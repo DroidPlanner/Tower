@@ -44,6 +44,11 @@
 
                 <data android:mimeType="text/plain" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".FightDataActivity" >
         </activity>
@@ -51,11 +56,6 @@
         </activity>
         <activity android:name=".TerminalActivity" >
                         
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".GCPActivity" tools:ignore="ExportedActivity">
