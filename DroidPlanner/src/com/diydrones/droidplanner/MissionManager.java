@@ -1,9 +1,7 @@
 package com.diydrones.droidplanner;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -95,12 +93,12 @@ public class MissionManager {
 		waypoints.clear();
 	}
 
-	public boolean openMission(String fileWithPath) {
+	public boolean openMission(String itemList) {
 		if (!isExternalStorageWritable()) {
 			return false;
 		}
 		try {
-			FileInputStream in = new FileInputStream(fileWithPath);
+			FileInputStream in = new FileInputStream(itemList);
 			BufferedReader reader = new BufferedReader(
 					new InputStreamReader(in));
 
@@ -143,11 +141,11 @@ public class MissionManager {
 	}
 
 	public boolean saveWaypoints() {
-		if (!isExternalStorageWritable()) {
-			return false;
-		}
 		try {
-			FileOutputStream out = getFileStream();
+			if (!isExternalStorageWritable()) {
+				return false;
+			}
+			FileOutputStream out = FileManager.getWaypointFileStream();
 
 			writeFirstLine(out);
 
@@ -183,17 +181,6 @@ public class MissionManager {
 
 	}
 
-	private FileOutputStream getFileStream() throws FileNotFoundException {
-		String root = Environment.getExternalStorageDirectory().toString();
-		File myDir = new File(root + "/waypoints");
-		myDir.mkdirs();
-		File file = new File(myDir, "waypoints-" + System.currentTimeMillis()
-				+ ".txt");
-		if (file.exists())
-			file.delete();
-		FileOutputStream out = new FileOutputStream(file);
-		return out;
-	}
 
 	public boolean isExternalStorageWritable() {
 		String state = Environment.getExternalStorageState();

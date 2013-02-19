@@ -1,7 +1,5 @@
 package com.diydrones.droidplanner;
 
-import java.io.File;
-import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +10,6 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -470,7 +467,7 @@ public class PlanningActivity extends android.support.v4.app.FragmentActivity
 	}
 
 	private void OpenWaypointDialog() {
-		final String[] itemList = loadFileList();
+		final String[] itemList = FileManager.loadWaypointFileList();
 		if (itemList.length == 0) {
 			Toast.makeText(getApplicationContext(), R.string.no_waypoint_files,
 					Toast.LENGTH_SHORT).show();
@@ -480,9 +477,7 @@ public class PlanningActivity extends android.support.v4.app.FragmentActivity
 		dialog.setTitle(R.string.select_file_to_open);
 		dialog.setItems(itemList, new OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
-				if (mission.openMission(Environment
-						.getExternalStorageDirectory().toString()
-						+ "/waypoints/" + itemList[which])) {
+				if (mission.openMission(FileManager.getWaypointsPath()+ itemList[which])) {
 					zoomToExtents();
 					Toast.makeText(getApplicationContext(), itemList[which],
 							Toast.LENGTH_LONG).show();
@@ -495,27 +490,6 @@ public class PlanningActivity extends android.support.v4.app.FragmentActivity
 			}
 		});
 		dialog.create().show();
-	}
-
-	private String[] loadFileList() {
-		File mPath = new File(Environment.getExternalStorageDirectory()
-				.toString() + "/waypoints/");
-		try {
-			mPath.mkdirs();
-		} catch (SecurityException e) {
-			return new String[0];
-		}
-		if (mPath.exists()) {
-			FilenameFilter filter = new FilenameFilter() {
-				public boolean accept(File dir, String filename) {
-					return filename.contains(".txt");
-				}
-			};
-			return mPath.list(filter);
-		} else {
-			return new String[0];
-		}
-
 	}
 
 }

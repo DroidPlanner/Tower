@@ -1,9 +1,7 @@
 package com.diydrones.droidplanner;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +17,6 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -279,7 +276,7 @@ public class GCPActivity extends android.support.v4.app.FragmentActivity
 	}
 
 	private void openGCPDialog() {
-		final String[] itemList = loadFileList();
+		final String[] itemList = FileManager.loadKMZFileList();
 		if (itemList.length == 0) {
 			Toast.makeText(getApplicationContext(), R.string.no_waypoint_files,
 					Toast.LENGTH_SHORT).show();
@@ -289,8 +286,7 @@ public class GCPActivity extends android.support.v4.app.FragmentActivity
 		dialog.setTitle(R.string.select_file_to_open);
 		dialog.setItems(itemList, new OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
-				if (openGCPFile(Environment.getExternalStorageDirectory()
-						.toString() + "/waypoints/" + itemList[which])) {
+				if (openGCPFile(FileManager.getGCPPath()+ itemList[which])) {
 					zoomToExtents();
 					Toast.makeText(getApplicationContext(), itemList[which],
 							Toast.LENGTH_LONG).show();
@@ -306,27 +302,6 @@ public class GCPActivity extends android.support.v4.app.FragmentActivity
 		dialog.create().show();
 	}
 
-	private String[] loadFileList() {
-		File mPath = new File(Environment.getExternalStorageDirectory()
-				.toString() + "/waypoints/");
-		try {
-			mPath.mkdirs();
-		} catch (SecurityException e) {
-			return new String[0];
-		}
-		if (mPath.exists()) {
-			FilenameFilter filter = new FilenameFilter() {
-				public boolean accept(File dir, String filename) {
-					return filename.contains(".kml")
-							|| filename.contains(".kmz");
-				}
-			};
-			return mPath.list(filter);
-		} else {
-			return new String[0];
-		}
-
-	}
 
 	@Override
 	public boolean onMarkerClick(Marker marker) {

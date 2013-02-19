@@ -2,23 +2,18 @@ package com.MAVLink;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.util.Log;
 
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
+import com.diydrones.droidplanner.FileManager;
 
 public abstract class MAVLink {
 	private String serverIP;
@@ -47,7 +42,7 @@ public abstract class MAVLink {
 			parser = new Parser();
 			try {
 				if (logEnabled) {					
-					logWriter = getFileStream();
+					logWriter = FileManager.getTLogFileStream();
 				}
 				getTCPStream();
 				
@@ -169,30 +164,5 @@ public abstract class MAVLink {
 		return connected;
 	}
 
-	/**
-	 * Timestamp for logs in the Mission Planner Format
-	 */
-	private String getTimeStamp() {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss",
-				Locale.US);
-		String timeStamp = sdf.format(new Date());
-		return timeStamp;
-	}
-
-	/**
-	 * Get a file Stream for logging purposes
-	 * 
-	 * @return output file stream for the log file
-	 */
-	private BufferedOutputStream getFileStream() throws FileNotFoundException {
-		String root = Environment.getExternalStorageDirectory().toString();
-		File myDir = new File(root + "/DroidPlanner/logs");
-		myDir.mkdirs();
-		File file = new File(myDir, getTimeStamp() + ".tlog");
-		if (file.exists())
-			file.delete();
-		BufferedOutputStream out =new BufferedOutputStream(new FileOutputStream(file));
-		return out;
-	}
 
 }
