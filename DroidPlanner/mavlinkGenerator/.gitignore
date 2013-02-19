@@ -1,0 +1,10 @@
+pymavlink/tools/
+pymavlink/examples/
+pymavlink/generator/C/
+pymavlink/generator/lib/
+pymavlink/generator/*.*
+!pymavlink/generator/mavgen.py
+!pymavlink/generator/mavgen_java.py
+
+pymavlink/APM_Mavtest
+pymavlink/*.*

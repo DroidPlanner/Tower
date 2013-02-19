@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:key="pref_server"
+        android:title="TCP connection" >
+        <EditTextPreference
+            android:defaultValue="192.168.40.10"
+            android:key="pref_server_ip"
+            android:title="Server IP" />
+        <EditTextPreference
+            android:defaultValue="5760"
+            android:key="pref_server_port"
+            android:title="Server Port" />
+    </PreferenceCategory>
+
+        
+    <PreferenceCategory
+        android:key="pref_mavlink"
+        android:title="MavLink" >
+        <CheckBoxPreference
+            android:key="pref_mavlink_log_enabled"
+            android:title="Enable Logging" 
+            android:defaultValue="false" 
+            android:summary="Logs the MAVlink communication to a *.tlog file, may degrade performance"/>
+    </PreferenceCategory>
+    
+</PreferenceScreen>
