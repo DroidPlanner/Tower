@@ -75,7 +75,9 @@ public abstract class MAVLink {
 			} finally{
 				try {
 					socket.close();
-					logWriter.close();
+					if (logEnabled) {
+						logWriter.close();
+					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
