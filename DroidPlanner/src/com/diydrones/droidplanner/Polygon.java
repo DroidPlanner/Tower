@@ -16,7 +16,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 public class Polygon {
 
 	private List<LatLng> waypoints;
-	
+
 	public Polygon() {
 		waypoints = new ArrayList<LatLng>();
 	}
@@ -394,14 +394,45 @@ public class Polygon {
 				p2 = waypoints2.get(i + 1);
 			}
 
-			dist = (getDistance(p1, point) + getDistance(p1, point))
-					/ getDistance(p1, p2);
+			dist = pointToLineDistance(p1, p2, point);
 			if (dist < currentbest) {
 				answer = i + 1;
 				currentbest = dist;
 			}
 		}
 		return answer;
+	}
+
+	/**
+	 * Provides the distance from a point P to the line segment that passes through A-B.
+	 * If the point is not on the side of the line, returns the distance to the closest point
+	 */
+	public double pointToLineDistance(LatLng L1, LatLng L2, LatLng P) {
+		double A = P.longitude - L1.longitude;
+		double B = P.latitude - L1.latitude;
+		double C = L2.longitude - L1.longitude;
+		double D = L2.latitude - L1.latitude;
+
+		double dot = A * C + B * D;
+		double len_sq = C * C + D * D;
+		double param = dot / len_sq;
+
+		double xx, yy;
+
+		if (param < 0) // point behind the segment
+		{
+			xx = L1.longitude;
+			yy = L1.latitude;
+		} else if (param > 1) // point after the segment
+		{
+			xx = L2.longitude;
+			yy = L2.latitude;
+		} else {	// point on the side of the segment
+			xx = L1.longitude + param * C;
+			yy = L1.latitude + param * D;
+		}
+
+		return Math.hypot(xx - P.longitude, yy - P.latitude);
 	}
 
 	/**
