@@ -2,6 +2,7 @@ package com.diydrones.droidplanner;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
@@ -10,6 +11,8 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
+import android.speech.tts.TextToSpeech.OnInitListener;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -52,6 +55,9 @@ public class PlanningActivity extends android.support.v4.app.FragmentActivity
 	TextView WaypointListNumber;
 	private MenuItem connectButton;
 	
+	
+	TextToSpeech tts;
+	
 	public MAVLinkClient MAVClient = new MAVLinkClient(this) {
 		@Override
 		public void notifyReceivedData(MAVLinkMessage m) {
@@ -59,11 +65,13 @@ public class PlanningActivity extends android.support.v4.app.FragmentActivity
 		}
 		@Override
 		public void notifyConnected() {
-			connectButton.setTitle(getResources().getString(R.string.menu_disconnect));		
+			connectButton.setTitle(getResources().getString(R.string.menu_disconnect));
+			tts.speak("Connected", TextToSpeech.QUEUE_FLUSH, null);
 		}
 		@Override
 		public void notifyDisconnected() {
 			connectButton.setTitle(getResources().getString(R.string.menu_connect));					
+			tts.speak("Disconnected", TextToSpeech.QUEUE_FLUSH, null);
 		}
 	};
 	
@@ -74,6 +82,7 @@ public class PlanningActivity extends android.support.v4.app.FragmentActivity
 			if(waypoints!=null){
 				Toast.makeText(getApplicationContext(), "Waypoints received from Drone", Toast.LENGTH_SHORT).show();
 				Log.d("Mission", "Received all waypoints, size()="+waypoints.size());
+				tts.speak("Received waypoints from Drone", TextToSpeech.QUEUE_FLUSH, null);
 				mission.setHome(waypoints.get(0));
 				waypoints.remove(0);	// Remove Home waypoint
 				mission.clearWaypoints();
@@ -85,6 +94,7 @@ public class PlanningActivity extends android.support.v4.app.FragmentActivity
 		@Override
 		public void onWriteWaypoints(msg_mission_ack msg) {
 			Toast.makeText(getApplicationContext(), "Waypoints saved to Drone", Toast.LENGTH_SHORT).show();
+			tts.speak("Waypoints saved to Drone", TextToSpeech.QUEUE_FLUSH, null);
 		}
 	};
 
@@ -114,6 +124,14 @@ public class PlanningActivity extends android.support.v4.app.FragmentActivity
 		updateMarkersAndPath();
 
 		MAVClient.init();
+		
+		tts = new TextToSpeech(this,new OnInitListener() {
+			
+			@Override
+			public void onInit(int status) {
+				tts.setLanguage(Locale.US);
+			}
+		});
 	}
 	
 	@Override
