@@ -30,6 +30,10 @@ public class FileManager {
 		return getDroidPlannerPath()+"/Logs/";
 	}
 	
+	public static String getMapsPath() {
+		return getDroidPlannerPath()+"/Maps/";
+	}
+	
 	static public FileOutputStream getWaypointFileStream() throws FileNotFoundException {
 		File myDir = new File(getWaypointsPath());
 		myDir.mkdirs();

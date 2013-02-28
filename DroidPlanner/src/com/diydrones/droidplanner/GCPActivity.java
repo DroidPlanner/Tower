@@ -17,6 +17,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -28,11 +29,11 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.TileOverlayOptions;
 
 public class GCPActivity extends android.support.v4.app.FragmentActivity
 		implements OnNavigationListener, OnMarkerClickListener {
@@ -96,7 +97,13 @@ public class GCPActivity extends android.support.v4.app.FragmentActivity
 
 	private void setUpMap() {
 		mMap.setMyLocationEnabled(true);
-		mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+		//mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+		mMap.setMapType(GoogleMap.MAP_TYPE_NONE);
+		
+
+        Log.d("MAP"," setUpMap()");
+		mMap.addTileOverlay(new TileOverlayOptions().tileProvider(new LocalMapTileProvider()));
+/*
 
 		UiSettings mUiSettings = mMap.getUiSettings();
 		mUiSettings.setMyLocationButtonEnabled(true);
@@ -116,6 +123,7 @@ public class GCPActivity extends android.support.v4.app.FragmentActivity
 			openGCPFile(intent.getData().getPath());
 			zoomToExtentsFixed();
 		}
+		*/
 
 	}
 
