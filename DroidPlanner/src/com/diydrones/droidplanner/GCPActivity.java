@@ -17,6 +17,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -24,16 +25,14 @@ import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import com.diydrones.droidplanner.KmlParser.waypoint;
+import com.diydrones.droidplanner.helpers.mapHelper;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.TileOverlayOptions;
 
 public class GCPActivity extends android.support.v4.app.FragmentActivity
 		implements OnNavigationListener, OnMarkerClickListener {
@@ -50,8 +49,6 @@ public class GCPActivity extends android.support.v4.app.FragmentActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-
 
 		// Set up the action bar to show a dropdown list.
 		setUpActionBar();
@@ -97,9 +94,7 @@ public class GCPActivity extends android.support.v4.app.FragmentActivity
 
 	private void setUpMap() {
 		mMap.setMyLocationEnabled(true);
-		//mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-		mMap.setMapType(GoogleMap.MAP_TYPE_NONE);
-		
+
 		UiSettings mUiSettings = mMap.getUiSettings();
 		mUiSettings.setMyLocationButtonEnabled(true);
 		mUiSettings.setCompassEnabled(true);
@@ -118,36 +113,18 @@ public class GCPActivity extends android.support.v4.app.FragmentActivity
 			openGCPFile(intent.getData().getPath());
 			zoomToExtentsFixed();
 		}
-		
 
 	}
 
 	private void updateMarkers() {
+		mMap.clear();
+		mapHelper.setupMapOverlay(mMap,PreferenceManager.getDefaultSharedPreferences(
+				this).getBoolean("pref_advanced_use_offline_maps", false));
 		int i = 1;
-		clearMap();
 		for (waypoint point : WPlist) {
-			if (point.set) {
-				mMap.addMarker(new MarkerOptions()
-						.position(point.coord)
-						.title(String.valueOf(i))
-						.icon(BitmapDescriptorFactory
-								.fromResource(R.drawable.placemark_circle_blue))
-						.anchor((float) 0.5, (float) 0.5));
-			} else {
-				mMap.addMarker(new MarkerOptions()
-						.position(point.coord)
-						.title(String.valueOf(i))
-						.icon(BitmapDescriptorFactory
-								.fromResource(R.drawable.placemark_circle_red))
-						.anchor((float) 0.5, (float) 0.5));
-			}
+			mapHelper.addGcpMarkerToMap(mMap,i, point.coord , point.set);
 			i++;
 		}
-	}
-
-	private void clearMap() {
-		mMap.clear();
-		mMap.addTileOverlay(new TileOverlayOptions().tileProvider(new LocalMapTileProvider()));
 	}
 
 	@Override
@@ -170,7 +147,7 @@ public class GCPActivity extends android.support.v4.app.FragmentActivity
 			startActivity(new Intent(this, TerminalActivity.class));
 			return false;
 		case 5: // GCP
-			//startActivity(new Intent(this, GCPActivity.class));
+			// startActivity(new Intent(this, GCPActivity.class));
 			return false;
 		}
 	}
@@ -178,6 +155,9 @@ public class GCPActivity extends android.support.v4.app.FragmentActivity
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
+		case R.id.menu_settings:
+			startActivity(new Intent(this,SettingsActivity.class));
+			return true;
 		case R.id.menu_clear:
 			clearWaypointsAndUpdate();
 			return true;
@@ -217,8 +197,8 @@ public class GCPActivity extends android.support.v4.app.FragmentActivity
 			for (waypoint point : WPlist) {
 				builder.include(point.coord);
 			}
-				mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(
-						builder.build(), 480, 360, 30));
+			mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(
+					builder.build(), 480, 360, 30));
 		}
 	}
 
@@ -294,7 +274,7 @@ public class GCPActivity extends android.support.v4.app.FragmentActivity
 		dialog.setTitle(R.string.select_file_to_open);
 		dialog.setItems(itemList, new OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
-				if (openGCPFile(FileManager.getGCPPath()+ itemList[which])) {
+				if (openGCPFile(FileManager.getGCPPath() + itemList[which])) {
 					zoomToExtents();
 					Toast.makeText(getApplicationContext(), itemList[which],
 							Toast.LENGTH_LONG).show();
@@ -309,7 +289,6 @@ public class GCPActivity extends android.support.v4.app.FragmentActivity
 		});
 		dialog.create().show();
 	}
-
 
 	@Override
 	public boolean onMarkerClick(Marker marker) {

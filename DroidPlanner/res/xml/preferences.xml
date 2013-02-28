@@ -25,4 +25,14 @@
             android:summary="Logs the MAVlink communication to a *.tlog file, may degrade performance"/>
     </PreferenceCategory>
     
+    <PreferenceCategory
+        android:key="pref_advanced"
+        android:title="Advanced" >
+        <CheckBoxPreference
+            android:key="pref_advanced_use_offline_maps"
+            android:title="Use offline maps" 
+            android:defaultValue="false" 
+            android:summary="Use map tiles on the local storage, for offline map view."/>
+    </PreferenceCategory>
+    
 </PreferenceScreen>
