@@ -17,7 +17,6 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -29,6 +28,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -100,11 +100,6 @@ public class GCPActivity extends android.support.v4.app.FragmentActivity
 		//mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
 		mMap.setMapType(GoogleMap.MAP_TYPE_NONE);
 		
-
-        Log.d("MAP"," setUpMap()");
-		mMap.addTileOverlay(new TileOverlayOptions().tileProvider(new LocalMapTileProvider()));
-/*
-
 		UiSettings mUiSettings = mMap.getUiSettings();
 		mUiSettings.setMyLocationButtonEnabled(true);
 		mUiSettings.setCompassEnabled(true);
@@ -123,13 +118,13 @@ public class GCPActivity extends android.support.v4.app.FragmentActivity
 			openGCPFile(intent.getData().getPath());
 			zoomToExtentsFixed();
 		}
-		*/
+		
 
 	}
 
 	private void updateMarkers() {
 		int i = 1;
-		mMap.clear();
+		clearMap();
 		for (waypoint point : WPlist) {
 			if (point.set) {
 				mMap.addMarker(new MarkerOptions()
@@ -148,6 +143,11 @@ public class GCPActivity extends android.support.v4.app.FragmentActivity
 			}
 			i++;
 		}
+	}
+
+	private void clearMap() {
+		mMap.clear();
+		mMap.addTileOverlay(new TileOverlayOptions().tileProvider(new LocalMapTileProvider()));
 	}
 
 	@Override
