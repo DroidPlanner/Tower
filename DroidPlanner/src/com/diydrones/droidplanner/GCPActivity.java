@@ -24,8 +24,10 @@ import android.widget.ArrayAdapter;
 import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
-import com.diydrones.droidplanner.KmlParser.waypoint;
+import com.diydrones.droidplanner.helpers.FileManager;
+import com.diydrones.droidplanner.helpers.KmlParser;
 import com.diydrones.droidplanner.helpers.mapHelper;
+import com.diydrones.droidplanner.helpers.KmlParser.waypoint;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;

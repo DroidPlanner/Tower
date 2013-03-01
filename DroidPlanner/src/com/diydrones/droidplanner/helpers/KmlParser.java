@@ -1,4 +1,4 @@
-package com.diydrones.droidplanner;
+package com.diydrones.droidplanner.helpers;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,9 +23,9 @@ public class KmlParser {
 	private List<waypoint> WPlist;
 
 	public class waypoint {
-		LatLng coord;
+		public LatLng coord;
 		Double Height;
-		boolean set;
+		public boolean set;
 
 		public waypoint(LatLng c, Double h) {
 			this.coord = c;

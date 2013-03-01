@@ -1,4 +1,4 @@
-package com.diydrones.droidplanner;
+package com.diydrones.droidplanner.helpers;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -13,24 +13,24 @@ import android.os.Environment;
 
 public class FileManager {
 	
-	public static String getDroidPlannerPath() {
+	static public String getDroidPlannerPath() {
 		String root = Environment.getExternalStorageDirectory().toString();
 		return (root + "/DroidPlanner/"); 
 	}
 
-	public static String getWaypointsPath() {
+	static public String getWaypointsPath() {
 		return getDroidPlannerPath()+ "/Waypoints/";
 	}
 
-	public static String getGCPPath() {
+	static public String getGCPPath() {
 		return getDroidPlannerPath() + "/GCP/"; 
 	}
 	
-	private static String getTLogPath() {
+	static private String getTLogPath() {
 		return getDroidPlannerPath()+"/Logs/";
 	}
 	
-	public static String getMapsPath() {
+	static public String getMapsPath() {
 		return getDroidPlannerPath()+"/Maps/";
 	}
 	
@@ -67,7 +67,7 @@ public class FileManager {
 	}
 	
 
-	static String[] loadKMZFileList() {
+	static public String[] loadKMZFileList() {
 		File mPath = new File(getGCPPath());
 		try {
 			mPath.mkdirs();
@@ -95,7 +95,7 @@ public class FileManager {
 	 * 
 	 * @return output file stream for the log file
 	 */
-	public static BufferedOutputStream getTLogFileStream() throws FileNotFoundException {
+	static public BufferedOutputStream getTLogFileStream() throws FileNotFoundException {
 		File myDir = new File(getTLogPath());
 		myDir.mkdirs();
 		File file = new File(myDir, getTimeStamp() + ".tlog");
@@ -108,7 +108,7 @@ public class FileManager {
 	/**
 	 * Timestamp for logs in the Mission Planner Format
 	 */
-	private static String getTimeStamp() {
+	 static private String getTimeStamp() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss",
 				Locale.US);
 		String timeStamp = sdf.format(new Date());

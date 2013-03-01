@@ -13,6 +13,7 @@ import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Environment;
 
+import com.diydrones.droidplanner.helpers.FileManager;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;

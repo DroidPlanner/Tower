@@ -1,6 +1,5 @@
 package com.diydrones.droidplanner.helpers;
 
-import com.diydrones.droidplanner.LocalMapTileProvider;
 import com.diydrones.droidplanner.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;

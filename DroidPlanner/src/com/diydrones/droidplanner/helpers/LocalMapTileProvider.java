@@ -1,4 +1,4 @@
-package com.diydrones.droidplanner;
+package com.diydrones.droidplanner.helpers;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
