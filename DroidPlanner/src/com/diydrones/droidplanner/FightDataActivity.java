@@ -14,6 +14,7 @@ import android.widget.SpinnerAdapter;
 
 import com.MAVLink.GPSMananger;
 import com.MAVLink.Messages.MAVLinkMessage;
+import com.diydrones.droidplanner.service.MAVLinkClient;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;

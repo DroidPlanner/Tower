@@ -2,7 +2,7 @@ package com.MAVLink;
 
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_global_position_int;
-import com.diydrones.droidplanner.MAVLinkClient;
+import com.diydrones.droidplanner.service.MAVLinkClient;
 import com.diydrones.droidplanner.waypoints.waypoint;
 
 /**

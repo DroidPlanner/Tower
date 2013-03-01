@@ -12,6 +12,7 @@ import android.widget.SpinnerAdapter;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_attitude;
 import com.diydrones.droidplanner.helpers.HUDwidget;
+import com.diydrones.droidplanner.service.MAVLinkClient;
 
 public class HUDActivity extends android.support.v4.app.FragmentActivity
 		implements OnNavigationListener {

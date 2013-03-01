@@ -14,7 +14,7 @@ import com.MAVLink.Messages.ardupilotmega.msg_mission_item_reached;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_request;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_request_list;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_set_current;
-import com.diydrones.droidplanner.MAVLinkClient;
+import com.diydrones.droidplanner.service.MAVLinkClient;
 import com.diydrones.droidplanner.waypoints.waypoint;
 
 /**

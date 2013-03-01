@@ -35,7 +35,7 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyCqZnhgWsao4ey91Z8hNBbOxxJ_EiC5mpM" />
 
-        <service android:name=".MAVLinkService"></service>
+        <service android:name="com.diydrones.droidplanner.service.MAVLinkService"></service>
         
         <activity android:name=".PlanningActivity" tools:ignore="ExportedActivity">
             <intent-filter>

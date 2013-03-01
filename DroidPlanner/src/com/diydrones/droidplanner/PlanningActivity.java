@@ -26,6 +26,7 @@ import com.MAVLink.WaypointMananger;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.diydrones.droidplanner.helpers.FileManager;
+import com.diydrones.droidplanner.service.MAVLinkClient;
 import com.diydrones.droidplanner.waypoints.MissionManager;
 import com.diydrones.droidplanner.waypoints.Polygon;
 import com.diydrones.droidplanner.waypoints.waypoint;

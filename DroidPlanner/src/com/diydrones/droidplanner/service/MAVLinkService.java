@@ -1,4 +1,4 @@
-package com.diydrones.droidplanner;
+package com.diydrones.droidplanner.service;
 
 import java.util.ArrayList;
 
@@ -22,6 +22,8 @@ import android.util.Log;
 import com.MAVLink.MAVLink;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
+import com.diydrones.droidplanner.R;
+import com.diydrones.droidplanner.TerminalActivity;
 
 /**
  * http://developer.android.com/guide/components/bound-services.html#Messenger

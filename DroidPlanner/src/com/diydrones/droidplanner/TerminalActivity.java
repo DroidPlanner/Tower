@@ -17,6 +17,7 @@ import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_param_request_list;
 import com.MAVLink.Messages.ardupilotmega.msg_param_value;
 import com.MAVLink.Messages.ardupilotmega.msg_statustext;
+import com.diydrones.droidplanner.service.MAVLinkClient;
 
 public class TerminalActivity extends android.support.v4.app.FragmentActivity
 		implements OnNavigationListener {
