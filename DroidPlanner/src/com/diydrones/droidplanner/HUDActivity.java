@@ -11,6 +11,7 @@ import android.widget.SpinnerAdapter;
 
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_attitude;
+import com.MAVLink.Messages.ardupilotmega.msg_request_data_stream;
 import com.diydrones.droidplanner.helpers.HUDwidget;
 import com.diydrones.droidplanner.service.MAVLinkClient;
 
@@ -38,6 +39,9 @@ public class HUDActivity extends android.support.v4.app.FragmentActivity
 		@Override
 		public void notifyConnected() {
 			connectButton.setTitle(getResources().getString(R.string.menu_disconnect));
+			
+			requestMavlinkDataStream(10,20); // MAV_DATA_STREAM_RAW_CONTROLLER;
+
 		}
 
 		@Override
@@ -46,6 +50,18 @@ public class HUDActivity extends android.support.v4.app.FragmentActivity
 		}
 
 	};
+	
+	private void requestMavlinkDataStream(int stream_id, int rate) {
+		msg_request_data_stream msg = new msg_request_data_stream();
+		msg.target_system = 1;
+		msg.target_component = 1;
+
+		msg.req_message_rate = (short) rate;
+		msg.req_stream_id = (byte) stream_id; 
+		
+		msg.start_stop = 1;
+		MAVClient.sendMavPacket(msg.pack());
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
