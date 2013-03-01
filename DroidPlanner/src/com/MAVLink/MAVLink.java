@@ -41,11 +41,11 @@ public abstract class MAVLink {
 		protected String doInBackground(String... message) {
 			parser = new Parser();
 			try {
-				if (logEnabled) {					
+				if (logEnabled) {
 					logWriter = FileManager.getTLogFileStream();
 				}
 				getTCPStream();
-				
+
 				MAVLinkMessage m;
 
 				while (connected) {
@@ -53,7 +53,7 @@ public abstract class MAVLink {
 					if ((data = mavIn.read()) >= 0) {
 						if (logEnabled) {
 							logWriter.write(data);
-						}							
+						}
 						m = parser.mavlink_parse_char(data);
 						if (m != null) {
 							receivedCount++;
@@ -63,13 +63,15 @@ public abstract class MAVLink {
 				}
 			} catch (UnknownHostException e) {
 				e.printStackTrace();
-			} catch (FileNotFoundException e){
+			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
-			} finally{
+			} finally {
 				try {
-					socket.close();
+					if (socket != null) {
+						socket.close();
+					}
 					if (logEnabled) {
 						logWriter.close();
 					}
@@ -80,17 +82,16 @@ public abstract class MAVLink {
 			return null;
 		}
 
-
-
 		private void getTCPStream() throws UnknownHostException, IOException {
 			InetAddress serverAddr = InetAddress.getByName(serverIP);
 			socket = new Socket(serverAddr, serverPort);
 			mavOut = new BufferedOutputStream((socket.getOutputStream()));
-			Log.d("TCP Client", "TCP connection started at: "+serverIP+":"+serverPort);
+			Log.d("TCP Client", "TCP connection started at: " + serverIP + ":"
+					+ serverPort);
 			// receive the message which the server sends back
 			mavIn = new BufferedInputStream(socket.getInputStream());
 		}
-		
+
 		@Override
 		protected void onProgressUpdate(MAVLinkMessage... values) {
 			super.onProgressUpdate(values);
@@ -107,7 +108,9 @@ public abstract class MAVLink {
 
 	/**
 	 * Format and send a Mavlink packet via the MAVlink stream
-	 * @param packet MavLink packet to be transmitted
+	 * 
+	 * @param packet
+	 *            MavLink packet to be transmitted
 	 */
 	public void sendMavPacket(MAVLinkPacket packet) {
 		byte[] buffer = packet.encodePacket();
@@ -116,7 +119,9 @@ public abstract class MAVLink {
 
 	/**
 	 * Sends a buffer thought the MAVlink stream
-	 * @param buffer Buffer with the data to be transmitted
+	 * 
+	 * @param buffer
+	 *            Buffer with the data to be transmitted
 	 */
 	public void sendBuffer(byte[] buffer) {
 		if (mavOut != null) {
@@ -129,7 +134,7 @@ public abstract class MAVLink {
 			}
 		}
 	}
-	
+
 	/*
 	 * Close the MAVlink Connection
 	 */
@@ -141,9 +146,10 @@ public abstract class MAVLink {
 
 	/**
 	 * Start the MAVlink Connection
-	 * @param port 
-	 * @param serverIP 
-	 * @param logEnabled 
+	 * 
+	 * @param port
+	 * @param serverIP
+	 * @param logEnabled
 	 */
 	public void openConnection(String serverIP, int port, boolean logEnabled) {
 		Log.d("TCP IN", "starting TCP");
@@ -163,6 +169,5 @@ public abstract class MAVLink {
 	public boolean isConnected() {
 		return connected;
 	}
-
 
 }

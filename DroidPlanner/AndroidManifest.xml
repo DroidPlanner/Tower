@@ -45,6 +45,11 @@
 
                 <data android:mimeType="text/plain" />
             </intent-filter>
+                        <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".FightDataActivity" >
         </activity>
@@ -62,11 +67,6 @@
 
                 <data android:mimeType="application/vnd.google-earth.kml+xml" />
                 <data android:mimeType="application/vnd.google-earth.kmz" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
          <activity
