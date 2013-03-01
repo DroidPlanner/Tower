@@ -23,6 +23,11 @@
             android:title="Enable Logging" 
             android:defaultValue="false" 
             android:summary="Logs the MAVlink communication to a *.tlog file, may degrade performance"/>
+        <EditTextPreference
+            android:defaultValue="10"
+            android:key="pref_mavlink_stream_rate"
+            android:title="Stream Rate"
+            android:summary="Rate in which flight data should be received from the drone (in Hz)."/>
     </PreferenceCategory>
     
     <PreferenceCategory

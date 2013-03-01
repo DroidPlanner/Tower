@@ -3,7 +3,9 @@ package com.diydrones.droidplanner;
 import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -39,9 +41,8 @@ public class HUDActivity extends android.support.v4.app.FragmentActivity
 		@Override
 		public void notifyConnected() {
 			connectButton.setTitle(getResources().getString(R.string.menu_disconnect));
-			
-			requestMavlinkDataStream(10,20); // MAV_DATA_STREAM_RAW_CONTROLLER;
-
+						
+			setupMavlinkStreamRate();
 		}
 
 		@Override
@@ -51,7 +52,18 @@ public class HUDActivity extends android.support.v4.app.FragmentActivity
 
 	};
 	
-	private void requestMavlinkDataStream(int stream_id, int rate) {
+	
+	private void setupMavlinkStreamRate() {
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		int rate = Integer.parseInt(prefs.getString("pref_mavlink_stream_rate", "0"));
+		if(rate==0){
+			requestMavlinkDataStream(10,0,false); // MAV_DATA_STREAM_RAW_CONTROLLER;
+		}else{
+			requestMavlinkDataStream(10,rate,true);
+		}
+	}
+	
+	private void requestMavlinkDataStream(int stream_id, int rate, boolean start) {		
 		msg_request_data_stream msg = new msg_request_data_stream();
 		msg.target_system = 1;
 		msg.target_component = 1;
@@ -59,7 +71,7 @@ public class HUDActivity extends android.support.v4.app.FragmentActivity
 		msg.req_message_rate = (short) rate;
 		msg.req_stream_id = (byte) stream_id; 
 		
-		msg.start_stop = 1;
+		msg.start_stop = (byte) (start?1:0);
 		MAVClient.sendMavPacket(msg.pack());
 	}
 
