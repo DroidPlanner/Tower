@@ -1,4 +1,4 @@
-package com.diydrones.droidplanner;
+package com.diydrones.droidplanner.helpers;
 
 import android.content.Context;
 import android.graphics.Canvas;

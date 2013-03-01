@@ -1,4 +1,4 @@
-package com.diydrones.droidplanner;
+package com.diydrones.droidplanner.waypoints;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -13,6 +13,7 @@ import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Environment;
 
+import com.diydrones.droidplanner.R;
 import com.diydrones.droidplanner.helpers.FileManager;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;

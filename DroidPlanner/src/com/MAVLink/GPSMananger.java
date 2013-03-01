@@ -3,7 +3,7 @@ package com.MAVLink;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_global_position_int;
 import com.diydrones.droidplanner.MAVLinkClient;
-import com.diydrones.droidplanner.waypoint;
+import com.diydrones.droidplanner.waypoints.waypoint;
 
 /**
  * Class to manage the comunication of GPS data from the MAV.
