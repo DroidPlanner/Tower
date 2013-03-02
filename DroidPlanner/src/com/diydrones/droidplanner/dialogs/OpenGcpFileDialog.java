@@ -1,4 +1,4 @@
-package com.diydrones.droidplanner.helpers;
+package com.diydrones.droidplanner.dialogs;
 
 import java.util.List;
 
@@ -9,6 +9,8 @@ import android.content.DialogInterface.OnClickListener;
 import android.widget.Toast;
 
 import com.diydrones.droidplanner.R;
+import com.diydrones.droidplanner.helpers.FileManager;
+import com.diydrones.droidplanner.helpers.KmlParser;
 import com.diydrones.droidplanner.helpers.KmlParser.waypoint;
 
 public abstract class OpenGcpFileDialog implements OnClickListener{

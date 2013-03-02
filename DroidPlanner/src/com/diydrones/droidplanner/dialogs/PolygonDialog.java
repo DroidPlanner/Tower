@@ -1,4 +1,4 @@
-package com.diydrones.droidplanner.helpers;
+package com.diydrones.droidplanner.dialogs;
 
 import java.util.List;
 

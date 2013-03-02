@@ -10,9 +10,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.diydrones.droidplanner.dialogs.OpenGcpFileDialog;
 import com.diydrones.droidplanner.helpers.KmlParser;
 import com.diydrones.droidplanner.helpers.KmlParser.waypoint;
-import com.diydrones.droidplanner.helpers.OpenGcpFileDialog;
 import com.diydrones.droidplanner.helpers.mapHelper;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;

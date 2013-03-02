@@ -1,4 +1,4 @@
-package com.diydrones.droidplanner.helpers;
+package com.diydrones.droidplanner.dialogs;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -7,6 +7,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.widget.Toast;
 
 import com.diydrones.droidplanner.R;
+import com.diydrones.droidplanner.helpers.FileManager;
 import com.diydrones.droidplanner.waypoints.MissionManager;
 
 public abstract class OpenMissionDialog implements OnClickListener {
