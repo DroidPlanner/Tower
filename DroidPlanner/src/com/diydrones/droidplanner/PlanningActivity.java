@@ -9,12 +9,9 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.NumberPicker;
-import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +19,7 @@ import com.MAVLink.WaypointMananger;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.diydrones.droidplanner.helpers.FileManager;
+import com.diydrones.droidplanner.helpers.PolygonDialog;
 import com.diydrones.droidplanner.helpers.TTS;
 import com.diydrones.droidplanner.service.MAVLinkClient;
 import com.diydrones.droidplanner.waypoints.MissionManager;
@@ -77,10 +75,10 @@ public class PlanningActivity extends Activity implements
 	
 		updateMarkersAndPath();
 	
-		MAVClient.init();
 	
 		tts = new TTS(this);
 	
+		MAVClient.init();
 	}
 
 	@Override
@@ -160,6 +158,18 @@ public class PlanningActivity extends Activity implements
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
+	}
+
+	public void generatePolygon() {
+		double defaultHatchAngle = ((double) mMap.getCameraPosition().bearing + 90) % 180;
+		PolygonDialog polygonDialog = new PolygonDialog() {
+			@Override
+			public void onPolygonGenerated(List<waypoint> list) {
+				mission.addWaypoints(list);
+				updateMarkersAndPath();
+			}
+		};
+		polygonDialog.generatePolygon(defaultHatchAngle, 50.0, polygon, mission.getLastWaypoint().coord, mission.getDefaultAlt(), this);	
 	}
 
 	private void setUpMapIfNeeded() {
@@ -303,89 +313,7 @@ public class PlanningActivity extends Activity implements
 		builder.create().show();
 	}
 
-	Double hatchAngle;
-	Double hatchDistance = 100.0;
-
-	private void generatePolygon() {
-		hatchAngle = ((double) mMap.getCameraPosition().bearing + 90) % 180;
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle("Polygon Angle");
-
-		LayoutInflater inflater = getLayoutInflater();
-
-		// Inflate and set the layout for the dialog
-		// Pass null as the parent view because its going in the dialog layout
-		builder.setView(inflater.inflate(R.layout.dialog_polygon, null));
-
-		builder.setNegativeButton("Cancel",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-					}
-				}).setPositiveButton("Ok",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						mission.addWaypoints(polygon.hatchfill(hatchAngle,
-								hatchDistance, mission.getLastWaypoint().coord,
-								mission.getDefaultAlt()));
-						updateMarkersAndPath();
-					}
-				});
-
-		AlertDialog dialog = builder.create();
-		dialog.show();
-
-		SeekBar angleSeekBar = (SeekBar) dialog.findViewById(R.id.SeekBarAngle);
-		final TextView angleTextView = (TextView) dialog
-				.findViewById(R.id.TextViewAngle);
-		angleTextView.setText(String.format(
-				getResources().getString(R.string.dialog_polygon_hatch_angle)
-						+ "\t%3.0fº", hatchAngle));
-		angleSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-			public void onProgressChanged(SeekBar seekBar, int progress,
-					boolean fromUser) {
-				hatchAngle = (double) progress;
-				angleTextView.setText(getResources().getString(
-						R.string.dialog_polygon_hatch_angle)
-						+ "\t" + hatchAngle + "º");
-			}
-
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
-			}
-
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-			}
-		});
-
-		SeekBar distanceSeekBar = (SeekBar) dialog
-				.findViewById(R.id.seekBarDistance);
-		final TextView distanceTextView = (TextView) dialog
-				.findViewById(R.id.textViewDistance);
-		distanceTextView.setText(getResources().getString(
-				R.string.dialog_polygon_distance_between_lines)
-				+ "\t" + hatchDistance + "m");
-		distanceSeekBar
-				.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-					public void onProgressChanged(SeekBar seekBar,
-							int progress, boolean fromUser) {
-						hatchDistance = (double) progress;
-						distanceTextView.setText(getResources().getString(
-								R.string.dialog_polygon_distance_between_lines)
-								+ "\t" + hatchDistance + "m");
-					}
-
-					@Override
-					public void onStartTrackingTouch(SeekBar seekBar) {
-					}
-
-					@Override
-					public void onStopTrackingTouch(SeekBar seekBar) {
-					}
-				});
-
-	}
-
+	
 	private void menuSaveFile() {
 		if (mission.saveWaypoints()) {
 			Toast.makeText(this, R.string.file_saved, Toast.LENGTH_SHORT)
@@ -415,12 +343,9 @@ public class PlanningActivity extends Activity implements
 	 * undergone the layout phase Assumes a map size of 480x360 px
 	 */
 	public void zoomToExtentsFixed() {
-		Log.d("Plan", "Zoom start");
 		LatLngBounds bound = mission.getWaypointsBounds();
-		Log.d("Plan", "Bound created");
 		mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bound, 480, 360,
 				30));
-		Log.d("Plan", "Zoom");
 	}
 
 	private void OpenWaypointDialog() {

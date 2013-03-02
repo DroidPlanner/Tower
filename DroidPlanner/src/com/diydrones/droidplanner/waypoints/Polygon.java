@@ -518,4 +518,11 @@ public class Polygon {
 		}
 		return Math.abs(0.5 * sum);
 	}
+
+	public boolean isValid() {
+		if(waypoints.size()>2)	// A valid polygon must have at least 3 points
+			return true;
+		else
+			return false;
+	}
 }
