@@ -10,8 +10,6 @@ import java.util.zip.ZipInputStream;
 
 import org.xmlpull.v1.XmlPullParserException;
 
-import android.app.ActionBar;
-import android.app.ActionBar.OnNavigationListener;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -20,14 +18,12 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import com.diydrones.droidplanner.helpers.FileManager;
 import com.diydrones.droidplanner.helpers.KmlParser;
-import com.diydrones.droidplanner.helpers.mapHelper;
 import com.diydrones.droidplanner.helpers.KmlParser.waypoint;
+import com.diydrones.droidplanner.helpers.mapHelper;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
@@ -36,8 +32,8 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 
-public class GCPActivity extends android.support.v4.app.FragmentActivity
-		implements OnNavigationListener, OnMarkerClickListener {
+public class GCPActivity extends Activity
+		implements OnMarkerClickListener {
 	private GoogleMap mMap;
 
 	private List<waypoint> WPlist;
@@ -52,11 +48,6 @@ public class GCPActivity extends android.support.v4.app.FragmentActivity
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-
-		// Set up the action bar to show a dropdown list.
-		setUpActionBar();
-
 		setContentView(R.layout.gcp);
 
 		WPlist = new ArrayList<waypoint>();
@@ -71,16 +62,7 @@ public class GCPActivity extends android.support.v4.app.FragmentActivity
 		return true;
 	}
 
-	private void setUpActionBar() {
-		final ActionBar actionBar = getActionBar();
-		actionBar.setDisplayShowTitleEnabled(false);
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-		SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this,
-				R.array.menu_dropdown,
-				android.R.layout.simple_spinner_dropdown_item);
-		actionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
-		actionBar.setSelectedNavigationItem(5);
-	}
+
 
 	private void setUpMapIfNeeded() {
 		// Do a null check to confirm that we have not already instantiated the
@@ -131,30 +113,6 @@ public class GCPActivity extends android.support.v4.app.FragmentActivity
 		}
 	}
 
-	@Override
-	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-		switch (itemPosition) {
-		default:
-		case 0: // Planning
-			startActivity(new Intent(this, PlanningActivity.class));
-			return false;
-		case 1: // HUD
-			startActivity(new Intent(this, HUDActivity.class));
-			return false;
-		case 2: // Flight Data
-			startActivity(new Intent(this, FightDataActivity.class));
-			return false;
-		case 3: // PID
-			startActivity(new Intent(this, PIDActivity.class));
-			return false;
-		case 4: // Terminal
-			startActivity(new Intent(this, TerminalActivity.class));
-			return false;
-		case 5: // GCP
-			// startActivity(new Intent(this, GCPActivity.class));
-			return false;
-		}
-	}
 
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
@@ -300,5 +258,10 @@ public class GCPActivity extends android.support.v4.app.FragmentActivity
 		WPlist.get(i).set = !WPlist.get(i).set;
 		updateMarkers();
 		return true;
+	}
+
+	@Override
+	int getNavigationItem() {
+		return 5;
 	}
 }

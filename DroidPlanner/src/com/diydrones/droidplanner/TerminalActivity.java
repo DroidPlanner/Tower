@@ -1,17 +1,12 @@
 package com.diydrones.droidplanner;
 
-import android.app.ActionBar;
-import android.app.ActionBar.OnNavigationListener;
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.MAVLink.Messages.MAVLinkMessage;
@@ -20,9 +15,7 @@ import com.MAVLink.Messages.ardupilotmega.msg_param_value;
 import com.MAVLink.Messages.ardupilotmega.msg_statustext;
 import com.diydrones.droidplanner.service.MAVLinkClient;
 
-public class TerminalActivity extends android.support.v4.app.FragmentActivity
-		implements OnNavigationListener {
-
+public class TerminalActivity extends Activity {
 
 	TextView terminal;
 	Button sendButton;
@@ -59,19 +52,6 @@ public class TerminalActivity extends android.support.v4.app.FragmentActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-	
-		
-		// Set up the action bar to show a dropdown list.
-		ActionBar actionBar = getActionBar();
-		actionBar.setDisplayShowTitleEnabled(false);
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-		SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this,
-				R.array.menu_dropdown,
-				android.R.layout.simple_spinner_dropdown_item);
-	
-		actionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
-		actionBar.setSelectedNavigationItem(4);
 	
 		setContentView(R.layout.terminal);
 	
@@ -96,30 +76,6 @@ public class TerminalActivity extends android.support.v4.app.FragmentActivity
 		MAVClient.sendMavPacket(msg.pack());
 	}
 
-	@Override
-	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-		switch (itemPosition) {
-		default:
-		case 0: // Planning
-			startActivity(new Intent(this, PlanningActivity.class));
-			return false;
-		case 1: // HUD
-			startActivity(new Intent(this, HUDActivity.class));
-			return false;
-		case 2: // Flight Data
-			startActivity(new Intent(this, FightDataActivity.class));
-			return false;
-		case 3: // PID
-			startActivity(new Intent(this, PIDActivity.class));
-			return false;
-		case 4: // Terminal
-			//startActivity(new Intent(this, TerminalActivity.class));
-			return false;
-		case 5: // GCP
-			startActivity(new Intent(this, GCPActivity.class));
-			return false;
-		}
-	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -141,6 +97,11 @@ public class TerminalActivity extends android.support.v4.app.FragmentActivity
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
+	}
+
+	@Override
+	int getNavigationItem() {
+		return 4;
 	}
 	
 }

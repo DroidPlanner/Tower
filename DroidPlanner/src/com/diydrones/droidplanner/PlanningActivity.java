@@ -3,23 +3,18 @@ package com.diydrones.droidplanner;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.ActionBar;
-import android.app.ActionBar.OnNavigationListener;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.NumberPicker;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,8 +38,8 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class PlanningActivity extends android.support.v4.app.FragmentActivity
-		implements OnNavigationListener, OnMapLongClickListener,
+public class PlanningActivity extends Activity
+		implements OnMapLongClickListener,
 		OnMarkerDragListener {
 
 	private GoogleMap mMap;
@@ -112,11 +107,7 @@ public class PlanningActivity extends android.support.v4.app.FragmentActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-
-		// Set up the action bar to show a dropdown list.
-		setUpActionBar();
-
+		
 		setContentView(R.layout.planning);
 
 		WaypointListNumber = (TextView) (findViewById(R.id.textViewWP));
@@ -155,16 +146,6 @@ public class PlanningActivity extends android.support.v4.app.FragmentActivity
 		return true;
 	}
 
-	private void setUpActionBar() {
-		final ActionBar actionBar = getActionBar();
-		actionBar.setDisplayShowTitleEnabled(false);
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-		SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this,
-				R.array.menu_dropdown,
-				android.R.layout.simple_spinner_dropdown_item);
-		actionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
-		actionBar.setSelectedNavigationItem(0);
-	}
 
 	private void setUpMapIfNeeded() {
 		// Do a null check to confirm that we have not already instantiated the
@@ -267,31 +248,6 @@ public class PlanningActivity extends android.support.v4.app.FragmentActivity
 		mission.clearWaypoints();
 		mMap.clear();
 		updateMarkersAndPath();
-	}
-
-	@Override
-	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-		switch (itemPosition) {
-		default:
-		case 0: // Planning
-			//startActivity(new Intent(this, PlanningActivity.class));
-			return false;
-		case 1: // HUD
-			startActivity(new Intent(this, HUDActivity.class));
-			return false;
-		case 2: // Flight Data
-			startActivity(new Intent(this, FightDataActivity.class));
-			return false;
-		case 3: // PID
-			startActivity(new Intent(this, PIDActivity.class));
-			return false;
-		case 4: // Terminal
-			startActivity(new Intent(this, TerminalActivity.class));
-			return false;
-		case 5: // GCP
-			startActivity(new Intent(this, GCPActivity.class));
-			return false;
-		}
 	}
 
 	@Override
@@ -508,6 +464,11 @@ public class PlanningActivity extends android.support.v4.app.FragmentActivity
 			}
 		});
 		dialog.create().show();
+	}
+
+	@Override
+	int getNavigationItem() {
+		return 0;
 	}
 
 }
