@@ -18,69 +18,23 @@ public class HUDActivity extends Activity {
 	HUDwidget hudWidget;
 	public boolean running;
 	MenuItem connectButton;
-	
-	public MAVLinkClient MAVClient = new MAVLinkClient(this) {	
-		@Override
-		public void notifyReceivedData(MAVLinkMessage msg) {
-			switch (msg.msgid) {
-			case msg_attitude.MAVLINK_MSG_ID_ATTITUDE:
-				msg_attitude m = (msg_attitude) msg;
-				hudWidget.newFlightData(m.roll, m.pitch, m.yaw);
-				break;
-			default:
-				break;
-			}
-			
-		}
-		
-		@Override
-		public void notifyConnected() {
-			connectButton.setTitle(getResources().getString(R.string.menu_disconnect));
-						
-			setupMavlinkStreamRate();
-		}
 
-		@Override
-		public void notifyDisconnected() {		
-			connectButton.setTitle(getResources().getString(R.string.menu_connect));
-		}
-
-	};
-	
-	
-	private void setupMavlinkStreamRate() {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		int rate = Integer.parseInt(prefs.getString("pref_mavlink_stream_rate", "0"));
-		if(rate==0){
-			requestMavlinkDataStream(10,0,false); // MAV_DATA_STREAM_RAW_CONTROLLER;
-		}else{
-			requestMavlinkDataStream(10,rate,true);
-		}
-	}
-	
-	private void requestMavlinkDataStream(int stream_id, int rate, boolean start) {		
-		msg_request_data_stream msg = new msg_request_data_stream();
-		msg.target_system = 1;
-		msg.target_component = 1;
-
-		msg.req_message_rate = (short) rate;
-		msg.req_stream_id = (byte) stream_id; 
-		
-		msg.start_stop = (byte) (start?1:0);
-		MAVClient.sendMavPacket(msg.pack());
+	@Override
+	int getNavigationItem() {
+		return 1;
 	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+	
 		setContentView(R.layout.hud);
-
+	
 		hudWidget = (HUDwidget) findViewById(R.id.hudWidget);
-		
+	
 		MAVClient.init();
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -98,7 +52,7 @@ public class HUDActivity extends Activity {
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_settings:
-			startActivity(new Intent(this,SettingsActivity.class));
+			startActivity(new Intent(this, SettingsActivity.class));
 			return true;
 		case R.id.menu_connect:
 			MAVClient.sendConnectMessage();
@@ -108,9 +62,58 @@ public class HUDActivity extends Activity {
 		}
 	}
 
-	@Override
-	int getNavigationItem() {
-		return 1;
+	public MAVLinkClient MAVClient = new MAVLinkClient(this) {
+		@Override
+		public void notifyReceivedData(MAVLinkMessage msg) {
+			switch (msg.msgid) {
+			case msg_attitude.MAVLINK_MSG_ID_ATTITUDE:
+				msg_attitude m = (msg_attitude) msg;
+				hudWidget.newFlightData(m.roll, m.pitch, m.yaw);
+				break;
+			default:
+				break;
+			}
+
+		}
+
+		@Override
+		public void notifyConnected() {
+			connectButton.setTitle(getResources().getString(
+					R.string.menu_disconnect));
+
+			setupMavlinkStreamRate();
+		}
+
+		@Override
+		public void notifyDisconnected() {
+			connectButton.setTitle(getResources().getString(
+					R.string.menu_connect));
+		}
+
+	};
+
+	private void setupMavlinkStreamRate() {
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		int rate = Integer.parseInt(prefs.getString("pref_mavlink_stream_rate",
+				"0"));
+		if (rate == 0) {
+			requestMavlinkDataStream(10, 0, false); // MAV_DATA_STREAM_RAW_CONTROLLER;
+		} else {
+			requestMavlinkDataStream(10, rate, true);
+		}
+	}
+
+	private void requestMavlinkDataStream(int stream_id, int rate, boolean start) {
+		msg_request_data_stream msg = new msg_request_data_stream();
+		msg.target_system = 1;
+		msg.target_component = 1;
+
+		msg.req_message_rate = (short) rate;
+		msg.req_stream_id = (byte) stream_id;
+
+		msg.start_stop = (byte) (start ? 1 : 0);
+		MAVClient.sendMavPacket(msg.pack());
 	}
 
 }

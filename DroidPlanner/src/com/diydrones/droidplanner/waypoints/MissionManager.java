@@ -183,7 +183,6 @@ public class MissionManager {
 
 	}
 
-
 	public boolean isExternalStorageWritable() {
 		String state = Environment.getExternalStorageState();
 		if (Environment.MEDIA_MOUNTED.equals(state)) {
@@ -195,7 +194,7 @@ public class MissionManager {
 	public LatLngBounds getHomeAndWaypointsBounds(LatLng myLocation) {
 		LatLngBounds.Builder builder = new LatLngBounds.Builder();
 		builder.include(home.coord);
-		if (waypoints.isEmpty() && (myLocation!= null)) {
+		if (waypoints.isEmpty() && (myLocation != null)) {
 			builder.include(myLocation);
 		} else {
 			for (waypoint w : waypoints) {
@@ -263,10 +262,10 @@ public class MissionManager {
 	public waypoint getHome() {
 		return home;
 	}
-	
-	public waypoint getLastWaypoint(){
-		if(waypoints.size()>0)
-			return waypoints.get(waypoints.size()-1);
+
+	public waypoint getLastWaypoint() {
+		if (waypoints.size() > 0)
+			return waypoints.get(waypoints.size() - 1);
 		else
 			return home;
 	}

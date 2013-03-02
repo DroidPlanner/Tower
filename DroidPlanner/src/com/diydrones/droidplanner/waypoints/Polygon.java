@@ -404,8 +404,9 @@ public class Polygon {
 	}
 
 	/**
-	 * Provides the distance from a point P to the line segment that passes through A-B.
-	 * If the point is not on the side of the line, returns the distance to the closest point
+	 * Provides the distance from a point P to the line segment that passes
+	 * through A-B. If the point is not on the side of the line, returns the
+	 * distance to the closest point
 	 */
 	public double pointToLineDistance(LatLng L1, LatLng L2, LatLng P) {
 		double A = P.longitude - L1.longitude;
@@ -427,7 +428,7 @@ public class Polygon {
 		{
 			xx = L2.longitude;
 			yy = L2.latitude;
-		} else {	// point on the side of the segment
+		} else { // point on the side of the segment
 			xx = L1.longitude + param * C;
 			yy = L1.latitude + param * D;
 		}

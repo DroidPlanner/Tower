@@ -12,40 +12,39 @@ import java.util.Locale;
 import android.os.Environment;
 
 public class FileManager {
-	
+
 	static public String getDroidPlannerPath() {
 		String root = Environment.getExternalStorageDirectory().toString();
-		return (root + "/DroidPlanner/"); 
+		return (root + "/DroidPlanner/");
 	}
 
 	static public String getWaypointsPath() {
-		return getDroidPlannerPath()+ "/Waypoints/";
+		return getDroidPlannerPath() + "/Waypoints/";
 	}
 
 	static public String getGCPPath() {
-		return getDroidPlannerPath() + "/GCP/"; 
+		return getDroidPlannerPath() + "/GCP/";
 	}
-	
+
 	static private String getTLogPath() {
-		return getDroidPlannerPath()+"/Logs/";
+		return getDroidPlannerPath() + "/Logs/";
 	}
-	
+
 	static public String getMapsPath() {
-		return getDroidPlannerPath()+"/Maps/";
+		return getDroidPlannerPath() + "/Maps/";
 	}
-	
-	static public FileOutputStream getWaypointFileStream() throws FileNotFoundException {
+
+	static public FileOutputStream getWaypointFileStream()
+			throws FileNotFoundException {
 		File myDir = new File(getWaypointsPath());
 		myDir.mkdirs();
-		File file = new File(myDir, "waypoints-" + getTimeStamp()
-				+ ".txt");
+		File file = new File(myDir, "waypoints-" + getTimeStamp() + ".txt");
 		if (file.exists())
 			file.delete();
 		FileOutputStream out = new FileOutputStream(file);
 		return out;
 	}
 
-	
 	static public String[] loadWaypointFileList() {
 		File mPath = new File(getWaypointsPath());
 		try {
@@ -65,7 +64,6 @@ public class FileManager {
 		}
 
 	}
-	
 
 	static public String[] loadKMZFileList() {
 		File mPath = new File(getGCPPath());
@@ -88,27 +86,27 @@ public class FileManager {
 
 	}
 
-
-
 	/**
 	 * Get a file Stream for logging purposes
 	 * 
 	 * @return output file stream for the log file
 	 */
-	static public BufferedOutputStream getTLogFileStream() throws FileNotFoundException {
+	static public BufferedOutputStream getTLogFileStream()
+			throws FileNotFoundException {
 		File myDir = new File(getTLogPath());
 		myDir.mkdirs();
 		File file = new File(myDir, getTimeStamp() + ".tlog");
 		if (file.exists())
 			file.delete();
-		BufferedOutputStream out =new BufferedOutputStream(new FileOutputStream(file));
+		BufferedOutputStream out = new BufferedOutputStream(
+				new FileOutputStream(file));
 		return out;
 	}
-	
+
 	/**
 	 * Timestamp for logs in the Mission Planner Format
 	 */
-	 static private String getTimeStamp() {
+	static private String getTimeStamp() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss",
 				Locale.US);
 		String timeStamp = sdf.format(new Date());

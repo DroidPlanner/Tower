@@ -38,93 +38,57 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class PlanningActivity extends Activity
-		implements OnMapLongClickListener,
-		OnMarkerDragListener {
+public class PlanningActivity extends Activity implements
+		OnMapLongClickListener, OnMarkerDragListener {
 
 	private GoogleMap mMap;
 
 	public MissionManager mission;
 	public Polygon polygon;
-	public enum modes{
-		MISSION,POLYGON;
+
+	public enum modes {
+		MISSION, POLYGON;
 	}
+
 	public modes mode;
-	
+
 	TextView WaypointListNumber;
 	private MenuItem connectButton;
-	
-	
-	TTS tts;
-	
-	public MAVLinkClient MAVClient = new MAVLinkClient(this) {
-		@Override
-		public void notifyReceivedData(MAVLinkMessage m) {
-			waypointMananger.processMessage(m);			
-		}
-		@Override
-		public void notifyConnected() {
-			connectButton.setTitle(getResources().getString(R.string.menu_disconnect));
-			tts.speak("Connected");
-		}
-		@Override
-		public void notifyDisconnected() {
-			connectButton.setTitle(getResources().getString(R.string.menu_connect));					
-			tts.speak("Disconnected");
-		}
-	};
-	
-	
-	WaypointMananger waypointMananger = new WaypointMananger(MAVClient) {
-		@Override
-		public void onWaypointsReceived(List<waypoint> waypoints) {
-			if(waypoints!=null){
-				Toast.makeText(getApplicationContext(), "Waypoints received from Drone", Toast.LENGTH_SHORT).show();
-				Log.d("Mission", "Received all waypoints, size()="+waypoints.size());
-				tts.speak("Received waypoints from Drone");
-				mission.setHome(waypoints.get(0));
-				waypoints.remove(0);	// Remove Home waypoint
-				mission.clearWaypoints();
-				mission.addWaypoints(waypoints);
-				updateMarkersAndPath();
-				zoomToExtents();
-			}
-		}
-		@Override
-		public void onWriteWaypoints(msg_mission_ack msg) {
-			Toast.makeText(getApplicationContext(), "Waypoints saved to Drone", Toast.LENGTH_SHORT).show();
-			tts.speak("Waypoints saved to Drone");
-		}
-	};
 
+	TTS tts;
+
+	@Override
+	int getNavigationItem() {
+		return 0;
+	}
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 	
+		setContentView(R.layout.planning);
+	
+		WaypointListNumber = (TextView) (findViewById(R.id.textViewWP));
+	
+		mission = new MissionManager();
+		polygon = new Polygon();
+		mode = modes.MISSION;
+		setUpMapIfNeeded();
+	
+		updateMarkersAndPath();
+	
+		MAVClient.init();
+	
+		tts = new TTS(this);
+	
+	}
+
 	@Override
 	protected void onResume() {
 		super.onResume();
 		setUpMapIfNeeded();
 	}
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		setContentView(R.layout.planning);
-
-		WaypointListNumber = (TextView) (findViewById(R.id.textViewWP));
-
-		mission = new MissionManager();
-		polygon = new Polygon();
-		mode = modes.MISSION;
-		setUpMapIfNeeded();
-		
-		updateMarkersAndPath();
-
-		MAVClient.init();
-		
-		tts = new TTS(this);
-		
-	}
-	
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -136,7 +100,7 @@ public class PlanningActivity extends Activity
 		switch (mode) {
 		default:
 		case MISSION:
-			getMenuInflater().inflate(R.menu.menu_planning, menu);	
+			getMenuInflater().inflate(R.menu.menu_planning, menu);
 			break;
 		case POLYGON:
 			getMenuInflater().inflate(R.menu.menu_planning_polygon, menu);
@@ -146,6 +110,57 @@ public class PlanningActivity extends Activity
 		return true;
 	}
 
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_clear_wp:
+			clearWaypointsAndUpdate();
+			return true;
+		case R.id.menu_load_from_apm:
+			waypointMananger.getWaypoints();
+			return true;
+		case R.id.menu_send_to_apm:
+			List<waypoint> data = new ArrayList<waypoint>();
+			data.add(mission.getHome());
+			data.addAll(mission.getWaypoints());
+			waypointMananger.writeWaypoints(data);
+			return true;
+		case R.id.menu_open_file:
+			OpenWaypointDialog();
+			return true;
+		case R.id.menu_save_file:
+			menuSaveFile();
+			return true;
+		case R.id.menu_settings:
+			startActivity(new Intent(this, SettingsActivity.class));
+			return true;
+		case R.id.menu_connect:
+			MAVClient.sendConnectMessage();
+			return true;
+		case R.id.menu_zoom:
+			zoomToExtents();
+			return true;
+		case R.id.menu_default_alt:
+			changeDefaultAlt();
+			return true;
+		case R.id.menu_polygon:
+			setModeToPolygon();
+			return true;
+		case R.id.menu_generate_polygon:
+			generatePolygon();
+			return true;
+		case R.id.menu_clear_polygon:
+			polygon.clearPolygon();
+			updateMarkersAndPath();
+			return true;
+		case R.id.menu_finish_polygon:
+			setModeToMission();
+			updateMarkersAndPath();
+			return true;
+		default:
+			return super.onMenuItemSelected(featureId, item);
+		}
+	}
 
 	private void setUpMapIfNeeded() {
 		// Do a null check to confirm that we have not already instantiated the
@@ -193,7 +208,7 @@ public class PlanningActivity extends Activity
 
 		switch (mode) {
 		default:
-		case MISSION:			
+		case MISSION:
 			mission.addWaypoint(point);
 			break;
 		case POLYGON:
@@ -250,67 +265,17 @@ public class PlanningActivity extends Activity
 		updateMarkersAndPath();
 	}
 
-	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.menu_clear_wp:
-			clearWaypointsAndUpdate();
-			return true;
-		case R.id.menu_load_from_apm:
-			waypointMananger.getWaypoints();
-			return true;
-		case R.id.menu_send_to_apm:
-			List<waypoint> data = new ArrayList<waypoint>();
-			data.add(mission.getHome());
-			data.addAll(mission.getWaypoints());
-			waypointMananger.writeWaypoints(data);
-			return true;
-		case R.id.menu_open_file:
-			OpenWaypointDialog();
-			return true;
-		case R.id.menu_save_file:
-			menuSaveFile();
-			return true;
-		case R.id.menu_settings:
-			startActivity(new Intent(this,SettingsActivity.class));
-			return true;
-		case R.id.menu_connect:
-			MAVClient.sendConnectMessage();
-			return true;
-		case R.id.menu_zoom:
-			zoomToExtents();
-			return true;
-		case R.id.menu_default_alt:
-			changeDefaultAlt();
-			return true;
-		case R.id.menu_polygon:
-			setModeToPolygon();
-			return true;
-		case R.id.menu_generate_polygon:
-			generatePolygon();
-			return true;
-		case R.id.menu_clear_polygon:
-			polygon.clearPolygon();
-			updateMarkersAndPath();
-			return true;
-		case R.id.menu_finish_polygon:
-			setModeToMission();		
-			updateMarkersAndPath();
-			return true;
-		default:
-			return super.onMenuItemSelected(featureId, item);
-		}
-	}
-
 	private void setModeToPolygon() {
 		mode = modes.POLYGON;
-		Toast.makeText(this, R.string.entering_polygon_mode, Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, R.string.entering_polygon_mode, Toast.LENGTH_SHORT)
+				.show();
 		invalidateOptionsMenu();
 	}
 
 	private void setModeToMission() {
 		mode = modes.MISSION;
-		Toast.makeText(this, R.string.exiting_polygon_mode, Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, R.string.exiting_polygon_mode, Toast.LENGTH_SHORT)
+				.show();
 		invalidateOptionsMenu();
 	}
 
@@ -338,71 +303,89 @@ public class PlanningActivity extends Activity
 		builder.create().show();
 	}
 
-	
 	Double hatchAngle;
 	Double hatchDistance = 100.0;
+
 	private void generatePolygon() {
-		hatchAngle = ((double) mMap.getCameraPosition().bearing + 90)%180;
+		hatchAngle = ((double) mMap.getCameraPosition().bearing + 90) % 180;
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("Polygon Angle");
 
-	    LayoutInflater inflater = getLayoutInflater();
+		LayoutInflater inflater = getLayoutInflater();
 
-	    // Inflate and set the layout for the dialog
-	    // Pass null as the parent view because its going in the dialog layout
-	    builder.setView(inflater.inflate(R.layout.dialog_polygon, null));
-	    
-	    
+		// Inflate and set the layout for the dialog
+		// Pass null as the parent view because its going in the dialog layout
+		builder.setView(inflater.inflate(R.layout.dialog_polygon, null));
+
 		builder.setNegativeButton("Cancel",
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 					}
-				})
-		.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				mission.addWaypoints(polygon.hatchfill(hatchAngle, hatchDistance,mission.getLastWaypoint().coord,mission.getDefaultAlt()));
-				updateMarkersAndPath();
-			}
-		});
-	    
-	    AlertDialog dialog = builder.create();
-	    dialog.show();
-	    	    
-	    SeekBar angleSeekBar = (SeekBar) dialog.findViewById(R.id.SeekBarAngle);
-	    final TextView angleTextView = (TextView) dialog.findViewById(R.id.TextViewAngle);
-	    angleTextView.setText(String.format(getResources().getString(R.string.dialog_polygon_hatch_angle)+"\t%3.0f�",hatchAngle));
-	    angleSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {		
+				}).setPositiveButton("Ok",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						mission.addWaypoints(polygon.hatchfill(hatchAngle,
+								hatchDistance, mission.getLastWaypoint().coord,
+								mission.getDefaultAlt()));
+						updateMarkersAndPath();
+					}
+				});
+
+		AlertDialog dialog = builder.create();
+		dialog.show();
+
+		SeekBar angleSeekBar = (SeekBar) dialog.findViewById(R.id.SeekBarAngle);
+		final TextView angleTextView = (TextView) dialog
+				.findViewById(R.id.TextViewAngle);
+		angleTextView.setText(String.format(
+				getResources().getString(R.string.dialog_polygon_hatch_angle)
+						+ "\t%3.0f�", hatchAngle));
+		angleSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 			public void onProgressChanged(SeekBar seekBar, int progress,
 					boolean fromUser) {
 				hatchAngle = (double) progress;
-				angleTextView.setText(getResources().getString(R.string.dialog_polygon_hatch_angle)+"\t"+hatchAngle+"�");
+				angleTextView.setText(getResources().getString(
+						R.string.dialog_polygon_hatch_angle)
+						+ "\t" + hatchAngle + "�");
 			}
+
 			@Override
 			public void onStartTrackingTouch(SeekBar seekBar) {
 			}
+
 			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {
 			}
 		});
 
-	    SeekBar distanceSeekBar = (SeekBar) dialog.findViewById(R.id.seekBarDistance);
-	    final TextView distanceTextView = (TextView) dialog.findViewById(R.id.textViewDistance);
-	    distanceTextView.setText(getResources().getString(R.string.dialog_polygon_distance_between_lines)+"\t"+hatchDistance+"m");
-	    distanceSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {		
-			public void onProgressChanged(SeekBar seekBar, int progress,
-					boolean fromUser) {
-				hatchDistance = (double) progress;
-				distanceTextView.setText(getResources().getString(R.string.dialog_polygon_distance_between_lines)+"\t"+hatchDistance+"m");
-			}
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
-			}
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-			}
-		});
+		SeekBar distanceSeekBar = (SeekBar) dialog
+				.findViewById(R.id.seekBarDistance);
+		final TextView distanceTextView = (TextView) dialog
+				.findViewById(R.id.textViewDistance);
+		distanceTextView.setText(getResources().getString(
+				R.string.dialog_polygon_distance_between_lines)
+				+ "\t" + hatchDistance + "m");
+		distanceSeekBar
+				.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+					public void onProgressChanged(SeekBar seekBar,
+							int progress, boolean fromUser) {
+						hatchDistance = (double) progress;
+						distanceTextView.setText(getResources().getString(
+								R.string.dialog_polygon_distance_between_lines)
+								+ "\t" + hatchDistance + "m");
+					}
+
+					@Override
+					public void onStartTrackingTouch(SeekBar seekBar) {
+					}
+
+					@Override
+					public void onStopTrackingTouch(SeekBar seekBar) {
+					}
+				});
 
 	}
+
 	private void menuSaveFile() {
 		if (mission.saveWaypoints()) {
 			Toast.makeText(this, R.string.file_saved, Toast.LENGTH_SHORT)
@@ -414,10 +397,10 @@ public class PlanningActivity extends Activity
 	}
 
 	public LatLng getMyLocation() {
-		if(mMap.getMyLocation() != null){
-		return new LatLng(mMap.getMyLocation().getLatitude(), mMap
-				.getMyLocation().getLongitude());
-		}else {
+		if (mMap.getMyLocation() != null) {
+			return new LatLng(mMap.getMyLocation().getLatitude(), mMap
+					.getMyLocation().getLongitude());
+		} else {
 			return null;
 		}
 	}
@@ -451,7 +434,8 @@ public class PlanningActivity extends Activity
 		dialog.setTitle(R.string.select_file_to_open);
 		dialog.setItems(itemList, new OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
-				if (mission.openMission(FileManager.getWaypointsPath()+ itemList[which])) {
+				if (mission.openMission(FileManager.getWaypointsPath()
+						+ itemList[which])) {
 					zoomToExtents();
 					Toast.makeText(getApplicationContext(), itemList[which],
 							Toast.LENGTH_LONG).show();
@@ -466,9 +450,52 @@ public class PlanningActivity extends Activity
 		dialog.create().show();
 	}
 
-	@Override
-	int getNavigationItem() {
-		return 0;
-	}
+	public MAVLinkClient MAVClient = new MAVLinkClient(this) {
+		@Override
+		public void notifyReceivedData(MAVLinkMessage m) {
+			waypointMananger.processMessage(m);
+		}
+	
+		@Override
+		public void notifyConnected() {
+			connectButton.setTitle(getResources().getString(
+					R.string.menu_disconnect));
+			tts.speak("Connected");
+		}
+	
+		@Override
+		public void notifyDisconnected() {
+			connectButton.setTitle(getResources().getString(
+					R.string.menu_connect));
+			tts.speak("Disconnected");
+		}
+	};
+
+	WaypointMananger waypointMananger = new WaypointMananger(MAVClient) {
+		@Override
+		public void onWaypointsReceived(List<waypoint> waypoints) {
+			if (waypoints != null) {
+				Toast.makeText(getApplicationContext(),
+						"Waypoints received from Drone", Toast.LENGTH_SHORT)
+						.show();
+				Log.d("Mission",
+						"Received all waypoints, size()=" + waypoints.size());
+				tts.speak("Received waypoints from Drone");
+				mission.setHome(waypoints.get(0));
+				waypoints.remove(0); // Remove Home waypoint
+				mission.clearWaypoints();
+				mission.addWaypoints(waypoints);
+				updateMarkersAndPath();
+				zoomToExtents();
+			}
+		}
+	
+		@Override
+		public void onWriteWaypoints(msg_mission_ack msg) {
+			Toast.makeText(getApplicationContext(), "Waypoints saved to Drone",
+					Toast.LENGTH_SHORT).show();
+			tts.speak("Waypoints saved to Drone");
+		}
+	};
 
 }

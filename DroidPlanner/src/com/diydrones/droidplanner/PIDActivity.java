@@ -4,17 +4,19 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class PIDActivity  extends Activity {
+public class PIDActivity extends Activity {
 
-	
+	@Override
+	int getNavigationItem() {
+		return 3;
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-	 
+
 		setContentView(R.layout.pid);
 	}
-	
-
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -22,6 +24,7 @@ public class PIDActivity  extends Activity {
 
 		return true;
 	}
+
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
@@ -32,14 +35,6 @@ public class PIDActivity  extends Activity {
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
-	}
-
-
-
-
-	@Override
-	int getNavigationItem() {
-		return 3;
 	}
 
 }

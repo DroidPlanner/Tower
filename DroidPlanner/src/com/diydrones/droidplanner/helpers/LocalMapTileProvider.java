@@ -10,9 +10,9 @@ import com.google.android.gms.maps.model.Tile;
 import com.google.android.gms.maps.model.TileProvider;
 
 /**
- * Title provider for a MapView from the local storage.
- * Based on: http://stackoverflow.com/questions/14784841/tileprovider-using-local-tiles
- *
+ * Title provider for a MapView from the local storage. Based on:
+ * http://stackoverflow.com/questions/14784841/tileprovider-using-local-tiles
+ * 
  */
 public class LocalMapTileProvider implements TileProvider {
 	private static final int TILE_WIDTH = 256;

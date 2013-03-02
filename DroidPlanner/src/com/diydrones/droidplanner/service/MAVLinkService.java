@@ -85,7 +85,7 @@ public class MAVLinkService extends Service {
 
 			case MSG_CONNECT_DEVICE:
 				Log.d("Service", "Toglle connection to Device");
-				toggleConnectionState();		
+				toggleConnectionState();
 				break;
 
 			case MSG_SEND_DATA:
@@ -183,11 +183,14 @@ public class MAVLinkService extends Service {
 		if (MAV.isConnected()) {
 			MAV.closeConnection();
 		} else {
-			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-			String serverIP =prefs.getString("pref_server_ip", "");
-			int port = Integer.parseInt(prefs.getString("pref_server_port", "0"));		
-			boolean logEnabled = prefs.getBoolean("pref_mavlink_log_enabled",false);
-			MAV.openConnection(serverIP,port,logEnabled);
+			SharedPreferences prefs = PreferenceManager
+					.getDefaultSharedPreferences(getApplicationContext());
+			String serverIP = prefs.getString("pref_server_ip", "");
+			int port = Integer.parseInt(prefs
+					.getString("pref_server_port", "0"));
+			boolean logEnabled = prefs.getBoolean("pref_mavlink_log_enabled",
+					false);
+			MAV.openConnection(serverIP, port, logEnabled);
 		}
 	}
 
@@ -195,10 +198,11 @@ public class MAVLinkService extends Service {
 	 * Show a notification while this service is running.
 	 */
 	static final int StatusBarNotification = 1;
+
 	private void showNotification() {
-			updateNotification(getResources().getString(R.string.disconnected));
+		updateNotification(getResources().getString(R.string.disconnected));
 	}
-	
+
 	private void updateNotification(String text) {
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
 				this).setSmallIcon(R.drawable.ic_launcher)

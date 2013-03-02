@@ -32,26 +32,30 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 
-public class GCPActivity extends Activity
-		implements OnMarkerClickListener {
+public class GCPActivity extends Activity implements OnMarkerClickListener {
 	private GoogleMap mMap;
 
 	private List<waypoint> WPlist;
 
 	@Override
-	protected void onResume() {
-		super.onResume();
-		setUpMapIfNeeded();
+	int getNavigationItem() {
+		return 5;
 	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+	
 		setContentView(R.layout.gcp);
-
+	
 		WPlist = new ArrayList<waypoint>();
+	
+		setUpMapIfNeeded();
+	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
 		setUpMapIfNeeded();
 	}
 
@@ -62,7 +66,24 @@ public class GCPActivity extends Activity
 		return true;
 	}
 
-
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_settings:
+			startActivity(new Intent(this, SettingsActivity.class));
+			return true;
+		case R.id.menu_clear:
+			clearWaypointsAndUpdate();
+			return true;
+		case R.id.menu_open_kmz:
+			openGCPDialog();
+			return true;
+		case R.id.menu_zoom:
+			zoomToExtents();
+		default:
+			return super.onMenuItemSelected(featureId, item);
+		}
+	}
 
 	private void setUpMapIfNeeded() {
 		// Do a null check to confirm that we have not already instantiated the
@@ -102,66 +123,31 @@ public class GCPActivity extends Activity
 
 	}
 
-	private void updateMarkers() {
-		mMap.clear();
-		mapHelper.setupMapOverlay(mMap,PreferenceManager.getDefaultSharedPreferences(
-				this).getBoolean("pref_advanced_use_offline_maps", false));
-		int i = 1;
-		for (waypoint point : WPlist) {
-			mapHelper.addGcpMarkerToMap(mMap,i, point.coord , point.set);
-			i++;
+	private void openGCPDialog() {
+		final String[] itemList = FileManager.loadKMZFileList();
+		if (itemList.length == 0) {
+			Toast.makeText(getApplicationContext(), R.string.no_waypoint_files,
+					Toast.LENGTH_SHORT).show();
+			return;
 		}
-	}
-
-
-	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.menu_settings:
-			startActivity(new Intent(this,SettingsActivity.class));
-			return true;
-		case R.id.menu_clear:
-			clearWaypointsAndUpdate();
-			return true;
-		case R.id.menu_open_kmz:
-			openGCPDialog();
-			return true;
-		case R.id.menu_zoom:
-			zoomToExtents();
-		default:
-			return super.onMenuItemSelected(featureId, item);
-		}
-	}
-
-	private void clearWaypointsAndUpdate() {
-		WPlist.clear();
-		updateMarkers();
-	}
-
-	public void zoomToExtents() {
-		if (!WPlist.isEmpty()) {
-			LatLngBounds.Builder builder = new LatLngBounds.Builder();
-			for (waypoint point : WPlist) {
-				builder.include(point.coord);
+		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+		dialog.setTitle(R.string.select_file_to_open);
+		dialog.setItems(itemList, new OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				if (openGCPFile(FileManager.getGCPPath() + itemList[which])) {
+					zoomToExtents();
+					Toast.makeText(getApplicationContext(), itemList[which],
+							Toast.LENGTH_LONG).show();
+				} else {
+					Toast.makeText(getApplicationContext(),
+							R.string.error_when_opening_file,
+							Toast.LENGTH_SHORT).show();
+				}
+				updateMarkers();
 			}
-			mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(
-					builder.build(), 30));
-		}
-	}
-
-	/**
-	 * Zoom to the extent of the waypoints should be used when the maps has not
-	 * undergone the layout phase Assumes a map size of 480x360 px
-	 */
-	public void zoomToExtentsFixed() {
-		if (!WPlist.isEmpty()) {
-			LatLngBounds.Builder builder = new LatLngBounds.Builder();
-			for (waypoint point : WPlist) {
-				builder.include(point.coord);
-			}
-			mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(
-					builder.build(), 480, 360, 30));
-		}
+	
+		});
+		dialog.create().show();
 	}
 
 	private boolean openGCPFile(String fileWithPath) {
@@ -225,33 +211,6 @@ public class GCPActivity extends Activity
 		return true;
 	}
 
-	private void openGCPDialog() {
-		final String[] itemList = FileManager.loadKMZFileList();
-		if (itemList.length == 0) {
-			Toast.makeText(getApplicationContext(), R.string.no_waypoint_files,
-					Toast.LENGTH_SHORT).show();
-			return;
-		}
-		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-		dialog.setTitle(R.string.select_file_to_open);
-		dialog.setItems(itemList, new OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				if (openGCPFile(FileManager.getGCPPath() + itemList[which])) {
-					zoomToExtents();
-					Toast.makeText(getApplicationContext(), itemList[which],
-							Toast.LENGTH_LONG).show();
-				} else {
-					Toast.makeText(getApplicationContext(),
-							R.string.error_when_opening_file,
-							Toast.LENGTH_SHORT).show();
-				}
-				updateMarkers();
-			}
-
-		});
-		dialog.create().show();
-	}
-
 	@Override
 	public boolean onMarkerClick(Marker marker) {
 		int i = Integer.parseInt(marker.getTitle()) - 1;
@@ -260,8 +219,47 @@ public class GCPActivity extends Activity
 		return true;
 	}
 
-	@Override
-	int getNavigationItem() {
-		return 5;
+	private void updateMarkers() {
+		mMap.clear();
+		mapHelper.setupMapOverlay(
+				mMap,
+				PreferenceManager.getDefaultSharedPreferences(this).getBoolean(
+						"pref_advanced_use_offline_maps", false));
+		int i = 1;
+		for (waypoint point : WPlist) {
+			mapHelper.addGcpMarkerToMap(mMap, i, point.coord, point.set);
+			i++;
+		}
+	}
+
+	private void clearWaypointsAndUpdate() {
+		WPlist.clear();
+		updateMarkers();
+	}
+
+	public void zoomToExtents() {
+		if (!WPlist.isEmpty()) {
+			LatLngBounds.Builder builder = new LatLngBounds.Builder();
+			for (waypoint point : WPlist) {
+				builder.include(point.coord);
+			}
+			mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(
+					builder.build(), 30));
+		}
+	}
+
+	/**
+	 * Zoom to the extent of the waypoints should be used when the maps has not
+	 * undergone the layout phase Assumes a map size of 480x360 px
+	 */
+	public void zoomToExtentsFixed() {
+		if (!WPlist.isEmpty()) {
+			LatLngBounds.Builder builder = new LatLngBounds.Builder();
+			for (waypoint point : WPlist) {
+				builder.include(point.coord);
+			}
+			mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(
+					builder.build(), 480, 360, 30));
+		}
 	}
 }
