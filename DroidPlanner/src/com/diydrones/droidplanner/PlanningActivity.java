@@ -5,7 +5,6 @@ import java.util.List;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,7 +17,7 @@ import android.widget.Toast;
 import com.MAVLink.WaypointMananger;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
-import com.diydrones.droidplanner.helpers.FileManager;
+import com.diydrones.droidplanner.helpers.OpenMissionDialog;
 import com.diydrones.droidplanner.helpers.PolygonDialog;
 import com.diydrones.droidplanner.helpers.TTS;
 import com.diydrones.droidplanner.service.MAVLinkClient;
@@ -124,7 +123,7 @@ public class PlanningActivity extends Activity implements
 			waypointMananger.writeWaypoints(data);
 			return true;
 		case R.id.menu_open_file:
-			OpenWaypointDialog();
+			openMissionFile();
 			return true;
 		case R.id.menu_save_file:
 			menuSaveFile();
@@ -145,7 +144,7 @@ public class PlanningActivity extends Activity implements
 			setModeToPolygon();
 			return true;
 		case R.id.menu_generate_polygon:
-			generatePolygon();
+			openPolygonGenerateDialog();
 			return true;
 		case R.id.menu_clear_polygon:
 			polygon.clearPolygon();
@@ -160,7 +159,20 @@ public class PlanningActivity extends Activity implements
 		}
 	}
 
-	public void generatePolygon() {
+	private void openMissionFile() {
+		OpenMissionDialog missionDialog = new OpenMissionDialog() {				
+			@Override
+			public void waypointFileLoaded(boolean isFileOpen) {
+				if(isFileOpen){
+					zoomToExtents();
+				}
+				updateMarkersAndPath();
+			}
+		};
+		missionDialog.OpenWaypointDialog(mission, this);
+	}
+
+	public void openPolygonGenerateDialog() {
 		double defaultHatchAngle = ((double) mMap.getCameraPosition().bearing + 90) % 180;
 		PolygonDialog polygonDialog = new PolygonDialog() {
 			@Override
@@ -346,33 +358,6 @@ public class PlanningActivity extends Activity implements
 		LatLngBounds bound = mission.getWaypointsBounds();
 		mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bound, 480, 360,
 				30));
-	}
-
-	private void OpenWaypointDialog() {
-		final String[] itemList = FileManager.loadWaypointFileList();
-		if (itemList.length == 0) {
-			Toast.makeText(getApplicationContext(), R.string.no_waypoint_files,
-					Toast.LENGTH_SHORT).show();
-			return;
-		}
-		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-		dialog.setTitle(R.string.select_file_to_open);
-		dialog.setItems(itemList, new OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				if (mission.openMission(FileManager.getWaypointsPath()
-						+ itemList[which])) {
-					zoomToExtents();
-					Toast.makeText(getApplicationContext(), itemList[which],
-							Toast.LENGTH_LONG).show();
-				} else {
-					Toast.makeText(getApplicationContext(),
-							R.string.error_when_opening_file,
-							Toast.LENGTH_SHORT).show();
-				}
-				updateMarkersAndPath();
-			}
-		});
-		dialog.create().show();
 	}
 
 	public MAVLinkClient MAVClient = new MAVLinkClient(this) {

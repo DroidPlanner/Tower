@@ -1,9 +1,13 @@
 package com.diydrones.droidplanner.helpers;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -20,7 +24,7 @@ import com.google.android.gms.maps.model.LatLng;
 public class KmlParser {
 	private final String ns = null;
 
-	private List<waypoint> WPlist;
+	public List<waypoint> WPlist;
 
 	public class waypoint {
 		public LatLng coord;
@@ -38,6 +42,63 @@ public class KmlParser {
 			Height = h;
 			set = false;
 		}
+	}
+	
+	
+	public boolean openGCPFile(String fileWithPath) {
+		boolean returnValue = false;
+		if (fileWithPath.endsWith(".kmz")) {
+			returnValue = openKMZ(fileWithPath);
+		} else if (fileWithPath.endsWith(".kml")) {
+			returnValue = openKML(fileWithPath);
+		}
+		return returnValue;
+	}
+
+	private boolean openKML(String fileWithPath) {
+		try {
+			FileInputStream in = new FileInputStream(fileWithPath);
+			
+			WPlist = parse(in);
+			in.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		} catch (XmlPullParserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
+	private boolean openKMZ(String fileWithPath) {
+		try {
+			ZipInputStream zin = new ZipInputStream(new FileInputStream(
+					fileWithPath));
+			ZipEntry ze;
+			while ((ze = zin.getNextEntry()) != null) {
+				if (ze.getName().contains(".kml")) {
+					WPlist = parse(zin);
+				}
+			}
+			zin.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return false;
+		} catch (XmlPullParserException e) {
+			e.printStackTrace();
+			return false;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 
 	public List<waypoint> parse(InputStream in) throws XmlPullParserException,

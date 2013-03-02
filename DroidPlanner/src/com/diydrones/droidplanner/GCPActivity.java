@@ -1,18 +1,8 @@
 package com.diydrones.droidplanner;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
-import org.xmlpull.v1.XmlPullParserException;
-
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -20,9 +10,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.diydrones.droidplanner.helpers.FileManager;
 import com.diydrones.droidplanner.helpers.KmlParser;
 import com.diydrones.droidplanner.helpers.KmlParser.waypoint;
+import com.diydrones.droidplanner.helpers.OpenGcpFileDialog;
 import com.diydrones.droidplanner.helpers.mapHelper;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -35,7 +25,7 @@ import com.google.android.gms.maps.model.Marker;
 public class GCPActivity extends Activity implements OnMarkerClickListener {
 	private GoogleMap mMap;
 
-	private List<waypoint> WPlist;
+	public List<waypoint> WPlist;
 
 	@Override
 	int getNavigationItem() {
@@ -76,13 +66,27 @@ public class GCPActivity extends Activity implements OnMarkerClickListener {
 			clearWaypointsAndUpdate();
 			return true;
 		case R.id.menu_open_kmz:
-			openGCPDialog();
+			openGcpFile();
 			return true;
 		case R.id.menu_zoom:
 			zoomToExtents();
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
+	}
+
+	public void openGcpFile() {
+		OpenGcpFileDialog dialog = new OpenGcpFileDialog() {			
+			@Override
+			public void onGcpFileLoaded(List<waypoint> list) {
+				if(list!=null)
+				WPlist.clear();
+				WPlist.addAll(list);
+				updateMarkers();
+				zoomToExtents();
+			}
+		};		
+		dialog.openGCPDialog(this);
 	}
 
 	private void setUpMapIfNeeded() {
@@ -117,99 +121,18 @@ public class GCPActivity extends Activity implements OnMarkerClickListener {
 		if (Intent.ACTION_VIEW.equals(action) && type != null) {
 			Toast.makeText(this, intent.getData().getPath(), Toast.LENGTH_LONG)
 					.show();
-			openGCPFile(intent.getData().getPath());
-			zoomToExtentsFixed();
-		}
-
-	}
-
-	private void openGCPDialog() {
-		final String[] itemList = FileManager.loadKMZFileList();
-		if (itemList.length == 0) {
-			Toast.makeText(getApplicationContext(), R.string.no_waypoint_files,
-					Toast.LENGTH_SHORT).show();
-			return;
-		}
-		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-		dialog.setTitle(R.string.select_file_to_open);
-		dialog.setItems(itemList, new OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				if (openGCPFile(FileManager.getGCPPath() + itemList[which])) {
-					zoomToExtents();
-					Toast.makeText(getApplicationContext(), itemList[which],
-							Toast.LENGTH_LONG).show();
-				} else {
-					Toast.makeText(getApplicationContext(),
-							R.string.error_when_opening_file,
-							Toast.LENGTH_SHORT).show();
-				}
-				updateMarkers();
+			KmlParser parser = (new KmlParser());
+			boolean fileIsOpen = parser.openGCPFile(intent.getData().getPath());
+			if(fileIsOpen){
+					WPlist.clear();
+					WPlist.addAll(parser.WPlist);
+					updateMarkers();
+					zoomToExtentsFixed();
 			}
-	
-		});
-		dialog.create().show();
+		}
+
 	}
 
-	private boolean openGCPFile(String fileWithPath) {
-		boolean returnValue = false;
-		if (fileWithPath.endsWith(".kmz")) {
-			returnValue = openKMZ(fileWithPath);
-		} else if (fileWithPath.endsWith(".kml")) {
-			returnValue = openKML(fileWithPath);
-		}
-		if (returnValue == true) {
-			updateMarkers();
-		}
-		return returnValue;
-	}
-
-	private boolean openKML(String fileWithPath) {
-		try {
-			FileInputStream in = new FileInputStream(fileWithPath);
-			KmlParser reader = new KmlParser();
-
-			WPlist = reader.parse(in);
-			in.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
-		} catch (XmlPullParserException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}
-
-	private boolean openKMZ(String fileWithPath) {
-		try {
-			ZipInputStream zin = new ZipInputStream(new FileInputStream(
-					fileWithPath));
-			ZipEntry ze;
-			while ((ze = zin.getNextEntry()) != null) {
-				if (ze.getName().contains(".kml")) {
-					KmlParser reader = new KmlParser();
-					WPlist = reader.parse(zin);
-				}
-			}
-			zin.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return false;
-		} catch (XmlPullParserException e) {
-			e.printStackTrace();
-			return false;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}
 
 	@Override
 	public boolean onMarkerClick(Marker marker) {
