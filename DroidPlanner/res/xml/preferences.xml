@@ -5,11 +5,11 @@
         android:key="pref_server"
         android:title="TCP connection" >
         <EditTextPreference
-            android:defaultValue="192.168.40.10"
+            android:defaultValue="192.168.40.100"
             android:key="pref_server_ip"
             android:title="Server IP" />
         <EditTextPreference
-            android:defaultValue="5760"
+            android:defaultValue="9761"
             android:key="pref_server_port"
             android:title="Server Port" />
     </PreferenceCategory>
@@ -38,6 +38,11 @@
             android:title="Use offline maps" 
             android:defaultValue="false" 
             android:summary="Use map tiles on the local storage, for offline map view."/>
+        <CheckBoxPreference
+            android:key="pref_enable_tts"
+            android:title="Enable Text To Speech" 
+            android:defaultValue="false" 
+            android:summary="Audible messages for important events"/>
     </PreferenceCategory>
     
 </PreferenceScreen>

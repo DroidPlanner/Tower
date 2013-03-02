@@ -51,6 +51,8 @@ public class GCPActivity extends android.support.v4.app.FragmentActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
 		// Set up the action bar to show a dropdown list.
 		setUpActionBar();

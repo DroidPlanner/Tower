@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -58,7 +59,8 @@ public class TerminalActivity extends android.support.v4.app.FragmentActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+	
 		
 		// Set up the action bar to show a dropdown list.
 		ActionBar actionBar = getActionBar();
@@ -67,19 +69,19 @@ public class TerminalActivity extends android.support.v4.app.FragmentActivity
 		SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this,
 				R.array.menu_dropdown,
 				android.R.layout.simple_spinner_dropdown_item);
-
+	
 		actionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
 		actionBar.setSelectedNavigationItem(4);
-
+	
 		setContentView(R.layout.terminal);
-
+	
 		terminal = (TextView) findViewById(R.id.textViewTerminal);
 		sendButton = (Button) findViewById(R.id.buttonSend);
 		
 		MAVClient.init();
 		
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
