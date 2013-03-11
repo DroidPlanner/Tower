@@ -23,7 +23,12 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
 	private int width;
 	private int height;
 
-	double roll = 0, pitch = 0, yaw = 0, altitude = 0;
+	double roll = 0, pitch = 0, yaw = 0, altitude = 0, disttowp = 0;
+	int wpno = -1;
+	private String remainBatt = "";
+	private String battVolt = "";
+	private String gpsFix = "";
+	private String mode = "Init";
 
 	Paint grid_paint = new Paint();
 	Paint ground = new Paint();
@@ -38,9 +43,6 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
 	Paint plane = new Paint();
 	Paint redSolid = new Paint();
 	Paint blackSolid = new Paint();
-	private String remainBatt = "";
-	private String battVolt = "";
-	private String gpsFix = "";
 
 	public HUDwidget(Context context, AttributeSet attributeSet) {
 		super(context, attributeSet);
@@ -69,6 +71,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
 		whiteStroke.setColor(Color.WHITE);
 		whiteStroke.setStyle(Style.STROKE);
 		whiteStroke.setStrokeWidth(3);
+		whiteStroke.setAntiAlias(true);	// Shouldn't affect performance
 
 		plane.setColor(Color.RED);
 		plane.setStyle(Style.STROKE);
@@ -286,6 +289,10 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
         canvas.drawPath(arrow, blackSolid);
         canvas.drawText(Integer.toString((int)altitude), scroller.left+15 , textHalfSize , ScrollerText);
         
+        // Draw mode and wp distance
+        canvas.drawText(mode, scroller.left , scroller.bottom + 25,ScrollerText);
+        canvas.drawText( Integer.toString((int) disttowp) + ">" + wpno, scroller.left , scroller.bottom +45,ScrollerText);
+
 
 	}
 	
@@ -420,6 +427,27 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
 	public void setBatteryRemaining(String d) {
 		if (!remainBatt.equals(d)) {
 			remainBatt = d;
+			setDirty();
+		}
+	}
+
+	public void setMode(String d) {
+		if (!mode.equals(d)) {
+			mode = d;
+			setDirty();
+		}
+	}
+	
+	public void setDistanceToWaypoint(double d) {
+		if (disttowp != d) {
+			disttowp = d;
+			setDirty();
+		}
+	}
+	
+	public void setWaypointNumber(int d) {
+		if (wpno != d) {
+			wpno = d;
 			setDirty();
 		}
 	}

@@ -9,6 +9,9 @@ import android.view.MenuItem;
 
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_attitude;
+import com.MAVLink.Messages.ardupilotmega.msg_heartbeat;
+import com.MAVLink.Messages.ardupilotmega.msg_mission_current;
+import com.MAVLink.Messages.ardupilotmega.msg_nav_controller_output;
 import com.MAVLink.Messages.ardupilotmega.msg_request_data_stream;
 import com.MAVLink.Messages.ardupilotmega.msg_vfr_hud;
 import com.diydrones.droidplanner.helpers.HUDwidget;
@@ -74,10 +77,19 @@ public class HUDActivity extends Activity {
 			case msg_vfr_hud.MAVLINK_MSG_ID_VFR_HUD:
 				hudWidget.setAltitude(((msg_vfr_hud) msg).alt);
 				break;
+			case msg_mission_current.MAVLINK_MSG_ID_MISSION_CURRENT:
+				hudWidget.setWaypointNumber(((msg_mission_current) msg).seq);
+				break;
+			case msg_nav_controller_output.MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT:
+				hudWidget.setDistanceToWaypoint(((msg_nav_controller_output) msg).wp_dist);
+				break;
+			case msg_heartbeat.MAVLINK_MSG_ID_HEARTBEAT:
+				//TODO decode mode from mavlink message
+				//hudWidget.setMode(((msg_heartbeat) msg).custom_mode);
+				break;
 			default:
 				break;
 			}
-
 		}
 
 		@Override
