@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_attitude;
 import com.MAVLink.Messages.ardupilotmega.msg_request_data_stream;
+import com.MAVLink.Messages.ardupilotmega.msg_vfr_hud;
 import com.diydrones.droidplanner.helpers.HUDwidget;
 import com.diydrones.droidplanner.service.MAVLinkClient;
 
@@ -69,6 +70,9 @@ public class HUDActivity extends Activity {
 			case msg_attitude.MAVLINK_MSG_ID_ATTITUDE:
 				msg_attitude m = (msg_attitude) msg;
 				hudWidget.newFlightData(m.roll, m.pitch, m.yaw);
+				break;
+			case msg_vfr_hud.MAVLINK_MSG_ID_VFR_HUD:
+				hudWidget.setAltitude(((msg_vfr_hud) msg).alt);
 				break;
 			default:
 				break;

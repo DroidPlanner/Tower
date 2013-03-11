@@ -1,11 +1,13 @@
 package com.diydrones.droidplanner.helpers;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
+import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
@@ -21,7 +23,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
 	private int width;
 	private int height;
 
-	double roll = 0, pitch = 0, yaw = 0;
+	double roll = 0, pitch = 0, yaw = 0, altitude = 0;
 
 	Paint grid_paint = new Paint();
 	Paint ground = new Paint();
@@ -31,10 +33,11 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
 	Paint whitebar = new Paint();
 	Paint whiteStroke = new Paint();
 	Paint statusText = new Paint();
+	Paint ScrollerText = new Paint();
 
 	Paint plane = new Paint();
 	Paint redSolid = new Paint();
-	private String altitude = "";
+	Paint blackSolid = new Paint();
 	private String remainBatt = "";
 	private String battVolt = "";
 	private String gpsFix = "";
@@ -59,7 +62,10 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
 		statusText.setColor(Color.WHITE);
 		statusText.setTextSize(25.0f * context.getResources()
 				.getDisplayMetrics().density);
-
+		
+		ScrollerText = new Paint(statusText);
+		ScrollerText.setTextAlign(Paint.Align.LEFT);
+		
 		whiteStroke.setColor(Color.WHITE);
 		whiteStroke.setStyle(Style.STROKE);
 		whiteStroke.setStrokeWidth(3);
@@ -69,7 +75,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
 		plane.setStrokeWidth(3);
 
 		redSolid.setColor(Color.RED);
-
+		blackSolid.setColor(Color.BLACK);
 	}
 
 	@Override
@@ -93,6 +99,9 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
 		canvas.restore();
 		canvas.save();
 		drawPlane(canvas);
+		canvas.restore();
+		canvas.save();
+		drawRightScroller(canvas);
 		canvas.restore();
 
 	}
@@ -128,7 +137,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
 
 	private void drawText(Canvas canvas) {
 		drawText(canvas, 1, gpsFix, statusText, true);
-		drawText(canvas, 0, altitude, statusText, true);
+		//drawText(canvas, 0, altitude, statusText, true);
 
 		drawText(canvas, 1, remainBatt, statusText, false);
 		drawText(canvas, 0, battVolt, statusText, false);
@@ -243,6 +252,44 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
 		}
 	}
 
+	private void drawRightScroller(Canvas canvas){
+		final float textHalfSize = ScrollerText.getTextSize()/2 -1;
+		
+		// Outside box
+		RectF scroller = new RectF(width*0.42f, -height*.30f, width *.50f, height*.30f);
+		canvas.drawRect(scroller, whiteStroke);
+		canvas.drawRect(scroller, whitebar);
+		
+		// Altitude ticks and values
+		final int viewrange = 26;
+        float space = scroller.height() / (float)viewrange;
+        int start = ((int)altitude - viewrange / 2);
+		
+        for (int a = start; a <= (altitude + viewrange / 2); a += 1){ // go trough 1m steps
+            if (a % 5 == 0){
+            	float lineHeight = scroller.centerY() - space * (a- (int)altitude);
+                canvas.drawLine(scroller.left, lineHeight , scroller.left + 10, lineHeight, whiteStroke);
+                canvas.drawText(Integer.toString(a), scroller.left+15, lineHeight + textHalfSize, ScrollerText);                
+            }
+            //TODO add target altitude indicator
+        }        
+        
+        //TODO add vertical speed indicator
+        
+        // Arrow with current altitude
+        final int arrowHeight = 26;
+        Path arrow = new Path();
+        arrow.moveTo(scroller.right,-arrowHeight/2);
+        arrow.lineTo(scroller.left + 12, -arrowHeight/2);
+        arrow.lineTo(scroller.left + 5, 0);
+        arrow.lineTo(scroller.left + 12, arrowHeight/2);
+        arrow.lineTo(scroller.right, arrowHeight/2);        
+        canvas.drawPath(arrow, blackSolid);
+        canvas.drawText(Integer.toString((int)altitude), scroller.left+15 , textHalfSize , ScrollerText);
+        
+
+	}
+	
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
@@ -307,6 +354,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
 			}
 		}
 
+		@SuppressLint("WrongCall")		// TODO fix error
 		@Override
 		public void run() {
 			Canvas c;
@@ -363,8 +411,8 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
 		}
 	}
 
-	public void setAltitude(String alt) {
-		if (!altitude.equals(alt)) {
+	public void setAltitude(double alt) {
+		if (alt != altitude) {
 			altitude = alt;
 			setDirty();
 		}
