@@ -190,7 +190,6 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
 	}
 
 	private void drawRoll(Canvas canvas) {
-
 		int r = (int) ((double) width * 0.35); // 250;
 		RectF rec = new RectF(-r, -height / 2 + 60, r, -height / 2 + 60 + 2 * r);
 
@@ -218,7 +217,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
 			}
 		}
 
-		float dx = (float) Math.sin(-roll * Math.PI / 180) * r;
+		float dx = (float) Math.sin(roll * Math.PI / 180) * r;
 		float dy = (float) Math.cos(-roll * Math.PI / 180) * r;
 		canvas.drawCircle(dx, centerY - dy, 10, redSolid);
 
