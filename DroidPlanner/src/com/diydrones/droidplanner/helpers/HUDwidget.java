@@ -23,23 +23,27 @@ import com.MAVLink.Messages.ApmModes;
 public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
 	private static final float SCROLLER_HEIGHT_PERCENT = .30f;
 	private static final float SCROLLER_WIDTH_PERCENT = 0.08f;
-    private static final int SCROLLER_ARROW_HEIGTH = 26;
-	
-    private static final int SCROLLER_VSI_RANGE = 12;
-    private static final int SCROLLER_ALT_RANGE = 26;
-    private static final int SCROLLER_SPEED_RANGE = 26;
-    
+	private static final int SCROLLER_ARROW_HEIGTH = 26;
+
+	private static final int SCROLLER_VSI_RANGE = 12;
+	private static final int SCROLLER_ALT_RANGE = 26;
+	private static final int SCROLLER_SPEED_RANGE = 26;
+
 	private ScopeThread renderer;
 	private int width;
 	private int height;
 
-	double roll = 0, pitch = 0, yaw = 0, altitude = 0, disttowp = 0, verticalSpeed = 0, groundSpeed = 0, airSpeed = 0, targetSpeed = 0, targetAltitude = 0;
+	// Drone Status
+	double roll = 0, pitch = 0, yaw = 0, altitude = 0, disttowp = 0,
+			verticalSpeed = 0, groundSpeed = 0, airSpeed = 0, targetSpeed = 0,
+			targetAltitude = 0;
 	int wpno = -1;
 	private String remainBatt = "";
 	private String battVolt = "";
 	private String gpsFix = "";
 	private String mode = "Unknown";
 
+	// Paints
 	Paint grid_paint = new Paint();
 	Paint ground = new Paint();
 	Paint sky = new Paint();
@@ -50,7 +54,8 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
 	Paint statusText = new Paint();
 	Paint ScrollerText = new Paint();
 	Paint ScrollerTextLeft = new Paint();
-
+	Paint yawText = new Paint();
+	
 	Paint plane = new Paint();
 	Paint redSolid = new Paint();
 	Paint blackSolid = new Paint();
@@ -78,17 +83,22 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
 		statusText.setColor(Color.WHITE);
 		statusText.setTextSize(25.0f * context.getResources()
 				.getDisplayMetrics().density);
-		
+
 		ScrollerText = new Paint(statusText);
 		ScrollerText.setTextAlign(Paint.Align.LEFT);
 		ScrollerTextLeft = new Paint(ScrollerText);
 		ScrollerTextLeft.setTextAlign(Paint.Align.RIGHT);
-		
+
 		whiteStroke.setColor(Color.WHITE);
 		whiteStroke.setStyle(Style.STROKE);
 		whiteStroke.setStrokeWidth(3);
-		whiteStroke.setAntiAlias(true);	// Shouldn't affect performance
+		whiteStroke.setAntiAlias(true); // Shouldn't affect performance
 		
+		yawText = new Paint(whiteStroke);
+		yawText.setStrokeWidth(2);
+		yawText.setTextSize(20);
+		yawText.setTextAlign(Paint.Align.CENTER);
+
 		greenPen = new Paint(whiteStroke);
 		greenPen.setColor(Color.GREEN);
 		greenPen.setStrokeWidth(6);
@@ -132,7 +142,6 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
 		canvas.save();
 		drawLeftScroller(canvas);
 		canvas.restore();
-		
 
 	}
 
@@ -167,7 +176,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
 
 	private void drawText(Canvas canvas) {
 		drawText(canvas, 1, gpsFix, statusText, true);
-		//drawText(canvas, 0, altitude, statusText, true);
+		// drawText(canvas, 0, altitude, statusText, true);
 
 		drawText(canvas, 1, remainBatt, statusText, false);
 		drawText(canvas, 0, battVolt, statusText, false);
@@ -183,7 +192,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
 		// then round to nearest 5 degrees, and draw it.
 
 		double centerDegrees = yaw;
-		double numDegreesToShow = 50;
+		double numDegreesToShow = 120;
 		double degreesPerPixel = (double) width / numDegreesToShow;
 
 		double mod = yaw % 5;
@@ -199,19 +208,23 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
 			// How many pixels from center should it be?
 			int distanceToCenter = (int) ((angle - centerDegrees) * degreesPerPixel);
 
-			canvas.drawLine(distanceToCenter, -height / 2 + 20,
-					distanceToCenter, -height / 2 + 40, white);
 
-			if (workAngle % 90 == 0) {
-				String compass[] = { "N", "E", "S", "W" };
-				int index = (int) workAngle / 90;
+			if (workAngle % 45 == 0) {
+				String compass[] = { "N", "NE", "E", "SE", "S", "SW", "W", "NW"};
+				int index = (int) workAngle / 45;
 				canvas.drawText(compass[index], distanceToCenter,
-						-height / 2 + 20, whiteStroke);
-
-			} else
+						-height / 2 + 20, yawText);
+				canvas.drawLine(distanceToCenter, -height / 2 + 25,
+				distanceToCenter, -height / 2 + 30, white);
+			} else if (workAngle % 15 == 0){
+				canvas.drawLine(distanceToCenter, -height / 2 + 20,
+						distanceToCenter, -height / 2 + 30, white);
 				canvas.drawText((int) (workAngle) + "", distanceToCenter,
-						-height / 2 + 20, whiteCenter);
-
+						-height / 2 + 18, whiteCenter);
+			} else{
+				canvas.drawLine(distanceToCenter, -height / 2 + 25,
+						distanceToCenter, -height / 2 + 30, white);
+			}
 		}
 
 		// Draw the center line
@@ -279,92 +292,115 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
 		}
 	}
 
-	private void drawRightScroller(Canvas canvas){
-		final float textHalfSize = ScrollerText.getTextSize()/2 -1;
-		
-		// Outside box
-		RectF scroller = new RectF(width*(0.5f - SCROLLER_WIDTH_PERCENT), -height*SCROLLER_HEIGHT_PERCENT, width *.50f, height*SCROLLER_HEIGHT_PERCENT);
-		
-		// Draw Vertical speed indicator
-        final float vsi_width = scroller.width() / 4;	
-        float linespace = scroller.height() / SCROLLER_VSI_RANGE ;	
-        Path vsiBox = new Path();
-        vsiBox.moveTo(scroller.left,scroller.top);		// draw outside box
-        vsiBox.lineTo(scroller.left - vsi_width, scroller.top + vsi_width);
-        vsiBox.lineTo(scroller.left - vsi_width, scroller.bottom - vsi_width);
-        vsiBox.lineTo(scroller.left, scroller.bottom);        
-        for (int a = 1; a < SCROLLER_VSI_RANGE; a++){	// draw ticks
-        	float lineHeight = scroller.top + linespace * a;
-        	vsiBox.moveTo(scroller.left - vsi_width, lineHeight);
-        	vsiBox.lineTo(scroller.left - vsi_width/2, lineHeight);
-        }
-        
-        float vsiFillTrim = 0;
-        if(verticalSpeed>1){		// TODO Vertical Speed indicator must be tested
-        	vsiFillTrim = -1;
-        } else if(verticalSpeed<-1){
-        	vsiFillTrim = 1;        	
-		}	
-        
-        Path vsiFill = new Path();
-        vsiFill.moveTo(scroller.left, scroller.centerY());
-        vsiFill.lineTo(scroller.left - vsi_width, scroller.centerY());
-  		vsiFill.lineTo(scroller.left - vsi_width,(scroller.centerY()-(((float)verticalSpeed)+vsiFillTrim)*linespace));
-        vsiFill.lineTo(scroller.left ,(scroller.centerY()-((float)verticalSpeed)*linespace));
-        vsiFill.lineTo(scroller.left, scroller.centerY());        
-        canvas.drawPath(vsiFill, blueVSI);  
-        canvas.drawPath(vsiBox, whiteStroke);
-        
-        // Draw Altitude Scroller
-     		canvas.drawRect(scroller, whiteStroke);
-     		canvas.drawRect(scroller, whitebar);
-     		
-             float space = scroller.height() / (float)SCROLLER_ALT_RANGE;
-             int start = ((int)altitude - SCROLLER_ALT_RANGE / 2);
-             
-     		if (start > targetAltitude){
-     			canvas.drawLine(scroller.left, scroller.bottom, scroller.right, scroller.bottom,greenLightPen);
-    		}else if ((altitude + SCROLLER_SPEED_RANGE / 2) < targetAltitude){
-    			canvas.drawLine(scroller.left, scroller.top, scroller.right, scroller.top,greenLightPen);
-    		}
-     		
-            for (int a = start; a <= (altitude + SCROLLER_ALT_RANGE / 2); a += 1){ // go trough 1m steps
-            	float lineHeight = scroller.centerY() - space * (a- (int)altitude);
+	private void drawRightScroller(Canvas canvas) {
+		final float textHalfSize = ScrollerText.getTextSize() / 2 - 1;
 
-            	if(a == ((int)targetAltitude) && targetAltitude!=0){
-            		canvas.drawLine(scroller.left,lineHeight , scroller.right, lineHeight,greenPen);				
-            	}	
-                if (a % 5 == 0){
-                     canvas.drawLine(scroller.left, lineHeight , scroller.left + 10, lineHeight, whiteStroke);
-                     canvas.drawText(Integer.toString(a), scroller.left+15, lineHeight + textHalfSize, ScrollerText);                
-                }
-             }        
-             
-             // Arrow with current altitude
-             Path arrow = new Path();
-             arrow.moveTo(scroller.right,-SCROLLER_ARROW_HEIGTH/2);
-             arrow.lineTo(scroller.left + SCROLLER_ARROW_HEIGTH / 2, -SCROLLER_ARROW_HEIGTH/2);
-             arrow.lineTo(scroller.left + 5, 0);
-             arrow.lineTo(scroller.left + SCROLLER_ARROW_HEIGTH / 2, SCROLLER_ARROW_HEIGTH/2);
-             arrow.lineTo(scroller.right, SCROLLER_ARROW_HEIGTH/2);        
-             canvas.drawPath(arrow, blackSolid);
-             canvas.drawText(Integer.toString((int)altitude), scroller.left+15 , textHalfSize , ScrollerText);
-             
-             // Draw mode and wp distance
-             canvas.drawText(mode, scroller.left - scroller.width() / 4 , scroller.bottom + 25,ScrollerText);
-             canvas.drawText( Integer.toString((int) disttowp) + ">" + wpno, scroller.left - scroller.width() / 4, scroller.bottom +45,ScrollerText);
-        
-	}
-	
-	private void drawLeftScroller(Canvas canvas){
-		final float textHalfSize = ScrollerText.getTextSize()/2 -1;
-		
-        double speed = airSpeed;	// TODO test airSpeed
-        if (speed == 0)
-            speed = groundSpeed;		
-		
 		// Outside box
-		RectF scroller = new RectF(-width *.50f, -height*SCROLLER_HEIGHT_PERCENT, width*(-0.5f + SCROLLER_WIDTH_PERCENT), height*SCROLLER_HEIGHT_PERCENT);
+		RectF scroller = new RectF(width * (0.5f - SCROLLER_WIDTH_PERCENT),
+				-height * SCROLLER_HEIGHT_PERCENT, width * .50f, height
+						* SCROLLER_HEIGHT_PERCENT);
+
+		// Draw Vertical speed indicator
+		final float vsi_width = scroller.width() / 4;
+		float linespace = scroller.height() / SCROLLER_VSI_RANGE;
+		Path vsiBox = new Path();
+		vsiBox.moveTo(scroller.left, scroller.top); // draw outside box
+		vsiBox.lineTo(scroller.left - vsi_width, scroller.top + vsi_width);
+		vsiBox.lineTo(scroller.left - vsi_width, scroller.bottom - vsi_width);
+		vsiBox.lineTo(scroller.left, scroller.bottom);
+		for (int a = 1; a < SCROLLER_VSI_RANGE; a++) { // draw ticks
+			float lineHeight = scroller.top + linespace * a;
+			vsiBox.moveTo(scroller.left - vsi_width, lineHeight);
+			vsiBox.lineTo(scroller.left - vsi_width / 2, lineHeight);
+		}
+
+		float vsiFillTrim = 0;
+		if (verticalSpeed > 1) { // TODO Vertical Speed indicator must be tested
+			vsiFillTrim = -1;
+		} else if (verticalSpeed < -1) {
+			vsiFillTrim = 1;
+		}
+
+		Path vsiFill = new Path();
+		vsiFill.moveTo(scroller.left, scroller.centerY());
+		vsiFill.lineTo(scroller.left - vsi_width, scroller.centerY());
+		vsiFill.lineTo(scroller.left - vsi_width,
+				(scroller.centerY() - (((float) verticalSpeed) + vsiFillTrim)
+						* linespace));
+		vsiFill.lineTo(scroller.left,
+				(scroller.centerY() - ((float) verticalSpeed) * linespace));
+		vsiFill.lineTo(scroller.left, scroller.centerY());
+		canvas.drawPath(vsiFill, blueVSI);
+		canvas.drawPath(vsiBox, whiteStroke);
+
+		// Draw Altitude Scroller
+		canvas.drawRect(scroller, whiteStroke);
+		canvas.drawRect(scroller, whitebar);
+
+		float space = scroller.height() / (float) SCROLLER_ALT_RANGE;
+		int start = ((int) altitude - SCROLLER_ALT_RANGE / 2);
+
+		if (start > targetAltitude) {
+			canvas.drawLine(scroller.left, scroller.bottom, scroller.right,
+					scroller.bottom, greenLightPen);
+		} else if ((altitude + SCROLLER_SPEED_RANGE / 2) < targetAltitude) {
+			canvas.drawLine(scroller.left, scroller.top, scroller.right,
+					scroller.top, greenLightPen);
+		}
+
+		for (int a = start; a <= (altitude + SCROLLER_ALT_RANGE / 2); a += 1) { // go
+																				// trough
+																				// 1m
+																				// steps
+			float lineHeight = scroller.centerY() - space
+					* (a - (int) altitude);
+
+			if (a == ((int) targetAltitude) && targetAltitude != 0) {
+				canvas.drawLine(scroller.left, lineHeight, scroller.right,
+						lineHeight, greenPen);
+			}
+			if (a % 5 == 0) {
+				canvas.drawLine(scroller.left, lineHeight, scroller.left + 10,
+						lineHeight, whiteStroke);
+				canvas.drawText(Integer.toString(a), scroller.left + 15,
+						lineHeight + textHalfSize, ScrollerText);
+			}
+		}
+
+		// Arrow with current altitude
+		Path arrow = new Path();
+		arrow.moveTo(scroller.right, -SCROLLER_ARROW_HEIGTH / 2);
+		arrow.lineTo(scroller.left + SCROLLER_ARROW_HEIGTH / 2,
+				-SCROLLER_ARROW_HEIGTH / 2);
+		arrow.lineTo(scroller.left + 5, 0);
+		arrow.lineTo(scroller.left + SCROLLER_ARROW_HEIGTH / 2,
+				SCROLLER_ARROW_HEIGTH / 2);
+		arrow.lineTo(scroller.right, SCROLLER_ARROW_HEIGTH / 2);
+		canvas.drawPath(arrow, blackSolid);
+		canvas.drawText(Integer.toString((int) altitude), scroller.left + 15,
+				textHalfSize, ScrollerText);
+
+		// Draw mode and wp distance
+		canvas.drawText(mode, scroller.left - scroller.width() / 4,
+				scroller.bottom + 25, ScrollerText);
+		canvas.drawText(Integer.toString((int) disttowp) + ">" + wpno,
+				scroller.left - scroller.width() / 4, scroller.bottom + 45,
+				ScrollerText);
+
+	}
+
+	private void drawLeftScroller(Canvas canvas) {
+		final float textHalfSize = ScrollerText.getTextSize() / 2 - 1;
+
+		double speed = airSpeed; // TODO test airSpeed
+		if (speed == 0)
+			speed = groundSpeed;
+
+		// Outside box
+		RectF scroller = new RectF(-width * .50f, -height
+				* SCROLLER_HEIGHT_PERCENT, width
+				* (-0.5f + SCROLLER_WIDTH_PERCENT), height
+				* SCROLLER_HEIGHT_PERCENT);
 
 		// Draw Scroll
 		canvas.drawRect(scroller, whiteStroke);
@@ -373,21 +409,24 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
 		float space = scroller.height() / (float) SCROLLER_SPEED_RANGE;
 		int start = ((int) speed - SCROLLER_SPEED_RANGE / 2);
 
-		if (start > targetSpeed){
-			canvas.drawLine(scroller.left, scroller.bottom, scroller.right, scroller.bottom,greenLightPen);
-		}else if ((speed + SCROLLER_SPEED_RANGE / 2) < targetSpeed){
-			canvas.drawLine(scroller.left, scroller.top, scroller.right, scroller.top,greenLightPen);
+		if (start > targetSpeed) {
+			canvas.drawLine(scroller.left, scroller.bottom, scroller.right,
+					scroller.bottom, greenLightPen);
+		} else if ((speed + SCROLLER_SPEED_RANGE / 2) < targetSpeed) {
+			canvas.drawLine(scroller.left, scroller.top, scroller.right,
+					scroller.top, greenLightPen);
 		}
-		
+
 		for (int a = start; a <= (speed + SCROLLER_SPEED_RANGE / 2); a += 1) {
-			float lineHeight = scroller.centerY() - space* (a - (int) speed);
-			
-			if(a == ((int)targetSpeed) && targetSpeed!=0){
-				canvas.drawLine(scroller.left,lineHeight , scroller.right, lineHeight,greenPen);				
-			}				
+			float lineHeight = scroller.centerY() - space * (a - (int) speed);
+
+			if (a == ((int) targetSpeed) && targetSpeed != 0) {
+				canvas.drawLine(scroller.left, lineHeight, scroller.right,
+						lineHeight, greenPen);
+			}
 			if (a % 5 == 0) {
-				canvas.drawLine(scroller.right, lineHeight, scroller.right - 10,
-						lineHeight, whiteStroke);
+				canvas.drawLine(scroller.right, lineHeight,
+						scroller.right - 10, lineHeight, whiteStroke);
 				canvas.drawText(Integer.toString(a), scroller.right - 15,
 						lineHeight + textHalfSize, ScrollerTextLeft);
 			}
@@ -396,25 +435,24 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
 		// Arrow with current speed
 		Path arrow = new Path();
 		arrow.moveTo(scroller.left, -SCROLLER_ARROW_HEIGTH / 2);
-		arrow.lineTo(scroller.right - SCROLLER_ARROW_HEIGTH / 2, -SCROLLER_ARROW_HEIGTH / 2);
+		arrow.lineTo(scroller.right - SCROLLER_ARROW_HEIGTH / 2,
+				-SCROLLER_ARROW_HEIGTH / 2);
 		arrow.lineTo(scroller.right - 5, 0);
-		arrow.lineTo(scroller.right - SCROLLER_ARROW_HEIGTH / 2, SCROLLER_ARROW_HEIGTH / 2);
+		arrow.lineTo(scroller.right - SCROLLER_ARROW_HEIGTH / 2,
+				SCROLLER_ARROW_HEIGTH / 2);
 		arrow.lineTo(scroller.left, SCROLLER_ARROW_HEIGTH / 2);
 		canvas.drawPath(arrow, blackSolid);
 		canvas.drawText(Integer.toString((int) speed), scroller.right - 15,
 				textHalfSize, ScrollerTextLeft);
 
 		// Draw mode and wp distance
-		canvas.drawText("AS "+Integer.toString((int) airSpeed), 
-				scroller.left+5,
-				scroller.bottom + 25, ScrollerText);
-		canvas.drawText("GS "+Integer.toString((int) groundSpeed),
-				scroller.left+5, 
-				scroller.bottom + 45,
-				ScrollerText);
+		canvas.drawText("AS " + Integer.toString((int) airSpeed),
+				scroller.left + 5, scroller.bottom + 25, ScrollerText);
+		canvas.drawText("GS " + Integer.toString((int) groundSpeed),
+				scroller.left + 5, scroller.bottom + 45, ScrollerText);
 
 	}
-	
+
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
@@ -479,7 +517,8 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
 			}
 		}
 
-		@SuppressLint("WrongCall")		// TODO fix error
+		@SuppressLint("WrongCall")
+		// TODO fix error
 		@Override
 		public void run() {
 			Canvas c;
@@ -557,57 +596,57 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
 			setDirty();
 		}
 	}
-	
+
 	public void setDistanceToWaypoint(double d) {
 		if (disttowp != d) {
 			disttowp = d;
 			setDirty();
 		}
 	}
-	
+
 	public void setVerticalSpeed(double d) {
 		if (verticalSpeed != d) {
 			verticalSpeed = d;
 			setDirty();
 		}
 	}
-	
+
 	public void setGroundSpeed(double d) {
 		if (groundSpeed != d) {
 			groundSpeed = d;
 			setDirty();
 		}
 	}
-	
+
 	public void setAirSpeed(double d) {
 		if (airSpeed != d) {
 			airSpeed = d;
 			setDirty();
 		}
 	}
-	
-	public void setAltitudeError(double d){
-		setTargetAltitude(d+altitude);
+
+	public void setAltitudeError(double d) {
+		setTargetAltitude(d + altitude);
 	}
-	
-	public void setSpeedError(double d){
-		setTargetSpeed(d+airSpeed);
+
+	public void setSpeedError(double d) {
+		setTargetSpeed(d + airSpeed);
 	}
-	
+
 	public void setTargetSpeed(double d) {
 		if (targetSpeed != d) {
 			targetSpeed = d;
 			setDirty();
 		}
 	}
-	
+
 	public void setTargetAltitude(double d) {
 		if (targetAltitude != d) {
 			targetAltitude = d;
 			setDirty();
 		}
 	}
-	
+
 	public void setWaypointNumber(int d) {
 		if (wpno != d) {
 			wpno = d;
