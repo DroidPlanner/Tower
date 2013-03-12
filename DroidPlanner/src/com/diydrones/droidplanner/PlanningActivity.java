@@ -19,29 +19,20 @@ import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.diydrones.droidplanner.dialogs.OpenMissionDialog;
 import com.diydrones.droidplanner.dialogs.PolygonDialog;
+import com.diydrones.droidplanner.fragments.PlanningMapFragment;
+import com.diydrones.droidplanner.fragments.PlanningMapFragment.OnMapInteractionListener;
 import com.diydrones.droidplanner.helpers.TTS;
 import com.diydrones.droidplanner.service.MAVLinkClient;
 import com.diydrones.droidplanner.waypoints.MissionManager;
 import com.diydrones.droidplanner.waypoints.Polygon;
 import com.diydrones.droidplanner.waypoints.waypoint;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 
-public class PlanningActivity extends SuperActivity implements
-		OnMapLongClickListener, OnMarkerDragListener {
-
-	private GoogleMap mMap;
-
+public class PlanningActivity extends SuperActivity implements OnMapInteractionListener{
+	
 	public MissionManager mission;
 	public Polygon polygon;
+	private PlanningMapFragment planningMapFragment;
 
 	public enum modes {
 		MISSION, POLYGON;
@@ -65,25 +56,34 @@ public class PlanningActivity extends SuperActivity implements
 	
 		setContentView(R.layout.planning);
 	
+		planningMapFragment = ((PlanningMapFragment)getFragmentManager().findFragmentById(R.id.planningMapFragment));
 		WaypointListNumber = (TextView) (findViewById(R.id.textViewWP));
 	
 		mission = new MissionManager();
 		polygon = new Polygon();
 		mode = modes.MISSION;
-		setUpMapIfNeeded();
-	
-		updateMarkersAndPath();
-	
+
+		
+		checkIntent();
+		
+		update();	
 	
 		tts = new TTS(this);
 	
 		MAVClient.init();
 	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		setUpMapIfNeeded();
+	private void checkIntent() {
+		Intent intent = getIntent();
+		String action = intent.getAction();
+		String type = intent.getType();
+		if (Intent.ACTION_VIEW.equals(action) && type != null) {
+			Toast.makeText(this, intent.getData().getPath(), Toast.LENGTH_LONG)
+					.show();
+			mission.openMission(intent.getData().getPath());
+			update();
+			planningMapFragment.zoomToExtentsFixed(mission);
+		}
 	}
 
 	@Override
@@ -135,7 +135,7 @@ public class PlanningActivity extends SuperActivity implements
 			MAVClient.sendConnectMessage();
 			return true;
 		case R.id.menu_zoom:
-			zoomToExtents();
+			planningMapFragment.zoomToExtents(mission);
 			return true;
 		case R.id.menu_default_alt:
 			changeDefaultAlt();
@@ -148,11 +148,11 @@ public class PlanningActivity extends SuperActivity implements
 			return true;
 		case R.id.menu_clear_polygon:
 			polygon.clearPolygon();
-			updateMarkersAndPath();
+			update();
 			return true;
 		case R.id.menu_finish_polygon:
 			setModeToMission();
-			updateMarkersAndPath();
+			update();
 			return true;
 		default:
 			return super.onMenuItemSelected(featureId, item);
@@ -164,127 +164,29 @@ public class PlanningActivity extends SuperActivity implements
 			@Override
 			public void waypointFileLoaded(boolean isFileOpen) {
 				if(isFileOpen){
-					zoomToExtents();
+					planningMapFragment.zoomToExtents(mission);
 				}
-				updateMarkersAndPath();
+				update();
 			}
 		};
 		missionDialog.OpenWaypointDialog(mission, this);
 	}
 
 	public void openPolygonGenerateDialog() {
-		double defaultHatchAngle = ((double) mMap.getCameraPosition().bearing + 90) % 180;
+		double defaultHatchAngle = (planningMapFragment.getMapRotation() + 90) % 180;
 		PolygonDialog polygonDialog = new PolygonDialog() {
 			@Override
 			public void onPolygonGenerated(List<waypoint> list) {
 				mission.addWaypoints(list);
-				updateMarkersAndPath();
+				update();
 			}
 		};
 		polygonDialog.generatePolygon(defaultHatchAngle, 50.0, polygon, mission.getLastWaypoint().coord, mission.getDefaultAlt(), this);	
 	}
 
-	private void setUpMapIfNeeded() {
-		// Do a null check to confirm that we have not already instantiated the
-		// map.
-		if (mMap == null) {
-			// Try to obtain the map from the SupportMapFragment.
-			mMap = ((MapFragment) getFragmentManager()
-					.findFragmentById(R.id.map)).getMap();
-			// Check if we were successful in obtaining the map.
-			if (mMap != null) {
-				setUpMap();
-			}
-		}
-	}
-
-	private void setUpMap() {
-		mMap.setMyLocationEnabled(true);
-		mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-		mMap.setOnMarkerDragListener(this);
-
-		UiSettings mUiSettings = mMap.getUiSettings();
-		mUiSettings.setMyLocationButtonEnabled(true);
-		mUiSettings.setCompassEnabled(true);
-		mUiSettings.setTiltGesturesEnabled(false);
-
-		mMap.setOnMapLongClickListener(this);
-		updateMarkersAndPath();
-
-		Intent intent = getIntent();
-		String action = intent.getAction();
-		String type = intent.getType();
-		if (Intent.ACTION_VIEW.equals(action) && type != null) {
-			Toast.makeText(this, intent.getData().getPath(), Toast.LENGTH_LONG)
-					.show();
-			mission.openMission(intent.getData().getPath());
-			updateMarkersAndPath();
-			Log.d("Plan", "loaded mission");
-			zoomToExtentsFixed();
-		}
-
-	}
-
-	@Override
-	public void onMapLongClick(LatLng point) {
-
-		switch (mode) {
-		default:
-		case MISSION:
-			mission.addWaypoint(point);
-			break;
-		case POLYGON:
-			polygon.addWaypoint(point);
-			break;
-		}
-		updateMarkersAndPath();
-	}
-
-	@Override
-	public void onMarkerDrag(Marker marker) {
-	}
-
-	@Override
-	public void onMarkerDragStart(Marker marker) {
-	}
-
-	@Override
-	public void onMarkerDragEnd(Marker marker) {
-		if (mission.isHomeMarker(marker)) {
-			mission.setHomeToMarker(marker);
-			updateMarkersAndPath();
-			return;
-		} else if (mission.isWaypointMarker(marker)) {
-			mission.setWaypointToMarker(marker);
-			updateMarkersAndPath();
-			return;
-		} else if (polygon.isPolygonMarker(marker)) {
-			polygon.setWaypointToMarker(marker);
-			updateMarkersAndPath();
-			return;
-		}
-	}
-
-	private void updateMarkersAndPath() {
-		mMap.clear();
-		mMap.addMarker(mission.getHomeIcon());
-		for (MarkerOptions waypoint : mission.getWaypointMarkers()) {
-			mMap.addMarker(waypoint);
-		}
-		mMap.addPolyline(mission.getFlightPath());
-
-		WaypointListNumber.setText(mission.getWaypointData());
-
-		for (MarkerOptions point : polygon.getWaypointMarkers()) {
-			mMap.addMarker(point);
-		}
-		mMap.addPolyline(polygon.getFlightPath());
-	}
-
 	private void clearWaypointsAndUpdate() {
 		mission.clearWaypoints();
-		mMap.clear();
-		updateMarkersAndPath();
+		update();
 	}
 
 	private void setModeToPolygon() {
@@ -319,7 +221,7 @@ public class PlanningActivity extends SuperActivity implements
 		builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				mission.setDefaultAlt((double) numb3rs.getValue());
-				updateMarkersAndPath();
+				update();
 			}
 		});
 		builder.create().show();
@@ -335,30 +237,14 @@ public class PlanningActivity extends SuperActivity implements
 					.show();
 		}
 	}
+	
 
-	public LatLng getMyLocation() {
-		if (mMap.getMyLocation() != null) {
-			return new LatLng(mMap.getMyLocation().getLatitude(), mMap
-					.getMyLocation().getLongitude());
-		} else {
-			return null;
-		}
+	private void update() {
+		planningMapFragment.update(mission, polygon);
+		WaypointListNumber.setText(mission.getWaypointData());
+		
 	}
 
-	public void zoomToExtents() {
-		mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(
-				mission.getHomeAndWaypointsBounds(getMyLocation()), 30));
-	}
-
-	/**
-	 * Zoom to the extent of the waypoints should be used when the maps has not
-	 * undergone the layout phase Assumes a map size of 480x360 px
-	 */
-	public void zoomToExtentsFixed() {
-		LatLngBounds bound = mission.getWaypointsBounds();
-		mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bound, 480, 360,
-				30));
-	}
 
 	public MAVLinkClient MAVClient = new MAVLinkClient(this) {
 		@Override
@@ -380,7 +266,7 @@ public class PlanningActivity extends SuperActivity implements
 			tts.speak("Disconnected");
 		}
 	};
-
+	
 	WaypointMananger waypointMananger = new WaypointMananger(MAVClient) {
 		@Override
 		public void onWaypointsReceived(List<waypoint> waypoints) {
@@ -395,11 +281,12 @@ public class PlanningActivity extends SuperActivity implements
 				waypoints.remove(0); // Remove Home waypoint
 				mission.clearWaypoints();
 				mission.addWaypoints(waypoints);
-				updateMarkersAndPath();
-				zoomToExtents();
+				update();
+				planningMapFragment.zoomToExtents(mission);
 			}
 		}
 	
+
 		@Override
 		public void onWriteWaypoints(msg_mission_ack msg) {
 			Toast.makeText(getApplicationContext(), "Waypoints saved to Drone",
@@ -407,5 +294,38 @@ public class PlanningActivity extends SuperActivity implements
 			tts.speak("Waypoints saved to Drone");
 		}
 	};
+
+	@Override
+	public void onAddWaypoint(LatLng point) {
+		switch (mode) {
+		default:
+		case MISSION:
+			mission.addWaypoint(point);
+			break;
+		case POLYGON:
+			polygon.addWaypoint(point);
+			break;
+		}
+		update();		
+	}
+
+	@Override
+	public void onMoveHome(LatLng coord, double height) {
+		mission.setHome(new waypoint(coord, height));	
+		update();
+	}
+
+	@Override
+	public void onMoveWaypoint(LatLng coord, double height, int Number) {
+		mission.moveWaypoint(coord, height , Number);
+		update();
+	}
+
+	@Override
+	public void onMovePolygonPoint(LatLng coord, int Number) {
+		polygon.movePoint(coord,  Number);
+		update();
+	}
+
 
 }

@@ -9,23 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import android.annotation.SuppressLint;
-import android.graphics.Color;
 import android.os.Environment;
 
-import com.diydrones.droidplanner.R;
 import com.diydrones.droidplanner.helpers.FileManager;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolylineOptions;
 
 public class MissionManager {
-
-	static final String homeMarkerTitle = "Home";
-
 	private waypoint home;
 	private Double defaultAlt;
 	private List<waypoint> waypoints;
@@ -36,44 +25,6 @@ public class MissionManager {
 		setDefaultAlt(100.0);
 	}
 
-	public MarkerOptions getHomeIcon() {
-		return (new MarkerOptions()
-				.position(home.coord)
-				.snippet(String.format(Locale.ENGLISH, "%.2f", home.Height))
-				.draggable(true)
-				.anchor((float) 0.5, (float) 0.5)
-				.icon(BitmapDescriptorFactory
-						.fromResource(R.drawable.ic_menu_home))
-				.title(homeMarkerTitle));
-	}
-
-	public PolylineOptions getFlightPath() {
-		PolylineOptions flightPath = new PolylineOptions();
-		flightPath.color(Color.YELLOW).width(3);
-
-		flightPath.add(home.coord);
-		for (waypoint point : waypoints) {
-			flightPath.add(point.coord);
-		}
-		return flightPath;
-	}
-
-	public List<MarkerOptions> getWaypointMarkers() {
-		int i = 1;
-		List<MarkerOptions> MarkerList = new ArrayList<MarkerOptions>();
-		for (waypoint point : waypoints) {
-			MarkerList
-					.add(new MarkerOptions()
-							.position(point.coord)
-							.draggable(true)
-							.title("WP" + Integer.toString(i))
-							.snippet(
-									String.format(Locale.ENGLISH, "%.2f",
-											point.Height)));
-			i++;
-		}
-		return MarkerList;
-	}
 
 	public void addWaypoints(List<waypoint> points) {
 		waypoints.addAll(points);
@@ -190,50 +141,7 @@ public class MissionManager {
 		}
 		return false;
 	}
-
-	public LatLngBounds getHomeAndWaypointsBounds(LatLng myLocation) {
-		LatLngBounds.Builder builder = new LatLngBounds.Builder();
-		builder.include(home.coord);
-		if (waypoints.isEmpty() && (myLocation != null)) {
-			builder.include(myLocation);
-		} else {
-			for (waypoint w : waypoints) {
-				builder.include(w.coord);
-			}
-		}
-		return builder.build();
-	}
-
-	public LatLngBounds getWaypointsBounds() {
-		LatLngBounds.Builder builder = new LatLngBounds.Builder();
-		builder.include(home.coord);
-		for (waypoint w : waypoints) {
-			builder.include(w.coord);
-		}
-		return builder.build();
-	}
-
-	public boolean isHomeMarker(Marker marker) {
-		return marker.getTitle().equals(homeMarkerTitle);
-	}
-
-	public boolean isWaypointMarker(Marker marker) {
-		return marker.getTitle().contains("WP");
-	}
-
-	public void setHomeToMarker(Marker marker) {
-		home.coord = marker.getPosition();
-		home.Height = Double.parseDouble(marker.getSnippet().replace(",", "."));
-	}
-
-	public void setWaypointToMarker(Marker marker) {
-		int WPnumber = Integer.parseInt(marker.getTitle().replace("WP", "")) - 1;
-		waypoints.get(WPnumber).coord = marker.getPosition();
-		waypoints.get(WPnumber).Height = Double.parseDouble(marker.getSnippet()
-				.replace(",", "."));
-	}
-
-	@SuppressLint("DefaultLocale")
+	
 	public String getWaypointData() {
 		String waypointData = String.format(Locale.ENGLISH, "Home\t%2.0f\n",
 				home.Height);
@@ -272,6 +180,10 @@ public class MissionManager {
 
 	public void setHome(waypoint home) {
 		this.home = home;
+	}
+
+	public void moveWaypoint(LatLng coord, double height, int number) {
+		waypoints.set(number, new waypoint(coord, height));
 	}
 
 }

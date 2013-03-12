@@ -3,72 +3,33 @@ package com.diydrones.droidplanner.waypoints;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.graphics.Color;
 import android.util.Log;
 
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolylineOptions;
 
 public class Polygon {
 
 	private List<LatLng> waypoints;
 
 	public Polygon() {
-		waypoints = new ArrayList<LatLng>();
+		setWaypoints(new ArrayList<LatLng>());
 	}
 
-	public PolylineOptions getFlightPath() {
-		PolylineOptions flightPath = new PolylineOptions();
-		flightPath.color(Color.BLACK).width(2);
-
-		for (LatLng point : waypoints) {
-			flightPath.add(point);
-		}
-		if (waypoints.size() > 2) {
-			flightPath.add(waypoints.get(0));
-		}
-
-		return flightPath;
-	}
-
-	public List<MarkerOptions> getWaypointMarkers() {
-		int i = 1;
-		List<MarkerOptions> MarkerList = new ArrayList<MarkerOptions>();
-		for (LatLng point : waypoints) {
-			MarkerList.add(new MarkerOptions()
-					.position(point)
-					.draggable(true)
-					.title("Poly" + Integer.toString(i))
-					.icon(BitmapDescriptorFactory
-							.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-			i++;
-		}
-		return MarkerList;
+	private void setWaypoints(ArrayList<LatLng> arrayList) {
+		waypoints = arrayList;
 	}
 
 	public void addWaypoint(Double Lat, Double Lng) {
-		waypoints.add(new LatLng(Lat, Lng));
+		getWaypoints().add(new LatLng(Lat, Lng));
 	}
 
 	public void addWaypoint(LatLng coord) {
-		waypoints.add(findClosestPair(coord, waypoints), coord);
+		getWaypoints().add(findClosestPair(coord, getWaypoints()), coord);
 	}
 
 	public void clearPolygon() {
-		waypoints.clear();
-	}
-
-	public boolean isPolygonMarker(Marker marker) {
-		return marker.getTitle().contains("Poly");
-	}
-
-	public void setWaypointToMarker(Marker marker) {
-		int WPnumber = Integer.parseInt(marker.getTitle().replace("Poly", "")) - 1;
-		waypoints.set(WPnumber, marker.getPosition());
+		getWaypoints().clear();
 	}
 
 	private class LineLatLng {
@@ -83,8 +44,8 @@ public class Polygon {
 
 	public List<waypoint> hatchfill(Double angle, Double lineDist,
 			LatLng lastLocation, Double altitude) {
-		List<LineLatLng> gridLines = generateGrid(waypoints, angle, lineDist);
-		List<LineLatLng> hatchLines = trimGridLines(waypoints, gridLines);
+		List<LineLatLng> gridLines = generateGrid(getWaypoints(), angle, lineDist);
+		List<LineLatLng> hatchLines = trimGridLines(getWaypoints(), gridLines);
 
 		List<waypoint> gridPoints = waypointsFromHatch(lastLocation, altitude,
 				hatchLines);
@@ -509,20 +470,29 @@ public class Polygon {
 	// TODO test and fix this function
 	public Double getArea() {
 		double sum = 0.0;
-		for (int i = 0; i < waypoints.size() - 1; i++) {
+		for (int i = 0; i < getWaypoints().size() - 1; i++) {
 			sum = sum
-					+ (latToMeters(waypoints.get(i).longitude) * latToMeters(waypoints
+					+ (latToMeters(getWaypoints().get(i).longitude) * latToMeters(getWaypoints()
 							.get(i + 1).latitude))
-					- (latToMeters(waypoints.get(i).latitude) * latToMeters(waypoints
+					- (latToMeters(getWaypoints().get(i).latitude) * latToMeters(getWaypoints()
 							.get(i + 1).longitude));
 		}
 		return Math.abs(0.5 * sum);
 	}
 
 	public boolean isValid() {
-		if(waypoints.size()>2)	// A valid polygon must have at least 3 points
+		if(getWaypoints().size()>2)	// A valid polygon must have at least 3 points
 			return true;
 		else
 			return false;
+	}
+
+	public List<LatLng> getWaypoints() {
+		return waypoints;
+	}
+
+	public void movePoint(LatLng coord, int number) {
+		waypoints.set(number, coord);
+		
 	}
 }
