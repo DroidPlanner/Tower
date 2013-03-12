@@ -28,14 +28,14 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
-import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class PlanningActivity extends Activity implements
+public class PlanningActivity extends SuperActivity implements
 		OnMapLongClickListener, OnMarkerDragListener {
 
 	private GoogleMap mMap;
@@ -189,7 +189,7 @@ public class PlanningActivity extends Activity implements
 		// map.
 		if (mMap == null) {
 			// Try to obtain the map from the SupportMapFragment.
-			mMap = ((SupportMapFragment) getSupportFragmentManager()
+			mMap = ((MapFragment) getFragmentManager()
 					.findFragmentById(R.id.map)).getMap();
 			// Check if we were successful in obtaining the map.
 			if (mMap != null) {

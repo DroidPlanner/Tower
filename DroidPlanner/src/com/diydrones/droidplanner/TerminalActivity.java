@@ -15,7 +15,7 @@ import com.MAVLink.Messages.ardupilotmega.msg_param_value;
 import com.MAVLink.Messages.ardupilotmega.msg_statustext;
 import com.diydrones.droidplanner.service.MAVLinkClient;
 
-public class TerminalActivity extends Activity {
+public class TerminalActivity extends SuperActivity {
 
 	TextView terminal;
 	Button sendButton;

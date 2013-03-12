@@ -8,20 +8,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.MAVLink.Messages.MAVLinkMessage;
-import com.MAVLink.Messages.ardupilotmega.msg_attitude;
-import com.MAVLink.Messages.ardupilotmega.msg_heartbeat;
-import com.MAVLink.Messages.ardupilotmega.msg_mission_current;
-import com.MAVLink.Messages.ardupilotmega.msg_nav_controller_output;
 import com.MAVLink.Messages.ardupilotmega.msg_request_data_stream;
-import com.MAVLink.Messages.ardupilotmega.msg_vfr_hud;
-import com.diydrones.droidplanner.helpers.HUDwidget;
+import com.diydrones.droidplanner.fragments.HudFragment;
 import com.diydrones.droidplanner.service.MAVLinkClient;
 
-public class HUDActivity extends Activity {
+public class HUDActivity extends SuperActivity {
 
-	HUDwidget hudWidget;
 	public boolean running;
 	MenuItem connectButton;
+	private HudFragment hudFragment;
 
 	@Override
 	int getNavigationItem() {
@@ -33,9 +28,9 @@ public class HUDActivity extends Activity {
 		super.onCreate(savedInstanceState);
 	
 		setContentView(R.layout.hud);
-	
-		hudWidget = (HUDwidget) findViewById(R.id.hudWidget);
-	
+		
+		hudFragment = ((HudFragment)getFragmentManager().findFragmentById(R.id.hud_fragment));
+		
 		MAVClient.init();
 	}
 
@@ -67,34 +62,6 @@ public class HUDActivity extends Activity {
 	}
 
 	public MAVLinkClient MAVClient = new MAVLinkClient(this) {
-		@Override
-		public void notifyReceivedData(MAVLinkMessage msg) {
-			switch (msg.msgid) {
-			case msg_attitude.MAVLINK_MSG_ID_ATTITUDE:
-				msg_attitude m = (msg_attitude) msg;
-				hudWidget.newFlightData(m.roll, m.pitch, m.yaw);
-				break;
-			case msg_vfr_hud.MAVLINK_MSG_ID_VFR_HUD:
-				hudWidget.setAltitude(((msg_vfr_hud) msg).alt);
-				hudWidget.setGroundSpeed(((msg_vfr_hud) msg).groundspeed);
-				hudWidget.setAirSpeed(((msg_vfr_hud) msg).airspeed);
-				break;
-			case msg_mission_current.MAVLINK_MSG_ID_MISSION_CURRENT:
-				hudWidget.setWaypointNumber(((msg_mission_current) msg).seq);
-				break;
-			case msg_nav_controller_output.MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT:
-				msg_nav_controller_output m1 = (msg_nav_controller_output) msg;
-				hudWidget.setDistanceToWaypoint(m1.wp_dist);
-				hudWidget.setAltitudeError(m1.alt_error);
-				hudWidget.setSpeedError(m1.aspd_error);
-				break;
-			case msg_heartbeat.MAVLINK_MSG_ID_HEARTBEAT:
-				hudWidget.setMode(((msg_heartbeat) msg).custom_mode);
-				break;
-			default:
-				break;
-			}
-		}
 
 		@Override
 		public void notifyConnected() {
@@ -108,6 +75,11 @@ public class HUDActivity extends Activity {
 		public void notifyDisconnected() {
 			connectButton.setTitle(getResources().getString(
 					R.string.menu_connect));
+		}
+
+		@Override
+		public void notifyReceivedData(MAVLinkMessage m) {
+			hudFragment.receiveData(m);
 		}
 
 	};

@@ -12,13 +12,13 @@ import com.MAVLink.GPSMananger;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.diydrones.droidplanner.service.MAVLinkClient;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class FightDataActivity extends Activity {
+public class FightDataActivity extends SuperActivity {
 
 	private GoogleMap mMap;
 	private MenuItem connectButton;
@@ -80,7 +80,7 @@ public class FightDataActivity extends Activity {
 		// map.
 		if (mMap == null) {
 			// Try to obtain the map from the SupportMapFragment.
-			mMap = ((SupportMapFragment) getSupportFragmentManager()
+			mMap = ((MapFragment) getFragmentManager()
 					.findFragmentById(R.id.map)).getMap();
 			// Check if we were successful in obtaining the map.
 			if (mMap != null) {

@@ -2,18 +2,18 @@ package com.diydrones.droidplanner;
 
 import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentActivity;
 import android.widget.ArrayAdapter;
 import android.widget.SpinnerAdapter;
 
-public abstract class Activity extends FragmentActivity implements
+public abstract class SuperActivity extends Activity implements
 		OnNavigationListener {
 	abstract int getNavigationItem();
 
-	public Activity() {
+	public SuperActivity() {
 		super();
 	}
 

@@ -3,11 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
-    <fragment
-        android:id="@+id/map"
+
+    <com.diydrones.droidplanner.helpers.HUDwidget
+        android:id="@+id/hudWidget"
         android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        class="com.google.android.gms.maps.MapFragment" />
-    
+        android:layout_height="fill_parent" />
+
 </LinearLayout>

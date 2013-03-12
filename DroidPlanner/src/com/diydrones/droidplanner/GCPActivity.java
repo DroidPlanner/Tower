@@ -17,12 +17,12 @@ import com.diydrones.droidplanner.helpers.mapHelper;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
-import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 
-public class GCPActivity extends Activity implements OnMarkerClickListener {
+public class GCPActivity extends SuperActivity implements OnMarkerClickListener {
 	private GoogleMap mMap;
 
 	public List<waypoint> WPlist;
@@ -94,7 +94,7 @@ public class GCPActivity extends Activity implements OnMarkerClickListener {
 		// map.
 		if (mMap == null) {
 			// Try to obtain the map from the SupportMapFragment.
-			mMap = ((SupportMapFragment) getSupportFragmentManager()
+			mMap = ((MapFragment) getFragmentManager()
 					.findFragmentById(R.id.map)).getMap();
 			// Check if we were successful in obtaining the map.
 			if (mMap != null) {
