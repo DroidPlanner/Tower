@@ -14,6 +14,8 @@ import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.MAVLink.Messages.ApmModes;
+
 /**
  * Widget for a HUD Originally copied from http://code.google.com/p/copter-gcs/
  * 
@@ -34,7 +36,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
 	private String remainBatt = "";
 	private String battVolt = "";
 	private String gpsFix = "";
-	private String mode = "Init";
+	private String mode = "Unknown";
 
 	Paint grid_paint = new Paint();
 	Paint ground = new Paint();
@@ -326,8 +328,8 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
              canvas.drawText(Integer.toString((int)altitude), scroller.left+15 , textHalfSize , ScrollerText);
              
              // Draw mode and wp distance
-             canvas.drawText(mode, scroller.left , scroller.bottom + 25,ScrollerText);
-             canvas.drawText( Integer.toString((int) disttowp) + ">" + wpno, scroller.left , scroller.bottom +45,ScrollerText);
+             canvas.drawText(mode, scroller.left - scroller.width() / 4 , scroller.bottom + 25,ScrollerText);
+             canvas.drawText( Integer.toString((int) disttowp) + ">" + wpno, scroller.left - scroller.width() / 4, scroller.bottom +45,ScrollerText);
 
         
 	}
@@ -467,9 +469,10 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
 		}
 	}
 
-	public void setMode(String d) {
-		if (!mode.equals(d)) {
-			mode = d;
+	public void setMode(int m) {
+		String newMode = ApmModes.toString(m);
+		if (!mode.equals(newMode)) {
+			mode = newMode;
 			setDirty();
 		}
 	}

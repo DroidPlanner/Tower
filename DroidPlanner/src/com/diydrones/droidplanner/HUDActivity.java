@@ -76,7 +76,6 @@ public class HUDActivity extends Activity {
 				break;
 			case msg_vfr_hud.MAVLINK_MSG_ID_VFR_HUD:
 				hudWidget.setAltitude(((msg_vfr_hud) msg).alt);
-				hudWidget.setVerticalSpeed(((msg_vfr_hud) msg).climb);
 				break;
 			case msg_mission_current.MAVLINK_MSG_ID_MISSION_CURRENT:
 				hudWidget.setWaypointNumber(((msg_mission_current) msg).seq);
@@ -85,8 +84,7 @@ public class HUDActivity extends Activity {
 				hudWidget.setDistanceToWaypoint(((msg_nav_controller_output) msg).wp_dist);
 				break;
 			case msg_heartbeat.MAVLINK_MSG_ID_HEARTBEAT:
-				//TODO decode mode from mavlink message
-				//hudWidget.setMode(((msg_heartbeat) msg).custom_mode);
+				hudWidget.setMode(((msg_heartbeat) msg).custom_mode);
 				break;
 			default:
 				break;
