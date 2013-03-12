@@ -15,11 +15,13 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class FlightMapFragment extends MapFragment {
 	private Bitmap planeBitmap;
 	private GoogleMap mMap;
+	private Marker DroneMarker;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
@@ -36,17 +38,17 @@ public class FlightMapFragment extends MapFragment {
 		mUiSettings.setMyLocationButtonEnabled(true);
 		mUiSettings.setCompassEnabled(true);
 		mUiSettings.setTiltGesturesEnabled(false);
+		
+		addDroneMarkerToMap();
 
 		return view;
 	}
 
 	public void updateDronePosition(float heading, LatLng coord) {
-		mMap.clear(); // TODO Find a better implementation, where all markers
-						// don't need to be cleared
-		addDroneMarkerToMap(heading, coord);
+		DroneMarker.setPosition(coord); // TODO This causes the heap to grow a lot.
 	}
 
-	private void addDroneMarkerToMap(float heading, LatLng coord) {
+	private void addDroneMarkerToMap() {
 			// TODO Find a way to rotate the plane that doesn't consume too much CPU power
 			/*Matrix matrix = new Matrix();
 			matrix.postRotate(heading - mMap.getCameraPosition().bearing);
@@ -58,8 +60,9 @@ public class FlightMapFragment extends MapFragment {
 					.anchor((float) 0.5, (float) 0.5)
 					.icon(BitmapDescriptorFactory.fromBitmap(rotatedPlane)));
 			*/
-			mMap.addMarker(new MarkerOptions().position(coord)
+			DroneMarker = mMap.addMarker(new MarkerOptions()
 					.anchor((float) 0.5, (float) 0.5)
+					.position(new LatLng(0, 0))
 					.icon(BitmapDescriptorFactory.fromBitmap(planeBitmap)));
 			
 	}
