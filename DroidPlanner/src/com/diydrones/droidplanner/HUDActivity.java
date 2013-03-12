@@ -76,6 +76,7 @@ public class HUDActivity extends Activity {
 				break;
 			case msg_vfr_hud.MAVLINK_MSG_ID_VFR_HUD:
 				hudWidget.setAltitude(((msg_vfr_hud) msg).alt);
+				hudWidget.setVerticalSpeed(((msg_vfr_hud) msg).climb);
 				break;
 			case msg_mission_current.MAVLINK_MSG_ID_MISSION_CURRENT:
 				hudWidget.setWaypointNumber(((msg_mission_current) msg).seq);
