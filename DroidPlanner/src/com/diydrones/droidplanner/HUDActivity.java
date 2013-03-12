@@ -83,7 +83,10 @@ public class HUDActivity extends Activity {
 				hudWidget.setWaypointNumber(((msg_mission_current) msg).seq);
 				break;
 			case msg_nav_controller_output.MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT:
-				hudWidget.setDistanceToWaypoint(((msg_nav_controller_output) msg).wp_dist);
+				msg_nav_controller_output m1 = (msg_nav_controller_output) msg;
+				hudWidget.setDistanceToWaypoint(m1.wp_dist);
+				hudWidget.setAltitudeError(m1.alt_error);
+				hudWidget.setSpeedError(m1.aspd_error);
 				break;
 			case msg_heartbeat.MAVLINK_MSG_ID_HEARTBEAT:
 				hudWidget.setMode(((msg_heartbeat) msg).custom_mode);
