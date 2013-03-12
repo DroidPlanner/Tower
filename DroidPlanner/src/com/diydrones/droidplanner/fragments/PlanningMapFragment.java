@@ -51,6 +51,7 @@ public class PlanningMapFragment extends MapFragment implements
 			Bundle bundle) {
 		View view = super.onCreateView(inflater, viewGroup, bundle);
 
+		mMap = getMap();
 		mMap.setMyLocationEnabled(true);
 		mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
 		mMap.setOnMarkerDragListener(this);
