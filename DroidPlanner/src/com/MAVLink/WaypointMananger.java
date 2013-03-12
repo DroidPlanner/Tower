@@ -95,8 +95,6 @@ public abstract class WaypointMananger {
 	 *            number of the completed waypoint
 	 */
 	public void onWaypointReached(int wpNumber) {
-		// TODO this function still needs testing
-		Log.d("Mission", "Reached WP number:" + wpNumber);
 	}
 
 	/**
@@ -106,8 +104,6 @@ public abstract class WaypointMananger {
 	 *            number of the updated waypoint
 	 */
 	private void onCurrentWaypointUpdate(short seq) {
-		// TODO this function still needs testing
-		Log.d("Mission", "Current waypoint is:" + seq);
 	}
 
 	/**

@@ -22,7 +22,7 @@ import com.MAVLink.Messages.ApmModes;
  */
 public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
 	private static final float SCROLLER_HEIGHT_PERCENT = .30f;
-	private static final float SCROLLER_WIDTH_PERCENT = 0.08f;
+	private static final float SCROLLER_WIDTH = 60;
 	private static final int SCROLLER_ARROW_HEIGTH = 26;
 
 	private static final int SCROLLER_VSI_RANGE = 12;
@@ -55,7 +55,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
 	Paint ScrollerText = new Paint();
 	Paint ScrollerTextLeft = new Paint();
 	Paint yawText = new Paint();
-	
+
 	Paint plane = new Paint();
 	Paint redSolid = new Paint();
 	Paint blackSolid = new Paint();
@@ -93,7 +93,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
 		whiteStroke.setStyle(Style.STROKE);
 		whiteStroke.setStrokeWidth(3);
 		whiteStroke.setAntiAlias(true); // Shouldn't affect performance
-		
+
 		yawText = new Paint(whiteStroke);
 		yawText.setStrokeWidth(2);
 		yawText.setTextSize(20);
@@ -208,20 +208,19 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
 			// How many pixels from center should it be?
 			int distanceToCenter = (int) ((angle - centerDegrees) * degreesPerPixel);
 
-
 			if (workAngle % 45 == 0) {
-				String compass[] = { "N", "NE", "E", "SE", "S", "SW", "W", "NW"};
+				String compass[] = { "N", "NE", "E", "SE", "S", "SW", "W", "NW" };
 				int index = (int) workAngle / 45;
 				canvas.drawText(compass[index], distanceToCenter,
 						-height / 2 + 20, yawText);
 				canvas.drawLine(distanceToCenter, -height / 2 + 25,
-				distanceToCenter, -height / 2 + 30, white);
-			} else if (workAngle % 15 == 0){
+						distanceToCenter, -height / 2 + 30, white);
+			} else if (workAngle % 15 == 0) {
 				canvas.drawLine(distanceToCenter, -height / 2 + 20,
 						distanceToCenter, -height / 2 + 30, white);
 				canvas.drawText((int) (workAngle) + "", distanceToCenter,
 						-height / 2 + 18, whiteCenter);
-			} else{
+			} else {
 				canvas.drawLine(distanceToCenter, -height / 2 + 25,
 						distanceToCenter, -height / 2 + 30, white);
 			}
@@ -296,9 +295,9 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
 		final float textHalfSize = ScrollerText.getTextSize() / 2 - 1;
 
 		// Outside box
-		RectF scroller = new RectF(width * (0.5f - SCROLLER_WIDTH_PERCENT),
-				-height * SCROLLER_HEIGHT_PERCENT, width * .50f, height
-						* SCROLLER_HEIGHT_PERCENT);
+		RectF scroller = new RectF(width * 0.5f - SCROLLER_WIDTH, -height
+				* SCROLLER_HEIGHT_PERCENT, width * .50f, height
+				* SCROLLER_HEIGHT_PERCENT);
 
 		// Draw Vertical speed indicator
 		final float vsi_width = scroller.width() / 4;
@@ -398,9 +397,8 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
 
 		// Outside box
 		RectF scroller = new RectF(-width * .50f, -height
-				* SCROLLER_HEIGHT_PERCENT, width
-				* (-0.5f + SCROLLER_WIDTH_PERCENT), height
-				* SCROLLER_HEIGHT_PERCENT);
+				* SCROLLER_HEIGHT_PERCENT, -width * 0.5f + SCROLLER_WIDTH,
+				height * SCROLLER_HEIGHT_PERCENT);
 
 		// Draw Scroll
 		canvas.drawRect(scroller, whiteStroke);

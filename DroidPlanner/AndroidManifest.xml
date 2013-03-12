@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.diydrones.droidplanner"
     android:versionCode="1"
-    android:versionName="1.0" xmlns:tools="http://schemas.android.com/tools">
+    android:versionName="1.0" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -35,9 +36,12 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyCqZnhgWsao4ey91Z8hNBbOxxJ_EiC5mpM" />
 
-        <service android:name="com.diydrones.droidplanner.service.MAVLinkService"></service>
-        
-        <activity android:name=".PlanningActivity" tools:ignore="ExportedActivity">
+        <service android:name="com.diydrones.droidplanner.service.MAVLinkService" >
+        </service>
+
+        <activity
+            android:name=".PlanningActivity"
+            tools:ignore="ExportedActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -45,17 +49,21 @@
 
                 <data android:mimeType="text/plain" />
             </intent-filter>
-
         </activity>
         <activity android:name=".FightDataActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".PIDActivity" >
         </activity>
         <activity android:name=".TerminalActivity" >
-                        
         </activity>
         <activity
-            android:name=".GCPActivity" tools:ignore="ExportedActivity">
+            android:name=".GCPActivity"
+            tools:ignore="ExportedActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -65,18 +73,10 @@
                 <data android:mimeType="application/vnd.google-earth.kmz" />
             </intent-filter>
         </activity>
-         <activity
-            android:name=".HUDActivity">
-                                    <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-         </activity>
-         <activity
-            android:name=".SettingsActivity">
-         </activity>
-         
+        <activity android:name=".HUDActivity" >
+        </activity>
+        <activity android:name=".SettingsActivity" >
+        </activity>
     </application>
 
 </manifest>

@@ -2,12 +2,13 @@ package com.diydrones.droidplanner.fragments;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.MAVLink.Messages.MAVLinkMessage;
+import com.MAVLink.Messages.ardupilotmega.msg_global_position_int;
 import com.diydrones.droidplanner.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -47,15 +48,28 @@ public class FlightMapFragment extends MapFragment {
 
 	private void addDroneMarkerToMap(float heading, LatLng coord) {
 			// TODO Find a way to rotate the plane that doesn't consume too much CPU power
-			Matrix matrix = new Matrix();
+			/*Matrix matrix = new Matrix();
 			matrix.postRotate(heading - mMap.getCameraPosition().bearing);
 			Bitmap rotatedPlane = Bitmap.createBitmap(planeBitmap, 0, 0,
 					planeBitmap.getWidth(), planeBitmap.getHeight(), matrix,
 					true);
+					
 			mMap.addMarker(new MarkerOptions().position(coord)
 					.anchor((float) 0.5, (float) 0.5)
 					.icon(BitmapDescriptorFactory.fromBitmap(rotatedPlane)));
+			*/
+			mMap.addMarker(new MarkerOptions().position(coord)
+					.anchor((float) 0.5, (float) 0.5)
+					.icon(BitmapDescriptorFactory.fromBitmap(planeBitmap)));
 			
+	}
+
+	public void receiveData(MAVLinkMessage msg) {
+		if(msg.msgid == msg_global_position_int.MAVLINK_MSG_ID_GLOBAL_POSITION_INT) {
+			LatLng position = new LatLng(((msg_global_position_int)msg).lat/1E7, ((msg_global_position_int)msg).lon/1E7);
+			float heading = (0x0000FFFF & ((int)((msg_global_position_int)msg).hdg))/100f; // TODO fix unsigned short read at mavlink library
+			updateDronePosition(heading, position);
+		}
 	}
 
 }

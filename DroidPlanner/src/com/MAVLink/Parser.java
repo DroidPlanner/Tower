@@ -1,7 +1,5 @@
 package com.MAVLink;
 
-import android.util.Log;
-
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
 
@@ -90,7 +88,6 @@ public class Parser {
 			m.generateCRC();
 			// Check first checksum byte
 			if (c != m.crc.getLSB()) {
-				Log.e("CRC", "Invalid CRC, msgid:"+m.msgid);
 				msg_received = false;
 				state = MAV_states.MAVLINK_PARSE_STATE_IDLE;
 				if (c == MAVLinkPacket.MAVLINK_STX) {
@@ -105,7 +102,6 @@ public class Parser {
 		case MAVLINK_PARSE_STATE_GOT_CRC1:
 			// Check second checksum byte
 			if (c != m.crc.getMSB()) {
-				Log.e("CRC", "Invalid CRC");
 				msg_received = false;
 				state = MAV_states.MAVLINK_PARSE_STATE_IDLE;
 				if (c == MAVLinkPacket.MAVLINK_STX) {
