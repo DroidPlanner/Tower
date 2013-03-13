@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_global_position_int;
 import com.diydrones.droidplanner.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.UiSettings;
@@ -46,6 +47,10 @@ public class FlightMapFragment extends MapFragment {
 
 	public void updateDronePosition(float heading, LatLng coord) {
 		DroneMarker.setPosition(coord); // TODO This causes the heap to grow a lot.
+		if(!DroneMarker.isVisible()){
+			DroneMarker.setVisible(true);
+			mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coord, 16));
+		}
 	}
 
 	private void addDroneMarkerToMap() {
@@ -63,7 +68,8 @@ public class FlightMapFragment extends MapFragment {
 			DroneMarker = mMap.addMarker(new MarkerOptions()
 					.anchor((float) 0.5, (float) 0.5)
 					.position(new LatLng(0, 0))
-					.icon(BitmapDescriptorFactory.fromBitmap(planeBitmap)));
+					.icon(BitmapDescriptorFactory.fromBitmap(planeBitmap))
+					.visible(false));
 			
 	}
 
