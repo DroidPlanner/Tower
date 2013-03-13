@@ -13,17 +13,14 @@ import com.MAVLink.Messages.ardupilotmega.msg_global_position_int;
 import com.diydrones.droidplanner.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class FlightMapFragment extends MapFragment {
+public class FlightMapFragment extends OfflineMapFragment {
 	private static final int DRONE_MIN_ROTATION = 5;
-	private Bitmap planeBitmap;
 	private GoogleMap mMap;
 	private Marker[] DroneMarker;
 	private boolean hasBeenZoomed = false;
@@ -33,20 +30,8 @@ public class FlightMapFragment extends MapFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
 			Bundle bundle) {
 		View view = super.onCreateView(inflater, viewGroup, bundle);
-		planeBitmap = BitmapFactory.decodeResource(getResources(),
-				R.drawable.planetracker);
-
-		mMap = getMap();
-		mMap.setMyLocationEnabled(true);
-		mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-
-		UiSettings mUiSettings = mMap.getUiSettings();
-		mUiSettings.setMyLocationButtonEnabled(true);
-		mUiSettings.setCompassEnabled(true);
-		mUiSettings.setTiltGesturesEnabled(false);
-		
+		mMap = getMap();		
 		addDroneMarkersToMap();
-
 		return view;
 	}
 
@@ -66,6 +51,7 @@ public class FlightMapFragment extends MapFragment {
 
 	private void addDroneMarkersToMap() {
 		int count = 360/DRONE_MIN_ROTATION;
+		
 		DroneMarker = new Marker[count];
 		for (int i = 0; i < count; i++) {					
 			DroneMarker[i] = mMap.addMarker(new MarkerOptions()
@@ -78,6 +64,8 @@ public class FlightMapFragment extends MapFragment {
 	}
 	
 	private BitmapDescriptor generateDroneIcon(float heading) {
+		Bitmap planeBitmap = BitmapFactory.decodeResource(getResources(),
+				R.drawable.planetracker);
 		Matrix matrix = new Matrix();
 		matrix.postRotate(heading - mMap.getCameraPosition().bearing);
 		return BitmapDescriptorFactory.fromBitmap( Bitmap.createBitmap(planeBitmap, 0, 0, planeBitmap.getWidth(),

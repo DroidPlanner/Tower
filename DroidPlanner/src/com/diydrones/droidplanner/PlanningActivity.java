@@ -82,7 +82,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 					.show();
 			mission.openMission(intent.getData().getPath());
 			update();
-			planningMapFragment.zoomToExtentsFixed(mission);
+			planningMapFragment.zoomToExtents(mission.getAllCoordinates());
 		}
 	}
 
@@ -135,7 +135,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 			MAVClient.sendConnectMessage();
 			return true;
 		case R.id.menu_zoom:
-			planningMapFragment.zoomToExtents(mission);
+			planningMapFragment.zoomToExtents(mission.getAllCoordinates());
 			return true;
 		case R.id.menu_default_alt:
 			changeDefaultAlt();
@@ -164,7 +164,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 			@Override
 			public void waypointFileLoaded(boolean isFileOpen) {
 				if(isFileOpen){
-					planningMapFragment.zoomToExtents(mission);
+					planningMapFragment.zoomToExtents(mission.getAllCoordinates());
 				}
 				update();
 			}
@@ -282,7 +282,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 				mission.clearWaypoints();
 				mission.addWaypoints(waypoints);
 				update();
-				planningMapFragment.zoomToExtents(mission);
+				planningMapFragment.zoomToExtents(mission.getAllCoordinates());
 			}
 		}
 	

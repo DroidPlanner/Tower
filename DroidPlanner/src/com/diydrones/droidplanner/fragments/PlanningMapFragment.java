@@ -15,20 +15,16 @@ import com.diydrones.droidplanner.R;
 import com.diydrones.droidplanner.waypoints.MissionManager;
 import com.diydrones.droidplanner.waypoints.Polygon;
 import com.diydrones.droidplanner.waypoints.waypoint;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-public class PlanningMapFragment extends MapFragment implements
+public class PlanningMapFragment extends OfflineMapFragment implements
 		OnMapLongClickListener, OnMarkerDragListener {
 	private GoogleMap mMap;
 
@@ -50,17 +46,8 @@ public class PlanningMapFragment extends MapFragment implements
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
 			Bundle bundle) {
 		View view = super.onCreateView(inflater, viewGroup, bundle);
-
 		mMap = getMap();
-		mMap.setMyLocationEnabled(true);
-		mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
 		mMap.setOnMarkerDragListener(this);
-
-		UiSettings mUiSettings = mMap.getUiSettings();
-		mUiSettings.setMyLocationButtonEnabled(true);
-		mUiSettings.setCompassEnabled(true);
-		mUiSettings.setTiltGesturesEnabled(false);
-
 		mMap.setOnMapLongClickListener(this);
 		return view;
 	}
@@ -83,21 +70,6 @@ public class PlanningMapFragment extends MapFragment implements
 			mMap.addMarker(point);
 		}
 		mMap.addPolyline(getPolygonPath(polygon));
-	}
-
-	public void zoomToExtents(MissionManager mission) {
-		mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(
-				getHomeAndWaypointsBounds(mission), 30));
-	}
-
-	/**
-	 * Zoom to the extent of the waypoints should be used when the maps has not
-	 * undergone the layout phase Assumes a map size of 480x360 px
-	 */
-	public void zoomToExtentsFixed(MissionManager mission) {
-		LatLngBounds bound = getWaypointsBounds(mission);
-		mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bound, 480, 360,
-				30));
 	}
 
 	private MarkerOptions getHomeIcon(MissionManager mission) {
@@ -168,30 +140,6 @@ public class PlanningMapFragment extends MapFragment implements
 			i++;
 		}
 		return MarkerList;
-	}
-
-	private LatLngBounds getHomeAndWaypointsBounds(MissionManager mission) {
-		LatLngBounds.Builder builder = new LatLngBounds.Builder();
-		builder.include(mission.getHome().coord);
-		LatLng myLocation = getMyLocation();
-		List<waypoint> waypoints = mission.getWaypoints();
-		if (waypoints.isEmpty() && (myLocation != null)) {
-			builder.include(myLocation);
-		} else {
-			for (waypoint w : waypoints) {
-				builder.include(w.coord);
-			}
-		}
-		return builder.build();
-	}
-
-	private LatLngBounds getWaypointsBounds(MissionManager mission) {
-		LatLngBounds.Builder builder = new LatLngBounds.Builder();
-		builder.include(mission.getHome().coord);
-		for (waypoint w : mission.getWaypoints()) {
-			builder.include(w.coord);
-		}
-		return builder.build();
 	}
 
 	@Override

@@ -186,4 +186,14 @@ public class MissionManager {
 		waypoints.set(number, new waypoint(coord, height));
 	}
 
+
+	public List<LatLng> getAllCoordinates() {
+		List<LatLng> result = new ArrayList<LatLng>();
+		for (waypoint point : waypoints) {
+			result.add(point.coord);
+		}
+		result.add(home.coord);
+		return result;
+	}
+
 }

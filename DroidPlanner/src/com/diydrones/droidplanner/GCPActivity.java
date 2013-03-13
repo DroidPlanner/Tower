@@ -35,7 +35,6 @@ public class GCPActivity extends SuperActivity implements OnGcpClickListner {
 		gcpList = new ArrayList<gcp>();
 	
 		gcpMapFragment = ((GcpMapFragment)getFragmentManager().findFragmentById(R.id.gcpMapFragment));
-		gcpMapFragment.setupMap();
 		clearWaypointsAndUpdate();
 		
 		checkIntent();

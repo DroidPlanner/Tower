@@ -29,8 +29,7 @@ public class GcpMapFragment extends OfflineMapFragment implements OnMarkerClickL
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
 			Bundle bundle) {
-		View view = super.onCreateView(inflater, viewGroup, bundle);
-		super.setupMap();		
+		View view = super.onCreateView(inflater, viewGroup, bundle);		
 		mMap = getMap();
 		mMap.setOnMarkerClickListener(this);
 		return view;
