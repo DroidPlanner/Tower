@@ -2,6 +2,7 @@ package com.diydrones.droidplanner.fragments;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,15 +15,19 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class FlightMapFragment extends MapFragment {
+	private static final int DRONE_MIN_ROTATION = 5;
 	private Bitmap planeBitmap;
 	private GoogleMap mMap;
-	private Marker DroneMarker;
+	private Marker[] DroneMarker;
+	private boolean hasBeenZoomed = false;
+	private int lastMarker = 0;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
@@ -40,37 +45,43 @@ public class FlightMapFragment extends MapFragment {
 		mUiSettings.setCompassEnabled(true);
 		mUiSettings.setTiltGesturesEnabled(false);
 		
-		addDroneMarkerToMap();
+		addDroneMarkersToMap();
 
 		return view;
 	}
 
 	public void updateDronePosition(float heading, LatLng coord) {
-		DroneMarker.setPosition(coord); // TODO This causes the heap to grow a lot.
-		if(!DroneMarker.isVisible()){
-			DroneMarker.setVisible(true);
+		int index = (int) (heading/DRONE_MIN_ROTATION);
+		
+		DroneMarker[lastMarker].setVisible(false);
+		DroneMarker[index].setPosition(coord);
+		DroneMarker[index].setVisible(true);
+		lastMarker = index;
+		
+		if(!hasBeenZoomed){
+			hasBeenZoomed = true;
 			mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coord, 16));
 		}
 	}
 
-	private void addDroneMarkerToMap() {
-			// TODO Find a way to rotate the plane that doesn't consume too much CPU power
-			/*Matrix matrix = new Matrix();
-			matrix.postRotate(heading - mMap.getCameraPosition().bearing);
-			Bitmap rotatedPlane = Bitmap.createBitmap(planeBitmap, 0, 0,
-					planeBitmap.getWidth(), planeBitmap.getHeight(), matrix,
-					true);
-					
-			mMap.addMarker(new MarkerOptions().position(coord)
-					.anchor((float) 0.5, (float) 0.5)
-					.icon(BitmapDescriptorFactory.fromBitmap(rotatedPlane)));
-			*/
-			DroneMarker = mMap.addMarker(new MarkerOptions()
+	private void addDroneMarkersToMap() {
+		int count = 360/DRONE_MIN_ROTATION;
+		DroneMarker = new Marker[count];
+		for (int i = 0; i < count; i++) {					
+			DroneMarker[i] = mMap.addMarker(new MarkerOptions()
 					.anchor((float) 0.5, (float) 0.5)
 					.position(new LatLng(0, 0))
-					.icon(BitmapDescriptorFactory.fromBitmap(planeBitmap))
+					.icon(generateDroneIcon(i*DRONE_MIN_ROTATION))
 					.visible(false));
+		}
 			
+	}
+	
+	private BitmapDescriptor generateDroneIcon(float heading) {
+		Matrix matrix = new Matrix();
+		matrix.postRotate(heading - mMap.getCameraPosition().bearing);
+		return BitmapDescriptorFactory.fromBitmap( Bitmap.createBitmap(planeBitmap, 0, 0, planeBitmap.getWidth(),
+				planeBitmap.getHeight(), matrix, true));
 	}
 
 	public void receiveData(MAVLinkMessage msg) {
