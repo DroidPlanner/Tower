@@ -5,7 +5,6 @@ import java.util.List;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -15,6 +14,7 @@ import com.diydrones.droidplanner.fragments.GcpMapFragment;
 import com.diydrones.droidplanner.fragments.GcpMapFragment.OnGcpClickListner;
 import com.diydrones.droidplanner.helpers.KmlParser;
 import com.diydrones.droidplanner.waypoints.gcp;
+import com.google.android.gms.maps.model.LatLng;
 
 public class GCPActivity extends SuperActivity implements OnGcpClickListner {
 	
@@ -35,7 +35,7 @@ public class GCPActivity extends SuperActivity implements OnGcpClickListner {
 		gcpList = new ArrayList<gcp>();
 	
 		gcpMapFragment = ((GcpMapFragment)getFragmentManager().findFragmentById(R.id.gcpMapFragment));
-		gcpMapFragment.setupMap(PreferenceManager.getDefaultSharedPreferences(this));
+		gcpMapFragment.setupMap();
 		clearWaypointsAndUpdate();
 		
 		checkIntent();
@@ -60,10 +60,18 @@ public class GCPActivity extends SuperActivity implements OnGcpClickListner {
 			openGcpFile();
 			return true;
 		case R.id.menu_zoom:
-			gcpMapFragment.zoomToExtents(gcpList);
+			gcpMapFragment.zoomToExtents(getGcpCoordinates());
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
+	}
+
+	private List<LatLng> getGcpCoordinates() {
+		List<LatLng> result = new ArrayList<LatLng>();
+		for (gcp latLng : gcpList) {
+			result.add(latLng.coord);
+		}
+		return result;
 	}
 
 	public void openGcpFile() {
@@ -81,8 +89,8 @@ public class GCPActivity extends SuperActivity implements OnGcpClickListner {
 	private void putListToGcp(List<gcp> list) {
 		gcpList.clear();
 		gcpList.addAll(list);
-		gcpMapFragment.updateMarkers(list);
-		gcpMapFragment.zoomToExtents(list);
+		gcpMapFragment.updateMarkers(gcpList);
+		gcpMapFragment.zoomToExtents(getGcpCoordinates());
 	}
 	
 	private void checkIntent() {
@@ -111,4 +119,5 @@ public class GCPActivity extends SuperActivity implements OnGcpClickListner {
 		gcpMapFragment.updateMarkers(gcpList);		
 	}
 
+	
 }
