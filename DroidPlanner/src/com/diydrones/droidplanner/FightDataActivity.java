@@ -36,7 +36,7 @@ public class FightDataActivity extends SuperActivity {
 
 
 	@Override
-	protected void onDestroy() {
+	protected void onStop() {
 		super.onDestroy();
 		MAVClient.onDestroy();
 	}

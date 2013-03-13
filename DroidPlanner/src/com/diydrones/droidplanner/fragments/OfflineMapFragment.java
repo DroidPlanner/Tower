@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +62,6 @@ public class OfflineMapFragment extends MapFragment {
 	private void setupOnlineMapOverlay() {
 		GoogleMap mMap = getMap();
 		mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-		Log.d("MAP", "Using Online Map");
 	}
 
 	private void setupOfflineMapOverlay() {
@@ -71,7 +69,6 @@ public class OfflineMapFragment extends MapFragment {
 		mMap.setMapType(GoogleMap.MAP_TYPE_NONE);
 		mMap.addTileOverlay(new TileOverlayOptions()
 				.tileProvider(new LocalMapTileProvider()));
-		Log.d("MAP", "Using Local Map");
 	}
 
 	public void zoomToExtents(List<LatLng> pointsList) {

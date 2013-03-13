@@ -41,7 +41,7 @@ public class TerminalActivity extends SuperActivity {
 	}
 
 	@Override
-	protected void onDestroy() {
+	protected void onStop() {
 		super.onDestroy();
 		MAVClient.onDestroy();
 	}

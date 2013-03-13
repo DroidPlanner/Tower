@@ -87,7 +87,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 	}
 
 	@Override
-	protected void onDestroy() {
+	protected void onStop() {
 		super.onDestroy();
 		MAVClient.onDestroy();
 	}
