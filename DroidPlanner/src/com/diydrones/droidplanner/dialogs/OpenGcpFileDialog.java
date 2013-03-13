@@ -11,10 +11,10 @@ import android.widget.Toast;
 import com.diydrones.droidplanner.R;
 import com.diydrones.droidplanner.helpers.FileManager;
 import com.diydrones.droidplanner.helpers.KmlParser;
-import com.diydrones.droidplanner.helpers.KmlParser.waypoint;
+import com.diydrones.droidplanner.waypoints.gcp;
 
 public abstract class OpenGcpFileDialog implements OnClickListener{
-	public abstract void onGcpFileLoaded(List<waypoint> WPlist);
+	public abstract void onGcpFileLoaded(List<gcp> gcpList);
 
 	Context context;
 	String[] itemList;
@@ -39,7 +39,7 @@ public abstract class OpenGcpFileDialog implements OnClickListener{
 		if(fileIsOpen) {			
 			Toast.makeText(context, itemList[which],
 					Toast.LENGTH_LONG).show();
-			onGcpFileLoaded(parser.WPlist);
+			onGcpFileLoaded(parser.gcpList);
 		} else {
 			Toast.makeText(context,
 					R.string.error_when_opening_file,

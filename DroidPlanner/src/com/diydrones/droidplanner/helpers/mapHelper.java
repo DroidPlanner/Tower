@@ -18,24 +18,4 @@ public class mapHelper {
 			mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
 		}
 	}
-
-	public static void addGcpMarkerToMap(GoogleMap mMap, int i, LatLng coord,
-			boolean isChecked) {
-		if (isChecked) {
-			mMap.addMarker(new MarkerOptions()
-					.position(coord)
-					.title(String.valueOf(i))
-					.icon(BitmapDescriptorFactory
-							.fromResource(R.drawable.placemark_circle_blue))
-					.anchor((float) 0.5, (float) 0.5));
-		} else {
-			mMap.addMarker(new MarkerOptions()
-					.position(coord)
-					.title(String.valueOf(i))
-					.icon(BitmapDescriptorFactory
-							.fromResource(R.drawable.placemark_circle_red))
-					.anchor((float) 0.5, (float) 0.5));
-		}
-	}
-
 }

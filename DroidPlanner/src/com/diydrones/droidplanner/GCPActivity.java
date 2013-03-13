@@ -11,21 +11,15 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.diydrones.droidplanner.dialogs.OpenGcpFileDialog;
+import com.diydrones.droidplanner.fragments.GcpMapFragment;
+import com.diydrones.droidplanner.fragments.GcpMapFragment.OnGcpClickListner;
 import com.diydrones.droidplanner.helpers.KmlParser;
-import com.diydrones.droidplanner.helpers.KmlParser.waypoint;
-import com.diydrones.droidplanner.helpers.mapHelper;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.UiSettings;
-import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
+import com.diydrones.droidplanner.waypoints.gcp;
 
-public class GCPActivity extends SuperActivity implements OnMarkerClickListener {
-	private GoogleMap mMap;
-
-	public List<waypoint> WPlist;
+public class GCPActivity extends SuperActivity implements OnGcpClickListner {
+	
+	public List<gcp> gcpList;
+	private GcpMapFragment gcpMapFragment;
 
 	@Override
 	int getNavigationItem() {
@@ -37,22 +31,19 @@ public class GCPActivity extends SuperActivity implements OnMarkerClickListener 
 		super.onCreate(savedInstanceState);
 	
 		setContentView(R.layout.gcp);
+			
+		gcpList = new ArrayList<gcp>();
 	
-		WPlist = new ArrayList<waypoint>();
+		gcpMapFragment = ((GcpMapFragment)getFragmentManager().findFragmentById(R.id.gcpMapFragment));
+		gcpMapFragment.setupMap(PreferenceManager.getDefaultSharedPreferences(this));
+		clearWaypointsAndUpdate();
+		
+		checkIntent();
+	}
 	
-		setUpMapIfNeeded();
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		setUpMapIfNeeded();
-	}
-
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.menu_gcp, menu);
-
 		return true;
 	}
 
@@ -69,7 +60,7 @@ public class GCPActivity extends SuperActivity implements OnMarkerClickListener 
 			openGcpFile();
 			return true;
 		case R.id.menu_zoom:
-			zoomToExtents();
+			gcpMapFragment.zoomToExtents(gcpList);
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
@@ -78,43 +69,23 @@ public class GCPActivity extends SuperActivity implements OnMarkerClickListener 
 	public void openGcpFile() {
 		OpenGcpFileDialog dialog = new OpenGcpFileDialog() {			
 			@Override
-			public void onGcpFileLoaded(List<waypoint> list) {
-				if(list!=null)
-				WPlist.clear();
-				WPlist.addAll(list);
-				updateMarkers();
-				zoomToExtents();
+			public void onGcpFileLoaded(List<gcp> list) {
+				if(list!=null){
+					putListToGcp(list);
+				}
 			}
 		};		
 		dialog.openGCPDialog(this);
 	}
 
-	private void setUpMapIfNeeded() {
-		// Do a null check to confirm that we have not already instantiated the
-		// map.
-		if (mMap == null) {
-			// Try to obtain the map from the SupportMapFragment.
-			mMap = ((MapFragment) getFragmentManager()
-					.findFragmentById(R.id.map)).getMap();
-			// Check if we were successful in obtaining the map.
-			if (mMap != null) {
-				setUpMap();
-			}
-		}
+	private void putListToGcp(List<gcp> list) {
+		gcpList.clear();
+		gcpList.addAll(list);
+		gcpMapFragment.updateMarkers(list);
+		gcpMapFragment.zoomToExtents(list);
 	}
-
-	private void setUpMap() {
-		mMap.setMyLocationEnabled(true);
-
-		UiSettings mUiSettings = mMap.getUiSettings();
-		mUiSettings.setMyLocationButtonEnabled(true);
-		mUiSettings.setCompassEnabled(true);
-		mUiSettings.setTiltGesturesEnabled(false);
-
-		mMap.setOnMarkerClickListener(this);
-
-		updateMarkers();
-
+	
+	private void checkIntent() {
 		Intent intent = getIntent();
 		String action = intent.getAction();
 		String type = intent.getType();
@@ -123,66 +94,21 @@ public class GCPActivity extends SuperActivity implements OnMarkerClickListener 
 					.show();
 			KmlParser parser = (new KmlParser());
 			boolean fileIsOpen = parser.openGCPFile(intent.getData().getPath());
-			if(fileIsOpen){
-					WPlist.clear();
-					WPlist.addAll(parser.WPlist);
-					updateMarkers();
-					zoomToExtentsFixed();
+			if (fileIsOpen) {
+				putListToGcp(parser.gcpList);
 			}
 		}
-
 	}
 
+	public void clearWaypointsAndUpdate() {
+		gcpList.clear();
+		gcpMapFragment.updateMarkers(gcpList);
+	}
 
 	@Override
-	public boolean onMarkerClick(Marker marker) {
-		int i = Integer.parseInt(marker.getTitle()) - 1;
-		WPlist.get(i).set = !WPlist.get(i).set;
-		updateMarkers();
-		return true;
+	public void onGcpClick(int number) {
+		gcpList.get(number).toogleState();
+		gcpMapFragment.updateMarkers(gcpList);		
 	}
 
-	private void updateMarkers() {
-		mMap.clear();
-		mapHelper.setupMapOverlay(
-				mMap,
-				PreferenceManager.getDefaultSharedPreferences(this).getBoolean(
-						"pref_advanced_use_offline_maps", false));
-		int i = 1;
-		for (waypoint point : WPlist) {
-			mapHelper.addGcpMarkerToMap(mMap, i, point.coord, point.set);
-			i++;
-		}
-	}
-
-	private void clearWaypointsAndUpdate() {
-		WPlist.clear();
-		updateMarkers();
-	}
-
-	public void zoomToExtents() {
-		if (!WPlist.isEmpty()) {
-			LatLngBounds.Builder builder = new LatLngBounds.Builder();
-			for (waypoint point : WPlist) {
-				builder.include(point.coord);
-			}
-			mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(
-					builder.build(), 30));
-		}
-	}
-
-	/**
-	 * Zoom to the extent of the waypoints should be used when the maps has not
-	 * undergone the layout phase Assumes a map size of 480x360 px
-	 */
-	public void zoomToExtentsFixed() {
-		if (!WPlist.isEmpty()) {
-			LatLngBounds.Builder builder = new LatLngBounds.Builder();
-			for (waypoint point : WPlist) {
-				builder.include(point.coord);
-			}
-			mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(
-					builder.build(), 480, 360, 30));
-		}
-	}
 }

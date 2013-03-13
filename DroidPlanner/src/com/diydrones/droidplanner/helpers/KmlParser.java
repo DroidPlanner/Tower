@@ -14,7 +14,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.util.Xml;
 
-import com.google.android.gms.maps.model.LatLng;
+import com.diydrones.droidplanner.waypoints.gcp;
 
 /**
  * Class to parse a Kml file, based on the code from
@@ -24,25 +24,7 @@ import com.google.android.gms.maps.model.LatLng;
 public class KmlParser {
 	private final String ns = null;
 
-	public List<waypoint> WPlist;
-
-	public class waypoint {
-		public LatLng coord;
-		Double Height;
-		public boolean set;
-
-		public waypoint(LatLng c, Double h) {
-			this.coord = c;
-			Height = h;
-			set = false;
-		}
-
-		public waypoint(Double Lat, Double Lng, Double h) {
-			this.coord = new LatLng(Lat, Lng);
-			Height = h;
-			set = false;
-		}
-	}
+	public List<gcp> gcpList;
 	
 	
 	public boolean openGCPFile(String fileWithPath) {
@@ -59,7 +41,7 @@ public class KmlParser {
 		try {
 			FileInputStream in = new FileInputStream(fileWithPath);
 			
-			WPlist = parse(in);
+			gcpList = parse(in);
 			in.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -84,7 +66,7 @@ public class KmlParser {
 			ZipEntry ze;
 			while ((ze = zin.getNextEntry()) != null) {
 				if (ze.getName().contains(".kml")) {
-					WPlist = parse(zin);
+					gcpList = parse(zin);
 				}
 			}
 			zin.close();
@@ -101,15 +83,15 @@ public class KmlParser {
 		return true;
 	}
 
-	public List<waypoint> parse(InputStream in) throws XmlPullParserException,
+	public List<gcp> parse(InputStream in) throws XmlPullParserException,
 			IOException {
-		WPlist = new ArrayList<waypoint>();
+		gcpList = new ArrayList<gcp>();
 		XmlPullParser parser = Xml.newPullParser();
 		parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
 		parser.setInput(in, null);
 		parser.nextTag();
 		readFeed(parser);
-		return WPlist;
+		return gcpList;
 	}
 
 	private void readFeed(XmlPullParser parser) throws XmlPullParserException,
@@ -131,7 +113,7 @@ public class KmlParser {
 	private void readPlacemark(XmlPullParser parser)
 			throws XmlPullParserException, IOException {
 		parser.require(XmlPullParser.START_TAG, ns, "Placemark");
-		waypoint point = null;
+		gcp point = null;
 		while (parser.next() != XmlPullParser.END_TAG) {
 			if (parser.getEventType() != XmlPullParser.START_TAG) {
 				continue;
@@ -140,7 +122,7 @@ public class KmlParser {
 			if (name.equals("Point")) {
 				point = readPoint(parser);
 				if (point != null) {
-					WPlist.add(point);
+					gcpList.add(point);
 				}
 			} else {
 				skip(parser);
@@ -149,9 +131,9 @@ public class KmlParser {
 	}
 
 	// Processes Point tags in the feed.
-	private waypoint readPoint(XmlPullParser parser) throws IOException,
+	private gcp readPoint(XmlPullParser parser) throws IOException,
 			XmlPullParserException {
-		waypoint point = null;
+		gcp point = null;
 		while (parser.next() != XmlPullParser.END_TAG) {
 			if (parser.getEventType() != XmlPullParser.START_TAG) {
 				continue;
@@ -166,9 +148,9 @@ public class KmlParser {
 		return point;
 	}
 
-	private waypoint readCoordinate(XmlPullParser parser) throws IOException,
+	private gcp readCoordinate(XmlPullParser parser) throws IOException,
 			XmlPullParserException {
-		Double Lat, Lng, h;
+		Double Lat, Lng;
 
 		parser.require(XmlPullParser.START_TAG, ns, "coordinates");
 		String coordString = readText(parser);
@@ -177,9 +159,8 @@ public class KmlParser {
 		String title[] = coordString.split(",");
 		Lng = Double.valueOf(title[0]);
 		Lat = Double.valueOf(title[1]);
-		h = Double.valueOf(title[2]);
 
-		return (new waypoint(Lat, Lng, h));
+		return (new gcp(Lat, Lng));
 	}
 
 	// For the tags title and summary, extracts their text values.
