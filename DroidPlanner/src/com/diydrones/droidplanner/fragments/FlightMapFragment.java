@@ -57,6 +57,12 @@ public class FlightMapFragment extends OfflineMapFragment {
 		flightPath.setPoints(oldFlightPath);	
 	}
 
+	public void clearFlightPath() {
+		List<LatLng> oldFlightPath = flightPath.getPoints();
+		oldFlightPath.clear();
+		flightPath.setPoints(oldFlightPath);		
+	}
+
 	private void updateDronePosition(float heading, LatLng coord) {
 		int index = (int) (heading/DRONE_MIN_ROTATION);
 		
@@ -73,10 +79,10 @@ public class FlightMapFragment extends OfflineMapFragment {
 
 	private void addFlightPathToMap() {
 		PolylineOptions flightPathOptions = new PolylineOptions();
-		flightPathOptions.color(Color.argb(128, 0, 0, 255)).width(2);
+		flightPathOptions.color(Color.argb(128, 0, 0, 200)).width(2);
 		flightPath = mMap.addPolyline(flightPathOptions);		
 	}
-
+	
 	private void addDroneMarkersToMap() {
 		int count = 360/DRONE_MIN_ROTATION;
 		

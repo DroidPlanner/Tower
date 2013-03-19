@@ -36,6 +36,7 @@
     <string name="menu_clear_polygon">Clear Poly</string>
     <string name="menu_generate_polygon">Generate</string>
     <string name="menu_finish_polygon">Exit</string>
+    <string name="menu_clearFlightPath">Clear Track</string>
     <string name="exiting_polygon_mode">Exiting Polygon Mode</string>
     <string name="entering_polygon_mode">Entering Polygon Mode</string>
     <string name="dialog_polygon_hatch_angle">Hatch angle:</string>

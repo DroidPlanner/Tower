@@ -57,6 +57,9 @@ public class FightDataActivity extends SuperActivity {
 		case R.id.menu_connect:
 			MAVClient.sendConnectMessage();
 			return true;
+		case R.id.menu_clearFlightPath:
+			flightMapFragment.clearFlightPath();
+			return true;
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
