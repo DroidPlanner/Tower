@@ -14,6 +14,8 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
+import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
@@ -41,6 +43,7 @@ public class MAVLinkService extends Service {
 	public static final int MSG_SEND_DATA = 8;
 	public static final int MSG_GET_CONNECTION_STATE = 0;
 
+	private WakeLock wakeLock;
 	// Messaging
 	ArrayList<Messenger> msgCenter = new ArrayList<Messenger>();
 	final Messenger mMessenger = new Messenger(new IncomingHandler());
@@ -152,11 +155,13 @@ public class MAVLinkService extends Service {
 		@Override
 		public void onDisconnect() {
 			sendMessage(MSG_DEVICE_DISCONNECTED);
+			releaseWakelock();
 			updateNotification(getResources().getString(R.string.disconnected));
 		}
 
 		@Override
 		public void onConnect() {
+			aquireWakelock();
 			sendMessage(MSG_DEVICE_CONNECTED);
 			updateNotification(getResources().getString(R.string.conected));
 		}
@@ -166,6 +171,21 @@ public class MAVLinkService extends Service {
 	public void onCreate() {
 		super.onCreate();
 		showNotification();
+	}
+
+	protected void aquireWakelock() {
+		if(wakeLock==null){
+			PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+			wakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "CPU");
+			wakeLock.acquire();
+		}
+	}
+	
+	protected void releaseWakelock() {
+		if(wakeLock!=null){
+			wakeLock.release();		
+			wakeLock = null;
+		}
 	}
 
 	@Override
