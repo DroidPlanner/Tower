@@ -6,11 +6,18 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.MAVLink.Messages.ApmModes;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.ardupilotmega.msg_request_data_stream;
+import com.MAVLink.Messages.ardupilotmega.msg_set_mode;
 import com.diydrones.droidplanner.fragments.FlightMapFragment;
 import com.diydrones.droidplanner.fragments.FlightMapFragment.OnFlighDataListener;
 import com.diydrones.droidplanner.fragments.HudFragment;
@@ -18,11 +25,12 @@ import com.diydrones.droidplanner.service.MAVLinkClient;
 import com.diydrones.droidplanner.waypoints.waypoint;
 import com.google.android.gms.maps.model.LatLng;
 
-public class FightDataActivity extends SuperActivity implements OnFlighDataListener {
+public class FightDataActivity extends SuperActivity implements OnFlighDataListener, OnItemSelectedListener {
 
 	private MenuItem connectButton;
 	private FlightMapFragment flightMapFragment;
 	private HudFragment hudFragment;
+	private boolean isFirstModeSpinnerSelection = true;
 
 	@Override
 	int getNavigationItem() {
@@ -50,6 +58,12 @@ public class FightDataActivity extends SuperActivity implements OnFlighDataListe
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.menu_flightdata, menu);
 		connectButton = menu.findItem(R.id.menu_connect);
+		MenuItem flightModeMenu = menu.findItem( R.id.menu_flight_modes_spinner);
+		Spinner fligthModeSpinner = (Spinner) flightModeMenu.getActionView();
+		fligthModeSpinner.setAdapter(ArrayAdapter.createFromResource( this,
+		        R.array.menu_fligth_modes,
+		        android.R.layout.simple_spinner_dropdown_item ));
+		fligthModeSpinner.setOnItemSelectedListener(this);
 		return true;
 	}
 
@@ -71,6 +85,22 @@ public class FightDataActivity extends SuperActivity implements OnFlighDataListe
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
+	}
+
+
+	@Override
+	public void onItemSelected(AdapterView<?> parent, View view, 
+	        int pos, long id) {
+		if(isFirstModeSpinnerSelection){
+			isFirstModeSpinnerSelection = false;
+		}else{
+			changeFlightMode(parent.getItemAtPosition(pos).toString());
+		}		
+	}
+
+
+	@Override
+	public void onNothingSelected(AdapterView<?> arg0) {		
 	}
 
 
@@ -143,5 +173,17 @@ public class FightDataActivity extends SuperActivity implements OnFlighDataListe
 		msg.target_system = 1;
 		msg.target_component = 1;
 		MAVClient.sendMavPacket(msg.pack());
+	}
+
+	private void changeFlightMode(String string) {
+		int mode = ApmModes.toInt(string);
+		if(mode==-1){
+			return;
+		}
+		msg_set_mode msg = new msg_set_mode();
+		msg.target_system = 1;
+		msg.base_mode = 1; //TODO use meaningful constant
+		msg.custom_mode = mode;
+		MAVClient.sendMavPacket(msg.pack());			
 	}
 }

@@ -12,6 +12,34 @@ public class ApmModes {
 	public static final int LOITER = 12;
 	public static final int GUIDED = 15;
 
+	public static int toInt(String str) {
+		if (str.equals("Auto")) {
+			return AUTO;
+		}
+		if (str.equals("Circle")) {
+			return CIRCLE;
+		}
+		if (str.equals("FBW B")) {
+			return FLY_BY_WIRE_B;
+		}
+		if (str.equals("FBW A")) {
+			return FLY_BY_WIRE_A;
+		}
+		if (str.equals("Training")) {
+			return TRAINING;
+		}
+		if (str.equals("Stabilize")) {
+			return STABILIZE;
+		}
+		if (str.equals("Manual")) {
+			return MANUAL;
+		}
+		if (str.equals("RTL")) {
+			return RTL;
+		}
+		return -1;
+	}
+	
 	public static String toString(int m) {
 		String mode;
 		switch (m) {

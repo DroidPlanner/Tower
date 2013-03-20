@@ -15,6 +15,17 @@
         <item>GCP</item>        
     </string-array>
     
+    <string-array name="menu_fligth_modes">
+        <item>Auto</item>
+        <item>RTL</item>
+        <item>FBW B</item>
+        <item>FBW A</item>
+        <item>Stabilize</item>        
+        <item>Manual</item>        
+        <item>Training</item>        
+        <item>Circle</item>        
+    </string-array>
+    
     <string name="conected">Connected</string>
     <string name="disconnected">Disconnected</string>
     <string name="menu_open_file">Open file</string>
