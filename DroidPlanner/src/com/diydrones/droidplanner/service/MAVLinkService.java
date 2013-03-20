@@ -173,10 +173,11 @@ public class MAVLinkService extends Service {
 		showNotification();
 	}
 
+	@SuppressWarnings("deprecation")
 	protected void aquireWakelock() {
 		if(wakeLock==null){
 			PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-			wakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "CPU");
+			wakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "CPU");	// Use PARTIAL_WAKE_LOCK, and another pref to keep the screen on
 			wakeLock.acquire();
 		}
 	}

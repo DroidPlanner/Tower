@@ -2,6 +2,7 @@ package com.diydrones.droidplanner.fragments;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -19,6 +20,7 @@ import com.MAVLink.Messages.ardupilotmega.msg_global_position_int;
 import com.diydrones.droidplanner.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -27,15 +29,22 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-public class FlightMapFragment extends OfflineMapFragment {
+public class FlightMapFragment extends OfflineMapFragment implements OnMapLongClickListener {
 	private static final int DRONE_MIN_ROTATION = 5;
 	private GoogleMap mMap;
 	private Marker[] DroneMarker;
 	private Polyline flightPath;
 	private int maxFlightPathSize;
+	private boolean guidedModeEnabled;
 	private boolean hasBeenZoomed = false;
 	private int lastMarker = 0;
+	private OnFlighDataListener mListener;
 
+	public interface OnFlighDataListener {
+		public void onSetGuidedMode(LatLng point);
+	}
+	
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
 			Bundle bundle) {
@@ -44,7 +53,14 @@ public class FlightMapFragment extends OfflineMapFragment {
 		addDroneMarkersToMap();		
 		addFlightPathToMap();	
 		getPreferences();
+		mMap.setOnMapLongClickListener(this);
 		return view;
+	}
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		mListener = (OnFlighDataListener) activity;
 	}
 	
 	private void getPreferences() {
@@ -52,6 +68,7 @@ public class FlightMapFragment extends OfflineMapFragment {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
 		maxFlightPathSize =Integer.valueOf(prefs.getString("pref_max_fligth_path_size", "0"));
+		guidedModeEnabled =prefs.getBoolean("pref_guided_mode_enabled", false);	 // TODO fix preference description in preference.xml
 	}
 
 	public void receiveData(MAVLinkMessage msg) {
@@ -124,5 +141,13 @@ public class FlightMapFragment extends OfflineMapFragment {
 		return BitmapDescriptorFactory.fromBitmap( Bitmap.createBitmap(planeBitmap, 0, 0, planeBitmap.getWidth(),
 				planeBitmap.getHeight(), matrix, true));
 	}
+
+	@Override
+	public void onMapLongClick(LatLng point) {
+		if (guidedModeEnabled) {
+			mListener.onSetGuidedMode(point);			
+		}
+	}
+
 
 }

@@ -24,6 +24,11 @@
             android:key="pref_max_fligth_path_size"
             android:title="Fligth path size"
             android:summary="Size of the fligth path, set to zero to disable."/>
+        <CheckBoxPreference
+            android:key="pref_guided_mode_enabled"
+            android:title="Enable Guided Mode" 
+            android:defaultValue="false" 
+            android:summary="In development"/>
     </PreferenceCategory>
         
     <PreferenceCategory

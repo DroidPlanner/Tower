@@ -6,14 +6,19 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.MAVLink.Messages.MAVLinkMessage;
+import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.ardupilotmega.msg_request_data_stream;
 import com.diydrones.droidplanner.fragments.FlightMapFragment;
+import com.diydrones.droidplanner.fragments.FlightMapFragment.OnFlighDataListener;
 import com.diydrones.droidplanner.fragments.HudFragment;
 import com.diydrones.droidplanner.service.MAVLinkClient;
+import com.diydrones.droidplanner.waypoints.waypoint;
+import com.google.android.gms.maps.model.LatLng;
 
-public class FightDataActivity extends SuperActivity {
+public class FightDataActivity extends SuperActivity implements OnFlighDataListener {
 
 	private MenuItem connectButton;
 	private FlightMapFragment flightMapFragment;
@@ -108,6 +113,32 @@ public class FightDataActivity extends SuperActivity {
 		msg.req_stream_id = (byte) stream_id;
 
 		msg.start_stop = (byte) (start ? 1 : 0);
+		MAVClient.sendMavPacket(msg.pack());
+	}
+
+	@Override
+	public void onSetGuidedMode(LatLng point) {
+		Toast.makeText(this, "Guided Mode", Toast.LENGTH_SHORT).show();
+		setGuidedMode(new waypoint(point, 1000.0)); // Use default altitude to set guided mode.
+		
+	}
+	
+	public void setGuidedMode(waypoint wp) {
+		msg_mission_item msg = new msg_mission_item();
+		msg.seq = 0;
+		msg.current = 2;	//TODO use guided mode enum
+		msg.frame = 0; // TODO use correct parameter
+		msg.command = 16; // TODO use correct parameter
+		msg.param1 = 0; // TODO use correct parameter
+		msg.param2 = 0; // TODO use correct parameter
+		msg.param3 = 0; // TODO use correct parameter
+		msg.param4 = 0; // TODO use correct parameter
+		msg.x = (float) wp.coord.latitude;
+		msg.y = (float) wp.coord.longitude;
+		msg.z = wp.Height.floatValue();
+		msg.autocontinue = 1; // TODO use correct parameter
+		msg.target_system = 1;
+		msg.target_component = 1;
 		MAVClient.sendMavPacket(msg.pack());
 	}
 }
