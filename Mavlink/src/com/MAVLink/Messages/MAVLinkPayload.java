@@ -1,27 +1,28 @@
 package com.MAVLink.Messages;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.nio.ByteBuffer;
 
 public class MAVLinkPayload {
 
-	public List<Byte> payload;
+	public static final int MAX_PAYLOAD_SIZE = 512;
+	
+	public ByteBuffer payload;
 	public int index;
 
 	public MAVLinkPayload() {
-		payload = new ArrayList<Byte>();
+		payload = ByteBuffer.allocate(MAX_PAYLOAD_SIZE);
 	}
 
-	public List<Byte> getData() {
+	public ByteBuffer getData() {
 		return payload;
 	}
 
 	public int size() {
-		return payload.size();
+		return payload.position();
 	}
 
 	public void add(byte c) {
-		payload.add(c);
+		payload.put(c);
 	}
 
 	public void resetIndex() {

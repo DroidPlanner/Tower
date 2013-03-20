@@ -48,8 +48,8 @@ public abstract class MAVLink {
 
 				MAVLinkMessage m;
 
+				int data;
 				while (connected) {
-					int data;
 					if ((data = mavIn.read()) >= 0) {
 						if (logEnabled) {
 							logWriter.write(data);
