@@ -10,10 +10,21 @@
             android:title="Server IP" />
         <EditTextPreference
             android:defaultValue="9761"
+            android:inputType="number"
             android:key="pref_server_port"
             android:title="Server Port" />
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:key="pref_flight_data"
+        android:title="Flight Data">
+        <EditTextPreference
+            android:defaultValue= "100"
+            android:inputType="number"
+            android:key="pref_max_fligth_path_size"
+            android:title="Fligth path size"
+            android:summary="Size of the fligth path, set to zero to disable."/>
+    </PreferenceCategory>
         
     <PreferenceCategory
         android:key="pref_mavlink"
@@ -25,6 +36,7 @@
             android:summary="Logs the MAVlink communication to a *.tlog file, may degrade performance"/>
         <EditTextPreference
             android:defaultValue="10"
+            android:inputType="number"
             android:key="pref_mavlink_stream_rate"
             android:title="Stream Rate"
             android:summary="Rate in which flight data should be received from the drone (in Hz)."/>

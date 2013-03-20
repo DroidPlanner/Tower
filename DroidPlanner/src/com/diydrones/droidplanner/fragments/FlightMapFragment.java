@@ -2,11 +2,14 @@ package com.diydrones.droidplanner.fragments;
 
 import java.util.List;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +32,7 @@ public class FlightMapFragment extends OfflineMapFragment {
 	private GoogleMap mMap;
 	private Marker[] DroneMarker;
 	private Polyline flightPath;
+	private int maxFlightPathSize;
 	private boolean hasBeenZoomed = false;
 	private int lastMarker = 0;
 
@@ -38,23 +42,37 @@ public class FlightMapFragment extends OfflineMapFragment {
 		View view = super.onCreateView(inflater, viewGroup, bundle);
 		mMap = getMap();		
 		addDroneMarkersToMap();		
-		addFlightPathToMap();		
+		addFlightPathToMap();	
+		getPreferences();
 		return view;
 	}
 	
+	private void getPreferences() {
+		Context context = this.getActivity();
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(context);
+		maxFlightPathSize =Integer.valueOf(prefs.getString("pref_max_fligth_path_size", "0"));
+	}
+
 	public void receiveData(MAVLinkMessage msg) {
 		if(msg.msgid == msg_global_position_int.MAVLINK_MSG_ID_GLOBAL_POSITION_INT) {
 			LatLng position = new LatLng(((msg_global_position_int)msg).lat/1E7, ((msg_global_position_int)msg).lon/1E7);
 			float heading = (0x0000FFFF & ((int)((msg_global_position_int)msg).hdg))/100f; // TODO fix unsigned short read at mavlink library
 			updateDronePosition(heading, position);
 			addFlithPathPoint(position);
+			
 		}
 	}
 
 	private void addFlithPathPoint(LatLng position) {
-		List<LatLng> oldFlightPath = flightPath.getPoints();
-		oldFlightPath.add(position);
-		flightPath.setPoints(oldFlightPath);	
+		if (maxFlightPathSize > 0) {
+			List<LatLng> oldFlightPath = flightPath.getPoints();
+			if (oldFlightPath.size() > maxFlightPathSize) {
+				oldFlightPath.remove(0);
+			}
+			oldFlightPath.add(position);
+			flightPath.setPoints(oldFlightPath);
+		}
 	}
 
 	public void clearFlightPath() {
