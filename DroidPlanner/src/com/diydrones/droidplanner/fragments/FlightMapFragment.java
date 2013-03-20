@@ -33,14 +33,16 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 	private static final int DRONE_MIN_ROTATION = 5;
 	private GoogleMap mMap;
 	private Marker[] DroneMarker;
+	private Marker guidedMarker;
 	private Polyline flightPath;
+
 	private int maxFlightPathSize;
 	private boolean guidedModeEnabled;
 	private boolean hasBeenZoomed = false;
 	private int lastMarker = 0;
 	private OnFlighDataListener mListener;
-	private Marker guidedMarker;
-
+	
+	
 	public interface OnFlighDataListener {
 		public void onSetGuidedMode(LatLng point);
 	}
@@ -107,9 +109,7 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 			.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));	
 		} else {
 			guidedMarker.setPosition(point);
-		}
-		
-		
+		}	
 	}
 
 	private void updateDronePosition(float heading, LatLng coord) {
@@ -125,6 +125,10 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 			hasBeenZoomed = true;
 			mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coord, 16));
 		}
+	}
+	
+	public void zoomToLastKnowPosition() {
+		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(DroneMarker[lastMarker].getPosition(), 16));
 	}
 
 	private void addFlightPathToMap() {

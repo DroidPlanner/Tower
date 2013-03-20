@@ -65,6 +65,9 @@ public class FightDataActivity extends SuperActivity implements OnFlighDataListe
 		case R.id.menu_clearFlightPath:
 			flightMapFragment.clearFlightPath();
 			return true;
+		case R.id.menu_zoom:
+			flightMapFragment.zoomToLastKnowPosition();
+			return true;			
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
