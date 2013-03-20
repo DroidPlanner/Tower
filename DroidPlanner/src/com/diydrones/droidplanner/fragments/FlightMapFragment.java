@@ -64,7 +64,8 @@ public class FlightMapFragment extends OfflineMapFragment {
 	}
 
 	private void updateDronePosition(float heading, LatLng coord) {
-		int index = (int) (heading/DRONE_MIN_ROTATION);
+		float correctHeading = (heading - mMap.getCameraPosition().bearing)%360;
+		int index = (int) (correctHeading/DRONE_MIN_ROTATION);
 		
 		DroneMarker[lastMarker].setVisible(false);
 		DroneMarker[index].setPosition(coord);
