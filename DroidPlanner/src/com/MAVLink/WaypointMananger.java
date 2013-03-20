@@ -15,7 +15,6 @@ import com.MAVLink.Messages.ardupilotmega.msg_mission_request;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_request_list;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_set_current;
 import com.diydrones.droidplanner.service.MAVLinkClient;
-import com.diydrones.droidplanner.waypoints.waypoint;
 
 /**
  * Class to manage the communication of waypoints to the MAV.

@@ -27,6 +27,7 @@
         android:required="true" />
 
     <application
+        android:name=".DroidPlannerApp"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"

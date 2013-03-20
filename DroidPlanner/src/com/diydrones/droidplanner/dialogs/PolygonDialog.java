@@ -12,9 +12,9 @@ import android.widget.Toast;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
+import com.MAVLink.waypoint;
 import com.diydrones.droidplanner.R;
 import com.diydrones.droidplanner.waypoints.Polygon;
-import com.diydrones.droidplanner.waypoints.waypoint;
 import com.google.android.gms.maps.model.LatLng;
 
 public abstract class PolygonDialog implements DialogInterface.OnClickListener,

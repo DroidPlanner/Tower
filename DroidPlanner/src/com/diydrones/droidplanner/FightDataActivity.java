@@ -1,5 +1,7 @@
 package com.diydrones.droidplanner;
 
+import java.util.List;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,8 +15,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.MAVLink.Drone;
+import com.MAVLink.WaypointMananger;
+import com.MAVLink.waypoint;
 import com.MAVLink.Messages.ApmModes;
 import com.MAVLink.Messages.MAVLinkMessage;
+import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.ardupilotmega.msg_request_data_stream;
 import com.MAVLink.Messages.ardupilotmega.msg_set_mode;
@@ -22,7 +28,6 @@ import com.diydrones.droidplanner.fragments.FlightMapFragment;
 import com.diydrones.droidplanner.fragments.FlightMapFragment.OnFlighDataListener;
 import com.diydrones.droidplanner.fragments.HudFragment;
 import com.diydrones.droidplanner.service.MAVLinkClient;
-import com.diydrones.droidplanner.waypoints.waypoint;
 import com.google.android.gms.maps.model.LatLng;
 
 public class FightDataActivity extends SuperActivity implements OnFlighDataListener, OnItemSelectedListener {
@@ -31,6 +36,7 @@ public class FightDataActivity extends SuperActivity implements OnFlighDataListe
 	private FlightMapFragment flightMapFragment;
 	private HudFragment hudFragment;
 	private boolean isFirstModeSpinnerSelection = true;
+	private Drone drone;
 
 	@Override
 	int getNavigationItem() {
@@ -45,6 +51,10 @@ public class FightDataActivity extends SuperActivity implements OnFlighDataListe
 		flightMapFragment = ((FlightMapFragment)getFragmentManager().findFragmentById(R.id.flightMapFragment));
 		hudFragment = ((HudFragment)getFragmentManager().findFragmentById(R.id.hud_fragment2));
 		MAVClient.init();
+		
+		this.drone = ((DroidPlannerApp) getApplication()).drone;
+		flightMapFragment.updateMissionPath(drone);
+		flightMapFragment.updateHomeToMap(drone);
 	}
 
 
@@ -82,6 +92,9 @@ public class FightDataActivity extends SuperActivity implements OnFlighDataListe
 		case R.id.menu_zoom:
 			flightMapFragment.zoomToLastKnowPosition();
 			return true;			
+		case R.id.menu_load_from_apm:
+			waypointMananger.getWaypoints();
+			return true;			
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
@@ -109,6 +122,7 @@ public class FightDataActivity extends SuperActivity implements OnFlighDataListe
 		public void notifyReceivedData(MAVLinkMessage msg) {
 			hudFragment.receiveData(msg);
 			flightMapFragment.receiveData(msg);
+			waypointMananger.processMessage(msg);
 		}
 
 		@Override
@@ -122,6 +136,27 @@ public class FightDataActivity extends SuperActivity implements OnFlighDataListe
 			connectButton.setTitle(getResources().getString(
 					R.string.menu_disconnect));
 			setupMavlinkStreamRate();
+		}
+	};
+	
+	WaypointMananger waypointMananger = new WaypointMananger(MAVClient) {
+		@Override
+		public void onWaypointsReceived(List<waypoint> waypoints) {
+			if (waypoints != null) {
+				Toast.makeText(getApplicationContext(),
+						"Waypoints received from Drone", Toast.LENGTH_SHORT)
+						.show();
+				drone.setHome(waypoints.get(0));
+				waypoints.remove(0); // Remove Home waypoint
+				drone.clearWaypoints();
+				drone.addWaypoints(waypoints);
+				flightMapFragment.updateMissionPath(drone);
+				flightMapFragment.updateHomeToMap(drone);
+			}
+		}
+		
+		@Override
+		public void onWriteWaypoints(msg_mission_ack msg) {
 		}
 	};
 
