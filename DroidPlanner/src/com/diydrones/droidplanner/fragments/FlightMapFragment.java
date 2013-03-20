@@ -39,6 +39,7 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 	private boolean hasBeenZoomed = false;
 	private int lastMarker = 0;
 	private OnFlighDataListener mListener;
+	private Marker guidedMarker;
 
 	public interface OnFlighDataListener {
 		public void onSetGuidedMode(LatLng point);
@@ -98,6 +99,19 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 		flightPath.setPoints(oldFlightPath);		
 	}
 
+	private void updateGuidedMarker(LatLng point) {
+		if(guidedMarker == null){
+			guidedMarker = mMap.addMarker(new MarkerOptions()
+			.anchor((float) 0.5, (float) 0.5)
+			.position(point)
+			.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));	
+		} else {
+			guidedMarker.setPosition(point);
+		}
+		
+		
+	}
+
 	private void updateDronePosition(float heading, LatLng coord) {
 		float correctHeading = (heading - mMap.getCameraPosition().bearing+360)%360;	// This ensure the 0 to 360 range
 		int index = (int) (correctHeading/DRONE_MIN_ROTATION);
@@ -145,7 +159,8 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 	@Override
 	public void onMapLongClick(LatLng point) {
 		if (guidedModeEnabled) {
-			mListener.onSetGuidedMode(point);			
+			mListener.onSetGuidedMode(point);	
+			updateGuidedMarker(point);
 		}
 	}
 
