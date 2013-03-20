@@ -112,5 +112,13 @@ public class FileManager {
 		String timeStamp = sdf.format(new Date());
 		return timeStamp;
 	}
+	
+	public static boolean isExternalStorageAvaliable() {
+		String state = Environment.getExternalStorageState();
+		if (Environment.MEDIA_MOUNTED.equals(state)) {
+			return true;
+		}
+		return false;
+	}
 
 }

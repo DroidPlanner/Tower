@@ -1,6 +1,8 @@
 package com.diydrones.droidplanner.fragments;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.content.Context;
@@ -15,6 +17,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.MAVLink.Drone;
+import com.MAVLink.waypoint;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_global_position_int;
 import com.diydrones.droidplanner.R;
@@ -35,6 +39,7 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 	private Marker[] DroneMarker;
 	private Marker guidedMarker;
 	private Polyline flightPath;
+	private Polyline missionPath;
 
 	private int maxFlightPathSize;
 	private boolean isAutoPanEnabled;
@@ -43,6 +48,7 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 	private boolean hasBeenZoomed = false;
 	private int lastMarker = 0;
 	private OnFlighDataListener mListener;
+	private Marker homeMarker;
 	
 	
 	public interface OnFlighDataListener {
@@ -57,6 +63,7 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 		mMap = getMap();		
 		addDroneMarkersToMap();		
 		addFlightPathToMap();	
+		addMissionPathToMap();
 		getPreferences();
 		mMap.setOnMapLongClickListener(this);
 		return view;
@@ -87,6 +94,15 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 		}
 	}
 
+	public void updateMissionPath(Drone drone) {
+		ArrayList<LatLng> missionPoints = new ArrayList<LatLng>();
+		missionPoints.add(drone.getHome().coord);
+		for (waypoint point : drone.getWaypoints()) {
+			missionPoints.add(point.coord);
+		}
+		missionPath.setPoints(missionPoints);
+	}
+	
 	private void addFlithPathPoint(LatLng position) {
 		if (maxFlightPathSize > 0) {
 			List<LatLng> oldFlightPath = flightPath.getPoints();
@@ -138,9 +154,35 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(DroneMarker[lastMarker].getPosition(), 16));
 	}
 
+	private void addMissionPathToMap() {
+		PolylineOptions missionPathOptions = new PolylineOptions();
+		missionPathOptions.color(Color.YELLOW).width(3).zIndex(0);
+		missionPath = mMap.addPolyline(missionPathOptions);
+	}
+	
+	public void updateHomeToMap(Drone drone) {
+		if(homeMarker== null){
+		homeMarker = mMap.addMarker(new MarkerOptions()
+		.position(drone.getHome().coord)
+		.snippet(
+				String.format(Locale.ENGLISH, "%.2f",
+						drone.getHome().Height))
+		.draggable(true)
+		.anchor((float) 0.5, (float) 0.5)
+		.icon(BitmapDescriptorFactory
+				.fromResource(R.drawable.ic_menu_home))
+		.title("Home"));
+		}else {
+			homeMarker.setPosition(drone.getHome().coord);
+			homeMarker.setSnippet(
+				String.format(Locale.ENGLISH, "%.2f",
+						drone.getHome().Height));
+		}
+	}
+	
 	private void addFlightPathToMap() {
 		PolylineOptions flightPathOptions = new PolylineOptions();
-		flightPathOptions.color(Color.argb(128, 0, 0, 200)).width(2);
+		flightPathOptions.color(Color.argb(180, 0, 0, 200)).width(2).zIndex(1);
 		flightPath = mMap.addPolyline(flightPathOptions);		
 	}
 	

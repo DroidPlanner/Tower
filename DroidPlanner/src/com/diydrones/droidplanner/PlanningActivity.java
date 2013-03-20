@@ -14,7 +14,11 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.MAVLink.Drone;
+import com.MAVLink.MissionReader;
+import com.MAVLink.MissionWriter;
 import com.MAVLink.WaypointMananger;
+import com.MAVLink.waypoint;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.diydrones.droidplanner.dialogs.OpenMissionDialog;
@@ -23,14 +27,12 @@ import com.diydrones.droidplanner.fragments.PlanningMapFragment;
 import com.diydrones.droidplanner.fragments.PlanningMapFragment.OnMapInteractionListener;
 import com.diydrones.droidplanner.helpers.TTS;
 import com.diydrones.droidplanner.service.MAVLinkClient;
-import com.diydrones.droidplanner.waypoints.MissionManager;
 import com.diydrones.droidplanner.waypoints.Polygon;
-import com.diydrones.droidplanner.waypoints.waypoint;
 import com.google.android.gms.maps.model.LatLng;
 
 public class PlanningActivity extends SuperActivity implements OnMapInteractionListener{
 	
-	public MissionManager mission;
+	public Drone drone;
 	public Polygon polygon;
 	private PlanningMapFragment planningMapFragment;
 
@@ -59,7 +61,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 		planningMapFragment = ((PlanningMapFragment)getFragmentManager().findFragmentById(R.id.planningMapFragment));
 		WaypointListNumber = (TextView) (findViewById(R.id.textViewWP));
 	
-		mission = new MissionManager();
+		this.drone = ((DroidPlannerApp) getApplication()).drone;
 		polygon = new Polygon();
 		mode = modes.MISSION;
 
@@ -80,10 +82,24 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 		if (Intent.ACTION_VIEW.equals(action) && type != null) {
 			Toast.makeText(this, intent.getData().getPath(), Toast.LENGTH_LONG)
 					.show();
-			mission.openMission(intent.getData().getPath());
+			openMission(intent.getData().getPath());
 			update();
-			planningMapFragment.zoomToExtents(mission.getAllCoordinates());
+			planningMapFragment.zoomToExtents(drone.getAllCoordinates());
 		}
+	}
+
+	private void openMission(String path) {
+		MissionReader missionReader = new MissionReader();
+		if(missionReader.openMission(path)){
+			drone.home = missionReader.getHome();
+			drone.waypoints = missionReader.getWaypoints();
+		}
+		
+	}
+
+	private boolean writeMission() {
+		MissionWriter missionWriter = new MissionWriter(drone.home, drone.waypoints);
+		return missionWriter.saveWaypoints();
 	}
 
 	@Override
@@ -118,8 +134,8 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 			return true;
 		case R.id.menu_send_to_apm:
 			List<waypoint> data = new ArrayList<waypoint>();
-			data.add(mission.getHome());
-			data.addAll(mission.getWaypoints());
+			data.add(drone.getHome());
+			data.addAll(drone.getWaypoints());
 			waypointMananger.writeWaypoints(data);
 			return true;
 		case R.id.menu_open_file:
@@ -135,7 +151,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 			MAVClient.sendConnectMessage();
 			return true;
 		case R.id.menu_zoom:
-			planningMapFragment.zoomToExtents(mission.getAllCoordinates());
+			planningMapFragment.zoomToExtents(drone.getAllCoordinates());
 			return true;
 		case R.id.menu_default_alt:
 			changeDefaultAlt();
@@ -164,12 +180,12 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 			@Override
 			public void waypointFileLoaded(boolean isFileOpen) {
 				if(isFileOpen){
-					planningMapFragment.zoomToExtents(mission.getAllCoordinates());
+					planningMapFragment.zoomToExtents(drone.getAllCoordinates());
 				}
 				update();
 			}
 		};
-		missionDialog.OpenWaypointDialog(mission, this);
+		missionDialog.OpenWaypointDialog(drone, this);
 	}
 
 	public void openPolygonGenerateDialog() {
@@ -177,15 +193,15 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 		PolygonDialog polygonDialog = new PolygonDialog() {
 			@Override
 			public void onPolygonGenerated(List<waypoint> list) {
-				mission.addWaypoints(list);
+				drone.addWaypoints(list);
 				update();
 			}
 		};
-		polygonDialog.generatePolygon(defaultHatchAngle, 50.0, polygon, mission.getLastWaypoint().coord, mission.getDefaultAlt(), this);	
+		polygonDialog.generatePolygon(defaultHatchAngle, 50.0, polygon, drone.getLastWaypoint().coord, drone.getDefaultAlt(), this);	
 	}
 
 	private void clearWaypointsAndUpdate() {
-		mission.clearWaypoints();
+		drone.clearWaypoints();
 		update();
 	}
 
@@ -210,7 +226,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 		final NumberPicker numb3rs = new NumberPicker(this);
 		numb3rs.setMaxValue(1000);
 		numb3rs.setMinValue(0);
-		numb3rs.setValue((mission.getDefaultAlt().intValue()));
+		numb3rs.setValue((drone.getDefaultAlt().intValue()));
 		builder.setView(numb3rs);
 
 		builder.setNegativeButton("Cancel",
@@ -220,7 +236,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 				});
 		builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
-				mission.setDefaultAlt((double) numb3rs.getValue());
+				drone.setDefaultAlt((double) numb3rs.getValue());
 				update();
 			}
 		});
@@ -229,7 +245,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 
 	
 	private void menuSaveFile() {
-		if (mission.saveWaypoints()) {
+		if (writeMission()) {
 			Toast.makeText(this, R.string.file_saved, Toast.LENGTH_SHORT)
 					.show();
 		} else {
@@ -240,8 +256,8 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 	
 
 	private void update() {
-		planningMapFragment.update(mission, polygon);
-		WaypointListNumber.setText(mission.getWaypointData());
+		planningMapFragment.update(drone, polygon);
+		WaypointListNumber.setText(drone.getWaypointData());
 		
 	}
 
@@ -277,12 +293,12 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 				Log.d("Mission",
 						"Received all waypoints, size()=" + waypoints.size());
 				tts.speak("Received waypoints from Drone");
-				mission.setHome(waypoints.get(0));
+				drone.setHome(waypoints.get(0));
 				waypoints.remove(0); // Remove Home waypoint
-				mission.clearWaypoints();
-				mission.addWaypoints(waypoints);
+				drone.clearWaypoints();
+				drone.addWaypoints(waypoints);
 				update();
-				planningMapFragment.zoomToExtents(mission.getAllCoordinates());
+				planningMapFragment.zoomToExtents(drone.getAllCoordinates());
 			}
 		}
 	
@@ -300,7 +316,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 		switch (mode) {
 		default:
 		case MISSION:
-			mission.addWaypoint(point);
+			drone.addWaypoint(point);
 			break;
 		case POLYGON:
 			polygon.addWaypoint(point);
@@ -311,13 +327,13 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 
 	@Override
 	public void onMoveHome(LatLng coord, double height) {
-		mission.setHome(new waypoint(coord, height));	
+		drone.setHome(new waypoint(coord, height));	
 		update();
 	}
 
 	@Override
 	public void onMoveWaypoint(LatLng coord, double height, int Number) {
-		mission.moveWaypoint(coord, height , Number);
+		drone.moveWaypoint(coord, height , Number);
 		update();
 	}
 

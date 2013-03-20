@@ -6,20 +6,21 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.widget.Toast;
 
+import com.MAVLink.Drone;
+import com.MAVLink.MissionReader;
 import com.diydrones.droidplanner.R;
 import com.diydrones.droidplanner.helpers.FileManager;
-import com.diydrones.droidplanner.waypoints.MissionManager;
 
 public abstract class OpenMissionDialog implements OnClickListener {
 	public abstract void waypointFileLoaded(boolean isFileOpen);
 
 	private String[] itemList;
-	MissionManager mission;
+	Drone drone;
 	private Context context;
 
-	public void OpenWaypointDialog(MissionManager mission, Context context) {
+	public void OpenWaypointDialog(Drone drone, Context context) {
 		this.context = context;
-		this.mission = mission;
+		this.drone = drone;
 
 		itemList = FileManager.loadWaypointFileList();
 		if (itemList.length == 0) {
@@ -35,11 +36,15 @@ public abstract class OpenMissionDialog implements OnClickListener {
 
 	@Override
 	public void onClick(DialogInterface dialog, int which) {
-		boolean isFileOpen = mission.openMission(FileManager.getWaypointsPath()
-				+ itemList[which]);
+
+		MissionReader missionReader = new MissionReader();
+		boolean isFileOpen = missionReader.openMission(FileManager.getWaypointsPath()
+				+ itemList[which]);	
 		
 		if (isFileOpen) {
 			Toast.makeText(context, itemList[which], Toast.LENGTH_LONG).show();
+			drone.home = missionReader.getHome();
+			drone.waypoints = missionReader.getWaypoints();
 		} else {
 			Toast.makeText(context, R.string.error_when_opening_file,
 					Toast.LENGTH_SHORT).show();
