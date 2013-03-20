@@ -1,4 +1,4 @@
-package com.diydrones.droidplanner.waypoints;
+package com.MAVLink;
 
 import com.google.android.gms.maps.model.LatLng;
 

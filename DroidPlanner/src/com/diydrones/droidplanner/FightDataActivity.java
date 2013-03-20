@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.MAVLink.waypoint;
 import com.MAVLink.Messages.ApmModes;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
@@ -22,7 +23,6 @@ import com.diydrones.droidplanner.fragments.FlightMapFragment;
 import com.diydrones.droidplanner.fragments.FlightMapFragment.OnFlighDataListener;
 import com.diydrones.droidplanner.fragments.HudFragment;
 import com.diydrones.droidplanner.service.MAVLinkClient;
-import com.diydrones.droidplanner.waypoints.waypoint;
 import com.google.android.gms.maps.model.LatLng;
 
 public class FightDataActivity extends SuperActivity implements OnFlighDataListener, OnItemSelectedListener {

@@ -11,10 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.MAVLink.Drone;
+import com.MAVLink.waypoint;
 import com.diydrones.droidplanner.R;
-import com.diydrones.droidplanner.waypoints.MissionManager;
 import com.diydrones.droidplanner.waypoints.Polygon;
-import com.diydrones.droidplanner.waypoints.waypoint;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
@@ -58,13 +58,13 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		mListener = (OnMapInteractionListener) activity;
 	}
 
-	public void update(MissionManager mission, Polygon polygon) {
+	public void update(Drone drone, Polygon polygon) {
 		mMap.clear();
-		mMap.addMarker(getHomeIcon(mission));
-		for (MarkerOptions waypoint : getMissionMarkers(mission)) {
+		mMap.addMarker(getHomeIcon(drone));
+		for (MarkerOptions waypoint : getMissionMarkers(drone)) {
 			mMap.addMarker(waypoint);
 		}
-		mMap.addPolyline(getMissionPath(mission));
+		mMap.addPolyline(getMissionPath(drone));
 
 		for (MarkerOptions point : getPolygonMarkers(polygon)) {
 			mMap.addMarker(point);
@@ -72,12 +72,12 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		mMap.addPolyline(getPolygonPath(polygon));
 	}
 
-	private MarkerOptions getHomeIcon(MissionManager mission) {
+	private MarkerOptions getHomeIcon(Drone drone) {
 		return (new MarkerOptions()
-				.position(mission.getHome().coord)
+				.position(drone.getHome().coord)
 				.snippet(
 						String.format(Locale.ENGLISH, "%.2f",
-								mission.getHome().Height))
+								drone.getHome().Height))
 				.draggable(true)
 				.anchor((float) 0.5, (float) 0.5)
 				.icon(BitmapDescriptorFactory
@@ -85,21 +85,21 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 				.title(homeMarkerTitle));
 	}
 
-	private PolylineOptions getMissionPath(MissionManager mission) {
+	private PolylineOptions getMissionPath(Drone drone) {
 		PolylineOptions flightPath = new PolylineOptions();
 		flightPath.color(Color.YELLOW).width(3);
 
-		flightPath.add(mission.getHome().coord);
-		for (waypoint point : mission.getWaypoints()) {
+		flightPath.add(drone.getHome().coord);
+		for (waypoint point : drone.getWaypoints()) {
 			flightPath.add(point.coord);
 		}
 		return flightPath;
 	}
 
-	private List<MarkerOptions> getMissionMarkers(MissionManager mission) {
+	private List<MarkerOptions> getMissionMarkers(Drone drone) {
 		int i = 1;
 		List<MarkerOptions> MarkerList = new ArrayList<MarkerOptions>();
-		for (waypoint point : mission.getWaypoints()) {
+		for (waypoint point : drone.getWaypoints()) {
 			MarkerList
 					.add(new MarkerOptions()
 							.position(point.coord)

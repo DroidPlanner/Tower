@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.util.Log;
 
+import com.MAVLink.waypoint;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
