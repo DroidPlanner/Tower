@@ -99,7 +99,7 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 	}
 
 	private void updateDronePosition(float heading, LatLng coord) {
-		float correctHeading = (heading - mMap.getCameraPosition().bearing)%360;
+		float correctHeading = (heading - mMap.getCameraPosition().bearing+360)%360;	// This ensure the 0 to 360 range
 		int index = (int) (correctHeading/DRONE_MIN_ROTATION);
 		
 		DroneMarker[lastMarker].setVisible(false);
