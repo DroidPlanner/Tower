@@ -37,7 +37,9 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 	private Polyline flightPath;
 
 	private int maxFlightPathSize;
-	private boolean guidedModeEnabled;
+	private boolean isAutoPanEnabled;
+	private boolean isGuidedModeEnabled;
+	
 	private boolean hasBeenZoomed = false;
 	private int lastMarker = 0;
 	private OnFlighDataListener mListener;
@@ -71,7 +73,8 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
 		maxFlightPathSize =Integer.valueOf(prefs.getString("pref_max_fligth_path_size", "0"));
-		guidedModeEnabled =prefs.getBoolean("pref_guided_mode_enabled", false);	 // TODO fix preference description in preference.xml
+		isGuidedModeEnabled =prefs.getBoolean("pref_guided_mode_enabled", false);	 // TODO fix preference description in preference.xml
+		isAutoPanEnabled =prefs.getBoolean("pref_auto_pan_enabled", false);	
 	}
 
 	public void receiveData(MAVLinkMessage msg) {
@@ -125,6 +128,10 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 			hasBeenZoomed = true;
 			mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coord, 16));
 		}
+		
+		if(isAutoPanEnabled){
+			mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(DroneMarker[lastMarker].getPosition(), 17));
+		}
 	}
 	
 	public void zoomToLastKnowPosition() {
@@ -162,7 +169,7 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 
 	@Override
 	public void onMapLongClick(LatLng point) {
-		if (guidedModeEnabled) {
+		if (isGuidedModeEnabled) {
 			mListener.onSetGuidedMode(point);	
 			updateGuidedMarker(point);
 		}

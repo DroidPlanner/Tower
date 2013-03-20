@@ -29,6 +29,11 @@
             android:title="Enable Guided Mode" 
             android:defaultValue="false" 
             android:summary="In development"/>
+        <CheckBoxPreference
+            android:key="pref_auto_pan_enabled"
+            android:title="Enable auto pan" 
+            android:defaultValue="false" 
+            android:summary="Auto pan the map when a new GPS coordinate is received"/>
     </PreferenceCategory>
         
     <PreferenceCategory
@@ -44,7 +49,7 @@
             android:inputType="number"
             android:key="pref_mavlink_stream_rate"
             android:title="Stream Rate"
-            android:summary="Rate in which flight data should be received from the drone (in Hz)."/>
+            android:summary="Rate in which flight data should be received from the drone (in Hz)"/>
     </PreferenceCategory>
     
     <PreferenceCategory
@@ -54,7 +59,7 @@
             android:key="pref_advanced_use_offline_maps"
             android:title="Use offline maps" 
             android:defaultValue="false" 
-            android:summary="Use map tiles on the local storage, for offline map view."/>
+            android:summary="Use map tiles on the local storage, for offline map view"/>
         <CheckBoxPreference
             android:key="pref_enable_tts"
             android:title="Enable Text To Speech" 
