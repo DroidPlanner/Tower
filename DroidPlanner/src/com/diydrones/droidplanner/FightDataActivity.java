@@ -8,11 +8,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.MAVLink.Drone;
@@ -27,15 +23,16 @@ import com.MAVLink.Messages.ardupilotmega.msg_set_mode;
 import com.diydrones.droidplanner.fragments.FlightMapFragment;
 import com.diydrones.droidplanner.fragments.FlightMapFragment.OnFlighDataListener;
 import com.diydrones.droidplanner.fragments.HudFragment;
+import com.diydrones.droidplanner.helpers.SpinnerSelfSelect;
+import com.diydrones.droidplanner.helpers.SpinnerSelfSelect.OnItemSelectedEvenIfUnchangedListner;
 import com.diydrones.droidplanner.service.MAVLinkClient;
 import com.google.android.gms.maps.model.LatLng;
 
-public class FightDataActivity extends SuperActivity implements OnFlighDataListener, OnItemSelectedListener {
+public class FightDataActivity extends SuperActivity implements OnFlighDataListener, OnItemSelectedEvenIfUnchangedListner {
 
 	private MenuItem connectButton;
 	private FlightMapFragment flightMapFragment;
 	private HudFragment hudFragment;
-	private boolean isFirstModeSpinnerSelection = true;
 	private Drone drone;
 
 	@Override
@@ -69,11 +66,11 @@ public class FightDataActivity extends SuperActivity implements OnFlighDataListe
 		getMenuInflater().inflate(R.menu.menu_flightdata, menu);
 		connectButton = menu.findItem(R.id.menu_connect);
 		MenuItem flightModeMenu = menu.findItem( R.id.menu_flight_modes_spinner);
-		Spinner fligthModeSpinner = (Spinner) flightModeMenu.getActionView();
+		SpinnerSelfSelect fligthModeSpinner = (SpinnerSelfSelect) flightModeMenu.getActionView();
 		fligthModeSpinner.setAdapter(ArrayAdapter.createFromResource( this,
 		        R.array.menu_fligth_modes,
 		        android.R.layout.simple_spinner_dropdown_item ));
-		fligthModeSpinner.setOnItemSelectedListener(this);
+		fligthModeSpinner.setOnItemSelectedEvenIfUnchangedListener(this);
 		return true;
 	}
 
@@ -102,19 +99,10 @@ public class FightDataActivity extends SuperActivity implements OnFlighDataListe
 
 
 	@Override
-	public void onItemSelected(AdapterView<?> parent, View view, 
-	        int pos, long id) {
-		if(isFirstModeSpinnerSelection){
-			isFirstModeSpinnerSelection = false;
-		}else{
-			changeFlightMode(parent.getItemAtPosition(pos).toString());
-		}		
+	public void onItemSelectedEvenIfUnchanged(int position, String text) {
+		changeFlightMode(text);
 	}
 
-
-	@Override
-	public void onNothingSelected(AdapterView<?> arg0) {		
-	}
 
 
 	public MAVLinkClient MAVClient = new MAVLinkClient(this) {

@@ -7,7 +7,7 @@
     <item
     	android:id="@+id/menu_flight_modes_spinner"
     	android:showAsAction="always"
-    	android:actionViewClass="android.widget.Spinner" 
+    	android:actionViewClass="com.diydrones.droidplanner.helpers.SpinnerSelfSelect" 
     	tools:ignore="MenuTitle"/>
     <item
         android:id="@+id/menu_load_from_apm"
