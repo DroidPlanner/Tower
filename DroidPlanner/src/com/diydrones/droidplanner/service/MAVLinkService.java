@@ -24,8 +24,8 @@ import android.util.Log;
 import com.MAVLink.MAVLink;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
+import com.diydrones.droidplanner.FlightDataActivity;
 import com.diydrones.droidplanner.R;
-import com.diydrones.droidplanner.TerminalActivity;
 
 /**
  * http://developer.android.com/guide/components/bound-services.html#Messenger
@@ -230,7 +230,7 @@ public class MAVLinkService extends Service {
 				.setContentTitle(getResources().getString(R.string.app_title))
 				.setContentText(text);
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-				new Intent(this, TerminalActivity.class), 0);
+				new Intent(this, FlightDataActivity.class), 0);
 		mBuilder.setContentIntent(contentIntent);
 
 		NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

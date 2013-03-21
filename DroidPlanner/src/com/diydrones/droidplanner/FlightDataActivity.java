@@ -28,7 +28,7 @@ import com.diydrones.droidplanner.helpers.SpinnerSelfSelect.OnItemSelectedEvenIf
 import com.diydrones.droidplanner.service.MAVLinkClient;
 import com.google.android.gms.maps.model.LatLng;
 
-public class FightDataActivity extends SuperActivity implements OnFlighDataListener, OnItemSelectedEvenIfUnchangedListner {
+public class FlightDataActivity extends SuperActivity implements OnFlighDataListener, OnItemSelectedEvenIfUnchangedListner {
 
 	private MenuItem connectButton;
 	private FlightMapFragment flightMapFragment;

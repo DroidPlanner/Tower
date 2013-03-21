@@ -52,7 +52,7 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-        <activity android:name=".FightDataActivity" >
+        <activity android:name=".FlightDataActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
