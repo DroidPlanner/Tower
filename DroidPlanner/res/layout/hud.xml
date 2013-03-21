@@ -9,6 +9,6 @@
         android:id="@+id/hud_fragment"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        class="com.diydrones.droidplanner.fragments.HudFragment" />
+        class="com.droidplanner.fragments.HudFragment" />
 
 </LinearLayout>

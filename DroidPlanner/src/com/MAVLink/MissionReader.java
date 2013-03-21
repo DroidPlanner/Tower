@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.diydrones.droidplanner.helpers.FileManager;
+import com.droidplanner.helpers.FileManager;
 
 public class MissionReader {
 	private waypoint home;

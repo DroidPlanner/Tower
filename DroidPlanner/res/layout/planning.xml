@@ -42,6 +42,6 @@
         android:id="@+id/planningMapFragment"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        class="com.diydrones.droidplanner.fragments.PlanningMapFragment" />
+        class="com.droidplanner.fragments.PlanningMapFragment" />
 
 </LinearLayout>

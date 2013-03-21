@@ -9,13 +9,13 @@
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:layout_weight=".5"
-        class="com.diydrones.droidplanner.fragments.HudFragment" />
+        class="com.droidplanner.fragments.HudFragment" />
     
     <fragment
         android:id="@+id/flightMapFragment"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:layout_weight=".5"
-        class="com.diydrones.droidplanner.fragments.FlightMapFragment" />
+        class="com.droidplanner.fragments.FlightMapFragment" />
     
 </LinearLayout>

@@ -13,7 +13,7 @@ import android.util.Log;
 
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
-import com.diydrones.droidplanner.helpers.FileManager;
+import com.droidplanner.helpers.FileManager;
 
 public abstract class MAVLink {
 	private String serverIP;

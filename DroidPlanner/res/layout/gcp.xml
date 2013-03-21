@@ -8,6 +8,6 @@
         android:id="@+id/gcpMapFragment"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        class="com.diydrones.droidplanner.fragments.GcpMapFragment" />
+        class="com.droidplanner.fragments.GcpMapFragment" />
 
 </LinearLayout>

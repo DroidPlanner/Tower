@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import com.diydrones.droidplanner.helpers.FileManager;
+import com.droidplanner.helpers.FileManager;
 
 public class MissionWriter {
 	private waypoint home;

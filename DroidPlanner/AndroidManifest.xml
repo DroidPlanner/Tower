@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.diydrones.droidplanner"
+    package="com.droidplanner"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -10,10 +10,10 @@
         android:targetSdkVersion="17" />
 
     <permission
-        android:name="com.diydrones.droidplanner.permission.MAPS_RECEIVE"
+        android:name="com.droidplanner.permission.MAPS_RECEIVE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="com.diydrones.droidplanner.permission.MAPS_RECEIVE" />
+    <uses-permission android:name="com.droidplanner.permission.MAPS_RECEIVE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -27,7 +27,7 @@
         android:required="true" />
 
     <application
-        android:name=".DroidPlannerApp"
+        android:name="com.droidplanner.DroidPlannerApp"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"
@@ -38,11 +38,10 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyCqZnhgWsao4ey91Z8hNBbOxxJ_EiC5mpM" />
 
-        <service android:name="com.diydrones.droidplanner.service.MAVLinkService" >
-        </service>
+        <service android:name="com.droidplanner.service.MAVLinkService"></service>
 
         <activity
-            android:name=".PlanningActivity"
+            android:name="com.droidplanner.PlanningActivity"
             tools:ignore="ExportedActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -52,19 +51,19 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-        <activity android:name=".FlightDataActivity" >
+        <activity android:name="com.droidplanner.FlightDataActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PIDActivity" >
+        <activity android:name="com.droidplanner.PIDActivity" >
         </activity>
-        <activity android:name=".TerminalActivity" >
+        <activity android:name="com.droidplanner.TerminalActivity" >
         </activity>
         <activity
-            android:name=".GCPActivity"
+            android:name="com.droidplanner.GCPActivity"
             tools:ignore="ExportedActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -75,9 +74,9 @@
                 <data android:mimeType="application/vnd.google-earth.kmz" />
             </intent-filter>
         </activity>
-        <activity android:name=".HUDActivity" >
+        <activity android:name="com.droidplanner.HUDActivity" >
         </activity>
-        <activity android:name=".SettingsActivity" >
+        <activity android:name="com.droidplanner.SettingsActivity" >
         </activity>
     </application>
 
