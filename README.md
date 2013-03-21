@@ -1,5 +1,6 @@
 DroidPlanner - Ground Control Station for Android devices
 ==========
+If you just want to download the app goto [Google Play](https://play.google.com/store/apps/details?id=com.droidplanner).
 
 To start developing:
 - Download the git repositorie
