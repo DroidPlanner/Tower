@@ -12,7 +12,7 @@
     <item
     	android:id="@+id/menu_wp_spinner"
     	android:showAsAction="always"
-    	android:actionViewClass="com.droidplanner.helpers.SpinnerSelfSelect" 
+    	android:actionViewClass="com.droidplanner.helpers.SelectWaypointSpinner" 
     	tools:ignore="MenuTitle"/>
     <item
         android:id="@+id/menu_load_from_apm"

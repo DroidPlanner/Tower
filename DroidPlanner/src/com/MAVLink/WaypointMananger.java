@@ -63,9 +63,9 @@ public abstract class WaypointMananger {
 	 * @param data
 	 *            waypoints to be written
 	 */
-	public void setCurrentWaypoint(short i) {
+	public void setCurrentWaypoint(int i) {
 		if ((waypoints != null) && (MAV.isConnected())) {
-			sendSetCurrentWaypoint(i);
+			sendSetCurrentWaypoint((short )i);
 		}
 	}
 

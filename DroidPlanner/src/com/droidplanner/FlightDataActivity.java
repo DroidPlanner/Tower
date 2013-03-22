@@ -1,6 +1,5 @@
 package com.droidplanner;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
@@ -25,20 +24,21 @@ import com.MAVLink.Messages.ardupilotmega.msg_set_mode;
 import com.droidplanner.fragments.FlightMapFragment;
 import com.droidplanner.fragments.FlightMapFragment.OnFlighDataListener;
 import com.droidplanner.fragments.HudFragment;
+import com.droidplanner.helpers.SelectWaypointSpinner;
+import com.droidplanner.helpers.SelectWaypointSpinner.OnWaypointSpinnerSelectedListener;
 import com.droidplanner.helpers.SpinnerSelfSelect;
 import com.droidplanner.helpers.SpinnerSelfSelect.OnSpinnerItemSelectedListener;
 import com.droidplanner.service.MAVLinkClient;
 import com.google.android.gms.maps.model.LatLng;
 
-public class FlightDataActivity extends SuperActivity implements OnFlighDataListener, OnSpinnerItemSelectedListener {
-
+public class FlightDataActivity extends SuperActivity implements OnFlighDataListener, OnSpinnerItemSelectedListener, OnWaypointSpinnerSelectedListener {
+	
 	private MenuItem connectButton;
 	private FlightMapFragment flightMapFragment;
 	private HudFragment hudFragment;
 	private Drone drone;
-	private ArrayList<String> wpSpinnerAdapter;
 	private SpinnerSelfSelect fligthModeSpinner;
-	private SpinnerSelfSelect wpSpinner;
+	private SelectWaypointSpinner wpSpinner;
 
 	@Override
 	int getNavigationItem() {
@@ -78,25 +78,10 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 		        android.R.layout.simple_spinner_dropdown_item ));
 		fligthModeSpinner.setOnSpinnerItemSelectedListener(this);
 		
-		wpSpinnerAdapter = new ArrayList<String>();
-	    ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, wpSpinnerAdapter);    
-	    updateWpSpinner();
-	    MenuItem wpMenu = menu.findItem( R.id.menu_wp_spinner);
-	    wpSpinner = (SpinnerSelfSelect) wpMenu.getActionView();
-	    wpSpinner.setAdapter(adapter);
-	    wpSpinner.setOnSpinnerItemSelectedListener(this);
+		MenuItem wpMenu = menu.findItem( R.id.menu_wp_spinner);
+		wpSpinner = (SelectWaypointSpinner) wpMenu.getActionView();
+		wpSpinner.buildSpinner(this,this);	
 		return true;
-	}
-
-	private void updateWpSpinner() {
-		wpSpinnerAdapter.clear();
-		if (drone.waypoints.size()>0) {
-			for (int i = 0; i < drone.waypoints.size(); i++) {
-				wpSpinnerAdapter.add("WP "+Integer.toString(i+1));									
-			}			
-		}else {
-			wpSpinnerAdapter.add("WP");			
-		}		
 	}
 
 	@Override
@@ -123,13 +108,13 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 	}
 
 	@Override
+	public void OnWaypointSpinnerSelected(int item) {
+		waypointMananger.setCurrentWaypoint((short) item);
+	}
+
+	@Override
 	public void onSpinnerItemSelected(Spinner spinner, int position, String text) {
-		if(spinner == fligthModeSpinner){
-			changeFlightMode(text);
-		}else if (spinner == wpSpinner) {
-			waypointMananger.setCurrentWaypoint((short) (position+1));
-		}
-		
+			changeFlightMode(text);		
 	}
 
 
@@ -168,7 +153,7 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 				drone.addWaypoints(waypoints);
 				flightMapFragment.updateMissionPath(drone);
 				flightMapFragment.updateHomeToMap(drone);
-				updateWpSpinner();
+				wpSpinner.updateWpSpinner(drone);
 			}
 		}
 		

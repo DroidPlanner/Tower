@@ -1,2 +1,4 @@
+* New menu for selecting the current Waypoint
+
 ## DroidPlanner v0.3
 * Realease at Google Play
