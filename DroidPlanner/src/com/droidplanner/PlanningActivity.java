@@ -327,14 +327,14 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 	}
 
 	@Override
-	public void onMoveHome(LatLng coord, double height) {
-		drone.setHome(new waypoint(coord, height));	
+	public void onMoveHome(LatLng coord) {
+		drone.setHome(coord);	
 		update();
 	}
 
 	@Override
-	public void onMoveWaypoint(LatLng coord, double height, int Number) {
-		drone.moveWaypoint(coord, height , Number);
+	public void onMoveWaypoint(LatLng coord, int Number) {
+		drone.moveWaypoint(coord, Number);
 		update();
 	}
 
