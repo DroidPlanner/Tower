@@ -64,8 +64,6 @@ public abstract class WaypointMananger {
 	 *            waypoints to be written
 	 */
 	public void setCurrentWaypoint(short i) {
-		// TODO this function still needs testing
-		Log.d("Mission", "Setting waypoint as:" + i);
 		if ((waypoints != null) && (MAV.isConnected())) {
 			sendSetCurrentWaypoint(i);
 		}

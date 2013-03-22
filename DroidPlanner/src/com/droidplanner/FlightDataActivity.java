@@ -1,5 +1,6 @@
 package com.droidplanner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
@@ -9,6 +10,7 @@ import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.MAVLink.Drone;
@@ -20,21 +22,23 @@ import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.ardupilotmega.msg_request_data_stream;
 import com.MAVLink.Messages.ardupilotmega.msg_set_mode;
-import com.droidplanner.R;
 import com.droidplanner.fragments.FlightMapFragment;
-import com.droidplanner.fragments.HudFragment;
 import com.droidplanner.fragments.FlightMapFragment.OnFlighDataListener;
+import com.droidplanner.fragments.HudFragment;
 import com.droidplanner.helpers.SpinnerSelfSelect;
-import com.droidplanner.helpers.SpinnerSelfSelect.OnItemSelectedEvenIfUnchangedListner;
+import com.droidplanner.helpers.SpinnerSelfSelect.OnSpinnerItemSelectedListener;
 import com.droidplanner.service.MAVLinkClient;
 import com.google.android.gms.maps.model.LatLng;
 
-public class FlightDataActivity extends SuperActivity implements OnFlighDataListener, OnItemSelectedEvenIfUnchangedListner {
+public class FlightDataActivity extends SuperActivity implements OnFlighDataListener, OnSpinnerItemSelectedListener {
 
 	private MenuItem connectButton;
 	private FlightMapFragment flightMapFragment;
 	private HudFragment hudFragment;
 	private Drone drone;
+	private ArrayList<String> wpSpinnerAdapter;
+	private SpinnerSelfSelect fligthModeSpinner;
+	private SpinnerSelfSelect wpSpinner;
 
 	@Override
 	int getNavigationItem() {
@@ -66,13 +70,33 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.menu_flightdata, menu);
 		connectButton = menu.findItem(R.id.menu_connect);
+		
 		MenuItem flightModeMenu = menu.findItem( R.id.menu_flight_modes_spinner);
-		SpinnerSelfSelect fligthModeSpinner = (SpinnerSelfSelect) flightModeMenu.getActionView();
+		fligthModeSpinner = (SpinnerSelfSelect) flightModeMenu.getActionView();
 		fligthModeSpinner.setAdapter(ArrayAdapter.createFromResource( this,
 		        R.array.menu_fligth_modes,
 		        android.R.layout.simple_spinner_dropdown_item ));
-		fligthModeSpinner.setOnItemSelectedEvenIfUnchangedListener(this);
+		fligthModeSpinner.setOnSpinnerItemSelectedListener(this);
+		
+		wpSpinnerAdapter = new ArrayList<String>();
+	    ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, wpSpinnerAdapter);    
+	    updateWpSpinner();
+	    MenuItem wpMenu = menu.findItem( R.id.menu_wp_spinner);
+	    wpSpinner = (SpinnerSelfSelect) wpMenu.getActionView();
+	    wpSpinner.setAdapter(adapter);
+	    wpSpinner.setOnSpinnerItemSelectedListener(this);
 		return true;
+	}
+
+	private void updateWpSpinner() {
+		wpSpinnerAdapter.clear();
+		if (drone.waypoints.size()>0) {
+			for (int i = 0; i < drone.waypoints.size(); i++) {
+				wpSpinnerAdapter.add("WP "+Integer.toString(i+1));									
+			}			
+		}else {
+			wpSpinnerAdapter.add("WP");			
+		}		
 	}
 
 	@Override
@@ -98,12 +122,15 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 		}
 	}
 
-
 	@Override
-	public void onItemSelectedEvenIfUnchanged(int position, String text) {
-		changeFlightMode(text);
+	public void onSpinnerItemSelected(Spinner spinner, int position, String text) {
+		if(spinner == fligthModeSpinner){
+			changeFlightMode(text);
+		}else if (spinner == wpSpinner) {
+			waypointMananger.setCurrentWaypoint((short) (position+1));
+		}
+		
 	}
-
 
 
 	public MAVLinkClient MAVClient = new MAVLinkClient(this) {
@@ -141,6 +168,7 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 				drone.addWaypoints(waypoints);
 				flightMapFragment.updateMissionPath(drone);
 				flightMapFragment.updateHomeToMap(drone);
+				updateWpSpinner();
 			}
 		}
 		
