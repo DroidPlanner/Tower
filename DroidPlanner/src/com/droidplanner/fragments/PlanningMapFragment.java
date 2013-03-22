@@ -9,6 +9,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,7 +80,7 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 
 		i = 0;
 		for (MarkerOptions point : getPolygonMarkers(polygon)) {
-			waypointMarkers.put(i++,mMap.addMarker(point));
+			polygonMarkers.put(i++,mMap.addMarker(point));
 		}
 		mMap.addPolyline(getPolygonPath(polygon));
 	}
@@ -132,6 +133,7 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 					break;
 				}
 			}
+			Log.d("MARK","move polygon");
 			mListener.onMovePolygonPoint(marker.getPosition(), number);
 		}
 	}
