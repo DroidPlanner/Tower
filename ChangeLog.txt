@@ -1,0 +1,2 @@
+## DroidPlanner v0.3
+* Realease at Google Play
