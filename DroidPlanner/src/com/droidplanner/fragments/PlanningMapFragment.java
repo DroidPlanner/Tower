@@ -40,7 +40,7 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 	static final String homeMarkerTitle = "Home";
 
 	public interface OnMapInteractionListener {
-		public void onAddWaypoint(LatLng point);
+		public void onAddPoint(LatLng point);
 
 		public void onMoveHome(LatLng coord);
 
@@ -86,7 +86,7 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 
 	@Override
 	public void onMapLongClick(LatLng point) {
-		mListener.onAddWaypoint(point);
+		mListener.onAddPoint(point);
 	}
 
 	@Override
@@ -99,32 +99,41 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 
 	@Override
 	public void onMarkerDragEnd(Marker marker) {
-		LatLng coord = marker.getPosition();
-		if (isHomeMarker(marker)) {
-			mListener.onMoveHome(coord);
-			return;
-		} else if (isWaypointMarker(marker)) {
-			int Number = Integer.parseInt(marker.getTitle().replace("WP", "")) - 1;
-			mListener.onMoveWaypoint(coord,  Number);
-			return;
-		} else if (isPolygonMarker(marker)) {
-			int Number = Integer
-					.parseInt(marker.getTitle().replace("Poly", "")) - 1;
-			mListener.onMovePolygonPoint(coord, Number);
-			return;
+		checkForHomeMarker(marker);
+		checkForWaypointMarker(marker);
+		checkForPolygonMarker(marker);
+	}
+
+	private void checkForHomeMarker(Marker marker) {
+		if(home.equals(marker)){
+			mListener.onMoveHome(marker.getPosition());
 		}
 	}
 
-	private boolean isHomeMarker(Marker marker) {
-		return home.equals(marker);
+	private void checkForWaypointMarker(Marker marker) {
+		if (waypointMarkers.containsValue(marker)) {
+			int number = 0;
+			for (HashMap.Entry<Integer, Marker> e : waypointMarkers.entrySet()) {
+				if (marker.equals(e.getValue())) {
+					number = e.getKey();
+					break;
+				}
+			}
+			mListener.onMoveWaypoint(marker.getPosition(), number);
+		}
 	}
 
-	private boolean isWaypointMarker(Marker marker) {
-		return waypointMarkers.containsValue(marker);
-	}
-
-	private boolean isPolygonMarker(Marker marker) {
-		return polygonMarkers.containsValue(marker);
+	private void checkForPolygonMarker(Marker marker) {
+		if (polygonMarkers.containsValue(marker)) {
+			int number = 0;
+			for (HashMap.Entry<Integer, Marker> e : polygonMarkers.entrySet()) {
+				if (marker.equals(e.getValue())) {
+					number = e.getKey();
+					break;
+				}
+			}
+			mListener.onMovePolygonPoint(marker.getPosition(), number);
+		}
 	}
 
 	public LatLng getMyLocation() {

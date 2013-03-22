@@ -313,7 +313,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 	};
 
 	@Override
-	public void onAddWaypoint(LatLng point) {
+	public void onAddPoint(LatLng point) {
 		switch (mode) {
 		default:
 		case MISSION:
