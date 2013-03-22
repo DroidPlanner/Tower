@@ -196,7 +196,6 @@ public abstract class WaypointMananger {
 
 	private void requestFirstWaypoint(MAVLinkMessage msg) {
 		waypointCount = ((msg_mission_count) msg).count;
-		Log.d("Mission", "Count:" + waypointCount);
 		waypoints.clear();
 		requestWayPoint();
 	}
@@ -206,12 +205,9 @@ public abstract class WaypointMananger {
 		Double Lng = (double) msg.y;
 		Double h = (double) msg.z;
 		waypoints.add(new waypoint(Lat, Lng, h));
-		Log.d("Mission", "Item:" + waypoints.size() + " Lng:" + Lng + " Lat:"
-				+ Lat + " h:" + h);
 	}
 
 	private void sendAck() {
-		Log.d("Mission", "Ack");
 		msg_mission_ack msg = new msg_mission_ack();
 		msg.target_system = 1;
 		msg.target_component = 1;
@@ -221,7 +217,6 @@ public abstract class WaypointMananger {
 	}
 
 	private void requestWaypointsList() {
-		Log.d("Mission", "requestList");
 		msg_mission_request_list msg = new msg_mission_request_list();
 		msg.target_system = 1;
 		msg.target_component = 1;
@@ -229,7 +224,6 @@ public abstract class WaypointMananger {
 	}
 
 	private void requestWayPoint() {
-		Log.d("Mission", "requestPoint");
 		msg_mission_request msg = new msg_mission_request();
 		msg.target_system = 1;
 		msg.target_component = 1;
@@ -238,7 +232,6 @@ public abstract class WaypointMananger {
 	}
 
 	private void sendWaypointCount() {
-		Log.d("Mission", "sendWaypointCount:" + (short) waypoints.size());
 		msg_mission_count msg = new msg_mission_count();
 		msg.target_system = 1;
 		msg.target_component = 1;
@@ -247,7 +240,6 @@ public abstract class WaypointMananger {
 	}
 
 	private void sendWaypoint(int index) {
-		Log.d("Mission", "sendWaypoint:" + index);
 		msg_mission_item msg = new msg_mission_item();
 		msg.seq = (short) index;
 		msg.current = (byte) ((index == 0) ? 1 : 0); // TODO use correct
@@ -269,7 +261,6 @@ public abstract class WaypointMananger {
 	}
 
 	private void sendSetCurrentWaypoint(short i) {
-		Log.d("Mission", "send setCurrent");
 		msg_mission_set_current msg = new msg_mission_set_current();
 		msg.target_system = 1;
 		msg.target_component = 1;
