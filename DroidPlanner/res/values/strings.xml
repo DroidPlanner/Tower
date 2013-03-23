@@ -9,7 +9,7 @@
     <string-array name="menu_dropdown">
         <item>Planning</item>
         <item>HUD</item>
-        <item>Fligth Data</item>
+        <item>Flight Data</item>
         <item>PID</item>
         <item>Terminal</item>
         <item>GCP</item>        
