@@ -61,11 +61,9 @@ public class PIDActivity extends SuperActivity implements OnSeekBarChangeListene
 		bStop.setOnClickListener(this);
 		
 		MAVClient.init();
-				
+		
 		rcTask = new RcOutput(MAVClient);
-		scheduleTaskExecutor = Executors.newScheduledThreadPool(5);
-		scheduleTaskExecutor.scheduleWithFixedDelay( rcTask ,1000, 20, TimeUnit.MILLISECONDS);
-
+		
 	}
 
 	@Override
@@ -140,11 +138,26 @@ public class PIDActivity extends SuperActivity implements OnSeekBarChangeListene
 	@Override
 	public void onClick(View v) {
 		if(v == bStart){
+			enableRcOverride();
 		}else if (v == bStop) {
-			//scheduleTaskExecutor.shutdownNow();
-			//disableOverride(MAVClient);	
+			disableRcOverride();
 		}
 		
+	}
+
+	private void disableRcOverride() {
+		if(scheduleTaskExecutor !=null){
+			scheduleTaskExecutor.shutdownNow();
+			scheduleTaskExecutor = null;
+		}
+		//rcTask.disableOverride(MAVClient);		
+	}
+
+	private void enableRcOverride() {
+		if (scheduleTaskExecutor == null) {
+			scheduleTaskExecutor = Executors.newScheduledThreadPool(5);
+			scheduleTaskExecutor.scheduleWithFixedDelay( rcTask ,0, 20, TimeUnit.MILLISECONDS);			
+		}		
 	}
 
 	class RcOutput implements Runnable{
