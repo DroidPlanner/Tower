@@ -92,7 +92,6 @@ public class MAVLinkService extends Service {
 				break;
 
 			case MSG_SEND_DATA:
-				Log.d("Service", "Sending packet");
 				Bundle b = msg.getData();
 				MAVLinkPacket packet = (MAVLinkPacket) b.getSerializable("msg");
 				MAV.sendMavPacket(packet);
