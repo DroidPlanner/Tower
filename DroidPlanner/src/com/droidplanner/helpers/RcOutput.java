@@ -12,9 +12,15 @@ import com.droidplanner.service.MAVLinkClient;
 public class RcOutput {
 	private static final int DISABLE_OVERRIDE = 0;
 	private static final int RC_TRIM = 1500;
+	private static final int RC_RANGE = 500;
 	private ScheduledExecutorService scheduleTaskExecutor;
 	private MAVLinkClient MAV;
 	public int[] rcOutputs = new int[8];
+	
+	public static final int AILERON = 0;
+	public static final int	ELEVATOR = 1;
+	public static final int	TROTTLE = 2;
+	public static final int	RUDDER  = 3;
 
 	public RcOutput(MAVLinkClient MAV) {
 		this.MAV = MAV;
@@ -61,6 +67,12 @@ public class RcOutput {
 	
 	public boolean isRcOverrided(){
 		return (scheduleTaskExecutor!=null);
+	}
+
+	public void setRcChannel(int ch, double value){
+		if(value > +1) value = +1;
+		if(value < -1) value = -1;
+		rcOutputs[ch] = (int) (value*RC_RANGE + RC_TRIM);
 	}
 
 }

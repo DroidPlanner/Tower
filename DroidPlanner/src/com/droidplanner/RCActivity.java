@@ -106,11 +106,11 @@ public class RCActivity extends SuperActivity implements
 	public void onProgressChanged(SeekBar seekBar, int progress,
 			boolean fromUser) {
 		if (seekBar == ch1SeekBar) {
-			rcOutput.rcOutputs[0] = progress + 1000;
-			ch1TextView.setText(Integer.toString(rcOutput.rcOutputs[0]));
+			rcOutput.setRcChannel(RcOutput.AILERON, (progress-500)/500.0);
+			ch1TextView.setText(Integer.toString(progress + 1000));
 		} else if (seekBar == ch2SeekBar) {
-			rcOutput.rcOutputs[1] = progress + 1000;
-			ch2TextView.setText(Integer.toString(rcOutput.rcOutputs[1]));
+			rcOutput.setRcChannel(7,(progress-500)/500.0);
+			ch2TextView.setText(Integer.toString(progress + 1000));
 		}
 	}
 
