@@ -13,6 +13,8 @@ import android.widget.TextView;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.droidplanner.helpers.RcOutput;
 import com.droidplanner.service.MAVLinkClient;
+import com.droidplanner.widgets.joystick.DualJoystickView;
+import com.droidplanner.widgets.joystick.JoystickMovedListener;
 
 public class RCActivity extends SuperActivity implements
 		OnSeekBarChangeListener, OnClickListener {
@@ -38,6 +40,10 @@ public class RCActivity extends SuperActivity implements
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.rc);
+		
+		DualJoystickView joystick = (DualJoystickView)findViewById(R.id.joystickView);
+        
+        joystick.setOnJostickMovedListener(lJoystick, rJoystick);
 
 		ch1TextView = (TextView) findViewById(R.id.ch1TextView);
 		ch1SeekBar = (SeekBar) findViewById(R.id.ch1SeekBar);
@@ -138,4 +144,30 @@ public class RCActivity extends SuperActivity implements
 
 	}
 
+	JoystickMovedListener lJoystick = new JoystickMovedListener() {
+		@Override
+		public void OnReturnedToCenter() {
+		}
+		@Override
+		public void OnReleased() {
+		}
+		@Override
+		public void OnMoved(int pan, int tilt) {
+			rcOutput.setRcChannel(RcOutput.RUDDER, pan/10.0);
+			rcOutput.setRcChannel(RcOutput.TROTTLE, -tilt/10.0);
+		}
+	};
+	JoystickMovedListener rJoystick = new JoystickMovedListener() {
+		@Override
+		public void OnReturnedToCenter() {
+		}
+		@Override
+		public void OnReleased() {
+		}
+		@Override
+		public void OnMoved(int pan, int tilt) {
+			rcOutput.setRcChannel(RcOutput.AILERON, pan/10.0);
+			rcOutput.setRcChannel(RcOutput.ELEVATOR, -tilt/10.0);
+		}
+	};
 }
