@@ -10,7 +10,7 @@
         <item>Planning</item>
         <item>HUD</item>
         <item>Flight Data</item>
-        <item>PID</item>
+        <item>RC</item>
         <item>Terminal</item>
         <item>GCP</item>        
     </string-array>

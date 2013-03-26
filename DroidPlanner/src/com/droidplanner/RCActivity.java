@@ -1,12 +1,6 @@
 package com.droidplanner;
 
-import java.util.Arrays;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,11 +11,10 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
 import com.MAVLink.Messages.MAVLinkMessage;
-import com.MAVLink.Messages.ardupilotmega.msg_rc_channels_override;
+import com.droidplanner.helpers.RcOutput;
 import com.droidplanner.service.MAVLinkClient;
 
-public class PIDActivity extends SuperActivity implements OnSeekBarChangeListener, OnClickListener {
-	private ScheduledExecutorService scheduleTaskExecutor;
+public class RCActivity extends SuperActivity implements OnSeekBarChangeListener, OnClickListener {
 
 	private SeekBar ch1SeekBar;
 	private TextView ch1TextView;
@@ -34,7 +27,7 @@ public class PIDActivity extends SuperActivity implements OnSeekBarChangeListene
 	
 	MenuItem connectButton;
 		
-	private RcOutput rcTask;
+	private RcOutput rcOutput;
 	
 	@Override
 	int getNavigationItem() {
@@ -45,7 +38,7 @@ public class PIDActivity extends SuperActivity implements OnSeekBarChangeListene
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.pid);
+		setContentView(R.layout.rc);
 		
 		ch1TextView =(TextView) findViewById(R.id.ch1TextView);
 		ch1SeekBar = (SeekBar) findViewById(R.id.ch1SeekBar);
@@ -60,10 +53,11 @@ public class PIDActivity extends SuperActivity implements OnSeekBarChangeListene
 		bStop = (Button) findViewById(R.id.bstop);
 		bStop.setOnClickListener(this);
 		
+		
 		MAVClient.init();
 		
-		rcTask = new RcOutput(MAVClient);
-		
+		rcOutput = new RcOutput(MAVClient);
+				
 	}
 
 	@Override
@@ -117,11 +111,11 @@ public class PIDActivity extends SuperActivity implements OnSeekBarChangeListene
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 		if(seekBar == ch1SeekBar){
-			rcTask.rcOutputs[0] = progress+1000;
-			ch1TextView.setText(Integer.toString(rcTask.rcOutputs[0]));
+			rcOutput.rcOutputs[0] = progress+1000;
+			ch1TextView.setText(Integer.toString(rcOutput.rcOutputs[0]));
 		}else if (seekBar == ch2SeekBar) {
-			rcTask.rcOutputs[1] = progress+1000;
-			ch2TextView.setText(Integer.toString(rcTask.rcOutputs[1]));			
+			rcOutput.rcOutputs[1] = progress+1000;
+			ch2TextView.setText(Integer.toString(rcOutput.rcOutputs[1]));			
 		}
 	}
 
@@ -138,71 +132,11 @@ public class PIDActivity extends SuperActivity implements OnSeekBarChangeListene
 	@Override
 	public void onClick(View v) {
 		if(v == bStart){
-			enableRcOverride();
+			rcOutput.enableRcOverride();
 		}else if (v == bStop) {
-			disableRcOverride();
+			rcOutput.disableRcOverride();
 		}
 		
 	}
-
-	private void disableRcOverride() {
-		if(scheduleTaskExecutor !=null){
-			scheduleTaskExecutor.shutdownNow();
-			scheduleTaskExecutor = null;
-		}
-		//rcTask.disableOverride(MAVClient);		
-	}
-
-	private void enableRcOverride() {
-		if (scheduleTaskExecutor == null) {
-			scheduleTaskExecutor = Executors.newScheduledThreadPool(5);
-			scheduleTaskExecutor.scheduleWithFixedDelay( rcTask ,0, 20, TimeUnit.MILLISECONDS);			
-		}		
-	}
-
-	class RcOutput implements Runnable{
-		private MAVLinkClient MAV;
-		
-		private static final int DISABLE_OVERRIDE = 0;
-		private static final int RC_TRIM = 1500;
-		public int [] rcOutputs = new int[8];
-
-		public RcOutput(MAVLinkClient mAVClient) {
-			MAV = mAVClient;
-			Arrays.fill(rcOutputs, RC_TRIM);
-		}
-
-		@Override
-		public void run() {
-			sendRcOverrideMsg();
-		}
-		
-		public void disableOverride(MAVLinkClient mAVClient) {
-			Arrays.fill(rcOutputs, DISABLE_OVERRIDE);	
-			sendRcOverrideMsg(); 	// Just to be sure send 3 disable
-			sendRcOverrideMsg();
-			sendRcOverrideMsg();		
-		}
-		
-		public void sendRcOverrideMsg(){
-			msg_rc_channels_override msg = new msg_rc_channels_override();
-			msg.chan1_raw = (short) rcOutputs[0];
-			msg.chan2_raw = (short) rcOutputs[1];
-			msg.chan3_raw = (short) rcOutputs[2];
-			msg.chan4_raw = (short) rcOutputs[3];
-			msg.chan5_raw = (short) rcOutputs[4];
-			msg.chan6_raw = (short) rcOutputs[5];
-			msg.chan7_raw = (short) rcOutputs[6];
-			msg.chan8_raw = (short) rcOutputs[7];
-			msg.target_system = 1;
-			msg.target_component = 1;
-			Log.d("RC", "send");
-			MAV.sendMavPacket(msg.pack());	
-		}
-		
-
-	}
-	
-	
 
 }
