@@ -52,5 +52,7 @@
     <string name="entering_polygon_mode">Entering Polygon Mode</string>
     <string name="dialog_polygon_hatch_angle">Hatch angle:</string>
     <string name="dialog_polygon_distance_between_lines">Distance between lines:</string>
+    <string name="enable_rc_control">Enable RC control</string>
+    <string name="disable_rc_control">Disable RC control</string>
 
 </resources>

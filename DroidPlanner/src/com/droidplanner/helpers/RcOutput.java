@@ -5,7 +5,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import android.util.Log;
 
 import com.MAVLink.Messages.ardupilotmega.msg_rc_channels_override;
 import com.droidplanner.service.MAVLinkClient;
@@ -22,7 +21,7 @@ public class RcOutput {
 	}
 
 	public void disableRcOverride() {
-		if (scheduleTaskExecutor != null) {
+		if (isRcOverrided()) {
 			scheduleTaskExecutor.shutdownNow();
 			scheduleTaskExecutor = null;
 		}
@@ -33,7 +32,7 @@ public class RcOutput {
 	}
 
 	public void enableRcOverride() {
-		if (scheduleTaskExecutor == null) {
+		if (!isRcOverrided()) {
 			Arrays.fill(rcOutputs, RC_TRIM);
 			scheduleTaskExecutor = Executors.newScheduledThreadPool(5);
 			scheduleTaskExecutor.scheduleWithFixedDelay(new Runnable() {
@@ -57,7 +56,11 @@ public class RcOutput {
 		msg.chan8_raw = (short) rcOutputs[7];
 		msg.target_system = 1;
 		msg.target_component = 1;
-		Log.d("RC", "send");
 		MAV.sendMavPacket(msg.pack());
 	}
+	
+	public boolean isRcOverrided(){
+		return (scheduleTaskExecutor!=null);
+	}
+
 }
