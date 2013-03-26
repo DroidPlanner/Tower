@@ -24,11 +24,11 @@ import com.MAVLink.Messages.ardupilotmega.msg_set_mode;
 import com.droidplanner.fragments.FlightMapFragment;
 import com.droidplanner.fragments.FlightMapFragment.OnFlighDataListener;
 import com.droidplanner.fragments.HudFragment;
-import com.droidplanner.helpers.SelectWaypointSpinner;
-import com.droidplanner.helpers.SelectWaypointSpinner.OnWaypointSpinnerSelectedListener;
-import com.droidplanner.helpers.SpinnerSelfSelect;
-import com.droidplanner.helpers.SpinnerSelfSelect.OnSpinnerItemSelectedListener;
 import com.droidplanner.service.MAVLinkClient;
+import com.droidplanner.widgets.spinners.SelectWaypointSpinner;
+import com.droidplanner.widgets.spinners.SpinnerSelfSelect;
+import com.droidplanner.widgets.spinners.SelectWaypointSpinner.OnWaypointSpinnerSelectedListener;
+import com.droidplanner.widgets.spinners.SpinnerSelfSelect.OnSpinnerItemSelectedListener;
 import com.google.android.gms.maps.model.LatLng;
 
 public class FlightDataActivity extends SuperActivity implements OnFlighDataListener, OnSpinnerItemSelectedListener, OnWaypointSpinnerSelectedListener {

@@ -1,4 +1,4 @@
-package com.droidplanner.helpers;
+package com.droidplanner.widgets.HUD;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

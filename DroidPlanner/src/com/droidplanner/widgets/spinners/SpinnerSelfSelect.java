@@ -1,4 +1,4 @@
-package com.droidplanner.helpers;
+package com.droidplanner.widgets.spinners;
 
 import android.content.Context;
 import android.widget.Spinner;
