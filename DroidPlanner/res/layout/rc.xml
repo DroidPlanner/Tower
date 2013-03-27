@@ -5,74 +5,28 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="5dp"
+        android:text="This is very experimental, please be careful."
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/bTogleRC"
         android:layout_width="match_parent"
-        android:layout_height="50dp" >
-
-        <SeekBar
-            android:id="@+id/ch1SeekBar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:max="1000"
-            android:progress="500" />
-
-        <TextView
-            android:id="@+id/ch1TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="1500"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            tools:ignore="HardcodedText" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp" >
-
-        <SeekBar
-            android:id="@+id/ch2SeekBar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:max="1000"
-            android:progress="500" />
-
-        <TextView
-            android:id="@+id/ch2TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="1500"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            tools:ignore="HardcodedText" />
-
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:text="@string/enable_rc_control" />
 
             <com.droidplanner.widgets.joystick.DualJoystickView
                 android:id="@+id/joystickView"
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
+                android:layout_height="fill_parent"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginLeft="50dp"
                 android:layout_marginRight="50dp"
                 android:layout_marginTop="20dip" />
-    
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_gravity="center" >
-
-        <Button
-            android:id="@+id/bTogleRC"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_weight="1"
-            android:text="@string/enable_rc_control" />
-    </LinearLayout>
 
 </LinearLayout>

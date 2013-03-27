@@ -52,13 +52,13 @@
             </intent-filter>
         </activity>
         <activity android:name="com.droidplanner.FlightDataActivity" >
-        </activity>
-        <activity android:name="com.droidplanner.RCActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name="com.droidplanner.RCActivity" >
         </activity>
         <activity android:name="com.droidplanner.TerminalActivity" >
         </activity>

@@ -8,9 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
-import android.widget.TextView;
 
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.droidplanner.helpers.RcOutput;
@@ -19,12 +16,8 @@ import com.droidplanner.widgets.joystick.DualJoystickView;
 import com.droidplanner.widgets.joystick.JoystickMovedListener;
 
 public class RCActivity extends SuperActivity implements
-		OnSeekBarChangeListener, OnClickListener {
+		 OnClickListener {
 
-	private SeekBar ch1SeekBar;
-	private TextView ch1TextView;
-	private SeekBar ch2SeekBar;
-	private TextView ch2TextView;
 
 	private Button bTogleRC;
 
@@ -46,14 +39,6 @@ public class RCActivity extends SuperActivity implements
 		DualJoystickView joystick = (DualJoystickView)findViewById(R.id.joystickView);
         
         joystick.setOnJostickMovedListener(lJoystick, rJoystick);
-
-		ch1TextView = (TextView) findViewById(R.id.ch1TextView);
-		ch1SeekBar = (SeekBar) findViewById(R.id.ch1SeekBar);
-		ch1SeekBar.setOnSeekBarChangeListener(this);
-
-		ch2TextView = (TextView) findViewById(R.id.ch2TextView);
-		ch2SeekBar = (SeekBar) findViewById(R.id.ch2SeekBar);
-		ch2SeekBar.setOnSeekBarChangeListener(this);
 
 		bTogleRC = (Button) findViewById(R.id.bTogleRC);
 		bTogleRC.setOnClickListener(this);
@@ -109,28 +94,6 @@ public class RCActivity extends SuperActivity implements
 					R.string.menu_connect));
 		}
 	};
-
-	@Override
-	public void onProgressChanged(SeekBar seekBar, int progress,
-			boolean fromUser) {
-		if (seekBar == ch1SeekBar) {
-			rcOutput.setRcChannel(RcOutput.AILERON, (progress-500)/500.0);
-			ch1TextView.setText(Integer.toString(progress + 1000));
-		} else if (seekBar == ch2SeekBar) {
-			rcOutput.setRcChannel(7,(progress-500)/500.0);
-			ch2TextView.setText(Integer.toString(progress + 1000));
-		}
-	}
-
-	@Override
-	public void onStartTrackingTouch(SeekBar seekBar) {
-
-	}
-
-	@Override
-	public void onStopTrackingTouch(SeekBar seekBar) {
-
-	}
 
 	@Override
 	public void onClick(View v) {
