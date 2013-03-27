@@ -1,3 +1,6 @@
+## Droidplanner v0.4.1
+* Improvement to the HUD layout
+
 ## DroidPlanner v0.4.0
 * RC control override
 
