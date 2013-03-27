@@ -7,12 +7,12 @@
     <item
     	android:id="@+id/menu_flight_modes_spinner"
     	android:showAsAction="always"
-    	android:actionViewClass="com.droidplanner.helpers.SpinnerSelfSelect" 
+    	android:actionViewClass="com.droidplanner.widgets.spinners.SpinnerSelfSelect" 
     	tools:ignore="MenuTitle"/>
     <item
     	android:id="@+id/menu_wp_spinner"
     	android:showAsAction="always"
-    	android:actionViewClass="com.droidplanner.helpers.SelectWaypointSpinner" 
+    	android:actionViewClass="com.droidplanner.widgets.spinners.SelectWaypointSpinner" 
     	tools:ignore="MenuTitle"/>
     <item
         android:id="@+id/menu_load_from_apm"
