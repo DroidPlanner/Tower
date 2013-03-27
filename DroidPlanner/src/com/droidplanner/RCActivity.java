@@ -2,6 +2,7 @@ package com.droidplanner;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.InputDevice;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -133,6 +134,8 @@ public class RCActivity extends SuperActivity implements
 
 	@Override
 	public void onClick(View v) {
+		//printInputDevicesToLog();
+		
 		if (v == bTogleRC) {
 			if (rcOutput.isRcOverrided()) {
 				rcOutput.disableRcOverride();
@@ -142,7 +145,16 @@ public class RCActivity extends SuperActivity implements
 				bTogleRC.setText(R.string.disable_rc_control);
 			}
 		}
+	}
 
+	@SuppressWarnings("unused")
+	private void printInputDevicesToLog() {
+		int[] inputIds = InputDevice.getDeviceIds();
+		Log.d("DEV", "Found " + inputIds.length);
+		for (int i = 0; i < inputIds.length; i++) {
+			InputDevice inputDevice = InputDevice.getDevice(inputIds[i]);
+			Log.d("DEV","name:"+inputDevice.getName()+" Sources:"+inputDevice.getSources());	
+		}
 	}
 
 	JoystickMovedListener lJoystick = new JoystickMovedListener() {
@@ -167,7 +179,6 @@ public class RCActivity extends SuperActivity implements
 		}
 		@Override
 		public void OnMoved(double pan, double tilt) {
-			Log.d("RC",pan + "  "+tilt);
 			rcOutput.setRcChannel(RcOutput.AILERON, pan);
 			rcOutput.setRcChannel(RcOutput.ELEVATOR, tilt);
 		}
