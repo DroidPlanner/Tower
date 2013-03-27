@@ -247,13 +247,13 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback {
 			// Draw ticks
 			float dx = (float) Math.sin(i * Math.PI / 180) * r;
 			float dy = (float) Math.cos(i * Math.PI / 180) * r;
-			canvas.drawLine(dx, centerY - dy, (dx + (dx / 25)), centerY
-					- (dy + dy / 25), whiteStroke);
+			canvas.drawLine(dx, centerY - dy, (dx - (dx / 25)), centerY
+					- (dy - dy / 25), whiteStroke);
 
 			// Draw the labels
 			if (i != 0) {
-				dx = (float) Math.sin(i * Math.PI / 180) * (r - 30);
-				dy = (float) Math.cos(i * Math.PI / 180) * (r - 30);
+				dx = (float) Math.sin(i * Math.PI / 180) * (r + 10);
+				dy = (float) Math.cos(i * Math.PI / 180) * (r + 10);
 				canvas.drawText(Math.abs(i) + "", dx, centerY - dy, whiteCenter);
 
 			}
