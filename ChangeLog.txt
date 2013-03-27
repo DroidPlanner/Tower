@@ -1,4 +1,6 @@
+## DroidPlanner v0.3.1
 * New menu for selecting the current Waypoint
+* Fix map markers handling on Planning screen
 
 ## DroidPlanner v0.3
 * Realease at Google Play

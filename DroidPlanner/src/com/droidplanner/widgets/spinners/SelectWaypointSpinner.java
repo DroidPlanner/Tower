@@ -1,4 +1,4 @@
-package com.droidplanner.helpers;
+package com.droidplanner.widgets.spinners;
 
 import java.util.ArrayList;
 
@@ -7,7 +7,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.MAVLink.Drone;
-import com.droidplanner.helpers.SpinnerSelfSelect.OnSpinnerItemSelectedListener;
+import com.droidplanner.widgets.spinners.SpinnerSelfSelect.OnSpinnerItemSelectedListener;
 
 public class SelectWaypointSpinner extends SpinnerSelfSelect implements OnSpinnerItemSelectedListener {
 	public interface OnWaypointSpinnerSelectedListener {

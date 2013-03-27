@@ -56,7 +56,7 @@ public abstract class SuperActivity extends Activity implements
 			startActivity(new Intent(this, FlightDataActivity.class));
 			return false;
 		case 3: // PID
-			startActivity(new Intent(this, PIDActivity.class));
+			startActivity(new Intent(this, RCActivity.class));
 			return false;
 		case 4: // Terminal
 			startActivity(new Intent(this, TerminalActivity.class));

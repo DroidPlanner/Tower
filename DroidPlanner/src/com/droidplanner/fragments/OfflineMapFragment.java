@@ -95,5 +95,9 @@ public class OfflineMapFragment extends MapFragment {
 		}
 		return builder.build();
 	}
+	
+	public double getMapRotation() {
+		return getMap().getCameraPosition().bearing;
+	}
 
 }

@@ -13,7 +13,7 @@ import com.MAVLink.Messages.ardupilotmega.msg_mission_current;
 import com.MAVLink.Messages.ardupilotmega.msg_nav_controller_output;
 import com.MAVLink.Messages.ardupilotmega.msg_vfr_hud;
 import com.droidplanner.R;
-import com.droidplanner.helpers.HUDwidget;
+import com.droidplanner.widgets.HUD.HUDwidget;
 
 
 public class HudFragment extends Fragment{

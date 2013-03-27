@@ -77,9 +77,13 @@ public class Drone {
 	public void setHome(waypoint home) {
 		this.home = home;
 	}
+	
+	public void setHome(LatLng home) {
+		this.home.coord = home;
+	}
 
-	public void moveWaypoint(LatLng coord, double height, int number) {
-		waypoints.set(number, new waypoint(coord, height));
+	public void moveWaypoint(LatLng coord, int number) {
+		waypoints.get(number).coord = coord;
 	}
 
 
