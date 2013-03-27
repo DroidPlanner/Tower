@@ -1,3 +1,6 @@
+## DroidPlanner v0.4.0
+* RC control override
+
 ## DroidPlanner v0.3.1
 * New menu for selecting the current Waypoint
 * Fix map markers handling on Planning screen
