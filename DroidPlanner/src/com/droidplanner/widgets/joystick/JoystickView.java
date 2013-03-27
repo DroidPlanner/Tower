@@ -7,7 +7,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.HapticFeedbackConstants;
@@ -47,8 +46,8 @@ public class JoystickView extends View {
 	//Max range of movement in user coordinate system
 	public final static int CONSTRAIN_BOX = 0;
 	public final static int CONSTRAIN_CIRCLE = 1;
+	private final static float MOVEMENT_RANGE = 1;
 	private int movementConstraint;
-	private float movementRange;
 
 	public final static int COORDINATE_CARTESIAN = 0;		//Regular cartesian coordinates
 	public final static int COORDINATE_DIFFERENTIAL = 1;	//Uses polar rotation of 45 degrees to calc differential drive paramaters
@@ -73,17 +72,17 @@ public class JoystickView extends View {
 	private int cX, cY;
 
 	//Size of the view in view coordinates
-	private int dimX, dimY;
+	private int dimSide;
 
 	//Cartesian coordinates of last touch point - joystick center is (0,0)
-	private int cartX, cartY;
+	private double cartX, cartY;
 	
 	//Polar coordinates of the touch point from joystick center
 	private double radial;
 	private double angle;
 	
 	//User coordinates of last touch point
-	private int userX, userY;
+	private double userX, userY;
 
 	//Offset co-ordinates (used when touch events are received from parent's coordinate origin)
 	private int offsetX;
@@ -137,10 +136,9 @@ public class JoystickView extends View {
 
 		innerPadding = 10;
 		
-		setMovementRange(10);
 		setMoveResolution(1.0f);
 		setClickThreshold(0.4f);
-		setYAxisInverted(true);
+		setYAxisInverted(false);
 		setUserCoordinateSystem(COORDINATE_CARTESIAN);
 		setAutoReturnToCenter(true);
 	}
@@ -198,13 +196,6 @@ public class JoystickView extends View {
 		return clickThreshold;
 	}
 	
-	public void setMovementRange(float movementRange) {
-		this.movementRange = movementRange;
-	}
-	
-	public float getMovementRange() {
-		return movementRange;
-	}
 	
 	public void setMoveResolution(float moveResolution) {
 		this.moveResolution = moveResolution;
@@ -244,13 +235,12 @@ public class JoystickView extends View {
 
 		int d = Math.min(getMeasuredWidth(), getMeasuredHeight());
 
-		dimX = d;
-		dimY = d;
+		dimSide = d;
 
 		cX = d / 2;
 		cY = d / 2;
 		
-		bgRadius = dimX/2 - innerPadding;
+		bgRadius = dimSide/2 - innerPadding;
 		handleRadius = (int)(d * 0.25);
 		handleInnerBoundaries = handleRadius;
 		movementRadius = Math.min(cX, cY) - handleInnerBoundaries;
@@ -365,7 +355,7 @@ public class JoystickView extends View {
 		    case MotionEvent.ACTION_DOWN: {
 		    	if ( pointerId == INVALID_POINTER_ID ) {
 		    		int x = (int) ev.getX();
-		    		if ( x >= offsetX && x < offsetX + dimX ) {
+		    		if ( x >= offsetX && x < offsetX + dimSide ) {
 			        	setPointerId(ev.getPointerId(0));
 //			        	Log.d(TAG, "ACTION_DOWN: " + getPointerId());
 			    		return true;
@@ -378,7 +368,7 @@ public class JoystickView extends View {
 			        final int pointerIndex = (action & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
 			        final int pointerId = ev.getPointerId(pointerIndex);
 		    		int x = (int) ev.getX(pointerId);
-		    		if ( x >= offsetX && x < offsetX + dimX ) {
+		    		if ( x >= offsetX && x < offsetX + dimSide ) {
 //			        	Log.d(TAG, "ACTION_POINTER_DOWN: " + pointerId);
 			        	setPointerId(pointerId);
 			    		return true;
@@ -436,8 +426,8 @@ public class JoystickView extends View {
 
 	private void calcUserCoordinates() {
 		//First convert to cartesian coordinates
-		cartX = (int)(touchX / movementRadius * movementRange);
-		cartY = (int)(touchY / movementRadius * movementRange);
+		cartX = (touchX / movementRadius * MOVEMENT_RANGE);
+		cartY = (touchY / movementRadius * MOVEMENT_RANGE);
 		
 		radial = Math.sqrt((cartX*cartX) + (cartY*cartY));
 		angle = Math.atan2(cartY, cartX);
@@ -454,15 +444,15 @@ public class JoystickView extends View {
 			userX = cartY + cartX / 4;
 			userY = cartY - cartX / 4;
 			
-			if ( userX < -movementRange )
-				userX = (int)-movementRange;
-			if ( userX > movementRange )
-				userX = (int)movementRange;
+			if ( userX < -MOVEMENT_RANGE )
+				userX = -MOVEMENT_RANGE;
+			if ( userX > MOVEMENT_RANGE )
+				userX = MOVEMENT_RANGE;
 
-			if ( userY < -movementRange )
-				userY = (int)-movementRange;
-			if ( userY > movementRange )
-				userY = (int)movementRange;
+			if ( userY < -MOVEMENT_RANGE )
+				userY = -MOVEMENT_RANGE;
+			if ( userY > MOVEMENT_RANGE )
+				userY = MOVEMENT_RANGE;
 		}
 		
 	}

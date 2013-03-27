@@ -111,10 +111,6 @@ public class DualJoystickView extends LinearLayout {
 		stickR.setMovementConstraint(movementConstraint);
 	}
 
-	public void setMovementRange(float movementRangeLeft, float movementRangeRight) {
-		stickL.setMovementRange(movementRangeLeft);
-		stickR.setMovementRange(movementRangeRight);
-	}
 
 	public void setMoveResolution(float leftMoveResolution, float rightMoveResolution) {
 		stickL.setMoveResolution(leftMoveResolution);

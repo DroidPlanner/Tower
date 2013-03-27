@@ -1,6 +1,7 @@
 package com.droidplanner;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -152,9 +153,9 @@ public class RCActivity extends SuperActivity implements
 		public void OnReleased() {
 		}
 		@Override
-		public void OnMoved(int pan, int tilt) {
-			rcOutput.setRcChannel(RcOutput.RUDDER, pan/10.0);
-			rcOutput.setRcChannel(RcOutput.TROTTLE, -tilt/10.0);
+		public void OnMoved(double pan, double tilt) {
+			rcOutput.setRcChannel(RcOutput.RUDDER, pan);
+			rcOutput.setRcChannel(RcOutput.TROTTLE, tilt);
 		}
 	};
 	JoystickMovedListener rJoystick = new JoystickMovedListener() {
@@ -165,9 +166,10 @@ public class RCActivity extends SuperActivity implements
 		public void OnReleased() {
 		}
 		@Override
-		public void OnMoved(int pan, int tilt) {
-			rcOutput.setRcChannel(RcOutput.AILERON, pan/10.0);
-			rcOutput.setRcChannel(RcOutput.ELEVATOR, -tilt/10.0);
+		public void OnMoved(double pan, double tilt) {
+			Log.d("RC",pan + "  "+tilt);
+			rcOutput.setRcChannel(RcOutput.AILERON, pan);
+			rcOutput.setRcChannel(RcOutput.ELEVATOR, tilt);
 		}
 	};
 }
