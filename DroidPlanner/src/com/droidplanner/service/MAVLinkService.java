@@ -26,6 +26,7 @@ import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
 import com.droidplanner.FlightDataActivity;
 import com.droidplanner.R;
+import com.ftdi.j2xx.D2xxManager;
 
 /**
  * http://developer.android.com/guide/components/bound-services.html#Messenger
@@ -210,10 +211,28 @@ public class MAVLinkService extends Service {
 					.getString("pref_server_port", "0"));
 			boolean logEnabled = prefs.getBoolean("pref_mavlink_log_enabled",
 					false);
-			MAV.openConnection(serverIP, port, logEnabled);
+			
+			
+			//MAV.openConnection(serverIP, port, logEnabled);
+			
+			MAV.openConnection(openCOM(),logEnabled,getApplicationContext());
+			
+			
 		}
 	}
 
+	
+	private D2xxManager openCOM() {
+		D2xxManager ftD2xx = null;
+		try {
+    		ftD2xx = D2xxManager.getInstance(this);
+    	} catch (D2xxManager.D2xxException ex) {
+    		ex.printStackTrace();
+    	}		
+		return ftD2xx;
+		
+	}
+	
 	/**
 	 * Show a notification while this service is running.
 	 */
