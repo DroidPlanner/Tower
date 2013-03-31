@@ -53,7 +53,8 @@ public abstract class SuperActivity extends Activity implements
 			startActivity(new Intent(this, HUDActivity.class));
 			return false;
 		case 2: // Flight Data
-			startActivity(new Intent(this, FlightDataActivity.class));
+			startActivity(new Intent(this, FlightDataActivity.class)
+					.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 			return false;
 		case 3: // PID
 			startActivity(new Intent(this, RCActivity.class));
