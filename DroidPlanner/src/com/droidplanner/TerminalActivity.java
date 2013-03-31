@@ -6,23 +6,26 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.MAVLink.Parser;
 import com.MAVLink.Messages.MAVLinkMessage;
-import com.MAVLink.Messages.ardupilotmega.msg_param_request_list;
-import com.MAVLink.Messages.ardupilotmega.msg_param_value;
-import com.MAVLink.Messages.ardupilotmega.msg_statustext;
-import com.droidplanner.R;
 import com.droidplanner.service.MAVLinkClient;
+import com.ftdi.j2xx.D2xxManager;
+import com.ftdi.j2xx.FT_Device;
 
-public class TerminalActivity extends SuperActivity {
+public class TerminalActivity extends SuperActivity implements OnClickListener {
 
+	public static D2xxManager ftD2xx = null;
+	
 	TextView terminal;
 	Button sendButton;
 	Menu menu;
 	MenuItem connectButton;
-
+	FT_Device ftDev;
+	
 	@Override
 	int getNavigationItem() {
 		return 4;
@@ -36,9 +39,50 @@ public class TerminalActivity extends SuperActivity {
 
 		terminal = (TextView) findViewById(R.id.textViewTerminal);
 		sendButton = (Button) findViewById(R.id.buttonSend);
-
+		sendButton.setOnClickListener(this);
+		
+    	try {
+    		ftD2xx = D2xxManager.getInstance(this);
+    	} catch (D2xxManager.D2xxException ex) {
+    		ex.printStackTrace();
+    	}
+    	
+    	openCOM();
+    	
+    	new read_thread().start();
+    			
 		MAVClient.init();
 
+	}
+
+	private void openCOM() {
+		int DevCount = ftD2xx.createDeviceInfoList(this);
+    	if (DevCount < 1) {
+    		Log.d("USB", "No Devices");
+    		return;
+    	}			
+    	Log.d("USB", "Nº dev:"+DevCount);
+    
+    	ftDev = ftD2xx.openByIndex(this, 0);
+    	
+    	if(ftDev == null){
+    		Log.d("USB", "COM close");
+    		return;
+    	}
+
+    	
+		ftDev.setBitMode((byte) 0, D2xxManager.FT_BITMODE_RESET);
+		ftDev.setBaudRate(57600);
+		ftDev.setDataCharacteristics(D2xxManager.FT_DATA_BITS_8,
+				D2xxManager.FT_STOP_BITS_1, D2xxManager.FT_PARITY_NONE);
+		ftDev.setFlowControl(D2xxManager.FT_FLOW_NONE, (byte) 0x00, (byte) 0x00);
+		ftDev.setLatencyTimer((byte) 16);
+		ftDev.purge((byte) (D2xxManager.FT_PURGE_TX | D2xxManager.FT_PURGE_RX));
+    	
+    				
+		if (true == ftDev.isOpen()){
+			Log.d("USB", "COM open");
+		}
 	}
 
 	@Override
@@ -69,31 +113,13 @@ public class TerminalActivity extends SuperActivity {
 		}
 	}
 
-	public void sendData(View view) {
-		Log.d("PARAM", "request List");
-		msg_param_request_list msg = new msg_param_request_list();
-		msg.target_system = 1;
-		msg.target_component = 1;
-		MAVClient.sendMavPacket(msg.pack());
-	}
 
 	public MAVLinkClient MAVClient = new MAVLinkClient(this) {
 	
-		String additionalInfo = "";
-	
+		
 		@Override
 		public void notifyReceivedData(MAVLinkMessage m) {
-			String terminalMsg = "Received lenght packets\nLast packet was: "
-					+ m.msgid + "\n";
-			if (m.msgid == msg_statustext.MAVLINK_MSG_ID_STATUSTEXT) {
-				additionalInfo += ((msg_statustext) m).toString() + "\n";
-			}
-			if (m.msgid == msg_param_value.MAVLINK_MSG_ID_PARAM_VALUE) {
-				Log.d("PARAM", ("param:" + ((msg_param_value) m).getParam_Id()
-						+ "\t Value" + ((msg_param_value) m).param_value));
-			}
-	
-			terminal.setText(terminalMsg + additionalInfo);
+		
 		}
 	
 		@Override
@@ -108,5 +134,62 @@ public class TerminalActivity extends SuperActivity {
 					R.string.menu_disconnect));
 		}
 	};
+	
+	
+	
+    public void SendMessage() {
+		if (ftDev.isOpen() == false) {
+			Log.e("j2xx", "SendMessage: device not open");
+			return;
+		}
+
+		ftDev.setLatencyTimer((byte) 16);
+
+		String writeData = "Teste da Serial";
+		byte[] OutData = writeData.getBytes();
+		ftDev.write(OutData, writeData.length());
+    }
+	
+	private class read_thread  extends Thread	{
+
+		public read_thread(){
+			this.setPriority(Thread.MAX_PRIORITY);
+		}
+
+		@Override
+		public void run()
+		{
+			ftDev.setLatencyTimer((byte)16);
+
+			int iavailable;
+			byte[] readData = new byte[4096];
+			Parser parser = new Parser();
+			MAVLinkMessage m;
+			
+			while(true){
+				iavailable = ftDev.getQueueStatus();
+				
+				if(iavailable > 0){	
+					if(iavailable > 4096)
+						iavailable = 4096;
+					ftDev.read(readData,iavailable);	
+					Log.d("USB", "read:"+iavailable);
+					
+					for (int i = 0; i < iavailable; i++) {
+						m= parser.mavlink_parse_char(readData[i]&0x00ff);
+						if (m != null) {
+							Log.d("MSG_"+m.msgid,m.toString() );
+						}
+					}
+					
+				}
+			}
+		}
+	}
+
+	@Override
+	public void onClick(View v) {
+		SendMessage();		
+	}
 
 }
