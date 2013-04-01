@@ -1,6 +1,7 @@
 package com.droidplanner;
 
 import android.app.ActionBar;
+import android.app.TaskStackBuilder;
 import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.content.Intent;
@@ -8,7 +9,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.widget.ArrayAdapter;
 import android.widget.SpinnerAdapter;
-import com.droidplanner.R;
 
 public abstract class SuperActivity extends Activity implements
 		OnNavigationListener {
@@ -44,27 +44,30 @@ public abstract class SuperActivity extends Activity implements
 		if (itemPosition == getNavigationItem()) {
 			return false;
 		}
+		Intent navigationIntent;
 		switch (itemPosition) {
 		default:
 		case 0: // Planning
-			startActivity(new Intent(this, PlanningActivity.class));
-			return false;
+			navigationIntent = new Intent(this, PlanningActivity.class);
+			break;
 		case 1: // HUD
-			startActivity(new Intent(this, HUDActivity.class));
-			return false;
+			navigationIntent = new Intent(this, HUDActivity.class);
+			break;
 		case 2: // Flight Data
-			startActivity(new Intent(this, FlightDataActivity.class)
-					.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-			return false;
+			navigationIntent = new Intent(this, FlightDataActivity.class);
+			navigationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			break;
 		case 3: // PID
-			startActivity(new Intent(this, RCActivity.class));
-			return false;
+			navigationIntent = new Intent(this, RCActivity.class);
+			break;
 		case 4: // Terminal
-			startActivity(new Intent(this, TerminalActivity.class));
-			return false;
+			navigationIntent = new Intent(this, TerminalActivity.class);
+			break;
 		case 5: // GCP
-			startActivity(new Intent(this, GCPActivity.class));
-			return false;
+			navigationIntent = new Intent(this, GCPActivity.class);
+			break;
 		}
+		startActivity(navigationIntent);
+		return false;
 	}
 }
