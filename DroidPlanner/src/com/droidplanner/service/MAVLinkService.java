@@ -16,6 +16,7 @@ import android.os.Messenger;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.RemoteException;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -203,8 +204,14 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner{
 			mavConnection.disconnect();
 			mavConnection = null;
 		} else {
-			mavConnection = new UsbConnection(this);
-			//mavConnection = new TcpConnection(this);
+			String connectionType = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("pref_connection_type", "");
+			if (connectionType.equals("USB")) {
+				mavConnection = new UsbConnection(this);
+			} else if (connectionType.equals("TCP")) {
+				mavConnection = new TcpConnection(this);
+			} else {
+				return;
+			}
 			mavConnection.start();
 		}
 	}
