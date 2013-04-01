@@ -43,10 +43,14 @@ public class RCActivity extends SuperActivity implements
 		bTogleRC = (Button) findViewById(R.id.bTogleRC);
 		bTogleRC.setOnClickListener(this);
 
-		MAVClient.init();
-
+		
 		rcOutput = new RcOutput(MAVClient);
-
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onRestart();
+		MAVClient.init();
 	}
 
 	@Override
@@ -65,8 +69,6 @@ public class RCActivity extends SuperActivity implements
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.menu_settings:
-			return true;
 		case R.id.menu_connect:
 			MAVClient.sendConnectMessage();
 			return true;

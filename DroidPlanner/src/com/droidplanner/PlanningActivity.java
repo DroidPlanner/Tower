@@ -73,6 +73,11 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 	
 		tts = new TTS(this);
 	
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onRestart();
 		MAVClient.init();
 	}
 
@@ -144,9 +149,6 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 			return true;
 		case R.id.menu_save_file:
 			menuSaveFile();
-			return true;
-		case R.id.menu_settings:
-			startActivity(new Intent(this, SettingsActivity.class));
 			return true;
 		case R.id.menu_connect:
 			MAVClient.sendConnectMessage();

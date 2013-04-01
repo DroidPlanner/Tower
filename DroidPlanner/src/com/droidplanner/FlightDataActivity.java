@@ -2,7 +2,6 @@ package com.droidplanner;
 
 import java.util.List;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -26,8 +25,8 @@ import com.droidplanner.fragments.FlightMapFragment.OnFlighDataListener;
 import com.droidplanner.fragments.HudFragment;
 import com.droidplanner.service.MAVLinkClient;
 import com.droidplanner.widgets.spinners.SelectWaypointSpinner;
-import com.droidplanner.widgets.spinners.SpinnerSelfSelect;
 import com.droidplanner.widgets.spinners.SelectWaypointSpinner.OnWaypointSpinnerSelectedListener;
+import com.droidplanner.widgets.spinners.SpinnerSelfSelect;
 import com.droidplanner.widgets.spinners.SpinnerSelfSelect.OnSpinnerItemSelectedListener;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -52,13 +51,18 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 		setContentView(R.layout.flightdata);
 		flightMapFragment = ((FlightMapFragment)getFragmentManager().findFragmentById(R.id.flightMapFragment));
 		hudFragment = ((HudFragment)getFragmentManager().findFragmentById(R.id.hud_fragment2));
-		MAVClient.init();
-		
+				
 		this.drone = ((DroidPlannerApp) getApplication()).drone;
 		flightMapFragment.updateMissionPath(drone);
 		flightMapFragment.updateHomeToMap(drone);
 	}
 
+
+	@Override
+	protected void onResume() {
+		super.onRestart();
+		MAVClient.init();
+	}
 
 	@Override
 	protected void onStop() {
@@ -87,9 +91,6 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.menu_settings:
-			startActivity(new Intent(this, SettingsActivity.class));
-			return true;
 		case R.id.menu_connect:
 			MAVClient.sendConnectMessage();
 			return true;
