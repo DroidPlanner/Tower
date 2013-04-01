@@ -11,7 +11,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-public abstract class TcpConnection extends MAVLinkConnection {
+public class TcpConnection extends MAVLinkConnection {
 	private Socket socket;
 	private BufferedOutputStream mavOut;
 	private BufferedInputStream mavIn;
@@ -30,13 +30,14 @@ public abstract class TcpConnection extends MAVLinkConnection {
 
 		try {
 			getTCPStream();
-			while (true) {
+			while (connected) {
 				iavailable = mavIn.read(readData);
 				handleData();
 			}
+			socket.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		} 
 	}
 
 	@Override

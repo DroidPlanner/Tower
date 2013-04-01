@@ -14,28 +14,30 @@ import com.MAVLink.Messages.MAVLinkPacket;
 import com.droidplanner.helpers.FileManager;
 
 public abstract class MAVLinkConnection extends Thread {
-	public abstract void onReceiveMessage(MAVLinkMessage msg);
 
 	public abstract void sendBuffer(byte[] buffer);
-
 	public abstract void getPreferences(SharedPreferences prefs);
 
-	public abstract void onDisconnect();
-
-	public abstract void onConnect();
-
+	public interface MavLinkConnectionListner{
+		public void onReceiveMessage(MAVLinkMessage msg);
+		public void onDisconnect();
+		public void onConnect();
+	}
+	
+	MavLinkConnectionListner listner;
 	protected Context parentContext;
-
 	protected boolean logEnabled;
 	private BufferedOutputStream logWriter;
 
-	MAVLinkMessage m;
-	Parser parser = new Parser();
-	byte[] readData = new byte[4096];
-	int iavailable, i;
-
+	protected MAVLinkMessage m;
+	protected Parser parser = new Parser();
+	protected byte[] readData = new byte[4096];
+	protected int iavailable, i;
+	protected boolean connected = true;
+	
 	public MAVLinkConnection(Context parentContext) {
 		this.parentContext = parentContext;
+		this.listner = (MavLinkConnectionListner) parentContext;
 
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(parentContext);
@@ -46,6 +48,7 @@ public abstract class MAVLinkConnection extends Thread {
 	@Override
 	public void run() {
 		super.run();
+		listner.onConnect();
 		try {
 			if (logEnabled) {
 				logWriter = FileManager.getTLogFileStream();
@@ -62,7 +65,7 @@ public abstract class MAVLinkConnection extends Thread {
 		for (i = 0; i < iavailable; i++) {
 			m = parser.mavlink_parse_char(readData[i] & 0x00ff);
 			if (m != null) {
-				onReceiveMessage(m);
+				listner.onReceiveMessage(m);
 			}
 		}
 
@@ -85,6 +88,12 @@ public abstract class MAVLinkConnection extends Thread {
 		byte[] buffer = packet.encodePacket();
 		sendBuffer(buffer);
 	}
+	
+	public void disconnect(){
+		connected = false;
+		listner.onDisconnect();
+	}
+
 
 
 }

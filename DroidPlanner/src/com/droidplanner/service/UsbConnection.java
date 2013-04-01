@@ -7,7 +7,7 @@ import android.util.Log;
 import com.ftdi.j2xx.D2xxManager;
 import com.ftdi.j2xx.FT_Device;
 
-public abstract class UsbConnection extends MAVLinkConnection {
+public class UsbConnection extends MAVLinkConnection {
 	private D2xxManager ftD2xx;
 	private FT_Device ftDev;
 
@@ -21,17 +21,16 @@ public abstract class UsbConnection extends MAVLinkConnection {
 	public void run() {
 		super.run();
 
-		while (true) {
+		while (connected) {
 			iavailable = ftDev.getQueueStatus();
-
 			if (iavailable > 0) {
 				if (iavailable > 4096)
 					iavailable = 4096;
 				ftDev.read(readData, iavailable);
-			}
-			
+			}			
 			handleData();
 		}
+		ftDev.close();
 
 	}
 
