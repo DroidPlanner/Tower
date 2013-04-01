@@ -2,51 +2,52 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <PreferenceCategory
-        android:key="pref_flight_data"
-        android:title="Flight Data">
-        <EditTextPreference
-            android:defaultValue= "100"
-            android:inputType="number"
-            android:key="pref_max_fligth_path_size"
-            android:title="Fligth path size"
-            android:summary="Size of the fligth path, set to zero to disable."/>
-        <CheckBoxPreference
-            android:key="pref_guided_mode_enabled"
-            android:title="Enable Guided Mode" 
-            android:defaultValue="false" 
-            android:summary="In development"/>
-        <CheckBoxPreference
-            android:key="pref_auto_pan_enabled"
-            android:title="Enable auto pan" 
-            android:defaultValue="false" 
-            android:summary="Auto pan the map when a new GPS coordinate is received"/>
-    </PreferenceCategory>
-        
-    <PreferenceCategory
         android:key="pref_mavlink"
         android:title="MavLink" >
+        <ListPreference
+            android:defaultValue="USB"
+            android:entries="@array/TelemetryConnectionTypes"
+            android:entryValues="@array/TelemetryConnectionTypes"
+            android:key="pref_connection_type"
+            android:summary="Which link to use to connect to the drone"
+            android:title="Telemetry Connection Type" />
+        
         <CheckBoxPreference
+            android:defaultValue="false"
             android:key="pref_mavlink_log_enabled"
-            android:title="Enable Logging" 
-            android:defaultValue="false" 
-            android:summary="Logs the MAVlink communication to a *.tlog file, may degrade performance"/>
+            android:summary="Logs the MAVlink communication to a *.tlog file, may degrade performance"
+            android:title="Enable Logging" />
+
         <EditTextPreference
             android:defaultValue="10"
             android:inputType="number"
             android:key="pref_mavlink_stream_rate"
-            android:title="Stream Rate"
-            android:summary="Rate in which flight data should be received from the drone (in Hz)"/>
-         
-         <ListPreference 
-            android:key="pref_connection_type"
-            android:title="Telemetry Connection Type"
-            android:summary="Which link to use to connect to the drone"
-            android:defaultValue="USB" 
-            android:entries="@array/TelemetryConnectionTypes"
-            android:entryValues="@array/TelemetryConnectionTypes"
-        />   
+            android:summary="Rate in which flight data should be received from the drone (in Hz)"
+            android:title="Stream Rate" />
+        
     </PreferenceCategory>
     
+    <PreferenceCategory
+        android:key="pref_flight_data"
+        android:title="Flight Data" >
+        <EditTextPreference
+            android:defaultValue="100"
+            android:inputType="number"
+            android:key="pref_max_fligth_path_size"
+            android:summary="Size of the fligth path, set to zero to disable."
+            android:title="Fligth path size" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_guided_mode_enabled"
+            android:summary="In development"
+            android:title="Enable Guided Mode" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_auto_pan_enabled"
+            android:summary="Auto pan the map when a new GPS coordinate is received"
+            android:title="Enable auto pan" />
+    </PreferenceCategory>
     <PreferenceCategory
         android:key="pref_server"
         android:title="TCP connection" >
@@ -60,20 +61,19 @@
             android:key="pref_server_port"
             android:title="Server Port" />
     </PreferenceCategory>
-    
     <PreferenceCategory
         android:key="pref_advanced"
         android:title="Advanced" >
         <CheckBoxPreference
+            android:defaultValue="false"
             android:key="pref_advanced_use_offline_maps"
-            android:title="Use offline maps" 
-            android:defaultValue="false" 
-            android:summary="Use map tiles on the local storage, for offline map view"/>
+            android:summary="Use map tiles on the local storage, for offline map view"
+            android:title="Use offline maps" />
         <CheckBoxPreference
+            android:defaultValue="false"
             android:key="pref_enable_tts"
-            android:title="Enable Text To Speech" 
-            android:defaultValue="false" 
-            android:summary="Audible messages for important events"/>
+            android:summary="Audible messages for important events"
+            android:title="Enable Text To Speech" />
     </PreferenceCategory>
-    
+
 </PreferenceScreen>

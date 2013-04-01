@@ -1,3 +1,8 @@
+## Droidplanner v0.5.0
+* USB support for 3DR telemetry module
+* Minnor navigation improvement
+* Fix some bugs that crashed the app
+
 ## Droidplanner v0.4.1
 * Improvement to the HUD layout
 
