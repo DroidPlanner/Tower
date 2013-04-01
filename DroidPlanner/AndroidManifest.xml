@@ -53,10 +53,6 @@
             </intent-filter>
         </activity>
         <activity android:name="com.droidplanner.FlightDataActivity" >
-        </activity>
-        <activity android:name="com.droidplanner.RCActivity" >
-        </activity>
-        <activity android:name="com.droidplanner.TerminalActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -69,6 +65,10 @@
             <meta-data
                 android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
                 android:resource="@xml/device_filter" />
+        </activity>
+        <activity android:name="com.droidplanner.RCActivity" >
+        </activity>
+        <activity android:name="com.droidplanner.TerminalActivity" >
         </activity>
         <activity
             android:name="com.droidplanner.GCPActivity"

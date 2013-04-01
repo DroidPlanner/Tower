@@ -8,7 +8,6 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -17,16 +16,13 @@ import android.os.Messenger;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.RemoteException;
-import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.MAVLink.MAVLink;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
 import com.droidplanner.FlightDataActivity;
 import com.droidplanner.R;
-import com.ftdi.j2xx.D2xxManager;
 
 /**
  * http://developer.android.com/guide/components/bound-services.html#Messenger
@@ -71,8 +67,7 @@ public class MAVLinkService extends Service {
 				// connection
 			case MSG_GET_CONNECTION_STATE:
 				Log.d("Service", "What is the connection state?");
-				MAV.isConnected();
-				int state = MAV.isConnected() ? MSG_DEVICE_CONNECTED
+				int state = (MAV!=null) ? MSG_DEVICE_CONNECTED
 						: MSG_DEVICE_DISCONNECTED;
 				try {
 					msg.replyTo.send(Message.obtain(null, state));
@@ -145,27 +140,7 @@ public class MAVLinkService extends Service {
 		}
 	}
 
-	MAVLink MAV = new MAVLink() {
-
-		@Override
-		public void onReceiveMessage(MAVLinkMessage msg) {
-			notifyNewMessage(msg);
-		}
-
-		@Override
-		public void onDisconnect() {
-			sendMessage(MSG_DEVICE_DISCONNECTED);
-			releaseWakelock();
-			updateNotification(getResources().getString(R.string.disconnected));
-		}
-
-		@Override
-		public void onConnect() {
-			aquireWakelock();
-			sendMessage(MSG_DEVICE_CONNECTED);
-			updateNotification(getResources().getString(R.string.conected));
-		}
-	};
+	private MAVLinkConnection MAV;
 
 	@Override
 	public void onCreate() {
@@ -191,7 +166,7 @@ public class MAVLinkService extends Service {
 
 	@Override
 	public void onDestroy() {
-		MAV.closeConnection();
+		//MAV.closeConnection(); //TODO fix
 		dismissNotification();
 		super.onDestroy();
 	}
@@ -201,36 +176,36 @@ public class MAVLinkService extends Service {
 	 * the as needed. May throw a onConnect or onDisconnect callback
 	 */
 	public void toggleConnectionState() {
-		if (MAV.isConnected()) {
+		/*if (MAV.isConnected()) {
 			MAV.closeConnection();
 		} else {
-			SharedPreferences prefs = PreferenceManager
-					.getDefaultSharedPreferences(getApplicationContext());
-			String serverIP = prefs.getString("pref_server_ip", "");
-			int port = Integer.parseInt(prefs
-					.getString("pref_server_port", "0"));
-			boolean logEnabled = prefs.getBoolean("pref_mavlink_log_enabled",
-					false);
+			*/			
 			
-			
-			//MAV.openConnection(serverIP, port, logEnabled);
-			
-			MAV.openConnection(openCOM(),logEnabled,getApplicationContext());
-			
-			
-		}
-	}
+		MAV = new TcpConnection(this) {
+				
+				@Override
+				public void onReceiveMessage(MAVLinkMessage msg) {
+					notifyNewMessage(msg);
+					
+				}
 
-	
-	private D2xxManager openCOM() {
-		D2xxManager ftD2xx = null;
-		try {
-    		ftD2xx = D2xxManager.getInstance(this);
-    	} catch (D2xxManager.D2xxException ex) {
-    		ex.printStackTrace();
-    	}		
-		return ftD2xx;
-		
+				@Override
+						public void onDisconnect() {
+							sendMessage(MSG_DEVICE_DISCONNECTED);
+							releaseWakelock();
+							updateNotification(getResources().getString(R.string.disconnected));
+						}
+				
+						@Override
+						public void onConnect() {
+							aquireWakelock();
+							sendMessage(MSG_DEVICE_CONNECTED);
+							updateNotification(getResources().getString(R.string.conected));
+						}	
+			};
+			MAV.start();
+			
+		//}
 	}
 	
 	/**
