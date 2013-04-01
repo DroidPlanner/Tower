@@ -2,20 +2,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <PreferenceCategory
-        android:key="pref_server"
-        android:title="TCP connection" >
-        <EditTextPreference
-            android:defaultValue="192.168.40.100"
-            android:key="pref_server_ip"
-            android:title="Server IP" />
-        <EditTextPreference
-            android:defaultValue="9761"
-            android:inputType="number"
-            android:key="pref_server_port"
-            android:title="Server Port" />
-    </PreferenceCategory>
-
-    <PreferenceCategory
         android:key="pref_flight_data"
         android:title="Flight Data">
         <EditTextPreference
@@ -50,6 +36,29 @@
             android:key="pref_mavlink_stream_rate"
             android:title="Stream Rate"
             android:summary="Rate in which flight data should be received from the drone (in Hz)"/>
+         
+         <ListPreference 
+            android:key="pref_connection_type"
+            android:title="Telemetry Connection Type"
+            android:summary="Which link to use to connect to the drone"
+            android:defaultValue="USB" 
+            android:entries="@array/TelemetryConnectionTypes"
+            android:entryValues="@array/TelemetryConnectionTypes"
+        />   
+    </PreferenceCategory>
+    
+    <PreferenceCategory
+        android:key="pref_server"
+        android:title="TCP connection" >
+        <EditTextPreference
+            android:defaultValue="192.168.40.100"
+            android:key="pref_server_ip"
+            android:title="Server IP" />
+        <EditTextPreference
+            android:defaultValue="9761"
+            android:inputType="number"
+            android:key="pref_server_port"
+            android:title="Server Port" />
     </PreferenceCategory>
     
     <PreferenceCategory

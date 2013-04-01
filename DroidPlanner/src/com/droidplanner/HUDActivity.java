@@ -1,12 +1,10 @@
 package com.droidplanner;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.MAVLink.Messages.MAVLinkMessage;
-import com.droidplanner.R;
 import com.droidplanner.fragments.HudFragment;
 import com.droidplanner.service.MAVLinkClient;
 
@@ -29,6 +27,11 @@ public class HUDActivity extends SuperActivity {
 		
 		hudFragment = ((HudFragment)getFragmentManager().findFragmentById(R.id.hud_fragment));
 		
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onRestart();
 		MAVClient.init();
 	}
 
@@ -48,9 +51,6 @@ public class HUDActivity extends SuperActivity {
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.menu_settings:
-			startActivity(new Intent(this, SettingsActivity.class));
-			return true;
 		case R.id.menu_connect:
 			MAVClient.sendConnectMessage();
 			return true;

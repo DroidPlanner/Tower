@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.SpinnerAdapter;
 import com.droidplanner.R;
@@ -64,6 +65,17 @@ public abstract class SuperActivity extends Activity implements
 		case 5: // GCP
 			startActivity(new Intent(this, GCPActivity.class));
 			return false;
+		}
+	}
+
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.menu_settings:
+				startActivity(new Intent(this, SettingsActivity.class));
+				return true;
+			default:
+				return super.onMenuItemSelected(featureId, item);
 		}
 	}
 }

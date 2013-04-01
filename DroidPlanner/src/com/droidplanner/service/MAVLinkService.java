@@ -8,7 +8,6 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -21,17 +20,17 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.MAVLink.MAVLink;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
 import com.droidplanner.FlightDataActivity;
 import com.droidplanner.R;
+import com.droidplanner.service.MAVLinkConnection.MavLinkConnectionListner;
 
 /**
  * http://developer.android.com/guide/components/bound-services.html#Messenger
  * 
  */
-public class MAVLinkService extends Service {
+public class MAVLinkService extends Service implements MavLinkConnectionListner{
 
 	public static final int MSG_SAY_HELLO = 1;
 	public static final int MSG_RECEIVED_DATA = 2;
@@ -44,6 +43,7 @@ public class MAVLinkService extends Service {
 	public static final int MSG_GET_CONNECTION_STATE = 0;
 
 	private WakeLock wakeLock;
+	private MAVLinkConnection mavConnection;
 	// Messaging
 	ArrayList<Messenger> msgCenter = new ArrayList<Messenger>();
 	final Messenger mMessenger = new Messenger(new IncomingHandler());
@@ -70,8 +70,7 @@ public class MAVLinkService extends Service {
 				// connection
 			case MSG_GET_CONNECTION_STATE:
 				Log.d("Service", "What is the connection state?");
-				MAV.isConnected();
-				int state = MAV.isConnected() ? MSG_DEVICE_CONNECTED
+				int state = (mavConnection!=null) ? MSG_DEVICE_CONNECTED
 						: MSG_DEVICE_DISCONNECTED;
 				try {
 					msg.replyTo.send(Message.obtain(null, state));
@@ -94,7 +93,9 @@ public class MAVLinkService extends Service {
 			case MSG_SEND_DATA:
 				Bundle b = msg.getData();
 				MAVLinkPacket packet = (MAVLinkPacket) b.getSerializable("msg");
-				MAV.sendMavPacket(packet);
+				if (mavConnection!=null) {					
+					mavConnection.sendMavPacket(packet);
+				}
 			default:
 				super.handleMessage(msg);
 			}
@@ -144,27 +145,25 @@ public class MAVLinkService extends Service {
 		}
 	}
 
-	MAVLink MAV = new MAVLink() {
+	@Override
+	public void onReceiveMessage(MAVLinkMessage msg) {
+		notifyNewMessage(msg);
+	
+	}
 
-		@Override
-		public void onReceiveMessage(MAVLinkMessage msg) {
-			notifyNewMessage(msg);
-		}
+	@Override
+	public void onDisconnect() {
+		sendMessage(MSG_DEVICE_DISCONNECTED);
+		releaseWakelock();
+		updateNotification(getResources().getString(R.string.disconnected));
+	}
 
-		@Override
-		public void onDisconnect() {
-			sendMessage(MSG_DEVICE_DISCONNECTED);
-			releaseWakelock();
-			updateNotification(getResources().getString(R.string.disconnected));
-		}
-
-		@Override
-		public void onConnect() {
-			aquireWakelock();
-			sendMessage(MSG_DEVICE_CONNECTED);
-			updateNotification(getResources().getString(R.string.conected));
-		}
-	};
+	@Override
+	public void onConnect() {
+		aquireWakelock();
+		sendMessage(MSG_DEVICE_CONNECTED);
+		updateNotification(getResources().getString(R.string.conected));
+	}
 
 	@Override
 	public void onCreate() {
@@ -190,7 +189,10 @@ public class MAVLinkService extends Service {
 
 	@Override
 	public void onDestroy() {
-		MAV.closeConnection();
+		if(mavConnection !=null){
+			mavConnection.disconnect();
+			mavConnection = null;
+		}
 		dismissNotification();
 		super.onDestroy();
 	}
@@ -200,20 +202,22 @@ public class MAVLinkService extends Service {
 	 * the as needed. May throw a onConnect or onDisconnect callback
 	 */
 	public void toggleConnectionState() {
-		if (MAV.isConnected()) {
-			MAV.closeConnection();
+		if (mavConnection != null) {
+			mavConnection.disconnect();
+			mavConnection = null;
 		} else {
-			SharedPreferences prefs = PreferenceManager
-					.getDefaultSharedPreferences(getApplicationContext());
-			String serverIP = prefs.getString("pref_server_ip", "");
-			int port = Integer.parseInt(prefs
-					.getString("pref_server_port", "0"));
-			boolean logEnabled = prefs.getBoolean("pref_mavlink_log_enabled",
-					false);
-			MAV.openConnection(serverIP, port, logEnabled);
+			String connectionType = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("pref_connection_type", "");
+			if (connectionType.equals("USB")) {
+				mavConnection = new UsbConnection(this);
+			} else if (connectionType.equals("TCP")) {
+				mavConnection = new TcpConnection(this);
+			} else {
+				return;
+			}
+			mavConnection.start();
 		}
 	}
-
+	
 	/**
 	 * Show a notification while this service is running.
 	 */

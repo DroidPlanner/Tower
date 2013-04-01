@@ -50,9 +50,6 @@ public class GCPActivity extends SuperActivity implements OnGcpClickListner {
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.menu_settings:
-			startActivity(new Intent(this, SettingsActivity.class));
-			return true;
 		case R.id.menu_clear:
 			clearWaypointsAndUpdate();
 			return true;

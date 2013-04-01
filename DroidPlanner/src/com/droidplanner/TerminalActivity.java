@@ -1,28 +1,28 @@
 package com.droidplanner;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.MAVLink.Messages.MAVLinkMessage;
-import com.MAVLink.Messages.ardupilotmega.msg_param_request_list;
-import com.MAVLink.Messages.ardupilotmega.msg_param_value;
-import com.MAVLink.Messages.ardupilotmega.msg_statustext;
-import com.droidplanner.R;
 import com.droidplanner.service.MAVLinkClient;
+import com.ftdi.j2xx.D2xxManager;
+import com.ftdi.j2xx.FT_Device;
 
-public class TerminalActivity extends SuperActivity {
+public class TerminalActivity extends SuperActivity implements OnClickListener {
 
+	public static D2xxManager ftD2xx = null;
+	
 	TextView terminal;
 	Button sendButton;
 	Menu menu;
 	MenuItem connectButton;
-
+	FT_Device ftDev;
+	
 	@Override
 	int getNavigationItem() {
 		return 4;
@@ -36,10 +36,17 @@ public class TerminalActivity extends SuperActivity {
 
 		terminal = (TextView) findViewById(R.id.textViewTerminal);
 		sendButton = (Button) findViewById(R.id.buttonSend);
-
-		MAVClient.init();
-
+		sendButton.setOnClickListener(this);
+		    	
 	}
+	
+	@Override
+	protected void onResume() {
+		super.onRestart();
+		MAVClient.init();
+	}
+
+
 
 	@Override
 	protected void onStop() {
@@ -58,9 +65,6 @@ public class TerminalActivity extends SuperActivity {
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.menu_settings:
-			startActivity(new Intent(this, SettingsActivity.class));
-			return true;
 		case R.id.menu_connect:
 			MAVClient.sendConnectMessage();
 			return true;
@@ -69,31 +73,13 @@ public class TerminalActivity extends SuperActivity {
 		}
 	}
 
-	public void sendData(View view) {
-		Log.d("PARAM", "request List");
-		msg_param_request_list msg = new msg_param_request_list();
-		msg.target_system = 1;
-		msg.target_component = 1;
-		MAVClient.sendMavPacket(msg.pack());
-	}
 
 	public MAVLinkClient MAVClient = new MAVLinkClient(this) {
 	
-		String additionalInfo = "";
-	
+		
 		@Override
 		public void notifyReceivedData(MAVLinkMessage m) {
-			String terminalMsg = "Received lenght packets\nLast packet was: "
-					+ m.msgid + "\n";
-			if (m.msgid == msg_statustext.MAVLINK_MSG_ID_STATUSTEXT) {
-				additionalInfo += ((msg_statustext) m).toString() + "\n";
-			}
-			if (m.msgid == msg_param_value.MAVLINK_MSG_ID_PARAM_VALUE) {
-				Log.d("PARAM", ("param:" + ((msg_param_value) m).getParam_Id()
-						+ "\t Value" + ((msg_param_value) m).param_value));
-			}
-	
-			terminal.setText(terminalMsg + additionalInfo);
+		
 		}
 	
 		@Override
@@ -108,5 +94,11 @@ public class TerminalActivity extends SuperActivity {
 					R.string.menu_disconnect));
 		}
 	};
+	
+	
+
+	@Override
+	public void onClick(View v) {	
+	}
 
 }

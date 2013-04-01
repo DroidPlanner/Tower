@@ -22,8 +22,7 @@
             style="?android:attr/buttonStyleSmall"
             android:layout_width="93dp"
             android:layout_height="match_parent"
-            android:text="Send"
-            android:onClick="sendData" />
+            android:text="Send" />
     </LinearLayout>
 
     <TextView
