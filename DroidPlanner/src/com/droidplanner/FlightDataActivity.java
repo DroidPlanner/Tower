@@ -51,13 +51,18 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 		setContentView(R.layout.flightdata);
 		flightMapFragment = ((FlightMapFragment)getFragmentManager().findFragmentById(R.id.flightMapFragment));
 		hudFragment = ((HudFragment)getFragmentManager().findFragmentById(R.id.hud_fragment2));
-		MAVClient.init();
-		
+				
 		this.drone = ((DroidPlannerApp) getApplication()).drone;
 		flightMapFragment.updateMissionPath(drone);
 		flightMapFragment.updateHomeToMap(drone);
 	}
 
+
+	@Override
+	protected void onResume() {
+		super.onRestart();
+		MAVClient.init();
+	}
 
 	@Override
 	protected void onStop() {

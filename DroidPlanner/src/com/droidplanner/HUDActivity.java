@@ -27,6 +27,11 @@ public class HUDActivity extends SuperActivity {
 		
 		hudFragment = ((HudFragment)getFragmentManager().findFragmentById(R.id.hud_fragment));
 		
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onRestart();
 		MAVClient.init();
 	}
 

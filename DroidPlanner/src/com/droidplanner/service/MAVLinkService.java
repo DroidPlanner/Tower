@@ -93,7 +93,9 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner{
 			case MSG_SEND_DATA:
 				Bundle b = msg.getData();
 				MAVLinkPacket packet = (MAVLinkPacket) b.getSerializable("msg");
-				mavConnection.sendMavPacket(packet);
+				if (mavConnection!=null) {					
+					mavConnection.sendMavPacket(packet);
+				}
 			default:
 				super.handleMessage(msg);
 			}

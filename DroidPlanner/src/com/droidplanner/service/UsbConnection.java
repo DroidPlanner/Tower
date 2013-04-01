@@ -37,7 +37,7 @@ public class UsbConnection extends MAVLinkConnection {
 
 	@Override
 	protected void sendBuffer(byte[] buffer) {
-		if (connected) {
+		if (connected & ftDev !=null) {
 			ftDev.write(buffer);
 		}
 	}

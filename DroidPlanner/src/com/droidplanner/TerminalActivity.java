@@ -38,9 +38,12 @@ public class TerminalActivity extends SuperActivity implements OnClickListener {
 		sendButton = (Button) findViewById(R.id.buttonSend);
 		sendButton.setOnClickListener(this);
 		    	
-    	    			
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onRestart();
 		MAVClient.init();
-
 	}
 
 

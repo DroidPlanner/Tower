@@ -73,6 +73,11 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 	
 		tts = new TTS(this);
 	
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onRestart();
 		MAVClient.init();
 	}
 

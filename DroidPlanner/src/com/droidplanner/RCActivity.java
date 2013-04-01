@@ -43,10 +43,14 @@ public class RCActivity extends SuperActivity implements
 		bTogleRC = (Button) findViewById(R.id.bTogleRC);
 		bTogleRC.setOnClickListener(this);
 
-		MAVClient.init();
-
+		
 		rcOutput = new RcOutput(MAVClient);
-
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onRestart();
+		MAVClient.init();
 	}
 
 	@Override
