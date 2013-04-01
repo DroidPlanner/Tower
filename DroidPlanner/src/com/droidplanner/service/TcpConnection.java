@@ -9,7 +9,6 @@ import java.net.UnknownHostException;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 public class TcpConnection extends MAVLinkConnection {
 	private Socket socket;
@@ -21,52 +20,44 @@ public class TcpConnection extends MAVLinkConnection {
 
 	public TcpConnection(Context context) {
 		super(context);
-
 	}
 
 	@Override
-	public void run() {
-		super.run();
-
-		try {
-			getTCPStream();
-			while (connected) {
-				iavailable = mavIn.read(readData);
-				handleData();
-			}
-			socket.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} 
+	protected void openConnection() throws UnknownHostException, IOException {
+		getTCPStream();		
 	}
 
 	@Override
-	public void sendBuffer(byte[] buffer) {
-		if (mavOut != null) {
-			try {
-				mavOut.write(buffer);
-				mavOut.flush();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+	protected void readDataBlock() throws IOException {
+		iavailable = mavIn.read(readData);		
+	}
+
+	@Override
+	protected void sendBuffer(byte[] buffer) throws IOException {
+		if (mavOut!=null) {
+			mavOut.write(buffer);
+			mavOut.flush();
 		}
 	}
-
-	private void getTCPStream() throws UnknownHostException, IOException {
-		Log.d("TCP Client", "TCP connection started at: " + serverIP + ":"
-				+ serverPort);
-		InetAddress serverAddr = InetAddress.getByName(serverIP);
-		socket = new Socket(serverAddr, serverPort);
-		mavOut = new BufferedOutputStream((socket.getOutputStream()));
-		// receive the message which the server sends back
-		mavIn = new BufferedInputStream(socket.getInputStream());
+	
+	@Override
+	protected void closeConnection() throws IOException {
+		socket.close();		
 	}
-
-	public void getPreferences(SharedPreferences prefs) {
+	
+	@Override
+	protected void getPreferences(SharedPreferences prefs) {
 		serverIP = prefs.getString("pref_server_ip", "");
 		serverPort = Integer.parseInt(prefs.getString("pref_server_port", "0"));
 
 	}
+
+	private void getTCPStream() throws UnknownHostException, IOException {
+		InetAddress serverAddr = InetAddress.getByName(serverIP);
+		socket = new Socket(serverAddr, serverPort);
+		mavOut = new BufferedOutputStream((socket.getOutputStream()));
+		mavIn = new BufferedInputStream(socket.getInputStream());
+	}
+
 
 }

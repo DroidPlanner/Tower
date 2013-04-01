@@ -3,6 +3,7 @@ package com.droidplanner.service;
 import java.io.BufferedOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.UnknownHostException;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -15,8 +16,11 @@ import com.droidplanner.helpers.FileManager;
 
 public abstract class MAVLinkConnection extends Thread {
 
-	public abstract void sendBuffer(byte[] buffer);
-	public abstract void getPreferences(SharedPreferences prefs);
+	protected abstract void openConnection() throws UnknownHostException, IOException;
+	protected abstract void readDataBlock() throws IOException;
+	protected abstract void sendBuffer(byte[] buffer) throws IOException;
+	protected abstract void closeConnection() throws IOException;
+	protected abstract void getPreferences(SharedPreferences prefs);
 
 	public interface MavLinkConnectionListner{
 		public void onReceiveMessage(MAVLinkMessage msg);
@@ -24,9 +28,9 @@ public abstract class MAVLinkConnection extends Thread {
 		public void onConnect();
 	}
 	
-	MavLinkConnectionListner listner;
 	protected Context parentContext;
-	protected boolean logEnabled;
+	private MavLinkConnectionListner listner;
+	private boolean logEnabled;
 	private BufferedOutputStream logWriter;
 
 	protected MAVLinkMessage m;
@@ -48,17 +52,30 @@ public abstract class MAVLinkConnection extends Thread {
 	@Override
 	public void run() {
 		super.run();
-		listner.onConnect();
 		try {
+			openConnection();
 			if (logEnabled) {
 				logWriter = FileManager.getTLogFileStream();
 			}
+			listner.onConnect();
+			
+			while (connected) {
+				readDataBlock();
+				handleData();
+				saveToLog();
+			}	
+			closeConnection();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+		listner.onDisconnect();
 	}
 
-	protected void handleData() {
+	
+	
+	private void handleData() {
 		if (iavailable < 1) {
 			return;
 		}
@@ -69,12 +86,11 @@ public abstract class MAVLinkConnection extends Thread {
 			}
 		}
 
+	}
+	
+	private void saveToLog() throws IOException {
 		if (logEnabled) {
-			try {
-				logWriter.write(readData, 0, iavailable);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			logWriter.write(readData, 0, iavailable);
 		}
 	}
 
@@ -86,12 +102,15 @@ public abstract class MAVLinkConnection extends Thread {
 	 */
 	public void sendMavPacket(MAVLinkPacket packet) {
 		byte[] buffer = packet.encodePacket();
-		sendBuffer(buffer);
+		try {
+			sendBuffer(buffer);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void disconnect(){
 		connected = false;
-		listner.onDisconnect();
 	}
 
 
