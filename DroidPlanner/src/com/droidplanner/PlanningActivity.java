@@ -145,9 +145,6 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 		case R.id.menu_save_file:
 			menuSaveFile();
 			return true;
-		case R.id.menu_settings:
-			startActivity(new Intent(this, SettingsActivity.class));
-			return true;
 		case R.id.menu_connect:
 			MAVClient.sendConnectMessage();
 			return true;
