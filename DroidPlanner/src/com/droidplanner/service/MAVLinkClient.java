@@ -54,6 +54,8 @@ public abstract class MAVLinkClient {
 
 		} catch (RemoteException e) {
 			e.printStackTrace();
+		} catch (IllegalArgumentException e){
+			e.printStackTrace();
 		}
 	}
 
