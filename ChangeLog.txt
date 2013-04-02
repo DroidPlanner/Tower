@@ -1,3 +1,6 @@
+## Droidplanner v0.5.1
+* Support devices without USB host mode since they can connect via TCP
+
 ## Droidplanner v0.5.0
 * USB support for 3DR telemetry module
 * Minnor navigation improvement
