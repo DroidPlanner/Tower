@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.droidplanner"
-    android:versionCode="6"
-    android:versionName="0.5.1" >
+    android:versionCode="7"
+    android:versionName="0.5.2" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -26,6 +26,18 @@
     <uses-feature
         android:name="android.hardware.usb.host"
         android:required="false" />
+    
+    <!-- Support devices that don't have location services -->
+    <uses-feature
+        android:name="android.hardware.location.gps"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.location.network"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.location"
+        android:required="false" />
+    
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
