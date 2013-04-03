@@ -1,5 +1,5 @@
 ## Droidplanner v0.5.2
-* Suport
+* Support devices that don't have location services.
 
 ## Droidplanner v0.5.1
 * Support devices without USB host mode since they can connect via TCP
