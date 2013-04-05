@@ -20,6 +20,7 @@ import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.ardupilotmega.msg_request_data_stream;
 import com.MAVLink.Messages.ardupilotmega.msg_set_mode;
+import com.MAVLink.Messages.enums.MAV_DATA_STREAM;
 import com.droidplanner.fragments.FlightMapFragment;
 import com.droidplanner.fragments.FlightMapFragment.OnFlighDataListener;
 import com.droidplanner.fragments.HudFragment;
@@ -168,11 +169,14 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 				.getDefaultSharedPreferences(this);
 		int rate = Integer.parseInt(prefs.getString("pref_mavlink_stream_rate",
 				"0"));
-		if (rate == 0) {
-			requestMavlinkDataStream(10, 0, false); // MAV_DATA_STREAM_RAW_CONTROLLER;
-		} else {
-			requestMavlinkDataStream(10, rate, true);
-		}
+		
+		requestMavlinkDataStream(MAV_DATA_STREAM.MAV_DATA_STREAM_EXTENDED_STATUS, 2, true);	// waypoints, GPS raw, fence data, current waypoint, etc
+		requestMavlinkDataStream(MAV_DATA_STREAM.MAV_DATA_STREAM_EXTRA1, 10, true);			// attitude and simulation state
+		requestMavlinkDataStream(MAV_DATA_STREAM.MAV_DATA_STREAM_EXTRA2, 2, true);			// VFR_Hud data
+		requestMavlinkDataStream(MAV_DATA_STREAM.MAV_DATA_STREAM_EXTRA3, 2, true);			// AHRS, Hardware Status, Wind 
+		requestMavlinkDataStream(MAV_DATA_STREAM.MAV_DATA_STREAM_POSITION, 3, true);		// location data 
+		requestMavlinkDataStream(MAV_DATA_STREAM.MAV_DATA_STREAM_RAW_SENSORS, 0, true);		// location data 
+		requestMavlinkDataStream(MAV_DATA_STREAM.MAV_DATA_STREAM_RC_CHANNELS, 0, true);		// radio input or radio output data
 	}
 
 	private void requestMavlinkDataStream(int stream_id, int rate, boolean start) {
