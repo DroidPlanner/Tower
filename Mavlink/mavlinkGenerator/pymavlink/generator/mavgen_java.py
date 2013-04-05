@@ -327,6 +327,10 @@ public class MAVLinkPacket implements Serializable {
 	 * Check if the size of the Payload is equal to the "len" byte
 	 */
 	public boolean payloadIsFilled() {
+		if (payload.size() >= MAVLinkPayload.MAX_PAYLOAD_SIZE-1) {
+			Log.d("MAV","Buffer overflow");
+			return true;
+		}
 		return (payload.size() == len);
 	}
 	
@@ -361,8 +365,8 @@ public class MAVLinkPacket implements Serializable {
 		buffer[i++] = (byte) sysid;
 		buffer[i++] = (byte) compid;
 		buffer[i++] = (byte) msgid;
-		for (byte b : payload.payload) {
-			buffer[i++] = b;
+		for (int j = 0; j < payload.size(); j++) {
+			buffer[i++] = payload.payload.get(j);
 		}
 		generateCRC();
 		buffer[i++] = (byte) (crc.getLSB());

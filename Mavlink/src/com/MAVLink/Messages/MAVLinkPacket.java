@@ -113,7 +113,7 @@ public class MAVLinkPacket implements Serializable {
 		buffer[i++] = (byte) compid;
 		buffer[i++] = (byte) msgid;
 		for (int j = 0; j < payload.size(); j++) {
-			buffer[i++] = payload.payload.get(j);			
+			buffer[i++] = payload.payload.get(j);
 		}
 		generateCRC();
 		buffer[i++] = (byte) (crc.getLSB());
