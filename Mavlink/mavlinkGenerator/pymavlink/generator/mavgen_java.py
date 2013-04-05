@@ -64,6 +64,27 @@ def generate_mavlink_h(directory, xml):
 ''', xml)
     f.close()
 
+
+def generate_enums(basename, xml):
+    '''generate main header per XML file'''
+    directory = os.path.join(basename, '''enums''')
+    mavparse.mkdir_p(directory)
+    for en in xml.enum:
+        f = open(os.path.join(directory, en.name+".java"), mode='w')
+        t.write(f, '''
+/** ${description}
+*/
+package com.MAVLink.Messages.enums;
+
+public class ${name} {
+${{entry:	public static final int ${name} = ${value}; /* ${description} |${{param:${description}| }} */
+}}
+}
+''', en)
+        f.close()
+             
+    
+
 def generate_CRC(directory, xml):
     # and message CRCs array
     xml.message_crcs_array = ''
@@ -608,9 +629,10 @@ def generate_one(basename, xml):
 
 def generate(basename, xml_list):
     '''generate complete MAVLink Java implemenation'''
-
     for xml in xml_list:
         generate_one(basename, xml)
-        
+        generate_enums(basename, xml)    
     generate_MAVLinkMessage(basename, xml_list)
     generate_CRC(basename, xml_list[0])
+
+    
