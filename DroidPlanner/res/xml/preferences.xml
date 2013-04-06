@@ -26,12 +26,12 @@
                 android:defaultValue="2"
                 android:inputType="number"
                 android:key="pref_mavlink_stream_rate_ext_stat"
-                android:title="waypoints, GPS raw, fence data, current waypoint, etc" />
+                android:title="Waypoints, GPS raw, fence data, current waypoint, etc" />
             <EditTextPreference
                 android:defaultValue="10"
                 android:inputType="number"
                 android:key="pref_mavlink_stream_rate_extra1"
-                android:title="attitude" />
+                android:title="Attitude" />
             <EditTextPreference
                 android:defaultValue="2"
                 android:inputType="number"
@@ -47,6 +47,11 @@
                 android:inputType="number"
                 android:key="pref_mavlink_stream_rate_position"
                 android:title="Position data" />
+            <EditTextPreference
+                android:defaultValue="50"
+                android:inputType="number"
+                android:key="pref_mavlink_stream_rate_RC_override"
+                android:title="RC override" />
         </PreferenceScreen>
     </PreferenceCategory>
     <PreferenceCategory
