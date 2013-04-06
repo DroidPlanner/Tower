@@ -1,3 +1,6 @@
+## Droidplanner v0.5.3
+* Data stream rates now can be selected from the preferences menu
+
 ## Droidplanner v0.5.2
 * Support devices that don't have location services.
 
