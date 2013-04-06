@@ -48,7 +48,7 @@
                 android:key="pref_mavlink_stream_rate_position"
                 android:title="Position data" />
             <EditTextPreference
-                android:defaultValue="25"
+                android:defaultValue="50"
                 android:inputType="number"
                 android:key="pref_mavlink_stream_rate_RC_override"
                 android:title="RC override" />
