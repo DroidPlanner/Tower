@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.droidplanner"
-    android:versionCode="8"
-    android:versionName="0.5.3" >
+    android:versionCode="9"
+    android:versionName="0.5.4" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -50,10 +50,9 @@
         android:label="@string/app_title" >
 
         <!-- You must insert your own Google Maps for Android API v2 key in here. -->
-        <!--  Release key is: "AIzaSyDFsAn5xo-mILEirpcUsF9BU9Vb_yR-Er4" -->>
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyCqZnhgWsao4ey91Z8hNBbOxxJ_EiC5mpM" />
+            android:value="AIzaSyDFsAn5xo-mILEirpcUsF9BU9Vb_yR-Er4" />
 
         <service android:name="com.droidplanner.service.MAVLinkService"></service>
 
