@@ -64,6 +64,27 @@ def generate_mavlink_h(directory, xml):
 ''', xml)
     f.close()
 
+
+def generate_enums(basename, xml):
+    '''generate main header per XML file'''
+    directory = os.path.join(basename, '''enums''')
+    mavparse.mkdir_p(directory)
+    for en in xml.enum:
+        f = open(os.path.join(directory, en.name+".java"), mode='w')
+        t.write(f, '''
+/** ${description}
+*/
+package com.MAVLink.Messages.enums;
+
+public class ${name} {
+${{entry:	public static final int ${name} = ${value}; /* ${description} |${{param:${description}| }} */
+}}
+}
+''', en)
+        f.close()
+             
+    
+
 def generate_CRC(directory, xml):
     # and message CRCs array
     xml.message_crcs_array = ''
@@ -306,6 +327,10 @@ public class MAVLinkPacket implements Serializable {
 	 * Check if the size of the Payload is equal to the "len" byte
 	 */
 	public boolean payloadIsFilled() {
+		if (payload.size() >= MAVLinkPayload.MAX_PAYLOAD_SIZE-1) {
+			Log.d("MAV","Buffer overflow");
+			return true;
+		}
 		return (payload.size() == len);
 	}
 	
@@ -340,8 +365,8 @@ public class MAVLinkPacket implements Serializable {
 		buffer[i++] = (byte) sysid;
 		buffer[i++] = (byte) compid;
 		buffer[i++] = (byte) msgid;
-		for (byte b : payload.payload) {
-			buffer[i++] = b;
+		for (int j = 0; j < payload.size(); j++) {
+			buffer[i++] = payload.payload.get(j);
 		}
 		generateCRC();
 		buffer[i++] = (byte) (crc.getLSB());
@@ -608,9 +633,10 @@ def generate_one(basename, xml):
 
 def generate(basename, xml_list):
     '''generate complete MAVLink Java implemenation'''
-
     for xml in xml_list:
         generate_one(basename, xml)
-        
+        generate_enums(basename, xml)    
     generate_MAVLinkMessage(basename, xml_list)
     generate_CRC(basename, xml_list[0])
+
+    
