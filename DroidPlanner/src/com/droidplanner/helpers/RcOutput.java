@@ -5,6 +5,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import com.MAVLink.Messages.ardupilotmega.msg_rc_channels_override;
 import com.droidplanner.service.MAVLinkClient;
@@ -13,6 +16,7 @@ public class RcOutput {
 	private static final int DISABLE_OVERRIDE = 0;
 	private static final int RC_TRIM = 1500;
 	private static final int RC_RANGE = 500;
+	private Context parrentContext;
 	private ScheduledExecutorService scheduleTaskExecutor;
 	private MAVLinkClient MAV;
 	public int[] rcOutputs = new int[8];
@@ -22,8 +26,9 @@ public class RcOutput {
 	public static final int	TROTTLE = 2;
 	public static final int	RUDDER  = 3;
 
-	public RcOutput(MAVLinkClient MAV) {
+	public RcOutput(MAVLinkClient MAV, Context context) {
 		this.MAV = MAV;
+		parrentContext = context;
 	}
 
 	public void disableRcOverride() {
@@ -46,8 +51,20 @@ public class RcOutput {
 				public void run() {
 					sendRcOverrideMsg();
 				}
-			}, 0, 25, TimeUnit.MILLISECONDS);
+			}, 0, getRcOverrideDelayMs(), TimeUnit.MILLISECONDS);
 		}
+	}
+
+	private int getRcOverrideDelayMs() {
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(parrentContext);
+		int rate = Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_RC_override",
+						"0"));
+		if((rate>1)&(rate<500)){
+			return 1000/rate; 
+		}else {
+			return 20;
+		}		
 	}
 
 	public void sendRcOverrideMsg() {

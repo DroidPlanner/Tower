@@ -44,7 +44,7 @@ public class RCActivity extends SuperActivity implements
 		bTogleRC.setOnClickListener(this);
 
 		
-		rcOutput = new RcOutput(MAVClient);
+		rcOutput = new RcOutput(MAVClient,this);
 	}
 	
 	@Override
