@@ -11,22 +11,44 @@
             android:key="pref_connection_type"
             android:summary="Which link to use to connect to the drone"
             android:title="Telemetry Connection Type" />
-        
+
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="pref_mavlink_log_enabled"
             android:summary="Logs the MAVlink communication to a *.tlog file, may degrade performance"
             android:title="Enable Logging" />
 
-        <EditTextPreference
-            android:defaultValue="10"
-            android:inputType="number"
-            android:key="pref_mavlink_stream_rate"
+        <PreferenceScreen
+            android:key="pref_mavlink_rates"
             android:summary="Rate in which flight data should be received from the drone (in Hz)"
-            android:title="Stream Rate" />
-        
+            android:title="Stream Rates" >
+            <EditTextPreference
+                android:defaultValue="2"
+                android:inputType="number"
+                android:key="pref_mavlink_stream_rate_ext_stat"
+                android:title="waypoints, GPS raw, fence data, current waypoint, etc" />
+            <EditTextPreference
+                android:defaultValue="10"
+                android:inputType="number"
+                android:key="pref_mavlink_stream_rate_extra1"
+                android:title="attitude" />
+            <EditTextPreference
+                android:defaultValue="2"
+                android:inputType="number"
+                android:key="pref_mavlink_stream_rate_extra2"
+                android:title="VFR_Hud data" />
+            <EditTextPreference
+                android:defaultValue="2"
+                android:inputType="number"
+                android:key="pref_mavlink_stream_rate_extra3"
+                android:title="AHRS, Hardware Status, Wind" />
+            <EditTextPreference
+                android:defaultValue="3"
+                android:inputType="number"
+                android:key="pref_mavlink_stream_rate_position"
+                android:title="Position data" />
+        </PreferenceScreen>
     </PreferenceCategory>
-    
     <PreferenceCategory
         android:key="pref_flight_data"
         android:title="Flight Data" >
