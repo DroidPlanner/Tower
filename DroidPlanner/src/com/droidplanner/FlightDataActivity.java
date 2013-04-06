@@ -5,6 +5,7 @@ import java.util.List;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -167,19 +168,31 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 	private void setupMavlinkStreamRate() {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
-		int rate = Integer.parseInt(prefs.getString("pref_mavlink_stream_rate",
-				"0"));
-		
-		requestMavlinkDataStream(MAV_DATA_STREAM.MAV_DATA_STREAM_EXTENDED_STATUS, 2, true);	// waypoints, GPS raw, fence data, current waypoint, etc
-		requestMavlinkDataStream(MAV_DATA_STREAM.MAV_DATA_STREAM_EXTRA1, 10, true);			// attitude and simulation state
-		requestMavlinkDataStream(MAV_DATA_STREAM.MAV_DATA_STREAM_EXTRA2, 2, true);			// VFR_Hud data
-		requestMavlinkDataStream(MAV_DATA_STREAM.MAV_DATA_STREAM_EXTRA3, 2, true);			// AHRS, Hardware Status, Wind 
-		requestMavlinkDataStream(MAV_DATA_STREAM.MAV_DATA_STREAM_POSITION, 3, true);		// location data 
-		requestMavlinkDataStream(MAV_DATA_STREAM.MAV_DATA_STREAM_RAW_SENSORS, 0, true);		// location data 
-		requestMavlinkDataStream(MAV_DATA_STREAM.MAV_DATA_STREAM_RC_CHANNELS, 0, true);		// radio input or radio output data
+
+		requestMavlinkDataStream(
+				MAV_DATA_STREAM.MAV_DATA_STREAM_EXTENDED_STATUS,
+				Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_ext_stat",
+						"0")));
+		requestMavlinkDataStream(MAV_DATA_STREAM.MAV_DATA_STREAM_EXTRA1,
+				Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_extra1",
+						"0")));
+		requestMavlinkDataStream(MAV_DATA_STREAM.MAV_DATA_STREAM_EXTRA2,
+				Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_extra2",
+						"0")));
+		requestMavlinkDataStream(MAV_DATA_STREAM.MAV_DATA_STREAM_EXTRA3,
+				Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_extra3",
+						"0")));
+		requestMavlinkDataStream(MAV_DATA_STREAM.MAV_DATA_STREAM_POSITION,
+				Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_position",
+						"0")));
+		requestMavlinkDataStream(MAV_DATA_STREAM.MAV_DATA_STREAM_RAW_SENSORS,
+				0);
+		requestMavlinkDataStream(MAV_DATA_STREAM.MAV_DATA_STREAM_RC_CHANNELS,
+				0);
 	}
 
-	private void requestMavlinkDataStream(int stream_id, int rate, boolean start) {
+	private void requestMavlinkDataStream(int stream_id, int rate) {
+		Log.d("PREF", stream_id +"  -  "+rate);
 		msg_request_data_stream msg = new msg_request_data_stream();
 		msg.target_system = 1;
 		msg.target_component = 1;
@@ -187,7 +200,11 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 		msg.req_message_rate = (short) rate;
 		msg.req_stream_id = (byte) stream_id;
 
-		msg.start_stop = (byte) (start ? 1 : 0);
+		if (rate>0){
+			msg.start_stop = 1;
+		}else{
+			msg.start_stop = 0;
+		}
 		MAVClient.sendMavPacket(msg.pack());
 	}
 
