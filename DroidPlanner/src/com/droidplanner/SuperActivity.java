@@ -1,18 +1,24 @@
 package com.droidplanner;
 
+import com.droidplanner.DroidPlannerApp.ConnectionStateListner;
+
 import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.SpinnerAdapter;
 
 public abstract class SuperActivity extends Activity implements
-		OnNavigationListener {
+		OnNavigationListener, ConnectionStateListner {
+
 	abstract int getNavigationItem();
+	public DroidPlannerApp app;
+	private MenuItem connectButton;	
 
 	public SuperActivity() {
 		super();
@@ -26,6 +32,9 @@ public abstract class SuperActivity extends Activity implements
 	
 		// Set up the action bar to show a dropdown list.
 		setUpActionBar();
+		app = (DroidPlannerApp) getApplication();
+		app.setConectionStateListner(this);
+
 	}
 
 	public void setUpActionBar() {
@@ -50,22 +59,19 @@ public abstract class SuperActivity extends Activity implements
 		case 0: // Planning
 			navigationIntent = new Intent(this, PlanningActivity.class);
 			break;
-		case 1: // HUD
-			navigationIntent = new Intent(this, HUDActivity.class);
-			break;
-		case 2: // Flight Data
+		case 1: // Flight Data
 			navigationIntent = new Intent(this, FlightDataActivity.class);
 			navigationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			break;
-		case 3: // PID
+		case 2: // RC
 			navigationIntent = new Intent(this, RCActivity.class);
+			break;
+		case 3: // GCP
+			navigationIntent = new Intent(this, GCPActivity.class);
 			break;
 		case 4: // Terminal
 			navigationIntent = new Intent(this, TerminalActivity.class);
-			break;
-		case 5: // GCP
-			navigationIntent = new Intent(this, GCPActivity.class);
-			break;
+			break;			
 		}
 		startActivity(navigationIntent);
 		return false;
@@ -77,8 +83,33 @@ public abstract class SuperActivity extends Activity implements
 			case R.id.menu_settings:
 				startActivity(new Intent(this, SettingsActivity.class));
 				return true;
+			case R.id.menu_connect:
+				app.MAVClient.toggleConnectionState();
+				return true;
+			case R.id.menu_load_from_apm:
+				app.waypointMananger.getWaypoints();
+				return true;					
 			default:
 				return super.onMenuItemSelected(featureId, item);
 		}
+	}
+	
+	
+
+	public void notifyDisconnected() {
+		connectButton.setTitle(getResources().getString(
+				R.string.menu_connect));
+	}
+
+	public void notifyConnected() {
+		connectButton.setTitle(getResources().getString(
+				R.string.menu_disconnect));
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		connectButton = menu.findItem(R.id.menu_connect);
+		app.MAVClient.queryConnectionState();
+		return super.onCreateOptionsMenu(menu);
 	}
 }

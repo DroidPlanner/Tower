@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Just for Developers"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        tools:ignore="HardcodedText" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,21 +22,25 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text=""
             android:ems="10"
-            android:padding="15dp" />
+            android:padding="15dp"
+            android:text=""
+            tools:ignore="TextFields" />
 
         <Button
             android:id="@+id/buttonSend"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="93dp"
             android:layout_height="match_parent"
-            android:text="Send" />
+            android:text="Send"
+            tools:ignore="HardcodedText" />
+
     </LinearLayout>
 
     <TextView
         android:id="@+id/textViewTerminal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        tools:ignore="SelectableText" />
 
 </LinearLayout>

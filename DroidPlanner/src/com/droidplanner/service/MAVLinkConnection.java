@@ -33,7 +33,7 @@ public abstract class MAVLinkConnection extends Thread {
 	private boolean logEnabled;
 	private BufferedOutputStream logWriter;
 
-	protected MAVLinkMessage m;
+	protected MAVLinkPacket receivedPacket;
 	protected Parser parser = new Parser();
 	protected byte[] readData = new byte[4096];
 	protected int iavailable, i;
@@ -80,9 +80,10 @@ public abstract class MAVLinkConnection extends Thread {
 			return;
 		}
 		for (i = 0; i < iavailable; i++) {
-			m = parser.mavlink_parse_char(readData[i] & 0x00ff);
-			if (m != null) {
-				listner.onReceiveMessage(m);
+			receivedPacket = parser.mavlink_parse_char(readData[i] & 0x00ff);
+			if (receivedPacket != null) {
+				MAVLinkMessage msg = receivedPacket.unpack();
+				listner.onReceiveMessage(msg);
 			}
 		}
 
