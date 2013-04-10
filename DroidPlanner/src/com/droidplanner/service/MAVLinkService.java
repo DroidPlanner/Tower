@@ -32,15 +32,15 @@ import com.droidplanner.service.MAVLinkConnection.MavLinkConnectionListner;
  */
 public class MAVLinkService extends Service implements MavLinkConnectionListner{
 
+	public static final int MSG_GET_CONNECTION_STATE = 0;
 	public static final int MSG_SAY_HELLO = 1;
 	public static final int MSG_RECEIVED_DATA = 2;
 	public static final int MSG_DEVICE_DISCONNECTED = 3;
 	public static final int MSG_DEVICE_CONNECTED = 4;
 	public static final int MSG_REGISTER_CLIENT = 5;
 	public static final int MSG_UNREGISTER_CLIENT = 6;
-	public static final int MSG_CONNECT_DEVICE = 7;
+	public static final int MSG_TOGGLE_CONNECTION_STATE = 7;
 	public static final int MSG_SEND_DATA = 8;
-	public static final int MSG_GET_CONNECTION_STATE = 0;
 
 	private WakeLock wakeLock;
 	private MAVLinkConnection mavConnection;
@@ -73,8 +73,9 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner{
 				int state = (mavConnection!=null) ? MSG_DEVICE_CONNECTED
 						: MSG_DEVICE_DISCONNECTED;
 				try {
-					msg.replyTo.send(Message.obtain(null, state));
-				} catch (RemoteException e) {
+					Message msg_state = Message.obtain(null, state);
+					msg.replyTo.send(msg_state);
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				break;
@@ -85,7 +86,7 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner{
 				}
 				break;
 
-			case MSG_CONNECT_DEVICE:
+			case MSG_TOGGLE_CONNECTION_STATE:
 				Log.d("Service", "Toglle connection to Device");
 				toggleConnectionState();
 				break;

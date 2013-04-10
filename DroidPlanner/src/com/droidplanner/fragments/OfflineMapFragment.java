@@ -97,7 +97,12 @@ public class OfflineMapFragment extends MapFragment {
 	}
 	
 	public double getMapRotation() {
-		return getMap().getCameraPosition().bearing;
+		GoogleMap map = getMap();
+		if(map!=null){
+			return map.getCameraPosition().bearing;
+		}else {
+			return 0;
+		}
 	}
 
 }

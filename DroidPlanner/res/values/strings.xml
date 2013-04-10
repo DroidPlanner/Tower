@@ -8,11 +8,10 @@
 
     <string-array name="menu_dropdown">
         <item>Planning</item>
-        <item>HUD</item>
         <item>Flight Data</item>
         <item>RC</item>
-        <item>Terminal</item>
         <item>GCP</item>        
+        <item>Terminal</item>
     </string-array>
     
     <string-array name="menu_fligth_modes">

@@ -19,9 +19,9 @@ import android.view.ViewGroup;
 
 import com.MAVLink.Drone;
 import com.MAVLink.waypoint;
-import com.MAVLink.Messages.MAVLinkMessage;
-import com.MAVLink.Messages.ardupilotmega.msg_global_position_int;
+import com.MAVLink.Drone.MapUpdatedListner;
 import com.droidplanner.R;
+import com.droidplanner.SuperActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
@@ -33,7 +33,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-public class FlightMapFragment extends OfflineMapFragment implements OnMapLongClickListener {
+public class FlightMapFragment extends OfflineMapFragment implements OnMapLongClickListener,MapUpdatedListner {
 	private static final int DRONE_MIN_ROTATION = 5;
 	private GoogleMap mMap;
 	private Marker[] DroneMarker;
@@ -49,6 +49,7 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 	private int lastMarker = 0;
 	private OnFlighDataListener mListener;
 	private Marker homeMarker;
+	private Drone drone;
 	
 	
 	public interface OnFlighDataListener {
@@ -66,6 +67,10 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 		addMissionPathToMap();
 		getPreferences();
 		mMap.setOnMapLongClickListener(this);
+		
+		
+		drone = ((SuperActivity)getActivity()).app.drone;
+		drone.setMapListner(this);		
 		return view;
 	}
 	
@@ -84,15 +89,6 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 		isAutoPanEnabled =prefs.getBoolean("pref_auto_pan_enabled", false);	
 	}
 
-	public void receiveData(MAVLinkMessage msg) {
-		if(msg.msgid == msg_global_position_int.MAVLINK_MSG_ID_GLOBAL_POSITION_INT) {
-			LatLng position = new LatLng(((msg_global_position_int)msg).lat/1E7, ((msg_global_position_int)msg).lon/1E7);
-			float heading = (0x0000FFFF & ((int)((msg_global_position_int)msg).hdg))/100f; // TODO fix unsigned short read at mavlink library
-			updateDronePosition(heading, position);
-			addFlithPathPoint(position);
-			
-		}
-	}
 
 	public void updateMissionPath(Drone drone) {
 		ArrayList<LatLng> missionPoints = new ArrayList<LatLng>();
@@ -131,8 +127,8 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 		}	
 	}
 
-	private void updateDronePosition(float heading, LatLng coord) {
-		double correctHeading = (heading - getMapRotation()+360)%360;	// This ensure the 0 to 360 range
+	private void updateDronePosition(double yaw, LatLng coord) {
+		double correctHeading = (yaw - getMapRotation()+360)%360;	// This ensure the 0 to 360 range
 		int index = (int) (correctHeading/DRONE_MIN_ROTATION);
 		
 		DroneMarker[lastMarker].setVisible(false);
@@ -215,6 +211,13 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 			mListener.onSetGuidedMode(point);	
 			updateGuidedMarker(point);
 		}
+	}
+
+	@Override
+	public void onDroneUpdate() {
+		updateDronePosition(drone.yaw, drone.position);
+		addFlithPathPoint(drone.position);
+		
 	}
 
 

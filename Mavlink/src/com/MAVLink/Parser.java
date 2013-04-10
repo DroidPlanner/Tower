@@ -1,6 +1,5 @@
 package com.MAVLink;
 
-import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
 
 public class Parser {
@@ -18,8 +17,6 @@ public class Parser {
 
 	private MAVLinkPacket m;
 
-	MAVLinkMessage message;
-
 	/**
 	 * This is a convenience function which handles the complete MAVLink
 	 * parsing. the function will parse one byte at a time and return the
@@ -29,10 +26,9 @@ public class Parser {
 	 * @param c
 	 *            The char to parse
 	 */
-	public MAVLinkMessage mavlink_parse_char(int c) {
+	public MAVLinkPacket mavlink_parse_char(int c) {
 		msg_received = false;
-		message = null;
-
+		
 		switch (state) {
 		case MAVLINK_PARSE_STATE_UNINIT:
 		case MAVLINK_PARSE_STATE_IDLE:
@@ -109,12 +105,6 @@ public class Parser {
 					m.crc.start_checksum();
 				}
 			} else { // Successfully received the message
-				try {
-					message = m.unpack();
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 				msg_received = true;
 				state = MAV_states.MAVLINK_PARSE_STATE_IDLE;
 			}
@@ -122,8 +112,11 @@ public class Parser {
 			break;
 
 		}
-
-		return message;
+		if (msg_received) {
+			return m;		
+		}else {
+			return null;
+		}
 	}
 
 }
