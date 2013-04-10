@@ -1,18 +1,24 @@
 package com.droidplanner;
 
+import com.droidplanner.DroidPlannerApp.ConnectionStateListner;
+
 import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.SpinnerAdapter;
 
 public abstract class SuperActivity extends Activity implements
-		OnNavigationListener {
+		OnNavigationListener, ConnectionStateListner {
+
 	abstract int getNavigationItem();
+	public DroidPlannerApp app;
+	private MenuItem connectButton;	
 
 	public SuperActivity() {
 		super();
@@ -26,6 +32,8 @@ public abstract class SuperActivity extends Activity implements
 	
 		// Set up the action bar to show a dropdown list.
 		setUpActionBar();
+		app = (DroidPlannerApp) getApplication();
+		app.setConectionStateListner(this);
 	}
 
 	public void setUpActionBar() {
@@ -77,8 +85,32 @@ public abstract class SuperActivity extends Activity implements
 			case R.id.menu_settings:
 				startActivity(new Intent(this, SettingsActivity.class));
 				return true;
+			case R.id.menu_connect:
+				app.MAVClient.sendConnectMessage();
+				return true;
+			case R.id.menu_load_from_apm:
+				app.waypointMananger.getWaypoints();
+				return true;					
 			default:
 				return super.onMenuItemSelected(featureId, item);
 		}
+	}
+	
+	
+
+	public void notifyDisconnected() {
+		connectButton.setTitle(getResources().getString(
+				R.string.menu_connect));
+	}
+
+	public void notifyConnected() {
+		connectButton.setTitle(getResources().getString(
+				R.string.menu_disconnect));
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		connectButton = menu.findItem(R.id.menu_connect);
+		return super.onCreateOptionsMenu(menu);
 	}
 }

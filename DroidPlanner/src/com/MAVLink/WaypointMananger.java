@@ -24,7 +24,7 @@ import com.droidplanner.service.MAVLinkClient;
  * MAV Message.
  * 
  */
-public abstract class WaypointMananger {
+public class WaypointMananger {
 	/**
 	 * Try to receive all waypoints from the MAV.
 	 * 
@@ -69,21 +69,10 @@ public abstract class WaypointMananger {
 		}
 	}
 
-	/**
-	 * Callback for when all waypoints have been received.
-	 * 
-	 * @param waypoints
-	 *            list with received waypoints.
-	 */
-	public abstract void onWaypointsReceived(List<waypoint> waypoints);
-
-	/**
-	 * Callback for when all waypoints have been written.
-	 * 
-	 * @param msg
-	 *            Acknowledgment message from the MAV
-	 */
-	public abstract void onWriteWaypoints(msg_mission_ack msg);
+	public interface OnWaypointManagerListner{
+		public abstract void onWaypointsReceived(List<waypoint> waypoints);
+		public abstract void onWriteWaypoints(msg_mission_ack msg);
+	}
 
 	/**
 	 * Callback for when a waypoint has been reached
@@ -107,6 +96,7 @@ public abstract class WaypointMananger {
 	 * Object with a MAVlink connection
 	 */
 	MAVLinkClient MAV;
+	private OnWaypointManagerListner listner;
 	/**
 	 * number of waypoints to be received, used when reading waypoints
 	 */
@@ -125,9 +115,9 @@ public abstract class WaypointMananger {
 	}
 
 	waypointStates state = waypointStates.IDLE;
-
-	public WaypointMananger(MAVLinkClient MAV) {
+	public WaypointMananger(MAVLinkClient MAV, OnWaypointManagerListner listner) {
 		this.MAV = MAV;
+		this.listner = listner;
 		waypoints = new ArrayList<waypoint>();
 	}
 
@@ -158,7 +148,7 @@ public abstract class WaypointMananger {
 				} else {
 					state = waypointStates.IDLE;
 					sendAck();
-					onWaypointsReceived(waypoints);
+					listner.onWaypointsReceived(waypoints);
 				}
 				return true;
 			}
@@ -174,7 +164,7 @@ public abstract class WaypointMananger {
 			break;
 		case WAITING_WRITE_ACK:
 			if (msg.msgid == msg_mission_ack.MAVLINK_MSG_ID_MISSION_ACK) {
-				onWriteWaypoints((msg_mission_ack) msg);
+				listner.onWriteWaypoints((msg_mission_ack) msg);
 				state = waypointStates.IDLE;
 				return true;
 			}
@@ -264,6 +254,5 @@ public abstract class WaypointMananger {
 		msg.target_component = 1;
 		msg.seq = i;
 		MAV.sendMavPacket(msg.pack());
-
 	}
 }

@@ -1,7 +1,6 @@
 package com.droidplanner.service;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -18,23 +17,28 @@ import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
 
 // provide a common class for some ease of use functionality
-public abstract class MAVLinkClient {
+public class MAVLinkClient {
 
-	Activity parent;
+	Context parent;
 
 	/** Messenger for communicating with service. */
 	Messenger mService = null;
 	final Messenger mMessenger = new Messenger(new IncomingHandler());
 	public boolean startedInit = false;
 
-	public abstract void notifyConnected();
+	private OnMavlinkClientListner listner;
 
-	public abstract void notifyDisconnected();
+	
+	
+	public interface OnMavlinkClientListner{
+		public void notifyConnected();
+		public void notifyDisconnected();
+		public void notifyReceivedData(MAVLinkMessage m);
+	}
 
-	public abstract void notifyReceivedData(MAVLinkMessage m);
-
-	public MAVLinkClient(Activity mainActivity) {
-		parent = mainActivity;
+	public MAVLinkClient(Context context, OnMavlinkClientListner listner) {
+		parent = context;
+		this.listner = listner;
 	}
 
 	public void onDestroy() {
@@ -50,7 +54,7 @@ public abstract class MAVLinkClient {
 
 			}
 			// Unbinding the service.
-			parent.getApplicationContext().unbindService(mConnection);
+			parent.unbindService(mConnection);
 
 		} catch (RemoteException e) {
 			e.printStackTrace();
@@ -62,7 +66,7 @@ public abstract class MAVLinkClient {
 	public void init() {
 		Log.d("Service", "Client Init");
 		startedInit = true;
-		parent.getApplicationContext().bindService(
+		parent.bindService(
 				new Intent(parent, MAVLinkService.class), mConnection,
 				Context.BIND_AUTO_CREATE);
 	}
@@ -78,18 +82,18 @@ public abstract class MAVLinkClient {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case MAVLinkService.MSG_DEVICE_CONNECTED:
-				notifyConnected();
+				listner.notifyConnected();
 				break;
 
 			case MAVLinkService.MSG_DEVICE_DISCONNECTED:
-				notifyDisconnected();
+				listner.notifyDisconnected();
 				break;
 
 			// Received data from... somewhere
 			case MAVLinkService.MSG_RECEIVED_DATA:
 				Bundle b = msg.getData();
 				MAVLinkMessage m = (MAVLinkMessage) b.getSerializable("msg");
-				notifyReceivedData(m);
+				listner.notifyReceivedData(m);
 				break;
 
 			default:

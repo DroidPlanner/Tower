@@ -8,8 +8,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.MAVLink.Messages.MAVLinkMessage;
-import com.droidplanner.service.MAVLinkClient;
 import com.ftdi.j2xx.D2xxManager;
 import com.ftdi.j2xx.FT_Device;
 
@@ -43,7 +41,7 @@ public class TerminalActivity extends SuperActivity implements OnClickListener {
 	@Override
 	protected void onResume() {
 		super.onRestart();
-		MAVClient.init();
+		//TODO reimplement MAVClient.init();
 	}
 
 
@@ -51,7 +49,7 @@ public class TerminalActivity extends SuperActivity implements OnClickListener {
 	@Override
 	protected void onStop() {
 		super.onDestroy();
-		MAVClient.onDestroy();
+		//TODO reimplement MAVClient.onDestroy();
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -66,14 +64,17 @@ public class TerminalActivity extends SuperActivity implements OnClickListener {
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_connect:
-			MAVClient.sendConnectMessage();
+			//TODO reimplement MAVClient.sendConnectMessage();
 			return true;
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
 	}
+	
+	//TODO reimplement 
 
 
+	/*
 	public MAVLinkClient MAVClient = new MAVLinkClient(this) {
 	
 		
@@ -94,6 +95,8 @@ public class TerminalActivity extends SuperActivity implements OnClickListener {
 					R.string.menu_disconnect));
 		}
 	};
+	
+	*/
 	
 	
 

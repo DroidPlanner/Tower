@@ -1,11 +1,6 @@
 package com.droidplanner;
 
-import java.util.List;
-
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -13,30 +8,22 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.MAVLink.Drone;
-import com.MAVLink.WaypointMananger;
 import com.MAVLink.waypoint;
 import com.MAVLink.Messages.ApmModes;
-import com.MAVLink.Messages.MAVLinkMessage;
-import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
-import com.MAVLink.Messages.ardupilotmega.msg_request_data_stream;
 import com.MAVLink.Messages.ardupilotmega.msg_set_mode;
-import com.MAVLink.Messages.enums.MAV_DATA_STREAM;
+import com.droidplanner.DroidPlannerApp.OnWaypointReceivedListner;
 import com.droidplanner.fragments.FlightMapFragment;
 import com.droidplanner.fragments.FlightMapFragment.OnFlighDataListener;
-import com.droidplanner.fragments.HudFragment;
-import com.droidplanner.service.MAVLinkClient;
 import com.droidplanner.widgets.spinners.SelectWaypointSpinner;
 import com.droidplanner.widgets.spinners.SelectWaypointSpinner.OnWaypointSpinnerSelectedListener;
 import com.droidplanner.widgets.spinners.SpinnerSelfSelect;
 import com.droidplanner.widgets.spinners.SpinnerSelfSelect.OnSpinnerItemSelectedListener;
 import com.google.android.gms.maps.model.LatLng;
 
-public class FlightDataActivity extends SuperActivity implements OnFlighDataListener, OnSpinnerItemSelectedListener, OnWaypointSpinnerSelectedListener {
+public class FlightDataActivity extends SuperActivity implements OnFlighDataListener, OnSpinnerItemSelectedListener, OnWaypointSpinnerSelectedListener, OnWaypointReceivedListner {
 	
-	private MenuItem connectButton;
 	private FlightMapFragment flightMapFragment;
-	private HudFragment hudFragment;
 	private Drone drone;
 	private SpinnerSelfSelect fligthModeSpinner;
 	private SelectWaypointSpinner wpSpinner;
@@ -52,30 +39,18 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 	
 		setContentView(R.layout.flightdata);
 		flightMapFragment = ((FlightMapFragment)getFragmentManager().findFragmentById(R.id.flightMapFragment));
-		hudFragment = ((HudFragment)getFragmentManager().findFragmentById(R.id.hud_fragment2));
 				
 		this.drone = ((DroidPlannerApp) getApplication()).drone;
 		flightMapFragment.updateMissionPath(drone);
 		flightMapFragment.updateHomeToMap(drone);
+		
+		((DroidPlannerApp) getApplication()).setWaypointReceivedListner(this);
 	}
 
-
-	@Override
-	protected void onResume() {
-		super.onRestart();
-		MAVClient.init();
-	}
-
-	@Override
-	protected void onStop() {
-		super.onDestroy();
-		MAVClient.onDestroy();
-	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.menu_flightdata, menu);
-		connectButton = menu.findItem(R.id.menu_connect);
 		
 		MenuItem flightModeMenu = menu.findItem( R.id.menu_flight_modes_spinner);
 		fligthModeSpinner = (SpinnerSelfSelect) flightModeMenu.getActionView();
@@ -87,24 +62,19 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 		MenuItem wpMenu = menu.findItem( R.id.menu_wp_spinner);
 		wpSpinner = (SelectWaypointSpinner) wpMenu.getActionView();
 		wpSpinner.buildSpinner(this,this);	
-		return true;
+		
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.menu_connect:
-			MAVClient.sendConnectMessage();
-			return true;
 		case R.id.menu_clearFlightPath:
 			flightMapFragment.clearFlightPath();
 			return true;
 		case R.id.menu_zoom:
 			flightMapFragment.zoomToLastKnowPosition();
-			return true;			
-		case R.id.menu_load_from_apm:
-			waypointMananger.getWaypoints();
-			return true;			
+			return true;	
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
@@ -112,101 +82,14 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 
 	@Override
 	public void OnWaypointSpinnerSelected(int item) {
-		waypointMananger.setCurrentWaypoint((short) item);
+		app.waypointMananger.setCurrentWaypoint((short) item);
 	}
 
 	@Override
 	public void onSpinnerItemSelected(Spinner spinner, int position, String text) {
 			changeFlightMode(text);		
 	}
-
-
-	public MAVLinkClient MAVClient = new MAVLinkClient(this) {
-		@Override
-		public void notifyReceivedData(MAVLinkMessage msg) {
-			hudFragment.receiveData(msg);
-			flightMapFragment.receiveData(msg);
-			waypointMananger.processMessage(msg);
-		}
-
-		@Override
-		public void notifyDisconnected() {
-			connectButton.setTitle(getResources().getString(
-					R.string.menu_connect));
-		}
-
-		@Override
-		public void notifyConnected() {
-			connectButton.setTitle(getResources().getString(
-					R.string.menu_disconnect));
-			setupMavlinkStreamRate();
-		}
-	};
 	
-	WaypointMananger waypointMananger = new WaypointMananger(MAVClient) {
-		@Override
-		public void onWaypointsReceived(List<waypoint> waypoints) {
-			if (waypoints != null) {
-				Toast.makeText(getApplicationContext(),
-						"Waypoints received from Drone", Toast.LENGTH_SHORT)
-						.show();
-				drone.setHome(waypoints.get(0));
-				waypoints.remove(0); // Remove Home waypoint
-				drone.clearWaypoints();
-				drone.addWaypoints(waypoints);
-				flightMapFragment.updateMissionPath(drone);
-				flightMapFragment.updateHomeToMap(drone);
-				wpSpinner.updateWpSpinner(drone);
-			}
-		}
-		
-		@Override
-		public void onWriteWaypoints(msg_mission_ack msg) {
-		}
-	};
-
-	private void setupMavlinkStreamRate() {
-		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(this);
-
-		requestMavlinkDataStream(
-				MAV_DATA_STREAM.MAV_DATA_STREAM_EXTENDED_STATUS,
-				Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_ext_stat",
-						"0")));
-		requestMavlinkDataStream(MAV_DATA_STREAM.MAV_DATA_STREAM_EXTRA1,
-				Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_extra1",
-						"0")));
-		requestMavlinkDataStream(MAV_DATA_STREAM.MAV_DATA_STREAM_EXTRA2,
-				Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_extra2",
-						"0")));
-		requestMavlinkDataStream(MAV_DATA_STREAM.MAV_DATA_STREAM_EXTRA3,
-				Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_extra3",
-						"0")));
-		requestMavlinkDataStream(MAV_DATA_STREAM.MAV_DATA_STREAM_POSITION,
-				Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_position",
-						"0")));
-		requestMavlinkDataStream(MAV_DATA_STREAM.MAV_DATA_STREAM_RAW_SENSORS,
-				0);
-		requestMavlinkDataStream(MAV_DATA_STREAM.MAV_DATA_STREAM_RC_CHANNELS,
-				0);
-	}
-
-	private void requestMavlinkDataStream(int stream_id, int rate) {
-		Log.d("PREF", stream_id +"  -  "+rate);
-		msg_request_data_stream msg = new msg_request_data_stream();
-		msg.target_system = 1;
-		msg.target_component = 1;
-
-		msg.req_message_rate = (short) rate;
-		msg.req_stream_id = (byte) stream_id;
-
-		if (rate>0){
-			msg.start_stop = 1;
-		}else{
-			msg.start_stop = 0;
-		}
-		MAVClient.sendMavPacket(msg.pack());
-	}
 
 	@Override
 	public void onSetGuidedMode(LatLng point) {
@@ -231,7 +114,7 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 		msg.autocontinue = 1; // TODO use correct parameter
 		msg.target_system = 1;
 		msg.target_component = 1;
-		MAVClient.sendMavPacket(msg.pack());
+		app.MAVClient.sendMavPacket(msg.pack());
 	}
 
 	private void changeFlightMode(String string) {
@@ -243,6 +126,13 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 		msg.target_system = 1;
 		msg.base_mode = 1; //TODO use meaningful constant
 		msg.custom_mode = mode;
-		MAVClient.sendMavPacket(msg.pack());			
+		app.MAVClient.sendMavPacket(msg.pack());			
+	}
+
+	@Override
+	public void onWaypointsReceived() {
+		flightMapFragment.updateMissionPath(drone);
+		flightMapFragment.updateHomeToMap(drone);
+		wpSpinner.updateWpSpinner(drone);		
 	}
 }

@@ -7,7 +7,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.NumberPicker;
@@ -17,17 +16,12 @@ import android.widget.Toast;
 import com.MAVLink.Drone;
 import com.MAVLink.MissionReader;
 import com.MAVLink.MissionWriter;
-import com.MAVLink.WaypointMananger;
 import com.MAVLink.waypoint;
-import com.MAVLink.Messages.MAVLinkMessage;
-import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
-import com.droidplanner.R;
 import com.droidplanner.dialogs.OpenMissionDialog;
 import com.droidplanner.dialogs.PolygonDialog;
 import com.droidplanner.fragments.PlanningMapFragment;
 import com.droidplanner.fragments.PlanningMapFragment.OnMapInteractionListener;
 import com.droidplanner.helpers.TTS;
-import com.droidplanner.service.MAVLinkClient;
 import com.droidplanner.waypoints.Polygon;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -44,7 +38,6 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 	public modes mode;
 
 	TextView WaypointListNumber;
-	private MenuItem connectButton;
 
 	TTS tts;
 
@@ -78,7 +71,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 	@Override
 	protected void onResume() {
 		super.onRestart();
-		MAVClient.init();
+		//TODO reimplement MAVClient.init();
 	}
 
 	private void checkIntent() {
@@ -111,7 +104,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 	@Override
 	protected void onStop() {
 		super.onDestroy();
-		MAVClient.onDestroy();
+		//TODO reimplement MAVClient.onDestroy();
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -125,7 +118,6 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 			getMenuInflater().inflate(R.menu.menu_planning_polygon, menu);
 			break;
 		}
-		connectButton = menu.findItem(R.id.menu_connect);
 		return true;
 	}
 
@@ -135,23 +127,17 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 		case R.id.menu_clear_wp:
 			clearWaypointsAndUpdate();
 			return true;
-		case R.id.menu_load_from_apm:
-			waypointMananger.getWaypoints();
-			return true;
 		case R.id.menu_send_to_apm:
 			List<waypoint> data = new ArrayList<waypoint>();
 			data.add(drone.getHome());
 			data.addAll(drone.getWaypoints());
-			waypointMananger.writeWaypoints(data);
+			//TODO reimplement waypointMananger.writeWaypoints(data);
 			return true;
 		case R.id.menu_open_file:
 			openMissionFile();
 			return true;
 		case R.id.menu_save_file:
 			menuSaveFile();
-			return true;
-		case R.id.menu_connect:
-			MAVClient.sendConnectMessage();
 			return true;
 		case R.id.menu_zoom:
 			planningMapFragment.zoomToExtents(drone.getAllCoordinates());
@@ -264,7 +250,8 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 		
 	}
 
-
+	//TODO reimplement 
+	/*
 	public MAVLinkClient MAVClient = new MAVLinkClient(this) {
 		@Override
 		public void notifyReceivedData(MAVLinkMessage m) {
@@ -284,8 +271,10 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 					R.string.menu_connect));
 			tts.speak("Disconnected");
 		}
-	};
+	};*/
 	
+	//TODO reimplement 
+	/*
 	WaypointMananger waypointMananger = new WaypointMananger(MAVClient) {
 		@Override
 		public void onWaypointsReceived(List<waypoint> waypoints) {
@@ -313,6 +302,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 			tts.speak("Waypoints saved to Drone");
 		}
 	};
+	*/
 
 	@Override
 	public void onAddPoint(LatLng point) {

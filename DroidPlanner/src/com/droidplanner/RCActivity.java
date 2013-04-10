@@ -9,9 +9,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-import com.MAVLink.Messages.MAVLinkMessage;
 import com.droidplanner.helpers.RcOutput;
-import com.droidplanner.service.MAVLinkClient;
 import com.droidplanner.widgets.joystick.DualJoystickView;
 import com.droidplanner.widgets.joystick.JoystickMovedListener;
 
@@ -44,19 +42,19 @@ public class RCActivity extends SuperActivity implements
 		bTogleRC.setOnClickListener(this);
 
 		
-		rcOutput = new RcOutput(MAVClient,this);
+		//TODO reimplement  rcOutput = new RcOutput(MAVClient,this);
 	}
 	
 	@Override
 	protected void onResume() {
 		super.onRestart();
-		MAVClient.init();
+		//TODO reimplement MAVClient.init();
 	}
 
 	@Override
 	protected void onStop() {
 		super.onDestroy();
-		MAVClient.onDestroy();
+		//TODO reimplement MAVClient.onDestroy();
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -70,13 +68,15 @@ public class RCActivity extends SuperActivity implements
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_connect:
-			MAVClient.sendConnectMessage();
+			//TODO reimplement MAVClient.sendConnectMessage();
 			return true;
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
 	}
-
+	
+	//TODO reimplement
+	/*
 	private MAVLinkClient MAVClient = new MAVLinkClient(this) {
 
 		@Override
@@ -96,6 +96,7 @@ public class RCActivity extends SuperActivity implements
 					R.string.menu_connect));
 		}
 	};
+	*/
 
 	@Override
 	public void onClick(View v) {
