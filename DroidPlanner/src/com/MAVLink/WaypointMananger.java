@@ -3,8 +3,6 @@ package com.MAVLink;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.util.Log;
-
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_count;
@@ -244,7 +242,6 @@ public class WaypointMananger {
 		msg.autocontinue = 1; // TODO use correct parameter
 		msg.target_system = 1;
 		msg.target_component = 1;
-		Log.d("Mission", msg.toString());
 		MAV.sendMavPacket(msg.pack());
 	}
 

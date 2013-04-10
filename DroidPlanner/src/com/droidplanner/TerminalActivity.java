@@ -57,7 +57,8 @@ public class TerminalActivity extends SuperActivity implements OnClickListener {
 		getMenuInflater().inflate(R.menu.menu_terminal, menu);
 		this.menu = menu;
 		connectButton = menu.findItem(R.id.menu_connect);
-		return true;
+
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override

@@ -61,7 +61,8 @@ public class RCActivity extends SuperActivity implements
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.menu_pid, menu);
 		connectButton = menu.findItem(R.id.menu_connect);
-		return true;
+
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override

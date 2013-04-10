@@ -44,7 +44,7 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 		flightMapFragment.updateMissionPath(drone);
 		flightMapFragment.updateHomeToMap(drone);
 		
-		((DroidPlannerApp) getApplication()).setWaypointReceivedListner(this);
+		app.setWaypointReceivedListner(this);
 	}
 
 

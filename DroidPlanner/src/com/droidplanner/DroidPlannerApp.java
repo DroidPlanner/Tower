@@ -16,6 +16,7 @@ import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.MAVLink.Messages.ardupilotmega.msg_request_data_stream;
 import com.MAVLink.Messages.enums.MAV_DATA_STREAM;
+import com.droidplanner.helpers.TTS;
 import com.droidplanner.service.MAVLinkClient;
 import com.droidplanner.service.MAVLinkClient.OnMavlinkClientListner;
 
@@ -26,6 +27,7 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 	
 	public ConnectionStateListner conectionListner;
 	private OnWaypointReceivedListner waypointsListner;
+	private TTS tts;
 	
 	public interface OnWaypointReceivedListner{
 		public void onWaypointsReceived();
@@ -40,11 +42,13 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 	public void onCreate() {
 		super.onCreate();
 		Log.d("APP", "Created");
+
+		tts = new TTS(this);
 		drone = new Drone();
 		MAVClient = new MAVLinkClient(this,this);
 		waypointMananger = new WaypointMananger(MAVClient,this);
 		
-		MAVClient.init();
+		MAVClient.init();		
 	}
 	
 	
@@ -68,12 +72,14 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 	@Override
 	public void notifyDisconnected() {
 		conectionListner.notifyDisconnected();
+		tts.speak("Disconnected");
 	}
 
 	@Override
 	public void notifyConnected() {
 		setupMavlinkStreamRate();
 		conectionListner.notifyConnected();
+		tts.speak("Connected");
 	}
 	
 	private void setupMavlinkStreamRate() {
@@ -124,6 +130,7 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 		if (waypoints != null) {
 			Toast.makeText(getApplicationContext(),
 					"Waypoints received from Drone", Toast.LENGTH_SHORT).show();
+			tts.speak("Received waypoints from Drone");
 			drone.setHome(waypoints.get(0));
 			waypoints.remove(0); // Remove Home waypoint
 			drone.clearWaypoints();
@@ -134,6 +141,9 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 
 	@Override
 	public void onWriteWaypoints(msg_mission_ack msg) {
+		Toast.makeText(getApplicationContext(), "Waypoints saved to Drone",
+				Toast.LENGTH_SHORT).show();
+		tts.speak("Waypoints saved to Drone");
 	}
 
 
