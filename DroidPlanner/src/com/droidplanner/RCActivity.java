@@ -42,20 +42,10 @@ public class RCActivity extends SuperActivity implements
 		bTogleRC.setOnClickListener(this);
 
 		
-		//TODO reimplement  rcOutput = new RcOutput(MAVClient,this);
+		rcOutput = new RcOutput(app.MAVClient,this);
 	}
 	
-	@Override
-	protected void onResume() {
-		super.onRestart();
-		//TODO reimplement MAVClient.init();
-	}
 
-	@Override
-	protected void onStop() {
-		super.onDestroy();
-		//TODO reimplement MAVClient.onDestroy();
-	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -68,36 +58,11 @@ public class RCActivity extends SuperActivity implements
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.menu_connect:
-			//TODO reimplement MAVClient.sendConnectMessage();
-			return true;
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
 	}
-	
-	//TODO reimplement
-	/*
-	private MAVLinkClient MAVClient = new MAVLinkClient(this) {
 
-		@Override
-		public void notifyReceivedData(MAVLinkMessage m) {
-
-		}
-
-		@Override
-		public void notifyConnected() {
-			connectButton.setTitle(getResources().getString(
-					R.string.menu_disconnect));
-		}
-
-		@Override
-		public void notifyDisconnected() {
-			connectButton.setTitle(getResources().getString(
-					R.string.menu_connect));
-		}
-	};
-	*/
 
 	@Override
 	public void onClick(View v) {
