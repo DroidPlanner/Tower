@@ -125,21 +125,20 @@ public class MAVLinkClient {
 		}
 	};
 
-	public void sendMessage(int m) {
-		Message msg = Message.obtain(null, m);
-		msg.replyTo = mMessenger;
+	public void toggleConnectionState() {
+		Message msg = Message.obtain(null, MAVLinkService.MSG_TOGGLE_CONNECTION_STATE);
 		try {
 			mService.send(msg);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
 	}
-
-	public void sendConnectMessage() {
-		Message msg = Message.obtain(null, MAVLinkService.MSG_CONNECT_DEVICE);
+	
+	public void queryConnectionState() {
+		Message msg = Message.obtain(null, MAVLinkService.MSG_GET_CONNECTION_STATE);
 		try {
 			mService.send(msg);
-		} catch (RemoteException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -156,10 +155,4 @@ public class MAVLinkClient {
 		}
 
 	}
-
-	public boolean isConnected() {
-		return true; // TODO Must be fixed, or the app can crash if we try to
-						// communicate without a connection
-	}
-
 }

@@ -29,10 +29,8 @@ public class WaypointMananger {
 	 * If all runs well the callback will return the list of waypoints.
 	 */
 	public void getWaypoints() {
-		if (MAV.isConnected()) {
 			state = waypointStates.READ_REQUEST;
 			requestWaypointsList();
-		}
 	}
 
 	/**
@@ -44,7 +42,7 @@ public class WaypointMananger {
 	 *            waypoints to be written
 	 */
 	public void writeWaypoints(List<waypoint> data) {
-		if ((waypoints != null) && (MAV.isConnected())) {
+		if ((waypoints != null)) {
 			waypoints.clear();
 			waypoints.addAll(data);
 			writeIndex = 0;
@@ -62,7 +60,7 @@ public class WaypointMananger {
 	 *            waypoints to be written
 	 */
 	public void setCurrentWaypoint(int i) {
-		if ((waypoints != null) && (MAV.isConnected())) {
+		if ((waypoints != null)) {
 			sendSetCurrentWaypoint((short )i);
 		}
 	}

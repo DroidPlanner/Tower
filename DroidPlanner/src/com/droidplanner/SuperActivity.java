@@ -34,6 +34,7 @@ public abstract class SuperActivity extends Activity implements
 		setUpActionBar();
 		app = (DroidPlannerApp) getApplication();
 		app.setConectionStateListner(this);
+
 	}
 
 	public void setUpActionBar() {
@@ -83,7 +84,7 @@ public abstract class SuperActivity extends Activity implements
 				startActivity(new Intent(this, SettingsActivity.class));
 				return true;
 			case R.id.menu_connect:
-				app.MAVClient.sendConnectMessage();
+				app.MAVClient.toggleConnectionState();
 				return true;
 			case R.id.menu_load_from_apm:
 				app.waypointMananger.getWaypoints();
@@ -108,6 +109,7 @@ public abstract class SuperActivity extends Activity implements
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		connectButton = menu.findItem(R.id.menu_connect);
+		app.MAVClient.queryConnectionState();
 		return super.onCreateOptionsMenu(menu);
 	}
 }
