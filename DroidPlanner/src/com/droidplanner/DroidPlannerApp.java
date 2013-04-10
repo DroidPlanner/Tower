@@ -5,7 +5,6 @@ import java.util.List;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.MAVLink.Drone;
@@ -41,7 +40,6 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		Log.d("APP", "Created");
 
 		tts = new TTS(this);
 		drone = new Drone();
@@ -109,7 +107,6 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 	}
 
 	private void requestMavlinkDataStream(int stream_id, int rate) {
-		Log.d("PREF", stream_id +"  -  "+rate);
 		msg_request_data_stream msg = new msg_request_data_stream();
 		msg.target_system = 1;
 		msg.target_component = 1;

@@ -58,22 +58,19 @@ public abstract class SuperActivity extends Activity implements
 		case 0: // Planning
 			navigationIntent = new Intent(this, PlanningActivity.class);
 			break;
-		case 1: // HUD
-			navigationIntent = new Intent(this, HUDActivity.class);
-			break;
-		case 2: // Flight Data
+		case 1: // Flight Data
 			navigationIntent = new Intent(this, FlightDataActivity.class);
 			navigationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			break;
-		case 3: // PID
+		case 2: // RC
 			navigationIntent = new Intent(this, RCActivity.class);
+			break;
+		case 3: // GCP
+			navigationIntent = new Intent(this, GCPActivity.class);
 			break;
 		case 4: // Terminal
 			navigationIntent = new Intent(this, TerminalActivity.class);
-			break;
-		case 5: // GCP
-			navigationIntent = new Intent(this, GCPActivity.class);
-			break;
+			break;			
 		}
 		startActivity(navigationIntent);
 		return false;

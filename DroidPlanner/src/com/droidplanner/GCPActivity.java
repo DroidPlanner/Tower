@@ -24,7 +24,7 @@ public class GCPActivity extends SuperActivity implements OnGcpClickListner {
 
 	@Override
 	int getNavigationItem() {
-		return 5;
+		return 3;
 	}
 
 	@Override

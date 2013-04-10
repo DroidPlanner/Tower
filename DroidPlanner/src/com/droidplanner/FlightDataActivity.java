@@ -30,7 +30,7 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 
 	@Override
 	int getNavigationItem() {
-		return 2;
+		return 1;
 	}
 
 	@Override

@@ -25,7 +25,7 @@ public class RCActivity extends SuperActivity implements
 
 	@Override
 	int getNavigationItem() {
-		return 3;
+		return 2;
 	}
 
 	@Override
