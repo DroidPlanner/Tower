@@ -63,14 +63,18 @@ public class HUDActivity extends SuperActivity {
 
 		@Override
 		public void notifyConnected() {
-			connectButton.setTitle(getResources().getString(
-					R.string.menu_disconnect));
+			if (connectButton != null) {
+				connectButton.setTitle(getResources().getString(
+						R.string.menu_disconnect));
+			}
 		}
 
 		@Override
 		public void notifyDisconnected() {
-			connectButton.setTitle(getResources().getString(
-					R.string.menu_connect));
+			if (connectButton != null) {
+				connectButton.setTitle(getResources().getString(
+						R.string.menu_connect));
+			}
 		}
 
 		@Override

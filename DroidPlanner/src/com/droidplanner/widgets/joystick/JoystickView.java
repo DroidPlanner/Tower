@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.FloatMath;
 import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
@@ -46,8 +47,9 @@ public class JoystickView extends View {
 	//Max range of movement in user coordinate system
 	public final static int CONSTRAIN_BOX = 0;
 	public final static int CONSTRAIN_CIRCLE = 1;
-	private final static float MOVEMENT_RANGE = 1;
+	
 	private int movementConstraint;
+	private float movementRange;
 
 	public final static int COORDINATE_CARTESIAN = 0;		//Regular cartesian coordinates
 	public final static int COORDINATE_DIFFERENTIAL = 1;	//Uses polar rotation of 45 degrees to calc differential drive paramaters
@@ -136,6 +138,7 @@ public class JoystickView extends View {
 
 		innerPadding = 10;
 		
+		setMovementRange(10);
 		setMoveResolution(1.0f);
 		setClickThreshold(0.4f);
 		setYAxisInverted(false);
@@ -196,6 +199,13 @@ public class JoystickView extends View {
 		return clickThreshold;
 	}
 	
+	 public void setMovementRange(float movementRange) {
+         this.movementRange = movementRange;
+	 }
+	 
+	 public float getMovementRange() {
+	         return movementRange;
+	 }
 	
 	public void setMoveResolution(float moveResolution) {
 		this.moveResolution = moveResolution;
@@ -308,7 +318,7 @@ public class JoystickView extends View {
 	private void constrainCircle() {
 		float diffX = touchX;
 		float diffY = touchY;
-		double radial = Math.sqrt((diffX*diffX) + (diffY*diffY));
+		double radial = FloatMath.sqrt((diffX*diffX) + (diffY*diffY));
 		if ( radial > movementRadius ) {
 			touchX = (int)((diffX / radial) * movementRadius);
 			touchY = (int)((diffY / radial) * movementRadius);
@@ -426,8 +436,8 @@ public class JoystickView extends View {
 
 	private void calcUserCoordinates() {
 		//First convert to cartesian coordinates
-		cartX = (touchX / movementRadius * MOVEMENT_RANGE);
-		cartY = (touchY / movementRadius * MOVEMENT_RANGE);
+		cartX = (touchX / movementRadius * movementRange);
+        cartY = (touchY / movementRadius * movementRange);
 		
 		radial = Math.sqrt((cartX*cartX) + (cartY*cartY));
 		angle = Math.atan2(cartY, cartX);
@@ -444,15 +454,15 @@ public class JoystickView extends View {
 			userX = cartY + cartX / 4;
 			userY = cartY - cartX / 4;
 			
-			if ( userX < -MOVEMENT_RANGE )
-				userX = -MOVEMENT_RANGE;
-			if ( userX > MOVEMENT_RANGE )
-				userX = MOVEMENT_RANGE;
-
-			if ( userY < -MOVEMENT_RANGE )
-				userY = -MOVEMENT_RANGE;
-			if ( userY > MOVEMENT_RANGE )
-				userY = MOVEMENT_RANGE;
+			if ( userX < -movementRange )
+                userX = (int)-movementRange;
+	        if ( userX > movementRange )
+	                userX = (int)movementRange;
+	
+	        if ( userY < -movementRange )
+	                userY = (int)-movementRange;
+	        if ( userY > movementRange )
+	                userY = (int)movementRange;
 		}
 		
 	}
