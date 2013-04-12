@@ -131,18 +131,21 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 		double correctHeading = (yaw - getMapRotation()+360)%360;	// This ensure the 0 to 360 range
 		int index = (int) (correctHeading/DRONE_MIN_ROTATION);
 		
-		DroneMarker[lastMarker].setVisible(false);
-		DroneMarker[index].setPosition(coord);
-		DroneMarker[index].setVisible(true);
-		lastMarker = index;
-		
-		if(!hasBeenZoomed){
-			hasBeenZoomed = true;
-			mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coord, 16));
-		}
-		
-		if(isAutoPanEnabled){
-			mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(DroneMarker[lastMarker].getPosition(), 17));
+		try{
+			DroneMarker[lastMarker].setVisible(false);
+			DroneMarker[index].setPosition(coord);
+			DroneMarker[index].setVisible(true);
+			lastMarker = index;
+			
+			if(!hasBeenZoomed){
+				hasBeenZoomed = true;
+				mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coord, 16));
+			}
+			
+			if(isAutoPanEnabled){
+				mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(DroneMarker[lastMarker].getPosition(), 17));
+			}
+		}catch(Exception e){
 		}
 	}
 	
@@ -198,7 +201,7 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 	
 	private BitmapDescriptor generateDroneIcon(float heading) {
 		Bitmap planeBitmap = BitmapFactory.decodeResource(getResources(),
-				R.drawable.planetracker);
+				R.drawable.plane);
 		Matrix matrix = new Matrix();
 		matrix.postRotate(heading - mMap.getCameraPosition().bearing);
 		return BitmapDescriptorFactory.fromBitmap( Bitmap.createBitmap(planeBitmap, 0, 0, planeBitmap.getWidth(),
