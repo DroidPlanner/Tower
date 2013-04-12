@@ -8,9 +8,12 @@ import com.MAVLink.Messages.ApmModes;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_attitude;
 import com.MAVLink.Messages.ardupilotmega.msg_global_position_int;
+import com.MAVLink.Messages.ardupilotmega.msg_gps_raw_int;
 import com.MAVLink.Messages.ardupilotmega.msg_heartbeat;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_current;
 import com.MAVLink.Messages.ardupilotmega.msg_nav_controller_output;
+import com.MAVLink.Messages.ardupilotmega.msg_radio;
+import com.MAVLink.Messages.ardupilotmega.msg_sys_status;
 import com.MAVLink.Messages.ardupilotmega.msg_vfr_hud;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -21,18 +24,16 @@ public class Drone {
 	
 	public double roll = 0, pitch = 0, yaw = 0, altitude = 0, disttowp = 0,
 			verticalSpeed = 0, groundSpeed = 0, airSpeed = 0, targetSpeed = 0,
-			targetAltitude = 0;
-	
-	public int wpno = -1;
-	public String remainBatt = "";
-	public String battVolt = "";
-	public String gpsFix = "";
+			targetAltitude = 0, battVolt = -1, battRemain = -1,
+			battCurrent = -1;
+	public int wpno = -1,satCount = -1, fixType = -1;
 	public String mode = "Unknown";
 	public LatLng position;
 	
 	
 	private HudUpdatedListner hudListner;
 	private MapUpdatedListner mapListner;
+	
 	
 	public interface HudUpdatedListner{
 		public void onDroneUpdate();
@@ -58,9 +59,7 @@ public class Drone {
 			yaw = (m_att.yaw * 180.0 / Math.PI);
 			if (hudListner != null)
 				hudListner.onDroneUpdate();
-			break;
-			
-			
+			break;	
 		case msg_vfr_hud.MAVLINK_MSG_ID_VFR_HUD:
 			msg_vfr_hud m_hud = (msg_vfr_hud) msg;
 			altitude = m_hud.alt;
@@ -91,17 +90,28 @@ public class Drone {
 					hudListner.onDroneUpdate();			
 			}
 			break;
-			
 		case msg_global_position_int.MAVLINK_MSG_ID_GLOBAL_POSITION_INT:
 			position = new LatLng(((msg_global_position_int)msg).lat/1E7, ((msg_global_position_int)msg).lon/1E7);
 			mapListner.onDroneUpdate();
 			break;
-		default:
+		case msg_sys_status.MAVLINK_MSG_ID_SYS_STATUS:
+			msg_sys_status m_sys = (msg_sys_status) msg;
+			battVolt = m_sys.voltage_battery/1000.0;
+			battRemain = m_sys.battery_remaining;
+			battCurrent = m_sys.current_battery/100.0;
+			if (hudListner != null)
+				hudListner.onDroneUpdate();
 			break;
+		case msg_radio.MAVLINK_MSG_ID_RADIO:
+			// TODO implement link quality
+			break;
+		case msg_gps_raw_int.MAVLINK_MSG_ID_GPS_RAW_INT:
+			fixType = ((msg_gps_raw_int) msg).fix_type;
+			satCount = ((msg_gps_raw_int) msg).satellites_visible;
+			if (hudListner != null)
+				hudListner.onDroneUpdate();
 		}
 	}
-	
-	
 	
 	
 	public void addWaypoints(List<waypoint> points) {

@@ -8,7 +8,6 @@ import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
@@ -58,6 +57,38 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 	Paint greenLightPen;
 	private Drone drone;
 
+	
+	@Override
+	protected void onDraw(Canvas canvas) {
+		if (drone == null){
+			return;
+		}
+		
+		// clear screen
+		canvas.drawColor(Color.rgb(20, 20, 20));
+		canvas.translate(width / 2, height / 2);
+
+		canvas.save();
+		drawPitch(canvas);
+		canvas.restore();
+		canvas.save();
+		drawRoll(canvas);
+		canvas.restore();
+		canvas.save();
+		drawYaw(canvas);
+		canvas.restore();
+		canvas.save();
+		drawPlane(canvas);
+		canvas.restore();
+		canvas.save();
+		drawRightScroller(canvas);
+		canvas.restore();
+		canvas.save();
+		drawLeftScroller(canvas);
+		canvas.restore();
+
+	}
+	
 	public HUDwidget(Context context, AttributeSet attributeSet) {
 		super(context, attributeSet);
 		getHolder().addCallback(this);
@@ -109,39 +140,6 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 		blueVSI.setARGB(255, 0, 50, 250);
 	}
 
-	@Override
-	protected void onDraw(Canvas canvas) {
-		if (drone == null){
-			return;
-		}
-		
-		// clear screen
-		canvas.drawColor(Color.rgb(20, 20, 20));
-		canvas.translate(width / 2, height / 2);
-
-		canvas.save();
-		drawPitch(canvas);
-		canvas.restore();
-		canvas.save();
-		drawRoll(canvas);
-		canvas.restore();
-		canvas.save();
-		drawYaw(canvas);
-		canvas.restore();
-		canvas.save();
-		drawText(canvas);
-		canvas.restore();
-		canvas.save();
-		drawPlane(canvas);
-		canvas.restore();
-		canvas.save();
-		drawRightScroller(canvas);
-		canvas.restore();
-		canvas.save();
-		drawLeftScroller(canvas);
-		canvas.restore();
-
-	}
 
 	private void drawPlane(Canvas canvas) {
 		canvas.drawCircle(0, 0, 15, plane);
@@ -152,34 +150,6 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 
 	}
 
-	// Draw text aligned correctly.
-	private void drawText(Canvas canvas, int i, String text, Paint p,
-			boolean left) {
-		Rect bounds = new Rect();
-		p.getTextBounds(text, 0, text.length(), bounds);
-
-		float y = (float) (height / 2.0 - i * bounds.height() * 1.2)
-				- (float) bounds.height() * 0.3f;
-
-		if (left)
-			canvas.drawText(text,
-					(float) (-width / 2.0 + bounds.height() * .2f), y, p);
-		else
-			canvas.drawText(
-					text,
-					(float) (width / 2.0 - bounds.width() - bounds.height() * .2f),
-					y, p);
-
-	}
-
-	private void drawText(Canvas canvas) {
-		drawText(canvas, 1, drone.gpsFix, statusText, true);
-		// drawText(canvas, 0, altitude, statusText, true);
-
-		drawText(canvas, 1, drone.remainBatt, statusText, false);
-		drawText(canvas, 0, drone.battVolt, statusText, false);
-
-	}
 
 	private void drawYaw(Canvas canvas) {
 		canvas.drawRect(-width, -height / 2, width, -height / 2 + 30, sky);
@@ -384,6 +354,23 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 				scroller.left - scroller.width() / 4, scroller.bottom + 45,
 				ScrollerText);
 
+		String gpsFix = "";
+		if (drone.satCount >= 0) {
+			switch (drone.fixType) {
+			case 2:
+				gpsFix = ("GPS2D(" + drone.satCount + ")");
+				break;
+			case 3:
+				gpsFix = ("GPS3D(" + drone.satCount + ")");
+				break;
+			default:
+				gpsFix = ("NoGPS(" + drone.satCount + ")");
+				break;
+			}
+		}
+		canvas.drawText(gpsFix, scroller.left - scroller.width() / 2,
+				scroller.top - 10, ScrollerText);
+
 	}
 
 	private void drawLeftScroller(Canvas canvas) {
@@ -441,12 +428,19 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 		canvas.drawText(Integer.toString((int) speed), scroller.right - 15,
 				textHalfSize, ScrollerTextLeft);
 
-		// Draw mode and wp distance
+		// Draw Text
 		canvas.drawText("AS " + Integer.toString((int) drone.airSpeed),
 				scroller.left + 5, scroller.bottom + 25, ScrollerText);
 		canvas.drawText("GS " + Integer.toString((int) drone.groundSpeed),
 				scroller.left + 5, scroller.bottom + 45, ScrollerText);
-
+		if (drone.battVolt >= 0) {
+			canvas.drawText(String.format("%2.2f V", drone.battVolt),
+					scroller.left + 5, scroller.top - 10, ScrollerText);
+		}
+		if (drone.battCurrent >= 0) {
+			canvas.drawText(String.format("%2.2f A", drone.battCurrent),
+					scroller.left + 5, scroller.top - 30, ScrollerText);
+		}
 	}
 
 	@Override
