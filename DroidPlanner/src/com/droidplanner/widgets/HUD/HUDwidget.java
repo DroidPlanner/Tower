@@ -354,7 +354,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 				scroller.left - scroller.width() / 4, scroller.bottom + 45,
 				ScrollerText);
 
-		String gpsFix;
+		String gpsFix = "";
 		switch (drone.fixType) {
 		case 2:
 			gpsFix = ("GPS2D(" + drone.satCount + ")");
@@ -363,7 +363,9 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 			gpsFix = ("GPS3D(" + drone.satCount + ")");
 			break;
 		default:
-			gpsFix = ("NoGPS(" + drone.satCount + ")");
+			if(drone.satCount>=0){
+				gpsFix = ("NoGPS(" + drone.satCount + ")");
+			}
 			break;
 		}
 		canvas.drawText(gpsFix, scroller.left - scroller.width() / 2,
