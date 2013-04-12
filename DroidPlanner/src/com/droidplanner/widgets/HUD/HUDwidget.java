@@ -355,18 +355,18 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 				ScrollerText);
 
 		String gpsFix = "";
-		switch (drone.fixType) {
-		case 2:
-			gpsFix = ("GPS2D(" + drone.satCount + ")");
-			break;
-		case 3:
-			gpsFix = ("GPS3D(" + drone.satCount + ")");
-			break;
-		default:
-			if(drone.satCount>=0){
+		if (drone.satCount >= 0) {
+			switch (drone.fixType) {
+			case 2:
+				gpsFix = ("GPS2D(" + drone.satCount + ")");
+				break;
+			case 3:
+				gpsFix = ("GPS3D(" + drone.satCount + ")");
+				break;
+			default:
 				gpsFix = ("NoGPS(" + drone.satCount + ")");
+				break;
 			}
-			break;
 		}
 		canvas.drawText(gpsFix, scroller.left - scroller.width() / 2,
 				scroller.top - 10, ScrollerText);
