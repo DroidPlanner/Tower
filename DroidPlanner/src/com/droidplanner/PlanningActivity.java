@@ -273,15 +273,19 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 	
 		@Override
 		public void notifyConnected() {
-			connectButton.setTitle(getResources().getString(
-					R.string.menu_disconnect));
+			if (connectButton != null) {
+				connectButton.setTitle(getResources().getString(
+						R.string.menu_disconnect));
+			}
 			tts.speak("Connected");
 		}
 	
 		@Override
 		public void notifyDisconnected() {
-			connectButton.setTitle(getResources().getString(
-					R.string.menu_connect));
+			if (connectButton != null) {
+				connectButton.setTitle(getResources().getString(
+						R.string.menu_connect));
+			}
 			tts.speak("Disconnected");
 		}
 	};
