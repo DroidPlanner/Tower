@@ -97,13 +97,17 @@ public abstract class SuperActivity extends Activity implements
 	
 
 	public void notifyDisconnected() {
-		connectButton.setTitle(getResources().getString(
-				R.string.menu_connect));
+		if (connectButton != null) {
+			connectButton.setTitle(getResources().getString(
+					R.string.menu_connect));
+		}
 	}
 
 	public void notifyConnected() {
-		connectButton.setTitle(getResources().getString(
-				R.string.menu_disconnect));
+		if (connectButton != null) {
+			connectButton.setTitle(getResources().getString(
+					R.string.menu_disconnect));		
+		}
 	}
 
 	@Override
