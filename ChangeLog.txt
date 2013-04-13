@@ -1,3 +1,10 @@
+## Droidplanner v0.6.0
+* Armed/Disarmed indication for copters
+* Improvement to the HUD, like GPS and Battery indicators
+* New plane icon
+* Deletes unused screens like the old HUD
+* Code restructure, should fix some bugs
+
 ## Droidplanner v0.5.4
 * RC override rate now is selectable from the preferences menu
 
