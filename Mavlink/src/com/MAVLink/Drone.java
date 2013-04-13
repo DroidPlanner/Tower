@@ -31,7 +31,7 @@ public class Drone {
 			battCurrent = -1;
 	public int wpno = -1,satCount = -1, fixType = -1, type = MAV_TYPE.MAV_TYPE_FIXED_WING;
 	public boolean failsafe = false, armed = false;
-	public String mode = "Unknown";
+	public ApmModes mode = ApmModes.UNKNOWN;
 	public LatLng position;
 	
 	
@@ -91,9 +91,9 @@ public class Drone {
 			type = msg_heart.type;
 			armed = (msg_heart.base_mode & (byte)MAV_MODE_FLAG.MAV_MODE_FLAG_SAFETY_ARMED) == (byte)MAV_MODE_FLAG.MAV_MODE_FLAG_SAFETY_ARMED;
             failsafe = msg_heart.system_status == (byte)MAV_STATE.MAV_STATE_CRITICAL;				
-
-            String newMode = ApmModes.toString(msg_heart.custom_mode);
-
+            
+            ApmModes newMode;
+            newMode = ApmModes.getMode(msg_heart.custom_mode);
 			if (!mode.equals(newMode)) {
 				mode = newMode;
 				if (hudListner != null)

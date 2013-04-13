@@ -118,14 +118,14 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 	}
 
 	private void changeFlightMode(String string) {
-		int mode = ApmModes.toInt(string);
-		if(mode==-1){
+		ApmModes mode = ApmModes.getMode(string);
+		if(mode == ApmModes.UNKNOWN){
 			return;
 		}
 		msg_set_mode msg = new msg_set_mode();
 		msg.target_system = 1;
 		msg.base_mode = 1; //TODO use meaningful constant
-		msg.custom_mode = mode;
+		msg.custom_mode = mode.getNumber();
 		app.MAVClient.sendMavPacket(msg.pack());			
 	}
 

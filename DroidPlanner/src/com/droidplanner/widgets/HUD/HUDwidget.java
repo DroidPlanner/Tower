@@ -359,7 +359,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 				textHalfSize, ScrollerText);
 
 		// Draw mode and wp distance
-		canvas.drawText(drone.mode, scroller.left - scroller.width() / 4,
+		canvas.drawText(drone.mode.getName(), scroller.left - scroller.width() / 4,
 				scroller.bottom + 25, ScrollerText);
 		canvas.drawText(Integer.toString((int) drone.disttowp) + ">" + drone.wpno,
 				scroller.left - scroller.width() / 4, scroller.bottom + 45,
