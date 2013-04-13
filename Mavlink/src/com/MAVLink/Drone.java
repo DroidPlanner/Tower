@@ -15,6 +15,9 @@ import com.MAVLink.Messages.ardupilotmega.msg_nav_controller_output;
 import com.MAVLink.Messages.ardupilotmega.msg_radio;
 import com.MAVLink.Messages.ardupilotmega.msg_sys_status;
 import com.MAVLink.Messages.ardupilotmega.msg_vfr_hud;
+import com.MAVLink.Messages.enums.MAV_MODE_FLAG;
+import com.MAVLink.Messages.enums.MAV_STATE;
+import com.MAVLink.Messages.enums.MAV_TYPE;
 import com.google.android.gms.maps.model.LatLng;
 
 public class Drone {
@@ -26,7 +29,8 @@ public class Drone {
 			verticalSpeed = 0, groundSpeed = 0, airSpeed = 0, targetSpeed = 0,
 			targetAltitude = 0, battVolt = -1, battRemain = -1,
 			battCurrent = -1;
-	public int wpno = -1,satCount = -1, fixType = -1;
+	public int wpno = -1,satCount = -1, fixType = -1, type = MAV_TYPE.MAV_TYPE_FIXED_WING;
+	public boolean failsafe = false, armed = false;
 	public String mode = "Unknown";
 	public LatLng position;
 	
@@ -82,8 +86,14 @@ public class Drone {
 				hudListner.onDroneUpdate();
 			break;
 		case msg_heartbeat.MAVLINK_MSG_ID_HEARTBEAT:
-			int mod = ((msg_heartbeat) msg).custom_mode;
-			String newMode = ApmModes.toString(mod);
+			msg_heartbeat msg_heart = (msg_heartbeat) msg;
+			
+			type = msg_heart.type;
+			armed = (msg_heart.base_mode & (byte)MAV_MODE_FLAG.MAV_MODE_FLAG_SAFETY_ARMED) == (byte)MAV_MODE_FLAG.MAV_MODE_FLAG_SAFETY_ARMED;
+            failsafe = msg_heart.system_status == (byte)MAV_STATE.MAV_STATE_CRITICAL;				
+
+            String newMode = ApmModes.toString(msg_heart.custom_mode);
+
 			if (!mode.equals(newMode)) {
 				mode = newMode;
 				if (hudListner != null)
@@ -190,6 +200,20 @@ public class Drone {
 		}
 		result.add(home.coord);
 		return result;
+	}
+
+	public boolean isCopter(){
+		switch (type) {
+		case MAV_TYPE.MAV_TYPE_TRICOPTER:
+		case MAV_TYPE.MAV_TYPE_QUADROTOR:
+		case MAV_TYPE.MAV_TYPE_HEXAROTOR:
+		case MAV_TYPE.MAV_TYPE_OCTOROTOR:
+		case MAV_TYPE.MAV_TYPE_HELICOPTER:
+			return true;
+		case MAV_TYPE.MAV_TYPE_FIXED_WING:
+		default:
+			return false;
+		}
 	}
 
 	
