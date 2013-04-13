@@ -34,6 +34,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 	private int height;
 
 
+	private int armedCounter = 0;
 	
 
 	// Paints
@@ -46,6 +47,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 	Paint whiteStroke = new Paint();
 	Paint statusText = new Paint();
 	Paint ScrollerText = new Paint();
+	Paint FailsafeText = new Paint();
 	Paint ScrollerTextLeft = new Paint();
 	Paint yawText = new Paint();
 
@@ -86,6 +88,9 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 		canvas.save();
 		drawLeftScroller(canvas);
 		canvas.restore();
+		canvas.save();
+		drawFailsafe(canvas);
+		canvas.restore();
 
 	}
 	
@@ -114,6 +119,12 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 		ScrollerText.setTextAlign(Paint.Align.LEFT);
 		ScrollerTextLeft = new Paint(ScrollerText);
 		ScrollerTextLeft.setTextAlign(Paint.Align.RIGHT);
+		
+		FailsafeText = new Paint(statusText);
+		FailsafeText.setTextAlign(Paint.Align.CENTER);
+		FailsafeText.setColor(Color.RED);
+		FailsafeText.setTextSize(50.0f * context.getResources()
+				.getDisplayMetrics().density);
 
 		whiteStroke.setColor(Color.WHITE);
 		whiteStroke.setStyle(Style.STROKE);
@@ -440,6 +451,22 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 		if (drone.battCurrent >= 0) {
 			canvas.drawText(String.format("%2.2f A", drone.battCurrent),
 					scroller.left + 5, scroller.top - 30, ScrollerText);
+		}
+	}
+	
+	private void drawFailsafe(Canvas canvas) {
+		if (drone.isCopter()) {
+			if (drone.armed) {
+				if (armedCounter < 50) {
+					canvas.drawText("ARMED", 0, canvas.getHeight() / 3,
+							FailsafeText);
+					armedCounter++;
+				}
+			} else {
+				canvas.drawText("DISARMED", 0, canvas.getHeight() / 3,
+						FailsafeText);
+				armedCounter = 0;
+			}
 		}
 	}
 
