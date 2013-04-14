@@ -3,8 +3,6 @@ package com.droidplanner;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.MAVLink.Drone;
@@ -15,17 +13,17 @@ import com.MAVLink.Messages.ardupilotmega.msg_set_mode;
 import com.droidplanner.DroidPlannerApp.OnWaypointReceivedListner;
 import com.droidplanner.fragments.FlightMapFragment;
 import com.droidplanner.fragments.FlightMapFragment.OnFlighDataListener;
+import com.droidplanner.widgets.spinners.SelectModeSpinner;
+import com.droidplanner.widgets.spinners.SelectModeSpinner.OnModeSpinnerSelectedListener;
 import com.droidplanner.widgets.spinners.SelectWaypointSpinner;
 import com.droidplanner.widgets.spinners.SelectWaypointSpinner.OnWaypointSpinnerSelectedListener;
-import com.droidplanner.widgets.spinners.SpinnerSelfSelect;
-import com.droidplanner.widgets.spinners.SpinnerSelfSelect.OnSpinnerItemSelectedListener;
 import com.google.android.gms.maps.model.LatLng;
 
-public class FlightDataActivity extends SuperActivity implements OnFlighDataListener, OnSpinnerItemSelectedListener, OnWaypointSpinnerSelectedListener, OnWaypointReceivedListner {
+public class FlightDataActivity extends SuperActivity implements OnFlighDataListener, OnWaypointSpinnerSelectedListener, OnWaypointReceivedListner, OnModeSpinnerSelectedListener {
 	
 	private FlightMapFragment flightMapFragment;
 	private Drone drone;
-	private SpinnerSelfSelect fligthModeSpinner;
+	private SelectModeSpinner fligthModeSpinner;
 	private SelectWaypointSpinner wpSpinner;
 
 	@Override
@@ -53,11 +51,9 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 		getMenuInflater().inflate(R.menu.menu_flightdata, menu);
 		
 		MenuItem flightModeMenu = menu.findItem( R.id.menu_flight_modes_spinner);
-		fligthModeSpinner = (SpinnerSelfSelect) flightModeMenu.getActionView();
-		fligthModeSpinner.setAdapter(ArrayAdapter.createFromResource( this,
-		        R.array.menu_fligth_modes,
-		        android.R.layout.simple_spinner_dropdown_item ));
-		fligthModeSpinner.setOnSpinnerItemSelectedListener(this);
+		fligthModeSpinner = (SelectModeSpinner) flightModeMenu.getActionView();
+		fligthModeSpinner.buildSpinner(this, this);
+		fligthModeSpinner.updateModeSpinner(drone);
 		
 		MenuItem wpMenu = menu.findItem( R.id.menu_wp_spinner);
 		wpSpinner = (SelectWaypointSpinner) wpMenu.getActionView();
@@ -85,11 +81,6 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 		app.waypointMananger.setCurrentWaypoint((short) item);
 	}
 
-	@Override
-	public void onSpinnerItemSelected(Spinner spinner, int position, String text) {
-			changeFlightMode(text);		
-	}
-	
 
 	@Override
 	public void onSetGuidedMode(LatLng point) {
@@ -117,11 +108,7 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 		app.MAVClient.sendMavPacket(msg.pack());
 	}
 
-	private void changeFlightMode(String string) {
-		ApmModes mode = ApmModes.getMode(string);
-		if(mode == ApmModes.UNKNOWN){
-			return;
-		}
+	private void changeFlightMode(ApmModes mode) {
 		msg_set_mode msg = new msg_set_mode();
 		msg.target_system = 1;
 		msg.base_mode = 1; //TODO use meaningful constant
@@ -135,4 +122,11 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 		flightMapFragment.updateHomeToMap(drone);
 		wpSpinner.updateWpSpinner(drone);		
 	}
+
+	@Override
+	public void OnModeSpinnerSelected(ApmModes mode) {
+		changeFlightMode(mode);
+		
+	}
+
 }
