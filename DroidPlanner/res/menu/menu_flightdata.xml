@@ -2,6 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
     <item
         android:id="@+id/menu_zoom"
+        android:icon="@android:drawable/2_action_search"
         android:showAsAction="ifRoom"
         android:title="@string/menu_zoom"/>
     <item
@@ -16,18 +17,22 @@
     	tools:ignore="MenuTitle"/>
     <item
         android:id="@+id/menu_load_from_apm"
+        android:icon="@android:drawable/9_av_download"
         android:showAsAction="never"
         android:title="@string/menu_load_from_apm"/>
     <item
         android:id="@+id/menu_connect"
+        android:icon="@android:drawable/5_content_import_export"
         android:showAsAction="ifRoom"
         android:title="@string/menu_connect"/>
     <item
         android:id="@+id/menu_clearFlightPath"
+        android:icon="@android:drawable/9_av_stop"
         android:showAsAction="never"
         android:title="@string/menu_clearFlightPath"/>
     <item
         android:id="@+id/menu_settings"
+        android:icon="@android:drawable/2_action_settings"
         android:showAsAction="never"
         android:title="@string/menu_settings"/>
 
