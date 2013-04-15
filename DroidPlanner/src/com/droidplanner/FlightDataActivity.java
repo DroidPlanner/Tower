@@ -1,11 +1,13 @@
 package com.droidplanner;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.MAVLink.Drone;
+import com.MAVLink.Drone.DroneTypeListner;
 import com.MAVLink.waypoint;
 import com.MAVLink.Messages.ApmModes;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
@@ -19,7 +21,7 @@ import com.droidplanner.widgets.spinners.SelectWaypointSpinner;
 import com.droidplanner.widgets.spinners.SelectWaypointSpinner.OnWaypointSpinnerSelectedListener;
 import com.google.android.gms.maps.model.LatLng;
 
-public class FlightDataActivity extends SuperActivity implements OnFlighDataListener, OnWaypointSpinnerSelectedListener, OnWaypointReceivedListner, OnModeSpinnerSelectedListener {
+public class FlightDataActivity extends SuperActivity implements OnFlighDataListener, OnWaypointSpinnerSelectedListener, OnWaypointReceivedListner, OnModeSpinnerSelectedListener, DroneTypeListner {
 	
 	private FlightMapFragment flightMapFragment;
 	private Drone drone;
@@ -43,6 +45,7 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 		flightMapFragment.updateHomeToMap(drone);
 		
 		app.setWaypointReceivedListner(this);
+		drone.setDroneTypeChangedListner(this);
 	}
 
 
@@ -124,9 +127,17 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 	}
 
 	@Override
-	public void OnModeSpinnerSelected(ApmModes mode) {
-		changeFlightMode(mode);
-		
+	public void OnModeSpinnerSelected(String text) {
+		ApmModes mode = ApmModes.getMode(text,drone.type);
+		if (mode != ApmModes.UNKNOWN) {
+			changeFlightMode(mode);
+		}		
+	}
+
+	@Override
+	public void onDroneTypeChanged() {
+		Log.d("DRONE", "Drone type changed");
+		fligthModeSpinner.updateModeSpinner(drone);
 	}
 
 }

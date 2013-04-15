@@ -12,7 +12,7 @@ import com.droidplanner.widgets.spinners.SpinnerSelfSelect.OnSpinnerItemSelected
 
 public class SelectModeSpinner extends SpinnerSelfSelect implements OnSpinnerItemSelectedListener {
 	public interface OnModeSpinnerSelectedListener {
-		void OnModeSpinnerSelected(ApmModes apmModes);
+		void OnModeSpinnerSelected(String Mode);
 	}
 
 	private OnModeSpinnerSelectedListener listener;
@@ -51,19 +51,12 @@ public class SelectModeSpinner extends SpinnerSelfSelect implements OnSpinnerIte
 
 	private void updateWpSpinnerWithList(Drone drone) {
 		modeSpinnerAdapter.clear();
-		for (ApmModes mode : ApmModes.values()) {
-			if (mode!=ApmModes.UNKNOWN) {
-				modeSpinnerAdapter.add(mode.getName());			
-			}
-		}
+		modeSpinnerAdapter.addAll(ApmModes.getModeList(drone.type));
 	}
 
 	@Override
 	public void onSpinnerItemSelected(Spinner spinner, int position, String text) {
-		ApmModes mode = ApmModes.getMode(text);
-		if (mode != ApmModes.UNKNOWN) {
-			listener.OnModeSpinnerSelected(mode);			
-		}
+		listener.OnModeSpinnerSelected(text);
 	}
 	
 	

@@ -455,7 +455,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 	}
 	
 	private void drawFailsafe(Canvas canvas) {
-		if (drone.isCopter()) {
+		if (Drone.isCopter(drone.type)) {
 			if (drone.armed) {
 				if (armedCounter < 50) {
 					canvas.drawText("ARMED", 0, canvas.getHeight() / 3,
