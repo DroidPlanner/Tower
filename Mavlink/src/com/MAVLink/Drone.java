@@ -31,12 +31,13 @@ public class Drone {
 			battCurrent = -1;
 	public int wpno = -1,satCount = -1, fixType = -1, type = MAV_TYPE.MAV_TYPE_FIXED_WING;
 	public boolean failsafe = false, armed = false;
-	public String mode = "Unknown";
+	public ApmModes mode = ApmModes.UNKNOWN;
 	public LatLng position;
 	
 	
 	private HudUpdatedListner hudListner;
 	private MapUpdatedListner mapListner;
+	private DroneTypeListner typeListner;
 	
 	
 	public interface HudUpdatedListner{
@@ -44,6 +45,9 @@ public class Drone {
 	}
 	public interface MapUpdatedListner{
 		public void onDroneUpdate();
+	}
+	public interface DroneTypeListner{
+		public void onDroneTypeChanged();
 	}
 
 	public Drone() {
@@ -88,12 +92,18 @@ public class Drone {
 		case msg_heartbeat.MAVLINK_MSG_ID_HEARTBEAT:
 			msg_heartbeat msg_heart = (msg_heartbeat) msg;
 			
-			type = msg_heart.type;
+			if(type != msg_heart.type){
+				type = msg_heart.type;
+				if(typeListner != null){
+					typeListner.onDroneTypeChanged();
+				}
+			}
+			
 			armed = (msg_heart.base_mode & (byte)MAV_MODE_FLAG.MAV_MODE_FLAG_SAFETY_ARMED) == (byte)MAV_MODE_FLAG.MAV_MODE_FLAG_SAFETY_ARMED;
             failsafe = msg_heart.system_status == (byte)MAV_STATE.MAV_STATE_CRITICAL;				
-
-            String newMode = ApmModes.toString(msg_heart.custom_mode);
-
+            
+            ApmModes newMode;
+            newMode = ApmModes.getMode(msg_heart.custom_mode,type);
 			if (!mode.equals(newMode)) {
 				mode = newMode;
 				if (hudListner != null)
@@ -202,7 +212,7 @@ public class Drone {
 		return result;
 	}
 
-	public boolean isCopter(){
+	public static boolean isCopter(int type){
 		switch (type) {
 		case MAV_TYPE.MAV_TYPE_TRICOPTER:
 		case MAV_TYPE.MAV_TYPE_QUADROTOR:
@@ -225,7 +235,9 @@ public class Drone {
 		mapListner = listner;
 	}
 	
-
+	public void setDroneTypeChangedListner(DroneTypeListner listner){
+		typeListner = listner;
+	}
 
 	
 }
