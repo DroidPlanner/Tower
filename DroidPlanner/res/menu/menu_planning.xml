@@ -3,38 +3,47 @@
 
     <item
         android:id="@+id/menu_default_alt"
+        android:icon="@android:drawable/6_social_send_now"
         android:showAsAction="ifRoom"
         android:title="@string/default_alt"/>
     <item
         android:id="@+id/menu_settings"
+        android:icon="@android:drawable/2_action_settings"
         android:showAsAction="never"
         android:title="@string/menu_settings"/>
     <item
         android:id="@+id/menu_zoom"
+        android:icon="@android:drawable/2_action_search"
         android:showAsAction="ifRoom"
         android:title="@string/menu_zoom"/>
     <item
         android:id="@+id/menu_connect"
+        android:icon="@android:drawable/5_content_import_export"
         android:showAsAction="ifRoom"
         android:title="@string/menu_connect"/>
     <item
         android:id="@+id/menu_save_file"
+        android:icon="@android:drawable/5_content_save"
         android:showAsAction="never"
         android:title="@string/menu_save_file"/>
     <item
         android:id="@+id/menu_open_file"
+        android:icon="@android:drawable/5_content_read"
         android:showAsAction="never"
         android:title="@string/menu_open_file"/>
     <item
         android:id="@+id/menu_send_to_apm"
+        android:icon="@android:drawable/10_device_access_network_wifi"
         android:showAsAction="never"
         android:title="@string/menu_send_to_apm"/>
     <item
         android:id="@+id/menu_load_from_apm"
+        android:icon="@android:drawable/9_av_download"
         android:showAsAction="never"
         android:title="@string/menu_load_from_apm"/>
     <item
         android:id="@+id/menu_clear_wp"
+        android:icon="@android:drawable/5_content_discard"
         android:showAsAction="never"
         android:title="@string/menu_clear"/>
     <item
