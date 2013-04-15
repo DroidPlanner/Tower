@@ -1,3 +1,7 @@
+## Droidplanner v0.7.0
+* Improved compatibility with ArduCopter (Compatible mode selection, and copter Icon)
+* HUD layout improvements to suport multiple screen sizes and densities.
+
 ## Droidplanner v0.6.0
 * Armed/Disarmed indication for copters
 * Improvement to the HUD, like GPS and Battery indicators
