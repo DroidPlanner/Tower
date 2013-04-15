@@ -22,7 +22,8 @@ import com.MAVLink.Drone.HudUpdatedListner;
  */
 public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, HudUpdatedListner {
 	private static final float SCROLLER_HEIGHT_PERCENT = .30f;
-	private static final float SCROLLER_WIDTH = 60;
+	private static final float SCROLLER_WIDTH_PERCENT = .15f;
+	private static final float ROLL_WIDTH_PERCENT = .35f;
 	private static final int SCROLLER_ARROW_HEIGTH = 26;
 
 	private static final int SCROLLER_VSI_RANGE = 12;
@@ -211,7 +212,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 	}
 
 	private void drawRoll(Canvas canvas) {
-		int r = (int) ((double) width * 0.35); // 250;
+		int r = (int) ((double) width * ROLL_WIDTH_PERCENT);
 		RectF rec = new RectF(-r, -height / 2 + 60, r, -height / 2 + 60 + 2 * r);
 
 		// Draw the arc
@@ -274,9 +275,10 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 		final float textHalfSize = ScrollerText.getTextSize() / 2 - 1;
 
 		// Outside box
-		RectF scroller = new RectF(width * 0.5f - SCROLLER_WIDTH, -height
+		RectF scroller = new RectF(width * 0.5f - width*SCROLLER_WIDTH_PERCENT, -height
 				* SCROLLER_HEIGHT_PERCENT, width * .50f, height
 				* SCROLLER_HEIGHT_PERCENT);
+		
 
 		// Draw Vertical speed indicator
 		final float vsi_width = scroller.width() / 4;
@@ -359,11 +361,15 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 				textHalfSize, ScrollerText);
 
 		// Draw mode and wp distance
-		canvas.drawText(drone.mode.getName(), scroller.left - scroller.width() / 4,
-				scroller.bottom + 25, ScrollerText);
+		int screenBottom = canvas.getHeight()/2;
+		float sizeLeftBellowScroller = (screenBottom)-scroller.bottom;
+		
+		
+		canvas.drawText(drone.mode.getName(), scroller.right -5,
+				screenBottom - sizeLeftBellowScroller/2, ScrollerTextLeft);
 		canvas.drawText(Integer.toString((int) drone.disttowp) + ">" + drone.wpno,
-				scroller.left - scroller.width() / 4, scroller.bottom + 45,
-				ScrollerText);
+				scroller.right -5, screenBottom - 5,
+				ScrollerTextLeft);
 
 		String gpsFix = "";
 		if (drone.satCount >= 0) {
@@ -379,8 +385,8 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 				break;
 			}
 		}
-		canvas.drawText(gpsFix, scroller.left - scroller.width() / 2,
-				scroller.top - 10, ScrollerText);
+		canvas.drawText(gpsFix, scroller.right -5,
+				scroller.top - 10, ScrollerTextLeft);
 
 	}
 
@@ -393,7 +399,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 
 		// Outside box
 		RectF scroller = new RectF(-width * .50f, -height
-				* SCROLLER_HEIGHT_PERCENT, -width * 0.5f + SCROLLER_WIDTH,
+				* SCROLLER_HEIGHT_PERCENT, -width * 0.5f + width*SCROLLER_WIDTH_PERCENT,
 				height * SCROLLER_HEIGHT_PERCENT);
 
 		// Draw Scroll
@@ -440,10 +446,13 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 				textHalfSize, ScrollerTextLeft);
 
 		// Draw Text
+		int screenBottom = canvas.getHeight()/2;
+		float sizeLeftBellowScroller = (screenBottom)-scroller.bottom;
+		
 		canvas.drawText("AS " + Integer.toString((int) drone.airSpeed),
-				scroller.left + 5, scroller.bottom + 25, ScrollerText);
+				scroller.left + 5, screenBottom - sizeLeftBellowScroller/2, ScrollerText);
 		canvas.drawText("GS " + Integer.toString((int) drone.groundSpeed),
-				scroller.left + 5, scroller.bottom + 45, ScrollerText);
+				scroller.left + 5, screenBottom - 5, ScrollerText);
 		if (drone.battVolt >= 0) {
 			canvas.drawText(String.format("%2.2f V", drone.battVolt),
 					scroller.left + 5, scroller.top - 10, ScrollerText);
