@@ -3,10 +3,12 @@
 
     <item
         android:id="@+id/menu_settings"
+        android:icon="@android:drawable/2_action_settings"
         android:showAsAction="never"
         android:title="@string/menu_settings"/>
     <item
         android:id="@+id/menu_connect"
+        android:icon="@android:drawable/5_content_import_export"
         android:showAsAction="ifRoom"
         android:title="@string/menu_connect"/>
 
