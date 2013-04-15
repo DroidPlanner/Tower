@@ -359,7 +359,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 				textHalfSize, ScrollerText);
 
 		// Draw mode and wp distance
-		canvas.drawText(drone.mode, scroller.left - scroller.width() / 4,
+		canvas.drawText(drone.mode.getName(), scroller.left - scroller.width() / 4,
 				scroller.bottom + 25, ScrollerText);
 		canvas.drawText(Integer.toString((int) drone.disttowp) + ">" + drone.wpno,
 				scroller.left - scroller.width() / 4, scroller.bottom + 45,
@@ -455,7 +455,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 	}
 	
 	private void drawFailsafe(Canvas canvas) {
-		if (drone.isCopter()) {
+		if (Drone.isCopter(drone.type)) {
 			if (drone.armed) {
 				if (armedCounter < 50) {
 					canvas.drawText("ARMED", 0, canvas.getHeight() / 3,
