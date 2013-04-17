@@ -1,3 +1,6 @@
+## Droidplanner v0.7.2
+* Notifications using Text To speech
+
 ## Droidplanner v0.7.1
 * Improvement to the HUD layout
 * Dialog for entering the guided mode altitude
