@@ -12,7 +12,9 @@ import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.MAVLink.Messages.ardupilotmega.msg_request_data_stream;
 import com.MAVLink.Messages.enums.MAV_DATA_STREAM;
+
 import com.droidplanner.MAVLink.Drone;
+import com.droidplanner.MAVLink.MavLinkMsgHandler;
 import com.droidplanner.MAVLink.WaypointMananger;
 import com.droidplanner.MAVLink.WaypointMananger.OnWaypointManagerListner;
 import com.droidplanner.helpers.TTS;
@@ -26,6 +28,7 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 	
 	public ConnectionStateListner conectionListner;
 	private OnWaypointReceivedListner waypointsListner;
+	private MavLinkMsgHandler mavLinkMsgHandler;
 	private TTS tts;
 	
 	public interface OnWaypointReceivedListner{
@@ -45,7 +48,7 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 		drone = new Drone();
 		MAVClient = new MAVLinkClient(this,this);
 		waypointMananger = new WaypointMananger(MAVClient,this);
-		
+		mavLinkMsgHandler = new com.droidplanner.MAVLink.MavLinkMsgHandler(drone); 
 		MAVClient.init();		
 	}
 	
@@ -63,7 +66,7 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 	
 	@Override
 	public void notifyReceivedData(MAVLinkMessage msg) {
-		drone.receiveData(msg);
+		mavLinkMsgHandler.receiveData(msg);
 		waypointMananger.processMessage(msg);
 	}
 
