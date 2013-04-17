@@ -10,11 +10,11 @@ import android.speech.tts.TextToSpeech.OnInitListener;
 
 public class TTS implements OnInitListener {
 	TextToSpeech tts;
+	private SharedPreferences prefs;
 
 	public TTS(Context context) {
-		if(shouldEnableTTS(context)) {
-			tts = new TextToSpeech(context, this);
-		}
+		tts = new TextToSpeech(context, this);
+		this.prefs = PreferenceManager.getDefaultSharedPreferences(context);
 	}
 
 	@Override
@@ -23,13 +23,14 @@ public class TTS implements OnInitListener {
 	}
 
 	public void speak(String string) {
-		if (tts != null)
-			tts.speak(string, TextToSpeech.QUEUE_FLUSH, null);
+		if (tts != null) {
+			if (shouldEnableTTS()) {
+				tts.speak(string, TextToSpeech.QUEUE_FLUSH, null);
+			}
+		}
 	}
 
-	private boolean shouldEnableTTS(Context context) {
-		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(context);
+	private boolean shouldEnableTTS() {
 		return prefs.getBoolean("pref_enable_tts", false);
 	}
 }
