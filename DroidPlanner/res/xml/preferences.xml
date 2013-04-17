@@ -97,7 +97,7 @@
             android:summary="Use map tiles on the local storage, for offline map view"
             android:title="Use offline maps" />
         <CheckBoxPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="pref_enable_tts"
             android:summary="Audible messages for important events"
             android:title="Enable Text To Speech" />
