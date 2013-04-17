@@ -7,6 +7,7 @@ import java.util.Locale;
 import com.MAVLink.waypoint;
 import com.MAVLink.Messages.ApmModes;
 import com.MAVLink.Messages.enums.MAV_TYPE;
+import com.droidplanner.helpers.TTS;
 import com.google.android.gms.maps.model.LatLng;
 
 public class Drone {
@@ -27,6 +28,7 @@ public class Drone {
 	private HudUpdatedListner hudListner;
 	private MapUpdatedListner mapListner;
 	private DroneTypeListner typeListner;
+	private TTS tts;
 
 	public interface HudUpdatedListner {
 		public void onDroneUpdate();
@@ -40,8 +42,9 @@ public class Drone {
 		public void onDroneTypeChanged();
 	}
 
-	public Drone() {
+	public Drone(TTS tts) {
 		super();
+		this.tts = tts;
 		this.home = new waypoint(0.0, 0.0, 0.0);
 		this.defaultAlt = 100.0;
 		this.waypoints = new ArrayList<waypoint>();
@@ -96,7 +99,11 @@ public class Drone {
 	public void setArmedAndFailsafe(boolean armed, boolean failsafe) {
 		if (this.armed != armed | this.failsafe != failsafe) {
 			if (this.armed != armed) {
-
+				if (armed) {
+					tts.speak("Armed");					
+				}else{
+					tts.speak("Disarmed");
+				}					
 			}
 			this.armed = armed;
 			this.failsafe = failsafe;
@@ -107,7 +114,17 @@ public class Drone {
 	public void setGpsState(int fix, int satellites_visible) {
 		if (satCount != satellites_visible | fixType != fix) {
 			if (fixType != fix) {
-
+				switch (fix) {
+				case 2:
+					tts.speak("GPS 2D Lock");
+					break;
+				case 3:					
+					tts.speak("GPS 3D Lock");
+					break;
+				default:
+					tts.speak("Lost GPS Lock");
+					break;
+				}
 			}
 			this.fixType = fix;
 			this.satCount = satellites_visible;
@@ -125,6 +142,7 @@ public class Drone {
 	public void setMode(ApmModes mode) {
 		if (this.mode != mode) {
 			this.mode = mode;
+			tts.speak("Mode "+mode.getName());
 			notifyHudUpdate();
 		}
 	}
@@ -132,6 +150,7 @@ public class Drone {
 	public void setWpno(int wpno) {
 		if (this.wpno != wpno) {
 			this.wpno = wpno;
+			tts.speak("Going for waypoint "+wpno);
 			notifyHudUpdate();
 		}
 	}

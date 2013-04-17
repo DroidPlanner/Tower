@@ -45,7 +45,7 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 		super.onCreate();
 
 		tts = new TTS(this);
-		drone = new Drone();
+		drone = new Drone(tts);
 		MAVClient = new MAVLinkClient(this,this);
 		waypointMananger = new WaypointMananger(MAVClient,this);
 		mavLinkMsgHandler = new com.droidplanner.MAVLink.MavLinkMsgHandler(drone); 
@@ -130,7 +130,7 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 		if (waypoints != null) {
 			Toast.makeText(getApplicationContext(),
 					"Waypoints received from Drone", Toast.LENGTH_SHORT).show();
-			tts.speak("Received waypoints from Drone");
+			tts.speak("Waypoints received");
 			drone.setHome(waypoints.get(0));
 			waypoints.remove(0); // Remove Home waypoint
 			drone.clearWaypoints();
@@ -141,7 +141,7 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 
 	@Override
 	public void onWriteWaypoints(msg_mission_ack msg) {
-		Toast.makeText(getApplicationContext(), "Waypoints saved to Drone",
+		Toast.makeText(getApplicationContext(), "Waypoints sent",
 				Toast.LENGTH_SHORT).show();
 		tts.speak("Waypoints saved to Drone");
 	}
