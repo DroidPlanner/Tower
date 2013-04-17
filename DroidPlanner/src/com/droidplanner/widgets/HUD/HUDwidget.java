@@ -59,7 +59,6 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 	Paint greenPen;
 	Paint greenLightPen;
 	private Drone drone;
-
 	
 	@Override
 	protected void onDraw(Canvas canvas) {
@@ -152,7 +151,6 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 		blueVSI.setARGB(255, 0, 50, 250);
 	}
 
-
 	private void drawPlane(Canvas canvas) {
 		canvas.drawCircle(0, 0, 15, plane);
 
@@ -161,7 +159,6 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 		canvas.drawLine(0, -15, 0, -25, plane);
 
 	}
-
 
 	private void drawYaw(Canvas canvas) {
 		canvas.drawRect(-width, -height / 2, width, -height / 2 + 30, sky);
@@ -245,7 +242,6 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 	}
 
 	private void drawPitch(Canvas canvas) {
-
 		int step = 40; // Pixels per 5 degree step
 
 		canvas.translate(0, (int) (drone.pitch * (step / 5)));
@@ -259,14 +255,16 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 		canvas.drawLine(-width, 0, width, 0, white);
 		// canvas.f
 
-		for (int i = -step * 20; i < step * 20; i += step) {
+		int iMax = ((int) (-drone.pitch + 25) / 5);
+		int yPos;
+		for (int i = ((int) (-drone.pitch - 25) / 5); i <= iMax; i++) {
 			if (i != 0) {
-				if (i % (2 * step) == 0) {
-					canvas.drawLine(-50, i, 50, i, white);
-					canvas.drawText((5 * i / -step) + "", -90, i + 5, white);
-
+				yPos = i * step;
+				if (i % 2 == 0) {
+					canvas.drawLine(-50, yPos, 50, yPos, white);
+					canvas.drawText((5 * (-i)) + "", -90, yPos + 5, white);
 				} else
-					canvas.drawLine(-20, i, 20, i, white);
+					canvas.drawLine(-20, yPos, 20, yPos, white);
 			}
 		}
 	}
@@ -495,8 +493,6 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 		}
 	}
 
-	
-
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		boolean retry = true;
@@ -590,5 +586,4 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 		if (renderer != null)
 			renderer.setDirty();
 	}
-
 }
