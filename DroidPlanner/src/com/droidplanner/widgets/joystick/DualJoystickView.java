@@ -41,6 +41,7 @@ public class DualJoystickView extends LinearLayout {
 
 	private void initDualJoystickView() {
 		setOrientation(LinearLayout.HORIZONTAL);
+		stickL.setyAxisAutoReturnToCenter(false);
 		
 		if ( D ) {
 			dbgPaint1 = new Paint(Paint.ANTI_ALIAS_FLAG);
