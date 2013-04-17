@@ -1,9 +1,12 @@
 package com.droidplanner;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.NumberPicker;
 import android.widget.Toast;
 
 import com.MAVLink.Drone;
@@ -88,8 +91,30 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 	@Override
 	public void onSetGuidedMode(LatLng point) {
 		Toast.makeText(this, "Guided Mode", Toast.LENGTH_SHORT).show();
-		setGuidedMode(new waypoint(point, 1000.0)); // Use default altitude to set guided mode.
-		
+		askForGuidedAltitude(point);				
+	}
+	
+	private void askForGuidedAltitude(final LatLng point) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("Guided Altitude");
+
+		final NumberPicker numb3rs = new NumberPicker(this);
+		numb3rs.setMaxValue(1000);
+		numb3rs.setMinValue(0);
+		numb3rs.setValue((drone.getDefaultAlt().intValue()));
+		builder.setView(numb3rs);
+
+		builder.setNegativeButton("Cancel",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+					}
+				});
+		builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				setGuidedMode(new waypoint(point, (double) numb3rs.getValue())); // Use default altitude to set guided mode.		
+			}
+		});
+		builder.create().show();
 	}
 	
 	public void setGuidedMode(waypoint wp) {
