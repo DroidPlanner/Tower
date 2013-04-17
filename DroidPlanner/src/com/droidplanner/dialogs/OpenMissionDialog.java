@@ -6,9 +6,9 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.widget.Toast;
 
-import com.MAVLink.Drone;
-import com.MAVLink.MissionReader;
 import com.droidplanner.R;
+import com.droidplanner.MAVLink.Drone;
+import com.droidplanner.MAVLink.MissionReader;
 import com.droidplanner.helpers.FileManager;
 
 public abstract class OpenMissionDialog implements OnClickListener {

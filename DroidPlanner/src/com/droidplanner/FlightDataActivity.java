@@ -9,13 +9,13 @@ import android.view.MenuItem;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
-import com.MAVLink.Drone;
-import com.MAVLink.Drone.DroneTypeListner;
 import com.MAVLink.waypoint;
 import com.MAVLink.Messages.ApmModes;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.ardupilotmega.msg_set_mode;
 import com.droidplanner.DroidPlannerApp.OnWaypointReceivedListner;
+import com.droidplanner.MAVLink.Drone;
+import com.droidplanner.MAVLink.Drone.DroneTypeListner;
 import com.droidplanner.fragments.FlightMapFragment;
 import com.droidplanner.fragments.FlightMapFragment.OnFlighDataListener;
 import com.droidplanner.widgets.spinners.SelectModeSpinner;
@@ -153,7 +153,7 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 
 	@Override
 	public void OnModeSpinnerSelected(String text) {
-		ApmModes mode = ApmModes.getMode(text,drone.type);
+		ApmModes mode = ApmModes.getMode(text,drone.getType());
 		if (mode != ApmModes.UNKNOWN) {
 			changeFlightMode(mode);
 		}		
