@@ -66,7 +66,7 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 		drone = ((SuperActivity)getActivity()).app.drone;
 		drone.setMapListner(this);		
 		
-		addDroneMarkersToMap(drone.type);		
+		addDroneMarkersToMap(drone.getType());		
 		addFlightPathToMap();	
 		addMissionPathToMap();
 		getPreferences();
@@ -191,7 +191,7 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 		for (Marker marker : DroneMarker) {
 			marker.remove();
 		}
-		addDroneMarkersToMap(drone.type);
+		addDroneMarkersToMap(drone.getType());
 	}
 	
 	private void addDroneMarkersToMap(int type) {
@@ -226,9 +226,8 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 
 	@Override
 	public void onDroneUpdate() {
-		updateDronePosition(drone.yaw, drone.position);
-		addFlithPathPoint(drone.position);
-		
+		updateDronePosition(drone.getYaw(), drone.getPosition());
+		addFlithPathPoint(drone.getPosition());		
 	}
 
 	
