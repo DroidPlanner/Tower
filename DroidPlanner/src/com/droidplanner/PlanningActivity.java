@@ -13,11 +13,11 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.MAVLink.Drone;
-import com.MAVLink.MissionReader;
-import com.MAVLink.MissionWriter;
 import com.MAVLink.waypoint;
 import com.droidplanner.DroidPlannerApp.OnWaypointReceivedListner;
+import com.droidplanner.MAVLink.Drone;
+import com.droidplanner.MAVLink.MissionReader;
+import com.droidplanner.MAVLink.MissionWriter;
 import com.droidplanner.dialogs.OpenMissionDialog;
 import com.droidplanner.dialogs.PolygonDialog;
 import com.droidplanner.fragments.PlanningMapFragment;

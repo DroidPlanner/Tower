@@ -3,7 +3,6 @@ package com.MAVLink.Messages;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.MAVLink.Drone;
 import com.MAVLink.Messages.enums.MAV_TYPE;
 
 public enum ApmModes {
@@ -77,7 +76,7 @@ public enum ApmModes {
 	public static List<String> getModeList(int type) {
 		List<String> modeList = new ArrayList<String>();
 		
-		if (Drone.isCopter(type)) {
+		if (isCopter(type)) {
 			type = MAV_TYPE.MAV_TYPE_QUADROTOR;			
 		}
 		
@@ -94,5 +93,18 @@ public enum ApmModes {
 	}
 
 	
+	public static boolean isCopter(int type){
+		switch (type) {
+		case MAV_TYPE.MAV_TYPE_TRICOPTER:
+		case MAV_TYPE.MAV_TYPE_QUADROTOR:
+		case MAV_TYPE.MAV_TYPE_HEXAROTOR:
+		case MAV_TYPE.MAV_TYPE_OCTOROTOR:
+		case MAV_TYPE.MAV_TYPE_HELICOPTER:
+			return true;
+		case MAV_TYPE.MAV_TYPE_FIXED_WING:
+		default:
+			return false;
+		}
+	}
 	
 }

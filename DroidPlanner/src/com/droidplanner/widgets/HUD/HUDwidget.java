@@ -13,8 +13,10 @@ import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.MAVLink.Drone;
-import com.MAVLink.Drone.HudUpdatedListner;
+import com.MAVLink.Messages.ApmModes;
+import com.droidplanner.MAVLink.Drone;
+import com.droidplanner.MAVLink.Drone.HudUpdatedListner;
+
 
 /**
  * Widget for a HUD Originally copied from http://code.google.com/p/copter-gcs/
@@ -462,7 +464,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 	}
 	
 	private void drawFailsafe(Canvas canvas) {
-		if (Drone.isCopter(drone.type)) {
+		if (ApmModes.isCopter(drone.type)) {
 			if (drone.armed) {
 				if (armedCounter < 50) {
 					canvas.drawText("ARMED", 0, canvas.getHeight() / 3,

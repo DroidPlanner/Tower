@@ -7,14 +7,14 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
-import com.MAVLink.Drone;
-import com.MAVLink.WaypointMananger;
-import com.MAVLink.WaypointMananger.OnWaypointManagerListner;
 import com.MAVLink.waypoint;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.MAVLink.Messages.ardupilotmega.msg_request_data_stream;
 import com.MAVLink.Messages.enums.MAV_DATA_STREAM;
+import com.droidplanner.MAVLink.Drone;
+import com.droidplanner.MAVLink.WaypointMananger;
+import com.droidplanner.MAVLink.WaypointMananger.OnWaypointManagerListner;
 import com.droidplanner.helpers.TTS;
 import com.droidplanner.service.MAVLinkClient;
 import com.droidplanner.service.MAVLinkClient.OnMavlinkClientListner;

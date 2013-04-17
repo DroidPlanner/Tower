@@ -1,9 +1,10 @@
-package com.MAVLink;
+package com.droidplanner.MAVLink;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import com.MAVLink.waypoint;
 import com.MAVLink.Messages.ApmModes;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_attitude;
@@ -211,21 +212,6 @@ public class Drone {
 		result.add(home.coord);
 		return result;
 	}
-
-	public static boolean isCopter(int type){
-		switch (type) {
-		case MAV_TYPE.MAV_TYPE_TRICOPTER:
-		case MAV_TYPE.MAV_TYPE_QUADROTOR:
-		case MAV_TYPE.MAV_TYPE_HEXAROTOR:
-		case MAV_TYPE.MAV_TYPE_OCTOROTOR:
-		case MAV_TYPE.MAV_TYPE_HELICOPTER:
-			return true;
-		case MAV_TYPE.MAV_TYPE_FIXED_WING:
-		default:
-			return false;
-		}
-	}
-
 	
 	public void setHudListner(HudUpdatedListner listner){
 		hudListner = listner;

@@ -17,12 +17,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.MAVLink.Drone;
 import com.MAVLink.waypoint;
-import com.MAVLink.Drone.MapUpdatedListner;
 import com.MAVLink.Messages.enums.MAV_TYPE;
 import com.droidplanner.R;
 import com.droidplanner.SuperActivity;
+import com.droidplanner.MAVLink.Drone;
+import com.droidplanner.MAVLink.Drone.MapUpdatedListner;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
