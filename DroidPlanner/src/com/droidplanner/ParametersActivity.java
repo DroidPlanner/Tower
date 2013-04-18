@@ -1,21 +1,22 @@
 package com.droidplanner;
 
-import java.text.Format;
 import java.util.List;
-
-import com.droidplanner.MAVLink.Parameter;
-import com.droidplanner.MAVLink.ParametersManager.OnParameterManagerListner;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
+
+import com.droidplanner.MAVLink.Parameter;
+import com.droidplanner.MAVLink.ParametersManager.OnParameterManagerListner;
 
 public class ParametersActivity extends SuperActivity implements
 		OnParameterManagerListner {
 
-	private TextView parameterTable;
+	private TableLayout parameterTable;
 
 	@Override
 	int getNavigationItem() {
@@ -26,7 +27,7 @@ public class ParametersActivity extends SuperActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.parameters);
-		parameterTable = (TextView) findViewById(R.id.parametersTextView);
+		parameterTable = (TableLayout) findViewById(R.id.parametersTable);
 		app.setOnParametersChangedListner(this);
 	}
 
@@ -50,13 +51,30 @@ public class ParametersActivity extends SuperActivity implements
 	@Override
 	public void onParametersReceived(List<Parameter> parameters) {
 		Log.d("PARM", "parameters Received");
-		String parameterString = "";
+		parameterTable.removeAllViews();
 		for (Parameter param : parameters) {
-			parameterString += String.format("%s\t\t\t%3.2f\t%d\t%d\n",
-					param.name, param.value, param.type, param.index);
+			TableRow row = new TableRow(this);
+			TextView nameView = new TextView(this);
+			TextView valueView = new TextView(this);
+			TextView typeView = new TextView(this);
+			TextView indexView = new TextView(this);
+			
+			nameView.setText(param.name);
+			valueView.setText(String.format("%3.3f",param.value));
+			typeView.setText(Integer.toString(param.type));
+			indexView.setText(Integer.toString(param.index));
+			
+			nameView.setWidth(150);
+			valueView.setWidth(100);
+			typeView.setWidth(50);
+			indexView.setWidth(50);
+			
+			row.addView(nameView);
+			row.addView(valueView);
+			row.addView(typeView);
+			row.addView(indexView);
+			parameterTable.addView(row);
 		}
-		parameterTable.setText(parameterString);
-
 	}
 
 }

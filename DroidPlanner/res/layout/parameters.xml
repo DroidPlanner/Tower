@@ -5,10 +5,13 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/parametersTextView"
-                android:textIsSelectable="false"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+    <TableLayout
+        android:id="@+id/parametersTable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:dividerPadding="1dp"
+        android:showDividers="end" >
 
-    </ScrollView>
+    </TableLayout>
+
+</ScrollView>
