@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -14,7 +17,7 @@ import com.droidplanner.MAVLink.Parameter;
 import com.droidplanner.MAVLink.ParametersManager.OnParameterManagerListner;
 
 public class ParametersActivity extends SuperActivity implements
-		OnParameterManagerListner {
+		OnParameterManagerListner, OnClickListener {
 
 	private TableLayout parameterTable;
 
@@ -58,11 +61,14 @@ public class ParametersActivity extends SuperActivity implements
 			TextView valueView = new TextView(this);
 			TextView typeView = new TextView(this);
 			TextView indexView = new TextView(this);
+			Button	sendButton = new Button(this);
+			sendButton.setOnClickListener(this);
 			
 			nameView.setText(param.name);
 			valueView.setText(String.format("%3.3f",param.value));
 			typeView.setText(Integer.toString(param.type));
 			indexView.setText(Integer.toString(param.index));
+			sendButton.setText("Send");
 			
 			nameView.setWidth(150);
 			valueView.setWidth(100);
@@ -73,8 +79,16 @@ public class ParametersActivity extends SuperActivity implements
 			row.addView(valueView);
 			row.addView(typeView);
 			row.addView(indexView);
+			row.addView(sendButton);
+			
 			parameterTable.addView(row);
 		}
+	}
+
+	@Override
+	public void onClick(View view) {
+		String id = (String) ((TextView)((TableRow)view.getParent()).getChildAt(0)).getText();
+		Log.d("PARM", "Send: "+id);
 	}
 
 }

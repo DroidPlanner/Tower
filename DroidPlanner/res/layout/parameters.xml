@@ -9,8 +9,7 @@
         android:id="@+id/parametersTable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:dividerPadding="1dp"
-        android:showDividers="end" >
+        android:dividerPadding="1dp" >
 
     </TableLayout>
 
