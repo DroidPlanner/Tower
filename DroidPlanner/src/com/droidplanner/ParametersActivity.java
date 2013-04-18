@@ -1,10 +1,18 @@
 package com.droidplanner;
 
+import java.util.List;
+
+import com.droidplanner.MAVLink.ParametersManager.OnParameterManagerListner;
+
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
-public class ParametersActivity extends SuperActivity {
+public class ParametersActivity extends SuperActivity implements OnParameterManagerListner {
+
+	private TextView parameterTable;
 
 	@Override
 	int getNavigationItem() {
@@ -15,6 +23,8 @@ public class ParametersActivity extends SuperActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.parameters);
+		parameterTable = (TextView) findViewById(R.id.parametersTextView);
+		app.setOnParametersChangedListner(this);
 	}
 	
 	@Override
@@ -32,6 +42,17 @@ public class ParametersActivity extends SuperActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.menu_parameters, menu);
 		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public void onParametersReceived(List<String> param) {
+		Log.d("PARM", "parameters Received");
+		String parameterString = "";
+		for (String string : param) {
+			parameterString += string + "\n";
+		}
+		parameterTable.setText(parameterString);
+		
 	}
 
 }
