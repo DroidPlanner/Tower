@@ -2,6 +2,8 @@ package com.droidplanner.helpers;
 
 import java.util.Locale;
 
+import com.MAVLink.Messages.ApmModes;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -32,5 +34,57 @@ public class TTS implements OnInitListener {
 
 	private boolean shouldEnableTTS() {
 		return prefs.getBoolean("pref_enable_tts", false);
+	}
+	
+	public void speakGpsMode(int fix) {
+		switch (fix) {
+		case 2:
+			speak("GPS 2D Lock");
+			break;
+		case 3:					
+			speak("GPS 3D Lock");
+			break;
+		default:
+			speak("Lost GPS Lock");
+			break;
+		}
+	}
+	
+	public void speakArmedState(boolean armed) {
+		if (armed) {
+			speak("Armed");					
+		}else{
+			speak("Disarmed");
+		}
+	}
+
+	public void speakMode(ApmModes mode) {
+		String modeString = "Mode ";
+		switch (mode) {
+		case FIXED_WING_FLY_BY_WIRE_A:
+			modeString += "Fly by wire A";
+			break;
+		case FIXED_WING_FLY_BY_WIRE_B:
+			modeString += "Fly by wire B";
+			break;
+		case ROTOR_ACRO:
+			modeString += "Acrobatic";
+			break;
+		case ROTOR_ALT_HOLD:
+			modeString += "Altitude hold";
+			break;
+		case ROTOR_POSITION:
+			modeString += "Position hold";
+			break;
+		case FIXED_WING_RTL:
+		case ROTOR_RTL:
+			modeString += "Return to home";
+			break;
+		default:
+			modeString += mode.getName();
+			break;
+		}
+		speak(modeString);
+		
 	}
 }
