@@ -69,11 +69,6 @@
         </activity>
         <activity android:name="com.droidplanner.FlightDataActivity" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <intent-filter>
                 <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
             </intent-filter>
 
@@ -97,7 +92,12 @@
                 <data android:mimeType="application/vnd.google-earth.kmz" />
             </intent-filter>
         </activity>
-        <activity android:name="com.droidplanner.HUDActivity" >
+        <activity android:name="com.droidplanner.ParametersActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name="com.droidplanner.SettingsActivity" >
         </activity>

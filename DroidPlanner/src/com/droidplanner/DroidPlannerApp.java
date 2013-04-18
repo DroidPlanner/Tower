@@ -5,6 +5,7 @@ import java.util.List;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.MAVLink.waypoint;
@@ -15,16 +16,19 @@ import com.MAVLink.Messages.enums.MAV_DATA_STREAM;
 
 import com.droidplanner.MAVLink.Drone;
 import com.droidplanner.MAVLink.MavLinkMsgHandler;
+import com.droidplanner.MAVLink.ParametersManager;
+import com.droidplanner.MAVLink.ParametersManager.OnParameterManagerListner;
 import com.droidplanner.MAVLink.WaypointMananger;
 import com.droidplanner.MAVLink.WaypointMananger.OnWaypointManagerListner;
 import com.droidplanner.helpers.TTS;
 import com.droidplanner.service.MAVLinkClient;
 import com.droidplanner.service.MAVLinkClient.OnMavlinkClientListner;
 
-public class DroidPlannerApp extends Application implements OnMavlinkClientListner, OnWaypointManagerListner {
+public class DroidPlannerApp extends Application implements OnMavlinkClientListner, OnWaypointManagerListner, OnParameterManagerListner {
 	public Drone drone;
 	public MAVLinkClient MAVClient;
 	public WaypointMananger waypointMananger;
+	public ParametersManager parameterMananger;
 	
 	public ConnectionStateListner conectionListner;
 	private OnWaypointReceivedListner waypointsListner;
@@ -48,6 +52,7 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 		drone = new Drone(tts);
 		MAVClient = new MAVLinkClient(this,this);
 		waypointMananger = new WaypointMananger(MAVClient,this);
+		parameterMananger = new ParametersManager(MAVClient, this);
 		mavLinkMsgHandler = new com.droidplanner.MAVLink.MavLinkMsgHandler(drone); 
 		MAVClient.init();		
 	}
@@ -68,6 +73,7 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 	public void notifyReceivedData(MAVLinkMessage msg) {
 		mavLinkMsgHandler.receiveData(msg);
 		waypointMananger.processMessage(msg);
+		parameterMananger.processMessage(msg);
 	}
 
 	@Override
@@ -153,6 +159,11 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 	
 	public void setWaypointReceivedListner(OnWaypointReceivedListner listner){
 		waypointsListner = listner;
+	}
+
+	@Override
+	public void onParametersReceived(List<String> param) {
+		Log.d("PARM", "parameters Received");	
 	}
 
 }
