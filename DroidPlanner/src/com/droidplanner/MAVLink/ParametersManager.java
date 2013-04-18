@@ -30,12 +30,12 @@ public class ParametersManager {
 	}
 
 	public interface OnParameterManagerListner {
-		public abstract void onParametersReceived(List<String> param);
+		public abstract void onParametersReceived(List<Parameter> parameters);
 	}
 
 	MAVLinkClient MAV;
 	private OnParameterManagerListner listner;
-	private List<String> parameters;
+	private List<Parameter> parameters;
 
 	enum waypointStates {
 		IDLE
@@ -47,7 +47,7 @@ public class ParametersManager {
 			OnParameterManagerListner listner) {
 		this.MAV = MAV;
 		this.listner = listner;
-		parameters = new ArrayList<String>();
+		parameters = new ArrayList<Parameter>();
 	}
 
 	/**
@@ -73,7 +73,8 @@ public class ParametersManager {
 
 	private void processReceivedParam(msg_param_value m_value) {
 		Log.d("PARM", m_value.toString());
-		parameters.add(m_value.toString());
+		Parameter param = new Parameter(m_value.getParam_Id(),m_value.param_value,m_value.param_type,m_value.param_index);
+		parameters.add(param);
 		if (m_value.param_index == m_value.param_count - 1) {
 			listner.onParametersReceived(parameters);
 		}

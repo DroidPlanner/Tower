@@ -14,6 +14,7 @@ import com.MAVLink.Messages.ardupilotmega.msg_request_data_stream;
 import com.MAVLink.Messages.enums.MAV_DATA_STREAM;
 import com.droidplanner.MAVLink.Drone;
 import com.droidplanner.MAVLink.MavLinkMsgHandler;
+import com.droidplanner.MAVLink.Parameter;
 import com.droidplanner.MAVLink.ParametersManager;
 import com.droidplanner.MAVLink.ParametersManager.OnParameterManagerListner;
 import com.droidplanner.MAVLink.WaypointMananger;
@@ -153,9 +154,9 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 
 
 	@Override
-	public void onParametersReceived(List<String> param) {
+	public void onParametersReceived(List<Parameter> parameters) {
 		if (parameterListner != null) {
-			parameterListner.onParametersReceived(param);			
+			parameterListner.onParametersReceived(parameters);			
 		}
 	}
 	
@@ -170,6 +171,4 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 	public void setOnParametersChangedListner(OnParameterManagerListner listner){
 		parameterListner = listner;
 	}
-
-
 }
