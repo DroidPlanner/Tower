@@ -3,12 +3,15 @@ package com.droidplanner;
 import java.util.List;
 
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -58,10 +61,11 @@ public class ParametersActivity extends SuperActivity implements
 		for (Parameter param : parameters) {
 			TableRow row = new TableRow(this);
 			TextView nameView = new TextView(this);
-			TextView valueView = new TextView(this);
+			EditText valueView = new EditText(this);
 			TextView typeView = new TextView(this);
 			TextView indexView = new TextView(this);
 			Button	sendButton = new Button(this);
+			valueView.setInputType(InputType.TYPE_CLASS_NUMBER);
 			sendButton.setOnClickListener(this);
 			
 			nameView.setText(param.name);
@@ -70,15 +74,16 @@ public class ParametersActivity extends SuperActivity implements
 			indexView.setText(Integer.toString(param.index));
 			sendButton.setText("Send");
 			
+			indexView.setWidth(50);
 			nameView.setWidth(150);
 			valueView.setWidth(100);
+			typeView.setGravity(Gravity.RIGHT);
 			typeView.setWidth(50);
-			indexView.setWidth(50);
 			
+			row.addView(indexView);
 			row.addView(nameView);
 			row.addView(valueView);
 			row.addView(typeView);
-			row.addView(indexView);
 			row.addView(sendButton);
 			
 			parameterTable.addView(row);
