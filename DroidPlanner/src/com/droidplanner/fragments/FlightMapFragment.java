@@ -218,6 +218,7 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 
 	@Override
 	public void onMapLongClick(LatLng point) {
+		getPreferences();
 		if (isGuidedModeEnabled) {
 			mListener.onSetGuidedMode(point);	
 			updateGuidedMarker(point);
