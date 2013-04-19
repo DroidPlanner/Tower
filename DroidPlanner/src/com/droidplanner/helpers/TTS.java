@@ -11,8 +11,11 @@ import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 
 public class TTS implements OnInitListener {
+	private static final double BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT = 10;
+	
 	TextToSpeech tts;
 	private SharedPreferences prefs;
+	private int lastBatteryDischargeNotification;
 
 	public TTS(Context context) {
 		tts = new TextToSpeech(context, this);
@@ -84,7 +87,14 @@ public class TTS implements OnInitListener {
 			modeString += mode.getName();
 			break;
 		}
-		speak(modeString);
-		
+		speak(modeString);	
+	}
+	
+	
+	public void batteryDischargeNotification(double battRemain) {
+		if (lastBatteryDischargeNotification != (int) ((battRemain - 1) / BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT)) {
+			lastBatteryDischargeNotification = (int) ((battRemain - 1) / BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT);
+			speak("Battery at" + (int) battRemain + "%");
+		}
 	}
 }
