@@ -3,13 +3,10 @@ package com.droidplanner;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +15,7 @@ import com.droidplanner.DroidPlannerApp.OnWaypointReceivedListner;
 import com.droidplanner.MAVLink.Drone;
 import com.droidplanner.MAVLink.MissionReader;
 import com.droidplanner.MAVLink.MissionWriter;
+import com.droidplanner.dialogs.AltitudeDialog;
 import com.droidplanner.dialogs.OpenMissionDialog;
 import com.droidplanner.dialogs.PolygonDialog;
 import com.droidplanner.fragments.PlanningMapFragment;
@@ -198,27 +196,14 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 	}
 
 	private void changeDefaultAlt() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle("Default Altitude");
-
-		final NumberPicker numb3rs = new NumberPicker(this);
-		numb3rs.setMaxValue(1000);
-		numb3rs.setMinValue(0);
-		numb3rs.setValue((drone.getDefaultAlt().intValue()));
-		builder.setView(numb3rs);
-
-		builder.setNegativeButton("Cancel",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-					}
-				});
-		builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				drone.setDefaultAlt((double) numb3rs.getValue());
+		AltitudeDialog dialog = new AltitudeDialog() {			
+			@Override
+			public void onAltitudeChanged(double newAltitude) {
+				drone.setDefaultAlt(newAltitude);
 				update();
 			}
-		});
-		builder.create().show();
+		};
+		dialog.build(drone.getDefaultAlt(), this);
 	}
 
 	
