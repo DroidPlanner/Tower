@@ -15,6 +15,7 @@ import com.droidplanner.DroidPlannerApp.OnWaypointReceivedListner;
 import com.droidplanner.MAVLink.MissionReader;
 import com.droidplanner.MAVLink.MissionWriter;
 import com.droidplanner.dialogs.AltitudeDialog;
+import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
 import com.droidplanner.dialogs.OpenMissionDialog;
 import com.droidplanner.dialogs.PolygonDialog;
 import com.droidplanner.fragments.PlanningMapFragment;
@@ -22,7 +23,7 @@ import com.droidplanner.fragments.PlanningMapFragment.OnMapInteractionListener;
 import com.droidplanner.waypoints.Polygon;
 import com.google.android.gms.maps.model.LatLng;
 
-public class PlanningActivity extends SuperActivity implements OnMapInteractionListener, OnWaypointReceivedListner{
+public class PlanningActivity extends SuperActivity implements OnMapInteractionListener, OnWaypointReceivedListner, OnAltitudeChangedListner{
 	
 	public Polygon polygon;
 	private PlanningMapFragment planningMapFragment;
@@ -193,13 +194,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 	}
 
 	private void changeDefaultAlt() {
-		AltitudeDialog dialog = new AltitudeDialog() {			
-			@Override
-			public void onAltitudeChanged(double newAltitude) {
-				drone.setDefaultAlt(newAltitude);
-				update();
-			}
-		};
+		AltitudeDialog dialog = new AltitudeDialog(this);
 		dialog.build(drone.getDefaultAlt(), this);
 	}
 
@@ -258,5 +253,9 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 		planningMapFragment.zoomToExtents(drone.getAllCoordinates());		
 	}
 
-
+	@Override
+	public void onAltitudeChanged(double newAltitude) {
+		drone.setDefaultAlt(newAltitude);
+		update();
+	}
 }

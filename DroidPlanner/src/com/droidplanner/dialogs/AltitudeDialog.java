@@ -9,14 +9,20 @@ import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.LinearLayout.LayoutParams;
 
-public abstract class AltitudeDialog implements DialogInterface.OnClickListener {
-
+public class AltitudeDialog implements DialogInterface.OnClickListener {
 	private NumberPicker thousandPicker;
 	private NumberPicker hundredPicker;
 	private NumberPicker decadePicker;
 	private NumberPicker unitPicker;
+	private OnAltitudeChangedListner listner;
 
-	public abstract void onAltitudeChanged(double newAltitude);
+	public interface OnAltitudeChangedListner {
+		public void onAltitudeChanged(double newAltitude);
+	}
+
+	public AltitudeDialog(OnAltitudeChangedListner listner) {
+		this.listner = listner;
+	}
 
 	public void build(double defaultAltitude, Context context) {
 		AlertDialog dialog = buildDialog(context);
@@ -39,12 +45,12 @@ public abstract class AltitudeDialog implements DialogInterface.OnClickListener 
 		layoutStyle.weight = 1;
 		LinearLayout layout = new LinearLayout(context);
 		layout.setLayoutParams(layoutStyle);
-		
-		unitPicker = buildDigitPicker(context,layoutStyle);
-		decadePicker = buildDigitPicker(context,layoutStyle);
-		hundredPicker = buildDigitPicker(context,layoutStyle);
-		thousandPicker = buildDigitPicker(context,layoutStyle);		
-		
+
+		unitPicker = buildDigitPicker(context, layoutStyle);
+		decadePicker = buildDigitPicker(context, layoutStyle);
+		hundredPicker = buildDigitPicker(context, layoutStyle);
+		thousandPicker = buildDigitPicker(context, layoutStyle);
+
 		layout.addView(thousandPicker);
 		layout.addView(hundredPicker);
 		layout.addView(decadePicker);
@@ -52,7 +58,8 @@ public abstract class AltitudeDialog implements DialogInterface.OnClickListener 
 		return layout;
 	}
 
-	private NumberPicker buildDigitPicker(Context context, LayoutParams layoutStyle) {
+	private NumberPicker buildDigitPicker(Context context,
+			LayoutParams layoutStyle) {
 		NumberPicker digitPicker = new NumberPicker(context);
 		digitPicker.setMaxValue(9);
 		digitPicker.setMinValue(0);
@@ -66,7 +73,7 @@ public abstract class AltitudeDialog implements DialogInterface.OnClickListener 
 	@Override
 	public void onClick(DialogInterface arg0, int which) {
 		if (which == Dialog.BUTTON_POSITIVE) {
-			onAltitudeChanged(getValue());
+			listner.onAltitudeChanged(getValue());
 		}
 	}
 
