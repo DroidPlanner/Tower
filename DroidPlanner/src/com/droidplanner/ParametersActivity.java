@@ -3,24 +3,17 @@ package com.droidplanner;
 import java.util.List;
 
 import android.os.Bundle;
-import android.text.InputType;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
 
 import com.droidplanner.MAVLink.Parameter;
 import com.droidplanner.MAVLink.ParametersManager.OnParameterManagerListner;
+import com.droidplanner.widgets.paramRow.ParamRow;
 
 public class ParametersActivity extends SuperActivity implements
-		OnParameterManagerListner, OnClickListener {
+		OnParameterManagerListner {
 
 	private TableLayout parameterTable;
 
@@ -59,41 +52,11 @@ public class ParametersActivity extends SuperActivity implements
 		Log.d("PARM", "parameters Received");
 		parameterTable.removeAllViews();
 		for (Parameter param : parameters) {
-			TableRow row = new TableRow(this);
-			TextView nameView = new TextView(this);
-			EditText valueView = new EditText(this);
-			TextView typeView = new TextView(this);
-			TextView indexView = new TextView(this);
-			Button	sendButton = new Button(this);
-			valueView.setInputType(InputType.TYPE_CLASS_NUMBER);
-			sendButton.setOnClickListener(this);
-			
-			nameView.setText(param.name);
-			valueView.setText(String.format("%3.3f",param.value));
-			typeView.setText(Integer.toString(param.type));
-			indexView.setText(Integer.toString(param.index));
-			sendButton.setText("Send");
-			
-			indexView.setWidth(50);
-			nameView.setWidth(150);
-			valueView.setWidth(100);
-			typeView.setGravity(Gravity.RIGHT);
-			typeView.setWidth(50);
-			
-			row.addView(indexView);
-			row.addView(nameView);
-			row.addView(valueView);
-			row.addView(typeView);
-			row.addView(sendButton);
-			
-			parameterTable.addView(row);
+			ParamRow pRow = new ParamRow(this);
+			pRow.setParam(param);			
+			parameterTable.addView(pRow);
 		}
 	}
 
-	@Override
-	public void onClick(View view) {
-		String id = (String) ((TextView)((TableRow)view.getParent()).getChildAt(0)).getText();
-		Log.d("PARM", "Send: "+id);
-	}
 
 }
