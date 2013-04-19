@@ -29,6 +29,7 @@ public class Drone {
 	private MapUpdatedListner mapListner;
 	private DroneTypeListner typeListner;
 	private TTS tts;
+	
 
 	public interface HudUpdatedListner {
 		public void onDroneUpdate();
@@ -89,6 +90,7 @@ public class Drone {
 			double battCurrent) {
 		if (this.battVolt != battVolt | this.battRemain != battRemain
 				| this.battCurrent != battCurrent) {
+			tts.batteryDischargeNotification(battRemain);
 			this.battVolt = battVolt;
 			this.battRemain = battRemain;
 			this.battCurrent = battCurrent;
