@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import com.MAVLink.waypoint;
 import com.droidplanner.DroidPlannerApp.OnWaypointReceivedListner;
-import com.droidplanner.MAVLink.Drone;
 import com.droidplanner.MAVLink.MissionReader;
 import com.droidplanner.MAVLink.MissionWriter;
 import com.droidplanner.dialogs.AltitudeDialog;
@@ -25,7 +24,6 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class PlanningActivity extends SuperActivity implements OnMapInteractionListener, OnWaypointReceivedListner{
 	
-	public Drone drone;
 	public Polygon polygon;
 	private PlanningMapFragment planningMapFragment;
 
@@ -51,7 +49,6 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 		planningMapFragment = ((PlanningMapFragment)getFragmentManager().findFragmentById(R.id.planningMapFragment));
 		WaypointListNumber = (TextView) (findViewById(R.id.textViewWP));
 	
-		this.drone = ((DroidPlannerApp) getApplication()).drone;
 		polygon = new Polygon();
 		mode = modes.MISSION;
 

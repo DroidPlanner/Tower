@@ -1,6 +1,7 @@
 package com.droidplanner;
 
 import com.droidplanner.DroidPlannerApp.ConnectionStateListner;
+import com.droidplanner.MAVLink.Drone;
 
 import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
@@ -18,7 +19,8 @@ public abstract class SuperActivity extends Activity implements
 
 	abstract int getNavigationItem();
 	public DroidPlannerApp app;
-	private MenuItem connectButton;	
+	private MenuItem connectButton;
+	public Drone drone;	
 
 	public SuperActivity() {
 		super();
@@ -34,7 +36,7 @@ public abstract class SuperActivity extends Activity implements
 		setUpActionBar();
 		app = (DroidPlannerApp) getApplication();
 		app.setConectionStateListner(this);
-
+		this.drone = ((DroidPlannerApp) getApplication()).drone;
 	}
 
 	public void setUpActionBar() {
