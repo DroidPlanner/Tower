@@ -2,6 +2,8 @@ package com.droidplanner;
 
 import com.droidplanner.DroidPlannerApp.ConnectionStateListner;
 import com.droidplanner.MAVLink.Drone;
+import com.droidplanner.dialogs.AltitudeDialog;
+import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
 
 import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
@@ -15,7 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.SpinnerAdapter;
 
 public abstract class SuperActivity extends Activity implements
-		OnNavigationListener, ConnectionStateListner {
+		OnNavigationListener, ConnectionStateListner, OnAltitudeChangedListner {
 
 	abstract int getNavigationItem();
 	public DroidPlannerApp app;
@@ -117,5 +119,15 @@ public abstract class SuperActivity extends Activity implements
 		connectButton = menu.findItem(R.id.menu_connect);
 		app.MAVClient.queryConnectionState();
 		return super.onCreateOptionsMenu(menu);
+	}
+
+	protected void changeDefaultAlt() {
+		AltitudeDialog dialog = new AltitudeDialog(this);
+		dialog.build(drone.getDefaultAlt(), this);
+	}
+	
+	@Override
+	public void onAltitudeChanged(double newAltitude) {
+		drone.setDefaultAlt(newAltitude);
 	}
 }

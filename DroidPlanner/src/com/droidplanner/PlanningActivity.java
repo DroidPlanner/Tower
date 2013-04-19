@@ -14,7 +14,6 @@ import com.MAVLink.waypoint;
 import com.droidplanner.DroidPlannerApp.OnWaypointReceivedListner;
 import com.droidplanner.MAVLink.MissionReader;
 import com.droidplanner.MAVLink.MissionWriter;
-import com.droidplanner.dialogs.AltitudeDialog;
 import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
 import com.droidplanner.dialogs.OpenMissionDialog;
 import com.droidplanner.dialogs.PolygonDialog;
@@ -193,12 +192,6 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 		invalidateOptionsMenu();
 	}
 
-	private void changeDefaultAlt() {
-		AltitudeDialog dialog = new AltitudeDialog(this);
-		dialog.build(drone.getDefaultAlt(), this);
-	}
-
-	
 	private void menuSaveFile() {
 		if (writeMission()) {
 			Toast.makeText(this, R.string.file_saved, Toast.LENGTH_SHORT)
@@ -255,7 +248,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 
 	@Override
 	public void onAltitudeChanged(double newAltitude) {
-		drone.setDefaultAlt(newAltitude);
+		super.onAltitudeChanged(newAltitude);
 		update();
 	}
 }
