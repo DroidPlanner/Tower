@@ -1,12 +1,9 @@
 package com.droidplanner;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.NumberPicker;
 import android.widget.Toast;
 
 import com.MAVLink.waypoint;
@@ -14,7 +11,6 @@ import com.MAVLink.Messages.ApmModes;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.ardupilotmega.msg_set_mode;
 import com.droidplanner.DroidPlannerApp.OnWaypointReceivedListner;
-import com.droidplanner.MAVLink.Drone;
 import com.droidplanner.MAVLink.Drone.DroneTypeListner;
 import com.droidplanner.fragments.FlightMapFragment;
 import com.droidplanner.fragments.FlightMapFragment.OnFlighDataListener;
@@ -27,9 +23,9 @@ import com.google.android.gms.maps.model.LatLng;
 public class FlightDataActivity extends SuperActivity implements OnFlighDataListener, OnWaypointSpinnerSelectedListener, OnWaypointReceivedListner, OnModeSpinnerSelectedListener, DroneTypeListner {
 	
 	private FlightMapFragment flightMapFragment;
-	private Drone drone;
 	private SelectModeSpinner fligthModeSpinner;
 	private SelectWaypointSpinner wpSpinner;
+	private LatLng guidedPoint;
 
 	@Override
 	int getNavigationItem() {
@@ -43,7 +39,6 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 		setContentView(R.layout.flightdata);
 		flightMapFragment = ((FlightMapFragment)getFragmentManager().findFragmentById(R.id.flightMapFragment));
 				
-		this.drone = ((DroidPlannerApp) getApplication()).drone;
 		flightMapFragment.updateMissionPath(drone);
 		flightMapFragment.updateHomeToMap(drone);
 		
@@ -90,32 +85,10 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 
 	@Override
 	public void onSetGuidedMode(LatLng point) {
-		Toast.makeText(this, "Guided Mode", Toast.LENGTH_SHORT).show();
-		askForGuidedAltitude(point);				
+		changeDefaultAlt();		
+		guidedPoint = point;
 	}
 	
-	private void askForGuidedAltitude(final LatLng point) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle("Guided Altitude");
-
-		final NumberPicker numb3rs = new NumberPicker(this);
-		numb3rs.setMaxValue(1000);
-		numb3rs.setMinValue(0);
-		numb3rs.setValue((drone.getDefaultAlt().intValue()));
-		builder.setView(numb3rs);
-
-		builder.setNegativeButton("Cancel",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-					}
-				});
-		builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				setGuidedMode(new waypoint(point, (double) numb3rs.getValue())); // Use default altitude to set guided mode.		
-			}
-		});
-		builder.create().show();
-	}
 	
 	public void setGuidedMode(waypoint wp) {
 		msg_mission_item msg = new msg_mission_item();
@@ -164,6 +137,16 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 		Log.d("DRONE", "Drone type changed");
 		fligthModeSpinner.updateModeSpinner(drone);
 		flightMapFragment.updateDroneMarkers();
+	}
+
+	@Override
+	public void onAltitudeChanged(double newAltitude) {
+		super.onAltitudeChanged(newAltitude);
+		if(guidedPoint!=null){
+			Toast.makeText(this, "Guided Mode ("+(int)newAltitude+"m)", Toast.LENGTH_SHORT).show();
+			setGuidedMode(new waypoint(guidedPoint, newAltitude)); 
+			guidedPoint = null;
+		}
 	}
 
 }

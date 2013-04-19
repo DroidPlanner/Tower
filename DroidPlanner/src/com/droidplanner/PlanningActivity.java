@@ -3,21 +3,18 @@ package com.droidplanner;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.MAVLink.waypoint;
 import com.droidplanner.DroidPlannerApp.OnWaypointReceivedListner;
-import com.droidplanner.MAVLink.Drone;
 import com.droidplanner.MAVLink.MissionReader;
 import com.droidplanner.MAVLink.MissionWriter;
+import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
 import com.droidplanner.dialogs.OpenMissionDialog;
 import com.droidplanner.dialogs.PolygonDialog;
 import com.droidplanner.fragments.PlanningMapFragment;
@@ -25,9 +22,8 @@ import com.droidplanner.fragments.PlanningMapFragment.OnMapInteractionListener;
 import com.droidplanner.waypoints.Polygon;
 import com.google.android.gms.maps.model.LatLng;
 
-public class PlanningActivity extends SuperActivity implements OnMapInteractionListener, OnWaypointReceivedListner{
+public class PlanningActivity extends SuperActivity implements OnMapInteractionListener, OnWaypointReceivedListner, OnAltitudeChangedListner{
 	
-	public Drone drone;
 	public Polygon polygon;
 	private PlanningMapFragment planningMapFragment;
 
@@ -53,7 +49,6 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 		planningMapFragment = ((PlanningMapFragment)getFragmentManager().findFragmentById(R.id.planningMapFragment));
 		WaypointListNumber = (TextView) (findViewById(R.id.textViewWP));
 	
-		this.drone = ((DroidPlannerApp) getApplication()).drone;
 		polygon = new Polygon();
 		mode = modes.MISSION;
 
@@ -62,7 +57,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 		
 		checkIntent();
 		
-		update();	
+		update();
 	
 	}
 	
@@ -197,31 +192,6 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 		invalidateOptionsMenu();
 	}
 
-	private void changeDefaultAlt() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle("Default Altitude");
-
-		final NumberPicker numb3rs = new NumberPicker(this);
-		numb3rs.setMaxValue(1000);
-		numb3rs.setMinValue(0);
-		numb3rs.setValue((drone.getDefaultAlt().intValue()));
-		builder.setView(numb3rs);
-
-		builder.setNegativeButton("Cancel",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-					}
-				});
-		builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				drone.setDefaultAlt((double) numb3rs.getValue());
-				update();
-			}
-		});
-		builder.create().show();
-	}
-
-	
 	private void menuSaveFile() {
 		if (writeMission()) {
 			Toast.makeText(this, R.string.file_saved, Toast.LENGTH_SHORT)
@@ -276,5 +246,9 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 		planningMapFragment.zoomToExtents(drone.getAllCoordinates());		
 	}
 
-
+	@Override
+	public void onAltitudeChanged(double newAltitude) {
+		super.onAltitudeChanged(newAltitude);
+		update();
+	}
 }
