@@ -1,7 +1,10 @@
 package com.droidplanner.widgets.paramRow;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -14,13 +17,14 @@ import android.widget.TextView;
 
 import com.droidplanner.MAVLink.Parameter;
 
-public class ParamRow extends TableRow implements OnClickListener {
+public class ParamRow extends TableRow implements OnClickListener, TextWatcher {
 
 	private TextView nameView;
 	private EditText valueView;
 	private TextView typeView;
 	private TextView indexView;
 	private Button sendButton;
+	private Parameter param;
 
 	public ParamRow(Context context) {
 		super(context);
@@ -33,6 +37,7 @@ public class ParamRow extends TableRow implements OnClickListener {
 	}
 
 	public void setParam(Parameter param) {
+		this.param = param;
 		nameView.setText(param.name);
 		valueView.setText(String.format("%3.3f", param.value));
 		typeView.setText(Integer.toString(param.type));
@@ -64,15 +69,48 @@ public class ParamRow extends TableRow implements OnClickListener {
 		
 
 		sendButton.setOnClickListener(this);
+		valueView.addTextChangedListener(this);
 	}
 
 	@Override
 	public void onClick(View view) {
 		if(view == sendButton){
-			String param =  nameView.getText().toString();
-			String value =  valueView.getText().toString();
+			String param =  getParamName();
+			double value =  getParamValue();
 			Log.d("PARM", "Send: "+param+" : "+value);
 		}
+	}
+
+	private double getParamValue() {
+		return Double.parseDouble(valueView.getText().toString());
+	}
+
+	private String getParamName() {
+		return nameView.getText().toString();
+	}
+
+	@Override
+	public void afterTextChanged(Editable s) {			
+		if (isValueDiferentFromDroneParam()) {
+			Log.d("PARM", "Diferent");	
+			valueView.setTextColor(Color.RED);
+		}else{		
+			Log.d("PARM", "equal");
+			valueView.setTextColor(Color.WHITE);
+		}
+	}
+
+	private boolean isValueDiferentFromDroneParam() {
+		return getParamValue() != (param.value);
+	}
+
+	@Override
+	public void beforeTextChanged(CharSequence s, int start, int count,
+			int after) {		
+	}
+
+	@Override
+	public void onTextChanged(CharSequence s, int start, int before, int count) {		
 	}
 
 }
