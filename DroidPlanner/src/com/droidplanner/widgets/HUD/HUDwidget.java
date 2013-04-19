@@ -387,6 +387,10 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 		}
 		canvas.drawText(gpsFix, scroller.right -5,
 				scroller.top - 10, ScrollerTextLeft);
+		if (drone.getBattRemain()>0) {
+			canvas.drawText(String.format("%3.0f%%",drone.getBattRemain()), scroller.right -5,
+					scroller.top - 30, ScrollerTextLeft);			
+		}
 
 	}
 
