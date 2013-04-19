@@ -1,3 +1,8 @@
+## Droidplanner v0.7.3
+* Improved mode TTS notifications
+* Battery Capacity indication on the HUD
+* Better selection of flight altitude, in planning missions and guided mode
+
 ## Droidplanner v0.7.2
 * Notifications using Text To speech
 
