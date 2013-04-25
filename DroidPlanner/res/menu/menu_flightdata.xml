@@ -15,6 +15,10 @@
     	android:actionViewClass="com.droidplanner.widgets.spinners.SelectWaypointSpinner" 
     	tools:ignore="MenuTitle"/>
     <item
+        android:id="@+id/menu_follow_me"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_follow_me"/>
+    <item
         android:id="@+id/menu_load_from_apm"
         android:showAsAction="never"
         android:title="@string/menu_load_from_apm"/>

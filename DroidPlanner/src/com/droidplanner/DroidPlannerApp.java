@@ -15,6 +15,7 @@ import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.MAVLink.Messages.ardupilotmega.msg_request_data_stream;
 import com.MAVLink.Messages.enums.MAV_DATA_STREAM;
+import com.droidplanner.helpers.FollowMe;
 import com.droidplanner.helpers.TTS;
 import com.droidplanner.service.MAVLinkClient;
 import com.droidplanner.service.MAVLinkClient.OnMavlinkClientListner;
@@ -23,6 +24,7 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 	public Drone drone;
 	public MAVLinkClient MAVClient;
 	public WaypointMananger waypointMananger;
+	public FollowMe followMe;
 	
 	public ConnectionStateListner conectionListner;
 	private OnWaypointReceivedListner waypointsListner;
@@ -45,7 +47,7 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 		drone = new Drone();
 		MAVClient = new MAVLinkClient(this,this);
 		waypointMananger = new WaypointMananger(MAVClient,this);
-		
+		followMe = new FollowMe(MAVClient,this);
 		MAVClient.init();		
 	}
 	

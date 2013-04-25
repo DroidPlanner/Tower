@@ -75,6 +75,8 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 		case R.id.menu_zoom:
 			flightMapFragment.zoomToLastKnowPosition();
 			return true;	
+		case R.id.menu_follow_me:
+			app.followMe.toogleFollowMeState();
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
