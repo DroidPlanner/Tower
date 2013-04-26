@@ -96,6 +96,13 @@
             android:key="pref_advanced_use_offline_maps"
             android:summary="Use map tiles on the local storage, for offline map view"
             android:title="Use offline maps" />
+         <ListPreference
+            android:defaultValue="Satellite"
+            android:entries="@array/MapTypes"
+            android:entryValues="@array/MapTypes"
+            android:key="pref_map_type"
+            android:summary="Which type of map to use, user must reset the app"
+            android:title="Map Type" />
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="pref_enable_tts"
