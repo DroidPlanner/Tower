@@ -1,4 +1,4 @@
-package com.MAVLink;
+package com.droidplanner.MAVLink;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.MAVLink.waypoint;
 import com.droidplanner.helpers.FileManager;
 
 public class MissionReader {

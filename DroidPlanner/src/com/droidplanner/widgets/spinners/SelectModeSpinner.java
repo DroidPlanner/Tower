@@ -6,65 +6,62 @@ import android.content.Context;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import com.MAVLink.Messages.ApmModes;
 import com.droidplanner.MAVLink.Drone;
 import com.droidplanner.widgets.spinners.SpinnerSelfSelect.OnSpinnerItemSelectedListener;
 
-public class SelectWaypointSpinner extends SpinnerSelfSelect implements OnSpinnerItemSelectedListener {
-	public interface OnWaypointSpinnerSelectedListener {
-		void OnWaypointSpinnerSelected(int item);
+public class SelectModeSpinner extends SpinnerSelfSelect implements OnSpinnerItemSelectedListener {
+	public interface OnModeSpinnerSelectedListener {
+		void OnModeSpinnerSelected(String Mode);
 	}
 
-	private OnWaypointSpinnerSelectedListener listener;
+	private OnModeSpinnerSelectedListener listener;
 	
-	private ArrayList<String> wpSpinnerAdapter;
+	private ArrayList<String> modeSpinnerAdapter;
 
-	public SelectWaypointSpinner(Context context) {
+	public SelectModeSpinner(Context context) {
 		super(context);
 	}
 	
-	public void buildSpinner(Context context, OnWaypointSpinnerSelectedListener listener ){
-		wpSpinnerAdapter = new ArrayList<String>();
+	public void buildSpinner(Context context, OnModeSpinnerSelectedListener listener ){
+		modeSpinnerAdapter = new ArrayList<String>();
 		
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
 				android.R.layout.simple_spinner_dropdown_item,
-				wpSpinnerAdapter);
+				modeSpinnerAdapter);
 		
-		updateWpSpinner(null);
+		updateModeSpinner(null);
 		setAdapter(adapter);
 		setOnSpinnerItemSelectedListener(this);
 		setOnWaypointSpinnerSelectedListener(listener);
 	}
 
-	public void updateWpSpinner(Drone drone) {
-		wpSpinnerAdapter.clear();
+	public void updateModeSpinner(Drone drone) {
+		modeSpinnerAdapter.clear();
 		if (drone != null) {
-			if (drone.waypoints.size() > 0) {
 				updateWpSpinnerWithList(drone);
-				return;
-			}
 		}
 		updateWpSpinnerWithNoData();
 		return;
 	}
 
 	private void updateWpSpinnerWithNoData() {
-		wpSpinnerAdapter.add("WP");
+		modeSpinnerAdapter.add("Mode");
 	}
 
 	private void updateWpSpinnerWithList(Drone drone) {
-		for (int i = 0; i < drone.waypoints.size(); i++) {
-			wpSpinnerAdapter.add("WP " + Integer.toString(i + 1));
-		}
+		modeSpinnerAdapter.clear();
+		modeSpinnerAdapter.addAll(ApmModes.getModeList(drone.getType()));
 	}
 
 	@Override
 	public void onSpinnerItemSelected(Spinner spinner, int position, String text) {
-		listener.OnWaypointSpinnerSelected(position+1);
+		listener.OnModeSpinnerSelected(text);
 	}
 	
 	
 	public void setOnWaypointSpinnerSelectedListener(
-			OnWaypointSpinnerSelectedListener listener) {
+			OnModeSpinnerSelectedListener listener) {
 		this.listener = listener;
 	}
 }

@@ -1,6 +1,9 @@
 package com.droidplanner;
 
 import com.droidplanner.DroidPlannerApp.ConnectionStateListner;
+import com.droidplanner.MAVLink.Drone;
+import com.droidplanner.dialogs.AltitudeDialog;
+import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
 
 import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
@@ -14,11 +17,12 @@ import android.widget.ArrayAdapter;
 import android.widget.SpinnerAdapter;
 
 public abstract class SuperActivity extends Activity implements
-		OnNavigationListener, ConnectionStateListner {
+		OnNavigationListener, ConnectionStateListner, OnAltitudeChangedListner {
 
 	abstract int getNavigationItem();
 	public DroidPlannerApp app;
-	private MenuItem connectButton;	
+	private MenuItem connectButton;
+	public Drone drone;	
 
 	public SuperActivity() {
 		super();
@@ -34,7 +38,7 @@ public abstract class SuperActivity extends Activity implements
 		setUpActionBar();
 		app = (DroidPlannerApp) getApplication();
 		app.setConectionStateListner(this);
-
+		this.drone = ((DroidPlannerApp) getApplication()).drone;
 	}
 
 	public void setUpActionBar() {
@@ -97,13 +101,17 @@ public abstract class SuperActivity extends Activity implements
 	
 
 	public void notifyDisconnected() {
-		connectButton.setTitle(getResources().getString(
-				R.string.menu_connect));
+		if (connectButton != null) {
+			connectButton.setTitle(getResources().getString(
+					R.string.menu_connect));
+		}
 	}
 
 	public void notifyConnected() {
-		connectButton.setTitle(getResources().getString(
-				R.string.menu_disconnect));
+		if (connectButton != null) {
+			connectButton.setTitle(getResources().getString(
+					R.string.menu_disconnect));		
+		}
 	}
 
 	@Override
@@ -111,5 +119,15 @@ public abstract class SuperActivity extends Activity implements
 		connectButton = menu.findItem(R.id.menu_connect);
 		app.MAVClient.queryConnectionState();
 		return super.onCreateOptionsMenu(menu);
+	}
+
+	protected void changeDefaultAlt() {
+		AltitudeDialog dialog = new AltitudeDialog(this);
+		dialog.build(drone.getDefaultAlt(), this);
+	}
+	
+	@Override
+	public void onAltitudeChanged(double newAltitude) {
+		drone.setDefaultAlt(newAltitude);
 	}
 }

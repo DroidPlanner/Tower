@@ -7,7 +7,7 @@
     <item
     	android:id="@+id/menu_flight_modes_spinner"
     	android:showAsAction="always"
-    	android:actionViewClass="com.droidplanner.widgets.spinners.SpinnerSelfSelect" 
+    	android:actionViewClass="com.droidplanner.widgets.spinners.SelectModeSpinner" 
     	tools:ignore="MenuTitle"/>
     <item
     	android:id="@+id/menu_wp_spinner"

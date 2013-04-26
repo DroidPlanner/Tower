@@ -1,8 +1,9 @@
-package com.MAVLink;
+package com.droidplanner.MAVLink;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.MAVLink.waypoint;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_count;

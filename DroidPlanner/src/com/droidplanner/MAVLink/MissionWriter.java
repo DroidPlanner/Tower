@@ -1,10 +1,11 @@
-package com.MAVLink;
+package com.droidplanner.MAVLink;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import com.MAVLink.waypoint;
 import com.droidplanner.helpers.FileManager;
 
 public class MissionWriter {

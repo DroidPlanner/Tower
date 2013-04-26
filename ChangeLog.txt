@@ -1,3 +1,34 @@
+## Droidplanner v0.7.5
+* Added battery discharge notification
+* Fix a bug on the RC override function, CH5 to 8 are now not overrided.
+
+## Droidplanner v0.7.4
+* .tlog files are now compatible with Mission Planner
+
+## Droidplanner v0.7.3
+* Improved mode TTS notifications
+* Battery Capacity indication on the HUD
+* Better selection of flight altitude, in planning missions and guided mode
+
+## Droidplanner v0.7.2
+* Notifications using Text To speech
+
+## Droidplanner v0.7.1
+* Improvement to the HUD layout
+* Dialog for entering the guided mode altitude
+* Fix autoreturn in throttle stick in RC screen
+
+## Droidplanner v0.7.0
+* Improved compatibility with ArduCopter (Compatible mode selection, and copter Icon)
+* HUD layout improvements to suport multiple screen sizes and densities.
+
+## Droidplanner v0.6.0
+* Armed/Disarmed indication for copters
+* Improvement to the HUD, like GPS and Battery indicators
+* New plane icon
+* Deletes unused screens like the old HUD
+* Code restructure, should fix some bugs
+
 ## Droidplanner v0.5.4
 * RC override rate now is selectable from the preferences menu
 

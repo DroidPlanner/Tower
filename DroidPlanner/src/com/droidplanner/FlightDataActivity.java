@@ -1,32 +1,31 @@
 package com.droidplanner;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.MAVLink.Drone;
 import com.MAVLink.waypoint;
 import com.MAVLink.Messages.ApmModes;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.ardupilotmega.msg_set_mode;
 import com.droidplanner.DroidPlannerApp.OnWaypointReceivedListner;
+import com.droidplanner.MAVLink.Drone.DroneTypeListner;
 import com.droidplanner.fragments.FlightMapFragment;
 import com.droidplanner.fragments.FlightMapFragment.OnFlighDataListener;
+import com.droidplanner.widgets.spinners.SelectModeSpinner;
+import com.droidplanner.widgets.spinners.SelectModeSpinner.OnModeSpinnerSelectedListener;
 import com.droidplanner.widgets.spinners.SelectWaypointSpinner;
 import com.droidplanner.widgets.spinners.SelectWaypointSpinner.OnWaypointSpinnerSelectedListener;
-import com.droidplanner.widgets.spinners.SpinnerSelfSelect;
-import com.droidplanner.widgets.spinners.SpinnerSelfSelect.OnSpinnerItemSelectedListener;
 import com.google.android.gms.maps.model.LatLng;
 
-public class FlightDataActivity extends SuperActivity implements OnFlighDataListener, OnSpinnerItemSelectedListener, OnWaypointSpinnerSelectedListener, OnWaypointReceivedListner {
+public class FlightDataActivity extends SuperActivity implements OnFlighDataListener, OnWaypointSpinnerSelectedListener, OnWaypointReceivedListner, OnModeSpinnerSelectedListener, DroneTypeListner {
 	
 	private FlightMapFragment flightMapFragment;
-	private Drone drone;
-	private SpinnerSelfSelect fligthModeSpinner;
+	private SelectModeSpinner fligthModeSpinner;
 	private SelectWaypointSpinner wpSpinner;
+	private LatLng guidedPoint;
 
 	@Override
 	int getNavigationItem() {
@@ -40,11 +39,11 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 		setContentView(R.layout.flightdata);
 		flightMapFragment = ((FlightMapFragment)getFragmentManager().findFragmentById(R.id.flightMapFragment));
 				
-		this.drone = ((DroidPlannerApp) getApplication()).drone;
 		flightMapFragment.updateMissionPath(drone);
 		flightMapFragment.updateHomeToMap(drone);
 		
 		app.setWaypointReceivedListner(this);
+		drone.setDroneTypeChangedListner(this);
 	}
 
 
@@ -53,11 +52,9 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 		getMenuInflater().inflate(R.menu.menu_flightdata, menu);
 		
 		MenuItem flightModeMenu = menu.findItem( R.id.menu_flight_modes_spinner);
-		fligthModeSpinner = (SpinnerSelfSelect) flightModeMenu.getActionView();
-		fligthModeSpinner.setAdapter(ArrayAdapter.createFromResource( this,
-		        R.array.menu_fligth_modes,
-		        android.R.layout.simple_spinner_dropdown_item ));
-		fligthModeSpinner.setOnSpinnerItemSelectedListener(this);
+		fligthModeSpinner = (SelectModeSpinner) flightModeMenu.getActionView();
+		fligthModeSpinner.buildSpinner(this, this);
+		fligthModeSpinner.updateModeSpinner(drone);
 		
 		MenuItem wpMenu = menu.findItem( R.id.menu_wp_spinner);
 		wpSpinner = (SelectWaypointSpinner) wpMenu.getActionView();
@@ -87,18 +84,13 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 		app.waypointMananger.setCurrentWaypoint((short) item);
 	}
 
-	@Override
-	public void onSpinnerItemSelected(Spinner spinner, int position, String text) {
-			changeFlightMode(text);		
-	}
-	
 
 	@Override
 	public void onSetGuidedMode(LatLng point) {
-		Toast.makeText(this, "Guided Mode", Toast.LENGTH_SHORT).show();
-		setGuidedMode(new waypoint(point, 1000.0)); // Use default altitude to set guided mode.
-		
+		changeDefaultAlt();		
+		guidedPoint = point;
 	}
+	
 	
 	public void setGuidedMode(waypoint wp) {
 		msg_mission_item msg = new msg_mission_item();
@@ -119,15 +111,11 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 		app.MAVClient.sendMavPacket(msg.pack());
 	}
 
-	private void changeFlightMode(String string) {
-		int mode = ApmModes.toInt(string);
-		if(mode==-1){
-			return;
-		}
+	private void changeFlightMode(ApmModes mode) {
 		msg_set_mode msg = new msg_set_mode();
 		msg.target_system = 1;
 		msg.base_mode = 1; //TODO use meaningful constant
-		msg.custom_mode = mode;
+		msg.custom_mode = mode.getNumber();
 		app.MAVClient.sendMavPacket(msg.pack());			
 	}
 
@@ -137,4 +125,30 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 		flightMapFragment.updateHomeToMap(drone);
 		wpSpinner.updateWpSpinner(drone);		
 	}
+
+	@Override
+	public void OnModeSpinnerSelected(String text) {
+		ApmModes mode = ApmModes.getMode(text,drone.getType());
+		if (mode != ApmModes.UNKNOWN) {
+			changeFlightMode(mode);
+		}		
+	}
+
+	@Override
+	public void onDroneTypeChanged() {
+		Log.d("DRONE", "Drone type changed");
+		fligthModeSpinner.updateModeSpinner(drone);
+		flightMapFragment.updateDroneMarkers();
+	}
+
+	@Override
+	public void onAltitudeChanged(double newAltitude) {
+		super.onAltitudeChanged(newAltitude);
+		if(guidedPoint!=null){
+			Toast.makeText(this, "Guided Mode ("+(int)newAltitude+"m)", Toast.LENGTH_SHORT).show();
+			setGuidedMode(new waypoint(guidedPoint, newAltitude)); 
+			guidedPoint = null;
+		}
+	}
+
 }

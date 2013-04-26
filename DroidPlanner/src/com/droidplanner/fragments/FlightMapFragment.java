@@ -17,11 +17,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.MAVLink.Drone;
 import com.MAVLink.waypoint;
-import com.MAVLink.Drone.MapUpdatedListner;
+import com.MAVLink.Messages.enums.MAV_TYPE;
 import com.droidplanner.R;
 import com.droidplanner.SuperActivity;
+import com.droidplanner.MAVLink.Drone;
+import com.droidplanner.MAVLink.Drone.MapUpdatedListner;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
@@ -62,15 +63,16 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 			Bundle bundle) {
 		View view = super.onCreateView(inflater, viewGroup, bundle);
 		mMap = getMap();		
-		addDroneMarkersToMap();		
+		drone = ((SuperActivity)getActivity()).app.drone;
+		drone.setMapListner(this);		
+		
+		addDroneMarkersToMap(drone.getType());		
 		addFlightPathToMap();	
 		addMissionPathToMap();
 		getPreferences();
 		mMap.setOnMapLongClickListener(this);
 		
 		
-		drone = ((SuperActivity)getActivity()).app.drone;
-		drone.setMapListner(this);		
 		return view;
 	}
 	
@@ -131,18 +133,21 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 		double correctHeading = (yaw - getMapRotation()+360)%360;	// This ensure the 0 to 360 range
 		int index = (int) (correctHeading/DRONE_MIN_ROTATION);
 		
-		DroneMarker[lastMarker].setVisible(false);
-		DroneMarker[index].setPosition(coord);
-		DroneMarker[index].setVisible(true);
-		lastMarker = index;
-		
-		if(!hasBeenZoomed){
-			hasBeenZoomed = true;
-			mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coord, 16));
-		}
-		
-		if(isAutoPanEnabled){
-			mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(DroneMarker[lastMarker].getPosition(), 17));
+		try{
+			DroneMarker[lastMarker].setVisible(false);
+			DroneMarker[index].setPosition(coord);
+			DroneMarker[index].setVisible(true);
+			lastMarker = index;
+			
+			if(!hasBeenZoomed){
+				hasBeenZoomed = true;
+				mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coord, 16));
+			}
+			
+			if(isAutoPanEnabled){
+				mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(DroneMarker[lastMarker].getPosition(), 17));
+			}
+		}catch(Exception e){
 		}
 	}
 	
@@ -182,7 +187,14 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 		flightPath = mMap.addPolyline(flightPathOptions);		
 	}
 	
-	private void addDroneMarkersToMap() {
+	public void updateDroneMarkers(){
+		for (Marker marker : DroneMarker) {
+			marker.remove();
+		}
+		addDroneMarkersToMap(drone.getType());
+	}
+	
+	private void addDroneMarkersToMap(int type) {
 		int count = 360/DRONE_MIN_ROTATION;
 		
 		DroneMarker = new Marker[count];
@@ -190,15 +202,14 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 			DroneMarker[i] = mMap.addMarker(new MarkerOptions()
 					.anchor((float) 0.5, (float) 0.5)
 					.position(new LatLng(0, 0))
-					.icon(generateDroneIcon(i*DRONE_MIN_ROTATION))
+					.icon(generateDroneIcon(i*DRONE_MIN_ROTATION,type))
 					.visible(false));
 		}
 			
 	}
 	
-	private BitmapDescriptor generateDroneIcon(float heading) {
-		Bitmap planeBitmap = BitmapFactory.decodeResource(getResources(),
-				R.drawable.planetracker);
+	private BitmapDescriptor generateDroneIcon(float heading,int type) {
+		Bitmap planeBitmap = getDroneBitmap(type);
 		Matrix matrix = new Matrix();
 		matrix.postRotate(heading - mMap.getCameraPosition().bearing);
 		return BitmapDescriptorFactory.fromBitmap( Bitmap.createBitmap(planeBitmap, 0, 0, planeBitmap.getWidth(),
@@ -207,6 +218,7 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 
 	@Override
 	public void onMapLongClick(LatLng point) {
+		getPreferences();
 		if (isGuidedModeEnabled) {
 			mListener.onSetGuidedMode(point);	
 			updateGuidedMarker(point);
@@ -215,10 +227,25 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 
 	@Override
 	public void onDroneUpdate() {
-		updateDronePosition(drone.yaw, drone.position);
-		addFlithPathPoint(drone.position);
-		
+		updateDronePosition(drone.getYaw(), drone.getPosition());
+		addFlithPathPoint(drone.getPosition());		
 	}
 
+	
+	private Bitmap getDroneBitmap(int type) {
+		switch (type) {
+		case MAV_TYPE.MAV_TYPE_TRICOPTER:
+		case MAV_TYPE.MAV_TYPE_QUADROTOR:
+		case MAV_TYPE.MAV_TYPE_HEXAROTOR:
+		case MAV_TYPE.MAV_TYPE_OCTOROTOR:
+		case MAV_TYPE.MAV_TYPE_HELICOPTER:
+			return BitmapFactory
+					.decodeResource(getResources(), R.drawable.quad);
+		case MAV_TYPE.MAV_TYPE_FIXED_WING:
+		default:
+			return BitmapFactory.decodeResource(getResources(),
+					R.drawable.plane);
+		}
+	}
 
 }
