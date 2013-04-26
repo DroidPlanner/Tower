@@ -17,6 +17,7 @@ import com.droidplanner.MAVLink.Drone;
 import com.droidplanner.MAVLink.MavLinkMsgHandler;
 import com.droidplanner.MAVLink.WaypointMananger;
 import com.droidplanner.MAVLink.WaypointMananger.OnWaypointManagerListner;
+import com.droidplanner.helpers.FollowMe;
 import com.droidplanner.helpers.TTS;
 import com.droidplanner.service.MAVLinkClient;
 import com.droidplanner.service.MAVLinkClient.OnMavlinkClientListner;
@@ -25,6 +26,7 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 	public Drone drone;
 	public MAVLinkClient MAVClient;
 	public WaypointMananger waypointMananger;
+	public FollowMe followMe;
 	
 	public ConnectionStateListner conectionListner;
 	private OnWaypointReceivedListner waypointsListner;
@@ -48,7 +50,8 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 		drone = new Drone(tts);
 		MAVClient = new MAVLinkClient(this,this);
 		waypointMananger = new WaypointMananger(MAVClient,this);
-		mavLinkMsgHandler = new com.droidplanner.MAVLink.MavLinkMsgHandler(drone); 
+		mavLinkMsgHandler = new com.droidplanner.MAVLink.MavLinkMsgHandler(drone);
+		followMe = new FollowMe(MAVClient, this);
 		MAVClient.init();		
 	}
 	
