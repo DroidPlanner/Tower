@@ -22,6 +22,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     
+    <uses-feature android:name="android.hardware.screen.portrait"/>
+    
     <!-- Support devices without USB host mode since they can connect via TCP -->
     <uses-feature
         android:name="android.hardware.usb.host"
@@ -81,7 +83,8 @@
                 android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
                 android:resource="@xml/device_filter" />
         </activity>
-        <activity android:name="com.droidplanner.RCActivity" >
+        <activity android:name="com.droidplanner.RCActivity" 
+            android:screenOrientation="landscape">
         </activity>
         <activity android:name="com.droidplanner.TerminalActivity" >
         </activity>
