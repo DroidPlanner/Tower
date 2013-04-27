@@ -69,8 +69,7 @@ public class CameraActivity extends SuperActivity {
 
 		@Override
 		public void OnMoved(double pan, double tilt) {
-			// rcOutput.setRcChannel(RcOutput.RUDDER, pan);
-			// rcOutput.setRcChannel(RcOutput.TROTTLE, tilt);
+			rcOutput.setRcChannel(RcOutput.RC8, pan);
 		}
 	};
 	JoystickMovedListener rJoystick = new JoystickMovedListener() {
@@ -84,8 +83,8 @@ public class CameraActivity extends SuperActivity {
 
 		@Override
 		public void OnMoved(double pan, double tilt) {
-			// rcOutput.setRcChannel(RcOutput.AILERON, pan);
-			// rcOutput.setRcChannel(RcOutput.ELEVATOR, tilt);
+			rcOutput.setRcChannel(RcOutput.RC6, tilt);
+			rcOutput.setRcChannel(RcOutput.RC7, pan);
 		}
 	};
 }
