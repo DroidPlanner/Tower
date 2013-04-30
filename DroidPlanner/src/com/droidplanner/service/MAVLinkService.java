@@ -1,7 +1,5 @@
 package com.droidplanner.service;
 
-import java.util.ArrayList;
-
 import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -45,7 +43,7 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner{
 	private WakeLock wakeLock;
 	private MAVLinkConnection mavConnection;
 	// Messaging
-	ArrayList<Messenger> msgCenter = new ArrayList<Messenger>();
+	Messenger msgCenter = null;
 	final Messenger mMessenger = new Messenger(new IncomingHandler());
 
 	/**
@@ -60,11 +58,7 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner{
 			switch (msg.what) {
 			case MSG_REGISTER_CLIENT:
 				Log.d("Service", "Register Client");
-				synchronized (msgCenter) {
-					if (!msgCenter.contains(msg.replyTo))
-						msgCenter.add(msg.replyTo);
-
-				}
+				msgCenter = msg.replyTo;
 				// This fall-trough is intentional since when registering a new
 				// client we will want to know the state of the MAVLink
 				// connection
@@ -74,16 +68,14 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner{
 						: MSG_DEVICE_DISCONNECTED;
 				try {
 					Message msg_state = Message.obtain(null, state);
-					msg.replyTo.send(msg_state);
+					msgCenter.send(msg_state);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				break;
 			case MSG_UNREGISTER_CLIENT:
 				Log.d("Service", "Unregister Client");
-				synchronized (msgCenter) {
-					msgCenter.remove(msg.replyTo);
-				}
+				msgCenter = null;
 				break;
 
 			case MSG_TOGGLE_CONNECTION_STATE:
@@ -113,16 +105,12 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner{
 
 	private void notifyNewMessage(MAVLinkMessage m) {
 		try {
-			synchronized (msgCenter) {
-				for (Messenger c : msgCenter) {
-					if (c == null)
-						continue;
-					Message msg = Message.obtain(null, MSG_RECEIVED_DATA);
-					Bundle data = new Bundle();
-					data.putSerializable("msg", m);
-					msg.setData(data);
-					c.send(msg);
-				}
+			if (msgCenter != null) {
+				Message msg = Message.obtain(null, MSG_RECEIVED_DATA);
+				Bundle data = new Bundle();
+				data.putSerializable("msg", m);
+				msg.setData(data);
+				msgCenter.send(msg);
 			}
 		} catch (RemoteException e) {
 			e.printStackTrace();
@@ -132,13 +120,9 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner{
 
 	private void sendMessage(int m) {
 		try {
-			synchronized (msgCenter) {
-				for (Messenger c : msgCenter) {
-					if (c == null)
-						continue;
-					Message msg = Message.obtain(null, m);
-					c.send(msg);
-				}
+			if (msgCenter != null) {
+				Message msg = Message.obtain(null, m);
+				msgCenter.send(msg);
 			}
 		} catch (RemoteException e) {
 			e.printStackTrace();
@@ -148,8 +132,7 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner{
 
 	@Override
 	public void onReceiveMessage(MAVLinkMessage msg) {
-		notifyNewMessage(msg);
-	
+		notifyNewMessage(msg);	
 	}
 
 	@Override
