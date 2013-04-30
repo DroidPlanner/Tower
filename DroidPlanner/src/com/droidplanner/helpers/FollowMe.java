@@ -54,9 +54,9 @@ public class FollowMe implements LocationListener {
 	
 	@Override
 	public void onLocationChanged(Location location) {
-		// TODO Auto-generated method stub
 		Log.d("GPS", "Location:"+location.getProvider()+" lat "+location.getLatitude()+" :lng "+location.getLongitude()+" :alt "+location.getAltitude()+" :acu "+location.getAccuracy());
-		
+		waypoint guidedWP = new waypoint(location.getLatitude(), location.getLongitude(), 100.0);	// TODO find a better way to do the altitude
+		setGuidedMode(guidedWP);
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class FollowMe implements LocationListener {
 	}
 
 	
-	public void setGuidedMode(waypoint wp) {
+	private void setGuidedMode(waypoint wp) {
 		msg_mission_item msg = new msg_mission_item();
 		msg.seq = 0;
 		msg.current = 2;	//TODO use guided mode enum
