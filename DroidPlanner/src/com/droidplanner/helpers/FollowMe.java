@@ -37,7 +37,6 @@ public class FollowMe implements LocationListener {
 				
 		// Register the listener with the Location Manager to receive location updates
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
 		
 		followMeEnabled = true;		
 	}
