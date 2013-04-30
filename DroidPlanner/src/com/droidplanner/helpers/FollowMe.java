@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.MAVLink.waypoint;
+import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.droidplanner.service.MAVLinkClient;
 
 public class FollowMe implements LocationListener {
@@ -70,4 +72,23 @@ public class FollowMe implements LocationListener {
 	public void onStatusChanged(String provider, int status, Bundle extras) {		
 	}
 
+	
+	public void setGuidedMode(waypoint wp) {
+		msg_mission_item msg = new msg_mission_item();
+		msg.seq = 0;
+		msg.current = 2;	//TODO use guided mode enum
+		msg.frame = 0; // TODO use correct parameter
+		msg.command = 16; // TODO use correct parameter
+		msg.param1 = 0; // TODO use correct parameter
+		msg.param2 = 0; // TODO use correct parameter
+		msg.param3 = 0; // TODO use correct parameter
+		msg.param4 = 0; // TODO use correct parameter
+		msg.x = (float) wp.coord.latitude;
+		msg.y = (float) wp.coord.longitude;
+		msg.z = wp.Height.floatValue();
+		msg.autocontinue = 1; // TODO use correct parameter
+		msg.target_system = 1;
+		msg.target_component = 1;
+		MAV.sendMavPacket(msg.pack());
+	}
 }
