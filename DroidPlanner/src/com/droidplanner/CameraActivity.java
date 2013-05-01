@@ -54,6 +54,8 @@ public class CameraActivity extends SuperActivity {
 			bTogleCamera.setTitle("Enable");
 		} else {
 			rcOutput.enableRcOverride();
+			lJoystick.OnMoved(0f, 0f);
+			rJoystick.OnMoved(0f, 0f);
 			bTogleCamera.setTitle("Disable");
 		}
 	}
