@@ -28,16 +28,12 @@ import com.droidplanner.service.MAVLinkConnection.MavLinkConnectionListner;
  * 
  */
 public class MAVLinkService extends Service implements MavLinkConnectionListner {
-
-	
 	public static final int MSG_REGISTER_CLIENT = 1;
 	public static final int MSG_UNREGISTER_CLIENT = 2;
 	public static final int MSG_SEND_DATA = 3;
 	
-
 	private WakeLock wakeLock;
 	private MAVLinkConnection mavConnection;
-	// Messaging
 	Messenger msgCenter = null;
 	final Messenger mMessenger = new Messenger(new IncomingHandler());
 	private boolean couldNotOpenConnection = false;
@@ -115,10 +111,6 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public void onConnect() {
 	}
 
 	@Override
