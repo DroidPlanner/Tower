@@ -16,7 +16,6 @@ import android.os.PowerManager.WakeLock;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
@@ -52,15 +51,12 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case MSG_REGISTER_CLIENT:
-				Log.d("Service", "Register Client");
 				msgCenter = msg.replyTo;
 				break;
 			case MSG_UNREGISTER_CLIENT:
-				Log.d("Service", "Unregister Client");
 				msgCenter = null;
 				break;
 			case MSG_SEND_DATA:
-				Log.d("Service", "Send Data");
 				Bundle b = msg.getData();
 				MAVLinkPacket packet = (MAVLinkPacket) b.getSerializable("msg");
 				if (mavConnection != null) {
@@ -91,7 +87,6 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 			}
 		} catch (RemoteException e) {
 			e.printStackTrace();
-
 		}
 	}
 
@@ -102,70 +97,51 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 
 	@Override
 	public void onDisconnect() {
-		releaseWakelock();
-		updateNotification(getResources().getString(R.string.disconnected));
 	}
 
 	@Override
 	public void onConnect() {
-		aquireWakelock();
-		updateNotification(getResources().getString(R.string.conected));
 	}
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		connectMAVconnection();
 		showNotification();
-	}
-
-	@SuppressWarnings("deprecation")
-	protected void aquireWakelock() {
-		if (wakeLock == null) {
-			PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-			// TODO Use PARTIAL_WAKE_LOCK, and another pref to keep the screen on
-			wakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "CPU");
-			wakeLock.acquire();
-		}
-	}
-
-	protected void releaseWakelock() {
-		if (wakeLock != null) {
-			wakeLock.release();
-			wakeLock = null;
-		}
+		aquireWakelock();
+		updateNotification(getResources().getString(R.string.conected));
 	}
 
 	@Override
 	public void onDestroy() {
-		if (mavConnection != null) {
-			mavConnection.disconnect();
-			mavConnection = null;
-		}
+		disconnectMAVConnection();
 		dismissNotification();
+		releaseWakelock();
 		super.onDestroy();
-		Log.d("SERVICE", "Destroyed");
 	}
 
 	/**
 	 * Toggle the current state of the MAVlink connection. Starting and closing
 	 * the as needed. May throw a onConnect or onDisconnect callback
 	 */
-	public void toggleConnectionState() {
+	private void connectMAVconnection() {
+		String connectionType = PreferenceManager
+				.getDefaultSharedPreferences(getApplicationContext())
+				.getString("pref_connection_type", "");
+		if (connectionType.equals("USB")) {
+			mavConnection = new UsbConnection(this);
+		} else if (connectionType.equals("TCP")) {
+			mavConnection = new TcpConnection(this);
+		} else {
+			return;
+		}
+		mavConnection.start();
+	}
+
+	private void disconnectMAVConnection() {
 		if (mavConnection != null) {
 			mavConnection.disconnect();
 			mavConnection = null;
-		} else {
-			String connectionType = PreferenceManager
-					.getDefaultSharedPreferences(getApplicationContext())
-					.getString("pref_connection_type", "");
-			if (connectionType.equals("USB")) {
-				mavConnection = new UsbConnection(this);
-			} else if (connectionType.equals("TCP")) {
-				mavConnection = new TcpConnection(this);
-			} else {
-				return;
-			}
-			mavConnection.start();
 		}
 	}
 
@@ -197,4 +173,20 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 
 	}
 
+	@SuppressWarnings("deprecation")
+	protected void aquireWakelock() {
+		if (wakeLock == null) {
+			PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+			// TODO Use PARTIAL_WAKE_LOCK, and another pref to keep the screen on
+			wakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "CPU");
+			wakeLock.acquire();
+		}
+	}
+	
+	protected void releaseWakelock() {
+		if (wakeLock != null) {
+			wakeLock.release();
+			wakeLock = null;
+		}
+	}
 }

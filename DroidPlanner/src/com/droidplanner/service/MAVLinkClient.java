@@ -11,7 +11,6 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import android.util.Log;
 
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
@@ -38,14 +37,12 @@ public class MAVLinkClient {
 	}
 
 	public void init() {
-		Log.d("Client", "Client Init");
 		parent.bindService(new Intent(parent, MAVLinkService.class),
 				mConnection, Context.BIND_AUTO_CREATE);
 		mIsBound = true;
 	}
 
 	public void close() {
-		Log.d("Client", "Client closing");
 		if (isConnected()) {
 			// If we have received the service, and hence registered with
 			// it, then now is the time to unregister.
@@ -126,14 +123,12 @@ public class MAVLinkClient {
 	}
 
 	private void onConnectedService() {
-		Log.d("Client", "Client Connected");
 		listner.notifyConnected();
 	}
 
 	private void onDisconnectService() {
 		mIsBound = false;
 		listner.notifyDisconnected();
-		Log.d("Client", "Client Unbinding");
 	}
 
 	public void queryConnectionState() {
