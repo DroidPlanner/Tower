@@ -28,17 +28,12 @@ import com.droidplanner.service.MAVLinkConnection.MavLinkConnectionListner;
  * http://developer.android.com/guide/components/bound-services.html#Messenger
  * 
  */
-public class MAVLinkService extends Service implements MavLinkConnectionListner{
+public class MAVLinkService extends Service implements MavLinkConnectionListner {
 
-	public static final int MSG_GET_CONNECTION_STATE = 0;
-	public static final int MSG_SAY_HELLO = 1;
-	public static final int MSG_RECEIVED_DATA = 2;
-	public static final int MSG_DEVICE_DISCONNECTED = 3;
-	public static final int MSG_DEVICE_CONNECTED = 4;
-	public static final int MSG_REGISTER_CLIENT = 5;
-	public static final int MSG_UNREGISTER_CLIENT = 6;
-	public static final int MSG_TOGGLE_CONNECTION_STATE = 7;
-	public static final int MSG_SEND_DATA = 8;
+	public static final int MSG_RECEIVED_DATA = 0;
+	public static final int MSG_REGISTER_CLIENT = 1;
+	public static final int MSG_UNREGISTER_CLIENT = 2;
+	public static final int MSG_SEND_DATA = 3;
 
 	private WakeLock wakeLock;
 	private MAVLinkConnection mavConnection;
@@ -59,34 +54,16 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner{
 			case MSG_REGISTER_CLIENT:
 				Log.d("Service", "Register Client");
 				msgCenter = msg.replyTo;
-				// This fall-trough is intentional since when registering a new
-				// client we will want to know the state of the MAVLink
-				// connection
-			case MSG_GET_CONNECTION_STATE:
-				Log.d("Service", "What is the connection state?");
-				int state = (mavConnection!=null) ? MSG_DEVICE_CONNECTED
-						: MSG_DEVICE_DISCONNECTED;
-				try {
-					Message msg_state = Message.obtain(null, state);
-					msgCenter.send(msg_state);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
 				break;
 			case MSG_UNREGISTER_CLIENT:
 				Log.d("Service", "Unregister Client");
 				msgCenter = null;
 				break;
-
-			case MSG_TOGGLE_CONNECTION_STATE:
-				Log.d("Service", "Toglle connection to Device");
-				toggleConnectionState();
-				break;
-
 			case MSG_SEND_DATA:
+				Log.d("Service", "Send Data");
 				Bundle b = msg.getData();
 				MAVLinkPacket packet = (MAVLinkPacket) b.getSerializable("msg");
-				if (mavConnection!=null) {					
+				if (mavConnection != null) {
 					mavConnection.sendMavPacket(packet);
 				}
 			default:
@@ -118,26 +95,13 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner{
 		}
 	}
 
-	private void sendMessage(int m) {
-		try {
-			if (msgCenter != null) {
-				Message msg = Message.obtain(null, m);
-				msgCenter.send(msg);
-			}
-		} catch (RemoteException e) {
-			e.printStackTrace();
-
-		}
-	}
-
 	@Override
 	public void onReceiveMessage(MAVLinkMessage msg) {
-		notifyNewMessage(msg);	
+		notifyNewMessage(msg);
 	}
 
 	@Override
 	public void onDisconnect() {
-		sendMessage(MSG_DEVICE_DISCONNECTED);
 		releaseWakelock();
 		updateNotification(getResources().getString(R.string.disconnected));
 	}
@@ -145,7 +109,6 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner{
 	@Override
 	public void onConnect() {
 		aquireWakelock();
-		sendMessage(MSG_DEVICE_CONNECTED);
 		updateNotification(getResources().getString(R.string.conected));
 	}
 
@@ -157,28 +120,30 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner{
 
 	@SuppressWarnings("deprecation")
 	protected void aquireWakelock() {
-		if(wakeLock==null){
+		if (wakeLock == null) {
 			PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-			wakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "CPU");	// Use PARTIAL_WAKE_LOCK, and another pref to keep the screen on
+			// TODO Use PARTIAL_WAKE_LOCK, and another pref to keep the screen on
+			wakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "CPU");
 			wakeLock.acquire();
 		}
 	}
-	
+
 	protected void releaseWakelock() {
-		if(wakeLock!=null){
-			wakeLock.release();		
+		if (wakeLock != null) {
+			wakeLock.release();
 			wakeLock = null;
 		}
 	}
 
 	@Override
 	public void onDestroy() {
-		if(mavConnection !=null){
+		if (mavConnection != null) {
 			mavConnection.disconnect();
 			mavConnection = null;
 		}
 		dismissNotification();
 		super.onDestroy();
+		Log.d("SERVICE", "Destroyed");
 	}
 
 	/**
@@ -190,7 +155,9 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner{
 			mavConnection.disconnect();
 			mavConnection = null;
 		} else {
-			String connectionType = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("pref_connection_type", "");
+			String connectionType = PreferenceManager
+					.getDefaultSharedPreferences(getApplicationContext())
+					.getString("pref_connection_type", "");
 			if (connectionType.equals("USB")) {
 				mavConnection = new UsbConnection(this);
 			} else if (connectionType.equals("TCP")) {
@@ -201,7 +168,7 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner{
 			mavConnection.start();
 		}
 	}
-	
+
 	/**
 	 * Show a notification while this service is running.
 	 */
@@ -229,4 +196,5 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner{
 		mNotificationManager.cancelAll();
 
 	}
+
 }

@@ -20,17 +20,13 @@ import com.MAVLink.Messages.MAVLinkPacket;
 public class MAVLinkClient {
 
 	Context parent;
-
-	/** Messenger for communicating with service. */
+	private OnMavlinkClientListner listner;
 	Messenger mService = null;
 	final Messenger mMessenger = new Messenger(new IncomingHandler());
-	public boolean startedInit = false;
+	private boolean mIsBound;
 
-	private OnMavlinkClientListner listner;
 
-	
-	
-	public interface OnMavlinkClientListner{
+	public interface OnMavlinkClientListner {
 		public void notifyConnected();
 		public void notifyDisconnected();
 		public void notifyReceivedData(MAVLinkMessage m);
@@ -41,34 +37,35 @@ public class MAVLinkClient {
 		this.listner = listner;
 	}
 
-	public void onDestroy() {
-		if (!startedInit)
-			return;
-		Log.d("Service", "Client Destroyed");
-		try {
-			if (mService != null) {
-				Message msg = Message.obtain(null,
-						MAVLinkService.MSG_UNREGISTER_CLIENT);
-				msg.replyTo = mMessenger;
-				mService.send(msg);
-
-			}
-			// Unbinding the service.
-			parent.unbindService(mConnection);
-
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e){
-			e.printStackTrace();
-		}
+	public void init() {
+		Log.d("Client", "Client Init");
+		parent.bindService(new Intent(parent, MAVLinkService.class),
+				mConnection, Context.BIND_AUTO_CREATE);
+		mIsBound = true;
 	}
 
-	public void init() {
-		Log.d("Service", "Client Init");
-		startedInit = true;
-		parent.bindService(
-				new Intent(parent, MAVLinkService.class), mConnection,
-				Context.BIND_AUTO_CREATE);
+	public void close() {
+		Log.d("Client", "Client closing");
+		if (isConnected()) {
+			// If we have received the service, and hence registered with
+			// it, then now is the time to unregister.
+			if (mService != null) {
+				try {
+					Message msg = Message.obtain(null,
+							MAVLinkService.MSG_UNREGISTER_CLIENT);
+					msg.replyTo = mMessenger;
+					mService.send(msg);
+
+				} catch (RemoteException e) {
+					e.printStackTrace();
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				}
+				// Unbinding the service.
+				parent.unbindService(mConnection);
+				onDisconnectService();
+			}
+		}
 	}
 
 	/**
@@ -77,18 +74,9 @@ public class MAVLinkClient {
 	@SuppressLint("HandlerLeak")
 	// TODO fix this error message
 	class IncomingHandler extends Handler {
-
 		@Override
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
-			case MAVLinkService.MSG_DEVICE_CONNECTED:
-				listner.notifyConnected();
-				break;
-
-			case MAVLinkService.MSG_DEVICE_DISCONNECTED:
-				listner.notifyDisconnected();
-				break;
-
 			// Received data from... somewhere
 			case MAVLinkService.MSG_RECEIVED_DATA:
 				Bundle b = msg.getData();
@@ -113,35 +101,16 @@ public class MAVLinkClient {
 						MAVLinkService.MSG_REGISTER_CLIENT);
 				msg.replyTo = mMessenger;
 				mService.send(msg);
-				Log.d("Service", "Client Connected");
+				onConnectedService();
 			} catch (RemoteException e) {
 			}
 		}
 
 		@Override
 		public void onServiceDisconnected(ComponentName arg0) {
-			Log.d("Service", "Client Disconencted");
-			mService = null;
+			onDisconnectService();
 		}
 	};
-
-	public void toggleConnectionState() {
-		Message msg = Message.obtain(null, MAVLinkService.MSG_TOGGLE_CONNECTION_STATE);
-		try {
-			mService.send(msg);
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void queryConnectionState() {
-		Message msg = Message.obtain(null, MAVLinkService.MSG_GET_CONNECTION_STATE);
-		try {
-			mService.send(msg);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	public void sendMavPacket(MAVLinkPacket pack) {
 		Message msg = Message.obtain(null, MAVLinkService.MSG_SEND_DATA);
@@ -154,5 +123,29 @@ public class MAVLinkClient {
 			e.printStackTrace();
 		}
 
+	}
+
+	private void onConnectedService() {
+		Log.d("Client", "Client Connected");
+		listner.notifyConnected();
+	}
+
+	private void onDisconnectService() {
+		mIsBound = false;
+		listner.notifyDisconnected();
+		Log.d("Client", "Client Unbinding");
+	}
+
+	public void queryConnectionState() {
+		if (mIsBound) {
+			listner.notifyConnected();
+		} else {
+			listner.notifyDisconnected();
+		}
+
+	}
+
+	public boolean isConnected() {
+		return mIsBound;
 	}
 }
