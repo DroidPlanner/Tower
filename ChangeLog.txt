@@ -1,3 +1,6 @@
+## Droidplanner v0.7.7
+* Better handling of the MAVLink connection
+
 ## Droidplanner v0.7.6
 * Map type selection
 * Lock orientation in the RC override screen
