@@ -48,21 +48,9 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 		drone = new Drone(tts);
 		MAVClient = new MAVLinkClient(this,this);
 		waypointMananger = new WaypointMananger(MAVClient,this);
-		mavLinkMsgHandler = new com.droidplanner.MAVLink.MavLinkMsgHandler(drone); 
-		MAVClient.init();		
+		mavLinkMsgHandler = new com.droidplanner.MAVLink.MavLinkMsgHandler(drone);	
 	}
 	
-	
-	@Override
-	protected void finalize() throws Throwable {
-		super.finalize();
-		try {
-			MAVClient.onDestroy();	
-		} catch (Exception e) {
-		};
-	}
-
-
 	
 	@Override
 	public void notifyReceivedData(MAVLinkMessage msg) {
