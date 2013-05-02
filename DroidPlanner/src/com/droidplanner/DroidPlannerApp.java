@@ -50,7 +50,7 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 		MAVClient = new MAVLinkClient(this,this);
 		waypointMananger = new WaypointMananger(MAVClient,this);
 		mavLinkMsgHandler = new com.droidplanner.MAVLink.MavLinkMsgHandler(drone);
-		followMe = new FollowMe(MAVClient, this);
+		followMe = new FollowMe(MAVClient, this,drone);
 		MAVClient.init();		
 	}
 	

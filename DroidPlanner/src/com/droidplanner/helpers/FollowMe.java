@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.MAVLink.waypoint;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
+import com.droidplanner.MAVLink.Drone;
 import com.droidplanner.service.MAVLinkClient;
 
 public class FollowMe implements LocationListener {
@@ -17,10 +18,12 @@ public class FollowMe implements LocationListener {
 	private Context context;
 	private boolean followMeEnabled = false;
 	private LocationManager locationManager;
+	private Drone drone;
 	
-	public FollowMe(MAVLinkClient MAVClient,Context context) {
+	public FollowMe(MAVLinkClient MAVClient,Context context, Drone drone) {
 		this.MAV = MAVClient;
 		this.context = context;
+		this.drone = drone;
 		this.locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 	}
 	public void toogleFollowMeState() {
@@ -55,7 +58,7 @@ public class FollowMe implements LocationListener {
 	@Override
 	public void onLocationChanged(Location location) {
 		Log.d("GPS", "Location:"+location.getProvider()+" lat "+location.getLatitude()+" :lng "+location.getLongitude()+" :alt "+location.getAltitude()+" :acu "+location.getAccuracy());
-		waypoint guidedWP = new waypoint(location.getLatitude(), location.getLongitude(), 100.0);	// TODO find a better way to do the altitude
+		waypoint guidedWP = new waypoint(location.getLatitude(), location.getLongitude(), drone.defaultAlt);	// TODO find a better way to do the altitude
 		setGuidedMode(guidedWP);
 	}
 
