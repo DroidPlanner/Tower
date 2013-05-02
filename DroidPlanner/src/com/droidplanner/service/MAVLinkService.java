@@ -29,16 +29,18 @@ import com.droidplanner.service.MAVLinkConnection.MavLinkConnectionListner;
  */
 public class MAVLinkService extends Service implements MavLinkConnectionListner {
 
-	public static final int MSG_RECEIVED_DATA = 0;
+	
 	public static final int MSG_REGISTER_CLIENT = 1;
 	public static final int MSG_UNREGISTER_CLIENT = 2;
 	public static final int MSG_SEND_DATA = 3;
+	
 
 	private WakeLock wakeLock;
 	private MAVLinkConnection mavConnection;
 	// Messaging
 	Messenger msgCenter = null;
 	final Messenger mMessenger = new Messenger(new IncomingHandler());
+	private boolean couldNotOpenConnection = false;
 
 	/**
 	 * Handler of incoming messages from clients.
@@ -52,6 +54,9 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 			switch (msg.what) {
 			case MSG_REGISTER_CLIENT:
 				msgCenter = msg.replyTo;
+				if (couldNotOpenConnection) {
+					selfDestryService();
+				}
 				break;
 			case MSG_UNREGISTER_CLIENT:
 				msgCenter = null;
@@ -79,7 +84,7 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 	private void notifyNewMessage(MAVLinkMessage m) {
 		try {
 			if (msgCenter != null) {
-				Message msg = Message.obtain(null, MSG_RECEIVED_DATA);
+				Message msg = Message.obtain(null, MAVLinkClient.MSG_RECEIVED_DATA);
 				Bundle data = new Bundle();
 				data.putSerializable("msg", m);
 				msg.setData(data);
@@ -97,6 +102,19 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 
 	@Override
 	public void onDisconnect() {
+		couldNotOpenConnection  = true;
+		selfDestryService();
+	}
+
+	private void selfDestryService() {
+		try {
+			if (msgCenter != null) {
+				Message msg = Message.obtain(null, MAVLinkClient.MSG_SELF_DESTRY_SERVICE);
+				msgCenter.send(msg);
+			}
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

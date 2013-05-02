@@ -17,6 +17,8 @@ import com.MAVLink.Messages.MAVLinkPacket;
 
 // provide a common class for some ease of use functionality
 public class MAVLinkClient {
+	public static final int MSG_RECEIVED_DATA = 0;
+	public static final int MSG_SELF_DESTRY_SERVICE = 1;
 
 	Context parent;
 	private OnMavlinkClientListner listner;
@@ -75,12 +77,14 @@ public class MAVLinkClient {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			// Received data from... somewhere
-			case MAVLinkService.MSG_RECEIVED_DATA:
+			case MSG_RECEIVED_DATA:
 				Bundle b = msg.getData();
 				MAVLinkMessage m = (MAVLinkMessage) b.getSerializable("msg");
 				listner.notifyReceivedData(m);
 				break;
-
+			case MSG_SELF_DESTRY_SERVICE:
+				close();
+				break;
 			default:
 				super.handleMessage(msg);
 			}
