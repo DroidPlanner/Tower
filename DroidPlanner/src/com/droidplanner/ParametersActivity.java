@@ -43,6 +43,9 @@ public class ParametersActivity extends SuperActivity implements
 		case R.id.menu_save_parameters:
 			saveParametersToFile();
 			return true;
+		case R.id.menu_write_parameters:
+			writeModifiedParametersToDrone();
+			return true;
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
@@ -54,6 +57,18 @@ public class ParametersActivity extends SuperActivity implements
 		return super.onCreateOptionsMenu(menu);
 	}
 
+	
+	private void writeModifiedParametersToDrone() {
+		int count =0;
+		for (ParamRow row : rowList) {
+			if (!row.isNewValueEqualToDroneParam()){
+				app.parameterMananger.onSend(row.getParameterFromRow());
+				count++;
+			}						
+		}		
+		Toast.makeText(this, "Write "+count+" parameters", Toast.LENGTH_SHORT).show();		
+	}
+	
 	@Override
 	public void onParametersReceived() {
 		Log.d("PARM", "parameters Received");

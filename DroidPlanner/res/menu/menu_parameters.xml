@@ -6,6 +6,10 @@
         android:title="Refresh" 
         tools:ignore="HardcodedText"/>
     <item
+        android:id="@+id/menu_write_parameters"
+        android:showAsAction="ifRoom"
+        android:title="Write"/>
+    <item
         android:id="@+id/menu_connect"
         android:showAsAction="ifRoom"
         android:title="@string/menu_connect"/>

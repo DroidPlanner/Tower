@@ -108,7 +108,7 @@ public class ParamRow extends TableRow implements OnClickListener, TextWatcher {
 		}
 	}
 
-	private boolean isNewValueEqualToDroneParam() {
+	public boolean isNewValueEqualToDroneParam() {
 		return param.getValue().equals(valueView.getText().toString());
 	}
 
