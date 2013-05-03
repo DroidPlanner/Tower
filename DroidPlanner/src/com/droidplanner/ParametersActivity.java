@@ -72,7 +72,7 @@ public class ParametersActivity extends SuperActivity implements
 	@Override
 	public void onParametersReceived() {
 		Log.d("PARM", "parameters Received");
-		Toast.makeText(this, "Parameters Received", Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, "Parameters Received", Toast.LENGTH_LONG).show();
 	}
 
 
