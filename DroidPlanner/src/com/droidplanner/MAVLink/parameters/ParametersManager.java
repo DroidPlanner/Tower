@@ -3,8 +3,6 @@ package com.droidplanner.MAVLink.parameters;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.util.Log;
-
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_param_request_list;
 import com.MAVLink.Messages.ardupilotmega.msg_param_set;
@@ -71,7 +69,6 @@ public class ParametersManager {
 	}
 
 	private void processReceivedParam(msg_param_value m_value) {
-		Log.d("PARM", m_value.toString());
 		Parameter param = new Parameter(m_value.getParam_Id(),m_value.param_value,m_value.param_type,m_value.param_index);
 		parameters.add(param);
 		listner.onParameterReceived(param);
@@ -88,7 +85,6 @@ public class ParametersManager {
 	}
 
 	public void sendParameter(Parameter parameter) {
-		Log.d("PARM", "Send: "+parameter.name+" : "+parameter.value);
 		msg_param_set msg = new msg_param_set();
 		msg.target_system = 1;
 		msg.target_component = 1;

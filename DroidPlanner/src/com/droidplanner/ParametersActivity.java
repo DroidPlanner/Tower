@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TableLayout;
@@ -71,7 +70,6 @@ public class ParametersActivity extends SuperActivity implements
 	
 	@Override
 	public void onParametersReceived() {
-		Log.d("PARM", "parameters Received");
 		Toast.makeText(this, "Parameters Received", Toast.LENGTH_LONG).show();
 	}
 
