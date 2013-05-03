@@ -18,6 +18,10 @@ public class FileManager {
 		return (root + "/DroidPlanner/");
 	}
 
+	static public String getParametersPath() {
+		return getDroidPlannerPath() + "/Parameters/";
+	}
+
 	static public String getWaypointsPath() {
 		return getDroidPlannerPath() + "/Waypoints/";
 	}
@@ -33,6 +37,18 @@ public class FileManager {
 	static public String getMapsPath() {
 		return getDroidPlannerPath() + "/Maps/";
 	}
+
+	
+	public static FileOutputStream getParameterFileStream() throws FileNotFoundException {
+		File myDir = new File(getParametersPath());
+		myDir.mkdirs();
+		File file = new File(myDir, "Parameters-" + getTimeStamp() + ".param");
+		if (file.exists())
+			file.delete();
+		FileOutputStream out = new FileOutputStream(file);
+		return out;
+	}
+	
 
 	static public FileOutputStream getWaypointFileStream()
 			throws FileNotFoundException {
@@ -106,7 +122,7 @@ public class FileManager {
 	/**
 	 * Timestamp for logs in the Mission Planner Format
 	 */
-	static private String getTimeStamp() {
+	static public String getTimeStamp() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss",
 				Locale.US);
 		String timeStamp = sdf.format(new Date());

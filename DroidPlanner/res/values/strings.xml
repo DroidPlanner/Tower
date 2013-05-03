@@ -10,12 +10,14 @@
         <item>Planning</item>
         <item>Flight Data</item>
         <item>RC</item>
+        <item>Parameters</item>     
         <item>GCP</item>        
         <item>Terminal</item>
     </string-array>
        
     <string name="conected">Connected</string>
     <string name="disconnected">Disconnected</string>
+    <string name="save">Save</string>
     <string name="menu_open_file">Open file</string>
     <string name="menu_save_file">Save file</string>
     <string name="menu_load_from_apm">Load from APM</string>
@@ -42,6 +44,8 @@
     <string name="dialog_polygon_distance_between_lines">Distance between lines:</string>
     <string name="enable_rc_control">Enable RC control</string>
     <string name="disable_rc_control">Disable RC control</string>
+    <string name="write">Write</string>
+    <string name="refresh">Refresh</string>
 
     
     <string-array name="TelemetryConnectionTypes">
