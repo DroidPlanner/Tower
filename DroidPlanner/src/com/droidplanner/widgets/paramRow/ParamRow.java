@@ -39,9 +39,9 @@ public class ParamRow extends TableRow implements OnClickListener, TextWatcher {
 	public void setParam(Parameter param) {
 		this.param = param;
 		nameView.setText(param.name);
-		valueView.setText(String.format("%3.3f", param.value));
 		typeView.setText(Integer.toString(param.type));
 		indexView.setText(Integer.toString(param.index));
+		valueView.setText(param.getValue());
 		sendButton.setText("Send");
 	}
 
@@ -91,17 +91,15 @@ public class ParamRow extends TableRow implements OnClickListener, TextWatcher {
 
 	@Override
 	public void afterTextChanged(Editable s) {			
-		if (isValueDiferentFromDroneParam()) {
-			Log.d("PARM", "Diferent");	
-			valueView.setTextColor(Color.RED);
-		}else{		
-			Log.d("PARM", "equal");
+		if (isNewValueEqualToDroneParam()) {
 			valueView.setTextColor(Color.WHITE);
+		}else{			
+			valueView.setTextColor(Color.RED);
 		}
 	}
 
-	private boolean isValueDiferentFromDroneParam() {
-		return getParamValue() != (param.value);
+	private boolean isNewValueEqualToDroneParam() {
+		return param.getValue().equals(valueView.getText().toString());
 	}
 
 	@Override

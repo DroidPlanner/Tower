@@ -1,5 +1,7 @@
 package com.droidplanner.MAVLink;
 
+import java.util.Locale;
+
 public class Parameter {
 	public String name;
 	public double value;
@@ -11,6 +13,10 @@ public class Parameter {
 		this.value = value;
 		this.type = type;
 		this.index = index;
+	}
+	
+	public String getValue(){
+		return String.format(Locale.US,"%3.3f", value);
 	}
 
 }
