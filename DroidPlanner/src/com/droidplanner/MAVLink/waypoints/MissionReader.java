@@ -1,4 +1,4 @@
-package com.droidplanner.MAVLink;
+package com.droidplanner.MAVLink.waypoints;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;

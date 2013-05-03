@@ -8,7 +8,7 @@ import android.widget.Toast;
 
 import com.droidplanner.R;
 import com.droidplanner.MAVLink.Drone;
-import com.droidplanner.MAVLink.MissionReader;
+import com.droidplanner.MAVLink.waypoints.MissionReader;
 import com.droidplanner.helpers.FileManager;
 
 public abstract class OpenMissionDialog implements OnClickListener {
