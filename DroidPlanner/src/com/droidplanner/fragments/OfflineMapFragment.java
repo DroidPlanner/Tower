@@ -37,11 +37,13 @@ public class OfflineMapFragment extends MapFragment {
 
 	private void setupMapUI() {
 		GoogleMap mMap = getMap();
-		mMap.setMyLocationEnabled(true);
-		UiSettings mUiSettings = mMap.getUiSettings();
-		mUiSettings.setMyLocationButtonEnabled(true);
-		mUiSettings.setCompassEnabled(true);
-		mUiSettings.setTiltGesturesEnabled(false);
+		if (mMap!=null) {
+			mMap.setMyLocationEnabled(true);
+			UiSettings mUiSettings = mMap.getUiSettings();
+			mUiSettings.setMyLocationButtonEnabled(true);
+			mUiSettings.setCompassEnabled(true);
+			mUiSettings.setTiltGesturesEnabled(false);			
+		}
 	}
 
 	private void setupMapOverlay() {
