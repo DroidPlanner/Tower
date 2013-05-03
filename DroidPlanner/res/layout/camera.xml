@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="5dp"
-        android:text="This is very experimental, please be careful."
+        android:text="@string/this_is_very_experimental_please_be_careful"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <com.droidplanner.widgets.joystick.DualJoystickView

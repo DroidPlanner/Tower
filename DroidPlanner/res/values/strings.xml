@@ -47,6 +47,7 @@
     <string name="disable_rc_control">Disable RC control</string>
     <string name="write">Write</string>
     <string name="refresh">Refresh</string>
+    <string name="this_is_very_experimental_please_be_careful">This is very experimental, please be careful.</string>
 
     
     <string-array name="TelemetryConnectionTypes">

@@ -65,9 +65,9 @@
             android:title="Fligth path size" />
 
         <CheckBoxPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="pref_guided_mode_enabled"
-            android:summary="In development"
+            android:summary="Point and click guided flight"
             android:title="Enable Guided Mode" />
         <CheckBoxPreference
             android:defaultValue="false"
