@@ -27,7 +27,6 @@ public abstract class MAVLinkConnection extends Thread {
 	public interface MavLinkConnectionListner{
 		public void onReceiveMessage(MAVLinkMessage msg);
 		public void onDisconnect();
-		public void onConnect();
 	}
 	
 	protected Context parentContext;
@@ -64,7 +63,6 @@ public abstract class MAVLinkConnection extends Thread {
 				logBuffer = ByteBuffer.allocate(Long.SIZE/Byte.SIZE);
 				logBuffer.order(ByteOrder.BIG_ENDIAN);
 			}
-			listner.onConnect();
 			
 			while (connected) {
 				readDataBlock();

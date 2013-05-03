@@ -91,7 +91,7 @@ public abstract class SuperActivity extends Activity implements
 				startActivity(new Intent(this, SettingsActivity.class));
 				return true;
 			case R.id.menu_connect:
-				app.MAVClient.toggleConnectionState();
+				toggleConnectionState();
 				return true;
 			case R.id.menu_load_from_apm:
 				app.waypointMananger.getWaypoints();
@@ -102,6 +102,15 @@ public abstract class SuperActivity extends Activity implements
 	}
 	
 	
+
+	private void toggleConnectionState() {
+		if (app.MAVClient.isConnected()) {
+			app.MAVClient.close();
+		}else{
+			app.MAVClient.init();
+		}
+		
+	}
 
 	public void notifyDisconnected() {
 		if (connectButton != null) {
