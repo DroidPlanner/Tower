@@ -148,6 +148,13 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 		}
 	}
 	
+	@Override
+	public void onParameterReceived(Parameter parameter) {
+		if (parameterListner != null) {
+			parameterListner.onParameterReceived(parameter);			
+		}
+	}
+	
 	public void setConectionStateListner(ConnectionStateListner listner) {
 		conectionListner = listner;		
 	}
@@ -159,4 +166,6 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 	public void setOnParametersChangedListner(OnParameterManagerListner listner){
 		parameterListner = listner;
 	}
+
+
 }

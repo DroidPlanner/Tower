@@ -39,7 +39,7 @@ public class ParamRow extends TableRow implements OnClickListener, TextWatcher {
 		createRowViews(context);
 	}
 
-	public void setOnParameterSend(OnParameterSend listner){
+	public void setOnParameterSendListner(OnParameterSend listner){
 		this.listner = listner;
 	}
 	public void setParam(Parameter param) {
@@ -93,6 +93,10 @@ public class ParamRow extends TableRow implements OnClickListener, TextWatcher {
 
 	public double getParamValue() {
 		return Double.parseDouble(valueView.getText().toString());
+	}
+	
+	public String getParamName(){
+		return param.name;
 	}
 	
 	@Override

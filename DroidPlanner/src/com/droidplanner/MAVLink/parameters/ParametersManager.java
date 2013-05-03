@@ -25,6 +25,7 @@ public class ParametersManager implements OnParameterSend {
 
 	public interface OnParameterManagerListner {
 		public abstract void onParametersReceived(List<Parameter> parameters);
+		public abstract void onParameterReceived(Parameter parameter);
 	}
 
 	MAVLinkClient MAV;
@@ -74,6 +75,7 @@ public class ParametersManager implements OnParameterSend {
 		Log.d("PARM", m_value.toString());
 		Parameter param = new Parameter(m_value.getParam_Id(),m_value.param_value,m_value.param_type,m_value.param_index);
 		parameters.add(param);
+		listner.onParameterReceived(param);
 		if (m_value.param_index == m_value.param_count - 1) {
 			listner.onParametersReceived(parameters);
 		}

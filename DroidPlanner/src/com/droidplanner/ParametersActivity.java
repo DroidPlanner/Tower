@@ -1,5 +1,6 @@
 package com.droidplanner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Bundle;
@@ -18,7 +19,7 @@ public class ParametersActivity extends SuperActivity implements
 		OnParameterManagerListner {
 
 	private TableLayout parameterTable;
-	private List<Parameter> parameterList;
+	private List<ParamRow> rowList = new ArrayList<ParamRow>();
 
 	@Override
 	int getNavigationItem() {
@@ -55,24 +56,59 @@ public class ParametersActivity extends SuperActivity implements
 
 	@Override
 	public void onParametersReceived(List<Parameter> parameters) {
-		parameterList = parameters;
 		Log.d("PARM", "parameters Received");
-		parameterTable.removeAllViews();
-		for (Parameter param : parameters) {
-			ParamRow pRow = new ParamRow(this);
-			pRow.setParam(param);			
-			pRow.setOnParameterSend(app.parameterMananger);
-			parameterTable.addView(pRow);
+		Toast.makeText(this, "Parameters Received", Toast.LENGTH_SHORT).show();
+		//parameterTable.removeAllViews();
+		/*for (Parameter param : parameters) {
+			addParameterRow(param);
+		}*/
+	}
+
+
+	@Override
+	public void onParameterReceived(Parameter parameter) {
+		ParamRow row = findRowByName(parameter.name);
+		if (row!=null) {
+			row.setParam(parameter);
+			Log.d("PARM", "MACTH FOUND");	
+		}else{
+			Log.d("PARM", "ADDING PARAM");
+			addParameterRow(parameter);
 		}
 	}
 
+	private ParamRow findRowByName(String name) {
+		for (ParamRow row : rowList) {
+			if(row.getParamName().equals(name)){
+				return row;
+			}				
+		}
+		return null;
+	}
+
+	private void addParameterRow(Parameter param) {
+		ParamRow pRow = new ParamRow(this);
+		pRow.setParam(param);			
+		pRow.setOnParameterSendListner(app.parameterMananger);
+		rowList.add(pRow);
+		parameterTable.addView(pRow);
+	}
+	
+	private List<Parameter> getParameterListFromTable(){
+		ArrayList<Parameter> parameters = new ArrayList<Parameter>();
+		for (ParamRow row : rowList) {
+			parameters.add(row.getParameterFromRow());
+		}
+		return parameters;
+	}
+
 	private void saveParametersToFile() {
-		if (parameterList!= null) {
+		List<Parameter> parameterList = getParameterListFromTable();
+		if (parameterList.size()>0) {
 			ParameterWriter parameterWriter = new ParameterWriter(parameterList);
 			if(parameterWriter.saveParametersToFile()){
 				Toast.makeText(this, "Parameters saved", Toast.LENGTH_SHORT).show();
 			}
 		}
 	}
-
 }
