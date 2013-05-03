@@ -17,6 +17,7 @@
        
     <string name="conected">Connected</string>
     <string name="disconnected">Disconnected</string>
+    <string name="save_parameters_to_file">Save Parameters to file</string>
     <string name="menu_open_file">Open file</string>
     <string name="menu_save_file">Save file</string>
     <string name="menu_load_from_apm">Load from APM</string>

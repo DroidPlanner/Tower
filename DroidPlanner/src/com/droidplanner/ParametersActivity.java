@@ -7,8 +7,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TableLayout;
+import android.widget.Toast;
 
 import com.droidplanner.MAVLink.Parameter;
+import com.droidplanner.MAVLink.ParameterWriter;
 import com.droidplanner.MAVLink.ParametersManager.OnParameterManagerListner;
 import com.droidplanner.widgets.paramRow.ParamRow;
 
@@ -16,6 +18,7 @@ public class ParametersActivity extends SuperActivity implements
 		OnParameterManagerListner {
 
 	private TableLayout parameterTable;
+	private List<Parameter> parameterList;
 
 	@Override
 	int getNavigationItem() {
@@ -36,6 +39,9 @@ public class ParametersActivity extends SuperActivity implements
 		case R.id.menu_load_parameters:
 			app.parameterMananger.getAllParameters();
 			return true;
+		case R.id.menu_save_parameters:
+			saveParametersToFile();
+			return true;
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
@@ -49,6 +55,7 @@ public class ParametersActivity extends SuperActivity implements
 
 	@Override
 	public void onParametersReceived(List<Parameter> parameters) {
+		parameterList = parameters;
 		Log.d("PARM", "parameters Received");
 		parameterTable.removeAllViews();
 		for (Parameter param : parameters) {
@@ -59,5 +66,13 @@ public class ParametersActivity extends SuperActivity implements
 		}
 	}
 
+	private void saveParametersToFile() {
+		if (parameterList!= null) {
+			ParameterWriter parameterWriter = new ParameterWriter(parameterList);
+			if(parameterWriter.saveParametersToFile()){
+				Toast.makeText(this, "Parameters saved", Toast.LENGTH_SHORT).show();
+			}
+		}
+	}
 
 }
