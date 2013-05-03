@@ -63,12 +63,16 @@
             android:key="pref_max_fligth_path_size"
             android:summary="Size of the fligth path, set to zero to disable."
             android:title="Fligth path size" />
-
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="pref_guided_mode_enabled"
             android:summary="In development"
             android:title="Enable Guided Mode" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_follow_me_mode_enabled"
+            android:summary="In development"
+            android:title="Enable FollowMe Mode" />
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="pref_auto_pan_enabled"

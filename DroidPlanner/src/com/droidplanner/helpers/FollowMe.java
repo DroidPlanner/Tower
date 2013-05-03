@@ -1,10 +1,12 @@
 package com.droidplanner.helpers;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -28,11 +30,16 @@ public class FollowMe implements LocationListener {
 		this.drone = drone;
 		this.locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 	}
+
 	public void toogleFollowMeState() {
-		if(isEnabled()){
-			disableFollowMe();				
-		}else {
-			enableFollowMe();
+		if (isEnabledInPreferences()) {
+			if (isEnabled()) {
+				disableFollowMe();
+			} else {
+				enableFollowMe();
+			}
+		} else {
+			disableFollowMe();
 		}
 	}
 	
@@ -95,5 +102,11 @@ public class FollowMe implements LocationListener {
 		msg.target_system = 1;
 		msg.target_component = 1;
 		MAV.sendMavPacket(msg.pack());
+	}
+	private boolean isEnabledInPreferences() {
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(context);
+		
+		return prefs.getBoolean("pref_follow_me_mode_enabled", false);	
 	}
 }
