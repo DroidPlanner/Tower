@@ -9,6 +9,7 @@ import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_param_request_list;
 import com.MAVLink.Messages.ardupilotmega.msg_param_value;
 import com.droidplanner.service.MAVLinkClient;
+import com.droidplanner.widgets.paramRow.ParamRow.OnParameterSend;
 
 /**
  * Class to manage the communication of parameters to the MAV.
@@ -18,11 +19,8 @@ import com.droidplanner.service.MAVLinkClient;
  * MAV Message.
  * 
  */
-public class ParametersManager {
-	public void getAllParameters() {
-		parameters.clear();
-		requestParametersList();
-	}
+public class ParametersManager implements OnParameterSend {
+	
 
 	public interface OnParameterManagerListner {
 		public abstract void onParametersReceived(List<Parameter> parameters);
@@ -45,6 +43,11 @@ public class ParametersManager {
 		parameters = new ArrayList<Parameter>();
 	}
 
+	public void getAllParameters() {
+		parameters.clear();
+		requestParametersList();
+	}
+	
 	/**
 	 * Try to process a Mavlink message if it is a parameter related message
 	 * 
@@ -80,6 +83,12 @@ public class ParametersManager {
 		msg.target_system = 1;
 		msg.target_component = 1;
 		MAV.sendMavPacket(msg.pack());
+	}
+
+	@Override
+	public void onSend(Parameter parameter) {
+		// TODO generate a message to send the parameter
+		Log.d("PARM", "Send: "+parameter.name+" : "+parameter.value);
 	}
 
 }

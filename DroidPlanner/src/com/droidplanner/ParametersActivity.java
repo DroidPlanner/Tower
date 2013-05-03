@@ -54,6 +54,7 @@ public class ParametersActivity extends SuperActivity implements
 		for (Parameter param : parameters) {
 			ParamRow pRow = new ParamRow(this);
 			pRow.setParam(param);			
+			pRow.setOnParameterSend(app.parameterMananger);
 			parameterTable.addView(pRow);
 		}
 	}
