@@ -122,6 +122,8 @@ public class MAVLinkClient {
 			mService.send(msg);
 		} catch (RemoteException e) {
 			e.printStackTrace();
+		} catch (NullPointerException e){
+			e.printStackTrace();
 		}
 
 	}
