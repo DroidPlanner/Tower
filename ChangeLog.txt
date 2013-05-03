@@ -1,3 +1,8 @@
+## Droidplanner v0.8.0
+* Parameter screen, with the ability to read/write/save parameters from an ArduPilot board
+* Camera screen, virtual sticks to control a camera gimbal
+* Follow-me mode, just a beta test of this mode (disabled by default)
+
 ## Droidplanner v0.7.8
 * Fix bug in the MAVlink conenction
 
