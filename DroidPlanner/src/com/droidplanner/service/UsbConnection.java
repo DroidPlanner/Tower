@@ -81,8 +81,10 @@ public class UsbConnection extends MAVLinkConnection {
 		ftDev.setLatencyTimer(LATENCY_TIMER);
 		ftDev.purge((byte) (D2xxManager.FT_PURGE_TX | D2xxManager.FT_PURGE_RX));
 		
-		if (true == ftDev.isOpen()) {
-			Log.d("USB", "COM open");
+		if (!ftDev.isOpen()){
+			throw new IOException();
+		}else{
+			Log.d("USB", "COM open");			
 		}
 	}
 

@@ -29,6 +29,7 @@ public class Drone {
 	private MapUpdatedListner mapListner;
 	private DroneTypeListner typeListner;
 	private TTS tts;
+	
 
 	public interface HudUpdatedListner {
 		public void onDroneUpdate();
@@ -89,6 +90,7 @@ public class Drone {
 			double battCurrent) {
 		if (this.battVolt != battVolt | this.battRemain != battRemain
 				| this.battCurrent != battCurrent) {
+			tts.batteryDischargeNotification(battRemain);
 			this.battVolt = battVolt;
 			this.battRemain = battRemain;
 			this.battCurrent = battCurrent;
@@ -99,11 +101,7 @@ public class Drone {
 	public void setArmedAndFailsafe(boolean armed, boolean failsafe) {
 		if (this.armed != armed | this.failsafe != failsafe) {
 			if (this.armed != armed) {
-				if (armed) {
-					tts.speak("Armed");					
-				}else{
-					tts.speak("Disarmed");
-				}					
+				tts.speakArmedState(armed);					
 			}
 			this.armed = armed;
 			this.failsafe = failsafe;
@@ -114,23 +112,15 @@ public class Drone {
 	public void setGpsState(int fix, int satellites_visible) {
 		if (satCount != satellites_visible | fixType != fix) {
 			if (fixType != fix) {
-				switch (fix) {
-				case 2:
-					tts.speak("GPS 2D Lock");
-					break;
-				case 3:					
-					tts.speak("GPS 3D Lock");
-					break;
-				default:
-					tts.speak("Lost GPS Lock");
-					break;
-				}
+				tts.speakGpsMode(fix);
 			}
 			this.fixType = fix;
 			this.satCount = satellites_visible;
 			notifyHudUpdate();
 		}
 	}
+
+
 
 	public void setType(int type) {
 		if (this.type != type) {
@@ -142,7 +132,7 @@ public class Drone {
 	public void setMode(ApmModes mode) {
 		if (this.mode != mode) {
 			this.mode = mode;
-			tts.speak("Mode "+mode.getName());
+			tts.speakMode(mode);
 			notifyHudUpdate();
 		}
 	}

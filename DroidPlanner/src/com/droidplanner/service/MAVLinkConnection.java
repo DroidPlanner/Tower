@@ -4,6 +4,8 @@ import java.io.BufferedOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -25,7 +27,6 @@ public abstract class MAVLinkConnection extends Thread {
 	public interface MavLinkConnectionListner{
 		public void onReceiveMessage(MAVLinkMessage msg);
 		public void onDisconnect();
-		public void onConnect();
 	}
 	
 	protected Context parentContext;
@@ -38,6 +39,9 @@ public abstract class MAVLinkConnection extends Thread {
 	protected byte[] readData = new byte[4096];
 	protected int iavailable, i;
 	protected boolean connected = true;
+	
+	private ByteBuffer logBuffer;
+			  
 	
 	public MAVLinkConnection(Context parentContext) {
 		this.parentContext = parentContext;
@@ -56,13 +60,13 @@ public abstract class MAVLinkConnection extends Thread {
 			openConnection();
 			if (logEnabled) {
 				logWriter = FileManager.getTLogFileStream();
+				logBuffer = ByteBuffer.allocate(Long.SIZE/Byte.SIZE);
+				logBuffer.order(ByteOrder.BIG_ENDIAN);
 			}
-			listner.onConnect();
 			
 			while (connected) {
 				readDataBlock();
 				handleData();
-				saveToLog();
 			}	
 			closeConnection();
 		} catch (FileNotFoundException e) {
@@ -75,13 +79,14 @@ public abstract class MAVLinkConnection extends Thread {
 
 	
 	
-	private void handleData() {
+	private void handleData() throws IOException {
 		if (iavailable < 1) {
 			return;
 		}
 		for (i = 0; i < iavailable; i++) {
 			receivedPacket = parser.mavlink_parse_char(readData[i] & 0x00ff);
 			if (receivedPacket != null) {
+				saveToLog(receivedPacket);
 				MAVLinkMessage msg = receivedPacket.unpack();
 				listner.onReceiveMessage(msg);
 			}
@@ -89,9 +94,13 @@ public abstract class MAVLinkConnection extends Thread {
 
 	}
 	
-	private void saveToLog() throws IOException {
+	private void saveToLog(MAVLinkPacket receivedPacket) throws IOException {
 		if (logEnabled) {
-			logWriter.write(readData, 0, iavailable);
+			logBuffer.clear();
+			long time = System.currentTimeMillis() * 1000;
+			logBuffer.putLong(time);
+			logWriter.write(logBuffer.array());
+			logWriter.write(receivedPacket.encodePacket());
 		}
 	}
 
@@ -105,6 +114,7 @@ public abstract class MAVLinkConnection extends Thread {
 		byte[] buffer = packet.encodePacket();
 		try {
 			sendBuffer(buffer);
+			saveToLog(packet);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

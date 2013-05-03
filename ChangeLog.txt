@@ -1,3 +1,22 @@
+## Droidplanner v0.7.7
+* Better handling of the MAVLink connection
+
+## Droidplanner v0.7.6
+* Map type selection
+* Lock orientation in the RC override screen
+
+## Droidplanner v0.7.5
+* Added battery discharge notification
+* Fix a bug on the RC override function, CH5 to 8 are now not overrided.
+
+## Droidplanner v0.7.4
+* .tlog files are now compatible with Mission Planner
+
+## Droidplanner v0.7.3
+* Improved mode TTS notifications
+* Battery Capacity indication on the HUD
+* Better selection of flight altitude, in planning missions and guided mode
+
 ## Droidplanner v0.7.2
 * Notifications using Text To speech
 

@@ -50,4 +50,11 @@
         <item name="TCP">TCP</item>
     </string-array>
     
+    <string-array name="MapTypes">
+        <item >Satellite</item>
+        <item >Hybrid</item>
+        <item >Normal</item>
+        <item >Terrain</item>
+    </string-array>
+    
 </resources>

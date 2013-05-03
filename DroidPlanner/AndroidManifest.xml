@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.droidplanner"
-    android:versionCode="13"
-    android:versionName="0.7.2" >
+    android:versionCode="18"
+    android:versionName="0.7.7" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -21,6 +21,8 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    
+    <uses-feature android:name="android.hardware.screen.portrait"/>
     
     <!-- Support devices without USB host mode since they can connect via TCP -->
     <uses-feature
@@ -76,7 +78,8 @@
                 android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
                 android:resource="@xml/device_filter" />
         </activity>
-        <activity android:name="com.droidplanner.RCActivity" >
+        <activity android:name="com.droidplanner.RCActivity" 
+            android:screenOrientation="landscape">
         </activity>
         <activity android:name="com.droidplanner.TerminalActivity" >
         </activity>

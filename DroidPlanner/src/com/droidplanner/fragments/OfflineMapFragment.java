@@ -60,8 +60,26 @@ public class OfflineMapFragment extends MapFragment {
 	}
 
 	private void setupOnlineMapOverlay() {
-		GoogleMap mMap = getMap();
-		mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+		GoogleMap mMap = getMap();		
+		mMap.setMapType(getMapType());
+	}
+
+	private int getMapType() {
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(getActivity());
+		String mapType = prefs.getString("pref_map_type", "");
+		
+		if (mapType.equalsIgnoreCase("Satellite")) {			
+			return GoogleMap.MAP_TYPE_SATELLITE;
+		}if (mapType.equalsIgnoreCase("Hybrid")) {
+			return GoogleMap.MAP_TYPE_HYBRID;
+		}if (mapType.equalsIgnoreCase("Normal")) {
+			return GoogleMap.MAP_TYPE_NORMAL;
+		}if (mapType.equalsIgnoreCase("Terrain")){		
+			return GoogleMap.MAP_TYPE_TERRAIN;
+		}else {
+			return GoogleMap.MAP_TYPE_SATELLITE;
+		}
 	}
 
 	private void setupOfflineMapOverlay() {
