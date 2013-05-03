@@ -12,6 +12,7 @@ import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.MAVLink.Messages.ardupilotmega.msg_request_data_stream;
 import com.MAVLink.Messages.enums.MAV_DATA_STREAM;
+
 import com.droidplanner.MAVLink.Drone;
 import com.droidplanner.MAVLink.MavLinkMsgHandler;
 import com.droidplanner.MAVLink.WaypointMananger;
@@ -49,22 +50,10 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 		drone = new Drone(tts);
 		MAVClient = new MAVLinkClient(this,this);
 		waypointMananger = new WaypointMananger(MAVClient,this);
-		mavLinkMsgHandler = new com.droidplanner.MAVLink.MavLinkMsgHandler(drone);
 		followMe = new FollowMe(MAVClient, this,drone);
-		MAVClient.init();		
+		mavLinkMsgHandler = new com.droidplanner.MAVLink.MavLinkMsgHandler(drone);			
 	}
 	
-	
-	@Override
-	protected void finalize() throws Throwable {
-		super.finalize();
-		try {
-			MAVClient.onDestroy();	
-		} catch (Exception e) {
-		};
-	}
-
-
 	
 	@Override
 	public void notifyReceivedData(MAVLinkMessage msg) {
