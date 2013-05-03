@@ -62,7 +62,7 @@ public class ParametersActivity extends SuperActivity implements
 		int count =0;
 		for (ParamRow row : rowList) {
 			if (!row.isNewValueEqualToDroneParam()){
-				app.parameterMananger.onSend(row.getParameterFromRow());
+				app.parameterMananger.sendParameter(row.getParameterFromRow());
 				count++;
 			}						
 		}		
@@ -98,7 +98,6 @@ public class ParametersActivity extends SuperActivity implements
 	private void addParameterRow(Parameter param) {
 		ParamRow pRow = new ParamRow(this);
 		pRow.setParam(param);			
-		pRow.setOnParameterSendListner(app.parameterMananger);
 		rowList.add(pRow);
 		parameterTable.addView(pRow);
 	}

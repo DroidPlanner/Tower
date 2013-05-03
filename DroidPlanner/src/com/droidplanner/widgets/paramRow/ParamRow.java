@@ -7,26 +7,17 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.Gravity;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.droidplanner.MAVLink.parameters.Parameter;
 
-public class ParamRow extends TableRow implements OnClickListener, TextWatcher {
-
-	public interface OnParameterSend{
-		public void onSend(Parameter parameter);
-	}
-	private OnParameterSend listner;
+public class ParamRow extends TableRow implements TextWatcher {
 	private TextView nameView;
 	private EditText valueView;
 	private TextView typeView;
 	private TextView indexView;
-	private Button sendButton;
 	private Parameter param;
 
 	public ParamRow(Context context) {
@@ -39,16 +30,12 @@ public class ParamRow extends TableRow implements OnClickListener, TextWatcher {
 		createRowViews(context);
 	}
 
-	public void setOnParameterSendListner(OnParameterSend listner){
-		this.listner = listner;
-	}
 	public void setParam(Parameter param) {
 		this.param = param;
 		nameView.setText(param.name);
 		typeView.setText(Integer.toString(param.type));
 		indexView.setText(Integer.toString(param.index));
 		valueView.setText(param.getValue());
-		sendButton.setText("Send");
 	}
 
 	private void createRowViews(Context context) {
@@ -56,7 +43,6 @@ public class ParamRow extends TableRow implements OnClickListener, TextWatcher {
 		valueView = new EditText(context);
 		typeView = new TextView(context);
 		indexView = new TextView(context);
-		sendButton = new Button(context);
 
 		valueView.setInputType(InputType.TYPE_CLASS_NUMBER);
 
@@ -71,22 +57,10 @@ public class ParamRow extends TableRow implements OnClickListener, TextWatcher {
 		addView(nameView);
 		addView(valueView);
 		addView(typeView);
-		addView(sendButton);
-		
 
-		sendButton.setOnClickListener(this);
 		valueView.addTextChangedListener(this);
 	}
 
-	@Override
-	public void onClick(View view) {
-		if(view == sendButton){
-			if (listner!=null) {
-				listner.onSend(getParameterFromRow());
-			}
-		}
-	}
-	
 	public Parameter getParameterFromRow(){
 		return (new Parameter(param.name, getParamValue(), param.type, param.index));
 	}

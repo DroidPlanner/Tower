@@ -10,7 +10,6 @@ import com.MAVLink.Messages.ardupilotmega.msg_param_request_list;
 import com.MAVLink.Messages.ardupilotmega.msg_param_set;
 import com.MAVLink.Messages.ardupilotmega.msg_param_value;
 import com.droidplanner.service.MAVLinkClient;
-import com.droidplanner.widgets.paramRow.ParamRow.OnParameterSend;
 
 /**
  * Class to manage the communication of parameters to the MAV.
@@ -20,7 +19,7 @@ import com.droidplanner.widgets.paramRow.ParamRow.OnParameterSend;
  * MAV Message.
  * 
  */
-public class ParametersManager implements OnParameterSend {
+public class ParametersManager {
 	
 
 	public interface OnParameterManagerListner {
@@ -88,8 +87,7 @@ public class ParametersManager implements OnParameterSend {
 		MAV.sendMavPacket(msg.pack());
 	}
 
-	@Override
-	public void onSend(Parameter parameter) {
+	public void sendParameter(Parameter parameter) {
 		Log.d("PARM", "Send: "+parameter.name+" : "+parameter.value);
 		msg_param_set msg = new msg_param_set();
 		msg.target_system = 1;
