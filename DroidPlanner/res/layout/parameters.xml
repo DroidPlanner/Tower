@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <TableLayout
+    <fragment
         android:id="@+id/parametersTable"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:dividerPadding="1dp" >
+        android:layout_height="match_parent"
+        class="com.droidplanner.fragments.ParametersTableFragment" />
 
-    </TableLayout>
-
-</ScrollView>
+</LinearLayout>
