@@ -55,13 +55,9 @@ public class ParametersActivity extends SuperActivity implements
 	}
 
 	@Override
-	public void onParametersReceived(List<Parameter> parameters) {
+	public void onParametersReceived() {
 		Log.d("PARM", "parameters Received");
 		Toast.makeText(this, "Parameters Received", Toast.LENGTH_SHORT).show();
-		//parameterTable.removeAllViews();
-		/*for (Parameter param : parameters) {
-			addParameterRow(param);
-		}*/
 	}
 
 
@@ -69,10 +65,8 @@ public class ParametersActivity extends SuperActivity implements
 	public void onParameterReceived(Parameter parameter) {
 		ParamRow row = findRowByName(parameter.name);
 		if (row!=null) {
-			row.setParam(parameter);
-			Log.d("PARM", "MACTH FOUND");	
+			row.setParam(parameter);	
 		}else{
-			Log.d("PARM", "ADDING PARAM");
 			addParameterRow(parameter);
 		}
 	}

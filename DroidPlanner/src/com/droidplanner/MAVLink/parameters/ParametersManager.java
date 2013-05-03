@@ -24,7 +24,7 @@ public class ParametersManager implements OnParameterSend {
 	
 
 	public interface OnParameterManagerListner {
-		public abstract void onParametersReceived(List<Parameter> parameters);
+		public abstract void onParametersReceived();
 		public abstract void onParameterReceived(Parameter parameter);
 	}
 
@@ -77,7 +77,7 @@ public class ParametersManager implements OnParameterSend {
 		parameters.add(param);
 		listner.onParameterReceived(param);
 		if (m_value.param_index == m_value.param_count - 1) {
-			listner.onParametersReceived(parameters);
+			listner.onParametersReceived();
 		}
 	}
 

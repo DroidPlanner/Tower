@@ -142,9 +142,9 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 
 
 	@Override
-	public void onParametersReceived(List<Parameter> parameters) {
+	public void onParametersReceived() {
 		if (parameterListner != null) {
-			parameterListner.onParametersReceived(parameters);			
+			parameterListner.onParametersReceived();			
 		}
 	}
 	
