@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_param_request_list;
+import com.MAVLink.Messages.ardupilotmega.msg_param_set;
 import com.MAVLink.Messages.ardupilotmega.msg_param_value;
 import com.droidplanner.service.MAVLinkClient;
 import com.droidplanner.widgets.paramRow.ParamRow.OnParameterSend;
@@ -87,8 +88,14 @@ public class ParametersManager implements OnParameterSend {
 
 	@Override
 	public void onSend(Parameter parameter) {
-		// TODO generate a message to send the parameter
 		Log.d("PARM", "Send: "+parameter.name+" : "+parameter.value);
+		msg_param_set msg = new msg_param_set();
+		msg.target_system = 1;
+		msg.target_component = 1;
+		msg.setParam_Id(parameter.name);
+		msg.param_type = (byte) parameter.type;
+		msg.param_value = (float) parameter.value;
+		MAV.sendMavPacket(msg.pack());
 	}
 
 }
