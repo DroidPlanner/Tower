@@ -1,6 +1,6 @@
 package com.droidplanner.MAVLink.parameters;
 
-import java.util.Locale;
+import java.text.DecimalFormat;
 
 public class Parameter {
 	public String name;
@@ -16,7 +16,8 @@ public class Parameter {
 	}
 	
 	public String getValue(){
-		return String.format(Locale.US,"%3.3f", value);
+		DecimalFormat format = new DecimalFormat("0.###");
+		return format.format(value);		
 	}
 
 }
