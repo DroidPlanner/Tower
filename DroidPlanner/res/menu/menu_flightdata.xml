@@ -24,8 +24,12 @@
         android:title="@string/menu_load_from_apm"/>
     <item
         android:id="@+id/menu_connect"
-        android:showAsAction="ifRoom"
+        android:showAsAction="always"
         android:title="@string/menu_connect"/>
+    <item
+        android:id="@+id/menu_default_alt"
+        android:showAsAction="ifRoom"
+        android:title="@string/default_alt"/>
     <item
         android:id="@+id/menu_clearFlightPath"
         android:showAsAction="never"
