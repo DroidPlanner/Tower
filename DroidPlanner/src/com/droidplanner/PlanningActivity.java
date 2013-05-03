@@ -126,9 +126,6 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 		case R.id.menu_zoom:
 			planningMapFragment.zoomToExtents(drone.getAllCoordinates());
 			return true;
-		case R.id.menu_default_alt:
-			changeDefaultAlt();
-			return true;
 		case R.id.menu_polygon:
 			setModeToPolygon();
 			return true;
