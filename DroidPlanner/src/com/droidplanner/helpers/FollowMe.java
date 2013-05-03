@@ -44,7 +44,6 @@ public class FollowMe implements LocationListener {
 	}
 	
 	private void enableFollowMe() {
-		//TODO add the function that handles the follow me function
 		Toast.makeText(context, "FollowMe Enabled", Toast.LENGTH_SHORT).show();
 				
 		// Register the listener with the Location Manager to receive location updates
@@ -54,7 +53,6 @@ public class FollowMe implements LocationListener {
 	}
 	
 	private void disableFollowMe() {
-		//TODO add the disable for the follow me mode
 		Toast.makeText(context, "FollowMe Disabled", Toast.LENGTH_SHORT).show();
 		locationManager.removeUpdates(this);
 		followMeEnabled = false;
