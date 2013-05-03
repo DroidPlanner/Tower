@@ -41,7 +41,6 @@ public class DualJoystickView extends LinearLayout {
 
 	private void initDualJoystickView() {
 		setOrientation(LinearLayout.HORIZONTAL);
-		stickL.setyAxisAutoReturnToCenter(false);
 		
 		if ( D ) {
 			dbgPaint1 = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -121,6 +120,14 @@ public class DualJoystickView extends LinearLayout {
 	public void setUserCoordinateSystem(int leftCoordinateSystem, int rightCoordinateSystem) {
 		stickL.setUserCoordinateSystem(leftCoordinateSystem);
 		stickR.setUserCoordinateSystem(rightCoordinateSystem);
+	}
+	
+	public void setLeftAutoReturnToCenter(boolean yAxisAutoReturnToCenter,boolean xAxisAutoReturnToCenter){
+		stickL.setAxisAutoReturnToCenter(yAxisAutoReturnToCenter, xAxisAutoReturnToCenter);
+	}
+	
+	public void setRightAutoReturnToCenter(boolean yAxisAutoReturnToCenter,boolean xAxisAutoReturnToCenter){
+		stickR.setAxisAutoReturnToCenter(yAxisAutoReturnToCenter, xAxisAutoReturnToCenter);
 	}
 	
 	@Override

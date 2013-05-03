@@ -37,11 +37,11 @@ public class RCActivity extends SuperActivity implements
 		DualJoystickView joystick = (DualJoystickView)findViewById(R.id.joystickView);
         
         joystick.setOnJostickMovedListener(lJoystick, rJoystick);
-
+        joystick.setLeftAutoReturnToCenter(false, true);
+        
 		bTogleRC = (Button) findViewById(R.id.bTogleRC);
 		bTogleRC.setOnClickListener(this);
 
-		
 		rcOutput = new RcOutput(app.MAVClient,this);
 	}
 	
@@ -71,6 +71,8 @@ public class RCActivity extends SuperActivity implements
 		if (v == bTogleRC) {
 			if (rcOutput.isRcOverrided()) {
 				rcOutput.disableRcOverride();
+				lJoystick.OnMoved(0f, 0f);
+				rJoystick.OnMoved(0f, 0f);
 				bTogleRC.setText(R.string.enable_rc_control);
 			} else {
 				rcOutput.enableRcOverride();

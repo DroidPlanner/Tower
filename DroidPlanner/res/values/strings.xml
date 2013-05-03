@@ -10,7 +10,8 @@
         <item>Planning</item>
         <item>Flight Data</item>
         <item>RC</item>
-        <item>Parameters</item>     
+        <item>Parameters</item>
+        <item>Camera</item>
         <item>GCP</item>        
         <item>Terminal</item>
     </string-array>

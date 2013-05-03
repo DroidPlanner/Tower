@@ -73,10 +73,13 @@ public abstract class SuperActivity extends Activity implements
 		case 3: // Parameters
 			navigationIntent = new Intent(this, ParametersActivity.class);
 			break;
-		case 4: // GCP
+		case 4: // Camera
+			navigationIntent = new Intent(this, CameraActivity.class);
+			break;
+		case 5: // GCP
 			navigationIntent = new Intent(this, GCPActivity.class);
 			break;
-		case 5: // Terminal
+		case 6: // Terminal
 			navigationIntent = new Intent(this, TerminalActivity.class);
 			break;			
 		}

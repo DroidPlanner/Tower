@@ -81,6 +81,9 @@
         <activity android:name="com.droidplanner.RCActivity" 
             android:screenOrientation="landscape">
         </activity>
+        <activity android:name="com.droidplanner.CameraActivity" 
+            android:screenOrientation="landscape">
+        </activity>
         <activity android:name="com.droidplanner.TerminalActivity" >
         </activity>
         <activity

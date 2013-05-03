@@ -42,6 +42,7 @@ public class JoystickView extends View {
 
 	private boolean yAxisInverted;
 	private boolean yAxisAutoReturnToCenter = true;
+	private boolean xAxisAutoReturnToCenter = true;
 	private boolean autoReturnToCenter;
 	
 	//Max range of movement in user coordinate system
@@ -88,6 +89,7 @@ public class JoystickView extends View {
 	//Offset co-ordinates (used when touch events are received from parent's coordinate origin)
 	private int offsetX;
 	private int offsetY;
+
 
 	// =========================================
 	// Constructors
@@ -489,7 +491,9 @@ public class JoystickView extends View {
 				postDelayed(new Runnable() {
 					@Override
 					public void run() {
-						touchX += intervalsX;
+						if(xAxisAutoReturnToCenter){
+							touchX += intervalsX;
+						}
 						if(yAxisAutoReturnToCenter){
 							touchY += intervalsY;
 						}
@@ -515,7 +519,8 @@ public class JoystickView extends View {
 		offsetY = y;
 	}
 
-	public void setyAxisAutoReturnToCenter(boolean yAxisAutoReturnToCenter) {
+	public void setAxisAutoReturnToCenter(boolean yAxisAutoReturnToCenter,boolean xAxisAutoReturnToCenter) {
 		this.yAxisAutoReturnToCenter = yAxisAutoReturnToCenter;
+		this.xAxisAutoReturnToCenter = xAxisAutoReturnToCenter;
 	}
 }

@@ -14,7 +14,7 @@ public class TerminalActivity extends SuperActivity implements OnClickListener {
 	
 	@Override
 	int getNavigationItem() {
-		return 5;
+		return 6;
 	}
 
 	@Override
