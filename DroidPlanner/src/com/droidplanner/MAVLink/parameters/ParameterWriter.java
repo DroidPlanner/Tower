@@ -1,4 +1,4 @@
-package com.droidplanner.MAVLink;
+package com.droidplanner.MAVLink.parameters;
 
 import java.io.FileOutputStream;
 import java.io.IOException;

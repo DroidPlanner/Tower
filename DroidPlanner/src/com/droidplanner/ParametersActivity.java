@@ -9,9 +9,9 @@ import android.view.MenuItem;
 import android.widget.TableLayout;
 import android.widget.Toast;
 
-import com.droidplanner.MAVLink.Parameter;
-import com.droidplanner.MAVLink.ParameterWriter;
-import com.droidplanner.MAVLink.ParametersManager.OnParameterManagerListner;
+import com.droidplanner.MAVLink.parameters.Parameter;
+import com.droidplanner.MAVLink.parameters.ParameterWriter;
+import com.droidplanner.MAVLink.parameters.ParametersManager.OnParameterManagerListner;
 import com.droidplanner.widgets.paramRow.ParamRow;
 
 public class ParametersActivity extends SuperActivity implements

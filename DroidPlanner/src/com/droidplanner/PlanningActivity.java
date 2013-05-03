@@ -12,8 +12,8 @@ import android.widget.Toast;
 
 import com.MAVLink.waypoint;
 import com.droidplanner.DroidPlannerApp.OnWaypointReceivedListner;
-import com.droidplanner.MAVLink.MissionReader;
-import com.droidplanner.MAVLink.MissionWriter;
+import com.droidplanner.MAVLink.waypoints.MissionReader;
+import com.droidplanner.MAVLink.waypoints.MissionWriter;
 import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
 import com.droidplanner.dialogs.OpenMissionDialog;
 import com.droidplanner.dialogs.PolygonDialog;

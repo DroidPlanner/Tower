@@ -14,7 +14,7 @@ import android.widget.EditText;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.droidplanner.MAVLink.Parameter;
+import com.droidplanner.MAVLink.parameters.Parameter;
 
 public class ParamRow extends TableRow implements OnClickListener, TextWatcher {
 
