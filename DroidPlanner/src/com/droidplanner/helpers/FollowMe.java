@@ -14,6 +14,8 @@ import com.droidplanner.MAVLink.Drone;
 import com.droidplanner.service.MAVLinkClient;
 
 public class FollowMe implements LocationListener {
+	private static final long MIN_TIME_MS = 2000;
+	private static final float MIN_DISTANCE_M = 0;
 	private MAVLinkClient MAV;
 	private Context context;
 	private boolean followMeEnabled = false;
@@ -39,7 +41,7 @@ public class FollowMe implements LocationListener {
 		Toast.makeText(context, "FollowMe Enabled", Toast.LENGTH_SHORT).show();
 				
 		// Register the listener with the Location Manager to receive location updates
-		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_MS, MIN_DISTANCE_M, this);
 		
 		followMeEnabled = true;		
 	}
@@ -47,6 +49,7 @@ public class FollowMe implements LocationListener {
 	private void disableFollowMe() {
 		//TODO add the disable for the follow me mode
 		Toast.makeText(context, "FollowMe Disabled", Toast.LENGTH_SHORT).show();
+		locationManager.removeUpdates(this);
 		followMeEnabled = false;
 	}
 	
