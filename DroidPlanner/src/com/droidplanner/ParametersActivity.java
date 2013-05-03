@@ -34,7 +34,7 @@ public class ParametersActivity extends SuperActivity implements
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_load_parameters:
-			app.parameterMananger.getWaypoints();
+			app.parameterMananger.getAllParameters();
 			return true;
 		default:
 			return super.onMenuItemSelected(featureId, item);

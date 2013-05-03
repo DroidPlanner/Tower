@@ -19,12 +19,7 @@ import com.droidplanner.service.MAVLinkClient;
  * 
  */
 public class ParametersManager {
-	/**
-	 * Try to receive all parameters from the MAV.
-	 * 
-	 * If all runs well the callback will return the list of waypoints.
-	 */
-	public void getWaypoints() {
+	public void getAllParameters() {
 		parameters.clear();
 		requestParametersList();
 	}
