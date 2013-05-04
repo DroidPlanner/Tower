@@ -30,13 +30,17 @@ public class ParametersTableFragment extends Fragment {
 		parameterTable = (TableLayout) view.findViewById(R.id.parametersTable);
 		return view;
 	}
-	
+
 	public void refreshRowParameter(Parameter parameter) {
-		ParamRow row = findRowByName(parameter.name);
-		if (row!=null) {
-			row.setParam(parameter);	
-		}else{
-			addParameterRow(parameter);
+		try {
+			Parameter.checkParameterName(parameter.name);
+			ParamRow row = findRowByName(parameter.name);
+			if (row != null) {
+				row.setParam(parameter);
+			} else {
+				addParameterRow(parameter);
+			}
+		} catch (Exception e) {
 		}
 	}
 
@@ -49,7 +53,7 @@ public class ParametersTableFragment extends Fragment {
 		return null;
 	}
 
-	private void addParameterRow(Parameter param) {
+	private void addParameterRow(Parameter param){
 		ParamRow pRow = new ParamRow(this.getActivity());
 		pRow.setParam(param);			
 		rowList.add(pRow);
