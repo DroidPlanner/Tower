@@ -18,12 +18,10 @@ public abstract class OpenParameterDialog implements OnClickListener {
 	public abstract void parameterFileLoaded(List<Parameter> parameters);
 
 	private String[] itemList;
-	Drone drone;
 	private Context context;
 
 	public void OpenWaypointDialog(Drone drone, Context context) {
 		this.context = context;
-		this.drone = drone;
 
 		itemList = FileManager.loadParametersFileList();
 		if (itemList.length == 0) {
