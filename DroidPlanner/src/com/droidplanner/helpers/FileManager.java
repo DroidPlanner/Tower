@@ -78,7 +78,25 @@ public class FileManager {
 		} else {
 			return null;
 		}
-
+	}
+	
+	public static String[] loadParametersFileList() {
+		File mPath = new File(getParametersPath());
+		try {
+			mPath.mkdirs();
+		} catch (SecurityException e) {
+			return null;
+		}
+		if (mPath.exists()) {
+			FilenameFilter filter = new FilenameFilter() {
+				public boolean accept(File dir, String filename) {
+					return filename.contains(".param");
+				}
+			};
+			return mPath.list(filter);
+		} else {
+			return null;
+		}
 	}
 
 	static public String[] loadKMZFileList() {

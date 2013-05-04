@@ -16,7 +16,7 @@ public class ParameterReader {
 		this.parameters = new ArrayList<Parameter>();
 	}
 
-	public boolean openMission(String itemList) {
+	public boolean openFile(String itemList) {
 		if (!FileManager.isExternalStorageAvaliable()) {
 			return false;
 		}
@@ -102,7 +102,7 @@ public class ParameterReader {
 		return reader.readLine().contains("#NOTE");
 	}
 
-	public List<Parameter> getWaypoints() {
+	public List<Parameter> getParameters() {
 		return parameters;
 	}
 

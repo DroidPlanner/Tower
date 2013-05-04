@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.droidplanner.MAVLink.parameters.Parameter;
 import com.droidplanner.MAVLink.parameters.ParameterManager.OnParameterManagerListner;
+import com.droidplanner.dialogs.OpenParameterDialog;
 import com.droidplanner.fragments.ParametersTableFragment;
 import com.droidplanner.widgets.paramRow.ParamRow;
 
@@ -45,6 +46,9 @@ public class ParametersActivity extends SuperActivity implements
 		case R.id.menu_save_parameters:
 			tableFragment.saveParametersToFile();
 			return true;
+		case R.id.menu_open_parameters:
+			openParametersFromFile();
+			return true;
 		case R.id.menu_write_parameters:
 			writeModifiedParametersToDrone();
 			return true;
@@ -68,6 +72,18 @@ public class ParametersActivity extends SuperActivity implements
 		}		
 		Toast.makeText(this, "Write "+modRows.size()+" parameters", Toast.LENGTH_SHORT).show();		
 	}
+	
+	private void openParametersFromFile() {
+		OpenParameterDialog dialog = new OpenParameterDialog() {
+			@Override
+			public void parameterFileLoaded(List<Parameter> parameters) {
+				for (Parameter parameter : parameters) {
+					onParameterReceived(parameter);
+				}				
+			}
+		};
+		dialog.OpenWaypointDialog(drone, this);
+	}		
 	
 	@Override
 	public void onParametersReceived() {

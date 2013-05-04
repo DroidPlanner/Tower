@@ -73,7 +73,6 @@ public class ParametersTableFragment extends Fragment {
 		}
 		return modParameters;
 	}
-
 	
 	public void saveParametersToFile() {
 		List<Parameter> parameterList = getParameterListFromTable();
@@ -90,4 +89,5 @@ public class ParametersTableFragment extends Fragment {
 		// TODO Auto-generated method stub
 		super.onAttach(activity);
 	}
+
 }

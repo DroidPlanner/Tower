@@ -13,8 +13,12 @@
         android:showAsAction="ifRoom"
         android:title="@string/save"/>
     <item
-        android:id="@+id/menu_connect"
+        android:id="@+id/menu_open_parameters"
         android:showAsAction="ifRoom"
+        android:title="@string/open"/>
+    <item
+        android:id="@+id/menu_connect"
+        android:showAsAction="always"
         android:title="@string/menu_connect"/>
     <item
         android:id="@+id/menu_settings"
