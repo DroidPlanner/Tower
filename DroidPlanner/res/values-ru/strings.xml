@@ -38,9 +38,20 @@
 <!--Original value: Settings-->
 <string name="menu_settings">Настройки</string>
 <!--Original value: Connect-->
-<string name="menu_connect">Подключено</string>
+<string name="menu_connect">Подключить</string>
 <!--Original value: Disconnect-->
-<string name="menu_disconnect">Отключено</string>
+<string name="menu_disconnect">Отключить</string>
+
+ <string-array name="menu_dropdown">
+        <item>Полетное задание</item>
+        <item>Полетные данные</item>
+        <item>Радиоуправление</item>
+        <item>Параметры</item>
+        <item>Камера</item>
+        <item>GCP</item>        
+        <item>Терминал</item>
+    </string-array>
+    
 <!--Original value: Connected-->
 <string name="conected">Подключение</string>
 <!--Original value: Disconnected-->
@@ -106,5 +117,12 @@
 <!--Original value: Refresh-->
 <string name="refresh">Обновить</string>
 <!--Original value: This is very experimental, please be careful.-->
-<string name="this_is_very_experimental_please_be_careful">Внимание! Будьте осторожны.</string> 
+<string name="this_is_very_experimental_please_be_careful">Внимание!  Экспериментальный режим. Будьте осторожны.</string> 
+
+ <string-array name="Тип карты">
+        <item >Спутниковая</item>
+        <item >Гибридная</item>
+        <item >Нормальная</item>
+        <item >Terrain</item>
+    </string-array>
 </resources>
