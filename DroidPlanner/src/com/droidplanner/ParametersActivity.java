@@ -8,7 +8,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.droidplanner.MAVLink.parameters.Parameter;
-import com.droidplanner.MAVLink.parameters.ParametersManager.OnParameterManagerListner;
+import com.droidplanner.MAVLink.parameters.ParameterManager.OnParameterManagerListner;
 import com.droidplanner.fragments.ParametersTableFragment;
 import com.droidplanner.widgets.paramRow.ParamRow;
 

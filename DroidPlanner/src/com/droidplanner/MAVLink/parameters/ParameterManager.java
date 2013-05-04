@@ -17,7 +17,7 @@ import com.droidplanner.service.MAVLinkClient;
  * MAV Message.
  * 
  */
-public class ParametersManager {
+public class ParameterManager {
 	
 
 	public interface OnParameterManagerListner {
@@ -35,7 +35,7 @@ public class ParametersManager {
 
 	waypointStates state = waypointStates.IDLE;
 
-	public ParametersManager(MAVLinkClient MAV,
+	public ParameterManager(MAVLinkClient MAV,
 			OnParameterManagerListner listner) {
 		this.MAV = MAV;
 		this.listner = listner;
