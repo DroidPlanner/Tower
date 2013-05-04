@@ -20,38 +20,40 @@ public class Parameter {
 	}
 
 	public Parameter(String name, Double value) {
-		this(name, value, 0);			// TODO Setting type to Zero may cause an error
+		this(name, value, 0); // TODO Setting type to Zero may cause an error
 	}
 
 	public String getValue() {
 		DecimalFormat format = new DecimalFormat("0.###");
 		return format.format(value);
 	}
-	
+
 	public static void checkParameterName(String name) throws Exception {
-		if (name == "SYSID_SW_MREV")
+		if (name.equals("SYSID_SW_MREV")) {
 			throw new Exception("ExludedName");
-		if (name == "WP_TOTAL")
+		} else if (name.equals("WP_TOTAL")) {
 			throw new Exception("ExludedName");
-		if (name == "CMD_TOTAL")
+		} else if (name.equals("CMD_TOTAL")) {
 			throw new Exception("ExludedName");
-		if (name == "FENCE_TOTAL")
+		} else if (name.equals("FENCE_TOTAL")) {
 			throw new Exception("ExludedName");
-		if (name == "SYS_NUM_RESETS")
+		} else if (name.equals("SYS_NUM_RESETS")) {
 			throw new Exception("ExludedName");
-		if (name == "ARSPD_OFFSET")
+		} else if (name.equals("ARSPD_OFFSET")) {
 			throw new Exception("ExludedName");
-		if (name == "GND_ABS_PRESS")
+		} else if (name.equals("GND_ABS_PRESS")) {
 			throw new Exception("ExludedName");
-		if (name == "GND_TEMP")
+		} else if (name.equals("GND_TEMP")) {
 			throw new Exception("ExludedName");
-		if (name == "CMD_INDEX")
+		} else if (name.equals("CMD_INDEX")) {
 			throw new Exception("ExludedName");
-		if (name == "LOG_LASTFILE")
+		} else if (name.equals("LOG_LASTFILE")) {
 			throw new Exception("ExludedName");
-		if (name == "FORMAT_VERSION")
+		} else if (name.equals("FORMAT_VERSION")) {
 			throw new Exception("ExludedName");
-		return;
+		} else {
+			return;
+		}
 	}
 
 }
