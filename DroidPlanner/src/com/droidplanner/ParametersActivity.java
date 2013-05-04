@@ -36,7 +36,11 @@ public class ParametersActivity extends SuperActivity implements
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_load_parameters:
-			app.parameterMananger.getAllParameters();
+			if (app.MAVClient.isConnected()) {
+				app.parameterMananger.getAllParameters();				
+			}else{
+				Toast.makeText(this, "Please connect first", Toast.LENGTH_SHORT).show();
+			}
 			return true;
 		case R.id.menu_save_parameters:
 			tableFragment.saveParametersToFile();
