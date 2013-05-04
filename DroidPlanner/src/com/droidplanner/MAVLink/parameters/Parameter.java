@@ -2,19 +2,23 @@ package com.droidplanner.MAVLink.parameters;
 
 import java.text.DecimalFormat;
 
+import com.MAVLink.Messages.ardupilotmega.msg_param_value;
+
 public class Parameter {
 	public String name;
 	public double value;
 	public int type;
-	public int index;
 	
-	public Parameter(String name, double value, int type, int index) {
+	public Parameter(String name, double value, int type) {
 		this.name = name;
 		this.value = value;
 		this.type = type;
-		this.index = index;
 	}
 	
+	public Parameter(msg_param_value m_value) {
+		this(m_value.getParam_Id(),m_value.param_value,m_value.param_type);
+	}
+
 	public String getValue(){
 		DecimalFormat format = new DecimalFormat("0.###");
 		return format.format(value);		

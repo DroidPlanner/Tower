@@ -15,7 +15,6 @@ import com.droidplanner.MAVLink.parameters.Parameter;
 public class ParamRow extends TableRow implements TextWatcher {
 	private TextView nameView;
 	private EditText valueView;
-	private TextView indexView;
 	private Parameter param;
 
 	public ParamRow(Context context) {
@@ -31,21 +30,17 @@ public class ParamRow extends TableRow implements TextWatcher {
 	public void setParam(Parameter param) {
 		this.param = param;
 		nameView.setText(param.name);
-		indexView.setText(Integer.toString(param.index));
 		valueView.setText(param.getValue());
 	}
 
 	private void createRowViews(Context context) {
 		nameView = new TextView(context);
 		valueView = new EditText(context);
-		indexView = new TextView(context);
 		valueView.setInputType(InputType.TYPE_CLASS_NUMBER);
 
-		indexView.setWidth(50);
 		nameView.setWidth(150);
 		valueView.setWidth(100);
 
-		addView(indexView);
 		addView(nameView);
 		addView(valueView);
 
@@ -53,7 +48,7 @@ public class ParamRow extends TableRow implements TextWatcher {
 	}
 
 	public Parameter getParameterFromRow(){
-		return (new Parameter(param.name, getParamValue(), param.type, param.index));
+		return (new Parameter(param.name, getParamValue(), param.type));
 	}
 
 	public double getParamValue() {
