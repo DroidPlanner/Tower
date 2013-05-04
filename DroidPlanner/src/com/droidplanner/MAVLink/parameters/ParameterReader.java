@@ -58,7 +58,7 @@ public class ParameterReader {
 		String name = RowData[0];
 		Double value = Double.valueOf(RowData[1]);
 
-		isParamNameAnExeption(name);
+		Parameter.checkParameterName(name);
 
 		parameters.add(new Parameter(name, value));
 	}
@@ -71,31 +71,7 @@ public class ParameterReader {
 		return RowData;
 	}
 
-	private void isParamNameAnExeption(String name) throws Exception {
-		if (name == "SYSID_SW_MREV")
-			throw new Exception("ExludedName");
-		if (name == "WP_TOTAL")
-			throw new Exception("ExludedName");
-		if (name == "CMD_TOTAL")
-			throw new Exception("ExludedName");
-		if (name == "FENCE_TOTAL")
-			throw new Exception("ExludedName");
-		if (name == "SYS_NUM_RESETS")
-			throw new Exception("ExludedName");
-		if (name == "ARSPD_OFFSET")
-			throw new Exception("ExludedName");
-		if (name == "GND_ABS_PRESS")
-			throw new Exception("ExludedName");
-		if (name == "GND_TEMP")
-			throw new Exception("ExludedName");
-		if (name == "CMD_INDEX")
-			throw new Exception("ExludedName");
-		if (name == "LOG_LASTFILE")
-			throw new Exception("ExludedName");
-		if (name == "FORMAT_VERSION")
-			throw new Exception("ExludedName");
-		return;
-	}
+
 
 	private static boolean isParameterFile(BufferedReader reader)
 			throws IOException {

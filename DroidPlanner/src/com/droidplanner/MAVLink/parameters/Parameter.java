@@ -27,5 +27,31 @@ public class Parameter {
 		DecimalFormat format = new DecimalFormat("0.###");
 		return format.format(value);
 	}
+	
+	public static void checkParameterName(String name) throws Exception {
+		if (name == "SYSID_SW_MREV")
+			throw new Exception("ExludedName");
+		if (name == "WP_TOTAL")
+			throw new Exception("ExludedName");
+		if (name == "CMD_TOTAL")
+			throw new Exception("ExludedName");
+		if (name == "FENCE_TOTAL")
+			throw new Exception("ExludedName");
+		if (name == "SYS_NUM_RESETS")
+			throw new Exception("ExludedName");
+		if (name == "ARSPD_OFFSET")
+			throw new Exception("ExludedName");
+		if (name == "GND_ABS_PRESS")
+			throw new Exception("ExludedName");
+		if (name == "GND_TEMP")
+			throw new Exception("ExludedName");
+		if (name == "CMD_INDEX")
+			throw new Exception("ExludedName");
+		if (name == "LOG_LASTFILE")
+			throw new Exception("ExludedName");
+		if (name == "FORMAT_VERSION")
+			throw new Exception("ExludedName");
+		return;
+	}
 
 }
