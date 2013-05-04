@@ -38,9 +38,9 @@
 <!--Original value: Settings-->
 <string name="menu_settings">Настройки</string>
 <!--Original value: Connect-->
-<string name="menu_connect">Подключено</string>
+<string name="menu_connect">Подключить</string>
 <!--Original value: Disconnect-->
-<string name="menu_disconnect">Отключено</string>
+<string name="menu_disconnect">Отключить</string>
 <!--Original value: Connected-->
 <string name="conected">Подключение</string>
 <!--Original value: Disconnected-->
