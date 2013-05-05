@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Locale;
 
 import com.MAVLink.waypoint;
-import com.droidplanner.helpers.FileManager;
+import com.droidplanner.helpers.file.FileManager;
 
 public class MissionWriter {
 	private waypoint home;

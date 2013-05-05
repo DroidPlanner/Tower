@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import com.droidplanner.helpers.FileManager;
+import com.droidplanner.helpers.file.FileManager;
 
 public class ParameterWriter {
 	private List<Parameter> parameterList;

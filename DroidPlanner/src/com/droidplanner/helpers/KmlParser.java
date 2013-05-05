@@ -15,6 +15,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.util.Xml;
 
 import com.droidplanner.dialogs.OpenFileDialog.FileReader;
+import com.droidplanner.helpers.file.FileManager;
 import com.droidplanner.waypoints.gcp;
 
 /**

@@ -9,7 +9,7 @@ import java.util.List;
 
 import com.MAVLink.waypoint;
 import com.droidplanner.dialogs.OpenFileDialog.FileReader;
-import com.droidplanner.helpers.FileManager;
+import com.droidplanner.helpers.file.FileManager;
 
 public class MissionReader implements FileReader {
 	private waypoint home;

@@ -14,7 +14,7 @@ import android.preference.PreferenceManager;
 import com.MAVLink.Parser;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
-import com.droidplanner.helpers.FileManager;
+import com.droidplanner.helpers.file.FileManager;
 
 public abstract class MAVLinkConnection extends Thread {
 
