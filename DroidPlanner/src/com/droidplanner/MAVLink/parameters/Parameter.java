@@ -31,25 +31,25 @@ public class Parameter {
 	public static void checkParameterName(String name) throws Exception {
 		if (name.equals("SYSID_SW_MREV")) {
 			throw new Exception("ExludedName");
-		} else if (name.equals("WP_TOTAL")) {
+		} else if (name.contains("WP_TOTAL")) {
 			throw new Exception("ExludedName");
-		} else if (name.equals("CMD_TOTAL")) {
+		} else if (name.contains("CMD_TOTAL")) {
 			throw new Exception("ExludedName");
-		} else if (name.equals("FENCE_TOTAL")) {
+		} else if (name.contains("FENCE_TOTAL")) {
 			throw new Exception("ExludedName");
-		} else if (name.equals("SYS_NUM_RESETS")) {
+		} else if (name.contains("SYS_NUM_RESETS")) {
 			throw new Exception("ExludedName");
-		} else if (name.equals("ARSPD_OFFSET")) {
+		} else if (name.contains("ARSPD_OFFSET")) {
 			throw new Exception("ExludedName");
-		} else if (name.equals("GND_ABS_PRESS")) {
+		} else if (name.contains("GND_ABS_PRESS")) {
 			throw new Exception("ExludedName");
-		} else if (name.equals("GND_TEMP")) {
+		} else if (name.contains("GND_TEMP")) {
 			throw new Exception("ExludedName");
-		} else if (name.equals("CMD_INDEX")) {
+		} else if (name.contains("CMD_INDEX")) {
 			throw new Exception("ExludedName");
-		} else if (name.equals("LOG_LASTFILE")) {
+		} else if (name.contains("LOG_LASTFILE")) {
 			throw new Exception("ExludedName");
-		} else if (name.equals("FORMAT_VERSION")) {
+		} else if (name.contains("FORMAT_VERSION")) {
 			throw new Exception("ExludedName");
 		} else {
 			return;
