@@ -1,3 +1,6 @@
+## Droidplanner v0.8.2
+* Fix small bug that ocurred when logging was enabled.
+
 ## Droidplanner v0.8.1
 * Russian language avaliable
 * Ability to read/save parameters from/to a .param file.
