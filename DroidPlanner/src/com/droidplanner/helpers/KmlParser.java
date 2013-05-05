@@ -14,6 +14,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.util.Xml;
 
+import com.droidplanner.dialogs.OpenFileDialog.FileReader;
 import com.droidplanner.waypoints.gcp;
 
 /**
@@ -21,7 +22,7 @@ import com.droidplanner.waypoints.gcp;
  * http://developer.android.com/training/basics/network-ops/xml.html
  * 
  */
-public class KmlParser {
+public class KmlParser implements FileReader {
 	private final String ns = null;
 
 	public List<gcp> gcpList;
@@ -196,5 +197,20 @@ public class KmlParser {
 				break;
 			}
 		}
+	}
+
+	@Override
+	public String getPath() {
+		return FileManager.getGCPPath();
+	}
+
+	@Override
+	public String[] getFileList() {
+		return FileManager.loadKMZFileList();
+	}
+
+	@Override
+	public boolean openFile(String itemList) {
+		return openGCPFile(itemList);
 	}
 }

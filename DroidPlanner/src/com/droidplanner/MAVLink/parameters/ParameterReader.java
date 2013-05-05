@@ -9,7 +9,7 @@ import java.util.List;
 
 import com.droidplanner.helpers.FileManager;
 
-public class ParameterReader {
+public class ParameterReader implements com.droidplanner.dialogs.OpenFileDialog.FileReader {
 	private List<Parameter> parameters;
 
 	public ParameterReader() {
@@ -82,4 +82,13 @@ public class ParameterReader {
 		return parameters;
 	}
 
+	@Override
+	public String getPath() {
+		return FileManager.getParametersPath();
+	}
+
+	@Override
+	public String[] getFileList() {
+		return FileManager.loadParametersFileList();
+	}
 }

@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.droidplanner.MAVLink.parameters.Parameter;
 import com.droidplanner.MAVLink.parameters.ParameterManager.OnParameterManagerListner;
+import com.droidplanner.dialogs.OpenFileDialog;
 import com.droidplanner.dialogs.OpenParameterDialog;
 import com.droidplanner.fragments.ParametersTableFragment;
 import com.droidplanner.widgets.paramRow.ParamRow;
@@ -74,7 +75,7 @@ public class ParametersActivity extends SuperActivity implements
 	}
 	
 	private void openParametersFromFile() {
-		OpenParameterDialog dialog = new OpenParameterDialog() {
+		OpenFileDialog dialog = new OpenParameterDialog() {
 			@Override
 			public void parameterFileLoaded(List<Parameter> parameters) {
 				for (Parameter parameter : parameters) {
@@ -82,7 +83,7 @@ public class ParametersActivity extends SuperActivity implements
 				}				
 			}
 		};
-		dialog.OpenWaypointDialog(drone, this);
+		dialog.openDialog(this);
 	}		
 	
 	@Override
