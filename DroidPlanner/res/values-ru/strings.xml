@@ -40,17 +40,7 @@
 <!--Original value: Connect-->
 <string name="menu_connect">Подключить</string>
 <!--Original value: Disconnect-->
-<string name="menu_disconnect">Отключить</string>
-
- <string-array name="menu_dropdown">
-        <item>Полетное задание</item>
-        <item>Полетные данные</item>
-        <item>Радиоуправление</item>
-        <item>Параметры</item>
-        <item>Камера</item>
-        <item>GCP</item>
-    </string-array>
-    
+<string name="menu_disconnect">Отключить</string>    
 <!--Original value: Connected-->
 <string name="conected">Подключение</string>
 <!--Original value: Disconnected-->
@@ -118,4 +108,12 @@
 <!--Original value: This is very experimental, please be careful.-->
 <string name="this_is_very_experimental_please_be_careful">Внимание!  Экспериментальный режим. Будьте осторожны.</string> 
 
+ <string-array name="menu_dropdown">
+        <item>Полетное задание</item>
+        <item>Полетные данные</item>
+        <item>Радиоуправление</item>
+        <item>Параметры</item>
+        <item>Камера</item>
+        <item>GCP</item>
+    </string-array>
 </resources>
