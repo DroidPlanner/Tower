@@ -89,6 +89,6 @@ public class ParameterReader implements com.droidplanner.dialogs.OpenFileDialog.
 
 	@Override
 	public String[] getFileList() {
-		return FileManager.loadParametersFileList();
+		return FileManager.getParametersFileList();
 	}
 }

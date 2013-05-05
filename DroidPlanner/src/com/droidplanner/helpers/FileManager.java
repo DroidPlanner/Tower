@@ -61,64 +61,45 @@ public class FileManager {
 		return out;
 	}
 
-	static public String[] loadWaypointFileList() {
-		File mPath = new File(getWaypointsPath());
+	static public String[] getWaypointFileList() {
+		FilenameFilter filter = new FilenameFilter() {
+			public boolean accept(File dir, String filename) {
+				return filename.contains(".txt");
+			}
+		};
+		return getFileList(getWaypointsPath(), filter);
+	}
+
+	public static String[] getParametersFileList() {
+		FilenameFilter filter = new FilenameFilter() {
+			public boolean accept(File dir, String filename) {
+				return filename.contains(".param");
+			}
+		};
+		return getFileList(getParametersPath(), filter);
+	}
+
+	static public String[] getKMZFileList() {
+		FilenameFilter filter = new FilenameFilter() {
+			public boolean accept(File dir, String filename) {
+				return filename.contains(".kml") || filename.contains(".kmz");
+			}
+		};
+		return getFileList(getGCPPath(), filter);
+	}
+
+	static public String[] getFileList(String path, FilenameFilter filter) {
+		File mPath = new File(path);
 		try {
 			mPath.mkdirs();
+			if (mPath.exists()) {
+				return mPath.list(filter);
+			}
 		} catch (SecurityException e) {
-			return null;
 		}
-		if (mPath.exists()) {
-			FilenameFilter filter = new FilenameFilter() {
-				public boolean accept(File dir, String filename) {
-					return filename.contains(".txt");
-				}
-			};
-			return mPath.list(filter);
-		} else {
-			return null;
-		}
+		return new String[0];
 	}
 	
-	public static String[] loadParametersFileList() {
-		File mPath = new File(getParametersPath());
-		try {
-			mPath.mkdirs();
-		} catch (SecurityException e) {
-			return null;
-		}
-		if (mPath.exists()) {
-			FilenameFilter filter = new FilenameFilter() {
-				public boolean accept(File dir, String filename) {
-					return filename.contains(".param");
-				}
-			};
-			return mPath.list(filter);
-		} else {
-			return null;
-		}
-	}
-
-	static public String[] loadKMZFileList() {
-		File mPath = new File(getGCPPath());
-		try {
-			mPath.mkdirs();
-		} catch (SecurityException e) {
-			return new String[0];
-		}
-		if (mPath.exists()) {
-			FilenameFilter filter = new FilenameFilter() {
-				public boolean accept(File dir, String filename) {
-					return filename.contains(".kml")
-							|| filename.contains(".kmz");
-				}
-			};
-			return mPath.list(filter);
-		} else {
-			return new String[0];
-		}
-
-	}
 
 	/**
 	 * Get a file Stream for logging purposes

@@ -206,7 +206,7 @@ public class KmlParser implements FileReader {
 
 	@Override
 	public String[] getFileList() {
-		return FileManager.loadKMZFileList();
+		return FileManager.getKMZFileList();
 	}
 
 	@Override

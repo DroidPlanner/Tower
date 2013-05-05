@@ -82,7 +82,7 @@ public class MissionReader implements FileReader {
 
 	@Override
 	public String[] getFileList() {
-		return FileManager.loadWaypointFileList();
+		return FileManager.getWaypointFileList();
 	}
 
 	@Override
