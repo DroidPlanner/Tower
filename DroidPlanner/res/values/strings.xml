@@ -12,8 +12,7 @@
         <item>RC</item>
         <item>Parameters</item>
         <item>Camera</item>
-        <item>GCP</item>        
-        <item>Terminal</item>
+        <item>GCP</item>     
     </string-array>
        
     <string name="conected">Connected</string>

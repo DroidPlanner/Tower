@@ -48,8 +48,7 @@
         <item>Радиоуправление</item>
         <item>Параметры</item>
         <item>Камера</item>
-        <item>GCP</item>        
-        <item>Терминал</item>
+        <item>GCP</item>
     </string-array>
     
 <!--Original value: Connected-->

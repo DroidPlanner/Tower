@@ -61,10 +61,10 @@ public abstract class SuperActivity extends Activity implements
 		}
 		Intent navigationIntent;
 		switch (itemPosition) {
-		default:
 		case 0: // Planning
 			navigationIntent = new Intent(this, PlanningActivity.class);
 			break;
+		default:
 		case 1: // Flight Data
 			navigationIntent = new Intent(this, FlightDataActivity.class);
 			navigationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -80,10 +80,7 @@ public abstract class SuperActivity extends Activity implements
 			break;
 		case 5: // GCP
 			navigationIntent = new Intent(this, GCPActivity.class);
-			break;
-		case 6: // Terminal
-			navigationIntent = new Intent(this, TerminalActivity.class);
-			break;			
+			break;		
 		}
 		startActivity(navigationIntent);
 		return false;
