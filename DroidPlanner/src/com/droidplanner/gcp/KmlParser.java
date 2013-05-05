@@ -1,4 +1,4 @@
-package com.droidplanner.helpers;
+package com.droidplanner.gcp;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -17,7 +17,6 @@ import android.util.Xml;
 import com.droidplanner.dialogs.OpenFileDialog.FileReader;
 import com.droidplanner.helpers.file.DirectoryPath;
 import com.droidplanner.helpers.file.FileList;
-import com.droidplanner.waypoints.gcp;
 
 /**
  * Class to parse a Kml file, based on the code from

@@ -1,4 +1,4 @@
-package com.droidplanner.service;
+package com.droidplanner.connection;
 
 import java.io.BufferedOutputStream;
 import java.io.FileNotFoundException;

@@ -1,4 +1,4 @@
-package com.droidplanner;
+package com.droidplanner.activitys;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +14,8 @@ import com.droidplanner.dialogs.OpenFileDialog;
 import com.droidplanner.dialogs.OpenGcpFileDialog;
 import com.droidplanner.fragments.GcpMapFragment;
 import com.droidplanner.fragments.GcpMapFragment.OnGcpClickListner;
-import com.droidplanner.helpers.KmlParser;
-import com.droidplanner.waypoints.gcp;
+import com.droidplanner.gcp.KmlParser;
+import com.droidplanner.gcp.gcp;
 import com.google.android.gms.maps.model.LatLng;
 
 public class GCPActivity extends SuperActivity implements OnGcpClickListner {

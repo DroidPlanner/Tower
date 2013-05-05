@@ -2,8 +2,8 @@ package com.droidplanner.dialogs;
 
 import java.util.List;
 
-import com.droidplanner.MAVLink.parameters.Parameter;
-import com.droidplanner.MAVLink.parameters.ParameterReader;
+import com.droidplanner.parameters.Parameter;
+import com.droidplanner.parameters.ParameterReader;
 
 public abstract class OpenParameterDialog extends OpenFileDialog {
 	public abstract void parameterFileLoaded(List<Parameter> parameters);

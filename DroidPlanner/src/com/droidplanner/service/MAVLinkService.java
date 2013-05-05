@@ -19,9 +19,12 @@ import android.support.v4.app.NotificationCompat;
 
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
-import com.droidplanner.FlightDataActivity;
 import com.droidplanner.R;
-import com.droidplanner.service.MAVLinkConnection.MavLinkConnectionListner;
+import com.droidplanner.activitys.FlightDataActivity;
+import com.droidplanner.connection.MAVLinkConnection;
+import com.droidplanner.connection.MAVLinkConnection.MavLinkConnectionListner;
+import com.droidplanner.connection.TcpConnection;
+import com.droidplanner.connection.UsbConnection;
 
 /**
  * http://developer.android.com/guide/components/bound-services.html#Messenger

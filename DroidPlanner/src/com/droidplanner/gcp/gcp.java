@@ -1,4 +1,4 @@
-package com.droidplanner.waypoints;
+package com.droidplanner.gcp;
 
 import com.google.android.gms.maps.model.LatLng;
 

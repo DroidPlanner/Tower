@@ -1,4 +1,4 @@
-package com.droidplanner;
+package com.droidplanner.activitys;
 
 import java.util.List;
 
@@ -7,11 +7,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.droidplanner.MAVLink.parameters.Parameter;
-import com.droidplanner.MAVLink.parameters.ParameterManager.OnParameterManagerListner;
+import com.droidplanner.R;
 import com.droidplanner.dialogs.OpenFileDialog;
 import com.droidplanner.dialogs.OpenParameterDialog;
 import com.droidplanner.fragments.ParametersTableFragment;
+import com.droidplanner.parameters.Parameter;
+import com.droidplanner.parameters.ParameterManager.OnParameterManagerListner;
 import com.droidplanner.widgets.paramRow.ParamRow;
 
 public class ParametersActivity extends SuperActivity implements

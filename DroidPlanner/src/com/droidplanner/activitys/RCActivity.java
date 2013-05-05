@@ -1,4 +1,4 @@
-package com.droidplanner;
+package com.droidplanner.activitys;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+import com.droidplanner.R;
 import com.droidplanner.helpers.RcOutput;
 import com.droidplanner.widgets.joystick.DualJoystickView;
 import com.droidplanner.widgets.joystick.JoystickMovedListener;

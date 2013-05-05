@@ -1,4 +1,4 @@
-package com.droidplanner.MAVLink.parameters;
+package com.droidplanner.parameters;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;

@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.droidplanner.R;
-import com.droidplanner.SuperActivity;
+import com.droidplanner.activitys.SuperActivity;
 import com.droidplanner.widgets.HUD.HUDwidget;
 
 

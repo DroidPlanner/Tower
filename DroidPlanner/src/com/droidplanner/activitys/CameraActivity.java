@@ -1,9 +1,10 @@
-package com.droidplanner;
+package com.droidplanner.activitys;
 
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.droidplanner.R;
 import com.droidplanner.helpers.RcOutput;
 import com.droidplanner.widgets.joystick.DualJoystickView;
 import com.droidplanner.widgets.joystick.JoystickMovedListener;

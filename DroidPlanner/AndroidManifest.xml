@@ -10,10 +10,10 @@
         android:targetSdkVersion="17" />
 
     <permission
-        android:name="com.droidplanner.permission.MAPS_RECEIVE"
+        android:name=".permission.MAPS_RECEIVE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="com.droidplanner.permission.MAPS_RECEIVE" />
+    <uses-permission android:name=".permission.MAPS_RECEIVE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -21,14 +21,14 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    
-    <uses-feature android:name="android.hardware.screen.portrait"/>
-    
+
+    <uses-feature android:name="android.hardware.screen.portrait" />
+
     <!-- Support devices without USB host mode since they can connect via TCP -->
     <uses-feature
         android:name="android.hardware.usb.host"
         android:required="false" />
-    
+
     <!-- Support devices that don't have location services -->
     <uses-feature
         android:name="android.hardware.location.gps"
@@ -39,13 +39,12 @@
     <uses-feature
         android:name="android.hardware.location"
         android:required="false" />
-    
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
 
     <application
-        android:name="com.droidplanner.DroidPlannerApp"
+        android:name=".DroidPlannerApp"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"
@@ -56,10 +55,11 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyDFsAn5xo-mILEirpcUsF9BU9Vb_yR-Er4" />
 
-        <service android:name="com.droidplanner.service.MAVLinkService"></service>
+        <service android:name=".service.MAVLinkService" >
+        </service>
 
         <activity
-            android:name="com.droidplanner.PlanningActivity"
+            android:name=".activitys.PlanningActivity"
             tools:ignore="ExportedActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -69,28 +69,32 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-        <activity android:name="com.droidplanner.FlightDataActivity" >
+        <activity android:name=".activitys.FlightDataActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
             </intent-filter>
+
             <meta-data
                 android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
                 android:resource="@xml/device_filter" />
         </activity>
-        <activity android:name="com.droidplanner.RCActivity" 
-            android:screenOrientation="landscape">
-        </activity>
-        <activity android:name="com.droidplanner.CameraActivity" 
-            android:screenOrientation="landscape">
-        </activity>
-        <activity android:name="com.droidplanner.TerminalActivity" >
+        <activity
+            android:name=".activitys.RCActivity"
+            android:screenOrientation="landscape" >
         </activity>
         <activity
-            android:name="com.droidplanner.GCPActivity"
+            android:name=".activitys.CameraActivity"
+            android:screenOrientation="landscape" >
+        </activity>
+        <activity android:name=".activitys.TerminalActivity" >
+        </activity>
+        <activity
+            android:name=".activitys.GCPActivity"
             tools:ignore="ExportedActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -101,9 +105,9 @@
                 <data android:mimeType="application/vnd.google-earth.kmz" />
             </intent-filter>
         </activity>
-        <activity android:name="com.droidplanner.ParametersActivity" >
+        <activity android:name=".activitys.ParametersActivity" >
         </activity>
-        <activity android:name="com.droidplanner.SettingsActivity" >
+        <activity android:name=".activitys.SettingsActivity" >
         </activity>
     </application>
 

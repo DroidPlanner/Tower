@@ -2,8 +2,8 @@ package com.droidplanner.dialogs;
 
 import java.util.List;
 
-import com.droidplanner.helpers.KmlParser;
-import com.droidplanner.waypoints.gcp;
+import com.droidplanner.gcp.KmlParser;
+import com.droidplanner.gcp.gcp;
 
 public abstract class OpenGcpFileDialog extends OpenFileDialog {
 	public abstract void onGcpFileLoaded(List<gcp> gcpList);

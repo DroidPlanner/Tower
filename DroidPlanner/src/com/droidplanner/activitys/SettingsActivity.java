@@ -1,7 +1,8 @@
-package com.droidplanner;
+package com.droidplanner.activitys;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+
 import com.droidplanner.R;
 
 public class SettingsActivity extends PreferenceActivity {

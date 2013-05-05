@@ -1,4 +1,4 @@
-package com.droidplanner.service;
+package com.droidplanner.connection;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

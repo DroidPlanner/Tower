@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.MAVLink.waypoint;
-import com.droidplanner.waypoints.Polygon;
+import com.droidplanner.helpers.Polygon;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.google.android.gms.maps.model.LatLng;
 

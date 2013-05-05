@@ -14,15 +14,15 @@ import com.MAVLink.Messages.ardupilotmega.msg_request_data_stream;
 import com.MAVLink.Messages.enums.MAV_DATA_STREAM;
 import com.droidplanner.MAVLink.Drone;
 import com.droidplanner.MAVLink.MavLinkMsgHandler;
-import com.droidplanner.MAVLink.parameters.Parameter;
-import com.droidplanner.MAVLink.parameters.ParameterManager;
-import com.droidplanner.MAVLink.parameters.ParameterManager.OnParameterManagerListner;
-import com.droidplanner.MAVLink.waypoints.WaypointMananger;
-import com.droidplanner.MAVLink.waypoints.WaypointMananger.OnWaypointManagerListner;
 import com.droidplanner.helpers.FollowMe;
 import com.droidplanner.helpers.TTS;
+import com.droidplanner.parameters.Parameter;
+import com.droidplanner.parameters.ParameterManager;
+import com.droidplanner.parameters.ParameterManager.OnParameterManagerListner;
 import com.droidplanner.service.MAVLinkClient;
 import com.droidplanner.service.MAVLinkClient.OnMavlinkClientListner;
+import com.droidplanner.waypoints.WaypointMananger;
+import com.droidplanner.waypoints.WaypointMananger.OnWaypointManagerListner;
 
 public class DroidPlannerApp extends Application implements OnMavlinkClientListner, OnWaypointManagerListner, OnParameterManagerListner {
 	public Drone drone;

@@ -1,9 +1,4 @@
-package com.droidplanner;
-
-import com.droidplanner.DroidPlannerApp.ConnectionStateListner;
-import com.droidplanner.MAVLink.Drone;
-import com.droidplanner.dialogs.AltitudeDialog;
-import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
+package com.droidplanner.activitys;
 
 import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
@@ -15,6 +10,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.SpinnerAdapter;
+
+import com.droidplanner.DroidPlannerApp;
+import com.droidplanner.DroidPlannerApp.ConnectionStateListner;
+import com.droidplanner.R;
+import com.droidplanner.MAVLink.Drone;
+import com.droidplanner.dialogs.AltitudeDialog;
+import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
 
 public abstract class SuperActivity extends Activity implements
 		OnNavigationListener, ConnectionStateListner, OnAltitudeChangedListner {

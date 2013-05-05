@@ -1,4 +1,4 @@
-package com.droidplanner.MAVLink.waypoints;
+package com.droidplanner.waypoints;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
