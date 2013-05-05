@@ -70,6 +70,7 @@ public class ParameterReader implements com.droidplanner.dialogs.OpenFileDialog.
 		if (RowData.length != 2) {
 			throw new Exception("Invalid Length");
 		}
+		RowData[0] = RowData[0].trim();
 		return RowData;
 	}
 
