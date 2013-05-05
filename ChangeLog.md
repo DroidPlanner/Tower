@@ -1,3 +1,8 @@
+## Droidplanner v0.8.1
+* Russian language avaliable
+* Ability to read/save parameters from/to a .param file.
+* Improvements to the code structure
+
 ## Droidplanner v0.8.0
 * Parameter screen, with the ability to read/write/save parameters from an ArduPilot board
 * Camera screen, virtual sticks to control a camera gimbal
