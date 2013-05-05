@@ -9,6 +9,8 @@ import java.util.List;
 
 import com.MAVLink.waypoint;
 import com.droidplanner.dialogs.OpenFileDialog.FileReader;
+import com.droidplanner.helpers.file.DirectoryPath;
+import com.droidplanner.helpers.file.FileList;
 import com.droidplanner.helpers.file.FileManager;
 
 public class MissionReader implements FileReader {
@@ -77,12 +79,12 @@ public class MissionReader implements FileReader {
 
 	@Override
 	public String getPath() {
-		return FileManager.getWaypointsPath();
+		return DirectoryPath.getWaypointsPath();
 	}
 
 	@Override
 	public String[] getFileList() {
-		return FileManager.getWaypointFileList();
+		return FileList.getWaypointFileList();
 	}
 
 	@Override

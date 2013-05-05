@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Locale;
 
 import com.droidplanner.helpers.file.FileManager;
+import com.droidplanner.helpers.file.FileStream;
 
 public class ParameterWriter {
 	private List<Parameter> parameterList;
@@ -19,7 +20,7 @@ public class ParameterWriter {
 			if (!FileManager.isExternalStorageAvaliable()) {
 				return false;
 			}
-			FileOutputStream out = FileManager.getParameterFileStream();
+			FileOutputStream out = FileStream.getParameterFileStream();
 
 			writeFirstLine(out);
 

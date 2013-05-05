@@ -15,7 +15,8 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.util.Xml;
 
 import com.droidplanner.dialogs.OpenFileDialog.FileReader;
-import com.droidplanner.helpers.file.FileManager;
+import com.droidplanner.helpers.file.DirectoryPath;
+import com.droidplanner.helpers.file.FileList;
 import com.droidplanner.waypoints.gcp;
 
 /**
@@ -202,12 +203,12 @@ public class KmlParser implements FileReader {
 
 	@Override
 	public String getPath() {
-		return FileManager.getGCPPath();
+		return DirectoryPath.getGCPPath();
 	}
 
 	@Override
 	public String[] getFileList() {
-		return FileManager.getKMZFileList();
+		return FileList.getKMZFileList();
 	}
 
 	@Override

@@ -6,7 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Locale;
 
-import com.droidplanner.helpers.file.FileManager;
+import com.droidplanner.helpers.file.DirectoryPath;
 import com.google.android.gms.maps.model.Tile;
 import com.google.android.gms.maps.model.TileProvider;
 
@@ -36,7 +36,7 @@ public class LocalMapTileProvider implements TileProvider {
 		ByteArrayOutputStream buffer = null;
 
 		try {
-			String patch = FileManager.getMapsPath()
+			String patch = DirectoryPath.getMapsPath()
 					+ getTileFilename(x, y, zoom);
 			in = new FileInputStream(patch);
 			buffer = new ByteArrayOutputStream();

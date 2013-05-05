@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.droidplanner.helpers.file.DirectoryPath;
+import com.droidplanner.helpers.file.FileList;
 import com.droidplanner.helpers.file.FileManager;
 
 public class ParameterReader implements com.droidplanner.dialogs.OpenFileDialog.FileReader {
@@ -84,11 +86,11 @@ public class ParameterReader implements com.droidplanner.dialogs.OpenFileDialog.
 
 	@Override
 	public String getPath() {
-		return FileManager.getParametersPath();
+		return DirectoryPath.getParametersPath();
 	}
 
 	@Override
 	public String[] getFileList() {
-		return FileManager.getParametersFileList();
+		return FileList.getParametersFileList();
 	}
 }

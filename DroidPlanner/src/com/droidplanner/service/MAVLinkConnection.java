@@ -14,7 +14,7 @@ import android.preference.PreferenceManager;
 import com.MAVLink.Parser;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
-import com.droidplanner.helpers.file.FileManager;
+import com.droidplanner.helpers.file.FileStream;
 
 public abstract class MAVLinkConnection extends Thread {
 
@@ -59,7 +59,7 @@ public abstract class MAVLinkConnection extends Thread {
 		try {
 			openConnection();
 			if (logEnabled) {
-				logWriter = FileManager.getTLogFileStream();
+				logWriter = FileStream.getTLogFileStream();
 				logBuffer = ByteBuffer.allocate(Long.SIZE/Byte.SIZE);
 				logBuffer.order(ByteOrder.BIG_ENDIAN);
 			}
