@@ -96,11 +96,15 @@ public abstract class MAVLinkConnection extends Thread {
 	
 	private void saveToLog(MAVLinkPacket receivedPacket) throws IOException {
 		if (logEnabled) {
-			logBuffer.clear();
-			long time = System.currentTimeMillis() * 1000;
-			logBuffer.putLong(time);
-			logWriter.write(logBuffer.array());
-			logWriter.write(receivedPacket.encodePacket());
+			try {
+				logBuffer.clear();
+				long time = System.currentTimeMillis() * 1000;
+				logBuffer.putLong(time);
+				logWriter.write(logBuffer.array());
+				logWriter.write(receivedPacket.encodePacket());
+			} catch (Exception e) {
+				// There was a null pointer error for some users on logBuffer.clear(); 
+			}
 		}
 	}
 
