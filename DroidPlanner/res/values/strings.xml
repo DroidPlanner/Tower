@@ -19,6 +19,7 @@
     <string name="conected">Connected</string>
     <string name="disconnected">Disconnected</string>
     <string name="save">Save</string>
+    <string name="open">Open</string>
     <string name="menu_open_file">Open file</string>
     <string name="menu_save_file">Save file</string>
     <string name="menu_load_from_apm">Load from APM</string>
@@ -28,6 +29,7 @@
     <string name="menu_zoom">Zoom</string>
     <string name="file_saved">File Saved</string>
     <string name="no_waypoint_files">No Waypoint Files</string>
+    <string name="no_files">No Files</string>
     <string name="select_file_to_open">Select file to open:</string>
     <string name="error_when_saving">Error when saving</string>
     <string name="error_when_opening_file">Error when opening file</string>

@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.Locale;
 
 import com.MAVLink.waypoint;
-import com.droidplanner.helpers.FileManager;
+import com.droidplanner.helpers.file.FileManager;
+import com.droidplanner.helpers.file.FileStream;
 
 public class MissionWriter {
 	private waypoint home;
@@ -22,7 +23,7 @@ public class MissionWriter {
 			if (!FileManager.isExternalStorageAvaliable()) {
 				return false;
 			}
-			FileOutputStream out = FileManager.getWaypointFileStream();
+			FileOutputStream out = FileStream.getWaypointFileStream();
 
 			writeFirstLine(out);
 

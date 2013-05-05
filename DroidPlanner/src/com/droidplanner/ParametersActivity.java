@@ -8,7 +8,9 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.droidplanner.MAVLink.parameters.Parameter;
-import com.droidplanner.MAVLink.parameters.ParametersManager.OnParameterManagerListner;
+import com.droidplanner.MAVLink.parameters.ParameterManager.OnParameterManagerListner;
+import com.droidplanner.dialogs.OpenFileDialog;
+import com.droidplanner.dialogs.OpenParameterDialog;
 import com.droidplanner.fragments.ParametersTableFragment;
 import com.droidplanner.widgets.paramRow.ParamRow;
 
@@ -36,10 +38,17 @@ public class ParametersActivity extends SuperActivity implements
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_load_parameters:
-			app.parameterMananger.getAllParameters();
+			if (app.MAVClient.isConnected()) {
+				app.parameterMananger.getAllParameters();				
+			}else{
+				Toast.makeText(this, "Please connect first", Toast.LENGTH_SHORT).show();
+			}
 			return true;
 		case R.id.menu_save_parameters:
 			tableFragment.saveParametersToFile();
+			return true;
+		case R.id.menu_open_parameters:
+			openParametersFromFile();
 			return true;
 		case R.id.menu_write_parameters:
 			writeModifiedParametersToDrone();
@@ -64,6 +73,18 @@ public class ParametersActivity extends SuperActivity implements
 		}		
 		Toast.makeText(this, "Write "+modRows.size()+" parameters", Toast.LENGTH_SHORT).show();		
 	}
+	
+	private void openParametersFromFile() {
+		OpenFileDialog dialog = new OpenParameterDialog() {
+			@Override
+			public void parameterFileLoaded(List<Parameter> parameters) {
+				for (Parameter parameter : parameters) {
+					onParameterReceived(parameter);
+				}				
+			}
+		};
+		dialog.openDialog(this);
+	}		
 	
 	@Override
 	public void onParametersReceived() {
