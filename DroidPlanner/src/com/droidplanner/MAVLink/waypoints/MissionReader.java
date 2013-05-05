@@ -8,9 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.MAVLink.waypoint;
+import com.droidplanner.dialogs.OpenFileDialog.FileReader;
 import com.droidplanner.helpers.FileManager;
 
-public class MissionReader {
+public class MissionReader implements FileReader {
 	private waypoint home;
 	private List<waypoint> waypoints;
 
@@ -18,12 +19,12 @@ public class MissionReader {
 		this.waypoints = new ArrayList<waypoint>();
 	}
 
-	public boolean openMission(String itemList) {
+	public boolean openMission(String file) {
 		if (!FileManager.isExternalStorageAvaliable()) {
 			return false;
 		}
 		try {
-			FileInputStream in = new FileInputStream(itemList);
+			FileInputStream in = new FileInputStream(file);
 			BufferedReader reader = new BufferedReader(
 					new InputStreamReader(in));
 
@@ -72,5 +73,20 @@ public class MissionReader {
 	private static boolean isWaypointFile(BufferedReader reader)
 			throws IOException {
 		return reader.readLine().contains("QGC WPL 110");
+	}
+
+	@Override
+	public String getPath() {
+		return FileManager.getWaypointsPath();
+	}
+
+	@Override
+	public String[] getFileList() {
+		return FileManager.loadWaypointFileList();
+	}
+
+	@Override
+	public boolean openFile(String file) {
+		return openMission(file);
 	}
 }
