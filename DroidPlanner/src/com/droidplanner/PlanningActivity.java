@@ -15,6 +15,7 @@ import com.droidplanner.DroidPlannerApp.OnWaypointReceivedListner;
 import com.droidplanner.MAVLink.waypoints.MissionReader;
 import com.droidplanner.MAVLink.waypoints.MissionWriter;
 import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
+import com.droidplanner.dialogs.OpenFileDialog;
 import com.droidplanner.dialogs.OpenMissionDialog;
 import com.droidplanner.dialogs.PolygonDialog;
 import com.droidplanner.fragments.PlanningMapFragment;
@@ -146,16 +147,14 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 	}
 
 	private void openMissionFile() {
-		OpenMissionDialog missionDialog = new OpenMissionDialog() {				
+		OpenFileDialog missionDialog = new OpenMissionDialog(drone) {
 			@Override
-			public void waypointFileLoaded(boolean isFileOpen) {
-				if(isFileOpen){
-					planningMapFragment.zoomToExtents(drone.getAllCoordinates());
-				}
-				update();
+			public void waypointFileLoaded() {
+				planningMapFragment.zoomToExtents(drone.getAllCoordinates());
+				update();				
 			}
 		};
-		missionDialog.OpenWaypointDialog(drone, this);
+		missionDialog.openDialog(this);
 	}
 
 	public void openPolygonGenerateDialog() {
