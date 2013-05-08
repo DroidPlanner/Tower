@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" >
+
     <item
         android:id="@+id/menu_zoom"
         android:showAsAction="ifRoom"
         android:title="@string/menu_zoom"/>
     <item
-    	android:id="@+id/menu_flight_modes_spinner"
-    	android:showAsAction="always"
-    	android:actionViewClass="com.droidplanner.widgets.spinners.SelectModeSpinner" 
-    	tools:ignore="MenuTitle"/>
+        android:id="@+id/menu_flight_modes_spinner"
+        android:actionViewClass="com.droidplanner.widgets.spinners.SelectModeSpinner"
+        android:showAsAction="always"
+        tools:ignore="MenuTitle"/>
     <item
-    	android:id="@+id/menu_wp_spinner"
-    	android:showAsAction="always"
-    	android:actionViewClass="com.droidplanner.widgets.spinners.SelectWaypointSpinner" 
-    	tools:ignore="MenuTitle"/>
+        android:id="@+id/menu_wp_spinner"
+        android:actionViewClass="com.droidplanner.widgets.spinners.SelectWaypointSpinner"
+        android:showAsAction="always"
+        tools:ignore="MenuTitle"/>
     <item
         android:id="@+id/menu_follow_me"
         android:showAsAction="ifRoom"
@@ -31,9 +33,18 @@
         android:showAsAction="ifRoom"
         android:title="@string/default_alt"/>
     <item
-        android:id="@+id/menu_clearFlightPath"
+        android:id="@+id/menu_advanced"
         android:showAsAction="never"
-        android:title="@string/menu_clearFlightPath"/>
+        android:title="@string/menu_advanced">
+        <item
+            android:id="@+id/menu_clearFlightPath"
+            android:showAsAction="never"
+            android:title="@string/menu_clearFlightPath"/>
+        <item
+            android:id="@+id/menu_preflight_calibration"
+            android:showAsAction="never"
+            android:title="@string/menu_calibration"/>
+    </item>
     <item
         android:id="@+id/menu_settings"
         android:showAsAction="never"
