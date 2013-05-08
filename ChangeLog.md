@@ -1,3 +1,8 @@
+## Droidplanner v0.8.3
+* German language avaliable
+* Removing old Terminal screen
+* APM calibration using a menu button.
+
 ## Droidplanner v0.8.2
 * Fix small bug that ocurred when logging was enabled.
 
