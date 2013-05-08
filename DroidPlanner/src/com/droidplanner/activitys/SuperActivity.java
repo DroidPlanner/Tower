@@ -101,6 +101,9 @@ public abstract class SuperActivity extends Activity implements
 			case R.id.menu_default_alt:
 				changeDefaultAlt();
 				return true;
+			case R.id.menu_preflight_calibration:
+				app.calibrationSetup.startCalibration(this);
+				return true;
 			default:
 				return super.onMenuItemSelected(featureId, item);
 		}

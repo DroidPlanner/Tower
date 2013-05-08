@@ -14,6 +14,7 @@ import com.MAVLink.Messages.ardupilotmega.msg_request_data_stream;
 import com.MAVLink.Messages.enums.MAV_DATA_STREAM;
 import com.droidplanner.MAVLink.Drone;
 import com.droidplanner.MAVLink.MavLinkMsgHandler;
+import com.droidplanner.helpers.CalibrationSetup;
 import com.droidplanner.helpers.FollowMe;
 import com.droidplanner.helpers.TTS;
 import com.droidplanner.parameters.Parameter;
@@ -31,6 +32,7 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 	public ParameterManager parameterMananger;
 	private MavLinkMsgHandler mavLinkMsgHandler;
 	public FollowMe followMe;
+	public CalibrationSetup calibrationSetup;
 	
 	public ConnectionStateListner conectionListner;
 	public OnParameterManagerListner parameterListner; 
@@ -56,6 +58,7 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 		waypointMananger = new WaypointMananger(MAVClient,this);
 		parameterMananger = new ParameterManager(MAVClient, this);
 		followMe = new FollowMe(MAVClient, this,drone);
+		calibrationSetup = new CalibrationSetup(MAVClient);
 		mavLinkMsgHandler = new com.droidplanner.MAVLink.MavLinkMsgHandler(drone);
 	}
 	
@@ -65,6 +68,7 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 		mavLinkMsgHandler.receiveData(msg);
 		waypointMananger.processMessage(msg);
 		parameterMananger.processMessage(msg);
+		calibrationSetup.processMessage(msg);
 	}
 
 	@Override
