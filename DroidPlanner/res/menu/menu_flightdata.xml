@@ -32,22 +32,14 @@
         android:id="@+id/menu_default_alt"
         android:showAsAction="ifRoom"
         android:title="@string/default_alt"/>
-    <item
-        android:id="@+id/menu_advanced"
-        android:showAsAction="never"
-        android:title="@string/menu_advanced">
-        <item
-            android:id="@+id/menu_clearFlightPath"
-            android:showAsAction="never"
-            android:title="@string/menu_clearFlightPath"/>
-        <item
-            android:id="@+id/menu_preflight_calibration"
-            android:showAsAction="never"
-            android:title="@string/menu_calibration"/>
+    <item android:id="@+id/menu_advanced" android:title="@string/menu_advanced">
+        <menu>
+            <item android:id="@+id/menu_preflight_calibration" android:title="@string/menu_calibration"/>
+            <item android:id="@+id/menu_clearFlightPath" android:title="@string/menu_clearFlightPath"/>
+        </menu>
     </item>
     <item
         android:id="@+id/menu_settings"
         android:showAsAction="never"
         android:title="@string/menu_settings"/>
-
 </menu>
