@@ -4,52 +4,51 @@
     <string name="app_title">DroidPlanner</string>
     <string name="menu_settings">Ρυθμίσεις</string>
     <string name="menu_connect">Σύνδεση</string>
-    <string name="menu_disconnect">Disconnect</string>
-    <string name="conected">Connected</string>
-    <string name="disconnected">Disconnected</string>
-    <string name="save">Save</string>
-    <string name="open">Open</string>
-    <string name="menu_open_file">Open file</string>
-    <string name="menu_save_file">Save file</string>
-    <string name="menu_load_from_apm">Load from APM</string>
-    <string name="menu_send_to_apm">Send to APM</string>
-    <string name="menu_follow_me">Follow</string>
-    <string name="menu_clear">Clear WPs</string>
-    <string name="menu_zoom">Zoom</string>
-    <string name="file_saved">File Saved</string>
-    <string name="no_waypoint_files">No Waypoint Files</string>
-    <string name="no_files">No Files</string>
-    <string name="select_file_to_open">Select file to open:</string>
-    <string name="error_when_saving">Error when saving</string>
-    <string name="error_when_opening_file">Error when opening file</string>
-    <string name="waypoint_altitude">Altitude</string>
-    <string name="default_alt">Change Alt.</string>
-    <string name="menu_open_kmz">Open KMZ</string>
-    <string name="menu_add_polygon">Add Polygon</string>
-    <string name="menu_polygon">Polygon</string>
-    <string name="menu_clear_polygon">Clear Poly</string>
-    <string name="menu_generate_polygon">Generate</string>
-    <string name="menu_finish_polygon">Exit</string>
-    <string name="menu_clearFlightPath">Clear Track</string>
-    <string name="exiting_polygon_mode">Exiting Polygon Mode</string>
-    <string name="entering_polygon_mode">Entering Polygon Mode</string>
-    <string name="dialog_polygon_hatch_angle">Hatch angle:</string>
-    <string name="dialog_polygon_distance_between_lines">Distance between lines:</string>
-    <string name="enable_rc_control">Enable RC control</string>
-    <string name="disable_rc_control">Disable RC control</string>
-    <string name="write">Write</string>
-    <string name="refresh">Refresh</string>
-    <string name="this_is_very_experimental_please_be_careful">This is very experimental, please be careful.</string>
-    <string name="menu_advanced">Advanced</string>
-    <string name="menu_calibration">Calibration</string>
-
+    <string name="menu_disconnect">Αποσύνδεση</string>
+    <string name="conected">Σύνδεση</string>
+    <string name="disconnected">Αποσύνδεση</string>
+    <string name="save">Αποθήκευση</string>
+    <string name="open">Άνοιγμα</string>
+    <string name="menu_open_file">Άνοιγμα αρχείου</string>
+    <string name="menu_save_file">Αποθήκευση αρχείου</string>
+    <string name="menu_load_from_apm">Ανοιγμα απο ΑΡΜ/string>
+    <string name="menu_send_to_apm">Αποθήκευση σε ΑΡΜ</string>
+    <string name="menu_follow_me">Ακολουθησέ με</string>
+    <string name="menu_clear">Καθαρισμός WP</string>
+    <string name="menu_zoom">Μεγένθυνση</string>
+    <string name="file_saved">Αρχείο Αποθηκεύτηκε</string>
+    <string name="no_waypoint_files">Δεν υπάρχουν WP αρχεία</string>
+    <string name="no_files">Δεν υπάρχουν αρχεία</string>
+    <string name="select_file_to_open">Επιλεξτε αρχείο για άνοιγμα:</string>
+    <string name="error_when_saving">Πρόβλημα κατα την αποθήκευση</string>
+    <string name="error_when_opening_file">Πρόβλημα κατα το άνοιγμα</string>
+    <string name="waypoint_altitude">Υψόμετρο</string>
+    <string name="default_alt">Προεπιλεγμένο υψόμετρο</string>
+    <string name="menu_open_kmz">Άνοιγμα αρχείου KMZ</string>
+    <string name="menu_add_polygon">Πρόσθεσε πολύγωνο</string>
+    <string name="menu_polygon">Πολύγωνο</string>
+    <string name="menu_clear_polygon">Διαγραφή πολύγωνου</string>
+    <string name="menu_generate_polygon">Δημιουργια πολύγωνου</string>
+    <string name="menu_finish_polygon">Τέλος πολύγωνου</string>
+    <string name="menu_clearFlightPath">Διαγραφή σχεδίου πτήσης</string>
+    <string name="exiting_polygon_mode">Έξοδος απο κατάσταση πολύγωνου</string>
+    <string name="entering_polygon_mode">Έναρξη κατάστασης πολύγωνου</string>
+    <string name="dialog_polygon_hatch_angle">Γωνία εισόδου:</string>
+    <string name="dialog_polygon_distance_between_lines">Απόσταση μεταξύ γραμμών:</string>
+    <string name="enable_rc_control">Ενεργοποίηση εικονικού RC</string>
+    <string name="disable_rc_control">Απενεργοποίηση εικονικού RC</string>
+    <string name="write">Εγγραφή</string>
+    <string name="refresh">Ανανέωση</string>
+    <string name="this_is_very_experimental_please_be_careful">ΠΡΟΣΟΧΗ πειραματική έκδοση</string>
+ 
     <string-array name="menu_dropdown">
-        <item>Planning</item>
-        <item>Flight Data</item>
-        <item>RC</item>
-        <item>Parameters</item>
-        <item>Camera</item>
+        <item>Σχέδιο πτήσης</item>
+        <item>Στοιχεία πτήσης</item>
+        <item>Εικονικό RC</item>
+        <item>Παράμετροι</item>
+        <item>Κάμερα</item>
         <item>GCP</item>
     </string-array>
+
 
 </resources>
