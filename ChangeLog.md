@@ -1,3 +1,7 @@
+## Droidplanner v0.8.4
+* Greek language avaliable
+* Latvian language avaliable
+
 ## Droidplanner v0.8.3
 * German language avaliable
 * Removing old Terminal screen
