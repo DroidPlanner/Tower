@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_title">AirStudio DroidPlanner</string>
+    <string name="app_title">DroidPlanner</string>
     <string name="menu_settings">Iestatījumi</string>
     <string name="menu_connect">Savienot</string>
     <string name="menu_disconnect">Atvienot</string>      
@@ -42,14 +42,5 @@
     <string name="this_is_very_experimental_please_be_careful">Šī ir eksperimentālā funkcija. Lūdzu, uzmanīgi izmantot.</string>
     <string name="menu_advanced">Advancēti</string>
     <string name="menu_calibration">Kalibrācija</string>
-    
-    <string-array name="menu_dropdown">
-        <item>Planning</item>
-        <item>Flight Data</item>
-        <item>RC</item>
-        <item>Parameters</item>
-        <item>Camera</item>
-        <item>GCP</item>     
-    </string-array>    
     
 </resources>
