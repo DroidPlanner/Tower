@@ -11,7 +11,7 @@
     <string name="open">Άνοιγμα</string>
     <string name="menu_open_file">Άνοιγμα αρχείου</string>
     <string name="menu_save_file">Αποθήκευση αρχείου</string>
-    <string name="menu_load_from_apm">Ανοιγμα απο ΑΡΜ/string>
+    <string name="menu_load_from_apm">Ανοιγμα απο ΑΡΜ</string>
     <string name="menu_send_to_apm">Αποθήκευση σε ΑΡΜ</string>
     <string name="menu_follow_me">Ακολουθησέ με</string>
     <string name="menu_clear">Καθαρισμός WP</string>
@@ -40,7 +40,7 @@
     <string name="write">Εγγραφή</string>
     <string name="refresh">Ανανέωση</string>
     <string name="this_is_very_experimental_please_be_careful">ΠΡΟΣΟΧΗ πειραματική έκδοση</string>
- 
+
     <string-array name="menu_dropdown">
         <item>Σχέδιο πτήσης</item>
         <item>Στοιχεία πτήσης</item>
@@ -49,6 +49,5 @@
         <item>Κάμερα</item>
         <item>GCP</item>
     </string-array>
-
 
 </resources>
