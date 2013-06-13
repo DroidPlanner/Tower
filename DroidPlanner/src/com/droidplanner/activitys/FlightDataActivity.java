@@ -139,7 +139,7 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 	public void onDroneTypeChanged() {
 		Log.d("DRONE", "Drone type changed");
 		fligthModeSpinner.updateModeSpinner(drone);
-		flightMapFragment.updateDroneMarkers();
+		flightMapFragment.droneMarker.updateDroneMarkers(flightMapFragment);
 	}
 
 	@Override

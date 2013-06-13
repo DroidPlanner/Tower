@@ -7,10 +7,7 @@ import java.util.Locale;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
@@ -18,15 +15,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.MAVLink.waypoint;
-import com.MAVLink.Messages.enums.MAV_TYPE;
 import com.droidplanner.R;
 import com.droidplanner.MAVLink.Drone;
 import com.droidplanner.MAVLink.Drone.MapUpdatedListner;
 import com.droidplanner.activitys.SuperActivity;
+import com.droidplanner.fragments.markers.DroneMarker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -35,21 +31,20 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 public class FlightMapFragment extends OfflineMapFragment implements OnMapLongClickListener,MapUpdatedListner {
-	private static final int DRONE_MIN_ROTATION = 5;
-	private GoogleMap mMap;
-	private BitmapDescriptor[] droneBitmaps;
+	public GoogleMap mMap;
 	private Marker guidedMarker;
 	private Polyline flightPath;
 	private Polyline missionPath;
 
 	private int maxFlightPathSize;
-	private boolean isAutoPanEnabled;
+	public boolean isAutoPanEnabled;
 	private boolean isGuidedModeEnabled;
 	
-	private boolean hasBeenZoomed = false;
+	public boolean hasBeenZoomed = false;
 	private OnFlighDataListener mListener;
-	private Marker homeMarker,droneMarker;
-	private Drone drone;
+	private Marker homeMarker;
+	public DroneMarker droneMarker = new DroneMarker();
+	public Drone drone;
 	
 	
 	public interface OnFlighDataListener {
@@ -65,7 +60,7 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 		drone = ((SuperActivity)getActivity()).app.drone;
 		drone.setMapListner(this);		
 		
-		buildDroneBitmaps(drone.getType());		
+		droneMarker.buildBitmaps(this, drone.getType());		
 		addFlightPathToMap();	
 		addMissionPathToMap();
 		getPreferences();
@@ -100,7 +95,7 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 		missionPath.setPoints(missionPoints);
 	}
 	
-	private void addFlithPathPoint(LatLng position) {
+	public void addFlithPathPoint(LatLng position) {
 		if (maxFlightPathSize > 0) {
 			List<LatLng> oldFlightPath = flightPath.getPoints();
 			if (oldFlightPath.size() > maxFlightPathSize) {
@@ -128,28 +123,8 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 		}	
 	}
 
-	private void updateDronePosition(double yaw, LatLng coord) {
-		double correctHeading = (yaw - getMapRotation()+360)%360;	// This ensure the 0 to 360 range
-		int index = (int) (correctHeading/DRONE_MIN_ROTATION);
-		
-		try{
-			droneMarker.setPosition(coord);
-			droneMarker.setIcon(droneBitmaps[index]);
-			
-			if(!hasBeenZoomed){
-				hasBeenZoomed = true;
-				mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coord, 16));
-			}
-			
-			if(isAutoPanEnabled){
-				mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(droneMarker.getPosition(), 17));
-			}
-		}catch(Exception e){
-		}
-	}
-	
 	public void zoomToLastKnowPosition() {
-		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(droneMarker.getPosition(), 16));
+		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(droneMarker.droneMarker.getPosition(), 16));
 	}
 
 	private void addMissionPathToMap() {
@@ -184,32 +159,6 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 		flightPath = mMap.addPolyline(flightPathOptions);		
 	}
 	
-	public void updateDroneMarkers(){
-		buildDroneBitmaps(drone.getType());
-		droneMarker = mMap.addMarker(new MarkerOptions()
-		.anchor((float) 0.5, (float) 0.5)
-		.position(new LatLng(0, 0))
-		.icon(droneBitmaps[0])
-		.visible(false));			
-	}
-	
-	private void buildDroneBitmaps(int type) {
-		int count = 360/DRONE_MIN_ROTATION;
-		droneBitmaps = new BitmapDescriptor[count];
-		for (int i = 0; i < count; i++) {					
-			droneBitmaps[i] = generateDroneIcon(i*DRONE_MIN_ROTATION,type); 
-		}
-		
-	}
-	
-	private BitmapDescriptor generateDroneIcon(float heading,int type) {
-		Bitmap planeBitmap = getDroneBitmap(type);
-		Matrix matrix = new Matrix();
-		matrix.postRotate(heading - mMap.getCameraPosition().bearing);
-		return BitmapDescriptorFactory.fromBitmap( Bitmap.createBitmap(planeBitmap, 0, 0, planeBitmap.getWidth(),
-				planeBitmap.getHeight(), matrix, true));
-	}
-
 	@Override
 	public void onMapLongClick(LatLng point) {
 		getPreferences();
@@ -219,27 +168,12 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 		}
 	}
 
+	/**
+	 * @deprecated Use {@link com.droidplanner.fragments.markers.DroneMarker#onDroneUpdate(com.droidplanner.fragments.FlightMapFragment)} instead
+	 */
 	@Override
 	public void onDroneUpdate() {
-		updateDronePosition(drone.getYaw(), drone.getPosition());
-		addFlithPathPoint(drone.getPosition());		
-	}
-
-	
-	private Bitmap getDroneBitmap(int type) {
-		switch (type) {
-		case MAV_TYPE.MAV_TYPE_TRICOPTER:
-		case MAV_TYPE.MAV_TYPE_QUADROTOR:
-		case MAV_TYPE.MAV_TYPE_HEXAROTOR:
-		case MAV_TYPE.MAV_TYPE_OCTOROTOR:
-		case MAV_TYPE.MAV_TYPE_HELICOPTER:
-			return BitmapFactory
-					.decodeResource(getResources(), R.drawable.quad);
-		case MAV_TYPE.MAV_TYPE_FIXED_WING:
-		default:
-			return BitmapFactory.decodeResource(getResources(),
-					R.drawable.plane);
-		}
+		droneMarker.onDroneUpdate(this);
 	}
 
 }
