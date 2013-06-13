@@ -37,7 +37,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 public class FlightMapFragment extends OfflineMapFragment implements OnMapLongClickListener,MapUpdatedListner {
 	private static final int DRONE_MIN_ROTATION = 5;
 	private GoogleMap mMap;
-	private Marker[] DroneMarker;
+	private BitmapDescriptor[] droneBitmaps;
 	private Marker guidedMarker;
 	private Polyline flightPath;
 	private Polyline missionPath;
@@ -47,9 +47,8 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 	private boolean isGuidedModeEnabled;
 	
 	private boolean hasBeenZoomed = false;
-	private int lastMarker = 0;
 	private OnFlighDataListener mListener;
-	private Marker homeMarker;
+	private Marker homeMarker,droneMarker;
 	private Drone drone;
 	
 	
@@ -66,7 +65,7 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 		drone = ((SuperActivity)getActivity()).app.drone;
 		drone.setMapListner(this);		
 		
-		addDroneMarkersToMap(drone.getType());		
+		buildDroneBitmaps(drone.getType());		
 		addFlightPathToMap();	
 		addMissionPathToMap();
 		getPreferences();
@@ -87,7 +86,7 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
 		maxFlightPathSize =Integer.valueOf(prefs.getString("pref_max_fligth_path_size", "0"));
-		isGuidedModeEnabled =prefs.getBoolean("pref_guided_mode_enabled", false);	 // TODO fix preference description in preference.xml
+		isGuidedModeEnabled =prefs.getBoolean("pref_guided_mode_enabled", false);
 		isAutoPanEnabled =prefs.getBoolean("pref_auto_pan_enabled", false);	
 	}
 
@@ -134,10 +133,8 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 		int index = (int) (correctHeading/DRONE_MIN_ROTATION);
 		
 		try{
-			DroneMarker[lastMarker].setVisible(false);
-			DroneMarker[index].setPosition(coord);
-			DroneMarker[index].setVisible(true);
-			lastMarker = index;
+			droneMarker.setPosition(coord);
+			droneMarker.setIcon(droneBitmaps[index]);
 			
 			if(!hasBeenZoomed){
 				hasBeenZoomed = true;
@@ -145,14 +142,14 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 			}
 			
 			if(isAutoPanEnabled){
-				mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(DroneMarker[lastMarker].getPosition(), 17));
+				mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(droneMarker.getPosition(), 17));
 			}
 		}catch(Exception e){
 		}
 	}
 	
 	public void zoomToLastKnowPosition() {
-		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(DroneMarker[lastMarker].getPosition(), 16));
+		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(droneMarker.getPosition(), 16));
 	}
 
 	private void addMissionPathToMap() {
@@ -188,24 +185,21 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 	}
 	
 	public void updateDroneMarkers(){
-		for (Marker marker : DroneMarker) {
-			marker.remove();
-		}
-		addDroneMarkersToMap(drone.getType());
+		buildDroneBitmaps(drone.getType());
+		droneMarker = mMap.addMarker(new MarkerOptions()
+		.anchor((float) 0.5, (float) 0.5)
+		.position(new LatLng(0, 0))
+		.icon(droneBitmaps[0])
+		.visible(false));			
 	}
 	
-	private void addDroneMarkersToMap(int type) {
+	private void buildDroneBitmaps(int type) {
 		int count = 360/DRONE_MIN_ROTATION;
-		
-		DroneMarker = new Marker[count];
+		droneBitmaps = new BitmapDescriptor[count];
 		for (int i = 0; i < count; i++) {					
-			DroneMarker[i] = mMap.addMarker(new MarkerOptions()
-					.anchor((float) 0.5, (float) 0.5)
-					.position(new LatLng(0, 0))
-					.icon(generateDroneIcon(i*DRONE_MIN_ROTATION,type))
-					.visible(false));
+			droneBitmaps[i] = generateDroneIcon(i*DRONE_MIN_ROTATION,type); 
 		}
-			
+		
 	}
 	
 	private BitmapDescriptor generateDroneIcon(float heading,int type) {
