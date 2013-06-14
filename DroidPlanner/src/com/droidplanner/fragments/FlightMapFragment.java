@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import com.MAVLink.waypoint;
 import com.droidplanner.R;
 import com.droidplanner.MAVLink.Drone;
-import com.droidplanner.MAVLink.Drone.MapUpdatedListner;
 import com.droidplanner.activitys.SuperActivity;
 import com.droidplanner.fragments.markers.DroneMarker;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -30,7 +29,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-public class FlightMapFragment extends OfflineMapFragment implements OnMapLongClickListener,MapUpdatedListner {
+public class FlightMapFragment extends OfflineMapFragment implements OnMapLongClickListener {
 	public GoogleMap mMap;
 	private Marker guidedMarker;
 	private Polyline flightPath;
@@ -43,7 +42,7 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 	public boolean hasBeenZoomed = false;
 	private OnFlighDataListener mListener;
 	private Marker homeMarker;
-	public DroneMarker droneMarker = new DroneMarker();
+	public DroneMarker droneMarker = new DroneMarker(this);
 	public Drone drone;
 	
 	
@@ -58,7 +57,7 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 		View view = super.onCreateView(inflater, viewGroup, bundle);
 		mMap = getMap();		
 		drone = ((SuperActivity)getActivity()).app.drone;
-		drone.setMapListner(this);		
+		drone.setMapListner(droneMarker);		
 		
 		droneMarker.buildBitmaps(this, drone.getType());		
 		addFlightPathToMap();	
@@ -166,14 +165,6 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 			mListener.onSetGuidedMode(point);	
 			updateGuidedMarker(point);
 		}
-	}
-
-	/**
-	 * @deprecated Use {@link com.droidplanner.fragments.markers.DroneMarker#onDroneUpdate(com.droidplanner.fragments.FlightMapFragment)} instead
-	 */
-	@Override
-	public void onDroneUpdate() {
-		droneMarker.onDroneUpdate(this);
 	}
 
 }

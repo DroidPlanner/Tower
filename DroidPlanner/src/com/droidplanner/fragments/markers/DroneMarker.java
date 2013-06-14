@@ -1,5 +1,12 @@
 package com.droidplanner.fragments.markers;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+
+import com.MAVLink.Messages.enums.MAV_TYPE;
+import com.droidplanner.R.drawable;
+import com.droidplanner.MAVLink.Drone.MapUpdatedListner;
 import com.droidplanner.fragments.FlightMapFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -8,7 +15,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class DroneMarker {
+public class DroneMarker implements MapUpdatedListner {
 	public static final int DRONE_MIN_ROTATION = 5;
 	
 	public BitmapDescriptor[] droneBitmaps;
@@ -23,20 +30,20 @@ public class DroneMarker {
 		int count = 360/DRONE_MIN_ROTATION;
 		droneBitmaps = new BitmapDescriptor[count];
 		for (int i = 0; i < count; i++) {					
-			droneBitmaps[i] = flightMapFragment.droneMarker.generateIcon(flightMapFragment, i*DRONE_MIN_ROTATION,type); 
+			droneBitmaps[i] = flightMapFragment.droneMarker.generateIcon(i*DRONE_MIN_ROTATION,type); 
 		}
 		
 	}
 
-	public BitmapDescriptor generateIcon(FlightMapFragment flightMapFragment, float heading, int type) {
-		Bitmap planeBitmap = flightMapFragment.droneMarker.getBitmap(flightMapFragment, type);
+	public BitmapDescriptor generateIcon(float heading, int type) {
+		Bitmap planeBitmap = flightMapFragment.droneMarker.getBitmap(type);
 		Matrix matrix = new Matrix();
 		matrix.postRotate(heading - flightMapFragment.mMap.getCameraPosition().bearing);
 		return BitmapDescriptorFactory.fromBitmap( Bitmap.createBitmap(planeBitmap, 0, 0, planeBitmap.getWidth(),
 				planeBitmap.getHeight(), matrix, true));
 	}
 
-	public Bitmap getBitmap(FlightMapFragment flightMapFragment, int type) {
+	public Bitmap getBitmap(int type) {
 		switch (type) {
 		case MAV_TYPE.MAV_TYPE_TRICOPTER:
 		case MAV_TYPE.MAV_TYPE_QUADROTOR:
@@ -52,7 +59,7 @@ public class DroneMarker {
 		}
 	}
 
-	public void updatePosition(FlightMapFragment flightMapFragment, double yaw, LatLng coord) {
+	public void updatePosition(double yaw, LatLng coord) {
 		double correctHeading = (yaw - flightMapFragment.getMapRotation()+360)%360;	// This ensure the 0 to 360 range
 		int index = (int) (correctHeading/DRONE_MIN_ROTATION);
 		
@@ -72,7 +79,7 @@ public class DroneMarker {
 		}
 	}
 
-	public void updateDroneMarkers(FlightMapFragment flightMapFragment){
+	public void updateDroneMarkers(){
 		buildBitmaps(flightMapFragment, flightMapFragment.drone.getType());
 		droneMarker = flightMapFragment.mMap.addMarker(new MarkerOptions()
 		.anchor((float) 0.5, (float) 0.5)
@@ -81,8 +88,8 @@ public class DroneMarker {
 		.visible(false));			
 	}
 
-	public void onDroneUpdate(FlightMapFragment flightMapFragment) {
-		updatePosition(flightMapFragment, flightMapFragment.drone.getYaw(), flightMapFragment.drone.getPosition());
+	public void onDroneUpdate() {
+		updatePosition(flightMapFragment.drone.getYaw(), flightMapFragment.drone.getPosition());
 		flightMapFragment.addFlithPathPoint(flightMapFragment.drone.getPosition());		
 	}
 }
