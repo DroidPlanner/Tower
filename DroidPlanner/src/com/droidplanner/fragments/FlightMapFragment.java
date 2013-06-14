@@ -42,7 +42,7 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 	public boolean hasBeenZoomed = false;
 	private OnFlighDataListener mListener;
 	private Marker homeMarker;
-	public DroneMarker droneMarker = new DroneMarker(this);
+	public DroneMarker droneMarker;
 	public Drone drone;
 	
 	
@@ -59,7 +59,7 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 		drone = ((SuperActivity)getActivity()).app.drone;
 		drone.setMapListner(droneMarker);		
 		
-		droneMarker.buildBitmaps(this, drone.getType());		
+		droneMarker = new DroneMarker(this);		
 		addFlightPathToMap();	
 		addMissionPathToMap();
 		getPreferences();
