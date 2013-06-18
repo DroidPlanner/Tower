@@ -1,3 +1,6 @@
+## Droidplanner v0.9.0
+* New HUD by Karsten
+
 ## Droidplanner v0.8.4
 * Greek language avaliable
 * Latvian language avaliable
