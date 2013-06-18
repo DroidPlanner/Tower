@@ -8,7 +8,9 @@ import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
+import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Region;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -17,49 +19,147 @@ import com.MAVLink.Messages.ApmModes;
 import com.droidplanner.MAVLink.Drone;
 import com.droidplanner.MAVLink.Drone.HudUpdatedListner;
 
-
 /**
  * Widget for a HUD Originally copied from http://code.google.com/p/copter-gcs/
- * 
+ * Modified by Karsten Prange (realbuxtehuder):
+ * 		- Improved consistency across different screen sizes by replacing 
+ * 		  all fixed and density scaled size and position values by percentual scaled values
+ * 		- Added functionality to show dummy data for debugging purposes
+ * 		- Some minor layout changes
  */
-public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, HudUpdatedListner {
-	private static final float SCROLLER_HEIGHT_PERCENT = .30f;
-	private static final float SCROLLER_WIDTH_PERCENT = .15f;
-	private static final float ROLL_WIDTH_PERCENT = .35f;
-	private static final int SCROLLER_ARROW_HEIGTH = 26;
 
-	private static final int SCROLLER_VSI_RANGE = 12;
-	private static final int SCROLLER_ALT_RANGE = 26;
-	private static final int SCROLLER_SPEED_RANGE = 26;
+public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, HudUpdatedListner {
+	private static final float 	SCROLLER_WIDTH_FACTOR = .15f;			//in relation to width (total HUD widget width)
+	private static final float  SCROLLER_MAX_HEIGHT_FACTOR = .66f;		//in relation to attHeightPx
+	private static final float		SCROLLER_FACTOR_TEXT = .048f;		//in relation to attHeightPx
+	private static final float		SCROLLER_FACTOR_TEXT_Y_OFFSET = -.16f;//in relation to scrollerSizePxText
+	private static final float		SCROLLER_FACTOR_ACTUAL_TEXT_MAGNIFICATION = 1.2f;//in relation to the resulting size of SCROLLER_FACTOR_TEXT
+	private static final float		SCROLLER_FACTOR_TEXT_X_OFFSET = .037f;//in relation to width
+	private static final float		SCROLLER_FACTOR_TIC_LENGTH = .025f;	//in relation to width
+	private static final float 		SCROLLER_FACTOR_ARROW_HEIGTH = 1.4f; //in relation to scrollerSizePxText
+	private static final float 		SCROLLER_FACTOR_TARGET_BAR_WIDTH = .015f;//in relation to attHeightPx
+	private static final int 	SCROLLER_VSI_RANGE = 12;
+	private static final int 	SCROLLER_ALT_RANGE = 26;
+	private static final int 	SCROLLER_SPEED_RANGE = 26;
+	private static final float  ROLL_FACTOR_TEXT = .038f;				//in relation to attHeightPx
+	private static final float  ROLL_FACTOR_TIC_LENGTH = .25f;			//in relation to rollTopOffsetPx
+	private static final float  ROLL_FACTOR_TEXT_Y_OFFSET = .8f;		//in relation to rollSizePxTics
+	private static final float	PITCH_FACTOR_TEXT = .038f;				//in relation to attHeightPx
+	private static final float	PITCH_FACTOR_TEXT_Y_OFFSET = -.16f;		//in relation to the resulting size of PITCH_FACTOR_TEXT
+	private static final float 		PITCH_FACTOR_SCALE_Y_SPACE = 0.02f;	//in relation to attHeightPx
+	private static final float 		PITCH_FACTOR_SCALE_WIDHT_WIDE = 0.25f;	//in relation to width
+	private static final float 		PITCH_FACTOR_SCALE_WIDHT_NARROW = 0.1f;	//in relation to width
+	private static final float 		PITCH_FACTOR_SCALE_TEXT_X_OFFSET = 0.025f;	//in relation to width
+	
+	private static final float	YAW_HEIGHT_FACTOR = .075f;				//in relation to height (total HUD widget height)
+	private static final float		YAW_FACTOR_TEXT = .75f;				//in relation to yawHeightPx
+	private static final float		YAW_FACTOR_TEXT_NUMBERS = .50f;		//in relation to yawHeightPx
+	private static final float		YAW_FACTOR_TEXT_Y_OFFSET = -.16f;	//in relation to yawSizePxText	
+	private static final float		YAW_FACTOR_TICS_SMALL = .20f;		//in relation to yawHeightPx
+	private static final float		YAW_FACTOR_TICS_TALL = .35f;		//in relation to yawHeightPx
+	private static final float		YAW_FACTOR_CENTERLINE_OVERRUN = .2f;//in relation to yawHeightPx
+	private static final int 	YAW_DEGREES_TO_SHOW = 90;
+	private static final float	ATT_FACTOR_INFOTEXT = .048f;			//in relation to attHeightPx
+	private static final float		ATT_FACTOR_INFOTEXT_Y_OFFSET = -.1f;	//in relation to the resulting size of ATT_FACTOR_INFOTEXT
+	private static final float		ATT_FACTOR_INFOTEXT_X_OFFSET = .013f;	//in relation to width
+	private static final float		ATT_FACTOR_INFOTEXT_CLEARANCE = .1f; 	//in relation to attSizePxInfoText//.3f
+	
+	private static final float 	HUD_FACTOR_BORDER_WIDTH = .0075f;		//in relation to averaged of width and height
+	private static final float 	HUD_FACTOR_RED_INDICATOR_WIDTH = .0075f;	//in relation to averaged of width and height
+	private static final float  HUD_FACTOR_SCALE_THICK_TIC_STROKEWIDTH = .005f; //in relation to averaged of width and height
+	private static final float  HUD_FACTOR_SCALE_THIN_TIC_STROKEWIDTH = .0025f; //in relation to averaged of width and height
+	private static final float  HUD_FACTOR_CENTER_INDICATOR_SIZE = .0375f; //in relation to averaged of width and height
+	
+	private static final float 	FAILSAFE_FACTOR_TEXT = .093f;			//in relation to width
+	private static final float 	FAILSAFE_FACTOR_BOX_PADDING = .27f;		//in relation to the resulting size of FAILSAFE_FACTOR_TEXT
+	
+	
 
 	private ScopeThread renderer;
 	private int width;
 	private int height;
-
-
-	private int armedCounter = 0;
+	private int attHeightPx;
+	private int 	attPosPxInfoTextUpperTop;
+	private int 	attPosPxInfoTextUpperBottom;
+	private int 	attPosPxInfoTextLowerTop;
+	private int 	attPosPxInfoTextLowerBottom;
+	private int 	attPosPxInfoTextXOffset;
+	private int scrollerHeightPx;
+	private int scrollerWidthPx;
+	private int 	scrollerSizePxTextYOffset;
+	private int 	scrollerSizePxActualTextYOffset;
+	private int 	scrollerSizePxTextXOffset;
+	private int 	scrollerSizePxArrowHeight;
+	private int 	scrollerSizePxTicLength;
+	private int yawHeightPx;
+	private int		yawYPosPxText;
+	private int		yawYPosPxTextNumbers;
+	private double	yawDegreesPerPixel;
+	private int		yawSizePxTicsSmall;
+	private int		yawSizePxTicsTall;
+	private int 	yawSizePxCenterLineOverRun;
+	private int rollTopOffsetPx;
+	private int 	rollSizePxTics;
+	private int 	rollPosPxTextYOffset;
+	private int pitchTextCenterOffsetPx;
+	private int		pitchPixPerDegree;
+	private int 	pitchScaleWideHalfWidth;
+	private int 	pitchScaleNarrowHalfWidth;
+	private int 	pitchScaleTextXOffset;
+	private int hudCenterIndicatorRadius;
+	private int failsafeSizePxBoxPadding;
 	
 
+	private int armedCounter = 0;
+	//private DisplayMetrics hudMetrics;
+	
+	private static final boolean hudDebug = false;
+	//hudDebug is the main switch for HUD debugging
+	// |->false: Normal HUD operation.
+	// '->true:  HUD shows only the following dummy data! NO NORMAL OPERATION
+	private static final double hudDebugYaw = 42;
+	private static final double hudDebugRoll = 45;
+	private static final double hudDebugPitch = 11;
+	private static final double hudDebugGroundSpeed = 4.3;
+	private static final double hudDebugAirSpeed = 3.2;
+	private static final double hudDebugTargetSpeed = 3;
+	private static final double hudDebugAltitude = 8;
+	private static final double hudDebugTargetAltitude = 20;
+	private static final double hudDebugVerticalSpeed = 2.5;
+	private static final double hudDebugBattRemain = 51;
+	private static final double hudDebugBattCurrent = 40.5;
+	private static final double hudDebugBattVolt = 12.32;
+	private static final int  	hudDebugSatCount = 8;
+	private static final int 	hudDebugFixType = 3;
+	private static final String hudDebugModeName = "Loiter";
+	private static final int 	hudDebugWpNumber = 4;
+	private static final double hudDebugDistToWp = 30.45;
+	private static final int	hudDebugDroneType = 2;
+	private static final boolean hudDebugDroneArmed = false;
+	
+	
 	// Paints
-	Paint grid_paint = new Paint();
 	Paint ground = new Paint();
 	Paint sky = new Paint();
-	Paint white = new Paint();
-	Paint whiteCenter = new Paint();
-	Paint whitebar = new Paint();
-	Paint whiteStroke = new Paint();
-	Paint statusText = new Paint();
-	Paint ScrollerText = new Paint();
-	Paint FailsafeText = new Paint();
-	Paint ScrollerTextLeft = new Paint();
+	Paint yawBg = new Paint();
 	Paint yawText = new Paint();
-
+	Paint yawNumbers = new Paint();
+	Paint rollText = new Paint();
+	Paint pitchText = new Paint();
+	Paint scrollerBg = new Paint();
+	Paint scrollerText = new Paint();
+	Paint scrollerActualText = new Paint();
+	Paint whiteStroke = new Paint();
+	Paint whiteBorder = new Paint();
+	Paint whiteThickTics = new Paint();
+	Paint whiteThinTics = new Paint();
+	Paint FailsafeText = new Paint();
+	Paint attInfoText = new Paint();
 	Paint plane = new Paint();
-	Paint redSolid = new Paint();
 	Paint blackSolid = new Paint();
 	Paint blueVSI = new Paint();
-	Paint greenPen;
-	Paint greenLightPen;
+	Paint greenPen = new Paint();
+	
 	private Drone drone;
 	
 	@Override
@@ -70,113 +170,115 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 		
 		// clear screen
 		canvas.drawColor(Color.rgb(20, 20, 20));
-		canvas.translate(width / 2, height / 2);
+		canvas.translate(width / 2, attHeightPx / 2 + yawHeightPx);		// set center of HUD excluding YAW area
 
-		canvas.save();
+		//from now on each drawing routine has to undo all applied transformations, clippings, etc by itself
+		//this will improve performance because not every routine applies that stuff, so general save and restore 
+		//is not necessary
 		drawPitch(canvas);
-		canvas.restore();
-		canvas.save();
 		drawRoll(canvas);
-		canvas.restore();
-		canvas.save();
 		drawYaw(canvas);
-		canvas.restore();
-		canvas.save();
 		drawPlane(canvas);
-		canvas.restore();
-		canvas.save();
 		drawRightScroller(canvas);
-		canvas.restore();
-		canvas.save();
 		drawLeftScroller(canvas);
-		canvas.restore();
-		canvas.save();
+		drawAttitudeInfoText(canvas);
 		drawFailsafe(canvas);
-		canvas.restore();
-
 	}
 	
 	public HUDwidget(Context context, AttributeSet attributeSet) {
 		super(context, attributeSet);
 		getHolder().addCallback(this);
+		//hudMetrics = context.getResources().getDisplayMetrics();
 		
-		grid_paint.setColor(Color.rgb(100, 100, 100));
 		ground.setARGB(220, 148, 193, 31);
 		sky.setARGB(220, 0, 113, 188);
-		whitebar.setARGB(64, 255, 255, 255);
-
-		white.setColor(Color.WHITE);
-		white.setTextSize(15.0f * context.getResources().getDisplayMetrics().density);
-
-		whiteCenter.setColor(Color.WHITE);
-		whiteCenter.setTextSize(15.0f * context.getResources()
-				.getDisplayMetrics().density);
-		whiteCenter.setTextAlign(Align.CENTER);
-
-		statusText.setColor(Color.WHITE);
-		statusText.setTextSize(25.0f * context.getResources()
-				.getDisplayMetrics().density);
-
-		ScrollerText = new Paint(statusText);
-		ScrollerText.setTextAlign(Paint.Align.LEFT);
-		ScrollerTextLeft = new Paint(ScrollerText);
-		ScrollerTextLeft.setTextAlign(Paint.Align.RIGHT);
+		yawBg.setARGB(255, 0, 0, 0);//(64, 255, 255, 255);
+		scrollerBg.setARGB(64, 255, 255, 255);//(255, 0, 0, 0);
 		
-		FailsafeText = new Paint(statusText);
-		FailsafeText.setTextAlign(Paint.Align.CENTER);
-		FailsafeText.setColor(Color.RED);
-		FailsafeText.setTextSize(50.0f * context.getResources()
-				.getDisplayMetrics().density);
+		scrollerText.setColor(Color.WHITE);
+		scrollerText.setAntiAlias(true);
+		scrollerActualText.setColor(Color.WHITE);
+		scrollerActualText.setAntiAlias(true);
+	
+		FailsafeText.setTextSize(37);
+		FailsafeText.setAntiAlias(true);
 
 		whiteStroke.setColor(Color.WHITE);
 		whiteStroke.setStyle(Style.STROKE);
 		whiteStroke.setStrokeWidth(3);
-		whiteStroke.setAntiAlias(true); // Shouldn't affect performance
+		whiteStroke.setAntiAlias(true);
+		
+		whiteBorder.setColor(Color.WHITE);
+		whiteBorder.setStyle(Style.STROKE);
+		whiteBorder.setStrokeWidth(3);
+		whiteBorder.setAntiAlias(true);
+		
+		whiteThinTics.setColor(Color.WHITE);
+		whiteThinTics.setStyle(Style.FILL);
+		whiteThinTics.setStrokeWidth(1);
+		
+		whiteThickTics.setColor(Color.WHITE);
+		whiteThickTics.setStyle(Style.FILL);
+		whiteThickTics.setStrokeWidth(2);
 
-		yawText = new Paint(whiteStroke);
-		yawText.setStrokeWidth(2);
-		yawText.setTextSize(20);
-		yawText.setTextAlign(Paint.Align.CENTER);
+		yawText.setColor(Color.WHITE);
+		yawText.setFakeBoldText(true);
+		yawText.setTextAlign(Align.CENTER);
+		yawText.setAntiAlias(true);
+		
+		yawNumbers.setColor(Color.WHITE);
+		yawNumbers.setTextAlign(Align.CENTER);
+		yawNumbers.setAntiAlias(true);
+		
+		rollText.setColor(Color.WHITE);
+		rollText.setAntiAlias(true);
+		rollText.setTextAlign(Align.CENTER);
+		
+		pitchText.setColor(Color.WHITE);
+		pitchText.setAntiAlias(true);
+		pitchText.setTextAlign(Align.RIGHT);
+		
+		attInfoText.setColor(Color.WHITE);
+		attInfoText.setTextAlign(Align.CENTER);
+		attInfoText.setAntiAlias(true);
 
-		greenPen = new Paint(whiteStroke);
 		greenPen.setColor(Color.GREEN);
 		greenPen.setStrokeWidth(6);
-		greenLightPen = new Paint(greenPen);
-		greenLightPen.setAlpha(128);
+		greenPen.setStyle(Style.STROKE);
 
 		plane.setColor(Color.RED);
 		plane.setStyle(Style.STROKE);
 		plane.setStrokeWidth(3);
+		plane.setAntiAlias(true);
 
-		redSolid.setColor(Color.RED);
 		blackSolid.setColor(Color.BLACK);
+		blackSolid.setAntiAlias(true);
 		blueVSI.setARGB(255, 0, 50, 250);
+		blueVSI.setAntiAlias(true);
 	}
 
 	private void drawPlane(Canvas canvas) {
-		canvas.drawCircle(0, 0, 15, plane);
-
-		canvas.drawLine(-15, 0, -25, 0, plane);
-		canvas.drawLine(15, 0, 25, 0, plane);
-		canvas.drawLine(0, -15, 0, -25, plane);
-
+		canvas.drawCircle(0, 0, hudCenterIndicatorRadius, plane);
+		canvas.drawLine(-hudCenterIndicatorRadius, 0, -hudCenterIndicatorRadius * 2, 0, plane);
+		canvas.drawLine(hudCenterIndicatorRadius, 0, hudCenterIndicatorRadius * 2, 0, plane);
+		canvas.drawLine(0, -hudCenterIndicatorRadius, 0, -hudCenterIndicatorRadius * 2, plane);
 	}
 
 	private void drawYaw(Canvas canvas) {
-		canvas.drawRect(-width, -height / 2, width, -height / 2 + 30, sky);
-		canvas.drawLine(-width, -height / 2 + 30, width, -height / 2 + 30,
-				white);
+		int yawBottom = -attHeightPx / 2;
+		canvas.drawRect(-width / 2, yawBottom - yawHeightPx, width / 2, yawBottom, yawBg);
+		canvas.drawLine(-width / 2, yawBottom, width / 2, yawBottom, whiteBorder);
 
-		// width / 2 == yawPosition
-		// then round to nearest 5 degrees, and draw it.
+		double yaw = drone.getYaw();
+		if (hudDebug)
+			yaw = hudDebugYaw;
+		
+		double centerDegrees = yaw;
 
-		double centerDegrees = drone.getYaw();
-		double numDegreesToShow = 120;
-		double degreesPerPixel = (double) width / numDegreesToShow;
-
-		double mod = drone.getYaw() % 5;
-		for (double angle = (centerDegrees - mod) - numDegreesToShow / 2.0; angle <= (centerDegrees - mod)
-				+ numDegreesToShow / 2.0; angle += 5) {
+		double mod = yaw % 5;
+		for (double angle = (centerDegrees - mod) - YAW_DEGREES_TO_SHOW / 2.0; 
+				angle <= (centerDegrees - mod) + YAW_DEGREES_TO_SHOW / 2.0;
+				angle += 5) {
 
 			// protect from wraparound
 			double workAngle = (angle + 360.0);
@@ -185,101 +287,124 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 
 			// need to draw "angle"
 			// How many pixels from center should it be?
-			int distanceToCenter = (int) ((angle - centerDegrees) * degreesPerPixel);
+			int distanceToCenter = (int) ((angle - centerDegrees) * yawDegreesPerPixel);
 
 			if (workAngle % 45 == 0) {
 				String compass[] = { "N", "NE", "E", "SE", "S", "SW", "W", "NW" };
 				int index = (int) workAngle / 45;
-				canvas.drawText(compass[index], distanceToCenter,
-						-height / 2 + 20, yawText);
-				canvas.drawLine(distanceToCenter, -height / 2 + 25,
-						distanceToCenter, -height / 2 + 30, white);
+				canvas.drawLine(distanceToCenter, yawBottom - yawSizePxTicsSmall, distanceToCenter, yawBottom, whiteThinTics);
+				canvas.drawText(compass[index], distanceToCenter, yawBottom - yawYPosPxText, yawText);
 			} else if (workAngle % 15 == 0) {
-				canvas.drawLine(distanceToCenter, -height / 2 + 20,
-						distanceToCenter, -height / 2 + 30, white);
-				canvas.drawText((int) (workAngle) + "", distanceToCenter,
-						-height / 2 + 18, whiteCenter);
+				canvas.drawLine(distanceToCenter, yawBottom - yawSizePxTicsTall, distanceToCenter, yawBottom, whiteThinTics);
+				canvas.drawText((int) (workAngle) + "", distanceToCenter, yawBottom - yawYPosPxTextNumbers, yawNumbers);
 			} else {
-				canvas.drawLine(distanceToCenter, -height / 2 + 25,
-						distanceToCenter, -height / 2 + 30, white);
+				canvas.drawLine(distanceToCenter, yawBottom - yawSizePxTicsSmall, distanceToCenter, yawBottom, whiteThinTics);
 			}
 		}
 
 		// Draw the center line
-		canvas.drawLine(0, -height / 2, 0, -height / 2 + 40, plane);
-
+		canvas.drawLine(0, yawBottom - yawHeightPx, 0, yawBottom + yawSizePxCenterLineOverRun, plane);
 	}
 
 	private void drawRoll(Canvas canvas) {
-		int r = (int) ((double) width * ROLL_WIDTH_PERCENT);
-		RectF rec = new RectF(-r, -height / 2 + 60, r, -height / 2 + 60 + 2 * r);
-
+		int r = Math.round(attHeightPx / 2 - rollTopOffsetPx);
+		RectF rec = new RectF(-r, -r, r, r);
+		
 		// Draw the arc
-		canvas.drawArc(rec, -180 + 45, 90, false, whiteStroke);
+		canvas.drawArc(rec, 225, 90, false, whiteBorder);
 
+		// Draw center triangle
+		Path arrow = new Path();
+		int tempOffset = Math.round(plane.getStrokeWidth() / 2);
+		arrow.moveTo(0, -attHeightPx / 2 + rollTopOffsetPx - tempOffset);
+		arrow.lineTo(0 - rollTopOffsetPx / 3, -attHeightPx / 2 + rollTopOffsetPx / 2 - tempOffset);
+		arrow.lineTo(0 + rollTopOffsetPx / 3, -attHeightPx / 2 + rollTopOffsetPx / 2 - tempOffset);
+		arrow.close();
+		canvas.drawPath(arrow, plane);
+		
 		// draw the ticks
-		// The center of the circle is at:
-		// 0, -height/2 + 60 + r
-
-		float centerY = -height / 2 + 60 + r;
+		// The center of the circle is at: 0, 0
 		for (int i = -45; i <= 45; i += 15) {
-			// Draw ticks
-			float dx = (float) Math.sin(i * Math.PI / 180) * r;
-			float dy = (float) Math.cos(i * Math.PI / 180) * r;
-			canvas.drawLine(dx, centerY - dy, (dx - (dx / 25)), centerY
-					- (dy - dy / 25), whiteStroke);
-
-			// Draw the labels
 			if (i != 0) {
-				dx = (float) Math.sin(i * Math.PI / 180) * (r + 10);
-				dy = (float) Math.cos(i * Math.PI / 180) * (r + 10);
-				canvas.drawText(Math.abs(i) + "", dx, centerY - dy, whiteCenter);
-
+				// Draw ticks 
+				float dx = (float) Math.sin(i * Math.PI / 180) * r;
+				float dy = (float) Math.cos(i * Math.PI / 180) * r;
+				float ex = (float) Math.sin(i * Math.PI / 180) * (r + rollSizePxTics);
+				float ey = (float) Math.cos(i * Math.PI / 180) * (r + rollSizePxTics);
+				canvas.drawLine(dx, -dy, ex, -ey, whiteThickTics);
+				// Draw the labels
+				dx = (float) Math.sin(i * Math.PI / 180) * (r + rollSizePxTics + rollPosPxTextYOffset);
+				dy = (float) Math.cos(i * Math.PI / 180) * (r + rollSizePxTics + rollPosPxTextYOffset);
+				canvas.drawText(Math.abs(i) + "", dx, -dy, rollText);
 			}
 		}
-
-		float dx = (float) Math.sin(drone.getRoll() * Math.PI / 180) * r;
-		float dy = (float) Math.cos(-drone.getRoll() * Math.PI / 180) * r;
-		canvas.drawCircle(dx, centerY - dy, 10, redSolid);
+		
+		//current roll angle will be drawn by drawPitch()
 	}
 
 	private void drawPitch(Canvas canvas) {
-		int step = 40; // Pixels per 5 degree step
+		double pitch = drone.getPitch();
+		double roll = drone.getRoll();
+		
+		if (hudDebug) {
+			pitch = hudDebugPitch;
+			roll = hudDebugRoll;
+		}
+		
+		int pitchOffsetPx = (int) (pitch * pitchPixPerDegree);
+		int rollTriangleBottom = -attHeightPx / 2 + rollTopOffsetPx / 2 + rollTopOffsetPx;
+		
+		canvas.rotate(-(int) roll);
 
-		canvas.translate(0, (int) (drone.getPitch() * (step / 5)));
-		canvas.rotate(-(int) drone.getRoll());
-
-		// Draw the background box
-		canvas.drawRect(-width, 0, width, 5 * height /* Go plenty low */, ground);
-		canvas.drawRect(-width, -5 * height /* Go plenty high */, width, 0, sky);
-
-		// Draw the vertical grid
-		canvas.drawLine(-width, 0, width, 0, white);
-		// canvas.f
-
-		int iMax = ((int) (-drone.getPitch() + 25) / 5);
+		// Draw the background
+		canvas.drawRect(-width, pitchOffsetPx, width, 2 * height /* Go plenty low */, ground);
+		canvas.drawRect(-width, -2 * height /* Go plenty high */, width, pitchOffsetPx, sky);
+		canvas.drawLine(-width, pitchOffsetPx, width, pitchOffsetPx, whiteThinTics);
+		
+		// Draw roll triangle
+		Path arrow = new Path();
+		int tempOffset = Math.round(plane.getStrokeWidth() + whiteBorder.getStrokeWidth() / 2);
+		arrow.moveTo(0, -attHeightPx / 2 + rollTopOffsetPx + tempOffset);
+		arrow.lineTo(0 - rollTopOffsetPx / 3, rollTriangleBottom + tempOffset);
+		arrow.lineTo(0 + rollTopOffsetPx / 3, rollTriangleBottom + tempOffset);
+		arrow.close();
+		canvas.drawPath(arrow, plane);
+		
+		// Draw gauge
 		int yPos;
-		for (int i = ((int) (-drone.getPitch() - 25) / 5); i <= iMax; i++) {
-			if (i != 0) {
-				yPos = i * step;
+		for (int i = -180; i <= 180; i += 5) {
+			yPos = Math.round(-i * pitchPixPerDegree + pitchOffsetPx);
+			if ((yPos < -rollTriangleBottom) && (yPos > rollTriangleBottom) && (yPos != pitchOffsetPx)) {
 				if (i % 2 == 0) {
-					canvas.drawLine(-50, yPos, 50, yPos, white);
-					canvas.drawText((5 * (-i)) + "", -90, yPos + 5, white);
-				} else
-					canvas.drawLine(-20, yPos, 20, yPos, white);
+					canvas.drawLine(-pitchScaleWideHalfWidth, yPos, pitchScaleWideHalfWidth, yPos, whiteThinTics);
+					canvas.drawText(i + "", -pitchScaleWideHalfWidth - pitchScaleTextXOffset, yPos - pitchTextCenterOffsetPx, pitchText);
+				}
+				else
+					canvas.drawLine(-pitchScaleNarrowHalfWidth, yPos, pitchScaleNarrowHalfWidth, yPos, whiteThinTics);
 			}
 		}
+
+		canvas.rotate((int) roll);
 	}
 
 	private void drawRightScroller(Canvas canvas) {
-		final float textHalfSize = ScrollerText.getTextSize() / 2 - 1;
-
-		// Outside box
-		RectF scroller = new RectF(width * 0.5f - width*SCROLLER_WIDTH_PERCENT, -height
-				* SCROLLER_HEIGHT_PERCENT, width * .50f, height
-				* SCROLLER_HEIGHT_PERCENT);
+		final float textHalfSize = scrollerText.getTextSize() / 2;
+		scrollerText.setTextAlign(Paint.Align.LEFT);
+		scrollerActualText.setTextAlign(Paint.Align.LEFT);
 		
-
+		double altitude = drone.getAltitude();
+		double targetAltitude = drone.getTargetAltitude();
+		double verticalSpeed = drone.getVerticalSpeed();
+		
+		if (hudDebug) {
+			altitude = hudDebugAltitude;
+			targetAltitude = hudDebugTargetAltitude;
+			verticalSpeed = hudDebugVerticalSpeed;
+		}
+			
+		// Outside box
+		RectF scroller = new RectF(width / 2 - scrollerWidthPx, -scrollerHeightPx / 2, width / 2, scrollerHeightPx / 2);
+		
 		// Draw Vertical speed indicator
 		final float vsi_width = scroller.width() / 4;
 		float linespace = scroller.height() / SCROLLER_VSI_RANGE;
@@ -288,196 +413,265 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 		vsiBox.lineTo(scroller.left - vsi_width, scroller.top + vsi_width);
 		vsiBox.lineTo(scroller.left - vsi_width, scroller.bottom - vsi_width);
 		vsiBox.lineTo(scroller.left, scroller.bottom);
-		for (int a = 1; a < SCROLLER_VSI_RANGE; a++) { // draw ticks
-			float lineHeight = scroller.top + linespace * a;
-			vsiBox.moveTo(scroller.left - vsi_width, lineHeight);
-			vsiBox.lineTo(scroller.left - vsi_width / 2, lineHeight);
-		}
-
+		/*
 		float vsiFillTrim = 0;
-		if (drone.getVerticalSpeed() > 1) { // TODO Vertical Speed indicator must be tested
+		if (verticalSpeed > 1) { // TODO Vertical Speed indicator must be tested
 			vsiFillTrim = -1;
-		} else if (drone.getVerticalSpeed() < -1) {
+		} else if (verticalSpeed < -1) {
 			vsiFillTrim = 1;
 		}
-
+		*/
 		Path vsiFill = new Path();
+		float vsiIndicatorEnd = scroller.centerY() - ((float) verticalSpeed) * linespace;
 		vsiFill.moveTo(scroller.left, scroller.centerY());
 		vsiFill.lineTo(scroller.left - vsi_width, scroller.centerY());
-		vsiFill.lineTo(scroller.left - vsi_width,
-				(scroller.centerY() - (((float) drone.getVerticalSpeed()) + vsiFillTrim)
-						* linespace));
-		vsiFill.lineTo(scroller.left,
-				(scroller.centerY() - ((float) drone.getVerticalSpeed()) * linespace));
+		vsiFill.lineTo(scroller.left - vsi_width, vsiIndicatorEnd);
+		vsiFill.lineTo(scroller.left, vsiIndicatorEnd);
 		vsiFill.lineTo(scroller.left, scroller.centerY());
+		canvas.drawPath(vsiBox, scrollerBg);
 		canvas.drawPath(vsiFill, blueVSI);
-		canvas.drawPath(vsiBox, whiteStroke);
-
-		// Draw Altitude Scroller
-		canvas.drawRect(scroller, whiteStroke);
-		canvas.drawRect(scroller, whitebar);
-
-		float space = scroller.height() / (float) SCROLLER_ALT_RANGE;
-		int start = ((int) drone.getAltitude() - SCROLLER_ALT_RANGE / 2);
-
-		if (start > drone.getTargetAltitude()) {
-			canvas.drawLine(scroller.left, scroller.bottom, scroller.right,
-					scroller.bottom, greenLightPen);
-		} else if ((drone.getAltitude() + SCROLLER_SPEED_RANGE / 2) < drone.getTargetAltitude()) {
-			canvas.drawLine(scroller.left, scroller.top, scroller.right,
-					scroller.top, greenLightPen);
+		canvas.drawLine(scroller.left - vsi_width, vsiIndicatorEnd, scroller.left, vsiIndicatorEnd,whiteThinTics);
+		canvas.drawPath(vsiBox, whiteBorder);
+		
+		for (int a = 1; a < SCROLLER_VSI_RANGE; a++) { // draw ticks
+			float lineHeight = scroller.top + linespace * a;
+			canvas.drawLine(scroller.left - vsi_width, lineHeight, scroller.left - vsi_width + vsi_width / 3, lineHeight, whiteThickTics);
 		}
 
-		for (int a = start; a <= (drone.getAltitude() + SCROLLER_ALT_RANGE / 2); a += 1) { // go
-																				// trough
-																				// 1m
-																				// steps
-			float lineHeight = scroller.centerY() - space
-					* (a - (int) drone.getAltitude());
+		// Draw Altitude Scroller
+		canvas.drawRect(scroller, scrollerBg);
+		canvas.drawRect(scroller, whiteBorder);
+		// Clip to Scroller
+		canvas.clipRect(scroller, Region.Op.REPLACE);
 
-			if (a == ((int) drone.getTargetAltitude()) && drone.getTargetAltitude() != 0) {
-				canvas.drawLine(scroller.left, lineHeight, scroller.right,
-						lineHeight, greenPen);
+		float space = scroller.height() / (float) SCROLLER_ALT_RANGE;
+		int start = ((int) altitude - SCROLLER_ALT_RANGE / 2);
+
+		if (start > targetAltitude) {
+			canvas.drawLine(scroller.left, scroller.bottom, scroller.right,
+					scroller.bottom, greenPen);
+		} else if ((altitude + SCROLLER_SPEED_RANGE / 2) < targetAltitude) {
+			canvas.drawLine(scroller.left, scroller.top, scroller.right,
+					scroller.top, greenPen);
+		}
+		
+		float targetAltPos = Float.MIN_VALUE;
+		for (int a = start; a <= (altitude + SCROLLER_ALT_RANGE / 2); a += 1) { // go trough 1m steps
+
+			float lineHeight = scroller.centerY() - space * (a - (int) altitude);
+
+			if (a == ((int) targetAltitude) && targetAltitude != 0) {
+				canvas.drawLine(scroller.left, lineHeight, scroller.right, lineHeight, greenPen);
+				targetAltPos = lineHeight;
 			}
 			if (a % 5 == 0) {
-				canvas.drawLine(scroller.left, lineHeight, scroller.left + 10,
-						lineHeight, whiteStroke);
-				canvas.drawText(Integer.toString(a), scroller.left + 15,
-						lineHeight + textHalfSize, ScrollerText);
+				canvas.drawLine(scroller.left, lineHeight, scroller.left + scrollerSizePxTicLength, lineHeight, whiteThickTics);
+				canvas.drawText(Integer.toString(a), scroller.left + scrollerSizePxTextXOffset, lineHeight + textHalfSize + scrollerSizePxTextYOffset, scrollerText);
 			}
 		}
 
 		// Arrow with current altitude
+		String actualText = Integer.toString((int) altitude);
+		int borderWidth = Math.round(whiteBorder.getStrokeWidth());
 		Path arrow = new Path();
-		arrow.moveTo(scroller.right, -SCROLLER_ARROW_HEIGTH / 2);
-		arrow.lineTo(scroller.left + SCROLLER_ARROW_HEIGTH / 2,
-				-SCROLLER_ARROW_HEIGTH / 2);
-		arrow.lineTo(scroller.left + 5, 0);
-		arrow.lineTo(scroller.left + SCROLLER_ARROW_HEIGTH / 2,
-				SCROLLER_ARROW_HEIGTH / 2);
-		arrow.lineTo(scroller.right, SCROLLER_ARROW_HEIGTH / 2);
+		arrow.moveTo(scroller.right, -scrollerSizePxArrowHeight / 2);
+		arrow.lineTo(scroller.left + scrollerSizePxArrowHeight / 4 + borderWidth, -scrollerSizePxArrowHeight / 2);
+		arrow.lineTo(scroller.left + borderWidth, 0);
+		arrow.lineTo(scroller.left + scrollerSizePxArrowHeight / 4 + borderWidth, scrollerSizePxArrowHeight / 2);
+		arrow.lineTo(scroller.right, scrollerSizePxArrowHeight / 2);
 		canvas.drawPath(arrow, blackSolid);
-		canvas.drawText(Integer.toString((int) drone.getAltitude()), scroller.left + 15,
-				textHalfSize, ScrollerText);
-
-		// Draw mode and wp distance
-		int screenBottom = canvas.getHeight()/2;
-		float sizeLeftBellowScroller = (screenBottom)-scroller.bottom;
-		
-		
-		canvas.drawText(drone.getMode().getName(), scroller.right -5,
-				screenBottom - sizeLeftBellowScroller/2, ScrollerTextLeft);
-		canvas.drawText(Integer.toString((int) drone.getDisttowp()) + ">" + drone.getWpno(),
-				scroller.right -5, screenBottom - 5,
-				ScrollerTextLeft);
-
-		String gpsFix = "";
-		if (drone.getSatCount() >= 0) {
-			switch (drone.getFixType()) {
-			case 2:
-				gpsFix = ("GPS2D(" + drone.getSatCount() + ")");
-				break;
-			case 3:
-				gpsFix = ("GPS3D(" + drone.getSatCount() + ")");
-				break;
-			default:
-				gpsFix = ("NoGPS(" + drone.getSatCount() + ")");
-				break;
-			}
+		if ((targetAltPos != Float.MIN_VALUE) && (targetAltPos > -scrollerSizePxArrowHeight / 2) && (targetAltPos < scrollerSizePxArrowHeight / 2)) {
+			Rect actualTextRec = new Rect();
+			scrollerActualText.getTextBounds(actualText, 0, actualText.length(), actualTextRec);
+			canvas.drawLine(scroller.right, targetAltPos, scroller.left + actualTextRec.width() + scrollerSizePxTextXOffset + textHalfSize, targetAltPos, greenPen);
 		}
-		canvas.drawText(gpsFix, scroller.right -5,
-				scroller.top - 10, ScrollerTextLeft);
-		if (drone.getBattRemain()>0) {
-			canvas.drawText(String.format("%3.0f%%",drone.getBattRemain()), scroller.right -5,
-					scroller.top - 30, ScrollerTextLeft);			
-		}
-
+		canvas.drawPath(arrow, plane);
+		canvas.drawText(actualText, scroller.left + scrollerSizePxTextXOffset, scrollerActualText.getTextSize() / 2 + scrollerSizePxActualTextYOffset, scrollerActualText);
+		// Reset clipping of Scroller
+		canvas.clipRect(-width / 2, -height / 2, width / 2, height / 2,Region.Op.REPLACE);
+		//Draw VSI center indicator
+		canvas.drawLine(scroller.left + borderWidth, 0, scroller.left - vsi_width - borderWidth, 0, plane);
 	}
 
 	private void drawLeftScroller(Canvas canvas) {
-		final float textHalfSize = ScrollerText.getTextSize() / 2 - 1;
+		final float textHalfSize = scrollerText.getTextSize() / 2;
+		scrollerText.setTextAlign(Paint.Align.RIGHT);
+		scrollerActualText.setTextAlign(Paint.Align.RIGHT);
 
-		double speed = drone.getAirSpeed(); // TODO test airSpeed
+		double groundSpeed = drone.getGroundSpeed();
+		double airSpeed = drone.getAirSpeed();
+		double targetSpeed = drone.getTargetSpeed();
+		if (hudDebug) {
+			groundSpeed = hudDebugGroundSpeed;
+			airSpeed = hudDebugAirSpeed;
+			targetSpeed = hudDebugTargetSpeed;
+		}
+		
+		double speed = airSpeed; // TODO test airSpeed
 		if (speed == 0)
-			speed = drone.getGroundSpeed();
+			speed = groundSpeed;
 
 		// Outside box
-		RectF scroller = new RectF(-width * .50f, -height
-				* SCROLLER_HEIGHT_PERCENT, -width * 0.5f + width*SCROLLER_WIDTH_PERCENT,
-				height * SCROLLER_HEIGHT_PERCENT);
-
+		RectF scroller = new RectF(-width / 2, -scrollerHeightPx / 2,
+				-width / 2 + scrollerWidthPx, scrollerHeightPx / 2);
+		
 		// Draw Scroll
-		canvas.drawRect(scroller, whiteStroke);
-		canvas.drawRect(scroller, whitebar);
+		canvas.drawRect(scroller, scrollerBg);
+		canvas.drawRect(scroller, whiteBorder);
+		// Clip to Scroller
+		canvas.clipRect(scroller, Region.Op.REPLACE);
 
 		float space = scroller.height() / (float) SCROLLER_SPEED_RANGE;
 		int start = ((int) speed - SCROLLER_SPEED_RANGE / 2);
 
-		if (start > drone.getTargetSpeed()) {
+		if (start > targetSpeed) {
 			canvas.drawLine(scroller.left, scroller.bottom, scroller.right,
-					scroller.bottom, greenLightPen);
-		} else if ((speed + SCROLLER_SPEED_RANGE / 2) < drone.getTargetSpeed()) {
+					scroller.bottom, greenPen);
+		} else if ((speed + SCROLLER_SPEED_RANGE / 2) < targetSpeed) {
 			canvas.drawLine(scroller.left, scroller.top, scroller.right,
-					scroller.top, greenLightPen);
+					scroller.top, greenPen);
 		}
 
+		float targetSpdPos = Float.MIN_VALUE;
 		for (int a = start; a <= (speed + SCROLLER_SPEED_RANGE / 2); a += 1) {
 			float lineHeight = scroller.centerY() - space * (a - (int) speed);
 
-			if (a == ((int) drone.getTargetSpeed()) && drone.getTargetSpeed() != 0) {
-				canvas.drawLine(scroller.left, lineHeight, scroller.right,
-						lineHeight, greenPen);
+			if (a == ((int) targetSpeed) && targetSpeed != 0) {
+				canvas.drawLine(scroller.left, lineHeight, scroller.right, lineHeight, greenPen);
+				targetSpdPos = lineHeight;
 			}
 			if (a % 5 == 0) {
 				canvas.drawLine(scroller.right, lineHeight,
-						scroller.right - 10, lineHeight, whiteStroke);
-				canvas.drawText(Integer.toString(a), scroller.right - 15,
-						lineHeight + textHalfSize, ScrollerTextLeft);
+						scroller.right - scrollerSizePxTicLength, lineHeight, whiteThickTics);
+				canvas.drawText(Integer.toString(a), scroller.right - scrollerSizePxTextXOffset,
+						lineHeight + textHalfSize + scrollerSizePxTextYOffset, scrollerText);
 			}
 		}
 
 		// Arrow with current speed
+		String actualText = Integer.toString((int) speed);
+		int borderWidth = Math.round(whiteBorder.getStrokeWidth());
 		Path arrow = new Path();
-		arrow.moveTo(scroller.left, -SCROLLER_ARROW_HEIGTH / 2);
-		arrow.lineTo(scroller.right - SCROLLER_ARROW_HEIGTH / 2,
-				-SCROLLER_ARROW_HEIGTH / 2);
-		arrow.lineTo(scroller.right - 5, 0);
-		arrow.lineTo(scroller.right - SCROLLER_ARROW_HEIGTH / 2,
-				SCROLLER_ARROW_HEIGTH / 2);
-		arrow.lineTo(scroller.left, SCROLLER_ARROW_HEIGTH / 2);
+		arrow.moveTo(scroller.left - borderWidth, -scrollerSizePxArrowHeight / 2);
+		arrow.lineTo(scroller.right - scrollerSizePxArrowHeight / 4 - borderWidth, -scrollerSizePxArrowHeight / 2);
+		arrow.lineTo(scroller.right - borderWidth, 0);
+		arrow.lineTo(scroller.right - scrollerSizePxArrowHeight / 4 - borderWidth, scrollerSizePxArrowHeight / 2);
+		arrow.lineTo(scroller.left - borderWidth, scrollerSizePxArrowHeight / 2);
 		canvas.drawPath(arrow, blackSolid);
-		canvas.drawText(Integer.toString((int) speed), scroller.right - 15,
-				textHalfSize, ScrollerTextLeft);
-
-		// Draw Text
-		int screenBottom = canvas.getHeight()/2;
-		float sizeLeftBellowScroller = (screenBottom)-scroller.bottom;
+		if ((targetSpdPos != Float.MIN_VALUE) && (targetSpdPos > -scrollerSizePxArrowHeight / 2) && (targetSpdPos < scrollerSizePxArrowHeight / 2)) {
+			Rect actualTextRec = new Rect();
+			scrollerActualText.getTextBounds(actualText, 0, actualText.length(), actualTextRec);
+			canvas.drawLine(scroller.left, targetSpdPos, scroller.right - actualTextRec.width() - scrollerSizePxTextXOffset - textHalfSize, targetSpdPos, greenPen);
+		}
+		canvas.drawPath(arrow, plane);
+		canvas.drawText(actualText, scroller.right - scrollerSizePxTextXOffset, scrollerActualText.getTextSize() / 2 + scrollerSizePxActualTextYOffset, scrollerActualText);
+		// Reset clipping of Scroller
+		canvas.clipRect(-width / 2, -height / 2, width / 2, height / 2,Region.Op.REPLACE);
+	}
+	
+	private void drawAttitudeInfoText(Canvas canvas) {
+		double battVolt = drone.getBattVolt();
+		double battCurrent = drone.getBattCurrent();
+		double battRemain = drone.getBattRemain();
+		double groundSpeed = drone.getGroundSpeed();
+		double airSpeed = drone.getAirSpeed();
+		int satCount = drone.getSatCount();
+		int fixType = drone.getFixType();
+		String modeName = drone.getMode().getName();
+		int wpNumber = drone.getWpno();
+		double distToWp = drone.getDisttowp();
 		
-		canvas.drawText("AS " + Integer.toString((int) drone.getAirSpeed()),
-				scroller.left + 5, screenBottom - sizeLeftBellowScroller/2, ScrollerText);
-		canvas.drawText("GS " + Integer.toString((int) drone.getGroundSpeed()),
-				scroller.left + 5, screenBottom - 5, ScrollerText);
-		if (drone.getBattVolt() >= 0) {
-			canvas.drawText(String.format("%2.2f V", drone.getBattVolt()),
-					scroller.left + 5, scroller.top - 10, ScrollerText);
+		if (hudDebug) {
+			battVolt = hudDebugBattVolt;
+			battCurrent = hudDebugBattCurrent;
+			battRemain = hudDebugBattRemain;
+			groundSpeed = hudDebugGroundSpeed;
+			airSpeed = hudDebugAirSpeed;
+			satCount = hudDebugSatCount;
+			fixType = hudDebugFixType;
+			modeName = hudDebugModeName;
+			wpNumber = hudDebugWpNumber;
+			distToWp = hudDebugDistToWp;
 		}
-		if (drone.getBattCurrent() >= 0) {
-			canvas.drawText(String.format("%2.2f A", drone.getBattCurrent()),
-					scroller.left + 5, scroller.top - 30, ScrollerText);
+		
+		// Left Top Text
+		attInfoText.setTextAlign(Align.LEFT);
+		
+		if ((battVolt >= 0) || (battRemain >= 0))
+			canvas.drawText(String.format("%2.1fV  %.0f%%", battVolt, battRemain), -width / 2 + attPosPxInfoTextXOffset, attPosPxInfoTextUpperTop, attInfoText);
+		if (battCurrent >= 0)
+			canvas.drawText(String.format("%2.1fA", battCurrent), -width / 2 + attPosPxInfoTextXOffset, attPosPxInfoTextUpperBottom, attInfoText);
+		
+		// Left Bottom Text	
+		/*
+		float tmpDensity = tempContext.getResources().getDisplayMetrics().density;
+		int tmpDensDPI = tempContext.getResources().getDisplayMetrics().densityDpi;
+		float tmpScaledDensity = tempContext.getResources().getDisplayMetrics().scaledDensity;
+		float tmpXDPI = tempContext.getResources().getDisplayMetrics().xdpi;
+		float tmpYDPI = tempContext.getResources().getDisplayMetrics().ydpi;
+		canvas.drawText(String.format("H%d W%d D%.2f SD%.2f", height, width, tmpDensity, tmpScaledDensity), -width / 2 + 5, attPosPxInfoTextLowerTop, attInfoText);
+		canvas.drawText(String.format("Ddpi%d Xdpi%.1f Ydpi%.1f", tmpDensDPI, tmpXDPI, tmpYDPI), -width / 2 + 5, attPosPxInfoTextLowerBottom, attInfoText);
+		*/
+		canvas.drawText(String.format("AS %.1f",airSpeed), -width / 2 + attPosPxInfoTextXOffset, attPosPxInfoTextLowerTop, attInfoText);
+		canvas.drawText(String.format("GS %.1f",groundSpeed), -width / 2 + attPosPxInfoTextXOffset, attPosPxInfoTextLowerBottom, attInfoText);
+		
+		// Right Top Text
+		attInfoText.setTextAlign(Align.RIGHT);
+		
+		String gpsFix = "";
+		if (satCount >= 0) {
+			switch (fixType) {
+			case 2:
+				gpsFix = ("GPS2D(" + satCount + ")");
+				break;
+			case 3:
+				gpsFix = ("GPS3D(" + satCount + ")");
+				break;
+			default:
+				gpsFix = ("NoGPS(" + satCount + ")");
+				break;
+			}
 		}
+		canvas.drawText(gpsFix, width / 2 -attPosPxInfoTextXOffset, attPosPxInfoTextUpperTop, attInfoText);
+		// reserved for future GPS precision indication like hdop value or something else
+		
+		// Right Bottom Text
+		canvas.drawText(modeName, width / 2 -attPosPxInfoTextXOffset, attPosPxInfoTextLowerTop, attInfoText);
+		if (wpNumber >= 0)
+			canvas.drawText(String.format("%.0fm>WP#%d", distToWp, wpNumber), width / 2 -attPosPxInfoTextXOffset, attPosPxInfoTextLowerBottom, attInfoText);	
 	}
 	
 	private void drawFailsafe(Canvas canvas) {
-		if (ApmModes.isCopter(drone.getType())) {
-			if (drone.isArmed()) {
+		int droneType = drone.getType();
+		boolean isArmed = drone.isArmed();
+			
+		if (hudDebug) {
+			droneType = hudDebugDroneType;
+			isArmed = hudDebugDroneArmed;
+		}
+		
+		if (ApmModes.isCopter(droneType)) {
+			if (isArmed) {
 				if (armedCounter < 50) {
-					canvas.drawText("ARMED", 0, canvas.getHeight() / 3,
-							FailsafeText);
+					FailsafeText.setColor(Color.RED);
+					String text = "ARMED";
+					Rect textRec = new Rect();
+					FailsafeText.getTextBounds(text, 0, text.length(), textRec);
+					textRec.offset(-textRec.width() / 2, canvas.getHeight() / 3);
+					RectF boxRec = new RectF(textRec.left - failsafeSizePxBoxPadding, textRec.top - failsafeSizePxBoxPadding, textRec.right + failsafeSizePxBoxPadding, textRec.bottom + failsafeSizePxBoxPadding);
+					canvas.drawRoundRect(boxRec, failsafeSizePxBoxPadding, failsafeSizePxBoxPadding, blackSolid);
+					canvas.drawText(text, textRec.left -3, textRec.bottom -1, FailsafeText);
 					armedCounter++;
 				}
 			} else {
-				canvas.drawText("DISARMED", 0, canvas.getHeight() / 3,
-						FailsafeText);
+				FailsafeText.setColor(Color.GREEN);
+				String text = "DISARMED";
+				Rect textRec = new Rect();
+				FailsafeText.getTextBounds(text, 0, text.length(), textRec);
+				textRec.offset(-textRec.width() / 2, canvas.getHeight() / 3);
+				RectF boxRec = new RectF(textRec.left - failsafeSizePxBoxPadding, textRec.top - failsafeSizePxBoxPadding, textRec.right + failsafeSizePxBoxPadding, textRec.bottom + failsafeSizePxBoxPadding);
+				canvas.drawRoundRect(boxRec, failsafeSizePxBoxPadding, failsafeSizePxBoxPadding, blackSolid);
+				canvas.drawText(text, textRec.left -3, textRec.bottom -1, FailsafeText);
 				armedCounter = 0;
 			}
 		}
@@ -486,8 +680,99 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
+		int tempAttTextClearance;
+		int tempSize, tempOffset, tempAttSizeText;
+		float hudScaleThickTicStrokeWidth, hudScaleThinTicStrokeWidth, hudBorderWidth, redIndicatorWidth;
+		
 		this.width = width;
 		this.height = height;
+		
+		//do as much precalculation as possible here because it
+		//takes some load off the onDraw() routine which is called much more frequently
+		
+		hudCenterIndicatorRadius = Math.round((this.width + this.height) / 2 * HUD_FACTOR_CENTER_INDICATOR_SIZE);
+		
+		hudScaleThickTicStrokeWidth = (this.width + this.height) / 2 * HUD_FACTOR_SCALE_THICK_TIC_STROKEWIDTH;
+		if (hudScaleThickTicStrokeWidth < 1)
+			hudScaleThickTicStrokeWidth = 1;
+		whiteThickTics.setStrokeWidth(hudScaleThickTicStrokeWidth);
+		
+		hudScaleThinTicStrokeWidth = (this.width + this.height) / 2 * HUD_FACTOR_SCALE_THIN_TIC_STROKEWIDTH;
+		if (hudScaleThinTicStrokeWidth < 1)
+			hudScaleThinTicStrokeWidth = 1;
+		whiteThinTics.setStrokeWidth(hudScaleThinTicStrokeWidth);
+		
+		hudBorderWidth = (this.width + this.height) / 2 * HUD_FACTOR_BORDER_WIDTH;
+		if (hudBorderWidth < 1)
+			hudBorderWidth = 1;
+		whiteBorder.setStrokeWidth(hudBorderWidth);
+		
+		redIndicatorWidth = (this.width + this.height) / 2 * HUD_FACTOR_RED_INDICATOR_WIDTH;
+		if (redIndicatorWidth < 1)
+			redIndicatorWidth = 1;
+		plane.setStrokeWidth(redIndicatorWidth);
+		
+		yawHeightPx = Math.round(this.height * YAW_HEIGHT_FACTOR);
+		yawSizePxTicsSmall = Math.round(yawHeightPx * YAW_FACTOR_TICS_SMALL);
+		yawSizePxTicsTall = Math.round(yawHeightPx * YAW_FACTOR_TICS_TALL);
+		tempSize = Math.round(yawHeightPx * YAW_FACTOR_TEXT);
+		yawText.setTextSize(tempSize);
+		tempOffset = Math.round(tempSize * YAW_FACTOR_TEXT_Y_OFFSET);
+		yawYPosPxText = Math.round(yawSizePxTicsSmall + (yawHeightPx - yawSizePxTicsSmall) / 2 - tempSize / 2 - tempOffset);
+		tempSize = Math.round(yawHeightPx * YAW_FACTOR_TEXT_NUMBERS);
+		yawNumbers.setTextSize(tempSize);
+		tempOffset = Math.round(tempSize * YAW_FACTOR_TEXT_Y_OFFSET);
+		yawYPosPxTextNumbers = Math.round(yawSizePxTicsSmall + (yawHeightPx - yawSizePxTicsSmall) / 2 - tempSize / 2 - tempOffset);
+		yawSizePxCenterLineOverRun = Math.round(yawHeightPx * YAW_FACTOR_CENTERLINE_OVERRUN);
+		yawDegreesPerPixel = this.width / YAW_DEGREES_TO_SHOW;
+		
+		attHeightPx = this.height - yawHeightPx;
+		tempAttSizeText = Math.round(attHeightPx * ATT_FACTOR_INFOTEXT);
+		attInfoText.setTextSize(tempAttSizeText);
+		tempOffset = Math.round(tempAttSizeText * ATT_FACTOR_INFOTEXT_Y_OFFSET); 
+		tempAttTextClearance = Math.round(tempAttSizeText * ATT_FACTOR_INFOTEXT_CLEARANCE);
+		attPosPxInfoTextXOffset = Math.round(this.width * ATT_FACTOR_INFOTEXT_X_OFFSET);
+		
+		int scrollerMaxAvailHeight = attHeightPx - 4 * tempAttSizeText - 6 * tempAttTextClearance;
+		scrollerHeightPx = Math.round(attHeightPx * SCROLLER_MAX_HEIGHT_FACTOR);
+		if (scrollerHeightPx > scrollerMaxAvailHeight) { 
+			scrollerHeightPx = scrollerMaxAvailHeight;
+		} else {
+			tempAttTextClearance = Math.round((attHeightPx - scrollerHeightPx - 4 * tempAttSizeText) / 6);
+		}
+		scrollerWidthPx = Math.round(this.width * SCROLLER_WIDTH_FACTOR);
+		tempSize = Math.round(attHeightPx * SCROLLER_FACTOR_TEXT);
+		scrollerText.setTextSize(tempSize);
+		scrollerSizePxTextYOffset = Math.round(tempSize * SCROLLER_FACTOR_TEXT_Y_OFFSET);
+		tempSize = Math.round(tempSize * SCROLLER_FACTOR_ACTUAL_TEXT_MAGNIFICATION);
+		scrollerActualText.setTextSize(tempSize);
+		scrollerSizePxActualTextYOffset = Math.round(tempSize * SCROLLER_FACTOR_TEXT_Y_OFFSET);
+		scrollerSizePxArrowHeight = Math.round(tempSize * SCROLLER_FACTOR_ARROW_HEIGTH);
+		scrollerSizePxTextXOffset = Math.round(this.width * SCROLLER_FACTOR_TEXT_X_OFFSET);
+		scrollerSizePxTicLength = Math.round(this.width * SCROLLER_FACTOR_TIC_LENGTH);
+		greenPen.setStrokeWidth(Math.round(attHeightPx * SCROLLER_FACTOR_TARGET_BAR_WIDTH));
+		
+		attPosPxInfoTextUpperTop = -attHeightPx / 2 + tempAttSizeText + tempOffset + tempAttTextClearance;
+		attPosPxInfoTextUpperBottom = -attHeightPx / 2 + 2 * tempAttSizeText + tempOffset + 2 * tempAttTextClearance;
+		attPosPxInfoTextLowerBottom = attHeightPx / 2 + tempOffset - tempAttTextClearance;
+		attPosPxInfoTextLowerTop = attHeightPx / 2 - tempAttSizeText + tempOffset - 2 * tempAttTextClearance;
+		
+		rollTopOffsetPx = yawHeightPx;
+		rollText.setTextSize(Math.round(attHeightPx * ROLL_FACTOR_TEXT));
+		rollSizePxTics = Math.round(rollTopOffsetPx * ROLL_FACTOR_TIC_LENGTH);
+		rollPosPxTextYOffset = Math.round(rollSizePxTics * ROLL_FACTOR_TEXT_Y_OFFSET);
+		
+		tempSize = Math.round(attHeightPx * PITCH_FACTOR_TEXT);
+		pitchText.setTextSize(tempSize);
+		pitchTextCenterOffsetPx = Math.round(-tempSize / 2 - tempSize * PITCH_FACTOR_TEXT_Y_OFFSET);
+		pitchScaleWideHalfWidth = Math.round(this.width * PITCH_FACTOR_SCALE_WIDHT_WIDE / 2);
+		pitchScaleNarrowHalfWidth = Math.round(this.width * PITCH_FACTOR_SCALE_WIDHT_NARROW / 2);
+		pitchScaleTextXOffset = Math.round(this.width * PITCH_FACTOR_SCALE_TEXT_X_OFFSET);
+		pitchPixPerDegree = Math.round(attHeightPx * PITCH_FACTOR_SCALE_Y_SPACE);
+		
+		tempSize = Math.round(this.width * FAILSAFE_FACTOR_TEXT);
+		FailsafeText.setTextSize(tempSize);
+		failsafeSizePxBoxPadding = Math.round(tempSize * FAILSAFE_FACTOR_BOX_PADDING);
 	}
 
 	@Override
