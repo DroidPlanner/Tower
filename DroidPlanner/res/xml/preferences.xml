@@ -68,7 +68,7 @@
             android:inputType="number"
             android:key="pref_max_fligth_path_size"
             android:summary="Size of the fligth path, set to zero to disable."
-            android:title="Fligth path size" />
+            android:title="Flight path size" />
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="pref_guided_mode_enabled"
