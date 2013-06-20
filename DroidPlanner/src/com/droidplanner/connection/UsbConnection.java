@@ -11,7 +11,7 @@ import com.ftdi.j2xx.D2xxManager;
 import com.ftdi.j2xx.FT_Device;
 
 public class UsbConnection extends MAVLinkConnection {
-	private static final int BAUD_RATE = 57600;
+	private static int baud_rate = 57600;
 	private static final byte LATENCY_TIMER = 16;
 	
 	private FT_Device ftDev;
@@ -48,7 +48,12 @@ public class UsbConnection extends MAVLinkConnection {
 	}
 	
 	@Override
-	protected void getPreferences(SharedPreferences prefs) {		
+	protected void getPreferences(SharedPreferences prefs) {
+		String baud_type = prefs.getString("pref_baud_type", "");
+		if (baud_type.equals("57600"))
+			baud_rate = 57600;
+		else 
+			baud_rate = 115200;	
 	}
 	
 	private void openCOM() throws IOException {
@@ -72,9 +77,9 @@ public class UsbConnection extends MAVLinkConnection {
 			Log.d("USB", "COM close");
 			throw new IOException();
 		}
-		
+		Log.d("USB", "Opening using Baud rate " + baud_rate);		
 		ftDev.setBitMode((byte) 0, D2xxManager.FT_BITMODE_RESET);
-		ftDev.setBaudRate(BAUD_RATE);
+		ftDev.setBaudRate(baud_rate);
 		ftDev.setDataCharacteristics(D2xxManager.FT_DATA_BITS_8,
 				D2xxManager.FT_STOP_BITS_1, D2xxManager.FT_PARITY_NONE);
 		ftDev.setFlowControl(D2xxManager.FT_FLOW_NONE, (byte) 0x00, (byte) 0x00);

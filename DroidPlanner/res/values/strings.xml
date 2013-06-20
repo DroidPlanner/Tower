@@ -65,5 +65,9 @@
         <item >Normal</item>
         <item >Terrain</item>
     </string-array>
+    <string-array name="TelemetryBaudTypes">
+        <item name="57600">57600</item>
+        <item name="115200">115200</item>
+    </string-array>
     
 </resources>
