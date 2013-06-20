@@ -11,7 +11,13 @@
             android:key="pref_connection_type"
             android:summary="Which link to use to connect to the drone"
             android:title="Telemetry Connection Type" />
-
+        <ListPreference
+            android:defaultValue="57600"
+            android:entries="@array/TelemetryBaudTypes"
+            android:entryValues="@array/TelemetryBaudTypes"
+            android:key="pref_baud_type"
+            android:summary="Baud Rate of the USB Telementry Link"
+            android:title="Telemetry link speed" />
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="pref_mavlink_log_enabled"
