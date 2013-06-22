@@ -1,6 +1,5 @@
 package com.droidplanner.activitys;
 
-import android.media.AudioManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.InputDevice;
@@ -35,7 +34,6 @@ public class RCActivity extends SuperActivity implements
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.rc);
-		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		
 		DualJoystickView joystick = (DualJoystickView)findViewById(R.id.joystickView);
         
