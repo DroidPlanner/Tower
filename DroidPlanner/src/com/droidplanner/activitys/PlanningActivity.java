@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,6 +48,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 		super.onCreate(savedInstanceState);
 	
 		setContentView(R.layout.planning);
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 	
 		planningMapFragment = ((PlanningMapFragment)getFragmentManager().findFragmentById(R.id.planningMapFragment));
 		WaypointListNumber = (TextView) (findViewById(R.id.textViewWP));
@@ -60,7 +62,6 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 		checkIntent();
 		
 		update();
-	
 	}
 	
 	

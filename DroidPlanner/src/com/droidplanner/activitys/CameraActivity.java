@@ -1,5 +1,6 @@
 package com.droidplanner.activitys;
 
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +25,7 @@ public class CameraActivity extends SuperActivity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.camera);
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
 		DualJoystickView joystick = (DualJoystickView) findViewById(R.id.joystickView);
 
