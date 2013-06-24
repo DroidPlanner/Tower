@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string name="menu_connect">Conectar</string>
+    <string name="conected">Conectado</string>
+    
+    <string name="menu_settings">Settings</string>
+    <string name="menu_disconnect">Disconnect</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="save">Save</string>
+    <string name="open">Open</string>
+    <string name="menu_open_file">Open file</string>
+    <string name="menu_save_file">Save file</string>
+    <string name="menu_load_from_apm">Load from APM</string>
+    <string name="menu_send_to_apm">Send to APM</string>
+    <string name="menu_follow_me">Follow</string>
+    <string name="menu_clear">Clear WPs</string>
+    <string name="menu_zoom">Zoom</string>
+    <string name="file_saved">File Saved</string>
+    <string name="no_waypoint_files">No Waypoint Files</string>
+    <string name="no_files">No Files</string>
+    <string name="select_file_to_open">Select file to open:</string>
+    <string name="error_when_saving">Error when saving</string>
+    <string name="error_when_opening_file">Error when opening file</string>
+    <string name="waypoint_altitude">Altitude</string>
+    <string name="default_alt">Change Alt.</string>
+    <string name="menu_open_kmz">Open KMZ</string>
+    <string name="menu_add_polygon">Add Polygon</string>
+    <string name="menu_polygon">Polygon</string>
+    <string name="menu_clear_polygon">Clear Poly</string>
+    <string name="menu_generate_polygon">Generate</string>
+    <string name="menu_finish_polygon">Exit</string>
+    <string name="menu_clearFlightPath">Clear Track</string>
+    <string name="exiting_polygon_mode">Exiting Polygon Mode</string>
+    <string name="entering_polygon_mode">Entering Polygon Mode</string>
+    <string name="dialog_polygon_hatch_angle">Hatch angle:</string>
+    <string name="dialog_polygon_distance_between_lines">Distance between lines:</string>
+    <string name="enable_rc_control">Enable RC control</string>
+    <string name="disable_rc_control">Disable RC control</string>
+    <string name="write">Write</string>
+    <string name="refresh">Refresh</string>
+    <string name="this_is_very_experimental_please_be_careful">This is very experimental, please be careful.</string>
+    <string name="menu_advanced">Advanced</string>
+    <string name="menu_calibration">Calibration</string>
+    
+    <string-array name="menu_dropdown">
+        <item>Planning</item>
+        <item>Flight Data</item>
+        <item>RC</item>
+        <item>Parameters</item>
+        <item>Camera</item>
+        <item>GCP</item>     
+    </string-array>    
+</resources>
