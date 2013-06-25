@@ -118,6 +118,10 @@
             android:key="pref_enable_tts"
             android:summary="Audible messages for important events"
             android:title="Enable Text To Speech" />
+        <CheckBoxPreference 
+            android:title="Keep Screen bright" 
+            android:summary="(Only during an active Connection to the Drone)\nIf unchecked the Screen will dim after a while (safes Battery)\nTo apply disconnect and reconnect" 
+            android:key="pref_keep_screen_bright"/>
     </PreferenceCategory>
 
 </PreferenceScreen>
