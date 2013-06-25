@@ -216,10 +216,12 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 		whiteThinTics.setColor(Color.WHITE);
 		whiteThinTics.setStyle(Style.FILL);
 		whiteThinTics.setStrokeWidth(1);
+		whiteThinTics.setAntiAlias(true);
 		
 		whiteThickTics.setColor(Color.WHITE);
 		whiteThickTics.setStyle(Style.FILL);
 		whiteThickTics.setStrokeWidth(2);
+		whiteThickTics.setAntiAlias(true);
 
 		yawText.setColor(Color.WHITE);
 		yawText.setFakeBoldText(true);
