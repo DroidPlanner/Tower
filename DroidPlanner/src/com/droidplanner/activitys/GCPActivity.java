@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
-import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,7 +33,6 @@ public class GCPActivity extends SuperActivity implements OnGcpClickListner {
 		super.onCreate(savedInstanceState);
 	
 		setContentView(R.layout.gcp);
-		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 			
 		gcpList = new ArrayList<gcp>();
 	
