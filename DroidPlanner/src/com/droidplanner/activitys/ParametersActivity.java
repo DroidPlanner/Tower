@@ -2,6 +2,7 @@ package com.droidplanner.activitys;
 
 import java.util.List;
 
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,6 +30,7 @@ public class ParametersActivity extends SuperActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.parameters);
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
 		tableFragment = ((ParametersTableFragment)getFragmentManager().findFragmentById(R.id.parametersTable));
 		

@@ -1,5 +1,6 @@
 package com.droidplanner.activitys;
 
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -38,8 +39,9 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 		super.onCreate(savedInstanceState);
 	
 		setContentView(R.layout.flightdata);
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);
+		
 		flightMapFragment = ((FlightMapFragment)getFragmentManager().findFragmentById(R.id.flightMapFragment));
-				
 		flightMapFragment.updateMissionPath(drone);
 		flightMapFragment.updateHomeToMap(drone);
 		
