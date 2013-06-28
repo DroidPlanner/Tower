@@ -34,7 +34,7 @@ public class MavLinkMsgHandler {
 			break;	
 		case msg_vfr_hud.MAVLINK_MSG_ID_VFR_HUD:
 			msg_vfr_hud m_hud = (msg_vfr_hud) msg;
-			drone.setAltitudeGroundAndAirSpeeds(m_hud.alt,m_hud.groundspeed,m_hud.airspeed);						
+			drone.setAltitudeGroundAndAirSpeeds(m_hud.alt,m_hud.groundspeed,m_hud.airspeed,m_hud.climb);						
 			break;
 		case msg_mission_current.MAVLINK_MSG_ID_MISSION_CURRENT:
 			drone.setWpno(((msg_mission_current) msg).seq);
@@ -64,7 +64,7 @@ public class MavLinkMsgHandler {
 			// TODO implement link quality
 			break;
 		case msg_gps_raw_int.MAVLINK_MSG_ID_GPS_RAW_INT:
-			drone.setGpsState(((msg_gps_raw_int) msg).fix_type,((msg_gps_raw_int) msg).satellites_visible);
+			drone.setGpsState(((msg_gps_raw_int) msg).fix_type,((msg_gps_raw_int) msg).satellites_visible,((msg_gps_raw_int) msg).eph);
 		}
 	}
 }
