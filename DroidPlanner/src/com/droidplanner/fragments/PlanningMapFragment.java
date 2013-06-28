@@ -70,6 +70,7 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		mMap.clear();
 		waypointMarkers.clear();
 		polygonMarkers.clear();
+		mMap = getMap();
 		
 		home = mMap.addMarker(getHomeIcon(drone));
 		int i =0;
