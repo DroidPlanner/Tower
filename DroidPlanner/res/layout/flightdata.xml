@@ -1,21 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:keepScreenOn="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal" android:baselineAligned="false">
-    
-    <fragment
-        android:id="@+id/hud_fragment2"
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:layout_weight=".5"
-        class="com.droidplanner.fragments.HudFragment" />
-    
-    <fragment
-        android:id="@+id/flightMapFragment"
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:layout_weight=".5"
-        class="com.droidplanner.fragments.FlightMapFragment" />
-    
-</LinearLayout>
+    android:orientation="vertical" android:baselineAligned="false">
+    <LinearLayout
+        android:layout_width="match_parent"
+   		android:layout_height="match_parent"
+    	android:orientation="horizontal" android:baselineAligned="false">
+	    <fragment
+	        android:id="@+id/hud_fragment2"
+	        android:layout_width="fill_parent"
+	        android:layout_height="match_parent"
+	        android:layout_weight=".5"
+	        class="com.droidplanner.fragments.HudFragment" />
+	    
+	    <fragment
+	        android:id="@+id/flightMapFragment"
+	        android:layout_width="fill_parent"
+	        android:layout_height="match_parent"
+	        android:layout_weight=".5"
+	        class="com.droidplanner.fragments.FlightMapFragment" />
+    </LinearLayout>
+    <Button 
+        android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:text="@string/Launch"
+	    android:layout_alignParentBottom="true"
+	    android:layout_alignParentRight="true"
+	    android:id="@+id/launch"
+        />
+</RelativeLayout>
