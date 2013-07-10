@@ -46,7 +46,35 @@ public class RCActivity extends SuperActivity implements
 		rcOutput = new RcOutput(app.MAVClient,this);
 	}
 	
+	@Override
+	protected void onDestroy() {
+		// return to rcmode off when we close this
+		rcOutput.disableRcOverride();
+		lJoystick.OnMoved(0f, 0f);
+		rJoystick.OnMoved(0f, 0f);
+		bTogleRC.setText(R.string.enable_rc_control);
+		super.onDestroy();
+	}
+	
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		rcOutput.disableRcOverride();
+		lJoystick.OnMoved(0f, 0f);
+		rJoystick.OnMoved(0f, 0f);
+		bTogleRC.setText(R.string.enable_rc_control);
+		super.onPause();
+	}
 
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		rcOutput.disableRcOverride();
+		lJoystick.OnMoved(0f, 0f);
+		rJoystick.OnMoved(0f, 0f);
+		bTogleRC.setText(R.string.enable_rc_control);
+		super.onResume();
+	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

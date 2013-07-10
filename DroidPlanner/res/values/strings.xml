@@ -42,6 +42,11 @@
     <string name="this_is_very_experimental_please_be_careful">This is very experimental, please be careful.</string>
     <string name="menu_advanced">Advanced</string>
     <string name="menu_calibration">Calibration</string>
+    <string name="Arm">Arm</string>
+    <string name="Disarm">Disarm</string>
+    <string name="Launch">Launch</string>
+    <string name="RTL">RTL</string>
+    <string name="Stabilize">Stabilize</string>
     
     <string-array name="menu_dropdown">
         <item>Planning</item>

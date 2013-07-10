@@ -200,6 +200,10 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 	
 
 	private void update() {
+		//set first waypoint = home
+		if(!drone.getWaypoints().isEmpty()){
+			drone.home=drone.getWaypoints().get(0);
+		}
 		planningMapFragment.update(drone, polygon);
 		WaypointListNumber.setText(drone.getWaypointData());
 	}

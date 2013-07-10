@@ -53,14 +53,16 @@
         <!-- You must insert your own Google Maps for Android API v2 key in here. -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyDFsAn5xo-mILEirpcUsF9BU9Vb_yR-Er4" />
+            android:value="AIzaSyCy8oai4SXCRGM_s4qtR-an6uZFyywN1xI" />
 
         <service android:name=".service.MAVLinkService" >
         </service>
 
         <activity
             android:name=".activitys.PlanningActivity"
-            tools:ignore="ExportedActivity" >
+            tools:ignore="ExportedActivity" 
+            android:screenOrientation="landscape"
+			android:configChanges="keyboardHidden|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -69,7 +71,9 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-        <activity android:name=".activitys.FlightDataActivity" >
+        <activity android:name=".activitys.FlightDataActivity" 
+            android:screenOrientation="landscape"
+			android:configChanges="keyboardHidden|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -85,15 +89,19 @@
         </activity>
         <activity
             android:name=".activitys.RCActivity"
-            android:screenOrientation="landscape" >
+            android:screenOrientation="landscape"
+			android:configChanges="keyboardHidden|orientation|screenSize" >
         </activity>
         <activity
             android:name=".activitys.CameraActivity"
-            android:screenOrientation="landscape" >
+            android:screenOrientation="landscape"
+			android:configChanges="keyboardHidden|orientation|screenSize" >
         </activity>
         <activity
             android:name=".activitys.GCPActivity"
-            tools:ignore="ExportedActivity" >
+            tools:ignore="ExportedActivity" 
+            android:screenOrientation="landscape"
+			android:configChanges="keyboardHidden|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -110,3 +118,8 @@
     </application>
 
 </manifest>
+
+<!-- api key for aps -->
+<!-- AIzaSyCy8oai4SXCRGM_s4qtR-an6uZFyywN1xI -->
+<!-- api key for browser -->
+<!-- AIzaSyD1EmBSRaojZOQa_4r-RN_RWmCLK_C3VhM -->
