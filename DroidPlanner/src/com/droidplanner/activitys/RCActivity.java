@@ -46,7 +46,23 @@ public class RCActivity extends SuperActivity implements
 		rcOutput = new RcOutput(app.MAVClient,this);
 	}
 	
+	@Override
+	protected void onDestroy() {
+		disableRCOverride();
+		super.onDestroy();
+	}
+	
+	@Override
+	protected void onPause() {
+		disableRCOverride();
+		super.onPause();
+	}
 
+	@Override
+	protected void onResume() {
+		disableRCOverride();
+		super.onResume();
+	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -64,22 +80,27 @@ public class RCActivity extends SuperActivity implements
 		}
 	}
 
-
 	@Override
-	public void onClick(View v) {
-		//printInputDevicesToLog();
-		
+	public void onClick(View v) {		
 		if (v == bTogleRC) {
 			if (rcOutput.isRcOverrided()) {
-				rcOutput.disableRcOverride();
-				lJoystick.OnMoved(0f, 0f);
-				rJoystick.OnMoved(0f, 0f);
-				bTogleRC.setText(R.string.enable_rc_control);
+				disableRCOverride();
 			} else {
-				rcOutput.enableRcOverride();
-				bTogleRC.setText(R.string.disable_rc_control);
+				enableRCOverride();
 			}
 		}
+	}
+
+	private void enableRCOverride() {
+		rcOutput.enableRcOverride();
+		bTogleRC.setText(R.string.disable_rc_control);
+	}
+
+	private void disableRCOverride() {
+		rcOutput.disableRcOverride();
+		lJoystick.OnMoved(0f, 0f);
+		rJoystick.OnMoved(0f, 0f);
+		bTogleRC.setText(R.string.enable_rc_control);
 	}
 
 	@SuppressWarnings("unused")
