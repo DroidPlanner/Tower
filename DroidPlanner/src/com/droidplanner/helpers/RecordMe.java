@@ -78,7 +78,7 @@ public class RecordMe implements LocationListener {
 		if (waypoints.size()>1) {
 			waypoint home = waypoints.get(0);
 			waypoints.remove(0);
-			MissionWriter missionWriter = new MissionWriter(home, waypoints);			
+			MissionWriter missionWriter = new MissionWriter(home, waypoints,"RecordMe");			
 			return missionWriter.saveWaypoints();
 		}else{
 			return false;
