@@ -47,7 +47,7 @@ public class Drone {
 		super();
 		this.tts = tts;
 		this.home = new waypoint(0.0, 0.0, 0.0);
-		this.defaultAlt = 100.0;
+		this.defaultAlt = 50.0;
 		this.waypoints = new ArrayList<waypoint>();
 	}
 
