@@ -48,31 +48,19 @@ public class RCActivity extends SuperActivity implements
 	
 	@Override
 	protected void onDestroy() {
-		// return to rcmode off when we close this
-		rcOutput.disableRcOverride();
-		lJoystick.OnMoved(0f, 0f);
-		rJoystick.OnMoved(0f, 0f);
-		bTogleRC.setText(R.string.enable_rc_control);
+		disableRCOverride();
 		super.onDestroy();
 	}
 	
 	@Override
 	protected void onPause() {
-		// TODO Auto-generated method stub
-		rcOutput.disableRcOverride();
-		lJoystick.OnMoved(0f, 0f);
-		rJoystick.OnMoved(0f, 0f);
-		bTogleRC.setText(R.string.enable_rc_control);
+		disableRCOverride();
 		super.onPause();
 	}
 
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
-		rcOutput.disableRcOverride();
-		lJoystick.OnMoved(0f, 0f);
-		rJoystick.OnMoved(0f, 0f);
-		bTogleRC.setText(R.string.enable_rc_control);
+		disableRCOverride();
 		super.onResume();
 	}
 
@@ -92,22 +80,27 @@ public class RCActivity extends SuperActivity implements
 		}
 	}
 
-
 	@Override
-	public void onClick(View v) {
-		//printInputDevicesToLog();
-		
+	public void onClick(View v) {		
 		if (v == bTogleRC) {
 			if (rcOutput.isRcOverrided()) {
-				rcOutput.disableRcOverride();
-				lJoystick.OnMoved(0f, 0f);
-				rJoystick.OnMoved(0f, 0f);
-				bTogleRC.setText(R.string.enable_rc_control);
+				disableRCOverride();
 			} else {
-				rcOutput.enableRcOverride();
-				bTogleRC.setText(R.string.disable_rc_control);
+				enableRCOverride();
 			}
 		}
+	}
+
+	private void enableRCOverride() {
+		rcOutput.enableRcOverride();
+		bTogleRC.setText(R.string.disable_rc_control);
+	}
+
+	private void disableRCOverride() {
+		rcOutput.disableRcOverride();
+		lJoystick.OnMoved(0f, 0f);
+		rJoystick.OnMoved(0f, 0f);
+		bTogleRC.setText(R.string.enable_rc_control);
 	}
 
 	@SuppressWarnings("unused")
