@@ -55,13 +55,13 @@ public class RecordMe implements LocationListener {
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
 				MIN_TIME_MS, MIN_DISTANCE_M, this);
 		recordMeEnabled = true;
-		saveWaypointsToFile();
 	}
 
 	private void finishRecordMe() {
 		locationManager.removeUpdates(this);
 		recordMeEnabled = false;
 		saveWaypointsToFile();
+		waypoints.clear();
 	}
 
 	private void saveWaypointsToFile() {
@@ -75,8 +75,14 @@ public class RecordMe implements LocationListener {
 	}
 
 	private boolean writeMission() {
-		MissionWriter missionWriter = new MissionWriter(drone.home, waypoints);
-		return missionWriter.saveWaypoints();
+		if (waypoints.size()>1) {
+			waypoint home = waypoints.get(0);
+			waypoints.remove(0);
+			MissionWriter missionWriter = new MissionWriter(home, waypoints);			
+			return missionWriter.saveWaypoints();
+		}else{
+			return false;
+		}
 	}
 
 	public boolean isEnabled() {
