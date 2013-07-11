@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.MAVLink.waypoint;
@@ -15,6 +17,7 @@ import com.droidplanner.R;
 import com.droidplanner.MAVLink.Drone.DroneTypeListner;
 import com.droidplanner.fragments.FlightMapFragment;
 import com.droidplanner.fragments.FlightMapFragment.OnFlighDataListener;
+import com.droidplanner.helpers.RcOutput;
 import com.droidplanner.widgets.spinners.SelectModeSpinner;
 import com.droidplanner.widgets.spinners.SelectModeSpinner.OnModeSpinnerSelectedListener;
 import com.droidplanner.widgets.spinners.SelectWaypointSpinner;
@@ -27,7 +30,9 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 	private SelectModeSpinner fligthModeSpinner;
 	private SelectWaypointSpinner wpSpinner;
 	private LatLng guidedPoint;
-
+	Button launch;
+	private RcOutput rcOutput;
+	
 	@Override
 	int getNavigationItem() {
 		return 1;
@@ -45,6 +50,31 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 		
 		app.setWaypointReceivedListner(this);
 		drone.setDroneTypeChangedListner(this);
+		//give throttle input for 1 sec
+		rcOutput = new RcOutput(app.MAVClient,this);
+		launch=(Button) findViewById(R.id.launch);
+		launch.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				rcOutput.enableRcOverride();
+	        	rcOutput.setRcChannel(RcOutput.TROTTLE, 800);
+	        	
+				Thread thread = new Thread(){
+				    @Override
+				    public void run() {
+				        try{
+				            while(true) {
+				                sleep(1000);
+				                rcOutput.disableRcOverride();
+				            }
+				        } catch (InterruptedException e) {
+				            e.printStackTrace();
+				        }
+				    }
+				};
+				thread.start();
+			}
+		});
 	}
 
 
