@@ -79,11 +79,6 @@
             android:key="pref_follow_me_mode_enabled"
             android:summary="In development"
             android:title="Enable FollowMe Mode" />
-        <CheckBoxPreference 
-            android:defaultValue="false"
-            android:key="pref_record_me_mode_enabled"
-            android:summary="In development"
-            android:title="Enable RecordMe Mode" />
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="pref_auto_pan_enabled"

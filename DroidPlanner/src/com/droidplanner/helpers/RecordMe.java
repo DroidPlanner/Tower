@@ -21,7 +21,7 @@ import com.droidplanner.waypoints.MissionWriter;
 public class RecordMe implements LocationListener {
 	private static final long MIN_TIME_MS = 2000;
 	private static final float MIN_DISTANCE_M = 0;
-	
+
 	private Context context;
 	private Drone drone;
 	private LocationManager locationManager;
@@ -36,14 +36,10 @@ public class RecordMe implements LocationListener {
 	}
 
 	public void toogleRecordMeState() {
-		if (isEnabledInPreferences()) {
-			if (isEnabled()) {
-				finishRecordMe();
-			} else {
-				startRecordMe();
-			}
-		} else {
+		if (isEnabled()) {
 			finishRecordMe();
+		} else {
+			startRecordMe();
 		}
 	}
 
@@ -75,12 +71,13 @@ public class RecordMe implements LocationListener {
 	}
 
 	private boolean writeMission() {
-		if (waypoints.size()>1) {
+		if (waypoints.size() > 1) {
 			waypoint home = waypoints.get(0);
 			waypoints.remove(0);
-			MissionWriter missionWriter = new MissionWriter(home, waypoints,"RecordMe");			
+			MissionWriter missionWriter = new MissionWriter(home, waypoints,
+					"RecordMe");
 			return missionWriter.saveWaypoints();
-		}else{
+		} else {
 			return false;
 		}
 	}
@@ -92,7 +89,8 @@ public class RecordMe implements LocationListener {
 	// @Override
 	public void onLocationChanged(Location location) {
 		// TODO find a better way to do the altitude
-		waypoints.add(new waypoint(location.getLatitude(), location.getLongitude(), drone.defaultAlt));
+		waypoints.add(new waypoint(location.getLatitude(), location
+				.getLongitude(), drone.defaultAlt));
 	}
 
 	@Override
@@ -105,11 +103,5 @@ public class RecordMe implements LocationListener {
 
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
-	}
-
-	private boolean isEnabledInPreferences() {
-		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		return prefs.getBoolean("pref_record_me_mode_enabled", false);
 	}
 }
