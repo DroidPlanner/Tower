@@ -12,10 +12,16 @@ import com.droidplanner.helpers.file.FileStream;
 public class MissionWriter {
 	private waypoint home;
 	private List<waypoint> waypoints;
+	private String name ="";
 
-	public MissionWriter(waypoint home, List<waypoint> waypoints) {
+	public MissionWriter(waypoint home, List<waypoint> waypoints, String name) {
 		this.home = home;
 		this.waypoints = waypoints;
+		this.name = name;
+	}
+	
+	public MissionWriter(waypoint home, List<waypoint> waypoints) {
+		this(home,waypoints,"waypoints");
 	}
 
 	public boolean saveWaypoints() {
@@ -23,7 +29,7 @@ public class MissionWriter {
 			if (!FileManager.isExternalStorageAvaliable()) {
 				return false;
 			}
-			FileOutputStream out = FileStream.getWaypointFileStream();
+			FileOutputStream out = FileStream.getWaypointFileStream(name);
 
 			writeFirstLine(out);
 

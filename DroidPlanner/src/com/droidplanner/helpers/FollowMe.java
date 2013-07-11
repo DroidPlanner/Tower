@@ -23,7 +23,7 @@ public class FollowMe implements LocationListener {
 	private boolean followMeEnabled = false;
 	private LocationManager locationManager;
 	private Drone drone;
-	
+
 	public FollowMe(MAVLinkClient MAVClient,Context context, Drone drone) {
 		this.MAV = MAVClient;
 		this.context = context;
@@ -42,27 +42,27 @@ public class FollowMe implements LocationListener {
 			disableFollowMe();
 		}
 	}
-	
+
 	private void enableFollowMe() {
 		Toast.makeText(context, "FollowMe Enabled", Toast.LENGTH_SHORT).show();
-				
+
 		// Register the listener with the Location Manager to receive location updates
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_MS, MIN_DISTANCE_M, this);
-		
+
 		followMeEnabled = true;		
 	}
-	
+
 	private void disableFollowMe() {
 		Toast.makeText(context, "FollowMe Disabled", Toast.LENGTH_SHORT).show();
 		locationManager.removeUpdates(this);
 		followMeEnabled = false;
 	}
-	
+
 	public boolean isEnabled() {
 		return followMeEnabled;
 	}
 
-	
+
 	@Override
 	public void onLocationChanged(Location location) {
 		Log.d("GPS", "Location:"+location.getProvider()+" lat "+location.getLatitude()+" :lng "+location.getLongitude()+" :alt "+location.getAltitude()+" :acu "+location.getAccuracy());
@@ -82,7 +82,7 @@ public class FollowMe implements LocationListener {
 	public void onStatusChanged(String provider, int status, Bundle extras) {		
 	}
 
-	
+
 	private void setGuidedMode(waypoint wp) {
 		msg_mission_item msg = new msg_mission_item();
 		msg.seq = 0;
@@ -104,7 +104,7 @@ public class FollowMe implements LocationListener {
 	private boolean isEnabledInPreferences() {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
-		
+
 		return prefs.getBoolean("pref_follow_me_mode_enabled", false);	
 	}
 }

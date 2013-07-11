@@ -107,6 +107,8 @@ public abstract class SuperActivity extends Activity implements
 			case R.id.menu_preflight_calibration:
 				app.calibrationSetup.startCalibration(this);
 				return true;
+			case R.id.menu_record_me:
+				app.recordMe.toogleRecordMeState();
 			default:
 				return super.onMenuItemSelected(featureId, item);
 		}

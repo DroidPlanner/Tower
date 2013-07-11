@@ -16,17 +16,17 @@ public class FileStream {
 		return out;
 	}
 	
-
-	static public FileOutputStream getWaypointFileStream()
+	static public FileOutputStream getWaypointFileStream(String name)
 			throws FileNotFoundException {
 		File myDir = new File(DirectoryPath.getWaypointsPath());
 		myDir.mkdirs();
-		File file = new File(myDir, "waypoints-" + FileManager.getTimeStamp() + ".txt");
+		File file = new File(myDir, name+"-" + FileManager.getTimeStamp() + ".txt");
 		if (file.exists())
 			file.delete();
 		FileOutputStream out = new FileOutputStream(file);
 		return out;
 	}
+	
 
 	/**
 	 * Get a file Stream for logging purposes

@@ -18,6 +18,10 @@
         android:showAsAction="ifRoom"
         android:title="@string/menu_connect"/>
     <item
+        android:id="@+id/menu_record_me"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_record_me"/>
+    <item
         android:id="@+id/menu_save_file"
         android:showAsAction="never"
         android:title="@string/menu_save_file"/>
