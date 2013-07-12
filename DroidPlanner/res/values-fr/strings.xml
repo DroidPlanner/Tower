@@ -1,5 +1,5 @@
-<resources>
 <?xml version="1.0" encoding="utf-8"?>
+<resources>
     <string name="app_title">DroidPlanner</string>
     <string name="menu_settings">Configuration</string>
     <string name="menu_connect">Connection</string>
