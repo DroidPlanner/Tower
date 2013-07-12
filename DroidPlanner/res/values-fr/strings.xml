@@ -10,8 +10,8 @@
     <string name="open">Ouvrir</string>
     <string name="menu_open_file">Ouvrir fichier</string>
     <string name="menu_save_file">Sauvegarder fichier</string>
-    <string name="menu_load_from_apm">Charger de l'APM</string>
-    <string name="menu_send_to_apm">Envoyer à l'APM</string>
+    <string name="menu_load_from_apm">Charger de l\'APM</string>
+    <string name="menu_send_to_apm">Envoyer à l\'APM</string>
     <string name="menu_follow_me">Me suivre</string>
     <string name="menu_record_me">Enregistrer</string>
     <string name="menu_clear">Effacer les WPs</string>
@@ -21,9 +21,9 @@
     <string name="no_files">Aucun fichier</string>
     <string name="select_file_to_open">Choisir un fichier à ouvrir :</string>
     <string name="error_when_saving">Erreur lors de la sauvegarde</string>
-    <string name="error_when_opening_file">Erreur lors de l'ouverture du fichier</string>
+    <string name="error_when_opening_file">Erreur lors de l\'ouverture du fichier</string>
     <string name="waypoint_altitude">Altitude</string>
-    <string name="default_alt">Changer l'alt.</string>
+    <string name="default_alt">Changer l\'alt.</string>
     <string name="menu_open_kmz">Ouvrir KMZ</string>
     <string name="menu_add_polygon">Ajouter un polygone</string>
     <string name="menu_polygon">Polygone</string>
