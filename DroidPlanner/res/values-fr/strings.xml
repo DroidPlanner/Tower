@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_title">DroidPlanner</string>
+    <string name="menu_settings">Configuration</string>
+    <string name="menu_connect">Connection</string>
+    <string name="menu_disconnect">Déconnection</string>
+    <string name="conected">Connecté</string>
+    <string name="disconnected">Déconnecté</string>
+    <string name="save">Sauvegarder</string>
+    <string name="open">Ouvrir</string>
+    <string name="menu_open_file">Ouvrir fichier</string>
+    <string name="menu_save_file">Sauvegarder fichier</string>
+    <string name="menu_load_from_apm">Charger de l'APM</string>
+    <string name="menu_send_to_apm">Envoyer à l'APM</string>
+    <string name="menu_follow_me">Me suivre</string>
+    <string name="menu_record_me">Enregistrer</string>
+    <string name="menu_clear">Effacer les WPs</string>
+    <string name="menu_zoom">Zoom</string>
+    <string name="file_saved">Fichier sauvegardé</string>
+    <string name="no_waypoint_files">Pas de fichier de waypoint</string>
+    <string name="no_files">Aucun fichier</string>
+    <string name="select_file_to_open">Choisir un fichier à ouvrir :</string>
+    <string name="error_when_saving">Erreur lors de la sauvegarde</string>
+    <string name="error_when_opening_file">Erreur lors de l'ouverture du fichier</string>
+    <string name="waypoint_altitude">Altitude</string>
+    <string name="default_alt">Changer l'alt.</string>
+    <string name="menu_open_kmz">Ouvrir KMZ</string>
+    <string name="menu_add_polygon">Ajouter un polygone</string>
+    <string name="menu_polygon">Polygone</string>
+    <string name="menu_clear_polygon">Effacer poly</string>
+    <string name="menu_generate_polygon">Générer</string>
+    <string name="menu_finish_polygon">Sortie</string>
+    <string name="menu_clearFlightPath">Effacer le chemin</string>
+    <string name="exiting_polygon_mode">Mode polygone inactif</string>
+    <string name="entering_polygon_mode">Mode polygone actif</string>
+    <string name="dialog_polygon_hatch_angle">Angle de la grille :</string>
+    <string name="dialog_polygon_distance_between_lines">Distance entre les lignes :</string>
+    <string name="enable_rc_control">Activer le contrôle RC</string>
+    <string name="disable_rc_control">Désactiver le contrôle RC</string>
+    <string name="write">Ecrire</string>
+    <string name="refresh">Rafraîchir</string>
+    <string name="this_is_very_experimental_please_be_careful">Ceci est expérimental, faites attention.</string>
+    <string name="menu_advanced">Avancé</string>
+    <string name="menu_calibration">Calibration</string>
+
+    <string-array name="menu_dropdown">
+        <item>Planning</item>
+        <item>Données de vol</item>
+        <item>RC</item>
+        <item>Paramètres</item>
+        <item>Camera</item>
+        <item>GCP</item>
+    </string-array>
+
+</resources>
