@@ -1,9 +1,9 @@
 DroidPlanner - Ground Control Station for Android devices
 ==========
 If you just want to download the app goto [Google Play](https://play.google.com/store/apps/details?id=com.droidplanner).
+For more info goto [the wiki pages](https://github.com/arthurbenemann/droidplanner/wiki).
+To compile the code follow the instructions [here](https://github.com/arthurbenemann/droidplanner/wiki/Build-Setup).
 
-To start developing:
-- Download the git repositorie
-- Download the Android SDK Bundle from: http://developer.android.com/sdk/index.html.
-- Import both folders to Eclipse
-- Generate a MAPs API KEY and add it to AndroidManifest.xml (The code will run as default but no map will be show)
+![DroidPlanner](https://lh5.ggpht.com/Ax5Kgyg91pwJ1QpG1eFpwhwv9nt2Wsw_sRwBE_J7uY6UusNdC1GvFdyGS831IQy2Lmg)
+
+

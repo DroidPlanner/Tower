@@ -191,7 +191,14 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 		if (wakeLock == null) {
 			PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 			// TODO Use PARTIAL_WAKE_LOCK, and another pref to keep the screen on
-			wakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "CPU");
+			if (PreferenceManager
+					.getDefaultSharedPreferences(getApplicationContext())
+					.getBoolean("pref_keep_screen_bright", false)) {
+				wakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK|PowerManager.ON_AFTER_RELEASE, "CPU");
+			} else {
+				wakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "CPU");
+			}
+				
 			wakeLock.acquire();
 		}
 	}

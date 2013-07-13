@@ -38,8 +38,8 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 		super.onCreate(savedInstanceState);
 	
 		setContentView(R.layout.flightdata);
-		flightMapFragment = ((FlightMapFragment)getFragmentManager().findFragmentById(R.id.flightMapFragment));
 				
+		flightMapFragment = ((FlightMapFragment)getFragmentManager().findFragmentById(R.id.flightMapFragment));
 		flightMapFragment.updateMissionPath(drone);
 		flightMapFragment.updateHomeToMap(drone);
 		

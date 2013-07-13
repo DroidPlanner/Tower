@@ -60,7 +60,6 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 		checkIntent();
 		
 		update();
-	
 	}
 	
 	

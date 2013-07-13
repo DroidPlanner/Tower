@@ -14,6 +14,7 @@
     <string name="menu_load_from_apm">Load from APM</string>
     <string name="menu_send_to_apm">Send to APM</string>
     <string name="menu_follow_me">Follow</string>
+    <string name="menu_record_me">Record</string>
     <string name="menu_clear">Clear WPs</string>
     <string name="menu_zoom">Zoom</string>
     <string name="file_saved">File Saved</string>
@@ -64,6 +65,10 @@
         <item >Hybrid</item>
         <item >Normal</item>
         <item >Terrain</item>
+    </string-array>
+    <string-array name="TelemetryBaudTypes">
+        <item name="57600">57600</item>
+        <item name="115200">115200</item>
     </string-array>
     
 </resources>

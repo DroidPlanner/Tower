@@ -18,7 +18,7 @@ public class Drone {
 	private double roll = 0, pitch = 0, yaw = 0, altitude = 0, disttowp = 0,
 			verticalSpeed = 0, groundSpeed = 0, airSpeed = 0, targetSpeed = 0,
 			targetAltitude = 0, battVolt = -1, battRemain = -1,
-			battCurrent = -1;
+			battCurrent = -1, gps_eph = -1;
 	private int wpno = -1, satCount = -1, fixType = -1,
 			type = MAV_TYPE.MAV_TYPE_FIXED_WING;
 	private boolean failsafe = false, armed = false;
@@ -47,7 +47,7 @@ public class Drone {
 		super();
 		this.tts = tts;
 		this.home = new waypoint(0.0, 0.0, 0.0);
-		this.defaultAlt = 100.0;
+		this.defaultAlt = 50.0;
 		this.waypoints = new ArrayList<waypoint>();
 	}
 
@@ -71,10 +71,11 @@ public class Drone {
 	}
 
 	public void setAltitudeGroundAndAirSpeeds(double altitude,
-			double groundSpeed, double airSpeed) {
+			double groundSpeed, double airSpeed, double climb) {
 		this.altitude = altitude;
 		this.groundSpeed = groundSpeed;
 		this.airSpeed = airSpeed;
+		this.verticalSpeed = climb;
 		notifyHudUpdate();
 	}
 
@@ -109,13 +110,14 @@ public class Drone {
 		}
 	}
 
-	public void setGpsState(int fix, int satellites_visible) {
+	public void setGpsState(int fix, int satellites_visible, int eph) {
 		if (satCount != satellites_visible | fixType != fix) {
 			if (fixType != fix) {
 				tts.speakGpsMode(fix);
 			}
 			this.fixType = fix;
 			this.satCount = satellites_visible;
+			this.gps_eph = (double) eph / 100; //convert from eph(cm) to gps_eph(m)
 			notifyHudUpdate();
 		}
 	}
@@ -231,6 +233,10 @@ public class Drone {
 
 	public int getFixType() {
 		return fixType;
+	}
+	
+	public double getGpsEPH() {
+		return gps_eph;
 	}
 
 	public int getType() {

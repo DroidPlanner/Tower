@@ -11,7 +11,13 @@
             android:key="pref_connection_type"
             android:summary="Which link to use to connect to the drone"
             android:title="Telemetry Connection Type" />
-
+        <ListPreference
+            android:defaultValue="57600"
+            android:entries="@array/TelemetryBaudTypes"
+            android:entryValues="@array/TelemetryBaudTypes"
+            android:key="pref_baud_type"
+            android:summary="Baud Rate of the USB Telementry Link"
+            android:title="Telemetry link speed" />
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="pref_mavlink_log_enabled"
@@ -62,7 +68,7 @@
             android:inputType="number"
             android:key="pref_max_fligth_path_size"
             android:summary="Size of the fligth path, set to zero to disable."
-            android:title="Fligth path size" />
+            android:title="Flight path size" />
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="pref_guided_mode_enabled"
@@ -112,6 +118,11 @@
             android:key="pref_enable_tts"
             android:summary="Audible messages for important events"
             android:title="Enable Text To Speech" />
+        <CheckBoxPreference 
+            android:defaultValue="true"
+            android:title="Keep Screen bright" 
+            android:summary="(Only during an active Connection to the Drone)\nIf unchecked the Screen will dim after a while (safes Battery)\nTo apply disconnect and reconnect" 
+            android:key="pref_keep_screen_bright"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

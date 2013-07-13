@@ -131,6 +131,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 	private static final double hudDebugBattVolt = 12.32;
 	private static final int  	hudDebugSatCount = 8;
 	private static final int 	hudDebugFixType = 3;
+	private static final double hudDebugGpsEPH = 2.4;
 	private static final String hudDebugModeName = "Loiter";
 	private static final int 	hudDebugWpNumber = 4;
 	private static final double hudDebugDistToWp = 30.45;
@@ -216,10 +217,12 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 		whiteThinTics.setColor(Color.WHITE);
 		whiteThinTics.setStyle(Style.FILL);
 		whiteThinTics.setStrokeWidth(1);
+		whiteThinTics.setAntiAlias(true);
 		
 		whiteThickTics.setColor(Color.WHITE);
 		whiteThickTics.setStyle(Style.FILL);
 		whiteThickTics.setStrokeWidth(2);
+		whiteThickTics.setAntiAlias(true);
 
 		yawText.setColor(Color.WHITE);
 		yawText.setFakeBoldText(true);
@@ -580,6 +583,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 		String modeName = drone.getMode().getName();
 		int wpNumber = drone.getWpno();
 		double distToWp = drone.getDisttowp();
+		double gpsEPH = drone.getGpsEPH();
 		
 		if (hudDebug) {
 			battVolt = hudDebugBattVolt;
@@ -592,6 +596,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 			modeName = hudDebugModeName;
 			wpNumber = hudDebugWpNumber;
 			distToWp = hudDebugDistToWp;
+			gpsEPH = hudDebugGpsEPH;
 		}
 		
 		// Left Top Text
@@ -603,17 +608,8 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 			canvas.drawText(String.format("%2.1fA", battCurrent), -width / 2 + attPosPxInfoTextXOffset, attPosPxInfoTextUpperBottom, attInfoText);
 		
 		// Left Bottom Text	
-		/*
-		float tmpDensity = tempContext.getResources().getDisplayMetrics().density;
-		int tmpDensDPI = tempContext.getResources().getDisplayMetrics().densityDpi;
-		float tmpScaledDensity = tempContext.getResources().getDisplayMetrics().scaledDensity;
-		float tmpXDPI = tempContext.getResources().getDisplayMetrics().xdpi;
-		float tmpYDPI = tempContext.getResources().getDisplayMetrics().ydpi;
-		canvas.drawText(String.format("H%d W%d D%.2f SD%.2f", height, width, tmpDensity, tmpScaledDensity), -width / 2 + 5, attPosPxInfoTextLowerTop, attInfoText);
-		canvas.drawText(String.format("Ddpi%d Xdpi%.1f Ydpi%.1f", tmpDensDPI, tmpXDPI, tmpYDPI), -width / 2 + 5, attPosPxInfoTextLowerBottom, attInfoText);
-		*/
-		canvas.drawText(String.format("AS %.1f",airSpeed), -width / 2 + attPosPxInfoTextXOffset, attPosPxInfoTextLowerTop, attInfoText);
-		canvas.drawText(String.format("GS %.1f",groundSpeed), -width / 2 + attPosPxInfoTextXOffset, attPosPxInfoTextLowerBottom, attInfoText);
+		canvas.drawText(String.format("AS %.1fms",airSpeed), -width / 2 + attPosPxInfoTextXOffset, attPosPxInfoTextLowerTop, attInfoText);
+		canvas.drawText(String.format("GS %.1fms",groundSpeed), -width / 2 + attPosPxInfoTextXOffset, attPosPxInfoTextLowerBottom, attInfoText);
 		
 		// Right Top Text
 		attInfoText.setTextAlign(Align.RIGHT);
@@ -633,7 +629,8 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 			}
 		}
 		canvas.drawText(gpsFix, width / 2 -attPosPxInfoTextXOffset, attPosPxInfoTextUpperTop, attInfoText);
-		// reserved for future GPS precision indication like hdop value or something else
+		if (gpsEPH >= 0)
+			canvas.drawText(String.format("hp%.1fm", gpsEPH), width / 2 -attPosPxInfoTextXOffset, attPosPxInfoTextUpperBottom, attInfoText);
 		
 		// Right Bottom Text
 		canvas.drawText(modeName, width / 2 -attPosPxInfoTextXOffset, attPosPxInfoTextLowerTop, attInfoText);
