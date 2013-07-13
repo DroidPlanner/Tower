@@ -57,12 +57,15 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 		View view = super.onCreateView(inflater, viewGroup, bundle);
 		mMap = getMap();		
 		drone = ((SuperActivity)getActivity()).app.drone;
-		drone.setMapListner(droneMarker);		
 		
-		droneMarker = new DroneMarker(this);		
+		droneMarker = new DroneMarker(this);
+		
+		
 		addFlightPathToMap();	
 		addMissionPathToMap();
 		getPreferences();
+		
+		drone.setMapListner(droneMarker);		
 		mMap.setOnMapLongClickListener(this);
 		
 		
@@ -123,7 +126,7 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 	}
 
 	public void zoomToLastKnowPosition() {
-		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(droneMarker.droneMarker.getPosition(), 16));
+		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(drone.getPosition(), 16));
 	}
 
 	private void addMissionPathToMap() {

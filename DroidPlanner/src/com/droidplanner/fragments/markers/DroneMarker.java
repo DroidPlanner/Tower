@@ -1,5 +1,7 @@
 package com.droidplanner.fragments.markers;
 
+import android.util.Log;
+
 import com.droidplanner.MAVLink.Drone.MapUpdatedListner;
 import com.droidplanner.fragments.FlightMapFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -14,13 +16,14 @@ public class DroneMarker implements MapUpdatedListner {
 
 	public DroneMarker(FlightMapFragment flightMapFragment) {
 		this.flightMapFragment = flightMapFragment;
-		buildBitmaps();
+		updateDroneMarkers();
 	}
 
 	private void updatePosition(double yaw, LatLng coord) {
 		double correctHeading = (yaw - flightMapFragment.getMapRotation()+360)%360;	// This ensure the 0 to 360 range
-		
+		Log.d("MARK", "updatepos");
 		try{
+			droneMarker.setVisible(true);
 			droneMarker.setPosition(coord);
 			droneMarker.setIcon(bitmaps.getIcon(correctHeading));
 			
