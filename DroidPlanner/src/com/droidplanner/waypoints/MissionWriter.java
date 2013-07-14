@@ -57,8 +57,8 @@ public class MissionWriter {
 					.format(Locale.ENGLISH,
 							"%d\t0\t%d\t%d\t0.000000\t0.000000\t0.000000\t0.000000\t%f\t%f\t%f\t1\n",
 							i + 1,
-							0, // TODO Implement Relative Altitude
-							16,// TODO Implement other modes (16 == auto?)
+							3, // TODO Implement Relative Altitude. Please, lets set it as RELATIVE by default. This will help everybody, even who operates at sea level.
+							16,// TODO Implement other modes (16 == auto?). This field identify the Command in the waypoint. In this case 16 meens WAYPOINT, 19 meens LOITER_TIMES, 18 meens LOITER_TURNS and etc...
 							waypoints.get(i).coord.latitude,
 							waypoints.get(i).coord.longitude,
 							waypoints.get(i).Height).getBytes());
