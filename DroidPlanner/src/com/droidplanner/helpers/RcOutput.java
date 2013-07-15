@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.view.MotionEvent;
 
 import com.MAVLink.Messages.ardupilotmega.msg_rc_channels_override;
 import com.droidplanner.service.MAVLinkClient;
@@ -95,6 +96,42 @@ public class RcOutput {
 		if(value > +1) value = +1;
 		if(value < -1) value = -1;
 		rcOutputs[ch] = (int) (value*RC_RANGE + RC_TRIM);
+	}
+	
+	public void setRcValue(int ch, int value){
+		rcOutputs[ch] = value;
+	}
+
+	public void simulateDisarmEvent(MotionEvent event) {
+		if (event.getAction() == MotionEvent.ACTION_DOWN) {
+			enableRcOverride();
+			setRcValue(RcOutput.TROTTLE, 500);
+			setRcValue(RcOutput.RUDDER, 500);
+		}
+		if (event.getAction() == MotionEvent.ACTION_UP) {
+			disableRcOverride();
+		}
+	}
+
+	public void simulateLaunchEvent(MotionEvent event) {
+		if (event.getAction() == MotionEvent.ACTION_DOWN) {
+			enableRcOverride();
+			setRcValue(RcOutput.TROTTLE, 1100);
+		}
+		if (event.getAction() == MotionEvent.ACTION_UP) {
+			disableRcOverride();
+		}
+	}
+
+	public void simulateArmEvent(MotionEvent event) {
+		if (event.getAction() == MotionEvent.ACTION_DOWN) {
+			enableRcOverride();
+			setRcValue(RcOutput.TROTTLE, 500);
+			setRcValue(RcOutput.RUDDER, 2000);
+		}
+		if (event.getAction() == MotionEvent.ACTION_UP) {
+			disableRcOverride();
+		}
 	}
 
 }
