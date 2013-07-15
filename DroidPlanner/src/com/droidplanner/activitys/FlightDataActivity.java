@@ -181,16 +181,12 @@ public class FlightDataActivity extends SuperActivity implements
 	public boolean onTouch(View v, MotionEvent event) {
 		if (v.equals(launch)) {
 			rcOutput.simulateLaunchEvent(event);
-			return true;
 		} else if (v.equals(arm)) {
 			rcOutput.simulateArmEvent(event);
-			return true;
 		} else if (v.equals(disarm)) {
 			rcOutput.simulateDisarmEvent(event);
-			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	@Override
