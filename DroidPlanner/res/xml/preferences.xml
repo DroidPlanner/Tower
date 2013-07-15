@@ -122,7 +122,7 @@
     <PreferenceCategory
         android:key="pref_connection_actions"
         android:title="While Connected to Drone" 
-        android:summary="Actions to permore on or while connected to the Drone\nTo apply disconnect and reconnect">
+        android:summary="Actions to perform on or while connected to the Drone\nTo apply disconnect and reconnect">
         <CheckBoxPreference 
             android:defaultValue="true"
             android:title="Keep Screen bright" 
