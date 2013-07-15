@@ -72,13 +72,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|left"
             android:layout_weight="1" />
-        
-         <Button
-             android:id="@+id/bTogleRC"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_marginTop="20dp"
-             android:text="@string/enable_rc_control" />
 
         <com.droidplanner.widgets.joystick.JoystickView
             android:id="@+id/joystickViewR"
