@@ -30,7 +30,7 @@ import com.google.android.gms.maps.model.LatLng;
 public class FlightDataActivity extends SuperActivity implements
 		OnFlighDataListener, OnWaypointSpinnerSelectedListener,
 		OnWaypointReceivedListner, OnModeSpinnerSelectedListener,
-		DroneTypeListner {
+		DroneTypeListner, OnTouchListener, OnClickListener {
 
 	private FlightMapFragment flightMapFragment;
 	private SelectModeSpinner fligthModeSpinner;
@@ -59,62 +59,19 @@ public class FlightDataActivity extends SuperActivity implements
 		drone.setDroneTypeChangedListner(this);
 		// Buttons
 		rcOutput = new RcOutput(app.MAVClient, this);
-		OnTouchListener launchListen, disarmListen, armListen;
 
-		OnClickListener stabilizeListen, rtlListen;
 		launch = (Button) findViewById(R.id.launch);
 		arm = (Button) findViewById(R.id.arm);
 		disarm = (Button) findViewById(R.id.disarm);
 		rtl = (Button) findViewById(R.id.rtl);
 		stabilize = (Button) findViewById(R.id.stabilize);
 		// Button listeners
-		rtlListen = new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				OnModeSpinnerSelected("RTL");
-			}
-		};
-		rtl.setOnClickListener(rtlListen);
-		stabilizeListen = new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				OnModeSpinnerSelected("Stabilize");
-			}
-		};
-		stabilize.setOnClickListener(stabilizeListen);
 
-		launchListen = new View.OnTouchListener() {
-
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				rcOutput.simulateLaunchEvent(event);
-				return false;
-			}
-		};
-
-		disarmListen = new View.OnTouchListener() {
-
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				rcOutput.simulateDisarmEvent(event);
-				return false;
-			}
-
-		};
-
-		armListen = new View.OnTouchListener() {
-
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				rcOutput.simulateArmEvent(event);
-				return false;
-			}
-
-		};
-
-		launch.setOnTouchListener(launchListen);
-		arm.setOnTouchListener(armListen);
-		disarm.setOnTouchListener(disarmListen);
+		rtl.setOnClickListener(this);
+		stabilize.setOnClickListener(this);
+		launch.setOnTouchListener(this);
+		arm.setOnTouchListener(this);
+		disarm.setOnTouchListener(this);
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -217,6 +174,31 @@ public class FlightDataActivity extends SuperActivity implements
 					Toast.LENGTH_SHORT).show();
 			setGuidedMode(new waypoint(guidedPoint, newAltitude));
 			guidedPoint = null;
+		}
+	}
+
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		if (v.equals(launch)) {
+			rcOutput.simulateLaunchEvent(event);
+			return true;
+		} else if (v.equals(arm)) {
+			rcOutput.simulateArmEvent(event);
+			return true;
+		} else if (v.equals(disarm)) {
+			rcOutput.simulateDisarmEvent(event);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public void onClick(View v) {
+		if (v.equals(rtl)) {
+			OnModeSpinnerSelected("RTL");
+		} else if (v.equals(stabilize)) {
+			OnModeSpinnerSelected("Stabilize");
 		}
 	}
 
