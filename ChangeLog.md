@@ -1,3 +1,8 @@
+## Droidplanner v0.9.2
+* French Translation
+* Updating to the new Google Maps API
+* Orientation lock when connected
+
 ## Droidplanner v0.9.1
 * Record-Me mode
 * Nicer Icons
