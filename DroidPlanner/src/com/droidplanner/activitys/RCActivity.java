@@ -98,7 +98,7 @@ public class RCActivity extends SuperActivity {
 
 	private void enableRCOverride() {
 		rcOutput.enableRcOverride();
-		bTogleRC.setTitle(R.string.disable_rc_control);
+		bTogleRC.setTitle(R.string.disable);
 	}
 
 	private void disableRCOverride() {
@@ -106,7 +106,7 @@ public class RCActivity extends SuperActivity {
 		lJoystick.OnMoved(0f, 0f);
 		rJoystick.OnMoved(0f, 0f);
 		if (bTogleRC != null) {
-			bTogleRC.setTitle(R.string.enable_rc_control);			
+			bTogleRC.setTitle(R.string.enable);			
 		}
 	}
 

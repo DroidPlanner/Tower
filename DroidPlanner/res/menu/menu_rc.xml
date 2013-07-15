@@ -8,7 +8,7 @@
     <item
         android:id="@+id/menu_rc_enable"
         android:showAsAction="ifRoom"
-        android:title="Enable"/>
+        android:title="@string/enable"/>
     <item
         android:id="@+id/menu_connect"
         android:showAsAction="ifRoom"

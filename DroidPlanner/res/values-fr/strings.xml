@@ -35,8 +35,8 @@
     <string name="entering_polygon_mode">Mode polygone actif</string>
     <string name="dialog_polygon_hatch_angle">Angle de la grille :</string>
     <string name="dialog_polygon_distance_between_lines">Distance entre les lignes :</string>
-    <string name="enable_rc_control">Activer le contrôle RC</string>
-    <string name="disable_rc_control">Désactiver le contrôle RC</string>
+    <string name="enable">Activer</string>
+    <string name="disable">Désactiver</string>
     <string name="write">Ecrire</string>
     <string name="refresh">Rafraîchir</string>
     <string name="this_is_very_experimental_please_be_careful">Ceci est expérimental, faites attention.</string>
