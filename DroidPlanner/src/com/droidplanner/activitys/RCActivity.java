@@ -123,7 +123,7 @@ public class RCActivity extends SuperActivity implements
 		@Override
 		public void OnMoved(double pan, double tilt) {
 			rcOutput.setRcChannel(RcOutput.RUDDER, pan);
-			rcOutput.setRcChannel(RcOutput.TROTTLE, tilt);
+			rcOutput.setRcChannel(RcOutput.THROTTLE, tilt);
 		}
 	};
 	JoystickMovedListener rJoystick = new JoystickMovedListener() {

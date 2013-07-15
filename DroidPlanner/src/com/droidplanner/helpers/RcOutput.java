@@ -24,7 +24,7 @@ public class RcOutput {
 	
 	public static final int AILERON = 0;
 	public static final int	ELEVATOR = 1;
-	public static final int	TROTTLE = 2;
+	public static final int	THROTTLE = 2;
 	public static final int	RUDDER  = 3;
 
 	public static final int	RC5  = 4;
@@ -105,7 +105,7 @@ public class RcOutput {
 	public void simulateDisarmEvent(MotionEvent event) {
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			enableRcOverride();
-			setRcValue(RcOutput.TROTTLE, 500);
+			setRcValue(RcOutput.THROTTLE, 500);
 			setRcValue(RcOutput.RUDDER, 500);
 		}
 		if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -116,7 +116,7 @@ public class RcOutput {
 	public void simulateLaunchEvent(MotionEvent event) {
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			enableRcOverride();
-			setRcValue(RcOutput.TROTTLE, 1100);
+			setRcValue(RcOutput.THROTTLE, 1100);
 		}
 		if (event.getAction() == MotionEvent.ACTION_UP) {
 			disableRcOverride();
@@ -126,7 +126,7 @@ public class RcOutput {
 	public void simulateArmEvent(MotionEvent event) {
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			enableRcOverride();
-			setRcValue(RcOutput.TROTTLE, 500);
+			setRcValue(RcOutput.THROTTLE, 500);
 			setRcValue(RcOutput.RUDDER, 2000);
 		}
 		if (event.getAction() == MotionEvent.ACTION_UP) {
