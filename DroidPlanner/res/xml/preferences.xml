@@ -118,11 +118,20 @@
             android:key="pref_enable_tts"
             android:summary="Audible messages for important events"
             android:title="Enable Text To Speech" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="pref_connection_actions"
+        android:title="While Connected to Drone" 
+        android:summary="Actions to perform on or while connected to the Drone\nTo apply disconnect and reconnect">
         <CheckBoxPreference 
             android:defaultValue="true"
             android:title="Keep Screen bright" 
-            android:summary="(Only during an active Connection to the Drone)\nIf unchecked the Screen will dim after a while (safes Battery)\nTo apply disconnect and reconnect" 
+            android:summary="If unchecked the Screen will dim after a while (safes Battery)" 
             android:key="pref_keep_screen_bright"/>
-    </PreferenceCategory>
-
+       	<CheckBoxPreference 
+            android:defaultValue="true"
+            android:title="Lock Screen Orientation"  
+            android:summary="Locks screen to the orientation which is present when connecting" 
+            android:key="pref_lock_screen_orientation"/>
+	</PreferenceCategory>
 </PreferenceScreen>
