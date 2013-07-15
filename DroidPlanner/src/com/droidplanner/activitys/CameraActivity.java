@@ -44,6 +44,25 @@ public class CameraActivity extends SuperActivity {
 
 		rcOutput = new RcOutput(app.MAVClient, this);
 	}
+	
+	@Override
+	protected void onDestroy() {
+		disableRcOverride();
+		super.onDestroy();
+	}
+	
+	@Override
+	protected void onPause() {
+		disableRcOverride();
+		super.onPause();
+	}
+
+	@Override
+	protected void onResume() {
+		disableRcOverride();
+		super.onResume();
+	}
+
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -65,13 +84,23 @@ public class CameraActivity extends SuperActivity {
 	
 	private void toggleCameraOverride() {
 		if (rcOutput.isRcOverrided()) {
-			rcOutput.disableRcOverride();
-			bTogleCamera.setTitle("Enable");
+			disableRcOverride();
 		} else {
-			rcOutput.enableRcOverride();
-			lJoystick.OnMoved(0f, 0f);
-			rJoystick.OnMoved(0f, 0f);
-			bTogleCamera.setTitle("Disable");
+			enableRcOverride();
+		}
+	}
+
+	private void enableRcOverride() {
+		rcOutput.enableRcOverride();
+		lJoystick.OnMoved(0f, 0f);
+		rJoystick.OnMoved(0f, 0f);
+		bTogleCamera.setTitle("Disable");
+	}
+
+	private void disableRcOverride() {
+		rcOutput.disableRcOverride();
+		if (bTogleCamera!=null) {
+			bTogleCamera.setTitle("Enable");
 		}
 	}
 
