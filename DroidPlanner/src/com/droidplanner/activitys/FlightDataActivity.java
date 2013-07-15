@@ -27,8 +27,11 @@ import com.droidplanner.widgets.spinners.SelectWaypointSpinner;
 import com.droidplanner.widgets.spinners.SelectWaypointSpinner.OnWaypointSpinnerSelectedListener;
 import com.google.android.gms.maps.model.LatLng;
 
-public class FlightDataActivity extends SuperActivity implements OnFlighDataListener, OnWaypointSpinnerSelectedListener, OnWaypointReceivedListner, OnModeSpinnerSelectedListener, DroneTypeListner {
-	
+public class FlightDataActivity extends SuperActivity implements
+		OnFlighDataListener, OnWaypointSpinnerSelectedListener,
+		OnWaypointReceivedListner, OnModeSpinnerSelectedListener,
+		DroneTypeListner {
+
 	private FlightMapFragment flightMapFragment;
 	private SelectModeSpinner fligthModeSpinner;
 	private SelectWaypointSpinner wpSpinner;
@@ -44,110 +47,89 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-	
+
 		setContentView(R.layout.flightdata);
-				
-		flightMapFragment = ((FlightMapFragment)getFragmentManager().findFragmentById(R.id.flightMapFragment));
+
+		flightMapFragment = ((FlightMapFragment) getFragmentManager()
+				.findFragmentById(R.id.flightMapFragment));
 		flightMapFragment.updateMissionPath(drone);
 		flightMapFragment.updateHomeToMap(drone);
-		
+
 		app.setWaypointReceivedListner(this);
 		drone.setDroneTypeChangedListner(this);
-		//Buttons
-		rcOutput = new RcOutput(app.MAVClient,this);
+		// Buttons
+		rcOutput = new RcOutput(app.MAVClient, this);
 		OnTouchListener launchListen, disarmListen, armListen;
-		
+
 		OnClickListener stabilizeListen, rtlListen;
-		launch=(Button) findViewById(R.id.launch);
-		arm=(Button) findViewById(R.id.arm);
-		disarm=(Button) findViewById(R.id.disarm);
-		rtl=(Button) findViewById(R.id.rtl);
-		stabilize=(Button) findViewById(R.id.stabilize);
-		//Button listeners
-		rtlListen=new View.OnClickListener() {
+		launch = (Button) findViewById(R.id.launch);
+		arm = (Button) findViewById(R.id.arm);
+		disarm = (Button) findViewById(R.id.disarm);
+		rtl = (Button) findViewById(R.id.rtl);
+		stabilize = (Button) findViewById(R.id.stabilize);
+		// Button listeners
+		rtlListen = new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				OnModeSpinnerSelected("RTL");
 			}
 		};
 		rtl.setOnClickListener(rtlListen);
-		stabilizeListen=new View.OnClickListener() {
+		stabilizeListen = new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				OnModeSpinnerSelected("Stabilize");
 			}
 		};
 		stabilize.setOnClickListener(stabilizeListen);
-		
-		launchListen=new View.OnTouchListener() {
+
+		launchListen = new View.OnTouchListener() {
 
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				if(event.getAction() == MotionEvent.ACTION_DOWN){
-					rcOutput.enableRcOverride();
-					rcOutput.setRcValue(RcOutput.TROTTLE, 1100);					
-				}
-				if(event.getAction() == MotionEvent.ACTION_UP){
-					rcOutput.disableRcOverride();
-				}
+				rcOutput.simulateLaunchEvent(event);
 				return false;
 			}
-			
 		};
-		
-		disarmListen=new View.OnTouchListener() {
+
+		disarmListen = new View.OnTouchListener() {
 
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				if(event.getAction() == MotionEvent.ACTION_DOWN){
-					rcOutput.enableRcOverride();
-		        	rcOutput.setRcValue(RcOutput.TROTTLE, 500);
-		        	rcOutput.setRcValue(RcOutput.RUDDER, 500);
-				}
-				if(event.getAction() == MotionEvent.ACTION_UP){
-					rcOutput.disableRcOverride();
-				}
+				rcOutput.simulateDisarmEvent(event);
 				return false;
 			}
-			
+
 		};
-		
-		armListen=new View.OnTouchListener() {
+
+		armListen = new View.OnTouchListener() {
 
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				if(event.getAction() == MotionEvent.ACTION_DOWN){
-					rcOutput.enableRcOverride();
-		        	rcOutput.setRcValue(RcOutput.TROTTLE, 500);
-		        	rcOutput.setRcValue(RcOutput.RUDDER, 2000);
-				}
-				if(event.getAction() == MotionEvent.ACTION_UP){
-					rcOutput.disableRcOverride();
-				}
+				rcOutput.simulateArmEvent(event);
 				return false;
 			}
-			
+
 		};
-	
+
 		launch.setOnTouchListener(launchListen);
 		arm.setOnTouchListener(armListen);
 		disarm.setOnTouchListener(disarmListen);
 	}
 
-
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.menu_flightdata, menu);
-		
-		MenuItem flightModeMenu = menu.findItem( R.id.menu_flight_modes_spinner);
+
+		MenuItem flightModeMenu = menu.findItem(R.id.menu_flight_modes_spinner);
 		fligthModeSpinner = (SelectModeSpinner) flightModeMenu.getActionView();
 		fligthModeSpinner.buildSpinner(this, this);
 		fligthModeSpinner.updateModeSpinner(drone);
-		
-		MenuItem wpMenu = menu.findItem( R.id.menu_wp_spinner);
+
+		MenuItem wpMenu = menu.findItem(R.id.menu_wp_spinner);
 		wpSpinner = (SelectWaypointSpinner) wpMenu.getActionView();
-		wpSpinner.buildSpinner(this,this);	
-		
+		wpSpinner.buildSpinner(this, this);
+
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -159,7 +141,7 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 			return true;
 		case R.id.menu_zoom:
 			flightMapFragment.zoomToLastKnowPosition();
-			return true;	
+			return true;
 		case R.id.menu_follow_me:
 			app.followMe.toogleFollowMeState();
 		default:
@@ -172,18 +154,16 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 		app.waypointMananger.setCurrentWaypoint((short) item);
 	}
 
-
 	@Override
 	public void onSetGuidedMode(LatLng point) {
-		changeDefaultAlt();		
+		changeDefaultAlt();
 		guidedPoint = point;
 	}
-	
-	
+
 	public void setGuidedMode(waypoint wp) {
 		msg_mission_item msg = new msg_mission_item();
 		msg.seq = 0;
-		msg.current = 2;	//TODO use guided mode enum
+		msg.current = 2; // TODO use guided mode enum
 		msg.frame = 0; // TODO use correct parameter
 		msg.command = 16; // TODO use correct parameter
 		msg.param1 = 0; // TODO use correct parameter
@@ -202,24 +182,24 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 	private void changeFlightMode(ApmModes mode) {
 		msg_set_mode msg = new msg_set_mode();
 		msg.target_system = 1;
-		msg.base_mode = 1; //TODO use meaningful constant
+		msg.base_mode = 1; // TODO use meaningful constant
 		msg.custom_mode = mode.getNumber();
-		app.MAVClient.sendMavPacket(msg.pack());			
+		app.MAVClient.sendMavPacket(msg.pack());
 	}
 
 	@Override
 	public void onWaypointsReceived() {
 		flightMapFragment.updateMissionPath(drone);
 		flightMapFragment.updateHomeToMap(drone);
-		wpSpinner.updateWpSpinner(drone);		
+		wpSpinner.updateWpSpinner(drone);
 	}
 
 	@Override
 	public void OnModeSpinnerSelected(String text) {
-		ApmModes mode = ApmModes.getMode(text,drone.getType());
+		ApmModes mode = ApmModes.getMode(text, drone.getType());
 		if (mode != ApmModes.UNKNOWN) {
 			changeFlightMode(mode);
-		}		
+		}
 	}
 
 	@Override
@@ -232,9 +212,10 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 	@Override
 	public void onAltitudeChanged(double newAltitude) {
 		super.onAltitudeChanged(newAltitude);
-		if(guidedPoint!=null){
-			Toast.makeText(this, "Guided Mode ("+(int)newAltitude+"m)", Toast.LENGTH_SHORT).show();
-			setGuidedMode(new waypoint(guidedPoint, newAltitude)); 
+		if (guidedPoint != null) {
+			Toast.makeText(this, "Guided Mode (" + (int) newAltitude + "m)",
+					Toast.LENGTH_SHORT).show();
+			setGuidedMode(new waypoint(guidedPoint, newAltitude));
 			guidedPoint = null;
 		}
 	}
