@@ -35,8 +35,8 @@
     <string name="entering_polygon_mode">Έναρξη κατάστασης πολύγωνου</string>
     <string name="dialog_polygon_hatch_angle">Γωνία εισόδου:</string>
     <string name="dialog_polygon_distance_between_lines">Απόσταση μεταξύ γραμμών:</string>
-    <string name="enable_rc_control">Ενεργοποίηση εικονικού RC</string>
-    <string name="disable_rc_control">Απενεργοποίηση εικονικού RC</string>
+    <string name="enable">Ενεργοποίηση</string>
+    <string name="disable">Απενεργοποίηση</string>
     <string name="write">Εγγραφή</string>
     <string name="refresh">Ανανέωση</string>
     <string name="this_is_very_experimental_please_be_careful">ΠΡΟΣΟΧΗ πειραματική έκδοση</string>

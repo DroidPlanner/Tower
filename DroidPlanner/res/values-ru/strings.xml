@@ -98,9 +98,9 @@
 <!--Original value: Distance between lines:-->
 <string name="dialog_polygon_distance_between_lines">Расстояние между строками:</string>
 <!--Original value: Enable RC control-->
-<string name="enable_rc_control">Включить RC управление</string>
+<string name="enable">Включить</string>
 <!--Original value: Disable RC control-->
-<string name="disable_rc_control">Выключить RC управление</string>
+<string name="disable">Выключить</string>
 <!--Original value: Write-->
 <string name="write">Записать</string>
 <!--Original value: Refresh-->

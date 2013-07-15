@@ -5,20 +5,16 @@ import android.util.Log;
 import android.view.InputDevice;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.widget.TextView;
 
 import com.droidplanner.R;
 import com.droidplanner.helpers.RcOutput;
-import com.droidplanner.widgets.joystick.DualJoystickView;
 import com.droidplanner.widgets.joystick.JoystickMovedListener;
+import com.droidplanner.widgets.joystick.JoystickView;
 
-public class RCActivity extends SuperActivity implements
-		 OnClickListener {
-
-
-	private Button bTogleRC;
+public class RCActivity extends SuperActivity {
+	private MenuItem bTogleRC;
+	private TextView textViewLPan, textViewLTilt, textViewRPan, textViewRTilt;
 
 	MenuItem connectButton;
 
@@ -35,14 +31,22 @@ public class RCActivity extends SuperActivity implements
 
 		setContentView(R.layout.rc);
 		
-		DualJoystickView joystick = (DualJoystickView)findViewById(R.id.joystickView);
+		textViewLPan = (TextView) findViewById(R.id.textViewRCJoyLPan);
+		textViewLPan.setText("");
+		textViewLTilt = (TextView) findViewById(R.id.textViewRCJoyLTilt);
+		textViewLTilt.setText("");
+		textViewRPan = (TextView) findViewById(R.id.textViewRCJoyRPan);
+		textViewRPan.setText("");
+		textViewRTilt = (TextView) findViewById(R.id.textViewRCJoyRTilt);
+		textViewRTilt.setText("");
+		
+		JoystickView joystickL = (JoystickView)findViewById(R.id.joystickViewL);
+		JoystickView joystickR = (JoystickView)findViewById(R.id.joystickViewR);
+		
+		joystickL.setAxisAutoReturnToCenter(false, true);
+		joystickL.setOnJostickMovedListener(lJoystick);
+		joystickR.setOnJostickMovedListener(rJoystick);
         
-        joystick.setOnJostickMovedListener(lJoystick, rJoystick);
-        joystick.setLeftAutoReturnToCenter(false, true);
-        
-		bTogleRC = (Button) findViewById(R.id.bTogleRC);
-		bTogleRC.setOnClickListener(this);
-
 		rcOutput = new RcOutput(app.MAVClient,this);
 	}
 	
@@ -66,41 +70,44 @@ public class RCActivity extends SuperActivity implements
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.menu_pid, menu);
+		getMenuInflater().inflate(R.menu.menu_rc, menu);
 		connectButton = menu.findItem(R.id.menu_connect);
-
+		bTogleRC = menu.findItem(R.id.menu_rc_enable);
 		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
+		case R.id.menu_rc_enable:
+			toggleRcOverride();
+			return true;
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
 	}
 
-	@Override
-	public void onClick(View v) {		
-		if (v == bTogleRC) {
-			if (rcOutput.isRcOverrided()) {
-				disableRCOverride();
-			} else {
-				enableRCOverride();
-			}
+
+	private void toggleRcOverride() {
+		if (rcOutput.isRcOverrided()) {
+			disableRCOverride();
+		} else {
+			enableRCOverride();
 		}
 	}
 
 	private void enableRCOverride() {
 		rcOutput.enableRcOverride();
-		bTogleRC.setText(R.string.disable_rc_control);
+		bTogleRC.setTitle(R.string.disable);
 	}
 
 	private void disableRCOverride() {
 		rcOutput.disableRcOverride();
 		lJoystick.OnMoved(0f, 0f);
 		rJoystick.OnMoved(0f, 0f);
-		bTogleRC.setText(R.string.enable_rc_control);
+		if (bTogleRC != null) {
+			bTogleRC.setTitle(R.string.enable);			
+		}
 	}
 
 	@SuppressWarnings("unused")
@@ -124,6 +131,8 @@ public class RCActivity extends SuperActivity implements
 		public void OnMoved(double pan, double tilt) {
 			rcOutput.setRcChannel(RcOutput.RUDDER, pan);
 			rcOutput.setRcChannel(RcOutput.TROTTLE, tilt);
+			textViewLPan.setText(String.format("Rudd: %.0f%%", pan *100));
+			textViewLTilt.setText(String.format("Thrt: %.0f%%", tilt *100));
 		}
 	};
 	JoystickMovedListener rJoystick = new JoystickMovedListener() {
@@ -137,6 +146,8 @@ public class RCActivity extends SuperActivity implements
 		public void OnMoved(double pan, double tilt) {
 			rcOutput.setRcChannel(RcOutput.AILERON, pan);
 			rcOutput.setRcChannel(RcOutput.ELEVATOR, tilt);
+			textViewRPan.setText(String.format("Ail: %.0f%%", pan *100));
+			textViewRTilt.setText(String.format("Elev: %.0f%%", tilt *100));
 		}
 	};
 }
