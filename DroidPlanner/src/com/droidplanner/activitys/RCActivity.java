@@ -5,9 +5,6 @@ import android.util.Log;
 import android.view.InputDevice;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.droidplanner.R;
@@ -15,11 +12,8 @@ import com.droidplanner.helpers.RcOutput;
 import com.droidplanner.widgets.joystick.JoystickMovedListener;
 import com.droidplanner.widgets.joystick.JoystickView;
 
-public class RCActivity extends SuperActivity implements
-		 OnClickListener {
-
-
-	private Button bTogleRC;
+public class RCActivity extends SuperActivity {
+	private MenuItem bTogleRC;
 	private TextView textViewLPan, textViewLTilt, textViewRPan, textViewRTilt;
 
 	MenuItem connectButton;
@@ -53,9 +47,6 @@ public class RCActivity extends SuperActivity implements
 		joystickL.setOnJostickMovedListener(lJoystick);
 		joystickR.setOnJostickMovedListener(rJoystick);
         
-		bTogleRC = (Button) findViewById(R.id.bTogleRC);
-		bTogleRC.setOnClickListener(this);		
-
 		rcOutput = new RcOutput(app.MAVClient,this);
 	}
 	
@@ -79,41 +70,44 @@ public class RCActivity extends SuperActivity implements
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.menu_pid, menu);
+		getMenuInflater().inflate(R.menu.menu_rc, menu);
 		connectButton = menu.findItem(R.id.menu_connect);
-
+		bTogleRC = menu.findItem(R.id.menu_rc_enable);
 		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
+		case R.id.menu_rc_enable:
+			toggleRcOverride();
+			return true;
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
 	}
 
-	@Override
-	public void onClick(View v) {		
-		if (v == bTogleRC) {
-			if (rcOutput.isRcOverrided()) {
-				disableRCOverride();
-			} else {
-				enableRCOverride();
-			}
+
+	private void toggleRcOverride() {
+		if (rcOutput.isRcOverrided()) {
+			disableRCOverride();
+		} else {
+			enableRCOverride();
 		}
 	}
 
 	private void enableRCOverride() {
 		rcOutput.enableRcOverride();
-		bTogleRC.setText(R.string.disable_rc_control);
+		bTogleRC.setTitle(R.string.disable_rc_control);
 	}
 
 	private void disableRCOverride() {
 		rcOutput.disableRcOverride();
 		lJoystick.OnMoved(0f, 0f);
 		rJoystick.OnMoved(0f, 0f);
-		bTogleRC.setText(R.string.enable_rc_control);
+		if (bTogleRC != null) {
+			bTogleRC.setTitle(R.string.enable_rc_control);			
+		}
 	}
 
 	@SuppressWarnings("unused")
