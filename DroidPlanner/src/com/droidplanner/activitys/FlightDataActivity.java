@@ -4,6 +4,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.MAVLink.waypoint;
@@ -15,6 +20,7 @@ import com.droidplanner.R;
 import com.droidplanner.MAVLink.Drone.DroneTypeListner;
 import com.droidplanner.fragments.FlightMapFragment;
 import com.droidplanner.fragments.FlightMapFragment.OnFlighDataListener;
+import com.droidplanner.helpers.RcOutput;
 import com.droidplanner.widgets.spinners.SelectModeSpinner;
 import com.droidplanner.widgets.spinners.SelectModeSpinner.OnModeSpinnerSelectedListener;
 import com.droidplanner.widgets.spinners.SelectWaypointSpinner;
@@ -27,6 +33,8 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 	private SelectModeSpinner fligthModeSpinner;
 	private SelectWaypointSpinner wpSpinner;
 	private LatLng guidedPoint;
+	private Button launch, arm, disarm, rtl, stabilize;
+	private RcOutput rcOutput;
 
 	@Override
 	int getNavigationItem() {
@@ -45,6 +53,85 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 		
 		app.setWaypointReceivedListner(this);
 		drone.setDroneTypeChangedListner(this);
+		//Buttons
+		rcOutput = new RcOutput(app.MAVClient,this);
+		OnTouchListener launchListen, disarmListen, armListen;
+		
+		OnClickListener stabilizeListen, rtlListen;
+		launch=(Button) findViewById(R.id.launch);
+		arm=(Button) findViewById(R.id.arm);
+		disarm=(Button) findViewById(R.id.disarm);
+		rtl=(Button) findViewById(R.id.rtl);
+		stabilize=(Button) findViewById(R.id.stabilize);
+		//Button listeners
+		rtlListen=new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				OnModeSpinnerSelected("RTL");
+			}
+		};
+		rtl.setOnClickListener(rtlListen);
+		stabilizeListen=new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				OnModeSpinnerSelected("Stabilize");
+			}
+		};
+		stabilize.setOnClickListener(stabilizeListen);
+		
+		launchListen=new View.OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if(event.getAction() == MotionEvent.ACTION_DOWN){
+					rcOutput.enableRcOverride();
+					rcOutput.setRcValue(RcOutput.TROTTLE, 1100);					
+				}
+				if(event.getAction() == MotionEvent.ACTION_UP){
+					rcOutput.disableRcOverride();
+				}
+				return false;
+			}
+			
+		};
+		
+		disarmListen=new View.OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if(event.getAction() == MotionEvent.ACTION_DOWN){
+					rcOutput.enableRcOverride();
+		        	rcOutput.setRcValue(RcOutput.TROTTLE, 500);
+		        	rcOutput.setRcValue(RcOutput.RUDDER, 500);
+				}
+				if(event.getAction() == MotionEvent.ACTION_UP){
+					rcOutput.disableRcOverride();
+				}
+				return false;
+			}
+			
+		};
+		
+		armListen=new View.OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if(event.getAction() == MotionEvent.ACTION_DOWN){
+					rcOutput.enableRcOverride();
+		        	rcOutput.setRcValue(RcOutput.TROTTLE, 500);
+		        	rcOutput.setRcValue(RcOutput.RUDDER, 2000);
+				}
+				if(event.getAction() == MotionEvent.ACTION_UP){
+					rcOutput.disableRcOverride();
+				}
+				return false;
+			}
+			
+		};
+	
+		launch.setOnTouchListener(launchListen);
+		arm.setOnTouchListener(armListen);
+		disarm.setOnTouchListener(disarmListen);
 	}
 
 

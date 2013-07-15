@@ -11,11 +11,69 @@
         android:layout_weight=".5"
         class="com.droidplanner.fragments.HudFragment" />
     
-    <fragment
-        android:id="@+id/flightMapFragment"
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
+    <LinearLayout
         android:layout_weight=".5"
-        class="com.droidplanner.fragments.FlightMapFragment" />
-    
+        android:layout_width="fill_parent"
+    	android:layout_height="match_parent"
+    	android:orientation="horizontal"
+    	android:baselineAligned="false">
+    	<RelativeLayout
+    	    android:layout_weight=".17"
+	        android:layout_width="0dp"
+	   		android:layout_height="fill_parent"
+			android:orientation="vertical"
+			android:baselineAligned="false">
+		    <Button 
+		        android:textSize="10sp"
+		        android:textScaleX=".8"
+		        android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:text="@string/Arm"
+			    android:layout_above="@+id/disarm"
+			    android:id="@+id/arm"
+		        />
+		    <Button 
+		        android:textSize="10sp"
+		        android:textScaleX=".8"
+		        android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:text="@string/Disarm"
+			    android:layout_above="@+id/launch"
+			    android:id="@+id/disarm"
+		        />
+		    <Button 
+		        android:textSize="10sp"
+		        android:textScaleX=".8"
+		        android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:text="@string/Launch"
+			    android:layout_centerVertical="true"
+			    android:id="@+id/launch"
+		        />
+		    <Button 
+		        android:textSize="10sp"
+		        android:textScaleX=".8"
+		        android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:text="@string/RTL"
+			    android:layout_below="@+id/launch"
+			    android:id="@+id/rtl"
+		        />
+		    <Button 
+		        android:textSize="10sp"
+		        android:textScaleX=".7"
+		        android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:text="@string/Stabilize"
+			    android:layout_below="@+id/rtl"
+			    android:id="@+id/stabilize"
+		        />
+	    </RelativeLayout>
+	    <fragment
+	        android:id="@+id/flightMapFragment"
+	        android:layout_weight=".83"
+	        android:layout_width="0dp"
+	        android:layout_height="match_parent"
+	        class="com.droidplanner.fragments.FlightMapFragment" />
+	    </LinearLayout>
 </LinearLayout>

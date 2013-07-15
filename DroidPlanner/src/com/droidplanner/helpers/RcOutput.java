@@ -96,5 +96,9 @@ public class RcOutput {
 		if(value < -1) value = -1;
 		rcOutputs[ch] = (int) (value*RC_RANGE + RC_TRIM);
 	}
+	
+	public void setRcValue(int ch, double value){
+		rcOutputs[ch] = (int) (value*RC_RANGE + RC_TRIM);
+	}
 
 }
