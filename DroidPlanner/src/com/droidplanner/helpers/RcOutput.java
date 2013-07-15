@@ -98,8 +98,8 @@ public class RcOutput {
 		rcOutputs[ch] = (int) (value*RC_RANGE + RC_TRIM);
 	}
 	
-	public void setRcValue(int ch, double value){
-		rcOutputs[ch] = (int) (value*RC_RANGE + RC_TRIM);
+	public void setRcValue(int ch, int value){
+		rcOutputs[ch] = value;
 	}
 
 	public void simulateDisarmEvent(MotionEvent event) {
