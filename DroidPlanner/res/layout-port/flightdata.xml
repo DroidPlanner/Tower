@@ -1,79 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:keepScreenOn="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" android:baselineAligned="false">
-    
-    <fragment
-        android:id="@+id/hud_fragment2"
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:layout_weight=".5"
-        class="com.droidplanner.fragments.HudFragment" />
-    
-    <LinearLayout
-        android:layout_weight=".5"
-        android:layout_width="fill_parent"
-    	android:layout_height="match_parent"
-    	android:orientation="horizontal"
-    	android:baselineAligned="false">
-    	<RelativeLayout
-    	    android:layout_weight=".17"
-	        android:layout_width="0dp"
-	   		android:layout_height="fill_parent"
-			android:orientation="vertical"
-			android:baselineAligned="false">
-		    <Button 
-		        android:textSize="10sp"
-		        android:textScaleX=".8"
-		        android:layout_width="match_parent"
-			    android:layout_height="wrap_content"
-			    android:text="@string/Arm"
-			    android:layout_above="@+id/disarm"
-			    android:id="@+id/arm"
-		        />
-		    <Button 
-		        android:textSize="10sp"
-		        android:textScaleX=".8"
-		        android:layout_width="match_parent"
-			    android:layout_height="wrap_content"
-			    android:text="@string/Disarm"
-			    android:layout_above="@+id/launch"
-			    android:id="@+id/disarm"
-		        />
-		    <Button 
-		        android:textSize="10sp"
-		        android:textScaleX=".8"
-		        android:layout_width="match_parent"
-			    android:layout_height="wrap_content"
-			    android:text="@string/Launch"
-			    android:layout_centerVertical="true"
-			    android:id="@+id/launch"
-		        />
-		    <Button 
-		        android:textSize="10sp"
-		        android:textScaleX=".8"
-		        android:layout_width="match_parent"
-			    android:layout_height="wrap_content"
-			    android:text="@string/RTL"
-			    android:layout_below="@+id/launch"
-			    android:id="@+id/rtl"
-		        />
-		    <Button 
-		        android:textSize="10sp"
-		        android:textScaleX=".7"
-		        android:layout_width="match_parent"
-			    android:layout_height="wrap_content"
-			    android:text="@string/Stabilize"
-			    android:layout_below="@+id/rtl"
-			    android:id="@+id/stabilize"
-		        />
-	    </RelativeLayout>
+    android:orientation="vertical" >
+
 	    <fragment
-	        android:id="@+id/flightMapFragment"
-	        android:layout_weight=".83"
-	        android:layout_width="0dp"
+	        android:id="@+id/hud_fragment2"
+	        android:layout_width="fill_parent"
 	        android:layout_height="match_parent"
-	        class="com.droidplanner.fragments.FlightMapFragment" />
-	    </LinearLayout>
-</LinearLayout>
+	        android:layout_weight=".5"
+	        class="com.droidplanner.fragments.HudFragment" />
+
+	    <RelativeLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_weight=".5" >
+
+	        <fragment
+	            android:id="@+id/flightMapFragment"
+	            android:layout_width="fill_parent"
+	            android:layout_height="match_parent"
+	            class="com.droidplanner.fragments.FlightMapFragment" />
+
+	        <RelativeLayout
+	            android:layout_width="130dp"
+	            android:layout_height="match_parent"
+	            android:orientation="vertical" >
+
+	            <Button
+	                android:id="@+id/arm"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_above="@+id/disarm"
+	                android:layout_margin="10dp"
+	                android:padding="10dp"
+	                android:paddingLeft="50dp"
+	                android:paddingRight="50dp"
+	                android:text="@string/Arm" />
+
+	            <Button
+	                android:id="@+id/disarm"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_above="@+id/launch"
+	                android:layout_margin="10dp"
+	                android:padding="10dp"
+	                android:text="@string/Disarm" />
+
+	            <Button
+	                android:id="@+id/launch"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_centerVertical="true"
+	                android:layout_margin="10dp"
+	                android:padding="10dp"
+	                android:text="@string/Launch" />
+
+	            <Button
+	                android:id="@+id/rtl"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_below="@+id/launch"
+	                android:layout_margin="10dp"
+	                android:padding="10dp"
+	                android:text="@string/RTL" />
+
+	            <Button
+	                android:id="@+id/stabilize"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_below="@+id/rtl"
+	                android:layout_margin="10dp"
+	                android:padding="10dp"
+	                android:text="@string/Stabilize" />
+	        </RelativeLayout>
+
+	    </RelativeLayout>
+
+    </LinearLayout>
