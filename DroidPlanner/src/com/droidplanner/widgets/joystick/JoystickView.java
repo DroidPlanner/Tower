@@ -9,9 +9,11 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.LinearLayout.LayoutParams;
 
 public class JoystickView extends View {
 	public static final int INVALID_POINTER_ID = -1;
@@ -20,7 +22,7 @@ public class JoystickView extends View {
 	// Private Members
 	// =========================================
 	private final boolean D = false;
-	String TAG = "JoystickView";
+	public String TAG = "JoystickView";
 	
 	private Paint dbgPaint1;
 	private Paint dbgPaint2;
@@ -117,6 +119,8 @@ public class JoystickView extends View {
 	private void initJoystickView() {
 		setFocusable(true);
 
+		 
+		
 		dbgPaint1 = new Paint(Paint.ANTI_ALIAS_FLAG);
 		dbgPaint1.setColor(Color.RED);
 		dbgPaint1.setStrokeWidth(1);
@@ -240,8 +244,36 @@ public class JoystickView extends View {
 
 		dimSide = d;
 
-		cX = d / 2;
-		cY = d / 2;
+		int grav = ((LayoutParams)getLayoutParams()).gravity;
+		
+		if (getMeasuredWidth() > getMeasuredHeight()) {
+			cY = getMeasuredHeight() / 2;
+			if ((grav & Gravity.LEFT) == Gravity.LEFT) {
+				cX = d / 2;
+			} else if ((grav & Gravity.RIGHT) == Gravity.RIGHT) {
+				cX = getMeasuredWidth() - (d / 2);
+			} else {
+				cX = getMeasuredWidth() / 2;
+			}
+		} else if (getMeasuredHeight() > getMeasuredWidth()) {
+			cX = getMeasuredWidth() / 2;
+			if ((grav & Gravity.TOP) == Gravity.TOP) {
+				cY = d / 2;
+			} else if ((grav & Gravity.BOTTOM) == Gravity.BOTTOM) {
+				cY = getMeasuredHeight() - (d / 2);
+			} else {
+				cY = getMeasuredHeight() / 2;
+			}
+		} else {
+			cX = getMeasuredWidth() / 2;
+			cY = getMeasuredHeight() / 2;
+		}
+		offsetX = cX - (d / 2);
+		offsetY = cY - (d / 2);
+		//Log.d(TAG, String.format("D:%d", d));
+		//Log.d(TAG, String.format("center(X:%d,Y:%d)", cX, cY));
+		//Log.d(TAG, String.format("offset(X:%d,Y:%d)", offsetX, offsetY));
+		
 		
 		bgRadius = dimSide/2 - innerPadding;
 		handleRadius = (int)(d * 0.25);
@@ -336,7 +368,7 @@ public class JoystickView extends View {
 		    case MotionEvent.ACTION_CANCEL: 
 		    case MotionEvent.ACTION_UP: {
 		    	if ( pointerId != INVALID_POINTER_ID ) {
-//			    	Log.d(TAG, "ACTION_UP");
+			    	Log.d(TAG, "ACTION_UP");
 			    	returnHandleToCenter();
 		        	setPointerId(INVALID_POINTER_ID);
 		    	}
@@ -347,7 +379,7 @@ public class JoystickView extends View {
 			        final int pointerIndex = (action & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
 			        final int pointerId = ev.getPointerId(pointerIndex);
 			        if ( pointerId == this.pointerId ) {
-//			        	Log.d(TAG, "ACTION_POINTER_UP: " + pointerId);
+			        	//Log.d(TAG, "ACTION_POINTER_UP: " + pointerId);
 			        	returnHandleToCenter();
 			        	setPointerId(INVALID_POINTER_ID);
 			    		return true;
@@ -358,9 +390,11 @@ public class JoystickView extends View {
 		    case MotionEvent.ACTION_DOWN: {
 		    	if ( pointerId == INVALID_POINTER_ID ) {
 		    		int x = (int) ev.getX();
-		    		if ( x >= offsetX && x < offsetX + dimSide ) {
+		    		int y = (int) ev.getY();
+		    		//Log.d(TAG, String.format("ACTION_DOWN x=%d y=%d", x, y));
+		    		if ((x >= offsetX && x < offsetX + dimSide) && (y >= offsetY && y < offsetY + dimSide)) {
 			        	setPointerId(ev.getPointerId(0));
-//			        	Log.d(TAG, "ACTION_DOWN: " + getPointerId());
+			        	//Log.d(TAG, "ACTION_DOWN: " + getPointerId());
 			    		return true;
 		    		}
 		    	}
@@ -371,8 +405,10 @@ public class JoystickView extends View {
 			        final int pointerIndex = (action & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
 			        final int pointerId = ev.getPointerId(pointerIndex);
 		    		int x = (int) ev.getX(pointerId);
-		    		if ( x >= offsetX && x < offsetX + dimSide ) {
-//			        	Log.d(TAG, "ACTION_POINTER_DOWN: " + pointerId);
+		    		int y = (int) ev.getY(pointerId);
+		    		//Log.d(TAG, String.format("ACTION_POINTER_DOWN x=%d y=%d", x,y));
+		    		if ((x >= offsetX && x < offsetX + dimSide) && (y >= offsetY && y < offsetY + dimSide)) {
+			        	//Log.d(TAG, "ACTION_POINTER_DOWN: " + pointerId);
 			        	setPointerId(pointerId);
 			    		return true;
 		    		}
@@ -389,10 +425,9 @@ public class JoystickView extends View {
 			
 			// Translate touch position to center of view
 			float x = ev.getX(pointerIndex);
-			touchX = x - cX - offsetX;
+			touchX = x - cX;
 			float y = ev.getY(pointerIndex);
-			touchY = y - cY - offsetY;
-
+			touchY = y - cY;
 //        	Log.d(TAG, String.format("ACTION_MOVE: (%03.0f, %03.0f) => (%03.0f, %03.0f)", x, y, touchX, touchY));
         	
 			reportOnMoved();
