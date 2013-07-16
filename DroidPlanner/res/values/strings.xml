@@ -4,7 +4,7 @@
     <string name="app_title">DroidPlanner</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_connect">Connect</string>
-    <string name="menu_disconnect">Disconnect</string>      
+    <string name="menu_disconnect">Disconnect</string>
     <string name="conected">Connected</string>
     <string name="disconnected">Disconnected</string>
     <string name="save">Save</string>
@@ -43,32 +43,34 @@
     <string name="this_is_very_experimental_please_be_careful">This is very experimental, please be careful.</string>
     <string name="menu_advanced">Advanced</string>
     <string name="menu_calibration">Calibration</string>
-    
+
     <string-array name="menu_dropdown">
         <item>Planning</item>
         <item>Flight Data</item>
         <item>RC</item>
         <item>Parameters</item>
         <item>Camera</item>
-        <item>GCP</item>     
-    </string-array>    
-    
-    <!--Do not change the names in the array bellow-->
+        <item>GCP</item>
+    </string-array>
+
+    <!-- Do not change the names in the array bellow -->
     <string-array name="TelemetryConnectionTypes">
         <item name="USB">USB</item>
         <item name="TCP">TCP</item>
     </string-array>
-    
-    <!--Do not change the names in the array bellow-->
+
+    <!-- Do not change the names in the array bellow -->
     <string-array name="MapTypes">
-        <item >Satellite</item>
-        <item >Hybrid</item>
-        <item >Normal</item>
-        <item >Terrain</item>
+        <item>Satellite</item>
+        <item>Hybrid</item>
+        <item>Normal</item>
+        <item>Terrain</item>
     </string-array>
     <string-array name="TelemetryBaudTypes">
         <item name="57600">57600</item>
         <item name="115200">115200</item>
     </string-array>
-    
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
