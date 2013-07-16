@@ -4,6 +4,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.MAVLink.waypoint;
@@ -15,6 +20,7 @@ import com.droidplanner.R;
 import com.droidplanner.MAVLink.Drone.DroneTypeListner;
 import com.droidplanner.fragments.FlightMapFragment;
 import com.droidplanner.fragments.FlightMapFragment.OnFlighDataListener;
+import com.droidplanner.helpers.RcOutput;
 import com.droidplanner.widgets.spinners.SelectModeSpinner;
 import com.droidplanner.widgets.spinners.SelectModeSpinner.OnModeSpinnerSelectedListener;
 import com.droidplanner.widgets.spinners.SelectWaypointSpinner;
@@ -27,6 +33,8 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 	private SelectModeSpinner fligthModeSpinner;
 	private SelectWaypointSpinner wpSpinner;
 	private LatLng guidedPoint;
+	private Button launch, arm, disarm, rtl, stabilize;
+	private RcOutput rcOutput;
 
 	@Override
 	int getNavigationItem() {
@@ -45,6 +53,86 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 		
 		app.setWaypointReceivedListner(this);
 		drone.setDroneTypeChangedListner(this);
+		//Buttons
+		rcOutput = new RcOutput(app.MAVClient,this);
+		OnTouchListener launchListen, disarmListen, armListen;
+		
+		OnClickListener stabilizeListen, rtlListen;
+		launch=(Button) findViewById(R.id.launch);
+		arm=(Button) findViewById(R.id.arm);
+		disarm=(Button) findViewById(R.id.disarm);
+		rtl=(Button) findViewById(R.id.rtl);
+		stabilize=(Button) findViewById(R.id.stabilize);
+		//Button listeners
+		rtlListen=new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				OnModeSpinnerSelected("RTL");
+			}
+		};
+		rtl.setOnClickListener(rtlListen);
+		stabilizeListen=new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				OnModeSpinnerSelected("Stabilize");
+			}
+		};
+		stabilize.setOnClickListener(stabilizeListen);
+		
+		launchListen=new View.OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if(event.getAction() == MotionEvent.ACTION_DOWN){
+					setLaunchPoint(new waypoint(drone.getPosition(),drone.defaultAlt));
+					rcOutput.enableRcOverride();
+					rcOutput.setRcChannel(RcOutput.TROTTLE, 1);					
+				}
+				if(event.getAction() == MotionEvent.ACTION_UP){
+					rcOutput.disableRcOverride();
+				}
+				return false;
+			}
+			
+		};
+		
+		disarmListen=new View.OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if(event.getAction() == MotionEvent.ACTION_DOWN){
+					rcOutput.enableRcOverride();
+		        	rcOutput.setRcChannel(RcOutput.TROTTLE, -1);
+		        	rcOutput.setRcChannel(RcOutput.RUDDER, -1);
+				}
+				if(event.getAction() == MotionEvent.ACTION_UP){
+					rcOutput.disableRcOverride();
+				}
+				return false;
+			}
+			
+		};
+		
+		armListen=new View.OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if(event.getAction() == MotionEvent.ACTION_DOWN){
+					rcOutput.enableRcOverride();
+		        	rcOutput.setRcChannel(RcOutput.TROTTLE, -1);
+		        	rcOutput.setRcChannel(RcOutput.RUDDER, 1);
+				}
+				if(event.getAction() == MotionEvent.ACTION_UP){
+					rcOutput.disableRcOverride();
+				}
+				return false;
+			}
+			
+		};
+	
+		launch.setOnTouchListener(launchListen);
+		arm.setOnTouchListener(armListen);
+		disarm.setOnTouchListener(disarmListen);
 	}
 
 
@@ -112,6 +200,25 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 		app.MAVClient.sendMavPacket(msg.pack());
 	}
 
+	public void setLaunchPoint(waypoint wp) {
+		msg_mission_item msg = new msg_mission_item();
+		msg.seq = 0;
+		msg.current = 2;	//TODO use guided mode enum
+		msg.frame = 0; // TODO use correct parameter
+		msg.command = 22; // TODO use correct parameter
+		msg.param1 = 0; // TODO use correct parameter
+		msg.param2 = 0; // TODO use correct parameter
+		msg.param3 = 0; // TODO use correct parameter
+		msg.param4 = 0; // TODO use correct parameter
+		msg.x = (float) wp.coord.latitude;
+		msg.y = (float) wp.coord.longitude;
+		msg.z = wp.Height.floatValue();
+		msg.autocontinue = 1; // TODO use correct parameter
+		msg.target_system = 1;
+		msg.target_component = 1;
+		app.MAVClient.sendMavPacket(msg.pack());
+	}
+	
 	private void changeFlightMode(ApmModes mode) {
 		msg_set_mode msg = new msg_set_mode();
 		msg.target_system = 1;
