@@ -84,8 +84,9 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				if(event.getAction() == MotionEvent.ACTION_DOWN){
+					setLaunchPoint(new waypoint(drone.getPosition(),drone.defaultAlt));
 					rcOutput.enableRcOverride();
-					rcOutput.setRcValue(RcOutput.TROTTLE, 1100);					
+					rcOutput.setRcChannel(RcOutput.TROTTLE, 1);					
 				}
 				if(event.getAction() == MotionEvent.ACTION_UP){
 					rcOutput.disableRcOverride();
@@ -101,8 +102,8 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 			public boolean onTouch(View v, MotionEvent event) {
 				if(event.getAction() == MotionEvent.ACTION_DOWN){
 					rcOutput.enableRcOverride();
-		        	rcOutput.setRcValue(RcOutput.TROTTLE, 500);
-		        	rcOutput.setRcValue(RcOutput.RUDDER, 500);
+		        	rcOutput.setRcChannel(RcOutput.TROTTLE, -1);
+		        	rcOutput.setRcChannel(RcOutput.RUDDER, -1);
 				}
 				if(event.getAction() == MotionEvent.ACTION_UP){
 					rcOutput.disableRcOverride();
@@ -118,8 +119,8 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 			public boolean onTouch(View v, MotionEvent event) {
 				if(event.getAction() == MotionEvent.ACTION_DOWN){
 					rcOutput.enableRcOverride();
-		        	rcOutput.setRcValue(RcOutput.TROTTLE, 500);
-		        	rcOutput.setRcValue(RcOutput.RUDDER, 2000);
+		        	rcOutput.setRcChannel(RcOutput.TROTTLE, -1);
+		        	rcOutput.setRcChannel(RcOutput.RUDDER, 1);
 				}
 				if(event.getAction() == MotionEvent.ACTION_UP){
 					rcOutput.disableRcOverride();
@@ -199,6 +200,25 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 		app.MAVClient.sendMavPacket(msg.pack());
 	}
 
+	public void setLaunchPoint(waypoint wp) {
+		msg_mission_item msg = new msg_mission_item();
+		msg.seq = 0;
+		msg.current = 2;	//TODO use guided mode enum
+		msg.frame = 0; // TODO use correct parameter
+		msg.command = 22; // TODO use correct parameter
+		msg.param1 = 0; // TODO use correct parameter
+		msg.param2 = 0; // TODO use correct parameter
+		msg.param3 = 0; // TODO use correct parameter
+		msg.param4 = 0; // TODO use correct parameter
+		msg.x = (float) wp.coord.latitude;
+		msg.y = (float) wp.coord.longitude;
+		msg.z = wp.Height.floatValue();
+		msg.autocontinue = 1; // TODO use correct parameter
+		msg.target_system = 1;
+		msg.target_component = 1;
+		app.MAVClient.sendMavPacket(msg.pack());
+	}
+	
 	private void changeFlightMode(ApmModes mode) {
 		msg_set_mode msg = new msg_set_mode();
 		msg.target_system = 1;
