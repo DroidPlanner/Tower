@@ -55,7 +55,7 @@ public abstract class PolygonDialog implements DialogInterface.OnClickListener {
 		angleView = new SeekBarWithText(context);
 		angleView.setMinMaxInc(0, 180, 0.1);
 		angleView.setTitle("Hatch angle:");
-		angleView.setUnit("�");
+		angleView.setUnit("deg");
 		
 		distanceView = new SeekBarWithText(context);
 		distanceView.setMinMaxInc(5, 500, 5);
