@@ -7,7 +7,6 @@ import android.util.Log;
 
 import com.MAVLink.waypoint;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 
 public class Polygon {
 
@@ -173,7 +172,7 @@ public class Polygon {
 			Double angle, Double lineDist) {
 		List<LineLatLng> gridLines = new ArrayList<LineLatLng>();
 
-		Bounds bounds = new Bounds(waypoints2);
+		PolyBounds bounds = new PolyBounds(waypoints2);
 		LatLng point = new LatLng(bounds.getMiddle().latitude,
 				bounds.getMiddle().longitude);
 
@@ -201,36 +200,6 @@ public class Polygon {
 		}
 
 		return gridLines;
-	}
-
-	/**
-	 * 
-	 * Object for holding boundary for a polygon
-	 * 
-	 */
-	private class Bounds {
-		public LatLng sw;
-		public LatLng ne;
-
-		public Bounds(List<LatLng> points) {
-			LatLngBounds.Builder builder = new LatLngBounds.Builder();
-			for (LatLng point : points) {
-				builder.include(point);
-			}
-			LatLngBounds bounds = builder.build();
-			sw = bounds.southwest;
-			ne = bounds.northeast;
-		}
-
-		public double getDiag() {
-			return GeoTools.latToMeters(GeoTools.getDistance(ne, sw));
-		}
-
-		public LatLng getMiddle() {
-			return (new LatLng((ne.latitude + sw.latitude) / 2,
-					(ne.longitude + sw.longitude) / 2));
-
-		}
 	}
 
 	public boolean isValid() {
