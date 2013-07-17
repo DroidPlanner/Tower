@@ -19,6 +19,7 @@ import com.droidplanner.dialogs.OpenMissionDialog;
 import com.droidplanner.dialogs.PolygonDialog;
 import com.droidplanner.fragments.PlanningMapFragment;
 import com.droidplanner.fragments.PlanningMapFragment.OnMapInteractionListener;
+import com.droidplanner.fragments.PlanningMapFragment.modes;
 import com.droidplanner.polygon.Polygon;
 import com.droidplanner.waypoints.MissionReader;
 import com.droidplanner.waypoints.MissionWriter;
@@ -28,12 +29,6 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 	
 	public Polygon polygon;
 	private PlanningMapFragment planningMapFragment;
-
-	public enum modes {
-		MISSION, POLYGON;
-	}
-
-	public modes mode;
 
 	TextView WaypointListNumber;
 
@@ -52,7 +47,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 		WaypointListNumber = (TextView) (findViewById(R.id.textViewWP));
 	
 		polygon = new Polygon();
-		mode = modes.MISSION;
+		planningMapFragment.mode = modes.MISSION;
 
 
 		app.setWaypointReceivedListner(this);
@@ -93,7 +88,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		switch (mode) {
+		switch (planningMapFragment.mode) {
 		default:
 		case MISSION:
 			getMenuInflater().inflate(R.menu.menu_planning, menu);
@@ -128,7 +123,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 			planningMapFragment.zoomToExtents(drone.getAllCoordinates());
 			return true;
 		case R.id.menu_polygon:
-			setModeToPolygon();
+			setMode(modes.POLYGON);
 			return true;
 		case R.id.menu_generate_polygon:
 			openPolygonGenerateDialog();
@@ -138,7 +133,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 			update();
 			return true;
 		case R.id.menu_finish_polygon:
-			setModeToMission();
+			setMode(modes.MISSION);
 			update();
 			return true;
 		default:
@@ -174,17 +169,8 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 		update();
 	}
 
-	private void setModeToPolygon() {
-		mode = modes.POLYGON;
-		Toast.makeText(this, R.string.entering_polygon_mode, Toast.LENGTH_SHORT)
-				.show();
-		invalidateOptionsMenu();
-	}
-
-	private void setModeToMission() {
-		mode = modes.MISSION;
-		Toast.makeText(this, R.string.exiting_polygon_mode, Toast.LENGTH_SHORT)
-				.show();
+	private void setMode(modes mode) {
+		planningMapFragment.setMode(mode);
 		invalidateOptionsMenu();
 	}
 
@@ -206,7 +192,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 
 	@Override
 	public void onAddPoint(LatLng point) {
-		switch (mode) {
+		switch (planningMapFragment.mode) {
 		default:
 		case MISSION:
 			drone.addWaypoint(point);

@@ -13,9 +13,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.MAVLink.waypoint;
 import com.droidplanner.R;
+import com.droidplanner.R.string;
 import com.droidplanner.MAVLink.Drone;
 import com.droidplanner.polygon.Polygon;
 import com.google.android.gms.maps.GoogleMap;
@@ -30,6 +32,11 @@ import com.google.android.gms.maps.model.PolylineOptions;
 @SuppressLint("UseSparseArrays")
 public class PlanningMapFragment extends OfflineMapFragment implements
 		OnMapLongClickListener, OnMarkerDragListener {
+	
+	public enum modes {
+		MISSION, POLYGON;
+	}
+	
 	private GoogleMap mMap;
 	
 	private HashMap<Integer, Marker> waypointMarkers = new HashMap<Integer, Marker>();
@@ -38,9 +45,12 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 	
 	private OnMapInteractionListener mListener;
 
+	public modes mode;
+
 	static final String homeMarkerTitle = "Home";
 
 	public interface OnMapInteractionListener {
+
 		public void onAddPoint(LatLng point);
 
 		public void onMoveHome(LatLng coord);
@@ -215,5 +225,20 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		}
 	
 		return flightPath;
+	}
+
+	public void setMode(modes mode) {
+		this.mode = mode;
+		switch (mode) {
+		default:
+		case MISSION:
+			Toast.makeText(getActivity(), string.exiting_polygon_mode, Toast.LENGTH_SHORT)
+			.show();			
+			break;
+		case POLYGON:
+			Toast.makeText(getActivity(), string.entering_polygon_mode, Toast.LENGTH_SHORT)
+			.show();
+			break;
+		}
 	}
 }
