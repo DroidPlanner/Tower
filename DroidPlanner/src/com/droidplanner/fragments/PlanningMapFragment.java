@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 import com.MAVLink.waypoint;
 import com.droidplanner.R;
 import com.droidplanner.MAVLink.Drone;
-import com.droidplanner.helpers.Polygon;
+import com.droidplanner.polygon.Polygon;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
