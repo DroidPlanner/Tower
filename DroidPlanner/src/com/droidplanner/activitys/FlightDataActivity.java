@@ -57,6 +57,7 @@ public class FlightDataActivity extends SuperActivity implements
 
 		app.setWaypointReceivedListner(this);
 		drone.setDroneTypeChangedListner(this);
+
 		// Buttons
 		rcOutput = new RcOutput(app.MAVClient, this);
 
@@ -65,8 +66,8 @@ public class FlightDataActivity extends SuperActivity implements
 		disarm = (Button) findViewById(R.id.disarm);
 		rtl = (Button) findViewById(R.id.rtl);
 		stabilize = (Button) findViewById(R.id.stabilize);
+		
 		// Button listeners
-
 		rtl.setOnClickListener(this);
 		stabilize.setOnClickListener(this);
 		launch.setOnTouchListener(this);
@@ -136,6 +137,25 @@ public class FlightDataActivity extends SuperActivity implements
 		app.MAVClient.sendMavPacket(msg.pack());
 	}
 
+	public void setLaunchPoint(waypoint wp) {
+		msg_mission_item msg = new msg_mission_item();
+		msg.seq = 0;
+		msg.current = 2;	//TODO use guided mode enum
+		msg.frame = 0; // TODO use correct parameter
+		msg.command = 22; // TODO use correct parameter
+		msg.param1 = 0; // TODO use correct parameter
+		msg.param2 = 0; // TODO use correct parameter
+		msg.param3 = 0; // TODO use correct parameter
+		msg.param4 = 0; // TODO use correct parameter
+		msg.x = (float) wp.coord.latitude;
+		msg.y = (float) wp.coord.longitude;
+		msg.z = wp.Height.floatValue();
+		msg.autocontinue = 1; // TODO use correct parameter
+		msg.target_system = 1;
+		msg.target_component = 1;
+		app.MAVClient.sendMavPacket(msg.pack());
+	}
+	
 	private void changeFlightMode(ApmModes mode) {
 		msg_set_mode msg = new msg_set_mode();
 		msg.target_system = 1;
@@ -180,7 +200,7 @@ public class FlightDataActivity extends SuperActivity implements
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		if (v.equals(launch)) {
-			rcOutput.simulateLaunchEvent(event);
+			simulateLaunchEvent(event);
 		} else if (v.equals(arm)) {
 			rcOutput.simulateArmEvent(event);
 		} else if (v.equals(disarm)) {
@@ -197,5 +217,17 @@ public class FlightDataActivity extends SuperActivity implements
 			OnModeSpinnerSelected("Stabilize");
 		}
 	}
+	
+	private void simulateLaunchEvent(MotionEvent event) {
+		if (event.getAction() == MotionEvent.ACTION_DOWN) {
+			setLaunchPoint(new waypoint(drone.getPosition(),drone.defaultAlt));
+			rcOutput.enableRcOverride();
+			rcOutput.setRcChannel(RcOutput.THROTTLE, 1);	
+		}
+		if (event.getAction() == MotionEvent.ACTION_UP) {
+			rcOutput.disableRcOverride();
+		}
+	}
+
 
 }

@@ -98,25 +98,11 @@ public class RcOutput {
 		rcOutputs[ch] = (int) (value*RC_RANGE + RC_TRIM);
 	}
 	
-	public void setRcValue(int ch, int value){
-		rcOutputs[ch] = value;
-	}
-
 	public void simulateDisarmEvent(MotionEvent event) {
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			enableRcOverride();
-			setRcValue(RcOutput.THROTTLE, 500);
-			setRcValue(RcOutput.RUDDER, 500);
-		}
-		if (event.getAction() == MotionEvent.ACTION_UP) {
-			disableRcOverride();
-		}
-	}
-
-	public void simulateLaunchEvent(MotionEvent event) {
-		if (event.getAction() == MotionEvent.ACTION_DOWN) {
-			enableRcOverride();
-			setRcValue(RcOutput.THROTTLE, 1100);
+			setRcChannel(RcOutput.THROTTLE, -1);
+			setRcChannel(RcOutput.RUDDER, -1);
 		}
 		if (event.getAction() == MotionEvent.ACTION_UP) {
 			disableRcOverride();
@@ -126,12 +112,11 @@ public class RcOutput {
 	public void simulateArmEvent(MotionEvent event) {
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			enableRcOverride();
-			setRcValue(RcOutput.THROTTLE, 500);
-			setRcValue(RcOutput.RUDDER, 2000);
+			setRcChannel(RcOutput.THROTTLE,-1);
+			setRcChannel(RcOutput.RUDDER, 1);
 		}
 		if (event.getAction() == MotionEvent.ACTION_UP) {
 			disableRcOverride();
 		}
 	}
-
 }
