@@ -1,4 +1,4 @@
-package com.droidplanner.helpers;
+package com.droidplanner.polygon;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -466,7 +466,7 @@ public class Polygon {
 	/**
 	 * Experimental Function, needs testing! Calculate the area of the polygon
 	 * 
-	 * @return area in m²
+	 * @return area in mï¿½
 	 */
 	// TODO test and fix this function
 	public Double getArea() {

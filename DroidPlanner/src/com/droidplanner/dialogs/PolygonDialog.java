@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.MAVLink.waypoint;
-import com.droidplanner.helpers.Polygon;
+import com.droidplanner.polygon.Polygon;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -54,7 +54,7 @@ public abstract class PolygonDialog implements DialogInterface.OnClickListener {
 		angleView = new SeekBarWithText(context);
 		angleView.setMinMaxInc(0, 180, 0.1);
 		angleView.setTitle("Hatch angle:");
-		angleView.setUnit("º");
+		angleView.setUnit("ï¿½");
 		
 		distanceView = new SeekBarWithText(context);
 		distanceView.setMinMaxInc(5, 500, 5);
