@@ -75,10 +75,10 @@ public abstract class PolygonDialog implements DialogInterface.OnClickListener {
 	@Override
 	public void onClick(DialogInterface arg0, int which) {
 		if (which == Dialog.BUTTON_POSITIVE) {
-			GridGenerator grid = new GridGenerator();
+			GridGenerator grid = new GridGenerator(polygon,angleView.getValue(), distanceView.getValue(),
+					originPoint, height);
 			
-			onPolygonGenerated(grid.hatchfill(angleView.getValue(), distanceView.getValue(),
-					originPoint, height, polygon));
+			onPolygonGenerated(grid.hatchfill());
 		}
 	}
 

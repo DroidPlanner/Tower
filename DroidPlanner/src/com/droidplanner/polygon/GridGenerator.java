@@ -10,9 +10,22 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class GridGenerator {
 
-
-	public List<waypoint> hatchfill(Double angle, Double lineDist,
-		LatLng lastLocation, Double altitude , Polygon poly) {
+	private Polygon poly;
+	private Double angle;
+	private Double lineDist;
+	private LatLng lastLocation;
+	private Double altitude;
+	
+	public GridGenerator(Polygon poly, Double angle, Double lineDist,
+			LatLng lastLocation, Double altitude) {
+		this.poly = poly;
+		this.angle = angle;
+		this.lineDist = lineDist;
+		this.lastLocation = lastLocation;
+		this.altitude = altitude;
+	}	
+	
+	public List<waypoint> hatchfill() {
 		List<LineLatLng> gridLines = generateGrid(poly.getWaypoints(), angle, lineDist);
 		List<LineLatLng> hatchLines = trimGridLines(poly.getWaypoints(), gridLines);
 		List<waypoint> gridPoints = waypointsFromHatch(lastLocation, altitude,
