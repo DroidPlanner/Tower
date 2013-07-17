@@ -8,7 +8,7 @@ import android.util.Log;
 import com.MAVLink.waypoint;
 import com.google.android.gms.maps.model.LatLng;
 
-public class GridGenerator {
+public class GridBuilder {
 
 	private Polygon poly;
 	private Double angle;
@@ -16,7 +16,7 @@ public class GridGenerator {
 	private LatLng lastLocation;
 	private Double altitude;
 	
-	public GridGenerator(Polygon poly, Double angle, Double lineDist,
+	public GridBuilder(Polygon poly, Double angle, Double lineDist,
 			LatLng lastLocation, Double altitude) {
 		this.poly = poly;
 		this.angle = angle;

@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.MAVLink.waypoint;
-import com.droidplanner.polygon.GridGenerator;
+import com.droidplanner.polygon.GridBuilder;
 import com.droidplanner.polygon.Polygon;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.google.android.gms.maps.model.LatLng;
@@ -75,7 +75,7 @@ public abstract class PolygonDialog implements DialogInterface.OnClickListener {
 	@Override
 	public void onClick(DialogInterface arg0, int which) {
 		if (which == Dialog.BUTTON_POSITIVE) {
-			GridGenerator grid = new GridGenerator(polygon,angleView.getValue(), distanceView.getValue(),
+			GridBuilder grid = new GridBuilder(polygon,angleView.getValue(), distanceView.getValue(),
 					originPoint, height);
 			
 			onPolygonGenerated(grid.hatchfill());
