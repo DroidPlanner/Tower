@@ -186,9 +186,9 @@ public class GeoTools {
 		double shortest = Double.MAX_VALUE;
 	
 		for (LineLatLng line : list) {
-			double ans1 = getDistance(point, line.p1);
-			double ans2 = getDistance(point, line.p2);
-			LatLng shorterpnt = ans1 < ans2 ? line.p1 : line.p2;
+			double ans1 = getDistance(point, line.line.p1);
+			double ans2 = getDistance(point, line.line.p2);
+			LatLng shorterpnt = ans1 < ans2 ? line.line.p1 : line.line.p2;
 	
 			if (shortest > getDistance(point, shorterpnt)) {
 				answer = line;

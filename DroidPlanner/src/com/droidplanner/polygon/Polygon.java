@@ -33,18 +33,9 @@ public class Polygon {
 		getWaypoints().clear();
 	}
 
-	class LineLatLng {
-		public LatLng p1;
-		public LatLng p2;
-
-		public LineLatLng(LatLng p1, LatLng p2) {
-			this.p1 = p1;
-			this.p2 = p2;
-		}
-	}
 
 	public List<waypoint> hatchfill(Double angle, Double lineDist,
-			LatLng lastLocation, Double altitude) {
+		LatLng lastLocation, Double altitude) {
 		List<LineLatLng> gridLines = generateGrid(getWaypoints(), angle, lineDist);
 		List<LineLatLng> hatchLines = trimGridLines(getWaypoints(), gridLines);
 
@@ -178,9 +169,9 @@ public class Polygon {
 	 *            Distance between lines in meters
 	 * @return Returns a array of lines of the generated grid
 	 */
-	private List<Polygon.LineLatLng> generateGrid(List<LatLng> waypoints2,
+	private List<LineLatLng> generateGrid(List<LatLng> waypoints2,
 			Double angle, Double lineDist) {
-		List<Polygon.LineLatLng> gridLines = new ArrayList<Polygon.LineLatLng>();
+		List<LineLatLng> gridLines = new ArrayList<LineLatLng>();
 
 		Bounds bounds = new Bounds(waypoints2);
 		LatLng point = new LatLng(bounds.getMiddle().latitude,
@@ -202,7 +193,7 @@ public class Polygon {
 			LatLng pointx = point;
 			pointx = GeoTools.newpos(pointx, angle, bounds.getDiag() * 1.5);
 
-			Polygon.LineLatLng line = new Polygon.LineLatLng(point, pointx);
+			LineLatLng line = new LineLatLng(point, pointx);
 			gridLines.add(line);
 
 			point = GeoTools.addLatLng(point, diff);
