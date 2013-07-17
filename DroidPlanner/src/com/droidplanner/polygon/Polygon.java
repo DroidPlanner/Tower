@@ -233,24 +233,6 @@ public class Polygon {
 		}
 	}
 
-	/**
-	 * Experimental Function, needs testing! Calculate the area of the polygon
-	 * 
-	 * @return area in m�
-	 */
-	// TODO test and fix this function
-	public Double getArea() {
-		double sum = 0.0;
-		for (int i = 0; i < getWaypoints().size() - 1; i++) {
-			sum = sum
-					+ (GeoTools.latToMeters(getWaypoints().get(i).longitude) * GeoTools.latToMeters(getWaypoints()
-							.get(i + 1).latitude))
-					- (GeoTools.latToMeters(getWaypoints().get(i).latitude) * GeoTools.latToMeters(getWaypoints()
-							.get(i + 1).longitude));
-		}
-		return Math.abs(0.5 * sum);
-	}
-
 	public boolean isValid() {
 		if(getWaypoints().size()>2)	// A valid polygon must have at least 3 points
 			return true;

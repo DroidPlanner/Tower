@@ -234,4 +234,22 @@ public class GeoTools {
 				+ (r * (end1.latitude - start1.latitude));
 		return (new LatLng(latitude, longitude));
 	}
+
+	/**
+	 * Experimental Function, needs testing! Calculate the area of the polygon
+	 * 
+	 * @return area in m�
+	 */
+	// TODO test and fix this function
+	public static  Double getArea(Polygon poly) {
+		double sum = 0.0;
+		for (int i = 0; i < poly.getWaypoints().size() - 1; i++) {
+			sum = sum
+					+ (latToMeters(poly.getWaypoints().get(i).longitude) * latToMeters(poly.getWaypoints()
+							.get(i + 1).latitude))
+					- (latToMeters(poly.getWaypoints().get(i).latitude) * latToMeters(poly.getWaypoints()
+							.get(i + 1).longitude));
+		}
+		return Math.abs(0.5 * sum);
+	}
 }
