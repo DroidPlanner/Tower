@@ -19,7 +19,7 @@ import com.droidplanner.dialogs.OpenMissionDialog;
 import com.droidplanner.dialogs.PolygonDialog;
 import com.droidplanner.fragments.PlanningMapFragment;
 import com.droidplanner.fragments.PlanningMapFragment.OnMapInteractionListener;
-import com.droidplanner.helpers.Polygon;
+import com.droidplanner.polygon.Polygon;
 import com.droidplanner.waypoints.MissionReader;
 import com.droidplanner.waypoints.MissionWriter;
 import com.google.android.gms.maps.model.LatLng;
