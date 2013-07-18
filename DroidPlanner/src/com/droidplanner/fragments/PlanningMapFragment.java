@@ -45,7 +45,9 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 	
 	private OnMapInteractionListener mListener;
 
-	public modes mode;
+	public modes mode = modes.MISSION;
+
+	public Polygon polygon;
 
 	static final String homeMarkerTitle = "Home";
 
