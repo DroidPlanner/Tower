@@ -20,8 +20,8 @@ public abstract class OpenMissionDialog extends OpenFileDialog {
 
 	@Override
 	protected void onDataLoaded(FileReader reader) {
-		drone.mission.home = ((MissionReader)reader).getHome();
-		drone.mission.waypoints = ((MissionReader)reader).getWaypoints();
+		drone.mission.setHome(((MissionReader)reader).getHome());
+		drone.mission.setWaypoints(((MissionReader)reader).getWaypoints());
 		waypointFileLoaded();				
 	}
 }

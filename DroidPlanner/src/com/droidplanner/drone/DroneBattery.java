@@ -1,9 +1,9 @@
 package com.droidplanner.drone;
 
 public class DroneBattery extends DroneVariable {
-	public double battVolt = -1;
-	public double battRemain = -1;
-	public double battCurrent = -1;
+	private double battVolt = -1;
+	private double battRemain = -1;
+	private double battCurrent = -1;
 
 	public DroneBattery(Drone myDrone) {
 		super(myDrone);

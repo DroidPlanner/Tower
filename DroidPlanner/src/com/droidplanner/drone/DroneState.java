@@ -3,9 +3,9 @@ package com.droidplanner.drone;
 import com.MAVLink.Messages.ApmModes;
 
 public class DroneState extends DroneVariable {
-	public boolean failsafe = false;
-	public boolean armed = false;
-	public ApmModes mode = ApmModes.UNKNOWN;
+	private boolean failsafe = false;
+	private boolean armed = false;
+	private ApmModes mode = ApmModes.UNKNOWN;
 
 	public DroneState(Drone myDrone) {
 		super(myDrone);

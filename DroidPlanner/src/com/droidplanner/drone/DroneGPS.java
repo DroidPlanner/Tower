@@ -3,10 +3,10 @@ package com.droidplanner.drone;
 import com.google.android.gms.maps.model.LatLng;
 
 public class DroneGPS extends DroneVariable {
-	public double gps_eph= -1;
-	public int satCount = -1;
-	public int fixType= -1;
-	public LatLng position;
+	private double gps_eph= -1;
+	private int satCount = -1;
+	private int fixType= -1;
+	private LatLng position;
 
 	public DroneGPS(Drone myDrone) {
 		super(myDrone);

@@ -74,14 +74,14 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 	private void openMission(String path) {
 		MissionReader missionReader = new MissionReader();
 		if(missionReader.openMission(path)){
-			drone.mission.home = missionReader.getHome();
-			drone.mission.waypoints = missionReader.getWaypoints();
+			drone.mission.setHome(missionReader.getHome());
+			drone.mission.setWaypoints(missionReader.getWaypoints());
 		}
 		
 	}
 
 	private boolean writeMission() {
-		MissionWriter missionWriter = new MissionWriter(drone.mission.home, drone.mission.waypoints);
+		MissionWriter missionWriter = new MissionWriter(drone.mission.getHome(), drone.mission.getWaypoints());
 		return missionWriter.saveWaypoints();
 	}
 

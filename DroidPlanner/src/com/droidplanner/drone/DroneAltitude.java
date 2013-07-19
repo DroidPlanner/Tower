@@ -1,8 +1,8 @@
 package com.droidplanner.drone;
 
 public class DroneAltitude extends DroneVariable {
-	public double altitude = 0;
-	public double targetAltitude = 0;
+	private double altitude = 0;
+	private double targetAltitude = 0;
 
 	public DroneAltitude(Drone myDrone) {
 		super(myDrone);

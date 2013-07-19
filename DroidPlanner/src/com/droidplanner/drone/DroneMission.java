@@ -9,11 +9,11 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class DroneMission extends DroneVariable {
 
-	public waypoint home = new waypoint(0.0, 0.0, 0.0);
-	public List<waypoint> waypoints = new ArrayList<waypoint>();
-	public Double defaultAlt = 50.0;
-	public int wpno = -1;
-	public double disttowp = 0;
+	private waypoint home = new waypoint(0.0, 0.0, 0.0);
+	private List<waypoint> waypoints = new ArrayList<waypoint>();
+	private Double defaultAlt = 50.0;
+	private int wpno = -1;
+	private double disttowp = 0;
 
 	public DroneMission(Drone myDrone) {
 		super(myDrone);
