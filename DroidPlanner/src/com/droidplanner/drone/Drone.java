@@ -21,7 +21,6 @@ public class Drone {
 	TTS tts;
 
 	public Drone(TTS tts) {
-		super();
 		this.tts = tts;
 	}
 
