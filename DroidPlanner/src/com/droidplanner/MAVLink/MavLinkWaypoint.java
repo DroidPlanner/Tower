@@ -7,6 +7,8 @@ import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_request;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_request_list;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_set_current;
+import com.MAVLink.Messages.enums.MAV_FRAME;
+import com.MAVLink.Messages.enums.MAV_MISSION_RESULT;
 import com.droidplanner.service.MAVLinkClient;
 
 public class MavLinkWaypoint {
@@ -15,7 +17,7 @@ public class MavLinkWaypoint {
 		msg_mission_ack msg = new msg_mission_ack();
 		msg.target_system = 1;
 		msg.target_component = 1;
-		msg.type = 0; // TODO use MAV_MISSION_RESULT constant
+		msg.type = MAV_MISSION_RESULT.MAV_MISSION_ACCEPTED; 
 		MavClient.sendMavPacket(msg.pack());
 
 	}
@@ -41,7 +43,7 @@ public class MavLinkWaypoint {
 		msg.seq = (short) index;
 		msg.current = (byte) ((index == 0) ? 1 : 0); // TODO use correct
 														// parameter for HOME
-		msg.frame = 0; // TODO use correct parameter
+		msg.frame = MAV_FRAME.MAV_FRAME_GLOBAL; 
 		msg.command = 16; // TODO use correct parameter
 		msg.param1 = 0; // TODO use correct parameter
 		msg.param2 = 0; // TODO use correct parameter

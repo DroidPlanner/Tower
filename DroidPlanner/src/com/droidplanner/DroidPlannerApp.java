@@ -38,8 +38,8 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 		tts = new TTS(this);
 		MAVClient = new MAVLinkClient(this,this);
 		drone = new Drone(tts,MAVClient,getApplicationContext());
-		followMe = new FollowMe(MAVClient, this,drone);
-		recordMe = new RecordMe(MAVClient, this,drone);
+		followMe = new FollowMe(this,drone);
+		recordMe = new RecordMe(this,drone);
 		mavLinkMsgHandler = new com.droidplanner.MAVLink.MavLinkMsgHandler(drone);
 	}
 	
