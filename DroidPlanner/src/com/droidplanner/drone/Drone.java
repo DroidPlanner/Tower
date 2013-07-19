@@ -30,14 +30,13 @@ public class Drone {
 	private MAVLinkClient MavClient;
 	public ParameterManager parameterMananger;
 	public CalibrationSetup calibrationSetup;
-	protected Context context;
-
+	public Context context;
 	public Drone(TTS tts, MAVLinkClient MAVClient, DroidPlannerApp droidPlannerApp,Context context) {
 		this.tts = tts;
 		this.MavClient = MAVClient;
 		this.context = context;
 		waypointMananger = new WaypointMananger(this.MavClient,mission);
-		parameterMananger = new ParameterManager(MAVClient, droidPlannerApp);
+		parameterMananger = new ParameterManager(this,MAVClient);
 		calibrationSetup = new CalibrationSetup(MAVClient);
 	}
 

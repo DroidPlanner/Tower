@@ -9,19 +9,17 @@ import com.droidplanner.drone.Drone;
 import com.droidplanner.helpers.FollowMe;
 import com.droidplanner.helpers.RecordMe;
 import com.droidplanner.helpers.TTS;
-import com.droidplanner.parameters.Parameter;
 import com.droidplanner.parameters.ParameterManager.OnParameterManagerListner;
 import com.droidplanner.service.MAVLinkClient;
 import com.droidplanner.service.MAVLinkClient.OnMavlinkClientListner;
 
-public class DroidPlannerApp extends Application implements OnMavlinkClientListner, OnParameterManagerListner {
+public class DroidPlannerApp extends Application implements OnMavlinkClientListner {
 	public Drone drone;
 	public MAVLinkClient MAVClient;
 	private MavLinkMsgHandler mavLinkMsgHandler;
 	public FollowMe followMe;
 	public RecordMe recordMe;
 	public ConnectionStateListner conectionListner;
-	public OnParameterManagerListner parameterListner; 
 	private TTS tts;
 	
 	public interface OnWaypointReceivedListner{
@@ -64,20 +62,6 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 		tts.speak("Connected");
 	}
 
-	@Override
-	public void onParametersReceived() {
-		if (parameterListner != null) {
-			parameterListner.onParametersReceived();			
-		}
-	}
-	
-	@Override
-	public void onParameterReceived(Parameter parameter) {
-		if (parameterListner != null) {
-			parameterListner.onParameterReceived(parameter);			
-		}
-	}
-	
 	public void setConectionStateListner(ConnectionStateListner listner) {
 		conectionListner = listner;		
 	}
@@ -87,7 +71,7 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 	}
 	
 	public void setOnParametersChangedListner(OnParameterManagerListner listner){
-		parameterListner = listner;
+		drone.parameterMananger.parameterListner = listner;
 	}
 
 

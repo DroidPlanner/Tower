@@ -3,10 +3,14 @@ package com.droidplanner.parameters;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.widget.Toast;
+
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_param_request_list;
 import com.MAVLink.Messages.ardupilotmega.msg_param_set;
 import com.MAVLink.Messages.ardupilotmega.msg_param_value;
+import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.DroneVariable;
 import com.droidplanner.service.MAVLinkClient;
 
 /**
@@ -17,16 +21,14 @@ import com.droidplanner.service.MAVLinkClient;
  * MAV Message.
  * 
  */
-public class ParameterManager {
+public class ParameterManager extends DroneVariable{
 	
 
 	public interface OnParameterManagerListner {
-		public abstract void onParametersReceived();
 		public abstract void onParameterReceived(Parameter parameter);
 	}
 
 	MAVLinkClient MAV;
-	private OnParameterManagerListner listner;
 	private List<Parameter> parameters;
 
 	enum waypointStates {
@@ -34,11 +36,11 @@ public class ParameterManager {
 	}
 
 	waypointStates state = waypointStates.IDLE;
+	public OnParameterManagerListner parameterListner;
 
-	public ParameterManager(MAVLinkClient MAV,
-			OnParameterManagerListner listner) {
+	public ParameterManager(Drone myDrone,MAVLinkClient MAV) {
+		super(myDrone);
 		this.MAV = MAV;
-		this.listner = listner;
 		parameters = new ArrayList<Parameter>();
 	}
 
@@ -71,9 +73,9 @@ public class ParameterManager {
 	private void processReceivedParam(msg_param_value m_value) {
 		Parameter param = new Parameter(m_value);
 		parameters.add(param);
-		listner.onParameterReceived(param);
+		parameterListner.onParameterReceived(param);
 		if (m_value.param_index == m_value.param_count - 1) {
-			listner.onParametersReceived();
+			Toast.makeText(myDrone.context, "Parameters Received", Toast.LENGTH_LONG).show();
 		}
 	}
 

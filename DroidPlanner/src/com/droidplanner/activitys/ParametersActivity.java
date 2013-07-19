@@ -88,11 +88,6 @@ public class ParametersActivity extends SuperActivity implements
 	}		
 	
 	@Override
-	public void onParametersReceived() {
-		Toast.makeText(this, "Parameters Received", Toast.LENGTH_LONG).show();
-	}
-
-	@Override
 	public void onParameterReceived(Parameter parameter) {
 		tableFragment.refreshRowParameter(parameter);
 	}
