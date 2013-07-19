@@ -21,7 +21,7 @@ public class Drone {
 	public DroneOrientation orientation = new DroneOrientation(this);
 	public DroneParameters parameterMananger;
 	public WaypointMananger waypointMananger;
-	public DroneCalibration calibrationSetup;
+	public DroneCalibration calibrationSetup = new DroneCalibration(this);
 
 	TTS tts;
 	protected MAVLinkClient MavClient;
@@ -38,7 +38,6 @@ public class Drone {
 		this.context = context;
 		waypointMananger = new WaypointMananger(this.MavClient, mission);
 		parameterMananger = new DroneParameters(this, MAVClient);
-		calibrationSetup = new DroneCalibration(MAVClient);
 	}
 
 	public void setHudListner(HudUpdatedListner listner) {

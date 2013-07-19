@@ -8,28 +8,26 @@ import android.content.DialogInterface.OnClickListener;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_statustext;
 import com.droidplanner.MAVLink.MavLinkCalibration;
-import com.droidplanner.service.MAVLinkClient;
 
-public class DroneCalibration implements OnClickListener {
-	private MAVLinkClient MAV;
+public class DroneCalibration extends DroneVariable implements OnClickListener {
 	private Context context;
 
 	private int count;
 
-	public DroneCalibration(MAVLinkClient MAVClient) {
-		this.MAV = MAVClient;
+	public DroneCalibration(Drone drone) {
+		super(drone);
 	}
 
 	public void startCalibration(Context context) {
 		this.context = context;
-		MavLinkCalibration.sendStartCalibrationMessage(MAV);
+		MavLinkCalibration.sendStartCalibrationMessage(myDrone.MavClient);
 		count = 0;
 	}
 
 	@Override
 	public void onClick(DialogInterface dialog, int id) {
 		count++;
-		MavLinkCalibration.sendCalibrationAckMessage(count, MAV);
+		MavLinkCalibration.sendCalibrationAckMessage(count, myDrone.MavClient);
 		if (count >= 6) {
 			createDialog("Calibration Done!");
 			count = 0;
