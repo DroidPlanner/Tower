@@ -11,11 +11,9 @@ import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.droidplanner.DroidPlannerApp.OnWaypointReceivedListner;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneVariable;
-import com.droidplanner.waypoints.WaypointMananger.OnWaypointManagerListner;
 import com.google.android.gms.maps.model.LatLng;
 
-public class Mission extends DroneVariable implements
-		OnWaypointManagerListner {
+public class Mission extends DroneVariable {
 
 	private waypoint home = new waypoint(0.0, 0.0, 0.0);
 	private List<waypoint> waypoints = new ArrayList<waypoint>();
@@ -130,7 +128,6 @@ public class Mission extends DroneVariable implements
 		waypoints.get(number).coord = coord;
 	}
 
-	@Override
 	public void onWaypointsReceived(List<waypoint> waypoints) {
 		if (waypoints != null) {
 			Toast.makeText(myDrone.context,"Waypoints received from Drone", Toast.LENGTH_SHORT).show();
@@ -144,7 +141,6 @@ public class Mission extends DroneVariable implements
 
 	}
 
-	@Override
 	public void onWriteWaypoints(msg_mission_ack msg) {
 		Toast.makeText(myDrone.context, "Waypoints sent", Toast.LENGTH_SHORT).show();
 		myDrone.tts.speak("Waypoints saved to Drone");

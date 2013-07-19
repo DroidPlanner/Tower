@@ -28,9 +28,9 @@ public class Drone {
 	public Mission mission = new Mission(this);
 	public Altitude altitude = new Altitude(this);
 	public Orientation orientation = new Orientation(this);
-	public Parameters parameters;
-	public WaypointMananger waypointMananger;
+	public Parameters parameters = new Parameters(this);
 	public Calibration calibrationSetup = new Calibration(this);
+	public WaypointMananger waypointMananger = new WaypointMananger(this);
 
 	public TTS tts;
 	public MAVLinkClient MavClient;
@@ -45,8 +45,6 @@ public class Drone {
 		this.tts = tts;
 		this.MavClient = mavClient;
 		this.context = context;
-		waypointMananger = new WaypointMananger(this.MavClient, mission);
-		parameters = new Parameters(this);
 	}
 
 	public void setHudListner(HudUpdatedListner listner) {
