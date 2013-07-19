@@ -11,8 +11,7 @@ import com.MAVLink.Messages.ardupilotmega.msg_mission_current;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item_reached;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_request;
-import com.MAVLink.Messages.ardupilotmega.msg_mission_request_list;
-import com.MAVLink.Messages.ardupilotmega.msg_mission_set_current;
+import com.droidplanner.MAVLink.MavLinkWaypoint;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneVariable;
 
@@ -32,7 +31,7 @@ public class WaypointMananger extends DroneVariable{
 	 */
 	public void getWaypoints() {
 			state = waypointStates.READ_REQUEST;
-			requestWaypointsList();
+			MavLinkWaypoint.requestWaypointsList(myDrone.MavClient);
 	}
 
 	/**
@@ -49,7 +48,7 @@ public class WaypointMananger extends DroneVariable{
 			waypoints.addAll(data);
 			writeIndex = 0;
 			state =waypointStates.WRITTING_WP;
-			sendWaypointCount();
+			MavLinkWaypoint.sendWaypointCount(myDrone.MavClient, waypoints.size());
 		}
 	}
 
@@ -63,7 +62,7 @@ public class WaypointMananger extends DroneVariable{
 	 */
 	public void setCurrentWaypoint(int i) {
 		if ((waypoints != null)) {
-			sendSetCurrentWaypoint((short )i);
+			MavLinkWaypoint.sendSetCurrentWaypoint(myDrone.MavClient, (short )i);
 		}
 	}
 
@@ -121,7 +120,9 @@ public class WaypointMananger extends DroneVariable{
 			break;
 		case READ_REQUEST:
 			if (msg.msgid == msg_mission_count.MAVLINK_MSG_ID_MISSION_COUNT) {
-				requestFirstWaypoint(msg);
+				waypointCount = ((msg_mission_count) msg).count;
+				waypoints.clear();
+				MavLinkWaypoint.requestWayPoint(myDrone.MavClient,waypoints.size());
 				state = waypointStates.READING_WP;
 				return true;
 			}
@@ -130,10 +131,10 @@ public class WaypointMananger extends DroneVariable{
 			if (msg.msgid == msg_mission_item.MAVLINK_MSG_ID_MISSION_ITEM) {
 				processReceivedWaypoint((msg_mission_item) msg);
 				if (waypoints.size() < waypointCount) {
-					requestWayPoint();
+					MavLinkWaypoint.requestWayPoint(myDrone.MavClient,waypoints.size());
 				} else {
 					state = waypointStates.IDLE;
-					sendAck();
+					MavLinkWaypoint.sendAck(myDrone.MavClient);
 					 myDrone.mission.onWaypointsReceived(waypoints);
 				}
 				return true;
@@ -141,7 +142,8 @@ public class WaypointMananger extends DroneVariable{
 			break;
 		case WRITTING_WP:
 			if (msg.msgid == msg_mission_request.MAVLINK_MSG_ID_MISSION_REQUEST) {
-				sendWaypoint(writeIndex++);
+				MavLinkWaypoint.sendWaypoint(myDrone.MavClient, writeIndex, waypoints.get(writeIndex));
+				writeIndex++;
 				if (writeIndex >= waypoints.size()) {
 					state = waypointStates.WAITING_WRITE_ACK;
 				}
@@ -168,76 +170,10 @@ public class WaypointMananger extends DroneVariable{
 		return false;
 	}
 
-	private void requestFirstWaypoint(MAVLinkMessage msg) {
-		waypointCount = ((msg_mission_count) msg).count;
-		waypoints.clear();
-		requestWayPoint();
-	}
-
 	private void processReceivedWaypoint(msg_mission_item msg) {
 		Double Lat = (double) msg.x;
 		Double Lng = (double) msg.y;
 		Double h = (double) msg.z;
 		waypoints.add(new waypoint(Lat, Lng, h));
-	}
-
-	private void sendAck() {
-		msg_mission_ack msg = new msg_mission_ack();
-		msg.target_system = 1;
-		msg.target_component = 1;
-		msg.type = 0; // TODO use MAV_MISSION_RESULT constant
-		myDrone.MavClient.sendMavPacket(msg.pack());
-
-	}
-
-	private void requestWaypointsList() {
-		msg_mission_request_list msg = new msg_mission_request_list();
-		msg.target_system = 1;
-		msg.target_component = 1;
-		myDrone.MavClient.sendMavPacket(msg.pack());
-	}
-
-	private void requestWayPoint() {
-		msg_mission_request msg = new msg_mission_request();
-		msg.target_system = 1;
-		msg.target_component = 1;
-		msg.seq = (short) waypoints.size();
-		myDrone.MavClient.sendMavPacket(msg.pack());
-	}
-
-	private void sendWaypointCount() {
-		msg_mission_count msg = new msg_mission_count();
-		msg.target_system = 1;
-		msg.target_component = 1;
-		msg.count = (short) waypoints.size();
-		myDrone.MavClient.sendMavPacket(msg.pack());
-	}
-
-	private void sendWaypoint(int index) {
-		msg_mission_item msg = new msg_mission_item();
-		msg.seq = (short) index;
-		msg.current = (byte) ((index == 0) ? 1 : 0); // TODO use correct
-														// parameter for HOME
-		msg.frame = 0; // TODO use correct parameter
-		msg.command = 16; // TODO use correct parameter
-		msg.param1 = 0; // TODO use correct parameter
-		msg.param2 = 0; // TODO use correct parameter
-		msg.param3 = 0; // TODO use correct parameter
-		msg.param4 = 0; // TODO use correct parameter
-		msg.x = (float) waypoints.get(index).coord.latitude;
-		msg.y = (float) waypoints.get(index).coord.longitude;
-		msg.z = waypoints.get(index).Height.floatValue();
-		msg.autocontinue = 1; // TODO use correct parameter
-		msg.target_system = 1;
-		msg.target_component = 1;
-		myDrone.MavClient.sendMavPacket(msg.pack());
-	}
-
-	private void sendSetCurrentWaypoint(short i) {
-		msg_mission_set_current msg = new msg_mission_set_current();
-		msg.target_system = 1;
-		msg.target_component = 1;
-		msg.seq = i;
-		myDrone.MavClient.sendMavPacket(msg.pack());
 	}
 }
