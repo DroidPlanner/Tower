@@ -10,7 +10,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class HomeMarker {
-	public Marker homeMarker;
+	private Marker homeMarker;
 	private GoogleMap myMap;
 
 	public HomeMarker(GoogleMap myMap) {
@@ -45,5 +45,9 @@ public class HomeMarker {
 
 	public void invalidate() {
 		homeMarker = null;		
+	}
+
+	public boolean isHomeMarker(Marker marker) {
+		return homeMarker.equals(marker);
 	}
 }

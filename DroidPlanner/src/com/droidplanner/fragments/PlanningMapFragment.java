@@ -119,7 +119,7 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 	}
 
 	private void checkForHomeMarker(Marker marker) {
-		if(homeMarker.homeMarker.equals(marker)){
+		if(homeMarker.isHomeMarker(marker)){
 			mListener.onMoveHome(marker.getPosition());
 		}
 	}
