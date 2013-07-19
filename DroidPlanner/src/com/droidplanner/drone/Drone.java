@@ -6,7 +6,6 @@ import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.drone.DroneInterfaces.DroneTypeListner;
 import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
 import com.droidplanner.drone.DroneInterfaces.MapUpdatedListner;
-import com.droidplanner.helpers.CalibrationSetup;
 import com.droidplanner.helpers.TTS;
 import com.droidplanner.service.MAVLinkClient;
 import com.droidplanner.waypoints.WaypointMananger;
@@ -22,7 +21,7 @@ public class Drone {
 	public DroneOrientation orientation = new DroneOrientation(this);
 	public DroneParameters parameterMananger;
 	public WaypointMananger waypointMananger;
-	public CalibrationSetup calibrationSetup;
+	public DroneCalibration calibrationSetup;
 
 	TTS tts;
 	protected MAVLinkClient MavClient;
@@ -39,7 +38,7 @@ public class Drone {
 		this.context = context;
 		waypointMananger = new WaypointMananger(this.MavClient, mission);
 		parameterMananger = new DroneParameters(this, MAVClient);
-		calibrationSetup = new CalibrationSetup(MAVClient);
+		calibrationSetup = new DroneCalibration(MAVClient);
 	}
 
 	public void setHudListner(HudUpdatedListner listner) {

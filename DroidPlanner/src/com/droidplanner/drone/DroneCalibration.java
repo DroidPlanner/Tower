@@ -1,4 +1,4 @@
-package com.droidplanner.helpers;
+package com.droidplanner.drone;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -10,13 +10,13 @@ import com.MAVLink.Messages.ardupilotmega.msg_statustext;
 import com.droidplanner.MAVLink.MavLinkCalibration;
 import com.droidplanner.service.MAVLinkClient;
 
-public class CalibrationSetup implements OnClickListener {
+public class DroneCalibration implements OnClickListener {
 	private MAVLinkClient MAV;
 	private Context context;
 
 	private int count;
 
-	public CalibrationSetup(MAVLinkClient MAVClient) {
+	public DroneCalibration(MAVLinkClient MAVClient) {
 		this.MAV = MAVClient;
 	}
 
