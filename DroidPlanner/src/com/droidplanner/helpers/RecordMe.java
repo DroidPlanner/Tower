@@ -13,8 +13,8 @@ import android.widget.Toast;
 import com.MAVLink.waypoint;
 import com.droidplanner.R;
 import com.droidplanner.drone.Drone;
+import com.droidplanner.file.IO.MissionWriter;
 import com.droidplanner.service.MAVLinkClient;
-import com.droidplanner.waypoints.MissionWriter;
 
 public class RecordMe implements LocationListener {
 	private static final long MIN_TIME_MS = 2000;

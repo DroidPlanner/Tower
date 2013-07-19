@@ -1,4 +1,4 @@
-package com.droidplanner.waypoints;
+package com.droidplanner.file.IO;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -9,9 +9,9 @@ import java.util.List;
 
 import com.MAVLink.waypoint;
 import com.droidplanner.dialogs.OpenFileDialog.FileReader;
-import com.droidplanner.helpers.file.DirectoryPath;
-import com.droidplanner.helpers.file.FileList;
-import com.droidplanner.helpers.file.FileManager;
+import com.droidplanner.file.DirectoryPath;
+import com.droidplanner.file.FileList;
+import com.droidplanner.file.FileManager;
 
 public class MissionReader implements FileReader {
 	private waypoint home;

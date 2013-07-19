@@ -17,12 +17,12 @@ import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
 import com.droidplanner.dialogs.OpenFileDialog;
 import com.droidplanner.dialogs.OpenMissionDialog;
 import com.droidplanner.dialogs.PolygonDialog;
+import com.droidplanner.file.IO.MissionReader;
+import com.droidplanner.file.IO.MissionWriter;
 import com.droidplanner.fragments.PlanningMapFragment;
 import com.droidplanner.fragments.PlanningMapFragment.OnMapInteractionListener;
 import com.droidplanner.fragments.PlanningMapFragment.modes;
 import com.droidplanner.polygon.Polygon;
-import com.droidplanner.waypoints.MissionReader;
-import com.droidplanner.waypoints.MissionWriter;
 import com.google.android.gms.maps.model.LatLng;
 
 public class PlanningActivity extends SuperActivity implements OnMapInteractionListener, OnWaypointReceivedListner, OnAltitudeChangedListner{

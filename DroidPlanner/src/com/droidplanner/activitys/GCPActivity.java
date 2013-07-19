@@ -12,9 +12,9 @@ import android.widget.Toast;
 import com.droidplanner.R;
 import com.droidplanner.dialogs.OpenFileDialog;
 import com.droidplanner.dialogs.OpenGcpFileDialog;
+import com.droidplanner.file.IO.GcpReader;
 import com.droidplanner.fragments.GcpMapFragment;
 import com.droidplanner.fragments.GcpMapFragment.OnGcpClickListner;
-import com.droidplanner.gcp.KmlParser;
 import com.droidplanner.gcp.gcp;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -99,7 +99,7 @@ public class GCPActivity extends SuperActivity implements OnGcpClickListner {
 		if (Intent.ACTION_VIEW.equals(action) && type != null) {
 			Toast.makeText(this, intent.getData().getPath(), Toast.LENGTH_LONG)
 					.show();
-			KmlParser parser = (new KmlParser());
+			GcpReader parser = (new GcpReader());
 			boolean fileIsOpen = parser.openGCPFile(intent.getData().getPath());
 			if (fileIsOpen) {
 				putListToGcp(parser.gcpList);
