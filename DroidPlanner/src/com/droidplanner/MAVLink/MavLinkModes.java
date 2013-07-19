@@ -4,6 +4,7 @@ import com.MAVLink.waypoint;
 import com.MAVLink.Messages.ApmModes;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.ardupilotmega.msg_set_mode;
+import com.MAVLink.Messages.enums.MAV_FRAME;
 import com.droidplanner.service.MAVLinkClient;
 
 public class MavLinkModes {
@@ -11,7 +12,7 @@ public class MavLinkModes {
 		msg_mission_item msg = new msg_mission_item();
 		msg.seq = 0;
 		msg.current = 2;	//TODO use guided mode enum
-		msg.frame = 0; // TODO use correct parameter
+		msg.frame = MAV_FRAME.MAV_FRAME_GLOBAL;
 		msg.command = 16; // TODO use correct parameter
 		msg.param1 = 0; // TODO use correct parameter
 		msg.param2 = 0; // TODO use correct parameter
