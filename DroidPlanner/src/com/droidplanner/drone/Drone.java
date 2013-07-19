@@ -15,9 +15,9 @@ import com.droidplanner.drone.variables.Parameters;
 import com.droidplanner.drone.variables.Speed;
 import com.droidplanner.drone.variables.State;
 import com.droidplanner.drone.variables.Type;
+import com.droidplanner.drone.variables.WaypointMananger;
 import com.droidplanner.helpers.TTS;
 import com.droidplanner.service.MAVLinkClient;
-import com.droidplanner.waypoints.WaypointMananger;
 
 public class Drone {
 	public Type type = new Type(this);
