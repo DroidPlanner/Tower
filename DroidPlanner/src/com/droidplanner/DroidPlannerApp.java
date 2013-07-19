@@ -6,10 +6,10 @@ import com.MAVLink.Messages.MAVLinkMessage;
 import com.droidplanner.MAVLink.MavLinkMsgHandler;
 import com.droidplanner.MAVLink.MavLinkStreamRates;
 import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.DroneParameters.OnParameterManagerListner;
 import com.droidplanner.helpers.FollowMe;
 import com.droidplanner.helpers.RecordMe;
 import com.droidplanner.helpers.TTS;
-import com.droidplanner.parameters.ParameterManager.OnParameterManagerListner;
 import com.droidplanner.service.MAVLinkClient;
 import com.droidplanner.service.MAVLinkClient.OnMavlinkClientListner;
 
