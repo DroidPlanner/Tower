@@ -24,11 +24,6 @@ public class DroneParameters extends DroneVariable {
 	MAVLinkClient MAV;
 	private List<Parameter> parameters;
 
-	enum waypointStates {
-		IDLE
-	}
-
-	waypointStates state = waypointStates.IDLE;
 	public DroneInterfaces.OnParameterManagerListner parameterListner;
 
 	public DroneParameters(Drone myDrone, MAVLinkClient MAV) {
@@ -50,12 +45,6 @@ public class DroneParameters extends DroneVariable {
 	 * @return Returns true if the message has been processed
 	 */
 	public boolean processMessage(MAVLinkMessage msg) {
-		switch (state) {
-		default:
-		case IDLE:
-			break;
-		}
-
 		if (msg.msgid == msg_param_value.MAVLINK_MSG_ID_PARAM_VALUE) {
 			processReceivedParam((msg_param_value) msg);
 			return true;
