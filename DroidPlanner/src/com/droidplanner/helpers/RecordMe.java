@@ -14,7 +14,6 @@ import com.MAVLink.waypoint;
 import com.droidplanner.R;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.file.IO.MissionWriter;
-import com.droidplanner.service.MAVLinkClient;
 
 public class RecordMe implements LocationListener {
 	private static final long MIN_TIME_MS = 2000;
@@ -26,7 +25,7 @@ public class RecordMe implements LocationListener {
 	private boolean recordMeEnabled = false;
 	private List<waypoint> waypoints = new ArrayList<waypoint>();
 
-	public RecordMe(MAVLinkClient MAVClient, Context context, Drone drone) {
+	public RecordMe(Context context, Drone drone) {
 		this.context = context;
 		this.drone = drone;
 		this.locationManager = (LocationManager) context
