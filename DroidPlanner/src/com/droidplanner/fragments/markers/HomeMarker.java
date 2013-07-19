@@ -42,4 +42,8 @@ public class HomeMarker {
 				.icon(BitmapDescriptorFactory
 						.fromResource(drawable.ic_menu_home)).title("Home"));
 	}
+
+	public void invalidate() {
+		homeMarker = null;		
+	}
 }
