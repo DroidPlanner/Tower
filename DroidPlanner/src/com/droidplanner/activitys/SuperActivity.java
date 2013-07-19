@@ -19,9 +19,9 @@ import android.widget.SpinnerAdapter;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.DroidPlannerApp.ConnectionStateListner;
 import com.droidplanner.R;
-import com.droidplanner.MAVLink.Drone;
 import com.droidplanner.dialogs.AltitudeDialog;
 import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
+import com.droidplanner.drone.Drone;
 
 public abstract class SuperActivity extends Activity implements
 		OnNavigationListener, ConnectionStateListner, OnAltitudeChangedListner {
@@ -198,11 +198,11 @@ public abstract class SuperActivity extends Activity implements
 
 	protected void changeDefaultAlt() {
 		AltitudeDialog dialog = new AltitudeDialog(this);
-		dialog.build(drone.getDefaultAlt(), this);
+		dialog.build(drone.mission.getDefaultAlt(), this);
 	}
 	
 	@Override
 	public void onAltitudeChanged(double newAltitude) {
-		drone.setDefaultAlt(newAltitude);
+		drone.mission.setDefaultAlt(newAltitude);
 	}
 }

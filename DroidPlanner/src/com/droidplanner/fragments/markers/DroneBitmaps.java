@@ -13,7 +13,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 public class DroneBitmaps {
 
 	public static final int DRONE_MIN_ROTATION = 5;
-	public BitmapDescriptor[] droneBitmaps;
+	private BitmapDescriptor[] droneBitmaps;
 	private Resources resources;
 	public DroneBitmaps(Resources resources,int type) {
 		this.resources = resources;

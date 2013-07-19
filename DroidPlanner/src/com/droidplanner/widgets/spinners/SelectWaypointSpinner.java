@@ -6,7 +6,7 @@ import android.content.Context;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import com.droidplanner.MAVLink.Drone;
+import com.droidplanner.drone.Drone;
 import com.droidplanner.widgets.spinners.SpinnerSelfSelect.OnSpinnerItemSelectedListener;
 
 public class SelectWaypointSpinner extends SpinnerSelfSelect implements OnSpinnerItemSelectedListener {
@@ -38,7 +38,7 @@ public class SelectWaypointSpinner extends SpinnerSelfSelect implements OnSpinne
 	public void updateWpSpinner(Drone drone) {
 		wpSpinnerAdapter.clear();
 		if (drone != null) {
-			if (drone.waypoints.size() > 0) {
+			if (drone.mission.getWaypoints().size() > 0) {
 				updateWpSpinnerWithList(drone);
 				return;
 			}
@@ -52,7 +52,7 @@ public class SelectWaypointSpinner extends SpinnerSelfSelect implements OnSpinne
 	}
 
 	private void updateWpSpinnerWithList(Drone drone) {
-		for (int i = 0; i < drone.waypoints.size(); i++) {
+		for (int i = 0; i < drone.mission.getWaypoints().size(); i++) {
 			wpSpinnerAdapter.add("WP " + Integer.toString(i + 1));
 		}
 	}

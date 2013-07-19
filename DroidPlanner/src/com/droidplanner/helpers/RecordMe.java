@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.MAVLink.waypoint;
 import com.droidplanner.R;
-import com.droidplanner.MAVLink.Drone;
+import com.droidplanner.drone.Drone;
 import com.droidplanner.service.MAVLinkClient;
 import com.droidplanner.waypoints.MissionWriter;
 
@@ -88,7 +88,7 @@ public class RecordMe implements LocationListener {
 	public void onLocationChanged(Location location) {
 		// TODO find a better way to do the altitude
 		waypoints.add(new waypoint(location.getLatitude(), location
-				.getLongitude(), drone.defaultAlt));
+				.getLongitude(), drone.mission.getDefaultAlt()));
 	}
 
 	@Override
