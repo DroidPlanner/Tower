@@ -25,4 +25,15 @@ public class DroneSpeed extends DroneVariable {
 	public double getTargetSpeed() {
 		return targetSpeed;
 	}
+	
+	public void setSpeedError(double aspd_error) {
+		targetSpeed = aspd_error + airSpeed;
+	}
+	
+	public void setGroundAndAirSpeeds(double groundSpeed, double airSpeed,
+			double climb) {
+		this.groundSpeed = groundSpeed;
+		this.airSpeed = airSpeed;
+		this.verticalSpeed = climb;
+	}
 }

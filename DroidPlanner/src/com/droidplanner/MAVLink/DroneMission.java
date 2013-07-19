@@ -34,6 +34,10 @@ public class DroneMission extends DroneVariable {
 	public waypoint getHome() {
 		return home;
 	}
+	
+	public void setDistanceToWp(double disttowp) {
+		this.disttowp = disttowp;
+	}
 
 	public waypoint getLastWaypoint() {
 		if (waypoints.size() > 0)
