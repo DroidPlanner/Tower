@@ -1,4 +1,4 @@
-package com.droidplanner.parameters;
+package com.droidplanner.file.IO;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -7,9 +7,10 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.droidplanner.helpers.file.DirectoryPath;
-import com.droidplanner.helpers.file.FileList;
-import com.droidplanner.helpers.file.FileManager;
+import com.droidplanner.file.DirectoryPath;
+import com.droidplanner.file.FileList;
+import com.droidplanner.file.FileManager;
+import com.droidplanner.parameters.Parameter;
 
 public class ParameterReader implements com.droidplanner.dialogs.OpenFileDialog.FileReader {
 	private List<Parameter> parameters;

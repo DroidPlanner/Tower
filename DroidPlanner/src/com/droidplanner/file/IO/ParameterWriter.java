@@ -1,12 +1,13 @@
-package com.droidplanner.parameters;
+package com.droidplanner.file.IO;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import com.droidplanner.helpers.file.FileManager;
-import com.droidplanner.helpers.file.FileStream;
+import com.droidplanner.file.FileManager;
+import com.droidplanner.file.FileStream;
+import com.droidplanner.parameters.Parameter;
 
 public class ParameterWriter {
 	private List<Parameter> parameterList;

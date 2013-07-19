@@ -1,4 +1,4 @@
-package com.droidplanner.helpers.file;
+package com.droidplanner.file;
 
 import java.io.File;
 import java.io.FilenameFilter;

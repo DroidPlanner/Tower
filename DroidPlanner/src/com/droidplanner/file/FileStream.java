@@ -1,4 +1,4 @@
-package com.droidplanner.helpers.file;
+package com.droidplanner.file;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
