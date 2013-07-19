@@ -1,4 +1,4 @@
-package com.droidplanner.MAVLink;
+package com.droidplanner.drone;
 
 public class DroneBattery extends DroneVariable {
 	public double battVolt = -1;

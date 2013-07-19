@@ -16,8 +16,8 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.MAVLink.Messages.ApmModes;
-import com.droidplanner.MAVLink.Drone;
-import com.droidplanner.MAVLink.Drone.HudUpdatedListner;
+import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.Drone.HudUpdatedListner;
 
 /**
  * Widget for a HUD Originally copied from http://code.google.com/p/copter-gcs/

@@ -1,6 +1,6 @@
 package com.droidplanner.dialogs;
 
-import com.droidplanner.MAVLink.Drone;
+import com.droidplanner.drone.Drone;
 import com.droidplanner.waypoints.MissionReader;
 
 public abstract class OpenMissionDialog extends OpenFileDialog {

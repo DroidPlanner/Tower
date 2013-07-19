@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.MAVLink.waypoint;
 import com.droidplanner.R;
-import com.droidplanner.MAVLink.Drone;
+import com.droidplanner.drone.Drone;
 import com.droidplanner.service.MAVLinkClient;
 import com.droidplanner.waypoints.MissionWriter;
 

@@ -7,7 +7,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.MAVLink.Messages.ApmModes;
-import com.droidplanner.MAVLink.Drone;
+import com.droidplanner.drone.Drone;
 import com.droidplanner.widgets.spinners.SpinnerSelfSelect.OnSpinnerItemSelectedListener;
 
 public class SelectModeSpinner extends SpinnerSelfSelect implements OnSpinnerItemSelectedListener {

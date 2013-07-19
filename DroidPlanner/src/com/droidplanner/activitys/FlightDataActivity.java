@@ -12,7 +12,7 @@ import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.ardupilotmega.msg_set_mode;
 import com.droidplanner.DroidPlannerApp.OnWaypointReceivedListner;
 import com.droidplanner.R;
-import com.droidplanner.MAVLink.Drone.DroneTypeListner;
+import com.droidplanner.drone.Drone.DroneTypeListner;
 import com.droidplanner.fragments.FlightMapFragment;
 import com.droidplanner.fragments.FlightMapFragment.OnFlighDataListener;
 import com.droidplanner.widgets.spinners.SelectModeSpinner;

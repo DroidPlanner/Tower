@@ -1,4 +1,4 @@
-package com.droidplanner.MAVLink;
+package com.droidplanner.drone;
 
 public class DroneOrientation extends DroneVariable {
 	public double roll = 0;

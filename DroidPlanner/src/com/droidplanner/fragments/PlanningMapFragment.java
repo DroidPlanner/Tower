@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.MAVLink.waypoint;
 import com.droidplanner.R;
 import com.droidplanner.R.string;
-import com.droidplanner.MAVLink.Drone;
+import com.droidplanner.drone.Drone;
 import com.droidplanner.polygon.Polygon;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;

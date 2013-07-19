@@ -2,7 +2,7 @@ package com.droidplanner.fragments.markers;
 
 import android.util.Log;
 
-import com.droidplanner.MAVLink.Drone.MapUpdatedListner;
+import com.droidplanner.drone.Drone.MapUpdatedListner;
 import com.droidplanner.fragments.FlightMapFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;

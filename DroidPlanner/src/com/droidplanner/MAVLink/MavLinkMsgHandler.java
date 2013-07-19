@@ -13,6 +13,7 @@ import com.MAVLink.Messages.ardupilotmega.msg_sys_status;
 import com.MAVLink.Messages.ardupilotmega.msg_vfr_hud;
 import com.MAVLink.Messages.enums.MAV_MODE_FLAG;
 import com.MAVLink.Messages.enums.MAV_STATE;
+import com.droidplanner.drone.Drone;
 import com.google.android.gms.maps.model.LatLng;
 
 

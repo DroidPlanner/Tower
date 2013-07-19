@@ -6,7 +6,7 @@ import android.content.Context;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import com.droidplanner.MAVLink.Drone;
+import com.droidplanner.drone.Drone;
 import com.droidplanner.widgets.spinners.SpinnerSelfSelect.OnSpinnerItemSelectedListener;
 
 public class SelectWaypointSpinner extends SpinnerSelfSelect implements OnSpinnerItemSelectedListener {

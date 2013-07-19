@@ -19,9 +19,9 @@ import android.widget.SpinnerAdapter;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.DroidPlannerApp.ConnectionStateListner;
 import com.droidplanner.R;
-import com.droidplanner.MAVLink.Drone;
 import com.droidplanner.dialogs.AltitudeDialog;
 import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
+import com.droidplanner.drone.Drone;
 
 public abstract class SuperActivity extends Activity implements
 		OnNavigationListener, ConnectionStateListner, OnAltitudeChangedListner {

@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.MAVLink.waypoint;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
-import com.droidplanner.MAVLink.Drone;
+import com.droidplanner.drone.Drone;
 import com.droidplanner.service.MAVLinkClient;
 
 public class FollowMe implements LocationListener {

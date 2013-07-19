@@ -1,4 +1,4 @@
-package com.droidplanner.MAVLink;
+package com.droidplanner.drone;
 
 public class DroneVariable {
 	protected Drone myDrone;
