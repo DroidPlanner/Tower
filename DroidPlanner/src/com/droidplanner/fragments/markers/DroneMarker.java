@@ -60,7 +60,7 @@ public class DroneMarker implements MapUpdatedListner {
 	}
 
 	public void onDroneUpdate() {
-		updatePosition(flightMapFragment.drone.getYaw(), flightMapFragment.drone.getPosition());
-		flightMapFragment.addFlithPathPoint(flightMapFragment.drone.getPosition());		
+		updatePosition(flightMapFragment.drone.orientation.getYaw(), flightMapFragment.drone.GPS.getPosition());
+		flightMapFragment.addFlithPathPoint(flightMapFragment.drone.GPS.getPosition());		
 	}
 }

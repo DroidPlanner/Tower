@@ -67,21 +67,21 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 					.show();
 			openMission(intent.getData().getPath());
 			update();
-			planningMapFragment.zoomToExtents(drone.getAllCoordinates());
+			planningMapFragment.zoomToExtents(drone.mission.getAllCoordinates());
 		}
 	}
 
 	private void openMission(String path) {
 		MissionReader missionReader = new MissionReader();
 		if(missionReader.openMission(path)){
-			drone.home = missionReader.getHome();
-			drone.waypoints = missionReader.getWaypoints();
+			drone.mission.home = missionReader.getHome();
+			drone.mission.waypoints = missionReader.getWaypoints();
 		}
 		
 	}
 
 	private boolean writeMission() {
-		MissionWriter missionWriter = new MissionWriter(drone.home, drone.waypoints);
+		MissionWriter missionWriter = new MissionWriter(drone.mission.home, drone.mission.waypoints);
 		return missionWriter.saveWaypoints();
 	}
 
@@ -109,7 +109,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 			return true;
 		case R.id.menu_send_to_apm:
 			List<waypoint> data = new ArrayList<waypoint>();
-			data.add(drone.getHome());
+			data.add(drone.mission.getHome());
 			data.addAll(drone.getWaypoints());
 			app.waypointMananger.writeWaypoints(data);
 			return true;
@@ -120,7 +120,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 			menuSaveFile();
 			return true;
 		case R.id.menu_zoom:
-			planningMapFragment.zoomToExtents(drone.getAllCoordinates());
+			planningMapFragment.zoomToExtents(drone.mission.getAllCoordinates());
 			return true;
 		case R.id.menu_polygon:
 			setMode(modes.POLYGON);
@@ -145,7 +145,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 		OpenFileDialog missionDialog = new OpenMissionDialog(drone) {
 			@Override
 			public void waypointFileLoaded() {
-				planningMapFragment.zoomToExtents(drone.getAllCoordinates());
+				planningMapFragment.zoomToExtents(drone.mission.getAllCoordinates());
 				update();				
 			}
 		};
@@ -161,7 +161,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 				update();
 			}
 		};
-		polygonDialog.generatePolygon(defaultHatchAngle, 50.0, polygon, drone.getLastWaypoint().coord, drone.getDefaultAlt(), this);	
+		polygonDialog.generatePolygon(defaultHatchAngle, 50.0, polygon, drone.mission.getLastWaypoint().coord, drone.mission.getDefaultAlt(), this);	
 	}
 
 	private void clearWaypointsAndUpdate() {
@@ -225,7 +225,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 	@Override
 	public void onWaypointsReceived() {
 		update();
-		planningMapFragment.zoomToExtents(drone.getAllCoordinates());		
+		planningMapFragment.zoomToExtents(drone.mission.getAllCoordinates());		
 	}
 
 	@Override

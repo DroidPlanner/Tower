@@ -38,7 +38,7 @@ public class SelectWaypointSpinner extends SpinnerSelfSelect implements OnSpinne
 	public void updateWpSpinner(Drone drone) {
 		wpSpinnerAdapter.clear();
 		if (drone != null) {
-			if (drone.waypoints.size() > 0) {
+			if (drone.mission.waypoints.size() > 0) {
 				updateWpSpinnerWithList(drone);
 				return;
 			}
@@ -52,7 +52,7 @@ public class SelectWaypointSpinner extends SpinnerSelfSelect implements OnSpinne
 	}
 
 	private void updateWpSpinnerWithList(Drone drone) {
-		for (int i = 0; i < drone.waypoints.size(); i++) {
+		for (int i = 0; i < drone.mission.waypoints.size(); i++) {
 			wpSpinnerAdapter.add("WP " + Integer.toString(i + 1));
 		}
 	}

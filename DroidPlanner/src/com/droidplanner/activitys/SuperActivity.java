@@ -198,7 +198,7 @@ public abstract class SuperActivity extends Activity implements
 
 	protected void changeDefaultAlt() {
 		AltitudeDialog dialog = new AltitudeDialog(this);
-		dialog.build(drone.getDefaultAlt(), this);
+		dialog.build(drone.mission.getDefaultAlt(), this);
 	}
 	
 	@Override

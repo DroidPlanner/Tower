@@ -90,7 +90,7 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 
 	public void updateMissionPath(Drone drone) {
 		ArrayList<LatLng> missionPoints = new ArrayList<LatLng>();
-		missionPoints.add(drone.getHome().coord);
+		missionPoints.add(drone.mission.getHome().coord);
 		for (waypoint point : drone.getWaypoints()) {
 			missionPoints.add(point.coord);
 		}
@@ -126,7 +126,7 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 	}
 
 	public void zoomToLastKnowPosition() {
-		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(drone.getPosition(), 16));
+		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(drone.GPS.getPosition(), 16));
 	}
 
 	private void addMissionPathToMap() {
@@ -138,20 +138,20 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 	public void updateHomeToMap(Drone drone) {
 		if(homeMarker== null){
 		homeMarker = mMap.addMarker(new MarkerOptions()
-		.position(drone.getHome().coord)
+		.position(drone.mission.getHome().coord)
 		.snippet(
 				String.format(Locale.ENGLISH, "%.2f",
-						drone.getHome().Height))
+						drone.mission.getHome().Height))
 		.draggable(true)
 		.anchor((float) 0.5, (float) 0.5)
 		.icon(BitmapDescriptorFactory
 				.fromResource(R.drawable.ic_menu_home))
 		.title("Home"));
 		}else {
-			homeMarker.setPosition(drone.getHome().coord);
+			homeMarker.setPosition(drone.mission.getHome().coord);
 			homeMarker.setSnippet(
 				String.format(Locale.ENGLISH, "%.2f",
-						drone.getHome().Height));
+						drone.mission.getHome().Height));
 		}
 	}
 	

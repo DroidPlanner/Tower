@@ -11,20 +11,17 @@ import com.droidplanner.helpers.TTS;
 import com.google.android.gms.maps.model.LatLng;
 
 public class Drone {
-	public waypoint home;
-	public Double defaultAlt;
-	public List<waypoint> waypoints;
-
-	private double roll = 0, pitch = 0, yaw = 0, altitude = 0, disttowp = 0,
-			verticalSpeed = 0, groundSpeed = 0, airSpeed = 0, targetSpeed = 0,
-			targetAltitude = 0, battVolt = -1, battRemain = -1,
-			battCurrent = -1, gps_eph = -1;
-	private int wpno = -1, satCount = -1, fixType = -1,
-			type = MAV_TYPE.MAV_TYPE_FIXED_WING;
-	private boolean failsafe = false, armed = false;
-	private ApmModes mode = ApmModes.UNKNOWN;
-	private LatLng position;
-
+	private int type = MAV_TYPE.MAV_TYPE_FIXED_WING;
+		
+	public DroneGPS GPS = new DroneGPS(-1, -1, -1);
+	public DroneSpeed speed = new DroneSpeed(0, 0, 0, 0);
+	public DroneState state = new DroneState(false, false, ApmModes.UNKNOWN);
+	public DroneBattery battery = new DroneBattery(-1, -1,-1);	
+	public DroneMission mission = new DroneMission(-1,0);	
+	public DroneAltitude altitude = new DroneAltitude(0, 0);
+	public DroneOrientation orientation = new DroneOrientation(0, 0, 0);
+	
+	
 	private HudUpdatedListner hudListner;
 	private MapUpdatedListner mapListner;
 	private DroneTypeListner typeListner;
@@ -46,9 +43,9 @@ public class Drone {
 	public Drone(TTS tts) {
 		super();
 		this.tts = tts;
-		this.home = new waypoint(0.0, 0.0, 0.0);
-		this.defaultAlt = 50.0;
-		this.waypoints = new ArrayList<waypoint>();
+		this.mission.home = new waypoint(0.0, 0.0, 0.0);
+		this.mission.defaultAlt = 50.0;
+		this.mission.waypoints = new ArrayList<waypoint>();
 	}
 
 	public void setHudListner(HudUpdatedListner listner) {
@@ -64,60 +61,60 @@ public class Drone {
 	}
 
 	public void setRollPitchYaw(double roll, double pitch, double yaw) {
-		this.roll = roll;
-		this.pitch = pitch;
-		this.yaw = yaw;
+		this.orientation.roll = roll;
+		this.orientation.pitch = pitch;
+		this.orientation.yaw = yaw;
 		notifyHudUpdate();
 	}
 
 	public void setAltitudeGroundAndAirSpeeds(double altitude,
 			double groundSpeed, double airSpeed, double climb) {
-		this.altitude = altitude;
-		this.groundSpeed = groundSpeed;
-		this.airSpeed = airSpeed;
-		this.verticalSpeed = climb;
+		this.altitude.altitude = altitude;
+		this.speed.groundSpeed = groundSpeed;
+		this.speed.airSpeed = airSpeed;
+		this.speed.verticalSpeed = climb;
 		notifyHudUpdate();
 	}
 
 	public void setDisttowpAndSpeedAltErrors(double disttowp, double alt_error,
 			double aspd_error) {
-		this.disttowp = disttowp;
-		targetAltitude = alt_error + altitude;
-		targetSpeed = aspd_error + airSpeed;
+		this.mission.disttowp = disttowp;
+		altitude.targetAltitude = alt_error + altitude.altitude;
+		speed.targetSpeed = aspd_error + speed.airSpeed;
 		notifyHudUpdate();
 	}
 
 	public void setBatteryState(double battVolt, double battRemain,
 			double battCurrent) {
-		if (this.battVolt != battVolt | this.battRemain != battRemain
-				| this.battCurrent != battCurrent) {
+		if (this.battery.battVolt != battVolt | this.battery.battRemain != battRemain
+				| this.battery.battCurrent != battCurrent) {
 			tts.batteryDischargeNotification(battRemain);
-			this.battVolt = battVolt;
-			this.battRemain = battRemain;
-			this.battCurrent = battCurrent;
+			this.battery.battVolt = battVolt;
+			this.battery.battRemain = battRemain;
+			this.battery.battCurrent = battCurrent;
 			notifyHudUpdate();
 		}
 	}
 
 	public void setArmedAndFailsafe(boolean armed, boolean failsafe) {
-		if (this.armed != armed | this.failsafe != failsafe) {
-			if (this.armed != armed) {
+		if (this.state.armed != armed | this.state.failsafe != failsafe) {
+			if (this.state.armed != armed) {
 				tts.speakArmedState(armed);					
 			}
-			this.armed = armed;
-			this.failsafe = failsafe;
+			this.state.armed = armed;
+			this.state.failsafe = failsafe;
 			notifyHudUpdate();
 		}
 	}
 
 	public void setGpsState(int fix, int satellites_visible, int eph) {
-		if (satCount != satellites_visible | fixType != fix) {
-			if (fixType != fix) {
+		if (GPS.satCount != satellites_visible | GPS.fixType != fix) {
+			if (GPS.fixType != fix) {
 				tts.speakGpsMode(fix);
 			}
-			this.fixType = fix;
-			this.satCount = satellites_visible;
-			this.gps_eph = (double) eph / 100; //convert from eph(cm) to gps_eph(m)
+			this.GPS.fixType = fix;
+			this.GPS.satCount = satellites_visible;
+			this.GPS.gps_eph = (double) eph / 100; //convert from eph(cm) to gps_eph(m)
 			notifyHudUpdate();
 		}
 	}
@@ -132,24 +129,24 @@ public class Drone {
 	}
 
 	public void setMode(ApmModes mode) {
-		if (this.mode != mode) {
-			this.mode = mode;
+		if (this.state.mode != mode) {
+			this.state.mode = mode;
 			tts.speakMode(mode);
 			notifyHudUpdate();
 		}
 	}
 
 	public void setWpno(int wpno) {
-		if (this.wpno != wpno) {
-			this.wpno = wpno;
+		if (this.mission.wpno != wpno) {
+			this.mission.wpno = wpno;
 			tts.speak("Going for waypoint "+wpno);
 			notifyHudUpdate();
 		}
 	}
 
 	public void setPosition(LatLng position) {
-		if (this.position != position) {
-			this.position = position;
+		if (this.GPS.position != position) {
+			this.GPS.position = position;
 			notifyPositionChange();
 		}
 	}
@@ -171,125 +168,46 @@ public class Drone {
 			hudListner.onDroneUpdate();
 	}
 
-	public double getRoll() {
-		return roll;
-	}
-
-	public double getPitch() {
-		return pitch;
-	}
-
-	public double getYaw() {
-		return yaw;
-	}
-
-	public double getAltitude() {
-		return altitude;
-	}
-
-	public double getDisttowp() {
-		return disttowp;
-	}
-
-	public double getVerticalSpeed() {
-		return verticalSpeed;
-	}
-
-	public double getGroundSpeed() {
-		return groundSpeed;
-	}
-
-	public double getAirSpeed() {
-		return airSpeed;
-	}
-
-	public double getTargetSpeed() {
-		return targetSpeed;
-	}
-
-	public double getTargetAltitude() {
-		return targetAltitude;
-	}
-
-	public double getBattVolt() {
-		return battVolt;
-	}
-
-	public double getBattRemain() {
-		return battRemain;
-	}
-
-	public double getBattCurrent() {
-		return battCurrent;
-	}
-
-	public int getWpno() {
-		return wpno;
-	}
-
-	public int getSatCount() {
-		return satCount;
-	}
-
-	public int getFixType() {
-		return fixType;
-	}
-	
-	public double getGpsEPH() {
-		return gps_eph;
-	}
-
 	public int getType() {
 		return type;
 	}
 
-	public ApmModes getMode() {
-		return mode;
-	}
-
-	public LatLng getPosition() {
-		return position;
-	}
-
-	public boolean isFailsafe() {
-		return failsafe;
-	}
-
-	public boolean isArmed() {
-		return armed;
-	}
 
 	public void setWaypoints(List<waypoint> waypoints) {
-		this.waypoints = waypoints;
+		this.mission.waypoints = waypoints;
 	}
 
 	public void addWaypoints(List<waypoint> points) {
-		waypoints.addAll(points);
+		mission.waypoints.addAll(points);
 	}
 
 	public void addWaypoint(Double Lat, Double Lng, Double h) {
-		waypoints.add(new waypoint(Lat, Lng, h));
+		mission.waypoints.add(new waypoint(Lat, Lng, h));
 	}
 
 	public void addWaypoint(LatLng coord, Double h) {
-		waypoints.add(new waypoint(coord, h));
+		mission.waypoints.add(new waypoint(coord, h));
 	}
 
 	public void addWaypoint(LatLng coord) {
-		addWaypoint(coord, getDefaultAlt());
+		addWaypoint(coord, mission.getDefaultAlt());
 	}
 
 	public void clearWaypoints() {
-		waypoints.clear();
+		mission.waypoints.clear();
+	}
+
+	public void setDefaultAlt(Double defaultAlt) {
+		this.mission.defaultAlt = defaultAlt;
 	}
 
 	public String getWaypointData() {
 		String waypointData = String.format(Locale.ENGLISH, "Home\t%2.0f\n",
-				home.Height);
-		waypointData += String.format("Def:\t%2.0f\n", getDefaultAlt());
-
+				mission.home.Height);
+		waypointData += String.format("Def:\t%2.0f\n", mission.getDefaultAlt());
+	
 		int i = 1;
-		for (waypoint point : waypoints) {
+		for (waypoint point : mission.waypoints) {
 			waypointData += String.format(Locale.ENGLISH, "WP%02d \t%2.0f\n",
 					i++, point.Height);
 		}
@@ -297,47 +215,19 @@ public class Drone {
 	}
 
 	public List<waypoint> getWaypoints() {
-		return waypoints;
-	}
-
-	public Double getDefaultAlt() {
-		return defaultAlt;
-	}
-
-	public void setDefaultAlt(Double defaultAlt) {
-		this.defaultAlt = defaultAlt;
-	}
-
-	public waypoint getHome() {
-		return home;
-	}
-
-	public waypoint getLastWaypoint() {
-		if (waypoints.size() > 0)
-			return waypoints.get(waypoints.size() - 1);
-		else
-			return home;
+		return mission.waypoints;
 	}
 
 	public void setHome(waypoint home) {
-		this.home = home;
+		this.mission.home = home;
 	}
 
 	public void setHome(LatLng home) {
-		this.home.coord = home;
+		this.mission.home.coord = home;
 	}
 
 	public void moveWaypoint(LatLng coord, int number) {
-		waypoints.get(number).coord = coord;
-	}
-
-	public List<LatLng> getAllCoordinates() {
-		List<LatLng> result = new ArrayList<LatLng>();
-		for (waypoint point : waypoints) {
-			result.add(point.coord);
-		}
-		result.add(home.coord);
-		return result;
+		mission.waypoints.get(number).coord = coord;
 	}
 
 }

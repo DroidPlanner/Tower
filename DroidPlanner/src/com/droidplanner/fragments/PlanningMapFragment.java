@@ -161,10 +161,10 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 
 	private MarkerOptions getHomeIcon(Drone drone) {
 		return (new MarkerOptions()
-				.position(drone.getHome().coord)
+				.position(drone.mission.getHome().coord)
 				.snippet(
 						String.format(Locale.ENGLISH, "%.2f",
-								drone.getHome().Height))
+								drone.mission.getHome().Height))
 				.draggable(true)
 				.anchor((float) 0.5, (float) 0.5)
 				.icon(BitmapDescriptorFactory
@@ -208,7 +208,7 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		PolylineOptions flightPath = new PolylineOptions();
 		flightPath.color(Color.YELLOW).width(3);
 	
-		flightPath.add(drone.getHome().coord);
+		flightPath.add(drone.mission.getHome().coord);
 		for (waypoint point : drone.getWaypoints()) {
 			flightPath.add(point.coord);
 		}
