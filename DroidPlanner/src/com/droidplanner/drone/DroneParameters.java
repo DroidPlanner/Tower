@@ -20,11 +20,7 @@ import com.droidplanner.service.MAVLinkClient;
  * MAV Message.
  * 
  */
-public class DroneParameters extends DroneVariable{
-	public interface OnParameterManagerListner {
-		public abstract void onParameterReceived(Parameter parameter);
-	}
-
+public class DroneParameters extends DroneVariable {
 	MAVLinkClient MAV;
 	private List<Parameter> parameters;
 
@@ -33,9 +29,9 @@ public class DroneParameters extends DroneVariable{
 	}
 
 	waypointStates state = waypointStates.IDLE;
-	public OnParameterManagerListner parameterListner;
+	public DroneInterfaces.OnParameterManagerListner parameterListner;
 
-	public DroneParameters(Drone myDrone,MAVLinkClient MAV) {
+	public DroneParameters(Drone myDrone, MAVLinkClient MAV) {
 		super(myDrone);
 		this.MAV = MAV;
 		parameters = new ArrayList<Parameter>();
@@ -45,7 +41,7 @@ public class DroneParameters extends DroneVariable{
 		parameters.clear();
 		requestParametersList();
 	}
-	
+
 	/**
 	 * Try to process a Mavlink message if it is a parameter related message
 	 * 
@@ -72,7 +68,8 @@ public class DroneParameters extends DroneVariable{
 		parameters.add(param);
 		parameterListner.onParameterReceived(param);
 		if (m_value.param_index == m_value.param_count - 1) {
-			Toast.makeText(myDrone.context, "Parameters Received", Toast.LENGTH_LONG).show();
+			Toast.makeText(myDrone.context, "Parameters Received",
+					Toast.LENGTH_LONG).show();
 		}
 	}
 
