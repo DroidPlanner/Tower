@@ -16,9 +16,9 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.MAVLink.waypoint;
-import com.droidplanner.R;
 import com.droidplanner.R.string;
 import com.droidplanner.drone.Drone;
+import com.droidplanner.fragments.markers.HomeMarker;
 import com.droidplanner.polygon.Polygon;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
@@ -37,19 +37,17 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		MISSION, POLYGON;
 	}
 	
-	private GoogleMap mMap;
+	public GoogleMap mMap;
 	
 	private HashMap<Integer, Marker> waypointMarkers = new HashMap<Integer, Marker>();
 	private HashMap<Integer, Marker> polygonMarkers = new HashMap<Integer, Marker>();
-	private Marker home;
-	
+	public HomeMarker homeMarker;
+
 	private OnMapInteractionListener mListener;
 
 	public modes mode = modes.MISSION;
 
 	public Polygon polygon;
-
-	static final String homeMarkerTitle = "Home";
 
 	public interface OnMapInteractionListener {
 
@@ -69,6 +67,8 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		mMap = getMap();
 		mMap.setOnMarkerDragListener(this);
 		mMap.setOnMapLongClickListener(this);
+		
+		homeMarker = new HomeMarker(mMap);
 		return view;
 	}
 
@@ -80,10 +80,11 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 
 	public void update(Drone drone, Polygon polygon) {
 		mMap.clear();
+		homeMarker.invalidate();
 		waypointMarkers.clear();
 		polygonMarkers.clear();
 		
-		home = mMap.addMarker(getHomeIcon(drone));
+		homeMarker.update(drone);
 		int i =0;
 		for (MarkerOptions waypoint : getMissionMarkers(drone)) {
 			waypointMarkers.put(i++,mMap.addMarker(waypoint));
@@ -118,7 +119,7 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 	}
 
 	private void checkForHomeMarker(Marker marker) {
-		if(home.equals(marker)){
+		if(homeMarker.homeMarker.equals(marker)){
 			mListener.onMoveHome(marker.getPosition());
 		}
 	}
@@ -157,19 +158,6 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		} else {
 			return null;
 		}
-	}
-
-	private MarkerOptions getHomeIcon(Drone drone) {
-		return (new MarkerOptions()
-				.position(drone.mission.getHome().coord)
-				.snippet(
-						String.format(Locale.ENGLISH, "%.2f",
-								drone.mission.getHome().Height))
-				.draggable(true)
-				.anchor((float) 0.5, (float) 0.5)
-				.icon(BitmapDescriptorFactory
-						.fromResource(R.drawable.ic_menu_home))
-				.title(homeMarkerTitle));
 	}
 
 	private List<MarkerOptions> getMissionMarkers(Drone drone) {

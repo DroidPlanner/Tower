@@ -2,7 +2,6 @@ package com.droidplanner.fragments;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import android.app.Activity;
 import android.content.Context;
@@ -15,23 +14,20 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.MAVLink.waypoint;
-import com.droidplanner.R;
 import com.droidplanner.activitys.SuperActivity;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.fragments.markers.DroneMarker;
+import com.droidplanner.fragments.markers.HomeMarker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 public class FlightMapFragment extends OfflineMapFragment implements OnMapLongClickListener {
 	public GoogleMap mMap;
-	private Marker guidedMarker;
+	private GuidedMarker guidedMarker;
 	private Polyline flightPath;
 	private Polyline missionPath;
 
@@ -41,7 +37,7 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 	
 	public boolean hasBeenZoomed = false;
 	private OnFlighDataListener mListener;
-	private Marker homeMarker;
+	public HomeMarker homeMarker;
 	public DroneMarker droneMarker;
 	public Drone drone;
 	
@@ -59,7 +55,8 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 		drone = ((SuperActivity)getActivity()).app.drone;
 		
 		droneMarker = new DroneMarker(this);
-		
+		homeMarker = new HomeMarker(this.mMap);
+		guidedMarker = new GuidedMarker(mMap);
 		
 		addFlightPathToMap();	
 		addMissionPathToMap();
@@ -114,17 +111,6 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 		flightPath.setPoints(oldFlightPath);		
 	}
 
-	private void updateGuidedMarker(LatLng point) {
-		if(guidedMarker == null){
-			guidedMarker = mMap.addMarker(new MarkerOptions()
-			.anchor((float) 0.5, (float) 0.5)
-			.position(point)
-			.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));	
-		} else {
-			guidedMarker.setPosition(point);
-		}	
-	}
-
 	public void zoomToLastKnowPosition() {
 		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(drone.GPS.getPosition(), 16));
 	}
@@ -133,26 +119,6 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 		PolylineOptions missionPathOptions = new PolylineOptions();
 		missionPathOptions.color(Color.YELLOW).width(3).zIndex(0);
 		missionPath = mMap.addPolyline(missionPathOptions);
-	}
-	
-	public void updateHomeToMap(Drone drone) {
-		if(homeMarker== null){
-		homeMarker = mMap.addMarker(new MarkerOptions()
-		.position(drone.mission.getHome().coord)
-		.snippet(
-				String.format(Locale.ENGLISH, "%.2f",
-						drone.mission.getHome().Height))
-		.draggable(true)
-		.anchor((float) 0.5, (float) 0.5)
-		.icon(BitmapDescriptorFactory
-				.fromResource(R.drawable.ic_menu_home))
-		.title("Home"));
-		}else {
-			homeMarker.setPosition(drone.mission.getHome().coord);
-			homeMarker.setSnippet(
-				String.format(Locale.ENGLISH, "%.2f",
-						drone.mission.getHome().Height));
-		}
 	}
 	
 	private void addFlightPathToMap() {
@@ -166,7 +132,7 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 		getPreferences();
 		if (isGuidedModeEnabled) {
 			mListener.onSetGuidedMode(point);	
-			updateGuidedMarker(point);
+			guidedMarker.updateGuidedMarker(point);
 		}
 	}
 
