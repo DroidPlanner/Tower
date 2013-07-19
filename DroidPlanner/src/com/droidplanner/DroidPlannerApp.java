@@ -66,7 +66,7 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 
 	@Override
 	public void notifyConnected() {
-		MavLinkStreamRates.setupMavlinkStreamRate(this);
+		MavLinkStreamRates.setupStreamRatesFromPref(this);
 		conectionListner.notifyConnected();
 		tts.speak("Connected");
 	}
