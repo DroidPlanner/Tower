@@ -105,13 +105,13 @@ public abstract class SuperActivity extends Activity implements
 				toggleConnectionState();
 				return true;
 			case R.id.menu_load_from_apm:
-				app.waypointMananger.getWaypoints();
+				drone.waypointMananger.getWaypoints();
 				return true;	
 			case R.id.menu_default_alt:
 				changeDefaultAlt();
 				return true;
 			case R.id.menu_preflight_calibration:
-				app.calibrationSetup.startCalibration(this);
+				drone.calibrationSetup.startCalibration(this);
 				return true;
 			case R.id.menu_record_me:
 				app.recordMe.toogleRecordMeState();

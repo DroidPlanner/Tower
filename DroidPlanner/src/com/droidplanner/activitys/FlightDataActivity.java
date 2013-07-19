@@ -82,7 +82,7 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 
 	@Override
 	public void OnWaypointSpinnerSelected(int item) {
-		app.waypointMananger.setCurrentWaypoint((short) item);
+		drone.waypointMananger.setCurrentWaypoint((short) item);
 	}
 
 

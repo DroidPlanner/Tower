@@ -1,9 +1,14 @@
 package com.droidplanner.drone;
 
+import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.drone.DroneInterfaces.DroneTypeListner;
 import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
 import com.droidplanner.drone.DroneInterfaces.MapUpdatedListner;
+import com.droidplanner.helpers.CalibrationSetup;
 import com.droidplanner.helpers.TTS;
+import com.droidplanner.parameters.ParameterManager;
+import com.droidplanner.service.MAVLinkClient;
+import com.droidplanner.waypoints.WaypointMananger;
 
 public class Drone {
 	public DroneType type = new DroneType(this);
@@ -19,9 +24,17 @@ public class Drone {
 	private MapUpdatedListner mapListner;
 	private DroneTypeListner typeListner;
 	TTS tts;
+	public WaypointMananger waypointMananger;
+	private MAVLinkClient MavClient;
+	public ParameterManager parameterMananger;
+	public CalibrationSetup calibrationSetup;
 
-	public Drone(TTS tts) {
+	public Drone(TTS tts, MAVLinkClient MAVClient, DroidPlannerApp droidPlannerApp) {
 		this.tts = tts;
+		this.MavClient = MAVClient;
+		waypointMananger = new WaypointMananger(this.MavClient,droidPlannerApp);
+		parameterMananger = new ParameterManager(MAVClient, droidPlannerApp);
+		calibrationSetup = new CalibrationSetup(MAVClient);
 	}
 
 	public void setHudListner(HudUpdatedListner listner) {

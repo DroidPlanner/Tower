@@ -111,7 +111,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 			List<waypoint> data = new ArrayList<waypoint>();
 			data.add(drone.mission.getHome());
 			data.addAll(drone.mission.getWaypoints());
-			app.waypointMananger.writeWaypoints(data);
+			drone.waypointMananger.writeWaypoints(data);
 			return true;
 		case R.id.menu_open_file:
 			openMissionFile();
