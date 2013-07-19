@@ -1,0 +1,36 @@
+package com.droidplanner.MAVLink;
+
+import com.MAVLink.waypoint;
+import com.MAVLink.Messages.ApmModes;
+import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
+import com.MAVLink.Messages.ardupilotmega.msg_set_mode;
+import com.droidplanner.service.MAVLinkClient;
+
+public class MavLinkModes {
+	public static void setGuidedMode(MAVLinkClient MAVClient,waypoint wp) {
+		msg_mission_item msg = new msg_mission_item();
+		msg.seq = 0;
+		msg.current = 2;	//TODO use guided mode enum
+		msg.frame = 0; // TODO use correct parameter
+		msg.command = 16; // TODO use correct parameter
+		msg.param1 = 0; // TODO use correct parameter
+		msg.param2 = 0; // TODO use correct parameter
+		msg.param3 = 0; // TODO use correct parameter
+		msg.param4 = 0; // TODO use correct parameter
+		msg.x = (float) wp.coord.latitude;
+		msg.y = (float) wp.coord.longitude;
+		msg.z = wp.Height.floatValue();
+		msg.autocontinue = 1; // TODO use correct parameter
+		msg.target_system = 1;
+		msg.target_component = 1;
+		MAVClient.sendMavPacket(msg.pack());
+	}
+
+	public static void changeFlightMode(MAVLinkClient MAVClient,ApmModes mode) {
+		msg_set_mode msg = new msg_set_mode();
+		msg.target_system = 1;
+		msg.base_mode = 1; //TODO use meaningful constant
+		msg.custom_mode = mode.getNumber();
+		MAVClient.sendMavPacket(msg.pack());			
+	}
+}

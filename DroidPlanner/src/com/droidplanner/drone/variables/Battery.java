@@ -1,11 +1,14 @@
-package com.droidplanner.drone;
+package com.droidplanner.drone.variables;
 
-public class DroneBattery extends DroneVariable {
+import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.DroneVariable;
+
+public class Battery extends DroneVariable {
 	private double battVolt = -1;
 	private double battRemain = -1;
 	private double battCurrent = -1;
 
-	public DroneBattery(Drone myDrone) {
+	public Battery(Drone myDrone) {
 		super(myDrone);
 	}
 

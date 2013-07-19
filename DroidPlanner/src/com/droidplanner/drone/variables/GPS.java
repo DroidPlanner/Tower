@@ -1,14 +1,16 @@
-package com.droidplanner.drone;
+package com.droidplanner.drone.variables;
 
+import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.DroneVariable;
 import com.google.android.gms.maps.model.LatLng;
 
-public class DroneGPS extends DroneVariable {
+public class GPS extends DroneVariable {
 	private double gps_eph= -1;
 	private int satCount = -1;
 	private int fixType= -1;
 	private LatLng position;
 
-	public DroneGPS(Drone myDrone) {
+	public GPS(Drone myDrone) {
 		super(myDrone);
 	}
 
