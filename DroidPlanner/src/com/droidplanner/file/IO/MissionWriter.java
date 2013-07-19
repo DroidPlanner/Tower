@@ -1,4 +1,4 @@
-package com.droidplanner.waypoints;
+package com.droidplanner.file.IO;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Locale;
 
 import com.MAVLink.waypoint;
-import com.droidplanner.helpers.file.FileManager;
-import com.droidplanner.helpers.file.FileStream;
+import com.droidplanner.file.FileManager;
+import com.droidplanner.file.FileStream;
 
 public class MissionWriter {
 	private waypoint home;

@@ -13,8 +13,8 @@ import android.widget.TableLayout;
 import android.widget.Toast;
 
 import com.droidplanner.R;
+import com.droidplanner.file.IO.ParameterWriter;
 import com.droidplanner.parameters.Parameter;
-import com.droidplanner.parameters.ParameterWriter;
 import com.droidplanner.widgets.paramRow.ParamRow;
 
 public class ParametersTableFragment extends Fragment {
