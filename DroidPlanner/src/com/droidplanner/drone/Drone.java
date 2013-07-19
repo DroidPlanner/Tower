@@ -1,5 +1,8 @@
 package com.droidplanner.drone;
 
+import com.droidplanner.drone.DroneInterfaces.DroneTypeListner;
+import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
+import com.droidplanner.drone.DroneInterfaces.MapUpdatedListner;
 import com.droidplanner.helpers.TTS;
 
 public class Drone {
@@ -16,18 +19,6 @@ public class Drone {
 	private MapUpdatedListner mapListner;
 	private DroneTypeListner typeListner;
 	TTS tts;
-
-	public interface HudUpdatedListner {
-		public void onDroneUpdate();
-	}
-
-	public interface MapUpdatedListner {
-		public void onDroneUpdate();
-	}
-
-	public interface DroneTypeListner {
-		public void onDroneTypeChanged();
-	}
 
 	public Drone(TTS tts) {
 		super();
