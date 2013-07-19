@@ -13,13 +13,13 @@ import com.google.android.gms.maps.model.LatLng;
 public class Drone {
 	private int type = MAV_TYPE.MAV_TYPE_FIXED_WING;
 		
-	public DroneGPS GPS = new DroneGPS(-1, -1, -1);
-	public DroneSpeed speed = new DroneSpeed(0, 0, 0, 0);
-	public DroneState state = new DroneState(false, false, ApmModes.UNKNOWN);
-	public DroneBattery battery = new DroneBattery(-1, -1,-1);	
-	public DroneMission mission = new DroneMission(-1,0);	
-	public DroneAltitude altitude = new DroneAltitude(0, 0);
-	public DroneOrientation orientation = new DroneOrientation(0, 0, 0);
+	public DroneGPS GPS = new DroneGPS(this,-1, -1, -1);
+	public DroneSpeed speed = new DroneSpeed(this,0, 0, 0, 0);
+	public DroneState state = new DroneState(this,false, false, ApmModes.UNKNOWN);
+	public DroneBattery battery = new DroneBattery(this,-1, -1,-1);	
+	public DroneMission mission = new DroneMission(this,-1,0);	
+	public DroneAltitude altitude = new DroneAltitude(this,0, 0);
+	public DroneOrientation orientation = new DroneOrientation(this,0, 0, 0);
 	
 	
 	private HudUpdatedListner hudListner;

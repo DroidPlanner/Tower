@@ -1,11 +1,12 @@
 package com.droidplanner.MAVLink;
 
-public class DroneOrientation {
+public class DroneOrientation extends DroneVariable{
 	public double roll;
 	public double pitch;
 	public double yaw;
 
-	public DroneOrientation(double roll, double pitch, double yaw) {
+	public DroneOrientation(Drone myDrone,double roll, double pitch, double yaw) {
+		super(myDrone);
 		this.roll = roll;
 		this.pitch = pitch;
 		this.yaw = yaw;

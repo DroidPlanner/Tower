@@ -1,13 +1,14 @@
 package com.droidplanner.MAVLink;
 
-public class DroneSpeed {
+public class DroneSpeed extends DroneVariable{
 	public double verticalSpeed;
 	public double groundSpeed;
 	public double airSpeed;
 	public double targetSpeed;
 
-	public DroneSpeed(double verticalSpeed, double groundSpeed,
+	public DroneSpeed(Drone myDrone,double verticalSpeed, double groundSpeed,
 			double airSpeed, double targetSpeed) {
+		super(myDrone);
 		this.verticalSpeed = verticalSpeed;
 		this.groundSpeed = groundSpeed;
 		this.airSpeed = airSpeed;

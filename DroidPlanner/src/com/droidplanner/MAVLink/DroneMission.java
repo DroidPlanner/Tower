@@ -6,14 +6,16 @@ import java.util.List;
 import com.MAVLink.waypoint;
 import com.google.android.gms.maps.model.LatLng;
 
-public class DroneMission {
+public class DroneMission extends DroneVariable{
+
 	public waypoint home;
 	public Double defaultAlt;
 	public List<waypoint> waypoints;
 	public int wpno;
 	public double disttowp;
 
-	public DroneMission(int wpno,double disttowp) {
+	public DroneMission(Drone myDrone,int wpno,double disttowp) {
+		super(myDrone);
 		this.wpno = wpno;
 		this.disttowp = disttowp;
 	}
