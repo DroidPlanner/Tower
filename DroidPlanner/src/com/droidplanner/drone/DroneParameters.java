@@ -6,9 +6,8 @@ import java.util.List;
 import android.widget.Toast;
 
 import com.MAVLink.Messages.MAVLinkMessage;
-import com.MAVLink.Messages.ardupilotmega.msg_param_request_list;
-import com.MAVLink.Messages.ardupilotmega.msg_param_set;
 import com.MAVLink.Messages.ardupilotmega.msg_param_value;
+import com.droidplanner.MAVLink.MavLinkParameters;
 import com.droidplanner.parameters.Parameter;
 import com.droidplanner.service.MAVLinkClient;
 
@@ -34,7 +33,7 @@ public class DroneParameters extends DroneVariable {
 
 	public void getAllParameters() {
 		parameters.clear();
-		requestParametersList();
+		MavLinkParameters.requestParametersList(MAV);
 	}
 
 	/**
@@ -62,21 +61,9 @@ public class DroneParameters extends DroneVariable {
 		}
 	}
 
-	private void requestParametersList() {
-		msg_param_request_list msg = new msg_param_request_list();
-		msg.target_system = 1;
-		msg.target_component = 1;
-		MAV.sendMavPacket(msg.pack());
+	public void sendParameter(Parameter parameter) {
+		MavLinkParameters.sendParameter(parameter, MAV);		
 	}
 
-	public void sendParameter(Parameter parameter) {
-		msg_param_set msg = new msg_param_set();
-		msg.target_system = 1;
-		msg.target_component = 1;
-		msg.setParam_Id(parameter.name);
-		msg.param_type = (byte) parameter.type;
-		msg.param_value = (float) parameter.value;
-		MAV.sendMavPacket(msg.pack());
-	}
 
 }
