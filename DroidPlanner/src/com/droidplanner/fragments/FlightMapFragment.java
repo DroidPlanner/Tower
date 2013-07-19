@@ -21,16 +21,13 @@ import com.droidplanner.fragments.markers.HomeMarker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 public class FlightMapFragment extends OfflineMapFragment implements OnMapLongClickListener {
 	public GoogleMap mMap;
-	private Marker guidedMarker;
+	private GuidedMarker guidedMarker = new GuidedMarker(mMap);
 	private Polyline flightPath;
 	private Polyline missionPath;
 
@@ -113,17 +110,6 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 		flightPath.setPoints(oldFlightPath);		
 	}
 
-	private void updateGuidedMarker(LatLng point) {
-		if(guidedMarker == null){
-			guidedMarker = mMap.addMarker(new MarkerOptions()
-			.anchor((float) 0.5, (float) 0.5)
-			.position(point)
-			.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));	
-		} else {
-			guidedMarker.setPosition(point);
-		}	
-	}
-
 	public void zoomToLastKnowPosition() {
 		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(drone.GPS.getPosition(), 16));
 	}
@@ -145,7 +131,7 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 		getPreferences();
 		if (isGuidedModeEnabled) {
 			mListener.onSetGuidedMode(point);	
-			updateGuidedMarker(point);
+			guidedMarker.updateGuidedMarker(point);
 		}
 	}
 
