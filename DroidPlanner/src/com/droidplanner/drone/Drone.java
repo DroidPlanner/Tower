@@ -20,22 +20,25 @@ public class Drone {
 	public DroneMission mission = new DroneMission(this);
 	public DroneAltitude altitude = new DroneAltitude(this);
 	public DroneOrientation orientation = new DroneOrientation(this);
+	public DroneParameters parameterMananger;
+	public WaypointMananger waypointMananger;
+	public CalibrationSetup calibrationSetup;
+
+	TTS tts;
+	private MAVLinkClient MavClient;
+	protected Context context;
 
 	private HudUpdatedListner hudListner;
 	private MapUpdatedListner mapListner;
 	private DroneTypeListner typeListner;
-	TTS tts;
-	public WaypointMananger waypointMananger;
-	private MAVLinkClient MavClient;
-	public DroneParameters parameterMananger;
-	public CalibrationSetup calibrationSetup;
-	public Context context;
-	public Drone(TTS tts, MAVLinkClient MAVClient, DroidPlannerApp droidPlannerApp,Context context) {
+
+	public Drone(TTS tts, MAVLinkClient MAVClient,
+			DroidPlannerApp droidPlannerApp, Context context) {
 		this.tts = tts;
 		this.MavClient = MAVClient;
 		this.context = context;
-		waypointMananger = new WaypointMananger(this.MavClient,mission);
-		parameterMananger = new DroneParameters(this,MAVClient);
+		waypointMananger = new WaypointMananger(this.MavClient, mission);
+		parameterMananger = new DroneParameters(this, MAVClient);
 		calibrationSetup = new CalibrationSetup(MAVClient);
 	}
 

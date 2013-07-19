@@ -21,8 +21,6 @@ import com.droidplanner.service.MAVLinkClient;
  * 
  */
 public class DroneParameters extends DroneVariable{
-	
-
 	public interface OnParameterManagerListner {
 		public abstract void onParameterReceived(Parameter parameter);
 	}
