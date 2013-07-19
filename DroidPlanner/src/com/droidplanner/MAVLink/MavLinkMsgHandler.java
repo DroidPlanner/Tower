@@ -26,6 +26,10 @@ public class MavLinkMsgHandler {
 	}
 	
 	public void receiveData(MAVLinkMessage msg) {
+		drone.waypointMananger.processMessage(msg);
+		drone.parameters.processMessage(msg);
+		drone.calibrationSetup.processMessage(msg);
+		
 		switch (msg.msgid) {
 		case msg_attitude.MAVLINK_MSG_ID_ATTITUDE:
 			msg_attitude m_att = (msg_attitude) msg;

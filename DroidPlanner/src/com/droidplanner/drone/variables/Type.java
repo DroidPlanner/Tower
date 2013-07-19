@@ -1,11 +1,13 @@
-package com.droidplanner.drone;
+package com.droidplanner.drone.variables;
 
 import com.MAVLink.Messages.enums.MAV_TYPE;
+import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.DroneVariable;
 
-public class DroneType extends DroneVariable{
+public class Type extends DroneVariable{
 	private int type = MAV_TYPE.MAV_TYPE_FIXED_WING;
 	
-	public DroneType(Drone myDrone) {
+	public Type(Drone myDrone) {
 		super(myDrone);
 	}
 

@@ -1,44 +1,25 @@
 package com.droidplanner;
 
-import java.util.List;
-
 import android.app.Application;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.widget.Toast;
 
-import com.MAVLink.waypoint;
 import com.MAVLink.Messages.MAVLinkMessage;
-import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
-import com.MAVLink.Messages.ardupilotmega.msg_request_data_stream;
-import com.MAVLink.Messages.enums.MAV_DATA_STREAM;
 import com.droidplanner.MAVLink.MavLinkMsgHandler;
+import com.droidplanner.MAVLink.MavLinkStreamRates;
 import com.droidplanner.drone.Drone;
-import com.droidplanner.helpers.CalibrationSetup;
+import com.droidplanner.drone.DroneInterfaces;
 import com.droidplanner.helpers.FollowMe;
 import com.droidplanner.helpers.RecordMe;
 import com.droidplanner.helpers.TTS;
-import com.droidplanner.parameters.Parameter;
-import com.droidplanner.parameters.ParameterManager;
-import com.droidplanner.parameters.ParameterManager.OnParameterManagerListner;
 import com.droidplanner.service.MAVLinkClient;
 import com.droidplanner.service.MAVLinkClient.OnMavlinkClientListner;
-import com.droidplanner.waypoints.WaypointMananger;
-import com.droidplanner.waypoints.WaypointMananger.OnWaypointManagerListner;
 
-public class DroidPlannerApp extends Application implements OnMavlinkClientListner, OnWaypointManagerListner, OnParameterManagerListner {
+public class DroidPlannerApp extends Application implements OnMavlinkClientListner {
 	public Drone drone;
 	public MAVLinkClient MAVClient;
-	public WaypointMananger waypointMananger;
-	public ParameterManager parameterMananger;
 	private MavLinkMsgHandler mavLinkMsgHandler;
 	public FollowMe followMe;
 	public RecordMe recordMe;
-	public CalibrationSetup calibrationSetup;
-	
 	public ConnectionStateListner conectionListner;
-	public OnParameterManagerListner parameterListner; 
-	private OnWaypointReceivedListner waypointsListner;
 	private TTS tts;
 	
 	public interface OnWaypointReceivedListner{
@@ -55,13 +36,10 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 		super.onCreate();
 
 		tts = new TTS(this);
-		drone = new Drone(tts);
 		MAVClient = new MAVLinkClient(this,this);
-		waypointMananger = new WaypointMananger(MAVClient,this);
-		parameterMananger = new ParameterManager(MAVClient, this);
+		drone = new Drone(tts,MAVClient,getApplicationContext());
 		followMe = new FollowMe(MAVClient, this,drone);
 		recordMe = new RecordMe(MAVClient, this,drone);
-		calibrationSetup = new CalibrationSetup(MAVClient);
 		mavLinkMsgHandler = new com.droidplanner.MAVLink.MavLinkMsgHandler(drone);
 	}
 	
@@ -69,9 +47,6 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 	@Override
 	public void notifyReceivedData(MAVLinkMessage msg) {
 		mavLinkMsgHandler.receiveData(msg);
-		waypointMananger.processMessage(msg);
-		parameterMananger.processMessage(msg);
-		calibrationSetup.processMessage(msg);
 	}
 
 	@Override
@@ -82,99 +57,21 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 
 	@Override
 	public void notifyConnected() {
-		setupMavlinkStreamRate();
+		MavLinkStreamRates.setupStreamRatesFromPref(this);
 		conectionListner.notifyConnected();
 		tts.speak("Connected");
 	}
-	
-	private void setupMavlinkStreamRate() {
-		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(this);
 
-		requestMavlinkDataStream(
-				MAV_DATA_STREAM.MAV_DATA_STREAM_EXTENDED_STATUS,
-				Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_ext_stat",
-						"0")));
-		requestMavlinkDataStream(MAV_DATA_STREAM.MAV_DATA_STREAM_EXTRA1,
-				Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_extra1",
-						"0")));
-		requestMavlinkDataStream(MAV_DATA_STREAM.MAV_DATA_STREAM_EXTRA2,
-				Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_extra2",
-						"0")));
-		requestMavlinkDataStream(MAV_DATA_STREAM.MAV_DATA_STREAM_EXTRA3,
-				Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_extra3",
-						"0")));
-		requestMavlinkDataStream(MAV_DATA_STREAM.MAV_DATA_STREAM_POSITION,
-				Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_position",
-						"0")));
-		requestMavlinkDataStream(MAV_DATA_STREAM.MAV_DATA_STREAM_RAW_SENSORS,
-				0);
-		requestMavlinkDataStream(MAV_DATA_STREAM.MAV_DATA_STREAM_RC_CHANNELS,
-				0);
-	}
-
-	private void requestMavlinkDataStream(int stream_id, int rate) {
-		msg_request_data_stream msg = new msg_request_data_stream();
-		msg.target_system = 1;
-		msg.target_component = 1;
-
-		msg.req_message_rate = (short) rate;
-		msg.req_stream_id = (byte) stream_id;
-
-		if (rate>0){
-			msg.start_stop = 1;
-		}else{
-			msg.start_stop = 0;
-		}
-		MAVClient.sendMavPacket(msg.pack());
-	}
-
-	@Override
-	public void onWaypointsReceived(List<waypoint> waypoints) {
-		if (waypoints != null) {
-			Toast.makeText(getApplicationContext(),
-					"Waypoints received from Drone", Toast.LENGTH_SHORT).show();
-			tts.speak("Waypoints received");
-			drone.mission.setHome(waypoints.get(0));
-			waypoints.remove(0); // Remove Home waypoint
-			drone.mission.clearWaypoints();
-			drone.mission.addWaypoints(waypoints);
-			waypointsListner.onWaypointsReceived();
-		}
-	}
-
-	@Override
-	public void onWriteWaypoints(msg_mission_ack msg) {
-		Toast.makeText(getApplicationContext(), "Waypoints sent",
-				Toast.LENGTH_SHORT).show();
-		tts.speak("Waypoints saved to Drone");
-	}
-
-
-	@Override
-	public void onParametersReceived() {
-		if (parameterListner != null) {
-			parameterListner.onParametersReceived();			
-		}
-	}
-	
-	@Override
-	public void onParameterReceived(Parameter parameter) {
-		if (parameterListner != null) {
-			parameterListner.onParameterReceived(parameter);			
-		}
-	}
-	
 	public void setConectionStateListner(ConnectionStateListner listner) {
 		conectionListner = listner;		
 	}
 	
 	public void setWaypointReceivedListner(OnWaypointReceivedListner listner){
-		waypointsListner = listner;
+		drone.mission.waypointsListner = listner;
 	}
 	
-	public void setOnParametersChangedListner(OnParameterManagerListner listner){
-		parameterListner = listner;
+	public void setOnParametersChangedListner(DroneInterfaces.OnParameterManagerListner listner){
+		drone.parameters.parameterListner = listner;
 	}
 
 

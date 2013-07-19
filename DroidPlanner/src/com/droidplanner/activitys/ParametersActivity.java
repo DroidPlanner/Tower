@@ -10,13 +10,13 @@ import android.widget.Toast;
 import com.droidplanner.R;
 import com.droidplanner.dialogs.OpenFileDialog;
 import com.droidplanner.dialogs.OpenParameterDialog;
+import com.droidplanner.drone.DroneInterfaces;
 import com.droidplanner.fragments.ParametersTableFragment;
 import com.droidplanner.parameters.Parameter;
-import com.droidplanner.parameters.ParameterManager.OnParameterManagerListner;
 import com.droidplanner.widgets.paramRow.ParamRow;
 
 public class ParametersActivity extends SuperActivity implements
-		OnParameterManagerListner {
+		DroneInterfaces.OnParameterManagerListner {
 
 	private ParametersTableFragment tableFragment;
 
@@ -40,7 +40,7 @@ public class ParametersActivity extends SuperActivity implements
 		switch (item.getItemId()) {
 		case R.id.menu_load_parameters:
 			if (app.MAVClient.isConnected()) {
-				app.parameterMananger.getAllParameters();				
+				drone.parameters.getAllParameters();				
 			}else{
 				Toast.makeText(this, "Please connect first", Toast.LENGTH_SHORT).show();
 			}
@@ -69,7 +69,7 @@ public class ParametersActivity extends SuperActivity implements
 		List<ParamRow> modRows = tableFragment.getModifiedParametersRows();
 		for (ParamRow row : modRows) {
 			if (!row.isNewValueEqualToDroneParam()){
-				app.parameterMananger.sendParameter(row.getParameterFromRow());
+				drone.parameters.sendParameter(row.getParameterFromRow());
 			}						
 		}		
 		Toast.makeText(this, "Write "+modRows.size()+" parameters", Toast.LENGTH_SHORT).show();		
@@ -87,11 +87,6 @@ public class ParametersActivity extends SuperActivity implements
 		dialog.openDialog(this);
 	}		
 	
-	@Override
-	public void onParametersReceived() {
-		Toast.makeText(this, "Parameters Received", Toast.LENGTH_LONG).show();
-	}
-
 	@Override
 	public void onParameterReceived(Parameter parameter) {
 		tableFragment.refreshRowParameter(parameter);
