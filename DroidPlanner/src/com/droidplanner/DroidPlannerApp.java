@@ -135,10 +135,10 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 			Toast.makeText(getApplicationContext(),
 					"Waypoints received from Drone", Toast.LENGTH_SHORT).show();
 			tts.speak("Waypoints received");
-			drone.setHome(waypoints.get(0));
+			drone.mission.setHome(waypoints.get(0));
 			waypoints.remove(0); // Remove Home waypoint
-			drone.clearWaypoints();
-			drone.addWaypoints(waypoints);
+			drone.mission.clearWaypoints();
+			drone.mission.addWaypoints(waypoints);
 			waypointsListner.onWaypointsReceived();
 		}
 	}

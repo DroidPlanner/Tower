@@ -203,6 +203,6 @@ public abstract class SuperActivity extends Activity implements
 	
 	@Override
 	public void onAltitudeChanged(double newAltitude) {
-		drone.setDefaultAlt(newAltitude);
+		drone.mission.setDefaultAlt(newAltitude);
 	}
 }

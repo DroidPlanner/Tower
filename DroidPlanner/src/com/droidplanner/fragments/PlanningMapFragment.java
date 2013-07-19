@@ -175,7 +175,7 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 	private List<MarkerOptions> getMissionMarkers(Drone drone) {
 		int i = 1;
 		List<MarkerOptions> MarkerList = new ArrayList<MarkerOptions>();
-		for (waypoint point : drone.getWaypoints()) {
+		for (waypoint point : drone.mission.getWaypoints()) {
 			MarkerList
 					.add(new MarkerOptions()
 							.position(point.coord)
@@ -209,7 +209,7 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		flightPath.color(Color.YELLOW).width(3);
 	
 		flightPath.add(drone.mission.getHome().coord);
-		for (waypoint point : drone.getWaypoints()) {
+		for (waypoint point : drone.mission.getWaypoints()) {
 			flightPath.add(point.coord);
 		}
 		return flightPath;

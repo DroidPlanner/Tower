@@ -91,7 +91,7 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 	public void updateMissionPath(Drone drone) {
 		ArrayList<LatLng> missionPoints = new ArrayList<LatLng>();
 		missionPoints.add(drone.mission.getHome().coord);
-		for (waypoint point : drone.getWaypoints()) {
+		for (waypoint point : drone.mission.getWaypoints()) {
 			missionPoints.add(point.coord);
 		}
 		missionPath.setPoints(missionPoints);

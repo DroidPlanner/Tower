@@ -26,4 +26,23 @@ public class DroneState extends DroneVariable {
 	public ApmModes getMode() {
 		return mode;
 	}
+
+	public void setArmedAndFailsafe(boolean armed, boolean failsafe) {
+		if (this.armed != armed | this.failsafe != failsafe) {
+			if (this.armed != armed) {
+				myDrone.tts.speakArmedState(armed);					
+			}
+			this.armed = armed;
+			this.failsafe = failsafe;
+			myDrone.notifyHudUpdate();
+		}
+	}
+
+	public void setMode(ApmModes mode) {
+		if (this.mode != mode) {
+			this.mode = mode;
+			myDrone.tts.speakMode(mode);
+			myDrone.notifyHudUpdate();
+		}
+	}
 }

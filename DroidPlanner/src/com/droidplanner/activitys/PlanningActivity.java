@@ -110,7 +110,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 		case R.id.menu_send_to_apm:
 			List<waypoint> data = new ArrayList<waypoint>();
 			data.add(drone.mission.getHome());
-			data.addAll(drone.getWaypoints());
+			data.addAll(drone.mission.getWaypoints());
 			app.waypointMananger.writeWaypoints(data);
 			return true;
 		case R.id.menu_open_file:
@@ -157,7 +157,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 		PolygonDialog polygonDialog = new PolygonDialog() {
 			@Override
 			public void onPolygonGenerated(List<waypoint> list) {
-				drone.addWaypoints(list);
+				drone.mission.addWaypoints(list);
 				update();
 			}
 		};
@@ -165,7 +165,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 	}
 
 	private void clearWaypointsAndUpdate() {
-		drone.clearWaypoints();
+		drone.mission.clearWaypoints();
 		update();
 	}
 
@@ -187,7 +187,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 
 	private void update() {
 		planningMapFragment.update(drone, polygon);
-		WaypointListNumber.setText(drone.getWaypointData());
+		WaypointListNumber.setText(drone.mission.getWaypointData());
 	}
 
 	@Override
@@ -195,7 +195,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 		switch (planningMapFragment.mode) {
 		default:
 		case MISSION:
-			drone.addWaypoint(point);
+			drone.mission.addWaypoint(point);
 			break;
 		case POLYGON:
 			polygon.addWaypoint(point);
@@ -206,13 +206,13 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 
 	@Override
 	public void onMoveHome(LatLng coord) {
-		drone.setHome(coord);	
+		drone.mission.setHome(coord);	
 		update();
 	}
 
 	@Override
 	public void onMoveWaypoint(LatLng coord, int Number) {
-		drone.moveWaypoint(coord, Number);
+		drone.mission.moveWaypoint(coord, Number);
 		update();
 	}
 
