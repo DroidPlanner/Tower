@@ -9,16 +9,14 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class DroneMission extends DroneVariable {
 
-	public waypoint home;
-	public Double defaultAlt;
-	public List<waypoint> waypoints;
-	public int wpno;
-	public double disttowp;
+	public waypoint home = new waypoint(0.0, 0.0, 0.0);
+	public List<waypoint> waypoints = new ArrayList<waypoint>();
+	public Double defaultAlt = 50.0;
+	public int wpno = -1;
+	public double disttowp = 0;
 
-	public DroneMission(Drone myDrone, int wpno, double disttowp) {
+	public DroneMission(Drone myDrone) {
 		super(myDrone);
-		this.wpno = wpno;
-		this.disttowp = disttowp;
 	}
 
 	public double getDisttowp() {
@@ -56,7 +54,7 @@ public class DroneMission extends DroneVariable {
 	public void setWpno(int wpno) {
 		if (this.wpno != wpno) {
 			this.wpno = wpno;
-			myDrone.tts.speak("Going for waypoint "+wpno);
+			myDrone.tts.speak("Going for waypoint " + wpno);
 			myDrone.notifyHudUpdate();
 		}
 	}
@@ -93,7 +91,7 @@ public class DroneMission extends DroneVariable {
 		String waypointData = String.format(Locale.ENGLISH, "Home\t%2.0f\n",
 				home.Height);
 		waypointData += String.format("Def:\t%2.0f\n", getDefaultAlt());
-	
+
 		int i = 1;
 		for (waypoint point : waypoints) {
 			waypointData += String.format(Locale.ENGLISH, "WP%02d \t%2.0f\n",

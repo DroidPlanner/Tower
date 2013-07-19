@@ -1,13 +1,11 @@
 package com.droidplanner.MAVLink;
 
 public class DroneAltitude extends DroneVariable {
-	public double altitude;
-	public double targetAltitude;
+	public double altitude = 0;
+	public double targetAltitude = 0;
 
-	public DroneAltitude(Drone myDrone, double altitude, double targetAltitude) {
+	public DroneAltitude(Drone myDrone) {
 		super(myDrone);
-		this.altitude = altitude;
-		this.targetAltitude = targetAltitude;
 	}
 
 	public double getAltitude() {

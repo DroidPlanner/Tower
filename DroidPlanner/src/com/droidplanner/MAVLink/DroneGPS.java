@@ -3,16 +3,13 @@ package com.droidplanner.MAVLink;
 import com.google.android.gms.maps.model.LatLng;
 
 public class DroneGPS extends DroneVariable {
-	public double gps_eph;
-	public int satCount;
-	public int fixType;
+	public double gps_eph= -1;
+	public int satCount = -1;
+	public int fixType= -1;
 	public LatLng position;
 
-	public DroneGPS(Drone myDrone, double gps_eph, int satCount, int fixType) {
+	public DroneGPS(Drone myDrone) {
 		super(myDrone);
-		this.gps_eph = gps_eph;
-		this.satCount = satCount;
-		this.fixType = fixType;
 	}
 
 	public LatLng getPosition() {

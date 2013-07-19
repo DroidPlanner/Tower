@@ -3,16 +3,12 @@ package com.droidplanner.MAVLink;
 import com.MAVLink.Messages.ApmModes;
 
 public class DroneState extends DroneVariable {
-	public boolean failsafe;
-	public boolean armed;
-	public ApmModes mode;
+	public boolean failsafe = false;
+	public boolean armed = false;
+	public ApmModes mode = ApmModes.UNKNOWN;
 
-	public DroneState(Drone myDrone, boolean failsafe, boolean armed,
-			ApmModes mode) {
+	public DroneState(Drone myDrone) {
 		super(myDrone);
-		this.failsafe = failsafe;
-		this.armed = armed;
-		this.mode = mode;
 	}
 
 	public boolean isFailsafe() {
@@ -30,7 +26,7 @@ public class DroneState extends DroneVariable {
 	public void setArmedAndFailsafe(boolean armed, boolean failsafe) {
 		if (this.armed != armed | this.failsafe != failsafe) {
 			if (this.armed != armed) {
-				myDrone.tts.speakArmedState(armed);					
+				myDrone.tts.speakArmedState(armed);
 			}
 			this.armed = armed;
 			this.failsafe = failsafe;
