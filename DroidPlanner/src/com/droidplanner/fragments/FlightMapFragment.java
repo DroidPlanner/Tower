@@ -12,6 +12,7 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.MAVLink.waypoint;
 import com.droidplanner.activitys.SuperActivity;
@@ -112,7 +113,11 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 	}
 
 	public void zoomToLastKnowPosition() {
-		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(drone.GPS.getPosition(), 16));
+		if (drone.GPS.isPositionValid()) {
+			mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(drone.GPS.getPosition(), 16));			
+		}else{
+			Toast.makeText(getActivity(), "There is no valid location for the Drone", Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	private void addMissionPathToMap() {

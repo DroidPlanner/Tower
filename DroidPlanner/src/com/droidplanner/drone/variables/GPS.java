@@ -14,6 +14,10 @@ public class GPS extends DroneVariable {
 		super(myDrone);
 	}
 
+	public boolean isPositionValid() {
+		return (position!=null);
+	}
+	
 	public LatLng getPosition() {
 		return position;
 	}
