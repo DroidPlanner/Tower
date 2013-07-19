@@ -2,7 +2,6 @@ package com.droidplanner.fragments;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import android.app.Activity;
 import android.content.Context;
@@ -15,10 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.MAVLink.waypoint;
-import com.droidplanner.R;
 import com.droidplanner.activitys.SuperActivity;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.fragments.markers.DroneMarker;
+import com.droidplanner.fragments.markers.HomeMarker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
@@ -41,7 +40,7 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 	
 	public boolean hasBeenZoomed = false;
 	private OnFlighDataListener mListener;
-	private Marker homeMarker;
+	public HomeMarker homeMarker = new HomeMarker(this.mMap);
 	public DroneMarker droneMarker;
 	public Drone drone;
 	
@@ -133,26 +132,6 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 		PolylineOptions missionPathOptions = new PolylineOptions();
 		missionPathOptions.color(Color.YELLOW).width(3).zIndex(0);
 		missionPath = mMap.addPolyline(missionPathOptions);
-	}
-	
-	public void updateHomeToMap(Drone drone) {
-		if(homeMarker== null){
-		homeMarker = mMap.addMarker(new MarkerOptions()
-		.position(drone.mission.getHome().coord)
-		.snippet(
-				String.format(Locale.ENGLISH, "%.2f",
-						drone.mission.getHome().Height))
-		.draggable(true)
-		.anchor((float) 0.5, (float) 0.5)
-		.icon(BitmapDescriptorFactory
-				.fromResource(R.drawable.ic_menu_home))
-		.title("Home"));
-		}else {
-			homeMarker.setPosition(drone.mission.getHome().coord);
-			homeMarker.setSnippet(
-				String.format(Locale.ENGLISH, "%.2f",
-						drone.mission.getHome().Height));
-		}
 	}
 	
 	private void addFlightPathToMap() {

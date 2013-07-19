@@ -41,7 +41,7 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 				
 		flightMapFragment = ((FlightMapFragment)getFragmentManager().findFragmentById(R.id.flightMapFragment));
 		flightMapFragment.updateMissionPath(drone);
-		flightMapFragment.updateHomeToMap(drone);
+		flightMapFragment.homeMarker.update(drone);
 		
 		app.setWaypointReceivedListner(this);
 		drone.setDroneTypeChangedListner(this);
@@ -123,7 +123,7 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 	@Override
 	public void onWaypointsReceived() {
 		flightMapFragment.updateMissionPath(drone);
-		flightMapFragment.updateHomeToMap(drone);
+		flightMapFragment.homeMarker.update(drone);
 		wpSpinner.updateWpSpinner(drone);		
 	}
 
