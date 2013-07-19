@@ -129,7 +129,7 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 
 	@Override
 	public void OnModeSpinnerSelected(String text) {
-		ApmModes mode = ApmModes.getMode(text,drone.getType());
+		ApmModes mode = ApmModes.getMode(text,drone.type.getType());
 		if (mode != ApmModes.UNKNOWN) {
 			changeFlightMode(mode);
 		}		

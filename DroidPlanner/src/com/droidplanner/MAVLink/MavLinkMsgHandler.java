@@ -45,11 +45,11 @@ public class MavLinkMsgHandler {
 			break;
 		case msg_heartbeat.MAVLINK_MSG_ID_HEARTBEAT:
 			msg_heartbeat msg_heart = (msg_heartbeat) msg;
-			drone.setType(msg_heart.type);
+			drone.type.setType(msg_heart.type);
 			drone.state.setArmedAndFailsafe(
 					(msg_heart.base_mode & (byte) MAV_MODE_FLAG.MAV_MODE_FLAG_SAFETY_ARMED) == (byte) MAV_MODE_FLAG.MAV_MODE_FLAG_SAFETY_ARMED, msg_heart.system_status == (byte) MAV_STATE.MAV_STATE_CRITICAL);
             ApmModes newMode;
-            newMode = ApmModes.getMode(msg_heart.custom_mode,drone.getType());
+            newMode = ApmModes.getMode(msg_heart.custom_mode,drone.type.getType());
             drone.state.setMode(newMode);
 			break;
 		case msg_global_position_int.MAVLINK_MSG_ID_GLOBAL_POSITION_INT:

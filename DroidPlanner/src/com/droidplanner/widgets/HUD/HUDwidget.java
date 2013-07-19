@@ -639,7 +639,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 	}
 	
 	private void drawFailsafe(Canvas canvas) {
-		int droneType = drone.getType();
+		int droneType = drone.type.getType();
 		boolean isArmed = drone.state.isArmed();
 			
 		if (hudDebug) {

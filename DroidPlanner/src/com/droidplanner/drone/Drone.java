@@ -1,11 +1,9 @@
 package com.droidplanner.drone;
 
-import com.MAVLink.Messages.enums.MAV_TYPE;
 import com.droidplanner.helpers.TTS;
 
 public class Drone {
-	private int type = MAV_TYPE.MAV_TYPE_FIXED_WING;
-
+	public DroneType type = new DroneType(this);
 	public DroneGPS GPS = new DroneGPS(this);
 	public DroneSpeed speed = new DroneSpeed(this);
 	public DroneState state = new DroneState(this);
@@ -63,20 +61,13 @@ public class Drone {
 		notifyHudUpdate();
 	}
 
-	public void setType(int type) {
-		if (this.type != type) {
-			this.type = type;
-			notifyTypeChanged();
-		}
-	}
-
 	void notifyPositionChange() {
 		if (mapListner != null) {
 			mapListner.onDroneUpdate();
 		}
 	}
 
-	private void notifyTypeChanged() {
+	void notifyTypeChanged() {
 		if (typeListner != null) {
 			typeListner.onDroneTypeChanged();
 		}
@@ -86,9 +77,4 @@ public class Drone {
 		if (hudListner != null)
 			hudListner.onDroneUpdate();
 	}
-
-	public int getType() {
-		return type;
-	}
-
 }

@@ -51,7 +51,7 @@ public class SelectModeSpinner extends SpinnerSelfSelect implements OnSpinnerIte
 
 	private void updateWpSpinnerWithList(Drone drone) {
 		modeSpinnerAdapter.clear();
-		modeSpinnerAdapter.addAll(ApmModes.getModeList(drone.getType()));
+		modeSpinnerAdapter.addAll(ApmModes.getModeList(drone.type.getType()));
 	}
 
 	@Override

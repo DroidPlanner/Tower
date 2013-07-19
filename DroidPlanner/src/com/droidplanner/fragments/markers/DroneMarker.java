@@ -56,7 +56,7 @@ public class DroneMarker implements MapUpdatedListner {
 	}
 
 	private void buildBitmaps() {
-		bitmaps = new DroneBitmaps(flightMapFragment.getResources(),flightMapFragment.drone.getType());
+		bitmaps = new DroneBitmaps(flightMapFragment.getResources(),flightMapFragment.drone.type.getType());
 	}
 
 	public void onDroneUpdate() {
