@@ -27,7 +27,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 public class FlightMapFragment extends OfflineMapFragment implements OnMapLongClickListener {
 	public GoogleMap mMap;
-	private GuidedMarker guidedMarker = new GuidedMarker(mMap);
+	private GuidedMarker guidedMarker;
 	private Polyline flightPath;
 	private Polyline missionPath;
 
@@ -37,7 +37,7 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 	
 	public boolean hasBeenZoomed = false;
 	private OnFlighDataListener mListener;
-	public HomeMarker homeMarker = new HomeMarker(this.mMap);
+	public HomeMarker homeMarker;
 	public DroneMarker droneMarker;
 	public Drone drone;
 	
@@ -55,7 +55,8 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 		drone = ((SuperActivity)getActivity()).app.drone;
 		
 		droneMarker = new DroneMarker(this);
-		
+		homeMarker = new HomeMarker(this.mMap);
+		guidedMarker = new GuidedMarker(mMap);
 		
 		addFlightPathToMap();	
 		addMissionPathToMap();
