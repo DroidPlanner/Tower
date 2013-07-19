@@ -3,7 +3,6 @@ package com.droidplanner.fragments;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -87,11 +86,4 @@ public class ParametersTableFragment extends Fragment {
 			}
 		}
 	}
-
-	@Override
-	public void onAttach(Activity activity) {
-		// TODO Auto-generated method stub
-		super.onAttach(activity);
-	}
-
 }

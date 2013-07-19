@@ -416,14 +416,6 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 		vsiBox.lineTo(scroller.left - vsi_width, scroller.top + vsi_width);
 		vsiBox.lineTo(scroller.left - vsi_width, scroller.bottom - vsi_width);
 		vsiBox.lineTo(scroller.left, scroller.bottom);
-		/*
-		float vsiFillTrim = 0;
-		if (verticalSpeed > 1) { // TODO Vertical Speed indicator must be tested
-			vsiFillTrim = -1;
-		} else if (verticalSpeed < -1) {
-			vsiFillTrim = 1;
-		}
-		*/
 		Path vsiFill = new Path();
 		float vsiIndicatorEnd = scroller.centerY() - ((float) verticalSpeed) * linespace;
 		vsiFill.moveTo(scroller.left, scroller.centerY());
@@ -510,7 +502,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 			targetSpeed = hudDebugTargetSpeed;
 		}
 		
-		double speed = airSpeed; // TODO test airSpeed
+		double speed = airSpeed;
 		if (speed == 0)
 			speed = groundSpeed;
 

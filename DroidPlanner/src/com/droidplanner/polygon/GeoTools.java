@@ -14,9 +14,9 @@ public class GeoTools {
 	 * Provides the distance from a point P to the line segment that passes
 	 * through A-B. If the point is not on the side of the line, returns the
 	 * distance to the closest point
-	 * @param L1 TODO
-	 * @param L2 TODO
-	 * @param P TODO
+	 * @param L1 First point of the line
+	 * @param L2 Second point of the line
+	 * @param P  Point to measure the distance
 	 */
 	public static double pointToLineDistance(LatLng L1, LatLng L2, LatLng P) {
 		double A = P.longitude - L1.longitude;
