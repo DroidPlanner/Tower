@@ -40,7 +40,7 @@ public class ParametersActivity extends SuperActivity implements
 		switch (item.getItemId()) {
 		case R.id.menu_load_parameters:
 			if (app.MAVClient.isConnected()) {
-				drone.parameterMananger.getAllParameters();				
+				drone.parameters.getAllParameters();				
 			}else{
 				Toast.makeText(this, "Please connect first", Toast.LENGTH_SHORT).show();
 			}
@@ -69,7 +69,7 @@ public class ParametersActivity extends SuperActivity implements
 		List<ParamRow> modRows = tableFragment.getModifiedParametersRows();
 		for (ParamRow row : modRows) {
 			if (!row.isNewValueEqualToDroneParam()){
-				drone.parameterMananger.sendParameter(row.getParameterFromRow());
+				drone.parameters.sendParameter(row.getParameterFromRow());
 			}						
 		}		
 		Toast.makeText(this, "Write "+modRows.size()+" parameters", Toast.LENGTH_SHORT).show();		

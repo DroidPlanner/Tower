@@ -71,7 +71,7 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 	}
 	
 	public void setOnParametersChangedListner(DroneInterfaces.OnParameterManagerListner listner){
-		drone.parameterMananger.parameterListner = listner;
+		drone.parameters.parameterListner = listner;
 	}
 
 

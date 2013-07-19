@@ -27,7 +27,7 @@ public class MavLinkMsgHandler {
 	
 	public void receiveData(MAVLinkMessage msg) {
 		drone.waypointMananger.processMessage(msg);
-		drone.parameterMananger.processMessage(msg);
+		drone.parameters.processMessage(msg);
 		drone.calibrationSetup.processMessage(msg);
 		
 		switch (msg.msgid) {
