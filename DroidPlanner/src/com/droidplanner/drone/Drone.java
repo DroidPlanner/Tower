@@ -25,7 +25,7 @@ public class Drone {
 	public CalibrationSetup calibrationSetup;
 
 	TTS tts;
-	private MAVLinkClient MavClient;
+	protected MAVLinkClient MavClient;
 	protected Context context;
 
 	private HudUpdatedListner hudListner;
