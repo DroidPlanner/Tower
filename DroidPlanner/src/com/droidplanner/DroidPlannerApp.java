@@ -12,8 +12,8 @@ import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.MAVLink.Messages.ardupilotmega.msg_request_data_stream;
 import com.MAVLink.Messages.enums.MAV_DATA_STREAM;
-import com.droidplanner.MAVLink.Drone;
 import com.droidplanner.MAVLink.MavLinkMsgHandler;
+import com.droidplanner.drone.Drone;
 import com.droidplanner.helpers.CalibrationSetup;
 import com.droidplanner.helpers.FollowMe;
 import com.droidplanner.helpers.RecordMe;
@@ -135,10 +135,10 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 			Toast.makeText(getApplicationContext(),
 					"Waypoints received from Drone", Toast.LENGTH_SHORT).show();
 			tts.speak("Waypoints received");
-			drone.setHome(waypoints.get(0));
+			drone.mission.setHome(waypoints.get(0));
 			waypoints.remove(0); // Remove Home waypoint
-			drone.clearWaypoints();
-			drone.addWaypoints(waypoints);
+			drone.mission.clearWaypoints();
+			drone.mission.addWaypoints(waypoints);
 			waypointsListner.onWaypointsReceived();
 		}
 	}

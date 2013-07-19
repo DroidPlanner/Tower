@@ -12,7 +12,7 @@ import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.ardupilotmega.msg_set_mode;
 import com.droidplanner.DroidPlannerApp.OnWaypointReceivedListner;
 import com.droidplanner.R;
-import com.droidplanner.MAVLink.Drone.DroneTypeListner;
+import com.droidplanner.drone.DroneInterfaces.DroneTypeListner;
 import com.droidplanner.fragments.FlightMapFragment;
 import com.droidplanner.fragments.FlightMapFragment.OnFlighDataListener;
 import com.droidplanner.widgets.spinners.SelectModeSpinner;
@@ -41,7 +41,7 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 				
 		flightMapFragment = ((FlightMapFragment)getFragmentManager().findFragmentById(R.id.flightMapFragment));
 		flightMapFragment.updateMissionPath(drone);
-		flightMapFragment.updateHomeToMap(drone);
+		flightMapFragment.homeMarker.update(drone);
 		
 		app.setWaypointReceivedListner(this);
 		drone.setDroneTypeChangedListner(this);
@@ -123,13 +123,13 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 	@Override
 	public void onWaypointsReceived() {
 		flightMapFragment.updateMissionPath(drone);
-		flightMapFragment.updateHomeToMap(drone);
+		flightMapFragment.homeMarker.update(drone);
 		wpSpinner.updateWpSpinner(drone);		
 	}
 
 	@Override
 	public void OnModeSpinnerSelected(String text) {
-		ApmModes mode = ApmModes.getMode(text,drone.getType());
+		ApmModes mode = ApmModes.getMode(text,drone.type.getType());
 		if (mode != ApmModes.UNKNOWN) {
 			changeFlightMode(mode);
 		}		

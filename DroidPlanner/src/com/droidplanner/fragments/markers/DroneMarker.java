@@ -2,7 +2,7 @@ package com.droidplanner.fragments.markers;
 
 import android.util.Log;
 
-import com.droidplanner.MAVLink.Drone.MapUpdatedListner;
+import com.droidplanner.drone.DroneInterfaces.MapUpdatedListner;
 import com.droidplanner.fragments.FlightMapFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -10,7 +10,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class DroneMarker implements MapUpdatedListner {
-	public Marker droneMarker;
+	private Marker droneMarker;
 	private FlightMapFragment flightMapFragment;
 	private DroneBitmaps bitmaps;
 
@@ -56,11 +56,11 @@ public class DroneMarker implements MapUpdatedListner {
 	}
 
 	private void buildBitmaps() {
-		bitmaps = new DroneBitmaps(flightMapFragment.getResources(),flightMapFragment.drone.getType());
+		bitmaps = new DroneBitmaps(flightMapFragment.getResources(),flightMapFragment.drone.type.getType());
 	}
 
 	public void onDroneUpdate() {
-		updatePosition(flightMapFragment.drone.getYaw(), flightMapFragment.drone.getPosition());
-		flightMapFragment.addFlithPathPoint(flightMapFragment.drone.getPosition());		
+		updatePosition(flightMapFragment.drone.orientation.getYaw(), flightMapFragment.drone.GPS.getPosition());
+		flightMapFragment.addFlithPathPoint(flightMapFragment.drone.GPS.getPosition());		
 	}
 }

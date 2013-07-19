@@ -7,7 +7,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.MAVLink.Messages.ApmModes;
-import com.droidplanner.MAVLink.Drone;
+import com.droidplanner.drone.Drone;
 import com.droidplanner.widgets.spinners.SpinnerSelfSelect.OnSpinnerItemSelectedListener;
 
 public class SelectModeSpinner extends SpinnerSelfSelect implements OnSpinnerItemSelectedListener {
@@ -51,7 +51,7 @@ public class SelectModeSpinner extends SpinnerSelfSelect implements OnSpinnerIte
 
 	private void updateWpSpinnerWithList(Drone drone) {
 		modeSpinnerAdapter.clear();
-		modeSpinnerAdapter.addAll(ApmModes.getModeList(drone.getType()));
+		modeSpinnerAdapter.addAll(ApmModes.getModeList(drone.type.getType()));
 	}
 
 	@Override
