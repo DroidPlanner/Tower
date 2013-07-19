@@ -20,20 +20,18 @@ import com.droidplanner.service.MAVLinkClient;
  * 
  */
 public class DroneParameters extends DroneVariable {
-	MAVLinkClient MAV;
 	private List<Parameter> parameters;
 
 	public DroneInterfaces.OnParameterManagerListner parameterListner;
 
 	public DroneParameters(Drone myDrone, MAVLinkClient MAV) {
 		super(myDrone);
-		this.MAV = MAV;
 		parameters = new ArrayList<Parameter>();
 	}
 
 	public void getAllParameters() {
 		parameters.clear();
-		MavLinkParameters.requestParametersList(MAV);
+		MavLinkParameters.requestParametersList(myDrone.MavClient);
 	}
 
 	/**
@@ -62,7 +60,7 @@ public class DroneParameters extends DroneVariable {
 	}
 
 	public void sendParameter(Parameter parameter) {
-		MavLinkParameters.sendParameter(parameter, MAV);		
+		MavLinkParameters.sendParameter(parameter, myDrone.MavClient);		
 	}
 
 
