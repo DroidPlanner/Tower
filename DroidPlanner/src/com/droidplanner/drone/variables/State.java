@@ -1,15 +1,17 @@
-package com.droidplanner.drone;
+package com.droidplanner.drone.variables;
 
 import com.MAVLink.waypoint;
 import com.MAVLink.Messages.ApmModes;
 import com.droidplanner.MAVLink.MavLinkModes;
+import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.DroneVariable;
 
-public class DroneState extends DroneVariable {
+public class State extends DroneVariable {
 	private boolean failsafe = false;
 	private boolean armed = false;
 	private ApmModes mode = ApmModes.UNKNOWN;
 
-	public DroneState(Drone myDrone) {
+	public State(Drone myDrone) {
 		super(myDrone);
 	}
 

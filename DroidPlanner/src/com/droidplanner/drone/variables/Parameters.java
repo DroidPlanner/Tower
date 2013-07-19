@@ -1,4 +1,4 @@
-package com.droidplanner.drone;
+package com.droidplanner.drone.variables;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +8,9 @@ import android.widget.Toast;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_param_value;
 import com.droidplanner.MAVLink.MavLinkParameters;
+import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.DroneInterfaces;
+import com.droidplanner.drone.DroneVariable;
 import com.droidplanner.parameters.Parameter;
 
 /**
@@ -18,12 +21,12 @@ import com.droidplanner.parameters.Parameter;
  * MAV Message.
  * 
  */
-public class DroneParameters extends DroneVariable {
+public class Parameters extends DroneVariable {
 	private List<Parameter> parameters = new ArrayList<Parameter>();
 
 	public DroneInterfaces.OnParameterManagerListner parameterListner;
 
-	public DroneParameters(Drone myDrone) {
+	public Parameters(Drone myDrone) {
 		super(myDrone);
 	}
 

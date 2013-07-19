@@ -1,10 +1,13 @@
-package com.droidplanner.drone;
+package com.droidplanner.drone.variables;
 
-public class DroneAltitude extends DroneVariable {
+import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.DroneVariable;
+
+public class Altitude extends DroneVariable {
 	private double altitude = 0;
 	private double targetAltitude = 0;
 
-	public DroneAltitude(Drone myDrone) {
+	public Altitude(Drone myDrone) {
 		super(myDrone);
 	}
 

@@ -1,12 +1,15 @@
-package com.droidplanner.drone;
+package com.droidplanner.drone.variables;
 
-public class DroneSpeed extends DroneVariable {
+import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.DroneVariable;
+
+public class Speed extends DroneVariable {
 	private double verticalSpeed = 0;
 	private double groundSpeed = 0;
 	private double airSpeed = 0;
 	private double targetSpeed = 0;
 
-	public DroneSpeed(Drone myDrone) {
+	public Speed(Drone myDrone) {
 		super(myDrone);
 	}
 

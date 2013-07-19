@@ -5,26 +5,36 @@ import android.content.Context;
 import com.droidplanner.drone.DroneInterfaces.DroneTypeListner;
 import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
 import com.droidplanner.drone.DroneInterfaces.MapUpdatedListner;
+import com.droidplanner.drone.variables.Altitude;
+import com.droidplanner.drone.variables.Battery;
+import com.droidplanner.drone.variables.Calibration;
+import com.droidplanner.drone.variables.GPS;
+import com.droidplanner.drone.variables.Mission;
+import com.droidplanner.drone.variables.Orientation;
+import com.droidplanner.drone.variables.Parameters;
+import com.droidplanner.drone.variables.Speed;
+import com.droidplanner.drone.variables.State;
+import com.droidplanner.drone.variables.Type;
 import com.droidplanner.helpers.TTS;
 import com.droidplanner.service.MAVLinkClient;
 import com.droidplanner.waypoints.WaypointMananger;
 
 public class Drone {
-	public DroneType type = new DroneType(this);
-	public DroneGPS GPS = new DroneGPS(this);
-	public DroneSpeed speed = new DroneSpeed(this);
-	public DroneState state = new DroneState(this);
-	public DroneBattery battery = new DroneBattery(this);
-	public DroneMission mission = new DroneMission(this);
-	public DroneAltitude altitude = new DroneAltitude(this);
-	public DroneOrientation orientation = new DroneOrientation(this);
-	public DroneParameters parameters;
+	public Type type = new Type(this);
+	public GPS GPS = new GPS(this);
+	public Speed speed = new Speed(this);
+	public State state = new State(this);
+	public Battery battery = new Battery(this);
+	public Mission mission = new Mission(this);
+	public Altitude altitude = new Altitude(this);
+	public Orientation orientation = new Orientation(this);
+	public Parameters parameters;
 	public WaypointMananger waypointMananger;
-	public DroneCalibration calibrationSetup = new DroneCalibration(this);
+	public Calibration calibrationSetup = new Calibration(this);
 
-	TTS tts;
-	protected MAVLinkClient MavClient;
-	protected Context context;
+	public TTS tts;
+	public MAVLinkClient MavClient;
+	public Context context;
 
 	private HudUpdatedListner hudListner;
 	private MapUpdatedListner mapListner;
@@ -36,7 +46,7 @@ public class Drone {
 		this.MavClient = mavClient;
 		this.context = context;
 		waypointMananger = new WaypointMananger(this.MavClient, mission);
-		parameters = new DroneParameters(this);
+		parameters = new Parameters(this);
 	}
 
 	public void setHudListner(HudUpdatedListner listner) {
@@ -66,19 +76,19 @@ public class Drone {
 		notifyHudUpdate();
 	}
 
-	void notifyPositionChange() {
+	public void notifyPositionChange() {
 		if (mapListner != null) {
 			mapListner.onDroneUpdate();
 		}
 	}
 
-	void notifyTypeChanged() {
+	public void notifyTypeChanged() {
 		if (typeListner != null) {
 			typeListner.onDroneTypeChanged();
 		}
 	}
 
-	void notifyHudUpdate() {
+	public void notifyHudUpdate() {
 		if (hudListner != null)
 			hudListner.onDroneUpdate();
 	}

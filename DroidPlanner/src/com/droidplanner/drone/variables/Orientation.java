@@ -1,11 +1,14 @@
-package com.droidplanner.drone;
+package com.droidplanner.drone.variables;
 
-public class DroneOrientation extends DroneVariable {
+import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.DroneVariable;
+
+public class Orientation extends DroneVariable {
 	private double roll = 0;
 	private double pitch = 0;
 	private double yaw = 0;
 
-	public DroneOrientation(Drone myDrone) {
+	public Orientation(Drone myDrone) {
 		super(myDrone);
 	}
 

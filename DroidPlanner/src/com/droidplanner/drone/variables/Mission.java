@@ -1,4 +1,4 @@
-package com.droidplanner.drone;
+package com.droidplanner.drone.variables;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,10 +9,12 @@ import android.widget.Toast;
 import com.MAVLink.waypoint;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.droidplanner.DroidPlannerApp.OnWaypointReceivedListner;
+import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.DroneVariable;
 import com.droidplanner.waypoints.WaypointMananger.OnWaypointManagerListner;
 import com.google.android.gms.maps.model.LatLng;
 
-public class DroneMission extends DroneVariable implements
+public class Mission extends DroneVariable implements
 		OnWaypointManagerListner {
 
 	private waypoint home = new waypoint(0.0, 0.0, 0.0);
@@ -23,7 +25,7 @@ public class DroneMission extends DroneVariable implements
 	
 	public OnWaypointReceivedListner waypointsListner;
 
-	public DroneMission(Drone myDrone) {
+	public Mission(Drone myDrone) {
 		super(myDrone);
 	}
 
