@@ -2,7 +2,6 @@ package com.droidplanner.drone;
 
 import android.content.Context;
 
-import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.drone.DroneInterfaces.DroneTypeListner;
 import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
 import com.droidplanner.drone.DroneInterfaces.MapUpdatedListner;
@@ -31,13 +30,13 @@ public class Drone {
 	private MapUpdatedListner mapListner;
 	private DroneTypeListner typeListner;
 
-	public Drone(TTS tts, MAVLinkClient MAVClient,
-			DroidPlannerApp droidPlannerApp, Context context) {
+	public Drone(TTS tts, MAVLinkClient mavClient,
+			Context context) {
 		this.tts = tts;
-		this.MavClient = MAVClient;
+		this.MavClient = mavClient;
 		this.context = context;
 		waypointMananger = new WaypointMananger(this.MavClient, mission);
-		parameterMananger = new DroneParameters(this, MAVClient);
+		parameterMananger = new DroneParameters(this);
 	}
 
 	public void setHudListner(HudUpdatedListner listner) {

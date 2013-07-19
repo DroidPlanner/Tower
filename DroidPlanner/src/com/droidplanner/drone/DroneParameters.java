@@ -9,7 +9,6 @@ import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_param_value;
 import com.droidplanner.MAVLink.MavLinkParameters;
 import com.droidplanner.parameters.Parameter;
-import com.droidplanner.service.MAVLinkClient;
 
 /**
  * Class to manage the communication of parameters to the MAV.
@@ -20,13 +19,12 @@ import com.droidplanner.service.MAVLinkClient;
  * 
  */
 public class DroneParameters extends DroneVariable {
-	private List<Parameter> parameters;
+	private List<Parameter> parameters = new ArrayList<Parameter>();
 
 	public DroneInterfaces.OnParameterManagerListner parameterListner;
 
-	public DroneParameters(Drone myDrone, MAVLinkClient MAV) {
+	public DroneParameters(Drone myDrone) {
 		super(myDrone);
-		parameters = new ArrayList<Parameter>();
 	}
 
 	public void getAllParameters() {
