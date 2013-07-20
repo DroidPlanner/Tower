@@ -1,4 +1,6 @@
 ## Droidplanner v0.9.2
+* Big code refactoring
+* Nicer RC screen
 * French Translation
 * Updating to the new Google Maps API
 * Orientation lock when connected
