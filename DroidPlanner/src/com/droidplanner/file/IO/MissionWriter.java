@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import com.MAVLink.waypoint;
+import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.file.FileManager;
 import com.droidplanner.file.FileStream;
 

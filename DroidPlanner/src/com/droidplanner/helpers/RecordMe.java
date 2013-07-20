@@ -10,9 +10,9 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.MAVLink.waypoint;
 import com.droidplanner.R;
 import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.file.IO.MissionWriter;
 
 public class RecordMe implements LocationListener {

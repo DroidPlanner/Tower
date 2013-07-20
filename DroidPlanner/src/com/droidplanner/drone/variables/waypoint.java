@@ -1,4 +1,4 @@
-package com.MAVLink;
+package com.droidplanner.drone.variables;
 
 import com.google.android.gms.maps.model.LatLng;
 

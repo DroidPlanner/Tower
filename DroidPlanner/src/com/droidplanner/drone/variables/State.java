@@ -1,6 +1,5 @@
 package com.droidplanner.drone.variables;
 
-import com.MAVLink.waypoint;
 import com.MAVLink.Messages.ApmModes;
 import com.droidplanner.MAVLink.MavLinkModes;
 import com.droidplanner.drone.Drone;

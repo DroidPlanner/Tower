@@ -1,10 +1,10 @@
 package com.droidplanner.MAVLink;
 
-import com.MAVLink.waypoint;
 import com.MAVLink.Messages.ApmModes;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.ardupilotmega.msg_set_mode;
 import com.MAVLink.Messages.enums.MAV_FRAME;
+import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.service.MAVLinkClient;
 
 public class MavLinkModes {

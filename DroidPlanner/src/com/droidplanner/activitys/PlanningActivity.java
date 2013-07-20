@@ -10,13 +10,13 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.MAVLink.waypoint;
 import com.droidplanner.DroidPlannerApp.OnWaypointReceivedListner;
 import com.droidplanner.R;
 import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
 import com.droidplanner.dialogs.OpenFileDialog;
 import com.droidplanner.dialogs.OpenMissionDialog;
 import com.droidplanner.dialogs.PolygonDialog;
+import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.file.IO.MissionReader;
 import com.droidplanner.file.IO.MissionWriter;
 import com.droidplanner.fragments.PlanningMapFragment;

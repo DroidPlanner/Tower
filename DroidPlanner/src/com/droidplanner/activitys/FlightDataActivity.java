@@ -6,11 +6,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.MAVLink.waypoint;
 import com.MAVLink.Messages.ApmModes;
 import com.droidplanner.DroidPlannerApp.OnWaypointReceivedListner;
 import com.droidplanner.R;
 import com.droidplanner.drone.DroneInterfaces.DroneTypeListner;
+import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.fragments.FlightMapFragment;
 import com.droidplanner.fragments.FlightMapFragment.OnFlighDataListener;
 import com.droidplanner.widgets.spinners.SelectModeSpinner;

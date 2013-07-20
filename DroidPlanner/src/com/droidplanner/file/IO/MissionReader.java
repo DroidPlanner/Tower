@@ -7,8 +7,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.MAVLink.waypoint;
 import com.droidplanner.dialogs.OpenFileDialog.FileReader;
+import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.file.DirectoryPath;
 import com.droidplanner.file.FileList;
 import com.droidplanner.file.FileManager;

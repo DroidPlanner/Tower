@@ -6,7 +6,6 @@ import java.util.Locale;
 
 import android.widget.Toast;
 
-import com.MAVLink.waypoint;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.droidplanner.DroidPlannerApp.OnWaypointReceivedListner;
 import com.droidplanner.drone.Drone;

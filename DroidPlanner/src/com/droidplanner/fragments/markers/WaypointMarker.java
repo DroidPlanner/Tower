@@ -2,7 +2,7 @@ package com.droidplanner.fragments.markers;
 
 import java.util.Locale;
 
-import com.MAVLink.waypoint;
+import com.droidplanner.drone.variables.waypoint;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class WaypointMarker {

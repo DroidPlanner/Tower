@@ -1,6 +1,5 @@
 package com.droidplanner.MAVLink;
 
-import com.MAVLink.waypoint;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_count;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
@@ -9,6 +8,7 @@ import com.MAVLink.Messages.ardupilotmega.msg_mission_request_list;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_set_current;
 import com.MAVLink.Messages.enums.MAV_FRAME;
 import com.MAVLink.Messages.enums.MAV_MISSION_RESULT;
+import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.service.MAVLinkClient;
 
 public class MavLinkWaypoint {

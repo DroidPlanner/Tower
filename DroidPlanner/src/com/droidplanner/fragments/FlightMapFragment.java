@@ -14,9 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.MAVLink.waypoint;
 import com.droidplanner.activitys.SuperActivity;
 import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.fragments.markers.DroneMarker;
 import com.droidplanner.fragments.markers.HomeMarker;
 import com.google.android.gms.maps.CameraUpdateFactory;
