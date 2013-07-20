@@ -1,23 +1,27 @@
 package com.droidplanner.fragments;
 
+import java.util.Locale;
+
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
 import com.droidplanner.helpers.RcOutput;
 import com.droidplanner.widgets.joystick.JoystickMovedListener;
 import com.droidplanner.widgets.joystick.JoystickView;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 public class RCFragment extends Fragment {
 	
 	private JoystickView joystickL, joystickR;
 	private TextView textViewLPan, textViewLTilt, textViewRPan, textViewRTilt;
+	private ToggleButton activeButton;
 	
 	private RcOutput rcOutput;
 	private boolean rcActivated = false;
@@ -47,28 +51,39 @@ public class RCFragment extends Fragment {
 		DroidPlannerApp app = (DroidPlannerApp)getActivity().getApplication();
 		rcOutput = new RcOutput(app.MAVClient,app);
 		
+		activeButton = (ToggleButton)view.findViewById(R.id.toggleButtonRCActive);
+		activeButton.setTextOn(getString(R.string.rc_control) + "  [ " + getString(R.string.on).toUpperCase(Locale.getDefault()) + " ]");
+		activeButton.setTextOff(getString(R.string.rc_control) + "  [ " + getString(R.string.off).toUpperCase(Locale.getDefault()) + " ]");
+		activeButton.setChecked(rcOutput.isRcOverrided());
+		activeButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		        if (isChecked) {
+		        	enableRCOverride();
+		        } else {
+		        	disableRCOverride();
+		        }
+		        buttonView.setChecked(rcOutput.isRcOverrided());
+		    }
+		});
+		
 		return view;
+	}
+	
+	@Override
+	public void onStop() {
+		disableRCOverride();
+		super.onDestroyView();
 	}
 
 	public boolean isRcOverrideActive() {
 		return rcActivated;
 	}
 	
-	public void setRcOverrideActive(boolean active) {
-		if (active) {
-			enableRCOverride();
-		} else {
-			disableRCOverride();
-		}
-	}
-	
 	private void enableRCOverride() {
-		if (rcOutput != null) {
-			rcOutput.enableRcOverride();
-			rcActivated = true;
-			lJoystick.OnMoved(lLastPan, lLastTilt);
-			rJoystick.OnMoved(rLastPan, rLastTilt);
-		}
+		rcOutput.enableRcOverride();
+		rcActivated = rcOutput.isRcOverrided();
+		lJoystick.OnMoved(lLastPan, lLastTilt);
+		rJoystick.OnMoved(rLastPan, rLastTilt);
 	}
 	
 	private void disableRCOverride() {
@@ -78,17 +93,6 @@ public class RCFragment extends Fragment {
 		rJoystick.OnMoved(rLastPan, rLastTilt);
 	}
 
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void onDetach() {
-		super.onDetach();
-		// TODO 
-	}
 	
 	JoystickMovedListener lJoystick = new JoystickMovedListener() {
 		@Override

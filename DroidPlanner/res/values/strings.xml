@@ -38,11 +38,14 @@
     <string name="dialog_polygon_distance_between_lines">Distance between lines:</string>
     <string name="enable">Enable</string>
     <string name="disable">Disable</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
     <string name="write">Write</string>
     <string name="refresh">Refresh</string>
     <string name="this_is_very_experimental_please_be_careful">This is very experimental, please be careful.</string>
     <string name="menu_advanced">Advanced</string>
     <string name="menu_calibration">Calibration</string>
+    <string name="rc_control">RC control</string>
 
     <string-array name="menu_dropdown">
         <item>Planning</item>
@@ -71,6 +74,7 @@
         <item name="115200">115200</item>
     </string-array>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>   
+    
 
 </resources>
