@@ -18,9 +18,9 @@ public class MavLinkModes {
 		msg.param2 = 0; // TODO use correct parameter
 		msg.param3 = 0; // TODO use correct parameter
 		msg.param4 = 0; // TODO use correct parameter
-		msg.x = (float) wp.coord.latitude;
-		msg.y = (float) wp.coord.longitude;
-		msg.z = wp.Height.floatValue();
+		msg.x = (float) wp.getCoord().latitude;
+		msg.y = (float) wp.getCoord().longitude;
+		msg.z = wp.getHeight().floatValue();
 		msg.autocontinue = 1; // TODO use correct parameter
 		msg.target_system = 1;
 		msg.target_component = 1;

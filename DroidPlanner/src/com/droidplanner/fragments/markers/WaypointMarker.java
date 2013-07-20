@@ -10,12 +10,12 @@ public class WaypointMarker {
 
 	public static MarkerOptions generateWapointMarker(int i, waypoint point) {
 		return new MarkerOptions()
-				.position(point.coord)
+				.position(point.getCoord())
 				.draggable(true)
 				.title("WP" + Integer.toString(i))
 				.snippet(
 						String.format(Locale.ENGLISH, "%.2f",
-								point.Height));
+								point.getHeight()));
 	}
 
 }

@@ -49,9 +49,9 @@ public class MavLinkWaypoint {
 		msg.param2 = 0; // TODO use correct parameter
 		msg.param3 = 0; // TODO use correct parameter
 		msg.param4 = 0; // TODO use correct parameter
-		msg.x = (float) waypoint.coord.latitude;
-		msg.y = (float) waypoint.coord.longitude;
-		msg.z = waypoint.Height.floatValue();
+		msg.x = (float) waypoint.getCoord().latitude;
+		msg.y = (float) waypoint.getCoord().longitude;
+		msg.z = waypoint.getHeight().floatValue();
 		msg.autocontinue = 1; // TODO use correct parameter
 		msg.target_system = 1;
 		msg.target_component = 1;

@@ -46,7 +46,7 @@ public class MissionWriter {
 	private void writeFirstLine(FileOutputStream out) throws IOException {
 		out.write(String.format(Locale.ENGLISH,
 				"QGC WPL 110\n0\t1\t0\t16\t0\t0\t0\t0\t%f\t%f\t%f\t1\n",
-				home.coord.latitude, home.coord.longitude, home.Height)
+				home.getCoord().latitude, home.getCoord().longitude, home.getHeight())
 				.getBytes());
 
 	}
@@ -59,9 +59,9 @@ public class MissionWriter {
 							i + 1,
 							0, // TODO Implement Relative Altitude
 							16,// TODO Implement other modes (16 == auto?)
-							waypoints.get(i).coord.latitude,
-							waypoints.get(i).coord.longitude,
-							waypoints.get(i).Height).getBytes());
+							waypoints.get(i).getCoord().latitude,
+							waypoints.get(i).getCoord().longitude,
+							waypoints.get(i).getHeight()).getBytes());
 		}
 	}
 }

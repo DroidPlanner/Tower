@@ -56,9 +56,9 @@ public class Mission extends DroneVariable {
 	public List<LatLng> getAllCoordinates() {
 		List<LatLng> result = new ArrayList<LatLng>();
 		for (waypoint point : waypoints) {
-			result.add(point.coord);
+			result.add(point.getCoord());
 		}
-		result.add(home.coord);
+		result.add(home.getCoord());
 		return result;
 	}
 
@@ -100,13 +100,13 @@ public class Mission extends DroneVariable {
 
 	public String getWaypointData() {
 		String waypointData = String.format(Locale.ENGLISH, "Home\t%2.0f\n",
-				home.Height);
+				home.getHeight());
 		waypointData += String.format("Def:\t%2.0f\n", getDefaultAlt());
 
 		int i = 1;
 		for (waypoint point : waypoints) {
 			waypointData += String.format(Locale.ENGLISH, "WP%02d \t%2.0f\n",
-					i++, point.Height);
+					i++, point.getHeight());
 		}
 		return waypointData;
 	}
@@ -120,11 +120,11 @@ public class Mission extends DroneVariable {
 	}
 
 	public void setHome(LatLng home) {
-		this.home.coord = home;
+		this.home.setCoord(home);
 	}
 
 	public void moveWaypoint(LatLng coord, int number) {
-		waypoints.get(number).coord = coord;
+		waypoints.get(number).setCoord(coord);
 	}
 
 	public void onWaypointsReceived(List<waypoint> waypoints) {

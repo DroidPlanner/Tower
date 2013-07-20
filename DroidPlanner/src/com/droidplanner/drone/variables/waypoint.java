@@ -2,17 +2,34 @@ package com.droidplanner.drone.variables;
 
 import com.google.android.gms.maps.model.LatLng;
 
-public class waypoint {
-	public LatLng coord;
-	public Double Height;
+public class waypoint {	
+	
+	private LatLng coord;
+	private Double Height;
 
 	public waypoint(LatLng c, Double h) {
-		coord = c;
-		Height = h;
+		setCoord(c);
+		setHeight(h);
 	}
 
 	public waypoint(Double Lat, Double Lng, Double h) {
-		coord = new LatLng(Lat, Lng);
-		Height = h;
+		setCoord(new LatLng(Lat, Lng));
+		setHeight(h);
+	}
+
+	public Double getHeight() {
+		return Height;
+	}
+
+	public void setHeight(Double height) {
+		Height = height;
+	}
+
+	public LatLng getCoord() {
+		return coord;
+	}
+
+	public void setCoord(LatLng coord) {
+		this.coord = coord;
 	}
 }

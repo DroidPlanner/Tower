@@ -161,7 +161,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 				update();
 			}
 		};
-		polygonDialog.generatePolygon(defaultHatchAngle, 50.0, polygon, drone.mission.getLastWaypoint().coord, drone.mission.getDefaultAlt(), this);	
+		polygonDialog.generatePolygon(defaultHatchAngle, 50.0, polygon, drone.mission.getLastWaypoint().getCoord(), drone.mission.getDefaultAlt(), this);	
 	}
 
 	private void clearWaypointsAndUpdate() {
