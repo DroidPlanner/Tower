@@ -276,7 +276,7 @@ public class JoystickView extends View {
 		
 		
 		bgRadius = dimSide/2 - innerPadding;
-		handleRadius = (int)(d * 0.25);
+		handleRadius = (int)(d * 0.2); //0.25
 		handleInnerBoundaries = handleRadius;
 		movementRadius = Math.min(cX, cY) - handleInnerBoundaries;
 	}
