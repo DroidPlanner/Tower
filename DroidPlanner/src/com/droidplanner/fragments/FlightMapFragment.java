@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Locale;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -13,8 +14,10 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.MAVLink.waypoint;
+import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
 import com.droidplanner.MAVLink.Drone;
 import com.droidplanner.activitys.SuperActivity;
@@ -57,6 +60,7 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 		View view = super.onCreateView(inflater, viewGroup, bundle);
 		mMap = getMap();		
 		drone = ((SuperActivity)getActivity()).app.drone;
+		//drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
 		
 		droneMarker = new DroneMarker(this);
 		
@@ -126,7 +130,10 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 	}
 
 	public void zoomToLastKnowPosition() {
-		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(drone.getPosition(), 16));
+		LatLng tmp = drone.getPosition();
+		if (tmp != null) {
+			mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(tmp, 16));
+		}
 	}
 
 	private void addMissionPathToMap() {

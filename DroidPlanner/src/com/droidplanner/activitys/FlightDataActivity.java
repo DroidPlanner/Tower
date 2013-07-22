@@ -7,25 +7,17 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.MAVLink.waypoint;
-import com.MAVLink.Messages.ApmModes;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
-import com.MAVLink.Messages.ardupilotmega.msg_set_mode;
 import com.droidplanner.DroidPlannerApp.OnWaypointReceivedListner;
 import com.droidplanner.R;
 import com.droidplanner.MAVLink.Drone.DroneTypeListner;
 import com.droidplanner.fragments.FlightMapFragment;
 import com.droidplanner.fragments.FlightMapFragment.OnFlighDataListener;
-import com.droidplanner.widgets.spinners.SelectModeSpinner;
-import com.droidplanner.widgets.spinners.SelectModeSpinner.OnModeSpinnerSelectedListener;
-import com.droidplanner.widgets.spinners.SelectWaypointSpinner;
-import com.droidplanner.widgets.spinners.SelectWaypointSpinner.OnWaypointSpinnerSelectedListener;
 import com.google.android.gms.maps.model.LatLng;
 
-public class FlightDataActivity extends SuperActivity implements OnFlighDataListener, OnWaypointSpinnerSelectedListener, OnWaypointReceivedListner, OnModeSpinnerSelectedListener, DroneTypeListner {
+public class FlightDataActivity extends SuperFlightActivity implements OnFlighDataListener, OnWaypointReceivedListner, DroneTypeListner {
 	
 	private FlightMapFragment flightMapFragment;
-	private SelectModeSpinner fligthModeSpinner;
-	private SelectWaypointSpinner wpSpinner;
 	private LatLng guidedPoint;
 
 	@Override
@@ -49,43 +41,30 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 
 
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.menu_flightdata, menu);
-		
-		MenuItem flightModeMenu = menu.findItem( R.id.menu_flight_modes_spinner);
-		fligthModeSpinner = (SelectModeSpinner) flightModeMenu.getActionView();
-		fligthModeSpinner.buildSpinner(this, this);
-		fligthModeSpinner.updateModeSpinner(drone);
-		
-		MenuItem wpMenu = menu.findItem( R.id.menu_wp_spinner);
-		wpSpinner = (SelectWaypointSpinner) wpMenu.getActionView();
-		wpSpinner.buildSpinner(this,this);	
-		
+		getMenuInflater().inflate(R.menu.menu_flightdata, menu);	
 		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.menu_clearFlightPath:
-			flightMapFragment.clearFlightPath();
-			return true;
 		case R.id.menu_zoom:
 			flightMapFragment.zoomToLastKnowPosition();
-			return true;	
-		case R.id.menu_follow_me:
-			app.followMe.toogleFollowMeState();
+			return true;
+		case R.id.menu_default_alt:
+			changeDefaultAlt();
+			return true;
+		case R.id.menu_preflight_calibration:
+			app.calibrationSetup.startCalibration(this);
+			return true;
+		case R.id.menu_clearFlightPath:
+			flightMapFragment.clearFlightPath();
+			return true;		
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
 	}
-
-	@Override
-	public void OnWaypointSpinnerSelected(int item) {
-		app.waypointMananger.setCurrentWaypoint((short) item);
-	}
-
-
+	
 	@Override
 	public void onSetGuidedMode(LatLng point) {
 		changeDefaultAlt();		
@@ -111,15 +90,7 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 		msg.target_component = 1;
 		app.MAVClient.sendMavPacket(msg.pack());
 	}
-
-	private void changeFlightMode(ApmModes mode) {
-		msg_set_mode msg = new msg_set_mode();
-		msg.target_system = 1;
-		msg.base_mode = 1; //TODO use meaningful constant
-		msg.custom_mode = mode.getNumber();
-		app.MAVClient.sendMavPacket(msg.pack());			
-	}
-
+	
 	@Override
 	public void onWaypointsReceived() {
 		flightMapFragment.updateMissionPath(drone);
@@ -128,18 +99,10 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 	}
 
 	@Override
-	public void OnModeSpinnerSelected(String text) {
-		ApmModes mode = ApmModes.getMode(text,drone.getType());
-		if (mode != ApmModes.UNKNOWN) {
-			changeFlightMode(mode);
-		}		
-	}
-
-	@Override
 	public void onDroneTypeChanged() {
 		Log.d("DRONE", "Drone type changed");
-		fligthModeSpinner.updateModeSpinner(drone);
 		flightMapFragment.droneMarker.updateDroneMarkers();
+		fligthModeSpinner.updateModeSpinner(drone);
 	}
 
 	@Override
