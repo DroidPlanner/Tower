@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.droidplanner.DroidPlannerApp.OnWaypointReceivedListner;
@@ -19,6 +18,7 @@ import com.droidplanner.dialogs.PolygonDialog;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.file.IO.MissionReader;
 import com.droidplanner.file.IO.MissionWriter;
+import com.droidplanner.fragments.MissionFragment;
 import com.droidplanner.fragments.PlanningMapFragment;
 import com.droidplanner.fragments.PlanningMapFragment.OnMapInteractionListener;
 import com.droidplanner.fragments.PlanningMapFragment.modes;
@@ -29,8 +29,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 	
 	public Polygon polygon;
 	private PlanningMapFragment planningMapFragment;
-
-	TextView WaypointListNumber;
+	private MissionFragment missionFragment;
 
 	@Override
 	int getNavigationItem() {
@@ -44,8 +43,8 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 		setContentView(R.layout.planning);
 	
 		planningMapFragment = ((PlanningMapFragment)getFragmentManager().findFragmentById(R.id.planningMapFragment));
-		WaypointListNumber = (TextView) (findViewById(R.id.textViewWP));
-	
+		missionFragment =(MissionFragment) getFragmentManager().findFragmentById(R.id.missionFragment); 
+			
 		polygon = new Polygon();
 		planningMapFragment.mode = modes.MISSION;
 
@@ -187,7 +186,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 
 	private void update() {
 		planningMapFragment.update(drone, polygon);
-		WaypointListNumber.setText(drone.mission.getWaypointData());
+		missionFragment.update(drone.mission);
 	}
 
 	@Override
