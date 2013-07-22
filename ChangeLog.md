@@ -1,3 +1,6 @@
+## Droidplanner v0.9.3
+Fix in build process
+
 ## Droidplanner v0.9.2
 * Big code refactoring
 * Nicer RC screen
