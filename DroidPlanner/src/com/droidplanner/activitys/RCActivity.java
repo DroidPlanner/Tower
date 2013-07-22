@@ -9,25 +9,22 @@ import android.util.Log;
 import android.view.InputDevice;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import com.droidplanner.R;
+import com.droidplanner.DroidPlannerApp.OnWaypointReceivedListner;
+import com.droidplanner.MAVLink.Drone.DroneTypeListner;
 import com.droidplanner.fragments.FlightMapFragment;
 import com.droidplanner.fragments.HudFragment;
-import com.droidplanner.fragments.RCFragment;
-import com.droidplanner.fragments.FlightMapFragment.OnFlighDataListener;
-import com.google.android.gms.maps.model.LatLng;
 
-public class RCActivity extends SuperActivity implements OnFlighDataListener {
+public class RCActivity extends SuperFlightActivity implements OnWaypointReceivedListner, DroneTypeListner {
 	
 	//private RCFragment rcFragment;
+	private static HudFragment hudFragment;
+	private static FlightMapFragment mapFragment;
 	
 	static final int NUM_FRAGMENT_ITEMS = 2;
 	MyAdapter mAdapter;
 	ViewPager mPager;
-	
-	//private MenuItem bTogleRC;
-	MenuItem connectButton;
-	
-	private LatLng guidedPoint;
 
 	@Override
 	int getNavigationItem() {
@@ -39,6 +36,8 @@ public class RCActivity extends SuperActivity implements OnFlighDataListener {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.rc);
+		hudFragment = new HudFragment();
+		mapFragment = new FlightMapFragment();
 		
 		//rcFragment = ((RCFragment)getFragmentManager().findFragmentById(R.id.rcFragment));
 		
@@ -48,31 +47,34 @@ public class RCActivity extends SuperActivity implements OnFlighDataListener {
 			mPager.setAdapter(mAdapter);
 		}
 		
+		//mapFragment.updateMissionPath(drone);
+		//mapFragment.updateHomeToMap(drone);
+		
+		app.setWaypointReceivedListner(this);
+		drone.setDroneTypeChangedListner(this);
 	}
 	
 
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.menu_rc, menu);
-		connectButton = menu.findItem(R.id.menu_connect);
-		//bTogleRC = menu.findItem(R.id.menu_rc_enable);
 		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		/*
 		switch (item.getItemId()) {
-		case R.id.menu_rc_enable:
-			//toggleRcOverride();
+		case R.id.menu_zoom:
+			if (mapFragment != null)
+				mapFragment.zoomToLastKnowPosition();
+			return true;
+		case R.id.menu_clearFlightPath:
+			if (mapFragment != null)
+				mapFragment.clearFlightPath();
 			return true;
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
-		*/
-		return super.onMenuItemSelected(featureId, item);
 	}
-
 
 	@SuppressWarnings("unused")
 	private void printInputDevicesToLog() {
@@ -98,21 +100,27 @@ public class RCActivity extends SuperActivity implements OnFlighDataListener {
         public Fragment getItem(int position) {
         	switch (position) {
         		case 0:
-        			HudFragment hud = new HudFragment();
-        			return hud;
+        			return hudFragment;
         		case 1:
-        			FlightMapFragment map = new FlightMapFragment();
-        			return map;
+        			return mapFragment;
         		default:
         			return null;
-        	} //ArrayListFragment.newInstance(position);
+        	}
         }
     }
+	
+	@Override
+	public void onWaypointsReceived() {
+		mapFragment.updateMissionPath(drone);
+		mapFragment.updateHomeToMap(drone);
+		wpSpinner.updateWpSpinner(drone);		
+	}
 
 	@Override
-	public void onSetGuidedMode(LatLng point) {
-		changeDefaultAlt();		
-		guidedPoint = point;
+	public void onDroneTypeChanged() {
+		Log.d("DRONE", "Drone type changed");
+		mapFragment.droneMarker.updateDroneMarkers();
+		fligthModeSpinner.updateModeSpinner(drone);
 	}
 
 }
