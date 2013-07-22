@@ -1,6 +1,7 @@
 package com.droidplanner.drone.variables;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
+import com.MAVLink.Messages.enums.MAV_CMD;
 import com.MAVLink.Messages.enums.MAV_FRAME;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -17,7 +18,7 @@ public class waypoint {
 		
 		missionItem.current = 0; // TODO use correct parameter for HOME
 		missionItem.frame = MAV_FRAME.MAV_FRAME_GLOBAL;
-		missionItem.command = 16; // TODO use correct parameter
+		missionItem.command = MAV_CMD.MAV_CMD_NAV_WAYPOINT; 
 		missionItem.param1 = 0; // TODO use correct parameter
 		missionItem.param2 = 0; // TODO use correct parameter
 		missionItem.param3 = 0; // TODO use correct parameter
