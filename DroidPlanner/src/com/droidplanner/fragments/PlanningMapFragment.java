@@ -13,11 +13,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.MAVLink.waypoint;
-import com.droidplanner.R;
-import com.droidplanner.MAVLink.Drone;
-import com.droidplanner.helpers.Polygon;
+import com.droidplanner.R.string;
+import com.droidplanner.drone.Drone;
+import com.droidplanner.fragments.markers.HomeMarker;
+import com.droidplanner.polygon.Polygon;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
@@ -30,17 +32,25 @@ import com.google.android.gms.maps.model.PolylineOptions;
 @SuppressLint("UseSparseArrays")
 public class PlanningMapFragment extends OfflineMapFragment implements
 		OnMapLongClickListener, OnMarkerDragListener {
-	private GoogleMap mMap;
+	
+	public enum modes {
+		MISSION, POLYGON;
+	}
+	
+	public GoogleMap mMap;
 	
 	private HashMap<Integer, Marker> waypointMarkers = new HashMap<Integer, Marker>();
 	private HashMap<Integer, Marker> polygonMarkers = new HashMap<Integer, Marker>();
-	private Marker home;
-	
+	public HomeMarker homeMarker;
+
 	private OnMapInteractionListener mListener;
 
-	static final String homeMarkerTitle = "Home";
+	public modes mode = modes.MISSION;
+
+	public Polygon polygon;
 
 	public interface OnMapInteractionListener {
+
 		public void onAddPoint(LatLng point);
 
 		public void onMoveHome(LatLng coord);
@@ -57,6 +67,8 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		mMap = getMap();
 		mMap.setOnMarkerDragListener(this);
 		mMap.setOnMapLongClickListener(this);
+		
+		homeMarker = new HomeMarker(mMap);
 		return view;
 	}
 
@@ -68,10 +80,11 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 
 	public void update(Drone drone, Polygon polygon) {
 		mMap.clear();
+		homeMarker.invalidate();
 		waypointMarkers.clear();
 		polygonMarkers.clear();
 		
-		home = mMap.addMarker(getHomeIcon(drone));
+		homeMarker.update(drone);
 		int i =0;
 		for (MarkerOptions waypoint : getMissionMarkers(drone)) {
 			waypointMarkers.put(i++,mMap.addMarker(waypoint));
@@ -106,7 +119,7 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 	}
 
 	private void checkForHomeMarker(Marker marker) {
-		if(home.equals(marker)){
+		if(homeMarker.isHomeMarker(marker)){
 			mListener.onMoveHome(marker.getPosition());
 		}
 	}
@@ -147,23 +160,10 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		}
 	}
 
-	private MarkerOptions getHomeIcon(Drone drone) {
-		return (new MarkerOptions()
-				.position(drone.getHome().coord)
-				.snippet(
-						String.format(Locale.ENGLISH, "%.2f",
-								drone.getHome().Height))
-				.draggable(true)
-				.anchor((float) 0.5, (float) 0.5)
-				.icon(BitmapDescriptorFactory
-						.fromResource(R.drawable.ic_menu_home))
-				.title(homeMarkerTitle));
-	}
-
 	private List<MarkerOptions> getMissionMarkers(Drone drone) {
 		int i = 1;
 		List<MarkerOptions> MarkerList = new ArrayList<MarkerOptions>();
-		for (waypoint point : drone.getWaypoints()) {
+		for (waypoint point : drone.mission.getWaypoints()) {
 			MarkerList
 					.add(new MarkerOptions()
 							.position(point.coord)
@@ -196,8 +196,8 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		PolylineOptions flightPath = new PolylineOptions();
 		flightPath.color(Color.YELLOW).width(3);
 	
-		flightPath.add(drone.getHome().coord);
-		for (waypoint point : drone.getWaypoints()) {
+		flightPath.add(drone.mission.getHome().coord);
+		for (waypoint point : drone.mission.getWaypoints()) {
 			flightPath.add(point.coord);
 		}
 		return flightPath;
@@ -215,5 +215,20 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		}
 	
 		return flightPath;
+	}
+
+	public void setMode(modes mode) {
+		this.mode = mode;
+		switch (mode) {
+		default:
+		case MISSION:
+			Toast.makeText(getActivity(), string.exiting_polygon_mode, Toast.LENGTH_SHORT)
+			.show();			
+			break;
+		case POLYGON:
+			Toast.makeText(getActivity(), string.entering_polygon_mode, Toast.LENGTH_SHORT)
+			.show();
+			break;
+		}
 	}
 }

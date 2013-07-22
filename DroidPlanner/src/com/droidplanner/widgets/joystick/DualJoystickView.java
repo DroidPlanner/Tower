@@ -17,7 +17,7 @@ public class DualJoystickView extends LinearLayout {
 	@SuppressWarnings("unused")
 	private static final String TAG = DualJoystickView.class.getSimpleName();
 	
-	private final boolean D = false;
+	private final boolean D = true;
 	private Paint dbgPaint1;
 
 	private JoystickView stickL;

@@ -14,13 +14,62 @@
         android:text="@string/this_is_very_experimental_please_be_careful"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-            <com.droidplanner.widgets.joystick.DualJoystickView
-                android:id="@+id/joystickView"
-                android:layout_width="match_parent"
-                android:layout_height="fill_parent"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="50dp"
-                android:layout_marginRight="50dp"
-                android:layout_marginTop="20dip" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+        
+   		<TextView
+       		android:id="@+id/textViewCamJoyLPan"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:gravity="center"
+        	android:layout_weight="1"
+        	android:text=""/>
+   		<TextView
+       		android:id="@+id/textViewCamJoyLTilt"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:gravity="center"
+        	android:layout_weight="1"
+        	android:text=""/>
+   		<TextView
+       		android:id="@+id/textViewCamJoyRPan"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:gravity="center"
+        	android:layout_weight="1"
+        	android:text=""/>
+
+   		<TextView
+   		    android:id="@+id/textViewCamJoyRTilt"
+   		    android:layout_width="wrap_content"
+   		    android:layout_height="wrap_content"
+   		    android:gravity="center"
+   		    android:layout_weight="1"
+   		    android:text="" />
+   		
+   	</LinearLayout>
+   	
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal" >
+        
+        <com.droidplanner.widgets.joystick.JoystickView
+            android:id="@+id/joystickViewCamL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|left"
+            android:layout_weight="1" />
+
+        <com.droidplanner.widgets.joystick.JoystickView
+            android:id="@+id/joystickViewCamR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_weight="1" />
+
+    </LinearLayout>
 
 </LinearLayout>

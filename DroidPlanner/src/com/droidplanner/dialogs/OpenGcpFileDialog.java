@@ -2,7 +2,7 @@ package com.droidplanner.dialogs;
 
 import java.util.List;
 
-import com.droidplanner.gcp.KmlParser;
+import com.droidplanner.file.IO.GcpReader;
 import com.droidplanner.gcp.gcp;
 
 public abstract class OpenGcpFileDialog extends OpenFileDialog {
@@ -10,11 +10,11 @@ public abstract class OpenGcpFileDialog extends OpenFileDialog {
 
 	@Override
 	protected FileReader createReader() {
-		return new KmlParser();
+		return new GcpReader();
 	}
 
 	@Override
 	protected void onDataLoaded(FileReader reader) {
-		onGcpFileLoaded(((KmlParser) reader).gcpList);
+		onGcpFileLoaded(((GcpReader) reader).gcpList);
 	}
 }

@@ -16,8 +16,8 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.MAVLink.Messages.ApmModes;
-import com.droidplanner.MAVLink.Drone;
-import com.droidplanner.MAVLink.Drone.HudUpdatedListner;
+import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
 
 /**
  * Widget for a HUD Originally copied from http://code.google.com/p/copter-gcs/
@@ -131,6 +131,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 	private static final double hudDebugBattVolt = 12.32;
 	private static final int  	hudDebugSatCount = 8;
 	private static final int 	hudDebugFixType = 3;
+	private static final double hudDebugGpsEPH = 2.4;
 	private static final String hudDebugModeName = "Loiter";
 	private static final int 	hudDebugWpNumber = 4;
 	private static final double hudDebugDistToWp = 30.45;
@@ -216,10 +217,12 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 		whiteThinTics.setColor(Color.WHITE);
 		whiteThinTics.setStyle(Style.FILL);
 		whiteThinTics.setStrokeWidth(1);
+		whiteThinTics.setAntiAlias(true);
 		
 		whiteThickTics.setColor(Color.WHITE);
 		whiteThickTics.setStyle(Style.FILL);
 		whiteThickTics.setStrokeWidth(2);
+		whiteThickTics.setAntiAlias(true);
 
 		yawText.setColor(Color.WHITE);
 		yawText.setFakeBoldText(true);
@@ -269,7 +272,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 		canvas.drawRect(-width / 2, yawBottom - yawHeightPx, width / 2, yawBottom, yawBg);
 		canvas.drawLine(-width / 2, yawBottom, width / 2, yawBottom, whiteBorder);
 
-		double yaw = drone.getYaw();
+		double yaw = drone.orientation.getYaw();
 		if (hudDebug)
 			yaw = hudDebugYaw;
 		
@@ -343,8 +346,8 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 	}
 
 	private void drawPitch(Canvas canvas) {
-		double pitch = drone.getPitch();
-		double roll = drone.getRoll();
+		double pitch = drone.orientation.getPitch();
+		double roll = drone.orientation.getRoll();
 		
 		if (hudDebug) {
 			pitch = hudDebugPitch;
@@ -392,9 +395,9 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 		scrollerText.setTextAlign(Paint.Align.LEFT);
 		scrollerActualText.setTextAlign(Paint.Align.LEFT);
 		
-		double altitude = drone.getAltitude();
-		double targetAltitude = drone.getTargetAltitude();
-		double verticalSpeed = drone.getVerticalSpeed();
+		double altitude = drone.altitude.getAltitude();
+		double targetAltitude = drone.altitude.getTargetAltitude();
+		double verticalSpeed = drone.speed.getVerticalSpeed();
 		
 		if (hudDebug) {
 			altitude = hudDebugAltitude;
@@ -413,14 +416,6 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 		vsiBox.lineTo(scroller.left - vsi_width, scroller.top + vsi_width);
 		vsiBox.lineTo(scroller.left - vsi_width, scroller.bottom - vsi_width);
 		vsiBox.lineTo(scroller.left, scroller.bottom);
-		/*
-		float vsiFillTrim = 0;
-		if (verticalSpeed > 1) { // TODO Vertical Speed indicator must be tested
-			vsiFillTrim = -1;
-		} else if (verticalSpeed < -1) {
-			vsiFillTrim = 1;
-		}
-		*/
 		Path vsiFill = new Path();
 		float vsiIndicatorEnd = scroller.centerY() - ((float) verticalSpeed) * linespace;
 		vsiFill.moveTo(scroller.left, scroller.centerY());
@@ -498,16 +493,16 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 		scrollerText.setTextAlign(Paint.Align.RIGHT);
 		scrollerActualText.setTextAlign(Paint.Align.RIGHT);
 
-		double groundSpeed = drone.getGroundSpeed();
-		double airSpeed = drone.getAirSpeed();
-		double targetSpeed = drone.getTargetSpeed();
+		double groundSpeed = drone.speed.getGroundSpeed();
+		double airSpeed = drone.speed.getAirSpeed();
+		double targetSpeed = drone.speed.getTargetSpeed();
 		if (hudDebug) {
 			groundSpeed = hudDebugGroundSpeed;
 			airSpeed = hudDebugAirSpeed;
 			targetSpeed = hudDebugTargetSpeed;
 		}
 		
-		double speed = airSpeed; // TODO test airSpeed
+		double speed = airSpeed;
 		if (speed == 0)
 			speed = groundSpeed;
 
@@ -570,16 +565,17 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 	}
 	
 	private void drawAttitudeInfoText(Canvas canvas) {
-		double battVolt = drone.getBattVolt();
-		double battCurrent = drone.getBattCurrent();
-		double battRemain = drone.getBattRemain();
-		double groundSpeed = drone.getGroundSpeed();
-		double airSpeed = drone.getAirSpeed();
-		int satCount = drone.getSatCount();
-		int fixType = drone.getFixType();
-		String modeName = drone.getMode().getName();
-		int wpNumber = drone.getWpno();
-		double distToWp = drone.getDisttowp();
+		double battVolt = drone.battery.getBattVolt();
+		double battCurrent = drone.battery.getBattCurrent();
+		double battRemain = drone.battery.getBattRemain();
+		double groundSpeed = drone.speed.getGroundSpeed();
+		double airSpeed = drone.speed.getAirSpeed();
+		int satCount = drone.GPS.getSatCount();
+		int fixType = drone.GPS.getFixType();
+		String modeName = drone.state.getMode().getName();
+		int wpNumber = drone.mission.getWpno();
+		double distToWp = drone.mission.getDisttowp();
+		double gpsEPH = drone.GPS.getGpsEPH();
 		
 		if (hudDebug) {
 			battVolt = hudDebugBattVolt;
@@ -592,6 +588,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 			modeName = hudDebugModeName;
 			wpNumber = hudDebugWpNumber;
 			distToWp = hudDebugDistToWp;
+			gpsEPH = hudDebugGpsEPH;
 		}
 		
 		// Left Top Text
@@ -603,17 +600,8 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 			canvas.drawText(String.format("%2.1fA", battCurrent), -width / 2 + attPosPxInfoTextXOffset, attPosPxInfoTextUpperBottom, attInfoText);
 		
 		// Left Bottom Text	
-		/*
-		float tmpDensity = tempContext.getResources().getDisplayMetrics().density;
-		int tmpDensDPI = tempContext.getResources().getDisplayMetrics().densityDpi;
-		float tmpScaledDensity = tempContext.getResources().getDisplayMetrics().scaledDensity;
-		float tmpXDPI = tempContext.getResources().getDisplayMetrics().xdpi;
-		float tmpYDPI = tempContext.getResources().getDisplayMetrics().ydpi;
-		canvas.drawText(String.format("H%d W%d D%.2f SD%.2f", height, width, tmpDensity, tmpScaledDensity), -width / 2 + 5, attPosPxInfoTextLowerTop, attInfoText);
-		canvas.drawText(String.format("Ddpi%d Xdpi%.1f Ydpi%.1f", tmpDensDPI, tmpXDPI, tmpYDPI), -width / 2 + 5, attPosPxInfoTextLowerBottom, attInfoText);
-		*/
-		canvas.drawText(String.format("AS %.1f",airSpeed), -width / 2 + attPosPxInfoTextXOffset, attPosPxInfoTextLowerTop, attInfoText);
-		canvas.drawText(String.format("GS %.1f",groundSpeed), -width / 2 + attPosPxInfoTextXOffset, attPosPxInfoTextLowerBottom, attInfoText);
+		canvas.drawText(String.format("AS %.1fms",airSpeed), -width / 2 + attPosPxInfoTextXOffset, attPosPxInfoTextLowerTop, attInfoText);
+		canvas.drawText(String.format("GS %.1fms",groundSpeed), -width / 2 + attPosPxInfoTextXOffset, attPosPxInfoTextLowerBottom, attInfoText);
 		
 		// Right Top Text
 		attInfoText.setTextAlign(Align.RIGHT);
@@ -633,7 +621,8 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 			}
 		}
 		canvas.drawText(gpsFix, width / 2 -attPosPxInfoTextXOffset, attPosPxInfoTextUpperTop, attInfoText);
-		// reserved for future GPS precision indication like hdop value or something else
+		if (gpsEPH >= 0)
+			canvas.drawText(String.format("hp%.1fm", gpsEPH), width / 2 -attPosPxInfoTextXOffset, attPosPxInfoTextUpperBottom, attInfoText);
 		
 		// Right Bottom Text
 		canvas.drawText(modeName, width / 2 -attPosPxInfoTextXOffset, attPosPxInfoTextLowerTop, attInfoText);
@@ -642,8 +631,8 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback, Hu
 	}
 	
 	private void drawFailsafe(Canvas canvas) {
-		int droneType = drone.getType();
-		boolean isArmed = drone.isArmed();
+		int droneType = drone.type.getType();
+		boolean isArmed = drone.state.isArmed();
 			
 		if (hudDebug) {
 			droneType = hudDebugDroneType;

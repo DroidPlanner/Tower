@@ -1,3 +1,21 @@
+## Droidplanner v0.9.2
+* Big code refactoring
+* Nicer RC screen
+* French Translation
+* Updating to the new Google Maps API
+* Orientation lock when connected
+
+## Droidplanner v0.9.1
+* Record-Me mode
+* Nicer Icons
+* Portuguese Translation
+* Improvements to the HUD
+* Change the default alt. to 50m
+* Option to select diferent baud rates
+* Option to keep the screen at full brightness
+* Fix a bug with the Volume Control
+* Fix bug in the RC Override screen
+
 ## Droidplanner v0.9.0
 * New HUD by Karsten
 

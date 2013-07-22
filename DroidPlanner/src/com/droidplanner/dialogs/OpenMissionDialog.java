@@ -1,7 +1,7 @@
 package com.droidplanner.dialogs;
 
-import com.droidplanner.MAVLink.Drone;
-import com.droidplanner.waypoints.MissionReader;
+import com.droidplanner.drone.Drone;
+import com.droidplanner.file.IO.MissionReader;
 
 public abstract class OpenMissionDialog extends OpenFileDialog {
 	public abstract void waypointFileLoaded();
@@ -20,8 +20,8 @@ public abstract class OpenMissionDialog extends OpenFileDialog {
 
 	@Override
 	protected void onDataLoaded(FileReader reader) {
-		drone.home = ((MissionReader)reader).getHome();
-		drone.waypoints = ((MissionReader)reader).getWaypoints();
+		drone.mission.setHome(((MissionReader)reader).getHome());
+		drone.mission.setWaypoints(((MissionReader)reader).getWaypoints());
 		waypointFileLoaded();				
 	}
 }

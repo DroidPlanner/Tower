@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.droidplanner"
-    android:versionCode="25"
-    android:versionName="0.9.0" >
+    android:versionCode="27"
+    android:versionName="0.9.2" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -84,12 +84,12 @@
                 android:resource="@xml/device_filter" />
         </activity>
         <activity
-            android:name=".activitys.RCActivity"
-            android:screenOrientation="landscape" >
+            android:name=".activitys.RCActivity" >
+            <!-- android:screenOrientation="landscape" -->
         </activity>
         <activity
-            android:name=".activitys.CameraActivity"
-            android:screenOrientation="landscape" >
+            android:name=".activitys.CameraActivity" >
+            <!-- android:screenOrientation="landscape" -->
         </activity>
         <activity
             android:name=".activitys.GCPActivity"

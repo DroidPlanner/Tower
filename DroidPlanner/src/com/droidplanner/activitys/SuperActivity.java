@@ -4,19 +4,24 @@ import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Surface;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.SpinnerAdapter;
 
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.DroidPlannerApp.ConnectionStateListner;
 import com.droidplanner.R;
-import com.droidplanner.MAVLink.Drone;
 import com.droidplanner.dialogs.AltitudeDialog;
 import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
+import com.droidplanner.drone.Drone;
 
 public abstract class SuperActivity extends Activity implements
 		OnNavigationListener, ConnectionStateListner, OnAltitudeChangedListner {
@@ -24,7 +29,8 @@ public abstract class SuperActivity extends Activity implements
 	abstract int getNavigationItem();
 	public DroidPlannerApp app;
 	private MenuItem connectButton;
-	public Drone drone;	
+	public Drone drone;
+	public static int screenRequestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
 
 	public SuperActivity() {
 		super();
@@ -41,6 +47,9 @@ public abstract class SuperActivity extends Activity implements
 		app = (DroidPlannerApp) getApplication();
 		app.setConectionStateListner(this);
 		this.drone = ((DroidPlannerApp) getApplication()).drone;
+		
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);
+		setRequestedOrientation(screenRequestedOrientation);
 	}
 
 	public void setUpActionBar() {
@@ -96,14 +105,16 @@ public abstract class SuperActivity extends Activity implements
 				toggleConnectionState();
 				return true;
 			case R.id.menu_load_from_apm:
-				app.waypointMananger.getWaypoints();
+				drone.waypointMananger.getWaypoints();
 				return true;	
 			case R.id.menu_default_alt:
 				changeDefaultAlt();
 				return true;
 			case R.id.menu_preflight_calibration:
-				app.calibrationSetup.startCalibration(this);
+				drone.calibrationSetup.startCalibration(this);
 				return true;
+			case R.id.menu_record_me:
+				app.recordMe.toogleRecordMeState();
 			default:
 				return super.onMenuItemSelected(featureId, item);
 		}
@@ -125,12 +136,56 @@ public abstract class SuperActivity extends Activity implements
 			connectButton.setTitle(getResources().getString(
 					R.string.menu_connect));
 		}
+		if (screenRequestedOrientation != ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) {
+			screenRequestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
+			setRequestedOrientation(screenRequestedOrientation);
+		}
 	}
 
 	public void notifyConnected() {
 		if (connectButton != null) {
 			connectButton.setTitle(getResources().getString(
 					R.string.menu_disconnect));		
+		}
+		if (PreferenceManager
+				.getDefaultSharedPreferences(getApplicationContext())
+				.getBoolean("pref_lock_screen_orientation", false)) {
+			int rotation = ((WindowManager)getSystemService(WINDOW_SERVICE)).getDefaultDisplay().getRotation();
+			int actualOrientation = getResources().getConfiguration().orientation;
+			boolean naturalOrientationLandscape = (((rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) && actualOrientation == Configuration.ORIENTATION_LANDSCAPE) ||
+					                               ((rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) && actualOrientation == Configuration.ORIENTATION_PORTRAIT));
+			if (naturalOrientationLandscape) {
+				switch(rotation) {
+				case Surface.ROTATION_0:
+					screenRequestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+					break;
+				case Surface.ROTATION_90:
+					screenRequestedOrientation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
+					break;
+				case Surface.ROTATION_180:
+					screenRequestedOrientation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
+					break;
+				case Surface.ROTATION_270:
+					screenRequestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+					break;
+				}
+			} else {
+				switch(rotation) {
+				case Surface.ROTATION_0:
+					screenRequestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+					break;
+				case Surface.ROTATION_90:
+					screenRequestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+					break;
+				case Surface.ROTATION_180:
+					screenRequestedOrientation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
+					break;
+				case Surface.ROTATION_270:
+					screenRequestedOrientation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
+					break;
+				}
+			}
+			setRequestedOrientation(screenRequestedOrientation);
 		}
 	}
 
@@ -143,11 +198,11 @@ public abstract class SuperActivity extends Activity implements
 
 	protected void changeDefaultAlt() {
 		AltitudeDialog dialog = new AltitudeDialog(this);
-		dialog.build(drone.getDefaultAlt(), this);
+		dialog.build(drone.mission.getDefaultAlt(), this);
 	}
 	
 	@Override
 	public void onAltitudeChanged(double newAltitude) {
-		drone.setDefaultAlt(newAltitude);
+		drone.mission.setDefaultAlt(newAltitude);
 	}
 }

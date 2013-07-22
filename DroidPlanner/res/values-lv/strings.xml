@@ -35,8 +35,8 @@
     <string name="entering_polygon_mode">Ieeju poligona režīmā</string>
     <string name="dialog_polygon_hatch_angle">Lūka leņķis:</string>
     <string name="dialog_polygon_distance_between_lines">Distance starp līnijām</string>
-    <string name="enable_rc_control">Ieslēgt RC vadību</string>
-    <string name="disable_rc_control">Izslēgt RC vadību</string>
+    <string name="enable">Dot iespēju</string>
+    <string name="disable">Atslēgt</string>
     <string name="write">Ierakstīt</string>
     <string name="refresh">Atjaunot</string>
     <string name="this_is_very_experimental_please_be_careful">Šī ir eksperimentālā funkcija. Lūdzu, uzmanīgi izmantot.</string>
