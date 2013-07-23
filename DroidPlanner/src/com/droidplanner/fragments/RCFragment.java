@@ -13,9 +13,9 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.MAVLink.Messages.ApmModes;
-import com.MAVLink.Messages.ardupilotmega.msg_set_mode;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
+import com.droidplanner.MAVLink.MavLinkModes;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.helpers.RcOutput;
 import com.droidplanner.widgets.joystick.JoystickMovedListener;
@@ -59,7 +59,7 @@ public class RCFragment extends Fragment {
 		    public void onClick(View v) {
 		    	ApmModes mode = ApmModes.getMode("Loiter",drone.type.getType());
 				if (mode != ApmModes.UNKNOWN) {
-					changeFlightMode(mode);
+					MavLinkModes.changeFlightMode(drone.MavClient,mode);
 				}
 		    }
 		});
@@ -71,7 +71,7 @@ public class RCFragment extends Fragment {
 		    public void onClick(View v) {
 		    	ApmModes mode = ApmModes.getMode("Stabilize",drone.type.getType());
 				if (mode != ApmModes.UNKNOWN) {
-					changeFlightMode(mode);
+					MavLinkModes.changeFlightMode(drone.MavClient, mode);
 				}
 		    }
 		});
@@ -170,13 +170,5 @@ public class RCFragment extends Fragment {
 			}
 		}
 	};
-	
-	private void changeFlightMode(ApmModes mode) {
-		msg_set_mode msg = new msg_set_mode();
-		msg.target_system = 1;
-		msg.base_mode = 1; //TODO use meaningful constant
-		msg.custom_mode = mode.getNumber();
-		app.MAVClient.sendMavPacket(msg.pack());			
-	}
 
 }
