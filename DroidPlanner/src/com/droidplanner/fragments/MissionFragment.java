@@ -13,8 +13,9 @@ import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.widgets.paramRow.MissionRow;
 
 public class MissionFragment extends Fragment {
-	private TableLayout table;
-	
+	public TableLayout table;
+	private Mission mission;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -23,7 +24,10 @@ public class MissionFragment extends Fragment {
 		return view;
 	}
 
-	public void update(Mission mission) {
+	public void setMission(Mission mission){
+		this.mission = mission;
+	}
+	public void update() {
 		table.removeAllViews();
 		int i =0;
 		for (waypoint wp : mission.getWaypoints()) {
@@ -33,7 +37,11 @@ public class MissionFragment extends Fragment {
 	
 	private void addRow(waypoint wp, int i){
 		wp.setNumber(i); // TODO The waypoint number should be fixed elsewhere
-		MissionRow row = new MissionRow(this.getActivity(),wp);
+		MissionRow row = new MissionRow(this,wp);
 		table.addView(row);
-	}	
+	}
+
+	public void onDeleteWaypoint(waypoint waypoint) {
+		mission.removeWaypoint(waypoint);
+	}
 }

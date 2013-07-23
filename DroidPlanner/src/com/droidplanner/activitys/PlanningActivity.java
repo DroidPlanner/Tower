@@ -9,7 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.droidplanner.DroidPlannerApp.OnWaypointReceivedListner;
+import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
 import com.droidplanner.R;
 import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
 import com.droidplanner.dialogs.OpenFileDialog;
@@ -25,7 +25,7 @@ import com.droidplanner.fragments.PlanningMapFragment.modes;
 import com.droidplanner.polygon.Polygon;
 import com.google.android.gms.maps.model.LatLng;
 
-public class PlanningActivity extends SuperActivity implements OnMapInteractionListener, OnWaypointReceivedListner, OnAltitudeChangedListner{
+public class PlanningActivity extends SuperActivity implements OnMapInteractionListener, OnWaypointUpdateListner, OnAltitudeChangedListner{
 	
 	public Polygon polygon;
 	private PlanningMapFragment planningMapFragment;
@@ -43,10 +43,12 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 		setContentView(R.layout.planning);
 	
 		planningMapFragment = ((PlanningMapFragment)getFragmentManager().findFragmentById(R.id.planningMapFragment));
-		missionFragment =(MissionFragment) getFragmentManager().findFragmentById(R.id.missionFragment); 
+		missionFragment =(MissionFragment) getFragmentManager().findFragmentById(R.id.missionFragment);
 			
 		polygon = new Polygon();
 		planningMapFragment.mode = modes.MISSION;
+		
+		missionFragment.setMission(drone.mission);
 
 
 		app.setWaypointReceivedListner(this);
@@ -186,7 +188,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 
 	private void update() {
 		planningMapFragment.update(drone, polygon);
-		missionFragment.update(drone.mission);
+		missionFragment.update();
 	}
 
 	@Override
@@ -222,7 +224,7 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 	}
 
 	@Override
-	public void onWaypointsReceived() {
+	public void onWaypointsUpdate() {
 		update();
 		planningMapFragment.zoomToExtents(drone.mission.getAllCoordinates());		
 	}

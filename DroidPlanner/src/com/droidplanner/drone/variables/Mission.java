@@ -7,7 +7,7 @@ import java.util.Locale;
 import android.widget.Toast;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
-import com.droidplanner.DroidPlannerApp.OnWaypointReceivedListner;
+import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneVariable;
 import com.google.android.gms.maps.model.LatLng;
@@ -20,7 +20,7 @@ public class Mission extends DroneVariable {
 	private int wpno = -1;
 	private double disttowp = 0;
 	
-	public OnWaypointReceivedListner waypointsListner;
+	public OnWaypointUpdateListner waypointsListner;
 
 	public Mission(Drone myDrone) {
 		super(myDrone);
@@ -135,7 +135,7 @@ public class Mission extends DroneVariable {
 			waypoints.remove(0); // Remove Home waypoint
 			clearWaypoints();
 			addWaypoints(waypoints);
-			waypointsListner.onWaypointsReceived();
+			waypointsListner.onWaypointsUpdate();
 		}
 
 	}
@@ -143,5 +143,10 @@ public class Mission extends DroneVariable {
 	public void onWriteWaypoints(msg_mission_ack msg) {
 		Toast.makeText(myDrone.context, "Waypoints sent", Toast.LENGTH_SHORT).show();
 		myDrone.tts.speak("Waypoints saved to Drone");
+	}
+
+	public void removeWaypoint(waypoint waypoint) {
+		waypoints.remove(waypoint);
+		waypointsListner.onWaypointsUpdate();
 	}
 }

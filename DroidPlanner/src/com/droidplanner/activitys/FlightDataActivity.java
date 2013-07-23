@@ -7,7 +7,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.MAVLink.Messages.ApmModes;
-import com.droidplanner.DroidPlannerApp.OnWaypointReceivedListner;
+import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
 import com.droidplanner.R;
 import com.droidplanner.drone.DroneInterfaces.DroneTypeListner;
 import com.droidplanner.drone.variables.waypoint;
@@ -19,7 +19,7 @@ import com.droidplanner.widgets.spinners.SelectWaypointSpinner;
 import com.droidplanner.widgets.spinners.SelectWaypointSpinner.OnWaypointSpinnerSelectedListener;
 import com.google.android.gms.maps.model.LatLng;
 
-public class FlightDataActivity extends SuperActivity implements OnFlighDataListener, OnWaypointSpinnerSelectedListener, OnWaypointReceivedListner, OnModeSpinnerSelectedListener, DroneTypeListner {
+public class FlightDataActivity extends SuperActivity implements OnFlighDataListener, OnWaypointSpinnerSelectedListener, OnWaypointUpdateListner, OnModeSpinnerSelectedListener, DroneTypeListner {
 	
 	private FlightMapFragment flightMapFragment;
 	private SelectModeSpinner fligthModeSpinner;
@@ -91,7 +91,7 @@ public class FlightDataActivity extends SuperActivity implements OnFlighDataList
 	}
 
 	@Override
-	public void onWaypointsReceived() {
+	public void onWaypointsUpdate() {
 		flightMapFragment.updateMissionPath(drone);
 		flightMapFragment.homeMarker.update(drone);
 		wpSpinner.updateWpSpinner(drone);		
