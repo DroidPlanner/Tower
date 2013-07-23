@@ -19,24 +19,26 @@ public class MissionFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.mission_fragment, container, false);
+		View view = inflater.inflate(R.layout.mission_fragment, container,
+				false);
 		table = (TableLayout) view.findViewById(R.id.missionTable);
 		return view;
 	}
 
-	public void setMission(Mission mission){
+	public void setMission(Mission mission) {
 		this.mission = mission;
 	}
+
 	public void update() {
 		table.removeAllViews();
-		int i =0;
+		int i = 0;
 		for (waypoint wp : mission.getWaypoints()) {
-			addRow(wp,i++);
+			addRow(wp, i++);
 		}
 	}
-	
-	private void addRow(waypoint wp, int i){
-		MissionRow row = new MissionRow(this,wp);
+
+	private void addRow(waypoint wp, int i) {
+		MissionRow row = new MissionRow(this, wp);
 		table.addView(row);
 	}
 

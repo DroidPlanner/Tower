@@ -12,16 +12,16 @@ import com.droidplanner.file.FileStream;
 public class MissionWriter {
 	private waypoint home;
 	private List<waypoint> waypoints;
-	private String name ="";
+	private String name = "";
 
 	public MissionWriter(waypoint home, List<waypoint> waypoints, String name) {
 		this.home = home;
 		this.waypoints = waypoints;
 		this.name = name;
 	}
-	
+
 	public MissionWriter(waypoint home, List<waypoint> waypoints) {
-		this(home,waypoints,"waypoints");
+		this(home, waypoints, "waypoints");
 	}
 
 	public boolean saveWaypoints() {
@@ -46,8 +46,8 @@ public class MissionWriter {
 	private void writeFirstLine(FileOutputStream out) throws IOException {
 		out.write(String.format(Locale.ENGLISH,
 				"QGC WPL 110\n0\t1\t0\t16\t0\t0\t0\t0\t%f\t%f\t%f\t1\n",
-				home.getCoord().latitude, home.getCoord().longitude, home.getHeight())
-				.getBytes());
+				home.getCoord().latitude, home.getCoord().longitude,
+				home.getHeight()).getBytes());
 
 	}
 
@@ -57,11 +57,8 @@ public class MissionWriter {
 			out.write(String
 					.format(Locale.ENGLISH,
 							"%d\t0\t%d\t%d\t0.000000\t0.000000\t0.000000\t0.000000\t%f\t%f\t%f\t1\n",
-							i + 1,
-							wp.getFrame(), 
-							wp.getCmd().getType(),
-							wp.getCoord().latitude,
-							wp.getCoord().longitude,
+							i + 1, wp.getFrame(), wp.getCmd().getType(),
+							wp.getCoord().latitude, wp.getCoord().longitude,
 							wp.getHeight()).getBytes());
 		}
 	}

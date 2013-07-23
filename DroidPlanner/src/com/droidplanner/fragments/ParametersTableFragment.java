@@ -17,15 +17,15 @@ import com.droidplanner.parameters.Parameter;
 import com.droidplanner.widgets.tableRow.ParamRow;
 
 public class ParametersTableFragment extends Fragment {
-	
 
 	private TableLayout parameterTable;
 	private List<ParamRow> rowList = new ArrayList<ParamRow>();
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.parameters_fragment, container, false);
+		View view = inflater.inflate(R.layout.parameters_fragment, container,
+				false);
 		parameterTable = (TableLayout) view.findViewById(R.id.parametersTable);
 		return view;
 	}
@@ -45,44 +45,45 @@ public class ParametersTableFragment extends Fragment {
 
 	private ParamRow findRowByName(String name) {
 		for (ParamRow row : rowList) {
-			if(row.getParamName().equals(name)){
+			if (row.getParamName().equals(name)) {
 				return row;
-			}				
+			}
 		}
 		return null;
 	}
 
-	private void addParameterRow(Parameter param){
+	private void addParameterRow(Parameter param) {
 		ParamRow pRow = new ParamRow(this.getActivity());
-		pRow.setParam(param);			
+		pRow.setParam(param);
 		rowList.add(pRow);
 		parameterTable.addView(pRow);
 	}
-	
-	private List<Parameter> getParameterListFromTable(){
+
+	private List<Parameter> getParameterListFromTable() {
 		ArrayList<Parameter> parameters = new ArrayList<Parameter>();
 		for (ParamRow row : rowList) {
 			parameters.add(row.getParameterFromRow());
 		}
 		return parameters;
 	}
-	
-	public List<ParamRow> getModifiedParametersRows(){
+
+	public List<ParamRow> getModifiedParametersRows() {
 		ArrayList<ParamRow> modParameters = new ArrayList<ParamRow>();
 		for (ParamRow row : rowList) {
-			if (!row.isNewValueEqualToDroneParam()){
+			if (!row.isNewValueEqualToDroneParam()) {
 				modParameters.add(row);
 			}
 		}
 		return modParameters;
 	}
-	
+
 	public void saveParametersToFile() {
 		List<Parameter> parameterList = getParameterListFromTable();
-		if (parameterList.size()>0) {
+		if (parameterList.size() > 0) {
 			ParameterWriter parameterWriter = new ParameterWriter(parameterList);
-			if(parameterWriter.saveParametersToFile()){
-				Toast.makeText(this.getActivity(), "Parameters saved", Toast.LENGTH_SHORT).show();
+			if (parameterWriter.saveParametersToFile()) {
+				Toast.makeText(this.getActivity(), "Parameters saved",
+						Toast.LENGTH_SHORT).show();
 			}
 		}
 	}

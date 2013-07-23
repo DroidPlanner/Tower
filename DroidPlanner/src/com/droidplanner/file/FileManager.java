@@ -7,7 +7,7 @@ import java.util.Locale;
 import android.os.Environment;
 
 public class FileManager {
-	
+
 	/**
 	 * Timestamp for logs in the Mission Planner Format
 	 */
@@ -17,7 +17,7 @@ public class FileManager {
 		String timeStamp = sdf.format(new Date());
 		return timeStamp;
 	}
-	
+
 	public static boolean isExternalStorageAvaliable() {
 		String state = Environment.getExternalStorageState();
 		if (Environment.MEDIA_MOUNTED.equals(state)) {

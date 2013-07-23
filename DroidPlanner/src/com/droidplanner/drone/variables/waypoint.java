@@ -16,10 +16,10 @@ public class waypoint {
 	public waypoint(Double Lat, Double Lng, Double h) {
 		setCoord(new LatLng(Lat, Lng));
 		setHeight(h);
-		
+
 		missionItem.current = 0; // TODO use correct parameter for HOME
 		missionItem.frame = MAV_FRAME.MAV_FRAME_GLOBAL;
-		missionItem.command = MAV_CMD.MAV_CMD_NAV_WAYPOINT; 
+		missionItem.command = MAV_CMD.MAV_CMD_NAV_WAYPOINT;
 		missionItem.param1 = 0; // TODO use correct parameter
 		missionItem.param2 = 0; // TODO use correct parameter
 		missionItem.param3 = 0; // TODO use correct parameter
@@ -49,7 +49,7 @@ public class waypoint {
 	}
 
 	public void setNumber(int i) {
-		missionItem.seq = (short) i;		
+		missionItem.seq = (short) i;
 	}
 
 	public short getNumber() {
@@ -57,7 +57,7 @@ public class waypoint {
 	}
 
 	public void setCmd(ApmCommands cmd) {
-		missionItem.command = (short) cmd.getType();		
+		missionItem.command = (short) cmd.getType();
 	}
 
 	public int getFrame() {
@@ -65,11 +65,10 @@ public class waypoint {
 	}
 
 	public void setFrame(int i) {
-		missionItem.frame = (byte) i;				
+		missionItem.frame = (byte) i;
 	}
 
-	public void setParameters(float parm1, float parm2, float parm3,
-			float parm4) {
+	public void setParameters(float parm1, float parm2, float parm3, float parm4) {
 		missionItem.param1 = parm1;
 		missionItem.param2 = parm2;
 		missionItem.param3 = parm3;

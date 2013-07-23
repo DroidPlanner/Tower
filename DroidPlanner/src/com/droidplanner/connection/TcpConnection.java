@@ -24,27 +24,27 @@ public class TcpConnection extends MAVLinkConnection {
 
 	@Override
 	protected void openConnection() throws UnknownHostException, IOException {
-		getTCPStream();		
+		getTCPStream();
 	}
 
 	@Override
 	protected void readDataBlock() throws IOException {
-		iavailable = mavIn.read(readData);		
+		iavailable = mavIn.read(readData);
 	}
 
 	@Override
 	protected void sendBuffer(byte[] buffer) throws IOException {
-		if (mavOut!=null) {
+		if (mavOut != null) {
 			mavOut.write(buffer);
 			mavOut.flush();
 		}
 	}
-	
+
 	@Override
 	protected void closeConnection() throws IOException {
-		socket.close();		
+		socket.close();
 	}
-	
+
 	@Override
 	protected void getPreferences(SharedPreferences prefs) {
 		serverIP = prefs.getString("pref_server_ip", "");
@@ -58,6 +58,5 @@ public class TcpConnection extends MAVLinkConnection {
 		mavOut = new BufferedOutputStream((socket.getOutputStream()));
 		mavIn = new BufferedInputStream(socket.getInputStream());
 	}
-
 
 }

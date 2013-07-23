@@ -24,7 +24,8 @@ public class FollowMe implements LocationListener {
 	public FollowMe(Context context, Drone drone) {
 		this.context = context;
 		this.drone = drone;
-		this.locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+		this.locationManager = (LocationManager) context
+				.getSystemService(Context.LOCATION_SERVICE);
 	}
 
 	public void toogleFollowMeState() {
@@ -42,10 +43,12 @@ public class FollowMe implements LocationListener {
 	private void enableFollowMe() {
 		Toast.makeText(context, "FollowMe Enabled", Toast.LENGTH_SHORT).show();
 
-		// Register the listener with the Location Manager to receive location updates
-		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_MS, MIN_DISTANCE_M, this);
+		// Register the listener with the Location Manager to receive location
+		// updates
+		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+				MIN_TIME_MS, MIN_DISTANCE_M, this);
 
-		followMeEnabled = true;		
+		followMeEnabled = true;
 	}
 
 	private void disableFollowMe() {
@@ -58,15 +61,23 @@ public class FollowMe implements LocationListener {
 		return followMeEnabled;
 	}
 
-
 	@Override
 	public void onLocationChanged(Location location) {
-		waypoint guidedWP = new waypoint(location.getLatitude(), location.getLongitude(), drone.mission.getDefaultAlt());	// TODO find a better way to do the altitude
-		MavLinkModes.setGuidedMode(drone.MavClient,guidedWP);
+		waypoint guidedWP = new waypoint(location.getLatitude(),
+				location.getLongitude(), drone.mission.getDefaultAlt()); // TODO
+																			// find
+																			// a
+																			// better
+																			// way
+																			// to
+																			// do
+																			// the
+																			// altitude
+		MavLinkModes.setGuidedMode(drone.MavClient, guidedWP);
 	}
 
 	@Override
-	public void onProviderDisabled(String provider) {		
+	public void onProviderDisabled(String provider) {
 	}
 
 	@Override
@@ -74,14 +85,13 @@ public class FollowMe implements LocationListener {
 	}
 
 	@Override
-	public void onStatusChanged(String provider, int status, Bundle extras) {		
+	public void onStatusChanged(String provider, int status, Bundle extras) {
 	}
-
 
 	private boolean isEnabledInPreferences() {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
 
-		return prefs.getBoolean("pref_follow_me_mode_enabled", false);	
+		return prefs.getBoolean("pref_follow_me_mode_enabled", false);
 	}
 }

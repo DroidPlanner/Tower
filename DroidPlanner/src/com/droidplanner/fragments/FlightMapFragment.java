@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.droidplanner.activitys.SuperActivity;
+import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.fragments.markers.DroneMarker;
@@ -26,7 +26,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-public class FlightMapFragment extends OfflineMapFragment implements OnMapLongClickListener {
+public class FlightMapFragment extends OfflineMapFragment implements
+		OnMapLongClickListener {
 	public GoogleMap mMap;
 	private GuidedMarker guidedMarker;
 	private Polyline flightPath;
@@ -35,56 +36,54 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 	private int maxFlightPathSize;
 	public boolean isAutoPanEnabled;
 	private boolean isGuidedModeEnabled;
-	
+
 	public boolean hasBeenZoomed = false;
 	private OnFlighDataListener mListener;
 	public HomeMarker homeMarker;
 	public DroneMarker droneMarker;
 	public Drone drone;
-	
-	
+
 	public interface OnFlighDataListener {
 		public void onSetGuidedMode(LatLng point);
 	}
-	
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
 			Bundle bundle) {
 		View view = super.onCreateView(inflater, viewGroup, bundle);
-		mMap = getMap();		
-		drone = ((SuperActivity)getActivity()).app.drone;
-		
+		mMap = getMap();
+		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
+
 		droneMarker = new DroneMarker(this);
 		homeMarker = new HomeMarker(this.mMap);
 		guidedMarker = new GuidedMarker(mMap);
-		
-		addFlightPathToMap();	
+
+		addFlightPathToMap();
 		addMissionPathToMap();
 		getPreferences();
-		
-		drone.setMapListner(droneMarker);		
+
+		drone.setMapListner(droneMarker);
 		mMap.setOnMapLongClickListener(this);
-		
-		
+
 		return view;
 	}
-	
+
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		mListener = (OnFlighDataListener) activity;
 	}
-	
+
 	private void getPreferences() {
 		Context context = this.getActivity();
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
-		maxFlightPathSize =Integer.valueOf(prefs.getString("pref_max_fligth_path_size", "0"));
-		isGuidedModeEnabled =prefs.getBoolean("pref_guided_mode_enabled", false);
-		isAutoPanEnabled =prefs.getBoolean("pref_auto_pan_enabled", false);	
+		maxFlightPathSize = Integer.valueOf(prefs.getString(
+				"pref_max_fligth_path_size", "0"));
+		isGuidedModeEnabled = prefs.getBoolean("pref_guided_mode_enabled",
+				false);
+		isAutoPanEnabled = prefs.getBoolean("pref_auto_pan_enabled", false);
 	}
-
 
 	public void updateMissionPath(Drone drone) {
 		ArrayList<LatLng> missionPoints = new ArrayList<LatLng>();
@@ -94,7 +93,7 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 		}
 		missionPath.setPoints(missionPoints);
 	}
-	
+
 	public void addFlithPathPoint(LatLng position) {
 		if (maxFlightPathSize > 0) {
 			List<LatLng> oldFlightPath = flightPath.getPoints();
@@ -109,14 +108,17 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 	public void clearFlightPath() {
 		List<LatLng> oldFlightPath = flightPath.getPoints();
 		oldFlightPath.clear();
-		flightPath.setPoints(oldFlightPath);		
+		flightPath.setPoints(oldFlightPath);
 	}
 
 	public void zoomToLastKnowPosition() {
 		if (drone.GPS.isPositionValid()) {
-			mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(drone.GPS.getPosition(), 16));			
-		}else{
-			Toast.makeText(getActivity(), "There is no valid location for the Drone", Toast.LENGTH_SHORT).show();
+			mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+					drone.GPS.getPosition(), 16));
+		} else {
+			Toast.makeText(getActivity(),
+					"There is no valid location for the Drone",
+					Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -125,18 +127,18 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 		missionPathOptions.color(Color.YELLOW).width(3).zIndex(0);
 		missionPath = mMap.addPolyline(missionPathOptions);
 	}
-	
+
 	private void addFlightPathToMap() {
 		PolylineOptions flightPathOptions = new PolylineOptions();
 		flightPathOptions.color(Color.argb(180, 0, 0, 200)).width(2).zIndex(1);
-		flightPath = mMap.addPolyline(flightPathOptions);		
+		flightPath = mMap.addPolyline(flightPathOptions);
 	}
-	
+
 	@Override
 	public void onMapLongClick(LatLng point) {
 		getPreferences();
 		if (isGuidedModeEnabled) {
-			mListener.onSetGuidedMode(point);	
+			mListener.onSetGuidedMode(point);
 			guidedMarker.updateGuidedMarker(point);
 		}
 	}

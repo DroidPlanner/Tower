@@ -26,7 +26,7 @@ public class CameraActivity extends SuperActivity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.camera);
-		
+
 		textViewLPan = (TextView) findViewById(R.id.textViewCamJoyLPan);
 		textViewLPan.setText(" RC8: 0%");
 		textViewLTilt = (TextView) findViewById(R.id.textViewCamJoyLTilt);
@@ -36,21 +36,21 @@ public class CameraActivity extends SuperActivity {
 		textViewRTilt = (TextView) findViewById(R.id.textViewCamJoyRTilt);
 		textViewRTilt.setText("RC6: 0%");
 
-		JoystickView joystickL = (JoystickView)findViewById(R.id.joystickViewCamL);
-		JoystickView joystickR = (JoystickView)findViewById(R.id.joystickViewCamR);
+		JoystickView joystickL = (JoystickView) findViewById(R.id.joystickViewCamL);
+		JoystickView joystickR = (JoystickView) findViewById(R.id.joystickViewCamR);
 
 		joystickL.setOnJostickMovedListener(lJoystick);
 		joystickR.setOnJostickMovedListener(rJoystick);
 
 		rcOutput = new RcOutput(app.MAVClient, this);
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		disableRcOverride();
 		super.onDestroy();
 	}
-	
+
 	@Override
 	protected void onPause() {
 		disableRcOverride();
@@ -62,7 +62,6 @@ public class CameraActivity extends SuperActivity {
 		disableRcOverride();
 		super.onResume();
 	}
-
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -81,7 +80,7 @@ public class CameraActivity extends SuperActivity {
 			return super.onMenuItemSelected(featureId, item);
 		}
 	}
-	
+
 	private void toggleCameraOverride() {
 		if (rcOutput.isRcOverrided()) {
 			disableRcOverride();
@@ -99,7 +98,7 @@ public class CameraActivity extends SuperActivity {
 
 	private void disableRcOverride() {
 		rcOutput.disableRcOverride();
-		if (bTogleCamera!=null) {
+		if (bTogleCamera != null) {
 			bTogleCamera.setTitle(R.string.enable);
 		}
 	}
@@ -116,7 +115,7 @@ public class CameraActivity extends SuperActivity {
 		@Override
 		public void OnMoved(double pan, double tilt) {
 			rcOutput.setRcChannel(RcOutput.RC8, pan);
-			textViewLPan.setText(String.format("RC8: %.0f%%", pan *100));
+			textViewLPan.setText(String.format("RC8: %.0f%%", pan * 100));
 		}
 	};
 	JoystickMovedListener rJoystick = new JoystickMovedListener() {
@@ -132,8 +131,8 @@ public class CameraActivity extends SuperActivity {
 		public void OnMoved(double pan, double tilt) {
 			rcOutput.setRcChannel(RcOutput.RC6, tilt);
 			rcOutput.setRcChannel(RcOutput.RC7, pan);
-			textViewRPan.setText(String.format("RC7: %.0f%%", pan *100));
-			textViewRTilt.setText(String.format("RC6: %.0f%%", tilt *100));
+			textViewRPan.setText(String.format("RC7: %.0f%%", pan * 100));
+			textViewRTilt.setText(String.format("RC6: %.0f%%", tilt * 100));
 		}
 	};
 }

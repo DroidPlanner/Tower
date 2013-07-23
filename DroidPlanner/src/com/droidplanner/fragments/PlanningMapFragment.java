@@ -32,13 +32,13 @@ import com.google.android.gms.maps.model.PolylineOptions;
 @SuppressLint("UseSparseArrays")
 public class PlanningMapFragment extends OfflineMapFragment implements
 		OnMapLongClickListener, OnMarkerDragListener {
-	
+
 	public enum modes {
 		MISSION, POLYGON;
 	}
-	
+
 	public GoogleMap mMap;
-	
+
 	private HashMap<Integer, Marker> waypointMarkers = new HashMap<Integer, Marker>();
 	private HashMap<Integer, Marker> polygonMarkers = new HashMap<Integer, Marker>();
 	public HomeMarker homeMarker;
@@ -67,7 +67,7 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		mMap = getMap();
 		mMap.setOnMarkerDragListener(this);
 		mMap.setOnMapLongClickListener(this);
-		
+
 		homeMarker = new HomeMarker(mMap);
 		return view;
 	}
@@ -80,28 +80,25 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 
 	public void update(Drone drone, Polygon polygon) {
 		clearMap();
-		
+
 		homeMarker.invalidate();
 		waypointMarkers.clear();
 		polygonMarkers.clear();
-		
-		
 		homeMarker.update(drone);
-		int i =0;
-		
+
+		int i = 0;
 		for (MarkerOptions point : getPolygonMarkers(polygon)) {
-			polygonMarkers.put(i++,mMap.addMarker(point));
+			polygonMarkers.put(i++, mMap.addMarker(point));
 		}
 		mMap.addPolyline(getPolygonPath(polygon));
+
 		i = 0;
 		for (MarkerOptions waypoint : getMissionMarkers(drone)) {
-			waypointMarkers.put(i++,mMap.addMarker(waypoint));
+			waypointMarkers.put(i++, mMap.addMarker(waypoint));
 		}
 		mMap.addPolyline(getMissionPath(drone));
-		
+
 	}
-
-
 
 	@Override
 	public void onMapLongClick(LatLng point) {
@@ -124,7 +121,7 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 	}
 
 	private void checkForHomeMarker(Marker marker) {
-		if(homeMarker.isHomeMarker(marker)){
+		if (homeMarker.isHomeMarker(marker)) {
 			mListener.onMoveHome(marker.getPosition());
 		}
 	}
@@ -151,7 +148,7 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 					break;
 				}
 			}
-			Log.d("MARK","move polygon");
+			Log.d("MARK", "move polygon");
 			mListener.onMovePolygonPoint(marker.getPosition(), number);
 		}
 	}
@@ -191,7 +188,7 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 	private PolylineOptions getMissionPath(Drone drone) {
 		PolylineOptions flightPath = new PolylineOptions();
 		flightPath.color(Color.YELLOW).width(3);
-	
+
 		flightPath.add(drone.mission.getHome().getCoord());
 		for (waypoint point : drone.mission.getWaypoints()) {
 			flightPath.add(point.getCoord());
@@ -202,14 +199,14 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 	public PolylineOptions getPolygonPath(Polygon poly) {
 		PolylineOptions flightPath = new PolylineOptions();
 		flightPath.color(Color.BLACK).width(2);
-	
+
 		for (LatLng point : poly.getWaypoints()) {
 			flightPath.add(point);
 		}
 		if (poly.getWaypoints().size() > 2) {
 			flightPath.add(poly.getWaypoints().get(0));
 		}
-	
+
 		return flightPath;
 	}
 
@@ -218,12 +215,12 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		switch (mode) {
 		default:
 		case MISSION:
-			Toast.makeText(getActivity(), string.exiting_polygon_mode, Toast.LENGTH_SHORT)
-			.show();			
+			Toast.makeText(getActivity(), string.exiting_polygon_mode,
+					Toast.LENGTH_SHORT).show();
 			break;
 		case POLYGON:
-			Toast.makeText(getActivity(), string.entering_polygon_mode, Toast.LENGTH_SHORT)
-			.show();
+			Toast.makeText(getActivity(), string.entering_polygon_mode,
+					Toast.LENGTH_SHORT).show();
 			break;
 		}
 	}

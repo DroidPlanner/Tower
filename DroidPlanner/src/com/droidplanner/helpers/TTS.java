@@ -12,7 +12,7 @@ import android.speech.tts.TextToSpeech.OnInitListener;
 
 public class TTS implements OnInitListener {
 	private static final double BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT = 10;
-	
+
 	TextToSpeech tts;
 	private SharedPreferences prefs;
 	private int lastBatteryDischargeNotification;
@@ -38,13 +38,13 @@ public class TTS implements OnInitListener {
 	private boolean shouldEnableTTS() {
 		return prefs.getBoolean("pref_enable_tts", false);
 	}
-	
+
 	public void speakGpsMode(int fix) {
 		switch (fix) {
 		case 2:
 			speak("GPS 2D Lock");
 			break;
-		case 3:					
+		case 3:
 			speak("GPS 3D Lock");
 			break;
 		default:
@@ -52,11 +52,11 @@ public class TTS implements OnInitListener {
 			break;
 		}
 	}
-	
+
 	public void speakArmedState(boolean armed) {
 		if (armed) {
-			speak("Armed");					
-		}else{
+			speak("Armed");
+		} else {
 			speak("Disarmed");
 		}
 	}
@@ -87,10 +87,9 @@ public class TTS implements OnInitListener {
 			modeString += mode.getName();
 			break;
 		}
-		speak(modeString);	
+		speak(modeString);
 	}
-	
-	
+
 	public void batteryDischargeNotification(double battRemain) {
 		if (lastBatteryDischargeNotification != (int) ((battRemain - 1) / BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT)) {
 			lastBatteryDischargeNotification = (int) ((battRemain - 1) / BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT);

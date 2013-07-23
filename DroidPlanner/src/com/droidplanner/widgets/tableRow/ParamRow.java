@@ -47,23 +47,23 @@ public class ParamRow extends TableRow implements TextWatcher {
 		valueView.addTextChangedListener(this);
 	}
 
-	public Parameter getParameterFromRow(){
+	public Parameter getParameterFromRow() {
 		return (new Parameter(param.name, getParamValue(), param.type));
 	}
 
 	public double getParamValue() {
 		return Double.parseDouble(valueView.getText().toString());
 	}
-	
-	public String getParamName(){
+
+	public String getParamName() {
 		return param.name;
 	}
-	
+
 	@Override
-	public void afterTextChanged(Editable s) {			
+	public void afterTextChanged(Editable s) {
 		if (isNewValueEqualToDroneParam()) {
 			valueView.setTextColor(Color.WHITE);
-		}else{			
+		} else {
 			valueView.setTextColor(Color.RED);
 		}
 	}
@@ -74,11 +74,11 @@ public class ParamRow extends TableRow implements TextWatcher {
 
 	@Override
 	public void beforeTextChanged(CharSequence s, int start, int count,
-			int after) {		
+			int after) {
 	}
 
 	@Override
-	public void onTextChanged(CharSequence s, int start, int before, int count) {		
+	public void onTextChanged(CharSequence s, int start, int before, int count) {
 	}
 
 }

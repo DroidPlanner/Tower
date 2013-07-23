@@ -19,7 +19,7 @@ public class Mission extends DroneVariable {
 	private Double defaultAlt = 50.0;
 	private int wpno = -1;
 	private double disttowp = 0;
-	
+
 	public OnWaypointUpdateListner waypointsListner;
 
 	public Mission(Drone myDrone) {
@@ -79,10 +79,10 @@ public class Mission extends DroneVariable {
 	}
 
 	private void addWaypoint(waypoint wp) {
-		wp.setNumber(waypoints.size()+1);
+		wp.setNumber(waypoints.size() + 1);
 		waypoints.add(wp);
 	}
-	
+
 	public void addWaypoint(Double lat, Double Lng, Double h) {
 		addWaypoint(new waypoint(lat, Lng, h));
 	}
@@ -134,7 +134,8 @@ public class Mission extends DroneVariable {
 
 	public void onWaypointsReceived(List<waypoint> waypoints) {
 		if (waypoints != null) {
-			Toast.makeText(myDrone.context,"Waypoints received from Drone", Toast.LENGTH_SHORT).show();
+			Toast.makeText(myDrone.context, "Waypoints received from Drone",
+					Toast.LENGTH_SHORT).show();
 			myDrone.tts.speak("Waypoints received");
 			setHome(waypoints.get(0));
 			waypoints.remove(0); // Remove Home waypoint
@@ -146,7 +147,8 @@ public class Mission extends DroneVariable {
 	}
 
 	public void onWriteWaypoints(msg_mission_ack msg) {
-		Toast.makeText(myDrone.context, "Waypoints sent", Toast.LENGTH_SHORT).show();
+		Toast.makeText(myDrone.context, "Waypoints sent", Toast.LENGTH_SHORT)
+				.show();
 		myDrone.tts.speak("Waypoints saved to Drone");
 	}
 

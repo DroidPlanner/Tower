@@ -34,7 +34,7 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 	public static final int MSG_REGISTER_CLIENT = 1;
 	public static final int MSG_UNREGISTER_CLIENT = 2;
 	public static final int MSG_SEND_DATA = 3;
-	
+
 	private WakeLock wakeLock;
 	private MAVLinkConnection mavConnection;
 	Messenger msgCenter = null;
@@ -83,7 +83,8 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 	private void notifyNewMessage(MAVLinkMessage m) {
 		try {
 			if (msgCenter != null) {
-				Message msg = Message.obtain(null, MAVLinkClient.MSG_RECEIVED_DATA);
+				Message msg = Message.obtain(null,
+						MAVLinkClient.MSG_RECEIVED_DATA);
 				Bundle data = new Bundle();
 				data.putSerializable("msg", m);
 				msg.setData(data);
@@ -101,14 +102,15 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 
 	@Override
 	public void onDisconnect() {
-		couldNotOpenConnection  = true;
+		couldNotOpenConnection = true;
 		selfDestryService();
 	}
 
 	private void selfDestryService() {
 		try {
 			if (msgCenter != null) {
-				Message msg = Message.obtain(null, MAVLinkClient.MSG_SELF_DESTRY_SERVICE);
+				Message msg = Message.obtain(null,
+						MAVLinkClient.MSG_SELF_DESTRY_SERVICE);
 				msgCenter.send(msg);
 			}
 		} catch (RemoteException e) {
@@ -138,9 +140,8 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 	 * the as needed. May throw a onConnect or onDisconnect callback
 	 */
 	private void connectMAVconnection() {
-		String connectionType = PreferenceManager
-				.getDefaultSharedPreferences(getApplicationContext())
-				.getString("pref_connection_type", "");
+		String connectionType = PreferenceManager.getDefaultSharedPreferences(
+				getApplicationContext()).getString("pref_connection_type", "");
 		if (connectionType.equals("USB")) {
 			mavConnection = new UsbConnection(this);
 		} else if (connectionType.equals("TCP")) {
@@ -190,18 +191,20 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 	protected void aquireWakelock() {
 		if (wakeLock == null) {
 			PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-			if (PreferenceManager
-					.getDefaultSharedPreferences(getApplicationContext())
-					.getBoolean("pref_keep_screen_bright", false)) {
-				wakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK|PowerManager.ON_AFTER_RELEASE, "CPU");
+			if (PreferenceManager.getDefaultSharedPreferences(
+					getApplicationContext()).getBoolean(
+					"pref_keep_screen_bright", false)) {
+				wakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK
+						| PowerManager.ON_AFTER_RELEASE, "CPU");
 			} else {
-				wakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "CPU");
+				wakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK,
+						"CPU");
 			}
-				
+
 			wakeLock.acquire();
 		}
 	}
-	
+
 	protected void releaseWakelock() {
 		if (wakeLock != null) {
 			wakeLock.release();

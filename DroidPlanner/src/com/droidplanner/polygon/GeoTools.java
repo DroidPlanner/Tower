@@ -14,22 +14,26 @@ public class GeoTools {
 	 * Provides the distance from a point P to the line segment that passes
 	 * through A-B. If the point is not on the side of the line, returns the
 	 * distance to the closest point
-	 * @param L1 First point of the line
-	 * @param L2 Second point of the line
-	 * @param P  Point to measure the distance
+	 * 
+	 * @param L1
+	 *            First point of the line
+	 * @param L2
+	 *            Second point of the line
+	 * @param P
+	 *            Point to measure the distance
 	 */
 	public static double pointToLineDistance(LatLng L1, LatLng L2, LatLng P) {
 		double A = P.longitude - L1.longitude;
 		double B = P.latitude - L1.latitude;
 		double C = L2.longitude - L1.longitude;
 		double D = L2.latitude - L1.latitude;
-	
+
 		double dot = A * C + B * D;
 		double len_sq = C * C + D * D;
 		double param = dot / len_sq;
-	
+
 		double xx, yy;
-	
+
 		if (param < 0) // point behind the segment
 		{
 			xx = L1.longitude;
@@ -42,7 +46,7 @@ public class GeoTools {
 			xx = L1.longitude + param * C;
 			yy = L1.latitude + param * D;
 		}
-	
+
 		return Math.hypot(xx - P.longitude, yy - P.latitude);
 	}
 
@@ -94,20 +98,20 @@ public class GeoTools {
 	 */
 	static LatLng newpos(LatLng origin, double bearing, double distance) {
 		double radius_of_earth = 6378100.0;// # in meters
-	
+
 		double lat = origin.latitude;
 		double lon = origin.longitude;
 		double lat1 = Math.toRadians(lat);
 		double lon1 = Math.toRadians(lon);
 		double brng = Math.toRadians(bearing);
 		double dr = distance / radius_of_earth;
-	
+
 		double lat2 = Math.asin(Math.sin(lat1) * Math.cos(dr) + Math.cos(lat1)
 				* Math.sin(dr) * Math.cos(brng));
 		double lon2 = lon1
 				+ Math.atan2(Math.sin(brng) * Math.sin(dr) * Math.cos(lat1),
 						Math.cos(dr) - Math.sin(lat1) * Math.sin(lat2));
-	
+
 		return (new LatLng(Math.toDegrees(lat2), Math.toDegrees(lon2)));
 	}
 
@@ -127,7 +131,7 @@ public class GeoTools {
 		double currentbest = Double.MAX_VALUE;
 		double dist;
 		LatLng p1, p2;
-	
+
 		for (int i = 0; i < waypoints2.size(); i++) {
 			if (i == waypoints2.size() - 1) {
 				p1 = waypoints2.get(i);
@@ -136,7 +140,7 @@ public class GeoTools {
 				p1 = waypoints2.get(i);
 				p2 = waypoints2.get(i + 1);
 			}
-	
+
 			dist = pointToLineDistance(p1, p2, point);
 			if (dist < currentbest) {
 				answer = i + 1;
@@ -159,10 +163,10 @@ public class GeoTools {
 	private static LatLng findClosestPoint(LatLng point, List<LatLng> list) {
 		LatLng answer = null;
 		double currentbest = Double.MAX_VALUE;
-	
+
 		for (LatLng pnt : list) {
 			double dist1 = getDistance(point, pnt);
-	
+
 			if (dist1 < currentbest) {
 				answer = pnt;
 				currentbest = dist1;
@@ -183,12 +187,12 @@ public class GeoTools {
 	static LineLatLng findClosestLine(LatLng point, List<LineLatLng> list) {
 		LineLatLng answer = list.get(0);
 		double shortest = Double.MAX_VALUE;
-	
+
 		for (LineLatLng line : list) {
 			double ans1 = getDistance(point, line.p1);
 			double ans2 = getDistance(point, line.p2);
 			LatLng shorterpnt = ans1 < ans2 ? line.p1 : line.p2;
-	
+
 			if (shortest > getDistance(point, shorterpnt)) {
 				answer = line;
 				shortest = getDistance(point, shorterpnt);
@@ -240,14 +244,14 @@ public class GeoTools {
 	 * @return area in m�
 	 */
 	// TODO test and fix this function
-	public static  Double getArea(Polygon poly) {
+	public static Double getArea(Polygon poly) {
 		double sum = 0.0;
 		for (int i = 0; i < poly.getWaypoints().size() - 1; i++) {
 			sum = sum
-					+ (latToMeters(poly.getWaypoints().get(i).longitude) * latToMeters(poly.getWaypoints()
-							.get(i + 1).latitude))
-					- (latToMeters(poly.getWaypoints().get(i).latitude) * latToMeters(poly.getWaypoints()
-							.get(i + 1).longitude));
+					+ (latToMeters(poly.getWaypoints().get(i).longitude) * latToMeters(poly
+							.getWaypoints().get(i + 1).latitude))
+					- (latToMeters(poly.getWaypoints().get(i).latitude) * latToMeters(poly
+							.getWaypoints().get(i + 1).longitude));
 		}
 		return Math.abs(0.5 * sum);
 	}

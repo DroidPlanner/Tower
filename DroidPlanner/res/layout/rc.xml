@@ -1,85 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="5dp"
-        android:text="@string/this_is_very_experimental_please_be_careful"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+    android:layout_height="match_parent"
+    android:orientation="horizontal" android:baselineAligned="false">
     
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-        
-   		<TextView
-       		android:id="@+id/textViewRCJoyLPan"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:gravity="center"
-        	android:layout_weight="1"
-        	android:text=""/>
-   		<TextView
-       		android:id="@+id/textViewRCJoyLTilt"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:gravity="center"
-        	android:layout_weight="1"
-        	android:text=""/>
-   		<TextView
-       		android:id="@+id/textViewRCJoyRPan"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:gravity="center"
-        	android:layout_weight="1"
-        	android:text=""/>
-
-   		<TextView
-   		    android:id="@+id/textViewRCJoyRTilt"
-   		    android:layout_width="wrap_content"
-   		    android:layout_height="wrap_content"
-   		    android:gravity="center"
-   		    android:layout_weight="1"
-   		    android:text="" />
-   		
-   	</LinearLayout>
-<!--  
-            <com.droidplanner.widgets.joystick.DualJoystickView
-                android:id="@+id/joystickView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="50dp"
-                android:layout_marginRight="50dp"
-                android:layout_marginTop="20dip" />
--->
-
-    <LinearLayout
+    <fragment
+        android:id="@+id/rcFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal" >
-        
-        <com.droidplanner.widgets.joystick.JoystickView
-            android:id="@+id/joystickViewL"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|left"
-            android:layout_weight="1" />
-
-        <com.droidplanner.widgets.joystick.JoystickView
-            android:id="@+id/joystickViewR"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
-            android:layout_weight="1" />
-
-    </LinearLayout>
+        class="com.droidplanner.fragments.RCFragment" />
 
 </LinearLayout>

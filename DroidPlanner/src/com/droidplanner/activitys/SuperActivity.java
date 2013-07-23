@@ -27,6 +27,7 @@ public abstract class SuperActivity extends Activity implements
 		OnNavigationListener, ConnectionStateListner, OnAltitudeChangedListner {
 
 	abstract int getNavigationItem();
+
 	public DroidPlannerApp app;
 	private MenuItem connectButton;
 	public Drone drone;
@@ -39,15 +40,15 @@ public abstract class SuperActivity extends Activity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-	
+
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-	
+
 		// Set up the action bar to show a dropdown list.
 		setUpActionBar();
 		app = (DroidPlannerApp) getApplication();
 		app.setConectionStateListner(this);
 		this.drone = ((DroidPlannerApp) getApplication()).drone;
-		
+
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		setRequestedOrientation(screenRequestedOrientation);
 	}
@@ -89,7 +90,7 @@ public abstract class SuperActivity extends Activity implements
 			break;
 		case 5: // GCP
 			navigationIntent = new Intent(this, GCPActivity.class);
-			break;		
+			break;
 		}
 		startActivity(navigationIntent);
 		return false;
@@ -98,37 +99,35 @@ public abstract class SuperActivity extends Activity implements
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.menu_settings:
-				startActivity(new Intent(this, SettingsActivity.class));
-				return true;
-			case R.id.menu_connect:
-				toggleConnectionState();
-				return true;
-			case R.id.menu_load_from_apm:
-				drone.waypointMananger.getWaypoints();
-				return true;	
-			case R.id.menu_default_alt:
-				changeDefaultAlt();
-				return true;
-			case R.id.menu_preflight_calibration:
-				drone.calibrationSetup.startCalibration(this);
-				return true;
-			case R.id.menu_record_me:
-				app.recordMe.toogleRecordMeState();
-			default:
-				return super.onMenuItemSelected(featureId, item);
+		case R.id.menu_settings:
+			startActivity(new Intent(this, SettingsActivity.class));
+			return true;
+		case R.id.menu_connect:
+			toggleConnectionState();
+			return true;
+		case R.id.menu_load_from_apm:
+			drone.waypointMananger.getWaypoints();
+			return true;
+		case R.id.menu_default_alt:
+			changeDefaultAlt();
+			return true;
+		case R.id.menu_preflight_calibration:
+			drone.calibrationSetup.startCalibration(this);
+			return true;
+		case R.id.menu_record_me:
+			app.recordMe.toogleRecordMeState();
+		default:
+			return super.onMenuItemSelected(featureId, item);
 		}
 	}
-	
-	
 
 	private void toggleConnectionState() {
 		if (app.MAVClient.isConnected()) {
 			app.MAVClient.close();
-		}else{
+		} else {
 			app.MAVClient.init();
 		}
-		
+
 	}
 
 	public void notifyDisconnected() {
@@ -145,17 +144,17 @@ public abstract class SuperActivity extends Activity implements
 	public void notifyConnected() {
 		if (connectButton != null) {
 			connectButton.setTitle(getResources().getString(
-					R.string.menu_disconnect));		
+					R.string.menu_disconnect));
 		}
-		if (PreferenceManager
-				.getDefaultSharedPreferences(getApplicationContext())
-				.getBoolean("pref_lock_screen_orientation", false)) {
-			int rotation = ((WindowManager)getSystemService(WINDOW_SERVICE)).getDefaultDisplay().getRotation();
+		if (PreferenceManager.getDefaultSharedPreferences(
+				getApplicationContext()).getBoolean(
+				"pref_lock_screen_orientation", false)) {
+			int rotation = ((WindowManager) getSystemService(WINDOW_SERVICE))
+					.getDefaultDisplay().getRotation();
 			int actualOrientation = getResources().getConfiguration().orientation;
-			boolean naturalOrientationLandscape = (((rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) && actualOrientation == Configuration.ORIENTATION_LANDSCAPE) ||
-					                               ((rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) && actualOrientation == Configuration.ORIENTATION_PORTRAIT));
+			boolean naturalOrientationLandscape = (((rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) && actualOrientation == Configuration.ORIENTATION_LANDSCAPE) || ((rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) && actualOrientation == Configuration.ORIENTATION_PORTRAIT));
 			if (naturalOrientationLandscape) {
-				switch(rotation) {
+				switch (rotation) {
 				case Surface.ROTATION_0:
 					screenRequestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
 					break;
@@ -170,7 +169,7 @@ public abstract class SuperActivity extends Activity implements
 					break;
 				}
 			} else {
-				switch(rotation) {
+				switch (rotation) {
 				case Surface.ROTATION_0:
 					screenRequestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
 					break;
@@ -191,6 +190,7 @@ public abstract class SuperActivity extends Activity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu_super_activiy, menu);
 		connectButton = menu.findItem(R.id.menu_connect);
 		app.MAVClient.queryConnectionState();
 		return super.onCreateOptionsMenu(menu);
@@ -200,7 +200,7 @@ public abstract class SuperActivity extends Activity implements
 		AltitudeDialog dialog = new AltitudeDialog(this);
 		dialog.build(drone.mission.getDefaultAlt(), this);
 	}
-	
+
 	@Override
 	public void onAltitudeChanged(double newAltitude) {
 		drone.mission.setDefaultAlt(newAltitude);

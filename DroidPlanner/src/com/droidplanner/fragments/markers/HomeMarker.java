@@ -35,8 +35,8 @@ public class HomeMarker {
 		homeMarker = myMap.addMarker(new MarkerOptions()
 				.position(drone.mission.getHome().getCoord())
 				.snippet(
-						String.format(Locale.ENGLISH, "%.2f",
-								drone.mission.getHome().getHeight()))
+						String.format(Locale.ENGLISH, "%.2f", drone.mission
+								.getHome().getHeight()))
 				.draggable(true)
 				.anchor((float) 0.5, (float) 0.5)
 				.icon(BitmapDescriptorFactory
@@ -44,7 +44,7 @@ public class HomeMarker {
 	}
 
 	public void invalidate() {
-		homeMarker = null;		
+		homeMarker = null;
 	}
 
 	public boolean isHomeMarker(Marker marker) {

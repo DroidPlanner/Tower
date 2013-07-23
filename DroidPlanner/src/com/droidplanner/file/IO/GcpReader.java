@@ -28,8 +28,7 @@ public class GcpReader implements FileReader {
 	private final String ns = null;
 
 	public List<gcp> gcpList;
-	
-	
+
 	public boolean openGCPFile(String fileWithPath) {
 		boolean returnValue = false;
 		if (fileWithPath.endsWith(".kmz")) {
@@ -43,7 +42,7 @@ public class GcpReader implements FileReader {
 	private boolean openKML(String fileWithPath) {
 		try {
 			FileInputStream in = new FileInputStream(fileWithPath);
-			
+
 			gcpList = parse(in);
 			in.close();
 		} catch (FileNotFoundException e) {

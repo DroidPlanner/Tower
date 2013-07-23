@@ -61,8 +61,7 @@ public class Parameters extends DroneVariable {
 	}
 
 	public void sendParameter(Parameter parameter) {
-		MavLinkParameters.sendParameter(parameter, myDrone.MavClient);		
+		MavLinkParameters.sendParameter(parameter, myDrone.MavClient);
 	}
-
 
 }

@@ -38,12 +38,12 @@ public class OfflineMapFragment extends MapFragment {
 
 	private void setupMapUI() {
 		GoogleMap mMap = getMap();
-		if (mMap!=null) {
+		if (mMap != null) {
 			mMap.setMyLocationEnabled(true);
 			UiSettings mUiSettings = mMap.getUiSettings();
 			mUiSettings.setMyLocationButtonEnabled(true);
 			mUiSettings.setCompassEnabled(true);
-			mUiSettings.setTiltGesturesEnabled(false);			
+			mUiSettings.setTiltGesturesEnabled(false);
 		}
 	}
 
@@ -63,7 +63,7 @@ public class OfflineMapFragment extends MapFragment {
 	}
 
 	private void setupOnlineMapOverlay() {
-		GoogleMap mMap = getMap();		
+		GoogleMap mMap = getMap();
 		mMap.setMapType(getMapType());
 	}
 
@@ -71,16 +71,19 @@ public class OfflineMapFragment extends MapFragment {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());
 		String mapType = prefs.getString("pref_map_type", "");
-		
-		if (mapType.equalsIgnoreCase("Satellite")) {			
+
+		if (mapType.equalsIgnoreCase("Satellite")) {
 			return GoogleMap.MAP_TYPE_SATELLITE;
-		}if (mapType.equalsIgnoreCase("Hybrid")) {
+		}
+		if (mapType.equalsIgnoreCase("Hybrid")) {
 			return GoogleMap.MAP_TYPE_HYBRID;
-		}if (mapType.equalsIgnoreCase("Normal")) {
+		}
+		if (mapType.equalsIgnoreCase("Normal")) {
 			return GoogleMap.MAP_TYPE_NORMAL;
-		}if (mapType.equalsIgnoreCase("Terrain")){		
+		}
+		if (mapType.equalsIgnoreCase("Terrain")) {
 			return GoogleMap.MAP_TYPE_TERRAIN;
-		}else {
+		} else {
 			return GoogleMap.MAP_TYPE_SATELLITE;
 		}
 	}
@@ -124,12 +127,12 @@ public class OfflineMapFragment extends MapFragment {
 		}
 		return builder.build();
 	}
-	
+
 	public double getMapRotation() {
 		GoogleMap map = getMap();
-		if(map!=null){
+		if (map != null) {
 			return map.getCameraPosition().bearing;
-		}else {
+		} else {
 			return 0;
 		}
 	}

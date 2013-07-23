@@ -13,7 +13,8 @@ import com.droidplanner.helpers.TTS;
 import com.droidplanner.service.MAVLinkClient;
 import com.droidplanner.service.MAVLinkClient.OnMavlinkClientListner;
 
-public class DroidPlannerApp extends Application implements OnMavlinkClientListner {
+public class DroidPlannerApp extends Application implements
+		OnMavlinkClientListner {
 	public Drone drone;
 	public MAVLinkClient MAVClient;
 	private MavLinkMsgHandler mavLinkMsgHandler;
@@ -21,29 +22,30 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 	public RecordMe recordMe;
 	public ConnectionStateListner conectionListner;
 	private TTS tts;
-	
-	public interface OnWaypointUpdateListner{
+
+	public interface OnWaypointUpdateListner {
 		public void onWaypointsUpdate();
 	}
-	
-	public interface ConnectionStateListner{
+
+	public interface ConnectionStateListner {
 		public void notifyConnected();
+
 		public void notifyDisconnected();
 	}
-	
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
 
 		tts = new TTS(this);
-		MAVClient = new MAVLinkClient(this,this);
-		drone = new Drone(tts,MAVClient,getApplicationContext());
-		followMe = new FollowMe(this,drone);
-		recordMe = new RecordMe(this,drone);
-		mavLinkMsgHandler = new com.droidplanner.MAVLink.MavLinkMsgHandler(drone);
+		MAVClient = new MAVLinkClient(this, this);
+		drone = new Drone(tts, MAVClient, getApplicationContext());
+		followMe = new FollowMe(this, drone);
+		recordMe = new RecordMe(this, drone);
+		mavLinkMsgHandler = new com.droidplanner.MAVLink.MavLinkMsgHandler(
+				drone);
 	}
-	
-	
+
 	@Override
 	public void notifyReceivedData(MAVLinkMessage msg) {
 		mavLinkMsgHandler.receiveData(msg);
@@ -63,16 +65,16 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 	}
 
 	public void setConectionStateListner(ConnectionStateListner listner) {
-		conectionListner = listner;		
-	}
-	
-	public void setWaypointReceivedListner(OnWaypointUpdateListner listner){
-		drone.mission.waypointsListner = listner;
-	}
-	
-	public void setOnParametersChangedListner(DroneInterfaces.OnParameterManagerListner listner){
-		drone.parameters.parameterListner = listner;
+		conectionListner = listner;
 	}
 
+	public void setWaypointReceivedListner(OnWaypointUpdateListner listner) {
+		drone.mission.waypointsListner = listner;
+	}
+
+	public void setOnParametersChangedListner(
+			DroneInterfaces.OnParameterManagerListner listner) {
+		drone.parameters.parameterListner = listner;
+	}
 
 }

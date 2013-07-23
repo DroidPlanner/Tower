@@ -30,8 +30,9 @@ public class ParametersActivity extends SuperActivity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.parameters);
 
-		tableFragment = ((ParametersTableFragment)getFragmentManager().findFragmentById(R.id.parametersTable));
-		
+		tableFragment = ((ParametersTableFragment) getFragmentManager()
+				.findFragmentById(R.id.parametersTable));
+
 		app.setOnParametersChangedListner(this);
 	}
 
@@ -40,9 +41,10 @@ public class ParametersActivity extends SuperActivity implements
 		switch (item.getItemId()) {
 		case R.id.menu_load_parameters:
 			if (app.MAVClient.isConnected()) {
-				drone.parameters.getAllParameters();				
-			}else{
-				Toast.makeText(this, "Please connect first", Toast.LENGTH_SHORT).show();
+				drone.parameters.getAllParameters();
+			} else {
+				Toast.makeText(this, "Please connect first", Toast.LENGTH_SHORT)
+						.show();
 			}
 			return true;
 		case R.id.menu_save_parameters:
@@ -64,33 +66,33 @@ public class ParametersActivity extends SuperActivity implements
 		getMenuInflater().inflate(R.menu.menu_parameters, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
-	
+
 	private void writeModifiedParametersToDrone() {
 		List<ParamRow> modRows = tableFragment.getModifiedParametersRows();
 		for (ParamRow row : modRows) {
-			if (!row.isNewValueEqualToDroneParam()){
+			if (!row.isNewValueEqualToDroneParam()) {
 				drone.parameters.sendParameter(row.getParameterFromRow());
-			}						
-		}		
-		Toast.makeText(this, "Write "+modRows.size()+" parameters", Toast.LENGTH_SHORT).show();		
+			}
+		}
+		Toast.makeText(this, "Write " + modRows.size() + " parameters",
+				Toast.LENGTH_SHORT).show();
 	}
-	
+
 	private void openParametersFromFile() {
 		OpenFileDialog dialog = new OpenParameterDialog() {
 			@Override
 			public void parameterFileLoaded(List<Parameter> parameters) {
 				for (Parameter parameter : parameters) {
 					onParameterReceived(parameter);
-				}				
+				}
 			}
 		};
 		dialog.openDialog(this);
-	}		
-	
+	}
+
 	@Override
 	public void onParameterReceived(Parameter parameter) {
 		tableFragment.refreshRowParameter(parameter);
 	}
 
-	
 }

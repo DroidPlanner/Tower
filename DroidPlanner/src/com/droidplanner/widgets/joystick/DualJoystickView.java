@@ -16,7 +16,7 @@ import android.widget.LinearLayout;
 public class DualJoystickView extends LinearLayout {
 	@SuppressWarnings("unused")
 	private static final String TAG = DualJoystickView.class.getSimpleName();
-	
+
 	private final boolean D = true;
 	private Paint dbgPaint1;
 
@@ -41,30 +41,31 @@ public class DualJoystickView extends LinearLayout {
 
 	private void initDualJoystickView() {
 		setOrientation(LinearLayout.HORIZONTAL);
-		
-		if ( D ) {
+
+		if (D) {
 			dbgPaint1 = new Paint(Paint.ANTI_ALIAS_FLAG);
 			dbgPaint1.setColor(Color.CYAN);
 			dbgPaint1.setStrokeWidth(1);
 			dbgPaint1.setStyle(Paint.Style.STROKE);
 		}
-		
+
 		pad = new View(getContext());
 	}
-	
+
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 		removeView(stickL);
 		removeView(stickR);
 
-		float padW = getMeasuredWidth()-(getMeasuredHeight()*2);
-		int joyWidth = (int) ((getMeasuredWidth()-padW)/2);
-		LayoutParams joyLParams = new LayoutParams(joyWidth,getMeasuredHeight());
-		
+		float padW = getMeasuredWidth() - (getMeasuredHeight() * 2);
+		int joyWidth = (int) ((getMeasuredWidth() - padW) / 2);
+		LayoutParams joyLParams = new LayoutParams(joyWidth,
+				getMeasuredHeight());
+
 		stickL.setLayoutParams(joyLParams);
 		stickR.setLayoutParams(joyLParams);
-		
+
 		stickL.TAG = "L";
 		stickR.TAG = "R";
 		stickL.setPointerId(JoystickView.INVALID_POINTER_ID);
@@ -72,36 +73,40 @@ public class DualJoystickView extends LinearLayout {
 
 		addView(stickL);
 
-		ViewGroup.LayoutParams padLParams = new ViewGroup.LayoutParams((int) padW,getMeasuredHeight());
+		ViewGroup.LayoutParams padLParams = new ViewGroup.LayoutParams(
+				(int) padW, getMeasuredHeight());
 		removeView(pad);
 		pad.setLayoutParams(padLParams);
 		addView(pad);
-		
+
 		addView(stickR);
 	}
-	
+
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
 		super.onLayout(changed, l, t, r, b);
 		stickR.setTouchOffset(stickR.getLeft(), stickR.getTop());
 	}
-	
+
 	public void setAutoReturnToCenter(boolean left, boolean right) {
 		stickL.setAutoReturnToCenter(left);
 		stickR.setAutoReturnToCenter(right);
 	}
-	
-	public void setOnJostickMovedListener(JoystickMovedListener left, JoystickMovedListener right) {
+
+	public void setOnJostickMovedListener(JoystickMovedListener left,
+			JoystickMovedListener right) {
 		stickL.setOnJostickMovedListener(left);
 		stickR.setOnJostickMovedListener(right);
 	}
-	
-	public void setOnJostickClickedListener(JoystickClickedListener left, JoystickClickedListener right) {
+
+	public void setOnJostickClickedListener(JoystickClickedListener left,
+			JoystickClickedListener right) {
 		stickL.setOnJostickClickedListener(left);
 		stickR.setOnJostickClickedListener(right);
 	}
-	
-	public void setYAxisInverted(boolean leftYAxisInverted, boolean rightYAxisInverted) {
+
+	public void setYAxisInverted(boolean leftYAxisInverted,
+			boolean rightYAxisInverted) {
 		stickL.setYAxisInverted(leftYAxisInverted);
 		stickL.setYAxisInverted(rightYAxisInverted);
 	}
@@ -111,44 +116,50 @@ public class DualJoystickView extends LinearLayout {
 		stickR.setMovementConstraint(movementConstraint);
 	}
 
-
-	public void setMoveResolution(float leftMoveResolution, float rightMoveResolution) {
+	public void setMoveResolution(float leftMoveResolution,
+			float rightMoveResolution) {
 		stickL.setMoveResolution(leftMoveResolution);
 		stickR.setMoveResolution(rightMoveResolution);
 	}
 
-	public void setUserCoordinateSystem(int leftCoordinateSystem, int rightCoordinateSystem) {
+	public void setUserCoordinateSystem(int leftCoordinateSystem,
+			int rightCoordinateSystem) {
 		stickL.setUserCoordinateSystem(leftCoordinateSystem);
 		stickR.setUserCoordinateSystem(rightCoordinateSystem);
 	}
-	
-	public void setLeftAutoReturnToCenter(boolean yAxisAutoReturnToCenter,boolean xAxisAutoReturnToCenter){
-		stickL.setAxisAutoReturnToCenter(yAxisAutoReturnToCenter, xAxisAutoReturnToCenter);
+
+	public void setLeftAutoReturnToCenter(boolean yAxisAutoReturnToCenter,
+			boolean xAxisAutoReturnToCenter) {
+		stickL.setAxisAutoReturnToCenter(yAxisAutoReturnToCenter,
+				xAxisAutoReturnToCenter);
 	}
-	
-	public void setRightAutoReturnToCenter(boolean yAxisAutoReturnToCenter,boolean xAxisAutoReturnToCenter){
-		stickR.setAxisAutoReturnToCenter(yAxisAutoReturnToCenter, xAxisAutoReturnToCenter);
+
+	public void setRightAutoReturnToCenter(boolean yAxisAutoReturnToCenter,
+			boolean xAxisAutoReturnToCenter) {
+		stickR.setAxisAutoReturnToCenter(yAxisAutoReturnToCenter,
+				xAxisAutoReturnToCenter);
 	}
-	
+
 	@Override
 	protected void dispatchDraw(Canvas canvas) {
 		super.dispatchDraw(canvas);
 		if (D) {
-			canvas.drawRect(1, 1, getMeasuredWidth()-1, getMeasuredHeight()-1, dbgPaint1);
+			canvas.drawRect(1, 1, getMeasuredWidth() - 1,
+					getMeasuredHeight() - 1, dbgPaint1);
 		}
 	}
-	
+
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent ev) {
-    	boolean l = stickL.dispatchTouchEvent(ev);
-    	boolean r = stickR.dispatchTouchEvent(ev);
-    	return l || r;
+		boolean l = stickL.dispatchTouchEvent(ev);
+		boolean r = stickR.dispatchTouchEvent(ev);
+		return l || r;
 	}
-	
+
 	@Override
 	public boolean onTouchEvent(MotionEvent ev) {
-    	boolean l = stickL.onTouchEvent(ev);
-    	boolean r = stickR.onTouchEvent(ev);
-    	return l || r;
+		boolean l = stickL.onTouchEvent(ev);
+		boolean r = stickR.onTouchEvent(ev);
+		return l || r;
 	}
 }
