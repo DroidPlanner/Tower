@@ -119,8 +119,6 @@ public abstract class SuperActivity extends Activity implements
 				return super.onMenuItemSelected(featureId, item);
 		}
 	}
-	
-	
 
 	private void toggleConnectionState() {
 		if (app.MAVClient.isConnected()) {
@@ -191,6 +189,7 @@ public abstract class SuperActivity extends Activity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu_super_activiy, menu);
 		connectButton = menu.findItem(R.id.menu_connect);
 		app.MAVClient.queryConnectionState();
 		return super.onCreateOptionsMenu(menu);
