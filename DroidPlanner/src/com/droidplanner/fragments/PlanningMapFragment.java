@@ -3,7 +3,6 @@ package com.droidplanner.fragments;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -19,6 +18,7 @@ import com.droidplanner.R.string;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.fragments.markers.HomeMarker;
+import com.droidplanner.fragments.markers.WaypointMarker;
 import com.droidplanner.polygon.Polygon;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
@@ -161,18 +161,9 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 	}
 
 	private List<MarkerOptions> getMissionMarkers(Drone drone) {
-		int i = 1;
 		List<MarkerOptions> MarkerList = new ArrayList<MarkerOptions>();
-		for (waypoint point : drone.mission.getWaypoints()) {
-			MarkerList
-					.add(new MarkerOptions()
-							.position(point.getCoord())
-							.draggable(true)
-							.title("WP" + Integer.toString(i))
-							.snippet(
-									String.format(Locale.ENGLISH, "%.2f",
-											point.getHeight())));
-			i++;
+		for (waypoint wp : drone.mission.getWaypoints()) {
+			MarkerList.add(WaypointMarker.generateWapointMarker(wp));
 		}
 		return MarkerList;
 	}
