@@ -110,6 +110,12 @@ public class OfflineMapFragment extends MapFragment {
 	private boolean isMapLayoutFinished() {
 		return getMap() != null;
 	}
+	
+	protected void clearMap() {
+		GoogleMap mMap = getMap();
+		mMap.clear();
+		setupMapOverlay();
+	}
 
 	private LatLngBounds getBounds(List<LatLng> pointsList) {
 		LatLngBounds.Builder builder = new LatLngBounds.Builder();
