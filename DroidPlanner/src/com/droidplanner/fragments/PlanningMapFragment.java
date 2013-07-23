@@ -19,6 +19,7 @@ import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.fragments.markers.HomeMarker;
 import com.droidplanner.fragments.markers.WaypointMarker;
+import com.droidplanner.helpers.LocalMapTileProvider;
 import com.droidplanner.polygon.Polygon;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
@@ -28,6 +29,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.model.TileOverlayOptions;
 
 @SuppressLint("UseSparseArrays")
 public class PlanningMapFragment extends OfflineMapFragment implements
@@ -83,19 +85,22 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		homeMarker.invalidate();
 		waypointMarkers.clear();
 		polygonMarkers.clear();
+		mMap.addTileOverlay(new TileOverlayOptions().tileProvider(new LocalMapTileProvider())).setZIndex(-1);
+		
 		
 		homeMarker.update(drone);
 		int i =0;
-		for (MarkerOptions waypoint : getMissionMarkers(drone)) {
-			waypointMarkers.put(i++,mMap.addMarker(waypoint));
-		}
-		mMap.addPolyline(getMissionPath(drone));
-
-		i = 0;
+		
 		for (MarkerOptions point : getPolygonMarkers(polygon)) {
 			polygonMarkers.put(i++,mMap.addMarker(point));
 		}
 		mMap.addPolyline(getPolygonPath(polygon));
+		i = 0;
+		for (MarkerOptions waypoint : getMissionMarkers(drone)) {
+			waypointMarkers.put(i++,mMap.addMarker(waypoint));
+		}
+		mMap.addPolyline(getMissionPath(drone));
+		
 	}
 
 	@Override
