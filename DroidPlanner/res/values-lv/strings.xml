@@ -42,5 +42,6 @@
     <string name="this_is_very_experimental_please_be_careful">Šī ir eksperimentālā funkcija. Lūdzu, uzmanīgi izmantot.</string>
     <string name="menu_advanced">Advancēti</string>
     <string name="menu_calibration">Kalibrācija</string>
+    <string name="rc_control">RC vadību</string>
     
 </resources>

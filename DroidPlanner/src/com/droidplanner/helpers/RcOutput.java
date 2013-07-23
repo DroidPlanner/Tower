@@ -15,7 +15,7 @@ import com.droidplanner.service.MAVLinkClient;
 public class RcOutput {
 	private static final int DISABLE_OVERRIDE = 0;
 	private static final int RC_TRIM = 1500;
-	private static final int RC_RANGE = 500;
+	private static final int RC_RANGE = 550;
 	private Context parrentContext;
 	private ScheduledExecutorService scheduleTaskExecutor;
 	private MAVLinkClient MAV;

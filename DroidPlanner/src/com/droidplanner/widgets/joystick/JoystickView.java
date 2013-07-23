@@ -276,7 +276,7 @@ public class JoystickView extends View {
 		
 		
 		bgRadius = dimSide/2 - innerPadding;
-		handleRadius = (int)(d * 0.25);
+		handleRadius = (int)(d * 0.2); //0.25
 		handleInnerBoundaries = handleRadius;
 		movementRadius = Math.min(cX, cY) - handleInnerBoundaries;
 	}
@@ -368,7 +368,7 @@ public class JoystickView extends View {
 		    case MotionEvent.ACTION_CANCEL: 
 		    case MotionEvent.ACTION_UP: {
 		    	if ( pointerId != INVALID_POINTER_ID ) {
-			    	Log.d(TAG, "ACTION_UP");
+			    	//Log.d(TAG, "ACTION_UP");
 			    	returnHandleToCenter();
 		        	setPointerId(INVALID_POINTER_ID);
 		    	}
