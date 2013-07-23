@@ -176,9 +176,6 @@ public class WaypointMananger extends DroneVariable {
 	}
 
 	private void processReceivedWaypoint(msg_mission_item msg) {
-		Double Lat = (double) msg.x;
-		Double Lng = (double) msg.y;
-		Double h = (double) msg.z;
-		waypoints.add(new waypoint(Lat, Lng, h));
+		waypoints.add(new waypoint(msg));
 	}
 }
