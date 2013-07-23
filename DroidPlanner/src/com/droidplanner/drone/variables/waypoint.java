@@ -1,5 +1,6 @@
 package com.droidplanner.drone.variables;
 
+import com.MAVLink.Messages.ApmCommands;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_CMD;
 import com.MAVLink.Messages.enums.MAV_FRAME;
@@ -41,5 +42,9 @@ public class waypoint {
 	public void setCoord(LatLng coord) {
 		missionItem.x = (float) coord.latitude;
 		missionItem.y = (float) coord.longitude;
+	}
+
+	public ApmCommands getCmd() {
+		return ApmCommands.getCmd(missionItem.command);
 	}
 }

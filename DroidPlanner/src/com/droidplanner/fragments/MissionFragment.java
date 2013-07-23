@@ -39,6 +39,7 @@ public class MissionFragment extends Fragment {
 		MissionRow row = new MissionRow(this.getActivity());
 		row.setHeight(wp);
 		row.setNumber(i);
+		row.setCmd(wp.getCmd());
 		table.addView(row);
 	}	
 }
