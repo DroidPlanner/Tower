@@ -12,6 +12,6 @@ public class gcp {
 	}
 
 	public void toogleState() {
-		isMarked = ! isMarked;
+		isMarked = !isMarked;
 	}
 }

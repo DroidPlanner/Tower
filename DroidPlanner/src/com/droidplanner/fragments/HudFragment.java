@@ -10,8 +10,7 @@ import com.droidplanner.R;
 import com.droidplanner.activitys.SuperActivity;
 import com.droidplanner.widgets.HUD.HUDwidget;
 
-
-public class HudFragment extends Fragment{
+public class HudFragment extends Fragment {
 
 	private HUDwidget hudWidget;
 
@@ -20,11 +19,9 @@ public class HudFragment extends Fragment{
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.hud_fragment, container, false);
 		hudWidget = (HUDwidget) view.findViewById(R.id.hudWidget);
-		hudWidget.setDrone(((SuperActivity)getActivity()).app.drone);
+		hudWidget.setDrone(((SuperActivity) getActivity()).app.drone);
 		hudWidget.onDroneUpdate();
 		return view;
 	}
-	
-	
 
 }

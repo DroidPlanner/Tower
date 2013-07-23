@@ -17,7 +17,7 @@ public class MavLinkWaypoint {
 		msg_mission_ack msg = new msg_mission_ack();
 		msg.target_system = 1;
 		msg.target_component = 1;
-		msg.type = MAV_MISSION_RESULT.MAV_MISSION_ACCEPTED; 
+		msg.type = MAV_MISSION_RESULT.MAV_MISSION_ACCEPTED;
 		MavClient.sendMavPacket(msg.pack());
 
 	}
@@ -43,7 +43,7 @@ public class MavLinkWaypoint {
 		msg.seq = (short) index;
 		msg.current = (byte) ((index == 0) ? 1 : 0); // TODO use correct
 														// parameter for HOME
-		msg.frame = MAV_FRAME.MAV_FRAME_GLOBAL; 
+		msg.frame = MAV_FRAME.MAV_FRAME_GLOBAL;
 		msg.command = 16; // TODO use correct parameter
 		msg.param1 = 0; // TODO use correct parameter
 		msg.param2 = 0; // TODO use correct parameter

@@ -15,7 +15,8 @@ import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.fragments.MissionFragment;
 
-public class MissionRow extends TableRow implements OnClickListener, OnAltitudeChangedListner {
+public class MissionRow extends TableRow implements OnClickListener,
+		OnAltitudeChangedListner {
 
 	private Context context;
 	private MissionFragment fragment;

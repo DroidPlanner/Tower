@@ -5,9 +5,9 @@ import com.droidplanner.drone.DroneVariable;
 import com.google.android.gms.maps.model.LatLng;
 
 public class GPS extends DroneVariable {
-	private double gps_eph= -1;
+	private double gps_eph = -1;
 	private int satCount = -1;
-	private int fixType= -1;
+	private int fixType = -1;
 	private LatLng position;
 
 	public GPS(Drone myDrone) {
@@ -15,9 +15,9 @@ public class GPS extends DroneVariable {
 	}
 
 	public boolean isPositionValid() {
-		return (position!=null);
+		return (position != null);
 	}
-	
+
 	public LatLng getPosition() {
 		return position;
 	}
@@ -41,7 +41,7 @@ public class GPS extends DroneVariable {
 			}
 			fixType = fix;
 			satCount = satellites_visible;
-			gps_eph = (double) eph / 100; //convert from eph(cm) to gps_eph(m)
+			gps_eph = (double) eph / 100; // convert from eph(cm) to gps_eph(m)
 			myDrone.notifyHudUpdate();
 		}
 	}

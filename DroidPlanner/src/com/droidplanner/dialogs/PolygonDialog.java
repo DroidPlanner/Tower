@@ -35,7 +35,8 @@ public abstract class PolygonDialog implements DialogInterface.OnClickListener {
 		this.originPoint = originPoint;
 
 		if (!polygon.isValid()) {
-			Toast.makeText(context, "Invalid Polygon", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, "Invalid Polygon", Toast.LENGTH_SHORT)
+					.show();
 			return;
 		}
 
@@ -48,36 +49,35 @@ public abstract class PolygonDialog implements DialogInterface.OnClickListener {
 	private AlertDialog buildDialog(Context context) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle("Polygon Generator");
-		
+
 		LinearLayout layout = new LinearLayout(context);
 		layout.setOrientation(LinearLayout.VERTICAL);
-		
+
 		angleView = new SeekBarWithText(context);
 		angleView.setMinMaxInc(0, 180, 0.1);
 		angleView.setTitle("Hatch angle:");
 		angleView.setUnit("deg");
-		
+
 		distanceView = new SeekBarWithText(context);
 		distanceView.setMinMaxInc(5, 500, 5);
 		distanceView.setTitle("Distance between lines:");
 		distanceView.setUnit("m");
-		
+
 		layout.addView(angleView);
 		layout.addView(distanceView);
 		builder.setView(layout);
-		
+
 		builder.setNegativeButton("Cancel", this).setPositiveButton("Ok", this);
 		AlertDialog dialog = builder.create();
 		return dialog;
 	}
 
-
 	@Override
 	public void onClick(DialogInterface arg0, int which) {
 		if (which == Dialog.BUTTON_POSITIVE) {
-			GridBuilder grid = new GridBuilder(polygon,angleView.getValue(), distanceView.getValue(),
-					originPoint, height);
-			
+			GridBuilder grid = new GridBuilder(polygon, angleView.getValue(),
+					distanceView.getValue(), originPoint, height);
+
 			onPolygonGenerated(grid.hatchfill());
 		}
 	}

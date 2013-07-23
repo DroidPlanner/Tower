@@ -50,6 +50,6 @@ public class State extends DroneVariable {
 	}
 
 	public void setGuidedMode(waypoint waypoint) {
-		MavLinkModes.setGuidedMode(myDrone.MavClient, waypoint);		
+		MavLinkModes.setGuidedMode(myDrone.MavClient, waypoint);
 	}
 }

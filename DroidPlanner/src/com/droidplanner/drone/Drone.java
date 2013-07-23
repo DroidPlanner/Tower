@@ -40,8 +40,7 @@ public class Drone {
 	private MapUpdatedListner mapListner;
 	private DroneTypeListner typeListner;
 
-	public Drone(TTS tts, MAVLinkClient mavClient,
-			Context context) {
+	public Drone(TTS tts, MAVLinkClient mavClient, Context context) {
 		this.tts = tts;
 		this.MavClient = mavClient;
 		this.context = context;

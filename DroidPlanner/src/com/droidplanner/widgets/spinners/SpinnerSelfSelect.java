@@ -18,7 +18,7 @@ public class SpinnerSelfSelect extends Spinner {
 	public void setSelection(int position) {
 		super.setSelection(position);
 		if (listener != null)
-			listener.onSpinnerItemSelected(this,position,
+			listener.onSpinnerItemSelected(this, position,
 					getItemAtPosition(position).toString());
 	}
 

@@ -22,7 +22,8 @@ public class Polygon {
 	}
 
 	public void addWaypoint(LatLng coord) {
-		getWaypoints().add(GeoTools.findClosestPair(coord, getWaypoints()), coord);
+		getWaypoints().add(GeoTools.findClosestPair(coord, getWaypoints()),
+				coord);
 	}
 
 	public void clearPolygon() {
@@ -30,7 +31,8 @@ public class Polygon {
 	}
 
 	public boolean isValid() {
-		if(getWaypoints().size()>2)	// A valid polygon must have at least 3 points
+		if (getWaypoints().size() > 2) // A valid polygon must have at least 3
+										// points
 			return true;
 		else
 			return false;
@@ -42,6 +44,6 @@ public class Polygon {
 
 	public void movePoint(LatLng coord, int number) {
 		waypoints.set(number, coord);
-		
+
 	}
 }

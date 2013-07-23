@@ -15,7 +15,8 @@ public class DroneBitmaps {
 	public static final int DRONE_MIN_ROTATION = 5;
 	private BitmapDescriptor[] droneBitmaps;
 	private Resources resources;
-	public DroneBitmaps(Resources resources,int type) {
+
+	public DroneBitmaps(Resources resources, int type) {
 		this.resources = resources;
 		buildBitmaps(type);
 	}
@@ -49,12 +50,10 @@ public class DroneBitmaps {
 		case MAV_TYPE.MAV_TYPE_HEXAROTOR:
 		case MAV_TYPE.MAV_TYPE_OCTOROTOR:
 		case MAV_TYPE.MAV_TYPE_HELICOPTER:
-			return BitmapFactory.decodeResource(
-					resources, drawable.quad);
+			return BitmapFactory.decodeResource(resources, drawable.quad);
 		case MAV_TYPE.MAV_TYPE_FIXED_WING:
 		default:
-			return BitmapFactory.decodeResource(
-					resources, drawable.plane);
+			return BitmapFactory.decodeResource(resources, drawable.plane);
 		}
 	}
 }

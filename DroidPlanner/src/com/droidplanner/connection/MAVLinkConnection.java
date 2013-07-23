@@ -18,17 +18,23 @@ import com.droidplanner.file.FileStream;
 
 public abstract class MAVLinkConnection extends Thread {
 
-	protected abstract void openConnection() throws UnknownHostException, IOException;
+	protected abstract void openConnection() throws UnknownHostException,
+			IOException;
+
 	protected abstract void readDataBlock() throws IOException;
+
 	protected abstract void sendBuffer(byte[] buffer) throws IOException;
+
 	protected abstract void closeConnection() throws IOException;
+
 	protected abstract void getPreferences(SharedPreferences prefs);
 
-	public interface MavLinkConnectionListner{
+	public interface MavLinkConnectionListner {
 		public void onReceiveMessage(MAVLinkMessage msg);
+
 		public void onDisconnect();
 	}
-	
+
 	protected Context parentContext;
 	private MavLinkConnectionListner listner;
 	private boolean logEnabled;
@@ -39,10 +45,9 @@ public abstract class MAVLinkConnection extends Thread {
 	protected byte[] readData = new byte[4096];
 	protected int iavailable, i;
 	protected boolean connected = true;
-	
+
 	private ByteBuffer logBuffer;
-			  
-	
+
 	public MAVLinkConnection(Context parentContext) {
 		this.parentContext = parentContext;
 		this.listner = (MavLinkConnectionListner) parentContext;
@@ -60,14 +65,14 @@ public abstract class MAVLinkConnection extends Thread {
 			openConnection();
 			if (logEnabled) {
 				logWriter = FileStream.getTLogFileStream();
-				logBuffer = ByteBuffer.allocate(Long.SIZE/Byte.SIZE);
+				logBuffer = ByteBuffer.allocate(Long.SIZE / Byte.SIZE);
 				logBuffer.order(ByteOrder.BIG_ENDIAN);
 			}
-			
+
 			while (connected) {
 				readDataBlock();
 				handleData();
-			}	
+			}
 			closeConnection();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -77,8 +82,6 @@ public abstract class MAVLinkConnection extends Thread {
 		listner.onDisconnect();
 	}
 
-	
-	
 	private void handleData() throws IOException {
 		if (iavailable < 1) {
 			return;
@@ -93,7 +96,7 @@ public abstract class MAVLinkConnection extends Thread {
 		}
 
 	}
-	
+
 	private void saveToLog(MAVLinkPacket receivedPacket) throws IOException {
 		if (logEnabled) {
 			try {
@@ -103,7 +106,8 @@ public abstract class MAVLinkConnection extends Thread {
 				logWriter.write(logBuffer.array());
 				logWriter.write(receivedPacket.encodePacket());
 			} catch (Exception e) {
-				// There was a null pointer error for some users on logBuffer.clear(); 
+				// There was a null pointer error for some users on
+				// logBuffer.clear();
 			}
 		}
 	}
@@ -123,11 +127,9 @@ public abstract class MAVLinkConnection extends Thread {
 			e.printStackTrace();
 		}
 	}
-	
-	public void disconnect(){
+
+	public void disconnect() {
 		connected = false;
 	}
-
-
 
 }

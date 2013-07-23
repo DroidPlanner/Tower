@@ -13,8 +13,11 @@ import com.droidplanner.fragments.FlightMapFragment.OnFlighDataListener;
 import com.droidplanner.widgets.spinners.SelectModeSpinner.OnModeSpinnerSelectedListener;
 import com.droidplanner.widgets.spinners.SelectWaypointSpinner.OnWaypointSpinnerSelectedListener;
 
-public class FlightDataActivity extends SuperFlightActivity implements OnFlighDataListener, OnWaypointSpinnerSelectedListener, OnWaypointUpdateListner, OnModeSpinnerSelectedListener, DroneTypeListner {
-	
+public class FlightDataActivity extends SuperFlightActivity implements
+		OnFlighDataListener, OnWaypointSpinnerSelectedListener,
+		OnWaypointUpdateListner, OnModeSpinnerSelectedListener,
+		DroneTypeListner {
+
 	private FlightMapFragment flightMapFragment;
 
 	@Override
@@ -25,20 +28,20 @@ public class FlightDataActivity extends SuperFlightActivity implements OnFlighDa
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-	
+
 		setContentView(R.layout.flightdata);
-				
-		flightMapFragment = ((FlightMapFragment)getFragmentManager().findFragmentById(R.id.flightMapFragment));
+
+		flightMapFragment = ((FlightMapFragment) getFragmentManager()
+				.findFragmentById(R.id.flightMapFragment));
 		flightMapFragment.updateMissionPath(drone);
 		flightMapFragment.homeMarker.update(drone);
-		
+
 		app.setWaypointReceivedListner(this);
 		drone.setDroneTypeChangedListner(this);
 	}
 
-
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu_flightdata, menu);	
+		getMenuInflater().inflate(R.menu.menu_flightdata, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -50,13 +53,11 @@ public class FlightDataActivity extends SuperFlightActivity implements OnFlighDa
 			return true;
 		case R.id.menu_clearFlightPath:
 			flightMapFragment.clearFlightPath();
-			return true;		
+			return true;
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
 	}
-
-
 
 	@Override
 	public void onWaypointsUpdate() {
@@ -71,6 +72,5 @@ public class FlightDataActivity extends SuperFlightActivity implements OnFlighDa
 		Log.d("DRONE", "Drone type changed");
 		flightMapFragment.droneMarker.updateDroneMarkers();
 	}
-
 
 }

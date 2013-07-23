@@ -20,16 +20,16 @@ public class RcOutput {
 	private ScheduledExecutorService scheduleTaskExecutor;
 	private MAVLinkClient MAV;
 	public int[] rcOutputs = new int[8];
-	
-	public static final int AILERON = 0;
-	public static final int	ELEVATOR = 1;
-	public static final int	TROTTLE = 2;
-	public static final int	RUDDER  = 3;
 
-	public static final int	RC5  = 4;
-	public static final int	RC6  = 5;
-	public static final int	RC7  = 6;
-	public static final int	RC8  = 7;
+	public static final int AILERON = 0;
+	public static final int ELEVATOR = 1;
+	public static final int TROTTLE = 2;
+	public static final int RUDDER = 3;
+
+	public static final int RC5 = 4;
+	public static final int RC6 = 5;
+	public static final int RC7 = 6;
+	public static final int RC8 = 7;
 
 	public RcOutput(MAVLinkClient MAV, Context context) {
 		this.MAV = MAV;
@@ -63,13 +63,13 @@ public class RcOutput {
 	private int getRcOverrideDelayMs() {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(parrentContext);
-		int rate = Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_RC_override",
-						"0"));
-		if((rate>1)&(rate<500)){
-			return 1000/rate; 
-		}else {
+		int rate = Integer.parseInt(prefs.getString(
+				"pref_mavlink_stream_rate_RC_override", "0"));
+		if ((rate > 1) & (rate < 500)) {
+			return 1000 / rate;
+		} else {
 			return 20;
-		}		
+		}
 	}
 
 	public void sendRcOverrideMsg() {
@@ -86,15 +86,17 @@ public class RcOutput {
 		msg.target_component = 1;
 		MAV.sendMavPacket(msg.pack());
 	}
-	
-	public boolean isRcOverrided(){
-		return (scheduleTaskExecutor!=null);
+
+	public boolean isRcOverrided() {
+		return (scheduleTaskExecutor != null);
 	}
 
-	public void setRcChannel(int ch, double value){
-		if(value > +1) value = +1;
-		if(value < -1) value = -1;
-		rcOutputs[ch] = (int) (value*RC_RANGE + RC_TRIM);
+	public void setRcChannel(int ch, double value) {
+		if (value > +1)
+			value = +1;
+		if (value < -1)
+			value = -1;
+		rcOutputs[ch] = (int) (value * RC_RANGE + RC_TRIM);
 	}
 
 }

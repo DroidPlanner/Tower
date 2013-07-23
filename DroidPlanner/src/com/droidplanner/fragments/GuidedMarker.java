@@ -15,11 +15,11 @@ public class GuidedMarker {
 	}
 
 	void updateGuidedMarker(LatLng point) {
-		if(guidedMarker == null){
-			addMarker(point);	
+		if (guidedMarker == null) {
+			addMarker(point);
 		} else {
 			updateMarker(point);
-		}	
+		}
 	}
 
 	private void updateMarker(LatLng point) {
@@ -28,8 +28,9 @@ public class GuidedMarker {
 
 	private void addMarker(LatLng point) {
 		guidedMarker = myMap.addMarker(new MarkerOptions()
-		.anchor((float) 0.5, (float) 0.5)
-		.position(point)
-		.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+				.anchor((float) 0.5, (float) 0.5)
+				.position(point)
+				.icon(BitmapDescriptorFactory
+						.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
 	}
 }

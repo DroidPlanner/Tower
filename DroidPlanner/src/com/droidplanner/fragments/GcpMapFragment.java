@@ -17,24 +17,25 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class GcpMapFragment extends OfflineMapFragment implements OnMarkerClickListener{
+public class GcpMapFragment extends OfflineMapFragment implements
+		OnMarkerClickListener {
 
 	private GoogleMap mMap;
 	private OnGcpClickListner mListener;
 
-	public interface OnGcpClickListner{
+	public interface OnGcpClickListner {
 		void onGcpClick(int number);
 	}
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
 			Bundle bundle) {
-		View view = super.onCreateView(inflater, viewGroup, bundle);		
+		View view = super.onCreateView(inflater, viewGroup, bundle);
 		mMap = getMap();
 		mMap.setOnMarkerClickListener(this);
 		return view;
 	}
-	
+
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -57,8 +58,6 @@ public class GcpMapFragment extends OfflineMapFragment implements OnMarkerClickL
 		}
 	}
 
-
-	
 	public void addGcpMarkerToMap(GoogleMap mMap, int i, LatLng coord,
 			boolean isChecked) {
 		if (isChecked) {

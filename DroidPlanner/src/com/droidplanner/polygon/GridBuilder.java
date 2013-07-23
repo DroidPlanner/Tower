@@ -15,7 +15,7 @@ public class GridBuilder {
 	private Double lineDist;
 	private LatLng lastLocation;
 	private Double altitude;
-	
+
 	public GridBuilder(Polygon poly, Double angle, Double lineDist,
 			LatLng lastLocation, Double altitude) {
 		this.poly = poly;
@@ -23,11 +23,13 @@ public class GridBuilder {
 		this.lineDist = lineDist;
 		this.lastLocation = lastLocation;
 		this.altitude = altitude;
-	}	
-	
+	}
+
 	public List<waypoint> hatchfill() {
-		List<LineLatLng> gridLines = generateGrid(poly.getWaypoints(), angle, lineDist);
-		List<LineLatLng> hatchLines = trimGridLines(poly.getWaypoints(), gridLines);
+		List<LineLatLng> gridLines = generateGrid(poly.getWaypoints(), angle,
+				lineDist);
+		List<LineLatLng> hatchLines = trimGridLines(poly.getWaypoints(),
+				gridLines);
 		List<waypoint> gridPoints = waypointsFromHatch(lastLocation, altitude,
 				hatchLines);
 
@@ -53,16 +55,16 @@ public class GridBuilder {
 		LineLatLng closest = GeoTools.findClosestLine(lastLocation, hatchLines);
 		LatLng lastpnt;
 
-		if (GeoTools.getDistance(closest.p1, lastLocation) < GeoTools.getDistance(closest.p2,
-				lastLocation)) {
+		if (GeoTools.getDistance(closest.p1, lastLocation) < GeoTools
+				.getDistance(closest.p2, lastLocation)) {
 			lastpnt = closest.p1;
 		} else {
 			lastpnt = closest.p2;
 		}
 
 		while (hatchLines.size() > 0) {
-			if (GeoTools.getDistance(closest.p1, lastpnt) < GeoTools.getDistance(closest.p2,
-					lastpnt)) {
+			if (GeoTools.getDistance(closest.p1, lastpnt) < GeoTools
+					.getDistance(closest.p2, lastpnt)) {
 				gridPoints.add(new waypoint(closest.p1, altitude));
 				gridPoints.add(new waypoint(closest.p2, altitude));
 
@@ -112,24 +114,30 @@ public class GridBuilder {
 			for (int b = 0; b < waypoints2.size(); b++) {
 				LatLng newlatlong;
 				if (b != waypoints2.size() - 1) {
-					newlatlong = GeoTools.FindLineIntersection(waypoints2.get(b),
-							waypoints2.get(b + 1), gridLine.p1, gridLine.p2);
+					newlatlong = GeoTools.FindLineIntersection(
+							waypoints2.get(b), waypoints2.get(b + 1),
+							gridLine.p1, gridLine.p2);
 				} else { // Don't forget the last polygon line
-					newlatlong = GeoTools.FindLineIntersection(waypoints2.get(b),
-							waypoints2.get(0), gridLine.p1, gridLine.p2);
+					newlatlong = GeoTools.FindLineIntersection(
+							waypoints2.get(b), waypoints2.get(0), gridLine.p1,
+							gridLine.p2);
 				}
 
 				if (newlatlong != null) {
 					crosses++;
-					if (closestDistance > GeoTools.getDistance(gridLine.p1, newlatlong)) {
+					if (closestDistance > GeoTools.getDistance(gridLine.p1,
+							newlatlong)) {
 						closestPoint = new LatLng(newlatlong.latitude,
 								newlatlong.longitude);
-						closestDistance = GeoTools.getDistance(gridLine.p1, newlatlong);
+						closestDistance = GeoTools.getDistance(gridLine.p1,
+								newlatlong);
 					}
-					if (farestDistance < GeoTools.getDistance(gridLine.p1, newlatlong)) {
+					if (farestDistance < GeoTools.getDistance(gridLine.p1,
+							newlatlong)) {
 						farestPoint = new LatLng(newlatlong.latitude,
 								newlatlong.longitude);
-						farestDistance = GeoTools.getDistance(gridLine.p1, newlatlong);
+						farestDistance = GeoTools.getDistance(gridLine.p1,
+								newlatlong);
 					}
 				}
 			}
