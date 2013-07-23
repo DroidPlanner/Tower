@@ -6,16 +6,15 @@ import com.droidplanner.drone.variables.waypoint;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class WaypointMarker {
-	//private Marker waypointMarker;
 
-	public static MarkerOptions generateWapointMarker(int i, waypoint point) {
+	public static MarkerOptions generateWapointMarker(waypoint wp) {
 		return new MarkerOptions()
-				.position(point.getCoord())
+				.position(wp.getCoord())
 				.draggable(true)
-				.title("WP" + Integer.toString(i))
+				.title("WP" + Integer.toString(wp.getNumber()))
 				.snippet(
-						String.format(Locale.ENGLISH, "%.2f",
-								point.getHeight()));
+						String.format(Locale.ENGLISH, "%s %.1fm", wp.getCmd()
+								.getName(), wp.getHeight()));
 	}
 
 }
