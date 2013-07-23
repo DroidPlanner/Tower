@@ -4,8 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.text.InputType;
-import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
@@ -16,32 +14,30 @@ import com.MAVLink.Messages.ApmCommands;
 import com.droidplanner.drone.variables.waypoint;
 
 public class MissionRow extends TableRow implements OnClickListener {
+
 	private Context context;
+	private waypoint waypoint;
+	
 	private TextView nameView;
 	private EditText valueView;
 	private TextView cmdView;
 
 	public MissionRow(Context context) {
 		super(context);
+	}
+
+	public MissionRow(Context context, waypoint waypoint) {
+		super(context);
 		this.context = context;
+		this.waypoint = waypoint;
 		createRowViews(context);
+		update();
 	}
-
-	public MissionRow(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		createRowViews(context);
-	}
-
-	public void setHeight(waypoint wp) {
-		valueView.setText(wp.getHeight().toString());
-	}
-
-	public void setNumber(int num) {
-		nameView.setText("WP " + num);
-	}
-
-	public void setCmd(ApmCommands cmd) {
-		cmdView.setText(cmd.getName());
+	
+	public void update(){
+		valueView.setText(waypoint.getHeight().toString());
+		nameView.setText("WP " + waypoint.getNumber());
+		cmdView.setText(waypoint.getCmd().getName());
 	}
 
 	private void createRowViews(Context context) {
@@ -63,16 +59,15 @@ public class MissionRow extends TableRow implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		
-		String[] list = new String[ApmCommands.getNameList().size()];
+		final String[] list = new String[ApmCommands.getNameList().size()];
 		ApmCommands.getNameList().toArray(list);		
 		AlertDialog.Builder dialog = new AlertDialog.Builder(context);
 		dialog.setTitle("Select type");
 		dialog.setItems(list, new DialogInterface.OnClickListener() {
 					@Override
-					public void onClick(DialogInterface d, int arg1) {
-						Log.d("PLAN", ApmCommands.getNameList().get(arg1));
-						setCmd(ApmCommands.getCmd(ApmCommands.getNameList().get(arg1)));
+					public void onClick(DialogInterface d, int i) {
+						waypoint.setCmd(ApmCommands.getCmd(list[i]));
+						update();
 					}
 				});
 		dialog.create().show();

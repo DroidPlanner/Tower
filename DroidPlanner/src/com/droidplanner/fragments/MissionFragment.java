@@ -27,19 +27,13 @@ public class MissionFragment extends Fragment {
 		table.removeAllViews();
 		int i =0;
 		for (waypoint wp : mission.getWaypoints()) {
-			refreshRowParameter(wp,i++);
+			addRow(wp,i++);
 		}
 	}
 	
-	public void refreshRowParameter(waypoint wp, int i) {
-		addRow(wp,i);		
-	}
-
 	private void addRow(waypoint wp, int i){
-		MissionRow row = new MissionRow(this.getActivity());
-		row.setHeight(wp);
-		row.setNumber(i);
-		row.setCmd(wp.getCmd());
+		wp.setNumber(i); // TODO The waypoint number should be fixed elsewhere
+		MissionRow row = new MissionRow(this.getActivity(),wp);
 		table.addView(row);
 	}	
 }

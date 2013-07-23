@@ -47,4 +47,16 @@ public class waypoint {
 	public ApmCommands getCmd() {
 		return ApmCommands.getCmd(missionItem.command);
 	}
+
+	public void setNumber(int i) {
+		missionItem.seq = (short) i;		
+	}
+
+	public short getNumber() {
+		return missionItem.seq;
+	}
+
+	public void setCmd(ApmCommands cmd) {
+		missionItem.command = (short) cmd.getType();		
+	}
 }
