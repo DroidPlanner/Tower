@@ -51,7 +51,7 @@ public class RCFragment extends Fragment {
 		DroidPlannerApp app = (DroidPlannerApp)getActivity().getApplication();
 		rcOutput = new RcOutput(app.MAVClient,app);
 		
-		activeButton = (ToggleButton)view.findViewById(R.id.toggleButtonRCActive);
+		activeButton = (ToggleButton)view.findViewById(R.id.toggleButtonRCActivate);
 		activeButton.setTextOn(getString(R.string.rc_control) + "  [ " + getString(R.string.on).toUpperCase(Locale.getDefault()) + " ]");
 		activeButton.setTextOff(getString(R.string.rc_control) + "  [ " + getString(R.string.off).toUpperCase(Locale.getDefault()) + " ]");
 		activeButton.setChecked(rcOutput.isRcOverrided());
