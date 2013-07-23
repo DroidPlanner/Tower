@@ -1,3 +1,7 @@
+## Droidplanner v0.10.1
+* Fix in Offline maps
+* New RC screen in portrait mode
+
 ## Droidplanner v0.10.0
 * More advanced waypoint editor
 
