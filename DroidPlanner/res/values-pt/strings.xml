@@ -42,6 +42,7 @@
     <string name="this_is_very_experimental_please_be_careful">Recurso experimental, cuidado ao utilizar.</string>
     <string name="menu_advanced">Avançado</string>
     <string name="menu_calibration">Calibração</string>
+    <string name="rc_control">Controle RC</string>
     
     <string-array name="menu_dropdown">
         <item>Missão</item>

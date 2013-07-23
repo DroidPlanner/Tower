@@ -105,8 +105,14 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.menu_clear_wp:
-			clearWaypointsAndUpdate();
+		case R.id.menu_zoom:
+			planningMapFragment.zoomToExtents(drone.mission.getAllCoordinates());
+			return true;
+		case R.id.menu_save_file:
+			menuSaveFile();
+			return true;
+		case R.id.menu_open_file:
+			openMissionFile();
 			return true;
 		case R.id.menu_send_to_apm:
 			List<waypoint> data = new ArrayList<waypoint>();
@@ -114,14 +120,8 @@ public class PlanningActivity extends SuperActivity implements OnMapInteractionL
 			data.addAll(drone.mission.getWaypoints());
 			drone.waypointMananger.writeWaypoints(data);
 			return true;
-		case R.id.menu_open_file:
-			openMissionFile();
-			return true;
-		case R.id.menu_save_file:
-			menuSaveFile();
-			return true;
-		case R.id.menu_zoom:
-			planningMapFragment.zoomToExtents(drone.mission.getAllCoordinates());
+		case R.id.menu_clear_wp:
+			clearWaypointsAndUpdate();
 			return true;
 		case R.id.menu_polygon:
 			setMode(modes.POLYGON);
