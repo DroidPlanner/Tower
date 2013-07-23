@@ -63,4 +63,16 @@ public class waypoint {
 	public int getFrame() {
 		return missionItem.frame;
 	}
+
+	public void setFrame(int i) {
+		missionItem.frame = (byte) i;				
+	}
+
+	public void setParameters(float parm1, float parm2, float parm3,
+			float parm4) {
+		missionItem.param1 = parm1;
+		missionItem.param2 = parm2;
+		missionItem.param3 = parm3;
+		missionItem.param4 = parm4;
+	}
 }

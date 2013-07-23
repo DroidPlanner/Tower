@@ -78,12 +78,17 @@ public class Mission extends DroneVariable {
 		waypoints.addAll(points);
 	}
 
+	private void addWaypoint(waypoint wp) {
+		wp.setNumber(waypoints.size()+1);
+		waypoints.add(wp);
+	}
+	
 	public void addWaypoint(Double lat, Double Lng, Double h) {
-		waypoints.add(new waypoint(lat, Lng, h));
+		addWaypoint(new waypoint(lat, Lng, h));
 	}
 
 	public void addWaypoint(LatLng coord, Double h) {
-		waypoints.add(new waypoint(coord, h));
+		addWaypoint(new waypoint(coord, h));
 	}
 
 	public void addWaypoint(LatLng coord) {
