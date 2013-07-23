@@ -15,9 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.MAVLink.waypoint;
 import com.droidplanner.R.string;
 import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.fragments.markers.HomeMarker;
 import com.droidplanner.polygon.Polygon;
 import com.google.android.gms.maps.GoogleMap;
@@ -166,12 +166,12 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		for (waypoint point : drone.mission.getWaypoints()) {
 			MarkerList
 					.add(new MarkerOptions()
-							.position(point.coord)
+							.position(point.getCoord())
 							.draggable(true)
 							.title("WP" + Integer.toString(i))
 							.snippet(
 									String.format(Locale.ENGLISH, "%.2f",
-											point.Height)));
+											point.getHeight())));
 			i++;
 		}
 		return MarkerList;
@@ -196,9 +196,9 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		PolylineOptions flightPath = new PolylineOptions();
 		flightPath.color(Color.YELLOW).width(3);
 	
-		flightPath.add(drone.mission.getHome().coord);
+		flightPath.add(drone.mission.getHome().getCoord());
 		for (waypoint point : drone.mission.getWaypoints()) {
-			flightPath.add(point.coord);
+			flightPath.add(point.getCoord());
 		}
 		return flightPath;
 	}

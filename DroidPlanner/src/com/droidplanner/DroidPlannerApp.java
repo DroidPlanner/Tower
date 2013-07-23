@@ -22,8 +22,8 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 	public ConnectionStateListner conectionListner;
 	private TTS tts;
 	
-	public interface OnWaypointReceivedListner{
-		public void onWaypointsReceived();
+	public interface OnWaypointUpdateListner{
+		public void onWaypointsUpdate();
 	}
 	
 	public interface ConnectionStateListner{
@@ -66,7 +66,7 @@ public class DroidPlannerApp extends Application implements OnMavlinkClientListn
 		conectionListner = listner;		
 	}
 	
-	public void setWaypointReceivedListner(OnWaypointReceivedListner listner){
+	public void setWaypointReceivedListner(OnWaypointUpdateListner listner){
 		drone.mission.waypointsListner = listner;
 	}
 	
