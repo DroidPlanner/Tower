@@ -13,7 +13,7 @@ import com.droidplanner.dialogs.OpenParameterDialog;
 import com.droidplanner.drone.DroneInterfaces;
 import com.droidplanner.fragments.ParametersTableFragment;
 import com.droidplanner.parameters.Parameter;
-import com.droidplanner.widgets.paramRow.ParamRow;
+import com.droidplanner.widgets.tableRow.ParamRow;
 
 public class ParametersActivity extends SuperActivity implements
 		DroneInterfaces.OnParameterManagerListner {

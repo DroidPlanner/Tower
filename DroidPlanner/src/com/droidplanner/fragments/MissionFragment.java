@@ -10,7 +10,7 @@ import android.widget.TableLayout;
 import com.droidplanner.R;
 import com.droidplanner.drone.variables.Mission;
 import com.droidplanner.drone.variables.waypoint;
-import com.droidplanner.widgets.paramRow.MissionRow;
+import com.droidplanner.widgets.tableRow.MissionRow;
 
 public class MissionFragment extends Fragment {
 	public TableLayout table;
