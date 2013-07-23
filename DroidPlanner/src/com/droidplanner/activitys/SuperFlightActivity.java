@@ -3,20 +3,25 @@ package com.droidplanner.activitys;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.MAVLink.Messages.ApmModes;
 import com.droidplanner.R;
+import com.droidplanner.drone.variables.waypoint;
+import com.droidplanner.fragments.FlightMapFragment.OnFlighDataListener;
 import com.droidplanner.widgets.spinners.SelectModeSpinner;
 import com.droidplanner.widgets.spinners.SelectModeSpinner.OnModeSpinnerSelectedListener;
 import com.droidplanner.widgets.spinners.SelectWaypointSpinner;
 import com.droidplanner.widgets.spinners.SelectWaypointSpinner.OnWaypointSpinnerSelectedListener;
+import com.google.android.gms.maps.model.LatLng;
 
-public abstract class SuperFlightActivity extends SuperActivity implements
-		OnModeSpinnerSelectedListener, OnWaypointSpinnerSelectedListener {
+public abstract class SuperFlightActivity extends SuperActivity implements OnModeSpinnerSelectedListener, OnWaypointSpinnerSelectedListener, OnFlighDataListener {
 
 	public SelectModeSpinner fligthModeSpinner;
 	public SelectWaypointSpinner wpSpinner;
-
+	
+	private LatLng guidedPoint;
+	
 	public SuperFlightActivity() {
 		super();
 	}
@@ -69,4 +74,20 @@ public abstract class SuperFlightActivity extends SuperActivity implements
 		drone.waypointMananger.setCurrentWaypoint((short) item);
 	}
 
+	@Override
+	public void onSetGuidedMode(LatLng point) {
+		changeDefaultAlt();		
+		guidedPoint = point;
+	}
+	
+	@Override
+	public void onAltitudeChanged(double newAltitude) {
+		super.onAltitudeChanged(newAltitude);
+		if(guidedPoint!=null){
+			Toast.makeText(this, "Guided Mode ("+(int)newAltitude+"m)", Toast.LENGTH_SHORT).show();
+			drone.state.setGuidedMode(new waypoint(guidedPoint, newAltitude)); 
+			guidedPoint = null;
+		}
+	}
+	
 }
