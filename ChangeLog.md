@@ -1,5 +1,8 @@
+## Droidplanner v0.10.0
+* More advanced waypoint editor
+
 ## Droidplanner v0.9.3
-Fix in build process
+* Fix problem in the build process
 
 ## Droidplanner v0.9.2
 * Big code refactoring
