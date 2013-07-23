@@ -36,7 +36,6 @@ public class MissionFragment extends Fragment {
 	}
 	
 	private void addRow(waypoint wp, int i){
-		wp.setNumber(i); // TODO The waypoint number should be fixed elsewhere
 		MissionRow row = new MissionRow(this,wp);
 		table.addView(row);
 	}
