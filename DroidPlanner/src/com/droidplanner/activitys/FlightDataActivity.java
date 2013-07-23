@@ -60,16 +60,16 @@ public class FlightDataActivity extends SuperFlightActivity implements OnFlighDa
 
 	@Override
 	public void onWaypointsUpdate() {
+		super.onWaypointsUpdate();
 		flightMapFragment.updateMissionPath(drone);
 		flightMapFragment.homeMarker.update(drone);
-		wpSpinner.updateWpSpinner(drone);		
 	}
 
 	@Override
 	public void onDroneTypeChanged() {
+		super.onDroneTypeChanged();
 		Log.d("DRONE", "Drone type changed");
 		flightMapFragment.droneMarker.updateDroneMarkers();
-		fligthModeSpinner.updateModeSpinner(drone);
 	}
 
 

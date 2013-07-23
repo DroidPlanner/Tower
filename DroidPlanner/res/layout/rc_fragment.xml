@@ -69,7 +69,7 @@
            android:layout_marginTop="2dp"
            android:layout_weight="1"
            android:maxLines="1"
-           android:text="Loiter" />
+           android:text="" />
 
        <ToggleButton
            android:id="@+id/toggleButtonRCActivate"
@@ -81,7 +81,7 @@
            android:layout_marginTop="0dp"
            android:layout_weight="3"
            android:maxLines="1"
-           android:text="ToggleButton" />
+           android:text="" />
 
        <Button
            android:id="@+id/buttonRCQuickRight"
@@ -92,7 +92,7 @@
            android:layout_marginTop="2dp"
            android:layout_weight="1"
            android:lines="1"
-           android:text="Stabilize" />
+           android:text="" />
 	
     </LinearLayout>    
 

@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.droidplanner.activitys.SuperActivity;
+import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.fragments.markers.DroneMarker;
@@ -52,8 +52,8 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
 			Bundle bundle) {
 		View view = super.onCreateView(inflater, viewGroup, bundle);
-		mMap = getMap();		
-		drone = ((SuperActivity)getActivity()).app.drone;
+		mMap = getMap();
+		drone = ((DroidPlannerApp)getActivity().getApplication()).drone;
 		
 		droneMarker = new DroneMarker(this);
 		homeMarker = new HomeMarker(this.mMap);

@@ -6,7 +6,9 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.MAVLink.Messages.ApmModes;
+import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
 import com.droidplanner.R;
+import com.droidplanner.drone.DroneInterfaces.DroneTypeListner;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.fragments.FlightMapFragment.OnFlighDataListener;
 import com.droidplanner.widgets.spinners.SelectModeSpinner;
@@ -14,11 +16,10 @@ import com.droidplanner.widgets.spinners.SelectModeSpinner.OnModeSpinnerSelected
 import com.droidplanner.widgets.spinners.SelectWaypointSpinner;
 import com.droidplanner.widgets.spinners.SelectWaypointSpinner.OnWaypointSpinnerSelectedListener;
 import com.google.android.gms.maps.model.LatLng;
+public abstract class SuperFlightActivity extends SuperActivity implements OnModeSpinnerSelectedListener, OnWaypointSpinnerSelectedListener, OnFlighDataListener, DroneTypeListner, OnWaypointUpdateListner {
 
-public abstract class SuperFlightActivity extends SuperActivity implements OnModeSpinnerSelectedListener, OnWaypointSpinnerSelectedListener, OnFlighDataListener {
-
-	public SelectModeSpinner fligthModeSpinner;
-	public SelectWaypointSpinner wpSpinner;
+	private SelectModeSpinner fligthModeSpinner;
+	private SelectWaypointSpinner wpSpinner;
 	
 	private LatLng guidedPoint;
 	
@@ -90,4 +91,13 @@ public abstract class SuperFlightActivity extends SuperActivity implements OnMod
 		}
 	}
 	
+	@Override
+	public void onDroneTypeChanged() {
+		fligthModeSpinner.updateModeSpinner(drone);
+	}
+
+	@Override
+	public void onWaypointsUpdate() {
+		wpSpinner.updateWpSpinner(drone);		
+	}
 }

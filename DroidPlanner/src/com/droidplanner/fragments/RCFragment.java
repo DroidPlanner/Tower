@@ -2,27 +2,34 @@ package com.droidplanner.fragments;
 
 import java.util.Locale;
 
-import com.droidplanner.DroidPlannerApp;
-import com.droidplanner.R;
-import com.droidplanner.helpers.RcOutput;
-import com.droidplanner.widgets.joystick.JoystickMovedListener;
-import com.droidplanner.widgets.joystick.JoystickView;
-
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+
+import com.MAVLink.Messages.ApmModes;
+import com.MAVLink.Messages.ardupilotmega.msg_set_mode;
+import com.droidplanner.DroidPlannerApp;
+import com.droidplanner.R;
+import com.droidplanner.drone.Drone;
+import com.droidplanner.helpers.RcOutput;
+import com.droidplanner.widgets.joystick.JoystickMovedListener;
+import com.droidplanner.widgets.joystick.JoystickView;
 
 public class RCFragment extends Fragment {
 	
 	private JoystickView joystickL, joystickR;
 	private TextView textViewLPan, textViewLTilt, textViewRPan, textViewRTilt;
 	private ToggleButton activeButton;
+	private Button quickModeButtonLeft, quickModeButtonRight;
 	
+	private DroidPlannerApp app;
+	private Drone drone;
 	private RcOutput rcOutput;
 	private boolean rcActivated = false;
 	private double lLastPan = 0, lLastTilt = 0, rLastPan = 0, rLastTilt = 0;
@@ -31,6 +38,10 @@ public class RCFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.rc_fragment, container, false);
+		
+		app = (DroidPlannerApp)getActivity().getApplication();
+		drone = app.drone;
+		rcOutput = new RcOutput(app.MAVClient,app);
 		
 		textViewLPan = (TextView)view.findViewById(R.id.textViewRCJoyLPan);
 		textViewLPan.setText("(Rudd: 0%)");
@@ -41,15 +52,36 @@ public class RCFragment extends Fragment {
 		textViewRTilt = (TextView)view.findViewById(R.id.textViewRCJoyRTilt);
 		textViewRTilt.setText("(Elev: 0%)");
 		
+		quickModeButtonLeft = (Button)view.findViewById(R.id.buttonRCQuickLeft);
+		quickModeButtonLeft.setText("Loiter");
+		quickModeButtonLeft.setOnClickListener(new View.OnClickListener() {
+		    @Override
+		    public void onClick(View v) {
+		    	ApmModes mode = ApmModes.getMode("Loiter",drone.type.getType());
+				if (mode != ApmModes.UNKNOWN) {
+					changeFlightMode(mode);
+				}
+		    }
+		});
+		
+		quickModeButtonRight = (Button)view.findViewById(R.id.buttonRCQuickRight);
+		quickModeButtonRight.setText("Stabilize");
+		quickModeButtonRight.setOnClickListener(new View.OnClickListener() {
+		    @Override
+		    public void onClick(View v) {
+		    	ApmModes mode = ApmModes.getMode("Stabilize",drone.type.getType());
+				if (mode != ApmModes.UNKNOWN) {
+					changeFlightMode(mode);
+				}
+		    }
+		});
+		
 		joystickL = (JoystickView)view.findViewById(R.id.joystickViewL);
 		joystickR = (JoystickView)view.findViewById(R.id.joystickViewR);
 		
 		joystickL.setAxisAutoReturnToCenter(false, true);
 		joystickL.setOnJostickMovedListener(lJoystick);
 		joystickR.setOnJostickMovedListener(rJoystick);
-		
-		DroidPlannerApp app = (DroidPlannerApp)getActivity().getApplication();
-		rcOutput = new RcOutput(app.MAVClient,app);
 		
 		activeButton = (ToggleButton)view.findViewById(R.id.toggleButtonRCActivate);
 		activeButton.setTextOn(getString(R.string.rc_control) + "  [ " + getString(R.string.on).toUpperCase(Locale.getDefault()) + " ]");
@@ -138,5 +170,13 @@ public class RCFragment extends Fragment {
 			}
 		}
 	};
+	
+	private void changeFlightMode(ApmModes mode) {
+		msg_set_mode msg = new msg_set_mode();
+		msg.target_system = 1;
+		msg.base_mode = 1; //TODO use meaningful constant
+		msg.custom_mode = mode.getNumber();
+		app.MAVClient.sendMavPacket(msg.pack());			
+	}
 
 }
