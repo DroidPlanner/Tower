@@ -18,11 +18,10 @@ import com.droidplanner.fragments.HudFragment;
 
 public class RCActivity extends SuperFlightActivity implements OnWaypointReceivedListner, DroneTypeListner {
 	
-	//private RCFragment rcFragment;
+	static final int NUM_ADAPTER_FRAGMENT_ITEMS = 2;
 	private static HudFragment hudFragment;
 	private static FlightMapFragment mapFragment;
 	
-	static final int NUM_FRAGMENT_ITEMS = 2;
 	MyAdapter mAdapter;
 	ViewPager mPager;
 
@@ -36,19 +35,15 @@ public class RCActivity extends SuperFlightActivity implements OnWaypointReceive
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.rc);
+		
 		hudFragment = new HudFragment();
 		mapFragment = new FlightMapFragment();
-		
-		//rcFragment = ((RCFragment)getFragmentManager().findFragmentById(R.id.rcFragment));
 		
 		mAdapter = new MyAdapter(getFragmentManager());
 		mPager = (ViewPager)findViewById(R.id.rcPager);
 		if (mPager != null) {
 			mPager.setAdapter(mAdapter);
 		}
-		
-		//mapFragment.updateMissionPath(drone);
-		//mapFragment.updateHomeToMap(drone);
 		
 		app.setWaypointReceivedListner(this);
 		drone.setDroneTypeChangedListner(this);
@@ -93,7 +88,7 @@ public class RCActivity extends SuperFlightActivity implements OnWaypointReceive
 
         @Override
         public int getCount() {
-            return NUM_FRAGMENT_ITEMS;
+            return NUM_ADAPTER_FRAGMENT_ITEMS;
         }
 
         @Override
@@ -111,16 +106,16 @@ public class RCActivity extends SuperFlightActivity implements OnWaypointReceive
 	
 	@Override
 	public void onWaypointsReceived() {
+		super.onWaypointsReceived();
 		mapFragment.updateMissionPath(drone);
-		mapFragment.updateHomeToMap(drone);
-		wpSpinner.updateWpSpinner(drone);		
+		mapFragment.updateHomeToMap(drone);		
 	}
 
 	@Override
 	public void onDroneTypeChanged() {
+		super.onDroneTypeChanged();
 		Log.d("DRONE", "Drone type changed");
 		mapFragment.droneMarker.updateDroneMarkers();
-		fligthModeSpinner.updateModeSpinner(drone);
 	}
 
 }

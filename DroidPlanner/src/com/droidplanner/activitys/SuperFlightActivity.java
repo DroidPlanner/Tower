@@ -4,7 +4,9 @@ import com.MAVLink.waypoint;
 import com.MAVLink.Messages.ApmModes;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.ardupilotmega.msg_set_mode;
+import com.droidplanner.DroidPlannerApp.OnWaypointReceivedListner;
 import com.droidplanner.R;
+import com.droidplanner.MAVLink.Drone.DroneTypeListner;
 import com.droidplanner.fragments.FlightMapFragment.OnFlighDataListener;
 import com.droidplanner.widgets.spinners.SelectModeSpinner;
 import com.droidplanner.widgets.spinners.SelectModeSpinner.OnModeSpinnerSelectedListener;
@@ -17,10 +19,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-public abstract class SuperFlightActivity extends SuperActivity implements OnModeSpinnerSelectedListener, OnWaypointSpinnerSelectedListener, OnFlighDataListener {
+public abstract class SuperFlightActivity extends SuperActivity implements OnModeSpinnerSelectedListener, OnWaypointSpinnerSelectedListener, OnFlighDataListener, DroneTypeListner, OnWaypointReceivedListner {
 
-	public SelectModeSpinner fligthModeSpinner;
-	public SelectWaypointSpinner wpSpinner;
+	private SelectModeSpinner fligthModeSpinner;
+	private SelectWaypointSpinner wpSpinner;
 	
 	private LatLng guidedPoint;
 	
@@ -102,6 +104,17 @@ public abstract class SuperFlightActivity extends SuperActivity implements OnMod
 			guidedPoint = null;
 		}
 	}
+	
+	@Override
+	public void onDroneTypeChanged() {
+		fligthModeSpinner.updateModeSpinner(drone);
+	}
+	
+	@Override
+	public void onWaypointsReceived() {
+		wpSpinner.updateWpSpinner(drone);		
+	}
+
 	
 	public void setGuidedMode(waypoint wp) {
 		msg_mission_item msg = new msg_mission_item();

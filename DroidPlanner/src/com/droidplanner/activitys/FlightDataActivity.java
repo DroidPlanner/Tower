@@ -61,16 +61,16 @@ public class FlightDataActivity extends SuperFlightActivity implements OnWaypoin
 	
 	@Override
 	public void onWaypointsReceived() {
+		super.onWaypointsReceived();
 		flightMapFragment.updateMissionPath(drone);
-		flightMapFragment.updateHomeToMap(drone);
-		wpSpinner.updateWpSpinner(drone);		
+		flightMapFragment.updateHomeToMap(drone);		
 	}
 
 	@Override
 	public void onDroneTypeChanged() {
+		super.onDroneTypeChanged();
 		Log.d("DRONE", "Drone type changed");
 		flightMapFragment.droneMarker.updateDroneMarkers();
-		fligthModeSpinner.updateModeSpinner(drone);
 	}
 
 }

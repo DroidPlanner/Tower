@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Locale;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -14,13 +13,11 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.MAVLink.waypoint;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
 import com.droidplanner.MAVLink.Drone;
-import com.droidplanner.activitys.SuperActivity;
 import com.droidplanner.fragments.markers.DroneMarker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -58,9 +55,8 @@ public class FlightMapFragment extends OfflineMapFragment implements OnMapLongCl
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
 			Bundle bundle) {
 		View view = super.onCreateView(inflater, viewGroup, bundle);
-		mMap = getMap();		
-		drone = ((SuperActivity)getActivity()).app.drone;
-		//drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
+		mMap = getMap();
+		drone = ((DroidPlannerApp)getActivity().getApplication()).drone;
 		
 		droneMarker = new DroneMarker(this);
 		
