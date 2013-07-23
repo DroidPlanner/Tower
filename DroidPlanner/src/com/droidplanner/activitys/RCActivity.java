@@ -5,20 +5,17 @@ import android.util.Log;
 import android.view.InputDevice;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
-
 import com.droidplanner.R;
-import com.droidplanner.helpers.RcOutput;
-import com.droidplanner.widgets.joystick.JoystickMovedListener;
-import com.droidplanner.widgets.joystick.JoystickView;
+import com.droidplanner.fragments.RCFragment;
 
 public class RCActivity extends SuperActivity {
+	
+	private RCFragment rcFragment;
+	
 	private MenuItem bTogleRC;
-	private TextView textViewLPan, textViewLTilt, textViewRPan, textViewRTilt;
+	//private TextView textViewLPan, textViewLTilt, textViewRPan, textViewRTilt;
 
 	MenuItem connectButton;
-
-	private RcOutput rcOutput;
 
 	@Override
 	int getNavigationItem() {
@@ -31,23 +28,8 @@ public class RCActivity extends SuperActivity {
 
 		setContentView(R.layout.rc);
 		
-		textViewLPan = (TextView) findViewById(R.id.textViewRCJoyLPan);
-		textViewLPan.setText("");
-		textViewLTilt = (TextView) findViewById(R.id.textViewRCJoyLTilt);
-		textViewLTilt.setText("");
-		textViewRPan = (TextView) findViewById(R.id.textViewRCJoyRPan);
-		textViewRPan.setText("");
-		textViewRTilt = (TextView) findViewById(R.id.textViewRCJoyRTilt);
-		textViewRTilt.setText("");
+		rcFragment = ((RCFragment)getFragmentManager().findFragmentById(R.id.rcFragment));
 		
-		JoystickView joystickL = (JoystickView)findViewById(R.id.joystickViewL);
-		JoystickView joystickR = (JoystickView)findViewById(R.id.joystickViewR);
-		
-		joystickL.setAxisAutoReturnToCenter(false, true);
-		joystickL.setOnJostickMovedListener(lJoystick);
-		joystickR.setOnJostickMovedListener(rJoystick);
-        
-		rcOutput = new RcOutput(app.MAVClient,this);
 	}
 	
 	@Override
@@ -60,12 +42,6 @@ public class RCActivity extends SuperActivity {
 	protected void onPause() {
 		disableRCOverride();
 		super.onPause();
-	}
-
-	@Override
-	protected void onResume() {
-		disableRCOverride();
-		super.onResume();
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -89,7 +65,7 @@ public class RCActivity extends SuperActivity {
 
 
 	private void toggleRcOverride() {
-		if (rcOutput.isRcOverrided()) {
+		if (rcFragment.isRcOverrideActive()) {
 			disableRCOverride();
 		} else {
 			enableRCOverride();
@@ -97,16 +73,20 @@ public class RCActivity extends SuperActivity {
 	}
 
 	private void enableRCOverride() {
-		rcOutput.enableRcOverride();
-		bTogleRC.setTitle(R.string.disable);
+		rcFragment.setRcOverrideActive(true);
+		if (rcFragment.isRcOverrideActive()) {
+			bTogleRC.setTitle(R.string.disable);
+		} else {
+			bTogleRC.setTitle(R.string.enable);
+		}
 	}
 
 	private void disableRCOverride() {
-		rcOutput.disableRcOverride();
-		lJoystick.OnMoved(0f, 0f);
-		rJoystick.OnMoved(0f, 0f);
-		if (bTogleRC != null) {
-			bTogleRC.setTitle(R.string.enable);			
+		rcFragment.setRcOverrideActive(false);
+		if (rcFragment.isRcOverrideActive()) {
+			bTogleRC.setTitle(R.string.disable);
+		} else {
+			bTogleRC.setTitle(R.string.enable);
 		}
 	}
 
@@ -120,34 +100,4 @@ public class RCActivity extends SuperActivity {
 		}
 	}
 
-	JoystickMovedListener lJoystick = new JoystickMovedListener() {
-		@Override
-		public void OnReturnedToCenter() {
-		}
-		@Override
-		public void OnReleased() {
-		}
-		@Override
-		public void OnMoved(double pan, double tilt) {
-			rcOutput.setRcChannel(RcOutput.RUDDER, pan);
-			rcOutput.setRcChannel(RcOutput.TROTTLE, tilt);
-			textViewLPan.setText(String.format("Rudd: %.0f%%", pan *100));
-			textViewLTilt.setText(String.format("Thrt: %.0f%%", tilt *100));
-		}
-	};
-	JoystickMovedListener rJoystick = new JoystickMovedListener() {
-		@Override
-		public void OnReturnedToCenter() {
-		}
-		@Override
-		public void OnReleased() {
-		}
-		@Override
-		public void OnMoved(double pan, double tilt) {
-			rcOutput.setRcChannel(RcOutput.AILERON, pan);
-			rcOutput.setRcChannel(RcOutput.ELEVATOR, tilt);
-			textViewRPan.setText(String.format("Ail: %.0f%%", pan *100));
-			textViewRTilt.setText(String.format("Elev: %.0f%%", tilt *100));
-		}
-	};
 }

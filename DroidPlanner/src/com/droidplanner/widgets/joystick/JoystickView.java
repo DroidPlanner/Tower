@@ -368,7 +368,7 @@ public class JoystickView extends View {
 		    case MotionEvent.ACTION_CANCEL: 
 		    case MotionEvent.ACTION_UP: {
 		    	if ( pointerId != INVALID_POINTER_ID ) {
-			    	Log.d(TAG, "ACTION_UP");
+			    	//Log.d(TAG, "ACTION_UP");
 			    	returnHandleToCenter();
 		        	setPointerId(INVALID_POINTER_ID);
 		    	}
