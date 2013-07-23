@@ -9,9 +9,9 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
-import com.MAVLink.waypoint;
 import com.droidplanner.MAVLink.MavLinkModes;
 import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.variables.waypoint;
 
 public class FollowMe implements LocationListener {
 	private static final long MIN_TIME_MS = 2000;

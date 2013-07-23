@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import com.MAVLink.waypoint;
+import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.file.FileManager;
 import com.droidplanner.file.FileStream;
 
@@ -46,22 +46,23 @@ public class MissionWriter {
 	private void writeFirstLine(FileOutputStream out) throws IOException {
 		out.write(String.format(Locale.ENGLISH,
 				"QGC WPL 110\n0\t1\t0\t16\t0\t0\t0\t0\t%f\t%f\t%f\t1\n",
-				home.coord.latitude, home.coord.longitude, home.Height)
+				home.getCoord().latitude, home.getCoord().longitude, home.getHeight())
 				.getBytes());
 
 	}
 
 	private void writeWaypointsLines(FileOutputStream out) throws IOException {
 		for (int i = 0; i < waypoints.size(); i++) {
+			waypoint wp = waypoints.get(i);
 			out.write(String
 					.format(Locale.ENGLISH,
 							"%d\t0\t%d\t%d\t0.000000\t0.000000\t0.000000\t0.000000\t%f\t%f\t%f\t1\n",
 							i + 1,
-							0, // TODO Implement Relative Altitude
-							16,// TODO Implement other modes (16 == auto?)
-							waypoints.get(i).coord.latitude,
-							waypoints.get(i).coord.longitude,
-							waypoints.get(i).Height).getBytes());
+							wp.getFrame(), 
+							wp.getCmd().getType(),
+							wp.getCoord().latitude,
+							wp.getCoord().longitude,
+							wp.getHeight()).getBytes());
 		}
 	}
 }

@@ -7,8 +7,9 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.MAVLink.waypoint;
+import com.MAVLink.Messages.ApmCommands;
 import com.droidplanner.dialogs.OpenFileDialog.FileReader;
+import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.file.DirectoryPath;
 import com.droidplanner.file.FileList;
 import com.droidplanner.file.FileManager;
@@ -60,8 +61,15 @@ public class MissionReader implements FileReader {
 		waypoints.clear();
 		while ((line = reader.readLine()) != null) {
 			String[] RowData = line.split("\t");
-			waypoints.add(new waypoint(Double.valueOf(RowData[8]), Double
-					.valueOf(RowData[9]), Double.valueOf(RowData[10])));
+			waypoint wp = new waypoint(Double.valueOf(RowData[8]),
+					Double.valueOf(RowData[9]), Double.valueOf(RowData[10]));
+			wp.setNumber(Integer.valueOf(RowData[0]));
+			wp.setFrame(Integer.valueOf(RowData[2]));
+			wp.setCmd(ApmCommands.getCmd(Integer.valueOf(RowData[3])));
+			wp.setParameters(Float.valueOf(RowData[4]),
+					Float.valueOf(RowData[5]), Float.valueOf(RowData[6]),
+					Float.valueOf(RowData[7]));
+			waypoints.add(wp);
 		}
 
 	}

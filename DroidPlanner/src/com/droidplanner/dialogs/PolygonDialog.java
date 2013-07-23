@@ -9,7 +9,7 @@ import android.content.DialogInterface;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.MAVLink.waypoint;
+import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.polygon.GridBuilder;
 import com.droidplanner.polygon.Polygon;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;

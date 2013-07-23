@@ -26,17 +26,17 @@ public class HomeMarker {
 	}
 
 	private void updateMarker(Drone drone) {
-		homeMarker.setPosition(drone.mission.getHome().coord);
+		homeMarker.setPosition(drone.mission.getHome().getCoord());
 		homeMarker.setSnippet(String.format(Locale.ENGLISH, "%.2f",
-				drone.mission.getHome().Height));
+				drone.mission.getHome().getHeight()));
 	}
 
 	private void addMarkerToMap(Drone drone) {
 		homeMarker = myMap.addMarker(new MarkerOptions()
-				.position(drone.mission.getHome().coord)
+				.position(drone.mission.getHome().getCoord())
 				.snippet(
 						String.format(Locale.ENGLISH, "%.2f",
-								drone.mission.getHome().Height))
+								drone.mission.getHome().getHeight()))
 				.draggable(true)
 				.anchor((float) 0.5, (float) 0.5)
 				.icon(BitmapDescriptorFactory
