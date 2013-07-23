@@ -53,15 +53,16 @@ public class MissionWriter {
 
 	private void writeWaypointsLines(FileOutputStream out) throws IOException {
 		for (int i = 0; i < waypoints.size(); i++) {
+			waypoint wp = waypoints.get(i);
 			out.write(String
 					.format(Locale.ENGLISH,
 							"%d\t0\t%d\t%d\t0.000000\t0.000000\t0.000000\t0.000000\t%f\t%f\t%f\t1\n",
 							i + 1,
-							0, // TODO Implement Relative Altitude
-							16,// TODO Implement other modes (16 == auto?)
-							waypoints.get(i).getCoord().latitude,
-							waypoints.get(i).getCoord().longitude,
-							waypoints.get(i).getHeight()).getBytes());
+							wp.getFrame(), 
+							wp.getCmd().getType(),
+							wp.getCoord().latitude,
+							wp.getCoord().longitude,
+							wp.getHeight()).getBytes());
 		}
 	}
 }

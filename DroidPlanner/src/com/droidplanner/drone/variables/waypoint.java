@@ -59,4 +59,8 @@ public class waypoint {
 	public void setCmd(ApmCommands cmd) {
 		missionItem.command = (short) cmd.getType();		
 	}
+
+	public int getFrame() {
+		return missionItem.frame;
+	}
 }
