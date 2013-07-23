@@ -18,6 +18,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 
 public class OfflineMapFragment extends MapFragment {
@@ -87,8 +88,10 @@ public class OfflineMapFragment extends MapFragment {
 	private void setupOfflineMapOverlay() {
 		GoogleMap mMap = getMap();
 		mMap.setMapType(GoogleMap.MAP_TYPE_NONE);
-		mMap.addTileOverlay(new TileOverlayOptions()
+		TileOverlay tileOverlay = mMap.addTileOverlay(new TileOverlayOptions()
 				.tileProvider(new LocalMapTileProvider()));
+		tileOverlay.setZIndex(-1);
+		tileOverlay.clearTileCache();
 	}
 
 	public void zoomToExtents(List<LatLng> pointsList) {
