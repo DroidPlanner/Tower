@@ -4,13 +4,22 @@
     android:layout_height="match_parent"
     android:orientation="vertical" android:baselineAligned="false">
     
+ 
+    <android.support.v4.view.ViewPager
+    	xmlns:android="http://schemas.android.com/apk/res/android"
+    	android:id="@+id/rcPager"
+    	android:layout_width="match_parent"
+    	android:layout_height="match_parent" 
+    	android:layout_weight=".5"/>
+    
+    <!-- 
     <fragment
         android:id="@+id/hud_fragment2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight=".5"
         class="com.droidplanner.fragments.HudFragment" />
-
+	-->
     
     <fragment
         android:id="@+id/rcFragment"

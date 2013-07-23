@@ -1,21 +1,33 @@
 package com.droidplanner.activitys;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
+import android.support.v13.app.FragmentPagerAdapter;
 import android.util.Log;
 import android.view.InputDevice;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.droidplanner.R;
+import com.droidplanner.fragments.FlightMapFragment;
+import com.droidplanner.fragments.HudFragment;
 import com.droidplanner.fragments.RCFragment;
+import com.droidplanner.fragments.FlightMapFragment.OnFlighDataListener;
+import com.google.android.gms.maps.model.LatLng;
 
-public class RCActivity extends SuperActivity {
+public class RCActivity extends SuperActivity implements OnFlighDataListener {
 	
 	private RCFragment rcFragment;
 	
+	static final int NUM_FRAGMENT_ITEMS = 2;
+	MyAdapter mAdapter;
+	ViewPager mPager;
+	
 	private MenuItem bTogleRC;
-	//private TextView textViewLPan, textViewLTilt, textViewRPan, textViewRTilt;
-
 	MenuItem connectButton;
+	
+	private LatLng guidedPoint;
 
 	@Override
 	int getNavigationItem() {
@@ -29,6 +41,12 @@ public class RCActivity extends SuperActivity {
 		setContentView(R.layout.rc);
 		
 		rcFragment = ((RCFragment)getFragmentManager().findFragmentById(R.id.rcFragment));
+		
+		mAdapter = new MyAdapter(getFragmentManager());
+		mPager = (ViewPager)findViewById(R.id.rcPager);
+		if (mPager != null) {
+			mPager.setAdapter(mAdapter);
+		}
 		
 	}
 	
@@ -98,6 +116,37 @@ public class RCActivity extends SuperActivity {
 			InputDevice inputDevice = InputDevice.getDevice(inputIds[i]);
 			Log.d("DEV","name:"+inputDevice.getName()+" Sources:"+inputDevice.getSources());	
 		}
+	}
+	
+	public static class MyAdapter extends FragmentPagerAdapter {
+        public MyAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public int getCount() {
+            return NUM_FRAGMENT_ITEMS;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+        	switch (position) {
+        		case 0:
+        			HudFragment hud = new HudFragment();
+        			return hud;
+        		case 1:
+        			FlightMapFragment map = new FlightMapFragment();
+        			return map;
+        		default:
+        			return null;
+        	} //ArrayListFragment.newInstance(position);
+        }
+    }
+
+	@Override
+	public void onSetGuidedMode(LatLng point) {
+		changeDefaultAlt();		
+		guidedPoint = point;
 	}
 
 }
