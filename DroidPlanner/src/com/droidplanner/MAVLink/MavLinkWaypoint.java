@@ -39,23 +39,9 @@ public class MavLinkWaypoint {
 
 	public static void sendWaypoint(MAVLinkClient MavClient, int index,
 			waypoint waypoint) {
-		msg_mission_item msg = new msg_mission_item();
-		msg.seq = (short) index;
-		msg.current = (byte) ((index == 0) ? 1 : 0); // TODO use correct
-														// parameter for HOME
-		msg.frame = MAV_FRAME.MAV_FRAME_GLOBAL;
-		msg.command = 16; // TODO use correct parameter
-		msg.param1 = 0; // TODO use correct parameter
-		msg.param2 = 0; // TODO use correct parameter
-		msg.param3 = 0; // TODO use correct parameter
-		msg.param4 = 0; // TODO use correct parameter
-		msg.x = (float) waypoint.getCoord().latitude;
-		msg.y = (float) waypoint.getCoord().longitude;
-		msg.z = waypoint.getHeight().floatValue();
-		msg.autocontinue = 1; // TODO use correct parameter
-		msg.target_system = 1;
-		msg.target_component = 1;
-		MavClient.sendMavPacket(msg.pack());
+		waypoint.setCurrent((byte) ((index == 0) ? 1 : 0)); // TODO use correct
+		// parameter for HOME
+		MavClient.sendMavPacket(waypoint.pack());
 	}
 
 	public static void sendWaypointCount(MAVLinkClient MavClient, int count) {
