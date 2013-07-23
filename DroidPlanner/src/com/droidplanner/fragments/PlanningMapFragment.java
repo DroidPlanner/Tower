@@ -79,23 +79,25 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 	}
 
 	public void update(Drone drone, Polygon polygon) {
-		mMap.clear();
+		clearMap();
+
 		homeMarker.invalidate();
 		waypointMarkers.clear();
 		polygonMarkers.clear();
-
 		homeMarker.update(drone);
+
 		int i = 0;
+		for (MarkerOptions point : getPolygonMarkers(polygon)) {
+			polygonMarkers.put(i++, mMap.addMarker(point));
+		}
+		mMap.addPolyline(getPolygonPath(polygon));
+
+		i = 0;
 		for (MarkerOptions waypoint : getMissionMarkers(drone)) {
 			waypointMarkers.put(i++, mMap.addMarker(waypoint));
 		}
 		mMap.addPolyline(getMissionPath(drone));
 
-		i = 0;
-		for (MarkerOptions point : getPolygonMarkers(polygon)) {
-			polygonMarkers.put(i++, mMap.addMarker(point));
-		}
-		mMap.addPolyline(getPolygonPath(polygon));
 	}
 
 	@Override
