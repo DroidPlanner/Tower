@@ -88,6 +88,7 @@ public class OfflineMapFragment extends MapFragment {
 	}
 
 	private void setupOfflineMapOverlay() {
+		clearTileCache();
 		GoogleMap mMap = getMap();
 		mMap.setMapType(GoogleMap.MAP_TYPE_NONE);
 		mMap.addTileOverlay(new TileOverlayOptions()
