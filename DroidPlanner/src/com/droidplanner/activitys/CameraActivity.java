@@ -42,7 +42,7 @@ public class CameraActivity extends SuperActivity {
 		joystickL.setOnJostickMovedListener(lJoystick);
 		joystickR.setOnJostickMovedListener(rJoystick);
 
-		rcOutput = new RcOutput(app.MAVClient, this);
+		rcOutput = new RcOutput(drone, this);
 	}
 
 	@Override

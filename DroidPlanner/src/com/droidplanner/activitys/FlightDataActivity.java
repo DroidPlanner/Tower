@@ -9,14 +9,8 @@ import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
 import com.droidplanner.R;
 import com.droidplanner.drone.DroneInterfaces.DroneTypeListner;
 import com.droidplanner.fragments.FlightMapFragment;
-import com.droidplanner.fragments.FlightMapFragment.OnFlighDataListener;
-import com.droidplanner.widgets.spinners.SelectModeSpinner.OnModeSpinnerSelectedListener;
-import com.droidplanner.widgets.spinners.SelectWaypointSpinner.OnWaypointSpinnerSelectedListener;
 
-public class FlightDataActivity extends SuperFlightActivity implements
-		OnFlighDataListener, OnWaypointSpinnerSelectedListener,
-		OnWaypointUpdateListner, OnModeSpinnerSelectedListener,
-		DroneTypeListner {
+public class FlightDataActivity extends SuperFlightActivity implements OnWaypointUpdateListner,DroneTypeListner {
 
 	private FlightMapFragment flightMapFragment;
 

@@ -15,7 +15,6 @@ import android.widget.ToggleButton;
 import com.MAVLink.Messages.ApmModes;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
-import com.droidplanner.MAVLink.MavLinkModes;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.helpers.RcOutput;
 import com.droidplanner.widgets.joystick.JoystickMovedListener;
@@ -41,7 +40,7 @@ public class RCFragment extends Fragment {
 
 		app = (DroidPlannerApp) getActivity().getApplication();
 		drone = app.drone;
-		rcOutput = new RcOutput(app.MAVClient, app);
+		rcOutput = new RcOutput(drone, app);
 
 		textViewLPan = (TextView) view.findViewById(R.id.textViewRCJoyLPan);
 		textViewLPan.setText("(Rudd: 0%)");
@@ -59,9 +58,7 @@ public class RCFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				ApmModes mode = ApmModes.getMode("Loiter", drone.type.getType());
-				if (mode != ApmModes.UNKNOWN) {
-					MavLinkModes.changeFlightMode(drone.MavClient, mode);
-				}
+				drone.state.setMode(mode);
 			}
 		});
 
@@ -73,9 +70,7 @@ public class RCFragment extends Fragment {
 			public void onClick(View v) {
 				ApmModes mode = ApmModes.getMode("Stabilize",
 						drone.type.getType());
-				if (mode != ApmModes.UNKNOWN) {
-					MavLinkModes.changeFlightMode(drone.MavClient, mode);
-				}
+				drone.state.setMode(mode);
 			}
 		});
 

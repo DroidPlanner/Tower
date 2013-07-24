@@ -88,7 +88,7 @@ public enum ApmModes {
 		return modeList;
 	}
 
-	private static boolean isValid(ApmModes mode) {
+	public static boolean isValid(ApmModes mode) {
 		return mode!=ApmModes.UNKNOWN;
 	}
 
