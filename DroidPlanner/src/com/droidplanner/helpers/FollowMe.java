@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
-import com.droidplanner.MAVLink.MavLinkModes;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.variables.waypoint;
 
