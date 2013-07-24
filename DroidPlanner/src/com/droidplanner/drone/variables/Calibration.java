@@ -22,14 +22,14 @@ public class Calibration extends DroneVariable implements OnClickListener {
 
 	public void startCalibration(Context context) {
 		this.context = context;
-		MavLinkCalibration.sendStartCalibrationMessage(myDrone.MavClient);
+		MavLinkCalibration.sendStartCalibrationMessage(myDrone);
 		count = 0;
 	}
 
 	@Override
 	public void onClick(DialogInterface dialog, int id) {
 		count++;
-		MavLinkCalibration.sendCalibrationAckMessage(count, myDrone.MavClient);
+		MavLinkCalibration.sendCalibrationAckMessage(count, myDrone);
 		if (count >= 6) {
 			createDialog("Calibration Done!");
 			count = 0;

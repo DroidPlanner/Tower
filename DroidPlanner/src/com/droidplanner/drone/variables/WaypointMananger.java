@@ -30,7 +30,7 @@ public class WaypointMananger extends DroneVariable {
 	 */
 	public void getWaypoints() {
 		state = waypointStates.READ_REQUEST;
-		MavLinkWaypoint.requestWaypointsList(myDrone.MavClient);
+		MavLinkWaypoint.requestWaypointsList(myDrone);
 	}
 
 	/**
@@ -47,7 +47,7 @@ public class WaypointMananger extends DroneVariable {
 			waypoints.addAll(data);
 			writeIndex = 0;
 			state = waypointStates.WRITTING_WP;
-			MavLinkWaypoint.sendWaypointCount(myDrone.MavClient,
+			MavLinkWaypoint.sendWaypointCount(myDrone,
 					waypoints.size());
 		}
 	}
@@ -63,7 +63,7 @@ public class WaypointMananger extends DroneVariable {
 	public void setCurrentWaypoint(int i) {
 		if ((waypoints != null)) {
 			MavLinkWaypoint
-					.sendSetCurrentWaypoint(myDrone.MavClient, (short) i);
+					.sendSetCurrentWaypoint(myDrone, (short) i);
 		}
 	}
 
@@ -124,7 +124,7 @@ public class WaypointMananger extends DroneVariable {
 			if (msg.msgid == msg_mission_count.MAVLINK_MSG_ID_MISSION_COUNT) {
 				waypointCount = ((msg_mission_count) msg).count;
 				waypoints.clear();
-				MavLinkWaypoint.requestWayPoint(myDrone.MavClient,
+				MavLinkWaypoint.requestWayPoint(myDrone,
 						waypoints.size());
 				state = waypointStates.READING_WP;
 				return true;
@@ -134,11 +134,11 @@ public class WaypointMananger extends DroneVariable {
 			if (msg.msgid == msg_mission_item.MAVLINK_MSG_ID_MISSION_ITEM) {
 				processReceivedWaypoint((msg_mission_item) msg);
 				if (waypoints.size() < waypointCount) {
-					MavLinkWaypoint.requestWayPoint(myDrone.MavClient,
+					MavLinkWaypoint.requestWayPoint(myDrone,
 							waypoints.size());
 				} else {
 					state = waypointStates.IDLE;
-					MavLinkWaypoint.sendAck(myDrone.MavClient);
+					MavLinkWaypoint.sendAck(myDrone);
 					myDrone.mission.onWaypointsReceived(waypoints);
 				}
 				return true;
@@ -146,7 +146,7 @@ public class WaypointMananger extends DroneVariable {
 			break;
 		case WRITTING_WP:
 			if (msg.msgid == msg_mission_request.MAVLINK_MSG_ID_MISSION_REQUEST) {
-				MavLinkWaypoint.sendWaypoint(myDrone.MavClient, writeIndex,
+				MavLinkWaypoint.sendWaypoint(myDrone, writeIndex,
 						waypoints.get(writeIndex));
 				writeIndex++;
 				if (writeIndex >= waypoints.size()) {

@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.MAVLink.Messages.ardupilotmega.msg_rc_channels_override;
+import com.droidplanner.drone.Drone;
 import com.droidplanner.service.MAVLinkClient;
 
 public class RcOutput {
@@ -31,8 +32,8 @@ public class RcOutput {
 	public static final int RC7 = 6;
 	public static final int RC8 = 7;
 
-	public RcOutput(MAVLinkClient MAV, Context context) {
-		this.MAV = MAV;
+	public RcOutput(Drone drone, Context context) {
+		this.MAV = drone.MavClient;
 		parrentContext = context;
 	}
 

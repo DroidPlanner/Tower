@@ -46,10 +46,10 @@ public class State extends DroneVariable {
 	}
 
 	public void changeFlightMode(ApmModes mode) {
-		MavLinkModes.changeFlightMode(myDrone.MavClient, mode);
+		MavLinkModes.changeFlightMode(myDrone, mode);
 	}
 
 	public void setGuidedMode(waypoint waypoint) {
-		MavLinkModes.setGuidedMode(myDrone.MavClient, waypoint);
+		MavLinkModes.setGuidedMode(myDrone, waypoint);
 	}
 }

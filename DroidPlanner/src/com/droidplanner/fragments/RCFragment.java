@@ -41,7 +41,7 @@ public class RCFragment extends Fragment {
 
 		app = (DroidPlannerApp) getActivity().getApplication();
 		drone = app.drone;
-		rcOutput = new RcOutput(app.MAVClient, app);
+		rcOutput = new RcOutput(drone, app);
 
 		textViewLPan = (TextView) view.findViewById(R.id.textViewRCJoyLPan);
 		textViewLPan.setText("(Rudd: 0%)");
@@ -60,7 +60,7 @@ public class RCFragment extends Fragment {
 			public void onClick(View v) {
 				ApmModes mode = ApmModes.getMode("Loiter", drone.type.getType());
 				if (mode != ApmModes.UNKNOWN) {
-					MavLinkModes.changeFlightMode(drone.MavClient, mode);
+					MavLinkModes.changeFlightMode(drone, mode);
 				}
 			}
 		});
@@ -74,7 +74,7 @@ public class RCFragment extends Fragment {
 				ApmModes mode = ApmModes.getMode("Stabilize",
 						drone.type.getType());
 				if (mode != ApmModes.UNKNOWN) {
-					MavLinkModes.changeFlightMode(drone.MavClient, mode);
+					MavLinkModes.changeFlightMode(drone, mode);
 				}
 			}
 		});
