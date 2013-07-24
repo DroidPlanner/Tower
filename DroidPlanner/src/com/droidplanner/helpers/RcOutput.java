@@ -9,9 +9,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.MAVLink.Messages.ardupilotmega.msg_rc_channels_override;
+import com.droidplanner.MAVLink.MavLinkRC;
 import com.droidplanner.drone.Drone;
-import com.droidplanner.service.MAVLinkClient;
 
 public class RcOutput {
 	private static final int DISABLE_OVERRIDE = 0;
@@ -19,7 +18,7 @@ public class RcOutput {
 	private static final int RC_RANGE = 550;
 	private Context parrentContext;
 	private ScheduledExecutorService scheduleTaskExecutor;
-	private MAVLinkClient MAV;
+	private Drone drone;
 	public int[] rcOutputs = new int[8];
 
 	public static final int AILERON = 0;
@@ -33,7 +32,7 @@ public class RcOutput {
 	public static final int RC8 = 7;
 
 	public RcOutput(Drone drone, Context context) {
-		this.MAV = drone.MavClient;
+		this.drone = drone;
 		parrentContext = context;
 	}
 
@@ -43,9 +42,9 @@ public class RcOutput {
 			scheduleTaskExecutor = null;
 		}
 		Arrays.fill(rcOutputs, DISABLE_OVERRIDE);
-		sendRcOverrideMsg(); // Just to be sure send 3 disable
-		sendRcOverrideMsg();
-		sendRcOverrideMsg();
+		MavLinkRC.sendRcOverrideMsg(drone, rcOutputs); // Just to be sure send 3 disable
+		MavLinkRC.sendRcOverrideMsg(drone, rcOutputs);
+		MavLinkRC.sendRcOverrideMsg(drone, rcOutputs);
 	}
 
 	public void enableRcOverride() {
@@ -55,7 +54,7 @@ public class RcOutput {
 			scheduleTaskExecutor.scheduleWithFixedDelay(new Runnable() {
 				@Override
 				public void run() {
-					sendRcOverrideMsg();
+					MavLinkRC.sendRcOverrideMsg(drone, rcOutputs);
 				}
 			}, 0, getRcOverrideDelayMs(), TimeUnit.MILLISECONDS);
 		}
@@ -71,21 +70,6 @@ public class RcOutput {
 		} else {
 			return 20;
 		}
-	}
-
-	public void sendRcOverrideMsg() {
-		msg_rc_channels_override msg = new msg_rc_channels_override();
-		msg.chan1_raw = (short) rcOutputs[0];
-		msg.chan2_raw = (short) rcOutputs[1];
-		msg.chan3_raw = (short) rcOutputs[2];
-		msg.chan4_raw = (short) rcOutputs[3];
-		msg.chan5_raw = (short) rcOutputs[4];
-		msg.chan6_raw = (short) rcOutputs[5];
-		msg.chan7_raw = (short) rcOutputs[6];
-		msg.chan8_raw = (short) rcOutputs[7];
-		msg.target_system = 1;
-		msg.target_component = 1;
-		MAV.sendMavPacket(msg.pack());
 	}
 
 	public boolean isRcOverrided() {
