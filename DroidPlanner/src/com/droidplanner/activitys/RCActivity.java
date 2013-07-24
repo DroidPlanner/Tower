@@ -4,7 +4,6 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +13,7 @@ import com.droidplanner.R;
 import com.droidplanner.drone.DroneInterfaces.DroneTypeListner;
 import com.droidplanner.fragments.FlightMapFragment;
 import com.droidplanner.fragments.HudFragment;
+import com.droidplanner.widgets.viewPager.MapViewPager;
 
 public class RCActivity extends SuperFlightActivity implements
 		OnWaypointUpdateListner, DroneTypeListner {
@@ -22,7 +22,7 @@ public class RCActivity extends SuperFlightActivity implements
 	private static FlightMapFragment mapFragment;
 
 	AdapterHudMap mAdapter;
-	ViewPager mPager;
+	MapViewPager mPager;
 
 	@Override
 	int getNavigationItem() {
@@ -39,9 +39,10 @@ public class RCActivity extends SuperFlightActivity implements
 		mapFragment = new FlightMapFragment();
 
 		mAdapter = new AdapterHudMap(getFragmentManager());
-		mPager = (ViewPager) findViewById(R.id.rcPager);
+		mPager = (MapViewPager) findViewById(R.id.rcPager);
 		if (mPager != null) {
 			mPager.setAdapter(mAdapter);
+			mPager.setSwipeMarginWidth(40);
 		}
 
 		app.setWaypointReceivedListner(this);
