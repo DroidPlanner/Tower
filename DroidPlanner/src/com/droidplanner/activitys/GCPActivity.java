@@ -89,7 +89,7 @@ public class GCPActivity extends SuperActivity implements OnGcpClickListner {
 	private void putListToGcp(List<gcp> list) {
 		gcpList.clear();
 		gcpList.addAll(list);
-		gcpMapFragment.updateMarkers(gcpList);
+		gcpMapFragment.markers.updateMarkers(gcpList);
 		gcpMapFragment.zoomToExtents(getGcpCoordinates());
 	}
 
@@ -110,13 +110,13 @@ public class GCPActivity extends SuperActivity implements OnGcpClickListner {
 
 	public void clearWaypointsAndUpdate() {
 		gcpList.clear();
-		gcpMapFragment.clear();
+		gcpMapFragment.markers.clear(gcpMapFragment);
 	}
 
 	@Override
 	public void onGcpClick(gcp gcp) {
 		gcp.toogleState();
-		gcpMapFragment.updateMarker(gcp);
+		gcpMapFragment.markers.updateMarker(gcp);
 	}
 
 }
