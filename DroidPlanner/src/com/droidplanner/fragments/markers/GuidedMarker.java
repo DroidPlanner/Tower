@@ -1,4 +1,4 @@
-package com.droidplanner.fragments;
+package com.droidplanner.fragments.markers;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -14,7 +14,7 @@ public class GuidedMarker {
 		this.myMap = myMap;
 	}
 
-	void updateGuidedMarker(LatLng point) {
+	public void updateGuidedMarker(LatLng point) {
 		if (guidedMarker == null) {
 			addMarker(point);
 		} else {
