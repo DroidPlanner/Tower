@@ -116,16 +116,18 @@ public abstract class SuperActivity extends Activity implements
 			return true;
 		case R.id.menu_record_me:
 			app.recordMe.toogleRecordMeState();
+		case R.id.menu_follow_me:
+			app.followMe.toogleFollowMeState();
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
 	}
 
 	private void toggleConnectionState() {
-		if (app.MAVClient.isConnected()) {
-			app.MAVClient.close();
+		if (drone.MavClient.isConnected()) {
+			drone.MavClient.close();
 		} else {
-			app.MAVClient.init();
+			drone.MavClient.init();
 		}
 
 	}
@@ -192,7 +194,7 @@ public abstract class SuperActivity extends Activity implements
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu_super_activiy, menu);
 		connectButton = menu.findItem(R.id.menu_connect);
-		app.MAVClient.queryConnectionState();
+		drone.MavClient.queryConnectionState();
 		return super.onCreateOptionsMenu(menu);
 	}
 

@@ -52,20 +52,6 @@ public abstract class SuperFlightActivity extends SuperActivity implements
 	}
 
 	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.menu_follow_me:
-			app.followMe.toogleFollowMeState();
-			return true;
-		case R.id.menu_load_from_apm:
-			drone.waypointMananger.getWaypoints();
-			return true;
-		default:
-			return super.onMenuItemSelected(featureId, item);
-		}
-	}
-
-	@Override
 	public void OnModeSpinnerSelected(String text) {
 		ApmModes mode = ApmModes.getMode(text, drone.type.getType());
 		if (mode != ApmModes.UNKNOWN) {
