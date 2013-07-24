@@ -35,9 +35,6 @@ public class RCActivity extends SuperFlightActivity implements
 
 		setContentView(R.layout.rc);
 
-		hudFragment = new HudFragment();
-		mapFragment = new FlightMapFragment();
-
 		mAdapter = new AdapterHudMap(getFragmentManager());
 		mPager = (MapViewPager) findViewById(R.id.rcPager);
 		if (mPager != null) {
@@ -86,8 +83,10 @@ public class RCActivity extends SuperFlightActivity implements
 		public Fragment getItem(int position) {
 			switch (position) {
 			case 0:
+				hudFragment = new HudFragment();
 				return hudFragment;
 			case 1:
+				mapFragment = new FlightMapFragment();
 				return mapFragment;
 			default:
 				return null;
@@ -98,15 +97,19 @@ public class RCActivity extends SuperFlightActivity implements
 	@Override
 	public void onWaypointsUpdate() {
 		super.onWaypointsUpdate();
-		mapFragment.updateMissionPath(drone);
-		mapFragment.homeMarker.update(drone);
+		if (mapFragment != null) {
+			mapFragment.updateMissionPath(drone);
+			mapFragment.homeMarker.update(drone);
+		}
 	}
 
 	@Override
 	public void onDroneTypeChanged() {
 		super.onDroneTypeChanged();
 		Log.d("DRONE", "Drone type changed");
-		mapFragment.droneMarker.updateDroneMarkers();
+		if (mapFragment != null) {
+			mapFragment.droneMarker.updateDroneMarkers();
+		}
 	}
 
 }
