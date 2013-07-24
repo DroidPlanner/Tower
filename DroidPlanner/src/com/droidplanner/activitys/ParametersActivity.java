@@ -40,7 +40,7 @@ public class ParametersActivity extends SuperActivity implements
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_load_parameters:
-			if (app.MAVClient.isConnected()) {
+			if (drone.MavClient.isConnected()) {
 				drone.parameters.getAllParameters();
 			} else {
 				Toast.makeText(this, "Please connect first", Toast.LENGTH_SHORT)

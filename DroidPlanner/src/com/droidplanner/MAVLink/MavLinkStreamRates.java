@@ -26,7 +26,7 @@ public class MavLinkStreamRates {
 		int rcChannels = 0;
 		int rawSensors = 0;
 
-		setupStreamRates(droidPlannerApp.MAVClient, extendedStatus, extra1,
+		setupStreamRates(droidPlannerApp.drone.MavClient, extendedStatus, extra1,
 				extra2, extra3, position, rcChannels, rawSensors);
 	}
 
