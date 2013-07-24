@@ -1,3 +1,8 @@
+## Droidplanner v0.10.2
+* Better swipe implementation on RC screen
+* Bug fix on the RC screen
+* Code Refactoring
+
 ## Droidplanner v0.10.1
 * Fix in Offline maps
 * New RC screen in portrait mode
