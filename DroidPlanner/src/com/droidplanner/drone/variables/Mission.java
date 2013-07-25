@@ -20,7 +20,7 @@ public class Mission extends DroneVariable {
 	private int wpno = -1;
 	private double disttowp = 0;
 
-	public OnWaypointUpdateListner waypointsListner;
+	public OnWaypointUpdateListner missionListner;
 
 	public Mission(Drone myDrone) {
 		super(myDrone);
@@ -141,7 +141,7 @@ public class Mission extends DroneVariable {
 			waypoints.remove(0); // Remove Home waypoint
 			clearWaypoints();
 			addWaypoints(waypoints);
-			waypointsListner.onWaypointsUpdate();
+			notifyMissionUpdate();
 		}
 
 	}
@@ -154,6 +154,10 @@ public class Mission extends DroneVariable {
 
 	public void removeWaypoint(waypoint waypoint) {
 		waypoints.remove(waypoint);
-		waypointsListner.onWaypointsUpdate();
+		notifyMissionUpdate();
+	}
+
+	public void notifyMissionUpdate() {
+		missionListner.onWaypointsUpdate();		
 	}
 }
