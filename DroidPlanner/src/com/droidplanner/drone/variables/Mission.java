@@ -89,7 +89,7 @@ public class Mission extends DroneVariable {
 	}
 
 	public int getFrameFromPref() {
-		if (myDrone.prefs.getBoolean("pref_use_absolute_altitude", false)) {
+		if (myDrone.prefs.getBoolean("pref_advanced_use_absolute_altitude", false)) {
 			return MAV_FRAME.MAV_FRAME_GLOBAL;
 		} else {
 			return MAV_FRAME.MAV_FRAME_GLOBAL_RELATIVE_ALT;

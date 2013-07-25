@@ -4,7 +4,6 @@ import com.MAVLink.Messages.ApmCommands;
 import com.MAVLink.Messages.MAVLinkPacket;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_CMD;
-import com.MAVLink.Messages.enums.MAV_FRAME;
 import com.google.android.gms.maps.model.LatLng;
 
 public class waypoint {
@@ -19,7 +18,7 @@ public class waypoint {
 		setHeight(h);
 
 		missionItem.current = 0; // TODO use correct parameter for HOME
-		missionItem.frame = MAV_FRAME.MAV_FRAME_GLOBAL;
+		missionItem.frame = (byte) frame;
 		missionItem.command = MAV_CMD.MAV_CMD_NAV_WAYPOINT;
 		missionItem.param1 = 0; // TODO use correct parameter
 		missionItem.param2 = 0; // TODO use correct parameter
