@@ -29,141 +29,47 @@ import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
 
 public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		HudUpdatedListner {
-	private static final float SCROLLER_WIDTH_FACTOR = .15f; // in relation to
-																// width (total
-																// HUD widget
-																// width)
-	private static final float SCROLLER_MAX_HEIGHT_FACTOR = .66f; // in relation
-																	// to
-																	// attHeightPx
-	private static final float SCROLLER_FACTOR_TEXT = .048f; // in relation to
-																// attHeightPx
-	private static final float SCROLLER_FACTOR_TEXT_Y_OFFSET = -.16f;// in
-																		// relation
-																		// to
-																		// scrollerSizePxText
-	private static final float SCROLLER_FACTOR_ACTUAL_TEXT_MAGNIFICATION = 1.2f;// in
-																				// relation
-																				// to
-																				// the
-																				// resulting
-																				// size
-																				// of
-																				// SCROLLER_FACTOR_TEXT
-	private static final float SCROLLER_FACTOR_TEXT_X_OFFSET = .037f;// in
-																		// relation
-																		// to
-																		// width
-	private static final float SCROLLER_FACTOR_TIC_LENGTH = .025f; // in
-																	// relation
-																	// to width
-	private static final float SCROLLER_FACTOR_ARROW_HEIGTH = 1.4f; // in
-																	// relation
-																	// to
-																	// scrollerSizePxText
-	private static final float SCROLLER_FACTOR_TARGET_BAR_WIDTH = .015f;// in
-																		// relation
-																		// to
-																		// attHeightPx
-	private static final int SCROLLER_VSI_RANGE = 12;
-	private static final int SCROLLER_ALT_RANGE = 26;
-	private static final int SCROLLER_SPEED_RANGE = 26;
-	private static final float ROLL_FACTOR_TEXT = .038f; // in relation to
-															// attHeightPx
-	private static final float ROLL_FACTOR_TIC_LENGTH = .25f; // in relation to
-																// rollTopOffsetPx
-	private static final float ROLL_FACTOR_TEXT_Y_OFFSET = .8f; // in relation
-																// to
-																// rollSizePxTics
-	private static final float PITCH_FACTOR_TEXT = .038f; // in relation to
-															// attHeightPx
-	private static final float PITCH_FACTOR_TEXT_Y_OFFSET = -.16f; // in
-																	// relation
-																	// to the
-																	// resulting
-																	// size of
-																	// PITCH_FACTOR_TEXT
-	private static final float PITCH_FACTOR_SCALE_Y_SPACE = 0.02f; // in
-																	// relation
-																	// to
-																	// attHeightPx
-	private static final float PITCH_FACTOR_SCALE_WIDHT_WIDE = 0.25f; // in
-																		// relation
-																		// to
-																		// width
-	private static final float PITCH_FACTOR_SCALE_WIDHT_NARROW = 0.1f; // in
-																		// relation
-																		// to
-																		// width
-	private static final float PITCH_FACTOR_SCALE_TEXT_X_OFFSET = 0.025f; // in
-																			// relation
-																			// to
-																			// width
 
-	private static final float ATT_FACTOR_INFOTEXT = .048f; // in relation to
-															// attHeightPx
-	private static final float ATT_FACTOR_INFOTEXT_Y_OFFSET = -.1f; // in
-																	// relation
-																	// to the
-																	// resulting
-																	// size of
-																	// ATT_FACTOR_INFOTEXT
-	private static final float ATT_FACTOR_INFOTEXT_X_OFFSET = .013f; // in
-																		// relation
-																		// to
-																		// width
-	private static final float ATT_FACTOR_INFOTEXT_CLEARANCE = .1f; // in
-																	// relation
-																	// to
-																	// attSizePxInfoText//.3f
-
-	private static final float HUD_FACTOR_BORDER_WIDTH = .0075f; // in relation
-																	// to
-																	// averaged
-																	// of width
-																	// and
-																	// height
-	private static final float HUD_FACTOR_RED_INDICATOR_WIDTH = .0075f; // in
-																		// relation
-																		// to
-																		// averaged
-																		// of
-																		// width
-																		// and
-																		// height
-	private static final float HUD_FACTOR_SCALE_THICK_TIC_STROKEWIDTH = .005f; // in
-																				// relation
-																				// to
-																				// averaged
-																				// of
-																				// width
-																				// and
-																				// height
-	private static final float HUD_FACTOR_SCALE_THIN_TIC_STROKEWIDTH = .0025f; // in
-																				// relation
-																				// to
-																				// averaged
-																				// of
-																				// width
-																				// and
-																				// height
-	private static final float HUD_FACTOR_CENTER_INDICATOR_SIZE = .0375f; // in
-																			// relation
-																			// to
-																			// averaged
-																			// of
-																			// width
-																			// and
-																			// height
-
-	private static final float FAILSAFE_FACTOR_TEXT = .093f; // in relation to
-																// width
-	private static final float FAILSAFE_FACTOR_BOX_PADDING = .27f; // in
-																	// relation
-																	// to the
-																	// resulting
-																	// size of
-																	// FAILSAFE_FACTOR_TEXT
+	// in relation to attHeightPx
+	private static final float ROLL_FACTOR_TEXT = .038f;
+	// in relation to rollTopOffsetPx
+	private static final float ROLL_FACTOR_TIC_LENGTH = .25f;
+	// in relation to rollSizePxTics
+	private static final float ROLL_FACTOR_TEXT_Y_OFFSET = .8f;
+	// in relation to attHeightPx
+	private static final float PITCH_FACTOR_TEXT = .038f;
+	// in relation to the resulting size of PITCH_FACTOR_TEXT
+	private static final float PITCH_FACTOR_TEXT_Y_OFFSET = -.16f;
+	// in relation to attHeightPx
+	private static final float PITCH_FACTOR_SCALE_Y_SPACE = 0.02f;
+	// in relation to width
+	private static final float PITCH_FACTOR_SCALE_WIDHT_WIDE = 0.25f;
+	// in relation to width
+	private static final float PITCH_FACTOR_SCALE_WIDHT_NARROW = 0.1f;
+	// in relation to width
+	private static final float PITCH_FACTOR_SCALE_TEXT_X_OFFSET = 0.025f;
+	// in relation to attHeightPx
+	private static final float ATT_FACTOR_INFOTEXT = .048f;
+	// in relation to the resulting size of ATT_FACTOR_INFOTEXT
+	private static final float ATT_FACTOR_INFOTEXT_Y_OFFSET = -.1f;
+	// in relation to width
+	private static final float ATT_FACTOR_INFOTEXT_X_OFFSET = .013f;
+	// in relation to attSizePxInfoText
+	private static final float ATT_FACTOR_INFOTEXT_CLEARANCE = .1f;
+	// in relation to averaged of width and height
+	private static final float HUD_FACTOR_BORDER_WIDTH = .0075f;
+	// in relation to averaged of width and height
+	private static final float HUD_FACTOR_RED_INDICATOR_WIDTH = .0075f;
+	// in relation to averaged of width and height
+	private static final float HUD_FACTOR_SCALE_THICK_TIC_STROKEWIDTH = .005f;
+	// in relation to averaged of width and height
+	private static final float HUD_FACTOR_SCALE_THIN_TIC_STROKEWIDTH = .0025f;
+	// in relation to averaged of width and height
+	private static final float HUD_FACTOR_CENTER_INDICATOR_SIZE = .0375f;
+	// in relation to width
+	private static final float FAILSAFE_FACTOR_TEXT = .093f;
+	// in relation to the resulting size of FAILSAFE_FACTOR_TEXT
+	private static final float FAILSAFE_FACTOR_BOX_PADDING = .27f;
 
 	private ScopeThread renderer;
 	int width;
@@ -210,9 +116,6 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 	Paint yawBg = new Paint();
 	Paint rollText = new Paint();
 	Paint pitchText = new Paint();
-	Paint scrollerBg = new Paint();
-	Paint scrollerText = new Paint();
-	Paint scrollerActualText = new Paint();
 	Paint whiteStroke = new Paint();
 	Paint whiteBorder = new Paint();
 	Paint whiteThickTics = new Paint();
@@ -222,8 +125,6 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 	Paint plane = new Paint();
 	Paint blackSolid = new Paint();
 	Paint blueVSI = new Paint();
-	Paint greenPen = new Paint();
-
 	Drone drone;
 
 	@Override
@@ -235,10 +136,10 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		// clear screen
 		canvas.drawColor(Color.rgb(20, 20, 20));
 		canvas.translate(width / 2, data.attHeightPx / 2 + hudYaw.yawHeightPx); // set
-																	// center of
-																	// HUD
-																	// excluding
-																	// YAW area
+		// center of
+		// HUD
+		// excluding
+		// YAW area
 
 		// from now on each drawing routine has to undo all applied
 		// transformations, clippings, etc by itself
@@ -263,12 +164,6 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		ground.setARGB(220, 148, 193, 31);
 		sky.setARGB(220, 0, 113, 188);
 		yawBg.setARGB(255, 0, 0, 0);// (64, 255, 255, 255);
-		scrollerBg.setARGB(64, 255, 255, 255);// (255, 0, 0, 0);
-
-		scrollerText.setColor(Color.WHITE);
-		scrollerText.setAntiAlias(true);
-		scrollerActualText.setColor(Color.WHITE);
-		scrollerActualText.setAntiAlias(true);
 
 		FailsafeText.setTextSize(37);
 		FailsafeText.setAntiAlias(true);
@@ -292,7 +187,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		whiteThickTics.setStyle(Style.FILL);
 		whiteThickTics.setStrokeWidth(2);
 		whiteThickTics.setAntiAlias(true);
-		
+
 		rollText.setColor(Color.WHITE);
 		rollText.setAntiAlias(true);
 		rollText.setTextAlign(Align.CENTER);
@@ -304,10 +199,6 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		attInfoText.setColor(Color.WHITE);
 		attInfoText.setTextAlign(Align.CENTER);
 		attInfoText.setAntiAlias(true);
-
-		greenPen.setColor(Color.GREEN);
-		greenPen.setStrokeWidth(6);
-		greenPen.setStyle(Style.STROKE);
 
 		plane.setColor(Color.RED);
 		plane.setStyle(Style.STROKE);
@@ -340,7 +231,8 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		// Draw center triangle
 		Path arrow = new Path();
 		int tempOffset = Math.round(plane.getStrokeWidth() / 2);
-		arrow.moveTo(0, -data.attHeightPx / 2 + hudRoll.rollTopOffsetPx - tempOffset);
+		arrow.moveTo(0, -data.attHeightPx / 2 + hudRoll.rollTopOffsetPx
+				- tempOffset);
 		arrow.lineTo(0 - hudRoll.rollTopOffsetPx / 3, -data.attHeightPx / 2
 				+ hudRoll.rollTopOffsetPx / 2 - tempOffset);
 		arrow.lineTo(0 + hudRoll.rollTopOffsetPx / 3, -data.attHeightPx / 2
@@ -382,8 +274,8 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		}
 
 		int pitchOffsetPx = (int) (pitch * hudPitch.pitchPixPerDegree);
-		int rollTriangleBottom = -data.attHeightPx / 2 + hudRoll.rollTopOffsetPx / 2
-				+ hudRoll.rollTopOffsetPx;
+		int rollTriangleBottom = -data.attHeightPx / 2
+				+ hudRoll.rollTopOffsetPx / 2 + hudRoll.rollTopOffsetPx;
 
 		canvas.rotate(-(int) roll);
 
@@ -399,9 +291,12 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		Path arrow = new Path();
 		int tempOffset = Math.round(plane.getStrokeWidth()
 				+ whiteBorder.getStrokeWidth() / 2);
-		arrow.moveTo(0, -data.attHeightPx / 2 + hudRoll.rollTopOffsetPx + tempOffset);
-		arrow.lineTo(0 - hudRoll.rollTopOffsetPx / 3, rollTriangleBottom + tempOffset);
-		arrow.lineTo(0 + hudRoll.rollTopOffsetPx / 3, rollTriangleBottom + tempOffset);
+		arrow.moveTo(0, -data.attHeightPx / 2 + hudRoll.rollTopOffsetPx
+				+ tempOffset);
+		arrow.lineTo(0 - hudRoll.rollTopOffsetPx / 3, rollTriangleBottom
+				+ tempOffset);
+		arrow.lineTo(0 + hudRoll.rollTopOffsetPx / 3, rollTriangleBottom
+				+ tempOffset);
 		arrow.close();
 		canvas.drawPath(arrow, plane);
 
@@ -413,13 +308,15 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 					&& (yPos != pitchOffsetPx)) {
 				if (i % 2 == 0) {
 					canvas.drawLine(-hudPitch.pitchScaleWideHalfWidth, yPos,
-							hudPitch.pitchScaleWideHalfWidth, yPos, whiteThinTics);
+							hudPitch.pitchScaleWideHalfWidth, yPos,
+							whiteThinTics);
 					canvas.drawText(i + "", -hudPitch.pitchScaleWideHalfWidth
 							- hudPitch.pitchScaleTextXOffset, yPos
 							- hudPitch.pitchTextCenterOffsetPx, pitchText);
 				} else
 					canvas.drawLine(-hudPitch.pitchScaleNarrowHalfWidth, yPos,
-							hudPitch.pitchScaleNarrowHalfWidth, yPos, whiteThinTics);
+							hudPitch.pitchScaleNarrowHalfWidth, yPos,
+							whiteThinTics);
 			}
 		}
 
@@ -427,9 +324,9 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 	}
 
 	private void drawRightScroller(Canvas canvas) {
-		final float textHalfSize = scrollerText.getTextSize() / 2;
-		scrollerText.setTextAlign(Paint.Align.LEFT);
-		scrollerActualText.setTextAlign(Paint.Align.LEFT);
+		final float textHalfSize = hudScroller.scrollerText.getTextSize() / 2;
+		hudScroller.scrollerText.setTextAlign(Paint.Align.LEFT);
+		hudScroller.scrollerActualText.setTextAlign(Paint.Align.LEFT);
 
 		double altitude = drone.altitude.getAltitude();
 		double targetAltitude = drone.altitude.getTargetAltitude();
@@ -443,11 +340,12 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 
 		// Outside box
 		RectF scroller = new RectF(width / 2 - hudScroller.scrollerWidthPx,
-				-hudScroller.scrollerHeightPx / 2, width / 2, hudScroller.scrollerHeightPx / 2);
+				-hudScroller.scrollerHeightPx / 2, width / 2,
+				hudScroller.scrollerHeightPx / 2);
 
 		// Draw Vertical speed indicator
 		final float vsi_width = scroller.width() / 4;
-		float linespace = scroller.height() / SCROLLER_VSI_RANGE;
+		float linespace = scroller.height() / HudScroller.SCROLLER_VSI_RANGE;
 		Path vsiBox = new Path();
 		vsiBox.moveTo(scroller.left, scroller.top); // draw outside box
 		vsiBox.lineTo(scroller.left - vsi_width, scroller.top + vsi_width);
@@ -461,13 +359,13 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		vsiFill.lineTo(scroller.left - vsi_width, vsiIndicatorEnd);
 		vsiFill.lineTo(scroller.left, vsiIndicatorEnd);
 		vsiFill.lineTo(scroller.left, scroller.centerY());
-		canvas.drawPath(vsiBox, scrollerBg);
+		canvas.drawPath(vsiBox, hudScroller.scrollerBg);
 		canvas.drawPath(vsiFill, blueVSI);
 		canvas.drawLine(scroller.left - vsi_width, vsiIndicatorEnd,
 				scroller.left, vsiIndicatorEnd, whiteThinTics);
 		canvas.drawPath(vsiBox, whiteBorder);
 
-		for (int a = 1; a < SCROLLER_VSI_RANGE; a++) { // draw ticks
+		for (int a = 1; a < HudScroller.SCROLLER_VSI_RANGE; a++) { // draw ticks
 			float lineHeight = scroller.top + linespace * a;
 			canvas.drawLine(scroller.left - vsi_width, lineHeight,
 					scroller.left - vsi_width + vsi_width / 3, lineHeight,
@@ -475,24 +373,24 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		}
 
 		// Draw Altitude Scroller
-		canvas.drawRect(scroller, scrollerBg);
+		canvas.drawRect(scroller, hudScroller.scrollerBg);
 		canvas.drawRect(scroller, whiteBorder);
 		// Clip to Scroller
 		canvas.clipRect(scroller, Region.Op.REPLACE);
 
-		float space = scroller.height() / (float) SCROLLER_ALT_RANGE;
-		int start = ((int) altitude - SCROLLER_ALT_RANGE / 2);
+		float space = scroller.height() / (float) HudScroller.SCROLLER_ALT_RANGE;
+		int start = ((int) altitude - HudScroller.SCROLLER_ALT_RANGE / 2);
 
 		if (start > targetAltitude) {
 			canvas.drawLine(scroller.left, scroller.bottom, scroller.right,
-					scroller.bottom, greenPen);
-		} else if ((altitude + SCROLLER_SPEED_RANGE / 2) < targetAltitude) {
+					scroller.bottom, hudScroller.greenPen);
+		} else if ((altitude + HudScroller.SCROLLER_SPEED_RANGE / 2) < targetAltitude) {
 			canvas.drawLine(scroller.left, scroller.top, scroller.right,
-					scroller.top, greenPen);
+					scroller.top, hudScroller.greenPen);
 		}
 
 		float targetAltPos = Float.MIN_VALUE;
-		for (int a = start; a <= (altitude + SCROLLER_ALT_RANGE / 2); a += 1) { // go
+		for (int a = start; a <= (altitude + HudScroller.SCROLLER_ALT_RANGE / 2); a += 1) { // go
 																				// trough
 																				// 1m
 																				// steps
@@ -502,15 +400,17 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 
 			if (a == ((int) targetAltitude) && targetAltitude != 0) {
 				canvas.drawLine(scroller.left, lineHeight, scroller.right,
-						lineHeight, greenPen);
+						lineHeight, hudScroller.greenPen);
 				targetAltPos = lineHeight;
 			}
 			if (a % 5 == 0) {
 				canvas.drawLine(scroller.left, lineHeight, scroller.left
-						+ hudScroller.scrollerSizePxTicLength, lineHeight, whiteThickTics);
+						+ hudScroller.scrollerSizePxTicLength, lineHeight,
+						whiteThickTics);
 				canvas.drawText(Integer.toString(a), scroller.left
-						+ hudScroller.scrollerSizePxTextXOffset, lineHeight + textHalfSize
-						+ hudScroller.scrollerSizePxTextYOffset, scrollerText);
+						+ hudScroller.scrollerSizePxTextXOffset, lineHeight
+						+ textHalfSize + hudScroller.scrollerSizePxTextYOffset,
+						hudScroller.scrollerText);
 			}
 		}
 
@@ -530,16 +430,19 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 				&& (targetAltPos > -hudScroller.scrollerSizePxArrowHeight / 2)
 				&& (targetAltPos < hudScroller.scrollerSizePxArrowHeight / 2)) {
 			Rect actualTextRec = new Rect();
-			scrollerActualText.getTextBounds(actualText, 0,
+			hudScroller.scrollerActualText.getTextBounds(actualText, 0,
 					actualText.length(), actualTextRec);
 			canvas.drawLine(scroller.right, targetAltPos, scroller.left
-					+ actualTextRec.width() + hudScroller.scrollerSizePxTextXOffset
-					+ textHalfSize, targetAltPos, greenPen);
+					+ actualTextRec.width()
+					+ hudScroller.scrollerSizePxTextXOffset + textHalfSize,
+					targetAltPos, hudScroller.greenPen);
 		}
 		canvas.drawPath(arrow, plane);
-		canvas.drawText(actualText, scroller.left + hudScroller.scrollerSizePxTextXOffset,
-				scrollerActualText.getTextSize() / 2
-						+ hudScroller.scrollerSizePxActualTextYOffset, scrollerActualText);
+		canvas.drawText(actualText, scroller.left
+				+ hudScroller.scrollerSizePxTextXOffset,
+				hudScroller.scrollerActualText.getTextSize() / 2
+						+ hudScroller.scrollerSizePxActualTextYOffset,
+				hudScroller.scrollerActualText);
 		// Reset clipping of Scroller
 		canvas.clipRect(-width / 2, -height / 2, width / 2, height / 2,
 				Region.Op.REPLACE);
@@ -549,9 +452,9 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 	}
 
 	private void drawLeftScroller(Canvas canvas) {
-		final float textHalfSize = scrollerText.getTextSize() / 2;
-		scrollerText.setTextAlign(Paint.Align.RIGHT);
-		scrollerActualText.setTextAlign(Paint.Align.RIGHT);
+		final float textHalfSize = hudScroller.scrollerText.getTextSize() / 2;
+		hudScroller.scrollerText.setTextAlign(Paint.Align.RIGHT);
+		hudScroller.scrollerActualText.setTextAlign(Paint.Align.RIGHT);
 
 		double groundSpeed = drone.speed.getGroundSpeed();
 		double airSpeed = drone.speed.getAirSpeed();
@@ -567,41 +470,45 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 			speed = groundSpeed;
 
 		// Outside box
-		RectF scroller = new RectF(-width / 2, -hudScroller.scrollerHeightPx / 2, -width
-				/ 2 + hudScroller.scrollerWidthPx, hudScroller.scrollerHeightPx / 2);
+		RectF scroller = new RectF(-width / 2,
+				-hudScroller.scrollerHeightPx / 2, -width / 2
+						+ hudScroller.scrollerWidthPx,
+				hudScroller.scrollerHeightPx / 2);
 
 		// Draw Scroll
-		canvas.drawRect(scroller, scrollerBg);
+		canvas.drawRect(scroller, hudScroller.scrollerBg);
 		canvas.drawRect(scroller, whiteBorder);
 		// Clip to Scroller
 		canvas.clipRect(scroller, Region.Op.REPLACE);
 
-		float space = scroller.height() / (float) SCROLLER_SPEED_RANGE;
-		int start = ((int) speed - SCROLLER_SPEED_RANGE / 2);
+		float space = scroller.height() / (float) HudScroller.SCROLLER_SPEED_RANGE;
+		int start = ((int) speed - HudScroller.SCROLLER_SPEED_RANGE / 2);
 
 		if (start > targetSpeed) {
 			canvas.drawLine(scroller.left, scroller.bottom, scroller.right,
-					scroller.bottom, greenPen);
-		} else if ((speed + SCROLLER_SPEED_RANGE / 2) < targetSpeed) {
+					scroller.bottom, hudScroller.greenPen);
+		} else if ((speed + HudScroller.SCROLLER_SPEED_RANGE / 2) < targetSpeed) {
 			canvas.drawLine(scroller.left, scroller.top, scroller.right,
-					scroller.top, greenPen);
+					scroller.top, hudScroller.greenPen);
 		}
 
 		float targetSpdPos = Float.MIN_VALUE;
-		for (int a = start; a <= (speed + SCROLLER_SPEED_RANGE / 2); a += 1) {
+		for (int a = start; a <= (speed + HudScroller.SCROLLER_SPEED_RANGE / 2); a += 1) {
 			float lineHeight = scroller.centerY() - space * (a - (int) speed);
 
 			if (a == ((int) targetSpeed) && targetSpeed != 0) {
 				canvas.drawLine(scroller.left, lineHeight, scroller.right,
-						lineHeight, greenPen);
+						lineHeight, hudScroller.greenPen);
 				targetSpdPos = lineHeight;
 			}
 			if (a % 5 == 0) {
 				canvas.drawLine(scroller.right, lineHeight, scroller.right
-						- hudScroller.scrollerSizePxTicLength, lineHeight, whiteThickTics);
+						- hudScroller.scrollerSizePxTicLength, lineHeight,
+						whiteThickTics);
 				canvas.drawText(Integer.toString(a), scroller.right
-						- hudScroller.scrollerSizePxTextXOffset, lineHeight + textHalfSize
-						+ hudScroller.scrollerSizePxTextYOffset, scrollerText);
+						- hudScroller.scrollerSizePxTextXOffset, lineHeight
+						+ textHalfSize + hudScroller.scrollerSizePxTextYOffset,
+						hudScroller.scrollerText);
 			}
 		}
 
@@ -616,22 +523,26 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		arrow.lineTo(scroller.right - borderWidth, 0);
 		arrow.lineTo(scroller.right - hudScroller.scrollerSizePxArrowHeight / 4
 				- borderWidth, hudScroller.scrollerSizePxArrowHeight / 2);
-		arrow.lineTo(scroller.left - borderWidth, hudScroller.scrollerSizePxArrowHeight / 2);
+		arrow.lineTo(scroller.left - borderWidth,
+				hudScroller.scrollerSizePxArrowHeight / 2);
 		canvas.drawPath(arrow, blackSolid);
 		if ((targetSpdPos != Float.MIN_VALUE)
 				&& (targetSpdPos > -hudScroller.scrollerSizePxArrowHeight / 2)
 				&& (targetSpdPos < hudScroller.scrollerSizePxArrowHeight / 2)) {
 			Rect actualTextRec = new Rect();
-			scrollerActualText.getTextBounds(actualText, 0,
+			hudScroller.scrollerActualText.getTextBounds(actualText, 0,
 					actualText.length(), actualTextRec);
 			canvas.drawLine(scroller.left, targetSpdPos, scroller.right
-					- actualTextRec.width() - hudScroller.scrollerSizePxTextXOffset
-					- textHalfSize, targetSpdPos, greenPen);
+					- actualTextRec.width()
+					- hudScroller.scrollerSizePxTextXOffset - textHalfSize,
+					targetSpdPos, hudScroller.greenPen);
 		}
 		canvas.drawPath(arrow, plane);
-		canvas.drawText(actualText, scroller.right - hudScroller.scrollerSizePxTextXOffset,
-				scrollerActualText.getTextSize() / 2
-						+ hudScroller.scrollerSizePxActualTextYOffset, scrollerActualText);
+		canvas.drawText(actualText, scroller.right
+				- hudScroller.scrollerSizePxTextXOffset,
+				hudScroller.scrollerActualText.getTextSize() / 2
+						+ hudScroller.scrollerSizePxActualTextYOffset,
+				hudScroller.scrollerActualText);
 		// Reset clipping of Scroller
 		canvas.clipRect(-width / 2, -height / 2, width / 2, height / 2,
 				Region.Op.REPLACE);
@@ -674,16 +585,16 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 					data.attPosPxInfoTextUpperTop, attInfoText);
 		if (battCurrent >= 0)
 			canvas.drawText(String.format("%2.1fA", battCurrent), -width / 2
-					+ data.attPosPxInfoTextXOffset, data.attPosPxInfoTextUpperBottom,
-					attInfoText);
+					+ data.attPosPxInfoTextXOffset,
+					data.attPosPxInfoTextUpperBottom, attInfoText);
 
 		// Left Bottom Text
 		canvas.drawText(String.format("AS %.1fms", airSpeed), -width / 2
 				+ data.attPosPxInfoTextXOffset, data.attPosPxInfoTextLowerTop,
 				attInfoText);
 		canvas.drawText(String.format("GS %.1fms", groundSpeed), -width / 2
-				+ data.attPosPxInfoTextXOffset, data.attPosPxInfoTextLowerBottom,
-				attInfoText);
+				+ data.attPosPxInfoTextXOffset,
+				data.attPosPxInfoTextLowerBottom, attInfoText);
 
 		// Right Top Text
 		attInfoText.setTextAlign(Align.RIGHT);
@@ -706,8 +617,8 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 				data.attPosPxInfoTextUpperTop, attInfoText);
 		if (gpsEPH >= 0)
 			canvas.drawText(String.format("hp%.1fm", gpsEPH), width / 2
-					- data.attPosPxInfoTextXOffset, data.attPosPxInfoTextUpperBottom,
-					attInfoText);
+					- data.attPosPxInfoTextXOffset,
+					data.attPosPxInfoTextUpperBottom, attInfoText);
 
 		// Right Bottom Text
 		canvas.drawText(modeName, width / 2 - data.attPosPxInfoTextXOffset,
@@ -818,38 +729,13 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		data.attPosPxInfoTextXOffset = Math.round(this.width
 				* ATT_FACTOR_INFOTEXT_X_OFFSET);
 
-		int scrollerMaxAvailHeight = data.attHeightPx - 4 * tempAttSizeText - 6
-				* tempAttTextClearance;
-		hudScroller.scrollerHeightPx = Math.round(data.attHeightPx * SCROLLER_MAX_HEIGHT_FACTOR);
-		if (hudScroller.scrollerHeightPx > scrollerMaxAvailHeight) {
-			hudScroller.scrollerHeightPx = scrollerMaxAvailHeight;
-		} else {
-			tempAttTextClearance = Math
-					.round((data.attHeightPx - hudScroller.scrollerHeightPx - 4 * tempAttSizeText) / 6);
-		}
-		hudScroller.scrollerWidthPx = Math.round(this.width * SCROLLER_WIDTH_FACTOR);
-		tempSize = Math.round(data.attHeightPx * SCROLLER_FACTOR_TEXT);
-		scrollerText.setTextSize(tempSize);
-		hudScroller.scrollerSizePxTextYOffset = Math.round(tempSize
-				* SCROLLER_FACTOR_TEXT_Y_OFFSET);
-		tempSize = Math.round(tempSize
-				* SCROLLER_FACTOR_ACTUAL_TEXT_MAGNIFICATION);
-		scrollerActualText.setTextSize(tempSize);
-		hudScroller.scrollerSizePxActualTextYOffset = Math.round(tempSize
-				* SCROLLER_FACTOR_TEXT_Y_OFFSET);
-		hudScroller.scrollerSizePxArrowHeight = Math.round(tempSize
-				* SCROLLER_FACTOR_ARROW_HEIGTH);
-		hudScroller.scrollerSizePxTextXOffset = Math.round(this.width
-				* SCROLLER_FACTOR_TEXT_X_OFFSET);
-		hudScroller.scrollerSizePxTicLength = Math.round(this.width
-				* SCROLLER_FACTOR_TIC_LENGTH);
-		greenPen.setStrokeWidth(Math.round(data.attHeightPx
-				* SCROLLER_FACTOR_TARGET_BAR_WIDTH));
+		tempAttTextClearance = hudScroller.setupScroller(this,
+				tempAttTextClearance, tempAttSizeText);
 
 		data.attPosPxInfoTextUpperTop = -data.attHeightPx / 2 + tempAttSizeText
 				+ tempOffset + tempAttTextClearance;
-		data.attPosPxInfoTextUpperBottom = -data.attHeightPx / 2 + 2 * tempAttSizeText
-				+ tempOffset + 2 * tempAttTextClearance;
+		data.attPosPxInfoTextUpperBottom = -data.attHeightPx / 2 + 2
+				* tempAttSizeText + tempOffset + 2 * tempAttTextClearance;
 		data.attPosPxInfoTextLowerBottom = data.attHeightPx / 2 + tempOffset
 				- tempAttTextClearance;
 		data.attPosPxInfoTextLowerTop = data.attHeightPx / 2 - tempAttSizeText
@@ -857,7 +743,8 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 
 		hudRoll.rollTopOffsetPx = hudYaw.yawHeightPx;
 		rollText.setTextSize(Math.round(data.attHeightPx * ROLL_FACTOR_TEXT));
-		hudRoll.rollSizePxTics = Math.round(hudRoll.rollTopOffsetPx * ROLL_FACTOR_TIC_LENGTH);
+		hudRoll.rollSizePxTics = Math.round(hudRoll.rollTopOffsetPx
+				* ROLL_FACTOR_TIC_LENGTH);
 		hudRoll.rollPosPxTextYOffset = Math.round(hudRoll.rollSizePxTics
 				* ROLL_FACTOR_TEXT_Y_OFFSET);
 
@@ -871,8 +758,8 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 				* PITCH_FACTOR_SCALE_WIDHT_NARROW / 2);
 		hudPitch.pitchScaleTextXOffset = Math.round(this.width
 				* PITCH_FACTOR_SCALE_TEXT_X_OFFSET);
-		hudPitch.pitchPixPerDegree = Math
-				.round(data.attHeightPx * PITCH_FACTOR_SCALE_Y_SPACE);
+		hudPitch.pitchPixPerDegree = Math.round(data.attHeightPx
+				* PITCH_FACTOR_SCALE_Y_SPACE);
 
 		tempSize = Math.round(this.width * FAILSAFE_FACTOR_TEXT);
 		FailsafeText.setTextSize(tempSize);
