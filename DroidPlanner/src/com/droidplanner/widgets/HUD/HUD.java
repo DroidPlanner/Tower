@@ -98,7 +98,6 @@ public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
-		float redIndicatorWidth;
 
 		this.width = width;
 		this.height = height;
@@ -109,10 +108,8 @@ public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 
 		hudPlane.setupPlane(this);
 
-		redIndicatorWidth = commonPaints.setupCommonPaints(this);
+		commonPaints.setupCommonPaints(this);
 		
-		hudPlane.plane.setStrokeWidth(redIndicatorWidth);
-
 		hudYaw.setupYaw(this, this);
 
 		data.setupAtt(this);

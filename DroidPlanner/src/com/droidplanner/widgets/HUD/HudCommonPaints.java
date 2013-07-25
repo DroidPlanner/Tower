@@ -8,8 +8,6 @@ public class HudCommonPaints {
 	// in relation to averaged of width and height
 	static final float HUD_FACTOR_BORDER_WIDTH = .0075f;
 	// in relation to averaged of width and height
-	static final float HUD_FACTOR_RED_INDICATOR_WIDTH = .0075f;
-	// in relation to averaged of width and height
 	static final float HUD_FACTOR_SCALE_THICK_TIC_STROKEWIDTH = .005f;
 	// in relation to averaged of width and height
 	static final float HUD_FACTOR_SCALE_THIN_TIC_STROKEWIDTH = .0025f;
@@ -41,11 +39,10 @@ public class HudCommonPaints {
 		blackSolid.setAntiAlias(true);
 	}
 
-	float setupCommonPaints(HUD hud) {
+	void setupCommonPaints(HUD hud) {
 		float hudScaleThickTicStrokeWidth;
 		float hudScaleThinTicStrokeWidth;
 		float hudBorderWidth;
-		float redIndicatorWidth;
 		hudScaleThickTicStrokeWidth = (hud.width + hud.height) / 2
 				* HUD_FACTOR_SCALE_THICK_TIC_STROKEWIDTH;
 		if (hudScaleThickTicStrokeWidth < 1)
@@ -63,11 +60,5 @@ public class HudCommonPaints {
 		if (hudBorderWidth < 1)
 			hudBorderWidth = 1;
 		whiteBorder.setStrokeWidth(hudBorderWidth);
-	
-		redIndicatorWidth = (hud.width + hud.height) / 2
-				* HUD_FACTOR_RED_INDICATOR_WIDTH;
-		if (redIndicatorWidth < 1)
-			redIndicatorWidth = 1;
-		return redIndicatorWidth;
 	}
 }

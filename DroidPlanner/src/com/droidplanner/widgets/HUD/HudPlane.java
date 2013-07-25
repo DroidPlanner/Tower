@@ -9,6 +9,8 @@ public class HudPlane {
 
 	// in relation to averaged of width and height
 	static final float HUD_FACTOR_CENTER_INDICATOR_SIZE = .0375f;
+	// in relation to averaged of width and height
+	static final float HUD_FACTOR_RED_INDICATOR_WIDTH = .0075f;
 
 	public int hudCenterIndicatorRadius;
 	public Paint plane = new Paint();
@@ -21,9 +23,17 @@ public class HudPlane {
 	}
 
 	void setupPlane(HUD huDwidget) {
+		float redIndicatorWidth;
+		
 		hudCenterIndicatorRadius = Math
 				.round((huDwidget.width + huDwidget.height) / 2
 						* HUD_FACTOR_CENTER_INDICATOR_SIZE);
+		
+		redIndicatorWidth = (huDwidget.width + huDwidget.height) / 2
+				* HUD_FACTOR_RED_INDICATOR_WIDTH;
+		if (redIndicatorWidth < 1)
+			redIndicatorWidth = 1;
+		plane.setStrokeWidth(redIndicatorWidth);
 	}
 
 	void drawPlane(HUD huDwidget, Canvas canvas) {
