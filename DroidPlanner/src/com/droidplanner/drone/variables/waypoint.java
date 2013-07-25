@@ -33,6 +33,7 @@ public class waypoint {
 
 	public waypoint(msg_mission_item msg) {
 		missionItem = msg;
+		setTarget(1, 1);
 	}
 
 	public Double getHeight() {
