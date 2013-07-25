@@ -116,8 +116,10 @@ public abstract class SuperActivity extends Activity implements
 			return true;
 		case R.id.menu_record_me:
 			app.recordMe.toogleRecordMeState();
+			return true;
 		case R.id.menu_follow_me:
 			app.followMe.toogleFollowMeState();
+			return true;
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}

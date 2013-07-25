@@ -68,7 +68,7 @@ public class DroidPlannerApp extends Application implements
 	}
 
 	public void setWaypointReceivedListner(OnWaypointUpdateListner listner) {
-		drone.mission.waypointsListner = listner;
+		drone.mission.missionListner = listner;
 	}
 
 	public void setOnParametersChangedListner(
