@@ -32,7 +32,8 @@ public class GcpMapFragment extends OfflineMapFragment implements
 		mMap = getMap();
 		mMap.setOnMarkerClickListener(this);
 		markers = new MarkerManager(mMap) {
-		};;
+		};
+		;
 		return view;
 	}
 

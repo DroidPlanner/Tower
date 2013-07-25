@@ -6,7 +6,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class Gcp implements MarkerSource{
+public class Gcp implements MarkerSource {
 	public LatLng coord;
 	public boolean isMarked;
 
@@ -26,6 +26,6 @@ public class Gcp implements MarkerSource{
 
 	@Override
 	public void update(Marker markerFromGcp) {
-		GcpMarker.update(markerFromGcp,this);
+		GcpMarker.update(markerFromGcp, this);
 	}
 }

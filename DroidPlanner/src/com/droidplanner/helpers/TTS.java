@@ -2,13 +2,13 @@ package com.droidplanner.helpers;
 
 import java.util.Locale;
 
-import com.MAVLink.Messages.ApmModes;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
+
+import com.MAVLink.Messages.ApmModes;
 
 public class TTS implements OnInitListener {
 	private static final double BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT = 10;

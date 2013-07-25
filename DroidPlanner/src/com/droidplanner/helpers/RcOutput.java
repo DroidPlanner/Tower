@@ -42,7 +42,8 @@ public class RcOutput {
 			scheduleTaskExecutor = null;
 		}
 		Arrays.fill(rcOutputs, DISABLE_OVERRIDE);
-		MavLinkRC.sendRcOverrideMsg(drone, rcOutputs); // Just to be sure send 3 disable
+		MavLinkRC.sendRcOverrideMsg(drone, rcOutputs); // Just to be sure send 3
+														// disable
 		MavLinkRC.sendRcOverrideMsg(drone, rcOutputs);
 		MavLinkRC.sendRcOverrideMsg(drone, rcOutputs);
 	}

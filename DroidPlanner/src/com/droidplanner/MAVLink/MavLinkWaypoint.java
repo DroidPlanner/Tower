@@ -37,8 +37,7 @@ public class MavLinkWaypoint {
 		drone.MavClient.sendMavPacket(msg.pack());
 	}
 
-	public static void sendWaypoint(Drone drone, int index,
-			waypoint waypoint) {
+	public static void sendWaypoint(Drone drone, int index, waypoint waypoint) {
 		msg_mission_item msg = new msg_mission_item();
 		msg.seq = (short) index;
 		msg.current = (byte) ((index == 0) ? 1 : 0); // TODO use correct

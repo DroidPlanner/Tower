@@ -8,16 +8,16 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MarkerManager{
+public class MarkerManager {
 	public GoogleMap mMap;
 	public HashMap<Marker, MarkerSource> hashMap = new HashMap<Marker, MarkerSource>();
 
-	public interface MarkerSource{
+	public interface MarkerSource {
 		MarkerOptions build();
 
 		void update(Marker marker);
 	}
-	
+
 	public MarkerManager(GoogleMap map) {
 		this.mMap = map;
 	}

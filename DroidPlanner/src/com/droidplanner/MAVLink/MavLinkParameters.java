@@ -13,7 +13,7 @@ public class MavLinkParameters {
 		drone.MavClient.sendMavPacket(msg.pack());
 	}
 
-	public static void sendParameter(Drone drone,Parameter parameter) {
+	public static void sendParameter(Drone drone, Parameter parameter) {
 		msg_param_set msg = new msg_param_set();
 		msg.target_system = 1;
 		msg.target_component = 1;
