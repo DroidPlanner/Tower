@@ -246,12 +246,12 @@ public class GeoTools {
 	// TODO test and fix this function
 	public static Double getArea(Polygon poly) {
 		double sum = 0.0;
-		for (int i = 0; i < poly.getWaypoints().size() - 1; i++) {
+		for (int i = 0; i < poly.getLatLng().size() - 1; i++) {
 			sum = sum
-					+ (latToMeters(poly.getWaypoints().get(i).longitude) * latToMeters(poly
-							.getWaypoints().get(i + 1).latitude))
-					- (latToMeters(poly.getWaypoints().get(i).latitude) * latToMeters(poly
-							.getWaypoints().get(i + 1).longitude));
+					+ (latToMeters(poly.getLatLng().get(i).longitude) * latToMeters(poly
+							.getLatLng().get(i + 1).latitude))
+					- (latToMeters(poly.getLatLng().get(i).latitude) * latToMeters(poly
+							.getLatLng().get(i + 1).longitude));
 		}
 		return Math.abs(0.5 * sum);
 	}

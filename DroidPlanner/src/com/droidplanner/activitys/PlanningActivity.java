@@ -23,6 +23,7 @@ import com.droidplanner.fragments.PlanningMapFragment;
 import com.droidplanner.fragments.PlanningMapFragment.OnMapInteractionListener;
 import com.droidplanner.fragments.PlanningMapFragment.modes;
 import com.droidplanner.polygon.Polygon;
+import com.droidplanner.polygon.PolygonPoint;
 import com.google.android.gms.maps.model.LatLng;
 
 public class PlanningActivity extends SuperActivity implements
@@ -218,15 +219,15 @@ public class PlanningActivity extends SuperActivity implements
 	}
 
 	@Override
-	public void onMoveWaypoint(LatLng coord, int Number) {
-		drone.mission.moveWaypoint(coord, Number);
+	public void onMoveWaypoint(waypoint source, LatLng latLng) {
+		source.setCoord(latLng);
 		update();
 	}
 
 	@Override
-	public void onMovePolygonPoint(LatLng coord, int Number) {
-		polygon.movePoint(coord, Number);
-		update();
+	public void onMovePolygonPoint(PolygonPoint source, LatLng newCoord) {
+		source.coord = newCoord;
+		update();		
 	}
 
 	@Override
@@ -240,4 +241,5 @@ public class PlanningActivity extends SuperActivity implements
 		super.onAltitudeChanged(newAltitude);
 		update();
 	}
+
 }

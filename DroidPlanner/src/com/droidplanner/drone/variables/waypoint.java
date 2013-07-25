@@ -5,9 +5,13 @@ import com.MAVLink.Messages.MAVLinkPacket;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_CMD;
 import com.MAVLink.Messages.enums.MAV_FRAME;
+import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
+import com.droidplanner.fragments.markers.WaypointMarker;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
-public class waypoint {
+public class waypoint implements MarkerSource {
 	public msg_mission_item missionItem = new msg_mission_item();
 
 	public waypoint(LatLng c, Double h) {
@@ -119,4 +123,15 @@ public class waypoint {
 	public void setAutoContinue(Integer i) {
 		missionItem.autocontinue = i.byteValue();
 	}
+	
+	@Override
+	public MarkerOptions build() {
+		return WaypointMarker.build(this);
+	}
+	
+	@Override
+	public void update(Marker marker) {
+		WaypointMarker.update(marker, this);
+	}
+		
 }

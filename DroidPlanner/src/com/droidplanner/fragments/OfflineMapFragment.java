@@ -113,7 +113,7 @@ public class OfflineMapFragment extends MapFragment {
 	private boolean isMapLayoutFinished() {
 		return getMap() != null;
 	}
-	
+
 	protected void clearMap() {
 		GoogleMap mMap = getMap();
 		mMap.clear();

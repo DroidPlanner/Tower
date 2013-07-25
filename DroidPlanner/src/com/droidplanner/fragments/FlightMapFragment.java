@@ -18,6 +18,7 @@ import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.fragments.markers.DroneMarker;
+import com.droidplanner.fragments.markers.GuidedMarker;
 import com.droidplanner.fragments.markers.HomeMarker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;

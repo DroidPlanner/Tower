@@ -15,12 +15,13 @@ import com.droidplanner.dialogs.OpenGcpFileDialog;
 import com.droidplanner.file.IO.GcpReader;
 import com.droidplanner.fragments.GcpMapFragment;
 import com.droidplanner.fragments.GcpMapFragment.OnGcpClickListner;
-import com.droidplanner.gcp.gcp;
+import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
+import com.droidplanner.gcp.Gcp;
 import com.google.android.gms.maps.model.LatLng;
 
 public class GCPActivity extends SuperActivity implements OnGcpClickListner {
 
-	public List<gcp> gcpList;
+	public List<Gcp> gcpList;
 	private GcpMapFragment gcpMapFragment;
 
 	@Override
@@ -34,7 +35,7 @@ public class GCPActivity extends SuperActivity implements OnGcpClickListner {
 
 		setContentView(R.layout.gcp);
 
-		gcpList = new ArrayList<gcp>();
+		gcpList = new ArrayList<Gcp>();
 
 		gcpMapFragment = ((GcpMapFragment) getFragmentManager()
 				.findFragmentById(R.id.gcpMapFragment));
@@ -44,9 +45,7 @@ public class GCPActivity extends SuperActivity implements OnGcpClickListner {
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.menu_gcp, menu);
-
 		return true;
 	}
 
@@ -68,7 +67,7 @@ public class GCPActivity extends SuperActivity implements OnGcpClickListner {
 
 	private List<LatLng> getGcpCoordinates() {
 		List<LatLng> result = new ArrayList<LatLng>();
-		for (gcp latLng : gcpList) {
+		for (Gcp latLng : gcpList) {
 			result.add(latLng.coord);
 		}
 		return result;
@@ -77,7 +76,7 @@ public class GCPActivity extends SuperActivity implements OnGcpClickListner {
 	public void openGcpFile() {
 		OpenFileDialog dialog = new OpenGcpFileDialog() {
 			@Override
-			public void onGcpFileLoaded(List<gcp> list) {
+			public void onGcpFileLoaded(List<Gcp> list) {
 				if (list != null) {
 					putListToGcp(list);
 				}
@@ -86,10 +85,10 @@ public class GCPActivity extends SuperActivity implements OnGcpClickListner {
 		dialog.openDialog(this);
 	}
 
-	private void putListToGcp(List<gcp> list) {
+	private void putListToGcp(List<Gcp> list) {
 		gcpList.clear();
 		gcpList.addAll(list);
-		gcpMapFragment.updateMarkers(gcpList);
+		gcpMapFragment.markers.updateMarkers(gcpList);
 		gcpMapFragment.zoomToExtents(getGcpCoordinates());
 	}
 
@@ -110,13 +109,13 @@ public class GCPActivity extends SuperActivity implements OnGcpClickListner {
 
 	public void clearWaypointsAndUpdate() {
 		gcpList.clear();
-		gcpMapFragment.updateMarkers(gcpList);
+		gcpMapFragment.markers.clear();
 	}
 
 	@Override
-	public void onGcpClick(int number) {
-		gcpList.get(number).toogleState();
-		gcpMapFragment.updateMarkers(gcpList);
+	public void onGcpClick(MarkerSource gcp) {
+		((com.droidplanner.gcp.Gcp) gcp).toogleState();
+		gcpMapFragment.markers.updateMarker(gcp);
 	}
 
 }

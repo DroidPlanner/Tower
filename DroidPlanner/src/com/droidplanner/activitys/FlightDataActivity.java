@@ -10,7 +10,8 @@ import com.droidplanner.R;
 import com.droidplanner.drone.DroneInterfaces.DroneTypeListner;
 import com.droidplanner.fragments.FlightMapFragment;
 
-public class FlightDataActivity extends SuperFlightActivity implements OnWaypointUpdateListner,DroneTypeListner {
+public class FlightDataActivity extends SuperFlightActivity implements
+		OnWaypointUpdateListner, DroneTypeListner {
 
 	private FlightMapFragment flightMapFragment;
 
