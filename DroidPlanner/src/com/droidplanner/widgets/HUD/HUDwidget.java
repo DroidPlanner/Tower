@@ -101,7 +101,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		hudPitch.drawPitch(this, canvas);
 		hudRoll.drawRoll(this, canvas);
 		hudYaw.drawYaw(this, canvas);
-		drawPlane(canvas);
+		hudPlane.drawPlane(this, canvas);
 		hudScroller.drawRightScroller(this, canvas);
 		hudScroller.drawLeftScroller(this, canvas);
 		data.drawAttitudeInfoText(this, canvas);
@@ -150,16 +150,6 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		blackSolid.setAntiAlias(true);
 		blueVSI.setARGB(255, 0, 50, 250);
 		blueVSI.setAntiAlias(true);
-	}
-
-	private void drawPlane(Canvas canvas) {
-		canvas.drawCircle(0, 0, hudPlane.hudCenterIndicatorRadius, hudPlane.plane);
-		canvas.drawLine(-hudPlane.hudCenterIndicatorRadius, 0,
-				-hudPlane.hudCenterIndicatorRadius * 2, 0, hudPlane.plane);
-		canvas.drawLine(hudPlane.hudCenterIndicatorRadius, 0,
-				hudPlane.hudCenterIndicatorRadius * 2, 0, hudPlane.plane);
-		canvas.drawLine(0, -hudPlane.hudCenterIndicatorRadius, 0,
-				-hudPlane.hudCenterIndicatorRadius * 2, hudPlane.plane);
 	}
 
 	@Override
