@@ -98,8 +98,7 @@ public class RCActivity extends SuperFlightActivity implements
 	public void onWaypointsUpdate() {
 		super.onWaypointsUpdate();
 		if (mapFragment != null) {
-			mapFragment.updateMissionPath(drone);
-			mapFragment.homeMarker.update(drone);
+			mapFragment.updateFragment();
 		}
 	}
 

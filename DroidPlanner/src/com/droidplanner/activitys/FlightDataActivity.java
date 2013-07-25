@@ -28,8 +28,7 @@ public class FlightDataActivity extends SuperFlightActivity implements
 
 		flightMapFragment = ((FlightMapFragment) getFragmentManager()
 				.findFragmentById(R.id.flightMapFragment));
-		flightMapFragment.updateMissionPath(drone);
-		flightMapFragment.homeMarker.update(drone);
+		flightMapFragment.updateFragment();
 
 		app.setWaypointReceivedListner(this);
 		drone.setDroneTypeChangedListner(this);
@@ -57,8 +56,7 @@ public class FlightDataActivity extends SuperFlightActivity implements
 	@Override
 	public void onWaypointsUpdate() {
 		super.onWaypointsUpdate();
-		flightMapFragment.updateMissionPath(drone);
-		flightMapFragment.homeMarker.update(drone);
+		flightMapFragment.updateFragment();
 	}
 
 	@Override

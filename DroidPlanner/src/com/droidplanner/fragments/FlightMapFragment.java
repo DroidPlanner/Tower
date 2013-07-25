@@ -19,7 +19,6 @@ import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.variables.GuidedPoint;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.fragments.markers.DroneMarker;
-import com.droidplanner.fragments.markers.HomeMarker;
 import com.droidplanner.fragments.markers.MarkerManager;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -42,7 +41,6 @@ public class FlightMapFragment extends OfflineMapFragment implements
 	
 	public boolean hasBeenZoomed = false;
 	private OnFlighDataListener mListener;
-	public HomeMarker homeMarker;
 	public DroneMarker droneMarker;
 	public Drone drone;
 
@@ -61,7 +59,6 @@ public class FlightMapFragment extends OfflineMapFragment implements
 		markers = new MarkerManager(mMap);
 		
 		droneMarker = new DroneMarker(this);
-		homeMarker = new HomeMarker(this.mMap);
 
 		addFlightPathToMap();
 		addMissionPathToMap();
@@ -147,6 +144,11 @@ public class FlightMapFragment extends OfflineMapFragment implements
 			mListener.onSetGuidedMode(guidedPoint);
 			markers.updateMarker(guidedPoint);
 		}
+	}
+
+	public void updateFragment() {
+			updateMissionPath(drone);
+			markers.updateMarker(drone.mission.getHome());	
 	}
 
 }
