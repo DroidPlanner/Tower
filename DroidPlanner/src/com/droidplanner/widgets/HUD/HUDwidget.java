@@ -28,13 +28,6 @@ import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
 
 public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		HudUpdatedListner {
-
-	// in relation to attHeightPx
-	private static final float ROLL_FACTOR_TEXT = .038f;
-	// in relation to rollTopOffsetPx
-	private static final float ROLL_FACTOR_TIC_LENGTH = .25f;
-	// in relation to rollSizePxTics
-	private static final float ROLL_FACTOR_TEXT_Y_OFFSET = .8f;
 	// in relation to attHeightPx
 	private static final float PITCH_FACTOR_TEXT = .038f;
 	// in relation to the resulting size of PITCH_FACTOR_TEXT
@@ -75,7 +68,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 	int height;
 	HudAtt data = new HudAtt();
 	private HudScroller hudScroller = new HudScroller();
-	private HudYaw hudYaw = new HudYaw();
+	HudYaw hudYaw = new HudYaw();
 	private HurRoll hudRoll = new HurRoll();
 	private HudPitch hudPitch = new HudPitch();
 	private int hudCenterIndicatorRadius;
@@ -113,7 +106,6 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 	Paint ground = new Paint();
 	Paint sky = new Paint();
 	Paint yawBg = new Paint();
-	Paint rollText = new Paint();
 	Paint pitchText = new Paint();
 	Paint whiteStroke = new Paint();
 	Paint whiteBorder = new Paint();
@@ -187,10 +179,6 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		whiteThickTics.setStrokeWidth(2);
 		whiteThickTics.setAntiAlias(true);
 
-		rollText.setColor(Color.WHITE);
-		rollText.setAntiAlias(true);
-		rollText.setTextAlign(Align.CENTER);
-
 		pitchText.setColor(Color.WHITE);
 		pitchText.setAntiAlias(true);
 		pitchText.setTextAlign(Align.RIGHT);
@@ -256,7 +244,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 						* (r + hudRoll.rollSizePxTics + hudRoll.rollPosPxTextYOffset);
 				dy = (float) Math.cos(i * Math.PI / 180)
 						* (r + hudRoll.rollSizePxTics + hudRoll.rollPosPxTextYOffset);
-				canvas.drawText(Math.abs(i) + "", dx, -dy, rollText);
+				canvas.drawText(Math.abs(i) + "", dx, -dy, hudRoll.rollText);
 			}
 		}
 
@@ -515,12 +503,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		data.attPosPxInfoTextLowerTop = data.attHeightPx / 2 - tempAttSizeText
 				+ tempOffset - 2 * tempAttTextClearance;
 
-		hudRoll.rollTopOffsetPx = hudYaw.yawHeightPx;
-		rollText.setTextSize(Math.round(data.attHeightPx * ROLL_FACTOR_TEXT));
-		hudRoll.rollSizePxTics = Math.round(hudRoll.rollTopOffsetPx
-				* ROLL_FACTOR_TIC_LENGTH);
-		hudRoll.rollPosPxTextYOffset = Math.round(hudRoll.rollSizePxTics
-				* ROLL_FACTOR_TEXT_Y_OFFSET);
+		hudRoll.setupRoll(this);
 
 		tempSize = Math.round(data.attHeightPx * PITCH_FACTOR_TEXT);
 		pitchText.setTextSize(tempSize);
