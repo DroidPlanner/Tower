@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 
-public class HudAtt {
+public class HudInfo {
 
 	// in relation to attHeightPx
 	static final float ATT_FACTOR_INFOTEXT = .048f;
@@ -23,10 +23,10 @@ public class HudAtt {
 	public int attPosPxInfoTextXOffset;
 	Paint attInfoText = new Paint();
 
-	public HudAtt() {
+	public HudInfo() {
 	}
 
-	void setupAtt(HUDwidget huDwidget) {
+	void setupAtt(HUD huDwidget) {
 		int tempAttTextClearance;
 		int tempOffset;
 		int tempAttSizeText;
@@ -52,7 +52,7 @@ public class HudAtt {
 				+ tempOffset - 2 * tempAttTextClearance;
 	}
 
-	void drawAttitudeInfoText(HUDwidget huDwidget, Canvas canvas) {
+	void drawAttitudeInfoText(HUD huDwidget, Canvas canvas) {
 		double battVolt = huDwidget.drone.battery.getBattVolt();
 		double battCurrent = huDwidget.drone.battery.getBattCurrent();
 		double battRemain = huDwidget.drone.battery.getBattRemain();
@@ -65,18 +65,18 @@ public class HudAtt {
 		double distToWp = huDwidget.drone.mission.getDisttowp();
 		double gpsEPH = huDwidget.drone.GPS.getGpsEPH();
 	
-		if (HUDwidget.hudDebug) {
-			battVolt = HUDwidget.hudDebugBattVolt;
-			battCurrent = HUDwidget.hudDebugBattCurrent;
-			battRemain = HUDwidget.hudDebugBattRemain;
-			groundSpeed = HUDwidget.hudDebugGroundSpeed;
-			airSpeed = HUDwidget.hudDebugAirSpeed;
-			satCount = HUDwidget.hudDebugSatCount;
-			fixType = HUDwidget.hudDebugFixType;
-			modeName = HUDwidget.hudDebugModeName;
-			wpNumber = HUDwidget.hudDebugWpNumber;
-			distToWp = HUDwidget.hudDebugDistToWp;
-			gpsEPH = HUDwidget.hudDebugGpsEPH;
+		if (HUD.hudDebug) {
+			battVolt = HUD.hudDebugBattVolt;
+			battCurrent = HUD.hudDebugBattCurrent;
+			battRemain = HUD.hudDebugBattRemain;
+			groundSpeed = HUD.hudDebugGroundSpeed;
+			airSpeed = HUD.hudDebugAirSpeed;
+			satCount = HUD.hudDebugSatCount;
+			fixType = HUD.hudDebugFixType;
+			modeName = HUD.hudDebugModeName;
+			wpNumber = HUD.hudDebugWpNumber;
+			distToWp = HUD.hudDebugDistToWp;
+			gpsEPH = HUD.hudDebugGpsEPH;
 		}
 	
 		// Left Top Text

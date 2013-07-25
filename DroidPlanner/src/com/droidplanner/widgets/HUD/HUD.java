@@ -22,7 +22,7 @@ import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
  * dummy data for debugging purposes - Some minor layout changes
  */
 
-public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
+public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 		HudUpdatedListner {
 	// in relation to averaged of width and height
 	private static final float HUD_FACTOR_BORDER_WIDTH = .0075f;
@@ -36,7 +36,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 	private ScopeThread renderer;
 	int width;
 	int height;
-	public HudAtt data = new HudAtt();
+	public HudInfo data = new HudInfo();
 	public HudScroller hudScroller = new HudScroller();
 	public HudYaw hudYaw = new HudYaw();
 	public HurRoll hudRoll = new HurRoll();
@@ -108,7 +108,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		hudFailsafe.drawFailsafe(this, canvas);
 	}
 
-	public HUDwidget(Context context, AttributeSet attributeSet) {
+	public HUD(Context context, AttributeSet attributeSet) {
 		super(context, attributeSet);
 		getHolder().addCallback(this);
 		// hudMetrics = context.getResources().getDisplayMetrics();
@@ -227,11 +227,11 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 
 	private class ScopeThread extends Thread {
 		private SurfaceHolder _surfaceHolder;
-		private HUDwidget scope;
+		private HUD scope;
 		private volatile boolean running = false;
 		private Object dirty = new Object();
 
-		public ScopeThread(SurfaceHolder surfaceHolder, HUDwidget panel) {
+		public ScopeThread(SurfaceHolder surfaceHolder, HUD panel) {
 			_surfaceHolder = surfaceHolder;
 			scope = panel;
 		}

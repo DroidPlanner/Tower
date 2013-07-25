@@ -43,7 +43,7 @@ public class HudYaw {
 		yawNumbers.setAntiAlias(true);
 	}
 
-	void setupYaw(HUDwidget huDwidget, HUDwidget hud) {
+	void setupYaw(HUD huDwidget, HUD hud) {
 		int tempSize;
 		int tempOffset;
 		yawHeightPx = Math.round(hud.height * YAW_HEIGHT_FACTOR);
@@ -66,7 +66,7 @@ public class HudYaw {
 		yawDegreesPerPixel = hud.width / YAW_DEGREES_TO_SHOW;
 	}
 
-	void drawYaw(HUDwidget huDwidget, Canvas canvas) {
+	void drawYaw(HUD huDwidget, Canvas canvas) {
 		int yawBottom = -huDwidget.data.attHeightPx / 2;
 		canvas.drawRect(-huDwidget.width / 2, yawBottom - yawHeightPx,
 				huDwidget.width / 2, yawBottom, huDwidget.yawBg);
@@ -74,8 +74,8 @@ public class HudYaw {
 				yawBottom, huDwidget.whiteBorder);
 
 		double yaw = huDwidget.drone.orientation.getYaw();
-		if (HUDwidget.hudDebug)
-			yaw = HUDwidget.hudDebugYaw;
+		if (HUD.hudDebug)
+			yaw = HUD.hudDebugYaw;
 
 		double centerDegrees = yaw;
 

@@ -57,7 +57,7 @@ public class HudScroller {
 		greenPen.setStyle(Style.STROKE);
 	}
 
-	int setupScroller(HUDwidget huDwidget, int tempAttTextClearance,
+	int setupScroller(HUD huDwidget, int tempAttTextClearance,
 			int tempAttSizeText) {
 		int tempSize;
 		int scrollerMaxAvailHeight = huDwidget.data.attHeightPx - 4
@@ -93,7 +93,7 @@ public class HudScroller {
 		return tempAttTextClearance;
 	}
 
-	void drawLeftScroller(HUDwidget huDwidget, Canvas canvas) {
+	void drawLeftScroller(HUD huDwidget, Canvas canvas) {
 		final float textHalfSize = scrollerText.getTextSize() / 2;
 		scrollerText.setTextAlign(Paint.Align.RIGHT);
 		scrollerActualText.setTextAlign(Paint.Align.RIGHT);
@@ -101,10 +101,10 @@ public class HudScroller {
 		double groundSpeed = huDwidget.drone.speed.getGroundSpeed();
 		double airSpeed = huDwidget.drone.speed.getAirSpeed();
 		double targetSpeed = huDwidget.drone.speed.getTargetSpeed();
-		if (HUDwidget.hudDebug) {
-			groundSpeed = HUDwidget.hudDebugGroundSpeed;
-			airSpeed = HUDwidget.hudDebugAirSpeed;
-			targetSpeed = HUDwidget.hudDebugTargetSpeed;
+		if (HUD.hudDebug) {
+			groundSpeed = HUD.hudDebugGroundSpeed;
+			airSpeed = HUD.hudDebugAirSpeed;
+			targetSpeed = HUD.hudDebugTargetSpeed;
 		}
 
 		double speed = airSpeed;
@@ -184,7 +184,7 @@ public class HudScroller {
 				huDwidget.width / 2, huDwidget.height / 2, Region.Op.REPLACE);
 	}
 
-	void drawRightScroller(HUDwidget huDwidget, Canvas canvas) {
+	void drawRightScroller(HUD huDwidget, Canvas canvas) {
 		final float textHalfSize = scrollerText.getTextSize() / 2;
 		scrollerText.setTextAlign(Paint.Align.LEFT);
 		scrollerActualText.setTextAlign(Paint.Align.LEFT);
@@ -193,10 +193,10 @@ public class HudScroller {
 		double targetAltitude = huDwidget.drone.altitude.getTargetAltitude();
 		double verticalSpeed = huDwidget.drone.speed.getVerticalSpeed();
 
-		if (HUDwidget.hudDebug) {
-			altitude = HUDwidget.hudDebugAltitude;
-			targetAltitude = HUDwidget.hudDebugTargetAltitude;
-			verticalSpeed = HUDwidget.hudDebugVerticalSpeed;
+		if (HUD.hudDebug) {
+			altitude = HUD.hudDebugAltitude;
+			targetAltitude = HUD.hudDebugTargetAltitude;
+			verticalSpeed = HUD.hudDebugVerticalSpeed;
 		}
 
 		// Outside box

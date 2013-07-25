@@ -25,7 +25,7 @@ public class HudFailsafe {
 		FailsafeText.setAntiAlias(true);
 	}
 
-	void setupFailsafe(HUDwidget huDwidget) {
+	void setupFailsafe(HUD huDwidget) {
 		int tempSize;
 		tempSize = Math.round(huDwidget.width * FAILSAFE_FACTOR_TEXT);
 		FailsafeText.setTextSize(tempSize);
@@ -33,13 +33,13 @@ public class HudFailsafe {
 				* FAILSAFE_FACTOR_BOX_PADDING);
 	}
 
-	void drawFailsafe(HUDwidget huDwidget, Canvas canvas) {
+	void drawFailsafe(HUD huDwidget, Canvas canvas) {
 		int droneType = huDwidget.drone.type.getType();
 		boolean isArmed = huDwidget.drone.state.isArmed();
 	
-		if (HUDwidget.hudDebug) {
-			droneType = HUDwidget.hudDebugDroneType;
-			isArmed = HUDwidget.hudDebugDroneArmed;
+		if (HUD.hudDebug) {
+			droneType = HUD.hudDebugDroneType;
+			isArmed = HUD.hudDebugDroneArmed;
 		}
 	
 		if (ApmModes.isCopter(droneType)) {

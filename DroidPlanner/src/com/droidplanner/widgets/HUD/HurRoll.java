@@ -27,7 +27,7 @@ public class HurRoll {
 		rollText.setTextAlign(Align.CENTER);
 	}
 
-	void setupRoll(HUDwidget huDwidget) {
+	void setupRoll(HUD huDwidget) {
 		rollTopOffsetPx = huDwidget.hudYaw.yawHeightPx;
 		rollText.setTextSize(Math.round(huDwidget.data.attHeightPx * HurRoll.ROLL_FACTOR_TEXT));
 		rollSizePxTics = Math.round(rollTopOffsetPx
@@ -36,7 +36,7 @@ public class HurRoll {
 				* HurRoll.ROLL_FACTOR_TEXT_Y_OFFSET);
 	}
 
-	void drawRoll(HUDwidget huDwidget, Canvas canvas) {
+	void drawRoll(HUD huDwidget, Canvas canvas) {
 		int r = Math.round(huDwidget.data.attHeightPx / 2 - rollTopOffsetPx);
 		RectF rec = new RectF(-r, -r, r, r);
 	

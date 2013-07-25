@@ -14,13 +14,13 @@ public class HudPlane {
 	public HudPlane() {
 	}
 
-	void setupPlane(HUDwidget huDwidget) {
+	void setupPlane(HUD huDwidget) {
 		hudCenterIndicatorRadius = Math
 				.round((huDwidget.width + huDwidget.height) / 2
 						* HUD_FACTOR_CENTER_INDICATOR_SIZE);
 	}
 
-	void drawPlane(HUDwidget huDwidget, Canvas canvas) {
+	void drawPlane(HUD huDwidget, Canvas canvas) {
 		canvas.drawCircle(0, 0, hudCenterIndicatorRadius, plane);
 		canvas.drawLine(-hudCenterIndicatorRadius, 0,
 				-hudCenterIndicatorRadius * 2, 0, plane);

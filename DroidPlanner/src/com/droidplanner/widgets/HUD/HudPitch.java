@@ -39,7 +39,7 @@ public class HudPitch {
 		pitchText.setTextAlign(Align.RIGHT);
 	}
 
-	void setupPitch(HUDwidget huDwidget) {
+	void setupPitch(HUD huDwidget) {
 		int tempSize;
 		tempSize = Math.round(huDwidget.data.attHeightPx * PITCH_FACTOR_TEXT);
 		pitchText.setTextSize(tempSize);
@@ -55,13 +55,13 @@ public class HudPitch {
 				* PITCH_FACTOR_SCALE_Y_SPACE);
 	}
 
-	void drawPitch(HUDwidget huDwidget, Canvas canvas) {
+	void drawPitch(HUD huDwidget, Canvas canvas) {
 		double pitch = huDwidget.drone.orientation.getPitch();
 		double roll = huDwidget.drone.orientation.getRoll();
 	
-		if (HUDwidget.hudDebug) {
-			pitch = HUDwidget.hudDebugPitch;
-			roll = HUDwidget.hudDebugRoll;
+		if (HUD.hudDebug) {
+			pitch = HUD.hudDebugPitch;
+			roll = HUD.hudDebugRoll;
 		}
 	
 		int pitchOffsetPx = (int) (pitch * pitchPixPerDegree);
