@@ -187,34 +187,11 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 	private ScopeThread renderer;
 	private int width;
 	private int height;
-	private int attHeightPx;
-	private int attPosPxInfoTextUpperTop;
-	private int attPosPxInfoTextUpperBottom;
-	private int attPosPxInfoTextLowerTop;
-	private int attPosPxInfoTextLowerBottom;
-	private int attPosPxInfoTextXOffset;
-	private int scrollerHeightPx;
-	private int scrollerWidthPx;
-	private int scrollerSizePxTextYOffset;
-	private int scrollerSizePxActualTextYOffset;
-	private int scrollerSizePxTextXOffset;
-	private int scrollerSizePxArrowHeight;
-	private int scrollerSizePxTicLength;
-	private int yawHeightPx;
-	private int yawYPosPxText;
-	private int yawYPosPxTextNumbers;
-	private double yawDegreesPerPixel;
-	private int yawSizePxTicsSmall;
-	private int yawSizePxTicsTall;
-	private int yawSizePxCenterLineOverRun;
-	private int rollTopOffsetPx;
-	private int rollSizePxTics;
-	private int rollPosPxTextYOffset;
-	private int pitchTextCenterOffsetPx;
-	private int pitchPixPerDegree;
-	private int pitchScaleWideHalfWidth;
-	private int pitchScaleNarrowHalfWidth;
-	private int pitchScaleTextXOffset;
+	private HudAtt data = new HudAtt();
+	private HudScroller hudScroller = new HudScroller();
+	private HudYaw hudYaw = new HudYaw();
+	private HurRoll hudRoll = new HurRoll();
+	private HudPitch hudPitch = new HudPitch();
 	private int hudCenterIndicatorRadius;
 	private int failsafeSizePxBoxPadding;
 
@@ -278,7 +255,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 
 		// clear screen
 		canvas.drawColor(Color.rgb(20, 20, 20));
-		canvas.translate(width / 2, attHeightPx / 2 + yawHeightPx); // set
+		canvas.translate(width / 2, data.attHeightPx / 2 + hudYaw.yawHeightPx); // set
 																	// center of
 																	// HUD
 																	// excluding
@@ -384,8 +361,8 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 	}
 
 	private void drawYaw(Canvas canvas) {
-		int yawBottom = -attHeightPx / 2;
-		canvas.drawRect(-width / 2, yawBottom - yawHeightPx, width / 2,
+		int yawBottom = -data.attHeightPx / 2;
+		canvas.drawRect(-width / 2, yawBottom - hudYaw.yawHeightPx, width / 2,
 				yawBottom, yawBg);
 		canvas.drawLine(-width / 2, yawBottom, width / 2, yawBottom,
 				whiteBorder);
@@ -407,36 +384,36 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 
 			// need to draw "angle"
 			// How many pixels from center should it be?
-			int distanceToCenter = (int) ((angle - centerDegrees) * yawDegreesPerPixel);
+			int distanceToCenter = (int) ((angle - centerDegrees) * hudYaw.yawDegreesPerPixel);
 
 			if (workAngle % 45 == 0) {
 				String compass[] = { "N", "NE", "E", "SE", "S", "SW", "W", "NW" };
 				int index = (int) workAngle / 45;
 				canvas.drawLine(distanceToCenter, yawBottom
-						- yawSizePxTicsSmall, distanceToCenter, yawBottom,
+						- hudYaw.yawSizePxTicsSmall, distanceToCenter, yawBottom,
 						whiteThinTics);
 				canvas.drawText(compass[index], distanceToCenter, yawBottom
-						- yawYPosPxText, yawText);
+						- hudYaw.yawYPosPxText, yawText);
 			} else if (workAngle % 15 == 0) {
 				canvas.drawLine(distanceToCenter,
-						yawBottom - yawSizePxTicsTall, distanceToCenter,
+						yawBottom - hudYaw.yawSizePxTicsTall, distanceToCenter,
 						yawBottom, whiteThinTics);
 				canvas.drawText((int) (workAngle) + "", distanceToCenter,
-						yawBottom - yawYPosPxTextNumbers, yawNumbers);
+						yawBottom - hudYaw.yawYPosPxTextNumbers, yawNumbers);
 			} else {
 				canvas.drawLine(distanceToCenter, yawBottom
-						- yawSizePxTicsSmall, distanceToCenter, yawBottom,
+						- hudYaw.yawSizePxTicsSmall, distanceToCenter, yawBottom,
 						whiteThinTics);
 			}
 		}
 
 		// Draw the center line
-		canvas.drawLine(0, yawBottom - yawHeightPx, 0, yawBottom
-				+ yawSizePxCenterLineOverRun, plane);
+		canvas.drawLine(0, yawBottom - hudYaw.yawHeightPx, 0, yawBottom
+				+ hudYaw.yawSizePxCenterLineOverRun, plane);
 	}
 
 	private void drawRoll(Canvas canvas) {
-		int r = Math.round(attHeightPx / 2 - rollTopOffsetPx);
+		int r = Math.round(data.attHeightPx / 2 - hudRoll.rollTopOffsetPx);
 		RectF rec = new RectF(-r, -r, r, r);
 
 		// Draw the arc
@@ -445,11 +422,11 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		// Draw center triangle
 		Path arrow = new Path();
 		int tempOffset = Math.round(plane.getStrokeWidth() / 2);
-		arrow.moveTo(0, -attHeightPx / 2 + rollTopOffsetPx - tempOffset);
-		arrow.lineTo(0 - rollTopOffsetPx / 3, -attHeightPx / 2
-				+ rollTopOffsetPx / 2 - tempOffset);
-		arrow.lineTo(0 + rollTopOffsetPx / 3, -attHeightPx / 2
-				+ rollTopOffsetPx / 2 - tempOffset);
+		arrow.moveTo(0, -data.attHeightPx / 2 + hudRoll.rollTopOffsetPx - tempOffset);
+		arrow.lineTo(0 - hudRoll.rollTopOffsetPx / 3, -data.attHeightPx / 2
+				+ hudRoll.rollTopOffsetPx / 2 - tempOffset);
+		arrow.lineTo(0 + hudRoll.rollTopOffsetPx / 3, -data.attHeightPx / 2
+				+ hudRoll.rollTopOffsetPx / 2 - tempOffset);
 		arrow.close();
 		canvas.drawPath(arrow, plane);
 
@@ -461,15 +438,15 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 				float dx = (float) Math.sin(i * Math.PI / 180) * r;
 				float dy = (float) Math.cos(i * Math.PI / 180) * r;
 				float ex = (float) Math.sin(i * Math.PI / 180)
-						* (r + rollSizePxTics);
+						* (r + hudRoll.rollSizePxTics);
 				float ey = (float) Math.cos(i * Math.PI / 180)
-						* (r + rollSizePxTics);
+						* (r + hudRoll.rollSizePxTics);
 				canvas.drawLine(dx, -dy, ex, -ey, whiteThickTics);
 				// Draw the labels
 				dx = (float) Math.sin(i * Math.PI / 180)
-						* (r + rollSizePxTics + rollPosPxTextYOffset);
+						* (r + hudRoll.rollSizePxTics + hudRoll.rollPosPxTextYOffset);
 				dy = (float) Math.cos(i * Math.PI / 180)
-						* (r + rollSizePxTics + rollPosPxTextYOffset);
+						* (r + hudRoll.rollSizePxTics + hudRoll.rollPosPxTextYOffset);
 				canvas.drawText(Math.abs(i) + "", dx, -dy, rollText);
 			}
 		}
@@ -486,9 +463,9 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 			roll = hudDebugRoll;
 		}
 
-		int pitchOffsetPx = (int) (pitch * pitchPixPerDegree);
-		int rollTriangleBottom = -attHeightPx / 2 + rollTopOffsetPx / 2
-				+ rollTopOffsetPx;
+		int pitchOffsetPx = (int) (pitch * hudPitch.pitchPixPerDegree);
+		int rollTriangleBottom = -data.attHeightPx / 2 + hudRoll.rollTopOffsetPx / 2
+				+ hudRoll.rollTopOffsetPx;
 
 		canvas.rotate(-(int) roll);
 
@@ -504,27 +481,27 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		Path arrow = new Path();
 		int tempOffset = Math.round(plane.getStrokeWidth()
 				+ whiteBorder.getStrokeWidth() / 2);
-		arrow.moveTo(0, -attHeightPx / 2 + rollTopOffsetPx + tempOffset);
-		arrow.lineTo(0 - rollTopOffsetPx / 3, rollTriangleBottom + tempOffset);
-		arrow.lineTo(0 + rollTopOffsetPx / 3, rollTriangleBottom + tempOffset);
+		arrow.moveTo(0, -data.attHeightPx / 2 + hudRoll.rollTopOffsetPx + tempOffset);
+		arrow.lineTo(0 - hudRoll.rollTopOffsetPx / 3, rollTriangleBottom + tempOffset);
+		arrow.lineTo(0 + hudRoll.rollTopOffsetPx / 3, rollTriangleBottom + tempOffset);
 		arrow.close();
 		canvas.drawPath(arrow, plane);
 
 		// Draw gauge
 		int yPos;
 		for (int i = -180; i <= 180; i += 5) {
-			yPos = Math.round(-i * pitchPixPerDegree + pitchOffsetPx);
+			yPos = Math.round(-i * hudPitch.pitchPixPerDegree + pitchOffsetPx);
 			if ((yPos < -rollTriangleBottom) && (yPos > rollTriangleBottom)
 					&& (yPos != pitchOffsetPx)) {
 				if (i % 2 == 0) {
-					canvas.drawLine(-pitchScaleWideHalfWidth, yPos,
-							pitchScaleWideHalfWidth, yPos, whiteThinTics);
-					canvas.drawText(i + "", -pitchScaleWideHalfWidth
-							- pitchScaleTextXOffset, yPos
-							- pitchTextCenterOffsetPx, pitchText);
+					canvas.drawLine(-hudPitch.pitchScaleWideHalfWidth, yPos,
+							hudPitch.pitchScaleWideHalfWidth, yPos, whiteThinTics);
+					canvas.drawText(i + "", -hudPitch.pitchScaleWideHalfWidth
+							- hudPitch.pitchScaleTextXOffset, yPos
+							- hudPitch.pitchTextCenterOffsetPx, pitchText);
 				} else
-					canvas.drawLine(-pitchScaleNarrowHalfWidth, yPos,
-							pitchScaleNarrowHalfWidth, yPos, whiteThinTics);
+					canvas.drawLine(-hudPitch.pitchScaleNarrowHalfWidth, yPos,
+							hudPitch.pitchScaleNarrowHalfWidth, yPos, whiteThinTics);
 			}
 		}
 
@@ -547,8 +524,8 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		}
 
 		// Outside box
-		RectF scroller = new RectF(width / 2 - scrollerWidthPx,
-				-scrollerHeightPx / 2, width / 2, scrollerHeightPx / 2);
+		RectF scroller = new RectF(width / 2 - hudScroller.scrollerWidthPx,
+				-hudScroller.scrollerHeightPx / 2, width / 2, hudScroller.scrollerHeightPx / 2);
 
 		// Draw Vertical speed indicator
 		final float vsi_width = scroller.width() / 4;
@@ -612,10 +589,10 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 			}
 			if (a % 5 == 0) {
 				canvas.drawLine(scroller.left, lineHeight, scroller.left
-						+ scrollerSizePxTicLength, lineHeight, whiteThickTics);
+						+ hudScroller.scrollerSizePxTicLength, lineHeight, whiteThickTics);
 				canvas.drawText(Integer.toString(a), scroller.left
-						+ scrollerSizePxTextXOffset, lineHeight + textHalfSize
-						+ scrollerSizePxTextYOffset, scrollerText);
+						+ hudScroller.scrollerSizePxTextXOffset, lineHeight + textHalfSize
+						+ hudScroller.scrollerSizePxTextYOffset, scrollerText);
 			}
 		}
 
@@ -623,28 +600,28 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		String actualText = Integer.toString((int) altitude);
 		int borderWidth = Math.round(whiteBorder.getStrokeWidth());
 		Path arrow = new Path();
-		arrow.moveTo(scroller.right, -scrollerSizePxArrowHeight / 2);
-		arrow.lineTo(scroller.left + scrollerSizePxArrowHeight / 4
-				+ borderWidth, -scrollerSizePxArrowHeight / 2);
+		arrow.moveTo(scroller.right, -hudScroller.scrollerSizePxArrowHeight / 2);
+		arrow.lineTo(scroller.left + hudScroller.scrollerSizePxArrowHeight / 4
+				+ borderWidth, -hudScroller.scrollerSizePxArrowHeight / 2);
 		arrow.lineTo(scroller.left + borderWidth, 0);
-		arrow.lineTo(scroller.left + scrollerSizePxArrowHeight / 4
-				+ borderWidth, scrollerSizePxArrowHeight / 2);
-		arrow.lineTo(scroller.right, scrollerSizePxArrowHeight / 2);
+		arrow.lineTo(scroller.left + hudScroller.scrollerSizePxArrowHeight / 4
+				+ borderWidth, hudScroller.scrollerSizePxArrowHeight / 2);
+		arrow.lineTo(scroller.right, hudScroller.scrollerSizePxArrowHeight / 2);
 		canvas.drawPath(arrow, blackSolid);
 		if ((targetAltPos != Float.MIN_VALUE)
-				&& (targetAltPos > -scrollerSizePxArrowHeight / 2)
-				&& (targetAltPos < scrollerSizePxArrowHeight / 2)) {
+				&& (targetAltPos > -hudScroller.scrollerSizePxArrowHeight / 2)
+				&& (targetAltPos < hudScroller.scrollerSizePxArrowHeight / 2)) {
 			Rect actualTextRec = new Rect();
 			scrollerActualText.getTextBounds(actualText, 0,
 					actualText.length(), actualTextRec);
 			canvas.drawLine(scroller.right, targetAltPos, scroller.left
-					+ actualTextRec.width() + scrollerSizePxTextXOffset
+					+ actualTextRec.width() + hudScroller.scrollerSizePxTextXOffset
 					+ textHalfSize, targetAltPos, greenPen);
 		}
 		canvas.drawPath(arrow, plane);
-		canvas.drawText(actualText, scroller.left + scrollerSizePxTextXOffset,
+		canvas.drawText(actualText, scroller.left + hudScroller.scrollerSizePxTextXOffset,
 				scrollerActualText.getTextSize() / 2
-						+ scrollerSizePxActualTextYOffset, scrollerActualText);
+						+ hudScroller.scrollerSizePxActualTextYOffset, scrollerActualText);
 		// Reset clipping of Scroller
 		canvas.clipRect(-width / 2, -height / 2, width / 2, height / 2,
 				Region.Op.REPLACE);
@@ -672,8 +649,8 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 			speed = groundSpeed;
 
 		// Outside box
-		RectF scroller = new RectF(-width / 2, -scrollerHeightPx / 2, -width
-				/ 2 + scrollerWidthPx, scrollerHeightPx / 2);
+		RectF scroller = new RectF(-width / 2, -hudScroller.scrollerHeightPx / 2, -width
+				/ 2 + hudScroller.scrollerWidthPx, hudScroller.scrollerHeightPx / 2);
 
 		// Draw Scroll
 		canvas.drawRect(scroller, scrollerBg);
@@ -703,10 +680,10 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 			}
 			if (a % 5 == 0) {
 				canvas.drawLine(scroller.right, lineHeight, scroller.right
-						- scrollerSizePxTicLength, lineHeight, whiteThickTics);
+						- hudScroller.scrollerSizePxTicLength, lineHeight, whiteThickTics);
 				canvas.drawText(Integer.toString(a), scroller.right
-						- scrollerSizePxTextXOffset, lineHeight + textHalfSize
-						+ scrollerSizePxTextYOffset, scrollerText);
+						- hudScroller.scrollerSizePxTextXOffset, lineHeight + textHalfSize
+						+ hudScroller.scrollerSizePxTextYOffset, scrollerText);
 			}
 		}
 
@@ -715,28 +692,28 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		int borderWidth = Math.round(whiteBorder.getStrokeWidth());
 		Path arrow = new Path();
 		arrow.moveTo(scroller.left - borderWidth,
-				-scrollerSizePxArrowHeight / 2);
-		arrow.lineTo(scroller.right - scrollerSizePxArrowHeight / 4
-				- borderWidth, -scrollerSizePxArrowHeight / 2);
+				-hudScroller.scrollerSizePxArrowHeight / 2);
+		arrow.lineTo(scroller.right - hudScroller.scrollerSizePxArrowHeight / 4
+				- borderWidth, -hudScroller.scrollerSizePxArrowHeight / 2);
 		arrow.lineTo(scroller.right - borderWidth, 0);
-		arrow.lineTo(scroller.right - scrollerSizePxArrowHeight / 4
-				- borderWidth, scrollerSizePxArrowHeight / 2);
-		arrow.lineTo(scroller.left - borderWidth, scrollerSizePxArrowHeight / 2);
+		arrow.lineTo(scroller.right - hudScroller.scrollerSizePxArrowHeight / 4
+				- borderWidth, hudScroller.scrollerSizePxArrowHeight / 2);
+		arrow.lineTo(scroller.left - borderWidth, hudScroller.scrollerSizePxArrowHeight / 2);
 		canvas.drawPath(arrow, blackSolid);
 		if ((targetSpdPos != Float.MIN_VALUE)
-				&& (targetSpdPos > -scrollerSizePxArrowHeight / 2)
-				&& (targetSpdPos < scrollerSizePxArrowHeight / 2)) {
+				&& (targetSpdPos > -hudScroller.scrollerSizePxArrowHeight / 2)
+				&& (targetSpdPos < hudScroller.scrollerSizePxArrowHeight / 2)) {
 			Rect actualTextRec = new Rect();
 			scrollerActualText.getTextBounds(actualText, 0,
 					actualText.length(), actualTextRec);
 			canvas.drawLine(scroller.left, targetSpdPos, scroller.right
-					- actualTextRec.width() - scrollerSizePxTextXOffset
+					- actualTextRec.width() - hudScroller.scrollerSizePxTextXOffset
 					- textHalfSize, targetSpdPos, greenPen);
 		}
 		canvas.drawPath(arrow, plane);
-		canvas.drawText(actualText, scroller.right - scrollerSizePxTextXOffset,
+		canvas.drawText(actualText, scroller.right - hudScroller.scrollerSizePxTextXOffset,
 				scrollerActualText.getTextSize() / 2
-						+ scrollerSizePxActualTextYOffset, scrollerActualText);
+						+ hudScroller.scrollerSizePxActualTextYOffset, scrollerActualText);
 		// Reset clipping of Scroller
 		canvas.clipRect(-width / 2, -height / 2, width / 2, height / 2,
 				Region.Op.REPLACE);
@@ -775,19 +752,19 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		if ((battVolt >= 0) || (battRemain >= 0))
 			canvas.drawText(
 					String.format("%2.1fV  %.0f%%", battVolt, battRemain),
-					-width / 2 + attPosPxInfoTextXOffset,
-					attPosPxInfoTextUpperTop, attInfoText);
+					-width / 2 + data.attPosPxInfoTextXOffset,
+					data.attPosPxInfoTextUpperTop, attInfoText);
 		if (battCurrent >= 0)
 			canvas.drawText(String.format("%2.1fA", battCurrent), -width / 2
-					+ attPosPxInfoTextXOffset, attPosPxInfoTextUpperBottom,
+					+ data.attPosPxInfoTextXOffset, data.attPosPxInfoTextUpperBottom,
 					attInfoText);
 
 		// Left Bottom Text
 		canvas.drawText(String.format("AS %.1fms", airSpeed), -width / 2
-				+ attPosPxInfoTextXOffset, attPosPxInfoTextLowerTop,
+				+ data.attPosPxInfoTextXOffset, data.attPosPxInfoTextLowerTop,
 				attInfoText);
 		canvas.drawText(String.format("GS %.1fms", groundSpeed), -width / 2
-				+ attPosPxInfoTextXOffset, attPosPxInfoTextLowerBottom,
+				+ data.attPosPxInfoTextXOffset, data.attPosPxInfoTextLowerBottom,
 				attInfoText);
 
 		// Right Top Text
@@ -807,20 +784,20 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 				break;
 			}
 		}
-		canvas.drawText(gpsFix, width / 2 - attPosPxInfoTextXOffset,
-				attPosPxInfoTextUpperTop, attInfoText);
+		canvas.drawText(gpsFix, width / 2 - data.attPosPxInfoTextXOffset,
+				data.attPosPxInfoTextUpperTop, attInfoText);
 		if (gpsEPH >= 0)
 			canvas.drawText(String.format("hp%.1fm", gpsEPH), width / 2
-					- attPosPxInfoTextXOffset, attPosPxInfoTextUpperBottom,
+					- data.attPosPxInfoTextXOffset, data.attPosPxInfoTextUpperBottom,
 					attInfoText);
 
 		// Right Bottom Text
-		canvas.drawText(modeName, width / 2 - attPosPxInfoTextXOffset,
-				attPosPxInfoTextLowerTop, attInfoText);
+		canvas.drawText(modeName, width / 2 - data.attPosPxInfoTextXOffset,
+				data.attPosPxInfoTextLowerTop, attInfoText);
 		if (wpNumber >= 0)
 			canvas.drawText(String.format("%.0fm>WP#%d", distToWp, wpNumber),
-					width / 2 - attPosPxInfoTextXOffset,
-					attPosPxInfoTextLowerBottom, attInfoText);
+					width / 2 - data.attPosPxInfoTextXOffset,
+					data.attPosPxInfoTextLowerBottom, attInfoText);
 	}
 
 	private void drawFailsafe(Canvas canvas) {
@@ -912,89 +889,89 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 			redIndicatorWidth = 1;
 		plane.setStrokeWidth(redIndicatorWidth);
 
-		yawHeightPx = Math.round(this.height * YAW_HEIGHT_FACTOR);
-		yawSizePxTicsSmall = Math.round(yawHeightPx * YAW_FACTOR_TICS_SMALL);
-		yawSizePxTicsTall = Math.round(yawHeightPx * YAW_FACTOR_TICS_TALL);
-		tempSize = Math.round(yawHeightPx * YAW_FACTOR_TEXT);
+		hudYaw.yawHeightPx = Math.round(this.height * YAW_HEIGHT_FACTOR);
+		hudYaw.yawSizePxTicsSmall = Math.round(hudYaw.yawHeightPx * YAW_FACTOR_TICS_SMALL);
+		hudYaw.yawSizePxTicsTall = Math.round(hudYaw.yawHeightPx * YAW_FACTOR_TICS_TALL);
+		tempSize = Math.round(hudYaw.yawHeightPx * YAW_FACTOR_TEXT);
 		yawText.setTextSize(tempSize);
 		tempOffset = Math.round(tempSize * YAW_FACTOR_TEXT_Y_OFFSET);
-		yawYPosPxText = Math.round(yawSizePxTicsSmall
-				+ (yawHeightPx - yawSizePxTicsSmall) / 2 - tempSize / 2
+		hudYaw.yawYPosPxText = Math.round(hudYaw.yawSizePxTicsSmall
+				+ (hudYaw.yawHeightPx - hudYaw.yawSizePxTicsSmall) / 2 - tempSize / 2
 				- tempOffset);
-		tempSize = Math.round(yawHeightPx * YAW_FACTOR_TEXT_NUMBERS);
+		tempSize = Math.round(hudYaw.yawHeightPx * YAW_FACTOR_TEXT_NUMBERS);
 		yawNumbers.setTextSize(tempSize);
 		tempOffset = Math.round(tempSize * YAW_FACTOR_TEXT_Y_OFFSET);
-		yawYPosPxTextNumbers = Math.round(yawSizePxTicsSmall
-				+ (yawHeightPx - yawSizePxTicsSmall) / 2 - tempSize / 2
+		hudYaw.yawYPosPxTextNumbers = Math.round(hudYaw.yawSizePxTicsSmall
+				+ (hudYaw.yawHeightPx - hudYaw.yawSizePxTicsSmall) / 2 - tempSize / 2
 				- tempOffset);
-		yawSizePxCenterLineOverRun = Math.round(yawHeightPx
+		hudYaw.yawSizePxCenterLineOverRun = Math.round(hudYaw.yawHeightPx
 				* YAW_FACTOR_CENTERLINE_OVERRUN);
-		yawDegreesPerPixel = this.width / YAW_DEGREES_TO_SHOW;
+		hudYaw.yawDegreesPerPixel = this.width / YAW_DEGREES_TO_SHOW;
 
-		attHeightPx = this.height - yawHeightPx;
-		tempAttSizeText = Math.round(attHeightPx * ATT_FACTOR_INFOTEXT);
+		data.attHeightPx = this.height - hudYaw.yawHeightPx;
+		tempAttSizeText = Math.round(data.attHeightPx * ATT_FACTOR_INFOTEXT);
 		attInfoText.setTextSize(tempAttSizeText);
 		tempOffset = Math.round(tempAttSizeText * ATT_FACTOR_INFOTEXT_Y_OFFSET);
 		tempAttTextClearance = Math.round(tempAttSizeText
 				* ATT_FACTOR_INFOTEXT_CLEARANCE);
-		attPosPxInfoTextXOffset = Math.round(this.width
+		data.attPosPxInfoTextXOffset = Math.round(this.width
 				* ATT_FACTOR_INFOTEXT_X_OFFSET);
 
-		int scrollerMaxAvailHeight = attHeightPx - 4 * tempAttSizeText - 6
+		int scrollerMaxAvailHeight = data.attHeightPx - 4 * tempAttSizeText - 6
 				* tempAttTextClearance;
-		scrollerHeightPx = Math.round(attHeightPx * SCROLLER_MAX_HEIGHT_FACTOR);
-		if (scrollerHeightPx > scrollerMaxAvailHeight) {
-			scrollerHeightPx = scrollerMaxAvailHeight;
+		hudScroller.scrollerHeightPx = Math.round(data.attHeightPx * SCROLLER_MAX_HEIGHT_FACTOR);
+		if (hudScroller.scrollerHeightPx > scrollerMaxAvailHeight) {
+			hudScroller.scrollerHeightPx = scrollerMaxAvailHeight;
 		} else {
 			tempAttTextClearance = Math
-					.round((attHeightPx - scrollerHeightPx - 4 * tempAttSizeText) / 6);
+					.round((data.attHeightPx - hudScroller.scrollerHeightPx - 4 * tempAttSizeText) / 6);
 		}
-		scrollerWidthPx = Math.round(this.width * SCROLLER_WIDTH_FACTOR);
-		tempSize = Math.round(attHeightPx * SCROLLER_FACTOR_TEXT);
+		hudScroller.scrollerWidthPx = Math.round(this.width * SCROLLER_WIDTH_FACTOR);
+		tempSize = Math.round(data.attHeightPx * SCROLLER_FACTOR_TEXT);
 		scrollerText.setTextSize(tempSize);
-		scrollerSizePxTextYOffset = Math.round(tempSize
+		hudScroller.scrollerSizePxTextYOffset = Math.round(tempSize
 				* SCROLLER_FACTOR_TEXT_Y_OFFSET);
 		tempSize = Math.round(tempSize
 				* SCROLLER_FACTOR_ACTUAL_TEXT_MAGNIFICATION);
 		scrollerActualText.setTextSize(tempSize);
-		scrollerSizePxActualTextYOffset = Math.round(tempSize
+		hudScroller.scrollerSizePxActualTextYOffset = Math.round(tempSize
 				* SCROLLER_FACTOR_TEXT_Y_OFFSET);
-		scrollerSizePxArrowHeight = Math.round(tempSize
+		hudScroller.scrollerSizePxArrowHeight = Math.round(tempSize
 				* SCROLLER_FACTOR_ARROW_HEIGTH);
-		scrollerSizePxTextXOffset = Math.round(this.width
+		hudScroller.scrollerSizePxTextXOffset = Math.round(this.width
 				* SCROLLER_FACTOR_TEXT_X_OFFSET);
-		scrollerSizePxTicLength = Math.round(this.width
+		hudScroller.scrollerSizePxTicLength = Math.round(this.width
 				* SCROLLER_FACTOR_TIC_LENGTH);
-		greenPen.setStrokeWidth(Math.round(attHeightPx
+		greenPen.setStrokeWidth(Math.round(data.attHeightPx
 				* SCROLLER_FACTOR_TARGET_BAR_WIDTH));
 
-		attPosPxInfoTextUpperTop = -attHeightPx / 2 + tempAttSizeText
+		data.attPosPxInfoTextUpperTop = -data.attHeightPx / 2 + tempAttSizeText
 				+ tempOffset + tempAttTextClearance;
-		attPosPxInfoTextUpperBottom = -attHeightPx / 2 + 2 * tempAttSizeText
+		data.attPosPxInfoTextUpperBottom = -data.attHeightPx / 2 + 2 * tempAttSizeText
 				+ tempOffset + 2 * tempAttTextClearance;
-		attPosPxInfoTextLowerBottom = attHeightPx / 2 + tempOffset
+		data.attPosPxInfoTextLowerBottom = data.attHeightPx / 2 + tempOffset
 				- tempAttTextClearance;
-		attPosPxInfoTextLowerTop = attHeightPx / 2 - tempAttSizeText
+		data.attPosPxInfoTextLowerTop = data.attHeightPx / 2 - tempAttSizeText
 				+ tempOffset - 2 * tempAttTextClearance;
 
-		rollTopOffsetPx = yawHeightPx;
-		rollText.setTextSize(Math.round(attHeightPx * ROLL_FACTOR_TEXT));
-		rollSizePxTics = Math.round(rollTopOffsetPx * ROLL_FACTOR_TIC_LENGTH);
-		rollPosPxTextYOffset = Math.round(rollSizePxTics
+		hudRoll.rollTopOffsetPx = hudYaw.yawHeightPx;
+		rollText.setTextSize(Math.round(data.attHeightPx * ROLL_FACTOR_TEXT));
+		hudRoll.rollSizePxTics = Math.round(hudRoll.rollTopOffsetPx * ROLL_FACTOR_TIC_LENGTH);
+		hudRoll.rollPosPxTextYOffset = Math.round(hudRoll.rollSizePxTics
 				* ROLL_FACTOR_TEXT_Y_OFFSET);
 
-		tempSize = Math.round(attHeightPx * PITCH_FACTOR_TEXT);
+		tempSize = Math.round(data.attHeightPx * PITCH_FACTOR_TEXT);
 		pitchText.setTextSize(tempSize);
-		pitchTextCenterOffsetPx = Math.round(-tempSize / 2 - tempSize
+		hudPitch.pitchTextCenterOffsetPx = Math.round(-tempSize / 2 - tempSize
 				* PITCH_FACTOR_TEXT_Y_OFFSET);
-		pitchScaleWideHalfWidth = Math.round(this.width
+		hudPitch.pitchScaleWideHalfWidth = Math.round(this.width
 				* PITCH_FACTOR_SCALE_WIDHT_WIDE / 2);
-		pitchScaleNarrowHalfWidth = Math.round(this.width
+		hudPitch.pitchScaleNarrowHalfWidth = Math.round(this.width
 				* PITCH_FACTOR_SCALE_WIDHT_NARROW / 2);
-		pitchScaleTextXOffset = Math.round(this.width
+		hudPitch.pitchScaleTextXOffset = Math.round(this.width
 				* PITCH_FACTOR_SCALE_TEXT_X_OFFSET);
-		pitchPixPerDegree = Math
-				.round(attHeightPx * PITCH_FACTOR_SCALE_Y_SPACE);
+		hudPitch.pitchPixPerDegree = Math
+				.round(data.attHeightPx * PITCH_FACTOR_SCALE_Y_SPACE);
 
 		tempSize = Math.round(this.width * FAILSAFE_FACTOR_TEXT);
 		FailsafeText.setTextSize(tempSize);
