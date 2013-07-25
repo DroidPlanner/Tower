@@ -40,7 +40,6 @@ public class MavLinkWaypoint {
 		waypoint.setCurrent((byte) ((index == 0) ? 1 : 0));
 		waypoint.setTarget(1, 1);
 		drone.MavClient.sendMavPacket(waypoint.pack());
-
 	}
 
 	public static void sendWaypointCount(Drone drone, int count) {

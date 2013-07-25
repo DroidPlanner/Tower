@@ -14,7 +14,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class Mission extends DroneVariable {
 
-	private waypoint home = new waypoint(0.0, 0.0, 0.0);
+	private Home home = new Home(0.0, 0.0, 0.0);
 	private List<waypoint> waypoints = new ArrayList<waypoint>();
 	private Double defaultAlt = 50.0;
 	private int wpno = -1;
@@ -38,7 +38,7 @@ public class Mission extends DroneVariable {
 		return defaultAlt;
 	}
 
-	public waypoint getHome() {
+	public Home getHome() {
 		return home;
 	}
 
@@ -121,7 +121,7 @@ public class Mission extends DroneVariable {
 	}
 
 	public void setHome(waypoint home) {
-		this.home = home;
+		this.home = (Home) home;
 	}
 
 	public void setHome(LatLng home) {

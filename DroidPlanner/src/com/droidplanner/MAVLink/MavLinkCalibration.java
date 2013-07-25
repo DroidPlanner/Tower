@@ -8,8 +8,7 @@ import com.droidplanner.drone.Drone;
 
 public class MavLinkCalibration {
 
-	public static void sendCalibrationAckMessage(int count,
-			Drone drone) {
+	public static void sendCalibrationAckMessage(int count, Drone drone) {
 		msg_command_ack msg = new msg_command_ack();
 		msg.command = (short) count;
 		msg.result = MAV_CMD_ACK.MAV_CMD_ACK_OK;

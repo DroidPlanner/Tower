@@ -6,8 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.NumberPicker;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.NumberPicker;
 
 public class AltitudeDialog implements DialogInterface.OnClickListener {
 	private NumberPicker thousandPicker;

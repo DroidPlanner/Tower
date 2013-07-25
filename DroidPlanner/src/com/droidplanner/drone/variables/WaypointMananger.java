@@ -47,8 +47,7 @@ public class WaypointMananger extends DroneVariable {
 			waypoints.addAll(data);
 			writeIndex = 0;
 			state = waypointStates.WRITTING_WP;
-			MavLinkWaypoint.sendWaypointCount(myDrone,
-					waypoints.size());
+			MavLinkWaypoint.sendWaypointCount(myDrone, waypoints.size());
 		}
 	}
 
@@ -62,8 +61,7 @@ public class WaypointMananger extends DroneVariable {
 	 */
 	public void setCurrentWaypoint(int i) {
 		if ((waypoints != null)) {
-			MavLinkWaypoint
-					.sendSetCurrentWaypoint(myDrone, (short) i);
+			MavLinkWaypoint.sendSetCurrentWaypoint(myDrone, (short) i);
 		}
 	}
 
@@ -124,8 +122,7 @@ public class WaypointMananger extends DroneVariable {
 			if (msg.msgid == msg_mission_count.MAVLINK_MSG_ID_MISSION_COUNT) {
 				waypointCount = ((msg_mission_count) msg).count;
 				waypoints.clear();
-				MavLinkWaypoint.requestWayPoint(myDrone,
-						waypoints.size());
+				MavLinkWaypoint.requestWayPoint(myDrone, waypoints.size());
 				state = waypointStates.READING_WP;
 				return true;
 			}
@@ -134,8 +131,7 @@ public class WaypointMananger extends DroneVariable {
 			if (msg.msgid == msg_mission_item.MAVLINK_MSG_ID_MISSION_ITEM) {
 				processReceivedWaypoint((msg_mission_item) msg);
 				if (waypoints.size() < waypointCount) {
-					MavLinkWaypoint.requestWayPoint(myDrone,
-							waypoints.size());
+					MavLinkWaypoint.requestWayPoint(myDrone, waypoints.size());
 				} else {
 					state = waypointStates.IDLE;
 					MavLinkWaypoint.sendAck(myDrone);

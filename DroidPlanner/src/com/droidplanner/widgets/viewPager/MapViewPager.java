@@ -19,12 +19,12 @@ public class MapViewPager extends ViewPager {
 
 	public MapViewPager(Context context) {
 		super(context);
-		this.context =context;
+		this.context = context;
 	}
 
 	public MapViewPager(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		this.context =context;
+		this.context = context;
 	}
 
 	@Override
@@ -54,7 +54,8 @@ public class MapViewPager extends ViewPager {
 	 * @param width
 	 */
 	public void setSwipeMarginWidth(final int width) {
-		swipeRegionWidth = (int) (width* context.getResources().getDisplayMetrics().density);
+		swipeRegionWidth = (int) (width * context.getResources()
+				.getDisplayMetrics().density);
 	}
 
 }
