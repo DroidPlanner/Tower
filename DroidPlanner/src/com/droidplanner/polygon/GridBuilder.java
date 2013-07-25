@@ -15,14 +15,16 @@ public class GridBuilder {
 	private Double lineDist;
 	private LatLng lastLocation;
 	private Double altitude;
+	private int frame;
 
 	public GridBuilder(Polygon poly, Double angle, Double lineDist,
-			LatLng lastLocation, Double altitude) {
+			LatLng lastLocation, Double altitude, int frame) {
 		this.poly = poly;
 		this.angle = angle;
 		this.lineDist = lineDist;
 		this.lastLocation = lastLocation;
 		this.altitude = altitude;
+		this.frame = frame;
 	}
 
 	public List<waypoint> hatchfill() {
@@ -65,8 +67,8 @@ public class GridBuilder {
 		while (hatchLines.size() > 0) {
 			if (GeoTools.getDistance(closest.p1, lastpnt) < GeoTools
 					.getDistance(closest.p2, lastpnt)) {
-				gridPoints.add(new waypoint(closest.p1, altitude));
-				gridPoints.add(new waypoint(closest.p2, altitude));
+				gridPoints.add(new waypoint(closest.p1, altitude,frame));
+				gridPoints.add(new waypoint(closest.p2, altitude,frame));
 
 				lastpnt = closest.p2;
 
@@ -75,8 +77,8 @@ public class GridBuilder {
 					break;
 				closest = GeoTools.findClosestLine(closest.p2, hatchLines);
 			} else {
-				gridPoints.add(new waypoint(closest.p2, altitude));
-				gridPoints.add(new waypoint(closest.p1, altitude));
+				gridPoints.add(new waypoint(closest.p2, altitude,frame));
+				gridPoints.add(new waypoint(closest.p1, altitude,frame));
 
 				lastpnt = closest.p1;
 

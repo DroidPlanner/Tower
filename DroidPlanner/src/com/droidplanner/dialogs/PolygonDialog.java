@@ -27,11 +27,14 @@ public abstract class PolygonDialog implements DialogInterface.OnClickListener {
 
 	private SeekBarWithText angleView;
 
+	private int frame;
+
 	public void generatePolygon(double defaultHatchAngle,
 			double defaultHatchDistance, Polygon polygon, LatLng originPoint,
-			double height, Context context) {
+			double height,int frame, Context context) {
 		this.polygon = polygon;
 		this.height = height;
+		this.frame = frame;
 		this.originPoint = originPoint;
 
 		if (!polygon.isValid()) {
@@ -76,7 +79,7 @@ public abstract class PolygonDialog implements DialogInterface.OnClickListener {
 	public void onClick(DialogInterface arg0, int which) {
 		if (which == Dialog.BUTTON_POSITIVE) {
 			GridBuilder grid = new GridBuilder(polygon, angleView.getValue(),
-					distanceView.getValue(), originPoint, height);
+					distanceView.getValue(), originPoint, height,frame);
 
 			onPolygonGenerated(grid.hatchfill());
 		}

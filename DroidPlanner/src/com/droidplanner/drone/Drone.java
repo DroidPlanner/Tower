@@ -1,6 +1,8 @@
 package com.droidplanner.drone;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import com.droidplanner.drone.DroneInterfaces.DroneTypeListner;
 import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
@@ -35,6 +37,7 @@ public class Drone {
 	public TTS tts;
 	public MAVLinkClient MavClient;
 	public Context context;
+	public SharedPreferences prefs;
 
 	private HudUpdatedListner hudListner;
 	private MapUpdatedListner mapListner;
@@ -44,6 +47,8 @@ public class Drone {
 		this.tts = tts;
 		this.MavClient = mavClient;
 		this.context = context;
+		prefs = PreferenceManager
+				.getDefaultSharedPreferences(this.context);
 	}
 
 	public void setHudListner(HudUpdatedListner listner) {

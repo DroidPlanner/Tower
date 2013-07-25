@@ -90,7 +90,7 @@ public abstract class SuperFlightActivity extends SuperActivity implements
 		if (guidedPoint != null) {
 			Toast.makeText(this, "Guided Mode (" + (int) newAltitude + "m)",
 					Toast.LENGTH_SHORT).show();
-			drone.state.setGuidedMode(new waypoint(guidedPoint, newAltitude));
+			drone.state.setGuidedMode(new waypoint(guidedPoint, newAltitude,drone.mission.getFrameFromPref()));
 			guidedPoint = null;
 		}
 	}

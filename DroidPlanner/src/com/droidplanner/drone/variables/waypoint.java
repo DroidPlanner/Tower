@@ -10,11 +10,11 @@ import com.google.android.gms.maps.model.LatLng;
 public class waypoint {
 	public msg_mission_item missionItem = new msg_mission_item();
 
-	public waypoint(LatLng c, Double h) {
-		this(c.latitude, c.longitude, h);
+	public waypoint(LatLng c, Double h, int frame) {
+		this(c.latitude, c.longitude, h, frame);
 	}
 
-	public waypoint(Double Lat, Double Lng, Double h) {
+	public waypoint(Double Lat, Double Lng, Double h, int frame) {
 		setCoord(new LatLng(Lat, Lng));
 		setHeight(h);
 

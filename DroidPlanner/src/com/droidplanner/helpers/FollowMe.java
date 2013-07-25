@@ -64,7 +64,7 @@ public class FollowMe implements LocationListener {
 	@Override
 	public void onLocationChanged(Location location) {
 		waypoint guidedWP = new waypoint(location.getLatitude(),
-				location.getLongitude(), drone.mission.getDefaultAlt()); // TODO
+				location.getLongitude(), drone.mission.getDefaultAlt(),drone.mission.getFrameFromPref()); // TODO
 																			// find
 																			// a
 																			// better
