@@ -69,15 +69,23 @@ public class MissionReader implements FileReader {
 			wp.setParameters(Float.valueOf(RowData[4]),
 					Float.valueOf(RowData[5]), Float.valueOf(RowData[6]),
 					Float.valueOf(RowData[7]));
+			wp.setAutoContinue(Integer.valueOf(RowData[11]));
 			waypoints.add(wp);
 		}
 
 	}
 
 	private void parseHomeLine(BufferedReader reader) throws IOException {
-		String[] RowData1 = reader.readLine().split("\t");
-		home = new waypoint(Double.valueOf(RowData1[8]),
-				Double.valueOf(RowData1[9]), Double.valueOf(RowData1[10]));
+		String[] RowData = reader.readLine().split("\t");
+		home = new waypoint(Double.valueOf(RowData[8]),
+				Double.valueOf(RowData[9]), Double.valueOf(RowData[10]));
+		home.setNumber(Integer.valueOf(RowData[0]));
+		home.setFrame(Integer.valueOf(RowData[2]));
+		home.setCmd(ApmCommands.getCmd(Integer.valueOf(RowData[3])));
+		home.setParameters(Float.valueOf(RowData[4]),
+				Float.valueOf(RowData[5]), Float.valueOf(RowData[6]),
+				Float.valueOf(RowData[7]));
+		home.setAutoContinue(Integer.valueOf(RowData[11]));
 	}
 
 	private static boolean isWaypointFile(BufferedReader reader)

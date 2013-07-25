@@ -93,6 +93,29 @@ public class waypoint {
 
 	public void setTarget(int target_system, int target_component) {
 		missionItem.target_system = (byte) target_system;
-		missionItem.target_component = (byte) target_component;		
+		missionItem.target_component = (byte) target_component;
+	}
+	public Float getParam1(){
+		return missionItem.param1;
+	}
+	
+	public Float getParam2(){
+		return missionItem.param2;
+	}
+	
+	public Float getParam3(){
+		return missionItem.param3;
+	}
+	
+	public Float getParam4(){
+		return missionItem.param4;
+	}
+
+	public int getAutoContinue() {
+		return missionItem.autocontinue;
+	}
+
+	public void setAutoContinue(Integer i) {
+		missionItem.autocontinue = i.byteValue();
 	}
 }
