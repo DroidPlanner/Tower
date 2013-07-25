@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.droidplanner.R.string;
 import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.variables.Home;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.fragments.markers.MarkerManager;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
@@ -47,7 +48,7 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 
 		public void onMoveHome(LatLng coord);
 
-		public void onMoveWaypoint(LatLng coord, int Number);
+		public void onMoveWaypoint(waypoint waypoint, LatLng latLng);
 
 		public void onMovePolygonPoint(PolygonPoint source, LatLng newCoord);
 	}
@@ -100,27 +101,26 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 	@Override
 	public void onMarkerDragEnd(Marker marker) {
 		MarkerSource source = markers.getSourceFromMarker(marker);
-		checkForHomeMarker(marker);
-		checkForWaypointMarker(marker);
-		checkForPolygonMarker(source);
+		checkForHomeMarker(source, marker);
+		checkForWaypointMarker(source, marker);
+		checkForPolygonMarker(source, marker);
 	}
 
-	private void checkForHomeMarker(Marker marker) {
-		// TODO reimplement this
-		// if (homeMarker.isHomeMarker(marker)) {
-		// mListener.onMoveHome(marker.getPosition());
-		// }
+	private void checkForHomeMarker(MarkerSource source, Marker marker) {
+		if (Home.class.isInstance(source)) {
+			mListener.onMoveHome(marker.getPosition());
+		}
 	}
 
-	private void checkForWaypointMarker(Marker marker) {
-		// TODO reimplement this
-		// MarkerSource source = waypointMarkers.getSourceFromMarker(marker);
-		// Listener.onMoveWaypoint(, 0);
+	private void checkForWaypointMarker(MarkerSource source, Marker marker) {
+		if (waypoint.class.isInstance(source)) {
+			mListener.onMoveWaypoint((waypoint)source,marker.getPosition());
+		}
 	}
 
-	private void checkForPolygonMarker(MarkerSource source) {
+	private void checkForPolygonMarker(MarkerSource source, Marker marker) {
 		if (PolygonPoint.class.isInstance(source)) {
-			mListener.onMovePolygonPoint((PolygonPoint)source, markers.getMarkerFromSource(source).getPosition());
+			mListener.onMovePolygonPoint((PolygonPoint)source, marker.getPosition());
 		}
 	}
 

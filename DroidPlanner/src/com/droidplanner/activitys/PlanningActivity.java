@@ -219,8 +219,8 @@ public class PlanningActivity extends SuperActivity implements
 	}
 
 	@Override
-	public void onMoveWaypoint(LatLng coord, int Number) {
-		drone.mission.moveWaypoint(coord, Number);
+	public void onMoveWaypoint(waypoint source, LatLng latLng) {
+		source.setCoord(latLng);
 		update();
 	}
 

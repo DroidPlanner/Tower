@@ -38,7 +38,7 @@ public class Mission extends DroneVariable {
 		return defaultAlt;
 	}
 
-	public waypoint getHome() {
+	public Home getHome() {
 		return home;
 	}
 
