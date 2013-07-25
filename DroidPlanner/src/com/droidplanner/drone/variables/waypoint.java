@@ -1,6 +1,7 @@
 package com.droidplanner.drone.variables;
 
 import com.MAVLink.Messages.ApmCommands;
+import com.MAVLink.Messages.MAVLinkPacket;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_CMD;
 import com.MAVLink.Messages.enums.MAV_FRAME;
@@ -24,7 +25,15 @@ public class waypoint {
 		missionItem.param2 = 0; // TODO use correct parameter
 		missionItem.param3 = 0; // TODO use correct parameter
 		missionItem.param4 = 0; // TODO use correct parameter
+		
 		missionItem.autocontinue = 1; // TODO use correct parameter
+		missionItem.target_system = 1;
+		missionItem.target_component = 1;
+	}
+
+	public waypoint(msg_mission_item msg) {
+		missionItem = msg;
+		setTarget(1, 1);
 	}
 
 	public Double getHeight() {
@@ -73,5 +82,41 @@ public class waypoint {
 		missionItem.param2 = parm2;
 		missionItem.param3 = parm3;
 		missionItem.param4 = parm4;
+	}
+
+	public void setCurrent(byte b) {
+		missionItem.current = b;
+	}
+
+	public MAVLinkPacket pack() {
+		return missionItem.pack();
+	}
+
+	public void setTarget(int target_system, int target_component) {
+		missionItem.target_system = (byte) target_system;
+		missionItem.target_component = (byte) target_component;
+	}
+	public Float getParam1(){
+		return missionItem.param1;
+	}
+	
+	public Float getParam2(){
+		return missionItem.param2;
+	}
+	
+	public Float getParam3(){
+		return missionItem.param3;
+	}
+	
+	public Float getParam4(){
+		return missionItem.param4;
+	}
+
+	public int getAutoContinue() {
+		return missionItem.autocontinue;
+	}
+
+	public void setAutoContinue(Integer i) {
+		missionItem.autocontinue = i.byteValue();
 	}
 }
