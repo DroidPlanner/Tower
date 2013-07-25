@@ -29,18 +29,6 @@ import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
 public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		HudUpdatedListner {
 	// in relation to attHeightPx
-	private static final float PITCH_FACTOR_TEXT = .038f;
-	// in relation to the resulting size of PITCH_FACTOR_TEXT
-	private static final float PITCH_FACTOR_TEXT_Y_OFFSET = -.16f;
-	// in relation to attHeightPx
-	private static final float PITCH_FACTOR_SCALE_Y_SPACE = 0.02f;
-	// in relation to width
-	private static final float PITCH_FACTOR_SCALE_WIDHT_WIDE = 0.25f;
-	// in relation to width
-	private static final float PITCH_FACTOR_SCALE_WIDHT_NARROW = 0.1f;
-	// in relation to width
-	private static final float PITCH_FACTOR_SCALE_TEXT_X_OFFSET = 0.025f;
-	// in relation to attHeightPx
 	private static final float ATT_FACTOR_INFOTEXT = .048f;
 	// in relation to the resulting size of ATT_FACTOR_INFOTEXT
 	private static final float ATT_FACTOR_INFOTEXT_Y_OFFSET = -.1f;
@@ -103,10 +91,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 	private static final boolean hudDebugDroneArmed = false;
 
 	// Paints
-	Paint ground = new Paint();
-	Paint sky = new Paint();
 	Paint yawBg = new Paint();
-	Paint pitchText = new Paint();
 	Paint whiteStroke = new Paint();
 	Paint whiteBorder = new Paint();
 	Paint whiteThickTics = new Paint();
@@ -152,8 +137,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		getHolder().addCallback(this);
 		// hudMetrics = context.getResources().getDisplayMetrics();
 
-		ground.setARGB(220, 148, 193, 31);
-		sky.setARGB(220, 0, 113, 188);
+		
 		yawBg.setARGB(255, 0, 0, 0);// (64, 255, 255, 255);
 
 		FailsafeText.setTextSize(37);
@@ -178,10 +162,6 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		whiteThickTics.setStyle(Style.FILL);
 		whiteThickTics.setStrokeWidth(2);
 		whiteThickTics.setAntiAlias(true);
-
-		pitchText.setColor(Color.WHITE);
-		pitchText.setAntiAlias(true);
-		pitchText.setTextAlign(Align.RIGHT);
 
 		attInfoText.setColor(Color.WHITE);
 		attInfoText.setTextAlign(Align.CENTER);
@@ -225,9 +205,9 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 
 		// Draw the background
 		canvas.drawRect(-width, pitchOffsetPx, width,
-				2 * height /* Go plenty low */, ground);
+				2 * height /* Go plenty low */, hudPitch.ground);
 		canvas.drawRect(-width, -2 * height /* Go plenty high */, width,
-				pitchOffsetPx, sky);
+				pitchOffsetPx, hudPitch.sky);
 		canvas.drawLine(-width, pitchOffsetPx, width, pitchOffsetPx,
 				whiteThinTics);
 
@@ -256,7 +236,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 							whiteThinTics);
 					canvas.drawText(i + "", -hudPitch.pitchScaleWideHalfWidth
 							- hudPitch.pitchScaleTextXOffset, yPos
-							- hudPitch.pitchTextCenterOffsetPx, pitchText);
+							- hudPitch.pitchTextCenterOffsetPx, hudPitch.pitchText);
 				} else
 					canvas.drawLine(-hudPitch.pitchScaleNarrowHalfWidth, yPos,
 							hudPitch.pitchScaleNarrowHalfWidth, yPos,
@@ -462,18 +442,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 
 		hudRoll.setupRoll(this);
 
-		tempSize = Math.round(data.attHeightPx * PITCH_FACTOR_TEXT);
-		pitchText.setTextSize(tempSize);
-		hudPitch.pitchTextCenterOffsetPx = Math.round(-tempSize / 2 - tempSize
-				* PITCH_FACTOR_TEXT_Y_OFFSET);
-		hudPitch.pitchScaleWideHalfWidth = Math.round(this.width
-				* PITCH_FACTOR_SCALE_WIDHT_WIDE / 2);
-		hudPitch.pitchScaleNarrowHalfWidth = Math.round(this.width
-				* PITCH_FACTOR_SCALE_WIDHT_NARROW / 2);
-		hudPitch.pitchScaleTextXOffset = Math.round(this.width
-				* PITCH_FACTOR_SCALE_TEXT_X_OFFSET);
-		hudPitch.pitchPixPerDegree = Math.round(data.attHeightPx
-				* PITCH_FACTOR_SCALE_Y_SPACE);
+		hudPitch.setupPitch(this);
 
 		tempSize = Math.round(this.width * FAILSAFE_FACTOR_TEXT);
 		FailsafeText.setTextSize(tempSize);
