@@ -27,14 +27,6 @@ import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
 
 public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		HudUpdatedListner {
-	// in relation to attHeightPx
-	private static final float ATT_FACTOR_INFOTEXT = .048f;
-	// in relation to the resulting size of ATT_FACTOR_INFOTEXT
-	private static final float ATT_FACTOR_INFOTEXT_Y_OFFSET = -.1f;
-	// in relation to width
-	private static final float ATT_FACTOR_INFOTEXT_X_OFFSET = .013f;
-	// in relation to attSizePxInfoText
-	private static final float ATT_FACTOR_INFOTEXT_CLEARANCE = .1f;
 	// in relation to averaged of width and height
 	private static final float HUD_FACTOR_BORDER_WIDTH = .0075f;
 	// in relation to averaged of width and height
@@ -54,7 +46,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 	int width;
 	int height;
 	HudAtt data = new HudAtt();
-	private HudScroller hudScroller = new HudScroller();
+	HudScroller hudScroller = new HudScroller();
 	HudYaw hudYaw = new HudYaw();
 	HurRoll hudRoll = new HurRoll();
 	private HudPitch hudPitch = new HudPitch();
@@ -96,7 +88,6 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 	Paint whiteThickTics = new Paint();
 	Paint whiteThinTics = new Paint();
 	Paint FailsafeText = new Paint();
-	Paint attInfoText = new Paint();
 	Paint plane = new Paint();
 	Paint blackSolid = new Paint();
 	Paint blueVSI = new Paint();
@@ -162,9 +153,9 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		whiteThickTics.setStrokeWidth(2);
 		whiteThickTics.setAntiAlias(true);
 
-		attInfoText.setColor(Color.WHITE);
-		attInfoText.setTextAlign(Align.CENTER);
-		attInfoText.setAntiAlias(true);
+		data.attInfoText.setColor(Color.WHITE);
+		data.attInfoText.setTextAlign(Align.CENTER);
+		data.attInfoText.setAntiAlias(true);
 
 		plane.setColor(Color.RED);
 		plane.setStyle(Style.STROKE);
@@ -215,28 +206,28 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		}
 
 		// Left Top Text
-		attInfoText.setTextAlign(Align.LEFT);
+		data.attInfoText.setTextAlign(Align.LEFT);
 
 		if ((battVolt >= 0) || (battRemain >= 0))
 			canvas.drawText(
 					String.format("%2.1fV  %.0f%%", battVolt, battRemain),
 					-width / 2 + data.attPosPxInfoTextXOffset,
-					data.attPosPxInfoTextUpperTop, attInfoText);
+					data.attPosPxInfoTextUpperTop, data.attInfoText);
 		if (battCurrent >= 0)
 			canvas.drawText(String.format("%2.1fA", battCurrent), -width / 2
 					+ data.attPosPxInfoTextXOffset,
-					data.attPosPxInfoTextUpperBottom, attInfoText);
+					data.attPosPxInfoTextUpperBottom, data.attInfoText);
 
 		// Left Bottom Text
 		canvas.drawText(String.format("AS %.1fms", airSpeed), -width / 2
 				+ data.attPosPxInfoTextXOffset, data.attPosPxInfoTextLowerTop,
-				attInfoText);
+				data.attInfoText);
 		canvas.drawText(String.format("GS %.1fms", groundSpeed), -width / 2
 				+ data.attPosPxInfoTextXOffset,
-				data.attPosPxInfoTextLowerBottom, attInfoText);
+				data.attPosPxInfoTextLowerBottom, data.attInfoText);
 
 		// Right Top Text
-		attInfoText.setTextAlign(Align.RIGHT);
+		data.attInfoText.setTextAlign(Align.RIGHT);
 
 		String gpsFix = "";
 		if (satCount >= 0) {
@@ -253,19 +244,19 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 			}
 		}
 		canvas.drawText(gpsFix, width / 2 - data.attPosPxInfoTextXOffset,
-				data.attPosPxInfoTextUpperTop, attInfoText);
+				data.attPosPxInfoTextUpperTop, data.attInfoText);
 		if (gpsEPH >= 0)
 			canvas.drawText(String.format("hp%.1fm", gpsEPH), width / 2
 					- data.attPosPxInfoTextXOffset,
-					data.attPosPxInfoTextUpperBottom, attInfoText);
+					data.attPosPxInfoTextUpperBottom, data.attInfoText);
 
 		// Right Bottom Text
 		canvas.drawText(modeName, width / 2 - data.attPosPxInfoTextXOffset,
-				data.attPosPxInfoTextLowerTop, attInfoText);
+				data.attPosPxInfoTextLowerTop, data.attInfoText);
 		if (wpNumber >= 0)
 			canvas.drawText(String.format("%.0fm>WP#%d", distToWp, wpNumber),
 					width / 2 - data.attPosPxInfoTextXOffset,
-					data.attPosPxInfoTextLowerBottom, attInfoText);
+					data.attPosPxInfoTextLowerBottom, data.attInfoText);
 	}
 
 	private void drawFailsafe(Canvas canvas) {
@@ -319,8 +310,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
-		int tempAttTextClearance;
-		int tempSize, tempOffset, tempAttSizeText;
+		int tempSize;
 		float hudScaleThickTicStrokeWidth, hudScaleThinTicStrokeWidth, hudBorderWidth, redIndicatorWidth;
 
 		this.width = width;
@@ -359,26 +349,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 
 		hudYaw.setupYaw(this, this);
 
-		data.attHeightPx = this.height - hudYaw.yawHeightPx;
-		tempAttSizeText = Math.round(data.attHeightPx * ATT_FACTOR_INFOTEXT);
-		attInfoText.setTextSize(tempAttSizeText);
-		tempOffset = Math.round(tempAttSizeText * ATT_FACTOR_INFOTEXT_Y_OFFSET);
-		tempAttTextClearance = Math.round(tempAttSizeText
-				* ATT_FACTOR_INFOTEXT_CLEARANCE);
-		data.attPosPxInfoTextXOffset = Math.round(this.width
-				* ATT_FACTOR_INFOTEXT_X_OFFSET);
-
-		tempAttTextClearance = hudScroller.setupScroller(this,
-				tempAttTextClearance, tempAttSizeText);
-
-		data.attPosPxInfoTextUpperTop = -data.attHeightPx / 2 + tempAttSizeText
-				+ tempOffset + tempAttTextClearance;
-		data.attPosPxInfoTextUpperBottom = -data.attHeightPx / 2 + 2
-				* tempAttSizeText + tempOffset + 2 * tempAttTextClearance;
-		data.attPosPxInfoTextLowerBottom = data.attHeightPx / 2 + tempOffset
-				- tempAttTextClearance;
-		data.attPosPxInfoTextLowerTop = data.attHeightPx / 2 - tempAttSizeText
-				+ tempOffset - 2 * tempAttTextClearance;
+		data.setupAtt(this);
 
 		hudRoll.setupRoll(this);
 
