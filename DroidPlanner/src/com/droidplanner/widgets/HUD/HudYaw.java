@@ -31,6 +31,8 @@ public class HudYaw {
 	public int yawSizePxCenterLineOverRun;
 	Paint yawText = new Paint();
 	Paint yawNumbers = new Paint();
+	// Paints
+	Paint yawBg = new Paint();
 
 	public HudYaw() {
 		yawText.setColor(Color.WHITE);
@@ -41,6 +43,8 @@ public class HudYaw {
 		yawNumbers.setColor(Color.WHITE);
 		yawNumbers.setTextAlign(Align.CENTER);
 		yawNumbers.setAntiAlias(true);
+		
+		yawBg.setARGB(255, 0, 0, 0);// (64, 255, 255, 255);
 	}
 
 	void setupYaw(HUD huDwidget, HUD hud) {
@@ -69,7 +73,7 @@ public class HudYaw {
 	void drawYaw(HUD huDwidget, Canvas canvas) {
 		int yawBottom = -huDwidget.data.attHeightPx / 2;
 		canvas.drawRect(-huDwidget.width / 2, yawBottom - yawHeightPx,
-				huDwidget.width / 2, yawBottom, huDwidget.yawBg);
+				huDwidget.width / 2, yawBottom, yawBg);
 		canvas.drawLine(-huDwidget.width / 2, yawBottom, huDwidget.width / 2,
 				yawBottom, huDwidget.whiteBorder);
 

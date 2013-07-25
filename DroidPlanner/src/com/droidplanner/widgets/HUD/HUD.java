@@ -68,8 +68,6 @@ public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 	static final int hudDebugDroneType = 2;
 	static final boolean hudDebugDroneArmed = false;
 
-	// Paints
-	Paint yawBg = new Paint();
 	Paint whiteStroke = new Paint();
 	Paint whiteBorder = new Paint();
 	Paint whiteThickTics = new Paint();
@@ -111,11 +109,6 @@ public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 	public HUD(Context context, AttributeSet attributeSet) {
 		super(context, attributeSet);
 		getHolder().addCallback(this);
-		// hudMetrics = context.getResources().getDisplayMetrics();
-
-		
-		yawBg.setARGB(255, 0, 0, 0);// (64, 255, 255, 255);
-
 
 		whiteStroke.setColor(Color.WHITE);
 		whiteStroke.setStyle(Style.STROKE);
