@@ -17,7 +17,6 @@ import android.widget.Toast;
 import com.droidplanner.R.string;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.variables.waypoint;
-import com.droidplanner.fragments.markers.HomeMarker;
 import com.droidplanner.fragments.markers.MarkerManager;
 import com.droidplanner.polygon.Polygon;
 import com.google.android.gms.maps.GoogleMap;
@@ -42,8 +41,6 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 
 	private MarkerManager waypointMarkers;
 	private HashMap<Integer, Marker> polygonMarkers = new HashMap<Integer, Marker>();
-
-	public HomeMarker homeMarker;
 
 	private OnMapInteractionListener mListener;
 
@@ -72,7 +69,6 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 
 		waypointMarkers = new MarkerManager(mMap);
 		
-		homeMarker = new HomeMarker(mMap);
 		return view;
 	}
 
@@ -85,10 +81,9 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 	public void update(Drone drone, Polygon polygon) {
 		clearMap();
 
-		homeMarker.invalidate();
 		waypointMarkers.clear();
 		polygonMarkers.clear();
-		homeMarker.update(drone);
+
 
 		int i = 0;
 		for (MarkerOptions point : getPolygonMarkers(polygon)) {
@@ -97,6 +92,7 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		
 		mMap.addPolyline(getPolygonPath(polygon));
 
+		waypointMarkers.updateMarker(drone.mission.getHome());
 		waypointMarkers.updateMarkers(drone.mission.getWaypoints());
 		
 		mMap.addPolyline(getMissionPath(drone));
@@ -124,9 +120,10 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 	}
 
 	private void checkForHomeMarker(Marker marker) {
-		if (homeMarker.isHomeMarker(marker)) {
-			mListener.onMoveHome(marker.getPosition());
-		}
+		//TODO reimplement this
+		// if (homeMarker.isHomeMarker(marker)) {
+		// mListener.onMoveHome(marker.getPosition());
+		//}
 	}
 
 	private void checkForWaypointMarker(Marker marker) {
