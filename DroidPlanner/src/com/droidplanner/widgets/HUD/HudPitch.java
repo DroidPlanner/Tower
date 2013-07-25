@@ -76,12 +76,12 @@ public class HudPitch {
 		canvas.drawRect(-huDwidget.width, -2 * huDwidget.height, huDwidget.width,
 				pitchOffsetPx, sky);
 		canvas.drawLine(-huDwidget.width, pitchOffsetPx, huDwidget.width, pitchOffsetPx,
-				huDwidget.whiteThinTics);
+				huDwidget.commonPaints.whiteThinTics);
 	
 		// Draw roll triangle
 		Path arrow = new Path();
 		int tempOffset = Math.round(huDwidget.hudPlane.plane.getStrokeWidth()
-				+ huDwidget.whiteBorder.getStrokeWidth() / 2);
+				+ huDwidget.commonPaints.whiteBorder.getStrokeWidth() / 2);
 		arrow.moveTo(0, -huDwidget.data.attHeightPx / 2 + huDwidget.hudRoll.rollTopOffsetPx
 				+ tempOffset);
 		arrow.lineTo(0 - huDwidget.hudRoll.rollTopOffsetPx / 3, rollTriangleBottom
@@ -100,14 +100,14 @@ public class HudPitch {
 				if (i % 2 == 0) {
 					canvas.drawLine(-pitchScaleWideHalfWidth, yPos,
 							pitchScaleWideHalfWidth, yPos,
-							huDwidget.whiteThinTics);
+							huDwidget.commonPaints.whiteThinTics);
 					canvas.drawText(i + "", -pitchScaleWideHalfWidth
 							- pitchScaleTextXOffset, yPos
 							- pitchTextCenterOffsetPx, pitchText);
 				} else
 					canvas.drawLine(-pitchScaleNarrowHalfWidth, yPos,
 							pitchScaleNarrowHalfWidth, yPos,
-							huDwidget.whiteThinTics);
+							huDwidget.commonPaints.whiteThinTics);
 			}
 		}
 	

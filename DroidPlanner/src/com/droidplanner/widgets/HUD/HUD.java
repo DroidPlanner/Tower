@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Paint.Style;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -23,15 +21,6 @@ import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
 
 public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 		HudUpdatedListner {
-	// in relation to averaged of width and height
-	private static final float HUD_FACTOR_BORDER_WIDTH = .0075f;
-	// in relation to averaged of width and height
-	private static final float HUD_FACTOR_RED_INDICATOR_WIDTH = .0075f;
-	// in relation to averaged of width and height
-	private static final float HUD_FACTOR_SCALE_THICK_TIC_STROKEWIDTH = .005f;
-	// in relation to averaged of width and height
-	private static final float HUD_FACTOR_SCALE_THIN_TIC_STROKEWIDTH = .0025f;
-
 	private ScopeThread renderer;
 	int width;
 	int height;
@@ -68,10 +57,8 @@ public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 	static final int hudDebugDroneType = 2;
 	static final boolean hudDebugDroneArmed = false;
 
-	Paint whiteBorder = new Paint();
-	Paint whiteThickTics = new Paint();
-	Paint whiteThinTics = new Paint();
-	Paint blackSolid = new Paint();
+	HudCommonPaints commonPaints = new HudCommonPaints();
+	
 	Drone drone;
 
 	@Override
@@ -106,30 +93,12 @@ public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 	public HUD(Context context, AttributeSet attributeSet) {
 		super(context, attributeSet);
 		getHolder().addCallback(this);
-
-		whiteBorder.setColor(Color.WHITE);
-		whiteBorder.setStyle(Style.STROKE);
-		whiteBorder.setStrokeWidth(3);
-		whiteBorder.setAntiAlias(true);
-
-		whiteThinTics.setColor(Color.WHITE);
-		whiteThinTics.setStyle(Style.FILL);
-		whiteThinTics.setStrokeWidth(1);
-		whiteThinTics.setAntiAlias(true);
-
-		whiteThickTics.setColor(Color.WHITE);
-		whiteThickTics.setStyle(Style.FILL);
-		whiteThickTics.setStrokeWidth(2);
-		whiteThickTics.setAntiAlias(true);
-
-		blackSolid.setColor(Color.BLACK);
-		blackSolid.setAntiAlias(true);
 	}
 
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
-		float hudScaleThickTicStrokeWidth, hudScaleThinTicStrokeWidth, hudBorderWidth, redIndicatorWidth;
+		float redIndicatorWidth;
 
 		this.width = width;
 		this.height = height;
@@ -140,28 +109,8 @@ public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 
 		hudPlane.setupPlane(this);
 
-		hudScaleThickTicStrokeWidth = (this.width + this.height) / 2
-				* HUD_FACTOR_SCALE_THICK_TIC_STROKEWIDTH;
-		if (hudScaleThickTicStrokeWidth < 1)
-			hudScaleThickTicStrokeWidth = 1;
-		whiteThickTics.setStrokeWidth(hudScaleThickTicStrokeWidth);
-
-		hudScaleThinTicStrokeWidth = (this.width + this.height) / 2
-				* HUD_FACTOR_SCALE_THIN_TIC_STROKEWIDTH;
-		if (hudScaleThinTicStrokeWidth < 1)
-			hudScaleThinTicStrokeWidth = 1;
-		whiteThinTics.setStrokeWidth(hudScaleThinTicStrokeWidth);
-
-		hudBorderWidth = (this.width + this.height) / 2
-				* HUD_FACTOR_BORDER_WIDTH;
-		if (hudBorderWidth < 1)
-			hudBorderWidth = 1;
-		whiteBorder.setStrokeWidth(hudBorderWidth);
-
-		redIndicatorWidth = (this.width + this.height) / 2
-				* HUD_FACTOR_RED_INDICATOR_WIDTH;
-		if (redIndicatorWidth < 1)
-			redIndicatorWidth = 1;
+		redIndicatorWidth = commonPaints.setupCommonPaints(this);
+		
 		hudPlane.plane.setStrokeWidth(redIndicatorWidth);
 
 		hudYaw.setupYaw(this, this);

@@ -123,7 +123,7 @@ public class HudScroller {
 
 		// Draw Scroll
 		canvas.drawRect(scroller, scrollerBg);
-		canvas.drawRect(scroller, huDwidget.whiteBorder);
+		canvas.drawRect(scroller, huDwidget.commonPaints.whiteBorder);
 		// Clip to Scroller
 		canvas.clipRect(scroller, Region.Op.REPLACE);
 
@@ -151,7 +151,7 @@ public class HudScroller {
 			if (a % 5 == 0) {
 				canvas.drawLine(scroller.right, lineHeight, scroller.right
 						- scrollerSizePxTicLength, lineHeight,
-						huDwidget.whiteThickTics);
+						huDwidget.commonPaints.whiteThickTics);
 				canvas.drawText(Integer.toString(a), scroller.right
 						- scrollerSizePxTextXOffset, lineHeight + textHalfSize
 						+ scrollerSizePxTextYOffset, scrollerText);
@@ -160,7 +160,7 @@ public class HudScroller {
 
 		// Arrow with current speed
 		String actualText = Integer.toString((int) speed);
-		int borderWidth = Math.round(huDwidget.whiteBorder.getStrokeWidth());
+		int borderWidth = Math.round(huDwidget.commonPaints.whiteBorder.getStrokeWidth());
 		Path arrow = new Path();
 		arrow.moveTo(scroller.left - borderWidth,
 				-scrollerSizePxArrowHeight / 2);
@@ -170,7 +170,7 @@ public class HudScroller {
 		arrow.lineTo(scroller.right - scrollerSizePxArrowHeight / 4
 				- borderWidth, scrollerSizePxArrowHeight / 2);
 		arrow.lineTo(scroller.left - borderWidth, scrollerSizePxArrowHeight / 2);
-		canvas.drawPath(arrow, huDwidget.blackSolid);
+		canvas.drawPath(arrow, huDwidget.commonPaints.blackSolid);
 		if ((targetSpdPos != Float.MIN_VALUE)
 				&& (targetSpdPos > -scrollerSizePxArrowHeight / 2)
 				&& (targetSpdPos < scrollerSizePxArrowHeight / 2)) {
@@ -229,19 +229,19 @@ public class HudScroller {
 		canvas.drawPath(vsiBox, scrollerBg);
 		canvas.drawPath(vsiFill, blueVSI);
 		canvas.drawLine(scroller.left - vsi_width, vsiIndicatorEnd,
-				scroller.left, vsiIndicatorEnd, huDwidget.whiteThinTics);
-		canvas.drawPath(vsiBox, huDwidget.whiteBorder);
+				scroller.left, vsiIndicatorEnd, huDwidget.commonPaints.whiteThinTics);
+		canvas.drawPath(vsiBox, huDwidget.commonPaints.whiteBorder);
 
 		for (int a = 1; a < HudScroller.SCROLLER_VSI_RANGE; a++) { // draw ticks
 			float lineHeight = scroller.top + linespace * a;
 			canvas.drawLine(scroller.left - vsi_width, lineHeight,
 					scroller.left - vsi_width + vsi_width / 3, lineHeight,
-					huDwidget.whiteThickTics);
+					huDwidget.commonPaints.whiteThickTics);
 		}
 
 		// Draw Altitude Scroller
 		canvas.drawRect(scroller, scrollerBg);
-		canvas.drawRect(scroller, huDwidget.whiteBorder);
+		canvas.drawRect(scroller, huDwidget.commonPaints.whiteBorder);
 		// Clip to Scroller
 		canvas.clipRect(scroller, Region.Op.REPLACE);
 
@@ -274,7 +274,7 @@ public class HudScroller {
 			if (a % 5 == 0) {
 				canvas.drawLine(scroller.left, lineHeight, scroller.left
 						+ scrollerSizePxTicLength, lineHeight,
-						huDwidget.whiteThickTics);
+						huDwidget.commonPaints.whiteThickTics);
 				canvas.drawText(Integer.toString(a), scroller.left
 						+ scrollerSizePxTextXOffset, lineHeight + textHalfSize
 						+ scrollerSizePxTextYOffset, scrollerText);
@@ -283,7 +283,7 @@ public class HudScroller {
 
 		// Arrow with current altitude
 		String actualText = Integer.toString((int) altitude);
-		int borderWidth = Math.round(huDwidget.whiteBorder.getStrokeWidth());
+		int borderWidth = Math.round(huDwidget.commonPaints.whiteBorder.getStrokeWidth());
 		Path arrow = new Path();
 		arrow.moveTo(scroller.right, -scrollerSizePxArrowHeight / 2);
 		arrow.lineTo(scroller.left + scrollerSizePxArrowHeight / 4
@@ -292,7 +292,7 @@ public class HudScroller {
 		arrow.lineTo(scroller.left + scrollerSizePxArrowHeight / 4
 				+ borderWidth, scrollerSizePxArrowHeight / 2);
 		arrow.lineTo(scroller.right, scrollerSizePxArrowHeight / 2);
-		canvas.drawPath(arrow, huDwidget.blackSolid);
+		canvas.drawPath(arrow, huDwidget.commonPaints.blackSolid);
 		if ((targetAltPos != Float.MIN_VALUE)
 				&& (targetAltPos > -scrollerSizePxArrowHeight / 2)
 				&& (targetAltPos < scrollerSizePxArrowHeight / 2)) {

@@ -41,7 +41,7 @@ public class HurRoll {
 		RectF rec = new RectF(-r, -r, r, r);
 	
 		// Draw the arc
-		canvas.drawArc(rec, 225, 90, false, huDwidget.whiteBorder);
+		canvas.drawArc(rec, 225, 90, false, huDwidget.commonPaints.whiteBorder);
 	
 		// Draw center triangle
 		Path arrow = new Path();
@@ -66,7 +66,7 @@ public class HurRoll {
 						* (r + rollSizePxTics);
 				float ey = (float) Math.cos(i * Math.PI / 180)
 						* (r + rollSizePxTics);
-				canvas.drawLine(dx, -dy, ex, -ey, huDwidget.whiteThickTics);
+				canvas.drawLine(dx, -dy, ex, -ey, huDwidget.commonPaints.whiteThickTics);
 				// Draw the labels
 				dx = (float) Math.sin(i * Math.PI / 180)
 						* (r + rollSizePxTics + rollPosPxTextYOffset);

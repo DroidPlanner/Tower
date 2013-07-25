@@ -75,7 +75,7 @@ public class HudYaw {
 		canvas.drawRect(-huDwidget.width / 2, yawBottom - yawHeightPx,
 				huDwidget.width / 2, yawBottom, yawBg);
 		canvas.drawLine(-huDwidget.width / 2, yawBottom, huDwidget.width / 2,
-				yawBottom, huDwidget.whiteBorder);
+				yawBottom, huDwidget.commonPaints.whiteBorder);
 
 		double yaw = huDwidget.drone.orientation.getYaw();
 		if (HUD.hudDebug)
@@ -102,19 +102,19 @@ public class HudYaw {
 				int index = (int) workAngle / 45;
 				canvas.drawLine(distanceToCenter, yawBottom
 						- yawSizePxTicsSmall, distanceToCenter, yawBottom,
-						huDwidget.whiteThinTics);
+						huDwidget.commonPaints.whiteThinTics);
 				canvas.drawText(compass[index], distanceToCenter, yawBottom
 						- yawYPosPxText, yawText);
 			} else if (workAngle % 15 == 0) {
 				canvas.drawLine(distanceToCenter,
 						yawBottom - yawSizePxTicsTall, distanceToCenter,
-						yawBottom, huDwidget.whiteThinTics);
+						yawBottom, huDwidget.commonPaints.whiteThinTics);
 				canvas.drawText((int) (workAngle) + "", distanceToCenter,
 						yawBottom - yawYPosPxTextNumbers, yawNumbers);
 			} else {
 				canvas.drawLine(distanceToCenter, yawBottom
 						- yawSizePxTicsSmall, distanceToCenter, yawBottom,
-						huDwidget.whiteThinTics);
+						huDwidget.commonPaints.whiteThinTics);
 			}
 		}
 

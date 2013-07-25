@@ -56,7 +56,7 @@ public class HudFailsafe {
 							+ failsafeSizePxBoxPadding, textRec.bottom
 							+ failsafeSizePxBoxPadding);
 					canvas.drawRoundRect(boxRec, failsafeSizePxBoxPadding,
-							failsafeSizePxBoxPadding, huDwidget.blackSolid);
+							failsafeSizePxBoxPadding, huDwidget.commonPaints.blackSolid);
 					canvas.drawText(text, textRec.left - 3, textRec.bottom - 1,
 							FailsafeText);
 					armedCounter++;
@@ -73,7 +73,7 @@ public class HudFailsafe {
 						+ failsafeSizePxBoxPadding, textRec.bottom
 						+ failsafeSizePxBoxPadding);
 				canvas.drawRoundRect(boxRec, failsafeSizePxBoxPadding,
-						failsafeSizePxBoxPadding, huDwidget.blackSolid);
+						failsafeSizePxBoxPadding, huDwidget.commonPaints.blackSolid);
 				canvas.drawText(text, textRec.left - 3, textRec.bottom - 1,
 						FailsafeText);
 				armedCounter = 0;
