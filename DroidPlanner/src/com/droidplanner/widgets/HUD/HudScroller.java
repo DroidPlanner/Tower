@@ -44,17 +44,23 @@ public class HudScroller {
 	Paint scrollerText = new Paint();
 	Paint scrollerActualText = new Paint();
 	Paint greenPen = new Paint();
+	Paint blueVSI = new Paint();
 
 	public HudScroller() {
 		scrollerBg.setARGB(64, 255, 255, 255);// (255, 0, 0, 0);
+		
 		scrollerText.setColor(Color.WHITE);
 		scrollerText.setAntiAlias(true);
+		
 		scrollerActualText.setColor(Color.WHITE);
 		scrollerActualText.setAntiAlias(true);
-
+		
 		greenPen.setColor(Color.GREEN);
 		greenPen.setStrokeWidth(6);
 		greenPen.setStyle(Style.STROKE);
+		
+		blueVSI.setARGB(255, 0, 50, 250);
+		blueVSI.setAntiAlias(true);
 	}
 
 	int setupScroller(HUD huDwidget, int tempAttTextClearance,
@@ -221,7 +227,7 @@ public class HudScroller {
 		vsiFill.lineTo(scroller.left, vsiIndicatorEnd);
 		vsiFill.lineTo(scroller.left, scroller.centerY());
 		canvas.drawPath(vsiBox, scrollerBg);
-		canvas.drawPath(vsiFill, huDwidget.blueVSI);
+		canvas.drawPath(vsiFill, blueVSI);
 		canvas.drawLine(scroller.left - vsi_width, vsiIndicatorEnd,
 				scroller.left, vsiIndicatorEnd, huDwidget.whiteThinTics);
 		canvas.drawPath(vsiBox, huDwidget.whiteBorder);

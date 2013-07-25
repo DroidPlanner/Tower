@@ -73,7 +73,6 @@ public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 	Paint whiteThickTics = new Paint();
 	Paint whiteThinTics = new Paint();
 	Paint blackSolid = new Paint();
-	Paint blueVSI = new Paint();
 	Drone drone;
 
 	@Override
@@ -135,8 +134,6 @@ public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 
 		blackSolid.setColor(Color.BLACK);
 		blackSolid.setAntiAlias(true);
-		blueVSI.setARGB(255, 0, 50, 250);
-		blueVSI.setAntiAlias(true);
 	}
 
 	@Override
