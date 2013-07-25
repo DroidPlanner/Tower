@@ -11,6 +11,8 @@ import com.droidplanner.R;
 import com.droidplanner.drone.DroneInterfaces.DroneTypeListner;
 import com.droidplanner.drone.variables.GuidedPoint;
 import com.droidplanner.drone.variables.waypoint;
+import com.droidplanner.fragments.FlightMapFragment;
+import com.droidplanner.fragments.HudFragment;
 import com.droidplanner.fragments.FlightMapFragment.OnFlighDataListener;
 import com.droidplanner.widgets.spinners.SelectModeSpinner;
 import com.droidplanner.widgets.spinners.SelectModeSpinner.OnModeSpinnerSelectedListener;
@@ -25,6 +27,8 @@ public abstract class SuperFlightActivity extends SuperActivity implements
 	private SelectWaypointSpinner wpSpinner;
 
 	private GuidedPoint guidedPoint;
+	protected FlightMapFragment mapFragment;
+	protected HudFragment hudFragment;
 
 	public SuperFlightActivity() {
 		super();

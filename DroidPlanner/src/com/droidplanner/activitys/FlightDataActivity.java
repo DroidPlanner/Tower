@@ -13,8 +13,6 @@ import com.droidplanner.fragments.FlightMapFragment;
 public class FlightDataActivity extends SuperFlightActivity implements
 		OnWaypointUpdateListner, DroneTypeListner {
 
-	private FlightMapFragment flightMapFragment;
-
 	@Override
 	int getNavigationItem() {
 		return 1;
@@ -26,9 +24,9 @@ public class FlightDataActivity extends SuperFlightActivity implements
 
 		setContentView(R.layout.flightdata);
 
-		flightMapFragment = ((FlightMapFragment) getFragmentManager()
+		mapFragment = ((FlightMapFragment) getFragmentManager()
 				.findFragmentById(R.id.flightMapFragment));
-		flightMapFragment.updateFragment();
+		mapFragment.updateFragment();
 
 		app.setWaypointReceivedListner(this);
 		drone.setDroneTypeChangedListner(this);
@@ -43,10 +41,10 @@ public class FlightDataActivity extends SuperFlightActivity implements
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_zoom:
-			flightMapFragment.zoomToLastKnowPosition();
+			mapFragment.zoomToLastKnowPosition();
 			return true;
 		case R.id.menu_clearFlightPath:
-			flightMapFragment.clearFlightPath();
+			mapFragment.clearFlightPath();
 			return true;
 		default:
 			return super.onMenuItemSelected(featureId, item);
@@ -56,14 +54,14 @@ public class FlightDataActivity extends SuperFlightActivity implements
 	@Override
 	public void onWaypointsUpdate() {
 		super.onWaypointsUpdate();
-		flightMapFragment.updateFragment();
+		mapFragment.updateFragment();
 	}
 
 	@Override
 	public void onDroneTypeChanged() {
 		super.onDroneTypeChanged();
 		Log.d("DRONE", "Drone type changed");
-		flightMapFragment.droneMarker.updateDroneMarkers();
+		mapFragment.droneMarker.updateDroneMarkers();
 	}
 
 }
