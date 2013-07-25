@@ -1,3 +1,8 @@
+## Droidplanner v0.10.3
+* Improved Record-Me mode (with a bug fix)
+* Now all the data on a Mission item is used
+* Better handling of the markers on GCP and Planning screens
+
 ## Droidplanner v0.10.2
 * Better swipe implementation on RC screen
 * Bug fix on the RC screen
