@@ -1,5 +1,6 @@
 package com.droidplanner.fragments.markers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -7,14 +8,14 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MarkerManager<T> {
+public class MarkerManager{
 	public GoogleMap mMap;
-	public HashMap<Marker, T> hashMap = new HashMap<Marker, T>();
+	public HashMap<Marker, MarkerSource> hashMap = new HashMap<Marker, MarkerSource>();
 
-	public interface markerSource{
+	public interface MarkerSource{
 		MarkerOptions build();
 
-		void update(Marker markerFromGcp);
+		void update(Marker marker);
 	}
 	
 	public MarkerManager(GoogleMap map) {
@@ -23,37 +24,41 @@ public class MarkerManager<T> {
 
 	public void clear() {
 		for (Marker marker : hashMap.keySet()) {
-			removeMarker(getObjectFromMarker(marker));
+			removeMarker(getSourceFromMarker(marker));
 		}
 	}
 
-	public void updateMarkers(List<T> list) {
+	public <T> void updateMarkers(List<T> list) {
 		for (T object : list) {
-			updateMarker(object);
+			updateMarker((MarkerSource) object);
 		}
 		removeOldMarkers(list);
 	}
 
-	public void updateMarker(T marker) {
-		if (hashMap.containsValue(marker)) {
-			((markerSource) marker).update(getMarkerFromObject(marker));
+	public void updateMarker(MarkerSource object) {
+		if (hashMap.containsValue(object)) {
+			((MarkerSource) object).update(getMarkerFromSource(object));
 		} else {
-			addMarker(marker);
+			addMarker(object);
 		}
 	}
 
-	private void removeOldMarkers(List<T> list) {
+	private <T> void removeOldMarkers(List<T> list) {
+		List<MarkerSource> toRemove = new ArrayList<MarkerSource>();
 		for (Marker marker : hashMap.keySet()) {
-			T object = getObjectFromMarker(marker);
+			MarkerSource object = getSourceFromMarker(marker);
 			if (!list.contains(object)) {
-				removeMarker(object);
+				toRemove.add(object);
 			}
 		}
+		for (MarkerSource markerSource : toRemove) {
+			removeMarker(markerSource);
+		}
 	}
 
-	private boolean removeMarker(T object) {
+	private boolean removeMarker(MarkerSource object) {
 		if (hashMap.containsValue(object)) {
-			Marker marker = getMarkerFromObject(object);
+			Marker marker = getMarkerFromSource(object);
 			hashMap.remove(marker);
 			marker.remove();
 			return true;
@@ -62,21 +67,21 @@ public class MarkerManager<T> {
 		}
 	}
 
-	private void addMarker(T object) {
-		Marker marker = mMap.addMarker(((markerSource) object).build());
+	private void addMarker(MarkerSource object) {
+		Marker marker = mMap.addMarker(object.build());
 		hashMap.put(marker, object);
 	}
 
-	public Marker getMarkerFromObject(T object) {
+	public Marker getMarkerFromSource(MarkerSource object) {
 		for (Marker marker : hashMap.keySet()) {
-			if (getObjectFromMarker(marker) == object) {
+			if (getSourceFromMarker(marker) == object) {
 				return marker;
 			}
 		}
 		return null;
 	}
 
-	public T getObjectFromMarker(Marker marker) {
+	public MarkerSource getSourceFromMarker(Marker marker) {
 		return hashMap.get(marker);
 	}
 

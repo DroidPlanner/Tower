@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.droidplanner.fragments.markers.MarkerManager;
-import com.droidplanner.gcp.gcp;
+import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.model.Marker;
@@ -17,12 +17,12 @@ public class GcpMapFragment extends OfflineMapFragment implements
 
 	private OnGcpClickListner mListener;
 
-	public MarkerManager<gcp> markers;
+	public MarkerManager markers;
 
 	private GoogleMap mMap;
 
 	public interface OnGcpClickListner {
-		void onGcpClick(gcp gcp);
+		void onGcpClick(MarkerSource gcp);
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public class GcpMapFragment extends OfflineMapFragment implements
 		View view = super.onCreateView(inflater, viewGroup, bundle);
 		mMap = getMap();
 		mMap.setOnMarkerClickListener(this);
-		markers = new MarkerManager<gcp>(mMap) {
+		markers = new MarkerManager(mMap) {
 		};;
 		return view;
 	}
@@ -44,7 +44,7 @@ public class GcpMapFragment extends OfflineMapFragment implements
 
 	@Override
 	public boolean onMarkerClick(Marker marker) {
-		mListener.onGcpClick(markers.getObjectFromMarker(marker));
+		mListener.onGcpClick(markers.getSourceFromMarker(marker));
 		return true;
 	}
 

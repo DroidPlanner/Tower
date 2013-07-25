@@ -15,6 +15,7 @@ import com.droidplanner.dialogs.OpenGcpFileDialog;
 import com.droidplanner.file.IO.GcpReader;
 import com.droidplanner.fragments.GcpMapFragment;
 import com.droidplanner.fragments.GcpMapFragment.OnGcpClickListner;
+import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import com.droidplanner.gcp.gcp;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -114,8 +115,8 @@ public class GCPActivity extends SuperActivity implements OnGcpClickListner {
 	}
 
 	@Override
-	public void onGcpClick(gcp gcp) {
-		gcp.toogleState();
+	public void onGcpClick(MarkerSource gcp) {
+		((com.droidplanner.gcp.gcp) gcp).toogleState();
 		gcpMapFragment.markers.updateMarker(gcp);
 	}
 
