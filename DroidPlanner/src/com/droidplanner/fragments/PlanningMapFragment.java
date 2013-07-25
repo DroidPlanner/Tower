@@ -22,6 +22,7 @@ import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 @SuppressLint("UseSparseArrays")
@@ -41,6 +42,10 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 	public modes mode = modes.MISSION;
 
 	public Polygon polygon;
+
+	private Polyline polygonLine;
+
+	private Polyline missionLine;
 
 	public interface OnMapInteractionListener {
 
@@ -73,16 +78,26 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 	}
 
 	public void update(Drone drone, Polygon polygon) {
-		clearMap();
 		markers.clear();
 
 		markers.updateMarker(drone.mission.getHome());
 		markers.updateMarkers(drone.mission.getWaypoints());
 		markers.updateMarkers(polygon.getPolygonPoints());
 
-		mMap.addPolyline(getPolygonPath(polygon));
-		mMap.addPolyline(getMissionPath(drone));
+		clearPolylines();
 
+		polygonLine = mMap.addPolyline(getPolygonPath(polygon));
+		missionLine = mMap.addPolyline(getMissionPath(drone));
+
+	}
+
+	private void clearPolylines() {
+		if (polygonLine != null) {
+			polygonLine.remove();
+		}
+		if (missionLine != null) {
+			missionLine.remove();
+		}
 	}
 
 	@Override
@@ -114,13 +129,14 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 
 	private void checkForWaypointMarker(MarkerSource source, Marker marker) {
 		if (waypoint.class.isInstance(source)) {
-			mListener.onMoveWaypoint((waypoint)source,marker.getPosition());
+			mListener.onMoveWaypoint((waypoint) source, marker.getPosition());
 		}
 	}
 
 	private void checkForPolygonMarker(MarkerSource source, Marker marker) {
 		if (PolygonPoint.class.isInstance(source)) {
-			mListener.onMovePolygonPoint((PolygonPoint)source, marker.getPosition());
+			mListener.onMovePolygonPoint((PolygonPoint) source,
+					marker.getPosition());
 		}
 	}
 
