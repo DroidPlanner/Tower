@@ -16,10 +16,11 @@ import android.widget.Toast;
 
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.variables.GuidedPoint;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.fragments.markers.DroneMarker;
-import com.droidplanner.fragments.markers.GuidedMarker;
 import com.droidplanner.fragments.markers.HomeMarker;
+import com.droidplanner.fragments.markers.MarkerManager;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
@@ -30,7 +31,6 @@ import com.google.android.gms.maps.model.PolylineOptions;
 public class FlightMapFragment extends OfflineMapFragment implements
 		OnMapLongClickListener {
 	public GoogleMap mMap;
-	private GuidedMarker guidedMarker;
 	private Polyline flightPath;
 	private Polyline missionPath;
 
@@ -38,6 +38,8 @@ public class FlightMapFragment extends OfflineMapFragment implements
 	public boolean isAutoPanEnabled;
 	private boolean isGuidedModeEnabled;
 
+	private MarkerManager markers;
+	
 	public boolean hasBeenZoomed = false;
 	private OnFlighDataListener mListener;
 	public HomeMarker homeMarker;
@@ -45,7 +47,7 @@ public class FlightMapFragment extends OfflineMapFragment implements
 	public Drone drone;
 
 	public interface OnFlighDataListener {
-		public void onSetGuidedMode(LatLng point);
+		public void onSetGuidedMode(GuidedPoint guidedPoint);
 	}
 
 	@Override
@@ -55,9 +57,11 @@ public class FlightMapFragment extends OfflineMapFragment implements
 		mMap = getMap();
 		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
 
+
+		markers = new MarkerManager(mMap);
+		
 		droneMarker = new DroneMarker(this);
 		homeMarker = new HomeMarker(this.mMap);
-		guidedMarker = new GuidedMarker(mMap);
 
 		addFlightPathToMap();
 		addMissionPathToMap();
@@ -136,11 +140,12 @@ public class FlightMapFragment extends OfflineMapFragment implements
 	}
 
 	@Override
-	public void onMapLongClick(LatLng point) {
+	public void onMapLongClick(LatLng coord) {
 		getPreferences();
 		if (isGuidedModeEnabled) {
-			mListener.onSetGuidedMode(point);
-			guidedMarker.updateGuidedMarker(point);
+			GuidedPoint guidedPoint = new GuidedPoint(coord);
+			mListener.onSetGuidedMode(guidedPoint);
+			markers.updateMarker(guidedPoint);
 		}
 	}
 
