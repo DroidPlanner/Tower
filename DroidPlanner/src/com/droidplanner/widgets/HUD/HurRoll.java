@@ -1,8 +1,11 @@
 package com.droidplanner.widgets.HUD;
 
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
+import android.graphics.Path;
+import android.graphics.RectF;
 
 public class HurRoll {
 
@@ -31,5 +34,48 @@ public class HurRoll {
 				* HurRoll.ROLL_FACTOR_TIC_LENGTH);
 		rollPosPxTextYOffset = Math.round(rollSizePxTics
 				* HurRoll.ROLL_FACTOR_TEXT_Y_OFFSET);
+	}
+
+	void drawRoll(HUDwidget huDwidget, Canvas canvas) {
+		int r = Math.round(huDwidget.data.attHeightPx / 2 - rollTopOffsetPx);
+		RectF rec = new RectF(-r, -r, r, r);
+	
+		// Draw the arc
+		canvas.drawArc(rec, 225, 90, false, huDwidget.whiteBorder);
+	
+		// Draw center triangle
+		Path arrow = new Path();
+		int tempOffset = Math.round(huDwidget.plane.getStrokeWidth() / 2);
+		arrow.moveTo(0, -huDwidget.data.attHeightPx / 2 + rollTopOffsetPx
+				- tempOffset);
+		arrow.lineTo(0 - rollTopOffsetPx / 3, -huDwidget.data.attHeightPx / 2
+				+ rollTopOffsetPx / 2 - tempOffset);
+		arrow.lineTo(0 + rollTopOffsetPx / 3, -huDwidget.data.attHeightPx / 2
+				+ rollTopOffsetPx / 2 - tempOffset);
+		arrow.close();
+		canvas.drawPath(arrow, huDwidget.plane);
+	
+		// draw the ticks
+		// The center of the circle is at: 0, 0
+		for (int i = -45; i <= 45; i += 15) {
+			if (i != 0) {
+				// Draw ticks
+				float dx = (float) Math.sin(i * Math.PI / 180) * r;
+				float dy = (float) Math.cos(i * Math.PI / 180) * r;
+				float ex = (float) Math.sin(i * Math.PI / 180)
+						* (r + rollSizePxTics);
+				float ey = (float) Math.cos(i * Math.PI / 180)
+						* (r + rollSizePxTics);
+				canvas.drawLine(dx, -dy, ex, -ey, huDwidget.whiteThickTics);
+				// Draw the labels
+				dx = (float) Math.sin(i * Math.PI / 180)
+						* (r + rollSizePxTics + rollPosPxTextYOffset);
+				dy = (float) Math.cos(i * Math.PI / 180)
+						* (r + rollSizePxTics + rollPosPxTextYOffset);
+				canvas.drawText(Math.abs(i) + "", dx, -dy, rollText);
+			}
+		}
+	
+		// current roll angle will be drawn by drawPitch()
 	}
 }

@@ -138,7 +138,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		// stuff, so general save and restore
 		// is not necessary
 		drawPitch(canvas);
-		drawRoll(canvas);
+		hudRoll.drawRoll(this, canvas);
 		hudYaw.drawYaw(this, canvas);
 		drawPlane(canvas);
 		hudScroller.drawRightScroller(this, canvas);
@@ -206,49 +206,6 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 				hudCenterIndicatorRadius * 2, 0, plane);
 		canvas.drawLine(0, -hudCenterIndicatorRadius, 0,
 				-hudCenterIndicatorRadius * 2, plane);
-	}
-
-	private void drawRoll(Canvas canvas) {
-		int r = Math.round(data.attHeightPx / 2 - hudRoll.rollTopOffsetPx);
-		RectF rec = new RectF(-r, -r, r, r);
-
-		// Draw the arc
-		canvas.drawArc(rec, 225, 90, false, whiteBorder);
-
-		// Draw center triangle
-		Path arrow = new Path();
-		int tempOffset = Math.round(plane.getStrokeWidth() / 2);
-		arrow.moveTo(0, -data.attHeightPx / 2 + hudRoll.rollTopOffsetPx
-				- tempOffset);
-		arrow.lineTo(0 - hudRoll.rollTopOffsetPx / 3, -data.attHeightPx / 2
-				+ hudRoll.rollTopOffsetPx / 2 - tempOffset);
-		arrow.lineTo(0 + hudRoll.rollTopOffsetPx / 3, -data.attHeightPx / 2
-				+ hudRoll.rollTopOffsetPx / 2 - tempOffset);
-		arrow.close();
-		canvas.drawPath(arrow, plane);
-
-		// draw the ticks
-		// The center of the circle is at: 0, 0
-		for (int i = -45; i <= 45; i += 15) {
-			if (i != 0) {
-				// Draw ticks
-				float dx = (float) Math.sin(i * Math.PI / 180) * r;
-				float dy = (float) Math.cos(i * Math.PI / 180) * r;
-				float ex = (float) Math.sin(i * Math.PI / 180)
-						* (r + hudRoll.rollSizePxTics);
-				float ey = (float) Math.cos(i * Math.PI / 180)
-						* (r + hudRoll.rollSizePxTics);
-				canvas.drawLine(dx, -dy, ex, -ey, whiteThickTics);
-				// Draw the labels
-				dx = (float) Math.sin(i * Math.PI / 180)
-						* (r + hudRoll.rollSizePxTics + hudRoll.rollPosPxTextYOffset);
-				dy = (float) Math.cos(i * Math.PI / 180)
-						* (r + hudRoll.rollSizePxTics + hudRoll.rollPosPxTextYOffset);
-				canvas.drawText(Math.abs(i) + "", dx, -dy, hudRoll.rollText);
-			}
-		}
-
-		// current roll angle will be drawn by drawPitch()
 	}
 
 	private void drawPitch(Canvas canvas) {
