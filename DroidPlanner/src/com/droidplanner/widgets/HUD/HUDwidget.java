@@ -7,13 +7,10 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
-import android.graphics.Rect;
-import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.MAVLink.Messages.ApmModes;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
 
@@ -48,10 +45,6 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 	private HudPitch hudPitch = new HudPitch();
 	HudFailsafe hudFailsafe = new HudFailsafe();
 	private int hudCenterIndicatorRadius;
-	int failsafeSizePxBoxPadding;
-
-	private int armedCounter = 0;
-	// private DisplayMetrics hudMetrics;
 
 	static final boolean hudDebug = false;
 	// hudDebug is the main switch for HUD debugging
@@ -75,8 +68,8 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 	static final String hudDebugModeName = "Loiter";
 	static final int hudDebugWpNumber = 4;
 	static final double hudDebugDistToWp = 30.45;
-	private static final int hudDebugDroneType = 2;
-	private static final boolean hudDebugDroneArmed = false;
+	static final int hudDebugDroneType = 2;
+	static final boolean hudDebugDroneArmed = false;
 
 	// Paints
 	Paint yawBg = new Paint();
@@ -115,7 +108,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		hudScroller.drawRightScroller(this, canvas);
 		hudScroller.drawLeftScroller(this, canvas);
 		data.drawAttitudeInfoText(this, canvas);
-		drawFailsafe(canvas);
+		hudFailsafe.drawFailsafe(this, canvas);
 	}
 
 	public HUDwidget(Context context, AttributeSet attributeSet) {
@@ -170,54 +163,6 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 				hudCenterIndicatorRadius * 2, 0, plane);
 		canvas.drawLine(0, -hudCenterIndicatorRadius, 0,
 				-hudCenterIndicatorRadius * 2, plane);
-	}
-
-	private void drawFailsafe(Canvas canvas) {
-		int droneType = drone.type.getType();
-		boolean isArmed = drone.state.isArmed();
-
-		if (hudDebug) {
-			droneType = hudDebugDroneType;
-			isArmed = hudDebugDroneArmed;
-		}
-
-		if (ApmModes.isCopter(droneType)) {
-			if (isArmed) {
-				if (armedCounter < 50) {
-					hudFailsafe.FailsafeText.setColor(Color.RED);
-					String text = "ARMED";
-					Rect textRec = new Rect();
-					hudFailsafe.FailsafeText.getTextBounds(text, 0, text.length(), textRec);
-					textRec.offset(-textRec.width() / 2, canvas.getHeight() / 3);
-					RectF boxRec = new RectF(textRec.left
-							- failsafeSizePxBoxPadding, textRec.top
-							- failsafeSizePxBoxPadding, textRec.right
-							+ failsafeSizePxBoxPadding, textRec.bottom
-							+ failsafeSizePxBoxPadding);
-					canvas.drawRoundRect(boxRec, failsafeSizePxBoxPadding,
-							failsafeSizePxBoxPadding, blackSolid);
-					canvas.drawText(text, textRec.left - 3, textRec.bottom - 1,
-							hudFailsafe.FailsafeText);
-					armedCounter++;
-				}
-			} else {
-				hudFailsafe.FailsafeText.setColor(Color.GREEN);
-				String text = "DISARMED";
-				Rect textRec = new Rect();
-				hudFailsafe.FailsafeText.getTextBounds(text, 0, text.length(), textRec);
-				textRec.offset(-textRec.width() / 2, canvas.getHeight() / 3);
-				RectF boxRec = new RectF(textRec.left
-						- failsafeSizePxBoxPadding, textRec.top
-						- failsafeSizePxBoxPadding, textRec.right
-						+ failsafeSizePxBoxPadding, textRec.bottom
-						+ failsafeSizePxBoxPadding);
-				canvas.drawRoundRect(boxRec, failsafeSizePxBoxPadding,
-						failsafeSizePxBoxPadding, blackSolid);
-				canvas.drawText(text, textRec.left - 3, textRec.bottom - 1,
-						hudFailsafe.FailsafeText);
-				armedCounter = 0;
-			}
-		}
 	}
 
 	@Override
