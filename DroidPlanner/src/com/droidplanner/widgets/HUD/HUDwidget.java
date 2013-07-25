@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
-import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
@@ -57,7 +56,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 	HudAtt data = new HudAtt();
 	private HudScroller hudScroller = new HudScroller();
 	HudYaw hudYaw = new HudYaw();
-	private HurRoll hudRoll = new HurRoll();
+	HurRoll hudRoll = new HurRoll();
 	private HudPitch hudPitch = new HudPitch();
 	private int hudCenterIndicatorRadius;
 	private int failsafeSizePxBoxPadding;
@@ -70,8 +69,8 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 	// |->false: Normal HUD operation.
 	// '->true: HUD shows only the following dummy data! NO NORMAL OPERATION
 	static final double hudDebugYaw = 42;
-	private static final double hudDebugRoll = 45;
-	private static final double hudDebugPitch = 11;
+	static final double hudDebugRoll = 45;
+	static final double hudDebugPitch = 11;
 	static final double hudDebugGroundSpeed = 4.3;
 	static final double hudDebugAirSpeed = 3.2;
 	static final double hudDebugTargetSpeed = 3;
@@ -122,7 +121,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		// this will improve performance because not every routine applies that
 		// stuff, so general save and restore
 		// is not necessary
-		drawPitch(canvas);
+		hudPitch.drawPitch(this, canvas);
 		hudRoll.drawRoll(this, canvas);
 		hudYaw.drawYaw(this, canvas);
 		drawPlane(canvas);
@@ -186,65 +185,6 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 				hudCenterIndicatorRadius * 2, 0, plane);
 		canvas.drawLine(0, -hudCenterIndicatorRadius, 0,
 				-hudCenterIndicatorRadius * 2, plane);
-	}
-
-	private void drawPitch(Canvas canvas) {
-		double pitch = drone.orientation.getPitch();
-		double roll = drone.orientation.getRoll();
-
-		if (hudDebug) {
-			pitch = hudDebugPitch;
-			roll = hudDebugRoll;
-		}
-
-		int pitchOffsetPx = (int) (pitch * hudPitch.pitchPixPerDegree);
-		int rollTriangleBottom = -data.attHeightPx / 2
-				+ hudRoll.rollTopOffsetPx / 2 + hudRoll.rollTopOffsetPx;
-
-		canvas.rotate(-(int) roll);
-
-		// Draw the background
-		canvas.drawRect(-width, pitchOffsetPx, width,
-				2 * height /* Go plenty low */, hudPitch.ground);
-		canvas.drawRect(-width, -2 * height /* Go plenty high */, width,
-				pitchOffsetPx, hudPitch.sky);
-		canvas.drawLine(-width, pitchOffsetPx, width, pitchOffsetPx,
-				whiteThinTics);
-
-		// Draw roll triangle
-		Path arrow = new Path();
-		int tempOffset = Math.round(plane.getStrokeWidth()
-				+ whiteBorder.getStrokeWidth() / 2);
-		arrow.moveTo(0, -data.attHeightPx / 2 + hudRoll.rollTopOffsetPx
-				+ tempOffset);
-		arrow.lineTo(0 - hudRoll.rollTopOffsetPx / 3, rollTriangleBottom
-				+ tempOffset);
-		arrow.lineTo(0 + hudRoll.rollTopOffsetPx / 3, rollTriangleBottom
-				+ tempOffset);
-		arrow.close();
-		canvas.drawPath(arrow, plane);
-
-		// Draw gauge
-		int yPos;
-		for (int i = -180; i <= 180; i += 5) {
-			yPos = Math.round(-i * hudPitch.pitchPixPerDegree + pitchOffsetPx);
-			if ((yPos < -rollTriangleBottom) && (yPos > rollTriangleBottom)
-					&& (yPos != pitchOffsetPx)) {
-				if (i % 2 == 0) {
-					canvas.drawLine(-hudPitch.pitchScaleWideHalfWidth, yPos,
-							hudPitch.pitchScaleWideHalfWidth, yPos,
-							whiteThinTics);
-					canvas.drawText(i + "", -hudPitch.pitchScaleWideHalfWidth
-							- hudPitch.pitchScaleTextXOffset, yPos
-							- hudPitch.pitchTextCenterOffsetPx, hudPitch.pitchText);
-				} else
-					canvas.drawLine(-hudPitch.pitchScaleNarrowHalfWidth, yPos,
-							hudPitch.pitchScaleNarrowHalfWidth, yPos,
-							whiteThinTics);
-			}
-		}
-
-		canvas.rotate((int) roll);
 	}
 
 	private void drawAttitudeInfoText(Canvas canvas) {

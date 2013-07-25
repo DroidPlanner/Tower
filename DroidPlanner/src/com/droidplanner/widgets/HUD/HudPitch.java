@@ -1,8 +1,10 @@
 package com.droidplanner.widgets.HUD;
 
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
+import android.graphics.Path;
 
 public class HudPitch {
 	// in relation to attHeightPx
@@ -51,5 +53,64 @@ public class HudPitch {
 				* PITCH_FACTOR_SCALE_TEXT_X_OFFSET);
 		pitchPixPerDegree = Math.round(huDwidget.data.attHeightPx
 				* PITCH_FACTOR_SCALE_Y_SPACE);
+	}
+
+	void drawPitch(HUDwidget huDwidget, Canvas canvas) {
+		double pitch = huDwidget.drone.orientation.getPitch();
+		double roll = huDwidget.drone.orientation.getRoll();
+	
+		if (HUDwidget.hudDebug) {
+			pitch = HUDwidget.hudDebugPitch;
+			roll = HUDwidget.hudDebugRoll;
+		}
+	
+		int pitchOffsetPx = (int) (pitch * pitchPixPerDegree);
+		int rollTriangleBottom = -huDwidget.data.attHeightPx / 2
+				+ huDwidget.hudRoll.rollTopOffsetPx / 2 + huDwidget.hudRoll.rollTopOffsetPx;
+	
+		canvas.rotate(-(int) roll);
+	
+		// Draw the background
+		canvas.drawRect(-huDwidget.width, pitchOffsetPx, huDwidget.width,
+				2 * huDwidget.height, ground);
+		canvas.drawRect(-huDwidget.width, -2 * huDwidget.height, huDwidget.width,
+				pitchOffsetPx, sky);
+		canvas.drawLine(-huDwidget.width, pitchOffsetPx, huDwidget.width, pitchOffsetPx,
+				huDwidget.whiteThinTics);
+	
+		// Draw roll triangle
+		Path arrow = new Path();
+		int tempOffset = Math.round(huDwidget.plane.getStrokeWidth()
+				+ huDwidget.whiteBorder.getStrokeWidth() / 2);
+		arrow.moveTo(0, -huDwidget.data.attHeightPx / 2 + huDwidget.hudRoll.rollTopOffsetPx
+				+ tempOffset);
+		arrow.lineTo(0 - huDwidget.hudRoll.rollTopOffsetPx / 3, rollTriangleBottom
+				+ tempOffset);
+		arrow.lineTo(0 + huDwidget.hudRoll.rollTopOffsetPx / 3, rollTriangleBottom
+				+ tempOffset);
+		arrow.close();
+		canvas.drawPath(arrow, huDwidget.plane);
+	
+		// Draw gauge
+		int yPos;
+		for (int i = -180; i <= 180; i += 5) {
+			yPos = Math.round(-i * pitchPixPerDegree + pitchOffsetPx);
+			if ((yPos < -rollTriangleBottom) && (yPos > rollTriangleBottom)
+					&& (yPos != pitchOffsetPx)) {
+				if (i % 2 == 0) {
+					canvas.drawLine(-pitchScaleWideHalfWidth, yPos,
+							pitchScaleWideHalfWidth, yPos,
+							huDwidget.whiteThinTics);
+					canvas.drawText(i + "", -pitchScaleWideHalfWidth
+							- pitchScaleTextXOffset, yPos
+							- pitchTextCenterOffsetPx, pitchText);
+				} else
+					canvas.drawLine(-pitchScaleNarrowHalfWidth, yPos,
+							pitchScaleNarrowHalfWidth, yPos,
+							huDwidget.whiteThinTics);
+			}
+		}
+	
+		canvas.rotate((int) roll);
 	}
 }
