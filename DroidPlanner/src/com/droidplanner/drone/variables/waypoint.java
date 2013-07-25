@@ -90,4 +90,9 @@ public class waypoint {
 	public MAVLinkPacket pack() {
 		return missionItem.pack();
 	}
+
+	public void setTarget(int target_system, int target_component) {
+		missionItem.target_system = (byte) target_system;
+		missionItem.target_component = (byte) target_component;		
+	}
 }
