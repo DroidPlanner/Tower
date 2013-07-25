@@ -36,11 +36,12 @@ public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 	private ScopeThread renderer;
 	int width;
 	int height;
-	public HudInfo data = new HudInfo();
-	public HudScroller hudScroller = new HudScroller();
 	public HudYaw hudYaw = new HudYaw();
+	public HudInfo data = new HudInfo();
 	public HurRoll hudRoll = new HurRoll();
+	public HudPlane hudPlane = new HudPlane();
 	private HudPitch hudPitch = new HudPitch();
+	public HudScroller hudScroller = new HudScroller();
 	private HudFailsafe hudFailsafe = new HudFailsafe();
 	
 	static final boolean hudDebug = false;
@@ -72,7 +73,6 @@ public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 	Paint whiteBorder = new Paint();
 	Paint whiteThickTics = new Paint();
 	Paint whiteThinTics = new Paint();
-	HudPlane hudPlane = new HudPlane();
 	Paint blackSolid = new Paint();
 	Paint blueVSI = new Paint();
 	Drone drone;
