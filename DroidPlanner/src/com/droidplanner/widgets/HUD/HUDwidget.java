@@ -69,15 +69,15 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 	static final double hudDebugAltitude = 8;
 	static final double hudDebugTargetAltitude = 20;
 	static final double hudDebugVerticalSpeed = 2.5;
-	private static final double hudDebugBattRemain = 51;
-	private static final double hudDebugBattCurrent = 40.5;
-	private static final double hudDebugBattVolt = 12.32;
-	private static final int hudDebugSatCount = 8;
-	private static final int hudDebugFixType = 3;
-	private static final double hudDebugGpsEPH = 2.4;
-	private static final String hudDebugModeName = "Loiter";
-	private static final int hudDebugWpNumber = 4;
-	private static final double hudDebugDistToWp = 30.45;
+	static final double hudDebugBattRemain = 51;
+	static final double hudDebugBattCurrent = 40.5;
+	static final double hudDebugBattVolt = 12.32;
+	static final int hudDebugSatCount = 8;
+	static final int hudDebugFixType = 3;
+	static final double hudDebugGpsEPH = 2.4;
+	static final String hudDebugModeName = "Loiter";
+	static final int hudDebugWpNumber = 4;
+	static final double hudDebugDistToWp = 30.45;
 	private static final int hudDebugDroneType = 2;
 	private static final boolean hudDebugDroneArmed = false;
 
@@ -118,7 +118,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		drawPlane(canvas);
 		hudScroller.drawRightScroller(this, canvas);
 		hudScroller.drawLeftScroller(this, canvas);
-		drawAttitudeInfoText(canvas);
+		data.drawAttitudeInfoText(this, canvas);
 		drawFailsafe(canvas);
 	}
 
@@ -176,87 +176,6 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 				hudCenterIndicatorRadius * 2, 0, plane);
 		canvas.drawLine(0, -hudCenterIndicatorRadius, 0,
 				-hudCenterIndicatorRadius * 2, plane);
-	}
-
-	private void drawAttitudeInfoText(Canvas canvas) {
-		double battVolt = drone.battery.getBattVolt();
-		double battCurrent = drone.battery.getBattCurrent();
-		double battRemain = drone.battery.getBattRemain();
-		double groundSpeed = drone.speed.getGroundSpeed();
-		double airSpeed = drone.speed.getAirSpeed();
-		int satCount = drone.GPS.getSatCount();
-		int fixType = drone.GPS.getFixType();
-		String modeName = drone.state.getMode().getName();
-		int wpNumber = drone.mission.getWpno();
-		double distToWp = drone.mission.getDisttowp();
-		double gpsEPH = drone.GPS.getGpsEPH();
-
-		if (hudDebug) {
-			battVolt = hudDebugBattVolt;
-			battCurrent = hudDebugBattCurrent;
-			battRemain = hudDebugBattRemain;
-			groundSpeed = hudDebugGroundSpeed;
-			airSpeed = hudDebugAirSpeed;
-			satCount = hudDebugSatCount;
-			fixType = hudDebugFixType;
-			modeName = hudDebugModeName;
-			wpNumber = hudDebugWpNumber;
-			distToWp = hudDebugDistToWp;
-			gpsEPH = hudDebugGpsEPH;
-		}
-
-		// Left Top Text
-		data.attInfoText.setTextAlign(Align.LEFT);
-
-		if ((battVolt >= 0) || (battRemain >= 0))
-			canvas.drawText(
-					String.format("%2.1fV  %.0f%%", battVolt, battRemain),
-					-width / 2 + data.attPosPxInfoTextXOffset,
-					data.attPosPxInfoTextUpperTop, data.attInfoText);
-		if (battCurrent >= 0)
-			canvas.drawText(String.format("%2.1fA", battCurrent), -width / 2
-					+ data.attPosPxInfoTextXOffset,
-					data.attPosPxInfoTextUpperBottom, data.attInfoText);
-
-		// Left Bottom Text
-		canvas.drawText(String.format("AS %.1fms", airSpeed), -width / 2
-				+ data.attPosPxInfoTextXOffset, data.attPosPxInfoTextLowerTop,
-				data.attInfoText);
-		canvas.drawText(String.format("GS %.1fms", groundSpeed), -width / 2
-				+ data.attPosPxInfoTextXOffset,
-				data.attPosPxInfoTextLowerBottom, data.attInfoText);
-
-		// Right Top Text
-		data.attInfoText.setTextAlign(Align.RIGHT);
-
-		String gpsFix = "";
-		if (satCount >= 0) {
-			switch (fixType) {
-			case 2:
-				gpsFix = ("GPS2D(" + satCount + ")");
-				break;
-			case 3:
-				gpsFix = ("GPS3D(" + satCount + ")");
-				break;
-			default:
-				gpsFix = ("NoGPS(" + satCount + ")");
-				break;
-			}
-		}
-		canvas.drawText(gpsFix, width / 2 - data.attPosPxInfoTextXOffset,
-				data.attPosPxInfoTextUpperTop, data.attInfoText);
-		if (gpsEPH >= 0)
-			canvas.drawText(String.format("hp%.1fm", gpsEPH), width / 2
-					- data.attPosPxInfoTextXOffset,
-					data.attPosPxInfoTextUpperBottom, data.attInfoText);
-
-		// Right Bottom Text
-		canvas.drawText(modeName, width / 2 - data.attPosPxInfoTextXOffset,
-				data.attPosPxInfoTextLowerTop, data.attInfoText);
-		if (wpNumber >= 0)
-			canvas.drawText(String.format("%.0fm>WP#%d", distToWp, wpNumber),
-					width / 2 - data.attPosPxInfoTextXOffset,
-					data.attPosPxInfoTextLowerBottom, data.attInfoText);
 	}
 
 	private void drawFailsafe(Canvas canvas) {
