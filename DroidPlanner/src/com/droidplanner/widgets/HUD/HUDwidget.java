@@ -100,25 +100,6 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 																			// to
 																			// width
 
-	private static final float YAW_HEIGHT_FACTOR = .075f; // in relation to
-															// height (total HUD
-															// widget height)
-	private static final float YAW_FACTOR_TEXT = .75f; // in relation to
-														// yawHeightPx
-	private static final float YAW_FACTOR_TEXT_NUMBERS = .50f; // in relation to
-																// yawHeightPx
-	private static final float YAW_FACTOR_TEXT_Y_OFFSET = -.16f; // in relation
-																	// to
-																	// yawSizePxText
-	private static final float YAW_FACTOR_TICS_SMALL = .20f; // in relation to
-																// yawHeightPx
-	private static final float YAW_FACTOR_TICS_TALL = .35f; // in relation to
-															// yawHeightPx
-	private static final float YAW_FACTOR_CENTERLINE_OVERRUN = .2f;// in
-																	// relation
-																	// to
-																	// yawHeightPx
-	private static final int YAW_DEGREES_TO_SHOW = 90;
 	private static final float ATT_FACTOR_INFOTEXT = .048f; // in relation to
 															// attHeightPx
 	private static final float ATT_FACTOR_INFOTEXT_Y_OFFSET = -.1f; // in
@@ -185,8 +166,8 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 																	// FAILSAFE_FACTOR_TEXT
 
 	private ScopeThread renderer;
-	private int width;
-	private int height;
+	int width;
+	int height;
 	private HudAtt data = new HudAtt();
 	private HudScroller hudScroller = new HudScroller();
 	private HudYaw hudYaw = new HudYaw();
@@ -227,8 +208,6 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 	Paint ground = new Paint();
 	Paint sky = new Paint();
 	Paint yawBg = new Paint();
-	Paint yawText = new Paint();
-	Paint yawNumbers = new Paint();
 	Paint rollText = new Paint();
 	Paint pitchText = new Paint();
 	Paint scrollerBg = new Paint();
@@ -313,16 +292,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		whiteThickTics.setStyle(Style.FILL);
 		whiteThickTics.setStrokeWidth(2);
 		whiteThickTics.setAntiAlias(true);
-
-		yawText.setColor(Color.WHITE);
-		yawText.setFakeBoldText(true);
-		yawText.setTextAlign(Align.CENTER);
-		yawText.setAntiAlias(true);
-
-		yawNumbers.setColor(Color.WHITE);
-		yawNumbers.setTextAlign(Align.CENTER);
-		yawNumbers.setAntiAlias(true);
-
+		
 		rollText.setColor(Color.WHITE);
 		rollText.setAntiAlias(true);
 		rollText.setTextAlign(Align.CENTER);
@@ -374,8 +344,8 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		double centerDegrees = yaw;
 
 		double mod = yaw % 5;
-		for (double angle = (centerDegrees - mod) - YAW_DEGREES_TO_SHOW / 2.0; angle <= (centerDegrees - mod)
-				+ YAW_DEGREES_TO_SHOW / 2.0; angle += 5) {
+		for (double angle = (centerDegrees - mod) - HudYaw.YAW_DEGREES_TO_SHOW / 2.0; angle <= (centerDegrees - mod)
+				+ HudYaw.YAW_DEGREES_TO_SHOW / 2.0; angle += 5) {
 
 			// protect from wraparound
 			double workAngle = (angle + 360.0);
@@ -393,13 +363,13 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 						- hudYaw.yawSizePxTicsSmall, distanceToCenter, yawBottom,
 						whiteThinTics);
 				canvas.drawText(compass[index], distanceToCenter, yawBottom
-						- hudYaw.yawYPosPxText, yawText);
+						- hudYaw.yawYPosPxText, hudYaw.yawText);
 			} else if (workAngle % 15 == 0) {
 				canvas.drawLine(distanceToCenter,
 						yawBottom - hudYaw.yawSizePxTicsTall, distanceToCenter,
 						yawBottom, whiteThinTics);
 				canvas.drawText((int) (workAngle) + "", distanceToCenter,
-						yawBottom - hudYaw.yawYPosPxTextNumbers, yawNumbers);
+						yawBottom - hudYaw.yawYPosPxTextNumbers, hudYaw.yawNumbers);
 			} else {
 				canvas.drawLine(distanceToCenter, yawBottom
 						- hudYaw.yawSizePxTicsSmall, distanceToCenter, yawBottom,
@@ -889,24 +859,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 			redIndicatorWidth = 1;
 		plane.setStrokeWidth(redIndicatorWidth);
 
-		hudYaw.yawHeightPx = Math.round(this.height * YAW_HEIGHT_FACTOR);
-		hudYaw.yawSizePxTicsSmall = Math.round(hudYaw.yawHeightPx * YAW_FACTOR_TICS_SMALL);
-		hudYaw.yawSizePxTicsTall = Math.round(hudYaw.yawHeightPx * YAW_FACTOR_TICS_TALL);
-		tempSize = Math.round(hudYaw.yawHeightPx * YAW_FACTOR_TEXT);
-		yawText.setTextSize(tempSize);
-		tempOffset = Math.round(tempSize * YAW_FACTOR_TEXT_Y_OFFSET);
-		hudYaw.yawYPosPxText = Math.round(hudYaw.yawSizePxTicsSmall
-				+ (hudYaw.yawHeightPx - hudYaw.yawSizePxTicsSmall) / 2 - tempSize / 2
-				- tempOffset);
-		tempSize = Math.round(hudYaw.yawHeightPx * YAW_FACTOR_TEXT_NUMBERS);
-		yawNumbers.setTextSize(tempSize);
-		tempOffset = Math.round(tempSize * YAW_FACTOR_TEXT_Y_OFFSET);
-		hudYaw.yawYPosPxTextNumbers = Math.round(hudYaw.yawSizePxTicsSmall
-				+ (hudYaw.yawHeightPx - hudYaw.yawSizePxTicsSmall) / 2 - tempSize / 2
-				- tempOffset);
-		hudYaw.yawSizePxCenterLineOverRun = Math.round(hudYaw.yawHeightPx
-				* YAW_FACTOR_CENTERLINE_OVERRUN);
-		hudYaw.yawDegreesPerPixel = this.width / YAW_DEGREES_TO_SHOW;
+		hudYaw.setupYaw(this, this);
 
 		data.attHeightPx = this.height - hudYaw.yawHeightPx;
 		tempAttSizeText = Math.round(data.attHeightPx * ATT_FACTOR_INFOTEXT);
