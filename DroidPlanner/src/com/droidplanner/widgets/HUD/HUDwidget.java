@@ -168,7 +168,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 	private ScopeThread renderer;
 	int width;
 	int height;
-	private HudAtt data = new HudAtt();
+	HudAtt data = new HudAtt();
 	private HudScroller hudScroller = new HudScroller();
 	private HudYaw hudYaw = new HudYaw();
 	private HurRoll hudRoll = new HurRoll();
@@ -179,11 +179,11 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 	private int armedCounter = 0;
 	// private DisplayMetrics hudMetrics;
 
-	private static final boolean hudDebug = false;
+	static final boolean hudDebug = false;
 	// hudDebug is the main switch for HUD debugging
 	// |->false: Normal HUD operation.
 	// '->true: HUD shows only the following dummy data! NO NORMAL OPERATION
-	private static final double hudDebugYaw = 42;
+	static final double hudDebugYaw = 42;
 	private static final double hudDebugRoll = 45;
 	private static final double hudDebugPitch = 11;
 	private static final double hudDebugGroundSpeed = 4.3;
@@ -224,7 +224,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 	Paint blueVSI = new Paint();
 	Paint greenPen = new Paint();
 
-	private Drone drone;
+	Drone drone;
 
 	@Override
 	protected void onDraw(Canvas canvas) {
@@ -247,7 +247,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		// is not necessary
 		drawPitch(canvas);
 		drawRoll(canvas);
-		drawYaw(canvas);
+		hudYaw.drawYaw(this, canvas);
 		drawPlane(canvas);
 		drawRightScroller(canvas);
 		drawLeftScroller(canvas);
@@ -328,58 +328,6 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 				hudCenterIndicatorRadius * 2, 0, plane);
 		canvas.drawLine(0, -hudCenterIndicatorRadius, 0,
 				-hudCenterIndicatorRadius * 2, plane);
-	}
-
-	private void drawYaw(Canvas canvas) {
-		int yawBottom = -data.attHeightPx / 2;
-		canvas.drawRect(-width / 2, yawBottom - hudYaw.yawHeightPx, width / 2,
-				yawBottom, yawBg);
-		canvas.drawLine(-width / 2, yawBottom, width / 2, yawBottom,
-				whiteBorder);
-
-		double yaw = drone.orientation.getYaw();
-		if (hudDebug)
-			yaw = hudDebugYaw;
-
-		double centerDegrees = yaw;
-
-		double mod = yaw % 5;
-		for (double angle = (centerDegrees - mod) - HudYaw.YAW_DEGREES_TO_SHOW / 2.0; angle <= (centerDegrees - mod)
-				+ HudYaw.YAW_DEGREES_TO_SHOW / 2.0; angle += 5) {
-
-			// protect from wraparound
-			double workAngle = (angle + 360.0);
-			while (workAngle >= 360)
-				workAngle -= 360.0;
-
-			// need to draw "angle"
-			// How many pixels from center should it be?
-			int distanceToCenter = (int) ((angle - centerDegrees) * hudYaw.yawDegreesPerPixel);
-
-			if (workAngle % 45 == 0) {
-				String compass[] = { "N", "NE", "E", "SE", "S", "SW", "W", "NW" };
-				int index = (int) workAngle / 45;
-				canvas.drawLine(distanceToCenter, yawBottom
-						- hudYaw.yawSizePxTicsSmall, distanceToCenter, yawBottom,
-						whiteThinTics);
-				canvas.drawText(compass[index], distanceToCenter, yawBottom
-						- hudYaw.yawYPosPxText, hudYaw.yawText);
-			} else if (workAngle % 15 == 0) {
-				canvas.drawLine(distanceToCenter,
-						yawBottom - hudYaw.yawSizePxTicsTall, distanceToCenter,
-						yawBottom, whiteThinTics);
-				canvas.drawText((int) (workAngle) + "", distanceToCenter,
-						yawBottom - hudYaw.yawYPosPxTextNumbers, hudYaw.yawNumbers);
-			} else {
-				canvas.drawLine(distanceToCenter, yawBottom
-						- hudYaw.yawSizePxTicsSmall, distanceToCenter, yawBottom,
-						whiteThinTics);
-			}
-		}
-
-		// Draw the center line
-		canvas.drawLine(0, yawBottom - hudYaw.yawHeightPx, 0, yawBottom
-				+ hudYaw.yawSizePxCenterLineOverRun, plane);
 	}
 
 	private void drawRoll(Canvas canvas) {
