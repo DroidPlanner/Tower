@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
@@ -122,15 +121,6 @@ public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 		whiteThickTics.setStyle(Style.FILL);
 		whiteThickTics.setStrokeWidth(2);
 		whiteThickTics.setAntiAlias(true);
-
-		data.attInfoText.setColor(Color.WHITE);
-		data.attInfoText.setTextAlign(Align.CENTER);
-		data.attInfoText.setAntiAlias(true);
-
-		hudPlane.plane.setColor(Color.RED);
-		hudPlane.plane.setStyle(Style.STROKE);
-		hudPlane.plane.setStrokeWidth(3);
-		hudPlane.plane.setAntiAlias(true);
 
 		blackSolid.setColor(Color.BLACK);
 		blackSolid.setAntiAlias(true);

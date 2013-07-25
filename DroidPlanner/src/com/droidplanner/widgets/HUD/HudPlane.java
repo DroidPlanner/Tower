@@ -1,7 +1,9 @@
 package com.droidplanner.widgets.HUD;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Paint.Style;
 
 public class HudPlane {
 
@@ -12,6 +14,10 @@ public class HudPlane {
 	public Paint plane = new Paint();
 
 	public HudPlane() {
+		plane.setColor(Color.RED);
+		plane.setStyle(Style.STROKE);
+		plane.setStrokeWidth(3);
+		plane.setAntiAlias(true);
 	}
 
 	void setupPlane(HUD huDwidget) {

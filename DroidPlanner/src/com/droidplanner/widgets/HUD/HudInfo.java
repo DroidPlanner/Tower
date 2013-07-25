@@ -1,6 +1,7 @@
 package com.droidplanner.widgets.HUD;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 
@@ -21,9 +22,13 @@ public class HudInfo {
 	public int attPosPxInfoTextLowerTop;
 	public int attPosPxInfoTextLowerBottom;
 	public int attPosPxInfoTextXOffset;
+	
 	Paint attInfoText = new Paint();
 
 	public HudInfo() {
+		attInfoText.setColor(Color.WHITE);
+		attInfoText.setTextAlign(Align.CENTER);
+		attInfoText.setAntiAlias(true);
 	}
 
 	void setupAtt(HUD huDwidget) {
