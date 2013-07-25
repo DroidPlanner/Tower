@@ -120,8 +120,8 @@ public class Mission extends DroneVariable {
 		return waypoints;
 	}
 
-	public void setHome(waypoint home) {
-		this.home = (Home) home;
+	public void setHome(Home home) {
+		this.home = home;
 	}
 
 	public void setHome(LatLng home) {
@@ -137,7 +137,7 @@ public class Mission extends DroneVariable {
 			Toast.makeText(myDrone.context, "Waypoints received from Drone",
 					Toast.LENGTH_SHORT).show();
 			myDrone.tts.speak("Waypoints received");
-			setHome(waypoints.get(0));
+			setHome(new Home(waypoints.get(0)));
 			waypoints.remove(0); // Remove Home waypoint
 			clearWaypoints();
 			addWaypoints(waypoints);

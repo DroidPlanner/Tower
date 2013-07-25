@@ -9,13 +9,14 @@ import java.util.List;
 
 import com.MAVLink.Messages.ApmCommands;
 import com.droidplanner.dialogs.OpenFileDialog.FileReader;
+import com.droidplanner.drone.variables.Home;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.file.DirectoryPath;
 import com.droidplanner.file.FileList;
 import com.droidplanner.file.FileManager;
 
 public class MissionReader implements FileReader {
-	private waypoint home;
+	private Home home;
 	private List<waypoint> waypoints;
 
 	public MissionReader() {
@@ -48,7 +49,7 @@ public class MissionReader implements FileReader {
 		return true;
 	}
 
-	public waypoint getHome() {
+	public Home getHome() {
 		return home;
 	}
 
@@ -77,7 +78,7 @@ public class MissionReader implements FileReader {
 
 	private void parseHomeLine(BufferedReader reader) throws IOException {
 		String[] RowData = reader.readLine().split("\t");
-		home = new waypoint(Double.valueOf(RowData[8]),
+		home = new Home(Double.valueOf(RowData[8]),
 				Double.valueOf(RowData[9]), Double.valueOf(RowData[10]));
 		home.setNumber(Integer.valueOf(RowData[0]));
 		home.setFrame(Integer.valueOf(RowData[2]));
