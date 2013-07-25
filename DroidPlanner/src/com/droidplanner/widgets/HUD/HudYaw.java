@@ -116,6 +116,6 @@ public class HudYaw {
 
 		// Draw the center line
 		canvas.drawLine(0, yawBottom - yawHeightPx, 0, yawBottom
-				+ yawSizePxCenterLineOverRun, huDwidget.plane);
+				+ yawSizePxCenterLineOverRun, huDwidget.hudPlane.plane);
 	}
 }

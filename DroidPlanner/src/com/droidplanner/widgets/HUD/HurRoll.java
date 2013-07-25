@@ -45,7 +45,7 @@ public class HurRoll {
 	
 		// Draw center triangle
 		Path arrow = new Path();
-		int tempOffset = Math.round(huDwidget.plane.getStrokeWidth() / 2);
+		int tempOffset = Math.round(huDwidget.hudPlane.plane.getStrokeWidth() / 2);
 		arrow.moveTo(0, -huDwidget.data.attHeightPx / 2 + rollTopOffsetPx
 				- tempOffset);
 		arrow.lineTo(0 - rollTopOffsetPx / 3, -huDwidget.data.attHeightPx / 2
@@ -53,7 +53,7 @@ public class HurRoll {
 		arrow.lineTo(0 + rollTopOffsetPx / 3, -huDwidget.data.attHeightPx / 2
 				+ rollTopOffsetPx / 2 - tempOffset);
 		arrow.close();
-		canvas.drawPath(arrow, huDwidget.plane);
+		canvas.drawPath(arrow, huDwidget.hudPlane.plane);
 	
 		// draw the ticks
 		// The center of the circle is at: 0, 0

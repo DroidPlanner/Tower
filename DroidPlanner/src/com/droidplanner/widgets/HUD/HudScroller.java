@@ -175,7 +175,7 @@ public class HudScroller {
 					- actualTextRec.width() - scrollerSizePxTextXOffset
 					- textHalfSize, targetSpdPos, greenPen);
 		}
-		canvas.drawPath(arrow, huDwidget.plane);
+		canvas.drawPath(arrow, huDwidget.hudPlane.plane);
 		canvas.drawText(actualText, scroller.right - scrollerSizePxTextXOffset,
 				scrollerActualText.getTextSize() / 2
 						+ scrollerSizePxActualTextYOffset, scrollerActualText);
@@ -297,7 +297,7 @@ public class HudScroller {
 					+ actualTextRec.width() + scrollerSizePxTextXOffset
 					+ textHalfSize, targetAltPos, greenPen);
 		}
-		canvas.drawPath(arrow, huDwidget.plane);
+		canvas.drawPath(arrow, huDwidget.hudPlane.plane);
 		canvas.drawText(actualText, scroller.left + scrollerSizePxTextXOffset,
 				scrollerActualText.getTextSize() / 2
 						+ scrollerSizePxActualTextYOffset, scrollerActualText);
@@ -306,6 +306,6 @@ public class HudScroller {
 				huDwidget.width / 2, huDwidget.height / 2, Region.Op.REPLACE);
 		// Draw VSI center indicator
 		canvas.drawLine(scroller.left + borderWidth, 0, scroller.left
-				- vsi_width - borderWidth, 0, huDwidget.plane);
+				- vsi_width - borderWidth, 0, huDwidget.hudPlane.plane);
 	}
 }

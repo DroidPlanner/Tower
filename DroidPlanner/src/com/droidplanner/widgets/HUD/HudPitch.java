@@ -80,7 +80,7 @@ public class HudPitch {
 	
 		// Draw roll triangle
 		Path arrow = new Path();
-		int tempOffset = Math.round(huDwidget.plane.getStrokeWidth()
+		int tempOffset = Math.round(huDwidget.hudPlane.plane.getStrokeWidth()
 				+ huDwidget.whiteBorder.getStrokeWidth() / 2);
 		arrow.moveTo(0, -huDwidget.data.attHeightPx / 2 + huDwidget.hudRoll.rollTopOffsetPx
 				+ tempOffset);
@@ -89,7 +89,7 @@ public class HudPitch {
 		arrow.lineTo(0 + huDwidget.hudRoll.rollTopOffsetPx / 3, rollTriangleBottom
 				+ tempOffset);
 		arrow.close();
-		canvas.drawPath(arrow, huDwidget.plane);
+		canvas.drawPath(arrow, huDwidget.hudPlane.plane);
 	
 		// Draw gauge
 		int yPos;

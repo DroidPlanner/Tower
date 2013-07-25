@@ -32,20 +32,17 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 	private static final float HUD_FACTOR_SCALE_THICK_TIC_STROKEWIDTH = .005f;
 	// in relation to averaged of width and height
 	private static final float HUD_FACTOR_SCALE_THIN_TIC_STROKEWIDTH = .0025f;
-	// in relation to averaged of width and height
-	private static final float HUD_FACTOR_CENTER_INDICATOR_SIZE = .0375f;
 
 	private ScopeThread renderer;
 	int width;
 	int height;
-	HudAtt data = new HudAtt();
-	HudScroller hudScroller = new HudScroller();
-	HudYaw hudYaw = new HudYaw();
-	HurRoll hudRoll = new HurRoll();
+	public HudAtt data = new HudAtt();
+	public HudScroller hudScroller = new HudScroller();
+	public HudYaw hudYaw = new HudYaw();
+	public HurRoll hudRoll = new HurRoll();
 	private HudPitch hudPitch = new HudPitch();
-	HudFailsafe hudFailsafe = new HudFailsafe();
-	private int hudCenterIndicatorRadius;
-
+	private HudFailsafe hudFailsafe = new HudFailsafe();
+	
 	static final boolean hudDebug = false;
 	// hudDebug is the main switch for HUD debugging
 	// |->false: Normal HUD operation.
@@ -77,7 +74,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 	Paint whiteBorder = new Paint();
 	Paint whiteThickTics = new Paint();
 	Paint whiteThinTics = new Paint();
-	Paint plane = new Paint();
+	HudPlane hudPlane = new HudPlane();
 	Paint blackSolid = new Paint();
 	Paint blueVSI = new Paint();
 	Drone drone;
@@ -144,10 +141,10 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		data.attInfoText.setTextAlign(Align.CENTER);
 		data.attInfoText.setAntiAlias(true);
 
-		plane.setColor(Color.RED);
-		plane.setStyle(Style.STROKE);
-		plane.setStrokeWidth(3);
-		plane.setAntiAlias(true);
+		hudPlane.plane.setColor(Color.RED);
+		hudPlane.plane.setStyle(Style.STROKE);
+		hudPlane.plane.setStrokeWidth(3);
+		hudPlane.plane.setAntiAlias(true);
 
 		blackSolid.setColor(Color.BLACK);
 		blackSolid.setAntiAlias(true);
@@ -156,13 +153,13 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 	}
 
 	private void drawPlane(Canvas canvas) {
-		canvas.drawCircle(0, 0, hudCenterIndicatorRadius, plane);
-		canvas.drawLine(-hudCenterIndicatorRadius, 0,
-				-hudCenterIndicatorRadius * 2, 0, plane);
-		canvas.drawLine(hudCenterIndicatorRadius, 0,
-				hudCenterIndicatorRadius * 2, 0, plane);
-		canvas.drawLine(0, -hudCenterIndicatorRadius, 0,
-				-hudCenterIndicatorRadius * 2, plane);
+		canvas.drawCircle(0, 0, hudPlane.hudCenterIndicatorRadius, hudPlane.plane);
+		canvas.drawLine(-hudPlane.hudCenterIndicatorRadius, 0,
+				-hudPlane.hudCenterIndicatorRadius * 2, 0, hudPlane.plane);
+		canvas.drawLine(hudPlane.hudCenterIndicatorRadius, 0,
+				hudPlane.hudCenterIndicatorRadius * 2, 0, hudPlane.plane);
+		canvas.drawLine(0, -hudPlane.hudCenterIndicatorRadius, 0,
+				-hudPlane.hudCenterIndicatorRadius * 2, hudPlane.plane);
 	}
 
 	@Override
@@ -177,8 +174,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		// takes some load off the onDraw() routine which is called much more
 		// frequently
 
-		hudCenterIndicatorRadius = Math.round((this.width + this.height) / 2
-				* HUD_FACTOR_CENTER_INDICATOR_SIZE);
+		hudPlane.setupPlane(this);
 
 		hudScaleThickTicStrokeWidth = (this.width + this.height) / 2
 				* HUD_FACTOR_SCALE_THICK_TIC_STROKEWIDTH;
@@ -202,7 +198,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 				* HUD_FACTOR_RED_INDICATOR_WIDTH;
 		if (redIndicatorWidth < 1)
 			redIndicatorWidth = 1;
-		plane.setStrokeWidth(redIndicatorWidth);
+		hudPlane.plane.setStrokeWidth(redIndicatorWidth);
 
 		hudYaw.setupYaw(this, this);
 
