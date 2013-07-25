@@ -1,14 +1,9 @@
 package com.droidplanner.fragments;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +17,8 @@ import com.droidplanner.polygon.Polygon;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 @SuppressLint("UseSparseArrays")
@@ -38,9 +31,7 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 
 	public GoogleMap mMap;
 
-
 	private MarkerManager waypointMarkers;
-	private HashMap<Integer, Marker> polygonMarkers = new HashMap<Integer, Marker>();
 
 	private OnMapInteractionListener mListener;
 
@@ -68,7 +59,7 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		mMap.setOnMapLongClickListener(this);
 
 		waypointMarkers = new MarkerManager(mMap);
-		
+
 		return view;
 	}
 
@@ -80,21 +71,13 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 
 	public void update(Drone drone, Polygon polygon) {
 		clearMap();
-
 		waypointMarkers.clear();
-		polygonMarkers.clear();
-
-
-		int i = 0;
-		for (MarkerOptions point : getPolygonMarkers(polygon)) {
-			polygonMarkers.put(i++, mMap.addMarker(point));
-		}
-		
-		mMap.addPolyline(getPolygonPath(polygon));
 
 		waypointMarkers.updateMarker(drone.mission.getHome());
 		waypointMarkers.updateMarkers(drone.mission.getWaypoints());
-		
+		waypointMarkers.updateMarkers(polygon.getPolygonPoints());
+
+		mMap.addPolyline(getPolygonPath(polygon));
 		mMap.addPolyline(getMissionPath(drone));
 
 	}
@@ -120,30 +103,27 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 	}
 
 	private void checkForHomeMarker(Marker marker) {
-		//TODO reimplement this
+		// TODO reimplement this
 		// if (homeMarker.isHomeMarker(marker)) {
 		// mListener.onMoveHome(marker.getPosition());
-		//}
+		// }
 	}
 
 	private void checkForWaypointMarker(Marker marker) {
 		// TODO reimplement this
-		//MarkerSource source = waypointMarkers.getSourceFromMarker(marker);
-		//Listener.onMoveWaypoint(, 0);
+		// MarkerSource source = waypointMarkers.getSourceFromMarker(marker);
+		// Listener.onMoveWaypoint(, 0);
 	}
 
 	private void checkForPolygonMarker(Marker marker) {
-		if (polygonMarkers.containsValue(marker)) {
-			int number = 0;
-			for (HashMap.Entry<Integer, Marker> e : polygonMarkers.entrySet()) {
-				if (marker.equals(e.getValue())) {
-					number = e.getKey();
-					break;
-				}
-			}
-			Log.d("MARK", "move polygon");
-			mListener.onMovePolygonPoint(marker.getPosition(), number);
-		}
+		// TODO reimplement this
+		/*
+		 * if (polygonMarkers.containsValue(marker)) { int number = 0; for
+		 * (HashMap.Entry<Integer, Marker> e : polygonMarkers.entrySet()) { if
+		 * (marker.equals(e.getValue())) { number = e.getKey(); break; } }
+		 * Log.d("MARK", "move polygon");
+		 * mListener.onMovePolygonPoint(marker.getPosition(), number); }
+		 */
 	}
 
 	public LatLng getMyLocation() {
@@ -153,21 +133,6 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		} else {
 			return null;
 		}
-	}
-
-	public List<MarkerOptions> getPolygonMarkers(Polygon poly) {
-		int i = 1;
-		List<MarkerOptions> MarkerList = new ArrayList<MarkerOptions>();
-		for (LatLng point : poly.getWaypoints()) {
-			MarkerList.add(new MarkerOptions()
-					.position(point)
-					.draggable(true)
-					.title("Poly" + Integer.toString(i))
-					.icon(BitmapDescriptorFactory
-							.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-			i++;
-		}
-		return MarkerList;
 	}
 
 	private PolylineOptions getMissionPath(Drone drone) {
@@ -185,11 +150,11 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		PolylineOptions flightPath = new PolylineOptions();
 		flightPath.color(Color.BLACK).width(2);
 
-		for (LatLng point : poly.getWaypoints()) {
+		for (LatLng point : poly.getLatLng()) {
 			flightPath.add(point);
 		}
-		if (poly.getWaypoints().size() > 2) {
-			flightPath.add(poly.getWaypoints().get(0));
+		if (poly.getLatLng().size() > 2) {
+			flightPath.add(poly.getLatLng().get(0));
 		}
 
 		return flightPath;
