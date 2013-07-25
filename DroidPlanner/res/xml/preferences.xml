@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+pref_advanced_use_offline_maps<?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <PreferenceCategory
@@ -118,6 +118,7 @@
             android:key="pref_enable_tts"
             android:summary="Audible messages for important events"
             android:title="Enable Text To Speech" />
+        <CheckBoxPreference android:key="pref_advanced_use_absolute_altitude" android:title="Use absolute altitude" android:defaultValue="false" android:summary="Careful!!! This option will set your drone to use positive altitude over mean sea level (MSL)"/>
     </PreferenceCategory>
     <PreferenceCategory
         android:key="pref_connection_actions"
