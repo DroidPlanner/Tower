@@ -43,7 +43,7 @@ public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 	private HudPitch hudPitch = new HudPitch();
 	public HudScroller hudScroller = new HudScroller();
 	private HudFailsafe hudFailsafe = new HudFailsafe();
-	
+
 	static final boolean hudDebug = false;
 	// hudDebug is the main switch for HUD debugging
 	// |->false: Normal HUD operation.
@@ -69,7 +69,6 @@ public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 	static final int hudDebugDroneType = 2;
 	static final boolean hudDebugDroneArmed = false;
 
-	Paint whiteStroke = new Paint();
 	Paint whiteBorder = new Paint();
 	Paint whiteThickTics = new Paint();
 	Paint whiteThinTics = new Paint();
@@ -109,11 +108,6 @@ public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 	public HUD(Context context, AttributeSet attributeSet) {
 		super(context, attributeSet);
 		getHolder().addCallback(this);
-
-		whiteStroke.setColor(Color.WHITE);
-		whiteStroke.setStyle(Style.STROKE);
-		whiteStroke.setStrokeWidth(3);
-		whiteStroke.setAntiAlias(true);
 
 		whiteBorder.setColor(Color.WHITE);
 		whiteBorder.setStyle(Style.STROKE);
