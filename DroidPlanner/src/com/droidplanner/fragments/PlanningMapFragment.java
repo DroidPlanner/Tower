@@ -13,7 +13,9 @@ import com.droidplanner.R.string;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.fragments.markers.MarkerManager;
+import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import com.droidplanner.polygon.Polygon;
+import com.droidplanner.polygon.PolygonPoint;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
@@ -31,7 +33,7 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 
 	public GoogleMap mMap;
 
-	private MarkerManager waypointMarkers;
+	private MarkerManager markers;
 
 	private OnMapInteractionListener mListener;
 
@@ -47,7 +49,7 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 
 		public void onMoveWaypoint(LatLng coord, int Number);
 
-		public void onMovePolygonPoint(LatLng coord, int Number);
+		public void onMovePolygonPoint(PolygonPoint source, LatLng newCoord);
 	}
 
 	@Override
@@ -58,7 +60,7 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		mMap.setOnMarkerDragListener(this);
 		mMap.setOnMapLongClickListener(this);
 
-		waypointMarkers = new MarkerManager(mMap);
+		markers = new MarkerManager(mMap);
 
 		return view;
 	}
@@ -71,11 +73,11 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 
 	public void update(Drone drone, Polygon polygon) {
 		clearMap();
-		waypointMarkers.clear();
+		markers.clear();
 
-		waypointMarkers.updateMarker(drone.mission.getHome());
-		waypointMarkers.updateMarkers(drone.mission.getWaypoints());
-		waypointMarkers.updateMarkers(polygon.getPolygonPoints());
+		markers.updateMarker(drone.mission.getHome());
+		markers.updateMarkers(drone.mission.getWaypoints());
+		markers.updateMarkers(polygon.getPolygonPoints());
 
 		mMap.addPolyline(getPolygonPath(polygon));
 		mMap.addPolyline(getMissionPath(drone));
@@ -97,9 +99,10 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 
 	@Override
 	public void onMarkerDragEnd(Marker marker) {
+		MarkerSource source = markers.getSourceFromMarker(marker);
 		checkForHomeMarker(marker);
 		checkForWaypointMarker(marker);
-		checkForPolygonMarker(marker);
+		checkForPolygonMarker(source);
 	}
 
 	private void checkForHomeMarker(Marker marker) {
@@ -115,15 +118,10 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		// Listener.onMoveWaypoint(, 0);
 	}
 
-	private void checkForPolygonMarker(Marker marker) {
-		// TODO reimplement this
-		/*
-		 * if (polygonMarkers.containsValue(marker)) { int number = 0; for
-		 * (HashMap.Entry<Integer, Marker> e : polygonMarkers.entrySet()) { if
-		 * (marker.equals(e.getValue())) { number = e.getKey(); break; } }
-		 * Log.d("MARK", "move polygon");
-		 * mListener.onMovePolygonPoint(marker.getPosition(), number); }
-		 */
+	private void checkForPolygonMarker(MarkerSource source) {
+		if (PolygonPoint.class.isInstance(source)) {
+			mListener.onMovePolygonPoint((PolygonPoint)source, markers.getMarkerFromSource(source).getPosition());
+		}
 	}
 
 	public LatLng getMyLocation() {
