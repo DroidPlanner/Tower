@@ -59,9 +59,9 @@ public class HudPitch {
 		double pitch = huDwidget.drone.orientation.getPitch();
 		double roll = huDwidget.drone.orientation.getRoll();
 	
-		if (HUD.hudDebug) {
-			pitch = HUD.hudDebugPitch;
-			roll = HUD.hudDebugRoll;
+		if (HudDebugData.hudDebug) {
+			pitch = HudDebugData.hudDebugPitch;
+			roll = HudDebugData.hudDebugRoll;
 		}
 	
 		int pitchOffsetPx = (int) (pitch * pitchPixPerDegree);

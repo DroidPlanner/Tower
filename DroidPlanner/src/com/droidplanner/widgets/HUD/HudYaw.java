@@ -78,8 +78,8 @@ public class HudYaw {
 				yawBottom, huDwidget.commonPaints.whiteBorder);
 
 		double yaw = huDwidget.drone.orientation.getYaw();
-		if (HUD.hudDebug)
-			yaw = HUD.hudDebugYaw;
+		if (HudDebugData.hudDebug)
+			yaw = HudDebugData.hudDebugYaw;
 
 		double centerDegrees = yaw;
 

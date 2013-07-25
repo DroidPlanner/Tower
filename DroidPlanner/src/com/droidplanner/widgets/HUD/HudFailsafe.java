@@ -37,9 +37,9 @@ public class HudFailsafe {
 		int droneType = huDwidget.drone.type.getType();
 		boolean isArmed = huDwidget.drone.state.isArmed();
 	
-		if (HUD.hudDebug) {
-			droneType = HUD.hudDebugDroneType;
-			isArmed = HUD.hudDebugDroneArmed;
+		if (HudDebugData.hudDebug) {
+			droneType = HudDebugData.hudDebugDroneType;
+			isArmed = HudDebugData.hudDebugDroneArmed;
 		}
 	
 		if (ApmModes.isCopter(droneType)) {

@@ -70,18 +70,18 @@ public class HudInfo {
 		double distToWp = huDwidget.drone.mission.getDisttowp();
 		double gpsEPH = huDwidget.drone.GPS.getGpsEPH();
 	
-		if (HUD.hudDebug) {
-			battVolt = HUD.hudDebugBattVolt;
-			battCurrent = HUD.hudDebugBattCurrent;
-			battRemain = HUD.hudDebugBattRemain;
-			groundSpeed = HUD.hudDebugGroundSpeed;
-			airSpeed = HUD.hudDebugAirSpeed;
-			satCount = HUD.hudDebugSatCount;
-			fixType = HUD.hudDebugFixType;
-			modeName = HUD.hudDebugModeName;
-			wpNumber = HUD.hudDebugWpNumber;
-			distToWp = HUD.hudDebugDistToWp;
-			gpsEPH = HUD.hudDebugGpsEPH;
+		if (HudDebugData.hudDebug) {
+			battVolt = HudDebugData.hudDebugBattVolt;
+			battCurrent = HudDebugData.hudDebugBattCurrent;
+			battRemain = HudDebugData.hudDebugBattRemain;
+			groundSpeed = HudDebugData.hudDebugGroundSpeed;
+			airSpeed = HudDebugData.hudDebugAirSpeed;
+			satCount = HudDebugData.hudDebugSatCount;
+			fixType = HudDebugData.hudDebugFixType;
+			modeName = HudDebugData.hudDebugModeName;
+			wpNumber = HudDebugData.hudDebugWpNumber;
+			distToWp = HudDebugData.hudDebugDistToWp;
+			gpsEPH = HudDebugData.hudDebugGpsEPH;
 		}
 	
 		// Left Top Text

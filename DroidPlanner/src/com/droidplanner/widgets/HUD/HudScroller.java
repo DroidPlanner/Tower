@@ -107,10 +107,10 @@ public class HudScroller {
 		double groundSpeed = huDwidget.drone.speed.getGroundSpeed();
 		double airSpeed = huDwidget.drone.speed.getAirSpeed();
 		double targetSpeed = huDwidget.drone.speed.getTargetSpeed();
-		if (HUD.hudDebug) {
-			groundSpeed = HUD.hudDebugGroundSpeed;
-			airSpeed = HUD.hudDebugAirSpeed;
-			targetSpeed = HUD.hudDebugTargetSpeed;
+		if (HudDebugData.hudDebug) {
+			groundSpeed = HudDebugData.hudDebugGroundSpeed;
+			airSpeed = HudDebugData.hudDebugAirSpeed;
+			targetSpeed = HudDebugData.hudDebugTargetSpeed;
 		}
 
 		double speed = airSpeed;
@@ -199,10 +199,10 @@ public class HudScroller {
 		double targetAltitude = huDwidget.drone.altitude.getTargetAltitude();
 		double verticalSpeed = huDwidget.drone.speed.getVerticalSpeed();
 
-		if (HUD.hudDebug) {
-			altitude = HUD.hudDebugAltitude;
-			targetAltitude = HUD.hudDebugTargetAltitude;
-			verticalSpeed = HUD.hudDebugVerticalSpeed;
+		if (HudDebugData.hudDebug) {
+			altitude = HudDebugData.hudDebugAltitude;
+			targetAltitude = HudDebugData.hudDebugTargetAltitude;
+			verticalSpeed = HudDebugData.hudDebugVerticalSpeed;
 		}
 
 		// Outside box
