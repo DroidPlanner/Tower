@@ -37,10 +37,6 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 	private static final float HUD_FACTOR_SCALE_THIN_TIC_STROKEWIDTH = .0025f;
 	// in relation to averaged of width and height
 	private static final float HUD_FACTOR_CENTER_INDICATOR_SIZE = .0375f;
-	// in relation to width
-	private static final float FAILSAFE_FACTOR_TEXT = .093f;
-	// in relation to the resulting size of FAILSAFE_FACTOR_TEXT
-	private static final float FAILSAFE_FACTOR_BOX_PADDING = .27f;
 
 	private ScopeThread renderer;
 	int width;
@@ -50,8 +46,9 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 	HudYaw hudYaw = new HudYaw();
 	HurRoll hudRoll = new HurRoll();
 	private HudPitch hudPitch = new HudPitch();
+	HudFailsafe hudFailsafe = new HudFailsafe();
 	private int hudCenterIndicatorRadius;
-	private int failsafeSizePxBoxPadding;
+	int failsafeSizePxBoxPadding;
 
 	private int armedCounter = 0;
 	// private DisplayMetrics hudMetrics;
@@ -87,7 +84,6 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 	Paint whiteBorder = new Paint();
 	Paint whiteThickTics = new Paint();
 	Paint whiteThinTics = new Paint();
-	Paint FailsafeText = new Paint();
 	Paint plane = new Paint();
 	Paint blackSolid = new Paint();
 	Paint blueVSI = new Paint();
@@ -130,8 +126,6 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		
 		yawBg.setARGB(255, 0, 0, 0);// (64, 255, 255, 255);
 
-		FailsafeText.setTextSize(37);
-		FailsafeText.setAntiAlias(true);
 
 		whiteStroke.setColor(Color.WHITE);
 		whiteStroke.setStyle(Style.STROKE);
@@ -190,10 +184,10 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 		if (ApmModes.isCopter(droneType)) {
 			if (isArmed) {
 				if (armedCounter < 50) {
-					FailsafeText.setColor(Color.RED);
+					hudFailsafe.FailsafeText.setColor(Color.RED);
 					String text = "ARMED";
 					Rect textRec = new Rect();
-					FailsafeText.getTextBounds(text, 0, text.length(), textRec);
+					hudFailsafe.FailsafeText.getTextBounds(text, 0, text.length(), textRec);
 					textRec.offset(-textRec.width() / 2, canvas.getHeight() / 3);
 					RectF boxRec = new RectF(textRec.left
 							- failsafeSizePxBoxPadding, textRec.top
@@ -203,14 +197,14 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 					canvas.drawRoundRect(boxRec, failsafeSizePxBoxPadding,
 							failsafeSizePxBoxPadding, blackSolid);
 					canvas.drawText(text, textRec.left - 3, textRec.bottom - 1,
-							FailsafeText);
+							hudFailsafe.FailsafeText);
 					armedCounter++;
 				}
 			} else {
-				FailsafeText.setColor(Color.GREEN);
+				hudFailsafe.FailsafeText.setColor(Color.GREEN);
 				String text = "DISARMED";
 				Rect textRec = new Rect();
-				FailsafeText.getTextBounds(text, 0, text.length(), textRec);
+				hudFailsafe.FailsafeText.getTextBounds(text, 0, text.length(), textRec);
 				textRec.offset(-textRec.width() / 2, canvas.getHeight() / 3);
 				RectF boxRec = new RectF(textRec.left
 						- failsafeSizePxBoxPadding, textRec.top
@@ -220,7 +214,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 				canvas.drawRoundRect(boxRec, failsafeSizePxBoxPadding,
 						failsafeSizePxBoxPadding, blackSolid);
 				canvas.drawText(text, textRec.left - 3, textRec.bottom - 1,
-						FailsafeText);
+						hudFailsafe.FailsafeText);
 				armedCounter = 0;
 			}
 		}
@@ -229,7 +223,6 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
-		int tempSize;
 		float hudScaleThickTicStrokeWidth, hudScaleThinTicStrokeWidth, hudBorderWidth, redIndicatorWidth;
 
 		this.width = width;
@@ -274,10 +267,7 @@ public class HUDwidget extends SurfaceView implements SurfaceHolder.Callback,
 
 		hudPitch.setupPitch(this);
 
-		tempSize = Math.round(this.width * FAILSAFE_FACTOR_TEXT);
-		FailsafeText.setTextSize(tempSize);
-		failsafeSizePxBoxPadding = Math.round(tempSize
-				* FAILSAFE_FACTOR_BOX_PADDING);
+		hudFailsafe.setupFailsafe(this);
 	}
 
 	@Override
