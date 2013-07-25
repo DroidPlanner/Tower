@@ -1,8 +1,5 @@
 package com.droidplanner.helpers;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
@@ -10,10 +7,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.droidplanner.R;
 import com.droidplanner.drone.Drone;
-import com.droidplanner.drone.variables.waypoint;
-import com.droidplanner.file.IO.MissionWriter;
 
 public class RecordMe implements LocationListener {
 	private static final long MIN_TIME_MS = 2000;
@@ -23,7 +17,6 @@ public class RecordMe implements LocationListener {
 	private Drone drone;
 	private LocationManager locationManager;
 	private boolean recordMeEnabled = false;
-	private List<waypoint> waypoints = new ArrayList<waypoint>();
 
 	public RecordMe(Context context, Drone drone) {
 		this.context = context;
@@ -42,41 +35,15 @@ public class RecordMe implements LocationListener {
 
 	private void startRecordMe() {
 		Toast.makeText(context, "Record Enabled", Toast.LENGTH_SHORT).show();
-
-		// Register the listener with the Location Manager to receive location
-		// updates
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
 				MIN_TIME_MS, MIN_DISTANCE_M, this);
 		recordMeEnabled = true;
 	}
 
 	private void finishRecordMe() {
+		Toast.makeText(context, "Record Disabled", Toast.LENGTH_SHORT).show();
 		locationManager.removeUpdates(this);
 		recordMeEnabled = false;
-		saveWaypointsToFile();
-		waypoints.clear();
-	}
-
-	private void saveWaypointsToFile() {
-		if (writeMission()) {
-			Toast.makeText(context, R.string.file_saved, Toast.LENGTH_SHORT)
-					.show();
-		} else {
-			Toast.makeText(context, R.string.error_when_saving,
-					Toast.LENGTH_SHORT).show();
-		}
-	}
-
-	private boolean writeMission() {
-		if (waypoints.size() > 1) {
-			waypoint home = waypoints.get(0);
-			waypoints.remove(0);
-			MissionWriter missionWriter = new MissionWriter(home, waypoints,
-					"RecordMe");
-			return missionWriter.saveWaypoints();
-		} else {
-			return false;
-		}
 	}
 
 	public boolean isEnabled() {
@@ -86,8 +53,9 @@ public class RecordMe implements LocationListener {
 	// @Override
 	public void onLocationChanged(Location location) {
 		// TODO find a better way to do the altitude
-		waypoints.add(new waypoint(location.getLatitude(), location
-				.getLongitude(), drone.mission.getDefaultAlt()));
+		drone.mission.addWaypoint(location.getLatitude(), location
+				.getLongitude(), drone.mission.getDefaultAlt());
+		drone.mission.notifyMissionUpdate();
 	}
 
 	@Override

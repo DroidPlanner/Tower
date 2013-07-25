@@ -32,7 +32,7 @@ public class MissionWriter {
 			FileOutputStream out = FileStream.getWaypointFileStream(name);
 
 			writeFirstLine(out);
-
+			writeHomeLine(out);
 			writeWaypointsLines(out);
 			out.close();
 
@@ -44,22 +44,25 @@ public class MissionWriter {
 	}
 
 	private void writeFirstLine(FileOutputStream out) throws IOException {
+		out.write(String.format(Locale.ENGLISH, "QGC WPL 110\n").getBytes());
+	}
+
+	private void writeHomeLine(FileOutputStream out) throws IOException {
 		out.write(String.format(Locale.ENGLISH,
-				"QGC WPL 110\n0\t1\t0\t16\t0\t0\t0\t0\t%f\t%f\t%f\t1\n",
+				"0\t1\t0\t16\t0\t0\t0\t0\t%f\t%f\t%f\t1\n",
 				home.getCoord().latitude, home.getCoord().longitude,
 				home.getHeight()).getBytes());
-
 	}
 
 	private void writeWaypointsLines(FileOutputStream out) throws IOException {
 		for (int i = 0; i < waypoints.size(); i++) {
 			waypoint wp = waypoints.get(i);
-			out.write(String
-					.format(Locale.ENGLISH,
-							"%d\t0\t%d\t%d\t0.000000\t0.000000\t0.000000\t0.000000\t%f\t%f\t%f\t1\n",
-							i + 1, wp.getFrame(), wp.getCmd().getType(),
-							wp.getCoord().latitude, wp.getCoord().longitude,
-							wp.getHeight()).getBytes());
+			out.write(String.format(Locale.ENGLISH,
+					"%d\t0\t%d\t%d\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%d\n", i + 1,
+					wp.getFrame(), wp.getCmd().getType(), wp.getParam1(),
+					wp.getParam2(), wp.getParam3(), wp.getParam4(),
+					wp.getCoord().latitude, wp.getCoord().longitude,
+					wp.getHeight(), wp.getAutoContinue()).getBytes());
 		}
 	}
 }
