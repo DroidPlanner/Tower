@@ -17,7 +17,7 @@ import android.util.Xml;
 import com.droidplanner.dialogs.OpenFileDialog.FileReader;
 import com.droidplanner.file.DirectoryPath;
 import com.droidplanner.file.FileList;
-import com.droidplanner.gcp.gcp;
+import com.droidplanner.gcp.Gcp;
 
 /**
  * Class to parse a Kml file, based on the code from
@@ -27,7 +27,7 @@ import com.droidplanner.gcp.gcp;
 public class GcpReader implements FileReader {
 	private final String ns = null;
 
-	public List<gcp> gcpList;
+	public List<Gcp> gcpList;
 
 	public boolean openGCPFile(String fileWithPath) {
 		boolean returnValue = false;
@@ -82,9 +82,9 @@ public class GcpReader implements FileReader {
 		return true;
 	}
 
-	public List<gcp> parse(InputStream in) throws XmlPullParserException,
+	public List<Gcp> parse(InputStream in) throws XmlPullParserException,
 			IOException {
-		gcpList = new ArrayList<gcp>();
+		gcpList = new ArrayList<Gcp>();
 		XmlPullParser parser = Xml.newPullParser();
 		parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
 		parser.setInput(in, null);
@@ -112,7 +112,7 @@ public class GcpReader implements FileReader {
 	private void readPlacemark(XmlPullParser parser)
 			throws XmlPullParserException, IOException {
 		parser.require(XmlPullParser.START_TAG, ns, "Placemark");
-		gcp point = null;
+		Gcp point = null;
 		while (parser.next() != XmlPullParser.END_TAG) {
 			if (parser.getEventType() != XmlPullParser.START_TAG) {
 				continue;
@@ -130,9 +130,9 @@ public class GcpReader implements FileReader {
 	}
 
 	// Processes Point tags in the feed.
-	private gcp readPoint(XmlPullParser parser) throws IOException,
+	private Gcp readPoint(XmlPullParser parser) throws IOException,
 			XmlPullParserException {
-		gcp point = null;
+		Gcp point = null;
 		while (parser.next() != XmlPullParser.END_TAG) {
 			if (parser.getEventType() != XmlPullParser.START_TAG) {
 				continue;
@@ -147,7 +147,7 @@ public class GcpReader implements FileReader {
 		return point;
 	}
 
-	private gcp readCoordinate(XmlPullParser parser) throws IOException,
+	private Gcp readCoordinate(XmlPullParser parser) throws IOException,
 			XmlPullParserException {
 		Double Lat, Lng;
 
@@ -159,7 +159,7 @@ public class GcpReader implements FileReader {
 		Lng = Double.valueOf(title[0]);
 		Lat = Double.valueOf(title[1]);
 
-		return (new gcp(Lat, Lng));
+		return (new Gcp(Lat, Lng));
 	}
 
 	// For the tags title and summary, extracts their text values.
