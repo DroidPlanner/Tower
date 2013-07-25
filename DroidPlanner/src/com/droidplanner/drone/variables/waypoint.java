@@ -29,7 +29,7 @@ public class waypoint implements MarkerSource {
 		missionItem.param2 = 0; // TODO use correct parameter
 		missionItem.param3 = 0; // TODO use correct parameter
 		missionItem.param4 = 0; // TODO use correct parameter
-		
+
 		missionItem.autocontinue = 1; // TODO use correct parameter
 		missionItem.target_system = 1;
 		missionItem.target_component = 1;
@@ -100,19 +100,20 @@ public class waypoint implements MarkerSource {
 		missionItem.target_system = (byte) target_system;
 		missionItem.target_component = (byte) target_component;
 	}
-	public Float getParam1(){
+
+	public Float getParam1() {
 		return missionItem.param1;
 	}
-	
-	public Float getParam2(){
+
+	public Float getParam2() {
 		return missionItem.param2;
 	}
-	
-	public Float getParam3(){
+
+	public Float getParam3() {
 		return missionItem.param3;
 	}
-	
-	public Float getParam4(){
+
+	public Float getParam4() {
 		return missionItem.param4;
 	}
 
@@ -123,15 +124,15 @@ public class waypoint implements MarkerSource {
 	public void setAutoContinue(Integer i) {
 		missionItem.autocontinue = i.byteValue();
 	}
-	
+
 	@Override
 	public MarkerOptions build() {
 		return WaypointMarker.build(this);
 	}
-	
+
 	@Override
 	public void update(Marker marker) {
 		WaypointMarker.update(marker, this);
 	}
-		
+
 }

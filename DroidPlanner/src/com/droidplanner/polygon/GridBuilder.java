@@ -28,8 +28,7 @@ public class GridBuilder {
 	public List<waypoint> hatchfill() {
 		List<LineLatLng> gridLines = generateGrid(poly.getLatLng(), angle,
 				lineDist);
-		List<LineLatLng> hatchLines = trimGridLines(poly.getLatLng(),
-				gridLines);
+		List<LineLatLng> hatchLines = trimGridLines(poly.getLatLng(), gridLines);
 		List<waypoint> gridPoints = waypointsFromHatch(lastLocation, altitude,
 				hatchLines);
 

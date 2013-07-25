@@ -26,7 +26,7 @@ public class MarkerManager {
 		List<MarkerSource> emptyList = new ArrayList<MarkerSource>();
 		removeOldMarkers(emptyList);
 	}
-	
+
 	public <T> void updateMarkers(List<T> list) {
 		for (T object : list) {
 			updateMarker((MarkerSource) object);
@@ -83,6 +83,5 @@ public class MarkerManager {
 	public MarkerSource getSourceFromMarker(Marker marker) {
 		return hashMap.get(marker);
 	}
-
 
 }

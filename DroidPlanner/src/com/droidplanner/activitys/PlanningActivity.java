@@ -227,7 +227,7 @@ public class PlanningActivity extends SuperActivity implements
 	@Override
 	public void onMovePolygonPoint(PolygonPoint source, LatLng newCoord) {
 		source.coord = newCoord;
-		update();		
+		update();
 	}
 
 	@Override

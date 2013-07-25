@@ -78,8 +78,8 @@ public class MissionReader implements FileReader {
 
 	private void parseHomeLine(BufferedReader reader) throws IOException {
 		String[] RowData = reader.readLine().split("\t");
-		home = new Home(Double.valueOf(RowData[8]),
-				Double.valueOf(RowData[9]), Double.valueOf(RowData[10]));
+		home = new Home(Double.valueOf(RowData[8]), Double.valueOf(RowData[9]),
+				Double.valueOf(RowData[10]));
 		home.setNumber(Integer.valueOf(RowData[0]));
 		home.setFrame(Integer.valueOf(RowData[2]));
 		home.setCmd(ApmCommands.getCmd(Integer.valueOf(RowData[3])));

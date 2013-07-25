@@ -10,21 +10,19 @@ public class WaypointMarker {
 
 	public static MarkerOptions build(waypoint wp) {
 		return new MarkerOptions()
-		.position(wp.getCoord())
-		.draggable(true)
-		.title("WP" + Integer.toString(wp.getNumber()))
-		.snippet(
-				String.format(Locale.ENGLISH, "%s %.1fm", wp.getCmd()
-						.getName(), wp.getHeight()));
+				.position(wp.getCoord())
+				.draggable(true)
+				.title("WP" + Integer.toString(wp.getNumber()))
+				.snippet(
+						String.format(Locale.ENGLISH, "%s %.1fm", wp.getCmd()
+								.getName(), wp.getHeight()));
 	}
 
 	public static void update(Marker marker, waypoint wp) {
 		marker.setPosition(wp.getCoord());
 		marker.setTitle("WP" + Integer.toString(wp.getNumber()));
-		marker.setSnippet(
-				String.format(Locale.ENGLISH, "%s %.1fm", wp.getCmd()
-						.getName(), wp.getHeight()));
+		marker.setSnippet(String.format(Locale.ENGLISH, "%s %.1fm", wp.getCmd()
+				.getName(), wp.getHeight()));
 	}
-	
 
 }

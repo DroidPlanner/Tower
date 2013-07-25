@@ -15,7 +15,7 @@ public class PolygonPoint implements MarkerSource {
 	}
 
 	public PolygonPoint(LatLng coord) {
-		this.coord= coord;
+		this.coord = coord;
 	}
 
 	@Override

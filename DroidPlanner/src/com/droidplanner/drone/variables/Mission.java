@@ -158,6 +158,6 @@ public class Mission extends DroneVariable {
 	}
 
 	public void notifyMissionUpdate() {
-		missionListner.onWaypointsUpdate();		
+		missionListner.onWaypointsUpdate();
 	}
 }
