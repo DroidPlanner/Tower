@@ -31,9 +31,7 @@ public class GcpMapFragment extends OfflineMapFragment implements
 		View view = super.onCreateView(inflater, viewGroup, bundle);
 		mMap = getMap();
 		mMap.setOnMarkerClickListener(this);
-		markers = new MarkerManager(mMap) {
-		};
-		;
+		markers = new MarkerManager(mMap);
 		return view;
 	}
 

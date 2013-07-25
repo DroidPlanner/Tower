@@ -18,7 +18,7 @@ import com.droidplanner.R.string;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.fragments.markers.HomeMarker;
-import com.droidplanner.fragments.markers.WaypointMarker;
+import com.droidplanner.fragments.markers.MarkerManager;
 import com.droidplanner.polygon.Polygon;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
@@ -39,8 +39,10 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 
 	public GoogleMap mMap;
 
-	private HashMap<Integer, Marker> waypointMarkers = new HashMap<Integer, Marker>();
+
+	private MarkerManager waypointMarkers;
 	private HashMap<Integer, Marker> polygonMarkers = new HashMap<Integer, Marker>();
+
 	public HomeMarker homeMarker;
 
 	private OnMapInteractionListener mListener;
@@ -68,6 +70,8 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		mMap.setOnMarkerDragListener(this);
 		mMap.setOnMapLongClickListener(this);
 
+		waypointMarkers = new MarkerManager(mMap);
+		
 		homeMarker = new HomeMarker(mMap);
 		return view;
 	}
@@ -82,7 +86,6 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		clearMap();
 
 		homeMarker.invalidate();
-		waypointMarkers.clear();
 		polygonMarkers.clear();
 		homeMarker.update(drone);
 
@@ -90,12 +93,11 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		for (MarkerOptions point : getPolygonMarkers(polygon)) {
 			polygonMarkers.put(i++, mMap.addMarker(point));
 		}
+		
 		mMap.addPolyline(getPolygonPath(polygon));
 
-		i = 0;
-		for (MarkerOptions waypoint : getMissionMarkers(drone)) {
-			waypointMarkers.put(i++, mMap.addMarker(waypoint));
-		}
+		waypointMarkers.updateMarkers(drone.mission.getWaypoints());
+		
 		mMap.addPolyline(getMissionPath(drone));
 
 	}
@@ -127,16 +129,9 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 	}
 
 	private void checkForWaypointMarker(Marker marker) {
-		if (waypointMarkers.containsValue(marker)) {
-			int number = 0;
-			for (HashMap.Entry<Integer, Marker> e : waypointMarkers.entrySet()) {
-				if (marker.equals(e.getValue())) {
-					number = e.getKey();
-					break;
-				}
-			}
-			mListener.onMoveWaypoint(marker.getPosition(), number);
-		}
+		// TODO reimplement this
+		//MarkerSource source = waypointMarkers.getSourceFromMarker(marker);
+		//Listener.onMoveWaypoint(, 0);
 	}
 
 	private void checkForPolygonMarker(Marker marker) {
@@ -160,14 +155,6 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		} else {
 			return null;
 		}
-	}
-
-	private List<MarkerOptions> getMissionMarkers(Drone drone) {
-		List<MarkerOptions> MarkerList = new ArrayList<MarkerOptions>();
-		for (waypoint wp : drone.mission.getWaypoints()) {
-			MarkerList.add(WaypointMarker.generateWapointMarker(wp));
-		}
-		return MarkerList;
 	}
 
 	public List<MarkerOptions> getPolygonMarkers(Polygon poly) {
