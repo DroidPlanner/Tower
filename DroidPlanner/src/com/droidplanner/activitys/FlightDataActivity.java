@@ -30,6 +30,7 @@ public class FlightDataActivity extends SuperFlightActivity implements
 
 		app.setWaypointReceivedListner(this);
 		drone.setDroneTypeChangedListner(this);
+		
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {

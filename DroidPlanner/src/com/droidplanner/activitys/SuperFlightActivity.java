@@ -3,17 +3,15 @@ package com.droidplanner.activitys;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.MAVLink.Messages.ApmModes;
 import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
 import com.droidplanner.R;
 import com.droidplanner.drone.DroneInterfaces.DroneTypeListner;
 import com.droidplanner.drone.variables.GuidedPoint;
-import com.droidplanner.drone.variables.waypoint;
+import com.droidplanner.drone.variables.GuidedPoint.OnGuidedListener;
 import com.droidplanner.fragments.FlightMapFragment;
 import com.droidplanner.fragments.HudFragment;
-import com.droidplanner.fragments.FlightMapFragment.OnFlighDataListener;
 import com.droidplanner.widgets.spinners.SelectModeSpinner;
 import com.droidplanner.widgets.spinners.SelectModeSpinner.OnModeSpinnerSelectedListener;
 import com.droidplanner.widgets.spinners.SelectWaypointSpinner;
@@ -21,12 +19,11 @@ import com.droidplanner.widgets.spinners.SelectWaypointSpinner.OnWaypointSpinner
 
 public abstract class SuperFlightActivity extends SuperActivity implements
 		OnModeSpinnerSelectedListener, OnWaypointSpinnerSelectedListener,
-		OnFlighDataListener, DroneTypeListner, OnWaypointUpdateListner {
+		OnGuidedListener, DroneTypeListner, OnWaypointUpdateListner {
 
 	private SelectModeSpinner fligthModeSpinner;
 	private SelectWaypointSpinner wpSpinner;
 
-	private GuidedPoint guidedPoint;
 	protected FlightMapFragment mapFragment;
 	protected HudFragment hudFragment;
 
@@ -51,6 +48,9 @@ public abstract class SuperFlightActivity extends SuperActivity implements
 		MenuItem wpMenu = menu.findItem(R.id.menu_wp_spinner);
 		wpSpinner = (SelectWaypointSpinner) wpMenu.getActionView();
 		wpSpinner.buildSpinner(this, this);
+		
+
+		drone.guidedPoint.setOnGuidedListner(this);
 
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -69,19 +69,15 @@ public abstract class SuperFlightActivity extends SuperActivity implements
 	}
 
 	@Override
-	public void onSetGuidedMode(GuidedPoint guidedPoint) {
+	public void onGuidedPoint(GuidedPoint guidedPoint) {
 		changeDefaultAlt();
-		this.guidedPoint = guidedPoint;
 	}
 
 	@Override
 	public void onAltitudeChanged(double newAltitude) {
 		super.onAltitudeChanged(newAltitude);
-		if (guidedPoint != null) {
-			Toast.makeText(this, "Guided Mode (" + (int) newAltitude + "m)",
-					Toast.LENGTH_SHORT).show();
-			drone.state.setGuidedMode(new waypoint(guidedPoint.getCoord(), newAltitude));
-			guidedPoint = null;
+		if (drone.guidedPoint.isCoordValid()) {
+			drone.guidedPoint.setGuidedMode();
 		}
 	}
 

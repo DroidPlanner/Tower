@@ -3,7 +3,6 @@ package com.droidplanner.fragments;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -16,7 +15,6 @@ import android.widget.Toast;
 
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.drone.Drone;
-import com.droidplanner.drone.variables.GuidedPoint;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.fragments.markers.DroneMarker;
 import com.droidplanner.fragments.markers.MarkerManager;
@@ -40,13 +38,9 @@ public class FlightMapFragment extends OfflineMapFragment implements
 	private MarkerManager markers;
 	
 	public boolean hasBeenZoomed = false;
-	private OnFlighDataListener mListener;
+	
 	public DroneMarker droneMarker;
 	public Drone drone;
-
-	public interface OnFlighDataListener {
-		public void onSetGuidedMode(GuidedPoint guidedPoint);
-	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
@@ -70,12 +64,7 @@ public class FlightMapFragment extends OfflineMapFragment implements
 		return view;
 	}
 
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		mListener = (OnFlighDataListener) activity;
-	}
-
+	
 	private void getPreferences() {
 		Context context = this.getActivity();
 		SharedPreferences prefs = PreferenceManager
@@ -140,9 +129,8 @@ public class FlightMapFragment extends OfflineMapFragment implements
 	public void onMapLongClick(LatLng coord) {
 		getPreferences();
 		if (isGuidedModeEnabled) {
-			GuidedPoint guidedPoint = new GuidedPoint(coord);
-			mListener.onSetGuidedMode(guidedPoint);
-			markers.updateMarker(guidedPoint);
+			drone.guidedPoint.newGuidedPoint(coord);
+			markers.updateMarker(drone.guidedPoint);
 		}
 	}
 
