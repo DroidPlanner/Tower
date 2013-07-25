@@ -3,52 +3,57 @@ package com.droidplanner.fragments.markers;
 import java.util.HashMap;
 import java.util.List;
 
-import com.droidplanner.fragments.GcpMapFragment;
-import com.droidplanner.gcp.gcp;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MarkerManager {
+public class MarkerManager<T> {
 	public GoogleMap mMap;
-	public HashMap<Marker, gcp> hashMap = new HashMap<Marker, gcp>();
+	public HashMap<Marker, T> hashMap = new HashMap<Marker, T>();
 
+	public interface markerSource{
+		MarkerOptions build();
+
+		void update(Marker markerFromGcp);
+	}
+	
 	public MarkerManager(GoogleMap map) {
 		this.mMap = map;
 	}
 
-	public void clear(GcpMapFragment gcpMapFragment) {
+	public void clear() {
 		for (Marker marker : hashMap.keySet()) {
-			removeMarker(getGcpFromMarker(marker));
+			removeMarker(getObjectFromMarker(marker));
 		}
 	}
 
-	public void updateMarkers(List<gcp> gcpList) {
-		for (gcp gcp : gcpList) {
-			updateMarker(gcp);
+	public void updateMarkers(List<T> list) {
+		for (T object : list) {
+			updateMarker(object);
 		}
-		removeOldMarkers(gcpList);
+		removeOldMarkers(list);
 	}
 
-	public void updateMarker(gcp gcp) {
-		if (hashMap.containsValue(gcp)) {
-			GcpMarker.update(getMarkerFromGcp(gcp), gcp, 0);
+	public void updateMarker(T marker) {
+		if (hashMap.containsValue(marker)) {
+			((markerSource) marker).update(getMarkerFromObject(marker));
 		} else {
-			addMarker(gcp);
+			addMarker(marker);
 		}
 	}
 
-	private void removeOldMarkers(List<gcp> gcpList) {
+	private void removeOldMarkers(List<T> list) {
 		for (Marker marker : hashMap.keySet()) {
-			gcp gcp = getGcpFromMarker(marker);
-			if (!gcpList.contains(gcp)) {
-				removeMarker(gcp);
+			T object = getObjectFromMarker(marker);
+			if (!list.contains(object)) {
+				removeMarker(object);
 			}
 		}
 	}
 
-	private boolean removeMarker(gcp gcp) {
-		if (hashMap.containsValue(gcp)) {
-			Marker marker = getMarkerFromGcp(gcp);
+	private boolean removeMarker(T object) {
+		if (hashMap.containsValue(object)) {
+			Marker marker = getMarkerFromObject(object);
 			hashMap.remove(marker);
 			marker.remove();
 			return true;
@@ -57,21 +62,21 @@ public class MarkerManager {
 		}
 	}
 
-	private void addMarker(gcp gcp) {
-		Marker marker = mMap.addMarker(GcpMarker.build(gcp, 0));
-		hashMap.put(marker, gcp);
+	private void addMarker(T object) {
+		Marker marker = mMap.addMarker(((markerSource) object).build());
+		hashMap.put(marker, object);
 	}
 
-	public Marker getMarkerFromGcp(gcp gcp) {
+	public Marker getMarkerFromObject(T object) {
 		for (Marker marker : hashMap.keySet()) {
-			if (getGcpFromMarker(marker) == gcp) {
+			if (getObjectFromMarker(marker) == object) {
 				return marker;
 			}
 		}
 		return null;
 	}
 
-	public gcp getGcpFromMarker(Marker marker) {
+	public T getObjectFromMarker(Marker marker) {
 		return hashMap.get(marker);
 	}
 

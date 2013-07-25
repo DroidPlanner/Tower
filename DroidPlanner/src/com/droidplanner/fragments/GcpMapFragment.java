@@ -17,7 +17,7 @@ public class GcpMapFragment extends OfflineMapFragment implements
 
 	private OnGcpClickListner mListener;
 
-	public MarkerManager markers;
+	public MarkerManager<gcp> markers;
 
 	private GoogleMap mMap;
 
@@ -31,7 +31,8 @@ public class GcpMapFragment extends OfflineMapFragment implements
 		View view = super.onCreateView(inflater, viewGroup, bundle);
 		mMap = getMap();
 		mMap.setOnMarkerClickListener(this);
-		markers = new MarkerManager(mMap);
+		markers = new MarkerManager<gcp>(mMap) {
+		};;
 		return view;
 	}
 
@@ -43,7 +44,7 @@ public class GcpMapFragment extends OfflineMapFragment implements
 
 	@Override
 	public boolean onMarkerClick(Marker marker) {
-		mListener.onGcpClick(markers.getGcpFromMarker(marker));
+		mListener.onGcpClick(markers.getObjectFromMarker(marker));
 		return true;
 	}
 

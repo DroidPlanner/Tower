@@ -110,7 +110,7 @@ public class GCPActivity extends SuperActivity implements OnGcpClickListner {
 
 	public void clearWaypointsAndUpdate() {
 		gcpList.clear();
-		gcpMapFragment.markers.clear(gcpMapFragment);
+		gcpMapFragment.markers.clear();
 	}
 
 	@Override

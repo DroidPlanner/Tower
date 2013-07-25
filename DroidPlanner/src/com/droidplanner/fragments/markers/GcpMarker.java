@@ -9,14 +9,21 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class GcpMarker{
 
-	public static MarkerOptions build(gcp gcp, int i) {
+	public static MarkerOptions build(gcp gcp) {
 		return new MarkerOptions()
 		.position(gcp.coord)
-		.title(String.valueOf(i))
+		.title(String.valueOf(0))
 		.icon(getIcon(gcp))
 				.anchor((float) 0.5, (float) 0.5);
 	}
 	
+
+	public static void update(Marker marker,gcp gcp) {
+		marker.setPosition(gcp.coord);	
+		marker.setTitle(String.valueOf(0));
+		marker.setIcon(getIcon(gcp));
+	}
+
 	private static BitmapDescriptor getIcon(gcp gcp) {
 		if (gcp.isMarked) {
 			return BitmapDescriptorFactory
@@ -26,11 +33,4 @@ public class GcpMarker{
 					.fromResource(R.drawable.placemark_circle_blue);
 		}
 	}
-
-	public static void update(Marker marker,gcp gcp, int i) {
-		marker.setPosition(gcp.coord);	
-		marker.setTitle(String.valueOf(i));
-		marker.setIcon(getIcon(gcp));
-	}
-
 }
