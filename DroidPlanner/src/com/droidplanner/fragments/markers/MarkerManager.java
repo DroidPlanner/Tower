@@ -23,9 +23,8 @@ public class MarkerManager {
 	}
 
 	public void clear() {
-		for (Marker marker : hashMap.keySet()) {
-			removeMarker(getSourceFromMarker(marker));
-		}
+		List<MarkerSource> emptyList = new ArrayList<MarkerSource>();
+		removeOldMarkers(emptyList);
 	}
 
 	public <T> void updateMarkers(List<T> list) {
@@ -37,7 +36,8 @@ public class MarkerManager {
 
 	public void updateMarker(MarkerSource object) {
 		if (hashMap.containsValue(object)) {
-			((MarkerSource) object).update(getMarkerFromSource(object));
+			Marker marker = getMarkerFromSource(object);
+			((MarkerSource) object).update(marker);
 		} else {
 			addMarker(object);
 		}

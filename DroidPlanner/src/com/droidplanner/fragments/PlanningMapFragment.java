@@ -86,6 +86,7 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		clearMap();
 
 		homeMarker.invalidate();
+		waypointMarkers.clear();
 		polygonMarkers.clear();
 		homeMarker.update(drone);
 
