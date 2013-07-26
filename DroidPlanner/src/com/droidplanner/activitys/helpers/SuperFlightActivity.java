@@ -58,7 +58,7 @@ public abstract class SuperFlightActivity extends SuperActivity implements
 	@Override
 	public void OnModeSpinnerSelected(String text) {
 		ApmModes mode = ApmModes.getMode(text, drone.type.getType());
-		if (mode != ApmModes.UNKNOWN) {
+		if (ApmModes.isValid(mode)) {
 			drone.state.changeFlightMode(mode);
 		}
 	}
