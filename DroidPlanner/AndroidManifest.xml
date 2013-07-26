@@ -91,6 +91,9 @@
             android:name=".activitys.CameraActivity" >
             <!-- android:screenOrientation="landscape" -->
         </activity>
+                <activity
+            android:name=".activitys.ChartActivity" >
+        </activity>
         <activity
             android:name=".activitys.GCPActivity"
             tools:ignore="ExportedActivity" >

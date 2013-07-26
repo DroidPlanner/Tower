@@ -54,6 +54,7 @@
         <item>Parameters</item>
         <item>Camera</item>
         <item>GCP</item>
+        <item>Chart</item>
     </string-array>
 
     <!-- Do not change the names in the array bellow -->
