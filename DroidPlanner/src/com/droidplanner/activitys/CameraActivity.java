@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.droidplanner.R;
+import com.droidplanner.activitys.helpers.SuperActivity;
 import com.droidplanner.helpers.RcOutput;
 import com.droidplanner.widgets.joystick.JoystickMovedListener;
 import com.droidplanner.widgets.joystick.JoystickView;
@@ -17,12 +18,12 @@ public class CameraActivity extends SuperActivity {
 	private TextView textViewLPan, textViewLTilt, textViewRPan, textViewRTilt;
 
 	@Override
-	int getNavigationItem() {
+	public int getNavigationItem() {
 		return 4;
 	}
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.camera);

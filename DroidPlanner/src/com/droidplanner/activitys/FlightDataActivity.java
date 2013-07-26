@@ -7,6 +7,7 @@ import android.view.MenuItem;
 
 import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
 import com.droidplanner.R;
+import com.droidplanner.activitys.helpers.SuperFlightActivity;
 import com.droidplanner.drone.DroneInterfaces.DroneTypeListner;
 import com.droidplanner.fragments.FlightMapFragment;
 
@@ -14,12 +15,12 @@ public class FlightDataActivity extends SuperFlightActivity implements
 		OnWaypointUpdateListner, DroneTypeListner {
 
 	@Override
-	int getNavigationItem() {
+	public int getNavigationItem() {
 		return 1;
 	}
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.flightdata);
@@ -28,7 +29,7 @@ public class FlightDataActivity extends SuperFlightActivity implements
 				.findFragmentById(R.id.flightMapFragment));
 		mapFragment.updateFragment();
 
-		app.setWaypointReceivedListner(this);
+		drone.mission.missionListner = this;
 		drone.setDroneTypeChangedListner(this);
 		
 	}

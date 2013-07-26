@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.droidplanner.R;
-import com.droidplanner.activitys.SuperActivity;
+import com.droidplanner.activitys.helpers.SuperActivity;
 import com.droidplanner.widgets.HUD.HUD;
 
 public class HudFragment extends Fragment {

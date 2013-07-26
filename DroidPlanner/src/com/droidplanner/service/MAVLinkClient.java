@@ -150,4 +150,12 @@ public class MAVLinkClient {
 	public boolean isConnected() {
 		return mIsBound;
 	}
+
+	public void toggleConnectionState() {
+		if (isConnected()) {
+			close();
+		} else {
+			init();
+		}
+	}
 }

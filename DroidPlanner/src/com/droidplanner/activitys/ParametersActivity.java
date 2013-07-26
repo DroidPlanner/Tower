@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.droidplanner.R;
+import com.droidplanner.activitys.helpers.SuperActivity;
 import com.droidplanner.dialogs.OpenFileDialog;
 import com.droidplanner.dialogs.OpenParameterDialog;
 import com.droidplanner.drone.DroneInterfaces;
@@ -21,19 +22,19 @@ public class ParametersActivity extends SuperActivity implements
 	private ParametersTableFragment tableFragment;
 
 	@Override
-	int getNavigationItem() {
+	public int getNavigationItem() {
 		return 3;
 	}
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.parameters);
 
 		tableFragment = ((ParametersTableFragment) getFragmentManager()
 				.findFragmentById(R.id.parametersTable));
 
-		app.setOnParametersChangedListner(this);
+		drone.parameters.parameterListner = this;
 	}
 
 	@Override
