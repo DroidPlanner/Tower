@@ -34,7 +34,7 @@ public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 	private HudFailsafe hudFailsafe = new HudFailsafe();
 
 	HudCommonPaints commonPaints = new HudCommonPaints();
-	
+
 	Drone drone;
 
 	@Override
@@ -45,7 +45,8 @@ public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 
 		// clear screen
 		canvas.drawColor(Color.rgb(20, 20, 20));
-		canvas.translate(width / 2, hudInfo.attHeightPx / 2 + hudYaw.yawHeightPx); // set
+		canvas.translate(width / 2, hudInfo.attHeightPx / 2
+				+ hudYaw.yawHeightPx); // set
 		// center of HUD excluding YAW area
 
 		// from now on each drawing routine has to undo all applied
@@ -80,7 +81,7 @@ public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 		// frequently
 
 		hudPlane.setupPlane(this);
-		commonPaints.setupCommonPaints(this);		
+		commonPaints.setupCommonPaints(this);
 		hudYaw.setupYaw(this, this);
 		hudInfo.setupAtt(this);
 		hudRoll.setupRoll(this);

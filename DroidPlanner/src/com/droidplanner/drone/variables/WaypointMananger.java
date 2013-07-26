@@ -55,9 +55,6 @@ public class WaypointMananger extends DroneVariable {
 	 * Sets the current waypoint in the MAV
 	 * 
 	 * The callback will return the status of this operation
-	 * 
-	 * @param data
-	 *            waypoints to be written
 	 */
 	public void setCurrentWaypoint(int i) {
 		if ((waypoints != null)) {

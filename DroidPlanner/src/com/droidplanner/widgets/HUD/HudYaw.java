@@ -43,7 +43,7 @@ public class HudYaw {
 		yawNumbers.setColor(Color.WHITE);
 		yawNumbers.setTextAlign(Align.CENTER);
 		yawNumbers.setAntiAlias(true);
-		
+
 		yawBg.setARGB(255, 0, 0, 0);// (64, 255, 255, 255);
 	}
 

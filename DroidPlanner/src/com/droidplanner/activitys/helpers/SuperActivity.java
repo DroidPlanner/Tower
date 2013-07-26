@@ -35,7 +35,7 @@ public abstract class SuperActivity extends Activity implements
 	public DroidPlannerApp app;
 	public Drone drone;
 	private MenuItem connectButton;
-	
+
 	private ScreenOrientation screenOrientation = new ScreenOrientation(this);
 
 	public SuperActivity() {

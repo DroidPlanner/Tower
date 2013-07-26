@@ -1,26 +1,21 @@
 package com.droidplanner.activitys;
 
 import android.os.Bundle;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.TableLayout;
-import android.widget.TableRow;
+import android.widget.LinearLayout;
 
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperActivity;
 import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
 import com.droidplanner.widgets.graph.Chart;
+import com.droidplanner.widgets.graph.ChartCheckBoxList;
 
-public class ChartActivity extends SuperActivity implements
-		OnCheckedChangeListener, HudUpdatedListner {
+public class ChartActivity extends SuperActivity implements HudUpdatedListner {
 
-	private Chart chart;
-	private TableLayout layout;
-
-	// Settings overlay layout
-	private int nRows = 3;
-	String[] labels = { "Pitch", "Yaw", "Roll" };
+	public Chart chart;
+	public LinearLayout readoutMenu;
+	public String[] labels = { "Pitch", "Roll","Yaw", "Altitude", "Target Alt.", "Latitude",
+			"Longitude","SatCount" ,"Voltage", "Current", "G. Speed", "A. Speed","WP","DistToWp", };
+	public ChartCheckBoxList checkBoxList = new ChartCheckBoxList();
 
 	@Override
 	public int getNavigationItem() {
@@ -32,64 +27,32 @@ public class ChartActivity extends SuperActivity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.chart);
 
-		chart = (Chart) findViewById(R.id.scope);
-		layout = (TableLayout) findViewById(R.id.readoutMenu);
+		chart = (Chart) findViewById(R.id.chart);
+		readoutMenu = (LinearLayout) findViewById(R.id.readoutMenu);
 
-		chart.setDataSize(labels.length);
-
-		chart.enableEntry(0);
-		chart.enableEntry(1);
-		chart.enableEntry(2);
-
-		setupOverlay();
+		checkBoxList.populateView(readoutMenu, labels, chart);
 
 		drone.setHudListner(this);
 	}
 
-	void setupOverlay() {
-		int i = 0;
-
-		for (int y = 0; y < nRows; y++) {
-			TableRow tr = new TableRow(this);
-			layout.addView(tr);
-			if (i < labels.length) {
-				CheckBox cb = new CheckBox(layout.getContext());
-				cb.setOnCheckedChangeListener(this);
-
-				tr.addView(cb);
-				cb.setTag(i);
-				cb.setText(labels[i]);
-				cb.setTextColor(chart.getEntryColor((Integer) cb.getTag()));
-				cb.setChecked(chart.isActive((Integer) cb.getTag()));
-				i++;
-			}
-		}
-
-	}
-
-	@Override
-	public void onCheckedChanged(CompoundButton bv, boolean isChecked) {
-		Integer dataIndex = (Integer) bv.getTag();
-
-		if (isChecked) {
-			// Add dataIndex to rendered items
-			int c = chart.enableEntry(dataIndex);
-			if (c == -1) {
-				bv.setChecked(false);
-
-			}
-		} else {
-			chart.disableEntry(dataIndex);
-
-		}
-
-	}
-
 	@Override
 	public void onDroneUpdate() {
-		double[] data = { drone.orientation.getPitch(),
-				drone.orientation.getRoll(), drone.orientation.getYaw() };
-		chart.newFlightData(data);
+		checkBoxList.updateCheckBox("Pitch", drone.orientation.getPitch());
+		checkBoxList.updateCheckBox("Roll", drone.orientation.getRoll());
+		checkBoxList.updateCheckBox("Yaw", drone.orientation.getYaw());
+		checkBoxList.updateCheckBox("Altitude", drone.altitude.getAltitude());
+		checkBoxList.updateCheckBox("Target Alt.", drone.altitude.getTargetAltitude());
+		checkBoxList.updateCheckBox("Latitude",	drone.GPS.getPosition().latitude);
+		checkBoxList.updateCheckBox("Longitude", drone.GPS.getPosition().longitude);
+		checkBoxList.updateCheckBox("SatCount", drone.GPS.getSatCount());
+		checkBoxList.updateCheckBox("Voltage", drone.battery.getBattVolt());
+		checkBoxList.updateCheckBox("Current", drone.battery.getBattCurrent());
+		checkBoxList.updateCheckBox("G. Speed", drone.speed.getGroundSpeed());
+		checkBoxList.updateCheckBox("A. Speed", drone.speed.getAirSpeed());
+		checkBoxList.updateCheckBox("DistToWp", drone.mission.getDisttowp());
+		checkBoxList.updateCheckBox("WP", drone.mission.getWpno());
+
+		chart.update();
 	}
 
 }

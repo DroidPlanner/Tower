@@ -5,9 +5,10 @@ import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 
 public class RenderThread extends Thread {
-	public interface canvasPainter{
+	public interface canvasPainter {
 		public void onDraw(Canvas c);
 	}
+
 	private SurfaceHolder _surfaceHolder;
 	private canvasPainter painter;
 	private volatile boolean running = false;

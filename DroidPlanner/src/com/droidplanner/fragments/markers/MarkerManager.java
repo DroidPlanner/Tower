@@ -39,7 +39,7 @@ public class MarkerManager {
 			((MarkerSource) object).update(marker);
 			marker.setDraggable(draggable);
 		} else {
-			addMarker(object,draggable);
+			addMarker(object, draggable);
 		}
 	}
 

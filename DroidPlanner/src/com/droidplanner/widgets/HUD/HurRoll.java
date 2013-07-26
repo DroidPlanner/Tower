@@ -15,7 +15,7 @@ public class HurRoll {
 	static final float ROLL_FACTOR_TIC_LENGTH = .25f;
 	// in relation to rollSizePxTics
 	static final float ROLL_FACTOR_TEXT_Y_OFFSET = .8f;
-	
+
 	public int rollTopOffsetPx;
 	public int rollSizePxTics;
 	public int rollPosPxTextYOffset;
@@ -29,7 +29,8 @@ public class HurRoll {
 
 	void setupRoll(HUD huDwidget) {
 		rollTopOffsetPx = huDwidget.hudYaw.yawHeightPx;
-		rollText.setTextSize(Math.round(huDwidget.hudInfo.attHeightPx * HurRoll.ROLL_FACTOR_TEXT));
+		rollText.setTextSize(Math.round(huDwidget.hudInfo.attHeightPx
+				* HurRoll.ROLL_FACTOR_TEXT));
 		rollSizePxTics = Math.round(rollTopOffsetPx
 				* HurRoll.ROLL_FACTOR_TIC_LENGTH);
 		rollPosPxTextYOffset = Math.round(rollSizePxTics
@@ -39,22 +40,23 @@ public class HurRoll {
 	void drawRoll(HUD huDwidget, Canvas canvas) {
 		int r = Math.round(huDwidget.hudInfo.attHeightPx / 2 - rollTopOffsetPx);
 		RectF rec = new RectF(-r, -r, r, r);
-	
+
 		// Draw the arc
 		canvas.drawArc(rec, 225, 90, false, huDwidget.commonPaints.whiteBorder);
-	
+
 		// Draw center triangle
 		Path arrow = new Path();
-		int tempOffset = Math.round(huDwidget.hudPlane.plane.getStrokeWidth() / 2);
+		int tempOffset = Math
+				.round(huDwidget.hudPlane.plane.getStrokeWidth() / 2);
 		arrow.moveTo(0, -huDwidget.hudInfo.attHeightPx / 2 + rollTopOffsetPx
 				- tempOffset);
-		arrow.lineTo(0 - rollTopOffsetPx / 3, -huDwidget.hudInfo.attHeightPx / 2
-				+ rollTopOffsetPx / 2 - tempOffset);
-		arrow.lineTo(0 + rollTopOffsetPx / 3, -huDwidget.hudInfo.attHeightPx / 2
-				+ rollTopOffsetPx / 2 - tempOffset);
+		arrow.lineTo(0 - rollTopOffsetPx / 3, -huDwidget.hudInfo.attHeightPx
+				/ 2 + rollTopOffsetPx / 2 - tempOffset);
+		arrow.lineTo(0 + rollTopOffsetPx / 3, -huDwidget.hudInfo.attHeightPx
+				/ 2 + rollTopOffsetPx / 2 - tempOffset);
 		arrow.close();
 		canvas.drawPath(arrow, huDwidget.hudPlane.plane);
-	
+
 		// draw the ticks
 		// The center of the circle is at: 0, 0
 		for (int i = -45; i <= 45; i += 15) {
@@ -66,7 +68,8 @@ public class HurRoll {
 						* (r + rollSizePxTics);
 				float ey = (float) Math.cos(i * Math.PI / 180)
 						* (r + rollSizePxTics);
-				canvas.drawLine(dx, -dy, ex, -ey, huDwidget.commonPaints.whiteThickTics);
+				canvas.drawLine(dx, -dy, ex, -ey,
+						huDwidget.commonPaints.whiteThickTics);
 				// Draw the labels
 				dx = (float) Math.sin(i * Math.PI / 180)
 						* (r + rollSizePxTics + rollPosPxTextYOffset);
@@ -75,7 +78,7 @@ public class HurRoll {
 				canvas.drawText(Math.abs(i) + "", dx, -dy, rollText);
 			}
 		}
-	
+
 		// current roll angle will be drawn by drawPitch()
 	}
 }
