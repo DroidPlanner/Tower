@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.droidplanner"
-    android:versionCode="34"
-    android:versionName="0.11.1" >
+    android:versionCode="35"
+    android:versionName="0.11.2" >
 
     <uses-sdk
         android:minSdkVersion="14"

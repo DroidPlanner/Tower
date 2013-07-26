@@ -1,3 +1,7 @@
+## Droidplanner v0.11.2
+* Improving the Chart Screen
+* Chinese Translation
+
 ## Droidplanner v0.11.1
 * Changing the start screen back to Flight Data
 
