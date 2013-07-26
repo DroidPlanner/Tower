@@ -3,22 +3,17 @@
     android:id="@+id/layout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:layout_gravity="bottom" 
-    android:orientation="horizontal">
+    android:layout_gravity="bottom"
+    android:orientation="horizontal" >
 
-    <TableLayout
+    <LinearLayout
         android:id="@+id/readoutMenu"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_margin="5dp"
-        android:gravity="center" >
-
-        <TableRow
-            android:id="@+id/tableRow1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-        </TableRow>
-    </TableLayout>
+        android:gravity="center"
+        android:orientation="vertical" >
+    </LinearLayout>
 
     <com.droidplanner.widgets.graph.Chart
         android:id="@+id/scope"

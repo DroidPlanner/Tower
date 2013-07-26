@@ -1,11 +1,12 @@
 package com.droidplanner.activitys;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.TableLayout;
-import android.widget.TableRow;
+import android.widget.LinearLayout;
 
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperActivity;
@@ -16,10 +17,8 @@ public class ChartActivity extends SuperActivity implements
 		OnCheckedChangeListener, HudUpdatedListner {
 
 	private Chart chart;
-	private TableLayout layout;
+	private LinearLayout readoutMenu;
 
-	// Settings overlay layout
-	private int nRows = 3;
 	String[] labels = { "Pitch", "Yaw", "Roll" };
 
 	@Override
@@ -33,7 +32,7 @@ public class ChartActivity extends SuperActivity implements
 		setContentView(R.layout.chart);
 
 		chart = (Chart) findViewById(R.id.scope);
-		layout = (TableLayout) findViewById(R.id.readoutMenu);
+		readoutMenu = (LinearLayout) findViewById(R.id.readoutMenu);
 
 		setupOverlay();
 
@@ -43,32 +42,27 @@ public class ChartActivity extends SuperActivity implements
 	void setupOverlay() {
 		int i = 0;
 
-		for (int y = 0; y < nRows; y++) {
-			TableRow tr = new TableRow(this);
-			layout.addView(tr);
-			if (i < labels.length) {
-				CheckBox cb = new CheckBox(layout.getContext());
-				cb.setOnCheckedChangeListener(this);
-
-				tr.addView(cb);
-				cb.setTag(i);
-				cb.setText(labels[i]);
-				cb.setTextColor(chart.chartData.series.get((Integer) cb.getTag()).getColor());
-				cb.setChecked(chart.chartData.isActive((Integer) cb.getTag()));
-				i++;
-			}
+		for (String label : labels) {
+				CheckBox checkBox = new CheckBox(readoutMenu.getContext());
+				checkBox.setOnCheckedChangeListener(this);
+				checkBox.setText(label);
+				checkBox.setChecked(true);
+				checkBox.setGravity(Gravity.LEFT);
+				checkBox.setTag(i++);
+				readoutMenu.addView(checkBox);				
 		}
-
 	}
 
 	@Override
-	public void onCheckedChanged(CompoundButton bv, boolean isChecked) {
-		Integer dataIndex = (Integer) bv.getTag();
+	public void onCheckedChanged(CompoundButton checkBox, boolean isChecked) {
+		Integer dataIndex = (Integer) checkBox.getTag();
+		Log.d("TAG", "tag:"+dataIndex);
 		if (isChecked) {
 			chart.chartData.enableEntry(dataIndex);
 		} else {
 			chart.chartData.disableEntry(dataIndex);
 		}
+		chart.update();
 	}
 
 	@Override
