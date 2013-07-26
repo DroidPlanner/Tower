@@ -55,7 +55,7 @@ public class PlanningActivity extends SuperActivity implements
 
 		missionFragment.setMission(drone.mission);
 
-		app.drone.mission.missionListner = this;
+		drone.mission.missionListner = this;
 
 		checkIntent();
 
