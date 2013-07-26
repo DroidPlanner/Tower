@@ -8,17 +8,17 @@ import android.view.ViewGroup;
 
 import com.droidplanner.R;
 import com.droidplanner.activitys.SuperActivity;
-import com.droidplanner.widgets.HUD.HUDwidget;
+import com.droidplanner.widgets.HUD.HUD;
 
 public class HudFragment extends Fragment {
 
-	private HUDwidget hudWidget;
+	private HUD hudWidget;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.hud_fragment, container, false);
-		hudWidget = (HUDwidget) view.findViewById(R.id.hudWidget);
+		hudWidget = (HUD) view.findViewById(R.id.hudWidget);
 		hudWidget.setDrone(((SuperActivity) getActivity()).app.drone);
 		hudWidget.onDroneUpdate();
 		return view;
