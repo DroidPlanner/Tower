@@ -2,6 +2,9 @@ package com.droidplanner.activitys;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -34,6 +37,16 @@ public class ChartActivity extends SuperActivity implements
 
 		chart = (Chart) findViewById(R.id.scope);
 		layout = (TableLayout) findViewById(R.id.readoutMenu);
+		
+		layout.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Log.d("CHART", "newData");
+				double[] data = {0,1,2};
+				chart.newFlightData(data );				
+			}
+		});
 
 		chart.setDataSize(labels.length);
 		chart.setNames(labels);
@@ -69,7 +82,8 @@ public class ChartActivity extends SuperActivity implements
 	@Override
 	public void onCheckedChanged(CompoundButton bv, boolean isChecked) {
 		Integer dataIndex = (Integer) bv.getTag();
-
+		
+		
 		if (isChecked) {
 			// Add dataIndex to rendered items
 			int c = chart.enableEntry(dataIndex);

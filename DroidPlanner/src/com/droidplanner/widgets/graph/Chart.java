@@ -38,7 +38,7 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback, canvas
 	private int numPtsToDraw = 100;
 
 	// range values to display
-	private int range = 700;
+	private double range = 10;
 	
 	private Paint grid_paint = new Paint();
 
@@ -190,6 +190,8 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback, canvas
 			newestData = newIndex;
 			
 		}		
+		
+		update();
 	}
 		
 	@Override
@@ -258,7 +260,7 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback, canvas
 	        range /= detector.getScaleFactor();
 	        
 	        Log.d("Scale", range+"");	       
-	        range = Math.max(50, Math.min(range, 3000));
+	        range = Math.max(0.1, Math.min(range, 10));
 
 	        return true;
 	    }
