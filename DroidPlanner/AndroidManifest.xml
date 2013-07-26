@@ -70,11 +70,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".activitys.FlightDataActivity" >
-           <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
             <intent-filter>
                 <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
             </intent-filter>
@@ -91,8 +86,13 @@
             android:name=".activitys.CameraActivity" >
             <!-- android:screenOrientation="landscape" -->
         </activity>
-                <activity
+        <activity
             android:name=".activitys.ChartActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".activitys.GCPActivity"
