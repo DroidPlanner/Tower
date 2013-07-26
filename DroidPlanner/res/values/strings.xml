@@ -74,6 +74,16 @@
         <item name="57600">57600</item>
         <item name="115200">115200</item>
     </string-array>
+    
+    <!-- Do not change the names in the array bellow -->
+    <string-array name="RCModes">
+        <item name="MODE1">(Mode1) Throttle Right</item>
+        <item name="MODE2">(Mode2) Throttle Left</item>
+    </string-array>
+    <string-array name="RCModeValues">
+        <item name="MODE1">MODE1</item>
+        <item name="MODE2">MODE2</item>
+    </string-array>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>   
     
