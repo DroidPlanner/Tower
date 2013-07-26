@@ -99,6 +99,7 @@ public class MissionRow extends TableRow implements OnClickListener,
 			public void onClick(DialogInterface d, int i) {
 				waypoint.setCmd(ApmCommands.getCmd(list[i]));
 				update();
+				fragment.onWaypointUpdate(waypoint);
 			}
 		});
 		dialog.create().show();
