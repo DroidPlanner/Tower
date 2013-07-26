@@ -31,7 +31,7 @@ public class FlightDataActivity extends SuperFlightActivity implements
 
 		drone.mission.missionListner = this;
 		drone.setDroneTypeChangedListner(this);
-		
+
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {

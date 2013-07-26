@@ -36,9 +36,9 @@ public class FlightMapFragment extends OfflineMapFragment implements
 	private boolean isGuidedModeEnabled;
 
 	private MarkerManager markers;
-	
+
 	public boolean hasBeenZoomed = false;
-	
+
 	public DroneMarker droneMarker;
 	public Drone drone;
 
@@ -49,9 +49,8 @@ public class FlightMapFragment extends OfflineMapFragment implements
 		mMap = getMap();
 		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
 
-
 		markers = new MarkerManager(mMap);
-		
+
 		droneMarker = new DroneMarker(this);
 
 		addFlightPathToMap();
@@ -64,7 +63,6 @@ public class FlightMapFragment extends OfflineMapFragment implements
 		return view;
 	}
 
-	
 	private void getPreferences() {
 		Context context = this.getActivity();
 		SharedPreferences prefs = PreferenceManager
@@ -130,13 +128,13 @@ public class FlightMapFragment extends OfflineMapFragment implements
 		getPreferences();
 		if (isGuidedModeEnabled) {
 			drone.guidedPoint.newGuidedPoint(coord);
-			markers.updateMarker(drone.guidedPoint,false);
+			markers.updateMarker(drone.guidedPoint, false);
 		}
 	}
 
 	public void updateFragment() {
-			updateMissionPath(drone);
-			markers.updateMarker(drone.mission.getHome(),false);	
+		updateMissionPath(drone);
+		markers.updateMarker(drone.mission.getHome(), false);
 	}
 
 }

@@ -24,11 +24,11 @@ public class HudPlane {
 
 	void setupPlane(HUD huDwidget) {
 		float redIndicatorWidth;
-		
+
 		hudCenterIndicatorRadius = Math
 				.round((huDwidget.width + huDwidget.height) / 2
 						* HUD_FACTOR_CENTER_INDICATOR_SIZE);
-		
+
 		redIndicatorWidth = (huDwidget.width + huDwidget.height) / 2
 				* HUD_FACTOR_RED_INDICATOR_WIDTH;
 		if (redIndicatorWidth < 1)

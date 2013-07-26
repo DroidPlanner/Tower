@@ -1,22 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/frameLayout"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:layout_gravity="bottom" >
+    android:layout_gravity="bottom"
+    android:orientation="horizontal" >
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:id="@+id/readoutMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            android:orientation="vertical" >
+        </LinearLayout>
+    </ScrollView>
 
     <com.droidplanner.widgets.graph.Chart
-        android:id="@+id/scope"
+        android:id="@+id/chart"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+        android:layout_height="match_parent" />
 
-    <TableLayout
-        android:id="@+id/readoutMenu"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_gravity="bottom"
-        android:gravity="center"
-        android:orientation="horizontal" >
-    </TableLayout>
-
-</FrameLayout>
+</LinearLayout>
