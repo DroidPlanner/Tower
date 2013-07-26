@@ -1,6 +1,5 @@
 package com.droidplanner.activitys;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -35,15 +34,15 @@ public class ChartActivity extends SuperActivity implements
 
 		chart = (Chart) findViewById(R.id.scope);
 		layout = (TableLayout) findViewById(R.id.readoutMenu);
-		
+
 		chart.setDataSize(labels.length);
-		
+
 		chart.enableEntry(0);
 		chart.enableEntry(1);
 		chart.enableEntry(2);
-		
+
 		setupOverlay();
-		
+
 		drone.setHudListner(this);
 	}
 
@@ -60,7 +59,7 @@ public class ChartActivity extends SuperActivity implements
 				tr.addView(cb);
 				cb.setTag(i);
 				cb.setText(labels[i]);
-				cb.setTextColor(chart.getEntryColor((Integer)cb.getTag()));
+				cb.setTextColor(chart.getEntryColor((Integer) cb.getTag()));
 				cb.setChecked(chart.isActive((Integer) cb.getTag()));
 				i++;
 			}
@@ -71,15 +70,14 @@ public class ChartActivity extends SuperActivity implements
 	@Override
 	public void onCheckedChanged(CompoundButton bv, boolean isChecked) {
 		Integer dataIndex = (Integer) bv.getTag();
-		
-		
+
 		if (isChecked) {
 			// Add dataIndex to rendered items
 			int c = chart.enableEntry(dataIndex);
 			if (c == -1) {
 				bv.setChecked(false);
 
-			} 
+			}
 		} else {
 			chart.disableEntry(dataIndex);
 
@@ -89,7 +87,8 @@ public class ChartActivity extends SuperActivity implements
 
 	@Override
 	public void onDroneUpdate() {
-		double[] data = {drone.orientation.getPitch(),drone.orientation.getRoll(),drone.orientation.getYaw()};
+		double[] data = { drone.orientation.getPitch(),
+				drone.orientation.getRoll(), drone.orientation.getYaw() };
 		chart.newFlightData(data);
 	}
 
