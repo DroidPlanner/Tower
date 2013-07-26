@@ -23,7 +23,7 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback, canvas
 	private int height;
 	
 	private double[][] data = {{0,1,2,0},{3,2,1,0}};
-	private Paint[] availableColors = {new Paint(Color.RED), new Paint(Color.BLUE),new Paint(Color.GREEN),new Paint(Color.YELLOW)};
+	private Paint[] availableColors;
 	private boolean entryEnabled[] = {true,true};
 	
 	private int dataSize = 2;
@@ -37,7 +37,7 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback, canvas
 	private int numPtsToDraw = 100;
 
 	// range values to display
-	private double range = 10;
+	private double range = 180;
 	
 	private Paint grid_paint = new Paint();
 		
@@ -48,6 +48,17 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback, canvas
 		scaleDetector = new ScaleGestureDetector(context, new ScaleListener());
 
 		grid_paint.setColor(Color.rgb(100, 100, 100));
+		
+		int[] colors = { Color.RED, Color.BLUE, Color.GREEN, Color.CYAN,
+				Color.MAGENTA, Color.YELLOW, 0xFF800000, 0xff008000,
+				0xFF000080, 0xFF008080, 0xFF800080 };
+
+		Paint[] p = new Paint[colors.length];
+		for (int i = 0; i < p.length; i++) {
+			p[i] = new Paint();
+			p[i].setColor(colors[i]);
+		}
+		setColors(p);
 		
 	}
 
