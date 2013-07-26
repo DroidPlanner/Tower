@@ -42,7 +42,11 @@ public class MissionFragment extends Fragment {
 		table.addView(row);
 	}
 
-	public void onDeleteWaypoint(waypoint waypoint) {
-		mission.removeWaypoint(waypoint);
+	public void onDeleteWaypoint(waypoint wp) {
+		mission.removeWaypoint(wp);
+	}
+
+	public void onWaypointUpdate(waypoint wp) {
+		mission.notifyMissionUpdate();
 	}
 }
