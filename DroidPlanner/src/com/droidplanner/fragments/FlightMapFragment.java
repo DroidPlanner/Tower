@@ -3,7 +3,6 @@ package com.droidplanner.fragments;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -18,8 +17,7 @@ import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.fragments.markers.DroneMarker;
-import com.droidplanner.fragments.markers.GuidedMarker;
-import com.droidplanner.fragments.markers.HomeMarker;
+import com.droidplanner.fragments.markers.MarkerManager;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
@@ -30,7 +28,6 @@ import com.google.android.gms.maps.model.PolylineOptions;
 public class FlightMapFragment extends OfflineMapFragment implements
 		OnMapLongClickListener {
 	public GoogleMap mMap;
-	private GuidedMarker guidedMarker;
 	private Polyline flightPath;
 	private Polyline missionPath;
 
@@ -38,15 +35,12 @@ public class FlightMapFragment extends OfflineMapFragment implements
 	public boolean isAutoPanEnabled;
 	private boolean isGuidedModeEnabled;
 
+	private MarkerManager markers;
+	
 	public boolean hasBeenZoomed = false;
-	private OnFlighDataListener mListener;
-	public HomeMarker homeMarker;
+	
 	public DroneMarker droneMarker;
 	public Drone drone;
-
-	public interface OnFlighDataListener {
-		public void onSetGuidedMode(LatLng point);
-	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
@@ -55,9 +49,10 @@ public class FlightMapFragment extends OfflineMapFragment implements
 		mMap = getMap();
 		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
 
+
+		markers = new MarkerManager(mMap);
+		
 		droneMarker = new DroneMarker(this);
-		homeMarker = new HomeMarker(this.mMap);
-		guidedMarker = new GuidedMarker(mMap);
 
 		addFlightPathToMap();
 		addMissionPathToMap();
@@ -69,12 +64,7 @@ public class FlightMapFragment extends OfflineMapFragment implements
 		return view;
 	}
 
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		mListener = (OnFlighDataListener) activity;
-	}
-
+	
 	private void getPreferences() {
 		Context context = this.getActivity();
 		SharedPreferences prefs = PreferenceManager
@@ -136,12 +126,17 @@ public class FlightMapFragment extends OfflineMapFragment implements
 	}
 
 	@Override
-	public void onMapLongClick(LatLng point) {
+	public void onMapLongClick(LatLng coord) {
 		getPreferences();
 		if (isGuidedModeEnabled) {
-			mListener.onSetGuidedMode(point);
-			guidedMarker.updateGuidedMarker(point);
+			drone.guidedPoint.newGuidedPoint(coord);
+			markers.updateMarker(drone.guidedPoint);
 		}
+	}
+
+	public void updateFragment() {
+			updateMissionPath(drone);
+			markers.updateMarker(drone.mission.getHome());	
 	}
 
 }
