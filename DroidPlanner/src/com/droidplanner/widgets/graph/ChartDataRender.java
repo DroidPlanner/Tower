@@ -20,11 +20,11 @@ public class ChartDataRender {
 			int pos = 0;
 			for (int i = start; i < start + numPtsToDraw; i++) {
 
-				double y_i = serie.data[i % serie.data.length];
+				double y_i = -serie.data[i % serie.data.length];
 				y_i = (y_i + chart.scale.getRange())
 						/ (2 * chart.scale.getRange()) * chart.height;
 
-				double y_i1 = serie.data[(i + 1) % serie.data.length];
+				double y_i1 = -serie.data[(i + 1) % serie.data.length];
 				y_i1 = (y_i1 + chart.scale.getRange())
 						/ (2 * chart.scale.getRange()) * chart.height;
 
