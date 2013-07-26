@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <resources>
-	<usb-device vendor-id="1118" product-id="688"></usb-device>  
+    <!-- 0x0403 / 0x6001: FTDI FT232R UART -->
+    <usb-device vendor-id="1027" product-id="24577" />
+    <!-- Helibot copied these from FTDI device_fileter.xml file -->
+    <usb-device vendor-id="1118" product-id="688"></usb-device>  
 	<usb-device vendor-id="1027" product-id="24577" /> <!-- FT232RL -->
 	<usb-device vendor-id="1027" product-id="24596" /> <!-- FT232H -->
 	<usb-device vendor-id="1027" product-id="24592" /> <!-- FT2232C/D/HL -->
 	<usb-device vendor-id="1027" product-id="24593" /> <!-- FT4232HL -->
 	<usb-device vendor-id="1027" product-id="24597" /> <!-- FT230X -->
 	<usb-device vendor-id="1412" product-id="45088" /> <!-- REX-USB60F -->
+    <!-- 0x2341 / Arduino -->
+    <usb-device vendor-id="9025" />
+    <!-- 0x16C0 / 0x0483: Teensyduino  -->
+    <usb-device vendor-id="5824" product-id="1155" />
+    <!-- 0x10C4 / 0xEA60: CP210x UART Bridge -->
+    <usb-device vendor-id="4292" product-id="60000" />
 </resources>
+
