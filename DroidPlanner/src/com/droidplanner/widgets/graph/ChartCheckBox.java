@@ -2,17 +2,20 @@ package com.droidplanner.widgets.graph;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.AttributeSet;
 import android.view.Gravity;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
 public class ChartCheckBox extends CheckBox implements OnCheckedChangeListener {
+	public ChartCheckBox(Context context, AttributeSet attrs) {
+		super(context, attrs);
+	}
 
 	private Chart chart;
 
-	public ChartCheckBox(Context context, String label,
-			Chart chart) {
+	public ChartCheckBox(Context context, String label, Chart chart) {
 		super(context);
 		ChartSeries serie = new ChartSeries(800, Color.RED);
 		this.chart = chart;
