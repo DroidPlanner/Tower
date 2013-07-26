@@ -32,9 +32,10 @@ public abstract class SuperActivity extends Activity implements
 	public abstract int getNavigationItem();
 
 	public DroidPlannerApp app;
-	private MenuItem connectButton;
 	public Drone drone;
-	public ScreenOrientation screenOrientation = new ScreenOrientation(this);
+	private MenuItem connectButton;
+	
+	private ScreenOrientation screenOrientation = new ScreenOrientation(this);
 
 	public SuperActivity() {
 		super();
@@ -50,7 +51,7 @@ public abstract class SuperActivity extends Activity implements
 		setUpActionBar();
 		app = (DroidPlannerApp) getApplication();
 		app.conectionListner = this;
-		this.drone = ((DroidPlannerApp) getApplication()).drone;
+		this.drone = app.drone;
 
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		screenOrientation.unlock();
@@ -106,7 +107,7 @@ public abstract class SuperActivity extends Activity implements
 			startActivity(new Intent(this, SettingsActivity.class));
 			return true;
 		case R.id.menu_connect:
-			toggleConnectionState();
+			drone.MavClient.toggleConnectionState();
 			return true;
 		case R.id.menu_load_from_apm:
 			drone.waypointMananger.getWaypoints();
@@ -126,15 +127,6 @@ public abstract class SuperActivity extends Activity implements
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
-	}
-
-	private void toggleConnectionState() {
-		if (drone.MavClient.isConnected()) {
-			drone.MavClient.close();
-		} else {
-			drone.MavClient.init();
-		}
-
 	}
 
 	public void notifyDisconnected() {
