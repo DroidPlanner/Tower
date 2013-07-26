@@ -11,16 +11,14 @@ import com.droidplanner.activitys.helpers.SuperActivity;
 import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
 import com.droidplanner.widgets.graph.Chart;
 import com.droidplanner.widgets.graph.ChartCheckBox;
+import com.droidplanner.widgets.graph.ChartSeries;
 
-public class ChartActivity extends SuperActivity implements
-		 HudUpdatedListner {
+public class ChartActivity extends SuperActivity implements HudUpdatedListner {
 
-	private Chart chart;
-	private LinearLayout readoutMenu;
-
-	String[] labels = { "Pitch", "Yaw", "Roll" };
-
-	private List<ChartCheckBox> CheckBoxList = new ArrayList<ChartCheckBox>();
+	public Chart chart;
+	public LinearLayout readoutMenu;
+	public String[] labels = { "Pitch", "Yaw", "Roll" };
+	public List<ChartCheckBox> checkBoxList = new ArrayList<ChartCheckBox>();
 
 	@Override
 	public int getNavigationItem() {
@@ -42,20 +40,25 @@ public class ChartActivity extends SuperActivity implements
 
 	void setupReadoutMenu() {
 		for (String label : labels) {
-			ChartCheckBox checkBox = new ChartCheckBox(readoutMenu.getContext(),label, chart);
-			CheckBoxList.add(checkBox);
+			ChartCheckBox checkBox = new ChartCheckBox(
+					readoutMenu.getContext(), label, chart);
+			checkBoxList.add(checkBox);
 			readoutMenu.addView(checkBox);
 		}
 	}
 
-
 	@Override
 	public void onDroneUpdate() {
-		chart.series.get(0).newData(drone.orientation.getPitch());
-		chart.series.get(1).newData(drone.orientation.getRoll());
-		chart.series.get(2).newData(drone.orientation.getYaw());
+		updateCheckBox("Pitch", drone.orientation.getPitch());
 		chart.update();
+	}
 
+	private void updateCheckBox(String label, double value) {
+		for (ChartCheckBox box : checkBoxList) {
+			if (box.getText().equals(label)) {
+				((ChartSeries) box.getTag()).newData(value);
+			}
+		}
 	}
 
 }
