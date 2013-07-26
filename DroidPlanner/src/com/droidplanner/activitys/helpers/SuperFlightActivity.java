@@ -34,6 +34,7 @@ public abstract class SuperFlightActivity extends SuperActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		drone.guidedPoint.setOnGuidedListner(this);
 	}
 
 	@Override
@@ -48,9 +49,6 @@ public abstract class SuperFlightActivity extends SuperActivity implements
 		MenuItem wpMenu = menu.findItem(R.id.menu_wp_spinner);
 		wpSpinner = (SelectWaypointSpinner) wpMenu.getActionView();
 		wpSpinner.buildSpinner(this, this);
-		
-
-		drone.guidedPoint.setOnGuidedListner(this);
 
 		return super.onCreateOptionsMenu(menu);
 	}
