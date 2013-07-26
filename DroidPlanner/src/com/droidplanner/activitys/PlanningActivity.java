@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
 import com.droidplanner.R;
+import com.droidplanner.activitys.helpers.SuperActivity;
 import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
 import com.droidplanner.dialogs.OpenFileDialog;
 import com.droidplanner.dialogs.OpenMissionDialog;
@@ -35,12 +36,12 @@ public class PlanningActivity extends SuperActivity implements
 	private MissionFragment missionFragment;
 
 	@Override
-	int getNavigationItem() {
+	public int getNavigationItem() {
 		return 0;
 	}
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.planning);
@@ -55,7 +56,7 @@ public class PlanningActivity extends SuperActivity implements
 
 		missionFragment.setMission(drone.mission);
 
-		app.setWaypointReceivedListner(this);
+		drone.mission.missionListner = this;
 
 		checkIntent();
 
@@ -150,7 +151,9 @@ public class PlanningActivity extends SuperActivity implements
 	private void openMissionFile() {
 		OpenFileDialog missionDialog = new OpenMissionDialog(drone) {
 			@Override
-			public void waypointFileLoaded() {
+				public void waypointFileLoaded(MissionReader reader) {
+				drone.mission.setHome(reader.getHome());
+				drone.mission.setWaypoints(reader.getWaypoints());
 				planningMapFragment.zoomToExtents(drone.mission
 						.getAllCoordinates());
 				update();

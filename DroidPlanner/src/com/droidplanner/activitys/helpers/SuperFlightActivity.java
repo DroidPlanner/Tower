@@ -1,4 +1,4 @@
-package com.droidplanner.activitys;
+package com.droidplanner.activitys.helpers;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -24,16 +24,17 @@ public abstract class SuperFlightActivity extends SuperActivity implements
 	private SelectModeSpinner fligthModeSpinner;
 	private SelectWaypointSpinner wpSpinner;
 
-	protected FlightMapFragment mapFragment;
-	protected HudFragment hudFragment;
+	public FlightMapFragment mapFragment;
+	public HudFragment hudFragment;
 
 	public SuperFlightActivity() {
 		super();
 	}
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		drone.guidedPoint.setOnGuidedListner(this);
 	}
 
 	@Override
@@ -48,9 +49,6 @@ public abstract class SuperFlightActivity extends SuperActivity implements
 		MenuItem wpMenu = menu.findItem(R.id.menu_wp_spinner);
 		wpSpinner = (SelectWaypointSpinner) wpMenu.getActionView();
 		wpSpinner.buildSpinner(this, this);
-		
-
-		drone.guidedPoint.setOnGuidedListner(this);
 
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -58,7 +56,7 @@ public abstract class SuperFlightActivity extends SuperActivity implements
 	@Override
 	public void OnModeSpinnerSelected(String text) {
 		ApmModes mode = ApmModes.getMode(text, drone.type.getType());
-		if (mode != ApmModes.UNKNOWN) {
+		if (ApmModes.isValid(mode)) {
 			drone.state.changeFlightMode(mode);
 		}
 	}

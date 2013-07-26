@@ -6,7 +6,6 @@ import com.MAVLink.Messages.MAVLinkMessage;
 import com.droidplanner.MAVLink.MavLinkMsgHandler;
 import com.droidplanner.MAVLink.MavLinkStreamRates;
 import com.droidplanner.drone.Drone;
-import com.droidplanner.drone.DroneInterfaces;
 import com.droidplanner.helpers.FollowMe;
 import com.droidplanner.helpers.RecordMe;
 import com.droidplanner.helpers.TTS;
@@ -61,19 +60,6 @@ public class DroidPlannerApp extends Application implements
 		MavLinkStreamRates.setupStreamRatesFromPref(this);
 		conectionListner.notifyConnected();
 		tts.speak("Connected");
-	}
-
-	public void setConectionStateListner(ConnectionStateListner listner) {
-		conectionListner = listner;
-	}
-
-	public void setWaypointReceivedListner(OnWaypointUpdateListner listner) {
-		drone.mission.missionListner = listner;
-	}
-
-	public void setOnParametersChangedListner(
-			DroneInterfaces.OnParameterManagerListner listner) {
-		drone.parameters.parameterListner = listner;
 	}
 
 }
