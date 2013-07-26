@@ -5,10 +5,10 @@ import java.util.List;
 
 import android.graphics.Color;
 
-public class ChartColors {
+public class ChartColorsStack {
 List<Integer> avaliableColors = new ArrayList<Integer>();
 	
-	public ChartColors() {
+	public ChartColorsStack() {
 		avaliableColors.add(Color.RED);
 		avaliableColors.add(Color.BLUE);
 		avaliableColors.add(Color.GREEN);
