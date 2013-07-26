@@ -27,7 +27,7 @@ public class ChartActivity extends SuperActivity implements HudUpdatedListner {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.chart);
 
-		chart = (Chart) findViewById(R.id.scope);
+		chart = (Chart) findViewById(R.id.chart);
 		readoutMenu = (LinearLayout) findViewById(R.id.readoutMenu);
 
 		checkBoxList.populateView(readoutMenu, labels, chart);
