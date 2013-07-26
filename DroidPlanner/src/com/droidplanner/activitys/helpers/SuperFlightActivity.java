@@ -1,4 +1,4 @@
-package com.droidplanner.activitys;
+package com.droidplanner.activitys.helpers;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -24,15 +24,15 @@ public abstract class SuperFlightActivity extends SuperActivity implements
 	private SelectModeSpinner fligthModeSpinner;
 	private SelectWaypointSpinner wpSpinner;
 
-	protected FlightMapFragment mapFragment;
-	protected HudFragment hudFragment;
+	public FlightMapFragment mapFragment;
+	public HudFragment hudFragment;
 
 	public SuperFlightActivity() {
 		super();
 	}
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 	}
 

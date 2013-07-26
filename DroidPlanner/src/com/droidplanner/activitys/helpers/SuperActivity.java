@@ -1,4 +1,4 @@
-package com.droidplanner.activitys;
+package com.droidplanner.activitys.helpers;
 
 import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
@@ -15,7 +15,13 @@ import android.widget.SpinnerAdapter;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.DroidPlannerApp.ConnectionStateListner;
 import com.droidplanner.R;
-import com.droidplanner.activitys.helpers.ScreenOrientation;
+import com.droidplanner.activitys.CameraActivity;
+import com.droidplanner.activitys.FlightDataActivity;
+import com.droidplanner.activitys.GCPActivity;
+import com.droidplanner.activitys.ParametersActivity;
+import com.droidplanner.activitys.PlanningActivity;
+import com.droidplanner.activitys.RCActivity;
+import com.droidplanner.activitys.SettingsActivity;
 import com.droidplanner.dialogs.AltitudeDialog;
 import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
 import com.droidplanner.drone.Drone;
@@ -23,7 +29,7 @@ import com.droidplanner.drone.Drone;
 public abstract class SuperActivity extends Activity implements
 		OnNavigationListener, ConnectionStateListner, OnAltitudeChangedListner {
 
-	abstract int getNavigationItem();
+	public abstract int getNavigationItem();
 
 	public DroidPlannerApp app;
 	private MenuItem connectButton;
@@ -35,7 +41,7 @@ public abstract class SuperActivity extends Activity implements
 	}
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
@@ -155,7 +161,7 @@ public abstract class SuperActivity extends Activity implements
 		return super.onCreateOptionsMenu(menu);
 	}
 
-	protected void changeDefaultAlt() {
+	public void changeDefaultAlt() {
 		AltitudeDialog dialog = new AltitudeDialog(this);
 		dialog.build(drone.mission.getDefaultAlt(), this);
 	}

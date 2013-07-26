@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.droidplanner.R;
+import com.droidplanner.activitys.helpers.SuperActivity;
 import com.droidplanner.dialogs.OpenFileDialog;
 import com.droidplanner.dialogs.OpenGcpFileDialog;
 import com.droidplanner.file.IO.GcpReader;
@@ -25,12 +26,12 @@ public class GCPActivity extends SuperActivity implements OnGcpClickListner {
 	private GcpMapFragment gcpMapFragment;
 
 	@Override
-	int getNavigationItem() {
+	public int getNavigationItem() {
 		return 5;
 	}
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.gcp);
