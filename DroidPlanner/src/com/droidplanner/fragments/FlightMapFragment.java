@@ -130,13 +130,13 @@ public class FlightMapFragment extends OfflineMapFragment implements
 		getPreferences();
 		if (isGuidedModeEnabled) {
 			drone.guidedPoint.newGuidedPoint(coord);
-			markers.updateMarker(drone.guidedPoint);
+			markers.updateMarker(drone.guidedPoint,false);
 		}
 	}
 
 	public void updateFragment() {
 			updateMissionPath(drone);
-			markers.updateMarker(drone.mission.getHome());	
+			markers.updateMarker(drone.mission.getHome(),false);	
 	}
 
 }

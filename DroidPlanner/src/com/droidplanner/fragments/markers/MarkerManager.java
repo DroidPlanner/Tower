@@ -27,18 +27,19 @@ public class MarkerManager {
 		removeOldMarkers(emptyList);
 	}
 
-	public <T> void updateMarkers(List<T> list) {
+	public <T> void updateMarkers(List<T> list, boolean draggable) {
 		for (T object : list) {
-			updateMarker((MarkerSource) object);
+			updateMarker((MarkerSource) object, draggable);
 		}
 	}
 
-	public void updateMarker(MarkerSource object) {
+	public void updateMarker(MarkerSource object, boolean draggable) {
 		if (hashMap.containsValue(object)) {
 			Marker marker = getMarkerFromSource(object);
 			((MarkerSource) object).update(marker);
+			marker.setDraggable(draggable);
 		} else {
-			addMarker(object);
+			addMarker(object,draggable);
 		}
 	}
 
@@ -66,8 +67,9 @@ public class MarkerManager {
 		}
 	}
 
-	private void addMarker(MarkerSource object) {
+	private void addMarker(MarkerSource object, boolean draggable) {
 		Marker marker = mMap.addMarker(object.build());
+		marker.setDraggable(draggable);
 		hashMap.put(marker, object);
 	}
 
