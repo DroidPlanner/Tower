@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.droidplanner.widgets.graph.ChartScale.OnScaleListner;
 import com.droidplanner.widgets.helpers.RenderThread;
 import com.droidplanner.widgets.helpers.RenderThread.canvasPainter;
 
@@ -16,7 +17,7 @@ import com.droidplanner.widgets.helpers.RenderThread.canvasPainter;
  * Widget for a Chart Originally copied from http://code.google.com/p/copter-gcs/
  */
 public class Chart extends SurfaceView implements SurfaceHolder.Callback,
-		canvasPainter {
+		canvasPainter, OnScaleListner {
 	public RenderThread renderer;
 	int width;
 	int height;
@@ -36,7 +37,7 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback,
 		super(context, attributeSet);
 		getHolder().addCallback(this);
 
-		scale = new ChartScale(context);
+		scale = new ChartScale(context,this);
 
 
 		int[] colors = { Color.RED, Color.BLUE, Color.GREEN, Color.CYAN,
@@ -198,5 +199,10 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback,
 	public void update() {
 		if (renderer != null)
 			renderer.setDirty();
+	}
+
+	@Override
+	public void onScaleListner() {
+		update();		
 	}
 }
