@@ -137,7 +137,7 @@ public class Mission extends DroneVariable {
 			Toast.makeText(myDrone.context, "Waypoints received from Drone",
 					Toast.LENGTH_SHORT).show();
 			myDrone.tts.speak("Waypoints received");
-			setHome(new Home(waypoints.get(0)));
+			home.updateData(waypoints.get(0));
 			waypoints.remove(0); // Remove Home waypoint
 			clearWaypoints();
 			addWaypoints(waypoints);
