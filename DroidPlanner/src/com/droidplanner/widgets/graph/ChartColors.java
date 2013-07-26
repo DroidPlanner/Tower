@@ -28,6 +28,6 @@ List<Integer> avaliableColors = new ArrayList<Integer>();
 	}
 	
 	public void depositColor(Integer color){
-		avaliableColors.add(color);
+		avaliableColors.add(0,color);
 	}
 }
