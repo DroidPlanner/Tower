@@ -48,7 +48,7 @@ public class GuidedPoint extends DroneVariable implements MarkerSource {
 
 	public void setGuidedMode() {
 		Double altitude = myDrone.mission.getDefaultAlt();
-		setGuidedMode(new waypoint(getCoord(), altitude));
+		setGuidedMode(new waypoint(getCoord(), altitude,myDrone.mission.getFrameFromPref()));
 		Toast.makeText(myDrone.context, "Guided Mode (" + altitude + "m)",
 				Toast.LENGTH_SHORT).show();
 		invalidateCoord();
