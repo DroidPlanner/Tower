@@ -25,7 +25,7 @@ public class ChartData {
 	public int enableEntry(Chart chart, int i) {
 		if (i < entryEnabled.length) {
 			entryEnabled[i] = true;
-			return chart.availableColors[i].getColor();
+			return chart.dataRender.availableColors[i].getColor();
 	
 		}
 	
@@ -43,6 +43,13 @@ public class ChartData {
 			return entryEnabled[i];
 	
 		return false;
+	
+	}
+
+	public void setDataSize(Chart chart, int d) {
+		dataSize = d;
+		data = new double[dataSize][chart.width];
+		entryEnabled = new boolean[dataSize];
 	
 	}
 }

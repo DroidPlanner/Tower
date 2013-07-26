@@ -1,13 +1,25 @@
 package com.droidplanner.widgets.graph;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 
 public class ChartDataRender {
-	public int numPtsToDraw;
+	public int numPtsToDraw = 100;
+	Paint[] availableColors;
 
-	public ChartDataRender(int numPtsToDraw) {
-		this.numPtsToDraw = numPtsToDraw;
+	public ChartDataRender(Chart chart) {
+		
+		int[] colors = { Color.RED, Color.BLUE, Color.GREEN, Color.CYAN,
+				Color.MAGENTA, Color.YELLOW, 0xFF800000, 0xff008000,
+				0xFF000080, 0xFF008080, 0xFF800080 };
+
+		Paint[] p = new Paint[colors.length];
+		for (int i = 0; i < p.length; i++) {
+			p[i] = new Paint();
+			p[i].setColor(colors[i]);
+		}
+		setColors(chart, p);
 	}
 
 	void drawData(Chart chart, Canvas canvas) {
@@ -36,7 +48,7 @@ public class ChartDataRender {
 	
 					canvas.drawLine((float) pos * delta, (float) y_i,
 							(float) (pos + 1) * delta, (float) y_i1,
-							chart.availableColors[k]);
+							chart.dataRender.availableColors[k]);
 					pos++;
 				}
 			}
@@ -50,13 +62,9 @@ public class ChartDataRender {
 	}
 
 	public void setColors(Chart chart, Paint[] p) {
+		availableColors = p;
 	
-		if (p.length != chart.chartData.dataSize)
-			chart.chartData.dataSize = 0;
-	
-		chart.availableColors = p;
-	
-		for (Paint p1 : chart.availableColors)
+		for (Paint p1 : availableColors)
 			p1.setTextSize(17.0f * chart.getContext().getResources()
 					.getDisplayMetrics().density);
 	

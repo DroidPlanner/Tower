@@ -35,7 +35,7 @@ public class ChartActivity extends SuperActivity implements
 		chart = (Chart) findViewById(R.id.scope);
 		layout = (TableLayout) findViewById(R.id.readoutMenu);
 
-		chart.setDataSize(labels.length);
+		chart.chartData.setDataSize(chart, labels.length);
 
 		chart.chartData.enableEntry(chart, 0);
 		chart.chartData.enableEntry(chart, 1);

@@ -3,7 +3,6 @@ package com.droidplanner.widgets.graph;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -22,12 +21,11 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback,
 	int width;
 	int height;
 
-	Paint[] availableColors;
 	ChartScale scale;
 	public ChartData chartData = new ChartData();
 	// Number of entries to draw
 	
-	ChartDataRender dataRender = new ChartDataRender(100);
+	ChartDataRender dataRender;
 	private ChartGrid grid = new ChartGrid();
 
 	public Chart(Context context, AttributeSet attributeSet) {
@@ -35,22 +33,13 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback,
 		getHolder().addCallback(this);
 
 		scale = new ChartScale(context,this);
-	}
-
-	public void setDataSize(int d) {
-		chartData.dataSize = d;
-		chartData.data = new double[chartData.dataSize][width];
-		chartData.entryEnabled = new boolean[chartData.dataSize];
-
+		dataRender = new ChartDataRender(this);
 	}
 
 	@Override
 	public void onDraw(Canvas canvas) {
-
 		grid.drawGrid(this, canvas);
-
 		dataRender.drawData(this, canvas);
-
 	}
 
 	public void newData(double[] d) {
@@ -93,8 +82,8 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback,
 
 	public int getEntryColor(int i) {
 
-		if (i < availableColors.length)
-			return availableColors[i].getColor();
+		if (i < dataRender.availableColors.length)
+			return dataRender.availableColors[i].getColor();
 
 		return Color.WHITE;
 	}
