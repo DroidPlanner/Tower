@@ -1,5 +1,8 @@
 package com.droidplanner.widgets.graph;
 
+import com.droidplanner.widgets.helpers.CanvasThread;
+import com.droidplanner.widgets.helpers.CanvasThread.canvasPainter;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -15,8 +18,8 @@ import android.view.SurfaceView;
 /*
  * Widget for a Chart Originally copied from http://code.google.com/p/copter-gcs/
  */
-public class Chart extends SurfaceView implements SurfaceHolder.Callback {
-	private ScopeThread renderer;
+public class Chart extends SurfaceView implements SurfaceHolder.Callback, canvasPainter {
+	public CanvasThread renderer;
 	private int width;
 	private int height;
 	
@@ -77,7 +80,7 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback {
 	}
 	
 	@Override
-	protected void onDraw(Canvas canvas) {
+	public void onDraw(Canvas canvas) {
 
 		// clear screen
 		canvas.drawColor(Color.rgb(20, 20, 20));
@@ -200,12 +203,13 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback {
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
-		renderer = new ScopeThread(getHolder(), this);
-		if(! renderer.isRunning()){
+		renderer = new CanvasThread(getHolder(), this);
+		if (!renderer.isRunning()) {
 			renderer.setRunning(true);
 			renderer.start();
 		}
 	}
+
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
@@ -216,7 +220,6 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback {
 				renderer.join();
 				renderer = null;
 				retry = false;
-				
 			} catch (InterruptedException e) {
 				// we will try it again and again...
 			}
@@ -224,46 +227,6 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback {
 	}
 
 	
-	private class ScopeThread extends Thread {
-		private SurfaceHolder _surfaceHolder;
-		private Chart scope;
-		private boolean running = false;
-
-		public ScopeThread(SurfaceHolder surfaceHolder, Chart panel) {
-			_surfaceHolder = surfaceHolder;
-			scope = panel;
-		}
-
-		public boolean isRunning(){
-			return running;
-			
-		}
-		public void setRunning(boolean run) {
-			running = run;
-
-		}
-
-		@Override
-		public void run() {
-			Canvas c;
-			while (running) {
-				c = null;
-				try {
-					c = _surfaceHolder.lockCanvas(null);
-					synchronized (_surfaceHolder) {
-						scope.onDraw(c);
-					}
-				} finally {
-					// do this in a finally so that if an exception is thrown
-					// during the above, we don't leave the Surface in an
-					// inconsistent state
-					if (c != null) {
-						_surfaceHolder.unlockCanvasAndPost(c);
-					}
-				}
-			}
-		}
-	}
 
 	public int getEntryColor(int i) {
 		
@@ -322,5 +285,10 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback {
 		if( p > 0)
 			numPtsToDraw = width/p;
 		
+	}
+	
+	public void update() {
+		if (renderer != null)
+			renderer.setDirty();
 	}
 }
