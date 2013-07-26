@@ -9,6 +9,8 @@ import android.view.SurfaceView;
 
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
+import com.droidplanner.widgets.helpers.RenderThread;
+import com.droidplanner.widgets.helpers.RenderThread.canvasPainter;
 
 /**
  * Widget for a HUD Originally copied from http://code.google.com/p/copter-gcs/
@@ -19,8 +21,8 @@ import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
  */
 
 public class HUD extends SurfaceView implements SurfaceHolder.Callback,
-		HudUpdatedListner {
-	private HudThread renderer;
+		HudUpdatedListner, canvasPainter {
+	public RenderThread renderer;
 	int width;
 	int height;
 	public HudYaw hudYaw = new HudYaw();
@@ -36,7 +38,7 @@ public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 	Drone drone;
 
 	@Override
-	protected void onDraw(Canvas canvas) {
+	public void onDraw(Canvas canvas) {
 		if (drone == null) {
 			return;
 		}
@@ -88,7 +90,7 @@ public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
-		renderer = new HudThread(getHolder(), this);
+		renderer = new RenderThread(getHolder(), this);
 		if (!renderer.isRunning()) {
 			renderer.setRunning(true);
 			renderer.start();
