@@ -2,25 +2,12 @@ package com.droidplanner.widgets.graph;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 
 public class ChartDataRender {
 	public int numPtsToDraw = 100;
-	Paint[] availableColors;
-
-	public ChartDataRender(Context context) {
-		
-		int[] colors = { Color.RED, Color.BLUE, Color.GREEN, Color.CYAN,
-				Color.MAGENTA, Color.YELLOW, 0xFF800000, 0xff008000,
-				0xFF000080, 0xFF008080, 0xFF800080 };
-
-		Paint[] p = new Paint[colors.length];
-		for (int i = 0; i < p.length; i++) {
-			p[i] = new Paint();
-			p[i].setColor(colors[i]);
-		}
-		setColors(context, p);
+	
+	public ChartDataRender(Context context) {		
 	}
 
 	void drawSeries(Chart chart, Canvas canvas, ChartSeries serie) {
@@ -35,7 +22,7 @@ public class ChartDataRender {
 		int length0 = chartData.length;
 		boolean enabled = serie.entryEnabled;
 		int newestData = serie.newestData;
-		Paint color = chart.dataRender.availableColors[0];
+		Paint color = serie.getPaint();
 		
 		double range = chart.scale.range;
 		int height = chart.height;
@@ -62,23 +49,5 @@ public class ChartDataRender {
 	public void setDrawRate(Chart chart, int p) {
 		if (p > 0)
 			numPtsToDraw = chart.width / p;
-	
-	}
-
-	public void setColors(Context context, Paint[] p) {
-		availableColors = p;
-	
-		for (Paint p1 : availableColors)
-			p1.setTextSize(17.0f * context.getResources()
-					.getDisplayMetrics().density);
-	
-	}
-
-	public int getEntryColor(int i) {
-	
-		if (i < availableColors.length)
-			return availableColors[i].getColor();
-	
-		return Color.WHITE;
 	}
 }

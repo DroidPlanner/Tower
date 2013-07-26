@@ -3,13 +3,15 @@ package com.droidplanner.widgets.graph;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.graphics.Color;
+
 public class ChartData {
 	public List<ChartSeries> series = new ArrayList<ChartSeries>();
 
 	public ChartData() {
-		series.add(new ChartSeries(800));
-		series.add(new ChartSeries(800));
-		series.add(new ChartSeries(800));
+		series.add(new ChartSeries(800,Color.RED));
+		series.add(new ChartSeries(800,Color.BLUE));
+		series.add(new ChartSeries(800,Color.GREEN));
 	}
 
 	void newData(double[] d) {		
@@ -18,9 +20,8 @@ public class ChartData {
 		series.get(2).newData(d[2]);
 	}
 
-	public int enableEntry(Chart chart, int i) {
+	public void enableEntry(int i) {
 		series.get(i).entryEnabled = true;
-		return chart.dataRender.availableColors[i].getColor();
 	}
 
 	public void disableEntry(int i) {

@@ -53,7 +53,7 @@ public class ChartActivity extends SuperActivity implements
 				tr.addView(cb);
 				cb.setTag(i);
 				cb.setText(labels[i]);
-				cb.setTextColor(chart.dataRender.getEntryColor((Integer) cb.getTag()));
+				cb.setTextColor(chart.chartData.series.get((Integer) cb.getTag()).getPaint().getColor());
 				cb.setChecked(chart.chartData.isActive((Integer) cb.getTag()));
 				i++;
 			}
@@ -64,19 +64,11 @@ public class ChartActivity extends SuperActivity implements
 	@Override
 	public void onCheckedChanged(CompoundButton bv, boolean isChecked) {
 		Integer dataIndex = (Integer) bv.getTag();
-
 		if (isChecked) {
-			// Add dataIndex to rendered items
-			int c = chart.chartData.enableEntry(chart, dataIndex);
-			if (c == -1) {
-				bv.setChecked(false);
-
-			}
+			chart.chartData.enableEntry(dataIndex);
 		} else {
 			chart.chartData.disableEntry(dataIndex);
-
 		}
-
 	}
 
 	@Override
