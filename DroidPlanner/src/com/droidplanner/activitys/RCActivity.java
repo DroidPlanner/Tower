@@ -18,9 +18,6 @@ import com.droidplanner.widgets.viewPager.MapViewPager;
 public class RCActivity extends SuperFlightActivity implements
 		OnWaypointUpdateListner, DroneTypeListner {
 
-	private static HudFragment hudFragment;
-	private static FlightMapFragment mapFragment;
-
 	AdapterHudMap mAdapter;
 	MapViewPager mPager;
 
@@ -67,7 +64,7 @@ public class RCActivity extends SuperFlightActivity implements
 		}
 	}
 
-	public static class AdapterHudMap extends FragmentPagerAdapter {
+	public class AdapterHudMap extends FragmentPagerAdapter {
 		static final int NUM_ADAPTER_FRAGMENT_ITEMS = 2;
 
 		public AdapterHudMap(FragmentManager fm) {
@@ -98,8 +95,7 @@ public class RCActivity extends SuperFlightActivity implements
 	public void onWaypointsUpdate() {
 		super.onWaypointsUpdate();
 		if (mapFragment != null) {
-			mapFragment.updateMissionPath(drone);
-			mapFragment.homeMarker.update(drone);
+			mapFragment.updateFragment();
 		}
 	}
 
