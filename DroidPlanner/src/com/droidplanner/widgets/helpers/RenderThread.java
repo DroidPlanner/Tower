@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 
-public class CanvasThread extends Thread {
+public class RenderThread extends Thread {
 	public interface canvasPainter{
 		public void onDraw(Canvas c);
 	}
@@ -13,7 +13,7 @@ public class CanvasThread extends Thread {
 	private volatile boolean running = false;
 	private Object dirty = new Object();
 
-	public CanvasThread(SurfaceHolder surfaceHolder, canvasPainter painter) {
+	public RenderThread(SurfaceHolder surfaceHolder, canvasPainter painter) {
 		_surfaceHolder = surfaceHolder;
 		this.painter = (canvasPainter) painter;
 	}

@@ -1,7 +1,7 @@
 package com.droidplanner.widgets.graph;
 
-import com.droidplanner.widgets.helpers.CanvasThread;
-import com.droidplanner.widgets.helpers.CanvasThread.canvasPainter;
+import com.droidplanner.widgets.helpers.RenderThread;
+import com.droidplanner.widgets.helpers.RenderThread.canvasPainter;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -19,7 +19,7 @@ import android.view.SurfaceView;
  * Widget for a Chart Originally copied from http://code.google.com/p/copter-gcs/
  */
 public class Chart extends SurfaceView implements SurfaceHolder.Callback, canvasPainter {
-	public CanvasThread renderer;
+	public RenderThread renderer;
 	private int width;
 	private int height;
 	
@@ -203,7 +203,7 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback, canvas
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
-		renderer = new CanvasThread(getHolder(), this);
+		renderer = new RenderThread(getHolder(), this);
 		if (!renderer.isRunning()) {
 			renderer.setRunning(true);
 			renderer.start();
