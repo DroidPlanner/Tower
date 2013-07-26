@@ -1,3 +1,6 @@
+## Droidplanner v0.11.1
+* Changing the start screen back to Flight Data
+
 ## Droidplanner v0.11.0
 * New Chart screen
 * HUD code clean-up
