@@ -32,7 +32,8 @@ public class WaypointMarker {
 		switch (wp.getCmd()) {
 		default:
 		case CMD_NAV_WAYPOINT:
-			return BitmapDescriptorFactory.defaultMarker();
+			return BitmapDescriptorFactory
+					.defaultMarker(BitmapDescriptorFactory.HUE_RED);
 		case CMD_NAV_LOITER_TIME:
 		case CMD_NAV_LOITER_TURNS:
 		case CMD_NAV_LOITER_UNLIM:
@@ -40,10 +41,10 @@ public class WaypointMarker {
 					.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
 		case CMD_NAV_RETURN_TO_LAUNCH:
 			return BitmapDescriptorFactory
-					.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+					.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
 		case CMD_NAV_LAND:
 			return BitmapDescriptorFactory
-					.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
+					.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
 		case CMD_NAV_TAKEOFF:
 			return BitmapDescriptorFactory
 					.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA);
