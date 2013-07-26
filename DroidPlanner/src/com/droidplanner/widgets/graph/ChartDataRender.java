@@ -1,5 +1,6 @@
 package com.droidplanner.widgets.graph;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -8,7 +9,7 @@ public class ChartDataRender {
 	public int numPtsToDraw = 100;
 	Paint[] availableColors;
 
-	public ChartDataRender(Chart chart) {
+	public ChartDataRender(Context context) {
 		
 		int[] colors = { Color.RED, Color.BLUE, Color.GREEN, Color.CYAN,
 				Color.MAGENTA, Color.YELLOW, 0xFF800000, 0xff008000,
@@ -19,7 +20,7 @@ public class ChartDataRender {
 			p[i] = new Paint();
 			p[i].setColor(colors[i]);
 		}
-		setColors(chart, p);
+		setColors(context, p);
 	}
 
 	void drawData(Chart chart, Canvas canvas) {
@@ -61,12 +62,20 @@ public class ChartDataRender {
 	
 	}
 
-	public void setColors(Chart chart, Paint[] p) {
+	public void setColors(Context context, Paint[] p) {
 		availableColors = p;
 	
 		for (Paint p1 : availableColors)
-			p1.setTextSize(17.0f * chart.getContext().getResources()
+			p1.setTextSize(17.0f * context.getResources()
 					.getDisplayMetrics().density);
 	
+	}
+
+	public int getEntryColor(int i) {
+	
+		if (i < availableColors.length)
+			return availableColors[i].getColor();
+	
+		return Color.WHITE;
 	}
 }

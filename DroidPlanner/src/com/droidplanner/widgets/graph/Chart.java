@@ -2,7 +2,6 @@ package com.droidplanner.widgets.graph;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -18,22 +17,20 @@ import com.droidplanner.widgets.helpers.RenderThread.canvasPainter;
 public class Chart extends SurfaceView implements SurfaceHolder.Callback,
 		canvasPainter, OnScaleListner {
 	public RenderThread renderer;
-	int width;
-	int height;
+	public int width;
+	public int height;
 
-	ChartScale scale;
-	public ChartData chartData = new ChartData();
-	// Number of entries to draw
-	
-	ChartDataRender dataRender;
+	public ChartScale scale;
+	public ChartDataRender dataRender;
 	private ChartGrid grid = new ChartGrid();
+	public ChartData chartData = new ChartData();
 
 	public Chart(Context context, AttributeSet attributeSet) {
 		super(context, attributeSet);
 		getHolder().addCallback(this);
 
 		scale = new ChartScale(context,this);
-		dataRender = new ChartDataRender(this);
+		dataRender = new ChartDataRender(context);
 	}
 
 	@Override
@@ -80,21 +77,12 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback,
 		}
 	}
 
-	public int getEntryColor(int i) {
-
-		if (i < dataRender.availableColors.length)
-			return dataRender.availableColors[i].getColor();
-
-		return Color.WHITE;
-	}
-
 	@Override
 	public boolean onTouchEvent(MotionEvent ev) {
 		// Let the ScaleGestureDetector inspect all events.
 		super.onTouchEvent(ev);
 		scale.scaleDetector.onTouchEvent(ev);
 		return true;
-
 	}
 
 	public void update() {

@@ -59,7 +59,7 @@ public class ChartActivity extends SuperActivity implements
 				tr.addView(cb);
 				cb.setTag(i);
 				cb.setText(labels[i]);
-				cb.setTextColor(chart.getEntryColor((Integer) cb.getTag()));
+				cb.setTextColor(chart.dataRender.getEntryColor((Integer) cb.getTag()));
 				cb.setChecked(chart.chartData.isActive(chart, (Integer) cb.getTag()));
 				i++;
 			}
