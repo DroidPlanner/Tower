@@ -15,7 +15,8 @@ public class ChartActivity extends SuperActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.parameters);
+		setContentView(R.layout.chart);
+		
 	}
 
 }

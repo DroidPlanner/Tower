@@ -1,8 +1,5 @@
 package com.droidplanner.widgets.graph;
 
-import com.droidplanner.widgets.helpers.RenderThread;
-import com.droidplanner.widgets.helpers.RenderThread.canvasPainter;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -15,6 +12,9 @@ import android.view.ScaleGestureDetector;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.droidplanner.widgets.helpers.RenderThread;
+import com.droidplanner.widgets.helpers.RenderThread.canvasPainter;
+
 /*
  * Widget for a Chart Originally copied from http://code.google.com/p/copter-gcs/
  */
@@ -23,26 +23,25 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback, canvas
 	private int width;
 	private int height;
 	
-	double[][] data = null;
-	Paint[] availableColors = null;
-	boolean entryEnabled[];
+	private double[][] data = {{0,1,2,0},{3,2,1,0}};
+	private Paint[] availableColors = {new Paint(Color.RED), new Paint(Color.BLUE),new Paint(Color.GREEN),new Paint(Color.YELLOW)};
+	private boolean entryEnabled[] = {true,true};
 	
-	int dataSize = 0;
+	private int dataSize = 2;
 	
-	ScaleGestureDetector scaleDetector;
+	private ScaleGestureDetector scaleDetector;
 	
 	// Loop counter for circular buffer
-	int newestData = 0;
+	private int newestData = 0;
 	
 	// Number of entries to draw
-	int numPtsToDraw = 100;
+	private int numPtsToDraw = 100;
 
 	// range values to display
-	int range = 700;
+	private int range = 700;
 	
 	private Paint grid_paint = new Paint();
 
-	Integer[] colors;
 	private String[] names = null;
 		
 	public Chart(Context context, AttributeSet attributeSet) {
