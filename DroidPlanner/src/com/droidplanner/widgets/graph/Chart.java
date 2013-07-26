@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -41,8 +40,6 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback, canvas
 	private double range = 10;
 	
 	private Paint grid_paint = new Paint();
-
-	private String[] names = null;
 		
 	public Chart(Context context, AttributeSet attributeSet) {
 		super(context, attributeSet);
@@ -115,45 +112,9 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback, canvas
 	    	}
 	    }
 	    
-	    // lets draw us some labels
-
-	    if( names != null){
-		    canvas.translate(width/2, height/2);
-		    
-		    int pos = 0;
-		    float textHeight = availableColors[0].getFontMetrics().bottom - availableColors[0].getFontMetrics().top;
-		    int numEntries = 0;
-		    for( int i = 0; i < names.length; i++)
-		    	if(entryEnabled[i])
-		    		numEntries++;
-		    
-			float offset = (float)numEntries * textHeight * 1.2f - textHeight*.2f;
-			canvas.translate(0, -height/2.0f + offset/2.0f);
-
-		    for( int i = 0; i < names.length; i++){
-		    	if(entryEnabled[i]){
-		    		drawText(canvas, pos, names[i], availableColors[i], true);
-		    		pos ++;
-		    	}
-		    }
-		    
-	    }
 
 	}
 
-    // Draw text aligned correctly.
-	private void drawText(Canvas canvas, int i, String text, Paint p, boolean left){
-		Rect bounds = new Rect();
-		p.getTextBounds(text, 0, text.length(), bounds);
-		float textHeight = p.getFontMetrics().bottom - p.getFontMetrics().top;
-		
-		float y = (float) (height/2.0 - (float)i * textHeight * 1.2f - textHeight*.2); 
-		
-		
-		canvas.drawText(text, (float)(-width/2.0 + textHeight*.2f), y, p);
-		
-		
-	}
 
 	
 	private void drawGrid(Canvas canvas) {
