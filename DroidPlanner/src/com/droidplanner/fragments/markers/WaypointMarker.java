@@ -15,14 +15,14 @@ public class WaypointMarker {
 				.title("WP" + Integer.toString(wp.getNumber()))
 				.snippet(
 						String.format(Locale.ENGLISH, "%s %.1fm", wp.getCmd()
-								.getName(), wp.getHeight()));
+								.getName(), wp.getHeight()));// TODO include icons for each waypoint type
 	}
 
 	public static void update(Marker marker, waypoint wp) {
 		marker.setPosition(wp.getCoord());
 		marker.setTitle("WP" + Integer.toString(wp.getNumber()));
 		marker.setSnippet(String.format(Locale.ENGLISH, "%s %.1fm", wp.getCmd()
-				.getName(), wp.getHeight()));
+				.getName(), wp.getHeight())); // TODO include icons for each waypoint type
 	}
 
 }
