@@ -23,40 +23,7 @@ public class ChartDataRender {
 		setColors(context, p);
 	}
 
-	void drawData(Chart chart, Canvas canvas) {
-		// scale the data to +- 500
-		// target 0-height
-		// so D in the range +-500
-		// (D + 500) / 1000 * height
-	
-		float delta = (float) chart.width / (float) numPtsToDraw;
-	
-		for (int k = 0; k < chart.chartData.data.length; k++) {
-			if (!chart.chartData.entryEnabled[k])
-				continue;
-	
-			if (chart.chartData.data[k].length > 0) {
-				int start = (chart.chartData.newestData - numPtsToDraw + chart.chartData.data[0].length)
-						% chart.chartData.data[0].length;
-				int pos = 0;
-				for (int i = start; i < start + numPtsToDraw; i++) {
-	
-					double y_i = chart.chartData.data[k][i % chart.chartData.data[0].length];
-					y_i = (y_i + chart.scale.range) / (2 * chart.scale.range) * chart.height;
-	
-					double y_i1 = chart.chartData.data[k][(i + 1) % chart.chartData.data[0].length];
-					y_i1 = (y_i1 + chart.scale.range) / (2 * chart.scale.range) * chart.height;
-	
-					canvas.drawLine((float) pos * delta, (float) y_i,
-							(float) (pos + 1) * delta, (float) y_i1,
-							chart.dataRender.availableColors[k]);
-					pos++;
-				}
-			}
-		}
-	}
-
-	void drawSeries(Chart chart, Canvas canvas) {
+	void drawSeries(Chart chart, Canvas canvas, ChartSeries serie) {
 		// scale the data to +- 500
 		// target 0-height
 		// so D in the range +-500
@@ -64,10 +31,10 @@ public class ChartDataRender {
 
 		float delta = (float) chart.width / (float) numPtsToDraw;
 				
-		double[] chartData = chart.chartData.series.get(0).data;
+		double[] chartData = serie.data;
 		int length0 = chartData.length;
-		boolean enabled = chart.chartData.series.get(0).entryEnabled;
-		int newestData = chart.chartData.series.get(0).newestData;
+		boolean enabled = serie.entryEnabled;
+		int newestData = serie.newestData;
 		Paint color = chart.dataRender.availableColors[0];
 		
 		double range = chart.scale.range;

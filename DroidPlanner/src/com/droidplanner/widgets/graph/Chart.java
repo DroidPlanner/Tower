@@ -36,8 +36,9 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback,
 	@Override
 	public void onDraw(Canvas canvas) {
 		grid.drawGrid(this, canvas);
-		//dataRender.drawData(this, canvas);
-		dataRender.drawSeries(this, canvas);
+		for (ChartSeries serie : chartData.series) {
+			dataRender.drawSeries(this, canvas,serie);			
+		}
 	}
 
 	public void newData(double[] d) {
@@ -50,7 +51,6 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback,
 			int height) {
 		this.width = width;
 		this.height = height;
-		chartData.data = new double[chartData.dataSize][width];
 
 	}
 

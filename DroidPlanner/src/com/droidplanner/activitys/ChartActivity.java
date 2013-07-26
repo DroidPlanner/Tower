@@ -35,12 +35,6 @@ public class ChartActivity extends SuperActivity implements
 		chart = (Chart) findViewById(R.id.scope);
 		layout = (TableLayout) findViewById(R.id.readoutMenu);
 
-		chart.chartData.setDataSize(chart, labels.length);
-
-		chart.chartData.enableEntry(chart, 0);
-		chart.chartData.enableEntry(chart, 1);
-		chart.chartData.enableEntry(chart, 2);
-
 		setupOverlay();
 
 		drone.setHudListner(this);
@@ -60,7 +54,7 @@ public class ChartActivity extends SuperActivity implements
 				cb.setTag(i);
 				cb.setText(labels[i]);
 				cb.setTextColor(chart.dataRender.getEntryColor((Integer) cb.getTag()));
-				cb.setChecked(chart.chartData.isActive(chart, (Integer) cb.getTag()));
+				cb.setChecked(chart.chartData.isActive((Integer) cb.getTag()));
 				i++;
 			}
 		}
@@ -79,7 +73,7 @@ public class ChartActivity extends SuperActivity implements
 
 			}
 		} else {
-			chart.chartData.disableEntry(chart, dataIndex);
+			chart.chartData.disableEntry(dataIndex);
 
 		}
 
