@@ -8,8 +8,7 @@
     <com.droidplanner.widgets.graph.Chart
         android:id="@+id/scope"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:text="Readouts" />
+        android:layout_height="fill_parent" />
 
     <TableLayout
         android:id="@+id/readoutMenu"
@@ -18,7 +17,6 @@
         android:layout_gravity="bottom"
         android:gravity="center"
         android:orientation="horizontal" >
-
     </TableLayout>
 
 </FrameLayout>

@@ -2,9 +2,6 @@ package com.droidplanner.activitys;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -13,10 +10,11 @@ import android.widget.TableRow;
 
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperActivity;
+import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
 import com.droidplanner.widgets.graph.Chart;
 
 public class ChartActivity extends SuperActivity implements
-		OnCheckedChangeListener {
+		OnCheckedChangeListener, HudUpdatedListner {
 
 	private Chart chart;
 	private TableLayout layout;
@@ -38,16 +36,6 @@ public class ChartActivity extends SuperActivity implements
 		chart = (Chart) findViewById(R.id.scope);
 		layout = (TableLayout) findViewById(R.id.readoutMenu);
 		
-		layout.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Log.d("CHART", "newData");
-				double[] data = {0,1,2};
-				chart.newFlightData(data );				
-			}
-		});
-
 		chart.setDataSize(labels.length);
 		chart.setNames(labels);
 		
@@ -56,6 +44,8 @@ public class ChartActivity extends SuperActivity implements
 		chart.enableEntry(2);
 		
 		setupOverlay();
+		
+		drone.setHudListner(this);
 	}
 
 	void setupOverlay() {
@@ -96,6 +86,12 @@ public class ChartActivity extends SuperActivity implements
 
 		}
 
+	}
+
+	@Override
+	public void onDroneUpdate() {
+		double[] data = {drone.orientation.getPitch(),drone.orientation.getRoll(),drone.orientation.getYaw()};
+		chart.newFlightData(data);
 	}
 
 }
