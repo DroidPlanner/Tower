@@ -37,9 +37,9 @@ public class ChartActivity extends SuperActivity implements
 
 		chart.setDataSize(labels.length);
 
-		chart.enableEntry(0);
-		chart.enableEntry(1);
-		chart.enableEntry(2);
+		chart.chartData.enableEntry(chart, 0);
+		chart.chartData.enableEntry(chart, 1);
+		chart.chartData.enableEntry(chart, 2);
 
 		setupOverlay();
 
@@ -60,7 +60,7 @@ public class ChartActivity extends SuperActivity implements
 				cb.setTag(i);
 				cb.setText(labels[i]);
 				cb.setTextColor(chart.getEntryColor((Integer) cb.getTag()));
-				cb.setChecked(chart.isActive((Integer) cb.getTag()));
+				cb.setChecked(chart.chartData.isActive(chart, (Integer) cb.getTag()));
 				i++;
 			}
 		}
@@ -73,13 +73,13 @@ public class ChartActivity extends SuperActivity implements
 
 		if (isChecked) {
 			// Add dataIndex to rendered items
-			int c = chart.enableEntry(dataIndex);
+			int c = chart.chartData.enableEntry(chart, dataIndex);
 			if (c == -1) {
 				bv.setChecked(false);
 
 			}
 		} else {
-			chart.disableEntry(dataIndex);
+			chart.chartData.disableEntry(chart, dataIndex);
 
 		}
 

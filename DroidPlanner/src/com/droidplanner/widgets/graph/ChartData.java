@@ -4,6 +4,7 @@ public class ChartData {
 	public double[][] data = new double[0][0];
 	public int dataSize = 0;
 	public int newestData = 0;
+	boolean entryEnabled[] = { true, true };
 
 	public ChartData() {
 	}
@@ -19,5 +20,29 @@ public class ChartData {
 			newestData = newIndex;
 	
 		}
+	}
+
+	public int enableEntry(Chart chart, int i) {
+		if (i < entryEnabled.length) {
+			entryEnabled[i] = true;
+			return chart.availableColors[i].getColor();
+	
+		}
+	
+		return -1;
+	}
+
+	public void disableEntry(Chart chart, int i) {
+		if (i < entryEnabled.length)
+			entryEnabled[i] = false;
+	
+	}
+
+	public boolean isActive(Chart chart, int i) {
+		if (i < entryEnabled.length)
+			return entryEnabled[i];
+	
+		return false;
+	
 	}
 }
