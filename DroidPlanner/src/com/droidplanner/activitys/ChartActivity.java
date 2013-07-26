@@ -1,7 +1,9 @@
 package com.droidplanner.activitys;
 
+import java.util.List;
+
+import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -12,6 +14,7 @@ import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperActivity;
 import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
 import com.droidplanner.widgets.graph.Chart;
+import com.droidplanner.widgets.graph.ChartSeries;
 
 public class ChartActivity extends SuperActivity implements
 		OnCheckedChangeListener, HudUpdatedListner {
@@ -20,6 +23,8 @@ public class ChartActivity extends SuperActivity implements
 	private LinearLayout readoutMenu;
 
 	String[] labels = { "Pitch", "Yaw", "Roll" };
+	
+	private List<CheckBox> CheckBoxList;
 
 	@Override
 	public int getNavigationItem() {
@@ -40,36 +45,41 @@ public class ChartActivity extends SuperActivity implements
 	}
 
 	void setupOverlay() {
-		int i = 0;
-
 		for (String label : labels) {
-				CheckBox checkBox = new CheckBox(readoutMenu.getContext());
-				checkBox.setOnCheckedChangeListener(this);
-				checkBox.setText(label);
-				checkBox.setChecked(true);
-				checkBox.setGravity(Gravity.LEFT);
-				checkBox.setTag(i++);
-				readoutMenu.addView(checkBox);				
+				CheckBox checkBox = buildCheckBox(label);
+				CheckBoxList.add(checkBox);
+				readoutMenu.addView(checkBox);
 		}
+	}
+
+	private CheckBox buildCheckBox(String label) {
+		ChartSeries serie = new ChartSeries(800,Color.RED);
+		chart.series.add(serie);
+		CheckBox checkBox = new CheckBox(readoutMenu.getContext());
+		checkBox.setText(label);
+		checkBox.setChecked(serie.isActive());
+		checkBox.setGravity(Gravity.LEFT);
+		checkBox.setTag(serie);
+		checkBox.setOnCheckedChangeListener(this);
+		return checkBox;
 	}
 
 	@Override
 	public void onCheckedChanged(CompoundButton checkBox, boolean isChecked) {
-		Integer dataIndex = (Integer) checkBox.getTag();
-		Log.d("TAG", "tag:"+dataIndex);
+		 ChartSeries serie = (ChartSeries) checkBox.getTag();
 		if (isChecked) {
-			chart.chartData.enableEntry(dataIndex);
+			serie.enable();
 		} else {
-			chart.chartData.disableEntry(dataIndex);
+			serie.disable();
 		}
 		chart.update();
 	}
 
 	@Override
 	public void onDroneUpdate() {
-		chart.chartData.series.get(0).newData(drone.orientation.getPitch());
-		chart.chartData.series.get(1).newData(drone.orientation.getRoll());
-		chart.chartData.series.get(2).newData(drone.orientation.getYaw());
+		chart.series.get(0).newData(drone.orientation.getPitch());
+		chart.series.get(1).newData(drone.orientation.getRoll());
+		chart.series.get(2).newData(drone.orientation.getYaw());
 		chart.update();
 		
 	}

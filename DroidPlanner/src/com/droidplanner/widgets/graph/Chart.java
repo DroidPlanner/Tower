@@ -1,5 +1,8 @@
 package com.droidplanner.widgets.graph;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
@@ -22,7 +25,7 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback,
 
 	protected ChartScale scale;
 	private ChartGrid grid = new ChartGrid();
-	public ChartData chartData = new ChartData();
+	public  List<ChartSeries> series = new ArrayList<ChartSeries>();;
 	private ChartDataRender dataRender = new ChartDataRender();
 
 	public Chart(Context context, AttributeSet attributeSet) {
@@ -35,7 +38,7 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback,
 	@Override
 	public void onDraw(Canvas canvas) {
 		grid.drawGrid(this, canvas);
-		for (ChartSeries serie : chartData.series) {
+		for (ChartSeries serie : series) {
 			dataRender.drawSeries(this, canvas,serie);			
 		}
 	}

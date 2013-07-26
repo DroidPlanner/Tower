@@ -5,7 +5,7 @@ import android.graphics.Paint;
 
 public class ChartSeries {
 
-	boolean entryEnabled = true;
+	private boolean enabled = true;
 	public double[] data;
 	public int newestData = 0;
 	public Paint paint;
@@ -28,11 +28,23 @@ public class ChartSeries {
 	}
 
 	public int getColor() {
-		if (entryEnabled) {
+		if (enabled) {
 			return paint.getColor();
 		} else {
 			return Color.WHITE;
 		}
+	}
+
+	public void enable() {
+		enabled = true;
+	}
+
+	public void disable() {
+		enabled = false;
+	}
+
+	public boolean isActive() {
+		return enabled;
 	}
 
 }

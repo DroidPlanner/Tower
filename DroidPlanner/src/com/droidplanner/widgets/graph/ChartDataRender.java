@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 
 public class ChartDataRender {
 	private int numPtsToDraw = 100;
-
+	
 	protected void drawSeries(Chart chart, Canvas canvas, ChartSeries serie) {
 		// scale the data to +- 500
 		// target 0-height
@@ -13,7 +13,7 @@ public class ChartDataRender {
 
 		float delta = (float) chart.width / (float) numPtsToDraw;
 				
-		if (serie.entryEnabled & serie.data.length>0) {
+		if (serie.isActive()) {
 
 			int start = (serie.newestData - numPtsToDraw + serie.data.length) % serie.data.length;
 			int pos = 0;
