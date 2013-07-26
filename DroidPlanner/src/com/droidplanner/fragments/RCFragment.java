@@ -3,7 +3,9 @@ package com.droidplanner.fragments;
 import java.util.Locale;
 
 import android.app.Fragment;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +25,7 @@ import com.droidplanner.widgets.joystick.JoystickView;
 public class RCFragment extends Fragment {
 
 	private JoystickView joystickL, joystickR;
-	private TextView textViewLPan, textViewLTilt, textViewRPan, textViewRTilt;
+	private TextView textViewThrottle, textViewRudder, textViewAileron, textViewElevator;
 	private ToggleButton activeButton;
 	private Button quickModeButtonLeft, quickModeButtonRight;
 
@@ -31,6 +33,7 @@ public class RCFragment extends Fragment {
 	private Drone drone;
 	private RcOutput rcOutput;
 	private boolean rcActivated = false;
+	private boolean rcIsMode1 = false;
 	private double lLastPan = 0, lLastTilt = 0, rLastPan = 0, rLastTilt = 0;
 
 	@Override
@@ -42,14 +45,14 @@ public class RCFragment extends Fragment {
 		drone = app.drone;
 		rcOutput = new RcOutput(drone, app);
 
-		textViewLPan = (TextView) view.findViewById(R.id.textViewRCJoyLPan);
-		textViewLPan.setText("(Rudd: 0%)");
-		textViewLTilt = (TextView) view.findViewById(R.id.textViewRCJoyLTilt);
-		textViewLTilt.setText("(Thrt: 0%)");
-		textViewRPan = (TextView) view.findViewById(R.id.textViewRCJoyRPan);
-		textViewRPan.setText("(Ail: 0%)");
-		textViewRTilt = (TextView) view.findViewById(R.id.textViewRCJoyRTilt);
-		textViewRTilt.setText("(Elev: 0%)");
+		textViewThrottle = (TextView) view.findViewById(R.id.textViewRCThrottle);
+		textViewThrottle.setText("(Thrt: 0%)");
+		textViewRudder = (TextView) view.findViewById(R.id.textViewRCRudder);
+		textViewRudder.setText("(Rudd: 0%)");
+		textViewElevator = (TextView) view.findViewById(R.id.textViewRCElevator);
+		textViewElevator.setText("(Elev: 0%)");
+		textViewAileron = (TextView) view.findViewById(R.id.textViewRCAileron);
+		textViewAileron.setText("(Ail: 0%)");
 
 		quickModeButtonLeft = (Button) view
 				.findViewById(R.id.buttonRCQuickLeft);
@@ -76,8 +79,6 @@ public class RCFragment extends Fragment {
 
 		joystickL = (JoystickView) view.findViewById(R.id.joystickViewL);
 		joystickR = (JoystickView) view.findViewById(R.id.joystickViewR);
-
-		joystickL.setAxisAutoReturnToCenter(false, true);
 		joystickL.setOnJostickMovedListener(lJoystick);
 		joystickR.setOnJostickMovedListener(rJoystick);
 
@@ -104,6 +105,29 @@ public class RCFragment extends Fragment {
 				});
 
 		return view;
+	}
+	
+	@Override
+	public void onResume () {
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(app.getApplicationContext());
+		rcIsMode1 = prefs.getString("pref_rc_mode", "MODE2").equalsIgnoreCase("MODE1");
+		if (rcIsMode1) {
+			joystickL.setAxisAutoReturnToCenter(true, true);
+			joystickR.setAxisAutoReturnToCenter(prefs.getBoolean("pref_rc_throttle_returntocenter", false), true);
+			joystickL.setYAxisInverted(prefs.getBoolean("pref_rc_elevator_reverse", false));
+			joystickL.setXAxisInverted(prefs.getBoolean("pref_rc_rudder_reverse", false));
+			joystickR.setYAxisInverted(prefs.getBoolean("pref_rc_throttle_reverse", false));
+			joystickR.setXAxisInverted(prefs.getBoolean("pref_rc_aileron_reverse", false));
+		} else { //else Mode2
+			joystickL.setAxisAutoReturnToCenter(prefs.getBoolean("pref_rc_throttle_returntocenter", false), true);
+			joystickR.setAxisAutoReturnToCenter(true, true);
+			joystickL.setYAxisInverted(prefs.getBoolean("pref_rc_throttle_reverse", false));
+			joystickL.setXAxisInverted(prefs.getBoolean("pref_rc_rudder_reverse", false));
+			joystickR.setYAxisInverted(prefs.getBoolean("pref_rc_elevator_reverse", false));
+			joystickR.setXAxisInverted(prefs.getBoolean("pref_rc_aileron_reverse", false));
+		}
+		
+		super.onResume();
 	}
 
 	@Override
@@ -145,15 +169,21 @@ public class RCFragment extends Fragment {
 			lLastTilt = tilt;
 			if (rcActivated) {
 				rcOutput.setRcChannel(RcOutput.RUDDER, pan);
-				rcOutput.setRcChannel(RcOutput.TROTTLE, tilt);
-				textViewLPan.setText(String.format("Rudd: %.0f%%", pan * 100));
-				textViewLTilt
-						.setText(String.format("Thrt: %.0f%%", tilt * 100));
+				textViewRudder.setText(String.format("Rudd: %.0f%%", pan * 100));
+				if (rcIsMode1) {
+					rcOutput.setRcChannel(RcOutput.ELEVATOR, tilt);
+					textViewElevator.setText(String.format("Elev: %.0f%%", tilt * 100));
+				} else {
+					rcOutput.setRcChannel(RcOutput.TROTTLE, tilt);
+					textViewThrottle.setText(String.format("Thrt: %.0f%%", tilt * 100));
+				}
 			} else {
-				textViewLPan
-						.setText(String.format("(Rudd: %.0f%%)", pan * 100));
-				textViewLTilt.setText(String.format("(Thrt: %.0f%%)",
-						tilt * 100));
+				textViewRudder.setText(String.format("(Rudd: %.0f%%)", pan * 100));
+				if (rcIsMode1) {
+					textViewElevator.setText(String.format("Elev: %.0f%%", tilt * 100));
+				} else {
+					textViewThrottle.setText(String.format("(Thrt: %.0f%%)",tilt * 100));
+				}
 			}
 		}
 	};
@@ -172,14 +202,21 @@ public class RCFragment extends Fragment {
 			rLastTilt = tilt;
 			if (rcActivated) {
 				rcOutput.setRcChannel(RcOutput.AILERON, pan);
-				rcOutput.setRcChannel(RcOutput.ELEVATOR, tilt);
-				textViewRPan.setText(String.format("Ail: %.0f%%", pan * 100));
-				textViewRTilt
-						.setText(String.format("Elev: %.0f%%", tilt * 100));
+				textViewAileron.setText(String.format("Ail: %.0f%%", pan * 100));
+				if (rcIsMode1) {
+					rcOutput.setRcChannel(RcOutput.TROTTLE, tilt);
+					textViewThrottle.setText(String.format("Thrt: %.0f%%", tilt * 100));
+				} else {
+					rcOutput.setRcChannel(RcOutput.ELEVATOR, tilt);
+					textViewElevator.setText(String.format("Elev: %.0f%%", tilt * 100));
+				}
 			} else {
-				textViewRPan.setText(String.format("(Ail: %.0f%%)", pan * 100));
-				textViewRTilt.setText(String.format("(Elev: %.0f%%)",
-						tilt * 100));
+				textViewAileron.setText(String.format("(Ail: %.0f%%)", pan * 100));
+				if (rcIsMode1) {
+					textViewThrottle.setText(String.format("(Thrt: %.0f%%)",tilt * 100));
+				} else {
+					textViewElevator.setText(String.format("Elev: %.0f%%", tilt * 100));
+				}
 			}
 		}
 	};

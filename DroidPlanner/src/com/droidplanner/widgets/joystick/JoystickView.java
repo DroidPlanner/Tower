@@ -43,6 +43,7 @@ public class JoystickView extends View {
 	private float moveResolution;
 
 	private boolean yAxisInverted;
+	private boolean xAxisInverted;
 	private boolean yAxisAutoReturnToCenter = true;
 	private boolean xAxisAutoReturnToCenter = true;
 	private boolean autoReturnToCenter;
@@ -148,6 +149,7 @@ public class JoystickView extends View {
 
 		setMoveResolution(1.0f);
 		setClickThreshold(0.4f);
+		setXAxisInverted(false);
 		setYAxisInverted(false);
 		setUserCoordinateSystem(COORDINATE_CARTESIAN);
 		setAutoReturnToCenter(true);
@@ -185,10 +187,18 @@ public class JoystickView extends View {
 		return movementConstraint;
 	}
 
+	public boolean isXAxisInverted() {
+		return xAxisInverted;
+	}
+	
 	public boolean isYAxisInverted() {
 		return yAxisInverted;
 	}
 
+	public void setXAxisInverted(boolean xAxisInverted) {
+		this.xAxisInverted = xAxisInverted;
+	}
+	
 	public void setYAxisInverted(boolean yAxisInverted) {
 		this.yAxisInverted = yAxisInverted;
 	}
@@ -491,7 +501,9 @@ public class JoystickView extends View {
 		radial = Math.sqrt((cartX * cartX) + (cartY * cartY));
 		angle = Math.atan2(cartY, cartX);
 
-		// Invert Y axis if requested
+		// Invert axis if requested
+		if (!xAxisInverted)
+			cartX *= -1;
 		if (!yAxisInverted)
 			cartY *= -1;
 
