@@ -16,21 +16,20 @@ import com.droidplanner.widgets.helpers.RenderThread.canvasPainter;
  */
 public class Chart extends SurfaceView implements SurfaceHolder.Callback,
 		canvasPainter, OnScaleListner {
-	public RenderThread renderer;
-	public int width;
-	public int height;
+	private RenderThread renderer;
+	protected int width;
+	protected int height;
 
-	public ChartScale scale;
-	public ChartDataRender dataRender;
+	protected ChartScale scale;
 	private ChartGrid grid = new ChartGrid();
 	public ChartData chartData = new ChartData();
+	private ChartDataRender dataRender = new ChartDataRender();
 
 	public Chart(Context context, AttributeSet attributeSet) {
 		super(context, attributeSet);
 		getHolder().addCallback(this);
 
 		scale = new ChartScale(context,this);
-		dataRender = new ChartDataRender(context);
 	}
 
 	@Override
@@ -41,17 +40,11 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback,
 		}
 	}
 
-	public void newData(double[] d) {
-		chartData.newData(d);
-		update();
-	}
-
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
 		this.width = width;
 		this.height = height;
-
 	}
 
 	@Override

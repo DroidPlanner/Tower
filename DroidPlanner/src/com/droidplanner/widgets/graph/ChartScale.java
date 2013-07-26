@@ -8,19 +8,24 @@ public class ChartScale {
 		public void onScaleListner();
 	}
 	
-	public ScaleGestureDetector scaleDetector;
 	private OnScaleListner listner;
 
 	// range values to display
-	double range = 180;
+	private double range = 180;
 	// minimal range
-	double min = 10;
+	private double min = 10;
 	// maximal range
-	double max = 180;
+	private double max = 180;
+
+	protected ScaleGestureDetector scaleDetector;
 
 	public ChartScale(Context context, OnScaleListner listner) {
 		scaleDetector = new ScaleGestureDetector(context, new ChartScaleListener());
 		this.listner = listner;		
+	}
+
+	public double getRange() {
+		return range;
 	}
 
 	class ChartScaleListener extends

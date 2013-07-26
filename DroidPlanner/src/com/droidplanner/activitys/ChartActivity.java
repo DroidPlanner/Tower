@@ -53,7 +53,7 @@ public class ChartActivity extends SuperActivity implements
 				tr.addView(cb);
 				cb.setTag(i);
 				cb.setText(labels[i]);
-				cb.setTextColor(chart.chartData.series.get((Integer) cb.getTag()).getPaint().getColor());
+				cb.setTextColor(chart.chartData.series.get((Integer) cb.getTag()).getColor());
 				cb.setChecked(chart.chartData.isActive((Integer) cb.getTag()));
 				i++;
 			}
@@ -73,9 +73,11 @@ public class ChartActivity extends SuperActivity implements
 
 	@Override
 	public void onDroneUpdate() {
-		double[] data = { drone.orientation.getPitch(),
-				drone.orientation.getRoll(), drone.orientation.getYaw() };
-		chart.newData(data);
+		chart.chartData.series.get(0).newData(drone.orientation.getPitch());
+		chart.chartData.series.get(1).newData(drone.orientation.getRoll());
+		chart.chartData.series.get(2).newData(drone.orientation.getYaw());
+		chart.update();
+		
 	}
 
 }

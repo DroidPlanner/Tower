@@ -9,25 +9,30 @@ public class ChartSeries {
 	public double[] data;
 	public int newestData = 0;
 	public Paint paint;
-	
-	public ChartSeries(int bufferSize,int color) {
+
+	public ChartSeries(int bufferSize, int color) {
 		this.data = new double[bufferSize];
 		this.paint = new Paint();
 		this.paint.setColor(color);
 	}
-	
+
 	public void newData(double d) {
-		if (data.length>0) {		
+		if (data.length > 0) {
 			newestData = (newestData + 1) % data.length;
-			data[newestData] = d;		
+			data[newestData] = d;
 		}
 	}
 
 	public Paint getPaint() {
+		return paint;
+	}
+
+	public int getColor() {
 		if (entryEnabled) {
-			return paint;			
-		}else{
-			return new Paint(Color.WHITE);
+			return paint.getColor();
+		} else {
+			return Color.WHITE;
 		}
 	}
+
 }

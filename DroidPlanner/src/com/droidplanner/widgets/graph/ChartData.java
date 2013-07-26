@@ -14,12 +14,6 @@ public class ChartData {
 		series.add(new ChartSeries(800,Color.GREEN));
 	}
 
-	void newData(double[] d) {		
-		series.get(0).newData(d[0]);
-		series.get(1).newData(d[1]);
-		series.get(2).newData(d[2]);
-	}
-
 	public void enableEntry(int i) {
 		series.get(i).entryEnabled = true;
 	}
