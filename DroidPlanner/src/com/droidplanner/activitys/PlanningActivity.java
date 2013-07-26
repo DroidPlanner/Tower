@@ -55,7 +55,7 @@ public class PlanningActivity extends SuperActivity implements
 
 		missionFragment.setMission(drone.mission);
 
-		app.setWaypointReceivedListner(this);
+		app.drone.mission.missionListner = this;
 
 		checkIntent();
 

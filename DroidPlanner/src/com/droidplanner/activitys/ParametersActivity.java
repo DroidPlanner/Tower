@@ -33,7 +33,7 @@ public class ParametersActivity extends SuperActivity implements
 		tableFragment = ((ParametersTableFragment) getFragmentManager()
 				.findFragmentById(R.id.parametersTable));
 
-		app.setOnParametersChangedListner(this);
+		drone.parameters.parameterListner = this;
 	}
 
 	@Override

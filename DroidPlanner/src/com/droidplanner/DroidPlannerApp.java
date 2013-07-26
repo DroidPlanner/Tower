@@ -63,17 +63,4 @@ public class DroidPlannerApp extends Application implements
 		tts.speak("Connected");
 	}
 
-	public void setConectionStateListner(ConnectionStateListner listner) {
-		conectionListner = listner;
-	}
-
-	public void setWaypointReceivedListner(OnWaypointUpdateListner listner) {
-		drone.mission.missionListner = listner;
-	}
-
-	public void setOnParametersChangedListner(
-			DroneInterfaces.OnParameterManagerListner listner) {
-		drone.parameters.parameterListner = listner;
-	}
-
 }

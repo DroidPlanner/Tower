@@ -46,7 +46,7 @@ public abstract class SuperActivity extends Activity implements
 		// Set up the action bar to show a dropdown list.
 		setUpActionBar();
 		app = (DroidPlannerApp) getApplication();
-		app.setConectionStateListner(this);
+		app.conectionListner = this;
 		this.drone = ((DroidPlannerApp) getApplication()).drone;
 
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);

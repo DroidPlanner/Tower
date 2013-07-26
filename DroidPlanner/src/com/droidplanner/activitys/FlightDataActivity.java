@@ -28,7 +28,7 @@ public class FlightDataActivity extends SuperFlightActivity implements
 				.findFragmentById(R.id.flightMapFragment));
 		mapFragment.updateFragment();
 
-		app.setWaypointReceivedListner(this);
+		drone.mission.missionListner = this;
 		drone.setDroneTypeChangedListner(this);
 		
 	}
