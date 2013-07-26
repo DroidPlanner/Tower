@@ -1,3 +1,9 @@
+## Droidplanner v0.X.X
+* HUD code clean-up
+* Activitys clean-up
+* All markers are using the markerManager
+* Colorful markers in the planning screen
+
 ## Droidplanner v0.10.3
 * Improved Record-Me mode (with a bug fix)
 * Now all the data on a Mission item is used
