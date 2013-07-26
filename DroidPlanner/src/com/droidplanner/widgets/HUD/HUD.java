@@ -1,6 +1,5 @@
 package com.droidplanner.widgets.HUD;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -21,7 +20,7 @@ import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
 
 public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 		HudUpdatedListner {
-	private ScopeThread renderer;
+	private HudThread renderer;
 	int width;
 	int height;
 	public HudYaw hudYaw = new HudYaw();
@@ -45,10 +44,7 @@ public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 		// clear screen
 		canvas.drawColor(Color.rgb(20, 20, 20));
 		canvas.translate(width / 2, data.attHeightPx / 2 + hudYaw.yawHeightPx); // set
-		// center of
-		// HUD
-		// excluding
-		// YAW area
+		// center of HUD excluding YAW area
 
 		// from now on each drawing routine has to undo all applied
 		// transformations, clippings, etc by itself
@@ -82,23 +78,17 @@ public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 		// frequently
 
 		hudPlane.setupPlane(this);
-
-		commonPaints.setupCommonPaints(this);
-		
+		commonPaints.setupCommonPaints(this);		
 		hudYaw.setupYaw(this, this);
-
 		data.setupAtt(this);
-
 		hudRoll.setupRoll(this);
-
 		hudPitch.setupPitch(this);
-
 		hudFailsafe.setupFailsafe(this);
 	}
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
-		renderer = new ScopeThread(getHolder(), this);
+		renderer = new HudThread(getHolder(), this);
 		if (!renderer.isRunning()) {
 			renderer.setRunning(true);
 			renderer.start();
@@ -116,74 +106,6 @@ public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 				retry = false;
 			} catch (InterruptedException e) {
 				// we will try it again and again...
-			}
-		}
-	}
-
-	private class ScopeThread extends Thread {
-		private SurfaceHolder _surfaceHolder;
-		private HUD scope;
-		private volatile boolean running = false;
-		private Object dirty = new Object();
-
-		public ScopeThread(SurfaceHolder surfaceHolder, HUD panel) {
-			_surfaceHolder = surfaceHolder;
-			scope = panel;
-		}
-
-		public boolean isRunning() {
-			return running;
-
-		}
-
-		public void setRunning(boolean run) {
-			running = run;
-			setDirty();
-		}
-
-		/** We may need to redraw */
-		public void setDirty() {
-			synchronized (dirty) {
-				dirty.notify();
-			}
-		}
-
-		@SuppressLint("WrongCall")
-		// TODO fix error
-		@Override
-		public void run() {
-			Canvas c;
-			while (running) {
-				synchronized (dirty) {
-					c = null;
-					try {
-						c = _surfaceHolder.lockCanvas(null);
-						synchronized (_surfaceHolder) {
-							if (c != null) {
-								scope.onDraw(c);
-							}
-						}
-					} finally {
-						// do this in a finally so that if an exception is
-						// thrown
-						// during the above, we don't leave the Surface in an
-						// inconsistent state
-						if (c != null) {
-							_surfaceHolder.unlockCanvasAndPost(c);
-						}
-					}
-
-					// We do this wait at the _end_ to ensure we always draw at
-					// least one frame of
-					// HUD data
-					try {
-						// Log.d("HUD", "Waiting for change");
-						dirty.wait(); // TODO - not quite ready
-						// Log.d("HUD", "Handling change");
-					} catch (InterruptedException e) {
-						// We will try again and again
-					}
-				}
 			}
 		}
 	}
