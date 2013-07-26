@@ -1,19 +1,16 @@
 package com.droidplanner.widgets.graph;
 
-import android.graphics.Color;
 import android.graphics.Paint;
 
 public class ChartSeries {
 
-	private boolean enabled = true;
+	private boolean enabled = false;
 	public double[] data;
 	public int newestData = 0;
-	public Paint paint;
+	private Paint paint = new Paint();
 
-	public ChartSeries(int bufferSize, int color) {
+	public ChartSeries(int bufferSize) {
 		this.data = new double[bufferSize];
-		this.paint = new Paint();
-		this.paint.setColor(color);
 	}
 
 	public void newData(double d) {
@@ -27,12 +24,12 @@ public class ChartSeries {
 		return paint;
 	}
 
+	public void setColor(int color){
+		paint.setColor(color);
+	}
+	
 	public int getColor() {
-		if (enabled) {
-			return paint.getColor();
-		} else {
-			return Color.WHITE;
-		}
+		return paint.getColor();
 	}
 
 	public void enable() {

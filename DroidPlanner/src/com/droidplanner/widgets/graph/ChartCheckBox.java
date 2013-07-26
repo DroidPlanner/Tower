@@ -17,7 +17,7 @@ public class ChartCheckBox extends CheckBox implements OnCheckedChangeListener {
 
 	public ChartCheckBox(Context context, String label, Chart chart) {
 		super(context);
-		ChartSeries serie = new ChartSeries(800, Color.RED);
+		ChartSeries serie = new ChartSeries(800);
 		this.chart = chart;
 		this.chart.series.add(serie);
 		setText(label);
@@ -32,8 +32,13 @@ public class ChartCheckBox extends CheckBox implements OnCheckedChangeListener {
 		ChartSeries serie = (ChartSeries) getTag();
 		if (isChecked) {
 			serie.enable();
+			Integer color = chart.colors.retriveColor();
+			serie.setColor(color);
+			setTextColor(color);
 		} else {
 			serie.disable();
+			chart.colors.depositColor(serie.getColor());
+			setTextColor(Color.WHITE);
 		}
 		chart.update();
 	}

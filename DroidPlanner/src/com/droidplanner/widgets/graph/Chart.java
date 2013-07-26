@@ -23,6 +23,7 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback,
 	protected int width;
 	protected int height;
 
+	public ChartColors colors = new ChartColors();
 	protected ChartScale scale;
 	private ChartGrid grid = new ChartGrid();
 	public  List<ChartSeries> series = new ArrayList<ChartSeries>();;
