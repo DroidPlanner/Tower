@@ -1,4 +1,5 @@
-## Droidplanner v0.X.X
+## Droidplanner v0.11.0
+* New Chart screen
 * HUD code clean-up
 * Activitys clean-up
 * All markers are using the markerManager
