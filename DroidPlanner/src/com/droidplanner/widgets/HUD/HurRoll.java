@@ -29,7 +29,7 @@ public class HurRoll {
 
 	void setupRoll(HUD huDwidget) {
 		rollTopOffsetPx = huDwidget.hudYaw.yawHeightPx;
-		rollText.setTextSize(Math.round(huDwidget.data.attHeightPx * HurRoll.ROLL_FACTOR_TEXT));
+		rollText.setTextSize(Math.round(huDwidget.hudInfo.attHeightPx * HurRoll.ROLL_FACTOR_TEXT));
 		rollSizePxTics = Math.round(rollTopOffsetPx
 				* HurRoll.ROLL_FACTOR_TIC_LENGTH);
 		rollPosPxTextYOffset = Math.round(rollSizePxTics
@@ -37,7 +37,7 @@ public class HurRoll {
 	}
 
 	void drawRoll(HUD huDwidget, Canvas canvas) {
-		int r = Math.round(huDwidget.data.attHeightPx / 2 - rollTopOffsetPx);
+		int r = Math.round(huDwidget.hudInfo.attHeightPx / 2 - rollTopOffsetPx);
 		RectF rec = new RectF(-r, -r, r, r);
 	
 		// Draw the arc
@@ -46,11 +46,11 @@ public class HurRoll {
 		// Draw center triangle
 		Path arrow = new Path();
 		int tempOffset = Math.round(huDwidget.hudPlane.plane.getStrokeWidth() / 2);
-		arrow.moveTo(0, -huDwidget.data.attHeightPx / 2 + rollTopOffsetPx
+		arrow.moveTo(0, -huDwidget.hudInfo.attHeightPx / 2 + rollTopOffsetPx
 				- tempOffset);
-		arrow.lineTo(0 - rollTopOffsetPx / 3, -huDwidget.data.attHeightPx / 2
+		arrow.lineTo(0 - rollTopOffsetPx / 3, -huDwidget.hudInfo.attHeightPx / 2
 				+ rollTopOffsetPx / 2 - tempOffset);
-		arrow.lineTo(0 + rollTopOffsetPx / 3, -huDwidget.data.attHeightPx / 2
+		arrow.lineTo(0 + rollTopOffsetPx / 3, -huDwidget.hudInfo.attHeightPx / 2
 				+ rollTopOffsetPx / 2 - tempOffset);
 		arrow.close();
 		canvas.drawPath(arrow, huDwidget.hudPlane.plane);

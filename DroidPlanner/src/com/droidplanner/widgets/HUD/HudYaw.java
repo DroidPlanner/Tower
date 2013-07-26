@@ -71,7 +71,7 @@ public class HudYaw {
 	}
 
 	void drawYaw(HUD huDwidget, Canvas canvas) {
-		int yawBottom = -huDwidget.data.attHeightPx / 2;
+		int yawBottom = -huDwidget.hudInfo.attHeightPx / 2;
 		canvas.drawRect(-huDwidget.width / 2, yawBottom - yawHeightPx,
 				huDwidget.width / 2, yawBottom, yawBg);
 		canvas.drawLine(-huDwidget.width / 2, yawBottom, huDwidget.width / 2,

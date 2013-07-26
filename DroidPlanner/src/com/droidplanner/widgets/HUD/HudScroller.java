@@ -66,19 +66,19 @@ public class HudScroller {
 	int setupScroller(HUD huDwidget, int tempAttTextClearance,
 			int tempAttSizeText) {
 		int tempSize;
-		int scrollerMaxAvailHeight = huDwidget.data.attHeightPx - 4
+		int scrollerMaxAvailHeight = huDwidget.hudInfo.attHeightPx - 4
 				* tempAttSizeText - 6 * tempAttTextClearance;
-		scrollerHeightPx = Math.round(huDwidget.data.attHeightPx
+		scrollerHeightPx = Math.round(huDwidget.hudInfo.attHeightPx
 				* SCROLLER_MAX_HEIGHT_FACTOR);
 		if (scrollerHeightPx > scrollerMaxAvailHeight) {
 			scrollerHeightPx = scrollerMaxAvailHeight;
 		} else {
-			tempAttTextClearance = Math.round((huDwidget.data.attHeightPx
+			tempAttTextClearance = Math.round((huDwidget.hudInfo.attHeightPx
 					- scrollerHeightPx - 4 * tempAttSizeText) / 6);
 		}
 		scrollerWidthPx = Math.round(huDwidget.width * SCROLLER_WIDTH_FACTOR);
 		tempSize = Math
-				.round(huDwidget.data.attHeightPx * SCROLLER_FACTOR_TEXT);
+				.round(huDwidget.hudInfo.attHeightPx * SCROLLER_FACTOR_TEXT);
 		scrollerText.setTextSize(tempSize);
 		scrollerSizePxTextYOffset = Math.round(tempSize
 				* SCROLLER_FACTOR_TEXT_Y_OFFSET);
@@ -94,7 +94,7 @@ public class HudScroller {
 		scrollerSizePxTicLength = Math.round(huDwidget.width
 				* SCROLLER_FACTOR_TIC_LENGTH);
 
-		greenPen.setStrokeWidth(Math.round(huDwidget.data.attHeightPx
+		greenPen.setStrokeWidth(Math.round(huDwidget.hudInfo.attHeightPx
 				* HudScroller.SCROLLER_FACTOR_TARGET_BAR_WIDTH));
 		return tempAttTextClearance;
 	}

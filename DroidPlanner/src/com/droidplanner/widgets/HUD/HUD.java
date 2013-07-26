@@ -24,7 +24,7 @@ public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 	int width;
 	int height;
 	public HudYaw hudYaw = new HudYaw();
-	public HudInfo data = new HudInfo();
+	public HudInfo hudInfo = new HudInfo();
 	public HurRoll hudRoll = new HurRoll();
 	public HudPlane hudPlane = new HudPlane();
 	private HudPitch hudPitch = new HudPitch();
@@ -43,7 +43,7 @@ public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 
 		// clear screen
 		canvas.drawColor(Color.rgb(20, 20, 20));
-		canvas.translate(width / 2, data.attHeightPx / 2 + hudYaw.yawHeightPx); // set
+		canvas.translate(width / 2, hudInfo.attHeightPx / 2 + hudYaw.yawHeightPx); // set
 		// center of HUD excluding YAW area
 
 		// from now on each drawing routine has to undo all applied
@@ -57,7 +57,7 @@ public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 		hudPlane.drawPlane(this, canvas);
 		hudScroller.drawRightScroller(this, canvas);
 		hudScroller.drawLeftScroller(this, canvas);
-		data.drawAttitudeInfoText(this, canvas);
+		hudInfo.drawAttitudeInfoText(this, canvas);
 		hudFailsafe.drawFailsafe(this, canvas);
 	}
 
@@ -80,7 +80,7 @@ public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 		hudPlane.setupPlane(this);
 		commonPaints.setupCommonPaints(this);		
 		hudYaw.setupYaw(this, this);
-		data.setupAtt(this);
+		hudInfo.setupAtt(this);
 		hudRoll.setupRoll(this);
 		hudPitch.setupPitch(this);
 		hudFailsafe.setupFailsafe(this);

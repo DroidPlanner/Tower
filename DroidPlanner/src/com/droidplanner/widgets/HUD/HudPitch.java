@@ -41,7 +41,7 @@ public class HudPitch {
 
 	void setupPitch(HUD huDwidget) {
 		int tempSize;
-		tempSize = Math.round(huDwidget.data.attHeightPx * PITCH_FACTOR_TEXT);
+		tempSize = Math.round(huDwidget.hudInfo.attHeightPx * PITCH_FACTOR_TEXT);
 		pitchText.setTextSize(tempSize);
 		pitchTextCenterOffsetPx = Math.round(-tempSize / 2 - tempSize
 				* PITCH_FACTOR_TEXT_Y_OFFSET);
@@ -51,7 +51,7 @@ public class HudPitch {
 				* PITCH_FACTOR_SCALE_WIDHT_NARROW / 2);
 		pitchScaleTextXOffset = Math.round(huDwidget.width
 				* PITCH_FACTOR_SCALE_TEXT_X_OFFSET);
-		pitchPixPerDegree = Math.round(huDwidget.data.attHeightPx
+		pitchPixPerDegree = Math.round(huDwidget.hudInfo.attHeightPx
 				* PITCH_FACTOR_SCALE_Y_SPACE);
 	}
 
@@ -65,7 +65,7 @@ public class HudPitch {
 		}
 	
 		int pitchOffsetPx = (int) (pitch * pitchPixPerDegree);
-		int rollTriangleBottom = -huDwidget.data.attHeightPx / 2
+		int rollTriangleBottom = -huDwidget.hudInfo.attHeightPx / 2
 				+ huDwidget.hudRoll.rollTopOffsetPx / 2 + huDwidget.hudRoll.rollTopOffsetPx;
 	
 		canvas.rotate(-(int) roll);
@@ -82,7 +82,7 @@ public class HudPitch {
 		Path arrow = new Path();
 		int tempOffset = Math.round(huDwidget.hudPlane.plane.getStrokeWidth()
 				+ huDwidget.commonPaints.whiteBorder.getStrokeWidth() / 2);
-		arrow.moveTo(0, -huDwidget.data.attHeightPx / 2 + huDwidget.hudRoll.rollTopOffsetPx
+		arrow.moveTo(0, -huDwidget.hudInfo.attHeightPx / 2 + huDwidget.hudRoll.rollTopOffsetPx
 				+ tempOffset);
 		arrow.lineTo(0 - huDwidget.hudRoll.rollTopOffsetPx / 3, rollTriangleBottom
 				+ tempOffset);
