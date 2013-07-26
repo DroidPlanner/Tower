@@ -9,18 +9,31 @@ import android.view.Surface;
 import android.view.WindowManager;
 
 public class ScreenOrientation {
-	public int screenRequestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
+	public int screenRequestedOrientation;
 	private Activity activity;
 
 	public ScreenOrientation(Activity activity) {
 		this.activity =activity;
 	}
 
-	public void setOrientation() {
+	public void requestLock() {
+		if (isPrefLockOrientationSet()) {
+			lockOrientation();
+		}
+	}
+
+	public void unlock() {
+		if (screenRequestedOrientation != ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) {
+			screenRequestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
+			setOrientation();
+		}
+	}
+
+	private void setOrientation() {
 		activity.setRequestedOrientation(screenRequestedOrientation);		
 	}
 
-	void lockOrientation() {
+	private void lockOrientation() {
 		int rotation = ((WindowManager) activity.getSystemService(Context.WINDOW_SERVICE))
 				.getDefaultDisplay().getRotation();
 		int actualOrientation = activity.getResources().getConfiguration().orientation;
@@ -56,25 +69,12 @@ public class ScreenOrientation {
 				break;
 			}
 		}
-		activity.setRequestedOrientation(screenRequestedOrientation);
+		setOrientation();
 	}
 
-	boolean isPrefLockOrientationSet() {
+	private boolean isPrefLockOrientationSet() {
 		return PreferenceManager.getDefaultSharedPreferences(
 				activity.getApplicationContext()).getBoolean(
 				"pref_lock_screen_orientation", false);
-	}
-
-	public void notifyConnected() {
-		if (isPrefLockOrientationSet()) {
-			lockOrientation();
-		}
-	}
-
-	public void notifyDisconnected() {
-		if (screenRequestedOrientation != ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) {
-			screenRequestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
-			activity.setRequestedOrientation(screenRequestedOrientation);
-		}
 	}
 }

@@ -47,7 +47,7 @@ public abstract class SuperActivity extends Activity implements
 		this.drone = ((DroidPlannerApp) getApplication()).drone;
 
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
-		screenOrientation.setOrientation();
+		screenOrientation.unlock();
 	}
 
 	public void setUpActionBar() {
@@ -136,7 +136,7 @@ public abstract class SuperActivity extends Activity implements
 			connectButton.setTitle(getResources().getString(
 					R.string.menu_connect));
 		}
-		screenOrientation.notifyDisconnected();
+		screenOrientation.unlock();
 	}
 
 	public void notifyConnected() {
@@ -144,7 +144,7 @@ public abstract class SuperActivity extends Activity implements
 			connectButton.setTitle(getResources().getString(
 					R.string.menu_disconnect));
 		}
-		screenOrientation.notifyConnected();
+		screenOrientation.requestLock();
 	}
 
 	@Override
