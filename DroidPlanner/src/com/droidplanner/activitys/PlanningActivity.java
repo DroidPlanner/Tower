@@ -151,7 +151,9 @@ public class PlanningActivity extends SuperActivity implements
 	private void openMissionFile() {
 		OpenFileDialog missionDialog = new OpenMissionDialog(drone) {
 			@Override
-			public void waypointFileLoaded() {
+				public void waypointFileLoaded(MissionReader reader) {
+				drone.mission.setHome(reader.getHome());
+				drone.mission.setWaypoints(reader.getWaypoints());
 				planningMapFragment.zoomToExtents(drone.mission
 						.getAllCoordinates());
 				update();
