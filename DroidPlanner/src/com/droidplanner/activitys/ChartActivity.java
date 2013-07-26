@@ -89,7 +89,7 @@ public class ChartActivity extends SuperActivity implements
 	public void onDroneUpdate() {
 		double[] data = { drone.orientation.getPitch(),
 				drone.orientation.getRoll(), drone.orientation.getYaw() };
-		chart.newFlightData(data);
+		chart.newData(data);
 	}
 
 }

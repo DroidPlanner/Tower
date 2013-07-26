@@ -5,9 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -20,35 +18,26 @@ import com.droidplanner.widgets.helpers.RenderThread.canvasPainter;
 public class Chart extends SurfaceView implements SurfaceHolder.Callback,
 		canvasPainter {
 	public RenderThread renderer;
-	private int width;
-	private int height;
+	int width;
+	int height;
 
-	private double[][] data = { { 0, 1, 2, 0 }, { 3, 2, 1, 0 } };
 	private Paint[] availableColors;
 	private boolean entryEnabled[] = { true, true };
 
-	private int dataSize = 2;
-
-	private ScaleGestureDetector scaleDetector;
-
-	// Loop counter for circular buffer
-	private int newestData = 0;
-
+	private ChartScale scale;
+	private ChartData chartData = new ChartData();
 	// Number of entries to draw
+	
 	private int numPtsToDraw = 100;
 
-	// range values to display
-	private double range = 180;
-
-	private Paint grid_paint = new Paint();
+	private ChartGrid grid = new ChartGrid();
 
 	public Chart(Context context, AttributeSet attributeSet) {
 		super(context, attributeSet);
 		getHolder().addCallback(this);
 
-		scaleDetector = new ScaleGestureDetector(context, new ScaleListener());
+		scale = new ChartScale(context);
 
-		grid_paint.setColor(Color.rgb(100, 100, 100));
 
 		int[] colors = { Color.RED, Color.BLUE, Color.GREEN, Color.CYAN,
 				Color.MAGENTA, Color.YELLOW, 0xFF800000, 0xff008000,
@@ -65,8 +54,8 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback,
 
 	public void setColors(Paint[] p) {
 
-		if (p.length != dataSize)
-			dataSize = 0;
+		if (p.length != chartData.dataSize)
+			chartData.dataSize = 0;
 
 		availableColors = p;
 
@@ -77,19 +66,16 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback,
 	}
 
 	public void setDataSize(int d) {
-		dataSize = d;
-		data = new double[dataSize][width];
-		entryEnabled = new boolean[dataSize];
+		chartData.dataSize = d;
+		chartData.data = new double[chartData.dataSize][width];
+		entryEnabled = new boolean[chartData.dataSize];
 
 	}
 
 	@Override
 	public void onDraw(Canvas canvas) {
 
-		// clear screen
-		canvas.drawColor(Color.rgb(20, 20, 20));
-
-		drawGrid(canvas);
+		grid.drawGrid(this, canvas);
 
 		// scale the data to +- 500
 		// target 0-height
@@ -98,21 +84,21 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback,
 
 		float delta = (float) width / (float) numPtsToDraw;
 
-		for (int k = 0; k < data.length; k++) {
+		for (int k = 0; k < chartData.data.length; k++) {
 			if (!entryEnabled[k])
 				continue;
 
-			if (data[k].length > 0) {
-				int start = (newestData - numPtsToDraw + data[0].length)
-						% data[0].length;
+			if (chartData.data[k].length > 0) {
+				int start = (chartData.newestData - numPtsToDraw + chartData.data[0].length)
+						% chartData.data[0].length;
 				int pos = 0;
 				for (int i = start; i < start + numPtsToDraw; i++) {
 
-					double y_i = data[k][i % data[0].length];
-					y_i = (y_i + range) / (2 * range) * height;
+					double y_i = chartData.data[k][i % chartData.data[0].length];
+					y_i = (y_i + scale.range) / (2 * scale.range) * height;
 
-					double y_i1 = data[k][(i + 1) % data[0].length];
-					y_i1 = (y_i1 + range) / (2 * range) * height;
+					double y_i1 = chartData.data[k][(i + 1) % chartData.data[0].length];
+					y_i1 = (y_i1 + scale.range) / (2 * scale.range) * height;
 
 					canvas.drawLine((float) pos * delta, (float) y_i,
 							(float) (pos + 1) * delta, (float) y_i1,
@@ -124,37 +110,8 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback,
 
 	}
 
-	private void drawGrid(Canvas canvas) {
-		for (int vertical = 1; vertical < 10; vertical++) {
-			canvas.drawLine(vertical * (width / 10) + 1, 1, vertical
-					* (width / 10) + 1, height + 1, grid_paint);
-
-		}
-
-		for (int horizontal = 1; horizontal < 10; horizontal++) {
-			canvas.drawLine(1, horizontal * (height / 10) + 1, width + 1,
-					horizontal * (height / 10) + 1, grid_paint);
-
-		}
-	}
-
-	public void newFlightData(double[] d) {
-		if (d.length != data.length) {
-			Log.d("Scope", "Incopatible data sizes");
-			return;
-		}
-
-		if (data.length > 0) {
-			int newIndex = (newestData + 1) % data[0].length;
-
-			for (int i = 0; i < data.length; i++)
-				if (data[i].length > newIndex)
-					data[i][newIndex] = d[i];
-
-			newestData = newIndex;
-
-		}
-
+	public void newData(double[] d) {
+		chartData.newData(d);
 		update();
 	}
 
@@ -163,7 +120,7 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback,
 			int height) {
 		this.width = width;
 		this.height = height;
-		data = new double[dataSize][width];
+		chartData.data = new double[chartData.dataSize][width];
 
 	}
 
@@ -211,22 +168,9 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback,
 	public boolean onTouchEvent(MotionEvent ev) {
 		// Let the ScaleGestureDetector inspect all events.
 		super.onTouchEvent(ev);
-		scaleDetector.onTouchEvent(ev);
+		scale.scaleDetector.onTouchEvent(ev);
 		return true;
 
-	}
-
-	private class ScaleListener extends
-			ScaleGestureDetector.SimpleOnScaleGestureListener {
-		@Override
-		public boolean onScale(ScaleGestureDetector detector) {
-			range /= detector.getScaleFactor();
-
-			Log.d("Scale", range + "");
-			range = Math.max(0.1, Math.min(range, 180));
-
-			return true;
-		}
 	}
 
 	public void disableEntry(int i) {
