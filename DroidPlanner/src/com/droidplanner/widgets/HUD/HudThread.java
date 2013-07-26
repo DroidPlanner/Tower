@@ -5,8 +5,11 @@ import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 
 class HudThread extends Thread {
+	interface canvasPainter{
+		public void onDraw(Canvas c);
+	}
 	private SurfaceHolder _surfaceHolder;
-	private HUD hud;
+	private canvasPainter hud;
 	private volatile boolean running = false;
 	private Object dirty = new Object();
 
