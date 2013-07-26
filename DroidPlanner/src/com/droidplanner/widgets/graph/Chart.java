@@ -62,11 +62,6 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback, canvas
 			p1.setTextSize(17.0f * getContext().getResources().getDisplayMetrics().density);
 		
 	}
-
-	public void setNames(String[] n){
-		names = n;
-		
-	}
 	
 	public void setDataSize( int d){
 		dataSize = d;
@@ -221,7 +216,7 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback, canvas
 	        range /= detector.getScaleFactor();
 	        
 	        Log.d("Scale", range+"");	       
-	        range = Math.max(0.1, Math.min(range, 10));
+	        range = Math.max(0.1, Math.min(range, 180));
 
 	        return true;
 	    }

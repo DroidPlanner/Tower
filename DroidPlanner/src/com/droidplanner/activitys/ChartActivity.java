@@ -20,7 +20,7 @@ public class ChartActivity extends SuperActivity implements
 	private TableLayout layout;
 
 	// Settings overlay layout
-	private int nColumns = 3;
+	private int nRows = 3;
 	String[] labels = { "Pitch", "Yaw", "Roll" };
 
 	@Override
@@ -37,7 +37,6 @@ public class ChartActivity extends SuperActivity implements
 		layout = (TableLayout) findViewById(R.id.readoutMenu);
 		
 		chart.setDataSize(labels.length);
-		chart.setNames(labels);
 		
 		chart.enableEntry(0);
 		chart.enableEntry(1);
@@ -51,9 +50,9 @@ public class ChartActivity extends SuperActivity implements
 	void setupOverlay() {
 		int i = 0;
 
-		TableRow tr = new TableRow(this);
-		layout.addView(tr);
-		for (int x = 0; x < nColumns; x++) {
+		for (int y = 0; y < nRows; y++) {
+			TableRow tr = new TableRow(this);
+			layout.addView(tr);
 			if (i < labels.length) {
 				CheckBox cb = new CheckBox(layout.getContext());
 				cb.setOnCheckedChangeListener(this);
