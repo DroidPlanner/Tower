@@ -1,11 +1,13 @@
-package com.droidplanner.widgets.HUD;
+package com.droidplanner.widgets.helpers;
+
+import com.droidplanner.widgets.HUD.HUD;
 
 import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 
-class HudThread extends Thread {
-	interface canvasPainter{
+public class CanvasThread extends Thread {
+	public interface canvasPainter{
 		public void onDraw(Canvas c);
 	}
 	private SurfaceHolder _surfaceHolder;
@@ -13,9 +15,9 @@ class HudThread extends Thread {
 	private volatile boolean running = false;
 	private Object dirty = new Object();
 
-	public HudThread(SurfaceHolder surfaceHolder, HUD hud) {
+	public CanvasThread(SurfaceHolder surfaceHolder, HUD hud) {
 		_surfaceHolder = surfaceHolder;
-		this.hud = hud;
+		this.hud = (canvasPainter) hud;
 	}
 
 	public boolean isRunning() {
