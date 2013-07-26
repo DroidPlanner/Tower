@@ -12,7 +12,10 @@ import android.view.ScaleGestureDetector;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-public class ScopeDisplay extends SurfaceView implements SurfaceHolder.Callback {
+/*
+ * Widget for a Chart Originally copied from http://code.google.com/p/copter-gcs/
+ */
+public class Chart extends SurfaceView implements SurfaceHolder.Callback {
 	private ScopeThread renderer;
 	private int width;
 	private int height;
@@ -39,7 +42,7 @@ public class ScopeDisplay extends SurfaceView implements SurfaceHolder.Callback 
 	Integer[] colors;
 	private String[] names = null;
 		
-	public ScopeDisplay(Context context, AttributeSet attributeSet) {
+	public Chart(Context context, AttributeSet attributeSet) {
 		super(context, attributeSet);
 		getHolder().addCallback(this);
 		
@@ -223,10 +226,10 @@ public class ScopeDisplay extends SurfaceView implements SurfaceHolder.Callback 
 	
 	private class ScopeThread extends Thread {
 		private SurfaceHolder _surfaceHolder;
-		private ScopeDisplay scope;
+		private Chart scope;
 		private boolean running = false;
 
-		public ScopeThread(SurfaceHolder surfaceHolder, ScopeDisplay panel) {
+		public ScopeThread(SurfaceHolder surfaceHolder, Chart panel) {
 			_surfaceHolder = surfaceHolder;
 			scope = panel;
 		}
