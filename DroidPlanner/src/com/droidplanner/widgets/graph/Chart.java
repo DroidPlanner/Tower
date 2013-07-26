@@ -26,21 +26,21 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback,
 	public ChartColorsStack colors = new ChartColorsStack();
 	protected ChartScale scale;
 	private ChartGrid grid = new ChartGrid();
-	public  List<ChartSeries> series = new ArrayList<ChartSeries>();;
+	public List<ChartSeries> series = new ArrayList<ChartSeries>();;
 	private ChartDataRender dataRender = new ChartDataRender();
 
 	public Chart(Context context, AttributeSet attributeSet) {
 		super(context, attributeSet);
 		getHolder().addCallback(this);
 
-		scale = new ChartScale(context,this);
+		scale = new ChartScale(context, this);
 	}
 
 	@Override
 	public void onDraw(Canvas canvas) {
 		grid.drawGrid(this, canvas);
 		for (ChartSeries serie : series) {
-			dataRender.drawSeries(this, canvas,serie);			
+			dataRender.drawSeries(this, canvas, serie);
 		}
 	}
 
@@ -90,6 +90,6 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback,
 
 	@Override
 	public void onScaleListner() {
-		update();		
+		update();
 	}
 }

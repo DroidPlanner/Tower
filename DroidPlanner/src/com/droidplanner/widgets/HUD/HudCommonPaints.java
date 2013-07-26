@@ -12,7 +12,6 @@ public class HudCommonPaints {
 	// in relation to averaged of width and height
 	static final float HUD_FACTOR_SCALE_THIN_TIC_STROKEWIDTH = .0025f;
 
-	
 	public Paint whiteBorder = new Paint();
 	public Paint whiteThickTics = new Paint();
 	public Paint whiteThinTics = new Paint();
@@ -48,15 +47,14 @@ public class HudCommonPaints {
 		if (hudScaleThickTicStrokeWidth < 1)
 			hudScaleThickTicStrokeWidth = 1;
 		whiteThickTics.setStrokeWidth(hudScaleThickTicStrokeWidth);
-	
+
 		hudScaleThinTicStrokeWidth = (hud.width + hud.height) / 2
 				* HUD_FACTOR_SCALE_THIN_TIC_STROKEWIDTH;
 		if (hudScaleThinTicStrokeWidth < 1)
 			hudScaleThinTicStrokeWidth = 1;
 		whiteThinTics.setStrokeWidth(hudScaleThinTicStrokeWidth);
-	
-		hudBorderWidth = (hud.width + hud.height) / 2
-				* HUD_FACTOR_BORDER_WIDTH;
+
+		hudBorderWidth = (hud.width + hud.height) / 2 * HUD_FACTOR_BORDER_WIDTH;
 		if (hudBorderWidth < 1)
 			hudBorderWidth = 1;
 		whiteBorder.setStrokeWidth(hudBorderWidth);

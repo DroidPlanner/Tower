@@ -24,10 +24,10 @@ public class ChartSeries {
 		return paint;
 	}
 
-	public void setColor(int color){
+	public void setColor(int color) {
 		paint.setColor(color);
 	}
-	
+
 	public int getColor() {
 		return paint.getColor();
 	}

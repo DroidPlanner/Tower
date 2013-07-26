@@ -48,17 +48,17 @@ public class HudScroller {
 
 	public HudScroller() {
 		scrollerBg.setARGB(64, 255, 255, 255);// (255, 0, 0, 0);
-		
+
 		scrollerText.setColor(Color.WHITE);
 		scrollerText.setAntiAlias(true);
-		
+
 		scrollerActualText.setColor(Color.WHITE);
 		scrollerActualText.setAntiAlias(true);
-		
+
 		greenPen.setColor(Color.GREEN);
 		greenPen.setStrokeWidth(6);
 		greenPen.setStyle(Style.STROKE);
-		
+
 		blueVSI.setARGB(255, 0, 50, 250);
 		blueVSI.setAntiAlias(true);
 	}
@@ -77,8 +77,8 @@ public class HudScroller {
 					- scrollerHeightPx - 4 * tempAttSizeText) / 6);
 		}
 		scrollerWidthPx = Math.round(huDwidget.width * SCROLLER_WIDTH_FACTOR);
-		tempSize = Math
-				.round(huDwidget.hudInfo.attHeightPx * SCROLLER_FACTOR_TEXT);
+		tempSize = Math.round(huDwidget.hudInfo.attHeightPx
+				* SCROLLER_FACTOR_TEXT);
 		scrollerText.setTextSize(tempSize);
 		scrollerSizePxTextYOffset = Math.round(tempSize
 				* SCROLLER_FACTOR_TEXT_Y_OFFSET);
@@ -160,7 +160,8 @@ public class HudScroller {
 
 		// Arrow with current speed
 		String actualText = Integer.toString((int) speed);
-		int borderWidth = Math.round(huDwidget.commonPaints.whiteBorder.getStrokeWidth());
+		int borderWidth = Math.round(huDwidget.commonPaints.whiteBorder
+				.getStrokeWidth());
 		Path arrow = new Path();
 		arrow.moveTo(scroller.left - borderWidth,
 				-scrollerSizePxArrowHeight / 2);
@@ -229,7 +230,8 @@ public class HudScroller {
 		canvas.drawPath(vsiBox, scrollerBg);
 		canvas.drawPath(vsiFill, blueVSI);
 		canvas.drawLine(scroller.left - vsi_width, vsiIndicatorEnd,
-				scroller.left, vsiIndicatorEnd, huDwidget.commonPaints.whiteThinTics);
+				scroller.left, vsiIndicatorEnd,
+				huDwidget.commonPaints.whiteThinTics);
 		canvas.drawPath(vsiBox, huDwidget.commonPaints.whiteBorder);
 
 		for (int a = 1; a < HudScroller.SCROLLER_VSI_RANGE; a++) { // draw ticks
@@ -283,7 +285,8 @@ public class HudScroller {
 
 		// Arrow with current altitude
 		String actualText = Integer.toString((int) altitude);
-		int borderWidth = Math.round(huDwidget.commonPaints.whiteBorder.getStrokeWidth());
+		int borderWidth = Math.round(huDwidget.commonPaints.whiteBorder
+				.getStrokeWidth());
 		Path arrow = new Path();
 		arrow.moveTo(scroller.right, -scrollerSizePxArrowHeight / 2);
 		arrow.lineTo(scroller.left + scrollerSizePxArrowHeight / 4

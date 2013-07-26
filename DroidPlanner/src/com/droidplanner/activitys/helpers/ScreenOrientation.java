@@ -13,7 +13,7 @@ public class ScreenOrientation {
 	private Activity activity;
 
 	public ScreenOrientation(Activity activity) {
-		this.activity =activity;
+		this.activity = activity;
 	}
 
 	public void requestLock() {
@@ -30,12 +30,13 @@ public class ScreenOrientation {
 	}
 
 	private void setOrientation() {
-		activity.setRequestedOrientation(screenRequestedOrientation);		
+		activity.setRequestedOrientation(screenRequestedOrientation);
 	}
 
 	private void lockOrientation() {
-		int rotation = ((WindowManager) activity.getSystemService(Context.WINDOW_SERVICE))
-				.getDefaultDisplay().getRotation();
+		int rotation = ((WindowManager) activity
+				.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay()
+				.getRotation();
 		int actualOrientation = activity.getResources().getConfiguration().orientation;
 		boolean naturalOrientationLandscape = (((rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) && actualOrientation == Configuration.ORIENTATION_LANDSCAPE) || ((rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) && actualOrientation == Configuration.ORIENTATION_PORTRAIT));
 		if (naturalOrientationLandscape) {
