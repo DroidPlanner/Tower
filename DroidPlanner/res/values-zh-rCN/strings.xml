@@ -54,6 +54,7 @@
         <item>微调参数</item>
         <item>摄像头控制</item>
         <item>GCP</item>
+        <item>Chart</item>
     </string-array>
 
     <!-- Do not change the names in the array bellow -->
