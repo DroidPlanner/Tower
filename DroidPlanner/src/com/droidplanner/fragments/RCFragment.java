@@ -34,6 +34,7 @@ public class RCFragment extends Fragment {
 	private RcOutput rcOutput;
 	private boolean rcActivated = false;
 	private boolean rcIsMode1 = false;
+	private String quickModeLeft = "", quickModeRight = "";
 	private double lLastPan = 0, lLastTilt = 0, rLastPan = 0, rLastTilt = 0;
 
 	@Override
@@ -56,22 +57,20 @@ public class RCFragment extends Fragment {
 
 		quickModeButtonLeft = (Button) view
 				.findViewById(R.id.buttonRCQuickLeft);
-		quickModeButtonLeft.setText("Loiter");
 		quickModeButtonLeft.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				ApmModes mode = ApmModes.getMode("Loiter", drone.type.getType());
+				ApmModes mode = ApmModes.getMode(quickModeLeft, drone.type.getType());
 				drone.state.setMode(mode);
 			}
 		});
 
 		quickModeButtonRight = (Button) view
 				.findViewById(R.id.buttonRCQuickRight);
-		quickModeButtonRight.setText("Stabilize");
 		quickModeButtonRight.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				ApmModes mode = ApmModes.getMode("Stabilize",
+				ApmModes mode = ApmModes.getMode(quickModeRight,
 						drone.type.getType());
 				drone.state.setMode(mode);
 			}
@@ -110,6 +109,10 @@ public class RCFragment extends Fragment {
 	@Override
 	public void onResume () {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(app.getApplicationContext());
+		quickModeLeft = prefs.getString("pref_rc_quickmode_left", "Loiter");
+		quickModeRight = prefs.getString("pref_rc_quickmode_right", "Stabilize");
+		quickModeButtonLeft.setText(quickModeLeft);
+		quickModeButtonRight.setText(quickModeRight);
 		rcIsMode1 = prefs.getString("pref_rc_mode", "MODE2").equalsIgnoreCase("MODE1");
 		if (rcIsMode1) {
 			joystickL.setAxisAutoReturnToCenter(true, true);

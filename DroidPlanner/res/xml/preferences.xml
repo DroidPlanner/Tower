@@ -127,12 +127,25 @@
         		android:title="General"
         		android:key="pref_rc_general">	
             	<ListPreference
-                	android:title="Mode"
+                	android:title="RC Mode"
                 	android:summary="Throttle on left or right stick"
             		android:defaultValue="MODE2"
             		android:entries="@array/RCModes"
             		android:entryValues="@array/RCModeValues"
             		android:key="pref_rc_mode" />
+            	<ListPreference
+                	android:title="QuickMode Left"
+            		android:defaultValue="Loiter"
+            		android:entries="@array/RCQuickModes"
+            		android:entryValues="@array/RCQuickModes"
+            		android:key="pref_rc_quickmode_left" />
+            	<ListPreference
+                	android:title="QuickMode Right"
+            		android:defaultValue="Stabilize"
+            		android:entries="@array/RCQuickModes"
+            		android:entryValues="@array/RCQuickModes"
+            		android:key="pref_rc_quickmode_right" />
+            	
             </PreferenceCategory>
             
             <PreferenceCategory
@@ -175,7 +188,7 @@
         		android:key="pref_rc_elevator">
                 <CheckBoxPreference
                     android:title="Reverse"
-                    android:summary="reverses Elevator/Nick direction"
+                    android:summary="reverses Elevator/Pitch direction"
                     android:key="pref_rc_elevator_reverse"
             		android:defaultValue="false"/>
             </PreferenceCategory>
