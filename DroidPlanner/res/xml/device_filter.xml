@@ -10,11 +10,12 @@
 	<usb-device vendor-id="1027" product-id="24593" /> <!-- FT4232HL -->
 	<usb-device vendor-id="1027" product-id="24597" /> <!-- FT230X -->
 	<usb-device vendor-id="1412" product-id="45088" /> <!-- REX-USB60F -->
-    <!-- 0x2341 / Arduino -->
-    <usb-device vendor-id="9025" />
+    <!-- 0x2341 / 0x0010: APM 2.5 device -->
+    <usb-device vendor-id="9025" product-id="16" />
+    <!-- 0x26ac / 0x0010: APM 2.5 device -->
+    <usb-device vendor-id="9900" product-id="16" />    
     <!-- 0x16C0 / 0x0483: Teensyduino  -->
     <usb-device vendor-id="5824" product-id="1155" />
     <!-- 0x10C4 / 0xEA60: CP210x UART Bridge -->
     <usb-device vendor-id="4292" product-id="60000" />
 </resources>
-
