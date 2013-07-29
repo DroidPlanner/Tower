@@ -1,3 +1,6 @@
+## Droidplanner v0.11.3
+* Preferences for the RC screen (Mode1/Mode2, Inverted Channel, QuickButtons)
+
 ## Droidplanner v0.11.2
 * Improving the Chart Screen
 * Chinese Translation
