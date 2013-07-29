@@ -26,10 +26,11 @@ public class MAVLinkClient {
 	final Messenger mMessenger = new Messenger(new IncomingHandler());
 	private boolean mIsBound;
 
-
 	public interface OnMavlinkClientListner {
 		public void notifyConnected();
+
 		public void notifyDisconnected();
+
 		public void notifyReceivedData(MAVLinkMessage m);
 	}
 
@@ -122,7 +123,7 @@ public class MAVLinkClient {
 			mService.send(msg);
 		} catch (RemoteException e) {
 			e.printStackTrace();
-		} catch (NullPointerException e){
+		} catch (NullPointerException e) {
 			e.printStackTrace();
 		}
 
@@ -148,5 +149,13 @@ public class MAVLinkClient {
 
 	public boolean isConnected() {
 		return mIsBound;
+	}
+
+	public void toggleConnectionState() {
+		if (isConnected()) {
+			close();
+		} else {
+			init();
+		}
 	}
 }

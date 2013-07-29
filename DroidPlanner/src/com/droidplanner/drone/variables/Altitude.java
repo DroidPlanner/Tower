@@ -22,7 +22,7 @@ public class Altitude extends DroneVariable {
 	public void setAltitude(double altitude) {
 		this.altitude = altitude;
 	}
-	
+
 	public void setAltitudeError(double alt_error) {
 		targetAltitude = alt_error + altitude;
 	}

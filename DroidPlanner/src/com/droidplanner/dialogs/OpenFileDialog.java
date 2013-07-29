@@ -12,11 +12,14 @@ public abstract class OpenFileDialog implements OnClickListener {
 
 	public interface FileReader {
 		public String getPath();
+
 		public String[] getFileList();
+
 		public boolean openFile(String file);
 	}
 
 	protected abstract FileReader createReader();
+
 	protected abstract void onDataLoaded(FileReader reader);
 
 	private String[] itemList;

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textViewRCWarningText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="5dp"
+        android:text="@string/this_is_very_experimental_please_be_careful"
+        android:textAppearance="?android:attr/textAppearanceLarge" />    	
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="5dp" >
+        
+   		<TextView
+       		android:id="@+id/textViewRCJoyLPan"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:gravity="center"
+        	android:layout_weight="1"
+        	android:text=""/>
+   		
+   		<TextView
+       		android:id="@+id/textViewRCJoyLTilt"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:gravity="center"
+        	android:layout_weight="1"
+        	android:text=""/>
+   		
+   		<TextView
+       		android:id="@+id/textViewRCJoyRPan"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:gravity="center"
+        	android:layout_weight="1"
+        	android:text=""/>
+
+   		<TextView
+   		    android:id="@+id/textViewRCJoyRTilt"
+   		    android:layout_width="wrap_content"
+   		    android:layout_height="wrap_content"
+   		    android:gravity="center"
+   		    android:layout_weight="1"
+   		    android:text="" />
+   		
+   	</LinearLayout>
+   	
+ 	<LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="5dp" >
+
+       <Button
+           android:id="@+id/buttonRCQuickLeft"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_gravity="top|left"
+           android:layout_marginRight="10dp"
+           android:layout_marginTop="2dp"
+           android:layout_weight="1"
+           android:maxLines="1"
+           android:text="" />
+
+       <ToggleButton
+           android:id="@+id/toggleButtonRCActivate"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_gravity="top|center_horizontal"
+           android:layout_marginLeft="10dp"
+           android:layout_marginRight="10dp"
+           android:layout_marginTop="0dp"
+           android:layout_weight="3"
+           android:maxLines="1"
+           android:text="" />
+
+       <Button
+           android:id="@+id/buttonRCQuickRight"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_gravity="top|right"
+           android:layout_marginLeft="10dp"
+           android:layout_marginTop="2dp"
+           android:layout_weight="1"
+           android:lines="1"
+           android:text="" />
+	
+    </LinearLayout>    
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal" >
+        
+        <com.droidplanner.widgets.joystick.JoystickView
+            android:id="@+id/joystickViewL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|left"
+            android:layout_weight="1" />
+
+        <com.droidplanner.widgets.joystick.JoystickView
+            android:id="@+id/joystickViewR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+</LinearLayout>

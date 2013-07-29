@@ -1,7 +1,5 @@
 package com.droidplanner.fragments.markers;
 
-import android.util.Log;
-
 import com.droidplanner.drone.DroneInterfaces.MapUpdatedListner;
 import com.droidplanner.fragments.FlightMapFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -20,47 +18,50 @@ public class DroneMarker implements MapUpdatedListner {
 	}
 
 	private void updatePosition(double yaw, LatLng coord) {
-		double correctHeading = (yaw - flightMapFragment.getMapRotation()+360)%360;	// This ensure the 0 to 360 range
-		Log.d("MARK", "updatepos");
-		try{
+		// This ensure the 0 to 360 range
+		double correctHeading = (yaw - flightMapFragment.getMapRotation() + 360) % 360;
+		try {
 			droneMarker.setVisible(true);
 			droneMarker.setPosition(coord);
 			droneMarker.setIcon(bitmaps.getIcon(correctHeading));
-			
+
 			animateCamera(coord);
-		}catch(Exception e){
+		} catch (Exception e) {
 		}
 	}
 
 	private void animateCamera(LatLng coord) {
-		if(!flightMapFragment.hasBeenZoomed){
+		if (!flightMapFragment.hasBeenZoomed) {
 			flightMapFragment.hasBeenZoomed = true;
-			flightMapFragment.mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coord, 16));
-		}			
-		if(flightMapFragment.isAutoPanEnabled){
-			flightMapFragment.mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(droneMarker.getPosition(), 17));
+			flightMapFragment.mMap.animateCamera(CameraUpdateFactory
+					.newLatLngZoom(coord, 16));
+		}
+		if (flightMapFragment.isAutoPanEnabled) {
+			flightMapFragment.mMap.animateCamera(CameraUpdateFactory
+					.newLatLngZoom(droneMarker.getPosition(), 17));
 		}
 	}
 
-	public void updateDroneMarkers(){
+	public void updateDroneMarkers() {
 		buildBitmaps();
-		addMarkerToMap();			
+		addMarkerToMap();
 	}
 
 	private void addMarkerToMap() {
 		droneMarker = flightMapFragment.mMap.addMarker(new MarkerOptions()
-		.anchor((float) 0.5, (float) 0.5)
-		.position(new LatLng(0, 0))
-		.icon(bitmaps.getIcon(0))
-		.visible(false));
+				.anchor((float) 0.5, (float) 0.5).position(new LatLng(0, 0))
+				.icon(bitmaps.getIcon(0)).visible(false));
 	}
 
 	private void buildBitmaps() {
-		bitmaps = new DroneBitmaps(flightMapFragment.getResources(),flightMapFragment.drone.type.getType());
+		bitmaps = new DroneBitmaps(flightMapFragment.getResources(),
+				flightMapFragment.drone.type.getType());
 	}
 
 	public void onDroneUpdate() {
-		updatePosition(flightMapFragment.drone.orientation.getYaw(), flightMapFragment.drone.GPS.getPosition());
-		flightMapFragment.addFlithPathPoint(flightMapFragment.drone.GPS.getPosition());		
+		updatePosition(flightMapFragment.drone.orientation.getYaw(),
+				flightMapFragment.drone.GPS.getPosition());
+		flightMapFragment.addFlithPathPoint(flightMapFragment.drone.GPS
+				.getPosition());
 	}
 }

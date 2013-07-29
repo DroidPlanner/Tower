@@ -1,3 +1,37 @@
+## Droidplanner v0.11.2
+* Improving the Chart Screen
+* Chinese Translation
+
+## Droidplanner v0.11.1
+* Changing the start screen back to Flight Data
+
+## Droidplanner v0.11.0
+* New Chart screen
+* HUD code clean-up
+* Activitys clean-up
+* All markers are using the markerManager
+* Colorful markers in the planning screen
+
+## Droidplanner v0.10.3
+* Improved Record-Me mode (with a bug fix)
+* Now all the data on a Mission item is used
+* Better handling of the markers on GCP and Planning screens
+
+## Droidplanner v0.10.2
+* Better swipe implementation on RC screen
+* Bug fix on the RC screen
+* Code Refactoring
+
+## Droidplanner v0.10.1
+* Fix in Offline maps
+* New RC screen in portrait mode
+
+## Droidplanner v0.10.0
+* More advanced waypoint editor
+
+## Droidplanner v0.9.3
+* Fix problem in the build process
+
 ## Droidplanner v0.9.2
 * Big code refactoring
 * Nicer RC screen

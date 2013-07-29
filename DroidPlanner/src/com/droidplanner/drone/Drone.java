@@ -9,6 +9,7 @@ import com.droidplanner.drone.variables.Altitude;
 import com.droidplanner.drone.variables.Battery;
 import com.droidplanner.drone.variables.Calibration;
 import com.droidplanner.drone.variables.GPS;
+import com.droidplanner.drone.variables.GuidedPoint;
 import com.droidplanner.drone.variables.Mission;
 import com.droidplanner.drone.variables.Orientation;
 import com.droidplanner.drone.variables.Parameters;
@@ -28,6 +29,7 @@ public class Drone {
 	public Mission mission = new Mission(this);
 	public Altitude altitude = new Altitude(this);
 	public Orientation orientation = new Orientation(this);
+	public GuidedPoint guidedPoint = new GuidedPoint(this);
 	public Parameters parameters = new Parameters(this);
 	public Calibration calibrationSetup = new Calibration(this);
 	public WaypointMananger waypointMananger = new WaypointMananger(this);
@@ -40,8 +42,7 @@ public class Drone {
 	private MapUpdatedListner mapListner;
 	private DroneTypeListner typeListner;
 
-	public Drone(TTS tts, MAVLinkClient mavClient,
-			Context context) {
+	public Drone(TTS tts, MAVLinkClient mavClient, Context context) {
 		this.tts = tts;
 		this.MavClient = mavClient;
 		this.context = context;

@@ -7,41 +7,53 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class Polygon {
 
-	private List<LatLng> waypoints;
+	private List<PolygonPoint> points;
 
 	public Polygon() {
-		setWaypoints(new ArrayList<LatLng>());
+		setWaypoints(new ArrayList<PolygonPoint>());
 	}
 
-	private void setWaypoints(ArrayList<LatLng> arrayList) {
-		waypoints = arrayList;
+	private void setWaypoints(ArrayList<PolygonPoint> arrayList) {
+		points = arrayList;
 	}
 
 	public void addWaypoint(Double Lat, Double Lng) {
-		getWaypoints().add(new LatLng(Lat, Lng));
+		points.add(new PolygonPoint(Lat, Lng));
 	}
 
 	public void addWaypoint(LatLng coord) {
-		getWaypoints().add(GeoTools.findClosestPair(coord, getWaypoints()), coord);
+		points.add(GeoTools.findClosestPair(coord, getLatLng()),
+				new PolygonPoint(coord));
 	}
 
 	public void clearPolygon() {
-		getWaypoints().clear();
+		points.clear();
 	}
 
+	public List<LatLng> getLatLng() {
+		List<LatLng> list = new ArrayList<LatLng>();
+		for (PolygonPoint point : points) {
+			list.add(point.coord);
+		}
+		return list;
+	}
+
+	/*
+	 * A valid polygon must have at least 3 points
+	 */
 	public boolean isValid() {
-		if(getWaypoints().size()>2)	// A valid polygon must have at least 3 points
+		if (points.size() > 2)
 			return true;
 		else
 			return false;
 	}
 
-	public List<LatLng> getWaypoints() {
-		return waypoints;
+	public List<PolygonPoint> getPolygonPoints() {
+		return points;
 	}
 
 	public void movePoint(LatLng coord, int number) {
-		waypoints.set(number, coord);
-		
+		points.get(number).coord = coord;
+
 	}
 }

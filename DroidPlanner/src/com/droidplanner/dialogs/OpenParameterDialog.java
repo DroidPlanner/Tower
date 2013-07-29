@@ -12,9 +12,9 @@ public abstract class OpenParameterDialog extends OpenFileDialog {
 	protected FileReader createReader() {
 		return new ParameterReader();
 	}
-	
+
 	@Override
 	protected void onDataLoaded(FileReader reader) {
-		parameterFileLoaded(((ParameterReader) reader).getParameters());		
+		parameterFileLoaded(((ParameterReader) reader).getParameters());
 	}
 }

@@ -12,7 +12,8 @@ import com.droidplanner.file.FileList;
 import com.droidplanner.file.FileManager;
 import com.droidplanner.parameters.Parameter;
 
-public class ParameterReader implements com.droidplanner.dialogs.OpenFileDialog.FileReader {
+public class ParameterReader implements
+		com.droidplanner.dialogs.OpenFileDialog.FileReader {
 	private List<Parameter> parameters;
 
 	public ParameterReader() {
@@ -74,8 +75,6 @@ public class ParameterReader implements com.droidplanner.dialogs.OpenFileDialog.
 		RowData[0] = RowData[0].trim();
 		return RowData;
 	}
-
-
 
 	private static boolean isParameterFile(BufferedReader reader)
 			throws IOException {

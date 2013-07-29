@@ -1,153 +1,112 @@
 package com.droidplanner.activitys;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v13.app.FragmentPagerAdapter;
 import android.util.Log;
-import android.view.InputDevice;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
+import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
 import com.droidplanner.R;
-import com.droidplanner.helpers.RcOutput;
-import com.droidplanner.widgets.joystick.JoystickMovedListener;
-import com.droidplanner.widgets.joystick.JoystickView;
+import com.droidplanner.activitys.helpers.SuperFlightActivity;
+import com.droidplanner.drone.DroneInterfaces.DroneTypeListner;
+import com.droidplanner.fragments.FlightMapFragment;
+import com.droidplanner.fragments.HudFragment;
+import com.droidplanner.widgets.viewPager.MapViewPager;
 
-public class RCActivity extends SuperActivity {
-	private MenuItem bTogleRC;
-	private TextView textViewLPan, textViewLTilt, textViewRPan, textViewRTilt;
+public class RCActivity extends SuperFlightActivity implements
+		OnWaypointUpdateListner, DroneTypeListner {
 
-	MenuItem connectButton;
-
-	private RcOutput rcOutput;
+	AdapterHudMap mAdapter;
+	MapViewPager mPager;
 
 	@Override
-	int getNavigationItem() {
+	public int getNavigationItem() {
 		return 2;
 	}
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.rc);
-		
-		textViewLPan = (TextView) findViewById(R.id.textViewRCJoyLPan);
-		textViewLPan.setText("");
-		textViewLTilt = (TextView) findViewById(R.id.textViewRCJoyLTilt);
-		textViewLTilt.setText("");
-		textViewRPan = (TextView) findViewById(R.id.textViewRCJoyRPan);
-		textViewRPan.setText("");
-		textViewRTilt = (TextView) findViewById(R.id.textViewRCJoyRTilt);
-		textViewRTilt.setText("");
-		
-		JoystickView joystickL = (JoystickView)findViewById(R.id.joystickViewL);
-		JoystickView joystickR = (JoystickView)findViewById(R.id.joystickViewR);
-		
-		joystickL.setAxisAutoReturnToCenter(false, true);
-		joystickL.setOnJostickMovedListener(lJoystick);
-		joystickR.setOnJostickMovedListener(rJoystick);
-        
-		rcOutput = new RcOutput(app.MAVClient,this);
-	}
-	
-	@Override
-	protected void onDestroy() {
-		disableRCOverride();
-		super.onDestroy();
-	}
-	
-	@Override
-	protected void onPause() {
-		disableRCOverride();
-		super.onPause();
-	}
 
-	@Override
-	protected void onResume() {
-		disableRCOverride();
-		super.onResume();
+		mAdapter = new AdapterHudMap(getFragmentManager());
+		mPager = (MapViewPager) findViewById(R.id.rcPager);
+		if (mPager != null) {
+			mPager.setAdapter(mAdapter);
+			mPager.setSwipeMarginWidth(40);
+		}
+
+		drone.mission.missionListner = this;
+		drone.setDroneTypeChangedListner(this);
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.menu_rc, menu);
-		connectButton = menu.findItem(R.id.menu_connect);
-		bTogleRC = menu.findItem(R.id.menu_rc_enable);
 		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.menu_rc_enable:
-			toggleRcOverride();
+		case R.id.menu_zoom:
+			if (mapFragment != null)
+				mapFragment.zoomToLastKnowPosition();
+			return true;
+		case R.id.menu_clearFlightPath:
+			if (mapFragment != null)
+				mapFragment.clearFlightPath();
 			return true;
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
 	}
 
+	public class AdapterHudMap extends FragmentPagerAdapter {
+		static final int NUM_ADAPTER_FRAGMENT_ITEMS = 2;
 
-	private void toggleRcOverride() {
-		if (rcOutput.isRcOverrided()) {
-			disableRCOverride();
-		} else {
-			enableRCOverride();
+		public AdapterHudMap(FragmentManager fm) {
+			super(fm);
+		}
+
+		@Override
+		public int getCount() {
+			return NUM_ADAPTER_FRAGMENT_ITEMS;
+		}
+
+		@Override
+		public Fragment getItem(int position) {
+			switch (position) {
+			case 0:
+				hudFragment = new HudFragment();
+				return hudFragment;
+			case 1:
+				mapFragment = new FlightMapFragment();
+				return mapFragment;
+			default:
+				return null;
+			}
 		}
 	}
 
-	private void enableRCOverride() {
-		rcOutput.enableRcOverride();
-		bTogleRC.setTitle(R.string.disable);
-	}
-
-	private void disableRCOverride() {
-		rcOutput.disableRcOverride();
-		lJoystick.OnMoved(0f, 0f);
-		rJoystick.OnMoved(0f, 0f);
-		if (bTogleRC != null) {
-			bTogleRC.setTitle(R.string.enable);			
+	@Override
+	public void onWaypointsUpdate() {
+		super.onWaypointsUpdate();
+		if (mapFragment != null) {
+			mapFragment.updateFragment();
 		}
 	}
 
-	@SuppressWarnings("unused")
-	private void printInputDevicesToLog() {
-		int[] inputIds = InputDevice.getDeviceIds();
-		Log.d("DEV", "Found " + inputIds.length);
-		for (int i = 0; i < inputIds.length; i++) {
-			InputDevice inputDevice = InputDevice.getDevice(inputIds[i]);
-			Log.d("DEV","name:"+inputDevice.getName()+" Sources:"+inputDevice.getSources());	
+	@Override
+	public void onDroneTypeChanged() {
+		super.onDroneTypeChanged();
+		Log.d("DRONE", "Drone type changed");
+		if (mapFragment != null) {
+			mapFragment.droneMarker.updateDroneMarkers();
 		}
 	}
 
-	JoystickMovedListener lJoystick = new JoystickMovedListener() {
-		@Override
-		public void OnReturnedToCenter() {
-		}
-		@Override
-		public void OnReleased() {
-		}
-		@Override
-		public void OnMoved(double pan, double tilt) {
-			rcOutput.setRcChannel(RcOutput.RUDDER, pan);
-			rcOutput.setRcChannel(RcOutput.TROTTLE, tilt);
-			textViewLPan.setText(String.format("Rudd: %.0f%%", pan *100));
-			textViewLTilt.setText(String.format("Thrt: %.0f%%", tilt *100));
-		}
-	};
-	JoystickMovedListener rJoystick = new JoystickMovedListener() {
-		@Override
-		public void OnReturnedToCenter() {
-		}
-		@Override
-		public void OnReleased() {
-		}
-		@Override
-		public void OnMoved(double pan, double tilt) {
-			rcOutput.setRcChannel(RcOutput.AILERON, pan);
-			rcOutput.setRcChannel(RcOutput.ELEVATOR, tilt);
-			textViewRPan.setText(String.format("Ail: %.0f%%", pan *100));
-			textViewRTilt.setText(String.format("Elev: %.0f%%", tilt *100));
-		}
-	};
 }

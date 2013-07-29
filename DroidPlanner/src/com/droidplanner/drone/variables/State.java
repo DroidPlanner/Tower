@@ -1,6 +1,5 @@
 package com.droidplanner.drone.variables;
 
-import com.MAVLink.waypoint;
 import com.MAVLink.Messages.ApmModes;
 import com.droidplanner.MAVLink.MavLinkModes;
 import com.droidplanner.drone.Drone;
@@ -47,10 +46,8 @@ public class State extends DroneVariable {
 	}
 
 	public void changeFlightMode(ApmModes mode) {
-		MavLinkModes.changeFlightMode(myDrone.MavClient, mode);
-	}
-
-	public void setGuidedMode(waypoint waypoint) {
-		MavLinkModes.setGuidedMode(myDrone.MavClient, waypoint);		
+		if (ApmModes.isValid(mode)) {
+			MavLinkModes.changeFlightMode(myDrone, mode);
+		}
 	}
 }

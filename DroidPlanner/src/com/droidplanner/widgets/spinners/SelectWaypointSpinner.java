@@ -9,26 +9,27 @@ import android.widget.Spinner;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.widgets.spinners.SpinnerSelfSelect.OnSpinnerItemSelectedListener;
 
-public class SelectWaypointSpinner extends SpinnerSelfSelect implements OnSpinnerItemSelectedListener {
+public class SelectWaypointSpinner extends SpinnerSelfSelect implements
+		OnSpinnerItemSelectedListener {
 	public interface OnWaypointSpinnerSelectedListener {
 		void OnWaypointSpinnerSelected(int item);
 	}
 
 	private OnWaypointSpinnerSelectedListener listener;
-	
+
 	private ArrayList<String> wpSpinnerAdapter;
 
 	public SelectWaypointSpinner(Context context) {
 		super(context);
 	}
-	
-	public void buildSpinner(Context context, OnWaypointSpinnerSelectedListener listener ){
+
+	public void buildSpinner(Context context,
+			OnWaypointSpinnerSelectedListener listener) {
 		wpSpinnerAdapter = new ArrayList<String>();
-		
+
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
-				android.R.layout.simple_spinner_dropdown_item,
-				wpSpinnerAdapter);
-		
+				android.R.layout.simple_spinner_dropdown_item, wpSpinnerAdapter);
+
 		updateWpSpinner(null);
 		setAdapter(adapter);
 		setOnSpinnerItemSelectedListener(this);
@@ -59,10 +60,9 @@ public class SelectWaypointSpinner extends SpinnerSelfSelect implements OnSpinne
 
 	@Override
 	public void onSpinnerItemSelected(Spinner spinner, int position, String text) {
-		listener.OnWaypointSpinnerSelected(position+1);
+		listener.OnWaypointSpinnerSelected(position + 1);
 	}
-	
-	
+
 	public void setOnWaypointSpinnerSelectedListener(
 			OnWaypointSpinnerSelectedListener listener) {
 		this.listener = listener;
