@@ -8,7 +8,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -31,9 +30,6 @@ public class JoystickView extends View {
 
 	private JoystickMovedListener moveListener;
 
-
-
-
 	// Last touch point in view coordinates
 	private int pointerId = INVALID_POINTER_ID;
 	private float touchX, touchY;
@@ -53,6 +49,8 @@ public class JoystickView extends View {
 	private float firstTouchY;
 
 	private boolean handleVisible = false;
+	private double releaseX = 0;
+	private double releaseY = 0;
 
 	// =========================================
 	// Constructors
@@ -133,12 +131,6 @@ public class JoystickView extends View {
 		canvas.restore();
 	}
 
-	// Constrain touch within a box
-	private void constrainBox() {
-		touchX = Math.max(Math.min(touchX, movementRadius), -movementRadius);
-		touchY = Math.max(Math.min(touchY, movementRadius), -movementRadius);
-	}
-
 	public void setPointerId(int id) {
 		this.pointerId = id;
 	}
@@ -193,7 +185,9 @@ public class JoystickView extends View {
 		handleVisible = false;
 		invalidate();
 		if (moveListener!=null) {
-			moveListener.OnMoved(0, 0);
+			releaseX = xAxisAutoReturnToCenter?0:userX;
+			releaseY = yAxisAutoReturnToCenter?0:userY;
+			moveListener.OnMoved(releaseX, releaseY);
 		}
 		return true;
 	}
@@ -218,10 +212,7 @@ public class JoystickView extends View {
 			float y = ev.getY(pointerIndex);
 			touchX = x - firstTouchX;
 			touchY = y - firstTouchY;
-			Log.d(TAG, String.format(
-					"ACTION_MOVE: (%03.0f, %03.0f) => (%03.0f, %03.0f)", x, y,
-					touchX, touchY));
-
+			
 			reportOnMoved();
 			return true;
 		}
@@ -229,9 +220,8 @@ public class JoystickView extends View {
 	}
 
 	private void reportOnMoved() {
-		constrainBox();
-
 		calcUserCoordinates();
+		constrainBox();
 
 		if (moveListener != null) {
 			boolean rx = Math.abs(touchX - reportX) >= moveResolution;
@@ -255,42 +245,16 @@ public class JoystickView extends View {
 			cartX *= -1;
 		if (!yAxisInverted)
 			cartY *= -1;
-		userX = cartX;
-		userY = cartY;
+
+		userX = cartX + (xAxisAutoReturnToCenter?0:releaseX);
+		userY = cartY + (yAxisAutoReturnToCenter?0:releaseY);
+		
 	}
-
-	private void returnHandleToCenter() {
-		if (autoReturnToCenter) {
-			final int numberOfFrames = 5;
-			final double intervalsX = (0 - touchX) / numberOfFrames;
-			final double intervalsY = (0 - touchY) / numberOfFrames;
-
-			for (int i = 0; i < numberOfFrames; i++) {
-				final int j = i;
-				postDelayed(new Runnable() {
-					@Override
-					public void run() {
-						if (xAxisAutoReturnToCenter) {
-							touchX += intervalsX;
-						}
-						if (yAxisAutoReturnToCenter) {
-							touchY += intervalsY;
-						}
-
-						reportOnMoved();
-						invalidate();
-
-						if (moveListener != null && j == numberOfFrames - 1) {
-							moveListener.OnReturnedToCenter();
-						}
-					}
-				}, i * 40);
-			}
-
-			if (moveListener != null) {
-				moveListener.OnReleased();
-			}
-		}
+	
+	// Constrain touch within a box
+	private void constrainBox() {
+		userX = Math.max(Math.min(userX, 1), -1);
+		userY = Math.max(Math.min(userY, 1), -1);
 	}
 
 	public void setAxisAutoReturnToCenter(boolean yAxisAutoReturnToCenter,
