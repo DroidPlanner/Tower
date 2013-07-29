@@ -7,20 +7,20 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.support.v4.view.VelocityTrackerCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.VelocityTracker;
 import android.view.View;
 
 public class JoystickView extends View {
 	public static final int INVALID_POINTER_ID = -1;
 	public String TAG = "JoystickView";
-	
+
 	private int handleRadius = 20;
 	private Paint bgHandlePaint;
 	private int movementRadius = handleRadius * 4;
-	// # of pixels movement required between reporting to the listener
-	private float moveResolution = 1;
-	
+
 	private boolean yAxisInverted;
 	private boolean xAxisInverted;
 	private boolean yAxisAutoReturnToCenter = true;
@@ -35,10 +35,6 @@ public class JoystickView extends View {
 	private int pointerId = INVALID_POINTER_ID;
 	private float touchX, touchY;
 
-	// Last reported position in view coordinates (allows different reporting
-	// sensitivities)
-	private float reportX, reportY;
-
 	// Cartesian coordinates of last touch point - joystick center is (0,0)
 	private double cartX, cartY;
 
@@ -52,10 +48,16 @@ public class JoystickView extends View {
 	private boolean handleVisible = false;
 	private double releaseX = 0;
 	private double releaseY = 0;
+	private VelocityTracker mVelocityTracker;
+	private boolean velocityLock = false;
 
 	// =========================================
 	// Constructors
 	// =========================================
+
+	public void setVelocityLock(boolean velocityLock) {
+		this.velocityLock = velocityLock;
+	}
 
 	public JoystickView(Context context) {
 		super(context);
@@ -83,7 +85,7 @@ public class JoystickView extends View {
 		handlePaint.setColor(Color.BLACK);
 		handlePaint.setStrokeWidth(1);
 		handlePaint.setStyle(Paint.Style.FILL_AND_STROKE);
-		
+
 		bgHandlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		bgHandlePaint.setColor(Color.BLUE);
 		bgHandlePaint.setStrokeWidth(1);
@@ -132,8 +134,10 @@ public class JoystickView extends View {
 
 		// Draw the handle
 		if (handleVisible) {
-			canvas.drawCircle(firstTouchX, firstTouchY, movementRadius, bgHandlePaint);		
-			canvas.drawCircle(firstTouchX, firstTouchY, handleRadius, handlePaint);		
+			canvas.drawCircle(firstTouchX, firstTouchY, movementRadius,
+					bgHandlePaint);
+			canvas.drawCircle(firstTouchX, firstTouchY, handleRadius,
+					handlePaint);
 		}
 		canvas.restore();
 	}
@@ -157,6 +161,7 @@ public class JoystickView extends View {
 		case MotionEvent.ACTION_CANCEL:
 		case MotionEvent.ACTION_UP:
 			if (isPointerValid()) {
+				mVelocityTracker.recycle();
 				return processRelease();
 			}
 			break;
@@ -170,6 +175,16 @@ public class JoystickView extends View {
 		case MotionEvent.ACTION_DOWN:
 			if (!isPointerValid()) {
 				setPointerId(ev.getPointerId(0));
+				if (mVelocityTracker == null) {
+					// Retrieve a new VelocityTracker object to watch the
+					// velocity of a motion.
+					mVelocityTracker = VelocityTracker.obtain();
+				} else {
+					// Reset the velocity tracker back to its initial state.
+					mVelocityTracker.clear();
+				}
+				// Add a user's movement to the tracker.
+				mVelocityTracker.addMovement(ev);
 				processFirstTouch(ev);
 				return true;
 			}
@@ -191,9 +206,9 @@ public class JoystickView extends View {
 		setPointerId(INVALID_POINTER_ID);
 		handleVisible = false;
 		invalidate();
-		if (moveListener!=null) {
-			releaseX = xAxisAutoReturnToCenter?0:userX;
-			releaseY = yAxisAutoReturnToCenter?0:userY;
+		if (moveListener != null) {
+			releaseX = xAxisAutoReturnToCenter ? 0 : userX;
+			releaseY = yAxisAutoReturnToCenter ? 0 : userY;
 			moveListener.OnMoved(releaseX, releaseY);
 		}
 		return true;
@@ -202,6 +217,8 @@ public class JoystickView extends View {
 	private void processFirstTouch(MotionEvent ev) {
 		firstTouchX = ev.getX();
 		firstTouchY = ev.getY();
+		touchX = 0;
+		touchY = 0;
 		handleVisible = true;
 		invalidate();
 	}
@@ -214,11 +231,25 @@ public class JoystickView extends View {
 		if (isPointerValid()) {
 			final int pointerIndex = ev.findPointerIndex(pointerId);
 
+            
+			
 			// Translate touch position to center of view
 			float x = ev.getX(pointerIndex);
 			float y = ev.getY(pointerIndex);
-			touchX = x - firstTouchX;
+			
+			if(velocityLock){
+			if(getDirection(ev)){
+				touchX = x - firstTouchX;
+				firstTouchY = y-touchY; 
+			}else{
+				touchY = y - firstTouchY;
+				firstTouchX = x-touchX;
+			}}else{
+				touchX = x - firstTouchX;
 			touchY = y - firstTouchY;
+			}
+			
+			invalidate();
 			
 			reportOnMoved();
 			return true;
@@ -226,19 +257,27 @@ public class JoystickView extends View {
 		return false;
 	}
 
+	private boolean getDirection(MotionEvent ev) {
+		mVelocityTracker.addMovement(ev);
+		// When you want to determine the velocity, call
+		// computeCurrentVelocity(). Then call getXVelocity()
+		// and getYVelocity() to retrieve the velocity for each pointer ID.
+		mVelocityTracker.computeCurrentVelocity(1000);
+		// Log velocity of pixels per second
+		// Best practice to use VelocityTrackerCompat where possible.
+		float yVel = VelocityTrackerCompat.getYVelocity(mVelocityTracker,
+				pointerId);
+		float xVel = VelocityTrackerCompat.getXVelocity(mVelocityTracker,
+				pointerId);
+		return Math.abs(xVel) > Math.abs(yVel);
+	}
+
 	private void reportOnMoved() {
 		calcUserCoordinates();
 		constrainBox();
 
 		if (moveListener != null) {
-			boolean rx = Math.abs(touchX - reportX) >= moveResolution;
-			boolean ry = Math.abs(touchY - reportY) >= moveResolution;
-			if (rx || ry) {
-				this.reportX = touchX;
-				this.reportY = touchY;
-
-				moveListener.OnMoved(userX, userY);
-			}
+			moveListener.OnMoved(userX, userY);
 		}
 	}
 
@@ -253,11 +292,11 @@ public class JoystickView extends View {
 		if (!yAxisInverted)
 			cartY *= -1;
 
-		userX = cartX + (xAxisAutoReturnToCenter?0:releaseX);
-		userY = cartY + (yAxisAutoReturnToCenter?0:releaseY);
-		
+		userX = cartX + (xAxisAutoReturnToCenter ? 0 : releaseX);
+		userY = cartY + (yAxisAutoReturnToCenter ? 0 : releaseY);
+
 	}
-	
+
 	// Constrain touch within a box
 	private void constrainBox() {
 		userX = Math.max(Math.min(userX, 1), -1);
