@@ -18,15 +18,15 @@ public class JoystickView extends View {
 	public String TAG = "JoystickView";
 
 	private int handleRadius = 20;
-	private Paint bgHandlePaint;
 	private int movementRadius = handleRadius * 4;
 
-	private boolean yAxisInverted;
-	private boolean xAxisInverted;
+	private boolean yAxisInverted = false;
+	private boolean xAxisInverted = false;
 	private boolean yAxisAutoReturnToCenter = true;
 	private boolean xAxisAutoReturnToCenter = true;
-	private boolean autoReturnToCenter;
+	private boolean autoReturnToCenter = true;
 
+	private Paint bgHandlePaint;
 	private Paint handlePaint;
 
 	private JoystickMovedListener moveListener;
@@ -41,23 +41,13 @@ public class JoystickView extends View {
 	// User coordinates of last touch point
 	private double userX, userY;
 
-	private float firstTouchX;
-
-	private float firstTouchY;
-
-	private boolean handleVisible = false;
+	private float firstTouchX,firstTouchY;
 	private double releaseX = 0;
 	private double releaseY = 0;
+	
+	private boolean handleVisible = false;
 	private VelocityTracker mVelocityTracker;
 	private boolean velocityLock = false;
-
-	// =========================================
-	// Constructors
-	// =========================================
-
-	public void setVelocityLock(boolean velocityLock) {
-		this.velocityLock = velocityLock;
-	}
 
 	public JoystickView(Context context) {
 		super(context);
@@ -74,10 +64,6 @@ public class JoystickView extends View {
 		initJoystickView();
 	}
 
-	// =========================================
-	// Initialization
-	// =========================================
-
 	private void initJoystickView() {
 		setFocusable(true);
 
@@ -90,10 +76,6 @@ public class JoystickView extends View {
 		bgHandlePaint.setColor(Color.BLUE);
 		bgHandlePaint.setStrokeWidth(1);
 		bgHandlePaint.setStyle(Paint.Style.FILL_AND_STROKE);
-
-		setXAxisInverted(false);
-		setYAxisInverted(false);
-		setAutoReturnToCenter(true);
 	}
 
 	public void setAutoReturnToCenter(boolean autoReturnToCenter) {
@@ -112,6 +94,10 @@ public class JoystickView extends View {
 		return yAxisInverted;
 	}
 
+	public void setVelocityLock(boolean velocityLock) {
+		this.velocityLock = velocityLock;
+	}
+
 	public void setXAxisInverted(boolean xAxisInverted) {
 		this.xAxisInverted = xAxisInverted;
 	}
@@ -119,10 +105,6 @@ public class JoystickView extends View {
 	public void setYAxisInverted(boolean yAxisInverted) {
 		this.yAxisInverted = yAxisInverted;
 	}
-
-	// =========================================
-	// Public Methods
-	// =========================================
 
 	public void setOnJostickMovedListener(JoystickMovedListener listener) {
 		this.moveListener = listener;
@@ -142,13 +124,6 @@ public class JoystickView extends View {
 		canvas.restore();
 	}
 
-	public void setPointerId(int id) {
-		this.pointerId = id;
-	}
-
-	public int getPointerId() {
-		return pointerId;
-	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent ev) {
@@ -174,7 +149,7 @@ public class JoystickView extends View {
 			break;
 		case MotionEvent.ACTION_DOWN:
 			if (!isPointerValid()) {
-				setPointerId(ev.getPointerId(0));
+				this.pointerId = ev.getPointerId(0);
 				if (mVelocityTracker == null) {
 					// Retrieve a new VelocityTracker object to watch the
 					// velocity of a motion.
@@ -193,7 +168,7 @@ public class JoystickView extends View {
 			pointerIndex = (action & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
 			pointerId = ev.getPointerId(pointerIndex);
 			if (pointerId == INVALID_POINTER_ID) {
-				setPointerId(pointerId);
+				this.pointerId = pointerId;
 				processFirstTouch(ev);
 				return true;
 			}
@@ -203,7 +178,7 @@ public class JoystickView extends View {
 	}
 
 	private boolean processRelease() {
-		setPointerId(INVALID_POINTER_ID);
+		this.pointerId = INVALID_POINTER_ID;
 		handleVisible = false;
 		invalidate();
 		if (moveListener != null) {

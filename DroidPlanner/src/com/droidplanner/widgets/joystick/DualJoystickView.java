@@ -68,8 +68,6 @@ public class DualJoystickView extends LinearLayout {
 
 		stickL.TAG = "L";
 		stickR.TAG = "R";
-		stickL.setPointerId(JoystickView.INVALID_POINTER_ID);
-		stickR.setPointerId(JoystickView.INVALID_POINTER_ID);
 
 		addView(stickL);
 
