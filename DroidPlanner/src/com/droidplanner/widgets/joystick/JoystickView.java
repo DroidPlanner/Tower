@@ -9,6 +9,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.v4.view.VelocityTrackerCompat;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -40,6 +42,7 @@ public class JoystickView extends View {
 
 	// User coordinates of last touch point
 	private double userX, userY;
+	private double userXold, userYold;
 
 	private float firstTouchX,firstTouchY;
 	private double releaseX = 0;
@@ -48,6 +51,7 @@ public class JoystickView extends View {
 	private boolean handleVisible = false;
 	private VelocityTracker mVelocityTracker;
 	private boolean velocityLock = false;
+	private boolean wasCentered = false;
 
 	public JoystickView(Context context) {
 		super(context);
@@ -66,6 +70,7 @@ public class JoystickView extends View {
 
 	private void initJoystickView() {
 		setFocusable(true);
+		setHapticFeedbackEnabled(true);
 
 		handlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		handlePaint.setColor(Color.BLACK);
@@ -223,7 +228,7 @@ public class JoystickView extends View {
 				touchX = x - firstTouchX;
 			touchY = y - firstTouchY;
 			}
-			
+						
 			invalidate();
 			
 			reportOnMoved();
@@ -250,10 +255,26 @@ public class JoystickView extends View {
 	private void reportOnMoved() {
 		calcUserCoordinates();
 		constrainBox();
+		
+		hapticFeedback();
 
 		if (moveListener != null) {
 			moveListener.OnMoved(userX, userY);
 		}
+	}
+
+	private void hapticFeedback() {
+		if (Math.signum(userX)!=Math.signum(userXold)) {
+			performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+			Log.d(TAG, "XonCenter");	
+		}
+		if (Math.signum(userY)!=Math.signum(userYold)) {
+			performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+			Log.d(TAG, "YonCenter");
+		}
+		
+		userXold = userX;
+		userYold = userY;
 	}
 
 	private void calcUserCoordinates() {
