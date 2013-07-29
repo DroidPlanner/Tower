@@ -85,7 +85,6 @@ public class DualJoystickView extends LinearLayout {
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
 		super.onLayout(changed, l, t, r, b);
-		stickR.setTouchOffset(stickR.getLeft(), stickR.getTop());
 	}
 
 	public void setAutoReturnToCenter(boolean left, boolean right) {
@@ -101,8 +100,6 @@ public class DualJoystickView extends LinearLayout {
 
 	public void setOnJostickClickedListener(JoystickClickedListener left,
 			JoystickClickedListener right) {
-		stickL.setOnJostickClickedListener(left);
-		stickR.setOnJostickClickedListener(right);
 	}
 
 	public void setYAxisInverted(boolean leftYAxisInverted,
@@ -111,21 +108,8 @@ public class DualJoystickView extends LinearLayout {
 		stickL.setYAxisInverted(rightYAxisInverted);
 	}
 
-	public void setMovementConstraint(int movementConstraint) {
-		stickL.setMovementConstraint(movementConstraint);
-		stickR.setMovementConstraint(movementConstraint);
-	}
-
-	public void setMoveResolution(float leftMoveResolution,
-			float rightMoveResolution) {
-		stickL.setMoveResolution(leftMoveResolution);
-		stickR.setMoveResolution(rightMoveResolution);
-	}
-
 	public void setUserCoordinateSystem(int leftCoordinateSystem,
 			int rightCoordinateSystem) {
-		stickL.setUserCoordinateSystem(leftCoordinateSystem);
-		stickR.setUserCoordinateSystem(rightCoordinateSystem);
 	}
 
 	public void setLeftAutoReturnToCenter(boolean yAxisAutoReturnToCenter,

@@ -80,6 +80,8 @@ public class RCFragment extends Fragment {
 		joystickR = (JoystickView) view.findViewById(R.id.joystickViewR);
 		joystickL.setOnJostickMovedListener(lJoystick);
 		joystickR.setOnJostickMovedListener(rJoystick);
+		joystickL.TAG = "joyL";
+		joystickR.TAG = "joyR";
 
 		activeButton = (ToggleButton) view
 				.findViewById(R.id.toggleButtonRCActivate);
