@@ -16,7 +16,8 @@ public class JoystickView extends View {
 	public String TAG = "JoystickView";
 	
 	private int handleRadius = 20;
-	private int movementRadius = handleRadius * 3;
+	private Paint bgHandlePaint;
+	private int movementRadius = handleRadius * 4;
 	// # of pixels movement required between reporting to the listener
 	private float moveResolution = 1;
 	
@@ -79,9 +80,14 @@ public class JoystickView extends View {
 		setFocusable(true);
 
 		handlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		handlePaint.setColor(Color.DKGRAY);
+		handlePaint.setColor(Color.BLACK);
 		handlePaint.setStrokeWidth(1);
 		handlePaint.setStyle(Paint.Style.FILL_AND_STROKE);
+		
+		bgHandlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		bgHandlePaint.setColor(Color.BLUE);
+		bgHandlePaint.setStrokeWidth(1);
+		bgHandlePaint.setStyle(Paint.Style.FILL_AND_STROKE);
 
 		setXAxisInverted(false);
 		setYAxisInverted(false);
@@ -126,7 +132,8 @@ public class JoystickView extends View {
 
 		// Draw the handle
 		if (handleVisible) {
-			canvas.drawCircle(firstTouchX, firstTouchY, handleRadius, handlePaint);			
+			canvas.drawCircle(firstTouchX, firstTouchY, movementRadius, bgHandlePaint);		
+			canvas.drawCircle(firstTouchX, firstTouchY, handleRadius, handlePaint);		
 		}
 		canvas.restore();
 	}
