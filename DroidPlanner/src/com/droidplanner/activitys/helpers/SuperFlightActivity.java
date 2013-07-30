@@ -1,6 +1,7 @@
 package com.droidplanner.activitys.helpers;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -81,11 +82,18 @@ public abstract class SuperFlightActivity extends SuperActivity implements
 
 	@Override
 	public void onDroneTypeChanged() {
+		Log.d("DRONE", "Drone type changed");
 		fligthModeSpinner.updateModeSpinner(drone);
+		if (mapFragment != null) {
+			mapFragment.droneMarker.updateDroneMarkers();
+		}
 	}
 
 	@Override
 	public void onWaypointsUpdate() {
 		wpSpinner.updateWpSpinner(drone);
+		if (mapFragment != null) {
+			mapFragment.updateFragment();
+		}
 	}
 }

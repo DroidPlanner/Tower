@@ -1,18 +1,16 @@
 package com.droidplanner.activitys;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperFlightActivity;
-import com.droidplanner.drone.DroneInterfaces.DroneTypeListner;
 import com.droidplanner.fragments.FlightMapFragment;
 
 public class FlightDataActivity extends SuperFlightActivity implements
-		OnWaypointUpdateListner, DroneTypeListner {
+		OnWaypointUpdateListner {
 
 	@Override
 	public int getNavigationItem() {
@@ -51,19 +49,6 @@ public class FlightDataActivity extends SuperFlightActivity implements
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
-	}
-
-	@Override
-	public void onWaypointsUpdate() {
-		super.onWaypointsUpdate();
-		mapFragment.updateFragment();
-	}
-
-	@Override
-	public void onDroneTypeChanged() {
-		super.onDroneTypeChanged();
-		Log.d("DRONE", "Drone type changed");
-		mapFragment.droneMarker.updateDroneMarkers();
 	}
 
 }
