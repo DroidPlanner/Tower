@@ -4,11 +4,9 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperFlightActivity;
 import com.droidplanner.drone.DroneInterfaces.DroneTypeListner;
@@ -17,7 +15,7 @@ import com.droidplanner.fragments.HudFragment;
 import com.droidplanner.widgets.viewPager.MapViewPager;
 
 public class RCActivity extends SuperFlightActivity implements
-		OnWaypointUpdateListner, DroneTypeListner {
+		DroneTypeListner {
 
 	AdapterHudMap mAdapter;
 	MapViewPager mPager;
@@ -89,23 +87,6 @@ public class RCActivity extends SuperFlightActivity implements
 			default:
 				return null;
 			}
-		}
-	}
-
-	@Override
-	public void onWaypointsUpdate() {
-		super.onWaypointsUpdate();
-		if (mapFragment != null) {
-			mapFragment.updateFragment();
-		}
-	}
-
-	@Override
-	public void onDroneTypeChanged() {
-		super.onDroneTypeChanged();
-		Log.d("DRONE", "Drone type changed");
-		if (mapFragment != null) {
-			mapFragment.droneMarker.updateDroneMarkers();
 		}
 	}
 
