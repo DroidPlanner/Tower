@@ -19,6 +19,7 @@ public class JoystickView extends View {
 	public static final int INVALID_POINTER_ID = -1;
 	public String TAG = "JoystickView";
 
+	private static final double HAPTIC_FEEDBACK_ZONE = 0.05;
 	private int handleRadius = 20;
 	private int movementRadius = handleRadius * 4;
 
@@ -51,7 +52,6 @@ public class JoystickView extends View {
 	private boolean handleVisible = false;
 	private VelocityTracker mVelocityTracker;
 	private boolean velocityLock = false;
-	private boolean wasCentered = false;
 
 	public JoystickView(Context context) {
 		super(context);
@@ -141,7 +141,6 @@ public class JoystickView extends View {
 		case MotionEvent.ACTION_CANCEL:
 		case MotionEvent.ACTION_UP:
 			if (isPointerValid()) {
-				mVelocityTracker.recycle();
 				return processRelease();
 			}
 			break;
@@ -184,6 +183,7 @@ public class JoystickView extends View {
 
 	private boolean processRelease() {
 		this.pointerId = INVALID_POINTER_ID;
+		mVelocityTracker.recycle();
 		handleVisible = false;
 		invalidate();
 		if (moveListener != null) {
@@ -264,17 +264,25 @@ public class JoystickView extends View {
 	}
 
 	private void hapticFeedback() {
-		if (Math.signum(userX)!=Math.signum(userXold)) {
+		if (hasEnteredHapticFeedbackZone(userX, userXold)) {
 			performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 			Log.d(TAG, "XonCenter");	
 		}
-		if (Math.signum(userY)!=Math.signum(userYold)) {
+		if (hasEnteredHapticFeedbackZone(userY, userYold)) {
 			performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 			Log.d(TAG, "YonCenter");
 		}
 		
 		userXold = userX;
 		userYold = userY;
+	}
+
+	private boolean hasEnteredHapticFeedbackZone(double value, double oldValue) {
+		return isInHapticFeedbackZone(value)&(!isInHapticFeedbackZone(oldValue));
+	}
+
+	private boolean isInHapticFeedbackZone(double value) {
+		return Math.abs(value) < HAPTIC_FEEDBACK_ZONE;
 	}
 
 	private void calcUserCoordinates() {
