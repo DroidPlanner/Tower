@@ -1,3 +1,7 @@
+## Droidplanner v0.11.4
+* Compatible with ArduRover
+* Dynamicaly allocated on-screen joysticks
+
 ## Droidplanner v0.11.3
 * Preferences for the RC screen (Mode1/Mode2, Inverted Channel, QuickButtons)
 
