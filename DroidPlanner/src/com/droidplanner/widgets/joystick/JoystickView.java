@@ -141,7 +141,6 @@ public class JoystickView extends View {
 		case MotionEvent.ACTION_CANCEL:
 		case MotionEvent.ACTION_UP:
 			if (isPointerValid()) {
-				mVelocityTracker.recycle();
 				return processRelease();
 			}
 			break;
@@ -184,6 +183,7 @@ public class JoystickView extends View {
 
 	private boolean processRelease() {
 		this.pointerId = INVALID_POINTER_ID;
+		mVelocityTracker.recycle();
 		handleVisible = false;
 		invalidate();
 		if (moveListener != null) {
