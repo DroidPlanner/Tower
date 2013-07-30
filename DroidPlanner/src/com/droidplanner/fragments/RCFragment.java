@@ -117,12 +117,14 @@ public class RCFragment extends Fragment {
 		if (rcIsMode1) {
 			joystickL.setAxisAutoReturnToCenter(true, true);
 			joystickR.setAxisAutoReturnToCenter(prefs.getBoolean("pref_rc_throttle_returntocenter", false), true);
+			joystickL.setVelocityLock(true);
 			joystickL.setYAxisInverted(prefs.getBoolean("pref_rc_elevator_reverse", false));
 			joystickL.setXAxisInverted(prefs.getBoolean("pref_rc_rudder_reverse", false));
 			joystickR.setYAxisInverted(prefs.getBoolean("pref_rc_throttle_reverse", false));
 			joystickR.setXAxisInverted(prefs.getBoolean("pref_rc_aileron_reverse", false));
 		} else { //else Mode2
 			joystickL.setAxisAutoReturnToCenter(prefs.getBoolean("pref_rc_throttle_returntocenter", false), true);
+			joystickL.setVelocityLock(true);
 			joystickR.setAxisAutoReturnToCenter(true, true);
 			joystickL.setYAxisInverted(prefs.getBoolean("pref_rc_throttle_reverse", false));
 			joystickL.setXAxisInverted(prefs.getBoolean("pref_rc_rudder_reverse", false));
