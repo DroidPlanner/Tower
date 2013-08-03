@@ -31,7 +31,7 @@
     <string name="menu_generate">Générer</string>
     <string name="menu_exit">Sortie</string>
     <string name="menu_clearFlightPath">Effacer le chemin</string>
-    <string name="exiting_polygon_mode">Mode polygone inactif</string>
+    <string name="entering_mission_mode">Mode polygone inactif</string>
     <string name="entering_polygon_mode">Mode polygone actif</string>
     <string name="dialog_polygon_hatch_angle">Angle de la grille :</string>
     <string name="dialog_polygon_distance_between_lines">Distance entre les lignes :</string>

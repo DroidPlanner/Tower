@@ -31,7 +31,7 @@
     <string name="menu_generate">Δημιουργια πολύγωνου</string>
     <string name="menu_exit">Τέλος πολύγωνου</string>
     <string name="menu_clearFlightPath">Διαγραφή σχεδίου πτήσης</string>
-    <string name="exiting_polygon_mode">Έξοδος απο κατάσταση πολύγωνου</string>
+    <string name="entering_mission_mode">Έξοδος απο κατάσταση πολύγωνου</string>
     <string name="entering_polygon_mode">Έναρξη κατάστασης πολύγωνου</string>
     <string name="dialog_polygon_hatch_angle">Γωνία εισόδου:</string>
     <string name="dialog_polygon_distance_between_lines">Απόσταση μεταξύ γραμμών:</string>

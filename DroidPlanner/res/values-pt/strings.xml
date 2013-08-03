@@ -31,7 +31,7 @@
     <string name="menu_generate">Gerar WPs</string>
     <string name="menu_exit">Sair</string>
     <string name="menu_clearFlightPath">Limpar Trilhas</string>
-    <string name="exiting_polygon_mode">Sair Modo Poligono</string>
+    <string name="entering_mission_mode">Sair Modo Poligono</string>
     <string name="entering_polygon_mode">Entrar Modo Poligono</string>
     <string name="dialog_polygon_hatch_angle">Ângulo do Grid:</string>
     <string name="dialog_polygon_distance_between_lines">Distancia entre Linhas:</string>

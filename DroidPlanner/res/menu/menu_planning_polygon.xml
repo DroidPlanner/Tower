@@ -18,7 +18,7 @@
         android:showAsAction="ifRoom"
         android:title="@string/menu_zoom"/>
     <item
-        android:id="@+id/menu_finish_polygon"
+        android:id="@+id/menu_exit"
         android:showAsAction="ifRoom"
         android:title="@string/menu_exit"/>
 

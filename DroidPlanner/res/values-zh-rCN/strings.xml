@@ -32,7 +32,7 @@
     <string name="menu_generate">生成巡航计划</string>
     <string name="menu_exit">退出巡航计划</string>
     <string name="menu_clearFlightPath">清除飞行轨迹</string>
-    <string name="exiting_polygon_mode">退出巡航计划</string>
+    <string name="entering_mission_mode">退出巡航计划</string>
     <string name="entering_polygon_mode">编辑巡航计划</string>
     <string name="dialog_polygon_hatch_angle">巡航角度</string>
     <string name="dialog_polygon_distance_between_lines">巡航间距:</string>

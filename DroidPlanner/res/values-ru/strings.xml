@@ -90,7 +90,7 @@
 <!--Original value: Clear Track-->
 <string name="menu_clearFlightPath">Очистить путь</string>
 <!--Original value: Exiting Polygon Mode-->
-<string name="exiting_polygon_mode">Выход из режима редактирования полигонов</string>
+<string name="entering_mission_mode">Выход из режима редактирования полигонов</string>
 <!--Original value: Entering Polygon Mode-->
 <string name="entering_polygon_mode">Вход в режим редактирования полигонов</string>
 <!--Original value: Hatch angle:-->
