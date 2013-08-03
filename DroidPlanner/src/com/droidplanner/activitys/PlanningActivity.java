@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperActivity;
+import com.droidplanner.circle.Circle;
 import com.droidplanner.circle.CirclePoint;
 import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
 import com.droidplanner.dialogs.OpenFileDialog;
@@ -21,11 +22,9 @@ import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.file.IO.MissionReader;
 import com.droidplanner.file.IO.MissionWriter;
 import com.droidplanner.fragments.MissionFragment;
-import com.droidplanner.fragments.OfflineMapFragment;
 import com.droidplanner.fragments.PlanningMapFragment;
 import com.droidplanner.fragments.PlanningMapFragment.OnMapInteractionListener;
 import com.droidplanner.fragments.PlanningMapFragment.modes;
-import com.droidplanner.polygon.GeoTools;
 import com.droidplanner.polygon.Polygon;
 import com.droidplanner.polygon.PolygonPoint;
 import com.google.android.gms.maps.model.LatLng;
@@ -34,11 +33,11 @@ public class PlanningActivity extends SuperActivity implements
 		OnMapInteractionListener, OnWaypointUpdateListner,
 		OnAltitudeChangedListner {
 
-	public Polygon polygon;
-	private PlanningMapFragment planningMapFragment;
+	PlanningMapFragment planningMapFragment;
 	private MissionFragment missionFragment;
 
-	public CirclePoint circleCenter;
+	public Polygon polygon = new Polygon();;
+	public Circle circle = new Circle();
 
 	@Override
 	public int getNavigationItem() {
@@ -55,8 +54,6 @@ public class PlanningActivity extends SuperActivity implements
 				.findFragmentById(R.id.planningMapFragment));
 		missionFragment = (MissionFragment) getFragmentManager()
 				.findFragmentById(R.id.missionFragment);
-
-		polygon = new Polygon();
 
 		missionFragment.setMission(drone.mission);
 
@@ -150,18 +147,11 @@ public class PlanningActivity extends SuperActivity implements
 			update();
 			return true;
 		case R.id.menu_generate_circle:
-			generateCircle(10);
+			circle.generateCircle(drone.mission, 10);
 			update();
 			return true;
 		default:
 			return super.onMenuItemSelected(featureId, item);
-		}
-	}
-
-	private void generateCircle(int numberOfWaypoints) {
-		for (int i = 0; i < numberOfWaypoints; i++) {
-			double heading = (360.0*i)/numberOfWaypoints;
-			drone.mission.addWaypoint(GeoTools.newpos(circleCenter.coord, heading, 100.0));			
 		}
 	}
 
@@ -229,12 +219,7 @@ public class PlanningActivity extends SuperActivity implements
 			polygon.addWaypoint(point);
 			break;
 		case CIRCLE:
-			if (circleCenter == null) {
-				circleCenter = new CirclePoint(point);
-			}else{
-				circleCenter.coord = point;
-			}
-			planningMapFragment.updateCircle(circleCenter);
+			circle.moveCircle(planningMapFragment, point);
 			return;
 		}
 		update();
@@ -272,8 +257,7 @@ public class PlanningActivity extends SuperActivity implements
 
 	@Override
 	public void onMoveCirclePoint(CirclePoint point, LatLng newCoord) {
-		point.coord = newCoord;
-		planningMapFragment.updateCircle(point);
+		circle.moveCircle(planningMapFragment, newCoord);
 	}
 
 }
