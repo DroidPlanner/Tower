@@ -28,8 +28,8 @@
     <string name="menu_add_polygon">Pievienot poligonu</string>
     <string name="menu_polygon">Poligons</string>
     <string name="menu_clear_polygon">Izdzēst poligonu</string>
-    <string name="menu_generate_polygon">Ģenerēt</string>
-    <string name="menu_finish_polygon">Izeja</string>
+    <string name="menu_generate">Ģenerēt</string>
+    <string name="menu_exit">Izeja</string>
     <string name="menu_clearFlightPath">Izdzēst lidošanas ceļu</string>
     <string name="exiting_polygon_mode">Izeju no Poligona režīma</string>
     <string name="entering_polygon_mode">Ieeju poligona režīmā</string>

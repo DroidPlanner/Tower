@@ -16,6 +16,7 @@
     <string name="menu_follow_me">Follow</string>
     <string name="menu_record_me">Record</string>
     <string name="menu_clear">Clear WPs</string>
+    <string name="menu_clear_circle">Clear Circle</string>    
     <string name="menu_zoom">Zoom</string>
     <string name="file_saved">File Saved</string>
     <string name="no_waypoint_files">No Waypoint Files</string>
@@ -29,8 +30,8 @@
     <string name="menu_add_polygon">Add Polygon</string>
     <string name="menu_polygon">Polygon</string>
     <string name="menu_clear_polygon">Clear Poly</string>
-    <string name="menu_generate_polygon">Generate</string>
-    <string name="menu_finish_polygon">Exit</string>
+    <string name="menu_generate">Generate</string>
+    <string name="menu_exit">Exit</string>
     <string name="menu_clearFlightPath">Clear Track</string>
     <string name="exiting_polygon_mode">Exiting Polygon Mode</string>
     <string name="entering_polygon_mode">Entering Polygon Mode</string>

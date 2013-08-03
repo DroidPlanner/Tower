@@ -28,8 +28,8 @@
     <string name="menu_add_polygon">Desenhar Polig.</string>
     <string name="menu_polygon">Poligono</string>
     <string name="menu_clear_polygon">Limpar Polig.</string>
-    <string name="menu_generate_polygon">Gerar WPs</string>
-    <string name="menu_finish_polygon">Sair</string>
+    <string name="menu_generate">Gerar WPs</string>
+    <string name="menu_exit">Sair</string>
     <string name="menu_clearFlightPath">Limpar Trilhas</string>
     <string name="exiting_polygon_mode">Sair Modo Poligono</string>
     <string name="entering_polygon_mode">Entrar Modo Poligono</string>
