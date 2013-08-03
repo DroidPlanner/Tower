@@ -21,9 +21,11 @@ import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.file.IO.MissionReader;
 import com.droidplanner.file.IO.MissionWriter;
 import com.droidplanner.fragments.MissionFragment;
+import com.droidplanner.fragments.OfflineMapFragment;
 import com.droidplanner.fragments.PlanningMapFragment;
 import com.droidplanner.fragments.PlanningMapFragment.OnMapInteractionListener;
 import com.droidplanner.fragments.PlanningMapFragment.modes;
+import com.droidplanner.polygon.GeoTools;
 import com.droidplanner.polygon.Polygon;
 import com.droidplanner.polygon.PolygonPoint;
 import com.google.android.gms.maps.model.LatLng;
@@ -148,9 +150,18 @@ public class PlanningActivity extends SuperActivity implements
 			update();
 			return true;
 		case R.id.menu_generate_circle:
+			generateCircle(10);
+			update();
 			return true;
 		default:
 			return super.onMenuItemSelected(featureId, item);
+		}
+	}
+
+	private void generateCircle(int numberOfWaypoints) {
+		for (int i = 0; i < numberOfWaypoints; i++) {
+			double heading = (360.0*i)/numberOfWaypoints;
+			drone.mission.addWaypoint(GeoTools.newpos(circleCenter.coord, heading, 100.0));			
 		}
 	}
 

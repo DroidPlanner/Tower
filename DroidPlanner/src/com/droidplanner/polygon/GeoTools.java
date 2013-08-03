@@ -96,7 +96,7 @@ public class GeoTools {
 	 *            distance to be added
 	 * @return New point with the added distance
 	 */
-	static LatLng newpos(LatLng origin, double bearing, double distance) {
+	public static LatLng newpos(LatLng origin, double bearing, double distance) {
 		double radius_of_earth = 6378100.0;// # in meters
 
 		double lat = origin.latitude;
