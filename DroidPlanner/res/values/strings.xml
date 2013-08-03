@@ -16,7 +16,6 @@
     <string name="menu_follow_me">Follow</string>
     <string name="menu_record_me">Record</string>
     <string name="menu_clear">Clear WPs</string>
-    <string name="menu_clear_circle">Clear Circle</string>    
     <string name="menu_zoom">Zoom</string>
     <string name="file_saved">File Saved</string>
     <string name="no_waypoint_files">No Waypoint Files</string>

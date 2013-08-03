@@ -37,7 +37,6 @@ public class PlanningActivity extends SuperActivity implements
 	private MissionFragment missionFragment;
 
 	public CirclePoint circleCenter;
-	public CirclePoint circleEnd;
 
 	@Override
 	public int getNavigationItem() {
@@ -148,10 +147,8 @@ public class PlanningActivity extends SuperActivity implements
 			setMode(modes.MISSION);
 			update();
 			return true;
-		case R.id.menu_clear_circle:
-			return true;// TODO implement method
 		case R.id.menu_generate_circle:
-			return true;// TODO implement method
+			return true;
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
@@ -223,11 +220,10 @@ public class PlanningActivity extends SuperActivity implements
 		case CIRCLE:
 			if (circleCenter == null) {
 				circleCenter = new CirclePoint(point);
-				planningMapFragment.updateCircle(circleCenter, circleEnd);
-			} else if (circleEnd == null) {
-				circleEnd = new CirclePoint(point);
-				planningMapFragment.updateCircle(circleCenter, circleEnd);
+			}else{
+				circleCenter.coord = point;
 			}
+			planningMapFragment.updateCircle(circleCenter);
 			return;
 		}
 		update();
@@ -265,7 +261,8 @@ public class PlanningActivity extends SuperActivity implements
 
 	@Override
 	public void onMoveCirclePoint(CirclePoint point, LatLng newCoord) {
-
+		point.coord = newCoord;
+		planningMapFragment.updateCircle(point);
 	}
 
 }

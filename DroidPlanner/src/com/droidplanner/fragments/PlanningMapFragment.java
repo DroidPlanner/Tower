@@ -99,19 +99,17 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 
 	}
 
-	public void updateCircle(CirclePoint circleCenter, CirclePoint circleEnd) {
+	public void updateCircle(CirclePoint circleCenter) {
 		markers.updateMarker(circleCenter, true);
-		markers.updateMarker(circleEnd, true);
-		if (circleCenter != null & circleEnd != null) {
-			if (circle!=null) {
+		if (circleCenter != null) {
+			if (circle != null) {
 				circle.remove();
 			}
 			CircleOptions circleOptions = new CircleOptions()
-			.center(circleCenter.coord)
-			.radius(100).visible(true); // In meters
+					.center(circleCenter.coord).strokeWidth(3).radius(100)
+					.visible(true); // In meters
 			circle = mMap.addCircle(circleOptions);
 		}
-
 	}
 
 	private void clearPolylines() {
@@ -219,6 +217,9 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		case CIRCLE:
 			Toast.makeText(getActivity(), string.entering_polygon_mode,
 					Toast.LENGTH_SHORT).show();
+			if (circle!=null) {
+				circle.remove();				
+			}
 			break;
 		}
 	}
