@@ -138,7 +138,7 @@ public class PlanningActivity extends SuperActivity implements
 			polygon.clearPolygon();
 			update();
 			return true;
-		case R.id.menu_finish_polygon:
+		case R.id.menu_exit:
 			setMode(modes.MISSION);
 			update();
 			return true;

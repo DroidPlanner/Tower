@@ -78,7 +78,7 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 	}
 
 	public void update(Drone drone, Polygon polygon) {
-		markers.clear();
+		markers.cleanup();
 
 		markers.updateMarker(drone.mission.getHome(), true);
 		markers.updateMarkers(drone.mission.getWaypoints(), true);
@@ -179,7 +179,7 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		switch (mode) {
 		default:
 		case MISSION:
-			Toast.makeText(getActivity(), string.exiting_polygon_mode,
+			Toast.makeText(getActivity(), string.entering_mission_mode,
 					Toast.LENGTH_SHORT).show();
 			break;
 		case POLYGON:
