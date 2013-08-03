@@ -21,17 +21,15 @@ public abstract class GridDialog implements DialogInterface.OnClickListener {
 	private Polygon polygon;
 
 	private LatLng originPoint;
-	private double height;
 
 	private SeekBarWithText distanceView;
-
 	private SeekBarWithText angleView;
+	private SeekBarWithText altitudeView;
 
 	public void generatePolygon(double defaultHatchAngle,
 			double defaultHatchDistance, Polygon polygon, LatLng originPoint,
-			double height, Context context) {
+			double altitude, Context context) {
 		this.polygon = polygon;
-		this.height = height;
 		this.originPoint = originPoint;
 
 		if (!polygon.isValid()) {
@@ -43,6 +41,7 @@ public abstract class GridDialog implements DialogInterface.OnClickListener {
 		AlertDialog dialog = buildDialog(context);
 		distanceView.setValue(defaultHatchDistance);
 		angleView.setValue(defaultHatchAngle);
+		altitudeView.setValue(altitude);
 		dialog.show();
 	}
 
@@ -62,9 +61,15 @@ public abstract class GridDialog implements DialogInterface.OnClickListener {
 		distanceView.setMinMaxInc(5, 500, 5);
 		distanceView.setTitle("Distance between lines:");
 		distanceView.setUnit("m");
+		
+		altitudeView = new SeekBarWithText(context);
+		altitudeView.setMinMaxInc(5, 1000, 5);
+		altitudeView.setTitle("Flight Altitude:");
+		altitudeView.setUnit("m");
 
 		layout.addView(angleView);
 		layout.addView(distanceView);
+		layout.addView(altitudeView);
 		builder.setView(layout);
 
 		builder.setNegativeButton("Cancel", this).setPositiveButton("Ok", this);
@@ -76,7 +81,7 @@ public abstract class GridDialog implements DialogInterface.OnClickListener {
 	public void onClick(DialogInterface arg0, int which) {
 		if (which == Dialog.BUTTON_POSITIVE) {
 			GridBuilder grid = new GridBuilder(polygon, angleView.getValue(),
-					distanceView.getValue(), originPoint, height);
+					distanceView.getValue(), originPoint, altitudeView.getValue());
 
 			onPolygonGenerated(grid.hatchfill());
 		}
