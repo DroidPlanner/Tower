@@ -135,6 +135,9 @@ public class PlanningActivity extends SuperActivity implements
 		case R.id.menu_polygon:
 			setMode(modes.POLYGON);
 			return true;
+		case R.id.menu_circle:
+			setMode(modes.CIRCLE);
+			return true;
 		case R.id.menu_generate_polygon:
 			openPolygonGenerateDialog();
 			return true;
