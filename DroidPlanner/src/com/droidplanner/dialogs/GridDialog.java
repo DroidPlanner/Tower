@@ -15,7 +15,7 @@ import com.droidplanner.polygon.Polygon;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.google.android.gms.maps.model.LatLng;
 
-public abstract class PolygonDialog implements DialogInterface.OnClickListener {
+public abstract class GridDialog implements DialogInterface.OnClickListener {
 	public abstract void onPolygonGenerated(List<waypoint> list);
 
 	private Polygon polygon;

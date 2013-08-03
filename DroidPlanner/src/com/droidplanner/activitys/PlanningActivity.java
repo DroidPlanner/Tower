@@ -15,7 +15,7 @@ import com.droidplanner.activitys.helpers.SuperActivity;
 import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
 import com.droidplanner.dialogs.OpenFileDialog;
 import com.droidplanner.dialogs.OpenMissionDialog;
-import com.droidplanner.dialogs.PolygonDialog;
+import com.droidplanner.dialogs.GridDialog;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.file.IO.MissionReader;
 import com.droidplanner.file.IO.MissionWriter;
@@ -164,7 +164,7 @@ public class PlanningActivity extends SuperActivity implements
 
 	public void openPolygonGenerateDialog() {
 		double defaultHatchAngle = (planningMapFragment.getMapRotation() + 90) % 180;
-		PolygonDialog polygonDialog = new PolygonDialog() {
+		GridDialog polygonDialog = new GridDialog() {
 			@Override
 			public void onPolygonGenerated(List<waypoint> list) {
 				drone.mission.addWaypoints(list);
