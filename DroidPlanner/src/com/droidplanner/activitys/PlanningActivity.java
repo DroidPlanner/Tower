@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperActivity;
+import com.droidplanner.circle.CirclePoint;
 import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
 import com.droidplanner.dialogs.OpenFileDialog;
 import com.droidplanner.dialogs.OpenMissionDialog;
@@ -35,6 +36,9 @@ public class PlanningActivity extends SuperActivity implements
 	private PlanningMapFragment planningMapFragment;
 	private MissionFragment missionFragment;
 
+	public CirclePoint circleCenter;
+	public CirclePoint circleEnd;
+
 	@Override
 	public int getNavigationItem() {
 		return 0;
@@ -52,7 +56,7 @@ public class PlanningActivity extends SuperActivity implements
 				.findFragmentById(R.id.missionFragment);
 
 		polygon = new Polygon();
-		
+
 		missionFragment.setMission(drone.mission);
 
 		drone.mission.missionListner = this;
@@ -101,6 +105,8 @@ public class PlanningActivity extends SuperActivity implements
 		case POLYGON:
 			getMenuInflater().inflate(R.menu.menu_planning_polygon, menu);
 			break;
+		case CIRCLE:
+			getMenuInflater().inflate(R.menu.menu_planning_circle, menu);
 		}
 
 		return super.onCreateOptionsMenu(menu);
@@ -142,6 +148,10 @@ public class PlanningActivity extends SuperActivity implements
 			setMode(modes.MISSION);
 			update();
 			return true;
+		case R.id.menu_clear_circle:
+			return true;// TODO implement method
+		case R.id.menu_generate_circle:
+			return true;// TODO implement method
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
@@ -210,6 +220,15 @@ public class PlanningActivity extends SuperActivity implements
 		case POLYGON:
 			polygon.addWaypoint(point);
 			break;
+		case CIRCLE:
+			if (circleCenter == null) {
+				circleCenter = new CirclePoint(point);
+				planningMapFragment.updateCircle(circleCenter, circleEnd);
+			} else if (circleEnd == null) {
+				circleEnd = new CirclePoint(point);
+				planningMapFragment.updateCircle(circleCenter, circleEnd);
+			}
+			return;
 		}
 		update();
 	}
@@ -242,6 +261,11 @@ public class PlanningActivity extends SuperActivity implements
 	public void onAltitudeChanged(double newAltitude) {
 		super.onAltitudeChanged(newAltitude);
 		update();
+	}
+
+	@Override
+	public void onMoveCirclePoint(CirclePoint point, LatLng newCoord) {
+
 	}
 
 }

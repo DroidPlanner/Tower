@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menu_generate_circle"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_generate"/>
+    <item
+        android:id="@+id/menu_clear_wp"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_clear"/>
+    <item
+        android:id="@+id/menu_clear_circle"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_clear_circle"/>
+    <item
+        android:id="@+id/menu_zoom"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_zoom"/>
+    <item
+        android:id="@+id/menu_exit"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_exit"/>
+
+</menu>
