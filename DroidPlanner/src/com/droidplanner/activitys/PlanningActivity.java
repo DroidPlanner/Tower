@@ -147,7 +147,7 @@ public class PlanningActivity extends SuperActivity implements
 			update();
 			return true;
 		case R.id.menu_generate_circle:
-			circle.generateCircle(drone.mission, 10);
+			circle.generateCircle(drone.mission);
 			update();
 			return true;
 		default:

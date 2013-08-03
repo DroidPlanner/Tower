@@ -7,14 +7,16 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class Circle {
 	public CirclePoint circleCenter;
-
+	public double radius = 100.0;
+	int numberOfWaypoints = 10;
+	
 	public Circle() {
 	}
 
-	public void generateCircle(Mission mission, int numberOfWaypoints) {
+	public void generateCircle(Mission mission) {
 		for (int i = 0; i < numberOfWaypoints; i++) {
 			double heading = (360.0*i)/numberOfWaypoints;
-			mission.addWaypoint(GeoTools.newpos(circleCenter.coord, heading, 100.0));			
+			mission.addWaypoint(GeoTools.newpos(circleCenter.coord, heading, radius));			
 		}
 	}
 
@@ -24,7 +26,7 @@ public class Circle {
 		}else{
 			circleCenter.coord = point;
 		}
-		planningMapFragment.updateCircle(circleCenter);
+		planningMapFragment.updateCircle(this);
 		return;
 	}
 }

@@ -99,16 +99,16 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 
 	}
 
-	public void updateCircle(CirclePoint circleCenter) {
-		markers.updateMarker(circleCenter, true);
-		if (circleCenter != null) {
-			if (circle != null) {
-				circle.remove();
+	public void updateCircle(com.droidplanner.circle.Circle circle) {
+		markers.updateMarker(circle.circleCenter, true);
+		if (circle.circleCenter != null) {
+			if (this.circle != null) {
+				this.circle.remove();
 			}
 			CircleOptions circleOptions = new CircleOptions()
-					.center(circleCenter.coord).strokeWidth(3).radius(100)
+					.center(circle.circleCenter.coord).strokeWidth(3).radius(circle.radius)
 					.visible(true); // In meters
-			circle = mMap.addCircle(circleOptions);
+			this.circle = mMap.addCircle(circleOptions);
 		}
 	}
 
