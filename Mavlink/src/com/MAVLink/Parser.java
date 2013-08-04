@@ -2,7 +2,6 @@ package com.MAVLink;
 
 import com.MAVLink.Messages.MAVLinkPacket;
 import com.MAVLink.Messages.MAVLinkStats;
-import android.util.Log;
 
 public class Parser {
 
@@ -17,7 +16,7 @@ public class Parser {
 
 	static boolean msg_received;
 
-	private MAVLinkStats s = new MAVLinkStats();
+	public MAVLinkStats stats = new MAVLinkStats();
 	private MAVLinkPacket m;
 
 	/**
@@ -93,7 +92,7 @@ public class Parser {
 					state = MAV_states.MAVLINK_PARSE_STATE_GOT_STX;
 					m.crc.start_checksum();
 				}
-				s.crc_error_cnt++;
+				stats.crcError();
 			} else {
 				state = MAV_states.MAVLINK_PARSE_STATE_GOT_CRC1;
 			}
@@ -108,19 +107,9 @@ public class Parser {
 					state = MAV_states.MAVLINK_PARSE_STATE_GOT_STX;
 					m.crc.start_checksum();
 				}
-				s.crc_error_cnt++;
+				stats.crcError();
 			} else { // Successfully received the message
-				Log.d("MAVLINK", "rxPkt "+ m.seq +"," + s.last_seq + "," + s.lost_seq_cnt +"," + s.crc_error_cnt + "," + s.pkt_cnt);
-				s.last_seq = (s.last_seq + 1) & 0xFF; //find the expected seq number (and wrap from 255 to 0 if necessary)
-				if (s.last_seq > 0 && m.seq != s.last_seq )
-				{  //We have lost at least one packet
-					if (m.seq - s.last_seq  < 0)
-						s.lost_seq_cnt = s.lost_seq_cnt + (255 +(m.seq-s.last_seq));
-					else
-						s.lost_seq_cnt = s.lost_seq_cnt + (m.seq-s.last_seq);
-				}
-				s.last_seq  = m.seq;	
-				s.pkt_cnt ++;
+				stats.newPacket(m);
 				msg_received = true;
 				state = MAV_states.MAVLINK_PARSE_STATE_IDLE;
 			}
@@ -133,24 +122,6 @@ public class Parser {
 		}else {
 			return null;
 		}
-	}
-
-	/**
-	 * This function resets error counting for the MAVLink.
-	 */
-	public void mavlink_reset_counts() {
-		s.last_seq = -1;
-		s.lost_seq_cnt = 0;
-		s.crc_error_cnt = 0;
-		s.pkt_cnt = 0;
-	}
-
-	
-	/**
-	 * This function returns counts for the MAVLink.
-	 */
-public MAVLinkStats get_mavlink_counts() {
-		return s;
 	}
 
 	
