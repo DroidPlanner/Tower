@@ -1,6 +1,7 @@
 package com.MAVLink;
 
 import com.MAVLink.Messages.MAVLinkPacket;
+import com.MAVLink.Messages.MAVLinkStats;
 
 public class Parser {
 
@@ -15,6 +16,7 @@ public class Parser {
 
 	static boolean msg_received;
 
+	public MAVLinkStats stats = new MAVLinkStats();
 	private MAVLinkPacket m;
 
 	/**
@@ -90,6 +92,7 @@ public class Parser {
 					state = MAV_states.MAVLINK_PARSE_STATE_GOT_STX;
 					m.crc.start_checksum();
 				}
+				stats.crcError();
 			} else {
 				state = MAV_states.MAVLINK_PARSE_STATE_GOT_CRC1;
 			}
@@ -104,7 +107,9 @@ public class Parser {
 					state = MAV_states.MAVLINK_PARSE_STATE_GOT_STX;
 					m.crc.start_checksum();
 				}
+				stats.crcError();
 			} else { // Successfully received the message
+				stats.newPacket(m);
 				msg_received = true;
 				state = MAV_states.MAVLINK_PARSE_STATE_IDLE;
 			}
@@ -119,4 +124,6 @@ public class Parser {
 		}
 	}
 
+	
+	
 }
