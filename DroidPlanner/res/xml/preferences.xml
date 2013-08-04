@@ -118,6 +118,83 @@
             android:key="pref_enable_tts"
             android:summary="Audible messages for important events"
             android:title="Enable Text To Speech" />
+        
+        <PreferenceScreen
+			android:title="RC Screen"
+			android:key="pref_rc">
+            
+            <PreferenceCategory
+        		android:title="General"
+        		android:key="pref_rc_general">	
+            	<ListPreference
+                	android:title="RC Mode"
+                	android:summary="Throttle on left or right stick"
+            		android:defaultValue="MODE2"
+            		android:entries="@array/RCModes"
+            		android:entryValues="@array/RCModeValues"
+            		android:key="pref_rc_mode" />
+            	<ListPreference
+                	android:title="QuickMode Left"
+            		android:defaultValue="Loiter"
+            		android:entries="@array/RCQuickModes"
+            		android:entryValues="@array/RCQuickModes"
+            		android:key="pref_rc_quickmode_left" />
+            	<ListPreference
+                	android:title="QuickMode Right"
+            		android:defaultValue="Stabilize"
+            		android:entries="@array/RCQuickModes"
+            		android:entryValues="@array/RCQuickModes"
+            		android:key="pref_rc_quickmode_right" />
+            	
+            </PreferenceCategory>
+            
+            <PreferenceCategory
+        		android:title="Throttle"
+        		android:key="pref_rc_throttle">
+                <CheckBoxPreference
+                    android:title="Reverse"
+                    android:summary="reverses Throttle direction"
+                    android:key="pref_rc_throttle_reverse"
+            		android:defaultValue="false"/>
+                <CheckBoxPreference
+                    android:title="Return to Center"
+                    android:summary="on touch release Throttle returns to center"
+                    android:key="pref_rc_throttle_returntocenter"
+            		android:defaultValue="false"/>
+            </PreferenceCategory>
+            
+            <PreferenceCategory
+        		android:title="Rudder"
+        		android:key="pref_rc_rudder">
+                <CheckBoxPreference
+                    android:title="Reverse"
+                    android:summary="reverses Rudder/Yaw direction"
+                    android:key="pref_rc_rudder_reverse"
+            		android:defaultValue="false"/>
+            </PreferenceCategory>
+            
+            <PreferenceCategory
+        		android:title="Aileron"
+        		android:key="pref_rc_aileron">	
+                <CheckBoxPreference
+                    android:title="Reverse"
+                    android:summary="reverses Aileron/Roll direction"
+                    android:key="pref_rc_aileron_reverse"
+            		android:defaultValue="false"/>
+            </PreferenceCategory>
+            
+            <PreferenceCategory
+        		android:title="Elevator"
+        		android:key="pref_rc_elevator">
+                <CheckBoxPreference
+                    android:title="Reverse"
+                    android:summary="reverses Elevator/Pitch direction"
+                    android:key="pref_rc_elevator_reverse"
+            		android:defaultValue="false"/>
+            </PreferenceCategory>
+            
+        </PreferenceScreen>
+        
     </PreferenceCategory>
     <PreferenceCategory
         android:key="pref_connection_actions"

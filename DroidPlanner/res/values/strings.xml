@@ -74,6 +74,33 @@
         <item name="57600">57600</item>
         <item name="115200">115200</item>
     </string-array>
+    
+    <!-- Do not change the names in the array bellow -->
+    <string-array name="RCModes">
+        <item name="MODE1">(Mode1) Throttle Right</item>
+        <item name="MODE2">(Mode2) Throttle Left</item>
+    </string-array>
+    <string-array name="RCModeValues">
+        <item name="MODE1">MODE1</item>
+        <item name="MODE2">MODE2</item>
+    </string-array>
+    
+    <!-- Do not change the names in the array bellow -->
+    <string-array name="RCQuickModes">
+        <item name="Stabilize">Stabilize</item>
+        <item name="Loiter">Loiter</item>
+        <item name="Auto">Auto</item>
+        <item name="FBW A">FBW A</item>
+        <item name="FBW B">FBW B</item>
+        <item name="Manual">Manual</item>
+        <item name="RTL">RTL</item>
+        <item name="Guided">Guided</item>
+        <item name="Circle">Circle</item>
+        <item name="Alt Hold">Alt Hold</item>
+        <item name="Toy">Toy</item>
+        <item name="Acro">Acro</item>
+        <item name="Training">Training</item>
+    </string-array>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>   
     

@@ -43,6 +43,9 @@ public class DroneMarker implements MapUpdatedListner {
 	}
 
 	public void updateDroneMarkers() {
+		if (droneMarker!=null) {
+			droneMarker.remove();			
+		}
 		buildBitmaps();
 		addMarkerToMap();
 	}
