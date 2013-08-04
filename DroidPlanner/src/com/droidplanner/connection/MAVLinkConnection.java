@@ -14,6 +14,7 @@ import android.preference.PreferenceManager;
 import com.MAVLink.Parser;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
+import com.MAVLink.Messages.MAVLinkStats;
 import com.droidplanner.file.FileStream;
 
 public abstract class MAVLinkConnection extends Thread {
@@ -57,6 +58,7 @@ public abstract class MAVLinkConnection extends Thread {
 	public void run() {
 		super.run();
 		try {
+			parser.mavlink_reset_counts();  //Helibot
 			openConnection();
 			if (logEnabled) {
 				logWriter = FileStream.getTLogFileStream();
