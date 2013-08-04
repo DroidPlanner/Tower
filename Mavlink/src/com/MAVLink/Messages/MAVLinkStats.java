@@ -29,20 +29,32 @@ public class MAVLinkStats /* implements Serializable */{
 		Log.d("MAVLINK", "rxPkt " + packet.seq + "," + lastPacketSeq + ","
 				+ lostPacketCount + "," + crcErrorCount + ","
 				+ receivedPacketCount);
-		// find the expected seq number (and wrap from 255 to 0 if necessary)
-		lastPacketSeq = (lastPacketSeq + 1) & 0xFF;
 
-		// We have lost at least one packet
-		if (lastPacketSeq > 0 && packet.seq != lastPacketSeq) {
-			if (packet.seq - lastPacketSeq < 0)
-				lostPacketCount = lostPacketCount
-						+ (255 + (packet.seq - lastPacketSeq));
-			else
-				lostPacketCount = lostPacketCount
-						+ (packet.seq - lastPacketSeq);
+		advanceLastPacketSequence();
+		if (hasLostPackets(packet)) {
+			updateLostPacketCount(packet);
 		}
 		lastPacketSeq = packet.seq;
 		receivedPacketCount++;
+	}
+
+	private void updateLostPacketCount(MAVLinkPacket packet) {
+		int lostPackets;
+		if (packet.seq - lastPacketSeq < 0) {
+			lostPackets = (packet.seq - lastPacketSeq) + 255;
+		} else {
+			lostPackets = (packet.seq - lastPacketSeq);
+		}
+		lostPacketCount += lostPackets;
+	}
+
+	private boolean hasLostPackets(MAVLinkPacket packet) {
+		return lastPacketSeq > 0 && packet.seq != lastPacketSeq;
+	}
+
+	private void advanceLastPacketSequence() {
+		// wrap from 255 to 0 if necessary
+		lastPacketSeq = (lastPacketSeq + 1) & 0xFF;
 	}
 
 	/**
@@ -61,5 +73,5 @@ public class MAVLinkStats /* implements Serializable */{
 		crcErrorCount = 0;
 		receivedPacketCount = 0;
 	}
-	
+
 }
