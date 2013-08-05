@@ -22,7 +22,7 @@ public class MarkerManager {
 		this.mMap = map;
 	}
 
-	public void clear() {
+	public void cleanup() {
 		List<MarkerSource> emptyList = new ArrayList<MarkerSource>();
 		removeOldMarkers(emptyList);
 	}
@@ -34,12 +34,14 @@ public class MarkerManager {
 	}
 
 	public void updateMarker(MarkerSource object, boolean draggable) {
-		if (hashMap.containsValue(object)) {
-			Marker marker = getMarkerFromSource(object);
-			((MarkerSource) object).update(marker);
-			marker.setDraggable(draggable);
-		} else {
-			addMarker(object, draggable);
+		if (object != null) {
+			if (hashMap.containsValue(object)) {
+				Marker marker = getMarkerFromSource(object);
+				((MarkerSource) object).update(marker);
+				marker.setDraggable(draggable);
+			} else {
+				addMarker(object, draggable);
+			}
 		}
 	}
 

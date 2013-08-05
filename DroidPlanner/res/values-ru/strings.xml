@@ -84,13 +84,13 @@
 <!--Original value: Clear Poly-->
 <string name="menu_clear_polygon">Очистить полигон</string>
 <!--Original value: Generate-->
-<string name="menu_generate_polygon">Генератор полигонов</string>
+<string name="menu_generate">Генератор полигонов</string>
 <!--Original value: Exit-->
-<string name="menu_finish_polygon">Выход</string>
+<string name="menu_exit">Выход</string>
 <!--Original value: Clear Track-->
 <string name="menu_clearFlightPath">Очистить путь</string>
 <!--Original value: Exiting Polygon Mode-->
-<string name="exiting_polygon_mode">Выход из режима редактирования полигонов</string>
+<string name="entering_mission_mode">Выход из режима редактирования полигонов</string>
 <!--Original value: Entering Polygon Mode-->
 <string name="entering_polygon_mode">Вход в режим редактирования полигонов</string>
 <!--Original value: Hatch angle:-->

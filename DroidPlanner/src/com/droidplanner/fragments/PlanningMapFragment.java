@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.droidplanner.R.string;
+import com.droidplanner.circle.CirclePoint;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.variables.Home;
 import com.droidplanner.drone.variables.waypoint;
@@ -20,6 +21,8 @@ import com.droidplanner.polygon.PolygonPoint;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polyline;
@@ -30,7 +33,7 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		OnMapLongClickListener, OnMarkerDragListener {
 
 	public enum modes {
-		MISSION, POLYGON;
+		MISSION, POLYGON, CIRCLE;
 	}
 
 	public GoogleMap mMap;
@@ -39,13 +42,16 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 
 	private OnMapInteractionListener mListener;
 
-	public modes mode = modes.MISSION;
+	public modes mode = modes.CIRCLE; // TODO return to Mission mode, this was
+										// just for debbuging
 
 	public Polygon polygon;
 
 	private Polyline polygonLine;
 
 	private Polyline missionLine;
+
+	private Circle circle;
 
 	public interface OnMapInteractionListener {
 
@@ -56,6 +62,8 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		public void onMoveWaypoint(waypoint waypoint, LatLng latLng);
 
 		public void onMovePolygonPoint(PolygonPoint source, LatLng newCoord);
+
+		public void onMoveCirclePoint(CirclePoint point, LatLng newCoord);
 	}
 
 	@Override
@@ -78,7 +86,7 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 	}
 
 	public void update(Drone drone, Polygon polygon) {
-		markers.clear();
+		markers.cleanup();
 
 		markers.updateMarker(drone.mission.getHome(), true);
 		markers.updateMarkers(drone.mission.getWaypoints(), true);
@@ -89,6 +97,19 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		polygonLine = mMap.addPolyline(getPolygonPath(polygon));
 		missionLine = mMap.addPolyline(getMissionPath(drone));
 
+	}
+
+	public void updateCircle(com.droidplanner.circle.Circle circle) {
+		markers.updateMarker(circle.circleCenter, true);
+		if (circle.circleCenter != null) {
+			if (this.circle != null) {
+				this.circle.remove();
+			}
+			CircleOptions circleOptions = new CircleOptions()
+					.center(circle.circleCenter.coord).strokeWidth(3).radius(circle.radius)
+					.visible(true); // In meters
+			this.circle = mMap.addCircle(circleOptions);
+		}
 	}
 
 	private void clearPolylines() {
@@ -119,6 +140,14 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		checkForHomeMarker(source, marker);
 		checkForWaypointMarker(source, marker);
 		checkForPolygonMarker(source, marker);
+		checkForCirclePoints(source, marker);
+	}
+
+	private void checkForCirclePoints(MarkerSource source, Marker marker) {
+		if (CirclePoint.class.isInstance(source)) {
+			mListener.onMoveCirclePoint((CirclePoint) source,
+					marker.getPosition());
+		}
 	}
 
 	private void checkForHomeMarker(MarkerSource source, Marker marker) {
@@ -179,13 +208,20 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		switch (mode) {
 		default:
 		case MISSION:
-			Toast.makeText(getActivity(), string.exiting_polygon_mode,
+			Toast.makeText(getActivity(), string.entering_mission_mode,
 					Toast.LENGTH_SHORT).show();
 			break;
 		case POLYGON:
 			Toast.makeText(getActivity(), string.entering_polygon_mode,
 					Toast.LENGTH_SHORT).show();
+		case CIRCLE:
+			Toast.makeText(getActivity(), string.entering_polygon_mode,
+					Toast.LENGTH_SHORT).show();
+			if (circle!=null) {
+				circle.remove();				
+			}
 			break;
 		}
 	}
+
 }

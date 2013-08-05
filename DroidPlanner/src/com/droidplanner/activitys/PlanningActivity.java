@@ -12,6 +12,8 @@ import android.widget.Toast;
 import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperActivity;
+import com.droidplanner.circle.Circle;
+import com.droidplanner.circle.CirclePoint;
 import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
 import com.droidplanner.dialogs.OpenFileDialog;
 import com.droidplanner.dialogs.OpenMissionDialog;
@@ -31,9 +33,11 @@ public class PlanningActivity extends SuperActivity implements
 		OnMapInteractionListener, OnWaypointUpdateListner,
 		OnAltitudeChangedListner {
 
-	public Polygon polygon;
-	private PlanningMapFragment planningMapFragment;
+	PlanningMapFragment planningMapFragment;
 	private MissionFragment missionFragment;
+
+	public Polygon polygon = new Polygon();;
+	public Circle circle = new Circle();
 
 	@Override
 	public int getNavigationItem() {
@@ -50,9 +54,6 @@ public class PlanningActivity extends SuperActivity implements
 				.findFragmentById(R.id.planningMapFragment));
 		missionFragment = (MissionFragment) getFragmentManager()
 				.findFragmentById(R.id.missionFragment);
-
-		polygon = new Polygon();
-		planningMapFragment.mode = modes.MISSION;
 
 		missionFragment.setMission(drone.mission);
 
@@ -102,6 +103,8 @@ public class PlanningActivity extends SuperActivity implements
 		case POLYGON:
 			getMenuInflater().inflate(R.menu.menu_planning_polygon, menu);
 			break;
+		case CIRCLE:
+			getMenuInflater().inflate(R.menu.menu_planning_circle, menu);
 		}
 
 		return super.onCreateOptionsMenu(menu);
@@ -132,6 +135,9 @@ public class PlanningActivity extends SuperActivity implements
 		case R.id.menu_polygon:
 			setMode(modes.POLYGON);
 			return true;
+		case R.id.menu_circle:
+			setMode(modes.CIRCLE);
+			return true;
 		case R.id.menu_generate_polygon:
 			openPolygonGenerateDialog();
 			return true;
@@ -139,8 +145,12 @@ public class PlanningActivity extends SuperActivity implements
 			polygon.clearPolygon();
 			update();
 			return true;
-		case R.id.menu_finish_polygon:
+		case R.id.menu_exit:
 			setMode(modes.MISSION);
+			update();
+			return true;
+		case R.id.menu_generate_circle:
+			circle.generateCircle(drone.mission);
 			update();
 			return true;
 		default:
@@ -211,6 +221,9 @@ public class PlanningActivity extends SuperActivity implements
 		case POLYGON:
 			polygon.addWaypoint(point);
 			break;
+		case CIRCLE:
+			circle.moveCircle(planningMapFragment, point);
+			return;
 		}
 		update();
 	}
@@ -243,6 +256,11 @@ public class PlanningActivity extends SuperActivity implements
 	public void onAltitudeChanged(double newAltitude) {
 		super.onAltitudeChanged(newAltitude);
 		update();
+	}
+
+	@Override
+	public void onMoveCirclePoint(CirclePoint point, LatLng newCoord) {
+		circle.moveCircle(planningMapFragment, newCoord);
 	}
 
 }
