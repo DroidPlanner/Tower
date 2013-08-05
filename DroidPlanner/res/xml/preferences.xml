@@ -109,6 +109,15 @@
             android:title="Server Port" />
     </PreferenceCategory>
     <PreferenceCategory
+        android:key="pref_server_udp"
+        android:title="UDP connection" >
+        <EditTextPreference
+            android:defaultValue="14550"
+            android:inputType="number"
+            android:key="pref_udp_server_port"
+            android:title="UDP server Port" />
+    </PreferenceCategory>
+    <PreferenceCategory
         android:key="pref_advanced"
         android:title="Advanced" >
         <CheckBoxPreference
