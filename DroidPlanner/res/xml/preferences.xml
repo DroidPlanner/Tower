@@ -21,7 +21,7 @@
             android:title="Telemetry Connection Type" />
 
         <CheckBoxPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="pref_mavlink_log_enabled"
             android:summary="Logs the MAVlink communication to a *.tlog file, may degrade performance"
             android:title="Enable Logging" />
