@@ -1,12 +1,12 @@
 package com.droidplanner.widgets.HUD;
 
-import com.MAVLink.Messages.ApmModes;
-
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+
+import com.MAVLink.Messages.ApmModes;
 
 public class HudFailsafe {
 
@@ -14,7 +14,7 @@ public class HudFailsafe {
 	static final float FAILSAFE_FACTOR_TEXT = .093f;
 	// in relation to the resulting size of FAILSAFE_FACTOR_TEXT
 	static final float FAILSAFE_FACTOR_BOX_PADDING = .27f;
-	
+
 	public Paint FailsafeText = new Paint();
 
 	int failsafeSizePxBoxPadding;
@@ -36,12 +36,12 @@ public class HudFailsafe {
 	void drawFailsafe(HUD huDwidget, Canvas canvas) {
 		int droneType = huDwidget.drone.type.getType();
 		boolean isArmed = huDwidget.drone.state.isArmed();
-	
+
 		if (HudDebugData.hudDebug) {
 			droneType = HudDebugData.hudDebugDroneType;
 			isArmed = HudDebugData.hudDebugDroneArmed;
 		}
-	
+
 		if (ApmModes.isCopter(droneType)) {
 			if (isArmed) {
 				if (armedCounter < 50) {
@@ -56,7 +56,8 @@ public class HudFailsafe {
 							+ failsafeSizePxBoxPadding, textRec.bottom
 							+ failsafeSizePxBoxPadding);
 					canvas.drawRoundRect(boxRec, failsafeSizePxBoxPadding,
-							failsafeSizePxBoxPadding, huDwidget.commonPaints.blackSolid);
+							failsafeSizePxBoxPadding,
+							huDwidget.commonPaints.blackSolid);
 					canvas.drawText(text, textRec.left - 3, textRec.bottom - 1,
 							FailsafeText);
 					armedCounter++;
@@ -73,7 +74,8 @@ public class HudFailsafe {
 						+ failsafeSizePxBoxPadding, textRec.bottom
 						+ failsafeSizePxBoxPadding);
 				canvas.drawRoundRect(boxRec, failsafeSizePxBoxPadding,
-						failsafeSizePxBoxPadding, huDwidget.commonPaints.blackSolid);
+						failsafeSizePxBoxPadding,
+						huDwidget.commonPaints.blackSolid);
 				canvas.drawText(text, textRec.left - 3, textRec.bottom - 1,
 						FailsafeText);
 				armedCounter = 0;

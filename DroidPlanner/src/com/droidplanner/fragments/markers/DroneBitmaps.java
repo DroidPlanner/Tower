@@ -45,6 +45,8 @@ public class DroneBitmaps {
 
 	private Bitmap getBitmap(int type) {
 		switch (type) {
+		case MAV_TYPE.MAV_TYPE_GROUND_ROVER:
+			return BitmapFactory.decodeResource(resources, drawable.rover);
 		case MAV_TYPE.MAV_TYPE_TRICOPTER:
 		case MAV_TYPE.MAV_TYPE_QUADROTOR:
 		case MAV_TYPE.MAV_TYPE_HEXAROTOR:

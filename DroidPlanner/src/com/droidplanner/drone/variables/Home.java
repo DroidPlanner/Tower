@@ -37,4 +37,8 @@ public class Home extends waypoint {
 		HomeMarker.update(marker, this);
 	}
 
+	public void updateData(waypoint wp) {
+		this.missionItem = wp.missionItem;
+	}
+
 }

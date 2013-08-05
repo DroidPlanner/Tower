@@ -19,7 +19,11 @@ public class GPS extends DroneVariable {
 	}
 
 	public LatLng getPosition() {
-		return position;
+		if (isPositionValid()) {
+			return position;			
+		}else{
+			return new LatLng(0, 0);
+		}
 	}
 
 	public double getGpsEPH() {

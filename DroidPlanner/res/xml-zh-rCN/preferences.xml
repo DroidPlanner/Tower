@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:key="pref_mavlink"
+        android:title="MavLink通讯相关设定" >
+        <ListPreference
+            android:defaultValue="USB"
+            android:entries="@array/TelemetryConnectionTypes"
+            android:entryValues="@array/TelemetryConnectionTypes"
+            android:key="pref_connection_type"
+            android:summary="选择与无人机的通讯连接方式,USB方式或TCP方式."
+            android:title="通讯连接方式" />
+        <ListPreference
+            android:defaultValue="57600"
+            android:entries="@array/TelemetryBaudTypes"
+            android:entryValues="@array/TelemetryBaudTypes"
+            android:key="pref_baud_type"
+            android:summary="选择USB通讯的波特率."
+            android:title="通讯速率" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_mavlink_log_enabled"
+            android:summary="将MAVlink通讯 以*.tlog格式记录在手机DroidPlanner/logs目录下,开启此功能会略微影响移动设备的性能."
+            android:title="日志开关" />
+
+        <PreferenceScreen
+            android:key="pref_mavlink_rates"
+            android:summary="修改飞行数据的获取频率(单位Hz)."
+            android:title="飞行数据刷新率" >
+            <EditTextPreference
+                android:defaultValue="2"
+                android:inputType="number"
+                android:key="pref_mavlink_stream_rate_ext_stat"
+                android:title="航点, GPS数据, 围栏数据, 当前航点..." />
+            <EditTextPreference
+                android:defaultValue="10"
+                android:inputType="number"
+                android:key="pref_mavlink_stream_rate_extra1"
+                android:title="高度" />
+            <EditTextPreference
+                android:defaultValue="2"
+                android:inputType="number"
+                android:key="pref_mavlink_stream_rate_extra2"
+                android:title="抬头显示" />
+            <EditTextPreference
+                android:defaultValue="2"
+                android:inputType="number"
+                android:key="pref_mavlink_stream_rate_extra3"
+                android:title="AHRS, 硬件状态, 风速" />
+            <EditTextPreference
+                android:defaultValue="3"
+                android:inputType="number"
+                android:key="pref_mavlink_stream_rate_position"
+                android:title="位置数据" />
+            <EditTextPreference
+                android:defaultValue="50"
+                android:inputType="number"
+                android:key="pref_mavlink_stream_rate_RC_override"
+                android:title="遥控数据" />
+        </PreferenceScreen>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="pref_flight_data"
+        android:title="飞行数据窗口设定" >
+        <EditTextPreference
+            android:defaultValue="100"
+            android:inputType="number"
+            android:key="pref_max_fligth_path_size"
+            android:summary="调整飞行轨迹的长度,将飞行轨迹设置为0可关闭此功能."
+            android:title="飞行轨迹长度" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="pref_guided_mode_enabled"
+            android:summary="开启此功能,在飞行数据控制窗口长按某坐标并设置高度,无人机将飞到此坐标并盘旋(Guided模式)."
+            android:title="指点飞行模式开关(Guided mode)." />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_follow_me_mode_enabled"
+            android:summary="正在开发中,请小心使用."
+            android:title="跟随模式开关" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_auto_pan_enabled"
+            android:summary="当GPS数据更新时,地图始终将无人机图标置于地图中央."
+            android:title="地图自动居中开关" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="pref_server"
+        android:title="TCP连接设定" >
+        <EditTextPreference
+            android:defaultValue="192.168.40.100"
+            android:key="pref_server_ip"
+            android:title="服务器IP" />
+        <EditTextPreference
+            android:defaultValue="9761"
+            android:inputType="number"
+            android:key="pref_server_port"
+            android:title="服务器端口" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="pref_advanced"
+        android:title="软件进阶设定" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_advanced_use_offline_maps"
+            android:summary="要使用离线地图功能，需将PC上Mission Planner抓取的离线地图拷贝到手机DroidPlanner/Maps目录下"
+            android:title="使用离线地图" />
+         <ListPreference
+            android:defaultValue="Satellite"
+            android:entries="@array/MapTypes"
+            android:entryValues="@array/MapTypes"
+            android:key="pref_map_type"
+            android:summary="选择地图类型后需要切换功能窗口以激活设定."
+            android:title="地图类型" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="pref_enable_tts"
+            android:summary="重要的信息将以语音进行提示"
+            android:title="语音提示功能" />
+        
+        <PreferenceScreen
+			android:title="遥控面板进阶设定"
+			android:summary="油门反向等设定,请点击进入."
+			android:key="pref_rc">
+            
+            <PreferenceCategory
+        		android:title="General"
+        		android:key="pref_rc_general">	
+            	<ListPreference
+                	android:title="日本手美国手切换"
+                	android:summary="油门在右(日本手),或者油门在左(美国手)"
+            		android:defaultValue="MODE2"
+            		android:entries="@array/RCModes"
+            		android:entryValues="@array/RCModeValues"
+            		android:key="pref_rc_mode" />
+            	<ListPreference
+                	android:title="快速切换模式(左)"
+            		android:defaultValue="Loiter"
+            		android:entries="@array/RCQuickModes"
+            		android:entryValues="@array/RCQuickModes"
+            		android:key="pref_rc_quickmode_left" />
+            	<ListPreference
+                	android:title="快速切换模式(右)"
+            		android:defaultValue="Stabilize"
+            		android:entries="@array/RCQuickModes"
+            		android:entryValues="@array/RCQuickModes"
+            		android:key="pref_rc_quickmode_right" />
+            	
+            </PreferenceCategory>
+            
+            <PreferenceCategory
+        		android:title="油门设定"
+        		android:key="pref_rc_throttle">
+                <CheckBoxPreference
+                    android:title="油门反向"
+                    android:summary="反转油门通道方向"
+                    android:key="pref_rc_throttle_reverse"
+            		android:defaultValue="false"/>
+                <CheckBoxPreference
+                    android:title="油门自动回中"
+                    android:summary="打开此功能,松开油门摇杆油门会自动回中"
+                    android:key="pref_rc_throttle_returntocenter"
+            		android:defaultValue="false"/>
+            </PreferenceCategory>
+            
+            <PreferenceCategory
+        		android:title="方向舵"
+        		android:key="pref_rc_rudder">
+                <CheckBoxPreference
+                    android:title="方向舵反向"
+                    android:summary="反转方向舵通道"
+                    android:key="pref_rc_rudder_reverse"
+            		android:defaultValue="false"/>
+            </PreferenceCategory>
+            
+            <PreferenceCategory
+        		android:title="副翼"
+        		android:key="pref_rc_aileron">	
+                <CheckBoxPreference
+                    android:title="副翼反向"
+                    android:summary="反转副翼通道"
+                    android:key="pref_rc_aileron_reverse"
+            		android:defaultValue="false"/>
+            </PreferenceCategory>
+            
+            <PreferenceCategory
+        		android:title="升降舵"
+        		android:key="pref_rc_elevator">
+                <CheckBoxPreference
+                    android:title="升降舵反向"
+                    android:summary="反转升降舵通道"
+                    android:key="pref_rc_elevator_reverse"
+            		android:defaultValue="false"/>
+            </PreferenceCategory>
+            
+        </PreferenceScreen>
+        
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="pref_connection_actions"
+        android:title="当建立连接后" 
+        android:summary="设定与无人机建立连接后的一些特性">
+        <CheckBoxPreference 
+            android:defaultValue="true"
+            android:title="取消屏幕休眠" 
+            android:summary="打开此功能,连接无人机时地面站的屏幕不会自动休眠." 
+            android:key="pref_keep_screen_bright"/>
+       	<CheckBoxPreference 
+            android:defaultValue="true"
+            android:title="锁定屏幕旋转"  
+            android:summary="打开此功能,连接到无人机时地面站屏幕不会自动旋转." 
+            android:key="pref_lock_screen_orientation"/>
+	</PreferenceCategory>
+</PreferenceScreen>

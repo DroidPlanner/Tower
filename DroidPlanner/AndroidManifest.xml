@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.droidplanner"
-    android:versionCode="32"
-    android:versionName="0.10.3" >
+    android:versionCode="38"
+    android:versionName="0.12.0" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -70,26 +70,28 @@
             </intent-filter>
         </activity>
         <activity android:name=".activitys.FlightDataActivity" >
-           <intent-filter>
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+            </intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
             </intent-filter>
 
             <meta-data
                 android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
                 android:resource="@xml/device_filter" />
         </activity>
-        <activity
-            android:name=".activitys.RCActivity" >
+        <activity android:name=".activitys.RCActivity" >
+
             <!-- android:screenOrientation="landscape" -->
         </activity>
-        <activity
-            android:name=".activitys.CameraActivity" >
+        <activity android:name=".activitys.CameraActivity" >
+
             <!-- android:screenOrientation="landscape" -->
+        </activity>
+        <activity android:name=".activitys.ChartActivity" >
         </activity>
         <activity
             android:name=".activitys.GCPActivity"

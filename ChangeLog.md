@@ -1,3 +1,28 @@
+## Droidplanner v0.12.0
+* Add suport for direct USB connection
+* Fix chinise translation
+
+## Droidplanner v0.11.4
+* Compatible with ArduRover
+* Dynamicaly allocated on-screen joysticks
+
+## Droidplanner v0.11.3
+* Preferences for the RC screen (Mode1/Mode2, Inverted Channel, QuickButtons)
+
+## Droidplanner v0.11.2
+* Improving the Chart Screen
+* Chinese Translation
+
+## Droidplanner v0.11.1
+* Changing the start screen back to Flight Data
+
+## Droidplanner v0.11.0
+* New Chart screen
+* HUD code clean-up
+* Activitys clean-up
+* All markers are using the markerManager
+* Colorful markers in the planning screen
+
 ## Droidplanner v0.10.3
 * Improved Record-Me mode (with a bug fix)
 * Now all the data on a Mission item is used

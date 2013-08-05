@@ -80,9 +80,9 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 	public void update(Drone drone, Polygon polygon) {
 		markers.clear();
 
-		markers.updateMarker(drone.mission.getHome());
-		markers.updateMarkers(drone.mission.getWaypoints());
-		markers.updateMarkers(polygon.getPolygonPoints());
+		markers.updateMarker(drone.mission.getHome(), true);
+		markers.updateMarkers(drone.mission.getWaypoints(), true);
+		markers.updateMarkers(polygon.getPolygonPoints(), true);
 
 		clearPolylines();
 

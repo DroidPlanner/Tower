@@ -1,5 +1,7 @@
 package com.droidplanner.widgets.tableRow;
 
+import java.util.Locale;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -41,7 +43,7 @@ public class MissionRow extends TableRow implements OnClickListener,
 	}
 
 	public void update() {
-		altitudeView.setText(waypoint.getHeight().toString() + 'm');
+		altitudeView.setText(String.format(Locale.ENGLISH,"%3fm",waypoint.getHeight()));
 		nameView.setText("WP " + waypoint.getNumber());
 		cmdView.setText(waypoint.getCmd().getName());
 	}
@@ -99,6 +101,7 @@ public class MissionRow extends TableRow implements OnClickListener,
 			public void onClick(DialogInterface d, int i) {
 				waypoint.setCmd(ApmCommands.getCmd(list[i]));
 				update();
+				fragment.onWaypointUpdate(waypoint);
 			}
 		});
 		dialog.create().show();

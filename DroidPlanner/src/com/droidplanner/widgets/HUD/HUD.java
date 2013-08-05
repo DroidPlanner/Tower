@@ -9,6 +9,8 @@ import android.view.SurfaceView;
 
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
+import com.droidplanner.widgets.helpers.RenderThread;
+import com.droidplanner.widgets.helpers.RenderThread.canvasPainter;
 
 /**
  * Widget for a HUD Originally copied from http://code.google.com/p/copter-gcs/
@@ -19,8 +21,8 @@ import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
  */
 
 public class HUD extends SurfaceView implements SurfaceHolder.Callback,
-		HudUpdatedListner {
-	private HudThread renderer;
+		HudUpdatedListner, canvasPainter {
+	public RenderThread renderer;
 	int width;
 	int height;
 	public HudYaw hudYaw = new HudYaw();
@@ -32,18 +34,19 @@ public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 	private HudFailsafe hudFailsafe = new HudFailsafe();
 
 	HudCommonPaints commonPaints = new HudCommonPaints();
-	
+
 	Drone drone;
 
 	@Override
-	protected void onDraw(Canvas canvas) {
+	public void onDraw(Canvas canvas) {
 		if (drone == null) {
 			return;
 		}
 
 		// clear screen
 		canvas.drawColor(Color.rgb(20, 20, 20));
-		canvas.translate(width / 2, hudInfo.attHeightPx / 2 + hudYaw.yawHeightPx); // set
+		canvas.translate(width / 2, hudInfo.attHeightPx / 2
+				+ hudYaw.yawHeightPx); // set
 		// center of HUD excluding YAW area
 
 		// from now on each drawing routine has to undo all applied
@@ -78,7 +81,7 @@ public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 		// frequently
 
 		hudPlane.setupPlane(this);
-		commonPaints.setupCommonPaints(this);		
+		commonPaints.setupCommonPaints(this);
 		hudYaw.setupYaw(this, this);
 		hudInfo.setupAtt(this);
 		hudRoll.setupRoll(this);
@@ -88,7 +91,7 @@ public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
-		renderer = new HudThread(getHolder(), this);
+		renderer = new RenderThread(getHolder(), this);
 		if (!renderer.isRunning()) {
 			renderer.setRunning(true);
 			renderer.start();

@@ -16,6 +16,7 @@ import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.DroidPlannerApp.ConnectionStateListner;
 import com.droidplanner.R;
 import com.droidplanner.activitys.CameraActivity;
+import com.droidplanner.activitys.ChartActivity;
 import com.droidplanner.activitys.FlightDataActivity;
 import com.droidplanner.activitys.GCPActivity;
 import com.droidplanner.activitys.ParametersActivity;
@@ -34,7 +35,7 @@ public abstract class SuperActivity extends Activity implements
 	public DroidPlannerApp app;
 	public Drone drone;
 	private MenuItem connectButton;
-	
+
 	private ScreenOrientation screenOrientation = new ScreenOrientation(this);
 
 	public SuperActivity() {
@@ -94,6 +95,9 @@ public abstract class SuperActivity extends Activity implements
 			break;
 		case 5: // GCP
 			navigationIntent = new Intent(this, GCPActivity.class);
+			break;
+		case 6: // Chart
+			navigationIntent = new Intent(this, ChartActivity.class);
 			break;
 		}
 		startActivity(navigationIntent);
