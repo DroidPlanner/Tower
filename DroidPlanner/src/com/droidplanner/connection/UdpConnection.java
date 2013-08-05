@@ -16,10 +16,6 @@ import android.util.Log;
 public class UdpConnection extends MAVLinkConnection {
 
 	private DatagramSocket socket;
-	// private BufferedOutputStream mavOut;
-	// private BufferedInputStream mavIn;
-
-	private String serverIP = "192.168.40.255";
 	private int serverPort = 14550;
 
 	private int hostPort;
@@ -81,13 +77,13 @@ public class UdpConnection extends MAVLinkConnection {
 	}
 
 	private void getUdpStream() throws UnknownHostException, IOException {
-		InetAddress serverAddr = InetAddress.getByName(serverIP);
 		socket = new DatagramSocket(serverPort);
 		socket.setBroadcast(true);
 		socket.setReuseAddress(true);
 		Log.d("UDP", "Socket Open");
 	}
 	
+	@SuppressWarnings("unused")
 	private InetAddress getBroadcastAddress() throws IOException {
 	    WifiManager wifi = (WifiManager) parentContext.getSystemService(Context.WIFI_SERVICE);
 	    DhcpInfo dhcp = wifi.getDhcpInfo();
