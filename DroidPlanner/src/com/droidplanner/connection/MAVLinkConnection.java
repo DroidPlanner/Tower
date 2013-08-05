@@ -62,6 +62,7 @@ public abstract class MAVLinkConnection extends Thread {
 	public void run() {
 		super.run();
 		try {
+			parser.stats.mavlinkResetStats(); 
 			openConnection();
 			if (logEnabled) {
 				logWriter = FileStream.getTLogFileStream();

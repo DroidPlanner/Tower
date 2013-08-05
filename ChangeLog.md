@@ -1,3 +1,7 @@
+## Droidplanner v0.12.0
+* Add suport for direct USB connection
+* Fix chinise translation
+
 ## Droidplanner v0.11.4
 * Compatible with ArduRover
 * Dynamicaly allocated on-screen joysticks
