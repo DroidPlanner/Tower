@@ -23,7 +23,9 @@ import com.droidplanner.R;
 import com.droidplanner.activitys.FlightDataActivity;
 import com.droidplanner.connection.MAVLinkConnection;
 import com.droidplanner.connection.MAVLinkConnection.MavLinkConnectionListner;
+import com.droidplanner.connection.TcpConnection;
 import com.droidplanner.connection.UdpConnection;
+import com.droidplanner.connection.UsbConnection;
 
 /**
  * http://developer.android.com/guide/components/bound-services.html#Messenger
@@ -142,13 +144,14 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 		String connectionType = PreferenceManager.getDefaultSharedPreferences(
 				getApplicationContext()).getString("pref_connection_type", "");
 		if (connectionType.equals("USB")) {
-			//mavConnection = new UsbConnection(this);
+			mavConnection = new UsbConnection(this);
 		} else if (connectionType.equals("TCP")) {
-			//mavConnection = new TcpConnection(this);
+			mavConnection = new TcpConnection(this);
+		} else if (connectionType.equals("UDP")) {
+			mavConnection = new UdpConnection(this);
 		} else {
 			return;
 		}
-		mavConnection = new UdpConnection(this);	// TODO add a preference for UDP
 		mavConnection.start();
 	}
 
