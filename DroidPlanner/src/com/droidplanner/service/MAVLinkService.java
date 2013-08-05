@@ -24,6 +24,7 @@ import com.droidplanner.activitys.FlightDataActivity;
 import com.droidplanner.connection.MAVLinkConnection;
 import com.droidplanner.connection.MAVLinkConnection.MavLinkConnectionListner;
 import com.droidplanner.connection.TcpConnection;
+import com.droidplanner.connection.UdpConnection;
 import com.droidplanner.connection.UsbConnection;
 
 /**
@@ -146,6 +147,8 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 			mavConnection = new UsbConnection(this);
 		} else if (connectionType.equals("TCP")) {
 			mavConnection = new TcpConnection(this);
+		} else if (connectionType.equals("UDP")) {
+			mavConnection = new UdpConnection(this);
 		} else {
 			return;
 		}
