@@ -2,7 +2,9 @@ package com.droidplanner.activitys;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
@@ -30,7 +32,15 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		}
 		findPreference("pref_rc_quickmode_left").setSummary(sharedPref.getString("pref_rc_quickmode_left", ""));
 		findPreference("pref_rc_quickmode_right").setSummary(sharedPref.getString("pref_rc_quickmode_right", ""));
-		//
+		
+		try {
+			EditTextPreference versionPref = (EditTextPreference)findPreference("version");
+			String version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+			versionPref.setTitle(getString(R.string.version) + ": " + version);
+		} catch (NameNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@SuppressWarnings("deprecation")
