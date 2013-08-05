@@ -4,7 +4,6 @@ import com.MAVLink.Messages.ApmCommands;
 import com.MAVLink.Messages.MAVLinkPacket;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_CMD;
-import com.MAVLink.Messages.enums.MAV_FRAME;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import com.droidplanner.fragments.markers.WaypointMarker;
 import com.google.android.gms.maps.model.LatLng;
@@ -14,16 +13,16 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class waypoint implements MarkerSource {
 	public msg_mission_item missionItem = new msg_mission_item();
 
-	public waypoint(LatLng c, Double h) {
-		this(c.latitude, c.longitude, h);
+	public waypoint(LatLng c, Double h, int frame) {
+		this(c.latitude, c.longitude, h, frame);
 	}
 
-	public waypoint(Double Lat, Double Lng, Double h) {
+	public waypoint(Double Lat, Double Lng, Double h, int frame) {
 		setCoord(new LatLng(Lat, Lng));
 		setHeight(h);
 
 		missionItem.current = 0; // TODO use correct parameter for HOME
-		missionItem.frame = MAV_FRAME.MAV_FRAME_GLOBAL;
+		missionItem.frame = (byte) frame;
 		missionItem.command = MAV_CMD.MAV_CMD_NAV_WAYPOINT;
 		missionItem.param1 = 0; // TODO use correct parameter
 		missionItem.param2 = 0; // TODO use correct parameter

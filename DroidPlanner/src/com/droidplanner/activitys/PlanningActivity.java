@@ -173,7 +173,7 @@ public class PlanningActivity extends SuperActivity implements
 		};
 		polygonDialog.generatePolygon(defaultHatchAngle, 50.0, polygon,
 				drone.mission.getLastWaypoint().getCoord(),
-				drone.mission.getDefaultAlt(), this);
+				drone.mission.getDefaultAlt(),drone.mission.getFrameFromPref(), this);
 	}
 
 	private void clearWaypointsAndUpdate() {

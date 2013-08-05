@@ -7,6 +7,7 @@ import java.util.Locale;
 import android.widget.Toast;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
+import com.MAVLink.Messages.enums.MAV_FRAME;
 import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneVariable;
@@ -14,7 +15,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class Mission extends DroneVariable {
 
-	private Home home = new Home(0.0, 0.0, 0.0);
+	private Home home = new Home(0.0, 0.0, 0.0, MAV_FRAME.MAV_FRAME_GLOBAL);
 	private List<waypoint> waypoints = new ArrayList<waypoint>();
 	private Double defaultAlt = 50.0;
 	private int wpno = -1;
@@ -84,11 +85,19 @@ public class Mission extends DroneVariable {
 	}
 
 	public void addWaypoint(Double lat, Double Lng, Double h) {
-		addWaypoint(new waypoint(lat, Lng, h));
+		addWaypoint(new waypoint(lat, Lng, h,getFrameFromPref()));
 	}
 
-	public void addWaypoint(LatLng coord, Double h) {
-		addWaypoint(new waypoint(coord, h));
+	public int getFrameFromPref() {
+		if (myDrone.prefs.getBoolean("pref_advanced_use_absolute_altitude", false)) {
+			return MAV_FRAME.MAV_FRAME_GLOBAL;
+		} else {
+			return MAV_FRAME.MAV_FRAME_GLOBAL_RELATIVE_ALT;
+		}
+	}
+
+	private void addWaypoint(LatLng coord, Double h) {
+		addWaypoint(new waypoint(coord, h, getFrameFromPref()));
 	}
 
 	public void addWaypoint(LatLng coord) {

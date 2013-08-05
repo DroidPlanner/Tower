@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.variables.waypoint;
+import com.google.android.gms.maps.model.LatLng;
 
 public class FollowMe implements LocationListener {
 	private static final long MIN_TIME_MS = 2000;
@@ -62,8 +63,7 @@ public class FollowMe implements LocationListener {
 
 	@Override
 	public void onLocationChanged(Location location) {
-		waypoint guidedWP = new waypoint(location.getLatitude(),
-				location.getLongitude(), drone.mission.getDefaultAlt());
+		waypoint guidedWP = new waypoint(new LatLng(location.getLatitude(), location.getLongitude()), drone.mission.getDefaultAlt(),drone.mission.getFrameFromPref());
 		// TODO find a better way to do the GUIDED altitude
 		drone.guidedPoint.setGuidedMode(guidedWP);
 	}

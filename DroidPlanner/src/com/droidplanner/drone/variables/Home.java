@@ -7,8 +7,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class Home extends waypoint {
-	public Home(LatLng c, Double h) {
-		super(c, h);
+	public Home(LatLng c, Double h, int frame) {
+		super(c, h,frame);
 		setCurrent((byte) 1); // TODO Use correct parameter for home
 	}
 
@@ -17,8 +17,8 @@ public class Home extends waypoint {
 		setCurrent((byte) 1); // TODO Use correct parameter for home
 	}
 
-	public Home(Double Lat, Double Lng, Double h) {
-		super(Lat, Lng, h);
+	public Home(Double Lat, Double Lng, Double h, int frame) {
+		super(Lat, Lng, h, frame);
 		setCurrent((byte) 1); // TODO Use correct parameter for home
 	}
 

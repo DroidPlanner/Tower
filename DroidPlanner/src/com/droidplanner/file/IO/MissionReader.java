@@ -63,9 +63,8 @@ public class MissionReader implements FileReader {
 		while ((line = reader.readLine()) != null) {
 			String[] RowData = line.split("\t");
 			waypoint wp = new waypoint(Double.valueOf(RowData[8]),
-					Double.valueOf(RowData[9]), Double.valueOf(RowData[10]));
+					Double.valueOf(RowData[9]), Double.valueOf(RowData[10]),Integer.valueOf(RowData[2]));
 			wp.setNumber(Integer.valueOf(RowData[0]));
-			wp.setFrame(Integer.valueOf(RowData[2]));
 			wp.setCmd(ApmCommands.getCmd(Integer.valueOf(RowData[3])));
 			wp.setParameters(Float.valueOf(RowData[4]),
 					Float.valueOf(RowData[5]), Float.valueOf(RowData[6]),
@@ -78,10 +77,9 @@ public class MissionReader implements FileReader {
 
 	private void parseHomeLine(BufferedReader reader) throws IOException {
 		String[] RowData = reader.readLine().split("\t");
-		home = new Home(Double.valueOf(RowData[8]), Double.valueOf(RowData[9]),
-				Double.valueOf(RowData[10]));
+		home = new Home(Double.valueOf(RowData[8]),
+				Double.valueOf(RowData[9]), Double.valueOf(RowData[10]),Integer.valueOf(RowData[2]));
 		home.setNumber(Integer.valueOf(RowData[0]));
-		home.setFrame(Integer.valueOf(RowData[2]));
 		home.setCmd(ApmCommands.getCmd(Integer.valueOf(RowData[3])));
 		home.setParameters(Float.valueOf(RowData[4]),
 				Float.valueOf(RowData[5]), Float.valueOf(RowData[6]),

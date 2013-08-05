@@ -56,6 +56,7 @@ public class RecordMe implements LocationListener {
 		drone.mission.addWaypoint(location.getLatitude(),
 				location.getLongitude(), drone.mission.getDefaultAlt());
 		drone.mission.notifyMissionUpdate();
+
 	}
 
 	@Override
