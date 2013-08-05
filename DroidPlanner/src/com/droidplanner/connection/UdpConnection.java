@@ -8,9 +8,13 @@ import java.net.UnknownHostException;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.DhcpInfo;
+import android.net.wifi.WifiManager;
+import android.os.AsyncTask;
 import android.util.Log;
 
 public class UdpConnection extends MAVLinkConnection {
+
 	private DatagramSocket socket;
 	// private BufferedOutputStream mavOut;
 	// private BufferedInputStream mavIn;
@@ -18,7 +22,8 @@ public class UdpConnection extends MAVLinkConnection {
 	private String serverIP = "192.168.40.255";
 	private int serverPort = 14550;
 
-	private InetAddress serverAddr;
+	private int hostPort;
+	private InetAddress hostAdd;
 
 	public UdpConnection(Context context) {
 		super(context);
@@ -33,27 +38,35 @@ public class UdpConnection extends MAVLinkConnection {
 	protected void readDataBlock() throws IOException {
 		DatagramPacket packet = new DatagramPacket(readData, readData.length);
 		socket.receive(packet);
+		hostAdd=packet.getAddress();
+		hostPort = packet.getPort();
 		iavailable = packet.getLength();
 	}
 
 	@Override
 	protected void sendBuffer(byte[] buffer) throws IOException {
-		
-		try{
-			DatagramPacket packet = new DatagramPacket(buffer, buffer.length,
-					InetAddress.getByName(serverIP), 14553);
-			if (socket != null) {
-				socket.send(packet);
-
-			}
-		}catch (Exception e){
-			e.printStackTrace();	// TODO fix the NetworkOnMainThreadException
-
-		}
-			/*
-			 * if (mavOut != null) { mavOut.write(buffer); mavOut.flush(); }
-			 */
+		new UdpSender().execute(buffer);
 	}
+	
+	private class UdpSender extends AsyncTask<byte[], Integer, Integer> {
+
+		@Override
+		protected Integer doInBackground(byte[]... params) {
+			try{			
+				byte[] buffer = params[0];
+				DatagramPacket packet = new DatagramPacket(buffer, buffer.length,
+						hostAdd, hostPort);
+				Log.d("UDP", "packet Builded");
+				socket.send(packet);
+				Log.d("UDP", "packet Sent");
+				
+			}catch (Exception e){
+				e.printStackTrace();				
+			}
+			return null;			
+		}
+	}
+	
 
 	@Override
 	protected void closeConnection() throws IOException {
@@ -68,11 +81,24 @@ public class UdpConnection extends MAVLinkConnection {
 	}
 
 	private void getUdpStream() throws UnknownHostException, IOException {
-		serverAddr = InetAddress.getByName(serverIP);
+		InetAddress serverAddr = InetAddress.getByName(serverIP);
 		socket = new DatagramSocket(serverPort);
 		socket.setBroadcast(true);
 		socket.setReuseAddress(true);
 		Log.d("UDP", "Socket Open");
 	}
+	
+	private InetAddress getBroadcastAddress() throws IOException {
+	    WifiManager wifi = (WifiManager) parentContext.getSystemService(Context.WIFI_SERVICE);
+	    DhcpInfo dhcp = wifi.getDhcpInfo();
+	    // handle null somehow
+
+	    int broadcast = (dhcp.ipAddress & dhcp.netmask) | ~dhcp.netmask;
+	    byte[] quads = new byte[4];
+	    for (int k = 0; k < 4; k++)
+	      quads[k] = (byte) ((broadcast >> k * 8) & 0xFF);
+	    return InetAddress.getByAddress(quads);
+	}
+
 
 }
