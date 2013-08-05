@@ -9,13 +9,13 @@
     <string name="disconnected">已断开</string>
     <string name="save">保存</string>
     <string name="open">打开</string>
-    <string name="menu_open_file">打开航点</string>
+    <string name="menu_open_file">打开航点文件</string>
     <string name="menu_save_file">保存航点</string>
     <string name="menu_load_from_apm">从APM提取航点</string>
     <string name="menu_send_to_apm">发送航点至APM</string>
     <string name="menu_follow_me">跟随模式</string>
-    <string name="menu_record_me">录制为航点</string>
-    <string name="menu_clear">清除航点</string>
+    <string name="menu_record_me">录制行迹为航点</string>
+    <string name="menu_clear">清空航点</string>
     <string name="menu_zoom">缩放</string>
     <string name="file_saved">航点已保存</string>
     <string name="no_waypoint_files">没找到航点文件</string>
@@ -23,10 +23,10 @@
     <string name="select_file_to_open">选择航点文件:</string>
     <string name="error_when_saving">保存时错误</string>
     <string name="error_when_opening_file">打开文件时错误</string>
-    <string name="waypoint_altitude">航点高度</string>
-    <string name="default_alt">默认高度</string>
+    <string name="waypoint_altitude">航点,高度</string>
+    <string name="default_alt">默认高度.</string>
     <string name="menu_open_kmz">打开KMZ文件</string>
-    <string name="menu_add_polygon">添加巡航计划</string>
+    <string name="menu_add_polygon">编辑巡航范围</string>
     <string name="menu_polygon">设置巡航计划</string>
     <string name="menu_clear_polygon">清除多边形</string>
     <string name="menu_generate">生成巡航计划</string>
@@ -34,7 +34,7 @@
     <string name="menu_clearFlightPath">清除飞行轨迹</string>
     <string name="entering_mission_mode">退出巡航计划</string>
     <string name="entering_polygon_mode">编辑巡航计划</string>
-    <string name="dialog_polygon_hatch_angle">巡航角度</string>
+    <string name="dialog_polygon_hatch_angle">巡航切入角:</string>
     <string name="dialog_polygon_distance_between_lines">巡航间距:</string>
     <string name="enable">激活</string>
     <string name="disable">禁用</string>
@@ -54,7 +54,7 @@
         <item>微调参数</item>
         <item>摄像头控制</item>
         <item>GCP</item>
-        <item>Chart</item>
+        <item>状态曲线</item>
     </string-array>
 
     <!-- Do not change the names in the array bellow -->
@@ -73,6 +73,33 @@
     <string-array name="TelemetryBaudTypes">
         <item name="57600">57600</item>
         <item name="115200">115200</item>
+    </string-array>
+    
+    <!-- Do not change the names in the array bellow -->
+    <string-array name="RCModes">
+        <item name="MODE1">(Mode1) Throttle Right</item>
+        <item name="MODE2">(Mode2) Throttle Left</item>
+    </string-array>
+    <string-array name="RCModeValues">
+        <item name="MODE1">MODE1</item>
+        <item name="MODE2">MODE2</item>
+    </string-array>
+    
+    <!-- Do not change the names in the array bellow -->
+    <string-array name="RCQuickModes">
+        <item name="Stabilize">Stabilize</item>
+        <item name="Loiter">Loiter</item>
+        <item name="Auto">Auto</item>
+        <item name="FBW A">FBW A</item>
+        <item name="FBW B">FBW B</item>
+        <item name="Manual">Manual</item>
+        <item name="RTL">RTL</item>
+        <item name="Guided">Guided</item>
+        <item name="Circle">Circle</item>
+        <item name="Alt Hold">Alt Hold</item>
+        <item name="Toy">Toy</item>
+        <item name="Acro">Acro</item>
+        <item name="Training">Training</item>
     </string-array>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>   
