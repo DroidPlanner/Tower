@@ -16,7 +16,7 @@ import android.util.Log;
 public class UdpConnection extends MAVLinkConnection {
 
 	private DatagramSocket socket;
-	private int serverPort = 14550;
+	private int serverPort;
 
 	private int hostPort;
 	private InetAddress hostAdd;
@@ -71,9 +71,8 @@ public class UdpConnection extends MAVLinkConnection {
 
 	@Override
 	protected void getPreferences(SharedPreferences prefs) {
-		// serverIP = prefs.getString("pref_server_ip", "");
-		// serverPort = Integer.parseInt(prefs.getString("pref_server_port",
-		// "0"));
+		serverPort = Integer.parseInt(prefs.getString("pref_udp_server_port",
+		"14550"));
 	}
 
 	private void getUdpStream() throws UnknownHostException, IOException {

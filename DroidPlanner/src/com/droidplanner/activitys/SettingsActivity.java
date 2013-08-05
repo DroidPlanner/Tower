@@ -22,6 +22,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		findPreference("pref_max_fligth_path_size").setSummary(sharedPref.getString("pref_max_fligth_path_size", "") + " (set to zero to disable).");
 		findPreference("pref_server_ip").setSummary(sharedPref.getString("pref_server_ip", ""));
 		findPreference("pref_server_port").setSummary(sharedPref.getString("pref_server_port", ""));
+		findPreference("pref_udp_server_port").setSummary(sharedPref.getString("pref_udp_server_port", ""));
 		findPreference("pref_map_type").setSummary(sharedPref.getString("pref_map_type", ""));
 		if (sharedPref.getString("pref_rc_mode", "MODE2").equalsIgnoreCase("MODE1")) {
 			findPreference("pref_rc_mode").setSummary("Mode1: Throttle on RIGHT stick");
