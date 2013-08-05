@@ -3,18 +3,23 @@ package com.droidplanner.connection;
 import java.io.IOException;
 import java.net.UnknownHostException;
 
+//This version is modified by Helibot to use the "USB Serial for Android Library"
+//See https://code.google.com/p/usb-serial-for-android/ 
+// It should allow support of FDTI and other Serial to USB converters.
+// It should allow APM v2.0 and 2.5 to connect via USB cable straight to APM.
+// Be sure to set the Telementry speed in the setting menu to 
+//    115200 when connecting directly with USB cable.
+import com.hoho.android.usbserial.driver.UsbSerialDriver;
+import com.hoho.android.usbserial.driver.UsbSerialProber;
+import android.hardware.usb.UsbManager;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.ftdi.j2xx.D2xxManager;
-import com.ftdi.j2xx.FT_Device;
-
 public class UsbConnection extends MAVLinkConnection {
 	private static int baud_rate = 57600;
-	private static final byte LATENCY_TIMER = 16;
-
-	private FT_Device ftDev;
+    private static UsbSerialDriver sDriver = null;
 
 	public UsbConnection(Context parentContext) {
 		super(parentContext);
@@ -27,24 +32,36 @@ public class UsbConnection extends MAVLinkConnection {
 
 	@Override
 	protected void readDataBlock() throws IOException {
-		iavailable = ftDev.getQueueStatus();
-		if (iavailable > 0) {
-			if (iavailable > 4096)
-				iavailable = 4096;
-			ftDev.read(readData, iavailable);
-		}
+		//Read data from driver. This call will return upto readData.length bytes.
+		//If no data is received it will timeout after 200ms (as set by parameter 2)
+		iavailable = sDriver.read(readData,200);
+		if (iavailable == 0) iavailable = -1;
+		//Log.d("USB", "Bytes read" + iavailable);
 	}
 
 	@Override
 	protected void sendBuffer(byte[] buffer) {
-		if (connected & ftDev != null) {
-			ftDev.write(buffer);
+		//Write data to driver. This call should write buffer.length bytes 
+		//if data cant be sent , then it will timeout in 500ms (as set by parameter 2)
+		if (connected && sDriver != null) {
+			try{
+				sDriver.write(buffer,500);
+			} catch (IOException e) {
+				Log.e("USB", "Error Sending: " + e.getMessage(), e);
+			}
 		}
 	}
 
 	@Override
 	protected void closeConnection() throws IOException {
-		ftDev.close();
+      if (sDriver != null) {
+         try {
+              sDriver.close();
+         } catch (IOException e) {
+             // Ignore.
+         }
+         sDriver = null;
+      }
 	}
 
 	@Override
@@ -57,40 +74,34 @@ public class UsbConnection extends MAVLinkConnection {
 	}
 
 	private void openCOM() throws IOException {
-		D2xxManager ftD2xx = null;
-		try {
-			ftD2xx = D2xxManager.getInstance(parentContext);
-		} catch (D2xxManager.D2xxException ex) {
-			ex.printStackTrace();
-		}
+		// Get UsbManager from Android.
+		UsbManager manager = (UsbManager) parentContext.getSystemService(Context.USB_SERVICE);
 
-		int DevCount = ftD2xx.createDeviceInfoList(parentContext);
-		if (DevCount < 1) {
-			Log.d("USB", "No Devices");
+		// Find the first available driver.
+		//**TODO: We should probably step through all available USB Devices
+		//...but its unlikely to happen on a Phone/tablet running DroidPlanner.
+		sDriver = UsbSerialProber.findFirstDevice(manager);
+
+		if (sDriver == null) {
+			Log.d("USB", "No Devices found");	
 			throw new IOException();
 		}
-		Log.d("USB", "N� dev:" + DevCount);
-
-		ftDev = ftD2xx.openByIndex(parentContext, 0);
-
-		if (ftDev == null) {
-			Log.d("USB", "COM close");
-			throw new IOException();
-		}
+		else
+		{	
 		Log.d("USB", "Opening using Baud rate " + baud_rate);
-		ftDev.setBitMode((byte) 0, D2xxManager.FT_BITMODE_RESET);
-		ftDev.setBaudRate(baud_rate);
-		ftDev.setDataCharacteristics(D2xxManager.FT_DATA_BITS_8,
-				D2xxManager.FT_STOP_BITS_1, D2xxManager.FT_PARITY_NONE);
-		ftDev.setFlowControl(D2xxManager.FT_FLOW_NONE, (byte) 0x00, (byte) 0x00);
-		ftDev.setLatencyTimer(LATENCY_TIMER);
-		ftDev.purge((byte) (D2xxManager.FT_PURGE_TX | D2xxManager.FT_PURGE_RX));
-
-		if (!ftDev.isOpen()) {
-			throw new IOException();
-		} else {
-			Log.d("USB", "COM open");
+	        try {
+	                sDriver.open();
+	                sDriver.setParameters(baud_rate, 8, UsbSerialDriver.STOPBITS_1, UsbSerialDriver.PARITY_NONE);
+	            } catch (IOException e) {
+	                Log.e("USB", "Error setting up device: " + e.getMessage(), e);
+	                try {
+	                    sDriver.close();
+	                } catch (IOException e2) {
+	                    // Ignore.
+	                }
+	                sDriver = null;
+	                return;
+	        }
 		}
 	}
-
 }
