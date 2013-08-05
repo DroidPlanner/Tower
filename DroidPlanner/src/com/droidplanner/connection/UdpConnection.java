@@ -11,7 +11,6 @@ import android.content.SharedPreferences;
 import android.net.DhcpInfo;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
-import android.util.Log;
 
 public class UdpConnection extends MAVLinkConnection {
 
@@ -52,9 +51,7 @@ public class UdpConnection extends MAVLinkConnection {
 				byte[] buffer = params[0];
 				DatagramPacket packet = new DatagramPacket(buffer, buffer.length,
 						hostAdd, hostPort);
-				Log.d("UDP", "packet Builded");
 				socket.send(packet);
-				Log.d("UDP", "packet Sent");
 				
 			}catch (Exception e){
 				e.printStackTrace();				
@@ -79,7 +76,6 @@ public class UdpConnection extends MAVLinkConnection {
 		socket = new DatagramSocket(serverPort);
 		socket.setBroadcast(true);
 		socket.setReuseAddress(true);
-		Log.d("UDP", "Socket Open");
 	}
 	
 	@SuppressWarnings("unused")
