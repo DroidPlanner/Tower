@@ -84,7 +84,7 @@ public class msg_set_quad_motors_setpoint extends MAVLinkMessage{
     public msg_set_quad_motors_setpoint(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_SET_QUAD_MOTORS_SETPOINT;
+        this.msgid = MAVLINK_MSG_ID_SET_QUAD_MOTORS_SETPOINT;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "SET_QUAD_MOTORS_SETPOINT");
         //Log.d("MAVLINK_MSG_ID_SET_QUAD_MOTORS_SETPOINT", toString());

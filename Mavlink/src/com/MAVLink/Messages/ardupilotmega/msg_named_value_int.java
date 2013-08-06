@@ -76,7 +76,7 @@ public class msg_named_value_int extends MAVLinkMessage{
     public msg_named_value_int(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_NAMED_VALUE_INT;
+        this.msgid = MAVLINK_MSG_ID_NAMED_VALUE_INT;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "NAMED_VALUE_INT");
         //Log.d("MAVLINK_MSG_ID_NAMED_VALUE_INT", toString());

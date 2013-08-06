@@ -78,7 +78,7 @@ public class msg_set_gps_global_origin extends MAVLinkMessage{
     public msg_set_gps_global_origin(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_SET_GPS_GLOBAL_ORIGIN;
+        this.msgid = MAVLINK_MSG_ID_SET_GPS_GLOBAL_ORIGIN;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "SET_GPS_GLOBAL_ORIGIN");
         //Log.d("MAVLINK_MSG_ID_SET_GPS_GLOBAL_ORIGIN", toString());

@@ -108,7 +108,7 @@ public class msg_state_correction extends MAVLinkMessage{
     public msg_state_correction(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_STATE_CORRECTION;
+        this.msgid = MAVLINK_MSG_ID_STATE_CORRECTION;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "STATE_CORRECTION");
         //Log.d("MAVLINK_MSG_ID_STATE_CORRECTION", toString());

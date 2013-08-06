@@ -66,7 +66,7 @@ public class msg_file_transfer_res extends MAVLinkMessage{
     public msg_file_transfer_res(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_FILE_TRANSFER_RES;
+        this.msgid = MAVLINK_MSG_ID_FILE_TRANSFER_RES;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "FILE_TRANSFER_RES");
         //Log.d("MAVLINK_MSG_ID_FILE_TRANSFER_RES", toString());

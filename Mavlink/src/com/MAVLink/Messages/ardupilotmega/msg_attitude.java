@@ -96,7 +96,7 @@ public class msg_attitude extends MAVLinkMessage{
     public msg_attitude(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_ATTITUDE;
+        this.msgid = MAVLINK_MSG_ID_ATTITUDE;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "ATTITUDE");
         //Log.d("MAVLINK_MSG_ID_ATTITUDE", toString());

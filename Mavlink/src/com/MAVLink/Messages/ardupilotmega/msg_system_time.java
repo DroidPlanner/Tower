@@ -66,7 +66,7 @@ public class msg_system_time extends MAVLinkMessage{
     public msg_system_time(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_SYSTEM_TIME;
+        this.msgid = MAVLINK_MSG_ID_SYSTEM_TIME;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "SYSTEM_TIME");
         //Log.d("MAVLINK_MSG_ID_SYSTEM_TIME", toString());

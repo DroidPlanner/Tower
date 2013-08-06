@@ -120,7 +120,7 @@ public class msg_hil_controls extends MAVLinkMessage{
     public msg_hil_controls(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_HIL_CONTROLS;
+        this.msgid = MAVLINK_MSG_ID_HIL_CONTROLS;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "HIL_CONTROLS");
         //Log.d("MAVLINK_MSG_ID_HIL_CONTROLS", toString());

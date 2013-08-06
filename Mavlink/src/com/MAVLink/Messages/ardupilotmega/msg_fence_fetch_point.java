@@ -72,7 +72,7 @@ public class msg_fence_fetch_point extends MAVLinkMessage{
     public msg_fence_fetch_point(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_FENCE_FETCH_POINT;
+        this.msgid = MAVLINK_MSG_ID_FENCE_FETCH_POINT;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "FENCE_FETCH_POINT");
         //Log.d("MAVLINK_MSG_ID_FENCE_FETCH_POINT", toString());

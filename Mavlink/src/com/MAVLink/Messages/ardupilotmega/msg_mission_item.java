@@ -139,7 +139,7 @@ public class msg_mission_item extends MAVLinkMessage{
     public msg_mission_item(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_MISSION_ITEM;
+        this.msgid = MAVLINK_MSG_ID_MISSION_ITEM;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "MISSION_ITEM");
         //Log.d("MAVLINK_MSG_ID_MISSION_ITEM", toString());

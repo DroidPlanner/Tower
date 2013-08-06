@@ -102,7 +102,7 @@ public class msg_optical_flow extends MAVLinkMessage{
     public msg_optical_flow(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_OPTICAL_FLOW;
+        this.msgid = MAVLINK_MSG_ID_OPTICAL_FLOW;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "OPTICAL_FLOW");
         //Log.d("MAVLINK_MSG_ID_OPTICAL_FLOW", toString());

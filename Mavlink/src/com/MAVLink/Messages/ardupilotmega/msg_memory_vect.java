@@ -82,7 +82,7 @@ public class msg_memory_vect extends MAVLinkMessage{
     public msg_memory_vect(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_MEMORY_VECT;
+        this.msgid = MAVLINK_MSG_ID_MEMORY_VECT;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "MEMORY_VECT");
         //Log.d("MAVLINK_MSG_ID_MEMORY_VECT", toString());

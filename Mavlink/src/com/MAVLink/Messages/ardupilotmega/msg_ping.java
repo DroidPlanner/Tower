@@ -78,7 +78,7 @@ public class msg_ping extends MAVLinkMessage{
     public msg_ping(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_PING;
+        this.msgid = MAVLINK_MSG_ID_PING;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "PING");
         //Log.d("MAVLINK_MSG_ID_PING", toString());

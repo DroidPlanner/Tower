@@ -109,7 +109,7 @@ public class msg_limits_status extends MAVLinkMessage{
     public msg_limits_status(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_LIMITS_STATUS;
+        this.msgid = MAVLINK_MSG_ID_LIMITS_STATUS;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "LIMITS_STATUS");
         //Log.d("MAVLINK_MSG_ID_LIMITS_STATUS", toString());

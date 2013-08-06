@@ -66,7 +66,7 @@ public class msg_mission_request_list extends MAVLinkMessage{
     public msg_mission_request_list(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_MISSION_REQUEST_LIST;
+        this.msgid = MAVLINK_MSG_ID_MISSION_REQUEST_LIST;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "MISSION_REQUEST_LIST");
         //Log.d("MAVLINK_MSG_ID_MISSION_REQUEST_LIST", toString());

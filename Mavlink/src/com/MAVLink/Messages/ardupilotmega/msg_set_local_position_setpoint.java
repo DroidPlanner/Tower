@@ -96,7 +96,7 @@ public class msg_set_local_position_setpoint extends MAVLinkMessage{
     public msg_set_local_position_setpoint(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_SET_LOCAL_POSITION_SETPOINT;
+        this.msgid = MAVLINK_MSG_ID_SET_LOCAL_POSITION_SETPOINT;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "SET_LOCAL_POSITION_SETPOINT");
         //Log.d("MAVLINK_MSG_ID_SET_LOCAL_POSITION_SETPOINT", toString());

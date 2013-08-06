@@ -66,7 +66,7 @@ public class msg_mission_clear_all extends MAVLinkMessage{
     public msg_mission_clear_all(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_MISSION_CLEAR_ALL;
+        this.msgid = MAVLINK_MSG_ID_MISSION_CLEAR_ALL;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "MISSION_CLEAR_ALL");
         //Log.d("MAVLINK_MSG_ID_MISSION_CLEAR_ALL", toString());

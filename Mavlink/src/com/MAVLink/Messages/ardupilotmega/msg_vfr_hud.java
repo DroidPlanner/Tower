@@ -90,7 +90,7 @@ public class msg_vfr_hud extends MAVLinkMessage{
     public msg_vfr_hud(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_VFR_HUD;
+        this.msgid = MAVLINK_MSG_ID_VFR_HUD;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "VFR_HUD");
         //Log.d("MAVLINK_MSG_ID_VFR_HUD", toString());

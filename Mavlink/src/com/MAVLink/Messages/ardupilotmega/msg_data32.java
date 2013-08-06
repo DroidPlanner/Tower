@@ -76,7 +76,7 @@ public class msg_data32 extends MAVLinkMessage{
     public msg_data32(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_DATA32;
+        this.msgid = MAVLINK_MSG_ID_DATA32;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "DATA32");
         //Log.d("MAVLINK_MSG_ID_DATA32", toString());

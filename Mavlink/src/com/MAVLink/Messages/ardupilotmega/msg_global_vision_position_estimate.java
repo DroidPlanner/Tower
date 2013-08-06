@@ -96,7 +96,7 @@ public class msg_global_vision_position_estimate extends MAVLinkMessage{
     public msg_global_vision_position_estimate(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_GLOBAL_VISION_POSITION_ESTIMATE;
+        this.msgid = MAVLINK_MSG_ID_GLOBAL_VISION_POSITION_ESTIMATE;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "GLOBAL_VISION_POSITION_ESTIMATE");
         //Log.d("MAVLINK_MSG_ID_GLOBAL_VISION_POSITION_ESTIMATE", toString());

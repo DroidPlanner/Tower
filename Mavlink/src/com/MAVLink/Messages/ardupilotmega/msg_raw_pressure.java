@@ -84,7 +84,7 @@ public class msg_raw_pressure extends MAVLinkMessage{
     public msg_raw_pressure(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_RAW_PRESSURE;
+        this.msgid = MAVLINK_MSG_ID_RAW_PRESSURE;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "RAW_PRESSURE");
         //Log.d("MAVLINK_MSG_ID_RAW_PRESSURE", toString());

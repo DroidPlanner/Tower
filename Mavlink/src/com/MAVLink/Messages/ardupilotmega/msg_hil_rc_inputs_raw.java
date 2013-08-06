@@ -138,7 +138,7 @@ public class msg_hil_rc_inputs_raw extends MAVLinkMessage{
     public msg_hil_rc_inputs_raw(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_HIL_RC_INPUTS_RAW;
+        this.msgid = MAVLINK_MSG_ID_HIL_RC_INPUTS_RAW;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "HIL_RC_INPUTS_RAW");
         //Log.d("MAVLINK_MSG_ID_HIL_RC_INPUTS_RAW", toString());

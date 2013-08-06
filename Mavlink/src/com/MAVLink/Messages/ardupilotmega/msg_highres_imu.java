@@ -144,7 +144,7 @@ public class msg_highres_imu extends MAVLinkMessage{
     public msg_highres_imu(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_HIGHRES_IMU;
+        this.msgid = MAVLINK_MSG_ID_HIGHRES_IMU;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "HIGHRES_IMU");
         //Log.d("MAVLINK_MSG_ID_HIGHRES_IMU", toString());

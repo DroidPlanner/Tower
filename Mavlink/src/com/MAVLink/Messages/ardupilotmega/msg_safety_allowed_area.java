@@ -96,7 +96,7 @@ public class msg_safety_allowed_area extends MAVLinkMessage{
     public msg_safety_allowed_area(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_SAFETY_ALLOWED_AREA;
+        this.msgid = MAVLINK_MSG_ID_SAFETY_ALLOWED_AREA;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "SAFETY_ALLOWED_AREA");
         //Log.d("MAVLINK_MSG_ID_SAFETY_ALLOWED_AREA", toString());

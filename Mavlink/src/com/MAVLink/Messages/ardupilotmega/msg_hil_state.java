@@ -150,7 +150,7 @@ public class msg_hil_state extends MAVLinkMessage{
     public msg_hil_state(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_HIL_STATE;
+        this.msgid = MAVLINK_MSG_ID_HIL_STATE;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "HIL_STATE");
         //Log.d("MAVLINK_MSG_ID_HIL_STATE", toString());

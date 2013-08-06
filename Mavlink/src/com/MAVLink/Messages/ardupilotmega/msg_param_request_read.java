@@ -82,7 +82,7 @@ public class msg_param_request_read extends MAVLinkMessage{
     public msg_param_request_read(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_PARAM_REQUEST_READ;
+        this.msgid = MAVLINK_MSG_ID_PARAM_REQUEST_READ;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "PARAM_REQUEST_READ");
         //Log.d("MAVLINK_MSG_ID_PARAM_REQUEST_READ", toString());

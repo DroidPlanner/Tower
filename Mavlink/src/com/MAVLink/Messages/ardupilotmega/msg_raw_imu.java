@@ -114,7 +114,7 @@ public class msg_raw_imu extends MAVLinkMessage{
     public msg_raw_imu(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_RAW_IMU;
+        this.msgid = MAVLINK_MSG_ID_RAW_IMU;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "RAW_IMU");
         //Log.d("MAVLINK_MSG_ID_RAW_IMU", toString());

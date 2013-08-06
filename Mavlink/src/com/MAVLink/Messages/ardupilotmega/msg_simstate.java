@@ -120,7 +120,7 @@ public class msg_simstate extends MAVLinkMessage{
     public msg_simstate(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_SIMSTATE;
+        this.msgid = MAVLINK_MSG_ID_SIMSTATE;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "SIMSTATE");
         //Log.d("MAVLINK_MSG_ID_SIMSTATE", toString());

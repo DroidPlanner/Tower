@@ -108,7 +108,7 @@ public class msg_battery_status extends MAVLinkMessage{
     public msg_battery_status(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_BATTERY_STATUS;
+        this.msgid = MAVLINK_MSG_ID_BATTERY_STATUS;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "BATTERY_STATUS");
         //Log.d("MAVLINK_MSG_ID_BATTERY_STATUS", toString());

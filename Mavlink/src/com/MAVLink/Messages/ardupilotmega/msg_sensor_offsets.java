@@ -127,7 +127,7 @@ public class msg_sensor_offsets extends MAVLinkMessage{
     public msg_sensor_offsets(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_SENSOR_OFFSETS;
+        this.msgid = MAVLINK_MSG_ID_SENSOR_OFFSETS;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "SENSOR_OFFSETS");
         //Log.d("MAVLINK_MSG_ID_SENSOR_OFFSETS", toString());

@@ -78,7 +78,7 @@ public class msg_scaled_pressure extends MAVLinkMessage{
     public msg_scaled_pressure(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_SCALED_PRESSURE;
+        this.msgid = MAVLINK_MSG_ID_SCALED_PRESSURE;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "SCALED_PRESSURE");
         //Log.d("MAVLINK_MSG_ID_SCALED_PRESSURE", toString());

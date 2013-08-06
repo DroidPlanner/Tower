@@ -102,7 +102,7 @@ public class msg_nav_controller_output extends MAVLinkMessage{
     public msg_nav_controller_output(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT;
+        this.msgid = MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "NAV_CONTROLLER_OUTPUT");
         //Log.d("MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT", toString());

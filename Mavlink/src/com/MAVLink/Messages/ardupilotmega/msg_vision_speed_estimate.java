@@ -78,7 +78,7 @@ public class msg_vision_speed_estimate extends MAVLinkMessage{
     public msg_vision_speed_estimate(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_VISION_SPEED_ESTIMATE;
+        this.msgid = MAVLINK_MSG_ID_VISION_SPEED_ESTIMATE;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "VISION_SPEED_ESTIMATE");
         //Log.d("MAVLINK_MSG_ID_VISION_SPEED_ESTIMATE", toString());

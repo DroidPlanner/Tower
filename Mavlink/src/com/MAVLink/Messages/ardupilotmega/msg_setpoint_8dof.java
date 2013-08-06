@@ -108,7 +108,7 @@ public class msg_setpoint_8dof extends MAVLinkMessage{
     public msg_setpoint_8dof(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_SETPOINT_8DOF;
+        this.msgid = MAVLINK_MSG_ID_SETPOINT_8DOF;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "SETPOINT_8DOF");
         //Log.d("MAVLINK_MSG_ID_SETPOINT_8DOF", toString());

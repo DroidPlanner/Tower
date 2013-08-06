@@ -84,7 +84,7 @@ public class msg_request_data_stream extends MAVLinkMessage{
     public msg_request_data_stream(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_REQUEST_DATA_STREAM;
+        this.msgid = MAVLINK_MSG_ID_REQUEST_DATA_STREAM;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "REQUEST_DATA_STREAM");
         //Log.d("MAVLINK_MSG_ID_REQUEST_DATA_STREAM", toString());

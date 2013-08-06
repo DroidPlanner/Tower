@@ -66,7 +66,7 @@ public class msg_hwstatus extends MAVLinkMessage{
     public msg_hwstatus(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_HWSTATUS;
+        this.msgid = MAVLINK_MSG_ID_HWSTATUS;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "HWSTATUS");
         //Log.d("MAVLINK_MSG_ID_HWSTATUS", toString());

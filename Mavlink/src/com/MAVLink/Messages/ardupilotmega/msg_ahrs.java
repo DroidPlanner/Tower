@@ -96,7 +96,7 @@ public class msg_ahrs extends MAVLinkMessage{
     public msg_ahrs(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_AHRS;
+        this.msgid = MAVLINK_MSG_ID_AHRS;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "AHRS");
         //Log.d("MAVLINK_MSG_ID_AHRS", toString());

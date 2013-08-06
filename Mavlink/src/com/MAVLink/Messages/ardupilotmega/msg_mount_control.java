@@ -90,7 +90,7 @@ public class msg_mount_control extends MAVLinkMessage{
     public msg_mount_control(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_MOUNT_CONTROL;
+        this.msgid = MAVLINK_MSG_ID_MOUNT_CONTROL;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "MOUNT_CONTROL");
         //Log.d("MAVLINK_MSG_ID_MOUNT_CONTROL", toString());

@@ -79,7 +79,7 @@ public class msg_fence_status extends MAVLinkMessage{
     public msg_fence_status(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_FENCE_STATUS;
+        this.msgid = MAVLINK_MSG_ID_FENCE_STATUS;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "FENCE_STATUS");
         //Log.d("MAVLINK_MSG_ID_FENCE_STATUS", toString());

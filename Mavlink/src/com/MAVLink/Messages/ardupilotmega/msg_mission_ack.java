@@ -72,7 +72,7 @@ public class msg_mission_ack extends MAVLinkMessage{
     public msg_mission_ack(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_MISSION_ACK;
+        this.msgid = MAVLINK_MSG_ID_MISSION_ACK;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "MISSION_ACK");
         //Log.d("MAVLINK_MSG_ID_MISSION_ACK", toString());

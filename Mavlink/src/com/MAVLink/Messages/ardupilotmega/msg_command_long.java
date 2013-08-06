@@ -120,7 +120,7 @@ public class msg_command_long extends MAVLinkMessage{
     public msg_command_long(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_COMMAND_LONG;
+        this.msgid = MAVLINK_MSG_ID_COMMAND_LONG;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "COMMAND_LONG");
         //Log.d("MAVLINK_MSG_ID_COMMAND_LONG", toString());

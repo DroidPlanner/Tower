@@ -88,7 +88,7 @@ public class msg_file_transfer_start extends MAVLinkMessage{
     public msg_file_transfer_start(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_FILE_TRANSFER_START;
+        this.msgid = MAVLINK_MSG_ID_FILE_TRANSFER_START;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "FILE_TRANSFER_START");
         //Log.d("MAVLINK_MSG_ID_FILE_TRANSFER_START", toString());

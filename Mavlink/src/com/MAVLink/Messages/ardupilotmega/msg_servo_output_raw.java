@@ -114,7 +114,7 @@ public class msg_servo_output_raw extends MAVLinkMessage{
     public msg_servo_output_raw(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_SERVO_OUTPUT_RAW;
+        this.msgid = MAVLINK_MSG_ID_SERVO_OUTPUT_RAW;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "SERVO_OUTPUT_RAW");
         //Log.d("MAVLINK_MSG_ID_SERVO_OUTPUT_RAW", toString());

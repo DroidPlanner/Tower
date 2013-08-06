@@ -110,7 +110,7 @@ public class msg_gps_status extends MAVLinkMessage{
     public msg_gps_status(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_GPS_STATUS;
+        this.msgid = MAVLINK_MSG_ID_GPS_STATUS;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "GPS_STATUS");
         //Log.d("MAVLINK_MSG_ID_GPS_STATUS", toString());

@@ -120,7 +120,7 @@ public class msg_rc_channels_scaled extends MAVLinkMessage{
     public msg_rc_channels_scaled(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_RC_CHANNELS_SCALED;
+        this.msgid = MAVLINK_MSG_ID_RC_CHANNELS_SCALED;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "RC_CHANNELS_SCALED");
         //Log.d("MAVLINK_MSG_ID_RC_CHANNELS_SCALED", toString());

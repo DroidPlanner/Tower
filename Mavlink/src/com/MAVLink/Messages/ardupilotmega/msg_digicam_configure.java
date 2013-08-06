@@ -120,7 +120,7 @@ public class msg_digicam_configure extends MAVLinkMessage{
     public msg_digicam_configure(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_DIGICAM_CONFIGURE;
+        this.msgid = MAVLINK_MSG_ID_DIGICAM_CONFIGURE;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "DIGICAM_CONFIGURE");
         //Log.d("MAVLINK_MSG_ID_DIGICAM_CONFIGURE", toString());

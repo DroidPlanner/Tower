@@ -76,7 +76,7 @@ public class msg_file_transfer_dir_list extends MAVLinkMessage{
     public msg_file_transfer_dir_list(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_FILE_TRANSFER_DIR_LIST;
+        this.msgid = MAVLINK_MSG_ID_FILE_TRANSFER_DIR_LIST;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "FILE_TRANSFER_DIR_LIST");
         //Log.d("MAVLINK_MSG_ID_FILE_TRANSFER_DIR_LIST", toString());

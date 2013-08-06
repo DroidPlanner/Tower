@@ -88,7 +88,7 @@ public class msg_param_value extends MAVLinkMessage{
     public msg_param_value(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_PARAM_VALUE;
+        this.msgid = MAVLINK_MSG_ID_PARAM_VALUE;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "PARAM_VALUE");
         //Log.d("MAVLINK_MSG_ID_PARAM_VALUE", toString());

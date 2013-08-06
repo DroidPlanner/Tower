@@ -90,7 +90,7 @@ public class msg_heartbeat extends MAVLinkMessage{
     public msg_heartbeat(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_HEARTBEAT;
+        this.msgid = MAVLINK_MSG_ID_HEARTBEAT;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "HEARTBEAT");
         //Log.d("MAVLINK_MSG_ID_HEARTBEAT", toString());

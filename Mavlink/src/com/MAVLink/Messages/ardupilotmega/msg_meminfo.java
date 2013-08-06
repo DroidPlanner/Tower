@@ -66,7 +66,7 @@ public class msg_meminfo extends MAVLinkMessage{
     public msg_meminfo(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_MEMINFO;
+        this.msgid = MAVLINK_MSG_ID_MEMINFO;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "MEMINFO");
         //Log.d("MAVLINK_MSG_ID_MEMINFO", toString());

@@ -96,7 +96,7 @@ public class msg_radio extends MAVLinkMessage{
     public msg_radio(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_RADIO;
+        this.msgid = MAVLINK_MSG_ID_RADIO;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "RADIO");
         //Log.d("MAVLINK_MSG_ID_RADIO", toString());

@@ -120,7 +120,7 @@ public class msg_rc_channels_raw extends MAVLinkMessage{
     public msg_rc_channels_raw(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_RC_CHANNELS_RAW;
+        this.msgid = MAVLINK_MSG_ID_RC_CHANNELS_RAW;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "RC_CHANNELS_RAW");
         //Log.d("MAVLINK_MSG_ID_RC_CHANNELS_RAW", toString());

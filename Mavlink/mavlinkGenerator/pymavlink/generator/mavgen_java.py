@@ -233,7 +233,7 @@ ${{ordered_fields:	    ${unpackField}
     public msg_${name_lower}(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_${name};
+        this.msgid = MAVLINK_MSG_ID_${name};
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "${name}");
         //Log.d("MAVLINK_MSG_ID_${name}", toString());

@@ -90,7 +90,7 @@ public class msg_manual_control extends MAVLinkMessage{
     public msg_manual_control(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_MANUAL_CONTROL;
+        this.msgid = MAVLINK_MSG_ID_MANUAL_CONTROL;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "MANUAL_CONTROL");
         //Log.d("MAVLINK_MSG_ID_MANUAL_CONTROL", toString());

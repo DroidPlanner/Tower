@@ -72,7 +72,7 @@ public class msg_wind extends MAVLinkMessage{
     public msg_wind(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_WIND;
+        this.msgid = MAVLINK_MSG_ID_WIND;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "WIND");
         //Log.d("MAVLINK_MSG_ID_WIND", toString());

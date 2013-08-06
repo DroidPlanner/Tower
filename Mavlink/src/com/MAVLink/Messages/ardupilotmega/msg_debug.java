@@ -72,7 +72,7 @@ public class msg_debug extends MAVLinkMessage{
     public msg_debug(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_DEBUG;
+        this.msgid = MAVLINK_MSG_ID_DEBUG;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "DEBUG");
         //Log.d("MAVLINK_MSG_ID_DEBUG", toString());

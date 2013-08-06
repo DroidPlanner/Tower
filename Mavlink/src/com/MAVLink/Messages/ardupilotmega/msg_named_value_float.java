@@ -76,7 +76,7 @@ public class msg_named_value_float extends MAVLinkMessage{
     public msg_named_value_float(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_NAMED_VALUE_FLOAT;
+        this.msgid = MAVLINK_MSG_ID_NAMED_VALUE_FLOAT;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "NAMED_VALUE_FLOAT");
         //Log.d("MAVLINK_MSG_ID_NAMED_VALUE_FLOAT", toString());

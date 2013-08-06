@@ -115,7 +115,7 @@ public class msg_gps_raw_int extends MAVLinkMessage{
     public msg_gps_raw_int(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_GPS_RAW_INT;
+        this.msgid = MAVLINK_MSG_ID_GPS_RAW_INT;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "GPS_RAW_INT");
         //Log.d("MAVLINK_MSG_ID_GPS_RAW_INT", toString());

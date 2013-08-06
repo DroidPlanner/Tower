@@ -102,7 +102,7 @@ public class msg_attitude_quaternion extends MAVLinkMessage{
     public msg_attitude_quaternion(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_ATTITUDE_QUATERNION;
+        this.msgid = MAVLINK_MSG_ID_ATTITUDE_QUATERNION;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "ATTITUDE_QUATERNION");
         //Log.d("MAVLINK_MSG_ID_ATTITUDE_QUATERNION", toString());

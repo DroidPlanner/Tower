@@ -90,7 +90,7 @@ public class msg_set_roll_pitch_yaw_speed_thrust extends MAVLinkMessage{
     public msg_set_roll_pitch_yaw_speed_thrust(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_SET_ROLL_PITCH_YAW_SPEED_THRUST;
+        this.msgid = MAVLINK_MSG_ID_SET_ROLL_PITCH_YAW_SPEED_THRUST;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "SET_ROLL_PITCH_YAW_SPEED_THRUST");
         //Log.d("MAVLINK_MSG_ID_SET_ROLL_PITCH_YAW_SPEED_THRUST", toString());

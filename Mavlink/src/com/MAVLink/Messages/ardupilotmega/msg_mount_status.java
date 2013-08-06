@@ -84,7 +84,7 @@ public class msg_mount_status extends MAVLinkMessage{
     public msg_mount_status(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_MOUNT_STATUS;
+        this.msgid = MAVLINK_MSG_ID_MOUNT_STATUS;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "MOUNT_STATUS");
         //Log.d("MAVLINK_MSG_ID_MOUNT_STATUS", toString());

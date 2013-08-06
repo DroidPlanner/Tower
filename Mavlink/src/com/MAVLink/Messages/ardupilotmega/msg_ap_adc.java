@@ -90,7 +90,7 @@ public class msg_ap_adc extends MAVLinkMessage{
     public msg_ap_adc(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_AP_ADC;
+        this.msgid = MAVLINK_MSG_ID_AP_ADC;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "AP_ADC");
         //Log.d("MAVLINK_MSG_ID_AP_ADC", toString());

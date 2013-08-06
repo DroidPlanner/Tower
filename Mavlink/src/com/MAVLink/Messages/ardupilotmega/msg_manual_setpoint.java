@@ -96,7 +96,7 @@ public class msg_manual_setpoint extends MAVLinkMessage{
     public msg_manual_setpoint(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_MANUAL_SETPOINT;
+        this.msgid = MAVLINK_MSG_ID_MANUAL_SETPOINT;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "MANUAL_SETPOINT");
         //Log.d("MAVLINK_MSG_ID_MANUAL_SETPOINT", toString());

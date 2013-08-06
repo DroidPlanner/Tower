@@ -70,7 +70,7 @@ public class msg_statustext extends MAVLinkMessage{
     public msg_statustext(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_STATUSTEXT;
+        this.msgid = MAVLINK_MSG_ID_STATUSTEXT;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "STATUSTEXT");
         //Log.d("MAVLINK_MSG_ID_STATUSTEXT", toString());

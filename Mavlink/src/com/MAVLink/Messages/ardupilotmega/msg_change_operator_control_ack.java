@@ -72,7 +72,7 @@ public class msg_change_operator_control_ack extends MAVLinkMessage{
     public msg_change_operator_control_ack(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_CHANGE_OPERATOR_CONTROL_ACK;
+        this.msgid = MAVLINK_MSG_ID_CHANGE_OPERATOR_CONTROL_ACK;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "CHANGE_OPERATOR_CONTROL_ACK");
         //Log.d("MAVLINK_MSG_ID_CHANGE_OPERATOR_CONTROL_ACK", toString());

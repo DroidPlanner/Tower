@@ -64,7 +64,7 @@ public class msg_auth_key extends MAVLinkMessage{
     public msg_auth_key(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_AUTH_KEY;
+        this.msgid = MAVLINK_MSG_ID_AUTH_KEY;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "AUTH_KEY");
         //Log.d("MAVLINK_MSG_ID_AUTH_KEY", toString());

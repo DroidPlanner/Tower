@@ -132,7 +132,7 @@ public class msg_sys_status extends MAVLinkMessage{
     public msg_sys_status(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_SYS_STATUS;
+        this.msgid = MAVLINK_MSG_ID_SYS_STATUS;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "SYS_STATUS");
         //Log.d("MAVLINK_MSG_ID_SYS_STATUS", toString());

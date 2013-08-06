@@ -88,7 +88,7 @@ public class msg_debug_vect extends MAVLinkMessage{
     public msg_debug_vect(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_DEBUG_VECT;
+        this.msgid = MAVLINK_MSG_ID_DEBUG_VECT;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "DEBUG_VECT");
         //Log.d("MAVLINK_MSG_ID_DEBUG_VECT", toString());

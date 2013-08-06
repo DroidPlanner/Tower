@@ -72,7 +72,7 @@ public class msg_set_mode extends MAVLinkMessage{
     public msg_set_mode(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = = MAVLINK_MSG_ID_SET_MODE;
+        this.msgid = MAVLINK_MSG_ID_SET_MODE;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "SET_MODE");
         //Log.d("MAVLINK_MSG_ID_SET_MODE", toString());
