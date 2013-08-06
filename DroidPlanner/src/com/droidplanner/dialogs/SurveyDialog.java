@@ -24,15 +24,14 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener {
 	private SeekBarWithText angleView;
 	private SeekBarWithText altitudeView;
 	private SeekBarWithText sidelapView;
-	
+
 	private Polygon polygon;
 	private LatLng originPoint;
 
-	private Double altitude;
-	private Double lineDistance;
+	private SurveyData surveyData;
 
-	public void generateSurveyDialog(Polygon polygon,double defaultHatchAngle, LatLng lastPoint,
-			double defaultAltitude, Context context) {
+	public void generateSurveyDialog(Polygon polygon, double defaultHatchAngle,
+			LatLng lastPoint, double defaultAltitude, Context context) {
 		this.polygon = polygon;
 		this.originPoint = lastPoint;
 
@@ -41,14 +40,19 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener {
 					.show();
 			return;
 		}
-		
+
 		AlertDialog dialog = buildDialog(context);
 
-		sidelapView.setValue(10);
-		overlapView.setValue(10);
-		angleView.setValue(defaultHatchAngle);
-		altitudeView.setValue(defaultAltitude);
+		surveyData = new SurveyData(defaultHatchAngle,defaultAltitude,50,60);
+		updateViews();
 		dialog.show();
+	}
+
+	private void updateViews() {
+		angleView.setValue(surveyData.getAngle());
+		altitudeView.setValue(surveyData.getAltitude());
+		sidelapView.setValue(surveyData.getSidelap());
+		overlapView.setValue(surveyData.getOverlap());		
 	}
 
 	private boolean checkIfPolygonIsValid(Polygon polygon) {
@@ -68,18 +72,16 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener {
 		angleView = (SeekBarWithText) layout.findViewById(R.id.angleView);
 		overlapView = (SeekBarWithText) layout.findViewById(R.id.overlapView);
 		sidelapView = (SeekBarWithText) layout.findViewById(R.id.sidelapView);
-		altitudeView = (SeekBarWithText) layout.findViewById(R.id.altitudeView);	
-
+		altitudeView = (SeekBarWithText) layout.findViewById(R.id.altitudeView);
+		
 		return dialog;
 	}
 
 	@Override
 	public void onClick(DialogInterface arg0, int which) {
 		if (which == Dialog.BUTTON_POSITIVE) {
-			GridBuilder grid = new GridBuilder(polygon, angleView.getValue(),
-					lineDistance, originPoint,
-					altitude);
-
+			GridBuilder grid = new GridBuilder(polygon, surveyData.getAngle(),
+					surveyData.getLineDistance(), originPoint, surveyData.getAltitude());
 			onPolygonGenerated(grid.hatchfill());
 		}
 	}
