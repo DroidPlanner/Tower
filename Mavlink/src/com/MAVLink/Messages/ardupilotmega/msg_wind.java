@@ -17,15 +17,15 @@ public class msg_wind extends MAVLinkMessage{
 	
 
  	/**
-	*wind direction that wind is coming from (degrees)
+	* wind direction that wind is coming from (degrees)
 	*/
 	public float direction; 
  	/**
-	*wind speed in ground plane (m/s)
+	* wind speed in ground plane (m/s)
 	*/
 	public float speed; 
  	/**
-	*vertical wind speed (m/s)
+	* vertical wind speed (m/s)
 	*/
 	public float speed_z; 
 
@@ -69,9 +69,11 @@ public class msg_wind extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_wind(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_WIND;
-        unpack(payload);
+    public msg_wind(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_WIND;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "WIND");
         //Log.d("MAVLINK_MSG_ID_WIND", toString());
     }

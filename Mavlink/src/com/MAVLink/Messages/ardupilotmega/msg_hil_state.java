@@ -17,67 +17,67 @@ public class msg_hil_state extends MAVLinkMessage{
 	
 
  	/**
-	*Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+	* Timestamp (microseconds since UNIX epoch or microseconds since system boot)
 	*/
 	public long time_usec; 
  	/**
-	*Roll angle (rad)
+	* Roll angle (rad)
 	*/
 	public float roll; 
  	/**
-	*Pitch angle (rad)
+	* Pitch angle (rad)
 	*/
 	public float pitch; 
  	/**
-	*Yaw angle (rad)
+	* Yaw angle (rad)
 	*/
 	public float yaw; 
  	/**
-	*Roll angular speed (rad/s)
+	* Roll angular speed (rad/s)
 	*/
 	public float rollspeed; 
  	/**
-	*Pitch angular speed (rad/s)
+	* Pitch angular speed (rad/s)
 	*/
 	public float pitchspeed; 
  	/**
-	*Yaw angular speed (rad/s)
+	* Yaw angular speed (rad/s)
 	*/
 	public float yawspeed; 
  	/**
-	*Latitude, expressed as * 1E7
+	* Latitude, expressed as * 1E7
 	*/
 	public int lat; 
  	/**
-	*Longitude, expressed as * 1E7
+	* Longitude, expressed as * 1E7
 	*/
 	public int lon; 
  	/**
-	*Altitude in meters, expressed as * 1000 (millimeters)
+	* Altitude in meters, expressed as * 1000 (millimeters)
 	*/
 	public int alt; 
  	/**
-	*Ground X Speed (Latitude), expressed as m/s * 100
+	* Ground X Speed (Latitude), expressed as m/s * 100
 	*/
 	public short vx; 
  	/**
-	*Ground Y Speed (Longitude), expressed as m/s * 100
+	* Ground Y Speed (Longitude), expressed as m/s * 100
 	*/
 	public short vy; 
  	/**
-	*Ground Z Speed (Altitude), expressed as m/s * 100
+	* Ground Z Speed (Altitude), expressed as m/s * 100
 	*/
 	public short vz; 
  	/**
-	*X acceleration (mg)
+	* X acceleration (mg)
 	*/
 	public short xacc; 
  	/**
-	*Y acceleration (mg)
+	* Y acceleration (mg)
 	*/
 	public short yacc; 
  	/**
-	*Z acceleration (mg)
+	* Z acceleration (mg)
 	*/
 	public short zacc; 
 
@@ -147,9 +147,11 @@ public class msg_hil_state extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_hil_state(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_HIL_STATE;
-        unpack(payload);
+    public msg_hil_state(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_HIL_STATE;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "HIL_STATE");
         //Log.d("MAVLINK_MSG_ID_HIL_STATE", toString());
     }

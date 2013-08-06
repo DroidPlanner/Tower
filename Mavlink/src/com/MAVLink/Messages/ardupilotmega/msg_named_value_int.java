@@ -17,15 +17,15 @@ public class msg_named_value_int extends MAVLinkMessage{
 	
 
  	/**
-	*Timestamp (milliseconds since system boot)
+	* Timestamp (milliseconds since system boot)
 	*/
 	public int time_boot_ms; 
  	/**
-	*Signed integer value
+	* Signed integer value
 	*/
 	public int value; 
  	/**
-	*Name of the debug variable
+	* Name of the debug variable
 	*/
 	public byte name[] = new byte[10]; 
 
@@ -73,9 +73,11 @@ public class msg_named_value_int extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_named_value_int(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_NAMED_VALUE_INT;
-        unpack(payload);
+    public msg_named_value_int(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_NAMED_VALUE_INT;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "NAMED_VALUE_INT");
         //Log.d("MAVLINK_MSG_ID_NAMED_VALUE_INT", toString());
     }

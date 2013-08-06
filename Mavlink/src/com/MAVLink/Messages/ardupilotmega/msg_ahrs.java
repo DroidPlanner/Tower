@@ -17,31 +17,31 @@ public class msg_ahrs extends MAVLinkMessage{
 	
 
  	/**
-	*X gyro drift estimate rad/s
+	* X gyro drift estimate rad/s
 	*/
 	public float omegaIx; 
  	/**
-	*Y gyro drift estimate rad/s
+	* Y gyro drift estimate rad/s
 	*/
 	public float omegaIy; 
  	/**
-	*Z gyro drift estimate rad/s
+	* Z gyro drift estimate rad/s
 	*/
 	public float omegaIz; 
  	/**
-	*average accel_weight
+	* average accel_weight
 	*/
 	public float accel_weight; 
  	/**
-	*average renormalisation value
+	* average renormalisation value
 	*/
 	public float renorm_val; 
  	/**
-	*average error_roll_pitch value
+	* average error_roll_pitch value
 	*/
 	public float error_rp; 
  	/**
-	*average error_yaw value
+	* average error_yaw value
 	*/
 	public float error_yaw; 
 
@@ -93,9 +93,11 @@ public class msg_ahrs extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_ahrs(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_AHRS;
-        unpack(payload);
+    public msg_ahrs(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_AHRS;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "AHRS");
         //Log.d("MAVLINK_MSG_ID_AHRS", toString());
     }

@@ -17,11 +17,11 @@ public class msg_system_time extends MAVLinkMessage{
 	
 
  	/**
-	*Timestamp of the master clock in microseconds since UNIX epoch.
+	* Timestamp of the master clock in microseconds since UNIX epoch.
 	*/
 	public long time_unix_usec; 
  	/**
-	*Timestamp of the component clock since boot time in milliseconds.
+	* Timestamp of the component clock since boot time in milliseconds.
 	*/
 	public int time_boot_ms; 
 
@@ -63,9 +63,11 @@ public class msg_system_time extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_system_time(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_SYSTEM_TIME;
-        unpack(payload);
+    public msg_system_time(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_SYSTEM_TIME;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "SYSTEM_TIME");
         //Log.d("MAVLINK_MSG_ID_SYSTEM_TIME", toString());
     }

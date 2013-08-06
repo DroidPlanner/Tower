@@ -17,39 +17,39 @@ public class msg_safety_set_allowed_area extends MAVLinkMessage{
 	
 
  	/**
-	*x position 1 / Latitude 1
+	* x position 1 / Latitude 1
 	*/
 	public float p1x; 
  	/**
-	*y position 1 / Longitude 1
+	* y position 1 / Longitude 1
 	*/
 	public float p1y; 
  	/**
-	*z position 1 / Altitude 1
+	* z position 1 / Altitude 1
 	*/
 	public float p1z; 
  	/**
-	*x position 2 / Latitude 2
+	* x position 2 / Latitude 2
 	*/
 	public float p2x; 
  	/**
-	*y position 2 / Longitude 2
+	* y position 2 / Longitude 2
 	*/
 	public float p2y; 
  	/**
-	*z position 2 / Altitude 2
+	* z position 2 / Altitude 2
 	*/
 	public float p2z; 
  	/**
-	*System ID
+	* System ID
 	*/
 	public byte target_system; 
  	/**
-	*Component ID
+	* Component ID
 	*/
 	public byte target_component; 
  	/**
-	*Coordinate frame, as defined by MAV_FRAME enum in mavlink_types.h. Can be either global, GPS, right-handed with Z axis up or local, right handed, Z axis down.
+	* Coordinate frame, as defined by MAV_FRAME enum in mavlink_types.h. Can be either global, GPS, right-handed with Z axis up or local, right handed, Z axis down.
 	*/
 	public byte frame; 
 
@@ -105,9 +105,11 @@ public class msg_safety_set_allowed_area extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_safety_set_allowed_area(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_SAFETY_SET_ALLOWED_AREA;
-        unpack(payload);
+    public msg_safety_set_allowed_area(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_SAFETY_SET_ALLOWED_AREA;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "SAFETY_SET_ALLOWED_AREA");
         //Log.d("MAVLINK_MSG_ID_SAFETY_SET_ALLOWED_AREA", toString());
     }

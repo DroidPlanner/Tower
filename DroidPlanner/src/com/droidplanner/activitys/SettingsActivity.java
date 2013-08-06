@@ -2,7 +2,9 @@ package com.droidplanner.activitys;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
@@ -22,6 +24,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		findPreference("pref_max_fligth_path_size").setSummary(sharedPref.getString("pref_max_fligth_path_size", "") + " (set to zero to disable).");
 		findPreference("pref_server_ip").setSummary(sharedPref.getString("pref_server_ip", ""));
 		findPreference("pref_server_port").setSummary(sharedPref.getString("pref_server_port", ""));
+		findPreference("pref_udp_server_port").setSummary(sharedPref.getString("pref_udp_server_port", ""));
 		findPreference("pref_map_type").setSummary(sharedPref.getString("pref_map_type", ""));
 		if (sharedPref.getString("pref_rc_mode", "MODE2").equalsIgnoreCase("MODE1")) {
 			findPreference("pref_rc_mode").setSummary("Mode1: Throttle on RIGHT stick");
@@ -30,7 +33,15 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		}
 		findPreference("pref_rc_quickmode_left").setSummary(sharedPref.getString("pref_rc_quickmode_left", ""));
 		findPreference("pref_rc_quickmode_right").setSummary(sharedPref.getString("pref_rc_quickmode_right", ""));
-		//
+		
+		try {
+			EditTextPreference versionPref = (EditTextPreference)findPreference("version");
+			String version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+			versionPref.setTitle(getString(R.string.version) + ": " + version);
+		} catch (NameNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@SuppressWarnings("deprecation")

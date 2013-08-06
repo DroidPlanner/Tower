@@ -17,7 +17,7 @@ public class msg_mission_current extends MAVLinkMessage{
 	
 
  	/**
-	*Sequence
+	* Sequence
 	*/
 	public short seq; 
 
@@ -57,9 +57,11 @@ public class msg_mission_current extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_mission_current(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_MISSION_CURRENT;
-        unpack(payload);
+    public msg_mission_current(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_MISSION_CURRENT;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "MISSION_CURRENT");
         //Log.d("MAVLINK_MSG_ID_MISSION_CURRENT", toString());
     }

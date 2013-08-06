@@ -17,63 +17,63 @@ public class msg_highres_imu extends MAVLinkMessage{
 	
 
  	/**
-	*Timestamp (microseconds, synced to UNIX time or since system boot)
+	* Timestamp (microseconds, synced to UNIX time or since system boot)
 	*/
 	public long time_usec; 
  	/**
-	*X acceleration (m/s^2)
+	* X acceleration (m/s^2)
 	*/
 	public float xacc; 
  	/**
-	*Y acceleration (m/s^2)
+	* Y acceleration (m/s^2)
 	*/
 	public float yacc; 
  	/**
-	*Z acceleration (m/s^2)
+	* Z acceleration (m/s^2)
 	*/
 	public float zacc; 
  	/**
-	*Angular speed around X axis (rad / sec)
+	* Angular speed around X axis (rad / sec)
 	*/
 	public float xgyro; 
  	/**
-	*Angular speed around Y axis (rad / sec)
+	* Angular speed around Y axis (rad / sec)
 	*/
 	public float ygyro; 
  	/**
-	*Angular speed around Z axis (rad / sec)
+	* Angular speed around Z axis (rad / sec)
 	*/
 	public float zgyro; 
  	/**
-	*X Magnetic field (Gauss)
+	* X Magnetic field (Gauss)
 	*/
 	public float xmag; 
  	/**
-	*Y Magnetic field (Gauss)
+	* Y Magnetic field (Gauss)
 	*/
 	public float ymag; 
  	/**
-	*Z Magnetic field (Gauss)
+	* Z Magnetic field (Gauss)
 	*/
 	public float zmag; 
  	/**
-	*Absolute pressure in millibar
+	* Absolute pressure in millibar
 	*/
 	public float abs_pressure; 
  	/**
-	*Differential pressure in millibar
+	* Differential pressure in millibar
 	*/
 	public float diff_pressure; 
  	/**
-	*Altitude calculated from pressure
+	* Altitude calculated from pressure
 	*/
 	public float pressure_alt; 
  	/**
-	*Temperature in degrees celsius
+	* Temperature in degrees celsius
 	*/
 	public float temperature; 
  	/**
-	*Bitmask for fields that have updated since last message, bit 0 = xacc, bit 12: temperature
+	* Bitmask for fields that have updated since last message, bit 0 = xacc, bit 12: temperature
 	*/
 	public short fields_updated; 
 
@@ -141,9 +141,11 @@ public class msg_highres_imu extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_highres_imu(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_HIGHRES_IMU;
-        unpack(payload);
+    public msg_highres_imu(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_HIGHRES_IMU;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "HIGHRES_IMU");
         //Log.d("MAVLINK_MSG_ID_HIGHRES_IMU", toString());
     }

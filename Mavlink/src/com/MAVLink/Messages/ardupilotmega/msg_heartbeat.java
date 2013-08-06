@@ -17,27 +17,27 @@ public class msg_heartbeat extends MAVLinkMessage{
 	
 
  	/**
-	*A bitfield for use for autopilot-specific flags.
+	* A bitfield for use for autopilot-specific flags.
 	*/
 	public int custom_mode; 
  	/**
-	*Type of the MAV (quadrotor, helicopter, etc., up to 15 types, defined in MAV_TYPE ENUM)
+	* Type of the MAV (quadrotor, helicopter, etc., up to 15 types, defined in MAV_TYPE ENUM)
 	*/
 	public byte type; 
  	/**
-	*Autopilot type / class. defined in MAV_AUTOPILOT ENUM
+	* Autopilot type / class. defined in MAV_AUTOPILOT ENUM
 	*/
 	public byte autopilot; 
  	/**
-	*System mode bitfield, see MAV_MODE_FLAGS ENUM in mavlink/include/mavlink_types.h
+	* System mode bitfield, see MAV_MODE_FLAGS ENUM in mavlink/include/mavlink_types.h
 	*/
 	public byte base_mode; 
  	/**
-	*System status flag, see MAV_STATE ENUM
+	* System status flag, see MAV_STATE ENUM
 	*/
 	public byte system_status; 
  	/**
-	*MAVLink version, not writable by user, gets added by protocol because of magic data type: uint8_t_mavlink_version
+	* MAVLink version, not writable by user, gets added by protocol because of magic data type: uint8_t_mavlink_version
 	*/
 	public byte mavlink_version; 
 
@@ -87,9 +87,11 @@ public class msg_heartbeat extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_heartbeat(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_HEARTBEAT;
-        unpack(payload);
+    public msg_heartbeat(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_HEARTBEAT;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "HEARTBEAT");
         //Log.d("MAVLINK_MSG_ID_HEARTBEAT", toString());
     }

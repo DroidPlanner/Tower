@@ -17,39 +17,39 @@ public class msg_state_correction extends MAVLinkMessage{
 	
 
  	/**
-	*x position error
+	* x position error
 	*/
 	public float xErr; 
  	/**
-	*y position error
+	* y position error
 	*/
 	public float yErr; 
  	/**
-	*z position error
+	* z position error
 	*/
 	public float zErr; 
  	/**
-	*roll error (radians)
+	* roll error (radians)
 	*/
 	public float rollErr; 
  	/**
-	*pitch error (radians)
+	* pitch error (radians)
 	*/
 	public float pitchErr; 
  	/**
-	*yaw error (radians)
+	* yaw error (radians)
 	*/
 	public float yawErr; 
  	/**
-	*x velocity
+	* x velocity
 	*/
 	public float vxErr; 
  	/**
-	*y velocity
+	* y velocity
 	*/
 	public float vyErr; 
  	/**
-	*z velocity
+	* z velocity
 	*/
 	public float vzErr; 
 
@@ -105,9 +105,11 @@ public class msg_state_correction extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_state_correction(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_STATE_CORRECTION;
-        unpack(payload);
+    public msg_state_correction(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_STATE_CORRECTION;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "STATE_CORRECTION");
         //Log.d("MAVLINK_MSG_ID_STATE_CORRECTION", toString());
     }

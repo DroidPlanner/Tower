@@ -1,6 +1,5 @@
 package com.MAVLink.Messages;
 
-import android.util.Log;
 
 /**
  * Storage for MAVLink Packet and Error statistics
@@ -26,10 +25,6 @@ public class MAVLinkStats /* implements Serializable */{
 	 *            Packet that should be checked
 	 */
 	public void newPacket(MAVLinkPacket packet) {
-		Log.d("MAVLINK", "rxPkt " + packet.seq + "," + lastPacketSeq + ","
-				+ lostPacketCount + "," + crcErrorCount + ","
-				+ receivedPacketCount);
-
 		advanceLastPacketSequence();
 		if (hasLostPackets(packet)) {
 			updateLostPacketCount(packet);

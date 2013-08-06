@@ -17,15 +17,15 @@ public class msg_gps_global_origin extends MAVLinkMessage{
 	
 
  	/**
-	*Latitude (WGS84), expressed as * 1E7
+	* Latitude (WGS84), expressed as * 1E7
 	*/
 	public int latitude; 
  	/**
-	*Longitude (WGS84), expressed as * 1E7
+	* Longitude (WGS84), expressed as * 1E7
 	*/
 	public int longitude; 
  	/**
-	*Altitude(WGS84), expressed as * 1000
+	* Altitude(WGS84), expressed as * 1000
 	*/
 	public int altitude; 
 
@@ -69,9 +69,11 @@ public class msg_gps_global_origin extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_gps_global_origin(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_GPS_GLOBAL_ORIGIN;
-        unpack(payload);
+    public msg_gps_global_origin(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_GPS_GLOBAL_ORIGIN;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "GPS_GLOBAL_ORIGIN");
         //Log.d("MAVLINK_MSG_ID_GPS_GLOBAL_ORIGIN", toString());
     }

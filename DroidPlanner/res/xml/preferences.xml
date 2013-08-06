@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
+    <EditTextPreference
+        android:enabled="false"
+        android:key="version"
+        android:persistent="false"
+        android:selectable="false"
+        android:shouldDisableView="false"
+        android:title="@string/version" />
+
     <PreferenceCategory
         android:key="pref_mavlink"
         android:title="MavLink" >
@@ -11,15 +19,9 @@
             android:key="pref_connection_type"
             android:summary="Which link to use to connect to the drone"
             android:title="Telemetry Connection Type" />
-        <ListPreference
-            android:defaultValue="57600"
-            android:entries="@array/TelemetryBaudTypes"
-            android:entryValues="@array/TelemetryBaudTypes"
-            android:key="pref_baud_type"
-            android:summary="Baud Rate of the USB Telementry Link"
-            android:title="Telemetry link speed" />
+
         <CheckBoxPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="pref_mavlink_log_enabled"
             android:summary="Logs the MAVlink communication to a *.tlog file, may degrade performance"
             android:title="Enable Logging" />
@@ -61,6 +63,21 @@
         </PreferenceScreen>
     </PreferenceCategory>
     <PreferenceCategory
+        android:key="pref_connection_actions"
+        android:summary="Actions to perform on or while connected to the Drone\nTo apply disconnect and reconnect"
+        android:title="While Connected to Drone" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="pref_keep_screen_bright"
+            android:summary="If unchecked the Screen will dim after a while (safes Battery)"
+            android:title="Keep Screen bright" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="pref_lock_screen_orientation"
+            android:summary="Locks screen to the orientation which is present when connecting"
+            android:title="Lock Screen Orientation" />
+    </PreferenceCategory>
+    <PreferenceCategory
         android:key="pref_flight_data"
         android:title="Flight Data" >
         <EditTextPreference
@@ -69,6 +86,7 @@
             android:key="pref_max_fligth_path_size"
             android:summary="Size of the fligth path, set to zero to disable."
             android:title="Flight path size" />
+
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="pref_guided_mode_enabled"
@@ -86,6 +104,109 @@
             android:title="Enable auto pan" />
     </PreferenceCategory>
     <PreferenceCategory
+        android:key="pref_advanced"
+        android:title="Advanced" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_advanced_use_offline_maps"
+            android:summary="Use map tiles on the local storage, for offline map view"
+            android:title="Use offline maps" />
+
+        <ListPreference
+            android:defaultValue="Satellite"
+            android:entries="@array/MapTypes"
+            android:entryValues="@array/MapTypes"
+            android:key="pref_map_type"
+            android:summary="Which type of map to use, user must reset the app"
+            android:title="Map Type" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="pref_enable_tts"
+            android:summary="Audible messages for important events"
+            android:title="Enable Text To Speech" />
+
+        <PreferenceScreen
+            android:key="pref_rc"
+            android:title="RC Screen" >
+            <PreferenceCategory
+                android:key="pref_rc_general"
+                android:title="General" >
+                <ListPreference
+                    android:defaultValue="MODE2"
+                    android:entries="@array/RCModes"
+                    android:entryValues="@array/RCModeValues"
+                    android:key="pref_rc_mode"
+                    android:summary="Throttle on left or right stick"
+                    android:title="RC Mode" />
+                <ListPreference
+                    android:defaultValue="Loiter"
+                    android:entries="@array/RCQuickModes"
+                    android:entryValues="@array/RCQuickModes"
+                    android:key="pref_rc_quickmode_left"
+                    android:title="QuickMode Left" />
+                <ListPreference
+                    android:defaultValue="Stabilize"
+                    android:entries="@array/RCQuickModes"
+                    android:entryValues="@array/RCQuickModes"
+                    android:key="pref_rc_quickmode_right"
+                    android:title="QuickMode Right" />
+            </PreferenceCategory>
+            <PreferenceCategory
+                android:key="pref_rc_throttle"
+                android:title="Throttle" >
+                <CheckBoxPreference
+                    android:defaultValue="false"
+                    android:key="pref_rc_throttle_reverse"
+                    android:summary="reverses Throttle direction"
+                    android:title="Reverse" />
+                <CheckBoxPreference
+                    android:defaultValue="false"
+                    android:key="pref_rc_throttle_returntocenter"
+                    android:summary="on touch release Throttle returns to center"
+                    android:title="Return to Center" />
+            </PreferenceCategory>
+            <PreferenceCategory
+                android:key="pref_rc_rudder"
+                android:title="Rudder" >
+                <CheckBoxPreference
+                    android:defaultValue="false"
+                    android:key="pref_rc_rudder_reverse"
+                    android:summary="reverses Rudder/Yaw direction"
+                    android:title="Reverse" />
+            </PreferenceCategory>
+            <PreferenceCategory
+                android:key="pref_rc_aileron"
+                android:title="Aileron" >
+                <CheckBoxPreference
+                    android:defaultValue="false"
+                    android:key="pref_rc_aileron_reverse"
+                    android:summary="reverses Aileron/Roll direction"
+                    android:title="Reverse" />
+            </PreferenceCategory>
+            <PreferenceCategory
+                android:key="pref_rc_elevator"
+                android:title="Elevator" >
+                <CheckBoxPreference
+                    android:defaultValue="false"
+                    android:key="pref_rc_elevator_reverse"
+                    android:summary="reverses Elevator/Pitch direction"
+                    android:title="Reverse" />
+            </PreferenceCategory>
+        </PreferenceScreen>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="pref_usb"
+        android:title="USB connection" >
+        <ListPreference
+            android:defaultValue="57600"
+            android:entries="@array/TelemetryBaudTypes"
+            android:entryValues="@array/TelemetryBaudTypes"
+            android:key="pref_baud_type"
+            android:summary="Baud Rate of the USB Telementry Link"
+            android:title="Telemetry link speed" />
+    </PreferenceCategory>
+    <PreferenceCategory
         android:key="pref_server"
         android:title="TCP connection" >
         <EditTextPreference
@@ -99,116 +220,13 @@
             android:title="Server Port" />
     </PreferenceCategory>
     <PreferenceCategory
-        android:key="pref_advanced"
-        android:title="Advanced" >
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="pref_advanced_use_offline_maps"
-            android:summary="Use map tiles on the local storage, for offline map view"
-            android:title="Use offline maps" />
-         <ListPreference
-            android:defaultValue="Satellite"
-            android:entries="@array/MapTypes"
-            android:entryValues="@array/MapTypes"
-            android:key="pref_map_type"
-            android:summary="Which type of map to use, user must reset the app"
-            android:title="Map Type" />
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="pref_enable_tts"
-            android:summary="Audible messages for important events"
-            android:title="Enable Text To Speech" />
-        
-        <PreferenceScreen
-			android:title="RC Screen"
-			android:key="pref_rc">
-            
-            <PreferenceCategory
-        		android:title="General"
-        		android:key="pref_rc_general">	
-            	<ListPreference
-                	android:title="RC Mode"
-                	android:summary="Throttle on left or right stick"
-            		android:defaultValue="MODE2"
-            		android:entries="@array/RCModes"
-            		android:entryValues="@array/RCModeValues"
-            		android:key="pref_rc_mode" />
-            	<ListPreference
-                	android:title="QuickMode Left"
-            		android:defaultValue="Loiter"
-            		android:entries="@array/RCQuickModes"
-            		android:entryValues="@array/RCQuickModes"
-            		android:key="pref_rc_quickmode_left" />
-            	<ListPreference
-                	android:title="QuickMode Right"
-            		android:defaultValue="Stabilize"
-            		android:entries="@array/RCQuickModes"
-            		android:entryValues="@array/RCQuickModes"
-            		android:key="pref_rc_quickmode_right" />
-            	
-            </PreferenceCategory>
-            
-            <PreferenceCategory
-        		android:title="Throttle"
-        		android:key="pref_rc_throttle">
-                <CheckBoxPreference
-                    android:title="Reverse"
-                    android:summary="reverses Throttle direction"
-                    android:key="pref_rc_throttle_reverse"
-            		android:defaultValue="false"/>
-                <CheckBoxPreference
-                    android:title="Return to Center"
-                    android:summary="on touch release Throttle returns to center"
-                    android:key="pref_rc_throttle_returntocenter"
-            		android:defaultValue="false"/>
-            </PreferenceCategory>
-            
-            <PreferenceCategory
-        		android:title="Rudder"
-        		android:key="pref_rc_rudder">
-                <CheckBoxPreference
-                    android:title="Reverse"
-                    android:summary="reverses Rudder/Yaw direction"
-                    android:key="pref_rc_rudder_reverse"
-            		android:defaultValue="false"/>
-            </PreferenceCategory>
-            
-            <PreferenceCategory
-        		android:title="Aileron"
-        		android:key="pref_rc_aileron">	
-                <CheckBoxPreference
-                    android:title="Reverse"
-                    android:summary="reverses Aileron/Roll direction"
-                    android:key="pref_rc_aileron_reverse"
-            		android:defaultValue="false"/>
-            </PreferenceCategory>
-            
-            <PreferenceCategory
-        		android:title="Elevator"
-        		android:key="pref_rc_elevator">
-                <CheckBoxPreference
-                    android:title="Reverse"
-                    android:summary="reverses Elevator/Pitch direction"
-                    android:key="pref_rc_elevator_reverse"
-            		android:defaultValue="false"/>
-            </PreferenceCategory>
-            
-        </PreferenceScreen>
-        
+        android:key="pref_server_udp"
+        android:title="UDP connection" >
+        <EditTextPreference
+            android:defaultValue="14550"
+            android:inputType="number"
+            android:key="pref_udp_server_port"
+            android:title="UDP server Port" />
     </PreferenceCategory>
-    <PreferenceCategory
-        android:key="pref_connection_actions"
-        android:title="While Connected to Drone" 
-        android:summary="Actions to perform on or while connected to the Drone\nTo apply disconnect and reconnect">
-        <CheckBoxPreference 
-            android:defaultValue="true"
-            android:title="Keep Screen bright" 
-            android:summary="If unchecked the Screen will dim after a while (safes Battery)" 
-            android:key="pref_keep_screen_bright"/>
-       	<CheckBoxPreference 
-            android:defaultValue="true"
-            android:title="Lock Screen Orientation"  
-            android:summary="Locks screen to the orientation which is present when connecting" 
-            android:key="pref_lock_screen_orientation"/>
-	</PreferenceCategory>
+
 </PreferenceScreen>

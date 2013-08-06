@@ -17,31 +17,31 @@ public class msg_radio extends MAVLinkMessage{
 	
 
  	/**
-	*receive errors
+	* receive errors
 	*/
 	public short rxerrors; 
  	/**
-	*count of error corrected packets
+	* count of error corrected packets
 	*/
 	public short fixed; 
  	/**
-	*local signal strength
+	* local signal strength
 	*/
 	public byte rssi; 
  	/**
-	*remote signal strength
+	* remote signal strength
 	*/
 	public byte remrssi; 
  	/**
-	*how full the tx buffer is as a percentage
+	* how full the tx buffer is as a percentage
 	*/
 	public byte txbuf; 
  	/**
-	*background noise level
+	* background noise level
 	*/
 	public byte noise; 
  	/**
-	*remote background noise level
+	* remote background noise level
 	*/
 	public byte remnoise; 
 
@@ -93,9 +93,11 @@ public class msg_radio extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_radio(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_RADIO;
-        unpack(payload);
+    public msg_radio(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_RADIO;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "RADIO");
         //Log.d("MAVLINK_MSG_ID_RADIO", toString());
     }

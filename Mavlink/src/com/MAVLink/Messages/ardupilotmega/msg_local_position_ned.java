@@ -17,31 +17,31 @@ public class msg_local_position_ned extends MAVLinkMessage{
 	
 
  	/**
-	*Timestamp (milliseconds since system boot)
+	* Timestamp (milliseconds since system boot)
 	*/
 	public int time_boot_ms; 
  	/**
-	*X Position
+	* X Position
 	*/
 	public float x; 
  	/**
-	*Y Position
+	* Y Position
 	*/
 	public float y; 
  	/**
-	*Z Position
+	* Z Position
 	*/
 	public float z; 
  	/**
-	*X Speed
+	* X Speed
 	*/
 	public float vx; 
  	/**
-	*Y Speed
+	* Y Speed
 	*/
 	public float vy; 
  	/**
-	*Z Speed
+	* Z Speed
 	*/
 	public float vz; 
 
@@ -93,9 +93,11 @@ public class msg_local_position_ned extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_local_position_ned(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_LOCAL_POSITION_NED;
-        unpack(payload);
+    public msg_local_position_ned(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_LOCAL_POSITION_NED;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "LOCAL_POSITION_NED");
         //Log.d("MAVLINK_MSG_ID_LOCAL_POSITION_NED", toString());
     }
