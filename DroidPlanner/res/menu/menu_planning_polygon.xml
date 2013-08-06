@@ -6,6 +6,10 @@
         android:showAsAction="ifRoom"
         android:title="@string/menu_generate_polygon"/>
     <item
+        android:id="@+id/menu_survey"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_survey"/>
+    <item
         android:id="@+id/menu_clear_wp"
         android:showAsAction="ifRoom"
         android:title="@string/menu_clear"/>

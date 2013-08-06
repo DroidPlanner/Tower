@@ -53,9 +53,9 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener {
 
 		LayoutInflater inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View layout = inflater.inflate(R.layout.dialog_grid, null);
+		View layout = inflater.inflate(R.layout.dialog_survey, null);
 		angleView = (SeekBarWithText) layout.findViewById(R.id.angleView);
-		distanceView = (SeekBarWithText) layout.findViewById(R.id.distanceView);
+		distanceView = (SeekBarWithText) layout.findViewById(R.id.overlapView);
 		altitudeView = (SeekBarWithText) layout.findViewById(R.id.altitudeView);
 		builder.setView(layout);
 
