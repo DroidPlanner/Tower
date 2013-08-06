@@ -68,9 +68,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
-        custom:inc="5"
-        custom:max="500"
-        custom:min="5"
+        custom:inc="1"
+        custom:max="99"
+        custom:min="0"
         custom:title="Overlap:"
         custom:unit="m" >
     </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
@@ -80,9 +80,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
-        custom:inc="5"
-        custom:max="500"
-        custom:min="5"
+        custom:inc="1"
+        custom:max="99"
+        custom:min="0"
         custom:title="Sidelap:"
         custom:unit="m" >
     </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
