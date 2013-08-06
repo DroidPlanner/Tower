@@ -23,6 +23,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		OnTextSeekBarChangedListner {
 	public abstract void onPolygonGenerated(List<waypoint> list);
 
+	private Context context;
 	private SeekBarWithText overlapView;
 	private SeekBarWithText angleView;
 	private SeekBarWithText altitudeView;
@@ -42,6 +43,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 			LatLng lastPoint, double defaultAltitude, Context context) {
 		this.polygon = polygon;
 		this.originPoint = lastPoint;
+		this.context = context;
 
 		if (checkIfPolygonIsValid(polygon)) {
 			Toast.makeText(context, "Invalid Polygon", Toast.LENGTH_SHORT)
@@ -67,6 +69,21 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		altitudeView.setValue(surveyData.getAltitude());
 		sidelapView.setValue(surveyData.getSidelap());
 		overlapView.setValue(surveyData.getOverlap());
+		lenghtTextView.setText(context.getString(R.string.lenght) + ": "
+				+ surveyData.getMissionLength() + "");
+		areaTextView.setText(context.getString(R.string.area) + ": "
+				+ surveyData.getArea() + "");
+		distanceTextView.setText(context
+				.getString(R.string.distance_between_pictures)
+				+ ": "
+				+ surveyData.getDistanceBetweenPictures() + "");
+		footprintTextView.setText(context.getString(R.string.footprint) + ": "
+				+ surveyData.getLateralFootPrint() + ""
+				+ surveyData.getLongitudinalFootPrint() + "");
+		groundResolutionTextView.setText(context
+				.getString(R.string.ground_resolution)
+				+ ": "
+				+ surveyData.getGroundResolution() + "");
 	}
 
 	private boolean checkIfPolygonIsValid(Polygon polygon) {

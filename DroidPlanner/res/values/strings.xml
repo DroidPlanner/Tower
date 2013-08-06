@@ -105,7 +105,21 @@
         <item name="Training">Training</item>
     </string-array>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>   
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="footprint">Footprint</string>
+
+    <string name="ground_resolution">Ground Resolution</string>
+
+    <string name="distance_between_pictures">Distance Between Pictures</string>
+
+    <string name="area">Area</string>
+
+    <string name="lenght">Lenght</string>
+
+    <string name="camera_">Camera:</string>
+
+    <string name="inner_wps">Inner WPs</string>   
     
 
 </resources>
