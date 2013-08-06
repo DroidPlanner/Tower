@@ -1,3 +1,11 @@
+## Droidplanner v0.12.1b
+* Removing debug info that passed trough on the last release
+
+## Droidplanner v0.12.1
+* UDP support
+* Better layout on the preference screen
+* Fix the MAVLink library
+
 ## Droidplanner v0.12.0
 * Add suport for direct USB connection
 * Fix chinise translation
