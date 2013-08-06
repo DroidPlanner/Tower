@@ -106,9 +106,12 @@ public class msg_global_position_int extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_global_position_int(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_GLOBAL_POSITION_INT;
-        unpack(payload);
+    public msg_global_position_int(MAVLinkPacket mavLinkPacket){
+    	this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_GLOBAL_POSITION_INT;
+        
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "GLOBAL_POSITION_INT");
         //Log.d("MAVLINK_MSG_ID_GLOBAL_POSITION_INT", toString());
     }

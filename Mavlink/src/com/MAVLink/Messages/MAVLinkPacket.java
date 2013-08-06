@@ -215,7 +215,7 @@ public class MAVLinkPacket implements Serializable {
 		case msg_local_position_ned.MAVLINK_MSG_ID_LOCAL_POSITION_NED:
 			return  new msg_local_position_ned(payload);
 		case msg_global_position_int.MAVLINK_MSG_ID_GLOBAL_POSITION_INT:
-			return  new msg_global_position_int(payload);
+			return  new msg_global_position_int(this);
 		case msg_rc_channels_scaled.MAVLINK_MSG_ID_RC_CHANNELS_SCALED:
 			return  new msg_rc_channels_scaled(payload);
 		case msg_rc_channels_raw.MAVLINK_MSG_ID_RC_CHANNELS_RAW:
