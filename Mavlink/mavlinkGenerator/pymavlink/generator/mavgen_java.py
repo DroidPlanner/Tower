@@ -187,7 +187,7 @@ public class msg_${name_lower} extends MAVLinkMessage{
 	
 
 ${{ordered_fields: 	/**
-	*${description}
+	* ${description}
 	*/
 	public ${type} ${name}${array_suffix}; 
 }}
@@ -230,9 +230,11 @@ ${{ordered_fields:	    ${unpackField}
      * from a mavlink packet
      * 
      */
-    public msg_${name_lower}(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_${name};
-        unpack(payload);
+    public msg_${name_lower}(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_${name};
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "${name}");
         //Log.d("MAVLINK_MSG_ID_${name}", toString());
     }
@@ -250,7 +252,7 @@ ${{ordered_fields: ${getText} }}
 
 
 def generate_MAVLinkMessage(directory, xml_list):
-    f = open(os.path.join(directory, "MAVLinkPacket.Java"), mode='w')
+    f = open(os.path.join(directory, "MAVLinkPacket.java"), mode='w')
     f.write('''package com.MAVLink.Messages;
 
 import android.util.Log;
@@ -385,7 +387,7 @@ public class MAVLinkPacket implements Serializable {
     for xml in xml_list:
         t.write(f, '''
 ${{message:		case msg_${name_lower}.MAVLINK_MSG_ID_${name}:
-			return  new msg_${name_lower}(payload);
+			return  new msg_${name_lower}(this);
 }}
 ''',xml)
     f.write('''		default:

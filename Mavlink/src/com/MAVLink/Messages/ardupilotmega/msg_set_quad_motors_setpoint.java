@@ -17,23 +17,23 @@ public class msg_set_quad_motors_setpoint extends MAVLinkMessage{
 	
 
  	/**
-	*Front motor in + configuration, front left motor in x configuration
+	* Front motor in + configuration, front left motor in x configuration
 	*/
 	public short motor_front_nw; 
  	/**
-	*Right motor in + configuration, front right motor in x configuration
+	* Right motor in + configuration, front right motor in x configuration
 	*/
 	public short motor_right_ne; 
  	/**
-	*Back motor in + configuration, back right motor in x configuration
+	* Back motor in + configuration, back right motor in x configuration
 	*/
 	public short motor_back_se; 
  	/**
-	*Left motor in + configuration, back left motor in x configuration
+	* Left motor in + configuration, back left motor in x configuration
 	*/
 	public short motor_left_sw; 
  	/**
-	*System ID of the system that should set these motor commands
+	* System ID of the system that should set these motor commands
 	*/
 	public byte target_system; 
 
@@ -81,9 +81,11 @@ public class msg_set_quad_motors_setpoint extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_set_quad_motors_setpoint(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_SET_QUAD_MOTORS_SETPOINT;
-        unpack(payload);
+    public msg_set_quad_motors_setpoint(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_SET_QUAD_MOTORS_SETPOINT;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "SET_QUAD_MOTORS_SETPOINT");
         //Log.d("MAVLINK_MSG_ID_SET_QUAD_MOTORS_SETPOINT", toString());
     }

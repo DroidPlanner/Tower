@@ -17,35 +17,35 @@ public class msg_attitude_quaternion extends MAVLinkMessage{
 	
 
  	/**
-	*Timestamp (milliseconds since system boot)
+	* Timestamp (milliseconds since system boot)
 	*/
 	public int time_boot_ms; 
  	/**
-	*Quaternion component 1
+	* Quaternion component 1
 	*/
 	public float q1; 
  	/**
-	*Quaternion component 2
+	* Quaternion component 2
 	*/
 	public float q2; 
  	/**
-	*Quaternion component 3
+	* Quaternion component 3
 	*/
 	public float q3; 
  	/**
-	*Quaternion component 4
+	* Quaternion component 4
 	*/
 	public float q4; 
  	/**
-	*Roll angular speed (rad/s)
+	* Roll angular speed (rad/s)
 	*/
 	public float rollspeed; 
  	/**
-	*Pitch angular speed (rad/s)
+	* Pitch angular speed (rad/s)
 	*/
 	public float pitchspeed; 
  	/**
-	*Yaw angular speed (rad/s)
+	* Yaw angular speed (rad/s)
 	*/
 	public float yawspeed; 
 
@@ -99,9 +99,11 @@ public class msg_attitude_quaternion extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_attitude_quaternion(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_ATTITUDE_QUATERNION;
-        unpack(payload);
+    public msg_attitude_quaternion(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_ATTITUDE_QUATERNION;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "ATTITUDE_QUATERNION");
         //Log.d("MAVLINK_MSG_ID_ATTITUDE_QUATERNION", toString());
     }

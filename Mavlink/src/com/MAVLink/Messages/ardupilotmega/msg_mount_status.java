@@ -17,23 +17,23 @@ public class msg_mount_status extends MAVLinkMessage{
 	
 
  	/**
-	*pitch(deg*100) or lat, depending on mount mode
+	* pitch(deg*100) or lat, depending on mount mode
 	*/
 	public int pointing_a; 
  	/**
-	*roll(deg*100) or lon depending on mount mode
+	* roll(deg*100) or lon depending on mount mode
 	*/
 	public int pointing_b; 
  	/**
-	*yaw(deg*100) or alt (in cm) depending on mount mode
+	* yaw(deg*100) or alt (in cm) depending on mount mode
 	*/
 	public int pointing_c; 
  	/**
-	*System ID
+	* System ID
 	*/
 	public byte target_system; 
  	/**
-	*Component ID
+	* Component ID
 	*/
 	public byte target_component; 
 
@@ -81,9 +81,11 @@ public class msg_mount_status extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_mount_status(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_MOUNT_STATUS;
-        unpack(payload);
+    public msg_mount_status(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_MOUNT_STATUS;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "MOUNT_STATUS");
         //Log.d("MAVLINK_MSG_ID_MOUNT_STATUS", toString());
     }

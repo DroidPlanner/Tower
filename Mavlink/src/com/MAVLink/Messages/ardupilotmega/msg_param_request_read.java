@@ -17,19 +17,19 @@ public class msg_param_request_read extends MAVLinkMessage{
 	
 
  	/**
-	*Parameter index. Send -1 to use the param ID field as identifier (else the param id will be ignored)
+	* Parameter index. Send -1 to use the param ID field as identifier (else the param id will be ignored)
 	*/
 	public short param_index; 
  	/**
-	*System ID
+	* System ID
 	*/
 	public byte target_system; 
  	/**
-	*Component ID
+	* Component ID
 	*/
 	public byte target_component; 
  	/**
-	*Onboard parameter id, terminated by NULL if the length is less than 16 human-readable chars and WITHOUT null termination (NULL) byte if the length is exactly 16 chars - applications have to provide 16+1 bytes storage if the ID is stored as string
+	* Onboard parameter id, terminated by NULL if the length is less than 16 human-readable chars and WITHOUT null termination (NULL) byte if the length is exactly 16 chars - applications have to provide 16+1 bytes storage if the ID is stored as string
 	*/
 	public byte param_id[] = new byte[16]; 
 
@@ -79,9 +79,11 @@ public class msg_param_request_read extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_param_request_read(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_PARAM_REQUEST_READ;
-        unpack(payload);
+    public msg_param_request_read(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_PARAM_REQUEST_READ;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "PARAM_REQUEST_READ");
         //Log.d("MAVLINK_MSG_ID_PARAM_REQUEST_READ", toString());
     }

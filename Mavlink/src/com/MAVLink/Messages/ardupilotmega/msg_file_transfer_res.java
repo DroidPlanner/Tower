@@ -17,11 +17,11 @@ public class msg_file_transfer_res extends MAVLinkMessage{
 	
 
  	/**
-	*Unique transfer ID
+	* Unique transfer ID
 	*/
 	public long transfer_uid; 
  	/**
-	*0: OK, 1: not permitted, 2: bad path / file name, 3: no space left on device
+	* 0: OK, 1: not permitted, 2: bad path / file name, 3: no space left on device
 	*/
 	public byte result; 
 
@@ -63,9 +63,11 @@ public class msg_file_transfer_res extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_file_transfer_res(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_FILE_TRANSFER_RES;
-        unpack(payload);
+    public msg_file_transfer_res(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_FILE_TRANSFER_RES;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "FILE_TRANSFER_RES");
         //Log.d("MAVLINK_MSG_ID_FILE_TRANSFER_RES", toString());
     }

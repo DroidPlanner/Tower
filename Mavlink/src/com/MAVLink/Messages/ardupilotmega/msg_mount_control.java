@@ -17,27 +17,27 @@ public class msg_mount_control extends MAVLinkMessage{
 	
 
  	/**
-	*pitch(deg*100) or lat, depending on mount mode
+	* pitch(deg*100) or lat, depending on mount mode
 	*/
 	public int input_a; 
  	/**
-	*roll(deg*100) or lon depending on mount mode
+	* roll(deg*100) or lon depending on mount mode
 	*/
 	public int input_b; 
  	/**
-	*yaw(deg*100) or alt (in cm) depending on mount mode
+	* yaw(deg*100) or alt (in cm) depending on mount mode
 	*/
 	public int input_c; 
  	/**
-	*System ID
+	* System ID
 	*/
 	public byte target_system; 
  	/**
-	*Component ID
+	* Component ID
 	*/
 	public byte target_component; 
  	/**
-	*if "1" it will save current trimmed position on EEPROM (just valid for NEUTRAL and LANDING)
+	* if "1" it will save current trimmed position on EEPROM (just valid for NEUTRAL and LANDING)
 	*/
 	public byte save_position; 
 
@@ -87,9 +87,11 @@ public class msg_mount_control extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_mount_control(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_MOUNT_CONTROL;
-        unpack(payload);
+    public msg_mount_control(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_MOUNT_CONTROL;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "MOUNT_CONTROL");
         //Log.d("MAVLINK_MSG_ID_MOUNT_CONTROL", toString());
     }

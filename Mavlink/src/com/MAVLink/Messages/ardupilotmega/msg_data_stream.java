@@ -17,15 +17,15 @@ public class msg_data_stream extends MAVLinkMessage{
 	
 
  	/**
-	*The requested interval between two messages of this type
+	* The requested interval between two messages of this type
 	*/
 	public short message_rate; 
  	/**
-	*The ID of the requested data stream
+	* The ID of the requested data stream
 	*/
 	public byte stream_id; 
  	/**
-	*1 stream is enabled, 0 stream is stopped.
+	* 1 stream is enabled, 0 stream is stopped.
 	*/
 	public byte on_off; 
 
@@ -69,9 +69,11 @@ public class msg_data_stream extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_data_stream(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_DATA_STREAM;
-        unpack(payload);
+    public msg_data_stream(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_DATA_STREAM;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "DATA_STREAM");
         //Log.d("MAVLINK_MSG_ID_DATA_STREAM", toString());
     }

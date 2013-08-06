@@ -17,15 +17,15 @@ public class msg_named_value_float extends MAVLinkMessage{
 	
 
  	/**
-	*Timestamp (milliseconds since system boot)
+	* Timestamp (milliseconds since system boot)
 	*/
 	public int time_boot_ms; 
  	/**
-	*Floating point value
+	* Floating point value
 	*/
 	public float value; 
  	/**
-	*Name of the debug variable
+	* Name of the debug variable
 	*/
 	public byte name[] = new byte[10]; 
 
@@ -73,9 +73,11 @@ public class msg_named_value_float extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_named_value_float(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_NAMED_VALUE_FLOAT;
-        unpack(payload);
+    public msg_named_value_float(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_NAMED_VALUE_FLOAT;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "NAMED_VALUE_FLOAT");
         //Log.d("MAVLINK_MSG_ID_NAMED_VALUE_FLOAT", toString());
     }

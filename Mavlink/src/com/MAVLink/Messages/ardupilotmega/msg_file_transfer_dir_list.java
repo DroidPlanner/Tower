@@ -17,15 +17,15 @@ public class msg_file_transfer_dir_list extends MAVLinkMessage{
 	
 
  	/**
-	*Unique transfer ID
+	* Unique transfer ID
 	*/
 	public long transfer_uid; 
  	/**
-	*Directory path to list
+	* Directory path to list
 	*/
 	public byte dir_path[] = new byte[240]; 
  	/**
-	*RESERVED
+	* RESERVED
 	*/
 	public byte flags; 
 
@@ -73,9 +73,11 @@ public class msg_file_transfer_dir_list extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_file_transfer_dir_list(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_FILE_TRANSFER_DIR_LIST;
-        unpack(payload);
+    public msg_file_transfer_dir_list(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_FILE_TRANSFER_DIR_LIST;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "FILE_TRANSFER_DIR_LIST");
         //Log.d("MAVLINK_MSG_ID_FILE_TRANSFER_DIR_LIST", toString());
     }

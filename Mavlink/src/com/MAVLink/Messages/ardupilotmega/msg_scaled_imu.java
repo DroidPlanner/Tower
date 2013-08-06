@@ -17,43 +17,43 @@ public class msg_scaled_imu extends MAVLinkMessage{
 	
 
  	/**
-	*Timestamp (milliseconds since system boot)
+	* Timestamp (milliseconds since system boot)
 	*/
 	public int time_boot_ms; 
  	/**
-	*X acceleration (mg)
+	* X acceleration (mg)
 	*/
 	public short xacc; 
  	/**
-	*Y acceleration (mg)
+	* Y acceleration (mg)
 	*/
 	public short yacc; 
  	/**
-	*Z acceleration (mg)
+	* Z acceleration (mg)
 	*/
 	public short zacc; 
  	/**
-	*Angular speed around X axis (millirad /sec)
+	* Angular speed around X axis (millirad /sec)
 	*/
 	public short xgyro; 
  	/**
-	*Angular speed around Y axis (millirad /sec)
+	* Angular speed around Y axis (millirad /sec)
 	*/
 	public short ygyro; 
  	/**
-	*Angular speed around Z axis (millirad /sec)
+	* Angular speed around Z axis (millirad /sec)
 	*/
 	public short zgyro; 
  	/**
-	*X Magnetic field (milli tesla)
+	* X Magnetic field (milli tesla)
 	*/
 	public short xmag; 
  	/**
-	*Y Magnetic field (milli tesla)
+	* Y Magnetic field (milli tesla)
 	*/
 	public short ymag; 
  	/**
-	*Z Magnetic field (milli tesla)
+	* Z Magnetic field (milli tesla)
 	*/
 	public short zmag; 
 
@@ -111,9 +111,11 @@ public class msg_scaled_imu extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_scaled_imu(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_SCALED_IMU;
-        unpack(payload);
+    public msg_scaled_imu(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_SCALED_IMU;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "SCALED_IMU");
         //Log.d("MAVLINK_MSG_ID_SCALED_IMU", toString());
     }

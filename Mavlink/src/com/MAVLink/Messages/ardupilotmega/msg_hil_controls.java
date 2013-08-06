@@ -17,47 +17,47 @@ public class msg_hil_controls extends MAVLinkMessage{
 	
 
  	/**
-	*Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+	* Timestamp (microseconds since UNIX epoch or microseconds since system boot)
 	*/
 	public long time_usec; 
  	/**
-	*Control output -1 .. 1
+	* Control output -1 .. 1
 	*/
 	public float roll_ailerons; 
  	/**
-	*Control output -1 .. 1
+	* Control output -1 .. 1
 	*/
 	public float pitch_elevator; 
  	/**
-	*Control output -1 .. 1
+	* Control output -1 .. 1
 	*/
 	public float yaw_rudder; 
  	/**
-	*Throttle 0 .. 1
+	* Throttle 0 .. 1
 	*/
 	public float throttle; 
  	/**
-	*Aux 1, -1 .. 1
+	* Aux 1, -1 .. 1
 	*/
 	public float aux1; 
  	/**
-	*Aux 2, -1 .. 1
+	* Aux 2, -1 .. 1
 	*/
 	public float aux2; 
  	/**
-	*Aux 3, -1 .. 1
+	* Aux 3, -1 .. 1
 	*/
 	public float aux3; 
  	/**
-	*Aux 4, -1 .. 1
+	* Aux 4, -1 .. 1
 	*/
 	public float aux4; 
  	/**
-	*System mode (MAV_MODE)
+	* System mode (MAV_MODE)
 	*/
 	public byte mode; 
  	/**
-	*Navigation mode (MAV_NAV_MODE)
+	* Navigation mode (MAV_NAV_MODE)
 	*/
 	public byte nav_mode; 
 
@@ -117,9 +117,11 @@ public class msg_hil_controls extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_hil_controls(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_HIL_CONTROLS;
-        unpack(payload);
+    public msg_hil_controls(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_HIL_CONTROLS;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "HIL_CONTROLS");
         //Log.d("MAVLINK_MSG_ID_HIL_CONTROLS", toString());
     }

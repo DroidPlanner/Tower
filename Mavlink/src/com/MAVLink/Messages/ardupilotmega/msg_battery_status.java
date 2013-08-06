@@ -17,39 +17,39 @@ public class msg_battery_status extends MAVLinkMessage{
 	
 
  	/**
-	*Battery voltage of cell 1, in millivolts (1 = 1 millivolt)
+	* Battery voltage of cell 1, in millivolts (1 = 1 millivolt)
 	*/
 	public short voltage_cell_1; 
  	/**
-	*Battery voltage of cell 2, in millivolts (1 = 1 millivolt), -1: no cell
+	* Battery voltage of cell 2, in millivolts (1 = 1 millivolt), -1: no cell
 	*/
 	public short voltage_cell_2; 
  	/**
-	*Battery voltage of cell 3, in millivolts (1 = 1 millivolt), -1: no cell
+	* Battery voltage of cell 3, in millivolts (1 = 1 millivolt), -1: no cell
 	*/
 	public short voltage_cell_3; 
  	/**
-	*Battery voltage of cell 4, in millivolts (1 = 1 millivolt), -1: no cell
+	* Battery voltage of cell 4, in millivolts (1 = 1 millivolt), -1: no cell
 	*/
 	public short voltage_cell_4; 
  	/**
-	*Battery voltage of cell 5, in millivolts (1 = 1 millivolt), -1: no cell
+	* Battery voltage of cell 5, in millivolts (1 = 1 millivolt), -1: no cell
 	*/
 	public short voltage_cell_5; 
  	/**
-	*Battery voltage of cell 6, in millivolts (1 = 1 millivolt), -1: no cell
+	* Battery voltage of cell 6, in millivolts (1 = 1 millivolt), -1: no cell
 	*/
 	public short voltage_cell_6; 
  	/**
-	*Battery current, in 10*milliamperes (1 = 10 milliampere), -1: autopilot does not measure the current
+	* Battery current, in 10*milliamperes (1 = 10 milliampere), -1: autopilot does not measure the current
 	*/
 	public short current_battery; 
  	/**
-	*Accupack ID
+	* Accupack ID
 	*/
 	public byte accu_id; 
  	/**
-	*Remaining battery energy: (0%: 0, 100%: 100), -1: autopilot does not estimate the remaining battery
+	* Remaining battery energy: (0%: 0, 100%: 100), -1: autopilot does not estimate the remaining battery
 	*/
 	public byte battery_remaining; 
 
@@ -105,9 +105,11 @@ public class msg_battery_status extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_battery_status(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_BATTERY_STATUS;
-        unpack(payload);
+    public msg_battery_status(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_BATTERY_STATUS;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "BATTERY_STATUS");
         //Log.d("MAVLINK_MSG_ID_BATTERY_STATUS", toString());
     }

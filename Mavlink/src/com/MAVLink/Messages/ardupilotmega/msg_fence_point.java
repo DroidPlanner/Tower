@@ -18,27 +18,27 @@ public class msg_fence_point extends MAVLinkMessage{
 	
 
  	/**
-	*Latitude of point
+	* Latitude of point
 	*/
 	public float lat; 
  	/**
-	*Longitude of point
+	* Longitude of point
 	*/
 	public float lng; 
  	/**
-	*System ID
+	* System ID
 	*/
 	public byte target_system; 
  	/**
-	*Component ID
+	* Component ID
 	*/
 	public byte target_component; 
  	/**
-	*point index (first point is 1, 0 is for return point)
+	* point index (first point is 1, 0 is for return point)
 	*/
 	public byte idx; 
  	/**
-	*total number of points (for sanity checking)
+	* total number of points (for sanity checking)
 	*/
 	public byte count; 
 
@@ -88,9 +88,11 @@ public class msg_fence_point extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_fence_point(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_FENCE_POINT;
-        unpack(payload);
+    public msg_fence_point(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_FENCE_POINT;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "FENCE_POINT");
         //Log.d("MAVLINK_MSG_ID_FENCE_POINT", toString());
     }

@@ -17,15 +17,15 @@ public class msg_change_operator_control_ack extends MAVLinkMessage{
 	
 
  	/**
-	*ID of the GCS this message 
+	* ID of the GCS this message 
 	*/
 	public byte gcs_system_id; 
  	/**
-	*0: request control of this MAV, 1: Release control of this MAV
+	* 0: request control of this MAV, 1: Release control of this MAV
 	*/
 	public byte control_request; 
  	/**
-	*0: ACK, 1: NACK: Wrong passkey, 2: NACK: Unsupported passkey encryption method, 3: NACK: Already under control
+	* 0: ACK, 1: NACK: Wrong passkey, 2: NACK: Unsupported passkey encryption method, 3: NACK: Already under control
 	*/
 	public byte ack; 
 
@@ -69,9 +69,11 @@ public class msg_change_operator_control_ack extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_change_operator_control_ack(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_CHANGE_OPERATOR_CONTROL_ACK;
-        unpack(payload);
+    public msg_change_operator_control_ack(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_CHANGE_OPERATOR_CONTROL_ACK;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "CHANGE_OPERATOR_CONTROL_ACK");
         //Log.d("MAVLINK_MSG_ID_CHANGE_OPERATOR_CONTROL_ACK", toString());
     }

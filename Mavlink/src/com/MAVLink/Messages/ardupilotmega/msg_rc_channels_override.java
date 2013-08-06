@@ -17,43 +17,43 @@ public class msg_rc_channels_override extends MAVLinkMessage{
 	
 
  	/**
-	*RC channel 1 value, in microseconds
+	* RC channel 1 value, in microseconds
 	*/
 	public short chan1_raw; 
  	/**
-	*RC channel 2 value, in microseconds
+	* RC channel 2 value, in microseconds
 	*/
 	public short chan2_raw; 
  	/**
-	*RC channel 3 value, in microseconds
+	* RC channel 3 value, in microseconds
 	*/
 	public short chan3_raw; 
  	/**
-	*RC channel 4 value, in microseconds
+	* RC channel 4 value, in microseconds
 	*/
 	public short chan4_raw; 
  	/**
-	*RC channel 5 value, in microseconds
+	* RC channel 5 value, in microseconds
 	*/
 	public short chan5_raw; 
  	/**
-	*RC channel 6 value, in microseconds
+	* RC channel 6 value, in microseconds
 	*/
 	public short chan6_raw; 
  	/**
-	*RC channel 7 value, in microseconds
+	* RC channel 7 value, in microseconds
 	*/
 	public short chan7_raw; 
  	/**
-	*RC channel 8 value, in microseconds
+	* RC channel 8 value, in microseconds
 	*/
 	public short chan8_raw; 
  	/**
-	*System ID
+	* System ID
 	*/
 	public byte target_system; 
  	/**
-	*Component ID
+	* Component ID
 	*/
 	public byte target_component; 
 
@@ -111,9 +111,11 @@ public class msg_rc_channels_override extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_rc_channels_override(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_RC_CHANNELS_OVERRIDE;
-        unpack(payload);
+    public msg_rc_channels_override(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_RC_CHANNELS_OVERRIDE;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "RC_CHANNELS_OVERRIDE");
         //Log.d("MAVLINK_MSG_ID_RC_CHANNELS_OVERRIDE", toString());
     }

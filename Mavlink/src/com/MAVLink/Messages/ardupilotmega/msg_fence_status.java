@@ -18,19 +18,19 @@ public class msg_fence_status extends MAVLinkMessage{
 	
 
  	/**
-	*time of last breach in milliseconds since boot
+	* time of last breach in milliseconds since boot
 	*/
 	public int breach_time; 
  	/**
-	*number of fence breaches
+	* number of fence breaches
 	*/
 	public short breach_count; 
  	/**
-	*0 if currently inside fence, 1 if outside
+	* 0 if currently inside fence, 1 if outside
 	*/
 	public byte breach_status; 
  	/**
-	*last breach type (see FENCE_BREACH_* enum)
+	* last breach type (see FENCE_BREACH_* enum)
 	*/
 	public byte breach_type; 
 
@@ -76,9 +76,11 @@ public class msg_fence_status extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_fence_status(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_FENCE_STATUS;
-        unpack(payload);
+    public msg_fence_status(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_FENCE_STATUS;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "FENCE_STATUS");
         //Log.d("MAVLINK_MSG_ID_FENCE_STATUS", toString());
     }

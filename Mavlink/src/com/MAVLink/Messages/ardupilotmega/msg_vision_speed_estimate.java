@@ -17,19 +17,19 @@ public class msg_vision_speed_estimate extends MAVLinkMessage{
 	
 
  	/**
-	*Timestamp (microseconds, synced to UNIX time or since system boot)
+	* Timestamp (microseconds, synced to UNIX time or since system boot)
 	*/
 	public long usec; 
  	/**
-	*Global X speed
+	* Global X speed
 	*/
 	public float x; 
  	/**
-	*Global Y speed
+	* Global Y speed
 	*/
 	public float y; 
  	/**
-	*Global Z speed
+	* Global Z speed
 	*/
 	public float z; 
 
@@ -75,9 +75,11 @@ public class msg_vision_speed_estimate extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_vision_speed_estimate(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_VISION_SPEED_ESTIMATE;
-        unpack(payload);
+    public msg_vision_speed_estimate(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_VISION_SPEED_ESTIMATE;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "VISION_SPEED_ESTIMATE");
         //Log.d("MAVLINK_MSG_ID_VISION_SPEED_ESTIMATE", toString());
     }

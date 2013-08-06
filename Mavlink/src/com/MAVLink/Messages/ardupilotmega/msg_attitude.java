@@ -17,31 +17,31 @@ public class msg_attitude extends MAVLinkMessage{
 	
 
  	/**
-	*Timestamp (milliseconds since system boot)
+	* Timestamp (milliseconds since system boot)
 	*/
 	public int time_boot_ms; 
  	/**
-	*Roll angle (rad, -pi..+pi)
+	* Roll angle (rad, -pi..+pi)
 	*/
 	public float roll; 
  	/**
-	*Pitch angle (rad, -pi..+pi)
+	* Pitch angle (rad, -pi..+pi)
 	*/
 	public float pitch; 
  	/**
-	*Yaw angle (rad, -pi..+pi)
+	* Yaw angle (rad, -pi..+pi)
 	*/
 	public float yaw; 
  	/**
-	*Roll angular speed (rad/s)
+	* Roll angular speed (rad/s)
 	*/
 	public float rollspeed; 
  	/**
-	*Pitch angular speed (rad/s)
+	* Pitch angular speed (rad/s)
 	*/
 	public float pitchspeed; 
  	/**
-	*Yaw angular speed (rad/s)
+	* Yaw angular speed (rad/s)
 	*/
 	public float yawspeed; 
 
@@ -93,9 +93,11 @@ public class msg_attitude extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_attitude(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_ATTITUDE;
-        unpack(payload);
+    public msg_attitude(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_ATTITUDE;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "ATTITUDE");
         //Log.d("MAVLINK_MSG_ID_ATTITUDE", toString());
     }
