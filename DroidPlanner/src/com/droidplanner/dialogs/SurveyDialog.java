@@ -15,9 +15,11 @@ import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.polygon.GridBuilder;
 import com.droidplanner.polygon.Polygon;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
+import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
 import com.google.android.gms.maps.model.LatLng;
 
-public abstract class SurveyDialog implements DialogInterface.OnClickListener {
+public abstract class SurveyDialog implements DialogInterface.OnClickListener,
+		OnTextSeekBarChangedListner {
 	public abstract void onPolygonGenerated(List<waypoint> list);
 
 	private SeekBarWithText overlapView;
@@ -43,16 +45,22 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener {
 
 		AlertDialog dialog = buildDialog(context);
 
-		surveyData = new SurveyData(defaultHatchAngle,defaultAltitude,50,60);
+		surveyData = new SurveyData(defaultHatchAngle, defaultAltitude, 50, 60);
 		updateViews();
 		dialog.show();
+	}
+
+	@Override
+	public void onSeekBarChanged() {
+		surveyData.update(angleView.getValue(), altitudeView.getValue(),
+				overlapView.getValue(), sidelapView.getValue());
 	}
 
 	private void updateViews() {
 		angleView.setValue(surveyData.getAngle());
 		altitudeView.setValue(surveyData.getAltitude());
 		sidelapView.setValue(surveyData.getSidelap());
-		overlapView.setValue(surveyData.getOverlap());		
+		overlapView.setValue(surveyData.getOverlap());
 	}
 
 	private boolean checkIfPolygonIsValid(Polygon polygon) {
@@ -73,7 +81,8 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener {
 		overlapView = (SeekBarWithText) layout.findViewById(R.id.overlapView);
 		sidelapView = (SeekBarWithText) layout.findViewById(R.id.sidelapView);
 		altitudeView = (SeekBarWithText) layout.findViewById(R.id.altitudeView);
-		
+
+		angleView.setOnChangedListner(this);
 		return dialog;
 	}
 
@@ -81,7 +90,8 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener {
 	public void onClick(DialogInterface arg0, int which) {
 		if (which == Dialog.BUTTON_POSITIVE) {
 			GridBuilder grid = new GridBuilder(polygon, surveyData.getAngle(),
-					surveyData.getLineDistance(), originPoint, surveyData.getAltitude());
+					surveyData.getLineDistance(), originPoint,
+					surveyData.getAltitude());
 			onPolygonGenerated(grid.hatchfill());
 		}
 	}

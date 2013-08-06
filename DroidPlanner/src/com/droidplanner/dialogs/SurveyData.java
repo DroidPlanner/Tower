@@ -14,43 +14,27 @@ public class SurveyData {
 		this.sidelap = sidelap;		
 	}
 
+	public void update(double angle, double altitude, double overlap, double sidelap) {
+		
+	}
+	
 	public Double getAltitude() {
 		return altitude;
-	}
-
-	public void setAltitude(Double altitude) {
-		this.altitude = altitude;
 	}
 
 	public Double getLineDistance() {
 		return lineDistance;
 	}
 
-	public void setLineDistance(Double lineDistance) {
-		this.lineDistance = lineDistance;
-	}
-
 	public Double getAngle() {
 		return angle;
 	}
 
-	public void setAngle(Double angle) {
-		this.angle = angle;
-	}
-
-	public Double getOverlap() {
-		return overlap;
-	}
-
-	public void setOverlap(Double overlap) {
-		this.overlap = overlap;
-	}
-
-	public Double getSidelap() {
+	public double getSidelap() {
 		return sidelap;
 	}
 
-	public void setSidelap(Double sidelap) {
-		this.sidelap = sidelap;
+	public double getOverlap() {
+		return overlap;
 	}
 }

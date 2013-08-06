@@ -13,12 +13,17 @@ import com.droidplanner.R;
 public class SeekBarWithText extends LinearLayout implements
 		OnSeekBarChangeListener {
 
+	public interface OnTextSeekBarChangedListner {
+		public void onSeekBarChanged();
+	}
+
 	private TextView textView;
 	private SeekBar seekBar;
 	private double min = 0;
 	private double inc = 1;
 	private String title = "";
 	private String unit = "";
+	private OnTextSeekBarChangedListner listner;
 
 	public SeekBarWithText(Context context) {
 		super(context);
@@ -88,6 +93,9 @@ public class SeekBarWithText extends LinearLayout implements
 	public void onProgressChanged(SeekBar seekBar, int progress,
 			boolean fromUser) {
 		updateTitle();
+		if (listner != null) {
+			listner.onSeekBarChanged();
+		}
 	}
 
 	@Override
@@ -98,6 +106,10 @@ public class SeekBarWithText extends LinearLayout implements
 	@Override
 	public void onStopTrackingTouch(SeekBar seekBar) {
 
+	}
+
+	public void setOnChangedListner(OnTextSeekBarChangedListner listner) {
+		this.listner = listner;
 	}
 
 }
