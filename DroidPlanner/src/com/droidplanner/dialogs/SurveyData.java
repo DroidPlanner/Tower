@@ -7,11 +7,11 @@ public class SurveyData {
 	private Double overlap;
 	private Double sidelap;
 
-	public SurveyData(double defaultHatchAngle, double defaultAltitude, double overlap, double sidelap) {
+	public SurveyData(double defaultHatchAngle, double defaultAltitude) {
 		this.angle = defaultHatchAngle;
 		this.altitude = defaultAltitude;
-		this.overlap = overlap;
-		this.sidelap = sidelap;		
+		this.overlap = 50.0;
+		this.sidelap = 60.0;		
 	}
 
 	public void update(double angle, double altitude, double overlap, double sidelap) {
