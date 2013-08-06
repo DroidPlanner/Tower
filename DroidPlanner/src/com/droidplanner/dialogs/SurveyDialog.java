@@ -62,6 +62,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 	public void onSeekBarChanged() {
 		surveyData.update(angleView.getValue(), altitudeView.getValue(),
 				overlapView.getValue(), sidelapView.getValue());
+		updateViews();
 	}
 
 	private void updateViews() {
@@ -104,7 +105,6 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		overlapView = (SeekBarWithText) layout.findViewById(R.id.overlapView);
 		sidelapView = (SeekBarWithText) layout.findViewById(R.id.sidelapView);
 		altitudeView = (SeekBarWithText) layout.findViewById(R.id.altitudeView);
-		altitudeView = (SeekBarWithText) layout.findViewById(R.id.altitudeView);
 
 		areaTextView = (TextView) layout.findViewById(R.id.areaTextView);
 		lenghtTextView = (TextView) layout.findViewById(R.id.lenghtTextView);
@@ -116,6 +116,9 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 				.findViewById(R.id.distanceTextView);
 
 		angleView.setOnChangedListner(this);
+		altitudeView.setOnChangedListner(this);
+		overlapView.setOnChangedListner(this);
+		sidelapView.setOnChangedListner(this);
 		return dialog;
 	}
 

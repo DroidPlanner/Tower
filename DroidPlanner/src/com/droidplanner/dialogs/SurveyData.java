@@ -1,5 +1,6 @@
 package com.droidplanner.dialogs;
 
+
 public class SurveyData {
 	private Double altitude;
 	private Double angle;
@@ -47,8 +48,8 @@ public class SurveyData {
 	}
 
 	public double getGroundResolution() {
-		// TODO Do some calculation and return the correct value 
-		return 3.4;
+		// TODO Do some calculation and return the correct value
+		return altitude;
 	}
 
 	public Double getLineDistance() {
