@@ -45,7 +45,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 
 		AlertDialog dialog = buildDialog(context);
 
-		surveyData = new SurveyData(defaultHatchAngle, defaultAltitude, 50, 60);
+		surveyData = new SurveyData(defaultHatchAngle, defaultAltitude);
 		updateViews();
 		dialog.show();
 	}
