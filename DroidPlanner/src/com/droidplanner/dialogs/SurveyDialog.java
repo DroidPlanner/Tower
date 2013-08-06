@@ -20,13 +20,16 @@ import com.google.android.gms.maps.model.LatLng;
 public abstract class SurveyDialog implements DialogInterface.OnClickListener {
 	public abstract void onPolygonGenerated(List<waypoint> list);
 
-	private Polygon polygon;
-
-	private LatLng originPoint;
-
-	private SeekBarWithText distanceView;
+	private SeekBarWithText overlapView;
 	private SeekBarWithText angleView;
 	private SeekBarWithText altitudeView;
+	private SeekBarWithText sidelapView;
+	
+	private Polygon polygon;
+	private LatLng originPoint;
+
+	private Double altitude;
+	private Double lineDistance;
 
 	public void generateSurveyDialog(Polygon polygon,double defaultHatchAngle, LatLng lastPoint,
 			double defaultAltitude, Context context) {
@@ -41,7 +44,8 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener {
 		
 		AlertDialog dialog = buildDialog(context);
 
-		distanceView.setValue(10);
+		sidelapView.setValue(10);
+		overlapView.setValue(10);
 		angleView.setValue(defaultHatchAngle);
 		altitudeView.setValue(defaultAltitude);
 		dialog.show();
@@ -62,7 +66,8 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener {
 		AlertDialog dialog = builder.create();
 
 		angleView = (SeekBarWithText) layout.findViewById(R.id.angleView);
-		distanceView = (SeekBarWithText) layout.findViewById(R.id.overlapView);
+		overlapView = (SeekBarWithText) layout.findViewById(R.id.overlapView);
+		sidelapView = (SeekBarWithText) layout.findViewById(R.id.sidelapView);
 		altitudeView = (SeekBarWithText) layout.findViewById(R.id.altitudeView);	
 
 		return dialog;
@@ -72,8 +77,8 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener {
 	public void onClick(DialogInterface arg0, int which) {
 		if (which == Dialog.BUTTON_POSITIVE) {
 			GridBuilder grid = new GridBuilder(polygon, angleView.getValue(),
-					distanceView.getValue(), originPoint,
-					altitudeView.getValue());
+					lineDistance, originPoint,
+					altitude);
 
 			onPolygonGenerated(grid.hatchfill());
 		}
