@@ -2,7 +2,6 @@ package com.droidplanner.dialogs;
 
 public class SurveyData {
 	private Double altitude;
-	private Double lineDistance;
 	private Double angle;
 	private Double overlap;
 	private Double sidelap;
@@ -16,6 +15,10 @@ public class SurveyData {
 
 	public void update(double angle, double altitude, double overlap,
 			double sidelap) {
+		this.angle = angle;
+		this.altitude = altitude;
+		this.overlap = overlap;
+		this.sidelap = sidelap;
 	}
 
 	public double getMissionLength() {
@@ -48,13 +51,15 @@ public class SurveyData {
 		return 3.4;
 	}
 
+	public Double getLineDistance() {
+		// TODO Do some calculation and return the correct value 
+		return 50.0;
+	}
+	
 	public Double getAltitude() {
 		return altitude;
 	}
 
-	public Double getLineDistance() {
-		return lineDistance;
-	}
 
 	public Double getAngle() {
 		return angle;
