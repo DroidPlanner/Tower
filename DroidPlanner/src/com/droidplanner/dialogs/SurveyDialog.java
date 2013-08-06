@@ -15,6 +15,7 @@ import com.droidplanner.R;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.polygon.GridBuilder;
 import com.droidplanner.polygon.Polygon;
+import com.droidplanner.survey.SurveyData;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
 import com.google.android.gms.maps.model.LatLng;

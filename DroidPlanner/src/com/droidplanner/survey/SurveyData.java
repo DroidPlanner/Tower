@@ -1,5 +1,4 @@
-package com.droidplanner.dialogs;
-
+package com.droidplanner.survey;
 
 public class SurveyData {
 	private Double altitude;
