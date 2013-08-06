@@ -53,7 +53,9 @@ public class Parameters extends DroneVariable {
 	private void processReceivedParam(msg_param_value m_value) {
 		Parameter param = new Parameter(m_value);
 		parameters.add(param);
-		parameterListner.onParameterReceived(param);
+		if(parameterListner!=null){
+			parameterListner.onParameterReceived(param);
+		}
 		if (m_value.param_index == m_value.param_count - 1) {
 			Toast.makeText(myDrone.context, "Parameters Received",
 					Toast.LENGTH_LONG).show();
