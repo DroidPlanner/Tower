@@ -17,11 +17,11 @@ public class msg_statustext extends MAVLinkMessage{
 	
 
  	/**
-	*Severity of status. Relies on the definitions within RFC-5424. See enum MAV_SEVERITY.
+	* Severity of status. Relies on the definitions within RFC-5424. See enum MAV_SEVERITY.
 	*/
 	public byte severity; 
  	/**
-	*Status text message, without null termination character
+	* Status text message, without null termination character
 	*/
 	public byte text[] = new byte[50]; 
 
@@ -67,9 +67,11 @@ public class msg_statustext extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_statustext(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_STATUSTEXT;
-        unpack(payload);
+    public msg_statustext(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_STATUSTEXT;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "STATUSTEXT");
         //Log.d("MAVLINK_MSG_ID_STATUSTEXT", toString());
     }

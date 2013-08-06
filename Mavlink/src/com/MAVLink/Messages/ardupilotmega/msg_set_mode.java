@@ -17,15 +17,15 @@ public class msg_set_mode extends MAVLinkMessage{
 	
 
  	/**
-	*The new autopilot-specific mode. This field can be ignored by an autopilot.
+	* The new autopilot-specific mode. This field can be ignored by an autopilot.
 	*/
 	public int custom_mode; 
  	/**
-	*The system setting the mode
+	* The system setting the mode
 	*/
 	public byte target_system; 
  	/**
-	*The new base mode
+	* The new base mode
 	*/
 	public byte base_mode; 
 
@@ -69,9 +69,11 @@ public class msg_set_mode extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_set_mode(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_SET_MODE;
-        unpack(payload);
+    public msg_set_mode(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_SET_MODE;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "SET_MODE");
         //Log.d("MAVLINK_MSG_ID_SET_MODE", toString());
     }

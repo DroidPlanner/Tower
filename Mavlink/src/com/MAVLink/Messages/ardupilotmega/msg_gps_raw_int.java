@@ -18,43 +18,43 @@ public class msg_gps_raw_int extends MAVLinkMessage{
 	
 
  	/**
-	*Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+	* Timestamp (microseconds since UNIX epoch or microseconds since system boot)
 	*/
 	public long time_usec; 
  	/**
-	*Latitude in 1E7 degrees
+	* Latitude in 1E7 degrees
 	*/
 	public int lat; 
  	/**
-	*Longitude in 1E7 degrees
+	* Longitude in 1E7 degrees
 	*/
 	public int lon; 
  	/**
-	*Altitude in 1E3 meters (millimeters) above MSL
+	* Altitude in 1E3 meters (millimeters) above MSL
 	*/
 	public int alt; 
  	/**
-	*GPS HDOP horizontal dilution of position in cm (m*100). If unknown, set to: 65535
+	* GPS HDOP horizontal dilution of position in cm (m*100). If unknown, set to: 65535
 	*/
 	public short eph; 
  	/**
-	*GPS VDOP horizontal dilution of position in cm (m*100). If unknown, set to: 65535
+	* GPS VDOP horizontal dilution of position in cm (m*100). If unknown, set to: 65535
 	*/
 	public short epv; 
  	/**
-	*GPS ground speed (m/s * 100). If unknown, set to: 65535
+	* GPS ground speed (m/s * 100). If unknown, set to: 65535
 	*/
 	public short vel; 
  	/**
-	*Course over ground (NOT heading, but direction of movement) in degrees * 100, 0.0..359.99 degrees. If unknown, set to: 65535
+	* Course over ground (NOT heading, but direction of movement) in degrees * 100, 0.0..359.99 degrees. If unknown, set to: 65535
 	*/
 	public short cog; 
  	/**
-	*0-1: no fix, 2: 2D fix, 3: 3D fix. Some applications will not use the value of this field unless it is at least two, so always correctly fill in the fix.
+	* 0-1: no fix, 2: 2D fix, 3: 3D fix. Some applications will not use the value of this field unless it is at least two, so always correctly fill in the fix.
 	*/
 	public byte fix_type; 
  	/**
-	*Number of satellites visible. If unknown, set to 255
+	* Number of satellites visible. If unknown, set to 255
 	*/
 	public byte satellites_visible; 
 
@@ -112,9 +112,11 @@ public class msg_gps_raw_int extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_gps_raw_int(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_GPS_RAW_INT;
-        unpack(payload);
+    public msg_gps_raw_int(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_GPS_RAW_INT;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "GPS_RAW_INT");
         //Log.d("MAVLINK_MSG_ID_GPS_RAW_INT", toString());
     }

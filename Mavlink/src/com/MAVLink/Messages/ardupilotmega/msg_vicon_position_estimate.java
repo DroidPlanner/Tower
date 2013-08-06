@@ -17,31 +17,31 @@ public class msg_vicon_position_estimate extends MAVLinkMessage{
 	
 
  	/**
-	*Timestamp (microseconds, synced to UNIX time or since system boot)
+	* Timestamp (microseconds, synced to UNIX time or since system boot)
 	*/
 	public long usec; 
  	/**
-	*Global X position
+	* Global X position
 	*/
 	public float x; 
  	/**
-	*Global Y position
+	* Global Y position
 	*/
 	public float y; 
  	/**
-	*Global Z position
+	* Global Z position
 	*/
 	public float z; 
  	/**
-	*Roll angle in rad
+	* Roll angle in rad
 	*/
 	public float roll; 
  	/**
-	*Pitch angle in rad
+	* Pitch angle in rad
 	*/
 	public float pitch; 
  	/**
-	*Yaw angle in rad
+	* Yaw angle in rad
 	*/
 	public float yaw; 
 
@@ -93,9 +93,11 @@ public class msg_vicon_position_estimate extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_vicon_position_estimate(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_VICON_POSITION_ESTIMATE;
-        unpack(payload);
+    public msg_vicon_position_estimate(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_VICON_POSITION_ESTIMATE;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "VICON_POSITION_ESTIMATE");
         //Log.d("MAVLINK_MSG_ID_VICON_POSITION_ESTIMATE", toString());
     }

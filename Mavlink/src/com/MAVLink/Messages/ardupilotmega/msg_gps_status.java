@@ -17,27 +17,27 @@ public class msg_gps_status extends MAVLinkMessage{
 	
 
  	/**
-	*Number of satellites visible
+	* Number of satellites visible
 	*/
 	public byte satellites_visible; 
  	/**
-	*Global satellite ID
+	* Global satellite ID
 	*/
 	public byte satellite_prn[] = new byte[20]; 
  	/**
-	*0: Satellite not used, 1: used for localization
+	* 0: Satellite not used, 1: used for localization
 	*/
 	public byte satellite_used[] = new byte[20]; 
  	/**
-	*Elevation (0: right on top of receiver, 90: on the horizon) of satellite
+	* Elevation (0: right on top of receiver, 90: on the horizon) of satellite
 	*/
 	public byte satellite_elevation[] = new byte[20]; 
  	/**
-	*Direction of satellite, 0: 0 deg, 255: 360 deg.
+	* Direction of satellite, 0: 0 deg, 255: 360 deg.
 	*/
 	public byte satellite_azimuth[] = new byte[20]; 
  	/**
-	*Signal to noise ratio of satellite
+	* Signal to noise ratio of satellite
 	*/
 	public byte satellite_snr[] = new byte[20]; 
 
@@ -107,9 +107,11 @@ public class msg_gps_status extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_gps_status(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_GPS_STATUS;
-        unpack(payload);
+    public msg_gps_status(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_GPS_STATUS;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "GPS_STATUS");
         //Log.d("MAVLINK_MSG_ID_GPS_STATUS", toString());
     }

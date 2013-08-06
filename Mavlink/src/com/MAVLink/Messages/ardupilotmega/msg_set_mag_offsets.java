@@ -17,23 +17,23 @@ public class msg_set_mag_offsets extends MAVLinkMessage{
 	
 
  	/**
-	*magnetometer X offset
+	* magnetometer X offset
 	*/
 	public short mag_ofs_x; 
  	/**
-	*magnetometer Y offset
+	* magnetometer Y offset
 	*/
 	public short mag_ofs_y; 
  	/**
-	*magnetometer Z offset
+	* magnetometer Z offset
 	*/
 	public short mag_ofs_z; 
  	/**
-	*System ID
+	* System ID
 	*/
 	public byte target_system; 
  	/**
-	*Component ID
+	* Component ID
 	*/
 	public byte target_component; 
 
@@ -81,9 +81,11 @@ public class msg_set_mag_offsets extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_set_mag_offsets(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_SET_MAG_OFFSETS;
-        unpack(payload);
+    public msg_set_mag_offsets(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_SET_MAG_OFFSETS;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "SET_MAG_OFFSETS");
         //Log.d("MAVLINK_MSG_ID_SET_MAG_OFFSETS", toString());
     }

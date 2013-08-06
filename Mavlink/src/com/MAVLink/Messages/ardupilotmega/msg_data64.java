@@ -17,15 +17,15 @@ public class msg_data64 extends MAVLinkMessage{
 	
 
  	/**
-	*data type
+	* data type
 	*/
 	public byte type; 
  	/**
-	*data length
+	* data length
 	*/
 	public byte len; 
  	/**
-	*raw data
+	* raw data
 	*/
 	public byte data[] = new byte[64]; 
 
@@ -73,9 +73,11 @@ public class msg_data64 extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_data64(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_DATA64;
-        unpack(payload);
+    public msg_data64(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_DATA64;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "DATA64");
         //Log.d("MAVLINK_MSG_ID_DATA64", toString());
     }

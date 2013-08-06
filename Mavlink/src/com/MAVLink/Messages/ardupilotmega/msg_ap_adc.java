@@ -17,27 +17,27 @@ public class msg_ap_adc extends MAVLinkMessage{
 	
 
  	/**
-	*ADC output 1
+	* ADC output 1
 	*/
 	public short adc1; 
  	/**
-	*ADC output 2
+	* ADC output 2
 	*/
 	public short adc2; 
  	/**
-	*ADC output 3
+	* ADC output 3
 	*/
 	public short adc3; 
  	/**
-	*ADC output 4
+	* ADC output 4
 	*/
 	public short adc4; 
  	/**
-	*ADC output 5
+	* ADC output 5
 	*/
 	public short adc5; 
  	/**
-	*ADC output 6
+	* ADC output 6
 	*/
 	public short adc6; 
 
@@ -87,9 +87,11 @@ public class msg_ap_adc extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_ap_adc(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_AP_ADC;
-        unpack(payload);
+    public msg_ap_adc(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_AP_ADC;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "AP_ADC");
         //Log.d("MAVLINK_MSG_ID_AP_ADC", toString());
     }

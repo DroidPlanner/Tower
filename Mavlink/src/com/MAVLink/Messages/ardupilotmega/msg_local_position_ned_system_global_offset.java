@@ -17,31 +17,31 @@ public class msg_local_position_ned_system_global_offset extends MAVLinkMessage{
 	
 
  	/**
-	*Timestamp (milliseconds since system boot)
+	* Timestamp (milliseconds since system boot)
 	*/
 	public int time_boot_ms; 
  	/**
-	*X Position
+	* X Position
 	*/
 	public float x; 
  	/**
-	*Y Position
+	* Y Position
 	*/
 	public float y; 
  	/**
-	*Z Position
+	* Z Position
 	*/
 	public float z; 
  	/**
-	*Roll
+	* Roll
 	*/
 	public float roll; 
  	/**
-	*Pitch
+	* Pitch
 	*/
 	public float pitch; 
  	/**
-	*Yaw
+	* Yaw
 	*/
 	public float yaw; 
 
@@ -93,9 +93,11 @@ public class msg_local_position_ned_system_global_offset extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_local_position_ned_system_global_offset(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_LOCAL_POSITION_NED_SYSTEM_GLOBAL_OFFSET;
-        unpack(payload);
+    public msg_local_position_ned_system_global_offset(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_LOCAL_POSITION_NED_SYSTEM_GLOBAL_OFFSET;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "LOCAL_POSITION_NED_SYSTEM_GLOBAL_OFFSET");
         //Log.d("MAVLINK_MSG_ID_LOCAL_POSITION_NED_SYSTEM_GLOBAL_OFFSET", toString());
     }

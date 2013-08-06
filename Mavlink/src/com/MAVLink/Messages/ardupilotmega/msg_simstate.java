@@ -17,47 +17,47 @@ public class msg_simstate extends MAVLinkMessage{
 	
 
  	/**
-	*Roll angle (rad)
+	* Roll angle (rad)
 	*/
 	public float roll; 
  	/**
-	*Pitch angle (rad)
+	* Pitch angle (rad)
 	*/
 	public float pitch; 
  	/**
-	*Yaw angle (rad)
+	* Yaw angle (rad)
 	*/
 	public float yaw; 
  	/**
-	*X acceleration m/s/s
+	* X acceleration m/s/s
 	*/
 	public float xacc; 
  	/**
-	*Y acceleration m/s/s
+	* Y acceleration m/s/s
 	*/
 	public float yacc; 
  	/**
-	*Z acceleration m/s/s
+	* Z acceleration m/s/s
 	*/
 	public float zacc; 
  	/**
-	*Angular speed around X axis rad/s
+	* Angular speed around X axis rad/s
 	*/
 	public float xgyro; 
  	/**
-	*Angular speed around Y axis rad/s
+	* Angular speed around Y axis rad/s
 	*/
 	public float ygyro; 
  	/**
-	*Angular speed around Z axis rad/s
+	* Angular speed around Z axis rad/s
 	*/
 	public float zgyro; 
  	/**
-	*Latitude in degrees
+	* Latitude in degrees
 	*/
 	public float lat; 
  	/**
-	*Longitude in degrees
+	* Longitude in degrees
 	*/
 	public float lng; 
 
@@ -117,9 +117,11 @@ public class msg_simstate extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_simstate(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_SIMSTATE;
-        unpack(payload);
+    public msg_simstate(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_SIMSTATE;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "SIMSTATE");
         //Log.d("MAVLINK_MSG_ID_SIMSTATE", toString());
     }

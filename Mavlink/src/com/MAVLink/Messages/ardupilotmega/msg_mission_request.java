@@ -17,15 +17,15 @@ public class msg_mission_request extends MAVLinkMessage{
 	
 
  	/**
-	*Sequence
+	* Sequence
 	*/
 	public short seq; 
  	/**
-	*System ID
+	* System ID
 	*/
 	public byte target_system; 
  	/**
-	*Component ID
+	* Component ID
 	*/
 	public byte target_component; 
 
@@ -69,9 +69,11 @@ public class msg_mission_request extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_mission_request(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_MISSION_REQUEST;
-        unpack(payload);
+    public msg_mission_request(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_MISSION_REQUEST;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "MISSION_REQUEST");
         //Log.d("MAVLINK_MSG_ID_MISSION_REQUEST", toString());
     }

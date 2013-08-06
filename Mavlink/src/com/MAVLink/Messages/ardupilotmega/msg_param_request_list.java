@@ -17,11 +17,11 @@ public class msg_param_request_list extends MAVLinkMessage{
 	
 
  	/**
-	*System ID
+	* System ID
 	*/
 	public byte target_system; 
  	/**
-	*Component ID
+	* Component ID
 	*/
 	public byte target_component; 
 
@@ -63,9 +63,11 @@ public class msg_param_request_list extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_param_request_list(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_PARAM_REQUEST_LIST;
-        unpack(payload);
+    public msg_param_request_list(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = MAVLINK_MSG_ID_PARAM_REQUEST_LIST;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "PARAM_REQUEST_LIST");
         //Log.d("MAVLINK_MSG_ID_PARAM_REQUEST_LIST", toString());
     }
