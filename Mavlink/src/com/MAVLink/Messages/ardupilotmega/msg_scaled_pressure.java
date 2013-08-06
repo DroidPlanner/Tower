@@ -17,19 +17,19 @@ public class msg_scaled_pressure extends MAVLinkMessage{
 	
 
  	/**
-	*Timestamp (milliseconds since system boot)
+	* Timestamp (milliseconds since system boot)
 	*/
 	public int time_boot_ms; 
  	/**
-	*Absolute pressure (hectopascal)
+	* Absolute pressure (hectopascal)
 	*/
 	public float press_abs; 
  	/**
-	*Differential pressure 1 (hectopascal)
+	* Differential pressure 1 (hectopascal)
 	*/
 	public float press_diff; 
  	/**
-	*Temperature measurement (0.01 degrees celsius)
+	* Temperature measurement (0.01 degrees celsius)
 	*/
 	public short temperature; 
 
@@ -75,9 +75,11 @@ public class msg_scaled_pressure extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_scaled_pressure(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_SCALED_PRESSURE;
-        unpack(payload);
+    public msg_scaled_pressure(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = = MAVLINK_MSG_ID_SCALED_PRESSURE;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "SCALED_PRESSURE");
         //Log.d("MAVLINK_MSG_ID_SCALED_PRESSURE", toString());
     }

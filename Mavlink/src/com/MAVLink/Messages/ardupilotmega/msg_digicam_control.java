@@ -17,43 +17,43 @@ public class msg_digicam_control extends MAVLinkMessage{
 	
 
  	/**
-	*Correspondent value to given extra_param
+	* Correspondent value to given extra_param
 	*/
 	public float extra_value; 
  	/**
-	*System ID
+	* System ID
 	*/
 	public byte target_system; 
  	/**
-	*Component ID
+	* Component ID
 	*/
 	public byte target_component; 
  	/**
-	*0: stop, 1: start or keep it up //Session control e.g. show/hide lens
+	* 0: stop, 1: start or keep it up //Session control e.g. show/hide lens
 	*/
 	public byte session; 
  	/**
-	*1 to N //Zoom's absolute position (0 means ignore)
+	* 1 to N //Zoom's absolute position (0 means ignore)
 	*/
 	public byte zoom_pos; 
  	/**
-	*-100 to 100 //Zooming step value to offset zoom from the current position
+	* -100 to 100 //Zooming step value to offset zoom from the current position
 	*/
 	public byte zoom_step; 
  	/**
-	*0: unlock focus or keep unlocked, 1: lock focus or keep locked, 3: re-lock focus
+	* 0: unlock focus or keep unlocked, 1: lock focus or keep locked, 3: re-lock focus
 	*/
 	public byte focus_lock; 
  	/**
-	*0: ignore, 1: shot or start filming
+	* 0: ignore, 1: shot or start filming
 	*/
 	public byte shot; 
  	/**
-	*Command Identity (incremental loop: 0 to 255)//A command sent multiple times will be executed or pooled just once
+	* Command Identity (incremental loop: 0 to 255)//A command sent multiple times will be executed or pooled just once
 	*/
 	public byte command_id; 
  	/**
-	*Extra parameters enumeration (0 means ignore)
+	* Extra parameters enumeration (0 means ignore)
 	*/
 	public byte extra_param; 
 
@@ -111,9 +111,11 @@ public class msg_digicam_control extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_digicam_control(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_DIGICAM_CONTROL;
-        unpack(payload);
+    public msg_digicam_control(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = = MAVLINK_MSG_ID_DIGICAM_CONTROL;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "DIGICAM_CONTROL");
         //Log.d("MAVLINK_MSG_ID_DIGICAM_CONTROL", toString());
     }

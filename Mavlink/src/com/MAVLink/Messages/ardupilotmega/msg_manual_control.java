@@ -17,27 +17,27 @@ public class msg_manual_control extends MAVLinkMessage{
 	
 
  	/**
-	*X-axis, normalized to the range [-1000,1000]. A value of INT16_MAX indicates that this axis is invalid. Generally corresponds to forward(1000)-backward(-1000) movement on a joystick and the pitch of a vehicle.
+	* X-axis, normalized to the range [-1000,1000]. A value of INT16_MAX indicates that this axis is invalid. Generally corresponds to forward(1000)-backward(-1000) movement on a joystick and the pitch of a vehicle.
 	*/
 	public short x; 
  	/**
-	*Y-axis, normalized to the range [-1000,1000]. A value of INT16_MAX indicates that this axis is invalid. Generally corresponds to left(-1000)-right(1000) movement on a joystick and the roll of a vehicle.
+	* Y-axis, normalized to the range [-1000,1000]. A value of INT16_MAX indicates that this axis is invalid. Generally corresponds to left(-1000)-right(1000) movement on a joystick and the roll of a vehicle.
 	*/
 	public short y; 
  	/**
-	*Z-axis, normalized to the range [-1000,1000]. A value of INT16_MAX indicates that this axis is invalid. Generally corresponds to a separate slider movement with maximum being 1000 and minimum being -1000 on a joystick and the thrust of a vehicle.
+	* Z-axis, normalized to the range [-1000,1000]. A value of INT16_MAX indicates that this axis is invalid. Generally corresponds to a separate slider movement with maximum being 1000 and minimum being -1000 on a joystick and the thrust of a vehicle.
 	*/
 	public short z; 
  	/**
-	*R-axis, normalized to the range [-1000,1000]. A value of INT16_MAX indicates that this axis is invalid. Generally corresponds to a twisting of the joystick, with counter-clockwise being 1000 and clockwise being -1000, and the yaw of a vehicle.
+	* R-axis, normalized to the range [-1000,1000]. A value of INT16_MAX indicates that this axis is invalid. Generally corresponds to a twisting of the joystick, with counter-clockwise being 1000 and clockwise being -1000, and the yaw of a vehicle.
 	*/
 	public short r; 
  	/**
-	*A bitfield corresponding to the joystick buttons' current state, 1 for pressed, 0 for released. The lowest bit corresponds to Button 1.
+	* A bitfield corresponding to the joystick buttons' current state, 1 for pressed, 0 for released. The lowest bit corresponds to Button 1.
 	*/
 	public short buttons; 
  	/**
-	*The system to be controlled.
+	* The system to be controlled.
 	*/
 	public byte target; 
 
@@ -87,9 +87,11 @@ public class msg_manual_control extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_manual_control(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_MANUAL_CONTROL;
-        unpack(payload);
+    public msg_manual_control(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = = MAVLINK_MSG_ID_MANUAL_CONTROL;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "MANUAL_CONTROL");
         //Log.d("MAVLINK_MSG_ID_MANUAL_CONTROL", toString());
     }

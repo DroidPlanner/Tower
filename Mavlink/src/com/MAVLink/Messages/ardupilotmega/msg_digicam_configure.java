@@ -17,47 +17,47 @@ public class msg_digicam_configure extends MAVLinkMessage{
 	
 
  	/**
-	*Correspondent value to given extra_param
+	* Correspondent value to given extra_param
 	*/
 	public float extra_value; 
  	/**
-	*Divisor number //e.g. 1000 means 1/1000 (0 means ignore)
+	* Divisor number //e.g. 1000 means 1/1000 (0 means ignore)
 	*/
 	public short shutter_speed; 
  	/**
-	*System ID
+	* System ID
 	*/
 	public byte target_system; 
  	/**
-	*Component ID
+	* Component ID
 	*/
 	public byte target_component; 
  	/**
-	*Mode enumeration from 1 to N //P, TV, AV, M, Etc (0 means ignore)
+	* Mode enumeration from 1 to N //P, TV, AV, M, Etc (0 means ignore)
 	*/
 	public byte mode; 
  	/**
-	*F stop number x 10 //e.g. 28 means 2.8 (0 means ignore)
+	* F stop number x 10 //e.g. 28 means 2.8 (0 means ignore)
 	*/
 	public byte aperture; 
  	/**
-	*ISO enumeration from 1 to N //e.g. 80, 100, 200, Etc (0 means ignore)
+	* ISO enumeration from 1 to N //e.g. 80, 100, 200, Etc (0 means ignore)
 	*/
 	public byte iso; 
  	/**
-	*Exposure type enumeration from 1 to N (0 means ignore)
+	* Exposure type enumeration from 1 to N (0 means ignore)
 	*/
 	public byte exposure_type; 
  	/**
-	*Command Identity (incremental loop: 0 to 255)//A command sent multiple times will be executed or pooled just once
+	* Command Identity (incremental loop: 0 to 255)//A command sent multiple times will be executed or pooled just once
 	*/
 	public byte command_id; 
  	/**
-	*Main engine cut-off time before camera trigger in seconds/10 (0 means no cut-off)
+	* Main engine cut-off time before camera trigger in seconds/10 (0 means no cut-off)
 	*/
 	public byte engine_cut_off; 
  	/**
-	*Extra parameters enumeration (0 means ignore)
+	* Extra parameters enumeration (0 means ignore)
 	*/
 	public byte extra_param; 
 
@@ -117,9 +117,11 @@ public class msg_digicam_configure extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_digicam_configure(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_DIGICAM_CONFIGURE;
-        unpack(payload);
+    public msg_digicam_configure(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = = MAVLINK_MSG_ID_DIGICAM_CONFIGURE;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "DIGICAM_CONFIGURE");
         //Log.d("MAVLINK_MSG_ID_DIGICAM_CONFIGURE", toString());
     }

@@ -17,11 +17,11 @@ public class msg_command_ack extends MAVLinkMessage{
 	
 
  	/**
-	*Command ID, as defined by MAV_CMD enum.
+	* Command ID, as defined by MAV_CMD enum.
 	*/
 	public short command; 
  	/**
-	*See MAV_RESULT enum
+	* See MAV_RESULT enum
 	*/
 	public byte result; 
 
@@ -63,9 +63,11 @@ public class msg_command_ack extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_command_ack(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_COMMAND_ACK;
-        unpack(payload);
+    public msg_command_ack(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = = MAVLINK_MSG_ID_COMMAND_ACK;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "COMMAND_ACK");
         //Log.d("MAVLINK_MSG_ID_COMMAND_ACK", toString());
     }

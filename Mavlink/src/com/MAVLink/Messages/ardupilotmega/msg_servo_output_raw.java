@@ -17,43 +17,43 @@ public class msg_servo_output_raw extends MAVLinkMessage{
 	
 
  	/**
-	*Timestamp (microseconds since system boot)
+	* Timestamp (microseconds since system boot)
 	*/
 	public int time_usec; 
  	/**
-	*Servo output 1 value, in microseconds
+	* Servo output 1 value, in microseconds
 	*/
 	public short servo1_raw; 
  	/**
-	*Servo output 2 value, in microseconds
+	* Servo output 2 value, in microseconds
 	*/
 	public short servo2_raw; 
  	/**
-	*Servo output 3 value, in microseconds
+	* Servo output 3 value, in microseconds
 	*/
 	public short servo3_raw; 
  	/**
-	*Servo output 4 value, in microseconds
+	* Servo output 4 value, in microseconds
 	*/
 	public short servo4_raw; 
  	/**
-	*Servo output 5 value, in microseconds
+	* Servo output 5 value, in microseconds
 	*/
 	public short servo5_raw; 
  	/**
-	*Servo output 6 value, in microseconds
+	* Servo output 6 value, in microseconds
 	*/
 	public short servo6_raw; 
  	/**
-	*Servo output 7 value, in microseconds
+	* Servo output 7 value, in microseconds
 	*/
 	public short servo7_raw; 
  	/**
-	*Servo output 8 value, in microseconds
+	* Servo output 8 value, in microseconds
 	*/
 	public short servo8_raw; 
  	/**
-	*Servo output port (set of 8 outputs = 1 port). Most MAVs will just use one, but this allows to encode more than 8 servos.
+	* Servo output port (set of 8 outputs = 1 port). Most MAVs will just use one, but this allows to encode more than 8 servos.
 	*/
 	public byte port; 
 
@@ -111,9 +111,11 @@ public class msg_servo_output_raw extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_servo_output_raw(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_SERVO_OUTPUT_RAW;
-        unpack(payload);
+    public msg_servo_output_raw(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = = MAVLINK_MSG_ID_SERVO_OUTPUT_RAW;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "SERVO_OUTPUT_RAW");
         //Log.d("MAVLINK_MSG_ID_SERVO_OUTPUT_RAW", toString());
     }

@@ -18,51 +18,51 @@ public class msg_sensor_offsets extends MAVLinkMessage{
 	
 
  	/**
-	*magnetic declination (radians)
+	* magnetic declination (radians)
 	*/
 	public float mag_declination; 
  	/**
-	*raw pressure from barometer
+	* raw pressure from barometer
 	*/
 	public int raw_press; 
  	/**
-	*raw temperature from barometer
+	* raw temperature from barometer
 	*/
 	public int raw_temp; 
  	/**
-	*gyro X calibration
+	* gyro X calibration
 	*/
 	public float gyro_cal_x; 
  	/**
-	*gyro Y calibration
+	* gyro Y calibration
 	*/
 	public float gyro_cal_y; 
  	/**
-	*gyro Z calibration
+	* gyro Z calibration
 	*/
 	public float gyro_cal_z; 
  	/**
-	*accel X calibration
+	* accel X calibration
 	*/
 	public float accel_cal_x; 
  	/**
-	*accel Y calibration
+	* accel Y calibration
 	*/
 	public float accel_cal_y; 
  	/**
-	*accel Z calibration
+	* accel Z calibration
 	*/
 	public float accel_cal_z; 
  	/**
-	*magnetometer X offset
+	* magnetometer X offset
 	*/
 	public short mag_ofs_x; 
  	/**
-	*magnetometer Y offset
+	* magnetometer Y offset
 	*/
 	public short mag_ofs_y; 
  	/**
-	*magnetometer Z offset
+	* magnetometer Z offset
 	*/
 	public short mag_ofs_z; 
 
@@ -124,9 +124,11 @@ public class msg_sensor_offsets extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_sensor_offsets(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_SENSOR_OFFSETS;
-        unpack(payload);
+    public msg_sensor_offsets(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = = MAVLINK_MSG_ID_SENSOR_OFFSETS;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "SENSOR_OFFSETS");
         //Log.d("MAVLINK_MSG_ID_SENSOR_OFFSETS", toString());
     }

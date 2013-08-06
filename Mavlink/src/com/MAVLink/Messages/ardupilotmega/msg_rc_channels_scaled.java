@@ -17,47 +17,47 @@ public class msg_rc_channels_scaled extends MAVLinkMessage{
 	
 
  	/**
-	*Timestamp (milliseconds since system boot)
+	* Timestamp (milliseconds since system boot)
 	*/
 	public int time_boot_ms; 
  	/**
-	*RC channel 1 value scaled, (-100%) -10000, (0%) 0, (100%) 10000, (invalid) 32767.
+	* RC channel 1 value scaled, (-100%) -10000, (0%) 0, (100%) 10000, (invalid) 32767.
 	*/
 	public short chan1_scaled; 
  	/**
-	*RC channel 2 value scaled, (-100%) -10000, (0%) 0, (100%) 10000, (invalid) 32767.
+	* RC channel 2 value scaled, (-100%) -10000, (0%) 0, (100%) 10000, (invalid) 32767.
 	*/
 	public short chan2_scaled; 
  	/**
-	*RC channel 3 value scaled, (-100%) -10000, (0%) 0, (100%) 10000, (invalid) 32767.
+	* RC channel 3 value scaled, (-100%) -10000, (0%) 0, (100%) 10000, (invalid) 32767.
 	*/
 	public short chan3_scaled; 
  	/**
-	*RC channel 4 value scaled, (-100%) -10000, (0%) 0, (100%) 10000, (invalid) 32767.
+	* RC channel 4 value scaled, (-100%) -10000, (0%) 0, (100%) 10000, (invalid) 32767.
 	*/
 	public short chan4_scaled; 
  	/**
-	*RC channel 5 value scaled, (-100%) -10000, (0%) 0, (100%) 10000, (invalid) 32767.
+	* RC channel 5 value scaled, (-100%) -10000, (0%) 0, (100%) 10000, (invalid) 32767.
 	*/
 	public short chan5_scaled; 
  	/**
-	*RC channel 6 value scaled, (-100%) -10000, (0%) 0, (100%) 10000, (invalid) 32767.
+	* RC channel 6 value scaled, (-100%) -10000, (0%) 0, (100%) 10000, (invalid) 32767.
 	*/
 	public short chan6_scaled; 
  	/**
-	*RC channel 7 value scaled, (-100%) -10000, (0%) 0, (100%) 10000, (invalid) 32767.
+	* RC channel 7 value scaled, (-100%) -10000, (0%) 0, (100%) 10000, (invalid) 32767.
 	*/
 	public short chan7_scaled; 
  	/**
-	*RC channel 8 value scaled, (-100%) -10000, (0%) 0, (100%) 10000, (invalid) 32767.
+	* RC channel 8 value scaled, (-100%) -10000, (0%) 0, (100%) 10000, (invalid) 32767.
 	*/
 	public short chan8_scaled; 
  	/**
-	*Servo output port (set of 8 outputs = 1 port). Most MAVs will just use one, but this allows for more than 8 servos.
+	* Servo output port (set of 8 outputs = 1 port). Most MAVs will just use one, but this allows for more than 8 servos.
 	*/
 	public byte port; 
  	/**
-	*Receive signal strength indicator, 0: 0%, 100: 100%, 255: invalid/unknown.
+	* Receive signal strength indicator, 0: 0%, 100: 100%, 255: invalid/unknown.
 	*/
 	public byte rssi; 
 
@@ -117,9 +117,11 @@ public class msg_rc_channels_scaled extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_rc_channels_scaled(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_RC_CHANNELS_SCALED;
-        unpack(payload);
+    public msg_rc_channels_scaled(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = = MAVLINK_MSG_ID_RC_CHANNELS_SCALED;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "RC_CHANNELS_SCALED");
         //Log.d("MAVLINK_MSG_ID_RC_CHANNELS_SCALED", toString());
     }

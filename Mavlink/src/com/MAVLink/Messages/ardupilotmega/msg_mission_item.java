@@ -18,59 +18,59 @@ public class msg_mission_item extends MAVLinkMessage{
 	
 
  	/**
-	*PARAM1 / For NAV command MISSIONs: Radius in which the MISSION is accepted as reached, in meters
+	* PARAM1 / For NAV command MISSIONs: Radius in which the MISSION is accepted as reached, in meters
 	*/
 	public float param1; 
  	/**
-	*PARAM2 / For NAV command MISSIONs: Time that the MAV should stay inside the PARAM1 radius before advancing, in milliseconds
+	* PARAM2 / For NAV command MISSIONs: Time that the MAV should stay inside the PARAM1 radius before advancing, in milliseconds
 	*/
 	public float param2; 
  	/**
-	*PARAM3 / For LOITER command MISSIONs: Orbit to circle around the MISSION, in meters. If positive the orbit direction should be clockwise, if negative the orbit direction should be counter-clockwise.
+	* PARAM3 / For LOITER command MISSIONs: Orbit to circle around the MISSION, in meters. If positive the orbit direction should be clockwise, if negative the orbit direction should be counter-clockwise.
 	*/
 	public float param3; 
  	/**
-	*PARAM4 / For NAV and LOITER command MISSIONs: Yaw orientation in degrees, [0..360] 0 = NORTH
+	* PARAM4 / For NAV and LOITER command MISSIONs: Yaw orientation in degrees, [0..360] 0 = NORTH
 	*/
 	public float param4; 
  	/**
-	*PARAM5 / local: x position, global: latitude
+	* PARAM5 / local: x position, global: latitude
 	*/
 	public float x; 
  	/**
-	*PARAM6 / y position: global: longitude
+	* PARAM6 / y position: global: longitude
 	*/
 	public float y; 
  	/**
-	*PARAM7 / z position: global: altitude
+	* PARAM7 / z position: global: altitude
 	*/
 	public float z; 
  	/**
-	*Sequence
+	* Sequence
 	*/
 	public short seq; 
  	/**
-	*The scheduled action for the MISSION. see MAV_CMD in common.xml MAVLink specs
+	* The scheduled action for the MISSION. see MAV_CMD in common.xml MAVLink specs
 	*/
 	public short command; 
  	/**
-	*System ID
+	* System ID
 	*/
 	public byte target_system; 
  	/**
-	*Component ID
+	* Component ID
 	*/
 	public byte target_component; 
  	/**
-	*The coordinate system of the MISSION. see MAV_FRAME in mavlink_types.h
+	* The coordinate system of the MISSION. see MAV_FRAME in mavlink_types.h
 	*/
 	public byte frame; 
  	/**
-	*false:0, true:1
+	* false:0, true:1
 	*/
 	public byte current; 
  	/**
-	*autocontinue to next wp
+	* autocontinue to next wp
 	*/
 	public byte autocontinue; 
 
@@ -136,9 +136,11 @@ public class msg_mission_item extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_mission_item(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_MISSION_ITEM;
-        unpack(payload);
+    public msg_mission_item(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = = MAVLINK_MSG_ID_MISSION_ITEM;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "MISSION_ITEM");
         //Log.d("MAVLINK_MSG_ID_MISSION_ITEM", toString());
     }

@@ -17,11 +17,11 @@ public class msg_meminfo extends MAVLinkMessage{
 	
 
  	/**
-	*heap top
+	* heap top
 	*/
 	public short brkval; 
  	/**
-	*free memory
+	* free memory
 	*/
 	public short freemem; 
 
@@ -63,9 +63,11 @@ public class msg_meminfo extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_meminfo(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_MEMINFO;
-        unpack(payload);
+    public msg_meminfo(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = = MAVLINK_MSG_ID_MEMINFO;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "MEMINFO");
         //Log.d("MAVLINK_MSG_ID_MEMINFO", toString());
     }

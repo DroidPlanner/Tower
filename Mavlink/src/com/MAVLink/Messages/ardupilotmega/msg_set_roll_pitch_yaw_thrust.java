@@ -17,27 +17,27 @@ public class msg_set_roll_pitch_yaw_thrust extends MAVLinkMessage{
 	
 
  	/**
-	*Desired roll angle in radians
+	* Desired roll angle in radians
 	*/
 	public float roll; 
  	/**
-	*Desired pitch angle in radians
+	* Desired pitch angle in radians
 	*/
 	public float pitch; 
  	/**
-	*Desired yaw angle in radians
+	* Desired yaw angle in radians
 	*/
 	public float yaw; 
  	/**
-	*Collective thrust, normalized to 0 .. 1
+	* Collective thrust, normalized to 0 .. 1
 	*/
 	public float thrust; 
  	/**
-	*System ID
+	* System ID
 	*/
 	public byte target_system; 
  	/**
-	*Component ID
+	* Component ID
 	*/
 	public byte target_component; 
 
@@ -87,9 +87,11 @@ public class msg_set_roll_pitch_yaw_thrust extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_set_roll_pitch_yaw_thrust(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_SET_ROLL_PITCH_YAW_THRUST;
-        unpack(payload);
+    public msg_set_roll_pitch_yaw_thrust(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = = MAVLINK_MSG_ID_SET_ROLL_PITCH_YAW_THRUST;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "SET_ROLL_PITCH_YAW_THRUST");
         //Log.d("MAVLINK_MSG_ID_SET_ROLL_PITCH_YAW_THRUST", toString());
     }

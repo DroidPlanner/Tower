@@ -17,19 +17,19 @@ public class msg_mission_write_partial_list extends MAVLinkMessage{
 	
 
  	/**
-	*Start index, 0 by default and smaller / equal to the largest index of the current onboard list.
+	* Start index, 0 by default and smaller / equal to the largest index of the current onboard list.
 	*/
 	public short start_index; 
  	/**
-	*End index, equal or greater than start index.
+	* End index, equal or greater than start index.
 	*/
 	public short end_index; 
  	/**
-	*System ID
+	* System ID
 	*/
 	public byte target_system; 
  	/**
-	*Component ID
+	* Component ID
 	*/
 	public byte target_component; 
 
@@ -75,9 +75,11 @@ public class msg_mission_write_partial_list extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_mission_write_partial_list(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_MISSION_WRITE_PARTIAL_LIST;
-        unpack(payload);
+    public msg_mission_write_partial_list(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = = MAVLINK_MSG_ID_MISSION_WRITE_PARTIAL_LIST;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "MISSION_WRITE_PARTIAL_LIST");
         //Log.d("MAVLINK_MSG_ID_MISSION_WRITE_PARTIAL_LIST", toString());
     }

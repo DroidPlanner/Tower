@@ -17,27 +17,27 @@ public class msg_set_quad_swarm_roll_pitch_yaw_thrust extends MAVLinkMessage{
 	
 
  	/**
-	*Desired roll angle in radians +-PI (+-32767)
+	* Desired roll angle in radians +-PI (+-32767)
 	*/
 	public short roll[] = new short[4]; 
  	/**
-	*Desired pitch angle in radians +-PI (+-32767)
+	* Desired pitch angle in radians +-PI (+-32767)
 	*/
 	public short pitch[] = new short[4]; 
  	/**
-	*Desired yaw angle in radians, scaled to int16 +-PI (+-32767)
+	* Desired yaw angle in radians, scaled to int16 +-PI (+-32767)
 	*/
 	public short yaw[] = new short[4]; 
  	/**
-	*Collective thrust, scaled to uint16 (0..65535)
+	* Collective thrust, scaled to uint16 (0..65535)
 	*/
 	public short thrust[] = new short[4]; 
  	/**
-	*ID of the quadrotor group (0 - 255, up to 256 groups supported)
+	* ID of the quadrotor group (0 - 255, up to 256 groups supported)
 	*/
 	public byte group; 
  	/**
-	*ID of the flight mode (0 - 255, up to 256 modes supported)
+	* ID of the flight mode (0 - 255, up to 256 modes supported)
 	*/
 	public byte mode; 
 
@@ -103,9 +103,11 @@ public class msg_set_quad_swarm_roll_pitch_yaw_thrust extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_set_quad_swarm_roll_pitch_yaw_thrust(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_SET_QUAD_SWARM_ROLL_PITCH_YAW_THRUST;
-        unpack(payload);
+    public msg_set_quad_swarm_roll_pitch_yaw_thrust(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = = MAVLINK_MSG_ID_SET_QUAD_SWARM_ROLL_PITCH_YAW_THRUST;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "SET_QUAD_SWARM_ROLL_PITCH_YAW_THRUST");
         //Log.d("MAVLINK_MSG_ID_SET_QUAD_SWARM_ROLL_PITCH_YAW_THRUST", toString());
     }

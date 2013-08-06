@@ -17,23 +17,23 @@ public class msg_raw_pressure extends MAVLinkMessage{
 	
 
  	/**
-	*Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+	* Timestamp (microseconds since UNIX epoch or microseconds since system boot)
 	*/
 	public long time_usec; 
  	/**
-	*Absolute pressure (raw)
+	* Absolute pressure (raw)
 	*/
 	public short press_abs; 
  	/**
-	*Differential pressure 1 (raw)
+	* Differential pressure 1 (raw)
 	*/
 	public short press_diff1; 
  	/**
-	*Differential pressure 2 (raw)
+	* Differential pressure 2 (raw)
 	*/
 	public short press_diff2; 
  	/**
-	*Raw Temperature measurement (raw)
+	* Raw Temperature measurement (raw)
 	*/
 	public short temperature; 
 
@@ -81,9 +81,11 @@ public class msg_raw_pressure extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_raw_pressure(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_RAW_PRESSURE;
-        unpack(payload);
+    public msg_raw_pressure(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = = MAVLINK_MSG_ID_RAW_PRESSURE;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "RAW_PRESSURE");
         //Log.d("MAVLINK_MSG_ID_RAW_PRESSURE", toString());
     }

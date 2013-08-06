@@ -17,19 +17,19 @@ public class msg_ping extends MAVLinkMessage{
 	
 
  	/**
-	*Unix timestamp in microseconds
+	* Unix timestamp in microseconds
 	*/
 	public long time_usec; 
  	/**
-	*PING sequence
+	* PING sequence
 	*/
 	public int seq; 
  	/**
-	*0: request ping from all receiving systems, if greater than 0: message is a ping response and number is the system id of the requesting system
+	* 0: request ping from all receiving systems, if greater than 0: message is a ping response and number is the system id of the requesting system
 	*/
 	public byte target_system; 
  	/**
-	*0: request ping from all receiving components, if greater than 0: message is a ping response and number is the system id of the requesting system
+	* 0: request ping from all receiving components, if greater than 0: message is a ping response and number is the system id of the requesting system
 	*/
 	public byte target_component; 
 
@@ -75,9 +75,11 @@ public class msg_ping extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_ping(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_PING;
-        unpack(payload);
+    public msg_ping(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = = MAVLINK_MSG_ID_PING;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "PING");
         //Log.d("MAVLINK_MSG_ID_PING", toString());
     }

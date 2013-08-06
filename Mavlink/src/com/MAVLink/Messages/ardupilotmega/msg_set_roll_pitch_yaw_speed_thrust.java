@@ -17,27 +17,27 @@ public class msg_set_roll_pitch_yaw_speed_thrust extends MAVLinkMessage{
 	
 
  	/**
-	*Desired roll angular speed in rad/s
+	* Desired roll angular speed in rad/s
 	*/
 	public float roll_speed; 
  	/**
-	*Desired pitch angular speed in rad/s
+	* Desired pitch angular speed in rad/s
 	*/
 	public float pitch_speed; 
  	/**
-	*Desired yaw angular speed in rad/s
+	* Desired yaw angular speed in rad/s
 	*/
 	public float yaw_speed; 
  	/**
-	*Collective thrust, normalized to 0 .. 1
+	* Collective thrust, normalized to 0 .. 1
 	*/
 	public float thrust; 
  	/**
-	*System ID
+	* System ID
 	*/
 	public byte target_system; 
  	/**
-	*Component ID
+	* Component ID
 	*/
 	public byte target_component; 
 
@@ -87,9 +87,11 @@ public class msg_set_roll_pitch_yaw_speed_thrust extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_set_roll_pitch_yaw_speed_thrust(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_SET_ROLL_PITCH_YAW_SPEED_THRUST;
-        unpack(payload);
+    public msg_set_roll_pitch_yaw_speed_thrust(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = = MAVLINK_MSG_ID_SET_ROLL_PITCH_YAW_SPEED_THRUST;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "SET_ROLL_PITCH_YAW_SPEED_THRUST");
         //Log.d("MAVLINK_MSG_ID_SET_ROLL_PITCH_YAW_SPEED_THRUST", toString());
     }

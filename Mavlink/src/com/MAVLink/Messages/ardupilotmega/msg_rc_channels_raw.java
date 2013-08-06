@@ -17,47 +17,47 @@ public class msg_rc_channels_raw extends MAVLinkMessage{
 	
 
  	/**
-	*Timestamp (milliseconds since system boot)
+	* Timestamp (milliseconds since system boot)
 	*/
 	public int time_boot_ms; 
  	/**
-	*RC channel 1 value, in microseconds. A value of 65535 implies the channel is unused.
+	* RC channel 1 value, in microseconds. A value of 65535 implies the channel is unused.
 	*/
 	public short chan1_raw; 
  	/**
-	*RC channel 2 value, in microseconds. A value of 65535 implies the channel is unused.
+	* RC channel 2 value, in microseconds. A value of 65535 implies the channel is unused.
 	*/
 	public short chan2_raw; 
  	/**
-	*RC channel 3 value, in microseconds. A value of 65535 implies the channel is unused.
+	* RC channel 3 value, in microseconds. A value of 65535 implies the channel is unused.
 	*/
 	public short chan3_raw; 
  	/**
-	*RC channel 4 value, in microseconds. A value of 65535 implies the channel is unused.
+	* RC channel 4 value, in microseconds. A value of 65535 implies the channel is unused.
 	*/
 	public short chan4_raw; 
  	/**
-	*RC channel 5 value, in microseconds. A value of 65535 implies the channel is unused.
+	* RC channel 5 value, in microseconds. A value of 65535 implies the channel is unused.
 	*/
 	public short chan5_raw; 
  	/**
-	*RC channel 6 value, in microseconds. A value of 65535 implies the channel is unused.
+	* RC channel 6 value, in microseconds. A value of 65535 implies the channel is unused.
 	*/
 	public short chan6_raw; 
  	/**
-	*RC channel 7 value, in microseconds. A value of 65535 implies the channel is unused.
+	* RC channel 7 value, in microseconds. A value of 65535 implies the channel is unused.
 	*/
 	public short chan7_raw; 
  	/**
-	*RC channel 8 value, in microseconds. A value of 65535 implies the channel is unused.
+	* RC channel 8 value, in microseconds. A value of 65535 implies the channel is unused.
 	*/
 	public short chan8_raw; 
  	/**
-	*Servo output port (set of 8 outputs = 1 port). Most MAVs will just use one, but this allows for more than 8 servos.
+	* Servo output port (set of 8 outputs = 1 port). Most MAVs will just use one, but this allows for more than 8 servos.
 	*/
 	public byte port; 
  	/**
-	*Receive signal strength indicator, 0: 0%, 100: 100%, 255: invalid/unknown.
+	* Receive signal strength indicator, 0: 0%, 100: 100%, 255: invalid/unknown.
 	*/
 	public byte rssi; 
 
@@ -117,9 +117,11 @@ public class msg_rc_channels_raw extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_rc_channels_raw(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_RC_CHANNELS_RAW;
-        unpack(payload);
+    public msg_rc_channels_raw(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = = MAVLINK_MSG_ID_RC_CHANNELS_RAW;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "RC_CHANNELS_RAW");
         //Log.d("MAVLINK_MSG_ID_RC_CHANNELS_RAW", toString());
     }

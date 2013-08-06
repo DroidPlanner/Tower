@@ -17,23 +17,23 @@ public class msg_file_transfer_start extends MAVLinkMessage{
 	
 
  	/**
-	*Unique transfer ID
+	* Unique transfer ID
 	*/
 	public long transfer_uid; 
  	/**
-	*File size in bytes
+	* File size in bytes
 	*/
 	public int file_size; 
  	/**
-	*Destination path
+	* Destination path
 	*/
 	public byte dest_path[] = new byte[240]; 
  	/**
-	*Transfer direction: 0: from requester, 1: to requester
+	* Transfer direction: 0: from requester, 1: to requester
 	*/
 	public byte direction; 
  	/**
-	*RESERVED
+	* RESERVED
 	*/
 	public byte flags; 
 
@@ -85,9 +85,11 @@ public class msg_file_transfer_start extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_file_transfer_start(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_FILE_TRANSFER_START;
-        unpack(payload);
+    public msg_file_transfer_start(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = = MAVLINK_MSG_ID_FILE_TRANSFER_START;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "FILE_TRANSFER_START");
         //Log.d("MAVLINK_MSG_ID_FILE_TRANSFER_START", toString());
     }

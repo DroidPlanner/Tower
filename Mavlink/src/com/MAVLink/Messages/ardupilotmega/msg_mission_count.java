@@ -17,15 +17,15 @@ public class msg_mission_count extends MAVLinkMessage{
 	
 
  	/**
-	*Number of mission items in the sequence
+	* Number of mission items in the sequence
 	*/
 	public short count; 
  	/**
-	*System ID
+	* System ID
 	*/
 	public byte target_system; 
  	/**
-	*Component ID
+	* Component ID
 	*/
 	public byte target_component; 
 
@@ -69,9 +69,11 @@ public class msg_mission_count extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_mission_count(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_MISSION_COUNT;
-        unpack(payload);
+    public msg_mission_count(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = = MAVLINK_MSG_ID_MISSION_COUNT;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "MISSION_COUNT");
         //Log.d("MAVLINK_MSG_ID_MISSION_COUNT", toString());
     }

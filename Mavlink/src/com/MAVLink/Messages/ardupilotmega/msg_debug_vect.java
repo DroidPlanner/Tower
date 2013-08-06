@@ -17,23 +17,23 @@ public class msg_debug_vect extends MAVLinkMessage{
 	
 
  	/**
-	*Timestamp
+	* Timestamp
 	*/
 	public long time_usec; 
  	/**
-	*x
+	* x
 	*/
 	public float x; 
  	/**
-	*y
+	* y
 	*/
 	public float y; 
  	/**
-	*z
+	* z
 	*/
 	public float z; 
  	/**
-	*Name
+	* Name
 	*/
 	public byte name[] = new byte[10]; 
 
@@ -85,9 +85,11 @@ public class msg_debug_vect extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_debug_vect(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_DEBUG_VECT;
-        unpack(payload);
+    public msg_debug_vect(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = = MAVLINK_MSG_ID_DEBUG_VECT;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "DEBUG_VECT");
         //Log.d("MAVLINK_MSG_ID_DEBUG_VECT", toString());
     }

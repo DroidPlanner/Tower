@@ -17,31 +17,31 @@ public class msg_set_local_position_setpoint extends MAVLinkMessage{
 	
 
  	/**
-	*x position
+	* x position
 	*/
 	public float x; 
  	/**
-	*y position
+	* y position
 	*/
 	public float y; 
  	/**
-	*z position
+	* z position
 	*/
 	public float z; 
  	/**
-	*Desired yaw angle
+	* Desired yaw angle
 	*/
 	public float yaw; 
  	/**
-	*System ID
+	* System ID
 	*/
 	public byte target_system; 
  	/**
-	*Component ID
+	* Component ID
 	*/
 	public byte target_component; 
  	/**
-	*Coordinate frame - valid values are only MAV_FRAME_LOCAL_NED or MAV_FRAME_LOCAL_ENU
+	* Coordinate frame - valid values are only MAV_FRAME_LOCAL_NED or MAV_FRAME_LOCAL_ENU
 	*/
 	public byte coordinate_frame; 
 
@@ -93,9 +93,11 @@ public class msg_set_local_position_setpoint extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_set_local_position_setpoint(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_SET_LOCAL_POSITION_SETPOINT;
-        unpack(payload);
+    public msg_set_local_position_setpoint(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = = MAVLINK_MSG_ID_SET_LOCAL_POSITION_SETPOINT;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "SET_LOCAL_POSITION_SETPOINT");
         //Log.d("MAVLINK_MSG_ID_SET_LOCAL_POSITION_SETPOINT", toString());
     }

@@ -17,23 +17,23 @@ public class msg_global_position_setpoint_int extends MAVLinkMessage{
 	
 
  	/**
-	*WGS84 Latitude position in degrees * 1E7
+	* WGS84 Latitude position in degrees * 1E7
 	*/
 	public int latitude; 
  	/**
-	*WGS84 Longitude position in degrees * 1E7
+	* WGS84 Longitude position in degrees * 1E7
 	*/
 	public int longitude; 
  	/**
-	*WGS84 Altitude in meters * 1000 (positive for up)
+	* WGS84 Altitude in meters * 1000 (positive for up)
 	*/
 	public int altitude; 
  	/**
-	*Desired yaw angle in degrees * 100
+	* Desired yaw angle in degrees * 100
 	*/
 	public short yaw; 
  	/**
-	*Coordinate frame - valid values are only MAV_FRAME_GLOBAL or MAV_FRAME_GLOBAL_RELATIVE_ALT
+	* Coordinate frame - valid values are only MAV_FRAME_GLOBAL or MAV_FRAME_GLOBAL_RELATIVE_ALT
 	*/
 	public byte coordinate_frame; 
 
@@ -81,9 +81,11 @@ public class msg_global_position_setpoint_int extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_global_position_setpoint_int(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_GLOBAL_POSITION_SETPOINT_INT;
-        unpack(payload);
+    public msg_global_position_setpoint_int(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = = MAVLINK_MSG_ID_GLOBAL_POSITION_SETPOINT_INT;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "GLOBAL_POSITION_SETPOINT_INT");
         //Log.d("MAVLINK_MSG_ID_GLOBAL_POSITION_SETPOINT_INT", toString());
     }

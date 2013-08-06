@@ -17,15 +17,15 @@ public class msg_debug extends MAVLinkMessage{
 	
 
  	/**
-	*Timestamp (milliseconds since system boot)
+	* Timestamp (milliseconds since system boot)
 	*/
 	public int time_boot_ms; 
  	/**
-	*DEBUG value
+	* DEBUG value
 	*/
 	public float value; 
  	/**
-	*index of debug variable
+	* index of debug variable
 	*/
 	public byte ind; 
 
@@ -69,9 +69,11 @@ public class msg_debug extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_debug(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_DEBUG;
-        unpack(payload);
+    public msg_debug(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = = MAVLINK_MSG_ID_DEBUG;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "DEBUG");
         //Log.d("MAVLINK_MSG_ID_DEBUG", toString());
     }

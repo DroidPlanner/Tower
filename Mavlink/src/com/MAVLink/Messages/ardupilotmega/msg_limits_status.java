@@ -18,39 +18,39 @@ public class msg_limits_status extends MAVLinkMessage{
 	
 
  	/**
-	*time of last breach in milliseconds since boot
+	* time of last breach in milliseconds since boot
 	*/
 	public int last_trigger; 
  	/**
-	*time of last recovery action in milliseconds since boot
+	* time of last recovery action in milliseconds since boot
 	*/
 	public int last_action; 
  	/**
-	*time of last successful recovery in milliseconds since boot
+	* time of last successful recovery in milliseconds since boot
 	*/
 	public int last_recovery; 
  	/**
-	*time of last all-clear in milliseconds since boot
+	* time of last all-clear in milliseconds since boot
 	*/
 	public int last_clear; 
  	/**
-	*number of fence breaches
+	* number of fence breaches
 	*/
 	public short breach_count; 
  	/**
-	*state of AP_Limits, (see enum LimitState, LIMITS_STATE)
+	* state of AP_Limits, (see enum LimitState, LIMITS_STATE)
 	*/
 	public byte limits_state; 
  	/**
-	*AP_Limit_Module bitfield of enabled modules, (see enum moduleid or LIMIT_MODULE)
+	* AP_Limit_Module bitfield of enabled modules, (see enum moduleid or LIMIT_MODULE)
 	*/
 	public byte mods_enabled; 
  	/**
-	*AP_Limit_Module bitfield of required modules, (see enum moduleid or LIMIT_MODULE)
+	* AP_Limit_Module bitfield of required modules, (see enum moduleid or LIMIT_MODULE)
 	*/
 	public byte mods_required; 
  	/**
-	*AP_Limit_Module bitfield of triggered modules, (see enum moduleid or LIMIT_MODULE)
+	* AP_Limit_Module bitfield of triggered modules, (see enum moduleid or LIMIT_MODULE)
 	*/
 	public byte mods_triggered; 
 
@@ -106,9 +106,11 @@ public class msg_limits_status extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_limits_status(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_LIMITS_STATUS;
-        unpack(payload);
+    public msg_limits_status(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = = MAVLINK_MSG_ID_LIMITS_STATUS;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "LIMITS_STATUS");
         //Log.d("MAVLINK_MSG_ID_LIMITS_STATUS", toString());
     }

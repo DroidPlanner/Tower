@@ -17,15 +17,15 @@ public class msg_mission_ack extends MAVLinkMessage{
 	
 
  	/**
-	*System ID
+	* System ID
 	*/
 	public byte target_system; 
  	/**
-	*Component ID
+	* Component ID
 	*/
 	public byte target_component; 
  	/**
-	*See MAV_MISSION_RESULT enum
+	* See MAV_MISSION_RESULT enum
 	*/
 	public byte type; 
 
@@ -69,9 +69,11 @@ public class msg_mission_ack extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_mission_ack(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_MISSION_ACK;
-        unpack(payload);
+    public msg_mission_ack(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = = MAVLINK_MSG_ID_MISSION_ACK;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "MISSION_ACK");
         //Log.d("MAVLINK_MSG_ID_MISSION_ACK", toString());
     }

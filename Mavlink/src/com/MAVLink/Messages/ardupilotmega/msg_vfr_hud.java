@@ -17,27 +17,27 @@ public class msg_vfr_hud extends MAVLinkMessage{
 	
 
  	/**
-	*Current airspeed in m/s
+	* Current airspeed in m/s
 	*/
 	public float airspeed; 
  	/**
-	*Current ground speed in m/s
+	* Current ground speed in m/s
 	*/
 	public float groundspeed; 
  	/**
-	*Current altitude (MSL), in meters
+	* Current altitude (MSL), in meters
 	*/
 	public float alt; 
  	/**
-	*Current climb rate in meters/second
+	* Current climb rate in meters/second
 	*/
 	public float climb; 
  	/**
-	*Current heading in degrees, in compass units (0..360, 0=north)
+	* Current heading in degrees, in compass units (0..360, 0=north)
 	*/
 	public short heading; 
  	/**
-	*Current throttle setting in integer percent, 0 to 100
+	* Current throttle setting in integer percent, 0 to 100
 	*/
 	public short throttle; 
 
@@ -87,9 +87,11 @@ public class msg_vfr_hud extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_vfr_hud(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_VFR_HUD;
-        unpack(payload);
+    public msg_vfr_hud(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = = MAVLINK_MSG_ID_VFR_HUD;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "VFR_HUD");
         //Log.d("MAVLINK_MSG_ID_VFR_HUD", toString());
     }

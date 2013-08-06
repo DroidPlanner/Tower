@@ -17,15 +17,15 @@ public class msg_fence_fetch_point extends MAVLinkMessage{
 	
 
  	/**
-	*System ID
+	* System ID
 	*/
 	public byte target_system; 
  	/**
-	*Component ID
+	* Component ID
 	*/
 	public byte target_component; 
  	/**
-	*point index (first point is 1, 0 is for return point)
+	* point index (first point is 1, 0 is for return point)
 	*/
 	public byte idx; 
 
@@ -69,9 +69,11 @@ public class msg_fence_fetch_point extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_fence_fetch_point(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_FENCE_FETCH_POINT;
-        unpack(payload);
+    public msg_fence_fetch_point(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = = MAVLINK_MSG_ID_FENCE_FETCH_POINT;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "FENCE_FETCH_POINT");
         //Log.d("MAVLINK_MSG_ID_FENCE_FETCH_POINT", toString());
     }

@@ -17,31 +17,31 @@ public class msg_setpoint_6dof extends MAVLinkMessage{
 	
 
  	/**
-	*Translational Component in x
+	* Translational Component in x
 	*/
 	public float trans_x; 
  	/**
-	*Translational Component in y
+	* Translational Component in y
 	*/
 	public float trans_y; 
  	/**
-	*Translational Component in z
+	* Translational Component in z
 	*/
 	public float trans_z; 
  	/**
-	*Rotational Component in x
+	* Rotational Component in x
 	*/
 	public float rot_x; 
  	/**
-	*Rotational Component in y
+	* Rotational Component in y
 	*/
 	public float rot_y; 
  	/**
-	*Rotational Component in z
+	* Rotational Component in z
 	*/
 	public float rot_z; 
  	/**
-	*System ID
+	* System ID
 	*/
 	public byte target_system; 
 
@@ -93,9 +93,11 @@ public class msg_setpoint_6dof extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_setpoint_6dof(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_SETPOINT_6DOF;
-        unpack(payload);
+    public msg_setpoint_6dof(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = = MAVLINK_MSG_ID_SETPOINT_6DOF;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "SETPOINT_6DOF");
         //Log.d("MAVLINK_MSG_ID_SETPOINT_6DOF", toString());
     }

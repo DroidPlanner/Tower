@@ -17,35 +17,35 @@ public class msg_optical_flow extends MAVLinkMessage{
 	
 
  	/**
-	*Timestamp (UNIX)
+	* Timestamp (UNIX)
 	*/
 	public long time_usec; 
  	/**
-	*Flow in meters in x-sensor direction, angular-speed compensated
+	* Flow in meters in x-sensor direction, angular-speed compensated
 	*/
 	public float flow_comp_m_x; 
  	/**
-	*Flow in meters in y-sensor direction, angular-speed compensated
+	* Flow in meters in y-sensor direction, angular-speed compensated
 	*/
 	public float flow_comp_m_y; 
  	/**
-	*Ground distance in meters. Positive value: distance known. Negative value: Unknown distance
+	* Ground distance in meters. Positive value: distance known. Negative value: Unknown distance
 	*/
 	public float ground_distance; 
  	/**
-	*Flow in pixels in x-sensor direction
+	* Flow in pixels in x-sensor direction
 	*/
 	public short flow_x; 
  	/**
-	*Flow in pixels in y-sensor direction
+	* Flow in pixels in y-sensor direction
 	*/
 	public short flow_y; 
  	/**
-	*Sensor ID
+	* Sensor ID
 	*/
 	public byte sensor_id; 
  	/**
-	*Optical flow quality / confidence. 0: bad, 255: maximum quality
+	* Optical flow quality / confidence. 0: bad, 255: maximum quality
 	*/
 	public byte quality; 
 
@@ -99,9 +99,11 @@ public class msg_optical_flow extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_optical_flow(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_OPTICAL_FLOW;
-        unpack(payload);
+    public msg_optical_flow(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = = MAVLINK_MSG_ID_OPTICAL_FLOW;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "OPTICAL_FLOW");
         //Log.d("MAVLINK_MSG_ID_OPTICAL_FLOW", toString());
     }

@@ -17,39 +17,39 @@ public class msg_setpoint_8dof extends MAVLinkMessage{
 	
 
  	/**
-	*Value 1
+	* Value 1
 	*/
 	public float val1; 
  	/**
-	*Value 2
+	* Value 2
 	*/
 	public float val2; 
  	/**
-	*Value 3
+	* Value 3
 	*/
 	public float val3; 
  	/**
-	*Value 4
+	* Value 4
 	*/
 	public float val4; 
  	/**
-	*Value 5
+	* Value 5
 	*/
 	public float val5; 
  	/**
-	*Value 6
+	* Value 6
 	*/
 	public float val6; 
  	/**
-	*Value 7
+	* Value 7
 	*/
 	public float val7; 
  	/**
-	*Value 8
+	* Value 8
 	*/
 	public float val8; 
  	/**
-	*System ID
+	* System ID
 	*/
 	public byte target_system; 
 
@@ -105,9 +105,11 @@ public class msg_setpoint_8dof extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_setpoint_8dof(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_SETPOINT_8DOF;
-        unpack(payload);
+    public msg_setpoint_8dof(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = = MAVLINK_MSG_ID_SETPOINT_8DOF;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "SETPOINT_8DOF");
         //Log.d("MAVLINK_MSG_ID_SETPOINT_8DOF", toString());
     }

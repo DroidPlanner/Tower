@@ -17,19 +17,19 @@ public class msg_mission_request_partial_list extends MAVLinkMessage{
 	
 
  	/**
-	*Start index, 0 by default
+	* Start index, 0 by default
 	*/
 	public short start_index; 
  	/**
-	*End index, -1 by default (-1: send list to end). Else a valid index of the list
+	* End index, -1 by default (-1: send list to end). Else a valid index of the list
 	*/
 	public short end_index; 
  	/**
-	*System ID
+	* System ID
 	*/
 	public byte target_system; 
  	/**
-	*Component ID
+	* Component ID
 	*/
 	public byte target_component; 
 
@@ -75,9 +75,11 @@ public class msg_mission_request_partial_list extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_mission_request_partial_list(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_MISSION_REQUEST_PARTIAL_LIST;
-        unpack(payload);
+    public msg_mission_request_partial_list(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = = MAVLINK_MSG_ID_MISSION_REQUEST_PARTIAL_LIST;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "MISSION_REQUEST_PARTIAL_LIST");
         //Log.d("MAVLINK_MSG_ID_MISSION_REQUEST_PARTIAL_LIST", toString());
     }

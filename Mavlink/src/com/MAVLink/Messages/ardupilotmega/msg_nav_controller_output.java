@@ -17,35 +17,35 @@ public class msg_nav_controller_output extends MAVLinkMessage{
 	
 
  	/**
-	*Current desired roll in degrees
+	* Current desired roll in degrees
 	*/
 	public float nav_roll; 
  	/**
-	*Current desired pitch in degrees
+	* Current desired pitch in degrees
 	*/
 	public float nav_pitch; 
  	/**
-	*Current altitude error in meters
+	* Current altitude error in meters
 	*/
 	public float alt_error; 
  	/**
-	*Current airspeed error in meters/second
+	* Current airspeed error in meters/second
 	*/
 	public float aspd_error; 
  	/**
-	*Current crosstrack error on x-y plane in meters
+	* Current crosstrack error on x-y plane in meters
 	*/
 	public float xtrack_error; 
  	/**
-	*Current desired heading in degrees
+	* Current desired heading in degrees
 	*/
 	public short nav_bearing; 
  	/**
-	*Bearing to current MISSION/target in degrees
+	* Bearing to current MISSION/target in degrees
 	*/
 	public short target_bearing; 
  	/**
-	*Distance to active MISSION in meters
+	* Distance to active MISSION in meters
 	*/
 	public short wp_dist; 
 
@@ -99,9 +99,11 @@ public class msg_nav_controller_output extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_nav_controller_output(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT;
-        unpack(payload);
+    public msg_nav_controller_output(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = = MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "NAV_CONTROLLER_OUTPUT");
         //Log.d("MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT", toString());
     }

@@ -17,11 +17,11 @@ public class msg_hwstatus extends MAVLinkMessage{
 	
 
  	/**
-	*board voltage (mV)
+	* board voltage (mV)
 	*/
 	public short Vcc; 
  	/**
-	*I2C error count
+	* I2C error count
 	*/
 	public byte I2Cerr; 
 
@@ -63,9 +63,11 @@ public class msg_hwstatus extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_hwstatus(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_HWSTATUS;
-        unpack(payload);
+    public msg_hwstatus(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = = MAVLINK_MSG_ID_HWSTATUS;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "HWSTATUS");
         //Log.d("MAVLINK_MSG_ID_HWSTATUS", toString());
     }

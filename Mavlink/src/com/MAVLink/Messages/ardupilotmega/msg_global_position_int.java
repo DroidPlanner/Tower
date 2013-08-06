@@ -18,39 +18,39 @@ public class msg_global_position_int extends MAVLinkMessage{
 	
 
  	/**
-	*Timestamp (milliseconds since system boot)
+	* Timestamp (milliseconds since system boot)
 	*/
 	public int time_boot_ms; 
  	/**
-	*Latitude, expressed as * 1E7
+	* Latitude, expressed as * 1E7
 	*/
 	public int lat; 
  	/**
-	*Longitude, expressed as * 1E7
+	* Longitude, expressed as * 1E7
 	*/
 	public int lon; 
  	/**
-	*Altitude in meters, expressed as * 1000 (millimeters), above MSL
+	* Altitude in meters, expressed as * 1000 (millimeters), above MSL
 	*/
 	public int alt; 
  	/**
-	*Altitude above ground in meters, expressed as * 1000 (millimeters)
+	* Altitude above ground in meters, expressed as * 1000 (millimeters)
 	*/
 	public int relative_alt; 
  	/**
-	*Ground X Speed (Latitude), expressed as m/s * 100
+	* Ground X Speed (Latitude), expressed as m/s * 100
 	*/
 	public short vx; 
  	/**
-	*Ground Y Speed (Longitude), expressed as m/s * 100
+	* Ground Y Speed (Longitude), expressed as m/s * 100
 	*/
 	public short vy; 
  	/**
-	*Ground Z Speed (Altitude), expressed as m/s * 100
+	* Ground Z Speed (Altitude), expressed as m/s * 100
 	*/
 	public short vz; 
  	/**
-	*Compass heading in degrees * 100, 0.0..359.99 degrees. If unknown, set to: 65535
+	* Compass heading in degrees * 100, 0.0..359.99 degrees. If unknown, set to: 65535
 	*/
 	public short hdg; 
 
@@ -107,10 +107,9 @@ public class msg_global_position_int extends MAVLinkMessage{
      * 
      */
     public msg_global_position_int(MAVLinkPacket mavLinkPacket){
-    	this.sysid = mavLinkPacket.sysid;
+        this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = MAVLINK_MSG_ID_GLOBAL_POSITION_INT;
-        
+        this.msgid = = MAVLINK_MSG_ID_GLOBAL_POSITION_INT;
         unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "GLOBAL_POSITION_INT");
         //Log.d("MAVLINK_MSG_ID_GLOBAL_POSITION_INT", toString());

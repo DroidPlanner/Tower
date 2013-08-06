@@ -17,23 +17,23 @@ public class msg_request_data_stream extends MAVLinkMessage{
 	
 
  	/**
-	*The requested interval between two messages of this type
+	* The requested interval between two messages of this type
 	*/
 	public short req_message_rate; 
  	/**
-	*The target requested to send the message stream.
+	* The target requested to send the message stream.
 	*/
 	public byte target_system; 
  	/**
-	*The target requested to send the message stream.
+	* The target requested to send the message stream.
 	*/
 	public byte target_component; 
  	/**
-	*The ID of the requested data stream
+	* The ID of the requested data stream
 	*/
 	public byte req_stream_id; 
  	/**
-	*1 to start sending, 0 to stop sending.
+	* 1 to start sending, 0 to stop sending.
 	*/
 	public byte start_stop; 
 
@@ -81,9 +81,11 @@ public class msg_request_data_stream extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_request_data_stream(MAVLinkPayload payload){
-        msgid = MAVLINK_MSG_ID_REQUEST_DATA_STREAM;
-        unpack(payload);
+    public msg_request_data_stream(MAVLinkPacket mavLinkPacket){
+        this.sysid = mavLinkPacket.sysid;
+        this.compid = mavLinkPacket.compid;
+        this.msgid = = MAVLINK_MSG_ID_REQUEST_DATA_STREAM;
+        unpack(mavLinkPacket.payload);
         //Log.d("MAVLink", "REQUEST_DATA_STREAM");
         //Log.d("MAVLINK_MSG_ID_REQUEST_DATA_STREAM", toString());
     }
