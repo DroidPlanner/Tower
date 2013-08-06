@@ -13,9 +13,9 @@ import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperActivity;
 import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
+import com.droidplanner.dialogs.GridDialog;
 import com.droidplanner.dialogs.OpenFileDialog;
 import com.droidplanner.dialogs.OpenMissionDialog;
-import com.droidplanner.dialogs.GridDialog;
 import com.droidplanner.dialogs.SurveyDialog;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.file.IO.MissionReader;
@@ -26,7 +26,10 @@ import com.droidplanner.fragments.PlanningMapFragment.OnMapInteractionListener;
 import com.droidplanner.fragments.PlanningMapFragment.modes;
 import com.droidplanner.polygon.Polygon;
 import com.droidplanner.polygon.PolygonPoint;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 
 public class PlanningActivity extends SuperActivity implements
 		OnMapInteractionListener, OnWaypointUpdateListner,
@@ -61,7 +64,30 @@ public class PlanningActivity extends SuperActivity implements
 
 		checkIntent();
 
+		setDebugState(); // TODO remove this after finishing the camera Dialog
+
 		update();
+	}
+
+	private void setDebugState() {// TODO remove this after finishing the camera
+									// Dialog
+		planningMapFragment.mode = modes.POLYGON;
+		drone.mission.setHome(new LatLng(-29.702632470079642,
+				-51.14419251680374));
+		onAddPoint(new LatLng(-29.702162433803252, -51.14540822803974));
+		onAddPoint(new LatLng(-29.701339428185392, -51.14431958645582));
+		onAddPoint(new LatLng(-29.70253723985932, -51.143730506300926));
+
+		LatLngBounds.Builder builder = new LatLngBounds.Builder();
+		builder.include(polygon.getLatLng().get(0));
+		builder.include(polygon.getLatLng().get(1));
+		builder.include(polygon.getLatLng().get(2));
+
+		CameraUpdate animation = CameraUpdateFactory.newLatLngBounds(
+				builder.build(), 480, 360, 30);
+		planningMapFragment.mMap.animateCamera(animation);
+
+		openSurveyDialog();
 	}
 
 	private void checkIntent() {
@@ -138,7 +164,7 @@ public class PlanningActivity extends SuperActivity implements
 			return true;
 		case R.id.menu_survey:
 			openSurveyDialog();
-			return true;			
+			return true;
 		case R.id.menu_clear_polygon:
 			polygon.clearPolygon();
 			update();
@@ -151,7 +177,6 @@ public class PlanningActivity extends SuperActivity implements
 			return super.onMenuItemSelected(featureId, item);
 		}
 	}
-
 
 	private void openMissionFile() {
 		OpenFileDialog missionDialog = new OpenMissionDialog(drone) {
