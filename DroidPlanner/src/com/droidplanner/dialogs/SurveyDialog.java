@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.droidplanner.R;
@@ -26,6 +27,11 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 	private SeekBarWithText angleView;
 	private SeekBarWithText altitudeView;
 	private SeekBarWithText sidelapView;
+	private TextView lenghtTextView;
+	private TextView areaTextView;
+	private TextView distanceTextView;
+	private TextView footprintTextView;
+	private TextView groundResolutionTextView;
 
 	private Polygon polygon;
 	private LatLng originPoint;
@@ -81,6 +87,16 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		overlapView = (SeekBarWithText) layout.findViewById(R.id.overlapView);
 		sidelapView = (SeekBarWithText) layout.findViewById(R.id.sidelapView);
 		altitudeView = (SeekBarWithText) layout.findViewById(R.id.altitudeView);
+		altitudeView = (SeekBarWithText) layout.findViewById(R.id.altitudeView);
+
+		areaTextView = (TextView) layout.findViewById(R.id.areaTextView);
+		lenghtTextView = (TextView) layout.findViewById(R.id.lenghtTextView);
+		footprintTextView = (TextView) layout
+				.findViewById(R.id.footprintTextView);
+		groundResolutionTextView = (TextView) layout
+				.findViewById(R.id.groundResolutionTextView);
+		distanceTextView = (TextView) layout
+				.findViewById(R.id.distanceTextView);
 
 		angleView.setOnChangedListner(this);
 		return dialog;
