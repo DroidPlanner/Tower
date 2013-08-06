@@ -28,39 +28,43 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener {
 	private SeekBarWithText angleView;
 	private SeekBarWithText altitudeView;
 
-	public void generatePolygon(double defaultHatchAngle,
-			double defaultHatchDistance, Polygon polygon, LatLng originPoint,
-			double altitude, Context context) {
+	public void generateSurveyDialog(Polygon polygon,double defaultHatchAngle, LatLng lastPoint,
+			double defaultAltitude, Context context) {
 		this.polygon = polygon;
-		this.originPoint = originPoint;
+		this.originPoint = lastPoint;
 
-		if (!polygon.isValid()) {
+		if (checkIfPolygonIsValid(polygon)) {
 			Toast.makeText(context, "Invalid Polygon", Toast.LENGTH_SHORT)
 					.show();
 			return;
 		}
-
+		
 		AlertDialog dialog = buildDialog(context);
-		distanceView.setValue(defaultHatchDistance);
+
+		distanceView.setValue(10);
 		angleView.setValue(defaultHatchAngle);
-		altitudeView.setValue(altitude);
+		altitudeView.setValue(defaultAltitude);
 		dialog.show();
+	}
+
+	private boolean checkIfPolygonIsValid(Polygon polygon) {
+		return !polygon.isValid();
 	}
 
 	private AlertDialog buildDialog(Context context) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setTitle("Polygon Generator");
-
+		builder.setTitle("Survey");
 		LayoutInflater inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View layout = inflater.inflate(R.layout.dialog_survey, null);
-		angleView = (SeekBarWithText) layout.findViewById(R.id.angleView);
-		distanceView = (SeekBarWithText) layout.findViewById(R.id.overlapView);
-		altitudeView = (SeekBarWithText) layout.findViewById(R.id.altitudeView);
 		builder.setView(layout);
-
 		builder.setNegativeButton("Cancel", this).setPositiveButton("Ok", this);
 		AlertDialog dialog = builder.create();
+
+		angleView = (SeekBarWithText) layout.findViewById(R.id.angleView);
+		distanceView = (SeekBarWithText) layout.findViewById(R.id.overlapView);
+		altitudeView = (SeekBarWithText) layout.findViewById(R.id.altitudeView);	
+
 		return dialog;
 	}
 
