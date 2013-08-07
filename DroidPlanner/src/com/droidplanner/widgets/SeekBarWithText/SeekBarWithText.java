@@ -93,9 +93,6 @@ public class SeekBarWithText extends LinearLayout implements
 	public void onProgressChanged(SeekBar seekBar, int progress,
 			boolean fromUser) {
 		updateTitle();
-		if (listner != null) {
-			listner.onSeekBarChanged();
-		}
 	}
 
 	@Override
@@ -105,7 +102,9 @@ public class SeekBarWithText extends LinearLayout implements
 
 	@Override
 	public void onStopTrackingTouch(SeekBar seekBar) {
-
+		if (listner != null) {
+			listner.onSeekBarChanged();
+		}
 	}
 
 	public void setOnChangedListner(OnTextSeekBarChangedListner listner) {
