@@ -17,7 +17,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <com.droidplanner.widgets.spinners.SpinnerSelfSelect
-            android:id="@+id/spinnerSelfSelect1"
+            android:id="@+id/cameraFileSpinner"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

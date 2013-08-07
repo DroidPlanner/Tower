@@ -72,22 +72,22 @@ public class CameraInfoReader implements FileReader {
 			// Starts by looking for the entry tag
 			if (name.equals("ImageWidth")) {
 				imageWidth = readDouble("ImageWidth");
-				Log.d("PARSER", "ImageWidth");
+				Log.d("PARSER", "ImageWidth"+imageWidth);
 			} else if (name.equals("ImageHeight")) {
 				imageHeight = readDouble("ImageHeight");
-				Log.d("PARSER", "ImageHeight");
+				Log.d("PARSER", "ImageHeight"+ imageHeight);
 			} else if (name.equals("FocalLength")) {
 				focalLength = readDouble("FocalLength");
-				Log.d("PARSER", "FocalLength");
+				Log.d("PARSER", "FocalLength"+focalLength);
 			} else if (name.equals("Overlap")) {
 				overlap = readDouble("Overlap");
-				Log.d("PARSER", "Overlap");
+				Log.d("PARSER", "Overlap"+overlap);
 			} else if (name.equals("Sidelap")) {
 				sidelap = readDouble("Sidelap");
-				Log.d("PARSER", "Sidelap");
+				Log.d("PARSER", "Sidelap"+sidelap);
 			} else if (name.equals("Orientation")) {
 				isInLandscapeOrientation = readText().equals("Portrait")?false:true;
-				Log.d("PARSER", "Orientation");
+				Log.d("PARSER", "isInLandscapeOrientation "+ isInLandscapeOrientation);
 			} else {
 				skip();
 			}

@@ -6,22 +6,30 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.droidplanner.R;
 import com.droidplanner.drone.variables.waypoint;
+import com.droidplanner.file.DirectoryPath;
+import com.droidplanner.file.FileList;
+import com.droidplanner.file.IO.CameraInfoReader;
 import com.droidplanner.polygon.GridBuilder;
 import com.droidplanner.polygon.Polygon;
 import com.droidplanner.survey.SurveyData;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
+import com.droidplanner.widgets.spinners.SpinnerSelfSelect;
+import com.droidplanner.widgets.spinners.SpinnerSelfSelect.OnSpinnerItemSelectedListener;
 import com.google.android.gms.maps.model.LatLng;
 
 public abstract class SurveyDialog implements DialogInterface.OnClickListener,
-		OnTextSeekBarChangedListner {
+		OnTextSeekBarChangedListner, OnSpinnerItemSelectedListener {
 	public abstract void onPolygonGenerated(List<waypoint> list);
 
 	private Context context;
@@ -39,6 +47,8 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 	private LatLng originPoint;
 
 	private SurveyData surveyData;
+	private SpinnerSelfSelect cameraSpinner;
+	private ArrayAdapter<CharSequence> avaliableCameras;
 
 	public void generateSurveyDialog(Polygon polygon, double defaultHatchAngle,
 			LatLng lastPoint, double defaultAltitude, Context context) {
@@ -56,7 +66,19 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 
 		surveyData = new SurveyData(defaultHatchAngle, defaultAltitude);
 		updateViews();
+
+		cameraSpinner.setOnSpinnerItemSelectedListener(this);
+		updateCameraSpinner(context);
+
 		dialog.show();
+	}
+
+	private void updateCameraSpinner(Context context) {
+		avaliableCameras = new ArrayAdapter<CharSequence>(context,
+				android.R.layout.simple_spinner_dropdown_item);
+		avaliableCameras.addAll(FileList.getCameraInfoFileList());
+		cameraSpinner.setAdapter(avaliableCameras);
+		cameraSpinner.setSelection(0);
 	}
 
 	@Override
@@ -80,8 +102,9 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 				+ ": "
 				+ surveyData.getDistanceBetweenPictures() + " m");
 		footprintTextView.setText(context.getString(R.string.footprint) + ": "
-				+ ((Double)surveyData.getLateralFootPrint()).intValue() + "x"
-				+ ((Double)surveyData.getLongitudinalFootPrint()).intValue() + " m");
+				+ ((Double) surveyData.getLateralFootPrint()).intValue() + "x"
+				+ ((Double) surveyData.getLongitudinalFootPrint()).intValue()
+				+ " m");
 		groundResolutionTextView.setText(context
 				.getString(R.string.ground_resolution)
 				+ ": "
@@ -102,6 +125,8 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		builder.setNegativeButton("Cancel", this).setPositiveButton("Ok", this);
 		AlertDialog dialog = builder.create();
 
+		cameraSpinner = (SpinnerSelfSelect) layout
+				.findViewById(R.id.cameraFileSpinner);
 		angleView = (SeekBarWithText) layout.findViewById(R.id.angleView);
 		overlapView = (SeekBarWithText) layout.findViewById(R.id.overlapView);
 		sidelapView = (SeekBarWithText) layout.findViewById(R.id.sidelapView);
@@ -131,6 +156,19 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 					surveyData.getAltitude());
 			onPolygonGenerated(grid.hatchfill());
 		}
+	}
+
+	@Override
+	public void onSpinnerItemSelected(Spinner spinner, int position, String text) {
+		String filenameWithPath = DirectoryPath.getCameraInfoPath() + text;
+		Log.d("RED", (String) filenameWithPath);
+		CameraInfoReader reader = new CameraInfoReader();
+		if (!reader.openFile(filenameWithPath)) {
+			Toast.makeText(context,
+					context.getString(R.string.error_when_opening_file),
+					Toast.LENGTH_SHORT).show();
+		}
+
 	}
 
 }
