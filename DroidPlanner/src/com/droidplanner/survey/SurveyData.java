@@ -1,16 +1,24 @@
 package com.droidplanner.survey;
 
+import com.droidplanner.file.IO.CameraInfo;
+
 public class SurveyData {
 	private Double altitude;
 	private Double angle;
 	private Double overlap;
 	private Double sidelap;
+	@SuppressWarnings("unused") // TODO remove1 after parameter data is used
+	private CameraInfo cameraInfo = new CameraInfo();
 
 	public SurveyData(double defaultHatchAngle, double defaultAltitude) {
 		this.angle = defaultHatchAngle;
 		this.altitude = defaultAltitude;
 		this.overlap = 50.0;
 		this.sidelap = 60.0;
+	}
+
+	public void setCameraInfo(CameraInfo info) {
+		this.cameraInfo=info;
 	}
 
 	public void update(double angle, double altitude, double overlap,
@@ -52,14 +60,13 @@ public class SurveyData {
 	}
 
 	public Double getLineDistance() {
-		// TODO Do some calculation and return the correct value 
+		// TODO Do some calculation and return the correct value
 		return 50.0;
 	}
-	
+
 	public Double getAltitude() {
 		return altitude;
 	}
-
 
 	public Double getAngle() {
 		return angle;
@@ -72,4 +79,5 @@ public class SurveyData {
 	public double getOverlap() {
 		return overlap;
 	}
+
 }

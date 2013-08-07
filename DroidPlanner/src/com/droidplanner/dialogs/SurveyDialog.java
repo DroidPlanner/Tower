@@ -161,13 +161,15 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 	@Override
 	public void onSpinnerItemSelected(Spinner spinner, int position, String text) {
 		String filenameWithPath = DirectoryPath.getCameraInfoPath() + text;
-		Log.d("RED", (String) filenameWithPath);
 		CameraInfoReader reader = new CameraInfoReader();
 		if (!reader.openFile(filenameWithPath)) {
 			Toast.makeText(context,
 					context.getString(R.string.error_when_opening_file),
 					Toast.LENGTH_SHORT).show();
 		}
+		surveyData.setCameraInfo(reader.getCameraInfo());
+		Log.d("SURVEY", (String) filenameWithPath);	// TODO remove after debugging this class
+		Log.d("SURVEY", reader.getCameraInfo().toString());// TODO remove after debugging this class
 
 	}
 

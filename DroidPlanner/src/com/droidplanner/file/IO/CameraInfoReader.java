@@ -8,7 +8,6 @@ import java.io.InputStream;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
-import android.util.Log;
 import android.util.Xml;
 
 import com.droidplanner.dialogs.OpenFileDialog.FileReader;
@@ -23,12 +22,8 @@ import com.droidplanner.file.FileList;
 public class CameraInfoReader implements FileReader {
 
 	private XmlPullParser parser;
-	private Double imageWidth;
-	private Double imageHeight;
-	private Double focalLength;
-	private Double overlap;
-	private Double sidelap;
-	private Object isInLandscapeOrientation;
+	
+	private CameraInfo cameraInfo = new CameraInfo();
 
 	public boolean openCameraInfoFile(String fileWithPath) {
 		return openKML(fileWithPath);
@@ -71,23 +66,17 @@ public class CameraInfoReader implements FileReader {
 			String name = parser.getName();
 			// Starts by looking for the entry tag
 			if (name.equals("ImageWidth")) {
-				imageWidth = readDouble("ImageWidth");
-				Log.d("PARSER", "ImageWidth"+imageWidth);
+				cameraInfo.imageWidth = readDouble("ImageWidth");
 			} else if (name.equals("ImageHeight")) {
-				imageHeight = readDouble("ImageHeight");
-				Log.d("PARSER", "ImageHeight"+ imageHeight);
+				cameraInfo.imageHeight = readDouble("ImageHeight");
 			} else if (name.equals("FocalLength")) {
-				focalLength = readDouble("FocalLength");
-				Log.d("PARSER", "FocalLength"+focalLength);
+				cameraInfo.focalLength = readDouble("FocalLength");
 			} else if (name.equals("Overlap")) {
-				overlap = readDouble("Overlap");
-				Log.d("PARSER", "Overlap"+overlap);
+				cameraInfo.overlap = readDouble("Overlap");
 			} else if (name.equals("Sidelap")) {
-				sidelap = readDouble("Sidelap");
-				Log.d("PARSER", "Sidelap"+sidelap);
+				cameraInfo.sidelap = readDouble("Sidelap");
 			} else if (name.equals("Orientation")) {
-				isInLandscapeOrientation = readText().equals("Portrait")?false:true;
-				Log.d("PARSER", "isInLandscapeOrientation "+ isInLandscapeOrientation);
+				cameraInfo.isInLandscapeOrientation = readText().equals("Portrait")?false:true;
 			} else {
 				skip();
 			}
@@ -148,5 +137,9 @@ public class CameraInfoReader implements FileReader {
 	@Override
 	public boolean openFile(String filenameWithPath) {
 		return openCameraInfoFile(filenameWithPath);
+	}
+
+	public CameraInfo getCameraInfo() {
+		return cameraInfo;
 	}
 }
