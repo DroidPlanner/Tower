@@ -52,7 +52,6 @@ public class PlanningActivity extends SuperActivity implements
 				.findFragmentById(R.id.missionFragment);
 
 		polygon = new Polygon();
-		planningMapFragment.mode = modes.MISSION;
 
 		missionFragment.setMission(drone.mission);
 
