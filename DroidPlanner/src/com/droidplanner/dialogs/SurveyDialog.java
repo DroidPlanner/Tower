@@ -73,11 +73,16 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 	}
 
 	private void updateCameraSpinner(Context context) {
-		avaliableCameras = new ArrayAdapter<CharSequence>(context,
-				android.R.layout.simple_spinner_dropdown_item);
-		avaliableCameras.addAll(FileList.getCameraInfoFileList());
-		cameraSpinner.setAdapter(avaliableCameras);
-		cameraSpinner.setSelection(0);
+		String[] list = FileList.getCameraInfoFileList();
+		if (list.length > 0) {
+			avaliableCameras = new ArrayAdapter<CharSequence>(context,
+					android.R.layout.simple_spinner_dropdown_item);
+			avaliableCameras.addAll();
+			cameraSpinner.setAdapter(avaliableCameras);
+			cameraSpinner.setSelection(0);
+		}else{
+			Toast.makeText(context, context.getString(R.string.no_files), Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	@Override
