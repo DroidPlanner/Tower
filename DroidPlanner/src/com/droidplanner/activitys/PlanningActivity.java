@@ -256,6 +256,7 @@ public class PlanningActivity extends SuperActivity implements
 
 	@Override
 	public void onPathStarted() {
+		clearWaypointsAndUpdate(); // TODO this will not be needed when we improve the on screen drawing of the path
 	}
 
 	@Override
