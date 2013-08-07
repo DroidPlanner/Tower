@@ -107,7 +107,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 				+ ": "
 				+ surveyData.getMissionLength() + " m");
 		areaTextView.setText(context.getString(R.string.area) + ": "
-				+ surveyData.getArea() + " deg");
+				+ surveyData.getArea() + " km²");
 		distanceTextView.setText(context
 				.getString(R.string.distance_between_pictures)
 				+ ": "
