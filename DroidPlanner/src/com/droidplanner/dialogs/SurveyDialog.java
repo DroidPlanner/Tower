@@ -81,7 +81,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 			cameraSpinner.setAdapter(avaliableCameras);
 			cameraSpinner.setSelection(0);
 		}else{
-			Toast.makeText(context, context.getString(R.string.no_files), Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, context.getString(R.string.no_files), Toast.LENGTH_LONG).show();
 		}
 	}
 

@@ -3,8 +3,7 @@
 
     <!-- This string is just used to help in the layout editor -->
     <string-array name="ExampleCameraArray">
-        <item name="57600">NEX 5</item>
-        <item name="115200">1D Mark IV</item>
+        <item>No cameras Avaliable</item>
     </string-array>
 
 </resources>
