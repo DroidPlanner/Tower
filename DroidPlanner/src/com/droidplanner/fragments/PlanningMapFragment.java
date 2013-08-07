@@ -3,6 +3,7 @@ package com.droidplanner.fragments;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import com.droidplanner.R.string;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.variables.Home;
 import com.droidplanner.drone.variables.waypoint;
+import com.droidplanner.fragments.helpers.TouchableWrapper;
 import com.droidplanner.fragments.markers.MarkerManager;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import com.droidplanner.polygon.Polygon;
@@ -37,7 +39,7 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 
 	private MarkerManager markers;
 
-	private OnMapInteractionListener mListener;
+	public OnMapInteractionListener mListener;
 
 	public modes mode = modes.PATH; // TODO return to Mission mode when finished debbuging
 
@@ -46,6 +48,8 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 	private Polyline polygonLine;
 
 	private Polyline missionLine;
+
+	private TouchableWrapper mTouchView;
 
 	public interface OnMapInteractionListener {
 
@@ -62,13 +66,17 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
 			Bundle bundle) {
 		View view = super.onCreateView(inflater, viewGroup, bundle);
+		 
 		mMap = getMap();
 		mMap.setOnMarkerDragListener(this);
 		mMap.setOnMapLongClickListener(this);
 
 		markers = new MarkerManager(mMap);
-
-		return view;
+		
+		mTouchView = new TouchableWrapper(getActivity());
+		mTouchView.addView(view);
+		mTouchView.addParentFragment(this);
+		return mTouchView;
 	}
 
 	@Override
@@ -107,6 +115,7 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 
 	@Override
 	public void onMarkerDrag(Marker marker) {
+		Point p = mMap.getProjection().toScreenLocation(marker.getPosition());
 	}
 
 	@Override
