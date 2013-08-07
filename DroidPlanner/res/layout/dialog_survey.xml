@@ -116,14 +116,15 @@
             android:text="@string/distance_between_pictures" />
 
         <TextView
+            android:id="@+id/distanceBetweenLinesTextView"
+            android:minWidth="90dp"
+            android:text="@string/distance_between_lines" />
+
+        <TextView
             android:id="@+id/areaTextView"
             android:minWidth="90dp"
             android:text="@string/area" />
 
-        <TextView
-            android:id="@+id/lenghtTextView"
-            android:minWidth="90dp"
-            android:text="@string/lenght" />
     </GridLayout>
 
 </LinearLayout>

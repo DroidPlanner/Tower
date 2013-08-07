@@ -96,7 +96,7 @@
 <!--Original value: Hatch angle:-->
 <string name="dialog_polygon_hatch_angle">Угол штриховки:</string>
 <!--Original value: Distance between lines:-->
-<string name="dialog_polygon_distance_between_lines">Расстояние между строками:</string>
+<string name="distance_between_lines">Расстояние между строками:</string>
 <!--Original value: Enable RC control-->
 <string name="enable">Включить</string>
 <!--Original value: Disable RC control-->

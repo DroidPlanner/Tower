@@ -34,7 +34,7 @@
     <string name="exiting_polygon_mode">Έξοδος απο κατάσταση πολύγωνου</string>
     <string name="entering_polygon_mode">Έναρξη κατάστασης πολύγωνου</string>
     <string name="dialog_polygon_hatch_angle">Γωνία εισόδου:</string>
-    <string name="dialog_polygon_distance_between_lines">Απόσταση μεταξύ γραμμών:</string>
+    <string name="distance_between_lines">Απόσταση μεταξύ γραμμών:</string>
     <string name="enable">Ενεργοποίηση</string>
     <string name="disable">Απενεργοποίηση</string>
     <string name="write">Εγγραφή</string>

@@ -37,7 +37,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 	private SeekBarWithText angleView;
 	private SeekBarWithText altitudeView;
 	private SeekBarWithText sidelapView;
-	private TextView lenghtTextView;
+	private TextView distanceBetweenLinesTextView;
 	private TextView areaTextView;
 	private TextView distanceTextView;
 	private TextView footprintTextView;
@@ -93,7 +93,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		altitudeView.setValue(surveyData.getAltitude());
 		sidelapView.setValue(surveyData.getSidelap());
 		overlapView.setValue(surveyData.getOverlap());
-		lenghtTextView.setText(context.getString(R.string.lenght) + ": "
+		distanceBetweenLinesTextView.setText(context.getString(R.string.distance_between_lines) + ": "
 				+ surveyData.getMissionLength() + " m");
 		areaTextView.setText(context.getString(R.string.area) + ": "
 				+ surveyData.getArea() + " deg");
@@ -133,7 +133,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		altitudeView = (SeekBarWithText) layout.findViewById(R.id.altitudeView);
 
 		areaTextView = (TextView) layout.findViewById(R.id.areaTextView);
-		lenghtTextView = (TextView) layout.findViewById(R.id.lenghtTextView);
+		distanceBetweenLinesTextView = (TextView) layout.findViewById(R.id.distanceBetweenLinesTextView);
 		footprintTextView = (TextView) layout
 				.findViewById(R.id.footprintTextView);
 		groundResolutionTextView = (TextView) layout
