@@ -41,6 +41,9 @@ public class PlanningPath extends Polygon {
 
 	public List<waypoint> getWaypoints(double altitude) {
 		List<LatLng> pointList = path.getPoints();
+		
+		pointList = Simplify.simplify(pointList, 2.0);
+		
 		List<waypoint> waypoints = new ArrayList<waypoint>();
 		for (LatLng point : pointList) {
 			waypoints.add(new waypoint(point, altitude));
