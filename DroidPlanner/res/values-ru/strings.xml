@@ -84,9 +84,9 @@
 <!--Original value: Clear Poly-->
 <string name="menu_clear_polygon">Очистить полигон</string>
 <!--Original value: Generate-->
-<string name="menu_generate_polygon">Генератор полигонов</string>
+<string name="generate">Генератор полигонов</string>
 <!--Original value: Exit-->
-<string name="menu_finish_polygon">Выход</string>
+<string name="exit">Выход</string>
 <!--Original value: Clear Track-->
 <string name="menu_clearFlightPath">Очистить путь</string>
 <!--Original value: Exiting Polygon Mode-->

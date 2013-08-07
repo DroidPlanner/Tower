@@ -102,6 +102,9 @@ public class PlanningActivity extends SuperActivity implements
 		case POLYGON:
 			getMenuInflater().inflate(R.menu.menu_planning_polygon, menu);
 			break;
+		case PATH:
+			getMenuInflater().inflate(R.menu.menu_planning_path, menu);
+			break;
 		}
 
 		return super.onCreateOptionsMenu(menu);
@@ -139,7 +142,7 @@ public class PlanningActivity extends SuperActivity implements
 			polygon.clearPolygon();
 			update();
 			return true;
-		case R.id.menu_finish_polygon:
+		case R.id.mode_exit:
 			setMode(modes.MISSION);
 			update();
 			return true;
@@ -210,6 +213,9 @@ public class PlanningActivity extends SuperActivity implements
 			break;
 		case POLYGON:
 			polygon.addWaypoint(point);
+			break;
+		case PATH:
+			//TODO do something here
 			break;
 		}
 		update();

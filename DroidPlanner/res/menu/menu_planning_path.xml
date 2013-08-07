@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/menu_generate_polygon"
+        android:id="@+id/menu_generate_path"
         android:showAsAction="ifRoom"
         android:title="@string/generate"/>
     <item
@@ -10,9 +10,9 @@
         android:showAsAction="ifRoom"
         android:title="@string/menu_clear"/>
     <item
-        android:id="@+id/menu_clear_polygon"
+        android:id="@+id/menu_clear_path"
         android:showAsAction="ifRoom"
-        android:title="@string/menu_clear_polygon"/>
+        android:title="@string/menu_clear_path"/>
     <item
         android:id="@+id/menu_zoom"
         android:showAsAction="ifRoom"

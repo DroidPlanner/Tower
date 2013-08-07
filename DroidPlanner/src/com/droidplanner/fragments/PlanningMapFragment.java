@@ -30,7 +30,7 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		OnMapLongClickListener, OnMarkerDragListener {
 
 	public enum modes {
-		MISSION, POLYGON;
+		MISSION, POLYGON,PATH;
 	}
 
 	public GoogleMap mMap;
@@ -39,7 +39,7 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 
 	private OnMapInteractionListener mListener;
 
-	public modes mode = modes.MISSION;
+	public modes mode = modes.PATH; // TODO return to Mission mode when finished debbuging
 
 	public Polygon polygon;
 
@@ -184,6 +184,10 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 			break;
 		case POLYGON:
 			Toast.makeText(getActivity(), string.entering_polygon_mode,
+					Toast.LENGTH_SHORT).show();
+			break;
+		case PATH:
+			Toast.makeText(getActivity(), string.entering_path_mode,
 					Toast.LENGTH_SHORT).show();
 			break;
 		}
