@@ -1,10 +1,11 @@
 package com.droidplanner.planningPath;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.graphics.Color;
-import android.util.Log;
 
+import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.polygon.Polygon;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
@@ -38,8 +39,12 @@ public class PlanningPath extends Polygon {
 		path = map.addPolyline(polyline);
 	}
 
-	public void finish() {
-		Log.d("PATH", "END");
-		
+	public List<waypoint> getWaypoints(double altitude) {
+		List<LatLng> pointList = path.getPoints();
+		List<waypoint> waypoints = new ArrayList<waypoint>();
+		for (LatLng point : pointList) {
+			waypoints.add(new waypoint(point, altitude));
+		}
+		return waypoints;
 	}
 }

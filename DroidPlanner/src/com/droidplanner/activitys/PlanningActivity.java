@@ -256,13 +256,13 @@ public class PlanningActivity extends SuperActivity implements
 
 	@Override
 	public void onPathStarted() {
-		planningPath.clear();
-		
 	}
 
 	@Override
 	public void onPathFinished() {
-		planningPath.finish();
+		drone.mission.addWaypoints(planningPath.getWaypoints(drone.mission.getDefaultAlt()));
+		planningPath.clear();		
+		update();
 	}
 
 }
