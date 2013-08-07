@@ -65,8 +65,6 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		AlertDialog dialog = buildDialog(context);
 
 		surveyData = new SurveyData(defaultHatchAngle, defaultAltitude);
-		updateSeekBarsValues();
-		updateViews();
 
 		cameraSpinner.setOnSpinnerItemSelectedListener(this);
 		updateCameraSpinner(context);
@@ -87,7 +85,8 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		surveyData.update(angleView.getValue(), altitudeView.getValue(),
 				overlapView.getValue(), sidelapView.getValue());
 		updateViews();
-		Log.d("SURVEY", surveyData.toString()); // TODO remove after debugging this class
+		Log.d("SURVEY", surveyData.toString()); // TODO remove after debugging
+												// this class
 	}
 
 	private void updateSeekBarsValues() {
@@ -96,9 +95,11 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		sidelapView.setValue(surveyData.getSidelap());
 		overlapView.setValue(surveyData.getOverlap());
 	}
-	
+
 	private void updateViews() {
-		distanceBetweenLinesTextView.setText(context.getString(R.string.distance_between_lines) + ": "
+		distanceBetweenLinesTextView.setText(context
+				.getString(R.string.distance_between_lines)
+				+ ": "
 				+ surveyData.getMissionLength() + " m");
 		areaTextView.setText(context.getString(R.string.area) + ": "
 				+ surveyData.getArea() + " deg");
@@ -138,7 +139,8 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		altitudeView = (SeekBarWithText) layout.findViewById(R.id.altitudeView);
 
 		areaTextView = (TextView) layout.findViewById(R.id.areaTextView);
-		distanceBetweenLinesTextView = (TextView) layout.findViewById(R.id.distanceBetweenLinesTextView);
+		distanceBetweenLinesTextView = (TextView) layout
+				.findViewById(R.id.distanceBetweenLinesTextView);
 		footprintTextView = (TextView) layout
 				.findViewById(R.id.footprintTextView);
 		groundResolutionTextView = (TextView) layout
@@ -173,8 +175,13 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 					Toast.LENGTH_SHORT).show();
 		}
 		surveyData.setCameraInfo(reader.getCameraInfo());
-		Log.d("SURVEY", (String) filenameWithPath);	// TODO remove after debugging this class
-		Log.d("SURVEY", reader.getCameraInfo().toString());// TODO remove after debugging this class
+		updateSeekBarsValues();
+		updateViews();
+		Log.d("SURVEY", (String) filenameWithPath); // TODO remove after
+													// debugging this class
+		Log.d("SURVEY", reader.getCameraInfo().toString());// TODO remove after
+															// debugging this
+															// class
 
 	}
 

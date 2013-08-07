@@ -9,18 +9,27 @@ public class SurveyData {
 	private Double angle;
 	private Double overlap;
 	private Double sidelap;
-	@SuppressWarnings("unused") // TODO remove1 after parameter data is used
 	private CameraInfo cameraInfo = new CameraInfo();
 
 	public SurveyData(double defaultHatchAngle, double defaultAltitude) {
 		this.angle = defaultHatchAngle;
 		this.altitude = defaultAltitude;
 		this.overlap = 50.0;
-		this.sidelap = 60.0;
+		this.sidelap = 50.0;
 	}
 
 	public void setCameraInfo(CameraInfo info) {
 		this.cameraInfo=info;
+		tryToLoadOverlapFromCamera();
+	}
+
+	private void tryToLoadOverlapFromCamera() {
+		if (cameraInfo.overlap!=null) {
+			this.overlap = cameraInfo.overlap;
+		}
+		if (cameraInfo.sidelap!=null) {
+			this.sidelap = cameraInfo.sidelap;
+		}
 	}
 
 	public void update(double angle, double altitude, double overlap,
