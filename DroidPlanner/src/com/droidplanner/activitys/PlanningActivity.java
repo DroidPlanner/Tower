@@ -23,6 +23,7 @@ import com.droidplanner.fragments.MissionFragment;
 import com.droidplanner.fragments.PlanningMapFragment;
 import com.droidplanner.fragments.PlanningMapFragment.OnMapInteractionListener;
 import com.droidplanner.fragments.PlanningMapFragment.modes;
+import com.droidplanner.planningPath.PlanningPath;
 import com.droidplanner.polygon.Polygon;
 import com.droidplanner.polygon.PolygonPoint;
 import com.google.android.gms.maps.model.LatLng;
@@ -32,6 +33,7 @@ public class PlanningActivity extends SuperActivity implements
 		OnAltitudeChangedListner {
 
 	public Polygon polygon;
+	private PlanningPath planningPath;
 	private PlanningMapFragment planningMapFragment;
 	private MissionFragment missionFragment;
 
@@ -52,6 +54,8 @@ public class PlanningActivity extends SuperActivity implements
 				.findFragmentById(R.id.missionFragment);
 
 		polygon = new Polygon();
+		
+		planningPath = new PlanningPath(planningMapFragment.mMap);
 
 		missionFragment.setMission(drone.mission);
 
@@ -214,7 +218,7 @@ public class PlanningActivity extends SuperActivity implements
 			polygon.addWaypoint(point);
 			break;
 		case PATH:
-			drone.mission.addWaypoint(point);
+			planningPath.addWaypoint(point);
 			break;
 		}
 		update();
