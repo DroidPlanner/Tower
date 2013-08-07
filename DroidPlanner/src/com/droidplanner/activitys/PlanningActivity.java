@@ -214,7 +214,7 @@ public class PlanningActivity extends SuperActivity implements
 			polygon.addWaypoint(point);
 			break;
 		case PATH:
-			//TODO do something here
+			drone.mission.addWaypoint(point);
 			break;
 		}
 		update();

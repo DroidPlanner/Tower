@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 import android.widget.FrameLayout;
 
 import com.droidplanner.fragments.PlanningMapFragment;
+import com.droidplanner.fragments.PlanningMapFragment.modes;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -34,10 +35,14 @@ public class TouchableWrapper extends FrameLayout {
 		switch (event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
 		case MotionEvent.ACTION_MOVE:
-			Point point = new Point((int) event.getX(), (int) event.getY());
-			LatLng coord = map.getProjection().fromScreenLocation(point);
-			Log.d("PATH", point.toString() + coord.toString());
-			break;
+			if (fragment.mode == modes.PATH) {
+				Point point = new Point((int) event.getX(), (int) event.getY());
+				LatLng coord = map.getProjection().fromScreenLocation(point);
+				Log.d("PATH", point.toString() + coord.toString());
+
+				fragment.mListener.onAddPoint(coord);
+				return true;
+			}
 		}
 		return super.dispatchTouchEvent(event);
 	}

@@ -3,7 +3,6 @@ package com.droidplanner.fragments;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -115,7 +114,6 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 
 	@Override
 	public void onMarkerDrag(Marker marker) {
-		Point p = mMap.getProjection().toScreenLocation(marker.getPosition());
 	}
 
 	@Override
