@@ -77,7 +77,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		if (list.length > 0) {
 			avaliableCameras = new ArrayAdapter<CharSequence>(context,
 					android.R.layout.simple_spinner_dropdown_item);
-			avaliableCameras.addAll();
+			avaliableCameras.addAll(list);
 			cameraSpinner.setAdapter(avaliableCameras);
 			cameraSpinner.setSelection(0);
 		}else{
