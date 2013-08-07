@@ -208,7 +208,7 @@ public class GcpReader implements FileReader {
 	}
 
 	@Override
-	public boolean openFile(String itemList) {
-		return openGCPFile(itemList);
+	public boolean openFile(String filenameWithPath) {
+		return openGCPFile(filenameWithPath);
 	}
 }

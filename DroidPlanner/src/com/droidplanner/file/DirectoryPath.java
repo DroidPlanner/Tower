@@ -28,4 +28,8 @@ public class DirectoryPath {
 	static public String getMapsPath() {
 		return getDroidPlannerPath() + "/Maps/";
 	}
+
+	public static String getCameraInfoPath() {
+		return getDroidPlannerPath() + "/CameraInfo/";
+	}
 }
