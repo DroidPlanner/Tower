@@ -65,6 +65,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		AlertDialog dialog = buildDialog(context);
 
 		surveyData = new SurveyData(defaultHatchAngle, defaultAltitude);
+		updateSeekBarsValues();
 		updateViews();
 
 		cameraSpinner.setOnSpinnerItemSelectedListener(this);
@@ -86,13 +87,17 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		surveyData.update(angleView.getValue(), altitudeView.getValue(),
 				overlapView.getValue(), sidelapView.getValue());
 		updateViews();
+		Log.d("SURVEY", surveyData.toString()); // TODO remove after debugging this class
 	}
 
-	private void updateViews() {
+	private void updateSeekBarsValues() {
 		angleView.setValue(surveyData.getAngle());
 		altitudeView.setValue(surveyData.getAltitude());
 		sidelapView.setValue(surveyData.getSidelap());
 		overlapView.setValue(surveyData.getOverlap());
+	}
+	
+	private void updateViews() {
 		distanceBetweenLinesTextView.setText(context.getString(R.string.distance_between_lines) + ": "
 				+ surveyData.getMissionLength() + " m");
 		areaTextView.setText(context.getString(R.string.area) + ": "

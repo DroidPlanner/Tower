@@ -1,5 +1,7 @@
 package com.droidplanner.survey;
 
+import java.util.Locale;
+
 import com.droidplanner.file.IO.CameraInfo;
 
 public class SurveyData {
@@ -79,5 +81,11 @@ public class SurveyData {
 	public double getOverlap() {
 		return overlap;
 	}
+
+	@Override
+	public String toString() {
+		return String.format(Locale.US,"Altitude: %f Angle %f Overlap: %f Sidelap: %f", altitude,angle,overlap,sidelap);
+	}	
+	
 
 }
