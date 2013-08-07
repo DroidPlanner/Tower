@@ -1,21 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:keepScreenOn="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal" android:baselineAligned="false">
-    
-    <fragment
-        android:id="@+id/hud_fragment2"
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:layout_weight=".5"
-        class="com.droidplanner.fragments.HudFragment" />
-    
-    <fragment
-        android:id="@+id/flightMapFragment"
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:layout_weight=".5"
-        class="com.droidplanner.fragments.FlightMapFragment" />
-    
-</LinearLayout>
+    android:orientation="vertical" android:baselineAligned="false">
+    <LinearLayout
+        android:layout_width="match_parent"
+   		android:layout_height="match_parent"
+    	android:orientation="horizontal" android:baselineAligned="false">
+	    <fragment
+	        android:id="@+id/hud_fragment2"
+	        android:layout_width="fill_parent"
+	        android:layout_height="match_parent"
+	        android:layout_weight=".5"
+	        class="com.droidplanner.fragments.HudFragment" />
+	    
+	    <fragment
+	        android:id="@+id/flightMapFragment"
+	        android:layout_width="fill_parent"
+	        android:layout_height="match_parent"
+	        android:layout_weight=".5"
+	        class="com.droidplanner.fragments.FlightMapFragment" />
+    </LinearLayout>
+	<RelativeLayout 
+        android:layout_width="130dp"
+   		android:layout_height="match_parent"
+		android:orientation="vertical"
+		android:layout_alignParentRight="true">
+	    <Button 
+	        android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_margin="10dp"
+		    android:padding="10dp"
+		    android:paddingRight="50dp"
+		    android:paddingLeft="50dp"
+		    android:text="@string/Arm"
+		    android:layout_above="@+id/disarm"
+		    android:id="@+id/arm"
+	        />
+	    <Button 
+	        android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_margin="10dp"
+		    android:padding="10dp"
+		    android:text="@string/Disarm"
+		    android:layout_above="@+id/launch"
+		    android:id="@+id/disarm"
+	        />
+	    <Button 
+	        android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_margin="10dp"
+		    android:padding="10dp"
+		    android:text="@string/Launch"
+		    android:layout_centerVertical="true"
+		    android:id="@+id/launch"
+	        />
+	    <Button 
+	        android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_margin="10dp"
+		    android:padding="10dp"
+		    android:text="@string/Land"
+		    android:layout_below="@+id/launch"
+		    android:id="@+id/land"
+	        />
+	    <Button 
+	        android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_margin="10dp"
+		    android:padding="10dp"
+		    android:text="@string/RTL"
+		    android:layout_below="@+id/land"
+		    android:id="@+id/rtl"
+	        />
+	    <Button 
+	        android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_margin="10dp"
+		    android:padding="10dp"
+		    android:text="@string/Stabilize"
+		    android:layout_below="@+id/rtl"
+		    android:id="@+id/stabilize"
+	        />
+    </RelativeLayout>
+</RelativeLayout>
