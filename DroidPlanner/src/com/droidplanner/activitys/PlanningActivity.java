@@ -254,4 +254,15 @@ public class PlanningActivity extends SuperActivity implements
 		update();
 	}
 
+	@Override
+	public void onPathStarted() {
+		planningPath.clear();
+		
+	}
+
+	@Override
+	public void onPathFinished() {
+		planningPath.finish();
+	}
+
 }

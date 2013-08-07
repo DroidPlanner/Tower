@@ -2,7 +2,6 @@ package com.droidplanner.fragments.helpers;
 
 import android.content.Context;
 import android.graphics.Point;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.FrameLayout;
 
@@ -34,16 +33,21 @@ public class TouchableWrapper extends FrameLayout {
 	public boolean dispatchTouchEvent(MotionEvent event) {
 		switch (event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
+			if (fragment.mode == modes.PATH) {
+				fragment.mListener.onPathStarted();
+			}
 		case MotionEvent.ACTION_MOVE:
 			if (fragment.mode == modes.PATH) {
 				Point point = new Point((int) event.getX(), (int) event.getY());
 				LatLng coord = map.getProjection().fromScreenLocation(point);
-				Log.d("PATH", point.toString() + coord.toString());
-
 				fragment.mListener.onAddPoint(coord);
 				return true;
 			}
+		case MotionEvent.ACTION_UP:
+			fragment.mListener.onPathFinished();
+			return true;
 		}
+			
 		return super.dispatchTouchEvent(event);
 	}
 

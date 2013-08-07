@@ -59,6 +59,10 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		public void onMoveWaypoint(waypoint waypoint, LatLng latLng);
 
 		public void onMovePolygonPoint(PolygonPoint source, LatLng newCoord);
+
+		public void onPathStarted();
+
+		public void onPathFinished();
 	}
 
 	@Override
