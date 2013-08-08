@@ -13,7 +13,6 @@ import com.droidplanner.R.string;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.variables.Home;
 import com.droidplanner.drone.variables.waypoint;
-import com.droidplanner.fragments.helpers.TouchableWrapper;
 import com.droidplanner.fragments.markers.MarkerManager;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import com.droidplanner.polygon.Polygon;
@@ -48,8 +47,6 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 
 	private Polyline missionLine;
 
-	private TouchableWrapper mTouchView;
-
 	public interface OnMapInteractionListener {
 
 		public void onAddPoint(LatLng point);
@@ -75,11 +72,8 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		mMap.setOnMapLongClickListener(this);
 
 		markers = new MarkerManager(mMap);
-		
-		mTouchView = new TouchableWrapper(getActivity());
-		mTouchView.addView(view);
-		mTouchView.addParentFragment(this);
-		return mTouchView;
+		 
+		return view;
 	}
 
 	@Override
@@ -203,4 +197,6 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 			break;
 		}
 	}
+
+
 }

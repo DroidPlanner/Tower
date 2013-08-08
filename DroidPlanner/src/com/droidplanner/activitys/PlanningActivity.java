@@ -23,6 +23,7 @@ import com.droidplanner.fragments.MissionFragment;
 import com.droidplanner.fragments.PlanningMapFragment;
 import com.droidplanner.fragments.PlanningMapFragment.OnMapInteractionListener;
 import com.droidplanner.fragments.PlanningMapFragment.modes;
+import com.droidplanner.fragments.helpers.GestureMapFragment;
 import com.droidplanner.planningPath.PlanningPath;
 import com.droidplanner.polygon.Polygon;
 import com.droidplanner.polygon.PolygonPoint;
@@ -36,6 +37,7 @@ public class PlanningActivity extends SuperActivity implements
 	private PlanningPath planningPath;
 	private PlanningMapFragment planningMapFragment;
 	private MissionFragment missionFragment;
+	private GestureMapFragment gestureMapFragment;
 
 	@Override
 	public int getNavigationItem() {
@@ -50,6 +52,8 @@ public class PlanningActivity extends SuperActivity implements
 
 		planningMapFragment = ((PlanningMapFragment) getFragmentManager()
 				.findFragmentById(R.id.planningMapFragment));
+		gestureMapFragment = ((GestureMapFragment) getFragmentManager()
+				.findFragmentById(R.id.gestureMapFragment));
 		missionFragment = (MissionFragment) getFragmentManager()
 				.findFragmentById(R.id.missionFragment);
 
@@ -218,7 +222,7 @@ public class PlanningActivity extends SuperActivity implements
 			polygon.addWaypoint(point);
 			break;
 		case PATH:
-			planningPath.addWaypoint(point);
+			gestureMapFragment.enableGestureDetection();
 			break;
 		}
 		update();
