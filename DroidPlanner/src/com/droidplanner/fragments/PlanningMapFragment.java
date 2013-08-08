@@ -7,9 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.droidplanner.R.string;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.variables.Home;
 import com.droidplanner.drone.variables.waypoint;
@@ -30,17 +28,11 @@ import com.google.android.gms.maps.model.PolylineOptions;
 public class PlanningMapFragment extends OfflineMapFragment implements
 		OnMapLongClickListener, OnMarkerDragListener, OnMapClickListener {
 
-	public enum modes {
-		MISSION, POLYGON,PATH;
-	}
-
 	public GoogleMap mMap;
 
 	private MarkerManager markers;
 
 	public OnMapInteractionListener mListener;
-
-	public modes mode = modes.PATH; // TODO return to Mission mode when finished debbuging
 
 	public Polygon polygon;
 
@@ -177,25 +169,6 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		}
 
 		return flightPath;
-	}
-
-	public void setMode(modes mode) {
-		this.mode = mode;
-		switch (mode) {
-		default:
-		case MISSION:
-			Toast.makeText(getActivity(), string.exiting_polygon_mode,
-					Toast.LENGTH_SHORT).show();
-			break;
-		case POLYGON:
-			Toast.makeText(getActivity(), string.entering_polygon_mode,
-					Toast.LENGTH_SHORT).show();
-			break;
-		case PATH:
-			Toast.makeText(getActivity(), string.entering_path_mode,
-					Toast.LENGTH_SHORT).show();
-			break;
-		}
 	}
 
 	@Override

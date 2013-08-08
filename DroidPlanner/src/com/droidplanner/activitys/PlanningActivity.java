@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
 import com.droidplanner.R;
+import com.droidplanner.R.string;
 import com.droidplanner.activitys.helpers.SuperActivity;
 import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
 import com.droidplanner.dialogs.OpenFileDialog;
@@ -23,7 +24,6 @@ import com.droidplanner.file.IO.MissionWriter;
 import com.droidplanner.fragments.MissionFragment;
 import com.droidplanner.fragments.PlanningMapFragment;
 import com.droidplanner.fragments.PlanningMapFragment.OnMapInteractionListener;
-import com.droidplanner.fragments.PlanningMapFragment.modes;
 import com.droidplanner.fragments.helpers.GestureMapFragment;
 import com.droidplanner.fragments.helpers.GestureMapFragment.OnPathFinishedListner;
 import com.droidplanner.fragments.helpers.MapProjection;
@@ -34,11 +34,15 @@ import com.google.android.gms.maps.model.LatLng;
 public class PlanningActivity extends SuperActivity implements
 		OnMapInteractionListener, OnWaypointUpdateListner,
 		OnAltitudeChangedListner, OnPathFinishedListner {
+	public enum modes {
+		MISSION, POLYGON;
+	}
 
 	public Polygon polygon;
 	private PlanningMapFragment planningMapFragment;
 	private MissionFragment missionFragment;
 	private GestureMapFragment gestureMapFragment;
+	public modes mode = modes.MISSION;
 
 	@Override
 	public int getNavigationItem() {
@@ -101,16 +105,13 @@ public class PlanningActivity extends SuperActivity implements
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		switch (planningMapFragment.mode) {
+		switch (mode) {
 		default:
 		case MISSION:
 			getMenuInflater().inflate(R.menu.menu_planning, menu);
 			break;
 		case POLYGON:
 			getMenuInflater().inflate(R.menu.menu_planning_polygon, menu);
-			break;
-		case PATH:
-			getMenuInflater().inflate(R.menu.menu_planning_path, menu);
 			break;
 		}
 
@@ -191,11 +192,6 @@ public class PlanningActivity extends SuperActivity implements
 		update();
 	}
 
-	private void setMode(modes mode) {
-		planningMapFragment.setMode(mode);
-		invalidateOptionsMenu();
-	}
-
 	private void menuSaveFile() {
 		if (writeMission()) {
 			Toast.makeText(this, R.string.file_saved, Toast.LENGTH_SHORT)
@@ -213,15 +209,13 @@ public class PlanningActivity extends SuperActivity implements
 
 	@Override
 	public void onAddPoint(LatLng point) {
-		switch (planningMapFragment.mode) {
+		switch (mode) {
 		default:
 		case MISSION:
 			drone.mission.addWaypoint(point);
 			break;
 		case POLYGON:
 			polygon.addWaypoint(point);
-			break;
-		case PATH:
 			break;
 		}
 		update();
@@ -259,16 +253,32 @@ public class PlanningActivity extends SuperActivity implements
 
 	@Override
 	public void onPathFinished(List<Point> path) {
-		List<waypoint> waypoints = MapProjection.projectPathIntoMap(path, planningMapFragment.mMap, drone.mission.getDefaultAlt());
+		List<waypoint> waypoints = MapProjection.projectPathIntoMap(path,
+				planningMapFragment.mMap, drone.mission.getDefaultAlt());
 		drone.mission.addWaypoints(waypoints);
-		update();			
+		update();
 	}
 
 	@Override
 	public void onMapClick(LatLng point) {
-		Toast.makeText(this, "Draw your path",
-				Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, "Draw your path", Toast.LENGTH_SHORT).show();
 		gestureMapFragment.enableGestureDetection();
+	}
+
+	public void setMode(modes mode) {
+		this.mode = mode;
+		switch (mode) {
+		default:
+		case MISSION:
+			Toast.makeText(this, string.exiting_polygon_mode,
+					Toast.LENGTH_SHORT).show();
+			break;
+		case POLYGON:
+			Toast.makeText(this, string.entering_polygon_mode,
+					Toast.LENGTH_SHORT).show();
+			break;
+		}
+		invalidateOptionsMenu();
 	}
 
 }
