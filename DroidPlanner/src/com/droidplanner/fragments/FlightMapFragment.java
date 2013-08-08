@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.variables.waypoint;
+import com.droidplanner.fragments.helpers.OfflineMapFragment;
 import com.droidplanner.fragments.markers.DroneMarker;
 import com.droidplanner.fragments.markers.MarkerManager;
 import com.google.android.gms.maps.CameraUpdateFactory;
