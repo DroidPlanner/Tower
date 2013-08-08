@@ -28,8 +28,8 @@
     <string name="menu_add_polygon">Πρόσθεσε πολύγωνο</string>
     <string name="menu_polygon">Πολύγωνο</string>
     <string name="menu_clear_polygon">Διαγραφή πολύγωνου</string>
-    <string name="menu_generate_polygon">Δημιουργια πολύγωνου</string>
-    <string name="menu_finish_polygon">Τέλος πολύγωνου</string>
+    <string name="generate">Δημιουργια πολύγωνου</string>
+    <string name="exit">Τέλος πολύγωνου</string>
     <string name="menu_clearFlightPath">Διαγραφή σχεδίου πτήσης</string>
     <string name="exiting_polygon_mode">Έξοδος απο κατάσταση πολύγωνου</string>
     <string name="entering_polygon_mode">Έναρξη κατάστασης πολύγωνου</string>
