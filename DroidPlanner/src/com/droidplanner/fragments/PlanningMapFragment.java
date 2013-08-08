@@ -18,6 +18,7 @@ import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import com.droidplanner.polygon.Polygon;
 import com.droidplanner.polygon.PolygonPoint;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.model.LatLng;
@@ -27,7 +28,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 @SuppressLint("UseSparseArrays")
 public class PlanningMapFragment extends OfflineMapFragment implements
-		OnMapLongClickListener, OnMarkerDragListener {
+		OnMapLongClickListener, OnMarkerDragListener, OnMapClickListener {
 
 	public enum modes {
 		MISSION, POLYGON,PATH;
@@ -56,6 +57,8 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		public void onMoveWaypoint(waypoint waypoint, LatLng latLng);
 
 		public void onMovePolygonPoint(PolygonPoint source, LatLng newCoord);
+
+		public void onMapClick(LatLng point);
 	}
 
 	@Override
@@ -65,6 +68,7 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		 
 		mMap = getMap();
 		mMap.setOnMarkerDragListener(this);
+		mMap.setOnMapClickListener(this);
 		mMap.setOnMapLongClickListener(this);
 
 		markers = new MarkerManager(mMap);
@@ -192,6 +196,11 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 					Toast.LENGTH_SHORT).show();
 			break;
 		}
+	}
+
+	@Override
+	public void onMapClick(LatLng point) {
+		mListener.onMapClick(point);		
 	}
 
 

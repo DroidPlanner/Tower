@@ -223,7 +223,6 @@ public class PlanningActivity extends SuperActivity implements
 			polygon.addWaypoint(point);
 			break;
 		case PATH:
-			gestureMapFragment.enableGestureDetection();
 			break;
 		}
 		update();
@@ -265,6 +264,13 @@ public class PlanningActivity extends SuperActivity implements
 		List<waypoint> waypoints = MapProjection.projectPathIntoMap(path, planningMapFragment.mMap, drone.mission.getDefaultAlt());
 		drone.mission.addWaypoints(waypoints);
 		update();			
+	}
+
+	@Override
+	public void onMapClick(LatLng point) {
+		Toast.makeText(this, "Draw your path",
+				Toast.LENGTH_SHORT).show();
+		gestureMapFragment.enableGestureDetection();
 	}
 
 }
