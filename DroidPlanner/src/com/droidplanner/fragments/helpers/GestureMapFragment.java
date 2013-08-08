@@ -8,7 +8,6 @@ import android.gesture.GestureOverlayView;
 import android.gesture.GestureOverlayView.OnGestureListener;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -46,7 +45,6 @@ public class GestureMapFragment extends Fragment implements OnGestureListener {
 	
 	@Override
 	public void onGestureEnded(GestureOverlayView arg0, MotionEvent arg1) {
-		Log.d("GESTURE", "ENDED ");
 		overlay.setEnabled(false);
 
 		List<Point> path = new ArrayList<Point>();
@@ -55,7 +53,7 @@ public class GestureMapFragment extends Fragment implements OnGestureListener {
 			path.add(new Point((int) points[i], (int) points[i + 1]));
 		}
 		
-		path = Simplify.simplify(path, 50.0);
+		path = Simplify.simplify(path, 10);
 		listner.onPathFinished(path);
 	}
 
