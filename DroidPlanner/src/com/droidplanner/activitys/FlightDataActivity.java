@@ -14,6 +14,8 @@ import com.droidplanner.fragments.FlightMapFragment;
 import com.droidplanner.fragments.FlightMapFragment.OnDroneClickListner;
 import com.droidplanner.fragments.helpers.FlightGestureMapFragment;
 import com.droidplanner.fragments.helpers.FlightGestureMapFragment.OnPathFinishedListner;
+import com.droidplanner.fragments.helpers.MapProjection;
+import com.google.android.gms.maps.model.LatLng;
 
 public class FlightDataActivity extends SuperFlightActivity implements
 		OnWaypointUpdateListner, OnPathFinishedListner, OnDroneClickListner {
@@ -72,7 +74,12 @@ public class FlightDataActivity extends SuperFlightActivity implements
 	
 	@Override
 	public void onPathFinished(List<Point> path) {
-		
+		List<LatLng> points = MapProjection.projectPathIntoMap(path,
+				mapFragment.mMap);
+		drone.mission.clearWaypoints();
+		drone.mission.addWaypointsWithDefaultAltitude(points);
+		mapFragment.updateMissionPath(drone);
+		drone.state.restartAutoMission();
 	}
 
 

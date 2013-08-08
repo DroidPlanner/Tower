@@ -50,4 +50,10 @@ public class State extends DroneVariable {
 			MavLinkModes.changeFlightMode(myDrone, mode);
 		}
 	}
+
+	public void restartAutoMission() {
+		myDrone.mission.sendMissionToAPM();
+		setMode(ApmModes.getAutoMode(myDrone.type.getType()));
+		myDrone.mission.setWpno(1);
+	}
 }
