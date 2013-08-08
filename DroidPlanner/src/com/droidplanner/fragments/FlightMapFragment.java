@@ -22,12 +22,18 @@ import com.droidplanner.fragments.markers.MarkerManager;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 public class FlightMapFragment extends OfflineMapFragment implements
-		OnMapLongClickListener {
+		OnMapLongClickListener, OnMarkerClickListener {
+	public interface OnDroneClickListner{
+		public void onDroneClick();
+	}
+	
 	public GoogleMap mMap;
 	private Polyline flightPath;
 	private Polyline missionPath;
@@ -42,6 +48,7 @@ public class FlightMapFragment extends OfflineMapFragment implements
 
 	public DroneMarker droneMarker;
 	public Drone drone;
+	private OnDroneClickListner listner;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
@@ -60,6 +67,7 @@ public class FlightMapFragment extends OfflineMapFragment implements
 
 		drone.setMapListner(droneMarker);
 		mMap.setOnMapLongClickListener(this);
+		mMap.setOnMarkerClickListener(this);
 
 		return view;
 	}
@@ -136,6 +144,19 @@ public class FlightMapFragment extends OfflineMapFragment implements
 	public void updateFragment() {
 		updateMissionPath(drone);
 		markers.updateMarker(drone.mission.getHome(), false);
+	}
+
+	@Override
+	public boolean onMarkerClick(Marker marker) {
+		if (droneMarker.equals(marker)) {
+			listner.onDroneClick();
+			return true;
+		}
+		return false;
+	}
+
+	public void setOnDroneClickListner(OnDroneClickListner listner) {
+		this.listner = listner;
 	}
 
 }

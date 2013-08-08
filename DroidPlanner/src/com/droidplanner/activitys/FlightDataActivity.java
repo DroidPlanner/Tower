@@ -1,5 +1,8 @@
 package com.droidplanner.activitys;
 
+import java.util.List;
+
+import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -8,9 +11,14 @@ import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperFlightActivity;
 import com.droidplanner.fragments.FlightMapFragment;
+import com.droidplanner.fragments.FlightMapFragment.OnDroneClickListner;
+import com.droidplanner.fragments.helpers.FlightGestureMapFragment;
+import com.droidplanner.fragments.helpers.FlightGestureMapFragment.OnPathFinishedListner;
 
 public class FlightDataActivity extends SuperFlightActivity implements
-		OnWaypointUpdateListner {
+		OnWaypointUpdateListner, OnPathFinishedListner, OnDroneClickListner {
+
+	private FlightGestureMapFragment gestureMapFragment;
 
 	@Override
 	public int getNavigationItem() {
@@ -26,6 +34,12 @@ public class FlightDataActivity extends SuperFlightActivity implements
 		mapFragment = ((FlightMapFragment) getFragmentManager()
 				.findFragmentById(R.id.flightMapFragment));
 		mapFragment.updateFragment();
+		mapFragment.setOnDroneClickListner(this);
+		
+		gestureMapFragment = ((FlightGestureMapFragment) getFragmentManager()
+				.findFragmentById(R.id.flightGestureMapFragment));
+
+		gestureMapFragment.setOnPathFinishedListner(this);
 
 		drone.mission.missionListner = this;
 		drone.setDroneTypeChangedListner(this);
@@ -50,5 +64,16 @@ public class FlightDataActivity extends SuperFlightActivity implements
 			return super.onMenuItemSelected(featureId, item);
 		}
 	}
+
+	@Override
+	public void onDroneClick() {
+		gestureMapFragment.enableGestureDetection();
+	}
+	
+	@Override
+	public void onPathFinished(List<Point> path) {
+		
+	}
+
 
 }
