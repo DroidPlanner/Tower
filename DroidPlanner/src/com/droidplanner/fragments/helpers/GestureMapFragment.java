@@ -8,7 +8,6 @@ import android.gesture.GestureOverlayView;
 import android.gesture.GestureOverlayView.OnGestureListener;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,8 +16,11 @@ import android.view.ViewGroup;
 import com.droidplanner.R;
 
 public class GestureMapFragment extends Fragment implements OnGestureListener {
-	private static final int TOLERANCE = 10;
+	private static final int TOLERANCE = 15;
+	private static final int STROKE_WIDTH = 3;
 
+	private double toleranceInPixels;
+	
 	public interface OnPathFinishedListner {
 
 		void onPathFinished(List<Point> path);
@@ -35,6 +37,10 @@ public class GestureMapFragment extends Fragment implements OnGestureListener {
 		overlay = (GestureOverlayView) view.findViewById(R.id.overlay1);
 		overlay.addOnGestureListener(this);
 		overlay.setEnabled(false);
+		
+		final float scale = getResources().getDisplayMetrics().density;
+		overlay.setGestureStrokeWidth(STROKE_WIDTH*scale);
+		toleranceInPixels = TOLERANCE*scale;
 		return view;
 	}
 
@@ -51,7 +57,7 @@ public class GestureMapFragment extends Fragment implements OnGestureListener {
 		overlay.setEnabled(false);
 		List<Point> path = decodeGesture();
 		if (path.size() > 1) {
-			path = Simplify.simplify(path, TOLERANCE);
+			path = Simplify.simplify(path, toleranceInPixels);
 		}
 		listner.onPathFinished(path);
 	}
