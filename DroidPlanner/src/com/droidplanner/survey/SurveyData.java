@@ -10,12 +10,13 @@ public class SurveyData {
 	private Double overlap;
 	private Double sidelap;
 	private CameraInfo cameraInfo = new CameraInfo();
+	private int area;
 
 	public SurveyData(double defaultHatchAngle, double defaultAltitude) {
 		this.angle = defaultHatchAngle;
 		this.altitude = defaultAltitude;
 		this.overlap = 50.0;
-		this.sidelap = 50.0;
+		this.sidelap = 60.0;
 	}
 
 	public void setCameraInfo(CameraInfo info) {
@@ -38,6 +39,9 @@ public class SurveyData {
 		this.altitude = altitude;
 		this.overlap = overlap;
 		this.sidelap = sidelap;
+		
+		double sensorResolution = cameraInfo.sensorResolution;
+		
 	}
 
 	public double getMissionLength() {
@@ -48,6 +52,7 @@ public class SurveyData {
 	public double getArea() {
 		// TODO Do some calculation and return the correct value
 		return 20;
+
 	}
 
 	public double getDistanceBetweenPictures() {

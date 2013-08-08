@@ -82,6 +82,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 			cameraSpinner.setSelection(0);
 		}else{
 			Toast.makeText(context, context.getString(R.string.no_files), Toast.LENGTH_LONG).show();
+			onSpinnerItemSelected(cameraSpinner, 0, "");
 		}
 	}
 
@@ -179,7 +180,9 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 					context.getString(R.string.error_when_opening_file),
 					Toast.LENGTH_SHORT).show();
 		}
-		surveyData.setCameraInfo(reader.getCameraInfo());
+		//surveyData.setCameraInfo(reader.getCameraInfo());
+		surveyData.setCameraInfo(reader.getNewMockCameraInfo());
+		//TODO: just for debugging
 		updateSeekBarsValues();
 		updateViews();
 		Log.d("SURVEY", (String) filenameWithPath); // TODO remove after

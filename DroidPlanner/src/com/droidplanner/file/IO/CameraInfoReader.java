@@ -142,4 +142,16 @@ public class CameraInfoReader implements FileReader {
 	public CameraInfo getCameraInfo() {
 		return cameraInfo;
 	}
+
+	public CameraInfo getNewMockCameraInfo() {
+		cameraInfo = new CameraInfo();
+		cameraInfo.imageHeight = 4.22;
+		cameraInfo.imageWidth = 6.12;
+		cameraInfo.focalLength = 7.0;
+		cameraInfo.sensorResolution = 10.1;
+		cameraInfo.overlap = 50.0;
+		cameraInfo.sidelap = 60.0;
+		cameraInfo.isInLandscapeOrientation = false;
+		return cameraInfo;
+	}
 }

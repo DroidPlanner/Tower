@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -18,6 +19,7 @@ import com.droidplanner.dialogs.OpenFileDialog;
 import com.droidplanner.dialogs.OpenMissionDialog;
 import com.droidplanner.dialogs.SurveyDialog;
 import com.droidplanner.drone.variables.waypoint;
+import com.droidplanner.file.DirectoryPath;
 import com.droidplanner.file.IO.MissionReader;
 import com.droidplanner.file.IO.MissionWriter;
 import com.droidplanner.fragments.MissionFragment;
@@ -67,6 +69,7 @@ public class PlanningActivity extends SuperActivity implements
 		setDebugState(); // TODO remove this after finishing the camera Dialog
 
 		update();
+		Log.d("",DirectoryPath.getCameraInfoPath());
 	}
 
 	private void setDebugState() {// TODO remove this after finishing the camera

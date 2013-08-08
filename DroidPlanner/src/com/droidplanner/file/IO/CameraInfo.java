@@ -8,6 +8,7 @@ public class CameraInfo {
 	public Double overlap;
 	public Double sidelap;
 	public Object isInLandscapeOrientation = true;
+	public double sensorResolution;
 
 	@Override
 	public String toString() {
