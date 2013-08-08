@@ -167,4 +167,11 @@ public class Mission extends DroneVariable {
 		missionListner.onWaypointsUpdate();
 	}
 
+	public void sendMissionToAPM() {
+		List<waypoint> data = new ArrayList<waypoint>();
+		data.add(getHome());
+		data.addAll(getWaypoints());
+		myDrone.waypointMananger.writeWaypoints(data);
+	}
+
 }

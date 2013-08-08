@@ -88,21 +88,6 @@ public class PlanningActivity extends SuperActivity implements
 		}
 	}
 
-	private void openMission(String path) {
-		MissionReader missionReader = new MissionReader();
-		if (missionReader.openMission(path)) {
-			drone.mission.setHome(missionReader.getHome());
-			drone.mission.setWaypoints(missionReader.getWaypoints());
-		}
-
-	}
-
-	private boolean writeMission() {
-		MissionWriter missionWriter = new MissionWriter(
-				drone.mission.getHome(), drone.mission.getWaypoints());
-		return missionWriter.saveWaypoints();
-	}
-
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		switch (mode) {
@@ -114,7 +99,7 @@ public class PlanningActivity extends SuperActivity implements
 			getMenuInflater().inflate(R.menu.menu_planning_polygon, menu);
 			break;
 		}
-
+	
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -132,10 +117,7 @@ public class PlanningActivity extends SuperActivity implements
 			openMissionFile();
 			return true;
 		case R.id.menu_send_to_apm:
-			List<waypoint> data = new ArrayList<waypoint>();
-			data.add(drone.mission.getHome());
-			data.addAll(drone.mission.getWaypoints());
-			drone.waypointMananger.writeWaypoints(data);
+			drone.mission.sendMissionToAPM();
 			return true;
 		case R.id.menu_clear_wp:
 			clearWaypointsAndUpdate();
@@ -157,6 +139,111 @@ public class PlanningActivity extends SuperActivity implements
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
+	}
+
+	private void processReceivedPoints(List<LatLng> points) {
+		switch (mode) {
+		case MISSION:
+			drone.mission.addWaypointsWithDefaultAltitude(points);			
+			break;
+		case POLYGON:
+			polygon.addPoints(points);
+			break;
+		default:
+			break;
+		}
+		update();
+	}
+
+	public void setMode(modes mode) {
+		this.mode = mode;
+		switch (mode) {
+		default:
+		case MISSION:
+			Toast.makeText(this, string.exiting_polygon_mode,
+					Toast.LENGTH_SHORT).show();
+			break;
+		case POLYGON:
+			Toast.makeText(this, string.entering_polygon_mode,
+					Toast.LENGTH_SHORT).show();
+			break;
+		}
+		invalidateOptionsMenu();
+	}
+
+	private void clearWaypointsAndUpdate() {
+		drone.mission.clearWaypoints();
+		update();
+	}
+
+	private void update() {
+		planningMapFragment.update(drone, polygon);
+		missionFragment.update();
+	}
+
+	@Override
+	public void onMapClick(LatLng point) {
+		Toast.makeText(this, "Draw your path", Toast.LENGTH_SHORT).show();
+		gestureMapFragment.enableGestureDetection();
+	}
+
+	@Override
+	public void onAddPoint(LatLng point) {
+		List<LatLng> points = new ArrayList<LatLng>();
+		points.add(point);
+		processReceivedPoints(points);
+	}
+
+	@Override
+	public void onAltitudeChanged(double newAltitude) {
+		super.onAltitudeChanged(newAltitude);
+		update();
+	}
+
+	@Override
+	public void onMoveHome(LatLng coord) {
+		drone.mission.setHome(coord);
+		update();
+	}
+
+	@Override
+	public void onMoveWaypoint(waypoint source, LatLng latLng) {
+		source.setCoord(latLng);
+		update();
+	}
+
+	@Override
+	public void onMovePolygonPoint(PolygonPoint source, LatLng newCoord) {
+		source.coord = newCoord;
+		update();
+	}
+
+	@Override
+	public void onWaypointsUpdate() {
+		update();
+		planningMapFragment.zoomToExtents(drone.mission.getAllCoordinates());
+	}
+
+	@Override
+	public void onPathFinished(List<Point> path) {
+		List<LatLng> points = MapProjection.projectPathIntoMap(path,
+				planningMapFragment.mMap);
+		processReceivedPoints(points);
+	}
+
+	private void openMission(String path) {
+		MissionReader missionReader = new MissionReader();
+		if (missionReader.openMission(path)) {
+			drone.mission.setHome(missionReader.getHome());
+			drone.mission.setWaypoints(missionReader.getWaypoints());
+		}
+
+	}
+
+	private boolean writeMission() {
+		MissionWriter missionWriter = new MissionWriter(
+				drone.mission.getHome(), drone.mission.getWaypoints());
+		return missionWriter.saveWaypoints();
 	}
 
 	private void openMissionFile() {
@@ -187,11 +274,6 @@ public class PlanningActivity extends SuperActivity implements
 				drone.mission.getDefaultAlt(), this);
 	}
 
-	private void clearWaypointsAndUpdate() {
-		drone.mission.clearWaypoints();
-		update();
-	}
-
 	private void menuSaveFile() {
 		if (writeMission()) {
 			Toast.makeText(this, R.string.file_saved, Toast.LENGTH_SHORT)
@@ -200,94 +282,6 @@ public class PlanningActivity extends SuperActivity implements
 			Toast.makeText(this, R.string.error_when_saving, Toast.LENGTH_SHORT)
 					.show();
 		}
-	}
-
-	private void update() {
-		planningMapFragment.update(drone, polygon);
-		missionFragment.update();
-	}
-
-	@Override
-	public void onAddPoint(LatLng point) {
-		switch (mode) {
-		default:
-		case MISSION:
-			drone.mission.addWaypoint(point);
-			break;
-		case POLYGON:
-			polygon.addWaypoint(point);
-			break;
-		}
-		update();
-	}
-
-	@Override
-	public void onMoveHome(LatLng coord) {
-		drone.mission.setHome(coord);
-		update();
-	}
-
-	@Override
-	public void onMoveWaypoint(waypoint source, LatLng latLng) {
-		source.setCoord(latLng);
-		update();
-	}
-
-	@Override
-	public void onMovePolygonPoint(PolygonPoint source, LatLng newCoord) {
-		source.coord = newCoord;
-		update();
-	}
-
-	@Override
-	public void onWaypointsUpdate() {
-		update();
-		planningMapFragment.zoomToExtents(drone.mission.getAllCoordinates());
-	}
-
-	@Override
-	public void onAltitudeChanged(double newAltitude) {
-		super.onAltitudeChanged(newAltitude);
-		update();
-	}
-
-	@Override
-	public void onPathFinished(List<Point> path) {
-		List<LatLng> points = MapProjection.projectPathIntoMap(path,
-				planningMapFragment.mMap);
-		switch (mode) {
-		case MISSION:
-			drone.mission.addWaypointsWithDefaultAltitude(points);			
-			break;
-		case POLYGON:
-			polygon.addPoints(points);
-			break;
-		default:
-			break;
-		}
-		update();
-	}
-
-	@Override
-	public void onMapClick(LatLng point) {
-		Toast.makeText(this, "Draw your path", Toast.LENGTH_SHORT).show();
-		gestureMapFragment.enableGestureDetection();
-	}
-
-	public void setMode(modes mode) {
-		this.mode = mode;
-		switch (mode) {
-		default:
-		case MISSION:
-			Toast.makeText(this, string.exiting_polygon_mode,
-					Toast.LENGTH_SHORT).show();
-			break;
-		case POLYGON:
-			Toast.makeText(this, string.entering_polygon_mode,
-					Toast.LENGTH_SHORT).show();
-			break;
-		}
-		invalidateOptionsMenu();
 	}
 
 }

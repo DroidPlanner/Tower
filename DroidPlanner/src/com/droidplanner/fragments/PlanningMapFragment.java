@@ -161,11 +161,11 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		PolylineOptions flightPath = new PolylineOptions();
 		flightPath.color(Color.BLACK).width(2);
 
-		for (LatLng point : poly.getLatLng()) {
+		for (LatLng point : poly.getLatLngList()) {
 			flightPath.add(point);
 		}
-		if (poly.getLatLng().size() > 2) {
-			flightPath.add(poly.getLatLng().get(0));
+		if (poly.getLatLngList().size() > 2) {
+			flightPath.add(poly.getLatLngList().get(0));
 		}
 
 		return flightPath;
