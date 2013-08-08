@@ -38,10 +38,14 @@ public class GestureMapFragment extends Fragment implements OnGestureListener {
 		overlay.addOnGestureListener(this);
 		overlay.setEnabled(false);
 		
-		final float scale = getResources().getDisplayMetrics().density;
-		overlay.setGestureStrokeWidth(STROKE_WIDTH*scale);
-		toleranceInPixels = TOLERANCE*scale;
+		overlay.setGestureStrokeWidth(scaleDpToPixels(STROKE_WIDTH));
+		toleranceInPixels = scaleDpToPixels(TOLERANCE);
 		return view;
+	}
+
+	private int scaleDpToPixels(double value) {
+		final float scale = getResources().getDisplayMetrics().density;
+		return (int) Math.round(value*scale);
 	}
 
 	public void enableGestureDetection() {
