@@ -29,8 +29,8 @@
     <string name="menu_add_polygon">编辑巡航范围</string>
     <string name="menu_polygon">设置巡航计划</string>
     <string name="menu_clear_polygon">清除多边形</string>
-    <string name="menu_generate_polygon">生成巡航计划</string>
-    <string name="menu_finish_polygon">退出巡航计划</string>
+    <string name="generate">生成巡航计划</string>
+    <string name="exit">退出巡航计划</string>
     <string name="menu_clearFlightPath">清除飞行轨迹</string>
     <string name="exiting_polygon_mode">退出巡航计划</string>
     <string name="entering_polygon_mode">编辑巡航计划</string>
