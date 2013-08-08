@@ -78,6 +78,12 @@ public class Mission extends DroneVariable {
 		waypoints.addAll(points);
 	}
 
+	public void addWaypointsWithDefaultAltitude(List<LatLng> coords) {
+		for (LatLng coord : coords) {
+			addWaypoint(coord);
+		}
+	}
+
 	private void addWaypoint(waypoint wp) {
 		wp.setNumber(waypoints.size() + 1);
 		waypoints.add(wp);
@@ -160,4 +166,5 @@ public class Mission extends DroneVariable {
 	public void notifyMissionUpdate() {
 		missionListner.onWaypointsUpdate();
 	}
+
 }

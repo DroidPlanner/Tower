@@ -253,9 +253,18 @@ public class PlanningActivity extends SuperActivity implements
 
 	@Override
 	public void onPathFinished(List<Point> path) {
-		List<waypoint> waypoints = MapProjection.projectPathIntoMap(path,
-				planningMapFragment.mMap, drone.mission.getDefaultAlt());
-		drone.mission.addWaypoints(waypoints);
+		List<LatLng> points = MapProjection.projectPathIntoMap(path,
+				planningMapFragment.mMap);
+		switch (mode) {
+		case MISSION:
+			drone.mission.addWaypointsWithDefaultAltitude(points);			
+			break;
+		case POLYGON:
+			polygon.addPoints(points);
+			break;
+		default:
+			break;
+		}
 		update();
 	}
 

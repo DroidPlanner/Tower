@@ -17,6 +17,12 @@ public class Polygon {
 		points = arrayList;
 	}
 
+	public void addPoints(List<LatLng> pointList) {
+		for (LatLng point : pointList) {
+			addPoint(point);
+		}
+	}
+	
 	public void addWaypoint(Double Lat, Double Lng) {
 		points.add(new PolygonPoint(Lat, Lng));
 	}
@@ -24,6 +30,10 @@ public class Polygon {
 	public void addWaypoint(LatLng coord) {
 		points.add(GeoTools.findClosestPair(coord, getLatLng()),
 				new PolygonPoint(coord));
+	}
+	
+	public void addPoint(LatLng coord) {
+		points.add(new PolygonPoint(coord));
 	}
 
 	public void clearPolygon() {
@@ -56,4 +66,5 @@ public class Polygon {
 		points.get(number).coord = coord;
 
 	}
+
 }
