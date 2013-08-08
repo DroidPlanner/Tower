@@ -1,6 +1,7 @@
 package com.droidplanner.fragments.helpers;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Fragment;
 import android.gesture.GestureOverlayView;
@@ -16,7 +17,13 @@ import android.view.ViewGroup;
 import com.droidplanner.R;
 
 public class GestureMapFragment extends Fragment implements OnGestureListener {
+	public interface OnPathFinishedListner{
+
+		void onPathFinished(List<Point> path);
+	}
+	
 	private GestureOverlayView overlay;
+	private OnPathFinishedListner listner;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,19 +39,21 @@ public class GestureMapFragment extends Fragment implements OnGestureListener {
 		overlay.setEnabled(true);
 	}
 	
+	public void setOnPathFinishedListner(OnPathFinishedListner listner) {
+		this.listner = listner;
+	}
+	
 	@Override
 	public void onGestureEnded(GestureOverlayView arg0, MotionEvent arg1) {
 		Log.d("GESTURE", "ENDED ");
 		overlay.setEnabled(false);
 
-		ArrayList<Point> path = new ArrayList<Point>();
+		List<Point> path = new ArrayList<Point>();
 		float[] points = overlay.getGesture().getStrokes().get(0).points;
 		for (int i = 0; i < points.length; i += 2) {
 			path.add(new Point((int) points[i], (int) points[i + 1]));
 		}
-		for (Point point : path) {
-			Log.d("GESTURE", "P: " + point.toString());
-		}
+		listner.onPathFinished(path);
 	}
 
 	@Override
@@ -58,6 +67,7 @@ public class GestureMapFragment extends Fragment implements OnGestureListener {
 	@Override
 	public void onGestureStarted(GestureOverlayView arg0, MotionEvent arg1) {
 	}
+
 
 
 }

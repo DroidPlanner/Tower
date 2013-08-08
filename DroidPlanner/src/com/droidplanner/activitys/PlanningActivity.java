@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,17 +25,18 @@ import com.droidplanner.fragments.PlanningMapFragment;
 import com.droidplanner.fragments.PlanningMapFragment.OnMapInteractionListener;
 import com.droidplanner.fragments.PlanningMapFragment.modes;
 import com.droidplanner.fragments.helpers.GestureMapFragment;
-import com.droidplanner.planningPath.PlanningPath;
+import com.droidplanner.fragments.helpers.MapProjection;
+import com.droidplanner.fragments.helpers.Simplify;
+import com.droidplanner.fragments.helpers.GestureMapFragment.OnPathFinishedListner;
 import com.droidplanner.polygon.Polygon;
 import com.droidplanner.polygon.PolygonPoint;
 import com.google.android.gms.maps.model.LatLng;
 
 public class PlanningActivity extends SuperActivity implements
 		OnMapInteractionListener, OnWaypointUpdateListner,
-		OnAltitudeChangedListner {
+		OnAltitudeChangedListner, OnPathFinishedListner {
 
 	public Polygon polygon;
-	private PlanningPath planningPath;
 	private PlanningMapFragment planningMapFragment;
 	private MissionFragment missionFragment;
 	private GestureMapFragment gestureMapFragment;
@@ -58,9 +60,8 @@ public class PlanningActivity extends SuperActivity implements
 				.findFragmentById(R.id.missionFragment);
 
 		polygon = new Polygon();
-		
-		planningPath = new PlanningPath(planningMapFragment.mMap);
 
+		gestureMapFragment.setOnPathFinishedListner(this);
 		missionFragment.setMission(drone.mission);
 
 		drone.mission.missionListner = this;
@@ -259,15 +260,11 @@ public class PlanningActivity extends SuperActivity implements
 	}
 
 	@Override
-	public void onPathStarted() {
-		clearWaypointsAndUpdate(); // TODO this will not be needed when we improve the on screen drawing of the path
-	}
-
-	@Override
-	public void onPathFinished() {
-		drone.mission.addWaypoints(planningPath.getWaypoints(drone.mission.getDefaultAlt()));
-		planningPath.clear();		
-		update();
+	public void onPathFinished(List<Point> path) {
+		path = Simplify.simplify(path, 50.0);
+		List<waypoint> waypoints = MapProjection.projectPathIntoMap(path, planningMapFragment.mMap, drone.mission.getDefaultAlt());
+		drone.mission.addWaypoints(waypoints);
+		update();			
 	}
 
 }
