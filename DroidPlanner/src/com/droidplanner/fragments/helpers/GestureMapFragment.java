@@ -8,6 +8,7 @@ import android.gesture.GestureOverlayView;
 import android.gesture.GestureOverlayView.OnGestureListener;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,11 +17,13 @@ import android.view.ViewGroup;
 import com.droidplanner.R;
 
 public class GestureMapFragment extends Fragment implements OnGestureListener {
-	public interface OnPathFinishedListner{
+	private static final int TOLERANCE = 10;
+
+	public interface OnPathFinishedListner {
 
 		void onPathFinished(List<Point> path);
 	}
-	
+
 	private GestureOverlayView overlay;
 	private OnPathFinishedListner listner;
 
@@ -38,23 +41,32 @@ public class GestureMapFragment extends Fragment implements OnGestureListener {
 	public void enableGestureDetection() {
 		overlay.setEnabled(true);
 	}
-	
+
 	public void setOnPathFinishedListner(OnPathFinishedListner listner) {
 		this.listner = listner;
 	}
-	
+
 	@Override
 	public void onGestureEnded(GestureOverlayView arg0, MotionEvent arg1) {
 		overlay.setEnabled(false);
+		List<Point> path = decodeGesture();
+		if (path.size() > 1) {
+			path = Simplify.simplify(path, TOLERANCE);
+		}
+		listner.onPathFinished(path);
+	}
 
+	private List<Point> decodeGesture() {
 		List<Point> path = new ArrayList<Point>();
+		extractPathFromGesture(path);		
+		return path;
+	}
+
+	private void extractPathFromGesture(List<Point> path) {
 		float[] points = overlay.getGesture().getStrokes().get(0).points;
 		for (int i = 0; i < points.length; i += 2) {
 			path.add(new Point((int) points[i], (int) points[i + 1]));
 		}
-		
-		path = Simplify.simplify(path, 10);
-		listner.onPathFinished(path);
 	}
 
 	@Override
@@ -68,7 +80,5 @@ public class GestureMapFragment extends Fragment implements OnGestureListener {
 	@Override
 	public void onGestureStarted(GestureOverlayView arg0, MotionEvent arg1) {
 	}
-
-
 
 }
