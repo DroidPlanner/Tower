@@ -260,7 +260,6 @@ public class PlanningActivity extends SuperActivity implements
 
 	@Override
 	public void onPathFinished(List<Point> path) {
-		path = Simplify.simplify(path, 50.0);
 		List<waypoint> waypoints = MapProjection.projectPathIntoMap(path, planningMapFragment.mMap, drone.mission.getDefaultAlt());
 		drone.mission.addWaypoints(waypoints);
 		update();			

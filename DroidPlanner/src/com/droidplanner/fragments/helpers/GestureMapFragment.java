@@ -54,6 +54,8 @@ public class GestureMapFragment extends Fragment implements OnGestureListener {
 		for (int i = 0; i < points.length; i += 2) {
 			path.add(new Point((int) points[i], (int) points[i + 1]));
 		}
+		
+		path = Simplify.simplify(path, 50.0);
 		listner.onPathFinished(path);
 	}
 
