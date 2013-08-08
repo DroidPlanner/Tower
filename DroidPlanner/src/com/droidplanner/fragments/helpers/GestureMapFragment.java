@@ -32,6 +32,7 @@ public class GestureMapFragment extends Fragment implements OnGestureListener {
 				false);
 		overlay = (GestureOverlayView) view.findViewById(R.id.overlay1);
 		overlay.addOnGestureListener(this);
+		overlay.setEnabled(false);
 		return view;
 	}
 
