@@ -6,6 +6,7 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
 import com.droidplanner.R;
@@ -69,6 +70,7 @@ public class FlightDataActivity extends SuperFlightActivity implements
 
 	@Override
 	public void onDroneClick() {
+		Toast.makeText(this, "Draw your path", Toast.LENGTH_SHORT).show();
 		gestureMapFragment.enableGestureDetection();
 	}
 	
