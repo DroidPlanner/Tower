@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.view.MotionEvent;
 
 import com.droidplanner.MAVLink.MavLinkRC;
 import com.droidplanner.drone.Drone;
@@ -83,6 +84,28 @@ public class RcOutput {
 		if (value < -1)
 			value = -1;
 		rcOutputs[ch] = (int) (value * RC_RANGE + RC_TRIM);
+	}
+	
+	public void simulateDisarmEvent(MotionEvent event) {
+		if (event.getAction() == MotionEvent.ACTION_DOWN) {
+			enableRcOverride();
+			setRcChannel(RcOutput.TROTTLE, -1);
+			setRcChannel(RcOutput.RUDDER, -1);
+		}
+		if (event.getAction() == MotionEvent.ACTION_UP) {
+			disableRcOverride();
+		}
+	}
+
+	public void simulateArmEvent(MotionEvent event) {
+		if (event.getAction() == MotionEvent.ACTION_DOWN) {
+			enableRcOverride();
+			setRcChannel(RcOutput.TROTTLE,-1);
+			setRcChannel(RcOutput.RUDDER, 1);
+		}
+		if (event.getAction() == MotionEvent.ACTION_UP) {
+			disableRcOverride();
+		}
 	}
 
 }

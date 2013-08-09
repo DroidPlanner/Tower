@@ -16,7 +16,7 @@ public class Mission extends DroneVariable {
 
 	private Home home = new Home(0.0, 0.0, 0.0);
 	private List<waypoint> waypoints = new ArrayList<waypoint>();
-	private Double defaultAlt = 50.0;
+	private Double defaultAlt = 5.0;
 	private int wpno = -1;
 	private double disttowp = 0;
 
