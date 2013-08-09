@@ -3,6 +3,7 @@ package com.droidplanner.drone.variables;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.MAVLink.Messages.ApmModes;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_count;
@@ -40,9 +41,12 @@ public class WaypointMananger extends DroneVariable {
 	 * 
 	 * @param data
 	 *            waypoints to be written
+	 * @param shouldRestartAfterSending
 	 */
-	public void writeWaypoints(List<waypoint> data) {
+	public void writeWaypoints(List<waypoint> data,
+			boolean shouldRestartAfterSending) {
 		if ((waypoints != null)) {
+			this.shouldRestartAfterSending = shouldRestartAfterSending;
 			waypoints.clear();
 			waypoints.addAll(data);
 			writeIndex = 0;
@@ -98,6 +102,7 @@ public class WaypointMananger extends DroneVariable {
 	}
 
 	waypointStates state = waypointStates.IDLE;
+	public boolean shouldRestartAfterSending = false;
 
 	public WaypointMananger(Drone drone) {
 		super(drone);
@@ -150,7 +155,12 @@ public class WaypointMananger extends DroneVariable {
 			break;
 		case WAITING_WRITE_ACK:
 			if (msg.msgid == msg_mission_ack.MAVLINK_MSG_ID_MISSION_ACK) {
-				myDrone.mission.onWriteWaypoints((msg_mission_ack) msg);
+				if (shouldRestartAfterSending) {
+					restartAutoMission();
+					myDrone.tts.speak("Mission Acknowledged");
+				} else {
+					myDrone.mission.onWriteWaypoints((msg_mission_ack) msg);
+				}
 				state = waypointStates.IDLE;
 				return true;
 			}
@@ -170,5 +180,11 @@ public class WaypointMananger extends DroneVariable {
 
 	private void processReceivedWaypoint(msg_mission_item msg) {
 		waypoints.add(new waypoint(msg));
+	}
+
+	public void restartAutoMission() {
+		myDrone.state.changeFlightMode(ApmModes.getAutoMode(myDrone.type
+				.getType()));
+		setCurrentWaypoint(1);
 	}
 }

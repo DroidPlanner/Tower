@@ -153,9 +153,9 @@ public class Mission extends DroneVariable {
 	}
 
 	public void onWriteWaypoints(msg_mission_ack msg) {
+		myDrone.tts.speak("Waypoints saved to Drone");
 		Toast.makeText(myDrone.context, "Waypoints sent", Toast.LENGTH_SHORT)
 				.show();
-		myDrone.tts.speak("Waypoints saved to Drone");
 	}
 
 	public void removeWaypoint(waypoint waypoint) {
@@ -167,11 +167,11 @@ public class Mission extends DroneVariable {
 		missionListner.onWaypointsUpdate();
 	}
 
-	public void sendMissionToAPM() {
+	public void sendMissionToAPM(boolean shouldRestartAfterSending) {
 		List<waypoint> data = new ArrayList<waypoint>();
 		data.add(getHome());
 		data.addAll(getWaypoints());
-		myDrone.waypointMananger.writeWaypoints(data);
+		myDrone.waypointMananger.writeWaypoints(data,shouldRestartAfterSending);
 	}
 
 }

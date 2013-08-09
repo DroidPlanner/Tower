@@ -79,7 +79,7 @@ public class FlightDataActivity extends SuperFlightActivity implements
 		drone.mission.clearWaypoints();
 		drone.mission.addWaypointsWithDefaultAltitude(points);
 		mapFragment.updateMissionPath(drone);
-		drone.state.restartAutoMission();
+		drone.mission.sendMissionToAPM(true);
 	}
 
 

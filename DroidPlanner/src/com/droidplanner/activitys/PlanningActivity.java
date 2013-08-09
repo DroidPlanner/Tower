@@ -117,7 +117,7 @@ public class PlanningActivity extends SuperActivity implements
 			openMissionFile();
 			return true;
 		case R.id.menu_send_to_apm:
-			drone.mission.sendMissionToAPM();
+			drone.mission.sendMissionToAPM(false);
 			return true;
 		case R.id.menu_clear_wp:
 			clearWaypointsAndUpdate();
