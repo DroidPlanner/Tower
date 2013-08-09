@@ -1,3 +1,6 @@
+## Droidplanner v0.12.2
+* New way of creating missions and polygons
+
 ## Droidplanner v0.12.1b
 * Removing debug info that passed trough on the last release
 
