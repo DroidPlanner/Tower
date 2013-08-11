@@ -8,8 +8,6 @@ import java.net.UnknownHostException;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.DhcpInfo;
-import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 
 public class UdpConnection extends MAVLinkConnection {
@@ -77,19 +75,5 @@ public class UdpConnection extends MAVLinkConnection {
 		socket.setBroadcast(true);
 		socket.setReuseAddress(true);
 	}
-	
-	@SuppressWarnings("unused")
-	private InetAddress getBroadcastAddress() throws IOException {
-	    WifiManager wifi = (WifiManager) parentContext.getSystemService(Context.WIFI_SERVICE);
-	    DhcpInfo dhcp = wifi.getDhcpInfo();
-	    // handle null somehow
-
-	    int broadcast = (dhcp.ipAddress & dhcp.netmask) | ~dhcp.netmask;
-	    byte[] quads = new byte[4];
-	    for (int k = 0; k < 4; k++)
-	      quads[k] = (byte) ((broadcast >> k * 8) & 0xFF);
-	    return InetAddress.getByAddress(quads);
-	}
-
 
 }
