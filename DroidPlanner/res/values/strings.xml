@@ -2,7 +2,9 @@
 <resources>
 
     <string name="app_title">DroidPlanner</string>
+    <string name="about">About</string>
     <string name="version">Version</string>
+    <string name="storage_folder">Storage Folder</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_connect">Connect</string>
     <string name="menu_disconnect">Disconnect</string>
