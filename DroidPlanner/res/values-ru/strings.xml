@@ -1,120 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-   <string name="common_google_play_services_install_title">Установите Сервисы Google Play</string>
-<!--Original value: "This app won't run without Google Play services, which are missing from your phone."-->
-<string name="common_google_play_services_install_text_phone">Для работы этого приложения требуется установить Сервисы Google Play.</string>
-<!--Original value: "This app won't run without Google Play services, which are missing from your tablet."-->
-<string name="common_google_play_services_install_text_tablet">Для работы этого приложения требуется установить Сервисы Google Play.</string>
-<!--Original value: Get Google Play services-->
-<string name="common_google_play_services_install_button">Установить</string>
-<!--Original value: Enable Google Play services-->
-<string name="common_google_play_services_enable_title">Включите Сервисы Google Play</string>
-<!--Original value: "This app won't work unless you enable Google Play services."-->
-<string name="common_google_play_services_enable_text">Для работы этого приложения требуется включить Сервисы Google Play.</string>
-<!--Original value: Enable Google Play services-->
-<string name="common_google_play_services_enable_button">Включить</string>
-<!--Original value: Update Google Play services-->
-<string name="common_google_play_services_update_title">Обновите Сервисы Google Play</string>
-<!--Original value: "This app won't run unless you update Google Play services."-->
-<string name="common_google_play_services_update_text">Для работы этого приложения требуется обновить Сервисы Google Play.</string>
-<!--Original value: Unknown issue with Google Play services.-->
-<string name="common_google_play_services_unknown_issue">Неизвестная ошибка с Сервисами Google Play.</string>
-<!--Original value: Google Play services-->
-<string name="common_google_play_services_unsupported_title">Сервисы Google Play</string>
-<!--Original value: Google Play services, which some of your applications rely on, is not supported by your device. Please contact the manufacturer for assistance.-->
-<string name="common_google_play_services_unsupported_text">Сервисы Google Play, необходимые для работы некоторых приложений, не поддерживаются на вашем устройстве. Обратитесь к производителю.</string>
-<!--Original value: Update-->
-<string name="common_google_play_services_update_button">Обновить</string>
-<!--Original value: Sign in with Google-->
-<string name="common_signin_button_text_long">Войти в аккаунт Google</string>
-<!--Original value: Install/Update/Enable Google Play services-->
-<string name="auth_client_availability_notification_title">Установка/обновление/включение сервисов Google Play</string>
-<!--Original value: Google Play services error-->
-<string name="auth_client_play_services_err_notification_msg">Ошибка сервисов Google Play</string>
-<!--Original value: Requested by %1$s-->
-<string name="auth_client_requested_by_msg">Запрос от приложения \"%1$s\"</string>
-<!--Original value: DroidPlanner-->
-<string name="app_title">DroidPlanner</string>
-<!--Original value: Settings-->
-<string name="menu_settings">Настройки</string>
-<!--Original value: Connect-->
-<string name="menu_connect">Подключить</string>
-<!--Original value: Disconnect-->
-<string name="menu_disconnect">Отключить</string>    
-<!--Original value: Connected-->
-<string name="conected">Подключение</string>
-<!--Original value: Disconnected-->
-<string name="disconnected">Отключение</string>
-<!--Original value: Save-->
-<string name="save">Сохранить</string>
-<!--Original value: Open file-->
-<string name="menu_open_file">Открыть файл</string>
-<!--Original value: Save file-->
-<string name="menu_save_file">Сохранить файл</string>
-<!--Original value: Load from APM-->
-<string name="menu_load_from_apm">Загрузить из APM</string>
-<!--Original value: Send to APM-->
-<string name="menu_send_to_apm">Отправить в APM</string>
-<!--Original value: Follow-->
-<string name="menu_follow_me">Иди за мной</string>
-<!--Original value: Clear WPs-->
-<string name="menu_clear">Очистить точки</string>
-<!--Original value: Zoom-->
-<string name="menu_zoom">Zoom</string>
-<!--Original value: File Saved-->
-<string name="file_saved">Файл сохранен</string>
-<!--Original value: No Waypoint Files-->
-<string name="no_waypoint_files">Нет файла с точками</string>
-<!--Original value: Select file to open:-->
-<string name="select_file_to_open">Выбрать файл для открытия</string>
-<!--Original value: Error when saving-->
-<string name="error_when_saving">Ошибка при сохранении</string>
-<!--Original value: Error when opening file-->
-<string name="error_when_opening_file">Ошибка при открытии файла</string>
-<!--Original value: Altitude-->
-<string name="waypoint_altitude">Высота</string>
-<!--Original value: Change Alt.-->
-<string name="default_alt">Изменить Alt.</string>
-<!--Original value: Open KMZ-->
-<string name="menu_open_kmz">Открыть KMZ</string>
-<!--Original value: Add Polygon-->
-<string name="menu_add_polygon">Добавить полигон</string>
-<!--Original value: Polygon-->
-<string name="menu_polygon">Полигон</string>
-<!--Original value: Clear Poly-->
-<string name="menu_clear_polygon">Очистить полигон</string>
-<!--Original value: Generate-->
-<string name="generate">Генератор полигонов</string>
-<!--Original value: Exit-->
-<string name="exit">Выход</string>
-<!--Original value: Clear Track-->
-<string name="menu_clearFlightPath">Очистить путь</string>
-<!--Original value: Exiting Polygon Mode-->
-<string name="exiting_polygon_mode">Выход из режима редактирования полигонов</string>
-<!--Original value: Entering Polygon Mode-->
-<string name="entering_polygon_mode">Вход в режим редактирования полигонов</string>
-<!--Original value: Hatch angle:-->
-<string name="dialog_polygon_hatch_angle">Угол штриховки:</string>
-<!--Original value: Distance between lines:-->
-<string name="dialog_polygon_distance_between_lines">Расстояние между строками:</string>
-<!--Original value: Enable RC control-->
-<string name="enable">Включить</string>
-<!--Original value: Disable RC control-->
-<string name="disable">Выключить</string>
-<!--Original value: Write-->
-<string name="write">Записать</string>
-<!--Original value: Refresh-->
-<string name="refresh">Обновить</string>
-<!--Original value: This is very experimental, please be careful.-->
-<string name="this_is_very_experimental_please_be_careful">Внимание!  Экспериментальный режим. Будьте осторожны.</string> 
-<string name="rc_control">RC управление</string>
 
- <string-array name="menu_dropdown">
-        <item>Полетное задание</item>
-        <item>Полетные данные</item>
-        <item>Радиоуправление</item>
-        <item>Параметры</item>
-        <item>Камера</item>
-        <item>GCP</item>
-    </string-array>
+    <string name="common_google_play_services_install_title">Установите Сервисы Google Play</string>
+    <!-- Original value: "This app won't run without Google Play services, which are missing from your phone." -->
+    <string name="common_google_play_services_install_text_phone">Для работы этого приложения требуется установить Сервисы Google Play.</string>
+    <!-- Original value: "This app won't run without Google Play services, which are missing from your tablet." -->
+    <string name="common_google_play_services_install_text_tablet">Для работы этого приложения требуется установить Сервисы Google Play.</string>
+    <!-- Original value: Get Google Play services -->
+    <string name="common_google_play_services_install_button">Установить</string>
+    <!-- Original value: Enable Google Play services -->
+    <string name="common_google_play_services_enable_title">Включите Сервисы Google Play</string>
+    <!-- Original value: "This app won't work unless you enable Google Play services." -->
+    <string name="common_google_play_services_enable_text">Для работы этого приложения требуется включить Сервисы Google Play.</string>
+    <!-- Original value: Enable Google Play services -->
+    <string name="common_google_play_services_enable_button">Включить</string>
+    <!-- Original value: Update Google Play services -->
+    <string name="common_google_play_services_update_title">Обновите Сервисы Google Play</string>
+    <!-- Original value: "This app won't run unless you update Google Play services." -->
+    <string name="common_google_play_services_update_text">Для работы этого приложения требуется обновить Сервисы Google Play.</string>
+    <!-- Original value: Unknown issue with Google Play services. -->
+    <string name="common_google_play_services_unknown_issue">Неизвестная ошибка с Сервисами Google Play.</string>
+    <!-- Original value: Google Play services -->
+    <string name="common_google_play_services_unsupported_title">Сервисы Google Play</string>
+    <!-- Original value: Google Play services, which some of your applications rely on, is not supported by your device. Please contact the manufacturer for assistance. -->
+    <string name="common_google_play_services_unsupported_text">Сервисы Google Play, необходимые для работы некоторых приложений, не поддерживаются на вашем устройстве. Обратитесь к производителю.</string>
+    <!-- Original value: Update -->
+    <string name="common_google_play_services_update_button">Обновить</string>
+    <!-- Original value: Sign in with Google -->
+    <string name="common_signin_button_text_long">Войти в аккаунт Google</string>
+    <!-- Original value: Install/Update/Enable Google Play services -->
+    <string name="auth_client_availability_notification_title">Установка/обновление/включение сервисов Google Play</string>
+    <!-- Original value: Google Play services error -->
+    <string name="auth_client_play_services_err_notification_msg">Ошибка сервисов Google Play</string>
+    <!-- Original value: Requested by %1$s -->
+    <string name="auth_client_requested_by_msg">Запрос от приложения \"%1$s\"</string>
+    <!-- Original value: DroidPlanner -->
+    <string name="app_title">DroidPlanner</string>
+    <!-- Original value: Settings -->
+    <string name="menu_settings">Настройки</string>
+    <!-- Original value: Connect -->
+    <string name="menu_connect">Подключить</string>
+    <!-- Original value: Disconnect -->
+    <string name="menu_disconnect">Отключить</string>
+    <!-- Original value: Connected -->
+    <string name="conected">Подключение</string>
+    <!-- Original value: Disconnected -->
+    <string name="disconnected">Отключение</string>
+    <!-- Original value: Save -->
+    <string name="save">Сохранить</string>
+    <!-- Original value: Open file -->
+    <string name="menu_open_file">Открыть файл</string>
+    <!-- Original value: Save file -->
+    <string name="menu_save_file">Сохранить файл</string>
+    <!-- Original value: Load from APM -->
+    <string name="menu_load_from_apm">Загрузить из APM</string>
+    <!-- Original value: Send to APM -->
+    <string name="menu_send_to_apm">Отправить в APM</string>
+    <!-- Original value: Follow -->
+    <string name="menu_follow_me">Иди за мной</string>
+    <!-- Original value: Clear WPs -->
+    <string name="menu_clear">Очистить точки</string>
+    <!-- Original value: Zoom -->
+    <string name="menu_zoom">Zoom</string>
+    <!-- Original value: File Saved -->
+    <string name="file_saved">Файл сохранен</string>
+    <!-- Original value: No Waypoint Files -->
+    <string name="no_waypoint_files">Нет файла с точками</string>
+    <!-- Original value: Select file to open: -->
+    <string name="select_file_to_open">Выбрать файл для открытия</string>
+    <!-- Original value: Error when saving -->
+    <string name="error_when_saving">Ошибка при сохранении</string>
+    <!-- Original value: Error when opening file -->
+    <string name="error_when_opening_file">Ошибка при открытии файла</string>
+    <!-- Original value: Altitude -->
+    <string name="waypoint_altitude">Высота</string>
+    <!-- Original value: Change Alt. -->
+    <string name="default_alt">Изменить Alt.</string>
+    <!-- Original value: Open KMZ -->
+    <string name="menu_open_kmz">Открыть KMZ</string>
+    <!-- Original value: Add Polygon -->
+    <string name="menu_add_polygon">Добавить полигон</string>
+    <!-- Original value: Polygon -->
+    <string name="menu_polygon">Полигон</string>
+    <!-- Original value: Clear Poly -->
+    <string name="menu_clear_polygon">Очистить полигон</string>
+    <!-- Original value: Generate -->
+    <string name="generate">Генератор полигонов</string>
+    <!-- Original value: Exit -->
+    <string name="exit">Выход</string>
+    <!-- Original value: Clear Track -->
+    <string name="menu_clearFlightPath">Очистить путь</string>
+    <!-- Original value: Exiting Polygon Mode -->
+    <string name="exiting_polygon_mode">Выход из режима редактирования полигонов</string>
+    <!-- Original value: Entering Polygon Mode -->
+    <string name="entering_polygon_mode">Вход в режим редактирования полигонов</string>
+    <!-- Original value: Hatch angle: -->
+    <string name="dialog_polygon_hatch_angle">Угол штриховки:</string>
+    <!-- Original value: Distance between lines: -->
+    <string name="dialog_polygon_distance_between_lines">Расстояние между строками:</string>
+    <!-- Original value: Enable RC control -->
+    <string name="enable">Включить</string>
+    <!-- Original value: Disable RC control -->
+    <string name="disable">Выключить</string>
+    <!-- Original value: Write -->
+    <string name="write">Записать</string>
+    <!-- Original value: Refresh -->
+    <string name="refresh">Обновить</string>
+    <!-- Original value: This is very experimental, please be careful. -->
+    <string name="this_is_very_experimental_please_be_careful">Внимание!  Экспериментальный режим. Будьте осторожны.</string>
+    <string name="rc_control">RC управление</string>
+
+    
+    <string name="screen_planning">Полетное задание</string>
+    <string name="screen_flight_data">Полетные данные</string>
+    <string name="screen_rc">Радиоуправление</string>
+    <string name="screen_parameters">Параметры</string>
+    <string name="screen_camera">Камера</string>
 </resources>

@@ -44,13 +44,12 @@
     <string name="this_is_very_experimental_please_be_careful">Dies ist experimentell!, VORSICHT!</string>
     <string name="rc_control">RC Kontrolle</string>
     
-    <string-array name="menu_dropdown">
-        <item>Planung</item>
-        <item>Flugdaten</item>
-        <item>RC</item>
-        <item>Parameter</item>
-        <item>Kamera</item>
-        <item>GCP</item>
-    </string-array>
+    <string name="screen_planning">Planung</string>
+    <string name="screen_flight_data">Flugdaten</string>
+    <string name="screen_rc">RC</string>
+    <string name="screen_parameters">Parameter</string>
+    <string name="screen_camera">Kamera</string>
+    <string name="screen_gcp">GCP</string>
+    <string name="screen_chart">Chart</string>
 
 </resources>
