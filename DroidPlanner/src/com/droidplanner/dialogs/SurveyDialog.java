@@ -106,13 +106,13 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		distanceBetweenLinesTextView.setText(context
 				.getString(R.string.distance_between_lines)
 				+ ": "
-				+ surveyData.getMissionLength() + " m");
+				+ surveyData.getLineDistance().intValue() + " m");
 		areaTextView.setText(context.getString(R.string.area) + ": "
-				+ surveyData.getArea() + " kmÂ²");
+				+ surveyData.getArea().intValue() + " m²");
 		distanceTextView.setText(context
 				.getString(R.string.distance_between_pictures)
 				+ ": "
-				+ surveyData.getDistanceBetweenPictures() + " m");
+				+ surveyData.getDistanceBetweenPictures().intValue() + " m");
 		footprintTextView.setText(context.getString(R.string.footprint) + ": "
 				+ ((Double) surveyData.getLateralFootPrint()).intValue() + "x"
 				+ ((Double) surveyData.getLongitudinalFootPrint()).intValue()
@@ -120,7 +120,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		groundResolutionTextView.setText(context
 				.getString(R.string.ground_resolution)
 				+ ": "
-				+ surveyData.getGroundResolution() + " cmÂ²/pixel");
+				+ surveyData.getGroundResolution() + " cm²/pixel");
 	}
 
 	private boolean checkIfPolygonIsValid(Polygon polygon) {
