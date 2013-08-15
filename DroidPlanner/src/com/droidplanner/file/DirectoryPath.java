@@ -5,7 +5,7 @@ import android.os.Environment;
 public class DirectoryPath {
 
 	static public String getDroidPlannerPath() {
-		String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
+		String root = Environment.getExternalStorageDirectory().getPath();
 		return (root + "/DroidPlanner/");
 	}
 
