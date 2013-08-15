@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <EditTextPreference
-        android:enabled="false"
-        android:key="version"
-        android:persistent="false"
-        android:selectable="false"
-        android:shouldDisableView="false"
-        android:title="@string/version" />
-
     <PreferenceCategory
         android:key="pref_mavlink"
         android:title="MavLink" >
@@ -227,6 +219,22 @@
             android:inputType="number"
             android:key="pref_udp_server_port"
             android:title="UDP server Port" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/about" >
+        <EditTextPreference
+            android:enabled="false"
+            android:key="pref_version"
+            android:persistent="false"
+            android:selectable="false"
+            android:shouldDisableView="false"
+            android:title="@string/version" />
+        <EditTextPreference
+            android:enabled="false"
+            android:key="pref_storage"
+            android:persistent="false"
+            android:selectable="false"
+            android:shouldDisableView="false"
+            android:title="@string/storage_folder" />
     </PreferenceCategory>
 
 </PreferenceScreen>
