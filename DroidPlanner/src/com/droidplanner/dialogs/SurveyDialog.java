@@ -103,23 +103,23 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 	}
 
 	private void updateViews() {
+		footprintTextView.setText(context.getString(R.string.footprint) + ": "
+				+ ((Double) surveyData.getLateralFootPrint()).intValue() + "x"
+				+ ((Double) surveyData.getLongitudinalFootPrint()).intValue()
+				+ " m");
+		groundResolutionTextView.setText(String.format("%s:%2.2f cm\u00B2",
+				context.getString(R.string.ground_resolution),
+				surveyData.getGroundResolution()));
+		distanceTextView.setText(context
+				.getString(R.string.distance_between_pictures)
+				+ ": "
+				+ surveyData.getDistanceBetweenPictures().intValue() + " m");
 		distanceBetweenLinesTextView.setText(context
 				.getString(R.string.distance_between_lines)
 				+ ": "
 				+ surveyData.getLineDistance().intValue() + " m");
 		areaTextView.setText(context.getString(R.string.area) + ": "
-				+ surveyData.getArea().intValue() + " m²");
-		distanceTextView.setText(context
-				.getString(R.string.distance_between_pictures)
-				+ ": "
-				+ surveyData.getDistanceBetweenPictures().intValue() + " m");
-		footprintTextView.setText(context.getString(R.string.footprint) + ": "
-				+ ((Double) surveyData.getLateralFootPrint()).intValue() + "x"
-				+ ((Double) surveyData.getLongitudinalFootPrint()).intValue()
-				+ " m");
-		groundResolutionTextView.setText(String.format("%s:%2.2f cm²",
-				context.getString(R.string.ground_resolution),
-				surveyData.getGroundResolution()));
+				+ surveyData.getArea().intValue() + " m\u00B2");
 	}
 
 	private boolean checkIfPolygonIsValid(Polygon polygon) {
