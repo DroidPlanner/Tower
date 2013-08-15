@@ -117,10 +117,9 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 				+ ((Double) surveyData.getLateralFootPrint()).intValue() + "x"
 				+ ((Double) surveyData.getLongitudinalFootPrint()).intValue()
 				+ " m");
-		groundResolutionTextView.setText(context
-				.getString(R.string.ground_resolution)
-				+ ": "
-				+ surveyData.getGroundResolution() + " cm²/pixel");
+		groundResolutionTextView.setText(String.format("%s:%2.2f cm²",
+				context.getString(R.string.ground_resolution),
+				surveyData.getGroundResolution()));
 	}
 
 	private boolean checkIfPolygonIsValid(Polygon polygon) {
