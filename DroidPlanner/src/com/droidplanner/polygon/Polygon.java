@@ -7,30 +7,23 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class Polygon {
 
-	private List<PolygonPoint> points;
+	private List<PolygonPoint> points = new ArrayList<PolygonPoint>();
 
-	public Polygon() {
-		setWaypoints(new ArrayList<PolygonPoint>());
+	public void addPoints(List<LatLng> pointList) {
+		for (LatLng point : pointList) {
+			addPoint(point);
+		}
 	}
 
-	private void setWaypoints(ArrayList<PolygonPoint> arrayList) {
-		points = arrayList;
-	}
-
-	public void addWaypoint(Double Lat, Double Lng) {
-		points.add(new PolygonPoint(Lat, Lng));
-	}
-
-	public void addWaypoint(LatLng coord) {
-		points.add(GeoTools.findClosestPair(coord, getLatLng()),
-				new PolygonPoint(coord));
+	public void addPoint(LatLng coord) {
+		points.add(new PolygonPoint(coord));
 	}
 
 	public void clearPolygon() {
 		points.clear();
 	}
 
-	public List<LatLng> getLatLng() {
+	public List<LatLng> getLatLngList() {
 		List<LatLng> list = new ArrayList<LatLng>();
 		for (PolygonPoint point : points) {
 			list.add(point.coord);
@@ -56,4 +49,5 @@ public class Polygon {
 		points.get(number).coord = coord;
 
 	}
+
 }

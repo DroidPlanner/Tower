@@ -7,17 +7,17 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.droidplanner.R.string;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.variables.Home;
 import com.droidplanner.drone.variables.waypoint;
+import com.droidplanner.fragments.helpers.OfflineMapFragment;
 import com.droidplanner.fragments.markers.MarkerManager;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import com.droidplanner.polygon.Polygon;
 import com.droidplanner.polygon.PolygonPoint;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.model.LatLng;
@@ -27,19 +27,13 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 @SuppressLint("UseSparseArrays")
 public class PlanningMapFragment extends OfflineMapFragment implements
-		OnMapLongClickListener, OnMarkerDragListener {
-
-	public enum modes {
-		MISSION, POLYGON;
-	}
+		OnMapLongClickListener, OnMarkerDragListener, OnMapClickListener {
 
 	public GoogleMap mMap;
 
 	private MarkerManager markers;
 
-	private OnMapInteractionListener mListener;
-
-	public modes mode = modes.MISSION;
+	public OnMapInteractionListener mListener;
 
 	public Polygon polygon;
 
@@ -56,18 +50,22 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		public void onMoveWaypoint(waypoint waypoint, LatLng latLng);
 
 		public void onMovePolygonPoint(PolygonPoint source, LatLng newCoord);
+
+		public void onMapClick(LatLng point);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
 			Bundle bundle) {
 		View view = super.onCreateView(inflater, viewGroup, bundle);
+		 
 		mMap = getMap();
 		mMap.setOnMarkerDragListener(this);
+		mMap.setOnMapClickListener(this);
 		mMap.setOnMapLongClickListener(this);
 
 		markers = new MarkerManager(mMap);
-
+		 
 		return view;
 	}
 
@@ -164,28 +162,20 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		PolylineOptions flightPath = new PolylineOptions();
 		flightPath.color(Color.BLACK).width(2);
 
-		for (LatLng point : poly.getLatLng()) {
+		for (LatLng point : poly.getLatLngList()) {
 			flightPath.add(point);
 		}
-		if (poly.getLatLng().size() > 2) {
-			flightPath.add(poly.getLatLng().get(0));
+		if (poly.getLatLngList().size() > 2) {
+			flightPath.add(poly.getLatLngList().get(0));
 		}
 
 		return flightPath;
 	}
 
-	public void setMode(modes mode) {
-		this.mode = mode;
-		switch (mode) {
-		default:
-		case MISSION:
-			Toast.makeText(getActivity(), string.exiting_polygon_mode,
-					Toast.LENGTH_SHORT).show();
-			break;
-		case POLYGON:
-			Toast.makeText(getActivity(), string.entering_polygon_mode,
-					Toast.LENGTH_SHORT).show();
-			break;
-		}
+	@Override
+	public void onMapClick(LatLng point) {
+		mListener.onMapClick(point);		
 	}
+
+
 }

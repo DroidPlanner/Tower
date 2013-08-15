@@ -4,7 +4,7 @@
     <item
         android:id="@+id/menu_generate_polygon"
         android:showAsAction="ifRoom"
-        android:title="@string/menu_generate_polygon"/>
+        android:title="@string/generate"/>
     <item
         android:id="@+id/menu_survey"
         android:showAsAction="ifRoom"
@@ -22,8 +22,8 @@
         android:showAsAction="ifRoom"
         android:title="@string/menu_zoom"/>
     <item
-        android:id="@+id/menu_finish_polygon"
+        android:id="@+id/mode_exit"
         android:showAsAction="ifRoom"
-        android:title="@string/menu_finish_polygon"/>
+        android:title="@string/exit"/>
 
 </menu>

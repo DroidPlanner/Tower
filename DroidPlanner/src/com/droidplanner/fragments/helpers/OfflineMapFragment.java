@@ -1,4 +1,4 @@
-package com.droidplanner.fragments;
+package com.droidplanner.fragments.helpers;
 
 import java.util.List;
 

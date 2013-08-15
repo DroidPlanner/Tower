@@ -28,8 +28,8 @@
     <string name="menu_add_polygon">Polygon hinzufügen</string>
     <string name="menu_polygon">Polygon</string>
     <string name="menu_clear_polygon">Poly löschen</string>
-    <string name="menu_generate_polygon">Generieren</string>
-    <string name="menu_finish_polygon">Fertig</string>
+    <string name="generate">Generieren</string>
+    <string name="exit">Fertig</string>
     <string name="menu_clearFlightPath">Pfad löschen</string>
     <string name="exiting_polygon_mode">Verlasse Polygon Mode</string>
     <string name="entering_polygon_mode">Starte Polygon Mode</string>
