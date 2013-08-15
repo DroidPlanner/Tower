@@ -2,33 +2,33 @@ package com.droidplanner.file.IO;
 
 public class CameraInfo {
 
-	public Double imageWidth;
-	public Double imageHeight;
+	public Double sensorWidth;
+	public Double sensorHeight;
 	public Double focalLength;
 	public Double overlap;
 	public Double sidelap;
-	public Boolean isInLandscapeOrientation = true;
-	public double sensorResolution;
+	public boolean isInLandscapeOrientation = true;
+	public Double sensorResolution;
 
 	public Double getSensorLateralSize() {
 		if (isInLandscapeOrientation){
-			return  imageWidth;
+			return  sensorWidth;
 		}else{
-			return imageHeight;
+			return sensorHeight;
 		}
 	}
 	
 	public Double getSensorLongitudinalSize() {
 		if (isInLandscapeOrientation){
-			return  imageHeight;
+			return  sensorHeight;
 		}else{
-			return imageWidth;
+			return sensorWidth;
 		}
 	}
 	
 	@Override
 	public String toString() {
-		return "ImageWidth:" + imageWidth + " ImageHeight:" + imageHeight
+		return "ImageWidth:" + sensorWidth + " ImageHeight:" + sensorHeight
 				+ " FocalLength:" + focalLength + " Overlap:" + overlap
 				+ " Sidelap:" + sidelap + " isInLandscapeOrientation:"
 				+ isInLandscapeOrientation;

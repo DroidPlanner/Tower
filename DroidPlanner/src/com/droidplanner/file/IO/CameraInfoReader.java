@@ -65,10 +65,12 @@ public class CameraInfoReader implements FileReader {
 			}
 			String name = parser.getName();
 			// Starts by looking for the entry tag
-			if (name.equals("ImageWidth")) {
-				cameraInfo.imageWidth = readDouble("ImageWidth");
-			} else if (name.equals("ImageHeight")) {
-				cameraInfo.imageHeight = readDouble("ImageHeight");
+			if (name.equals("SensorWidth")) {
+				cameraInfo.sensorWidth = readDouble("SensorWidth");
+			} else if (name.equals("SensorHeight")) {
+				cameraInfo.sensorHeight = readDouble("SensorHeight");
+			} else if (name.equals("SensorResolution")) {
+				cameraInfo.sensorResolution = readDouble("SensorResolution");
 			} else if (name.equals("FocalLength")) {
 				cameraInfo.focalLength = readDouble("FocalLength");
 			} else if (name.equals("Overlap")) {
@@ -145,8 +147,8 @@ public class CameraInfoReader implements FileReader {
 
 	public CameraInfo getNewMockCameraInfo() {
 		cameraInfo = new CameraInfo();
-		cameraInfo.imageHeight = 4.22;
-		cameraInfo.imageWidth = 6.12;
+		cameraInfo.sensorHeight = 4.22;
+		cameraInfo.sensorWidth = 6.12;
 		cameraInfo.focalLength = 7.0;
 		cameraInfo.sensorResolution = 10.1;
 		cameraInfo.overlap = 50.0;

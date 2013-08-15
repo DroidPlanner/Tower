@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <cameraInfo>
-    <ImageWidth>4592</ImageWidth>
-    <ImageHeight>3056</ImageHeight>
+    <SensorWidth>23.4</SensorWidth>
+    <SensorHeight>15.6</SensorHeight>
+    <SensorResolution>14.2</SensorResolution>
     <FocalLength>16.0</FocalLength>
     <Overlap>50</Overlap>
     <Sidelap>60</Sidelap>    
