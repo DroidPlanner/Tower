@@ -48,10 +48,10 @@ public class SurveyData {
 	
 	private void update() {
 		
-		double imageHeight = cameraInfo.imageHeight = 4.22;
-		double imageWidth = cameraInfo.imageWidth = 6.12;
-		double focalLength = cameraInfo.focalLength = 7.0;
-		Double sensorResolution = cameraInfo.sensorResolution = 10.1;
+		double imageHeight = cameraInfo.imageHeight;
+		double imageWidth = cameraInfo.imageWidth;
+		double focalLength = cameraInfo.focalLength;
+		Double sensorResolution = cameraInfo.sensorResolution;
 		Double sensorLat = imageWidth;
 		Double sensorLong = imageHeight;
 
