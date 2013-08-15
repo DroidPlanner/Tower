@@ -13,8 +13,8 @@ public class SurveyData {
 	private Double sensorFpLat;
 	private Double sensorFpLong;
 	private Double sensorFpRes;
-	private Double separationLat;    //This (lateral) distance between grid lines
-	private Double separationLong;   // The (longitudinal) distance between pictures
+	private Double separationLat;    
+	private Double separationLong;   
 
 	public SurveyData(double defaultHatchAngle, double defaultAltitude) {
 		this.angle = 90.0;
@@ -54,10 +54,6 @@ public class SurveyData {
 		separationLat = sensorFpLat*(1-sidelap*.01);
 	}
 
-	public Double getDistanceBetweenPictures() {
-		update();
-		return this.separationLong;
-	}
 
 	public double getLateralFootPrint() {
 		update();
@@ -74,7 +70,12 @@ public class SurveyData {
 		return this.sensorFpRes;
 	}
 
-	public Double getLineDistance() {
+	public Double getLongitudinalPictureDistance() {
+		update();
+		return this.separationLong;
+	}
+	
+	public Double getLateralPictureDistance() {
 		update();
 		return this.separationLat;
 	}

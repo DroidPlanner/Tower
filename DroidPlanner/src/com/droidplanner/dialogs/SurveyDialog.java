@@ -113,11 +113,11 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		distanceTextView.setText(context
 				.getString(R.string.distance_between_pictures)
 				+ ": "
-				+ surveyData.getDistanceBetweenPictures().intValue() + " m");
+				+ surveyData.getLongitudinalPictureDistance().intValue() + " m");
 		distanceBetweenLinesTextView.setText(context
 				.getString(R.string.distance_between_lines)
 				+ ": "
-				+ surveyData.getLineDistance().intValue() + " m");
+				+ surveyData.getLateralPictureDistance().intValue() + " m");
 		areaTextView.setText(context.getString(R.string.area) + ": "
 				+ polygon.getArea().intValue() + " m\u00B2");
 	}
@@ -164,7 +164,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 	public void onClick(DialogInterface arg0, int which) {
 		if (which == Dialog.BUTTON_POSITIVE) {
 			GridBuilder grid = new GridBuilder(polygon, surveyData.getAngle(),
-					surveyData.getLineDistance(), originPoint,
+					surveyData.getLateralPictureDistance(), originPoint,
 					surveyData.getAltitude());
 			onPolygonGenerated(grid.hatchfill());
 		}
