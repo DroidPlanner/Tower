@@ -47,17 +47,11 @@ public class SurveyData {
 	}
 	
 	private void update() {
-		double focalLength = camera.focalLength;
-		Double sensorResolution = camera.sensorResolution;
-		Double sensorLat = camera.getSensorLateralSize();
-		Double sensorLong = camera.getSensorLongitudinalSize();
-
-		sensorFpLat = altitude*sensorLat/focalLength;
-		sensorFpLong = altitude*sensorLong/focalLength;
-		sensorFpRes = sensorFpLat*sensorFpLong/(sensorResolution*1000);
+		sensorFpLat = altitude*camera.getSensorLateralSize()/camera.focalLength;
+		sensorFpLong = altitude*camera.getSensorLongitudinalSize()/camera.focalLength;
+		sensorFpRes = sensorFpLat*sensorFpLong/(camera.sensorResolution*1000);
 		separationLong = sensorFpLong*(1-overlap*.01);
 		separationLat = sensorFpLat*(1-sidelap*.01);
-		
 	}
 
 	public Double getDistanceBetweenPictures() {
