@@ -6,7 +6,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -91,8 +90,6 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		surveyData.update(angleView.getValue(), altitudeView.getValue(),
 				overlapView.getValue(), sidelapView.getValue());
 		updateViews();
-		Log.d("SURVEY", surveyData.toString()); // TODO remove after debugging
-												// this class
 	}
 
 	private void updateSeekBarsValues() {
@@ -178,18 +175,12 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 			Toast.makeText(context,
 					context.getString(R.string.error_when_opening_file),
 					Toast.LENGTH_SHORT).show();
+			surveyData.setCameraInfo(reader.getNewMockCameraInfo());
+		}else{
+			surveyData.setCameraInfo(reader.getCameraInfo());		
 		}
-		//surveyData.setCameraInfo(reader.getCameraInfo());
-		surveyData.setCameraInfo(reader.getNewMockCameraInfo());
-		//TODO: just for debugging
 		updateSeekBarsValues();
 		updateViews();
-		Log.d("SURVEY", (String) filenameWithPath); // TODO remove after
-													// debugging this class
-		Log.d("SURVEY", reader.getCameraInfo().toString());// TODO remove after
-															// debugging this
-															// class
-
 	}
 
 }
