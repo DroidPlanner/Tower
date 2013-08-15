@@ -9,7 +9,7 @@ public class SurveyData {
 	private Double angle;
 	private Double overlap;
 	private Double sidelap;
-	private CameraInfo cameraInfo = new CameraInfo();
+	private CameraInfo camera = new CameraInfo();
 	private Double sensorFpLat;
 	private Double sensorFpLong;
 	private Double sensorFpRes;
@@ -24,16 +24,16 @@ public class SurveyData {
 	}
 
 	public void setCameraInfo(CameraInfo info) {
-		this.cameraInfo=info;
+		this.camera=info;
 		tryToLoadOverlapFromCamera();
 	}
 
 	private void tryToLoadOverlapFromCamera() {
-		if (cameraInfo.overlap!=null) {
-			this.overlap = cameraInfo.overlap;
+		if (camera.overlap!=null) {
+			this.overlap = camera.overlap;
 		}
-		if (cameraInfo.sidelap!=null) {
-			this.sidelap = cameraInfo.sidelap;
+		if (camera.sidelap!=null) {
+			this.sidelap = camera.sidelap;
 		}
 	}
 
@@ -47,16 +47,16 @@ public class SurveyData {
 	}
 	
 	private void update() {
-		double focalLength = cameraInfo.focalLength;
-		Double sensorResolution = cameraInfo.sensorResolution;
-		Double sensorLat = cameraInfo.getSensorLateralSize();
-		Double sensorLong = cameraInfo.getSensorLongitudinalSize();
+		double focalLength = camera.focalLength;
+		Double sensorResolution = camera.sensorResolution;
+		Double sensorLat = camera.getSensorLateralSize();
+		Double sensorLong = camera.getSensorLongitudinalSize();
 
-		this.sensorFpLat = this.altitude*sensorLat/focalLength;
-		this.sensorFpLong = this.altitude*sensorLong/focalLength;
-		this.sensorFpRes = this.sensorFpLat*this.sensorFpLong/(sensorResolution*1000);
-		this.separationLong = this.sensorFpLong*(1-this.overlap*.01);
-		this.separationLat = this.sensorFpLat*(1-sidelap*.01);
+		sensorFpLat = altitude*sensorLat/focalLength;
+		sensorFpLong = altitude*sensorLong/focalLength;
+		sensorFpRes = sensorFpLat*sensorFpLong/(sensorResolution*1000);
+		separationLong = sensorFpLong*(1-overlap*.01);
+		separationLat = sensorFpLat*(1-sidelap*.01);
 		
 	}
 
