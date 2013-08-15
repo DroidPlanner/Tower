@@ -119,7 +119,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 				+ ": "
 				+ surveyData.getLineDistance().intValue() + " m");
 		areaTextView.setText(context.getString(R.string.area) + ": "
-				+ surveyData.getArea().intValue() + " m\u00B2");
+				+ polygon.getArea().intValue() + " m\u00B2");
 	}
 
 	private boolean checkIfPolygonIsValid(Polygon polygon) {

@@ -50,4 +50,8 @@ public class Polygon {
 
 	}
 
+	public Double getArea() {
+			return 0.0; // TODO return the polygon area
+	}
+
 }

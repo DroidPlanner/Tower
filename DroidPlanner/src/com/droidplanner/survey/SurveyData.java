@@ -10,7 +10,6 @@ public class SurveyData {
 	private Double overlap;
 	private Double sidelap;
 	private CameraInfo cameraInfo = new CameraInfo();
-	private Double area;
 	private Double sensorFpLat;
 	private Double sensorFpLong;
 	private Double sensorFpRes;
@@ -66,7 +65,6 @@ public class SurveyData {
 		this.sensorFpLat = this.altitude*sensorLat/focalLength;
 		this.sensorFpLong = this.altitude*sensorLong/focalLength;
 		this.sensorFpRes = this.sensorFpLat*this.sensorFpLong/(sensorResolution*1000);
-		this.area = this.sensorFpLat*this.sensorFpLong;
 		this.separationLong = this.sensorFpLong*(1-this.overlap*.01);
 		this.separationLat = this.sensorFpLat*(1-sidelap*.01);
 		
@@ -76,11 +74,6 @@ public class SurveyData {
 //		update(this.angle,this.altitude,this.overlap,this.sidelap);
 //		return this.separationLat;
 //	}
-
-	public Double getArea() {
-		update(this.angle,this.altitude,this.overlap,this.sidelap);
-		return this.area;
-	}
 
 	public Double getDistanceBetweenPictures() {
 		update(this.angle,this.altitude,this.overlap,this.sidelap);
