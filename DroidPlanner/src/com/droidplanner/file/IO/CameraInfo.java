@@ -7,9 +7,25 @@ public class CameraInfo {
 	public Double focalLength;
 	public Double overlap;
 	public Double sidelap;
-	public Object isInLandscapeOrientation = true;
+	public Boolean isInLandscapeOrientation = true;
 	public double sensorResolution;
 
+	public Double getSensorLateralSize() {
+		if (isInLandscapeOrientation){
+			return  imageWidth;
+		}else{
+			return imageHeight;
+		}
+	}
+	
+	public Double getSensorLongitudinalSize() {
+		if (isInLandscapeOrientation){
+			return  imageHeight;
+		}else{
+			return imageWidth;
+		}
+	}
+	
 	@Override
 	public String toString() {
 		return "ImageWidth:" + imageWidth + " ImageHeight:" + imageHeight
@@ -18,4 +34,5 @@ public class CameraInfo {
 				+ isInLandscapeOrientation;
 
 	}
+
 }

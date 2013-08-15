@@ -47,24 +47,10 @@ public class SurveyData {
 	}
 	
 	private void update() {
-		
-		double imageHeight = cameraInfo.imageHeight;
-		double imageWidth = cameraInfo.imageWidth;
 		double focalLength = cameraInfo.focalLength;
 		Double sensorResolution = cameraInfo.sensorResolution;
-		Double sensorLat = imageWidth;
-		Double sensorLong = imageHeight;
-
-		if ((Boolean) cameraInfo.isInLandscapeOrientation)
-		{
-			sensorLat = imageWidth;
-			sensorLong = imageHeight;
-		}
-		else
-		{
-			sensorLat = imageHeight;
-			sensorLong = imageWidth;
-		}
+		Double sensorLat = cameraInfo.getSensorLateralSize();
+		Double sensorLong = cameraInfo.getSensorLongitudinalSize();
 
 		this.sensorFpLat = this.altitude*sensorLat/focalLength;
 		this.sensorFpLong = this.altitude*sensorLong/focalLength;
