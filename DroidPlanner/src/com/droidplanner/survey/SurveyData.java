@@ -43,6 +43,10 @@ public class SurveyData {
 		this.altitude = altitude;
 		this.overlap = overlap;
 		this.sidelap = sidelap;
+		update();
+	}
+	
+	private void update() {
 		
 		double imageHeight = cameraInfo.imageHeight = 4.22;
 		double imageWidth = cameraInfo.imageWidth = 6.12;
@@ -70,33 +74,28 @@ public class SurveyData {
 		
 	}
 
-//	public double getMissionLength() {
-//		update(this.angle,this.altitude,this.overlap,this.sidelap);
-//		return this.separationLat;
-//	}
-
 	public Double getDistanceBetweenPictures() {
-		update(this.angle,this.altitude,this.overlap,this.sidelap);
+		update();
 		return this.separationLong;
 	}
 
 	public double getLateralFootPrint() {
-		update(this.angle,this.altitude,this.overlap,this.sidelap);
+		update();
 		return this.sensorFpLat;
 	}
 
 	public double getLongitudinalFootPrint() {
-		update(this.angle,this.altitude,this.overlap,this.sidelap);
+		update();
 		return this.sensorFpLong;
 	}
 
 	public double getGroundResolution() {
-		update(this.angle,this.altitude,this.overlap,this.sidelap);
+		update();
 		return this.sensorFpRes;
 	}
 
 	public Double getLineDistance() {
-		update(this.angle,this.altitude,this.overlap,this.sidelap);
+		update();
 		return this.separationLat;
 	}
 
