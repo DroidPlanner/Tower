@@ -11,7 +11,7 @@ public class PolygonMarker {
 		return new MarkerOptions()
 				.position(wp.coord)
 				.draggable(true)
-				.title("Poly" + Integer.toString(0))
+				.title("Poly")
 				// TODO fix constant
 				.icon(BitmapDescriptorFactory
 						.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
@@ -19,7 +19,7 @@ public class PolygonMarker {
 
 	public static void update(Marker marker, PolygonPoint wp) {
 		marker.setPosition(wp.coord);
-		marker.setTitle("Poly" + Integer.toString(0));// TODO fix constant
+		marker.setTitle("Poly");// TODO fix constant
 		marker.setIcon(BitmapDescriptorFactory
 				.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
 	}
