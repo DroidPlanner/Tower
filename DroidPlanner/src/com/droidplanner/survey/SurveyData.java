@@ -18,7 +18,6 @@ public class SurveyData {
 		this.sidelap = 60.0;
 	}
 
-
 	public void update(double angle, double altitude, double overlap,
 			double sidelap) {
 		this.angle = angle;
@@ -28,36 +27,41 @@ public class SurveyData {
 	}
 
 	public double getLateralFootPrint() {
-		return altitude*camera.getSensorLateralSize()/camera.focalLength;
-		
+		return altitude * camera.getSensorLateralSize() / camera.focalLength;
+
 	}
 
 	public double getLongitudinalFootPrint() {
-		return altitude*camera.getSensorLongitudinalSize()/camera.focalLength;
+		return altitude * camera.getSensorLongitudinalSize()
+				/ camera.focalLength;
 	}
-	
+
 	public double getGroundResolution() {
-		return altitude*camera.getSensorLateralSize()/camera.focalLength*(altitude*camera.getSensorLongitudinalSize()/camera.focalLength)/(camera.sensorResolution*1000);
+		return altitude
+				* camera.getSensorLateralSize()
+				/ camera.focalLength
+				* (altitude * camera.getSensorLongitudinalSize() / camera.focalLength)
+				/ (camera.sensorResolution * 1000);
 	}
 
 	public Double getLongitudinalPictureDistance() {
-		return getLongitudinalFootPrint()*(1-overlap*.01);
+		return getLongitudinalFootPrint() * (1 - overlap * .01);
 	}
-	
+
 	public Double getLateralPictureDistance() {
-		return getLateralFootPrint()*(1-sidelap*.01);
+		return getLateralFootPrint() * (1 - sidelap * .01);
 	}
 
 	public void setCameraInfo(CameraInfo info) {
-		this.camera=info;
+		this.camera = info;
 		tryToLoadOverlapFromCamera();
 	}
-	
+
 	private void tryToLoadOverlapFromCamera() {
-		if (camera.overlap!=null) {
+		if (camera.overlap != null) {
 			this.overlap = camera.overlap;
 		}
-		if (camera.sidelap!=null) {
+		if (camera.sidelap != null) {
 			this.sidelap = camera.sidelap;
 		}
 	}
@@ -80,8 +84,9 @@ public class SurveyData {
 
 	@Override
 	public String toString() {
-		return String.format(Locale.US,"Altitude: %f Angle %f Overlap: %f Sidelap: %f", altitude,angle,overlap,sidelap);
-	}	
-	
+		return String.format(Locale.US,
+				"Altitude: %f Angle %f Overlap: %f Sidelap: %f", altitude,
+				angle, overlap, sidelap);
+	}
 
 }
