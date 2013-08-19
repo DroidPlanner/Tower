@@ -44,7 +44,7 @@ public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 		}
 
 		// clear screen
-		canvas.drawColor(Color.rgb(20, 20, 20));
+//		canvas.drawColor(Color.rgb(20, 20, 20));
 		canvas.translate(width / 2, hudInfo.attHeightPx / 2
 				+ hudYaw.yawHeightPx); // set
 		// center of HUD excluding YAW area
