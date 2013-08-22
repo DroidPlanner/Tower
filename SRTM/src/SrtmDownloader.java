@@ -28,6 +28,7 @@ public class SrtmDownloader {
 		String region = SrtmRegions.findRegion(fname, path);
 		output = new File(path +"/" + fname + ".zip");
 		result = downloadZipFile(fname, output, region);
+		UnZip.unZipIt(fname,output);
 		return result;
 	}
 
