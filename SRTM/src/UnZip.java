@@ -14,7 +14,7 @@ public class UnZip {
 		ZipEntry ze = zip.getEntry(fname);
 		InputStream zis = zip.getInputStream(ze);
 
-		File newFile = new File(output.getPath() + "/" + fname);
+		File newFile = new File(output.getParent() + "/" + fname);
 
 		System.out.println("file unzip : " + newFile.getAbsoluteFile());
 
