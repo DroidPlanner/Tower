@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  * @author fm
  */
 public class SRTM {
-	private static final String url = "http://dds.cr.usgs.gov/srtm/version2_1/SRTM3/";
+	static final String url = "http://dds.cr.usgs.gov/srtm/version2_1/SRTM3/";
 	static final String[] REGIONS = { "Eurasia", "Africa", "Australia",
 			"Islands", "North_America", "South_America" };
 
@@ -138,29 +138,5 @@ public class SRTM {
 		}
 		fname = fname + dirlon + st + ".hgt";
 		return fname;
-	}
-
-	boolean download(String fname) {
-		File output;
-		String region = findRegion(fname, srtmData.path);
-		if (region == null) {
-			return false;
-		}
-		if (srtmData.path.equals("")) {
-			output = new File(region + "/" + fname + ".zip");
-		} else {
-			output = new File(srtmData.path + "/" + region + "/" + fname + ".zip");
-		}
-		boolean result = SrtmDownloader.downloadFile(url + region + "/" + fname + ".zip",
-				output);
-		// fix SRTM 2.1 naming problem in North America
-		if ((!result) && fname.startsWith("N5")
-				&& region.equalsIgnoreCase("North_America")) {
-			if (SrtmDownloader.downloadFile(url + region + "/" + fname.replace(".hgt", "hgt")
-					+ ".zip", output)) {
-				return true;
-			}
-		}
-		return result;
 	}
 }

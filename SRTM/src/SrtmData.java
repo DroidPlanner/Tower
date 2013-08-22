@@ -1,10 +1,12 @@
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
 public class SrtmData {
@@ -12,9 +14,8 @@ public class SrtmData {
 	public int[][] data = new int[1201][1201];
 	File srtmFile;
 	File srtmZipFile;
-
-	public SrtmData() {
-	}
+	ZipFile zf;
+	InputStream s;
 
 	public boolean load(SRTM srtm, int lon, int lat) {
 		// loads SRTM data for the lon,lat
@@ -27,9 +28,33 @@ public class SrtmData {
 
 		setupFilePaths(fname, region);
 
-		ZipFile zf;
-		InputStream s;
+		if (loadSrtmFile(srtm, fname) == false) {
+			return false;			
+		}
+		
+		try {
+			openSrtmFile(fname);
+			readHtgFile(s);
+			s.close();
+		} catch (Exception ex) {
+			Logger.getLogger(SRTM.class.getName()).log(Level.SEVERE, "", ex);
+			return false;
+		}
+		return true;
+	}
 
+	private void openSrtmFile(String fname) throws FileNotFoundException,
+			ZipException, IOException {
+		if (srtmFile.exists()) {
+			s = new FileInputStream(srtmFile);
+		} else {// try zip file
+			zf = new ZipFile(srtmZipFile);
+			ZipEntry entry = zf.getEntry(fname);
+			s = zf.getInputStream(entry);
+		}
+	}
+
+	private boolean loadSrtmFile(SRTM srtm, String fname) {
 		if (srtmZipFile.exists()) {
 			try {
 				// try zip file
@@ -42,21 +67,7 @@ public class SrtmData {
 				srtmZipFile.delete();
 			}
 		}
-		if (!(srtmFile.exists() || srtmZipFile.exists() || srtm.download(fname))) {
-			return false;
-		}
-		try {
-			if (srtmFile.exists()) {
-				s = new FileInputStream(srtmFile);
-			} else {// try zip file
-				zf = new ZipFile(srtmZipFile);
-				ZipEntry entry = zf.getEntry(fname);
-				s = zf.getInputStream(entry);
-			}
-			readHtgFile(s);
-			s.close();
-		} catch (Exception ex) {
-			Logger.getLogger(SRTM.class.getName()).log(Level.SEVERE, "", ex);
+		if (!(srtmFile.exists() || srtmZipFile.exists() || SrtmDownloader.download(fname, path))) {
 			return false;
 		}
 		return true;
