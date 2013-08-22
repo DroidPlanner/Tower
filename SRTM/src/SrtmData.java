@@ -27,14 +27,11 @@ public class SrtmData {
 		return altitude;
 	}
 
-	private void loadSrtmFile(SRTM srtm, String fname) throws Exception {
+	private void loadSrtmFile(SRTM srtm, String fname) throws Exception  {
 		if (srtmFile.exists()) {
 			return;
 		}
-		if (SrtmDownloader.downloadSrtmFile(fname, path)) {
-			return;
-		}
-		throw new Exception("Failed to load SRTM file");
+		SrtmDownloader.downloadSrtmFile(fname, path);
 	}
 
 	private void setupFilePaths(String fname, String region) {
