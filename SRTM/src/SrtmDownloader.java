@@ -19,7 +19,7 @@ public class SrtmDownloader {
 
 	static void downloadSrtmFile(String fname, String path) throws Exception {
 		File output;
-		String region = new SrtmRegions().findRegion(fname, path);
+		String region = new SrtmRegions(path).findRegion(fname);
 		output = new File(path + "/" + fname + ".zip");
 		downloadSrtmFile(fname, output, region);
 		UnZip.unZipIt(fname, output);

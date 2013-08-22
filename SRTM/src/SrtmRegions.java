@@ -7,15 +7,19 @@ import java.util.Scanner;
 public class SrtmRegions {
 	static final String[] REGIONS = { "Eurasia", "Africa", "Australia",
 			"Islands", "North_America", "South_America" };
-
 	private Map<String, Integer> regionMap = new HashMap<String, Integer>();
+	private String path;
+
+	public SrtmRegions(String path) {
+		this.path = path;
+	}
 
 	/*
 	 * Returns region name for a file
 	 */
-	public String findRegion(String fname, String srtmPath) throws Exception {
+	public String findRegion(String fname) throws Exception {
 		if (regionMap.isEmpty()) {
-			fillRegionData(srtmPath);
+			fillRegionData();
 			System.out.println("SRTM map filled in with " + regionMap.size()
 					+ " entries.");
 		}
@@ -26,14 +30,14 @@ public class SrtmRegions {
 		throw new Exception("Null Region");
 	}
 
-	private void fillRegionData(String srtmPath) throws Exception {
+	private void fillRegionData() throws Exception {
 		System.err.println("Downloading SRTM map data.");
 		String region;
 		for (int i = 0; i < SrtmRegions.REGIONS.length; i++) {
 			region = SrtmRegions.REGIONS[i];
 			String indexPath = region;
-			if (!srtmPath.equals("")) {
-				indexPath = srtmPath + "/" + indexPath;
+			if (!path.equals("")) {
+				indexPath = path + "/" + indexPath;
 			}
 			File indexDir = new File(indexPath);
 			if (!indexDir.exists()) {
@@ -43,7 +47,7 @@ public class SrtmRegions {
 			File indexFile = new File(indexPath);
 			if (!indexFile.exists()) {
 				try {
-					SrtmDownloader.downloadRegionIndex(i, srtmPath,
+					SrtmDownloader.downloadRegionIndex(i, path,
 							SrtmDownloader.url);
 				} catch (IOException e) {
 					// download error, try again with the next attempt
