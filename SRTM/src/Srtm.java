@@ -1,13 +1,9 @@
 public class Srtm {
+	private static final int SRTM_NaN = -32768;
 	public SrtmData srtmData = new SrtmData();
 	
 	Srtm(String dir) {
 		this.srtmData.path = dir;
-	}
-
-	public static int get(double lon, double lat, String dir) throws Exception {
-		Srtm srtm = new Srtm(dir);
-		return srtm.srtmData.load(srtm, lon, lat);
 	}
 
 	/*
@@ -18,7 +14,12 @@ public class Srtm {
 			return get(lon, lat, dir);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return -32768; // SRTM NaN
+			return SRTM_NaN; // SRTM NaN
 		}
+	}
+	
+	private static int get(double lon, double lat, String dir) throws Exception {
+		Srtm srtm = new Srtm(dir);
+		return srtm.srtmData.load(srtm, lon, lat);
 	}
 }
