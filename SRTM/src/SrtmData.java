@@ -22,7 +22,7 @@ public class SrtmData {
 	public boolean load(SRTM srtm, int lon, int lat) {
 		// loads SRTM data for the lon,lat
 		String fname = SRTM.getName(lon, lat);
-		String region = SRTM.findRegion(fname, path);
+		String region = SrtmRegions.findRegion(fname, path);
 
 		if (region == null) {
 			return false;
