@@ -5,44 +5,42 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
 public class SrtmData {
 	public String path;
-	public int[][] data = new int[1201][1201];
 	File srtmFile;
 	File srtmZipFile;
 	ZipFile zf;
 	BufferedInputStream s;
 
-	public boolean load(SRTM srtm, int lon, int lat) {
+	public int load(SRTM srtm, double lon, double lat) throws Exception {
+		int altitude;
+		
 		// loads SRTM data for the lon,lat
 		String fname = SRTM.getName(lon, lat);
 		String region = SrtmRegions.findRegion(fname, path);
 
 		if (region == null) {
-			return false;
+			throw new Exception("Null Region");
 		}
 
 		setupFilePaths(fname, region);
 
 		if (loadSrtmFile(srtm, fname) == false) {
-			return false;			
+			throw new Exception("Failed to load SRTM file");
 		}
 		
 		try {
 			openSrtmFile(fname);
-			readHtgFile(s);
+			altitude = readHtgFile(s,lon,lat);
 			s.close();
 		} catch (Exception ex) {
-			Logger.getLogger(SRTM.class.getName()).log(Level.SEVERE, "", ex);
-			return false;
+			throw new Exception("Failed when reading SRTM file");
 		}
-		return true;
+		return altitude;
 	}
 
 	private void openSrtmFile(String fname) throws FileNotFoundException,
@@ -85,21 +83,21 @@ public class SrtmData {
 		}
 	}
 
-	private void readHtgFile(BufferedInputStream s) throws IOException {
-		byte[] buffer = new byte[1201 * 1201 * 2];
-		s.read(buffer);
+	private int readHtgFile(BufferedInputStream s, double lon, double lat) throws Exception {
+		
+		byte[] buffer = new byte[2];
 
-		ByteBuffer intBuffer = ByteBuffer.wrap(buffer).order(
-				ByteOrder.BIG_ENDIAN);
-
-		int i = 0;
-		while (i <= 1200) {
-			int j = 0;
-			while (j <= 1200) {
-				data[1200 - i][j] = intBuffer.getShort();
-				j++;
-			}
-			i++;
+		int ai = (int) Math.round(1200d * (lat - Math.floor(lat)));
+		int aj = (int) Math.round(1200d * (lon - Math.floor(lon)));
+		int index = (aj+(1200-ai)*1201)*2;
+		
+		if(s.skip(index)!=index){
+			throw new Exception("error when skipping");
 		}
+		s.read(buffer);
+		
+
+		return ByteBuffer.wrap(buffer).order(
+				ByteOrder.BIG_ENDIAN).getShort();
 	}
 }
