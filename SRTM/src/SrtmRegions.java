@@ -47,8 +47,7 @@ public class SrtmRegions {
 			File indexFile = new File(indexPath);
 			if (!indexFile.exists()) {
 				try {
-					SrtmDownloader.downloadRegionIndex(i, path,
-							SrtmDownloader.url);
+					SrtmDownloader.downloadRegionIndex(i, path);
 				} catch (IOException e) {
 					// download error, try again with the next attempt
 					regionMap.clear();
