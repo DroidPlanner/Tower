@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -47,7 +48,9 @@ public class SrtmRegions {
 			indexPath += ".index.html";
 			File indexFile = new File(indexPath);
 			if (!indexFile.exists()) {
-				if (!SrtmDownloader.downloadRegionIndex(i, srtmPath, SRTM.url)) {
+				try{
+					SrtmDownloader.downloadRegionIndex(i, srtmPath, SRTM.url);
+				}catch (IOException e){
 					// download error, try again with the next attempt
 					SrtmRegions.regionMap.clear();
 					return false;
