@@ -56,60 +56,68 @@ public class SRTM {
 	 */
 	static String findRegion(String fname, String srtmPath) {
 		if (regionMap.isEmpty()) {
-			System.err.println("Downloading SRTM map data.");
-			String region;
-			for (int i = 0; i < REGIONS.length; i++) {
-				region = REGIONS[i];
-				String indexPath = region;
-				if (!srtmPath.equals("")) {
-					indexPath = srtmPath + "/" + indexPath;
-				}
-				File indexDir = new File(indexPath);
-				if (!indexDir.exists()) {
-					indexDir.mkdirs();
-				}
-				indexPath += ".index.html";
-				File indexFile = new File(indexPath);
-				if (!indexFile.exists()) {
-					if (!SrtmDownloader.downloadRegionIndex(i, srtmPath, url)) {
-						// download error, try again with the next attempt
-						regionMap.clear();
-						return null;
-					}
-				}
-				try {
-					Scanner scanner = new Scanner(indexFile);
-					while (scanner.hasNext()) {
-						String line = scanner.next();
-						if (line.contains("href=\"")) {
-							int index = line.indexOf(".hgt.zip") - 7;
-							if (index >= 0) {
-								String srtm = line.substring(index, index + 7);
-								regionMap.put(srtm, i);
-							} else {
-								index = line.indexOf("hgt.zip") - 7;
-								if (index >= 0) {
-									String srtm = line.substring(index,
-											index + 7);
-									regionMap.put(srtm, i);
-								}
-							}
-						}
-					}
-					scanner.close();
-				} catch (FileNotFoundException ex) {
-					Logger.getLogger(SRTM.class.getName()).log(Level.SEVERE,
-							null, ex);
-				}
+			if (!fillRegionData(srtmPath)) {
+				return null;
 			}
 			System.out.println("SRTM map filled in with " + regionMap.size()
 					+ " entries.");
+
 		}
 		String name = fname.replace(".hgt", "");
 		if (regionMap.containsKey(name)) {
 			return REGIONS[regionMap.get(name)];
 		}
 		return null;
+	}
+
+	private static boolean fillRegionData(String srtmPath) {
+		System.err.println("Downloading SRTM map data.");
+		String region;
+		for (int i = 0; i < REGIONS.length; i++) {
+			region = REGIONS[i];
+			String indexPath = region;
+			if (!srtmPath.equals("")) {
+				indexPath = srtmPath + "/" + indexPath;
+			}
+			File indexDir = new File(indexPath);
+			if (!indexDir.exists()) {
+				indexDir.mkdirs();
+			}
+			indexPath += ".index.html";
+			File indexFile = new File(indexPath);
+			if (!indexFile.exists()) {
+				if (!SrtmDownloader.downloadRegionIndex(i, srtmPath, url)) {
+					// download error, try again with the next attempt
+					regionMap.clear();
+					return false;
+				}
+			}
+			try {
+				Scanner scanner = new Scanner(indexFile);
+				while (scanner.hasNext()) {
+					String line = scanner.next();
+					if (line.contains("href=\"")) {
+						int index = line.indexOf(".hgt.zip") - 7;
+						if (index >= 0) {
+							String srtm = line.substring(index, index + 7);
+							regionMap.put(srtm, i);
+						} else {
+							index = line.indexOf("hgt.zip") - 7;
+							if (index >= 0) {
+								String srtm = line.substring(index,
+										index + 7);
+								regionMap.put(srtm, i);
+							}
+						}
+					}
+				}
+				scanner.close();
+			} catch (FileNotFoundException ex) {
+				Logger.getLogger(SRTM.class.getName()).log(Level.SEVERE,
+						null, ex);
+			}
+		}
+		return true;
 	}
 
 	static String getName(int lon, int lat) {
