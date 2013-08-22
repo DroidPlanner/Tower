@@ -1,3 +1,4 @@
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -15,7 +16,7 @@ public class SrtmData {
 	File srtmFile;
 	File srtmZipFile;
 	ZipFile zf;
-	InputStream s;
+	BufferedInputStream s;
 
 	public boolean load(SRTM srtm, int lon, int lat) {
 		// loads SRTM data for the lon,lat
@@ -46,11 +47,11 @@ public class SrtmData {
 	private void openSrtmFile(String fname) throws FileNotFoundException,
 			ZipException, IOException {
 		if (srtmFile.exists()) {
-			s = new FileInputStream(srtmFile);
+			s = new BufferedInputStream(new FileInputStream(srtmFile));
 		} else {// try zip file
 			zf = new ZipFile(srtmZipFile);
 			ZipEntry entry = zf.getEntry(fname);
-			s = zf.getInputStream(entry);
+			s = new BufferedInputStream(zf.getInputStream(entry));
 		}
 	}
 
@@ -60,7 +61,7 @@ public class SrtmData {
 				// try zip file
 				zf = new ZipFile(srtmZipFile);
 				ZipEntry entry = zf.getEntry(fname);
-				s = zf.getInputStream(entry);
+				s =  new BufferedInputStream(zf.getInputStream(entry));
 				zf.close();
 			} catch (IOException ex) {
 				// broken download, try again
