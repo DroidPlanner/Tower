@@ -19,7 +19,7 @@ public class SrtmDownloader {
 
 	static void downloadSrtmFile(String fname, String path) throws Exception {
 		File output;
-		String region = SrtmRegions.findRegion(fname, path);
+		String region = new SrtmRegions().findRegion(fname, path);
 		output = new File(path + "/" + fname + ".zip");
 		downloadSrtmFile(fname, output, region);
 		UnZip.unZipIt(fname, output);
@@ -29,7 +29,7 @@ public class SrtmDownloader {
 	private static void downloadSrtmFile(String fname, File output,
 			String region) throws IOException {
 		try {
-			downloadFile(Srtm.url + region + "/" + fname + ".zip", output);
+			downloadFile(SrtmDownloader.url + region + "/" + fname + ".zip", output);
 		} catch (IOException e) {
 			downloadAlternativeSrtmFile(fname, output, region, e);
 		}
@@ -41,7 +41,7 @@ public class SrtmDownloader {
 		if (fname.startsWith("N5")
 				&& region.equalsIgnoreCase("North_America")) {
 			downloadFile(
-					Srtm.url + region + "/" + fname.replace(".hgt", "hgt")
+					SrtmDownloader.url + region + "/" + fname.replace(".hgt", "hgt")
 							+ ".zip", output);
 		} else {
 			throw e;
@@ -74,5 +74,7 @@ public class SrtmDownloader {
 		outputs.close();
 
 	}
+
+	static final String url = "http://dds.cr.usgs.gov/srtm/version2_1/SRTM3/";
 
 }
