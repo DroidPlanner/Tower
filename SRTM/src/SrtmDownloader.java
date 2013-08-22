@@ -61,4 +61,28 @@ public class SrtmDownloader {
 		return downloadFile(url + SRTM.REGIONS[region] + "/", regionIndexFile);
 	}
 
+	static boolean download(String fname, String path) {
+		File output;
+		String region = SRTM.findRegion(fname, path);
+		if (region == null) {
+			return false;
+		}
+		if (path.equals("")) {
+			output = new File(region + "/" + fname + ".zip");
+		} else {
+			output = new File(path + "/" + region + "/" + fname + ".zip");
+		}
+		boolean result = downloadFile(SRTM.url + region + "/" + fname + ".zip",
+				output);
+		// fix SRTM 2.1 naming problem in North America
+		if ((!result) && fname.startsWith("N5")
+				&& region.equalsIgnoreCase("North_America")) {
+			if (downloadFile(SRTM.url + region + "/" + fname.replace(".hgt", "hgt")
+					+ ".zip", output)) {
+				return true;
+			}
+		}
+		return result;
+	}
+
 }
