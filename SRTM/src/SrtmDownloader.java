@@ -52,17 +52,17 @@ public class SrtmDownloader {
 
 	static boolean downloadRegionIndex(int region, String srtmPath,
 			String url) {
-		String regionIndex = SRTM.REGIONS[region] + ".index.html";
+		String regionIndex = SrtmRegions.REGIONS[region] + ".index.html";
 		if (!srtmPath.equals("")) {
 			regionIndex = srtmPath + "/" + regionIndex;
 		}
 		File regionIndexFile = new File(regionIndex);
-		return downloadFile(url + SRTM.REGIONS[region] + "/", regionIndexFile);
+		return downloadFile(url + SrtmRegions.REGIONS[region] + "/", regionIndexFile);
 	}
 
 	static boolean download(String fname, String path) {
 		File output;
-		String region = SRTM.findRegion(fname, path);
+		String region = SrtmRegions.findRegion(fname, path);
 		if (region == null) {
 			return false;
 		}
