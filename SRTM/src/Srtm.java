@@ -11,17 +11,17 @@
  * 
  * @author fm
  */
-public class SRTM {
+public class Srtm {
 	static final String url = "http://dds.cr.usgs.gov/srtm/version2_1/SRTM3/";
 	public SrtmData srtmData = new SrtmData();
 	public SrtmRegions regions = new SrtmRegions();
 	
-	SRTM(String dir) {
+	Srtm(String dir) {
 		this.srtmData.path = dir;
 	}
 
 	public static int get(double lon, double lat, String dir) throws Exception {
-		SRTM srtm = new SRTM(dir);
+		Srtm srtm = new Srtm(dir);
 		return srtm.srtmData.load(srtm, lon, lat);
 	}
 
