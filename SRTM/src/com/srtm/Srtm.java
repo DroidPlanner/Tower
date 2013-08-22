@@ -1,3 +1,4 @@
+package com.srtm;
 public class Srtm {
 	private static final int SRTM_NaN = -32768;
 	public SrtmData srtmData = new SrtmData();
