@@ -15,10 +15,10 @@ public class SrtmRegions {
 	/*
 	 * Returns region name for a file
 	 */
-	static String findRegion(String fname, String srtmPath) {
+	static String findRegion(String fname, String srtmPath) throws Exception {
 		if (SrtmRegions.regionMap.isEmpty()) {
 			if (!SrtmRegions.fillRegionData(srtmPath)) {
-				return null;
+				throw new Exception("Null Region");
 			}
 			System.out.println("SRTM map filled in with " + SrtmRegions.regionMap.size()
 					+ " entries.");
@@ -28,7 +28,7 @@ public class SrtmRegions {
 		if (SrtmRegions.regionMap.containsKey(name)) {
 			return SrtmRegions.REGIONS[SrtmRegions.regionMap.get(name)];
 		}
-		return null;
+		throw new Exception("Null Region");
 	}
 
 	static boolean fillRegionData(String srtmPath) {
