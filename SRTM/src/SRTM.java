@@ -23,7 +23,7 @@ public class SRTM {
 	static final String[] REGIONS = { "Eurasia", "Africa", "Australia",
 			"Islands", "North_America", "South_America" };
 
-	public SrtmData srtmData = new SrtmData(new int[1201][1201]);
+	public SrtmData srtmData = new SrtmData();
 	private static final Map<String, Integer> regionMap = new HashMap<String, Integer>();
 
 	SRTM(String dir) {
