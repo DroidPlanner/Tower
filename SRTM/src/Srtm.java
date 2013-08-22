@@ -1,6 +1,5 @@
 public class Srtm {
 	public SrtmData srtmData = new SrtmData();
-	public SrtmRegions regions = new SrtmRegions();
 	
 	Srtm(String dir) {
 		this.srtmData.path = dir;
