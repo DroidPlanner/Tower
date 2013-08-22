@@ -16,13 +16,9 @@ public class SrtmDownloader {
 		URL url1;
 		InputStream inputs;
 		BufferedOutputStream outputs;
+		System.out.println("file:"+output.getName());
 		try {
 			url1 = new URL(urlAddress);
-		} catch (MalformedURLException ex) {
-			Logger.getLogger(SRTM.class.getName()).log(Level.SEVERE, "", ex);
-			return false;
-		}
-		try {
 			inputs = url1.openStream();
 			outputs = new BufferedOutputStream(new FileOutputStream(output));
 			int i = 0;
@@ -41,6 +37,9 @@ public class SrtmDownloader {
 			inputs.close();
 			outputs.close();
 	
+		} catch (MalformedURLException ex) {
+			Logger.getLogger(SRTM.class.getName()).log(Level.SEVERE, "", ex);
+			return false;
 		} catch (FileNotFoundException ex) {
 			return false;
 		} catch (IOException ex) {
