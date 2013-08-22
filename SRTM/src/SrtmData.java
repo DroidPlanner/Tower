@@ -3,7 +3,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.IntBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
@@ -84,12 +86,19 @@ public class SrtmData {
 		}
 	}
 
-	private void readHtgFile(InputStream s) throws IOException {
+	private void readHtgFile(BufferedInputStream s) throws IOException {
+		
+		
+		byte[] buffer = new byte[1201*1201*2];
+		s.read(buffer);
+		
+		ByteBuffer intBuffer = ByteBuffer.wrap(buffer).order(ByteOrder.BIG_ENDIAN);
+		
 		int i = 0;
 		while (i <= 1200) {
 			int j = 0;
 			while (j <= 1200) {
-				data[1200 - i][j] = 256 * s.read() + s.read();
+				data[1200 - i][j] = intBuffer.getShort();
 				j++;
 			}
 			i++;
