@@ -27,12 +27,13 @@ public class SrtmDownloader {
 		File output;
 		String region = SrtmRegions.findRegion(fname, path);
 		output = new File(path +"/" + fname + ".zip");
-		result = downloadZipFile(fname, output, region);
+		result = downloadZipedSrtmFile(fname, output, region);
 		UnZip.unZipIt(fname,output);
+		output.delete();
 		return result;
 	}
 
-	private static boolean downloadZipFile(String fname, File output,
+	private static boolean downloadZipedSrtmFile(String fname, File output,
 			String region) {
 		boolean result;
 		result = downloadFile(SRTM.url + region + "/" + fname + ".zip", output);
