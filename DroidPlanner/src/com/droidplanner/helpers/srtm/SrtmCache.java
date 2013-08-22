@@ -11,14 +11,15 @@ public class SrtmCache extends AsyncTask<Integer, Integer, Integer>{
 	protected Integer doInBackground(Integer... params) {
 		String path = DirectoryPath.getDroidPlannerPath()+"/SRTM/";
 		
-		for (int i = 0; i < 10; i++) {
+		int alt=0,sea=0,high=0;
+		Log.d("SRTM","fetching data");
+		for (int i = 0; i < 1000; i++) {
 			
-		int alt = SRTM.getData(-51.1439127,-29.7026708,path); //Near my house
-		int sea = SRTM.getData(-50.0360209,-29.8055343,path); //Sea level	
-		int high = SRTM.getData(-50.0360209,-20.8055343,path); //High place
-		
-		Log.d("SRTM","Altitude:"+alt+" Sea:"+sea+ " High:"+high);
+		alt = SRTM.getData(-51.1439127,-29.7026708,path); //Near my house
+		sea = SRTM.getData(-50.0360209,-29.8055343,path); //Sea level	
+		high = SRTM.getData(-50.0360209,-20.8055343,path); //High place	
 		}
+		Log.d("SRTM","Altitude:"+alt+" Sea:"+sea+ " High:"+high);
 		
 		return null;
 	}

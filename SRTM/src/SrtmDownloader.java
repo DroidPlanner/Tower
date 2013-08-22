@@ -12,7 +12,41 @@ import java.util.logging.Logger;
 
 public class SrtmDownloader {
 
-	static boolean downloadFile(String urlAddress, File output) {
+	static boolean downloadRegionIndex(int region, String srtmPath,
+			String url) {
+		String regionIndex = SrtmRegions.REGIONS[region] + ".index.html";
+		if (!srtmPath.equals("")) {
+			regionIndex = srtmPath + "/" + regionIndex;
+		}
+		File regionIndexFile = new File(regionIndex);
+		return downloadFile(url + SrtmRegions.REGIONS[region] + "/", regionIndexFile);
+	}
+
+	static boolean downloadSrtmFile(String fname, String path) throws Exception {
+		boolean result;
+		File output;
+		String region = SrtmRegions.findRegion(fname, path);
+		output = new File(path +"/" + fname + ".zip");
+		result = downloadZipFile(fname, output, region);
+		return result;
+	}
+
+	private static boolean downloadZipFile(String fname, File output,
+			String region) {
+		boolean result;
+		result = downloadFile(SRTM.url + region + "/" + fname + ".zip", output);
+		// fix SRTM 2.1 naming problem in North America
+		if ((!result) && fname.startsWith("N5")
+				&& region.equalsIgnoreCase("North_America")) {
+			if (downloadFile(SRTM.url + region + "/" + fname.replace(".hgt", "hgt")
+			+ ".zip", output)) {
+				return true;
+			}
+		}
+		return result;
+	}
+
+	private static boolean downloadFile(String urlAddress, File output) {
 		URL url1;
 		InputStream inputs;
 		BufferedOutputStream outputs;
@@ -48,40 +82,6 @@ public class SrtmDownloader {
 		}
 	
 		return true;
-	}
-
-	static boolean downloadRegionIndex(int region, String srtmPath,
-			String url) {
-		String regionIndex = SrtmRegions.REGIONS[region] + ".index.html";
-		if (!srtmPath.equals("")) {
-			regionIndex = srtmPath + "/" + regionIndex;
-		}
-		File regionIndexFile = new File(regionIndex);
-		return downloadFile(url + SrtmRegions.REGIONS[region] + "/", regionIndexFile);
-	}
-
-	static boolean download(String fname, String path) {
-		File output;
-		String region = SrtmRegions.findRegion(fname, path);
-		if (region == null) {
-			return false;
-		}
-		if (path.equals("")) {
-			output = new File(region + "/" + fname + ".zip");
-		} else {
-			output = new File(path + "/" + region + "/" + fname + ".zip");
-		}
-		boolean result = downloadFile(SRTM.url + region + "/" + fname + ".zip",
-				output);
-		// fix SRTM 2.1 naming problem in North America
-		if ((!result) && fname.startsWith("N5")
-				&& region.equalsIgnoreCase("North_America")) {
-			if (downloadFile(SRTM.url + region + "/" + fname.replace(".hgt", "hgt")
-					+ ".zip", output)) {
-				return true;
-			}
-		}
-		return result;
 	}
 
 }
