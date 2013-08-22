@@ -7,8 +7,12 @@ public class TimeLogger {
 	}
 
 	public void tick() {
+		tick("");
+	}
+
+	public void tick(String string) {
 		long currentTime = System.currentTimeMillis();
-		System.out.println("Time:"+(currentTime-time)+"ms");
-		time = currentTime;
+		System.out.println(string+":"+(currentTime-time)+"ms");
+		time = currentTime;		
 	}
 }
