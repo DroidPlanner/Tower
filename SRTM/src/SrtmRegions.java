@@ -1,38 +1,32 @@
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 
 public class SrtmRegions {
 	static final String[] REGIONS = { "Eurasia", "Africa", "Australia",
-	"Islands", "North_America", "South_America" };
-	static final Map<String, Integer> regionMap = new HashMap<String, Integer>();
+			"Islands", "North_America", "South_America" };
+
+	private Map<String, Integer> regionMap = new HashMap<String, Integer>();
 
 	/*
 	 * Returns region name for a file
 	 */
-	static String findRegion(String fname, String srtmPath) throws Exception {
-		if (SrtmRegions.regionMap.isEmpty()) {
-			if (!SrtmRegions.fillRegionData(srtmPath)) {
-				throw new Exception("Null Region");
-			}
-			System.out.println("SRTM map filled in with " + SrtmRegions.regionMap.size()
+	public String findRegion(String fname, String srtmPath) throws Exception {
+		if (regionMap.isEmpty()) {
+			fillRegionData(srtmPath);
+			System.out.println("SRTM map filled in with " + regionMap.size()
 					+ " entries.");
-	
 		}
 		String name = fname.replace(".hgt", "");
-		if (SrtmRegions.regionMap.containsKey(name)) {
-			return SrtmRegions.REGIONS[SrtmRegions.regionMap.get(name)];
+		if (regionMap.containsKey(name)) {
+			return REGIONS[regionMap.get(name)];
 		}
 		throw new Exception("Null Region");
 	}
 
-	static boolean fillRegionData(String srtmPath) {
+	private void fillRegionData(String srtmPath) throws Exception {
 		System.err.println("Downloading SRTM map data.");
 		String region;
 		for (int i = 0; i < SrtmRegions.REGIONS.length; i++) {
@@ -48,39 +42,33 @@ public class SrtmRegions {
 			indexPath += ".index.html";
 			File indexFile = new File(indexPath);
 			if (!indexFile.exists()) {
-				try{
-					SrtmDownloader.downloadRegionIndex(i, srtmPath, Srtm.url);
-				}catch (IOException e){
+				try {
+					SrtmDownloader.downloadRegionIndex(i, srtmPath,
+							SrtmDownloader.url);
+				} catch (IOException e) {
 					// download error, try again with the next attempt
-					SrtmRegions.regionMap.clear();
-					return false;
+					regionMap.clear();
+					throw new Exception("Null Region");
 				}
 			}
-			try {
-				Scanner scanner = new Scanner(indexFile);
-				while (scanner.hasNext()) {
-					String line = scanner.next();
-					if (line.contains("href=\"")) {
-						int index = line.indexOf(".hgt.zip") - 7;
+			Scanner scanner = new Scanner(indexFile);
+			while (scanner.hasNext()) {
+				String line = scanner.next();
+				if (line.contains("href=\"")) {
+					int index = line.indexOf(".hgt.zip") - 7;
+					if (index >= 0) {
+						String srtm = line.substring(index, index + 7);
+						regionMap.put(srtm, i);
+					} else {
+						index = line.indexOf("hgt.zip") - 7;
 						if (index >= 0) {
 							String srtm = line.substring(index, index + 7);
-							SrtmRegions.regionMap.put(srtm, i);
-						} else {
-							index = line.indexOf("hgt.zip") - 7;
-							if (index >= 0) {
-								String srtm = line.substring(index,
-										index + 7);
-								SrtmRegions.regionMap.put(srtm, i);
-							}
+							regionMap.put(srtm, i);
 						}
 					}
 				}
-				scanner.close();
-			} catch (FileNotFoundException ex) {
-				Logger.getLogger(Srtm.class.getName()).log(Level.SEVERE,
-						null, ex);
 			}
+			scanner.close();
 		}
-		return true;
 	}
 }

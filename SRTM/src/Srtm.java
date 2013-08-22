@@ -1,18 +1,4 @@
-/*
- * #%L
- * Osm2garminAPI
- * %%
- * Copyright (C) 2011 Frantisek Mantlik <frantisek at mantlik.cz>
- * %%
- */
-
-
-/**
- * 
- * @author fm
- */
 public class Srtm {
-	static final String url = "http://dds.cr.usgs.gov/srtm/version2_1/SRTM3/";
 	public SrtmData srtmData = new SrtmData();
 	public SrtmRegions regions = new SrtmRegions();
 	
