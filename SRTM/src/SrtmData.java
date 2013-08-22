@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.IntBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
@@ -87,13 +86,12 @@ public class SrtmData {
 	}
 
 	private void readHtgFile(BufferedInputStream s) throws IOException {
-		
-		
-		byte[] buffer = new byte[1201*1201*2];
+		byte[] buffer = new byte[1201 * 1201 * 2];
 		s.read(buffer);
-		
-		ByteBuffer intBuffer = ByteBuffer.wrap(buffer).order(ByteOrder.BIG_ENDIAN);
-		
+
+		ByteBuffer intBuffer = ByteBuffer.wrap(buffer).order(
+				ByteOrder.BIG_ENDIAN);
+
 		int i = 0;
 		while (i <= 1200) {
 			int j = 0;
