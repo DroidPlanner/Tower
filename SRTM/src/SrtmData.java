@@ -1,3 +1,4 @@
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -33,13 +34,9 @@ public class SrtmData {
 			throw new Exception("Failed to load SRTM file");
 		}
 		
-		try {
-			openSrtmFile(fname);
-			altitude = readHtgFile(s,lon,lat);
-			s.close();
-		} catch (Exception ex) {
-			throw new Exception("Failed when reading SRTM file");
-		}
+		openSrtmFile(fname);
+		altitude = readHtgFile(s,lon,lat);
+		s.close();
 		return altitude;
 	}
 
