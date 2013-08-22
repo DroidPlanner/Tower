@@ -20,28 +20,28 @@ public class SRTM {
 		this.srtmData.path = dir;
 	}
 
-	public static SRTM get(int lon, int lat, String dir) {
+	public static int get(double lon, double lat, String dir) throws Exception {
 		SRTM srtm = new SRTM(dir);
-		if (srtm.srtmData.load(srtm, lon, lat)) {
-			return srtm;
-		}
-		return null;
+		return srtm.srtmData.load(srtm, lon, lat);
 	}
 
 	/*
 	 * Get SRTM elevation in meters for lon and lat WGS-84 coordinates
 	 */
 	public static int getData(double lon, double lat, String dir) {
-		SRTM srtm = get((int) Math.floor(lon), (int) Math.floor(lat), dir);
-		int i = (int) Math.round(1200d * (lat - Math.floor(lat)));
-		int j = (int) Math.round(1200d * (lon - Math.floor(lon)));
-		if (srtm == null) {
+		try {
+			return get(lon, lat, dir);
+		} catch (Exception e) {
+			e.printStackTrace();
 			return -32768; // SRTM NaN
 		}
-		return srtm.srtmData.data[i][j];
 	}
 
-	static String getName(int lon, int lat) {
+	static String getName(double Dlon, double Dlat) {
+
+		int lon = (int) Math.floor(Dlon);
+		int lat = (int) Math.floor(Dlat);
+		
 		String dirlat = "N";
 		if (lat < 0) {
 			dirlat = "S";
