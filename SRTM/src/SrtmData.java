@@ -13,13 +13,9 @@ public class SrtmData {
 	public int load(Srtm srtm, double lon, double lat) throws Exception {
 		int altitude;
 		
-		// loads SRTM data for the lon,lat
 		String fname = Srtm.getName(lon, lat);
-		String region = SrtmRegions.findRegion(fname, path);
-
-		setupFilePaths(fname, region);
-
-		loadSrtmFile(srtm, fname);
+		setupFilePaths(fname);
+		downloadSrtmFileIfNeeded(srtm, fname);
 		
 		s = new BufferedInputStream(new FileInputStream(srtmFile));
 		altitude = readHtgFile(s,lon,lat);
@@ -27,31 +23,36 @@ public class SrtmData {
 		return altitude;
 	}
 
-	private void loadSrtmFile(Srtm srtm, String fname) throws Exception  {
-		if (srtmFile.exists()) {
-			return;
+	private void downloadSrtmFileIfNeeded(Srtm srtm, String fname) throws Exception  {
+		if (!srtmFile.exists()) {
+			SrtmDownloader.downloadSrtmFile(fname, path);
 		}
-		SrtmDownloader.downloadSrtmFile(fname, path);
 	}
 
-	private void setupFilePaths(String fname, String region) {
+	private void setupFilePaths(String fname) {
 			srtmFile = new File(path + "/" + fname);
 	}
 
 	private int readHtgFile(BufferedInputStream s, double lon, double lat) throws Exception {
-		
 		byte[] buffer = new byte[2];
+		int index = calculateFileIndex(lon, lat);
+		skipToDataPositionInFile(index);
+		s.read(buffer);
+		return ByteBuffer.wrap(buffer).order(
+				ByteOrder.BIG_ENDIAN).getShort();
+	}
 
-		int ai = (int) Math.round(1200d * (lat - Math.floor(lat)));
-		int aj = (int) Math.round(1200d * (lon - Math.floor(lon)));
-		int index = (aj+(1200-ai)*1201)*2;
-		
+	private void skipToDataPositionInFile(int index)
+			throws Exception {
 		if(s.skip(index)!=index){
 			throw new Exception("error when skipping");
 		}
-		s.read(buffer);		
+	}
 
-		return ByteBuffer.wrap(buffer).order(
-				ByteOrder.BIG_ENDIAN).getShort();
+	private int calculateFileIndex(double lon, double lat) {
+		int ai = (int) Math.round(1200d * (lat - Math.floor(lat)));
+		int aj = (int) Math.round(1200d * (lon - Math.floor(lon)));
+		int index = (aj+(1200-ai)*1201)*2;
+		return index;
 	}
 }
