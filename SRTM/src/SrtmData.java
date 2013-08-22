@@ -10,11 +10,11 @@ public class SrtmData {
 	File srtmFile;
 	BufferedInputStream s;
 
-	public int load(SRTM srtm, double lon, double lat) throws Exception {
+	public int load(Srtm srtm, double lon, double lat) throws Exception {
 		int altitude;
 		
 		// loads SRTM data for the lon,lat
-		String fname = SRTM.getName(lon, lat);
+		String fname = Srtm.getName(lon, lat);
 		String region = SrtmRegions.findRegion(fname, path);
 
 		setupFilePaths(fname, region);
@@ -27,7 +27,7 @@ public class SrtmData {
 		return altitude;
 	}
 
-	private void loadSrtmFile(SRTM srtm, String fname) throws Exception  {
+	private void loadSrtmFile(Srtm srtm, String fname) throws Exception  {
 		if (srtmFile.exists()) {
 			return;
 		}

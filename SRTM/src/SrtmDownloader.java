@@ -29,7 +29,7 @@ public class SrtmDownloader {
 	private static void downloadSrtmFile(String fname, File output,
 			String region) throws IOException {
 		try {
-			downloadFile(SRTM.url + region + "/" + fname + ".zip", output);
+			downloadFile(Srtm.url + region + "/" + fname + ".zip", output);
 		} catch (IOException e) {
 			downloadAlternativeSrtmFile(fname, output, region, e);
 		}
@@ -41,7 +41,7 @@ public class SrtmDownloader {
 		if (fname.startsWith("N5")
 				&& region.equalsIgnoreCase("North_America")) {
 			downloadFile(
-					SRTM.url + region + "/" + fname.replace(".hgt", "hgt")
+					Srtm.url + region + "/" + fname.replace(".hgt", "hgt")
 							+ ".zip", output);
 		} else {
 			throw e;

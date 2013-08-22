@@ -49,7 +49,7 @@ public class SrtmRegions {
 			File indexFile = new File(indexPath);
 			if (!indexFile.exists()) {
 				try{
-					SrtmDownloader.downloadRegionIndex(i, srtmPath, SRTM.url);
+					SrtmDownloader.downloadRegionIndex(i, srtmPath, Srtm.url);
 				}catch (IOException e){
 					// download error, try again with the next attempt
 					SrtmRegions.regionMap.clear();
@@ -77,7 +77,7 @@ public class SrtmRegions {
 				}
 				scanner.close();
 			} catch (FileNotFoundException ex) {
-				Logger.getLogger(SRTM.class.getName()).log(Level.SEVERE,
+				Logger.getLogger(Srtm.class.getName()).log(Level.SEVERE,
 						null, ex);
 			}
 		}
