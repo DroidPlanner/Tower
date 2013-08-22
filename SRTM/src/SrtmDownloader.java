@@ -6,8 +6,9 @@ import java.io.InputStream;
 import java.net.URL;
 
 public class SrtmDownloader {
+	static final String url = "http://dds.cr.usgs.gov/srtm/version2_1/SRTM3/";
 
-	static void downloadRegionIndex(int region, String srtmPath, String url)
+	static void downloadRegionIndex(int region, String srtmPath)
 			throws IOException {
 		String regionIndex = SrtmRegions.REGIONS[region] + ".index.html";
 		if (!srtmPath.equals("")) {
@@ -75,6 +76,5 @@ public class SrtmDownloader {
 
 	}
 
-	static final String url = "http://dds.cr.usgs.gov/srtm/version2_1/SRTM3/";
 
 }
