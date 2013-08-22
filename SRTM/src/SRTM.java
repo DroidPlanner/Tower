@@ -30,12 +30,6 @@ public class SRTM {
 		this.srtmData.path = dir;
 	}
 
-	public static boolean exists(int lon, int lat, String dir) {
-		String fname = getName(-51, -29);
-		String region = findRegion(fname, dir);
-		return (region != null);
-	}
-
 	public static SRTM get(int lon, int lat, String dir) {
 		SRTM srtm = new SRTM(dir);
 		if (srtm.srtmData.load(srtm, lon, lat)) {

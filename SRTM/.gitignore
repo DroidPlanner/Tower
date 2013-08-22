@@ -1,3 +1,5 @@
+.attach_pid*
+
 # built application files
 *.apk
 *.ap_
