@@ -1,6 +1,7 @@
 package com.droidplanner.helpers.srtm;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -16,10 +17,10 @@ public class SrtmRegions {
 	/*
 	 * Returns region name for a file
 	 */
-	static String findRegion(String fname, String srtmPath) {
+	static String findRegion(String fname, String srtmPath) throws Exception {
 		if (SrtmRegions.regionMap.isEmpty()) {
 			if (!SrtmRegions.fillRegionData(srtmPath)) {
-				return null;
+				throw new Exception("Null Region");
 			}
 			System.out.println("SRTM map filled in with " + SrtmRegions.regionMap.size()
 					+ " entries.");
@@ -29,7 +30,7 @@ public class SrtmRegions {
 		if (SrtmRegions.regionMap.containsKey(name)) {
 			return SrtmRegions.REGIONS[SrtmRegions.regionMap.get(name)];
 		}
-		return null;
+		throw new Exception("Null Region");
 	}
 
 	static boolean fillRegionData(String srtmPath) {
@@ -48,7 +49,9 @@ public class SrtmRegions {
 			indexPath += ".index.html";
 			File indexFile = new File(indexPath);
 			if (!indexFile.exists()) {
-				if (!SrtmDownloader.downloadRegionIndex(i, srtmPath, SRTM.url)) {
+				try{
+					SrtmDownloader.downloadRegionIndex(i, srtmPath, Srtm.url);
+				}catch (IOException e){
 					// download error, try again with the next attempt
 					SrtmRegions.regionMap.clear();
 					return false;
@@ -75,7 +78,7 @@ public class SrtmRegions {
 				}
 				scanner.close();
 			} catch (FileNotFoundException ex) {
-				Logger.getLogger(SRTM.class.getName()).log(Level.SEVERE,
+				Logger.getLogger(Srtm.class.getName()).log(Level.SEVERE,
 						null, ex);
 			}
 		}
