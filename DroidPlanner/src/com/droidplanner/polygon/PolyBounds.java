@@ -26,7 +26,7 @@ class PolyBounds {
 	}
 
 	public double getDiag() {
-		return GeoTools.latToMeters(GeoTools.getDistance(ne, sw));
+		return GeoTools.latToMeters(GeoTools.getAproximatedDistance(ne, sw));
 	}
 
 	public LatLng getMiddle() {

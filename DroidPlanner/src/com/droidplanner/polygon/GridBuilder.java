@@ -55,16 +55,16 @@ public class GridBuilder {
 		LineLatLng closest = GeoTools.findClosestLine(lastLocation, hatchLines);
 		LatLng lastpnt;
 
-		if (GeoTools.getDistance(closest.p1, lastLocation) < GeoTools
-				.getDistance(closest.p2, lastLocation)) {
+		if (GeoTools.getAproximatedDistance(closest.p1, lastLocation) < GeoTools
+				.getAproximatedDistance(closest.p2, lastLocation)) {
 			lastpnt = closest.p1;
 		} else {
 			lastpnt = closest.p2;
 		}
 
 		while (hatchLines.size() > 0) {
-			if (GeoTools.getDistance(closest.p1, lastpnt) < GeoTools
-					.getDistance(closest.p2, lastpnt)) {
+			if (GeoTools.getAproximatedDistance(closest.p1, lastpnt) < GeoTools
+					.getAproximatedDistance(closest.p2, lastpnt)) {
 				gridPoints.add(new waypoint(closest.p1, altitude));
 				gridPoints.add(new waypoint(closest.p2, altitude));
 
@@ -125,18 +125,18 @@ public class GridBuilder {
 
 				if (newlatlong != null) {
 					crosses++;
-					if (closestDistance > GeoTools.getDistance(gridLine.p1,
+					if (closestDistance > GeoTools.getAproximatedDistance(gridLine.p1,
 							newlatlong)) {
 						closestPoint = new LatLng(newlatlong.latitude,
 								newlatlong.longitude);
-						closestDistance = GeoTools.getDistance(gridLine.p1,
+						closestDistance = GeoTools.getAproximatedDistance(gridLine.p1,
 								newlatlong);
 					}
-					if (farestDistance < GeoTools.getDistance(gridLine.p1,
+					if (farestDistance < GeoTools.getAproximatedDistance(gridLine.p1,
 							newlatlong)) {
 						farestPoint = new LatLng(newlatlong.latitude,
 								newlatlong.longitude);
-						farestDistance = GeoTools.getDistance(gridLine.p1,
+						farestDistance = GeoTools.getAproximatedDistance(gridLine.p1,
 								newlatlong);
 					}
 				}
