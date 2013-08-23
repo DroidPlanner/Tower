@@ -1,4 +1,5 @@
 package com.droidplanner.helpers.srtm;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,8 +18,6 @@ public class UnZip {
 
 		File newFile = new File(output.getParent() + "/" + fname);
 
-		System.out.println("file unzip : " + newFile.getAbsoluteFile());
-
 		FileOutputStream fos = new FileOutputStream(newFile);
 
 		int len;
@@ -29,7 +28,5 @@ public class UnZip {
 		fos.close();
 		zis.close();
 		zip.close();
-
-		System.out.println("Done");
 	}
 }
