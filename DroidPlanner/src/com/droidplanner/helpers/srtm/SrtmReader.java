@@ -6,10 +6,18 @@ import com.droidplanner.file.DirectoryPath;
 import com.droidplanner.helpers.srtm.Srtm.OnProgressListner;
 import com.google.android.gms.maps.model.LatLng;
 
-public abstract class SrtmReader extends AsyncTask<LatLng, String, Integer> implements OnProgressListner {
-	public abstract void update(String values);
-	public abstract void finish();
+public class SrtmReader extends AsyncTask<LatLng, String, Integer> implements OnProgressListner {
+	public interface OnSrtmReaderListner {
+		public void updateSrtmReaderProgress(String values);
+		public void srtmReadFinished();
+	}
+	OnSrtmReaderListner listner;
 
+	public SrtmReader(OnSrtmReaderListner listner) {
+		super();
+		this.listner = listner;
+	}
+	
 	@Override
 	protected Integer doInBackground(LatLng... params) {
 		Srtm Srtm = new Srtm(DirectoryPath.getSrtmPath());
@@ -30,10 +38,10 @@ public abstract class SrtmReader extends AsyncTask<LatLng, String, Integer> impl
 
 	@Override
 	protected void onProgressUpdate(String... values) {
-		update(values[0]);
+		listner.updateSrtmReaderProgress(values[0]);
 	}
 	@Override
 	protected void onPostExecute(Integer result) {
-		finish();
+		listner.srtmReadFinished();
 	}
 }
