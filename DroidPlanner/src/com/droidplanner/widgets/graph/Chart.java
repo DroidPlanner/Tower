@@ -27,7 +27,7 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback,
 	protected ChartScale scale;
 	private ChartGrid grid = new ChartGrid();
 	public List<ChartSeries> series = new ArrayList<ChartSeries>();;
-	private ChartDataRender dataRender = new ChartDataRender();
+	public ChartDataRender dataRender = new ChartDataRender();
 
 	public Chart(Context context, AttributeSet attributeSet) {
 		super(context, attributeSet);

@@ -40,4 +40,8 @@ public class ChartDataRender {
 		if (p > 0)
 			numPtsToDraw = chart.width / p;
 	}
+
+	public void setNumPtsToDraw(int numPtsToDraw) {
+		this.numPtsToDraw = numPtsToDraw;
+	}
 }
