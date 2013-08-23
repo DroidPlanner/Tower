@@ -27,7 +27,6 @@ import com.droidplanner.fragments.PlanningMapFragment.OnMapInteractionListener;
 import com.droidplanner.fragments.helpers.GestureMapFragment;
 import com.droidplanner.fragments.helpers.GestureMapFragment.OnPathFinishedListner;
 import com.droidplanner.fragments.helpers.MapProjection;
-import com.droidplanner.helpers.srtm.SrtmCache;
 import com.droidplanner.polygon.Polygon;
 import com.droidplanner.polygon.PolygonPoint;
 import com.google.android.gms.maps.model.LatLng;
@@ -121,9 +120,7 @@ public class PlanningActivity extends SuperActivity implements
 			drone.mission.sendMissionToAPM();
 			return true;
 		case R.id.menu_clear_wp:
-			//clearWaypointsAndUpdate(); // TODO this was just for debbuging
-			SrtmCache srtm = new SrtmCache();
-			srtm.execute(0);
+			clearWaypointsAndUpdate();
 			return true;
 		case R.id.menu_polygon:
 			setMode(modes.POLYGON);
