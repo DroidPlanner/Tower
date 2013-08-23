@@ -1,7 +1,9 @@
-package com.droidplanner.polygon;
+package com.droidplanner.helpers.geoTools;
 
 import java.util.List;
 
+import com.droidplanner.polygon.LineLatLng;
+import com.droidplanner.polygon.Polygon;
 import com.google.android.gms.maps.model.LatLng;
 
 public class GeoTools {
