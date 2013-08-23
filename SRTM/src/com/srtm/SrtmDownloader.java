@@ -12,12 +12,11 @@ public class SrtmDownloader {
 	static void downloadRegionIndex(int region, String srtmPath)
 			throws IOException {
 		String regionIndex = SrtmRegions.REGIONS[region] + ".index.html";
-		if (!srtmPath.equals("")) {
-			regionIndex = srtmPath + "/" + regionIndex;
-		}
+		regionIndex = getIndexPath(srtmPath)+regionIndex;
 		File regionIndexFile = new File(regionIndex);
 		downloadFile(url + SrtmRegions.REGIONS[region] + "/", regionIndexFile);
 	}
+
 
 	static void downloadSrtmFile(String fname, String path) throws Exception {
 		File output;
@@ -77,5 +76,8 @@ public class SrtmDownloader {
 
 	}
 
+	public static String getIndexPath(String srtmPath) {
+		return srtmPath + "/Index/";
+	}
 
 }

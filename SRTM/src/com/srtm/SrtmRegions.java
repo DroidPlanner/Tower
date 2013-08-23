@@ -37,9 +37,7 @@ public class SrtmRegions {
 		for (int i = 0; i < SrtmRegions.REGIONS.length; i++) {
 			region = SrtmRegions.REGIONS[i];
 			String indexPath = region;
-			if (!path.equals("")) {
-				indexPath = path + "/" + indexPath;
-			}
+			indexPath = SrtmDownloader.getIndexPath(path) + indexPath;
 			File indexDir = new File(indexPath);
 			if (!indexDir.exists()) {
 				indexDir.mkdirs();
