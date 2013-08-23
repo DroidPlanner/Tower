@@ -6,7 +6,7 @@ import com.droidplanner.file.DirectoryPath;
 import com.droidplanner.helpers.srtm.Srtm.OnProgressListner;
 import com.google.android.gms.maps.model.LatLng;
 
-public abstract class SrtmCache extends AsyncTask<LatLng, String, Integer> implements OnProgressListner {
+public abstract class SrtmReader extends AsyncTask<LatLng, String, Integer> implements OnProgressListner {
 	public abstract void update(String values);
 	public abstract void finish();
 

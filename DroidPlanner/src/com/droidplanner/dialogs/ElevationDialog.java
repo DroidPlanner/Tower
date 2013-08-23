@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.droidplanner.R;
 import com.droidplanner.helpers.srtm.Srtm.OnProgressListner;
-import com.droidplanner.helpers.srtm.SrtmCache;
+import com.droidplanner.helpers.srtm.SrtmReader;
 import com.google.android.gms.maps.model.LatLng;
 
 public class ElevationDialog implements OnProgressListner {
@@ -22,7 +22,7 @@ public class ElevationDialog implements OnProgressListner {
 		AlertDialog dialog = buildDownloadingDialog(context);
 		dialog.show();
 
-		SrtmCache srtm = new SrtmCache() {
+		SrtmReader srtm = new SrtmReader() {
 			@Override
 			public void update(String values) {
 				progressText.setText(values);
