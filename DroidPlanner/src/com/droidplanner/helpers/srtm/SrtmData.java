@@ -14,7 +14,7 @@ public class SrtmData {
 	public int load(Srtm srtm, double lon, double lat) throws Exception {
 		int altitude;
 		
-		String fname = Srtm.getName(lon, lat);
+		String fname = SrtmData.getName(lon, lat);
 		setupFilePaths(fname);
 		downloadSrtmFileIfNeeded(srtm, fname);
 		
@@ -55,5 +55,31 @@ public class SrtmData {
 		int aj = (int) Math.round(1200d * (lon - Math.floor(lon)));
 		int index = (aj+(1200-ai)*1201)*2;
 		return index;
+	}
+
+	static String getName(double Dlon, double Dlat) {
+	
+		int lon = (int) Math.floor(Dlon);
+		int lat = (int) Math.floor(Dlat);
+		
+		String dirlat = "N";
+		if (lat < 0) {
+			dirlat = "S";
+		}
+		String dirlon = "E";
+		if (lon < 0) {
+			dirlon = "W";
+		}
+		String st = String.valueOf(Math.abs(lat));
+		while (st.length() < 2) {
+			st = "0" + st;
+		}
+		String fname = dirlat + st;
+		st = String.valueOf(Math.abs(lon));
+		while (st.length() < 3) {
+			st = "0" + st;
+		}
+		fname = fname + dirlon + st + ".hgt";
+		return fname;
 	}
 }
