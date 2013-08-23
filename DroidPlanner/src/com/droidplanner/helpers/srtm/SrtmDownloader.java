@@ -9,7 +9,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
-import com.srtm.Srtm.OnProgressListner;
+import com.droidplanner.helpers.srtm.Srtm.OnProgressListner;
 
 public class SrtmDownloader {
 	static final String url = "http://dds.cr.usgs.gov/srtm/version2_1/SRTM3/";
@@ -64,7 +64,7 @@ public class SrtmDownloader {
         URLConnection connection = url.openConnection();
         connection.connect();
         // this will be useful so that you can show a typical 0-100% progress bar
-        long fileLength = connection.getContentLengthLong();
+        long fileLength = connection.getContentLength();
 
         // download the file
         InputStream input = new BufferedInputStream(url.openStream());		

@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-import com.srtm.Srtm.OnProgressListner;
+import com.droidplanner.helpers.srtm.Srtm.OnProgressListner;
 
 public class SrtmRegions {
 	static final String[] REGIONS = { "Eurasia", "Africa", "Australia",
