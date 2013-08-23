@@ -8,11 +8,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.droidplanner.R;
-import com.droidplanner.helpers.srtm.Srtm.OnProgressListner;
 import com.droidplanner.helpers.srtm.SrtmReader;
+import com.droidplanner.helpers.srtm.SrtmReader.OnSrtmReaderListner;
 import com.google.android.gms.maps.model.LatLng;
 
-public class ElevationDialog implements OnProgressListner {
+public class ElevationDialog implements OnSrtmReaderListner {
 
 	private LinearLayout layout;
 	private TextView progressText;
@@ -22,23 +22,18 @@ public class ElevationDialog implements OnProgressListner {
 		AlertDialog dialog = buildDownloadingDialog(context);
 		dialog.show();
 
-		SrtmReader srtm = new SrtmReader() {
-			@Override
-			public void update(String values) {
-				progressText.setText(values);
-			}
-
-			@Override
-			public void finish() {
-				layout.removeAllViews();
-			}
-		};
+		SrtmReader srtm = new SrtmReader(this);
 		srtm.execute(new LatLng(-29.7026708, -51.1439127));
 	}
 
 	@Override
-	public void onProgress(String filename, int percentage) {
+	public void updateSrtmReaderProgress(String values) {
+		progressText.setText(values);
+	}
 
+	@Override
+	public void srtmReadFinished() {
+		layout.removeAllViews();
 	}
 
 	private AlertDialog buildDownloadingDialog(Context context) {
@@ -64,5 +59,4 @@ public class ElevationDialog implements OnProgressListner {
 		AlertDialog dialog = builder.create();
 		return dialog;
 	}
-
 }
