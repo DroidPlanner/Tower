@@ -1,4 +1,5 @@
 package com.srtm;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -12,11 +13,10 @@ public class SrtmDownloader {
 	static void downloadRegionIndex(int region, String srtmPath)
 			throws IOException {
 		String regionIndex = SrtmRegions.REGIONS[region] + ".index.html";
-		regionIndex = getIndexPath(srtmPath)+regionIndex;
+		regionIndex = getIndexPath(srtmPath) + regionIndex;
 		File regionIndexFile = new File(regionIndex);
 		downloadFile(url + SrtmRegions.REGIONS[region] + "/", regionIndexFile);
 	}
-
 
 	static void downloadSrtmFile(String fname, String path) throws Exception {
 		File output;
@@ -30,7 +30,8 @@ public class SrtmDownloader {
 	private static void downloadSrtmFile(String fname, File output,
 			String region) throws IOException {
 		try {
-			downloadFile(SrtmDownloader.url + region + "/" + fname + ".zip", output);
+			downloadFile(SrtmDownloader.url + region + "/" + fname + ".zip",
+					output);
 		} catch (IOException e) {
 			downloadAlternativeSrtmFile(fname, output, region, e);
 		}
@@ -39,11 +40,10 @@ public class SrtmDownloader {
 	private static void downloadAlternativeSrtmFile(String fname, File output,
 			String region, IOException e) throws IOException {
 		// fix SRTM 2.1 naming problem in North America
-		if (fname.startsWith("N5")
-				&& region.equalsIgnoreCase("North_America")) {
+		if (fname.startsWith("N5") && region.equalsIgnoreCase("North_America")) {
 			downloadFile(
-					SrtmDownloader.url + region + "/" + fname.replace(".hgt", "hgt")
-							+ ".zip", output);
+					SrtmDownloader.url + region + "/"
+							+ fname.replace(".hgt", "hgt") + ".zip", output);
 		} else {
 			throw e;
 		}

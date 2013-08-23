@@ -1,14 +1,14 @@
 package com.srtm;
+
 public class Srtm {
 	private static final int SRTM_NaN = -32768;
-	
-	public interface OnProgressListner{
+
+	public interface OnProgressListner {
 		public void onProgress(float percentage, String filename);
 	}
-	
+
 	public SrtmData srtmData;
-	
-	
+
 	public Srtm(String dir) {
 		srtmData = new SrtmData(dir);
 	}
