@@ -10,15 +10,20 @@ public class Srtm {
 	private SrtmData srtmData;
 
 	/**
-	 * @param directory Cache directory
+	 * @param directory
+	 *            Cache directory
 	 */
 	public Srtm(String directory) {
 		srtmData = new SrtmData(directory);
 	}
 
 	/**
-	 * Get SRTM elevation for geographic coordinate
-	 * (WGS-84)
+	 * Get SRTM elevation for geographic coordinate (WGS-84)
+	 * 
+	 * Stores a cache of uncompressed SRTM data files at the default directory.
+	 * It need a Internet connection to fetch SRTM files if they are not in the
+	 * disk
+	 * 
 	 * @return Above Sea Level (ASL) altitude in meters
 	 */
 	public int getData(double longitude, double latitude) {
