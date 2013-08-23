@@ -15,6 +15,7 @@ import com.droidplanner.R;
 import com.droidplanner.R.string;
 import com.droidplanner.activitys.helpers.SuperActivity;
 import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
+import com.droidplanner.dialogs.ElevationDialog;
 import com.droidplanner.dialogs.OpenFileDialog;
 import com.droidplanner.dialogs.OpenMissionDialog;
 import com.droidplanner.dialogs.PolygonDialog;
@@ -72,6 +73,8 @@ public class PlanningActivity extends SuperActivity implements
 		checkIntent();
 
 		update();
+		
+		openElevationDialog();
 	}
 
 	private void checkIntent() {
@@ -131,6 +134,9 @@ public class PlanningActivity extends SuperActivity implements
 		case R.id.menu_clear_polygon:
 			polygon.clearPolygon();
 			update();
+			return true;
+		case R.id.menu_elevation_dialog:
+			openElevationDialog();
 			return true;
 		case R.id.mode_exit:
 			setMode(modes.MISSION);
@@ -274,6 +280,10 @@ public class PlanningActivity extends SuperActivity implements
 				drone.mission.getDefaultAlt(), this);
 	}
 
+	public void openElevationDialog(){
+		new ElevationDialog().build(this);
+	}
+	
 	private void menuSaveFile() {
 		if (writeMission()) {
 			Toast.makeText(this, R.string.file_saved, Toast.LENGTH_SHORT)
