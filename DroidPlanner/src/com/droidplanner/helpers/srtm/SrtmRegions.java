@@ -1,9 +1,12 @@
 package com.droidplanner.helpers.srtm;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+
+import com.srtm.Srtm.OnProgressListner;
 
 public class SrtmRegions {
 	static final String[] REGIONS = { "Eurasia", "Africa", "Australia",
@@ -18,11 +21,9 @@ public class SrtmRegions {
 	/*
 	 * Returns region name for a file
 	 */
-	public String findRegion(String fname) throws Exception {
+	public String findRegion(String fname, OnProgressListner listner) throws Exception {
 		if (regionMap.isEmpty()) {
-			fillRegionData();
-			System.out.println("SRTM map filled in with " + regionMap.size()
-					+ " entries.");
+			fillRegionData(listner);
 		}
 		String name = fname.replace(".hgt", "");
 		if (regionMap.containsKey(name)) {
@@ -31,22 +32,17 @@ public class SrtmRegions {
 		throw new Exception("Null Region");
 	}
 
-	private void fillRegionData() throws Exception {
-		System.err.println("Downloading SRTM map data.");
+	private void fillRegionData(OnProgressListner listner) throws Exception {
 		String region;
 		for (int i = 0; i < SrtmRegions.REGIONS.length; i++) {
 			region = SrtmRegions.REGIONS[i];
 			String indexPath = region;
 			indexPath = SrtmDownloader.getIndexPath(path) + indexPath;
-			File indexDir = new File(indexPath);
-			if (!indexDir.exists()) {
-				indexDir.mkdirs();
-			}
 			indexPath += ".index.html";
 			File indexFile = new File(indexPath);
 			if (!indexFile.exists()) {
 				try {
-					SrtmDownloader.downloadRegionIndex(i, path);
+					new SrtmDownloader(listner).downloadRegionIndex(i, path);
 				} catch (IOException e) {
 					// download error, try again with the next attempt
 					regionMap.clear();

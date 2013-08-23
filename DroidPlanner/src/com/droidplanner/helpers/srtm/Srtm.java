@@ -1,26 +1,48 @@
 package com.droidplanner.helpers.srtm;
+
 public class Srtm {
 	private static final int SRTM_NaN = -32768;
-	public SrtmData srtmData = new SrtmData();
-	
-	Srtm(String dir) {
-		this.srtmData.path = dir;
+
+	/**
+	 * Callback for progress reports
+	 */
+	public interface OnProgressListner {
+		public void onProgress(String filename, int percentage);
 	}
 
-	/*
-	 * Get SRTM elevation in meters for lon and lat WGS-84 coordinates
+	private SrtmData srtmData;
+	private OnProgressListner listner;
+
+	/**
+	 * @param directory
+	 *            Cache directory
 	 */
-	public static int getData(double lon, double lat, String dir) {
+	public Srtm(String directory) {
+		srtmData = new SrtmData(directory);
+	}
+
+	/**
+	 * Get SRTM elevation for geographic coordinate (WGS-84)
+	 * 
+	 * Stores a cache of uncompressed SRTM data files at the default directory.
+	 * It need a Internet connection to fetch SRTM files if they are not in the
+	 * disk
+	 * 
+	 * @return Above Sea Level (ASL) altitude in meters
+	 */
+	public int getData(double longitude, double latitude) {
 		try {
-			return get(lon, lat, dir);
+			return srtmData.load(longitude, latitude, listner);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return SRTM_NaN; // SRTM NaN
 		}
 	}
-	
-	private static int get(double lon, double lat, String dir) throws Exception {
-		Srtm srtm = new Srtm(dir);
-		return srtm.srtmData.load(srtm, lon, lat);
+
+	/**
+	 * If a file needs to be download this listener will be called periodically
+	 */
+	public void setListner(OnProgressListner listner) {
+		this.listner = listner;
 	}
 }
