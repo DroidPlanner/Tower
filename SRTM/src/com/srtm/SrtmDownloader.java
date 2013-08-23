@@ -1,11 +1,13 @@
 package com.srtm;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLConnection;
 
 import com.srtm.Srtm.OnProgressListner;
 
@@ -56,31 +58,30 @@ public class SrtmDownloader {
 		}
 	}
 
-	private void downloadFile(String urlAddress, File output)
+	private void downloadFile(String urlAddress, File file)
 			throws IOException {
-		URL url1;
-		InputStream inputs;
-		BufferedOutputStream outputs;
-		callListner(output.getName(), 0);
-		url1 = new URL(urlAddress);
-		inputs = url1.openStream();
-		outputs = new BufferedOutputStream(new FileOutputStream(output));
-		int i = 0;
-		int ch = 0;
-		while (ch >= 0) {
-			ch = inputs.read();
-			if (ch >= 0) {
-				outputs.write(ch);
-			}
-			i++;
-			if (i % 100000 == 0) {
-				callListner(output.getName(), i);
-			}
-		}
-		callListner(output.getName(), 100);
-		inputs.close();
-		outputs.close();
+		URL url = new URL(urlAddress);
+        URLConnection connection = url.openConnection();
+        connection.connect();
+        // this will be useful so that you can show a typical 0-100% progress bar
+        int fileLength = connection.getContentLength();
 
+        // download the file
+        InputStream input = new BufferedInputStream(url.openStream());		
+        BufferedOutputStream outputs = new BufferedOutputStream(new FileOutputStream(file));
+		
+        byte data[] = new byte[2048];
+        long total = 0;
+        int count;
+        while ((count = input.read(data)) != -1) {
+            total += count;
+            outputs.write(data, 0, count);
+            callListner(file.getName(), (int) (total * 100 / fileLength));
+        }
+        
+		outputs.flush();
+		outputs.close();
+		input.close();
 	}
 
 	private void callListner(String filename, int i) {

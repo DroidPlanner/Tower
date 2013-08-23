@@ -4,7 +4,7 @@ public class Srtm {
 	private static final int SRTM_NaN = -32768;
 
 	public interface OnProgressListner {
-		public void onProgress(String filename, float percentage);
+		public void onProgress(String filename, int percentage);
 	}
 
 	private SrtmData srtmData;
