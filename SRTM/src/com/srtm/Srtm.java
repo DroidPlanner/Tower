@@ -7,18 +7,23 @@ public class Srtm {
 		public void onProgress(float percentage, String filename);
 	}
 
-	public SrtmData srtmData;
+	private SrtmData srtmData;
 
-	public Srtm(String dir) {
-		srtmData = new SrtmData(dir);
+	/**
+	 * @param directory Cache directory
+	 */
+	public Srtm(String directory) {
+		srtmData = new SrtmData(directory);
 	}
 
-	/*
-	 * Get SRTM elevation in meters for lon and lat WGS-84 coordinates
+	/**
+	 * Get SRTM elevation for geographic coordinate
+	 * (WGS-84)
+	 * @return Above Sea Level (ASL) altitude in meters
 	 */
-	public int getData(double lon, double lat) {
+	public int getData(double longitude, double latitude) {
 		try {
-			return srtmData.load(lon, lat);
+			return srtmData.load(longitude, latitude);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return SRTM_NaN; // SRTM NaN
