@@ -7,16 +7,20 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 public class SrtmData {
-	public String path;
-	File srtmFile;
-	BufferedInputStream s;
+	private String path;
+	private File srtmFile;
+	private BufferedInputStream s;
 
-	public int load(Srtm srtm, double lon, double lat) throws Exception {
+	public SrtmData(String dir) {
+		path = dir;
+	}
+
+	public int load(double lon, double lat) throws Exception {
 		int altitude;
 		
 		String fname = SrtmData.getName(lon, lat);
 		setupFilePaths(fname);
-		downloadSrtmFileIfNeeded(srtm, fname);
+		downloadSrtmFileIfNeeded(fname);
 		
 		s = new BufferedInputStream(new FileInputStream(srtmFile));
 		altitude = readHtgFile(s,lon,lat);
@@ -24,7 +28,7 @@ public class SrtmData {
 		return altitude;
 	}
 
-	private void downloadSrtmFileIfNeeded(Srtm srtm, String fname) throws Exception  {
+	private void downloadSrtmFileIfNeeded(String fname) throws Exception  {
 		if (!srtmFile.exists()) {
 			SrtmDownloader.downloadSrtmFile(fname, path);
 		}
