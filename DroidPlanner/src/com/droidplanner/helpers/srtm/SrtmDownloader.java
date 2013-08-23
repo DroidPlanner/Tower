@@ -7,20 +7,20 @@ import java.io.InputStream;
 import java.net.URL;
 
 public class SrtmDownloader {
+	static final String url = "http://dds.cr.usgs.gov/srtm/version2_1/SRTM3/";
 
-	static void downloadRegionIndex(int region, String srtmPath, String url)
+	static void downloadRegionIndex(int region, String srtmPath)
 			throws IOException {
 		String regionIndex = SrtmRegions.REGIONS[region] + ".index.html";
-		if (!srtmPath.equals("")) {
-			regionIndex = srtmPath + "/" + regionIndex;
-		}
+		regionIndex = getIndexPath(srtmPath)+regionIndex;
 		File regionIndexFile = new File(regionIndex);
 		downloadFile(url + SrtmRegions.REGIONS[region] + "/", regionIndexFile);
 	}
 
+
 	static void downloadSrtmFile(String fname, String path) throws Exception {
 		File output;
-		String region = SrtmRegions.findRegion(fname, path);
+		String region = new SrtmRegions(path).findRegion(fname);
 		output = new File(path + "/" + fname + ".zip");
 		downloadSrtmFile(fname, output, region);
 		UnZip.unZipIt(fname, output);
@@ -30,7 +30,7 @@ public class SrtmDownloader {
 	private static void downloadSrtmFile(String fname, File output,
 			String region) throws IOException {
 		try {
-			downloadFile(Srtm.url + region + "/" + fname + ".zip", output);
+			downloadFile(SrtmDownloader.url + region + "/" + fname + ".zip", output);
 		} catch (IOException e) {
 			downloadAlternativeSrtmFile(fname, output, region, e);
 		}
@@ -42,7 +42,7 @@ public class SrtmDownloader {
 		if (fname.startsWith("N5")
 				&& region.equalsIgnoreCase("North_America")) {
 			downloadFile(
-					Srtm.url + region + "/" + fname.replace(".hgt", "hgt")
+					SrtmDownloader.url + region + "/" + fname.replace(".hgt", "hgt")
 							+ ".zip", output);
 		} else {
 			throw e;
@@ -74,6 +74,10 @@ public class SrtmDownloader {
 		inputs.close();
 		outputs.close();
 
+	}
+
+	public static String getIndexPath(String srtmPath) {
+		return srtmPath + "/Index/";
 	}
 
 }
