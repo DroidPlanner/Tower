@@ -33,7 +33,7 @@ public class LineSampler {
 		double distance = 0;
 		
 		while (distance < totalLength) {
-			GeoTools.newpos(from, heading, distance);
+			GeoTools.newCoordFromBearingAndDistance(from, heading, distance);
 			distance += samplingDistance;
 		}
 		return result;

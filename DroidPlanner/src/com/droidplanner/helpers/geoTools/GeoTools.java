@@ -99,7 +99,7 @@ public class GeoTools {
 	 *            distance to be added
 	 * @return New point with the added distance
 	 */
-	static LatLng newpos(LatLng origin, double bearing, double distance) {
+	static LatLng newCoordFromBearingAndDistance(LatLng origin, double bearing, double distance) {
 
 		double lat = origin.latitude;
 		double lon = origin.longitude;
