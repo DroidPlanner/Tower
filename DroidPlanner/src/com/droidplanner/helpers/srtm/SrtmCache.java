@@ -1,35 +1,39 @@
 package com.droidplanner.helpers.srtm;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.droidplanner.file.DirectoryPath;
 import com.droidplanner.helpers.srtm.Srtm.OnProgressListner;
+import com.google.android.gms.maps.model.LatLng;
 
-public class SrtmCache extends AsyncTask<Integer, Integer, Integer> implements OnProgressListner {
+public abstract class SrtmCache extends AsyncTask<LatLng, String, Integer> implements OnProgressListner {
+	public abstract void update(String values);
+	public abstract void finish();
 
 	@Override
-	protected Integer doInBackground(Integer... params) {
+	protected Integer doInBackground(LatLng... params) {
 		Srtm Srtm = new Srtm(DirectoryPath.getSrtmPath());
 		Srtm.setListner(this);
-		int alt = 0, sea = 0, high = 0;
-
-		Log.d("SRTM", "fetching data");
-		alt = Srtm.getData(-51.1439127, -29.7026708); // Near my house
-		sea = Srtm.getData(-50.0360209, -29.8055343); // Sea level
-		high = Srtm.getData(-50.0360209, -20.8055343); // High place
-		Log.d("SRTM", "Altitude:" + alt + " Sea:" + sea + " High:" + high);
-		return null;
-	}
-	
+		
+		int alt = Srtm.getData(params[0].longitude,params[0].latitude);
+		return alt;
+	}	
 	
 	@Override
 	public void onProgress(String filename, int percentage) {
 		if (percentage>=0) {
-			Log.d("SRTM", "Downloading "+filename+" - "+percentage+"%");			
+			publishProgress("Downloading "+filename+" - "+percentage+"%");			
 		}else{
-			Log.d("SRTM", "Downloading "+filename);
+			publishProgress("Downloading "+filename);
 		}
-	}	
+	}
 
+	@Override
+	protected void onProgressUpdate(String... values) {
+		update(values[0]);
+	}
+	@Override
+	protected void onPostExecute(Integer result) {
+		finish();
+	}
 }
