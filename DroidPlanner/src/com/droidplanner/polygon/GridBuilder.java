@@ -174,7 +174,7 @@ public class GridBuilder {
 		LatLng point = new LatLng(bounds.getMiddle().latitude,
 				bounds.getMiddle().longitude);
 
-		point = GeoTools.newpos(point, angle - 135, bounds.getDiag());
+		point = GeoTools.newCoordFromBearingAndDistance(point, angle - 135, bounds.getDiag());
 
 		// get x y step amount in lat lng from m
 		Double y1 = Math.cos(Math.toRadians(angle + 90));
@@ -188,7 +188,7 @@ public class GridBuilder {
 		int lines = 0;
 		while (lines * lineDist < bounds.getDiag() * 1.5) {
 			LatLng pointx = point;
-			pointx = GeoTools.newpos(pointx, angle, bounds.getDiag() * 1.5);
+			pointx = GeoTools.newCoordFromBearingAndDistance(pointx, angle, bounds.getDiag() * 1.5);
 
 			LineLatLng line = new LineLatLng(point, pointx);
 			gridLines.add(line);
