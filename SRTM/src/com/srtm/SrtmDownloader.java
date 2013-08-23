@@ -7,10 +7,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
+import com.srtm.Srtm.OnProgressListner;
+
 public class SrtmDownloader {
 	static final String url = "http://dds.cr.usgs.gov/srtm/version2_1/SRTM3/";
+	private OnProgressListner listner;
 
-	static void downloadRegionIndex(int region, String srtmPath)
+	public SrtmDownloader(OnProgressListner listner) {
+		this.listner = listner;
+	}
+
+	public void downloadRegionIndex(int region, String srtmPath)
 			throws IOException {
 		String regionIndex = SrtmRegions.REGIONS[region] + ".index.html";
 		regionIndex = getIndexPath(srtmPath) + regionIndex;
@@ -18,17 +25,17 @@ public class SrtmDownloader {
 		downloadFile(url + SrtmRegions.REGIONS[region] + "/", regionIndexFile);
 	}
 
-	static void downloadSrtmFile(String fname, String path) throws Exception {
+	public void downloadSrtmFile(String fname, String path) throws Exception {
 		File output;
-		String region = new SrtmRegions(path).findRegion(fname);
+		String region = new SrtmRegions(path).findRegion(fname, listner);
 		output = new File(path + "/" + fname + ".zip");
 		downloadSrtmFile(fname, output, region);
 		UnZip.unZipIt(fname, output);
 		output.delete();
 	}
 
-	private static void downloadSrtmFile(String fname, File output,
-			String region) throws IOException {
+	private void downloadSrtmFile(String fname, File output, String region)
+			throws IOException {
 		try {
 			downloadFile(SrtmDownloader.url + region + "/" + fname + ".zip",
 					output);
@@ -37,7 +44,7 @@ public class SrtmDownloader {
 		}
 	}
 
-	private static void downloadAlternativeSrtmFile(String fname, File output,
+	private void downloadAlternativeSrtmFile(String fname, File output,
 			String region, IOException e) throws IOException {
 		// fix SRTM 2.1 naming problem in North America
 		if (fname.startsWith("N5") && region.equalsIgnoreCase("North_America")) {
@@ -49,12 +56,12 @@ public class SrtmDownloader {
 		}
 	}
 
-	private static void downloadFile(String urlAddress, File output)
+	private void downloadFile(String urlAddress, File output)
 			throws IOException {
 		URL url1;
 		InputStream inputs;
 		BufferedOutputStream outputs;
-		System.out.println("file:" + output.getName());
+		callListner(output.getName(), 0);
 		url1 = new URL(urlAddress);
 		inputs = url1.openStream();
 		outputs = new BufferedOutputStream(new FileOutputStream(output));
@@ -67,13 +74,19 @@ public class SrtmDownloader {
 			}
 			i++;
 			if (i % 100000 == 0) {
-				System.out.print("-");
+				callListner(output.getName(), i);
 			}
 		}
-		System.out.println("");
+		callListner(output.getName(), 100);
 		inputs.close();
 		outputs.close();
 
+	}
+
+	private void callListner(String filename, int i) {
+		if (listner != null) {
+			listner.onProgress(filename, i);
+		}
 	}
 
 	public static String getIndexPath(String srtmPath) {

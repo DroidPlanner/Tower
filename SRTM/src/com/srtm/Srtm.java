@@ -4,10 +4,11 @@ public class Srtm {
 	private static final int SRTM_NaN = -32768;
 
 	public interface OnProgressListner {
-		public void onProgress(float percentage, String filename);
+		public void onProgress(String filename, float percentage);
 	}
 
 	private SrtmData srtmData;
+	private OnProgressListner listner;
 
 	/**
 	 * @param directory
@@ -28,10 +29,17 @@ public class Srtm {
 	 */
 	public int getData(double longitude, double latitude) {
 		try {
-			return srtmData.load(longitude, latitude);
+			return srtmData.load(longitude, latitude, listner);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return SRTM_NaN; // SRTM NaN
 		}
+	}
+
+	/**
+	 * If a file needs to be download this listener will be called periodically
+	 */
+	public void setListner(OnProgressListner listner) {
+		this.listner = listner;
 	}
 }
