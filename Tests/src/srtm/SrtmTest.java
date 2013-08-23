@@ -11,7 +11,7 @@ import org.junit.Test;
 import com.srtm.Srtm;
 import com.srtm.Srtm.OnProgressListner;
 
-public class SrtmTest {
+public class SrtmTest implements OnProgressListner {
 	private static final String PATH = "./bin/SRTM";
 	Srtm srtm;
 	protected int progressCalbacks;
@@ -19,6 +19,7 @@ public class SrtmTest {
 	@Before
 	public void Setup() {
 		srtm = new Srtm(PATH);
+		srtm.setListner(this);
 	}
 
 	@Test
@@ -35,16 +36,12 @@ public class SrtmTest {
 	@Ignore("Since it needs to fetch a file this can be very slow")
 	@Test
 	public void testListner() {
-		//	new File(PATH + "/S30W052.hgt").delete();
-		
-		srtm.setListner(new OnProgressListner() {
-			@Override
-			public void onProgress(String filename, int percentage) {
-				System.out.println("OnProgress:" + filename + " %:"+ percentage);
-			}
-		});
-		srtm.getData(-51.1439127, -29.7026708);		
-
+		new File(PATH + "/S30W052.hgt").delete();
+		srtm.getData(-51.1439127, -29.7026708);
 	}
 
+	@Override
+	public void onProgress(String filename, int percentage) {
+		System.out.println("OnProgress:" + filename + " %:" + percentage);
+	}
 }

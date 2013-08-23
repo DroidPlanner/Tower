@@ -3,6 +3,9 @@ package com.srtm;
 public class Srtm {
 	private static final int SRTM_NaN = -32768;
 
+	/**
+	 * Callback for progress reports
+	 */
 	public interface OnProgressListner {
 		public void onProgress(String filename, int percentage);
 	}

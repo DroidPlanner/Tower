@@ -64,12 +64,12 @@ public class SrtmDownloader {
         URLConnection connection = url.openConnection();
         connection.connect();
         // this will be useful so that you can show a typical 0-100% progress bar
-        int fileLength = connection.getContentLength();
+        long fileLength = connection.getContentLengthLong();
 
         // download the file
         InputStream input = new BufferedInputStream(url.openStream());		
         BufferedOutputStream outputs = new BufferedOutputStream(new FileOutputStream(file));
-		
+        
         byte data[] = new byte[2048];
         long total = 0;
         int count;
@@ -86,7 +86,11 @@ public class SrtmDownloader {
 
 	private void callListner(String filename, int i) {
 		if (listner != null) {
-			listner.onProgress(filename, i);
+			if (i>=0) {
+				listner.onProgress(filename, i);				
+			}else{
+				listner.onProgress(filename, -1);
+			}
 		}
 	}
 
