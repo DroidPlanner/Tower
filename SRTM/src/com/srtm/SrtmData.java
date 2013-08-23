@@ -17,39 +17,38 @@ public class SrtmData {
 
 	public int load(double lon, double lat) throws Exception {
 		int altitude;
-		
+
 		String fname = SrtmData.getName(lon, lat);
 		setupFilePaths(fname);
 		downloadSrtmFileIfNeeded(fname);
-		
+
 		s = new BufferedInputStream(new FileInputStream(srtmFile));
-		altitude = readHtgFile(s,lon,lat);
+		altitude = readHtgFile(s, lon, lat);
 		s.close();
 		return altitude;
 	}
 
-	private void downloadSrtmFileIfNeeded(String fname) throws Exception  {
+	private void downloadSrtmFileIfNeeded(String fname) throws Exception {
 		if (!srtmFile.exists()) {
 			SrtmDownloader.downloadSrtmFile(fname, path);
 		}
 	}
 
 	private void setupFilePaths(String fname) {
-			srtmFile = new File(path + "/" + fname);
+		srtmFile = new File(path + "/" + fname);
 	}
 
-	private int readHtgFile(BufferedInputStream s, double lon, double lat) throws Exception {
+	private int readHtgFile(BufferedInputStream s, double lon, double lat)
+			throws Exception {
 		byte[] buffer = new byte[2];
 		int index = calculateFileIndex(lon, lat);
 		skipToDataPositionInFile(index);
 		s.read(buffer);
-		return ByteBuffer.wrap(buffer).order(
-				ByteOrder.BIG_ENDIAN).getShort();
+		return ByteBuffer.wrap(buffer).order(ByteOrder.BIG_ENDIAN).getShort();
 	}
 
-	private void skipToDataPositionInFile(int index)
-			throws Exception {
-		if(s.skip(index)!=index){
+	private void skipToDataPositionInFile(int index) throws Exception {
+		if (s.skip(index) != index) {
 			throw new Exception("error when skipping");
 		}
 	}
@@ -57,15 +56,15 @@ public class SrtmData {
 	private int calculateFileIndex(double lon, double lat) {
 		int ai = (int) Math.round(1200d * (lat - Math.floor(lat)));
 		int aj = (int) Math.round(1200d * (lon - Math.floor(lon)));
-		int index = (aj+(1200-ai)*1201)*2;
+		int index = (aj + (1200 - ai) * 1201) * 2;
 		return index;
 	}
 
 	static String getName(double Dlon, double Dlat) {
-	
+
 		int lon = (int) Math.floor(Dlon);
 		int lat = (int) Math.floor(Dlat);
-		
+
 		String dirlat = "N";
 		if (lat < 0) {
 			dirlat = "S";
