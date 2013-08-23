@@ -29,6 +29,12 @@ public class ChartScale {
 		return range;
 	}
 
+	public void setRange(double range, double min, double max) {
+		this.range = range;
+		this.min = min;
+		this.max = max;
+	}
+
 	class ChartScaleListener extends
 			ScaleGestureDetector.SimpleOnScaleGestureListener {
 

@@ -281,7 +281,12 @@ public class PlanningActivity extends SuperActivity implements
 	}
 
 	public void openElevationDialog(){
-		new ElevationDialog().build(this);
+		List<LatLng> mockPoints = new ArrayList<LatLng>();
+		for (double i = 0; i < 1000; i++) {
+			mockPoints.add(new LatLng(-29.7026708, -51.1439127+i/1000d));		
+		}		
+		
+		new ElevationDialog().build(this, mockPoints);
 	}
 	
 	private void menuSaveFile() {

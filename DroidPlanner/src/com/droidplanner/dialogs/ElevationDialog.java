@@ -1,5 +1,8 @@
 package com.droidplanner.dialogs;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -22,12 +25,12 @@ public class ElevationDialog implements OnSrtmReaderListner {
 	private ProgressBar progressBar;
 	private Chart chart;
 
-	public void build(Context context) {
+	public void build(Context context, List<LatLng> mockPoints) {
 		AlertDialog dialog = buildDownloadingDialog(context);
 		dialog.show();
 
-		SrtmReader srtm = new SrtmReader(this);
-		srtm.execute(new LatLng(-29.7026708, -51.1439127));
+		SrtmReader srtm = new SrtmReader(mockPoints, this);
+		srtm.execute(0);
 	}
 
 	@Override
@@ -36,16 +39,14 @@ public class ElevationDialog implements OnSrtmReaderListner {
 	}
 
 	@Override
-	public void srtmReadFinished() {
+	public void srtmReadFinished(ArrayList<Integer> altitudes) {
 		layout.removeAllViews();
 		layout.addView(chart);
-		ChartSeries serie = new ChartSeries(80);
-		chart.dataRender.setNumPtsToDraw(80);
+		ChartSeries serie = new ChartSeries(altitudes);
+		chart.dataRender.setNumPtsToDraw(altitudes.size());
+		chart.scale.setRange(1000, 10, 1000);
 		serie.enable();
 		serie.setColor(Color.BLUE);
-		for (int i = 0; i < 80; i++) {
-			serie.newData(i%80);			
-		}
 		chart.series.add(serie);
 		chart.update();
 	}
