@@ -9,7 +9,7 @@ public class SrtmCache extends AsyncTask<Integer, Integer, Integer> {
 
 	@Override
 	protected Integer doInBackground(Integer... params) {
-		Srtm Srtm = new Srtm(DirectoryPath.getDroidPlannerPath() + "/SRTM/");
+		Srtm Srtm = new Srtm(DirectoryPath.getSrtmPath());
 
 		int alt = 0, sea = 0, high = 0;
 
