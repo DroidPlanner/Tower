@@ -38,6 +38,10 @@ public class SrtmRegions {
 			region = SrtmRegions.REGIONS[i];
 			String indexPath = region;
 			indexPath = SrtmDownloader.getIndexPath(path) + indexPath;
+			File indexDir = new File(indexPath);
+			if (!indexDir.exists()) {
+				indexDir.mkdirs();
+			}
 			indexPath += ".index.html";
 			File indexFile = new File(indexPath);
 			if (!indexFile.exists()) {
