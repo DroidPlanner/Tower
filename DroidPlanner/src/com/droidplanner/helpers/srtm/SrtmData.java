@@ -6,7 +6,7 @@ import java.io.FileInputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import com.srtm.Srtm.OnProgressListner;
+import com.droidplanner.helpers.srtm.Srtm.OnProgressListner;
 
 public class SrtmData {
 	private String path;
