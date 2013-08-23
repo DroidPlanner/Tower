@@ -6,6 +6,8 @@ import java.io.FileInputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import com.srtm.Srtm.OnProgressListner;
+
 public class SrtmData {
 	private String path;
 	private File srtmFile;
@@ -15,12 +17,12 @@ public class SrtmData {
 		path = dir;
 	}
 
-	public int load(double lon, double lat) throws Exception {
+	public int load(double lon, double lat, OnProgressListner listner) throws Exception {
 		int altitude;
 
 		String fname = SrtmData.getName(lon, lat);
 		setupFilePaths(fname);
-		downloadSrtmFileIfNeeded(fname);
+		downloadSrtmFileIfNeeded(fname,listner);
 
 		s = new BufferedInputStream(new FileInputStream(srtmFile));
 		altitude = readHtgFile(s, lon, lat);
@@ -28,9 +30,9 @@ public class SrtmData {
 		return altitude;
 	}
 
-	private void downloadSrtmFileIfNeeded(String fname) throws Exception {
+	private void downloadSrtmFileIfNeeded(String fname,OnProgressListner listner) throws Exception {
 		if (!srtmFile.exists()) {
-			SrtmDownloader.downloadSrtmFile(fname, path);
+			new SrtmDownloader(listner).downloadSrtmFile(fname, path);
 		}
 	}
 
