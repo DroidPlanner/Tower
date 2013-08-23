@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.droidplanner.R;
 import com.droidplanner.helpers.srtm.SrtmReader;
 import com.droidplanner.helpers.srtm.SrtmReader.OnSrtmReaderListner;
+import com.droidplanner.widgets.graph.Chart;
 import com.google.android.gms.maps.model.LatLng;
 
 public class ElevationDialog implements OnSrtmReaderListner {
@@ -17,6 +18,7 @@ public class ElevationDialog implements OnSrtmReaderListner {
 	private LinearLayout layout;
 	private TextView progressText;
 	private ProgressBar progressBar;
+	private Chart chart;
 
 	public void build(Context context) {
 		AlertDialog dialog = buildDownloadingDialog(context);
@@ -34,6 +36,7 @@ public class ElevationDialog implements OnSrtmReaderListner {
 	@Override
 	public void srtmReadFinished() {
 		layout.removeAllViews();
+		layout.addView(chart);
 	}
 
 	private AlertDialog buildDownloadingDialog(Context context) {
@@ -43,6 +46,8 @@ public class ElevationDialog implements OnSrtmReaderListner {
 
 		layout = new LinearLayout(context);
 		layout.setOrientation(LinearLayout.VERTICAL);
+
+		chart = new Chart(context, null);
 
 		progressBar = new ProgressBar(context, null,
 				android.R.attr.progressBarStyleLarge);
