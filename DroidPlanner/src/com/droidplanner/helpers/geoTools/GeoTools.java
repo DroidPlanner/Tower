@@ -62,7 +62,7 @@ public class GeoTools {
 	 *            offset to be added
 	 * @return point with offset
 	 */
-	static LatLng addLatLng(LatLng point, LatLng offset) {
+	public static LatLng addLatLng(LatLng point, LatLng offset) {
 		return (new LatLng(point.latitude + offset.latitude, point.longitude
 				+ offset.longitude));
 	}
@@ -72,17 +72,17 @@ public class GeoTools {
 	 * 
 	 * @return distance between the points in degrees
 	 */
-	static Double getAproximatedDistance(LatLng p1, LatLng p2) {
+	public static Double getAproximatedDistance(LatLng p1, LatLng p2) {
 		return (Math.hypot((p1.latitude - p2.latitude),
 				(p1.longitude - p2.longitude)));
 	}
 
-	static Double metersTolat(double meters) {
+	public static Double metersTolat(double meters) {
 		double radius_of_earth = 6378100.0;// # in meters
 		return Math.toDegrees(meters / radius_of_earth);
 	}
 
-	static Double latToMeters(double lat) {
+	public static Double latToMeters(double lat) {
 		double radius_of_earth = 6378100.0;// # in meters
 		return Math.toRadians(lat) * radius_of_earth;
 	}
@@ -99,7 +99,7 @@ public class GeoTools {
 	 *            distance to be added
 	 * @return New point with the added distance
 	 */
-	static LatLng newCoordFromBearingAndDistance(LatLng origin, double bearing, double distance) {
+	public static LatLng newCoordFromBearingAndDistance(LatLng origin, double bearing, double distance) {
 
 		double lat = origin.latitude;
 		double lon = origin.longitude;
@@ -242,7 +242,7 @@ public class GeoTools {
 	 *            A list of lines to search
 	 * @return The closest Line
 	 */
-	static LineLatLng findClosestLine(LatLng point, List<LineLatLng> list) {
+	public static LineLatLng findClosestLine(LatLng point, List<LineLatLng> list) {
 		LineLatLng answer = list.get(0);
 		double shortest = Double.MAX_VALUE;
 
@@ -273,7 +273,7 @@ public class GeoTools {
 	 *            ending point of the second line
 	 * @return point of intersection, or null if there is no intersection
 	 */
-	static LatLng FindLineIntersection(LatLng start1, LatLng end1,
+	public static LatLng FindLineIntersection(LatLng start1, LatLng end1,
 			LatLng start2, LatLng end2) {
 		double denom = ((end1.longitude - start1.longitude) * (end2.latitude - start2.latitude))
 				- ((end1.latitude - start1.latitude) * (end2.longitude - start2.longitude));
