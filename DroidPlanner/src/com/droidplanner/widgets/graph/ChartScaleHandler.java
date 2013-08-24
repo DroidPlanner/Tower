@@ -26,8 +26,8 @@ public class ChartScaleHandler {
 	}
 
 	public void autoScale(StaticSeries dataSeries, double overScale) {
-		scaleY.max = dataSeries.getMaxValue()*overScale;
-		scaleY.range = scaleY.max;
+		scaleY.setMax(dataSeries.getMaxValue()*overScale);
+		scaleY.setRange(scaleY.getMax());
 	}
 	
 	class ChartScaleListener extends
