@@ -31,6 +31,7 @@
     <string name="menu_open_kmz">Open KMZ</string>
     <string name="menu_add_polygon">Add Polygon</string>
     <string name="menu_polygon">Polygon</string>
+    <string name="menu_elevation">Elevation</string>
     <string name="menu_clear_polygon">Clear Poly</string>
     <string name="menu_clear_path">Clear Path</string>
     <string name="generate">Generate</string>

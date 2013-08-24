@@ -2,6 +2,7 @@ package com.droidplanner.polygon;
 
 import java.util.List;
 
+import com.droidplanner.helpers.geoTools.GeoTools;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
@@ -25,7 +26,7 @@ class PolyBounds {
 	}
 
 	public double getDiag() {
-		return GeoTools.latToMeters(GeoTools.getDistance(ne, sw));
+		return GeoTools.latToMeters(GeoTools.getAproximatedDistance(ne, sw));
 	}
 
 	public LatLng getMiddle() {
