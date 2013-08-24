@@ -28,6 +28,7 @@ import com.droidplanner.fragments.PlanningMapFragment.OnMapInteractionListener;
 import com.droidplanner.fragments.helpers.GestureMapFragment;
 import com.droidplanner.fragments.helpers.GestureMapFragment.OnPathFinishedListner;
 import com.droidplanner.fragments.helpers.MapProjection;
+import com.droidplanner.helpers.geoTools.LineSampler;
 import com.droidplanner.polygon.Polygon;
 import com.droidplanner.polygon.PolygonPoint;
 import com.google.android.gms.maps.model.LatLng;
@@ -74,7 +75,6 @@ public class PlanningActivity extends SuperActivity implements
 
 		update();
 		
-		openElevationDialog();
 	}
 
 	private void checkIntent() {
@@ -281,12 +281,8 @@ public class PlanningActivity extends SuperActivity implements
 	}
 
 	public void openElevationDialog(){
-		List<LatLng> mockPoints = new ArrayList<LatLng>();
-		for (double i = 0; i < 1000; i++) {
-			mockPoints.add(new LatLng(-29.7026708, -51.1439127+i/1000d));		
-		}		
-		
-		new ElevationDialog().build(this, mockPoints);
+		List<LatLng> samplingPoints = new LineSampler(drone.mission.getAllCoordinates()).sample(100);
+		new ElevationDialog().build(this, samplingPoints);
 	}
 	
 	private void menuSaveFile() {
