@@ -23,6 +23,8 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 
 public class OfflineMapFragment extends MapFragment {
 
+	private GoogleMap mMap;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
 			Bundle bundle) {
@@ -32,19 +34,21 @@ public class OfflineMapFragment extends MapFragment {
 	}
 
 	private void setupMap() {
-		setupMapUI();
-		setupMapOverlay();
+		mMap = getMap();
+		if (isMapLayoutFinished()) { // TODO it should wait for the map layout
+										// before setting it up, instead of just
+										// skipping the setup
+			setupMapUI();
+			setupMapOverlay();
+		}
 	}
 
 	private void setupMapUI() {
-		GoogleMap mMap = getMap();
-		if (mMap != null) {
-			mMap.setMyLocationEnabled(true);
-			UiSettings mUiSettings = mMap.getUiSettings();
-			mUiSettings.setMyLocationButtonEnabled(true);
-			mUiSettings.setCompassEnabled(true);
-			mUiSettings.setTiltGesturesEnabled(false);
-		}
+		mMap.setMyLocationEnabled(true);
+		UiSettings mUiSettings = mMap.getUiSettings();
+		mUiSettings.setMyLocationButtonEnabled(true);
+		mUiSettings.setCompassEnabled(true);
+		mUiSettings.setTiltGesturesEnabled(false);
 	}
 
 	private void setupMapOverlay() {
@@ -63,7 +67,6 @@ public class OfflineMapFragment extends MapFragment {
 	}
 
 	private void setupOnlineMapOverlay() {
-		GoogleMap mMap = getMap();
 		mMap.setMapType(getMapType());
 	}
 
@@ -89,7 +92,6 @@ public class OfflineMapFragment extends MapFragment {
 	}
 
 	private void setupOfflineMapOverlay() {
-		GoogleMap mMap = getMap();
 		mMap.setMapType(GoogleMap.MAP_TYPE_NONE);
 		TileOverlay tileOverlay = mMap.addTileOverlay(new TileOverlayOptions()
 				.tileProvider(new LocalMapTileProvider()));
@@ -110,10 +112,6 @@ public class OfflineMapFragment extends MapFragment {
 		}
 	}
 
-	private boolean isMapLayoutFinished() {
-		return getMap() != null;
-	}
-
 	protected void clearMap() {
 		GoogleMap mMap = getMap();
 		mMap.clear();
@@ -129,12 +127,14 @@ public class OfflineMapFragment extends MapFragment {
 	}
 
 	public double getMapRotation() {
-		GoogleMap map = getMap();
-		if (map != null) {
-			return map.getCameraPosition().bearing;
+		if (isMapLayoutFinished()) {
+			return mMap.getCameraPosition().bearing;
 		} else {
 			return 0;
 		}
 	}
 
+	private boolean isMapLayoutFinished() {
+		return getMap() != null;
+	}
 }
