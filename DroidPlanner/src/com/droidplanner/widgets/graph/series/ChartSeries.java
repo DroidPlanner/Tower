@@ -15,6 +15,26 @@ public abstract class ChartSeries {
 		paint.setColor(Color.WHITE);
 	}
 
+	public double getMaxValue() {
+		double higer = Double.NEGATIVE_INFINITY;
+		for (int i = 0; i < data.length; i++) {
+			if (higer < data[i]) {
+				higer = data[i];
+			}
+		}
+		return higer;
+	}
+
+	public double getMinValue() {
+		double lower = Double.POSITIVE_INFINITY;
+		for (int i = 0; i < data.length; i++) {
+			if (lower > data[i]) {
+				lower = data[i];
+			}
+		}
+		return lower;
+	}
+	
 	public Paint getPaint() {
 		return paint;
 	}
@@ -38,6 +58,5 @@ public abstract class ChartSeries {
 	public boolean isActive() {
 		return enabled;
 	}
-
 
 }

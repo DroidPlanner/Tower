@@ -7,7 +7,7 @@ public class StaticSeries extends ChartSeries {
 	public StaticSeries(List<Integer> values) {
 		super(values.size());
 		for (int i = 0; i < values.size(); i++) {
-			data[i] = values.get(i);			
+			data[i] = values.get(i);
 		}
 		enable();
 	}

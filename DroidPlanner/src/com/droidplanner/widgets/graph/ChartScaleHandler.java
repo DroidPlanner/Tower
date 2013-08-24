@@ -1,5 +1,7 @@
 package com.droidplanner.widgets.graph;
 
+import com.droidplanner.widgets.graph.series.StaticSeries;
+
 import android.content.Context;
 import android.view.ScaleGestureDetector;
 
@@ -18,6 +20,10 @@ public class ChartScaleHandler {
 		this.listner = listner;
 	}
 
+	public void autoScale(StaticSeries dataSeries) {
+		scaleY.max = dataSeries.getMaxValue();
+		scaleY.range = scaleY.max;
+	}
 	class ChartScaleListener extends
 			ScaleGestureDetector.SimpleOnScaleGestureListener {
 
@@ -29,4 +35,5 @@ public class ChartScaleHandler {
 			return true;
 		}
 	}
+
 }
