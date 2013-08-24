@@ -1,4 +1,4 @@
-package com.droidplanner.widgets.graph;
+package com.droidplanner.widgets.graph.series;
 
 import android.graphics.Paint;
 

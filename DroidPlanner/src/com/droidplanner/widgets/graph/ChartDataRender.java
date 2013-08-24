@@ -1,5 +1,7 @@
 package com.droidplanner.widgets.graph;
 
+import com.droidplanner.widgets.graph.series.ChartSeries;
+
 import android.graphics.Canvas;
 
 public class ChartDataRender {

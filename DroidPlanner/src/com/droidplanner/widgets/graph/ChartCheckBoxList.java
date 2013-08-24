@@ -3,6 +3,8 @@ package com.droidplanner.widgets.graph;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.droidplanner.widgets.graph.series.ChartSeries;
+
 import android.widget.LinearLayout;
 
 public class ChartCheckBoxList {

@@ -11,6 +11,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.droidplanner.widgets.graph.ChartScale.OnScaleListner;
+import com.droidplanner.widgets.graph.series.ChartSeries;
 import com.droidplanner.widgets.helpers.RenderThread;
 import com.droidplanner.widgets.helpers.RenderThread.canvasPainter;
 

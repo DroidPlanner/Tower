@@ -42,6 +42,7 @@ public class ChartActivity extends SuperActivity implements HudUpdatedListner {
 		for (int i = 0; i < 800; i++) {
 			mockData.add(i%100);			
 		}
+		
 	}
 
 	@Override
