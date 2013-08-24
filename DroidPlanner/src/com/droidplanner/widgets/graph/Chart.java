@@ -80,7 +80,7 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback,
 	public boolean onTouchEvent(MotionEvent ev) {
 		// Let the ScaleGestureDetector inspect all events.
 		super.onTouchEvent(ev);
-		scale.scaleDetector.onTouchEvent(ev);
+		scale.onTouchEvent(ev);
 		return true;
 	}
 

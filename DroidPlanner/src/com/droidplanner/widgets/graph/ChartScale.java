@@ -42,4 +42,8 @@ public class ChartScale {
 	public void setPan(double i) {
 		pan = i;		
 	}
+
+	public void pan(float distanceY) {
+		pan+=distanceY;		
+	}
 }
