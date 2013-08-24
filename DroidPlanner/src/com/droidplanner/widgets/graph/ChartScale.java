@@ -23,10 +23,6 @@ public class ChartScale {
 		return range;
 	}
 	
-	public double getPan() {
-		return pan;
-	}
-
 	public double getMax() {
 		return max;
 	}
@@ -37,5 +33,13 @@ public class ChartScale {
 
 	public void setRange(double range) {
 		this.range = range;
+	}
+
+	public double getOffset() {
+		return pan;
+	}
+
+	public void setPan(double i) {
+		pan = i;		
 	}
 }

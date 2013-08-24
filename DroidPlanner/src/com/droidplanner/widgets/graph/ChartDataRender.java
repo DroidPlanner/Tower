@@ -18,11 +18,11 @@ public class ChartDataRender {
 			for (int i = start; i < start + chart.scale.scaleX.getRange() -1; i++) {
 
 				double y_i = -serie.data[i % serie.data.length];
-				y_i = (y_i + chart.scale.scaleY.getRange())
+				y_i = (y_i + chart.scale.scaleY.getRange() - chart.scale.scaleY.getOffset())
 						/ (2 * chart.scale.scaleY.getRange()) * chart.height;
 
 				double y_i1 = -serie.data[(i + 1) % serie.data.length];
-				y_i1 = (y_i1 + chart.scale.scaleY.getRange())
+				y_i1 = (y_i1 + chart.scale.scaleY.getRange() - chart.scale.scaleY.getOffset())
 						/ (2 * chart.scale.scaleY.getRange()) * chart.height;
 
 				canvas.drawLine((float) pos * delta, (float) y_i,
