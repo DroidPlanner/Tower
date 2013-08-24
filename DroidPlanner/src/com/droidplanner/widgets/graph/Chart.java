@@ -11,7 +11,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.droidplanner.widgets.graph.ChartScale.OnScaleListner;
-import com.droidplanner.widgets.graph.series.DynamicSeries;
+import com.droidplanner.widgets.graph.series.ChartSeries;
 import com.droidplanner.widgets.helpers.RenderThread;
 import com.droidplanner.widgets.helpers.RenderThread.canvasPainter;
 
@@ -27,7 +27,7 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback,
 	public ChartColorsStack colors = new ChartColorsStack();
 	protected ChartScale scale;
 	private ChartGrid grid = new ChartGrid();
-	public List<DynamicSeries> series = new ArrayList<DynamicSeries>();;
+	public List<ChartSeries> series = new ArrayList<ChartSeries>();
 	private ChartDataRender dataRender = new ChartDataRender();
 
 	public Chart(Context context, AttributeSet attributeSet) {
@@ -40,7 +40,7 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback,
 	@Override
 	public void onDraw(Canvas canvas) {
 		grid.drawGrid(this, canvas);
-		for (DynamicSeries serie : series) {
+		for (ChartSeries serie : series) {
 			dataRender.drawSeries(this, canvas, serie);
 		}
 	}

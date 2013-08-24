@@ -11,6 +11,7 @@ import com.droidplanner.activitys.helpers.SuperActivity;
 import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
 import com.droidplanner.widgets.graph.Chart;
 import com.droidplanner.widgets.graph.ChartCheckBoxList;
+import com.droidplanner.widgets.graph.series.StaticSeries;
 
 public class ChartActivity extends SuperActivity implements HudUpdatedListner {
 
@@ -41,8 +42,9 @@ public class ChartActivity extends SuperActivity implements HudUpdatedListner {
 		List<Integer> mockData = new ArrayList<Integer>();
 		for (int i = 0; i < 800; i++) {
 			mockData.add(i%100);			
-		}
-		
+		}		
+		chart.series.add(new StaticSeries(mockData));	
+		chart.update();
 	}
 
 	@Override
