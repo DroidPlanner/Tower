@@ -32,10 +32,13 @@ public class ChartScaleHandler {
 	
 	class ChartScaleListener extends
 			ScaleGestureDetector.SimpleOnScaleGestureListener {
-
 		@Override
 		public boolean onScale(ScaleGestureDetector detector) {
-			scaleY.scale(detector.getScaleFactor());
+			if (detector.getCurrentSpanY()>detector.getCurrentSpanX()) {
+				scaleY.scale(detector.getScaleFactor());				
+			}else{
+				scaleX.scale(detector.getScaleFactor());
+			}
 			listner.onScaleListner();
 			return true;
 		}
