@@ -1,3 +1,8 @@
+## Droidplanner v0.12.3
+* Hungarian translation
+* Fix waypoint numering issue
+* Fix problem with the chart screen in non-english versions
+
 ## Droidplanner v0.12.2
 * New way of creating missions and polygons
 

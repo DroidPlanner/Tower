@@ -75,7 +75,12 @@ public class Mission extends DroneVariable {
 	}
 
 	public void addWaypoints(List<waypoint> points) {
-		waypoints.addAll(points);
+		
+		//Loop through every wp and add it to the wp list
+		for (waypoint wp : points) {
+			addWaypoint(wp);
+		}
+//		waypoints.addAll(points);
 	}
 
 	public void addWaypointsWithDefaultAltitude(List<LatLng> coords) {
