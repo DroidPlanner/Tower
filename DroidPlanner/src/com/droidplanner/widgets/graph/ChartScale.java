@@ -1,6 +1,5 @@
 package com.droidplanner.widgets.graph;
 
-import com.droidplanner.widgets.graph.ChartScaleHandler.ChartScaleListener;
 
 public class ChartScale {
 	public double range;
@@ -13,12 +12,12 @@ public class ChartScale {
 		this.max = max;
 	}
 
-	void scale(float scale, ChartScaleListener chartScaleListener) {
+	void scale(float scale) {
 		range /= scale;
 		range = Math.max(min, Math.min(range, max));
 	}
 
-	public double getRange(ChartScaleHandler chartScaleHandler) {
+	public double getRange() {
 		return range;
 	}
 }

@@ -1,9 +1,9 @@
 package com.droidplanner.widgets.graph;
 
-import com.droidplanner.widgets.graph.series.StaticSeries;
-
 import android.content.Context;
 import android.view.ScaleGestureDetector;
+
+import com.droidplanner.widgets.graph.series.StaticSeries;
 
 public class ChartScaleHandler {
 	public interface OnScaleListner {
@@ -13,6 +13,7 @@ public class ChartScaleHandler {
 	private OnScaleListner listner;
 	protected ScaleGestureDetector scaleDetector;
 	public ChartScale scaleY = new ChartScale(180, 10, 180);
+	public ChartScale scaleX = new ChartScale(400,100, 800);
 
 	public ChartScaleHandler(Context context, OnScaleListner listner) {
 		scaleDetector = new ScaleGestureDetector(context,
@@ -34,8 +35,7 @@ public class ChartScaleHandler {
 
 		@Override
 		public boolean onScale(ScaleGestureDetector detector) {
-			float scale = detector.getCurrentSpanY()/detector.getPreviousSpanY();
-			scaleY.scale(scale, ChartScaleListener.this);
+			scaleY.scale(detector.getScaleFactor());
 			listner.onScaleListner();
 			return true;
 		}
