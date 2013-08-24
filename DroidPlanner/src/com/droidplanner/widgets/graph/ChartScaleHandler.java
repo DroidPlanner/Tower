@@ -21,8 +21,12 @@ public class ChartScaleHandler {
 	}
 
 	public void autoScale(StaticSeries dataSeries) {
+		autoScale(dataSeries, 1);
+	}
+
+	public void autoScale(StaticSeries dataSeries, double overScale) {
 		scaleY.max = dataSeries.getMaxValue();
-		scaleY.range = scaleY.max;
+		scaleY.range = scaleY.max*overScale;
 	}
 	class ChartScaleListener extends
 			ScaleGestureDetector.SimpleOnScaleGestureListener {
