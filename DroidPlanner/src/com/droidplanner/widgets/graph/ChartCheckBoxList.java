@@ -3,7 +3,7 @@ package com.droidplanner.widgets.graph;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.droidplanner.widgets.graph.series.ChartSeries;
+import com.droidplanner.widgets.graph.series.DynamicSeries;
 
 import android.widget.LinearLayout;
 
@@ -22,7 +22,7 @@ public class ChartCheckBoxList {
 	public void updateCheckBox(String label, double value) {
 		for (ChartCheckBox box : checkBoxList) {
 			if (box.getText().equals(label)) {
-				((ChartSeries) box.getTag()).newData(value);
+				((DynamicSeries) box.getTag()).newData(value);
 			}
 		}
 	}

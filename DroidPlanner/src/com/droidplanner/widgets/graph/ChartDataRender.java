@@ -1,13 +1,13 @@
 package com.droidplanner.widgets.graph;
 
-import com.droidplanner.widgets.graph.series.ChartSeries;
+import com.droidplanner.widgets.graph.series.DynamicSeries;
 
 import android.graphics.Canvas;
 
 public class ChartDataRender {
 	private int numPtsToDraw = 100;
 
-	protected void drawSeries(Chart chart, Canvas canvas, ChartSeries serie) {
+	protected void drawSeries(Chart chart, Canvas canvas, DynamicSeries serie) {
 		// scale the data to +- 500
 		// target 0-height
 		// so D in the range +-500
