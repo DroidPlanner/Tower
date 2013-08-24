@@ -23,12 +23,12 @@ public class ChartDataRender {
 			for (int i = start; i < start + numPtsToDraw -1; i++) {
 
 				double y_i = -serie.data[i % serie.data.length];
-				y_i = (y_i + chart.scale.getRange())
-						/ (2 * chart.scale.getRange()) * chart.height;
+				y_i = (y_i + chart.scale.scaleY.getRange(chart.scale))
+						/ (2 * chart.scale.scaleY.getRange(chart.scale)) * chart.height;
 
 				double y_i1 = -serie.data[(i + 1) % serie.data.length];
-				y_i1 = (y_i1 + chart.scale.getRange())
-						/ (2 * chart.scale.getRange()) * chart.height;
+				y_i1 = (y_i1 + chart.scale.scaleY.getRange(chart.scale))
+						/ (2 * chart.scale.scaleY.getRange(chart.scale)) * chart.height;
 
 				canvas.drawLine((float) pos * delta, (float) y_i,
 						(float) (pos + 1) * delta, (float) y_i1,
