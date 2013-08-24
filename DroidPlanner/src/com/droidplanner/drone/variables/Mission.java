@@ -55,10 +55,10 @@ public class Mission extends DroneVariable {
 
 	public List<LatLng> getAllCoordinates() {
 		List<LatLng> result = new ArrayList<LatLng>();
+		result.add(home.getCoord());
 		for (waypoint point : waypoints) {
 			result.add(point.getCoord());
 		}
-		result.add(home.getCoord());
 		return result;
 	}
 
