@@ -20,7 +20,7 @@ public class ChartDataRender {
 			int start = (serie.getFirstIndex() - numPtsToDraw + serie.data.length)
 					% serie.data.length;
 			int pos = 0;
-			for (int i = start; i < start + numPtsToDraw; i++) {
+			for (int i = start; i < start + numPtsToDraw -1; i++) {
 
 				double y_i = -serie.data[i % serie.data.length];
 				y_i = (y_i + chart.scale.getRange())
@@ -41,5 +41,9 @@ public class ChartDataRender {
 	protected void setDrawRate(Chart chart, int p) {
 		if (p > 0)
 			numPtsToDraw = chart.width / p;
+	}
+
+	public void setNumberOfPointsToDraw(int i) {
+		numPtsToDraw = i;
 	}
 }

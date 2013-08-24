@@ -17,4 +17,8 @@ public class StaticSeries extends ChartSeries {
 		return 0;
 	}
 
+	public int getSize() {
+		return data.length;
+	}
+
 }

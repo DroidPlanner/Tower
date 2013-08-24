@@ -43,7 +43,9 @@ public class ChartActivity extends SuperActivity implements HudUpdatedListner {
 		for (int i = 0; i < 800; i++) {
 			mockData.add(i%100);			
 		}		
-		chart.series.add(new StaticSeries(mockData));	
+		StaticSeries dataSeries = new StaticSeries(mockData);
+		chart.series.add(dataSeries);	
+		chart.dataRender.setNumberOfPointsToDraw(dataSeries.getSize());
 		chart.update();
 	}
 
