@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -14,6 +15,7 @@ import com.droidplanner.R;
 import com.droidplanner.helpers.srtm.SrtmReader;
 import com.droidplanner.helpers.srtm.SrtmReader.OnSrtmReaderListner;
 import com.droidplanner.widgets.graph.Chart;
+import com.droidplanner.widgets.graph.series.StaticSeries;
 import com.google.android.gms.maps.model.LatLng;
 
 public class ElevationDialog implements OnSrtmReaderListner {
@@ -40,15 +42,14 @@ public class ElevationDialog implements OnSrtmReaderListner {
 	public void srtmReadFinished(ArrayList<Integer> altitudes) {
 		layout.removeAllViews();
 		layout.addView(chart);
-		/*
-		ChartSeries serie = new ChartSeries(altitudes);
-		chart.dataRender.setNumPtsToDraw(altitudes.size());
-		chart.scale.setRange(1000, 10, 1000);
-		serie.enable();
+		StaticSeries serie = new StaticSeries(altitudes);
+		chart.scale.autoScale(serie,1.1);
+		chart.scale.scaleX.max = altitudes.size();
+		chart.scale.scaleX.range = chart.scale.scaleX.max;
+		chart.scale.scaleX.min = chart.scale.scaleX.max/2;
 		serie.setColor(Color.BLUE);
 		chart.series.add(serie);
 		chart.update();
-		*/
 	}
 
 	private AlertDialog buildDownloadingDialog(Context context) {
