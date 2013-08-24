@@ -1,5 +1,8 @@
 package com.droidplanner.activitys;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.os.Bundle;
 import android.widget.LinearLayout;
 
@@ -33,6 +36,12 @@ public class ChartActivity extends SuperActivity implements HudUpdatedListner {
 		//TODO uncomment the following functions after debbuging
 		//checkBoxList.populateView(readoutMenu, labels, chart);
 		//drone.setHudListner(this);
+		
+		//TODO remove the following mock data after debugging
+		List<Integer> mockData = new ArrayList<Integer>();
+		for (int i = 0; i < 800; i++) {
+			mockData.add(i%100);			
+		}
 	}
 
 	@Override
