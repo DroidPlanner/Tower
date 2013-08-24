@@ -9,6 +9,7 @@ public class StaticSeries extends ChartSeries {
 		for (int i = 0; i < values.size(); i++) {
 			data[i] = values.get(i);			
 		}
+		enable();
 	}
 
 	@Override

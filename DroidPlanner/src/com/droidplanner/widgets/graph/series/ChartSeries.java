@@ -1,5 +1,6 @@
 package com.droidplanner.widgets.graph.series;
 
+import android.graphics.Color;
 import android.graphics.Paint;
 
 public abstract class ChartSeries {
@@ -11,6 +12,7 @@ public abstract class ChartSeries {
 
 	public ChartSeries(int bufferSize) {
 		this.data = new double[bufferSize];
+		paint.setColor(Color.WHITE);
 	}
 
 	public Paint getPaint() {
