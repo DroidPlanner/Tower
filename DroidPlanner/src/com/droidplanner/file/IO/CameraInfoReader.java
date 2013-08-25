@@ -10,26 +10,22 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.util.Xml;
 
-import com.droidplanner.dialogs.OpenFileDialog.FileReader;
-import com.droidplanner.file.DirectoryPath;
-import com.droidplanner.file.FileList;
-
 /**
  * Class to parse a Kml file, based on the code from
  * http://developer.android.com/training/basics/network-ops/xml.html
  * 
  */
-public class CameraInfoReader implements FileReader {
+public class CameraInfoReader {
 
 	private XmlPullParser parser;
 	
 	private CameraInfo cameraInfo = new CameraInfo();
 
 	public boolean openCameraInfoFile(String fileWithPath) {
-		return openKML(fileWithPath);
+		return readCameraInfo(fileWithPath);
 	}
 
-	private boolean openKML(String fileWithPath) {
+	private boolean readCameraInfo(String fileWithPath) {
 		try {
 			FileInputStream in = new FileInputStream(fileWithPath);
 			parse(in);
@@ -126,19 +122,21 @@ public class CameraInfoReader implements FileReader {
 		}
 	}
 
-	@Override
-	public String getPath() {
-		return DirectoryPath.getCameraInfoPath();
-	}
-
-	@Override
-	public String[] getFileList() {
-		return FileList.getCameraInfoFileList();
-	}
-
-	@Override
-	public boolean openFile(String filenameWithPath) {
-		return openCameraInfoFile(filenameWithPath);
+	public boolean openFile(FileInputStream in) {
+		try {
+			parse(in);
+			in.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return false;
+		} catch (XmlPullParserException e) {
+			e.printStackTrace();
+			return false;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 
 	public CameraInfo getCameraInfo() {

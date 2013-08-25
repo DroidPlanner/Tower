@@ -15,8 +15,6 @@ import android.widget.Toast;
 
 import com.droidplanner.R;
 import com.droidplanner.drone.variables.waypoint;
-import com.droidplanner.file.DirectoryPath;
-import com.droidplanner.file.IO.CameraInfoReader;
 import com.droidplanner.file.help.CameraInfoLoader;
 import com.droidplanner.polygon.GridBuilder;
 import com.droidplanner.polygon.Polygon;
@@ -31,7 +29,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		OnTextSeekBarChangedListner, OnSpinnerItemSelectedListener {
 	public abstract void onPolygonGenerated(List<waypoint> list);
 
-	Context context;
+	public Context context;
 	private SeekBarWithText overlapView;
 	private SeekBarWithText angleView;
 	private SeekBarWithText altitudeView;
@@ -45,7 +43,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 	private Polygon polygon;
 	private LatLng originPoint;
 
-	private SurveyData surveyData;
+	public SurveyData surveyData;
 	private SpinnerSelfSelect cameraSpinner;
 	private CameraInfoLoader avaliableCameras;
 
@@ -172,16 +170,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 
 	@Override
 	public void onSpinnerItemSelected(Spinner spinner, int position, String text) {
-		String filenameWithPath = DirectoryPath.getCameraInfoPath() + text;
-		CameraInfoReader reader = new CameraInfoReader();
-		if (!reader.openFile(filenameWithPath)) {
-			Toast.makeText(context,
-					context.getString(R.string.error_when_opening_file),
-					Toast.LENGTH_SHORT).show();
-			surveyData.setCameraInfo(reader.getNewMockCameraInfo());
-		}else{
-			surveyData.setCameraInfo(reader.getCameraInfo());		
-		}
+		avaliableCameras.openFile(this, text);
 		updateSeekBarsValues();
 		updateViews();
 	}
