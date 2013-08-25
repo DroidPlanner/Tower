@@ -83,7 +83,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
-        custom:inc="0.1"
+        custom:inc="1"
         custom:max="180"
         custom:min="0"
         custom:title="Hatch angle:"
