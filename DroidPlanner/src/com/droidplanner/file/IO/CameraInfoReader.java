@@ -122,29 +122,17 @@ public class CameraInfoReader {
 		}
 	}
 
-	public boolean openFile(FileInputStream in) {
-		try {
-			parse(in);
-			in.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return false;
-		} catch (XmlPullParserException e) {
-			e.printStackTrace();
-			return false;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		}
-		return true;
+	public void openFile(FileInputStream in) throws Exception {
+		parse(in);
+		in.close();
 	}
 
 	public CameraInfo getCameraInfo() {
 		return cameraInfo;
 	}
 
-	public CameraInfo getNewMockCameraInfo() {
-		cameraInfo = new CameraInfo();
+	public static CameraInfo getNewMockCameraInfo() {
+		CameraInfo cameraInfo = new CameraInfo();
 		cameraInfo.sensorHeight = 4.22;
 		cameraInfo.sensorWidth = 6.12;
 		cameraInfo.focalLength = 7.0;

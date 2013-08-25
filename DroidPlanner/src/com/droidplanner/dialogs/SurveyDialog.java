@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -72,17 +71,9 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 	}
 
 	private void updateCameraSpinner(Context context) {
-		String[] list = avaliableCameras.getCameraInfoListFromStorage();
-		if (list.length > 0) {
-			avaliableCameras.avaliableCameras = new ArrayAdapter<CharSequence>(context,
-					android.R.layout.simple_spinner_dropdown_item);
-			avaliableCameras.avaliableCameras.addAll(list);
-			cameraSpinner.setAdapter(avaliableCameras.avaliableCameras);
-			cameraSpinner.setSelection(0);
-		}else{
-			Toast.makeText(context, context.getString(R.string.no_files), Toast.LENGTH_LONG).show();
-			onSpinnerItemSelected(cameraSpinner, 0, "");
-		}
+		avaliableCameras.rebuildCameraInfoList();
+		cameraSpinner.setAdapter(avaliableCameras.avaliableCameras);
+		cameraSpinner.setSelection(0);
 	}
 
 	@Override
@@ -170,7 +161,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 
 	@Override
 	public void onSpinnerItemSelected(Spinner spinner, int position, String text) {
-		avaliableCameras.openFile(this, text);
+		surveyData.setCameraInfo(avaliableCameras.openFile(text));
 		updateSeekBarsValues();
 		updateViews();
 	}
