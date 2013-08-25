@@ -61,6 +61,7 @@ public class ChartScaleHandler {
 		public boolean onScroll(MotionEvent e1, MotionEvent e2,
 				float distanceX, float distanceY) {
 			y.pan(distanceY);
+			x.pan(distanceX);
 			listner.onScaleListner();
 			Log.d("", "X:" + distanceX + " Y:" + distanceY);
 			return true;
