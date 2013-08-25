@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.util.HashMap;
 
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.widget.ArrayAdapter;
 import android.widget.SpinnerAdapter;
 
@@ -28,20 +27,32 @@ public class CameraInfoLoader {
 	}
 
 	public CameraInfo openFile(String file) throws Exception {
-		CameraInfoReader reader = new CameraInfoReader();
-		if (filesInSdCard.containsKey(file)) {	
-			reader.openFile(new FileInputStream(filesInSdCard.get(file)));
-			return reader.getCameraInfo();
-		}else if (filesInAssets.containsKey(file)) {
-			String filename = filesInAssets.get(file);
-			AssetManager assets = context.getAssets();
-			InputStream open = assets.open(filename);
-			reader.openFile(open);
-			return reader.getCameraInfo();
+		if (filesInSdCard.containsKey(file)) {
+			return readSdCardFile(file);
+		} else if (filesInAssets.containsKey(file)) {
+			return readAssetsFile(file);
+		} else {
+			throw new FileNotFoundException();
 		}
-		throw new FileNotFoundException();
 	}
-	
+
+	private CameraInfo readSdCardFile(String file) throws Exception {
+		CameraInfoReader reader = new CameraInfoReader();
+		InputStream inputStream = new FileInputStream(filesInSdCard.get(file));
+		reader.openFile(inputStream);
+		inputStream.close();
+		return reader.getCameraInfo();
+	}
+
+	private CameraInfo readAssetsFile(String file) throws Exception {
+		CameraInfoReader reader = new CameraInfoReader();
+		InputStream inputStream = context.getAssets().open(
+				filesInAssets.get(file));
+		reader.openFile(inputStream);
+		inputStream.close();
+		return reader.getCameraInfo();
+	}
+
 	public SpinnerAdapter getCameraInfoList() {
 		ArrayAdapter<CharSequence> avaliableCameras = new ArrayAdapter<CharSequence>(
 				context, android.R.layout.simple_spinner_dropdown_item);
@@ -49,13 +60,15 @@ public class CameraInfoLoader {
 		avaliableCameras.addAll(getCameraInfoListFromAssets());
 		return avaliableCameras;
 	}
-	
+
 	private String[] getCameraInfoListFromAssets() {
 		try {
-			String[] list = context.getAssets().list(CAMERA_INFO_ASSESTS_FOLDER);
+			String[] list = context.getAssets()
+					.list(CAMERA_INFO_ASSESTS_FOLDER);
 			filesInAssets.clear();
 			for (String string : list) {
-				filesInAssets.put(string, CAMERA_INFO_ASSESTS_FOLDER+"/"+string);
+				filesInAssets.put(string, CAMERA_INFO_ASSESTS_FOLDER + "/"
+						+ string);
 			}
 			return list;
 
@@ -68,7 +81,8 @@ public class CameraInfoLoader {
 		String[] list = FileList.getCameraInfoFileList();
 		filesInSdCard.clear();
 		for (String string : list) {
-			filesInSdCard.put(string, DirectoryPath.getCameraInfoPath()+string);
+			filesInSdCard.put(string, DirectoryPath.getCameraInfoPath()
+					+ string);
 		}
 		return list;
 	}
