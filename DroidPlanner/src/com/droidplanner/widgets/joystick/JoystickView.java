@@ -7,12 +7,10 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.support.v4.view.VelocityTrackerCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
-import android.view.VelocityTracker;
 import android.view.View;
 
 public class JoystickView extends View {
@@ -50,8 +48,6 @@ public class JoystickView extends View {
 	private double releaseY = 0;
 	
 	private boolean handleVisible = false;
-	private VelocityTracker mVelocityTracker;
-	private boolean velocityLock = false;
 
 	public JoystickView(Context context) {
 		super(context);
@@ -97,10 +93,6 @@ public class JoystickView extends View {
 
 	public boolean isYAxisInverted() {
 		return yAxisInverted;
-	}
-
-	public void setVelocityLock(boolean velocityLock) {
-		this.velocityLock = velocityLock;
 	}
 
 	public void setXAxisInverted(boolean xAxisInverted) {
@@ -154,16 +146,6 @@ public class JoystickView extends View {
 		case MotionEvent.ACTION_DOWN:
 			if (!isPointerValid()) {
 				this.pointerId = ev.getPointerId(0);
-				if (mVelocityTracker == null) {
-					// Retrieve a new VelocityTracker object to watch the
-					// velocity of a motion.
-					mVelocityTracker = VelocityTracker.obtain();
-				} else {
-					// Reset the velocity tracker back to its initial state.
-					mVelocityTracker.clear();
-				}
-				// Add a user's movement to the tracker.
-				mVelocityTracker.addMovement(ev);
 				processFirstTouch(ev);
 				return true;
 			}
@@ -183,7 +165,6 @@ public class JoystickView extends View {
 
 	private boolean processRelease() {
 		this.pointerId = INVALID_POINTER_ID;
-		mVelocityTracker.recycle();
 		handleVisible = false;
 		invalidate();
 		if (moveListener != null) {
@@ -210,46 +191,18 @@ public class JoystickView extends View {
 	private boolean processMove(MotionEvent ev) {
 		if (isPointerValid()) {
 			final int pointerIndex = ev.findPointerIndex(pointerId);
-
-            
 			
 			// Translate touch position to center of view
 			float x = ev.getX(pointerIndex);
 			float y = ev.getY(pointerIndex);
 			
-			if(velocityLock){
-			if(getDirection(ev)){
-				touchX = x - firstTouchX;
-				firstTouchY = y-touchY; 
-			}else{
-				touchY = y - firstTouchY;
-				firstTouchX = x-touchX;
-			}}else{
-				touchX = x - firstTouchX;
+			touchX = x - firstTouchX;
 			touchY = y - firstTouchY;
-			}
 						
-			invalidate();
-			
 			reportOnMoved();
 			return true;
 		}
 		return false;
-	}
-
-	private boolean getDirection(MotionEvent ev) {
-		mVelocityTracker.addMovement(ev);
-		// When you want to determine the velocity, call
-		// computeCurrentVelocity(). Then call getXVelocity()
-		// and getYVelocity() to retrieve the velocity for each pointer ID.
-		mVelocityTracker.computeCurrentVelocity(1000);
-		// Log velocity of pixels per second
-		// Best practice to use VelocityTrackerCompat where possible.
-		float yVel = VelocityTrackerCompat.getYVelocity(mVelocityTracker,
-				pointerId);
-		float xVel = VelocityTrackerCompat.getXVelocity(mVelocityTracker,
-				pointerId);
-		return Math.abs(xVel) > Math.abs(yVel);
 	}
 
 	private void reportOnMoved() {
