@@ -1,11 +1,13 @@
 package com.droidplanner.dialogs;
 
+import java.io.IOException;
 import java.util.List;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -90,6 +92,15 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		surveyData.update(angleView.getValue(), altitudeView.getValue(),
 				overlapView.getValue(), sidelapView.getValue());
 		updateViews();
+		
+	}
+
+	private String[] getCameraInfoListFromAssets() {
+		try {
+			return context.getAssets().list("CameraInfo");
+		} catch (IOException e) {
+			return new String[0];
+		}
 	}
 
 	private void updateSeekBarsValues() {
