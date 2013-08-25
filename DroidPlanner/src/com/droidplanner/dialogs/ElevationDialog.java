@@ -44,9 +44,8 @@ public class ElevationDialog implements OnSrtmReaderListner {
 		layout.addView(chart);
 		StaticSeries serie = new StaticSeries(altitudes);
 		chart.scale.autoScale(serie,1.1);
-		chart.scale.scaleX.max = altitudes.size();
-		chart.scale.scaleX.range = chart.scale.scaleX.max;
-		chart.scale.scaleX.min = chart.scale.scaleX.max/2;
+		chart.scale.x.setMax(altitudes.size());
+		chart.scale.x.setRange(chart.scale.x.getMax());
 		serie.setColor(Color.BLUE);
 		chart.series.add(serie);
 		chart.update();
