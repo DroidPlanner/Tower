@@ -16,8 +16,8 @@ public class ChartScaleHandler {
 	private OnScaleListner listner;
 	private ScaleGestureDetector zoomDetector;
 	private GestureDetector panDetector;
-	public ChartScale scaleY = new ChartScale(180, 10, 180);
-	public ChartScale scaleX = new ChartScale(400, 100, 800);
+	public ChartScale y = new ChartScale(180, 10, 180);
+	public ChartScale x = new ChartScale(400, 100, 800);
 
 	public ChartScaleHandler(Context context, OnScaleListner listner) {
 		zoomDetector = new ScaleGestureDetector(context,
@@ -31,8 +31,8 @@ public class ChartScaleHandler {
 	}
 
 	public void autoScale(StaticSeries dataSeries, double overScale) {
-		scaleY.setMax(dataSeries.getMaxValue() * overScale);
-		scaleY.setRange(scaleY.getMax());
+		y.setMax(dataSeries.getMaxValue() * overScale);
+		y.setRange(y.getMax());
 	}
 
 	public boolean onTouchEvent(MotionEvent ev) {
@@ -46,9 +46,9 @@ public class ChartScaleHandler {
 		@Override
 		public boolean onScale(ScaleGestureDetector detector) {
 			if (detector.getCurrentSpanY() > detector.getCurrentSpanX()) {
-				scaleY.scale(detector.getScaleFactor());
+				y.scale(detector.getScaleFactor());
 			} else {
-				scaleX.scale(detector.getScaleFactor());
+				x.scale(detector.getScaleFactor());
 			}
 			listner.onScaleListner();
 			Log.d("", "Scale" + detector.getScaleFactor());
@@ -60,7 +60,7 @@ public class ChartScaleHandler {
 		@Override
 		public boolean onScroll(MotionEvent e1, MotionEvent e2,
 				float distanceX, float distanceY) {
-			scaleY.pan(distanceY);
+			y.pan(distanceY);
 			listner.onScaleListner();
 			Log.d("", "X:" + distanceX + " Y:" + distanceY);
 			return true;
