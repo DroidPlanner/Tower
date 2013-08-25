@@ -1,13 +1,11 @@
 package com.droidplanner.dialogs;
 
-import java.io.IOException;
 import java.util.List;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -18,8 +16,8 @@ import android.widget.Toast;
 import com.droidplanner.R;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.file.DirectoryPath;
-import com.droidplanner.file.FileList;
 import com.droidplanner.file.IO.CameraInfoReader;
+import com.droidplanner.file.help.CameraInfoLoader;
 import com.droidplanner.polygon.GridBuilder;
 import com.droidplanner.polygon.Polygon;
 import com.droidplanner.survey.SurveyData;
@@ -33,7 +31,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		OnTextSeekBarChangedListner, OnSpinnerItemSelectedListener {
 	public abstract void onPolygonGenerated(List<waypoint> list);
 
-	private Context context;
+	Context context;
 	private SeekBarWithText overlapView;
 	private SeekBarWithText angleView;
 	private SeekBarWithText altitudeView;
@@ -49,13 +47,15 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 
 	private SurveyData surveyData;
 	private SpinnerSelfSelect cameraSpinner;
-	private ArrayAdapter<CharSequence> avaliableCameras;
+	private CameraInfoLoader avaliableCameras;
 
 	public void generateSurveyDialog(Polygon polygon, double defaultHatchAngle,
 			LatLng lastPoint, double defaultAltitude, Context context) {
 		this.polygon = polygon;
 		this.originPoint = lastPoint;
 		this.context = context;
+		
+		avaliableCameras =  new CameraInfoLoader(this.context);
 
 		if (checkIfPolygonIsValid(polygon)) {
 			Toast.makeText(context, "Invalid Polygon", Toast.LENGTH_SHORT)
@@ -74,12 +74,12 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 	}
 
 	private void updateCameraSpinner(Context context) {
-		String[] list = FileList.getCameraInfoFileList();
+		String[] list = avaliableCameras.getCameraInfoListFromStorage();
 		if (list.length > 0) {
-			avaliableCameras = new ArrayAdapter<CharSequence>(context,
+			avaliableCameras.avaliableCameras = new ArrayAdapter<CharSequence>(context,
 					android.R.layout.simple_spinner_dropdown_item);
-			avaliableCameras.addAll(list);
-			cameraSpinner.setAdapter(avaliableCameras);
+			avaliableCameras.avaliableCameras.addAll(list);
+			cameraSpinner.setAdapter(avaliableCameras.avaliableCameras);
 			cameraSpinner.setSelection(0);
 		}else{
 			Toast.makeText(context, context.getString(R.string.no_files), Toast.LENGTH_LONG).show();
@@ -93,14 +93,6 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 				overlapView.getValue(), sidelapView.getValue());
 		updateViews();
 		
-	}
-
-	private String[] getCameraInfoListFromAssets() {
-		try {
-			return context.getAssets().list("CameraInfo");
-		} catch (IOException e) {
-			return new String[0];
-		}
 	}
 
 	private void updateSeekBarsValues() {
