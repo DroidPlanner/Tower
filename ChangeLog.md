@@ -1,3 +1,7 @@
+## Droidplanner v0.12.4
+* A couple of bug fixes
+* Removing the "velocityLock" feature because it caused some troubles
+
 ## Droidplanner v0.12.3
 * Hungarian translation
 * Fix waypoint numering issue
