@@ -32,6 +32,9 @@
     <string name="menu_add_polygon">Add Polygon</string>
     <string name="menu_polygon">Polygon</string>
     <string name="menu_clear_polygon">Clear Poly</string>
+    <string name="menu_generate_polygon">Generate</string>
+    <string name="menu_survey">Survey</string>
+    <string name="menu_finish_polygon">Exit</string>
     <string name="menu_clear_path">Clear Path</string>
     <string name="generate">Generate</string>
     <string name="exit">Exit</string>
@@ -39,7 +42,7 @@
     <string name="exiting_polygon_mode">Exiting Polygon Mode</string>
     <string name="entering_polygon_mode">Entering Polygon Mode</string>
     <string name="dialog_polygon_hatch_angle">Hatch angle:</string>
-    <string name="dialog_polygon_distance_between_lines">Distance between lines:</string>
+    <string name="distance_between_lines">Distance Between Lines</string>
     <string name="enable">Enable</string>
     <string name="disable">Disable</string>
     <string name="on">On</string>
@@ -50,6 +53,12 @@
     <string name="menu_advanced">Advanced</string>
     <string name="menu_calibration">Calibration</string>
     <string name="rc_control">RC control</string>
+    <string name="footprint">Footprint</string>
+    <string name="ground_resolution">Ground Resolution</string>
+    <string name="distance_between_pictures">Distance Between Pictures</string>
+    <string name="area">Area</string>
+    <string name="camera_">Camera:</string>
+    <string name="inner_wps">Inner WPs</string>
     
     <string name="screen_planning">Planning</string>
     <string name="screen_flight_data">Flight Data</string>

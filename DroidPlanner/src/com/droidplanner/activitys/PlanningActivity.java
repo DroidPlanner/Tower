@@ -6,6 +6,7 @@ import java.util.List;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -15,10 +16,12 @@ import com.droidplanner.R;
 import com.droidplanner.R.string;
 import com.droidplanner.activitys.helpers.SuperActivity;
 import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
+import com.droidplanner.dialogs.GridDialog;
 import com.droidplanner.dialogs.OpenFileDialog;
 import com.droidplanner.dialogs.OpenMissionDialog;
-import com.droidplanner.dialogs.PolygonDialog;
+import com.droidplanner.dialogs.SurveyDialog;
 import com.droidplanner.drone.variables.waypoint;
+import com.droidplanner.file.DirectoryPath;
 import com.droidplanner.file.IO.MissionReader;
 import com.droidplanner.file.IO.MissionWriter;
 import com.droidplanner.fragments.MissionFragment;
@@ -29,7 +32,10 @@ import com.droidplanner.fragments.helpers.GestureMapFragment.OnPathFinishedListn
 import com.droidplanner.fragments.helpers.MapProjection;
 import com.droidplanner.polygon.Polygon;
 import com.droidplanner.polygon.PolygonPoint;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 
 public class PlanningActivity extends SuperActivity implements
 		OnMapInteractionListener, OnWaypointUpdateListner,
@@ -71,7 +77,31 @@ public class PlanningActivity extends SuperActivity implements
 
 		checkIntent();
 
+		setDebugState(); // TODO remove this after finishing the camera Dialog
+
 		update();
+		Log.d("",DirectoryPath.getCameraInfoPath());
+	}
+
+	private void setDebugState() {// TODO remove this after finishing the camera
+									// Dialog
+		mode = modes.POLYGON;
+		drone.mission.setHome(new LatLng(-29.702632470079642,
+				-51.14419251680374));
+		onAddPoint(new LatLng(-29.702162433803252, -51.14540822803974));
+		onAddPoint(new LatLng(-29.701339428185392, -51.14431958645582));
+		onAddPoint(new LatLng(-29.70253723985932, -51.143730506300926));
+
+		LatLngBounds.Builder builder = new LatLngBounds.Builder();
+		builder.include(polygon.getLatLngList().get(0));
+		builder.include(polygon.getLatLngList().get(1));
+		builder.include(polygon.getLatLngList().get(2));
+
+		CameraUpdate animation = CameraUpdateFactory.newLatLngBounds(
+				builder.build(), 480, 360, 30);
+		planningMapFragment.mMap.animateCamera(animation);
+
+		openSurveyDialog();
 	}
 
 	private void checkIntent() {
@@ -128,6 +158,9 @@ public class PlanningActivity extends SuperActivity implements
 		case R.id.menu_generate_polygon:
 			openPolygonGenerateDialog();
 			return true;
+		case R.id.menu_survey:
+			openSurveyDialog();
+			return true;
 		case R.id.menu_clear_polygon:
 			polygon.clearPolygon();
 			update();
@@ -155,6 +188,19 @@ public class PlanningActivity extends SuperActivity implements
 		update();
 	}
 
+	public void openPolygonGenerateDialog() {
+		double defaultHatchAngle = (planningMapFragment.getMapRotation() + 90) % 180;
+		GridDialog polygonDialog = new GridDialog() {
+			@Override
+			public void onPolygonGenerated(List<waypoint> list) {
+				drone.mission.addWaypoints(list);
+				update();
+			}
+		};
+		polygonDialog.generatePolygon(defaultHatchAngle, 50.0, polygon,
+				drone.mission.getLastWaypoint().getCoord(),
+				drone.mission.getDefaultAlt(), this);
+	}
 	public void setMode(modes mode) {
 		this.mode = mode;
 		switch (mode) {
@@ -169,6 +215,20 @@ public class PlanningActivity extends SuperActivity implements
 			break;
 		}
 		invalidateOptionsMenu();
+	}
+
+	private void openSurveyDialog() {
+		double defaultHatchAngle = (planningMapFragment.getMapRotation() + 90) % 180;
+		SurveyDialog dialog = new SurveyDialog() {
+			@Override
+			public void onPolygonGenerated(List<waypoint> list) {
+				drone.mission.addWaypoints(list);
+				update();
+			}
+		};
+		dialog.generateSurveyDialog(polygon, defaultHatchAngle,
+				drone.mission.getLastWaypoint().getCoord(), drone.mission.getDefaultAlt(),
+				this);
 	}
 
 	private void clearWaypointsAndUpdate() {
@@ -258,20 +318,6 @@ public class PlanningActivity extends SuperActivity implements
 			}
 		};
 		missionDialog.openDialog(this);
-	}
-
-	public void openPolygonGenerateDialog() {
-		double defaultHatchAngle = (planningMapFragment.getMapRotation() + 90) % 180;
-		PolygonDialog polygonDialog = new PolygonDialog() {
-			@Override
-			public void onPolygonGenerated(List<waypoint> list) {
-				drone.mission.addWaypoints(list);
-				update();
-			}
-		};
-		polygonDialog.generatePolygon(defaultHatchAngle, 50.0, polygon,
-				drone.mission.getLastWaypoint().getCoord(),
-				drone.mission.getDefaultAlt(), this);
 	}
 
 	private void menuSaveFile() {

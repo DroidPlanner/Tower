@@ -35,7 +35,7 @@
     <string name="exiting_polygon_mode">退出巡航计划</string>
     <string name="entering_polygon_mode">编辑巡航计划</string>
     <string name="dialog_polygon_hatch_angle">巡航切入角:</string>
-    <string name="dialog_polygon_distance_between_lines">巡航间距:</string>
+    <string name="distance_between_lines">巡航间距:</string>
     <string name="enable">激活</string>
     <string name="disable">禁用</string>
     <string name="on">On</string>

@@ -34,7 +34,7 @@
     <string name="exiting_polygon_mode">Sair Modo Poligono</string>
     <string name="entering_polygon_mode">Entrar Modo Poligono</string>
     <string name="dialog_polygon_hatch_angle">Ângulo do Grid:</string>
-    <string name="dialog_polygon_distance_between_lines">Distancia entre Linhas:</string>
+    <string name="distance_between_lines">Distancia entre Linhas:</string>
     <string name="enable">Habilitar</string>
     <string name="disable">Desabilitar</string>
     <string name="write">Gravar</string>
