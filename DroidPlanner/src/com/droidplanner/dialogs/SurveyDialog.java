@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import com.droidplanner.R;
 import com.droidplanner.drone.variables.waypoint;
+import com.droidplanner.file.IO.CameraInfo;
+import com.droidplanner.file.IO.CameraInfoReader;
 import com.droidplanner.file.help.CameraInfoLoader;
 import com.droidplanner.polygon.GridBuilder;
 import com.droidplanner.polygon.Polygon;
@@ -51,8 +53,8 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		this.polygon = polygon;
 		this.originPoint = lastPoint;
 		this.context = context;
-		
-		avaliableCameras =  new CameraInfoLoader(this.context);
+
+		avaliableCameras = new CameraInfoLoader(this.context);
 
 		if (checkIfPolygonIsValid(polygon)) {
 			Toast.makeText(context, "Invalid Polygon", Toast.LENGTH_SHORT)
@@ -71,8 +73,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 	}
 
 	private void updateCameraSpinner(Context context) {
-		avaliableCameras.rebuildCameraInfoList();
-		cameraSpinner.setAdapter(avaliableCameras.avaliableCameras);
+		cameraSpinner.setAdapter(avaliableCameras.getCameraInfoList());
 		cameraSpinner.setSelection(0);
 	}
 
@@ -81,7 +82,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		surveyData.update(angleView.getValue(), altitudeView.getValue(),
 				overlapView.getValue(), sidelapView.getValue());
 		updateViews();
-		
+
 	}
 
 	private void updateSeekBarsValues() {
@@ -99,10 +100,11 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		groundResolutionTextView.setText(String.format("%s:%2.2f cm\u00B2",
 				context.getString(R.string.ground_resolution),
 				surveyData.getGroundResolution()));
-		distanceTextView.setText(context
-				.getString(R.string.distance_between_pictures)
-				+ ": "
-				+ surveyData.getLongitudinalPictureDistance().intValue() + " m");
+		distanceTextView
+				.setText(context.getString(R.string.distance_between_pictures)
+						+ ": "
+						+ surveyData.getLongitudinalPictureDistance()
+								.intValue() + " m");
 		distanceBetweenLinesTextView.setText(context
 				.getString(R.string.distance_between_lines)
 				+ ": "
@@ -161,7 +163,16 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 
 	@Override
 	public void onSpinnerItemSelected(Spinner spinner, int position, String text) {
-		surveyData.setCameraInfo(avaliableCameras.openFile(text));
+		CameraInfo cameraInfo;
+		try {
+			cameraInfo = avaliableCameras.openFile(text);
+		} catch (Exception e) {
+			Toast.makeText(context,
+					context.getString(R.string.error_when_opening_file),
+					Toast.LENGTH_SHORT).show();
+			cameraInfo = CameraInfoReader.getNewMockCameraInfo();
+		}
+		surveyData.setCameraInfo(cameraInfo);
 		updateSeekBarsValues();
 		updateViews();
 	}

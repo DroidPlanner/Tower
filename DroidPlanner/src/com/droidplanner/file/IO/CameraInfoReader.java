@@ -1,7 +1,5 @@
 package com.droidplanner.file.IO;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -21,26 +19,25 @@ public class CameraInfoReader {
 	
 	private CameraInfo cameraInfo = new CameraInfo();
 
-	public boolean openCameraInfoFile(String fileWithPath) {
-		return readCameraInfo(fileWithPath);
+	public void openFile(InputStream inputStream) throws Exception {
+		parse(inputStream);
+		inputStream.close();
 	}
 
-	private boolean readCameraInfo(String fileWithPath) {
-		try {
-			FileInputStream in = new FileInputStream(fileWithPath);
-			parse(in);
-			in.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return false;
-		} catch (XmlPullParserException e) {
-			e.printStackTrace();
-			return false;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		}
-		return true;
+	public CameraInfo getCameraInfo() {
+		return cameraInfo;
+	}
+
+	public static CameraInfo getNewMockCameraInfo() {
+		CameraInfo cameraInfo = new CameraInfo();
+		cameraInfo.sensorHeight = 4.22;
+		cameraInfo.sensorWidth = 6.12;
+		cameraInfo.focalLength = 7.0;
+		cameraInfo.sensorResolution = 10.1;
+		cameraInfo.overlap = 50.0;
+		cameraInfo.sidelap = 60.0;
+		cameraInfo.isInLandscapeOrientation = false;
+		return cameraInfo;
 	}
 
 	public void parse(InputStream in) throws XmlPullParserException,
@@ -120,26 +117,5 @@ public class CameraInfoReader {
 				break;
 			}
 		}
-	}
-
-	public void openFile(FileInputStream in) throws Exception {
-		parse(in);
-		in.close();
-	}
-
-	public CameraInfo getCameraInfo() {
-		return cameraInfo;
-	}
-
-	public static CameraInfo getNewMockCameraInfo() {
-		CameraInfo cameraInfo = new CameraInfo();
-		cameraInfo.sensorHeight = 4.22;
-		cameraInfo.sensorWidth = 6.12;
-		cameraInfo.focalLength = 7.0;
-		cameraInfo.sensorResolution = 10.1;
-		cameraInfo.overlap = 50.0;
-		cameraInfo.sidelap = 60.0;
-		cameraInfo.isInLandscapeOrientation = false;
-		return cameraInfo;
 	}
 }
