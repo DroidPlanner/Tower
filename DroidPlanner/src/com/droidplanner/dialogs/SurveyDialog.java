@@ -64,7 +64,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 
 		AlertDialog dialog = buildDialog(context);
 
-		surveyData = new SurveyData(defaultHatchAngle, defaultAltitude);
+		surveyData = new SurveyData(Math.floor(defaultHatchAngle), defaultAltitude);
 
 		cameraSpinner.setOnSpinnerItemSelectedListener(this);
 		updateCameraSpinner(context);

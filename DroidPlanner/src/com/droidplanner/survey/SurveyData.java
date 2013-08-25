@@ -12,8 +12,8 @@ public class SurveyData {
 	private CameraInfo camera = new CameraInfo();
 
 	public SurveyData(double defaultHatchAngle, double defaultAltitude) {
-		this.angle = 90.0;
-		this.altitude = 150.0;
+		this.angle = defaultHatchAngle;
+		this.altitude = defaultAltitude;
 		this.overlap = 50.0;
 		this.sidelap = 60.0;
 	}
