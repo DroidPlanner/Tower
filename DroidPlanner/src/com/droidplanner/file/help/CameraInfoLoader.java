@@ -3,10 +3,11 @@ package com.droidplanner.file.help;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 
 import android.content.Context;
-import android.util.Log;
+import android.content.res.AssetManager;
 import android.widget.ArrayAdapter;
 import android.widget.SpinnerAdapter;
 
@@ -17,7 +18,7 @@ import com.droidplanner.file.IO.CameraInfoReader;
 
 public class CameraInfoLoader {
 
-	private static final String CAMERA_INFO_ASSESTS_FOLDER = "CameraInfo/";
+	private static final String CAMERA_INFO_ASSESTS_FOLDER = "CameraInfo";
 	private Context context;
 	private HashMap<String, String> filesInSdCard = new HashMap<String, String>();
 	private HashMap<String, String> filesInAssets = new HashMap<String, String>();
@@ -28,13 +29,15 @@ public class CameraInfoLoader {
 
 	public CameraInfo openFile(String file) throws Exception {
 		CameraInfoReader reader = new CameraInfoReader();
-		if (filesInSdCard.containsKey(file)) {
-			Log.d("", "SD File");						
+		if (filesInSdCard.containsKey(file)) {	
 			reader.openFile(new FileInputStream(filesInSdCard.get(file)));
 			return reader.getCameraInfo();
 		}else if (filesInAssets.containsKey(file)) {
-			Log.d("", "assetFile");
-			reader.openFile(context.getAssets().open(filesInAssets.get(file)));
+			String filename = filesInAssets.get(file);
+			AssetManager assets = context.getAssets();
+			InputStream open = assets.open(filename);
+			reader.openFile(open);
+			return reader.getCameraInfo();
 		}
 		throw new FileNotFoundException();
 	}
@@ -49,10 +52,10 @@ public class CameraInfoLoader {
 	
 	private String[] getCameraInfoListFromAssets() {
 		try {
-			String[] list = context.getAssets().list("CameraInfo");
+			String[] list = context.getAssets().list(CAMERA_INFO_ASSESTS_FOLDER);
 			filesInAssets.clear();
 			for (String string : list) {
-				filesInAssets.put(string, CAMERA_INFO_ASSESTS_FOLDER+string);
+				filesInAssets.put(string, CAMERA_INFO_ASSESTS_FOLDER+"/"+string);
 			}
 			return list;
 
