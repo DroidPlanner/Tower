@@ -15,6 +15,7 @@ public class GridBuilder {
 	private Double lineDist;
 	private LatLng lastLocation;
 	private Double altitude;
+	private boolean innerWPs;
 
 	public GridBuilder(Polygon poly, Double angle, Double lineDist,
 			LatLng lastLocation, Double altitude) {
@@ -23,6 +24,10 @@ public class GridBuilder {
 		this.lineDist = lineDist;
 		this.lastLocation = lastLocation;
 		this.altitude = altitude;
+	}
+
+	public void setGenerateInnerWaypoints(boolean innerWPs) {
+		this.innerWPs = innerWPs;
 	}
 
 	public List<waypoint> hatchfill() {
@@ -65,8 +70,9 @@ public class GridBuilder {
 			if (GeoTools.getDistance(closest.p1, lastpnt) < GeoTools
 					.getDistance(closest.p2, lastpnt)) {
 				gridPoints.add(new waypoint(closest.p1, altitude));
+				//TODO add the code to generate the inner waypoints if necessary.
 				gridPoints.add(new waypoint(closest.p2, altitude));
-
+				
 				lastpnt = closest.p2;
 
 				hatchLines.remove(closest);
@@ -75,6 +81,7 @@ public class GridBuilder {
 				closest = GeoTools.findClosestLine(closest.p2, hatchLines);
 			} else {
 				gridPoints.add(new waypoint(closest.p2, altitude));
+				//TODO add the code to generate the inner waypoints if necessary.
 				gridPoints.add(new waypoint(closest.p1, altitude));
 
 				lastpnt = closest.p1;

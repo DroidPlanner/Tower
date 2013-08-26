@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,6 +48,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 	public SurveyData surveyData;
 	private SpinnerSelfSelect cameraSpinner;
 	private CameraInfoLoader avaliableCameras;
+	private CheckBox innerWPsCheckbox;
 
 	public void generateSurveyDialog(Polygon polygon, double defaultHatchAngle,
 			LatLng lastPoint, double defaultAltitude, Context context) {
@@ -133,6 +135,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		overlapView = (SeekBarWithText) layout.findViewById(R.id.overlapView);
 		sidelapView = (SeekBarWithText) layout.findViewById(R.id.sidelapView);
 		altitudeView = (SeekBarWithText) layout.findViewById(R.id.altitudeView);
+		innerWPsCheckbox = (CheckBox) layout.findViewById(R.id.checkBoxInnerWPs);
 
 		areaTextView = (TextView) layout.findViewById(R.id.areaTextView);
 		distanceBetweenLinesTextView = (TextView) layout
@@ -157,6 +160,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 			GridBuilder grid = new GridBuilder(polygon, surveyData.getAngle(),
 					surveyData.getLateralPictureDistance(), originPoint,
 					surveyData.getAltitude());
+			grid.setGenerateInnerWaypoints(innerWPsCheckbox.isChecked());
 			onPolygonGenerated(grid.hatchfill());
 		}
 	}
