@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- This string is just used to help in the layout editor -->
+    <string-array name="ExampleCameraArray">
+        <item>No cameras Avaliable</item>
+    </string-array>
     <!-- Do not change the names here, instead extract the extrings -->
     <string-array name="menu_dropdown">
         <item>@string/screen_planning</item>

@@ -1,3 +1,13 @@
+## Droidplanner v0.13.0
+* Survey dialog in mission planning
+
+## Droidplanner v0.12.4b
+* Fixing a problem with the build of v0.12.4
+
+## Droidplanner v0.12.4
+* A couple of bug fixes
+* Removing the "velocityLock" feature because it caused some troubles
+
 ## Droidplanner v0.12.3
 * Hungarian translation
 * Fix waypoint numering issue
