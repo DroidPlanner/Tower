@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" xmlns:app="http://schemas.android.com/apk/res/com.droidplanner">
+
+    <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+        android:id="@+id/SeekBarRollPitchControl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:inc="0.01"
+        app:max="0.2"
+        app:min="0.08"
+        app:title="Roll/Pitch Rate Control:" >
+    </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+
+    <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+        android:id="@+id/SeekBarRollPitchDampenning"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:inc="0.0001"
+        app:max="0.008"
+        app:min="0.001"
+        app:title="Roll/Pitch Rate Dampening" >
+    </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+
+    <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+        android:id="@+id/SeekBarYawControl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:inc="0.01"
+        app:max="0.25"
+        app:min="0.15"
+        app:title="Yaw Rate Control " >
+    </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+
+    <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+        android:id="@+id/SeekBarThrottleAccel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:inc="0.1"
+        app:max="1.5"
+        app:min="0.5"
+        app:title="Throttle Accel" >
+    </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+
+    <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+        android:id="@+id/seekBarThrottleHover"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:inc="5"
+        app:max="600"
+        app:min="300"
+        app:title="Throtle Hover" >
+    </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+
+</LinearLayout>

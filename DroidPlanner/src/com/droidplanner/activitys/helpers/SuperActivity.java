@@ -20,6 +20,7 @@ import com.droidplanner.activitys.ChartActivity;
 import com.droidplanner.activitys.FlightDataActivity;
 import com.droidplanner.activitys.GCPActivity;
 import com.droidplanner.activitys.ParametersActivity;
+import com.droidplanner.activitys.PidActivity;
 import com.droidplanner.activitys.PlanningActivity;
 import com.droidplanner.activitys.RCActivity;
 import com.droidplanner.activitys.SettingsActivity;
@@ -98,6 +99,9 @@ public abstract class SuperActivity extends Activity implements
 			break;
 		case 6: // Chart
 			navigationIntent = new Intent(this, ChartActivity.class);
+			break;
+		case 7: // PID
+			navigationIntent = new Intent(this, PidActivity.class);
 			break;
 		}
 		startActivity(navigationIntent);

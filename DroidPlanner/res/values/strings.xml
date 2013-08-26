@@ -67,4 +67,5 @@
     <string name="screen_camera">Camera</string>
     <string name="screen_gcp">GCP</string>
     <string name="screen_chart">Chart</string>
+    <string name="screen_pid">PID</string>
 </resources>

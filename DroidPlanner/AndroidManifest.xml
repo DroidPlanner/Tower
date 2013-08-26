@@ -110,6 +110,8 @@
         </activity>
         <activity android:name=".activitys.SettingsActivity" >
         </activity>
+        <activity android:name=".activitys.PidActivity" >
+        </activity>
     </application>
 
 </manifest>
