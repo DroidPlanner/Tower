@@ -8,46 +8,55 @@
         android:id="@+id/SeekBarRollPitchControl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:inc="0.01"
+        app:formatString="%1.3f"
+        app:inc="0.002"
         app:max="0.2"
         app:min="0.08"
         app:title="Roll/Pitch Rate Control:" >
+
     </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
 
     <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
         android:id="@+id/SeekBarRollPitchDampenning"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:formatString="%1.4f"
         app:inc="0.0001"
         app:max="0.008"
         app:min="0.001"
         app:title="Roll/Pitch Rate Dampening" >
+
     </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
 
     <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
         android:id="@+id/SeekBarYawControl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:inc="0.01"
+        app:formatString="%1.3f"
+        app:inc="0.002"
         app:max="0.25"
         app:min="0.15"
         app:title="Yaw Rate Control " >
+
     </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
 
     <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
         android:id="@+id/SeekBarThrottleAccel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:inc="0.1"
+        app:formatString="%1.2f"
+        app:inc="0.02"
         app:max="1.5"
         app:min="0.5"
         app:title="Throttle Accel" >
+
     </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
 
     <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
         android:id="@+id/seekBarThrottleHover"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:formatString="%1.0f"
         app:inc="5"
         app:max="600"
         app:min="300"
