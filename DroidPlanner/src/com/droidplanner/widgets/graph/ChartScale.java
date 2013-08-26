@@ -46,4 +46,8 @@ public class ChartScale {
 	public void pan(float distanceY) {
 		pan+=distanceY;		
 	}
+
+	public double getGridSize() {
+		return range/10;
+	}
 }
