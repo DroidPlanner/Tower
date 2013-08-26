@@ -188,7 +188,7 @@ public class PlanningActivity extends SuperActivity implements
 	}
 
 	private void openSurveyDialog() {
-		double defaultHatchAngle = (planningMapFragment.getMapRotation() + 90) % 180;
+		double defaultHatchAngle = ((planningMapFragment.getMapRotation() + 90) % 180);
 		SurveyDialog dialog = new SurveyDialog() {
 			@Override
 			public void onPolygonGenerated(List<waypoint> list) {
