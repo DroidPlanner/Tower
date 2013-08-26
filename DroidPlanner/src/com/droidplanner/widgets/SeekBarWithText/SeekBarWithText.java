@@ -67,7 +67,9 @@ public class SeekBarWithText extends LinearLayout implements
 	}
 
 	public void setUnit(String unit) {
-		this.unit = unit;
+		if (unit != null) {
+			this.unit = unit;			
+		}
 	}
 
 	public void setTitle(CharSequence text) {
