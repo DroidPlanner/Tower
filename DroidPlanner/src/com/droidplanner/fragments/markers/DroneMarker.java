@@ -2,7 +2,6 @@ package com.droidplanner.fragments.markers;
 
 import android.os.Handler;
 import android.os.SystemClock;
-import android.util.Log;
 
 import com.droidplanner.drone.DroneInterfaces.MapUpdatedListner;
 import com.droidplanner.fragments.FlightMapFragment;
@@ -106,7 +105,6 @@ public class DroneMarker implements MapUpdatedListner {
 					double t = iteration * PERIOD_MS;
 					LatLng coord = new LatLng(lastPosition.latitude + velY*t, lastPosition.longitude + velX*t);
 					updatePosition(yaw, coord);
-					Log.d("I", "interpolator " + t);
 
 					iteration++;
 					// Post again 16ms later.
