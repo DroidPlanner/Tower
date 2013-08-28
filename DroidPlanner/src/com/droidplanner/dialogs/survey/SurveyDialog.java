@@ -1,4 +1,4 @@
-package com.droidplanner.dialogs;
+package com.droidplanner.dialogs.survey;
 
 import java.util.List;
 
