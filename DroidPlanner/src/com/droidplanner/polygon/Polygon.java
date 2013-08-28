@@ -3,6 +3,7 @@ package com.droidplanner.polygon;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.droidplanner.helpers.geoTools.GeoTools;
 import com.google.android.gms.maps.model.LatLng;
 
 public class Polygon {
