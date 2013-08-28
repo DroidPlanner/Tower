@@ -3,6 +3,7 @@ package com.droidplanner.polygon;
 import java.util.List;
 
 import com.droidplanner.helpers.geoTools.GeoTools;
+import com.droidplanner.survey.grid.CircumscribedGrid;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
@@ -33,5 +34,10 @@ public class PolyBounds {
 		return (new LatLng((ne.latitude + sw.latitude) / 2,
 				(ne.longitude + sw.longitude) / 2));
 
+	}
+
+	public LatLng getMidlePoint() {
+		return new LatLng(getMiddle().latitude,
+				getMiddle().longitude);
 	}
 }
