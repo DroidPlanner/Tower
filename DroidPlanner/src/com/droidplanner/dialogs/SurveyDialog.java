@@ -6,12 +6,9 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.CheckBox;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.droidplanner.R;
@@ -23,9 +20,7 @@ import com.droidplanner.polygon.Polygon;
 import com.droidplanner.survey.SurveyData;
 import com.droidplanner.survey.grid.Grid;
 import com.droidplanner.survey.grid.GridBuilder;
-import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
-import com.droidplanner.widgets.spinners.SpinnerSelfSelect;
 import com.droidplanner.widgets.spinners.SpinnerSelfSelect.OnSpinnerItemSelectedListener;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -33,149 +28,53 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		OnTextSeekBarChangedListner, OnSpinnerItemSelectedListener, OnClickListener {
 	public abstract void onPolygonGenerated(List<waypoint> list);
 
-	public Context context;
-	private SeekBarWithText overlapView;
-	private SeekBarWithText angleView;
-	private SeekBarWithText altitudeView;
-	private SeekBarWithText sidelapView;
-	private TextView distanceBetweenLinesTextView;
-	private TextView areaTextView;
-	private TextView distanceTextView;
-	private TextView footprintTextView;
-	private TextView groundResolutionTextView;
-
-	private Polygon polygon;
+	Polygon polygon;
 	private LatLng originPoint;
 
 	public SurveyData surveyData;
-	private SpinnerSelfSelect cameraSpinner;
 	private CameraInfoLoader avaliableCameras;
-	private CheckBox innerWPsCheckbox;
-	private TextView numberOfPicturesView;
-	private TextView numberOfStripsView;
-	private TextView lengthView;
-	
-	private Grid grid;
+	public SurveyDialogViews views;
+	Grid grid;
 
 	public void generateSurveyDialog(Polygon polygon, double defaultHatchAngle,
 			LatLng lastPoint, double defaultAltitude, Context context) {
 		this.polygon = polygon;
 		this.originPoint = lastPoint;
-		this.context = context;
+		views = new SurveyDialogViews(this,context);
+		
 
-		avaliableCameras = new CameraInfoLoader(this.context);
+		avaliableCameras = new CameraInfoLoader(this.views.context);
 
 		if (checkIfPolygonIsValid(polygon)) {
 			Toast.makeText(context, "Invalid Polygon", Toast.LENGTH_SHORT)
 					.show();
 			return;
 		}
+		
 
-		AlertDialog dialog = buildDialog(context);
+		AlertDialog dialog = views.buildDialog();
 
 		surveyData = new SurveyData(Math.floor(defaultHatchAngle), defaultAltitude);
 
-		cameraSpinner.setOnSpinnerItemSelectedListener(this);
-		updateCameraSpinner(context);
+		views.cameraSpinner.setOnSpinnerItemSelectedListener(this);
+		views.updateCameraSpinner(avaliableCameras.getCameraInfoList());
 
 		dialog.show();
 	}
 
-	private void updateCameraSpinner(Context context) {
-		cameraSpinner.setAdapter(avaliableCameras.getCameraInfoList());
-		cameraSpinner.setSelection(0);
-	}
-
 	@Override
 	public void onSeekBarChanged() {
-		surveyData.update(angleView.getValue(), altitudeView.getValue(),
-				overlapView.getValue(), sidelapView.getValue());
+		surveyData.update(views.angleView.getValue(), views.altitudeView.getValue(),
+				views.overlapView.getValue(), views.sidelapView.getValue());
 		
 		GridBuilder gridBuilder = new GridBuilder(polygon, surveyData, originPoint);
 		grid = gridBuilder.generate();				
 		
-		updateViews();
-		
-	}
-
-	private void updateSeekBarsValues() {
-		angleView.setValue(surveyData.getAngle());
-		altitudeView.setValue(surveyData.getAltitude());
-		sidelapView.setValue(surveyData.getSidelap());
-		overlapView.setValue(surveyData.getOverlap());
-	}
-
-	private void updateViews() {
-		footprintTextView.setText(context.getString(R.string.footprint) + ": "
-				+ ((Double) surveyData.getLateralFootPrint()).intValue() + "x"
-				+ ((Double) surveyData.getLongitudinalFootPrint()).intValue()
-				+ " m");
-		groundResolutionTextView.setText(String.format("%s:%2.2f cm\u00B2/px",
-				context.getString(R.string.ground_resolution),
-				surveyData.getGroundResolution()));
-		distanceTextView
-				.setText(context.getString(R.string.distance_between_pictures)
-						+ ": "
-						+ surveyData.getLongitudinalPictureDistance()
-								.intValue() + " m");
-		distanceBetweenLinesTextView.setText(context
-				.getString(R.string.distance_between_lines)
-				+ ": "
-				+ surveyData.getLateralPictureDistance().intValue() + " m");
-		areaTextView.setText(context.getString(R.string.area) + ": "
-				+ polygon.getArea().intValue() + " m\u00B2");
-		lengthView.setText(context.getString(R.string.mission_length) + ": "
-				+(int) grid.getLength()+ " m");
-		numberOfPicturesView.setText(context.getString(R.string.pictures) + ": "
-				+(int)(grid.getLength()/surveyData.getLongitudinalPictureDistance()));
-		numberOfStripsView.setText(context.getString(R.string.number_of_strips) + ": "
-				+grid.getNumberOfLines());
+		views.updateViews();		
 	}
 
 	private boolean checkIfPolygonIsValid(Polygon polygon) {
 		return !polygon.isValid();
-	}
-
-	private AlertDialog buildDialog(Context context) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setTitle("Survey");
-		LayoutInflater inflater = (LayoutInflater) context
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View layout = inflater.inflate(R.layout.dialog_survey, null);
-		builder.setView(layout);
-		builder.setNegativeButton("Cancel", this).setPositiveButton("Ok", this);
-		AlertDialog dialog = builder.create();
-
-		cameraSpinner = (SpinnerSelfSelect) layout
-				.findViewById(R.id.cameraFileSpinner);
-		angleView = (SeekBarWithText) layout.findViewById(R.id.angleView);
-		overlapView = (SeekBarWithText) layout.findViewById(R.id.overlapView);
-		sidelapView = (SeekBarWithText) layout.findViewById(R.id.sidelapView);
-		altitudeView = (SeekBarWithText) layout.findViewById(R.id.altitudeView);
-		
-		innerWPsCheckbox = (CheckBox) layout.findViewById(R.id.checkBoxInnerWPs);
-
-		areaTextView = (TextView) layout.findViewById(R.id.areaTextView);
-		distanceBetweenLinesTextView = (TextView) layout
-				.findViewById(R.id.distanceBetweenLinesTextView);
-		footprintTextView = (TextView) layout
-				.findViewById(R.id.footprintTextView);
-		groundResolutionTextView = (TextView) layout
-				.findViewById(R.id.groundResolutionTextView);
-		distanceTextView = (TextView) layout
-				.findViewById(R.id.distanceTextView);
-		numberOfPicturesView = (TextView) layout
-				.findViewById(R.id.numberOfPicturesTextView);
-		numberOfStripsView = (TextView) layout
-				.findViewById(R.id.numberOfStripsTextView);
-		lengthView = (TextView) layout.findViewById(R.id.lengthTextView);
-
-		angleView.setOnChangedListner(this);
-		altitudeView.setOnChangedListner(this);
-		overlapView.setOnChangedListner(this);
-		sidelapView.setOnChangedListner(this);
-		innerWPsCheckbox.setOnClickListener(this);
-		return dialog;
 	}
 
 	@Override
@@ -184,9 +83,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 			List<waypoint> result = grid.getWaypoints(surveyData.getAltitude());
 			onPolygonGenerated(result);
 		}
-	}
-
-	
+	}	
 
 	@Override
 	public void onSpinnerItemSelected(Spinner spinner, int position, String text) {
@@ -194,20 +91,20 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		try {
 			cameraInfo = avaliableCameras.openFile(text);
 		} catch (Exception e) {
-			Toast.makeText(context,
-					context.getString(R.string.error_when_opening_file),
+			Toast.makeText(views.context,
+					views.context.getString(R.string.error_when_opening_file),
 					Toast.LENGTH_SHORT).show();
 			cameraInfo = CameraInfoReader.getNewMockCameraInfo();
 		}
 		surveyData.setCameraInfo(cameraInfo);
-		updateSeekBarsValues();
+		views.updateSeekBarsValues(this);
 		onSeekBarChanged();
 	}
 	
 	@Override
 	public void onClick(View view) {
-		if (view.equals(innerWPsCheckbox)) {
-			surveyData.setInnerWpsState(innerWPsCheckbox.isChecked());
+		if (view.equals(views.innerWPsCheckbox)) {
+			surveyData.setInnerWpsState(views.innerWPsCheckbox.isChecked());
 		}
 		
 	}
