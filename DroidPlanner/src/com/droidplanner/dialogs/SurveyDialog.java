@@ -6,6 +6,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.SystemClock;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
@@ -18,6 +20,7 @@ import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.file.IO.CameraInfo;
 import com.droidplanner.file.IO.CameraInfoReader;
 import com.droidplanner.file.help.CameraInfoLoader;
+import com.droidplanner.helpers.geoTools.GeoTools;
 import com.droidplanner.polygon.GridBuilder;
 import com.droidplanner.polygon.Polygon;
 import com.droidplanner.survey.SurveyData;
@@ -83,10 +86,30 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 	public void onSeekBarChanged() {
 		surveyData.update(angleView.getValue(), altitudeView.getValue(),
 				overlapView.getValue(), sidelapView.getValue());
+		
+		localGridProcessing();		
+		
 		updateViews();
 		
-		
+	}
 
+	private void localGridProcessing() {
+		long time = SystemClock.elapsedRealtime();
+		
+		List<waypoint> result = buildGrid();
+		Log.d("GRID", "Building the grid took (mS):"+(SystemClock.elapsedRealtime()-time));
+		time = SystemClock.elapsedRealtime();
+		
+		double lenght = 0;
+		for (int i = 1; i < result.size(); i++) {
+			lenght+=GeoTools.getDistance(result.get(i).getCoord(),result.get(i-1).getCoord());
+		}
+		Log.d("GRID", "Measuring the total length took (mS):"+(SystemClock.elapsedRealtime()-time));
+		time = SystemClock.elapsedRealtime();
+		
+		Log.d("GRID", "Grid Stats: \n Length "+lenght+" \nNumberOfPictures "+(lenght/surveyData.getLongitudinalPictureDistance())+"\n Legs "+(result.size()/2));
+		
+		
 	}
 
 	private void updateSeekBarsValues() {

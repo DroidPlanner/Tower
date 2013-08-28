@@ -144,7 +144,7 @@ public class GeoTools {
 	 * 
 	 * @return distance in meters
 	 */
-	static double getDistance(LatLng from, LatLng to) {
+	public static double getDistance(LatLng from, LatLng to) {
 		return RADIUS_OF_EARTH * Math.toRadians(getArcInRadians(from, to));
 	}
 	
