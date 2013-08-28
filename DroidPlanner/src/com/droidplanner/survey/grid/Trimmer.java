@@ -12,24 +12,18 @@ public class Trimmer {
 	LatLng farestPoint = null;
 
 	public Trimmer(List<LineLatLng> grid, List<LineLatLng> polygon) {
-
-		// find intersections
 		for (LineLatLng gridLine : grid) {
-			double closestDistance = Double.MAX_VALUE;
-			double farestDistance = Double.MIN_VALUE;
-
-
-			int crosses = 0;
-
-			crosses = findCrossings(polygon, gridLine, closestDistance,
-					farestDistance, crosses);
-
+			int crosses = findCrossings(polygon, gridLine);
 			processCrossings(crosses);
 		}
 	}
 
-	private int findCrossings(List<LineLatLng> polygon, LineLatLng gridLine,
-			double closestDistance, double farestDistance, int crosses) {
+	private int findCrossings(List<LineLatLng> polygon, LineLatLng gridLine) {
+		double closestDistance = Double.MAX_VALUE;
+		double farestDistance = Double.MIN_VALUE;
+		
+		int crosses = 0;
+		
 		for (LineLatLng polyLine : polygon) {
 			LatLng newlatlong = GeoTools.FindLineIntersection(polyLine,gridLine);
 
