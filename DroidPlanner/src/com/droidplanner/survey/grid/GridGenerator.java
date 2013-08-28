@@ -10,10 +10,10 @@ import com.google.android.gms.maps.model.LatLng;
 public class GridGenerator {
 	List<LineLatLng> grid = new ArrayList<LineLatLng>();
 	
-	public GridGenerator(List<LatLng> waypoints2,
+	public GridGenerator(List<LatLng> polygonPoints,
 			Double angle, Double lineDist) {		
 	
-		PolyBounds bounds = new PolyBounds(waypoints2);
+		PolyBounds bounds = new PolyBounds(polygonPoints);
 		LatLng point = new LatLng(bounds.getMiddle().latitude,
 				bounds.getMiddle().longitude);
 	

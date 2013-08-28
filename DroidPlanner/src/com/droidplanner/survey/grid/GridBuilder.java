@@ -2,7 +2,6 @@ package com.droidplanner.survey.grid;
 
 import java.util.List;
 
-
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.polygon.Polygon;
 import com.google.android.gms.maps.model.LatLng;
@@ -14,7 +13,9 @@ public class GridBuilder {
 	private Double lineDist;
 	private LatLng lastLocation;
 	private Double altitude;
-	private boolean innerWPs;
+	//private boolean innerWPs;
+
+	private List<waypoint> gridPoints;
 
 	public GridBuilder(Polygon poly, Double angle, Double lineDist,
 			LatLng lastLocation, Double altitude) {
@@ -26,16 +27,18 @@ public class GridBuilder {
 	}
 
 	public void setGenerateInnerWaypoints(boolean innerWPs) {
-		this.innerWPs = innerWPs;
+		//this.innerWPs = innerWPs;
 	}
 
 	public List<waypoint> generate() {
-		List<LineLatLng> gridLines = new GridGenerator(poly.getLatLngList(), angle,
-				lineDist).getGrid();
-		List<LineLatLng> hatchLines = GridTrim.trimGridLines(poly.getLatLngList(), gridLines);
-		List<waypoint> gridPoints = GridToWaypoints.waypointsFromGrid(lastLocation, altitude,
-				hatchLines);
+		List<LatLng> polygonPoints = poly.getLatLngList();
 
+		List<LineLatLng> circumscribedGrid = new GridGenerator(polygonPoints, angle,
+				lineDist).getGrid();
+		List<LineLatLng> trimedGrid = new GridTrim(circumscribedGrid, polygonPoints)
+				.getTrimmedGrid();
+		gridPoints = new GridEndpointSorter(trimedGrid, lastLocation, altitude)
+				.getWaypoints();
 		return gridPoints;
 	}
 }
