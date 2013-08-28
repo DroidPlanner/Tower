@@ -3,6 +3,7 @@ package com.droidplanner.survey.grid;
 import java.util.List;
 
 import com.droidplanner.drone.variables.waypoint;
+import com.droidplanner.helpers.geoTools.LineLatLng;
 import com.droidplanner.polygon.Polygon;
 import com.google.android.gms.maps.model.LatLng;
 

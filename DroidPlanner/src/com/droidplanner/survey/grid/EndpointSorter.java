@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.droidplanner.drone.variables.waypoint;
-import com.droidplanner.helpers.geoTools.GeoTools;
+import com.droidplanner.helpers.geoTools.LineLatLng;
 import com.droidplanner.helpers.geoTools.LineSampler;
+import com.droidplanner.helpers.geoTools.LineTools;
 import com.google.android.gms.maps.model.LatLng;
 
 public class EndpointSorter {
@@ -22,7 +23,7 @@ public class EndpointSorter {
 
 	public void sortGrid(LatLng lastpnt, boolean innerWPs) {
 		while (grid.size() > 0) {
-			LineLatLng closestLine = GeoTools.findClosestLineToPoint(lastpnt,
+			LineLatLng closestLine = LineTools.findClosestLineToPoint(lastpnt,
 					grid);
 			LatLng secondWp = processOneGridLine(closestLine, lastpnt, innerWPs);
 			lastpnt = secondWp;

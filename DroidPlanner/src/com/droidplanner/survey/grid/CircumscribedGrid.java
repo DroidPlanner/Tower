@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.droidplanner.helpers.geoTools.GeoTools;
+import com.droidplanner.helpers.geoTools.LineLatLng;
 import com.droidplanner.polygon.PolyBounds;
 import com.google.android.gms.maps.model.LatLng;
 

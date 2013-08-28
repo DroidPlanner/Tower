@@ -1,6 +1,5 @@
-package com.droidplanner.survey.grid;
+package com.droidplanner.helpers.geoTools;
 
-import com.droidplanner.helpers.geoTools.GeoTools;
 import com.google.android.gms.maps.model.LatLng;
 
 public class LineLatLng {
