@@ -4,60 +4,65 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.droidplanner.helpers.geoTools.GeoTools;
+import com.droidplanner.polygon.PolyBounds;
 import com.google.android.gms.maps.model.LatLng;
 
 public class Trimmer {
 	List<LineLatLng> trimedGrid = new ArrayList<LineLatLng>();
-	LatLng closestPoint = null;
-	LatLng farestPoint = null;
 
 	public Trimmer(List<LineLatLng> grid, List<LineLatLng> polygon) {
 		for (LineLatLng gridLine : grid) {
-			int crosses = findCrossings(polygon, gridLine);
-			processCrossings(crosses);
+			ArrayList<LatLng> crosses = findCrossings(polygon, gridLine);
+			processCrossings(crosses, gridLine);
 		}
 	}
 
-	private int findCrossings(List<LineLatLng> polygon, LineLatLng gridLine) {
-		double closestDistance = Double.MAX_VALUE;
-		double farestDistance = Double.MIN_VALUE;
-		
-		int crosses = 0;
-		
-		for (LineLatLng polyLine : polygon) {
-			LatLng newlatlong = GeoTools.FindLineIntersection(polyLine,gridLine);
+	private ArrayList<LatLng> findCrossings(List<LineLatLng> polygon,
+			LineLatLng gridLine) {
 
-			if (newlatlong != null) {
-				crosses++;
-				if (closestDistance > GeoTools.getAproximatedDistance(
-						gridLine.p1, newlatlong)) {
-					closestPoint = new LatLng(newlatlong.latitude,
-							newlatlong.longitude);
-					closestDistance = GeoTools.getAproximatedDistance(
-							gridLine.p1, newlatlong);
-				}
-				if (farestDistance < GeoTools.getAproximatedDistance(
-						gridLine.p1, newlatlong)) {
-					farestPoint = new LatLng(newlatlong.latitude,
-							newlatlong.longitude);
-					farestDistance = GeoTools.getAproximatedDistance(
-							gridLine.p1, newlatlong);
-				}
+		ArrayList<LatLng> crossings = new ArrayList<LatLng>();
+		for (LineLatLng polyLine : polygon) {
+			try {
+				crossings
+						.add(GeoTools.FindLineIntersection(polyLine, gridLine));
+			} catch (Exception e) {
 			}
 		}
-		return crosses;
+
+		return crossings;
 	}
 
-	private void processCrossings(int crosses) {
-		switch (crosses) {
+	private void processCrossings(ArrayList<LatLng> crosses, LineLatLng gridLine) {
+		switch (crosses.size()) {
 		case 0:
 		case 1:
 			break;
-		default: // TODO handle multiple crossings in a better way
 		case 2:
-			trimedGrid.add(new LineLatLng(closestPoint, farestPoint));
+			trimedGrid.add(new LineLatLng(crosses.get(0), crosses.get(1)));
 			break;
+		default: // TODO handle multiple crossings in a better way
+			trimedGrid.add(new LineLatLng(findExternalPoints(crosses)));
 		}
+	}
+
+	private LineLatLng findExternalPoints(ArrayList<LatLng> crosses) {
+		LatLng meanCoord = new PolyBounds(crosses).getMiddle();		
+		LatLng start = findFarthestPoint(crosses, meanCoord);
+		LatLng end = findFarthestPoint(crosses, start);		
+		return new LineLatLng(start, end);
+	}
+
+	private LatLng findFarthestPoint(ArrayList<LatLng> crosses, LatLng middle) {
+		double farthestDistance = Double.NEGATIVE_INFINITY;
+		LatLng farthestPoint = null;
+		for (LatLng cross : crosses) {
+			double distance = GeoTools.getAproximatedDistance(cross, middle);
+			if (distance > farthestDistance) {
+				farthestPoint = cross;
+				farthestDistance = distance;
+			}
+		}
+		return farthestPoint;
 	}
 
 	public List<LineLatLng> getTrimmedGrid() {

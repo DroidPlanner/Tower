@@ -39,7 +39,7 @@ public class CircumscribedGrid {
 
 	private void findPolygonBounds(List<LatLng> polygonPoints) {
 		PolyBounds bounds = new PolyBounds(polygonPoints);
-		LatLng middlePoint = bounds.getMidlePoint();
+		LatLng middlePoint = bounds.getMiddle();
 		gridLowerLeft = GeoTools.newCoordFromBearingAndDistance(middlePoint,
 				angle - 135, bounds.getDiag());
 		extrapolatedDiag = bounds.getDiag() * 1.5;

@@ -262,13 +262,13 @@ public class GeoTools {
 	/**
 	 * Finds the intersection of two lines http://stackoverflow.com/questions/
 	 * 1119451/how-to-tell-if-a-line-intersects -a-polygon-in-c
+	 * @throws Exception 
 	*/
-	public static LatLng FindLineIntersection(LineLatLng first, LineLatLng second) {
+	public static LatLng FindLineIntersection(LineLatLng first, LineLatLng second) throws Exception {
 		double denom = ((first.p2.longitude - first.p1.longitude) * (second.p2.latitude - second.p1.latitude))
 				- ((first.p2.latitude - first.p1.latitude) * (second.p2.longitude - second.p1.longitude));
-		// AB & CD are parallel
 		if (denom == 0)
-			return null;
+			throw new Exception("Parralel Lines");
 		double numer = ((first.p1.latitude - second.p1.latitude) * (second.p2.longitude - second.p1.longitude))
 				- ((first.p1.longitude - second.p1.longitude) * (second.p2.latitude - second.p1.latitude));
 		double r = numer / denom;
@@ -276,7 +276,7 @@ public class GeoTools {
 				- ((first.p1.longitude - second.p1.longitude) * (first.p2.latitude - first.p1.latitude));
 		double s = numer2 / denom;
 		if ((r < 0 || r > 1) || (s < 0 || s > 1))
-			return null;
+			throw new Exception("No Intersection");
 		// Find intersection point
 		double longitude = first.p1.longitude
 				+ (r * (first.p2.longitude - first.p1.longitude));

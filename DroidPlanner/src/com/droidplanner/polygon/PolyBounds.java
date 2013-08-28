@@ -34,9 +34,4 @@ public class PolyBounds {
 				(ne.longitude + sw.longitude) / 2));
 
 	}
-
-	public LatLng getMidlePoint() {
-		return new LatLng(getMiddle().latitude,
-				getMiddle().longitude);
-	}
 }
