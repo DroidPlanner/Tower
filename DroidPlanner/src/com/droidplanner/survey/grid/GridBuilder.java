@@ -1,4 +1,4 @@
-package com.droidplanner.survey;
+package com.droidplanner.survey.grid;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -13,7 +13,7 @@ import android.widget.Toast;
 import com.droidplanner.R;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.polygon.Polygon;
-import com.droidplanner.survey.GridBuilder;
+import com.droidplanner.survey.grid.GridBuilder;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.google.android.gms.maps.model.LatLng;
 

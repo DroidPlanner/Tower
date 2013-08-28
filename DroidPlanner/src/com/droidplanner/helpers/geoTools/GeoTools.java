@@ -3,7 +3,7 @@ package com.droidplanner.helpers.geoTools;
 import java.util.List;
 
 import com.droidplanner.polygon.Polygon;
-import com.droidplanner.survey.LineLatLng;
+import com.droidplanner.survey.grid.LineLatLng;
 import com.google.android.gms.maps.model.LatLng;
 
 public class GeoTools {

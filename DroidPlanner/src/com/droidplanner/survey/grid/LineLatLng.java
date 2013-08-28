@@ -1,4 +1,4 @@
-package com.droidplanner.survey;
+package com.droidplanner.survey.grid;
 
 import com.google.android.gms.maps.model.LatLng;
 
