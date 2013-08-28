@@ -21,7 +21,6 @@ import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.file.IO.CameraInfo;
 import com.droidplanner.file.IO.CameraInfoReader;
 import com.droidplanner.file.help.CameraInfoLoader;
-import com.droidplanner.helpers.geoTools.GeoTools;
 import com.droidplanner.polygon.Polygon;
 import com.droidplanner.survey.SurveyData;
 import com.droidplanner.survey.grid.Grid;
@@ -98,18 +97,16 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 	private void localGridProcessing() {	// TODO remove after debugging
 		long time = SystemClock.elapsedRealtime();
 		
-		List<waypoint> result = buildGrid();
+		GridBuilder gridBuilder = new GridBuilder(polygon, surveyData, originPoint);
+		Grid grid = gridBuilder.generate();		
 		Log.d("GRID", "Building the grid took (mS):"+(SystemClock.elapsedRealtime()-time));
 		time = SystemClock.elapsedRealtime();
-		
-		double lenght = 0;
-		for (int i = 1; i < result.size(); i++) {
-			lenght+=GeoTools.getDistance(result.get(i).getCoord(),result.get(i-1).getCoord());
-		}
+
+		double lenght = grid.getLength();
 		Log.d("GRID", "Measuring the total length took (mS):"+(SystemClock.elapsedRealtime()-time));
 		time = SystemClock.elapsedRealtime();
 		
-		Log.d("GRID", "Grid Stats: \n Length "+lenght+" \nNumberOfPictures "+(lenght/surveyData.getLongitudinalPictureDistance())+"\n Legs "+(result.size()/2));
+		Log.d("GRID", "Grid Stats: \n Length "+lenght+" \nNumberOfPictures "+(lenght/surveyData.getLongitudinalPictureDistance())+"\n Legs "+grid.getNumberOfLines());
 		
 		
 	}
@@ -192,7 +189,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 
 	private List<waypoint> buildGrid() {
 		GridBuilder gridBuilder = new GridBuilder(polygon, surveyData, originPoint);
-		Grid grid = gridBuilder.generate();
+		Grid grid = gridBuilder.generate();		
 		return grid.getWaypoints(surveyData.getAltitude());
 	}
 

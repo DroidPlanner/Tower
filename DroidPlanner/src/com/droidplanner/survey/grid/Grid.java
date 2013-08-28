@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.droidplanner.drone.variables.waypoint;
+import com.droidplanner.helpers.geoTools.GeoTools;
 import com.google.android.gms.maps.model.LatLng;
 
 public class Grid {
@@ -20,4 +21,17 @@ public class Grid {
 		}
 		return list;
 	}
+	
+	public double getLength(){
+		double lenght = 0;
+		for (int i = 1; i < gridPoints.size(); i++) {
+			lenght+=GeoTools.getDistance(gridPoints.get(i),gridPoints.get(i-1));
+		}
+		return lenght;
+	}
+	
+	public int getNumberOfLines(){
+		return gridPoints.size()/2;
+	}
+	
 }
