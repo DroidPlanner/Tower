@@ -7,10 +7,10 @@ import com.droidplanner.helpers.geoTools.GeoTools;
 import com.droidplanner.polygon.PolyBounds;
 import com.google.android.gms.maps.model.LatLng;
 
-public class GridGenerator {
+public class Generator {
 	List<LineLatLng> grid = new ArrayList<LineLatLng>();
 	
-	public GridGenerator(List<LatLng> polygonPoints,
+	public Generator(List<LatLng> polygonPoints,
 			Double angle, Double lineDist) {		
 	
 		PolyBounds bounds = new PolyBounds(polygonPoints);

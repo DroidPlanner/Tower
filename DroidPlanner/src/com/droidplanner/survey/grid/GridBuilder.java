@@ -33,11 +33,11 @@ public class GridBuilder {
 	public List<waypoint> generate() {
 		List<LatLng> polygonPoints = poly.getLatLngList();
 
-		List<LineLatLng> circumscribedGrid = new GridGenerator(polygonPoints, angle,
+		List<LineLatLng> circumscribedGrid = new Generator(polygonPoints, angle,
 				lineDist).getGrid();
-		List<LineLatLng> trimedGrid = new GridTrim(circumscribedGrid, polygonPoints)
+		List<LineLatLng> trimedGrid = new Trimmer(circumscribedGrid, polygonPoints)
 				.getTrimmedGrid();
-		GridEndpointSorter gridSorter = new GridEndpointSorter(trimedGrid, lastLocation, altitude);
+		EndpointSorter gridSorter = new EndpointSorter(trimedGrid, lastLocation, altitude);
 		gridSorter.sortGrid();		 
 		gridPoints = gridSorter.getWaypoints();
 		return gridPoints;

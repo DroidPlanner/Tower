@@ -6,10 +6,10 @@ import java.util.List;
 import com.droidplanner.helpers.geoTools.GeoTools;
 import com.google.android.gms.maps.model.LatLng;
 
-public class GridTrim {
+public class Trimmer {
 	List<LineLatLng> trimedGrid = new ArrayList<LineLatLng>();
 
-	public GridTrim(List<LineLatLng> grid, List<LatLng> waypoints2) {
+	public Trimmer(List<LineLatLng> grid, List<LatLng> waypoints2) {
 
 		// find intersections
 		for (LineLatLng gridLine : grid) {
