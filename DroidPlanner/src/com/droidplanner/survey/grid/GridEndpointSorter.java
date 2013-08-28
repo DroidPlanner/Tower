@@ -11,44 +11,45 @@ public class GridEndpointSorter {
 	private List<waypoint> gridPoints = new ArrayList<waypoint>();
 	private List<LineLatLng> grid;
 	private LatLng lastpnt;
-	private LineLatLng closest;
+	private LineLatLng firstLine;
 	private Double altitude;
 
 	public GridEndpointSorter(List<LineLatLng> grid, LatLng start,
 			Double altitude) {
 		this.grid = grid;
 		this.altitude = altitude;
-		closest = GeoTools.findClosestLineToPoint(start, grid);
-		lastpnt = closest.getClosestEndpointTo(start);
+		firstLine = GeoTools.findClosestLineToPoint(start, grid);
+		lastpnt = firstLine.getClosestEndpointTo(start);
 	}
 
 	public void sortGrid() {
+		LineLatLng closestLine = new LineLatLng(firstLine);
 		while (grid.size() > 0) {
-			if (GeoTools.getAproximatedDistance(closest.p1, lastpnt) < GeoTools
-					.getAproximatedDistance(closest.p2, lastpnt)) {
-				gridPoints.add(new waypoint(closest.p1, altitude));
+			if (GeoTools.getAproximatedDistance(closestLine.p1, lastpnt) < GeoTools
+					.getAproximatedDistance(closestLine.p2, lastpnt)) {
+				gridPoints.add(new waypoint(closestLine.p1, altitude));
 				// TODO add the code to generate the inner waypoints if
 				// necessary.
-				gridPoints.add(new waypoint(closest.p2, altitude));
+				gridPoints.add(new waypoint(closestLine.p2, altitude));
 
-				lastpnt = closest.p2;
+				lastpnt = closestLine.p2;
 
-				grid.remove(closest);
+				grid.remove(closestLine);
 				if (grid.size() == 0)
 					break;
-				closest = GeoTools.findClosestLineToPoint(closest.p2, grid);
+				closestLine = GeoTools.findClosestLineToPoint(closestLine.p2, grid);
 			} else {
-				gridPoints.add(new waypoint(closest.p2, altitude));
+				gridPoints.add(new waypoint(closestLine.p2, altitude));
 				// TODO add the code to generate the inner waypoints if
 				// necessary.
-				gridPoints.add(new waypoint(closest.p1, altitude));
+				gridPoints.add(new waypoint(closestLine.p1, altitude));
 
-				lastpnt = closest.p1;
+				lastpnt = closestLine.p1;
 
-				grid.remove(closest);
+				grid.remove(closestLine);
 				if (grid.size() == 0)
 					break;
-				closest = GeoTools.findClosestLineToPoint(closest.p1, grid);
+				closestLine = GeoTools.findClosestLineToPoint(closestLine.p1, grid);
 			}
 		}
 	}

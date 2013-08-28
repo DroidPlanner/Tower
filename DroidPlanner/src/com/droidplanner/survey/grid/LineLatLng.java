@@ -12,6 +12,10 @@ public class LineLatLng {
 		this.p2 = p2;
 	}
 
+	public LineLatLng(LineLatLng line) {
+		this(line.p1,line.p2);
+	}
+
 	public LatLng getClosestEndpointTo(LatLng point) {
 		if (getDistanceToStart(point) < getDistanceToEnd(point)) {
 			return p1;
