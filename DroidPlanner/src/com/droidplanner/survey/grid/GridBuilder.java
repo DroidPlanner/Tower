@@ -28,6 +28,15 @@ public class GridBuilder {
 		this.wpDistance = surveyData.getLongitudinalPictureDistance();
 	}
 
+	public GridBuilder(Polygon polygon, double angle, double distance,
+			LatLng originPoint) {
+		this.poly = polygon;
+		this.origin = originPoint;
+		this.angle = angle;
+		this.lineDist = distance;
+		this.innerWPs = false;
+	}
+
 	public Grid generate() {
 		List<LatLng> polygonPoints = poly.getLatLngList();
 

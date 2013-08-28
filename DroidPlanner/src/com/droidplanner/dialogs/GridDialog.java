@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.droidplanner.R;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.polygon.Polygon;
+import com.droidplanner.survey.grid.GridBuilder;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -65,14 +66,11 @@ public abstract class GridDialog implements DialogInterface.OnClickListener {
 
 	@Override
 	public void onClick(DialogInterface arg0, int which) {
-		if (which == Dialog.BUTTON_POSITIVE) {
-			// TODO make the following code work again by generating a Survey Data object
-			/*GridBuilder grid = new GridBuilder(polygon, angleView.getValue(),
-					distanceView.getValue(), originPoint,
-					altitudeView.getValue());
+		if (which == Dialog.BUTTON_POSITIVE) {			
+			GridBuilder grid = new GridBuilder(polygon, angleView.getValue(),
+					distanceView.getValue(), originPoint);
 
-			onPolygonGenerated(grid.generate());
-			*/
+			onPolygonGenerated(grid.generate().getWaypoints(altitudeView.getValue()));
 		}
 	}
 
