@@ -1,3 +1,6 @@
+## Droidplanner v0.13.1
+* Fixing layout problem in Survey Dialog in smaller screens
+
 ## Droidplanner v0.13.0
 * Survey dialog in mission planning
 
