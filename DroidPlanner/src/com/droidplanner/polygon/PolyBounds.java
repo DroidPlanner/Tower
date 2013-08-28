@@ -11,7 +11,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
  * Object for holding boundary for a polygon
  * 
  */
-class PolyBounds {
+public class PolyBounds {
 	public LatLng sw;
 	public LatLng ne;
 

@@ -1,4 +1,4 @@
-package com.droidplanner.polygon;
+package com.droidplanner.survey;
 
 import com.google.android.gms.maps.model.LatLng;
 
