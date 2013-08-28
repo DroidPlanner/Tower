@@ -53,6 +53,9 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 	private SpinnerSelfSelect cameraSpinner;
 	private CameraInfoLoader avaliableCameras;
 	private CheckBox innerWPsCheckbox;
+	private TextView numberOfPicturesView;
+	private TextView numberOfStripsView;
+	private TextView lengthView;
 
 	public void generateSurveyDialog(Polygon polygon, double defaultHatchAngle,
 			LatLng lastPoint, double defaultAltitude, Context context) {
@@ -159,6 +162,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		overlapView = (SeekBarWithText) layout.findViewById(R.id.overlapView);
 		sidelapView = (SeekBarWithText) layout.findViewById(R.id.sidelapView);
 		altitudeView = (SeekBarWithText) layout.findViewById(R.id.altitudeView);
+		
 		innerWPsCheckbox = (CheckBox) layout.findViewById(R.id.checkBoxInnerWPs);
 
 		areaTextView = (TextView) layout.findViewById(R.id.areaTextView);
@@ -170,6 +174,11 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 				.findViewById(R.id.groundResolutionTextView);
 		distanceTextView = (TextView) layout
 				.findViewById(R.id.distanceTextView);
+		numberOfPicturesView = (TextView) layout
+				.findViewById(R.id.numberOfPicturesTextView);
+		numberOfStripsView = (TextView) layout
+				.findViewById(R.id.numberOfStripsTextView);
+		lengthView = (TextView) layout.findViewById(R.id.lengthTextView);
 
 		angleView.setOnChangedListner(this);
 		altitudeView.setOnChangedListner(this);
