@@ -13,7 +13,8 @@ public class GridBuilder {
 	private Double lineDist;
 	private LatLng lastLocation;
 	private Double altitude;
-	//private boolean innerWPs;
+	private boolean innerWPs;
+	private Double wpDistance;
 
 	private List<waypoint> gridPoints;
 
@@ -26,8 +27,9 @@ public class GridBuilder {
 		this.altitude = altitude;
 	}
 
-	public void setGenerateInnerWaypoints(boolean innerWPs) {
-		//this.innerWPs = innerWPs;
+	public void setGenerateInnerWaypoints(boolean innerWPs, Double wpDistance) {
+		this.innerWPs = innerWPs;
+		this.wpDistance = wpDistance;
 	}
 
 	public List<waypoint> generate() {
@@ -37,8 +39,8 @@ public class GridBuilder {
 				lineDist).getGrid();
 		List<LineLatLng> trimedGrid = new Trimmer(circumscribedGrid, polygonPoints)
 				.getTrimmedGrid();
-		EndpointSorter gridSorter = new EndpointSorter(trimedGrid, altitude);
-		gridSorter.sortGrid(lastLocation);		 
+		EndpointSorter gridSorter = new EndpointSorter(trimedGrid, altitude,wpDistance);
+		gridSorter.sortGrid(lastLocation,innerWPs);		 
 		gridPoints = gridSorter.getWaypoints();
 		return gridPoints;
 	}

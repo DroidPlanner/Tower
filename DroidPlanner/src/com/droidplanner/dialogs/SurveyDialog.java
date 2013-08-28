@@ -191,7 +191,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		GridBuilder grid = new GridBuilder(polygon, surveyData.getAngle(),
 				surveyData.getLateralPictureDistance(), originPoint,
 				surveyData.getAltitude());
-		grid.setGenerateInnerWaypoints(innerWPsCheckbox.isChecked());
+		grid.setGenerateInnerWaypoints(innerWPsCheckbox.isChecked(),surveyData.getLongitudinalPictureDistance());
 		List<waypoint> result = grid.generate();
 		return result;
 	}

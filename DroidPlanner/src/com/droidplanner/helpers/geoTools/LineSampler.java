@@ -13,6 +13,12 @@ public class LineSampler {
 	public LineSampler(List<LatLng> points) {
 		this.points = points;
 	}
+	
+	public LineSampler(LatLng p1,LatLng p2) {
+		points = new ArrayList<LatLng>();
+		points.add(p1);
+		points.add(p2);
+	}
 
 	public List<LatLng> sample(double sampleDistance) {
 		for (int i = 1; i < points.size(); i++) {
