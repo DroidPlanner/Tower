@@ -6,8 +6,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.SystemClock;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -56,6 +54,9 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 	private TextView numberOfPicturesView;
 	private TextView numberOfStripsView;
 	private TextView lengthView;
+	
+	private GridBuilder gridBuilder = new GridBuilder(polygon, surveyData, originPoint);
+	private Grid grid;
 
 	public void generateSurveyDialog(Polygon polygon, double defaultHatchAngle,
 			LatLng lastPoint, double defaultAltitude, Context context) {
@@ -91,26 +92,9 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		surveyData.update(angleView.getValue(), altitudeView.getValue(),
 				overlapView.getValue(), sidelapView.getValue());
 		
-		localGridProcessing();  // TODO remove after debugging		
+		grid = gridBuilder.generate();				
 		
 		updateViews();
-		
-	}
-
-	private void localGridProcessing() {	// TODO remove after debugging
-		long time = SystemClock.elapsedRealtime();
-		
-		GridBuilder gridBuilder = new GridBuilder(polygon, surveyData, originPoint);
-		Grid grid = gridBuilder.generate();		
-		Log.d("GRID", "Building the grid took (mS):"+(SystemClock.elapsedRealtime()-time));
-		time = SystemClock.elapsedRealtime();
-
-		double lenght = grid.getLength();
-		Log.d("GRID", "Measuring the total length took (mS):"+(SystemClock.elapsedRealtime()-time));
-		time = SystemClock.elapsedRealtime();
-		
-		Log.d("GRID", "Grid Stats: \n Length "+lenght+" \nNumberOfPictures "+(lenght/surveyData.getLongitudinalPictureDistance())+"\n Legs "+grid.getNumberOfLines());
-		
 		
 	}
 
@@ -140,6 +124,12 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 				+ surveyData.getLateralPictureDistance().intValue() + " m");
 		areaTextView.setText(context.getString(R.string.area) + ": "
 				+ polygon.getArea().intValue() + " m\u00B2");
+		lengthView.setText(context.getString(R.string.mission_length) + ": "
+				+grid.getLength()+ " m");
+		numberOfPicturesView.setText(context.getString(R.string.pictures) + ": "
+				+grid.getLength()/surveyData.getLongitudinalPictureDistance());
+		numberOfStripsView.setText(context.getString(R.string.number_of_strips) + ": "
+				+grid.getNumberOfLines());
 	}
 
 	private boolean checkIfPolygonIsValid(Polygon polygon) {
