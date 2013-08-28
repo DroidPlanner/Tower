@@ -3,22 +3,18 @@ package com.droidplanner.survey.grid;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.helpers.geoTools.LineLatLng;
 import com.droidplanner.helpers.geoTools.LineSampler;
 import com.droidplanner.helpers.geoTools.LineTools;
 import com.google.android.gms.maps.model.LatLng;
 
 public class EndpointSorter {
-	private List<waypoint> gridPoints = new ArrayList<waypoint>();
+	private List<LatLng> gridPoints = new ArrayList<LatLng>();
 	private List<LineLatLng> grid;
-	private Double altitude;
 	private Double sampleDistance;
 
-	public EndpointSorter(List<LineLatLng> grid, Double altitude,
-			Double sampleDistance) {
+	public EndpointSorter(List<LineLatLng> grid, Double sampleDistance) {
 		this.grid = grid;
-		this.altitude = altitude;
 		this.sampleDistance = sampleDistance;
 	}
 
@@ -48,15 +44,15 @@ public class EndpointSorter {
 			List<LatLng> list = new LineSampler(firstWP, secondWp)
 					.sample(sampleDistance);
 			for (LatLng point : list) {
-				gridPoints.add(new waypoint(point, altitude));
+				gridPoints.add(point);
 			}
 		} else {
-			gridPoints.add(new waypoint(firstWP, altitude));
-			gridPoints.add(new waypoint(secondWp, altitude));
+			gridPoints.add(firstWP);
+			gridPoints.add(secondWp);
 		}
 	}
 
-	public List<waypoint> getWaypoints() {
+	public List<LatLng> getSortedGrid() {
 		return gridPoints;
 	}
 

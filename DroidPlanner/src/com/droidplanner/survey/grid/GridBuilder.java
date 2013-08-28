@@ -2,9 +2,9 @@ package com.droidplanner.survey.grid;
 
 import java.util.List;
 
-import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.helpers.geoTools.LineLatLng;
 import com.droidplanner.polygon.Polygon;
+import com.droidplanner.survey.SurveyData;
 import com.google.android.gms.maps.model.LatLng;
 
 public class GridBuilder {
@@ -12,38 +12,32 @@ public class GridBuilder {
 	private Polygon poly;
 	private Double angle;
 	private Double lineDist;
-	private LatLng lastLocation;
-	private Double altitude;
+	private LatLng origin;
 	private boolean innerWPs;
 	private Double wpDistance;
 
-	private List<waypoint> gridPoints;
+	private Grid grid;
 
-	public GridBuilder(Polygon poly, Double angle, Double lineDist,
-			LatLng lastLocation, Double altitude) {
-		this.poly = poly;
-		this.angle = angle;
-		this.lineDist = lineDist;
-		this.lastLocation = lastLocation;
-		this.altitude = altitude;
+	public GridBuilder(Polygon polygon, SurveyData surveyData,
+			LatLng originPoint) {
+		this.poly = polygon;
+		this.origin = originPoint;
+		this.angle = surveyData.getAngle();
+		this.lineDist = surveyData.getLateralPictureDistance();
+		this.innerWPs = surveyData.shouldGenerateInnerWPs();
+		this.wpDistance = surveyData.getLongitudinalPictureDistance();
 	}
 
-	public void setGenerateInnerWaypoints(boolean innerWPs, Double wpDistance) {
-		this.innerWPs = innerWPs;
-		this.wpDistance = wpDistance;
-	}
-
-	public List<waypoint> generate() {
+	public Grid generate() {
 		List<LatLng> polygonPoints = poly.getLatLngList();
 
 		List<LineLatLng> circumscribedGrid = new CircumscribedGrid(
 				polygonPoints, angle, lineDist).getGrid();
 		List<LineLatLng> trimedGrid = new Trimmer(circumscribedGrid,
 				poly.getLines()).getTrimmedGrid();
-		EndpointSorter gridSorter = new EndpointSorter(trimedGrid, altitude,
-				wpDistance);
-		gridSorter.sortGrid(lastLocation, innerWPs);
-		gridPoints = gridSorter.getWaypoints();
-		return gridPoints;
+		EndpointSorter gridSorter = new EndpointSorter(trimedGrid, wpDistance);
+		gridSorter.sortGrid(origin, innerWPs);
+		grid = new Grid(gridSorter.getSortedGrid());
+		return grid;
 	}
 }

@@ -10,6 +10,7 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -23,6 +24,7 @@ import com.droidplanner.file.help.CameraInfoLoader;
 import com.droidplanner.helpers.geoTools.GeoTools;
 import com.droidplanner.polygon.Polygon;
 import com.droidplanner.survey.SurveyData;
+import com.droidplanner.survey.grid.Grid;
 import com.droidplanner.survey.grid.GridBuilder;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
@@ -31,7 +33,7 @@ import com.droidplanner.widgets.spinners.SpinnerSelfSelect.OnSpinnerItemSelected
 import com.google.android.gms.maps.model.LatLng;
 
 public abstract class SurveyDialog implements DialogInterface.OnClickListener,
-		OnTextSeekBarChangedListner, OnSpinnerItemSelectedListener {
+		OnTextSeekBarChangedListner, OnSpinnerItemSelectedListener, OnClickListener {
 	public abstract void onPolygonGenerated(List<waypoint> list);
 
 	public Context context;
@@ -87,13 +89,13 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		surveyData.update(angleView.getValue(), altitudeView.getValue(),
 				overlapView.getValue(), sidelapView.getValue());
 		
-		localGridProcessing();		
+		localGridProcessing();  // TODO remove after debugging		
 		
 		updateViews();
 		
 	}
 
-	private void localGridProcessing() {
+	private void localGridProcessing() {	// TODO remove after debugging
 		long time = SystemClock.elapsedRealtime();
 		
 		List<waypoint> result = buildGrid();
@@ -176,6 +178,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		altitudeView.setOnChangedListner(this);
 		overlapView.setOnChangedListner(this);
 		sidelapView.setOnChangedListner(this);
+		innerWPsCheckbox.setOnClickListener(this);
 		return dialog;
 	}
 
@@ -188,12 +191,9 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 	}
 
 	private List<waypoint> buildGrid() {
-		GridBuilder grid = new GridBuilder(polygon, surveyData.getAngle(),
-				surveyData.getLateralPictureDistance(), originPoint,
-				surveyData.getAltitude());
-		grid.setGenerateInnerWaypoints(innerWPsCheckbox.isChecked(),surveyData.getLongitudinalPictureDistance());
-		List<waypoint> result = grid.generate();
-		return result;
+		GridBuilder gridBuilder = new GridBuilder(polygon, surveyData, originPoint);
+		Grid grid = gridBuilder.generate();
+		return grid.getWaypoints(surveyData.getAltitude());
 	}
 
 	@Override
@@ -210,6 +210,14 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		surveyData.setCameraInfo(cameraInfo);
 		updateSeekBarsValues();
 		updateViews();
+	}
+	
+	@Override
+	public void onClick(View view) {
+		if (view.equals(innerWPsCheckbox)) {
+			surveyData.setInnerWpsState(innerWPsCheckbox.isChecked());
+		}
+		
 	}
 
 }
