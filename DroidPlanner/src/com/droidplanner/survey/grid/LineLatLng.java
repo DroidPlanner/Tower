@@ -13,7 +13,15 @@ public class LineLatLng {
 	}
 
 	public LineLatLng(LineLatLng line) {
-		this(line.p1,line.p2);
+		this(line.p1, line.p2);
+	}
+
+	public LatLng getFarthestEndpointTo(LatLng point) {
+		if (getClosestEndpointTo(point).equals(p1)) {
+			return p2;
+		} else {
+			return p1;
+		}
 	}
 
 	public LatLng getClosestEndpointTo(LatLng point) {
@@ -31,4 +39,5 @@ public class LineLatLng {
 	private Double getDistanceToStart(LatLng point) {
 		return GeoTools.getAproximatedDistance(p1, point);
 	}
+
 }

@@ -25,33 +25,28 @@ public class GridEndpointSorter {
 	public void sortGrid() {
 		LineLatLng closestLine = new LineLatLng(firstLine);
 		while (grid.size() > 0) {
-			if (GeoTools.getAproximatedDistance(closestLine.p1, lastpnt) < GeoTools
-					.getAproximatedDistance(closestLine.p2, lastpnt)) {
-				gridPoints.add(new waypoint(closestLine.p1, altitude));
-				// TODO add the code to generate the inner waypoints if
-				// necessary.
-				gridPoints.add(new waypoint(closestLine.p2, altitude));
-
-				lastpnt = closestLine.p2;
-
-				grid.remove(closestLine);
-				if (grid.size() == 0)
-					break;
-				closestLine = GeoTools.findClosestLineToPoint(closestLine.p2, grid);
-			} else {
-				gridPoints.add(new waypoint(closestLine.p2, altitude));
-				// TODO add the code to generate the inner waypoints if
-				// necessary.
-				gridPoints.add(new waypoint(closestLine.p1, altitude));
-
-				lastpnt = closestLine.p1;
-
-				grid.remove(closestLine);
-				if (grid.size() == 0)
-					break;
-				closestLine = GeoTools.findClosestLineToPoint(closestLine.p1, grid);
-			}
+			LatLng secondWp = processOneGridLine(closestLine);
+			lastpnt = secondWp;
+			if (grid.size() == 0)
+				break;
+			closestLine = GeoTools.findClosestLineToPoint(lastpnt, grid);
 		}
+	}
+
+	private LatLng processOneGridLine(LineLatLng closestLine) {
+		LatLng firstWP = closestLine.getClosestEndpointTo(lastpnt);
+		LatLng secondWp = closestLine.getFarthestEndpointTo(lastpnt);
+
+		grid.remove(closestLine);
+
+		addWaypointsBetween(firstWP, secondWp);
+		return secondWp;
+	}
+
+	private void addWaypointsBetween(LatLng firstWP, LatLng secondWp) {
+		gridPoints.add(new waypoint(firstWP, altitude));
+		// TODO add the code to generate the inner waypoints if necessary.
+		gridPoints.add(new waypoint(secondWp, altitude));
 	}
 
 	public List<waypoint> getWaypoints() {
