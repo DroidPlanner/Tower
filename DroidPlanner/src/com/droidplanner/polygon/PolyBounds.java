@@ -3,7 +3,6 @@ package com.droidplanner.polygon;
 import java.util.List;
 
 import com.droidplanner.helpers.geoTools.GeoTools;
-import com.droidplanner.survey.grid.CircumscribedGrid;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
