@@ -55,7 +55,6 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 	private TextView numberOfStripsView;
 	private TextView lengthView;
 	
-	private GridBuilder gridBuilder = new GridBuilder(polygon, surveyData, originPoint);
 	private Grid grid;
 
 	public void generateSurveyDialog(Polygon polygon, double defaultHatchAngle,
@@ -92,6 +91,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		surveyData.update(angleView.getValue(), altitudeView.getValue(),
 				overlapView.getValue(), sidelapView.getValue());
 		
+		GridBuilder gridBuilder = new GridBuilder(polygon, surveyData, originPoint);
 		grid = gridBuilder.generate();				
 		
 		updateViews();
@@ -110,7 +110,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 				+ ((Double) surveyData.getLateralFootPrint()).intValue() + "x"
 				+ ((Double) surveyData.getLongitudinalFootPrint()).intValue()
 				+ " m");
-		groundResolutionTextView.setText(String.format("%s:%2.2f cm\u00B2",
+		groundResolutionTextView.setText(String.format("%s:%2.2f cm\u00B2/px",
 				context.getString(R.string.ground_resolution),
 				surveyData.getGroundResolution()));
 		distanceTextView
@@ -125,9 +125,9 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		areaTextView.setText(context.getString(R.string.area) + ": "
 				+ polygon.getArea().intValue() + " m\u00B2");
 		lengthView.setText(context.getString(R.string.mission_length) + ": "
-				+grid.getLength()+ " m");
+				+(int) grid.getLength()+ " m");
 		numberOfPicturesView.setText(context.getString(R.string.pictures) + ": "
-				+grid.getLength()/surveyData.getLongitudinalPictureDistance());
+				+(int)(grid.getLength()/surveyData.getLongitudinalPictureDistance()));
 		numberOfStripsView.setText(context.getString(R.string.number_of_strips) + ": "
 				+grid.getNumberOfLines());
 	}
@@ -181,16 +181,12 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 	@Override
 	public void onClick(DialogInterface arg0, int which) {
 		if (which == Dialog.BUTTON_POSITIVE) {
-			List<waypoint> result = buildGrid();
+			List<waypoint> result = grid.getWaypoints(surveyData.getAltitude());
 			onPolygonGenerated(result);
 		}
 	}
 
-	private List<waypoint> buildGrid() {
-		GridBuilder gridBuilder = new GridBuilder(polygon, surveyData, originPoint);
-		Grid grid = gridBuilder.generate();		
-		return grid.getWaypoints(surveyData.getAltitude());
-	}
+	
 
 	@Override
 	public void onSpinnerItemSelected(Spinner spinner, int position, String text) {
@@ -205,7 +201,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		}
 		surveyData.setCameraInfo(cameraInfo);
 		updateSeekBarsValues();
-		updateViews();
+		onSeekBarChanged();
 	}
 	
 	@Override
