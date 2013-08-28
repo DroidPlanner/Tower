@@ -37,8 +37,9 @@ public class GridBuilder {
 				lineDist).getGrid();
 		List<LineLatLng> trimedGrid = new GridTrim(circumscribedGrid, polygonPoints)
 				.getTrimmedGrid();
-		gridPoints = new GridEndpointSorter(trimedGrid, lastLocation, altitude)
-				.getWaypoints();
+		GridEndpointSorter gridSorter = new GridEndpointSorter(trimedGrid, lastLocation, altitude);
+		gridSorter.sortGrid();		 
+		gridPoints = gridSorter.getWaypoints();
 		return gridPoints;
 	}
 }

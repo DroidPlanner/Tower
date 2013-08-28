@@ -242,7 +242,7 @@ public class GeoTools {
 	 *            A list of lines to search
 	 * @return The closest Line
 	 */
-	public static LineLatLng findClosestLine(LatLng point, List<LineLatLng> list) {
+	public static LineLatLng findClosestLineToPoint(LatLng point, List<LineLatLng> list) {
 		LineLatLng answer = list.get(0);
 		double shortest = Double.MAX_VALUE;
 
