@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.droidplanner.helpers.geoTools.GeoTools;
+import com.droidplanner.survey.grid.LineLatLng;
 import com.google.android.gms.maps.model.LatLng;
 
 public class Polygon {
@@ -28,6 +29,15 @@ public class Polygon {
 		List<LatLng> list = new ArrayList<LatLng>();
 		for (PolygonPoint point : points) {
 			list.add(point.coord);
+		}
+		return list;
+	}
+
+	public List<LineLatLng> getLines() {
+		List<LineLatLng> list = new ArrayList<LineLatLng>();
+		for (int i = 0; i < points.size(); i++) {
+			int endIndex = (i==0)? points.size()-1: i-1;
+			list.add(new LineLatLng(points.get(i).coord,points.get(endIndex).coord));
 		}
 		return list;
 	}

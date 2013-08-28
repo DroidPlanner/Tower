@@ -9,7 +9,7 @@ import com.google.android.gms.maps.model.LatLng;
 public class Trimmer {
 	List<LineLatLng> trimedGrid = new ArrayList<LineLatLng>();
 
-	public Trimmer(List<LineLatLng> grid, List<LatLng> waypoints2) {
+	public Trimmer(List<LineLatLng> grid, List<LineLatLng> polygon) {
 
 		// find intersections
 		for (LineLatLng gridLine : grid) {
@@ -21,17 +21,8 @@ public class Trimmer {
 
 			int crosses = 0;
 
-			for (int b = 0; b < waypoints2.size(); b++) {
-				LatLng newlatlong;
-				if (b != waypoints2.size() - 1) {
-					newlatlong = GeoTools.FindLineIntersection(
-							waypoints2.get(b), waypoints2.get(b + 1),
-							gridLine.p1, gridLine.p2);
-				} else { // Don't forget the last polygon line
-					newlatlong = GeoTools.FindLineIntersection(
-							waypoints2.get(b), waypoints2.get(0), gridLine.p1,
-							gridLine.p2);
-				}
+			for (LineLatLng polyLine : polygon) {
+				LatLng newlatlong = GeoTools.FindLineIntersection(polyLine,gridLine);
 
 				if (newlatlong != null) {
 					crosses++;

@@ -38,7 +38,7 @@ public class GridBuilder {
 		List<LineLatLng> circumscribedGrid = new CircumscribedGrid(
 				polygonPoints, angle, lineDist).getGrid();
 		List<LineLatLng> trimedGrid = new Trimmer(circumscribedGrid,
-				polygonPoints).getTrimmedGrid();
+				poly.getLines()).getTrimmedGrid();
 		EndpointSorter gridSorter = new EndpointSorter(trimedGrid, altitude,
 				wpDistance);
 		gridSorter.sortGrid(lastLocation, innerWPs);

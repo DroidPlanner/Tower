@@ -262,37 +262,26 @@ public class GeoTools {
 	/**
 	 * Finds the intersection of two lines http://stackoverflow.com/questions/
 	 * 1119451/how-to-tell-if-a-line-intersects -a-polygon-in-c
-	 * 
-	 * @param start1
-	 *            starting point of the first line
-	 * @param end1
-	 *            ending point of the first line
-	 * @param start2
-	 *            starting point of the second line
-	 * @param end2
-	 *            ending point of the second line
-	 * @return point of intersection, or null if there is no intersection
-	 */
-	public static LatLng FindLineIntersection(LatLng start1, LatLng end1,
-			LatLng start2, LatLng end2) {
-		double denom = ((end1.longitude - start1.longitude) * (end2.latitude - start2.latitude))
-				- ((end1.latitude - start1.latitude) * (end2.longitude - start2.longitude));
+	*/
+	public static LatLng FindLineIntersection(LineLatLng first, LineLatLng second) {
+		double denom = ((first.p2.longitude - first.p1.longitude) * (second.p2.latitude - second.p1.latitude))
+				- ((first.p2.latitude - first.p1.latitude) * (second.p2.longitude - second.p1.longitude));
 		// AB & CD are parallel
 		if (denom == 0)
 			return null;
-		double numer = ((start1.latitude - start2.latitude) * (end2.longitude - start2.longitude))
-				- ((start1.longitude - start2.longitude) * (end2.latitude - start2.latitude));
+		double numer = ((first.p1.latitude - second.p1.latitude) * (second.p2.longitude - second.p1.longitude))
+				- ((first.p1.longitude - second.p1.longitude) * (second.p2.latitude - second.p1.latitude));
 		double r = numer / denom;
-		double numer2 = ((start1.latitude - start2.latitude) * (end1.longitude - start1.longitude))
-				- ((start1.longitude - start2.longitude) * (end1.latitude - start1.latitude));
+		double numer2 = ((first.p1.latitude - second.p1.latitude) * (first.p2.longitude - first.p1.longitude))
+				- ((first.p1.longitude - second.p1.longitude) * (first.p2.latitude - first.p1.latitude));
 		double s = numer2 / denom;
 		if ((r < 0 || r > 1) || (s < 0 || s > 1))
 			return null;
 		// Find intersection point
-		double longitude = start1.longitude
-				+ (r * (end1.longitude - start1.longitude));
-		double latitude = start1.latitude
-				+ (r * (end1.latitude - start1.latitude));
+		double longitude = first.p1.longitude
+				+ (r * (first.p2.longitude - first.p1.longitude));
+		double latitude = first.p1.latitude
+				+ (r * (first.p2.latitude - first.p1.latitude));
 		return (new LatLng(latitude, longitude));
 	}
 
@@ -313,4 +302,5 @@ public class GeoTools {
 		}
 		return Math.abs(0.5 * sum);
 	}
+
 }
