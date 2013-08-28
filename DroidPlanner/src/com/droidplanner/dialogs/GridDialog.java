@@ -71,7 +71,7 @@ public abstract class GridDialog implements DialogInterface.OnClickListener {
 					distanceView.getValue(), originPoint,
 					altitudeView.getValue());
 
-			onPolygonGenerated(grid.hatchfill());
+			onPolygonGenerated(grid.generate());
 		}
 	}
 

@@ -192,7 +192,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 				surveyData.getLateralPictureDistance(), originPoint,
 				surveyData.getAltitude());
 		grid.setGenerateInnerWaypoints(innerWPsCheckbox.isChecked());
-		List<waypoint> result = grid.hatchfill();
+		List<waypoint> result = grid.generate();
 		return result;
 	}
 
