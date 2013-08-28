@@ -84,6 +84,8 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		surveyData.update(angleView.getValue(), altitudeView.getValue(),
 				overlapView.getValue(), sidelapView.getValue());
 		updateViews();
+		
+		
 
 	}
 
@@ -157,12 +159,18 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 	@Override
 	public void onClick(DialogInterface arg0, int which) {
 		if (which == Dialog.BUTTON_POSITIVE) {
-			GridBuilder grid = new GridBuilder(polygon, surveyData.getAngle(),
-					surveyData.getLateralPictureDistance(), originPoint,
-					surveyData.getAltitude());
-			grid.setGenerateInnerWaypoints(innerWPsCheckbox.isChecked());
-			onPolygonGenerated(grid.hatchfill());
+			List<waypoint> result = buildGrid();
+			onPolygonGenerated(result);
 		}
+	}
+
+	private List<waypoint> buildGrid() {
+		GridBuilder grid = new GridBuilder(polygon, surveyData.getAngle(),
+				surveyData.getLateralPictureDistance(), originPoint,
+				surveyData.getAltitude());
+		grid.setGenerateInnerWaypoints(innerWPsCheckbox.isChecked());
+		List<waypoint> result = grid.hatchfill();
+		return result;
 	}
 
 	@Override
