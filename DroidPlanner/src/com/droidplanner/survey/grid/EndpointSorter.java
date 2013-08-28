@@ -10,30 +10,23 @@ import com.google.android.gms.maps.model.LatLng;
 public class EndpointSorter {
 	private List<waypoint> gridPoints = new ArrayList<waypoint>();
 	private List<LineLatLng> grid;
-	private LatLng lastpnt;
-	private LineLatLng firstLine;
 	private Double altitude;
 
-	public EndpointSorter(List<LineLatLng> grid, LatLng start,
-			Double altitude) {
+	public EndpointSorter(List<LineLatLng> grid, Double altitude) {
 		this.grid = grid;
 		this.altitude = altitude;
-		firstLine = GeoTools.findClosestLineToPoint(start, grid);
-		lastpnt = firstLine.getClosestEndpointTo(start);
 	}
 
-	public void sortGrid() {
-		LineLatLng closestLine = new LineLatLng(firstLine);
+	public void sortGrid(LatLng lastpnt) {
 		while (grid.size() > 0) {
-			LatLng secondWp = processOneGridLine(closestLine);
+			LineLatLng closestLine = GeoTools.findClosestLineToPoint(lastpnt,
+					grid);
+			LatLng secondWp = processOneGridLine(closestLine, lastpnt);
 			lastpnt = secondWp;
-			if (grid.size() == 0)
-				break;
-			closestLine = GeoTools.findClosestLineToPoint(lastpnt, grid);
 		}
 	}
 
-	private LatLng processOneGridLine(LineLatLng closestLine) {
+	private LatLng processOneGridLine(LineLatLng closestLine, LatLng lastpnt) {
 		LatLng firstWP = closestLine.getClosestEndpointTo(lastpnt);
 		LatLng secondWp = closestLine.getFarthestEndpointTo(lastpnt);
 
