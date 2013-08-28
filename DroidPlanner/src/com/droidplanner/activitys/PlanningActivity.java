@@ -30,7 +30,10 @@ import com.droidplanner.fragments.helpers.GestureMapFragment.OnPathFinishedListn
 import com.droidplanner.fragments.helpers.MapProjection;
 import com.droidplanner.polygon.Polygon;
 import com.droidplanner.polygon.PolygonPoint;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 
 public class PlanningActivity extends SuperActivity implements
 		OnMapInteractionListener, OnWaypointUpdateListner,
@@ -71,7 +74,30 @@ public class PlanningActivity extends SuperActivity implements
 		drone.mission.missionListner = this;
 
 		checkIntent();
+		setDebugState(); // TODO remove this after finishing the camera Dialog
+
 		update();
+	}
+
+	private void setDebugState() {// TODO remove this after finishing the camera
+									// Dialog
+		mode = modes.POLYGON;
+		drone.mission.setHome(new LatLng(-29.702632470079642,
+				-51.14419251680374));
+		onAddPoint(new LatLng(-29.702162433803252, -51.14540822803974));
+		onAddPoint(new LatLng(-29.701339428185392, -51.14431958645582));
+		onAddPoint(new LatLng(-29.70253723985932, -51.143730506300926));
+
+		LatLngBounds.Builder builder = new LatLngBounds.Builder();
+		builder.include(polygon.getLatLngList().get(0));
+		builder.include(polygon.getLatLngList().get(1));
+		builder.include(polygon.getLatLngList().get(2));
+
+		CameraUpdate animation = CameraUpdateFactory.newLatLngBounds(
+				builder.build(), 480, 360, 30);
+		planningMapFragment.mMap.animateCamera(animation);
+
+		openSurveyDialog();
 	}
 
 	private void checkIntent() {
