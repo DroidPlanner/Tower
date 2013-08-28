@@ -23,8 +23,8 @@ public class Trimmer {
 		ArrayList<LatLng> crossings = new ArrayList<LatLng>();
 		for (LineLatLng polyLine : polygon) {
 			try {
-				crossings
-						.add(LineTools.FindLineIntersection(polyLine, gridLine));
+				crossings.add(LineTools
+						.FindLineIntersection(polyLine, gridLine));
 			} catch (Exception e) {
 			}
 		}

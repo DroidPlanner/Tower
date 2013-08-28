@@ -13,8 +13,8 @@ public class LineSampler {
 	public LineSampler(List<LatLng> points) {
 		this.points = points;
 	}
-	
-	public LineSampler(LatLng p1,LatLng p2) {
+
+	public LineSampler(LatLng p1, LatLng p2) {
 		points = new ArrayList<LatLng>();
 		points.add(p1);
 		points.add(p2);
@@ -30,23 +30,23 @@ public class LineSampler {
 		return sampledPoints;
 	}
 
-
 	private List<LatLng> sampleLine(LatLng from, LatLng to,
 			double samplingDistance) {
 		List<LatLng> result = new ArrayList<LatLng>();
 		double heading = GeoTools.getHeadingFromCoordinates(from, to);
 		double totalLength = GeoTools.getDistance(from, to);
 		double distance = 0;
-		
+
 		while (distance < totalLength) {
-			result.add(GeoTools.newCoordFromBearingAndDistance(from, heading, distance));
+			result.add(GeoTools.newCoordFromBearingAndDistance(from, heading,
+					distance));
 			distance += samplingDistance;
 		}
 		return result;
 	}
-	
+
 	private LatLng getLast(List<LatLng> list) {
-		return list.get(list.size()-1);
+		return list.get(list.size() - 1);
 	}
 
 }

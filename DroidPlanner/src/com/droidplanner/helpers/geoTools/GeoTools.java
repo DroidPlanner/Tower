@@ -44,7 +44,8 @@ public class GeoTools {
 	 *            distance to be added
 	 * @return New point with the added distance
 	 */
-	public static LatLng newCoordFromBearingAndDistance(LatLng origin, double bearing, double distance) {
+	public static LatLng newCoordFromBearingAndDistance(LatLng origin,
+			double bearing, double distance) {
 
 		double lat = origin.latitude;
 		double lon = origin.longitude;
@@ -61,7 +62,7 @@ public class GeoTools {
 
 		return (new LatLng(Math.toDegrees(lat2), Math.toDegrees(lon2)));
 	}
-	
+
 	/**
 	 * Calculates the arc between two points
 	 * http://en.wikipedia.org/wiki/Haversine_formula
@@ -92,12 +93,11 @@ public class GeoTools {
 	public static double getDistance(LatLng from, LatLng to) {
 		return RADIUS_OF_EARTH * Math.toRadians(getArcInRadians(from, to));
 	}
-	
-	
+
 	/**
 	 * Computes the heading between two coordinates
-	 * @return
-	 *  heading in degrees
+	 * 
+	 * @return heading in degrees
 	 */
 	static double getHeadingFromCoordinates(LatLng fromLoc, LatLng toLoc) {
 		double fLat = Math.toRadians(fromLoc.latitude);
@@ -116,7 +116,6 @@ public class GeoTools {
 			return 360 + degree;
 		}
 	}
-	
 
 	/**
 	 * Experimental Function, needs testing! Calculate the area of the polygon

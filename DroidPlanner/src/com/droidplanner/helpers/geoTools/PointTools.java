@@ -7,7 +7,8 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class PointTools {
 
-	public static LatLng findFarthestPoint(ArrayList<LatLng> crosses, LatLng middle) {
+	public static LatLng findFarthestPoint(ArrayList<LatLng> crosses,
+			LatLng middle) {
 		double farthestDistance = Double.NEGATIVE_INFINITY;
 		LatLng farthestPoint = null;
 		for (LatLng cross : crosses) {
@@ -33,10 +34,10 @@ public class PointTools {
 	private static LatLng findClosestPoint(LatLng point, List<LatLng> list) {
 		LatLng answer = null;
 		double currentbest = Double.MAX_VALUE;
-	
+
 		for (LatLng pnt : list) {
 			double dist1 = GeoTools.getAproximatedDistance(point, pnt);
-	
+
 			if (dist1 < currentbest) {
 				answer = pnt;
 				currentbest = dist1;
@@ -61,7 +62,7 @@ public class PointTools {
 		double currentbest = Double.MAX_VALUE;
 		double dist;
 		LatLng p1, p2;
-	
+
 		for (int i = 0; i < waypoints2.size(); i++) {
 			if (i == waypoints2.size() - 1) {
 				p1 = waypoints2.get(i);
@@ -70,7 +71,7 @@ public class PointTools {
 				p1 = waypoints2.get(i);
 				p2 = waypoints2.get(i + 1);
 			}
-	
+
 			dist = PointTools.pointToLineDistance(p1, p2, point);
 			if (dist < currentbest) {
 				answer = i + 1;
@@ -97,13 +98,13 @@ public class PointTools {
 		double B = P.latitude - L1.latitude;
 		double C = L2.longitude - L1.longitude;
 		double D = L2.latitude - L1.latitude;
-	
+
 		double dot = A * C + B * D;
 		double len_sq = C * C + D * D;
 		double param = dot / len_sq;
-	
+
 		double xx, yy;
-	
+
 		if (param < 0) // point behind the segment
 		{
 			xx = L1.longitude;
@@ -116,7 +117,7 @@ public class PointTools {
 			xx = L1.longitude + param * C;
 			yy = L1.latitude + param * D;
 		}
-	
+
 		return Math.hypot(xx - P.longitude, yy - P.latitude);
 	}
 

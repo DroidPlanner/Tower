@@ -15,7 +15,8 @@ public class EndpointSorter {
 	private Double altitude;
 	private Double sampleDistance;
 
-	public EndpointSorter(List<LineLatLng> grid, Double altitude, Double sampleDistance) {
+	public EndpointSorter(List<LineLatLng> grid, Double altitude,
+			Double sampleDistance) {
 		this.grid = grid;
 		this.altitude = altitude;
 		this.sampleDistance = sampleDistance;
@@ -30,22 +31,24 @@ public class EndpointSorter {
 		}
 	}
 
-	private LatLng processOneGridLine(LineLatLng closestLine, LatLng lastpnt, boolean innerWPs) {
+	private LatLng processOneGridLine(LineLatLng closestLine, LatLng lastpnt,
+			boolean innerWPs) {
 		LatLng firstWP = closestLine.getClosestEndpointTo(lastpnt);
 		LatLng secondWp = closestLine.getFarthestEndpointTo(lastpnt);
 
 		grid.remove(closestLine);
 
-		
-		addWaypointsBetween(firstWP, secondWp,innerWPs);
+		addWaypointsBetween(firstWP, secondWp, innerWPs);
 		return secondWp;
 	}
 
-	private void addWaypointsBetween(LatLng firstWP, LatLng secondWp, boolean innerWPs) {
+	private void addWaypointsBetween(LatLng firstWP, LatLng secondWp,
+			boolean innerWPs) {
 		if (innerWPs) {
-			List<LatLng> list = new LineSampler(firstWP,secondWp).sample(sampleDistance);
+			List<LatLng> list = new LineSampler(firstWP, secondWp)
+					.sample(sampleDistance);
 			for (LatLng point : list) {
-				gridPoints.add(new waypoint(point, altitude));	
+				gridPoints.add(new waypoint(point, altitude));
 			}
 		} else {
 			gridPoints.add(new waypoint(firstWP, altitude));
