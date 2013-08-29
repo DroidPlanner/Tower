@@ -42,7 +42,6 @@ public class MissionFragment extends ListFragment implements DragScrollProfile, 
 	public void setMission(Mission mission) {
 		this.mission = mission;
 		adapter = new MissionRow(this.getActivity(), android.R.layout.simple_list_item_1,mission.getWaypoints());
-		adapter.setFragment(this);
 		setListAdapter(adapter);
 	}
 
