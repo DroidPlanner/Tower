@@ -59,23 +59,6 @@ public class MissionRow extends ArrayAdapter<waypoint> {
 				
 		return view;
 	}
-	
-
-	private void onCmdClick(final int position) {
-		final String[] list = new String[ApmCommands.getNameList().size()];
-		ApmCommands.getNameList().toArray(list);
-		AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-		dialog.setTitle("Select type");
-		dialog.setItems(list, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface d, int i) {
-				waypoints.get(position).setCmd(ApmCommands.getCmd(list[i]));
-				notifyDataSetChanged();
-				fragment.onWaypointUpdate(waypoints.get(position));
-			}
-		});
-		dialog.create().show();
-	}
 
 	public void setFragment(MissionFragment fragment) {
 		this.fragment = fragment;

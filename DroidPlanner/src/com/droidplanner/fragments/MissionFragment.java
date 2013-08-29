@@ -8,7 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
 import com.droidplanner.R;
+import com.droidplanner.dialogs.WaypointDialog;
 import com.droidplanner.drone.variables.Mission;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.widgets.tableRow.MissionRow;
@@ -17,7 +19,7 @@ import com.mobeta.android.dslv.DragSortListView.DragScrollProfile;
 import com.mobeta.android.dslv.DragSortListView.DropListener;
 import com.mobeta.android.dslv.DragSortListView.RemoveListener;
 
-public class MissionFragment extends ListFragment implements DragScrollProfile, RemoveListener, DropListener{
+public class MissionFragment extends ListFragment implements DragScrollProfile, RemoveListener, DropListener, OnWaypointUpdateListner{
 	public DragSortListView list;
 	private Mission mission;
 	private MissionRow adapter;
@@ -79,6 +81,15 @@ public class MissionFragment extends ListFragment implements DragScrollProfile, 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		Log.d("T", "touched "+position);
+		WaypointDialog dialog = new WaypointDialog(adapter.getItem(position));
+		dialog.build(this.getActivity(), this);		
 		super.onListItemClick(l, v, position, id);
+	}
+	
+	@Override
+	public void onWaypointsUpdate() {
+		Log.d("T", "waypoint updated by dialog");
+		mission.notifyMissionUpdate();	
+		adapter.notifyDataSetChanged();
 	}
 }
