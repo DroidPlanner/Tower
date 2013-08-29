@@ -13,7 +13,7 @@ import com.droidplanner.file.FileManager;
 import com.droidplanner.parameters.Parameter;
 
 public class ParameterReader implements
-		com.droidplanner.dialogs.OpenFileDialog.FileReader {
+		com.droidplanner.dialogs.openfile.OpenFileDialog.FileReader {
 	private List<Parameter> parameters;
 
 	public ParameterReader() {
