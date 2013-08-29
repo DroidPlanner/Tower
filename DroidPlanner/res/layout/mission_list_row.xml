@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dragHandler"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    tools:ignore="HardcodedText" >
+
+    <TextView
+        android:id="@+id/rowNameView"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:text="001"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/rowAltitudeView"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:text="1000m"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/rowTypeView"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="Waypoint"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+</LinearLayout>
