@@ -1,25 +1,32 @@
 package com.droidplanner.widgets.tableRow;
 
 import java.util.List;
+import java.util.Locale;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.droidplanner.R;
 import com.droidplanner.drone.variables.waypoint;
 
 public class MissionRow extends ArrayAdapter<waypoint> {
 
+	private Context context;
+	private List<waypoint> waypoints;
+
 	public MissionRow(Context context, int resource, List<waypoint> objects) {
 		super(context, resource, objects);
+		this.waypoints = objects;
+		this.context = context;
 	}
 
 	public MissionRow(Context context, int resource) {
 		super(context, resource);
+		this.context = context;
 	}
 
 	/*
@@ -27,32 +34,31 @@ public class MissionRow extends ArrayAdapter<waypoint> {
 	 * MissionFragment fragment;
 	 */
 
-
 	private TextView nameView;
 	private TextView altitudeView;
-	private TextView cmdView;
-	private Button removeButton;
-	private LinearLayout layout;
+	private TextView typeView;
+	//private Button removeButton;
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		//createRowViews(parent.getContext());
-		// update();
-		return super.getView(position, layout, parent);
+		return createRowViews(parent,position);
 	}
 
-	private void createRowViews(Context context) {
-		layout = new LinearLayout(context);
-		nameView = new TextView(context);
-		altitudeView = new TextView(context);
-		cmdView = new TextView(context);
-		removeButton = new Button(context);
-		removeButton.setText("X");
+	private View createRowViews(ViewGroup root, int position) {
+		LayoutInflater inflater = (LayoutInflater) context
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View view = inflater.inflate(R.layout.mission_list_row, null);
+		nameView = (TextView) view.findViewById(R.id.rowNameView);
+		altitudeView = (TextView) view.findViewById(R.id.rowAltitudeView);
+		typeView = (TextView) view.findViewById(R.id.rowTypeView);
 
-		// Sizes
-		nameView.setWidth(50);
-		cmdView.setWidth(60);
-		altitudeView.setWidth(80);
+		altitudeView.setText(String.format(Locale.ENGLISH, "%3.0fm",
+				waypoints.get(position).getHeight()));
+		nameView.setText(String.format("%3d", waypoints.get(position).getNumber()));
+		typeView.setText(waypoints.get(position).getCmd().getName());
+		
+		// removeButton = new Button(context);
+		// removeButton.setText("X");
 
 		// Listeners
 		/*
@@ -60,20 +66,12 @@ public class MissionRow extends ArrayAdapter<waypoint> {
 		 * altitudeView.setOnClickListener(this);
 		 * removeButton.setOnClickListener(this);
 		 */
-
-		layout.addView(nameView);
-		layout.addView(cmdView);
-		layout.addView(altitudeView);
-		layout.addView(removeButton);
+		return view;
 	}
 
+	public void update() {
+	}
 	/*
-	 * 
-	 * public void update() {
-	 * altitudeView.setText(String.format(Locale.ENGLISH,"%3fm"
-	 * ,waypoint.getHeight())); nameView.setText("WP " + waypoint.getNumber());
-	 * cmdView.setText(waypoint.getCmd().getName()); }
-	 * 
 	 * @Override public void onClick(View v) { if (v.equals(removeButton)) {
 	 * onDeleteButtonClick(); } else if (v.equals(altitudeView)) {
 	 * onAltitudeClick(); } else if (v.equals(cmdView)) { onCmdClick(); } }
