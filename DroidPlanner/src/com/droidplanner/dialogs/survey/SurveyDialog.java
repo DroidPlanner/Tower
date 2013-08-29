@@ -37,31 +37,22 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 	Grid grid;
 
 	public void generateSurveyDialog(Polygon polygon, double defaultHatchAngle,
-			LatLng lastPoint, double defaultAltitude, Context context) {
+			LatLng lastPoint, double defaultAltitude, Context context) throws Exception {
 		this.polygon = polygon;
 		this.originPoint = lastPoint;
-		views = new SurveyDialogViews(this,context);
-		
-
+		checkIfPolygonIsValid(polygon);
+		views = new SurveyDialogViews(context);
 		avaliableCameras = new CameraInfoLoader(this.views.context);
-
-		if (checkIfPolygonIsValid(polygon)) {
-			Toast.makeText(context, "Invalid Polygon", Toast.LENGTH_SHORT)
-					.show();
-			return;
-		}
-		
-
-		AlertDialog dialog = views.buildDialog();
-
 		surveyData = new SurveyData(Math.floor(defaultHatchAngle), defaultAltitude);
-
-		views.cameraSpinner.setOnSpinnerItemSelectedListener(this);
+		AlertDialog dialog = views.buildDialog(this);		
 		views.updateCameraSpinner(avaliableCameras.getCameraInfoList());
-
 		dialog.show();
 	}
 
+	private void checkIfPolygonIsValid(Polygon polygon) throws Exception {
+		throw new Exception("Invalid Polygon");
+	}
+	
 	@Override
 	public void onSeekBarChanged() {
 		surveyData.update(views.angleView.getValue(), views.altitudeView.getValue(),
@@ -70,12 +61,9 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		GridBuilder gridBuilder = new GridBuilder(polygon, surveyData, originPoint);
 		grid = gridBuilder.generate();				
 		
-		views.updateViews();		
+		views.updateViews(surveyData,grid,polygon.getArea());		
 	}
 
-	private boolean checkIfPolygonIsValid(Polygon polygon) {
-		return !polygon.isValid();
-	}
 
 	@Override
 	public void onClick(DialogInterface arg0, int which) {
@@ -97,7 +85,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 			cameraInfo = CameraInfoReader.getNewMockCameraInfo();
 		}
 		surveyData.setCameraInfo(cameraInfo);
-		views.updateSeekBarsValues(this);
+		views.updateSeekBarsValues(surveyData);
 		onSeekBarChanged();
 	}
 	

@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.droidplanner.R;
 import com.droidplanner.R.id;
 import com.droidplanner.R.string;
+import com.droidplanner.survey.SurveyData;
+import com.droidplanner.survey.grid.Grid;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.spinners.SpinnerSelfSelect;
 
@@ -31,66 +33,67 @@ public class SurveyDialogViews {
 	public TextView numberOfPicturesView;
 	public TextView numberOfStripsView;
 	public TextView lengthView;
-	private SurveyDialog surveyDialog;
 
-	public SurveyDialogViews(SurveyDialog surveyDialog, Context context) {
-		this.surveyDialog = surveyDialog;
+	public SurveyDialogViews(Context context) {
 		this.context = context;
 	}
 
-	void updateViews() {
+	void updateViews(SurveyData surveyData, Grid grid, Double area) {
 		footprintTextView.setText(context.getString(string.footprint) + ": "
-				+ ((Double) surveyDialog.surveyData.getLateralFootPrint()).intValue() + "x"
-				+ ((Double) surveyDialog.surveyData.getLongitudinalFootPrint()).intValue()
+				+ ((Double) surveyData.getLateralFootPrint()).intValue() + "x"
+				+ ((Double) surveyData.getLongitudinalFootPrint()).intValue()
 				+ " m");
 		groundResolutionTextView.setText(String.format("%s:%2.2f cm\u00B2/px",
 				context.getString(string.ground_resolution),
-				surveyDialog.surveyData.getGroundResolution()));
+				surveyData.getGroundResolution()));
 		distanceTextView
 				.setText(context.getString(string.distance_between_pictures)
 						+ ": "
-						+ surveyDialog.surveyData.getLongitudinalPictureDistance()
+						+ surveyData.getLongitudinalPictureDistance()
 								.intValue() + " m");
 		distanceBetweenLinesTextView.setText(context
 				.getString(string.distance_between_lines)
 				+ ": "
-				+ surveyDialog.surveyData.getLateralPictureDistance().intValue() + " m");
+				+ surveyData.getLateralPictureDistance().intValue() + " m");
 		areaTextView.setText(context.getString(string.area) + ": "
-				+ surveyDialog.polygon.getArea().intValue() + " m\u00B2");
+				+ area.intValue() + " m\u00B2");
 		lengthView.setText(context.getString(string.mission_length) + ": "
-				+(int) surveyDialog.grid.getLength()+ " m");
-		numberOfPicturesView.setText(context.getString(string.pictures) + ": "
-				+(int)(surveyDialog.grid.getLength()/surveyDialog.surveyData.getLongitudinalPictureDistance()));
-		numberOfStripsView.setText(context.getString(string.number_of_strips) + ": "
-				+surveyDialog.grid.getNumberOfLines());
+				+ (int) grid.getLength() + " m");
+		numberOfPicturesView.setText(context.getString(string.pictures)
+				+ ": "
+				+ (int) (grid.getLength() / surveyData
+						.getLongitudinalPictureDistance()));
+		numberOfStripsView.setText(context.getString(string.number_of_strips)
+				+ ": " + grid.getNumberOfLines());
 	}
 
-	void updateSeekBarsValues(SurveyDialog surveyDialog) {
-		angleView.setValue(surveyDialog.surveyData.getAngle());
-		altitudeView.setValue(surveyDialog.surveyData.getAltitude());
-		sidelapView.setValue(surveyDialog.surveyData.getSidelap());
-		overlapView.setValue(surveyDialog.surveyData.getOverlap());
+	void updateSeekBarsValues(SurveyData surveyData) {
+		angleView.setValue(surveyData.getAngle());
+		altitudeView.setValue(surveyData.getAltitude());
+		sidelapView.setValue(surveyData.getSidelap());
+		overlapView.setValue(surveyData.getOverlap());
 	}
 
-	AlertDialog buildDialog() {
+	AlertDialog buildDialog(SurveyDialog surveyDialog) {
 		Builder builder = new Builder(context);
 		builder.setTitle("Survey");
 		LayoutInflater inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View layout = inflater.inflate(R.layout.dialog_survey, null);
 		builder.setView(layout);
-		builder.setNegativeButton("Cancel", surveyDialog).setPositiveButton("Ok", surveyDialog);
+		builder.setNegativeButton("Cancel", surveyDialog).setPositiveButton(
+				"Ok", surveyDialog);
 		AlertDialog dialog = builder.create();
-	
+
 		cameraSpinner = (SpinnerSelfSelect) layout
 				.findViewById(id.cameraFileSpinner);
 		angleView = (SeekBarWithText) layout.findViewById(id.angleView);
 		overlapView = (SeekBarWithText) layout.findViewById(id.overlapView);
 		sidelapView = (SeekBarWithText) layout.findViewById(id.sidelapView);
 		altitudeView = (SeekBarWithText) layout.findViewById(id.altitudeView);
-		
+
 		innerWPsCheckbox = (CheckBox) layout.findViewById(id.checkBoxInnerWPs);
-	
+
 		areaTextView = (TextView) layout.findViewById(id.areaTextView);
 		distanceBetweenLinesTextView = (TextView) layout
 				.findViewById(id.distanceBetweenLinesTextView);
@@ -98,19 +101,19 @@ public class SurveyDialogViews {
 				.findViewById(id.footprintTextView);
 		groundResolutionTextView = (TextView) layout
 				.findViewById(id.groundResolutionTextView);
-		distanceTextView = (TextView) layout
-				.findViewById(id.distanceTextView);
+		distanceTextView = (TextView) layout.findViewById(id.distanceTextView);
 		numberOfPicturesView = (TextView) layout
 				.findViewById(id.numberOfPicturesTextView);
 		numberOfStripsView = (TextView) layout
 				.findViewById(id.numberOfStripsTextView);
 		lengthView = (TextView) layout.findViewById(id.lengthTextView);
-	
+
 		angleView.setOnChangedListner(surveyDialog);
 		altitudeView.setOnChangedListner(surveyDialog);
 		overlapView.setOnChangedListner(surveyDialog);
 		sidelapView.setOnChangedListner(surveyDialog);
 		innerWPsCheckbox.setOnClickListener(surveyDialog);
+		cameraSpinner.setOnSpinnerItemSelectedListener(surveyDialog);
 		return dialog;
 	}
 

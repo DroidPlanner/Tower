@@ -222,9 +222,13 @@ public class PlanningActivity extends SuperActivity implements
 				update();
 			}
 		};
-		dialog.generateSurveyDialog(polygon, defaultHatchAngle,
-				drone.mission.getLastWaypoint().getCoord(), drone.mission.getDefaultAlt(),
-				this);
+		try {
+			dialog.generateSurveyDialog(polygon, defaultHatchAngle,
+					drone.mission.getLastWaypoint().getCoord(), drone.mission.getDefaultAlt(),
+					this);			
+		} catch (Exception e) {
+			Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	private void clearWaypointsAndUpdate() {
