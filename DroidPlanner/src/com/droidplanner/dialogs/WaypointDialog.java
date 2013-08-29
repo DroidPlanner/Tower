@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import com.MAVLink.Messages.ApmCommands;
 import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
@@ -71,6 +73,19 @@ public class WaypointDialog implements DialogInterface.OnClickListener {
 		public ApmCommandsAdapter(Context context, int resource,
 				ApmCommands[] objects) {
 			super(context, resource, objects);
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			View view = super.getView(position, convertView, parent);
+			((TextView)view).setText(getItem(position).getName());
+			return view;
+		}
+
+		@Override
+		public View getDropDownView(int position, View convertView,
+				ViewGroup parent) {
+			return getView(position, convertView, parent);
 		}
 
 	}
