@@ -36,17 +36,9 @@ public class MissionRow extends ArrayAdapter<waypoint> implements
 		this.context = context;
 	}
 
-	/*
-	 * private List<waypoint> waypoints; private Context context; private
-	 * MissionFragment fragment;
-	 */
-
-
 	private TextView nameView;
 	private TextView altitudeView;
 	private TextView typeView;
-
-	// private Button removeButton;
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -67,18 +59,10 @@ public class MissionRow extends ArrayAdapter<waypoint> implements
 				.getNumber()));
 		typeView.setText(waypoints.get(position).getCmd().getName());
 		
-		
-
-		// removeButton = new Button(context);
-		// removeButton.setText("X");
-
-		// Listeners
-
 		typeView.setOnClickListener(this);
 		altitudeView.setOnClickListener(this);
 		typeView.setTag(position);
 		altitudeView.setTag(position);
-		// removeButton.setOnClickListener(this);
 		
 		return view;
 	}
@@ -104,28 +88,10 @@ public class MissionRow extends ArrayAdapter<waypoint> implements
 		});
 		dialog.create().show();
 	}
-	/*
-	private void onDeleteButtonClick() {
-		fragment.onDeleteWaypoint(waypoint);
-	}
-
-	private void onAltitudeClick() {
-		AltitudeDialog dialog = new AltitudeDialog(this);
-		dialog.build(waypoint.getHeight(), context);
-	}
-
-	*/
 
 	public void setFragment(MissionFragment fragment) {
 		this.fragment = fragment;
 	}
 
-	/*
-	@Override
-	public void onAltitudeChanged(double newAltitude) {
-		waypoint.setHeight(newAltitude);
-		update();
-	}
-	*/
 
 }
