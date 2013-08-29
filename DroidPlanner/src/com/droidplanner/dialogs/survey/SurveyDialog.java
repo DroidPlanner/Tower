@@ -50,7 +50,9 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 	}
 
 	private void checkIfPolygonIsValid(Polygon polygon) throws Exception {
-		throw new Exception("Invalid Polygon");
+		if (!polygon.isValid()) {
+			throw new Exception("Invalid Polygon");			
+		}
 	}
 	
 	@Override
