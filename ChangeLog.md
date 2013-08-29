@@ -1,3 +1,6 @@
+## Droidplanner v0.14.1
+* Fixing a small bug in the Survey Dialog
+
 ## Droidplanner v0.14.0
 * Drag-and-Drop waypoint editing
 * Slide to remove waypoit
