@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
@@ -18,8 +17,7 @@ import com.droidplanner.R;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.fragments.MissionFragment;
 
-public class MissionRow extends ArrayAdapter<waypoint> implements
-		OnClickListener {
+public class MissionRow extends ArrayAdapter<waypoint> {
 
 	private Context context;
 	private List<waypoint> waypoints;
@@ -58,18 +56,8 @@ public class MissionRow extends ArrayAdapter<waypoint> implements
 		nameView.setText(String.format("%3d", waypoints.get(position)
 				.getNumber()));
 		typeView.setText(waypoints.get(position).getCmd().getName());
-		
-		typeView.setOnClickListener(this);
-		altitudeView.setOnClickListener(this);
-		typeView.setTag(position);
-		altitudeView.setTag(position);
-		
+				
 		return view;
-	}
-
-	@Override
-	public void onClick(View v) {
-		onCmdClick((Integer) v.getTag());
 	}
 	
 

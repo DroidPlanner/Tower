@@ -2,9 +2,11 @@ package com.droidplanner.fragments;
 
 import android.app.ListFragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.droidplanner.R;
 import com.droidplanner.drone.variables.Mission;
@@ -72,5 +74,11 @@ public class MissionFragment extends ListFragment implements DragScrollProfile, 
 
 	public void onWaypointUpdate(waypoint waypoint) {
 		mission.notifyMissionUpdate();		
+	}
+
+	@Override
+	public void onListItemClick(ListView l, View v, int position, long id) {
+		Log.d("T", "touched "+position);
+		super.onListItemClick(l, v, position, id);
 	}
 }
