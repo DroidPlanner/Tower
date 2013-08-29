@@ -20,7 +20,7 @@
     dslv:drag_handle_id="@+id/dragHandler"
     dslv:sort_enabled="true"
     dslv:remove_enabled="true"
-    dslv:drag_start_mode="onDown"
+    dslv:drag_start_mode="onMove"
     dslv:remove_mode="flingRemove"
     >
 </com.mobeta.android.dslv.DragSortListView>
