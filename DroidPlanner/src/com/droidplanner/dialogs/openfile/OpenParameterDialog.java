@@ -1,4 +1,4 @@
-package com.droidplanner.dialogs;
+package com.droidplanner.dialogs.openfile;
 
 import java.util.List;
 

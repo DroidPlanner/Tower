@@ -1,4 +1,4 @@
-package com.droidplanner.dialogs;
+package com.droidplanner.dialogs.openfile;
 
 import android.app.AlertDialog;
 import android.content.Context;
