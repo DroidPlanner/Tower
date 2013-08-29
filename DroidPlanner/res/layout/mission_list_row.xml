@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal" 
+    android:layout_margin="2dp"
+    android:orientation="horizontal"
     tools:ignore="HardcodedText" >
 
     <TextView
@@ -26,7 +27,7 @@
         android:layout_height="wrap_content"
         android:text="Waypoint"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-
+<!--  
     <Button
         android:id="@+id/button1"
         style="?android:attr/buttonStyleSmall"
@@ -34,5 +35,6 @@
         android:layout_height="wrap_content"
         android:minHeight="30dp"
         android:text="X" />
+-->
 
 </LinearLayout>

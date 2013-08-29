@@ -2,6 +2,7 @@ package com.droidplanner.fragments;
 
 import android.app.ListFragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,7 @@ import com.droidplanner.drone.variables.Mission;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.widgets.tableRow.MissionRow;
 
-public class MissionFragment extends ListFragment {
+public class MissionFragment extends ListFragment{
 	public ListView list;
 	private Mission mission;
 	private MissionRow adapter;
@@ -22,7 +23,7 @@ public class MissionFragment extends ListFragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.mission_fragment, container,
 				false);
-		list = (ListView) view.findViewById(R.id.listView1);	
+		list = (ListView) view.findViewById(R.id.listView1);
 		adapter = new MissionRow(this.getActivity(), android.R.layout.simple_list_item_1);		
 		list.setAdapter(adapter);		
 		return view;
@@ -31,6 +32,7 @@ public class MissionFragment extends ListFragment {
 	public void setMission(Mission mission) {
 		this.mission = mission;
 		adapter = new MissionRow(this.getActivity(), android.R.layout.simple_list_item_1,mission.getWaypoints());
+		adapter.setFragment(this);
 		setListAdapter(adapter);
 	}
 
@@ -44,5 +46,11 @@ public class MissionFragment extends ListFragment {
 
 	public void onWaypointUpdate(waypoint wp) {
 		mission.notifyMissionUpdate();
+	}
+
+	@Override
+	public void onListItemClick(ListView l, View v, int position, long id) {
+		Log.d("Y", "clicked on:"+position+" view"+v.toString());
+		super.onListItemClick(l, v, position, id);
 	}
 }
