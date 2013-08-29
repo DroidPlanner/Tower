@@ -46,32 +46,28 @@ public class MissionFragment extends ListFragment implements DragScrollProfile, 
 	public void update() {
 		adapter.notifyDataSetChanged();
 	}
-
-	public void onDeleteWaypoint(waypoint wp) {
-		mission.removeWaypoint(wp);
-	}
-
-	public void onWaypointUpdate(waypoint wp) {
-		mission.notifyMissionUpdate();
-	}
 	
 	@Override
 	public void drop(int from, int to) {
-		// TODO Auto-generated method stub
-		Log.d("D", "from "+from+" to "+to);
-		
+		waypoint item=adapter.getItem(from);
+        adapter.remove(item);
+        adapter.insert(item, to);
+        adapter.notifyDataSetChanged();
+        mission.notifyMissionUpdate();		
 	}
 
 	@Override
 	public void remove(int which) {
-		// TODO Auto-generated method stub
-		Log.d("D", "remove "+which);
-		
+		mission.removeWaypoint(adapter.getItem(which));
 	}
 
 	@Override
 	public float getSpeed(float w, long t) {
 		Log.d("D", "w "+w+" t "+t);
 		return 0;
+	}
+
+	public void onWaypointUpdate(waypoint waypoint) {
+		mission.notifyMissionUpdate();		
 	}
 }

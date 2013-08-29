@@ -140,6 +140,12 @@ public class Mission extends DroneVariable {
 		this.home.setCoord(home);
 	}
 
+	public void moveWaypoint(int from, int to) {
+		waypoint wp = waypoints.get(from);
+		waypoints.remove(from);
+		
+	}
+	
 	public void moveWaypoint(LatLng coord, int number) {
 		waypoints.get(number).setCoord(coord);
 	}
@@ -179,5 +185,6 @@ public class Mission extends DroneVariable {
 		data.addAll(getWaypoints());
 		myDrone.waypointMananger.writeWaypoints(data);
 	}
+
 
 }
