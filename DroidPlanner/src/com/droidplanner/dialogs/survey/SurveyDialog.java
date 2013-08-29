@@ -61,7 +61,8 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		GridBuilder gridBuilder = new GridBuilder(polygon, surveyData, originPoint);
 		grid = gridBuilder.generate();				
 		
-		views.updateViews(surveyData,grid,polygon.getArea());		
+		//views.updateViews(surveyData,grid,polygon.getArea());
+		views.updateViews(surveyData,grid,0.0); // TODO use correct area value
 	}
 
 
