@@ -71,7 +71,8 @@ public class Mission extends DroneVariable {
 	}
 
 	public void setWaypoints(List<waypoint> waypoints) {
-		this.waypoints = waypoints;
+		this.waypoints.clear();
+		this.waypoints.addAll(waypoints);
 	}
 
 	public void addWaypoints(List<waypoint> points) {
