@@ -2,7 +2,6 @@ package com.droidplanner.fragments;
 
 import android.app.ListFragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,8 +62,12 @@ public class MissionFragment extends ListFragment implements DragScrollProfile, 
 
 	@Override
 	public float getSpeed(float w, long t) {
-		Log.d("D", "w "+w+" t "+t);
-		return 0;
+        if (w > 0.8f) {
+            // Traverse all views in a millisecond
+            return ((float) adapter.getCount()) / 0.001f;
+        } else {
+            return 5.0f * w;
+        }
 	}
 
 	public void onWaypointUpdate(waypoint waypoint) {
