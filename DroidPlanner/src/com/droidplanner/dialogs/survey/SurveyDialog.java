@@ -28,16 +28,18 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		OnTextSeekBarChangedListner, OnSpinnerItemSelectedListener, OnClickListener {
 	public abstract void onPolygonGenerated(List<waypoint> list);
 
-	Polygon polygon;
+	private Context context;
+	private Polygon polygon;
 	private LatLng originPoint;
 
-	public SurveyData surveyData;
+	private SurveyData surveyData;
 	private CameraInfoLoader avaliableCameras;
-	public SurveyDialogViews views;
-	Grid grid;
+	private SurveyDialogViews views;
+	private Grid grid;
 
 	public void generateSurveyDialog(Polygon polygon, double defaultHatchAngle,
 			LatLng lastPoint, double defaultAltitude, Context context) throws Exception {
+		this.context = context;
 		this.polygon = polygon;
 		this.originPoint = lastPoint;
 		checkIfPolygonIsValid(polygon);
@@ -61,10 +63,15 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 				views.overlapView.getValue(), views.sidelapView.getValue());
 		
 		GridBuilder gridBuilder = new GridBuilder(polygon, surveyData, originPoint);
-		grid = gridBuilder.generate();				
+		try {
+			grid = gridBuilder.generate();
+			//views.updateViews(surveyData,grid,polygon.getArea());
+			views.updateViews(surveyData,grid,0.0); // TODO use correct area value
+		} catch (Exception e) {
+			Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+			views.blank();
+		}				
 		
-		//views.updateViews(surveyData,grid,polygon.getArea());
-		views.updateViews(surveyData,grid,0.0); // TODO use correct area value
 	}
 
 
