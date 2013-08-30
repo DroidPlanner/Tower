@@ -9,8 +9,8 @@ import android.widget.Toast;
 
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperActivity;
-import com.droidplanner.dialogs.OpenFileDialog;
-import com.droidplanner.dialogs.OpenParameterDialog;
+import com.droidplanner.dialogs.openfile.OpenFileDialog;
+import com.droidplanner.dialogs.openfile.OpenParameterDialog;
 import com.droidplanner.drone.DroneInterfaces;
 import com.droidplanner.fragments.ParametersTableFragment;
 import com.droidplanner.parameters.Parameter;
