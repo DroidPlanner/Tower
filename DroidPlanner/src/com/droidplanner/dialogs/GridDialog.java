@@ -19,6 +19,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 public abstract class GridDialog implements DialogInterface.OnClickListener {
 	public abstract void onPolygonGenerated(List<waypoint> list);
+	private Context context;
 
 	private Polygon polygon;
 
@@ -28,9 +29,11 @@ public abstract class GridDialog implements DialogInterface.OnClickListener {
 	private SeekBarWithText angleView;
 	private SeekBarWithText altitudeView;
 
+
 	public void generatePolygon(double defaultHatchAngle,
 			double defaultHatchDistance, Polygon polygon, LatLng originPoint,
 			double altitude, Context context) {
+		this.context = context;
 		this.polygon = polygon;
 		this.originPoint = originPoint;
 
@@ -70,7 +73,11 @@ public abstract class GridDialog implements DialogInterface.OnClickListener {
 			GridBuilder grid = new GridBuilder(polygon, angleView.getValue(),
 					distanceView.getValue(), originPoint);
 
-			onPolygonGenerated(grid.generate().getWaypoints(altitudeView.getValue()));
+			try {
+				onPolygonGenerated(grid.generate().getWaypoints(altitudeView.getValue()));
+			} catch (Exception e) {
+				Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+			}
 		}
 	}
 
