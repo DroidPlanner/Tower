@@ -33,13 +33,13 @@ public class MarkerManager {
 		}
 	}
 
-	public void updateMarker(MarkerSource object, boolean draggable) {
-		if (hashMap.containsValue(object)) {
-			Marker marker = getMarkerFromSource(object);
-			((MarkerSource) object).update(marker);
+	public void updateMarker(MarkerSource source, boolean draggable) {
+		if (hashMap.containsValue(source)) {
+			Marker marker = getMarkerFromSource(source);
+			source.update(marker);
 			marker.setDraggable(draggable);
 		} else {
-			addMarker(object, draggable);
+			addMarker(source, draggable);
 		}
 	}
 

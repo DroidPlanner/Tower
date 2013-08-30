@@ -16,7 +16,7 @@ public class RenderThread extends Thread {
 
 	public RenderThread(SurfaceHolder surfaceHolder, canvasPainter painter) {
 		_surfaceHolder = surfaceHolder;
-		this.painter = (canvasPainter) painter;
+		this.painter = painter;
 	}
 
 	public boolean isRunning() {

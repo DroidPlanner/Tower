@@ -47,10 +47,7 @@ public class Polygon implements PathSource {
 	 * A valid polygon must have at least 3 points
 	 */
 	public boolean isValid() {
-		if (points.size() > 2)
-			return true;
-		else
-			return false;
+		return points.size() > 2;
 	}
 
 	public List<PolygonPoint> getPolygonPoints() {
