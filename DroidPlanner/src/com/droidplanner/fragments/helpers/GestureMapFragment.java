@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.droidplanner.R;
+import com.droidplanner.helpers.geoTools.Simplify;
 
 public class GestureMapFragment extends Fragment implements OnGestureListener {
 	private static final int TOLERANCE = 15;

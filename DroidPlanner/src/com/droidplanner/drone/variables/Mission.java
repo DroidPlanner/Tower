@@ -10,9 +10,10 @@ import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneVariable;
+import com.droidplanner.fragments.helpers.MapPath.PathSource;
 import com.google.android.gms.maps.model.LatLng;
 
-public class Mission extends DroneVariable {
+public class Mission extends DroneVariable implements PathSource {
 
 	private Home home = new Home(0.0, 0.0, 0.0);
 	private List<waypoint> waypoints = new ArrayList<waypoint>();
@@ -178,6 +179,16 @@ public class Mission extends DroneVariable {
 		data.add(getHome());
 		data.addAll(getWaypoints());
 		myDrone.waypointMananger.writeWaypoints(data);
+	}
+
+	@Override
+	public List<LatLng> getPathPoints() {
+		List<LatLng> newPath = new ArrayList<LatLng>();
+		newPath.add(getHome().getCoord());
+		for (waypoint point : getWaypoints()) {
+			newPath.add(point.getCoord());
+		}
+		return newPath;
 	}
 
 
