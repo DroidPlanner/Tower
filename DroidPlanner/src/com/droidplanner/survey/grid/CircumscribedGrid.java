@@ -9,20 +9,21 @@ import com.droidplanner.polygon.PolyBounds;
 import com.google.android.gms.maps.model.LatLng;
 
 public class CircumscribedGrid {
+	private static final int MAX_NUMBER_OF_LINES = 500;
 	List<LineLatLng> grid = new ArrayList<LineLatLng>();
 	private LatLng gridLowerLeft;
 	private double extrapolatedDiag;
 	private Double angle;
 
 	public CircumscribedGrid(List<LatLng> polygonPoints, Double angle,
-			Double lineDist) {
+			Double lineDist) throws Exception {
 		this.angle = angle;
 
 		findPolygonBounds(polygonPoints);
 		drawGrid(lineDist);
 	}
 
-	private void drawGrid(Double lineDist) {
+	private void drawGrid(Double lineDist) throws Exception {
 		int lines = 0;
 		LatLng startPoint = gridLowerLeft;
 		while (lines * lineDist < extrapolatedDiag) {
@@ -35,6 +36,9 @@ public class CircumscribedGrid {
 			startPoint = GeoTools.newCoordFromBearingAndDistance(startPoint,
 					angle + 90, lineDist);
 			lines++;
+			if (lines>MAX_NUMBER_OF_LINES) {
+				throw new Exception("Mission is too lengthy");				
+			}
 		}
 	}
 

@@ -37,7 +37,7 @@ public class GridBuilder {
 		this.innerWPs = false;
 	}
 
-	public Grid generate() {
+	public Grid generate() throws Exception {
 		List<LatLng> polygonPoints = poly.getLatLngList();
 
 		List<LineLatLng> circumscribedGrid = new CircumscribedGrid(

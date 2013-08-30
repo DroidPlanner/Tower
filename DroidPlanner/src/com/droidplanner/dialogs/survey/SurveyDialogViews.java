@@ -67,6 +67,19 @@ public class SurveyDialogViews {
 				+ ": " + grid.getNumberOfLines());
 	}
 
+	public void blank() {
+		String unknowData = "???";
+		footprintTextView.setText(unknowData);
+		groundResolutionTextView.setText(unknowData);
+		distanceTextView.setText(unknowData);
+		distanceBetweenLinesTextView.setText(unknowData);
+		areaTextView.setText(unknowData);
+		lengthView.setText(unknowData);
+		numberOfPicturesView.setText(unknowData);
+		numberOfStripsView.setText(unknowData);
+
+	}
+
 	void updateSeekBarsValues(SurveyData surveyData) {
 		angleView.setValue(surveyData.getAngle());
 		altitudeView.setValue(surveyData.getAltitude());
