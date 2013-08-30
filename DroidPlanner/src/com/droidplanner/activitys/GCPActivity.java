@@ -11,8 +11,8 @@ import android.widget.Toast;
 
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperActivity;
-import com.droidplanner.dialogs.OpenFileDialog;
-import com.droidplanner.dialogs.OpenGcpFileDialog;
+import com.droidplanner.dialogs.openfile.OpenFileDialog;
+import com.droidplanner.dialogs.openfile.OpenGcpFileDialog;
 import com.droidplanner.file.IO.GcpReader;
 import com.droidplanner.fragments.GcpMapFragment;
 import com.droidplanner.fragments.GcpMapFragment.OnGcpClickListner;

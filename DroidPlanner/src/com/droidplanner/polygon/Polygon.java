@@ -3,6 +3,8 @@ package com.droidplanner.polygon;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.droidplanner.helpers.geoTools.GeoTools;
+import com.droidplanner.helpers.geoTools.LineLatLng;
 import com.google.android.gms.maps.model.LatLng;
 
 public class Polygon {
@@ -31,6 +33,15 @@ public class Polygon {
 		return list;
 	}
 
+	public List<LineLatLng> getLines() {
+		List<LineLatLng> list = new ArrayList<LineLatLng>();
+		for (int i = 0; i < points.size(); i++) {
+			int endIndex = (i==0)? points.size()-1: i-1;
+			list.add(new LineLatLng(points.get(i).coord,points.get(endIndex).coord));
+		}
+		return list;
+	}
+
 	/*
 	 * A valid polygon must have at least 3 points
 	 */
@@ -51,7 +62,7 @@ public class Polygon {
 	}
 
 	public Double getArea() {
-			return 0.0; // TODO return the polygon area
+		return GeoTools.getArea(this);
 	}
 
 }

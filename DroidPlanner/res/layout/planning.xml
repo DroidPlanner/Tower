@@ -8,15 +8,13 @@
     <fragment
         android:id="@+id/missionFragment"
         android:name="com.droidplanner.fragments.MissionFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.7" />
+        android:layout_width="220dp"
+        android:layout_height="match_parent" />
 
     <fragment
         android:id="@+id/gestureMapFragment"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.3"
         class="com.droidplanner.fragments.helpers.GestureMapFragment" />
 
 </LinearLayout>
