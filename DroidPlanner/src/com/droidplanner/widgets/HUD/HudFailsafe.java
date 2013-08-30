@@ -46,40 +46,30 @@ public class HudFailsafe {
 			if (isArmed) {
 				if (armedCounter < 50) {
 					FailsafeText.setColor(Color.RED);
-					String text = "ARMED";
-					Rect textRec = new Rect();
-					FailsafeText.getTextBounds(text, 0, text.length(), textRec);
-					textRec.offset(-textRec.width() / 2, canvas.getHeight() / 3);
-					RectF boxRec = new RectF(textRec.left
-							- failsafeSizePxBoxPadding, textRec.top
-							- failsafeSizePxBoxPadding, textRec.right
-							+ failsafeSizePxBoxPadding, textRec.bottom
-							+ failsafeSizePxBoxPadding);
-					canvas.drawRoundRect(boxRec, failsafeSizePxBoxPadding,
-							failsafeSizePxBoxPadding,
-							huDwidget.commonPaints.blackSolid);
-					canvas.drawText(text, textRec.left - 3, textRec.bottom - 1,
-							FailsafeText);
+					drawFailsafeBox(huDwidget, canvas, "ARMED");
 					armedCounter++;
 				}
 			} else {
 				FailsafeText.setColor(Color.GREEN);
-				String text = "DISARMED";
-				Rect textRec = new Rect();
-				FailsafeText.getTextBounds(text, 0, text.length(), textRec);
-				textRec.offset(-textRec.width() / 2, canvas.getHeight() / 3);
-				RectF boxRec = new RectF(textRec.left
-						- failsafeSizePxBoxPadding, textRec.top
-						- failsafeSizePxBoxPadding, textRec.right
-						+ failsafeSizePxBoxPadding, textRec.bottom
-						+ failsafeSizePxBoxPadding);
-				canvas.drawRoundRect(boxRec, failsafeSizePxBoxPadding,
-						failsafeSizePxBoxPadding,
-						huDwidget.commonPaints.blackSolid);
-				canvas.drawText(text, textRec.left - 3, textRec.bottom - 1,
-						FailsafeText);
+				drawFailsafeBox(huDwidget, canvas, "DISARMED");
 				armedCounter = 0;
 			}
 		}
+	}
+
+	private void drawFailsafeBox(HUD huDwidget, Canvas canvas, String text) {
+		Rect textRec = new Rect();
+		FailsafeText.getTextBounds(text, 0, text.length(), textRec);
+		textRec.offset(-textRec.width() / 2, canvas.getHeight() / 3);
+		RectF boxRec = new RectF(textRec.left
+				- failsafeSizePxBoxPadding, textRec.top
+				- failsafeSizePxBoxPadding, textRec.right
+				+ failsafeSizePxBoxPadding, textRec.bottom
+				+ failsafeSizePxBoxPadding);
+		canvas.drawRoundRect(boxRec, failsafeSizePxBoxPadding,
+				failsafeSizePxBoxPadding,
+				huDwidget.commonPaints.blackSolid);
+		canvas.drawText(text, textRec.left - 3, textRec.bottom - 1,
+				FailsafeText);
 	}
 }
