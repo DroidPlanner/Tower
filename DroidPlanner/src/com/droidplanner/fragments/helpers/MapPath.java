@@ -1,18 +1,19 @@
 package com.droidplanner.fragments.helpers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.graphics.Color;
 
-import com.droidplanner.drone.Drone;
-import com.droidplanner.drone.variables.waypoint;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 public class MapPath {
+	public interface PathSource{
+		public List<LatLng> getPathPoints();
+	}
+	
 	public Polyline missionPath;
 	private GoogleMap mMap;
 
@@ -20,9 +21,9 @@ public class MapPath {
 		this.mMap = mMap;
 	}
 
-	public void updateMissionPath(Drone drone) {
+	public void updateMissionPath(PathSource pathSource) {
 		addToMapIfNeeded();
-		List<LatLng> newPath = getPathPoints(drone);
+		List<LatLng> newPath = pathSource.getPathPoints();
 		missionPath.setPoints(newPath);
 	}
 
@@ -32,14 +33,5 @@ public class MapPath {
 			flightPath.color(Color.YELLOW).width(3);
 			missionPath = mMap.addPolyline(flightPath);
 		}
-	}
-
-	private List<LatLng> getPathPoints(Drone drone) {
-		List<LatLng> newPath = new ArrayList<LatLng>();
-		newPath.add(drone.mission.getHome().getCoord());
-		for (waypoint point : drone.mission.getWaypoints()) {
-			newPath.add(point.getCoord());
-		}
-		return newPath;
 	}
 }

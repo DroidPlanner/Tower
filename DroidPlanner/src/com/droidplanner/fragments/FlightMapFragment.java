@@ -106,7 +106,7 @@ public class FlightMapFragment extends DroneMap implements
 	}
 
 	public void updateFragment() {
-		missionPath.updateMissionPath(drone);
+		missionPath.updateMissionPath(drone.mission);
 		markers.updateMarker(drone.mission.getHome(), false);
 	}
 
