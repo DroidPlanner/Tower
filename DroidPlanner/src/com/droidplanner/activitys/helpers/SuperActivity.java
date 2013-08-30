@@ -147,6 +147,7 @@ public abstract class SuperActivity extends Activity implements
 					R.string.menu_disconnect));
 		}
 		screenOrientation.requestLock();
+		drone.waypointMananger.getWaypoints();
 	}
 
 	@Override

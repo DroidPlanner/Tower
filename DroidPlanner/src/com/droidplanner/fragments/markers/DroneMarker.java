@@ -67,4 +67,9 @@ public class DroneMarker implements MapUpdatedListner {
 		flightMapFragment.addFlithPathPoint(flightMapFragment.drone.GPS
 				.getPosition());
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		return droneMarker.equals(o);
+	}
 }

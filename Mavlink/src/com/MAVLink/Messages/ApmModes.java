@@ -117,4 +117,21 @@ public enum ApmModes {
 		}
 	}
 	
+	public static ApmModes getAutoMode(int type){
+		switch (type) {
+		case MAV_TYPE.MAV_TYPE_TRICOPTER:
+		case MAV_TYPE.MAV_TYPE_QUADROTOR:
+		case MAV_TYPE.MAV_TYPE_HEXAROTOR:
+		case MAV_TYPE.MAV_TYPE_OCTOROTOR:
+		case MAV_TYPE.MAV_TYPE_HELICOPTER:
+			return ROTOR_AUTO;
+		case MAV_TYPE.MAV_TYPE_FIXED_WING:
+			return FIXED_WING_AUTO;
+		case MAV_TYPE.MAV_TYPE_GROUND_ROVER:
+			return ROVER_AUTO;
+		default:
+			return UNKNOWN;
+		}
+	}
+	
 }

@@ -202,11 +202,11 @@
         android:key="pref_server"
         android:title="TCP connection" >
         <EditTextPreference
-            android:defaultValue="192.168.40.100"
+            android:defaultValue="192.168.40.125"
             android:key="pref_server_ip"
             android:title="Server IP" />
         <EditTextPreference
-            android:defaultValue="9761"
+            android:defaultValue="5762"
             android:inputType="number"
             android:key="pref_server_port"
             android:title="Server Port" />
