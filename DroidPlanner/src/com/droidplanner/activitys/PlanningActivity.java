@@ -17,9 +17,9 @@ import com.droidplanner.activitys.helpers.SuperActivity;
 import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
 import com.droidplanner.dialogs.ElevationDialog;
 import com.droidplanner.dialogs.GridDialog;
-import com.droidplanner.dialogs.OpenFileDialog;
-import com.droidplanner.dialogs.OpenMissionDialog;
-import com.droidplanner.dialogs.SurveyDialog;
+import com.droidplanner.dialogs.openfile.OpenFileDialog;
+import com.droidplanner.dialogs.openfile.OpenMissionDialog;
+import com.droidplanner.dialogs.survey.SurveyDialog;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.file.IO.MissionReader;
 import com.droidplanner.file.IO.MissionWriter;
@@ -73,6 +73,7 @@ public class PlanningActivity extends SuperActivity implements
 		drone.mission.missionListner = this;
 
 		checkIntent();
+
 		update();
 		
 	}
@@ -204,9 +205,13 @@ public class PlanningActivity extends SuperActivity implements
 				update();
 			}
 		};
-		dialog.generateSurveyDialog(polygon, defaultHatchAngle,
-				drone.mission.getLastWaypoint().getCoord(), drone.mission.getDefaultAlt(),
-				this);
+		try {
+			dialog.generateSurveyDialog(polygon, defaultHatchAngle,
+					drone.mission.getLastWaypoint().getCoord(), drone.mission.getDefaultAlt(),
+					this);			
+		} catch (Exception e) {
+			Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	private void clearWaypointsAndUpdate() {

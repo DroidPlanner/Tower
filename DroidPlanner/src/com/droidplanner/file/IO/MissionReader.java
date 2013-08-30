@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.MAVLink.Messages.ApmCommands;
-import com.droidplanner.dialogs.OpenFileDialog.FileReader;
+import com.droidplanner.dialogs.openfile.OpenFileDialog.FileReader;
 import com.droidplanner.drone.variables.Home;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.file.DirectoryPath;
