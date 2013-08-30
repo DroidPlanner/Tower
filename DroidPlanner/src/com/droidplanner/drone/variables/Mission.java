@@ -54,10 +54,12 @@ public class Mission extends DroneVariable implements PathSource {
 			return home;
 	}
 
-	public List<LatLng> getAllCoordinates() {
+	public List<LatLng> getAllVisibleCoordinates() {
 		List<LatLng> result = new ArrayList<LatLng>();
 		for (waypoint point : waypoints) {
-			result.add(point.getCoord());
+			if (point.getCmd().isNavigation()) {
+				result.add(point.getCoord());				
+			}
 		}
 		result.add(home.getCoord());
 		return result;
