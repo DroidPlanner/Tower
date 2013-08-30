@@ -1,3 +1,6 @@
+## Droidplanner v0.14.2
+* Fixing the problem of working with big polygons
+
 ## Droidplanner v0.14.1
 * Fixing a small bug in the Survey Dialog
 
