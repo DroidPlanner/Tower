@@ -7,15 +7,14 @@ import com.droidplanner.file.IO.CameraInfo;
 public class SurveyData {
 	private Double altitude;
 	private Double angle;
-	private Double overlap;
-	private Double sidelap;
+	private Double overlap = 50.0;
+	private Double sidelap = 60.0;
+	private boolean generateInnerWps = false;
 	private CameraInfo camera = new CameraInfo();
 
 	public SurveyData(double defaultHatchAngle, double defaultAltitude) {
 		this.angle = defaultHatchAngle;
 		this.altitude = defaultAltitude;
-		this.overlap = 50.0;
-		this.sidelap = 60.0;
 	}
 
 	public void update(double angle, double altitude, double overlap,
@@ -66,6 +65,10 @@ public class SurveyData {
 		}
 	}
 
+	public void setInnerWpsState(boolean state) {
+		generateInnerWps = state;
+	}
+	
 	public Double getAltitude() {
 		return altitude;
 	}
@@ -82,6 +85,10 @@ public class SurveyData {
 		return overlap;
 	}
 
+	public boolean shouldGenerateInnerWPs() {
+		return generateInnerWps;
+	}
+	
 	@Override
 	public String toString() {
 		return String.format(Locale.US,
