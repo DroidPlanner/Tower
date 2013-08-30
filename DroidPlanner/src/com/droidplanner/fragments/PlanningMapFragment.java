@@ -54,7 +54,7 @@ public class PlanningMapFragment extends DroneMap implements
 		markers.updateMarkers(polygon.getPolygonPoints(), true);
 
 		updatePolygonPath(polygon);
-		updateMissionPath(drone);
+		missionPath.updateMissionPath(drone);
 
 	}
 
