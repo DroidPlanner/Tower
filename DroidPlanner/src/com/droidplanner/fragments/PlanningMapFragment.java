@@ -26,10 +26,7 @@ import com.google.android.gms.maps.model.Marker;
 public class PlanningMapFragment extends DroneMap implements
 		OnMapLongClickListener, OnMarkerDragListener, OnMapClickListener {
 
-	public Polygon polygon;
-
 	public OnMapInteractionListener mListener;
-
 	private MapPath polygonPath;
 
 	@Override
