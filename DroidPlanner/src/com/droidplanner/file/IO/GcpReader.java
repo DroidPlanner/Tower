@@ -14,7 +14,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.util.Xml;
 
-import com.droidplanner.dialogs.OpenFileDialog.FileReader;
+import com.droidplanner.dialogs.openfile.OpenFileDialog.FileReader;
 import com.droidplanner.file.DirectoryPath;
 import com.droidplanner.file.FileList;
 import com.droidplanner.gcp.Gcp;
@@ -208,7 +208,7 @@ public class GcpReader implements FileReader {
 	}
 
 	@Override
-	public boolean openFile(String itemList) {
-		return openGCPFile(itemList);
+	public boolean openFile(String filenameWithPath) {
+		return openGCPFile(filenameWithPath);
 	}
 }

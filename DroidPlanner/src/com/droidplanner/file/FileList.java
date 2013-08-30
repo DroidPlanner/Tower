@@ -32,6 +32,15 @@ public class FileList {
 		return getFileList(DirectoryPath.getGCPPath(), filter);
 	}
 
+	public static String[] getCameraInfoFileList() {
+		FilenameFilter filter = new FilenameFilter() {
+			public boolean accept(File dir, String filename) {
+				return filename.contains(".xml");
+			}
+		};
+		return getFileList(DirectoryPath.getCameraInfoPath(), filter);
+	}
+
 	static public String[] getFileList(String path, FilenameFilter filter) {
 		File mPath = new File(path);
 		try {

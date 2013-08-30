@@ -2,12 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.droidplanner"
-    android:versionCode="40"
-    android:versionName="0.12.1b" >
+    android:versionCode="49"
+    android:versionName="0.14.2" >
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="17" />
+        android:targetSdkVersion="18" />
 
     <permission
         android:name=".permission.MAPS_RECEIVE"

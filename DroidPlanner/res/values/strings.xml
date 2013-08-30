@@ -2,7 +2,9 @@
 <resources>
 
     <string name="app_title">DroidPlanner</string>
+    <string name="about">About</string>
     <string name="version">Version</string>
+    <string name="storage_folder">Storage Folder</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_connect">Connect</string>
     <string name="menu_disconnect">Disconnect</string>
@@ -30,6 +32,9 @@
     <string name="menu_add_polygon">Add Polygon</string>
     <string name="menu_polygon">Polygon</string>
     <string name="menu_clear_polygon">Clear Poly</string>
+    <string name="menu_generate_polygon">Generate</string>
+    <string name="menu_survey">Survey</string>
+    <string name="menu_finish_polygon">Exit</string>
     <string name="menu_clear_path">Clear Path</string>
     <string name="generate">Generate</string>
     <string name="exit">Exit</string>
@@ -37,7 +42,7 @@
     <string name="exiting_polygon_mode">Exiting Polygon Mode</string>
     <string name="entering_polygon_mode">Entering Polygon Mode</string>
     <string name="dialog_polygon_hatch_angle">Hatch angle:</string>
-    <string name="dialog_polygon_distance_between_lines">Distance between lines:</string>
+    <string name="distance_between_lines">Distance Between Lines</string>
     <string name="enable">Enable</string>
     <string name="disable">Disable</string>
     <string name="on">On</string>
@@ -48,64 +53,22 @@
     <string name="menu_advanced">Advanced</string>
     <string name="menu_calibration">Calibration</string>
     <string name="rc_control">RC control</string>
-
-    <string-array name="menu_dropdown">
-        <item>Planning</item>
-        <item>Flight Data</item>
-        <item>RC</item>
-        <item>Parameters</item>
-        <item>Camera</item>
-        <item>GCP</item>
-        <item>Chart</item>
-    </string-array>
-
-    <!-- Do not change the names in the array bellow -->
-    <string-array name="TelemetryConnectionTypes">
-        <item name="USB">USB</item>
-        <item name="TCP">TCP</item>
-        <item name="UDP">UDP</item>
-    </string-array>
-
-    <!-- Do not change the names in the array bellow -->
-    <string-array name="MapTypes">
-        <item>Satellite</item>
-        <item>Hybrid</item>
-        <item>Normal</item>
-        <item>Terrain</item>
-    </string-array>
-    <string-array name="TelemetryBaudTypes">
-        <item name="57600">57600</item>
-        <item name="115200">115200</item>
-    </string-array>
+    <string name="footprint">Footprint</string>
+    <string name="ground_resolution">Ground Resolution</string>
+    <string name="distance_between_pictures">Distance Between Pictures</string>
+    <string name="area">Area</string>
+    <string name="camera_">Camera:</string>
+    <string name="inner_wps">Inner WPs</string>
     
-    <!-- Do not change the names in the array bellow -->
-    <string-array name="RCModes">
-        <item name="MODE1">(Mode1) Throttle Right</item>
-        <item name="MODE2">(Mode2) Throttle Left</item>
-    </string-array>
-    <string-array name="RCModeValues">
-        <item name="MODE1">MODE1</item>
-        <item name="MODE2">MODE2</item>
-    </string-array>
-    
-    <!-- Do not change the names in the array bellow -->
-    <string-array name="RCQuickModes">
-        <item name="Stabilize">Stabilize</item>
-        <item name="Loiter">Loiter</item>
-        <item name="Auto">Auto</item>
-        <item name="FBW A">FBW A</item>
-        <item name="FBW B">FBW B</item>
-        <item name="Manual">Manual</item>
-        <item name="RTL">RTL</item>
-        <item name="Guided">Guided</item>
-        <item name="Circle">Circle</item>
-        <item name="Alt Hold">Alt Hold</item>
-        <item name="Toy">Toy</item>
-        <item name="Acro">Acro</item>
-        <item name="Training">Training</item>
-    </string-array>
-
-    <string name="hello_blank_fragment">Hello blank fragment</string>   
-    
-
+    <string name="screen_planning">Planning</string>
+    <string name="screen_flight_data">Flight Data</string>
+    <string name="screen_rc">RC</string>
+    <string name="screen_parameters">Parameters</string>
+    <string name="screen_camera">Camera</string>
+    <string name="screen_gcp">GCP</string>
+    <string name="screen_chart">Chart</string>
+    <string name="length">Length</string>
+    <string name="mission_length">Mission Length</string>
+    <string name="pictures">Pictures</string>
+    <string name="number_of_strips">Number Of Strips</string>
 </resources>

@@ -34,7 +34,7 @@
     <string name="exiting_polygon_mode">Izeju no Poligona režīma</string>
     <string name="entering_polygon_mode">Ieeju poligona režīmā</string>
     <string name="dialog_polygon_hatch_angle">Lūka leņķis:</string>
-    <string name="dialog_polygon_distance_between_lines">Distance starp līnijām</string>
+    <string name="distance_between_lines">Distance starp līnijām</string>
     <string name="enable">Dot iespēju</string>
     <string name="disable">Atslēgt</string>
     <string name="write">Ierakstīt</string>

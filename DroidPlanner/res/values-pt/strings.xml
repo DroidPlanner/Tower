@@ -34,7 +34,7 @@
     <string name="exiting_polygon_mode">Sair Modo Poligono</string>
     <string name="entering_polygon_mode">Entrar Modo Poligono</string>
     <string name="dialog_polygon_hatch_angle">Ângulo do Grid:</string>
-    <string name="dialog_polygon_distance_between_lines">Distancia entre Linhas:</string>
+    <string name="distance_between_lines">Distancia entre Linhas:</string>
     <string name="enable">Habilitar</string>
     <string name="disable">Desabilitar</string>
     <string name="write">Gravar</string>
@@ -44,12 +44,11 @@
     <string name="menu_calibration">Calibração</string>
     <string name="rc_control">Controle RC</string>
     
-    <string-array name="menu_dropdown">
-        <item>Missão</item>
-        <item>Navegação</item>
-        <item>Controle</item>
-        <item>Parametros</item>
-        <item>Camera</item>
-        <item>GCP</item>     
-    </string-array>    
+    <string name="screen_planning">Missão</string>
+    <string name="screen_flight_data">Navegação</string>
+    <string name="screen_rc">Controle</string>
+    <string name="screen_parameters">Parametros</string>
+    <string name="screen_camera">Câmera</string>
+    <string name="screen_gcp">GCP</string>
+    <string name="screen_chart">Gráfico</string>    
 </resources>

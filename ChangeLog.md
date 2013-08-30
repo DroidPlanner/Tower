@@ -1,3 +1,36 @@
+## Droidplanner v0.14.2
+* Fixing the problem of working with big polygons
+
+## Droidplanner v0.14.1
+* Fixing a small bug in the Survey Dialog
+
+## Droidplanner v0.14.0
+* Drag-and-Drop waypoint editing
+* Slide to remove waypoit
+* Click to edit waypoint
+* Adding a lot more info to the Survey Dialog
+
+## Droidplanner v0.13.1
+* Fixing layout problem in Survey Dialog in smaller screens
+
+## Droidplanner v0.13.0
+* Survey dialog in mission planning
+
+## Droidplanner v0.12.4b
+* Fixing a problem with the build of v0.12.4
+
+## Droidplanner v0.12.4
+* A couple of bug fixes
+* Removing the "velocityLock" feature because it caused some troubles
+
+## Droidplanner v0.12.3
+* Hungarian translation
+* Fix waypoint numering issue
+* Fix problem with the chart screen in non-english versions
+
+## Droidplanner v0.12.2
+* New way of creating missions and polygons
+
 ## Droidplanner v0.12.1b
 * Removing debug info that passed trough on the last release
 

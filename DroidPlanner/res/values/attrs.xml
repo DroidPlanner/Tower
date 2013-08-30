@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="SeekBarWithText">
+        <attr name="title" format="string" />
+        <attr name="unit" format="string" />
+        <attr name="min" format="float" />
+        <attr name="inc" format="float" />
+        <attr name="max" format="float" />
+    </declare-styleable>
+
+</resources>

@@ -9,6 +9,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
 import com.droidplanner.R;
+import com.droidplanner.file.DirectoryPath;
 
 public class SettingsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 	@SuppressWarnings("deprecation")
@@ -34,10 +35,12 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		findPreference("pref_rc_quickmode_left").setSummary(sharedPref.getString("pref_rc_quickmode_left", ""));
 		findPreference("pref_rc_quickmode_right").setSummary(sharedPref.getString("pref_rc_quickmode_right", ""));
 		
+		findPreference("pref_storage").setSummary(DirectoryPath.getDroidPlannerPath());
+		
 		try {
-			EditTextPreference versionPref = (EditTextPreference)findPreference("version");
+			EditTextPreference versionPref = (EditTextPreference)findPreference("pref_version");
 			String version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-			versionPref.setTitle(getString(R.string.version) + ": " + version);
+			versionPref.setSummary(version);
 		} catch (NameNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
