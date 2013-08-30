@@ -85,7 +85,7 @@ public class PlanningActivity extends SuperActivity implements
 			openMission(intent.getData().getPath());
 			update();
 			planningMapFragment
-					.zoomToExtents(drone.mission.getAllCoordinates());
+					.zoomToExtents(drone.mission.getAllVisibleCoordinates());
 		}
 	}
 
@@ -109,7 +109,7 @@ public class PlanningActivity extends SuperActivity implements
 		switch (item.getItemId()) {
 		case R.id.menu_zoom:
 			planningMapFragment
-					.zoomToExtents(drone.mission.getAllCoordinates());
+					.zoomToExtents(drone.mission.getAllVisibleCoordinates());
 			return true;
 		case R.id.menu_save_file:
 			menuSaveFile();
@@ -256,7 +256,7 @@ public class PlanningActivity extends SuperActivity implements
 	@Override
 	public void onWaypointsUpdate() {
 		update();
-		planningMapFragment.zoomToExtents(drone.mission.getAllCoordinates());
+		planningMapFragment.zoomToExtents(drone.mission.getAllVisibleCoordinates());
 	}
 
 	@Override
@@ -288,7 +288,7 @@ public class PlanningActivity extends SuperActivity implements
 				drone.mission.setHome(reader.getHome());
 				drone.mission.setWaypoints(reader.getWaypoints());
 				planningMapFragment.zoomToExtents(drone.mission
-						.getAllCoordinates());
+						.getAllVisibleCoordinates());
 				update();
 			}
 		};
