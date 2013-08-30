@@ -2,7 +2,6 @@ package com.droidplanner.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +11,7 @@ import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.variables.Home;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.fragments.helpers.DroneMap;
+import com.droidplanner.fragments.helpers.MapPath;
 import com.droidplanner.fragments.helpers.OnMapInteractionListener;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import com.droidplanner.polygon.Polygon;
@@ -21,8 +21,6 @@ import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
 
 @SuppressLint("UseSparseArrays")
 public class PlanningMapFragment extends DroneMap implements
@@ -30,9 +28,9 @@ public class PlanningMapFragment extends DroneMap implements
 
 	public Polygon polygon;
 
-	private Polyline polygonLine;
-
 	public OnMapInteractionListener mListener;
+
+	private MapPath polygonPath;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
@@ -42,6 +40,7 @@ public class PlanningMapFragment extends DroneMap implements
 		mMap.setOnMarkerDragListener(this);
 		mMap.setOnMapClickListener(this);
 		mMap.setOnMapLongClickListener(this);
+		polygonPath = new MapPath(mMap);
 		 
 		return view;
 	}
@@ -53,28 +52,10 @@ public class PlanningMapFragment extends DroneMap implements
 		markers.updateMarkers(drone.mission.getWaypoints(), true);
 		markers.updateMarkers(polygon.getPolygonPoints(), true);
 
-		updatePolygonPath(polygon);
-		missionPath.updateMissionPath(drone.mission);
+		polygonPath.update(polygon);
+		missionPath.update(drone.mission);
 
 	}
-
-	private void updatePolygonPath(Polygon polygon) {
-		if (polygonLine != null) {
-			polygonLine.remove();
-		}
-		PolylineOptions polypath = new PolylineOptions();
-		polypath.color(Color.BLACK).width(2);
-		
-		for (LatLng point : polygon.getLatLngList()) {
-			polypath.add(point);
-		}
-		if (polygon.getLatLngList().size() > 2) {
-			polypath.add(polygon.getLatLngList().get(0));
-		}		
-		PolylineOptions polygonPath = polypath;
-		polygonLine = mMap.addPolyline(polygonPath);
-	}
-
 
 	@Override
 	public void onMapLongClick(LatLng point) {

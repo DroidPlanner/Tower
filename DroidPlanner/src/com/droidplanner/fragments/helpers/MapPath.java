@@ -21,7 +21,7 @@ public class MapPath {
 		this.mMap = mMap;
 	}
 
-	public void updateMissionPath(PathSource pathSource) {
+	public void update(PathSource pathSource) {
 		addToMapIfNeeded();
 		List<LatLng> newPath = pathSource.getPathPoints();
 		missionPath.setPoints(newPath);
