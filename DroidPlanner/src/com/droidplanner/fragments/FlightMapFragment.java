@@ -1,6 +1,5 @@
 package com.droidplanner.fragments;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -15,28 +14,20 @@ import android.widget.Toast;
 
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.drone.Drone;
-import com.droidplanner.drone.variables.waypoint;
-import com.droidplanner.fragments.helpers.OfflineMapFragment;
+import com.droidplanner.fragments.helpers.DroneMap;
 import com.droidplanner.fragments.markers.DroneMarker;
-import com.droidplanner.fragments.markers.MarkerManager;
 import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-public class FlightMapFragment extends OfflineMapFragment implements
-		OnMapLongClickListener {
-	public GoogleMap mMap;
+public class FlightMapFragment extends DroneMap implements
+		OnMapLongClickListener{
 	private Polyline flightPath;
-	private Polyline missionPath;
-
 	private int maxFlightPathSize;
 	public boolean isAutoPanEnabled;
 	private boolean isGuidedModeEnabled;
-
-	private MarkerManager markers;
 
 	public boolean hasBeenZoomed = false;
 
@@ -47,15 +38,11 @@ public class FlightMapFragment extends OfflineMapFragment implements
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
 			Bundle bundle) {
 		View view = super.onCreateView(inflater, viewGroup, bundle);
-		mMap = getMap();
 		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
-
-		markers = new MarkerManager(mMap);
 
 		droneMarker = new DroneMarker(this);
 
 		addFlightPathToMap();
-		addMissionPathToMap();
 		getPreferences();
 
 		drone.setMapListner(droneMarker);
@@ -73,15 +60,6 @@ public class FlightMapFragment extends OfflineMapFragment implements
 		isGuidedModeEnabled = prefs.getBoolean("pref_guided_mode_enabled",
 				false);
 		isAutoPanEnabled = prefs.getBoolean("pref_auto_pan_enabled", false);
-	}
-
-	public void updateMissionPath(Drone drone) {
-		ArrayList<LatLng> missionPoints = new ArrayList<LatLng>();
-		missionPoints.add(drone.mission.getHome().getCoord());
-		for (waypoint point : drone.mission.getWaypoints()) {
-			missionPoints.add(point.getCoord());
-		}
-		missionPath.setPoints(missionPoints);
 	}
 
 	public void addFlithPathPoint(LatLng position) {
@@ -110,12 +88,6 @@ public class FlightMapFragment extends OfflineMapFragment implements
 					"There is no valid location for the Drone",
 					Toast.LENGTH_SHORT).show();
 		}
-	}
-
-	private void addMissionPathToMap() {
-		PolylineOptions missionPathOptions = new PolylineOptions();
-		missionPathOptions.color(Color.YELLOW).width(3).zIndex(0);
-		missionPath = mMap.addPolyline(missionPathOptions);
 	}
 
 	private void addFlightPathToMap() {
