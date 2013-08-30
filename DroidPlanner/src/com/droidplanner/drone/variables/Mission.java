@@ -186,7 +186,9 @@ public class Mission extends DroneVariable implements PathSource {
 		List<LatLng> newPath = new ArrayList<LatLng>();
 		newPath.add(getHome().getCoord());
 		for (waypoint point : getWaypoints()) {
-			newPath.add(point.getCoord());
+			if (point.getCmd().isNavigation()) {
+				newPath.add(point.getCoord());				
+			}
 		}
 		return newPath;
 	}
