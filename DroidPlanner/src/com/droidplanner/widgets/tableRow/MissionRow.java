@@ -39,20 +39,35 @@ public class MissionRow extends ArrayAdapter<waypoint> {
 	}
 
 	private View createRowViews(ViewGroup root, int position) {
+		waypoint waypoint = waypoints.get(position);
+		View view = createLayoutFromResource();
+		findViewObjects(view);		
+		setupViewsText(waypoint);
+		return view;
+	}
+
+	private View createLayoutFromResource() {
 		LayoutInflater inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View view = inflater.inflate(R.layout.mission_list_row, null);
+		return view;
+	}
+
+	private void findViewObjects(View view) {
 		nameView = (TextView) view.findViewById(R.id.rowNameView);
 		altitudeView = (TextView) view.findViewById(R.id.rowAltitudeView);
 		typeView = (TextView) view.findViewById(R.id.rowTypeView);
+	}
 
-		altitudeView.setText(String.format(Locale.ENGLISH, "%3.0fm", waypoints
-				.get(position).getHeight()));
-		nameView.setText(String.format("%3d", waypoints.get(position)
+	private void setupViewsText(waypoint waypoint) {
+		if (waypoint.getCmd().isNavigation()) {
+			altitudeView.setText(String.format(Locale.ENGLISH, "%3.0fm", waypoint.getHeight()));
+		} else {
+			altitudeView.setText("");
+		}
+		nameView.setText(String.format("%3d", waypoint
 				.getNumber()));
-		typeView.setText(waypoints.get(position).getCmd().getName());
-
-		return view;
+		typeView.setText(waypoint.getCmd().getName());
 	}
 
 }
