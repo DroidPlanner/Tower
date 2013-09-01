@@ -59,6 +59,10 @@
     <string name="area">Area</string>
     <string name="camera_">Camera:</string>
     <string name="inner_wps">Inner WPs</string>
+    <string name="hatch_angle">Hatch angle:</string>
+    <string name="flight_altitude">Flight Altitude:</string>
+    <string name="overlap">Overlap:</string>
+    <string name="sidelap">Sidelap:</string>
     
     <string name="screen_planning">Planning</string>
     <string name="screen_flight_data">Flight Data</string>
