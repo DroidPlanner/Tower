@@ -177,7 +177,7 @@ public class RCFragment extends Fragment {
 					rcOutput.setRcChannel(RcOutput.ELEVATOR, tilt);
 					textViewElevator.setText(String.format("Elev: %.0f%%", tilt * 100));
 				} else {
-					rcOutput.setRcChannel(RcOutput.TROTTLE, tilt);
+					rcOutput.setRcChannel(RcOutput.THROTTLE, tilt);
 					textViewThrottle.setText(String.format("Thrt: %.0f%%", tilt * 100));
 				}
 			} else {
@@ -207,7 +207,7 @@ public class RCFragment extends Fragment {
 				rcOutput.setRcChannel(RcOutput.AILERON, pan);
 				textViewAileron.setText(String.format("Ail: %.0f%%", pan * 100));
 				if (rcIsMode1) {
-					rcOutput.setRcChannel(RcOutput.TROTTLE, tilt);
+					rcOutput.setRcChannel(RcOutput.THROTTLE, tilt);
 					textViewThrottle.setText(String.format("Thrt: %.0f%%", tilt * 100));
 				} else {
 					rcOutput.setRcChannel(RcOutput.ELEVATOR, tilt);
