@@ -71,4 +71,9 @@
     <string name="mission_length">Mission Length</string>
     <string name="pictures">Pictures</string>
     <string name="number_of_strips">Number Of Strips</string>
+    <string name="loiter_time">Loiter Time</string>
+    <string name="loiter_turn">Loiter Turn</string>
+    <string name="waypoint_delay">Delay before next waypoint</string>
+    <string name="loiter_radius">Loiter Radius</string>
+    <string name="loiter_ccw">CCW</string>
 </resources>
