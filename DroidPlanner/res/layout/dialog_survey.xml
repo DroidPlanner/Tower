@@ -99,7 +99,7 @@
             custom:inc="1"
             custom:max="180"
             custom:min="0"
-            custom:title="Hatch angle:"
+            custom:title="@string/hatch_angle"
             custom:unit="º" >
         </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
 
@@ -111,7 +111,7 @@
             custom:inc="5"
             custom:max="1000"
             custom:min="5"
-            custom:title="Flight Altitude:"
+            custom:title="@string/flight_altitude"
             custom:unit="m" >
         </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
 
@@ -123,7 +123,7 @@
             custom:inc="1"
             custom:max="99"
             custom:min="0"
-            custom:title="Overlap:"
+            custom:title="@string/overlap"
             custom:unit="%" >
         </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
 
@@ -135,7 +135,7 @@
             custom:inc="1"
             custom:max="99"
             custom:min="0"
-            custom:title="Sidelap:"
+            custom:title="@string/sidelap"
             custom:unit="%" >
         </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
     </LinearLayout>
