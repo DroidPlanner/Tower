@@ -76,4 +76,5 @@
     <string name="waypoint_delay">Delay before next waypoint</string>
     <string name="loiter_radius">Loiter Radius</string>
     <string name="loiter_ccw">CCW</string>
+    <string name="menu_armed">Arm System</string>
 </resources>

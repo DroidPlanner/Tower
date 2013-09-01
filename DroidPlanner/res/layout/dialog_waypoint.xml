@@ -37,18 +37,6 @@
     </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
 
     <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
-        android:id="@+id/loiterRadius"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="2dp"
-        custom:inc="1"
-        custom:max="100"
-        custom:min="0"
-        custom:title="@string/loiter_radius"
-        custom:unit="m" >
-    </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
-
-    <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
         android:id="@+id/loiterTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -61,7 +49,7 @@
     </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
 
     <FrameLayout
-        android:id="@+id/loiterTurnFrame"
+        android:id="@+id/optionLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 

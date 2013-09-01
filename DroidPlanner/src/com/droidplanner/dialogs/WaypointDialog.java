@@ -30,13 +30,14 @@ public class WaypointDialog implements DialogInterface.OnClickListener, OnItemSe
 	private waypoint wp;
 	private SeekBarWithText altitudeSeekBar;
 	private SeekBarWithText delaySeekBar;
-	private SeekBarWithText radiusSeekBar;
 	private SeekBarWithText loiterTurnSeekBar;
 	private SeekBarWithText loiterTimeSeekBar;
-	private FrameLayout loiterTurnFrame;
+	private FrameLayout optionLayout;
 	private CheckBox loiterCCW;
 	private SpinnerSelfSelect typeSpinner;
 	private ApmCommandsAdapter commandAdapter;
+
+	
 
 	public WaypointDialog(waypoint wp) {
 		this.wp = wp;
@@ -80,42 +81,51 @@ public class WaypointDialog implements DialogInterface.OnClickListener, OnItemSe
 				.findViewById(R.id.waypointDelay);
 		delaySeekBar .setValue((double)wp.missionItem.param2);
 		delaySeekBar .setOnChangedListner(this);
-
-		loiterTurnFrame = (FrameLayout) view
-				.findViewById(R.id.loiterTurnFrame);
+		
+		loiterTimeSeekBar = (SeekBarWithText) view
+				.findViewById(R.id.loiterTime);
+		loiterTimeSeekBar .setOnChangedListner(this);
+		
+		loiterTurnSeekBar = (SeekBarWithText) view
+				.findViewById(R.id.loiterTurn);
+		loiterTurnSeekBar .setOnChangedListner(this);
 
 		loiterCCW = (CheckBox) view
 				.findViewById(R.string.loiter_ccw);
-//		loiterCCW.setOnCheckedChangeListener(this);
 
+		optionLayout = (FrameLayout) view
+				.findViewById(R.id.optionLayout);
 		
-
-		loiterTurnSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.loiterTurn);
-
-		if((double)wp.missionItem.param3<0){
-			loiterCCW.setChecked(true);
-			loiterTurnSeekBar .setValue(-1.0*(double)wp.missionItem.param3);
-		}
-		else {
-			loiterCCW.setChecked(false);
-			loiterTurnSeekBar .setValue((double)wp.missionItem.param3);
-		}
-		
-		loiterTurnSeekBar .setOnChangedListner(this);
-
-
-		loiterTimeSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.loiterTime);
-		loiterTimeSeekBar .setValue((double)wp.missionItem.param2);
-		loiterTimeSeekBar .setOnChangedListner(this);
+		delaySeekBar.setVisibility(8);
 		loiterTimeSeekBar .setVisibility(8);
-
-		radiusSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.loiterRadius);
-		radiusSeekBar .setValue((double)wp.missionItem.param1);
-		radiusSeekBar .setOnChangedListner(this);
-		radiusSeekBar .setVisibility(8);
+		optionLayout .setVisibility(8);
+		
+		if(wp.getCmd().toString()=="CMD_NAV_LOITER_TURNS"){
+			optionLayout.setVisibility(0);
+			
+			if(wp.missionItem.param1<0){
+				loiterCCW.setChecked(true);
+				loiterTurnSeekBar.setValue(-1.0*wp.missionItem.param1);
+			}
+			else {
+				loiterCCW.setChecked(false);
+				loiterTurnSeekBar.setValue(wp.missionItem.param1);
+			}
+		} 
+		else if (wp.getCmd().toString()=="CMD_NAV_LOITER_TIME"){
+			loiterTimeSeekBar.setVisibility(0);
+			
+			loiterTimeSeekBar.setValue(wp.missionItem.param1);
+		}
+		else if (wp.getCmd().toString()=="CMD_NAV_LOITER_UNLIM"){
+			delaySeekBar.setVisibility(8);
+		} 
+		else {
+			delaySeekBar.setVisibility(0);
+			delaySeekBar.setValue(wp.missionItem.param1);
+		}
+			
+			
 
 		return view;
 
@@ -123,10 +133,9 @@ public class WaypointDialog implements DialogInterface.OnClickListener, OnItemSe
 
 	@Override
 	public void onClick(DialogInterface arg0, int which) {
-		wp.missionItem.param3 = (float) loiterTurnSeekBar.getValue();// PARAM3 / For LOITER command MISSIONs: Orbit to circle around the MISSION, in meters. If positive the orbit direction should be clockwise, if negative the orbit direction should be counter-clockwise.
 		
-		if(loiterCCW.isChecked()) {
-			wp.missionItem.param3 *= -1.0; 
+		if(wp.getCmd().toString()=="CMD_NAV_LOITER_TURNS" && loiterCCW.isChecked() && wp.missionItem.param1>0) {
+			wp.missionItem.param1 *= -1.0; 
 		}
 		
 		if (which == Dialog.BUTTON_POSITIVE) {
@@ -139,26 +148,20 @@ public class WaypointDialog implements DialogInterface.OnClickListener, OnItemSe
 			long id) {
 		Log.d("Q", "selected"+commandAdapter.getItem(position).getName());
 
-		delaySeekBar.setVisibility(0);		//show waypoint delay seek bar
-		radiusSeekBar.setVisibility(8);		//hide loiter radius seek bar
-		loiterTimeSeekBar.setVisibility(8); //hide loiter time seek bar
-		loiterTurnFrame.setVisibility(8);	//hide loiter turn frame layout			
-		
+		delaySeekBar.setVisibility(0);
+		loiterTimeSeekBar .setVisibility(8);
+		optionLayout .setVisibility(8);
 
-		if(commandAdapter.getItem(position).getName()=="Loiter"){
-			delaySeekBar.setVisibility(8);		//hide waypoint delay seek bar
-			radiusSeekBar.setVisibility(0);		//show loiter radius seek bar
-		
-		}	
-		else if(commandAdapter.getItem(position).getName()=="LoiterN"){
-			
-			radiusSeekBar.setVisibility(0);		//show loiter radius seek bar
-			loiterTurnFrame.setVisibility(0);	//show loiter turn frame layout			
+		if(commandAdapter.getItem(position).getName()=="LoiterN"){
+			delaySeekBar.setVisibility(8);
+			optionLayout.setVisibility(0);
 		}
 		else if(commandAdapter.getItem(position).getName()=="LoiterT"){
-			delaySeekBar.setVisibility(8);		//hide waypoint delay seek bar
-			radiusSeekBar.setVisibility(0);		//show loiter radius seek bar
-			loiterTimeSeekBar.setVisibility(0);	//show loiter turn frame layout			
+			delaySeekBar.setVisibility(8);
+			loiterTimeSeekBar.setVisibility(0);
+		}
+		else if(commandAdapter.getItem(position).getName()=="Loiter"){
+			delaySeekBar.setVisibility(8);
 		}
 
 		wp.setCmd(commandAdapter.getItem(position));
@@ -170,37 +173,18 @@ public class WaypointDialog implements DialogInterface.OnClickListener, OnItemSe
 		wp.setHeight(altitudeSeekBar.getValue());
 		
 		if(wp.getCmd().toString()=="CMD_NAV_LOITER_TURNS"){
-			wp.missionItem.param1 = (float) radiusSeekBar.getValue();	 // PARAM1 / For NAV command MISSIONs: Radius in which the MISSION is accepted as reached, in meters
-			wp.missionItem.param2 = (float) delaySeekBar.getValue(); 	 //PARAM2 / For NAV command MISSIONs: Time that the MAV should stay inside the PARAM1 radius before advancing, in milliseconds
-			wp.missionItem.param3 = (float) loiterTurnSeekBar.getValue();// PARAM3 / For LOITER command MISSIONs: Orbit to circle around the MISSION, in meters. If positive the orbit direction should be clockwise, if negative the orbit direction should be counter-clockwise.
-			
+			wp.missionItem.param1 = (float) loiterTurnSeekBar.getValue();
 			if(loiterCCW.isChecked()) {
 				wp.missionItem.param3 *= -1.0; 
 			}
-				
-			wp.missionItem.param4 = 0;
 		}
 		else if(wp.getCmd().toString()=="CMD_NAV_LOITER_TIME"){
-			wp.missionItem.param1 = (float) radiusSeekBar.getValue();	 // PARAM1 / For NAV command MISSIONs: Radius in which the MISSION is accepted as reached, in meters
-			wp.missionItem.param2 = (float) loiterTimeSeekBar.getValue(); 	 //PARAM2 / For NAV command MISSIONs: Time that the MAV should stay inside the PARAM1 radius before advancing, in milliseconds
-			wp.missionItem.param3 = 0;// PARAM3 / For LOITER command MISSIONs: Orbit to circle around the MISSION, in meters. If positive the orbit direction should be clockwise, if negative the orbit direction should be counter-clockwise.
-			wp.missionItem.param4 = 0;			
+			wp.missionItem.param1 = (float) loiterTimeSeekBar.getValue();
 		}
-		else if(wp.getCmd().toString()=="CMD_NAV_LOITER_UNLIM"){
-			wp.missionItem.param1 = (float) radiusSeekBar.getValue();	 // PARAM1 / For NAV command MISSIONs: Radius in which the MISSION is accepted as reached, in meters
-			wp.missionItem.param2 = (float) loiterTimeSeekBar.getValue(); 	 //PARAM2 / For NAV command MISSIONs: Time that the MAV should stay inside the PARAM1 radius before advancing, in milliseconds
-			wp.missionItem.param3 = 0;// PARAM3 / For LOITER command MISSIONs: Orbit to circle around the MISSION, in meters. If positive the orbit direction should be clockwise, if negative the orbit direction should be counter-clockwise.
-			wp.missionItem.param4 = 0;			
+		else 
+		{
+			wp.missionItem.param1 = (float) delaySeekBar.getValue();
 		}
-		else {
-			wp.missionItem.param1 = 0;	 // PARAM1 / For NAV command MISSIONs: Radius in which the MISSION is accepted as reached, in meters
-			wp.missionItem.param2 = (float) delaySeekBar.getValue(); 	 //PARAM2 / For NAV command MISSIONs: Time that the MAV should stay inside the PARAM1 radius before advancing, in milliseconds
-			wp.missionItem.param3 = 0;// PARAM3 / For LOITER command MISSIONs: Orbit to circle around the MISSION, in meters. If positive the orbit direction should be clockwise, if negative the orbit direction should be counter-clockwise.
-			wp.missionItem.param4 = 0;			
-		}
-			
-		//wp.setParameters(parm1, parm2, parm3, parm4)
-
 	}
 	
 	@Override
