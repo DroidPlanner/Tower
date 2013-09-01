@@ -1,5 +1,8 @@
 package com.droidplanner.activitys;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.os.Bundle;
 import android.widget.LinearLayout;
 
@@ -8,6 +11,7 @@ import com.droidplanner.activitys.helpers.SuperActivity;
 import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
 import com.droidplanner.widgets.graph.Chart;
 import com.droidplanner.widgets.graph.ChartCheckBoxList;
+import com.droidplanner.widgets.graph.series.StaticSeries;
 
 public class ChartActivity extends SuperActivity implements HudUpdatedListner {
 
@@ -30,9 +34,20 @@ public class ChartActivity extends SuperActivity implements HudUpdatedListner {
 		chart = (Chart) findViewById(R.id.chart);
 		readoutMenu = (LinearLayout) findViewById(R.id.readoutMenu);
 
-		checkBoxList.populateView(readoutMenu, labels, chart);
-
-		drone.setHudListner(this);
+		//TODO uncomment the following functions after debbuging
+		//checkBoxList.populateView(readoutMenu, labels, chart);
+		//drone.setHudListner(this);
+		
+		//TODO remove the following mock data after debugging
+		List<Integer> mockData = new ArrayList<Integer>();
+		for (int i = 0; i < 800; i++) {
+			mockData.add(i%100);			
+		}		
+		StaticSeries dataSeries = new StaticSeries(mockData);
+		chart.series.add(dataSeries);	
+		chart.scale.autoScale(dataSeries,1.1);
+		chart.scale.y.setPan(10);
+		chart.update();
 	}
 
 	@Override
