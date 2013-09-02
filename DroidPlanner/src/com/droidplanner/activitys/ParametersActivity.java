@@ -29,7 +29,7 @@ public class ParametersActivity extends SuperActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.parameters);
+		setContentView(R.layout.activity_parameters);
 
 		tableFragment = ((ParametersTableFragment) getFragmentManager()
 				.findFragmentById(R.id.parametersTable));

@@ -24,7 +24,7 @@ public class ParametersTableFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.parameters_fragment, container,
+		View view = inflater.inflate(R.layout.fragment_parameters, container,
 				false);
 		parameterTable = (TableLayout) view.findViewById(R.id.parametersTable);
 		return view;

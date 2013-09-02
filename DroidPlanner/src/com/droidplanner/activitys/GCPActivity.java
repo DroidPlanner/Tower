@@ -34,7 +34,7 @@ public class GCPActivity extends SuperActivity implements OnGcpClickListner {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.gcp);
+		setContentView(R.layout.activity_gcp);
 
 		gcpList = new ArrayList<Gcp>();
 
