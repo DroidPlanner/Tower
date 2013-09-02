@@ -26,7 +26,7 @@ public class CameraActivity extends SuperActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.camera);
+		setContentView(R.layout.activity_camera);
 
 		textViewLPan = (TextView) findViewById(R.id.textViewCamJoyLPan);
 		textViewLPan.setText(" RC8: 0%");

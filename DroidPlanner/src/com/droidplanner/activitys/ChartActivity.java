@@ -25,7 +25,7 @@ public class ChartActivity extends SuperActivity implements HudUpdatedListner {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.chart);
+		setContentView(R.layout.activity_cchart);
 
 		chart = (Chart) findViewById(R.id.chart);
 		readoutMenu = (LinearLayout) findViewById(R.id.readoutMenu);
