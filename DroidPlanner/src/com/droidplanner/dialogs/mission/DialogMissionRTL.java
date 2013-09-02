@@ -12,7 +12,7 @@ public class DialogMissionRTL extends DialogMission implements
 
 	@Override
 	protected int getResource() {
-		return R.layout.dialog_waypoint_rtl;
+		return R.layout.dialog_mission_rtl;
 	}
 	
 	protected View buildView() {

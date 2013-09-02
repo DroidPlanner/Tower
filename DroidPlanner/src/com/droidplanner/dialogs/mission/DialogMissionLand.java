@@ -8,7 +8,7 @@ public class DialogMissionLand extends DialogMission {
 
 	@Override
 	protected int getResource() {
-		return R.layout.dialog_waypoint_land;
+		return R.layout.dialog_mission_land;
 	}
 	
 	protected View buildView() {

@@ -8,7 +8,7 @@ public class DialogMissionLoiter extends DialogMission {
 
 	@Override
 	protected int getResource() {
-		return R.layout.dialog_waypoint_loiter;
+		return R.layout.dialog_mission_loiter;
 	}
 	
 	protected View buildView() {

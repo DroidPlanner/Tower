@@ -13,7 +13,7 @@ public class DialogMissionWaypoint extends DialogMission implements
 
 	@Override
 	protected int getResource() {
-		return R.layout.dialog_waypoint_waypoint;
+		return R.layout.dialog_mission_waypoint;
 	}
 	
 	protected View buildView() {

@@ -12,7 +12,7 @@ public class DialogMissionTakeoff extends DialogMission implements
 
 	@Override
 	protected int getResource() {
-		return R.layout.dialog_waypoint_takeoff;
+		return R.layout.dialog_mission_takeoff;
 	}
 	
 	protected View buildView() {

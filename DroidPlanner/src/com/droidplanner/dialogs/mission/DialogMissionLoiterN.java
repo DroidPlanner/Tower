@@ -14,7 +14,7 @@ public class DialogMissionLoiterN extends DialogMission implements
 
 	@Override
 	protected int getResource() {
-		return R.layout.dialog_waypoint_loitern;
+		return R.layout.dialog_mission_loitern;
 	}
 
 	protected View buildView() {
