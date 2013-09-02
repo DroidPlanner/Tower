@@ -37,8 +37,14 @@ public abstract class WaypointDialog implements OnItemSelectedListener,
 			dialog = new WaypointDialogWaypoint();
 			break;
 		case CMD_NAV_LOITER_UNLIM:
+			dialog = new WaypointDialogLoiter();
+			break;
 		case CMD_NAV_LOITER_TURNS:
+			dialog = new WaypointDialogLoiterN();
+			break;
 		case CMD_NAV_LOITER_TIME:
+			dialog = new WaypointDialogLoiterT();
+			break;
 		case CMD_NAV_RETURN_TO_LAUNCH:
 		case CMD_NAV_TAKEOFF:
 		case CMD_NAV_LAND:
