@@ -1,4 +1,4 @@
-package com.droidplanner.dialogs;
+package com.droidplanner.dialogs.waypoints;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
