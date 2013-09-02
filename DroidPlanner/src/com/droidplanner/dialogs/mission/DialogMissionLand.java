@@ -1,6 +1,5 @@
 package com.droidplanner.dialogs.mission;
 
-import android.content.Context;
 import android.view.View;
 
 import com.droidplanner.R;
@@ -12,8 +11,8 @@ public class DialogMissionLand extends DialogMission {
 		return R.layout.dialog_waypoint_land;
 	}
 	
-	protected View buildView(Context context) {
-		super.buildView(context);		
+	protected View buildView() {
+		super.buildView();		
 		return view;
 	}
 

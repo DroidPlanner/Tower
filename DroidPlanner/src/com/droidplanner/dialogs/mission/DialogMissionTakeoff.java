@@ -1,6 +1,5 @@
 package com.droidplanner.dialogs.mission;
 
-import android.content.Context;
 import android.view.View;
 
 import com.droidplanner.R;
@@ -16,8 +15,8 @@ public class DialogMissionTakeoff extends DialogMission implements
 		return R.layout.dialog_waypoint_takeoff;
 	}
 	
-	protected View buildView(Context context) {
-		super.buildView(context);
+	protected View buildView() {
+		super.buildView();
 		altitudeSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.waypointAltitude);
 		altitudeSeekBar.setValue(wp.getHeight());

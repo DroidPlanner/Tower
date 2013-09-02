@@ -1,6 +1,5 @@
 package com.droidplanner.dialogs.mission;
 
-import android.content.Context;
 import android.view.View;
 import android.widget.CheckBox;
 
@@ -18,8 +17,8 @@ public class DialogMissionLoiterN extends DialogMission implements
 		return R.layout.dialog_waypoint_loitern;
 	}
 
-	protected View buildView(Context context) {
-		super.buildView(context);
+	protected View buildView() {
+		super.buildView();
 
 		loiterTurnSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.loiterTurn);

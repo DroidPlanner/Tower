@@ -26,6 +26,8 @@ public abstract class DialogMission implements OnItemSelectedListener,
 	private OnWaypointUpdateListner listner;
 	private SpinnerSelfSelect typeSpinner;
 	private ApmCommandsAdapter commandAdapter;
+	private AlertDialog dialog;
+	private Context context;
 	protected waypoint wp;
 	protected View view;
 
@@ -33,20 +35,21 @@ public abstract class DialogMission implements OnItemSelectedListener,
 			OnWaypointUpdateListner listner) {
 		this.wp = wp;
 		this.listner = listner;
-		AlertDialog dialog = buildDialog(context);
+		this.context = context;
+		dialog = buildDialog();
 		dialog.show();
 	}
 
-	private AlertDialog buildDialog(Context context) {
+	private AlertDialog buildDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle("Waypoint " + wp.getNumber());
-		builder.setView(buildView(context));
+		builder.setView(buildView());
 		builder.setPositiveButton("Ok", this);
 		AlertDialog dialog = builder.create();
 		return dialog;
 	}
 
-	protected View buildView(Context context) {
+	protected View buildView() {
 		LayoutInflater inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		view = inflater.inflate(getResource(), null);
@@ -73,8 +76,13 @@ public abstract class DialogMission implements OnItemSelectedListener,
 	@Override
 	public void onItemSelected(AdapterView<?> arg0, View v, int position,
 			long id) {
-		wp.setCmd(commandAdapter.getItem(position));
-		view.invalidate();
+		ApmCommands selected = commandAdapter.getItem(position);
+		if (selected != wp.getCmd()) {
+			wp.setCmd(selected);
+			dialog.dismiss();
+			DialogMissionFactory.getDialog(wp, context, listner);			
+		}
+		
 	}
 
 	@Override
