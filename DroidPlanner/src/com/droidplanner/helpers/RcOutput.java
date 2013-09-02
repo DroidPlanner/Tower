@@ -23,7 +23,7 @@ public class RcOutput {
 
 	public static final int AILERON = 0;
 	public static final int ELEVATOR = 1;
-	public static final int TROTTLE = 2;
+	public static final int THROTTLE = 2;
 	public static final int RUDDER = 3;
 
 	public static final int RC5 = 4;
@@ -50,7 +50,8 @@ public class RcOutput {
 
 	public void enableRcOverride() {
 		if (!isRcOverrided()) {
-			Arrays.fill(rcOutputs, DISABLE_OVERRIDE);
+			Arrays.fill(rcOutputs, RC_TRIM);  //was DISABLE_OVERRIDE);
+			setRcChannel(THROTTLE,-1);		
 			scheduleTaskExecutor = Executors.newScheduledThreadPool(5);
 			scheduleTaskExecutor.scheduleWithFixedDelay(new Runnable() {
 				@Override
@@ -60,7 +61,16 @@ public class RcOutput {
 			}, 0, getRcOverrideDelayMs(), TimeUnit.MILLISECONDS);
 		}
 	}
-
+	 public void setArmed(boolean Armed){
+			Arrays.fill(rcOutputs, RC_TRIM);
+			setRcChannel(THROTTLE,-1);
+			setRcChannel(RUDDER,1);
+			for(int a = 0;a<1000;a++){
+				MavLinkRC.sendRcOverrideMsg(drone, rcOutputs); // Just to be sure send 3
+			}
+		 
+	 }
+	 
 	private int getRcOverrideDelayMs() {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(parrentContext);
