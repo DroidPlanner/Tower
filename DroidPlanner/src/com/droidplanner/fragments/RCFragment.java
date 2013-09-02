@@ -169,7 +169,7 @@ public class RCFragment extends Fragment {
 		rJoystick.OnMoved(rLastPan, rLastTilt);
 	}
 
-	private JoystickMovedListener lJoystick = new JoystickMovedListener() {
+	JoystickMovedListener lJoystick = new JoystickMovedListener() {
 		@Override
 		public void OnReturnedToCenter() {
 		}
@@ -202,7 +202,7 @@ public class RCFragment extends Fragment {
 			}
 		}
 	};
-	private JoystickMovedListener rJoystick = new JoystickMovedListener() {
+	JoystickMovedListener rJoystick = new JoystickMovedListener() {
 		@Override
 		public void OnReturnedToCenter() {
 		}

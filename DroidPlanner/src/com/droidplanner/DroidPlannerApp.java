@@ -27,6 +27,7 @@ public class DroidPlannerApp extends Application implements
 
 	public interface ConnectionStateListner {
 		public void notifyConnected();
+		
 		public void notifyDisconnected();
 	}
 
