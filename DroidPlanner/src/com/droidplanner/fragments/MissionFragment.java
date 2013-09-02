@@ -80,8 +80,7 @@ public class MissionFragment extends ListFragment implements DragScrollProfile, 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		Log.d("T", "touched "+position);
-		WaypointDialog dialog = new WaypointDialog(adapter.getItem(position));
-		dialog.build(this.getActivity(), this);		
+		WaypointDialog.getDialog(adapter.getItem(position), this.getActivity(), this);		
 		super.onListItemClick(l, v, position, id);
 	}
 	
