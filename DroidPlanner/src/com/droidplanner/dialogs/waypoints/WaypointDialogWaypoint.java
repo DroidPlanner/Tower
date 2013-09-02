@@ -7,13 +7,14 @@ import com.droidplanner.R;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
 
-public class WaypointDialogGeneric extends WaypointDialog implements
+public class WaypointDialogWaypoint extends WaypointDialog implements
 		OnTextSeekBarChangedListner {
 	private SeekBarWithText altitudeSeekBar;
+	private SeekBarWithText delaySeekBar;
 
 	@Override
 	protected int getResource() {
-		return R.layout.dialog_waypoint_generic;
+		return R.layout.dialog_waypoint_waypoint;
 	}
 	
 	protected View buildView(Context context) {
@@ -23,12 +24,19 @@ public class WaypointDialogGeneric extends WaypointDialog implements
 		altitudeSeekBar.setValue(wp.getHeight());
 		altitudeSeekBar.setOnChangedListner(this);
 
+
+		delaySeekBar = (SeekBarWithText) view
+				.findViewById(R.id.waypointDelay);
+		delaySeekBar .setValue((double)wp.missionItem.param2);
+		delaySeekBar .setOnChangedListner(this);
+		
 		return view;
 	}
 
 	@Override
 	public void onSeekBarChanged() {
 		wp.setHeight(altitudeSeekBar.getValue());
+		wp.missionItem.param1 = (float) delaySeekBar.getValue();
 	}
 
 

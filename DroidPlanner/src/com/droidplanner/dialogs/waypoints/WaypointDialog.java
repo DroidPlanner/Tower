@@ -34,6 +34,8 @@ public abstract class WaypointDialog implements OnItemSelectedListener,
 		WaypointDialog dialog;
 		switch (wp.getCmd()) {
 		case CMD_NAV_WAYPOINT:
+			dialog = new WaypointDialogWaypoint();
+			break;
 		case CMD_NAV_LOITER_UNLIM:
 		case CMD_NAV_LOITER_TURNS:
 		case CMD_NAV_LOITER_TIME:
@@ -42,6 +44,7 @@ public abstract class WaypointDialog implements OnItemSelectedListener,
 		case CMD_NAV_LAND:
 		default:
 			dialog = new WaypointDialogGeneric();
+			break;
 		}
 		dialog.build(wp, context, listner);
 	}
