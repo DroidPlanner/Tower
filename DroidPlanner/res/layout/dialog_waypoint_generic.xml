@@ -24,23 +24,4 @@
         custom:unit="m" >
     </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
 
-    <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
-        android:id="@+id/waypointDelay"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="2dp"
-        custom:inc="1"
-        custom:max="600"
-        custom:min="0"
-        custom:title="@string/waypoint_delay"
-        custom:unit="s" >
-    </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Delay option is triggered after the craft reaches the waypoint radius. The Next command is loaded after the delay.
-Delay time is in seconds, the default is 0" />
-
 </LinearLayout>
