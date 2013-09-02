@@ -24,4 +24,11 @@
         custom:unit="m" >
     </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
 
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Will cause the craft to return to the home position set when the craft is armed (requires GPS Lock!)
+If Altitude is 0, craft will return to home at the altitude specified by the Mission Planner" />
+
 </LinearLayout>

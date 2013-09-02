@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res/com.droidplanner"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <com.droidplanner.widgets.spinners.SpinnerSelfSelect
+        android:id="@+id/spinnerWaypointType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:entries="@array/ExampleCameraArray" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Will cause the craft to land at the current location when the command is invoked.
+If you have Sonar, the craft will stop holding position at 3 meters and drop straight down.
+The motors will not stop on their own, you must exit the AP mode to cut the engines" />
+
+</LinearLayout>
