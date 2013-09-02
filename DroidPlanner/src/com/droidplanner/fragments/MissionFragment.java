@@ -27,7 +27,7 @@ public class MissionFragment extends ListFragment implements DragScrollProfile, 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.mission_fragment, container,
+		View view = inflater.inflate(R.layout.fragment_mission, container,
 				false);
 		list = (DragSortListView) view.findViewById(R.id.listView1);
 		list.setDropListener(this);

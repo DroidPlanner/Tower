@@ -49,7 +49,7 @@ public class MissionRow extends ArrayAdapter<waypoint> {
 	private View createLayoutFromResource() {
 		LayoutInflater inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View view = inflater.inflate(R.layout.mission_list_row, null);
+		View view = inflater.inflate(R.layout.row_mission_list, null);
 		return view;
 	}
 

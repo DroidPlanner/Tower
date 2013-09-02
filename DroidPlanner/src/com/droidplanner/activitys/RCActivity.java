@@ -29,7 +29,7 @@ public class RCActivity extends SuperFlightActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.rc);
+		setContentView(R.layout.activity_rc);
 
 		mAdapter = new AdapterHudMap(getFragmentManager());
 		mPager = (MapViewPager) findViewById(R.id.rcPager);
