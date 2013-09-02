@@ -6,7 +6,9 @@ import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.InputDevice;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -142,6 +144,16 @@ public class RCFragment extends Fragment {
 	public boolean isRcOverrideActive() {
 		return rcActivated;
 	}
+	
+	public boolean physicalJoyMoved(MotionEvent ev){
+		//Tested only for wikipad controller. Probably works with most game controllers.
+		if((ev.getSource() & InputDevice.SOURCE_CLASS_JOYSTICK) != 0) {
+			 lJoystick.OnMoved((double) ev.getAxisValue(MotionEvent.AXIS_X), (double) ev.getAxisValue(MotionEvent.AXIS_Y));
+			 rJoystick.OnMoved((double) ev.getAxisValue(MotionEvent.AXIS_Z), (double) ev.getAxisValue(MotionEvent.AXIS_RZ));
+			 return true;
+		}
+		return false;
+	}
 
 	private void enableRCOverride() {
 		rcOutput.enableRcOverride();
@@ -157,7 +169,7 @@ public class RCFragment extends Fragment {
 		rJoystick.OnMoved(rLastPan, rLastTilt);
 	}
 
-	JoystickMovedListener lJoystick = new JoystickMovedListener() {
+	private JoystickMovedListener lJoystick = new JoystickMovedListener() {
 		@Override
 		public void OnReturnedToCenter() {
 		}
@@ -190,7 +202,7 @@ public class RCFragment extends Fragment {
 			}
 		}
 	};
-	JoystickMovedListener rJoystick = new JoystickMovedListener() {
+	private JoystickMovedListener rJoystick = new JoystickMovedListener() {
 		@Override
 		public void OnReturnedToCenter() {
 		}
