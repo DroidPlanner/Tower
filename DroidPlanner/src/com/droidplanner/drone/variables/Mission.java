@@ -10,9 +10,10 @@ import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneVariable;
+import com.droidplanner.fragments.helpers.MapPath.PathSource;
 import com.google.android.gms.maps.model.LatLng;
 
-public class Mission extends DroneVariable {
+public class Mission extends DroneVariable implements PathSource {
 
 	private Home home = new Home(0.0, 0.0, 0.0);
 	private List<waypoint> waypoints = new ArrayList<waypoint>();
@@ -53,10 +54,12 @@ public class Mission extends DroneVariable {
 			return home;
 	}
 
-	public List<LatLng> getAllCoordinates() {
+	public List<LatLng> getAllVisibleCoordinates() {
 		List<LatLng> result = new ArrayList<LatLng>();
 		for (waypoint point : waypoints) {
-			result.add(point.getCoord());
+			if (point.getCmd().isNavigation()) {
+				result.add(point.getCoord());				
+			}
 		}
 		result.add(home.getCoord());
 		return result;
@@ -178,6 +181,18 @@ public class Mission extends DroneVariable {
 		data.add(getHome());
 		data.addAll(getWaypoints());
 		myDrone.waypointMananger.writeWaypoints(data);
+	}
+
+	@Override
+	public List<LatLng> getPathPoints() {
+		List<LatLng> newPath = new ArrayList<LatLng>();
+		newPath.add(getHome().getCoord());
+		for (waypoint point : getWaypoints()) {
+			if (point.getCmd().isNavigation()) {
+				newPath.add(point.getCoord());				
+			}
+		}
+		return newPath;
 	}
 
 

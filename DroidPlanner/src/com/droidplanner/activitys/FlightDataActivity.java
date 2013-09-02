@@ -21,7 +21,7 @@ public class FlightDataActivity extends SuperFlightActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.flightdata);
+		setContentView(R.layout.activity_flightdata);
 
 		mapFragment = ((FlightMapFragment) getFragmentManager()
 				.findFragmentById(R.id.flightMapFragment));
