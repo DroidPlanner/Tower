@@ -1,4 +1,4 @@
-package com.droidplanner.dialogs.waypoints;
+package com.droidplanner.dialogs.mission;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,14 +11,14 @@ import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
 
-public class WaypointDialogExtra extends WaypointDialog implements OnTextSeekBarChangedListner{
+public class DialogMissionExtra extends DialogMission implements OnTextSeekBarChangedListner{
 	SeekBarWithText altitudeSeekBar;
 	SeekBarWithText delaySeekBar;
 	SeekBarWithText loiterTurnSeekBar;
 	SeekBarWithText loiterTimeSeekBar;
 	FrameLayout optionLayout;
 	CheckBox loiterCCW;
-	public WaypointDialogExtra(waypoint wp) {
+	public DialogMissionExtra(waypoint wp) {
 		this.wp = wp;
 	}
 

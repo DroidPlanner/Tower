@@ -1,11 +1,11 @@
-package com.droidplanner.dialogs.waypoints;
+package com.droidplanner.dialogs.mission;
 
 import android.content.Context;
 import android.view.View;
 
 import com.droidplanner.R;
 
-public class WaypointDialogLoiter extends WaypointDialog {
+public class DialogMissionLoiter extends DialogMission {
 
 	@Override
 	protected int getResource() {

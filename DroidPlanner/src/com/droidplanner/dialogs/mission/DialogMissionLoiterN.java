@@ -1,4 +1,4 @@
-package com.droidplanner.dialogs.waypoints;
+package com.droidplanner.dialogs.mission;
 
 import android.content.Context;
 import android.view.View;
@@ -8,7 +8,7 @@ import com.droidplanner.R;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
 
-public class WaypointDialogLoiterN extends WaypointDialog implements
+public class DialogMissionLoiterN extends DialogMission implements
 		OnTextSeekBarChangedListner {
 	private SeekBarWithText loiterTurnSeekBar;
 	private CheckBox loiterCCW;

@@ -1,4 +1,4 @@
-package com.droidplanner.dialogs.waypoints;
+package com.droidplanner.dialogs.mission;
 
 import android.content.Context;
 import android.view.View;
@@ -7,7 +7,7 @@ import com.droidplanner.R;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
 
-public class WaypointDialogTakeoff extends WaypointDialog implements
+public class DialogMissionTakeoff extends DialogMission implements
 		OnTextSeekBarChangedListner {
 	private SeekBarWithText altitudeSeekBar;
 

@@ -1,4 +1,4 @@
-package com.droidplanner.dialogs.waypoints;
+package com.droidplanner.dialogs.mission;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -19,7 +19,7 @@ import com.droidplanner.R;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.widgets.spinners.SpinnerSelfSelect;
 
-public abstract class WaypointDialog implements OnItemSelectedListener,
+public abstract class DialogMission implements OnItemSelectedListener,
 		OnClickListener {
 	protected abstract int getResource();
 
