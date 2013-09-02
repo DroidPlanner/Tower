@@ -10,7 +10,7 @@ import android.widget.ListView;
 
 import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
 import com.droidplanner.R;
-import com.droidplanner.dialogs.waypoints.WaypointDialog;
+import com.droidplanner.dialogs.waypoints.WaypointDialogFactory;
 import com.droidplanner.drone.variables.Mission;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.widgets.tableRow.MissionRow;
@@ -80,7 +80,7 @@ public class MissionFragment extends ListFragment implements DragScrollProfile, 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		Log.d("T", "touched "+position);
-		WaypointDialog.getDialog(adapter.getItem(position), this.getActivity(), this);		
+		WaypointDialogFactory.getDialog(adapter.getItem(position), this.getActivity(), this);		
 		super.onListItemClick(l, v, position, id);
 	}
 	
