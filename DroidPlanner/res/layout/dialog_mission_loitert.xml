@@ -40,7 +40,6 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Will cause the craft to begin to Loiter at the current location when the command is invoked.
-Optionally give a location to loiter at that wp – The clock starts ticking after the WP is reached." />
+        android:text="@string/waypointInfo_LoiterT" />
 
 </LinearLayout>
