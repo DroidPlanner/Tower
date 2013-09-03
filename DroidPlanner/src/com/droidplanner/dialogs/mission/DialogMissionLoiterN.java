@@ -35,16 +35,6 @@ public class DialogMissionLoiterN extends DialogMission implements
 		loiterTurnSeekBar.setOnChangedListner(this);
 
 		loiterCCW = (CheckBox) view.findViewById(R.string.loiter_ccw);
-		loiterCCW.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-	        @Override
-	        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-	    		if (loiterCCW.isChecked()) {
-	    			wp.missionItem.param3 *= -1.0;
-	    		}
-	        }
-	    });
-
 		if (wp.missionItem.param1 < 0) {
 			loiterCCW.setChecked(true);
 			loiterTurnSeekBar.setValue(-1.0 * wp.missionItem.param1);
@@ -52,6 +42,17 @@ public class DialogMissionLoiterN extends DialogMission implements
 			loiterCCW.setChecked(false);
 			loiterTurnSeekBar.setValue(wp.missionItem.param1);
 		}
+
+		loiterCCW.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+	        @Override
+	        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+	    		if (loiterCCW.isChecked()) {
+	    			wp.missionItem.param1 *= -1.0;
+	    		}
+	        }
+	    });
+
 
 		return view;
 	}
@@ -64,7 +65,7 @@ public class DialogMissionLoiterN extends DialogMission implements
 		wp.setHeight(altitudeSeekBar.getValue());
 		wp.missionItem.param1 = (float) loiterTurnSeekBar.getValue();
 		if (loiterCCW.isChecked()) {
-			wp.missionItem.param3 *= -1.0;
+			wp.missionItem.param1 *= -1.0;
 		}
 	}
 
