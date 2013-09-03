@@ -15,6 +15,7 @@ import com.droidplanner.R;
 import com.droidplanner.R.string;
 import com.droidplanner.activitys.helpers.SuperActivity;
 import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
+import com.droidplanner.dialogs.ElevationDialog;
 import com.droidplanner.dialogs.GridDialog;
 import com.droidplanner.dialogs.openfile.OpenFileDialog;
 import com.droidplanner.dialogs.openfile.OpenMissionDialog;
@@ -28,6 +29,7 @@ import com.droidplanner.fragments.helpers.GestureMapFragment;
 import com.droidplanner.fragments.helpers.OnMapInteractionListener;
 import com.droidplanner.fragments.helpers.GestureMapFragment.OnPathFinishedListner;
 import com.droidplanner.fragments.helpers.MapProjection;
+import com.droidplanner.helpers.geoTools.LineSampler;
 import com.droidplanner.polygon.Polygon;
 import com.droidplanner.polygon.PolygonPoint;
 import com.google.android.gms.maps.model.LatLng;
@@ -73,6 +75,7 @@ public class PlanningActivity extends SuperActivity implements
 		checkIntent();
 
 		update();
+		
 	}
 
 	private void checkIntent() {
@@ -136,6 +139,9 @@ public class PlanningActivity extends SuperActivity implements
 			polygon.clearPolygon();
 			update();
 			return true;
+		case R.id.menu_elevation_dialog:
+			openElevationDialog();
+			return true;
 		case R.id.mode_exit:
 			setMode(modes.MISSION);
 			update();
@@ -159,19 +165,7 @@ public class PlanningActivity extends SuperActivity implements
 		update();
 	}
 
-	public void openPolygonGenerateDialog() {
-		double defaultHatchAngle = (planningMapFragment.getMapRotation() + 90) % 180;
-		GridDialog polygonDialog = new GridDialog() {
-			@Override
-			public void onPolygonGenerated(List<waypoint> list) {
-				drone.mission.addWaypoints(list);
-				update();
-			}
-		};
-		polygonDialog.generatePolygon(defaultHatchAngle, 50.0, polygon,
-				drone.mission.getLastWaypoint().getCoord(),
-				drone.mission.getDefaultAlt(), this);
-	}
+	
 	public void setMode(modes mode) {
 		this.mode = mode;
 		switch (mode) {
@@ -186,6 +180,20 @@ public class PlanningActivity extends SuperActivity implements
 			break;
 		}
 		invalidateOptionsMenu();
+	}
+	
+	public void openPolygonGenerateDialog() {
+		double defaultHatchAngle = (planningMapFragment.getMapRotation() + 90) % 180;
+		GridDialog polygonDialog = new GridDialog() {
+			@Override
+			public void onPolygonGenerated(List<waypoint> list) {
+				drone.mission.addWaypoints(list);
+				update();
+			}
+		};
+		polygonDialog.generatePolygon(defaultHatchAngle, 50.0, polygon,
+				drone.mission.getLastWaypoint().getCoord(),
+				drone.mission.getDefaultAlt(), this);
 	}
 
 	private void openSurveyDialog() {
@@ -294,7 +302,12 @@ public class PlanningActivity extends SuperActivity implements
 		};
 		missionDialog.openDialog(this);
 	}
-
+	
+	public void openElevationDialog(){
+		List<LatLng> samplingPoints = new LineSampler(drone.mission.getAllCoordinates()).sample(100);
+		new ElevationDialog().build(this, samplingPoints);
+	}
+	
 	private void menuSaveFile() {
 		if (writeMission()) {
 			Toast.makeText(this, R.string.file_saved, Toast.LENGTH_SHORT)

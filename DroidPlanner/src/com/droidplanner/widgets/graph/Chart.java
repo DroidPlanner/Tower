@@ -10,7 +10,8 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.droidplanner.widgets.graph.ChartScale.OnScaleListner;
+import com.droidplanner.widgets.graph.ChartScaleHandler.OnScaleListner;
+import com.droidplanner.widgets.graph.series.ChartSeries;
 import com.droidplanner.widgets.helpers.RenderThread;
 import com.droidplanner.widgets.helpers.RenderThread.canvasPainter;
 
@@ -24,16 +25,16 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback,
 	protected int height;
 
 	public ChartColorsStack colors = new ChartColorsStack();
-	protected ChartScale scale;
+	public ChartScaleHandler scale;
 	private ChartGrid grid = new ChartGrid();
-	public List<ChartSeries> series = new ArrayList<ChartSeries>();;
-	private ChartDataRender dataRender = new ChartDataRender();
+	public List<ChartSeries> series = new ArrayList<ChartSeries>();
+	public ChartDataRender dataRender = new ChartDataRender();
 
 	public Chart(Context context, AttributeSet attributeSet) {
 		super(context, attributeSet);
 		getHolder().addCallback(this);
 
-		scale = new ChartScale(context, this);
+		scale = new ChartScaleHandler(context, this);
 	}
 
 	@Override
@@ -79,7 +80,7 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback,
 	public boolean onTouchEvent(MotionEvent ev) {
 		// Let the ScaleGestureDetector inspect all events.
 		super.onTouchEvent(ev);
-		scale.scaleDetector.onTouchEvent(ev);
+		scale.onTouchEvent(ev);
 		return true;
 	}
 

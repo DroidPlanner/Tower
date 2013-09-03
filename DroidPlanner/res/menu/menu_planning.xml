@@ -34,6 +34,9 @@
         android:showAsAction="never"
         android:title="@string/menu_load_from_apm"/>
     <item
+        android:id="@+id/menu_elevation_dialog"
+        android:title="@string/menu_elevation"/>    
+    <item
         android:id="@+id/menu_polygon"
         android:title="@string/menu_polygon"/>
 

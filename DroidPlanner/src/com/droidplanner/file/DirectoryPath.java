@@ -29,6 +29,10 @@ public class DirectoryPath {
 		return getDroidPlannerPath() + "/Maps/";
 	}
 
+	static public String getSrtmPath() {
+		return getDroidPlannerPath() + "/Srtm/";
+	}
+
 	public static String getCameraInfoPath() {
 		return getDroidPlannerPath() + "/CameraInfo/";
 	}

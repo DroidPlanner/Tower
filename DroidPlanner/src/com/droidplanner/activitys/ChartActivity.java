@@ -31,7 +31,6 @@ public class ChartActivity extends SuperActivity implements HudUpdatedListner {
 		readoutMenu = (LinearLayout) findViewById(R.id.readoutMenu);
 
 		checkBoxList.populateView(readoutMenu, labels, chart);
-
 		drone.setHudListner(this);
 	}
 
