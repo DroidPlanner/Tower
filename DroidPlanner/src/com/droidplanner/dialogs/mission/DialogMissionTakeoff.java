@@ -9,6 +9,7 @@ import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarCha
 public class DialogMissionTakeoff extends DialogMission implements
 		OnTextSeekBarChangedListner {
 	private SeekBarWithText altitudeSeekBar;
+	private SeekBarWithText angleSeekBar;
 
 	@Override
 	protected int getResource() {
@@ -22,12 +23,18 @@ public class DialogMissionTakeoff extends DialogMission implements
 		altitudeSeekBar.setValue(wp.getHeight());
 		altitudeSeekBar.setOnChangedListner(this);
 
+		angleSeekBar = (SeekBarWithText) view
+				.findViewById(R.id.takeoffPitch);
+		angleSeekBar.setValue(wp.missionItem.param1);
+		angleSeekBar.setOnChangedListner(this);
+
 		return view;
 	}
 
 	@Override
 	public void onSeekBarChanged() {
 		wp.setHeight(altitudeSeekBar.getValue());
+		wp.missionItem.param1 = (float) angleSeekBar.getValue();
 	}
 
 

@@ -85,8 +85,10 @@
     <string name="waypointInfo_Generic">Generic Waypoint</string>
     <string name="waypointInfo_Loiter">Will cause the craft to begin to Loiter at the current location when the command is invoked.</string>
     <string name="waypointInfo_LoiterN">Will cause the craft to begin to orbit the current location when the command is invoked.</string>
-    <string name="waypointInfo_LoiterT">Will cause the craft to begin to Loiter at the current location when the command is invoked.\nOptionally give a location to loiter at that wp – The clock starts ticking after the WP is reached.</string>
-    <string name="waypointInfo_RTL">Will cause the craft to return to the home position set when the craft is armed (requires GPS Lock!)\nIf Altitude is 0, craft will return to home at the altitude specified by the Mission Planner</string>
-    <string name="waypointInfo_TakeOff">Will cause the craft to auto take off to specified altitude</string>
+    <string name="waypointInfo_LoiterT">Will cause the craft to begin to Loiter at the current location when the command is invoked. Optionally give a location to loiter at that wp – The clock starts ticking after the WP is reached.</string>
+    <string name="waypointInfo_RTL">Will cause the craft to return to the home position set when the craft is armed (requires GPS Lock!). If Altitude is 0, craft will return to home at the altitude specified by the Mission Planner</string>
+    <string name="waypointInfo_TakeOff">Will cause the craft to auto take off to specified altitude. Use Pitch Angle only for planes and set to 0 for copters.</string>
     <string name="waypointInfo_Waypoint">Delay option is triggered after the craft reaches the waypoint radius. The Next command is loaded after the delay.\nDelay time is in seconds, the default is 0</string>
+    <string name="rtl_Land">Land on reaching RTL position</string>
+    <string name="takeoff_pitch">Pitch Angle</string>
 </resources>
