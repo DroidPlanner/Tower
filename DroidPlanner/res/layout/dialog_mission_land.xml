@@ -16,8 +16,6 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Will cause the craft to land at the current location when the command is invoked.
-If you have Sonar, the craft will stop holding position at 3 meters and drop straight down.
-The motors will not stop on their own, you must exit the AP mode to cut the engines" />
+        android:text="@string/waypointInfo_Land" />
 
 </LinearLayout>

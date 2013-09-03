@@ -40,7 +40,6 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Delay option is triggered after the craft reaches the waypoint radius. The Next command is loaded after the delay.
-Delay time is in seconds, the default is 0" />
+        android:text="@string/waypointInfo_Waypoint" />
 
 </LinearLayout>
