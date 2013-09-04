@@ -12,9 +12,9 @@ public class PathLSR extends Path {
 	}
 
 	@Override
-	protected double getDistance() {
+	protected double getPathLength() {
 		// TODO Auto-generated method stub
-		return 0;
+		return Double.MAX_VALUE;
 	}
 
 	@Override

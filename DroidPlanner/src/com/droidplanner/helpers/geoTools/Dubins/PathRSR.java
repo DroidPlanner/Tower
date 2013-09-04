@@ -2,6 +2,7 @@ package com.droidplanner.helpers.geoTools.Dubins;
 
 import java.util.List;
 
+import com.droidplanner.helpers.geoTools.GeoTools;
 import com.droidplanner.helpers.geoTools.LineLatLng;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -12,9 +13,20 @@ public class PathRSR extends Path {
 	}
 
 	@Override
-	protected double getDistance() {
-		// TODO Auto-generated method stub
-		return 0;
+	protected double getPathLength() {
+		double interCircleAngle = new LineLatLng(circleStart, circleEnd)
+				.getHeading();
+		double distance = GeoTools.getAproximatedDistance(circleStart,
+				circleEnd);
+		distance += radius
+				* Math.abs(2 * Math.PI
+						+ Math.abs(interCircleAngle - Math.PI / 2)
+						- Math.abs(startVector.getHeading() - Math.PI / 2));
+		distance += radius
+				* Math.abs(2 * Math.PI
+						+ Math.abs(endVector.getHeading() - Math.PI / 2)
+						- Math.abs(interCircleAngle - Math.PI / 2));
+		return distance;
 	}
 
 	@Override

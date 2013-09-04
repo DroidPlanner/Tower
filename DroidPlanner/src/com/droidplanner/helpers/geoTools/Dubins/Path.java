@@ -11,7 +11,7 @@ abstract class Path {
 	protected static final int RIGHT_CIRCLE_ANGLE = -90;
 	protected static final int LEFT_CIRCLE_ANGLE = 90;
 
-	protected abstract double getDistance();
+	protected abstract double getPathLength();
 
 	protected abstract List<LatLng> generatePoints();
 
@@ -30,7 +30,7 @@ abstract class Path {
 		this.endVector = end;
 		this.radius = radius;
 		circleStart = generateCircle(startVector, getStartCircleAngle());
-		circleEnd = generateCircle(startVector, getEndCircleAngle());
+		circleEnd = generateCircle(endVector, getEndCircleAngle());
 	}
 
 	public static Path findShortestPath(LineLatLng start, LineLatLng end,
@@ -45,7 +45,7 @@ abstract class Path {
 		Path shortestPath = null;
 		double largest = Double.NEGATIVE_INFINITY;
 		for (Path path : paths) {
-			double length = path.getDistance();
+			double length = path.getPathLength();
 			if (length > largest) {
 				largest = length;
 				shortestPath = path;
