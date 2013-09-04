@@ -14,8 +14,6 @@ abstract class Path {
 
 	protected abstract double getPathLength();
 
-	protected abstract List<LatLng> generatePoints();
-
 	protected abstract int getEndCircleAngle();
 
 	protected abstract int getStartCircleAngle();
@@ -53,6 +51,13 @@ abstract class Path {
 			}
 		}
 		return shortestPath;
+	}
+
+	protected List<LatLng> generatePoints(){
+		//TODO remove the following after the point generation code is written
+		List<LatLng> result = GeoTools.generateCircle(circleStart, radius, 12);
+		result.addAll(GeoTools.generateCircle(circleEnd, radius, 12));		
+		return result;
 	}
 
 	protected LatLng generateCircle(LineLatLng vector, int angle) {

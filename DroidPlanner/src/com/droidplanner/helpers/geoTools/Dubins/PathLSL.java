@@ -35,7 +35,7 @@ public class PathLSL extends Path {
 	protected List<LatLng> generatePoints() {
 		// TODO Auto-generated method stub
 		Log.d("DUBIN", "Generating LSL path");
-		return null;
+		return super.generatePoints();
 	}
 
 	protected int getEndCircleAngle() {

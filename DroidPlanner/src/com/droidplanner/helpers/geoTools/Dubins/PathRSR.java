@@ -35,7 +35,7 @@ public class PathRSR extends Path {
 	protected List<LatLng> generatePoints() {
 		// TODO Auto-generated method stub
 		Log.d("DUBIN", "Generating RSR path");
-		return null;
+		return super.generatePoints();
 	}
 
 	@Override
