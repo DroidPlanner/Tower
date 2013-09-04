@@ -22,6 +22,20 @@
         custom:min="0"
         custom:title="@string/waypoint_altitude"
         custom:unit="m" >
+
+    </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+
+    <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+        android:id="@+id/takeoffPitch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        custom:inc="0.5"
+        custom:max="20"
+        custom:min="0"
+        custom:title="@string/takeoff_pitch"
+        custom:unit="°" >
+
     </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
 
     <TextView
