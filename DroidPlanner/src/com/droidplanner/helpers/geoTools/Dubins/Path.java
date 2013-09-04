@@ -3,6 +3,7 @@ package com.droidplanner.helpers.geoTools.Dubins;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.droidplanner.helpers.geoTools.GeoTools;
 import com.droidplanner.helpers.geoTools.LineLatLng;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -55,12 +56,7 @@ abstract class Path {
 	}
 
 	protected LatLng generateCircle(LineLatLng vector, int angle) {
-		double dx = radius
-				* Math.cos(Math.toRadians(vector.getHeading() + angle));
-		double dy = radius
-				* Math.sin(Math.toRadians(vector.getHeading() + angle));
-		return new LatLng(vector.getEnd().longitude + dy,
-				vector.getEnd().longitude + dx);
+		return GeoTools.newCoordFromBearingAndDistance(vector.getEnd(), angle, radius);
 	}
 
 }
