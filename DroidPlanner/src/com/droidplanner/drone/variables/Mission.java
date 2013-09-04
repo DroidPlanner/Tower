@@ -15,7 +15,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class Mission extends DroneVariable implements PathSource {
 
-	private Home home = new Home(0.0, 0.0, 0.0);
+	private Home home = new Home();
 	private List<waypoint> waypoints = new ArrayList<waypoint>();
 	private Double defaultAlt = 50.0;
 	private int wpno = -1;
@@ -61,7 +61,9 @@ public class Mission extends DroneVariable implements PathSource {
 				result.add(point.getCoord());				
 			}
 		}
-		result.add(home.getCoord());
+		if (home.isValid) {			
+			result.add(home.getCoord());
+		}
 		return result;
 	}
 
@@ -186,7 +188,6 @@ public class Mission extends DroneVariable implements PathSource {
 	@Override
 	public List<LatLng> getPathPoints() {
 		List<LatLng> newPath = new ArrayList<LatLng>();
-		newPath.add(getHome().getCoord());
 		for (waypoint point : getWaypoints()) {
 			if (point.getCmd().isNavigation()) {
 				newPath.add(point.getCoord());				

@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.droidplanner.drone.Drone;
-import com.droidplanner.drone.variables.Home;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.fragments.helpers.DroneMap;
 import com.droidplanner.fragments.helpers.MapPath;
@@ -45,7 +44,7 @@ public class PlanningMapFragment extends DroneMap implements
 	public void update(Drone drone, Polygon polygon) {
 		markers.clear();
 
-		markers.updateMarker(drone.mission.getHome(), true);
+		markers.updateMarker(drone.mission.getHome(), false);
 		markers.updateMarkers(drone.mission.getWaypoints(), true);
 		markers.updateMarkers(polygon.getPolygonPoints(), true);
 
@@ -70,15 +69,8 @@ public class PlanningMapFragment extends DroneMap implements
 	@Override
 	public void onMarkerDragEnd(Marker marker) {
 		MarkerSource source = markers.getSourceFromMarker(marker);
-		checkForHomeMarker(source, marker);
 		checkForWaypointMarker(source, marker);
 		checkForPolygonMarker(source, marker);
-	}
-
-	private void checkForHomeMarker(MarkerSource source, Marker marker) {
-		if (Home.class.isInstance(source)) {
-			mListener.onMoveHome(marker.getPosition());
-		}
 	}
 
 	private void checkForWaypointMarker(MarkerSource source, Marker marker) {

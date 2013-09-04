@@ -25,9 +25,9 @@ import com.droidplanner.file.IO.MissionWriter;
 import com.droidplanner.fragments.MissionFragment;
 import com.droidplanner.fragments.PlanningMapFragment;
 import com.droidplanner.fragments.helpers.GestureMapFragment;
-import com.droidplanner.fragments.helpers.OnMapInteractionListener;
 import com.droidplanner.fragments.helpers.GestureMapFragment.OnPathFinishedListner;
 import com.droidplanner.fragments.helpers.MapProjection;
+import com.droidplanner.fragments.helpers.OnMapInteractionListener;
 import com.droidplanner.polygon.Polygon;
 import com.droidplanner.polygon.PolygonPoint;
 import com.google.android.gms.maps.model.LatLng;
@@ -84,8 +84,7 @@ public class PlanningActivity extends SuperActivity implements
 					.show();
 			openMission(intent.getData().getPath());
 			update();
-			planningMapFragment
-					.zoomToExtents(drone.mission.getAllVisibleCoordinates());
+			zoom();
 		}
 	}
 
@@ -108,8 +107,7 @@ public class PlanningActivity extends SuperActivity implements
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_zoom:
-			planningMapFragment
-					.zoomToExtents(drone.mission.getAllVisibleCoordinates());
+			zoom();
 			return true;
 		case R.id.menu_save_file:
 			menuSaveFile();
@@ -143,6 +141,11 @@ public class PlanningActivity extends SuperActivity implements
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
+	}
+
+	private void zoom() {
+		planningMapFragment
+				.zoomToExtents(drone.mission.getAllVisibleCoordinates());
 	}
 
 	private void processReceivedPoints(List<LatLng> points) {
@@ -256,7 +259,7 @@ public class PlanningActivity extends SuperActivity implements
 	@Override
 	public void onWaypointsUpdate() {
 		update();
-		planningMapFragment.zoomToExtents(drone.mission.getAllVisibleCoordinates());
+		zoom();
 	}
 
 	@Override
@@ -287,8 +290,7 @@ public class PlanningActivity extends SuperActivity implements
 			public void waypointFileLoaded(MissionReader reader) {
 				drone.mission.setHome(reader.getHome());
 				drone.mission.setWaypoints(reader.getWaypoints());
-				planningMapFragment.zoomToExtents(drone.mission
-						.getAllVisibleCoordinates());
+				zoom();
 				update();
 			}
 		};
