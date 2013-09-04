@@ -63,7 +63,7 @@ public class MissionRow extends ArrayAdapter<waypoint> {
 		if (waypoint.getCmd().isNavigation()) {
 			altitudeView.setText(String.format(Locale.ENGLISH, "%3.0fm", waypoint.getHeight()));
 		} else {
-			altitudeView.setText("");
+			altitudeView.setText("-");
 		}
 		nameView.setText(String.format("%3d", waypoint
 				.getNumber()));

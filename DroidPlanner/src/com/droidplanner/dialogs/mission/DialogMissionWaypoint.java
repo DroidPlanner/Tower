@@ -35,7 +35,7 @@ public class DialogMissionWaypoint extends DialogMission implements
 	@Override
 	public void onSeekBarChanged() {
 		wp.setHeight(altitudeSeekBar.getValue());
-		wp.missionItem.param1 = (float) delaySeekBar.getValue();
+		wp.missionItem.param2 = (float) delaySeekBar.getValue();
 	}
 
 
