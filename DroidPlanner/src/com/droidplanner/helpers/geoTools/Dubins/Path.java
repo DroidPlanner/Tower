@@ -43,11 +43,11 @@ abstract class Path {
 		// TODO implement RLR and LRL paths
 
 		Path shortestPath = null;
-		double largest = Double.NEGATIVE_INFINITY;
+		double shortest = Double.POSITIVE_INFINITY;
 		for (Path path : paths) {
 			double length = path.getPathLength();
-			if (length > largest) {
-				largest = length;
+			if (length < shortest) {
+				shortest = length;
 				shortestPath = path;
 			}
 		}
