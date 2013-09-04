@@ -9,7 +9,7 @@ import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarCha
 public class DialogMissionLoiterT extends DialogMission implements
 		OnTextSeekBarChangedListner {
 	private SeekBarWithText altitudeSeekBar;
-	SeekBarWithText loiterTimeSeekBar;
+	private SeekBarWithText loiterTimeSeekBar;
 
 	@Override
 	protected int getResource() {
