@@ -1,63 +1,66 @@
 package com.droidplanner.helpers.geoTools.Dubins;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.droidplanner.helpers.geoTools.LineLatLng;
 import com.google.android.gms.maps.model.LatLng;
 
-enum Path {
-	RSR, RSL, LSR, LSL;
+abstract class Path {
 
-	private LineLatLng start;
-	private LineLatLng end;
-	private double radius;
+	protected static final int RIGHT_CIRCLE_ANGLE = -90;
+	protected static final int LEFT_CIRCLE_ANGLE = 90;
 
-	private void set(LineLatLng start, LineLatLng end, double radius) {
-		this.start = start;
-		this.end = end;
+	protected abstract double getDistance();
+
+	protected abstract List<LatLng> generatePoints();
+
+	protected abstract int getEndCircleAngle();
+
+	protected abstract int getStartCircleAngle();
+
+	protected LineLatLng startVector;
+	protected LineLatLng endVector;
+	protected double radius;
+	protected LatLng circleStart;
+	protected LatLng circleEnd;
+
+	public Path(LineLatLng start, LineLatLng end, double radius) {
+		this.startVector = start;
+		this.endVector = end;
 		this.radius = radius;
+		circleStart = generateCircle(startVector, getStartCircleAngle());
+		circleEnd = generateCircle(startVector, getEndCircleAngle());
 	}
 
 	public static Path findShortestPath(LineLatLng start, LineLatLng end,
 			double radius) {
-		Path largestPath = null;
+		List<Path> paths = new ArrayList<Path>();
+		paths.add(new PathLSL(start, end, radius));
+		paths.add(new PathRSL(start, end, radius));
+		paths.add(new PathLSR(start, end, radius));
+		paths.add(new PathRSR(start, end, radius));
+		// TODO implement RLR and LRL paths
+
+		Path shortestPath = null;
 		double largest = Double.NEGATIVE_INFINITY;
-		for (Path path : Path.values()) {
-			path.set(start, end, radius);
+		for (Path path : paths) {
 			double length = path.getDistance();
 			if (length > largest) {
 				largest = length;
-				largestPath = path;
+				shortestPath = path;
 			}
 		}
-		return largestPath;
+		return shortestPath;
 	}
 
-	public double getDistance() {
-		switch (this) {
-		default:
-		case RSR:
-			return 0;
-		case LSL:
-			return 0;
-		case LSR:
-			return 0;
-		case RSL:
-			return 0;
-		}
+	protected LatLng generateCircle(LineLatLng vector, int angle) {
+		double dx = radius
+				* Math.cos(Math.toRadians(vector.getHeading() + angle));
+		double dy = radius
+				* Math.sin(Math.toRadians(vector.getHeading() + angle));
+		return new LatLng(vector.getEnd().longitude + dy,
+				vector.getEnd().longitude + dx);
 	}
 
-	public List<LatLng> generatePoints() {
-		switch (this) {
-		default:
-		case RSR:
-			return null;
-		case LSL:
-			return null;
-		case LSR:
-			return null;
-		case RSL:
-			return null;
-		}
-	}
 }
