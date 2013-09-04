@@ -1,5 +1,6 @@
 package com.droidplanner.helpers.geoTools;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.droidplanner.polygon.Polygon;
@@ -92,6 +93,19 @@ public class GeoTools {
 	 */
 	public static double getDistance(LatLng from, LatLng to) {
 		return RADIUS_OF_EARTH * Math.toRadians(getArcInRadians(from, to));
+	}
+	
+	/**
+	 * Generates points in a circle
+	 */
+	public static List<LatLng> generateCircle(LatLng center, double radius,
+			int numberOfWaypoints) {
+		ArrayList<LatLng> result = new ArrayList<LatLng>();
+		for (int i = 0; i < numberOfWaypoints; i++) {
+			double heading = (360.0 * i) / numberOfWaypoints;
+			result.add(GeoTools.newCoordFromBearingAndDistance(center,	heading, 100.0));
+		}
+		return result;
 	}
 
 	/**
