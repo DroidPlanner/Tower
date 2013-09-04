@@ -16,25 +16,26 @@ public class Dubins {
 	}
 
 	public List<LatLng> generate(List<LatLng> points) {
-		result = new ArrayList<LatLng>();
-		result.add(points.get(0));
-		processPath(points);
-		result.add(points.get(points.size() - 1));
-		return result;
-	}
-
-	private void processPath(List<LatLng> points) {
 		try {
 			tryToProcessPath(points);
 		} catch (Exception e) {
-			result.add(points.get(1));
+			result = points;
 		}
+		return result;
 	}
 
 	private void tryToProcessPath(List<LatLng> points) throws Exception {
 		if (points.size() < 4) {
 			throw new Exception("Not enough points");
 		}
+		
+		result = new ArrayList<LatLng>();
+		result.add(points.get(0));
+		processPath(points);
+		result.add(points.get(points.size() - 1));
+	}
+
+	private void processPath(List<LatLng> points) {
 		for (int i = 3; i < points.size(); i++) {
 			LineLatLng start = new LineLatLng(points.get(i - 3),
 					points.get(i - 2));
@@ -45,7 +46,6 @@ public class Dubins {
 
 	private void processPathSegment(LineLatLng start, LineLatLng end) {
 		Path shortestPath = Path.findShortestPath(start, end, radius);
-
 		result.addAll(shortestPath.generatePoints());
 	}
 }
