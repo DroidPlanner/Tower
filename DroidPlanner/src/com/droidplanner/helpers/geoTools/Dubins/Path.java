@@ -28,8 +28,8 @@ abstract class Path {
 		this.startVector = start;
 		this.endVector = end;
 		this.radius = radius;
-		circleStart = generateCircle(startVector, getStartCircleAngle());
-		circleEnd = generateCircle(endVector, getEndCircleAngle());
+		circleStart = generateCircle(startVector.getEnd(), getStartCircleAngle());
+		circleEnd = generateCircle(endVector.getStart(), getEndCircleAngle());
 	}
 
 	public static Path findShortestPath(LineLatLng start, LineLatLng end,
@@ -60,8 +60,8 @@ abstract class Path {
 		return result;
 	}
 
-	protected LatLng generateCircle(LineLatLng vector, int angle) {
-		return GeoTools.newCoordFromBearingAndDistance(vector.getEnd(), angle, radius);
+	protected LatLng generateCircle(LatLng point, int angle) {
+		return GeoTools.newCoordFromBearingAndDistance(point, angle, radius);
 	}
 
 }
