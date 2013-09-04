@@ -197,7 +197,9 @@ public class Mission extends DroneVariable implements PathSource {
 		
 		Dubins dubins = new Dubins(50.0); // TODO find a better way to switch between normal path and dubins
 		
-		return dubins.generate(newPath);
+		//return dubins.generate(newPath);
+		
+		return newPath;
 	}
 
 
