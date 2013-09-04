@@ -23,12 +23,12 @@ public class GeoTools {
 	}
 
 	public static Double metersTolat(double meters) {
-		double radius_of_earth = 6378100.0;// # in meters
+		double radius_of_earth = RADIUS_OF_EARTH;// # in meters
 		return Math.toDegrees(meters / radius_of_earth);
 	}
 
 	public static Double latToMeters(double lat) {
-		double radius_of_earth = 6378100.0;// # in meters
+		double radius_of_earth = RADIUS_OF_EARTH;// # in meters
 		return Math.toRadians(lat) * radius_of_earth;
 	}
 
