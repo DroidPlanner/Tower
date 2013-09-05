@@ -103,7 +103,7 @@ public class GeoTools {
 		ArrayList<LatLng> result = new ArrayList<LatLng>();
 		for (int i = 0; i < numberOfWaypoints; i++) {
 			double heading = (360.0 * i) / numberOfWaypoints;
-			result.add(GeoTools.newCoordFromBearingAndDistance(center,	heading, 100.0));
+			result.add(GeoTools.newCoordFromBearingAndDistance(center,	heading, radius));
 		}
 		return result;
 	}

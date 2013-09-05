@@ -16,7 +16,7 @@ public class LineLatLng {
 	}
 
 	public double getHeading() {
-		return GeoTools.getHeadingFromCoordinates(getStart(), getEnd());		
+		return GeoTools.getHeadingFromCoordinates(getEnd(),getStart());		
 	}
 	
 	public LatLng getFarthestEndpointTo(LatLng point) {
