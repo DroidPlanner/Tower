@@ -17,16 +17,16 @@ public class PathLSL extends Path {
 	@Override
 	protected double getPathLength() {
 		double interCircleAngle = new LineLatLng(circleStart, circleEnd)
-				.getHeading();
+				.getAngle();
 		double distance = GeoTools.getAproximatedDistance(circleStart,
 				circleEnd);
 		distance += radius
 				* Math.abs(2 * Math.PI
 						+ Math.abs(interCircleAngle + Math.PI / 2)
-						- Math.abs(startVector.getHeading() + Math.PI / 2));
+						- Math.abs(startVector.getAngle() + Math.PI / 2));
 		distance += radius
 				* Math.abs(2 * Math.PI
-						+ Math.abs(endVector.getHeading() + Math.PI / 2)
+						+ Math.abs(endVector.getAngle() + Math.PI / 2)
 						- Math.abs(interCircleAngle + Math.PI / 2));
 		return distance;
 	}

@@ -63,6 +63,18 @@ public class GeoTools {
 
 		return (new LatLng(Math.toDegrees(lat2), Math.toDegrees(lon2)));
 	}
+	
+	/**
+	 * Similar to newCoordFromBearingAndDistance() but with a matematical angle
+	 * @param origin
+	 * @param angle
+	 * @param distance
+	 * @return
+	 */
+	public static LatLng newCoordFromAngleAndDistance(LatLng origin,
+			double angle, double distance) {
+		return newCoordFromBearingAndDistance(origin, angleToHeading(angle), distance);
+	}
 
 	/**
 	 * Calculates the arc between two points
@@ -103,11 +115,19 @@ public class GeoTools {
 		ArrayList<LatLng> result = new ArrayList<LatLng>();
 		for (int i = 0; i < numberOfWaypoints; i++) {
 			double heading = (360.0 * i) / numberOfWaypoints;
-			result.add(GeoTools.newCoordFromBearingAndDistance(center,	heading, radius));
+			result.add(GeoTools.newCoordFromAngleAndDistance(center,	heading, radius));
 		}
 		return result;
 	}
 
+	public static double headingToAngle(double heading) {
+		return (360 - heading);
+	}
+	
+	private static double angleToHeading(double angle) {
+		return headingToAngle(angle);
+	}
+	
 	/**
 	 * Computes the heading between two coordinates
 	 * 
@@ -148,5 +168,6 @@ public class GeoTools {
 		}
 		return Math.abs(0.5 * sum);
 	}
+
 
 }

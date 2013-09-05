@@ -25,7 +25,7 @@ public class Dubins {
 	}
 
 	private void tryToProcessPath(List<LatLng> points) throws Exception {
-		if (points.size() < 4) {
+		if (points.size() < 3) {
 			throw new Exception("Not enough points");
 		}
 		
@@ -36,9 +36,9 @@ public class Dubins {
 	}
 
 	private void processPath(List<LatLng> points) {
-		for (int i = 3; i < points.size(); i++) {
-			LineLatLng start = new LineLatLng(points.get(i - 3),
-					points.get(i - 2));
+		for (int i = 2; i < points.size(); i++) {
+			LineLatLng start = new LineLatLng(points.get(i - 2),
+					points.get(i - 1));
 			LineLatLng end = new LineLatLng(points.get(i - 1), points.get(i));
 			processPathSegment(start, end);
 		}
