@@ -81,6 +81,7 @@
     <string name="loiter_radius">Loiter Radius</string>
     <string name="loiter_ccw">CCW</string>
     <string name="menu_arm">Arm</string>
+	<string name="menu_disarm">Disarm</string>
     <string name="waypointInfo_Land">Will cause the craft to land at the current location when the command is invoked. If you have Sonar, the craft will stop holding position at 3 meters and drop straight down.\nThe motors will not stop on their own, you must exit the AP mode to cut the engines</string>
     <string name="waypointInfo_Generic">Generic Waypoint</string>
     <string name="waypointInfo_Loiter">Will cause the craft to begin to Loiter at the current location when the command is invoked.</string>
