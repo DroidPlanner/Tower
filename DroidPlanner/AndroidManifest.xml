@@ -52,9 +52,9 @@
         android:label="@string/app_title" >
 
         <!-- You must insert your own Google Maps for Android API v2 key in here. -->
-        <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyDFsAn5xo-mILEirpcUsF9BU9Vb_yR-Er4" />
+        <meta-data android:name="com.google.android.maps.v2.API_KEY" 
+            android:value="AIzaSyDYj9dviLfBGk_Ns1rmsL4wba6SblUrKMo" 
+        />
 
         <service android:name=".service.MAVLinkService" >
         </service>
@@ -110,6 +110,7 @@
         </activity>
         <activity android:name=".activitys.SettingsActivity" >
         </activity>
+              
     </application>
 
 </manifest>
