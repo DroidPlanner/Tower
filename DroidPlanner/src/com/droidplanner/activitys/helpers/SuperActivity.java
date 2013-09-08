@@ -115,8 +115,12 @@ public abstract class SuperActivity extends Activity implements
 			startActivity(new Intent(this, SettingsActivity.class));
 			return true;
 		case R.id.menu_arm:
-			if(drone.MavClient.isConnected())
+			if(drone.MavClient.isConnected()){
+				if(!drone.state.isArmed())
+					drone.tts.speak("Arming the vehicle, please standby");
 				MavLinkArm.sendArmMessage(drone, !drone.state.isArmed());
+				
+			}
 			return true;
 		case R.id.menu_connect:
 			drone.MavClient.toggleConnectionState();
