@@ -24,6 +24,18 @@
         custom:unit="m" >
     </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
 
+    <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+        android:id="@+id/loiterTurn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        custom:inc="1"
+        custom:max="100"
+        custom:min="0"
+        custom:title="@string/loiter_turn"
+        custom:unit="turns" >
+    </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+
     <FrameLayout
         android:id="@+id/optionLayout"
         android:layout_width="match_parent"
@@ -38,7 +50,7 @@
             android:text="@string/loiter_ccw" />
 
         <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
-            android:id="@+id/loiterTurn"
+            android:id="@+id/loiterRadius"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
@@ -47,8 +59,8 @@
             custom:inc="1"
             custom:max="100"
             custom:min="0"
-            custom:title="@string/loiter_turn"
-            custom:unit="turns" >
+            custom:title="@string/loiter_radius"
+            custom:unit="m" >
 
         </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
     </FrameLayout>
