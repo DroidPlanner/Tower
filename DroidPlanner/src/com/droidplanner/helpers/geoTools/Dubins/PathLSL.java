@@ -20,14 +20,8 @@ public class PathLSL extends Path {
 				.getAngle();
 		double distance = GeoTools.getAproximatedDistance(circleStart,
 				circleEnd);
-		distance += radius
-				* Math.abs(2 * Math.PI
-						+ Math.abs(interCircleAngle + Math.PI / 2)
-						- Math.abs(startVector.getAngle() + Math.PI / 2));
-		distance += radius
-				* Math.abs(2 * Math.PI
-						+ Math.abs(endVector.getAngle() + Math.PI / 2)
-						- Math.abs(interCircleAngle + Math.PI / 2));
+		distance += radius * DubinsMath.angularDistanceCCW(startVector.getAngle(),interCircleAngle);
+		distance += radius * DubinsMath.angularDistanceCCW(interCircleAngle,endVector.getAngle());
 		return distance;
 	}
 
