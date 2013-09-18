@@ -26,7 +26,7 @@ public class PathLSR extends Path {
 
 	@Override
 	protected List<LatLng> generatePoints() {
-		Log.d("DUBIN", "Generating LSL path");
+		Log.d("DUBIN", "Generating LSR path");
 		double interCircleAngle = new LineLatLng(circleStart, circleEnd).getAngle();
 		double startAngle = startVector.getAngle()-getStartCircleAngle();
 		double endAngle = endVector.getAngle()-getEndCircleAngle();
