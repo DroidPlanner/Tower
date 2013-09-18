@@ -18,7 +18,7 @@ public class PathLSL extends Path {
 	protected double getPathLength() {
 		double interCircleAngle = new LineLatLng(circleStart, circleEnd)
 				.getAngle();
-		double distance = GeoTools.getAproximatedDistance(circleStart,
+		double distance = GeoTools.getDistance(circleStart,
 				circleEnd);
 		distance += radius * Math.toRadians(DubinsMath.angularDistanceCCW(startVector.getAngle(),interCircleAngle));
 		distance += radius * Math.toRadians(DubinsMath.angularDistanceCCW(interCircleAngle,endVector.getAngle()));
