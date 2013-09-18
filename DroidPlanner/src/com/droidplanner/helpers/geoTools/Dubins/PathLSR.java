@@ -31,16 +31,16 @@ public class PathLSR extends Path {
 		double startAngle = startVector.getAngle()-getStartCircleAngle();
 		double endAngle = endVector.getAngle()-getEndCircleAngle();
 		List<LatLng> result = DubinsMath.generateArcCCW(circleStart,startAngle, interCircleAngle-getStartCircleAngle(),radius);
-		result.addAll(DubinsMath.generateArcCW(circleEnd,interCircleAngle-getEndCircleAngle(), endAngle,radius));		
+		result.addAll(DubinsMath.generateArcCW(circleEnd,interCircleAngle-getEndCircleAngle(), endAngle,radius));
 		return result;
 	}
 
 	protected int getEndCircleAngle() {
-		return LEFT_CIRCLE_ANGLE;
+		return RIGHT_CIRCLE_ANGLE;
 	}
 
 	@Override
 	protected int getStartCircleAngle() {
-		return RIGHT_CIRCLE_ANGLE;
+		return LEFT_CIRCLE_ANGLE;
 	}
 }
