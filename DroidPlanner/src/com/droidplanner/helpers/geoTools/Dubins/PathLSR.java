@@ -27,11 +27,13 @@ public class PathLSR extends Path {
 	@Override
 	protected List<LatLng> generatePoints() {
 		Log.d("DUBIN", "Generating LSR path");
-		double interCircleAngle = new LineLatLng(circleStart, circleEnd).getAngle();
 		double startAngle = startVector.getAngle()-getStartCircleAngle();
 		double endAngle = endVector.getAngle()-getEndCircleAngle();
-		List<LatLng> result = DubinsMath.generateArcCCW(circleStart,startAngle, interCircleAngle-getStartCircleAngle(),radius);
-		result.addAll(DubinsMath.generateArcCW(circleEnd,interCircleAngle-getEndCircleAngle(), endAngle,radius));
+		
+		double interCircleAngle = new LineLatLng(circleStart, circleEnd).getAngle()-Math.toDegrees(Math.acos((radius*2)/GeoTools.getDistance(circleStart, circleEnd)));
+		
+		List<LatLng> result = DubinsMath.generateArcCCW(circleStart,startAngle, interCircleAngle,radius);
+		result.addAll(DubinsMath.generateArcCW(circleEnd,interCircleAngle+180, endAngle,radius));
 		return result;
 	}
 
