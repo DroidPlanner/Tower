@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.util.Log;
 
+import com.droidplanner.helpers.geoTools.GeoTools;
 import com.droidplanner.helpers.geoTools.LineLatLng;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -15,8 +16,12 @@ public class PathLSR extends Path {
 
 	@Override
 	protected double getPathLength() {
-		// TODO Auto-generated method stub
-		return Double.MAX_VALUE;
+		double interCircleAngle = new LineLatLng(circleStart, circleEnd).getAngle();
+		double distanceBetweenCenters = GeoTools.getAproximatedDistance(circleStart,circleEnd);
+		double distance = Math.sqrt(distanceBetweenCenters*distanceBetweenCenters-4*radius*radius);
+		distance += radius * DubinsMath.angularDistanceCCW(startVector.getAngle(),interCircleAngle);
+		distance += radius * DubinsMath.angularDistanceCW(interCircleAngle,endVector.getAngle());
+		return distance;
 	}
 
 	@Override
