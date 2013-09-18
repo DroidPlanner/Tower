@@ -20,8 +20,8 @@ public class PathRSR extends Path {
 				.getAngle();
 		double distance = GeoTools.getAproximatedDistance(circleStart,
 				circleEnd);
-		distance += radius * DubinsMath.angularDistanceCW(startVector.getAngle(),interCircleAngle);
-		distance += radius * DubinsMath.angularDistanceCW(interCircleAngle,endVector.getAngle());
+		distance += radius * Math.toRadians(DubinsMath.angularDistanceCW(startVector.getAngle(),interCircleAngle));
+		distance += radius * Math.toRadians(DubinsMath.angularDistanceCW(interCircleAngle,endVector.getAngle()));
 		return distance;
 	}
 
@@ -29,7 +29,12 @@ public class PathRSR extends Path {
 	protected List<LatLng> generatePoints() {
 		// TODO Auto-generated method stub
 		Log.d("DUBIN", "Generating RSR path");
-		return super.generatePoints();
+		double interCircleAngle = new LineLatLng(circleStart, circleEnd).getAngle();
+		double startAngle = startVector.getAngle()-getStartCircleAngle();
+		double endAngle = endVector.getAngle()-getEndCircleAngle();
+		List<LatLng> result = DubinsMath.generateArcCW(circleStart,startAngle, interCircleAngle-getStartCircleAngle(),radius);
+		result.addAll(DubinsMath.generateArcCW(circleEnd,interCircleAngle-getEndCircleAngle(), endAngle,radius));		
+		return result;
 	}
 
 	@Override

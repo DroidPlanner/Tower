@@ -20,16 +20,20 @@ public class PathLSL extends Path {
 				.getAngle();
 		double distance = GeoTools.getAproximatedDistance(circleStart,
 				circleEnd);
-		distance += radius * DubinsMath.angularDistanceCCW(startVector.getAngle(),interCircleAngle);
-		distance += radius * DubinsMath.angularDistanceCCW(interCircleAngle,endVector.getAngle());
+		distance += radius * Math.toRadians(DubinsMath.angularDistanceCCW(startVector.getAngle(),interCircleAngle));
+		distance += radius * Math.toRadians(DubinsMath.angularDistanceCCW(interCircleAngle,endVector.getAngle()));
 		return distance;
 	}
 
 	@Override
 	protected List<LatLng> generatePoints() {
-		// TODO Auto-generated method stub
 		Log.d("DUBIN", "Generating LSL path");
-		return super.generatePoints();
+		double interCircleAngle = new LineLatLng(circleStart, circleEnd).getAngle();
+		double startAngle = startVector.getAngle()-getStartCircleAngle();
+		double endAngle = endVector.getAngle()-getEndCircleAngle();
+		List<LatLng> result = DubinsMath.generateArcCCW(circleStart,startAngle, interCircleAngle-getStartCircleAngle(),radius);
+		result.addAll(DubinsMath.generateArcCCW(circleEnd,interCircleAngle-getEndCircleAngle(), endAngle,radius));		
+		return result;
 	}
 
 	protected int getEndCircleAngle() {

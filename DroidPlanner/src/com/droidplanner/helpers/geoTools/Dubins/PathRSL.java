@@ -19,16 +19,20 @@ public class PathRSL extends Path {
 		double interCircleAngle = new LineLatLng(circleStart, circleEnd).getAngle();
 		double distanceBetweenCenters = GeoTools.getAproximatedDistance(circleStart,circleEnd);
 		double distance = Math.sqrt(distanceBetweenCenters*distanceBetweenCenters-4*radius*radius);
-		distance += radius * DubinsMath.angularDistanceCW(startVector.getAngle(),interCircleAngle);
-		distance += radius * DubinsMath.angularDistanceCCW(interCircleAngle,endVector.getAngle());
+		distance += radius * Math.toRadians(DubinsMath.angularDistanceCW(startVector.getAngle(),interCircleAngle));
+		distance += radius * Math.toRadians(DubinsMath.angularDistanceCCW(interCircleAngle,endVector.getAngle()));
 		return distance;
 	}
 
 	@Override
 	protected List<LatLng> generatePoints() {
-		// TODO Auto-generated method stub
 		Log.d("DUBIN", "Generating RSL path");
-		return null;
+		double interCircleAngle = new LineLatLng(circleStart, circleEnd).getAngle();
+		double startAngle = startVector.getAngle()-getStartCircleAngle();
+		double endAngle = endVector.getAngle()-getEndCircleAngle();
+		List<LatLng> result = DubinsMath.generateArcCW(circleStart,startAngle, interCircleAngle-getStartCircleAngle(),radius);
+		result.addAll(DubinsMath.generateArcCCW(circleEnd,interCircleAngle-getEndCircleAngle(), endAngle,radius));		
+		return result;
 	}
 
 	protected int getEndCircleAngle() {
