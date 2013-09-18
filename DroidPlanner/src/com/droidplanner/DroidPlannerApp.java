@@ -61,7 +61,7 @@ public class DroidPlannerApp extends Application implements
 				notifyArmed();
 			}
 			else {
-					notifyDisarmed();
+				notifyDisarmed();
 			}
 		}
 		mavLinkMsgHandler.receiveData(msg);
