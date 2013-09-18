@@ -10,11 +10,12 @@ import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
 
 public class DialogMissionLoiterN extends DialogMission implements
-		OnTextSeekBarChangedListner {
+		OnTextSeekBarChangedListner, OnCheckedChangeListener {
 	
 
 	private SeekBarWithText altitudeSeekBar;
 	private SeekBarWithText loiterTurnSeekBar;
+	private SeekBarWithText loiterRadiusSeekBar;
 	private CheckBox loiterCCW;
 
 	@Override
@@ -25,6 +26,14 @@ public class DialogMissionLoiterN extends DialogMission implements
 	protected View buildView() {
 		super.buildView();
 
+		loiterCCW = (CheckBox) view.findViewById(R.string.loiter_ccw);
+		if (wp.missionItem.param3 < 0) {
+			loiterCCW.setChecked(true);
+		} else {
+			loiterCCW.setChecked(false);
+		}
+		loiterCCW.setOnCheckedChangeListener(this);
+
 		altitudeSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.waypointAltitude);
 		altitudeSeekBar.setValue(wp.getHeight());
@@ -33,39 +42,34 @@ public class DialogMissionLoiterN extends DialogMission implements
 		loiterTurnSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.loiterTurn);
 		loiterTurnSeekBar.setOnChangedListner(this);
+		loiterTurnSeekBar.setValue(wp.missionItem.param1);
 
-		loiterCCW = (CheckBox) view.findViewById(R.string.loiter_ccw);
-		if (wp.missionItem.param1 < 0) {
-			loiterCCW.setChecked(true);
-			loiterTurnSeekBar.setValue(-1.0 * wp.missionItem.param1);
-		} else {
-			loiterCCW.setChecked(false);
-			loiterTurnSeekBar.setValue(wp.missionItem.param1);
-		}
-
-		loiterCCW.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-	        @Override
-	        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-	    		if (loiterCCW.isChecked()) {
-	    			wp.missionItem.param1 *= -1.0;
-	    		}
-	        }
-	    });
+		loiterRadiusSeekBar = (SeekBarWithText) view
+				.findViewById(R.id.loiterRadius);
+		loiterRadiusSeekBar.setAbsValue(wp.missionItem.param3);
+		loiterRadiusSeekBar .setOnChangedListner(this);
 
 
 		return view;
 	}
 
 
-
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		wp.missionItem.param3 = (float) loiterRadiusSeekBar.getValue();
+		if (loiterCCW.isChecked()) {
+			wp.missionItem.param3 *= -1.0;
+		}
+    }
+	
 	
 	@Override
 	public void onSeekBarChanged() {
 		wp.setHeight(altitudeSeekBar.getValue());
 		wp.missionItem.param1 = (float) loiterTurnSeekBar.getValue();
+		wp.missionItem.param3 = (float) loiterRadiusSeekBar.getValue();
 		if (loiterCCW.isChecked()) {
-			wp.missionItem.param1 *= -1.0;
+			wp.missionItem.param3 *= -1.0;
 		}
 	}
 

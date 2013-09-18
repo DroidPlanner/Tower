@@ -1,15 +1,20 @@
 package com.droidplanner.dialogs.mission;
 
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.droidplanner.R;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
 
 public class DialogMissionLoiterT extends DialogMission implements
-		OnTextSeekBarChangedListner {
+		OnTextSeekBarChangedListner, OnCheckedChangeListener {
 	private SeekBarWithText altitudeSeekBar;
 	private SeekBarWithText loiterTimeSeekBar;
+	private SeekBarWithText loiterRadiusSeekBar;
+	private CheckBox loiterCCW;
 
 	@Override
 	protected int getResource() {
@@ -18,6 +23,16 @@ public class DialogMissionLoiterT extends DialogMission implements
 	
 	protected View buildView() {
 		super.buildView();
+
+		loiterCCW = (CheckBox) view.findViewById(R.string.loiter_ccw);
+		if (wp.missionItem.param3 < 0) {
+			loiterCCW.setChecked(true);
+		} else {
+			loiterCCW.setChecked(false);
+		}
+		loiterCCW.setOnCheckedChangeListener(this);
+
+		
 		altitudeSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.waypointAltitude);
 		altitudeSeekBar.setValue(wp.getHeight());
@@ -28,13 +43,31 @@ public class DialogMissionLoiterT extends DialogMission implements
 		loiterTimeSeekBar .setOnChangedListner(this);
 		loiterTimeSeekBar.setValue(wp.missionItem.param1);
 		
+		loiterRadiusSeekBar = (SeekBarWithText) view
+				.findViewById(R.id.loiterRadius);
+		loiterRadiusSeekBar.setAbsValue(wp.missionItem.param3);
+		loiterRadiusSeekBar .setOnChangedListner(this);
+
 		return view;
 	}
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		wp.missionItem.param3 = (float) loiterRadiusSeekBar.getValue();
+		if (loiterCCW.isChecked()) {
+			wp.missionItem.param3 *= -1.0;
+		}
+    }
+	
 
 	@Override
 	public void onSeekBarChanged() {
 		wp.setHeight(altitudeSeekBar.getValue());
 		wp.missionItem.param1 = (float) loiterTimeSeekBar.getValue();
+		wp.missionItem.param3 = (float) loiterRadiusSeekBar.getValue();
+		if (loiterCCW.isChecked()) {
+			wp.missionItem.param3 *= -1.0;
+		}
 	}
 
 
