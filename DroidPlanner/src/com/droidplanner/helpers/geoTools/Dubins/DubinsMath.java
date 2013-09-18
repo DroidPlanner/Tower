@@ -25,6 +25,7 @@ public class DubinsMath {
 		for (int i = 0; i < steps; i++) {
 			result.add(GeoTools.newCoordFromAngleAndDistance(center,(startAngle+i*ARC_STEP+360)%360, radius));
 		}
+		result.add(GeoTools.newCoordFromAngleAndDistance(center,endAngle, radius));
 		return result;
 	}
 
@@ -35,6 +36,7 @@ public class DubinsMath {
 		for (int i = 0; i < steps; i++) {
 			result.add(GeoTools.newCoordFromAngleAndDistance(center,(startAngle-i*ARC_STEP+360)%360, radius));
 		}
+		result.add(GeoTools.newCoordFromAngleAndDistance(center,endAngle, radius));
 		return result;
 	}
 
