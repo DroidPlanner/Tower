@@ -14,7 +14,9 @@ import android.widget.SpinnerAdapter;
 
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.DroidPlannerApp.ConnectionStateListner;
+import com.droidplanner.DroidPlannerApp.OnSystemArmListener;
 import com.droidplanner.R;
+import com.droidplanner.MAVLink.MavLinkArm;
 import com.droidplanner.activitys.CameraActivity;
 import com.droidplanner.activitys.ChartActivity;
 import com.droidplanner.activitys.FlightDataActivity;
@@ -28,13 +30,14 @@ import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
 import com.droidplanner.drone.Drone;
 
 public abstract class SuperActivity extends Activity implements
-		OnNavigationListener, ConnectionStateListner, OnAltitudeChangedListner {
+		OnNavigationListener, ConnectionStateListner, OnAltitudeChangedListner, OnSystemArmListener{
 
 	public abstract int getNavigationItem();
 
 	public DroidPlannerApp app;
 	public Drone drone;
 	private MenuItem connectButton;
+	private MenuItem armButton;
 
 	private ScreenOrientation screenOrientation = new ScreenOrientation(this);
 
@@ -52,6 +55,7 @@ public abstract class SuperActivity extends Activity implements
 		setUpActionBar();
 		app = (DroidPlannerApp) getApplication();
 		app.conectionListner = this;
+		app.onSystemArmListener = this;
 		this.drone = app.drone;
 
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -110,6 +114,14 @@ public abstract class SuperActivity extends Activity implements
 		case R.id.menu_settings:
 			startActivity(new Intent(this, SettingsActivity.class));
 			return true;
+		case R.id.menu_arm:
+			if(drone.MavClient.isConnected()){
+				if(!drone.state.isArmed())
+					drone.tts.speak("Arming the vehicle, please standby");
+				MavLinkArm.sendArmMessage(drone, !drone.state.isArmed());
+				
+			}
+			return true;
 		case R.id.menu_connect:
 			drone.MavClient.toggleConnectionState();
 			return true;
@@ -138,6 +150,9 @@ public abstract class SuperActivity extends Activity implements
 			connectButton.setTitle(getResources().getString(
 					R.string.menu_connect));
 		}
+		if(armButton != null){
+			armButton.setEnabled(false);
+		}
 		screenOrientation.unlock();
 	}
 
@@ -146,12 +161,30 @@ public abstract class SuperActivity extends Activity implements
 			connectButton.setTitle(getResources().getString(
 					R.string.menu_disconnect));
 		}
+		if(armButton != null){
+			armButton.setEnabled(true);
+		}
 		screenOrientation.requestLock();
+	}
+
+	public void notifyArmed() {
+		if (armButton != null) {
+			armButton.setTitle(getResources().getString(
+					R.string.menu_disarm));
+		}
+	}
+
+	public void notifyDisarmed() {
+		if (armButton != null) {
+			armButton.setTitle(getResources().getString(
+					R.string.menu_arm));
+		}
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu_super_activiy, menu);
+		armButton = menu.findItem(R.id.menu_arm);
 		connectButton = menu.findItem(R.id.menu_connect);
 		drone.MavClient.queryConnectionState();
 		return super.onCreateOptionsMenu(menu);

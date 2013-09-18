@@ -3,6 +3,8 @@ package com.droidplanner;
 import android.app.Application;
 
 import com.MAVLink.Messages.MAVLinkMessage;
+import com.MAVLink.Messages.ardupilotmega.msg_heartbeat;
+import com.MAVLink.Messages.enums.MAV_MODE_FLAG;
 import com.droidplanner.MAVLink.MavLinkMsgHandler;
 import com.droidplanner.MAVLink.MavLinkStreamRates;
 import com.droidplanner.drone.Drone;
@@ -19,6 +21,7 @@ public class DroidPlannerApp extends Application implements
 	public FollowMe followMe;
 	public RecordMe recordMe;
 	public ConnectionStateListner conectionListner;
+	public OnSystemArmListener onSystemArmListener;
 	private TTS tts;
 
 	public interface OnWaypointUpdateListner {
@@ -29,6 +32,12 @@ public class DroidPlannerApp extends Application implements
 		public void notifyConnected();
 		
 		public void notifyDisconnected();
+	}
+
+	public interface OnSystemArmListener {
+		public void notifyArmed();
+		
+		public void notifyDisarmed();
 	}
 
 	@Override
@@ -46,6 +55,15 @@ public class DroidPlannerApp extends Application implements
 
 	@Override
 	public void notifyReceivedData(MAVLinkMessage msg) {
+		if(msg.msgid == msg_heartbeat.MAVLINK_MSG_ID_HEARTBEAT){
+			msg_heartbeat msg_heart = (msg_heartbeat) msg;
+			if((msg_heart.base_mode & (byte) MAV_MODE_FLAG.MAV_MODE_FLAG_SAFETY_ARMED) == (byte) MAV_MODE_FLAG.MAV_MODE_FLAG_SAFETY_ARMED){
+				notifyArmed();
+			}
+			else {
+					notifyDisarmed();
+			}
+		}
 		mavLinkMsgHandler.receiveData(msg);
 	}
 
@@ -62,4 +80,13 @@ public class DroidPlannerApp extends Application implements
 		tts.speak("Connected");
 	}
 
+	@Override
+	public void notifyArmed() {
+		onSystemArmListener.notifyArmed();
+	}
+
+	@Override
+	public void notifyDisarmed() {
+		onSystemArmListener.notifyDisarmed();
+	}
 }
