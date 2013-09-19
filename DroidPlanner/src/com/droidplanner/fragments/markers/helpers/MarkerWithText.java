@@ -42,9 +42,9 @@ public class MarkerWithText {
 		Rect bounds = new Rect();
 		paint.getTextBounds(gText, 0, gText.length(), bounds);
 		int x = (bitmap.getWidth() - bounds.width()) / 2;
-		int y = (bitmap.getHeight() + bounds.height()) / 2;
+		int y = (bitmap.getHeight() + bounds.height()) * 5/12; // At 5/12 from the top so it stays on the center
 
-		canvas.drawText(gText, x * scale, y * scale, paint);
+		canvas.drawText(gText, x, y, paint);
 
 		return bitmap;
 	}
