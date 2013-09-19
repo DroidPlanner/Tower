@@ -2,6 +2,7 @@ package com.droidplanner.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,9 +45,10 @@ public class PlanningMapFragment extends DroneMap implements
 	public void update(Drone drone, Polygon polygon) {
 		markers.clear();
 
-		markers.updateMarker(drone.mission.getHome(), false);
-		markers.updateMarkers(drone.mission.getWaypoints(), true);
-		markers.updateMarkers(polygon.getPolygonPoints(), true);
+		Context context = getActivity().getApplicationContext();
+		markers.updateMarker(drone.mission.getHome(), false,context);
+		markers.updateMarkers(drone.mission.getWaypoints(), true,context);
+		markers.updateMarkers(polygon.getPolygonPoints(), true,context);
 
 		polygonPath.update(polygon);
 		missionPath.update(drone.mission);

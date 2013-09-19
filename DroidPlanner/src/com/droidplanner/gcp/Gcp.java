@@ -1,5 +1,7 @@
 package com.droidplanner.gcp;
 
+import android.content.Context;
+
 import com.droidplanner.fragments.markers.GcpMarker;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import com.google.android.gms.maps.model.LatLng;
@@ -20,12 +22,12 @@ public class Gcp implements MarkerSource {
 	}
 
 	@Override
-	public MarkerOptions build() {
+	public MarkerOptions build(Context context) {
 		return GcpMarker.build(this);
 	}
 
 	@Override
-	public void update(Marker markerFromGcp) {
+	public void update(Marker markerFromGcp, Context context) {
 		GcpMarker.update(markerFromGcp, this);
 	}
 }
