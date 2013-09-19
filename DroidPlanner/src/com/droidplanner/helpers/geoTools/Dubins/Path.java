@@ -41,7 +41,8 @@ abstract class Path {
 		paths.add(new PathRSL(start, end, radius));
 		paths.add(new PathLSR(start, end, radius));
 		paths.add(new PathRSR(start, end, radius));
-		// TODO implement RLR and LRL paths
+		paths.add(new PathRLR(start, end, radius));
+		paths.add(new PathLRL(start, end, radius));
 
 		Path shortestPath = null;
 		double shortest = Double.POSITIVE_INFINITY;
