@@ -33,7 +33,11 @@ public class PathRSR extends Path {
 		double startAngle = startVector.getAngle()-getStartCircleAngle();
 		double endAngle = endVector.getAngle()-getEndCircleAngle();
 		List<LatLng> result = DubinsMath.generateArcCW(circleStart,startAngle, interCircleAngle-getStartCircleAngle(),radius);
-		result.addAll(DubinsMath.generateArcCW(circleEnd,interCircleAngle-getEndCircleAngle(), endAngle,radius));
+		if (endAngle<interCircleAngle-getEndCircleAngle()) { // Fix because of numerical approximations	
+			result.addAll(DubinsMath.generateArcCW(circleEnd,interCircleAngle-getEndCircleAngle(), endAngle,radius));
+		}else{
+			result.add(GeoTools.newCoordFromAngleAndDistance(circleEnd, endAngle, radius));
+		}
 		return result;
 	}
 

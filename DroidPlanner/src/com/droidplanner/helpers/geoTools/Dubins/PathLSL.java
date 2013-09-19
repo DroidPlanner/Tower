@@ -32,7 +32,11 @@ public class PathLSL extends Path {
 		double startAngle = startVector.getAngle()-getStartCircleAngle();
 		double endAngle = endVector.getAngle()-getEndCircleAngle();
 		List<LatLng> result = DubinsMath.generateArcCCW(circleStart,startAngle, interCircleAngle-getStartCircleAngle(),radius);
-		result.addAll(DubinsMath.generateArcCCW(circleEnd,interCircleAngle-getEndCircleAngle(), endAngle,radius));
+		if (endAngle<interCircleAngle-getEndCircleAngle()) { // Fix because of numerical approximations	
+			result.addAll(DubinsMath.generateArcCCW(circleEnd,interCircleAngle-getEndCircleAngle(), endAngle,radius));
+		}else{
+			result.add(GeoTools.newCoordFromAngleAndDistance(circleEnd, endAngle, radius));
+		}
 		return result;
 	}
 
