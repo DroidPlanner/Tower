@@ -15,7 +15,7 @@ public class DubinsMath {
 	}
 
 	public static double angularDistanceCCW(double start, double end) {
-		return (end - start + 360) % 360;
+		return (end - start + 720) % 360;
 	}
 
 	public static List<LatLng> generateArcCCW(LatLng center,
