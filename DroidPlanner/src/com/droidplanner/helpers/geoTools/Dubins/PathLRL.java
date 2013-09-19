@@ -40,7 +40,7 @@ public class PathLRL extends Path {
 
 	@Override
 	protected List<LatLng> generatePoints() {
-		Log.d("DUBIN", "Generating RLR path");
+		Log.d("DUBIN", "Generating LRL path");
 		
 		List<LatLng> result = DubinsMath.generateArcCCW(circleStart,startAngle,firstTanAngle,radius);
 		result.addAll(DubinsMath.generateArcCW(thirdCircle,firstTanAngle-180,secondTanAngle,radius));
