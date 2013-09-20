@@ -50,7 +50,10 @@ public class RcOutput {
 
 	public void enableRcOverride() {
 		if (!isRcOverrided()) {
-			Arrays.fill(rcOutputs, DISABLE_OVERRIDE);
+			Arrays.fill(rcOutputs, RC_TRIM);
+			MavLinkRC.sendRcOverrideMsg(drone, rcOutputs); // Just to be sure send 3
+			MavLinkRC.sendRcOverrideMsg(drone, rcOutputs);
+			MavLinkRC.sendRcOverrideMsg(drone, rcOutputs);			Arrays.fill(rcOutputs, DISABLE_OVERRIDE);
 			scheduleTaskExecutor = Executors.newScheduledThreadPool(5);
 			scheduleTaskExecutor.scheduleWithFixedDelay(new Runnable() {
 				@Override
