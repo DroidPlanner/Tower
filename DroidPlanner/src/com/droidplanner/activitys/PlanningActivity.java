@@ -67,7 +67,8 @@ public class PlanningActivity extends SuperActivity implements
 
 		gestureMapFragment.setOnPathFinishedListner(this);
 		missionFragment.setMission(drone.mission);
-
+		planningMapFragment.setMission(drone.mission);
+		
 		drone.mission.missionListner = this;
 
 		checkIntent();
@@ -215,7 +216,7 @@ public class PlanningActivity extends SuperActivity implements
 	}
 
 	private void update() {
-		planningMapFragment.update(drone, polygon);
+		planningMapFragment.update(polygon);
 		missionFragment.update();
 	}
 
