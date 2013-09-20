@@ -5,16 +5,16 @@ import java.util.Locale;
 public class Length {
 	private double lengthInMeters;
 	
-	public Length(double length) {
-		this.lengthInMeters = length;
+	public Length(double lengthInMeters) {
+		set(lengthInMeters);
 	}
 
-	public double get() {
+	public double valueInMeters() {
 		return lengthInMeters;
 	}
 
-	public void set(double length) {
-		this.lengthInMeters = length;
+	public void set(double lengthInMeters) {
+		this.lengthInMeters = lengthInMeters;
 	}
 
 	@Override
