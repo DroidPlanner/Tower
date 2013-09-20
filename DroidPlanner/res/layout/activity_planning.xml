@@ -27,12 +27,13 @@
 	android:handle="@+id/slideButton"
 	android:orientation="vertical"
 	android:padding="0dp" >
-	
-<Button
-    android:id="@id/slideButton"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="^" />
+	 
+	<ImageView
+ 	android:id="@id/slideButton"
+ 	android:layout_width="50dip"
+ 	android:layout_height="50dip"  
+ 	android:src="@drawable/wp_handle"
+	/>
 	
 	<LinearLayout
 	android:id="@+id/contentLayout"
