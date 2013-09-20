@@ -12,11 +12,19 @@
          not fit on-screen at once, the right pane is permitted to
          overlap the left. 
     -->
+
     <fragment
         android:id="@+id/gestureMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         class="com.droidplanner.fragments.helpers.GestureMapFragment" />
+
+    <TextView
+        android:id="@+id/textViewTotalLength"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/length"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 	<SlidingDrawer
 	android:layout_alignParentBottom="true"
@@ -59,5 +67,6 @@
     -->
 
 	</LinearLayout>
-	</SlidingDrawer>    
+	</SlidingDrawer>
+    
 </RelativeLayout>

@@ -8,6 +8,7 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
@@ -28,6 +29,7 @@ import com.droidplanner.fragments.helpers.GestureMapFragment;
 import com.droidplanner.fragments.helpers.GestureMapFragment.OnPathFinishedListner;
 import com.droidplanner.fragments.helpers.MapProjection;
 import com.droidplanner.fragments.helpers.OnMapInteractionListener;
+import com.droidplanner.helpers.geoTools.PolylineTools;
 import com.droidplanner.polygon.Polygon;
 import com.droidplanner.polygon.PolygonPoint;
 import com.google.android.gms.maps.model.LatLng;
@@ -44,6 +46,7 @@ public class PlanningActivity extends SuperActivity implements
 	private MissionFragment missionFragment;
 	private GestureMapFragment gestureMapFragment;
 	public modes mode = modes.MISSION;
+	private TextView lengthView;
 
 	@Override
 	public int getNavigationItem() {
@@ -62,6 +65,8 @@ public class PlanningActivity extends SuperActivity implements
 				.findFragmentById(R.id.gestureMapFragment));
 		missionFragment = (MissionFragment) getFragmentManager()
 				.findFragmentById(R.id.missionFragment);
+		
+		lengthView = (TextView) findViewById(R.id.textViewTotalLength);
 
 		polygon = new Polygon();
 
@@ -218,6 +223,12 @@ public class PlanningActivity extends SuperActivity implements
 	private void update() {
 		planningMapFragment.update(polygon);
 		missionFragment.update();
+		updateDistanceView();
+	}
+
+	private void updateDistanceView() {
+		double length = PolylineTools.getPolylineLength(drone.mission.getPathPoints());
+		lengthView.setText(getString(R.string.length)+": "+length+" m");		
 	}
 
 	@Override
