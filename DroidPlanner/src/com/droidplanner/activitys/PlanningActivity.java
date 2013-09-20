@@ -30,6 +30,7 @@ import com.droidplanner.fragments.helpers.GestureMapFragment.OnPathFinishedListn
 import com.droidplanner.fragments.helpers.MapProjection;
 import com.droidplanner.fragments.helpers.OnMapInteractionListener;
 import com.droidplanner.helpers.geoTools.PolylineTools;
+import com.droidplanner.helpers.units.Length;
 import com.droidplanner.polygon.Polygon;
 import com.droidplanner.polygon.PolygonPoint;
 import com.google.android.gms.maps.model.LatLng;
@@ -227,8 +228,8 @@ public class PlanningActivity extends SuperActivity implements
 	}
 
 	private void updateDistanceView() {
-		double length = PolylineTools.getPolylineLength(drone.mission.getPathPoints());
-		lengthView.setText(getString(R.string.length)+": "+length+" m");		
+		Length length = PolylineTools.getPolylineLength(drone.mission.getPathPoints());
+		lengthView.setText(getString(R.string.length)+": "+ length);		
 	}
 
 	@Override

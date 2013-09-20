@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.helpers.geoTools.PolylineTools;
+import com.droidplanner.helpers.units.Length;
 import com.google.android.gms.maps.model.LatLng;
 
 public class Grid {
@@ -22,7 +23,7 @@ public class Grid {
 		return list;
 	}
 	
-	public double getLength(){
+	public Length getLength(){
 		return PolylineTools.getPolylineLength(gridPoints);
 	}
 	

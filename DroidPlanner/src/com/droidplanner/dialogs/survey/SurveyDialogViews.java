@@ -58,10 +58,10 @@ public class SurveyDialogViews {
 		areaTextView.setText(context.getString(string.area) + ": "
 				+ area.intValue() + " m\u00B2");
 		lengthView.setText(context.getString(string.mission_length) + ": "
-				+ (int) grid.getLength() + " m");
+				+ grid.getLength());
 		numberOfPicturesView.setText(context.getString(string.pictures)
 				+ ": "
-				+ (int) (grid.getLength() / surveyData
+				+ (int) (grid.getLength().get() / surveyData
 						.getLongitudinalPictureDistance()));
 		numberOfStripsView.setText(context.getString(string.number_of_strips)
 				+ ": " + grid.getNumberOfLines());
