@@ -5,6 +5,7 @@ import java.util.Locale;
 import com.droidplanner.file.IO.CameraInfo;
 import com.droidplanner.helpers.units.Area;
 import com.droidplanner.helpers.units.Length;
+import com.google.android.gms.internal.al;
 
 public class SurveyData {
 	private Double altitude;
@@ -96,6 +97,11 @@ public class SurveyData {
 		return String.format(Locale.US,
 				"Altitude: %f Angle %f Overlap: %f Sidelap: %f", altitude,
 				angle, overlap, sidelap);
+	}
+
+	public void setAltitude(double altitude) {
+		this.altitude = altitude;
+		
 	}
 
 }

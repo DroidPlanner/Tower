@@ -6,6 +6,7 @@ import java.util.List;
 import com.droidplanner.fragments.helpers.MapPath.PathSource;
 import com.droidplanner.helpers.geoTools.GeoTools;
 import com.droidplanner.helpers.geoTools.LineLatLng;
+import com.droidplanner.helpers.units.Area;
 import com.google.android.gms.maps.model.LatLng;
 
 public class Polygon implements PathSource {
@@ -59,7 +60,7 @@ public class Polygon implements PathSource {
 
 	}
 
-	public Double getArea() {
+	public Area getArea() {
 		return GeoTools.getArea(this);
 	}
 

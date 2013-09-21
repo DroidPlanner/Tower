@@ -77,7 +77,7 @@ public class PlanningActivity extends SuperActivity implements
 		gestureMapFragment.setOnPathFinishedListner(this);
 		missionFragment.setMission(drone.mission);
 		planningMapFragment.setMission(drone.mission);
-		surveyFragment.setSurveyData(polygon);
+		surveyFragment.setSurveyData(polygon,drone.mission.getDefaultAlt());
 		surveyFragment.setOnNewGridListner(this);
 		
 		

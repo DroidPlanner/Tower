@@ -17,7 +17,6 @@ import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.file.IO.CameraInfo;
 import com.droidplanner.file.IO.CameraInfoReader;
 import com.droidplanner.file.help.CameraInfoLoader;
-import com.droidplanner.helpers.units.Area;
 import com.droidplanner.polygon.Polygon;
 import com.droidplanner.survey.SurveyData;
 import com.droidplanner.survey.grid.Grid;
@@ -62,8 +61,9 @@ public class SurveyFragment extends Fragment implements
 		return views.getLayout();
 	}
 
-	public void setSurveyData(Polygon polygon){
+	public void setSurveyData(Polygon polygon, double defaultAltitude){
 		this.polygon = polygon;		
+		surveyData.setAltitude(defaultAltitude);
 	}
 	
 	public void setOnNewGridListner(OnNewGridListner listner){
@@ -82,8 +82,7 @@ public class SurveyFragment extends Fragment implements
 			GridBuilder gridBuilder = new GridBuilder(polygon, surveyData, new LatLng(0, 0));
 			checkIfPolygonIsValid(polygon);
 			grid = gridBuilder.generate();
-			//views.updateViews(surveyData,grid,polygon.getArea());
-			views.updateViews(surveyData,grid,new Area(0.0)); // TODO use correct area value
+			views.updateViews(surveyData,grid,polygon.getArea()); 
 			
 			onNewGridListner.onNewGrid(grid.getWaypoints(surveyData.getAltitude()));
 		} catch (Exception e) {
@@ -100,6 +99,10 @@ public class SurveyFragment extends Fragment implements
 
 	@Override
 	public void onSpinnerItemSelected(Spinner spinner, int position, String text) {
+		onCameraSelected(text);
+	}
+
+	private void onCameraSelected(String text) {
 		CameraInfo cameraInfo;
 		try {
 			cameraInfo = avaliableCameras.openFile(text);
@@ -110,6 +113,10 @@ public class SurveyFragment extends Fragment implements
 			cameraInfo = CameraInfoReader.getNewMockCameraInfo();
 		}
 		surveyData.setCameraInfo(cameraInfo);
+		update();
+	}
+
+	private void update() {
 		views.updateSeekBarsValues(surveyData);
 		onSeekBarChanged();
 	}
