@@ -98,4 +98,9 @@ public class SurveyData {
 				angle, overlap, sidelap);
 	}
 
+	public void setAltitude(double altitude) {
+		this.altitude = altitude;
+		
+	}
+
 }

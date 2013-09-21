@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-
-    <item
-        android:id="@+id/menu_generate_polygon"
-        android:showAsAction="ifRoom"
-        android:title="@string/generate"/>
-    <item
-        android:id="@+id/menu_survey"
-        android:showAsAction="ifRoom"
-        android:title="@string/menu_survey"/>
     <item
         android:id="@+id/menu_clear_wp"
         android:showAsAction="ifRoom"

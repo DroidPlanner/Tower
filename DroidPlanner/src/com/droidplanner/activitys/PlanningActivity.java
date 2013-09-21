@@ -16,10 +16,8 @@ import com.droidplanner.R;
 import com.droidplanner.R.string;
 import com.droidplanner.activitys.helpers.SuperActivity;
 import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
-import com.droidplanner.dialogs.GridDialog;
 import com.droidplanner.dialogs.openfile.OpenFileDialog;
 import com.droidplanner.dialogs.openfile.OpenMissionDialog;
-import com.droidplanner.dialogs.survey.SurveyDialog;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.file.IO.MissionReader;
 import com.droidplanner.file.IO.MissionWriter;
@@ -29,6 +27,8 @@ import com.droidplanner.fragments.helpers.GestureMapFragment;
 import com.droidplanner.fragments.helpers.GestureMapFragment.OnPathFinishedListner;
 import com.droidplanner.fragments.helpers.MapProjection;
 import com.droidplanner.fragments.helpers.OnMapInteractionListener;
+import com.droidplanner.fragments.survey.SurveyFragment;
+import com.droidplanner.fragments.survey.SurveyFragment.OnNewGridListner;
 import com.droidplanner.helpers.geoTools.PolylineTools;
 import com.droidplanner.helpers.units.Length;
 import com.droidplanner.polygon.Polygon;
@@ -37,7 +37,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class PlanningActivity extends SuperActivity implements
 		OnMapInteractionListener, OnWaypointUpdateListner,
-		OnAltitudeChangedListner, OnPathFinishedListner {
+		OnAltitudeChangedListner, OnPathFinishedListner, OnNewGridListner {
 	public enum modes {
 		MISSION, POLYGON;
 	}
@@ -48,6 +48,7 @@ public class PlanningActivity extends SuperActivity implements
 	private GestureMapFragment gestureMapFragment;
 	public modes mode = modes.MISSION;
 	private TextView lengthView;
+	private SurveyFragment surveyFragment;
 
 	@Override
 	public int getNavigationItem() {
@@ -66,6 +67,8 @@ public class PlanningActivity extends SuperActivity implements
 				.findFragmentById(R.id.gestureMapFragment));
 		missionFragment = (MissionFragment) getFragmentManager()
 				.findFragmentById(R.id.missionFragment);
+		surveyFragment = (SurveyFragment) getFragmentManager()
+				.findFragmentById(R.id.surveyFragment);
 		
 		lengthView = (TextView) findViewById(R.id.textViewTotalLength);
 
@@ -74,6 +77,9 @@ public class PlanningActivity extends SuperActivity implements
 		gestureMapFragment.setOnPathFinishedListner(this);
 		missionFragment.setMission(drone.mission);
 		planningMapFragment.setMission(drone.mission);
+		surveyFragment.setSurveyData(polygon,drone.mission.getDefaultAlt());
+		surveyFragment.setOnNewGridListner(this);
+		
 		
 		drone.mission.missionListner = this;
 
@@ -131,12 +137,6 @@ public class PlanningActivity extends SuperActivity implements
 		case R.id.menu_polygon:
 			setMode(modes.POLYGON);
 			return true;
-		case R.id.menu_generate_polygon:
-			openPolygonGenerateDialog();
-			return true;
-		case R.id.menu_survey:
-			openSurveyDialog();
-			return true;
 		case R.id.menu_clear_polygon:
 			polygon.clearPolygon();
 			update();
@@ -169,19 +169,6 @@ public class PlanningActivity extends SuperActivity implements
 		update();
 	}
 
-	public void openPolygonGenerateDialog() {
-		double defaultHatchAngle = (planningMapFragment.getMapRotation() + 90) % 180;
-		GridDialog polygonDialog = new GridDialog() {
-			@Override
-			public void onPolygonGenerated(List<waypoint> list) {
-				drone.mission.addWaypoints(list);
-				update();
-			}
-		};
-		polygonDialog.generatePolygon(defaultHatchAngle, 50.0, polygon,
-				drone.mission.getLastWaypoint().getCoord(),
-				drone.mission.getDefaultAlt(), this);
-	}
 	public void setMode(modes mode) {
 		this.mode = mode;
 		switch (mode) {
@@ -196,24 +183,6 @@ public class PlanningActivity extends SuperActivity implements
 			break;
 		}
 		invalidateOptionsMenu();
-	}
-
-	private void openSurveyDialog() {
-		double defaultHatchAngle = ((planningMapFragment.getMapRotation() + 90) % 180);
-		SurveyDialog dialog = new SurveyDialog() {
-			@Override
-			public void onPolygonGenerated(List<waypoint> list) {
-				drone.mission.addWaypoints(list);
-				update();
-			}
-		};
-		try {
-			dialog.generateSurveyDialog(polygon, defaultHatchAngle,
-					drone.mission.getLastWaypoint().getCoord(), drone.mission.getDefaultAlt(),
-					this);			
-		} catch (Exception e) {
-			Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-		}
 	}
 
 	private void clearWaypointsAndUpdate() {
@@ -318,6 +287,12 @@ public class PlanningActivity extends SuperActivity implements
 			Toast.makeText(this, R.string.error_when_saving, Toast.LENGTH_SHORT)
 					.show();
 		}
+	}
+
+	@Override
+	public void onNewGrid(List<waypoint> grid) {
+		drone.mission.setWaypoints(grid);
+		update();		
 	}
 
 }
