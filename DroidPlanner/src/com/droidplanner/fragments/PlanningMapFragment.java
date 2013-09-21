@@ -1,5 +1,8 @@
 package com.droidplanner.fragments;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -16,22 +19,28 @@ import com.droidplanner.fragments.helpers.DroneMap;
 import com.droidplanner.fragments.helpers.MapPath;
 import com.droidplanner.fragments.helpers.OnMapInteractionListener;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
+import com.droidplanner.helpers.geoTools.GeoTools;
 import com.droidplanner.polygon.Polygon;
 import com.droidplanner.polygon.PolygonPoint;
+import com.droidplanner.survey.SurveyData;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.PolygonOptions;
 
 @SuppressLint("UseSparseArrays")
 public class PlanningMapFragment extends DroneMap implements
-		OnMapLongClickListener, OnMarkerDragListener, OnMapClickListener, OnMarkerClickListener {
+		OnMapLongClickListener, OnMarkerDragListener, OnMapClickListener,
+		OnMarkerClickListener {
 
 	public OnMapInteractionListener mListener;
 	private MapPath polygonPath;
 	private Mission mission;
+
+	private ArrayList<com.google.android.gms.maps.model.Polygon> cameraOverlays = new ArrayList<com.google.android.gms.maps.model.Polygon>();
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
@@ -42,8 +51,8 @@ public class PlanningMapFragment extends DroneMap implements
 		mMap.setOnMarkerClickListener(this);
 		mMap.setOnMapClickListener(this);
 		mMap.setOnMapLongClickListener(this);
-		polygonPath = new MapPath(mMap,Color.BLACK,2);
-		 
+		polygonPath = new MapPath(mMap, Color.BLACK, 2);
+
 		return view;
 	}
 
@@ -51,9 +60,9 @@ public class PlanningMapFragment extends DroneMap implements
 		markers.clear();
 
 		Context context = getActivity().getApplicationContext();
-		markers.updateMarker(mission.getHome(), false,context);
-		markers.updateMarkers(mission.getWaypoints(), true,context);
-		markers.updateMarkers(polygon.getPolygonPoints(), true,context);
+		markers.updateMarker(mission.getHome(), false, context);
+		markers.updateMarkers(mission.getWaypoints(), true, context);
+		markers.updateMarkers(polygon.getPolygonPoints(), true, context);
 
 		polygonPath.update(polygon);
 		missionPath.update(mission);
@@ -94,7 +103,7 @@ public class PlanningMapFragment extends DroneMap implements
 
 	@Override
 	public void onMapClick(LatLng point) {
-		mListener.onMapClick(point);		
+		mListener.onMapClick(point);
 	}
 
 	@Override
@@ -107,9 +116,10 @@ public class PlanningMapFragment extends DroneMap implements
 	public boolean onMarkerClick(Marker marker) {
 		MarkerSource source = markers.getSourceFromMarker(marker);
 		if (source instanceof waypoint) {
-			DialogMissionFactory.getDialog((waypoint)source, this.getActivity(),mission); 
+			DialogMissionFactory.getDialog((waypoint) source,
+					this.getActivity(), mission);
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
@@ -118,5 +128,32 @@ public class PlanningMapFragment extends DroneMap implements
 		this.mission = mission;
 	}
 
+	public void addCameraFootPrints(List<LatLng> cameraLocations,
+			SurveyData surveyData) {
+		for (com.google.android.gms.maps.model.Polygon overlay : cameraOverlays) {
+			overlay.remove();
+		}
+		cameraOverlays.clear();
+		for (LatLng latLng : cameraLocations) {
+			addOneFootprint(latLng, surveyData);
+		}
+	}
+
+	private void addOneFootprint(LatLng latLng, SurveyData surveyData) {
+		double diag = Math.hypot(surveyData.getLateralFootPrint()
+				.valueInMeters(), surveyData.getLongitudinalFootPrint()
+				.valueInMeters());
+		cameraOverlays.add(mMap.addPolygon(new PolygonOptions()
+				.add(GeoTools.newCoordFromBearingAndDistance(latLng,
+						surveyData.getAngle() + 45, diag),
+						GeoTools.newCoordFromBearingAndDistance(latLng,
+								surveyData.getAngle() + 90 + 45, diag),
+						GeoTools.newCoordFromBearingAndDistance(latLng,
+								surveyData.getAngle() + 180 + 45, diag),
+						GeoTools.newCoordFromBearingAndDistance(latLng,
+								surveyData.getAngle() + 270 + 45, diag))
+				.fillColor(Color.argb(40, 0, 0, 127)).strokeWidth(0)));
+
+	}
 
 }

@@ -147,4 +147,8 @@ public class SurveyFragment extends Fragment implements
 		}
 	}
 
+	public  SurveyData getSurveyData() {
+		return surveyData;
+	}
+
 }
