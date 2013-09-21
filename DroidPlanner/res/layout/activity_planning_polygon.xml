@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ff333333" >
+
+    <!--
+         The first child view becomes the left pane. When the combined
+         desired width (expressed using android:layout_width) would
+         not fit on-screen at once, the right pane is permitted to
+         overlap the left. 
+    -->
+
+    <fragment
+        android:id="@+id/surveyFragment"
+        android:name="com.droidplanner.fragments.survey.SurveyFragment"
+        android:layout_width="450dp"
+        android:layout_height="match_parent"
+        tools:layout="@layout/fragment_survey" />
+
+    <fragment
+        android:id="@+id/gestureMapFragment"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@id/surveyFragment"
+        class="com.droidplanner.fragments.helpers.GestureMapFragment" />
+
+    <TextView
+        android:id="@+id/textViewTotalLength"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/gestureMapFragment"
+        android:layout_margin="2dp"
+        android:text="@string/length"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <SlidingDrawer
+        android:id="@+id/SlidingDrawer"
+        android:layout_width="fill_parent"
+        android:layout_height="250dp"
+        android:layout_alignParentBottom="true"
+        android:content="@+id/contentLayout"
+        android:handle="@+id/slideButton"
+        android:orientation="vertical"
+        android:padding="0dp" >
+
+        <ImageView
+            android:id="@id/slideButton"
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:src="@drawable/wp_handle" />
+
+        <LinearLayout
+            android:id="@+id/contentLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#aa000000"
+            android:orientation="vertical"
+            android:padding="10dip" >
+
+            <fragment
+                android:id="@+id/missionFragment"
+                android:name="com.droidplanner.fragments.MissionFragment"
+                android:layout_width="220dp"
+                android:layout_height="match_parent" />
+            <!--
+         The second child becomes the right (content) pane. In this
+         example, android:layout_weight is used to express that this
+         pane should grow to consume leftover available space when the
+         window is wide enough. This allows the content pane to
+         responsively grow in width on larger screens while still
+         requiring at least the minimum width expressed by
+         android:layout_width.
+            -->
+
+        </LinearLayout>
+    </SlidingDrawer>
+
+</RelativeLayout>
