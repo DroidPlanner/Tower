@@ -143,7 +143,7 @@ public class PlanningMapFragment extends DroneMap implements
 		double lng = surveyData.getLateralFootPrint().valueInMeters();
 		double lateral = surveyData.getLongitudinalFootPrint().valueInMeters();
 		double halfDiag = Math.hypot(lng, lateral) / 2;
-		double angle = Math.toDegrees(Math.tan(lng / lateral));
+		double angle = Math.toDegrees(Math.atan(lng / lateral));
 		cameraOverlays.add(mMap.addPolygon(new PolygonOptions()
 				.add(GeoTools.newCoordFromBearingAndDistance(latLng,
 						surveyData.getAngle() - angle, halfDiag),
