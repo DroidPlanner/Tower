@@ -72,7 +72,7 @@
 
     <SlidingDrawer
         android:id="@+id/SlidingDrawer01"
-        android:layout_width="450dp"
+        android:layout_width="580dp"
         android:layout_height="fill_parent"
         android:layout_alignParentLeft="false"
         android:layout_alignParentRight="true"
@@ -94,7 +94,7 @@
             android:id="@+id/LinearLayout01"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#aa000000"
+            android:background="#ff000000"
             android:orientation="vertical"
             android:padding="10dip" >
 
