@@ -8,6 +8,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.droidplanner.R;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
@@ -20,6 +21,7 @@ public class DialogMissionSetHome extends DialogMission implements
 	private CheckBox useCurrentCheckBox;
 	private EditText lonEditText;
 	private EditText latEditText;
+	private Spinner coordSrcSpinner;
 	
 	@Override
 	protected int getResource() {
@@ -32,7 +34,9 @@ public class DialogMissionSetHome extends DialogMission implements
 				.findViewById(R.id.waypointSpeed);
 		altitudeSeekBar.setValue(wp.getHeight());
 		altitudeSeekBar.setOnChangedListner(this);
-
+		
+		coordSrcSpinner = (Spinner) view
+				.findViewById(R.id.spinnerCoordSrc);		
 		lonEditText = (EditText) view
 				.findViewById(R.id.editTextLon);		
 		latEditText = (EditText) view
@@ -48,12 +52,12 @@ public class DialogMissionSetHome extends DialogMission implements
 		
 		useCurrentCheckBox.requestFocus();
 		
-		
+		coordSrcSpinner.setEnabled(useCurrentCheckBox.isChecked());
 		lonEditText.setText(String.format(Locale.ENGLISH, "%1.8f ", wp.missionItem.y));
 		latEditText.setText(String.format(Locale.ENGLISH, "%1.8f ", wp.missionItem.x));
 		
-		lonEditText.setEnabled(useCurrentCheckBox.isChecked());
-		latEditText.setEnabled(useCurrentCheckBox.isChecked());
+		lonEditText.setEnabled(false);
+		latEditText.setEnabled(false);
 		
 
 		return view;
@@ -67,8 +71,7 @@ public class DialogMissionSetHome extends DialogMission implements
 	@Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		wp.missionItem.param1 = useCurrentCheckBox.isChecked()?1:0;
-		lonEditText.setEnabled(useCurrentCheckBox.isChecked());
-		latEditText.setEnabled(useCurrentCheckBox.isChecked());
+		coordSrcSpinner.setEnabled(useCurrentCheckBox.isChecked());
 		setLonLatValue();
     }
 	
