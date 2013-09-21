@@ -21,6 +21,12 @@ public class MissionRow extends ArrayAdapter<waypoint> {
 	private TextView nameView;
 	private TextView altitudeView;
 	private TextView typeView;
+	private TextView latView;
+	private TextView lonView;
+	private TextView param1View;
+	private TextView param2View;
+	private TextView param3View;
+	private TextView param4View;
 
 	public MissionRow(Context context, int resource, List<waypoint> objects) {
 		super(context, resource, objects);
@@ -57,6 +63,12 @@ public class MissionRow extends ArrayAdapter<waypoint> {
 		nameView = (TextView) view.findViewById(R.id.rowNameView);
 		altitudeView = (TextView) view.findViewById(R.id.rowAltitudeView);
 		typeView = (TextView) view.findViewById(R.id.rowTypeView);
+		latView = (TextView) view.findViewById(R.id.rowLatView);
+		lonView = (TextView) view.findViewById(R.id.rowLonView);
+		param1View = (TextView) view.findViewById(R.id.rowParam1View);
+		param2View = (TextView) view.findViewById(R.id.rowParam2View);
+		param3View = (TextView) view.findViewById(R.id.rowParam3View);
+		param4View = (TextView) view.findViewById(R.id.rowParam4View);
 	}
 
 	private void setupViewsText(waypoint waypoint) {
@@ -68,6 +80,13 @@ public class MissionRow extends ArrayAdapter<waypoint> {
 		nameView.setText(String.format("%3d", waypoint
 				.getNumber()));
 		typeView.setText(waypoint.getCmd().getName());
+		latView.setText(String.format(Locale.ENGLISH, "%3.5fm", waypoint.getCoord().latitude));
+		lonView.setText(String.format(Locale.ENGLISH, "%3.5fm", waypoint.getCoord().longitude));
+		param1View.setText(String.format(Locale.ENGLISH, "%3.2fm", waypoint.getParam1()));
+		param2View.setText(String.format(Locale.ENGLISH, "%3.2fm", waypoint.getParam2()));
+		param3View.setText(String.format(Locale.ENGLISH, "%3.2fm", waypoint.getParam3()));
+		param4View.setText(String.format(Locale.ENGLISH, "%3.2fm", waypoint.getParam4()));
+		
 	}
 
 }
