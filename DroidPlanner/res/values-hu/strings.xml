@@ -31,13 +31,13 @@
     <string name="menu_open_kmz">KMZ Megynitása</string>
     <string name="menu_add_polygon">Poligon hozzáadása</string>
     <string name="menu_polygon">Poligon</string>
-    <string name="menu_clear_polygon">Poligon törl.</string>
+    <string name="clear_polygon">Poligon törl.</string>
     <string name="menu_clear_path">Útvonal törl.</string>
     <string name="generate">Generál</string>
     <string name="exit">Kilép</string>
     <string name="menu_clearFlightPath">Pálya törl.</string>
-    <string name="exiting_polygon_mode">Kilépés Poligon Módból</string>
-    <string name="entering_polygon_mode">Belépés Poligon Módba</string>
+    <string name="mission_mode">Kilépés Poligon Módból</string>
+    <string name="polygon_mode">Belépés Poligon Módba</string>
     <string name="dialog_polygon_hatch_angle">Hatch szög:</string>
     <string name="dialog_polygon_distance_between_lines">Távolság vonalak között:</string>
     <string name="enable">Engedélyez</string>

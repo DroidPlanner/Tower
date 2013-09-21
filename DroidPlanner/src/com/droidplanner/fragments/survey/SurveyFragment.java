@@ -31,6 +31,11 @@ public class SurveyFragment extends Fragment implements
 
 	public interface OnNewGridListner{
 		public void onNewGrid(List<waypoint> grid);
+		public void onClearPolygon();
+	}
+	
+	public enum pathModes {
+		MISSION, POLYGON;
 	}
 	
 	private Context context;
@@ -41,7 +46,7 @@ public class SurveyFragment extends Fragment implements
 	private SurveyViews views;
 	private Grid grid;
 	
-	private OnNewGridListner onNewGridListner;
+	private OnNewGridListner onSurveyListner;
 
 	
 	@Override
@@ -66,8 +71,8 @@ public class SurveyFragment extends Fragment implements
 		surveyData.setAltitude(defaultAltitude);
 	}
 	
-	public void setOnNewGridListner(OnNewGridListner listner){
-		this.onNewGridListner = listner;
+	public void setOnSurveyListner(OnNewGridListner listner){
+		this.onSurveyListner = listner;
 	}
 
 	
@@ -84,7 +89,7 @@ public class SurveyFragment extends Fragment implements
 			grid = gridBuilder.generate();
 			views.updateViews(surveyData,grid,polygon.getArea()); 
 			
-			onNewGridListner.onNewGrid(grid.getWaypoints(surveyData.getAltitude()));
+			onSurveyListner.onNewGrid(grid.getWaypoints(surveyData.getAltitude()));
 		} catch (Exception e) {
 			Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
 			views.blank();
@@ -123,10 +128,23 @@ public class SurveyFragment extends Fragment implements
 	
 	@Override
 	public void onClick(View view) {
-		if (view.equals(views.innerWPsCheckbox)) {
-			surveyData.setInnerWpsState(views.innerWPsCheckbox.isChecked());
+		switch (view.getId()) {
+		case R.id.checkBoxInnerWPs:
+			surveyData.setInnerWpsState(views.innerWPsCheckbox.isChecked());			
+			break;
+		case R.id.clearPolyButton:
+			onSurveyListner.onClearPolygon();
+			break;
 		}
 		
+	}
+
+	public pathModes getPathToDraw() {
+		if (views.modeButton.isChecked()) {
+			return pathModes.POLYGON;
+		}else{
+			return pathModes.MISSION;
+		}
 	}
 
 }

@@ -4,9 +4,11 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.droidplanner.R;
 import com.droidplanner.R.id;
@@ -34,6 +36,8 @@ public class SurveyViews {
 	public TextView lengthView;
 	private Context context;
 	private View layout;
+	protected ToggleButton modeButton;
+	private Button clearPolyButton;
 
 	public SurveyViews(Context context) {
 		this.context = context;
@@ -88,6 +92,9 @@ public class SurveyViews {
 		layout = inflater.inflate(R.layout.fragment_survey, null);
 		cameraSpinner = (SpinnerSelfSelect) layout
 				.findViewById(id.cameraFileSpinner);
+		modeButton = (ToggleButton) layout.findViewById(id.surveyModeButton);
+		clearPolyButton = (Button) layout.findViewById(id.clearPolyButton);
+		
 		angleView = (SeekBarWithText) layout.findViewById(id.angleView);
 		overlapView = (SeekBarWithText) layout.findViewById(id.overlapView);
 		sidelapView = (SeekBarWithText) layout.findViewById(id.sidelapView);
@@ -115,6 +122,7 @@ public class SurveyViews {
 		sidelapView.setOnChangedListner(surveyDialog);
 		innerWPsCheckbox.setOnClickListener(surveyDialog);
 		cameraSpinner.setOnSpinnerItemSelectedListener(surveyDialog);
+		clearPolyButton.setOnClickListener(surveyDialog);
 	}
 
 	void updateCameraSpinner(SpinnerAdapter spinnerAdapter) {

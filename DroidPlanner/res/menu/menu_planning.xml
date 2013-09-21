@@ -14,10 +14,6 @@
         android:showAsAction="ifRoom"
         android:title="@string/menu_clear"/>
     <item
-        android:id="@+id/menu_clear_polygon"
-        android:showAsAction="ifRoom"
-        android:title="@string/menu_clear_polygon"/>
-    <item
         android:id="@+id/menu_record_me"
         android:showAsAction="ifRoom"
         android:title="@string/menu_record_me"/>
@@ -37,8 +33,5 @@
         android:id="@+id/menu_load_from_apm"
         android:showAsAction="never"
         android:title="@string/menu_load_from_apm"/>
-    <item
-        android:id="@+id/menu_polygon"
-        android:title="@string/menu_polygon"/>
 
 </menu>

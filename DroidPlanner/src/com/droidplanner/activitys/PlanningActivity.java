@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
 import com.droidplanner.R;
-import com.droidplanner.R.string;
 import com.droidplanner.activitys.helpers.SuperActivity;
 import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
 import com.droidplanner.dialogs.openfile.OpenFileDialog;
@@ -38,15 +37,11 @@ import com.google.android.gms.maps.model.LatLng;
 public class PlanningActivity extends SuperActivity implements
 		OnMapInteractionListener, OnWaypointUpdateListner,
 		OnAltitudeChangedListner, OnPathFinishedListner, OnNewGridListner {
-	public enum modes {
-		MISSION, POLYGON;
-	}
 
 	public Polygon polygon;
 	private PlanningMapFragment planningMapFragment;
 	private MissionFragment missionFragment;
 	private GestureMapFragment gestureMapFragment;
-	public modes mode = modes.MISSION;
 	private TextView lengthView;
 	private SurveyFragment surveyFragment;
 
@@ -78,7 +73,7 @@ public class PlanningActivity extends SuperActivity implements
 		missionFragment.setMission(drone.mission);
 		planningMapFragment.setMission(drone.mission);
 		surveyFragment.setSurveyData(polygon,drone.mission.getDefaultAlt());
-		surveyFragment.setOnNewGridListner(this);
+		surveyFragment.setOnSurveyListner(this);
 		
 		
 		drone.mission.missionListner = this;
@@ -102,17 +97,7 @@ public class PlanningActivity extends SuperActivity implements
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		switch (mode) {
-		default:
-		case MISSION:
-			getMenuInflater().inflate(R.menu.menu_planning, menu);
-			break;
-		case POLYGON:
-			getMenuInflater().inflate(R.menu.menu_planning_polygon, menu);
-			break;
-		}
-	
+		getMenuInflater().inflate(R.menu.menu_planning, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -134,17 +119,6 @@ public class PlanningActivity extends SuperActivity implements
 		case R.id.menu_clear_wp:
 			clearWaypointsAndUpdate();
 			return true;
-		case R.id.menu_polygon:
-			setMode(modes.POLYGON);
-			return true;
-		case R.id.menu_clear_polygon:
-			polygon.clearPolygon();
-			update();
-			return true;
-		case R.id.mode_exit:
-			setMode(modes.MISSION);
-			update();
-			return true;
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
@@ -156,7 +130,7 @@ public class PlanningActivity extends SuperActivity implements
 	}
 
 	private void processReceivedPoints(List<LatLng> points) {
-		switch (mode) {
+		switch (surveyFragment.getPathToDraw()){ 
 		case MISSION:
 			drone.mission.addWaypointsWithDefaultAltitude(points);			
 			break;
@@ -167,22 +141,6 @@ public class PlanningActivity extends SuperActivity implements
 			break;
 		}
 		update();
-	}
-
-	public void setMode(modes mode) {
-		this.mode = mode;
-		switch (mode) {
-		default:
-		case MISSION:
-			Toast.makeText(this, string.exiting_polygon_mode,
-					Toast.LENGTH_SHORT).show();
-			break;
-		case POLYGON:
-			Toast.makeText(this, string.entering_polygon_mode,
-					Toast.LENGTH_SHORT).show();
-			break;
-		}
-		invalidateOptionsMenu();
 	}
 
 	private void clearWaypointsAndUpdate() {
@@ -292,6 +250,12 @@ public class PlanningActivity extends SuperActivity implements
 	@Override
 	public void onNewGrid(List<waypoint> grid) {
 		drone.mission.setWaypoints(grid);
+		update();		
+	}
+
+	@Override
+	public void onClearPolygon() {
+		polygon.clearPolygon();
 		update();		
 	}
 
