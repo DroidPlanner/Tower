@@ -17,7 +17,7 @@ import com.droidplanner.survey.grid.Grid;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.spinners.SpinnerSelfSelect;
 
-public class SurveyDialogViews {
+public class SurveyViews {
 	public SeekBarWithText overlapView;
 	public SeekBarWithText angleView;
 	public SeekBarWithText altitudeView;
@@ -35,7 +35,7 @@ public class SurveyDialogViews {
 	private Context context;
 	private View layout;
 
-	public SurveyDialogViews(Context context) {
+	public SurveyViews(Context context) {
 		this.context = context;
 	}
 

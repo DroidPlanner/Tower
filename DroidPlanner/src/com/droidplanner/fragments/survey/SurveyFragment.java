@@ -39,7 +39,7 @@ public class SurveyFragment extends Fragment implements
 
 	private SurveyData surveyData;
 	private CameraInfoLoader avaliableCameras;
-	private SurveyDialogViews views;
+	private SurveyViews views;
 	private Grid grid;
 	
 	private OnNewGridListner onNewGridListner;
@@ -49,7 +49,7 @@ public class SurveyFragment extends Fragment implements
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		context = getActivity().getApplicationContext();
-		views = new SurveyDialogViews(context);
+		views = new SurveyViews(context);
 		views.build(inflater, container,this);
 		
 		//TODO find better values for the bellow
