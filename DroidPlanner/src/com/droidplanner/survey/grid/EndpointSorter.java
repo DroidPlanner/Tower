@@ -12,6 +12,7 @@ public class EndpointSorter {
 	private List<LatLng> gridPoints = new ArrayList<LatLng>();
 	private List<LineLatLng> grid;
 	private Double sampleDistance;
+	private List<LatLng> cameraLocations;
 
 	public EndpointSorter(List<LineLatLng> grid, Double sampleDistance) {
 		this.grid = grid;
@@ -40,10 +41,10 @@ public class EndpointSorter {
 
 	private void addWaypointsBetween(LatLng firstWP, LatLng secondWp,
 			boolean innerWPs) {
+		cameraLocations = new LineSampler(firstWP, secondWp)
+				.sample(sampleDistance);
 		if (innerWPs) {
-			List<LatLng> list = new LineSampler(firstWP, secondWp)
-					.sample(sampleDistance);
-			for (LatLng point : list) {
+			for (LatLng point : cameraLocations) {
 				gridPoints.add(point);
 			}
 		} else {
@@ -54,6 +55,10 @@ public class EndpointSorter {
 
 	public List<LatLng> getSortedGrid() {
 		return gridPoints;
+	}
+	
+	public List<LatLng> getCameraLocations() {
+		return cameraLocations;
 	}
 
 }

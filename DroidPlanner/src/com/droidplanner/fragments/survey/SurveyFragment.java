@@ -1,7 +1,5 @@
 package com.droidplanner.fragments.survey;
 
-import java.util.List;
-
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -13,7 +11,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.droidplanner.R;
-import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.file.IO.CameraInfo;
 import com.droidplanner.file.IO.CameraInfoReader;
 import com.droidplanner.file.help.CameraInfoLoader;
@@ -30,7 +27,7 @@ public class SurveyFragment extends Fragment implements
 	//public abstract void onPolygonGenerated(List<waypoint> list);
 
 	public interface OnNewGridListner{
-		public void onNewGrid(List<waypoint> grid);
+		public void onNewGrid(Grid grid);
 		public void onClearPolygon();
 	}
 	
@@ -90,9 +87,9 @@ public class SurveyFragment extends Fragment implements
 			GridBuilder gridBuilder = new GridBuilder(polygon, surveyData, new LatLng(0, 0));
 			checkIfPolygonIsValid(polygon);
 			grid = gridBuilder.generate();
-			views.updateViews(surveyData,grid,polygon.getArea()); 
-			
-			onSurveyListner.onNewGrid(grid.getWaypoints(surveyData.getAltitude()));
+			views.updateViews(surveyData,grid,polygon.getArea());
+			grid.setAltitude(surveyData.getAltitude());
+			onSurveyListner.onNewGrid(grid);
 		} catch (Exception e) {
 			Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
 			views.blank();
