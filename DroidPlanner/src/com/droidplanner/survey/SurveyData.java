@@ -5,7 +5,6 @@ import java.util.Locale;
 import com.droidplanner.file.IO.CameraInfo;
 import com.droidplanner.helpers.units.Area;
 import com.droidplanner.helpers.units.Length;
-import com.google.android.gms.internal.al;
 
 public class SurveyData {
 	private Double altitude;

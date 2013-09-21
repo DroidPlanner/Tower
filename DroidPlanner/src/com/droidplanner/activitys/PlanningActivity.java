@@ -59,7 +59,7 @@ public class PlanningActivity extends SuperActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.activity_planning_polygon);
+		setContentView(R.layout.activity_planning);
 
 		planningMapFragment = ((PlanningMapFragment) getFragmentManager()
 				.findFragmentById(R.id.planningMapFragment));
