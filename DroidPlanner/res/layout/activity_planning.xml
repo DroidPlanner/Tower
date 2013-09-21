@@ -47,8 +47,9 @@
     <fragment
         android:id="@+id/missionFragment"
         android:name="com.droidplanner.fragments.MissionFragment"
-        android:layout_width="220dp"
-        android:layout_height="match_parent"/>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <!--
          The second child becomes the right (content) pane. In this
          example, android:layout_weight is used to express that this
