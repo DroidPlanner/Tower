@@ -63,5 +63,10 @@
         <item name="Param3">P3</item>
         <item name="Param4">P4</item>
         </string-array>
+    <string-array name="CoordSource">
+        <item >Waypoint</item>
+        <item >Ground station</item>
+        <item >Manual entry</item>
+    </string-array>
     
 </resources>

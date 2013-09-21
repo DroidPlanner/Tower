@@ -25,7 +25,7 @@ public class DialogMissionExtra extends DialogMission implements OnTextSeekBarCh
 	protected View buildView(Context context) {		
 
 		altitudeSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.waypointAltitude);
+				.findViewById(R.id.waypointSpeed);
 		altitudeSeekBar .setValue(wp.getHeight());
 		altitudeSeekBar .setOnChangedListner(this);
 		

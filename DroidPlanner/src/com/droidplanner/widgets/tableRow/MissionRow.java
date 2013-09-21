@@ -12,21 +12,20 @@ import android.widget.TextView;
 
 import com.droidplanner.R;
 import com.droidplanner.drone.variables.waypoint;
+import com.MAVLink.Messages.enums.MAV_CMD;
 
 public class MissionRow extends ArrayAdapter<waypoint> {
 
 	private Context context;
 	private List<waypoint> waypoints;
 
+
 	private TextView nameView;
 	private TextView altitudeView;
 	private TextView typeView;
-	private TextView latView;
-	private TextView lonView;
-	private TextView param1View;
-	private TextView param2View;
-	private TextView param3View;
-	private TextView param4View;
+	private TextView descView;
+
+
 
 	public MissionRow(Context context, int resource, List<waypoint> objects) {
 		super(context, resource, objects);
@@ -63,12 +62,8 @@ public class MissionRow extends ArrayAdapter<waypoint> {
 		nameView = (TextView) view.findViewById(R.id.rowNameView);
 		altitudeView = (TextView) view.findViewById(R.id.rowAltitudeView);
 		typeView = (TextView) view.findViewById(R.id.rowTypeView);
-		latView = (TextView) view.findViewById(R.id.rowLatView);
-		lonView = (TextView) view.findViewById(R.id.rowLonView);
-		param1View = (TextView) view.findViewById(R.id.rowParam1View);
-		param2View = (TextView) view.findViewById(R.id.rowParam2View);
-		param3View = (TextView) view.findViewById(R.id.rowParam3View);
-		param4View = (TextView) view.findViewById(R.id.rowParam4View);
+		descView = (TextView) view.findViewById(R.id.rowDescView);
+
 	}
 
 	private void setupViewsText(waypoint waypoint) {
@@ -77,16 +72,79 @@ public class MissionRow extends ArrayAdapter<waypoint> {
 		} else {
 			altitudeView.setText("-");
 		}
-		nameView.setText(String.format("%3d", waypoint
-				.getNumber()));
-		typeView.setText(waypoint.getCmd().getName());
-		latView.setText(String.format(Locale.ENGLISH, "%3.5fm", waypoint.getCoord().latitude));
-		lonView.setText(String.format(Locale.ENGLISH, "%3.5fm", waypoint.getCoord().longitude));
-		param1View.setText(String.format(Locale.ENGLISH, "%3.2fm", waypoint.getParam1()));
-		param2View.setText(String.format(Locale.ENGLISH, "%3.2fm", waypoint.getParam2()));
-		param3View.setText(String.format(Locale.ENGLISH, "%3.2fm", waypoint.getParam3()));
-		param4View.setText(String.format(Locale.ENGLISH, "%3.2fm", waypoint.getParam4()));
 		
+		nameView.setText(String.format("%3d", waypoint.getNumber()));
+		typeView.setText(waypoint.getCmd().getName());
+		descView.setText(setupDescription(waypoint));
 	}
 
+	private String setupDescription(waypoint waypoint) {
+		String descStr = null;
+		float tmpVal;
+		descStr = "";
+		
+		switch(waypoint.getCmd().getType())
+		{
+		case MAV_CMD.MAV_CMD_NAV_WAYPOINT:
+			descStr += "- ";
+			descStr += context.getString(R.string.waypointDesc_Waypoint);
+			descStr += " ";
+			if(waypoint.missionItem.param2<=0){
+				descStr += context.getString(R.string.waypointDesc_immediate);
+			} 
+			else{
+				descStr += context.getString(R.string.waypointDesc_after);
+				descStr += String.format(Locale.ENGLISH, " %1.0f", waypoint.missionItem.param2);
+				descStr += context.getString(R.string.waypointDesc_s);
+			}
+			break;
+		case MAV_CMD.MAV_CMD_NAV_LOITER_UNLIM:
+			tmpVal = waypoint.missionItem.param3<0?-1*waypoint.missionItem.param3:waypoint.missionItem.param3;			
+			descStr += context.getString(R.string.waypointDesc_Loiter);
+			descStr += " ";
+			descStr += String.format(Locale.ENGLISH, "%1.1f", tmpVal);
+			descStr += context.getString(R.string.waypointDesc_m);
+			descStr += " ";
+			descStr += context.getString(R.string.waypointDesc_radius);
+			descStr += " ";
+			descStr += waypoint.missionItem.param3<0?context.getString(R.string.waypointDesc_CCW):context.getString(R.string.waypointDesc_CW);
+			break;
+		case MAV_CMD.MAV_CMD_NAV_LOITER_TURNS:
+			tmpVal = waypoint.missionItem.param3<0?-1*waypoint.missionItem.param3:waypoint.missionItem.param3;			
+			descStr += context.getString(R.string.waypointDesc_LoiterN);
+			descStr += " ";
+			descStr += String.format(Locale.ENGLISH, "%1.0f ", waypoint.missionItem.param1);
+			descStr += context.getString(R.string.waypointDesc_turns);
+			descStr += " ";
+			descStr += String.format(Locale.ENGLISH, "within %1.1f", tmpVal);
+			descStr += context.getString(R.string.waypointDesc_m);
+			descStr += " ";
+			descStr += context.getString(R.string.waypointDesc_radius);
+			descStr += " ";
+			descStr += waypoint.missionItem.param3<0?context.getString(R.string.waypointDesc_CCW):context.getString(R.string.waypointDesc_CW);
+			break;
+		case MAV_CMD.MAV_CMD_NAV_LOITER_TIME:
+			tmpVal = waypoint.missionItem.param3<0?-1*waypoint.missionItem.param3:waypoint.missionItem.param3;			
+			descStr += context.getString(R.string.waypointDesc_LoiterT);
+			descStr += " ";
+			descStr += String.format(Locale.ENGLISH, "%1.0f", waypoint.missionItem.param1);
+			descStr += context.getString(R.string.waypointDesc_s);
+			descStr += " ";
+			descStr += String.format(Locale.ENGLISH, "within %1.1f", tmpVal);
+			descStr += context.getString(R.string.waypointDesc_m);
+			descStr += " ";
+			descStr += context.getString(R.string.waypointDesc_radius);
+			descStr += " ";
+			descStr += waypoint.missionItem.param3<0?context.getString(R.string.waypointDesc_CCW):context.getString(R.string.waypointDesc_CW);
+			break;
+		case MAV_CMD.MAV_CMD_NAV_TAKEOFF:
+			descStr += context.getString(R.string.waypointDesc_Takeoff);
+			descStr += " ";
+			descStr += String.format(Locale.ENGLISH, "%1.2f", waypoint.missionItem.param1);
+			descStr += context.getString(R.string.waypointDesc_degrees);
+			break;
+		}
+		
+		return descStr;
+	}
 }

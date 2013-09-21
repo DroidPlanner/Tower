@@ -6,15 +6,14 @@ import com.droidplanner.R;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
 
-public class DialogMissionWaypoint extends DialogMission implements
+public class DialogMissionCondAlt extends DialogMission implements
 		OnTextSeekBarChangedListner {
 	private SeekBarWithText altitudeSeekBar;
-	private SeekBarWithText delaySeekBar;
-	private SeekBarWithText yawSeekBar;
+	private SeekBarWithText rateSeekBar;
 
 	@Override
 	protected int getResource() {
-		return R.layout.dialog_mission_waypoint;
+		return R.layout.dialog_mission_cond_alt;
 	}
 	
 	protected View buildView() {
@@ -25,25 +24,18 @@ public class DialogMissionWaypoint extends DialogMission implements
 		altitudeSeekBar.setOnChangedListner(this);
 
 
-		delaySeekBar = (SeekBarWithText) view
-				.findViewById(R.id.waypointDelay);
-		delaySeekBar .setValue((double)wp.missionItem.param2);
-		delaySeekBar .setOnChangedListner(this);
+		rateSeekBar = (SeekBarWithText) view
+				.findViewById(R.id.waypointYawRate);
+		rateSeekBar .setValue((double)wp.missionItem.param1);
+		rateSeekBar .setOnChangedListner(this);
 
-		yawSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.waypointAngle);
-		yawSeekBar.setValue(wp.missionItem.param4);
-		yawSeekBar.setOnChangedListner(this);
-
-		
 		return view;
 	}
 
 	@Override
 	public void onSeekBarChanged() {
 		wp.setHeight(altitudeSeekBar.getValue());
-		wp.missionItem.param2 = (float) delaySeekBar.getValue();
-		wp.missionItem.param4 = (float) yawSeekBar.getValue();
+		wp.missionItem.param1 = (float) rateSeekBar.getValue();
 	}
 
 

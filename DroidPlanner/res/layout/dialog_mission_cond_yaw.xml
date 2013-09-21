@@ -13,30 +13,6 @@
         android:entries="@array/ExampleCameraArray" />
 
     <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
-        android:id="@+id/waypointSpeed"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="2dp"
-        custom:inc="5"
-        custom:max="1000"
-        custom:min="0"
-        custom:title="@string/waypoint_altitude"
-        custom:unit="m" >
-    </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
-
-    <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
-        android:id="@+id/waypointDelay"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="2dp"
-        custom:inc="1"
-        custom:max="600"
-        custom:min="0"
-        custom:title="@string/waypoint_delay"
-        custom:unit="s" >
-    </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
-
-    <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
         android:id="@+id/waypointAngle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -46,13 +22,38 @@
         custom:min="0"
         custom:title="@string/waypoint_angle"
         custom:unit="°" >
-
     </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+
+    <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+        android:id="@+id/waypointYawRate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        custom:inc="1"
+        custom:max="50"
+        custom:min="0"
+        custom:title="@string/waypoint_yawrate"
+        custom:unit="°/s" >
+    </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+
+    <CheckBox
+        android:id="@+id/checkBoxYawDir"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.00"
+        android:text="@string/waypoint_yawdir" />
+
+    <CheckBox
+        android:id="@+id/checkBoxYawOffset"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.00"
+        android:text="@string/waypoint_yawoffset" />
 
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/waypointInfo_Waypoint" />
+        android:text="@string/waypointInfo_CondYaw" />
 
 </LinearLayout>

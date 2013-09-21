@@ -11,8 +11,6 @@
         android:id="@+id/rowNameView"
         android:layout_width="40dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="3dp"
-        android:layout_marginTop="3dp"
         android:text="001"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -20,8 +18,6 @@
         android:id="@+id/rowAltitudeView"
         android:layout_width="70dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="3dp"
-        android:layout_marginTop="3dp"
         android:gravity="center_horizontal"
         android:text="1000m"
         android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -30,57 +26,13 @@
         android:id="@+id/rowTypeView"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="3dp"
-        android:layout_marginTop="3dp"
         android:text="Waypoint"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-        android:id="@+id/rowLatView"
-        android:layout_width="150dp"
+        android:id="@+id/rowDescView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="-"
+        android:text="Waypoint"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/rowLonView"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="-"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-    
-    <TextView
-        android:id="@+id/rowParam1View"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="-"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/rowParam2View"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="-"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/rowParam3View"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="-"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/rowParam4View"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="-"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-</LinearLayout>
+    </LinearLayout>

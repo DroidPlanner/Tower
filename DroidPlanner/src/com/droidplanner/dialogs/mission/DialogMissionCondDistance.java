@@ -6,28 +6,28 @@ import com.droidplanner.R;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
 
-public class DialogMissionRTL extends DialogMission implements
+public class DialogMissionCondDistance extends DialogMission implements
 		OnTextSeekBarChangedListner {
-	private SeekBarWithText altitudeSeekBar;
+	private SeekBarWithText distanceSeekBar;
 
 	@Override
 	protected int getResource() {
-		return R.layout.dialog_mission_rtl;
+		return R.layout.dialog_mission_cond_distance;
 	}
 	
 	protected View buildView() {
 		super.buildView();
-		altitudeSeekBar = (SeekBarWithText) view
+		distanceSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.waypointSpeed);
-		altitudeSeekBar.setValue(wp.getHeight());
-		altitudeSeekBar.setOnChangedListner(this);
+		distanceSeekBar.setValue(wp.missionItem.param1);
+		distanceSeekBar.setOnChangedListner(this);
 
 		return view;
 	}
 
 	@Override
 	public void onSeekBarChanged() {
-		wp.setHeight(altitudeSeekBar.getValue());
+		wp.missionItem.param1 = (float) distanceSeekBar.getValue();
 	}
 
 
