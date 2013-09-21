@@ -3,7 +3,6 @@ package com.droidplanner.dialogs.mission;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 import com.droidplanner.R;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
@@ -15,7 +14,6 @@ public class DialogMissionSetSpeed extends DialogMission implements
 	private SeekBarWithText throttleSeekBar;
 	private RadioButton airspeedRadioButton;
 	private RadioButton groundspeedRadioButton;
-	private RadioGroup radioGroupSpeed;
 
 	@Override
 	protected int getResource() {
@@ -34,7 +32,6 @@ public class DialogMissionSetSpeed extends DialogMission implements
 		speedSeekBar = (SeekBarWithText) view.findViewById(R.id.waypointSpeed);
 		throttleSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.waypointThrottle);
-		radioGroupSpeed = (RadioGroup) view.findViewById(R.id.radioGroupSpeed);
 		airspeedRadioButton = (RadioButton) view
 				.findViewById(R.id.radioAirSpeed);
 		groundspeedRadioButton = (RadioButton) view
@@ -53,7 +50,8 @@ public class DialogMissionSetSpeed extends DialogMission implements
 	private void setupListners() {
 		speedSeekBar.setOnChangedListner(this);
 		throttleSeekBar.setOnChangedListner(this);
-		radioGroupSpeed.setOnClickListener(this);
+		airspeedRadioButton.setOnClickListener(this);
+		groundspeedRadioButton.setOnClickListener(this);
 	}
 
 	@Override
