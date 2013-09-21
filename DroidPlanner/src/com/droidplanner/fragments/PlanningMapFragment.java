@@ -140,19 +140,21 @@ public class PlanningMapFragment extends DroneMap implements
 	}
 
 	private void addOneFootprint(LatLng latLng, SurveyData surveyData) {
-		double diag = Math.hypot(surveyData.getLateralFootPrint()
-				.valueInMeters(), surveyData.getLongitudinalFootPrint()
-				.valueInMeters());
+		double lng = surveyData.getLateralFootPrint().valueInMeters();
+		double lateral = surveyData.getLongitudinalFootPrint().valueInMeters();
+		double halfDiag = Math.hypot(lng, lateral) / 2;
+		double angle = Math.toDegrees(Math.tan(lng / lateral));
 		cameraOverlays.add(mMap.addPolygon(new PolygonOptions()
 				.add(GeoTools.newCoordFromBearingAndDistance(latLng,
-						surveyData.getAngle() + 45, diag),
+						surveyData.getAngle() - angle, halfDiag),
 						GeoTools.newCoordFromBearingAndDistance(latLng,
-								surveyData.getAngle() + 90 + 45, diag),
+								surveyData.getAngle() + angle, halfDiag),
 						GeoTools.newCoordFromBearingAndDistance(latLng,
-								surveyData.getAngle() + 180 + 45, diag),
+								surveyData.getAngle() + 180 - angle, halfDiag),
 						GeoTools.newCoordFromBearingAndDistance(latLng,
-								surveyData.getAngle() + 270 + 45, diag))
-				.fillColor(Color.argb(40, 0, 0, 127)).strokeWidth(0)));
+								surveyData.getAngle() + 180 + angle, halfDiag))
+				.fillColor(Color.argb(40, 0, 0, 127)).strokeWidth(1)
+				.strokeColor(Color.argb(127, 0, 0, 255))));
 
 	}
 
