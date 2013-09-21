@@ -16,7 +16,7 @@ public class WaypointMarker {
 	public static MarkerOptions build(waypoint wp, Context context) {
 		return new MarkerOptions()
 				.position(wp.getCoord())
-				.visible(wp.getCmd().isNavigation())
+				.visible(wp.getCmd().showOnMap())
 				.draggable(true)
 				.title("WP" + Integer.toString(wp.getNumber()))
 				.snippet(
