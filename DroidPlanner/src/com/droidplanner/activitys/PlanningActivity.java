@@ -136,6 +136,7 @@ public class PlanningActivity extends SuperActivity implements
 			break;
 		case POLYGON:
 			polygon.addPoints(points);
+			surveyFragment.generateGrid();
 			break;
 		default:
 			break;

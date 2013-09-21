@@ -77,8 +77,11 @@ public class SurveyFragment extends Fragment implements
 
 	
 	@Override
-	public void onSeekBarChanged() {
-		
+	public void onSeekBarChanged() {		
+		generateGrid();						
+	}
+
+	public void generateGrid() {
 		surveyData.update(views.angleView.getValue(), views.altitudeView.getValue(),
 				views.overlapView.getValue(), views.sidelapView.getValue());
 		//TODO find a better origin point than (0,0)
@@ -93,7 +96,7 @@ public class SurveyFragment extends Fragment implements
 		} catch (Exception e) {
 			Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
 			views.blank();
-		}						
+		}
 	}
 	
 	private void checkIfPolygonIsValid(Polygon polygon) throws Exception {
