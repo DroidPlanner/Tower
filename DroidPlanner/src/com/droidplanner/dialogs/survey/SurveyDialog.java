@@ -16,6 +16,7 @@ import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.file.IO.CameraInfo;
 import com.droidplanner.file.IO.CameraInfoReader;
 import com.droidplanner.file.help.CameraInfoLoader;
+import com.droidplanner.helpers.units.Area;
 import com.droidplanner.polygon.Polygon;
 import com.droidplanner.survey.SurveyData;
 import com.droidplanner.survey.grid.Grid;
@@ -66,7 +67,7 @@ public abstract class SurveyDialog implements DialogInterface.OnClickListener,
 		try {
 			grid = gridBuilder.generate();
 			//views.updateViews(surveyData,grid,polygon.getArea());
-			views.updateViews(surveyData,grid,0.0); // TODO use correct area value
+			views.updateViews(surveyData,grid,new Area(0.0)); // TODO use correct area value
 		} catch (Exception e) {
 			Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
 			views.blank();

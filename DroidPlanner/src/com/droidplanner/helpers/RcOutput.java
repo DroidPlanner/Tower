@@ -41,7 +41,7 @@ public class RcOutput {
 			scheduleTaskExecutor.shutdownNow();
 			scheduleTaskExecutor = null;
 		}
-		Arrays.fill(rcOutputs, DISABLE_OVERRIDE);
+		Arrays.fill(rcOutputs, DISABLE_OVERRIDE);	// Start with all channels disabled, external callers can enable them as desired
 		MavLinkRC.sendRcOverrideMsg(drone, rcOutputs); // Just to be sure send 3
 														// disable
 		MavLinkRC.sendRcOverrideMsg(drone, rcOutputs);
@@ -50,7 +50,7 @@ public class RcOutput {
 
 	public void enableRcOverride() {
 		if (!isRcOverrided()) {
-			Arrays.fill(rcOutputs, RC_TRIM);
+			Arrays.fill(rcOutputs, DISABLE_OVERRIDE);
 			MavLinkRC.sendRcOverrideMsg(drone, rcOutputs); // Just to be sure send 3
 			MavLinkRC.sendRcOverrideMsg(drone, rcOutputs);
 			MavLinkRC.sendRcOverrideMsg(drone, rcOutputs);			Arrays.fill(rcOutputs, DISABLE_OVERRIDE);

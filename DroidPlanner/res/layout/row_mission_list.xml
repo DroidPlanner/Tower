@@ -11,6 +11,8 @@
         android:id="@+id/rowNameView"
         android:layout_width="40dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"
+        android:layout_marginTop="3dp"
         android:text="001"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -18,6 +20,8 @@
         android:id="@+id/rowAltitudeView"
         android:layout_width="70dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"
+        android:layout_marginTop="3dp"
         android:gravity="center_horizontal"
         android:text="1000m"
         android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -26,6 +30,8 @@
         android:id="@+id/rowTypeView"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"
+        android:layout_marginTop="3dp"
         android:text="Waypoint"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 

@@ -3,6 +3,8 @@ package com.droidplanner.survey;
 import java.util.Locale;
 
 import com.droidplanner.file.IO.CameraInfo;
+import com.droidplanner.helpers.units.Area;
+import com.droidplanner.helpers.units.Length;
 
 public class SurveyData {
 	private Double altitude;
@@ -25,30 +27,30 @@ public class SurveyData {
 		this.sidelap = sidelap;
 	}
 
-	public double getLateralFootPrint() {
-		return altitude * camera.getSensorLateralSize() / camera.focalLength;
+	public Length getLateralFootPrint() {
+		return new Length(altitude * camera.getSensorLateralSize() / camera.focalLength);
 
 	}
 
-	public double getLongitudinalFootPrint() {
-		return altitude * camera.getSensorLongitudinalSize()
-				/ camera.focalLength;
+	public Length getLongitudinalFootPrint() {
+		return new Length(altitude * camera.getSensorLongitudinalSize()
+				/ camera.focalLength);
 	}
 
-	public double getGroundResolution() {
-		return altitude
+	public Area getGroundResolution() {
+		return new Area(((altitude
 				* camera.getSensorLateralSize()
 				/ camera.focalLength
 				* (altitude * camera.getSensorLongitudinalSize() / camera.focalLength)
-				/ (camera.sensorResolution * 1000);
+				/ (camera.sensorResolution * 1000)))/10000);
 	}
 
-	public Double getLongitudinalPictureDistance() {
-		return getLongitudinalFootPrint() * (1 - overlap * .01);
+	public Length getLongitudinalPictureDistance() {
+		return new Length(getLongitudinalFootPrint().valueInMeters() * (1 - overlap * .01));
 	}
 
-	public Double getLateralPictureDistance() {
-		return getLateralFootPrint() * (1 - sidelap * .01);
+	public Length getLateralPictureDistance() {
+		return new Length(getLateralFootPrint().valueInMeters() * (1 - sidelap * .01));
 	}
 
 	public void setCameraInfo(CameraInfo info) {

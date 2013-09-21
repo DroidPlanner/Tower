@@ -1,5 +1,7 @@
 package com.droidplanner.drone.variables;
 
+import android.content.Context;
+
 import com.MAVLink.Messages.ApmCommands;
 import com.MAVLink.Messages.MAVLinkPacket;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
@@ -126,13 +128,13 @@ public class waypoint implements MarkerSource {
 	}
 
 	@Override
-	public MarkerOptions build() {
-		return WaypointMarker.build(this);
+	public MarkerOptions build(Context context) {
+		return WaypointMarker.build(this,context);
 	}
 
 	@Override
-	public void update(Marker marker) {
-		WaypointMarker.update(marker, this);
+		public void update(Marker marker, Context context) {
+		WaypointMarker.update(marker, this,context);
 	}
 
 }
