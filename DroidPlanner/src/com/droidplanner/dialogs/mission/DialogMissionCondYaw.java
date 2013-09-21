@@ -23,27 +23,39 @@ public class DialogMissionCondYaw extends DialogMission implements
 	
 	protected View buildView() {
 		super.buildView();
-		angleSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.waypointAngle);
-		angleSeekBar.setValue(wp.missionItem.param1);
-		angleSeekBar.setOnChangedListner(this);
-
-		yawRateSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.waypointYawRate);
-		yawRateSeekBar.setValue(wp.missionItem.param2);
-		yawRateSeekBar.setOnChangedListner(this);
-
-		yawDirCheckBox = (CheckBox) view
-				.findViewById(R.id.checkBoxYawDir);
-		yawDirCheckBox.setChecked(wp.missionItem.param3>0?true:false);
-
-		yawOffsetCheckBox = (CheckBox) view
-				.findViewById(R.id.checkBoxYawOffset);
-		yawOffsetCheckBox.setChecked(wp.missionItem.param4>0?true:false);
-		
+		findLocalViews();
+		setupViews();
+		setupListeners();
 		return view;
 	}
-
+	
+	private void findLocalViews() {
+		angleSeekBar = (SeekBarWithText) view
+				.findViewById(R.id.waypointAngle);
+		yawRateSeekBar = (SeekBarWithText) view
+				.findViewById(R.id.waypointYawRate);
+		yawDirCheckBox = (CheckBox) view
+				.findViewById(R.id.checkBoxYawDir);
+		yawOffsetCheckBox = (CheckBox) view
+				.findViewById(R.id.checkBoxYawOffset);
+		
+	}
+	
+	private void setupViews() {
+		angleSeekBar.setValue(wp.missionItem.param1);
+		yawRateSeekBar.setValue(wp.missionItem.param2);
+		yawDirCheckBox.setChecked(wp.missionItem.param3>0?true:false);
+		yawOffsetCheckBox.setChecked(wp.missionItem.param4>0?true:false);
+		
+	}
+	
+	private void setupListeners() {
+		angleSeekBar.setOnChangedListner(this);
+		yawRateSeekBar.setOnChangedListner(this);
+		yawDirCheckBox.setOnCheckedChangeListener(this);
+		yawOffsetCheckBox.setOnCheckedChangeListener(this);
+	}
+	
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		wp.missionItem.param3 = yawDirCheckBox.isChecked()?1:-1;
