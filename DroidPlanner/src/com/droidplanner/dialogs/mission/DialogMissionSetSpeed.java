@@ -16,52 +16,56 @@ public class DialogMissionSetSpeed extends DialogMission implements
 	private RadioButton airspeedRadioButton;
 	private RadioButton groundspeedRadioButton;
 	private RadioGroup radioGroupSpeed;
-	
+
 	@Override
 	protected int getResource() {
 		return R.layout.dialog_mission_set_speed;
 	}
-	
+
 	protected View buildView() {
 		super.buildView();
-		speedSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.waypointSpeed);
-		speedSeekBar.setValue(wp.getHeight());
-		speedSeekBar.setOnChangedListner(this);
+		findLocalViews();
+		setupViews();
+		setupListners();
+		return view;
+	}
 
+	private void findLocalViews() {
+		speedSeekBar = (SeekBarWithText) view.findViewById(R.id.waypointSpeed);
 		throttleSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.waypointThrottle);
-		throttleSeekBar.setValue(wp.getHeight());
-		throttleSeekBar.setOnChangedListner(this);
-		
-		
 		radioGroupSpeed = (RadioGroup) view.findViewById(R.id.radioGroupSpeed);
-		radioGroupSpeed.setOnClickListener(this);
-		
 		airspeedRadioButton = (RadioButton) view
 				.findViewById(R.id.radioAirSpeed);
 		groundspeedRadioButton = (RadioButton) view
 				.findViewById(R.id.radioGroundSpeed);
+	}
 
+	private void setupViews() {
+		speedSeekBar.setValue(wp.getHeight());
+		throttleSeekBar.setValue(wp.getHeight());
 		if (wp.missionItem.param1 == 0)
 			airspeedRadioButton.setChecked(true);
 		else
 			groundspeedRadioButton.setChecked(true);
-
-		return view;
 	}
 
-	
+	private void setupListners() {
+		speedSeekBar.setOnChangedListner(this);
+		throttleSeekBar.setOnChangedListner(this);
+		radioGroupSpeed.setOnClickListener(this);
+	}
+
 	@Override
 	public void onSeekBarChanged() {
-		wp.missionItem.param2=(float) speedSeekBar.getValue();
-		wp.missionItem.param3=(float) throttleSeekBar.getValue();
+		wp.missionItem.param2 = (float) speedSeekBar.getValue();
+		wp.missionItem.param3 = (float) throttleSeekBar.getValue();
 	}
 
 	@Override
 	public void onClick(View view) {
 		boolean checked = ((RadioButton) view).isChecked();
-		
+
 		switch (view.getId()) {
 		case R.id.radioAirSpeed:
 			wp.missionItem.param1 = 0;
