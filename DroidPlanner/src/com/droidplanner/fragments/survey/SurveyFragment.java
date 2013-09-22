@@ -53,10 +53,7 @@ public class SurveyFragment extends Fragment implements
 		views = new SurveyViews(context);
 		views.build(inflater, container,this);
 		
-		//TODO find better values for the bellow
-		double defaultHatchAngle = 0;
-		double defaultAltitude = 0;
-		surveyData = new SurveyData(Math.floor(defaultHatchAngle), defaultAltitude);
+		surveyData = new SurveyData();
 		avaliableCameras = new CameraInfoLoader(context);
 		views.updateCameraSpinner(avaliableCameras.getCameraInfoList());
 		
@@ -66,6 +63,7 @@ public class SurveyFragment extends Fragment implements
 	public void setSurveyData(Polygon polygon, double defaultAltitude){
 		this.polygon = polygon;		
 		surveyData.setAltitude(defaultAltitude);
+		update();
 	}
 	
 	public void setOnSurveyListner(OnNewGridListner listner){
