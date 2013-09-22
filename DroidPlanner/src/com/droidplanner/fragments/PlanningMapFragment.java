@@ -1,7 +1,5 @@
 package com.droidplanner.fragments;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -15,21 +13,19 @@ import android.view.ViewGroup;
 import com.droidplanner.dialogs.mission.DialogMissionFactory;
 import com.droidplanner.drone.variables.Mission;
 import com.droidplanner.drone.variables.waypoint;
+import com.droidplanner.fragments.helpers.CameraGroundOverlays;
 import com.droidplanner.fragments.helpers.DroneMap;
 import com.droidplanner.fragments.helpers.MapPath;
 import com.droidplanner.fragments.helpers.OnMapInteractionListener;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
-import com.droidplanner.helpers.geoTools.GeoTools;
 import com.droidplanner.polygon.Polygon;
 import com.droidplanner.polygon.PolygonPoint;
-import com.droidplanner.survey.SurveyData;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.PolygonOptions;
 
 @SuppressLint("UseSparseArrays")
 public class PlanningMapFragment extends DroneMap implements
@@ -40,7 +36,7 @@ public class PlanningMapFragment extends DroneMap implements
 	private MapPath polygonPath;
 	private Mission mission;
 
-	private ArrayList<com.google.android.gms.maps.model.Polygon> cameraOverlays = new ArrayList<com.google.android.gms.maps.model.Polygon>();
+	public CameraGroundOverlays cameraOverlays;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
@@ -52,6 +48,7 @@ public class PlanningMapFragment extends DroneMap implements
 		mMap.setOnMapClickListener(this);
 		mMap.setOnMapLongClickListener(this);
 		polygonPath = new MapPath(mMap, Color.BLACK, 2);
+		cameraOverlays = new CameraGroundOverlays(mMap);
 
 		return view;
 	}
@@ -126,36 +123,6 @@ public class PlanningMapFragment extends DroneMap implements
 
 	public void setMission(Mission mission) {
 		this.mission = mission;
-	}
-
-	public void addCameraFootPrints(List<LatLng> cameraLocations,
-			SurveyData surveyData) {
-		for (com.google.android.gms.maps.model.Polygon overlay : cameraOverlays) {
-			overlay.remove();
-		}
-		cameraOverlays.clear();
-		for (LatLng latLng : cameraLocations) {
-			addOneFootprint(latLng, surveyData);
-		}
-	}
-
-	private void addOneFootprint(LatLng latLng, SurveyData surveyData) {
-		double lng = surveyData.getLateralFootPrint().valueInMeters();
-		double lateral = surveyData.getLongitudinalFootPrint().valueInMeters();
-		double halfDiag = Math.hypot(lng, lateral) / 2;
-		double angle = Math.toDegrees(Math.atan(lng / lateral));
-		cameraOverlays.add(mMap.addPolygon(new PolygonOptions()
-				.add(GeoTools.newCoordFromBearingAndDistance(latLng,
-						surveyData.getAngle() - angle, halfDiag),
-						GeoTools.newCoordFromBearingAndDistance(latLng,
-								surveyData.getAngle() + angle, halfDiag),
-						GeoTools.newCoordFromBearingAndDistance(latLng,
-								surveyData.getAngle() + 180 - angle, halfDiag),
-						GeoTools.newCoordFromBearingAndDistance(latLng,
-								surveyData.getAngle() + 180 + angle, halfDiag))
-				.fillColor(Color.argb(40, 0, 0, 127)).strokeWidth(1)
-				.strokeColor(Color.argb(127, 0, 0, 255))));
-
 	}
 
 }

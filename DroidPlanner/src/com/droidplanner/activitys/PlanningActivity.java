@@ -252,7 +252,7 @@ public class PlanningActivity extends SuperActivity implements
 	@Override
 	public void onNewGrid(Grid grid) {
 		drone.mission.setWaypoints(grid.getWaypoints());
-		planningMapFragment.addCameraFootPrints(grid.getCameraLocations(),surveyFragment.getSurveyData());
+		planningMapFragment.cameraOverlays.renew(grid.getCameraLocations(), surveyFragment.getSurveyData());
 		update();		
 	}
 
