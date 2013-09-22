@@ -41,5 +41,9 @@ public class Grid {
 	public void setAltitude(Double altitude) {
 		this.altitude = altitude;
 	}
+
+	public int getCameraCount() {
+		return getCameraLocations().size();
+	}
 	
 }
