@@ -9,6 +9,8 @@ import com.droidplanner.helpers.geoTools.LineTools;
 import com.google.android.gms.maps.model.LatLng;
 
 public class EndpointSorter {
+	private static final int MAX_NUMBER_OF_CAMERAS = 2000;
+	
 	private List<LatLng> gridPoints = new ArrayList<LatLng>();
 	private List<LineLatLng> grid;
 	private Double sampleDistance;
@@ -19,7 +21,7 @@ public class EndpointSorter {
 		this.sampleDistance = sampleDistance;
 	}
 
-	public void sortGrid(LatLng lastpnt, boolean innerWPs) {
+	public void sortGrid(LatLng lastpnt, boolean innerWPs) throws Exception {
 		while (grid.size() > 0) {
 			LineLatLng closestLine = LineTools.findClosestLineToPoint(lastpnt,
 					grid);
@@ -29,13 +31,16 @@ public class EndpointSorter {
 	}
 
 	private LatLng processOneGridLine(LineLatLng closestLine, LatLng lastpnt,
-			boolean innerWPs) {
+			boolean innerWPs) throws Exception {
 		LatLng firstWP = closestLine.getClosestEndpointTo(lastpnt);
 		LatLng secondWp = closestLine.getFarthestEndpointTo(lastpnt);
 
 		grid.remove(closestLine);
 
 		addWaypointsBetween(firstWP, secondWp, innerWPs);
+		if (cameraLocations.size()>MAX_NUMBER_OF_CAMERAS) {
+			throw new Exception("Too many camera positions");
+		}
 		return secondWp;
 	}
 

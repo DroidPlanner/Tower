@@ -44,13 +44,6 @@ public class Polygon implements PathSource {
 		return list;
 	}
 
-	/*
-	 * A valid polygon must have at least 3 points
-	 */
-	public boolean isValid() {
-		return points.size() > 2;
-	}
-
 	public List<PolygonPoint> getPolygonPoints() {
 		return points;
 	}
@@ -71,6 +64,20 @@ public class Polygon implements PathSource {
 			path.add(path.get(0));
 		}
 		return path;
+	}
+
+	public void checkIfValid() throws Exception {
+		switch (points.size()) {
+		case 0:
+			throw new Exception("Draw a polygon");
+		case 1:
+			throw new Exception("Draw at least 2 more polygon points");
+		case 2:
+			throw new Exception("Draw at least 1 more polygon points");
+		default:
+			return;
+		}
+		
 	}
 
 }

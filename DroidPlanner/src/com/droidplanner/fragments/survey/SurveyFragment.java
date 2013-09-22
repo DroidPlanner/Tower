@@ -83,7 +83,7 @@ public class SurveyFragment extends Fragment implements
 		
 		try {
 			GridBuilder gridBuilder = new GridBuilder(polygon, surveyData, new LatLng(0, 0));
-			checkIfPolygonIsValid(polygon);
+			polygon.checkIfValid();
 			grid = gridBuilder.generate();
 			views.updateViews(surveyData,grid,polygon.getArea());
 			grid.setAltitude(surveyData.getAltitude());
@@ -91,12 +91,6 @@ public class SurveyFragment extends Fragment implements
 		} catch (Exception e) {
 			Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
 			views.blank();
-		}
-	}
-	
-	private void checkIfPolygonIsValid(Polygon polygon) throws Exception {
-		if (!polygon.isValid()) {
-			throw new Exception("Invalid Polygon");			
 		}
 	}
 
