@@ -11,6 +11,8 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.droidplanner.DroidPlannerApp.ConnectionStateListner;
+import com.droidplanner.DroidPlannerApp.OnSystemArmListener;
 import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperActivity;
@@ -37,7 +39,8 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class PlanningActivity extends SuperActivity implements
 		OnMapInteractionListener, OnWaypointUpdateListner,
-		OnAltitudeChangedListner, OnPathFinishedListner, OnNewGridListner {
+		OnAltitudeChangedListner, OnPathFinishedListner, OnNewGridListner,
+		ConnectionStateListner, OnSystemArmListener {
 
 	public Polygon polygon;
 	private PlanningMapFragment planningMapFragment;
@@ -78,6 +81,7 @@ public class PlanningActivity extends SuperActivity implements
 		planningMapFragment.setMission(drone.mission);
 		surveyFragment.setSurveyData(polygon,drone.mission.getDefaultAlt());
 		surveyFragment.setOnSurveyListner(this);
+		missionControlFragment.setLister(this);
 		
 		drone.mission.missionListner = this;
 
