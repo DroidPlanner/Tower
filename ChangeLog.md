@@ -1,3 +1,11 @@
+## Droidplanner v0.15.0
+* New Waypoint Editor
+* New Survey Interface
+* Support for Physical Joysticks
+* Chinise Translation
+* Code Refactoring
+* Minor fixes (please consult GIT history)
+
 ## Droidplanner v0.14.2
 * Fixing the problem of working with big polygons
 
