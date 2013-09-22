@@ -70,6 +70,28 @@ public class MissionControlFragment extends Fragment implements
 
 	}
 
+	private void setButtonState(boolean armEnable, boolean missionEnable) {
+
+		armBtn.setEnabled(armEnable);
+		rtlBtn.setEnabled(missionEnable);
+		landBtn.setEnabled(missionEnable);
+		launchBtn.setEnabled(missionEnable);
+		missionBtn.setEnabled(missionEnable);
+		joystickBtn.setEnabled(missionEnable);
+
+		armBtn.setImageResource(armEnable ? R.drawable.armg : R.drawable.armd);
+		rtlBtn.setImageResource(missionEnable ? R.drawable.rtlb
+				: R.drawable.rtld);
+		landBtn.setImageResource(missionEnable ? R.drawable.landb
+				: R.drawable.landd);
+		launchBtn.setImageResource(missionEnable ? R.drawable.launchb
+				: R.drawable.launchd);
+		missionBtn.setImageResource(missionEnable ? R.drawable.missionb
+				: R.drawable.missiond);
+		joystickBtn.setImageResource(missionEnable ? R.drawable.gamecontrollerg
+				: R.drawable.gamecontrollerd);
+	}
+
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
@@ -103,48 +125,26 @@ public class MissionControlFragment extends Fragment implements
 	@Override
 	public void notifyConnected() {
 		connectBtn.setImageResource(R.drawable.connectg);
-		armBtn.setEnabled(true);
-		armBtn.setImageResource(R.drawable.armg);
+		setButtonState(true, false);
 		connectionStateListener.notifyConnected();
 	}
 
 	@Override
 	public void notifyDisconnected() {
 		connectBtn.setImageResource(R.drawable.disconnectr);
-		armBtn.setImageResource(R.drawable.armd);
-
-		armBtn.setEnabled(false);
-		rtlBtn.setEnabled(false);
-		landBtn.setEnabled(false);
-		launchBtn.setEnabled(false);
-		missionBtn.setEnabled(false);
-		joystickBtn.setEnabled(false);
-
+		setButtonState(false, false);
 		connectionStateListener.notifyDisconnected();
 	}
 
 	@Override
 	public void notifyArmed() {
-		armBtn.setImageResource(R.drawable.armr);
-
-		rtlBtn.setEnabled(true);
-		landBtn.setEnabled(true);
-		launchBtn.setEnabled(true);
-		missionBtn.setEnabled(true);
-		joystickBtn.setEnabled(true);
-
+		setButtonState(true, true);
 		systemArmListener.notifyArmed();
 	}
 
 	@Override
 	public void notifyDisarmed() {
-		armBtn.setImageResource(R.drawable.armg);
-
-		rtlBtn.setEnabled(false);
-		landBtn.setEnabled(false);
-		launchBtn.setEnabled(false);
-		missionBtn.setEnabled(false);
-		joystickBtn.setEnabled(false);
+		setButtonState(true, false);
 
 		systemArmListener.notifyDisarmed();
 
