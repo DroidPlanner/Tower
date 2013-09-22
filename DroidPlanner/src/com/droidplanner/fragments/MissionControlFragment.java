@@ -16,7 +16,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
-public class MissionControlFragment extends Fragment implements OnClickListener, ConnectionStateListner, OnSystemArmListener {
+public class MissionControlFragment extends Fragment implements
+		OnClickListener, ConnectionStateListner, OnSystemArmListener {
 
 	private ImageButton armBtn;
 	private ImageButton rtlBtn;
@@ -30,7 +31,7 @@ public class MissionControlFragment extends Fragment implements OnClickListener,
 	private Drone drone;
 	private ConnectionStateListner connectionStateListener;
 	private OnSystemArmListener systemArmListener;
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -59,7 +60,7 @@ public class MissionControlFragment extends Fragment implements OnClickListener,
 		connectBtn = (ImageButton) view.findViewById(R.id.mc_connectBtn);
 		missionBtn = (ImageButton) view.findViewById(R.id.mc_missionBtn);
 		joystickBtn = (ImageButton) view.findViewById(R.id.mc_joystickBtn);
-		
+
 		armBtn.setEnabled(false);
 		rtlBtn.setEnabled(false);
 		landBtn.setEnabled(false);
@@ -69,16 +70,17 @@ public class MissionControlFragment extends Fragment implements OnClickListener,
 
 	}
 
-	
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.mc_armBtn:
-			if(drone.MavClient.isConnected()){
-				if(!drone.state.isArmed())
+			if (drone.MavClient.isConnected()) {
+				if (!drone.state.isArmed()) {
+					armBtn.setImageResource(R.drawable.arma);
 					drone.tts.speak("Arming the vehicle, please standby");
-				MavLinkArm.sendArmMessage(drone, !drone.state.isArmed());				
+				}
+				MavLinkArm.sendArmMessage(drone, !drone.state.isArmed());
 			}
 			break;
 		case R.id.mc_rtlBtn:
@@ -97,7 +99,6 @@ public class MissionControlFragment extends Fragment implements OnClickListener,
 
 		}
 	}
-
 
 	@Override
 	public void notifyConnected() {
@@ -125,28 +126,28 @@ public class MissionControlFragment extends Fragment implements OnClickListener,
 	@Override
 	public void notifyArmed() {
 		armBtn.setImageResource(R.drawable.armr);
-		
+
 		rtlBtn.setEnabled(true);
 		landBtn.setEnabled(true);
 		launchBtn.setEnabled(true);
 		missionBtn.setEnabled(true);
 		joystickBtn.setEnabled(true);
-		
+
 		systemArmListener.notifyArmed();
 	}
 
 	@Override
 	public void notifyDisarmed() {
 		armBtn.setImageResource(R.drawable.armg);
-		
+
 		rtlBtn.setEnabled(false);
 		landBtn.setEnabled(false);
 		launchBtn.setEnabled(false);
 		missionBtn.setEnabled(false);
 		joystickBtn.setEnabled(false);
-		
+
 		systemArmListener.notifyDisarmed();
-		
+
 	}
 
 	public void setLister(PlanningActivity planningActivity) {
@@ -154,9 +155,9 @@ public class MissionControlFragment extends Fragment implements OnClickListener,
 		this.drone = planningActivity.drone;
 		connectionStateListener = planningActivity.app.conectionListner;
 		systemArmListener = planningActivity.app.onSystemArmListener;
-		
+
 		planningActivity.app.conectionListner = this;
 		planningActivity.app.onSystemArmListener = this;
-		
+
 	}
 }
