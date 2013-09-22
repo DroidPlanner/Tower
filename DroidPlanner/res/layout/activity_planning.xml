@@ -17,7 +17,8 @@
         android:id="@+id/gestureMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        class="com.droidplanner.fragments.helpers.GestureMapFragment" />
+        class="com.droidplanner.fragments.helpers.GestureMapFragment"
+        tools:layout="@layout/fragment_gesture_map" />
 
     <TextView
         android:id="@+id/textViewTotalLength"
@@ -55,7 +56,8 @@
                 android:id="@+id/missionFragment"
                 android:name="com.droidplanner.fragments.MissionFragment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                tools:layout="@layout/fragment_mission" />
 
             <!--
          The second child becomes the right (content) pane. In this

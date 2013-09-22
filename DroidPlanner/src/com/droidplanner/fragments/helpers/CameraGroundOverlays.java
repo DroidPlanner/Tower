@@ -20,13 +20,6 @@ public class CameraGroundOverlays {
 		this.mMap = mMap;
 	}
 
-
-	public void renew(List<LatLng> cameraLocations, SurveyData surveyData) {
-		removeAll();
-		addOverlays(cameraLocations, surveyData);
-	}
-
-
 	public void addOverlays(List<LatLng> cameraLocations,
 			SurveyData surveyData) {
 		for (LatLng latLng : cameraLocations) {

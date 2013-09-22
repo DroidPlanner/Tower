@@ -123,17 +123,21 @@ public class SurveyFragment extends Fragment implements
 
 	private void update() {
 		views.updateSeekBarsValues(surveyData);
-		onSeekBarChanged();
+		generateGrid();
 	}
 	
 	@Override
 	public void onClick(View view) {
 		switch (view.getId()) {
 		case R.id.checkBoxInnerWPs:
-			surveyData.setInnerWpsState(views.innerWPsCheckbox.isChecked());			
+			surveyData.setInnerWpsState(views.innerWPsCheckbox.isChecked());
+			update();
 			break;
 		case R.id.clearPolyButton:
 			onSurveyListner.onClearPolygon();
+			break;
+		case R.id.CheckBoxFootprints:
+			update();
 			break;
 		}
 		
@@ -149,6 +153,10 @@ public class SurveyFragment extends Fragment implements
 
 	public  SurveyData getSurveyData() {
 		return surveyData;
+	}
+
+	public boolean isFootPrintOverlayEnabled() {
+		return views.footprintCheckBox.isChecked();
 	}
 
 }

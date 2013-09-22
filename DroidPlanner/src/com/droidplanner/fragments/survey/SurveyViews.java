@@ -38,6 +38,7 @@ public class SurveyViews {
 	private View layout;
 	protected ToggleButton modeButton;
 	private Button clearPolyButton;
+	public CheckBox footprintCheckBox;
 
 	public SurveyViews(Context context) {
 		this.context = context;
@@ -94,6 +95,7 @@ public class SurveyViews {
 				.findViewById(id.cameraFileSpinner);
 		modeButton = (ToggleButton) layout.findViewById(id.surveyModeButton);
 		clearPolyButton = (Button) layout.findViewById(id.clearPolyButton);
+		footprintCheckBox = (CheckBox) layout.findViewById(id.CheckBoxFootprints);
 		
 		angleView = (SeekBarWithText) layout.findViewById(id.angleView);
 		overlapView = (SeekBarWithText) layout.findViewById(id.overlapView);
@@ -116,6 +118,7 @@ public class SurveyViews {
 				.findViewById(id.numberOfStripsTextView);
 		lengthView = (TextView) layout.findViewById(id.lengthTextView);
 
+		footprintCheckBox.setOnClickListener(surveyDialog);
 		angleView.setOnChangedListner(surveyDialog);
 		altitudeView.setOnChangedListner(surveyDialog);
 		overlapView.setOnChangedListner(surveyDialog);
