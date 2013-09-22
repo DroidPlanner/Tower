@@ -13,7 +13,7 @@ import com.droidplanner.drone.DroneVariable;
 import com.droidplanner.fragments.helpers.MapPath.PathSource;
 import com.google.android.gms.maps.model.LatLng;
 
-public class Mission extends DroneVariable implements PathSource {
+public class Mission extends DroneVariable implements PathSource, OnWaypointUpdateListner {
 
 	private Home home = new Home();
 	private List<waypoint> waypoints = new ArrayList<waypoint>();
@@ -57,7 +57,7 @@ public class Mission extends DroneVariable implements PathSource {
 	public List<LatLng> getAllVisibleCoordinates() {
 		List<LatLng> result = new ArrayList<LatLng>();
 		for (waypoint point : waypoints) {
-			if (point.getCmd().isNavigation()) {
+			if (point.getCmd().showOnMap()) {
 				result.add(point.getCoord());				
 			}
 		}
@@ -158,7 +158,7 @@ public class Mission extends DroneVariable implements PathSource {
 			waypoints.remove(0); // Remove Home waypoint
 			clearWaypoints();
 			addWaypoints(waypoints);
-			notifyMissionUpdate();
+			onWaypointsUpdate();
 		}
 
 	}
@@ -171,11 +171,7 @@ public class Mission extends DroneVariable implements PathSource {
 
 	public void removeWaypoint(waypoint waypoint) {
 		waypoints.remove(waypoint);
-		notifyMissionUpdate();
-	}
-
-	public void notifyMissionUpdate() {
-		missionListner.onWaypointsUpdate();
+		onWaypointsUpdate();
 	}
 
 	public void sendMissionToAPM() {
@@ -189,11 +185,16 @@ public class Mission extends DroneVariable implements PathSource {
 	public List<LatLng> getPathPoints() {
 		List<LatLng> newPath = new ArrayList<LatLng>();
 		for (waypoint point : getWaypoints()) {
-			if (point.getCmd().isNavigation()) {
+			if (point.getCmd().isOnFligthPath()) {
 				newPath.add(point.getCoord());				
 			}
 		}
 		return newPath;
+	}
+
+	@Override
+	public void onWaypointsUpdate() {
+		missionListner.onWaypointsUpdate();
 	}
 
 
