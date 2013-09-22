@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ff333333" >
+    android:background="#ff333333"
+    android:gravity="right" >
 
     <!--
          The first child view becomes the left pane. When the combined
@@ -66,6 +67,43 @@
          android:layout_width.
             -->
 
+        </LinearLayout>
+    </SlidingDrawer>
+
+    <SlidingDrawer
+        android:id="@+id/SlidingDrawer01"
+        android:layout_width="580dp"
+        android:layout_height="fill_parent"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:content="@+id/LinearLayout01"
+        android:handle="@+id/ImageView01"
+        android:orientation="horizontal"
+        android:padding="0dp"
+        android:visibility="visible" >
+
+        <ImageView
+            android:id="@+id/ImageView01"
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:src="@drawable/wp_handle"
+            tools:ignore="ContentDescription" />
+
+        <LinearLayout
+            android:id="@+id/LinearLayout01"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#ff000000"
+            android:orientation="vertical"
+            android:padding="10dip" >
+
+            <fragment
+                android:id="@+id/surveyFragment"
+                android:name="com.droidplanner.fragments.survey.SurveyFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:layout="@layout/fragment_survey" />
         </LinearLayout>
     </SlidingDrawer>
 

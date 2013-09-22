@@ -3,6 +3,7 @@ package com.droidplanner.fragments;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,7 +42,7 @@ public class PlanningMapFragment extends DroneMap implements
 		mMap.setOnMarkerClickListener(this);
 		mMap.setOnMapClickListener(this);
 		mMap.setOnMapLongClickListener(this);
-		polygonPath = new MapPath(mMap);
+		polygonPath = new MapPath(mMap,Color.BLACK,2);
 		 
 		return view;
 	}

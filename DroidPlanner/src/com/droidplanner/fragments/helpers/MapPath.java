@@ -10,15 +10,23 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 public class MapPath {
-	public interface PathSource{
+	public interface PathSource {
 		public List<LatLng> getPathPoints();
 	}
-	
+
 	public Polyline missionPath;
 	private GoogleMap mMap;
+	private float width;
+	private int color;
+
+	public MapPath(GoogleMap mMap, int color, float width) {
+		this.mMap = mMap;
+		this.color = color;
+		this.width = width;
+	}
 
 	public MapPath(GoogleMap mMap) {
-		this.mMap = mMap;
+		this(mMap, Color.YELLOW, 3);
 	}
 
 	public void update(PathSource pathSource) {
@@ -30,7 +38,7 @@ public class MapPath {
 	private void addToMapIfNeeded() {
 		if (missionPath == null) {
 			PolylineOptions flightPath = new PolylineOptions();
-			flightPath.color(Color.YELLOW).width(3);
+			flightPath.color(color).width(width);
 			missionPath = mMap.addPolyline(flightPath);
 		}
 	}

@@ -27,12 +27,12 @@
     <string name="menu_open_kmz">Άνοιγμα αρχείου KMZ</string>
     <string name="menu_add_polygon">Πρόσθεσε πολύγωνο</string>
     <string name="menu_polygon">Πολύγωνο</string>
-    <string name="menu_clear_polygon">Διαγραφή πολύγωνου</string>
+    <string name="clear_polygon">Διαγραφή πολύγωνου</string>
     <string name="generate">Δημιουργια πολύγωνου</string>
     <string name="exit">Τέλος πολύγωνου</string>
     <string name="menu_clearFlightPath">Διαγραφή σχεδίου πτήσης</string>
-    <string name="exiting_polygon_mode">Έξοδος απο κατάσταση πολύγωνου</string>
-    <string name="entering_polygon_mode">Έναρξη κατάστασης πολύγωνου</string>
+    <string name="mission_mode">Έξοδος απο κατάσταση πολύγωνου</string>
+    <string name="polygon_mode">Έναρξη κατάστασης πολύγωνου</string>
     <string name="dialog_polygon_hatch_angle">Γωνία εισόδου:</string>
     <string name="distance_between_lines">Απόσταση μεταξύ γραμμών:</string>
     <string name="enable">Ενεργοποίηση</string>

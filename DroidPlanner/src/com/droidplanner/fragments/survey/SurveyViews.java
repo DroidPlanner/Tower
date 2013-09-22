@@ -1,13 +1,14 @@
-package com.droidplanner.dialogs.survey;
+package com.droidplanner.fragments.survey;
 
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.droidplanner.R;
 import com.droidplanner.R.id;
@@ -18,8 +19,7 @@ import com.droidplanner.survey.grid.Grid;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.spinners.SpinnerSelfSelect;
 
-public class SurveyDialogViews {
-	public Context context;
+public class SurveyViews {
 	public SeekBarWithText overlapView;
 	public SeekBarWithText angleView;
 	public SeekBarWithText altitudeView;
@@ -34,8 +34,12 @@ public class SurveyDialogViews {
 	public TextView numberOfPicturesView;
 	public TextView numberOfStripsView;
 	public TextView lengthView;
+	private Context context;
+	private View layout;
+	protected ToggleButton modeButton;
+	private Button clearPolyButton;
 
-	public SurveyDialogViews(Context context) {
+	public SurveyViews(Context context) {
 		this.context = context;
 	}
 
@@ -84,19 +88,13 @@ public class SurveyDialogViews {
 		overlapView.setValue(surveyData.getOverlap());
 	}
 
-	AlertDialog buildDialog(SurveyDialog surveyDialog) {
-		Builder builder = new Builder(context);
-		builder.setTitle("Survey");
-		LayoutInflater inflater = (LayoutInflater) context
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View layout = inflater.inflate(R.layout.dialog_survey, null);
-		builder.setView(layout);
-		builder.setNegativeButton("Cancel", surveyDialog).setPositiveButton(
-				"Ok", surveyDialog);
-		AlertDialog dialog = builder.create();
-
+	public void build(LayoutInflater inflater, ViewGroup container, SurveyFragment surveyDialog) {
+		layout = inflater.inflate(R.layout.fragment_survey, null);
 		cameraSpinner = (SpinnerSelfSelect) layout
 				.findViewById(id.cameraFileSpinner);
+		modeButton = (ToggleButton) layout.findViewById(id.surveyModeButton);
+		clearPolyButton = (Button) layout.findViewById(id.clearPolyButton);
+		
 		angleView = (SeekBarWithText) layout.findViewById(id.angleView);
 		overlapView = (SeekBarWithText) layout.findViewById(id.overlapView);
 		sidelapView = (SeekBarWithText) layout.findViewById(id.sidelapView);
@@ -124,11 +122,16 @@ public class SurveyDialogViews {
 		sidelapView.setOnChangedListner(surveyDialog);
 		innerWPsCheckbox.setOnClickListener(surveyDialog);
 		cameraSpinner.setOnSpinnerItemSelectedListener(surveyDialog);
-		return dialog;
+		clearPolyButton.setOnClickListener(surveyDialog);
 	}
 
 	void updateCameraSpinner(SpinnerAdapter spinnerAdapter) {
 		cameraSpinner.setAdapter(spinnerAdapter);
 		cameraSpinner.setSelection(0);
 	}
+
+	public View getLayout() {
+		return layout;
+	}
+
 }
