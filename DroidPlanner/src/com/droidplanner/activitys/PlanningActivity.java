@@ -20,6 +20,7 @@ import com.droidplanner.dialogs.openfile.OpenMissionDialog;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.file.IO.MissionReader;
 import com.droidplanner.file.IO.MissionWriter;
+import com.droidplanner.fragments.MissionControlFragment;
 import com.droidplanner.fragments.MissionFragment;
 import com.droidplanner.fragments.PlanningMapFragment;
 import com.droidplanner.fragments.helpers.GestureMapFragment;
@@ -44,7 +45,8 @@ public class PlanningActivity extends SuperActivity implements
 	private GestureMapFragment gestureMapFragment;
 	private TextView lengthView;
 	private SurveyFragment surveyFragment;
-
+	private MissionControlFragment missionControlFragment;
+	
 	@Override
 	public int getNavigationItem() {
 		return 0;
@@ -64,6 +66,8 @@ public class PlanningActivity extends SuperActivity implements
 				.findFragmentById(R.id.missionFragment);
 		surveyFragment = (SurveyFragment) getFragmentManager()
 				.findFragmentById(R.id.surveyFragment);
+		missionControlFragment = (MissionControlFragment) getFragmentManager()
+				.findFragmentById(R.id.missionControlFragment);
 		
 		lengthView = (TextView) findViewById(R.id.textViewTotalLength);
 
@@ -74,7 +78,6 @@ public class PlanningActivity extends SuperActivity implements
 		planningMapFragment.setMission(drone.mission);
 		surveyFragment.setSurveyData(polygon,drone.mission.getDefaultAlt());
 		surveyFragment.setOnSurveyListner(this);
-		
 		
 		drone.mission.missionListner = this;
 
