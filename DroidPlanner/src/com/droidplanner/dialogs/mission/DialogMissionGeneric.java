@@ -18,7 +18,7 @@ public class DialogMissionGeneric extends DialogMission implements
 	protected View buildView() {
 		super.buildView();
 		altitudeSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.waypointAltitude);
+				.findViewById(R.id.waypointSpeed);
 		altitudeSeekBar.setValue(wp.getHeight());
 		altitudeSeekBar.setOnChangedListner(this);
 

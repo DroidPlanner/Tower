@@ -17,6 +17,7 @@ public class DialogMissionLoiterN extends DialogMission implements
 	private SeekBarWithText loiterTurnSeekBar;
 	private SeekBarWithText loiterRadiusSeekBar;
 	private CheckBox loiterCCW;
+	private SeekBarWithText yawSeekBar;
 
 	@Override
 	protected int getResource() {
@@ -35,7 +36,7 @@ public class DialogMissionLoiterN extends DialogMission implements
 		loiterCCW.setOnCheckedChangeListener(this);
 
 		altitudeSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.waypointAltitude);
+				.findViewById(R.id.waypointSpeed);
 		altitudeSeekBar.setValue(wp.getHeight());
 		altitudeSeekBar.setOnChangedListner(this);
 		
@@ -49,6 +50,10 @@ public class DialogMissionLoiterN extends DialogMission implements
 		loiterRadiusSeekBar.setAbsValue(wp.missionItem.param3);
 		loiterRadiusSeekBar .setOnChangedListner(this);
 
+		yawSeekBar = (SeekBarWithText) view
+				.findViewById(R.id.waypointAngle);
+		yawSeekBar.setValue(wp.missionItem.param4);
+		yawSeekBar.setOnChangedListner(this);
 
 		return view;
 	}
@@ -71,6 +76,7 @@ public class DialogMissionLoiterN extends DialogMission implements
 		if (loiterCCW.isChecked()) {
 			wp.missionItem.param3 *= -1.0;
 		}
+		wp.missionItem.param4 = (float) yawSeekBar.getValue();
 	}
 
 }

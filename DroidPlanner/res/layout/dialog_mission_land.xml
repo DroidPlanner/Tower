@@ -12,6 +12,18 @@
         android:layout_margin="5dp"
         android:entries="@array/ExampleCameraArray" />
 
+    <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+        android:id="@+id/waypointAngle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        custom:inc="5"
+        custom:max="360"
+        custom:min="0"
+        custom:title="@string/waypoint_angle"
+        custom:unit="°" >
+    </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"

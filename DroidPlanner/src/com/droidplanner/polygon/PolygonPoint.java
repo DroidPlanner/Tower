@@ -1,5 +1,7 @@
 package com.droidplanner.polygon;
 
+import android.content.Context;
+
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import com.droidplanner.fragments.markers.PolygonMarker;
 import com.google.android.gms.maps.model.LatLng;
@@ -19,12 +21,12 @@ public class PolygonPoint implements MarkerSource {
 	}
 
 	@Override
-	public MarkerOptions build() {
+	public MarkerOptions build(Context context) {
 		return PolygonMarker.build(this);
 	}
 
 	@Override
-	public void update(Marker marker) {
+	public void update(Marker marker, Context context) {
 		PolygonMarker.update(marker, this);
 
 	}

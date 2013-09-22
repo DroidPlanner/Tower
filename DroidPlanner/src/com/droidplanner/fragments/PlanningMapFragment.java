@@ -1,14 +1,19 @@
 package com.droidplanner.fragments;
 
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.droidplanner.drone.Drone;
+import com.droidplanner.dialogs.mission.DialogMissionFactory;
+import com.droidplanner.drone.variables.Mission;
 import com.droidplanner.drone.variables.waypoint;
+import com.droidplanner.fragments.helpers.CameraGroundOverlays;
 import com.droidplanner.fragments.helpers.DroneMap;
 import com.droidplanner.fragments.helpers.MapPath;
 import com.droidplanner.fragments.helpers.OnMapInteractionListener;
@@ -17,16 +22,21 @@ import com.droidplanner.polygon.Polygon;
 import com.droidplanner.polygon.PolygonPoint;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
 @SuppressLint("UseSparseArrays")
 public class PlanningMapFragment extends DroneMap implements
-		OnMapLongClickListener, OnMarkerDragListener, OnMapClickListener {
+		OnMapLongClickListener, OnMarkerDragListener, OnMapClickListener,
+		OnMarkerClickListener {
 
 	public OnMapInteractionListener mListener;
 	private MapPath polygonPath;
+	private Mission mission;
+
+	public CameraGroundOverlays cameraOverlays;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
@@ -34,23 +44,25 @@ public class PlanningMapFragment extends DroneMap implements
 		View view = super.onCreateView(inflater, viewGroup, bundle);
 
 		mMap.setOnMarkerDragListener(this);
+		mMap.setOnMarkerClickListener(this);
 		mMap.setOnMapClickListener(this);
 		mMap.setOnMapLongClickListener(this);
-		polygonPath = new MapPath(mMap);
-		 
+		polygonPath = new MapPath(mMap, Color.BLACK, 2);
+		cameraOverlays = new CameraGroundOverlays(mMap);
+
 		return view;
 	}
 
-	public void update(Drone drone, Polygon polygon) {
+	public void update(Polygon polygon) {
 		markers.clear();
 
-		markers.updateMarker(drone.mission.getHome(), false);
-		markers.updateMarkers(drone.mission.getWaypoints(), true);
-		markers.updateMarkers(polygon.getPolygonPoints(), true);
+		Context context = getActivity().getApplicationContext();
+		markers.updateMarker(mission.getHome(), false, context);
+		markers.updateMarkers(mission.getWaypoints(), true, context);
+		markers.updateMarkers(polygon.getPolygonPoints(), true, context);
 
 		polygonPath.update(polygon);
-		missionPath.update(drone.mission);
-
+		missionPath.update(mission);
 	}
 
 	@Override
@@ -88,7 +100,7 @@ public class PlanningMapFragment extends DroneMap implements
 
 	@Override
 	public void onMapClick(LatLng point) {
-		mListener.onMapClick(point);		
+		mListener.onMapClick(point);
 	}
 
 	@Override
@@ -97,5 +109,20 @@ public class PlanningMapFragment extends DroneMap implements
 		mListener = (OnMapInteractionListener) activity;
 	}
 
+	@Override
+	public boolean onMarkerClick(Marker marker) {
+		MarkerSource source = markers.getSourceFromMarker(marker);
+		if (source instanceof waypoint) {
+			DialogMissionFactory.getDialog((waypoint) source,
+					this.getActivity(), mission);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public void setMission(Mission mission) {
+		this.mission = mission;
+	}
 
 }

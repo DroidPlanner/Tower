@@ -27,12 +27,12 @@
     <string name="menu_open_kmz">Atvērt KMZ</string>
     <string name="menu_add_polygon">Pievienot poligonu</string>
     <string name="menu_polygon">Poligons</string>
-    <string name="menu_clear_polygon">Izdzēst poligonu</string>
+    <string name="clear_polygon">Izdzēst poligonu</string>
     <string name="generate">Ģenerēt</string>
     <string name="exit">Izeja</string>
     <string name="menu_clearFlightPath">Izdzēst lidošanas ceļu</string>
-    <string name="exiting_polygon_mode">Izeju no Poligona režīma</string>
-    <string name="entering_polygon_mode">Ieeju poligona režīmā</string>
+    <string name="mission_mode">Izeju no Poligona režīma</string>
+    <string name="polygon_mode">Ieeju poligona režīmā</string>
     <string name="dialog_polygon_hatch_angle">Lūka leņķis:</string>
     <string name="distance_between_lines">Distance starp līnijām</string>
     <string name="enable">Dot iespēju</string>

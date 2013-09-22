@@ -1,5 +1,7 @@
 package com.droidplanner.drone.variables;
 
+import android.content.Context;
+
 import com.droidplanner.fragments.markers.HomeMarker;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -19,12 +21,12 @@ public class Home extends waypoint {
 	}
 
 	@Override
-	public MarkerOptions build() {
+	public MarkerOptions build(Context context) {
 		return HomeMarker.build(this);
 	}
 
 	@Override
-	public void update(Marker marker) {
+	public void update(Marker marker, Context context) {
 		HomeMarker.update(marker, this);
 	}
 

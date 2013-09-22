@@ -9,7 +9,7 @@ import com.droidplanner.polygon.PolyBounds;
 import com.google.android.gms.maps.model.LatLng;
 
 public class CircumscribedGrid {
-	private static final int MAX_NUMBER_OF_LINES = 500;
+	private static final int MAX_NUMBER_OF_LINES = 200;
 	List<LineLatLng> grid = new ArrayList<LineLatLng>();
 	private LatLng gridLowerLeft;
 	private double extrapolatedDiag;

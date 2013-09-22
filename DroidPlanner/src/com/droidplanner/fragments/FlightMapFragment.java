@@ -101,13 +101,13 @@ public class FlightMapFragment extends DroneMap implements
 		getPreferences();
 		if (isGuidedModeEnabled) {
 			drone.guidedPoint.newGuidedPoint(coord);
-			markers.updateMarker(drone.guidedPoint, false);
+			markers.updateMarker(drone.guidedPoint, false,getActivity().getApplicationContext());
 		}
 	}
 
 	public void updateFragment() {
 		missionPath.update(drone.mission);
-		markers.updateMarker(drone.mission.getHome(), false);
+		markers.updateMarker(drone.mission.getHome(), false,getActivity().getApplicationContext());
 	}
 
 }

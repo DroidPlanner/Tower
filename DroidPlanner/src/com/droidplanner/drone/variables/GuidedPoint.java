@@ -1,5 +1,6 @@
 package com.droidplanner.drone.variables;
 
+import android.content.Context;
 import android.widget.Toast;
 
 import com.droidplanner.MAVLink.MavLinkModes;
@@ -24,12 +25,12 @@ public class GuidedPoint extends DroneVariable implements MarkerSource {
 	}
 
 	@Override
-	public MarkerOptions build() {
+	public MarkerOptions build(Context context) {
 		return GuidedMarker.build(this);
 	}
 
 	@Override
-	public void update(Marker markerFromGcp) {
+	public void update(Marker markerFromGcp, Context context) {
 		GuidedMarker.update(markerFromGcp, this);
 	}
 
