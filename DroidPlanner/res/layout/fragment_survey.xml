@@ -40,7 +40,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/footprint" />
-
         </LinearLayout>
     </LinearLayout>
 
@@ -137,29 +136,36 @@
                 custom:unit="m" >
             </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
 
-            <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
-                android:id="@+id/overlapView"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="2dp"
-                custom:inc="1"
-                custom:max="99"
-                custom:min="0"
-                custom:title="@string/overlap"
-                custom:unit="%" >
-            </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+                android:orientation="horizontal" >
 
-            <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
-                android:id="@+id/sidelapView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="2dp"
-                custom:inc="1"
-                custom:max="99"
-                custom:min="0"
-                custom:title="@string/sidelap"
-                custom:unit="%" >
-            </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+                <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+                    android:id="@+id/overlapView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:layout_margin="2dp"
+                    custom:inc="1"
+                    custom:max="99"
+                    custom:min="0"
+                    custom:title="@string/overlap"
+                    custom:unit="%" >
+                </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+
+                <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+                    android:id="@+id/sidelapView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    custom:inc="1"
+                    custom:max="99"
+                    custom:min="0"
+                    custom:title="@string/sidelap"
+                    custom:unit="%" >
+                </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
@@ -180,8 +186,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textOff="@string/mission_mode"
-            android:textOn="@string/polygon_mode" />
-
+            android:textOn="@string/polygon_mode" 
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+        
         <Button
             android:id="@+id/clearPolyButton"
             android:layout_width="match_parent"
