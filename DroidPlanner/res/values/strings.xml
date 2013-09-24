@@ -106,7 +106,9 @@
     <string name="waypointDesc_CondAlt" formatted="false">Altitude condition is set to %1.1fm at the rate of %1.1fm/s</string>
     <string name="waypointDesc_CondDist" formatted="false">Distance condition is set to %1.1fm</string>
     <string name="waypointDesc_CondYaw" formatted="false">Yaw condition is set to %03.0f° at the rate of %1.1fm/s %s, using %s</string>
+    <string name="waypointDesc_GPS" formatted="false">Lat/Lon [%1.12f/%1.12f]</string>
     <string name="waypointDesc_coordmav">current vehicle position</string>
+    <string name="waypointDesc_coordwp">current Waypoint position</string>
     <string name="waypointDesc_coordgcs">current GCS position</string>
     <string name="waypointDesc_coordmanual">entered coordinate</string>
     <string name="waypointDesc_immediate">immediately</string>
