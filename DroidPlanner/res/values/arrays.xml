@@ -34,6 +34,7 @@
         <item name="USB">USB</item>
         <item name="TCP">TCP</item>
         <item name="UDP">UDP</item>
+        <item name="BLUETOOTH">BLUETOOTH</item>
     </string-array>
     <string-array name="MapTypes">
         <item>Satellite</item>
