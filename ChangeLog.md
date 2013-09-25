@@ -1,3 +1,7 @@
+## Droidplanner v0.16.0
+* Bluetooth Support
+* Fixing layout problems with the Survey window
+
 ## Droidplanner v0.15.0
 * New Waypoint Editor
 * New Survey Interface
