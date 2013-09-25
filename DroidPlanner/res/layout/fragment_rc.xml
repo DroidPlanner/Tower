@@ -3,16 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
-
-    <TextView
-        android:id="@+id/textViewRCWarningText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="5dp"
-        android:text="@string/this_is_very_experimental_please_be_careful"
-        android:textAppearance="?android:attr/textAppearanceLarge" />    	
+    android:orientation="vertical" >    	
     
     <LinearLayout
         android:layout_width="match_parent"
