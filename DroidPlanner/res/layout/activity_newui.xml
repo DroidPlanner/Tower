@@ -11,79 +11,17 @@
         android:layout_height="match_parent" />
 
     <FrameLayout
-        android:id="@+id/containerRCFragment"
+        android:id="@+id/containerRC"
         android:layout_width="match_parent"
         android:layout_height="370dp"
         android:layout_gravity="bottom" />
 
-    <SlidingDrawer
-        android:id="@+id/SlidingDrawer"
-        android:layout_width="fill_parent"
-        android:layout_height="250dp"
-        android:layout_gravity="bottom"
-        android:content="@+id/contentLayout"
-        android:handle="@+id/slideButton1"
-        android:orientation="vertical"
-        android:padding="0dp" >
+    <FrameLayout
+        android:id="@+id/containerPlanning"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
 
-        <ImageView
-            android:id="@id/slideButton1"
-            android:layout_width="50dip"
-            android:layout_height="50dip"
-            android:src="@drawable/slide_up"
-            tools:ignore="ContentDescription" />
-
-        <LinearLayout
-            android:id="@+id/contentLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#aa000000"
-            android:orientation="vertical"
-            android:padding="10dip" >
-
-            <fragment
-                android:id="@+id/missionFragment"
-                android:name="com.droidplanner.fragments.MissionFragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:layout="@layout/fragment_mission" />
-        </LinearLayout>
-    </SlidingDrawer>
-
-    <SlidingDrawer
-        android:id="@+id/SlidingDrawer01"
-        android:layout_width="580dp"
-        android:layout_height="fill_parent"
-        android:layout_gravity="right"
-        android:content="@+id/LinearLayout01"
-        android:handle="@+id/ImageView01"
-        android:orientation="horizontal"
-        android:padding="0dp"
-        android:visibility="visible" >
-
-        <ImageView
-            android:id="@+id/ImageView01"
-            android:layout_width="50dip"
-            android:layout_height="50dip"
-            android:src="@drawable/slide_left"
-            tools:ignore="ContentDescription" />
-
-        <LinearLayout
-            android:id="@+id/LinearLayout01"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#ff000000"
-            android:orientation="vertical"
-            android:padding="10dip" >
-
-            <fragment
-                android:id="@+id/surveyFragment"
-                android:name="com.droidplanner.fragments.survey.SurveyFragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:layout="@layout/fragment_survey" />
-        </LinearLayout>
-    </SlidingDrawer>
+    </FrameLayout>
 
     <fragment
         android:id="@+id/fragment3"
