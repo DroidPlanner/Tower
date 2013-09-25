@@ -10,13 +10,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <fragment
-        android:id="@+id/fragment2"
-        android:name="com.droidplanner.fragments.RCFragment"
+    <FrameLayout
+        android:id="@+id/containerRCFragment"
         android:layout_width="match_parent"
         android:layout_height="370dp"
-        android:layout_gravity="bottom"
-        tools:layout="@layout/fragment_rc" />
+        android:layout_gravity="bottom" />
 
     <SlidingDrawer
         android:id="@+id/SlidingDrawer"
