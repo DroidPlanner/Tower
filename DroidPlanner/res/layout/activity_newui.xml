@@ -10,13 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Large Text"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
     <fragment
         android:id="@+id/fragment2"
         android:name="com.droidplanner.fragments.RCFragment"
@@ -39,7 +32,7 @@
             android:id="@id/slideButton1"
             android:layout_width="50dip"
             android:layout_height="50dip"
-            android:src="@drawable/wp_handle"
+            android:src="@drawable/slide_up"
             tools:ignore="ContentDescription" />
 
         <LinearLayout
@@ -74,7 +67,7 @@
             android:id="@+id/ImageView01"
             android:layout_width="50dip"
             android:layout_height="50dip"
-            android:src="@drawable/wp_handle"
+            android:src="@drawable/slide_left"
             tools:ignore="ContentDescription" />
 
         <LinearLayout
@@ -93,5 +86,13 @@
                 tools:layout="@layout/fragment_survey" />
         </LinearLayout>
     </SlidingDrawer>
+
+    <fragment
+        android:id="@+id/fragment3"
+        android:name="com.droidplanner.fragments.MissionControlFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="87dp"
+        android:layout_gravity="top|center_horizontal"
+        tools:layout="@layout/fragment_mission_control" />
 
 </FrameLayout>

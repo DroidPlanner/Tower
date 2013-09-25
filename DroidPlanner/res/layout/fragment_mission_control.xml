@@ -5,23 +5,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="#aa000000"
-    android:orientation="horizontal"
-    android:rotation="180" >
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="3dp"
-        android:layout_marginRight="3dp"
-        android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/mc_missionTxt"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal|top"
-            android:text="Small Text"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+    android:layout_gravity="center_horizontal"
+    android:orientation="horizontal" >
 
         <ImageButton
             android:id="@+id/mc_missionBtn"
@@ -30,23 +15,6 @@
             android:padding="15dp"
             android:src="@drawable/globed"
             tools:ignore="ContentDescription" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="3dp"
-        android:layout_marginRight="3dp"
-        android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/mc_rtlTxt"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal|top"
-            android:text="Small Text"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
         <ImageButton
             android:id="@+id/mc_rtlBtn"
             android:layout_width="wrap_content"
@@ -54,23 +22,6 @@
             android:padding="15dp"
             android:src="@drawable/rtld"
             tools:ignore="ContentDescription" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="3dp"
-        android:layout_marginRight="3dp"
-        android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/mc_landTxt"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal|top"
-            android:text="Small Text"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
         <ImageButton
             android:id="@+id/mc_landBtn"
             android:layout_width="wrap_content"
@@ -78,23 +29,6 @@
             android:padding="15dp"
             android:src="@drawable/landd"
             tools:ignore="ContentDescription" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="3dp"
-        android:layout_marginRight="3dp"
-        android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/mc_launchTxt"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal|top"
-            android:text="Small Text"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
         <ImageButton
             android:id="@+id/mc_launchBtn"
             android:layout_width="wrap_content"
@@ -102,23 +36,6 @@
             android:padding="15dp"
             android:src="@drawable/launchd"
             tools:ignore="ContentDescription" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="3dp"
-        android:layout_marginRight="3dp"
-        android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/mc_joystickTxt"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal|top"
-            android:text="Small Text"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
         <ImageButton
             android:id="@+id/mc_joystickBtn"
             android:layout_width="wrap_content"
@@ -126,22 +43,6 @@
             android:padding="15dp"
             android:src="@drawable/gamecontrollerd"
             tools:ignore="ContentDescription" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="3dp"
-        android:layout_marginRight="3dp"
-        android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/mc_armTxt"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal|top"
-            android:text="Small Text"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <ImageButton
             android:id="@+id/mc_armBtn"
@@ -150,22 +51,7 @@
             android:padding="15dp"
             android:src="@drawable/armd"
             tools:ignore="ContentDescription" />
-    </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="3dp"
-        android:layout_marginRight="3dp"
-        android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/mc_connectTxt"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal|top"
-            android:text="Small Text"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <ImageButton
             android:id="@+id/mc_connectBtn"
@@ -175,6 +61,5 @@
             android:src="@drawable/disconnectr"
             tools:ignore="ContentDescription" />
 
-    </LinearLayout>
 
 </LinearLayout>
