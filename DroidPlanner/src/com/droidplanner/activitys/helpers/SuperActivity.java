@@ -53,7 +53,8 @@ public abstract class SuperActivity extends Activity implements
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
 		// Set up the action bar to show a dropdown list.
-		setUpActionBar();
+		//setUpActionBar();
+		
 		app = (DroidPlannerApp) getApplication();
 		app.conectionListner = this;
 		app.onSystemArmListener = this;
