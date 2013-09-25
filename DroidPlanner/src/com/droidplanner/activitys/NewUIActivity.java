@@ -4,10 +4,13 @@ import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperActivity;
 import com.droidplanner.drone.variables.waypoint;
+import com.droidplanner.fragments.MissionControlFragment;
+import com.droidplanner.fragments.MissionControlFragment.OnMissionControlInteraction;
 import com.droidplanner.fragments.PlanningFragment;
 import com.droidplanner.fragments.RCFragment;
 import com.droidplanner.fragments.helpers.OnMapInteractionListener;
@@ -15,10 +18,11 @@ import com.droidplanner.polygon.PolygonPoint;
 import com.google.android.gms.maps.model.LatLng;
 
 public class NewUIActivity extends SuperActivity implements
-		OnMapInteractionListener {
+		OnMapInteractionListener, OnMissionControlInteraction {
 	private FragmentManager fragmentManager;
 	private RCFragment rcFragment;
 	private PlanningFragment planningFragment;
+	private MissionControlFragment missionControlFragment;
 
 	@Override
 	public int getNavigationItem() {
@@ -31,25 +35,6 @@ public class NewUIActivity extends SuperActivity implements
 		setContentView(R.layout.activity_newui);
 		fragmentManager = getFragmentManager();
 
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu_newui, menu);
-		return super.onCreateOptionsMenu(menu);
-	}
-
-	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.menu_ui_rc:
-			toggleRCFragment();
-			return true;
-		case R.id.menu_ui_b2:
-			togglePlanningFragment();
-			return true;
-		}
-		return super.onMenuItemSelected(featureId, item);
 	}
 
 	private void toggleRCFragment() {
@@ -103,5 +88,67 @@ public class NewUIActivity extends SuperActivity implements
 		// TODO Auto-generated method stub
 
 	}
+
+	@Override
+	public void onJoystickSelected() {
+		toggleRCFragment();		
+	}
+
+	@Override
+	public void onPlanningSelected() {
+		togglePlanningFragment();		
+	}
+
+	@Override
+	public void onArmSelected() {
+		// TODO Auto-generated method stub	
+		/*
+		 * 			if (drone.MavClient.isConnected()) {
+				if (!drone.state.isArmed()) {
+					armBtn.setImageResource(R.drawable.arma);
+					drone.tts.speak("Arming the vehicle, please standby");
+				}
+				MavLinkArm.sendArmMessage(drone, !drone.state.isArmed());
+			}
+		 */
+	}
+
+	@Override
+	public void onDisArmSelected() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onConnectSelected() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onDisConnectSelected() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onRTLSelected() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onLandSelected() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onTakeOffSelected() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
 
 }

@@ -9,12 +9,21 @@
     android:orientation="horizontal" >
 
         <ImageButton
-            android:id="@+id/mc_missionBtn"
+            android:id="@+id/mc_planningBtn"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:padding="15dp"
             android:src="@drawable/globed"
             tools:ignore="ContentDescription" />
+
+        <ImageButton
+            android:id="@+id/mc_joystickBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:padding="15dp"
+            android:src="@drawable/gamecontrollerd"
+            tools:ignore="ContentDescription" />
+
         <ImageButton
             android:id="@+id/mc_rtlBtn"
             android:layout_width="wrap_content"
@@ -35,13 +44,6 @@
             android:layout_height="fill_parent"
             android:padding="15dp"
             android:src="@drawable/launchd"
-            tools:ignore="ContentDescription" />
-        <ImageButton
-            android:id="@+id/mc_joystickBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:padding="15dp"
-            android:src="@drawable/gamecontrollerd"
             tools:ignore="ContentDescription" />
 
         <ImageButton
