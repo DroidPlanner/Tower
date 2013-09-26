@@ -1,91 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >    	
+    android:layout_height="match_parent">    	
     
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="5dp"
         android:orientation="horizontal"
-        android:layout_margin="5dp" >
+        android:background="#FFFF0000" >
         
    		<TextView
-       		android:id="@+id/textViewRCThrottle"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:gravity="center"
-        	android:layout_weight="1"
-        	android:text=""/>
+   		    android:id="@+id/textViewRCThrottle"
+   		    android:layout_width="wrap_content"
+   		    android:layout_height="wrap_content"
+   		    android:layout_weight="1"
+   		    android:gravity="center"
+   		    android:textColor="#FF000000" />
    		
    		<TextView
-       		android:id="@+id/textViewRCRudder"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:gravity="center"
-        	android:layout_weight="1"
-        	android:text=""/>
+   		    android:id="@+id/textViewRCRudder"
+   		    android:layout_width="wrap_content"
+   		    android:layout_height="wrap_content"
+   		    android:layout_weight="1"
+   		    android:gravity="center"
+   		    android:text=""
+   		    android:textColor="#FF000000" />
    		
    		<TextView
-       		android:id="@+id/textViewRCElevator"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:gravity="center"
-        	android:layout_weight="1"
-        	android:text=""/>
+   		    android:id="@+id/textViewRCElevator"
+   		    android:layout_width="wrap_content"
+   		    android:layout_height="wrap_content"
+   		    android:layout_weight="1"
+   		    android:gravity="center"
+   		    android:text=""
+   		    android:textColor="#FF000000" />
 
    		<TextView
    		    android:id="@+id/textViewRCAileron"
    		    android:layout_width="wrap_content"
    		    android:layout_height="wrap_content"
-   		    android:gravity="center"
    		    android:layout_weight="1"
-   		    android:text="" />
+   		    android:gravity="center"
+   		    android:text=""
+   		    android:textColor="#FF000000" />
    		
-   	</LinearLayout>
-   	
- 	<LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="5dp" >
-
-       <Button
-           android:id="@+id/buttonRCQuickLeft"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:layout_gravity="top|left"
-           android:layout_marginRight="10dp"
-           android:layout_marginTop="2dp"
-           android:layout_weight="1"
-           android:maxLines="1"
-           android:text="" />
-
-       <ToggleButton
-           android:id="@+id/toggleButtonRCActivate"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:layout_gravity="top|center_horizontal"
-           android:layout_marginLeft="10dp"
-           android:layout_marginRight="10dp"
-           android:layout_marginTop="0dp"
-           android:layout_weight="3"
-           android:maxLines="1"
-           android:text="" />
-
-       <Button
-           android:id="@+id/buttonRCQuickRight"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:layout_gravity="top|right"
-           android:layout_marginLeft="10dp"
-           android:layout_marginTop="2dp"
-           android:layout_weight="1"
-           android:lines="1"
-           android:text="" />
-	
-    </LinearLayout>    
+   	</LinearLayout>    
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -108,4 +70,4 @@
 
     </LinearLayout>
 
-</LinearLayout>
+</FrameLayout>

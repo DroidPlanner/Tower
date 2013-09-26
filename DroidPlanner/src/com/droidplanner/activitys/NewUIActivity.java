@@ -2,16 +2,11 @@ package com.droidplanner.activitys;
 
 import android.app.FragmentManager;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperActivity;
 import com.droidplanner.drone.variables.waypoint;
-import com.droidplanner.fragments.MissionControlFragment;
 import com.droidplanner.fragments.MissionControlFragment.OnMissionControlInteraction;
-import com.droidplanner.fragments.HudFragment;
 import com.droidplanner.fragments.PlanningFragment;
 import com.droidplanner.fragments.RCFragment;
 import com.droidplanner.fragments.helpers.OnMapInteractionListener;
