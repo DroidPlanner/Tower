@@ -119,7 +119,7 @@ public class MissionControlFragment extends Fragment implements OnClickListener 
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.mc_hudBtn:
-			listner.onArmSelected();
+			listner.onHUDSelected();
 			break;
 		case R.id.mc_rtlBtn:
 			listner.onRTLSelected();

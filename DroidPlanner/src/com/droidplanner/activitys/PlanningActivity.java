@@ -61,7 +61,7 @@ public class PlanningActivity extends SuperActivity implements
 		setContentView(R.layout.activity_planning);
 
 		planningMapFragment = ((PlanningMapFragment) getFragmentManager()
-				.findFragmentById(R.id.planningMapFragment));
+				.findFragmentById(R.id.mapFragment));
 		gestureMapFragment = ((GestureMapFragment) getFragmentManager()
 				.findFragmentById(R.id.gestureMapFragment));
 		missionFragment = (MissionFragment) getFragmentManager()

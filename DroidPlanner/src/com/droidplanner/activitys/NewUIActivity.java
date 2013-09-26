@@ -6,6 +6,8 @@ import android.os.Bundle;
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperActivity;
 import com.droidplanner.drone.variables.waypoint;
+import com.droidplanner.fragments.HudMapFragment;
+import com.droidplanner.fragments.HudMapFragment.State;
 import com.droidplanner.fragments.MissionControlFragment.OnMissionControlInteraction;
 import com.droidplanner.fragments.PlanningFragment;
 import com.droidplanner.fragments.RCFragment;
@@ -128,7 +130,8 @@ public class NewUIActivity extends SuperActivity implements
 	}
 
 	private void toggleHUDFragment() {
-				
+		HudMapFragment fragment = (HudMapFragment)fragmentManager.findFragmentById(R.id.fragment1);
+		fragment.nextLayout();
 	}
 
 	private void toggleRCFragment() {
