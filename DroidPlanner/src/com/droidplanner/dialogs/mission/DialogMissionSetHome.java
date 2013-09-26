@@ -38,40 +38,38 @@ public class DialogMissionSetHome extends DialogMission implements
 
 	protected View buildView() {
 		super.buildView();
-		setupView();
-		setupCoordSpinner();
-		setupListeners();
-
+		findViewItems();
+		setupViewItems();
+		setupViewListeners();
+		setupViewEnables();
+		
 		return view;
 	}
 
-	private void setupCoordSpinner() {
+	private void setupViewEnables() {
+		coordSrcSpinner.setEnabled(!useCurrentCheckBox.isChecked());
+		lonEditText.setEnabled(!useCurrentCheckBox.isChecked() && coordSrcSpinner.getSelectedItemPosition() == 2);
+		latEditText.setEnabled(!useCurrentCheckBox.isChecked() && coordSrcSpinner.getSelectedItemPosition() == 2);
+	}
+
+	private void findViewItems() {
 		// TODO Auto-generated method stub
+		altitudeSeekBar = (SeekBarWithText) view.findViewById(R.id.waypointSpeed);
+		coordSrcSpinner = (Spinner) view.findViewById(R.id.spinnerCoordSrc);
+		lonEditText = (EditText) view.findViewById(R.id.editTextLon);
+		latEditText = (EditText) view.findViewById(R.id.editTextLat);
+		useCurrentCheckBox = (CheckBox) view.findViewById(R.id.checkBoxHomeCurrent);
+	}
+
+	private void setupViewItems() {
+		altitudeSeekBar.setValue(wp.getHeight());
 
 		coord_adapter = ArrayAdapter.createFromResource(context,
 				R.array.CoordSource, android.R.layout.simple_spinner_item);
 		coord_adapter
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-	}
-
-	private void setupListeners() {
-		useCurrentCheckBox.setOnCheckedChangeListener(this);
-		coordSrcSpinner.setOnItemSelectedListener(this);
-	}
-
-	private void setupView() {
-		altitudeSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.waypointSpeed);
-		altitudeSeekBar.setValue(wp.getHeight());
-		altitudeSeekBar.setOnChangedListner(this);
-
-		coordSrcSpinner = (Spinner) view.findViewById(R.id.spinnerCoordSrc);
 		coordSrcSpinner.setSelection(wp.homeType);
 
-		lonEditText = (EditText) view.findViewById(R.id.editTextLon);
-		latEditText = (EditText) view.findViewById(R.id.editTextLat);
-		useCurrentCheckBox = (CheckBox) view
-				.findViewById(R.id.checkBoxHomeCurrent);
 
 		if (wp.missionItem.param1 > 0)
 			useCurrentCheckBox.setChecked(true);
@@ -90,6 +88,12 @@ public class DialogMissionSetHome extends DialogMission implements
 		latEditText.setEnabled(false);
 	}
 
+	private void setupViewListeners() {
+		altitudeSeekBar.setOnChangedListner(this);
+		useCurrentCheckBox.setOnCheckedChangeListener(this);
+		coordSrcSpinner.setOnItemSelectedListener(this);
+	}
+
 	@Override
 	public void onSeekBarChanged() {
 		wp.setHeight(altitudeSeekBar.getValue());
@@ -97,8 +101,8 @@ public class DialogMissionSetHome extends DialogMission implements
 
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		setupViewEnables();
 		setLonLatValue();
-		coordSrcSpinner.setEnabled(useCurrentCheckBox.isChecked());
 	}
 
 	@Override
@@ -111,8 +115,7 @@ public class DialogMissionSetHome extends DialogMission implements
 	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
 			long arg3) {
 		
-		lonEditText.setEnabled(coordSrcSpinner.getSelectedItemPosition() == 2);
-		latEditText.setEnabled(coordSrcSpinner.getSelectedItemPosition() == 2);
+		setupViewEnables();
 		
 		switch (coordSrcSpinner.getSelectedItemPosition()) {
 		case 0:
