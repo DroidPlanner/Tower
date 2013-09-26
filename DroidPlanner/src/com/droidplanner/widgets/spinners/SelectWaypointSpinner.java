@@ -2,10 +2,12 @@ package com.droidplanner.widgets.spinners;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.content.Context;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.widgets.spinners.SpinnerSelfSelect.OnSpinnerItemSelectedListener;
 
@@ -29,8 +31,10 @@ public class SelectWaypointSpinner extends SpinnerSelfSelect implements
 
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
 				android.R.layout.simple_spinner_dropdown_item, wpSpinnerAdapter);
-
-		updateWpSpinner(null);
+		
+		DroidPlannerApp app = (DroidPlannerApp)((Activity) context).getApplication();
+		
+		updateWpSpinner(app.drone);
 		setAdapter(adapter);
 		setOnSpinnerItemSelectedListener(this);
 		setOnWaypointSpinnerSelectedListener(listener);
