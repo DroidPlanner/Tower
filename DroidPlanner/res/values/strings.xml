@@ -146,4 +146,7 @@
     <string name="waypoint_groundspeed">Ground speed</string>
     <string name="selectCoodSource">Select location source</string>
     <string name="waypoint_coordsrc">Source data :</string>
+    <string name="waypoint_jumpto">Jump to waypoint :</string>
+    <string name="waypoint_repeat">Repeat waypoint</string>
+	<string name="waypointInfo_SetJump">Repeat waypoint</string>
 </resources>
