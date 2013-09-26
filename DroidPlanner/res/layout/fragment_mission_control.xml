@@ -25,6 +25,14 @@
             tools:ignore="ContentDescription" />
 
         <ImageButton
+            android:id="@+id/mc_hudBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:padding="15dp"
+            android:src="@drawable/armd"
+            tools:ignore="ContentDescription" />
+
+        <ImageButton
             android:id="@+id/mc_rtlBtn"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
@@ -44,14 +52,6 @@
             android:layout_height="fill_parent"
             android:padding="15dp"
             android:src="@drawable/launchd"
-            tools:ignore="ContentDescription" />
-
-        <ImageButton
-            android:id="@+id/mc_armBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:padding="15dp"
-            android:src="@drawable/armd"
             tools:ignore="ContentDescription" />
 
 

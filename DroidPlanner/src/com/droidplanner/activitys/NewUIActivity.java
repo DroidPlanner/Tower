@@ -11,6 +11,7 @@ import com.droidplanner.activitys.helpers.SuperActivity;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.fragments.MissionControlFragment;
 import com.droidplanner.fragments.MissionControlFragment.OnMissionControlInteraction;
+import com.droidplanner.fragments.HudFragment;
 import com.droidplanner.fragments.PlanningFragment;
 import com.droidplanner.fragments.RCFragment;
 import com.droidplanner.fragments.helpers.OnMapInteractionListener;
@@ -22,7 +23,6 @@ public class NewUIActivity extends SuperActivity implements
 	private FragmentManager fragmentManager;
 	private RCFragment rcFragment;
 	private PlanningFragment planningFragment;
-	private MissionControlFragment missionControlFragment;
 
 	@Override
 	public int getNavigationItem() {
@@ -35,28 +35,6 @@ public class NewUIActivity extends SuperActivity implements
 		setContentView(R.layout.activity_newui);
 		fragmentManager = getFragmentManager();
 
-	}
-
-	private void toggleRCFragment() {
-		if (rcFragment == null) {
-			rcFragment = new RCFragment();
-			fragmentManager.beginTransaction()
-					.add(R.id.containerRC, rcFragment).commit();
-		} else {
-			fragmentManager.beginTransaction().remove(rcFragment).commit();
-			rcFragment = null;
-		}
-	}
-	
-	private void togglePlanningFragment() {
-		if (planningFragment == null) {
-			planningFragment = new PlanningFragment();
-			fragmentManager.beginTransaction()
-					.add(R.id.containerPlanning, planningFragment).commit();
-		} else {
-			fragmentManager.beginTransaction().remove(planningFragment).commit();
-			planningFragment = null;
-		}
 	}
 
 	@Override
@@ -147,6 +125,37 @@ public class NewUIActivity extends SuperActivity implements
 	public void onTakeOffSelected() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void onHUDSelected() {
+		toggleHUDFragment();		
+	}
+
+	private void toggleHUDFragment() {
+				
+	}
+
+	private void toggleRCFragment() {
+		if (rcFragment == null) {
+			rcFragment = new RCFragment();
+			fragmentManager.beginTransaction()
+					.add(R.id.containerRC, rcFragment).commit();
+		} else {
+			fragmentManager.beginTransaction().remove(rcFragment).commit();
+			rcFragment = null;
+		}
+	}
+
+	private void togglePlanningFragment() {
+		if (planningFragment == null) {
+			planningFragment = new PlanningFragment();
+			fragmentManager.beginTransaction()
+					.add(R.id.containerPlanning, planningFragment).commit();
+		} else {
+			fragmentManager.beginTransaction().remove(planningFragment).commit();
+			planningFragment = null;
+		}
 	}
 
 	

@@ -18,6 +18,8 @@ public class MissionControlFragment extends Fragment implements OnClickListener 
 
 		public void onPlanningSelected();
 
+		public void onHUDSelected();
+		
 		public void onArmSelected();
 
 		public void onDisArmSelected();
@@ -34,7 +36,7 @@ public class MissionControlFragment extends Fragment implements OnClickListener 
 	}
 
 	private OnMissionControlInteraction listner;
-	private ImageButton armBtn;
+	private ImageButton hudBtn;
 	private ImageButton rtlBtn;
 	private ImageButton landBtn;
 	private ImageButton launchBtn;
@@ -59,7 +61,7 @@ public class MissionControlFragment extends Fragment implements OnClickListener 
 	}
 
 	private void setupListner() {
-		armBtn.setOnClickListener(this);
+		hudBtn.setOnClickListener(this);
 		rtlBtn.setOnClickListener(this);
 		landBtn.setOnClickListener(this);
 		launchBtn.setOnClickListener(this);
@@ -69,7 +71,7 @@ public class MissionControlFragment extends Fragment implements OnClickListener 
 	}
 
 	private void setupViews(View parentView) {
-		armBtn = (ImageButton) parentView.findViewById(R.id.mc_armBtn);
+		hudBtn = (ImageButton) parentView.findViewById(R.id.mc_hudBtn);
 		rtlBtn = (ImageButton) parentView.findViewById(R.id.mc_rtlBtn);
 		landBtn = (ImageButton) parentView.findViewById(R.id.mc_landBtn);
 		launchBtn = (ImageButton) parentView.findViewById(R.id.mc_launchBtn);
@@ -79,7 +81,7 @@ public class MissionControlFragment extends Fragment implements OnClickListener 
 				.findViewById(R.id.mc_joystickBtn);
 
 		
-		armBtn.setEnabled(false);
+		hudBtn.setEnabled(true);
 		rtlBtn.setEnabled(false);
 		landBtn.setEnabled(false);
 		launchBtn.setEnabled(false);
@@ -92,14 +94,14 @@ public class MissionControlFragment extends Fragment implements OnClickListener 
 
 	private void setButtonState(boolean armEnable, boolean missionEnable) {
 
-		armBtn.setEnabled(armEnable);
+		hudBtn.setEnabled(armEnable);
 		rtlBtn.setEnabled(missionEnable);
 		landBtn.setEnabled(missionEnable);
 		launchBtn.setEnabled(missionEnable);
 		missionBtn.setEnabled(missionEnable);
 		joystickBtn.setEnabled(missionEnable);
 
-		armBtn.setImageResource(armEnable ? R.drawable.armg : R.drawable.armd);
+		hudBtn.setImageResource(armEnable ? R.drawable.armg : R.drawable.armd);
 		rtlBtn.setImageResource(missionEnable ? R.drawable.rtlb
 				: R.drawable.rtld);
 		landBtn.setImageResource(missionEnable ? R.drawable.landb
@@ -116,7 +118,7 @@ public class MissionControlFragment extends Fragment implements OnClickListener 
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
-		case R.id.mc_armBtn:
+		case R.id.mc_hudBtn:
 			listner.onArmSelected();
 			break;
 		case R.id.mc_rtlBtn:
