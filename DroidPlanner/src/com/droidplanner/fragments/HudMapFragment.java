@@ -1,7 +1,11 @@
 package com.droidplanner.fragments;
 
+import java.util.List;
+
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.gesture.GestureOverlayView;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,24 +13,32 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.droidplanner.R;
-import com.google.android.gms.maps.MapFragment;
+import com.droidplanner.fragments.PathGesture.OnPathFinishedListner;
 
-public class HudMapFragment extends Fragment {
+public class HudMapFragment extends Fragment implements OnPathFinishedListner {
 	public enum State {
 		HUD, HUD_AND_MAP, MAP
 	}
 
 	public State state = State.HUD_AND_MAP;
 	private HudFragment hud;
-	private MapFragment map;
+	private PlanningMapFragment map;
 	private View centerDivider;
+	private PathGesture pathGesture;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		RelativeLayout view = (RelativeLayout) inflater.inflate(
 				R.layout.fragment_hud_map, container, false);
+
 		centerDivider = view.findViewById(R.id.strutCenter);
+		GestureOverlayView overlay = (GestureOverlayView) view
+				.findViewById(R.id.overlay1);
+		pathGesture = new PathGesture(overlay);
+		pathGesture.setOnPathFinishedListner(this);
+		pathGesture.enableGestureDetection();
+
 		update();
 
 		return view;
@@ -87,7 +99,7 @@ public class HudMapFragment extends Fragment {
 		if (map != null) {
 			transaction.attach(map);
 		} else {
-			map = new MapFragment();
+			map = new PlanningMapFragment();
 			transaction.add(R.id.containerMap, map);
 		}
 	}
@@ -99,6 +111,11 @@ public class HudMapFragment extends Fragment {
 			hud = new HudFragment();
 			transaction.add(R.id.containerHud, hud);
 		}
+	}
+
+	@Override
+	public void onPathFinished(List<Point> path) {
+		pathGesture.enableGestureDetection();		
 	}
 
 }

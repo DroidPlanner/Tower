@@ -1,10 +1,13 @@
 package com.droidplanner.fragments;
 
 
+import java.util.List;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +16,7 @@ import android.view.ViewGroup;
 import com.droidplanner.dialogs.mission.DialogMissionFactory;
 import com.droidplanner.drone.variables.Mission;
 import com.droidplanner.drone.variables.waypoint;
+import com.droidplanner.fragments.PathGesture.OnPathFinishedListner;
 import com.droidplanner.fragments.helpers.CameraGroundOverlays;
 import com.droidplanner.fragments.helpers.DroneMap;
 import com.droidplanner.fragments.helpers.MapPath;
@@ -30,7 +34,7 @@ import com.google.android.gms.maps.model.Marker;
 @SuppressLint("UseSparseArrays")
 public class PlanningMapFragment extends DroneMap implements
 		OnMapLongClickListener, OnMarkerDragListener, OnMapClickListener,
-		OnMarkerClickListener {
+		OnMarkerClickListener, OnPathFinishedListner {
 
 	public OnMapInteractionListener mListener;
 	private MapPath polygonPath;
@@ -123,6 +127,12 @@ public class PlanningMapFragment extends DroneMap implements
 
 	public void setMission(Mission mission) {
 		this.mission = mission;
+	}
+
+	@Override
+	public void onPathFinished(List<Point> path) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
