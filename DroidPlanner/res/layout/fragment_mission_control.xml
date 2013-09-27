@@ -12,6 +12,7 @@
             android:id="@+id/mc_planningBtn"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
+            android:adjustViewBounds="true"
             android:padding="15dp"
             android:src="@drawable/globed"
             tools:ignore="ContentDescription" />
@@ -20,38 +21,9 @@
             android:id="@+id/mc_joystickBtn"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
+            android:adjustViewBounds="true"
             android:padding="15dp"
             android:src="@drawable/gamecontrollerd"
-            tools:ignore="ContentDescription" />
-
-        <ImageButton
-            android:id="@+id/mc_hudBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:padding="15dp"
-            android:src="@drawable/armd"
-            tools:ignore="ContentDescription" />
-
-        <ImageButton
-            android:id="@+id/mc_rtlBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:padding="15dp"
-            android:src="@drawable/rtld"
-            tools:ignore="ContentDescription" />
-        <ImageButton
-            android:id="@+id/mc_landBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:padding="15dp"
-            android:src="@drawable/landd"
-            tools:ignore="ContentDescription" />
-        <ImageButton
-            android:id="@+id/mc_launchBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:padding="15dp"
-            android:src="@drawable/launchd"
             tools:ignore="ContentDescription" />
 
 
@@ -59,9 +31,18 @@
             android:id="@+id/mc_connectBtn"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
+            android:adjustViewBounds="true"
             android:padding="15dp"
             android:src="@drawable/disconnectr"
             tools:ignore="ContentDescription" />
 
+        <ImageButton
+            android:id="@+id/mc_hudBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:adjustViewBounds="true"
+            android:padding="15dp"
+            android:src="@drawable/ic_action_core_overflow"
+            tools:ignore="ContentDescription" />
 
 </LinearLayout>

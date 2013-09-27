@@ -37,7 +37,6 @@ public class HudMapFragment extends Fragment implements OnPathFinishedListner {
 				.findViewById(R.id.overlay1);
 		pathGesture = new PathGesture(overlay);
 		pathGesture.setOnPathFinishedListner(this);
-		pathGesture.enableGestureDetection();
 
 		update();
 
