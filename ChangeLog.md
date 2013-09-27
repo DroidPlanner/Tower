@@ -1,3 +1,6 @@
+## Droidplanner v1.0.0
+* No new changes to the codebase, just setting a milestone 
+
 ## Droidplanner v0.16.0
 * Bluetooth Support
 * Fixing layout problems with the Survey window
