@@ -33,36 +33,56 @@ public class DialogMissionSetJump extends DialogMission implements
 	
 	protected View buildView() {
 		super.buildView();
-		
+		findViewItems();
+		setupViewItems();
+		setupViewListeners();
+		return view;
+	}
+
+	
+	private void findViewItems() {
+		altitudeSeekBar = (SeekBarWithText) view.findViewById(R.id.altitudeView);
+		repeatSeekBar =  (SeekBarWithText) view.findViewById(R.id.waypointRepeat);
+		jumpToSpinner =  (Spinner) view.findViewById(R.id.spinnerJumpTo);		
+	}
+	
+	private void setupViewItems() {
+		altitudeSeekBar.setValue(wp.getHeight());
+		repeatSeekBar.setValue((int)wp.missionItem.param2);
+		setupWPList();
+	}
+
+	private void setupViewListeners() {
+		altitudeSeekBar.setOnChangedListner(this);
+		repeatSeekBar.setOnChangedListner(this);
+
+		jumpToSpinner.setOnItemSelectedListener(new OnItemSelectedListener(){
+
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				wp.missionItem.param1 = (int)jumpToSpinner.getSelectedItemPosition();
+				
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+	}
+
+	private void setupWPList() {
 		app = (DroidPlannerApp)((Activity) context).getApplication();
 
 		jumpToList = new ArrayList<String>();
 
 		jumpToAdapter = new ArrayAdapter<String>(context,
-				android.R.layout.simple_spinner_dropdown_item, jumpToList);
-
-		findViewItems();
-		setupViewItems();
-		setupViewListeners();
-		
-
-		return view;
-	}
-
-	private void findViewItems() {
-		altitudeSeekBar = (SeekBarWithText) view.findViewById(R.id.altitudeView);
-		repeatSeekBar =  (SeekBarWithText) view.findViewById(R.id.waypointRepeat);
-		jumpToSpinner =  (Spinner) view.findViewById(R.id.spinnerJumpTo);
-		
-	}
-
-	private void setupViewItems() {
-		altitudeSeekBar.setValue(wp.getHeight());
+				android.R.layout.simple_spinner_item, jumpToList);
 		jumpToSpinner.setAdapter(jumpToAdapter);
-		setupWPAdapter();
-	}
 
-	private void setupWPAdapter() {
 		if(app != null){
 			wplist = app.drone.mission.getWaypoints();
 			for (int i = 0; i < wplist.size(); i++) {
@@ -72,27 +92,10 @@ public class DialogMissionSetJump extends DialogMission implements
 		jumpToSpinner.setSelection((int) wp.missionItem.param1);
 	}
 
-	private void setupViewListeners() {
-		altitudeSeekBar.setOnChangedListner(this);
-		repeatSeekBar.setOnChangedListner(this);
-		jumpToSpinner.setOnItemSelectedListener(this);
-	}
-
 	@Override
 	public void onSeekBarChanged() {
 		wp.setHeight(altitudeSeekBar.getValue());
+		wp.missionItem.param2 = (float) repeatSeekBar.getValue();
 	}
-
-	@Override
-	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
-			long arg3) {
-		wp.missionItem.param1 = (int)jumpToSpinner.getSelectedItemPosition();
-	}
-
-	@Override
-	public void onNothingSelected(AdapterView<?> arg0) {
-		// TODO Auto-generated method stub
-	}
-
 
 }

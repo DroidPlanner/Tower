@@ -91,29 +91,26 @@ public class DialogMissionSetHome extends DialogMission implements
 	private void setupViewListeners() {
 		altitudeSeekBar.setOnChangedListner(this);
 		useCurrentCheckBox.setOnCheckedChangeListener(this);
-		coordSrcSpinner.setOnItemSelectedListener(this);
+		coordSrcSpinner.setOnItemSelectedListener(new OnItemSelectedListener(){
+
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				setupHomePosition();
+				
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
 	}
 
-	@Override
-	public void onSeekBarChanged() {
-		wp.setHeight(altitudeSeekBar.getValue());
-	}
 
-	@Override
-	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		setupViewEnables();
-		setLonLatValue();
-	}
-
-	@Override
-	public void onClick(DialogInterface arg0, int which) {
-		setLonLatValue();
-		super.onClick(arg0, which);
-	}
-
-	@Override
-	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
-			long arg3) {
+	private void setupHomePosition() {
 		
 		setupViewEnables();
 		
@@ -149,17 +146,28 @@ public class DialogMissionSetHome extends DialogMission implements
 
 	}
 
-	@Override
-	public void onNothingSelected(AdapterView<?> arg0) {
-		// TODO Auto-generated method stub
-	}
-
 	private void setLonLatValue() {
 		wp.missionItem.param1 = useCurrentCheckBox.isChecked() ? 1 : 0;
 		if (!useCurrentCheckBox.isChecked()) {
 			wp.missionItem.x = Float.valueOf(latEditText.getText().toString());
 			wp.missionItem.y = Float.valueOf(lonEditText.getText().toString());
 		}
+	}
+	@Override
+	public void onSeekBarChanged() {
+		wp.setHeight(altitudeSeekBar.getValue());
+	}
+
+	@Override
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		setupViewEnables();
+		setLonLatValue();
+	}
+
+	@Override
+	public void onClick(DialogInterface arg0, int which) {
+		setLonLatValue();
+		super.onClick(arg0, which);
 	}
 
 }
