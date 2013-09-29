@@ -63,6 +63,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 		missionItem.y = (float) coord.longitude;
 	}
 
+	public boolean hasCoord() {
+		return missionItem.x != 0 || missionItem.y != 0;
+	}
+
 	public ApmCommands getCmd() {
 		return ApmCommands.getCmd(missionItem.command);
 	}
