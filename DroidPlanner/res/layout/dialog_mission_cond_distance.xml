@@ -13,7 +13,7 @@
         android:entries="@array/ExampleCameraArray" />
 
     <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
-        android:id="@+id/waypointSpeed"
+        android:id="@+id/waypointDistance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="2dp"

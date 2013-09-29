@@ -36,7 +36,7 @@ public class DialogMissionLoiterN extends DialogMission implements
 		loiterCCW.setOnCheckedChangeListener(this);
 
 		altitudeSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.waypointSpeed);
+				.findViewById(R.id.altitudeView);
 		altitudeSeekBar.setValue(wp.getHeight());
 		altitudeSeekBar.setOnChangedListner(this);
 		

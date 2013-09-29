@@ -187,7 +187,8 @@ public class MissionRow extends ArrayAdapter<waypoint> {
 			break;
 
 		case MAV_CMD.MAV_CMD_DO_JUMP:
-			descStr += context.getString(R.string.waypointDesc_SetJump);
+			descStr += descStr += String.format(Locale.ENGLISH, context.getString(R.string.waypointDesc_SetJump),
+					(int)waypoint.missionItem.param1+1,waypoints.get((int)waypoint.missionItem.param1).getCmd().getName());
 			descStr += " ";
 			break;
 		}

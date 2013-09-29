@@ -18,7 +18,7 @@ public class DialogMissionCondDistance extends DialogMission implements
 	protected View buildView() {
 		super.buildView();
 		distanceSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.waypointSpeed);
+				.findViewById(R.id.waypointDistance);
 		distanceSeekBar.setValue(wp.missionItem.param1);
 		distanceSeekBar.setOnChangedListner(this);
 

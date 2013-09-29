@@ -13,7 +13,7 @@
         android:entries="@array/ExampleCameraArray" />
 
     <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
-        android:id="@+id/waypointYawRate"
+        android:id="@+id/waypointAltRate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
@@ -25,7 +25,7 @@
     </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
 
     <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
-        android:id="@+id/waypointSpeed"
+        android:id="@+id/waypointFinalAltitude"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="2dp"

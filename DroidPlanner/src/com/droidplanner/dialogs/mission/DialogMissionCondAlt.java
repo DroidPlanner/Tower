@@ -19,13 +19,13 @@ public class DialogMissionCondAlt extends DialogMission implements
 	protected View buildView() {
 		super.buildView();
 		altitudeSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.waypointSpeed);
+				.findViewById(R.id.altitudeView);
 		altitudeSeekBar.setValue(wp.getHeight());
 		altitudeSeekBar.setOnChangedListner(this);
 
 
 		rateSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.waypointYawRate);
+				.findViewById(R.id.waypointAltRate);
 		rateSeekBar .setValue((double)wp.missionItem.param1);
 		rateSeekBar .setOnChangedListner(this);
 
