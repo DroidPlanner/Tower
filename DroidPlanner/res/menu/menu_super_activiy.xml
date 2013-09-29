@@ -6,9 +6,6 @@
         android:id="@+id/menu_connect"
         android:showAsAction="always"
         android:title="@string/menu_connect"/>
-    <item android:id="@+id/menu_arm" 
-        android:title="@string/menu_arm" 
-        android:showAsAction="always"></item>
     <item
         android:id="@+id/menu_settings"
         android:showAsAction="never"
