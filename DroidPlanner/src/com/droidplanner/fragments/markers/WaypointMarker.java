@@ -36,8 +36,8 @@ public class WaypointMarker {
 		switch (wp.getCmd()) {
 		default:
 		case CMD_NAV_WAYPOINT:
-			return BitmapDescriptorFactory.fromBitmap(MarkerWithText.getMarkerWithText(
-					Integer.toString(wp.getNumber()), String.format("%.1f m", wp.getHeight()),context));
+			return BitmapDescriptorFactory.fromBitmap(MarkerWithText.getMarkerWithTextAndDetail(
+					Integer.toString(wp.getNumber()), String.format("%.1f m", wp.getHeight()), context));
 		case CMD_NAV_LOITER_TIME:
 		case CMD_NAV_LOITER_TURNS:
 		case CMD_NAV_LOITER_UNLIM:

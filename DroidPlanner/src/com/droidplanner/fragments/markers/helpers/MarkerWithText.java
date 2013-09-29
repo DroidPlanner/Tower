@@ -10,8 +10,9 @@ public class MarkerWithText {
 
 	private static final int RECT_PADDING = 6;
 
-	public static Bitmap getMarkerWithText(String text, String detail, Context context) {
-		return drawTextToBitmap(context, R.drawable.ic_menu_places, text, detail);
+
+	public static Bitmap getMarkerWithText(String text, Context context) {
+		return drawTextToBitmap(context, R.drawable.ic_menu_places, text);
 	}
 
 	/**
@@ -19,7 +20,44 @@ public class MarkerWithText {
 	 * http://stackoverflow.com/questions/18335642/how-to-draw-text-in-default-marker-of-google-map-v2?lq=1
 	 */
 	private static Bitmap drawTextToBitmap(Context gContext, int gResId,
-			String gText, String gDetail) {
+	                                       String gText) {
+		Resources resources = gContext.getResources();
+		float scale = resources.getDisplayMetrics().density;
+		Bitmap bitmap = BitmapFactory.decodeResource(resources, gResId);
+
+		android.graphics.Bitmap.Config bitmapConfig = bitmap.getConfig();
+		if (bitmapConfig == null) {
+			bitmapConfig = android.graphics.Bitmap.Config.ARGB_8888;
+		}
+		bitmap = bitmap.copy(bitmapConfig, true);
+
+		Canvas canvas = new Canvas(bitmap);
+		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		paint.setColor(Color.BLACK);
+		paint.setTextSize((int) (15 * scale));
+		paint.setShadowLayer(1f, 0f, 1f, Color.WHITE);
+
+		Rect bounds = new Rect();
+		paint.getTextBounds(gText, 0, gText.length(), bounds);
+		int x = (bitmap.getWidth() - bounds.width()) / 2;
+		int y = (bitmap.getHeight() + bounds.height()) * 5/12; // At 5/12 from the top so it stays on the center
+
+		canvas.drawText(gText, x, y, paint);
+
+		return bitmap;
+	}
+
+
+	public static Bitmap getMarkerWithTextAndDetail(String text, String detail, Context context) {
+		return drawTextAndDetailToBitmap(context, R.drawable.ic_menu_places, text, detail);
+	}
+
+	/**
+	 * Based on:
+	 * http://stackoverflow.com/questions/18335642/how-to-draw-text-in-default-marker-of-google-map-v2?lq=1
+	 */
+	private static Bitmap drawTextAndDetailToBitmap(Context gContext, int gResId,
+	                                                String gText, String gDetail) {
 		Resources resources = gContext.getResources();
 		float scale = resources.getDisplayMetrics().density;
 		Bitmap bitmap = BitmapFactory.decodeResource(resources, gResId);
