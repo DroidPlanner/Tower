@@ -501,6 +501,9 @@ public class DragSortListView extends ListView {
                 int removeMode = a.getInt(
                         R.styleable.DragSortListView_remove_mode,
                         DragSortController.FLING_REMOVE);
+                int dragWidthDivisor = a.getInt(
+                		R.styleable.DragSortListView_drag_width_divisor, 
+                		2);
                 boolean sortEnabled = a.getBoolean(
                         R.styleable.DragSortListView_sort_enabled,
                         true);
@@ -521,8 +524,8 @@ public class DragSortListView extends ListView {
                         Color.BLACK);
 
                 DragSortController controller = new DragSortController(
-                        this, dragHandleId, dragInitMode, removeMode,
-                        clickRemoveId, flingHandleId);
+                        this, dragHandleId, dragInitMode, removeMode, 
+                        dragWidthDivisor, clickRemoveId, flingHandleId);
                 controller.setRemoveEnabled(removeEnabled);
                 controller.setSortEnabled(sortEnabled);
                 controller.setBackgroundColor(bgColor);

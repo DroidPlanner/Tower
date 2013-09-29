@@ -8,7 +8,9 @@
     <attr name="remove_mode">
       <enum name="clickRemove" value="0" />
       <enum name="flingRemove" value="1" />
+      <enum name="dragRemove" value="2" />
     </attr>
+    <attr name="drag_width_divisor" format="integer"/>
     <attr name="track_drag_sort" format="boolean"/>
     <attr name="float_alpha" format="float"/>
     <attr name="slide_shuffle_speed" format="float"/>
