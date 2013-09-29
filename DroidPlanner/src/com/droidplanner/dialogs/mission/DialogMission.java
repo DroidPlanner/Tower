@@ -80,9 +80,8 @@ public abstract class DialogMission implements OnItemSelectedListener,
 		if (selected != wp.getCmd()) {
 			wp.setCmd(selected);
 			dialog.dismiss();
-			DialogMissionFactory.getDialog(wp, context, listner);			
+			DialogMissionFactory.getDialog(wp, context, listner);
 		}
-		
 	}
 
 	@Override
