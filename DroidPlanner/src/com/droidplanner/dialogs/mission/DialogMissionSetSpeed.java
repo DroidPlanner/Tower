@@ -39,8 +39,8 @@ public class DialogMissionSetSpeed extends DialogMission implements
 	}
 
 	private void setupViews() {
-		speedSeekBar.setValue(wp.getHeight());
-		throttleSeekBar.setValue(wp.getHeight());
+		speedSeekBar.setValue(wp.missionItem.param2);
+		throttleSeekBar.setValue(wp.missionItem.param3);
 		if (wp.missionItem.param1 == 0)
 			airspeedRadioButton.setChecked(true);
 		else

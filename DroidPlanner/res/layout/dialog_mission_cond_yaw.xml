@@ -12,43 +12,55 @@
         android:layout_margin="5dp"
         android:entries="@array/ExampleCameraArray" />
 
-    <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
-        android:id="@+id/waypointAngle"
+    <ScrollView
+        android:id="@+id/scrollView1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="2dp"
-        custom:inc="5"
-        custom:max="360"
-        custom:min="0"
-        custom:title="@string/waypoint_angle"
-        custom:unit="°" >
-    </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+        android:layout_height="wrap_content" >
 
-    <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
-        android:id="@+id/waypointYawRate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="2dp"
-        custom:inc="1"
-        custom:max="50"
-        custom:min="0"
-        custom:title="@string/waypoint_yawrate"
-        custom:unit="°/s" >
-    </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-    <CheckBox
-        android:id="@+id/checkBoxYawDir"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.00"
-        android:text="@string/waypoint_yawdir" />
+            <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+                android:id="@+id/waypointAngle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                custom:inc="5"
+                custom:max="360"
+                custom:min="0"
+                custom:title="@string/waypoint_angle"
+                custom:unit="°" >
+            </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
 
-    <CheckBox
-        android:id="@+id/checkBoxYawOffset"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.00"
-        android:text="@string/waypoint_yawoffset" />
+            <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+                android:id="@+id/waypointYawRate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                custom:inc="1"
+                custom:max="50"
+                custom:min="0"
+                custom:title="@string/waypoint_yawrate"
+                custom:unit="°/s" >
+            </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+
+            <CheckBox
+                android:id="@+id/checkBoxYawDir"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.00"
+                android:text="@string/waypoint_yawdir" />
+
+            <CheckBox
+                android:id="@+id/checkBoxYawOffset"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.00"
+                android:text="@string/waypoint_yawoffset" />
+        </LinearLayout>
+    </ScrollView>
 
     <TextView
         android:id="@+id/textView1"
