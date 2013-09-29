@@ -57,7 +57,7 @@ public class MarkerWithText {
 		Paint bpaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		bpaint.setColor(Color.WHITE);
 		bpaint.setAlpha(160);
-		bpaint.setShadowLayer(1f, 1f, 1f, Color.DKGRAY);
+		bpaint.setShadowLayer(1f, 1f, 1f, Color.GRAY);
 		bpaint.setStyle(Paint.Style.FILL);
 
 		// include text and detail bounds
