@@ -44,12 +44,6 @@ public class DialogMissionFactory {
 		case CMD_DO_SET_HOME:
 			dialog = new DialogMissionSetHome();
 			break;
-		case CMD_DO_SET_RELAY:
-			dialog = new DialogMissionSetRelay();
-			break;
-		case CMD_DO_REPEAT_RELAY:
-			dialog = new DialogMissionSetRepeatRelay();
-			break;
 		case CMD_DO_JUMP:
 			dialog = new DialogMissionSetJump();
 			break;

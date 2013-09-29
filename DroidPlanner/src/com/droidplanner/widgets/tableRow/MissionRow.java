@@ -145,11 +145,29 @@ public class MissionRow extends ArrayAdapter<waypoint> {
 		case MAV_CMD.MAV_CMD_DO_SET_HOME:
 			descStr += context.getString(R.string.waypointDesc_SetHome);
 			descStr += " ";
-			if(waypoint.missionItem.param1<1)
+			if(waypoint.missionItem.param1>0){
 				descStr += context.getString(R.string.waypointDesc_coordmav);
-			else {
-				
 			}
+			else {
+				switch(waypoint.homeType){
+				case 0:
+					descStr += context.getString(R.string.waypointDesc_coordwp);
+					break;
+				case 1:
+					descStr += context.getString(R.string.waypointDesc_coordgcs);
+					break;
+				case 2:
+					descStr += context.getString(R.string.waypointDesc_coordmanual);
+					break;
+				default:
+					break;
+				}
+				descStr +=" ";
+				descStr += String.format(Locale.ENGLISH, context.getString(R.string.waypointDesc_GPS), 
+						waypoint.getCoord().latitude,waypoint.getCoord().longitude);
+				break;
+			}
+	
 			break;
 
 		case MAV_CMD.MAV_CMD_DO_CHANGE_SPEED:
