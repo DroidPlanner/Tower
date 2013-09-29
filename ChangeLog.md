@@ -1,3 +1,8 @@
+## Droidplanner v1.0.1
+* Moving the arm/disarm button to the overflow menu for safety reasons
+* Fixing problems with the Do_Jump and Set_Home waypoint dialogs
+* Reduce the chance of unintentionally deleting waypoints while scrolling
+
 ## Droidplanner v1.0.0
 * No new changes to the codebase, just setting a milestone 
 
