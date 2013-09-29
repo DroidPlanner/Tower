@@ -35,7 +35,7 @@ public class DialogMissionLoiterT extends DialogMission implements
 
 		
 		altitudeSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.waypointSpeed);
+				.findViewById(R.id.altitudeView);
 		altitudeSeekBar.setValue(wp.getHeight());
 		altitudeSeekBar.setOnChangedListner(this);
 		
