@@ -20,7 +20,7 @@ public class DialogMissionWaypoint extends DialogMission implements
 	protected View buildView() {
 		super.buildView();
 		altitudeSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.waypointSpeed);
+				.findViewById(R.id.altitudeView);
 		altitudeSeekBar.setValue(wp.getHeight());
 		altitudeSeekBar.setOnChangedListner(this);
 

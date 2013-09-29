@@ -98,7 +98,7 @@
     <string name="waypointDesc_LoiterN" formatted="false">Loiter for %1.0f turns within %1.1fm radius %s, heading is set to %03.0f°</string>
     <string name="waypointDesc_LoiterT" formatted="false">Loiter for %1.0fs within %1.1fm radius %s, heading is set to %03.0f°</string>
     <string name="waypointDesc_Takeoff" formatted="false">Takeoff with pitch set to %1.2f°</string>
-    <string name="waypointDesc_SetJump" formatted="false">Jump to</string>
+    <string name="waypointDesc_SetJump" formatted="false">Jump to Waypoint %d - %s</string>
     <string name="waypointDesc_SetHome" formatted="false">Home is set to</string>
     <string name="waypointDesc_SetSpeed" formatted="false">Speed is set to %1.1fm/s with throttle at %1.0f%% using %s as reference</string>
     <string name="waypointDesc_SetRelay" formatted="false">Relay is set to</string>
@@ -106,7 +106,9 @@
     <string name="waypointDesc_CondAlt" formatted="false">Altitude condition is set to %1.1fm at the rate of %1.1fm/s</string>
     <string name="waypointDesc_CondDist" formatted="false">Distance condition is set to %1.1fm</string>
     <string name="waypointDesc_CondYaw" formatted="false">Yaw condition is set to %03.0f° at the rate of %1.1fm/s %s, using %s</string>
+    <string name="waypointDesc_GPS" formatted="false">Lat/Lon [%1.12f/%1.12f]</string>
     <string name="waypointDesc_coordmav">current vehicle position</string>
+    <string name="waypointDesc_coordwp">current Waypoint position</string>
     <string name="waypointDesc_coordgcs">current GCS position</string>
     <string name="waypointDesc_coordmanual">entered coordinate</string>
     <string name="waypointDesc_immediate">immediately</string>
@@ -144,4 +146,7 @@
     <string name="waypoint_groundspeed">Ground speed</string>
     <string name="selectCoodSource">Select location source</string>
     <string name="waypoint_coordsrc">Source data :</string>
+    <string name="waypoint_jumpto">Jump to waypoint :</string>
+    <string name="waypoint_repeat">Repeat waypoint</string>
+	<string name="waypointInfo_SetJump">Repeat waypoint</string>
 </resources>

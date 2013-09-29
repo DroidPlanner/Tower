@@ -27,7 +27,7 @@ public abstract class DialogMission implements OnItemSelectedListener,
 	private SpinnerSelfSelect typeSpinner;
 	private ApmCommandsAdapter commandAdapter;
 	private AlertDialog dialog;
-	private Context context;
+	protected Context context;
 	protected waypoint wp;
 	protected View view;
 
@@ -80,9 +80,8 @@ public abstract class DialogMission implements OnItemSelectedListener,
 		if (selected != wp.getCmd()) {
 			wp.setCmd(selected);
 			dialog.dismiss();
-			DialogMissionFactory.getDialog(wp, context, listner);			
+			DialogMissionFactory.getDialog(wp, context, listner);
 		}
-		
 	}
 
 	@Override
