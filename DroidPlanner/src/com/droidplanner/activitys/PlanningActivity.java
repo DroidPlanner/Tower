@@ -193,6 +193,12 @@ public class PlanningActivity extends SuperActivity implements
 	}
 
 	@Override
+	public void onMovingWaypoint(waypoint source, LatLng latLng)
+	{
+		updateDistanceView();
+	}
+
+	@Override
 	public void onMovePolygonPoint(PolygonPoint source, LatLng newCoord) {
 		source.coord = newCoord;
 		update();
