@@ -1,3 +1,8 @@
+## Droidplanner v1.0.2
+* Fixing the waypoint numbering issue when planning a survey and reordering via the waypoint editor
+* Live update flight path and distanceView while dragging
+* Added RAW_SENSORS and RC_CHANNELS to preferences for compatibility w/ other MAVLink hardware on vehicle
+
 ## Droidplanner v1.0.1
 * Moving the arm/disarm button to the overflow menu for safety reasons
 * Fixing problems with the Do_Jump and Set_Home waypoint dialogs
