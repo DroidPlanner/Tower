@@ -53,6 +53,7 @@ public class MissionFragment extends ListFragment implements DragScrollProfile, 
 		waypoint item=adapter.getItem(from);
         adapter.remove(item);
         adapter.insert(item, to);
+        mission.reNumberWaypoints();
         adapter.notifyDataSetChanged();
         mission.onWaypointsUpdate();		
 	}
