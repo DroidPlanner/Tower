@@ -77,7 +77,7 @@ public class Mission extends DroneVariable implements PathSource, OnWaypointUpda
 
 	public void setWaypoints(List<waypoint> waypoints) {
 		this.waypoints.clear();
-		this.waypoints.addAll(waypoints);
+		addWaypoints(waypoints);
 	}
 
 	public void addWaypoints(List<waypoint> points) {
