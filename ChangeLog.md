@@ -1,3 +1,6 @@
+## Droidplanner v1.1.0
+* Suport for the new telemetry module from 3DR (FT231)
+
 ## Droidplanner v1.0.2
 * Fixing the waypoint numbering issue when planning a survey and reordering via the waypoint editor
 * Live update flight path and distanceView while dragging
