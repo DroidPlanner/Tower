@@ -1,4 +1,4 @@
-package com.droidplanner.fragments.helpers;
+package com.droidplanner.helpers.geoTools;
 
 import java.util.ArrayList;
 import java.util.List;

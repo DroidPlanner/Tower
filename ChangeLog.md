@@ -1,3 +1,31 @@
+## Droidplanner v1.1.0
+* Suport for the new telemetry module from 3DR (FT231)
+
+## Droidplanner v1.0.2
+* Fixing the waypoint numbering issue when planning a survey and reordering via the waypoint editor
+* Live update flight path and distanceView while dragging
+* Added RAW_SENSORS and RC_CHANNELS to preferences for compatibility w/ other MAVLink hardware on vehicle
+
+## Droidplanner v1.0.1
+* Moving the arm/disarm button to the overflow menu for safety reasons
+* Fixing problems with the Do_Jump and Set_Home waypoint dialogs
+* Reduce the chance of unintentionally deleting waypoints while scrolling
+
+## Droidplanner v1.0.0
+* No new changes to the codebase, just setting a milestone 
+
+## Droidplanner v0.16.0
+* Bluetooth Support
+* Fixing layout problems with the Survey window
+
+## Droidplanner v0.15.0
+* New Waypoint Editor
+* New Survey Interface
+* Support for Physical Joysticks
+* Chinise Translation
+* Code Refactoring
+* Minor fixes (please consult GIT history)
+
 ## Droidplanner v0.14.2
 * Fixing the problem of working with big polygons
 

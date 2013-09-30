@@ -12,7 +12,7 @@ public class HomeMarker {
 	public static MarkerOptions build(Home home) {
 		return new MarkerOptions()
 				.position(home.getCoord())
-				.draggable(true)
+				.visible(home.isValid())
 				.title("Home")
 				.snippet(
 						String.format(Locale.ENGLISH, "%.1fm", home.getHeight()))
@@ -22,6 +22,7 @@ public class HomeMarker {
 	}
 
 	public static void update(Marker marker, Home home) {
+		marker.setVisible(home.isValid());
 		marker.setPosition(home.getCoord());
 		marker.setSnippet(String.format(Locale.ENGLISH, "%s %.1fm", home
 				.getCmd().getName(), home.getHeight()));

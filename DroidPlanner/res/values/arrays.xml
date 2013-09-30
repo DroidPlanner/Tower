@@ -35,6 +35,7 @@
         <item name="USB">USB</item>
         <item name="TCP">TCP</item>
         <item name="UDP">UDP</item>
+        <item name="BLUETOOTH">BLUETOOTH</item>
     </string-array>
     <string-array name="MapTypes">
         <item>Satellite</item>
@@ -54,5 +55,20 @@
         <item name="MODE1">MODE1</item>
         <item name="MODE2">MODE2</item>
     </string-array>
-
+    <string-array name="WPData">
+        <item name="Nos">#</item>
+        <item name="Alt">Altitude</item>
+        <item name="Lat">Latitude</item>
+        <item name="Lon">Longitude</item>
+        <item name="Param1">P1</item>
+        <item name="Param2">P2</item>
+        <item name="Param3">P3</item>
+        <item name="Param4">P4</item>
+        </string-array>
+    <string-array name="CoordSource">
+        <item >Waypoint</item>
+        <item >Ground station</item>
+        <item >Manual entry</item>
+    </string-array>
+    
 </resources>

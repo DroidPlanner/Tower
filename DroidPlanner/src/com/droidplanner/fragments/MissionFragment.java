@@ -8,9 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
 import com.droidplanner.R;
-import com.droidplanner.dialogs.WaypointDialog;
+import com.droidplanner.dialogs.mission.DialogMissionFactory;
 import com.droidplanner.drone.variables.Mission;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.widgets.tableRow.MissionRow;
@@ -19,7 +18,7 @@ import com.mobeta.android.dslv.DragSortListView.DragScrollProfile;
 import com.mobeta.android.dslv.DragSortListView.DropListener;
 import com.mobeta.android.dslv.DragSortListView.RemoveListener;
 
-public class MissionFragment extends ListFragment implements DragScrollProfile, RemoveListener, DropListener, OnWaypointUpdateListner{
+public class MissionFragment extends ListFragment implements DragScrollProfile, RemoveListener, DropListener{
 	public DragSortListView list;
 	private Mission mission;
 	private MissionRow adapter;
@@ -27,7 +26,7 @@ public class MissionFragment extends ListFragment implements DragScrollProfile, 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.mission_fragment, container,
+		View view = inflater.inflate(R.layout.fragment_mission, container,
 				false);
 		list = (DragSortListView) view.findViewById(R.id.listView1);
 		list.setDropListener(this);
@@ -54,8 +53,9 @@ public class MissionFragment extends ListFragment implements DragScrollProfile, 
 		waypoint item=adapter.getItem(from);
         adapter.remove(item);
         adapter.insert(item, to);
+        mission.reNumberWaypoints();
         adapter.notifyDataSetChanged();
-        mission.notifyMissionUpdate();		
+        mission.onWaypointsUpdate();		
 	}
 
 	@Override
@@ -73,22 +73,11 @@ public class MissionFragment extends ListFragment implements DragScrollProfile, 
         }
 	}
 
-	public void onWaypointUpdate(waypoint waypoint) {
-		mission.notifyMissionUpdate();		
-	}
-
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		Log.d("T", "touched "+position);
-		WaypointDialog dialog = new WaypointDialog(adapter.getItem(position));
-		dialog.build(this.getActivity(), this);		
+		DialogMissionFactory.getDialog(adapter.getItem(position), this.getActivity(), mission);		
 		super.onListItemClick(l, v, position, id);
 	}
-	
-	@Override
-	public void onWaypointsUpdate() {
-		Log.d("T", "waypoint updated by dialog");
-		mission.notifyMissionUpdate();	
-		adapter.notifyDataSetChanged();
-	}
+
 }

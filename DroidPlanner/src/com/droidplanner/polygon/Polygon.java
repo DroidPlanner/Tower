@@ -3,11 +3,13 @@ package com.droidplanner.polygon;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.droidplanner.fragments.helpers.MapPath.PathSource;
 import com.droidplanner.helpers.geoTools.GeoTools;
 import com.droidplanner.helpers.geoTools.LineLatLng;
+import com.droidplanner.helpers.units.Area;
 import com.google.android.gms.maps.model.LatLng;
 
-public class Polygon {
+public class Polygon implements PathSource {
 
 	private List<PolygonPoint> points = new ArrayList<PolygonPoint>();
 
@@ -42,16 +44,6 @@ public class Polygon {
 		return list;
 	}
 
-	/*
-	 * A valid polygon must have at least 3 points
-	 */
-	public boolean isValid() {
-		if (points.size() > 2)
-			return true;
-		else
-			return false;
-	}
-
 	public List<PolygonPoint> getPolygonPoints() {
 		return points;
 	}
@@ -61,8 +53,31 @@ public class Polygon {
 
 	}
 
-	public Double getArea() {
+	public Area getArea() {
 		return GeoTools.getArea(this);
+	}
+
+	@Override
+	public List<LatLng> getPathPoints() {
+		List<LatLng> path = getLatLngList();
+		if (getLatLngList().size() > 2) {
+			path.add(path.get(0));
+		}
+		return path;
+	}
+
+	public void checkIfValid() throws Exception {
+		switch (points.size()) {
+		case 0:
+			throw new Exception("Draw a polygon");
+		case 1:
+			throw new Exception("Draw at least 2 more polygon points");
+		case 2:
+			throw new Exception("Draw at least 1 more polygon points");
+		default:
+			return;
+		}
+		
 	}
 
 }

@@ -6,12 +6,14 @@ import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperFlightActivity;
 import com.droidplanner.drone.DroneInterfaces.DroneTypeListner;
 import com.droidplanner.fragments.FlightMapFragment;
 import com.droidplanner.fragments.HudFragment;
+import com.droidplanner.fragments.RCFragment;
 import com.droidplanner.widgets.viewPager.MapViewPager;
 
 public class RCActivity extends SuperFlightActivity implements
@@ -29,7 +31,7 @@ public class RCActivity extends SuperFlightActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.rc);
+		setContentView(R.layout.activity_rc);
 
 		mAdapter = new AdapterHudMap(getFragmentManager());
 		mPager = (MapViewPager) findViewById(R.id.rcPager);
@@ -89,5 +91,12 @@ public class RCActivity extends SuperFlightActivity implements
 			}
 		}
 	}
+	
 
+	//Handle movement of wikipad joystick
+	@Override
+	public boolean onGenericMotionEvent(MotionEvent ev){
+		RCFragment rcFragment = (RCFragment) getFragmentManager().findFragmentById(R.id.rcFragment);
+		return rcFragment.physicalJoyMoved(ev);
+	}
 }

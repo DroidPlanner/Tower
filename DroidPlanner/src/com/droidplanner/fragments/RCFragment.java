@@ -6,7 +6,9 @@ import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.InputDevice;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -40,7 +42,7 @@ public class RCFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.rc_fragment, container, false);
+		View view = inflater.inflate(R.layout.fragment_rc, container, false);
 
 		app = (DroidPlannerApp) getActivity().getApplication();
 		drone = app.drone;
@@ -141,6 +143,16 @@ public class RCFragment extends Fragment {
 
 	public boolean isRcOverrideActive() {
 		return rcActivated;
+	}
+	
+	public boolean physicalJoyMoved(MotionEvent ev){
+		//Tested only for wikipad controller. Probably works with most game controllers.
+		if((ev.getSource() & InputDevice.SOURCE_CLASS_JOYSTICK) != 0) {
+			 lJoystick.OnMoved((double) ev.getAxisValue(MotionEvent.AXIS_X), (double) ev.getAxisValue(MotionEvent.AXIS_Y));
+			 rJoystick.OnMoved((double) ev.getAxisValue(MotionEvent.AXIS_Z), (double) ev.getAxisValue(MotionEvent.AXIS_RZ));
+			 return true;
+		}
+		return false;
 	}
 
 	private void enableRCOverride() {

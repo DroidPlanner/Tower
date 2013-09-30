@@ -99,6 +99,12 @@ public class SeekBarWithText extends LinearLayout implements
 		seekBar.setProgress((int) ((value - min) / inc));
 	}
 
+	public void setAbsValue(double value) {
+		if(value<0)
+			value *= -1.0;
+		seekBar.setProgress((int) ((value - min) / inc));
+	}
+
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress,
 			boolean fromUser) {

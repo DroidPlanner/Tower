@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import android.content.Context;
+
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -13,9 +15,9 @@ public class MarkerManager {
 	public HashMap<Marker, MarkerSource> hashMap = new HashMap<Marker, MarkerSource>();
 
 	public interface MarkerSource {
-		MarkerOptions build();
+		MarkerOptions build(Context context);
 
-		void update(Marker marker);
+		void update(Marker marker, Context context);
 	}
 
 	public MarkerManager(GoogleMap map) {
@@ -27,19 +29,20 @@ public class MarkerManager {
 		removeOldMarkers(emptyList);
 	}
 
-	public <T> void updateMarkers(List<T> list, boolean draggable) {
+	public <T> void updateMarkers(List<T> list, boolean draggable,
+			Context context) {
 		for (T object : list) {
-			updateMarker((MarkerSource) object, draggable);
+			updateMarker((MarkerSource) object, draggable,context);
 		}
 	}
-
-	public void updateMarker(MarkerSource object, boolean draggable) {
-		if (hashMap.containsValue(object)) {
-			Marker marker = getMarkerFromSource(object);
-			((MarkerSource) object).update(marker);
+	public void updateMarker(MarkerSource source, boolean draggable,
+		Context context) {
+		if (hashMap.containsValue(source)) {
+			Marker marker = getMarkerFromSource(source);
+			source.update(marker,context);
 			marker.setDraggable(draggable);
 		} else {
-			addMarker(object, draggable);
+			addMarker(source, draggable,context);
 		}
 	}
 
@@ -67,8 +70,9 @@ public class MarkerManager {
 		}
 	}
 
-	private void addMarker(MarkerSource object, boolean draggable) {
-		Marker marker = mMap.addMarker(object.build());
+	private void addMarker(MarkerSource object, boolean draggable,
+			Context context) {
+		Marker marker = mMap.addMarker(object.build(context));
 		marker.setDraggable(draggable);
 		hashMap.put(marker, object);
 	}
@@ -85,5 +89,6 @@ public class MarkerManager {
 	public MarkerSource getSourceFromMarker(Marker marker) {
 		return hashMap.get(marker);
 	}
+
 
 }

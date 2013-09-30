@@ -34,7 +34,7 @@ public class GCPActivity extends SuperActivity implements OnGcpClickListner {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.gcp);
+		setContentView(R.layout.activity_gcp);
 
 		gcpList = new ArrayList<Gcp>();
 
@@ -89,7 +89,7 @@ public class GCPActivity extends SuperActivity implements OnGcpClickListner {
 	private void putListToGcp(List<Gcp> list) {
 		gcpList.clear();
 		gcpList.addAll(list);
-		gcpMapFragment.markers.updateMarkers(gcpList, false);
+		gcpMapFragment.markers.updateMarkers(gcpList, false,getApplicationContext());
 		gcpMapFragment.zoomToExtents(getGcpCoordinates());
 	}
 
@@ -116,7 +116,7 @@ public class GCPActivity extends SuperActivity implements OnGcpClickListner {
 	@Override
 	public void onGcpClick(MarkerSource gcp) {
 		((com.droidplanner.gcp.Gcp) gcp).toogleState();
-		gcpMapFragment.markers.updateMarker(gcp, false);
+		gcpMapFragment.markers.updateMarker(gcp, false,getApplicationContext());
 	}
 
 }

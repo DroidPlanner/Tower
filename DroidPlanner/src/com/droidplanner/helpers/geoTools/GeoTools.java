@@ -2,6 +2,7 @@ package com.droidplanner.helpers.geoTools;
 
 import java.util.List;
 
+import com.droidplanner.helpers.units.Area;
 import com.droidplanner.polygon.Polygon;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -123,7 +124,7 @@ public class GeoTools {
 	 * @return area in m�
 	 */
 	// TODO test and fix this function
-	public static Double getArea(Polygon poly) {
+	public static Area getArea(Polygon poly) {
 		double sum = 0.0;
 		for (int i = 0; i < poly.getLatLngList().size() - 1; i++) {
 			sum = sum
@@ -132,7 +133,8 @@ public class GeoTools {
 					- (latToMeters(poly.getLatLngList().get(i).latitude) * latToMeters(poly
 							.getLatLngList().get(i + 1).longitude));
 		}
-		return Math.abs(0.5 * sum);
+		//return new Area(Math.abs(0.5 * sum));
+		return new Area(0);
 	}
 
 }

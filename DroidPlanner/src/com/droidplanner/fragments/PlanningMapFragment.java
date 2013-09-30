@@ -1,101 +1,69 @@
 package com.droidplanner.fragments;
 
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.droidplanner.drone.Drone;
-import com.droidplanner.drone.variables.Home;
+import com.droidplanner.dialogs.mission.DialogMissionFactory;
+import com.droidplanner.drone.variables.Mission;
 import com.droidplanner.drone.variables.waypoint;
-import com.droidplanner.fragments.helpers.OfflineMapFragment;
+import com.droidplanner.fragments.helpers.CameraGroundOverlays;
+import com.droidplanner.fragments.helpers.DroneMap;
+import com.droidplanner.fragments.helpers.MapPath;
+import com.droidplanner.fragments.helpers.OnMapInteractionListener;
 import com.droidplanner.fragments.markers.MarkerManager;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import com.droidplanner.polygon.Polygon;
 import com.droidplanner.polygon.PolygonPoint;
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
 
 @SuppressLint("UseSparseArrays")
-public class PlanningMapFragment extends OfflineMapFragment implements
-		OnMapLongClickListener, OnMarkerDragListener, OnMapClickListener {
-
-	public GoogleMap mMap;
-
-	private MarkerManager markers;
+public class PlanningMapFragment extends DroneMap implements
+		OnMapLongClickListener, OnMarkerDragListener, OnMapClickListener,
+		OnMarkerClickListener {
 
 	public OnMapInteractionListener mListener;
+	private MapPath polygonPath;
+	private Mission mission;
 
-	public Polygon polygon;
-
-	private Polyline polygonLine;
-
-	private Polyline missionLine;
-
-	public interface OnMapInteractionListener {
-
-		public void onAddPoint(LatLng point);
-
-		public void onMoveHome(LatLng coord);
-
-		public void onMoveWaypoint(waypoint waypoint, LatLng latLng);
-
-		public void onMovePolygonPoint(PolygonPoint source, LatLng newCoord);
-
-		public void onMapClick(LatLng point);
-	}
+	public CameraGroundOverlays cameraOverlays;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
 			Bundle bundle) {
 		View view = super.onCreateView(inflater, viewGroup, bundle);
-		 
-		mMap = getMap();
+
 		mMap.setOnMarkerDragListener(this);
+		mMap.setOnMarkerClickListener(this);
 		mMap.setOnMapClickListener(this);
 		mMap.setOnMapLongClickListener(this);
+		polygonPath = new MapPath(mMap, Color.BLACK, 2);
+		cameraOverlays = new CameraGroundOverlays(mMap);
 
-		markers = new MarkerManager(mMap);
-		 
 		return view;
 	}
 
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		mListener = (OnMapInteractionListener) activity;
-	}
-
-	public void update(Drone drone, Polygon polygon) {
+	public void update(Polygon polygon) {
 		markers.clear();
 
-		markers.updateMarker(drone.mission.getHome(), true);
-		markers.updateMarkers(drone.mission.getWaypoints(), true);
-		markers.updateMarkers(polygon.getPolygonPoints(), true);
+		Context context = getActivity().getApplicationContext();
+		markers.updateMarker(mission.getHome(), false, context);
+		markers.updateMarkers(mission.getWaypoints(), true, context);
+		markers.updateMarkers(polygon.getPolygonPoints(), true, context);
 
-		clearPolylines();
-
-		polygonLine = mMap.addPolyline(getPolygonPath(polygon));
-		missionLine = mMap.addPolyline(getMissionPath(drone));
-
-	}
-
-	private void clearPolylines() {
-		if (polygonLine != null) {
-			polygonLine.remove();
-		}
-		if (missionLine != null) {
-			missionLine.remove();
-		}
+		polygonPath.update(polygon);
+		missionPath.update(mission);
 	}
 
 	@Override
@@ -105,24 +73,33 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 
 	@Override
 	public void onMarkerDrag(Marker marker) {
+		MarkerSource source = markers.getSourceFromMarker(marker);
+		checkForWaypointMarkerMoving(source, marker);
 	}
 
 	@Override
 	public void onMarkerDragStart(Marker marker) {
+		MarkerSource source = markers.getSourceFromMarker(marker);
+		checkForWaypointMarkerMoving(source, marker);
+	}
+
+	private void checkForWaypointMarkerMoving(MarkerSource source, Marker marker)
+	{
+		if (waypoint.class.isInstance(source)) {
+			// update marker source and flight path
+			waypoint waypoint = (waypoint) source;
+			waypoint.setCoord(marker.getPosition());
+			missionPath.update(mission);
+
+			mListener.onMovingWaypoint(waypoint, marker.getPosition());
+		}
 	}
 
 	@Override
 	public void onMarkerDragEnd(Marker marker) {
 		MarkerSource source = markers.getSourceFromMarker(marker);
-		checkForHomeMarker(source, marker);
 		checkForWaypointMarker(source, marker);
 		checkForPolygonMarker(source, marker);
-	}
-
-	private void checkForHomeMarker(MarkerSource source, Marker marker) {
-		if (Home.class.isInstance(source)) {
-			mListener.onMoveHome(marker.getPosition());
-		}
 	}
 
 	private void checkForWaypointMarker(MarkerSource source, Marker marker) {
@@ -138,44 +115,31 @@ public class PlanningMapFragment extends OfflineMapFragment implements
 		}
 	}
 
-	public LatLng getMyLocation() {
-		if (mMap.getMyLocation() != null) {
-			return new LatLng(mMap.getMyLocation().getLatitude(), mMap
-					.getMyLocation().getLongitude());
-		} else {
-			return null;
-		}
-	}
-
-	private PolylineOptions getMissionPath(Drone drone) {
-		PolylineOptions flightPath = new PolylineOptions();
-		flightPath.color(Color.YELLOW).width(3);
-
-		flightPath.add(drone.mission.getHome().getCoord());
-		for (waypoint point : drone.mission.getWaypoints()) {
-			flightPath.add(point.getCoord());
-		}
-		return flightPath;
-	}
-
-	public PolylineOptions getPolygonPath(Polygon poly) {
-		PolylineOptions flightPath = new PolylineOptions();
-		flightPath.color(Color.BLACK).width(2);
-
-		for (LatLng point : poly.getLatLngList()) {
-			flightPath.add(point);
-		}
-		if (poly.getLatLngList().size() > 2) {
-			flightPath.add(poly.getLatLngList().get(0));
-		}
-
-		return flightPath;
+	@Override
+	public void onMapClick(LatLng point) {
+		mListener.onMapClick(point);
 	}
 
 	@Override
-	public void onMapClick(LatLng point) {
-		mListener.onMapClick(point);		
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		mListener = (OnMapInteractionListener) activity;
 	}
 
+	@Override
+	public boolean onMarkerClick(Marker marker) {
+		MarkerSource source = markers.getSourceFromMarker(marker);
+		if (source instanceof waypoint) {
+			DialogMissionFactory.getDialog((waypoint) source,
+					this.getActivity(), mission);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public void setMission(Mission mission) {
+		this.mission = mission;
+	}
 
 }

@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.droidplanner.R;
+import com.droidplanner.helpers.geoTools.Simplify;
 
 public class GestureMapFragment extends Fragment implements OnGestureListener {
 	private static final int TOLERANCE = 15;
@@ -32,7 +33,7 @@ public class GestureMapFragment extends Fragment implements OnGestureListener {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.gesture_map_fragment, container,
+		View view = inflater.inflate(R.layout.fragment_gesture_map, container,
 				false);
 		overlay = (GestureOverlayView) view.findViewById(R.id.overlay1);
 		overlay.addOnGestureListener(this);

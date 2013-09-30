@@ -27,12 +27,12 @@
     <string name="menu_open_kmz">Ouvrir KMZ</string>
     <string name="menu_add_polygon">Ajouter un polygone</string>
     <string name="menu_polygon">Polygone</string>
-    <string name="menu_clear_polygon">Effacer poly</string>
+    <string name="clear_polygon">Effacer poly</string>
     <string name="generate">Generer</string>
     <string name="exit">Sortie</string>
     <string name="menu_clearFlightPath">Effacer le chemin</string>
-    <string name="exiting_polygon_mode">Mode polygone inactif</string>
-    <string name="entering_polygon_mode">Mode polygone actif</string>
+    <string name="mission_mode">Mode polygone inactif</string>
+    <string name="polygon_mode">Mode polygone actif</string>
     <string name="dialog_polygon_hatch_angle">Angle de la grille :</string>
     <string name="distance_between_lines">Distance entre les lignes :</string>
     <string name="enable">Activer</string>
