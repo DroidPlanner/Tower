@@ -7,6 +7,7 @@ import android.view.MenuItem;
 
 import com.MAVLink.Messages.ApmModes;
 import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
+import com.droidplanner.MAVLink.MavLinkArm;
 import com.droidplanner.R;
 import com.droidplanner.drone.DroneInterfaces.DroneTypeListner;
 import com.droidplanner.drone.variables.GuidedPoint;
@@ -21,6 +22,7 @@ import com.droidplanner.widgets.spinners.SelectWaypointSpinner.OnWaypointSpinner
 public abstract class SuperFlightActivity extends SuperActivity implements
 		OnModeSpinnerSelectedListener, OnWaypointSpinnerSelectedListener,
 		OnGuidedListener, DroneTypeListner, OnWaypointUpdateListner {
+
 
 	private SelectModeSpinner fligthModeSpinner;
 	private SelectWaypointSpinner wpSpinner;
@@ -52,6 +54,22 @@ public abstract class SuperFlightActivity extends SuperActivity implements
 		wpSpinner.buildSpinner(this, this);
 
 		return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_arm:
+			if (drone.MavClient.isConnected()) {
+				if (!drone.state.isArmed())
+					drone.tts.speak("Arming the vehicle, please standby");
+				MavLinkArm.sendArmMessage(drone, !drone.state.isArmed());
+
+			}
+			return true;
+		default:
+			return super.onMenuItemSelected(featureId, item);
+		}
 	}
 
 	@Override

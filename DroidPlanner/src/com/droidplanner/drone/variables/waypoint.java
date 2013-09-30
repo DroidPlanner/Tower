@@ -13,8 +13,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class waypoint implements MarkerSource {
+
+	 public class waypoint implements MarkerSource {
+	
 	public msg_mission_item missionItem = new msg_mission_item();
+
+	public int homeType;
 
 	public waypoint(LatLng c, Double h) {
 		this(c.latitude, c.longitude, h);
@@ -23,7 +27,7 @@ public class waypoint implements MarkerSource {
 	public waypoint(Double Lat, Double Lng, Double h) {
 		setCoord(new LatLng(Lat, Lng));
 		setHeight(h);
-
+		
 		missionItem.current = 0; // TODO use correct parameter for HOME
 		missionItem.frame = MAV_FRAME.MAV_FRAME_GLOBAL;
 		missionItem.command = MAV_CMD.MAV_CMD_NAV_WAYPOINT;

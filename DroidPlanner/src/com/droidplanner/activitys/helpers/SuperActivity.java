@@ -16,7 +16,6 @@ import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.DroidPlannerApp.ConnectionStateListner;
 import com.droidplanner.DroidPlannerApp.OnSystemArmListener;
 import com.droidplanner.R;
-import com.droidplanner.MAVLink.MavLinkArm;
 import com.droidplanner.activitys.CameraActivity;
 import com.droidplanner.activitys.ChartActivity;
 import com.droidplanner.activitys.FlightDataActivity;
@@ -118,14 +117,6 @@ public abstract class SuperActivity extends Activity implements
 		switch (item.getItemId()) {
 		case R.id.menu_settings:
 			startActivity(new Intent(this, SettingsActivity.class));
-			return true;
-		case R.id.menu_arm:
-			if(drone.MavClient.isConnected()){
-				if(!drone.state.isArmed())
-					drone.tts.speak("Arming the vehicle, please standby");
-				MavLinkArm.sendArmMessage(drone, !drone.state.isArmed());
-				
-			}
 			return true;
 		case R.id.menu_connect:
 			drone.MavClient.toggleConnectionState();

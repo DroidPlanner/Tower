@@ -12,6 +12,8 @@ public interface OnMapInteractionListener {
 
 	public void onMoveWaypoint(waypoint waypoint, LatLng latLng);
 
+	public void onMovingWaypoint(waypoint source, LatLng latLng);
+
 	public void onMovePolygonPoint(PolygonPoint source, LatLng newCoord);
 
 	public void onMapClick(LatLng point);
