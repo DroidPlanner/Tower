@@ -23,8 +23,10 @@ public class MavLinkStreamRates {
 				"pref_mavlink_stream_rate_extra3", "0"));
 		int position = Integer.parseInt(prefs.getString(
 				"pref_mavlink_stream_rate_position", "0"));
-		int rcChannels = 0;
-		int rawSensors = 0;
+		int rcChannels = Integer.parseInt(prefs.getString(
+				"pref_mavlink_stream_rate_rc_channels", "0"));
+		int rawSensors = Integer.parseInt(prefs.getString(
+				"pref_mavlink_stream_rate_raw_sensors", "0"));
 
 		setupStreamRates(droidPlannerApp.drone.MavClient, extendedStatus,
 				extra1, extra2, extra3, position, rcChannels, rawSensors);

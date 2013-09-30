@@ -10,6 +10,7 @@ public class DialogMissionTakeoff extends DialogMission implements
 		OnTextSeekBarChangedListner {
 	private SeekBarWithText altitudeSeekBar;
 	private SeekBarWithText angleSeekBar;
+	private SeekBarWithText yawSeekBar;
 
 	@Override
 	protected int getResource() {
@@ -19,7 +20,7 @@ public class DialogMissionTakeoff extends DialogMission implements
 	protected View buildView() {
 		super.buildView();
 		altitudeSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.waypointAltitude);
+				.findViewById(R.id.altitudeView);
 		altitudeSeekBar.setValue(wp.getHeight());
 		altitudeSeekBar.setOnChangedListner(this);
 
@@ -28,6 +29,11 @@ public class DialogMissionTakeoff extends DialogMission implements
 		angleSeekBar.setValue(wp.missionItem.param1);
 		angleSeekBar.setOnChangedListner(this);
 
+		yawSeekBar = (SeekBarWithText) view
+				.findViewById(R.id.waypointAngle);
+		yawSeekBar.setValue(wp.missionItem.param4);
+		yawSeekBar.setOnChangedListner(this);
+
 		return view;
 	}
 
@@ -35,6 +41,7 @@ public class DialogMissionTakeoff extends DialogMission implements
 	public void onSeekBarChanged() {
 		wp.setHeight(altitudeSeekBar.getValue());
 		wp.missionItem.param1 = (float) angleSeekBar.getValue();
+		wp.missionItem.param4 = (float) yawSeekBar.getValue();
 	}
 
 

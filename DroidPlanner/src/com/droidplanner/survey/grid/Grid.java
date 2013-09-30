@@ -4,17 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.droidplanner.drone.variables.waypoint;
-import com.droidplanner.helpers.geoTools.GeoTools;
+import com.droidplanner.helpers.geoTools.PolylineTools;
+import com.droidplanner.helpers.units.Length;
 import com.google.android.gms.maps.model.LatLng;
 
 public class Grid {
 	public List<LatLng> gridPoints;
+	private List<LatLng> cameraLocations;
+	private Double altitude;
 
-	public Grid(List<LatLng> list) {
+	public Grid(List<LatLng> list, List<LatLng> cameraLocations) {
 		this.gridPoints = list;
+		this.cameraLocations = cameraLocations;
 	}
 
-	public ArrayList<waypoint> getWaypoints(Double altitude) {
+	public ArrayList<waypoint> getWaypoints() {
 		ArrayList<waypoint> list = new ArrayList<waypoint>();
 		for (LatLng point : gridPoints) {
 			list.add(new waypoint(point, altitude));
@@ -22,16 +26,24 @@ public class Grid {
 		return list;
 	}
 	
-	public double getLength(){
-		double lenght = 0;
-		for (int i = 1; i < gridPoints.size(); i++) {
-			lenght+=GeoTools.getDistance(gridPoints.get(i),gridPoints.get(i-1));
-		}
-		return lenght;
+	public Length getLength(){
+		return PolylineTools.getPolylineLength(gridPoints);
 	}
 	
 	public int getNumberOfLines(){
 		return gridPoints.size()/2;
+	}
+
+	public List<LatLng> getCameraLocations() {
+		return cameraLocations;
+	}
+
+	public void setAltitude(Double altitude) {
+		this.altitude = altitude;
+	}
+
+	public int getCameraCount() {
+		return getCameraLocations().size();
 	}
 	
 }

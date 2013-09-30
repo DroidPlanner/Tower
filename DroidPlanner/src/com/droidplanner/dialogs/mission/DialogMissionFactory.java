@@ -32,6 +32,24 @@ public class DialogMissionFactory {
 		case CMD_NAV_LAND:
 			dialog = new DialogMissionLand();
 			break;
+		case CMD_CONDITION_CHANGE_ALT:
+			dialog = new DialogMissionCondAlt();
+			break;
+		case CMD_CONDITION_YAW:
+			dialog = new DialogMissionCondYaw();
+			break;
+		case CMD_CONDITION_DISTANCE:
+			dialog = new DialogMissionCondDistance();
+			break;
+		case CMD_DO_SET_HOME:
+			dialog = new DialogMissionSetHome();
+			break;
+		case CMD_DO_JUMP:
+			dialog = new DialogMissionSetJump();
+			break;
+		case CMD_DO_CHANGE_SPEED:
+			dialog = new DialogMissionSetSpeed();
+			break;
 		default:
 			dialog = new DialogMissionGeneric();
 			break;

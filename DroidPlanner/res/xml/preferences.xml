@@ -52,6 +52,16 @@
                 android:inputType="number"
                 android:key="pref_mavlink_stream_rate_RC_override"
                 android:title="RC override" />
+	        <EditTextPreference
+			        android:defaultValue="5"
+			        android:inputType="number"
+			        android:key="pref_mavlink_stream_rate_rc_channels"
+			        android:title="RC channel data" />
+	        <EditTextPreference
+			        android:defaultValue="2"
+			        android:inputType="number"
+			        android:key="pref_mavlink_stream_rate_raw_sensors"
+			        android:title="Raw sensors" />
         </PreferenceScreen>
     </PreferenceCategory>
     <PreferenceCategory

@@ -2,7 +2,10 @@ package com.droidplanner.fragments.markers;
 
 import java.util.Locale;
 
+import android.content.Context;
+
 import com.droidplanner.drone.variables.waypoint;
+import com.droidplanner.fragments.markers.helpers.MarkerWithText;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Marker;
@@ -10,31 +13,30 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class WaypointMarker {
 
-	public static MarkerOptions build(waypoint wp) {
+	public static MarkerOptions build(waypoint wp, Context context) {
 		return new MarkerOptions()
 				.position(wp.getCoord())
-				.visible(wp.getCmd().isNavigation())
+				.visible(wp.getCmd().showOnMap())
 				.draggable(true)
 				.title("WP" + Integer.toString(wp.getNumber()))
 				.snippet(
 						String.format(Locale.ENGLISH, "%s %.1fm", wp.getCmd()
-								.getName(), wp.getHeight())).icon(getIcon(wp));
+								.getName(), wp.getHeight())).icon(getIcon(wp,context));
 	}
 
-	public static void update(Marker marker, waypoint wp) {
+	public static void update(Marker marker, waypoint wp, Context context) {
 		marker.setPosition(wp.getCoord());
 		marker.setTitle("WP" + Integer.toString(wp.getNumber()));
 		marker.setSnippet(String.format(Locale.ENGLISH, "%s %.1fm", wp.getCmd()
 				.getName(), wp.getHeight()));
-		marker.setIcon(getIcon(wp));
+		marker.setIcon(getIcon(wp,context));
 	}
 
-	private static BitmapDescriptor getIcon(waypoint wp) {
+	private static BitmapDescriptor getIcon(waypoint wp, Context context) {
 		switch (wp.getCmd()) {
 		default:
 		case CMD_NAV_WAYPOINT:
-			return BitmapDescriptorFactory
-					.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+			return BitmapDescriptorFactory.fromBitmap(MarkerWithText.getMarkerWithText(Integer.toString(wp.getNumber()),context));
 		case CMD_NAV_LOITER_TIME:
 		case CMD_NAV_LOITER_TURNS:
 		case CMD_NAV_LOITER_UNLIM:

@@ -12,29 +12,53 @@
         android:layout_margin="5dp"
         android:entries="@array/ExampleCameraArray" />
 
-    <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
-        android:id="@+id/waypointAltitude"
+    <ScrollView
+        android:id="@+id/scrollView1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="2dp"
-        custom:inc="5"
-        custom:max="1000"
-        custom:min="0"
-        custom:title="@string/waypoint_altitude"
-        custom:unit="m" >
-    </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+        android:layout_height="wrap_content" >
 
-    <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
-        android:id="@+id/waypointDelay"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="2dp"
-        custom:inc="1"
-        custom:max="600"
-        custom:min="0"
-        custom:title="@string/waypoint_delay"
-        custom:unit="s" >
-    </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+                android:id="@+id/altitudeView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                custom:inc="5"
+                custom:max="1000"
+                custom:min="0"
+                custom:title="@string/waypoint_altitude"
+                custom:unit="m" >
+            </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+
+            <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+                android:id="@+id/waypointDelay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                custom:inc="1"
+                custom:max="600"
+                custom:min="0"
+                custom:title="@string/waypoint_delay"
+                custom:unit="s" >
+            </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+
+            <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+                android:id="@+id/waypointAngle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                custom:inc="5"
+                custom:max="360"
+                custom:min="0"
+                custom:title="@string/waypoint_angle"
+                custom:unit="°" >
+            </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+        </LinearLayout>
+    </ScrollView>
 
     <TextView
         android:id="@+id/textView1"

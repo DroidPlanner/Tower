@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" 
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" >
-    
-	<item
+
+    <item
         android:id="@+id/menu_flight_modes_spinner"
         android:actionViewClass="com.droidplanner.widgets.spinners.SelectModeSpinner"
         android:showAsAction="always"
@@ -13,12 +13,17 @@
         android:showAsAction="always"
         tools:ignore="MenuTitle"/>
     <item
+        android:id="@+id/menu_arm"
+        android:showAsAction="never"
+        android:title="@string/menu_arm">
+    </item>
+    <item
         android:id="@+id/menu_follow_me"
-        android:showAsAction="ifRoom"
+        android:showAsAction="never"
         android:title="@string/menu_follow_me"/>
     <item
         android:id="@+id/menu_load_from_apm"
         android:showAsAction="never"
         android:title="@string/menu_load_from_apm"/>
-    
+
 </menu>

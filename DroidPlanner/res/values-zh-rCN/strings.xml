@@ -31,7 +31,7 @@
     <string name="menu_open_kmz">打开KMZ文件</string>
     <string name="menu_add_polygon">编辑巡航范围</string>
     <string name="menu_polygon">设置巡航计划</string>
-    <string name="menu_clear_polygon">清除多边形</string>
+    <string name="clear_polygon">清除多边形</string>
     <string name="menu_generate_polygon">生成巡航计划</string>
     <string name="menu_survey">航拍设定</string>
     <string name="menu_finish_polygon">finish polygon？</string>
@@ -39,8 +39,8 @@
     <string name="generate">生成巡航路径</string>
     <string name="exit">退出 </string>
     <string name="menu_clearFlightPath">清除飞行轨迹</string>
-    <string name="exiting_polygon_mode">退出巡航计划</string>
-    <string name="entering_polygon_mode">编辑巡航计划</string>
+    <string name="mission_mode">退出巡航计划</string>
+    <string name="polygon_mode">编辑巡航计划</string>
     <string name="dialog_polygon_hatch_angle">巡航角度:</string>
     <string name="distance_between_lines">巡航间距</string>
     <string name="enable">激活</string>

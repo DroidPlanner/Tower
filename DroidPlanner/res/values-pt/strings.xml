@@ -27,12 +27,12 @@
     <string name="menu_open_kmz">Abrir KMZ</string>
     <string name="menu_add_polygon">Desenhar Polig.</string>
     <string name="menu_polygon">Poligono</string>
-    <string name="menu_clear_polygon">Limpar Polig.</string>
+    <string name="clear_polygon">Limpar Polig.</string>
     <string name="generate">Gerar WPs</string>
     <string name="exit">Sair</string>
     <string name="menu_clearFlightPath">Limpar Trilhas</string>
-    <string name="exiting_polygon_mode">Sair Modo Poligono</string>
-    <string name="entering_polygon_mode">Entrar Modo Poligono</string>
+    <string name="mission_mode">Sair Modo Poligono</string>
+    <string name="polygon_mode">Entrar Modo Poligono</string>
     <string name="dialog_polygon_hatch_angle">Ângulo do Grid:</string>
     <string name="distance_between_lines">Distancia entre Linhas:</string>
     <string name="enable">Habilitar</string>

@@ -32,6 +32,10 @@ public class MAVLinkClient {
 		public void notifyDisconnected();
 
 		public void notifyReceivedData(MAVLinkMessage m);
+
+		void notifyArmed();
+
+		void notifyDisarmed();
 	}
 
 	public MAVLinkClient(Context context, OnMavlinkClientListner listner) {
