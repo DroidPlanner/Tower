@@ -149,4 +149,5 @@
     <string name="waypoint_jumpto">Jump to waypoint :</string>
     <string name="waypoint_repeat">Repeat waypoint</string>
 	<string name="waypointInfo_SetJump">Repeat waypoint</string>
+	<string name="next">next</string>
 </resources>

@@ -11,8 +11,8 @@ public class MarkerWithText {
 	private static final int RECT_PADDING = 6;
 
 
-	public static Bitmap getMarkerWithText(String text, Context context) {
-		return drawTextToBitmap(context, R.drawable.ic_menu_places, text);
+	public static Bitmap getMarkerWithText(int color, String text, Context context) {
+		return drawTextToBitmap(context, R.drawable.ic_marker_white, color, text);
 	}
 
 	/**
@@ -20,7 +20,7 @@ public class MarkerWithText {
 	 * http://stackoverflow.com/questions/18335642/how-to-draw-text-in-default-marker-of-google-map-v2?lq=1
 	 */
 	private static Bitmap drawTextToBitmap(Context gContext, int gResId,
-	                                       String gText) {
+	                                       int color, String gText) {
 		Resources resources = gContext.getResources();
 		float scale = resources.getDisplayMetrics().density;
 		Bitmap bitmap = BitmapFactory.decodeResource(resources, gResId);
@@ -31,8 +31,13 @@ public class MarkerWithText {
 		}
 		bitmap = bitmap.copy(bitmapConfig, true);
 
+		// copy bitmap to canvas, replace white with colour
+		Paint paint = new Paint();
+		paint.setColorFilter(new LightingColorFilter(0x000000, color));
 		Canvas canvas = new Canvas(bitmap);
-		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		canvas.drawBitmap(bitmap, 0, 0, paint);
+
+		paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		paint.setColor(Color.BLACK);
 		paint.setTextSize((int) (15 * scale));
 		paint.setShadowLayer(1f, 0f, 1f, Color.WHITE);
@@ -48,8 +53,8 @@ public class MarkerWithText {
 	}
 
 
-	public static Bitmap getMarkerWithTextAndDetail(String text, String detail, Context context) {
-		return drawTextAndDetailToBitmap(context, R.drawable.ic_menu_places, text, detail);
+	public static Bitmap getMarkerWithTextAndDetail(int color, String text, String detail, Context context) {
+		return drawTextAndDetailToBitmap(context, R.drawable.ic_marker_white, color, text, detail);
 	}
 
 	/**
@@ -57,7 +62,7 @@ public class MarkerWithText {
 	 * http://stackoverflow.com/questions/18335642/how-to-draw-text-in-default-marker-of-google-map-v2?lq=1
 	 */
 	private static Bitmap drawTextAndDetailToBitmap(Context gContext, int gResId,
-	                                                String gText, String gDetail) {
+	                                                int color, String gText, String gDetail) {
 		Resources resources = gContext.getResources();
 		float scale = resources.getDisplayMetrics().density;
 		Bitmap bitmap = BitmapFactory.decodeResource(resources, gResId);
@@ -68,9 +73,13 @@ public class MarkerWithText {
 		}
 		bitmap = bitmap.copy(bitmapConfig, true);
 
-		// paint and bounds for text
+		// copy bitmap to canvas, replace white with colour
+		Paint paint = new Paint();
+		paint.setColorFilter(new LightingColorFilter(0x000000, color));
 		Canvas canvas = new Canvas(bitmap);
-		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		canvas.drawBitmap(bitmap, 0, 0, paint);
+
+		paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		paint.setColor(Color.BLACK);
 		paint.setTextSize((int) (15 * scale));
 		paint.setFakeBoldText(true);
@@ -86,7 +95,7 @@ public class MarkerWithText {
 		dpaint.setTextSize((int) (14 * scale));
 		paint.setFakeBoldText(true);
 		dpaint.setShadowLayer(1f, 0f, 1f, Color.WHITE);
-		
+
 		Rect dbounds = new Rect();
 		dpaint.getTextBounds(gDetail, 0, gDetail.length(), dbounds);
 		dbounds.offsetTo(0, bounds.bottom + 2);
@@ -95,7 +104,6 @@ public class MarkerWithText {
 		Paint bpaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		bpaint.setColor(Color.WHITE);
 		bpaint.setAlpha(160);
-		bpaint.setShadowLayer(1f, 1f, 1f, Color.GRAY);
 		bpaint.setStyle(Paint.Style.FILL);
 
 		// include text and detail bounds
