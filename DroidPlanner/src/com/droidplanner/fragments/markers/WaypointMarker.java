@@ -22,17 +22,11 @@ public class WaypointMarker {
 				.position(wp.getCoord())
 				.visible(wp.getCmd().showOnMap())
 				.draggable(true)
-				.title("WP" + Integer.toString(wp.getNumber()))
-				.snippet(
-						String.format(Locale.ENGLISH, "%s %.1fm", wp.getCmd()
-								.getName(), wp.getHeight())).icon(getIcon(wp,context));
+				.icon(getIcon(wp,context));
 	}
 
 	public static void update(Marker marker, waypoint wp, Context context) {
 		marker.setPosition(wp.getCoord());
-		marker.setTitle("WP" + Integer.toString(wp.getNumber()));
-		marker.setSnippet(String.format(Locale.ENGLISH, "%s %.1fm", wp.getCmd()
-				.getName(), wp.getHeight()));
 		marker.setIcon(getIcon(wp,context));
 	}
 
