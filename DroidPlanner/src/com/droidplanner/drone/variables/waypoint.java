@@ -9,16 +9,19 @@ import com.MAVLink.Messages.enums.MAV_CMD;
 import com.MAVLink.Messages.enums.MAV_FRAME;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import com.droidplanner.fragments.markers.WaypointMarker;
+import com.droidplanner.helpers.geoTools.GeoTools;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 
-	 public class waypoint implements MarkerSource {
-	
+public class waypoint implements MarkerSource {
+
 	public msg_mission_item missionItem = new msg_mission_item();
 
 	public int homeType;
+
+	private LatLng prevPathPoint;
 
 	public waypoint(LatLng c, Double h) {
 		this(c.latitude, c.longitude, h);
@@ -27,7 +30,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 	public waypoint(Double Lat, Double Lng, Double h) {
 		setCoord(new LatLng(Lat, Lng));
 		setHeight(h);
-		
+
 		missionItem.current = 0; // TODO use correct parameter for HOME
 		missionItem.frame = MAV_FRAME.MAV_FRAME_GLOBAL;
 		missionItem.command = MAV_CMD.MAV_CMD_NAV_WAYPOINT;
@@ -61,6 +64,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 	public void setCoord(LatLng coord) {
 		missionItem.x = (float) coord.latitude;
 		missionItem.y = (float) coord.longitude;
+	}
+
+	public boolean hasCoord() {
+		return missionItem.x != 0 || missionItem.y != 0;
 	}
 
 	public ApmCommands getCmd() {
@@ -138,7 +145,20 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 	@Override
 		public void update(Marker marker, Context context) {
-		WaypointMarker.update(marker, this,context);
+		WaypointMarker.update(marker, this, context);
 	}
 
+	public void setPrevPathPoint(LatLng prevPathPoint)
+	{
+		this.prevPathPoint = prevPathPoint;
+	}
+
+	public void updateInfoWindow(Mission mission, Marker marker)
+	{
+		marker.setTitle(getNumber() + " " + getCmd().getName());
+
+		// display distance from last waypoint if possible
+		if(prevPathPoint != null)
+			marker.setSnippet(String.format("%.0fm", GeoTools.getDistance(prevPathPoint, marker.getPosition())));
+	}
 }
