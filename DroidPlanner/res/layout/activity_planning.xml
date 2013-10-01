@@ -25,6 +25,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/length"
+        android:alpha="0.7"
+        android:background="@android:drawable/toast_frame"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <SlidingDrawer
