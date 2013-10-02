@@ -94,7 +94,7 @@ public class PlanningMapFragment extends DroneMap implements
 			if(dragging)
 				waypoint.updateDistanceFromPrevPoint();
 			else
-				waypoint.setPrevPoint(mission);
+				waypoint.setPrevPoint(mission.getWaypoints());
 			updateInfoWindow(waypoint, marker);
 
 			// update flight path

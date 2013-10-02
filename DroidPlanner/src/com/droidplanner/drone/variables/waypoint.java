@@ -14,6 +14,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.List;
+
 
 public class waypoint implements MarkerSource {
 
@@ -156,10 +158,10 @@ public class waypoint implements MarkerSource {
 		updateDistanceFromPrevPoint();
 	}
 
-	public void setPrevPoint(Mission mission) {
+	public void setPrevPoint(List<waypoint> waypoints) {
 		// search for prev point on flight path, assume we wont find one
 		LatLng prevPoint = null;
-		for (waypoint point : mission.getWaypoints()) {
+		for (waypoint point : waypoints) {
 			if (point.getCmd().isOnFligthPath()) {
 				if(point == this) {
 					// this waypoint found set prev point, bail
@@ -181,5 +183,18 @@ public class waypoint implements MarkerSource {
 
 	public double getDistanceFromPrevPoint() {
 		return distanceFromPrevPoint;
+	}
+
+	public static void updateDistancesFromPrevPoint(List<waypoint> waypoints) {
+		LatLng prevPoint = null;
+
+		// for all points on flight path...
+		for (waypoint point : waypoints) {
+			if (point.getCmd().isOnFligthPath()) {
+				// set prev point, update trailing point
+				point.setPrevPoint(prevPoint);
+				prevPoint = point.getCoord();
+			}
+		}
 	}
 }
