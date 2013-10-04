@@ -8,27 +8,60 @@
     android:orientation="horizontal" >
 
     <ImageButton
-        android:id="@+id/mc_planningBtn"
-        style="@style/actionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:src="@drawable/globed"
-        tools:ignore="ContentDescription" />
-
-    <ImageButton
         android:id="@+id/mc_joystickBtn"
         style="@style/actionButton"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
-        android:src="@drawable/gamecontrollerd"
+        android:src="@drawable/ic_control"
         tools:ignore="ContentDescription" />
+
+    <ImageButton
+        android:id="@+id/mc_planningBtn"
+        style="@style/actionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:src="@drawable/ic_edit"
+        tools:ignore="ContentDescription" />
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" 
+        android:layout_margin="5dp"/>
 
     <ImageButton
         android:id="@+id/mc_connectBtn"
         style="@style/actionButton"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
-        android:src="@drawable/disconnectr"
+        android:src="@drawable/ic_home"
+        tools:ignore="ContentDescription" />
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
+
+    <ImageButton
+        android:id="@+id/mc_follow"
+        style="@style/actionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:src="@drawable/ic_follow"
+        tools:ignore="ContentDescription" />
+
+    <ImageButton
+        android:id="@+id/mc_land"
+        style="@style/actionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:src="@drawable/ic_land"
+        tools:ignore="ContentDescription" />
+    
+    <ImageButton
+        android:id="@+id/mc_loiter"
+        style="@style/actionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:src="@drawable/ic_loiter"
         tools:ignore="ContentDescription" />
 
 </LinearLayout>
