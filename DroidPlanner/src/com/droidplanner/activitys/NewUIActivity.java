@@ -6,10 +6,7 @@ import android.os.Bundle;
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperActivity;
 import com.droidplanner.drone.variables.waypoint;
-import com.droidplanner.fragments.HudMapFragment;
-import com.droidplanner.fragments.HudMapFragment.State;
 import com.droidplanner.fragments.MissionControlFragment.OnMissionControlInteraction;
-import com.droidplanner.fragments.PlanningFragment;
 import com.droidplanner.fragments.RCFragment;
 import com.droidplanner.fragments.helpers.OnMapInteractionListener;
 import com.droidplanner.polygon.PolygonPoint;
@@ -19,7 +16,6 @@ public class NewUIActivity extends SuperActivity implements
 		OnMapInteractionListener, OnMissionControlInteraction {
 	private FragmentManager fragmentManager;
 	private RCFragment rcFragment;
-	private PlanningFragment planningFragment;
 
 	@Override
 	public int getNavigationItem() {
@@ -70,8 +66,7 @@ public class NewUIActivity extends SuperActivity implements
 	}
 
 	@Override
-	public void onPlanningSelected() {
-		togglePlanningFragment();		
+	public void onPlanningSelected() {		
 	}
 
 	@Override
@@ -124,16 +119,6 @@ public class NewUIActivity extends SuperActivity implements
 		
 	}
 
-	@Override
-	public void onHUDSelected() {
-		toggleHUDFragment();		
-	}
-
-	private void toggleHUDFragment() {
-		HudMapFragment fragment = (HudMapFragment)fragmentManager.findFragmentById(R.id.fragment1);
-		fragment.nextLayout();
-	}
-
 	private void toggleRCFragment() {
 		if (rcFragment == null) {
 			rcFragment = new RCFragment();
@@ -145,15 +130,10 @@ public class NewUIActivity extends SuperActivity implements
 		}
 	}
 
-	private void togglePlanningFragment() {
-		if (planningFragment == null) {
-			planningFragment = new PlanningFragment();
-			fragmentManager.beginTransaction()
-					.add(R.id.containerPlanning, planningFragment).commit();
-		} else {
-			fragmentManager.beginTransaction().remove(planningFragment).commit();
-			planningFragment = null;
-		}
+	@Override
+	public void onMovingWaypoint(waypoint source, LatLng latLng) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	

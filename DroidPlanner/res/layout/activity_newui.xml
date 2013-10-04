@@ -1,33 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
     <fragment
         android:id="@+id/fragment1"
-        android:name="com.droidplanner.fragments.HudMapFragment"
+        android:name="com.droidplanner.fragments.helpers.GestureMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <fragment
+        android:id="@+id/fragment2"
+        android:name="com.droidplanner.fragments.TelemetryFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        tools:layout="@layout/fragment_telemetry" />
 
     <FrameLayout
         android:id="@+id/containerRC"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="bottom" />
-
-    <FrameLayout
-        android:id="@+id/containerPlanning"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_gravity="bottom" >
     </FrameLayout>
 
     <fragment
         android:id="@+id/fragment3"
         android:name="com.droidplanner.fragments.MissionControlFragment"
         android:layout_width="wrap_content"
-        android:layout_height="87dp"
-        android:layout_gravity="top|center_horizontal"
+        android:layout_height="90dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         tools:layout="@layout/fragment_mission_control" />
 
-</FrameLayout>
+    <SlidingDrawer
+        android:id="@+id/SlidingDrawerLeft"
+        android:layout_width="220dp"
+        android:layout_height="300dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:content="@+id/LinearLayout01"
+        android:handle="@+id/slideButtonLeft"
+        android:orientation="horizontal"
+        android:padding="0dp"
+        android:visibility="visible" >
+
+        <ImageView
+            android:id="@+id/slideButtonLeft"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/slide_left"
+            tools:ignore="ContentDescription" />
+
+        <LinearLayout
+            android:id="@+id/LinearLayout01"
+            style="@style/transparentLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+        </LinearLayout>
+    </SlidingDrawer>
+
+</RelativeLayout>

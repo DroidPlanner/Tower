@@ -4,45 +4,31 @@
     android:id="@+id/contentLayoutMissionControl"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="#aa000000"
     android:layout_gravity="center_horizontal"
     android:orientation="horizontal" >
 
-        <ImageButton
-            android:id="@+id/mc_planningBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:adjustViewBounds="true"
-            android:padding="15dp"
-            android:src="@drawable/globed"
-            tools:ignore="ContentDescription" />
+    <ImageButton
+        android:id="@+id/mc_planningBtn"
+        style="@style/actionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:src="@drawable/globed"
+        tools:ignore="ContentDescription" />
 
-        <ImageButton
-            android:id="@+id/mc_joystickBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:adjustViewBounds="true"
-            android:padding="15dp"
-            android:src="@drawable/gamecontrollerd"
-            tools:ignore="ContentDescription" />
+    <ImageButton
+        android:id="@+id/mc_joystickBtn"
+        style="@style/actionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:src="@drawable/gamecontrollerd"
+        tools:ignore="ContentDescription" />
 
-
-        <ImageButton
-            android:id="@+id/mc_connectBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:adjustViewBounds="true"
-            android:padding="15dp"
-            android:src="@drawable/disconnectr"
-            tools:ignore="ContentDescription" />
-
-        <ImageButton
-            android:id="@+id/mc_hudBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:adjustViewBounds="true"
-            android:padding="15dp"
-            android:src="@drawable/ic_action_core_overflow"
-            tools:ignore="ContentDescription" />
+    <ImageButton
+        android:id="@+id/mc_connectBtn"
+        style="@style/actionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:src="@drawable/disconnectr"
+        tools:ignore="ContentDescription" />
 
 </LinearLayout>

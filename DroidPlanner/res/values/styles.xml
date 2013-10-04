@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="staticText">
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:textColor">#808080</item>
+    </style>
+
+    <style name="dynamicText">
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="actionButton">
+        <item name="android:layout_margin">2dp</item>
+        <item name="android:padding">15dp</item>
+        <item name="android:background">#000000</item>
+        <item name="android:adjustViewBounds">true</item>
+    </style>
+    
+    <style name="transparentLayout">
+        <item name="android:background">#aa000000</item>
+    </style>
+
+</resources>

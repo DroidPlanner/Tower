@@ -114,8 +114,7 @@
         </activity>
         <activity android:name=".activitys.SettingsActivity" >
         </activity>
-        <activity android:name=".activitys.NewUIActivity" 
-            android:theme="@android:style/Theme.Holo.NoActionBar">
+        <activity android:name=".activitys.NewUIActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

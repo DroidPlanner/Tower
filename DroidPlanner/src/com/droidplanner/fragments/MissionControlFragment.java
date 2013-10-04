@@ -17,8 +17,6 @@ public class MissionControlFragment extends Fragment implements OnClickListener 
 		public void onJoystickSelected();
 
 		public void onPlanningSelected();
-
-		public void onHUDSelected();
 		
 		public void onArmSelected();
 
@@ -36,7 +34,6 @@ public class MissionControlFragment extends Fragment implements OnClickListener 
 	}
 
 	private OnMissionControlInteraction listner;
-	private ImageButton hudBtn;
 	private ImageButton connectBtn;
 	private ImageButton missionBtn;
 	private ImageButton joystickBtn;
@@ -58,21 +55,18 @@ public class MissionControlFragment extends Fragment implements OnClickListener 
 	}
 
 	private void setupListner() {
-		hudBtn.setOnClickListener(this);
 		connectBtn.setOnClickListener(this);
 		missionBtn.setOnClickListener(this);
 		joystickBtn.setOnClickListener(this);
 	}
 
 	private void setupViews(View parentView) {
-		hudBtn = (ImageButton) parentView.findViewById(R.id.mc_hudBtn);
 		connectBtn = (ImageButton) parentView.findViewById(R.id.mc_connectBtn);
 		missionBtn = (ImageButton) parentView.findViewById(R.id.mc_planningBtn);
 		joystickBtn = (ImageButton) parentView
 				.findViewById(R.id.mc_joystickBtn);
 
 		
-		hudBtn.setEnabled(true);
 		missionBtn.setEnabled(true);
 		joystickBtn.setEnabled(true);
 		
@@ -80,26 +74,10 @@ public class MissionControlFragment extends Fragment implements OnClickListener 
 
 	}
 
-	private void setButtonState(boolean armEnable, boolean missionEnable) {
-
-		hudBtn.setEnabled(armEnable);
-		missionBtn.setEnabled(missionEnable);
-		joystickBtn.setEnabled(missionEnable);
-
-		hudBtn.setImageResource(armEnable ? R.drawable.armg : R.drawable.armd);
-		missionBtn.setImageResource(missionEnable ? R.drawable.missionb
-				: R.drawable.missiond);
-		joystickBtn.setImageResource(missionEnable ? R.drawable.gamecontrollerg
-				: R.drawable.gamecontrollerd);
-	}
-
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
-		case R.id.mc_hudBtn:
-			listner.onHUDSelected();
-			break;
 		case R.id.mc_planningBtn:
 			listner.onPlanningSelected();
 			break;
