@@ -104,10 +104,10 @@ public class OfflineMapFragment extends MapFragment {
 			LatLngBounds bounds = getBounds(pointsList);
 			CameraUpdate animation;
 			if (isMapLayoutFinished())
-				animation = CameraUpdateFactory.newLatLngBounds(bounds, 30);
+				animation = CameraUpdateFactory.newLatLngBounds(bounds, 100);
 			else
 				animation = CameraUpdateFactory.newLatLngBounds(bounds, 480,
-						360, 30);
+						360, 100);
 			getMap().animateCamera(animation);
 		}
 	}

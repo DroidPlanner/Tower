@@ -17,7 +17,6 @@ import com.droidplanner.fragments.helpers.CameraGroundOverlays;
 import com.droidplanner.fragments.helpers.DroneMap;
 import com.droidplanner.fragments.helpers.MapPath;
 import com.droidplanner.fragments.helpers.OnMapInteractionListener;
-import com.droidplanner.fragments.markers.MarkerManager;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import com.droidplanner.polygon.Polygon;
 import com.droidplanner.polygon.PolygonPoint;
@@ -74,25 +73,33 @@ public class PlanningMapFragment extends DroneMap implements
 	@Override
 	public void onMarkerDrag(Marker marker) {
 		MarkerSource source = markers.getSourceFromMarker(marker);
-		checkForWaypointMarkerMoving(source, marker);
+		checkForWaypointMarkerMoving(source, marker, true);
 	}
 
 	@Override
 	public void onMarkerDragStart(Marker marker) {
 		MarkerSource source = markers.getSourceFromMarker(marker);
-		checkForWaypointMarkerMoving(source, marker);
+		checkForWaypointMarkerMoving(source, marker, false);
 	}
 
-	private void checkForWaypointMarkerMoving(MarkerSource source, Marker marker)
+	private void checkForWaypointMarkerMoving(MarkerSource source, Marker marker, boolean dragging)
 	{
 		if (waypoint.class.isInstance(source)) {
 			// update marker source and flight path
 			waypoint waypoint = (waypoint) source;
 			waypoint.setCoord(marker.getPosition());
-			missionPath.update(mission);
+			waypoint.setPrevPathPoint(mission.getPrevPathPoint(waypoint));
 
+			updateInfoWindow(waypoint, marker);
+			missionPath.update(mission);
 			mListener.onMovingWaypoint(waypoint, marker.getPosition());
 		}
+	}
+
+	private void updateInfoWindow(waypoint waypoint, Marker marker)
+	{
+		waypoint.updateInfoWindow(mission, marker);
+		marker.showInfoWindow();
 	}
 
 	@Override
