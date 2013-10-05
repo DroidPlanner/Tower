@@ -1,9 +1,9 @@
 package com.droidplanner.drone.variables;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-
-import android.widget.Toast;
 
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_param_value;
@@ -32,6 +32,9 @@ public class Parameters extends DroneVariable {
 
 	public void getAllParameters() {
 		parameters.clear();
+		if(parameterListner!=null)
+			parameterListner.onBeginReceivingParameters();
+
 		MavLinkParameters.requestParametersList(myDrone);
 	}
 
@@ -51,14 +54,32 @@ public class Parameters extends DroneVariable {
 	}
 
 	private void processReceivedParam(msg_param_value m_value) {
+
+		// collect params in parameter list
 		Parameter param = new Parameter(m_value);
 		parameters.add(param);
-		if(parameterListner!=null){
-			parameterListner.onParameterReceived(param);
-		}
+
+		// update listener
+		if(parameterListner!=null)
+			parameterListner.onParameterReceived(param, m_value.param_index, m_value.param_count);
+
+		// last param?
 		if (m_value.param_index == m_value.param_count - 1) {
-			Toast.makeText(myDrone.context, "Parameters Received",
-					Toast.LENGTH_LONG).show();
+			// parameters received
+			if(parameterListner!=null){
+				// sort parameters list
+				Collections.sort(parameters, new Comparator<Parameter>()
+				{
+					@Override
+					public int compare(Parameter p1, Parameter p2)
+					{
+						return p1.name.compareTo(p2.name);
+					}
+				});
+
+				// add all params to parameter fragment
+				parameterListner.onEndReceivingParameters(parameters);
+			}
 		}
 	}
 
