@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Fragment;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,6 +56,11 @@ public class ParametersTableFragment extends Fragment {
 	private void addParameterRow(Parameter param) {
 		ParamRow pRow = new ParamRow(this.getActivity());
 		pRow.setParam(param);
+
+		// alternate background colors for clarity
+		if((rowList.size() % 2) == 1)
+			pRow.setBackgroundColor(Color.BLACK);
+
 		rowList.add(pRow);
 		parameterTable.addView(pRow);
 	}
