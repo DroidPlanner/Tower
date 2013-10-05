@@ -177,14 +177,15 @@ public abstract class SuperActivity extends Activity implements
 		}
 	}
 
+	/*
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu_super_activiy, menu);
-		armButton = menu.findItem(R.id.menu_arm);
-		connectButton = menu.findItem(R.id.menu_connect);
-		drone.MavClient.queryConnectionState();
+		//getMenuInflater().inflate(R.menu.menu_super_activiy, menu);
+		//armButton = menu.findItem(R.id.menu_arm);
+		//connectButton = menu.findItem(R.id.menu_connect);
+		//drone.MavClient.queryConnectionState();
 		return super.onCreateOptionsMenu(menu);
-	}
+	}*/
 
 	public void changeDefaultAlt() {
 		AltitudeDialog dialog = new AltitudeDialog(this);

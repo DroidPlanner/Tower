@@ -2,6 +2,7 @@ package com.droidplanner.activitys;
 
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.view.Menu;
 
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperActivity;
@@ -30,6 +31,12 @@ public class NewUIActivity extends SuperActivity implements
 
 	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu_newui, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+	
 	@Override
 	public void onAddPoint(LatLng point) {
 		// TODO Auto-generated method stub
