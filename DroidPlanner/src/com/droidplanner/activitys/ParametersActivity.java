@@ -2,6 +2,7 @@ package com.droidplanner.activitys;
 
 import java.util.List;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +21,7 @@ public class ParametersActivity extends SuperActivity implements
 		DroneInterfaces.OnParameterManagerListner {
 
 	private ParametersTableFragment tableFragment;
+	private ProgressDialog pd;
 
 	@Override
 	public int getNavigationItem() {
@@ -35,6 +37,9 @@ public class ParametersActivity extends SuperActivity implements
 				.findFragmentById(R.id.parametersTable));
 
 		drone.parameters.parameterListner = this;
+
+		Toast.makeText(this, "Touch REFRESH to read parameters", Toast.LENGTH_LONG)
+				.show();
 	}
 
 	@Override
@@ -89,6 +94,41 @@ public class ParametersActivity extends SuperActivity implements
 			}
 		};
 		dialog.openDialog(this);
+	}
+
+	@Override
+	public void onBeginReceivingParameters() {
+		pd = new ProgressDialog(this);
+		pd.setTitle("Refreshing Parameters...");
+		pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+		pd.setIndeterminate(true);
+		pd.setCancelable(false);
+		pd.setCanceledOnTouchOutside(true);
+
+		pd.show();
+	}
+
+	@Override
+	public void onParameterReceived(Parameter parameter, int index, int count) {
+		if(pd != null) {
+			if(pd.isIndeterminate()) {
+				pd.setIndeterminate(false);
+				pd.setMax(count);
+			}
+			pd.setProgress(index);
+		}
+	}
+
+	@Override
+	public void onEndReceivingParameters(List<Parameter> parameters) {
+		for(Parameter parameter : parameters)
+			tableFragment.refreshRowParameter(parameter);
+
+		// dismiss progress dialog
+		if(pd != null) {
+			pd.dismiss();
+			pd = null;
+		}
 	}
 
 	@Override
