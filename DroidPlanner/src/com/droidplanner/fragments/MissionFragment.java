@@ -45,6 +45,7 @@ public class MissionFragment extends ListFragment implements DragScrollProfile, 
 	}
 
 	public void update() {
+		waypoint.updateDistancesFromPrevPoint(mission.getWaypoints());
 		adapter.notifyDataSetChanged();
 	}
 	

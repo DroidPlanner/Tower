@@ -204,28 +204,4 @@ public class Mission extends DroneVariable implements PathSource, OnWaypointUpda
 		missionListner.onWaypointsUpdate();
 	}
 
-	/**
-	 * Returns coords of prev point to waypoint or null if unknown
-	 *
-	 * @param waypoint
-	 * @return
-	 */
-	public LatLng getPrevPathPoint(waypoint waypoint)
-	{
-		// search only points on flight path, assume we wont find one
-		LatLng prevPoint = null;
-		for (waypoint point : getWaypoints()) {
-			if (point.getCmd().isOnFligthPath()) {
-				// if waypoint found return coords of trailing point
-				if(point == waypoint)
-					return prevPoint;
-
-				// get coords of trailing point
-				prevPoint = point.getCoord();
-			}
-		}
-
-		// waypoint not found - prev point on path unknown
-		return null;
-	}
 }

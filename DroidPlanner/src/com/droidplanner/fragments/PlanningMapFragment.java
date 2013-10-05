@@ -82,23 +82,35 @@ public class PlanningMapFragment extends DroneMap implements
 		checkForWaypointMarkerMoving(source, marker, false);
 	}
 
-	private void checkForWaypointMarkerMoving(MarkerSource source, Marker marker, boolean dragging)
-	{
+	private void checkForWaypointMarkerMoving(MarkerSource source, Marker marker, boolean dragging) {
 		if (waypoint.class.isInstance(source)) {
-			// update marker source and flight path
-			waypoint waypoint = (waypoint) source;
-			waypoint.setCoord(marker.getPosition());
-			waypoint.setPrevPathPoint(mission.getPrevPathPoint(waypoint));
+			LatLng position = marker.getPosition();
 
+			// update marker source
+			waypoint waypoint = (waypoint) source;
+			waypoint.setCoord(position);
+
+			// update info window
+			if(dragging)
+				waypoint.updateDistanceFromPrevPoint();
+			else
+				waypoint.setPrevPoint(mission.getWaypoints());
 			updateInfoWindow(waypoint, marker);
+
+			// update flight path
 			missionPath.update(mission);
-			mListener.onMovingWaypoint(waypoint, marker.getPosition());
+			mListener.onMovingWaypoint(waypoint, position);
 		}
 	}
 
-	private void updateInfoWindow(waypoint waypoint, Marker marker)
-	{
-		waypoint.updateInfoWindow(mission, marker);
+	private void updateInfoWindow(waypoint waypoint, Marker marker) {
+		marker.setTitle(waypoint.getNumber() + " " + waypoint.getCmd().getName());
+
+		// display distance from last waypoint if available
+		double distanceFromPrevPathPoint = waypoint.getDistanceFromPrevPoint();
+		if(distanceFromPrevPathPoint != waypoint.UNKNOWN_DISTANCE)
+			marker.setSnippet(String.format("%.0fm", distanceFromPrevPathPoint));
+
 		marker.showInfoWindow();
 	}
 

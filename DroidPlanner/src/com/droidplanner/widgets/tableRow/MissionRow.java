@@ -24,6 +24,7 @@ public class MissionRow extends ArrayAdapter<waypoint> {
 	private TextView altitudeView;
 	private TextView typeView;
 	private TextView descView;
+	private TextView distanceView;
 
 
 
@@ -63,6 +64,7 @@ public class MissionRow extends ArrayAdapter<waypoint> {
 		altitudeView = (TextView) view.findViewById(R.id.rowAltitudeView);
 		typeView = (TextView) view.findViewById(R.id.rowTypeView);
 		descView = (TextView) view.findViewById(R.id.rowDescView);
+		distanceView = (TextView) view.findViewById(R.id.rowDistanceView);
 
 	}
 
@@ -76,6 +78,14 @@ public class MissionRow extends ArrayAdapter<waypoint> {
 		nameView.setText(String.format("%3d", waypoint.getNumber()));
 		typeView.setText(waypoint.getCmd().getName());
 		descView.setText(setupDescription(waypoint));
+
+		double distanceFromPrevPoint = waypoint.getDistanceFromPrevPoint();
+		if(distanceFromPrevPoint != waypoint.UNKNOWN_DISTANCE) {
+			distanceView.setText(String.format(Locale.ENGLISH, "%4.0fm", distanceFromPrevPoint));
+		}
+		else {
+			distanceView.setText("-");
+		}
 	}
 
 	private String setupDescription(waypoint waypoint) {
