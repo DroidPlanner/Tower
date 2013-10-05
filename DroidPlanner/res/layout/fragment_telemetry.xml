@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     style="@style/transparentLayout"
-    android:orientation="vertical" >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
 
     <LinearLayout
+        android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
@@ -82,4 +82,100 @@
         </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/TextView05"
+        style="@style/staticText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/linearLayout1"
+        android:layout_margin="2dp"
+        android:text="Ground speed:" />
+
+    <TextView
+        android:id="@+id/TextView10"
+        style="@style/staticText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/TextView06"
+        android:layout_margin="2dp"
+        android:text="Air speed:" />
+
+    <TextView
+        android:id="@+id/TextView06"
+        style="@style/dynamicText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/TextView05"
+        android:layout_margin="2dp"
+        android:layout_toLeftOf="@+id/TextView07"
+        android:text="13"
+        android:textSize="50sp" />
+
+    <TextView
+        android:id="@+id/TextView07"
+        style="@style/dynamicText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/TextView06"
+        android:layout_alignParentRight="true"
+        android:layout_margin="2dp"
+        android:text="m/s"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/TextView09"
+        style="@style/dynamicText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/TextView10"
+        android:layout_margin="2dp"
+        android:layout_toLeftOf="@+id/TextView08"
+        android:text="9"
+        android:textSize="50sp" />
+
+    <TextView
+        android:id="@+id/TextView08"
+        style="@style/dynamicText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/TextView09"
+        android:layout_alignParentRight="true"
+        android:layout_margin="2dp"
+        android:text="m/s"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/TextView11"
+        style="@style/staticText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/TextView09"
+        android:layout_margin="2dp"
+        android:text="Climb rate:" />
+
+    <TextView
+        android:id="@+id/TextView12"
+        style="@style/dynamicText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/TextView11"
+        android:layout_margin="2dp"
+        android:layout_toLeftOf="@+id/TextView13"
+        android:text="0.5"
+        android:textSize="50sp" />
+
+    <TextView
+        android:id="@+id/TextView13"
+        style="@style/dynamicText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/TextView12"
+        android:layout_alignParentRight="true"
+        android:layout_margin="2dp"
+        android:text="m/s"
+        android:textSize="25sp" />
+
+</RelativeLayout>
