@@ -71,7 +71,7 @@
     <string name="screen_camera">Camera</string>
     <string name="screen_gcp">GCP</string>
     <string name="screen_chart">Chart</string>
-    <string name="length">Length</string>
+    <string name="length">Distance</string>
     <string name="mission_length">Mission Length</string>
     <string name="pictures">Pictures</string>
     <string name="number_of_strips">Number Of Strips</string>
