@@ -84,6 +84,7 @@
 	<string name="menu_disarm">Disarm</string>
     <string name="rtl_Land">Land on reaching RTL position</string>
     <string name="takeoff_pitch">Min. Pitch Angle</string>
+    <string name="menu_launch">Launch</string>
 	<string name="waypointInfo_Land">Will cause the craft to land at the current location when the command is invoked. If you have Sonar, the craft will stop holding position at 3 meters and drop straight down.The motors will not stop on their own, you must exit the AP mode to cut the engines.</string>
     <string name="waypointInfo_Generic">Generic Waypoint</string>
     <string name="waypointInfo_Loiter">Will cause the craft to begin to Loiter at the current location when the command is invoked.</string>
@@ -146,6 +147,11 @@
     <string name="waypoint_groundspeed">Ground speed</string>
     <string name="selectCoodSource">Select location source</string>
     <string name="waypoint_coordsrc">Source data :</string>
+    <string name="menu_commands">Commands</string>
+    <string name="menu_hold">Hold</string>
+    <string name="menu_land">Land</string>
+    <string name="menu_return_to_launch">Return To Launch</string>
+    <string name="menu_continue">Continue</string>
     <string name="waypoint_jumpto">Jump to waypoint :</string>
     <string name="waypoint_repeat">Repeat waypoint</string>
 	<string name="waypointInfo_SetJump">Repeat waypoint</string>

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.droidplanner.dialogs.mission.DialogMissionFactory;
+import com.droidplanner.drone.variables.Home;
 import com.droidplanner.drone.variables.Mission;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.fragments.helpers.CameraGroundOverlays;
@@ -58,7 +59,7 @@ public class PlanningMapFragment extends DroneMap implements
 		markers.clear();
 
 		Context context = getActivity().getApplicationContext();
-		markers.updateMarker(mission.getHome(), false, context);
+		markers.updateMarker(mission.getHome(), true, context);
 		markers.updateMarkers(mission.getWaypoints(), true, context);
 		markers.updateMarkers(polygon.getPolygonPoints(), true, context);
 
@@ -99,12 +100,19 @@ public class PlanningMapFragment extends DroneMap implements
 	public void onMarkerDragEnd(Marker marker) {
 		MarkerSource source = markers.getSourceFromMarker(marker);
 		checkForWaypointMarker(source, marker);
+		checkForHomeMarker(source, marker);
 		checkForPolygonMarker(source, marker);
 	}
 
 	private void checkForWaypointMarker(MarkerSource source, Marker marker) {
 		if (waypoint.class.isInstance(source)) {
 			mListener.onMoveWaypoint((waypoint) source, marker.getPosition());
+		}
+	}
+
+	private void checkForHomeMarker(MarkerSource source, Marker marker) {
+		if (Home.class.isInstance(source)) {
+			mListener.onMoveHome(marker.getPosition());
 		}
 	}
 

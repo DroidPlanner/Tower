@@ -27,6 +27,8 @@ import com.droidplanner.activitys.SettingsActivity;
 import com.droidplanner.dialogs.AltitudeDialog;
 import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
 import com.droidplanner.drone.Drone;
+import com.droidplanner.MAVLink.MavLinkCommand;
+import com.MAVLink.Messages.enums.MAV_CMD;
 
 public abstract class SuperActivity extends Activity implements
 		OnNavigationListener, ConnectionStateListner, OnAltitudeChangedListner, OnSystemArmListener{
@@ -124,6 +126,21 @@ public abstract class SuperActivity extends Activity implements
 			return true;
 		case R.id.menu_preflight_calibration:
 			drone.calibrationSetup.startCalibration(this);
+			return true;
+		case R.id.menu_id_launch:
+			MavLinkCommand.sendLaunchMessage(drone);
+			return true;
+		case R.id.menu_id_hold:
+			MavLinkCommand.sendHoldMessage(drone);
+			return true;
+		case R.id.menu_id_continue:
+			MavLinkCommand.sendContinueMessage(drone);
+			return true;
+		case R.id.menu_id_land:
+			MavLinkCommand.sendLandMessage(drone);
+			return true;
+		case R.id.menu_id_return_to_launch:
+			MavLinkCommand.sendReturnToLaunchMessage(drone);
 			return true;
 		case R.id.menu_record_me:
 			app.recordMe.toogleRecordMeState();

@@ -22,5 +22,13 @@
             
         </menu> 
     </item>
+	<item android:id="@+id/commands" android:title="@string/menu_commands" android:showAsAction="ifRoom">
+		<menu><item android:title="@string/menu_launch" android:id="@+id/menu_id_launch"/>
+		<item android:id="@+id/menu_id_hold" android:title="@string/menu_hold"/>
+		<item android:id="@+id/menu_id_continue" android:title="@string/menu_continue"/><item android:id="@+id/menu_id_land" android:title="@string/menu_land"/>
+		<item android:id="@+id/menu_id_return_to_launch" android:title="@string/menu_return_to_launch"/>
+		
+</menu>
+	</item>
 	
 </menu>
