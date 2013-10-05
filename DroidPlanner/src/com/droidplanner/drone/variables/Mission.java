@@ -57,11 +57,11 @@ public class Mission extends DroneVariable implements PathSource, OnWaypointUpda
 	public List<LatLng> getAllVisibleCoordinates() {
 		List<LatLng> result = new ArrayList<LatLng>();
 		for (waypoint point : waypoints) {
-			if (point.getCmd().showOnMap()) {
+			if (point.getCmd().showOnMap()  && point.hasCoord()) {
 				result.add(point.getCoord());				
 			}
 		}
-		if (home.isValid) {			
+		if (home.isValid && home.hasCoord()) {
 			result.add(home.getCoord());
 		}
 		return result;
@@ -203,6 +203,5 @@ public class Mission extends DroneVariable implements PathSource, OnWaypointUpda
 	public void onWaypointsUpdate() {
 		missionListner.onWaypointsUpdate();
 	}
-
 
 }

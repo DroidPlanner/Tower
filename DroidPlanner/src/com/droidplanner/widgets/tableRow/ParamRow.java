@@ -34,14 +34,15 @@ public class ParamRow extends TableRow implements TextWatcher {
 	}
 
 	private void createRowViews(Context context) {
+		// name
 		nameView = new TextView(context);
+		addView(nameView);
+
+		// value
 		valueView = new EditText(context);
 		valueView.setInputType(InputType.TYPE_CLASS_NUMBER);
-
-		nameView.setWidth(150);
-		valueView.setWidth(100);
-
-		addView(nameView);
+		valueView.setWidth(220);
+		valueView.setGravity(5);
 		addView(valueView);
 
 		valueView.addTextChangedListener(this);

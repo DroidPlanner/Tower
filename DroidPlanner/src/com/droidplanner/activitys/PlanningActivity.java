@@ -198,6 +198,7 @@ public class PlanningActivity extends SuperActivity implements
 	public void onMovingWaypoint(waypoint source, LatLng latLng)
 	{
 		updateDistanceView();
+		missionFragment.update();
 	}
 
 	@Override

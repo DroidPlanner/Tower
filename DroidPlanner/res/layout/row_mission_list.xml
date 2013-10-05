@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dragHandler"
     android:layout_width="match_parent"
@@ -22,19 +22,33 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:text="1000m"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_toEndOf="@id/rowNameView"/>
 
     <TextView
         android:id="@+id/rowTypeView"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:text="Waypoint"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_toEndOf="@id/rowAltitudeView"/>
+
+	<TextView
+			android:id="@+id/rowDistanceView"
+			android:layout_width="70dp"
+			android:layout_height="wrap_content"
+			android:text="1000m"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:gravity="right"
+			android:layout_alignParentRight="true"
+			android:layout_alignParentEnd="false"/>
 
     <TextView
         android:id="@+id/rowDescView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Waypoint"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-    </LinearLayout>
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_toEndOf="@id/rowTypeView"
+        android:layout_toStartOf="@id/rowDistanceView"/>
+</RelativeLayout>
