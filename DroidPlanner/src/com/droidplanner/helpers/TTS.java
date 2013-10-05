@@ -91,7 +91,8 @@ public class TTS implements OnInitListener {
 	}
 
 	public void batteryDischargeNotification(double battRemain) {
-		if (lastBatteryDischargeNotification != (int) ((battRemain - 1) / BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT)) {
+		if (lastBatteryDischargeNotification > (int) ((battRemain - 1) / BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT) ||
+				lastBatteryDischargeNotification + 1 < (int) ((battRemain - 1) / BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT)) {
 			lastBatteryDischargeNotification = (int) ((battRemain - 1) / BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT);
 			speak("Battery at" + (int) battRemain + "%");
 		}
