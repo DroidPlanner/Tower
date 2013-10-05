@@ -17,9 +17,19 @@
         <item name="android:background">#000000</item>
         <item name="android:adjustViewBounds">true</item>
     </style>
-    
+
     <style name="transparentLayout">
         <item name="android:background">#aa000000</item>
     </style>
+
+    <!-- the theme applied to the application or activity -->
+    <style name="CustomActionBarTheme" parent="@android:style/Theme.Holo">
+        <item name="android:actionBarStyle">@style/ActionBar</item>
+    </style>
+
+    <style name="ActionBar" parent="@android:style/Widget.ActionBar">
+        <item name="android:background">@drawable/bar_background</item>
+    </style>
+
 
 </resources>
