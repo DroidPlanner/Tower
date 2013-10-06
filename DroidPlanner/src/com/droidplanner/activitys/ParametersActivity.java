@@ -1,5 +1,7 @@
 package com.droidplanner.activitys;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import android.app.ProgressDialog;
@@ -88,6 +90,14 @@ public class ParametersActivity extends SuperActivity implements
 		OpenFileDialog dialog = new OpenParameterDialog() {
 			@Override
 			public void parameterFileLoaded(List<Parameter> parameters) {
+				Collections.sort(parameters, new Comparator<Parameter>()
+				{
+					@Override
+					public int compare(Parameter p1, Parameter p2)
+					{
+						return p1.name.compareTo(p2.name);
+					}
+				});
 				for (Parameter parameter : parameters) {
 					onParameterReceived(parameter);
 				}
