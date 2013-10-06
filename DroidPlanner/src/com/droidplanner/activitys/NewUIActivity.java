@@ -2,10 +2,8 @@ package com.droidplanner.activitys;
 
 import android.app.FragmentManager;
 import android.os.Bundle;
-import android.view.Menu;
 
 import com.droidplanner.R;
-import com.droidplanner.activitys.helpers.SuperActivity;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.fragments.MissionControlFragment.OnMissionControlInteraction;
 import com.droidplanner.fragments.RCFragment;
@@ -13,7 +11,7 @@ import com.droidplanner.fragments.helpers.OnMapInteractionListener;
 import com.droidplanner.polygon.PolygonPoint;
 import com.google.android.gms.maps.model.LatLng;
 
-public class NewUIActivity extends SuperActivity implements
+public class NewUIActivity extends NewSuperUI implements
 		OnMapInteractionListener, OnMissionControlInteraction {
 	private FragmentManager fragmentManager;
 	private RCFragment rcFragment;
@@ -31,12 +29,6 @@ public class NewUIActivity extends SuperActivity implements
 
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu_newui, menu);
-		return super.onCreateOptionsMenu(menu);
-	}
-	
 	@Override
 	public void onAddPoint(LatLng point) {
 		// TODO Auto-generated method stub
