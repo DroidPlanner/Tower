@@ -12,10 +12,13 @@ import android.view.View;
 
 public class newHUD extends View {
 
+	private static final float PLANE_BODY_SIZE = 0.2f;
+	private static final float PLANE_WING_WIDTH = 0.05f;
 	private static final float PLANE_SIZE = 0.8f;
 	private static final float YAW_ARROW_SIZE = 1.2f;
 	private static final float  YAW_ARROW_ANGLE = 4.5f;
 	private static final float INTERNAL_RADIUS = 0.95f;
+	
 	private float halfWidth;
 	private float halfHeight;
 	private float radiusExternal;
@@ -70,14 +73,14 @@ public class newHUD extends View {
 
 	private void buildPlanePath() {
 		planePath.reset();
-		planePath.moveTo(0,radiusInternal*PLANE_SIZE/20);
+		planePath.moveTo(0,radiusInternal*PLANE_SIZE*PLANE_WING_WIDTH);
 		planePath.lineTo(radiusInternal*PLANE_SIZE,0);
-		planePath.lineTo(0,-radiusInternal*PLANE_SIZE/20);
+		planePath.lineTo(0,-radiusInternal*PLANE_SIZE*PLANE_WING_WIDTH);
 		planePath.lineTo(-radiusInternal*PLANE_SIZE,0);
-		planePath.lineTo(0,radiusInternal*PLANE_SIZE/20);
-		planePath.moveTo(radiusInternal*PLANE_SIZE/20,0);
+		planePath.lineTo(0,radiusInternal*PLANE_SIZE*PLANE_WING_WIDTH);
+		planePath.moveTo(radiusInternal*PLANE_SIZE*PLANE_WING_WIDTH,0);
 		planePath.lineTo(0,-radiusInternal*PLANE_SIZE/2);
-		planePath.lineTo(-radiusInternal*PLANE_SIZE/20,0);
+		planePath.lineTo(-radiusInternal*PLANE_SIZE*PLANE_WING_WIDTH,0);
 		
 	}
 
@@ -92,7 +95,7 @@ public class newHUD extends View {
 		
 		
 		canvas.drawPath(planePath, planePaint);
-		canvas.drawCircle(0, 0, radiusInternal*PLANE_SIZE/6, planePaint);
+		canvas.drawCircle(0, 0, radiusInternal*PLANE_SIZE*PLANE_BODY_SIZE, planePaint);
 	}
 
 	private void drawYaw(Canvas canvas) {
