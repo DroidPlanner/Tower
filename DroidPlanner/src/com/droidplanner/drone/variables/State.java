@@ -41,6 +41,7 @@ public class State extends DroneVariable {
 		if (this.mode != mode) {
 			this.mode = mode;
 			myDrone.tts.speakMode(mode);
+			myDrone.notifyModeChanged();
 			myDrone.notifyHudUpdate();
 		}
 	}
