@@ -12,6 +12,7 @@ import android.view.View;
 
 public class newHUD extends View {
 
+	private static final float PLANE_SIZE = 0.8f;
 	private static final float YAW_ARROW_SIZE = 1.2f;
 	private static final float  YAW_ARROW_ANGLE = 4.5f;
 	private static final float INTERNAL_RADIUS = 0.95f;
@@ -27,6 +28,9 @@ public class newHUD extends View {
 	private float yaw = 0;
 	private float roll = 30;
 	private RectF groundPoints;
+	private Paint planePaint;
+	private Path yawPath = new Path();
+	private Path planePath = new Path();
 	
 	public newHUD(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -47,6 +51,9 @@ public class newHUD extends View {
 		
 		groundPaint = new Paint(fillPaint);
 		groundPaint.setColor(Color.parseColor("#723700"));
+		
+		planePaint = new Paint(fillPaint);
+		planePaint.setColor(Color.WHITE);
 	}
 
 	@Override
@@ -57,6 +64,21 @@ public class newHUD extends View {
 		radiusExternal = Math.min(halfHeight,halfWidth)/YAW_ARROW_SIZE;
 		radiusInternal = radiusExternal*INTERNAL_RADIUS;
 		groundPoints = new RectF(-radiusInternal, -radiusInternal, radiusInternal, radiusInternal);
+
+		buildPlanePath();
+	}
+
+	private void buildPlanePath() {
+		planePath.reset();
+		planePath.moveTo(0,radiusInternal*PLANE_SIZE/20);
+		planePath.lineTo(radiusInternal*PLANE_SIZE,0);
+		planePath.lineTo(0,-radiusInternal*PLANE_SIZE/20);
+		planePath.lineTo(-radiusInternal*PLANE_SIZE,0);
+		planePath.lineTo(0,radiusInternal*PLANE_SIZE/20);
+		planePath.moveTo(radiusInternal*PLANE_SIZE/20,0);
+		planePath.lineTo(0,-radiusInternal*PLANE_SIZE/2);
+		planePath.lineTo(-radiusInternal*PLANE_SIZE/20,0);
+		
 	}
 
 	@Override
@@ -67,21 +89,25 @@ public class newHUD extends View {
 
 		canvas.drawCircle(0, 0, radiusInternal, skyPaint);
 		canvas.drawArc(groundPoints, roll, 180, true, groundPaint);
+		
+		
+		canvas.drawPath(planePath, planePaint);
+		canvas.drawCircle(0, 0, radiusInternal*PLANE_SIZE/6, planePaint);
 	}
 
 	private void drawYaw(Canvas canvas) {
 		canvas.drawCircle(0, 0, radiusExternal, yawPaint);
 		
 		// Yaw Arrow
-		Path path = new Path();
-		path.moveTo(0, 0);
-		path.lineTo((float) Math.sin(yaw - YAW_ARROW_ANGLE) * radiusExternal,
+		yawPath.reset();
+		yawPath.moveTo(0, 0);
+		yawPath.lineTo((float) Math.sin(yaw - YAW_ARROW_ANGLE) * radiusExternal,
 				(float) Math.cos(yaw - YAW_ARROW_ANGLE) * radiusExternal);
-		path.lineTo((float) Math.sin(yaw) * radiusExternal * 1.1f,
+		yawPath.lineTo((float) Math.sin(yaw) * radiusExternal * 1.1f,
 				(float) Math.cos(yaw) * radiusExternal * YAW_ARROW_SIZE);
-		path.lineTo((float) Math.sin(yaw + YAW_ARROW_ANGLE) * radiusExternal,
+		yawPath.lineTo((float) Math.sin(yaw + YAW_ARROW_ANGLE) * radiusExternal,
 				(float) Math.cos(yaw + YAW_ARROW_ANGLE) * radiusExternal);
-		canvas.drawPath(path, yawPaint);
+		canvas.drawPath(yawPath, yawPaint);
 
 	}
 }
