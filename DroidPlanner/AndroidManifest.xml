@@ -114,13 +114,13 @@
         <activity android:name=".activitys.SettingsActivity" >
         </activity>
         <activity android:name=".activitys.NewUIActivity" >
-        </activity>
-        <activity android:name=".activitys.NewEditorActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".activitys.NewEditorActivity" >
         </activity>
     </application>
 

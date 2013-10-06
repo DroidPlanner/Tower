@@ -1,6 +1,7 @@
 package com.droidplanner.activitys;
 
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.droidplanner.R;
@@ -66,6 +67,9 @@ public class NewUIActivity extends NewSuperUI implements
 
 	@Override
 	public void onPlanningSelected() {		
+		Intent navigationIntent;
+		navigationIntent = new Intent(this, NewEditorActivity.class);
+		startActivity(navigationIntent);
 	}
 
 	@Override
