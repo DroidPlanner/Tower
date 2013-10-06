@@ -9,6 +9,10 @@ public class DroneInterfaces {
 		public void onDroneUpdate();
 	}
 
+	public interface MapConfigListener {
+		public void onMapTypeChanged();
+	}
+
 	public interface DroneTypeListner {
 		public void onDroneTypeChanged();
 	}
