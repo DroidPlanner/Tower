@@ -10,6 +10,10 @@
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
+    
+    <style name="hugeDynamicText" parent="@style/dynamicText">
+        <item name="android:textSize">40sp</item>
+    </style>
 
     <style name="actionButton">
         <item name="android:layout_margin">2dp</item>
