@@ -99,6 +99,7 @@ public class PlanningActivity extends SuperActivity implements
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu_planning, menu);
+		getMenuInflater().inflate(R.menu.menu_map_type, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 

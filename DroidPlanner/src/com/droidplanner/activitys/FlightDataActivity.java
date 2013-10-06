@@ -34,6 +34,7 @@ public class FlightDataActivity extends SuperFlightActivity implements
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu_flightdata, menu);
+		getMenuInflater().inflate(R.menu.menu_map_type, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 
