@@ -150,4 +150,9 @@
     <string name="waypoint_repeat">Repeat waypoint</string>
 	<string name="waypointInfo_SetJump">Repeat waypoint</string>
 	<string name="next">next</string>
+	<string name="menu_map_type">Map Type</string>
+	<string name="menu_map_type_satellite">Satellite</string>
+	<string name="menu_map_type_hybrid">Hybrid</string>
+	<string name="menu_map_type_normal">Normal</string>
+	<string name="menu_map_type_terrain">Terrain</string>
 </resources>
