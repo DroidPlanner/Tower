@@ -6,6 +6,7 @@ import android.content.Context;
 import com.droidplanner.drone.DroneInterfaces.DroneTypeListner;
 import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
 import com.droidplanner.drone.DroneInterfaces.MapUpdatedListner;
+import com.droidplanner.drone.DroneInterfaces.MapConfigListener;
 import com.droidplanner.drone.variables.Altitude;
 import com.droidplanner.drone.variables.Battery;
 import com.droidplanner.drone.variables.Calibration;
@@ -41,6 +42,7 @@ public class Drone {
 
 	private HudUpdatedListner hudListner;
 	private MapUpdatedListner mapListner;
+	private MapConfigListener mapConfigListener;
 	private DroneTypeListner typeListner;
 
 	public Drone(TTS tts, MAVLinkClient mavClient, Context context) {
@@ -55,6 +57,10 @@ public class Drone {
 
 	public void setMapListner(MapUpdatedListner listner) {
 		mapListner = listner;
+	}
+
+	public void setMapConfigListener(MapConfigListener mapConfigListener) {
+		this.mapConfigListener = mapConfigListener;
 	}
 
 	public void setDroneTypeChangedListner(DroneTypeListner listner) {
@@ -91,5 +97,10 @@ public class Drone {
 	public void notifyHudUpdate() {
 		if (hudListner != null)
 			hudListner.onDroneUpdate();
+	}
+
+	public void notifyMapTypeChanged() {
+		if (mapConfigListener != null)
+			mapConfigListener.onMapTypeChanged();
 	}
 }

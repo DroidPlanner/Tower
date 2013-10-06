@@ -8,6 +8,7 @@ import android.preference.EditTextPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
+import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
 import com.droidplanner.file.DirectoryPath;
 
@@ -66,6 +67,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
         }
 		if (key.equals("pref_map_type")) {
 			findPreference(key).setSummary(sharedPreferences.getString(key, ""));
+			((DroidPlannerApp) getApplication()).drone.notifyMapTypeChanged();
         }
 		if (key.equals("pref_rc_mode")) {
 			if (sharedPreferences.getString(key, "MODE2").equalsIgnoreCase("MODE1")) {
