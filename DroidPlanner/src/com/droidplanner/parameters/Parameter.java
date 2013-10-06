@@ -23,6 +23,10 @@ public class Parameter {
 		this(name, value, 0); // TODO Setting type to Zero may cause an error
 	}
 
+	public Parameter(String name) {
+		this(name, 0, 0); // TODO Setting type to Zero may cause an error
+	}
+
 	public String getValue() {
 		DecimalFormat format = new DecimalFormat("0.###");
 		return format.format(value);

@@ -92,8 +92,9 @@ public class ParametersActivity extends SuperActivity implements
 	}
 
 	@Override
-	public void onParameterReceived(Parameter parameter) {
+	public boolean onParameterReceived(Parameter parameter) {
 		tableFragment.refreshRowParameter(parameter);
+		return false;
 	}
 
 }

@@ -16,6 +16,6 @@ public class DroneInterfaces {
 	}
 
 	public interface OnParameterManagerListner {
-		public void onParameterReceived(Parameter parameter);
+		public boolean onParameterReceived(Parameter parameter); //return true if needs to be process further
 	}
 }

@@ -52,10 +52,12 @@ public class Parameters extends DroneVariable {
 
 	private void processReceivedParam(msg_param_value m_value) {
 		Parameter param = new Parameter(m_value);
-		parameters.add(param);
-		if(parameterListner!=null){
-			parameterListner.onParameterReceived(param);
+		if (parameterListner != null) {
+			if (parameterListner.onParameterReceived(param)) {
+				return;
+			}
 		}
+		parameters.add(param);
 		if (m_value.param_index == m_value.param_count - 1) {
 			Toast.makeText(myDrone.context, "Parameters Received",
 					Toast.LENGTH_LONG).show();
@@ -64,6 +66,10 @@ public class Parameters extends DroneVariable {
 
 	public void sendParameter(Parameter parameter) {
 		MavLinkParameters.sendParameter(myDrone, parameter);
+	}
+
+	public void ReadParameter(String name) {
+		MavLinkParameters.readParameter(myDrone, name);
 	}
 
 }
