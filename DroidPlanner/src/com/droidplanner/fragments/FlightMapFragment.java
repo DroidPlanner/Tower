@@ -12,11 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.MAVLink.Messages.ApmModes;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.fragments.helpers.DroneMap;
 import com.droidplanner.fragments.markers.DroneMarker;
 import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
@@ -99,15 +101,28 @@ public class FlightMapFragment extends DroneMap implements
 	@Override
 	public void onMapLongClick(LatLng coord) {
 		getPreferences();
-		if (isGuidedModeEnabled) {
+		if (isGuidedModeEnabled)
 			drone.guidedPoint.newGuidedPoint(coord);
-			markers.updateMarker(drone.guidedPoint, false,getActivity().getApplicationContext());
-		}
 	}
 
 	public void updateFragment() {
 		missionPath.update(drone.mission);
 		markers.updateMarker(drone.mission.getHome(), false,getActivity().getApplicationContext());
+
+		if(drone.guidedPoint.isCoordValid())
+			markers.updateMarker(drone.guidedPoint, false, getActivity().getApplicationContext());
 	}
 
+	public void onModeChanged()
+	{
+		if(drone.state.getMode() != ApmModes.ROTOR_GUIDED)
+		{
+			if(drone.guidedPoint.isCoordValid())
+			{
+				// remove marker, invalidate guide point
+				markers.clear();
+				drone.guidedPoint.invalidateCoord();
+			}
+		}
+	}
 }
