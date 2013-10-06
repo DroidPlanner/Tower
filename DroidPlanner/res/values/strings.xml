@@ -27,7 +27,7 @@
     <string name="error_when_saving">Error when saving</string>
     <string name="error_when_opening_file">Error when opening file</string>
     <string name="waypoint_altitude">Altitude</string>
-    <string name="default_alt">Change Alt.</string>
+    <string name="default_alt">Altitude</string>
     <string name="menu_open_kmz">Open KMZ</string>
     <string name="menu_add_polygon">Add Polygon</string>
     <string name="menu_polygon">Polygon</string>
