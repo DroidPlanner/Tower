@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.SpinnerAdapter;

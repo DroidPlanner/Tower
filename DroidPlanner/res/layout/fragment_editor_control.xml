@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/contentLayoutMissionControl"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <ImageButton
+        android:id="@+id/mc_joystickBtn"
+        style="@style/actionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/editor_marker"
+        tools:ignore="ContentDescription" />
+
+    <ImageButton
+        android:id="@+id/mc_planningBtn"
+        style="@style/actionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/editor_path"
+        tools:ignore="ContentDescription" />
+
+    <ImageButton
+        android:id="@+id/mc_connectBtn"
+        style="@style/actionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/editor_polygon"
+        tools:ignore="ContentDescription" />
+
+    <ImageButton
+        android:id="@+id/mc_follow"
+        style="@style/actionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/editor_garbage"
+        tools:ignore="ContentDescription" />
+
+</LinearLayout>
