@@ -26,12 +26,12 @@ public class GuidedPoint extends DroneVariable implements MarkerSource {
 
 	@Override
 	public MarkerOptions build(Context context) {
-		return GuidedMarker.build(this);
+		return GuidedMarker.build(this, myDrone.mission.getDefaultAlt(), context);
 	}
 
 	@Override
 	public void update(Marker markerFromGcp, Context context) {
-		GuidedMarker.update(markerFromGcp, this);
+		GuidedMarker.update(markerFromGcp, this, myDrone.mission.getDefaultAlt(), context);
 	}
 
 	public LatLng getCoord() {
