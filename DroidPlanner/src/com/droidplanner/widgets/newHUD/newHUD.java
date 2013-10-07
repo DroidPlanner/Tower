@@ -4,8 +4,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.Paint.Style;
+import android.graphics.Path;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
@@ -16,45 +16,48 @@ public class newHUD extends View {
 	private static final float PLANE_WING_WIDTH = 0.05f;
 	private static final float PLANE_SIZE = 0.8f;
 	private static final float YAW_ARROW_SIZE = 1.2f;
-	private static final float  YAW_ARROW_ANGLE = 4.5f;
+	private static final float YAW_ARROW_ANGLE = 4.5f;
 	private static final float INTERNAL_RADIUS = 0.95f;
-	
+
 	private float halfWidth;
 	private float halfHeight;
 	private float radiusExternal;
 	private float radiusInternal;
-	
+	private RectF internalBounds;
+
 	private Paint yawPaint;
 	private Paint skyPaint;
 	private Paint groundPaint;
-
-	private float yaw = 0;
-	private float roll = 30;
-	private RectF groundPoints;
 	private Paint planePaint;
+
 	private Path yawPath = new Path();
+	private Path groundPath = new Path();
 	private Path planePath = new Path();
-	
+
+	private float yaw = -45;
+	private float roll = 30;
+	private float pitch = 20;
+
 	public newHUD(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		initialize();
 	}
 
 	private void initialize() {
-		
+
 		Paint fillPaint = new Paint();
 		fillPaint.setAntiAlias(true);
 		fillPaint.setStyle(Style.FILL);
-		
+
 		yawPaint = new Paint(fillPaint);
 		yawPaint.setColor(Color.WHITE);
-		
+
 		skyPaint = new Paint(fillPaint);
 		skyPaint.setColor(Color.parseColor("#008888"));
-		
+
 		groundPaint = new Paint(fillPaint);
 		groundPaint.setColor(Color.parseColor("#723700"));
-		
+
 		planePaint = new Paint(fillPaint);
 		planePaint.setColor(Color.WHITE);
 	}
@@ -64,24 +67,24 @@ public class newHUD extends View {
 		super.onSizeChanged(w, h, oldw, oldh);
 		halfHeight = h / 2f;
 		halfWidth = w / 2f;
-		radiusExternal = Math.min(halfHeight,halfWidth)/YAW_ARROW_SIZE;
-		radiusInternal = radiusExternal*INTERNAL_RADIUS;
-		groundPoints = new RectF(-radiusInternal, -radiusInternal, radiusInternal, radiusInternal);
-
+		radiusExternal = Math.min(halfHeight, halfWidth) / YAW_ARROW_SIZE;
+		radiusInternal = radiusExternal * INTERNAL_RADIUS;
+		internalBounds = new RectF(-radiusInternal, -radiusInternal,
+				radiusInternal, radiusInternal);
 		buildPlanePath();
 	}
 
 	private void buildPlanePath() {
 		planePath.reset();
-		planePath.moveTo(0,radiusInternal*PLANE_SIZE*PLANE_WING_WIDTH);
-		planePath.lineTo(radiusInternal*PLANE_SIZE,0);
-		planePath.lineTo(0,-radiusInternal*PLANE_SIZE*PLANE_WING_WIDTH);
-		planePath.lineTo(-radiusInternal*PLANE_SIZE,0);
-		planePath.lineTo(0,radiusInternal*PLANE_SIZE*PLANE_WING_WIDTH);
-		planePath.moveTo(radiusInternal*PLANE_SIZE*PLANE_WING_WIDTH,0);
-		planePath.lineTo(0,-radiusInternal*PLANE_SIZE/2);
-		planePath.lineTo(-radiusInternal*PLANE_SIZE*PLANE_WING_WIDTH,0);
-		
+		planePath.moveTo(0, radiusInternal * PLANE_SIZE * PLANE_WING_WIDTH);
+		planePath.lineTo(radiusInternal * PLANE_SIZE, 0);
+		planePath.lineTo(0, -radiusInternal * PLANE_SIZE * PLANE_WING_WIDTH);
+		planePath.lineTo(-radiusInternal * PLANE_SIZE, 0);
+		planePath.lineTo(0, radiusInternal * PLANE_SIZE * PLANE_WING_WIDTH);
+		planePath.moveTo(radiusInternal * PLANE_SIZE * PLANE_WING_WIDTH, 0);
+		planePath.lineTo(0, -radiusInternal * PLANE_SIZE / 2);
+		planePath.lineTo(-radiusInternal * PLANE_SIZE * PLANE_WING_WIDTH, 0);
+
 	}
 
 	@Override
@@ -89,28 +92,50 @@ public class newHUD extends View {
 		super.onDraw(canvas);
 		canvas.translate(halfWidth, halfHeight);
 		drawYaw(canvas);
-
-		canvas.drawCircle(0, 0, radiusInternal, skyPaint);
-		canvas.drawArc(groundPoints, roll, 180, true, groundPaint);
-		
-		
-		canvas.drawPath(planePath, planePaint);
-		canvas.drawCircle(0, 0, radiusInternal*PLANE_SIZE*PLANE_BODY_SIZE, planePaint);
+		drawSkyAndGround(canvas);
+		drawPlane(canvas);
 	}
 
 	private void drawYaw(Canvas canvas) {
+		// Fill the background
 		canvas.drawCircle(0, 0, radiusExternal, yawPaint);
-		
+
 		// Yaw Arrow
+		float mathYaw = (float) Math.toRadians(180 - yaw);
 		yawPath.reset();
 		yawPath.moveTo(0, 0);
-		yawPath.lineTo((float) Math.sin(yaw - YAW_ARROW_ANGLE) * radiusExternal,
-				(float) Math.cos(yaw - YAW_ARROW_ANGLE) * radiusExternal);
-		yawPath.lineTo((float) Math.sin(yaw) * radiusExternal * 1.1f,
-				(float) Math.cos(yaw) * radiusExternal * YAW_ARROW_SIZE);
-		yawPath.lineTo((float) Math.sin(yaw + YAW_ARROW_ANGLE) * radiusExternal,
-				(float) Math.cos(yaw + YAW_ARROW_ANGLE) * radiusExternal);
+		radialLineTo(yawPath, mathYaw + YAW_ARROW_ANGLE, radiusExternal);
+		radialLineTo(yawPath, mathYaw, radiusExternal * YAW_ARROW_SIZE);
+		radialLineTo(yawPath, mathYaw - YAW_ARROW_ANGLE, radiusExternal);
 		canvas.drawPath(yawPath, yawPaint);
+	}
 
+	private void radialLineTo(Path path, float angle, float radius) {
+		path.lineTo((float) Math.sin(angle) * radius, (float) Math.cos(angle)
+				* radius);
+	}
+
+	private void drawSkyAndGround(Canvas canvas) {
+		// Fill with the sky
+		canvas.drawCircle(0, 0, radiusInternal, skyPaint);
+
+		// Overlay the ground
+		groundPath.reset();
+		float pitchProjection = (float) Math.toDegrees(Math.acos(pitch / 45));
+		groundPath.addArc(internalBounds, 90 - pitchProjection + roll,
+				pitchProjection * 2);
+		canvas.drawPath(groundPath, groundPaint);
+	}
+
+	private void drawPlane(Canvas canvas) {
+		canvas.drawPath(planePath, planePaint);
+		canvas.drawCircle(0, 0, radiusInternal * PLANE_SIZE * PLANE_BODY_SIZE,
+				planePaint);
+	}
+
+	public void setAttitude(float roll, float pitch, float yaw) {
+		this.roll = roll;
+		this.pitch = pitch;
+		this.yaw = yaw;
 	}
 }
