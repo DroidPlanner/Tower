@@ -3,8 +3,12 @@ package com.droidplanner.widgets.newHUD;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
+import android.graphics.RadialGradient;
+import android.graphics.Shader;
 import android.graphics.Paint.Style;
+import android.graphics.Shader.TileMode;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.util.AttributeSet;
@@ -53,7 +57,6 @@ public class newHUD extends View {
 		yawPaint.setColor(Color.WHITE);
 
 		skyPaint = new Paint(fillPaint);
-		skyPaint.setColor(Color.parseColor("#008888"));
 
 		groundPaint = new Paint(fillPaint);
 		groundPaint.setColor(Color.parseColor("#723700"));
@@ -72,6 +75,8 @@ public class newHUD extends View {
 		internalBounds = new RectF(-radiusInternal, -radiusInternal,
 				radiusInternal, radiusInternal);
 		buildPlanePath();
+		skyPaint.setShader(new LinearGradient(0, -radiusInternal, 0, radiusInternal, Color.parseColor("#004444"), Color.parseColor("#00FFFF"), TileMode.CLAMP));
+		
 	}
 
 	private void buildPlanePath() {
