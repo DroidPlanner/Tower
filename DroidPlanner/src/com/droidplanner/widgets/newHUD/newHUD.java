@@ -16,12 +16,16 @@ import android.view.View;
 
 public class newHUD extends View {
 
+	private static final float INTERNAL_RADIUS = 0.95f;
+	private static final float YAW_ARROW_SIZE = 1.2f;
+	private static final float YAW_ARROW_ANGLE = 4.5f;
+	private static final float PITCH_TICK_LINE_LENGTH = 0.4f;
+	private static final int PITCH_RANGE = 45;
+	private static final int PITCH_TICK_SPACING = 15;
+	private static final int PITCH_TICK_PADDING = 2;
 	private static final float PLANE_BODY_SIZE = 0.2f;
 	private static final float PLANE_WING_WIDTH = 0.05f;
 	private static final float PLANE_SIZE = 0.8f;
-	private static final float YAW_ARROW_SIZE = 1.2f;
-	private static final float YAW_ARROW_ANGLE = 4.5f;
-	private static final float INTERNAL_RADIUS = 0.95f;
 
 	private float halfWidth;
 	private float halfHeight;
@@ -39,8 +43,9 @@ public class newHUD extends View {
 	private Path planePath = new Path();
 
 	private float yaw = -45;
-	private float roll = 30;
-	private float pitch = -20;
+	private float roll = -30;
+	private float pitch = 20;
+	private Paint tickPaint;
 
 	public newHUD(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -63,6 +68,10 @@ public class newHUD extends View {
 
 		planePaint = new Paint(fillPaint);
 		planePaint.setColor(Color.WHITE);
+
+		tickPaint = new Paint(fillPaint);
+		tickPaint.setColor(Color.WHITE);
+		tickPaint.setStrokeWidth(2);
 	}
 
 	@Override
@@ -75,8 +84,10 @@ public class newHUD extends View {
 		internalBounds = new RectF(-radiusInternal, -radiusInternal,
 				radiusInternal, radiusInternal);
 		buildPlanePath();
-		skyPaint.setShader(new LinearGradient(0, -radiusInternal, 0, radiusInternal, Color.parseColor("#004444"), Color.parseColor("#00FFFF"), TileMode.CLAMP));
-		
+		skyPaint.setShader(new LinearGradient(0, -radiusInternal, 0,
+				radiusInternal, Color.parseColor("#004444"), Color
+						.parseColor("#00FFFF"), TileMode.CLAMP));
+
 	}
 
 	private void buildPlanePath() {
@@ -98,6 +109,7 @@ public class newHUD extends View {
 		canvas.translate(halfWidth, halfHeight);
 		drawYaw(canvas);
 		drawSkyAndGround(canvas);
+		drawPitchTicks(canvas);
 		drawPlane(canvas);
 	}
 
@@ -126,10 +138,31 @@ public class newHUD extends View {
 
 		// Overlay the ground
 		groundPath.reset();
-		float pitchProjection = (float) Math.toDegrees(Math.acos(-pitch / 45));
+		float pitchProjection = (float) Math.toDegrees(Math.acos(pitch
+				/ PITCH_RANGE));
 		groundPath.addArc(internalBounds, 90 - pitchProjection + roll,
 				pitchProjection * 2);
 		canvas.drawPath(groundPath, groundPaint);
+
+	}
+
+	private void drawPitchTicks(Canvas canvas) {
+		float dx = (float) (Math.cos(Math.toRadians(roll)) * radiusInternal);
+		float dy = (float) (Math.sin(Math.toRadians(roll)) * radiusInternal);
+		float xPerDegree = (float) (Math.cos(Math.toRadians(roll - 90))
+				* radiusInternal / PITCH_RANGE);
+		float yPerDegree = (float) (Math.sin(Math.toRadians(roll - 90))
+				* radiusInternal / PITCH_RANGE);
+		int i = (int) ((-PITCH_RANGE + pitch + PITCH_TICK_PADDING) / PITCH_TICK_SPACING);
+		int loopEnd = (int) ((PITCH_RANGE + pitch - PITCH_TICK_PADDING) / PITCH_TICK_SPACING);
+		for (; i <= loopEnd; i++) {
+			canvas.drawLine(dx * PITCH_TICK_LINE_LENGTH + xPerDegree
+					* (-pitch + PITCH_TICK_SPACING * i), dy * PITCH_TICK_LINE_LENGTH
+					+ yPerDegree * (-pitch + PITCH_TICK_SPACING * i), -dx
+					* PITCH_TICK_LINE_LENGTH + xPerDegree
+					* (-pitch + PITCH_TICK_SPACING * i), -dy * PITCH_TICK_LINE_LENGTH
+					+ yPerDegree * (-pitch + PITCH_TICK_SPACING * i), tickPaint);
+		}
 	}
 
 	private void drawPlane(Canvas canvas) {
