@@ -40,7 +40,7 @@ public class newHUD extends View {
 
 	private float yaw = -45;
 	private float roll = 30;
-	private float pitch = 20;
+	private float pitch = -20;
 
 	public newHUD(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -126,7 +126,7 @@ public class newHUD extends View {
 
 		// Overlay the ground
 		groundPath.reset();
-		float pitchProjection = (float) Math.toDegrees(Math.acos(pitch / 45));
+		float pitchProjection = (float) Math.toDegrees(Math.acos(-pitch / 45));
 		groundPath.addArc(internalBounds, 90 - pitchProjection + roll,
 				pitchProjection * 2);
 		canvas.drawPath(groundPath, groundPaint);
