@@ -5,12 +5,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
-import android.graphics.RadialGradient;
-import android.graphics.Shader;
 import android.graphics.Paint.Style;
-import android.graphics.Shader.TileMode;
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.graphics.Shader.TileMode;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -42,14 +40,13 @@ public class newHUD extends View {
 	private Path groundPath = new Path();
 	private Path planePath = new Path();
 
-	private float yaw = -45;
-	private float roll = -30;
-	private float pitch = 20;
+	private float yaw, roll, pitch;
 	private Paint tickPaint;
 
 	public newHUD(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		initialize();
+		setAttitude(-30, 20, -45);
 	}
 
 	private void initialize() {
@@ -174,5 +171,6 @@ public class newHUD extends View {
 		this.roll = roll;
 		this.pitch = pitch;
 		this.yaw = yaw;
+		invalidate();
 	}
 }
