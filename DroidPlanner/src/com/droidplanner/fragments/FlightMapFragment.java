@@ -5,6 +5,7 @@ import java.util.List;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import com.MAVLink.Messages.ApmModes;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.fragments.helpers.DroneMap;
+import com.droidplanner.fragments.helpers.GuidePointListener;
 import com.droidplanner.fragments.markers.DroneMarker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -35,6 +37,8 @@ public class FlightMapFragment extends DroneMap implements
 
 	public DroneMarker droneMarker;
 	public Drone drone;
+
+	private GuidePointListener guidePointListener;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
@@ -98,6 +102,10 @@ public class FlightMapFragment extends DroneMap implements
 		flightPath = mMap.addPolyline(flightPathOptions);
 	}
 
+	public void setGuidePointListener(GuidePointListener guidePointListener) {
+		this.guidePointListener = guidePointListener;
+	}
+
 	@Override
 	public void onMapLongClick(LatLng coord) {
 		getPreferences();
@@ -109,17 +117,17 @@ public class FlightMapFragment extends DroneMap implements
 		missionPath.update(drone.mission);
 		markers.updateMarker(drone.mission.getHome(), false,getActivity().getApplicationContext());
 
-		if(drone.guidedPoint.isCoordValid())
+		if(drone.guidedPoint.isCoordValid()) {
 			markers.updateMarker(drone.guidedPoint, false, getActivity().getApplicationContext());
+			if(guidePointListener != null) {
+				guidePointListener.OnGuidePointMoved();
+			}
+		}
 	}
 
-	public void onModeChanged()
-	{
-		if(drone.state.getMode() != ApmModes.ROTOR_GUIDED)
-		{
-			if(drone.guidedPoint.isCoordValid())
-			{
-				// remove marker, invalidate guide point
+	public void onModeChanged() {
+		if(drone.state.getMode() != ApmModes.ROTOR_GUIDED) {
+			if(drone.guidedPoint.isCoordValid()) {
 				markers.clear();
 				drone.guidedPoint.invalidateCoord();
 			}
