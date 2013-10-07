@@ -147,21 +147,20 @@ public class newHUD extends View {
 	}
 
 	private void drawPitchTicks(Canvas canvas) {
-		float dx = (float) (Math.cos(Math.toRadians(roll)) * radiusInternal);
-		float dy = (float) (Math.sin(Math.toRadians(roll)) * radiusInternal);
-		float xPerDegree = (float) (Math.cos(Math.toRadians(roll - 90))
+		float lineX = (float) (Math.cos(Math.toRadians(roll)) * radiusInternal)
+				* PITCH_TICK_LINE_LENGTH;
+		float lineY = (float) (Math.sin(Math.toRadians(roll)) * radiusInternal)
+				* PITCH_TICK_LINE_LENGTH;
+		float dx = (float) (Math.cos(Math.toRadians(roll - 90))
 				* radiusInternal / PITCH_RANGE);
-		float yPerDegree = (float) (Math.sin(Math.toRadians(roll - 90))
+		float dy = (float) (Math.sin(Math.toRadians(roll - 90))
 				* radiusInternal / PITCH_RANGE);
 		int i = (int) ((-PITCH_RANGE + pitch + PITCH_TICK_PADDING) / PITCH_TICK_SPACING);
 		int loopEnd = (int) ((PITCH_RANGE + pitch - PITCH_TICK_PADDING) / PITCH_TICK_SPACING);
 		for (; i <= loopEnd; i++) {
-			canvas.drawLine(dx * PITCH_TICK_LINE_LENGTH + xPerDegree
-					* (-pitch + PITCH_TICK_SPACING * i), dy * PITCH_TICK_LINE_LENGTH
-					+ yPerDegree * (-pitch + PITCH_TICK_SPACING * i), -dx
-					* PITCH_TICK_LINE_LENGTH + xPerDegree
-					* (-pitch + PITCH_TICK_SPACING * i), -dy * PITCH_TICK_LINE_LENGTH
-					+ yPerDegree * (-pitch + PITCH_TICK_SPACING * i), tickPaint);
+			float degree = -pitch + PITCH_TICK_SPACING * i;
+			canvas.drawLine(lineX + dx * degree, lineY + dy * degree, -lineX
+					+ dx * degree, -lineY + dy * degree, tickPaint);
 		}
 	}
 
