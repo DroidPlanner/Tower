@@ -12,7 +12,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class GuidedMarker {
 	public static MarkerOptions build(GuidedPoint guidedPoint, Double altitude, Context context) {
 		return new MarkerOptions()
-				.anchor((float) 0.5, (float) 0.5)
 				.position(guidedPoint.getCoord())
 				.icon(getIcon(guidedPoint, altitude, context));
 	}
