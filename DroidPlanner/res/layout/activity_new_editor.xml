@@ -38,8 +38,8 @@
         android:id="@+id/editorToolsFragment"
         android:name="com.droidplanner.fragments.EditorToolsFragment"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/fragment1"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/missionFragment1"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/textView1"
         android:layout_margin="5dp"
@@ -47,8 +47,8 @@
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/fragment2"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/missionFragment1"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/textView1"
         android:gravity="center"
@@ -77,7 +77,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Load" />
-
     </LinearLayout>
 
 </RelativeLayout>
