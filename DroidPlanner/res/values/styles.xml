@@ -10,9 +10,10 @@
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
-    
+
     <style name="hugeDynamicText" parent="@style/dynamicText">
         <item name="android:textSize">40sp</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
     </style>
 
     <style name="actionButton">
