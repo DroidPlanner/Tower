@@ -1,43 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/contentLayoutMissionControl"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
-    android:gravity="center"
-    android:orientation="vertical" >
+    android:gravity="center" >
 
-    <ImageButton
-        android:id="@+id/mc_joystickBtn"
-        style="@style/actionButton"
+    <RadioButton
+        android:id="@+id/RadioButton01"
+        android:layout_width="wrap_content"
+        android:button="@drawable/editor_tools_marker"
+        android:checked="true" />
+
+    <RadioButton
+        android:id="@+id/RadioButton02"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/editor_marker"
-        tools:ignore="ContentDescription" />
+        android:button="@drawable/editor_tools_draw" />
 
-    <ImageButton
-        android:id="@+id/mc_planningBtn"
-        style="@style/actionButton"
+    <RadioButton
+        android:id="@+id/RadioButton03"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/editor_path"
-        tools:ignore="ContentDescription" />
+        android:button="@drawable/editor_tools_poly" />
 
-    <ImageButton
-        android:id="@+id/mc_connectBtn"
-        style="@style/actionButton"
+    <RadioButton
+        android:id="@+id/RadioButton04"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/editor_polygon"
-        tools:ignore="ContentDescription" />
+        android:button="@drawable/editor_tools_trash" />
 
-    <ImageButton
-        android:id="@+id/mc_follow"
-        style="@style/actionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/editor_garbage"
-        tools:ignore="ContentDescription" />
-
-</LinearLayout>
+</RadioGroup>
