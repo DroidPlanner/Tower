@@ -2,13 +2,13 @@ package com.droidplanner.dialogs.mission;
 
 import android.content.Context;
 
-import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
+import com.droidplanner.DroidPlannerApp.OnWaypointChangedListner;
 import com.droidplanner.drone.variables.waypoint;
 
 public class DialogMissionFactory {
 
 	public static void getDialog(waypoint wp, Context context,
-			OnWaypointUpdateListner listner) {
+			OnWaypointChangedListner listner) {
 		DialogMission dialog;
 		switch (wp.getCmd()) {
 		case CMD_NAV_WAYPOINT:

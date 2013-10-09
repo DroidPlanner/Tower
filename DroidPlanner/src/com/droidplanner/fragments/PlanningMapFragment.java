@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.droidplanner.DroidPlannerApp.OnWaypointChangedListner;
 import com.droidplanner.dialogs.mission.DialogMissionFactory;
 import com.droidplanner.drone.variables.Mission;
 import com.droidplanner.drone.variables.waypoint;
@@ -34,13 +35,14 @@ import com.google.android.gms.maps.model.Marker;
 @SuppressLint("UseSparseArrays")
 public class PlanningMapFragment extends DroneMap implements
 		OnMapLongClickListener, OnMarkerDragListener, OnMapClickListener,
-		OnMarkerClickListener, OnPathFinishedListner {
+		OnMarkerClickListener, OnPathFinishedListner, OnWaypointChangedListner {
 
 	public OnMapInteractionListener mListener;
 	private MapPath polygonPath;
 	private Mission mission;
 
 	public CameraGroundOverlays cameraOverlays;
+	private Polygon polygon = new Polygon();
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
@@ -57,13 +59,13 @@ public class PlanningMapFragment extends DroneMap implements
 		return view;
 	}
 
-	public void update(Polygon polygon) {
+	public void update() {
 		markers.clear();
 
 		Context context = getActivity().getApplicationContext();
 		markers.updateMarker(mission.getHome(), false, context);
 		markers.updateMarkers(mission.getWaypoints(), true, context);
-		markers.updateMarkers(polygon.getPolygonPoints(), true, context);
+		markers.updateMarkers(polygon .getPolygonPoints(), true, context);
 
 		polygonPath.update(polygon);
 		missionPath.update(mission);
@@ -169,6 +171,11 @@ public class PlanningMapFragment extends DroneMap implements
 	public void onPathFinished(List<Point> path) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void onWaypointsUpdate() {
+		update();
 	}
 
 }

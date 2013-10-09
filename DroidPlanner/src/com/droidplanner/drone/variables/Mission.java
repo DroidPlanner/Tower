@@ -7,13 +7,14 @@ import java.util.Locale;
 import android.widget.Toast;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
-import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
+import com.droidplanner.DroidPlannerApp.OnWaypointChangedListner;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneVariable;
 import com.droidplanner.fragments.helpers.MapPath.PathSource;
 import com.google.android.gms.maps.model.LatLng;
 
-public class Mission extends DroneVariable implements PathSource, OnWaypointUpdateListner {
+public class Mission extends DroneVariable implements PathSource,
+		OnWaypointChangedListner {
 
 	private Home home = new Home();
 	private List<waypoint> waypoints = new ArrayList<waypoint>();
@@ -21,7 +22,7 @@ public class Mission extends DroneVariable implements PathSource, OnWaypointUpda
 	private int wpno = -1;
 	private double disttowp = 0;
 
-	public OnWaypointUpdateListner missionListner;
+	private List<OnWaypointChangedListner> missionListner = new ArrayList<OnWaypointChangedListner>();
 
 	public Mission(Drone myDrone) {
 		super(myDrone);
@@ -57,8 +58,8 @@ public class Mission extends DroneVariable implements PathSource, OnWaypointUpda
 	public List<LatLng> getAllVisibleCoordinates() {
 		List<LatLng> result = new ArrayList<LatLng>();
 		for (waypoint point : waypoints) {
-			if (point.getCmd().showOnMap()  && point.hasCoord()) {
-				result.add(point.getCoord());				
+			if (point.getCmd().showOnMap() && point.hasCoord()) {
+				result.add(point.getCoord());
 			}
 		}
 		if (home.isValid && home.hasCoord()) {
@@ -76,24 +77,24 @@ public class Mission extends DroneVariable implements PathSource, OnWaypointUpda
 	}
 
 	public void reNumberWaypoints() {
-		int i=1;
+		int i = 1;
 		for (waypoint wp : waypoints) {
-			wp.setNumber(i++);			
+			wp.setNumber(i++);
 		}
 	}
-	
+
 	public void setWaypoints(List<waypoint> waypoints) {
 		this.waypoints.clear();
 		addWaypoints(waypoints);
 	}
 
 	public void addWaypoints(List<waypoint> points) {
-		
-		//Loop through every wp and add it to the wp list
+
+		// Loop through every wp and add it to the wp list
 		for (waypoint wp : points) {
 			addWaypoint(wp);
 		}
-//		waypoints.addAll(points);
+		// waypoints.addAll(points);
 	}
 
 	public void addWaypointsWithDefaultAltitude(List<LatLng> coords) {
@@ -105,7 +106,9 @@ public class Mission extends DroneVariable implements PathSource, OnWaypointUpda
 	private void addWaypoint(waypoint wp) {
 		wp.setNumber(waypoints.size() + 1);
 		waypoints.add(wp);
+		onWaypointsUpdate();
 	}
+
 
 	public void addWaypoint(Double lat, Double Lng, Double h) {
 		addWaypoint(new waypoint(lat, Lng, h));
@@ -151,7 +154,7 @@ public class Mission extends DroneVariable implements PathSource, OnWaypointUpda
 	public void setHome(LatLng home) {
 		this.home.setCoord(home);
 	}
-	
+
 	public void moveWaypoint(LatLng coord, int number) {
 		waypoints.get(number).setCoord(coord);
 	}
@@ -193,7 +196,7 @@ public class Mission extends DroneVariable implements PathSource, OnWaypointUpda
 		List<LatLng> newPath = new ArrayList<LatLng>();
 		for (waypoint point : getWaypoints()) {
 			if (point.getCmd().isOnFligthPath()) {
-				newPath.add(point.getCoord());				
+				newPath.add(point.getCoord());
 			}
 		}
 		return newPath;
@@ -201,7 +204,16 @@ public class Mission extends DroneVariable implements PathSource, OnWaypointUpda
 
 	@Override
 	public void onWaypointsUpdate() {
-		missionListner.onWaypointsUpdate();
+		for (OnWaypointChangedListner listner : missionListner) {
+			listner.onWaypointsUpdate();			
+		}
+	}
+
+	public void addOnWaypointsChangedListner(OnWaypointChangedListner listner) {
+		if (!missionListner.contains(listner)) {
+			missionListner.add(listner);
+		}
+		
 	}
 
 }

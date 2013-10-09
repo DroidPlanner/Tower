@@ -1,22 +1,33 @@
 package com.droidplanner.activitys;
 
-import android.R.anim;
+import java.util.List;
+
 import android.app.ActionBar;
-import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
+import com.droidplanner.DroidPlannerApp.OnWaypointChangedListner;
 import com.droidplanner.R;
+import com.droidplanner.drone.variables.Mission;
 import com.droidplanner.drone.variables.waypoint;
+import com.droidplanner.fragments.MissionFragment;
+import com.droidplanner.fragments.PlanningMapFragment;
 import com.droidplanner.fragments.EditorControlFragment.OnEditorControlInteraction;
+import com.droidplanner.fragments.helpers.GestureMapFragment;
+import com.droidplanner.fragments.helpers.GestureMapFragment.OnPathFinishedListner;
 import com.droidplanner.fragments.helpers.OnMapInteractionListener;
 import com.droidplanner.polygon.PolygonPoint;
-import com.google.android.gms.internal.dy.i;
 import com.google.android.gms.maps.model.LatLng;
 
 public class NewEditorActivity extends NewSuperUI implements
-		OnMapInteractionListener, OnEditorControlInteraction {
+		OnMapInteractionListener, OnEditorControlInteraction, OnPathFinishedListner {
+
+	private PlanningMapFragment planningMapFragment;
+	private GestureMapFragment gestureMapFragment;
+	private MissionFragment missionFragment;
+	private Mission mission;
 
 	@Override
 	public int getNavigationItem() {
@@ -30,6 +41,21 @@ public class NewEditorActivity extends NewSuperUI implements
 
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
+		
+		planningMapFragment = ((PlanningMapFragment) getFragmentManager()
+				.findFragmentById(R.id.mapFragment));
+		gestureMapFragment = ((GestureMapFragment) getFragmentManager()
+				.findFragmentById(R.id.gestureMapFragment));
+		missionFragment = (MissionFragment) getFragmentManager()
+				.findFragmentById(R.id.missionFragment1);
+		
+		mission = drone.mission;
+		gestureMapFragment.setOnPathFinishedListner(this);
+		missionFragment.setMission(mission);
+		planningMapFragment.setMission(mission);
+		
+		mission.addOnWaypointsChangedListner(missionFragment);
+		mission.addOnWaypointsChangedListner(planningMapFragment);
 	}
 
 	@Override
@@ -74,14 +100,18 @@ public class NewEditorActivity extends NewSuperUI implements
 
 	@Override
 	public void onMapClick(LatLng point) {
+		mission.addWaypoint(point);
+	}
+	@Override
+	public void editorModeChanged() {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void editorModeChanged() {
-		// TODO Auto-generated method stub
-
+	public void onPathFinished(List<Point> path) {
+		
+		
 	}
 
 }

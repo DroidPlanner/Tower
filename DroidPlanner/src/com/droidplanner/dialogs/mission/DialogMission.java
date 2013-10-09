@@ -14,7 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.MAVLink.Messages.ApmCommands;
-import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
+import com.droidplanner.DroidPlannerApp.OnWaypointChangedListner;
 import com.droidplanner.R;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.widgets.spinners.SpinnerSelfSelect;
@@ -23,7 +23,7 @@ public abstract class DialogMission implements OnItemSelectedListener,
 		OnClickListener {
 	protected abstract int getResource();
 
-	private OnWaypointUpdateListner listner;
+	private OnWaypointChangedListner listner;
 	private SpinnerSelfSelect typeSpinner;
 	private ApmCommandsAdapter commandAdapter;
 	private AlertDialog dialog;
@@ -32,7 +32,7 @@ public abstract class DialogMission implements OnItemSelectedListener,
 	protected View view;
 
 	public void build(waypoint wp, Context context,
-			OnWaypointUpdateListner listner) {
+			OnWaypointChangedListner listner) {
 		this.wp = wp;
 		this.listner = listner;
 		this.context = context;

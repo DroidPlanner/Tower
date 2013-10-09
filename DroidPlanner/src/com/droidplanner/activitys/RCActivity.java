@@ -40,7 +40,7 @@ public class RCActivity extends SuperFlightActivity implements
 			mPager.setSwipeMarginWidth(40);
 		}
 
-		drone.mission.missionListner = this;
+		drone.mission.addOnWaypointsChangedListner(this);
 		drone.setDroneTypeChangedListner(this);
 	}
 

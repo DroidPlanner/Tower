@@ -6,7 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.MAVLink.Messages.ApmModes;
-import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
+import com.droidplanner.DroidPlannerApp.OnWaypointChangedListner;
 import com.droidplanner.MAVLink.MavLinkArm;
 import com.droidplanner.R;
 import com.droidplanner.drone.DroneInterfaces.DroneTypeListner;
@@ -21,7 +21,7 @@ import com.droidplanner.widgets.spinners.SelectWaypointSpinner.OnWaypointSpinner
 
 public abstract class SuperFlightActivity extends SuperActivity implements
 		OnModeSpinnerSelectedListener, OnWaypointSpinnerSelectedListener,
-		OnGuidedListener, DroneTypeListner, OnWaypointUpdateListner {
+		OnGuidedListener, DroneTypeListner, OnWaypointChangedListner {
 
 
 	private SelectModeSpinner fligthModeSpinner;

@@ -24,7 +24,7 @@ public class DroidPlannerApp extends Application implements
 	public OnSystemArmListener onSystemArmListener;
 	private TTS tts;
 
-	public interface OnWaypointUpdateListner {
+	public interface OnWaypointChangedListner {
 		public void onWaypointsUpdate();
 	}
 

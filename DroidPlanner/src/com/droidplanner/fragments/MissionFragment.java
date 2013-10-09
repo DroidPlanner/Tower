@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.droidplanner.DroidPlannerApp.OnWaypointChangedListner;
 import com.droidplanner.R;
 import com.droidplanner.dialogs.mission.DialogMissionFactory;
 import com.droidplanner.drone.variables.Mission;
@@ -18,7 +19,7 @@ import com.mobeta.android.dslv.DragSortListView.DragScrollProfile;
 import com.mobeta.android.dslv.DragSortListView.DropListener;
 import com.mobeta.android.dslv.DragSortListView.RemoveListener;
 
-public class MissionFragment extends ListFragment implements DragScrollProfile, RemoveListener, DropListener{
+public class MissionFragment extends ListFragment implements DragScrollProfile, RemoveListener, DropListener, OnWaypointChangedListner{
 	public DragSortListView list;
 	private Mission mission;
 	private MissionRow adapter;
@@ -79,6 +80,11 @@ public class MissionFragment extends ListFragment implements DragScrollProfile, 
 		Log.d("T", "touched "+position);
 		DialogMissionFactory.getDialog(adapter.getItem(position), this.getActivity(), mission);		
 		super.onListItemClick(l, v, position, id);
+	}
+
+	@Override
+	public void onWaypointsUpdate() {
+		update();		
 	}
 
 }
