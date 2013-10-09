@@ -18,6 +18,7 @@ import com.droidplanner.fragments.MissionFragment;
 import com.droidplanner.fragments.PlanningMapFragment;
 import com.droidplanner.fragments.helpers.GestureMapFragment;
 import com.droidplanner.fragments.helpers.GestureMapFragment.OnPathFinishedListner;
+import com.droidplanner.fragments.helpers.MapProjection;
 import com.droidplanner.fragments.helpers.OnMapInteractionListener;
 import com.droidplanner.polygon.PolygonPoint;
 import com.google.android.gms.maps.model.LatLng;
@@ -118,14 +119,20 @@ public class NewEditorActivity extends NewSuperUI implements
 	}
 
 	@Override
-	public void onPathFinished(List<Point> path) {
+	public void editorToolChanged(EditorTools tools) {
+		if (tools == EditorTools.DRAW) {
+			gestureMapFragment.enableGestureDetection();
+		}else {
+			gestureMapFragment.disableGestureDetection();
+		}
 
 	}
 
 	@Override
-	public void editorToolChanged(EditorTools tools) {
-		// TODO Auto-generated method stub
-
+	public void onPathFinished(List<Point> path) {
+		List<LatLng> points = MapProjection.projectPathIntoMap(path,
+				planningMapFragment.mMap);
+		drone.mission.addWaypointsWithDefaultAltitude(points);	
 	}
 
 }
