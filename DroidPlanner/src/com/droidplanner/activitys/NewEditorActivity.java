@@ -8,13 +8,12 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
-import com.droidplanner.DroidPlannerApp.OnWaypointChangedListner;
 import com.droidplanner.R;
 import com.droidplanner.drone.variables.Mission;
 import com.droidplanner.drone.variables.waypoint;
+import com.droidplanner.fragments.EditorControlFragment.OnEditorControlInteraction;
 import com.droidplanner.fragments.MissionFragment;
 import com.droidplanner.fragments.PlanningMapFragment;
-import com.droidplanner.fragments.EditorControlFragment.OnEditorControlInteraction;
 import com.droidplanner.fragments.helpers.GestureMapFragment;
 import com.droidplanner.fragments.helpers.GestureMapFragment.OnPathFinishedListner;
 import com.droidplanner.fragments.helpers.OnMapInteractionListener;

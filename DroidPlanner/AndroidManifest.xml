@@ -67,18 +67,17 @@
         <service android:name=".service.MAVLinkService" >
         </service>
 
-        <activity
-            android:name=".activitys.PlanningActivity"
-            tools:ignore="ExportedActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="text/plain" />
-            </intent-filter>
+        <activity android:name=".activitys.SettingsActivity" >
         </activity>
-        <activity android:name=".activitys.FlightDataActivity" >
+        <activity android:name=".activitys.NewUIActivity" >
+            <!-- Launcher Intent -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            
+            <!-- USB connection  intent -->
             <intent-filter>
                 <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
             </intent-filter>
@@ -87,43 +86,18 @@
                 android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
                 android:resource="@xml/device_filter" />
         </activity>
-        <activity android:name=".activitys.RCActivity" >
-
-            <!-- android:screenOrientation="landscape" -->
-        </activity>
-        <activity android:name=".activitys.CameraActivity" >
-
-            <!-- android:screenOrientation="landscape" -->
-        </activity>
-        <activity android:name=".activitys.ChartActivity" >
-        </activity>
         <activity
-            android:name=".activitys.GCPActivity"
-            tools:ignore="ExportedActivity" >
+            android:name=".activitys.NewEditorActivity"
+            android:label="Editor"
+            android:parentActivityName=".activitys.NewUIActivity" >
+            <!-- Intent for opening mission files-->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:mimeType="application/vnd.google-earth.kml+xml" />
-                <data android:mimeType="application/vnd.google-earth.kmz" />
+                <data android:mimeType="text/plain" />
             </intent-filter>
-        </activity>
-        <activity android:name=".activitys.ParametersActivity" >
-        </activity>
-        <activity android:name=".activitys.SettingsActivity" >
-        </activity>
-        <activity android:name=".activitys.NewUIActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".activitys.NewEditorActivity"
-            android:label="Editor"
-            android:parentActivityName=".activitys.NewUIActivity" >
 
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
