@@ -1,11 +1,8 @@
 package com.droidplanner.fragments.markers;
 
-import java.util.Locale;
-
 import android.content.Context;
-
 import android.graphics.Color;
-import com.MAVLink.Messages.MAVLinkMessage;
+
 import com.MAVLink.Messages.enums.MAV_ROI;
 import com.droidplanner.R;
 import com.droidplanner.drone.variables.waypoint;

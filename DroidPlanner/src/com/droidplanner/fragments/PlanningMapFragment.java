@@ -114,7 +114,7 @@ public class PlanningMapFragment extends DroneMap implements
 
 		// display distance from last waypoint if available
 		double distanceFromPrevPathPoint = waypoint.getDistanceFromPrevPoint();
-		if(distanceFromPrevPathPoint != waypoint.UNKNOWN_DISTANCE)
+		if(distanceFromPrevPathPoint != com.droidplanner.drone.variables.waypoint.UNKNOWN_DISTANCE)
 			marker.setSnippet(String.format("%.0fm", distanceFromPrevPathPoint));
 
 		marker.showInfoWindow();
