@@ -75,4 +75,29 @@ public class EditorToolsFragment extends Fragment implements OnClickListener {
 		return tool;
 	}
 
+	public void setTool(EditorTools marker) {
+		RadioButton selected = null;
+		buttonDraw.setChecked(false);
+		buttonMarker.setChecked(false);
+		buttonPoly.setChecked(false);
+		buttonTrash.setChecked(false);
+		switch (marker) {
+		case DRAW:
+			selected = buttonDraw;
+			break;
+		case MARKER:
+			selected = buttonMarker;
+			break;
+		case POLY:
+			selected = buttonPoly;
+			break;
+		case TRASH:
+			selected = buttonTrash;
+			break;
+		}
+		selected.setChecked(true);
+		onClick(selected);
+
+	}
+
 }
