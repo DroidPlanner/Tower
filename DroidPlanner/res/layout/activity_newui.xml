@@ -25,7 +25,7 @@
     </FrameLayout>
 
     <fragment
-        android:id="@+id/fragment3"
+        android:id="@+id/editorToolsFragment"
         android:name="com.droidplanner.fragments.MissionControlFragment"
         android:layout_width="wrap_content"
         android:layout_height="90dp"

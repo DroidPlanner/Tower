@@ -1,32 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/contentLayoutMissionControl"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
     android:gravity="center" >
 
     <RadioButton
-        android:id="@+id/RadioButton01"
+        android:id="@+id/editor_tools_marker"
         android:layout_width="wrap_content"
         android:button="@drawable/editor_tools_marker"
         android:checked="true" />
 
     <RadioButton
-        android:id="@+id/RadioButton02"
+        android:id="@+id/editor_tools_draw"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:button="@drawable/editor_tools_draw" />
 
     <RadioButton
-        android:id="@+id/RadioButton03"
+        android:id="@+id/editor_tools_poly"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:button="@drawable/editor_tools_poly" />
 
     <RadioButton
-        android:id="@+id/RadioButton04"
+        android:id="@+id/editor_tools_trash"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:button="@drawable/editor_tools_trash" />
