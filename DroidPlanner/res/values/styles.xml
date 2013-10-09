@@ -32,8 +32,7 @@
     </style>
 
     <style name="ActionBar" parent="@android:style/Widget.ActionBar">
-        <item name="android:background">@drawable/bar_background</item>
-    </style>
-
+        <item name="android:background">@drawable/action_texture</item>
+        </style>
 
 </resources>
