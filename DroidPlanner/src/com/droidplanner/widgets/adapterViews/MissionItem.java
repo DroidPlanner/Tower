@@ -1,7 +1,6 @@
-package com.droidplanner.widgets.tableRow;
+package com.droidplanner.widgets.adapterViews;
 
 import java.util.List;
-import java.util.Locale;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,9 +11,8 @@ import android.widget.TextView;
 
 import com.droidplanner.R;
 import com.droidplanner.drone.variables.waypoint;
-import com.MAVLink.Messages.enums.MAV_CMD;
 
-public class MissionRow extends ArrayAdapter<waypoint> {
+public class MissionItem extends ArrayAdapter<waypoint> {
 
 	private Context context;
 	private List<waypoint> waypoints;
@@ -28,13 +26,13 @@ public class MissionRow extends ArrayAdapter<waypoint> {
 
 
 
-	public MissionRow(Context context, int resource, List<waypoint> objects) {
+	public MissionItem(Context context, int resource, List<waypoint> objects) {
 		super(context, resource, objects);
 		this.waypoints = objects;
 		this.context = context;
 	}
 
-	public MissionRow(Context context, int resource) {
+	public MissionItem(Context context, int resource) {
 		super(context, resource);
 		this.context = context;
 	}
@@ -55,28 +53,29 @@ public class MissionRow extends ArrayAdapter<waypoint> {
 	private View createLayoutFromResource() {
 		LayoutInflater inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View view = inflater.inflate(R.layout.row_mission_list, null);
+		View view = inflater.inflate(R.layout.adapterview_mission_item, null);
 		return view;
 	}
 
+	
 	private void findViewObjects(View view) {
 		nameView = (TextView) view.findViewById(R.id.rowNameView);
-		altitudeView = (TextView) view.findViewById(R.id.rowAltitudeView);
+		/*altitudeView = (TextView) view.findViewById(R.id.rowAltitudeView);
 		typeView = (TextView) view.findViewById(R.id.rowTypeView);
 		descView = (TextView) view.findViewById(R.id.rowDescView);
 		distanceView = (TextView) view.findViewById(R.id.rowDistanceView);
-
+*/
 	}
-
 	private void setupViewsText(waypoint waypoint) {
+		/*
 		if (waypoint.getCmd().showOnMap()) {
 			altitudeView.setText(String.format(Locale.ENGLISH, "%3.0fm", waypoint.getHeight()));
 		} else {
 			altitudeView.setText("-");
 		}
-		
+*/		
 		nameView.setText(String.format("%3d", waypoint.getNumber()));
-		typeView.setText(waypoint.getCmd().getName());
+	/*	typeView.setText(waypoint.getCmd().getName());
 		descView.setText(setupDescription(waypoint));
 
 		double distanceFromPrevPoint = waypoint.getDistanceFromPrevPoint();
@@ -86,8 +85,9 @@ public class MissionRow extends ArrayAdapter<waypoint> {
 		else {
 			distanceView.setText("-");
 		}
+		*/
 	}
-
+/*
 	private String setupDescription(waypoint waypoint) {
 		String descStr = null;
 		String tmpStr = null;
@@ -205,4 +205,5 @@ public class MissionRow extends ArrayAdapter<waypoint> {
 		
 		return descStr;
 	}
+	 */
 }

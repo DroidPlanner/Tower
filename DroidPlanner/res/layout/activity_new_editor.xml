@@ -17,7 +17,7 @@
         android:id="@+id/missionFragment1"
         android:name="com.droidplanner.fragments.MissionFragment"
         android:layout_width="match_parent"
-        android:layout_height="90dp"
+        android:layout_height="72dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         tools:layout="@layout/fragment_mission" />
@@ -39,45 +39,63 @@
         android:name="com.droidplanner.fragments.EditorToolsFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/fragment1"
+        android:layout_above="@+id/missionFragment1"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/textView1"
         android:layout_margin="5dp"
         tools:layout="@layout/fragment_editor_control" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <SlidingDrawer
+        android:id="@+id/slidingDrawer1"
+        android:layout_width="260dp"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/fragment2"
+        android:layout_above="@+id/missionFragment1"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/textView1"
+        android:content="@+id/content"
         android:gravity="center"
-        android:orientation="vertical" >
+        android:handle="@+id/slideButtonLeft"
+        android:orientation="horizontal" >
 
-        <Button
-            android:id="@+id/Button03"
-            android:layout_width="match_parent"
+
+        <ImageView
+            android:id="@+id/slideButtonLeft"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/slide_left"
+            tools:ignore="ContentDescription" />
+
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Send" />
+            android:gravity="center_vertical|right"
+            android:orientation="vertical" >
 
-        <Button
-            android:id="@+id/Button02"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Receive" />
+            <Button
+                android:id="@+id/Button03"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Send" />
 
-        <Button
-            android:id="@+id/Button01"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Save" />
+            <Button
+                android:id="@+id/Button02"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Receive" />
 
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Load" />
+            <Button
+                android:id="@+id/Button01"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Save" />
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/button1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Load" />
+        </LinearLayout>
+    </SlidingDrawer>
 
 </RelativeLayout>

@@ -11,9 +11,9 @@ import android.view.MenuItem;
 import com.droidplanner.R;
 import com.droidplanner.drone.variables.Mission;
 import com.droidplanner.drone.variables.waypoint;
+import com.droidplanner.fragments.EditorToolsFragment;
 import com.droidplanner.fragments.EditorToolsFragment.EditorTools;
 import com.droidplanner.fragments.EditorToolsFragment.OnEditorToolSelected;
-import com.droidplanner.fragments.EditorToolsFragment;
 import com.droidplanner.fragments.MissionFragment;
 import com.droidplanner.fragments.PlanningMapFragment;
 import com.droidplanner.fragments.helpers.GestureMapFragment;
@@ -61,8 +61,16 @@ public class NewEditorActivity extends NewSuperUI implements
 
 		mission.addOnWaypointsChangedListner(missionFragment);
 		mission.addOnWaypointsChangedListner(planningMapFragment);
+		mission.onWaypointsUpdate();
 	}
 
+	@Override
+	protected void onStop() {
+		super.onStop();
+		mission.removeOnWaypointsChangedListner(missionFragment);
+		mission.removeOnWaypointsChangedListner(planningMapFragment);
+	}
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -125,14 +133,14 @@ public class NewEditorActivity extends NewSuperUI implements
 		}else {
 			gestureMapFragment.disableGestureDetection();
 		}
-
 	}
 
 	@Override
 	public void onPathFinished(List<Point> path) {
 		List<LatLng> points = MapProjection.projectPathIntoMap(path,
 				planningMapFragment.mMap);
-		drone.mission.addWaypointsWithDefaultAltitude(points);	
+		drone.mission.addWaypointsWithDefaultAltitude(points);
+		editorToolsFragment.setTool(EditorTools.MARKER);
 	}
 
 }
