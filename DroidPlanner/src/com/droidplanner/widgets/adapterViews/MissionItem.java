@@ -1,7 +1,6 @@
-package com.droidplanner.widgets.tableRow;
+package com.droidplanner.widgets.adapterViews;
 
 import java.util.List;
-import java.util.Locale;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,9 +11,8 @@ import android.widget.TextView;
 
 import com.droidplanner.R;
 import com.droidplanner.drone.variables.waypoint;
-import com.MAVLink.Messages.enums.MAV_CMD;
 
-public class MissionRow extends ArrayAdapter<waypoint> {
+public class MissionItem extends ArrayAdapter<waypoint> {
 
 	private Context context;
 	private List<waypoint> waypoints;
@@ -28,13 +26,13 @@ public class MissionRow extends ArrayAdapter<waypoint> {
 
 
 
-	public MissionRow(Context context, int resource, List<waypoint> objects) {
+	public MissionItem(Context context, int resource, List<waypoint> objects) {
 		super(context, resource, objects);
 		this.waypoints = objects;
 		this.context = context;
 	}
 
-	public MissionRow(Context context, int resource) {
+	public MissionItem(Context context, int resource) {
 		super(context, resource);
 		this.context = context;
 	}

@@ -1,4 +1,4 @@
-package com.droidplanner.widgets.tableRow;
+package com.droidplanner.widgets.adapterViews;
 
 import android.content.Context;
 import android.graphics.Color;

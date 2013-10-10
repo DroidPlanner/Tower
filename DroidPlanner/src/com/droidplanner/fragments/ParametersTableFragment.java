@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.droidplanner.R;
 import com.droidplanner.file.IO.ParameterWriter;
 import com.droidplanner.parameters.Parameter;
-import com.droidplanner.widgets.tableRow.ParamRow;
+import com.droidplanner.widgets.adapterViews.ParamRow;
 
 public class ParametersTableFragment extends Fragment {
 

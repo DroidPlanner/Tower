@@ -10,13 +10,13 @@ import com.droidplanner.DroidPlannerApp.OnWaypointChangedListner;
 import com.droidplanner.R;
 import com.droidplanner.drone.variables.Mission;
 import com.droidplanner.drone.variables.waypoint;
-import com.droidplanner.widgets.tableRow.MissionRow;
+import com.droidplanner.widgets.adapterViews.MissionItem;
 import com.mobeta.android.dslv.HorizontalListView;
 
 public class MissionFragment extends Fragment implements  OnWaypointChangedListner{
 	public HorizontalListView list;
 	private Mission mission;
-	private MissionRow adapter;
+	private MissionItem adapter;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -28,14 +28,14 @@ public class MissionFragment extends Fragment implements  OnWaypointChangedListn
 		//list.setRemoveListener(this);
 		//list.setDragScrollProfile(this);
 		
-		adapter = new MissionRow(this.getActivity(), android.R.layout.simple_list_item_1);		
+		adapter = new MissionItem(this.getActivity(), android.R.layout.simple_list_item_1);		
 		list.setAdapter(adapter);		
 		return view;
 	}
 
 	public void setMission(Mission mission) {
 		this.mission = mission;
-		adapter = new MissionRow(this.getActivity(), android.R.layout.simple_list_item_1,mission.getWaypoints());
+		adapter = new MissionItem(this.getActivity(), android.R.layout.simple_list_item_1,mission.getWaypoints());
 		list.setAdapter(adapter);
 	}
 
