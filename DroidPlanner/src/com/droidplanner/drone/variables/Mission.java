@@ -205,7 +205,9 @@ public class Mission extends DroneVariable implements PathSource,
 	@Override
 	public void onWaypointsUpdate() {
 		for (OnWaypointChangedListner listner : missionListner) {
-			listner.onWaypointsUpdate();			
+			if (listner!=null) {
+				listner.onWaypointsUpdate();
+			}
 		}
 	}
 
@@ -214,6 +216,11 @@ public class Mission extends DroneVariable implements PathSource,
 			missionListner.add(listner);
 		}
 		
+	}
+
+	public void removeOnWaypointsChangedListner(
+			OnWaypointChangedListner listner) {
+		missionListner.remove(listner);
 	}
 
 }

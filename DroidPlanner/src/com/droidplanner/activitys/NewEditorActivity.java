@@ -61,8 +61,16 @@ public class NewEditorActivity extends NewSuperUI implements
 
 		mission.addOnWaypointsChangedListner(missionFragment);
 		mission.addOnWaypointsChangedListner(planningMapFragment);
+		mission.onWaypointsUpdate();
 	}
 
+	@Override
+	protected void onStop() {
+		super.onStop();
+		mission.removeOnWaypointsChangedListner(missionFragment);
+		mission.removeOnWaypointsChangedListner(planningMapFragment);
+	}
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
