@@ -11,11 +11,25 @@
         android:layout_weight=".5"
         class="com.droidplanner.fragments.HudFragment" />
     
-    <fragment
-        android:id="@+id/flightMapFragment"
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:layout_weight=".5"
-        class="com.droidplanner.fragments.FlightMapFragment" />
+    <RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+	                 android:layout_width="fill_parent"
+	                 android:layout_height="match_parent"
+	                 android:layout_weight=".5">
+	<fragment
+			android:id="@+id/flightMapFragment"
+			android:layout_width="fill_parent"
+			android:layout_height="match_parent"
+			class="com.droidplanner.fragments.FlightMapFragment" />
+
+	<TextView
+			android:id="@+id/textViewDistance"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text=""
+			android:alpha="0.7"
+			android:visibility="invisible"
+			android:background="@android:drawable/toast_frame"
+			android:textAppearance="?android:attr/textAppearanceMedium" />
+	</RelativeLayout>
     
 </LinearLayout>

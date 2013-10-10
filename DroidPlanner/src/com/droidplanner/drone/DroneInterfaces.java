@@ -21,6 +21,10 @@ public class DroneInterfaces {
 		public void onDroneUpdate();
 	}
 
+	public interface ModeChangedListener {
+		public void onModeChanged();
+	}
+
 	public interface OnParameterManagerListner {
 		public void onParameterReceived(Parameter parameter);
 
