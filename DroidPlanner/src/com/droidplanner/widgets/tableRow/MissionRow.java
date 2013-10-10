@@ -59,24 +59,25 @@ public class MissionRow extends ArrayAdapter<waypoint> {
 		return view;
 	}
 
+	
 	private void findViewObjects(View view) {
 		nameView = (TextView) view.findViewById(R.id.rowNameView);
-		altitudeView = (TextView) view.findViewById(R.id.rowAltitudeView);
+		/*altitudeView = (TextView) view.findViewById(R.id.rowAltitudeView);
 		typeView = (TextView) view.findViewById(R.id.rowTypeView);
 		descView = (TextView) view.findViewById(R.id.rowDescView);
 		distanceView = (TextView) view.findViewById(R.id.rowDistanceView);
-
+*/
 	}
-
 	private void setupViewsText(waypoint waypoint) {
+		/*
 		if (waypoint.getCmd().showOnMap()) {
 			altitudeView.setText(String.format(Locale.ENGLISH, "%3.0fm", waypoint.getHeight()));
 		} else {
 			altitudeView.setText("-");
 		}
-		
+*/		
 		nameView.setText(String.format("%3d", waypoint.getNumber()));
-		typeView.setText(waypoint.getCmd().getName());
+	/*	typeView.setText(waypoint.getCmd().getName());
 		descView.setText(setupDescription(waypoint));
 
 		double distanceFromPrevPoint = waypoint.getDistanceFromPrevPoint();
@@ -86,8 +87,9 @@ public class MissionRow extends ArrayAdapter<waypoint> {
 		else {
 			distanceView.setText("-");
 		}
+		*/
 	}
-
+/*
 	private String setupDescription(waypoint waypoint) {
 		String descStr = null;
 		String tmpStr = null;
@@ -205,4 +207,5 @@ public class MissionRow extends ArrayAdapter<waypoint> {
 		
 		return descStr;
 	}
+	 */
 }

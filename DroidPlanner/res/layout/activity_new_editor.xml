@@ -17,7 +17,7 @@
         android:id="@+id/missionFragment1"
         android:name="com.droidplanner.fragments.MissionFragment"
         android:layout_width="match_parent"
-        android:layout_height="90dp"
+        android:layout_height="72dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         tools:layout="@layout/fragment_mission" />
