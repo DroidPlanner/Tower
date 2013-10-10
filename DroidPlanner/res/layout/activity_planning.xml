@@ -27,7 +27,7 @@
         android:text="@string/length"
         android:alpha="0.7"
         android:background="@android:drawable/toast_frame"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <SlidingDrawer
         android:id="@+id/SlidingDrawer"
