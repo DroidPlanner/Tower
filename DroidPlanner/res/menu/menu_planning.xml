@@ -7,7 +7,7 @@
         android:title="@string/menu_zoom"/>
 	<item
 		android:id="@+id/menu_default_alt"
-		android:showAsAction="always"
+		android:showAsAction="ifRoom"
 		android:title="@string/default_alt"/>
     <item
         android:id="@+id/menu_clear_wp"
