@@ -25,15 +25,18 @@
                 style="@style/staticText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="R:" />
+                android:text="R:"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/TextView02"
                 style="@style/dynamicText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
                 android:layout_marginRight="5dp"
-                android:text="-30º" />
+                android:text="-30º"
+                android:textSize="14sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -47,15 +50,16 @@
                 style="@style/staticText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="P:" />
+                android:text="P:"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/TextView03"
                 style="@style/dynamicText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
-                android:text="20º" />
+                android:text="20º"
+                android:textSize="14sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -70,15 +74,16 @@
                 style="@style/staticText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Y:" />
+                android:text="Y:"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/TextView04"
                 style="@style/dynamicText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
-                android:text="-45º" />
+                android:text="-45º"
+                android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -86,99 +91,120 @@
         android:id="@+id/imageView1"
         android:layout_width="fill_parent"
         android:layout_height="100dp"
-        android:layout_above="@+id/TextView05"
         android:layout_alignParentLeft="true"
         android:layout_below="@id/linearLayout1"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="-10dp"
         android:src="@drawable/hud" />
 
-    <TextView
-        android:id="@+id/TextView13"
-        style="@style/dynamicText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_margin="2dp"
-        android:text="m/s" />
-
-    <TextView
-        android:id="@+id/TextView12"
-        style="@style/hugeDynamicText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="2dp"
-        android:layout_toLeftOf="@+id/TextView13"
-        android:text="0.5" />
-
-    <TextView
-        android:id="@+id/TextView11"
-        style="@style/staticText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/TextView12"
-        android:layout_alignParentLeft="true"
-        android:layout_margin="2dp"
-        android:text="Climb rate:" />
-
-    <TextView
-        android:id="@+id/TextView08"
-        style="@style/dynamicText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/TextView11"
-        android:layout_alignParentRight="true"
-        android:layout_margin="2dp"
-        android:text="m/s" />
-
-    <TextView
-        android:id="@+id/TextView09"
-        style="@style/hugeDynamicText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/TextView08"
-        android:layout_margin="2dp"
-        android:layout_toLeftOf="@+id/TextView08"
-        android:text="9" />
-
-    <TextView
-        android:id="@+id/TextView10"
-        style="@style/staticText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/TextView09"
-        android:layout_alignParentLeft="true"
-        android:layout_margin="2dp"
-        android:text="Air speed:" />
-
-    <TextView
-        android:id="@+id/TextView07"
-        style="@style/dynamicText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/TextView10"
-        android:layout_alignParentRight="true"
-        android:layout_margin="2dp"
-        android:text="m/s" />
-
-    <TextView
-        android:id="@+id/TextView06"
-        style="@style/hugeDynamicText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/TextView07"
-        android:layout_margin="2dp"
-        android:layout_toLeftOf="@+id/TextView07"
-        android:text="13" />
+    <!-- ************* -->
 
     <TextView
         android:id="@+id/TextView05"
         style="@style/staticText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/TextView06"
         android:layout_alignParentLeft="true"
-        android:layout_margin="2dp"
+        android:layout_below="@+id/imageView1"
         android:text="Ground speed:" />
 
+    <!-- ************* -->
+
+
+    <!-- ************* -->
+
+    <TextView
+        android:id="@+id/TextView09"
+        style="@style/hugeDynamicText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@id/linearLayout1"
+        android:layout_below="@+id/TextView10"
+        android:text=".05" />
+
+    <TextView
+        android:id="@+id/TextView11"
+        style="@style/staticText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/TextView09"
+        android:text="Climb rate:" />
+
+    <TextView
+        android:id="@+id/TextView12"
+        style="@style/hugeDynamicText"
+        android:layout_width="match_parent"
+        android:layout_alignRight="@id/linearLayout1"
+        android:layout_below="@+id/TextView11"
+        android:text="13" />
+
+    <TextView
+        android:id="@+id/TextView06"
+        style="@style/hugeDynamicText"
+        android:layout_width="match_parent"
+        android:layout_alignRight="@id/linearLayout1"
+        android:layout_below="@+id/TextView05"
+        android:text="999.9" />
+
+    <TextView
+        android:id="@+id/TextView10"
+        style="@style/staticText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/TextView06"
+        android:text="Air speed:" />
+
+    <TextView
+        android:id="@+id/TextView08"
+        style="@style/staticText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/TextView12"
+        android:text="Altitude:" />
+
+    <TextView
+        android:id="@+id/TextView07"
+        style="@style/hugeDynamicText"
+        android:layout_width="match_parent"
+        android:layout_alignRight="@id/linearLayout1"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/TextView08"
+        android:text="13\n12\n11" />
+
+    <TextView
+        android:id="@+id/TextView13"
+        style="@style/unitText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/TextView06"
+        android:text="m/s" />
+
+	<TextView
+        android:id="@+id/TextView14"
+        style="@style/unitText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/TextView12"
+        android:text="m/s" />
+    
+	<TextView
+        android:id="@+id/TextView15"
+        style="@style/unitText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/TextView09"
+        android:text="m/s" />
+
+	<TextView
+	    android:id="@+id/TextView16"
+	    style="@style/unitText"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignLeft="@+id/TextView14"
+	    android:layout_below="@+id/TextView08"
+	    android:layout_marginTop="64dp"
+	    android:text="m/s" />
+        
 </RelativeLayout>

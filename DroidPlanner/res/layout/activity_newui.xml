@@ -13,7 +13,7 @@
     <fragment
         android:id="@+id/fragment2"
         android:name="com.droidplanner.fragments.TelemetryFragment"
-        android:layout_width="210dp"
+        android:layout_width="135dp"
         android:layout_height="match_parent"
         tools:layout="@layout/fragment_telemetry" />
 
@@ -21,7 +21,9 @@
         android:id="@+id/containerRC"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="bottom" >
+        android:layout_gravity="bottom"
+        android:measureAllChildren="true" >
+
     </FrameLayout>
 
     <fragment
