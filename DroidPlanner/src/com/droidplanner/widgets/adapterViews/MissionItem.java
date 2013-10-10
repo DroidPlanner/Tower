@@ -53,7 +53,7 @@ public class MissionItem extends ArrayAdapter<waypoint> {
 	private View createLayoutFromResource() {
 		LayoutInflater inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View view = inflater.inflate(R.layout.row_mission_list, null);
+		View view = inflater.inflate(R.layout.adapterview_mission_item, null);
 		return view;
 	}
 
