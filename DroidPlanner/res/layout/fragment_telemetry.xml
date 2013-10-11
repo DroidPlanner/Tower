@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/transparentLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
 
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
         android:baselineAligned="false"
         android:gravity="center"
         tools:ignore="HardcodedText" >
@@ -21,21 +23,21 @@
             android:gravity="center" >
 
             <TextView
-                android:id="@+id/textView1"
-                style="@style/staticText"
+                android:id="@+id/rollLabelText"
+                style="@style/RPYtextLabels"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="R:"
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/TextView02"
-                style="@style/dynamicText"
+                android:id="@+id/rollValueText"
+                style="@style/smallTelemetryText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="5dp"
-                android:text="-30º"
+                android:text="180°"
                 android:textSize="14sp" />
         </LinearLayout>
 
@@ -46,19 +48,19 @@
             android:gravity="center" >
 
             <TextView
-                android:id="@+id/textView2"
-                style="@style/staticText"
+                android:id="@+id/pitchLabelText"
+                style="@style/RPYtextLabels"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="P:"
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/TextView03"
-                style="@style/dynamicText"
+                android:id="@+id/pitchValueText"
+                style="@style/smallTelemetryText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="20º"
+                android:text="180º"
                 android:textSize="14sp" />
         </LinearLayout>
 
@@ -70,141 +72,148 @@
             android:gravity="center" >
 
             <TextView
-                android:id="@+id/TextView01"
-                style="@style/staticText"
+                android:id="@+id/yawLabelText"
+                style="@style/RPYtextLabels"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Y:"
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/TextView04"
-                style="@style/dynamicText"
+                android:id="@+id/yawValueText"
+                style="@style/smallTelemetryText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="-45º"
+                android:text="360º"
                 android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
 
     <com.droidplanner.widgets.newHUD.newHUD
-        android:id="@+id/imageView1"
+        android:id="@+id/hudView"
         android:layout_width="fill_parent"
         android:layout_height="100dp"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/linearLayout1"
         android:layout_marginBottom="5dp"
-        android:layout_marginTop="-10dp"
         android:src="@drawable/hud" />
 
     <!-- ************* -->
 
     <TextView
-        android:id="@+id/TextView05"
-        style="@style/staticText"
+        android:id="@+id/groundSpeedLabel"
+        style="@style/textLabels"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/imageView1"
         android:text="Ground speed:" />
 
-    <!-- ************* -->
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
 
+		<TextView
+		    android:id="@+id/groundSpeedValue"
+		    style="@style/largeTelemetryText"
+		    android:layout_width="98dp"
+		    android:layout_height="wrap_content"
+		    android:text="999.9" />
 
-    <!-- ************* -->
+		<TextView
+			android:id="@+id/groundSpeedUnits"
+			style="@style/unitText"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="m/s" />
+	</LinearLayout>
+
 
     <TextView
-        android:id="@+id/TextView09"
-        style="@style/hugeDynamicText"
+        android:id="@+id/airSpeedLabel"
+        style="@style/textLabels"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignRight="@id/linearLayout1"
-        android:layout_below="@+id/TextView10"
-        android:text=".05" />
-
-    <TextView
-        android:id="@+id/TextView11"
-        style="@style/staticText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/TextView09"
-        android:text="Climb rate:" />
-
-    <TextView
-        android:id="@+id/TextView12"
-        style="@style/hugeDynamicText"
-        android:layout_width="match_parent"
-        android:layout_alignRight="@id/linearLayout1"
-        android:layout_below="@+id/TextView11"
-        android:text="13" />
-
-    <TextView
-        android:id="@+id/TextView06"
-        style="@style/hugeDynamicText"
-        android:layout_width="match_parent"
-        android:layout_alignRight="@id/linearLayout1"
-        android:layout_below="@+id/TextView05"
-        android:text="999.9" />
-
-    <TextView
-        android:id="@+id/TextView10"
-        style="@style/staticText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/TextView06"
         android:text="Air speed:" />
 
-    <TextView
-        android:id="@+id/TextView08"
-        style="@style/staticText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/TextView12"
-        android:text="Altitude:" />
-
-    <TextView
-        android:id="@+id/TextView07"
-        style="@style/hugeDynamicText"
-        android:layout_width="match_parent"
-        android:layout_alignRight="@id/linearLayout1"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/TextView08"
-        android:text="13\n12\n11" />
-
-    <TextView
-        android:id="@+id/TextView13"
-        style="@style/unitText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/TextView06"
-        android:text="m/s" />
-
-	<TextView
-        android:id="@+id/TextView14"
-        style="@style/unitText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/TextView12"
-        android:text="m/s" />
-    
-	<TextView
-        android:id="@+id/TextView15"
-        style="@style/unitText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/TextView09"
-        android:text="m/s" />
-
-	<TextView
-	    android:id="@+id/TextView16"
-	    style="@style/unitText"
-	    android:layout_width="wrap_content"
+	<LinearLayout
+	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    android:layout_alignLeft="@+id/TextView14"
-	    android:layout_below="@+id/TextView08"
-	    android:layout_marginTop="64dp"
-	    android:text="m/s" />
-        
-</RelativeLayout>
+	    android:baselineAligned="true"
+	    android:orientation="horizontal" >
+
+		<TextView
+		    android:id="@+id/airSpeedValue"
+		    style="@style/largeTelemetryText"
+		    android:layout_width="98dp"
+		    android:layout_height="wrap_content"
+		    android:text="999.9" />
+
+		<TextView
+		    android:id="@+id/airSpeedUnits"
+		    style="@style/unitText"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="m/s" />
+
+	</LinearLayout>
+
+    <!-- ************* -->
+
+
+    <TextView
+        android:id="@+id/climbRateLabel"
+        style="@style/textLabels"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Climb rate:" />
+
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+
+		<TextView
+		    android:id="@+id/climbRateValue"
+		    style="@style/largeTelemetryText"
+		    android:layout_width="98dp"
+		    android:layout_height="wrap_content"
+		    android:text="999.9" />
+
+	    <TextView
+	        android:id="@+id/climbRateUnits"
+			style="@style/unitText"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="m/s" />
+
+	</LinearLayout>
+
+	<TextView
+        android:id="@+id/altitudeLabel"
+        style="@style/textLabels"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Altitude:" />
+	
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal" >
+	
+	    <TextView
+	        android:id="@+id/altitudeValue"
+	        style="@style/largeTelemetryText"
+		    android:layout_width="98dp"
+	        android:layout_height="wrap_content"
+	        android:layout_centerHorizontal="true"
+	        android:text="13\n12\n11" />
+
+	    <TextView
+	        android:id="@+id/altitudeUnits"
+	        style="@style/unitText"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="46dp"
+	        android:text="m/s" />
+	    
+	    	</LinearLayout>
+    
+</LinearLayout>
