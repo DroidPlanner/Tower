@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.Button;
 
 import com.droidplanner.R;
 
@@ -17,7 +17,7 @@ public class MissionControlFragment extends Fragment implements OnClickListener 
 		public void onJoystickSelected();
 
 		public void onPlanningSelected();
-		
+
 		public void onArmSelected();
 
 		public void onDisArmSelected();
@@ -34,9 +34,9 @@ public class MissionControlFragment extends Fragment implements OnClickListener 
 	}
 
 	private OnMissionControlInteraction listner;
-	private ImageButton connectBtn;
-	private ImageButton missionBtn;
-	private ImageButton joystickBtn;
+	private Button connectBtn;
+	private Button missionBtn;
+	private Button joystickBtn;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,16 +61,16 @@ public class MissionControlFragment extends Fragment implements OnClickListener 
 	}
 
 	private void setupViews(View parentView) {
-		connectBtn = (ImageButton) parentView.findViewById(R.id.mc_connectBtn);
-		missionBtn = (ImageButton) parentView.findViewById(R.id.mc_planningBtn);
-		joystickBtn = (ImageButton) parentView
+		connectBtn = (Button) parentView.findViewById(R.id.mc_connectBtn);
+		missionBtn = (Button) parentView.findViewById(R.id.mc_planningBtn);
+		joystickBtn = (Button) parentView
 				.findViewById(R.id.mc_joystickBtn);
 
-		
+
 		missionBtn.setEnabled(true);
 		joystickBtn.setEnabled(true);
-		
-		
+
+
 
 	}
 

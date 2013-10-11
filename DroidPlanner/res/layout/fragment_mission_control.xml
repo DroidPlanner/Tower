@@ -3,65 +3,74 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/contentLayoutMissionControl"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:layout_gravity="center_horizontal"
     android:orientation="horizontal" >
 
-    <ImageButton
-        android:id="@+id/mc_joystickBtn"
-        style="@style/actionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:src="@drawable/ic_control"
-        tools:ignore="ContentDescription" />
+	<Button
+	    android:id="@+id/mc_joystickBtn"
+	    style="@style/actionButton"
+	    android:layout_width="75dp"
+	    android:layout_height="match_parent"
+	    android:background="@drawable/black_button"
+	    android:drawableTop="@drawable/ic_control"
+	    android:text="Control" />
 
-    <ImageButton
-        android:id="@+id/mc_planningBtn"
-        style="@style/actionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:src="@drawable/ic_edit"
-        tools:ignore="ContentDescription" />
+	<Button
+	    android:id="@+id/mc_planningBtn"
+	    style="@style/actionButton"
+	    android:layout_width="75dp"
+	    android:layout_height="match_parent"
+	    android:background="@drawable/black_button"
+	    android:drawableTop="@drawable/ic_edit"
+	    android:text="Edit" />
 
     <Space
         android:layout_width="wrap_content"
-        android:layout_height="match_parent" 
+        android:layout_height="match_parent"
         android:layout_margin="5dp"/>
 
-    <ImageButton
-        android:id="@+id/mc_connectBtn"
-        style="@style/actionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:src="@drawable/ic_home"
-        tools:ignore="ContentDescription" />
+	<Button
+	    android:id="@+id/mc_connectBtn"
+	    style="@style/actionButton"
+	    android:layout_width="75dp"
+	    android:layout_height="match_parent"
+	    android:background="@drawable/black_button"
+	    android:drawableTop="@drawable/ic_home"
+	    android:text="Home" />
 
     <Space
         android:layout_width="wrap_content"
         android:layout_height="match_parent" />
 
-    <ImageButton
-        android:id="@+id/mc_follow"
-        style="@style/actionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:src="@drawable/ic_follow"
-        tools:ignore="ContentDescription" />
+	<Button
+	    android:id="@+id/mc_follow"
+	    style="@style/actionButton"
+	    android:layout_width="75dp"
+	    android:layout_height="match_parent"
+	    android:background="@drawable/black_button"
+	    android:drawableTop="@drawable/ic_follow"
+	    android:text="Follow"
+	    tools:ignore="ContentDescription" />
 
-    <ImageButton
-        android:id="@+id/mc_land"
-        style="@style/actionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:src="@drawable/ic_land"
-        tools:ignore="ContentDescription" />
-    
-    <ImageButton
-        android:id="@+id/mc_loiter"
-        style="@style/actionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:src="@drawable/ic_loiter"
-        tools:ignore="ContentDescription" />
+	<Button
+	    android:id="@+id/mc_land"
+	    style="@style/actionButton"
+	    android:layout_width="75dp"
+	    android:layout_height="match_parent"
+	    android:background="@drawable/black_button"
+	    android:drawableTop="@drawable/ic_land"
+	    android:text="Land"
+	    tools:ignore="ContentDescription" />
+
+	<Button
+	    android:id="@+id/mc_loiter"
+	    style="@style/actionButton"
+	    android:layout_width="75dp"
+	    android:layout_height="match_parent"
+	    android:background="@drawable/black_button"
+	    android:drawableTop="@drawable/ic_loiter"
+	    android:text="Loiter"
+	    tools:ignore="ContentDescription" />
 
 </LinearLayout>
