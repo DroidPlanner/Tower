@@ -27,7 +27,7 @@ public class DialogMissionWaypoint extends DialogMission implements
 
 		delaySeekBar = (SeekBarWithText) view
 				.findViewById(R.id.waypointDelay);
-		delaySeekBar .setValue((double)wp.missionItem.param2);
+		delaySeekBar .setValue((double)wp.missionItem.param1);
 		delaySeekBar .setOnChangedListner(this);
 
 		yawSeekBar = (SeekBarWithText) view
@@ -42,7 +42,7 @@ public class DialogMissionWaypoint extends DialogMission implements
 	@Override
 	public void onSeekBarChanged() {
 		wp.setHeight(altitudeSeekBar.getValue());
-		wp.missionItem.param2 = (float) delaySeekBar.getValue();
+		wp.missionItem.param1 = (float) delaySeekBar.getValue();
 		wp.missionItem.param4 = (float) yawSeekBar.getValue();
 	}
 
