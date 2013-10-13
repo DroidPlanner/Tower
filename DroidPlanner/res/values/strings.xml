@@ -91,7 +91,7 @@
     <string name="waypointInfo_LoiterT">Will cause the craft to begin to Loiter at the current location when the command is invoked. Optionally give a location to loiter at that wp – The clock starts ticking after the WP is reached.</string>
     <string name="waypointInfo_RTL">Will cause the craft to return to the home position set when the craft is armed (requires GPS Lock!). If Altitude is 0, craft will return to home at the altitude specified by the Mission Planner.</string>
     <string name="waypointInfo_TakeOff">Will cause the craft to auto take off to specified altitude. Use Pitch Angle only for planes and set to 0 for copters.</string>
-    <string name="waypointInfo_Waypoint">Delay option is triggered after the craft reaches the waypoint radius. The Next command is loaded after the delay.Delay time is in seconds, the default is 0. Yaw angle sets the heading at each waypoint - for rotary wing only.</string>
+    <string name="waypointInfo_Waypoint">Delay option is triggered after the craft reaches the waypoint radius. The Next command is loaded after the delay.Delay time is in seconds, the default is 0. Set Orbital radius to 0 for pass through or specify the orbit radius in meter. Yaw angle sets the heading at each waypoint - for rotary wing only.</string>
     <string name="waypointDesc_Waypoint_1" formatted="false">Executing next waypoint immediately, heading is set to %03.0f°</string>
     <string name="waypointDesc_Waypoint_2" formatted="false">Executing next waypoint after %1.1fs, heading is set to %03.0f°</string>
     <string name="waypointDesc_Loiter" formatted="false">Loiter until next command within %1.1fm radius %s, heading is set to %03.0f°</string>
@@ -155,4 +155,6 @@
 	<string name="menu_map_type_hybrid">Hybrid</string>
 	<string name="menu_map_type_normal">Normal</string>
 	<string name="menu_map_type_terrain">Terrain</string>
+	<string name="waypoint_AcceptRadius">Acceptance radius</string>
+	<string name="waypoint_orbitalRadius">Orbital radius</string>
 </resources>
