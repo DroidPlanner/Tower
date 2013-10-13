@@ -62,7 +62,7 @@
         <item name="android:padding">2dp</item>
         		<item name="android:gravity">center_vertical|right</item>
         	</style>
-            
+
 
 
     <style name="transparentLayout">
@@ -73,6 +73,8 @@
     <style name="CustomActionBarTheme" parent="@android:style/Theme.Holo">
         <item name="android:actionBarStyle">@style/CustomActionBarTheme.ActionBar</item>
 		<item name="android:actionMenuTextAppearance">@style/CustomActionBarTheme.ActionBar.Text</item>
+		<item name="android:actionBarDivider">@null</item>
+
 		<item name="android:popupMenuStyle">@style/MyPopupMenu</item>
 		<item name="android:itemTextAppearance">@style/myCustomMenuTextApearance</item>
 
