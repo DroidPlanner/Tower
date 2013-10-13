@@ -5,9 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import android.app.ProgressDialog;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -101,7 +99,7 @@ public class ParametersActivity extends SuperActivity implements
 						return p1.name.compareTo(p2.name);
 					}
 				});
-                drone.parameters.loadMetaData(ParametersActivity.this, null);
+                drone.parameters.loadMetadata(ParametersActivity.this, null);
 				for (Parameter parameter : parameters)
                     tableFragment.refreshRowParameter(parameter, drone.parameters);
 			}
@@ -142,7 +140,7 @@ public class ParametersActivity extends SuperActivity implements
                 return p1.name.compareTo(p2.name);
             }
         });
-        drone.parameters.loadMetaData(this, getMetadataType());
+        drone.parameters.loadMetadata(this, getMetadataType());
 		for(Parameter parameter : parameters)
             tableFragment.refreshRowParameter(parameter, drone.parameters);
 
@@ -155,7 +153,7 @@ public class ParametersActivity extends SuperActivity implements
 
     @Override
     public void onParamterMetaDataChanged() {
-        drone.parameters.loadMetaData(this, null);
+        drone.parameters.loadMetadata(this, null);
         tableFragment.refresh(drone.parameters);
     }
 
