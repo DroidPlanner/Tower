@@ -40,7 +40,7 @@ public class ParamRow extends TableRow implements TextWatcher {
     }
 
     public void setParamMetadata(Parameters parameters) {
-        ParameterMetadata metadata = parameters.getMetaData(param.name);
+        ParameterMetadata metadata = parameters.getMetadata(param.name);
         if(metadata != null) {
             // display-name (units)
             String displayName = metadata.getDisplayName();
