@@ -12,6 +12,8 @@ import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
 import com.droidplanner.file.DirectoryPath;
 
+import java.io.File;
+
 public class SettingsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 	@SuppressWarnings("deprecation")
 	// TODO use more up-to-date code
@@ -20,7 +22,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.preferences);
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-		
+
 		findPreference("pref_connection_type").setSummary(sharedPref.getString("pref_connection_type", ""));
 		findPreference("pref_baud_type").setSummary(sharedPref.getString("pref_baud_type", ""));
 		findPreference("pref_max_fligth_path_size").setSummary(sharedPref.getString("pref_max_fligth_path_size", "") + " (set to zero to disable).");
@@ -28,6 +30,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		findPreference("pref_server_port").setSummary(sharedPref.getString("pref_server_port", ""));
 		findPreference("pref_udp_server_port").setSummary(sharedPref.getString("pref_udp_server_port", ""));
 		findPreference("pref_map_type").setSummary(sharedPref.getString("pref_map_type", ""));
+        findPreference("pref_param_metadata").setSummary(getParamMetadataSummary(sharedPref));
 		if (sharedPref.getString("pref_rc_mode", "MODE2").equalsIgnoreCase("MODE1")) {
 			findPreference("pref_rc_mode").setSummary("Mode1: Throttle on RIGHT stick");
 		} else {
@@ -48,7 +51,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		}
 	}
 
-	@SuppressWarnings("deprecation")
+    @SuppressWarnings("deprecation")
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		if (key.equals("pref_connection_type")) {
 			findPreference(key).setSummary(sharedPreferences.getString(key, ""));
@@ -68,6 +71,10 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		if (key.equals("pref_map_type")) {
 			findPreference(key).setSummary(sharedPreferences.getString(key, ""));
 			((DroidPlannerApp) getApplication()).drone.notifyMapTypeChanged();
+        }
+        if (key.equals("pref_param_metadata")) {
+            findPreference(key).setSummary(getParamMetadataSummary(sharedPreferences));
+            ((DroidPlannerApp) getApplication()).drone.parameters.notifyParameterMetadataChanged();
         }
 		if (key.equals("pref_rc_mode")) {
 			if (sharedPreferences.getString(key, "MODE2").equalsIgnoreCase("MODE1")) {
@@ -99,5 +106,15 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	    getPreferenceScreen().getSharedPreferences()
 	            .unregisterOnSharedPreferenceChangeListener(this);
 	}
+
+    private String getParamMetadataSummary(SharedPreferences sharedPref) {
+        String summary = sharedPref.getString("pref_param_metadata", "");
+        if(!summary.isEmpty() && !summary.equals(getString(R.string.none))) {
+            final File file = new File(DirectoryPath.getParameterMetadataPath());
+            if(!file.exists())
+                summary += " (" + DirectoryPath.PARAMETER_METADATA_XML + " not found in '" + DirectoryPath.PARAMETERS + "' directory)";
+        }
+        return summary;
+    }
 
 }
