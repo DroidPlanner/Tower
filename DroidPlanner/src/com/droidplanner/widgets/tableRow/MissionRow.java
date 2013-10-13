@@ -97,13 +97,13 @@ public class MissionRow extends ArrayAdapter<waypoint> {
 		switch(waypoint.getCmd().getType())
 		{
 		case MAV_CMD.MAV_CMD_NAV_WAYPOINT:
-			if(waypoint.missionItem.param1<=0){
+			if(waypoint.missionItem.param2<=0){
 				descStr = String.format(Locale.ENGLISH, context.getString(R.string.waypointDesc_Waypoint_1),
 						waypoint.missionItem.param4);
 			} 
 			else{
 				descStr = String.format(Locale.ENGLISH, context.getString(R.string.waypointDesc_Waypoint_2),
-						waypoint.missionItem.param1,waypoint.missionItem.param4);
+						waypoint.missionItem.param2,waypoint.missionItem.param4);
 			}
 			break;
 
