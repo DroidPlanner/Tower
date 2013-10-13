@@ -5,7 +5,6 @@ import android.os.Environment;
 public class DirectoryPath {
 
     public static final String PARAMETER_METADATA_XML = "ParameterMetaData.xml";
-    public static final String PARAMETERS = "Parameters";
 
     static public String getDroidPlannerPath() {
 		String root = Environment.getExternalStorageDirectory().getPath();
@@ -13,7 +12,7 @@ public class DirectoryPath {
 	}
 
 	static public String getParametersPath() {
-		return getDroidPlannerPath() + "/" + PARAMETERS + "/";
+		return getDroidPlannerPath() + "/Parameters/";
 	}
 
 	static public String getWaypointsPath() {

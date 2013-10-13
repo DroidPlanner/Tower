@@ -12,8 +12,6 @@ import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
 import com.droidplanner.file.DirectoryPath;
 
-import java.io.File;
-
 public class SettingsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 	@SuppressWarnings("deprecation")
 	// TODO use more up-to-date code
@@ -30,7 +28,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		findPreference("pref_server_port").setSummary(sharedPref.getString("pref_server_port", ""));
 		findPreference("pref_udp_server_port").setSummary(sharedPref.getString("pref_udp_server_port", ""));
 		findPreference("pref_map_type").setSummary(sharedPref.getString("pref_map_type", ""));
-        findPreference("pref_param_metadata").setSummary(getParamMetadataSummary(sharedPref));
+        findPreference("pref_param_metadata").setSummary(sharedPref.getString("pref_param_metadata", ""));
 		if (sharedPref.getString("pref_rc_mode", "MODE2").equalsIgnoreCase("MODE1")) {
 			findPreference("pref_rc_mode").setSummary("Mode1: Throttle on RIGHT stick");
 		} else {
@@ -73,7 +71,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 			((DroidPlannerApp) getApplication()).drone.notifyMapTypeChanged();
         }
         if (key.equals("pref_param_metadata")) {
-            findPreference(key).setSummary(getParamMetadataSummary(sharedPreferences));
+            findPreference(key).setSummary(sharedPreferences.getString(key, ""));
             ((DroidPlannerApp) getApplication()).drone.parameters.notifyParameterMetadataChanged();
         }
 		if (key.equals("pref_rc_mode")) {
@@ -106,15 +104,5 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	    getPreferenceScreen().getSharedPreferences()
 	            .unregisterOnSharedPreferenceChangeListener(this);
 	}
-
-    private String getParamMetadataSummary(SharedPreferences sharedPref) {
-        String summary = sharedPref.getString("pref_param_metadata", "");
-        if(!summary.isEmpty() && !summary.equals(getString(R.string.none))) {
-            final File file = new File(DirectoryPath.getParameterMetadataPath());
-            if(!file.exists())
-                summary += " (" + DirectoryPath.PARAMETER_METADATA_XML + " not found in '" + DirectoryPath.PARAMETERS + "' directory)";
-        }
-        return summary;
-    }
 
 }

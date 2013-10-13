@@ -3,6 +3,7 @@ package com.droidplanner.drone.variables;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 import android.content.Context;
@@ -100,7 +101,7 @@ public class Parameters extends DroneVariable {
     public void loadMetadata(Context context, String metadataType) {
         metadataMap = null;
 
-        // use metadata type from prefs if not specified, bail if nothing to do
+        // use metadata type from prefs if not specified, bail if none
         if(metadataType == null) {
             final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             metadataType = prefs.getString("pref_param_metadata", null);
@@ -108,12 +109,20 @@ public class Parameters extends DroneVariable {
         if(metadataType == null || metadataType.equals(context.getString(R.string.none)))
             return;
 
-        File file = new File(DirectoryPath.getParameterMetadataPath());
-        if(!file.exists())
-            return;
-
         try {
-            metadataMap = ParameterMetadataMapReader.open(new FileInputStream(file), metadataType);
+            // use user supplied file in ~/Parameters if available, else fallback to asset from resources
+            final InputStream inputStream;
+            final File file = new File(DirectoryPath.getParameterMetadataPath());
+            if(file.exists()) {
+                // load from file
+                inputStream = new FileInputStream(file);
+            } else {
+                // load from resource
+                inputStream = context.getAssets().open("ParameterMetaData/ParameterMetaData.xml");
+            }
+
+            // parse
+            metadataMap = ParameterMetadataMapReader.open(inputStream, metadataType);
 
         } catch (Exception ex) {
             // nop
