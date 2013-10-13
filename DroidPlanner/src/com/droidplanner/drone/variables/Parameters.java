@@ -98,12 +98,15 @@ public class Parameters extends DroneVariable {
         return (metaDataMap == null) ? null : metaDataMap.get(name);
     }
 
-    public void loadMetaData(Context context) {
+    public void loadMetaData(Context context, String metadataType) {
         metaDataMap = null;
 
-        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String paramMetaElt = prefs.getString("pref_param_metadata", null);
-        if(paramMetaElt == null || paramMetaElt.equals(context.getString(R.string.none)))
+        // use metadata type from prefs if not specified, bail if nothing to do
+        if(metadataType == null) {
+            final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            metadataType = prefs.getString("pref_param_metadata", null);
+        }
+        if(metadataType == null || metadataType.equals(context.getString(R.string.none)))
             return;
 
         File file = new File(DirectoryPath.getParameterMetadataPath());
@@ -117,7 +120,7 @@ public class Parameters extends DroneVariable {
             XmlPullParser parser = XmlPullParserFactory.newInstance().newPullParser();
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
             parser.setInput(fis, null);
-            parseMetaData(parser, paramMetaElt);
+            parseMetaData(parser, metadataType);
 
         } catch (Exception ex) {
             // nop
