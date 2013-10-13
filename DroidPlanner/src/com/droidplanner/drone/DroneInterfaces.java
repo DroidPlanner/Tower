@@ -26,10 +26,9 @@ public class DroneInterfaces {
 	}
 
 	public interface OnParameterManagerListner {
-		public void onParameterReceived(Parameter parameter);
-
 		public void onBeginReceivingParameters();
 		public void onParameterReceived(Parameter parameter, int index, int count);
 		public void onEndReceivingParameters(List<Parameter> parameter);
+        public void onParamterMetaDataChanged();
 	}
 }
