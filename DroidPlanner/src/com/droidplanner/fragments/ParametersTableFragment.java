@@ -13,6 +13,7 @@ import android.widget.TableLayout;
 import android.widget.Toast;
 
 import com.droidplanner.R;
+import com.droidplanner.drone.variables.Parameters;
 import com.droidplanner.file.IO.ParameterWriter;
 import com.droidplanner.parameters.Parameter;
 import com.droidplanner.widgets.tableRow.ParamRow;
@@ -31,14 +32,14 @@ public class ParametersTableFragment extends Fragment {
 		return view;
 	}
 
-	public void refreshRowParameter(Parameter parameter) {
+	public void refreshRowParameter(Parameter parameter, Parameters parameters) {
 		try {
 			Parameter.checkParameterName(parameter.name);
 			ParamRow row = findRowByName(parameter.name);
-			if (row != null) {
-				row.setParam(parameter);
+            if (row != null) {
+				row.setParam(parameter, parameters);
 			} else {
-				addParameterRow(parameter);
+				addParameterRow(parameter, parameters);
 			}
 		} catch (Exception e) {
 		}
@@ -53,9 +54,9 @@ public class ParametersTableFragment extends Fragment {
 		return null;
 	}
 
-	private void addParameterRow(Parameter param) {
+	private void addParameterRow(Parameter param, Parameters parameters) {
 		ParamRow pRow = new ParamRow(this.getActivity());
-		pRow.setParam(param);
+		pRow.setParam(param, parameters);
 
 		// alternate background colors for clarity
 		if((rowList.size() % 2) == 1)
@@ -93,4 +94,9 @@ public class ParametersTableFragment extends Fragment {
 			}
 		}
 	}
+
+    public void refresh(Parameters parameters) {
+        for (ParamRow row : rowList)
+            row.setParamMetadata(parameters);
+    }
 }

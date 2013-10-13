@@ -4,13 +4,16 @@ import android.os.Environment;
 
 public class DirectoryPath {
 
-	static public String getDroidPlannerPath() {
+    public static final String PARAMETER_METADATA_XML = "ParameterMetaData.xml";
+    public static final String PARAMETERS = "Parameters";
+
+    static public String getDroidPlannerPath() {
 		String root = Environment.getExternalStorageDirectory().getPath();
 		return (root + "/DroidPlanner/");
 	}
 
 	static public String getParametersPath() {
-		return getDroidPlannerPath() + "/Parameters/";
+		return getDroidPlannerPath() + "/" + PARAMETERS + "/";
 	}
 
 	static public String getWaypointsPath() {
@@ -32,4 +35,8 @@ public class DirectoryPath {
 	public static String getCameraInfoPath() {
 		return getDroidPlannerPath() + "/CameraInfo/";
 	}
+
+    public static String getParameterMetadataPath() {
+        return getParametersPath() + "/" + PARAMETER_METADATA_XML;
+    }
 }
