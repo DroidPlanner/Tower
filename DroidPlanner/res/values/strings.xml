@@ -157,4 +157,5 @@
 	<string name="menu_map_type_terrain">Terrain</string>
 	<string name="waypoint_AcceptRadius">Acceptance radius</string>
 	<string name="waypoint_orbitalRadius">Orbital radius</string>
+    <string name="none">None</string>
 </resources>
