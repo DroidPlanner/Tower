@@ -1,5 +1,6 @@
 package com.droidplanner.fragments;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -15,6 +16,8 @@ import android.widget.Toast;
 import com.MAVLink.Messages.ApmModes;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.variables.WaypointLabel;
+import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.fragments.helpers.DroneMap;
 import com.droidplanner.fragments.helpers.GuidePointListener;
 import com.droidplanner.fragments.markers.DroneMarker;
@@ -154,6 +157,7 @@ public class FlightMapFragment extends DroneMap implements
 
 		missionPath.update(drone.mission);
 		markers.updateMarker(drone.mission.getHome(), false, context);
+        markers.updateMarkers(cloneLabelMarkersFromWaypoints(drone.mission.getWaypoints()), false, context);
 
 		if(drone.guidedPoint.isCoordValid()) {
 			markers.updateMarker(drone.guidedPoint, true, context);
@@ -169,4 +173,12 @@ public class FlightMapFragment extends DroneMap implements
 			}
 		}
 	}
+
+    private List<WaypointLabel> cloneLabelMarkersFromWaypoints(List<waypoint> waypoints) {
+        List<WaypointLabel> labels = new ArrayList<WaypointLabel>();
+        for (waypoint waypoint : waypoints) {
+            labels.add(new WaypointLabel(waypoint));
+        }
+        return labels;
+    }
 }
