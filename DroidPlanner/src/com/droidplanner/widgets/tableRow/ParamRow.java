@@ -21,8 +21,11 @@ import com.droidplanner.drone.variables.Parameters;
 import com.droidplanner.parameters.Parameter;
 import com.droidplanner.parameters.ParameterMetadata;
 
+import java.text.DecimalFormat;
+import java.text.ParseException;
+
 public class ParamRow extends TableRow implements
-        TextWatcher, View.OnClickListener {
+        TextWatcher, View.OnClickListener, View.OnFocusChangeListener {
 	private TextView nameView;
     private TextView displayNameView;
 	private EditText valueView;
@@ -83,6 +86,7 @@ public class ParamRow extends TableRow implements
 		valueView.setWidth(220);
 		valueView.setGravity(Gravity.RIGHT);
         valueView.addTextChangedListener(this);
+        valueView.setOnFocusChangeListener(this);
         addView(valueView);
     }
 
@@ -91,8 +95,14 @@ public class ParamRow extends TableRow implements
 	}
 
 	public double getParamValue() {
-		return Double.parseDouble(valueView.getText().toString());
-	}
+        final DecimalFormat format = (DecimalFormat) DecimalFormat.getInstance();
+        format.applyPattern(Parameter.DECIMAL_PATTERN);
+        try {
+            return format.parse(valueView.getText().toString()).doubleValue();
+        } catch (ParseException ex) {
+            throw new NumberFormatException(ex.getMessage());
+        }
+    }
 
 	public String getParamName() {
 		return param.name;
@@ -126,5 +136,12 @@ public class ParamRow extends TableRow implements
             return;
 
         DialogParameterInfo.build(metadata, getContext()).show();
+    }
+
+    @Override
+    public void onFocusChange(View view, boolean b) {
+        final DecimalFormat format = (DecimalFormat) DecimalFormat.getInstance();
+        format.applyPattern(Parameter.DECIMAL_PATTERN);
+        valueView.setText(format.format(getParamValue()));
     }
 }
