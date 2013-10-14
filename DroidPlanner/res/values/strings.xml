@@ -158,4 +158,7 @@
 	<string name="waypoint_AcceptRadius">Acceptance radius</string>
 	<string name="waypoint_orbitalRadius">Orbital radius</string>
     <string name="none">None</string>
+    <string name="metadata_values">Values:</string>
+    <string name="metadata_units">Units:</string>
+    <string name="metadata_range">Range:</string>
 </resources>
