@@ -90,7 +90,7 @@
                     android:id="@+id/rowDistanceHeader"
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
-                    android:text="∆ Home"
+                    android:text="∆ WP"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <TextView
