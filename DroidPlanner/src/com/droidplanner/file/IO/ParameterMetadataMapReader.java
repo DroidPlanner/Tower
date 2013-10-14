@@ -19,6 +19,7 @@ public class ParameterMetadataMapReader {
     private static final String METADATA_DESCRIPTION = "Description";
     private static final String METADATA_UNITS = "Units";
     private static final String METADATA_VALUES = "Values";
+    private static final String METADATA_RANGE = "Range";
 
 
     public static ParameterMetadataMap open(InputStream inputStream, String metadataType) throws XmlPullParserException, IOException {
@@ -87,6 +88,8 @@ public class ParameterMetadataMapReader {
 
         else if(name.equals(METADATA_UNITS))
             metaData.setUnits(text);
+        else if(name.equals(METADATA_RANGE))
+            metaData.setRange(text);
         else if(name.equals(METADATA_VALUES))
             metaData.setValues(text);
     }

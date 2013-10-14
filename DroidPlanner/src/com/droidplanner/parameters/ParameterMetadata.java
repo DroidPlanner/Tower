@@ -6,12 +6,8 @@ public class ParameterMetadata {
 	private String description;
 
 	private String units;
+    private String range;
     private String values;
-
-//  ** Future
-//	private Float[] range;
-//	private Float increment;
-//	private String user;
 
 
     public String getName() {
@@ -46,11 +42,23 @@ public class ParameterMetadata {
         this.units = units;
     }
 
+    public String getRange() {
+        return range;
+    }
+
+    public void setRange(String range) {
+        this.range = range;
+    }
+
     public String getValues() {
         return values;
     }
 
     public void setValues(String values) {
         this.values = values;
+    }
+
+    public boolean hasInfo() {
+        return (description != null && !description.isEmpty()) || (values != null && !values.isEmpty());
     }
 }
