@@ -26,16 +26,21 @@ public class GuidedPoint extends DroneVariable implements MarkerSource {
 
 	@Override
 	public MarkerOptions build(Context context) {
-		return GuidedMarker.build(this);
+		return GuidedMarker.build(this, myDrone.mission.getDefaultAlt(), context);
 	}
 
 	@Override
 	public void update(Marker markerFromGcp, Context context) {
-		GuidedMarker.update(markerFromGcp, this);
+		GuidedMarker.update(markerFromGcp, this, myDrone.mission.getDefaultAlt(), context);
 	}
 
 	public LatLng getCoord() {
 		return coord;
+	}
+
+	public void setCoord(LatLng coord)
+	{
+		this.coord = coord;
 	}
 
 	public void newGuidedPoint(LatLng coord) {
@@ -52,14 +57,13 @@ public class GuidedPoint extends DroneVariable implements MarkerSource {
 		setGuidedMode(new waypoint(getCoord(), altitude));
 		Toast.makeText(myDrone.context, "Guided Mode (" + altitude + "m)",
 				Toast.LENGTH_SHORT).show();
-		invalidateCoord();
 	}
 
 	public void setGuidedMode(waypoint waypoint) {
 		MavLinkModes.setGuidedMode(myDrone, waypoint);
 	}
 
-	private void invalidateCoord() {
+	public void invalidateCoord() {
 		coord = null;
 	}
 
