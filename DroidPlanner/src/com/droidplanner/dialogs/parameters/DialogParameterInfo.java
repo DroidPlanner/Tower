@@ -39,7 +39,7 @@ public class DialogParameterInfo {
 
         final String[] part = range.split(" ");
         if(part.length == 2)
-            return part[0] + " - " + part[1];
+            return part[0] + "  /  " + part[1];
         else
             return range;
     }
