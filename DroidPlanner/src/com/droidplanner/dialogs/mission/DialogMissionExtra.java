@@ -39,7 +39,7 @@ public class DialogMissionExtra extends DialogMission implements OnTextSeekBarCh
 		loiterTimeSeekBar .setOnChangedListner(this);
 		
 		loiterTurnSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.loiterRadius);
+				.findViewById(R.id.waypointOrbitalRadius);
 		loiterTurnSeekBar .setOnChangedListner(this);
 
 		loiterCCW = (CheckBox) view

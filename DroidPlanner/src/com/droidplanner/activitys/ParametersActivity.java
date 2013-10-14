@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.MAVLink.Messages.enums.MAV_TYPE;
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperActivity;
 import com.droidplanner.dialogs.openfile.OpenFileDialog;
@@ -98,15 +99,15 @@ public class ParametersActivity extends SuperActivity implements
 						return p1.name.compareTo(p2.name);
 					}
 				});
-				for (Parameter parameter : parameters) {
-					onParameterReceived(parameter);
-				}
+                drone.parameters.loadMetadata(ParametersActivity.this, null);
+				for (Parameter parameter : parameters)
+                    tableFragment.refreshRowParameter(parameter, drone.parameters);
 			}
 		};
 		dialog.openDialog(this);
 	}
 
-	@Override
+    @Override
 	public void onBeginReceivingParameters() {
 		pd = new ProgressDialog(this);
 		pd.setTitle("Refreshing Parameters...");
@@ -131,8 +132,17 @@ public class ParametersActivity extends SuperActivity implements
 
 	@Override
 	public void onEndReceivingParameters(List<Parameter> parameters) {
+        Collections.sort(parameters, new Comparator<Parameter>()
+        {
+            @Override
+            public int compare(Parameter p1, Parameter p2)
+            {
+                return p1.name.compareTo(p2.name);
+            }
+        });
+        drone.parameters.loadMetadata(this, getMetadataType());
 		for(Parameter parameter : parameters)
-			tableFragment.refreshRowParameter(parameter);
+            tableFragment.refreshRowParameter(parameter, drone.parameters);
 
 		// dismiss progress dialog
 		if(pd != null) {
@@ -141,9 +151,47 @@ public class ParametersActivity extends SuperActivity implements
 		}
 	}
 
-	@Override
-	public void onParameterReceived(Parameter parameter) {
-		tableFragment.refreshRowParameter(parameter);
-	}
+    @Override
+    public void onParamterMetaDataChanged() {
+        drone.parameters.loadMetadata(this, null);
+        tableFragment.refresh(drone.parameters);
+    }
 
+    private String getMetadataType() {
+        if (drone.MavClient.isConnected()) {
+            // online: derive from connected vehicle type
+            switch(drone.type.getType()) {
+                case MAV_TYPE.MAV_TYPE_FIXED_WING: /* Fixed wing aircraft. | */
+                    return "ArduPlane";
+
+                case MAV_TYPE.MAV_TYPE_GENERIC: /* Generic micro air vehicle. | */
+                case MAV_TYPE.MAV_TYPE_QUADROTOR: /* Quadrotor | */
+                case MAV_TYPE.MAV_TYPE_COAXIAL: /* Coaxial helicopter | */
+                case MAV_TYPE.MAV_TYPE_HELICOPTER: /* Normal helicopter with tail rotor. | */
+                case MAV_TYPE.MAV_TYPE_HEXAROTOR: /* Hexarotor | */
+                case MAV_TYPE.MAV_TYPE_OCTOROTOR: /* Octorotor | */
+                case MAV_TYPE.MAV_TYPE_TRICOPTER: /* Octorotor | */
+                    return "ArduCopter2";
+
+                case MAV_TYPE.MAV_TYPE_GROUND_ROVER: /* Ground rover | */
+                case MAV_TYPE.MAV_TYPE_SURFACE_BOAT: /* Surface vessel, boat, ship | */
+                    return "ArduRover";
+
+//                case MAV_TYPE.MAV_TYPE_ANTENNA_TRACKER: /* Ground installation | */
+//                case MAV_TYPE.MAV_TYPE_GCS: /* Operator control unit / ground control station | */
+//                case MAV_TYPE.MAV_TYPE_AIRSHIP: /* Airship, controlled | */
+//                case MAV_TYPE.MAV_TYPE_FREE_BALLOON: /* Free balloon, uncontrolled | */
+//                case MAV_TYPE.MAV_TYPE_ROCKET: /* Rocket | */
+//                case MAV_TYPE.MAV_TYPE_SUBMARINE: /* Submarine | */
+//                case MAV_TYPE.MAV_TYPE_FLAPPING_WING: /* Flapping wing | */
+//                case MAV_TYPE.MAV_TYPE_KITE: /* Flapping wing | */
+                default:
+                    // unsupported
+                    return null;
+            }
+        } else {
+            // offline: use configured parameter metadata type
+            return null;
+        }
+    }
 }
