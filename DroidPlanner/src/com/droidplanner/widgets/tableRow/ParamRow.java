@@ -76,7 +76,10 @@ public class ParamRow extends TableRow implements
 
         // value
 		valueView = new EditText(context);
-		valueView.setInputType(InputType.TYPE_CLASS_NUMBER);
+		valueView.setInputType(
+                InputType.TYPE_CLASS_NUMBER |
+                InputType.TYPE_NUMBER_FLAG_DECIMAL |
+                InputType.TYPE_NUMBER_FLAG_SIGNED);
 		valueView.setWidth(220);
 		valueView.setGravity(Gravity.RIGHT);
         valueView.addTextChangedListener(this);
@@ -100,7 +103,7 @@ public class ParamRow extends TableRow implements
 		if (isNewValueEqualToDroneParam()) {
 			valueView.setTextColor(Color.WHITE);
 		} else {
-			valueView.setTextColor(Color.RED);
+			valueView.setTextColor(Color.GREEN);
 		}
 	}
 
