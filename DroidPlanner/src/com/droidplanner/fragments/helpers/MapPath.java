@@ -26,7 +26,7 @@ public class MapPath {
 	}
 
 	public MapPath(GoogleMap mMap) {
-		this(mMap, Color.YELLOW, 5);
+		this(mMap, Color.CYAN, 5);
 	}
 
 	public void update(PathSource pathSource) {
