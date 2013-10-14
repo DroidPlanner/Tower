@@ -1,17 +1,29 @@
 package com.droidplanner.drone.variables;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_param_value;
 import com.droidplanner.MAVLink.MavLinkParameters;
+import com.droidplanner.R;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces;
 import com.droidplanner.drone.DroneVariable;
+import com.droidplanner.file.DirectoryPath;
+import com.droidplanner.file.IO.ParameterMetadataMap;
+import com.droidplanner.file.IO.ParameterMetadataMapReader;
 import com.droidplanner.parameters.Parameter;
+import com.droidplanner.parameters.ParameterMetadata;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
 
 /**
  * Class to manage the communication of parameters to the MAV.
@@ -22,7 +34,9 @@ import com.droidplanner.parameters.Parameter;
  * 
  */
 public class Parameters extends DroneVariable {
-	private List<Parameter> parameters = new ArrayList<Parameter>();
+
+    private List<Parameter> parameters = new ArrayList<Parameter>();
+    private ParameterMetadataMap metadataMap;
 
 	public DroneInterfaces.OnParameterManagerListner parameterListner;
 
@@ -63,23 +77,10 @@ public class Parameters extends DroneVariable {
 		if(parameterListner!=null)
 			parameterListner.onParameterReceived(param, m_value.param_index, m_value.param_count);
 
-		// last param?
+		// last param? notify listener w/ params
 		if (m_value.param_index == m_value.param_count - 1) {
-			// parameters received
-			if(parameterListner!=null){
-				// sort parameters list
-				Collections.sort(parameters, new Comparator<Parameter>()
-				{
-					@Override
-					public int compare(Parameter p1, Parameter p2)
-					{
-						return p1.name.compareTo(p2.name);
-					}
-				});
-
-				// add all params to parameter fragment
+			if(parameterListner!=null)
 				parameterListner.onEndReceivingParameters(parameters);
-			}
 		}
 	}
 
@@ -87,4 +88,45 @@ public class Parameters extends DroneVariable {
 		MavLinkParameters.sendParameter(myDrone, parameter);
 	}
 
+
+    public void notifyParameterMetadataChanged() {
+        if(parameterListner != null)
+            parameterListner.onParamterMetaDataChanged();
+    }
+
+    public ParameterMetadata getMetadata(String name) {
+        return (metadataMap == null) ? null : metadataMap.get(name);
+    }
+
+    public void loadMetadata(Context context, String metadataType) {
+        metadataMap = null;
+
+        // use metadata type from prefs if not specified, bail if none
+        if(metadataType == null) {
+            final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            metadataType = prefs.getString("pref_param_metadata", null);
+        }
+        if(metadataType == null || metadataType.equals(context.getString(R.string.none)))
+            return;
+
+        try {
+            // use user supplied file in ~/Parameters if available, else fallback to asset from resources
+            final InputStream inputStream;
+            final File file = new File(DirectoryPath.getParameterMetadataPath());
+            if(file.exists()) {
+                // load from file
+                inputStream = new FileInputStream(file);
+            } else {
+                // load from resource
+                inputStream = context.getAssets().open("ParameterMetaData/ParameterMetaData.xml");
+            }
+
+            // parse
+            metadataMap = ParameterMetadataMapReader.open(inputStream, metadataType);
+
+        } catch (Exception ex) {
+            // nop
+
+        }
+    }
 }
