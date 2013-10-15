@@ -24,6 +24,7 @@ public class MissionRow extends ArrayAdapter<waypoint> {
 	private TextView altitudeView;
 	private TextView typeView;
 	private TextView descView;
+	private TextView distanceView;
 
 
 
@@ -63,6 +64,7 @@ public class MissionRow extends ArrayAdapter<waypoint> {
 		altitudeView = (TextView) view.findViewById(R.id.rowAltitudeView);
 		typeView = (TextView) view.findViewById(R.id.rowTypeView);
 		descView = (TextView) view.findViewById(R.id.rowDescView);
+		distanceView = (TextView) view.findViewById(R.id.rowDistanceView);
 
 	}
 
@@ -76,6 +78,14 @@ public class MissionRow extends ArrayAdapter<waypoint> {
 		nameView.setText(String.format("%3d", waypoint.getNumber()));
 		typeView.setText(waypoint.getCmd().getName());
 		descView.setText(setupDescription(waypoint));
+
+		double distanceFromPrevPoint = waypoint.getDistanceFromPrevPoint();
+		if(distanceFromPrevPoint != waypoint.UNKNOWN_DISTANCE) {
+			distanceView.setText(String.format(Locale.ENGLISH, "%4.0fm", distanceFromPrevPoint));
+		}
+		else {
+			distanceView.setText("-");
+		}
 	}
 
 	private String setupDescription(waypoint waypoint) {
@@ -87,13 +97,13 @@ public class MissionRow extends ArrayAdapter<waypoint> {
 		switch(waypoint.getCmd().getType())
 		{
 		case MAV_CMD.MAV_CMD_NAV_WAYPOINT:
-			if(waypoint.missionItem.param2<=0){
+			if(waypoint.missionItem.param1<=0){
 				descStr = String.format(Locale.ENGLISH, context.getString(R.string.waypointDesc_Waypoint_1),
 						waypoint.missionItem.param4);
 			} 
 			else{
 				descStr = String.format(Locale.ENGLISH, context.getString(R.string.waypointDesc_Waypoint_2),
-						waypoint.missionItem.param2,waypoint.missionItem.param4);
+						waypoint.missionItem.param1,waypoint.missionItem.param4);
 			}
 			break;
 

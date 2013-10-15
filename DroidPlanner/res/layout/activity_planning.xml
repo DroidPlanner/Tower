@@ -24,8 +24,10 @@
         android:id="@+id/textViewTotalLength"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/length"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:alpha="0.7"
+        android:background="@android:drawable/toast_frame"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/length"/>
 
     <SlidingDrawer
         android:id="@+id/SlidingDrawer"
@@ -51,6 +53,56 @@
             android:background="#aa000000"
             android:orientation="vertical"
             android:padding="10dip" >
+
+            <LinearLayout
+	            android:id="@+id/rowHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+	            android:background="#4fff0000"
+                android:orientation="horizontal"
+                android:paddingBottom="3dp"
+                tools:ignore="HardcodedText" >
+
+                <TextView
+                    android:id="@+id/rowNameHeader"
+                    android:layout_width="45dp"
+                    android:layout_height="wrap_content"
+                    android:text="WP#"
+                    android:gravity="center_horizontal"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/rowAltitudeHeader"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="ALT"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/rowTypeHeader"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:text="WP Type"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/rowDistanceHeader"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:text="∆ WP"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/rowDescHeader"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:layout_weight="1"
+                    android:scrollHorizontally="true"
+                    android:text="Description"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </LinearLayout>
 
             <fragment
                 android:id="@+id/missionFragment"

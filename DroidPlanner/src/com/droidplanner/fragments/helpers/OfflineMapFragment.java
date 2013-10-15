@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.droidplanner.DroidPlannerApp;
+import com.droidplanner.drone.DroneInterfaces;
 import com.droidplanner.helpers.LocalMapTileProvider;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -21,7 +23,15 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 
-public class OfflineMapFragment extends MapFragment {
+public class OfflineMapFragment extends MapFragment
+		implements DroneInterfaces.MapConfigListener {
+
+	public static final String PREF_MAP_TYPE = "pref_map_type";
+
+	public static final String MAP_TYPE_SATELLITE = "Satellite";
+	public static final String MAP_TYPE_HYBRID = "Hybrid";
+	public static final String MAP_TYPE_NORMAL = "Normal";
+	public static final String MAP_TYPE_TERRAIN = "Terrain";
 
 	private GoogleMap mMap;
 
@@ -29,6 +39,9 @@ public class OfflineMapFragment extends MapFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
 			Bundle bundle) {
 		View view = super.onCreateView(inflater, viewGroup, bundle);
+
+		((DroidPlannerApp) getActivity().getApplication()).drone.setMapConfigListener(this);
+
 		setupMap();
 		return view;
 	}
@@ -73,18 +86,18 @@ public class OfflineMapFragment extends MapFragment {
 	private int getMapType() {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());
-		String mapType = prefs.getString("pref_map_type", "");
+		String mapType = prefs.getString(PREF_MAP_TYPE, "");
 
-		if (mapType.equalsIgnoreCase("Satellite")) {
+		if (mapType.equalsIgnoreCase(MAP_TYPE_SATELLITE)) {
 			return GoogleMap.MAP_TYPE_SATELLITE;
 		}
-		if (mapType.equalsIgnoreCase("Hybrid")) {
+		if (mapType.equalsIgnoreCase(MAP_TYPE_HYBRID)) {
 			return GoogleMap.MAP_TYPE_HYBRID;
 		}
-		if (mapType.equalsIgnoreCase("Normal")) {
+		if (mapType.equalsIgnoreCase(MAP_TYPE_NORMAL)) {
 			return GoogleMap.MAP_TYPE_NORMAL;
 		}
-		if (mapType.equalsIgnoreCase("Terrain")) {
+		if (mapType.equalsIgnoreCase(MAP_TYPE_TERRAIN)) {
 			return GoogleMap.MAP_TYPE_TERRAIN;
 		} else {
 			return GoogleMap.MAP_TYPE_SATELLITE;
@@ -94,7 +107,7 @@ public class OfflineMapFragment extends MapFragment {
 	private void setupOfflineMapOverlay() {
 		mMap.setMapType(GoogleMap.MAP_TYPE_NONE);
 		TileOverlay tileOverlay = mMap.addTileOverlay(new TileOverlayOptions()
-				.tileProvider(new LocalMapTileProvider()));
+				                                              .tileProvider(new LocalMapTileProvider()));
 		tileOverlay.setZIndex(-1);
 		tileOverlay.clearTileCache();
 	}
@@ -104,10 +117,10 @@ public class OfflineMapFragment extends MapFragment {
 			LatLngBounds bounds = getBounds(pointsList);
 			CameraUpdate animation;
 			if (isMapLayoutFinished())
-				animation = CameraUpdateFactory.newLatLngBounds(bounds, 30);
+				animation = CameraUpdateFactory.newLatLngBounds(bounds, 100);
 			else
 				animation = CameraUpdateFactory.newLatLngBounds(bounds, 480,
-						360, 30);
+						360, 100);
 			getMap().animateCamera(animation);
 		}
 	}
@@ -136,5 +149,10 @@ public class OfflineMapFragment extends MapFragment {
 
 	private boolean isMapLayoutFinished() {
 		return getMap() != null;
+	}
+
+	@Override
+	public void onMapTypeChanged() {
+		setupMap();
 	}
 }

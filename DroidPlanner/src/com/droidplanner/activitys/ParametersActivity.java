@@ -1,12 +1,16 @@
 package com.droidplanner.activitys;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.MAVLink.Messages.enums.MAV_TYPE;
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperActivity;
 import com.droidplanner.dialogs.openfile.OpenFileDialog;
@@ -20,6 +24,7 @@ public class ParametersActivity extends SuperActivity implements
 		DroneInterfaces.OnParameterManagerListner {
 
 	private ParametersTableFragment tableFragment;
+	private ProgressDialog pd;
 
 	@Override
 	public int getNavigationItem() {
@@ -35,6 +40,9 @@ public class ParametersActivity extends SuperActivity implements
 				.findFragmentById(R.id.parametersTable));
 
 		drone.parameters.parameterListner = this;
+
+		Toast.makeText(this, "Touch REFRESH to read parameters", Toast.LENGTH_LONG)
+				.show();
 	}
 
 	@Override
@@ -83,17 +91,107 @@ public class ParametersActivity extends SuperActivity implements
 		OpenFileDialog dialog = new OpenParameterDialog() {
 			@Override
 			public void parameterFileLoaded(List<Parameter> parameters) {
-				for (Parameter parameter : parameters) {
-					onParameterReceived(parameter);
-				}
+				Collections.sort(parameters, new Comparator<Parameter>()
+				{
+					@Override
+					public int compare(Parameter p1, Parameter p2)
+					{
+						return p1.name.compareTo(p2.name);
+					}
+				});
+                drone.parameters.loadMetadata(ParametersActivity.this, null);
+				for (Parameter parameter : parameters)
+                    tableFragment.refreshRowParameter(parameter, drone.parameters);
 			}
 		};
 		dialog.openDialog(this);
 	}
 
-	@Override
-	public void onParameterReceived(Parameter parameter) {
-		tableFragment.refreshRowParameter(parameter);
+    @Override
+	public void onBeginReceivingParameters() {
+		pd = new ProgressDialog(this);
+		pd.setTitle("Refreshing Parameters...");
+		pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+		pd.setIndeterminate(true);
+		pd.setCancelable(false);
+		pd.setCanceledOnTouchOutside(true);
+
+		pd.show();
 	}
 
+	@Override
+	public void onParameterReceived(Parameter parameter, int index, int count) {
+		if(pd != null) {
+			if(pd.isIndeterminate()) {
+				pd.setIndeterminate(false);
+				pd.setMax(count);
+			}
+			pd.setProgress(index);
+		}
+	}
+
+	@Override
+	public void onEndReceivingParameters(List<Parameter> parameters) {
+        Collections.sort(parameters, new Comparator<Parameter>()
+        {
+            @Override
+            public int compare(Parameter p1, Parameter p2)
+            {
+                return p1.name.compareTo(p2.name);
+            }
+        });
+        drone.parameters.loadMetadata(this, getMetadataType());
+		for(Parameter parameter : parameters)
+            tableFragment.refreshRowParameter(parameter, drone.parameters);
+
+		// dismiss progress dialog
+		if(pd != null) {
+			pd.dismiss();
+			pd = null;
+		}
+	}
+
+    @Override
+    public void onParamterMetaDataChanged() {
+        drone.parameters.loadMetadata(this, null);
+        tableFragment.refresh(drone.parameters);
+    }
+
+    private String getMetadataType() {
+        if (drone.MavClient.isConnected()) {
+            // online: derive from connected vehicle type
+            switch(drone.type.getType()) {
+                case MAV_TYPE.MAV_TYPE_FIXED_WING: /* Fixed wing aircraft. | */
+                    return "ArduPlane";
+
+                case MAV_TYPE.MAV_TYPE_GENERIC: /* Generic micro air vehicle. | */
+                case MAV_TYPE.MAV_TYPE_QUADROTOR: /* Quadrotor | */
+                case MAV_TYPE.MAV_TYPE_COAXIAL: /* Coaxial helicopter | */
+                case MAV_TYPE.MAV_TYPE_HELICOPTER: /* Normal helicopter with tail rotor. | */
+                case MAV_TYPE.MAV_TYPE_HEXAROTOR: /* Hexarotor | */
+                case MAV_TYPE.MAV_TYPE_OCTOROTOR: /* Octorotor | */
+                case MAV_TYPE.MAV_TYPE_TRICOPTER: /* Octorotor | */
+                    return "ArduCopter2";
+
+                case MAV_TYPE.MAV_TYPE_GROUND_ROVER: /* Ground rover | */
+                case MAV_TYPE.MAV_TYPE_SURFACE_BOAT: /* Surface vessel, boat, ship | */
+                    return "ArduRover";
+
+//                case MAV_TYPE.MAV_TYPE_ANTENNA_TRACKER: /* Ground installation | */
+//                case MAV_TYPE.MAV_TYPE_GCS: /* Operator control unit / ground control station | */
+//                case MAV_TYPE.MAV_TYPE_AIRSHIP: /* Airship, controlled | */
+//                case MAV_TYPE.MAV_TYPE_FREE_BALLOON: /* Free balloon, uncontrolled | */
+//                case MAV_TYPE.MAV_TYPE_ROCKET: /* Rocket | */
+//                case MAV_TYPE.MAV_TYPE_SUBMARINE: /* Submarine | */
+//                case MAV_TYPE.MAV_TYPE_FLAPPING_WING: /* Flapping wing | */
+//                case MAV_TYPE.MAV_TYPE_KITE: /* Flapping wing | */
+                default:
+                    // unsupported
+                    return null;
+            }
+        } else {
+            // offline: use configured parameter metadata type
+            return null;
+        }
+    }
 }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<item android:id="@+id/menu_map_type"
+	      android:title="@string/menu_map_type"
+	      android:showAsAction="never">
+		<menu>
+			<item android:id="@+id/menu_map_type_satellite"
+			      android:title="@string/menu_map_type_satellite"/>
+
+			<item android:id="@+id/menu_map_type_hybrid"
+			      android:title="@string/menu_map_type_hybrid"/>
+
+			<item android:id="@+id/menu_map_type_normal"
+			      android:title="@string/menu_map_type_normal"/>
+
+			<item android:id="@+id/menu_map_type_terrain"
+			      android:title="@string/menu_map_type_terrain"/>
+		</menu>
+	</item>
+</menu>
