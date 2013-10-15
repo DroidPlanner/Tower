@@ -12,13 +12,14 @@ import android.widget.EditText;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import android.widget.Toast;
 import com.droidplanner.dialogs.parameters.DialogParameterInfo;
 import com.droidplanner.drone.variables.Parameters;
 import com.droidplanner.parameters.Parameter;
 import com.droidplanner.parameters.ParameterMetadata;
 
-import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.util.Map;
 
 public class ParamRow extends TableRow implements
         TextWatcher, View.OnClickListener, View.OnFocusChangeListener {
@@ -27,9 +28,6 @@ public class ParamRow extends TableRow implements
 	private EditText valueView;
 	private Parameter param;
     private ParameterMetadata metadata;
-
-    private final static DecimalFormat format = (DecimalFormat) DecimalFormat.getInstance();
-    static { format.applyPattern(Parameter.DECIMAL_PATTERN); }
 
     private enum Validation { NA, INVALID, VALID }
 
@@ -98,7 +96,7 @@ public class ParamRow extends TableRow implements
 
 	public double getParamValue() {
         try {
-            return format.parse(valueView.getText().toString()).doubleValue();
+            return Parameter.getFormat().parse(valueView.getText().toString()).doubleValue();
         } catch (ParseException ex) {
             throw new NumberFormatException(ex.getMessage());
         }
@@ -146,22 +144,36 @@ public class ParamRow extends TableRow implements
         } else if(metadata.getRange() != null) {
             return validateInRange(value);
 
+        } else if(metadata.getValues() != null) {
+            return validateInValues(value);
+
         } else {
             return Validation.NA;
         }
     }
 
     private Validation validateInRange(String value) {
-        final String part[] = metadata.getRange().split(" ");
-        if(part.length != 2)
-            return Validation.NA;
-
         try {
-            final double dval = format.parse(value).doubleValue();
-            final double low = format.parse(part[0]).doubleValue();
-            final double high = format.parse(part[1]).doubleValue();
-            return (dval >= low && dval <= high) ? Validation.VALID : Validation.INVALID;
-        } catch (ParseException e) {
+            final double dval = Parameter.getFormat().parse(value).doubleValue();
+            final double[] range = metadata.parseRange();
+            return (dval >= range[ParameterMetadata.RANGE_LOW] && dval <= range[ParameterMetadata.RANGE_HIGH]) ?
+                    Validation.VALID : Validation.INVALID;
+        } catch (ParseException ex) {
+            return Validation.NA;
+        }
+    }
+
+    private Validation validateInValues(String value) {
+        try {
+            final double dval = Parameter.getFormat().parse(value).doubleValue();
+            final Map<Double, String> values = metadata.parseValues();
+            if (values.keySet().contains(dval)) {
+                return Validation.VALID;
+            }
+            else {
+                return Validation.INVALID;
+            }
+        } catch (ParseException ex) {
             return Validation.NA;
         }
     }
@@ -184,7 +196,10 @@ public class ParamRow extends TableRow implements
     }
 
     @Override
-    public void onFocusChange(View view, boolean b) {
-        valueView.setText(format.format(getParamValue()));
+    public void onFocusChange(View view, boolean hasFocus) {
+        if(!hasFocus) {
+            // refresh value on leaving view - show results of rounding etc.
+            valueView.setText(Parameter.getFormat().format(getParamValue()));
+        }
     }
 }

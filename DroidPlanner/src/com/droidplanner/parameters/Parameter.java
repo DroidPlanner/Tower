@@ -1,19 +1,17 @@
 package com.droidplanner.parameters;
 
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 
 import com.MAVLink.Messages.ardupilotmega.msg_param_value;
 
 public class Parameter {
-    public static final String DECIMAL_PATTERN = "0.###";
 
     public String name;
 	public double value;
 	public int type;
 
     private final static DecimalFormat format = (DecimalFormat) DecimalFormat.getInstance();
-    static { format.applyPattern(Parameter.DECIMAL_PATTERN); }
+    static { format.applyPattern("0.###"); }
 
 
 	public Parameter(String name, double value, int type) {
@@ -62,4 +60,7 @@ public class Parameter {
 		}
 	}
 
+    public static DecimalFormat getFormat() {
+        return format;
+    }
 }
