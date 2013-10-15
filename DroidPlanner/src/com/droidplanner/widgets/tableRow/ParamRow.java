@@ -2,6 +2,7 @@ package com.droidplanner.widgets.tableRow;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -113,6 +114,7 @@ public class ParamRow extends TableRow implements
         final int color;
         if(isValueEqualToDroneParam(newValue)) {
             color = Color.WHITE;
+            valueView.setTypeface(null, Typeface.NORMAL);
         } else {
             final Validation validation = validateValue(newValue);
             if (validation == Validation.VALID) {
@@ -122,6 +124,7 @@ public class ParamRow extends TableRow implements
             } else {
                 color = Color.YELLOW;
             }
+            valueView.setTypeface(null, Typeface.BOLD);
         }
         valueView.setTextColor(color);
     }
