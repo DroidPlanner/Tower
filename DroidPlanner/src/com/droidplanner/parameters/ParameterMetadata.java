@@ -3,6 +3,7 @@ package com.droidplanner.parameters;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class ParameterMetadata {
@@ -88,14 +89,15 @@ public class ParameterMetadata {
     public Map<Double, String> parseValues() throws ParseException {
         final DecimalFormat format = Parameter.getFormat();
 
-        final Map<Double, String> outValues = new HashMap<Double, String>();
-        final String[] tparts = this.values.split(",");
-        for (String tpart : tparts) {
-            final String[] parts = tpart.split(":");
-            if(parts.length != 2)
-                throw new IllegalArgumentException();
-
-            outValues.put(format.parse(parts[0].trim()).doubleValue(), parts[1].trim());
+        final Map<Double, String> outValues = new LinkedHashMap<Double, String>();
+        if(values != null) {
+            final String[] tparts = this.values.split(",");
+            for (String tpart : tparts) {
+                final String[] parts = tpart.split(":");
+                if(parts.length != 2)
+                    throw new IllegalArgumentException();
+                outValues.put(format.parse(parts[0].trim()).doubleValue(), parts[1].trim());
+            }
         }
         return outValues;
     }

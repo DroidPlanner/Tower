@@ -161,4 +161,5 @@
     <string name="metadata_values">Values:</string>
     <string name="metadata_units">Units:</string>
     <string name="metadata_range">Range:</string>
+    <string name="parameter_row_edit">Edit</string>
 </resources>

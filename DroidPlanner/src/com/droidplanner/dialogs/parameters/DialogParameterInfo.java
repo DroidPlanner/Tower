@@ -12,11 +12,10 @@ import com.droidplanner.parameters.ParameterMetadata;
 
 public class DialogParameterInfo {
 
-    public static Dialog build(ParameterMetadata metadata, Context context) {
+    public static AlertDialog.Builder build(ParameterMetadata metadata, Context context) {
         return new AlertDialog.Builder(context)
                 .setTitle(metadata.getName())
-                .setView(buildView(metadata, context))
-                .create();
+                .setView(buildView(metadata, context));
     }
 
     private static View buildView(ParameterMetadata metadata, Context context) {
