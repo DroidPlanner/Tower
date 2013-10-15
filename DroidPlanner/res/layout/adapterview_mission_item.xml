@@ -8,7 +8,7 @@
 
     <Button
         android:id="@+id/button1"
-        android:layout_width="60dp"
+        android:layout_width="64dp"
         android:layout_height="60dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
@@ -17,11 +17,9 @@
 
     <TextView
         android:id="@+id/rowNameView"
-        android:layout_width="wrap_content"
-        android:layout_height="36dp"
-        android:layout_alignLeft="@+id/button1"
-        android:layout_alignRight="@+id/button1"
-        android:layout_alignTop="@+id/button1"
+        android:layout_width="64dp"
+        android:layout_height="40dp"
+        android:paddingTop="4dp"
         android:gravity="center"
         android:text="100"
         android:textAppearance="?android:attr/textAppearanceLarge"
@@ -29,37 +27,33 @@
         android:textStyle="bold" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="76dp"
+        android:paddingTop="2dp"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/button1"
-        android:layout_alignLeft="@+id/button1"
-        android:layout_alignRight="@+id/button1"
-        android:layout_below="@+id/rowNameView" >
+        android:layout_below="@+id/rowNameView"
+        android:gravity="center">
 
         <ImageView
             android:id="@+id/ImageView02"
-            android:layout_width="0dp"
+	        android:padding="1dp"
+	        android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="1dp"
             android:src="@drawable/ic_mission_ascend"
             tools:ignore="ContentDescription" />
 
         <ImageView
             android:id="@+id/imageView1"
-            android:layout_width="0dp"
+	        android:padding="1dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="1dp"
+	        android:layout_width="wrap_content"
             android:src="@drawable/ic_mission_wp"
             tools:ignore="ContentDescription" />
 
         <ImageView
             android:id="@+id/ImageView01"
-            android:layout_width="0dp"
+	        android:padding="1dp"
+	        android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="1dp"
             android:src="@drawable/ic_mission_delay"
             tools:ignore="ContentDescription" />
     </LinearLayout>
