@@ -1,6 +1,8 @@
 package com.droidplanner.widgets.tableRow;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.text.Editable;
@@ -13,13 +15,16 @@ import android.widget.EditText;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import android.widget.Toast;
+import com.droidplanner.R;
 import com.droidplanner.dialogs.parameters.DialogParameterInfo;
+import com.droidplanner.dialogs.parameters.DialogParameterValues;
 import com.droidplanner.drone.variables.Parameters;
 import com.droidplanner.parameters.Parameter;
 import com.droidplanner.parameters.ParameterMetadata;
 
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class ParamRow extends TableRow implements
@@ -191,18 +196,44 @@ public class ParamRow extends TableRow implements
 	}
 
     @Override
-    public void onClick(View view) {
-        if(metadata == null || !metadata.hasInfo())
-            return;
-
-        DialogParameterInfo.build(metadata, getContext()).show();
-    }
-
-    @Override
     public void onFocusChange(View view, boolean hasFocus) {
         if(!hasFocus) {
             // refresh value on leaving view - show results of rounding etc.
             valueView.setText(Parameter.getFormat().format(getParamValue()));
         }
+    }
+
+    @Override
+    public void onClick(View view) {
+        if(metadata == null || !metadata.hasInfo())
+            return;
+
+        final AlertDialog.Builder builder = DialogParameterInfo.build(metadata, getContext());
+
+        // add edit button if metadata supplies known values
+        if(metadata.getValues() != null)
+            addEditValuesButton(builder);
+
+        builder.show();
+    }
+
+    private AlertDialog.Builder addEditValuesButton(AlertDialog.Builder builder) {
+        return builder.setPositiveButton(R.string.parameter_row_edit, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                DialogParameterValues.build(param.name, metadata, valueView.getText().toString(), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int which) {
+                        try {
+                            final List<Double> values = new ArrayList<Double>(metadata.parseValues().keySet());
+                            valueView.setText(Parameter.getFormat().format(values.get(which)));
+                            dialogInterface.dismiss();
+                        } catch (ParseException ex) {
+                            // nop
+                        }
+                    }
+                }, getContext()).show();
+            }
+        });
     }
 }
