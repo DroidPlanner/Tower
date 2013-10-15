@@ -1,6 +1,5 @@
 package com.droidplanner.widgets.tableRow;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.text.Editable;
@@ -8,14 +7,11 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.droidplanner.R;
 import com.droidplanner.dialogs.parameters.DialogParameterInfo;
 import com.droidplanner.drone.variables.Parameters;
 import com.droidplanner.parameters.Parameter;
@@ -31,6 +27,12 @@ public class ParamRow extends TableRow implements
 	private EditText valueView;
 	private Parameter param;
     private ParameterMetadata metadata;
+
+    private final static DecimalFormat format = (DecimalFormat) DecimalFormat.getInstance();
+    static { format.applyPattern(Parameter.DECIMAL_PATTERN); }
+
+    private enum Validation { NA, INVALID, VALID }
+
 
     public ParamRow(Context context) {
 		super(context);
@@ -95,8 +97,6 @@ public class ParamRow extends TableRow implements
 	}
 
 	public double getParamValue() {
-        final DecimalFormat format = (DecimalFormat) DecimalFormat.getInstance();
-        format.applyPattern(Parameter.DECIMAL_PATTERN);
         try {
             return format.parse(valueView.getText().toString()).doubleValue();
         } catch (ParseException ex) {
@@ -110,18 +110,63 @@ public class ParamRow extends TableRow implements
 
 	@Override
 	public void afterTextChanged(Editable s) {
-		if (isNewValueEqualToDroneParam()) {
-			valueView.setTextColor(Color.WHITE);
-		} else {
-			valueView.setTextColor(Color.GREEN);
-		}
-	}
+        final String newValue = valueView.getText().toString();
+
+        final int color;
+        if(isValueEqualToDroneParam(newValue)) {
+            color = Color.WHITE;
+        } else {
+            final Validation validation = validateValue(newValue);
+            if (validation == Validation.VALID) {
+                color = Color.GREEN;
+            } else if (validation == Validation.INVALID) {
+                color = Color.RED;
+            } else {
+                color = Color.YELLOW;
+            }
+        }
+        valueView.setTextColor(color);
+    }
 
 	public boolean isNewValueEqualToDroneParam() {
-		return param.getValue().equals(valueView.getText().toString());
+		return isValueEqualToDroneParam(valueView.getText().toString());
 	}
 
-	@Override
+    private boolean isValueEqualToDroneParam(String value) {
+        return param.getValue().equals(value);
+    }
+
+    /*
+     * Return TRUE if valid or unable to validate
+     */
+    private Validation validateValue(String value) {
+        if(metadata == null) {
+            return Validation.NA;
+
+        } else if(metadata.getRange() != null) {
+            return validateInRange(value);
+
+        } else {
+            return Validation.NA;
+        }
+    }
+
+    private Validation validateInRange(String value) {
+        final String part[] = metadata.getRange().split(" ");
+        if(part.length != 2)
+            return Validation.NA;
+
+        try {
+            final double dval = format.parse(value).doubleValue();
+            final double low = format.parse(part[0]).doubleValue();
+            final double high = format.parse(part[1]).doubleValue();
+            return (dval >= low && dval <= high) ? Validation.VALID : Validation.INVALID;
+        } catch (ParseException e) {
+            return Validation.NA;
+        }
+    }
+
+    @Override
 	public void beforeTextChanged(CharSequence s, int start, int count,
 			int after) {
 	}
@@ -140,8 +185,6 @@ public class ParamRow extends TableRow implements
 
     @Override
     public void onFocusChange(View view, boolean b) {
-        final DecimalFormat format = (DecimalFormat) DecimalFormat.getInstance();
-        format.applyPattern(Parameter.DECIMAL_PATTERN);
         valueView.setText(format.format(getParamValue()));
     }
 }
