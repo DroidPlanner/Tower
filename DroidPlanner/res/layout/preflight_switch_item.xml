@@ -6,12 +6,14 @@
     android:layout_margin="5dp"
     android:orientation="horizontal" >
 
-    <ToggleButton
-        android:id="@+id/chk_toggle"
+    <Switch
+        android:id="@+id/chk_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
-        android:text="ToggleButton" />
+        android:gravity="center_vertical|end"
+        android:switchMinWidth="25sp"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/chk_label"

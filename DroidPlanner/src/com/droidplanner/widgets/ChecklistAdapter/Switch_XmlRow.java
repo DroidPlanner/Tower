@@ -10,13 +10,12 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
-public class Toggle_XmlRow implements XmlRow {
+public class Switch_XmlRow implements XmlRow {
     private final CheckListItem checkListItem;
     private final LayoutInflater inflater;
 
-    public Toggle_XmlRow(LayoutInflater inflater, CheckListItem checkListItem) {
+    public Switch_XmlRow(LayoutInflater inflater, CheckListItem checkListItem) {
         this.checkListItem = checkListItem;
         this.inflater = inflater;
     }
@@ -26,7 +25,7 @@ public class Toggle_XmlRow implements XmlRow {
 		View view;
 		if (convertView == null) {
 			ViewGroup viewGroup = (ViewGroup) inflater.inflate(
-					R.layout.preflight_toggle_item, null);
+					R.layout.preflight_switch_item, null);
 			holder = new ViewHolder(viewGroup);
 
 			viewGroup.setTag(holder);
@@ -42,17 +41,17 @@ public class Toggle_XmlRow implements XmlRow {
 	}
 
 	public int getViewType() {
-		return XmlRowType.TOGGLE_ROW.ordinal();
+		return XmlRowType.SWITCH_ROW.ordinal();
 	}
 
 	private static class ViewHolder {
 		final LinearLayout layoutView;
-		final ToggleButton toggleButton;
+		final Switch switchView;
 		final TextView textView;
 
 		private ViewHolder(ViewGroup viewGroup) {
 			this.layoutView = (LinearLayout) viewGroup.findViewById(R.id.layout_toggle);
-			this.toggleButton = (ToggleButton) viewGroup.findViewById(R.id.chk_toggle);
+			this.switchView = (Switch) viewGroup.findViewById(R.id.chk_switch);
 			this.textView = (TextView) viewGroup.findViewById(R.id.chk_label);
 		}
 	}

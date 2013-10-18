@@ -20,7 +20,12 @@
             description="Ensure surface control is in the right direction"
             mandatory="yes"
             title="Surface control - Rudder" />
-    </category>
+        <switch_item
+            description="Switch trasnmitter"
+            editable="yes"
+            mandatory="yes"
+            title="Radio Transmitter" />
+        </category>
     <category label="System Checklist" >
         <select_item
             description="Select connection type"
@@ -31,7 +36,7 @@
             title="Telemetry connection :" />
 
         <toggle_item
-            description="Toggle sytem arm or disarm"
+            description="Toggle system arm or disarm"
             editable="yes"
             mandatory="yes"
             system_tag="SYS_ARM_STATE"

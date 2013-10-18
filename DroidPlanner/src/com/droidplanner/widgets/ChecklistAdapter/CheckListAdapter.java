@@ -47,6 +47,8 @@ public class CheckListAdapter extends BaseExpandableListAdapter {
 					xmlRows.add(new Select_XmlRow(this.inflater, listItem));
 				} else if (listItem.getType().equalsIgnoreCase("toggle_item")) {
 					xmlRows.add(new Toggle_XmlRow(this.inflater, listItem));
+				} else if (listItem.getType().equalsIgnoreCase("switch_item")) {
+					xmlRows.add(new Switch_XmlRow(this.inflater, listItem));
 				}
 			}
 			listCheckListChild.put(dataHeader, xmlRows);
