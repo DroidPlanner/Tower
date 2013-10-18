@@ -16,11 +16,11 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 
 public class Radio_XmlRow implements XmlRow {
-	public interface OnRadioGroupCheckedChangListener{
+	public interface OnRadioGroupCheckedChangeListener{
 		public void onRadioGroupCheckedChanged(CheckListItem checkListItem, RadioGroup group, int checkId);
 	}
 	
-	private OnRadioGroupCheckedChangListener listener;
+	private OnRadioGroupCheckedChangeListener listener;
 	private final CheckListItem checkListItem;
 	private final LayoutInflater inflater;
 
@@ -64,7 +64,7 @@ public class Radio_XmlRow implements XmlRow {
 		return XmlRowType.RADIO_ROW.ordinal();
 	}
 
-	public void setOnRadioGroupChackedChangeListener(OnRadioGroupCheckedChangListener listener) {
+	public void setOnRadioGroupChackedChangeListener(OnRadioGroupCheckedChangeListener listener) {
 		this.listener = listener;
 	}
 

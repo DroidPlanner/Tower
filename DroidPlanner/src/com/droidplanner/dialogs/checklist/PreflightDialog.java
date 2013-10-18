@@ -26,7 +26,8 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Toast;
 
 public class PreflightDialog implements DialogInterface.OnClickListener,
-		com.droidplanner.preflightcheck.XMLChecklistParser.OnXmlParserError, OnCheckListItemUpdateListener {
+		com.droidplanner.preflightcheck.XMLChecklistParser.OnXmlParserError,
+		OnCheckListItemUpdateListener {
 
 	private Context context;
 	private View view;
@@ -41,7 +42,7 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 		// TODO Auto-generated constructor stub
 	}
 
-//	public void build(Drone mdrone, Context mcontext, boolean mpreflight) {
+	// public void build(Drone mdrone, Context mcontext, boolean mpreflight) {
 	public void build(Context mcontext, Drone mdrone, boolean mpreflight) {
 		context = mcontext;
 		drone = mdrone;
@@ -121,9 +122,22 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 	@Override
 	public void onRadioGroupUpdate(CheckListItem checkListItem,
 			RadioGroup group, int checkId) {
-		Toast.makeText(context, checkListItem.getTitle(), Toast.LENGTH_SHORT).show();
-		
+		Toast.makeText(
+				context,
+				checkListItem.getTitle() + " : "
+						+ checkListItem.getOptionLists().get(checkId),
+				Toast.LENGTH_SHORT).show();
+
 	}
 
+	@Override
+	public void onSelectUpdate(CheckListItem checkListItem, int selectId) {
+		Toast.makeText(
+				context,
+				checkListItem.getTitle() + " : "
+						+ checkListItem.getOptionLists().get(selectId),
+				Toast.LENGTH_SHORT).show();
+
+	}
 
 }

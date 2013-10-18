@@ -11,18 +11,19 @@ import java.util.List;
 
 import com.droidplanner.R;
 import com.droidplanner.preflightcheck.CheckListItem;
-import com.droidplanner.widgets.ChecklistAdapter.Radio_XmlRow.OnRadioGroupCheckedChangListener;
+import com.droidplanner.widgets.ChecklistAdapter.Radio_XmlRow.OnRadioGroupCheckedChangeListener;
+import com.droidplanner.widgets.ChecklistAdapter.Select_XmlRow.OnSelectChangeListener;
 
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.widget.TextView;
 
 public class CheckListAdapter extends BaseExpandableListAdapter implements
-		OnRadioGroupCheckedChangListener {
+		OnRadioGroupCheckedChangeListener,OnSelectChangeListener {
 
 	public interface OnCheckListItemUpdateListener {
 		public void onRadioGroupUpdate(CheckListItem checkListItem, RadioGroup group, int checkId);
-
+		public void onSelectUpdate(CheckListItem checkListItem, int selectId);
 	}
 
 	private OnCheckListItemUpdateListener listener;
@@ -51,7 +52,9 @@ public class CheckListAdapter extends BaseExpandableListAdapter implements
 					row.setOnRadioGroupChackedChangeListener(this);
 					xmlRows.add(row);
 				} else if (listItem.getType().equalsIgnoreCase("select_item")) {
-					xmlRows.add(new Select_XmlRow(this.inflater, listItem));
+					Select_XmlRow row = new Select_XmlRow(this.inflater, listItem);
+					row.setOnSelectChangeListener(this);
+					xmlRows.add(row);
 				} else if (listItem.getType().equalsIgnoreCase("toggle_item")) {
 					xmlRows.add(new Toggle_XmlRow(this.inflater, listItem));
 				} else if (listItem.getType().equalsIgnoreCase("switch_item")) {
@@ -152,6 +155,12 @@ public class CheckListAdapter extends BaseExpandableListAdapter implements
 			RadioGroup group, int checkId) {
 		if(this.listener!=null)
 			this.listener.onRadioGroupUpdate(checkListItem, group, checkId);
+	}
+
+	@Override
+	public void onSelectChanged(CheckListItem checkListItem, int selectId) {
+		if(this.listener!=null)
+			this.listener.onSelectUpdate(checkListItem, selectId);		
 	}
 
 
