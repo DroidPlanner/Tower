@@ -21,7 +21,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:minWidth="100dp" />
+        android:focusableInTouchMode="false" />
 
 </LinearLayout>

@@ -6,5 +6,6 @@ public enum XmlRowType {
     TOGGLE_ROW,
     SWITCH_ROW,
     RADIO_ROW,
-    SELECT_ROW
+    SELECT_ROW,
+    LEVEL_ROW
 }

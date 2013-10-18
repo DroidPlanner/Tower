@@ -32,7 +32,6 @@ public class CheckListAdapter extends BaseExpandableListAdapter {
 		this.cvSelect = null;
 		this.cvToggle = null;
 		this.cvValue = null;
-//		this.convertViews = new View[XmlRowType.values().length];
 		
 		for (String dataHeader : listDataHeader) {
 			List<XmlRow> xmlRows = new ArrayList<XmlRow>();
@@ -49,6 +48,8 @@ public class CheckListAdapter extends BaseExpandableListAdapter {
 					xmlRows.add(new Toggle_XmlRow(this.inflater, listItem));
 				} else if (listItem.getType().equalsIgnoreCase("switch_item")) {
 					xmlRows.add(new Switch_XmlRow(this.inflater, listItem));
+				}else if (listItem.getType().equalsIgnoreCase("level_item")) {
+					xmlRows.add(new Level_XmlRow(this.inflater, listItem));
 				}
 			}
 			listCheckListChild.put(dataHeader, xmlRows);

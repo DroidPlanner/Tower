@@ -27,13 +27,29 @@
             title="Radio Transmitter" />
         </category>
     <category label="System Checklist" >
-        <select_item
+         <level_item
+            description="Show battery level"
+            editable="no"
+            mandatory="yes"
+            minimum_val="3.5"
+            nominal_val="3.7"
+            system_tag="SYS_BATTERY_LVL"
+            title="Battery level" />
+        <value_item
+            description="Show default Altitude"
+            editable="no"
+            mandatory="yes"
+            minimum_val="10"
+            nominal_val="50"
+            system_tag="SYS_DEF_ALT"
+            title="Default Alt " />
+         <select_item
             description="Select connection type"
             mandatory="yes"
             optionlist="Bluetooth,USB,WiFi"
             selectindex="0"
             system_tag="SYS_TELEMETRY_TYPE"
-            title="Telemetry connection :" />
+            title="Telemetry connection " />
 
         <toggle_item
             description="Toggle system arm or disarm"
@@ -51,14 +67,6 @@
             system_tag="SYS_CONNECT_STATE"
             title="Telemetry connect" />
 
-        <value_item
-            description="Show battery level"
-            editable="no"
-            mandatory="yes"
-            minimum_val="3.5"
-            nominal_val="3.7"
-            system_tag="SYS_BATTERY_LVL"
-            title="Battery level" />
     </category>
 
 </preflightcheck>
