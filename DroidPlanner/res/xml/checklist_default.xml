@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<preflightcheck
+    type="APM"
+    version="1" >
+
+    <category label="User Checklist" >
+        <check_item
+            description="Ensure Camera is connected and switch on"
+            mandatory="yes"
+            title="Camera connected and switch on" />
+        <check_item
+            description="Ensure surface control is in the right direction"
+            mandatory="yes"
+            title="Surface control - Aileron" />
+        <check_item
+            description="Ensure surface control is in the right direction"
+            mandatory="yes"
+            title="Surface control - Elevator" />
+        <check_item
+            description="Ensure surface control is in the right direction"
+            mandatory="yes"
+            title="Surface control - Rudder" />
+    </category>
+    <category label="System Checklist" >
+        <select_item
+            description="Select connection type"
+            mandatory="yes"
+            optionlist="Bluetooth,USB,WiFi"
+            selectindex="0"
+            system_tag="SYS_TELEMETRY_TYPE"
+            title="Telemetry connection :" />
+
+        <toggle_item
+            description="Toggle sytem arm or disarm"
+            editable="yes"
+            mandatory="yes"
+            system_tag="SYS_ARM_STATE"
+            title="Arm System" />
+
+        <radio_item
+            description="Select connection state"
+            editable="yes"
+            mandatory="yes"
+            optionlist="Connect,Disconnect"
+            selectindex="0"
+            system_tag="SYS_CONNECT_STATE"
+            title="Telemetry connect" />
+
+        <value_item
+            description="Show battery level"
+            editable="no"
+            mandatory="yes"
+            minimum_val="3.5"
+            nominal_val="3.7"
+            system_tag="SYS_BATTERY_LVL"
+            title="Battery level" />
+    </category>
+
+</preflightcheck>
