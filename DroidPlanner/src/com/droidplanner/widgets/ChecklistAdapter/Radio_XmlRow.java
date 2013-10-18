@@ -9,13 +9,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 
 public class Radio_XmlRow implements XmlRow {
+	public interface OnRadioGroupCheckedChangListener{
+		public void onRadioGroupCheckedChanged(CheckListItem checkListItem, RadioGroup group, int checkId);
+	}
+	
+	private OnRadioGroupCheckedChangListener listener;
 	private final CheckListItem checkListItem;
 	private final LayoutInflater inflater;
 
@@ -25,7 +30,7 @@ public class Radio_XmlRow implements XmlRow {
 	}
 
 	public View getView(View convertView) {
-		ViewHolder holder;
+		final ViewHolder holder;
 		View view;
 		if (convertView == null) {
 			ViewGroup viewGroup = (ViewGroup) inflater.inflate(
@@ -39,6 +44,19 @@ public class Radio_XmlRow implements XmlRow {
 		}
 		// TODO - Add information (radio items here)
 		holder.textView.setText(checkListItem.getTitle());
+		holder.radioGroupView.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			
+			@Override
+			public void onCheckedChanged(RadioGroup group, int checkedId) {
+				// TODO Auto-generated method stub
+				if(listener!=null){
+					listener.onRadioGroupCheckedChanged(holder.checkListItem,group, checkedId);
+				}
+					
+				
+			}
+		});
+		
 		return view;
 	}
 
@@ -46,12 +64,18 @@ public class Radio_XmlRow implements XmlRow {
 		return XmlRowType.RADIO_ROW.ordinal();
 	}
 
+	public void setOnRadioGroupChackedChangeListener(OnRadioGroupCheckedChangListener listener) {
+		this.listener = listener;
+	}
+
 	private static class ViewHolder {
 		final LinearLayout layoutView;
 		final TextView textView;
 		final RadioGroup radioGroupView;
-
+		final CheckListItem checkListItem;
+		
 		private ViewHolder(ViewGroup viewGroup, CheckListItem checkListItem) {
+			this.checkListItem = checkListItem;
 			this.layoutView = (LinearLayout) viewGroup
 					.findViewById(R.id.layout_radio);
 			this.textView = (TextView) viewGroup

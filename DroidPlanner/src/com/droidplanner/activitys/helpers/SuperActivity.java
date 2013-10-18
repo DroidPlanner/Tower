@@ -151,7 +151,7 @@ public abstract class SuperActivity extends Activity implements
 
 	private void doPreflightChecklist() {
 		PreflightDialog dialog = new PreflightDialog();
-		dialog.build(this, false);
+		dialog.build(this, drone, false);
 	}
 
 	private void setMapTypeFromItemId(int itemId) {

@@ -14,18 +14,23 @@ import java.util.ArrayList;
 import org.xmlpull.v1.XmlPullParser;
 
 import com.droidplanner.R;
+import com.droidplanner.drone.Drone;
 import com.droidplanner.preflightcheck.CheckListItem;
 import com.droidplanner.preflightcheck.XMLChecklistParser;
 import com.droidplanner.widgets.ChecklistAdapter.CheckListAdapter;
+import com.droidplanner.widgets.ChecklistAdapter.CheckListAdapter.OnCheckListItemUpdateListener;
 
 import android.widget.ExpandableListView;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.Toast;
 
 public class PreflightDialog implements DialogInterface.OnClickListener,
-		com.droidplanner.preflightcheck.XMLChecklistParser.OnXmlParserError {
+		com.droidplanner.preflightcheck.XMLChecklistParser.OnXmlParserError, OnCheckListItemUpdateListener {
 
 	private Context context;
 	private View view;
-	//private Drone drone;
+	private Drone drone;
 	private List<String> listDataHeader;
 	private List<CheckListItem> checkItemList;
 	private HashMap<String, List<CheckListItem>> listDataChild;
@@ -37,9 +42,9 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 	}
 
 //	public void build(Drone mdrone, Context mcontext, boolean mpreflight) {
-	public void build(Context mcontext, boolean mpreflight) {
+	public void build(Context mcontext, Drone mdrone, boolean mpreflight) {
 		context = mcontext;
-		//drone = mdrone;
+		drone = mdrone;
 		// TODO Read System checklist here
 		XMLChecklistParser xml = new XMLChecklistParser();
 		xml.setOnXMLParserError(this);
@@ -78,10 +83,11 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 
 		listAdapter = new CheckListAdapter(inflater, listDataHeader,
 				listDataChild);
+		listAdapter.setOnCheckListItemUpdateListener(this);
 		// setting list adapter
 		expListView.setAdapter(listAdapter);
 		expListView.expandGroup(0);
-//		expListView.expandGroup(1);
+		expListView.expandGroup(1);
 
 		return view;
 	}
@@ -111,5 +117,13 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 		// TODO Auto-generated method stub
 
 	}
+
+	@Override
+	public void onRadioGroupUpdate(CheckListItem checkListItem,
+			RadioGroup group, int checkId) {
+		Toast.makeText(context, checkListItem.getTitle(), Toast.LENGTH_SHORT).show();
+		
+	}
+
 
 }
