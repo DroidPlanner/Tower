@@ -2,13 +2,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layout_toggle"
     android:layout_width="match_parent"
-    android:layout_height="55dip"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
     android:orientation="horizontal" >
 
     <Switch
         android:id="@+id/chk_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Switch" />
+        android:layout_marginLeft="20dp"
+        android:gravity="center_vertical|end"
+        android:switchMinWidth="25sp"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/chk_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:text="Medium Text"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </LinearLayout>

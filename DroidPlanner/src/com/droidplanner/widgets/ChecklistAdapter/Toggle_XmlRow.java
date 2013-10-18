@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Switch;
+import android.widget.TextView;
 
 public class Toggle_XmlRow implements XmlRow {
     private final CheckListItem checkListItem;
@@ -35,7 +36,7 @@ public class Toggle_XmlRow implements XmlRow {
 		}
 
 		// TODO - Add spinner items
-		holder.switchView.setText(checkListItem.getTitle());
+		holder.textView.setText(checkListItem.getTitle());
 		return view;
 	}
 
@@ -46,10 +47,12 @@ public class Toggle_XmlRow implements XmlRow {
 	private static class ViewHolder {
 		final LinearLayout layoutView;
 		final Switch switchView;
+		final TextView textView;
 
 		private ViewHolder(ViewGroup viewGroup) {
 			this.layoutView = (LinearLayout) viewGroup.findViewById(R.id.layout_toggle);
 			this.switchView = (Switch) viewGroup.findViewById(R.id.chk_switch);
+			this.textView = (TextView) viewGroup.findViewById(R.id.chk_label);
 		}
 	}
 
