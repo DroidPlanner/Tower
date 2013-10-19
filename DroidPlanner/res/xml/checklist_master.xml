@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<masterchecklist
+type="APM"
+version="1" >
+
+<category label="Logbook" >
+    <text_item
+        description="Pilot/Operator"
+        mandatory="yes"
+        title="Pilot operating the MAV" />
+    <text_item
+        description="MAV number / description"
+        mandatory="yes"
+        title="MAV number / description" />
+    <date_item
+        description="Mission date"
+        mandatory="yes"
+        title="Mission date" />
+    <time_item
+        description="Mission start time"
+        mandatory="yes"
+        title="Mission time" />
+    <value_item
+        description="Home location"
+        mandatory="yes"
+        title="Home location / X and Y coordinates" />
+    <check_item
+        description="Auto mission"
+        mandatory="yes"
+        title="Auto mission" />
+
+    <value_item
+        description="Maximum altitude"
+        mandatory="yes"
+        title="Maximum flight altitude" />
+    <value_item
+        description="Maximum distance"
+        mandatory="yes"
+        title="Maximum flight distance" />   
+    <value_item
+        description="Maximum flight time"
+        mandatory="yes"
+        title="Maximum flight time" />
+</category>
+
+
+<category label="User Pre-Flight Checklist" >
+    <check_item
+        description="Environmental conditions ok"
+        mandatory="yes"
+        title="Environmental conditions ok" />
+     <check_item
+        description="MAV batteries ok"
+        mandatory="yes"
+        title="MAV batteries ok" />
+    <check_item
+        description="RC batteries ok"
+        mandatory="yes"
+        title="RC batteries ok" />
+    <check_item
+        description="Camera batteries ok"
+        mandatory="yes"
+        title="Camera batteries ok" />
+    <check_item
+        description="GCS batteries ok"
+        mandatory="yes"
+        title="GCS batteries ok" />
+    <check_item
+        description="Orientation of MAV ok"
+        mandatory="yes"
+        title="Orientation of MAV ok" />
+    <check_item
+        description="Yaw behaviour ok"
+        mandatory="yes"
+        title="Yaw behaviour ok" />
+    <check_item
+        description="GCS powered"
+        mandatory="yes"
+        title="GCS powered" />
+    <check_item
+        description="RC powered"
+        mandatory="yes"
+        title="RC powered" />
+    <check_item
+        description="MAV powered"
+        mandatory="yes"
+        title="MAV powered" />
+    <check_item
+        description="Telemetry connection ok"
+        mandatory="yes"
+        title="Telemetry connection ok" />
+    <check_item
+        description="Telemetry working"
+        mandatory="yes"
+        title="Telemetry working" />
+    <check_item
+        description="Range test sucessful"
+        mandatory="yes"
+        title="Range test sucessful" />
+    <check_item
+        description="3D GPS fix ok"
+        mandatory="yes"
+        title="3D GPS fix ok" />
+    <check_item
+        description="Mission altitude checked"
+        mandatory="yes"
+        title="Mission altitude checked" />
+    <check_item
+        description="Mission speed checked"
+        mandatory="yes"
+        title="Mission speed checked" />
+    <check_item
+        description="Sensors ok"
+        mandatory="yes"
+        title="Sensors ok" />
+    <check_item
+        description="Camera in manual mode"
+        mandatory="yes"
+        title="Camera in manual mode" />
+    <check_item
+        description="Camera script running"
+        mandatory="yes"
+        title="Camera script running" />
+    <check_item
+        description="Camera powered"
+        mandatory="yes"
+        title="Camera powered" />
+    <check_item
+        description="Mission loaded"
+        mandatory="yes"
+        title="Mission loaded to flight controller" />
+    <check_item
+        description="Mission downloaded and checked"
+        mandatory="yes"
+        title="Mission downloaded from flight controller and verified" />
+    <check_item
+        description="Environmental condition changes"
+        mandatory="yes"
+        title="Environmental conditions expected to stay ok during flight" />
+    <check_item
+        description="MAV armed"
+        mandatory="yes"
+        title="MAV armed" />
+</category>
+
+
+ <category label="User Post-Flight Checklist" >
+    <check_item
+        description="MAV disarmed"
+        mandatory="yes"
+        title="MAV disarmed" />
+    <check_item
+        description="MAV powered off"
+        mandatory="yes"
+        title="MAV powered off" />
+    <check_item
+        description="GCS powered off"
+        mandatory="yes"
+        title="GCS powered off" />
+    <check_item
+        description="RC powered off"
+        mandatory="yes"
+        title="RC powered off" />
+    <check_item
+        description="Camera powered off"
+        mandatory="yes"
+        title="Camera powered off" />
+</category>
+
+
+<category label="System Checklist" >
+    <select_item
+        description="Select connection type"
+        mandatory="yes"
+        optionlist="Bluetooth,USB,WiFi"
+        selectindex="0"
+        system_tag="SYS_TELEMETRY_TYPE"
+        title="Telemetry connection :" />
+
+    <toggle_item
+        description="Toggle sytem arm or disarm"
+        editable="yes"
+        mandatory="yes"
+        system_tag="SYS_ARM_STATE"
+        title="Arm System" />
+
+    <radio_item
+        description="Select connection state"
+        editable="yes"
+        mandatory="yes"
+        optionlist="Connect,Disconnect"
+        selectindex="0"
+        system_tag="SYS_CONNECT_STATE"
+        title="Telemetry connect" />
+
+    <value_item
+        description="Show battery level"
+        editable="no"
+        mandatory="yes"
+        minimum_val="3.5"
+        nominal_val="3.7"
+        system_tag="SYS_BATTERY_LVL"
+        title="Battery level" />
+</category>
+
+</masterchecklist>
