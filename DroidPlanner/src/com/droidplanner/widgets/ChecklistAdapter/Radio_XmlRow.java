@@ -15,11 +15,12 @@ import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 
-public class Radio_XmlRow implements XmlRow {
-	public interface OnRadioGroupCheckedChangeListener{
-		public void onRadioGroupCheckedChanged(CheckListItem checkListItem, RadioGroup group, int checkId);
+public class Radio_XmlRow implements XmlRow, OnCheckedChangeListener {
+	public interface OnRadioGroupCheckedChangeListener {
+		public void onRadioGroupCheckedChanged(CheckListItem checkListItem,
+				RadioGroup group, int checkId);
 	}
-	
+
 	private OnRadioGroupCheckedChangeListener listener;
 	private final CheckListItem checkListItem;
 	private final LayoutInflater inflater;
@@ -43,20 +44,9 @@ public class Radio_XmlRow implements XmlRow {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		// TODO - Add information (radio items here)
+		holder.radioGroupView.setOnCheckedChangeListener(this);
 		holder.textView.setText(checkListItem.getTitle());
-		holder.radioGroupView.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			
-			@Override
-			public void onCheckedChanged(RadioGroup group, int checkedId) {
-				// TODO Auto-generated method stub
-				if(listener!=null){
-					listener.onRadioGroupCheckedChanged(holder.checkListItem,group, checkedId);
-				}
-					
-				
-			}
-		});
-		
+
 		return view;
 	}
 
@@ -64,7 +54,8 @@ public class Radio_XmlRow implements XmlRow {
 		return XmlRowType.RADIO_ROW.ordinal();
 	}
 
-	public void setOnRadioGroupChackedChangeListener(OnRadioGroupCheckedChangeListener listener) {
+	public void setOnRadioGroupChackedChangeListener(
+			OnRadioGroupCheckedChangeListener listener) {
 		this.listener = listener;
 	}
 
@@ -73,22 +64,21 @@ public class Radio_XmlRow implements XmlRow {
 		final TextView textView;
 		final RadioGroup radioGroupView;
 		final CheckListItem checkListItem;
-		
+
 		private ViewHolder(ViewGroup viewGroup, CheckListItem checkListItem) {
 			this.checkListItem = checkListItem;
 			this.layoutView = (LinearLayout) viewGroup
 					.findViewById(R.id.layout_radio);
-			this.textView = (TextView) viewGroup
-					.findViewById(R.id.chk_label);
+			this.textView = (TextView) viewGroup.findViewById(R.id.chk_label);
 			this.radioGroupView = (RadioGroup) viewGroup
 					.findViewById(R.id.chk_radioGroup);
-			
+
 			setupRadioButtons(viewGroup, checkListItem);
 		}
 
 		private void setupRadioButtons(ViewGroup viewGroup,
 				CheckListItem checkListItem) {
-			
+
 			this.radioGroupView.removeAllViews();
 
 			List<String> optionLists = checkListItem.getOptionLists();
@@ -101,7 +91,13 @@ public class Radio_XmlRow implements XmlRow {
 				this.radioGroupView.addView(rButton);
 			}
 			this.radioGroupView.check(checkListItem.getSelectedIndex());
-			
+
 		}
+	}
+
+	@Override
+	public void onCheckedChanged(RadioGroup arg0, int arg1) {
+		if (listener != null)
+			listener.onRadioGroupCheckedChanged(checkListItem, arg0, arg1);
 	}
 }

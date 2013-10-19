@@ -22,7 +22,6 @@ import com.droidplanner.widgets.ChecklistAdapter.CheckListAdapter.OnCheckListIte
 
 import android.widget.ExpandableListView;
 import android.widget.RadioGroup;
-import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Toast;
 
 public class PreflightDialog implements DialogInterface.OnClickListener,
@@ -51,7 +50,7 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 		xml.setOnXMLParserError(this);
 
 		XmlResourceParser is = context.getResources().getXml(
-				R.xml.checklist_default);
+				R.xml.checklist_master);
 		xml.parse(is);
 		listDataHeader = xml.getCategories();
 		checkItemList = xml.getCheckListItems();
@@ -138,6 +137,16 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 						+ checkListItem.getOptionLists().get(selectId),
 				Toast.LENGTH_SHORT).show();
 
+	}
+
+	@Override
+	public void onCheckBoxUpdate(CheckListItem checkListItem, boolean isChecked) {
+		Toast.makeText(
+				context,
+				checkListItem.getTitle() + " : "
+						+ checkListItem.getTitle() + (isChecked?" checked":" unchecked"),
+				Toast.LENGTH_SHORT).show();
+		
 	}
 
 }

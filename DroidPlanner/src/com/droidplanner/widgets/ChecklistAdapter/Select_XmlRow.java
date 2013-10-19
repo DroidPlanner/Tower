@@ -15,11 +15,11 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-public class Select_XmlRow implements XmlRow {
-	public interface OnSelectChangeListener{
+public class Select_XmlRow implements XmlRow, OnItemSelectedListener {
+	public interface OnSelectChangeListener {
 		public void onSelectChanged(CheckListItem checkListItem, int selectId);
 	}
-	
+
 	private OnSelectChangeListener listener;
 	private final CheckListItem checkListItem;
 	private final LayoutInflater inflater;
@@ -45,23 +45,7 @@ public class Select_XmlRow implements XmlRow {
 
 		// TODO - Add spinner items
 		holder.textView.setText(checkListItem.getTitle());
-		holder.selectView.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-			@Override
-			public void onItemSelected(AdapterView<?> arg0, View arg1,
-					int arg2, long arg3) {
-				if(listener!=null){
-					listener.onSelectChanged(holder.checkListItem, arg2);
-				}
-				
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
+		holder.selectView.setOnItemSelectedListener(this);
 
 		return view;
 	}
@@ -88,18 +72,33 @@ public class Select_XmlRow implements XmlRow {
 			this.selectView = (Spinner) viewGroup.findViewById(R.id.chk_select);
 			this.textView = (TextView) viewGroup.findViewById(R.id.chk_label);
 			this.checkListItem = checkListItem;
-			
+
 			setupSpinner(viewGroup, checkListItem);
 		}
 
 		private void setupSpinner(ViewGroup viewGroup,
 				CheckListItem checkListItem) {
 			adapter = new ArrayAdapter<String>(viewGroup.getContext(),
-					android.R.layout.simple_spinner_item, checkListItem.getOptionLists());
+					android.R.layout.simple_spinner_item,
+					checkListItem.getOptionLists());
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			
+
 			selectView.setAdapter(adapter);
-			
+
 		}
+	}
+
+	@Override
+	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
+			long arg3) {
+		if (listener != null) {
+			listener.onSelectChanged(checkListItem, arg2);
+		}
+
+	}
+
+	@Override
+	public void onNothingSelected(AdapterView<?> arg0) {
+		// TODO Auto-generated method stub
 	}
 }

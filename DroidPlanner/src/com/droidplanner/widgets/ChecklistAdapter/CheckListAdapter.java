@@ -1,6 +1,7 @@
 package com.droidplanner.widgets.ChecklistAdapter;
 
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.RadioGroup;
@@ -11,6 +12,7 @@ import java.util.List;
 
 import com.droidplanner.R;
 import com.droidplanner.preflightcheck.CheckListItem;
+import com.droidplanner.widgets.ChecklistAdapter.CheckBox_XmlRow.OnCheckBoxChangeListener;
 import com.droidplanner.widgets.ChecklistAdapter.Radio_XmlRow.OnRadioGroupCheckedChangeListener;
 import com.droidplanner.widgets.ChecklistAdapter.Select_XmlRow.OnSelectChangeListener;
 
@@ -19,11 +21,15 @@ import android.view.LayoutInflater;
 import android.widget.TextView;
 
 public class CheckListAdapter extends BaseExpandableListAdapter implements
-		OnRadioGroupCheckedChangeListener,OnSelectChangeListener {
+		OnRadioGroupCheckedChangeListener, OnSelectChangeListener, OnCheckBoxChangeListener {
 
 	public interface OnCheckListItemUpdateListener {
-		public void onRadioGroupUpdate(CheckListItem checkListItem, RadioGroup group, int checkId);
+		public void onRadioGroupUpdate(CheckListItem checkListItem,
+				RadioGroup group, int checkId);
+
 		public void onSelectUpdate(CheckListItem checkListItem, int selectId);
+
+		public void onCheckBoxUpdate(CheckListItem checkListItem, boolean isChecked);
 	}
 
 	private OnCheckListItemUpdateListener listener;
@@ -44,7 +50,9 @@ public class CheckListAdapter extends BaseExpandableListAdapter implements
 			List<XmlRow> xmlRows = new ArrayList<XmlRow>();
 			for (CheckListItem listItem : listDataChild.get(dataHeader)) {
 				if (listItem.getType().equalsIgnoreCase("check_item")) {
-					xmlRows.add(new CheckBox_XmlRow(this.inflater, listItem));
+					CheckBox_XmlRow row = new CheckBox_XmlRow(this.inflater, listItem);
+					row.setOnCheckBoxChangeListener(this);
+					xmlRows.add(row);
 				} else if (listItem.getType().equalsIgnoreCase("value_item")) {
 					xmlRows.add(new Value_XmlRow(this.inflater, listItem));
 				} else if (listItem.getType().equalsIgnoreCase("radio_item")) {
@@ -52,7 +60,8 @@ public class CheckListAdapter extends BaseExpandableListAdapter implements
 					row.setOnRadioGroupChackedChangeListener(this);
 					xmlRows.add(row);
 				} else if (listItem.getType().equalsIgnoreCase("select_item")) {
-					Select_XmlRow row = new Select_XmlRow(this.inflater, listItem);
+					Select_XmlRow row = new Select_XmlRow(this.inflater,
+							listItem);
 					row.setOnSelectChangeListener(this);
 					xmlRows.add(row);
 				} else if (listItem.getType().equalsIgnoreCase("toggle_item")) {
@@ -153,16 +162,20 @@ public class CheckListAdapter extends BaseExpandableListAdapter implements
 	@Override
 	public void onRadioGroupCheckedChanged(CheckListItem checkListItem,
 			RadioGroup group, int checkId) {
-		if(this.listener!=null)
+		if (this.listener != null)
 			this.listener.onRadioGroupUpdate(checkListItem, group, checkId);
 	}
 
 	@Override
 	public void onSelectChanged(CheckListItem checkListItem, int selectId) {
-		if(this.listener!=null)
-			this.listener.onSelectUpdate(checkListItem, selectId);		
+		if (this.listener != null)
+			this.listener.onSelectUpdate(checkListItem, selectId);
 	}
 
-
+	@Override
+	public void onCheckBoxChanged(CheckListItem checkListItem, boolean isChecked) {
+		if (this.listener != null)
+			this.listener.onCheckBoxUpdate(checkListItem, isChecked);
+	}
 
 }
