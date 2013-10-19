@@ -50,7 +50,7 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 		xml.setOnXMLParserError(this);
 
 		XmlResourceParser is = context.getResources().getXml(
-				R.xml.checklist_master);
+				R.xml.checklist_default);
 		xml.parse(is);
 		listDataHeader = xml.getCategories();
 		checkItemList = xml.getCheckListItems();
@@ -145,6 +145,16 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 				context,
 				checkListItem.getTitle() + " : "
 						+ checkListItem.getTitle() + (isChecked?" checked":" unchecked"),
+				Toast.LENGTH_SHORT).show();
+		
+	}
+
+	@Override
+	public void onSwitchUpdate(CheckListItem checkListItem, boolean isSwitched) {
+		Toast.makeText(
+				context,
+				checkListItem.getTitle() + " : "
+						+ checkListItem.getTitle() + (isSwitched?" switched ON":" switched OFF"),
 				Toast.LENGTH_SHORT).show();
 		
 	}

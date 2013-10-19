@@ -15,13 +15,15 @@ import com.droidplanner.preflightcheck.CheckListItem;
 import com.droidplanner.widgets.ChecklistAdapter.CheckBox_XmlRow.OnCheckBoxChangeListener;
 import com.droidplanner.widgets.ChecklistAdapter.Radio_XmlRow.OnRadioGroupCheckedChangeListener;
 import com.droidplanner.widgets.ChecklistAdapter.Select_XmlRow.OnSelectChangeListener;
+import com.droidplanner.widgets.ChecklistAdapter.Switch_XmlRow.OnSwitchChangeListener;
 
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.widget.TextView;
 
 public class CheckListAdapter extends BaseExpandableListAdapter implements
-		OnRadioGroupCheckedChangeListener, OnSelectChangeListener, OnCheckBoxChangeListener {
+		OnRadioGroupCheckedChangeListener, OnSelectChangeListener,
+		OnCheckBoxChangeListener, OnSwitchChangeListener {
 
 	public interface OnCheckListItemUpdateListener {
 		public void onRadioGroupUpdate(CheckListItem checkListItem,
@@ -29,7 +31,12 @@ public class CheckListAdapter extends BaseExpandableListAdapter implements
 
 		public void onSelectUpdate(CheckListItem checkListItem, int selectId);
 
-		public void onCheckBoxUpdate(CheckListItem checkListItem, boolean isChecked);
+		public void onCheckBoxUpdate(CheckListItem checkListItem,
+				boolean isChecked);
+
+		public void onSwitchUpdate(CheckListItem checkListItem,
+				boolean isSwitched);
+
 	}
 
 	private OnCheckListItemUpdateListener listener;
@@ -50,7 +57,8 @@ public class CheckListAdapter extends BaseExpandableListAdapter implements
 			List<XmlRow> xmlRows = new ArrayList<XmlRow>();
 			for (CheckListItem listItem : listDataChild.get(dataHeader)) {
 				if (listItem.getType().equalsIgnoreCase("check_item")) {
-					CheckBox_XmlRow row = new CheckBox_XmlRow(this.inflater, listItem);
+					CheckBox_XmlRow row = new CheckBox_XmlRow(this.inflater,
+							listItem);
 					row.setOnCheckBoxChangeListener(this);
 					xmlRows.add(row);
 				} else if (listItem.getType().equalsIgnoreCase("value_item")) {
@@ -67,7 +75,10 @@ public class CheckListAdapter extends BaseExpandableListAdapter implements
 				} else if (listItem.getType().equalsIgnoreCase("toggle_item")) {
 					xmlRows.add(new Toggle_XmlRow(this.inflater, listItem));
 				} else if (listItem.getType().equalsIgnoreCase("switch_item")) {
-					xmlRows.add(new Switch_XmlRow(this.inflater, listItem));
+					Switch_XmlRow row = new Switch_XmlRow(this.inflater,
+							listItem);
+					row.setOnSwitchChangeListener(this);
+					xmlRows.add(row);
 				} else if (listItem.getType().equalsIgnoreCase("level_item")) {
 					xmlRows.add(new Level_XmlRow(this.inflater, listItem));
 				}
@@ -176,6 +187,12 @@ public class CheckListAdapter extends BaseExpandableListAdapter implements
 	public void onCheckBoxChanged(CheckListItem checkListItem, boolean isChecked) {
 		if (this.listener != null)
 			this.listener.onCheckBoxUpdate(checkListItem, isChecked);
+	}
+
+	@Override
+	public void onSwitchChanged(CheckListItem checkListItem, boolean isSwitched) {
+		if (this.listener != null)
+			this.listener.onSwitchUpdate(checkListItem, isSwitched);
 	}
 
 }
