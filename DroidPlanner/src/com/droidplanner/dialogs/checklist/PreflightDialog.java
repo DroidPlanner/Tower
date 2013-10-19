@@ -159,4 +159,14 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 		
 	}
 
+	@Override
+	public void onToggleUpdate(CheckListItem checkListItem, boolean isToggled) {
+		Toast.makeText(
+				context,
+				checkListItem.getTitle() + " : "
+						+ checkListItem.getTitle() + (isToggled?" toggled ON":" toggled OFF"),
+				Toast.LENGTH_SHORT).show();
+		
+	}
+
 }

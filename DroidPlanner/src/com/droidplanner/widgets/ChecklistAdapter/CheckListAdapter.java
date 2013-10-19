@@ -16,6 +16,7 @@ import com.droidplanner.widgets.ChecklistAdapter.CheckBox_XmlRow.OnCheckBoxChang
 import com.droidplanner.widgets.ChecklistAdapter.Radio_XmlRow.OnRadioGroupCheckedChangeListener;
 import com.droidplanner.widgets.ChecklistAdapter.Select_XmlRow.OnSelectChangeListener;
 import com.droidplanner.widgets.ChecklistAdapter.Switch_XmlRow.OnSwitchChangeListener;
+import com.droidplanner.widgets.ChecklistAdapter.Toggle_XmlRow.OnToggleChangeListener;
 
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
@@ -23,7 +24,8 @@ import android.widget.TextView;
 
 public class CheckListAdapter extends BaseExpandableListAdapter implements
 		OnRadioGroupCheckedChangeListener, OnSelectChangeListener,
-		OnCheckBoxChangeListener, OnSwitchChangeListener {
+		OnCheckBoxChangeListener, OnSwitchChangeListener,
+		OnToggleChangeListener {
 
 	public interface OnCheckListItemUpdateListener {
 		public void onRadioGroupUpdate(CheckListItem checkListItem,
@@ -37,6 +39,8 @@ public class CheckListAdapter extends BaseExpandableListAdapter implements
 		public void onSwitchUpdate(CheckListItem checkListItem,
 				boolean isSwitched);
 
+		public void onToggleUpdate(CheckListItem checkListItem,
+				boolean isToggled);
 	}
 
 	private OnCheckListItemUpdateListener listener;
@@ -73,7 +77,10 @@ public class CheckListAdapter extends BaseExpandableListAdapter implements
 					row.setOnSelectChangeListener(this);
 					xmlRows.add(row);
 				} else if (listItem.getType().equalsIgnoreCase("toggle_item")) {
-					xmlRows.add(new Toggle_XmlRow(this.inflater, listItem));
+					Toggle_XmlRow row = new Toggle_XmlRow(this.inflater,
+							listItem);
+					row.setOnToggleChangeListener(this);
+					xmlRows.add(row);
 				} else if (listItem.getType().equalsIgnoreCase("switch_item")) {
 					Switch_XmlRow row = new Switch_XmlRow(this.inflater,
 							listItem);
@@ -195,4 +202,9 @@ public class CheckListAdapter extends BaseExpandableListAdapter implements
 			this.listener.onSwitchUpdate(checkListItem, isSwitched);
 	}
 
+	@Override
+	public void onToggleChanged(CheckListItem checkListItem, boolean isToggled) {
+		if (this.listener != null)
+			this.listener.onToggleUpdate(checkListItem, isToggled);
+	}
 }
