@@ -9,6 +9,9 @@ import android.content.DialogInterface;
 import android.content.res.XmlResourceParser;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.WindowManager.LayoutParams;
+
 import java.util.ArrayList;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -35,7 +38,7 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 	private HashMap<String, List<CheckListItem>> listDataChild;
 	private CheckListAdapter listAdapter;
 	private ExpandableListView expListView;
-
+	private AlertDialog dialog;
 	public PreflightDialog() {
 		// TODO Auto-generated constructor stub
 	}
@@ -54,7 +57,7 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 		listDataHeader = xml.getCategories();
 		checkItemList = xml.getCheckListItems();
 
-		AlertDialog dialog = buildDialog(mpreflight);
+		dialog = buildDialog(mpreflight);
 		dialog.show();
 	}
 
@@ -85,11 +88,22 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 		listAdapter.setHeaderLayout(R.layout.list_group_header);
 		listAdapter.setOnCheckListItemUpdateListener(this);
 		// setting list adapter
+		
+		expListView.post(new Runnable() {
+
+	        @Override
+	        public void run() {
+	            dialog.getWindow().clearFlags(
+	                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+	                    WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);              
+	        }
+	    });
 		expListView.setAdapter(listAdapter);
-/*
+
 		expListView.expandGroup(0);
 		expListView.expandGroup(1);
-*/
+
+
 		return view;
 	}
 

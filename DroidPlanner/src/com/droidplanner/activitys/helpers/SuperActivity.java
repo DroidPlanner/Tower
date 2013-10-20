@@ -3,6 +3,7 @@ package com.droidplanner.activitys.helpers;
 import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
@@ -11,6 +12,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager.LayoutParams;
 import android.widget.ArrayAdapter;
 import android.widget.SpinnerAdapter;
 
@@ -217,7 +219,6 @@ public abstract class SuperActivity extends Activity implements
 					R.string.menu_arm));
 		}
 	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu_super_activiy, menu);
