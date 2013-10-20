@@ -1,4 +1,4 @@
-package com.droidplanner.chcekclist.xml;
+package com.droidplanner.checklist.xml;
 
 import java.io.IOException;
 import java.io.StringReader;
