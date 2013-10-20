@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -27,7 +28,9 @@ import com.droidplanner.activitys.RCActivity;
 import com.droidplanner.activitys.SettingsActivity;
 import com.droidplanner.dialogs.AltitudeDialog;
 import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
+import com.droidplanner.dialogs.checklist.PreflightDialog;
 import com.droidplanner.drone.Drone;
+import com.droidplanner.fragments.checklist.ListXmlFragment;
 import com.droidplanner.fragments.helpers.OfflineMapFragment;
 import com.google.android.gms.maps.GoogleMap;
 
@@ -134,6 +137,9 @@ public abstract class SuperActivity extends Activity implements
 		case R.id.menu_follow_me:
 			app.followMe.toogleFollowMeState();
 			return true;
+		case R.id.menu_preflight_checklist:
+			showCheckList();
+			return true;
 		case R.id.menu_map_type_hybrid:
 		case R.id.menu_map_type_normal:
 		case R.id.menu_map_type_terrain:
@@ -143,6 +149,12 @@ public abstract class SuperActivity extends Activity implements
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
+	}
+
+	private void showCheckList() {
+		PreflightDialog dialog = new PreflightDialog();
+		dialog.build(this, drone, false);
+		
 	}
 
 	private void setMapTypeFromItemId(int itemId) {

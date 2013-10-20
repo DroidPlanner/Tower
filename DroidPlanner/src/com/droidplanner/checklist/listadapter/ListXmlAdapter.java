@@ -3,6 +3,7 @@ package com.droidplanner.checklist.listadapter;
 import java.util.HashMap;
 import java.util.List;
 
+import com.droidplanner.R;
 import com.droidplanner.checklist.row.ListRow_Interface;
 
 import android.graphics.Typeface;
@@ -100,7 +101,7 @@ public abstract class ListXmlAdapter extends BaseExpandableListAdapter{
 		}
 
 		TextView lblListHeader = (TextView) convertView
-				.findViewById(layoutId);
+				.findViewById(R.id.lblListHeader);
 		lblListHeader.setTypeface(null, Typeface.BOLD);
 		lblListHeader.setText(headerTitle);
 

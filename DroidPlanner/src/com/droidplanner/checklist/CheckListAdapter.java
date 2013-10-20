@@ -18,6 +18,7 @@ import com.droidplanner.checklist.row.ListRow_Switch;
 import com.droidplanner.checklist.row.ListRow_Switch.OnSwitchChangeListener;
 import com.droidplanner.checklist.row.ListRow_Toggle;
 import com.droidplanner.checklist.row.ListRow_Toggle.OnToggleChangeListener;
+import com.droidplanner.checklist.row.ListRow_Type;
 import com.droidplanner.checklist.row.ListRow_Value;
 import com.droidplanner.checklist.row.ListRow_Value.OnValueChangeListener;
 
@@ -100,7 +101,11 @@ public class CheckListAdapter extends ListXmlAdapter implements
 			OnCheckListItemUpdateListener listener) {
 		this.listener = listener;
 	}
-
+	@Override
+	public int getChildTypeCount(){
+		return ListRow_Type.values().length;
+	}
+	
 	@Override
 	public boolean hasStableIds() {
 		return false;
