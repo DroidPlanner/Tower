@@ -48,12 +48,8 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 		context = mcontext;
 		drone = mdrone;
 		// TODO Read System checklist here
-		CheckListXmlParser xml = new CheckListXmlParser();
+		CheckListXmlParser xml = new CheckListXmlParser(mcontext,R.xml.checklist_default);
 		xml.setOnXMLParserError(this);
-
-		XmlResourceParser is = context.getResources().getXml(
-				R.xml.checklist_default);
-		xml.parse(is);
 		listDataHeader = xml.getCategories();
 		checkItemList = xml.getCheckListItems();
 
@@ -95,7 +91,8 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 	        public void run() {
 	            dialog.getWindow().clearFlags(
 	                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
-	                    WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);              
+	                    WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+	            dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 	        }
 	    });
 		expListView.setAdapter(listAdapter);
