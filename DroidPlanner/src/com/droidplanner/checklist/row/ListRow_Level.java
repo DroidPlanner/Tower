@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-public class ListRow_Level implements ListRow_Interface {
+public class ListRow_Level extends ListRow {
     private final CheckListItem checkListItem;
     private final LayoutInflater inflater;
 
@@ -22,14 +22,6 @@ public class ListRow_Level implements ListRow_Interface {
         getDroneVariable(drone,checkListItem);
     }
 
-	private void getDroneVariable(Drone mDrone, CheckListItem mListItem) {
-		String sys_tag = mListItem.getSys_tag();
-		
-		if(sys_tag.equalsIgnoreCase("SYS_BATTERY_LVL")){
-			mListItem.setSys_value(mDrone.battery.getBattRemain());
-		}
-		
-	}
 
 	public View getView(View convertView) {
 		ViewHolder holder;
@@ -37,8 +29,7 @@ public class ListRow_Level implements ListRow_Interface {
 		if (convertView == null) {
 			ViewGroup viewGroup = (ViewGroup) inflater.inflate(
 					R.layout.list_level_item, null);
-			holder = new ViewHolder(viewGroup);
-
+			holder = new ViewHolder(viewGroup,checkListItem);
 			viewGroup.setTag(holder);
 			view = viewGroup;
 		} else {
@@ -56,19 +47,24 @@ public class ListRow_Level implements ListRow_Interface {
 		int drawableId;
 		double minVal = mListItem.getMin_val();
 		double nomVal = mListItem.getNom_val();
-		double maxVal = mListItem.getMax_val();
 		String unit = mListItem.getUnit();
 		double sysValue = mListItem.getSys_value();
 		
 		if(sysValue<minVal)
 			drawableId = R.drawable.pstate_poor;
-		else if(sysValue>minVal && sysValue<nomVal)
+		else if(sysValue>minVal && sysValue<=nomVal)
 			drawableId = R.drawable.pstate_warning;
 		else
 			drawableId = R.drawable.pstate_good;
-		holder.progressBar.setIndeterminateDrawable(view.getResources().getDrawable(drawableId));
+		holder.progressBar.setProgressDrawable(view.getResources().getDrawable(drawableId));
 		holder.progressBar.setProgress((int) sysValue);
-		holder.unitView.setText(String.format("%.0f", sysValue)+" "+mListItem.getUnit());
+		
+		try {
+			holder.unitView.setText(String.format(unit, sysValue));
+		} catch (Exception e) {
+			holder.unitView.setText("Error");
+			e.printStackTrace();
+		}
 	}
 
 	public int getViewType() {
@@ -81,11 +77,12 @@ public class ListRow_Level implements ListRow_Interface {
 		final TextView unitView;
 		final CheckBox checkBox;
 		
-		private ViewHolder(ViewGroup viewGroup) {
+		private ViewHolder(ViewGroup viewGroup, CheckListItem checkListItem) {
 			this.layoutView = (LinearLayout) viewGroup.findViewById(R.id.lst_layout);
 			this.checkBox = (CheckBox) viewGroup.findViewById(R.id.lst_check);
 			this.progressBar = (ProgressBar) viewGroup.findViewById(R.id.lst_level);
 			this.unitView = (TextView) viewGroup.findViewById(R.id.lst_unit);
+			this.progressBar.setMax((int) checkListItem.getMax_val());
 			
 		}
 	}
