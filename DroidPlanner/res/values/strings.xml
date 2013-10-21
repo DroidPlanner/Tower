@@ -161,4 +161,6 @@
     <string name="metadata_values">Values:</string>
     <string name="metadata_units">Units:</string>
     <string name="metadata_range">Range:</string>
+    <string name="menu_preflight_checklist">Pre-Flight Checklist</string>
+    <string name="lst_note_hint">To add more rows, just press Enter</string>
 </resources>
