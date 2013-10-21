@@ -23,6 +23,8 @@ public class ListRow_Value implements ListRow_Interface, OnFocusChangeListener {
 	private final CheckListItem checkListItem;
 	private final LayoutInflater inflater;
 	private EditText editText;
+	private boolean lastFocusState;
+	private String lastValue;
 
 	public ListRow_Value(LayoutInflater inflater,
 			final CheckListItem checkListItem) {
@@ -33,21 +35,25 @@ public class ListRow_Value implements ListRow_Interface, OnFocusChangeListener {
 	public View getView(View convertView) {
 		ViewHolder holder;
 		View view;
+
 		if (convertView == null) {
 			ViewGroup viewGroup = (ViewGroup) inflater.inflate(
 					R.layout.list_value_item, null);
 			holder = new ViewHolder(viewGroup);
 			viewGroup.setTag(holder);
 			view = viewGroup;
+			lastValue = holder.editTextView.getText().toString();
+
 		} else {
 			view = convertView;
 			holder = (ViewHolder) convertView.getTag();
+
 		}
 
 		// TODO - Add spinner items
 		editText = holder.editTextView;
 		holder.editTextView.setOnFocusChangeListener(this);
-		holder.editTextView.setText(String.valueOf(checkListItem.getNom_val()));
+		holder.editTextView.setText(checkListItem.getValue());
 		holder.checkBox.setText(checkListItem.getTitle());
 
 		return view;
@@ -77,10 +83,21 @@ public class ListRow_Value implements ListRow_Interface, OnFocusChangeListener {
 
 	@Override
 	public void onFocusChange(View v, boolean hasFocus) {
-		if (!v.isFocused() && this.listener != null) {
-			this.listener.onValueChanged(checkListItem, this.editText.getText()
-					.toString());
-		}
+		if (lastFocusState != hasFocus) {
+			lastFocusState = hasFocus;
+			String a = ((EditText) v).getText().toString();
 
+			if (!a.equals(lastValue)) {
+				lastValue = a;
+				this.checkListItem
+						.setValue(((EditText) v).getText().toString());
+			}
+
+			if (!hasFocus && this.listener != null) {
+				this.listener.onValueChanged(checkListItem, this.editText
+						.getText().toString());
+
+			}
+		}
 	}
 }
