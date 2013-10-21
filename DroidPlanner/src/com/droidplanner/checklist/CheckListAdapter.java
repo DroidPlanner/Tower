@@ -10,6 +10,7 @@ import com.droidplanner.checklist.row.ListRow_CheckBox;
 import com.droidplanner.checklist.row.ListRow_CheckBox.OnCheckBoxChangeListener;
 import com.droidplanner.checklist.row.ListRow_Interface;
 import com.droidplanner.checklist.row.ListRow_Level;
+import com.droidplanner.checklist.row.ListRow_Note;
 import com.droidplanner.checklist.row.ListRow_Radio;
 import com.droidplanner.checklist.row.ListRow_Radio.OnRadioGroupCheckedChangeListener;
 import com.droidplanner.checklist.row.ListRow_Select;
@@ -91,6 +92,8 @@ public class CheckListAdapter extends ListXmlAdapter implements
 					xmlRows.add(row);
 				} else if (listItem.getTagName().equalsIgnoreCase("level_item")) {
 					xmlRows.add(new ListRow_Level(this.inflater, listItem));
+				} else if (listItem.getTagName().equalsIgnoreCase("note_item")) {
+					xmlRows.add(new ListRow_Note(this.inflater, listItem));
 				}
 			}
 			listItems.put(dataHeader, xmlRows);

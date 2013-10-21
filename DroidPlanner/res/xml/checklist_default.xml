@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <preflightcheck
     type="APM"
-    version="1" >
+    version="1" 
+    title="Pre-Flight Checklist">
 
     <category label="User Checklist" >
         <check_item
@@ -25,6 +26,12 @@
             editable="yes"
             mandatory="yes"
             title="Radio Transmitter" />
+       <note_item
+            description="Pilot personal note"
+            editable="yes"
+            mandatory="no"
+            value=""
+            title="Pilot notes" />
         </category>
     <category label="System Checklist" >
          <level_item

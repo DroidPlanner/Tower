@@ -13,6 +13,9 @@ public class CheckListXmlParser extends ListXmlParser {
 
 	private List<String> categories;
 	private List<CheckListItem> checkListItems;
+	private String checkListTitle;
+	private String checkListType;
+	private String checkListVersion;
 
 	public void setOnXMLParserError(OnXmlParserError listener) {
 		errorListener = listener;
@@ -55,7 +58,7 @@ public class CheckListXmlParser extends ListXmlParser {
 			checkListItems.add(new CheckListItem(xpp.getName()));
 			CheckListItem checkListItem = checkListItems.get(checkListItems
 					.size() - 1);
-
+			checkListItem.setDepth(xpp.getDepth());
 			checkListItem.setCategoryIndex(categories.size() - 1);
 			checkListItem.setTitle(xpp.getAttributeValue(null, "title"));
 			checkListItem.setDesc(xpp.getAttributeValue(null, "description"));
@@ -67,7 +70,7 @@ public class CheckListXmlParser extends ListXmlParser {
 			checkListItem.setMandatory(xpp.getAttributeValue(null, "mandatory"));
 			checkListItem.setMin_val(xpp.getAttributeValue(null, "minimum_val"));
 			checkListItem.setMax_val(xpp.getAttributeValue(null, "maximum_val"));
-			checkListItem.setNom_val(xpp.getAttributeValue(null, "nominal_val"));
+			checkListItem.setValue(xpp.getAttributeValue(null, "value"));
 			checkListItem.setSelectedIndex(xpp.getAttributeValue(null,"selectindex"));
 			checkListItem.setOptionLists(xpp.getAttributeValue(null,"optionlist"));
 		}
@@ -99,6 +102,10 @@ public class CheckListXmlParser extends ListXmlParser {
 			process_category(xpp);
 		} else if (xpp.getName().contains("_item")) {
 			process_checkitems(xpp);
+		} else if (xpp.getDepth()==1){
+			this.checkListTitle = xpp.getAttributeValue(null, "title");
+			this.checkListType = xpp.getAttributeValue(null, "type");
+			this.checkListVersion = xpp.getAttributeValue(null, "version");
 		}
 	}
 
@@ -114,4 +121,15 @@ public class CheckListXmlParser extends ListXmlParser {
 
 	}
 
+	public String getCheckListTitle() {
+		return checkListTitle;
+	}
+
+	public String getCheckListType() {
+		return checkListType;
+	}
+
+	public String getCheckListVersion() {
+		return checkListVersion;
+	}
 }

@@ -14,6 +14,7 @@ public class CheckListItem extends ListXmlData{
 	private String on_label;
 	private String off_label;
 	private String sys_tag;
+	private String value;
 	private boolean editable;
 	private boolean mandatory;
 	private int selectedIndex;
@@ -255,6 +256,16 @@ public class CheckListItem extends ListXmlData{
 
 	public void setVerified(boolean verified) {
 		this.verified = verified;
+	}
+
+	public String getValue() {
+		if(value==null)
+			return "";
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
 	}
 
 }

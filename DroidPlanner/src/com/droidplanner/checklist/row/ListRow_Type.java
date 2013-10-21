@@ -7,5 +7,6 @@ public enum ListRow_Type {
     SWITCH_ROW,
     RADIO_ROW,
     SELECT_ROW,
-    LEVEL_ROW
+    LEVEL_ROW,
+    NOTE_ROW
 }
