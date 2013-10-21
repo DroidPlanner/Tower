@@ -25,7 +25,6 @@
         android:duplicateParentState="false"
         android:ems="10"
         android:gravity="right"
-        android:inputType="numberSigned"
         android:longClickable="false" >
 
     </EditText>

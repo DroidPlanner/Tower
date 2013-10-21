@@ -4,6 +4,7 @@ import com.droidplanner.R;
 import com.droidplanner.checklist.CheckListItem;
 
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +25,7 @@ public class ListRow_Value implements ListRow_Interface, OnFocusChangeListener {
 	private final LayoutInflater inflater;
 	private EditText editText;
 	private boolean lastFocusState;
-	private String lastValue;
+	private float lastValue;
 
 	public ListRow_Value(LayoutInflater inflater,
 			final CheckListItem checkListItem) {
@@ -42,7 +43,10 @@ public class ListRow_Value implements ListRow_Interface, OnFocusChangeListener {
 			holder = new ViewHolder(viewGroup);
 			viewGroup.setTag(holder);
 			view = viewGroup;
-			lastValue = holder.editTextView.getText().toString();
+			if(holder.editTextView.getText().toString()==null)
+				holder.editTextView.setText("0.0");
+			
+			lastValue = checkListItem.getFloatValue();
 
 		} else {
 			view = convertView;
@@ -53,7 +57,7 @@ public class ListRow_Value implements ListRow_Interface, OnFocusChangeListener {
 		// TODO - Add spinner items
 		editText = holder.editTextView;
 		holder.editTextView.setOnFocusChangeListener(this);
-		holder.editTextView.setText(checkListItem.getValue());
+		holder.editTextView.setText(String.valueOf(checkListItem.getFloatValue()));
 		holder.checkBox.setText(checkListItem.getTitle());
 
 		return view;
@@ -77,6 +81,9 @@ public class ListRow_Value implements ListRow_Interface, OnFocusChangeListener {
 					.findViewById(R.id.lst_layout);
 			this.editTextView = (EditText) viewGroup
 					.findViewById(R.id.lst_editText);
+			this.editTextView.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL|InputType.TYPE_NUMBER_FLAG_SIGNED|InputType.TYPE_CLASS_NUMBER);
+//			this.editTextView.setInputType(InputType.TYPE_CLASS_PHONE);
+
 			this.checkBox = (CheckBox) viewGroup.findViewById(R.id.lst_check);
 		}
 	}
@@ -85,9 +92,16 @@ public class ListRow_Value implements ListRow_Interface, OnFocusChangeListener {
 	public void onFocusChange(View v, boolean hasFocus) {
 		if (lastFocusState != hasFocus) {
 			lastFocusState = hasFocus;
-			String a = ((EditText) v).getText().toString();
+			 float a = (float)0.0;
+			 
+			 try {
+				a = Float.parseFloat(((EditText) v).getText().toString());
+			} catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
-			if (!a.equals(lastValue)) {
+			if (a!=lastValue) {
 				lastValue = a;
 				this.checkListItem
 						.setValue(((EditText) v).getText().toString());

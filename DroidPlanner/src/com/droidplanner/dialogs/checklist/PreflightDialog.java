@@ -79,7 +79,7 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 		// preparing list data
 		prepareListData();
 
-		listAdapter = new CheckListAdapter(inflater, listDataHeader,
+		listAdapter = new CheckListAdapter(drone, inflater, listDataHeader,
 				listDataChild);
 		listAdapter.setHeaderLayout(R.layout.list_group_header);
 		listAdapter.setOnCheckListItemUpdateListener(this);

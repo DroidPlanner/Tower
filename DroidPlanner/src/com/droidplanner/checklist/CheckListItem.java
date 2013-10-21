@@ -21,7 +21,7 @@ public class CheckListItem extends ListXmlData{
 	private float min_val;
 	private float nom_val;
 	private float max_val;
-	private float sys_value;
+	private double sys_value;
 	private boolean verified;
 	private boolean sys_activated;
 	private List<String> optionLists;
@@ -214,12 +214,12 @@ public class CheckListItem extends ListXmlData{
 		}
 	}
 
-	public float getSys_value() {
+	public double getSys_value() {
 		return sys_value;
 	}
 
-	public void setSys_value(float sys_value) {
-		this.sys_value = sys_value;
+	public void setSys_value(double d) {
+		this.sys_value = d;
 	}
 
 	public boolean isSys_activated() {
@@ -263,7 +263,19 @@ public class CheckListItem extends ListXmlData{
 			return "";
 		return value;
 	}
-
+	public float getFloatValue(){
+		float fValue = (float) 0.0;
+		if(value!=null){
+			try {
+				fValue = Float.parseFloat(value);
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+			}
+		}
+		return fValue;
+			
+	}
+	
 	public void setValue(String value) {
 		this.value = value;
 	}

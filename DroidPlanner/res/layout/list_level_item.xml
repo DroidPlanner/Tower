@@ -29,7 +29,7 @@
         android:indeterminateOnly="false"
         android:max="100"
         android:progress="100"
-        android:progressDrawable="@drawable/pstate_2" >
+        android:progressDrawable="@drawable/pstate_warning" >
 
     </ProgressBar>
 

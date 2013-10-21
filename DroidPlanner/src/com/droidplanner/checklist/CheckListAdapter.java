@@ -22,6 +22,7 @@ import com.droidplanner.checklist.row.ListRow_Toggle.OnToggleChangeListener;
 import com.droidplanner.checklist.row.ListRow_Type;
 import com.droidplanner.checklist.row.ListRow_Value;
 import com.droidplanner.checklist.row.ListRow_Value.OnValueChangeListener;
+import com.droidplanner.drone.Drone;
 
 import android.view.LayoutInflater;
 import android.widget.RadioGroup;
@@ -29,7 +30,7 @@ import android.widget.RadioGroup;
 public class CheckListAdapter extends ListXmlAdapter implements
 		OnRadioGroupCheckedChangeListener, OnSelectChangeListener,
 		OnCheckBoxChangeListener, OnSwitchChangeListener,
-		OnToggleChangeListener, OnValueChangeListener {
+		OnToggleChangeListener, OnValueChangeListener{
 
 	public interface OnCheckListItemUpdateListener {
 		public void onRadioGroupUpdate(CheckListItem checkListItem,
@@ -48,12 +49,14 @@ public class CheckListAdapter extends ListXmlAdapter implements
 
 		public void onValueUpdate(CheckListItem checkListItem, String newValue);
 	}
-
+	private Drone drone;
 	private OnCheckListItemUpdateListener listener;
 
-	public CheckListAdapter(LayoutInflater inflater, List<String> listHeader,
+	public CheckListAdapter(Drone drone, LayoutInflater inflater, List<String> listHeader,
 			HashMap<String, List<CheckListItem>> listDataChild) {
 		super(inflater, listHeader);
+	
+		this.drone = drone;
 		
 		setHeaderLayout(R.layout.list_group_header);
 		
@@ -91,7 +94,7 @@ public class CheckListAdapter extends ListXmlAdapter implements
 					row.setOnSwitchChangeListener(this);
 					xmlRows.add(row);
 				} else if (listItem.getTagName().equalsIgnoreCase("level_item")) {
-					xmlRows.add(new ListRow_Level(this.inflater, listItem));
+					xmlRows.add(new ListRow_Level(drone, this.inflater, listItem));
 				} else if (listItem.getTagName().equalsIgnoreCase("note_item")) {
 					xmlRows.add(new ListRow_Note(this.inflater, listItem));
 				}

@@ -40,10 +40,10 @@ public class ListXmlFragment extends DialogFragment implements
 		getXmlListItems();
 		setDialogOptions();
 		
-		listAdapter = new CheckListAdapter(inflater, listDataHeader,
-				listDataChild);
-		listAdapter.setOnCheckListItemUpdateListener(this);
-		expListView.setAdapter(listAdapter);
+//		listAdapter = new CheckListAdapter(inflater, listDataHeader,
+//				listDataChild);
+//		listAdapter.setOnCheckListItemUpdateListener(this);
+//		expListView.setAdapter(listAdapter);
 		return view;
 	}
 
