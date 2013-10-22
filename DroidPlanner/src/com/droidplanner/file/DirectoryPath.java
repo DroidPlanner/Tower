@@ -4,8 +4,6 @@ import android.os.Environment;
 
 public class DirectoryPath {
 
-    public static final String PARAMETER_METADATA_XML = "ParameterMetaData.xml";
-
     static public String getDroidPlannerPath() {
 		String root = Environment.getExternalStorageDirectory().getPath();
 		return (root + "/DroidPlanner/");
@@ -35,7 +33,4 @@ public class DirectoryPath {
 		return getDroidPlannerPath() + "/CameraInfo/";
 	}
 
-    public static String getParameterMetadataPath() {
-        return getParametersPath() + "/" + PARAMETER_METADATA_XML;
-    }
 }

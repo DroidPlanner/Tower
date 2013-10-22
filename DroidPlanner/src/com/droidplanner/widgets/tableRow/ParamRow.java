@@ -2,32 +2,41 @@ package com.droidplanner.widgets.tableRow;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.droidplanner.R;
 import com.droidplanner.dialogs.parameters.DialogParameterInfo;
+import com.droidplanner.dialogs.parameters.DialogParameterValues;
 import com.droidplanner.drone.variables.Parameters;
 import com.droidplanner.parameters.Parameter;
 import com.droidplanner.parameters.ParameterMetadata;
 
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 public class ParamRow extends TableRow implements
-        TextWatcher, View.OnClickListener {
+        TextWatcher, View.OnClickListener, View.OnFocusChangeListener {
 	private TextView nameView;
     private TextView displayNameView;
 	private EditText valueView;
 	private Parameter param;
     private ParameterMetadata metadata;
+
+    private enum Validation { NA, INVALID, VALID }
+
 
     public ParamRow(Context context) {
 		super(context);
@@ -76,10 +85,14 @@ public class ParamRow extends TableRow implements
 
         // value
 		valueView = new EditText(context);
-		valueView.setInputType(InputType.TYPE_CLASS_NUMBER);
+		valueView.setInputType(
+                InputType.TYPE_CLASS_NUMBER |
+                InputType.TYPE_NUMBER_FLAG_DECIMAL |
+                InputType.TYPE_NUMBER_FLAG_SIGNED);
 		valueView.setWidth(220);
 		valueView.setGravity(Gravity.RIGHT);
         valueView.addTextChangedListener(this);
+        valueView.setOnFocusChangeListener(this);
         addView(valueView);
     }
 
@@ -88,8 +101,12 @@ public class ParamRow extends TableRow implements
 	}
 
 	public double getParamValue() {
-		return Double.parseDouble(valueView.getText().toString());
-	}
+        try {
+            return Parameter.getFormat().parse(valueView.getText().toString()).doubleValue();
+        } catch (ParseException ex) {
+            throw new NumberFormatException(ex.getMessage());
+        }
+    }
 
 	public String getParamName() {
 		return param.name;
@@ -97,18 +114,79 @@ public class ParamRow extends TableRow implements
 
 	@Override
 	public void afterTextChanged(Editable s) {
-		if (isNewValueEqualToDroneParam()) {
-			valueView.setTextColor(Color.WHITE);
-		} else {
-			valueView.setTextColor(Color.RED);
-		}
-	}
+        final String newValue = valueView.getText().toString();
+
+        final int color;
+        if(isValueEqualToDroneParam(newValue)) {
+            color = Color.WHITE;
+            valueView.setTypeface(null, Typeface.NORMAL);
+        } else {
+            final Validation validation = validateValue(newValue);
+            if (validation == Validation.VALID) {
+                color = Color.GREEN;
+            } else if (validation == Validation.INVALID) {
+                color = Color.RED;
+            } else {
+                color = Color.YELLOW;
+            }
+            valueView.setTypeface(null, Typeface.BOLD);
+        }
+        valueView.setTextColor(color);
+    }
 
 	public boolean isNewValueEqualToDroneParam() {
-		return param.getValue().equals(valueView.getText().toString());
+		return isValueEqualToDroneParam(valueView.getText().toString());
 	}
 
-	@Override
+    private boolean isValueEqualToDroneParam(String value) {
+        return param.getValue().equals(value);
+    }
+
+    /*
+     * Return TRUE if valid or unable to validate
+     */
+    private Validation validateValue(String value) {
+        if(metadata == null) {
+            return Validation.NA;
+
+        } else if(metadata.getRange() != null) {
+            return validateInRange(value);
+
+        } else if(metadata.getValues() != null) {
+            return validateInValues(value);
+
+        } else {
+            return Validation.NA;
+        }
+    }
+
+    private Validation validateInRange(String value) {
+        try {
+            final double dval = Parameter.getFormat().parse(value).doubleValue();
+            final double[] range = metadata.parseRange();
+            return (dval >= range[ParameterMetadata.RANGE_LOW] && dval <= range[ParameterMetadata.RANGE_HIGH]) ?
+                    Validation.VALID : Validation.INVALID;
+        } catch (ParseException ex) {
+            return Validation.NA;
+        }
+    }
+
+    private Validation validateInValues(String value) {
+        try {
+            final double dval = Parameter.getFormat().parse(value).doubleValue();
+            final Map<Double, String> values = metadata.parseValues();
+            if (values.keySet().contains(dval)) {
+                return Validation.VALID;
+            }
+            else {
+                return Validation.INVALID;
+            }
+        } catch (ParseException ex) {
+            return Validation.NA;
+        }
+    }
+
+    @Override
 	public void beforeTextChanged(CharSequence s, int start, int count,
 			int after) {
 	}
@@ -118,10 +196,44 @@ public class ParamRow extends TableRow implements
 	}
 
     @Override
+    public void onFocusChange(View view, boolean hasFocus) {
+        if(!hasFocus) {
+            // refresh value on leaving view - show results of rounding etc.
+            valueView.setText(Parameter.getFormat().format(getParamValue()));
+        }
+    }
+
+    @Override
     public void onClick(View view) {
         if(metadata == null || !metadata.hasInfo())
             return;
 
-        DialogParameterInfo.build(metadata, getContext()).show();
+        final AlertDialog.Builder builder = DialogParameterInfo.build(metadata, getContext());
+
+        // add edit button if metadata supplies known values
+        if(metadata.getValues() != null)
+            addEditValuesButton(builder);
+
+        builder.show();
+    }
+
+    private AlertDialog.Builder addEditValuesButton(AlertDialog.Builder builder) {
+        return builder.setPositiveButton(R.string.parameter_row_edit, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                DialogParameterValues.build(param.name, metadata, valueView.getText().toString(), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int which) {
+                        try {
+                            final List<Double> values = new ArrayList<Double>(metadata.parseValues().keySet());
+                            valueView.setText(Parameter.getFormat().format(values.get(which)));
+                            dialogInterface.dismiss();
+                        } catch (ParseException ex) {
+                            // nop
+                        }
+                    }
+                }, getContext()).show();
+            }
+        });
     }
 }
