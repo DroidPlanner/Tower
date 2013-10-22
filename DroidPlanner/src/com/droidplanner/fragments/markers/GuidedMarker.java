@@ -24,6 +24,6 @@ public class GuidedMarker {
 	private static BitmapDescriptor getIcon(GuidedPoint guidedPoint, double altitude, Context context)
 	{
 		return BitmapDescriptorFactory.fromBitmap(MarkerWithText.getMarkerWithTextAndDetail(Color.YELLOW,
-			"*", String.format("%.0fm", altitude), context));
+			"#", String.format("%.0fm", altitude), context));
 	}
 }
