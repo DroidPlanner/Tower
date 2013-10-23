@@ -8,12 +8,12 @@ import com.droidplanner.activitys.helpers.SuperActivity;
 public abstract class NewSuperUI extends SuperActivity {
 
 	public NewSuperUI() {
-		super();
+		super();        
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu_newui, menu);
+		getMenuInflater().inflate(R.menu.menu_newui_disconnected, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 
