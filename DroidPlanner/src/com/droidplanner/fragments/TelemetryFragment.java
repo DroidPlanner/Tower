@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
@@ -16,6 +17,9 @@ public class TelemetryFragment extends Fragment implements HudUpdatedListner {
 
 	private newHUD hud;
 	private Drone drone;
+	private TextView roll;
+	private TextView yaw;
+	private TextView pitch;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -24,6 +28,10 @@ public class TelemetryFragment extends Fragment implements HudUpdatedListner {
 				false);
 		hud = (newHUD) view.findViewById(R.id.hudView);
 
+		roll = (TextView) view.findViewById(R.id.rollValueText);
+		yaw = (TextView) view.findViewById(R.id.yawValueText);
+		pitch = (TextView) view.findViewById(R.id.pitchValueText);
+
 		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
 		drone.setHudListner(this);
 		return view;
@@ -31,9 +39,15 @@ public class TelemetryFragment extends Fragment implements HudUpdatedListner {
 
 	@Override
 	public void onDroneUpdate() {
-		hud.setAttitude((float) drone.orientation.getRoll(),
-				(float) drone.orientation.getPitch(),
-				(float) drone.orientation.getYaw());
+		float r = (float) drone.orientation.getRoll();
+		float p = (float) drone.orientation.getPitch();
+		float y = (float) drone.orientation.getYaw();
+		
+		hud.setAttitude(r, p, y);
+		
+		roll.setText(String.format("%3.0fº", r));
+		pitch.setText(String.format("%3.0fº", p));
+		yaw.setText(String.format("%3.0fº", y));
 
 	}
 
