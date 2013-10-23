@@ -72,7 +72,7 @@ public class Mission extends DroneVariable implements PathSource,
 		if (this.wpno != wpno) {
 			this.wpno = wpno;
 			myDrone.tts.speak("Going for waypoint " + wpno);
-			myDrone.notifyHudUpdate();
+			myDrone.onOrientationUpdate();
 		}
 	}
 

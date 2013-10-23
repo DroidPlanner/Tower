@@ -33,7 +33,7 @@ public class State extends DroneVariable {
 			}
 			this.armed = armed;
 			this.failsafe = failsafe;
-			myDrone.notifyHudUpdate();
+			myDrone.onOrientationUpdate();
 		}
 	}
 
@@ -41,7 +41,7 @@ public class State extends DroneVariable {
 		if (this.mode != mode) {
 			this.mode = mode;
 			myDrone.tts.speakMode(mode);
-			myDrone.notifyHudUpdate();
+			myDrone.onOrientationUpdate();
 		}
 	}
 

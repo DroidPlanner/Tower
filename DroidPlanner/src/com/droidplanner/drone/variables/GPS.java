@@ -46,7 +46,7 @@ public class GPS extends DroneVariable {
 			fixType = fix;
 			satCount = satellites_visible;
 			gps_eph = (double) eph / 100; // convert from eph(cm) to gps_eph(m)
-			myDrone.notifyHudUpdate();
+			myDrone.onOrientationUpdate();
 		}
 	}
 

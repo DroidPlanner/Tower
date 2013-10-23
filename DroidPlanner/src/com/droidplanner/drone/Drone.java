@@ -65,7 +65,7 @@ public class Drone {
 			double groundSpeed, double airSpeed, double climb) {
 		this.altitude.setAltitude(altitude);
 		speed.setGroundAndAirSpeeds(groundSpeed, airSpeed, climb);
-		notifyHudUpdate();
+		onSpeedUpdate();
 	}
 
 	public void setDisttowpAndSpeedAltErrors(double disttowp, double alt_error,
@@ -73,7 +73,7 @@ public class Drone {
 		mission.setDistanceToWp(disttowp);
 		altitude.setAltitudeError(alt_error);
 		speed.setSpeedError(aspd_error);
-		notifyHudUpdate();
+		onOrientationUpdate();
 	}
 
 	public void notifyPositionChange() {
@@ -88,8 +88,13 @@ public class Drone {
 		}
 	}
 
-	public void notifyHudUpdate() {
+	public void onOrientationUpdate() {
 		if (hudListner != null)
-			hudListner.onDroneUpdate();
+			hudListner.onOrientationUpdate();
+	}
+	
+	public void onSpeedUpdate() {
+		if (hudListner != null)
+			hudListner.onSpeedUpdate();
 	}
 }
