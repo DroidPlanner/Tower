@@ -8,7 +8,6 @@ import android.preference.PreferenceManager;
 import android.view.MenuItem;
 
 import com.droidplanner.DroidPlannerApp;
-import com.droidplanner.DroidPlannerApp.ConnectionStateListner;
 import com.droidplanner.DroidPlannerApp.OnSystemArmListener;
 import com.droidplanner.R;
 import com.droidplanner.activitys.SettingsActivity;
@@ -17,16 +16,14 @@ import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
 import com.droidplanner.drone.Drone;
 
 public abstract class SuperActivity extends Activity implements
-		ConnectionStateListner, OnAltitudeChangedListner, OnSystemArmListener{
+		 OnAltitudeChangedListner, OnSystemArmListener{
 
 	public abstract int getNavigationItem();
 
 	public DroidPlannerApp app;
 	public Drone drone;
-	private MenuItem connectButton;
 	private MenuItem armButton;
 
-	private ScreenOrientation screenOrientation = new ScreenOrientation(this);
 
 	public SuperActivity() {
 		super();
@@ -39,12 +36,10 @@ public abstract class SuperActivity extends Activity implements
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 		
 		app = (DroidPlannerApp) getApplication();
-		app.conectionListner = this;
 		app.onSystemArmListener = this;
 		this.drone = app.drone;
 
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
-		screenOrientation.unlock();
 	}
 
 
@@ -79,27 +74,6 @@ public abstract class SuperActivity extends Activity implements
 		}
 	}
 
-	public void notifyDisconnected() {
-		if (connectButton != null) {
-			connectButton.setTitle(getResources().getString(
-					R.string.menu_connect));
-		}
-		if(armButton != null){
-			armButton.setEnabled(false);
-		}
-		screenOrientation.unlock();
-	}
-
-	public void notifyConnected() {
-		if (connectButton != null) {
-			connectButton.setTitle(getResources().getString(
-					R.string.menu_disconnect));
-		}
-		if(armButton != null){
-			armButton.setEnabled(true);
-		}
-		screenOrientation.requestLock();
-	}
 
 	public void notifyArmed() {
 		if (armButton != null) {
@@ -114,16 +88,6 @@ public abstract class SuperActivity extends Activity implements
 					R.string.menu_arm));
 		}
 	}
-
-	/*
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		//getMenuInflater().inflate(R.menu.menu_super_activiy, menu);
-		//armButton = menu.findItem(R.id.menu_arm);
-		//connectButton = menu.findItem(R.id.menu_connect);
-		//drone.MavClient.queryConnectionState();
-		return super.onCreateOptionsMenu(menu);
-	}*/
 
 	public void changeDefaultAlt() {
 		AltitudeDialog dialog = new AltitudeDialog(this);
