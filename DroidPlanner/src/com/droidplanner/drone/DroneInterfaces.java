@@ -15,7 +15,7 @@ public class DroneInterfaces {
 
 	public interface HudUpdatedListner {
 		public void onOrientationUpdate();
-		public void onSpeedUpdate();
+		public void onSpeedAltitudeAndClimbRateUpdate();
 	}
 
 	public interface OnParameterManagerListner {
