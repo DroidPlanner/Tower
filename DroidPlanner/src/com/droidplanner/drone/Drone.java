@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.droidplanner.drone.DroneInterfaces.DroneTypeListner;
 import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
+import com.droidplanner.drone.DroneInterfaces.InfoListner;
 import com.droidplanner.drone.DroneInterfaces.MapUpdatedListner;
 import com.droidplanner.drone.variables.Altitude;
 import com.droidplanner.drone.variables.Battery;
@@ -42,6 +43,7 @@ public class Drone {
 	private HudUpdatedListner hudListner;
 	private MapUpdatedListner mapListner;
 	private DroneTypeListner typeListner;
+	private InfoListner infoListner;
 
 	public Drone(TTS tts, MAVLinkClient mavClient, Context context) {
 		this.tts = tts;
@@ -59,6 +61,10 @@ public class Drone {
 
 	public void setDroneTypeChangedListner(DroneTypeListner listner) {
 		typeListner = listner;
+	}
+
+	public void setInfoListner(InfoListner listner) {
+		infoListner = listner;
 	}
 
 	public void setAltitudeGroundAndAirSpeeds(double altitude,
@@ -82,6 +88,12 @@ public class Drone {
 		}
 	}
 
+	public void notifyInfoChange() {
+		if (infoListner != null) {
+			infoListner.onInfoUpdate();
+		}
+	}
+
 	public void notifyTypeChanged() {
 		if (typeListner != null) {
 			typeListner.onDroneTypeChanged();
@@ -101,4 +113,5 @@ public class Drone {
 		if (hudListner != null)
 			hudListner.onSpeedAltitudeAndClimbRateUpdate();
 	}
+
 }

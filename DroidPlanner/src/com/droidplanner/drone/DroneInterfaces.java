@@ -14,6 +14,10 @@ public class DroneInterfaces {
 	public interface DroneTypeListner {
 		public void onDroneTypeChanged();
 	}
+	
+	public interface InfoListner {
+		public void onInfoUpdate();
+	}
 
 	public interface HudUpdatedListner {
 		public void onOrientationUpdate();

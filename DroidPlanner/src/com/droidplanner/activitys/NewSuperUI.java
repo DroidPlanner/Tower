@@ -4,12 +4,13 @@ import android.os.Bundle;
 import android.view.Menu;
 
 import com.droidplanner.DroidPlannerApp.ConnectionStateListner;
-import com.droidplanner.R;
+import com.droidplanner.activitys.helpers.InfoMenu;
 import com.droidplanner.activitys.helpers.ScreenOrientation;
 import com.droidplanner.activitys.helpers.SuperActivity;
 
 public abstract class NewSuperUI extends SuperActivity implements ConnectionStateListner {
 	private ScreenOrientation screenOrientation = new ScreenOrientation(this);
+	private InfoMenu infoMenu;
 	
 	public NewSuperUI() {
 		super();        
@@ -23,18 +24,15 @@ public abstract class NewSuperUI extends SuperActivity implements ConnectionStat
 		app.conectionListner = this;
 
 		drone.MavClient.queryConnectionState();
+		infoMenu = new InfoMenu(drone);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		if (drone.MavClient.isConnected()) {
-			getMenuInflater().inflate(R.menu.menu_newui_connected, menu);
-		}else{
-			getMenuInflater().inflate(R.menu.menu_newui_disconnected, menu);
-		}		
+		infoMenu.inflateMenu(menu, getMenuInflater());		
 		return super.onCreateOptionsMenu(menu);
 	}
-	
+
 	public void notifyDisconnected() {
 		invalidateOptionsMenu();		
 		/*

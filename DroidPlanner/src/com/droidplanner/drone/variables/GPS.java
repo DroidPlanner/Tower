@@ -34,8 +34,20 @@ public class GPS extends DroneVariable {
 		return satCount;
 	}
 
-	public int getFixType() {
-		return fixType;
+	public String getFixType() {
+		String gpsFix = "";
+		switch (fixType) {
+		case 2:
+			gpsFix = ("2D");
+			break;
+		case 3:
+			gpsFix = ("3D");
+			break;
+		default:
+			gpsFix = ("NoFix");
+			break;
+		}
+		return gpsFix;
 	}
 
 	public void setGpsState(int fix, int satellites_visible, int eph) {
@@ -46,7 +58,8 @@ public class GPS extends DroneVariable {
 			fixType = fix;
 			satCount = satellites_visible;
 			gps_eph = (double) eph / 100; // convert from eph(cm) to gps_eph(m)
-			myDrone.onOrientationUpdate();
+
+			myDrone.notifyInfoChange();
 		}
 	}
 
