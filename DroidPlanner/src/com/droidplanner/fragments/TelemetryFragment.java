@@ -23,6 +23,7 @@ public class TelemetryFragment extends Fragment implements HudUpdatedListner {
 	private TextView groundSpeed;
 	private TextView airSpeed;
 	private TextView climbRate;
+	private TextView altitude;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,6 +40,7 @@ public class TelemetryFragment extends Fragment implements HudUpdatedListner {
 		groundSpeed = (TextView) view.findViewById(R.id.groundSpeedValue);
 		airSpeed = (TextView) view.findViewById(R.id.airSpeedValue);
 		climbRate = (TextView) view.findViewById(R.id.climbRateValue);
+		altitude = (TextView) view.findViewById(R.id.altitudeValue);
 
 		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
 		drone.setHudListner(this);
@@ -64,6 +66,8 @@ public class TelemetryFragment extends Fragment implements HudUpdatedListner {
 		airSpeed.setText(String.format("%3.1fº", drone.speed.getAirSpeed()));
 		groundSpeed.setText(String.format("%3.1fº", drone.speed.getGroundSpeed()));
 		climbRate.setText(String.format("%3.1f", drone.speed.getVerticalSpeed()));
+		double alt = drone.altitude.getAltitude();
+		altitude.setText(String.format("%3.0f\n%3.0f\n%3.0f", alt+1,alt,alt-1));
 	}
 
 }
