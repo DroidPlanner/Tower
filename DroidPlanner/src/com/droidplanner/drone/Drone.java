@@ -86,6 +86,10 @@ public class Drone {
 		if (typeListner != null) {
 			typeListner.onDroneTypeChanged();
 		}
+		if (mapListner != null) {
+			mapListner.onDroneTypeChanged();
+		}
+		
 	}
 
 	public void onOrientationUpdate() {

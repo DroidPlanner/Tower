@@ -7,6 +7,8 @@ import java.util.List;
 public class DroneInterfaces {
 	public interface MapUpdatedListner {
 		public void onDroneUpdate();
+
+		public void onDroneTypeChanged();
 	}
 
 	public interface DroneTypeListner {
