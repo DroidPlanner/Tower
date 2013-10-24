@@ -86,17 +86,6 @@ public class FlightMapFragment extends DroneMap implements
 		flightPath.setPoints(oldFlightPath);
 	}
 
-	public void zoomToLastKnowPosition() {
-		if (drone.GPS.isPositionValid()) {
-			mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-					drone.GPS.getPosition(), 16));
-		} else {
-			Toast.makeText(getActivity(),
-					"There is no valid location for the Drone",
-					Toast.LENGTH_SHORT).show();
-		}
-	}
-
 	private void addFlightPathToMap() {
 		PolylineOptions flightPathOptions = new PolylineOptions();
 		flightPathOptions.color(Color.argb(180, 0, 0, 200)).width(2).zIndex(1);
