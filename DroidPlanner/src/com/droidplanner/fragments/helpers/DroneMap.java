@@ -44,6 +44,12 @@ public abstract class DroneMap extends OfflineMapFragment implements OnWaypointC
 		context = activity.getApplicationContext();
 	}
 
+	@Override
+	public void onStop() {
+		super.onStop();
+		mission.removeOnWaypointsChangedListner(this);
+	}
+
 	public LatLng getMyLocation() {
 		if (mMap.getMyLocation() != null) {
 			return new LatLng(mMap.getMyLocation().getLatitude(), mMap
