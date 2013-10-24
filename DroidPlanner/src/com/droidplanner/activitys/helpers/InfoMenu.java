@@ -10,7 +10,6 @@ import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.HomeDistanceChangedListner;
 import com.droidplanner.drone.DroneInterfaces.InfoListner;
 import com.droidplanner.widgets.spinners.SelectModeSpinner;
-import com.droidplanner.widgets.spinners.SelectModeSpinner.OnModeSpinnerSelectedListener;
 
 public class InfoMenu implements InfoListner, HomeDistanceChangedListner {
 	private Drone drone;
@@ -64,10 +63,9 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner {
 		home.setTitle(drone.mission.getDroneDistanceToHome().toString());
 	}
 
-	public void setupModeSpinner(Context context,
-			OnModeSpinnerSelectedListener listener) {
+	public void setupModeSpinner(Context context) {
 		if (mode!=null) {
-			mode.buildSpinner(context, listener, drone);
+			mode.buildSpinner(context, drone);
 		}
 		
 	}

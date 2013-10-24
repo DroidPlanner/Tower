@@ -4,14 +4,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.MAVLink.Messages.ApmModes;
 import com.droidplanner.DroidPlannerApp.ConnectionStateListner;
 import com.droidplanner.activitys.helpers.InfoMenu;
 import com.droidplanner.activitys.helpers.ScreenOrientation;
 import com.droidplanner.activitys.helpers.SuperActivity;
-import com.droidplanner.widgets.spinners.SelectModeSpinner.OnModeSpinnerSelectedListener;
 
-public abstract class NewSuperUI extends SuperActivity implements ConnectionStateListner, OnModeSpinnerSelectedListener {
+public abstract class NewSuperUI extends SuperActivity implements ConnectionStateListner {
 	private ScreenOrientation screenOrientation = new ScreenOrientation(this);
 	private InfoMenu infoMenu;
 	
@@ -33,7 +31,7 @@ public abstract class NewSuperUI extends SuperActivity implements ConnectionStat
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		infoMenu.inflateMenu(menu, getMenuInflater());	
-		infoMenu.setupModeSpinner(this, this);
+		infoMenu.setupModeSpinner(this);
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -61,12 +59,6 @@ public abstract class NewSuperUI extends SuperActivity implements ConnectionStat
 		}
 		*/
 		screenOrientation.requestLock();
-	}
-
-	@Override
-	public void OnModeSpinnerSelected(ApmModes apmModes) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }
