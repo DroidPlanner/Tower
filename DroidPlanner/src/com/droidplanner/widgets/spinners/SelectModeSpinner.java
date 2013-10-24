@@ -34,10 +34,10 @@ public class SelectModeSpinner extends SpinnerSelfSelect implements
 		this.drone = drone;
 		this.listener = listener;
 		setOnSpinnerItemSelectedListener(this);
-		//this.drone.setModeChangedListener(this);
-		//this.drone.setDroneTypeChangedListner(this);
-		
-		buildAdapter();
+		this.drone.setModeChangedListener(this);
+		this.drone.setDroneTypeChangedListner(this);
+
+		onDroneTypeChanged();
 	}
 
 	private void buildAdapter() {
@@ -54,7 +54,11 @@ public class SelectModeSpinner extends SpinnerSelfSelect implements
 
 	@Override
 	public void onModeChanged() {
-		
+		try {
+			this.setSelection(modeAdapter.getPosition(drone.state.getMode()));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
