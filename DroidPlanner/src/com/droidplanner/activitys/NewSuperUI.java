@@ -2,6 +2,7 @@ package com.droidplanner.activitys;
 
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 
 import com.droidplanner.DroidPlannerApp.ConnectionStateListner;
 import com.droidplanner.activitys.helpers.InfoMenu;
@@ -31,6 +32,12 @@ public abstract class NewSuperUI extends SuperActivity implements ConnectionStat
 	public boolean onCreateOptionsMenu(Menu menu) {
 		infoMenu.inflateMenu(menu, getMenuInflater());		
 		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		infoMenu.onOptionsItemSelected(item);
+		return super.onOptionsItemSelected(item);
 	}
 
 	public void notifyDisconnected() {

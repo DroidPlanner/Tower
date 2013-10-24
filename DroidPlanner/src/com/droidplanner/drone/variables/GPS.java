@@ -67,6 +67,7 @@ public class GPS extends DroneVariable {
 		if (this.position != position) {
 			this.position = position;
 			myDrone.notifyPositionChange();
+			myDrone.notifyDistanceToHomeChange();
 		}
 	}
 }

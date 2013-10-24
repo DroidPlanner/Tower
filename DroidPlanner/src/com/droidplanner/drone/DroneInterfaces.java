@@ -18,7 +18,11 @@ public class DroneInterfaces {
 	public interface InfoListner {
 		public void onInfoUpdate();
 	}
-
+	
+	public interface HomeDistanceChangedListner {
+		public void onDistanceToHomeHasChanged();
+	}
+	
 	public interface HudUpdatedListner {
 		public void onOrientationUpdate();
 		public void onSpeedAltitudeAndClimbRateUpdate();

@@ -4,6 +4,7 @@ package com.droidplanner.drone;
 import android.content.Context;
 
 import com.droidplanner.drone.DroneInterfaces.DroneTypeListner;
+import com.droidplanner.drone.DroneInterfaces.HomeDistanceChangedListner;
 import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
 import com.droidplanner.drone.DroneInterfaces.InfoListner;
 import com.droidplanner.drone.DroneInterfaces.MapUpdatedListner;
@@ -44,6 +45,7 @@ public class Drone {
 	private MapUpdatedListner mapListner;
 	private DroneTypeListner typeListner;
 	private InfoListner infoListner;
+	private HomeDistanceChangedListner homeChangedListner;
 
 	public Drone(TTS tts, MAVLinkClient mavClient, Context context) {
 		this.tts = tts;
@@ -65,6 +67,10 @@ public class Drone {
 
 	public void setInfoListner(InfoListner listner) {
 		infoListner = listner;
+	}
+
+	public void setHomeChangedListner(HomeDistanceChangedListner listner) {
+		homeChangedListner = listner;		
 	}
 
 	public void setAltitudeGroundAndAirSpeeds(double altitude,
@@ -91,6 +97,12 @@ public class Drone {
 	public void notifyInfoChange() {
 		if (infoListner != null) {
 			infoListner.onInfoUpdate();
+		}
+	}
+	
+	public void notifyDistanceToHomeChange() {
+		if (homeChangedListner!= null) {
+			homeChangedListner.onDistanceToHomeHasChanged();
 		}
 	}
 
