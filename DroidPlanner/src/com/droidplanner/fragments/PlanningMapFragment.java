@@ -5,7 +5,6 @@ import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -15,7 +14,6 @@ import android.view.ViewGroup;
 
 import com.droidplanner.DroidPlannerApp.OnWaypointChangedListner;
 import com.droidplanner.dialogs.mission.DialogMissionFactory;
-import com.droidplanner.drone.variables.Mission;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.fragments.PathGesture.OnPathFinishedListner;
 import com.droidplanner.fragments.helpers.CameraGroundOverlays;
@@ -37,12 +35,12 @@ public class PlanningMapFragment extends DroneMap implements
 		OnMapLongClickListener, OnMarkerDragListener, OnMapClickListener,
 		OnMarkerClickListener, OnPathFinishedListner, OnWaypointChangedListner {
 
+
 	public OnMapInteractionListener mListener;
-	private MapPath polygonPath;
-	private Mission mission;
+	public MapPath polygonPath;
 
 	public CameraGroundOverlays cameraOverlays;
-	private Polygon polygon = new Polygon();
+	public Polygon polygon = new Polygon();
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
@@ -55,24 +53,17 @@ public class PlanningMapFragment extends DroneMap implements
 		mMap.setOnMapLongClickListener(this);
 		polygonPath = new MapPath(mMap, Color.BLACK, 2);
 		cameraOverlays = new CameraGroundOverlays(mMap);
-		
-		drone.mission.addOnWaypointsChangedListner(this);
 
 		return view;
 	}
 
+	@Override
 	public void update() {
-		markers.clear();
-
-		Context context = getActivity().getApplicationContext();
-		markers.updateMarker(mission.getHome(), false, context);
-		markers.updateMarkers(mission.getWaypoints(), true, context);
-		markers.updateMarkers(polygon .getPolygonPoints(), true, context);
-
+		super.update();
+		markers.updateMarkers(polygon .getPolygonPoints(), true, context);		
 		polygonPath.update(polygon);
-		missionPath.update(mission);
 	}
-
+	
 	@Override
 	public void onMapLongClick(LatLng point) {
 		mListener.onAddPoint(point);
@@ -165,19 +156,10 @@ public class PlanningMapFragment extends DroneMap implements
 		}
 	}
 
-	public void setMission(Mission mission) {
-		this.mission = mission;
-	}
-
 	@Override
 	public void onPathFinished(List<Point> path) {
 		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	public void onWaypointsUpdate() {
-		update();
 	}
 
 }

@@ -1,6 +1,5 @@
 package com.droidplanner.fragments;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -11,15 +10,11 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.MAVLink.Messages.ApmModes;
-import com.droidplanner.drone.variables.WaypointLabel;
-import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.fragments.helpers.DroneMap;
 import com.droidplanner.fragments.helpers.GuidePointListener;
 import com.droidplanner.fragments.markers.DroneMarker;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
@@ -69,6 +64,16 @@ public class FlightMapFragment extends DroneMap implements
 		isAutoPanEnabled = prefs.getBoolean("pref_auto_pan_enabled", false);
 	}
 
+	@Override
+	public void update() {
+		super.update();
+
+		if(drone.guidedPoint.isCoordValid()) {
+			markers.updateMarker(drone.guidedPoint, true, context);
+			guidePointListener.OnGuidePointMoved();
+		}
+	}
+
 	public void addFlithPathPoint(LatLng position) {
 		if (maxFlightPathSize > 0) {
 			List<LatLng> oldFlightPath = flightPath.getPoints();
@@ -116,38 +121,22 @@ public class FlightMapFragment extends DroneMap implements
 	}
 
 	@Override
-	public void onMarkerDragEnd(Marker marker)
-	{
+	public void onMarkerDragEnd(Marker marker){
 		checkForGuidePointMoving(marker);
 		drone.guidedPoint.newGuidedPoint(marker.getPosition());
 	}
 
 	@Override
-	public boolean onMarkerClick(Marker marker)
-	{
+	public boolean onMarkerClick(Marker marker){
 		drone.guidedPoint.newGuidedPoint(marker.getPosition());
 		return true;
 	}
 
-	private void checkForGuidePointMoving(Marker marker)
-	{
-		final Context context = getActivity().getApplicationContext();
+	private void checkForGuidePointMoving(Marker marker){
 		drone.guidedPoint.setCoord(marker.getPosition());
 		guidePointListener.OnGuidePointMoved();
 	}
 
-	public void updateFragment() {
-		final Context context = getActivity().getApplicationContext();
-
-		missionPath.update(drone.mission);
-		markers.updateMarker(drone.mission.getHome(), false, context);
-        markers.updateMarkers(cloneLabelMarkersFromWaypoints(drone.mission.getWaypoints()), false, context);
-
-		if(drone.guidedPoint.isCoordValid()) {
-			markers.updateMarker(drone.guidedPoint, true, context);
-			guidePointListener.OnGuidePointMoved();
-		}
-	}
 
 	public void onModeChanged() {
 		if(drone.state.getMode() != ApmModes.ROTOR_GUIDED) {
@@ -157,12 +146,4 @@ public class FlightMapFragment extends DroneMap implements
 			}
 		}
 	}
-
-    private List<WaypointLabel> cloneLabelMarkersFromWaypoints(List<waypoint> waypoints) {
-        List<WaypointLabel> labels = new ArrayList<WaypointLabel>();
-        for (waypoint waypoint : waypoints) {
-            labels.add(new WaypointLabel(waypoint));
-        }
-        return labels;
-    }
 }

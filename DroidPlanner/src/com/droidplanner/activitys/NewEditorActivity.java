@@ -57,7 +57,6 @@ public class NewEditorActivity extends NewSuperUI implements
 		mission = drone.mission;
 		gestureMapFragment.setOnPathFinishedListner(this);
 		missionFragment.setMission(mission);
-		planningMapFragment.setMission(mission);
 
 		mission.addOnWaypointsChangedListner(missionFragment);
 		mission.addOnWaypointsChangedListner(planningMapFragment);
