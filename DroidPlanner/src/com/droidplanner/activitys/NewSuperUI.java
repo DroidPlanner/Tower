@@ -51,6 +51,7 @@ public abstract class NewSuperUI extends SuperActivity implements ConnectionStat
 
 	public void notifyConnected() {
 		invalidateOptionsMenu();
+		
 		/*
 		if(armButton != null){
 			armButton.setEnabled(true);
