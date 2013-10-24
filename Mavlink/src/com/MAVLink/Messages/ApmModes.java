@@ -83,8 +83,8 @@ public enum ApmModes {
 		return UNKNOWN;
 	}	
 	
-	public static List<String> getModeList(int type) {
-		List<String> modeList = new ArrayList<String>();
+	public static List<ApmModes> getModeList(int type) {
+		List<ApmModes> modeList = new ArrayList<ApmModes>();
 		
 		if (isCopter(type)) {
 			type = MAV_TYPE.MAV_TYPE_QUADROTOR;			
@@ -92,7 +92,7 @@ public enum ApmModes {
 		
 		for (ApmModes mode : ApmModes.values()) {
 			if (isValid(mode) & mode.getType() == type) {
-				modeList.add(mode.getName());			
+				modeList.add(mode);			
 			}
 		}
 		return modeList;

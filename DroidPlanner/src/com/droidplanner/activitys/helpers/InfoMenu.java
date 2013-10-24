@@ -1,5 +1,6 @@
 package com.droidplanner.activitys.helpers;
 
+import android.content.Context;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -8,6 +9,8 @@ import com.droidplanner.R;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.HomeDistanceChangedListner;
 import com.droidplanner.drone.DroneInterfaces.InfoListner;
+import com.droidplanner.widgets.spinners.SelectModeSpinner;
+import com.droidplanner.widgets.spinners.SelectModeSpinner.OnModeSpinnerSelectedListener;
 
 public class InfoMenu implements InfoListner, HomeDistanceChangedListner {
 	private Drone drone;
@@ -16,6 +19,7 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner {
 	private MenuItem propeler;
 	private MenuItem home;
 	private MenuItem signal;
+	public SelectModeSpinner mode;
 
 	public InfoMenu(Drone drone) {
 		this.drone = drone;
@@ -29,6 +33,7 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner {
 			propeler = menu.findItem(R.id.bar_propeller);
 			home = menu.findItem(R.id.bar_home);
 			signal = menu.findItem(R.id.bar_signal);
+			mode = (SelectModeSpinner) menu.findItem(R.id.bar_mode).getActionView();
 
 			drone.setHomeChangedListner(this);
 			drone.setInfoListner(this);
@@ -57,5 +62,13 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner {
 	@Override
 	public void onDistanceToHomeHasChanged() {
 		home.setTitle(drone.mission.getDroneDistanceToHome().toString());
+	}
+
+	public void setupModeSpinner(Context context,
+			OnModeSpinnerSelectedListener listener) {
+		if (mode!=null) {
+			mode.buildSpinner(context, listener, drone);
+		}
+		
 	}
 }
