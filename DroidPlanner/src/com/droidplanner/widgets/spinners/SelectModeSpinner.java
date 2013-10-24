@@ -4,6 +4,7 @@ import android.content.Context;
 import android.widget.Spinner;
 
 import com.MAVLink.Messages.ApmModes;
+import com.droidplanner.R;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.DroneTypeListner;
 import com.droidplanner.drone.DroneInterfaces.ModeChangedListener;
@@ -20,6 +21,7 @@ public class SelectModeSpinner extends SpinnerSelfSelect implements
 		super(context);
 		this.context = context;
 		selectable = false;
+		setBackgroundResource(R.drawable.black_button);
 	}
 
 	public void buildSpinner(Context context, Drone drone) {
