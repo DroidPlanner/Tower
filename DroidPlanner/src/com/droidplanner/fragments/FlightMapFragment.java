@@ -14,17 +14,15 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.MAVLink.Messages.ApmModes;
-import com.droidplanner.DroidPlannerApp;
-import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.variables.WaypointLabel;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.fragments.helpers.DroneMap;
 import com.droidplanner.fragments.helpers.GuidePointListener;
 import com.droidplanner.fragments.markers.DroneMarker;
 import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
-import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polyline;
@@ -40,15 +38,12 @@ public class FlightMapFragment extends DroneMap implements
 	public boolean hasBeenZoomed = false;
 
 	public DroneMarker droneMarker;
-	public Drone drone;
-
 	private GuidePointListener guidePointListener;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
 			Bundle bundle) {
 		View view = super.onCreateView(inflater, viewGroup, bundle);
-		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
 
 		droneMarker = new DroneMarker(this);
 

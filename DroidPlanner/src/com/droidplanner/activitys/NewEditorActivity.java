@@ -62,6 +62,7 @@ public class NewEditorActivity extends NewSuperUI implements
 		mission.addOnWaypointsChangedListner(missionFragment);
 		mission.addOnWaypointsChangedListner(planningMapFragment);
 		mission.onWaypointsUpdate();
+		
 	}
 
 	@Override
