@@ -19,6 +19,7 @@ public class SelectModeSpinner extends SpinnerSelfSelect implements
 	public SelectModeSpinner(Context context) {
 		super(context);
 		this.context = context;
+		selectable = false;
 	}
 
 	public void buildSpinner(Context context, Drone drone) {
@@ -45,7 +46,7 @@ public class SelectModeSpinner extends SpinnerSelfSelect implements
 	@Override
 	public void onModeChanged() {
 		try {
-			this.setSelection(modeAdapter.getPosition(drone.state.getMode()));
+			this.forcedSetSelection(modeAdapter.getPosition(drone.state.getMode()));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
