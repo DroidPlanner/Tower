@@ -7,7 +7,9 @@ import com.droidplanner.drone.DroneInterfaces.DroneTypeListner;
 import com.droidplanner.drone.DroneInterfaces.HomeDistanceChangedListner;
 import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
 import com.droidplanner.drone.DroneInterfaces.InfoListner;
+import com.droidplanner.drone.DroneInterfaces.MapConfigListener;
 import com.droidplanner.drone.DroneInterfaces.MapUpdatedListner;
+import com.droidplanner.drone.DroneInterfaces.ModeChangedListener;
 import com.droidplanner.drone.variables.Altitude;
 import com.droidplanner.drone.variables.Battery;
 import com.droidplanner.drone.variables.Calibration;
@@ -43,9 +45,11 @@ public class Drone {
 
 	private HudUpdatedListner hudListner;
 	private MapUpdatedListner mapListner;
+	private MapConfigListener mapConfigListener;
 	private DroneTypeListner typeListner;
 	private InfoListner infoListner;
 	private HomeDistanceChangedListner homeChangedListner;
+	private ModeChangedListener modeChangedListener;
 
 	public Drone(TTS tts, MAVLinkClient mavClient, Context context) {
 		this.tts = tts;
@@ -61,6 +65,10 @@ public class Drone {
 		mapListner = listner;
 	}
 
+	public void setMapConfigListener(MapConfigListener mapConfigListener) {
+		this.mapConfigListener = mapConfigListener;
+	}
+
 	public void setDroneTypeChangedListner(DroneTypeListner listner) {
 		typeListner = listner;
 	}
@@ -71,6 +79,10 @@ public class Drone {
 
 	public void setHomeChangedListner(HomeDistanceChangedListner listner) {
 		homeChangedListner = listner;		
+	}
+	
+	public void setModeChangedListener(ModeChangedListener listener){
+		this.modeChangedListener = listener;
 	}
 
 	public void setAltitudeGroundAndAirSpeeds(double altitude,
@@ -126,4 +138,13 @@ public class Drone {
 			hudListner.onSpeedAltitudeAndClimbRateUpdate();
 	}
 
+	public void notifyMapTypeChanged() {
+		if (mapConfigListener != null)
+			mapConfigListener.onMapTypeChanged();
+	}
+
+	public void notifyModeChanged(){
+		if (modeChangedListener != null)
+			modeChangedListener.onModeChanged();
+	}
 }

@@ -1,5 +1,6 @@
 package com.droidplanner.fragments;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -12,18 +13,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.MAVLink.Messages.ApmModes;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.variables.WaypointLabel;
+import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.fragments.helpers.DroneMap;
+import com.droidplanner.fragments.helpers.GuidePointListener;
 import com.droidplanner.fragments.markers.DroneMarker;
 import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 public class FlightMapFragment extends DroneMap implements
-		OnMapLongClickListener{
+		OnMapLongClickListener, OnMarkerClickListener, OnMarkerDragListener {
 	private Polyline flightPath;
 	private int maxFlightPathSize;
 	public boolean isAutoPanEnabled;
@@ -33,6 +41,8 @@ public class FlightMapFragment extends DroneMap implements
 
 	public DroneMarker droneMarker;
 	public Drone drone;
+
+	private GuidePointListener guidePointListener;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
@@ -47,6 +57,8 @@ public class FlightMapFragment extends DroneMap implements
 
 		drone.setMapListner(droneMarker);
 		mMap.setOnMapLongClickListener(this);
+		mMap.setOnMarkerDragListener(this);
+		mMap.setOnMarkerClickListener(this);
 
 		return view;
 	}
@@ -96,18 +108,77 @@ public class FlightMapFragment extends DroneMap implements
 		flightPath = mMap.addPolyline(flightPathOptions);
 	}
 
+	public void setGuidePointListener(GuidePointListener guidePointListener) {
+		this.guidePointListener = guidePointListener;
+	}
+
 	@Override
 	public void onMapLongClick(LatLng coord) {
 		getPreferences();
-		if (isGuidedModeEnabled) {
+		if (isGuidedModeEnabled)
 			drone.guidedPoint.newGuidedPoint(coord);
-			markers.updateMarker(drone.guidedPoint, false,getActivity().getApplicationContext());
-		}
+	}
+
+	@Override
+	public void onMarkerDragStart(Marker marker)
+	{
+		checkForGuidePointMoving(marker);
+	}
+
+	@Override
+	public void onMarkerDrag(Marker marker)
+	{
+		checkForGuidePointMoving(marker);
+	}
+
+	@Override
+	public void onMarkerDragEnd(Marker marker)
+	{
+		checkForGuidePointMoving(marker);
+		drone.guidedPoint.newGuidedPoint(marker.getPosition());
+	}
+
+	@Override
+	public boolean onMarkerClick(Marker marker)
+	{
+		drone.guidedPoint.newGuidedPoint(marker.getPosition());
+		return true;
+	}
+
+	private void checkForGuidePointMoving(Marker marker)
+	{
+		final Context context = getActivity().getApplicationContext();
+		drone.guidedPoint.setCoord(marker.getPosition());
+		guidePointListener.OnGuidePointMoved();
 	}
 
 	public void updateFragment() {
+		final Context context = getActivity().getApplicationContext();
+
 		missionPath.update(drone.mission);
-		markers.updateMarker(drone.mission.getHome(), false,getActivity().getApplicationContext());
+		markers.updateMarker(drone.mission.getHome(), false, context);
+        markers.updateMarkers(cloneLabelMarkersFromWaypoints(drone.mission.getWaypoints()), false, context);
+
+		if(drone.guidedPoint.isCoordValid()) {
+			markers.updateMarker(drone.guidedPoint, true, context);
+			guidePointListener.OnGuidePointMoved();
+		}
 	}
 
+	public void onModeChanged() {
+		if(drone.state.getMode() != ApmModes.ROTOR_GUIDED) {
+			if(drone.guidedPoint.isCoordValid()) {
+				markers.clear();
+				drone.guidedPoint.invalidateCoord();
+			}
+		}
+	}
+
+    private List<WaypointLabel> cloneLabelMarkersFromWaypoints(List<waypoint> waypoints) {
+        List<WaypointLabel> labels = new ArrayList<WaypointLabel>();
+        for (waypoint waypoint : waypoints) {
+            labels.add(new WaypointLabel(waypoint));
+        }
+        return labels;
+    }
 }

@@ -5,9 +5,14 @@ import java.text.DecimalFormat;
 import com.MAVLink.Messages.ardupilotmega.msg_param_value;
 
 public class Parameter {
-	public String name;
+
+    public String name;
 	public double value;
 	public int type;
+
+    private final static DecimalFormat format = (DecimalFormat) DecimalFormat.getInstance();
+    static { format.applyPattern("0.###"); }
+
 
 	public Parameter(String name, double value, int type) {
 		this.name = name;
@@ -24,7 +29,6 @@ public class Parameter {
 	}
 
 	public String getValue() {
-		DecimalFormat format = new DecimalFormat("0.###");
 		return format.format(value);
 	}
 
@@ -56,4 +60,7 @@ public class Parameter {
 		}
 	}
 
+    public static DecimalFormat getFormat() {
+        return format;
+    }
 }

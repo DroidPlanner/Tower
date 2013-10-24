@@ -14,6 +14,7 @@ import com.droidplanner.activitys.SettingsActivity;
 import com.droidplanner.dialogs.AltitudeDialog;
 import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
 import com.droidplanner.drone.Drone;
+import com.droidplanner.fragments.helpers.OfflineMapFragment;
 
 public abstract class SuperActivity extends Activity implements
 		 OnAltitudeChangedListner, OnSystemArmListener{
@@ -69,11 +70,41 @@ public abstract class SuperActivity extends Activity implements
 		case R.id.menu_follow_me:
 			app.followMe.toogleFollowMeState();
 			return true;
+		case R.id.menu_map_type_hybrid:
+		case R.id.menu_map_type_normal:
+		case R.id.menu_map_type_terrain:
+		case R.id.menu_map_type_satellite:
+			setMapTypeFromItemId(item.getItemId());
+			return true;
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
 	}
 
+	private void setMapTypeFromItemId(int itemId) {
+
+		final String mapType;
+		switch(itemId) {
+			case R.id.menu_map_type_hybrid:
+				mapType = OfflineMapFragment.MAP_TYPE_HYBRID;
+				break;
+			case R.id.menu_map_type_normal:
+				mapType = OfflineMapFragment.MAP_TYPE_NORMAL;
+				break;
+			case R.id.menu_map_type_terrain:
+				mapType = OfflineMapFragment.MAP_TYPE_TERRAIN;
+				break;
+			default:
+				mapType = OfflineMapFragment.MAP_TYPE_SATELLITE;
+				break;
+		}
+
+		PreferenceManager.getDefaultSharedPreferences(this).edit()
+				.putString(OfflineMapFragment.PREF_MAP_TYPE, mapType)
+				.commit();
+
+		drone.notifyMapTypeChanged();
+	}
 
 	public void notifyArmed() {
 		if (armButton != null) {

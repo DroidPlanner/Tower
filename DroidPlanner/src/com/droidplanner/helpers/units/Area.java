@@ -20,7 +20,7 @@ public class Area {
 
 	@Override
 	public String toString() {
-		if (areaInSqMeters > 1000000) {
+		if (areaInSqMeters > 100000) {
 			return String.format(Locale.US,"%2.1f km"+SQUARE,areaInSqMeters/1000000);
 		}else if (areaInSqMeters>1) {
 			return String.format(Locale.US,"%2.1f m"+SQUARE,areaInSqMeters);

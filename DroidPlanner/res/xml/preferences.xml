@@ -128,6 +128,14 @@
             android:summary="Audible messages for important events"
             android:title="Enable Text To Speech" />
 
+        <ListPreference
+            android:defaultValue="None"
+            android:entries="@array/ParamMeta"
+            android:entryValues="@array/ParamMetaValues"
+            android:key="pref_param_metadata"
+            android:summary="Metadata to use when displaying parameters"
+            android:title="Parameter Metadata" />
+
         <PreferenceScreen
             android:key="pref_rc"
             android:title="RC Screen" >

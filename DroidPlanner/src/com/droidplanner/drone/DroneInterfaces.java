@@ -11,6 +11,10 @@ public class DroneInterfaces {
 		public void onDroneTypeChanged();
 	}
 
+	public interface MapConfigListener {
+		public void onMapTypeChanged();
+	}
+
 	public interface DroneTypeListner {
 		public void onDroneTypeChanged();
 	}
@@ -28,11 +32,14 @@ public class DroneInterfaces {
 		public void onSpeedAltitudeAndClimbRateUpdate();
 	}
 
-	public interface OnParameterManagerListner {
-		public void onParameterReceived(Parameter parameter);
+	public interface ModeChangedListener {
+		public void onModeChanged();
+	}
 
+	public interface OnParameterManagerListner {
 		public void onBeginReceivingParameters();
 		public void onParameterReceived(Parameter parameter, int index, int count);
 		public void onEndReceivingParameters(List<Parameter> parameter);
+        public void onParamterMetaDataChanged();
 	}
 }
