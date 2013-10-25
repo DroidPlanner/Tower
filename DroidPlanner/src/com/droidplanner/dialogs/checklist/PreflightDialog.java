@@ -6,12 +6,9 @@ import java.util.List;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.res.XmlResourceParser;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.WindowManager.LayoutParams;
-
 import java.util.ArrayList;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -39,6 +36,7 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 	private CheckListAdapter listAdapter;
 	private ExpandableListView expListView;
 	private AlertDialog dialog;
+
 	public PreflightDialog() {
 		// TODO Auto-generated constructor stub
 	}
@@ -48,7 +46,8 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 		context = mcontext;
 		drone = mdrone;
 		// TODO Read System checklist here
-		CheckListXmlParser xml = new CheckListXmlParser(mcontext,R.xml.checklist_default);
+		CheckListXmlParser xml = new CheckListXmlParser(mcontext,
+				R.xml.checklist_default);
 		xml.setOnXMLParserError(this);
 		listDataHeader = xml.getCategories();
 		checkItemList = xml.getCheckListItems();
@@ -84,22 +83,23 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 		listAdapter.setHeaderLayout(R.layout.list_group_header);
 		listAdapter.setOnCheckListItemUpdateListener(this);
 		// setting list adapter
-		
+
 		expListView.post(new Runnable() {
 
-	        @Override
-	        public void run() {
-	            dialog.getWindow().clearFlags(
-	                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
-	                    WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
-	            dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-	        }
-	    });
+			@Override
+			public void run() {
+				dialog.getWindow()
+						.clearFlags(
+								WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+										| WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+				dialog.getWindow().setSoftInputMode(
+						WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+			}
+		});
 		expListView.setAdapter(listAdapter);
 
 		expListView.expandGroup(0);
 		expListView.expandGroup(1);
-
 
 		return view;
 	}
@@ -131,8 +131,7 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 	}
 
 	@Override
-	public void onRadioGroupUpdate(CheckListItem checkListItem,
-			RadioGroup group, int checkId) {
+	public void onRadioGroupUpdate(CheckListItem checkListItem, int checkId) {
 		Toast.makeText(
 				context,
 				checkListItem.getTitle() + " : "
@@ -155,36 +154,36 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 	public void onCheckBoxUpdate(CheckListItem checkListItem, boolean isChecked) {
 		Toast.makeText(
 				context,
-				checkListItem.getTitle() + " : "
-						+ checkListItem.getTitle() + (isChecked?" checked":" unchecked"),
+				checkListItem.getTitle() + " : " + checkListItem.getTitle()
+						+ (isChecked ? " checked" : " unchecked"),
 				Toast.LENGTH_SHORT).show();
-		
+
 	}
 
 	@Override
 	public void onSwitchUpdate(CheckListItem checkListItem, boolean isSwitched) {
 		Toast.makeText(
 				context,
-				checkListItem.getTitle() + " : "
-						+ checkListItem.getTitle() + (isSwitched?" switched ON":" switched OFF"),
+				checkListItem.getTitle() + " : " + checkListItem.getTitle()
+						+ (isSwitched ? " switched ON" : " switched OFF"),
 				Toast.LENGTH_SHORT).show();
-		
+
 	}
 
 	@Override
 	public void onToggleUpdate(CheckListItem checkListItem, boolean isToggled) {
 		Toast.makeText(
 				context,
-				checkListItem.getTitle() + " : "
-						+ checkListItem.getTitle() + (isToggled?" toggled ON":" toggled OFF"),
+				checkListItem.getTitle() + " : " + checkListItem.getTitle()
+						+ (isToggled ? " toggled ON" : " toggled OFF"),
 				Toast.LENGTH_SHORT).show();
-		
+
 	}
 
 	@Override
 	public void onValueUpdate(CheckListItem checkListItem, String newValue) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

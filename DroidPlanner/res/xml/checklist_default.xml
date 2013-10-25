@@ -7,18 +7,22 @@
     <category label="User Checklist" >
         <check_item
             description="Ensure Camera is connected and switch on"
+            editable="yes"
             mandatory="yes"
             title="Camera connected and switch on" />
         <check_item
             description="Ensure surface control is in the right direction"
+            editable="yes"
             mandatory="yes"
             title="Surface control - Aileron" />
         <check_item
             description="Ensure surface control is in the right direction"
+            editable="yes"
             mandatory="yes"
             title="Surface control - Elevator" />
         <check_item
             description="Ensure surface control is in the right direction"
+            editable="yes"
             mandatory="yes"
             title="Surface control - Rudder" />
 
@@ -34,7 +38,7 @@
             description="Telemetry connection state"
             editable="yes"
             mandatory="yes"
-            system_tag="SYS_CONNECT_STATE"
+            system_tag="SYS_CONNECTION_STATE"
             title="Telemetry connection" />
         <switch_item
             description="Drone Arm state"

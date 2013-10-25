@@ -3,23 +3,16 @@ package com.droidplanner.checklist.row;
 import com.droidplanner.R;
 import com.droidplanner.checklist.CheckListItem;
 
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
-public class ListRow_Note implements ListRow_Interface, OnFocusChangeListener {
-	public interface OnValueChangeListener {
-		public void onValueChanged(CheckListItem checkListItem, String newValue);
-	}
-
-	private OnValueChangeListener listener;
+public class ListRow_Note extends ListRow implements OnFocusChangeListener, OnClickListener {
 	private final CheckListItem checkListItem;
 	private final LayoutInflater inflater;
 	private EditText editText;
@@ -43,25 +36,31 @@ public class ListRow_Note implements ListRow_Interface, OnFocusChangeListener {
 			view = convertView;
 			holder = (ViewHolder) convertView.getTag();
 		}
-
-		// TODO - Add spinner items
 		editText = holder.editTextView;
+
+		updateDisplay(view, holder, checkListItem);
+		return view;
+	}
+
+	private void updateDisplay(View view, ViewHolder holder,
+			CheckListItem mListItem) {
 		holder.editTextView.setOnFocusChangeListener(this);
 		holder.editTextView.setText(checkListItem.getValue());
+		
+		// Common display update
+		holder.checkBox.setOnClickListener(this);
+		holder.checkBox.setClickable(checkListItem.isEditable());
 		holder.checkBox.setText(checkListItem.getTitle());
-
-		return view;
+		holder.checkBox.setChecked(checkListItem.isVerified());
 	}
 
 	public int getViewType() {
 		return ListRow_Type.NOTE_ROW.ordinal();
 	}
 
-	public void setOnValueChangeListener(OnValueChangeListener listener) {
-		this.listener = listener;
-	}
 
 	private static class ViewHolder {
+		@SuppressWarnings("unused")
 		final LinearLayout layoutView;
 		final EditText editTextView;
 		final CheckBox checkBox;
@@ -78,9 +77,14 @@ public class ListRow_Note implements ListRow_Interface, OnFocusChangeListener {
 	@Override
 	public void onFocusChange(View v, boolean hasFocus) {
 		if (!v.isFocused() && this.listener != null) {
-			this.listener.onValueChanged(checkListItem, this.editText.getText()
-					.toString());
+			checkListItem.setValue(this.editText.getText().toString());
+			this.listener.onRowItemChanged(v,checkListItem, checkListItem.isVerified());
 		}
 
+	}
+
+	@Override
+	public void onClick(View v) {
+		this.checkListItem.setVerified(((CheckBox) v).isChecked());
 	}
 }

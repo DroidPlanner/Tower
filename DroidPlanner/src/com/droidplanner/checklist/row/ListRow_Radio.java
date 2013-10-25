@@ -7,6 +7,7 @@ import com.droidplanner.checklist.CheckListItem;
 
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.CheckBox;
@@ -14,15 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
-import android.widget.TextView;
 
-public class ListRow_Radio implements ListRow_Interface, OnCheckedChangeListener {
-	public interface OnRadioGroupCheckedChangeListener {
-		public void onRadioGroupCheckedChanged(CheckListItem checkListItem,
-				RadioGroup group, int checkId);
-	}
-
-	private OnRadioGroupCheckedChangeListener listener;
+public class ListRow_Radio extends ListRow implements OnCheckedChangeListener , OnClickListener{
 	private final CheckListItem checkListItem;
 	private final LayoutInflater inflater;
 
@@ -44,30 +38,32 @@ public class ListRow_Radio implements ListRow_Interface, OnCheckedChangeListener
 			view = convertView;
 			holder = (ViewHolder) convertView.getTag();
 		}
-		// TODO - Add information (radio items here)
-		holder.radioGroupView.setOnCheckedChangeListener(this);
-		holder.checkBox.setText(checkListItem.getTitle());
-
+		updateDisplay(view, holder, checkListItem);
 		return view;
+	}
+
+	private void updateDisplay(View view, ViewHolder holder,
+			CheckListItem mListItem) {
+		holder.radioGroupView.setOnCheckedChangeListener(this);
+		// Common display update
+		holder.checkBox.setOnClickListener(this);
+		holder.checkBox.setClickable(checkListItem.isEditable());
+		holder.checkBox.setText(checkListItem.getTitle());
+		holder.checkBox.setChecked(checkListItem.isVerified());
+
 	}
 
 	public int getViewType() {
 		return ListRow_Type.RADIO_ROW.ordinal();
 	}
 
-	public void setOnRadioGroupChackedChangeListener(
-			OnRadioGroupCheckedChangeListener listener) {
-		this.listener = listener;
-	}
-
 	private static class ViewHolder {
+		@SuppressWarnings("unused")
 		final LinearLayout layoutView;
 		final CheckBox checkBox;
 		final RadioGroup radioGroupView;
-		final CheckListItem checkListItem;
 
 		private ViewHolder(ViewGroup viewGroup, CheckListItem checkListItem) {
-			this.checkListItem = checkListItem;
 
 			this.layoutView = (LinearLayout) viewGroup
 					.findViewById(R.id.lst_layout);
@@ -99,7 +95,14 @@ public class ListRow_Radio implements ListRow_Interface, OnCheckedChangeListener
 
 	@Override
 	public void onCheckedChanged(RadioGroup arg0, int arg1) {
+		checkListItem.setSelectedIndex(arg1);
+
 		if (listener != null)
-			listener.onRadioGroupCheckedChanged(checkListItem, arg0, arg1);
+			listener.onRowItemChanged(arg0, checkListItem, checkListItem.isVerified());
+	}
+
+	@Override
+	public void onClick(View v) {
+		this.checkListItem.setVerified(((CheckBox) v).isChecked());
 	}
 }

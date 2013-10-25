@@ -9,14 +9,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
-public class ListRow_CheckBox implements ListRow_Interface, OnClickListener {
-	public interface OnCheckBoxChangeListener {
-		public void onCheckBoxChanged(CheckListItem checkListItem, boolean isChecked);
-	}
-
-	private OnCheckBoxChangeListener listener;
+public class ListRow_CheckBox extends ListRow implements OnClickListener {
 	private final CheckListItem checkListItem;
 	private final LayoutInflater inflater;
 
@@ -38,23 +32,31 @@ public class ListRow_CheckBox implements ListRow_Interface, OnClickListener {
 			holder = (ViewHolder) convertView.getTag();
 			view = convertView;
 		}
+
+		updateDisplay(view,holder,checkListItem);
+		return view;
+	}
+	
+	private void updateDisplay(View view, ViewHolder holder,
+			CheckListItem mListItem) {
+		
+		//Common display update
 		holder.checkBox.setOnClickListener(this);
 		holder.checkBox.setText(checkListItem.getTitle());
+		holder.checkBox.setClickable(checkListItem.isEditable());
+		holder.checkBox.setChecked(checkListItem.isSys_activated());
 
-		return view;
+		checkListItem.setVerified(holder.checkBox.isChecked());
 	}
 
 	public int getViewType() {
 		return ListRow_Type.CHECKBOX_ROW.ordinal();
 	}
 	
-	public void setOnCheckBoxChangeListener(OnCheckBoxChangeListener listener){
-		this.listener = listener;
-	}
-	
 	private static class ViewHolder {
+		@SuppressWarnings("unused")
 		final LinearLayout layoutView;
-		final TextView checkBox;
+		final CheckBox checkBox;
 
 		private ViewHolder(ViewGroup viewGroup) {
 			this.layoutView = (LinearLayout) viewGroup
@@ -65,8 +67,10 @@ public class ListRow_CheckBox implements ListRow_Interface, OnClickListener {
 
 	@Override
 	public void onClick(View v) {
+		this.checkListItem.setSys_activated(((CheckBox)v).isChecked());
+		
 		if(this.listener!=null){
-			this.listener.onCheckBoxChanged(this.checkListItem,((CheckBox)v).isChecked());
+			this.listener.onRowItemChanged(v, this.checkListItem,((CheckBox)v).isChecked());
 		}
 	}
 }

@@ -3,26 +3,21 @@ package com.droidplanner.checklist.row;
 import com.droidplanner.R;
 import com.droidplanner.checklist.CheckListItem;
 
-import android.text.Editable;
 import android.text.InputType;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
-public class ListRow_Value implements ListRow_Interface, OnFocusChangeListener {
-	public interface OnValueChangeListener {
-		public void onValueChanged(CheckListItem checkListItem, String newValue);
-	}
-
-	private OnValueChangeListener listener;
+public class ListRow_Value extends ListRow implements OnFocusChangeListener,
+		OnClickListener {
 	private final CheckListItem checkListItem;
 	private final LayoutInflater inflater;
+	@SuppressWarnings("unused")
 	private EditText editText;
 	private boolean lastFocusState;
 	private float lastValue;
@@ -43,9 +38,9 @@ public class ListRow_Value implements ListRow_Interface, OnFocusChangeListener {
 			holder = new ViewHolder(viewGroup);
 			viewGroup.setTag(holder);
 			view = viewGroup;
-			if(holder.editTextView.getText().toString()==null)
+			if (holder.editTextView.getText().toString() == null)
 				holder.editTextView.setText("0.0");
-			
+
 			lastValue = checkListItem.getFloatValue();
 
 		} else {
@@ -54,24 +49,39 @@ public class ListRow_Value implements ListRow_Interface, OnFocusChangeListener {
 
 		}
 
-		// TODO - Add spinner items
+		updateDisplay(view, holder, checkListItem);
+		return view;
+	}
+
+	@SuppressWarnings("unused")
+	private void updateDisplay(View view, ViewHolder holder,
+			CheckListItem mListItem) {
+		double minVal = mListItem.getMin_val();
+		double nomVal = mListItem.getNom_val();
+		double sysValue = mListItem.getSys_value();
+		String unit = mListItem.getUnit();
+		boolean failMandatory = sysValue <= minVal;
+
 		editText = holder.editTextView;
 		holder.editTextView.setOnFocusChangeListener(this);
-		holder.editTextView.setText(String.valueOf(checkListItem.getFloatValue()));
+		holder.editTextView.setText(String.valueOf(checkListItem
+				.getFloatValue()));
+		
+		// Common display update
+		holder.checkBox.setOnClickListener(this);
+		holder.checkBox.setClickable(checkListItem.isEditable());
 		holder.checkBox.setText(checkListItem.getTitle());
+		holder.checkBox.setChecked(checkListItem.isMandatory()&&!failMandatory);
 
-		return view;
+		checkListItem.setVerified(holder.checkBox.isChecked());
 	}
 
 	public int getViewType() {
 		return ListRow_Type.VALUE_ROW.ordinal();
 	}
 
-	public void setOnValueChangeListener(OnValueChangeListener listener) {
-		this.listener = listener;
-	}
-
 	private static class ViewHolder {
+		@SuppressWarnings("unused")
 		final LinearLayout layoutView;
 		final EditText editTextView;
 		final CheckBox checkBox;
@@ -81,8 +91,10 @@ public class ListRow_Value implements ListRow_Interface, OnFocusChangeListener {
 					.findViewById(R.id.lst_layout);
 			this.editTextView = (EditText) viewGroup
 					.findViewById(R.id.lst_editText);
-			this.editTextView.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL|InputType.TYPE_NUMBER_FLAG_SIGNED|InputType.TYPE_CLASS_NUMBER);
-//			this.editTextView.setInputType(InputType.TYPE_CLASS_PHONE);
+			this.editTextView.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL
+					| InputType.TYPE_NUMBER_FLAG_SIGNED
+					| InputType.TYPE_CLASS_NUMBER);
+			// this.editTextView.setInputType(InputType.TYPE_CLASS_PHONE);
 
 			this.checkBox = (CheckBox) viewGroup.findViewById(R.id.lst_check);
 		}
@@ -92,26 +104,30 @@ public class ListRow_Value implements ListRow_Interface, OnFocusChangeListener {
 	public void onFocusChange(View v, boolean hasFocus) {
 		if (lastFocusState != hasFocus) {
 			lastFocusState = hasFocus;
-			 float a = (float)0.0;
-			 
-			 try {
+			float a = (float) 0.0;
+
+			try {
 				a = Float.parseFloat(((EditText) v).getText().toString());
 			} catch (NumberFormatException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
-			if (a!=lastValue) {
+			if (a != lastValue) {
 				lastValue = a;
 				this.checkListItem
 						.setValue(((EditText) v).getText().toString());
 			}
 
-			if (!hasFocus && this.listener != null) {
-				this.listener.onValueChanged(checkListItem, this.editText
-						.getText().toString());
+			if (listener != null)
+				listener.onRowItemChanged(v, this.checkListItem,
+						this.checkListItem.isVerified());
 
-			}
 		}
+	}
+
+	@Override
+	public void onClick(View v) {
+		this.checkListItem.setVerified(((CheckBox) v).isChecked());
 	}
 }

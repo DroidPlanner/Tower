@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.droidplanner.checklist.xml.ListXmlData;
 
-public class CheckListItem extends ListXmlData{
+public class CheckListItem extends ListXmlData {
 	private int categoryIndex;
 	private String title;
 	private String desc;
@@ -43,9 +43,12 @@ public class CheckListItem extends ListXmlData{
 	}
 
 	public String getTitle() {
-		if(title==null)
+		if (title == null)
 			return "No Title";
-		return title;
+		if (isMandatory())
+			return "* " +title;
+		else
+			return title;
 	}
 
 	public void setTitle(String title) {
@@ -53,8 +56,8 @@ public class CheckListItem extends ListXmlData{
 	}
 
 	public String getDesc() {
-		if(desc==null)
-				return "";
+		if (desc == null)
+			return "";
 		return desc;
 	}
 
@@ -231,7 +234,7 @@ public class CheckListItem extends ListXmlData{
 	}
 
 	public String getOn_label() {
-		if(on_label==null)
+		if (on_label == null)
 			return "";
 		return on_label;
 	}
@@ -241,7 +244,7 @@ public class CheckListItem extends ListXmlData{
 	}
 
 	public String getOff_label() {
-		if(off_label==null)
+		if (off_label == null)
 			return "";
 		return off_label;
 	}
@@ -259,13 +262,14 @@ public class CheckListItem extends ListXmlData{
 	}
 
 	public String getValue() {
-		if(value==null)
+		if (value == null)
 			return "";
 		return value;
 	}
-	public float getFloatValue(){
+
+	public float getFloatValue() {
 		float fValue = (float) 0.0;
-		if(value!=null){
+		if (value != null) {
 			try {
 				fValue = Float.parseFloat(value);
 			} catch (NumberFormatException e) {
@@ -273,9 +277,9 @@ public class CheckListItem extends ListXmlData{
 			}
 		}
 		return fValue;
-			
+
 	}
-	
+
 	public void setValue(String value) {
 		this.value = value;
 	}

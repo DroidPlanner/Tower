@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager.LayoutParams;
 import android.widget.ExpandableListView;
-import android.widget.RadioGroup;
 
 public class ListXmlFragment extends DialogFragment implements
 		OnCheckListItemUpdateListener {
@@ -82,12 +81,6 @@ public class ListXmlFragment extends DialogFragment implements
 		setStyle(DialogFragment.STYLE_NORMAL, android.R.style.Theme_Holo);
 	}
 
-	@Override
-	public void onRadioGroupUpdate(CheckListItem checkListItem,
-			RadioGroup group, int checkId) {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
 	public void onSelectUpdate(CheckListItem checkListItem, int selectId) {
@@ -117,5 +110,11 @@ public class ListXmlFragment extends DialogFragment implements
 	public void onValueUpdate(CheckListItem checkListItem, String newValue) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void onRadioGroupUpdate(CheckListItem checkListItem, int checkId) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -5,23 +5,16 @@ import com.droidplanner.checklist.CheckListItem;
 
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.TextView;
 
-public class ListRow_Select implements ListRow_Interface, OnItemSelectedListener {
-	public interface OnSelectChangeListener {
-		public void onSelectChanged(CheckListItem checkListItem, int selectId);
-	}
-
-	private OnSelectChangeListener listener;
+public class ListRow_Select extends ListRow implements OnItemSelectedListener, OnClickListener {
 	private final CheckListItem checkListItem;
 	private final LayoutInflater inflater;
 
@@ -44,26 +37,34 @@ public class ListRow_Select implements ListRow_Interface, OnItemSelectedListener
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		// TODO - Add spinner items
-		holder.checkBox.setText(checkListItem.getTitle());
+		updateDisplay(view, holder, checkListItem);
+		return view;
+	}
+
+	private void updateDisplay(View view, ViewHolder holder,
+			CheckListItem mListItem) {
 		holder.selectView.setOnItemSelectedListener(this);
 
-		return view;
+		// Common display update
+		holder.checkBox.setText(checkListItem.getTitle());
+		holder.checkBox
+				.setClickable(checkListItem.getSys_tag().contains("SYS") == false);
+		holder.checkBox.setChecked(checkListItem.isVerified());
+
+		checkListItem.setVerified(holder.checkBox.isChecked());
 	}
 
 	public int getViewType() {
 		return ListRow_Type.SELECT_ROW.ordinal();
 	}
 
-	public void setOnSelectChangeListener(OnSelectChangeListener listener) {
-		this.listener = listener;
-	}
-
 	private static class ViewHolder {
+		@SuppressWarnings("unused")
 		final LinearLayout layoutView;
 		final Spinner selectView;
 		final CheckBox checkBox;
-		final CheckListItem checkListItem;
+		@SuppressWarnings("unused")
+		private CheckListItem checkListItem;
 
 		private ArrayAdapter<String> adapter;
 
@@ -92,8 +93,11 @@ public class ListRow_Select implements ListRow_Interface, OnItemSelectedListener
 	@Override
 	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
 			long arg3) {
+		checkListItem.setSelectedIndex(arg2);
+
 		if (listener != null) {
-			listener.onSelectChanged(checkListItem, arg2);
+			listener.onRowItemChanged(arg1, checkListItem,
+					checkListItem.isSys_activated());
 		}
 
 	}
@@ -102,4 +106,10 @@ public class ListRow_Select implements ListRow_Interface, OnItemSelectedListener
 	public void onNothingSelected(AdapterView<?> arg0) {
 		// TODO Auto-generated method stub
 	}
+
+	@Override
+	public void onClick(View v) {
+		this.checkListItem.setVerified(((CheckBox) v).isChecked());
+	}
+	
 }

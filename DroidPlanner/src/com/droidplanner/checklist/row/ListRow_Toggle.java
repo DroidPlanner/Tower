@@ -2,9 +2,11 @@ package com.droidplanner.checklist.row;
 
 import com.droidplanner.R;
 import com.droidplanner.checklist.CheckListItem;
+import com.droidplanner.drone.Drone;
 
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -12,19 +14,16 @@ import android.widget.LinearLayout;
 import android.widget.ToggleButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
-public class ListRow_Toggle implements ListRow_Interface, OnCheckedChangeListener {
-    public interface OnToggleChangeListener {
-    	public void onToggleChanged(CheckListItem checkListItem, boolean isToggled);
-    }
+public class ListRow_Toggle extends ListRow implements OnCheckedChangeListener,
+		OnClickListener {
+	private final CheckListItem checkListItem;
+	private final LayoutInflater inflater;
 
-    private OnToggleChangeListener listener;
-    private final CheckListItem checkListItem;
-    private final LayoutInflater inflater;
-
-    public ListRow_Toggle(LayoutInflater inflater, CheckListItem checkListItem) {
-        this.checkListItem = checkListItem;
-        this.inflater = inflater;
-    }
+	public ListRow_Toggle(Drone drone, LayoutInflater inflater, CheckListItem checkListItem) {
+		this.checkListItem = checkListItem;
+		this.inflater = inflater;
+		getDroneVariable(drone, checkListItem);
+	}
 
 	public View getView(View convertView) {
 		ViewHolder holder;
@@ -41,37 +40,58 @@ public class ListRow_Toggle implements ListRow_Interface, OnCheckedChangeListene
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		// TODO - Add spinner items
-		holder.toggleButton.setOnCheckedChangeListener(this);
-		holder.checkBox.setText(checkListItem.getTitle());
+		updateDisplay(view, holder, checkListItem);
 		return view;
+	}
+
+	private void updateDisplay(View view, ViewHolder holder,
+			CheckListItem mListItem) {
+		boolean failMandatory = !checkListItem.isSys_activated();
+
+		holder.toggleButton.setOnCheckedChangeListener(this);
+		holder.toggleButton.setChecked(checkListItem.isSys_activated());
+		holder.toggleButton.setClickable(checkListItem.isEditable());
+		
+		// Common display update
+		holder.checkBox.setOnClickListener(this);
+		holder.checkBox.setText(checkListItem.getTitle());
+		holder.checkBox
+				.setClickable(checkListItem.getSys_tag().contains("SYS") == false);
+		holder.checkBox.setChecked(checkListItem.isMandatory()
+				&& !failMandatory);
+
+		checkListItem.setVerified(holder.checkBox.isChecked());
 	}
 
 	public int getViewType() {
 		return ListRow_Type.TOGGLE_ROW.ordinal();
 	}
-	
-	public void setOnToggleChangeListener(OnToggleChangeListener listener) {
-		this.listener = listener;
-	}
-
 
 	private static class ViewHolder {
+		@SuppressWarnings("unused")
 		final LinearLayout layoutView;
 		final ToggleButton toggleButton;
 		final CheckBox checkBox;
 
 		private ViewHolder(ViewGroup viewGroup) {
-			this.layoutView = (LinearLayout) viewGroup.findViewById(R.id.lst_layout);
-			this.toggleButton = (ToggleButton) viewGroup.findViewById(R.id.lst_toggle);
-			this.checkBox = (CheckBox)viewGroup.findViewById(R.id.lst_check);
+			this.layoutView = (LinearLayout) viewGroup
+					.findViewById(R.id.lst_layout);
+			this.toggleButton = (ToggleButton) viewGroup
+					.findViewById(R.id.lst_toggle);
+			this.checkBox = (CheckBox) viewGroup.findViewById(R.id.lst_check);
 		}
 	}
 
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		if(this.listener!=null)
-			this.listener.onToggleChanged(this.checkListItem, isChecked);
+		this.checkListItem.setSys_activated(isChecked);
+
+		if (listener != null)
+			listener.onRowItemChanged(buttonView, this.checkListItem, this.checkListItem.isVerified());
 	}
 
+	@Override
+	public void onClick(View v) {
+		this.checkListItem.setVerified(((CheckBox) v).isChecked());
+	}
 }

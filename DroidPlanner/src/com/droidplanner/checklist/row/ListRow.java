@@ -7,6 +7,8 @@ import android.view.View;
 
 public class ListRow implements ListRow_Interface {
 
+	public OnRowItemChangeListener listener;
+	
 	public ListRow() {
 		// TODO Auto-generated constructor stub
 	}
@@ -22,7 +24,10 @@ public class ListRow implements ListRow_Interface {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
+	public void setOnRowItemChangeListener(OnRowItemChangeListener mListener){
+		listener = mListener;
+	}
+	
 	protected void getDroneVariable(Drone mDrone, CheckListItem mListItem) {
 		String sys_tag = mListItem.getSys_tag();
 
