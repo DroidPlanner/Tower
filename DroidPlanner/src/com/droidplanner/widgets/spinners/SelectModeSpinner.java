@@ -21,7 +21,7 @@ public class SelectModeSpinner extends SpinnerSelfSelect implements
 		super(context);
 		this.context = context;
 		selectable = false;
-		setBackgroundResource(R.drawable.black_button);
+		setBackgroundResource(R.drawable.modes);
 	}
 
 	public void buildSpinner(Context context, Drone drone) {
