@@ -20,8 +20,11 @@ import com.droidplanner.drone.variables.Speed;
 import com.droidplanner.drone.variables.State;
 import com.droidplanner.drone.variables.Type;
 import com.droidplanner.drone.variables.WaypointMananger;
+import com.droidplanner.file.IO.VehicleProfile;
 import com.droidplanner.helpers.TTS;
 import com.droidplanner.service.MAVLinkClient;
+
+import java.util.Map;
 
 public class Drone {
 	public Type type = new Type(this);
@@ -40,6 +43,8 @@ public class Drone {
 	public TTS tts;
 	public MAVLinkClient MavClient;
 	public Context context;
+
+    public Map<String, VehicleProfile> vehicleProfiles;
 
 	private HudUpdatedListner hudListner;
 	private MapUpdatedListner mapListner;
