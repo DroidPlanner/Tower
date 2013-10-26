@@ -17,6 +17,10 @@ public class DroneInterfaces {
 		public void onDroneTypeChanged();
 	}
 
+    public interface VehicleTypeListener {
+        public void onVehicleTypeChanged();
+    }
+
 	public interface HudUpdatedListner {
 		public void onDroneUpdate();
 	}
@@ -29,6 +33,5 @@ public class DroneInterfaces {
 		public void onBeginReceivingParameters();
 		public void onParameterReceived(Parameter parameter, int index, int count);
 		public void onEndReceivingParameters(List<Parameter> parameter);
-        public void onParamterMetaDataChanged();
 	}
 }

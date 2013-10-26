@@ -18,6 +18,7 @@ import com.droidplanner.drone.DroneVariable;
 import com.droidplanner.file.DirectoryPath;
 import com.droidplanner.file.IO.ParameterMetadataMap;
 import com.droidplanner.file.IO.ParameterMetadataMapReader;
+import com.droidplanner.file.IO.VehicleProfile;
 import com.droidplanner.parameters.Parameter;
 import com.droidplanner.parameters.ParameterMetadata;
 
@@ -30,7 +31,6 @@ import com.droidplanner.parameters.ParameterMetadata;
  * 
  */
 public class Parameters extends DroneVariable {
-
     private static final String PARAMETERMETADATA_PATH = "Parameters/ParameterMetaData.xml";
 
     private List<Parameter> parameters = new ArrayList<Parameter>();
@@ -87,24 +87,16 @@ public class Parameters extends DroneVariable {
 	}
 
 
-    public void notifyParameterMetadataChanged() {
-        if(parameterListner != null)
-            parameterListner.onParamterMetaDataChanged();
-    }
-
     public ParameterMetadata getMetadata(String name) {
         return (metadataMap == null) ? null : metadataMap.get(name);
     }
 
-    public void loadMetadata(Context context, String metadataType) {
+    public void loadMetadata() {
         metadataMap = null;
 
-        // use metadata type from prefs if not specified, bail if none
-        if(metadataType == null) {
-            final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            metadataType = prefs.getString("pref_param_metadata", null);
-        }
-        if(metadataType == null || metadataType.equals(context.getString(R.string.none)))
+        // get metadata type from profile, bail if none
+        final VehicleProfile profile = VehicleProfile.load(myDrone.context, myDrone.type.getVehicleType());
+        if(profile == null || profile.getMetadataType() == null)
             return;
 
         try {
@@ -116,11 +108,11 @@ public class Parameters extends DroneVariable {
                 inputStream = new FileInputStream(file);
             } else {
                 // load from resource
-                inputStream = context.getAssets().open(PARAMETERMETADATA_PATH);
+                inputStream = myDrone.context.getAssets().open(PARAMETERMETADATA_PATH);
             }
 
             // parse
-            metadataMap = ParameterMetadataMapReader.open(inputStream, metadataType);
+            metadataMap = ParameterMetadataMapReader.open(inputStream, profile.getMetadataType());
 
         } catch (Exception ex) {
             // nop

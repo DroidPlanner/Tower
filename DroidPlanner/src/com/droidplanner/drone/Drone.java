@@ -8,6 +8,7 @@ import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
 import com.droidplanner.drone.DroneInterfaces.MapUpdatedListner;
 import com.droidplanner.drone.DroneInterfaces.MapConfigListener;
 import com.droidplanner.drone.DroneInterfaces.ModeChangedListener;
+import com.droidplanner.drone.DroneInterfaces.VehicleTypeListener;
 import com.droidplanner.drone.variables.Altitude;
 import com.droidplanner.drone.variables.Battery;
 import com.droidplanner.drone.variables.Calibration;
@@ -20,11 +21,9 @@ import com.droidplanner.drone.variables.Speed;
 import com.droidplanner.drone.variables.State;
 import com.droidplanner.drone.variables.Type;
 import com.droidplanner.drone.variables.WaypointMananger;
-import com.droidplanner.file.IO.VehicleProfile;
 import com.droidplanner.helpers.TTS;
 import com.droidplanner.service.MAVLinkClient;
 
-import java.util.Map;
 
 public class Drone {
 	public Type type = new Type(this);
@@ -44,12 +43,11 @@ public class Drone {
 	public MAVLinkClient MavClient;
 	public Context context;
 
-    public Map<String, VehicleProfile> vehicleProfiles;
-
 	private HudUpdatedListner hudListner;
 	private MapUpdatedListner mapListner;
 	private MapConfigListener mapConfigListener;
 	private DroneTypeListner typeListner;
+    private VehicleTypeListener vehicleTypeListener;
 	private ModeChangedListener modeChangedListener;
 
 	public Drone(TTS tts, MAVLinkClient mavClient, Context context) {
@@ -79,7 +77,11 @@ public class Drone {
 		this.modeChangedListener = listener;
 	}
 
-	public void setAltitudeGroundAndAirSpeeds(double altitude,
+    public void setVehicleTypeListener(VehicleTypeListener vehicleTypeListener) {
+        this.vehicleTypeListener = vehicleTypeListener;
+    }
+
+    public void setAltitudeGroundAndAirSpeeds(double altitude,
 			double groundSpeed, double airSpeed, double climb) {
 		this.altitude.setAltitude(altitude);
 		speed.setGroundAndAirSpeeds(groundSpeed, airSpeed, climb);
@@ -116,9 +118,13 @@ public class Drone {
 			mapConfigListener.onMapTypeChanged();
 	}
 
-	public void notifyModeChanged()
-	{
+	public void notifyModeChanged() {
 		if (modeChangedListener != null)
 			modeChangedListener.onModeChanged();
 	}
+
+    public void notifyVehicleTypeChanged() {
+        if (vehicleTypeListener != null)
+            vehicleTypeListener.onVehicleTypeChanged();
+    }
 }
