@@ -21,7 +21,7 @@ import com.droidplanner.parameters.Parameter;
 import com.droidplanner.widgets.tableRow.ParamRow;
 
 public class ParametersActivity extends SuperActivity implements
-		DroneInterfaces.OnParameterManagerListner {
+		DroneInterfaces.OnParameterManagerListner, DroneInterfaces.VehicleTypeListener {
 
 	private ParametersTableFragment tableFragment;
 	private ProgressDialog pd;
@@ -40,6 +40,7 @@ public class ParametersActivity extends SuperActivity implements
 				.findFragmentById(R.id.parametersTable));
 
 		drone.parameters.parameterListner = this;
+        drone.setVehicleTypeListener(this);
 
 		Toast.makeText(this, "Touch REFRESH to read parameters", Toast.LENGTH_LONG)
 				.show();
@@ -99,7 +100,7 @@ public class ParametersActivity extends SuperActivity implements
 						return p1.name.compareTo(p2.name);
 					}
 				});
-                drone.parameters.loadMetadata(ParametersActivity.this, null);
+                drone.parameters.loadMetadata();
 				for (Parameter parameter : parameters)
                     tableFragment.refreshRowParameter(parameter, drone.parameters);
 			}
@@ -132,15 +133,13 @@ public class ParametersActivity extends SuperActivity implements
 
 	@Override
 	public void onEndReceivingParameters(List<Parameter> parameters) {
-        Collections.sort(parameters, new Comparator<Parameter>()
-        {
+        Collections.sort(parameters, new Comparator<Parameter>() {
             @Override
-            public int compare(Parameter p1, Parameter p2)
-            {
+            public int compare(Parameter p1, Parameter p2) {
                 return p1.name.compareTo(p2.name);
             }
         });
-        drone.parameters.loadMetadata(this, getMetadataType());
+        drone.parameters.loadMetadata();
 		for(Parameter parameter : parameters)
             tableFragment.refreshRowParameter(parameter, drone.parameters);
 
@@ -152,46 +151,8 @@ public class ParametersActivity extends SuperActivity implements
 	}
 
     @Override
-    public void onParamterMetaDataChanged() {
-        drone.parameters.loadMetadata(this, null);
+    public void onVehicleTypeChanged() {
+        drone.parameters.loadMetadata();
         tableFragment.refresh(drone.parameters);
-    }
-
-    private String getMetadataType() {
-        if (drone.MavClient.isConnected()) {
-            // online: derive from connected vehicle type
-            switch(drone.type.getType()) {
-                case MAV_TYPE.MAV_TYPE_FIXED_WING: /* Fixed wing aircraft. | */
-                    return "ArduPlane";
-
-                case MAV_TYPE.MAV_TYPE_GENERIC: /* Generic micro air vehicle. | */
-                case MAV_TYPE.MAV_TYPE_QUADROTOR: /* Quadrotor | */
-                case MAV_TYPE.MAV_TYPE_COAXIAL: /* Coaxial helicopter | */
-                case MAV_TYPE.MAV_TYPE_HELICOPTER: /* Normal helicopter with tail rotor. | */
-                case MAV_TYPE.MAV_TYPE_HEXAROTOR: /* Hexarotor | */
-                case MAV_TYPE.MAV_TYPE_OCTOROTOR: /* Octorotor | */
-                case MAV_TYPE.MAV_TYPE_TRICOPTER: /* Octorotor | */
-                    return "ArduCopter2";
-
-                case MAV_TYPE.MAV_TYPE_GROUND_ROVER: /* Ground rover | */
-                case MAV_TYPE.MAV_TYPE_SURFACE_BOAT: /* Surface vessel, boat, ship | */
-                    return "ArduRover";
-
-//                case MAV_TYPE.MAV_TYPE_ANTENNA_TRACKER: /* Ground installation | */
-//                case MAV_TYPE.MAV_TYPE_GCS: /* Operator control unit / ground control station | */
-//                case MAV_TYPE.MAV_TYPE_AIRSHIP: /* Airship, controlled | */
-//                case MAV_TYPE.MAV_TYPE_FREE_BALLOON: /* Free balloon, uncontrolled | */
-//                case MAV_TYPE.MAV_TYPE_ROCKET: /* Rocket | */
-//                case MAV_TYPE.MAV_TYPE_SUBMARINE: /* Submarine | */
-//                case MAV_TYPE.MAV_TYPE_FLAPPING_WING: /* Flapping wing | */
-//                case MAV_TYPE.MAV_TYPE_KITE: /* Flapping wing | */
-                default:
-                    // unsupported
-                    return null;
-            }
-        } else {
-            // offline: use configured parameter metadata type
-            return null;
-        }
     }
 }
