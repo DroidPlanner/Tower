@@ -28,10 +28,10 @@ public class ListRow implements ListRow_Interface, OnClickListener {
 		holder.checkBox.setChecked(mState);
 		holder.checkBox
 		.setClickable(checkListItem.getSys_tag() == null ? checkListItem
-				.isEditable() : checkListItem.getSys_tag().contains(
+				.isEditable() : !checkListItem.getSys_tag().contains(
 				"SYS"));
 
-		checkListItem.setVerified(holder.checkBox.isChecked());
+		checkListItem.setVerified(mState);
 	}
 
 	public void updateRowChanged(View mView, CheckListItem mListItem) {

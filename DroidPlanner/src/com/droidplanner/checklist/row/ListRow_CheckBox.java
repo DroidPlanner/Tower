@@ -33,7 +33,7 @@ public class ListRow_CheckBox extends ListRow {
 	private void updateDisplay(View view, ViewHolder holder,
 			CheckListItem mListItem) {
 		
-		updateCheckBox(checkListItem.isSys_activated());
+		updateCheckBox(checkListItem.isVerified());
 	}
 
 	public int getViewType() {
