@@ -126,15 +126,22 @@ public class GeoTools {
 	// TODO test and fix this function
 	public static Area getArea(Polygon poly) {
 		double sum = 0.0;
-		for (int i = 0; i < poly.getLatLngList().size() - 1; i++) {
+		int length = poly.getLatLngList().size();
+		for (int i = 0; i < length - 1; i++) {
 			sum = sum
 					+ (latToMeters(poly.getLatLngList().get(i).longitude) * latToMeters(poly
 							.getLatLngList().get(i + 1).latitude))
 					- (latToMeters(poly.getLatLngList().get(i).latitude) * latToMeters(poly
 							.getLatLngList().get(i + 1).longitude));
 		}
-		//return new Area(Math.abs(0.5 * sum));
-		return new Area(0);
+		sum = sum 
+				+ (latToMeters(poly.getLatLngList().get(length-1).longitude) * latToMeters(poly
+				.getLatLngList().get(0).latitude))
+				- (latToMeters(poly.getLatLngList().get(length-1).latitude) * latToMeters(poly
+						.getLatLngList().get(0).longitude));
+		return new Area(Math.abs(0.5 * sum));
+		//return new Area(0);
 	}
+
 
 }
