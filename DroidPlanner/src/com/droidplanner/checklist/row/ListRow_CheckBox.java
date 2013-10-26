@@ -8,24 +8,23 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.LinearLayout;
 
 public class ListRow_CheckBox extends ListRow implements OnClickListener {
 	private final CheckListItem checkListItem;
 	private final LayoutInflater inflater;
-
+	private ViewHolder holder;
+	
 	public ListRow_CheckBox(LayoutInflater inflater, CheckListItem checkListItem) {
 		this.checkListItem = checkListItem;
 		this.inflater = inflater;
 	}
 
 	public View getView(View convertView) {
-		ViewHolder holder;
 		View view;
 		if (convertView == null) {
 			ViewGroup viewGroup = (ViewGroup) inflater.inflate(
 					R.layout.list_check_item, null);
-			holder = new ViewHolder(viewGroup);
+			holder = new ViewHolder(viewGroup, checkListItem);
 			viewGroup.setTag(holder);
 			view = viewGroup;
 		} else {
@@ -53,15 +52,10 @@ public class ListRow_CheckBox extends ListRow implements OnClickListener {
 		return ListRow_Type.CHECKBOX_ROW.ordinal();
 	}
 	
-	private static class ViewHolder {
-		@SuppressWarnings("unused")
-		final LinearLayout layoutView;
-		final CheckBox checkBox;
+	private static class ViewHolder extends BaseViewHolder {
 
-		private ViewHolder(ViewGroup viewGroup) {
-			this.layoutView = (LinearLayout) viewGroup
-					.findViewById(R.id.lst_layout);
-			this.checkBox = (CheckBox) viewGroup.findViewById(R.id.lst_check);
+		private ViewHolder(ViewGroup viewGroup, CheckListItem checkListItem) {
+			super(viewGroup, checkListItem);
 		}
 	}
 
