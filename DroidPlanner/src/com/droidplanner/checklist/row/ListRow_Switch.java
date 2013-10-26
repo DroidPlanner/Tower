@@ -19,7 +19,8 @@ public class ListRow_Switch extends ListRow implements OnCheckedChangeListener,
 
 	private final CheckListItem checkListItem;
 	private final LayoutInflater inflater;
-
+	private ViewHolder holder;
+	
 	public ListRow_Switch(Drone drone, LayoutInflater inflater,
 			CheckListItem checkListItem) {
 		this.checkListItem = checkListItem;
@@ -28,12 +29,11 @@ public class ListRow_Switch extends ListRow implements OnCheckedChangeListener,
 	}
 
 	public View getView(View convertView) {
-		ViewHolder holder;
 		View view;
 		if (convertView == null) {
 			ViewGroup viewGroup = (ViewGroup) inflater.inflate(
 					R.layout.list_switch_item, null);
-			holder = new ViewHolder(viewGroup);
+			holder = new ViewHolder(viewGroup, checkListItem);
 
 			viewGroup.setTag(holder);
 			view = viewGroup;
@@ -68,13 +68,15 @@ public class ListRow_Switch extends ListRow implements OnCheckedChangeListener,
 		return ListRow_Type.SWITCH_ROW.ordinal();
 	}
 
-	private static class ViewHolder {
-		@SuppressWarnings("unused")
-		final LinearLayout layoutView;
-		final Switch switchView;
-		final CheckBox checkBox;
+	private static class ViewHolder extends BaseViewHolder {
+		private Switch switchView;
 
-		private ViewHolder(ViewGroup viewGroup) {
+		private ViewHolder(ViewGroup viewGroup, CheckListItem checkListItem) {
+			super(viewGroup, checkListItem);
+		}
+		
+	@Override
+		protected void setupViewItems(ViewGroup viewGroup, CheckListItem checkListItem) {		
 			this.layoutView = (LinearLayout) viewGroup
 					.findViewById(R.id.lst_layout);
 			this.switchView = (Switch) viewGroup.findViewById(R.id.lst_switch);
