@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import org.xmlpull.v1.XmlPullParser;
 
 import com.droidplanner.R;
+import com.droidplanner.MAVLink.MavLinkArm;
 import com.droidplanner.checklist.CheckListAdapter;
 import com.droidplanner.checklist.CheckListAdapter.OnCheckListItemUpdateListener;
 import com.droidplanner.checklist.CheckListItem;
@@ -45,9 +46,9 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 		context = mcontext;
 		drone = mdrone;
 		// TODO Read System checklist here
-//		CheckListXmlParser xml = new CheckListXmlParser(mcontext,
-//				R.xml.checklist_default);
-		CheckListXmlParser xml = new CheckListXmlParser("checklist_ext.xml");
+		CheckListXmlParser xml = new CheckListXmlParser(mcontext,
+				R.xml.checklist_default);
+//		CheckListXmlParser xml = new CheckListXmlParser("checklist_ext.xml");
 
 		xml.setOnXMLParserError(this);
 		listDataHeader = xml.getCategories();
@@ -120,6 +121,21 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 		}
 	}
 
+
+	private void updateSystem(CheckListItem checkListItem) {
+		if(checkListItem.getSys_tag().isEmpty())
+			return;
+		if(checkListItem.getSys_tag().equalsIgnoreCase("SYS_CONNECTION_STATE")){
+			drone.MavClient.toggleConnectionState();
+			
+		}else if(checkListItem.getSys_tag().equalsIgnoreCase("SYS_ARM_STATE")){
+			if (drone.MavClient.isConnected()) {
+				if (!drone.state.isArmed())
+					drone.tts.speak("Arming the vehicle, please standby");
+				MavLinkArm.sendArmMessage(drone, !drone.state.isArmed());
+			}
+		}
+	}
 	@Override
 	public void onClick(DialogInterface arg0, int arg1) {
 
@@ -163,12 +179,13 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 
 	@Override
 	public void onSwitchUpdate(CheckListItem checkListItem, boolean isSwitched) {
+		updateSystem(checkListItem);
 		Toast.makeText(
 				context,
 				checkListItem.getTitle() + " : " + checkListItem.getTitle()
 						+ (isSwitched ? " switched ON" : " switched OFF"),
 				Toast.LENGTH_SHORT).show();
-
+		
 	}
 
 	@Override
