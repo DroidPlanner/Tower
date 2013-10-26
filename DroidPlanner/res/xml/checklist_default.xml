@@ -122,6 +122,13 @@
             selectindex="0"
             system_tag="SYS_CONNECT_STATE"
             title="Telemetry connect" />
-    </category>
+        <radio_item
+            description="Select Drone Type"
+            editable="yes"
+            mandatory="yes"
+            optionlist="Quad+,Quadx,Hex+,HexX"
+            selectindex="0"
+            title="Drone Type" />
+        </category>
 
 </preflightcheck>

@@ -11,7 +11,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.CheckBox;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
@@ -19,14 +18,14 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 public class ListRow_Radio extends ListRow implements OnCheckedChangeListener , OnClickListener{
 	private final CheckListItem checkListItem;
 	private final LayoutInflater inflater;
-
+	private ViewHolder holder;
+	
 	public ListRow_Radio(LayoutInflater inflater, CheckListItem checkListItem) {
 		this.checkListItem = checkListItem;
 		this.inflater = inflater;
 	}
 
 	public View getView(View convertView) {
-		final ViewHolder holder;
 		View view;
 		if (convertView == null) {
 			ViewGroup viewGroup = (ViewGroup) inflater.inflate(
@@ -57,25 +56,18 @@ public class ListRow_Radio extends ListRow implements OnCheckedChangeListener , 
 		return ListRow_Type.RADIO_ROW.ordinal();
 	}
 
-	private static class ViewHolder {
-		@SuppressWarnings("unused")
-		final LinearLayout layoutView;
-		final CheckBox checkBox;
-		final RadioGroup radioGroupView;
+	private static class ViewHolder extends BaseViewHolder {
+		private RadioGroup radioGroupView;
 
-		private ViewHolder(ViewGroup viewGroup, CheckListItem checkListItem) {
-
-			this.layoutView = (LinearLayout) viewGroup
-					.findViewById(R.id.lst_layout);
-			this.checkBox = (CheckBox) viewGroup.findViewById(R.id.lst_check);
-			this.radioGroupView = (RadioGroup) viewGroup
-					.findViewById(R.id.lst_radioGroup);
-
-			setupRadioButtons(viewGroup, checkListItem);
+		public ViewHolder(ViewGroup viewGroup, CheckListItem checkListItem) {
+			super(viewGroup,checkListItem);
 		}
 
-		private void setupRadioButtons(ViewGroup viewGroup,
+		@Override
+		protected void setupViewItems(ViewGroup viewGroup,
 				CheckListItem checkListItem) {
+			this.radioGroupView = (RadioGroup) viewGroup
+					.findViewById(R.id.lst_radioGroup);
 
 			this.radioGroupView.removeAllViews();
 

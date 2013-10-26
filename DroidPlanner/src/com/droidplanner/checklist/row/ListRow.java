@@ -8,6 +8,7 @@ import android.view.View;
 public class ListRow implements ListRow_Interface {
 
 	public OnRowItemChangeListener listener;
+	public BaseViewHolder viewHolder;
 	
 	public ListRow() {
 		// TODO Auto-generated constructor stub
