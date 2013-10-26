@@ -1,6 +1,10 @@
 package com.droidplanner.checklist.xml;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.StringReader;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -8,6 +12,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 import android.content.Context;
 import android.content.res.XmlResourceParser;
+import android.os.Environment;
 
 public abstract class ListXmlParser {
 
@@ -30,12 +35,20 @@ public abstract class ListXmlParser {
 		getListItemsFromResource(context, resourceId);
 	}
 
-	public ListXmlParser(String ioFile) {
+	public ListXmlParser(String ioFile) throws FileNotFoundException, XmlPullParserException {
 		getListItemsFromFile(ioFile);
 	}
 
-	public void getListItemsFromFile(String ioFile) {
-	}
+	public void getListItemsFromFile(String ioFile) throws FileNotFoundException, XmlPullParserException {
+		ioFile = Environment.getExternalStorageDirectory()+"/DroidPlanner/Checklists/"+ioFile;
+		File file = new File(ioFile);
+		FileInputStream fis = new FileInputStream(file);
+		XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+		factory.setNamespaceAware(true);
+		_xpp = factory.newPullParser();
+		_xpp.setInput(new InputStreamReader(fis));	
+		do_parse(_xpp);
+		}
 	
 	public void getListItemsFromResource(Context context, int resourceId) {
 		XmlResourceParser is = context.getResources().getXml(resourceId);

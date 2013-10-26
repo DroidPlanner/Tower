@@ -1,9 +1,11 @@
 package com.droidplanner.checklist;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 
 import com.droidplanner.checklist.xml.ListXmlParser;
 
@@ -35,7 +37,15 @@ public class CheckListXmlParser extends ListXmlParser {
 	public CheckListXmlParser(String ioFile) {
 		categories = new ArrayList<String>();
 		checkListItems = new ArrayList<CheckListItem>();
-		getListItemsFromFile(ioFile);
+		try {
+			getListItemsFromFile(ioFile);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (XmlPullParserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	private void process_category(XmlPullParser xpp) {
