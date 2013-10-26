@@ -21,7 +21,6 @@ import com.droidplanner.checklist.CheckListXmlParser;
 import com.droidplanner.checklist.xml.ListXmlParser.OnXmlParserError;
 import com.droidplanner.drone.Drone;
 import android.widget.ExpandableListView;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 public class PreflightDialog implements DialogInterface.OnClickListener,
@@ -185,5 +184,4 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 		// TODO Auto-generated method stub
 
 	}
-
 }

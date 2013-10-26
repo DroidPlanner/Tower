@@ -17,8 +17,7 @@ public class ListRow_Switch extends ListRow implements OnCheckedChangeListener {
 
 	public ListRow_Switch(Drone drone, LayoutInflater inflater,
 			CheckListItem checkListItem) {
-		super(inflater, checkListItem);
-		getDroneVariable(drone, checkListItem);
+		super(drone,inflater, checkListItem);
 	}
 
 	public View getView(View convertView) {
@@ -42,11 +41,15 @@ public class ListRow_Switch extends ListRow implements OnCheckedChangeListener {
 
 	private void updateDisplay(View view, ViewHolder holder,
 			CheckListItem mListItem) {
-		boolean failMandatory = !checkListItem.isSys_activated();
+		boolean failMandatory = false;
+		
+		getDroneVariable(this.drone, mListItem);
+		failMandatory = !checkListItem.isSys_activated();
 
 		holder.switchView.setOnCheckedChangeListener(this);
 		holder.switchView.setClickable(checkListItem.isEditable());
-
+		holder.switchView.setChecked(mListItem.isSys_activated());
+		
 		updateCheckBox(checkListItem.isMandatory() && !failMandatory);
 	}
 

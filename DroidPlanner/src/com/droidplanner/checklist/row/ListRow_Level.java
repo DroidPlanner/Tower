@@ -16,8 +16,7 @@ public class ListRow_Level extends ListRow {
 	
 	public ListRow_Level(Drone drone, LayoutInflater inflater,
 			CheckListItem checkListItem) {
-		super(inflater, checkListItem);
-		getDroneVariable(drone, checkListItem);
+		super(drone,inflater, checkListItem);
 	}
 
 	public View getView(View convertView) {
@@ -44,8 +43,10 @@ public class ListRow_Level extends ListRow {
 		double nomVal = mListItem.getNom_val();
 		double sysValue = mListItem.getSys_value();
 		String unit = mListItem.getUnit();
-		boolean failMandatory = sysValue <= minVal;
+		boolean failMandatory = false;
 
+		getDroneVariable(drone, mListItem);
+		failMandatory = sysValue <= minVal;
 		
 		if (sysValue < minVal)
 			drawableId = R.drawable.pstate_poor;
@@ -53,6 +54,8 @@ public class ListRow_Level extends ListRow {
 			drawableId = R.drawable.pstate_warning;
 		else
 			drawableId = R.drawable.pstate_good;
+		
+		holder.progressBar.setMax((int) mListItem.getMax_val());
 		holder.progressBar.setProgressDrawable(view.getResources().getDrawable(
 				drawableId));
 		holder.progressBar.setProgress((int) sysValue);

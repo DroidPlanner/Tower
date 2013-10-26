@@ -11,13 +11,19 @@ import android.widget.CheckBox;
 public class ListRow implements ListRow_Interface, OnClickListener {
 	protected final CheckListItem checkListItem;
 	protected final LayoutInflater inflater;
-
+	protected  Drone drone;
+	
 	public OnRowItemChangeListener listener;
 	public BaseViewHolder holder;
 
 	public ListRow(LayoutInflater mInflater, CheckListItem mCheckListItem) {
 		this.checkListItem = mCheckListItem;
 		this.inflater = mInflater;
+	}
+	public ListRow(Drone mDrone,LayoutInflater mInflater, CheckListItem mCheckListItem) {
+		this.checkListItem = mCheckListItem;
+		this.inflater = mInflater;
+		this.drone = mDrone;
 	}
 
 	protected void updateCheckBox(boolean mState) {

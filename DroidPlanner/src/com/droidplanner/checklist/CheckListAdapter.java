@@ -42,16 +42,12 @@ public class CheckListAdapter extends ListXmlAdapter implements
 		public void onValueUpdate(CheckListItem checkListItem, String newValue);
 	}
 
-	@SuppressWarnings("unused")
-	private Drone drone;
 	private OnCheckListItemUpdateListener listener;
 
 	public CheckListAdapter(Drone drone, LayoutInflater inflater,
 			List<String> listHeader,
 			HashMap<String, List<CheckListItem>> listDataChild) {
 		super(inflater, listHeader);
-
-		this.drone = drone;
 
 		setHeaderLayout(R.layout.list_group_header);
 
