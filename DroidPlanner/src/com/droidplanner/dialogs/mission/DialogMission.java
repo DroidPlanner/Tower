@@ -65,7 +65,8 @@ public abstract class DialogMission implements OnItemSelectedListener,
 		typeSpinner.setOnItemSelectedListener(this);
 		typeSpinner.setSelection(commandAdapter.getPosition(wp.getCmd()));
 
-        final VehicleProfile profile = ((DroidPlannerApp) ((Activity) context).getApplication()).drone.vehicleProfiles.get("ArduCopter2");
+        final String vehicleType = ((DroidPlannerApp) ((Activity) context).getApplication()).drone.type.getVehicleType();
+        final VehicleProfile profile = VehicleProfile.load(context, vehicleType);
         if(profile != null)
             profile.customizeView(view);
 
