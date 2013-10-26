@@ -72,15 +72,8 @@
     <string-array name="ExampleWaypointType">
         <item >Waypoint Type</item>
     </string-array>
-    <string-array name="ParamMeta">
-        <item>None</item>
+    <string-array name="VehicleType">
         <item>ArduCopter</item>
-        <item>ArduPlane</item>
-        <item>ArduRover</item>
-    </string-array>
-    <string-array name="ParamMetaValues">
-        <item>None</item>
-        <item>ArduCopter2</item>
         <item>ArduPlane</item>
         <item>ArduRover</item>
     </string-array>
