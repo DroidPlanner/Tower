@@ -21,6 +21,7 @@ public class ListRow_Value extends ListRow implements OnFocusChangeListener,
 	private EditText editText;
 	private boolean lastFocusState;
 	private float lastValue;
+	private ViewHolder holder;
 
 	public ListRow_Value(LayoutInflater inflater,
 			final CheckListItem checkListItem) {
@@ -29,13 +30,12 @@ public class ListRow_Value extends ListRow implements OnFocusChangeListener,
 	}
 
 	public View getView(View convertView) {
-		ViewHolder holder;
 		View view;
 
 		if (convertView == null) {
 			ViewGroup viewGroup = (ViewGroup) inflater.inflate(
 					R.layout.list_value_item, null);
-			holder = new ViewHolder(viewGroup);
+			holder = new ViewHolder(viewGroup, checkListItem);
 			viewGroup.setTag(holder);
 			view = viewGroup;
 			if (holder.editTextView.getText().toString() == null)
@@ -80,13 +80,16 @@ public class ListRow_Value extends ListRow implements OnFocusChangeListener,
 		return ListRow_Type.VALUE_ROW.ordinal();
 	}
 
-	private static class ViewHolder {
-		@SuppressWarnings("unused")
-		final LinearLayout layoutView;
-		final EditText editTextView;
-		final CheckBox checkBox;
+	private static class ViewHolder extends BaseViewHolder {
+		private EditText editTextView;
 
-		private ViewHolder(ViewGroup viewGroup) {
+		private ViewHolder(ViewGroup viewGroup, CheckListItem checkListItem) {
+			super(viewGroup, checkListItem);
+		}
+		
+		@Override
+		protected void setupViewItems(ViewGroup viewGroup, CheckListItem checkListItem)
+		{
 			this.layoutView = (LinearLayout) viewGroup
 					.findViewById(R.id.lst_layout);
 			this.editTextView = (EditText) viewGroup

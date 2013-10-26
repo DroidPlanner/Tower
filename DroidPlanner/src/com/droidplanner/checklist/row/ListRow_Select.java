@@ -17,14 +17,14 @@ import android.widget.Spinner;
 public class ListRow_Select extends ListRow implements OnItemSelectedListener, OnClickListener {
 	private final CheckListItem checkListItem;
 	private final LayoutInflater inflater;
-
+	private ViewHolder holder;
+	
 	public ListRow_Select(LayoutInflater inflater, CheckListItem checkListItem) {
 		this.checkListItem = checkListItem;
 		this.inflater = inflater;
 	}
 
 	public View getView(View convertView) {
-		final ViewHolder holder;
 		View view;
 		if (convertView == null) {
 			ViewGroup viewGroup = (ViewGroup) inflater.inflate(
@@ -58,22 +58,24 @@ public class ListRow_Select extends ListRow implements OnItemSelectedListener, O
 		return ListRow_Type.SELECT_ROW.ordinal();
 	}
 
-	private static class ViewHolder {
-		@SuppressWarnings("unused")
-		final LinearLayout layoutView;
-		final Spinner selectView;
-		final CheckBox checkBox;
+	private static class ViewHolder extends BaseViewHolder {
+		private Spinner selectView;
 		@SuppressWarnings("unused")
 		private CheckListItem checkListItem;
 
 		private ArrayAdapter<String> adapter;
 
 		private ViewHolder(ViewGroup viewGroup, CheckListItem checkListItem) {
+			super(viewGroup, checkListItem);
+			this.checkListItem = checkListItem;			
+		}
+		
+		@Override
+		protected void setupViewItems(ViewGroup viewGroup, CheckListItem checkListItem){
 			this.layoutView = (LinearLayout) viewGroup
 					.findViewById(R.id.lst_layout);
 			this.selectView = (Spinner) viewGroup.findViewById(R.id.lst_select);
 			this.checkBox = (CheckBox) viewGroup.findViewById(R.id.lst_check);
-			this.checkListItem = checkListItem;
 
 			setupSpinner(viewGroup, checkListItem);
 		}

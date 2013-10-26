@@ -12,10 +12,12 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-public class ListRow_Note extends ListRow implements OnFocusChangeListener, OnClickListener {
+public class ListRow_Note extends ListRow implements OnFocusChangeListener,
+		OnClickListener {
 	private final CheckListItem checkListItem;
 	private final LayoutInflater inflater;
 	private EditText editText;
+	private ViewHolder holder;
 
 	public ListRow_Note(LayoutInflater inflater,
 			final CheckListItem checkListItem) {
@@ -24,12 +26,11 @@ public class ListRow_Note extends ListRow implements OnFocusChangeListener, OnCl
 	}
 
 	public View getView(View convertView) {
-		ViewHolder holder;
 		View view;
 		if (convertView == null) {
 			ViewGroup viewGroup = (ViewGroup) inflater.inflate(
 					R.layout.list_note_item, null);
-			holder = new ViewHolder(viewGroup);
+			holder = new ViewHolder(viewGroup, checkListItem);
 			viewGroup.setTag(holder);
 			view = viewGroup;
 		} else {
@@ -46,7 +47,7 @@ public class ListRow_Note extends ListRow implements OnFocusChangeListener, OnCl
 			CheckListItem mListItem) {
 		holder.editTextView.setOnFocusChangeListener(this);
 		holder.editTextView.setText(checkListItem.getValue());
-		
+
 		// Common display update
 		holder.checkBox.setOnClickListener(this);
 		holder.checkBox.setClickable(checkListItem.isEditable());
@@ -58,14 +59,16 @@ public class ListRow_Note extends ListRow implements OnFocusChangeListener, OnCl
 		return ListRow_Type.NOTE_ROW.ordinal();
 	}
 
+	private static class ViewHolder extends BaseViewHolder{
+		private EditText editTextView;
 
-	private static class ViewHolder {
-		@SuppressWarnings("unused")
-		final LinearLayout layoutView;
-		final EditText editTextView;
-		final CheckBox checkBox;
+		private ViewHolder(ViewGroup viewGroup, CheckListItem checkListItem) {
+			super(viewGroup, checkListItem);
+		}
 
-		private ViewHolder(ViewGroup viewGroup) {
+		@Override
+		protected void setupViewItems(ViewGroup viewGroup,
+				CheckListItem checkListItem) {
 			this.layoutView = (LinearLayout) viewGroup
 					.findViewById(R.id.lst_layout);
 			this.editTextView = (EditText) viewGroup
@@ -78,7 +81,8 @@ public class ListRow_Note extends ListRow implements OnFocusChangeListener, OnCl
 	public void onFocusChange(View v, boolean hasFocus) {
 		if (!v.isFocused() && this.listener != null) {
 			checkListItem.setValue(this.editText.getText().toString());
-			this.listener.onRowItemChanged(v,checkListItem, checkListItem.isVerified());
+			this.listener.onRowItemChanged(v, checkListItem,
+					checkListItem.isVerified());
 		}
 
 	}

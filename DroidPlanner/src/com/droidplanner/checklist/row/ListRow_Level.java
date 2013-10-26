@@ -16,7 +16,8 @@ import android.widget.TextView;
 public class ListRow_Level extends ListRow  implements OnClickListener{
 	private final CheckListItem checkListItem;
 	private final LayoutInflater inflater;
-
+	private ViewHolder holder;
+	
 	public ListRow_Level(Drone drone, LayoutInflater inflater,
 			CheckListItem checkListItem) {
 		this.checkListItem = checkListItem;
@@ -25,7 +26,6 @@ public class ListRow_Level extends ListRow  implements OnClickListener{
 	}
 
 	public View getView(View convertView) {
-		ViewHolder holder;
 		View view;
 		if (convertView == null) {
 			ViewGroup viewGroup = (ViewGroup) inflater.inflate(
@@ -37,8 +37,7 @@ public class ListRow_Level extends ListRow  implements OnClickListener{
 			view = convertView;
 			holder = (ViewHolder) convertView.getTag();
 		}
-
-		// TODO - Add spinner items
+		
 		updateDisplay(view, holder, checkListItem);
 		return view;
 	}
@@ -91,14 +90,16 @@ public class ListRow_Level extends ListRow  implements OnClickListener{
 		return ListRow_Type.LEVEL_ROW.ordinal();
 	}
 
-	private static class ViewHolder {
-		@SuppressWarnings("unused")
-		final LinearLayout layoutView;
-		final ProgressBar progressBar;
-		final TextView unitView;
-		final CheckBox checkBox;
+	private static class ViewHolder extends BaseViewHolder {
+		private ProgressBar progressBar;
+		private TextView unitView;
 
 		private ViewHolder(ViewGroup viewGroup, CheckListItem checkListItem) {
+				super(viewGroup,checkListItem);
+		}
+		
+		@Override
+		protected void setupViewItems(ViewGroup viewGroup, CheckListItem checkListItem){
 			this.layoutView = (LinearLayout) viewGroup
 					.findViewById(R.id.lst_layout);
 			this.checkBox = (CheckBox) viewGroup.findViewById(R.id.lst_check);
