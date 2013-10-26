@@ -4,11 +4,15 @@ import com.droidplanner.checklist.CheckListItem;
 import com.droidplanner.drone.Drone;
 
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.CheckBox;
+import android.widget.Toast;
 
-public class ListRow implements ListRow_Interface, OnClickListener {
+public class ListRow implements ListRow_Interface, OnClickListener, OnLongClickListener {
 	protected final CheckListItem checkListItem;
 	protected final LayoutInflater inflater;
 	protected  Drone drone;
@@ -29,6 +33,7 @@ public class ListRow implements ListRow_Interface, OnClickListener {
 	protected void updateCheckBox(boolean mState) {
 
 		// Common display update
+		holder.layoutView.setOnLongClickListener(this);
 		holder.checkBox.setOnClickListener(this);
 		holder.checkBox.setText(checkListItem.getTitle());
 		holder.checkBox.setChecked(mState);
@@ -88,6 +93,18 @@ public class ListRow implements ListRow_Interface, OnClickListener {
 	public void onClick(View v) {
 		this.checkListItem.setVerified(((CheckBox) v).isChecked());
 		updateRowChanged(v, this.checkListItem);
+	}
+
+	@Override
+	public boolean onLongClick(View arg0) {
+		if(arg0.equals(this.holder.layoutView)){
+			Toast.makeText(
+					arg0.getContext(),
+					checkListItem.getDesc(),
+					Toast.LENGTH_SHORT).show();
+
+		}
+		return false;
 	}
 
 }
