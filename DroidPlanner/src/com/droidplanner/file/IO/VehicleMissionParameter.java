@@ -1,7 +1,7 @@
 package com.droidplanner.file.IO;
 
 
-public class VehicleParameter {
+public class VehicleMissionParameter {
     private int resId;
     private int visibility;
     private String type;
