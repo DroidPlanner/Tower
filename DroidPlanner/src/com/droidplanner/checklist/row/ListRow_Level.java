@@ -48,7 +48,7 @@ public class ListRow_Level extends ListRow {
 		getDroneVariable(drone, mListItem);
 		failMandatory = sysValue <= minVal;
 		
-		if (sysValue < minVal)
+		if (sysValue <= minVal)
 			drawableId = R.drawable.pstate_poor;
 		else if (sysValue > minVal && sysValue <= nomVal)
 			drawableId = R.drawable.pstate_warning;
