@@ -5,24 +5,18 @@ import com.droidplanner.checklist.CheckListItem;
 
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-public class ListRow_Note extends ListRow implements OnFocusChangeListener,
-		OnClickListener {
-	private final CheckListItem checkListItem;
-	private final LayoutInflater inflater;
+public class ListRow_Note extends ListRow implements OnFocusChangeListener {
 	private EditText editText;
-	private ViewHolder holder;
 
 	public ListRow_Note(LayoutInflater inflater,
 			final CheckListItem checkListItem) {
-		this.checkListItem = checkListItem;
-		this.inflater = inflater;
+		super(inflater, checkListItem);
 	}
 
 	public View getView(View convertView) {
@@ -37,9 +31,9 @@ public class ListRow_Note extends ListRow implements OnFocusChangeListener,
 			view = convertView;
 			holder = (ViewHolder) convertView.getTag();
 		}
-		editText = holder.editTextView;
+		editText = ((ViewHolder)holder).editTextView;
 
-		updateDisplay(view, holder, checkListItem);
+		updateDisplay(view, (ViewHolder)holder, checkListItem);
 		return view;
 	}
 
@@ -48,18 +42,14 @@ public class ListRow_Note extends ListRow implements OnFocusChangeListener,
 		holder.editTextView.setOnFocusChangeListener(this);
 		holder.editTextView.setText(checkListItem.getValue());
 
-		// Common display update
-		holder.checkBox.setOnClickListener(this);
-		holder.checkBox.setClickable(checkListItem.isEditable());
-		holder.checkBox.setText(checkListItem.getTitle());
-		holder.checkBox.setChecked(checkListItem.isVerified());
+		updateCheckBox(checkListItem.isVerified());
 	}
 
 	public int getViewType() {
 		return ListRow_Type.NOTE_ROW.ordinal();
 	}
 
-	private static class ViewHolder extends BaseViewHolder{
+	private static class ViewHolder extends BaseViewHolder {
 		private EditText editTextView;
 
 		private ViewHolder(ViewGroup viewGroup, CheckListItem checkListItem) {
@@ -81,14 +71,8 @@ public class ListRow_Note extends ListRow implements OnFocusChangeListener,
 	public void onFocusChange(View v, boolean hasFocus) {
 		if (!v.isFocused() && this.listener != null) {
 			checkListItem.setValue(this.editText.getText().toString());
-			this.listener.onRowItemChanged(v, checkListItem,
-					checkListItem.isVerified());
+			updateRowChanged(v,this.checkListItem);
 		}
 
-	}
-
-	@Override
-	public void onClick(View v) {
-		this.checkListItem.setVerified(((CheckBox) v).isChecked());
 	}
 }

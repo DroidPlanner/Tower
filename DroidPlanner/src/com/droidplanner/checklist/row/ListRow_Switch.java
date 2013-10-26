@@ -6,7 +6,6 @@ import com.droidplanner.drone.Drone;
 
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -14,17 +13,11 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 
-public class ListRow_Switch extends ListRow implements OnCheckedChangeListener,
-		OnClickListener {
+public class ListRow_Switch extends ListRow implements OnCheckedChangeListener {
 
-	private final CheckListItem checkListItem;
-	private final LayoutInflater inflater;
-	private ViewHolder holder;
-	
 	public ListRow_Switch(Drone drone, LayoutInflater inflater,
 			CheckListItem checkListItem) {
-		this.checkListItem = checkListItem;
-		this.inflater = inflater;
+		super(inflater, checkListItem);
 		getDroneVariable(drone, checkListItem);
 	}
 
@@ -43,7 +36,7 @@ public class ListRow_Switch extends ListRow implements OnCheckedChangeListener,
 		}
 
 		// TODO - Add spinner items
-		updateDisplay(view, holder, checkListItem);
+		updateDisplay(view, (ViewHolder)holder, checkListItem);
 		return view;
 	}
 
@@ -54,14 +47,7 @@ public class ListRow_Switch extends ListRow implements OnCheckedChangeListener,
 		holder.switchView.setOnCheckedChangeListener(this);
 		holder.switchView.setClickable(checkListItem.isEditable());
 
-		// Common display update
-		holder.checkBox.setText(checkListItem.getTitle());
-		holder.checkBox
-				.setClickable(checkListItem.getSys_tag().contains("SYS") == false);
-		holder.checkBox.setChecked(checkListItem.isMandatory()
-				&& !failMandatory);
-
-		checkListItem.setVerified(holder.checkBox.isChecked());
+		updateCheckBox(checkListItem.isMandatory() && !failMandatory);
 	}
 
 	public int getViewType() {
@@ -74,9 +60,10 @@ public class ListRow_Switch extends ListRow implements OnCheckedChangeListener,
 		private ViewHolder(ViewGroup viewGroup, CheckListItem checkListItem) {
 			super(viewGroup, checkListItem);
 		}
-		
-	@Override
-		protected void setupViewItems(ViewGroup viewGroup, CheckListItem checkListItem) {		
+
+		@Override
+		protected void setupViewItems(ViewGroup viewGroup,
+				CheckListItem checkListItem) {
 			this.layoutView = (LinearLayout) viewGroup
 					.findViewById(R.id.lst_layout);
 			this.switchView = (Switch) viewGroup.findViewById(R.id.lst_switch);
@@ -87,16 +74,7 @@ public class ListRow_Switch extends ListRow implements OnCheckedChangeListener,
 	@Override
 	public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
 		this.checkListItem.setSys_activated(arg1);
-
-		if (listener != null)
-			listener.onRowItemChanged(arg0, this.checkListItem,
-					this.checkListItem.isVerified());
-	}
-
-	@Override
-	public void onClick(View v) {
-		this.checkListItem.setVerified(((CheckBox) v).isChecked());
+		updateRowChanged((View)arg0,this.checkListItem);
 
 	}
-
 }

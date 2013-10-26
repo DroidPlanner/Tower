@@ -6,27 +6,21 @@ import com.droidplanner.checklist.CheckListItem;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-public class ListRow_Value extends ListRow implements OnFocusChangeListener,
-		OnClickListener {
-	private final CheckListItem checkListItem;
-	private final LayoutInflater inflater;
+public class ListRow_Value extends ListRow implements OnFocusChangeListener {
 	@SuppressWarnings("unused")
 	private EditText editText;
 	private boolean lastFocusState;
 	private float lastValue;
-	private ViewHolder holder;
 
 	public ListRow_Value(LayoutInflater inflater,
 			final CheckListItem checkListItem) {
-		this.checkListItem = checkListItem;
-		this.inflater = inflater;
+		super(inflater, checkListItem);
 	}
 
 	public View getView(View convertView) {
@@ -38,8 +32,6 @@ public class ListRow_Value extends ListRow implements OnFocusChangeListener,
 			holder = new ViewHolder(viewGroup, checkListItem);
 			viewGroup.setTag(holder);
 			view = viewGroup;
-			if (holder.editTextView.getText().toString() == null)
-				holder.editTextView.setText("0.0");
 
 			lastValue = checkListItem.getFloatValue();
 
@@ -49,7 +41,7 @@ public class ListRow_Value extends ListRow implements OnFocusChangeListener,
 
 		}
 
-		updateDisplay(view, holder, checkListItem);
+		updateDisplay(view, (ViewHolder)holder, checkListItem);
 		return view;
 	}
 
@@ -63,17 +55,13 @@ public class ListRow_Value extends ListRow implements OnFocusChangeListener,
 		boolean failMandatory = sysValue <= minVal;
 
 		editText = holder.editTextView;
+		if (holder.editTextView.getText().toString() == null)
+			holder.editTextView.setText("0.0");
 		holder.editTextView.setOnFocusChangeListener(this);
 		holder.editTextView.setText(String.valueOf(checkListItem
 				.getFloatValue()));
-		
-		// Common display update
-		holder.checkBox.setOnClickListener(this);
-		holder.checkBox.setClickable(checkListItem.isEditable());
-		holder.checkBox.setText(checkListItem.getTitle());
-		holder.checkBox.setChecked(checkListItem.isMandatory()&&!failMandatory);
 
-		checkListItem.setVerified(holder.checkBox.isChecked());
+		updateCheckBox(checkListItem.isMandatory() && !failMandatory);
 	}
 
 	public int getViewType() {
@@ -86,10 +74,10 @@ public class ListRow_Value extends ListRow implements OnFocusChangeListener,
 		private ViewHolder(ViewGroup viewGroup, CheckListItem checkListItem) {
 			super(viewGroup, checkListItem);
 		}
-		
+
 		@Override
-		protected void setupViewItems(ViewGroup viewGroup, CheckListItem checkListItem)
-		{
+		protected void setupViewItems(ViewGroup viewGroup,
+				CheckListItem checkListItem) {
 			this.layoutView = (LinearLayout) viewGroup
 					.findViewById(R.id.lst_layout);
 			this.editTextView = (EditText) viewGroup
@@ -127,10 +115,5 @@ public class ListRow_Value extends ListRow implements OnFocusChangeListener,
 						this.checkListItem.isVerified());
 
 		}
-	}
-
-	@Override
-	public void onClick(View v) {
-		this.checkListItem.setVerified(((CheckBox) v).isChecked());
 	}
 }

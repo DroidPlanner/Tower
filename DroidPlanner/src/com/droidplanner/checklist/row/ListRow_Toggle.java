@@ -6,7 +6,6 @@ import com.droidplanner.drone.Drone;
 
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -14,15 +13,10 @@ import android.widget.LinearLayout;
 import android.widget.ToggleButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
-public class ListRow_Toggle extends ListRow implements OnCheckedChangeListener,
-		OnClickListener {
-	private final CheckListItem checkListItem;
-	private final LayoutInflater inflater;
-	private ViewHolder holder;
+public class ListRow_Toggle extends ListRow implements OnCheckedChangeListener{
 	
 	public ListRow_Toggle(Drone drone, LayoutInflater inflater, CheckListItem checkListItem) {
-		this.checkListItem = checkListItem;
-		this.inflater = inflater;
+		super(inflater,checkListItem);
 		getDroneVariable(drone, checkListItem);
 	}
 
@@ -40,7 +34,7 @@ public class ListRow_Toggle extends ListRow implements OnCheckedChangeListener,
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		updateDisplay(view, holder, checkListItem);
+		updateDisplay(view, (ViewHolder)holder, checkListItem);
 		return view;
 	}
 
@@ -52,15 +46,7 @@ public class ListRow_Toggle extends ListRow implements OnCheckedChangeListener,
 		holder.toggleButton.setChecked(checkListItem.isSys_activated());
 		holder.toggleButton.setClickable(checkListItem.isEditable());
 		
-		// Common display update
-		holder.checkBox.setOnClickListener(this);
-		holder.checkBox.setText(checkListItem.getTitle());
-		holder.checkBox
-				.setClickable(checkListItem.getSys_tag().contains("SYS") == false);
-		holder.checkBox.setChecked(checkListItem.isMandatory()
-				&& !failMandatory);
-
-		checkListItem.setVerified(holder.checkBox.isChecked());
+		updateCheckBox(checkListItem.isMandatory() && !failMandatory);
 	}
 
 	public int getViewType() {
@@ -84,17 +70,10 @@ public class ListRow_Toggle extends ListRow implements OnCheckedChangeListener,
 			this.checkBox = (CheckBox) viewGroup.findViewById(R.id.lst_check);
 		}
 	}
-
+	
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		this.checkListItem.setSys_activated(isChecked);
-
-		if (listener != null)
-			listener.onRowItemChanged(buttonView, this.checkListItem, this.checkListItem.isVerified());
-	}
-
-	@Override
-	public void onClick(View v) {
-		this.checkListItem.setVerified(((CheckBox) v).isChecked());
+		updateRowChanged((View)(buttonView),this.checkListItem);
 	}
 }

@@ -3,15 +3,41 @@ package com.droidplanner.checklist.row;
 import com.droidplanner.checklist.CheckListItem;
 import com.droidplanner.drone.Drone;
 
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.CheckBox;
 
-public class ListRow implements ListRow_Interface {
+public class ListRow implements ListRow_Interface, OnClickListener {
+	protected final CheckListItem checkListItem;
+	protected final LayoutInflater inflater;
 
 	public OnRowItemChangeListener listener;
-	public BaseViewHolder viewHolder;
-	
-	public ListRow() {
-		// TODO Auto-generated constructor stub
+	public BaseViewHolder holder;
+
+	public ListRow(LayoutInflater mInflater, CheckListItem mCheckListItem) {
+		this.checkListItem = mCheckListItem;
+		this.inflater = mInflater;
+	}
+
+	protected void updateCheckBox(boolean mState) {
+
+		// Common display update
+		holder.checkBox.setOnClickListener(this);
+		holder.checkBox.setText(checkListItem.getTitle());
+		holder.checkBox.setChecked(mState);
+		holder.checkBox
+		.setClickable(checkListItem.getSys_tag() == null ? checkListItem
+				.isEditable() : checkListItem.getSys_tag().contains(
+				"SYS"));
+
+		checkListItem.setVerified(holder.checkBox.isChecked());
+	}
+
+	public void updateRowChanged(View mView, CheckListItem mListItem) {
+		if (listener != null)
+			listener.onRowItemChanged(mView, this.checkListItem,
+					this.checkListItem.isVerified());
 	}
 
 	@Override
@@ -25,10 +51,11 @@ public class ListRow implements ListRow_Interface {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	public void setOnRowItemChangeListener(OnRowItemChangeListener mListener){
+
+	public void setOnRowItemChangeListener(OnRowItemChangeListener mListener) {
 		listener = mListener;
 	}
-	
+
 	protected void getDroneVariable(Drone mDrone, CheckListItem mListItem) {
 		String sys_tag = mListItem.getSys_tag();
 
@@ -49,6 +76,12 @@ public class ListRow implements ListRow_Interface {
 		} else if (sys_tag.equalsIgnoreCase("SYS_CONNECTION_STATE")) {
 			mListItem.setSys_activated(mDrone.MavClient.isConnected());
 		}
+	}
+
+	@Override
+	public void onClick(View v) {
+		this.checkListItem.setVerified(((CheckBox) v).isChecked());
+		updateRowChanged(v, this.checkListItem);
 	}
 
 }

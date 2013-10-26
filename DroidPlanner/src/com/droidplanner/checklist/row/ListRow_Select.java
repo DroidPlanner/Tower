@@ -5,7 +5,6 @@ import com.droidplanner.checklist.CheckListItem;
 
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -14,14 +13,10 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 
-public class ListRow_Select extends ListRow implements OnItemSelectedListener, OnClickListener {
-	private final CheckListItem checkListItem;
-	private final LayoutInflater inflater;
-	private ViewHolder holder;
+public class ListRow_Select extends ListRow implements OnItemSelectedListener{
 	
 	public ListRow_Select(LayoutInflater inflater, CheckListItem checkListItem) {
-		this.checkListItem = checkListItem;
-		this.inflater = inflater;
+		super(inflater, checkListItem);
 	}
 
 	public View getView(View convertView) {
@@ -37,21 +32,14 @@ public class ListRow_Select extends ListRow implements OnItemSelectedListener, O
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		updateDisplay(view, holder, checkListItem);
+		updateDisplay(view, (ViewHolder)holder, checkListItem);
 		return view;
 	}
 
 	private void updateDisplay(View view, ViewHolder holder,
 			CheckListItem mListItem) {
 		holder.selectView.setOnItemSelectedListener(this);
-
-		// Common display update
-		holder.checkBox.setText(checkListItem.getTitle());
-		holder.checkBox
-				.setClickable(checkListItem.getSys_tag().contains("SYS") == false);
-		holder.checkBox.setChecked(checkListItem.isVerified());
-
-		checkListItem.setVerified(holder.checkBox.isChecked());
+		updateCheckBox(checkListItem.isVerified());
 	}
 
 	public int getViewType() {
@@ -96,12 +84,7 @@ public class ListRow_Select extends ListRow implements OnItemSelectedListener, O
 	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
 			long arg3) {
 		checkListItem.setSelectedIndex(arg2);
-
-		if (listener != null) {
-			listener.onRowItemChanged(arg1, checkListItem,
-					checkListItem.isSys_activated());
-		}
-
+		updateRowChanged(arg1,this.checkListItem);
 	}
 
 	@Override
@@ -109,9 +92,4 @@ public class ListRow_Select extends ListRow implements OnItemSelectedListener, O
 		// TODO Auto-generated method stub
 	}
 
-	@Override
-	public void onClick(View v) {
-		this.checkListItem.setVerified(((CheckBox) v).isChecked());
-	}
-	
 }

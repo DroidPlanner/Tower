@@ -6,22 +6,17 @@ import com.droidplanner.drone.Drone;
 
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-public class ListRow_Level extends ListRow  implements OnClickListener{
-	private final CheckListItem checkListItem;
-	private final LayoutInflater inflater;
-	private ViewHolder holder;
+public class ListRow_Level extends ListRow {
 	
 	public ListRow_Level(Drone drone, LayoutInflater inflater,
 			CheckListItem checkListItem) {
-		this.checkListItem = checkListItem;
-		this.inflater = inflater;
+		super(inflater, checkListItem);
 		getDroneVariable(drone, checkListItem);
 	}
 
@@ -38,7 +33,7 @@ public class ListRow_Level extends ListRow  implements OnClickListener{
 			holder = (ViewHolder) convertView.getTag();
 		}
 		
-		updateDisplay(view, holder, checkListItem);
+		updateDisplay(view, (ViewHolder)holder, checkListItem);
 		return view;
 	}
 
@@ -70,13 +65,7 @@ public class ListRow_Level extends ListRow  implements OnClickListener{
 		}
 
 		
-		//Common display update
-		holder.checkBox.setOnClickListener(this);
-		holder.checkBox.setText(checkListItem.getTitle());
-		holder.checkBox.setClickable(checkListItem.isEditable());			
-		holder.checkBox.setChecked(checkListItem.isMandatory()&&!failMandatory);
-
-		checkListItem.setVerified(holder.checkBox.isChecked());
+		updateCheckBox(checkListItem.isMandatory()&&!failMandatory);
 /*	
 		if(holder.checkBox.isChecked())
 			holder.layoutView.setBackgroundColor(getViewType());
@@ -110,14 +99,4 @@ public class ListRow_Level extends ListRow  implements OnClickListener{
 
 		}
 	}
-
-	@Override
-	public void onClick(View v) {
-		this.checkListItem.setVerified(((CheckBox) v).isChecked());
-		
-		if(this.listener!=null){
-			this.listener.onRowItemChanged(v, checkListItem, checkListItem.isVerified());
-		}
-	}
-
 }

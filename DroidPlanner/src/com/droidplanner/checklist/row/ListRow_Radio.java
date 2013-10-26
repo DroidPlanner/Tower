@@ -7,22 +7,16 @@ import com.droidplanner.checklist.CheckListItem;
 
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
-public class ListRow_Radio extends ListRow implements OnCheckedChangeListener , OnClickListener{
-	private final CheckListItem checkListItem;
-	private final LayoutInflater inflater;
-	private ViewHolder holder;
+public class ListRow_Radio extends ListRow implements OnCheckedChangeListener {
 	
 	public ListRow_Radio(LayoutInflater inflater, CheckListItem checkListItem) {
-		this.checkListItem = checkListItem;
-		this.inflater = inflater;
+		super(inflater, checkListItem);
 	}
 
 	public View getView(View convertView) {
@@ -37,18 +31,15 @@ public class ListRow_Radio extends ListRow implements OnCheckedChangeListener , 
 			view = convertView;
 			holder = (ViewHolder) convertView.getTag();
 		}
-		updateDisplay(view, holder, checkListItem);
+		updateDisplay(view, (ViewHolder)holder, checkListItem);
 		return view;
 	}
 
 	private void updateDisplay(View view, ViewHolder holder,
 			CheckListItem mListItem) {
 		holder.radioGroupView.setOnCheckedChangeListener(this);
-		// Common display update
-		holder.checkBox.setOnClickListener(this);
-		holder.checkBox.setClickable(checkListItem.isEditable());
-		holder.checkBox.setText(checkListItem.getTitle());
-		holder.checkBox.setChecked(checkListItem.isVerified());
+		
+		updateCheckBox(checkListItem.isVerified());
 
 	}
 
@@ -88,13 +79,7 @@ public class ListRow_Radio extends ListRow implements OnCheckedChangeListener , 
 	@Override
 	public void onCheckedChanged(RadioGroup arg0, int arg1) {
 		checkListItem.setSelectedIndex(arg1);
+		updateRowChanged((View)arg0,this.checkListItem);
 
-		if (listener != null)
-			listener.onRowItemChanged(arg0, checkListItem, checkListItem.isVerified());
-	}
-
-	@Override
-	public void onClick(View v) {
-		this.checkListItem.setVerified(((CheckBox) v).isChecked());
 	}
 }

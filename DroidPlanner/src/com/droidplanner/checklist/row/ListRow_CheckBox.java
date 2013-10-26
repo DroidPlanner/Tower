@@ -5,18 +5,12 @@ import com.droidplanner.checklist.CheckListItem;
 
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 
-public class ListRow_CheckBox extends ListRow implements OnClickListener {
-	private final CheckListItem checkListItem;
-	private final LayoutInflater inflater;
-	private ViewHolder holder;
+public class ListRow_CheckBox extends ListRow {
 	
 	public ListRow_CheckBox(LayoutInflater inflater, CheckListItem checkListItem) {
-		this.checkListItem = checkListItem;
-		this.inflater = inflater;
+		super(inflater, checkListItem);
 	}
 
 	public View getView(View convertView) {
@@ -32,20 +26,14 @@ public class ListRow_CheckBox extends ListRow implements OnClickListener {
 			view = convertView;
 		}
 
-		updateDisplay(view,holder,checkListItem);
+		updateDisplay(view, (ViewHolder)holder,checkListItem);
 		return view;
 	}
 	
 	private void updateDisplay(View view, ViewHolder holder,
 			CheckListItem mListItem) {
 		
-		//Common display update
-		holder.checkBox.setOnClickListener(this);
-		holder.checkBox.setText(checkListItem.getTitle());
-		holder.checkBox.setClickable(checkListItem.isEditable());
-		holder.checkBox.setChecked(checkListItem.isSys_activated());
-
-		checkListItem.setVerified(holder.checkBox.isChecked());
+		updateCheckBox(checkListItem.isSys_activated());
 	}
 
 	public int getViewType() {
@@ -56,15 +44,6 @@ public class ListRow_CheckBox extends ListRow implements OnClickListener {
 
 		private ViewHolder(ViewGroup viewGroup, CheckListItem checkListItem) {
 			super(viewGroup, checkListItem);
-		}
-	}
-
-	@Override
-	public void onClick(View v) {
-		this.checkListItem.setSys_activated(((CheckBox)v).isChecked());
-		
-		if(this.listener!=null){
-			this.listener.onRowItemChanged(v, this.checkListItem,((CheckBox)v).isChecked());
 		}
 	}
 }
