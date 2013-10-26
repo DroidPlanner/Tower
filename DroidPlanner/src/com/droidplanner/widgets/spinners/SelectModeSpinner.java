@@ -1,68 +1,63 @@
 package com.droidplanner.widgets.spinners;
 
-import java.util.ArrayList;
-
 import android.content.Context;
-import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.MAVLink.Messages.ApmModes;
+import com.droidplanner.R;
 import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.DroneInterfaces.DroneTypeListner;
+import com.droidplanner.drone.DroneInterfaces.ModeChangedListener;
 import com.droidplanner.widgets.spinners.SpinnerSelfSelect.OnSpinnerItemSelectedListener;
 
 public class SelectModeSpinner extends SpinnerSelfSelect implements
-		OnSpinnerItemSelectedListener {
-	public interface OnModeSpinnerSelectedListener {
-		void OnModeSpinnerSelected(String Mode);
-	}
+		OnSpinnerItemSelectedListener, DroneTypeListner, ModeChangedListener {
 
-	private OnModeSpinnerSelectedListener listener;
-
-	private ArrayList<String> modeSpinnerAdapter;
+	private ModeAdapter modeAdapter;
+	private Drone drone;
+	private Context context;
 
 	public SelectModeSpinner(Context context) {
 		super(context);
+		this.context = context;
+		selectable = false;
+		setBackgroundResource(R.drawable.modes);
 	}
 
-	public void buildSpinner(Context context,
-			OnModeSpinnerSelectedListener listener) {
-		modeSpinnerAdapter = new ArrayList<String>();
-
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
-				android.R.layout.simple_spinner_dropdown_item,
-				modeSpinnerAdapter);
-
-		updateModeSpinner(null);
-		setAdapter(adapter);
+	public void buildSpinner(Context context, Drone drone) {
+		this.drone = drone;
 		setOnSpinnerItemSelectedListener(this);
-		setOnWaypointSpinnerSelectedListener(listener);
+		this.drone.setModeChangedListener(this);
+		this.drone.setDroneTypeChangedListner(this);
+
+		onDroneTypeChanged();
 	}
 
-	public void updateModeSpinner(Drone drone) {
-		modeSpinnerAdapter.clear();
-		if (drone != null) {
-			updateWpSpinnerWithList(drone);
+	@Override
+	public void onDroneTypeChanged() {
+		buildAdapter();
+	}
+
+	private void buildAdapter() {
+		modeAdapter = new ModeAdapter(this.context,
+				android.R.layout.simple_spinner_dropdown_item,
+				ApmModes.getModeList(this.drone.type.getType()));
+		setAdapter(modeAdapter);
+	}
+
+	@Override
+	public void onModeChanged() {
+		try {
+			this.forcedSetSelection(modeAdapter.getPosition(drone.state.getMode()));
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		updateWpSpinnerWithNoData();
-		return;
-	}
-
-	private void updateWpSpinnerWithNoData() {
-		modeSpinnerAdapter.add("Mode");
-	}
-
-	private void updateWpSpinnerWithList(Drone drone) {
-		modeSpinnerAdapter.clear();
-		modeSpinnerAdapter.addAll(ApmModes.getModeList(drone.type.getType()));
 	}
 
 	@Override
 	public void onSpinnerItemSelected(Spinner spinner, int position, String text) {
-		listener.OnModeSpinnerSelected(text);
+		ApmModes newMode = modeAdapter.getItem(position);
+		drone.state.changeFlightMode(newMode);		
 	}
 
-	public void setOnWaypointSpinnerSelectedListener(
-			OnModeSpinnerSelectedListener listener) {
-		this.listener = listener;
-	}
 }

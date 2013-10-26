@@ -93,8 +93,7 @@
         android:id="@+id/hudView"
         android:layout_width="fill_parent"
         android:layout_height="100dp"
-        android:layout_marginBottom="5dp"
-        android:src="@drawable/hud" />
+        android:layout_marginBottom="5dp" />
 
     <!-- ************* -->
 
@@ -212,7 +211,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_marginTop="46dp"
-	        android:text="m/s" />
+	        android:text="m" />
 	    
 	    	</LinearLayout>
     

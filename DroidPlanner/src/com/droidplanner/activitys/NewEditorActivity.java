@@ -14,7 +14,6 @@ import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.fragments.EditorToolsFragment;
 import com.droidplanner.fragments.EditorToolsFragment.EditorTools;
 import com.droidplanner.fragments.EditorToolsFragment.OnEditorToolSelected;
-import com.droidplanner.fragments.MissionFragment;
 import com.droidplanner.fragments.PlanningMapFragment;
 import com.droidplanner.fragments.helpers.GestureMapFragment;
 import com.droidplanner.fragments.helpers.GestureMapFragment.OnPathFinishedListner;
@@ -28,7 +27,6 @@ public class NewEditorActivity extends NewSuperUI implements
 
 	private PlanningMapFragment planningMapFragment;
 	private GestureMapFragment gestureMapFragment;
-	private MissionFragment missionFragment;
 	private Mission mission;
 	private EditorToolsFragment editorToolsFragment;
 
@@ -49,25 +47,18 @@ public class NewEditorActivity extends NewSuperUI implements
 				.findFragmentById(R.id.mapFragment));
 		gestureMapFragment = ((GestureMapFragment) getFragmentManager()
 				.findFragmentById(R.id.gestureMapFragment));
-		missionFragment = (MissionFragment) getFragmentManager()
-				.findFragmentById(R.id.missionFragment1);
 		editorToolsFragment = (EditorToolsFragment) getFragmentManager()
 				.findFragmentById(R.id.editorToolsFragment);
 
 		mission = drone.mission;
 		gestureMapFragment.setOnPathFinishedListner(this);
-		missionFragment.setMission(mission);
-		planningMapFragment.setMission(mission);
-
-		mission.addOnWaypointsChangedListner(missionFragment);
-		mission.addOnWaypointsChangedListner(planningMapFragment);
 		mission.onWaypointsUpdate();
+		
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
-		mission.removeOnWaypointsChangedListner(missionFragment);
 		mission.removeOnWaypointsChangedListner(planningMapFragment);
 	}
 	

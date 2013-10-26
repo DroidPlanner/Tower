@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.droidplanner.DroidPlannerApp.OnWaypointChangedListner;
+import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
 import com.droidplanner.drone.variables.Mission;
 import com.droidplanner.drone.variables.waypoint;
@@ -29,14 +30,21 @@ public class MissionFragment extends Fragment implements  OnWaypointChangedListn
 		//list.setDragScrollProfile(this);
 		
 		adapter = new MissionItem(this.getActivity(), android.R.layout.simple_list_item_1);		
-		list.setAdapter(adapter);		
+		list.setAdapter(adapter);
+		
+
+		mission = ((DroidPlannerApp) getActivity().getApplication()).drone.mission;
+		mission.addOnWaypointsChangedListner(this);
+		adapter = new MissionItem(this.getActivity(), android.R.layout.simple_list_item_1,mission.getWaypoints());
+		list.setAdapter(adapter);	
+
 		return view;
 	}
 
-	public void setMission(Mission mission) {
-		this.mission = mission;
-		adapter = new MissionItem(this.getActivity(), android.R.layout.simple_list_item_1,mission.getWaypoints());
-		list.setAdapter(adapter);
+	@Override
+	public void onStop() {
+		super.onStop();
+		mission.removeOnWaypointsChangedListner(this);
 	}
 
 	public void update() {

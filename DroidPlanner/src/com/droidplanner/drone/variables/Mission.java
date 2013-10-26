@@ -11,6 +11,8 @@ import com.droidplanner.DroidPlannerApp.OnWaypointChangedListner;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneVariable;
 import com.droidplanner.fragments.helpers.MapPath.PathSource;
+import com.droidplanner.helpers.geoTools.GeoTools;
+import com.droidplanner.helpers.units.Length;
 import com.google.android.gms.maps.model.LatLng;
 
 public class Mission extends DroneVariable implements PathSource,
@@ -72,7 +74,7 @@ public class Mission extends DroneVariable implements PathSource,
 		if (this.wpno != wpno) {
 			this.wpno = wpno;
 			myDrone.tts.speak("Going for waypoint " + wpno);
-			myDrone.notifyHudUpdate();
+			myDrone.onOrientationUpdate();
 		}
 	}
 
@@ -149,10 +151,12 @@ public class Mission extends DroneVariable implements PathSource,
 
 	public void setHome(Home home) {
 		this.home = home;
+		myDrone.notifyDistanceToHomeChange();
 	}
 
 	public void setHome(LatLng home) {
 		this.home.setCoord(home);
+		myDrone.notifyDistanceToHomeChange();
 	}
 
 	public void moveWaypoint(LatLng coord, int number) {
@@ -169,6 +173,7 @@ public class Mission extends DroneVariable implements PathSource,
 			clearWaypoints();
 			addWaypoints(waypoints);
 			onWaypointsUpdate();
+			myDrone.notifyDistanceToHomeChange();
 		}
 
 	}
@@ -221,6 +226,10 @@ public class Mission extends DroneVariable implements PathSource,
 	public void removeOnWaypointsChangedListner(
 			OnWaypointChangedListner listner) {
 		missionListner.remove(listner);
+	}
+
+	public Length getDroneDistanceToHome() {
+		return new Length(GeoTools.getDistance(getHome().getCoord(), myDrone.GPS.getPosition())); 
 	}
 
 }

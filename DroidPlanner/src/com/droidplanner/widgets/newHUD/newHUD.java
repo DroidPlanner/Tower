@@ -137,20 +137,20 @@ public class newHUD extends View {
 		groundPath.reset();
 		float pitchProjection = (float) Math.toDegrees(Math.acos(pitch
 				/ PITCH_RANGE));
-		groundPath.addArc(internalBounds, 90 - pitchProjection + roll,
+		groundPath.addArc(internalBounds, 90 - pitchProjection - roll,
 				pitchProjection * 2);
 		canvas.drawPath(groundPath, groundPaint);
 
 	}
 
 	private void drawPitchTicks(Canvas canvas) {
-		float lineX = (float) (Math.cos(Math.toRadians(roll)) * radiusInternal)
+		float lineX = (float) (Math.cos(Math.toRadians(-roll)) * radiusInternal)
 				* PITCH_TICK_LINE_LENGTH;
-		float lineY = (float) (Math.sin(Math.toRadians(roll)) * radiusInternal)
+		float lineY = (float) (Math.sin(Math.toRadians(-roll)) * radiusInternal)
 				* PITCH_TICK_LINE_LENGTH;
-		float dx = (float) (Math.cos(Math.toRadians(roll - 90))
+		float dx = (float) (Math.cos(Math.toRadians(-roll - 90))
 				* radiusInternal / PITCH_RANGE);
-		float dy = (float) (Math.sin(Math.toRadians(roll - 90))
+		float dy = (float) (Math.sin(Math.toRadians(-roll - 90))
 				* radiusInternal / PITCH_RANGE);
 		int i = (int) ((-PITCH_RANGE + pitch + PITCH_TICK_PADDING) / PITCH_TICK_SPACING);
 		int loopEnd = (int) ((PITCH_RANGE + pitch - PITCH_TICK_PADDING) / PITCH_TICK_SPACING);

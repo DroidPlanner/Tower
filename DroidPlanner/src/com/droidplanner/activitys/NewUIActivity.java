@@ -16,6 +16,7 @@ public class NewUIActivity extends NewSuperUI implements
 		OnMapInteractionListener, OnMissionControlInteraction {
 	private FragmentManager fragmentManager;
 	private RCFragment rcFragment;
+	
 
 	@Override
 	public int getNavigationItem() {
