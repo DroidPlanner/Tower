@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.droidplanner.R;
 import com.droidplanner.checklist.listadapter.ListXmlAdapter;
+import com.droidplanner.checklist.row.ListRow;
 import com.droidplanner.checklist.row.ListRow_CheckBox;
 import com.droidplanner.checklist.row.ListRow_Interface;
 import com.droidplanner.checklist.row.ListRow_Interface.OnRowItemChangeListener;
@@ -19,8 +20,10 @@ import com.droidplanner.checklist.row.ListRow_Type;
 import com.droidplanner.checklist.row.ListRow_Value;
 import com.droidplanner.drone.Drone;
 
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 
 public class CheckListAdapter extends ListXmlAdapter implements
 		OnRowItemChangeListener {
@@ -103,6 +106,43 @@ public class CheckListAdapter extends ListXmlAdapter implements
 	public void setOnCheckListItemUpdateListener(
 			OnCheckListItemUpdateListener listener) {
 		this.listener = listener;
+	}
+
+	@Override
+	public void updateRatioValue(TextView lblChkRatio, int groupPosition){
+		int childCount = getChildrenCount(groupPosition);
+		int childVerified = getChildrenVerified(groupPosition);
+		int childMandatory = getChildrenMandatory(groupPosition);
+
+ 		if(childVerified!=childMandatory)
+			lblChkRatio.setTextColor(0xfff9093d);
+		else
+			lblChkRatio.setTextColor(0xff09f93d);
+	
+ 		lblChkRatio.setTypeface(null, Typeface.BOLD);		
+		lblChkRatio.setText(String.format("%d/%d [%d]", childVerified, childCount, childMandatory));
+	}
+	
+	private int getChildrenVerified(int groupPosition) {
+		int verified = 0;
+		for(int c=0;c<getChildrenCount(groupPosition);c++){
+			ListRow row = (ListRow) getChild(groupPosition,c);
+			CheckListItem listItem = row.getCheckListItem();
+			if(listItem.isVerified())
+				verified++;
+		}
+		return verified;
+	}
+
+	private int getChildrenMandatory(int groupPosition) {
+		int count = 0;
+		for(int c=0;c<getChildrenCount(groupPosition);c++){
+			ListRow row = (ListRow) getChild(groupPosition,c);
+			CheckListItem listItem = row.getCheckListItem();
+			if(listItem.isMandatory())
+				count++;
+		}
+		return count;
 	}
 
 	@Override

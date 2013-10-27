@@ -4,11 +4,9 @@ import com.droidplanner.checklist.CheckListItem;
 import com.droidplanner.drone.Drone;
 
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
-import android.view.View.OnTouchListener;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
@@ -50,7 +48,10 @@ public class ListRow implements ListRow_Interface, OnClickListener, OnLongClickL
 			listener.onRowItemChanged(mView, this.checkListItem,
 					this.checkListItem.isVerified());
 	}
-
+	public CheckListItem getCheckListItem(){
+		return checkListItem;
+	}
+	
 	@Override
 	public View getView(View convertView) {
 		// TODO Auto-generated method stub

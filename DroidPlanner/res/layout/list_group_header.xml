@@ -3,16 +3,25 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="#000000"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:padding="8dp" >
 
     <TextView
         android:id="@+id/lblListHeader"
-        android:layout_width="fill_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
+        android:layout_weight="1"
         android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
         android:textColor="#f9f93d"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/lblChkRatio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="10/10"
+        android:textColor="#09f93d"
         android:textSize="17sp" />
 
 </LinearLayout>

@@ -104,8 +104,15 @@ public abstract class ListXmlAdapter extends BaseExpandableListAdapter{
 				.findViewById(R.id.lblListHeader);
 		lblListHeader.setTypeface(null, Typeface.BOLD);
 		lblListHeader.setText(headerTitle);
-
+		
+		TextView lblChkRatio = (TextView) convertView.findViewById(R.id.lblChkRatio);
+		updateRatioValue(lblChkRatio, groupPosition);
+		
 		return convertView;
+	}
+
+	public void updateRatioValue(TextView lblChkRatio, int groupPosition) {
+		return;
 	}
 
 	@Override
