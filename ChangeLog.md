@@ -1,3 +1,17 @@
+## Droidplanner v1.2.0
+* Planning: renamed column header - #348
+* Planning: Markers - additional UI + zooming fixes, distance while dragging marker - #324
+* Planning: Markers, Mission - distance from prev waypoint in mission planner w/ live update while dragging - #327
+* Planning: Fixed the area function - #358
+* Parameters: fix for name column size, progress indicator - #328
+* Parameters: sort by parameter name on opening parameter file - #335
+* Parameters: Use APM parameter metadata if available when editing parameters - #344
+* Parameters: Help display w/ description, units, valid range & accepted values where available - #345
+* FlightScreen: Draggable guide-point - #347
+* MapType: Made map fragments responsive to map type change, made map type more accessible - #336
+* Waypoints: Fix the Waypoint parameters - #337
+* Waypoints: Fixed the overlap text in the waypoint editor - #339
+
 ## Droidplanner v1.1.0
 * Suport for the new telemetry module from 3DR (FT231)
 

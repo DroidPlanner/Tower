@@ -2,7 +2,6 @@ package com.droidplanner.drone.variables;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
@@ -21,9 +20,6 @@ import com.droidplanner.file.IO.ParameterMetadataMap;
 import com.droidplanner.file.IO.ParameterMetadataMapReader;
 import com.droidplanner.parameters.Parameter;
 import com.droidplanner.parameters.ParameterMetadata;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
 
 /**
  * Class to manage the communication of parameters to the MAV.
@@ -34,6 +30,8 @@ import org.xmlpull.v1.XmlPullParserFactory;
  * 
  */
 public class Parameters extends DroneVariable {
+
+    private static final String PARAMETERMETADATA_PATH = "Parameters/ParameterMetaData.xml";
 
     private List<Parameter> parameters = new ArrayList<Parameter>();
     private ParameterMetadataMap metadataMap;
@@ -112,13 +110,13 @@ public class Parameters extends DroneVariable {
         try {
             // use user supplied file in ~/Parameters if available, else fallback to asset from resources
             final InputStream inputStream;
-            final File file = new File(DirectoryPath.getParameterMetadataPath());
+            final File file = new File(DirectoryPath.getDroidPlannerPath() + PARAMETERMETADATA_PATH);
             if(file.exists()) {
                 // load from file
                 inputStream = new FileInputStream(file);
             } else {
                 // load from resource
-                inputStream = context.getAssets().open("ParameterMetaData/ParameterMetaData.xml");
+                inputStream = context.getAssets().open(PARAMETERMETADATA_PATH);
             }
 
             // parse
