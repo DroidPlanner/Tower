@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lst_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:orientation="horizontal" >
+
+    <CheckBox
+        android:id="@+id/lst_check"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="10dp"
+        android:layout_weight="0.4"
+        android:text="Value" />
+
+    <EditText
+        android:id="@+id/lst_editText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="10dp"
+        android:layout_weight="0.4"
+        android:duplicateParentState="false"
+        android:ems="10"
+        android:gravity="right"
+        android:longClickable="false" >
+
+    </EditText>
+
+    <TextView
+        android:id="@+id/lst_unit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_weight="0.2"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+</LinearLayout>
