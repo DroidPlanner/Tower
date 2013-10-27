@@ -4,6 +4,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class FileStream {
 	public static FileOutputStream getParameterFileStream()
@@ -45,6 +46,20 @@ public class FileStream {
 		BufferedOutputStream out = new BufferedOutputStream(
 				new FileOutputStream(file));
 		return out;
+	}
+	
+	/**
+	 * Creates a new .nomedia file on the maps folder
+	 * 
+	 * It's used to hide the maps tiles from android gallery
+	 * @throws IOException 
+	 * 
+	 */
+	static public void createNoMediaFile()
+			throws IOException {
+		File myDir = new File(DirectoryPath.getMapsPath());
+		myDir.mkdirs();
+		new File(myDir,".nomedia").createNewFile();
 	}
 
 }
