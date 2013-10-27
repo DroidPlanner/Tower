@@ -1,25 +1,26 @@
 package com.droidplanner.file.IO;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.View;
-import com.droidplanner.DroidPlannerApp;
+import android.widget.TextView;
 import com.droidplanner.file.DirectoryPath;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
-import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class VehicleProfile {
     private static final String VEHICLEPROFILE_PATH = "VehicleProfiles";
 
-    private String metadataType;
-    private List<VehicleMissionParameter> missionParameters;
+    private String parameterMetadataType;
+    private final List<MissionViewProfile> missionViewProfiles = new ArrayList<MissionViewProfile>();
+    private final Map<Integer, MissionDialogProfile> profileMissionDialogs = new HashMap<Integer, MissionDialogProfile>();
 
 
     /**
@@ -48,30 +49,52 @@ public class VehicleProfile {
         }
     }
 
-    public String getMetadataType() {
-        return metadataType;
+
+    public String getParameterMetadataType() {
+        return parameterMetadataType;
     }
 
-    public void setMetadataType(String metadataType) {
-        this.metadataType = metadataType;
+    public void setParameterMetadataType(String parameterMetadataType) {
+        this.parameterMetadataType = parameterMetadataType;
     }
 
-    public void setMissionParameters(List<VehicleMissionParameter> missionParameters) {
-        this.missionParameters = missionParameters;
+    public List<MissionViewProfile> getMissionViewProfiles() {
+        return missionViewProfiles;
     }
 
-    public void customizeView(View view) {
-        for (VehicleMissionParameter missionParameter : missionParameters) {
+    public Map<Integer, MissionDialogProfile> getProfileMissionDialogs() {
+        return profileMissionDialogs;
+    }
+
+    public void applyMissionDialogProfile(View dialog, int resId) {
+        // apply global view customizations
+        applyViewProfile(dialog, missionViewProfiles);
+
+        // apply dialog
+        final MissionDialogProfile dialogProfile = profileMissionDialogs.get(resId);
+        if(dialogProfile != null)
+            applyViewProfile(dialog, dialogProfile.getMissionViewProfiles());
+    }
+
+
+    private void applyViewProfile(View view, List<MissionViewProfile> profiles) {
+        for (MissionViewProfile profile : profiles) {
             // find control view
-            final View ctl = view.findViewById(missionParameter.getResId());
+            final View ctl = view.findViewById(profile.getResId());
             if(ctl == null)
                 continue;
 
-            // set visibility
-            ctl.setVisibility(missionParameter.getVisibility());
+            // set text
+            final String text = profile.getText();
+            if(text != null && ctl instanceof TextView)
+                ((TextView) ctl).setText(text);
 
-            if("SeekBarWithText".equals(missionParameter.getType()) && (ctl instanceof SeekBarWithText))
-                ((SeekBarWithText) ctl).setMinMaxInc(missionParameter.getMin(), missionParameter.getMax(), missionParameter.getInc());
+            // set visibility
+            ctl.setVisibility(profile.getVisibility());
+
+            // set named control types
+            if("SeekBarWithText".equals(profile.getType()) && (ctl instanceof SeekBarWithText))
+                ((SeekBarWithText) ctl).setMinMaxInc(profile.getMin(), profile.getMax(), profile.getInc());
         }
     }
 }

@@ -5,13 +5,9 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.*;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_param_value;
 import com.droidplanner.MAVLink.MavLinkParameters;
-import com.droidplanner.R;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces;
 import com.droidplanner.drone.DroneVariable;
@@ -96,7 +92,7 @@ public class Parameters extends DroneVariable {
 
         // get metadata type from profile, bail if none
         final VehicleProfile profile = VehicleProfile.load(myDrone.context, myDrone.type.getVehicleType());
-        if(profile == null || profile.getMetadataType() == null)
+        if(profile == null || profile.getParameterMetadataType() == null)
             return;
 
         try {
@@ -112,7 +108,7 @@ public class Parameters extends DroneVariable {
             }
 
             // parse
-            metadataMap = ParameterMetadataMapReader.open(inputStream, profile.getMetadataType());
+            metadataMap = ParameterMetadataMapReader.open(inputStream, profile.getParameterMetadataType());
 
         } catch (Exception ex) {
             // nop

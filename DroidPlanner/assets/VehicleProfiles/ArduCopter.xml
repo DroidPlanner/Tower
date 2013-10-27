@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Profile>
+    <!-- Section to be loaded from ParameterMetaData.xml to be used for this vehicle type       -->
+    <!-- Parameter metadata is used to add descriptions and validation to the Parameters screen -->
     <ParameterMetadataType
         type="ArduCopter2"/>
 
-    <MissionViews>
-        <MissionView
+    <!-- Customize mission dialogs -->
+    <MissionViewProfiles>
+        <!-- Global Scope: applied to views in all mission dialogs -->
+        <ViewProfile
             id="@+id/altitudeView"
             visibility="visible"
             type="SeekBarWithText"
@@ -12,7 +16,7 @@
             max="120"
             inc="5"/>
 
-        <MissionView
+        <ViewProfile
             id="@+id/waypointDelay"
             visibility="visible"
             type="SeekBarWithText"
@@ -20,20 +24,38 @@
             max="300"
             inc="5"/>
 
-        <MissionView
+        <ViewProfile
             id="@+id/waypointAcceptanceRadius"
             visibility="gone"/>
 
-        <MissionView
+        <ViewProfile
             id="@+id/optionLayout"
             visibility="gone"/>
 
-        <MissionView
+        <ViewProfile
             id="@+id/waypointAngle"
             visibility="gone"/>
 
-        <MissionView
+        <ViewProfile
             id="@+id/takeoffPitch"
             visibility="gone"/>
-    </MissionViews>
+
+        <!-- Dialog Scope: applied only to views in identified dialogs -->
+        <DialogProfile
+            id="@dialog/dialog_mission_waypoint">
+
+            <ViewProfile
+                id="@+id/textView1"
+                text="Delay option is triggered after the craft reaches the waypoint radius. The Next command is loaded after the delay. Delay time is in seconds, the default is 0."/>
+        </DialogProfile>
+
+        <DialogProfile
+            id="@dialog/dialog_mission_takeoff">
+
+            <ViewProfile
+                id="@+id/textView1"
+                text="Will cause the craft to auto take off to specified altitude."/>
+        </DialogProfile>
+
+    </MissionViewProfiles>
 </Profile>

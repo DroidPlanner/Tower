@@ -68,7 +68,7 @@ public abstract class DialogMission implements OnItemSelectedListener,
         final String vehicleType = ((DroidPlannerApp) ((Activity) context).getApplication()).drone.type.getVehicleType();
         final VehicleProfile profile = VehicleProfile.load(context, vehicleType);
         if(profile != null)
-            profile.customizeView(view);
+            profile.applyMissionDialogProfile(view, getResource());
 
         return view;
 

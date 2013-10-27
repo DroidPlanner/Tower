@@ -1,8 +1,9 @@
 package com.droidplanner.file.IO;
 
 
-public class VehicleMissionParameter {
+public class MissionViewProfile {
     private int resId;
+    private String text;
     private int visibility;
     private String type;
 
@@ -16,6 +17,14 @@ public class VehicleMissionParameter {
 
     public void setResId(int resId) {
         this.resId = resId;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 
     public int getVisibility() {
