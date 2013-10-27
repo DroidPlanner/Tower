@@ -13,9 +13,9 @@ import java.util.ArrayList;
 
 
 public class VehicleProfileReader {
-    private static final String TAG_METADATATYPE = "MetadataType";
-    private static final String TAG_PARAMETER = "MissionParameter";
-    private static final String TAG_PARAMETERS = "MissionParameters";
+    private static final String TAG_METADATATYPE = "ParameterMetadataType";
+    private static final String TAG_MISSIONVIEW = "MissionView";
+    private static final String TAG_MISSIONVIEWS = "MissionViews";
 
     private static final String ATTR_ID = "id";
     private static final String ATTR_VISIBILITY = "visibility";
@@ -24,6 +24,8 @@ public class VehicleProfileReader {
     private static final String ATTR_INC = "inc";
     private static final String ATTR_MIN = "min";
     private static final String ATTR_MAX = "max";
+
+    private static final String PREFIX_ID = "@+id/";
 
 
     public static VehicleProfile open(InputStream inputStream) throws XmlPullParserException, IOException {
@@ -51,7 +53,7 @@ public class VehicleProfileReader {
                     if(parser.getName().equals(TAG_METADATATYPE)) {
                         profile.setMetadataType(parser.getAttributeValue(null, ATTR_TYPE));
 
-                    } else if(parser.getName().equals(TAG_PARAMETER)) {
+                    } else if(parser.getName().equals(TAG_MISSIONVIEW)) {
                         final VehicleMissionParameter parameter = newParameter(parser);
                         if(parameter != null)
                             parameters.add(parameter);
@@ -70,12 +72,10 @@ public class VehicleProfileReader {
         final VehicleMissionParameter parameter = new VehicleMissionParameter();
 
         // id
-        try {
-            final Field f = R.id.class.getDeclaredField(attr);
-            parameter.setResId(f.getInt(f));
-        } catch (Exception e) {
+        int resId = findResId(attr);
+        if(resId == -1)
             return null;
-        }
+        parameter.setResId(resId);
 
         // visibiliy
         attr = parser.getAttributeValue(null, ATTR_VISIBILITY);
@@ -96,6 +96,25 @@ public class VehicleProfileReader {
         parameter.setInc(parseDouble(parser.getAttributeValue(null, ATTR_INC)));
 
         return parameter;
+    }
+
+    private static int findResId(String idName) {
+        final Class resClass;
+        if(idName.startsWith(PREFIX_ID)) {
+            // R.id
+            resClass = R.id.class;
+            idName = idName.substring(PREFIX_ID.length());
+        } else {
+            // not found
+            return -1;
+        }
+
+        try {
+            final Field field = resClass.getDeclaredField(idName);
+            return field.getInt(field);
+        } catch (Exception e) {
+            return -1;
+        }
     }
 
     private static double parseDouble(String str) {

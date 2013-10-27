@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Profile>
-    <MetadataType
+    <ParameterMetadataType
         type="ArduCopter2"/>
 
-    <MissionParameters>
-        <MissionParameter
-            id="altitudeView"
+    <MissionViews>
+        <MissionView
+            id="@+id/altitudeView"
             visibility="visible"
             type="SeekBarWithText"
             min="0"
             max="120"
             inc="5"/>
 
-        <MissionParameter
-            id="waypointDelay"
+        <MissionView
+            id="@+id/waypointDelay"
             visibility="visible"
             type="SeekBarWithText"
             min="0"
             max="300"
             inc="5"/>
 
-        <MissionParameter
-            id="waypointAcceptanceRadius"
+        <MissionView
+            id="@+id/waypointAcceptanceRadius"
             visibility="gone"/>
 
-        <MissionParameter
-            id="optionLayout"
+        <MissionView
+            id="@+id/optionLayout"
             visibility="gone"/>
 
-        <MissionParameter
-            id="waypointAngle"
+        <MissionView
+            id="@+id/waypointAngle"
             visibility="gone"/>
 
-        <MissionParameter
-            id="takeoffPitch"
+        <MissionView
+            id="@+id/takeoffPitch"
             visibility="gone"/>
-    </MissionParameters>
+    </MissionViews>
 </Profile>
