@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_title">DroidPlanner</string>
+    <string name="about">O</string>
+    <string name="version">Wersja</string>
+    <string name="storage_folder">Folder zapisu</string>
+    <string name="menu_settings">Ustawienia</string>
+    <string name="menu_connect">Połącz</string>
+    <string name="menu_disconnect">Rozłącz</string>
+    <string name="conected">Połączony</string>
+    <string name="disconnected">Brak połączenia</string>
+    <string name="save">Zapisz</string>
+    <string name="open">Otwórz</string>
+    <string name="menu_open_file">Otwórz plik</string>
+    <string name="menu_save_file">Zapisz plik</string>
+    <string name="menu_load_from_apm">Załaduj z APM</string>
+    <string name="menu_send_to_apm">Wyślij do APM</string>
+    <string name="menu_follow_me">Śledź</string>
+    <string name="menu_record_me">Nagraj</string>
+    <string name="menu_clear">Wyczyść WPty</string>
+    <string name="menu_zoom">Powiększ</string>
+    <string name="file_saved">Zapisano plik</string>
+    <string name="no_waypoint_files">Brak plików WPów</string>
+    <string name="no_files">Brak plików</string>
+    <string name="select_file_to_open">Wybierz plik:</string>
+    <string name="error_when_saving">Bład zapisu pliku</string>
+    <string name="error_when_opening_file">Błąd otwarcia pliku</string>
+    <string name="waypoint_altitude">Wysokość</string>
+    <string name="default_alt">Zmiań Wys.</string>
+    <string name="menu_open_kmz">Otwórz KMZ</string>
+    <string name="menu_add_polygon">Dodaj krzywą</string>
+    <string name="menu_polygon">Krzywa</string>
+    <string name="clear_polygon">Wyczyść krzywą</string>
+    <string name="menu_generate_polygon">Generuj</string>
+    <string name="menu_survey">Survey</string>
+    <string name="menu_finish_polygon">Wyjście</string>
+    <string name="menu_clear_path">Czyść ścieżkę</string>
+    <string name="generate">Generuj</string>
+    <string name="exit">Wyjście</string>
+    <string name="menu_clearFlightPath">Clear Track</string>
+    <string name="mission_mode">Misja</string>
+    <string name="polygon_mode">Krzywa</string>
+    <string name="dialog_polygon_hatch_angle">Hatch angle:</string>
+    <string name="distance_between_lines">Distance Between Lines</string>
+    <string name="enable">Enable</string>
+    <string name="disable">Disable</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
+    <string name="write">Write</string>
+    <string name="refresh">Refresh</string>
+    <string name="this_is_very_experimental_please_be_careful">This is very experimental, please be careful.</string>
+    <string name="menu_advanced">Advanced</string>
+    <string name="menu_calibration">Calibration</string>
+    <string name="rc_control">RC control</string>
+    <string name="footprint">Footprint</string>
+    <string name="ground_resolution">Ground Resolution</string>
+    <string name="distance_between_pictures">Distance Between Pictures</string>
+    <string name="area">Area</string>
+    <string name="camera_">Camera:</string>
+    <string name="inner_wps">Inner WPs</string>
+    <string name="hatch_angle">Hatch angle:</string>
+    <string name="flight_altitude">Flight Altitude:</string>
+    <string name="overlap">Overlap:</string>
+    <string name="sidelap">Sidelap:</string>
+    
+    <string name="screen_planning">Planning</string>
+    <string name="screen_flight_data">Flight Data</string>
+    <string name="screen_rc">RC</string>
+    <string name="screen_parameters">Parameters</string>
+    <string name="screen_camera">Camera</string>
+    <string name="screen_gcp">GCP</string>
+    <string name="screen_chart">Chart</string>
+    <string name="length">Distance</string>
+    <string name="mission_length">Mission Length</string>
+    <string name="pictures">Pictures</string>
+    <string name="number_of_strips">Number Of Strips</string>
+    <string name="loiter_time">Loiter Time</string>
+    <string name="loiter_turn">Loiter Turn</string>
+    <string name="waypoint_delay">Delay before next waypoint</string>
+    <string name="loiter_radius">Loiter Radius</string>
+    <string name="loiter_ccw">CCW</string>
+    <string name="menu_arm">Arm</string>
+	<string name="menu_disarm">Disarm</string>
+    <string name="rtl_Land">Land on reaching RTL position</string>
+    <string name="takeoff_pitch">Min. Pitch Angle</string>
+	<string name="waypointInfo_Land">Will cause the craft to land at the current location when the command is invoked. If you have Sonar, the craft will stop holding position at 3 meters and drop straight down.The motors will not stop on their own, you must exit the AP mode to cut the engines.</string>
+    <string name="waypointInfo_Generic">Generic Waypoint</string>
+    <string name="waypointInfo_Loiter">Will cause the craft to begin to Loiter at the current location when the command is invoked.</string>
+    <string name="waypointInfo_LoiterN">Will cause the craft to begin to orbit the current location when the command is invoked.</string>
+    <string name="waypointInfo_LoiterT">Will cause the craft to begin to Loiter at the current location when the command is invoked. Optionally give a location to loiter at that wp – The clock starts ticking after the WP is reached.</string>
+    <string name="waypointInfo_RTL">Will cause the craft to return to the home position set when the craft is armed (requires GPS Lock!). If Altitude is 0, craft will return to home at the altitude specified by the Mission Planner.</string>
+    <string name="waypointInfo_TakeOff">Will cause the craft to auto take off to specified altitude. Use Pitch Angle only for planes and set to 0 for copters.</string>
+    <string name="waypointInfo_Waypoint">Delay option is triggered after the craft reaches the waypoint radius. The Next command is loaded after the delay.Delay time is in seconds, the default is 0. Set Orbital radius to 0 for pass through or specify the orbit radius in meter. Yaw angle sets the heading at each waypoint - for rotary wing only.</string>
+    <string name="waypointDesc_Waypoint_1" formatted="false">Executing next waypoint immediately, heading is set to %03.0f°</string>
+    <string name="waypointDesc_Waypoint_2" formatted="false">Executing next waypoint after %1.1fs, heading is set to %03.0f°</string>
+    <string name="waypointDesc_Loiter" formatted="false">Loiter until next command within %1.1fm radius %s, heading is set to %03.0f°</string>
+    <string name="waypointDesc_LoiterN" formatted="false">Loiter for %1.0f turns within %1.1fm radius %s, heading is set to %03.0f°</string>
+    <string name="waypointDesc_LoiterT" formatted="false">Loiter for %1.0fs within %1.1fm radius %s, heading is set to %03.0f°</string>
+    <string name="waypointDesc_Takeoff" formatted="false">Takeoff with pitch set to %1.2f°</string>
+    <string name="waypointDesc_SetJump" formatted="false">Jump to Waypoint %d - %s</string>
+    <string name="waypointDesc_SetHome" formatted="false">Home is set to</string>
+    <string name="waypointDesc_SetSpeed" formatted="false">Speed is set to %1.1fm/s with throttle at %1.0f%% using %s as reference</string>
+    <string name="waypointDesc_SetRelay" formatted="false">Relay is set to</string>
+    <string name="waypointDesc_SetRepeat" formatted="false">Repeating relay</string>
+    <string name="waypointDesc_CondAlt" formatted="false">Altitude condition is set to %1.1fm at the rate of %1.1fm/s</string>
+    <string name="waypointDesc_CondDist" formatted="false">Distance condition is set to %1.1fm</string>
+    <string name="waypointDesc_CondYaw" formatted="false">Yaw condition is set to %03.0f° at the rate of %1.1fm/s %s, using %s</string>
+    <string name="waypointDesc_GPS" formatted="false">Lat/Lon [%1.12f/%1.12f]</string>
+    <string name="waypointDesc_coordmav">current vehicle position</string>
+    <string name="waypointDesc_coordwp">current Waypoint position</string>
+    <string name="waypointDesc_coordgcs">current GCS position</string>
+    <string name="waypointDesc_coordmanual">entered coordinate</string>
+    <string name="waypointDesc_immediate">immediately</string>
+    <string name="waypointDesc_s">s</string>
+    <string name="waypointDesc_m">m</string>
+    <string name="waypointDesc_after">after</string>
+    <string name="waypointDesc_turns">turns</string>
+    <string name="waypointDesc_radius">radius</string>
+    <string name="waypointDesc_degrees">°</string>
+    <string name="waypointDesc_CW">CW</string>
+    <string name="waypointDesc_CCW">CCW</string>
+    <string name="waypoint_angle">Yaw Angle</string>
+    <string name="waypoint_finalaltitude">Target Altitude</string>
+    <string name="waypoint_altrate">Descent / Ascend rate</string>
+    <string name="waypoint_yawrate">Yaw rate</string>
+    <string name="waypoint_yawdir">Set yaw direction to CCW</string>
+    <string name="waypoint_yawrelative">Realtive Offset</string>
+    <string name="waypoint_yawabsolute">Absolute Angle</string>
+    <string name="waypoint_yawoffset">Use relative offset</string>
+    <string name="waypointInfo_CondAlt">Ascend/descend at specified rate. Delay mission state machine until desired altitude reached.</string>
+    <string name="waypointInfo_CondYaw">Set condition to reach a certain target angle.</string>
+    <string name="waypointInfo_CondDistance">Delay mission state machine until within desired distance of next NAV point</string>
+    <string name="waypointInfo_SetHome">Changes the home location either to the current location or a specified location.</string>
+    <string name="waypointInfo_SetSpeed">Change speed and/or throttle set points.Set -1 for both Speed and Throttle if no changes is required</string>
+    <string name="waypointInfo_SetRelay">Set a relay to a condition.</string>
+    <string name="waypointInfo_SetRepeatRelay">Cycle a relay on and off for a desired number of cyles with a desired period.</string>
+    <string name="waypoint_distance">Distance</string>
+    <string name="waypoint_homecurrent">"Set Home using current position "</string>
+    <string name="waypoint_longitude">Longitude :</string>
+    <string name="waypoint_latitude">Latitude :</string>
+    <string name="waypoint_speed">Target Speed</string>
+    <string name="waypoint_throttle">Throttle</string>
+    <string name="waypoint_speedtype">Speed type</string>
+    <string name="waypoint_airspeed">Air speed</string>
+    <string name="waypoint_groundspeed">Ground speed</string>
+    <string name="selectCoodSource">Select location source</string>
+    <string name="waypoint_coordsrc">Source data :</string>
+    <string name="waypoint_jumpto">Jump to waypoint :</string>
+    <string name="waypoint_repeat">Repeat waypoint</string>
+	<string name="waypointInfo_SetJump">Repeat waypoint</string>
+	<string name="next">next</string>
+	<string name="menu_map_type">Map Type</string>
+	<string name="menu_map_type_satellite">Satellite</string>
+	<string name="menu_map_type_hybrid">Hybrid</string>
+	<string name="menu_map_type_normal">Normal</string>
+	<string name="menu_map_type_terrain">Terrain</string>
+	<string name="waypoint_AcceptRadius">Acceptance radius</string>
+	<string name="waypoint_orbitalRadius">Orbital radius</string>
+    <string name="none">None</string>
+    <string name="metadata_values">Values:</string>
+    <string name="metadata_units">Units:</string>
+    <string name="metadata_range">Range:</string>
+    <string name="menu_preflight_checklist">Pre-Flight Checklist</string>
+    <string name="lst_note_hint">To add more rows, just press Enter</string>
+    <string name="parameter_row_edit">Edit</string>
+</resources>
