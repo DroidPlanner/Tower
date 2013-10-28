@@ -17,7 +17,7 @@ public class VehicleProfileReader {
     private static final String TAG_METADATATYPE = "ParameterMetadataType";
     private static final String TAG_VIEWPROFILE = "ViewProfile";
     private static final String TAG_DIALOGPROFILE = "DialogProfile";
-    private static final String TAG_MISSIONVIEWPROFILES = "MissionViewProfiles";
+    private static final String TAG_MISSIONVIEWPROFILES = "MissionViewProfile";
 
     private static final String ATTR_ID = "id";
     private static final String ATTR_TEXT = "text";
