@@ -19,7 +19,6 @@ import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
 import com.droidplanner.R;
 import com.droidplanner.drone.variables.waypoint;
-import com.droidplanner.file.IO.VehicleProfile;
 import com.droidplanner.widgets.spinners.SpinnerSelfSelect;
 
 public abstract class DialogMission implements OnItemSelectedListener,
@@ -65,10 +64,8 @@ public abstract class DialogMission implements OnItemSelectedListener,
 		typeSpinner.setOnItemSelectedListener(this);
 		typeSpinner.setSelection(commandAdapter.getPosition(wp.getCmd()));
 
-        final String vehicleType = ((DroidPlannerApp) ((Activity) context).getApplication()).drone.type.getVehicleType();
-        final VehicleProfile profile = VehicleProfile.load(context, vehicleType);
-        if(profile != null)
-            profile.applyMissionDialogProfile(view, getResource());
+        final DroidPlannerApp app = (DroidPlannerApp) ((Activity) context).getApplication();
+        app.drone.profile.applyViewProfile(view, getResource());
 
         return view;
 

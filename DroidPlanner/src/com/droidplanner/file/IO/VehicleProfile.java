@@ -16,68 +16,26 @@ import java.util.Map;
 
 
 public class VehicleProfile {
-    private static final String VEHICLEPROFILE_PATH = "VehicleProfiles";
-
     private String parameterMetadataType;
     private final List<MissionViewProfile> missionViewProfiles = new ArrayList<MissionViewProfile>();
     private final Map<Integer, MissionDialogProfile> profileMissionDialogs = new HashMap<Integer, MissionDialogProfile>();
-
-
-    /**
-     * Load profile <vehicleType>.xml from 'VehicleProfiles' directory or
-     * from resources if file not found
-     */
-    public static VehicleProfile load(Context context, String vehicleType) {
-        final String path = VEHICLEPROFILE_PATH + File.separator + vehicleType + ".xml";
-
-        try {
-            final InputStream inputStream;
-            final File file = new File(DirectoryPath.getDroidPlannerPath() + path);
-            if(file.exists()) {
-                // load from file
-                inputStream = new FileInputStream(file);
-            }
-            else {
-                // load from resource
-                inputStream = context.getAssets().open(path);
-            }
-            // load
-            return VehicleProfileReader.open(inputStream);
-        } catch (Exception e) {
-            // can't load
-            return null;
-        }
-    }
 
 
     public String getParameterMetadataType() {
         return parameterMetadataType;
     }
 
-    public void setParameterMetadataType(String parameterMetadataType) {
-        this.parameterMetadataType = parameterMetadataType;
-    }
-
-    public List<MissionViewProfile> getMissionViewProfiles() {
-        return missionViewProfiles;
-    }
-
-    public Map<Integer, MissionDialogProfile> getProfileMissionDialogs() {
-        return profileMissionDialogs;
-    }
-
-    public void applyMissionDialogProfile(View dialog, int resId) {
+    public void applyMissionViewProfile(View view, int resId) {
         // apply global view customizations
-        applyViewProfile(dialog, missionViewProfiles);
+        applyViewProfiles(view, missionViewProfiles);
 
         // apply dialog
         final MissionDialogProfile dialogProfile = profileMissionDialogs.get(resId);
         if(dialogProfile != null)
-            applyViewProfile(dialog, dialogProfile.getMissionViewProfiles());
+            applyViewProfiles(view, dialogProfile.getMissionViewProfiles());
     }
 
-
-    private void applyViewProfile(View view, List<MissionViewProfile> profiles) {
+    private void applyViewProfiles(View view, List<MissionViewProfile> profiles) {
         for (MissionViewProfile profile : profiles) {
             // find control view
             final View ctl = view.findViewById(profile.getResId());
@@ -95,6 +53,132 @@ public class VehicleProfile {
             // set named control types
             if("SeekBarWithText".equals(profile.getType()) && (ctl instanceof SeekBarWithText))
                 ((SeekBarWithText) ctl).setMinMaxInc(profile.getMin(), profile.getMax(), profile.getInc());
+        }
+    }
+
+
+    public void setParameterMetadataType(String parameterMetadataType) {
+        this.parameterMetadataType = parameterMetadataType;
+    }
+
+    public ViewProfileBuilder getViewProfileBuilder()
+    {
+        return new ViewProfileBuilder() {
+            @Override
+            public void addViewProfile(MissionViewProfile viewProfile) {
+                if (viewProfile != null)
+                    missionViewProfiles.add(viewProfile);
+            }
+        };
+    }
+
+    public ViewProfileBuilder addDialogProfile(MissionDialogProfile dialogProfile) {
+        if (dialogProfile != null) {
+            profileMissionDialogs.put(dialogProfile.getResId(), dialogProfile);
+            return dialogProfile.getViewProfileBuilder();
+
+        } else {
+            return null;
+        }
+    }
+
+    public static interface ViewProfileBuilder {
+        void addViewProfile(MissionViewProfile viewProfile);
+    }
+
+    public static class MissionDialogProfile {
+        private int resId;
+        private List<MissionViewProfile> missionViewProfiles = new ArrayList<MissionViewProfile>();
+
+
+        public int getResId() {
+            return resId;
+        }
+
+        public void setResId(int resId) {
+            this.resId = resId;
+        }
+
+        public List<MissionViewProfile> getMissionViewProfiles() {
+            return missionViewProfiles;
+        }
+
+        public ViewProfileBuilder getViewProfileBuilder()
+        {
+            return new ViewProfileBuilder() {
+                @Override
+                public void addViewProfile(MissionViewProfile viewProfile) {
+                    if (viewProfile != null)
+                        missionViewProfiles.add(viewProfile);
+                }
+            };
+        }
+    }
+
+    public static class MissionViewProfile {
+        private int resId;
+        private String text;
+        private int visibility;
+        private String type;
+
+        private double min;
+        private double max;
+        private double inc;
+
+        public int getResId() {
+            return resId;
+        }
+
+        public void setResId(int resId) {
+            this.resId = resId;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public void setText(String text) {
+            this.text = text;
+        }
+
+        public int getVisibility() {
+            return visibility;
+        }
+
+        public void setVisibility(int visibility) {
+            this.visibility = visibility;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public double getMin() {
+            return min;
+        }
+
+        public void setMin(double min) {
+            this.min = min;
+        }
+
+        public double getMax() {
+            return max;
+        }
+
+        public void setMax(double max) {
+            this.max = max;
+        }
+
+        public double getInc() {
+            return inc;
+        }
+
+        public void setInc(double inc) {
+            this.inc = inc;
         }
     }
 }

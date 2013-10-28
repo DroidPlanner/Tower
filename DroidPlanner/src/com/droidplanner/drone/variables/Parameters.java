@@ -91,8 +91,9 @@ public class Parameters extends DroneVariable {
         metadataMap = null;
 
         // get metadata type from profile, bail if none
-        final VehicleProfile profile = VehicleProfile.load(myDrone.context, myDrone.type.getVehicleType());
-        if(profile == null || profile.getParameterMetadataType() == null)
+        final String metadataType;
+        final VehicleProfile profile = myDrone.profile.getProfile();
+        if(profile == null || (metadataType = profile.getParameterMetadataType()) == null)
             return;
 
         try {
@@ -100,19 +101,15 @@ public class Parameters extends DroneVariable {
             final InputStream inputStream;
             final File file = new File(DirectoryPath.getDroidPlannerPath() + PARAMETERMETADATA_PATH);
             if(file.exists()) {
-                // load from file
                 inputStream = new FileInputStream(file);
             } else {
-                // load from resource
                 inputStream = myDrone.context.getAssets().open(PARAMETERMETADATA_PATH);
             }
-
-            // parse
-            metadataMap = ParameterMetadataMapReader.open(inputStream, profile.getParameterMetadataType());
+            // load
+            metadataMap = ParameterMetadataMapReader.open(inputStream, metadataType);
 
         } catch (Exception ex) {
             // nop
-
         }
     }
 }

@@ -9,15 +9,17 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
 
 
 public class VehicleProfileReader {
+    // vehicle profile tags
     private static final String TAG_METADATATYPE = "ParameterMetadataType";
+
+    // view profile tags
+    private static final String TAG_MISSIONVIEWPROFILES = "MissionViewProfile";
     private static final String TAG_VIEWPROFILE = "ViewProfile";
     private static final String TAG_DIALOGPROFILE = "DialogProfile";
-    private static final String TAG_MISSIONVIEWPROFILES = "MissionViewProfile";
 
     private static final String ATTR_ID = "id";
     private static final String ATTR_TEXT = "text";
@@ -46,7 +48,7 @@ public class VehicleProfileReader {
 
     private static VehicleProfile parse(XmlPullParser parser) throws XmlPullParserException, IOException {
         final VehicleProfile profile = new VehicleProfile();
-        List<MissionViewProfile> viewProfiles = profile.getMissionViewProfiles();
+        VehicleProfile.ViewProfileBuilder viewProfileBuilder = profile.getViewProfileBuilder();
 
         int eventType = parser.getEventType();
         while (eventType != XmlPullParser.END_DOCUMENT) {
@@ -59,25 +61,20 @@ public class VehicleProfileReader {
                         profile.setParameterMetadataType(parser.getAttributeValue(null, ATTR_TYPE));
 
                     } else if(parserName.equals(TAG_VIEWPROFILE)) {
-                        // add view profile
-                        final MissionViewProfile viewProfile = newViewProfile(parser);
-                        if(viewProfile != null)
-                            viewProfiles.add(viewProfile);
+                        // add view profile if builder available
+                        if(viewProfileBuilder != null)
+                            viewProfileBuilder.addViewProfile(newViewProfile(parser));
 
                     } else if(parserName.equals(TAG_DIALOGPROFILE)) {
-                        // map dialog profile, attach viewProfiles
-                        final MissionDialogProfile dialogProfile = newDialogProfile(parser);
-                        if(dialogProfile != null) {
-                            profile.getProfileMissionDialogs().put(dialogProfile.getResId(), dialogProfile);
-                            viewProfiles = dialogProfile.getMissionViewProfiles();
-                        }
+                        // add dialog profile, make active builder
+                        viewProfileBuilder = profile.addDialogProfile(newDialogProfile(parser));
                     }
                     break;
 
                 case XmlPullParser.END_TAG:
                     if(parserName.equals(TAG_DIALOGPROFILE)) {
-                        // detach viewProfiles
-                        viewProfiles = profile.getMissionViewProfiles();
+                        // make profile active builder
+                        viewProfileBuilder = profile.getViewProfileBuilder();
                     }
                     break;
             }
@@ -86,12 +83,12 @@ public class VehicleProfileReader {
         return profile;
     }
 
-    private static MissionDialogProfile newDialogProfile(XmlPullParser parser) {
+    private static VehicleProfile.MissionDialogProfile newDialogProfile(XmlPullParser parser) {
         String attr = parser.getAttributeValue(null, ATTR_ID);
         if(attr == null)
             return null;
 
-        final MissionDialogProfile dialogProfile = new MissionDialogProfile();
+        final VehicleProfile.MissionDialogProfile dialogProfile = new VehicleProfile.MissionDialogProfile();
 
         // id
         int resId = findResId(attr);
@@ -102,12 +99,12 @@ public class VehicleProfileReader {
         return dialogProfile;
     }
 
-    private static MissionViewProfile newViewProfile(XmlPullParser parser) {
+    private static VehicleProfile.MissionViewProfile newViewProfile(XmlPullParser parser) {
         String attr = parser.getAttributeValue(null, ATTR_ID);
         if(attr == null)
             return null;
 
-        final MissionViewProfile viewProfile = new MissionViewProfile();
+        final VehicleProfile.MissionViewProfile viewProfile = new VehicleProfile.MissionViewProfile();
 
         // id
         int resId = findResId(attr);
