@@ -58,25 +58,25 @@ public class CheckListAdapter extends ListXmlAdapter implements
 			List<ListRow_Interface> xmlRows = new ArrayList<ListRow_Interface>();
 			for (CheckListItem listItem : listDataChild.get(dataHeader)) {
 				if (listItem.getTagName().equalsIgnoreCase("check_item")) {
-					ListRow_CheckBox row = new ListRow_CheckBox(this.inflater,
+					ListRow_CheckBox row = new ListRow_CheckBox(drone, this.inflater,
 							listItem);
 					row.setOnRowItemChangeListener(this);
 					xmlRows.add(row);
 					
 				} else if (listItem.getTagName().equalsIgnoreCase("value_item")) {
-					ListRow_Value row = new ListRow_Value(this.inflater,
+					ListRow_Value row = new ListRow_Value(drone, this.inflater,
 							listItem);
 					row.setOnRowItemChangeListener(this);
 					xmlRows.add(row);
 					
 				} else if (listItem.getTagName().equalsIgnoreCase("radio_item")) {
-					ListRow_Radio row = new ListRow_Radio(this.inflater,
+					ListRow_Radio row = new ListRow_Radio(drone, this.inflater,
 							listItem);
 					row.setOnRowItemChangeListener(this);
 					xmlRows.add(row);
 					
 				} else if (listItem.getTagName().equalsIgnoreCase("select_item")) {
-					ListRow_Select row = new ListRow_Select(this.inflater,listItem);
+					ListRow_Select row = new ListRow_Select(drone, this.inflater,listItem);
 					row.setOnRowItemChangeListener(this);
 					xmlRows.add(row);
 					
@@ -114,7 +114,7 @@ public class CheckListAdapter extends ListXmlAdapter implements
 		int childVerified = getChildrenVerified(groupPosition);
 		int childMandatory = getChildrenMandatory(groupPosition);
 
- 		if(childVerified!=childMandatory)
+ 		if(childVerified<childMandatory)
 			lblChkRatio.setTextColor(0xfff9093d);
 		else
 			lblChkRatio.setTextColor(0xff09f93d);

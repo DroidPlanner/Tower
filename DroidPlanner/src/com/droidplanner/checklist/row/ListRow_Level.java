@@ -7,8 +7,6 @@ import com.droidplanner.drone.Drone;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -92,9 +90,6 @@ public class ListRow_Level extends ListRow {
 		
 		@Override
 		protected void setupViewItems(ViewGroup viewGroup, CheckListItem checkListItem){
-			this.layoutView = (LinearLayout) viewGroup
-					.findViewById(R.id.lst_layout);
-			this.checkBox = (CheckBox) viewGroup.findViewById(R.id.lst_check);
 			this.progressBar = (ProgressBar) viewGroup
 					.findViewById(R.id.lst_level);
 			this.unitView = (TextView) viewGroup.findViewById(R.id.lst_unit);

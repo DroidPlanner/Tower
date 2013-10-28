@@ -48,7 +48,7 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 		// TODO Read System checklist here
 		CheckListXmlParser xml = new CheckListXmlParser(mcontext,
 				R.xml.checklist_default);
-//		CheckListXmlParser xml = new CheckListXmlParser("checklist_ext.xml");
+		// CheckListXmlParser xml = new CheckListXmlParser("checklist_ext.xml");
 
 		xml.setOnXMLParserError(this);
 		listDataHeader = xml.getCategories();
@@ -121,21 +121,47 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 		}
 	}
 
-
 	private void updateSystem(CheckListItem checkListItem) {
-		if(checkListItem.getSys_tag().isEmpty())
+		
+		if (checkListItem.getSys_tag()==null)
 			return;
-		if(checkListItem.getSys_tag().equalsIgnoreCase("SYS_CONNECTION_STATE")){
-			drone.MavClient.toggleConnectionState();
+		
+		if (checkListItem.getSys_tag().equalsIgnoreCase("SYS_CONNECTION_STATE")) {
+			doSysConnect(checkListItem, checkListItem.isSys_activated());
+
+		} else if (checkListItem.getSys_tag().equalsIgnoreCase("SYS_ARM_STATE")) {
+			doSysArm(checkListItem, checkListItem.isSys_activated());
 			
-		}else if(checkListItem.getSys_tag().equalsIgnoreCase("SYS_ARM_STATE")){
-			if (drone.MavClient.isConnected()) {
-				if (!drone.state.isArmed())
-					drone.tts.speak("Arming the vehicle, please standby");
-				MavLinkArm.sendArmMessage(drone, !drone.state.isArmed());
+		} else if (checkListItem.getSys_tag().equalsIgnoreCase("SYS_DEF_ALT")) {
+			doDefAlt(checkListItem);
+			
+		}
+	}
+
+	private void doDefAlt(CheckListItem checkListItem) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void doSysArm(CheckListItem checkListItem, boolean arm) {
+		if (drone.MavClient.isConnected()) {
+			if (checkListItem.isSys_activated() && !drone.state.isArmed()) {
+				drone.tts.speak("Arming the vehicle, please standby");
+				MavLinkArm.sendArmMessage(drone, true);
+			} else {
+				MavLinkArm.sendArmMessage(drone, false);
 			}
 		}
 	}
+
+	private void doSysConnect(CheckListItem checkListItem, boolean connect) {
+		boolean activated = checkListItem.isSys_activated();
+		boolean connected = drone.MavClient.isConnected();
+		if (activated != connected){
+			drone.MavClient.toggleConnectionState();
+		}
+	}
+
 	@Override
 	public void onClick(DialogInterface arg0, int arg1) {
 
@@ -149,57 +175,75 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 
 	@Override
 	public void onRadioGroupUpdate(CheckListItem checkListItem, int checkId) {
-		Toast.makeText(
+		updateSystem(checkListItem);
+/*
+ 		Toast.makeText(
+ 
 				context,
 				checkListItem.getTitle() + " : "
 						+ checkListItem.getOptionLists().get(checkId),
 				Toast.LENGTH_SHORT).show();
-
+*/
 	}
 
 	@Override
 	public void onSelectUpdate(CheckListItem checkListItem, int selectId) {
+		updateSystem(checkListItem);
+/*	
 		Toast.makeText(
 				context,
 				checkListItem.getTitle() + " : "
 						+ checkListItem.getOptionLists().get(selectId),
 				Toast.LENGTH_SHORT).show();
+*/
 
 	}
 
 	@Override
 	public void onCheckBoxUpdate(CheckListItem checkListItem, boolean isChecked) {
+		updateSystem(checkListItem);
+		listAdapter.notifyDataSetChanged();
+
+/*
 		Toast.makeText(
 				context,
 				checkListItem.getTitle() + " : " + checkListItem.getTitle()
 						+ (isChecked ? " checked" : " unchecked"),
 				Toast.LENGTH_SHORT).show();
 
+*/
 	}
 
 	@Override
 	public void onSwitchUpdate(CheckListItem checkListItem, boolean isSwitched) {
 		updateSystem(checkListItem);
+		listAdapter.notifyDataSetChanged();
+/*
 		Toast.makeText(
 				context,
 				checkListItem.getTitle() + " : " + checkListItem.getTitle()
 						+ (isSwitched ? " switched ON" : " switched OFF"),
 				Toast.LENGTH_SHORT).show();
-		
+*/
 	}
 
 	@Override
 	public void onToggleUpdate(CheckListItem checkListItem, boolean isToggled) {
+		updateSystem(checkListItem);
+		listAdapter.notifyDataSetChanged();
+/*
 		Toast.makeText(
 				context,
 				checkListItem.getTitle() + " : " + checkListItem.getTitle()
 						+ (isToggled ? " toggled ON" : " toggled OFF"),
 				Toast.LENGTH_SHORT).show();
-
+*/
 	}
 
 	@Override
 	public void onValueUpdate(CheckListItem checkListItem, String newValue) {
+		updateSystem(checkListItem);
+//		listAdapter.notifyDataSetChanged();
 		// TODO Auto-generated method stub
 
 	}
