@@ -1,19 +1,16 @@
-package com.droidplanner.activitys;
+package com.droidplanner.activitys.helpers;
 
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.droidplanner.DroidPlannerApp.ConnectionStateListner;
-import com.droidplanner.activitys.helpers.InfoMenu;
-import com.droidplanner.activitys.helpers.ScreenOrientation;
-import com.droidplanner.activitys.helpers.SuperActivity;
 
-public abstract class NewSuperUI extends SuperActivity implements ConnectionStateListner {
+public abstract class SuperUI extends SuperActivity implements ConnectionStateListner {
 	private ScreenOrientation screenOrientation = new ScreenOrientation(this);
 	private InfoMenu infoMenu;
 	
-	public NewSuperUI() {
+	public SuperUI() {
 		super();        
 	}
 

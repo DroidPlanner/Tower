@@ -53,16 +53,15 @@ public class MarkerWithText {
 	}
 
 
-	public static Bitmap getMarkerWithTextAndDetail(int color, String text, String detail, Context context) {
-		return drawTextAndDetailToBitmap(context, R.drawable.ic_marker_white, color, text, detail);
+	public static Bitmap getMarkerWithTextAndDetail(int gResId, String text, String detail, Context context) {
+		return drawTextAndDetailToBitmap(context, gResId, text, detail);
 	}
 
 	/**
 	 * Based on:
 	 * http://stackoverflow.com/questions/18335642/how-to-draw-text-in-default-marker-of-google-map-v2?lq=1
 	 */
-	private static Bitmap drawTextAndDetailToBitmap(Context gContext, int gResId,
-	                                                int color, String gText, String gDetail) {
+	private static Bitmap drawTextAndDetailToBitmap(Context gContext, int gResId, String gText, String gDetail) {
 		Resources resources = gContext.getResources();
 		float scale = resources.getDisplayMetrics().density;
 		Bitmap bitmap = BitmapFactory.decodeResource(resources, gResId);
@@ -75,7 +74,6 @@ public class MarkerWithText {
 
 		// copy bitmap to canvas, replace white with colour
 		Paint paint = new Paint();
-		paint.setColorFilter(new LightingColorFilter(0x000000, color));
 		Canvas canvas = new Canvas(bitmap);
 		canvas.drawBitmap(bitmap, 0, 0, paint);
 
@@ -83,7 +81,7 @@ public class MarkerWithText {
 		paint.setColor(Color.BLACK);
 		paint.setTextSize((int) (15 * scale));
 		paint.setFakeBoldText(true);
-		paint.setShadowLayer(1f, 0f, 1f, Color.WHITE);
+		paint.setShadowLayer(1f, 0f, 1f, Color.TRANSPARENT);
 
 		Rect bounds = new Rect();
 		paint.getTextBounds(gText, 0, gText.length(), bounds);
@@ -92,7 +90,7 @@ public class MarkerWithText {
 		// paint and bounds for details
 		Paint dpaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		dpaint.setColor(Color.BLACK);
-		dpaint.setTextSize((int) (14 * scale));
+		dpaint.setTextSize((int) (10 * scale));
 		paint.setFakeBoldText(true);
 		dpaint.setShadowLayer(1f, 0f, 1f, Color.WHITE);
 
@@ -100,11 +98,6 @@ public class MarkerWithText {
 		dpaint.getTextBounds(gDetail, 0, gDetail.length(), dbounds);
 		dbounds.offsetTo(0, bounds.bottom + 2);
 
-		// paint and bounds for background
-		Paint bpaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		bpaint.setColor(Color.WHITE);
-		bpaint.setAlpha(160);
-		bpaint.setStyle(Paint.Style.FILL);
 
 		// include text and detail bounds
 		Rect brect = new Rect(bounds);
@@ -116,9 +109,6 @@ public class MarkerWithText {
 		brect.offsetTo(x, y - (bounds.height()));
 		brect.set(brect.left - RECT_PADDING, brect.top - RECT_PADDING, brect.right + RECT_PADDING, brect.bottom + RECT_PADDING);
 
-		// draw background w/ rounded corners
-		RectF brectF = new RectF(brect);
-		canvas.drawRoundRect(brectF, 12, 12, bpaint);
 
 		// draw text
 		x = (bitmap.getWidth() - bounds.width()) / 2;

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.droidplanner.R;
+import com.droidplanner.activitys.helpers.SuperUI;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.fragments.MissionControlFragment.OnMissionControlInteraction;
 import com.droidplanner.fragments.RCFragment;
@@ -12,7 +13,7 @@ import com.droidplanner.fragments.helpers.OnMapInteractionListener;
 import com.droidplanner.polygon.PolygonPoint;
 import com.google.android.gms.maps.model.LatLng;
 
-public class NewUIActivity extends NewSuperUI implements
+public class FlightActivity extends SuperUI implements
 		OnMapInteractionListener, OnMissionControlInteraction {
 	private FragmentManager fragmentManager;
 	private RCFragment rcFragment;
@@ -62,6 +63,12 @@ public class NewUIActivity extends NewSuperUI implements
 	}
 
 	@Override
+	public boolean onMarkerClick(waypoint wp) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
 	public void onJoystickSelected() {
 		toggleRCFragment();		
 	}
@@ -69,7 +76,7 @@ public class NewUIActivity extends NewSuperUI implements
 	@Override
 	public void onPlanningSelected() {		
 		Intent navigationIntent;
-		navigationIntent = new Intent(this, NewEditorActivity.class);
+		navigationIntent = new Intent(this, EditorActivity.class);
 		startActivity(navigationIntent);
 	}
 

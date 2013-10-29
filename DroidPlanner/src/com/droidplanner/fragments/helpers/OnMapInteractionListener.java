@@ -17,4 +17,6 @@ public interface OnMapInteractionListener {
 	public void onMovePolygonPoint(PolygonPoint source, LatLng newCoord);
 
 	public void onMapClick(LatLng point);
+
+	public boolean onMarkerClick(waypoint wp);
 }
