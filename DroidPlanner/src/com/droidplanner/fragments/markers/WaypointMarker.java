@@ -6,7 +6,7 @@ import android.content.Context;
 
 import com.MAVLink.Messages.enums.MAV_ROI;
 import com.droidplanner.R;
-import com.droidplanner.drone.variables.waypoint;
+import com.droidplanner.drone.variables.mission.waypoints.GenericWaypoint;
 import com.droidplanner.fragments.markers.helpers.MarkerWithText;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -15,18 +15,18 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class WaypointMarker {
 
-	public static MarkerOptions build(waypoint wp, Context context) {
+	public static MarkerOptions build(GenericWaypoint wp, Context context) {
 		return new MarkerOptions().position(wp.getCoord())
 				.visible(wp.getCmd().showOnMap()).draggable(true)
 				.icon(getIcon(wp, context)).anchor(0.5f, 0.5f);
 	}
 
-	public static void update(Marker marker, waypoint wp, Context context) {
+	public static void update(Marker marker, GenericWaypoint wp, Context context) {
 		marker.setPosition(wp.getCoord());
 		marker.setIcon(getIcon(wp, context));
 	}
 
-	private static BitmapDescriptor getIcon(waypoint wp, Context context) {
+	private static BitmapDescriptor getIcon(GenericWaypoint wp, Context context) {
 		switch (wp.getCmd()) {
 		default:
 		case CMD_NAV_WAYPOINT:
@@ -76,7 +76,7 @@ public class WaypointMarker {
 
 	}
 
-	private static String getRoiDetail(waypoint wp, Context context) {
+	private static String getRoiDetail(GenericWaypoint wp, Context context) {
 		if (wp.getParam1() == MAV_ROI.MAV_ROI_WPNEXT)
 			return context.getString(R.string.next);
 		else if (wp.getParam1() == MAV_ROI.MAV_ROI_TARGET)

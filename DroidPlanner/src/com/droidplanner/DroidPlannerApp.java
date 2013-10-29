@@ -25,7 +25,7 @@ public class DroidPlannerApp extends Application implements
 	private TTS tts;
 
 	public interface OnWaypointChangedListner {
-		public void onWaypointsUpdate();
+		public void onMissionUpdate();
 	}
 
 	public interface ConnectionStateListner {

@@ -60,7 +60,7 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner {
 
 	@Override
 	public void onDistanceToHomeHasChanged() {
-		home.setTitle(drone.mission.getDroneDistanceToHome().toString());
+		home.setTitle(drone.home.getDroneDistanceToHome().toString());
 	}
 
 	public void setupModeSpinner(Context context) {

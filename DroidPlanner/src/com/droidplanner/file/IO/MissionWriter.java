@@ -5,22 +5,22 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import com.droidplanner.drone.variables.waypoint;
+import com.droidplanner.drone.variables.mission.waypoints.GenericWaypoint;
 import com.droidplanner.file.FileManager;
 import com.droidplanner.file.FileStream;
 
 public class MissionWriter {
-	private waypoint home;
-	private List<waypoint> waypoints;
+	private GenericWaypoint home;
+	private List<GenericWaypoint> waypoints;
 	private String name = "";
 
-	public MissionWriter(waypoint home, List<waypoint> waypoints, String name) {
+	public MissionWriter(GenericWaypoint home, List<GenericWaypoint> waypoints, String name) {
 		this.home = home;
 		this.waypoints = waypoints;
 		this.name = name;
 	}
 
-	public MissionWriter(waypoint home, List<waypoint> waypoints) {
+	public MissionWriter(GenericWaypoint home, List<GenericWaypoint> waypoints) {
 		this(home, waypoints, "waypoints");
 	}
 
@@ -48,15 +48,21 @@ public class MissionWriter {
 	}
 
 	private void writeHomeLine(FileOutputStream out) throws IOException {
+		throw new IllegalArgumentException("NOT implemented"); //TODO implement this
+		/*
 		out.write(String.format(Locale.ENGLISH,
 				"0\t1\t0\t16\t0\t0\t0\t0\t%f\t%f\t%f\t1\n",
 				home.getCoord().latitude, home.getCoord().longitude,
 				home.getHeight()).getBytes());
+				*/
 	}
 
 	private void writeWaypointsLines(FileOutputStream out) throws IOException {
+
+		throw new IllegalArgumentException("NOT implemented");	//TODO implement this
+		/*
 		for (int i = 0; i < waypoints.size(); i++) {
-			waypoint wp = waypoints.get(i);
+			Waypoint wp = waypoints.get(i);
 			out.write(String.format(Locale.ENGLISH,
 					"%d\t0\t%d\t%d\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%d\n", i + 1,
 					wp.getFrame(), wp.getCmd().getType(), wp.getParam1(),
@@ -64,5 +70,6 @@ public class MissionWriter {
 					wp.getCoord().latitude, wp.getCoord().longitude,
 					wp.getHeight(), wp.getAutoContinue()).getBytes());
 		}
+		*/		
 	}
 }

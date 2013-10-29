@@ -24,8 +24,7 @@ public class HomeMarker {
 	public static void update(Marker marker, Home home) {
 		marker.setVisible(home.isValid());
 		marker.setPosition(home.getCoord());
-		marker.setSnippet(String.format(Locale.ENGLISH, "%s %.1fm", home
-				.getCmd().getName(), home.getHeight()));
+		marker.setSnippet("Home "+ home.getHeight());
 	}
 
 }

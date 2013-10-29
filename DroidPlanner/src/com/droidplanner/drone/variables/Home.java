@@ -2,24 +2,24 @@ package com.droidplanner.drone.variables;
 
 import android.content.Context;
 
+import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.DroneVariable;
 import com.droidplanner.fragments.markers.HomeMarker;
+import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
+import com.droidplanner.helpers.geoTools.GeoTools;
+import com.droidplanner.helpers.units.Length;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class Home extends waypoint {
-	boolean isValid = false;
+public class Home extends DroneVariable implements MarkerSource {
+	private LatLng coordinate;
+	private Length altitude = new Length(0);
 	
-	public Home() {
-		super(0.0, 0.0, 0.0);
-		setCurrent((byte) 1); // TODO Use correct parameter for home
+	public Home(Drone drone) {
+		super(drone);
 	}
 	
-	public Home(Double Lat, Double Lng, Double h) {
-		super(Lat, Lng, h);
-		isValid = true;
-		setCurrent((byte) 1); // TODO Use correct parameter for home
-	}
-
 	@Override
 	public MarkerOptions build(Context context) {
 		return HomeMarker.build(this);
@@ -30,13 +30,29 @@ public class Home extends waypoint {
 		HomeMarker.update(marker, this);
 	}
 
-	public void updateData(waypoint wp) {
-		this.missionItem = wp.missionItem;
-		isValid = true;
-	}
 
 	public boolean isValid() {
-		return isValid;
+		return (coordinate!=null);
+	}
+	
+	public Home getHome() {
+		return this;
+	}
+		
+	public Length getDroneDistanceToHome() {
+		if (isValid()) {
+			return new Length(GeoTools.getDistance(coordinate, myDrone.GPS.getPosition()));			
+		}else{
+			return new Length(0); // TODO fix this
+		}
+	}
+
+	public LatLng getCoord() {
+		return coordinate;
+	}
+
+	public Length getHeight() {
+		return altitude;
 	}
 
 }

@@ -6,10 +6,10 @@ import com.MAVLink.Messages.ardupilotmega.msg_set_mode;
 import com.MAVLink.Messages.enums.MAV_CMD;
 import com.MAVLink.Messages.enums.MAV_FRAME;
 import com.droidplanner.drone.Drone;
-import com.droidplanner.drone.variables.waypoint;
 
 public class MavLinkModes {
-	public static void setGuidedMode(Drone drone, waypoint wp) {
+	public static void setGuidedMode(Drone drone, double latitude,
+			double longitude, double d) {
 		msg_mission_item msg = new msg_mission_item();
 		msg.seq = 0;
 		msg.current = 2; // TODO use guided mode enum
@@ -19,9 +19,9 @@ public class MavLinkModes {
 		msg.param2 = 0; // TODO use correct parameter
 		msg.param3 = 0; // TODO use correct parameter
 		msg.param4 = 0; // TODO use correct parameter
-		msg.x = (float) wp.getCoord().latitude;
-		msg.y = (float) wp.getCoord().longitude;
-		msg.z = wp.getHeight().floatValue();
+		msg.x = (float) latitude;
+		msg.y = (float) longitude;
+		msg.z = (float) d;
 		msg.autocontinue = 1; // TODO use correct parameter
 		msg.target_system = 1;
 		msg.target_component = 1;

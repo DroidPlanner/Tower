@@ -10,17 +10,17 @@ import java.util.List;
 import com.MAVLink.Messages.ApmCommands;
 import com.droidplanner.dialogs.openfile.OpenFileDialog.FileReader;
 import com.droidplanner.drone.variables.Home;
-import com.droidplanner.drone.variables.waypoint;
+import com.droidplanner.drone.variables.mission.waypoints.GenericWaypoint;
 import com.droidplanner.file.DirectoryPath;
 import com.droidplanner.file.FileList;
 import com.droidplanner.file.FileManager;
 
 public class MissionReader implements FileReader {
 	private Home home;
-	private List<waypoint> waypoints;
+	private List<GenericWaypoint> waypoints;
 
 	public MissionReader() {
-		this.waypoints = new ArrayList<waypoint>();
+		this.waypoints = new ArrayList<GenericWaypoint>();
 	}
 
 	public boolean openMission(String file) {
@@ -53,7 +53,7 @@ public class MissionReader implements FileReader {
 		return home;
 	}
 
-	public List<waypoint> getWaypoints() {
+	public List<GenericWaypoint> getWaypoints() {
 		return waypoints;
 	}
 
@@ -61,8 +61,10 @@ public class MissionReader implements FileReader {
 		String line;
 		waypoints.clear();
 		while ((line = reader.readLine()) != null) {
+			throw new IllegalArgumentException("NOT implemented"); //TODO implement this
+			/*
 			String[] RowData = line.split("\t");
-			waypoint wp = new waypoint(Double.valueOf(RowData[8]),
+			Waypoint wp = new Waypoint(Double.valueOf(RowData[8]),
 					Double.valueOf(RowData[9]), Double.valueOf(RowData[10]));
 			wp.setNumber(Integer.valueOf(RowData[0]));
 			wp.setFrame(Integer.valueOf(RowData[2]));
@@ -72,11 +74,14 @@ public class MissionReader implements FileReader {
 					Float.valueOf(RowData[7]));
 			wp.setAutoContinue(Integer.valueOf(RowData[11]));
 			waypoints.add(wp);
+			*/
 		}
 
 	}
 
 	private void parseHomeLine(BufferedReader reader) throws IOException {
+		throw new IllegalArgumentException("NOT implemented"); //TODO implement this
+		/*
 		String[] RowData = reader.readLine().split("\t");
 		home = new Home(Double.valueOf(RowData[8]), Double.valueOf(RowData[9]),
 				Double.valueOf(RowData[10]));
@@ -87,6 +92,7 @@ public class MissionReader implements FileReader {
 				Float.valueOf(RowData[5]), Float.valueOf(RowData[6]),
 				Float.valueOf(RowData[7]));
 		home.setAutoContinue(Integer.valueOf(RowData[11]));
+		*/
 	}
 
 	private static boolean isWaypointFile(BufferedReader reader)

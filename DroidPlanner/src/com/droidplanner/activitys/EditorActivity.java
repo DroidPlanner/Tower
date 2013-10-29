@@ -11,8 +11,8 @@ import android.view.MenuItem;
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperUI;
 import com.droidplanner.dialogs.mission.DialogMissionFactory;
-import com.droidplanner.drone.variables.Mission;
-import com.droidplanner.drone.variables.waypoint;
+import com.droidplanner.drone.variables.mission.Mission;
+import com.droidplanner.drone.variables.mission.waypoints.GenericWaypoint;
 import com.droidplanner.fragments.EditorToolsFragment;
 import com.droidplanner.fragments.EditorToolsFragment.EditorTools;
 import com.droidplanner.fragments.EditorToolsFragment.OnEditorToolSelected;
@@ -49,14 +49,14 @@ public class EditorActivity extends SuperUI implements
 
 		mission = drone.mission;
 		gestureMapFragment.setOnPathFinishedListner(this);
-		mission.onWaypointsUpdate();
+		mission.onMissionUpdate();
 
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		mission.removeOnWaypointsChangedListner(planningMapFragment);
+		mission.removeOnMissionUpdateListner(planningMapFragment);
 	}
 
 	@Override
@@ -70,7 +70,7 @@ public class EditorActivity extends SuperUI implements
 	}
 
 	@Override
-	public boolean onMarkerClick(waypoint wp) {
+	public boolean onMarkerClick(GenericWaypoint wp) {
 		DialogMissionFactory.getDialog(wp,
 				this, mission);
 		return true;
@@ -89,13 +89,13 @@ public class EditorActivity extends SuperUI implements
 	}
 
 	@Override
-	public void onMoveWaypoint(waypoint waypoint, LatLng latLng) {
+	public void onMoveWaypoint(GenericWaypoint waypoint, LatLng latLng) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void onMovingWaypoint(waypoint source, LatLng latLng) {
+	public void onMovingWaypoint(GenericWaypoint source, LatLng latLng) {
 		// TODO Auto-generated method stub
 
 	}
@@ -110,7 +110,7 @@ public class EditorActivity extends SuperUI implements
 	public void onMapClick(LatLng point) {
 		switch (editorToolsFragment.getTool()) {
 		case MARKER:
-			mission.addWaypoint(point);
+			mission.addWaypoint(point,mission.getDefaultAlt());
 			break;
 		case DRAW:
 			break;

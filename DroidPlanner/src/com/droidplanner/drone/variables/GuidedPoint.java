@@ -54,14 +54,10 @@ public class GuidedPoint extends DroneVariable implements MarkerSource {
 
 	public void setGuidedMode() {
 		Double altitude = myDrone.mission.getDefaultAlt();
-		setGuidedMode(new waypoint(getCoord(), altitude));
+		MavLinkModes.setGuidedMode(myDrone, coord.latitude,coord.longitude,myDrone.mission.getDefaultAlt());
 		Toast.makeText(myDrone.context, "Guided Mode (" + altitude + "m)",
 				Toast.LENGTH_SHORT).show();
-	}
-
-	public void setGuidedMode(waypoint waypoint) {
-		MavLinkModes.setGuidedMode(myDrone, waypoint);
-	}
+	}	
 
 	public void invalidateCoord() {
 		coord = null;

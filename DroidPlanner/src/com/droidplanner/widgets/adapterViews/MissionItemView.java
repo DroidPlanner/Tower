@@ -10,12 +10,11 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.droidplanner.R;
-import com.droidplanner.drone.variables.waypoint;
 
-public class MissionItem extends ArrayAdapter<waypoint> {
+public class MissionItemView extends ArrayAdapter<com.droidplanner.drone.variables.mission.MissionItem> {
 
 	private Context context;
-	private List<waypoint> waypoints;
+	private List<com.droidplanner.drone.variables.mission.MissionItem> waypoints;
 
 
 	private TextView nameView;
@@ -26,13 +25,13 @@ public class MissionItem extends ArrayAdapter<waypoint> {
 
 
 
-	public MissionItem(Context context, int resource, List<waypoint> objects) {
-		super(context, resource, objects);
-		this.waypoints = objects;
+	public MissionItemView(Context context, int resource, List<com.droidplanner.drone.variables.mission.MissionItem> list) {
+		super(context, resource, list);
+		this.waypoints = list;
 		this.context = context;
 	}
 
-	public MissionItem(Context context, int resource) {
+	public MissionItemView(Context context, int resource) {
 		super(context, resource);
 		this.context = context;
 	}
@@ -43,7 +42,7 @@ public class MissionItem extends ArrayAdapter<waypoint> {
 	}
 
 	private View createRowViews(ViewGroup root, int position) {
-		waypoint waypoint = waypoints.get(position);
+		com.droidplanner.drone.variables.mission.MissionItem waypoint = waypoints.get(position);
 		View view = createLayoutFromResource();
 		findViewObjects(view);		
 		setupViewsText(waypoint);
@@ -66,7 +65,7 @@ public class MissionItem extends ArrayAdapter<waypoint> {
 		distanceView = (TextView) view.findViewById(R.id.rowDistanceView);
 */
 	}
-	private void setupViewsText(waypoint waypoint) {
+	private void setupViewsText(com.droidplanner.drone.variables.mission.MissionItem waypoint) {
 		/*
 		if (waypoint.getCmd().showOnMap()) {
 			altitudeView.setText(String.format(Locale.ENGLISH, "%3.0fm", waypoint.getHeight()));
@@ -74,7 +73,10 @@ public class MissionItem extends ArrayAdapter<waypoint> {
 			altitudeView.setText("-");
 		}
 */		
-		nameView.setText(String.format("%3d", waypoint.getNumber()));
+		//TODO fix the numbering
+		//nameView.setText(String.format("%3d", waypoint.getNumber()));	
+		
+		
 	/*	typeView.setText(waypoint.getCmd().getName());
 		descView.setText(setupDescription(waypoint));
 

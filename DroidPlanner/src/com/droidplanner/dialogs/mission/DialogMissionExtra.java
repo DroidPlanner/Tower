@@ -7,7 +7,7 @@ import android.widget.CheckBox;
 import android.widget.FrameLayout;
 
 import com.droidplanner.R;
-import com.droidplanner.drone.variables.waypoint;
+import com.droidplanner.drone.variables.mission.waypoints.GenericWaypoint;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
 
@@ -18,7 +18,7 @@ public class DialogMissionExtra extends DialogMission implements OnTextSeekBarCh
 	SeekBarWithText loiterTimeSeekBar;
 	FrameLayout optionLayout;
 	CheckBox loiterCCW;
-	public DialogMissionExtra(waypoint wp) {
+	public DialogMissionExtra(GenericWaypoint wp) {
 		this.wp = wp;
 	}
 

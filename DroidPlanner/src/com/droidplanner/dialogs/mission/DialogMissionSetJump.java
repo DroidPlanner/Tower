@@ -11,7 +11,7 @@ import android.widget.Spinner;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
 import com.droidplanner.dialogs.listener.helpers.setJumpItemSelectedListener;
-import com.droidplanner.drone.variables.waypoint;
+import com.droidplanner.drone.variables.mission.waypoints.GenericWaypoint;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
 
@@ -22,7 +22,7 @@ public class DialogMissionSetJump extends DialogMission implements
 	private Spinner jumpToSpinner;
 	private ArrayAdapter<String> jumpToAdapter;
 	private ArrayList<String> jumpToList;
-	private List<waypoint> wplist;
+	private List<GenericWaypoint> wplist;
 	private DroidPlannerApp app;
 
 	@Override

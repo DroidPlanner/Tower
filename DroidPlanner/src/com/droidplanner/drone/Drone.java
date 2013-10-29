@@ -15,13 +15,15 @@ import com.droidplanner.drone.variables.Battery;
 import com.droidplanner.drone.variables.Calibration;
 import com.droidplanner.drone.variables.GPS;
 import com.droidplanner.drone.variables.GuidedPoint;
-import com.droidplanner.drone.variables.Mission;
+import com.droidplanner.drone.variables.Home;
+import com.droidplanner.drone.variables.MissionStats;
 import com.droidplanner.drone.variables.Orientation;
 import com.droidplanner.drone.variables.Parameters;
 import com.droidplanner.drone.variables.Speed;
 import com.droidplanner.drone.variables.State;
 import com.droidplanner.drone.variables.Type;
-import com.droidplanner.drone.variables.WaypointMananger;
+import com.droidplanner.drone.variables.mission.Mission;
+import com.droidplanner.drone.variables.mission.WaypointMananger;
 import com.droidplanner.helpers.TTS;
 import com.droidplanner.service.MAVLinkClient;
 
@@ -31,7 +33,9 @@ public class Drone {
 	public Speed speed = new Speed(this);
 	public State state = new State(this);
 	public Battery battery = new Battery(this);
+	public Home home = new Home(this);
 	public Mission mission = new Mission(this);
+	public MissionStats missionStats = new MissionStats(this);
 	public Altitude altitude = new Altitude(this);
 	public Orientation orientation = new Orientation(this);
 	public GuidedPoint guidedPoint = new GuidedPoint(this);
@@ -94,7 +98,7 @@ public class Drone {
 
 	public void setDisttowpAndSpeedAltErrors(double disttowp, double alt_error,
 			double aspd_error) {
-		mission.setDistanceToWp(disttowp);
+		missionStats.setDistanceToWp(disttowp);
 		altitude.setAltitudeError(alt_error);
 		speed.setSpeedError(aspd_error);
 		onOrientationUpdate();

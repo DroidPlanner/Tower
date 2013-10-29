@@ -3,11 +3,11 @@ package com.droidplanner.dialogs.mission;
 import android.content.Context;
 
 import com.droidplanner.DroidPlannerApp.OnWaypointChangedListner;
-import com.droidplanner.drone.variables.waypoint;
+import com.droidplanner.drone.variables.mission.waypoints.GenericWaypoint;
 
 public class DialogMissionFactory {
 
-	public static void getDialog(waypoint wp, Context context,
+	public static void getDialog(GenericWaypoint wp, Context context,
 			OnWaypointChangedListner listner) {
 		DialogMission dialog;
 		switch (wp.getCmd()) {

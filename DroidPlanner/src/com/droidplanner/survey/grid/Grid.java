@@ -3,7 +3,7 @@ package com.droidplanner.survey.grid;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.droidplanner.drone.variables.waypoint;
+import com.droidplanner.drone.variables.mission.waypoints.GenericWaypoint;
 import com.droidplanner.helpers.geoTools.PolylineTools;
 import com.droidplanner.helpers.units.Length;
 import com.google.android.gms.maps.model.LatLng;
@@ -18,10 +18,10 @@ public class Grid {
 		this.cameraLocations = cameraLocations;
 	}
 
-	public ArrayList<waypoint> getWaypoints() {
-		ArrayList<waypoint> list = new ArrayList<waypoint>();
+	public ArrayList<GenericWaypoint> getWaypoints() {
+		ArrayList<GenericWaypoint> list = new ArrayList<GenericWaypoint>();
 		for (LatLng point : gridPoints) {
-			list.add(new waypoint(point, altitude));
+			list.add(new GenericWaypoint(point, altitude));
 		}
 		return list;
 	}

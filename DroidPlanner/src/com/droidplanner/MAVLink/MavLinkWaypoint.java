@@ -7,7 +7,6 @@ import com.MAVLink.Messages.ardupilotmega.msg_mission_request_list;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_set_current;
 import com.MAVLink.Messages.enums.MAV_MISSION_RESULT;
 import com.droidplanner.drone.Drone;
-import com.droidplanner.drone.variables.waypoint;
 
 public class MavLinkWaypoint {
 
@@ -33,13 +32,6 @@ public class MavLinkWaypoint {
 		msg.target_system = 1;
 		msg.target_component = 1;
 		drone.MavClient.sendMavPacket(msg.pack());
-	}
-
-	public static void sendWaypoint(Drone drone, int index, waypoint waypoint) {
-		// TODO use correct parameter for HOME
-		waypoint.setCurrent((byte) ((index == 0) ? 1 : 0));
-		waypoint.setTarget(1, 1);
-		drone.MavClient.sendMavPacket(waypoint.pack());
 	}
 
 	public static void sendWaypointCount(Drone drone, int count) {

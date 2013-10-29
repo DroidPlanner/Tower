@@ -12,16 +12,16 @@ import android.widget.AdapterView.OnItemClickListener;
 import com.droidplanner.DroidPlannerApp.OnWaypointChangedListner;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
-import com.droidplanner.drone.variables.Mission;
-import com.droidplanner.drone.variables.waypoint;
+import com.droidplanner.drone.variables.mission.Mission;
+import com.droidplanner.drone.variables.mission.waypoints.GenericWaypoint;
 import com.droidplanner.fragments.helpers.OnMapInteractionListener;
-import com.droidplanner.widgets.adapterViews.MissionItem;
+import com.droidplanner.widgets.adapterViews.MissionItemView;
 import com.mobeta.android.dslv.HorizontalListView;
 
 public class MissionFragment extends Fragment implements  OnWaypointChangedListner, OnItemClickListener{
 	public HorizontalListView list;
 	private Mission mission;
-	private MissionItem adapter;
+	private MissionItemView adapter;
 	private OnMapInteractionListener mListner;
 
 	@Override
@@ -34,13 +34,13 @@ public class MissionFragment extends Fragment implements  OnWaypointChangedListn
 		//list.setRemoveListener(this);
 		//list.setDragScrollProfile(this);
 		
-		adapter = new MissionItem(this.getActivity(), android.R.layout.simple_list_item_1);		
+		adapter = new MissionItemView(this.getActivity(), android.R.layout.simple_list_item_1);		
 		list.setAdapter(adapter);
 		
 
 		mission = ((DroidPlannerApp) getActivity().getApplication()).drone.mission;
-		mission.addOnWaypointsChangedListner(this);
-		adapter = new MissionItem(this.getActivity(), android.R.layout.simple_list_item_1,mission.getWaypoints());
+		mission.addOnMissionUpdateListner(this);
+		adapter = new MissionItemView(this.getActivity(), android.R.layout.simple_list_item_1,mission.getItems());
 		list.setAdapter(adapter);
 		list.setOnItemClickListener(this);
 
@@ -56,11 +56,10 @@ public class MissionFragment extends Fragment implements  OnWaypointChangedListn
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		mission.removeOnWaypointsChangedListner(this);
+		mission.removeOnMissionUpdateListner(this);
 	}
 
 	public void update() {
-		waypoint.updateDistancesFromPrevPoint(mission.getWaypoints());
 		adapter.notifyDataSetChanged();
 	}
 	
@@ -73,13 +72,13 @@ public class MissionFragment extends Fragment implements  OnWaypointChangedListn
 	}*/
 
 	@Override
-	public void onWaypointsUpdate() {
+	public void onMissionUpdate() {
 		update();		
 	}
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		mListner.onMarkerClick(((waypoint) parent.getItemAtPosition(position)));		
+		mListner.onMarkerClick(((GenericWaypoint) parent.getItemAtPosition(position)));		
 	}
 
 }

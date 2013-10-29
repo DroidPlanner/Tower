@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperUI;
-import com.droidplanner.drone.variables.waypoint;
+import com.droidplanner.drone.variables.mission.waypoints.GenericWaypoint;
 import com.droidplanner.fragments.MissionControlFragment.OnMissionControlInteraction;
 import com.droidplanner.fragments.RCFragment;
 import com.droidplanner.fragments.helpers.OnMapInteractionListener;
@@ -39,7 +39,7 @@ public class FlightActivity extends SuperUI implements
 	}
 
 	@Override
-	public void onMoveWaypoint(waypoint waypoint, LatLng latLng) {
+	public void onMoveWaypoint(GenericWaypoint waypoint, LatLng latLng) {
 		// TODO Auto-generated method stub
 
 	}
@@ -57,7 +57,7 @@ public class FlightActivity extends SuperUI implements
 	}
 
 	@Override
-	public boolean onMarkerClick(waypoint wp) {
+	public boolean onMarkerClick(GenericWaypoint wp) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -136,7 +136,7 @@ public class FlightActivity extends SuperUI implements
 	}
 
 	@Override
-	public void onMovingWaypoint(waypoint source, LatLng latLng) {
+	public void onMovingWaypoint(GenericWaypoint source, LatLng latLng) {
 		// TODO Auto-generated method stub
 		
 	}
