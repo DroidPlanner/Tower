@@ -107,6 +107,16 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activitys.ConfigurationActivity"
+            android:label="@string/configuration"
+            android:parentActivityName=".activitys.FlightActivity" >
+
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activitys.FlightActivity" />
+        </activity>
     </application>
 
 </manifest>
