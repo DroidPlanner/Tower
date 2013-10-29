@@ -9,6 +9,7 @@ import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
 import com.droidplanner.R;
+import com.droidplanner.activitys.helpers.SuperUI;
 import com.droidplanner.dialogs.mission.DialogMissionFactory;
 import com.droidplanner.drone.variables.Mission;
 import com.droidplanner.drone.variables.waypoint;
@@ -23,7 +24,7 @@ import com.droidplanner.fragments.helpers.OnMapInteractionListener;
 import com.droidplanner.polygon.PolygonPoint;
 import com.google.android.gms.maps.model.LatLng;
 
-public class NewEditorActivity extends NewSuperUI implements
+public class EditorActivity extends SuperUI implements
 		OnMapInteractionListener, OnPathFinishedListner, OnEditorToolSelected {
 
 	private PlanningMapFragment planningMapFragment;
