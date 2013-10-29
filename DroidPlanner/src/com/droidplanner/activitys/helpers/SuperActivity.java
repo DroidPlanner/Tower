@@ -20,8 +20,6 @@ import com.droidplanner.fragments.helpers.OfflineMapFragment;
 public abstract class SuperActivity extends Activity implements
 		 OnAltitudeChangedListner, OnSystemArmListener{
 
-	public abstract int getNavigationItem();
-
 	public DroidPlannerApp app;
 	public Drone drone;
 	private MenuItem armButton;

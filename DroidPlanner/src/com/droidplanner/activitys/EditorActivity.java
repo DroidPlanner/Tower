@@ -33,11 +33,6 @@ public class EditorActivity extends SuperUI implements
 	private EditorToolsFragment editorToolsFragment;
 
 	@Override
-	public int getNavigationItem() {
-		return 7;
-	}
-
-	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_new_editor);
