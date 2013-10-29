@@ -39,20 +39,19 @@ public class VehicleProfileReader {
     private static final String ATTR_MAX_ALTITUDE = "maxAltitude";
 
 
-    public static VehicleProfile open(InputStream inputStream) throws XmlPullParserException, IOException {
+    public static void open(InputStream inputStream, VehicleProfile profile) throws XmlPullParserException, IOException {
         try {
             XmlPullParser parser = Xml.newPullParser();
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
             parser.setInput(inputStream, null);
-            return parse(parser);
+            parse(parser, profile);
 
         } finally {
             try { inputStream.close(); } catch (IOException e) { /*nop*/ }
         }
     }
 
-    private static VehicleProfile parse(XmlPullParser parser) throws XmlPullParserException, IOException {
-        final VehicleProfile profile = new VehicleProfile();
+    private static void parse(XmlPullParser parser, VehicleProfile profile) throws XmlPullParserException, IOException {
         VehicleProfile.ViewProfileBuilder viewProfileBuilder = profile.getViewProfileBuilder();
 
         int eventType = parser.getEventType();
@@ -63,7 +62,9 @@ public class VehicleProfileReader {
                 case XmlPullParser.START_TAG:
                     if(parserName.equals(TAG_METADATATYPE)) {
                         // set metadata type
-                        profile.setParameterMetadataType(parser.getAttributeValue(null, ATTR_TYPE));
+                        final String value = parser.getAttributeValue(null, ATTR_TYPE);
+                        if(value != null)
+                            profile.setParameterMetadataType(value);
 
                     } else if(parserName.equals(TAG_DEFAULT)) {
                         // set defaults
@@ -89,17 +90,22 @@ public class VehicleProfileReader {
             }
             eventType = parser.next();
         }
-        return profile;
     }
 
+    // parse Default
     private static void parseDefault(XmlPullParser parser, VehicleProfile.Default default_) {
         // wpNavSpeed
-        default_.setWpNavSpeed(parseInt(parser.getAttributeValue(null, ATTR_WPNAV_SPEED)));
+        String value = parser.getAttributeValue(null, ATTR_WPNAV_SPEED);
+        if(value != null)
+            default_.setWpNavSpeed(parseInt(value));
 
         // maxAltitude
-        default_.setMaxAltitude(parseInt(parser.getAttributeValue(null, ATTR_MAX_ALTITUDE)));
+        value = parser.getAttributeValue(null, ATTR_MAX_ALTITUDE);
+        if(value != null)
+            default_.setMaxAltitude(parseInt(value));
     }
 
+    // parse DialogProfile
     private static VehicleProfile.MissionDialogProfile newDialogProfile(XmlPullParser parser) {
         String attr = parser.getAttributeValue(null, ATTR_ID);
         if(attr == null)
@@ -116,6 +122,7 @@ public class VehicleProfileReader {
         return dialogProfile;
     }
 
+    // parse ViewProfile
     private static VehicleProfile.MissionViewProfile newViewProfile(XmlPullParser parser) {
         String attr = parser.getAttributeValue(null, ATTR_ID);
         if(attr == null)

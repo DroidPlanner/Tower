@@ -77,9 +77,12 @@ public class VehicleProfile {
         };
     }
 
-    public ViewProfileBuilder addDialogProfile(MissionDialogProfile dialogProfile) {
-        if (dialogProfile != null) {
-            profileMissionDialogs.put(dialogProfile.getResId(), dialogProfile);
+    public ViewProfileBuilder addDialogProfile(MissionDialogProfile newDialogProfile) {
+        if (newDialogProfile != null) {
+            // return existing profile builder for resId, retain and use newDialogProfile if none
+            MissionDialogProfile dialogProfile = profileMissionDialogs.get(newDialogProfile.getResId());
+            if(dialogProfile == null)
+                profileMissionDialogs.put(newDialogProfile.getResId(), dialogProfile = newDialogProfile);
             return dialogProfile.getViewProfileBuilder();
 
         } else {
