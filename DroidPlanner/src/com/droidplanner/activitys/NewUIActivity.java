@@ -62,6 +62,12 @@ public class NewUIActivity extends NewSuperUI implements
 	}
 
 	@Override
+	public boolean onMarkerClick(waypoint wp) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
 	public void onJoystickSelected() {
 		toggleRCFragment();		
 	}

@@ -9,6 +9,7 @@ import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
 import com.droidplanner.R;
+import com.droidplanner.dialogs.mission.DialogMissionFactory;
 import com.droidplanner.drone.variables.Mission;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.fragments.EditorToolsFragment;
@@ -70,6 +71,13 @@ public class NewEditorActivity extends NewSuperUI implements
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public boolean onMarkerClick(waypoint wp) {
+		DialogMissionFactory.getDialog(wp,
+				this, mission);
+		return true;
 	}
 
 	@Override

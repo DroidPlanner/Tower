@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.droidplanner.DroidPlannerApp.OnWaypointChangedListner;
-import com.droidplanner.dialogs.mission.DialogMissionFactory;
 import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.fragments.PathGesture.OnPathFinishedListner;
 import com.droidplanner.fragments.helpers.CameraGroundOverlays;
@@ -148,9 +147,7 @@ public class PlanningMapFragment extends DroneMap implements
 	public boolean onMarkerClick(Marker marker) {
 		MarkerSource source = markers.getSourceFromMarker(marker);
 		if (source instanceof waypoint) {
-			DialogMissionFactory.getDialog((waypoint) source,
-					this.getActivity(), mission);
-			return true;
+			return mListener.onMarkerClick((waypoint) source);
 		} else {
 			return false;
 		}
