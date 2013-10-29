@@ -29,9 +29,9 @@
     <string name="waypoint_altitude">Wysokość</string>
     <string name="default_alt">Zmień Wys.</string>
     <string name="menu_open_kmz">Otwórz KMZ</string>
-    <string name="menu_add_polygon">Dodaj trasę</string>
-    <string name="menu_polygon">Trasa</string>
-    <string name="clear_polygon">Wyczyść trasę</string>
+    <string name="menu_add_polygon">Dodaj obszar</string>
+    <string name="menu_polygon">Obszar</string>
+    <string name="clear_polygon">Czyść obszar</string>
     <string name="menu_generate_polygon">Generuj</string>
     <string name="menu_survey">Inspekcja</string>
     <string name="menu_finish_polygon">Wyjście</string>
@@ -39,10 +39,10 @@
     <string name="generate">Generuj</string>
     <string name="exit">Wyjście</string>
     <string name="menu_clearFlightPath">Czyść trasę</string>
-    <string name="mission_mode">Misja</string>
-    <string name="polygon_mode">Trasa</string>
-    <string name="dialog_polygon_hatch_angle">Kierunek:</string>
-    <string name="distance_between_lines">Odległość linii</string>
+    <string name="mission_mode">Trasa</string>
+    <string name="polygon_mode">Obszar</string>
+    <string name="dialog_polygon_hatch_angle">Orientacja:</string>
+    <string name="distance_between_lines">Baza poprzeczna</string>
     <string name="enable">Włącz</string>
     <string name="disable">Wyłącz</string>
     <string name="on">Wł.</string>
@@ -53,16 +53,16 @@
     <string name="menu_advanced">Zaawansowane</string>
     <string name="menu_calibration">Kalibracja</string>
     <string name="rc_control">Sterowanie RC</string>
-    <string name="footprint">Podkład</string>
-    <string name="ground_resolution">Rozdzielczość pozioma</string>
+    <string name="footprint">Rzut</string>
+    <string name="ground_resolution">Wymiar piksela </string>
     <string name="distance_between_pictures">Odstęp obrazów</string>
     <string name="area">Powierzchnia</string>
     <string name="camera_">Kamera:</string>
-    <string name="inner_wps">Pkty wewn.</string>
-    <string name="hatch_angle">Kierunek:</string>
+    <string name="inner_wps">Punkty</string>
+    <string name="hatch_angle">Orientacja:</string>
     <string name="flight_altitude">Wysokość lotu:</string>
-    <string name="overlap">Zakładka (P/T):</string>
-    <string name="sidelap">Zakładka (L/P):</string>
+    <string name="overlap">Pokrycie podłużne:</string>
+    <string name="sidelap">Pokrycie poprzeczne:</string>
     
     <string name="screen_planning">Planowanie</string>
     <string name="screen_flight_data">Kokpit</string>
@@ -71,7 +71,7 @@
     <string name="screen_camera">Kamera</string>
     <string name="screen_gcp">GCP</string>
     <string name="screen_chart">Wykresy</string>
-    <string name="length">Odległość</string>
+    <string name="length">Długość</string>
     <string name="mission_length">Długość misji</string>
     <string name="pictures">Obrazy</string>
     <string name="number_of_strips">Liczba przelotów</string>
@@ -90,78 +90,78 @@
     <string name="waypointInfo_LoiterN">Włącza krążenie wokół miejsca aktualnego położenia.</string>
     <string name="waypointInfo_LoiterT">Włącza tryb Loiter w miejscu aktualnego położenia. Opcjonalnie podaj pozycję zawisu w tym punkcie trasy. Zegar uruchamia się po osiągnieciu punktu.</string>
     <string name="waypointInfo_RTL">Powrót statku do miejsca startu zapamiętanego w momencie uzbrojenia (wymagany fix GPSa). Jeśli wysokość wynosi 0 statek będzie wracał na wysokości zdefinowanej w parametach programu Mission Panner.</string>
-    <string name="waypointInfo_TakeOff">START statku na zadaną wysokość. Kąt Pochylenia używac wyłacznie dla samolotów, dla kopterów pozostawić 0.</string>
-    <string name="waypointInfo_Waypoint">Delay option is triggered after the craft reaches the waypoint radius. The Next command is loaded after the delay.Delay time is in seconds, the default is 0. Set Orbital radius to 0 for pass through or specify the orbit radius in meter. Yaw angle sets the heading at each waypoint - for rotary wing only.</string>
-    <string name="waypointDesc_Waypoint_1" formatted="false">Executing next waypoint immediately, heading is set to %03.0f°</string>
-    <string name="waypointDesc_Waypoint_2" formatted="false">Executing next waypoint after %1.1fs, heading is set to %03.0f°</string>
-    <string name="waypointDesc_Loiter" formatted="false">Loiter until next command within %1.1fm radius %s, heading is set to %03.0f°</string>
-    <string name="waypointDesc_LoiterN" formatted="false">Loiter for %1.0f turns within %1.1fm radius %s, heading is set to %03.0f°</string>
-    <string name="waypointDesc_LoiterT" formatted="false">Loiter for %1.0fs within %1.1fm radius %s, heading is set to %03.0f°</string>
-    <string name="waypointDesc_Takeoff" formatted="false">Takeoff with pitch set to %1.2f°</string>
-    <string name="waypointDesc_SetJump" formatted="false">Jump to Waypoint %d - %s</string>
-    <string name="waypointDesc_SetHome" formatted="false">Home is set to</string>
-    <string name="waypointDesc_SetSpeed" formatted="false">Speed is set to %1.1fm/s with throttle at %1.0f%% using %s as reference</string>
+    <string name="waypointInfo_TakeOff">START statku na zadaną wysokość. Kąt Pochylenia używaj wyłącznie dla samolotów, dla kopterów pozostaw 0.</string>
+    <string name="waypointInfo_Waypoint">Aktywacja opóźnienia następuje po osiągnięciu obszaru punktu. Następna komenda ładowana jest po upływie czasu opoźnienia. Opóźnienie podano w sekundach, domyślnie 0. Dla przelotów ustaw obszar krażenia na 0 lub określ jego promień w metrach. Kąt obrotu określa kurs w danym punkcie - wyłącznie dla wirnikowców.</string>
+    <string name="waypointDesc_Waypoint_1" formatted="false">Przejdź dalej bez późnień. Kurs %03.0f°</string>
+    <string name="waypointDesc_Waypoint_2" formatted="false">Przejdź dalej po %1.1fs. Kurs %03.0f°</string>
+    <string name="waypointDesc_Loiter"  formatted="false">Tryb Loiter do następnej komendy. Promień %1.1fm %s. Kurs %03.0f°</string>
+    <string name="waypointDesc_LoiterN" formatted="false">Tryb Loiter. Wykonaj %1.0f obrot(ów). Promień %1.1fm %s. Kurs %03.0f°</string>
+    <string name="waypointDesc_LoiterT" formatted="false">Tryb Loiter przez %1.0fs. Promień %1.1fm %s. Kurs %03.0f°</string>
+    <string name="waypointDesc_Takeoff" formatted="false">Start z pochyleniem %1.2f°</string>
+    <string name="waypointDesc_SetJump" formatted="false">Przeskocz do %d - %s</string>
+    <string name="waypointDesc_SetHome" formatted="false">Miejsce Startu ustawione na</string>
+    <string name="waypointDesc_SetSpeed" formatted="false">Prędkość %1.1fm/s z przepustnicą %1.0f%% , względem %s</string>
     <string name="waypointDesc_SetRelay" formatted="false">Relay is set to</string>
     <string name="waypointDesc_SetRepeat" formatted="false">Repeating relay</string>
-    <string name="waypointDesc_CondAlt" formatted="false">Altitude condition is set to %1.1fm at the rate of %1.1fm/s</string>
-    <string name="waypointDesc_CondDist" formatted="false">Distance condition is set to %1.1fm</string>
-    <string name="waypointDesc_CondYaw" formatted="false">Yaw condition is set to %03.0f° at the rate of %1.1fm/s %s, using %s</string>
-    <string name="waypointDesc_GPS" formatted="false">Lat/Lon [%1.12f/%1.12f]</string>
-    <string name="waypointDesc_coordmav">current vehicle position</string>
-    <string name="waypointDesc_coordwp">current Waypoint position</string>
-    <string name="waypointDesc_coordgcs">current GCS position</string>
-    <string name="waypointDesc_coordmanual">entered coordinate</string>
-    <string name="waypointDesc_immediate">immediately</string>
+    <string name="waypointDesc_CondAlt" formatted="false">Wysokość docelowa %1.1fm z prędkością %1.1fm/s</string>
+    <string name="waypointDesc_CondDist" formatted="false">Odległość docelowa %1.1fm</string>
+    <string name="waypointDesc_CondYaw" formatted="false">Kierunek docelowy %03.0f° z prędkością %1.1fm/s %s, względem %s</string>
+    <string name="waypointDesc_GPS" formatted="false">Szer/Dł [%1.12f/%1.12f]</string>
+    <string name="waypointDesc_coordmav">obecna pozycja statku</string>
+    <string name="waypointDesc_coordwp">obecna pozycja Punktu</string>
+    <string name="waypointDesc_coordgcs">obecna pozycja GCS</string>
+    <string name="waypointDesc_coordmanual">wprowadzone położenie</string>
+    <string name="waypointDesc_immediate">natychmiast</string>
     <string name="waypointDesc_s">s</string>
     <string name="waypointDesc_m">m</string>
-    <string name="waypointDesc_after">after</string>
-    <string name="waypointDesc_turns">turns</string>
-    <string name="waypointDesc_radius">radius</string>
+    <string name="waypointDesc_after">po</string>
+    <string name="waypointDesc_turns">obrotów</string>
+    <string name="waypointDesc_radius">promień</string>
     <string name="waypointDesc_degrees">°</string>
-    <string name="waypointDesc_CW">CW</string>
-    <string name="waypointDesc_CCW">CCW</string>
-    <string name="waypoint_angle">Yaw Angle</string>
-    <string name="waypoint_finalaltitude">Target Altitude</string>
-    <string name="waypoint_altrate">Descent / Ascend rate</string>
-    <string name="waypoint_yawrate">Yaw rate</string>
-    <string name="waypoint_yawdir">Set yaw direction to CCW</string>
-    <string name="waypoint_yawrelative">Realtive Offset</string>
-    <string name="waypoint_yawabsolute">Absolute Angle</string>
-    <string name="waypoint_yawoffset">Use relative offset</string>
-    <string name="waypointInfo_CondAlt">Ascend/descend at specified rate. Delay mission state machine until desired altitude reached.</string>
-    <string name="waypointInfo_CondYaw">Set condition to reach a certain target angle.</string>
-    <string name="waypointInfo_CondDistance">Delay mission state machine until within desired distance of next NAV point</string>
-    <string name="waypointInfo_SetHome">Changes the home location either to the current location or a specified location.</string>
-    <string name="waypointInfo_SetSpeed">Change speed and/or throttle set points.Set -1 for both Speed and Throttle if no changes is required</string>
+    <string name="waypointDesc_CW">W prawo</string>
+    <string name="waypointDesc_CCW">W lewo</string>
+    <string name="waypoint_angle">Kierunek</string>
+    <string name="waypoint_finalaltitude">Docelowa wysokość</string>
+    <string name="waypoint_altrate">Prędkość pionowa</string>
+    <string name="waypoint_yawrate">Prądkość obrotu</string>
+    <string name="waypoint_yawdir">Obrót w lewo</string>
+    <string name="waypoint_yawrelative">Kierunek względny</string>
+    <string name="waypoint_yawabsolute">Kierunek bezwzględny</string>
+    <string name="waypoint_yawoffset">Kierunek względny</string>
+    <string name="waypointInfo_CondAlt">Zmień wysokość z podaną prędkością pionową. Do czasu osiągniecia zadanej wysokości wykonanie następnych Punktów wstrzymane.</string>
+    <string name="waypointInfo_CondYaw">Zmień kierunek z wykorzystaniem podanych warunków.</string>
+    <string name="waypointInfo_CondDistance">Wstrzymaj wykonanie następnych Punktów do czasu osiągnięcia wskazanej odległości od następnego Punktu Nawigacyjnego</string>
+    <string name="waypointInfo_SetHome">Zmień Miejsce Startu.</string>
+    <string name="waypointInfo_SetSpeed">Zmień ustwienia prędkości i przepustnicy. Ustaw -1 jeśli bez zmian.</string>
     <string name="waypointInfo_SetRelay">Set a relay to a condition.</string>
     <string name="waypointInfo_SetRepeatRelay">Cycle a relay on and off for a desired number of cyles with a desired period.</string>
-    <string name="waypoint_distance">Distance</string>
-    <string name="waypoint_homecurrent">"Set Home using current position "</string>
-    <string name="waypoint_longitude">Longitude :</string>
-    <string name="waypoint_latitude">Latitude :</string>
-    <string name="waypoint_speed">Target Speed</string>
-    <string name="waypoint_throttle">Throttle</string>
-    <string name="waypoint_speedtype">Speed type</string>
-    <string name="waypoint_airspeed">Air speed</string>
-    <string name="waypoint_groundspeed">Ground speed</string>
+    <string name="waypoint_distance">Odległość</string>
+    <string name="waypoint_homecurrent">"Miejsce Startu w aktualnej pozycji"</string>
+    <string name="waypoint_longitude">Długość :</string>
+    <string name="waypoint_latitude">Szerokość :</string>
+    <string name="waypoint_speed">Prędkość docelowa</string>
+    <string name="waypoint_throttle">Przepustnica</string>
+    <string name="waypoint_speedtype">Prędkości względem</string>
+    <string name="waypoint_airspeed">Powietrza</string>
+    <string name="waypoint_groundspeed">Ziemi</string>
     <string name="selectCoodSource">Select location source</string>
-    <string name="waypoint_coordsrc">Source data :</string>
-    <string name="waypoint_jumpto">Jump to waypoint :</string>
-    <string name="waypoint_repeat">Repeat waypoint</string>
-	<string name="waypointInfo_SetJump">Repeat waypoint</string>
-	<string name="next">next</string>
-	<string name="menu_map_type">Map Type</string>
-	<string name="menu_map_type_satellite">Satellite</string>
-	<string name="menu_map_type_hybrid">Hybrid</string>
-	<string name="menu_map_type_normal">Normal</string>
-	<string name="menu_map_type_terrain">Terrain</string>
-	<string name="waypoint_AcceptRadius">Acceptance radius</string>
-	<string name="waypoint_orbitalRadius">Orbital radius</string>
-    <string name="none">None</string>
-    <string name="metadata_values">Values:</string>
-    <string name="metadata_units">Units:</string>
-    <string name="metadata_range">Range:</string>
-    <string name="menu_preflight_checklist">Pre-Flight Checklist</string>
-    <string name="lst_note_hint">To add more rows, just press Enter</string>
-    <string name="parameter_row_edit">Edit</string>
+    <string name="waypoint_coordsrc">Źródło pozycji :</string>
+    <string name="waypoint_jumpto">Skocz do Punktu :</string>
+    <string name="waypoint_repeat">Powtórz Punkt</string>
+	<string name="waypointInfo_SetJump">Powtórz Punkt</string>
+	<string name="next">dalej</string>
+	<string name="menu_map_type">Rodzaj mapy</string>
+	<string name="menu_map_type_satellite">Satelita</string>
+	<string name="menu_map_type_hybrid">Hybryda</string>
+	<string name="menu_map_type_normal">Normalna</string>
+	<string name="menu_map_type_terrain">Teren</string>
+	<string name="waypoint_AcceptRadius">Promień Punktu</string>
+	<string name="waypoint_orbitalRadius">Promień krążenia</string>
+    <string name="none">Brak</string>
+    <string name="metadata_values">Wartości:</string>
+    <string name="metadata_units">Jednostki:</string>
+    <string name="metadata_range">Zakres:</string>
+    <string name="menu_preflight_checklist">Lista startowa</string>
+    <string name="lst_note_hint">Naciśnij Enter aby dodać wiersz</string>
+    <string name="parameter_row_edit">Edycja</string>
 </resources>
