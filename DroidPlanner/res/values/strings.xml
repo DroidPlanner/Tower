@@ -105,7 +105,7 @@
     <string name="waypointDesc_SetRepeat" formatted="false">Repeating relay</string>
     <string name="waypointDesc_CondAlt" formatted="false">Altitude condition is set to %1.1fm at the rate of %1.1fm/s</string>
     <string name="waypointDesc_CondDist" formatted="false">Distance condition is set to %1.1fm</string>
-    <string name="waypointDesc_CondYaw" formatted="false">Yaw condition is set to %03.0f° at the rate of %1.1fm/s %s, using %s</string>
+    <string name="waypointDesc_CondYaw" formatted="false">Yaw condition is set to %03.0f° at the rate of %1.1f°/s %s, using %s</string>
     <string name="waypointDesc_GPS" formatted="false">Lat/Lon [%1.12f/%1.12f]</string>
     <string name="waypointDesc_coordmav">current vehicle position</string>
     <string name="waypointDesc_coordwp">current Waypoint position</string>
@@ -161,5 +161,7 @@
     <string name="metadata_values">Values:</string>
     <string name="metadata_units">Units:</string>
     <string name="metadata_range">Range:</string>
+    <string name="menu_preflight_checklist">Pre-Flight Checklist</string>
+    <string name="lst_note_hint">To add more rows, just press Enter</string>
     <string name="parameter_row_edit">Edit</string>
 </resources>
