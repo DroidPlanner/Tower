@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="app_title">DroidPlanner</string>
     <string name="about">O</string>
     <string name="version">Wersja</string>
     <string name="storage_folder">Folder zapisu</string>
@@ -100,8 +98,6 @@
     <string name="waypointDesc_SetJump" formatted="false">Przeskocz do %d - %s</string>
     <string name="waypointDesc_SetHome" formatted="false">Miejsce Startu ustawione na</string>
     <string name="waypointDesc_SetSpeed" formatted="false">Prędkość %1.1fm/s z przepustnicą %1.0f%% , względem %s</string>
-    <string name="waypointDesc_SetRelay" formatted="false">Relay is set to</string>
-    <string name="waypointDesc_SetRepeat" formatted="false">Repeating relay</string>
     <string name="waypointDesc_CondAlt" formatted="false">Wysokość docelowa %1.1fm z prędkością %1.1fm/s</string>
     <string name="waypointDesc_CondDist" formatted="false">Odległość docelowa %1.1fm</string>
     <string name="waypointDesc_CondYaw" formatted="false">Kierunek docelowy %03.0f° z prędkością %1.1fm/s %s, %s</string>
@@ -111,12 +107,9 @@
     <string name="waypointDesc_coordgcs">obecna pozycja GCS</string>
     <string name="waypointDesc_coordmanual">wprowadzone położenie</string>
     <string name="waypointDesc_immediate">natychmiast</string>
-    <string name="waypointDesc_s">s</string>
-    <string name="waypointDesc_m">m</string>
     <string name="waypointDesc_after">po</string>
     <string name="waypointDesc_turns">obrotów</string>
     <string name="waypointDesc_radius">promień</string>
-    <string name="waypointDesc_degrees">°</string>
     <string name="waypointDesc_CW">W prawo</string>
     <string name="waypointDesc_CCW">W lewo</string>
     <string name="waypoint_angle">Kierunek</string>
@@ -132,8 +125,6 @@
     <string name="waypointInfo_CondDistance">Wstrzymaj wykonanie następnych Punktów do czasu osiągnięcia wskazanej odległości od następnego Punktu Nawigacyjnego</string>
     <string name="waypointInfo_SetHome">Zmień Miejsce Startu.</string>
     <string name="waypointInfo_SetSpeed">Zmień ustawienia prędkości i przepustnicy. Ustaw -1 jeśli bez zmian.</string>
-    <string name="waypointInfo_SetRelay">Set a relay to a condition.</string>
-    <string name="waypointInfo_SetRepeatRelay">Cycle a relay on and off for a desired number of cyles with a desired period.</string>
     <string name="waypoint_distance">Odległość</string>
     <string name="waypoint_homecurrent">"Miejsce Startu w aktualnej pozycji"</string>
     <string name="waypoint_longitude">Długość :</string>
