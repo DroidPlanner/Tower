@@ -5,4 +5,12 @@
     <ParameterMetadataType
         type="ArduPlane"/>
 
+    <!-- Vehicle type defaults             -->
+    <!--   wpNavSpeed: waypoint horz speed -->
+    <!--   maxAltitude: service ceiling    -->
+    <!-- * extend as needed                -->
+    <Default
+        wpNavSpeed="500"
+        maxAltitude="12000"/>
+
 </Profile>
