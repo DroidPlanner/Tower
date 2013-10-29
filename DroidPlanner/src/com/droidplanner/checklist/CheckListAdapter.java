@@ -31,6 +31,9 @@ public class CheckListAdapter extends ListXmlAdapter implements
 	public interface OnCheckListItemUpdateListener {
 		public void onRowItemChanged(CheckListItem checkListItem,
 				String mSysTag, boolean isChecked);
+
+		public void onRowItemGetData(CheckListItem checkListItem,
+				String mSysTag, boolean isChecked);
 	}
 
 	private OnCheckListItemUpdateListener listener;
