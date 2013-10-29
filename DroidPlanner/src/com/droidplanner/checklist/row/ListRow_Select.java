@@ -2,8 +2,6 @@ package com.droidplanner.checklist.row;
 
 import com.droidplanner.R;
 import com.droidplanner.checklist.CheckListItem;
-import com.droidplanner.drone.Drone;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +12,8 @@ import android.widget.Spinner;
 
 public class ListRow_Select extends ListRow implements OnItemSelectedListener{
 	
-	public ListRow_Select(Drone drone, LayoutInflater inflater, CheckListItem checkListItem) {
-		super(drone, inflater, checkListItem);
+	public ListRow_Select( LayoutInflater inflater, CheckListItem checkListItem) {
+		super(inflater, checkListItem);
 	}
 
 	public View getView(View convertView) {
@@ -38,6 +36,8 @@ public class ListRow_Select extends ListRow implements OnItemSelectedListener{
 	private void updateDisplay(View view, ViewHolder holder,
 			CheckListItem mListItem) {
 		holder.selectView.setOnItemSelectedListener(this);
+		getData(mListItem);
+
 		updateCheckBox(checkListItem.isVerified());
 	}
 

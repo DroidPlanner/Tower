@@ -2,16 +2,14 @@ package com.droidplanner.checklist.row;
 
 import com.droidplanner.R;
 import com.droidplanner.checklist.CheckListItem;
-import com.droidplanner.drone.Drone;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 public class ListRow_CheckBox extends ListRow {
 	
-	public ListRow_CheckBox(Drone drone, LayoutInflater inflater, CheckListItem checkListItem) {
-		super(drone, inflater, checkListItem);
+	public ListRow_CheckBox(LayoutInflater inflater, CheckListItem checkListItem) {
+		super(inflater, checkListItem);
 	}
 
 	public View getView(View convertView) {
@@ -33,6 +31,8 @@ public class ListRow_CheckBox extends ListRow {
 	
 	private void updateDisplay(View view, ViewHolder holder,
 			CheckListItem mListItem) {
+
+		getData(mListItem);
 		
 		updateCheckBox(checkListItem.isVerified());
 	}

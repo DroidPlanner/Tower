@@ -120,23 +120,6 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 		}
 	}
 
-	private void updateSystem(CheckListItem checkListItem) {
-		
-		if (checkListItem.getSys_tag()==null)
-			return;
-		
-		if (checkListItem.getSys_tag().equalsIgnoreCase("SYS_CONNECTION_STATE")) {
-			doSysConnect(checkListItem, checkListItem.isSys_activated());
-
-		} else if (checkListItem.getSys_tag().equalsIgnoreCase("SYS_ARM_STATE")) {
-			doSysArm(checkListItem, checkListItem.isSys_activated());
-			
-		} else if (checkListItem.getSys_tag().equalsIgnoreCase("SYS_DEF_ALT")) {
-			doDefAlt(checkListItem);
-			
-		}
-	}
-
 	private void doDefAlt(CheckListItem checkListItem) {
 		// TODO Auto-generated method stub
 		
@@ -175,8 +158,53 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 	@Override
 	public void onRowItemChanged(CheckListItem checkListItem, String mSysTag,
 			boolean isChecked) {
-		updateSystem(checkListItem);
+		setSystemData(checkListItem);
 		listAdapter.notifyDataSetChanged();
 		
+	}
+
+	@Override
+	public void onRowItemGetData(CheckListItem checkListItem, String mSysTag) {
+		getSystemData(checkListItem, mSysTag);
+	}
+
+	private void setSystemData(CheckListItem checkListItem) {
+		
+		if (checkListItem.getSys_tag()==null)
+			return;
+		
+		if (checkListItem.getSys_tag().equalsIgnoreCase("SYS_CONNECTION_STATE")) {
+			doSysConnect(checkListItem, checkListItem.isSys_activated());
+
+		} else if (checkListItem.getSys_tag().equalsIgnoreCase("SYS_ARM_STATE")) {
+			doSysArm(checkListItem, checkListItem.isSys_activated());
+			
+		} else if (checkListItem.getSys_tag().equalsIgnoreCase("SYS_DEF_ALT")) {
+			doDefAlt(checkListItem);
+			
+		}
+	}
+
+	private void getSystemData(CheckListItem mListItem, String mSysTag) {
+		if(mSysTag==null)
+			return;
+		
+		if (mSysTag.equalsIgnoreCase("SYS_BATTREM_LVL")) {
+			mListItem.setSys_value(drone.battery.getBattRemain());
+		} else if (mSysTag.equalsIgnoreCase("SYS_BATTVOL_LVL")) {
+			mListItem.setSys_value(drone.battery.getBattVolt());
+		} else if (mSysTag.equalsIgnoreCase("SYS_BATTCUR_LVL")) {
+			mListItem.setSys_value(drone.battery.getBattCurrent());
+		} else if (mSysTag.equalsIgnoreCase("SYS_GPS3D_LVL")) {
+			mListItem.setSys_value(drone.GPS.getSatCount());
+		} else if (mSysTag.equalsIgnoreCase("SYS_DEF_ALT")) {
+			mListItem.setSys_value(drone.mission.getDefaultAlt());
+		} else if (mSysTag.equalsIgnoreCase("SYS_ARM_STATE")) {
+			mListItem.setSys_activated(drone.state.isArmed());
+		} else if (mSysTag.equalsIgnoreCase("SYS_FAILSAFE_STATE")) {
+			mListItem.setSys_activated(drone.state.isFailsafe());
+		} else if (mSysTag.equalsIgnoreCase("SYS_CONNECTION_STATE")) {
+			mListItem.setSys_activated(drone.MavClient.isConnected());
+		}	
 	}
 }

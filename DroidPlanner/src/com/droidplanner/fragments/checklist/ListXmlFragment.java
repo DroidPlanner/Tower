@@ -89,8 +89,7 @@ public class ListXmlFragment extends DialogFragment implements
 	}
 
 	@Override
-	public void onRowItemGetData(CheckListItem checkListItem, String mSysTag,
-			boolean isChecked) {
+	public void onRowItemGetData(CheckListItem checkListItem, String mSysTag) {
 		// TODO Auto-generated method stub
 		
 	}

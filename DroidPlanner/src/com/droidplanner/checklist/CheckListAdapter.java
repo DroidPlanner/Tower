@@ -33,7 +33,7 @@ public class CheckListAdapter extends ListXmlAdapter implements
 				String mSysTag, boolean isChecked);
 
 		public void onRowItemGetData(CheckListItem checkListItem,
-				String mSysTag, boolean isChecked);
+				String mSysTag);
 	}
 
 	private OnCheckListItemUpdateListener listener;
@@ -49,46 +49,46 @@ public class CheckListAdapter extends ListXmlAdapter implements
 			List<ListRow_Interface> xmlRows = new ArrayList<ListRow_Interface>();
 			for (CheckListItem listItem : listDataChild.get(dataHeader)) {
 				if (listItem.getTagName().equalsIgnoreCase("check_item")) {
-					ListRow_CheckBox row = new ListRow_CheckBox(drone,
-							this.inflater, listItem);
+					ListRow_CheckBox row = new ListRow_CheckBox(this.inflater,
+							listItem);
 					row.setOnRowItemChangeListener(this);
 					xmlRows.add(row);
 
 				} else if (listItem.getTagName().equalsIgnoreCase("value_item")) {
-					ListRow_Value row = new ListRow_Value(drone, this.inflater,
+					ListRow_Value row = new ListRow_Value(this.inflater,
 							listItem);
 					row.setOnRowItemChangeListener(this);
 					xmlRows.add(row);
 
 				} else if (listItem.getTagName().equalsIgnoreCase("radio_item")) {
-					ListRow_Radio row = new ListRow_Radio(drone, this.inflater,
+					ListRow_Radio row = new ListRow_Radio(this.inflater,
 							listItem);
 					row.setOnRowItemChangeListener(this);
 					xmlRows.add(row);
 
 				} else if (listItem.getTagName()
 						.equalsIgnoreCase("select_item")) {
-					ListRow_Select row = new ListRow_Select(drone,
-							this.inflater, listItem);
+					ListRow_Select row = new ListRow_Select(this.inflater,
+							listItem);
 					row.setOnRowItemChangeListener(this);
 					xmlRows.add(row);
 
 				} else if (listItem.getTagName()
 						.equalsIgnoreCase("toggle_item")) {
-					ListRow_Toggle row = new ListRow_Toggle(drone,
-							this.inflater, listItem);
+					ListRow_Toggle row = new ListRow_Toggle(this.inflater,
+							listItem);
 					row.setOnRowItemChangeListener(this);
 					xmlRows.add(row);
 
 				} else if (listItem.getTagName()
 						.equalsIgnoreCase("switch_item")) {
-					ListRow_Switch row = new ListRow_Switch(drone,
-							this.inflater, listItem);
+					ListRow_Switch row = new ListRow_Switch(this.inflater,
+							listItem);
 					row.setOnRowItemChangeListener(this);
 					xmlRows.add(row);
 
 				} else if (listItem.getTagName().equalsIgnoreCase("level_item")) {
-					ListRow_Level row = new ListRow_Level(drone, this.inflater,
+					ListRow_Level row = new ListRow_Level(this.inflater,
 							listItem);
 					xmlRows.add(row);
 				} else if (listItem.getTagName().equalsIgnoreCase("note_item")) {
@@ -166,5 +166,13 @@ public class CheckListAdapter extends ListXmlAdapter implements
 			return;
 		this.listener.onRowItemChanged(listItem, listItem.getSys_tag(),
 				isChecked);
+	}
+
+	@Override
+	public void onRowItemGetData(CheckListItem listItem, String sysTag) {
+		if (this.listener == null)
+			return;
+		this.listener.onRowItemGetData(listItem, sysTag);
+
 	}
 }

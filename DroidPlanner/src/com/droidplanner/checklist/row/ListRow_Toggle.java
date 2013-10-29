@@ -2,8 +2,6 @@ package com.droidplanner.checklist.row;
 
 import com.droidplanner.R;
 import com.droidplanner.checklist.CheckListItem;
-import com.droidplanner.drone.Drone;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +11,9 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 
 public class ListRow_Toggle extends ListRow implements OnCheckedChangeListener {
 
-	public ListRow_Toggle(Drone drone, LayoutInflater inflater,
+	public ListRow_Toggle(LayoutInflater inflater,
 			CheckListItem checkListItem) {
-		super(drone, inflater, checkListItem);
+		super(inflater, checkListItem);
 	}
 
 	public View getView(View convertView) {
@@ -40,7 +38,8 @@ public class ListRow_Toggle extends ListRow implements OnCheckedChangeListener {
 			CheckListItem mListItem) {
 		boolean failMandatory = false;
 
-		getDroneVariable(this.drone, mListItem);
+		getData(mListItem);
+
 		failMandatory = !checkListItem.isSys_activated();
 
 		holder.toggleButton.setOnCheckedChangeListener(this);

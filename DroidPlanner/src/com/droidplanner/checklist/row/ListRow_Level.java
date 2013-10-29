@@ -2,8 +2,6 @@ package com.droidplanner.checklist.row;
 
 import com.droidplanner.R;
 import com.droidplanner.checklist.CheckListItem;
-import com.droidplanner.drone.Drone;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +10,9 @@ import android.widget.TextView;
 
 public class ListRow_Level extends ListRow {
 	
-	public ListRow_Level(Drone drone, LayoutInflater inflater,
+	public ListRow_Level(LayoutInflater inflater,
 			CheckListItem checkListItem) {
-		super(drone,inflater, checkListItem);
+		super(inflater, checkListItem);
 	}
 
 	public View getView(View convertView) {
@@ -43,7 +41,8 @@ public class ListRow_Level extends ListRow {
 		String unit = mListItem.getUnit();
 		boolean failMandatory = false;
 
-		getDroneVariable(drone, mListItem);
+		getData(mListItem);
+
 		failMandatory = sysValue <= minVal;
 		
 		if (sysValue <= minVal)

@@ -4,8 +4,6 @@ import java.util.List;
 
 import com.droidplanner.R;
 import com.droidplanner.checklist.CheckListItem;
-import com.droidplanner.drone.Drone;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +14,8 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 
 public class ListRow_Radio extends ListRow implements OnCheckedChangeListener {
 	
-	public ListRow_Radio(Drone drone, LayoutInflater inflater, CheckListItem checkListItem) {
-		super(drone, inflater, checkListItem);
+	public ListRow_Radio(LayoutInflater inflater, CheckListItem checkListItem) {
+		super(inflater, checkListItem);
 	}
 
 	public View getView(View convertView) {
@@ -41,6 +39,7 @@ public class ListRow_Radio extends ListRow implements OnCheckedChangeListener {
 
 		holder.radioGroupView.setOnCheckedChangeListener(this);
 		
+		getData(mListItem);
 		updateCheckBox(checkListItem.isVerified());
 
 	}

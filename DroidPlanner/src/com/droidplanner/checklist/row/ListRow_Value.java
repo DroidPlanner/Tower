@@ -2,8 +2,6 @@ package com.droidplanner.checklist.row;
 
 import com.droidplanner.R;
 import com.droidplanner.checklist.CheckListItem;
-import com.droidplanner.drone.Drone;
-
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,9 +15,9 @@ public class ListRow_Value extends ListRow implements OnFocusChangeListener {
 	private boolean lastFocusState;
 	private float lastValue;
 
-	public ListRow_Value(Drone drone, LayoutInflater inflater,
+	public ListRow_Value(LayoutInflater inflater,
 			final CheckListItem checkListItem) {
-		super(drone, inflater, checkListItem);
+		super(inflater, checkListItem);
 	}
 
 	public View getView(View convertView) {
@@ -53,7 +51,7 @@ public class ListRow_Value extends ListRow implements OnFocusChangeListener {
 		String unit = mListItem.getUnit();
 		boolean failMandatory = sysValue <= minVal;
 
-		getDroneVariable(this.drone, mListItem);
+		getData(mListItem);
 
 		editText = holder.editTextView;
 		if (holder.editTextView.getText().toString() == null)
