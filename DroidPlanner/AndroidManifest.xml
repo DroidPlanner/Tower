@@ -59,7 +59,7 @@
         android:label="@string/app_title"
         android:theme="@style/CustomActionBarTheme"
         android:windowSoftInputMode="adjustPan" >
-        
+
         <!-- You must insert your own Google Maps for Android API v2 key in here. -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
@@ -70,14 +70,15 @@
 
         <activity android:name=".activitys.SettingsActivity" >
         </activity>
-        <activity android:name=".activitys.NewUIActivity" >
+        <activity android:name=".activitys.FlightActivity" >
+
             <!-- Launcher Intent -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            
+
             <!-- USB connection  intent -->
             <intent-filter>
                 <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
@@ -88,10 +89,16 @@
                 android:resource="@xml/device_filter" />
         </activity>
         <activity
-            android:name=".activitys.NewEditorActivity"
+            android:name=".activitys.EditorActivity"
             android:label="Editor"
-            android:parentActivityName=".activitys.NewUIActivity" >
-            <!-- Intent for opening mission files-->
+            android:parentActivityName=".activitys.FlightActivity" >
+
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activitys.FlightActivity" />
+
+            <!-- Intent for opening mission files -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -99,11 +106,6 @@
 
                 <data android:mimeType="text/plain" />
             </intent-filter>
-
-            <!-- Parent activity meta-data to support API level 7+ -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activitys.NewUIActivity" />
         </activity>
     </application>
 
