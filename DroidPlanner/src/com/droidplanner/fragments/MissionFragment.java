@@ -42,8 +42,8 @@ public class MissionFragment extends Fragment implements  OnWaypointChangedListn
 	}
 
 	@Override
-	public void onStop() {
-		super.onStop();
+	public void onDestroy() {
+		super.onDestroy();
 		mission.removeOnWaypointsChangedListner(this);
 	}
 

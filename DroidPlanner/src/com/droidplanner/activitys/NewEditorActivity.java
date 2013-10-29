@@ -53,15 +53,15 @@ public class NewEditorActivity extends NewSuperUI implements
 		mission = drone.mission;
 		gestureMapFragment.setOnPathFinishedListner(this);
 		mission.onWaypointsUpdate();
-		
+
 	}
 
 	@Override
-	protected void onStop() {
-		super.onStop();
+	protected void onDestroy() {
+		super.onDestroy();
 		mission.removeOnWaypointsChangedListner(planningMapFragment);
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -121,7 +121,7 @@ public class NewEditorActivity extends NewSuperUI implements
 	public void editorToolChanged(EditorTools tools) {
 		if (tools == EditorTools.DRAW) {
 			gestureMapFragment.enableGestureDetection();
-		}else {
+		} else {
 			gestureMapFragment.disableGestureDetection();
 		}
 	}

@@ -45,8 +45,8 @@ public abstract class DroneMap extends OfflineMapFragment implements OnWaypointC
 	}
 
 	@Override
-	public void onStop() {
-		super.onStop();
+	public void onDestroy() {
+		super.onDestroy();
 		mission.removeOnWaypointsChangedListner(this);
 	}
 
