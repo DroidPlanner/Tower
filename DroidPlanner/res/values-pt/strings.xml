@@ -4,7 +4,7 @@
     <string name="menu_connect">Conectar</string>
     <string name="conected">Conectado</string>
     
-    <string name="menu_settings">Configurar</string>
+    <string name="settings">Configurar</string>
     <string name="menu_disconnect">Desconectar</string>
     <string name="disconnected">Desconectado</string>
     <string name="save">Salvar</string>

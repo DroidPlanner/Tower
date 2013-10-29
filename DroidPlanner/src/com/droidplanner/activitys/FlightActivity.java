@@ -18,16 +18,10 @@ public class FlightActivity extends SuperUI implements
 	private FragmentManager fragmentManager;
 	private RCFragment rcFragment;
 	
-
-	@Override
-	public int getNavigationItem() {
-		return 7;
-	}
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_newui);
+		setContentView(R.layout.activity_flight);
 		fragmentManager = getFragmentManager();
 
 	}
