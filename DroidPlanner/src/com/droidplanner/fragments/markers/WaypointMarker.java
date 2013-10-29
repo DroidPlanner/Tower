@@ -1,7 +1,6 @@
 package com.droidplanner.fragments.markers;
 
 import android.content.Context;
-import android.graphics.Color;
 
 import com.MAVLink.Messages.enums.MAV_ROI;
 import com.droidplanner.R;
@@ -19,7 +18,8 @@ public class WaypointMarker {
 				.position(wp.getCoord())
 				.visible(wp.getCmd().showOnMap())
 				.draggable(true)
-				.icon(getIcon(wp,context));
+				.icon(getIcon(wp,context))
+				.anchor(0.5f, 0.5f);
 	}
 
 	public static void update(Marker marker, waypoint wp, Context context) {
@@ -31,7 +31,7 @@ public class WaypointMarker {
 		switch (wp.getCmd()) {
 		default:
 		case CMD_NAV_WAYPOINT:
-			return BitmapDescriptorFactory.fromBitmap(MarkerWithText.getMarkerWithTextAndDetail(Color.WHITE,
+			return BitmapDescriptorFactory.fromBitmap(MarkerWithText.getMarkerWithTextAndDetail(R.drawable.ic_wp_map,
 					Integer.toString(wp.getNumber()), String.format("%.0fm", wp.getHeight()), context));
 
 		case CMD_NAV_LOITER_TIME:
