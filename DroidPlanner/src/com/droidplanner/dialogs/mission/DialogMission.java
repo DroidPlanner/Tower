@@ -65,7 +65,7 @@ public abstract class DialogMission implements OnItemSelectedListener,
 		typeSpinner.setSelection(commandAdapter.getPosition(wp.getCmd()));
 
         final DroidPlannerApp app = (DroidPlannerApp) ((Activity) context).getApplication();
-        app.drone.profile.applyViewProfile(view, getResource());
+        app.drone.profile.applyMissionViewProfile(view, getResource());
 
         return view;
 

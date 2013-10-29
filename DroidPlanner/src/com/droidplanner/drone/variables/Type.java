@@ -24,6 +24,7 @@ public class Type extends DroneVariable {
 	public void setType(int type) {
 		if (this.type != type) {
 			this.type = type;
+            myDrone.profile.load();
 			myDrone.notifyTypeChanged();
 		}
 	}
@@ -55,6 +56,7 @@ public class Type extends DroneVariable {
                 case MAV_TYPE.MAV_TYPE_SURFACE_BOAT: /* Surface vessel, boat, ship | */
                     return ARDU_ROVER;
 
+//              Unused but here for documention
 //                case MAV_TYPE.MAV_TYPE_ANTENNA_TRACKER: /* Ground installation | */
 //                case MAV_TYPE.MAV_TYPE_GCS: /* Operator control unit / ground control station | */
 //                case MAV_TYPE.MAV_TYPE_AIRSHIP: /* Airship, controlled | */

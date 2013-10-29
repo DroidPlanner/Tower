@@ -22,8 +22,6 @@ public class Profile extends DroneVariable {
     }
 
     public VehicleProfile getProfile() {
-        load();
-
         return profile;
     }
 
@@ -49,8 +47,9 @@ public class Profile extends DroneVariable {
 
     /*
      * Apply vehicle view profiles to view identified by resId
+     * Reload - want the most recent profile each time this call is made
      */
-    public void applyViewProfile(View view, int resId) {
+    public void applyMissionViewProfile(View view, int resId) {
         load();
 
         if(profile != null)

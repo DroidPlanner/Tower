@@ -44,6 +44,8 @@ public class Drone {
 		this.tts = tts;
 		this.MavClient = mavClient;
 		this.context = context;
+
+        profile.load();
 	}
 
 	public void setHudListner(HudUpdatedListner listner) {
