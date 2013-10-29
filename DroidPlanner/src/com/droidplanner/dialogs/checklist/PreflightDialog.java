@@ -1,7 +1,10 @@
 package com.droidplanner.dialogs.checklist;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import org.xmlpull.v1.XmlPullParser;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -9,9 +12,7 @@ import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
-import java.util.ArrayList;
-
-import org.xmlpull.v1.XmlPullParser;
+import android.widget.ExpandableListView;
 
 import com.droidplanner.R;
 import com.droidplanner.MAVLink.MavLinkArm;
@@ -21,8 +22,6 @@ import com.droidplanner.checklist.CheckListItem;
 import com.droidplanner.checklist.CheckListXmlParser;
 import com.droidplanner.checklist.xml.ListXmlParser.OnXmlParserError;
 import com.droidplanner.drone.Drone;
-import android.widget.ExpandableListView;
-import android.widget.Toast;
 
 public class PreflightDialog implements DialogInterface.OnClickListener,
 		OnXmlParserError, OnCheckListItemUpdateListener {
@@ -45,10 +44,10 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 	public void build(Context mcontext, Drone mdrone, boolean mpreflight) {
 		context = mcontext;
 		drone = mdrone;
-		// TODO Read System checklist here
-		CheckListXmlParser xml = new CheckListXmlParser(mcontext,
+		
+		// If external file is not found, load the default
+		CheckListXmlParser xml = new CheckListXmlParser("checklist_ext.xml",mcontext,
 				R.xml.checklist_default);
-		// CheckListXmlParser xml = new CheckListXmlParser("checklist_ext.xml");
 
 		xml.setOnXMLParserError(this);
 		listDataHeader = xml.getCategories();

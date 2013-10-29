@@ -34,6 +34,20 @@ public class CheckListXmlParser extends ListXmlParser {
 		getListItemsFromResource(context, resourceId);
 	}
 
+	public CheckListXmlParser(String ioFile, Context context, int resourceId) {
+		categories = new ArrayList<String>();
+		checkListItems = new ArrayList<CheckListItem>();
+		try {
+			getListItemsFromFile(ioFile);
+		} catch (FileNotFoundException e) {
+			getListItemsFromResource(context, resourceId);
+			e.printStackTrace();
+		} catch (XmlPullParserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	public CheckListXmlParser(String ioFile) {
 		categories = new ArrayList<String>();
 		checkListItems = new ArrayList<CheckListItem>();
