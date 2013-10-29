@@ -173,77 +173,10 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 	}
 
 	@Override
-	public void onRadioGroupUpdate(CheckListItem checkListItem, int checkId) {
-		updateSystem(checkListItem);
-/*
- 		Toast.makeText(
- 
-				context,
-				checkListItem.getTitle() + " : "
-						+ checkListItem.getOptionLists().get(checkId),
-				Toast.LENGTH_SHORT).show();
-*/
-	}
-
-	@Override
-	public void onSelectUpdate(CheckListItem checkListItem, int selectId) {
-		updateSystem(checkListItem);
-/*	
-		Toast.makeText(
-				context,
-				checkListItem.getTitle() + " : "
-						+ checkListItem.getOptionLists().get(selectId),
-				Toast.LENGTH_SHORT).show();
-*/
-
-	}
-
-	@Override
-	public void onCheckBoxUpdate(CheckListItem checkListItem, boolean isChecked) {
+	public void onRowItemChanged(CheckListItem checkListItem, String mSysTag,
+			boolean isChecked) {
 		updateSystem(checkListItem);
 		listAdapter.notifyDataSetChanged();
-
-/*
-		Toast.makeText(
-				context,
-				checkListItem.getTitle() + " : " + checkListItem.getTitle()
-						+ (isChecked ? " checked" : " unchecked"),
-				Toast.LENGTH_SHORT).show();
-
-*/
-	}
-
-	@Override
-	public void onSwitchUpdate(CheckListItem checkListItem, boolean isSwitched) {
-		updateSystem(checkListItem);
-		listAdapter.notifyDataSetChanged();
-/*
-		Toast.makeText(
-				context,
-				checkListItem.getTitle() + " : " + checkListItem.getTitle()
-						+ (isSwitched ? " switched ON" : " switched OFF"),
-				Toast.LENGTH_SHORT).show();
-*/
-	}
-
-	@Override
-	public void onToggleUpdate(CheckListItem checkListItem, boolean isToggled) {
-		updateSystem(checkListItem);
-		listAdapter.notifyDataSetChanged();
-/*
-		Toast.makeText(
-				context,
-				checkListItem.getTitle() + " : " + checkListItem.getTitle()
-						+ (isToggled ? " toggled ON" : " toggled OFF"),
-				Toast.LENGTH_SHORT).show();
-*/
-	}
-
-	@Override
-	public void onValueUpdate(CheckListItem checkListItem, String newValue) {
-		updateSystem(checkListItem);
-//		listAdapter.notifyDataSetChanged();
-		// TODO Auto-generated method stub
-
+		
 	}
 }

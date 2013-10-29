@@ -81,39 +81,16 @@ public class ListXmlFragment extends DialogFragment implements
 		setStyle(DialogFragment.STYLE_NORMAL, android.R.style.Theme_Holo);
 	}
 
-
 	@Override
-	public void onSelectUpdate(CheckListItem checkListItem, int selectId) {
+	public void onRowItemChanged(CheckListItem checkListItem, String mSysTag,
+			boolean isChecked) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
-	public void onCheckBoxUpdate(CheckListItem checkListItem, boolean isChecked) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onSwitchUpdate(CheckListItem checkListItem, boolean isSwitched) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onToggleUpdate(CheckListItem checkListItem, boolean isToggled) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onValueUpdate(CheckListItem checkListItem, String newValue) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onRadioGroupUpdate(CheckListItem checkListItem, int checkId) {
+	public void onRowItemGetData(CheckListItem checkListItem, String mSysTag,
+			boolean isChecked) {
 		// TODO Auto-generated method stub
 		
 	}
