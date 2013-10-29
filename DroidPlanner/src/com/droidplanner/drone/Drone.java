@@ -116,6 +116,7 @@ public class Drone {
 	}
 
     public void notifyVehicleTypeChanged() {
+        profile.load();
         if (vehicleTypeListener != null)
             vehicleTypeListener.onVehicleTypeChanged();
     }
