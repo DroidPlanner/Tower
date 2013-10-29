@@ -17,12 +17,15 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		screenOrientation.unlock();
-		app.conectionListner = this;
-
-		drone.MavClient.queryConnectionState();
 		infoMenu = new InfoMenu(drone);
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		app.conectionListner = this;
+		drone.MavClient.queryConnectionState();
 	}
 
 	@Override
