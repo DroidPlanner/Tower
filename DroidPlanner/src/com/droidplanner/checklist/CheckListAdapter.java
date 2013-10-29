@@ -32,8 +32,7 @@ public class CheckListAdapter extends ListXmlAdapter implements
 		public void onRowItemChanged(CheckListItem checkListItem,
 				String mSysTag, boolean isChecked);
 
-		public void onRowItemGetData(CheckListItem checkListItem,
-				String mSysTag);
+		public void onRowItemGetData(CheckListItem checkListItem, String mSysTag);
 	}
 
 	private OnCheckListItemUpdateListener listener;
@@ -104,6 +103,10 @@ public class CheckListAdapter extends ListXmlAdapter implements
 	public void setOnCheckListItemUpdateListener(
 			OnCheckListItemUpdateListener listener) {
 		this.listener = listener;
+	}
+
+	public boolean areAllVerified(int groupPosition) {
+		return getChildrenVerified(groupPosition) >= getChildrenMandatory(groupPosition);
 	}
 
 	@Override

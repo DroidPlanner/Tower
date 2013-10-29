@@ -99,8 +99,10 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 		});
 		expListView.setAdapter(listAdapter);
 
-		expListView.expandGroup(0);
-		expListView.expandGroup(1);
+		for(int h =0; h<listDataHeader.size();h++){
+			if(!listAdapter.areAllVerified(h))
+			expListView.expandGroup(h);
+		}
 
 		return view;
 	}
