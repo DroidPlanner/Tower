@@ -21,7 +21,7 @@ public class FlightActivity extends SuperUI implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_newui);
+		setContentView(R.layout.activity_flight);
 		fragmentManager = getFragmentManager();
 
 	}
