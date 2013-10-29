@@ -21,6 +21,9 @@ public class VehicleProfileReader {
     private static final String TAG_VIEWPROFILE = "ViewProfile";
     private static final String TAG_DIALOGPROFILE = "DialogProfile";
 
+    private static final String PREFIX_ID = "@+id/";
+    private static final String PREFIX_DIALOG = "@dialog/";
+
     private static final String ATTR_ID = "id";
     private static final String ATTR_TEXT = "text";
     private static final String ATTR_VISIBILITY = "visibility";
@@ -30,8 +33,10 @@ public class VehicleProfileReader {
     private static final String ATTR_MIN = "min";
     private static final String ATTR_MAX = "max";
 
-    private static final String PREFIX_ID = "@+id/";
-    private static final String PREFIX_DIALOG = "@dialog/";
+    // default tags
+    private static final String TAG_DEFAULT = "Default";
+    private static final String ATTR_WPNAV_SPEED = "wpNavSpeed";
+    private static final String ATTR_MAX_ALTITUDE = "maxAltitude";
 
 
     public static VehicleProfile open(InputStream inputStream) throws XmlPullParserException, IOException {
@@ -60,6 +65,10 @@ public class VehicleProfileReader {
                         // set metadata type
                         profile.setParameterMetadataType(parser.getAttributeValue(null, ATTR_TYPE));
 
+                    } else if(parserName.equals(TAG_DEFAULT)) {
+                        // set defaults
+                        parseDefault(parser, profile.getDefault());
+
                     } else if(parserName.equals(TAG_VIEWPROFILE)) {
                         // add view profile if builder available
                         if(viewProfileBuilder != null)
@@ -81,6 +90,14 @@ public class VehicleProfileReader {
             eventType = parser.next();
         }
         return profile;
+    }
+
+    private static void parseDefault(XmlPullParser parser, VehicleProfile.Default default_) {
+        // wpNavSpeed
+        default_.setWpNavSpeed(parseInt(parser.getAttributeValue(null, ATTR_WPNAV_SPEED)));
+
+        // maxAltitude
+        default_.setMaxAltitude(parseInt(parser.getAttributeValue(null, ATTR_MAX_ALTITUDE)));
     }
 
     private static VehicleProfile.MissionDialogProfile newDialogProfile(XmlPullParser parser) {
@@ -159,6 +176,17 @@ public class VehicleProfileReader {
             return field.getInt(field);
         } catch (Exception e) {
             return -1;
+        }
+    }
+
+    private static int parseInt(String str) {
+        if(str == null)
+            return 0;
+
+        try {
+            return Integer.parseInt(str);
+        } catch (NumberFormatException e) {
+            return 0;
         }
     }
 

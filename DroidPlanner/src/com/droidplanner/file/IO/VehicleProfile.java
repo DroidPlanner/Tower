@@ -1,14 +1,9 @@
 package com.droidplanner.file.IO;
 
-import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
-import com.droidplanner.file.DirectoryPath;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,12 +12,22 @@ import java.util.Map;
 
 public class VehicleProfile {
     private String parameterMetadataType;
+    private Default default_ = new Default();
+
     private final List<MissionViewProfile> missionViewProfiles = new ArrayList<MissionViewProfile>();
     private final Map<Integer, MissionDialogProfile> profileMissionDialogs = new HashMap<Integer, MissionDialogProfile>();
 
 
     public String getParameterMetadataType() {
         return parameterMetadataType;
+    }
+
+    public Default getDefault() {
+        return default_;
+    }
+
+    public void setDefault(Default default_) {
+        this.default_ = default_;
     }
 
     public void applyMissionViewProfile(View view, int resId) {
@@ -179,6 +184,28 @@ public class VehicleProfile {
 
         public void setInc(double inc) {
             this.inc = inc;
+        }
+    }
+
+    public static class Default
+    {
+        private int wpNavSpeed;
+        private int maxAltitude;
+
+        public int getWpNavSpeed() {
+            return wpNavSpeed;
+        }
+
+        public void setWpNavSpeed(int wpNavSpeed) {
+            this.wpNavSpeed = wpNavSpeed;
+        }
+
+        public int getMaxAltitude() {
+            return maxAltitude;
+        }
+
+        public void setMaxAltitude(int maxAltitude) {
+            this.maxAltitude = maxAltitude;
         }
     }
 }
