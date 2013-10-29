@@ -5,7 +5,9 @@
     <string name="about">About</string>
     <string name="version">Version</string>
     <string name="storage_folder">Storage Folder</string>
-    <string name="menu_settings">Settings</string>
+    <string name="settings">Settings</string>
+    <string name="configuration">Configuration</string>
+    <string name="editor">Editor</string>
     <string name="menu_connect">Connect</string>
     <string name="menu_disconnect">Disconnect</string>
     <string name="conected">Connected</string>
@@ -164,4 +166,5 @@
     <string name="menu_preflight_checklist">Pre-Flight Checklist</string>
     <string name="lst_note_hint">To add more rows, just press Enter</string>
     <string name="parameter_row_edit">Edit</string>
+    
 </resources>

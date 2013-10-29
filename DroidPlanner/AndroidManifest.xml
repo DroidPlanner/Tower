@@ -90,7 +90,7 @@
         </activity>
         <activity
             android:name=".activitys.EditorActivity"
-            android:label="Editor"
+            android:label="@string/editor"
             android:parentActivityName=".activitys.FlightActivity" >
 
             <!-- Parent activity meta-data to support API level 7+ -->
