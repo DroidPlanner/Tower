@@ -26,13 +26,6 @@ public abstract class GenericWaypoint extends MissionItem implements
 		this.altitude = new Altitude(altitude);
 	}
 
-	public void setCoordinate(LatLng position) {
-		coordinate = position;
-	}
-
-	public LatLng getCoordinate() {
-		return coordinate;
-	}
 
 	@Override
 	public MarkerOptions build(Context context) {
@@ -57,5 +50,21 @@ public abstract class GenericWaypoint extends MissionItem implements
 		ArrayList<LatLng> points = new ArrayList<LatLng>();
 		points.add(coordinate);
 		return points;
+	}
+
+	public void setCoordinate(LatLng position) {
+		coordinate = position;
+	}
+	
+	public LatLng getCoordinate() {
+		return coordinate;
+	}
+
+	public Altitude getAltitude() {
+		return altitude;
+	}
+
+	public void setAltitude(Altitude altitude) {
+		this.altitude = altitude;
 	}
 }

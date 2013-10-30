@@ -12,6 +12,11 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 
 public class Waypoint extends GenericWaypoint implements MarkerSource {
+	public double delay;
+	public double acceptanceRadius;
+	public double yawAngle;
+	public double orbitalRadius;
+	public boolean orbitCCW;
 
 	public Waypoint(LatLng coord, double altitude) {
 		super(coord, altitude);
