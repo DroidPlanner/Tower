@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.MAVLink.Messages.ApmCommands;
 import com.droidplanner.DroidPlannerApp.OnWaypointChangedListner;
 import com.droidplanner.R;
-import com.droidplanner.drone.variables.mission.waypoints.GenericWaypoint;
+import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.widgets.spinners.SpinnerSelfSelect;
 
 public abstract class DialogMission implements OnItemSelectedListener,
@@ -28,10 +28,10 @@ public abstract class DialogMission implements OnItemSelectedListener,
 	private ApmCommandsAdapter commandAdapter;
 	private AlertDialog dialog;
 	protected Context context;
-	protected GenericWaypoint wp;
+	protected MissionItem wp;
 	protected View view;
 
-	public void build(GenericWaypoint wp, Context context,
+	public void build(MissionItem wp, Context context,
 			OnWaypointChangedListner listner) {
 		this.wp = wp;
 		this.listner = listner;
@@ -42,7 +42,8 @@ public abstract class DialogMission implements OnItemSelectedListener,
 
 	private AlertDialog buildDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setTitle("Waypoint " + wp.getNumber());
+		//builder.settitle("waypoint " + wp.getnumber());
+		builder.setTitle("waypoint");
 		builder.setView(buildView());
 		builder.setPositiveButton("Ok", this);
 		AlertDialog dialog = builder.create();
@@ -60,8 +61,8 @@ public abstract class DialogMission implements OnItemSelectedListener,
 				android.R.layout.simple_list_item_1, ApmCommands.values());
 		typeSpinner.setAdapter(commandAdapter);
 		typeSpinner.setOnItemSelectedListener(this);
-		typeSpinner.setSelection(commandAdapter.getPosition(wp.getCmd()));
-
+		//typeSpinner.setSelection(commandAdapter.getPosition(wp.getCmd()));
+		typeSpinner.setSelection(commandAdapter.getPosition(ApmCommands.CMD_NAV_WAYPOINT));
 		return view;
 
 	}
@@ -76,12 +77,14 @@ public abstract class DialogMission implements OnItemSelectedListener,
 	@Override
 	public void onItemSelected(AdapterView<?> arg0, View v, int position,
 			long id) {
+		/*
 		ApmCommands selected = commandAdapter.getItem(position);
 		if (selected != wp.getCmd()) {
 			wp.setCmd(selected);
 			dialog.dismiss();
 			DialogMissionFactory.getDialog(wp, context, listner);
 		}
+		*/
 	}
 
 	@Override

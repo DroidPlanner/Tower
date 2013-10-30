@@ -2,13 +2,11 @@ package com.droidplanner.drone.variables.mission.commands;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import android.content.Context;
 
-import com.MAVLink.Messages.enums.MAV_ROI;
 import com.droidplanner.R;
-import com.droidplanner.drone.variables.mission.waypoints.GenericWaypoint;
+import com.droidplanner.dialogs.mission.DialogMission;
 import com.droidplanner.fragments.markers.GenericMarker;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import com.droidplanner.helpers.units.Altitude;
@@ -38,6 +36,18 @@ public class RegionOfInterest extends MissionCMD implements MarkerSource{
 		marker.setPosition(pointOfInterest);
 	}
 	
+	@Override
+	public DialogMission getDialog() {
+		return null; // TODO create a dialog for ROI
+	}
+
+	public Altitude getHeight() {
+		return altitude;
+	}
+
+	public void setHeight(Altitude value) {
+		this.altitude = value;		
+	}
 	
 	/*
 	private static String getRoiDetail(GenericWaypoint wp, Context context) {
