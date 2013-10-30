@@ -169,5 +169,9 @@
     <string name="rowheader_wp_no">#PKT</string>
     <string name="rowheader_wp_delta">∆ PKT</string>
     <string name="rowheader_wp_desc">Opis</string>
+    <string name="dialog_box_title_altitude">Wysokość</string>
+    <string name="dialog_box_btn_txt_cancel">Anuluj</string>
+    <string name="dialog_box_btn_txt_ok">Ok</string>
+    
     
 </resources>

@@ -170,4 +170,7 @@
     <string name="rowheader_wp_no">WP#</string>
     <string name="rowheader_wp_delta">∆ WP</string>
     <string name="rowheader_wp_desc">Description</string>
+    <string name="dialog_box_title_altitude">Altitude</string>
+    <string name="dialog_box_btn_txt_cancel">Cancel</string>
+    <string name="dialog_box_btn_txt_ok">Ok</string>
 </resources>
