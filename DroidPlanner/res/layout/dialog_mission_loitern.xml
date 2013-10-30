@@ -43,7 +43,7 @@
                 custom:max="100"
                 custom:min="0"
                 custom:title="@string/loiter_turn"
-                custom:unit="turns" >
+                custom:unit="@string/lointer_unit_turns" >
             </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
 
             <FrameLayout
