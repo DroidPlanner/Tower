@@ -67,8 +67,8 @@
                     android:id="@+id/rowNameHeader"
                     android:layout_width="45dp"
                     android:layout_height="wrap_content"
-                    android:text="WP#"
                     android:gravity="center_horizontal"
+                    android:text="@string/rowheader_wp_no"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <TextView
@@ -76,21 +76,21 @@
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    android:text="ALT"
+                    android:text="@string/rowheader_wp_alt"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <TextView
                     android:id="@+id/rowTypeHeader"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:text="WP Type"
+                    android:text="@string/rowheader_wp_type"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <TextView
                     android:id="@+id/rowDistanceHeader"
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:text="∆ WP"
+                    android:text="@string/rowheader_wp_delta"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <TextView
@@ -100,7 +100,7 @@
                     android:layout_marginLeft="2dp"
                     android:layout_weight="1"
                     android:scrollHorizontally="true"
-                    android:text="Description"
+                    android:text="@string/rowheader_wp_desc"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
             </LinearLayout>
 

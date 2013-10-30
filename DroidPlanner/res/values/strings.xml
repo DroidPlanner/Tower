@@ -165,4 +165,9 @@
     <string name="lst_note_hint">To add more rows, just press Enter</string>
     <string name="parameter_row_edit">Edit</string>
     <string name="lointer_unit_turns">turn(s)</string>
+    <string name="rowheader_wp_type">WP Type</string>
+    <string name="rowheader_wp_alt">ALT</string>
+    <string name="rowheader_wp_no">WP#</string>
+    <string name="rowheader_wp_delta">∆ WP</string>
+    <string name="rowheader_wp_desc">Description</string>
 </resources>
