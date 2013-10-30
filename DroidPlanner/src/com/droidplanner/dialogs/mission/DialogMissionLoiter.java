@@ -6,6 +6,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.droidplanner.R;
+import com.droidplanner.drone.variables.mission.waypoints.LoiterInfinite;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
 
@@ -15,6 +16,7 @@ public class DialogMissionLoiter extends DialogMission implements
 	private SeekBarWithText loiterRadiusSeekBar;
 	private CheckBox loiterCCW;
 	private SeekBarWithText yawSeekBar;
+	private LoiterInfinite wp;
 	@Override
 	protected int getResource() {
 		return R.layout.dialog_mission_loiter;
@@ -24,7 +26,7 @@ public class DialogMissionLoiter extends DialogMission implements
 		super.buildView();		
 
 		loiterCCW = (CheckBox) view.findViewById(R.string.loiter_ccw);
-		if (wp.missionItem.param3 < 0) {
+		if (wp.getRadius()< 0) {
 			loiterCCW.setChecked(true);
 		} else {
 			loiterCCW.setChecked(false);
@@ -35,11 +37,11 @@ public class DialogMissionLoiter extends DialogMission implements
 		loiterRadiusSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.loiterRadius);
 		loiterRadiusSeekBar .setOnChangedListner(this);
-		loiterRadiusSeekBar.setAbsValue(wp.missionItem.param3);
+		loiterRadiusSeekBar.setAbsValue(wp.getRadius());
 
 		yawSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.waypointAngle);
-		yawSeekBar.setValue(wp.missionItem.param4);
+		yawSeekBar.setValue(wp.getAngle());
 		yawSeekBar.setOnChangedListner(this);
 
 
@@ -51,18 +53,18 @@ public class DialogMissionLoiter extends DialogMission implements
 
 	@Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		wp.missionItem.param3 = (float) loiterRadiusSeekBar.getValue();
+		wp.setRadius(loiterRadiusSeekBar.getValue());
 		if (loiterCCW.isChecked()) {
-			wp.missionItem.param3 *= -1.0;
+			wp.setRadius(wp.getRadius()*-1.0);
 		}
     }
 	
 	@Override
 	public void onSeekBarChanged() {
-		wp.missionItem.param3 = (float) loiterRadiusSeekBar.getValue();
+		wp.setRadius(loiterRadiusSeekBar.getValue());
 		if (loiterCCW.isChecked()) {
-			wp.missionItem.param3 *= -1.0;
+			wp.setRadius(wp.getRadius()*-1.0);
 		}
-		wp.missionItem.param4 = (float) yawSeekBar.getValue();
+		wp.setAngle(yawSeekBar.getValue());
 	}
 }

@@ -25,7 +25,14 @@ public abstract class Loiter extends GenericWaypoint implements MarkerSource {
 	public void setAngle(double angle) {
 		this.angle = angle;
 	}
-
+	
+	public double getAngle() {
+		return this.angle;
+	}
+	
+	public double getRadius(){
+		return this.radius;
+	}
 	@Override
 	protected BitmapDescriptor getIcon(Context context) {
 		return BitmapDescriptorFactory.fromBitmap(MarkerWithText
