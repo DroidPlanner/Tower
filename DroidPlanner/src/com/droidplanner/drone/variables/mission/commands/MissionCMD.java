@@ -1,7 +1,8 @@
-package com.droidplanner.drone.variables.mission;
+package com.droidplanner.drone.variables.mission.commands;
 
 import java.util.List;
 
+import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import com.google.android.gms.maps.model.LatLng;
 

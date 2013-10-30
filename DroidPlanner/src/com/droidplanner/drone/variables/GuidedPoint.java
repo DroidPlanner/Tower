@@ -38,8 +38,7 @@ public class GuidedPoint extends DroneVariable implements MarkerSource {
 		return coord;
 	}
 
-	public void setCoord(LatLng coord)
-	{
+	public void setCoord(LatLng coord){
 		this.coord = coord;
 	}
 

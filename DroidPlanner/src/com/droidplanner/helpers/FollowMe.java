@@ -64,9 +64,9 @@ public class FollowMe implements LocationListener {
 	@Override
 	public void onLocationChanged(Location location) {
 		LatLng coord = new LatLng(location.getLatitude(), location.getLongitude());
-		GenericWaypoint guidedWP = new GenericWaypoint(coord, drone.mission.getDefaultAlt());
 		// TODO find a better way to do the GUIDED altitude
-		drone.guidedPoint.setGuidedMode(guidedWP);
+		drone.guidedPoint.setCoord(coord);
+		drone.guidedPoint.setGuidedMode();
 	}
 
 	@Override

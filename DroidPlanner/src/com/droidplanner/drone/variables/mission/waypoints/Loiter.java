@@ -9,19 +9,29 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 
-public class Waypoint extends GenericWaypoint implements MarkerSource {
+public abstract class Loiter extends GenericWaypoint implements MarkerSource {
 
-	public Waypoint(LatLng coord, double altitude) {
+	private double radius;
+	private double angle;
+	
+	public Loiter(LatLng coord, double altitude) {
 		super(coord, altitude);
+	}
+
+	public void setRadius(double radius) {
+		this.radius = radius;
+	}
+
+	public void setAngle(double angle) {
+		this.angle = angle;
 	}
 
 	@Override
 	protected BitmapDescriptor getIcon(Context context) {
 		return BitmapDescriptorFactory.fromBitmap(MarkerWithText
-				.getMarkerWithTextAndDetail(R.drawable.ic_wp_map, "text",
+				.getMarkerWithTextAndDetail(R.drawable.ic_wp_loiter, "text",
 						"detail", context));
 	}
-
 	
 	
 }

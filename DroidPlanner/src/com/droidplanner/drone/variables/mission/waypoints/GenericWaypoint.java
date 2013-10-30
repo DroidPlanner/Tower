@@ -6,30 +6,43 @@ import java.util.List;
 import android.content.Context;
 
 import com.droidplanner.drone.variables.mission.MissionItem;
+import com.droidplanner.fragments.markers.GenericMarker;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
-import com.droidplanner.fragments.markers.WaypointMarker;
-import com.droidplanner.helpers.units.Length;
+import com.droidplanner.helpers.units.Altitude;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public abstract class GenericWaypoint extends MissionItem implements MarkerSource {
+public abstract class GenericWaypoint extends MissionItem implements
+		MarkerSource {
+	protected abstract BitmapDescriptor getIcon(Context context);
+	
 	LatLng coordinate;
-	Length altitude;
+	Altitude altitude;
 
 	public GenericWaypoint(LatLng coord, double altitude) {
 		this.coordinate = coord;
-		this.altitude = new Length(altitude);
+		this.altitude = new Altitude(altitude);
+	}
+
+	public void setCoordinate(LatLng position) {
+		coordinate = position;
+	}
+
+	public LatLng getCoordinate() {
+		return coordinate;
 	}
 
 	@Override
 	public MarkerOptions build(Context context) {
-		return WaypointMarker.build(this, context);
+		return GenericMarker.build(coordinate).icon(getIcon(context));
 	}
-
+	
 	@Override
 	public void update(Marker marker, Context context) {
-		WaypointMarker.update(marker, this, context);
+		marker.setPosition(coordinate);
+		marker.setIcon(getIcon(context));
 	}
 
 	@Override
