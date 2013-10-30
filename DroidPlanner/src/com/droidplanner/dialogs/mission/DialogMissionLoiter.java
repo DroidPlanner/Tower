@@ -17,6 +17,7 @@ public class DialogMissionLoiter extends DialogMission implements
 	private CheckBox loiterCCW;
 	private SeekBarWithText yawSeekBar;
 	private LoiterInfinite wp;
+	
 	@Override
 	protected int getResource() {
 		return R.layout.dialog_mission_loiter;
