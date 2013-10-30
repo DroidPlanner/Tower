@@ -43,12 +43,14 @@ public class Mission extends DroneVariable implements PathSource,
 
 	public void addWaypointsWithDefaultAltitude(List<LatLng> points) {
 		for (LatLng point : points) {
-			addWaypoint(point,defaultAlt);
+			waypoints.add(new Waypoint(point,defaultAlt));
 		}		
+		onMissionUpdate();
 	}
 
 	public void addWaypoint(LatLng point, Double alt) {
 		waypoints.add(new Waypoint(point,alt));
+		onMissionUpdate();
 	}
 
 	public void onMissionReceived(List<msg_mission_item> mission) {

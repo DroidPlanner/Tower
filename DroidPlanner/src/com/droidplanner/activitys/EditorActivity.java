@@ -70,7 +70,7 @@ public class EditorActivity extends SuperUI implements
 
 	@Override
 	public boolean onMarkerClick(GenericWaypoint wp) {
-		//DialogMissionFactory.getDialog(wp,this, mission);
+		// DialogMissionFactory.getDialog(wp,this, mission);
 		return true;
 	}
 
@@ -108,7 +108,7 @@ public class EditorActivity extends SuperUI implements
 	public void onMapClick(LatLng point) {
 		switch (editorToolsFragment.getTool()) {
 		case MARKER:
-			mission.addWaypoint(point,mission.getDefaultAlt());
+			mission.addWaypoint(point, mission.getDefaultAlt());
 			break;
 		case DRAW:
 			break;
