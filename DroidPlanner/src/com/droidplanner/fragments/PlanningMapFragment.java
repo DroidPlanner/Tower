@@ -86,14 +86,16 @@ public class PlanningMapFragment extends DroneMap implements
 
 			// update marker source
 			GenericWaypoint waypoint = (GenericWaypoint) source;
-			waypoint.setCoord(position);
+			waypoint.setCoordinate(position);
 
+			/*
 			// update info window
 			if(dragging)
 				waypoint.updateDistanceFromPrevPoint();
 			else
 				waypoint.setPrevPoint(mission.getWaypoints());
 			updateInfoWindow(waypoint, marker);
+			 */
 
 			// update flight path
 			missionPath.update(mission);
@@ -101,6 +103,7 @@ public class PlanningMapFragment extends DroneMap implements
 		}
 	}
 
+	/*
 	private void updateInfoWindow(GenericWaypoint waypoint, Marker marker) {
 		marker.setTitle(waypoint.getNumber() + " " + waypoint.getCmd().getName());
 
@@ -111,6 +114,7 @@ public class PlanningMapFragment extends DroneMap implements
 
 		marker.showInfoWindow();
 	}
+	*/
 
 	@Override
 	public void onMarkerDragEnd(Marker marker) {

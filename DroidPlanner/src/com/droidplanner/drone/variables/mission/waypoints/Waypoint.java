@@ -20,8 +20,6 @@ public class Waypoint extends GenericWaypoint implements MarkerSource {
 		return BitmapDescriptorFactory.fromBitmap(MarkerWithText
 				.getMarkerWithTextAndDetail(R.drawable.ic_wp_map, "text",
 						"detail", context));
-	}
-
-	
+	}	
 	
 }

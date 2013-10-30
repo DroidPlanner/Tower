@@ -1,7 +1,5 @@
 package com.droidplanner.fragments.markers;
 
-import java.util.Locale;
-
 import com.droidplanner.R.drawable;
 import com.droidplanner.drone.variables.Home;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -14,8 +12,7 @@ public class HomeMarker {
 				.position(home.getCoord())
 				.visible(home.isValid())
 				.title("Home")
-				.snippet(
-						String.format(Locale.ENGLISH, "%.1fm", home.getHeight()))
+				.snippet(home.getAltitude().toString())
 				.anchor((float) 0.5, (float) 0.5)
 				.icon(BitmapDescriptorFactory
 						.fromResource(drawable.ic_menu_home)).title("Home");
@@ -24,7 +21,7 @@ public class HomeMarker {
 	public static void update(Marker marker, Home home) {
 		marker.setVisible(home.isValid());
 		marker.setPosition(home.getCoord());
-		marker.setSnippet("Home "+ home.getHeight());
+		marker.setSnippet("Home "+ home.getAltitude());
 	}
 
 }

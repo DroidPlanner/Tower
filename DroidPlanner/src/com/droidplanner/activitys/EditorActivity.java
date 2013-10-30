@@ -10,7 +10,6 @@ import android.view.MenuItem;
 
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperUI;
-import com.droidplanner.dialogs.mission.DialogMissionFactory;
 import com.droidplanner.drone.variables.mission.Mission;
 import com.droidplanner.drone.variables.mission.waypoints.GenericWaypoint;
 import com.droidplanner.fragments.EditorToolsFragment;
@@ -71,8 +70,7 @@ public class EditorActivity extends SuperUI implements
 
 	@Override
 	public boolean onMarkerClick(GenericWaypoint wp) {
-		DialogMissionFactory.getDialog(wp,
-				this, mission);
+		//DialogMissionFactory.getDialog(wp,this, mission);
 		return true;
 	}
 

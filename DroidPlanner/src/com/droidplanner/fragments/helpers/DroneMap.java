@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.DroidPlannerApp.OnWaypointChangedListner;
 import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.variables.Home;
 import com.droidplanner.drone.variables.mission.Mission;
 import com.droidplanner.fragments.markers.MarkerManager;
 import com.google.android.gms.maps.GoogleMap;
@@ -60,8 +61,13 @@ public abstract class DroneMap extends OfflineMapFragment implements OnWaypointC
 	}
 
 	public void update() {
-		markers.clear();
-		markers.updateMarker(drone.home.getHome(), false, context);
+		markers.clean();
+		
+		Home home = drone.home.getHome();
+		if (home.isValid()) {
+			markers.updateMarker(home, false, context);			
+		}
+		
 		markers.updateMarkers(mission.getMarkers(), true, context);
 		
 		missionPath.update(mission);

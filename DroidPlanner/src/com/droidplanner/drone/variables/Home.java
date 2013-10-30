@@ -7,6 +7,7 @@ import com.droidplanner.drone.DroneVariable;
 import com.droidplanner.fragments.markers.HomeMarker;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import com.droidplanner.helpers.geoTools.GeoTools;
+import com.droidplanner.helpers.units.Altitude;
 import com.droidplanner.helpers.units.Length;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -14,7 +15,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class Home extends DroneVariable implements MarkerSource {
 	private LatLng coordinate;
-	private Length altitude = new Length(0);
+	private Altitude altitude = new Altitude(0);
 	
 	public Home(Drone drone) {
 		super(drone);
@@ -51,7 +52,7 @@ public class Home extends DroneVariable implements MarkerSource {
 		return coordinate;
 	}
 
-	public Length getHeight() {
+	public Length getAltitude() {
 		return altitude;
 	}
 
