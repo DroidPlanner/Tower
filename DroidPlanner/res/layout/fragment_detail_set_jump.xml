@@ -3,6 +3,7 @@
     xmlns:custom="http://schemas.android.com/apk/res/com.droidplanner"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/opaque_black"
     android:orientation="vertical" >
 
     <com.droidplanner.widgets.spinners.SpinnerSelfSelect
@@ -34,7 +35,6 @@
                 custom:min="0"
                 custom:title="@string/waypoint_altitude"
                 custom:unit="m" >
-
             </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
 
             <LinearLayout
@@ -52,8 +52,7 @@
                 <Spinner
                     android:id="@+id/spinnerJumpTo"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"/>
-
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
             <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
@@ -69,7 +68,6 @@
                 custom:title="@string/waypoint_repeat"
                 custom:unit="times" >
             </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
-
         </LinearLayout>
     </ScrollView>
 

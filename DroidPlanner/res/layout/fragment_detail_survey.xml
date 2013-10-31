@@ -3,6 +3,7 @@
     xmlns:custom="http://schemas.android.com/apk/res/com.droidplanner"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/opaque_black"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -145,8 +146,8 @@
                     android:id="@+id/overlapView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
                     android:layout_margin="2dp"
+                    android:layout_weight="0.5"
                     custom:inc="1"
                     custom:max="99"
                     custom:min="0"
@@ -185,10 +186,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:textOff="@string/mission_mode"
-            android:textOn="@string/polygon_mode" 
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-        
+            android:textOn="@string/polygon_mode" />
+
         <Button
             android:id="@+id/clearPolyButton"
             android:layout_width="match_parent"
