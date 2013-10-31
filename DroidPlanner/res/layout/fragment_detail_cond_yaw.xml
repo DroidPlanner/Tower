@@ -60,13 +60,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.00"
                 android:text="@string/waypoint_yawoffset" />
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/waypointInfo_CondYaw" />
         </LinearLayout>
     </ScrollView>
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/waypointInfo_CondYaw" />
 
 </LinearLayout>

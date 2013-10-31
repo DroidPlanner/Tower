@@ -68,13 +68,13 @@
                 custom:title="@string/waypoint_repeat"
                 custom:unit="times" >
             </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/waypointInfo_SetJump" />
         </LinearLayout>
     </ScrollView>
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/waypointInfo_SetJump" />
 
 </LinearLayout>
