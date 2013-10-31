@@ -52,6 +52,16 @@
                 android:inputType="number"
                 android:key="pref_mavlink_stream_rate_RC_override"
                 android:title="RC override" />
+            <EditTextPreference
+			        android:defaultValue="5"
+			        android:inputType="number"
+			        android:key="pref_mavlink_stream_rate_rc_channels"
+			        android:title="RC channel data" />
+	        <EditTextPreference
+			        android:defaultValue="2"
+			        android:inputType="number"
+			        android:key="pref_mavlink_stream_rate_raw_sensors"
+			        android:title="Raw sensors" />
         </PreferenceScreen>
     </PreferenceCategory>
     <PreferenceCategory
@@ -118,6 +128,14 @@
             android:summary="重要的飞行数据将以语音的形式播放"
             android:title="语音提示" />
 
+        <ListPreference
+            android:defaultValue="None"
+            android:entries="@array/ParamMeta"
+            android:entryValues="@array/ParamMetaValues"
+            android:key="pref_param_metadata"
+            android:summary="Metadata to use when displaying parameters"
+            android:title="模型参数类型" />
+        
         <PreferenceScreen
             android:key="pref_rc"
             android:title="遥控面板模块设定（点击进入设定）" >
