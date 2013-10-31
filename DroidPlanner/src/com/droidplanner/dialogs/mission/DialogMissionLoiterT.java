@@ -6,6 +6,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.droidplanner.R;
+import com.droidplanner.drone.variables.mission.waypoints.LoiterTime;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
 
@@ -16,6 +17,7 @@ public class DialogMissionLoiterT extends DialogMission implements
 	private SeekBarWithText loiterRadiusSeekBar;
 	private CheckBox loiterCCW;
 	private SeekBarWithText yawSeekBar;
+	private LoiterTime item;
 
 	@Override
 	protected int getResource() {
@@ -24,9 +26,10 @@ public class DialogMissionLoiterT extends DialogMission implements
 	
 	protected View buildView() {
 		super.buildView();
-
+		item = (LoiterTime) wp;
+		
 		loiterCCW = (CheckBox) view.findViewById(R.string.loiter_ccw);
-		if (wp.missionItem.param3 < 0) {
+		if (item.getRadius() < 0) {
 			loiterCCW.setChecked(true);
 		} else {
 			loiterCCW.setChecked(false);
@@ -36,22 +39,22 @@ public class DialogMissionLoiterT extends DialogMission implements
 		
 		altitudeSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.altitudeView);
-		altitudeSeekBar.setValue(wp.getHeight());
+		altitudeSeekBar.setValue(item.getAltitude().valueInMeters());
 		altitudeSeekBar.setOnChangedListner(this);
 		
 		loiterTimeSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.loiterTime);
 		loiterTimeSeekBar .setOnChangedListner(this);
-		loiterTimeSeekBar.setValue(wp.missionItem.param1);
+		loiterTimeSeekBar.setValue(item.getTime());
 		
 		loiterRadiusSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.loiterRadius);
-		loiterRadiusSeekBar.setAbsValue(wp.missionItem.param3);
+		loiterRadiusSeekBar.setAbsValue(item.getRadius());
 		loiterRadiusSeekBar .setOnChangedListner(this);
 
 		yawSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.waypointAngle);
-		yawSeekBar.setValue(wp.missionItem.param4);
+		yawSeekBar.setValue(item.getAngle());
 		yawSeekBar.setOnChangedListner(this);
 
 		return view;
@@ -59,22 +62,22 @@ public class DialogMissionLoiterT extends DialogMission implements
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		wp.missionItem.param3 = (float) loiterRadiusSeekBar.getValue();
+		item.setRadius(loiterRadiusSeekBar.getValue());
 		if (loiterCCW.isChecked()) {
-			wp.missionItem.param3 *= -1.0;
+			item.setRadius(item.getRadius()*-1.0);
 		}
     }
 	
 
 	@Override
 	public void onSeekBarChanged() {
-		wp.setHeight(altitudeSeekBar.getValue());
-		wp.missionItem.param1 = (float) loiterTimeSeekBar.getValue();
-		wp.missionItem.param3 = (float) loiterRadiusSeekBar.getValue();
+		item.getAltitude().set(altitudeSeekBar.getValue());
+		item.setTime(loiterTimeSeekBar.getValue());
+		item.setRadius(loiterRadiusSeekBar.getValue());
 		if (loiterCCW.isChecked()) {
-			wp.missionItem.param3 *= -1.0;
+			item.setRadius(item.getRadius()*-1.0);
 		}
-		wp.missionItem.param4 = (float) yawSeekBar.getValue();
+		item.setAngle(yawSeekBar.getValue());
 	}
 
 

@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.droidplanner.DroidPlannerApp.OnWaypointChangedListner;
-import com.droidplanner.drone.variables.waypoint;
+import com.droidplanner.drone.variables.mission.waypoints.GenericWaypoint;
 import com.droidplanner.fragments.PathGesture.OnPathFinishedListner;
 import com.droidplanner.fragments.helpers.CameraGroundOverlays;
 import com.droidplanner.fragments.helpers.DroneMap;
@@ -81,19 +81,21 @@ public class PlanningMapFragment extends DroneMap implements
 	}
 
 	private void checkForWaypointMarkerMoving(MarkerSource source, Marker marker, boolean dragging) {
-		if (waypoint.class.isInstance(source)) {
+		if (GenericWaypoint.class.isInstance(source)) {
 			LatLng position = marker.getPosition();
 
 			// update marker source
-			waypoint waypoint = (waypoint) source;
-			waypoint.setCoord(position);
+			GenericWaypoint waypoint = (GenericWaypoint) source;
+			waypoint.setCoordinate(position);
 
+			/*
 			// update info window
 			if(dragging)
 				waypoint.updateDistanceFromPrevPoint();
 			else
 				waypoint.setPrevPoint(mission.getWaypoints());
 			updateInfoWindow(waypoint, marker);
+			 */
 
 			// update flight path
 			missionPath.update(mission);
@@ -101,16 +103,18 @@ public class PlanningMapFragment extends DroneMap implements
 		}
 	}
 
-	private void updateInfoWindow(waypoint waypoint, Marker marker) {
+	/*
+	private void updateInfoWindow(GenericWaypoint waypoint, Marker marker) {
 		marker.setTitle(waypoint.getNumber() + " " + waypoint.getCmd().getName());
 
 		// display distance from last waypoint if available
 		double distanceFromPrevPathPoint = waypoint.getDistanceFromPrevPoint();
-		if(distanceFromPrevPathPoint != com.droidplanner.drone.variables.waypoint.UNKNOWN_DISTANCE)
+		if(distanceFromPrevPathPoint != com.droidplanner.drone.variables.mission.waypoints.GenericWaypoint.UNKNOWN_DISTANCE)
 			marker.setSnippet(String.format("%.0fm", distanceFromPrevPathPoint));
 
 		marker.showInfoWindow();
 	}
+	*/
 
 	@Override
 	public void onMarkerDragEnd(Marker marker) {
@@ -120,8 +124,8 @@ public class PlanningMapFragment extends DroneMap implements
 	}
 
 	private void checkForWaypointMarker(MarkerSource source, Marker marker) {
-		if (waypoint.class.isInstance(source)) {
-			mListener.onMoveWaypoint((waypoint) source, marker.getPosition());
+		if (GenericWaypoint.class.isInstance(source)) {
+			mListener.onMoveWaypoint((GenericWaypoint) source, marker.getPosition());
 		}
 	}
 
@@ -146,8 +150,8 @@ public class PlanningMapFragment extends DroneMap implements
 	@Override
 	public boolean onMarkerClick(Marker marker) {
 		MarkerSource source = markers.getSourceFromMarker(marker);
-		if (source instanceof waypoint) {
-			return mListener.onMarkerClick((waypoint) source);
+		if (source instanceof GenericWaypoint) {
+			return mListener.onMarkerClick((GenericWaypoint) source);
 		} else {
 			return false;
 		}

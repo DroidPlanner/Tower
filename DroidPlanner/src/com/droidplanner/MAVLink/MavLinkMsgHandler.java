@@ -41,7 +41,7 @@ public class MavLinkMsgHandler {
 					m_hud.airspeed, m_hud.climb);
 			break;
 		case msg_mission_current.MAVLINK_MSG_ID_MISSION_CURRENT:
-			drone.mission.setWpno(((msg_mission_current) msg).seq);
+			drone.missionStats.setWpno(((msg_mission_current) msg).seq);
 			break;
 		case msg_nav_controller_output.MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT:
 			msg_nav_controller_output m_nav = (msg_nav_controller_output) msg;

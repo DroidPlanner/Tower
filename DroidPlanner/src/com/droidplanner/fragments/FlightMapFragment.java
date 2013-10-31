@@ -141,7 +141,7 @@ public class FlightMapFragment extends DroneMap implements
 	public void onModeChanged() {
 		if(drone.state.getMode() != ApmModes.ROTOR_GUIDED) {
 			if(drone.guidedPoint.isCoordValid()) {
-				markers.clear();
+				markers.clean();
 				drone.guidedPoint.invalidateCoord();
 			}
 		}
