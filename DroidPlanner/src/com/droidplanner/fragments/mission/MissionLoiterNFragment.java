@@ -24,7 +24,7 @@ public class MissionLoiterNFragment extends MissionDetailFragment implements
 
 	@Override
 	protected int getResource() {
-		return R.layout.dialog_mission_loitern;
+		return R.layout.fragment_detail_loitern;
 	}
 	
 	@Override

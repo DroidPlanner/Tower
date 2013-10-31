@@ -24,7 +24,7 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
 
 	@Override
 	protected int getResource() {
-		return R.layout.dialog_mission_waypoint;
+		return R.layout.fragment_detail_waypoint;
 	}
 
 	@Override

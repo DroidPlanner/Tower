@@ -35,7 +35,7 @@
                 android:name="com.droidplanner.fragments.survey.SurveyFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout="@layout/fragment_survey" />
+                app:layout="@layout/fragment_detail_survey" />
         </LinearLayout>
     </SlidingDrawer>
 

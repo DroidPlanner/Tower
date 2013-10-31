@@ -90,7 +90,7 @@ public class SurveyViews {
 
 	public void build(LayoutInflater inflater, ViewGroup container,
 			SurveyFragment surveyDialog) {
-		layout = inflater.inflate(R.layout.fragment_survey, null);
+		layout = inflater.inflate(R.layout.fragment_detail_survey, null);
 		cameraSpinner = (SpinnerSelfSelect) layout
 				.findViewById(id.cameraFileSpinner);
 		modeButton = (ToggleButton) layout.findViewById(id.surveyModeButton);
