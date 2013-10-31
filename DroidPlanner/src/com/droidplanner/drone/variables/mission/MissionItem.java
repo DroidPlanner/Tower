@@ -2,8 +2,8 @@ package com.droidplanner.drone.variables.mission;
 
 import java.util.List;
 
-import com.droidplanner.dialogs.mission.DialogMission;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
+import com.droidplanner.fragments.mission.DialogMission;
 import com.google.android.gms.maps.model.LatLng;
 
 public abstract class MissionItem {

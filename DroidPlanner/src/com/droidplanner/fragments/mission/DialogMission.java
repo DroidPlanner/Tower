@@ -1,4 +1,4 @@
-package com.droidplanner.dialogs.mission;
+package com.droidplanner.fragments.mission;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

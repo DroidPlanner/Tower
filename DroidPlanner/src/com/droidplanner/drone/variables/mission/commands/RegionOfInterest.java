@@ -6,9 +6,9 @@ import java.util.List;
 import android.content.Context;
 
 import com.droidplanner.R;
-import com.droidplanner.dialogs.mission.DialogMission;
 import com.droidplanner.fragments.markers.GenericMarker;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
+import com.droidplanner.fragments.mission.DialogMission;
 import com.droidplanner.helpers.units.Altitude;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
