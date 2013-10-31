@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import android.util.Log;
 import android.widget.Toast;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
@@ -11,6 +12,7 @@ import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneVariable;
 import com.droidplanner.fragments.helpers.MapPath.PathSource;
+import com.droidplanner.helpers.geoTools.spline.SplinePath;
 import com.google.android.gms.maps.model.LatLng;
 
 public class Mission extends DroneVariable implements PathSource, OnWaypointUpdateListner {
@@ -196,7 +198,11 @@ public class Mission extends DroneVariable implements PathSource, OnWaypointUpda
 				newPath.add(point.getCoord());				
 			}
 		}
-		return newPath;
+		Log.d("t", "getPoints");
+		
+		SplinePath spline = new SplinePath();
+		return spline.process(newPath, 20);		
+		//return newPath;
 	}
 
 	@Override

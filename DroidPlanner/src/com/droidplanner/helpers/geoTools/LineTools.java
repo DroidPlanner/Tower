@@ -23,23 +23,23 @@ public class LineTools {
 	 */
 	public static LatLng FindLineIntersection(LineLatLng first,
 			LineLatLng second) throws Exception {
-		double denom = ((first.p2.longitude - first.p1.longitude) * (second.p2.latitude - second.p1.latitude))
-				- ((first.p2.latitude - first.p1.latitude) * (second.p2.longitude - second.p1.longitude));
+		double denom = ((first.getEnd().longitude - first.getStart().longitude) * (second.getEnd().latitude - second.getStart().latitude))
+				- ((first.getEnd().latitude - first.getStart().latitude) * (second.getEnd().longitude - second.getStart().longitude));
 		if (denom == 0)
 			throw new Exception("Parralel Lines");
-		double numer = ((first.p1.latitude - second.p1.latitude) * (second.p2.longitude - second.p1.longitude))
-				- ((first.p1.longitude - second.p1.longitude) * (second.p2.latitude - second.p1.latitude));
+		double numer = ((first.getStart().latitude - second.getStart().latitude) * (second.getEnd().longitude - second.getStart().longitude))
+				- ((first.getStart().longitude - second.getStart().longitude) * (second.getEnd().latitude - second.getStart().latitude));
 		double r = numer / denom;
-		double numer2 = ((first.p1.latitude - second.p1.latitude) * (first.p2.longitude - first.p1.longitude))
-				- ((first.p1.longitude - second.p1.longitude) * (first.p2.latitude - first.p1.latitude));
+		double numer2 = ((first.getStart().latitude - second.getStart().latitude) * (first.getEnd().longitude - first.getStart().longitude))
+				- ((first.getStart().longitude - second.getStart().longitude) * (first.getEnd().latitude - first.getStart().latitude));
 		double s = numer2 / denom;
 		if ((r < 0 || r > 1) || (s < 0 || s > 1))
 			throw new Exception("No Intersection");
 		// Find intersection point
-		double longitude = first.p1.longitude
-				+ (r * (first.p2.longitude - first.p1.longitude));
-		double latitude = first.p1.latitude
-				+ (r * (first.p2.latitude - first.p1.latitude));
+		double longitude = first.getStart().longitude
+				+ (r * (first.getEnd().longitude - first.getStart().longitude));
+		double latitude = first.getStart().latitude
+				+ (r * (first.getEnd().latitude - first.getStart().latitude));
 		return (new LatLng(latitude, longitude));
 	}
 
@@ -58,9 +58,9 @@ public class LineTools {
 		double shortest = Double.MAX_VALUE;
 
 		for (LineLatLng line : list) {
-			double ans1 = GeoTools.getAproximatedDistance(point, line.p1);
-			double ans2 = GeoTools.getAproximatedDistance(point, line.p2);
-			LatLng shorterpnt = ans1 < ans2 ? line.p1 : line.p2;
+			double ans1 = GeoTools.getAproximatedDistance(point, line.getStart());
+			double ans2 = GeoTools.getAproximatedDistance(point, line.getEnd());
+			LatLng shorterpnt = ans1 < ans2 ? line.getStart() : line.getEnd();
 
 			if (shortest > GeoTools.getAproximatedDistance(point, shorterpnt)) {
 				answer = line;
