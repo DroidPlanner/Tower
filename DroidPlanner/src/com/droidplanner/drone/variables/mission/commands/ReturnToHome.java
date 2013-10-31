@@ -11,4 +11,12 @@ public class ReturnToHome extends MissionCMD{
 	public DialogMission getDialog() {
 		return new DialogMissionRTL();
 	}
+
+	public Altitude  getHeight() {
+		return returnAltitude;
+	}
+
+	public void setHeight(Altitude altitude) {
+		returnAltitude = altitude;
+	}
 }

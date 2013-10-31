@@ -3,7 +3,7 @@ package com.droidplanner.dialogs.mission;
 import android.view.View;
 
 import com.droidplanner.R;
-import com.droidplanner.drone.variables.mission.commands.RegionOfInterest;
+import com.droidplanner.drone.variables.mission.commands.ReturnToHome;
 import com.droidplanner.helpers.units.Altitude;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
@@ -11,16 +11,16 @@ import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarCha
 public class DialogMissionRTL extends DialogMission implements
 		OnTextSeekBarChangedListner {
 	private SeekBarWithText altitudeSeekBar;
-	private RegionOfInterest item;
+	private ReturnToHome item;
 
 	@Override
 	protected int getResource() {
 		return R.layout.dialog_mission_rtl;
 	}
-	
+
 	protected View buildView() {
 		super.buildView();
-		item = (RegionOfInterest) wp;
+		item = (ReturnToHome) wp;
 		altitudeSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.altitudeView);
 		altitudeSeekBar.setValue(item.getHeight().valueInMeters());
@@ -33,6 +33,5 @@ public class DialogMissionRTL extends DialogMission implements
 	public void onSeekBarChanged() {
 		item.setHeight(new Altitude(altitudeSeekBar.getValue()));
 	}
-
 
 }
