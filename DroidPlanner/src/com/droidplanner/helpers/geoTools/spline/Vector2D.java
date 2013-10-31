@@ -9,7 +9,6 @@ public class Vector2D {
 	public Vector2D(Vector2D vector) {
 		this(vector.x, vector.y);
 	}
-	
 
 	public Vector2D(double x, double y) {
 		this.x = x;
@@ -21,10 +20,10 @@ public class Vector2D {
 	}
 
 	public Vector2D(LatLng latLng) {
-		this(latLng.latitude,latLng.longitude);
+		this(latLng.latitude, latLng.longitude);
 	}
-	
-	public LatLng getCoordinate(){
+
+	public LatLng getCoordinate() {
 		return new LatLng(x, y);
 	}
 
@@ -33,7 +32,7 @@ public class Vector2D {
 	}
 
 	public Vector2D subtract(Vector2D vector) {
-		return new Vector2D(vector.x - this.x, vector.y - this.y);
+		return new Vector2D(this.x - vector.x, this.y - vector.y);
 	}
 
 	public Vector2D dot(double scalar) {

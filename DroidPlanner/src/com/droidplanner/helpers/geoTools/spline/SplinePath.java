@@ -3,8 +3,6 @@ package com.droidplanner.helpers.geoTools.spline;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.util.Log;
-
 import com.google.android.gms.maps.model.LatLng;
 
 public class SplinePath {
@@ -39,13 +37,12 @@ public class SplinePath {
 		for (int i = 3; i < points.size(); i++) {
 			processPathSegment(points.get(i - 3), points.get(i - 2),
 					points.get(i - 1), points.get(i));
-			Log.d("t", "step");
 		}
 	}
 
 	private void processPathSegment(LatLng l1, LatLng l2, LatLng l3, LatLng l4) {
 		Spline spline = new Spline(new Vector2D(l1), new Vector2D(l2),
-				new Vector2D(l3), new Vector2D(l4));		
+				new Vector2D(l3), new Vector2D(l4));
 		result.addAll(spline.generateCoordinates(decimation));
 	}
 
