@@ -172,6 +172,10 @@
     <string name="dialog_box_title_altitude">Wysokość</string>
     <string name="dialog_box_btn_txt_cancel">Anuluj</string>
     <string name="dialog_box_btn_txt_ok">Ok</string>
+	<string name="exception_draw_polygon">Zaznacz Obszar/Punkty</string>
+    <string name="exception_draw_2_more_polygon_points">Zaznacz jeszcze co najmniej 2 punkty</string>
+    <string name="exception_draw_1_more_polygon_points">Zaznacz jeszcze co najmniej 1 punkt</string>
+    <string name="mission_is_too_lengthy">Misja jest zbyt długa!</string>    
     
     
 </resources>
