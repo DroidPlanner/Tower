@@ -1,5 +1,6 @@
 package com.droidplanner.helpers.geoTools;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.droidplanner.helpers.units.Area;
@@ -24,12 +25,12 @@ public class GeoTools {
 	}
 
 	public static Double metersTolat(double meters) {
-		double radius_of_earth = 6378100.0;// # in meters
+		double radius_of_earth = RADIUS_OF_EARTH;// # in meters
 		return Math.toDegrees(meters / radius_of_earth);
 	}
 
 	public static Double latToMeters(double lat) {
-		double radius_of_earth = 6378100.0;// # in meters
+		double radius_of_earth = RADIUS_OF_EARTH;// # in meters
 		return Math.toRadians(lat) * radius_of_earth;
 	}
 
@@ -63,6 +64,18 @@ public class GeoTools {
 
 		return (new LatLng(Math.toDegrees(lat2), Math.toDegrees(lon2)));
 	}
+	
+	/**
+	 * Similar to newCoordFromBearingAndDistance() but with a matematical angle
+	 * @param origin
+	 * @param angle
+	 * @param distance
+	 * @return
+	 */
+	public static LatLng newCoordFromAngleAndDistance(LatLng origin,
+			double angle, double distance) {
+		return newCoordFromBearingAndDistance(origin, angleToHeading(angle), distance);
+	}
 
 	/**
 	 * Calculates the arc between two points
@@ -94,7 +107,28 @@ public class GeoTools {
 	public static double getDistance(LatLng from, LatLng to) {
 		return RADIUS_OF_EARTH * Math.toRadians(getArcInRadians(from, to));
 	}
+	
+	/**
+	 * Generates points in a circle
+	 */
+	public static List<LatLng> generateCircle(LatLng center, double radius,
+			int numberOfWaypoints) {
+		ArrayList<LatLng> result = new ArrayList<LatLng>();
+		for (int i = 0; i < numberOfWaypoints; i++) {
+			double heading = (360.0 * i) / numberOfWaypoints;
+			result.add(GeoTools.newCoordFromAngleAndDistance(center,	heading, radius));
+		}
+		return result;
+	}
 
+	public static double headingToAngle(double heading) {
+		return (360 - heading);
+	}
+	
+	private static double angleToHeading(double angle) {
+		return headingToAngle(angle);
+	}
+	
 	/**
 	 * Computes the heading between two coordinates
 	 * 

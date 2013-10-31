@@ -80,7 +80,19 @@ public class PlanningActivity extends SuperActivity implements
 		drone.mission.missionListner = this;
 
 		checkIntent();
+		
+		update();
+		
+		//TODO remove the following method after debugging dubins
+		debugData();
+	}
 
+	private void debugData() {
+		List<LatLng> coords = new ArrayList<LatLng>();
+		coords.add(new LatLng(-29.699247360229492,-51.14939880371094));
+		coords.add(new LatLng(-29.696735382080078,-51.149410247802734));
+		coords.add(new LatLng(-29.695877334594727,-51.14913912963867));
+		drone.mission.addWaypointsWithDefaultAltitude(coords);
 		update();
 	}
 

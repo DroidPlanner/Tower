@@ -3,40 +3,52 @@ package com.droidplanner.helpers.geoTools;
 import com.google.android.gms.maps.model.LatLng;
 
 public class LineLatLng {
-	public LatLng p1;
-	public LatLng p2;
+	private LatLng start;
+	private LatLng end;
 
 	public LineLatLng(LatLng p1, LatLng p2) {
-		this.p1 = p1;
-		this.p2 = p2;
+		this.start = p1;
+		this.end = p2;
 	}
 
 	public LineLatLng(LineLatLng line) {
-		this(line.p1, line.p2);
+		this(line.getStart(), line.getEnd());
 	}
 
+	public double getAngle() {
+		double heading = GeoTools.getHeadingFromCoordinates(getStart(),getEnd());
+		return GeoTools.headingToAngle(heading);	
+	}
+	
 	public LatLng getFarthestEndpointTo(LatLng point) {
-		if (getClosestEndpointTo(point).equals(p1)) {
-			return p2;
+		if (getClosestEndpointTo(point).equals(getStart())) {
+			return getEnd();
 		} else {
-			return p1;
+			return getStart();
 		}
 	}
 
 	public LatLng getClosestEndpointTo(LatLng point) {
 		if (getDistanceToStart(point) < getDistanceToEnd(point)) {
-			return p1;
+			return getStart();
 		} else {
-			return p2;
+			return getEnd();
 		}
 	}
 
 	private Double getDistanceToEnd(LatLng point) {
-		return GeoTools.getAproximatedDistance(p2, point);
+		return GeoTools.getAproximatedDistance(getEnd(), point);
 	}
 
 	private Double getDistanceToStart(LatLng point) {
-		return GeoTools.getAproximatedDistance(p1, point);
+		return GeoTools.getAproximatedDistance(getStart(), point);
 	}
 
+	public LatLng getStart() {
+		return start;
+	}
+
+	public LatLng getEnd() {
+		return end;
+	}	
 }

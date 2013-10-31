@@ -11,6 +11,7 @@ import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneVariable;
 import com.droidplanner.fragments.helpers.MapPath.PathSource;
+import com.droidplanner.helpers.geoTools.Dubins.Dubins;
 import com.google.android.gms.maps.model.LatLng;
 
 public class Mission extends DroneVariable implements PathSource, OnWaypointUpdateListner {
@@ -196,7 +197,11 @@ public class Mission extends DroneVariable implements PathSource, OnWaypointUpda
 				newPath.add(point.getCoord());				
 			}
 		}
-		return newPath;
+		
+		Dubins dubins = new Dubins(50.0); // TODO find a better way to switch between normal path and dubins
+		return dubins.generate(newPath);
+		//dubins.generate(newPath);
+		//return newPath;
 	}
 
 	@Override
