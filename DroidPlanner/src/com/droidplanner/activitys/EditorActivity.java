@@ -3,6 +3,7 @@ package com.droidplanner.activitys;
 import java.util.List;
 
 import android.app.ActionBar;
+import android.app.FragmentManager;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -10,8 +11,8 @@ import android.view.MenuItem;
 
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperUI;
-import com.droidplanner.dialogs.mission.DialogMissionFactory;
 import com.droidplanner.drone.variables.mission.Mission;
+import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.drone.variables.mission.waypoints.GenericWaypoint;
 import com.droidplanner.fragments.EditorToolsFragment;
 import com.droidplanner.fragments.EditorToolsFragment.EditorTools;
@@ -21,6 +22,8 @@ import com.droidplanner.fragments.helpers.GestureMapFragment;
 import com.droidplanner.fragments.helpers.GestureMapFragment.OnPathFinishedListner;
 import com.droidplanner.fragments.helpers.MapProjection;
 import com.droidplanner.fragments.helpers.OnMapInteractionListener;
+import com.droidplanner.fragments.mission.ItemDetailFragment;
+import com.droidplanner.fragments.mission.MissionDetailFragment;
 import com.droidplanner.polygon.PolygonPoint;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -31,6 +34,8 @@ public class EditorActivity extends SuperUI implements
 	private GestureMapFragment gestureMapFragment;
 	private Mission mission;
 	private EditorToolsFragment editorToolsFragment;
+	private MissionDetailFragment itemDetailFragment;
+	private FragmentManager fragmentManager;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -40,11 +45,13 @@ public class EditorActivity extends SuperUI implements
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
-		planningMapFragment = ((PlanningMapFragment) getFragmentManager()
+		fragmentManager = getFragmentManager();
+
+		planningMapFragment = ((PlanningMapFragment) fragmentManager
 				.findFragmentById(R.id.mapFragment));
-		gestureMapFragment = ((GestureMapFragment) getFragmentManager()
+		gestureMapFragment = ((GestureMapFragment) fragmentManager
 				.findFragmentById(R.id.gestureMapFragment));
-		editorToolsFragment = (EditorToolsFragment) getFragmentManager()
+		editorToolsFragment = (EditorToolsFragment) fragmentManager
 				.findFragmentById(R.id.editorToolsFragment);
 
 		mission = drone.mission;
@@ -71,7 +78,7 @@ public class EditorActivity extends SuperUI implements
 
 	@Override
 	public boolean onMarkerClick(GenericWaypoint wp) {
-		DialogMissionFactory.getDialog(wp,this, mission);
+		showItemDetail(wp);
 		return true;
 	}
 
@@ -122,10 +129,38 @@ public class EditorActivity extends SuperUI implements
 
 	@Override
 	public void editorToolChanged(EditorTools tools) {
+		removeItemDetail();	//TODO remove this, used for debbuging
 		if (tools == EditorTools.DRAW) {
 			gestureMapFragment.enableGestureDetection();
 		} else {
 			gestureMapFragment.disableGestureDetection();
+		}
+	}
+
+	private void showItemDetail(MissionItem item) {
+		if (itemDetailFragment == null) {
+			addItemDetail(item);
+		} else {
+			switchItemDetail(item);
+		}
+	}
+
+	private void addItemDetail(MissionItem item) {
+		itemDetailFragment = item.getDetailFragment();
+		fragmentManager.beginTransaction()
+				.add(R.id.containerItemDetail, itemDetailFragment).commit();
+	}
+
+	private void switchItemDetail(MissionItem item) {
+		itemDetailFragment = item.getDetailFragment();
+		fragmentManager.beginTransaction()
+				.replace(R.id.containerItemDetail, itemDetailFragment).commit();
+	}
+
+	private void removeItemDetail() {
+		if (itemDetailFragment != null) {
+			fragmentManager.beginTransaction().remove(itemDetailFragment).commit();
+			itemDetailFragment = null;			
 		}
 	}
 

@@ -3,7 +3,7 @@ package com.droidplanner.drone.variables.mission;
 import java.util.List;
 
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
-import com.droidplanner.fragments.mission.MissionFragment;
+import com.droidplanner.fragments.mission.MissionDetailFragment;
 import com.google.android.gms.maps.model.LatLng;
 
 public abstract class MissionItem {
@@ -23,9 +23,9 @@ public abstract class MissionItem {
 	public abstract List<MarkerSource> getMarkers() throws Exception;
 
 	/**
-	 * Return a new dialog for this MissionItem
+	 * Return a new detail Fragment for this MissionItem
 	 * @return
 	 */
-	public abstract MissionFragment getDialog(); 
+	public abstract MissionDetailFragment getDetailFragment();
 	
 }

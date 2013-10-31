@@ -6,11 +6,12 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.droidplanner.R;
+import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.drone.variables.mission.waypoints.LoiterInfinite;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
 
-public class MissionLoiterFragment extends MissionFragment implements
+public class MissionLoiterFragment extends MissionDetailFragment implements
 		OnTextSeekBarChangedListner, OnCheckedChangeListener{
 
 	private SeekBarWithText loiterRadiusSeekBar;
@@ -23,10 +24,14 @@ public class MissionLoiterFragment extends MissionFragment implements
 		return R.layout.dialog_mission_loiter;
 	}
 	
-	protected View buildView() {
-		super.buildView();	
-		item =  (LoiterInfinite) wp;
-
+	@Override
+	public void setItem(MissionItem item) {
+		this.item = (LoiterInfinite) item; 
+	}
+	
+	@Override
+	protected void setupViews(View view) {
+		super.setupViews(view);
 		loiterCCW = (CheckBox) view.findViewById(R.string.loiter_ccw);
 		if (item.getRadius()< 0) {
 			loiterCCW.setChecked(true);
@@ -45,10 +50,6 @@ public class MissionLoiterFragment extends MissionFragment implements
 				.findViewById(R.id.waypointAngle);
 		yawSeekBar.setValue(item.getAngle());
 		yawSeekBar.setOnChangedListner(this);
-
-
-
-		return view;
 	}
 	
 	

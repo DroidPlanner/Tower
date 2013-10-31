@@ -98,4 +98,13 @@
         </LinearLayout>
     </SlidingDrawer>
 
+    <FrameLayout
+        android:id="@+id/containerItemDetail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignLeft="@+id/slidingDrawer1"
+        android:layout_gravity="bottom"
+        android:measureAllChildren="true" >
+
+    </FrameLayout>
 </RelativeLayout>

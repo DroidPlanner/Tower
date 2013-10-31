@@ -8,7 +8,7 @@ import android.content.Context;
 import com.droidplanner.R;
 import com.droidplanner.fragments.markers.GenericMarker;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
-import com.droidplanner.fragments.mission.MissionFragment;
+import com.droidplanner.fragments.mission.MissionDetailFragment;
 import com.droidplanner.helpers.units.Altitude;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -37,7 +37,7 @@ public class RegionOfInterest extends MissionCMD implements MarkerSource{
 	}
 	
 	@Override
-	public MissionFragment getDialog() {
+	public MissionDetailFragment getDetailFragment() {
 		return null; // TODO create a dialog for ROI
 	}
 

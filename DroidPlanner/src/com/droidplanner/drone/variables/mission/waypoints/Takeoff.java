@@ -5,7 +5,7 @@ import android.content.Context;
 import com.droidplanner.R;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import com.droidplanner.fragments.markers.helpers.MarkerWithText;
-import com.droidplanner.fragments.mission.MissionFragment;
+import com.droidplanner.fragments.mission.MissionDetailFragment;
 import com.droidplanner.fragments.mission.MissionTakeoffFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -28,8 +28,10 @@ public class Takeoff extends GenericWaypoint implements MarkerSource {
 	}
 
 	@Override
-	public MissionFragment getDialog() {
-		return new MissionTakeoffFragment();
+	public MissionDetailFragment getDetailFragment() {
+		MissionDetailFragment fragment = new MissionTakeoffFragment();
+		fragment.setItem(this);
+		return fragment;
 	}
 
 }

@@ -3,12 +3,13 @@ package com.droidplanner.fragments.mission;
 import android.view.View;
 
 import com.droidplanner.R;
+import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.drone.variables.mission.waypoints.Takeoff;
 import com.droidplanner.helpers.units.Altitude;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
 
-public class MissionTakeoffFragment extends MissionFragment implements
+public class MissionTakeoffFragment extends MissionDetailFragment implements
 		OnTextSeekBarChangedListner {
 	private SeekBarWithText altitudeSeekBar;
 	private SeekBarWithText angleSeekBar;
@@ -19,12 +20,17 @@ public class MissionTakeoffFragment extends MissionFragment implements
 	protected int getResource() {
 		return R.layout.dialog_mission_takeoff;
 	}
+	
+	@Override
+	public void setItem(MissionItem item) {
+		this.item =  (Takeoff) item; 
+	}	
 
-	protected View buildView() {
-		super.buildView();
+	@Override
+	protected void setupViews(View view) {
+		super.setupViews(view);
 		altitudeSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.altitudeView);
-		item = (Takeoff) wp;
 		altitudeSeekBar.setValue(item.getAltitude().valueInMeters());
 		altitudeSeekBar.setOnChangedListner(this);
 
@@ -35,8 +41,6 @@ public class MissionTakeoffFragment extends MissionFragment implements
 		yawSeekBar = (SeekBarWithText) view.findViewById(R.id.waypointAngle);
 		yawSeekBar.setValue(item.yawAngle);
 		yawSeekBar.setOnChangedListner(this);
-
-		return view;
 	}
 
 	@Override

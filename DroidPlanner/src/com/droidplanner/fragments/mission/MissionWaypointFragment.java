@@ -6,12 +6,13 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.droidplanner.R;
+import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.drone.variables.mission.waypoints.Waypoint;
 import com.droidplanner.helpers.units.Altitude;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
 
-public class MissionWaypointFragment extends MissionFragment implements
+public class MissionWaypointFragment extends MissionDetailFragment implements
 		OnTextSeekBarChangedListner, OnCheckedChangeListener {
 	private SeekBarWithText altitudeSeekBar;
 	private SeekBarWithText delaySeekBar;
@@ -26,9 +27,14 @@ public class MissionWaypointFragment extends MissionFragment implements
 		return R.layout.dialog_mission_waypoint;
 	}
 
-	protected View buildView() {
-		super.buildView();
-		item = (Waypoint) wp;
+	@Override
+	public void setItem(MissionItem item) {
+		this.item = (Waypoint) item;
+	}
+
+	@Override
+	protected void setupViews(View view) {
+		super.setupViews(view);
 		altitudeSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.altitudeView);
 		altitudeSeekBar.setValue(item.getAltitude().valueInMeters());
@@ -43,7 +49,6 @@ public class MissionWaypointFragment extends MissionFragment implements
 		radiusSeekBar.setValue(item.acceptanceRadius);
 		radiusSeekBar.setOnChangedListner(this);
 
-
 		yawSeekBar = (SeekBarWithText) view.findViewById(R.id.waypointAngle);
 		yawSeekBar.setValue(item.yawAngle);
 		yawSeekBar.setOnChangedListner(this);
@@ -52,20 +57,17 @@ public class MissionWaypointFragment extends MissionFragment implements
 				.findViewById(R.id.waypointOrbitalRadius);
 		orbitSeekBar.setOnChangedListner(this);
 		orbitSeekBar.setAbsValue(item.orbitalRadius);
-		
-		orbitCCW = (CheckBox) view
-				.findViewById(R.id.waypoint_CCW);
-		orbitCCW.setChecked(item.orbitCCW);
-		orbitCCW.setOnCheckedChangeListener(this);	
 
-		return view;
+		orbitCCW = (CheckBox) view.findViewById(R.id.waypoint_CCW);
+		orbitCCW.setChecked(item.orbitCCW);
+		orbitCCW.setOnCheckedChangeListener(this);
 	}
 
 	@Override
 	public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
 		onSeekBarChanged();
 	}
-	
+
 	@Override
 	public void onSeekBarChanged() {
 		item.setAltitude(new Altitude(altitudeSeekBar.getValue()));
@@ -73,7 +75,7 @@ public class MissionWaypointFragment extends MissionFragment implements
 		item.acceptanceRadius = (float) radiusSeekBar.getValue();
 		item.yawAngle = (float) yawSeekBar.getValue();
 		item.orbitalRadius = (float) orbitSeekBar.getValue();
-		item.orbitCCW = orbitCCW.isChecked();		
+		item.orbitCCW = orbitCCW.isChecked();
 	}
 
 }
