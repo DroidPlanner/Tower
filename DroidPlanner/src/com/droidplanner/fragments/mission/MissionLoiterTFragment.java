@@ -10,7 +10,7 @@ import com.droidplanner.drone.variables.mission.waypoints.LoiterTime;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
 
-public class DialogMissionLoiterT extends DialogMission implements
+public class MissionLoiterTFragment extends MissionFragment implements
 		OnTextSeekBarChangedListner, OnCheckedChangeListener {
 	private SeekBarWithText altitudeSeekBar;
 	private SeekBarWithText loiterTimeSeekBar;

@@ -5,8 +5,8 @@ import android.content.Context;
 import com.droidplanner.R;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import com.droidplanner.fragments.markers.helpers.MarkerWithText;
-import com.droidplanner.fragments.mission.DialogMission;
-import com.droidplanner.fragments.mission.DialogMissionLand;
+import com.droidplanner.fragments.mission.MissionFragment;
+import com.droidplanner.fragments.mission.MissionLandFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -27,8 +27,8 @@ public class Land extends GenericWaypoint implements MarkerSource {
 	}
 
 	@Override
-	public DialogMission getDialog() {
-		return new DialogMissionLand();
+	public MissionFragment getDialog() {
+		return new MissionLandFragment();
 	}
 
 }

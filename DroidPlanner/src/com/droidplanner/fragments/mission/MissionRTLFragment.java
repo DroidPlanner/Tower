@@ -8,7 +8,7 @@ import com.droidplanner.helpers.units.Altitude;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
 
-public class DialogMissionRTL extends DialogMission implements
+public class MissionRTLFragment extends MissionFragment implements
 		OnTextSeekBarChangedListner {
 	private SeekBarWithText altitudeSeekBar;
 	private ReturnToHome item;

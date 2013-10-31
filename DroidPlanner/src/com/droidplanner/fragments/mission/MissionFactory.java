@@ -5,11 +5,11 @@ import android.content.Context;
 import com.droidplanner.DroidPlannerApp.OnWaypointChangedListner;
 import com.droidplanner.drone.variables.mission.MissionItem;
 
-public class DialogMissionFactory {
+public class MissionFactory {
 
 	public static void getDialog(MissionItem item, Context context,
 			OnWaypointChangedListner listner) {
-		DialogMission dialog;
+		MissionFragment dialog;
 		dialog = item.getDialog();
 		dialog.build(item, context, listner);
 	}

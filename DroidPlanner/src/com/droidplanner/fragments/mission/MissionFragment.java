@@ -19,7 +19,7 @@ import com.droidplanner.R;
 import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.widgets.spinners.SpinnerSelfSelect;
 
-public abstract class DialogMission implements OnItemSelectedListener,
+public abstract class MissionFragment implements OnItemSelectedListener,
 		OnClickListener {
 	protected abstract int getResource();
 

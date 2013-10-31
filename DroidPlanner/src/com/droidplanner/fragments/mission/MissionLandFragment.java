@@ -7,7 +7,7 @@ import com.droidplanner.drone.variables.mission.waypoints.Land;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
 
-public class DialogMissionLand extends DialogMission implements
+public class MissionLandFragment extends MissionFragment implements
 		OnTextSeekBarChangedListner {
 	private SeekBarWithText yawSeekBar;
 	private Land item;

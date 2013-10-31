@@ -3,7 +3,7 @@ package com.droidplanner.drone.variables.mission;
 import java.util.List;
 
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
-import com.droidplanner.fragments.mission.DialogMission;
+import com.droidplanner.fragments.mission.MissionFragment;
 import com.google.android.gms.maps.model.LatLng;
 
 public abstract class MissionItem {
@@ -26,6 +26,6 @@ public abstract class MissionItem {
 	 * Return a new dialog for this MissionItem
 	 * @return
 	 */
-	public abstract DialogMission getDialog(); 
+	public abstract MissionFragment getDialog(); 
 	
 }

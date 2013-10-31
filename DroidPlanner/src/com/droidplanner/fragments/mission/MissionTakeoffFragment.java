@@ -8,7 +8,7 @@ import com.droidplanner.helpers.units.Altitude;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
 
-public class DialogMissionTakeoff extends DialogMission implements
+public class MissionTakeoffFragment extends MissionFragment implements
 		OnTextSeekBarChangedListner {
 	private SeekBarWithText altitudeSeekBar;
 	private SeekBarWithText angleSeekBar;

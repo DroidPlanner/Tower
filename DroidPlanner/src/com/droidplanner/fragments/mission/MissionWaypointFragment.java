@@ -11,7 +11,7 @@ import com.droidplanner.helpers.units.Altitude;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
 
-public class DialogMissionWaypoint extends DialogMission implements
+public class MissionWaypointFragment extends MissionFragment implements
 		OnTextSeekBarChangedListner, OnCheckedChangeListener {
 	private SeekBarWithText altitudeSeekBar;
 	private SeekBarWithText delaySeekBar;
