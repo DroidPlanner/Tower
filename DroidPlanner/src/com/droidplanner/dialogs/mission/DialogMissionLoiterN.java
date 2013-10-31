@@ -19,7 +19,7 @@ public class DialogMissionLoiterN extends DialogMission implements
 	private SeekBarWithText loiterRadiusSeekBar;
 	private CheckBox loiterCCW;
 	private SeekBarWithText yawSeekBar;
-	private LoiterTurns wp;
+	private LoiterTurns item;
 
 	@Override
 	protected int getResource() {
@@ -28,9 +28,10 @@ public class DialogMissionLoiterN extends DialogMission implements
 
 	protected View buildView() {
 		super.buildView();
-
+		item =  (LoiterTurns) wp;
+		
 		loiterCCW = (CheckBox) view.findViewById(R.string.loiter_ccw);
-		if (wp.getRadius() < 0) {
+		if (item.getRadius() < 0) {
 			loiterCCW.setChecked(true);
 		} else {
 			loiterCCW.setChecked(false);
@@ -39,22 +40,22 @@ public class DialogMissionLoiterN extends DialogMission implements
 
 		altitudeSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.altitudeView);
-		altitudeSeekBar.setValue(wp.getAltitude().valueInMeters());
+		altitudeSeekBar.setValue(item.getAltitude().valueInMeters());
 		altitudeSeekBar.setOnChangedListner(this);
 		
 		loiterTurnSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.loiterTurn);
 		loiterTurnSeekBar.setOnChangedListner(this);
-		loiterTurnSeekBar.setValue(wp.getTurns());
+		loiterTurnSeekBar.setValue(item.getTurns());
 
 		loiterRadiusSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.loiterRadius);
-		loiterRadiusSeekBar.setAbsValue(wp.getRadius());
+		loiterRadiusSeekBar.setAbsValue(item.getRadius());
 		loiterRadiusSeekBar .setOnChangedListner(this);
 
 		yawSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.waypointAngle);
-		yawSeekBar.setValue(wp.getAngle());
+		yawSeekBar.setValue(item.getAngle());
 		yawSeekBar.setOnChangedListner(this);
 
 		return view;
@@ -63,22 +64,22 @@ public class DialogMissionLoiterN extends DialogMission implements
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		wp.setRadius(loiterRadiusSeekBar.getValue());
+		item.setRadius(loiterRadiusSeekBar.getValue());
 		if (loiterCCW.isChecked()) {
-			wp.setRadius(wp.getRadius()*-1.0);
+			item.setRadius(item.getRadius()*-1.0);
 		}
     }
 	
 	
 	@Override
 	public void onSeekBarChanged() {
-		wp.getAltitude().set(altitudeSeekBar.getValue());
-		wp.setTurns((int)loiterTurnSeekBar.getValue());
-		wp.setRadius(loiterRadiusSeekBar.getValue());
+		item.getAltitude().set(altitudeSeekBar.getValue());
+		item.setTurns((int)loiterTurnSeekBar.getValue());
+		item.setRadius(loiterRadiusSeekBar.getValue());
 		if (loiterCCW.isChecked()) {
-			wp.setRadius(wp.getRadius()*-1.0);
+			item.setRadius(item.getRadius()*-1.0);
 		}
-		wp.setAngle(yawSeekBar.getValue());
+		item.setAngle(yawSeekBar.getValue());
 	}
 
 }
