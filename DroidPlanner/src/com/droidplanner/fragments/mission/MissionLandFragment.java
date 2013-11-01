@@ -24,14 +24,14 @@ public class MissionLandFragment extends MissionDetailFragment implements
 		typeSpinner.setSelection(commandAdapter
 				.getPosition(MissionItemTypes.LAND));
 		yawSeekBar = (SeekBarWithText) view.findViewById(R.id.waypointAngle);
-		yawSeekBar.setValue(item.yawAngle);
+		yawSeekBar.setValue(item.getYawAngle());
 		yawSeekBar.setOnChangedListner(this);
 	}
 
 	@Override
 	public void onSeekBarChanged() {
 		Land item = (Land) this.item;
-		item.yawAngle = (float) yawSeekBar.getValue();
+		item.setYawAngle((float) yawSeekBar.getValue());
 	}
 
 }

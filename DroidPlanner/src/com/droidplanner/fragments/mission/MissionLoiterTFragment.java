@@ -6,6 +6,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.droidplanner.R;
+import com.droidplanner.drone.variables.mission.waypoints.Loiter;
 import com.droidplanner.drone.variables.mission.waypoints.LoiterTime;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
@@ -32,11 +33,7 @@ public class MissionLoiterTFragment extends MissionDetailFragment implements
 		LoiterTime item = (LoiterTime) this.item;
 		
 		loiterCCW = (CheckBox) view.findViewById(R.string.loiter_ccw);
-		if (item.getRadius() < 0) {
-			loiterCCW.setChecked(true);
-		} else {
-			loiterCCW.setChecked(false);
-		}
+		loiterCCW.setChecked(item.isOrbitCCW());
 		loiterCCW.setOnCheckedChangeListener(this);
 
 		
@@ -52,22 +49,18 @@ public class MissionLoiterTFragment extends MissionDetailFragment implements
 		
 		loiterRadiusSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.loiterRadius);
-		loiterRadiusSeekBar.setAbsValue(item.getRadius());
+		loiterRadiusSeekBar.setAbsValue(item.getOrbitalRadius());
 		loiterRadiusSeekBar .setOnChangedListner(this);
 
 		yawSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.waypointAngle);
-		yawSeekBar.setValue(item.getAngle());
+		yawSeekBar.setValue(item.getYawAngle());
 		yawSeekBar.setOnChangedListner(this);
 	}
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-    	LoiterTime item = (LoiterTime) this.item;
-    	item.setRadius(loiterRadiusSeekBar.getValue());
-		if (loiterCCW.isChecked()) {
-			item.setRadius(item.getRadius()*-1.0);
-		}
+		((Loiter) item).setOrbitCCW(isChecked);
     }
 	
 
@@ -76,11 +69,8 @@ public class MissionLoiterTFragment extends MissionDetailFragment implements
 		LoiterTime item = (LoiterTime) this.item;
 		item.getAltitude().set(altitudeSeekBar.getValue());
 		item.setTime(loiterTimeSeekBar.getValue());
-		item.setRadius(loiterRadiusSeekBar.getValue());
-		if (loiterCCW.isChecked()) {
-			item.setRadius(item.getRadius()*-1.0);
-		}
-		item.setAngle(yawSeekBar.getValue());
+		item.setOrbitalRadius(loiterRadiusSeekBar.getValue());
+		item.setYawAngle(yawSeekBar.getValue());
 	}
 
 

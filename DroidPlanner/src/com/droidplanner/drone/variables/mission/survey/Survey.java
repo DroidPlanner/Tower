@@ -3,6 +3,7 @@ package com.droidplanner.drone.variables.mission.survey;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import com.droidplanner.fragments.mission.MissionDetailFragment;
@@ -38,6 +39,18 @@ public class Survey extends MissionItem {
 		MissionDetailFragment fragment = new MissionSurveyFragment();
 		fragment.setItem(this);
 		return fragment;
+	}
+
+	@Override
+	public msg_mission_item packMissionItem() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void unpackMAVMessage(msg_mission_item mavMsg) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

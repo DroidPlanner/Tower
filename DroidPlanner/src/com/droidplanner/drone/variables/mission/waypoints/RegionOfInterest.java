@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.content.Context;
 
+import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.droidplanner.R;
 import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
@@ -37,6 +38,18 @@ public class RegionOfInterest extends SpatialCoordItem implements MarkerSource{
 		MissionDetailFragment fragment = new MissionRegionOfInterestFragment();
 		fragment.setItem(this);
 		return fragment;
+	}
+
+	@Override
+	public msg_mission_item packMissionItem() {
+		// TODO Auto-generated method stub
+		return super.packMissionItem();
+	}
+
+	@Override
+	public void unpackMAVMessage(msg_mission_item mavMsg) {
+		// TODO Auto-generated method stub
+		super.unpackMAVMessage(mavMsg);
 	}
 	
 	/*

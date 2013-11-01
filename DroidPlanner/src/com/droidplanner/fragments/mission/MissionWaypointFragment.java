@@ -38,25 +38,25 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
 		altitudeSeekBar.setOnChangedListner(this);
 
 		delaySeekBar = (SeekBarWithText) view.findViewById(R.id.waypointDelay);
-		delaySeekBar.setValue(item.delay);
+		delaySeekBar.setValue(item.getDelay());
 		delaySeekBar.setOnChangedListner(this);
 
 		radiusSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.waypointAcceptanceRadius);
-		radiusSeekBar.setValue(item.acceptanceRadius);
+		radiusSeekBar.setValue(item.getAcceptanceRadius());
 		radiusSeekBar.setOnChangedListner(this);
 
 		yawSeekBar = (SeekBarWithText) view.findViewById(R.id.waypointAngle);
-		yawSeekBar.setValue(item.yawAngle);
+		yawSeekBar.setValue(item.getYawAngle());
 		yawSeekBar.setOnChangedListner(this);
 
 		orbitSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.waypointOrbitalRadius);
 		orbitSeekBar.setOnChangedListner(this);
-		orbitSeekBar.setAbsValue(item.orbitalRadius);
+		orbitSeekBar.setAbsValue(item.getOrbitalRadius());
 
 		orbitCCW = (CheckBox) view.findViewById(R.id.waypoint_CCW);
-		orbitCCW.setChecked(item.orbitCCW);
+		orbitCCW.setChecked(item.isOrbitCCW());
 		orbitCCW.setOnCheckedChangeListener(this);
 	}
 
@@ -69,11 +69,11 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
 	public void onSeekBarChanged() {
 		Waypoint item = (Waypoint) this.item;
 		item.setAltitude(new Altitude(altitudeSeekBar.getValue()));
-		item.delay = (float) delaySeekBar.getValue();
-		item.acceptanceRadius = (float) radiusSeekBar.getValue();
-		item.yawAngle = (float) yawSeekBar.getValue();
-		item.orbitalRadius = (float) orbitSeekBar.getValue();
-		item.orbitCCW = orbitCCW.isChecked();
+		item.setDelay((float) delaySeekBar.getValue());
+		item.setAcceptanceRadius((float) radiusSeekBar.getValue());
+		item.setYawAngle((float) yawSeekBar.getValue());
+		item.setOrbitalRadius((float) orbitSeekBar.getValue());
+		item.setOrbitCCW(orbitCCW.isChecked());
 	}
 
 }

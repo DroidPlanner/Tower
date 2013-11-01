@@ -1,5 +1,6 @@
 package com.droidplanner.drone.variables.mission.commands;
 
+import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.fragments.mission.MissionDetailFragment;
 import com.droidplanner.fragments.mission.MissionRTLFragment;
@@ -26,5 +27,17 @@ public class ReturnToHome extends MissionCMD{
 
 	public void setHeight(Altitude altitude) {
 		returnAltitude = altitude;
+	}
+
+	@Override
+	public msg_mission_item packMissionItem() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void unpackMAVMessage(msg_mission_item mavMessageItem) {
+		// TODO Auto-generated method stub
+		
 	}
 }
