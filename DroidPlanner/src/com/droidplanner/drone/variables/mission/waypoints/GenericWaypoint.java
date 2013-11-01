@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.content.Context;
 
+import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.fragments.markers.GenericMarker;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
@@ -66,5 +67,26 @@ public abstract class GenericWaypoint extends MissionItem implements
 
 	public void setAltitude(Altitude altitude) {
 		this.altitude = altitude;
+	}
+	
+	@Override
+	public msg_mission_item packMissionItem() {
+		msg_mission_item mavMsg = new msg_mission_item();
+		mavMsg.autocontinue = 1;
+		mavMsg.target_component = 1;
+		mavMsg.target_system = 1;
+		mavMsg.x = (float) getCoordinate().latitude;
+		mavMsg.y = (float) getCoordinate().longitude;
+		mavMsg.z = (float) getAltitude().valueInMeters();
+//		mavMsg.compid = 
+		return mavMsg;
+	}
+
+	@Override
+	public void unpackMAVMessage(msg_mission_item mavMsg) {
+		LatLng coord = new LatLng(mavMsg.x,mavMsg.y);
+		Altitude alt = new Altitude(mavMsg.z);
+		setCoordinate(coord);
+		setAltitude(alt);
 	}
 }

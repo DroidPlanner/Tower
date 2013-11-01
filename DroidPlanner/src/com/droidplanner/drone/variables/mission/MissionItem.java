@@ -39,6 +39,6 @@ public abstract class MissionItem {
 	 * Gets data from MAVLinkMessage msg_mission_item for this MissionItem
 	 * @return
 	 */
-	public abstract void unpackMAVMessage(msg_mission_item mavMessageItem);
+	public abstract void unpackMAVMessage(msg_mission_item mavMsg);
 	
 }
