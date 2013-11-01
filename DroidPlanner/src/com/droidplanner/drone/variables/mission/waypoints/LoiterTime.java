@@ -30,14 +30,15 @@ public class LoiterTime extends Loiter implements MarkerSource {
 
 	@Override
 	public msg_mission_item packMissionItem() {
-		// TODO Auto-generated method stub
-		return null;
+		msg_mission_item mavMsg = super.packMissionItem();
+		mavMsg.param1 = (float) getTime();
+		return mavMsg;
 	}
 
 	@Override
-	public void unpackMAVMessage(msg_mission_item mavMessageItem) {
-		// TODO Auto-generated method stub
-		
+	public void unpackMAVMessage(msg_mission_item mavMsg) {
+		super.unpackMAVMessage(mavMsg);
+		setTime(mavMsg.param1);
 	}
 
 	
