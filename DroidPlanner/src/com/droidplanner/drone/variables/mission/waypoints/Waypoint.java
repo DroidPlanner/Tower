@@ -56,6 +56,7 @@ public class Waypoint extends GenericWaypoint implements MarkerSource {
 		setAcceptanceRadius(mavMsg.param2);
 		setOrbitCCW(mavMsg.param3<0);
 		setOrbitalRadius(Math.abs(mavMsg.param3));
+		setYawAngle(mavMsg.param4);
 	}
 
 	public double getDelay() {
