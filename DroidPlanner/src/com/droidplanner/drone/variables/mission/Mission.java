@@ -63,7 +63,7 @@ public class Mission extends DroneVariable implements PathSource,
 	}
 
 	public void addSurveyPolygon(List<LatLng> points) {
-		Survey survey = new Survey(points);
+		Survey survey = new Survey(points, myDrone.context);
 		itens.add(survey);
 		onMissionUpdate();		
 	}
