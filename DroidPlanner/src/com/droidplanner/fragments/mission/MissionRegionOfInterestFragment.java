@@ -8,7 +8,8 @@ import com.droidplanner.helpers.units.Altitude;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
 
-public class MissionRegionOfInterestFragment extends MissionDetailFragment implements OnTextSeekBarChangedListner {
+public class MissionRegionOfInterestFragment extends MissionDetailFragment
+		implements OnTextSeekBarChangedListner {
 
 	private SeekBarWithText altitudeSeekBar;
 
@@ -16,23 +17,24 @@ public class MissionRegionOfInterestFragment extends MissionDetailFragment imple
 	protected int getResource() {
 		return R.layout.fragment_detail_roi;
 	}
-	
 
 	@Override
 	protected void setupViews(View view) {
 		super.setupViews(view);
-		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemTypes.ROI));
-		
+		typeSpinner.setSelection(commandAdapter
+				.getPosition(MissionItemTypes.ROI));
+
 		altitudeSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.altitudeView);
-		altitudeSeekBar.setValue(((RegionOfInterest) item).getAltitude().valueInMeters());
+		altitudeSeekBar.setValue(((RegionOfInterest) item).getAltitude()
+				.valueInMeters());
 		altitudeSeekBar.setOnChangedListner(this);
 	}
 
 	@Override
 	public void onSeekBarChanged() {
-		((RegionOfInterest) item).setAltitude(new Altitude(altitudeSeekBar.getValue()));
+		((RegionOfInterest) item).setAltitude(new Altitude(altitudeSeekBar
+				.getValue()));
 	}
-
 
 }
