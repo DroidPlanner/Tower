@@ -10,16 +10,11 @@ import com.droidplanner.fragments.mission.MissionDetailFragment;
 import com.droidplanner.fragments.mission.MissionTakeoffFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
 
-public class Takeoff extends GenericWaypoint implements MarkerSource {
+public class Takeoff extends SpatialCoordItem implements MarkerSource {
 
 	public double yawAngle;
 	public double minPitch;
-
-	public Takeoff(LatLng coord, double altitude) {
-		super(coord, altitude);
-	}
 
 	public Takeoff(MissionItem item) {
 		super(item);

@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.droidplanner.DroidPlannerApp.OnWaypointChangedListner;
-import com.droidplanner.drone.variables.mission.waypoints.GenericWaypoint;
+import com.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
 import com.droidplanner.fragments.PathGesture.OnPathFinishedListner;
 import com.droidplanner.fragments.helpers.CameraGroundOverlays;
 import com.droidplanner.fragments.helpers.DroneMap;
@@ -81,11 +81,11 @@ public class PlanningMapFragment extends DroneMap implements
 	}
 
 	private void checkForWaypointMarkerMoving(MarkerSource source, Marker marker, boolean dragging) {
-		if (GenericWaypoint.class.isInstance(source)) {
+		if (SpatialCoordItem.class.isInstance(source)) {
 			LatLng position = marker.getPosition();
 
 			// update marker source
-			GenericWaypoint waypoint = (GenericWaypoint) source;
+			SpatialCoordItem waypoint = (SpatialCoordItem) source;
 			waypoint.setCoordinate(position);
 
 			/*
@@ -124,8 +124,8 @@ public class PlanningMapFragment extends DroneMap implements
 	}
 
 	private void checkForWaypointMarker(MarkerSource source, Marker marker) {
-		if (GenericWaypoint.class.isInstance(source)) {
-			mListener.onMoveWaypoint((GenericWaypoint) source, marker.getPosition());
+		if (SpatialCoordItem.class.isInstance(source)) {
+			mListener.onMoveWaypoint((SpatialCoordItem) source, marker.getPosition());
 		}
 	}
 
@@ -150,8 +150,8 @@ public class PlanningMapFragment extends DroneMap implements
 	@Override
 	public boolean onMarkerClick(Marker marker) {
 		MarkerSource source = markers.getSourceFromMarker(marker);
-		if (source instanceof GenericWaypoint) {
-			return mListener.onMarkerClick((GenericWaypoint) source);
+		if (source instanceof SpatialCoordItem) {
+			return mListener.onMarkerClick((SpatialCoordItem) source);
 		} else {
 			return false;
 		}

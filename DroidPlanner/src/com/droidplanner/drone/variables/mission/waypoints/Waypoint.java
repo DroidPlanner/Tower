@@ -8,23 +8,24 @@ import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import com.droidplanner.fragments.markers.helpers.MarkerWithText;
 import com.droidplanner.fragments.mission.MissionDetailFragment;
 import com.droidplanner.fragments.mission.MissionWaypointFragment;
+import com.droidplanner.helpers.units.Altitude;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 
-public class Waypoint extends GenericWaypoint implements MarkerSource {
+public class Waypoint extends SpatialCoordItem implements MarkerSource {
 	public double delay;
 	public double acceptanceRadius;
 	public double yawAngle;
 	public double orbitalRadius;
 	public boolean orbitCCW;
 
-	public Waypoint(LatLng coord, double altitude) {
-		super(coord, altitude);
-	}
-
 	public Waypoint(MissionItem item) {
 		super(item);
+	}
+
+	public Waypoint(LatLng point, Altitude defaultAlt) {
+		super(point, defaultAlt);
 	}
 
 	@Override

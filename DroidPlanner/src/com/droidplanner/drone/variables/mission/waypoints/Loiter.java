@@ -8,16 +8,11 @@ import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import com.droidplanner.fragments.markers.helpers.MarkerWithText;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
 
-public abstract class Loiter extends GenericWaypoint implements MarkerSource {
+public abstract class Loiter extends SpatialCoordItem implements MarkerSource {
 
 	private double radius;
 	private double angle;
-	
-	public Loiter(LatLng coord, double altitude) {
-		super(coord, altitude);
-	}
 
 	public Loiter(MissionItem item) {
 		super(item);

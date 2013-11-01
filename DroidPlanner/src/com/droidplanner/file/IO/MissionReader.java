@@ -10,17 +10,17 @@ import java.util.List;
 import com.MAVLink.Messages.ApmCommands;
 import com.droidplanner.dialogs.openfile.OpenFileDialog.FileReader;
 import com.droidplanner.drone.variables.Home;
-import com.droidplanner.drone.variables.mission.waypoints.GenericWaypoint;
+import com.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
 import com.droidplanner.file.DirectoryPath;
 import com.droidplanner.file.FileList;
 import com.droidplanner.file.FileManager;
 
 public class MissionReader implements FileReader {
 	private Home home;
-	private List<GenericWaypoint> waypoints;
+	private List<SpatialCoordItem> waypoints;
 
 	public MissionReader() {
-		this.waypoints = new ArrayList<GenericWaypoint>();
+		this.waypoints = new ArrayList<SpatialCoordItem>();
 	}
 
 	public boolean openMission(String file) {
@@ -53,7 +53,7 @@ public class MissionReader implements FileReader {
 		return home;
 	}
 
-	public List<GenericWaypoint> getWaypoints() {
+	public List<SpatialCoordItem> getWaypoints() {
 		return waypoints;
 	}
 

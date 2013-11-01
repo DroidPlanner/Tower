@@ -5,22 +5,22 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import com.droidplanner.drone.variables.mission.waypoints.GenericWaypoint;
+import com.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
 import com.droidplanner.file.FileManager;
 import com.droidplanner.file.FileStream;
 
 public class MissionWriter {
-	private GenericWaypoint home;
-	private List<GenericWaypoint> waypoints;
+	private SpatialCoordItem home;
+	private List<SpatialCoordItem> waypoints;
 	private String name = "";
 
-	public MissionWriter(GenericWaypoint home, List<GenericWaypoint> waypoints, String name) {
+	public MissionWriter(SpatialCoordItem home, List<SpatialCoordItem> waypoints, String name) {
 		this.home = home;
 		this.waypoints = waypoints;
 		this.name = name;
 	}
 
-	public MissionWriter(GenericWaypoint home, List<GenericWaypoint> waypoints) {
+	public MissionWriter(SpatialCoordItem home, List<SpatialCoordItem> waypoints) {
 		this(home, waypoints, "waypoints");
 	}
 

@@ -10,15 +10,10 @@ import com.droidplanner.fragments.mission.MissionDetailFragment;
 import com.droidplanner.fragments.mission.MissionLandFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
 
-public class Land extends GenericWaypoint implements MarkerSource {
+public class Land extends SpatialCoordItem implements MarkerSource {
 
 	public double yawAngle;
-
-	public Land(LatLng coord, double altitude) {
-		super(coord, altitude);
-	}
 
 	public Land(MissionItem item) {
 		super(item);

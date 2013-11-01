@@ -13,7 +13,7 @@ import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperUI;
 import com.droidplanner.drone.variables.mission.Mission;
 import com.droidplanner.drone.variables.mission.MissionItem;
-import com.droidplanner.drone.variables.mission.waypoints.GenericWaypoint;
+import com.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
 import com.droidplanner.fragments.EditorToolsFragment;
 import com.droidplanner.fragments.EditorToolsFragment.EditorTools;
 import com.droidplanner.fragments.EditorToolsFragment.OnEditorToolSelected;
@@ -77,7 +77,7 @@ public class EditorActivity extends SuperUI implements
 	}
 
 	@Override
-	public boolean onMarkerClick(GenericWaypoint wp) {
+	public boolean onMarkerClick(SpatialCoordItem wp) {
 		showItemDetail(wp);
 		return true;
 	}
@@ -95,13 +95,13 @@ public class EditorActivity extends SuperUI implements
 	}
 
 	@Override
-	public void onMoveWaypoint(GenericWaypoint waypoint, LatLng latLng) {
+	public void onMoveWaypoint(SpatialCoordItem waypoint, LatLng latLng) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void onMovingWaypoint(GenericWaypoint source, LatLng latLng) {
+	public void onMovingWaypoint(SpatialCoordItem source, LatLng latLng) {
 		// TODO Auto-generated method stub
 
 	}

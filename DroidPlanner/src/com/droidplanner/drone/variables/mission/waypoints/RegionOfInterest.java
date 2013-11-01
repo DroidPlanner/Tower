@@ -1,6 +1,5 @@
 package com.droidplanner.drone.variables.mission.waypoints;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -15,14 +14,10 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 
-public class RegionOfInterest extends GenericWaypoint implements MarkerSource{
+public class RegionOfInterest extends SpatialCoordItem implements MarkerSource{
 	
 	public RegionOfInterest(MissionItem item) {
 		super(item);
-	}
-
-	public RegionOfInterest(LatLng coord, double altitude) {
-		super(coord, altitude);
 	}
 
 	@Override

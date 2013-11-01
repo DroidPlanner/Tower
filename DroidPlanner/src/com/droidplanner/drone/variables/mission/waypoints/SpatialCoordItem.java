@@ -14,28 +14,36 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public abstract class GenericWaypoint extends MissionItem implements
+/**
+ * Generic Mission item with Spatial Coordinates
+ * 
+ */
+public abstract class SpatialCoordItem extends MissionItem implements
 		MarkerSource {
 	protected abstract BitmapDescriptor getIcon(Context context);
-	
+
 	LatLng coordinate;
 	Altitude altitude;
 
-	public GenericWaypoint(LatLng coord, double altitude) {
+	public SpatialCoordItem(LatLng coord, Altitude altitude) {
 		this.coordinate = coord;
-		this.altitude = new Altitude(altitude);
+		this.altitude = altitude;
 	}
 
-	public GenericWaypoint(MissionItem item) {
-		coordinate = new LatLng(0, 0);
-		altitude = new Altitude(0);
+	public SpatialCoordItem(MissionItem item) {
+		this(new LatLng(0, 0), new Altitude(0));
 	}
+	
+	public SpatialCoordItem(SpatialCoordItem item) {
+		this(item.coordinate, item.altitude);
+	}
+
 
 	@Override
 	public MarkerOptions build(Context context) {
 		return GenericMarker.build(coordinate).icon(getIcon(context));
 	}
-	
+
 	@Override
 	public void update(Marker marker, Context context) {
 		marker.setPosition(coordinate);
@@ -59,7 +67,7 @@ public abstract class GenericWaypoint extends MissionItem implements
 	public void setCoordinate(LatLng position) {
 		coordinate = position;
 	}
-	
+
 	public LatLng getCoordinate() {
 		return coordinate;
 	}
