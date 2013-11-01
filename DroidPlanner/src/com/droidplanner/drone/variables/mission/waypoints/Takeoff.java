@@ -3,6 +3,7 @@ package com.droidplanner.drone.variables.mission.waypoints;
 import android.content.Context;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
+import com.MAVLink.Messages.enums.MAV_CMD;
 import com.droidplanner.R;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import com.droidplanner.fragments.markers.helpers.MarkerWithText;
@@ -14,8 +15,8 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class Takeoff extends GenericWaypoint implements MarkerSource {
 
-	public double yawAngle;
-	public double minPitch;
+	private double yawAngle;
+	private double minPitch;
 
 	public Takeoff(LatLng coord, double altitude) {
 		super(coord, altitude);
@@ -37,14 +38,33 @@ public class Takeoff extends GenericWaypoint implements MarkerSource {
 
 	@Override
 	public msg_mission_item packMissionItem() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		msg_mission_item mavMsg = super.packMissionItem();
+		mavMsg.command = MAV_CMD.MAV_CMD_NAV_TAKEOFF;
+		mavMsg.param1 = (float) getMinPitch();
+		mavMsg.param4 = (float) getYawAngle();
+		return mavMsg;
+	} 
 
 	@Override
-	public void unpackMAVMessage(msg_mission_item mavMessageItem) {
-		// TODO Auto-generated method stub
-		
+	public void unpackMAVMessage(msg_mission_item mavMsg) {
+		super.unpackMAVMessage(mavMsg);
+		setMinPitch(mavMsg.param1);
+		setYawAngle(mavMsg.param4);
 	}
 
+	public double getYawAngle() {
+		return yawAngle;
+	}
+
+	public void setYawAngle(double yawAngle) {
+		this.yawAngle = yawAngle;
+	}
+
+	public double getMinPitch() {
+		return minPitch;
+	}
+
+	public void setMinPitch(double minPitch) {
+		this.minPitch = minPitch;
+	}
 }

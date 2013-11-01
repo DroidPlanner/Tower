@@ -35,19 +35,19 @@ public class MissionTakeoffFragment extends MissionDetailFragment implements
 		altitudeSeekBar.setOnChangedListner(this);
 
 		angleSeekBar = (SeekBarWithText) view.findViewById(R.id.takeoffPitch);
-		angleSeekBar.setValue(item.minPitch);
+		angleSeekBar.setValue(item.getMinPitch());
 		angleSeekBar.setOnChangedListner(this);
 
 		yawSeekBar = (SeekBarWithText) view.findViewById(R.id.waypointAngle);
-		yawSeekBar.setValue(item.yawAngle);
+		yawSeekBar.setValue(item.getYawAngle());
 		yawSeekBar.setOnChangedListner(this);
 	}
 
 	@Override
 	public void onSeekBarChanged() {
 		item.setAltitude(new Altitude(altitudeSeekBar.getValue()));
-		item.minPitch = angleSeekBar.getValue();
-		item.yawAngle = yawSeekBar.getValue();
+		item.setMinPitch(angleSeekBar.getValue());
+		item.setYawAngle(yawSeekBar.getValue());
 	}
 
 }
