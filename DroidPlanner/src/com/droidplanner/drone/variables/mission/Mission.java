@@ -19,7 +19,7 @@ import com.google.android.gms.maps.model.LatLng;
 public class Mission extends DroneVariable implements PathSource,
 		OnWaypointChangedListner {
 
-	private List<MissionItem> waypoints = new ArrayList<MissionItem>();
+	private List<MissionItem> itens = new ArrayList<MissionItem>();
 	private Double defaultAlt = 50.0;
 
 	private List<OnWaypointChangedListner> missionListner = new ArrayList<OnWaypointChangedListner>();
@@ -37,20 +37,27 @@ public class Mission extends DroneVariable implements PathSource,
 	}
 
 	public void removeWaypoint(GenericWaypoint waypoint) {
-		waypoints.remove(waypoint);
+		itens.remove(waypoint);
 		onMissionUpdate();
 	}
 
 	public void addWaypointsWithDefaultAltitude(List<LatLng> points) {
 		for (LatLng point : points) {
-			waypoints.add(new Waypoint(point,defaultAlt));
+			itens.add(new Waypoint(point,defaultAlt));
 		}		
 		onMissionUpdate();
 	}
 
 	public void addWaypoint(LatLng point, Double alt) {
-		waypoints.add(new Waypoint(point,alt));
+		itens.add(new Waypoint(point,alt));
 		onMissionUpdate();
+	}
+	
+	public void replace(MissionItem oldItem, MissionItem newItem) {
+		int index = itens.indexOf(oldItem);
+		itens.remove(index);
+		itens.add(index, newItem);		
+		onMissionUpdate();		
 	}
 
 	public void onMissionReceived(List<msg_mission_item> mission) {
@@ -89,7 +96,7 @@ public class Mission extends DroneVariable implements PathSource,
 	@Override
 	public List<LatLng> getPathPoints() {
 		List<LatLng> newPath = new ArrayList<LatLng>();
-		for (MissionItem item : waypoints) {
+		for (MissionItem item : itens) {
 			try {
 				newPath.addAll(item.getPath());
 			} catch (Exception e) {
@@ -100,12 +107,12 @@ public class Mission extends DroneVariable implements PathSource,
 	}
 
 	public List<MissionItem> getItems() {
-		return waypoints;
+		return itens;
 	}
 
 	public List<MarkerSource> getMarkers() {
 		List<MarkerSource> markers = new ArrayList<MarkerSource>();
-		for (MissionItem item : waypoints) {
+		for (MissionItem item : itens) {
 			try {
 				markers.addAll(item.getMarkers());
 			} catch (Exception e) {

@@ -174,9 +174,8 @@ public class EditorActivity extends SuperUI implements
 
 	@Override
 	public void onWaypointTypeChanged(MissionItem newItem, MissionItem oldItem) {
-		oldItem = newItem;
+		mission.replace(oldItem,newItem);
 		showItemDetail(newItem);
-		mission.onMissionUpdate();
 	}
 
 }
