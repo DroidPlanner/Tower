@@ -27,7 +27,7 @@ public enum MissionItemTypes {
 		return name;
 	}
 
-	public MissionItem getNewItem(MissionItem item) {
+	public MissionItem getNewItem(MissionItem item) throws InvalidItemException {
 		switch (this) {
 		case LAND:
 			return new Land(item);
@@ -46,8 +46,13 @@ public enum MissionItemTypes {
 		case WAYPOINT:
 			return new Waypoint(item);
 		case SURVEY:
-			return new Survey(item);
+			throw new InvalidItemException();
 		}
 		throw new InvalidParameterException();
+	}
+	
+	class InvalidItemException extends Exception{
+		private static final long serialVersionUID = 1L;
+		
 	}
 }

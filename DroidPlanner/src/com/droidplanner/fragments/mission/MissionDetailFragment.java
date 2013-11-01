@@ -14,6 +14,7 @@ import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
 import com.droidplanner.drone.variables.mission.Mission;
 import com.droidplanner.drone.variables.mission.MissionItem;
+import com.droidplanner.fragments.mission.MissionItemTypes.InvalidItemException;
 import com.droidplanner.widgets.spinners.SpinnerSelfSelect;
 
 public abstract class MissionDetailFragment extends Fragment implements
@@ -61,14 +62,16 @@ public abstract class MissionDetailFragment extends Fragment implements
 	@Override
 	public void onItemSelected(AdapterView<?> arg0, View v, int position,
 			long id) {
-		
-		MissionItemTypes selected = commandAdapter.getItem(position);
-		MissionItem newItem = selected.getNewItem(getItem());
-		if (!newItem.getClass().equals(getItem().getClass())) {
-			Log.d("CLASS", "Diferent waypoint Classes");
-			mListner.onWaypointTypeChanged(newItem, getItem());			
-		}
 
+		MissionItemTypes selected = commandAdapter.getItem(position);
+		try {
+			MissionItem newItem = selected.getNewItem(getItem());
+			if (!newItem.getClass().equals(getItem().getClass())) {
+				Log.d("CLASS", "Diferent waypoint Classes");
+				mListner.onWaypointTypeChanged(newItem, getItem());
+			}
+		} catch (InvalidItemException e) {
+		}
 	}
 
 	@Override
