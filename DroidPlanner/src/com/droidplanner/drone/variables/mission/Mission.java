@@ -10,6 +10,7 @@ import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.droidplanner.DroidPlannerApp.OnWaypointChangedListner;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneVariable;
+import com.droidplanner.drone.variables.mission.survey.Survey;
 import com.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
 import com.droidplanner.drone.variables.mission.waypoints.Waypoint;
 import com.droidplanner.fragments.helpers.MapPath.PathSource;
@@ -59,6 +60,19 @@ public class Mission extends DroneVariable implements PathSource,
 		itens.remove(index);
 		itens.add(index, newItem);		
 		onMissionUpdate();		
+	}
+
+	public void addSurveyPolygon(List<LatLng> points) {
+		Survey survey = new Survey(points);
+		itens.add(survey);
+		onMissionUpdate();		
+	}
+
+	public void addOnMissionUpdateListner(OnWaypointChangedListner listner) {
+		if (!missionListner.contains(listner)) {
+			missionListner.add(listner);
+		}
+		
 	}
 
 	public void onMissionReceived(List<msg_mission_item> mission) {
@@ -130,13 +144,6 @@ public class Mission extends DroneVariable implements PathSource,
 				listner.onMissionUpdate();
 			}
 		}
-	}
-
-	public void addOnMissionUpdateListner(OnWaypointChangedListner listner) {
-		if (!missionListner.contains(listner)) {
-			missionListner.add(listner);
-		}
-		
 	}
 
 	public void removeOnMissionUpdateListner(

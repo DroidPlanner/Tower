@@ -17,6 +17,10 @@ public class Survey extends MissionItem {
 	public Survey(MissionItem item) {
 	}
 
+	public Survey(List<LatLng> points) {
+		polygon.addPoints(points);
+	}
+
 	@Override
 	public List<LatLng> getPath() throws Exception {
 		throw new Exception();

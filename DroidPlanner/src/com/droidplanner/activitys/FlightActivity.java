@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperUI;
+import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
 import com.droidplanner.fragments.MissionControlFragment.OnMissionControlInteraction;
 import com.droidplanner.fragments.RCFragment;
@@ -57,7 +58,7 @@ public class FlightActivity extends SuperUI implements
 	}
 
 	@Override
-	public boolean onMarkerClick(SpatialCoordItem wp) {
+	public boolean onMarkerClick(MissionItem wp) {
 		// TODO Auto-generated method stub
 		return false;
 	}

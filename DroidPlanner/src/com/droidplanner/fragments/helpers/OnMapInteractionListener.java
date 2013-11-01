@@ -1,5 +1,6 @@
 package com.droidplanner.fragments.helpers;
 
+import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
 import com.droidplanner.polygon.PolygonPoint;
 import com.google.android.gms.maps.model.LatLng;
@@ -18,5 +19,5 @@ public interface OnMapInteractionListener {
 
 	public void onMapClick(LatLng point);
 
-	public boolean onMarkerClick(SpatialCoordItem wp);
+	public boolean onMarkerClick(MissionItem missionItem);
 }

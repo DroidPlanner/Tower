@@ -28,7 +28,8 @@ import com.droidplanner.polygon.PolygonPoint;
 import com.google.android.gms.maps.model.LatLng;
 
 public class EditorActivity extends SuperUI implements
-		OnMapInteractionListener, OnPathFinishedListner, OnEditorToolSelected, OnWayPointTypeChangeListener {
+		OnMapInteractionListener, OnPathFinishedListner, OnEditorToolSelected,
+		OnWayPointTypeChangeListener {
 
 	private PlanningMapFragment planningMapFragment;
 	private GestureMapFragment gestureMapFragment;
@@ -77,7 +78,7 @@ public class EditorActivity extends SuperUI implements
 	}
 
 	@Override
-	public boolean onMarkerClick(SpatialCoordItem wp) {
+	public boolean onMarkerClick(MissionItem wp) {
 		showItemDetail(wp);
 		return true;
 	}
@@ -129,11 +130,16 @@ public class EditorActivity extends SuperUI implements
 
 	@Override
 	public void editorToolChanged(EditorTools tools) {
-		removeItemDetail();	//TODO remove this, used for debbuging
-		if (tools == EditorTools.DRAW) {
+		removeItemDetail(); // TODO remove this, used for debbuging
+		switch (tools) {
+		case DRAW:
+		case POLY:
 			gestureMapFragment.enableGestureDetection();
-		} else {
+			break;
+		case MARKER:
+		case TRASH:
 			gestureMapFragment.disableGestureDetection();
+			break;
 		}
 	}
 
@@ -159,8 +165,9 @@ public class EditorActivity extends SuperUI implements
 
 	private void removeItemDetail() {
 		if (itemDetailFragment != null) {
-			fragmentManager.beginTransaction().remove(itemDetailFragment).commit();
-			itemDetailFragment = null;			
+			fragmentManager.beginTransaction().remove(itemDetailFragment)
+					.commit();
+			itemDetailFragment = null;
 		}
 	}
 
@@ -168,13 +175,22 @@ public class EditorActivity extends SuperUI implements
 	public void onPathFinished(List<Point> path) {
 		List<LatLng> points = MapProjection.projectPathIntoMap(path,
 				planningMapFragment.mMap);
-		drone.mission.addWaypointsWithDefaultAltitude(points);
+		switch (editorToolsFragment.getTool()) {
+		case DRAW:
+			drone.mission.addWaypointsWithDefaultAltitude(points);
+			break;
+		case POLY:
+			drone.mission.addSurveyPolygon(points);
+			break;
+		default:			
+			break;
+		}
 		editorToolsFragment.setTool(EditorTools.MARKER);
 	}
 
 	@Override
 	public void onWaypointTypeChanged(MissionItem newItem, MissionItem oldItem) {
-		mission.replace(oldItem,newItem);
+		mission.replace(oldItem, newItem);
 		showItemDetail(newItem);
 	}
 

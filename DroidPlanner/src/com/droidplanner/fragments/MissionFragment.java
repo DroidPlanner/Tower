@@ -9,11 +9,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
-import com.droidplanner.DroidPlannerApp.OnWaypointChangedListner;
 import com.droidplanner.DroidPlannerApp;
+import com.droidplanner.DroidPlannerApp.OnWaypointChangedListner;
 import com.droidplanner.R;
 import com.droidplanner.drone.variables.mission.Mission;
-import com.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
+import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.fragments.helpers.OnMapInteractionListener;
 import com.droidplanner.widgets.adapterViews.MissionItemView;
 import com.mobeta.android.dslv.HorizontalListView;
@@ -78,7 +78,7 @@ public class MissionFragment extends Fragment implements  OnWaypointChangedListn
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		mListner.onMarkerClick(((SpatialCoordItem) parent.getItemAtPosition(position)));		
+		mListner.onMarkerClick(((MissionItem) parent.getItemAtPosition(position)));		
 	}
 
 }
