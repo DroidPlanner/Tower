@@ -3,12 +3,12 @@ package com.droidplanner.fragments.mission;
 import java.security.InvalidParameterException;
 
 import com.droidplanner.drone.variables.mission.MissionItem;
-import com.droidplanner.drone.variables.mission.commands.RegionOfInterest;
 import com.droidplanner.drone.variables.mission.commands.ReturnToHome;
 import com.droidplanner.drone.variables.mission.waypoints.Land;
 import com.droidplanner.drone.variables.mission.waypoints.LoiterInfinite;
 import com.droidplanner.drone.variables.mission.waypoints.LoiterTime;
 import com.droidplanner.drone.variables.mission.waypoints.LoiterTurns;
+import com.droidplanner.drone.variables.mission.waypoints.RegionOfInterest;
 import com.droidplanner.drone.variables.mission.waypoints.Takeoff;
 import com.droidplanner.drone.variables.mission.waypoints.Waypoint;
 

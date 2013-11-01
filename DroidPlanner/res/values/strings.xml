@@ -137,6 +137,7 @@
     <string name="waypointInfo_SetSpeed">Change speed and/or throttle set points.Set -1 for both Speed and Throttle if no changes is required</string>
     <string name="waypointInfo_SetRelay">Set a relay to a condition.</string>
     <string name="waypointInfo_SetRepeatRelay">Cycle a relay on and off for a desired number of cyles with a desired period.</string>
+    <string name="waypointInfo_ROI">Sets the region of interest (ROI) for a sensor set or the vehicle itself. This can then be used by the vehicles control system to control the vehicle attitude and the attitude of various sensors such as cameras.</string>
     <string name="waypoint_distance">Distance</string>
     <string name="waypoint_homecurrent">"Set Home using current position "</string>
     <string name="waypoint_longitude">Longitude :</string>

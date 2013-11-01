@@ -65,7 +65,7 @@ public abstract class MissionDetailFragment extends Fragment implements
 		MissionItemTypes selected = commandAdapter.getItem(position);
 		MissionItem newItem = selected.getNewItem(getItem());
 		if (!newItem.getClass().equals(getItem().getClass())) {
-			Log.d("CLASS", "Diferent Classes");
+			Log.d("CLASS", "Diferent waypoint Classes");
 			mListner.onWaypointTypeChanged(newItem, getItem());			
 		}
 
