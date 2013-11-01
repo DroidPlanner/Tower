@@ -28,13 +28,13 @@ public class MissionLandFragment extends MissionDetailFragment implements
 	protected void setupViews(View view) {
 		super.setupViews(view);
 		yawSeekBar = (SeekBarWithText) view.findViewById(R.id.waypointAngle);
-		yawSeekBar.setValue(item.yawAngle);
+		yawSeekBar.setValue(item.getYawAngle());
 		yawSeekBar.setOnChangedListner(this);
 	}
 
 	@Override
 	public void onSeekBarChanged() {
-		item.yawAngle = (float) yawSeekBar.getValue();
+		item.setYawAngle((float) yawSeekBar.getValue());
 	}
 
 
