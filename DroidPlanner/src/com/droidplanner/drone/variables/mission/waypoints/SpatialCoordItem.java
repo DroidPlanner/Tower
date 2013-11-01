@@ -31,13 +31,14 @@ public abstract class SpatialCoordItem extends MissionItem implements
 	}
 
 	public SpatialCoordItem(MissionItem item) {
-		this(new LatLng(0, 0), new Altitude(0));
+		if (item instanceof SpatialCoordItem) {
+			coordinate = ((SpatialCoordItem) item).getCoordinate();
+			altitude = ((SpatialCoordItem) item).getAltitude();
+		} else {
+			coordinate = new LatLng(0, 0);
+			altitude = new Altitude(0);
+		}
 	}
-	
-	public SpatialCoordItem(SpatialCoordItem item) {
-		this(item.coordinate, item.altitude);
-	}
-
 
 	@Override
 	public MarkerOptions build(Context context) {

@@ -33,6 +33,7 @@ public abstract class Loiter extends SpatialCoordItem implements MarkerSource {
 	public double getRadius(){
 		return this.radius;
 	}
+	
 	@Override
 	protected BitmapDescriptor getIcon(Context context) {
 		return BitmapDescriptorFactory.fromBitmap(MarkerWithText
