@@ -3,6 +3,7 @@ package com.droidplanner.drone.variables.mission.waypoints;
 import android.content.Context;
 
 import com.droidplanner.R;
+import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import com.droidplanner.fragments.markers.helpers.MarkerWithText;
 import com.droidplanner.fragments.mission.MissionDetailFragment;
@@ -18,6 +19,10 @@ public class Takeoff extends GenericWaypoint implements MarkerSource {
 
 	public Takeoff(LatLng coord, double altitude) {
 		super(coord, altitude);
+	}
+
+	public Takeoff(MissionItem item) {
+		super(item);
 	}
 
 	@Override

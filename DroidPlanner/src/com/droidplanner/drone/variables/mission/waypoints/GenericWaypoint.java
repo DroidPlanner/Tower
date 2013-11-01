@@ -26,6 +26,10 @@ public abstract class GenericWaypoint extends MissionItem implements
 		this.altitude = new Altitude(altitude);
 	}
 
+	public GenericWaypoint(MissionItem item) {
+		coordinate = new LatLng(0, 0);
+		altitude = new Altitude(0);
+	}
 
 	@Override
 	public MarkerOptions build(Context context) {

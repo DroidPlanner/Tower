@@ -8,6 +8,9 @@ import com.google.android.gms.maps.model.LatLng;
 
 public abstract class MissionCMD extends MissionItem{
 	
+	public MissionCMD(MissionItem item) {
+	}
+
 	@Override
 	public List<LatLng> getPath() throws Exception {
 		throw new Exception();

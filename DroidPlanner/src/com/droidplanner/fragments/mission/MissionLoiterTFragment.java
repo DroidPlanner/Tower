@@ -6,7 +6,6 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.droidplanner.R;
-import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.drone.variables.mission.waypoints.LoiterTime;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
@@ -18,21 +17,20 @@ public class MissionLoiterTFragment extends MissionDetailFragment implements
 	private SeekBarWithText loiterRadiusSeekBar;
 	private CheckBox loiterCCW;
 	private SeekBarWithText yawSeekBar;
-	private LoiterTime item;
 
 	@Override
 	protected int getResource() {
 		return R.layout.fragment_detail_loitert;
 	}
 	
-	@Override
-	public void setItem(MissionItem item) {
-		this.item =  (LoiterTime) item; 
-	}	
 
 	@Override
 	protected void setupViews(View view) {
 		super.setupViews(view);		
+		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemTypes.LOITERT));
+
+		LoiterTime item = (LoiterTime) this.item;
+		
 		loiterCCW = (CheckBox) view.findViewById(R.string.loiter_ccw);
 		if (item.getRadius() < 0) {
 			loiterCCW.setChecked(true);
@@ -65,7 +63,8 @@ public class MissionLoiterTFragment extends MissionDetailFragment implements
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		item.setRadius(loiterRadiusSeekBar.getValue());
+    	LoiterTime item = (LoiterTime) this.item;
+    	item.setRadius(loiterRadiusSeekBar.getValue());
 		if (loiterCCW.isChecked()) {
 			item.setRadius(item.getRadius()*-1.0);
 		}
@@ -74,6 +73,7 @@ public class MissionLoiterTFragment extends MissionDetailFragment implements
 
 	@Override
 	public void onSeekBarChanged() {
+		LoiterTime item = (LoiterTime) this.item;
 		item.getAltitude().set(altitudeSeekBar.getValue());
 		item.setTime(loiterTimeSeekBar.getValue());
 		item.setRadius(loiterRadiusSeekBar.getValue());

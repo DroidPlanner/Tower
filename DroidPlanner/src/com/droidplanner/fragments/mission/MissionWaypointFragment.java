@@ -6,7 +6,6 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.droidplanner.R;
-import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.drone.variables.mission.waypoints.Waypoint;
 import com.droidplanner.helpers.units.Altitude;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
@@ -20,7 +19,6 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
 	private SeekBarWithText radiusSeekBar;
 	private SeekBarWithText orbitSeekBar;
 	private CheckBox orbitCCW;
-	private Waypoint item;
 
 	@Override
 	protected int getResource() {
@@ -28,13 +26,12 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
 	}
 
 	@Override
-	public void setItem(MissionItem item) {
-		this.item = (Waypoint) item;
-	}
-
-	@Override
 	protected void setupViews(View view) {
 		super.setupViews(view);
+		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemTypes.WAYPOINT));
+		
+		Waypoint item = (Waypoint) this.item;
+		
 		altitudeSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.altitudeView);
 		altitudeSeekBar.setValue(item.getAltitude().valueInMeters());
@@ -70,6 +67,7 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
 
 	@Override
 	public void onSeekBarChanged() {
+		Waypoint item = (Waypoint) this.item;
 		item.setAltitude(new Altitude(altitudeSeekBar.getValue()));
 		item.delay = (float) delaySeekBar.getValue();
 		item.acceptanceRadius = (float) radiusSeekBar.getValue();

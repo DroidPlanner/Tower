@@ -6,7 +6,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.droidplanner.R;
-import com.droidplanner.drone.variables.mission.MissionItem;
+import com.droidplanner.drone.variables.mission.waypoints.Loiter;
 import com.droidplanner.drone.variables.mission.waypoints.LoiterTurns;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
@@ -20,7 +20,6 @@ public class MissionLoiterNFragment extends MissionDetailFragment implements
 	private SeekBarWithText loiterRadiusSeekBar;
 	private CheckBox loiterCCW;
 	private SeekBarWithText yawSeekBar;
-	private LoiterTurns item;
 
 	@Override
 	protected int getResource() {
@@ -28,13 +27,11 @@ public class MissionLoiterNFragment extends MissionDetailFragment implements
 	}
 	
 	@Override
-	public void setItem(MissionItem item) {
-		this.item =  (LoiterTurns) item; 
-	}
-	
-	@Override
 	protected void setupViews(View view) {	
 		super.setupViews(view);	
+		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemTypes.LOITERN));
+		
+		LoiterTurns item = (LoiterTurns) this.item;
 		loiterCCW = (CheckBox) view.findViewById(R.string.loiter_ccw);
 		if (item.getRadius() < 0) {
 			loiterCCW.setChecked(true);
@@ -67,15 +64,16 @@ public class MissionLoiterNFragment extends MissionDetailFragment implements
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		item.setRadius(loiterRadiusSeekBar.getValue());
+		((Loiter) item).setRadius(loiterRadiusSeekBar.getValue());
 		if (loiterCCW.isChecked()) {
-			item.setRadius(item.getRadius()*-1.0);
+			((Loiter) item).setRadius(((Loiter) item).getRadius()*-1.0);
 		}
     }
 	
 	
 	@Override
 	public void onSeekBarChanged() {
+		LoiterTurns item = (LoiterTurns) this.item;
 		item.getAltitude().set(altitudeSeekBar.getValue());
 		item.setTurns((int)loiterTurnSeekBar.getValue());
 		item.setRadius(loiterRadiusSeekBar.getValue());

@@ -6,6 +6,7 @@ import java.util.List;
 import android.content.Context;
 
 import com.droidplanner.R;
+import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.fragments.markers.GenericMarker;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import com.droidplanner.fragments.mission.MissionDetailFragment;
@@ -19,6 +20,12 @@ public class RegionOfInterest extends MissionCMD implements MarkerSource{
 	private Altitude altitude;
 	private LatLng pointOfInterest;
 	
+	public RegionOfInterest(MissionItem item) {
+		super(item);
+		altitude = new Altitude(0);
+		pointOfInterest = new LatLng(0, 0);
+	}
+
 	@Override
 	public List<MarkerSource> getMarkers() throws Exception {
 		ArrayList<MarkerSource> marker = new ArrayList<MarkerSource>();

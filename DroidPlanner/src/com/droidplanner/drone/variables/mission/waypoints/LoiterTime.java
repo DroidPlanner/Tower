@@ -1,5 +1,6 @@
 package com.droidplanner.drone.variables.mission.waypoints;
 
+import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import com.droidplanner.fragments.mission.MissionDetailFragment;
 import com.droidplanner.fragments.mission.MissionLoiterTFragment;
@@ -10,6 +11,10 @@ public class LoiterTime extends Loiter implements MarkerSource {
 	
 	public LoiterTime(LatLng coord, double altitude) {
 		super(coord, altitude);
+	}
+
+	public LoiterTime(MissionItem item) {
+		super(item);
 	}
 
 	public double getTime() {
