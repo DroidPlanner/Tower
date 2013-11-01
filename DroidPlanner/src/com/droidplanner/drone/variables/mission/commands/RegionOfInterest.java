@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.content.Context;
 
+import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.droidplanner.R;
 import com.droidplanner.fragments.markers.GenericMarker;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
@@ -47,6 +48,18 @@ public class RegionOfInterest extends MissionCMD implements MarkerSource{
 
 	public void setHeight(Altitude value) {
 		this.altitude = value;		
+	}
+
+	@Override
+	public msg_mission_item packMissionItem() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void unpackMAVMessage(msg_mission_item mavMessageItem) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	/*
