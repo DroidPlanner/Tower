@@ -1,4 +1,4 @@
-package com.droidplanner.survey;
+package com.droidplanner.drone.variables.mission.survey;
 
 import java.util.Locale;
 

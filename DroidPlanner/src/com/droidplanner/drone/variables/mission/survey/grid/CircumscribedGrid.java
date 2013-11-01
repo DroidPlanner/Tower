@@ -1,4 +1,4 @@
-package com.droidplanner.survey.grid;
+package com.droidplanner.drone.variables.mission.survey.grid;
 
 import java.util.ArrayList;
 import java.util.List;

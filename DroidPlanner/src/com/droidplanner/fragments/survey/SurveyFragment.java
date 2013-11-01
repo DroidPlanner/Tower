@@ -11,14 +11,14 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.droidplanner.R;
+import com.droidplanner.drone.variables.mission.survey.SurveyData;
+import com.droidplanner.drone.variables.mission.survey.grid.Grid;
+import com.droidplanner.drone.variables.mission.survey.grid.GridBuilder;
 import com.droidplanner.file.IO.CameraInfo;
 import com.droidplanner.file.IO.CameraInfoReader;
 import com.droidplanner.file.help.CameraInfoLoader;
 import com.droidplanner.helpers.units.Altitude;
 import com.droidplanner.polygon.Polygon;
-import com.droidplanner.survey.SurveyData;
-import com.droidplanner.survey.grid.Grid;
-import com.droidplanner.survey.grid.GridBuilder;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
 import com.droidplanner.widgets.spinners.SpinnerSelfSelect.OnSpinnerItemSelectedListener;
 import com.google.android.gms.maps.model.LatLng;

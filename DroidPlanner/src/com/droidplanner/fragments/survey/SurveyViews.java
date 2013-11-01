@@ -13,9 +13,9 @@ import android.widget.ToggleButton;
 import com.droidplanner.R;
 import com.droidplanner.R.id;
 import com.droidplanner.R.string;
+import com.droidplanner.drone.variables.mission.survey.SurveyData;
+import com.droidplanner.drone.variables.mission.survey.grid.Grid;
 import com.droidplanner.helpers.units.Area;
-import com.droidplanner.survey.SurveyData;
-import com.droidplanner.survey.grid.Grid;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.spinners.SpinnerSelfSelect;
 
