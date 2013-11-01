@@ -33,22 +33,18 @@ public class MissionLoiterFragment extends MissionDetailFragment implements
 	protected void setupViews(View view) {
 		super.setupViews(view);
 		loiterCCW = (CheckBox) view.findViewById(R.string.loiter_ccw);
-		if (item.getRadius()< 0) {
-			loiterCCW.setChecked(true);
-		} else {
-			loiterCCW.setChecked(false);
-		}
+		loiterCCW.setChecked(item.isOrbitCCW());
 		loiterCCW.setOnCheckedChangeListener(this);
 
 
 		loiterRadiusSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.loiterRadius);
 		loiterRadiusSeekBar .setOnChangedListner(this);
-		loiterRadiusSeekBar.setAbsValue(item.getRadius());
+		loiterRadiusSeekBar.setAbsValue(item.getOrbitalRadius());
 
 		yawSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.waypointAngle);
-		yawSeekBar.setValue(item.getAngle());
+		yawSeekBar.setValue(item.getYawAngle());
 		yawSeekBar.setOnChangedListner(this);
 	}
 	
@@ -56,18 +52,12 @@ public class MissionLoiterFragment extends MissionDetailFragment implements
 
 	@Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		item.setRadius(loiterRadiusSeekBar.getValue());
-		if (loiterCCW.isChecked()) {
-			item.setRadius(item.getRadius()*-1.0);
-		}
+		item.setOrbitCCW(isChecked);
     }
 	
 	@Override
 	public void onSeekBarChanged() {
-		item.setRadius(loiterRadiusSeekBar.getValue());
-		if (loiterCCW.isChecked()) {
-			item.setRadius(item.getRadius()*-1.0);
-		}
-		item.setAngle(yawSeekBar.getValue());
+		item.setOrbitalRadius(loiterRadiusSeekBar.getValue());
+		item.setYawAngle(yawSeekBar.getValue());
 	}
 }
