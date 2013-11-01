@@ -1,4 +1,4 @@
-package com.droidplanner.fragments.survey;
+package com.droidplanner.fragments.mission.survey;
 
 import android.app.Fragment;
 import android.content.Context;

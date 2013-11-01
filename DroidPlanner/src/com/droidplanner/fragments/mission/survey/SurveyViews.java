@@ -1,4 +1,4 @@
-package com.droidplanner.fragments.survey;
+package com.droidplanner.fragments.mission.survey;
 
 import android.content.Context;
 import android.view.LayoutInflater;

@@ -32,7 +32,7 @@
 
             <fragment
                 android:id="@+id/surveyFragment"
-                android:name="com.droidplanner.fragments.survey.SurveyFragment"
+                android:name="com.droidplanner.fragments.mission.survey.SurveyFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout="@layout/fragment_detail_survey" />
