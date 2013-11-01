@@ -1,6 +1,7 @@
 package com.droidplanner.drone.variables.mission.waypoints;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
+import com.MAVLink.Messages.enums.MAV_CMD;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import com.droidplanner.fragments.mission.MissionDetailFragment;
 import com.droidplanner.fragments.mission.MissionLoiterTFragment;
@@ -31,6 +32,7 @@ public class LoiterTime extends Loiter implements MarkerSource {
 	@Override
 	public msg_mission_item packMissionItem() {
 		msg_mission_item mavMsg = super.packMissionItem();
+		mavMsg.command = MAV_CMD.MAV_CMD_NAV_LOITER_TIME;
 		mavMsg.param1 = (float) getTime();
 		return mavMsg;
 	}
