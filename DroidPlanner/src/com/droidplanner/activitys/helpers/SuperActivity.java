@@ -17,6 +17,7 @@ import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
 import com.droidplanner.dialogs.checklist.PreflightDialog;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.fragments.helpers.OfflineMapFragment;
+import com.droidplanner.helpers.units.Altitude;
 
 public abstract class SuperActivity extends Activity implements
 		 OnAltitudeChangedListner, OnSystemArmListener{
@@ -138,7 +139,7 @@ public abstract class SuperActivity extends Activity implements
 	}
 
 	@Override
-	public void onAltitudeChanged(double newAltitude) {
+	public void onAltitudeChanged(Altitude newAltitude) {
 		drone.mission.setDefaultAlt(newAltitude);
 	}
 }

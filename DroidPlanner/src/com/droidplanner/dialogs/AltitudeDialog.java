@@ -1,5 +1,7 @@
 package com.droidplanner.dialogs;
 
+import com.droidplanner.helpers.units.Altitude;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -17,16 +19,16 @@ public class AltitudeDialog implements DialogInterface.OnClickListener {
 	private OnAltitudeChangedListner listner;
 
 	public interface OnAltitudeChangedListner {
-		public void onAltitudeChanged(double newAltitude);
+		public void onAltitudeChanged(Altitude newAltitude);
 	}
 
 	public AltitudeDialog(OnAltitudeChangedListner listner) {
 		this.listner = listner;
 	}
 
-	public void build(double defaultAltitude, Context context) {
+	public void build(Altitude altitude, Context context) {
 		AlertDialog dialog = buildDialog(context);
-		setValue(defaultAltitude);
+		setValue(altitude.valueInMeters());
 		dialog.show();
 	}
 
@@ -73,7 +75,7 @@ public class AltitudeDialog implements DialogInterface.OnClickListener {
 	@Override
 	public void onClick(DialogInterface arg0, int which) {
 		if (which == Dialog.BUTTON_POSITIVE) {
-			listner.onAltitudeChanged(getValue());
+			listner.onAltitudeChanged(new Altitude(getValue()));
 		}
 	}
 

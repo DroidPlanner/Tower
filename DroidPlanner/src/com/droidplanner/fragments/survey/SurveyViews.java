@@ -83,7 +83,7 @@ public class SurveyViews {
 
 	void updateSeekBarsValues(SurveyData surveyData) {
 		angleView.setValue(surveyData.getAngle());
-		altitudeView.setValue(surveyData.getAltitude());
+		altitudeView.setValue(surveyData.getAltitude().valueInMeters());
 		sidelapView.setValue(surveyData.getSidelap());
 		overlapView.setValue(surveyData.getOverlap());
 	}

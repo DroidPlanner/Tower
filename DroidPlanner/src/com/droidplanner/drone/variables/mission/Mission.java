@@ -10,17 +10,18 @@ import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.droidplanner.DroidPlannerApp.OnWaypointChangedListner;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneVariable;
-import com.droidplanner.drone.variables.mission.waypoints.GenericWaypoint;
+import com.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
 import com.droidplanner.drone.variables.mission.waypoints.Waypoint;
 import com.droidplanner.fragments.helpers.MapPath.PathSource;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
+import com.droidplanner.helpers.units.Altitude;
 import com.google.android.gms.maps.model.LatLng;
 
 public class Mission extends DroneVariable implements PathSource,
 		OnWaypointChangedListner {
 
 	private List<MissionItem> itens = new ArrayList<MissionItem>();
-	private Double defaultAlt = 50.0;
+	private Altitude defaultAlt = new Altitude(50.0);
 
 	private List<OnWaypointChangedListner> missionListner = new ArrayList<OnWaypointChangedListner>();
 
@@ -28,15 +29,15 @@ public class Mission extends DroneVariable implements PathSource,
 		super(myDrone);
 	}
 
-	public double getDefaultAlt() {
+	public Altitude getDefaultAlt() {
 		return defaultAlt;
 	}
 
-	public void setDefaultAlt(double newAltitude) {
+	public void setDefaultAlt(Altitude newAltitude) {
 		defaultAlt = newAltitude;		
 	}
 
-	public void removeWaypoint(GenericWaypoint waypoint) {
+	public void removeWaypoint(SpatialCoordItem waypoint) {
 		itens.remove(waypoint);
 		onMissionUpdate();
 	}
@@ -48,7 +49,7 @@ public class Mission extends DroneVariable implements PathSource,
 		onMissionUpdate();
 	}
 
-	public void addWaypoint(LatLng point, Double alt) {
+	public void addWaypoint(LatLng point, Altitude alt) {
 		itens.add(new Waypoint(point,alt));
 		onMissionUpdate();
 	}

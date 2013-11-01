@@ -14,6 +14,7 @@ import com.droidplanner.R;
 import com.droidplanner.file.IO.CameraInfo;
 import com.droidplanner.file.IO.CameraInfoReader;
 import com.droidplanner.file.help.CameraInfoLoader;
+import com.droidplanner.helpers.units.Altitude;
 import com.droidplanner.polygon.Polygon;
 import com.droidplanner.survey.SurveyData;
 import com.droidplanner.survey.grid.Grid;
@@ -60,7 +61,7 @@ public class SurveyFragment extends Fragment implements
 		return views.getLayout();
 	}
 
-	public void setSurveyData(Polygon polygon, double defaultAltitude){
+	public void setSurveyData(Polygon polygon, Altitude defaultAltitude){
 		this.polygon = polygon;		
 		surveyData.setAltitude(defaultAltitude);
 		update();
@@ -77,7 +78,7 @@ public class SurveyFragment extends Fragment implements
 	}
 
 	public void generateGrid() {
-		surveyData.update(views.angleView.getValue(), views.altitudeView.getValue(),
+		surveyData.update(views.angleView.getValue(), new Altitude(views.altitudeView.getValue()),
 				views.overlapView.getValue(), views.sidelapView.getValue());
 		//TODO find a better origin point than (0,0)
 		

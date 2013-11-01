@@ -3,18 +3,19 @@ package com.droidplanner.survey;
 import java.util.Locale;
 
 import com.droidplanner.file.IO.CameraInfo;
+import com.droidplanner.helpers.units.Altitude;
 import com.droidplanner.helpers.units.Area;
 import com.droidplanner.helpers.units.Length;
 
 public class SurveyData {
-	private Double altitude = 0.0;
+	private Altitude altitude = new Altitude(0.0);
 	private Double angle = 0.0;
 	private Double overlap = 50.0;
 	private Double sidelap = 60.0;
 	private boolean generateInnerWps = false;
 	private CameraInfo camera = new CameraInfo();
 
-	public void update(double angle, double altitude, double overlap,
+	public void update(double angle, Altitude altitude, double overlap,
 			double sidelap) {
 		this.angle = angle;
 		this.altitude = altitude;
@@ -23,20 +24,20 @@ public class SurveyData {
 	}
 
 	public Length getLateralFootPrint() {
-		return new Length(altitude * camera.getSensorLateralSize() / camera.focalLength);
+		return new Length(altitude.valueInMeters() * camera.getSensorLateralSize() / camera.focalLength);
 
 	}
 
 	public Length getLongitudinalFootPrint() {
-		return new Length(altitude * camera.getSensorLongitudinalSize()
+		return new Length(altitude.valueInMeters() * camera.getSensorLongitudinalSize()
 				/ camera.focalLength);
 	}
 
 	public Area getGroundResolution() {
-		return new Area(((altitude
+		return new Area(((altitude.valueInMeters()
 				* camera.getSensorLateralSize()
 				/ camera.focalLength
-				* (altitude * camera.getSensorLongitudinalSize() / camera.focalLength)
+				* (altitude.valueInMeters() * camera.getSensorLongitudinalSize() / camera.focalLength)
 				/ (camera.sensorResolution * 1000)))/10000);
 	}
 
@@ -66,7 +67,7 @@ public class SurveyData {
 		generateInnerWps = state;
 	}
 	
-	public Double getAltitude() {
+	public Altitude getAltitude() {
 		return altitude;
 	}
 
@@ -93,7 +94,7 @@ public class SurveyData {
 				angle, overlap, sidelap);
 	}
 
-	public void setAltitude(double altitude) {
+	public void setAltitude(Altitude altitude) {
 		this.altitude = altitude;
 	}
 

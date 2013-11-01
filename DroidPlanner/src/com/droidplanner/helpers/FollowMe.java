@@ -10,7 +10,7 @@ import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import com.droidplanner.drone.Drone;
-import com.droidplanner.drone.variables.mission.waypoints.GenericWaypoint;
+import com.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
 import com.google.android.gms.maps.model.LatLng;
 
 public class FollowMe implements LocationListener {

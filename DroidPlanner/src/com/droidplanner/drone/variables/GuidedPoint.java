@@ -8,6 +8,7 @@ import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneVariable;
 import com.droidplanner.fragments.markers.GuidedMarker;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
+import com.droidplanner.helpers.units.Altitude;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -52,9 +53,9 @@ public class GuidedPoint extends DroneVariable implements MarkerSource {
 	}
 
 	public void setGuidedMode() {
-		Double altitude = myDrone.mission.getDefaultAlt();
-		MavLinkModes.setGuidedMode(myDrone, coord.latitude,coord.longitude,myDrone.mission.getDefaultAlt());
-		Toast.makeText(myDrone.context, "Guided Mode (" + altitude + "m)",
+		Altitude altitude = myDrone.mission.getDefaultAlt();
+		MavLinkModes.setGuidedMode(myDrone, coord.latitude,coord.longitude,altitude.valueInMeters());
+		Toast.makeText(myDrone.context, "Guided Mode (" + altitude + ")",
 				Toast.LENGTH_SHORT).show();
 	}	
 
