@@ -4,6 +4,7 @@ import java.security.InvalidParameterException;
 
 import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.drone.variables.mission.commands.ReturnToHome;
+import com.droidplanner.drone.variables.mission.survey.Survey;
 import com.droidplanner.drone.variables.mission.waypoints.Land;
 import com.droidplanner.drone.variables.mission.waypoints.LoiterInfinite;
 import com.droidplanner.drone.variables.mission.waypoints.LoiterTime;
@@ -14,7 +15,7 @@ import com.droidplanner.drone.variables.mission.waypoints.Waypoint;
 
 public enum MissionItemTypes {
 	WAYPOINT("Waypoint"), LOITER("Loiter"), LOITERN("LoiterN"), LOITERT(
-			"LoiterT"), RTL("RTL"), LAND("Land"), TAKEOFF("Takeoff"), ROI("ROI");
+			"LoiterT"), RTL("RTL"), LAND("Land"), TAKEOFF("Takeoff"), ROI("ROI"), SURVEY("Survey");
 
 	private final String name;
 
@@ -44,6 +45,8 @@ public enum MissionItemTypes {
 			return new Takeoff(item);
 		case WAYPOINT:
 			return new Waypoint(item);
+		case SURVEY:
+			return new Survey(item);
 		}
 		throw new InvalidParameterException();
 	}
