@@ -5,19 +5,16 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.*;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_param_value;
 import com.droidplanner.MAVLink.MavLinkParameters;
-import com.droidplanner.R;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces;
 import com.droidplanner.drone.DroneVariable;
 import com.droidplanner.file.DirectoryPath;
 import com.droidplanner.file.IO.ParameterMetadataMap;
 import com.droidplanner.file.IO.ParameterMetadataMapReader;
+import com.droidplanner.file.IO.VehicleProfile;
 import com.droidplanner.parameters.Parameter;
 import com.droidplanner.parameters.ParameterMetadata;
 
@@ -30,7 +27,6 @@ import com.droidplanner.parameters.ParameterMetadata;
  * 
  */
 public class Parameters extends DroneVariable {
-
     private static final String PARAMETERMETADATA_PATH = "Parameters/ParameterMetaData.xml";
 
     private List<Parameter> parameters = new ArrayList<Parameter>();
@@ -87,24 +83,17 @@ public class Parameters extends DroneVariable {
 	}
 
 
-    public void notifyParameterMetadataChanged() {
-        if(parameterListner != null)
-            parameterListner.onParamterMetaDataChanged();
-    }
-
     public ParameterMetadata getMetadata(String name) {
         return (metadataMap == null) ? null : metadataMap.get(name);
     }
 
-    public void loadMetadata(Context context, String metadataType) {
+    public void loadMetadata() {
         metadataMap = null;
 
-        // use metadata type from prefs if not specified, bail if none
-        if(metadataType == null) {
-            final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            metadataType = prefs.getString("pref_param_metadata", null);
-        }
-        if(metadataType == null || metadataType.equals(context.getString(R.string.none)))
+        // get metadata type from profile, bail if none
+        final String metadataType;
+        final VehicleProfile profile = myDrone.profile.getProfile();
+        if(profile == null || (metadataType = profile.getParameterMetadataType()) == null)
             return;
 
         try {
@@ -112,19 +101,15 @@ public class Parameters extends DroneVariable {
             final InputStream inputStream;
             final File file = new File(DirectoryPath.getDroidPlannerPath() + PARAMETERMETADATA_PATH);
             if(file.exists()) {
-                // load from file
                 inputStream = new FileInputStream(file);
             } else {
-                // load from resource
-                inputStream = context.getAssets().open(PARAMETERMETADATA_PATH);
+                inputStream = myDrone.context.getAssets().open(PARAMETERMETADATA_PATH);
             }
-
-            // parse
+            // load
             metadataMap = ParameterMetadataMapReader.open(inputStream, metadataType);
 
         } catch (Exception ex) {
             // nop
-
         }
     }
 }
