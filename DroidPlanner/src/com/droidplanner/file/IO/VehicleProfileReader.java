@@ -1,18 +1,25 @@
 package com.droidplanner.file.IO;
 
+import android.content.Context;
+import android.content.res.AssetManager;
 import android.util.Xml;
 import android.view.View;
 import com.droidplanner.R;
+import com.droidplanner.file.AssetUtil;
+import com.droidplanner.file.DirectoryPath;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
-import java.util.List;
 
 
 public class VehicleProfileReader {
+    private static final String VEHICLEPROFILE_PATH = "VehicleProfiles";
+
     // vehicle profile tags
     private static final String TAG_METADATATYPE = "ParameterMetadataType";
 
@@ -39,7 +46,39 @@ public class VehicleProfileReader {
     private static final String ATTR_MAX_ALTITUDE = "maxAltitude";
 
 
-    public static void open(InputStream inputStream, VehicleProfile profile) throws XmlPullParserException, IOException {
+    /**
+     * Load/aggregate profile from resources and file (if available)
+     * File will override resource settings
+     */
+    public static VehicleProfile load(Context context, String vehicleType) {
+        final String fileName = vehicleType + ".xml";
+        final String path = VEHICLEPROFILE_PATH + File.separator + fileName;
+
+        try {
+            final VehicleProfile newProfile = new VehicleProfile();
+
+            // load profile from resources first
+            final AssetManager assetManager = context.getAssets();
+            if(AssetUtil.exists(assetManager, VEHICLEPROFILE_PATH, fileName)) {
+                final InputStream inputStream = assetManager.open(path);
+                VehicleProfileReader.open(inputStream, newProfile);
+            }
+
+            // load (override) from file if available
+            final File file = new File(DirectoryPath.getDroidPlannerPath() + path);
+            if(file.exists()) {
+                final InputStream inputStream = new FileInputStream(file);
+                VehicleProfileReader.open(inputStream, newProfile);
+            }
+            return newProfile;
+
+        } catch (Exception e) {
+            // nop
+        }
+        return null;
+    }
+
+    private static void open(InputStream inputStream, VehicleProfile profile) throws XmlPullParserException, IOException {
         try {
             XmlPullParser parser = Xml.newPullParser();
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
