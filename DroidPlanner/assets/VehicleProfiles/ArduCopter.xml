@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Profile>
+    <!-- Section to be loaded from ParameterMetaData.xml to be used for this vehicle type       -->
+    <!-- Parameter metadata is used to add descriptions and validation to the Parameters screen -->
+    <ParameterMetadataType
+        type="ArduCopter2"/>
+
+    <!-- Vehicle type defaults             -->
+    <!--   wpNavSpeed: waypoint horz speed -->
+    <!--   maxAltitude: service ceiling    -->
+    <!-- * extend as needed                -->
+    <Default
+        wpNavSpeed="500"
+        maxAltitude="12000"/>
+
+    <!-- Customize mission dialogs         -->
+    <!-- Example: uncomment to enable      -->
+    <MissionViewProfile>
+        <!-- Global Scope: applied to views in all mission dialogs -->
+        <!-- ViewProfile
+            id="@+id/altitudeView"
+            visibility="visible"
+            type="SeekBarWithText"
+            min="0"
+            max="120"
+            inc="5"/>
+
+        <ViewProfile
+            id="@+id/waypointAcceptanceRadius"
+            visibility="gone"/ -->
+
+        <!-- Dialog Scope: applied only to views in identified dialogs
+        <DialogProfile
+            id="@dialog/dialog_mission_rtl">
+
+            <ViewProfile
+                id="@+id/altitudeView"
+                visibility="gone"/>
+
+            <ViewProfile
+                id="@+id/textView1"
+                text="Will cause the craft to return to home position and land."/>
+        </DialogProfile -->
+
+    </MissionViewProfile>
+
+</Profile>
