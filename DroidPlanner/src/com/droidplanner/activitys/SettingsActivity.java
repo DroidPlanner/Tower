@@ -28,7 +28,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		findPreference("pref_server_port").setSummary(sharedPref.getString("pref_server_port", ""));
 		findPreference("pref_udp_server_port").setSummary(sharedPref.getString("pref_udp_server_port", ""));
 		findPreference("pref_map_type").setSummary(sharedPref.getString("pref_map_type", ""));
-        findPreference("pref_param_metadata").setSummary(sharedPref.getString("pref_param_metadata", ""));
+        findPreference("pref_vehicle_type").setSummary(sharedPref.getString("pref_vehicle_type", ""));
 		if (sharedPref.getString("pref_rc_mode", "MODE2").equalsIgnoreCase("MODE1")) {
 			findPreference("pref_rc_mode").setSummary("Mode1: Throttle on RIGHT stick");
 		} else {
@@ -70,9 +70,9 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 			findPreference(key).setSummary(sharedPreferences.getString(key, ""));
 			((DroidPlannerApp) getApplication()).drone.notifyMapTypeChanged();
         }
-        if (key.equals("pref_param_metadata")) {
+        if (key.equals("pref_vehicle_type")) {
             findPreference(key).setSummary(sharedPreferences.getString(key, ""));
-            ((DroidPlannerApp) getApplication()).drone.parameters.notifyParameterMetadataChanged();
+            ((DroidPlannerApp) getApplication()).drone.notifyVehicleTypeChanged();
         }
 		if (key.equals("pref_rc_mode")) {
 			if (sharedPreferences.getString(key, "MODE2").equalsIgnoreCase("MODE1")) {
