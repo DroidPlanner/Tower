@@ -10,6 +10,7 @@ import com.droidplanner.drone.DroneInterfaces.InfoListner;
 import com.droidplanner.drone.DroneInterfaces.MapConfigListener;
 import com.droidplanner.drone.DroneInterfaces.MapUpdatedListner;
 import com.droidplanner.drone.DroneInterfaces.ModeChangedListener;
+import com.droidplanner.drone.DroneInterfaces.VehicleTypeListener;
 import com.droidplanner.drone.variables.Altitude;
 import com.droidplanner.drone.variables.Battery;
 import com.droidplanner.drone.variables.Calibration;
@@ -19,6 +20,7 @@ import com.droidplanner.drone.variables.Home;
 import com.droidplanner.drone.variables.MissionStats;
 import com.droidplanner.drone.variables.Orientation;
 import com.droidplanner.drone.variables.Parameters;
+import com.droidplanner.drone.variables.Profile;
 import com.droidplanner.drone.variables.Speed;
 import com.droidplanner.drone.variables.State;
 import com.droidplanner.drone.variables.Type;
@@ -29,6 +31,7 @@ import com.droidplanner.service.MAVLinkClient;
 
 public class Drone {
 	public Type type = new Type(this);
+    public Profile profile = new Profile(this);
 	public GPS GPS = new GPS(this);
 	public Speed speed = new Speed(this);
 	public State state = new State(this);
@@ -51,6 +54,7 @@ public class Drone {
 	private MapUpdatedListner mapListner;
 	private MapConfigListener mapConfigListener;
 	private DroneTypeListner typeListner;
+    private VehicleTypeListener vehicleTypeListener;
 	private InfoListner infoListner;
 	private HomeDistanceChangedListner homeChangedListner;
 	private ModeChangedListener modeChangedListener;
@@ -59,6 +63,8 @@ public class Drone {
 		this.tts = tts;
 		this.MavClient = mavClient;
 		this.context = context;
+
+        profile.load();
 	}
 
 	public void setHudListner(HudUpdatedListner listner) {
@@ -76,6 +82,10 @@ public class Drone {
 	public void setDroneTypeChangedListner(DroneTypeListner listner) {
 		typeListner = listner;
 	}
+
+    public void setVehicleTypeListener(VehicleTypeListener vehicleTypeListener) {
+        this.vehicleTypeListener = vehicleTypeListener;
+    }
 
 	public void setInfoListner(InfoListner listner) {
 		infoListner = listner;
@@ -123,6 +133,8 @@ public class Drone {
 	}
 
 	public void notifyTypeChanged() {
+        profile.load();
+
 		if (typeListner != null) {
 			typeListner.onDroneTypeChanged();
 		}
@@ -131,6 +143,13 @@ public class Drone {
 		}
 		
 	}
+
+    public void notifyVehicleTypeChanged() {
+        profile.load();
+
+        if (vehicleTypeListener != null)
+            vehicleTypeListener.onVehicleTypeChanged();
+    }
 
 	public void onOrientationUpdate() {
 		if (hudListner != null)
