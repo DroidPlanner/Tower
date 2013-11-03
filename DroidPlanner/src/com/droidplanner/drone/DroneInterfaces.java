@@ -18,6 +18,10 @@ public class DroneInterfaces {
 		public void onDroneTypeChanged();
 	}
 
+    public interface VehicleTypeListener {
+        public void onVehicleTypeChanged();
+    }
+	
 	public interface InfoListner {
 		public void onInfoUpdate();
 	}
