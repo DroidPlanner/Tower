@@ -43,7 +43,6 @@ public class DroneInterfaces {
 		public void onBeginReceivingParameters();
 		public void onParameterReceived(Parameter parameter, int index,	int count);
 		public void onEndReceivingParameters(List<Parameter> parameter);
-		public void onParamterMetaDataChanged();
 	}
 
 	public interface OnStateListner {
