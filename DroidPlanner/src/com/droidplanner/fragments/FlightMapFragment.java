@@ -11,9 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.MAVLink.Messages.ApmModes;
+import com.droidplanner.drone.variables.GuidedPoint;
+import com.droidplanner.drone.variables.GuidedPoint.OnGuidedListener;
 import com.droidplanner.fragments.helpers.DroneMap;
-import com.droidplanner.fragments.helpers.GuidePointListener;
 import com.droidplanner.fragments.markers.DroneMarker;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
@@ -24,7 +24,7 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 public class FlightMapFragment extends DroneMap implements
-		OnMapLongClickListener, OnMarkerClickListener, OnMarkerDragListener {
+		OnMapLongClickListener, OnMarkerClickListener, OnMarkerDragListener, OnGuidedListener {
 	private Polyline flightPath;
 	private int maxFlightPathSize;
 	public boolean isAutoPanEnabled;
@@ -33,7 +33,6 @@ public class FlightMapFragment extends DroneMap implements
 	public boolean hasBeenZoomed = false;
 
 	public DroneMarker droneMarker;
-	private GuidePointListener guidePointListener;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
@@ -49,7 +48,8 @@ public class FlightMapFragment extends DroneMap implements
 		mMap.setOnMapLongClickListener(this);
 		mMap.setOnMarkerDragListener(this);
 		mMap.setOnMarkerClickListener(this);
-
+		
+		drone.setGuidedPointListner(this);
 		return view;
 	}
 
@@ -67,11 +67,6 @@ public class FlightMapFragment extends DroneMap implements
 	@Override
 	public void update() {
 		super.update();
-
-		if(drone.guidedPoint.isCoordValid()) {
-			markers.updateMarker(drone.guidedPoint, true, context);
-			guidePointListener.OnGuidePointMoved();
-		}
 	}
 
 	public void addFlithPathPoint(LatLng position) {
@@ -97,53 +92,36 @@ public class FlightMapFragment extends DroneMap implements
 		flightPath = mMap.addPolyline(flightPathOptions);
 	}
 
-	public void setGuidePointListener(GuidePointListener guidePointListener) {
-		this.guidePointListener = guidePointListener;
-	}
-
 	@Override
 	public void onMapLongClick(LatLng coord) {
 		getPreferences();
 		if (isGuidedModeEnabled)
-			drone.guidedPoint.newGuidedPoint(coord);
+			drone.guidedPoint.newGuidedPointWithCurrentAlt(coord);
 	}
 
 	@Override
-	public void onMarkerDragStart(Marker marker)
-	{
-		checkForGuidePointMoving(marker);
+	public void onMarkerDragStart(Marker marker){
 	}
 
 	@Override
-	public void onMarkerDrag(Marker marker)
-	{
-		checkForGuidePointMoving(marker);
+	public void onMarkerDrag(Marker marker){
 	}
 
+	
 	@Override
 	public void onMarkerDragEnd(Marker marker){
-		checkForGuidePointMoving(marker);
-		drone.guidedPoint.newGuidedPoint(marker.getPosition());
+		drone.guidedPoint.newGuidedPointwithLastAltitude(marker.getPosition());
 	}
 
 	@Override
 	public boolean onMarkerClick(Marker marker){
-		drone.guidedPoint.newGuidedPoint(marker.getPosition());
+		drone.guidedPoint.newGuidedPointWithCurrentAlt(marker.getPosition());
 		return true;
 	}
 
-	private void checkForGuidePointMoving(Marker marker){
-		drone.guidedPoint.setCoord(marker.getPosition());
-		guidePointListener.OnGuidePointMoved();
-	}
-
-
-	public void onModeChanged() {
-		if(drone.state.getMode() != ApmModes.ROTOR_GUIDED) {
-			if(drone.guidedPoint.isCoordValid()) {
-				markers.clean();
-				drone.guidedPoint.invalidateCoord();
-			}
-		}
+	@Override
+	public void onGuidedPoint() {
+		GuidedPoint guidedPoint = drone.guidedPoint;
+		markers.updateMarker(guidedPoint, true, context);
 	}
 }

@@ -1,7 +1,9 @@
 package com.droidplanner.fragments.markers;
 
+
 import android.content.Context;
-import android.graphics.Color;
+
+import com.droidplanner.R;
 import com.droidplanner.drone.variables.GuidedPoint;
 import com.droidplanner.fragments.markers.helpers.MarkerWithText;
 import com.droidplanner.helpers.units.Altitude;
@@ -18,13 +20,18 @@ public class GuidedMarker {
 	}
 
 	public static void update(Marker marker, GuidedPoint guidedPoint, Altitude altitude, Context context) {
-		marker.setPosition(guidedPoint.getCoord());
-		marker.setIcon(getIcon(guidedPoint, altitude, context));
+		if (guidedPoint.isValid()) {			
+			marker.setPosition(guidedPoint.getCoord());
+			marker.setIcon(getIcon(guidedPoint, altitude, context));
+			marker.setVisible(true);
+		}else{
+			marker.setVisible(false);
+		}
 	}
 
 	private static BitmapDescriptor getIcon(GuidedPoint guidedPoint, Altitude altitude, Context context)
 	{
-		return BitmapDescriptorFactory.fromBitmap(MarkerWithText.getMarkerWithTextAndDetail(Color.YELLOW,
-			"#",  altitude.toString(), context));
+		return BitmapDescriptorFactory.fromBitmap(MarkerWithText.getMarkerWithTextAndDetail(R.drawable.ic_wp_map_on,
+			"Guided",  "", context));
 	}
 }

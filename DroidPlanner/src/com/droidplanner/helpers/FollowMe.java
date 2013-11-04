@@ -10,7 +10,6 @@ import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import com.droidplanner.drone.Drone;
-import com.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
 import com.google.android.gms.maps.model.LatLng;
 
 public class FollowMe implements LocationListener {
@@ -65,8 +64,7 @@ public class FollowMe implements LocationListener {
 	public void onLocationChanged(Location location) {
 		LatLng coord = new LatLng(location.getLatitude(), location.getLongitude());
 		// TODO find a better way to do the GUIDED altitude
-		drone.guidedPoint.setCoord(coord);
-		drone.guidedPoint.setGuidedMode();
+		drone.guidedPoint.newGuidedPointWithCurrentAlt(coord);
 	}
 
 	@Override

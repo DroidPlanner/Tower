@@ -43,6 +43,10 @@ public class State extends DroneVariable {
 			this.mode = mode;
 			myDrone.tts.speakMode(mode);
 			myDrone.notifyModeChanged();
+			
+			if(getMode() != ApmModes.ROTOR_GUIDED) {
+				myDrone.guidedPoint.invalidateCoord();
+			}
 		}
 	}
 
