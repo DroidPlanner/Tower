@@ -1,6 +1,7 @@
 package com.droidplanner.activitys;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v13.app.FragmentTabHost;
 import android.support.v4.app.NavUtils;
@@ -10,11 +11,13 @@ import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperUI;
 import com.droidplanner.fragments.ParametersTableFragment;
 import com.droidplanner.fragments.SettingsFragment;
-import com.droidplanner.fragments.helpers.OfflineMapFragment;
 
 public class ConfigurationActivity extends SuperUI{
 
-    private FragmentTabHost mTabHost;
+    public static final String SCREEN_INTENT = "screen";
+	public static final String PARAMETERS = "parameters";
+    public static final String SETTINGS = "settings";
+	private FragmentTabHost mTabHost;
     
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -26,10 +29,16 @@ public class ConfigurationActivity extends SuperUI{
 		
 		mTabHost = (FragmentTabHost)findViewById(R.id.configurationTabHost);
 	    mTabHost.setup(this, getFragmentManager(), R.id.realtabcontent);
-	    mTabHost.addTab(mTabHost.newTabSpec("parameters").setIndicator("Parameters"),
+	    mTabHost.addTab(mTabHost.newTabSpec(PARAMETERS).setIndicator("Parameters"),
 	            ParametersTableFragment.class, null);
-	    mTabHost.addTab(mTabHost.newTabSpec("settings").setIndicator("Settings"),
+	    mTabHost.addTab(mTabHost.newTabSpec(SETTINGS).setIndicator("Settings"),
 	            SettingsFragment.class, null);
+	    
+	    Intent intent = getIntent();
+	    String stringExtra = intent.getStringExtra(SCREEN_INTENT);
+		if(SETTINGS.equalsIgnoreCase(stringExtra)){
+	    	mTabHost.setCurrentTabByTag(SETTINGS);    	
+	    }
 	}
 
 	@Override

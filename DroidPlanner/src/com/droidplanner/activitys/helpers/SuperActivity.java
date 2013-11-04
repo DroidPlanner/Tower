@@ -19,12 +19,11 @@ import com.droidplanner.fragments.helpers.OfflineMapFragment;
 import com.droidplanner.helpers.units.Altitude;
 
 public abstract class SuperActivity extends Activity implements
-		 OnAltitudeChangedListner, OnSystemArmListener{
+		OnAltitudeChangedListner, OnSystemArmListener {
 
 	public DroidPlannerApp app;
 	public Drone drone;
 	private MenuItem armButton;
-
 
 	public SuperActivity() {
 		super();
@@ -35,7 +34,7 @@ public abstract class SuperActivity extends Activity implements
 		super.onCreate(savedInstanceState);
 
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-		
+
 		app = (DroidPlannerApp) getApplication();
 		app.onSystemArmListener = this;
 		this.drone = app.drone;
@@ -43,14 +42,17 @@ public abstract class SuperActivity extends Activity implements
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 	}
 
-
-
-
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_configuration:
 			startActivity(new Intent(this, ConfigurationActivity.class));
+			return true;
+		case R.id.menu_settings:
+			Intent intent = new Intent(this, ConfigurationActivity.class);
+			intent.putExtra(ConfigurationActivity.SCREEN_INTENT,
+					ConfigurationActivity.SETTINGS);
+			startActivity(intent);
 			return true;
 		case R.id.menu_connect:
 			drone.MavClient.toggleConnectionState();
@@ -87,45 +89,41 @@ public abstract class SuperActivity extends Activity implements
 	private void showCheckList() {
 		PreflightDialog dialog = new PreflightDialog();
 		dialog.build(this, drone, false);
-		
+
 	}
 
 	private void setMapTypeFromItemId(int itemId) {
-
 		final String mapType;
-		switch(itemId) {
-			case R.id.menu_map_type_hybrid:
-				mapType = OfflineMapFragment.MAP_TYPE_HYBRID;
-				break;
-			case R.id.menu_map_type_normal:
-				mapType = OfflineMapFragment.MAP_TYPE_NORMAL;
-				break;
-			case R.id.menu_map_type_terrain:
-				mapType = OfflineMapFragment.MAP_TYPE_TERRAIN;
-				break;
-			default:
-				mapType = OfflineMapFragment.MAP_TYPE_SATELLITE;
-				break;
+		switch (itemId) {
+		case R.id.menu_map_type_hybrid:
+			mapType = OfflineMapFragment.MAP_TYPE_HYBRID;
+			break;
+		case R.id.menu_map_type_normal:
+			mapType = OfflineMapFragment.MAP_TYPE_NORMAL;
+			break;
+		case R.id.menu_map_type_terrain:
+			mapType = OfflineMapFragment.MAP_TYPE_TERRAIN;
+			break;
+		default:
+			mapType = OfflineMapFragment.MAP_TYPE_SATELLITE;
+			break;
 		}
 
 		PreferenceManager.getDefaultSharedPreferences(this).edit()
-				.putString(OfflineMapFragment.PREF_MAP_TYPE, mapType)
-				.commit();
+				.putString(OfflineMapFragment.PREF_MAP_TYPE, mapType).commit();
 
 		drone.notifyMapTypeChanged();
 	}
 
 	public void notifyArmed() {
 		if (armButton != null) {
-			armButton.setTitle(getResources().getString(
-					R.string.menu_disarm));
+			armButton.setTitle(getResources().getString(R.string.menu_disarm));
 		}
 	}
 
 	public void notifyDisarmed() {
 		if (armButton != null) {
-			armButton.setTitle(getResources().getString(
-					R.string.menu_arm));
+			armButton.setTitle(getResources().getString(R.string.menu_arm));
 		}
 	}
 
