@@ -1,11 +1,15 @@
 package com.droidplanner.drone.variables;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Context;
 import android.widget.Toast;
 
 import com.droidplanner.MAVLink.MavLinkModes;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneVariable;
+import com.droidplanner.fragments.helpers.MapPath.PathSource;
 import com.droidplanner.fragments.markers.GuidedMarker;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import com.droidplanner.helpers.units.Altitude;
@@ -13,7 +17,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class GuidedPoint extends DroneVariable implements MarkerSource {
+public class GuidedPoint extends DroneVariable implements MarkerSource, PathSource {
 	private LatLng coord;
 	private Altitude altitude;
 
@@ -67,5 +71,15 @@ public class GuidedPoint extends DroneVariable implements MarkerSource {
 	@Override
 	public void update(Marker markerFromGcp, Context context) {
 		GuidedMarker.update(markerFromGcp, this, altitude, context);
+	}
+
+	@Override
+	public List<LatLng> getPathPoints() {
+		List<LatLng> path = new ArrayList<LatLng>();
+		if (isValid()) {
+			path.add(myDrone.GPS.getPosition());
+			path.add(coord);
+		}
+		return path;
 	}
 }

@@ -11,9 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.droidplanner.drone.DroneInterfaces.MapUpdatedListner;
 import com.droidplanner.drone.variables.GuidedPoint;
 import com.droidplanner.drone.variables.GuidedPoint.OnGuidedListener;
 import com.droidplanner.fragments.helpers.DroneMap;
+import com.droidplanner.fragments.helpers.MapPath;
 import com.droidplanner.fragments.markers.DroneMarker;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
@@ -24,8 +26,9 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 public class FlightMapFragment extends DroneMap implements
-		OnMapLongClickListener, OnMarkerClickListener, OnMarkerDragListener, OnGuidedListener {
+		OnMapLongClickListener, OnMarkerClickListener, OnMarkerDragListener, OnGuidedListener, MapUpdatedListner {
 	private Polyline flightPath;
+	private MapPath droneLeashPath;
 	private int maxFlightPathSize;
 	public boolean isAutoPanEnabled;
 	private boolean isGuidedModeEnabled;
@@ -40,11 +43,13 @@ public class FlightMapFragment extends DroneMap implements
 		View view = super.onCreateView(inflater, viewGroup, bundle);
 
 		droneMarker = new DroneMarker(this);
+		droneLeashPath = new MapPath(mMap,Color.WHITE,5);
 
 		addFlightPathToMap();
 		getPreferences();
 
-		drone.setMapListner(droneMarker);
+
+		drone.setMapListner(this);
 		mMap.setOnMapLongClickListener(this);
 		mMap.setOnMarkerDragListener(this);
 		mMap.setOnMarkerClickListener(this);
@@ -123,5 +128,17 @@ public class FlightMapFragment extends DroneMap implements
 	public void onGuidedPoint() {
 		GuidedPoint guidedPoint = drone.guidedPoint;
 		markers.updateMarker(guidedPoint, true, context);
+		droneLeashPath.update(guidedPoint);
+	}
+
+	@Override
+	public void onDroneUpdate() {
+		droneMarker.onDroneUpdate();
+		droneLeashPath.update(drone.guidedPoint);
+	}
+
+	@Override
+	public void onDroneTypeChanged() {
+		droneMarker.onDroneTypeChanged();
 	}
 }

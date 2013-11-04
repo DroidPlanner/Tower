@@ -17,8 +17,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 
 public abstract class DroneMap extends OfflineMapFragment implements OnWaypointChangedListner {
-
-
 	public GoogleMap mMap;
 	protected MarkerManager markers;
 	protected MapPath missionPath;
