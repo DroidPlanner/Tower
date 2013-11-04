@@ -44,16 +44,6 @@
         android:layout_height="match_parent" />
 
 	<Button
-	    android:id="@+id/mc_follow"
-	    style="@style/actionButton"
-	    android:layout_width="75dp"
-	    android:layout_height="match_parent"
-	    android:background="@drawable/black_button"
-	    android:drawableTop="@drawable/ic_follow"
-	    android:text="Follow"
-	    tools:ignore="ContentDescription" />
-
-	<Button
 	    android:id="@+id/mc_land"
 	    style="@style/actionButton"
 	    android:layout_width="75dp"
@@ -64,6 +54,16 @@
 	    tools:ignore="ContentDescription" />
 
 	<Button
+	    android:id="@+id/mc_takeoff"
+	    style="@style/actionButton"
+	    android:layout_width="75dp"
+	    android:layout_height="match_parent"
+	    android:background="@drawable/black_button"
+	    android:drawableTop="@drawable/ic_land"
+	    android:text="Takeoff"
+	    tools:ignore="ContentDescription" />
+
+	<Button
 	    android:id="@+id/mc_loiter"
 	    style="@style/actionButton"
 	    android:layout_width="75dp"
@@ -71,6 +71,16 @@
 	    android:background="@drawable/black_button"
 	    android:drawableTop="@drawable/ic_loiter"
 	    android:text="Loiter"
+	    tools:ignore="ContentDescription" />
+
+	<Button
+	    android:id="@+id/mc_follow"
+	    style="@style/actionButton"
+	    android:layout_width="75dp"
+	    android:layout_height="match_parent"
+	    android:background="@drawable/black_button"
+	    android:drawableTop="@drawable/ic_follow"
+	    android:text="Follow"
 	    tools:ignore="ContentDescription" />
 
 </LinearLayout>

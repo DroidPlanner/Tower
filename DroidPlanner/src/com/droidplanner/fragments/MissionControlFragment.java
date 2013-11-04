@@ -75,6 +75,9 @@ public class MissionControlFragment extends Fragment implements OnClickListener 
 		case R.id.mc_land:
 			drone.state.changeFlightMode(ApmModes.ROTOR_LAND);
 			break;
+		case R.id.mc_takeoff:
+			drone.state.changeFlightMode(ApmModes.ROTOR_TAKEOFF);
+			break;
 		case R.id.mc_homeBtn:
 			drone.state.changeFlightMode(ApmModes.ROTOR_RTL);
 			break;
