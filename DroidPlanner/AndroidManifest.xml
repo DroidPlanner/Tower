@@ -68,8 +68,6 @@
         <service android:name=".service.MAVLinkService" >
         </service>
 
-        <activity android:name=".activitys.SettingsActivity" >
-        </activity>
         <activity android:name=".activitys.FlightActivity" >
 
             <!-- Launcher Intent -->

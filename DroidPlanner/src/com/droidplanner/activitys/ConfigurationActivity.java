@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperUI;
 import com.droidplanner.fragments.ParametersTableFragment;
+import com.droidplanner.fragments.SettingsFragment;
 import com.droidplanner.fragments.helpers.OfflineMapFragment;
 
 public class ConfigurationActivity extends SuperUI{
@@ -27,8 +28,8 @@ public class ConfigurationActivity extends SuperUI{
 	    mTabHost.setup(this, getFragmentManager(), R.id.realtabcontent);
 	    mTabHost.addTab(mTabHost.newTabSpec("parameters").setIndicator("Parameters"),
 	            ParametersTableFragment.class, null);
-	    mTabHost.addTab(mTabHost.newTabSpec("map").setIndicator("MAP"),	//TODO remove this after testing
-	            OfflineMapFragment.class, null);
+	    mTabHost.addTab(mTabHost.newTabSpec("settings").setIndicator("Settings"),
+	            SettingsFragment.class, null);
 	}
 
 	@Override
