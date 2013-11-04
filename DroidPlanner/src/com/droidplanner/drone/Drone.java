@@ -57,7 +57,7 @@ public class Drone {
 	private HomeDistanceChangedListner homeChangedListner;
 	private ModeChangedListener modeChangedListener;
 	private OnGuidedListener guidedListner;
-	private OnStateListner stateListner;
+	public OnStateListner stateListner;
 
 	public Drone(TTS tts, MAVLinkClient mavClient, Context context) {
 		this.tts = tts;
@@ -170,10 +170,4 @@ public class Drone {
 			modeChangedListener.onModeChanged();
 	}
 
-	public void notifyFlyingStateChanged() {
-		if(stateListner!=null){
-			stateListner.onFlightStateChanged();
-		}
-		
-	}
 }

@@ -36,15 +36,18 @@ public class State extends DroneVariable {
 	public void setIsFlying(boolean newState) {
 		if (newState != isFlying) {
 			isFlying = newState;
-			myDrone.notifyFlyingStateChanged();
-			Log.d("STATE", "isFLying "+isFlying+" failsafe "+failsafe+ " armed "+armed);
+			if(myDrone.stateListner!=null){
+				myDrone.stateListner.onFlightStateChanged();
+			}
 		}
 	}
 
 	public void setFailsafe(boolean newFailsafe) {
 		if(this.failsafe!=newFailsafe){
 			this.failsafe=newFailsafe;
-			Log.d("STATE", "isFLying "+isFlying+" failsafe "+failsafe+ " armed "+armed);
+			if(myDrone.stateListner!=null){
+				myDrone.stateListner.onFailsafeChanged();
+			}
 		}	
 	}
 
@@ -52,7 +55,9 @@ public class State extends DroneVariable {
 		if (this.armed != newState) {
 			myDrone.tts.speakArmedState(newState);
 			this.armed = newState;
-			Log.d("STATE", "isFLying "+isFlying+" failsafe "+failsafe+ " armed "+armed);
+			if(myDrone.stateListner!=null){
+				myDrone.stateListner.onArmChanged();
+			}			
 		}
 	}
 

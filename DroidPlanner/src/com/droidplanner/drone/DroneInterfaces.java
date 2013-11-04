@@ -44,5 +44,9 @@ public class DroneInterfaces {
 
 	public interface OnStateListner {
 		void onFlightStateChanged();
+
+		void onArmChanged();
+
+		void onFailsafeChanged();
 	}
 }

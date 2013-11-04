@@ -13,8 +13,10 @@ import com.MAVLink.Messages.ApmModes;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
 import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.DroneInterfaces.OnStateListner;
 
-public class MissionControlFragment extends Fragment implements OnClickListener {
+public class MissionControlFragment extends Fragment implements
+		OnClickListener, OnStateListner {
 
 	public interface OnMissionControlInteraction {
 		public void onJoystickSelected();
@@ -30,6 +32,7 @@ public class MissionControlFragment extends Fragment implements OnClickListener 
 	private Button landBtn;
 	private Button loiterBtn;
 	private Button takeoffBtn;
+	private Button followBtn;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,6 +42,7 @@ public class MissionControlFragment extends Fragment implements OnClickListener 
 		setupViews(view);
 		setupListner();
 		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
+		drone.setFlightStateListner(this);
 		return view;
 	}
 
@@ -55,6 +59,8 @@ public class MissionControlFragment extends Fragment implements OnClickListener 
 		landBtn = (Button) parentView.findViewById(R.id.mc_land);
 		takeoffBtn = (Button) parentView.findViewById(R.id.mc_takeoff);
 		loiterBtn = (Button) parentView.findViewById(R.id.mc_loiter);
+		followBtn = (Button) parentView.findViewById(R.id.mc_follow);
+		setToLandedState();
 	}
 
 	private void setupListner() {
@@ -64,6 +70,7 @@ public class MissionControlFragment extends Fragment implements OnClickListener 
 		landBtn.setOnClickListener(this);
 		takeoffBtn.setOnClickListener(this);
 		loiterBtn.setOnClickListener(this);
+		followBtn.setOnClickListener(this);
 	}
 
 	@Override
@@ -88,6 +95,42 @@ public class MissionControlFragment extends Fragment implements OnClickListener 
 			drone.state.changeFlightMode(ApmModes.ROTOR_LOITER);
 			break;
 		}
+	}
+
+	@Override
+	public void onFlightStateChanged() {
+		if (drone.state.isFlying()) {
+			setToFlyingState();
+		}else{
+			setToLandedState();
+		}			
+	}
+
+	private void setToLandedState() {
+		takeoffBtn.setVisibility(View.VISIBLE);
+		landBtn.setVisibility(View.GONE);
+		homeBtn.setVisibility(View.GONE);
+		loiterBtn.setVisibility(View.GONE);
+		followBtn.setVisibility(View.GONE);
+	}
+
+	private void setToFlyingState() {
+		landBtn.setVisibility(View.VISIBLE);
+		homeBtn.setVisibility(View.VISIBLE);
+		loiterBtn.setVisibility(View.VISIBLE);
+		takeoffBtn.setVisibility(View.GONE);
+	}
+
+	@Override
+	public void onArmChanged() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onFailsafeChanged() {
+		// TODO Auto-generated method stub
+
 	}
 
 }
