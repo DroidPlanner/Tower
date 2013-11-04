@@ -16,7 +16,8 @@ public class GuidedMarker {
 	public static MarkerOptions build(GuidedPoint guidedPoint, Altitude altitude, Context context) {
 		return new MarkerOptions()
 				.position(guidedPoint.getCoord())
-				.icon(getIcon(guidedPoint, altitude, context));
+				.icon(getIcon(guidedPoint, altitude, context))
+				.anchor(0.5f, 0.5f);
 	}
 
 	public static void update(Marker marker, GuidedPoint guidedPoint, Altitude altitude, Context context) {
