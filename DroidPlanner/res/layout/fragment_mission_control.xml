@@ -59,7 +59,7 @@
 	    android:layout_width="75dp"
 	    android:layout_height="match_parent"
 	    android:background="@drawable/black_button"
-	    android:drawableTop="@drawable/ic_land"
+	    android:drawableTop="@drawable/ic_takeoff"
 	    android:text="Takeoff"
 	    tools:ignore="ContentDescription" />
 
