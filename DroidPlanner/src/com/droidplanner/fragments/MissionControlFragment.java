@@ -29,6 +29,7 @@ public class MissionControlFragment extends Fragment implements OnClickListener 
 	private Button joystickBtn;
 	private Button landBtn;
 	private Button loiterBtn;
+	private Button takeoffBtn;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,6 +53,7 @@ public class MissionControlFragment extends Fragment implements OnClickListener 
 		joystickBtn = (Button) parentView.findViewById(R.id.mc_joystickBtn);
 		homeBtn = (Button) parentView.findViewById(R.id.mc_homeBtn);
 		landBtn = (Button) parentView.findViewById(R.id.mc_land);
+		takeoffBtn = (Button) parentView.findViewById(R.id.mc_takeoff);
 		loiterBtn = (Button) parentView.findViewById(R.id.mc_loiter);
 	}
 
@@ -60,6 +62,7 @@ public class MissionControlFragment extends Fragment implements OnClickListener 
 		joystickBtn.setOnClickListener(this);
 		homeBtn.setOnClickListener(this);
 		landBtn.setOnClickListener(this);
+		takeoffBtn.setOnClickListener(this);
 		loiterBtn.setOnClickListener(this);
 	}
 
