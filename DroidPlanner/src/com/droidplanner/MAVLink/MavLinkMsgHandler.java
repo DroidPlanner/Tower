@@ -51,10 +51,7 @@ public class MavLinkMsgHandler {
 		case msg_heartbeat.MAVLINK_MSG_ID_HEARTBEAT:
 			msg_heartbeat msg_heart = (msg_heartbeat) msg;
 			drone.type.setType(msg_heart.type);
-			drone.state
-					.setArmedAndFailsafe(
-							(msg_heart.base_mode & (byte) MAV_MODE_FLAG.MAV_MODE_FLAG_SAFETY_ARMED) == (byte) MAV_MODE_FLAG.MAV_MODE_FLAG_SAFETY_ARMED,
-							msg_heart.system_status == (byte) MAV_STATE.MAV_STATE_CRITICAL);
+			processState(msg_heart);
 			ApmModes newMode;
 			newMode = ApmModes.getMode(msg_heart.custom_mode,
 					drone.type.getType());
@@ -77,6 +74,34 @@ public class MavLinkMsgHandler {
 			drone.GPS.setGpsState(((msg_gps_raw_int) msg).fix_type,
 					((msg_gps_raw_int) msg).satellites_visible,
 					((msg_gps_raw_int) msg).eph);
+		}
+	}
+	
+	public void processState(msg_heartbeat msg_heart) {
+		checkArmState(msg_heart);
+		checkFailsafe(msg_heart);
+		checkIfIsFlying(msg_heart);
+	}
+
+	private void checkFailsafe(msg_heartbeat msg_heart) {
+		boolean failsafe2 = msg_heart.system_status == (byte) MAV_STATE.MAV_STATE_CRITICAL;
+		drone.state.setFailsafe(failsafe2);
+	}
+
+	private void checkArmState(msg_heartbeat msg_heart) {
+		drone.state.setArmed((msg_heart.base_mode & (byte) MAV_MODE_FLAG.MAV_MODE_FLAG_SAFETY_ARMED) == (byte) MAV_MODE_FLAG.MAV_MODE_FLAG_SAFETY_ARMED);
+	}
+
+	private void checkIfIsFlying(msg_heartbeat msg_heart) {
+		switch (msg_heart.system_status) {
+		case MAV_STATE.MAV_STATE_ACTIVE:
+		case MAV_STATE.MAV_STATE_CRITICAL:
+			drone.state.setIsFlying(true);
+			break;
+		case MAV_STATE.MAV_STATE_STANDBY:
+		case MAV_STATE.MAV_STATE_CALIBRATING:
+			drone.state.setIsFlying(false);
+			break;
 		}
 	}
 }

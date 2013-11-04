@@ -1,8 +1,8 @@
 package com.droidplanner;
 
 import android.app.Application;
-
 import android.os.Handler;
+
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_heartbeat;
 import com.MAVLink.Messages.enums.MAV_MODE_FLAG;
@@ -128,6 +128,8 @@ public class DroidPlannerApp extends Application implements
 			case LOST_HEARTBEAT:
 				tts.speak("Data link restored");
 				break;
+		case NORMAL_HEARTBEAT:
+			break;
 		}
 
 		heartbeatState = HeartbeatState.NORMAL_HEARTBEAT;

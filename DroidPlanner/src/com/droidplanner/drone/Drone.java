@@ -10,6 +10,7 @@ import com.droidplanner.drone.DroneInterfaces.InfoListner;
 import com.droidplanner.drone.DroneInterfaces.MapConfigListener;
 import com.droidplanner.drone.DroneInterfaces.MapUpdatedListner;
 import com.droidplanner.drone.DroneInterfaces.ModeChangedListener;
+import com.droidplanner.drone.DroneInterfaces.OnStateListner;
 import com.droidplanner.drone.variables.Altitude;
 import com.droidplanner.drone.variables.Battery;
 import com.droidplanner.drone.variables.Calibration;
@@ -56,6 +57,7 @@ public class Drone {
 	private HomeDistanceChangedListner homeChangedListner;
 	private ModeChangedListener modeChangedListener;
 	private OnGuidedListener guidedListner;
+	private OnStateListner stateListner;
 
 	public Drone(TTS tts, MAVLinkClient mavClient, Context context) {
 		this.tts = tts;
@@ -81,6 +83,10 @@ public class Drone {
 
 	public void setInfoListner(InfoListner listner) {
 		infoListner = listner;
+	}
+
+	public void setFlightStateListner(OnStateListner listner) {
+		stateListner = listner;
 	}
 
 	public void setHomeChangedListner(HomeDistanceChangedListner listner) {
@@ -162,5 +168,12 @@ public class Drone {
 	public void notifyModeChanged(){
 		if (modeChangedListener != null)
 			modeChangedListener.onModeChanged();
+	}
+
+	public void notifyFlyingStateChanged() {
+		if(stateListner!=null){
+			stateListner.onFlightStateChanged();
+		}
+		
 	}
 }
