@@ -9,7 +9,10 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.MAVLink.Messages.ApmModes;
+import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
+import com.droidplanner.drone.Drone;
 
 public class MissionControlFragment extends Fragment implements OnClickListener {
 
@@ -17,26 +20,15 @@ public class MissionControlFragment extends Fragment implements OnClickListener 
 		public void onJoystickSelected();
 
 		public void onPlanningSelected();
-
-		public void onArmSelected();
-
-		public void onDisArmSelected();
-
-		public void onConnectSelected();
-
-		public void onDisConnectSelected();
-
-		public void onRTLSelected();
-
-		public void onLandSelected();
-
-		public void onTakeOffSelected();
 	}
 
+	private Drone drone;
 	private OnMissionControlInteraction listner;
-	private Button connectBtn;
+	private Button homeBtn;
 	private Button missionBtn;
 	private Button joystickBtn;
+	private Button landBtn;
+	private Button loiterBtn;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,6 +37,7 @@ public class MissionControlFragment extends Fragment implements OnClickListener 
 				container, false);
 		setupViews(view);
 		setupListner();
+		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
 		return view;
 	}
 
@@ -54,29 +47,24 @@ public class MissionControlFragment extends Fragment implements OnClickListener 
 		listner = (OnMissionControlInteraction) activity;
 	}
 
-	private void setupListner() {
-		connectBtn.setOnClickListener(this);
-		missionBtn.setOnClickListener(this);
-		joystickBtn.setOnClickListener(this);
+	private void setupViews(View parentView) {
+		missionBtn = (Button) parentView.findViewById(R.id.mc_planningBtn);
+		joystickBtn = (Button) parentView.findViewById(R.id.mc_joystickBtn);
+		homeBtn = (Button) parentView.findViewById(R.id.mc_homeBtn);
+		landBtn = (Button) parentView.findViewById(R.id.mc_land);
+		loiterBtn = (Button) parentView.findViewById(R.id.mc_loiter);
 	}
 
-	private void setupViews(View parentView) {
-		connectBtn = (Button) parentView.findViewById(R.id.mc_connectBtn);
-		missionBtn = (Button) parentView.findViewById(R.id.mc_planningBtn);
-		joystickBtn = (Button) parentView
-				.findViewById(R.id.mc_joystickBtn);
-
-
-		missionBtn.setEnabled(true);
-		joystickBtn.setEnabled(true);
-
-
-
+	private void setupListner() {
+		missionBtn.setOnClickListener(this);
+		joystickBtn.setOnClickListener(this);
+		homeBtn.setOnClickListener(this);
+		landBtn.setOnClickListener(this);
+		loiterBtn.setOnClickListener(this);
 	}
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.mc_planningBtn:
 			listner.onPlanningSelected();
@@ -84,8 +72,14 @@ public class MissionControlFragment extends Fragment implements OnClickListener 
 		case R.id.mc_joystickBtn:
 			listner.onJoystickSelected();
 			break;
-		case R.id.mc_connectBtn:
-			listner.onConnectSelected();
+		case R.id.mc_land:
+			drone.state.changeFlightMode(ApmModes.ROTOR_LAND);
+			break;
+		case R.id.mc_homeBtn:
+			drone.state.changeFlightMode(ApmModes.ROTOR_RTL);
+			break;
+		case R.id.mc_loiter:
+			drone.state.changeFlightMode(ApmModes.ROTOR_LOITER);
 			break;
 		}
 	}

@@ -75,56 +75,6 @@ public class FlightActivity extends SuperUI implements
 		startActivity(navigationIntent);
 	}
 
-	@Override
-	public void onArmSelected() {
-		// TODO Auto-generated method stub	
-		/*
-		 * 			if (drone.MavClient.isConnected()) {
-				if (!drone.state.isArmed()) {
-					armBtn.setImageResource(R.drawable.arma);
-					drone.tts.speak("Arming the vehicle, please standby");
-				}
-				MavLinkArm.sendArmMessage(drone, !drone.state.isArmed());
-			}
-		 */
-	}
-
-	@Override
-	public void onDisArmSelected() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onConnectSelected() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onDisConnectSelected() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onRTLSelected() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onLandSelected() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onTakeOffSelected() {
-		// TODO Auto-generated method stub
-		
-	}
-
 	private void toggleRCFragment() {
 		if (rcFragment == null) {
 			rcFragment = new RCFragment();

@@ -1,5 +1,7 @@
 package com.droidplanner.drone.variables;
 
+import android.util.Log;
+
 import com.MAVLink.Messages.ApmModes;
 import com.droidplanner.MAVLink.MavLinkModes;
 import com.droidplanner.drone.Drone;
@@ -33,7 +35,6 @@ public class State extends DroneVariable {
 			}
 			this.armed = armed;
 			this.failsafe = failsafe;
-			myDrone.onOrientationUpdate();
 		}
 	}
 
@@ -41,13 +42,14 @@ public class State extends DroneVariable {
 		if (this.mode != mode) {
 			this.mode = mode;
 			myDrone.tts.speakMode(mode);
-			myDrone.onOrientationUpdate();
 			myDrone.notifyModeChanged();
 		}
 	}
 
 	public void changeFlightMode(ApmModes mode) {
+		Log.d("MODE", "mode "+mode.getName());
 		if (ApmModes.isValid(mode)) {
+			Log.d("MODE", "mode "+mode.getName()+" is valid");
 			MavLinkModes.changeFlightMode(myDrone, mode);
 		}
 	}

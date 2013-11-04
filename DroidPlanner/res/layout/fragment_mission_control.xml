@@ -31,7 +31,7 @@
         android:layout_margin="5dp"/>
 
 	<Button
-	    android:id="@+id/mc_connectBtn"
+	    android:id="@+id/mc_homeBtn"
 	    style="@style/actionButton"
 	    android:layout_width="75dp"
 	    android:layout_height="match_parent"
