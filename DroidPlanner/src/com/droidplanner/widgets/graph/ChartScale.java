@@ -15,7 +15,7 @@ public class ChartScale {
 	// minimal range
 	private double min = 10;
 	// maximal range
-	private double max = 180;
+	private double max = 90;
 
 	protected ScaleGestureDetector scaleDetector;
 

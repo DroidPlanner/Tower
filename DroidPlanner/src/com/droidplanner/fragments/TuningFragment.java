@@ -1,6 +1,9 @@
 package com.droidplanner.fragments;
 
+import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
+import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.DroneInterfaces.OnTuningDataListner;
 import com.droidplanner.parameters.Parameter;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.graph.Chart;
@@ -13,10 +16,13 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class TuningFragment extends Fragment {
+public class TuningFragment extends Fragment implements OnTuningDataListner {
 
+	private Drone drone;
+	
 	private Chart topChart;
 	private Chart bottomChart;
 	
@@ -30,6 +36,14 @@ public class TuningFragment extends Fragment {
 	private Parameter yawP;
 	private Parameter thrAcl;
 
+	private ChartSeries bottomDataReference;
+
+	private ChartSeries bottomDataValue;
+
+	private ChartSeries topDataReference;
+
+	private ChartSeries topDataValue;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -37,6 +51,9 @@ public class TuningFragment extends Fragment {
 				false);
 		setupLocalViews(view);		
 		setupCharts();
+
+		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
+		drone.setTuningDataListner(this);
 		return view;
 	
 	}
@@ -56,23 +73,33 @@ public class TuningFragment extends Fragment {
 	}
 
 	private void setupCharts() {
-		ChartSeries topDataReference = new ChartSeries(800);
-		topDataReference.setColor(Color.WHITE);
+		topDataReference = new ChartSeries(800);
+		topDataReference.setColor(Color.BLUE);
 		topDataReference.enable();
 		topChart.series.add(topDataReference);
-		ChartSeries topDataValue = new ChartSeries(800);
-		topDataValue.setColor(Color.BLUE);
+		topDataValue = new ChartSeries(800);
+		topDataValue.setColor(Color.WHITE);
 		topDataValue.enable();
 		topChart.series.add(topDataValue);
 		
-		ChartSeries bottomDataReference = new ChartSeries(800);
-		bottomDataReference.setColor(Color.WHITE);
+		bottomDataReference = new ChartSeries(800);
+		bottomDataReference.setColor(Color.BLUE);
 		bottomDataReference.enable();
 		bottomChart.series.add(bottomDataReference);
-		ChartSeries bottomDataValue = new ChartSeries(800);
-		bottomDataValue.setColor(Color.BLUE);
+		bottomDataValue = new ChartSeries(800);
+		bottomDataValue.setColor(Color.WHITE);
 		bottomDataValue.enable();
 		bottomChart.series.add(bottomDataValue);
+		
+	}
+
+	@Override
+	public void onNewTunningData() {
+		 bottomDataValue.newData(drone.orientation.getPitch());
+		 bottomChart.update();
+		 
+		 topDataValue.newData(drone.orientation.getRoll());		 
+		 topChart.update();
 		
 	}
 

@@ -49,4 +49,8 @@ public class DroneInterfaces {
 
 		void onFailsafeChanged();
 	}
+	
+	public interface OnTuningDataListner{
+		void onNewTunningData();
+	}
 }
