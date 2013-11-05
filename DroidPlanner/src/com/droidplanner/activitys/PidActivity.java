@@ -1,5 +1,7 @@
 package com.droidplanner.activitys;
 
+import java.util.List;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -30,11 +32,6 @@ public class PidActivity extends SuperActivity implements
 	private Parameter thrMid;
 
 	private DroneInterfaces.OnParameterManagerListner parameterListener;
-
-	@Override
-	public int getNavigationItem() {
-		return 7;
-	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -111,27 +108,6 @@ public class PidActivity extends SuperActivity implements
 		Toast.makeText(this, "PID values updated", Toast.LENGTH_SHORT).show();
 	}
 
-	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.menu_PID_refresh:
-			refreshPIDValues();
-			return true;
-		case R.id.menu_PID_update:
-			updatePIDValues();
-			return true;
-		default:
-			return super.onMenuItemSelected(featureId, item);
-		}
-	}
-
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.menu_pid, menu);
-		return super.onCreateOptionsMenu(menu);
-	}
-
-	@Override
 	public boolean onParameterReceived(Parameter parameter) {
 		if (parameter.name.equals("RATE_RLL_P")) {
 			Toast.makeText(this, "Rate Roll/Pitch control received",
@@ -191,6 +167,30 @@ public class PidActivity extends SuperActivity implements
 			break;
 		}
 
+	}
+
+	@Override
+	public void onBeginReceivingParameters() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onParameterReceived(Parameter parameter, int index, int count) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onEndReceivingParameters(List<Parameter> parameter) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onParamterMetaDataChanged() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
