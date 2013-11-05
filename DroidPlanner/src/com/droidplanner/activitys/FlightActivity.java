@@ -3,9 +3,11 @@ package com.droidplanner.activitys;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperUI;
+import com.droidplanner.drone.DroneInterfaces.OnStateListner;
 import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
 import com.droidplanner.fragments.MissionControlFragment.OnMissionControlInteraction;
@@ -15,16 +17,26 @@ import com.droidplanner.polygon.PolygonPoint;
 import com.google.android.gms.maps.model.LatLng;
 
 public class FlightActivity extends SuperUI implements
-		OnMapInteractionListener, OnMissionControlInteraction {
+		OnMapInteractionListener, OnMissionControlInteraction, OnStateListner {
 	private FragmentManager fragmentManager;
 	private RCFragment rcFragment;
-	
+	private View failsafeTextView;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_flight);
 		fragmentManager = getFragmentManager();
 
+		failsafeTextView = findViewById(R.id.failsafeTextView);
+		drone.state.addFlightStateListner(this);
+
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		drone.state.removeFlightStateListner(this);
 	}
 
 	@Override
@@ -65,11 +77,11 @@ public class FlightActivity extends SuperUI implements
 
 	@Override
 	public void onJoystickSelected() {
-		toggleRCFragment();		
+		toggleRCFragment();
 	}
 
 	@Override
-	public void onPlanningSelected() {		
+	public void onPlanningSelected() {
 		Intent navigationIntent;
 		navigationIntent = new Intent(this, EditorActivity.class);
 		startActivity(navigationIntent);
@@ -89,8 +101,26 @@ public class FlightActivity extends SuperUI implements
 	@Override
 	public void onMovingWaypoint(SpatialCoordItem source, LatLng latLng) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
+	@Override
+	public void onFlightStateChanged() {
+
+	}
+
+	@Override
+	public void onArmChanged() {
+
+	}
+
+	@Override
+	public void onFailsafeChanged() {
+		if (drone.state.isFailsafe()) {
+			failsafeTextView.setVisibility(View.VISIBLE);
+		} else {
+			failsafeTextView.setVisibility(View.GONE);
+		}
+	}
 
 }

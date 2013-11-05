@@ -63,4 +63,17 @@
         </LinearLayout>
     </SlidingDrawer>
 
+    <TextView
+        android:id="@+id/failsafeTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/fragment2"
+        android:background="#80ff0000"
+        android:gravity="center"
+        android:padding="3dp"
+        android:text="FAILSAFE"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:visibility="gone" />
+
 </RelativeLayout>
