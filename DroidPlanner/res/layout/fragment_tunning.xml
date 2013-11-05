@@ -7,30 +7,56 @@
     android:layout_height="match_parent"
     android:orientation="horizontal" >
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:orientation="vertical" >
+        android:layout_weight="3" >
+
+        <com.droidplanner.widgets.graph.Chart
+            android:id="@+id/chartBottom"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/chartTop"
+            android:layout_weight="1" />
 
         <com.droidplanner.widgets.graph.Chart
             android:id="@+id/chartTop"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_alignBottom="@+id/firstDivider"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
             android:layout_weight="1" />
 
         <View
             android:id="@+id/firstDivider"
             android:layout_width="fill_parent"
             android:layout_height="3dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
             android:background="#3F9BBF" />
 
-        <com.droidplanner.widgets.graph.Chart
-            android:id="@+id/chartBottom"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
-    </LinearLayout>
+        <TextView
+            android:id="@+id/titleBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignTop="@+id/chartBottom"
+            android:layout_weight="1"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/titleTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:text="Roll:"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -42,7 +68,8 @@
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Large Text"
+            android:layout_alignParentTop="true"
+            android:text="Type:"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
@@ -106,6 +133,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/SeekBarRollPitchDampenning"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/textView1"
             android:layout_weight="1"
             android:entries="@array/ExampleWaypointType" />
