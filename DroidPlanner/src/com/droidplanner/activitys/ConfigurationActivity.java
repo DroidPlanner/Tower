@@ -11,10 +11,12 @@ import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperUI;
 import com.droidplanner.fragments.ParametersTableFragment;
 import com.droidplanner.fragments.SettingsFragment;
+import com.droidplanner.fragments.TunningFragment;
 
 public class ConfigurationActivity extends SuperUI{
 
-    public static final String SCREEN_INTENT = "screen";
+	public static final String SCREEN_INTENT = "screen";
+	public static final String TUNING = "tuning";
 	public static final String PARAMETERS = "parameters";
     public static final String SETTINGS = "settings";
 	private FragmentTabHost mTabHost;
@@ -29,6 +31,8 @@ public class ConfigurationActivity extends SuperUI{
 		
 		mTabHost = (FragmentTabHost)findViewById(R.id.configurationTabHost);
 	    mTabHost.setup(this, getFragmentManager(), R.id.realtabcontent);
+	    mTabHost.addTab(mTabHost.newTabSpec(TUNING).setIndicator("Tuning"),
+	            TunningFragment.class, null);
 	    mTabHost.addTab(mTabHost.newTabSpec(PARAMETERS).setIndicator("Parameters"),
 	            ParametersTableFragment.class, null);
 	    mTabHost.addTab(mTabHost.newTabSpec(SETTINGS).setIndicator("Settings"),
