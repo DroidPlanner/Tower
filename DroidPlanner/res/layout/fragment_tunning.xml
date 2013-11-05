@@ -19,6 +19,12 @@
             android:layout_height="match_parent"
             android:layout_weight="1" />
 
+        <View
+            android:id="@+id/firstDivider"
+            android:layout_width="fill_parent"
+            android:layout_height="3dp"
+            android:background="#3F9BBF" />
+
         <com.droidplanner.widgets.graph.Chart
             android:id="@+id/chartBottom"
             android:layout_width="match_parent"
@@ -26,18 +32,18 @@
             android:layout_weight="1" />
     </LinearLayout>
 
-   <RelativeLayout
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"
-       android:layout_weight="7"
-       android:gravity="center_horizontal" >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="7"
+        android:gravity="center_horizontal" >
 
-       <TextView
-           android:id="@+id/textView1"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:text="Large Text"
-           android:textAppearance="?android:attr/textAppearanceLarge" />
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
             android:id="@+id/SeekBarYawControl"
@@ -122,9 +128,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Send" />
-
         </LinearLayout>
-
     </RelativeLayout>
 
 </LinearLayout>
