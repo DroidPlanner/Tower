@@ -51,6 +51,7 @@ public class TuningFragment extends Fragment implements OnTuningDataListner {
 
 		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
 		drone.setTuningDataListner(this);
+		
 		return view;
 	
 	}
@@ -93,19 +94,17 @@ public class TuningFragment extends Fragment implements OnTuningDataListner {
 	@Override
 	public void onNewOrientationData() {
 		 bottomDataValue.newData(drone.orientation.getPitch());
-		 bottomChart.update();
-		 
 		 topDataValue.newData(drone.orientation.getRoll());		 
-		 topChart.update();
+		 bottomDataReference.newData(drone.navigation.getNavPitch());		 
+		 topDataReference.newData(drone.navigation.getNavRoll());	
+		 bottomChart.update();
+		topChart.update();
 	}
+
 
 	@Override
 	public void onNewNavigationData() {
-		 bottomDataReference.newData(drone.navigation.getNavPitch());
-		 bottomChart.update();
-		 
-		 topDataReference.newData(drone.navigation.getNavRoll());		 
-		 topChart.update();		
+		onNewOrientationData();
 	}
-
+	
 }
