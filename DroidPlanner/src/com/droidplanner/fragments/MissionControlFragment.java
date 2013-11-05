@@ -42,7 +42,7 @@ public class MissionControlFragment extends Fragment implements
 		setupViews(view);
 		setupListner();
 		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
-		drone.setFlightStateListner(this);
+		drone.state.addFlightStateListner(this);
 		return view;
 	}
 
@@ -50,6 +50,12 @@ public class MissionControlFragment extends Fragment implements
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		listner = (OnMissionControlInteraction) activity;
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		drone.state.removeFlightStateListner(this);
 	}
 
 	private void setupViews(View parentView) {

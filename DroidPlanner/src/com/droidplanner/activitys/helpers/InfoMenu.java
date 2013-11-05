@@ -9,9 +9,12 @@ import com.droidplanner.R;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.HomeDistanceChangedListner;
 import com.droidplanner.drone.DroneInterfaces.InfoListner;
+import com.droidplanner.drone.DroneInterfaces.OnStateListner;
+import com.droidplanner.widgets.TimerView;
 import com.droidplanner.widgets.spinners.SelectModeSpinner;
 
-public class InfoMenu implements InfoListner, HomeDistanceChangedListner {
+public class InfoMenu implements InfoListner, HomeDistanceChangedListner,
+		OnStateListner {
 	private Drone drone;
 	private MenuItem battery;
 	private MenuItem gps;
@@ -19,6 +22,8 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner {
 	private MenuItem home;
 	private MenuItem signal;
 	public SelectModeSpinner mode;
+	
+	private TimerView timer;
 
 	public InfoMenu(Drone drone) {
 		this.drone = drone;
@@ -32,10 +37,13 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner {
 			propeler = menu.findItem(R.id.bar_propeller);
 			home = menu.findItem(R.id.bar_home);
 			signal = menu.findItem(R.id.bar_signal);
-			mode = (SelectModeSpinner) menu.findItem(R.id.bar_mode).getActionView();
+			mode = (SelectModeSpinner) menu.findItem(R.id.bar_mode)
+					.getActionView();
 
+			timer = new TimerView(propeler);
 			drone.setHomeChangedListner(this);
 			drone.setInfoListner(this);
+			drone.state.addFlightStateListner(this);
 
 		} else {
 			menuInflater.inflate(R.menu.menu_newui_disconnected, menu);
@@ -64,9 +72,31 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner {
 	}
 
 	public void setupModeSpinner(Context context) {
-		if (mode!=null) {
+		if (mode != null) {
 			mode.buildSpinner(context, drone);
 		}
-		
 	}
+
+	@Override
+	public void onFlightStateChanged() {
+		if (drone.state.isFlying()) {
+			timer.reStart();
+		}else{
+			timer.stop();
+		}
+	}
+
+	@Override
+	public void onArmChanged() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onFailsafeChanged() {
+		// TODO Auto-generated method stub
+
+	}	
+
+
 }

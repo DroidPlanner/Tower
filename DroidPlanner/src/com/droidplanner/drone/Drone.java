@@ -57,8 +57,6 @@ public class Drone {
 	private HomeDistanceChangedListner homeChangedListner;
 	private ModeChangedListener modeChangedListener;
 	private OnGuidedListener guidedListner;
-	public OnStateListner stateListner;
-
 	public Drone(TTS tts, MAVLinkClient mavClient, Context context) {
 		this.tts = tts;
 		this.MavClient = mavClient;
@@ -83,10 +81,6 @@ public class Drone {
 
 	public void setInfoListner(InfoListner listner) {
 		infoListner = listner;
-	}
-
-	public void setFlightStateListner(OnStateListner listner) {
-		stateListner = listner;
 	}
 
 	public void setHomeChangedListner(HomeDistanceChangedListner listner) {

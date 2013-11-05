@@ -1,10 +1,14 @@
 package com.droidplanner.drone.variables;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.util.Log;
 
 import com.MAVLink.Messages.ApmModes;
 import com.droidplanner.MAVLink.MavLinkModes;
 import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.DroneInterfaces.OnStateListner;
 import com.droidplanner.drone.DroneVariable;
 
 public class State extends DroneVariable {
@@ -12,6 +16,7 @@ public class State extends DroneVariable {
 	private boolean armed = false;
 	private boolean isFlying = false;
 	private ApmModes mode = ApmModes.UNKNOWN;
+	public List<OnStateListner> stateListner = new ArrayList<OnStateListner>();
 
 	public State(Drone myDrone) {
 		super(myDrone);
@@ -36,28 +41,21 @@ public class State extends DroneVariable {
 	public void setIsFlying(boolean newState) {
 		if (newState != isFlying) {
 			isFlying = newState;
-			if(myDrone.stateListner!=null){
-				myDrone.stateListner.onFlightStateChanged();
-			}
+			notifyFlightStateChanged();
 		}
 	}
 
 	public void setFailsafe(boolean newFailsafe) {
 		if(this.failsafe!=newFailsafe){
 			this.failsafe=newFailsafe;
-			if(myDrone.stateListner!=null){
-				myDrone.stateListner.onFailsafeChanged();
-			}
+			notifyFailsafeChanged();
 		}	
 	}
 
 	public void setArmed(boolean newState) {
 		if (this.armed != newState) {
-			myDrone.tts.speakArmedState(newState);
 			this.armed = newState;
-			if(myDrone.stateListner!=null){
-				myDrone.stateListner.onArmChanged();
-			}			
+			notifyArmChanged();			
 		}
 	}
 
@@ -78,6 +76,35 @@ public class State extends DroneVariable {
 		if (ApmModes.isValid(mode)) {
 			Log.d("MODE", "mode " + mode.getName() + " is valid");
 			MavLinkModes.changeFlightMode(myDrone, mode);
+		}
+	}
+	
+	public void addFlightStateListner(OnStateListner listner) {
+		stateListner.add(listner);
+	}
+	
+	public void removeFlightStateListner(OnStateListner listner) {
+		if (stateListner.contains(listner)) {
+			stateListner.remove(listner);			
+		}
+	}
+
+	private void notifyFlightStateChanged() {
+		for (OnStateListner listner : stateListner) {
+			listner.onFlightStateChanged();			
+		}
+	}
+
+	private void notifyFailsafeChanged() {
+		for (OnStateListner listner : stateListner) {
+			listner.onFailsafeChanged();			
+		}
+	}
+
+	private void notifyArmChanged() {
+		myDrone.tts.speakArmedState(armed);
+		for (OnStateListner listner : stateListner) {
+			listner.onArmChanged();			
 		}
 	}
 
