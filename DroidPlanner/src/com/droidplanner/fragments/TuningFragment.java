@@ -1,5 +1,12 @@
 package com.droidplanner.fragments;
 
+import android.app.Fragment;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
 import com.droidplanner.drone.Drone;
@@ -8,16 +15,6 @@ import com.droidplanner.parameters.Parameter;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.graph.Chart;
 import com.droidplanner.widgets.graph.ChartSeries;
-
-import android.app.Fragment;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 public class TuningFragment extends Fragment implements OnTuningDataListner {
 
@@ -94,13 +91,21 @@ public class TuningFragment extends Fragment implements OnTuningDataListner {
 	}
 
 	@Override
-	public void onNewTunningData() {
+	public void onNewOrientationData() {
 		 bottomDataValue.newData(drone.orientation.getPitch());
 		 bottomChart.update();
 		 
 		 topDataValue.newData(drone.orientation.getRoll());		 
 		 topChart.update();
-		
+	}
+
+	@Override
+	public void onNewNavigationData() {
+		 bottomDataReference.newData(drone.navigation.getNavPitch());
+		 bottomChart.update();
+		 
+		 topDataReference.newData(drone.navigation.getNavRoll());		 
+		 topChart.update();		
 	}
 
 }

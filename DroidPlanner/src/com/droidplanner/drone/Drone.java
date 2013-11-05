@@ -19,6 +19,7 @@ import com.droidplanner.drone.variables.GuidedPoint;
 import com.droidplanner.drone.variables.GuidedPoint.OnGuidedListener;
 import com.droidplanner.drone.variables.Home;
 import com.droidplanner.drone.variables.MissionStats;
+import com.droidplanner.drone.variables.Navigation;
 import com.droidplanner.drone.variables.Orientation;
 import com.droidplanner.drone.variables.Parameters;
 import com.droidplanner.drone.variables.Speed;
@@ -40,6 +41,7 @@ public class Drone {
 	public MissionStats missionStats = new MissionStats(this);
 	public Altitude altitude = new Altitude(this);
 	public Orientation orientation = new Orientation(this);
+	public Navigation navigation = new Navigation(this);
 	public GuidedPoint guidedPoint = new GuidedPoint(this);
 	public Parameters parameters = new Parameters(this);
 	public Calibration calibrationSetup = new Calibration(this);
@@ -57,7 +59,7 @@ public class Drone {
 	private HomeDistanceChangedListner homeChangedListner;
 	private ModeChangedListener modeChangedListener;
 	private OnGuidedListener guidedListner;
-	private OnTuningDataListner tuningDataListner;
+	public OnTuningDataListner tuningDataListner;
 	
 	public Drone(TTS tts, MAVLinkClient mavClient, Context context) {
 		this.tts = tts;
@@ -133,13 +135,7 @@ public class Drone {
 			infoListner.onInfoUpdate();
 		}
 	}
-	
-	public void notifyNewTuningData() {
-		if (tuningDataListner != null) {
-			tuningDataListner.onNewTunningData();
-		}
-	}
-	
+		
 	public void notifyDistanceToHomeChange() {
 		if (homeChangedListner!= null) {
 			homeChangedListner.onDistanceToHomeHasChanged();

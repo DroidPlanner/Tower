@@ -1,5 +1,7 @@
 package com.droidplanner.MAVLink;
 
+import android.util.Log;
+
 import com.MAVLink.Messages.ApmModes;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_attitude;
@@ -47,6 +49,8 @@ public class MavLinkMsgHandler {
 			msg_nav_controller_output m_nav = (msg_nav_controller_output) msg;
 			drone.setDisttowpAndSpeedAltErrors(m_nav.wp_dist, m_nav.alt_error,
 					m_nav.aspd_error);
+			drone.navigation.setNavPitchRollYaw(m_nav.nav_pitch,m_nav.nav_roll,m_nav.nav_bearing);
+			Log.d("NAV", m_nav.toString());
 			break;
 		case msg_heartbeat.MAVLINK_MSG_ID_HEARTBEAT:
 			msg_heartbeat msg_heart = (msg_heartbeat) msg;
@@ -74,6 +78,7 @@ public class MavLinkMsgHandler {
 			drone.GPS.setGpsState(((msg_gps_raw_int) msg).fix_type,
 					((msg_gps_raw_int) msg).satellites_visible,
 					((msg_gps_raw_int) msg).eph);
+			break;
 		}
 	}
 	

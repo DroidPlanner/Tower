@@ -51,6 +51,8 @@ public class DroneInterfaces {
 	}
 	
 	public interface OnTuningDataListner{
-		void onNewTunningData();
+		void onNewOrientationData();
+
+		void onNewNavigationData();
 	}
 }
