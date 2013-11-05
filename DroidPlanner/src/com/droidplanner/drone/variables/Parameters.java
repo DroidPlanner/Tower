@@ -86,7 +86,6 @@ public class Parameters extends DroneVariable {
 		MavLinkParameters.sendParameter(myDrone, parameter);
 	}
 
-
     public void notifyParameterMetadataChanged() {
         if(parameterListner != null)
             parameterListner.onParamterMetaDataChanged();
@@ -127,4 +126,8 @@ public class Parameters extends DroneVariable {
 
         }
     }
+    
+	public void ReadParameter(String name) {
+		MavLinkParameters.readParameter(myDrone, name);
+	}
 }
