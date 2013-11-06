@@ -15,10 +15,10 @@ import android.view.WindowManager;
 import android.widget.ExpandableListView;
 
 import com.droidplanner.R;
-import com.droidplanner.MAVLink.MavLinkArm;
 import com.droidplanner.checklist.CheckListAdapter;
 import com.droidplanner.checklist.CheckListAdapter.OnCheckListItemUpdateListener;
 import com.droidplanner.checklist.CheckListItem;
+import com.droidplanner.checklist.CheckListSysLink;
 import com.droidplanner.checklist.CheckListXmlParser;
 import com.droidplanner.checklist.xml.ListXmlParser.OnXmlParserError;
 import com.droidplanner.drone.Drone;
@@ -35,6 +35,7 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 	private CheckListAdapter listAdapter;
 	private ExpandableListView expListView;
 	private AlertDialog dialog;
+	private CheckListSysLink sysLink;
 
 	public PreflightDialog() {
 		// TODO Auto-generated constructor stub
@@ -44,7 +45,7 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 	public void build(Context mcontext, Drone mdrone, boolean mpreflight) {
 		context = mcontext;
 		drone = mdrone;
-		
+		sysLink = new CheckListSysLink(drone);
 		// If external file is not found, load the default
 		CheckListXmlParser xml = new CheckListXmlParser("checklist_ext.xml",mcontext,
 				R.xml.checklist_default);
@@ -132,29 +133,6 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 		}
 	}
 
-	private void doDefAlt(CheckListItem checkListItem) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void doSysArm(CheckListItem checkListItem, boolean arm) {
-		if (drone.MavClient.isConnected()) {
-			if (checkListItem.isSys_activated() && !drone.state.isArmed()) {
-				drone.tts.speak("Arming the vehicle, please standby");
-				MavLinkArm.sendArmMessage(drone, true);
-			} else {
-				MavLinkArm.sendArmMessage(drone, false);
-			}
-		}
-	}
-
-	private void doSysConnect(CheckListItem checkListItem, boolean connect) {
-		boolean activated = checkListItem.isSys_activated();
-		boolean connected = drone.MavClient.isConnected();
-		if (activated != connected){
-			drone.MavClient.toggleConnectionState();
-		}
-	}
 
 	@Override
 	public void onClick(DialogInterface arg0, int arg1) {
@@ -170,53 +148,15 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 	@Override
 	public void onRowItemChanged(CheckListItem checkListItem, String mSysTag,
 			boolean isChecked) {
-		setSystemData(checkListItem);
+		sysLink.setSystemData(checkListItem);
 		listAdapter.notifyDataSetChanged();
 		listViewAutoExpand(false,true);
 	}
 
 	@Override
 	public void onRowItemGetData(CheckListItem checkListItem, String mSysTag) {
-		getSystemData(checkListItem, mSysTag);
+		sysLink.getSystemData(checkListItem, mSysTag);
 	}
 
-	private void setSystemData(CheckListItem checkListItem) {
-		
-		if (checkListItem.getSys_tag()==null)
-			return;
-		
-		if (checkListItem.getSys_tag().equalsIgnoreCase("SYS_CONNECTION_STATE")) {
-			doSysConnect(checkListItem, checkListItem.isSys_activated());
 
-		} else if (checkListItem.getSys_tag().equalsIgnoreCase("SYS_ARM_STATE")) {
-			doSysArm(checkListItem, checkListItem.isSys_activated());
-			
-		} else if (checkListItem.getSys_tag().equalsIgnoreCase("SYS_DEF_ALT")) {
-			doDefAlt(checkListItem);
-			
-		}
-	}
-
-	private void getSystemData(CheckListItem mListItem, String mSysTag) {
-		if(mSysTag==null)
-			return;
-		
-		if (mSysTag.equalsIgnoreCase("SYS_BATTREM_LVL")) {
-			mListItem.setSys_value(drone.battery.getBattRemain());
-		} else if (mSysTag.equalsIgnoreCase("SYS_BATTVOL_LVL")) {
-			mListItem.setSys_value(drone.battery.getBattVolt());
-		} else if (mSysTag.equalsIgnoreCase("SYS_BATTCUR_LVL")) {
-			mListItem.setSys_value(drone.battery.getBattCurrent());
-		} else if (mSysTag.equalsIgnoreCase("SYS_GPS3D_LVL")) {
-			mListItem.setSys_value(drone.GPS.getSatCount());
-		} else if (mSysTag.equalsIgnoreCase("SYS_DEF_ALT")) {
-			mListItem.setSys_value(drone.mission.getDefaultAlt());
-		} else if (mSysTag.equalsIgnoreCase("SYS_ARM_STATE")) {
-			mListItem.setSys_activated(drone.state.isArmed());
-		} else if (mSysTag.equalsIgnoreCase("SYS_FAILSAFE_STATE")) {
-			mListItem.setSys_activated(drone.state.isFailsafe());
-		} else if (mSysTag.equalsIgnoreCase("SYS_CONNECTION_STATE")) {
-			mListItem.setSys_activated(drone.MavClient.isConnected());
-		}	
-	}
 }
