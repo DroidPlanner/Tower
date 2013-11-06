@@ -9,5 +9,8 @@
         <attr name="inc" format="float" />
         <attr name="max" format="float" />
     </declare-styleable>
+    <declare-styleable name="FillBar">
+        <attr name="percentage" format="float" />
+    </declare-styleable>
 
 </resources>

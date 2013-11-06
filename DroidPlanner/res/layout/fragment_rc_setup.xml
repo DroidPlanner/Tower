@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.droidplanner"
+    style="@style/transparentLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" android:baselineAligned="false">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.3"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" >
+
+            <com.droidplanner.widgets.FillBar.FillBar
+                android:id="@+id/fillBar1"
+                android:layout_width="20dp"
+                android:layout_height="100dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#303030" >
+
+            <Button
+                android:id="@+id/button1"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@+id/textView1"
+                android:layout_below="@+id/textView1"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/Button01"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/button1"
+                android:layout_alignRight="@+id/button1"
+                android:layout_below="@+id/button1"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/Button02"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/Button01"
+                android:layout_alignRight="@+id/Button01"
+                android:layout_below="@+id/Button01"
+                android:text="Button" />
+
+            <View
+                android:id="@+id/firstDivider"
+                android:layout_width="3dp"
+                android:layout_height="fill_parent"
+                android:layout_alignBottom="@id/Button02"
+                android:layout_alignParentTop="false"
+                android:layout_alignTop="@id/button1"
+                android:layout_centerHorizontal="true"
+                android:background="#E0E0E0" />
+
+            <CheckBox
+                android:id="@+id/CheckBox01"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/Button01"
+                android:layout_alignBottom="@+id/Button01"
+                android:layout_toRightOf="@+id/Button01"
+                android:text="Simple" />
+
+            <CheckBox
+                android:id="@+id/CheckBox02"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/Button02"
+                android:layout_alignBottom="@+id/Button02"
+                android:layout_toRightOf="@+id/Button02"
+                android:text="Simple" />
+
+            <CheckBox
+                android:id="@+id/checkBox1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/button1"
+                android:layout_alignBottom="@+id/button1"
+                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@+id/firstDivider"
+                android:text="Simple" />
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="30dp"
+                android:layout_toLeftOf="@+id/checkBox1"
+                android:text="Flight Modes:"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <Button
+                android:id="@+id/Button03"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView1"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/firstDivider"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/Button04"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/Button03"
+                android:layout_below="@+id/Button03"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/Button05"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/Button04"
+                android:layout_below="@+id/Button04"
+                android:text="Button" />
+
+            <CheckBox
+                android:id="@+id/CheckBox04"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/Button05"
+                android:layout_alignBottom="@+id/Button05"
+                android:layout_toRightOf="@+id/Button05"
+                android:text="Simple" />
+
+            <CheckBox
+                android:id="@+id/CheckBox03"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/Button04"
+                android:layout_alignBottom="@+id/Button04"
+                android:layout_alignLeft="@+id/CheckBox04"
+                android:text="Simple" />
+
+            <CheckBox
+                android:id="@+id/CheckBox05"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/Button03"
+                android:layout_alignBottom="@+id/Button03"
+                android:layout_alignLeft="@+id/CheckBox03"
+                android:text="Simple" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.7"
+        android:background="#E0E0E0" >
+
+    </RelativeLayout>
+
+</LinearLayout>

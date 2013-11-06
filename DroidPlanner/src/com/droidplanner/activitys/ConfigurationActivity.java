@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperUI;
 import com.droidplanner.fragments.ParametersTableFragment;
+import com.droidplanner.fragments.RcSetupFragment;
 import com.droidplanner.fragments.SettingsFragment;
 import com.droidplanner.fragments.TuningFragment;
 
@@ -19,6 +20,7 @@ public class ConfigurationActivity extends SuperUI{
 	public static final String TUNING = "tuning";
 	public static final String PARAMETERS = "parameters";
     public static final String SETTINGS = "settings";
+	private static final String RC_SETUP = "rc_setup";
 	private FragmentTabHost mTabHost;
     
 	@Override
@@ -33,6 +35,8 @@ public class ConfigurationActivity extends SuperUI{
 	    mTabHost.setup(this, getFragmentManager(), R.id.realtabcontent);
 	    mTabHost.addTab(mTabHost.newTabSpec(TUNING).setIndicator("Tuning"),
 	            TuningFragment.class, null);
+	    mTabHost.addTab(mTabHost.newTabSpec(RC_SETUP).setIndicator("RC"),
+	            RcSetupFragment.class, null);
 	    mTabHost.addTab(mTabHost.newTabSpec(PARAMETERS).setIndicator("Parameters"),
 	            ParametersTableFragment.class, null);
 	    mTabHost.addTab(mTabHost.newTabSpec(SETTINGS).setIndicator("Settings"),
