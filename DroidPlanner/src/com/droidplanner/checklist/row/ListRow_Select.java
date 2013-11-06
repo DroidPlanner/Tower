@@ -2,20 +2,17 @@ package com.droidplanner.checklist.row;
 
 import com.droidplanner.R;
 import com.droidplanner.checklist.CheckListItem;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 public class ListRow_Select extends ListRow implements OnItemSelectedListener{
 	
-	public ListRow_Select(LayoutInflater inflater, CheckListItem checkListItem) {
+	public ListRow_Select( LayoutInflater inflater, CheckListItem checkListItem) {
 		super(inflater, checkListItem);
 	}
 
@@ -39,6 +36,8 @@ public class ListRow_Select extends ListRow implements OnItemSelectedListener{
 	private void updateDisplay(View view, ViewHolder holder,
 			CheckListItem mListItem) {
 		holder.selectView.setOnItemSelectedListener(this);
+		getData(mListItem);
+
 		updateCheckBox(checkListItem.isVerified());
 	}
 
@@ -60,10 +59,7 @@ public class ListRow_Select extends ListRow implements OnItemSelectedListener{
 		
 		@Override
 		protected void setupViewItems(ViewGroup viewGroup, CheckListItem checkListItem){
-			this.layoutView = (LinearLayout) viewGroup
-					.findViewById(R.id.lst_layout);
 			this.selectView = (Spinner) viewGroup.findViewById(R.id.lst_select);
-			this.checkBox = (CheckBox) viewGroup.findViewById(R.id.lst_check);
 
 			setupSpinner(viewGroup, checkListItem);
 		}
