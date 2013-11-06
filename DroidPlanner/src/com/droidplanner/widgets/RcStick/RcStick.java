@@ -43,7 +43,7 @@ public class RcStick extends View {
 		super.onSizeChanged(w, h, oldw, oldh);
 		width = w - 1;
 		height = h - 1;
-		borders = new RectF(0, 0, width, height);
+		borders = new RectF(1, 1, width, height);
 		stickRadius = (int) (STICK_SIZE*Math.min(width, height)/2);
 		setPosition(0, 0);
 	}
@@ -52,7 +52,7 @@ public class RcStick extends View {
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 
-		canvas.drawRoundRect(borders, stickRadius*2, stickRadius*2, paintOutline);
+		canvas.drawRoundRect(borders, stickRadius, stickRadius, paintOutline);
 
 		canvas.drawCircle(xPos, yPos, stickRadius, paintFill);
 	}

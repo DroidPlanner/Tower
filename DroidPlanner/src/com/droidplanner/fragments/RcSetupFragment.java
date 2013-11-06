@@ -12,14 +12,25 @@ import com.droidplanner.MAVLink.MavLinkStreamRates;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.OnRcDataChangedListner;
 import com.droidplanner.widgets.FillBar.FillBarWithText;
+import com.droidplanner.widgets.RcStick.RcStick;
 
 public class RcSetupFragment extends Fragment implements OnRcDataChangedListner {
+	private static final int RC_MIN = 1000;
+	private static final int RC_MAX = 2000;
+
+	// Extreme RC update rate in this screen
+	private static final int RC_MSG_RATE = 50;
+
 	private Drone drone;
 
 	private FillBarWithText bar5;
 	private FillBarWithText bar6;
 	private FillBarWithText bar7;
 	private FillBarWithText bar8;
+
+	private RcStick stickLeft;
+
+	private RcStick stickRight;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -28,21 +39,23 @@ public class RcSetupFragment extends Fragment implements OnRcDataChangedListner 
 		View view = inflater.inflate(R.layout.fragment_rc_setup, container,
 				false);
 		setupLocalViews(view);
-		
+
 		drone.RC.setListner(this);
 		return view;
 	}
 
 	private void setupLocalViews(View view) {
+		stickLeft = (RcStick) view.findViewById(R.id.stickLeft);
+		stickRight = (RcStick) view.findViewById(R.id.stickRight);
 		bar5 = (FillBarWithText) view.findViewById(R.id.fillBar5);
 		bar6 = (FillBarWithText) view.findViewById(R.id.fillBar6);
 		bar7 = (FillBarWithText) view.findViewById(R.id.fillBar7);
 		bar8 = (FillBarWithText) view.findViewById(R.id.fillBar8);
-		
-		bar5.setup("CH 5",2000,1000);
-		bar6.setup("CH 6",2000,1000);
-		bar7.setup("CH 7",2000,1000);
-		bar8.setup("CH 8",2000,1000);
+
+		bar5.setup("CH 5", RC_MAX, RC_MIN);
+		bar6.setup("CH 6", RC_MAX, RC_MIN);
+		bar7.setup("CH 7", RC_MAX, RC_MIN);
+		bar8.setup("CH 8", RC_MAX, RC_MIN);
 	}
 
 	@Override
@@ -52,10 +65,8 @@ public class RcSetupFragment extends Fragment implements OnRcDataChangedListner 
 	}
 
 	private void setupDataStreamingForRcSetup() {
-		// Sets the nav messages at 50Hz and other messages at a low rate 1Hz
-		// TODO set correct values
-		// MavLinkStreamRates.setupStreamRates(drone.MavClient, 1, 0, 1, 1, 1,
-		// 0, 0, NAV_MSG_RATE);
+		MavLinkStreamRates.setupStreamRates(drone.MavClient, 1, 0, 1, 1, 1,
+				RC_MSG_RATE, 0, 0);
 	}
 
 	@Override
@@ -73,13 +84,20 @@ public class RcSetupFragment extends Fragment implements OnRcDataChangedListner 
 		bar6.setValue(data[5]);
 		bar7.setValue(data[6]);
 		bar8.setValue(data[7]);
-	}
-	
-	
-	@Override
-	public void onNewOutputRcData() {
-		// TODO Auto-generated method stub		
+		
+		float x,y;
+		x = (data[3] - RC_MIN) / ((float) (RC_MAX - RC_MIN))*2-1;
+		y = (data[2] - RC_MIN) / ((float) (RC_MAX - RC_MIN))*2-1;
+		stickLeft.setPosition(x, y);
+		
+		x = (data[0] - RC_MIN) / ((float) (RC_MAX - RC_MIN))*2-1;
+		y = (data[1] - RC_MIN) / ((float) (RC_MAX - RC_MIN))*2-1;
+		stickRight.setPosition(x, -y);
 	}
 
+	@Override
+	public void onNewOutputRcData() {
+		// TODO Auto-generated method stub
+	}
 
 }
