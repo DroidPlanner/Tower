@@ -55,4 +55,9 @@ public class DroneInterfaces {
 
 		void onNewNavigationData();
 	}
+	
+	public interface OnRcDataChangedListner{
+		void onNewOutputRcData();
+		void onNewInputRcData();
+	}
 }

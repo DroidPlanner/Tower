@@ -19,7 +19,7 @@
             android:layout_weight="1" >
 
             <com.droidplanner.widgets.FillBar.FillBarWithText
-                android:id="@+id/FillBarWithText03"
+                android:id="@+id/fillBar8"
                 android:layout_width="50dp"
                 android:layout_height="200dp"
                 android:layout_alignParentRight="true"
@@ -27,48 +27,48 @@
                 android:layout_margin="5dp" />
 
             <com.droidplanner.widgets.FillBar.FillBarWithText
-                android:id="@+id/FillBarWithText02"
+                android:id="@+id/fillBar7"
                 android:layout_width="50dp"
                 android:layout_height="200dp"
                 android:layout_centerVertical="true"
                 android:layout_margin="5dp"
-                android:layout_toLeftOf="@+id/FillBarWithText03" >
+                android:layout_toLeftOf="@+id/fillBar8" >
             </com.droidplanner.widgets.FillBar.FillBarWithText>
 
             <com.droidplanner.widgets.FillBar.FillBarWithText
-                android:id="@+id/fillBarWithText1"
+                android:id="@+id/fillBar6"
                 android:layout_width="50dp"
                 android:layout_height="200dp"
                 android:layout_centerVertical="true"
                 android:layout_margin="5dp"
-                android:layout_toLeftOf="@+id/FillBarWithText02" >
+                android:layout_toLeftOf="@+id/fillBar7" >
             </com.droidplanner.widgets.FillBar.FillBarWithText>
 
             <com.droidplanner.widgets.FillBar.FillBarWithText
-                android:id="@+id/FillBarWithText01"
+                android:id="@+id/fillBar5"
                 android:layout_width="50dp"
                 android:layout_height="200dp"
                 android:layout_centerVertical="true"
                 android:layout_margin="5dp"
-                android:layout_toLeftOf="@+id/fillBarWithText1"
+                android:layout_toLeftOf="@+id/fillBar6"
                 android:layout_weight="1" >
             </com.droidplanner.widgets.FillBar.FillBarWithText>
 
             <com.droidplanner.widgets.RcStick.RcStick
-                android:id="@+id/RcStick01"
+                android:id="@+id/stickLeft"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="54dp"
-                android:layout_toLeftOf="@+id/rcStick1" />
+                android:layout_toLeftOf="@+id/stickRight" />
 
             <com.droidplanner.widgets.RcStick.RcStick
-                android:id="@+id/rcStick1"
+                android:id="@+id/stickRight"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
-                android:layout_alignTop="@+id/RcStick01"
+                android:layout_alignTop="@+id/stickLeft"
                 android:layout_marginRight="42dp"
-                android:layout_toLeftOf="@+id/FillBarWithText01" />
+                android:layout_toLeftOf="@+id/fillBar5" />
 
         </RelativeLayout>
 

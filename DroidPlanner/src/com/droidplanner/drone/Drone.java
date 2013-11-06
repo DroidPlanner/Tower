@@ -22,6 +22,7 @@ import com.droidplanner.drone.variables.MissionStats;
 import com.droidplanner.drone.variables.Navigation;
 import com.droidplanner.drone.variables.Orientation;
 import com.droidplanner.drone.variables.Parameters;
+import com.droidplanner.drone.variables.RC;
 import com.droidplanner.drone.variables.Speed;
 import com.droidplanner.drone.variables.State;
 import com.droidplanner.drone.variables.Type;
@@ -33,6 +34,7 @@ import com.droidplanner.service.MAVLinkClient;
 public class Drone {
 	public Type type = new Type(this);
 	public GPS GPS = new GPS(this);
+	public RC RC = new RC(this);
 	public Speed speed = new Speed(this);
 	public State state = new State(this);
 	public Battery battery = new Battery(this);

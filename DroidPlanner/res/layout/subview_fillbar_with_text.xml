@@ -5,7 +5,7 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/textViewBarTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
@@ -13,7 +13,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
-        android:id="@+id/TextView01"
+        android:id="@+id/TextViewBarValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
@@ -30,7 +30,7 @@
             android:layout_weight="1" />
 
         <com.droidplanner.widgets.FillBar.FillBar
-            android:id="@+id/fillBar1"
+            android:id="@+id/fillBarSubview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.5" />

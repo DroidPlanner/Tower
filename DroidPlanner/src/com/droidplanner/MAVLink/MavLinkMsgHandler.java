@@ -1,5 +1,7 @@
 package com.droidplanner.MAVLink;
 
+import android.util.Log;
+
 import com.MAVLink.Messages.ApmModes;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_attitude;
@@ -9,6 +11,8 @@ import com.MAVLink.Messages.ardupilotmega.msg_heartbeat;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_current;
 import com.MAVLink.Messages.ardupilotmega.msg_nav_controller_output;
 import com.MAVLink.Messages.ardupilotmega.msg_radio;
+import com.MAVLink.Messages.ardupilotmega.msg_rc_channels_raw;
+import com.MAVLink.Messages.ardupilotmega.msg_servo_output_raw;
 import com.MAVLink.Messages.ardupilotmega.msg_sys_status;
 import com.MAVLink.Messages.ardupilotmega.msg_vfr_hud;
 import com.MAVLink.Messages.enums.MAV_MODE_FLAG;
@@ -75,6 +79,14 @@ public class MavLinkMsgHandler {
 			drone.GPS.setGpsState(((msg_gps_raw_int) msg).fix_type,
 					((msg_gps_raw_int) msg).satellites_visible,
 					((msg_gps_raw_int) msg).eph);
+			break;
+		case msg_rc_channels_raw.MAVLINK_MSG_ID_RC_CHANNELS_RAW:
+			drone.RC.setRcInputValues((msg_rc_channels_raw) msg);
+			Log.d("RC", msg.toString());
+			break;
+		case msg_servo_output_raw.MAVLINK_MSG_ID_SERVO_OUTPUT_RAW:
+			drone.RC.setRcOutputValues((msg_servo_output_raw) msg);
+			Log.d("RC", msg.toString());
 			break;
 		}
 	}
