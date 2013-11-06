@@ -2,7 +2,6 @@ package com.droidplanner.checklist.row;
 
 import com.droidplanner.R;
 import com.droidplanner.checklist.CheckListItem;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +31,8 @@ public class ListRow_CheckBox extends ListRow {
 	
 	private void updateDisplay(View view, ViewHolder holder,
 			CheckListItem mListItem) {
+
+		getData(mListItem);
 		
 		updateCheckBox(checkListItem.isVerified());
 	}
