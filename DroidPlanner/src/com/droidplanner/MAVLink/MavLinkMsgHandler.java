@@ -1,7 +1,5 @@
 package com.droidplanner.MAVLink;
 
-import android.util.Log;
-
 import com.MAVLink.Messages.ApmModes;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_attitude;
@@ -51,7 +49,8 @@ public class MavLinkMsgHandler {
 			msg_nav_controller_output m_nav = (msg_nav_controller_output) msg;
 			drone.setDisttowpAndSpeedAltErrors(m_nav.wp_dist, m_nav.alt_error,
 					m_nav.aspd_error);
-			drone.navigation.setNavPitchRollYaw(m_nav.nav_pitch,m_nav.nav_roll,m_nav.nav_bearing);
+			drone.navigation.setNavPitchRollYaw(m_nav.nav_pitch,
+					m_nav.nav_roll, m_nav.nav_bearing);
 			break;
 		case msg_heartbeat.MAVLINK_MSG_ID_HEARTBEAT:
 			msg_heartbeat msg_heart = (msg_heartbeat) msg;
@@ -82,15 +81,13 @@ public class MavLinkMsgHandler {
 			break;
 		case msg_rc_channels_raw.MAVLINK_MSG_ID_RC_CHANNELS_RAW:
 			drone.RC.setRcInputValues((msg_rc_channels_raw) msg);
-			Log.d("RC", msg.toString());
 			break;
 		case msg_servo_output_raw.MAVLINK_MSG_ID_SERVO_OUTPUT_RAW:
 			drone.RC.setRcOutputValues((msg_servo_output_raw) msg);
-			Log.d("RC", msg.toString());
 			break;
 		}
 	}
-	
+
 	public void processState(msg_heartbeat msg_heart) {
 		checkArmState(msg_heart);
 		checkFailsafe(msg_heart);
@@ -103,7 +100,8 @@ public class MavLinkMsgHandler {
 	}
 
 	private void checkArmState(msg_heartbeat msg_heart) {
-		drone.state.setArmed((msg_heart.base_mode & (byte) MAV_MODE_FLAG.MAV_MODE_FLAG_SAFETY_ARMED) == (byte) MAV_MODE_FLAG.MAV_MODE_FLAG_SAFETY_ARMED);
+		drone.state
+				.setArmed((msg_heart.base_mode & (byte) MAV_MODE_FLAG.MAV_MODE_FLAG_SAFETY_ARMED) == (byte) MAV_MODE_FLAG.MAV_MODE_FLAG_SAFETY_ARMED);
 	}
 
 	private void checkIfIsFlying(msg_heartbeat msg_heart) {
