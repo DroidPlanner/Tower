@@ -18,13 +18,43 @@
             android:layout_height="match_parent"
             android:layout_weight="1" >
 
-            <com.droidplanner.widgets.FillBar.FillBar
-                android:id="@+id/fillBar1"
-                android:layout_width="20dp"
-                android:layout_height="100dp"
-                android:layout_centerHorizontal="true"
+            <com.droidplanner.widgets.FillBar.FillBarWithText
+                android:id="@+id/FillBarWithText01"
+                android:layout_width="50dp"
+                android:layout_height="200dp"
+                android:layout_margin="5dp"
                 android:layout_centerVertical="true"
-                />
+                android:layout_toLeftOf="@+id/fillBarWithText1"
+                android:layout_weight="1" >
+            </com.droidplanner.widgets.SeekBarWithText.FillBarWithText>
+
+            <com.droidplanner.widgets.FillBar.FillBarWithText
+                android:id="@+id/FillBarWithText03"
+                android:layout_width="50dp"
+                android:layout_height="200dp"
+                android:layout_margin="5dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true" >
+            </com.droidplanner.widgets.SeekBarWithText.FillBarWithText>
+
+            <com.droidplanner.widgets.FillBar.FillBarWithText
+                android:id="@+id/fillBarWithText1"
+                android:layout_width="50dp"
+                android:layout_height="200dp"
+                android:layout_margin="5dp"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/FillBarWithText03" >
+            </com.droidplanner.widgets.SeekBarWithText.FillBarWithText>
+
+            <com.droidplanner.widgets.FillBar.FillBarWithText
+                android:id="@+id/FillBarWithText02"
+                android:layout_width="50dp"
+                android:layout_height="200dp"
+                android:layout_centerVertical="true"
+                android:layout_margin="5dp"
+                android:layout_toLeftOf="@+id/FillBarWithText01" >
+
+            </com.droidplanner.widgets.SeekBarWithText.FillBarWithText>
 
         </RelativeLayout>
 
