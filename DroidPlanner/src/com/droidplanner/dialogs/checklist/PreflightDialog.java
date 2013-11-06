@@ -98,13 +98,23 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 			}
 		});
 		expListView.setAdapter(listAdapter);
-
-		for(int h =0; h<listDataHeader.size();h++){
-			if(!listAdapter.areAllVerified(h))
-			expListView.expandGroup(h);
-		}
+		
+		listViewAutoExpand(true,true);
+		
 
 		return view;
+	}
+
+	private void listViewAutoExpand(boolean autoExpand, boolean autoCollapse) {
+		boolean allVerified;
+		for(int h =0; h<listDataHeader.size();h++){
+			allVerified = listAdapter.areAllVerified(h);
+			if(!allVerified&&autoExpand)
+					expListView.expandGroup(h);
+			else if(allVerified&&autoCollapse)
+				expListView.collapseGroup(h);
+		}
+		
 	}
 
 	private void prepareListData() {
@@ -162,7 +172,7 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 			boolean isChecked) {
 		setSystemData(checkListItem);
 		listAdapter.notifyDataSetChanged();
-		
+		listViewAutoExpand(false,true);
 	}
 
 	@Override

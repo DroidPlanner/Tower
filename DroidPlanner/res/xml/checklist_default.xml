@@ -98,37 +98,4 @@
             title="Battery current"
             unit="%.1fA" />
     </category>
-    <category label="Misc." >
-        <select_item
-            description="Select connection type"
-            mandatory="yes"
-            optionlist="Bluetooth,USB,WiFi"
-            selectindex="0"
-            system_tag="SYS_TELEMETRY_TYPE"
-            title="Telemetry connection " />
-
-        <toggle_item
-            description="Toggle system arm or disarm"
-            editable="yes"
-            mandatory="yes"
-            system_tag="SYS_ARM_STATE"
-            title="Arm System" />
-
-        <radio_item
-            description="Select connection state"
-            editable="yes"
-            mandatory="yes"
-            optionlist="Connect,Disconnect"
-            selectindex="0"
-            system_tag="SYS_CONNECT_STATE"
-            title="Telemetry connect" />
-        <radio_item
-            description="Select Drone Type"
-            editable="yes"
-            mandatory="yes"
-            optionlist="Quad+,Quadx,Hex+,HexX"
-            selectindex="0"
-            title="Drone Type" />
-        </category>
-
 </preflightcheck>
