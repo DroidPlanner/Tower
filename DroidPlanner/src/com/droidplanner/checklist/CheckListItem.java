@@ -223,6 +223,13 @@ public class CheckListItem extends ListXmlData {
 
 	public void setSys_value(double d) {
 		this.sys_value = d;
+		
+		try {
+			this.value = String.valueOf(this.sys_value);
+		} catch (Exception e) {
+			this.value = "0.0";
+			e.printStackTrace();
+		}
 	}
 
 	public boolean isSys_activated() {

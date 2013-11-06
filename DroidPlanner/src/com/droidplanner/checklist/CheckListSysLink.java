@@ -50,8 +50,7 @@ public class CheckListSysLink {
 	}
 
 	private void doDefAlt(CheckListItem checkListItem) {
-		// TODO Auto-generated method stub
-		
+		drone.mission.setDefaultAlt((double) checkListItem.getFloatValue());		
 	}
 
 	private void doSysArm(CheckListItem checkListItem, boolean arm) {
