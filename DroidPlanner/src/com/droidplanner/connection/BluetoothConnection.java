@@ -34,10 +34,10 @@ public class BluetoothConnection extends MAVLinkConnection {
 
 	@Override
 	protected void openConnection() throws UnknownHostException, IOException {
-		Log.d(BLUE, "Conenct");
+		Log.d(BLUE, "Connect");
 		BluetoothDevice device = findBluetoothDevice();
 
-		bluetoothSocket = device.createRfcommSocketToServiceRecord(UUID
+		bluetoothSocket = device.createInsecureRfcommSocketToServiceRecord(UUID
 				.fromString(UUID_SPP_DEVICE)); // TODO May need work
 		mBluetoothAdapter.cancelDiscovery();
 		bluetoothSocket.connect();
