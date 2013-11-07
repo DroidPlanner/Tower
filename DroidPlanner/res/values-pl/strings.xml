@@ -16,7 +16,7 @@
     <string name="menu_save_file">Zapisz plik</string>
     <string name="menu_load_from_apm">Pobierz z APM</string>
     <string name="menu_send_to_apm">Wyślij do APM</string>
-    <string name="menu_follow_me">Śledzenie</string>
+    <string name="menu_follow_me">Śledź mnie</string>
     <string name="menu_record_me">Nagraj mnie</string>
     <string name="menu_clear">Wyczyść Pkty</string>
     <string name="menu_zoom">Powiększ</string>
@@ -49,7 +49,7 @@
     <string name="off">Wył.</string>
     <string name="write">Zapisz</string>
     <string name="refresh">Odśwież</string>
-    <string name="this_is_very_experimental_please_be_careful">Wersja bardzo eksperymentalna. Bądź ostrożny..</string>
+    <string name="this_is_very_experimental_please_be_careful">Wersja mocno eksperymentalna. Bądź ostrożny..</string>
     <string name="menu_advanced">Zaawansowane</string>
     <string name="menu_calibration">Kalibracja</string>
     <string name="rc_control">Sterowanie RC</string>
@@ -79,8 +79,8 @@
     <string name="waypoint_delay">Opóźnienie przed następnym punktem </string>
     <string name="loiter_radius">Promień</string>
     <string name="loiter_ccw">W lewo</string>
-    <string name="menu_arm">Aktywny</string>
-	<string name="menu_disarm">Nie aktywny</string>
+    <string name="menu_arm">WŁĄCZ APM</string>
+	<string name="menu_disarm">WYŁĄCZ APM</string>
     <string name="rtl_Land">Ląduj po osiągnięciu Miejsca Startu</string>
     <string name="takeoff_pitch">Min. kąt pochylenia</string>
 	<string name="waypointInfo_Land">Lądowanie statku w miejscu aktualnego położenia. Jeśli masz Sonar statek przestanie utrzymać pozycję na wys. 3m i zniży się w dół. Silniki nie wyłączą się samodzielnie. Aby je zatrzymać musisz ręcznie wyłączyć tryb automatyczny.</string>
