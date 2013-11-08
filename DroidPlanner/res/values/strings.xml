@@ -170,4 +170,11 @@
     <string name="rowheader_wp_no">WP#</string>
     <string name="rowheader_wp_delta">∆ WP</string>
     <string name="rowheader_wp_desc">Description</string>
+    <string name="dialog_box_title_altitude">Altitude</string>
+    <string name="dialog_box_btn_txt_cancel">Cancel</string>
+    <string name="dialog_box_btn_txt_ok">Ok</string>
+    <string name="exception_draw_polygon">Draw a polygon/WPTs</string>
+    <string name="exception_draw_2_more_polygon_points">Draw at least 2 more polygon points</string>
+    <string name="exception_draw_1_more_polygon_points">Draw at least 1 more polygon points</string>
+    <string name="mission_is_too_lengthy">Mission is too lengthy</string>
 </resources>

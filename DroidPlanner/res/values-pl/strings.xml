@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="about">O</string>
+
+    <string name="app_title">DroidPlanner</string>
+    <string name="about">Program</string>
     <string name="version">Wersja</string>
     <string name="storage_folder">Folder zapisu</string>
     <string name="menu_settings">Ustawienia</string>
@@ -14,8 +16,8 @@
     <string name="menu_save_file">Zapisz plik</string>
     <string name="menu_load_from_apm">Pobierz z APM</string>
     <string name="menu_send_to_apm">Wyślij do APM</string>
-    <string name="menu_follow_me">Śledzenie</string>
-    <string name="menu_record_me">Nagraj</string>
+    <string name="menu_follow_me">Śledź mnie</string>
+    <string name="menu_record_me">Nagraj mnie</string>
     <string name="menu_clear">Wyczyść Pkty</string>
     <string name="menu_zoom">Powiększ</string>
     <string name="file_saved">Zapisano plik</string>
@@ -47,7 +49,7 @@
     <string name="off">Wył.</string>
     <string name="write">Zapisz</string>
     <string name="refresh">Odśwież</string>
-    <string name="this_is_very_experimental_please_be_careful">Wersja bardzo eksperymentalna. Bądź ostrożny..</string>
+    <string name="this_is_very_experimental_please_be_careful">Wersja mocno eksperymentalna. Bądź ostrożny..</string>
     <string name="menu_advanced">Zaawansowane</string>
     <string name="menu_calibration">Kalibracja</string>
     <string name="rc_control">Sterowanie RC</string>
@@ -72,44 +74,49 @@
     <string name="mission_length">Długość misji</string>
     <string name="pictures">Obrazy</string>
     <string name="number_of_strips">Liczba przelotów</string>
-    <string name="loiter_time">Loiter-czas</string>
-    <string name="loiter_turn">Loiter-obrót </string>
-    <string name="waypoint_delay">Opóźnienie przed następnym punktem</string>
-    <string name="loiter_radius">Loiter-promień</string>
+    <string name="loiter_time">Czas</string>
+    <string name="loiter_turn">Obroty </string>
+    <string name="waypoint_delay">Opóźnienie przed następnym punktem </string>
+    <string name="loiter_radius">Promień</string>
     <string name="loiter_ccw">W lewo</string>
-    <string name="menu_arm">Aktywny</string>
-	<string name="menu_disarm">Nie aktywny</string>
+    <string name="menu_arm">WŁĄCZ APM</string>
+	<string name="menu_disarm">WYŁĄCZ APM</string>
     <string name="rtl_Land">Ląduj po osiągnięciu Miejsca Startu</string>
     <string name="takeoff_pitch">Min. kąt pochylenia</string>
-	<string name="waypointInfo_Land">Lądowanie statku w miejscu aktualnego położenia. Jeśli masz Sonar statek przestanie utrzymać pozycję na wys. 3m i zniży się w dół. Silniki nie wyłącza się samodzielnie. Aby je zatrzymać musisz ręcznie wyłączyć tryb automatyczny.</string>
+	<string name="waypointInfo_Land">Lądowanie statku w miejscu aktualnego położenia. Jeśli masz Sonar statek przestanie utrzymać pozycję na wys. 3m i zniży się w dół. Silniki nie wyłączą się samodzielnie. Aby je zatrzymać musisz ręcznie wyłączyć tryb automatyczny.</string>
     <string name="waypointInfo_Generic">Std. punkt trasy.</string>
     <string name="waypointInfo_Loiter">Włącza tryb Loiter w miejscu aktualnego położenia.</string>
     <string name="waypointInfo_LoiterN">Włącza krążenie Loiter wokół miejsca aktualnego położenia.</string>
     <string name="waypointInfo_LoiterT">Włącza tryb Loiter w miejscu aktualnego położenia. Opcjonalnie podaj pozycję zawisu w tym punkcie trasy. Zegar uruchamia się po osiągnięciu punktu.</string>
     <string name="waypointInfo_RTL">Powrót statku do Miejsca Startu zapamiętanego w momencie uzbrojenia (wymagany fix GPSa). Jeśli wysokość wynosi 0 statek będzie wracał na wysokości zdefiniowanej w parametrach programu Mission Panner.</string>
-    <string name="waypointInfo_TakeOff">START statku na zadaną wysokość. Kąt Pochylenia używaj wyłącznie dla samolotów, dla kopterów pozostaw 0.</string>
-    <string name="waypointInfo_Waypoint">Aktywacja opóźnienia następuje po osiągnięciu obszaru punktu. Następna komenda ładowana jest po upływie czasu opóźnienia. Opóźnienie podano w sekundach, domyślnie 0. Dla przelotów ustaw obszar krążenia na 0 lub określ jego promień w metrach. Kierunek określa kurs w danym punkcie - wyłącznie dla wirnikowców.</string>
-    <string name="waypointDesc_Waypoint_1" formatted="false">Przejdź dalej bez późnień. Kurs %03.0f°</string>
-    <string name="waypointDesc_Waypoint_2" formatted="false">Przejdź dalej po %1.1fs. Kurs %03.0f°</string>
-    <string name="waypointDesc_Loiter"  formatted="false">Tryb Loiter do następnej komendy. Promień %1.1fm %s. Kurs %03.0f°</string>
-    <string name="waypointDesc_LoiterN" formatted="false">Tryb Loiter. Wykonaj %1.0f obrot(ów). Promień %1.1fm %s. Kurs %03.0f°</string>
-    <string name="waypointDesc_LoiterT" formatted="false">Tryb Loiter przez %1.0fs. Promień %1.1fm %s. Kurs %03.0f°</string>
+    <string name="waypointInfo_TakeOff">START statku na zadaną wysokość. Kąt Pochylenia używaj wyłącznie dla samolotów, dla wirnikowców pozostaw 0.</string>
+    <string name="waypointInfo_Waypoint">Aktywacja opóźnienia następuje po osiągnięciu obszaru punktu. Następna komenda ładowana jest po upływie czasu opóźnienia, podanego w sekundach, domyślnie 0. Dla przelotów ustaw obszar krążenia na 0 lub określ jego promień w metrach. Kierunek określa poziome położenie ramy w danym punkcie - wyłącznie dla wirnikowców.</string>
+    <string name="waypointDesc_Waypoint_1" formatted="false">Przejdź dalej bez późnień. Kierunek %03.0f°</string>
+    <string name="waypointDesc_Waypoint_2" formatted="false">Przejdź dalej po %1.1fs. Kierunek %03.0f°</string>
+    <string name="waypointDesc_Loiter"  formatted="false">Tryb Loiter do następnej komendy. Promień %1.1fm %s. Kierunek %03.0f°</string>
+    <string name="waypointDesc_LoiterN" formatted="false">Tryb Loiter. Wykonaj %1.0f obrot(ów). Promień %1.1fm %s. Kierunek %03.0f°</string>
+    <string name="waypointDesc_LoiterT" formatted="false">Tryb Loiter przez %1.0fs. Promień %1.1fm %s. Kierunek %03.0f°</string>
     <string name="waypointDesc_Takeoff" formatted="false">Start z pochyleniem %1.2f°</string>
     <string name="waypointDesc_SetJump" formatted="false">Przeskocz do %d - %s</string>
     <string name="waypointDesc_SetHome" formatted="false">Miejsce Startu ustawione na</string>
     <string name="waypointDesc_SetSpeed" formatted="false">Prędkość %1.1fm/s z przepustnicą %1.0f%% , względem %s</string>
+    <string name="waypointDesc_SetRelay" formatted="false">Relay is set to</string>
+    <string name="waypointDesc_SetRepeat" formatted="false">Repeating relay</string>
     <string name="waypointDesc_CondAlt" formatted="false">Wysokość docelowa %1.1fm z prędkością %1.1fm/s</string>
     <string name="waypointDesc_CondDist" formatted="false">Odległość docelowa %1.1fm</string>
-    <string name="waypointDesc_CondYaw" formatted="false">Kierunek docelowy %03.0f° z prędkością %1.1fm/s %s, %s</string>
+    <string name="waypointDesc_CondYaw" formatted="false">Kierunek docelowy %03.0f° z prędkością %1.1f°/s %s, %s</string>
     <string name="waypointDesc_GPS" formatted="false">Szer/Dł [%1.12f/%1.12f]</string>
     <string name="waypointDesc_coordmav">obecna pozycja statku</string>
     <string name="waypointDesc_coordwp">obecna pozycja Punktu</string>
     <string name="waypointDesc_coordgcs">obecna pozycja GCS</string>
     <string name="waypointDesc_coordmanual">wprowadzone położenie</string>
     <string name="waypointDesc_immediate">natychmiast</string>
+    <string name="waypointDesc_s">s</string>
+    <string name="waypointDesc_m">m</string>
     <string name="waypointDesc_after">po</string>
     <string name="waypointDesc_turns">obrotów</string>
     <string name="waypointDesc_radius">promień</string>
+    <string name="waypointDesc_degrees">°</string>
     <string name="waypointDesc_CW">W prawo</string>
     <string name="waypointDesc_CCW">W lewo</string>
     <string name="waypoint_angle">Kierunek</string>
@@ -123,8 +130,10 @@
     <string name="waypointInfo_CondAlt">Zmień wysokość z podaną prędkością pionową. Do czasu osiągnięcia zadanej wysokości wykonanie następnych Punktów wstrzymane.</string>
     <string name="waypointInfo_CondYaw">Zmień kierunek z wykorzystaniem podanych warunków.</string>
     <string name="waypointInfo_CondDistance">Wstrzymaj wykonanie następnych Punktów do czasu osiągnięcia wskazanej odległości od następnego Punktu Nawigacyjnego</string>
-    <string name="waypointInfo_SetHome">Zmień Miejsce Startu.</string>
-    <string name="waypointInfo_SetSpeed">Zmień ustawienia prędkości i przepustnicy. Ustaw -1 jeśli bez zmian.</string>
+    <string name="waypointInfo_SetHome">Przedefiniuj Miejsce Startu.</string>
+    <string name="waypointInfo_SetSpeed">Zmień ustawienia prędkości i przepustnicy. Ustaw (-1) jeśli bez zmian.</string>
+    <string name="waypointInfo_SetRelay">Set a relay to a condition.</string>
+    <string name="waypointInfo_SetRepeatRelay">Cycle a relay on and off for a desired number of cyles with a desired period.</string>
     <string name="waypoint_distance">Odległość</string>
     <string name="waypoint_homecurrent">"Miejsce Startu w aktualnej pozycji"</string>
     <string name="waypoint_longitude">Długość :</string>
@@ -137,8 +146,8 @@
     <string name="selectCoodSource">Wybierz źródło pozycji</string>
     <string name="waypoint_coordsrc">Źródło pozycji :</string>
     <string name="waypoint_jumpto">Skocz do Punktu :</string>
-    <string name="waypoint_repeat">Powtórz Punkt</string>
-	<string name="waypointInfo_SetJump">Powtórz Punkt</string>
+    <string name="waypoint_repeat">Powtórz</string>
+	<string name="waypointInfo_SetJump">Skocz do innego Punktu Trasy</string>
 	<string name="next">dalej</string>
 	<string name="menu_map_type">Rodzaj mapy</string>
 	<string name="menu_map_type_satellite">Satelita</string>
@@ -152,6 +161,21 @@
     <string name="metadata_units">Jednostki:</string>
     <string name="metadata_range">Zakres:</string>
     <string name="menu_preflight_checklist">Lista startowa</string>
-    <string name="lst_note_hint">Naciśnij Enter aby dodać wiersz</string>
+    <string name="lst_note_hint">Naciśnij Enter, aby dodać wiersz.</string>
     <string name="parameter_row_edit">Edycja</string>
+    <string name="lointer_unit_turns">obrot(y)</string>
+    <string name="rowheader_wp_type">Typ PKT</string>
+    <string name="rowheader_wp_alt">WYS</string>
+    <string name="rowheader_wp_no">#PKT</string>
+    <string name="rowheader_wp_delta">∆ PKT</string>
+    <string name="rowheader_wp_desc">Opis</string>
+    <string name="dialog_box_title_altitude">Wysokość</string>
+    <string name="dialog_box_btn_txt_cancel">Anuluj</string>
+    <string name="dialog_box_btn_txt_ok">Ok</string>
+	<string name="exception_draw_polygon">Zaznacz Obszar/Punkty</string>
+    <string name="exception_draw_2_more_polygon_points">Zaznacz jeszcze co najmniej 2 punkty</string>
+    <string name="exception_draw_1_more_polygon_points">Zaznacz jeszcze co najmniej 1 punkt</string>
+    <string name="mission_is_too_lengthy">Misja jest zbyt długa!</string>    
+    
+    
 </resources>
