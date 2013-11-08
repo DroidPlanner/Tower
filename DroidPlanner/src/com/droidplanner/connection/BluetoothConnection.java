@@ -3,6 +3,8 @@ package com.droidplanner.connection;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.UnknownHostException;
 import java.util.Set;
 import java.util.UUID;
@@ -13,6 +15,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.ParcelUuid;
 import android.util.Log;
 
@@ -34,13 +37,45 @@ public class BluetoothConnection extends MAVLinkConnection {
 
 	@Override
 	protected void openConnection() throws UnknownHostException, IOException {
-		Log.d(BLUE, "Conenct");
-		BluetoothDevice device = findBluetoothDevice();
 
-		bluetoothSocket = device.createRfcommSocketToServiceRecord(UUID
-				.fromString(UUID_SPP_DEVICE)); // TODO May need work
+		Log.d(BLUE, "Looking for BT devs ...");
+		BluetoothDevice device = findBluetoothDevice();
+		
+
+		if (Build.VERSION.SDK_INT < 9) { // VK: Build.Version_Codes.GINGERBREAD is not accessible yet so using raw int value
+			// VK: 9 is the API Level integer value for Gingerbread
+			try {
+				bluetoothSocket = device.createRfcommSocketToServiceRecord(UUID.fromString(UUID_SPP_DEVICE));
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} else {			
+			Method BTSocketMethod = null;
+			try {
+				BTSocketMethod = device.getClass().getMethod("createInsecureRfcommSocketToServiceRecord", new Class[] { UUID.class });
+			} catch (NoSuchMethodException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+				bluetoothSocket = (BluetoothSocket) BTSocketMethod.invoke(device, (UUID) UUID.fromString(UUID_SPP_DEVICE));
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+
+		
+
 		mBluetoothAdapter.cancelDiscovery();
-		bluetoothSocket.connect();
+		bluetoothSocket.connect(); //Here the IOException will rise on BT protocol/handshake error.
+		Log.d(BLUE, "## BT Connected ##");			
 
 		out = bluetoothSocket.getOutputStream();
 		in = bluetoothSocket.getInputStream();
@@ -61,6 +96,8 @@ public class BluetoothConnection extends MAVLinkConnection {
 					// TODO maybe this will not work on newer devices
 					Log.d(BLUE, "id:" + id.toString());
 					if (id.toString().equalsIgnoreCase(UUID_SPP_DEVICE)) {
+						Log.d(BLUE, ">> Selected: " + device.getName()
+								+ " Using: " + id.toString());
 						return device;
 					}
 				}
@@ -85,6 +122,7 @@ public class BluetoothConnection extends MAVLinkConnection {
 	@Override
 	protected void closeConnection() throws IOException {
 		bluetoothSocket.close();
+		Log.d(BLUE, "## BT Closed ##");
 	}
 
 	@Override
