@@ -42,8 +42,7 @@ public class BluetoothConnection extends MAVLinkConnection {
 		BluetoothDevice device = findBluetoothDevice();
 		
 
-		if (Build.VERSION.SDK_INT < 9) { // VK: Build.Version_Codes.GINGERBREAD is not accessible yet so using raw int value
-			// VK: 9 is the API Level integer value for Gingerbread
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD) { 
 			try {
 				bluetoothSocket = device.createRfcommSocketToServiceRecord(UUID.fromString(UUID_SPP_DEVICE));
 			} catch (IOException e1) {
