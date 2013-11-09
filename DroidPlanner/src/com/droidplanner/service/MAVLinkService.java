@@ -17,7 +17,7 @@ import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-
+import android.widget.Toast;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
 import com.droidplanner.R;
@@ -33,6 +33,7 @@ import com.droidplanner.connection.UsbConnection;
  * http://developer.android.com/guide/components/bound-services.html#Messenger
  * 
  */
+
 public class MAVLinkService extends Service implements MavLinkConnectionListner {
 	public static final int MSG_REGISTER_CLIENT = 1;
 	public static final int MSG_UNREGISTER_CLIENT = 2;
@@ -43,6 +44,23 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 	Messenger msgCenter = null;
 	final Messenger mMessenger = new Messenger(new IncomingHandler());
 	private boolean couldNotOpenConnection = false;
+
+	/**
+	 * 
+	 * Handler for Communication Errors Messages
+	 * used in onComError() to display Toast msg.
+	 * 
+	 * */
+
+	private String commErrMsgLocalStore = "Mavlink Error: ";
+	@SuppressLint("HandlerLeak")
+	private Handler commErrHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			Toast.makeText(getApplicationContext(), commErrMsgLocalStore,
+					Toast.LENGTH_LONG).show();
+		}
+	};
 
 	/**
 	 * Handler of incoming messages from clients.
@@ -139,6 +157,23 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 	}
 
 	/**
+	 * Called after the exception raised in any of the
+	 * MavLinkConnection classes 
+	 */
+	public void onComError(String errMsg) {
+
+		Message errMessageObj = new Message();
+		Bundle resBundle = new Bundle();
+		resBundle.putString("status", "SUCCESS");
+		errMessageObj.obj = resBundle;
+
+		commErrMsgLocalStore = commErrMsgLocalStore + errMsg;
+		commErrHandler.sendMessage(errMessageObj);
+
+		Log.d(CONNECTIVITY_SERVICE, commErrMsgLocalStore);
+	}
+
+	/**
 	 * Toggle the current state of the MAVlink connection. Starting and closing
 	 * the as needed. May throw a onConnect or onDisconnect callback
 	 */
@@ -151,7 +186,7 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 			mavConnection = new TcpConnection(this);
 		} else if (connectionType.equals("UDP")) {
 			mavConnection = new UdpConnection(this);
-		} else if (connectionType.equals("BLUETOOTH")) {	
+		} else if (connectionType.equals("BLUETOOTH")) {
 			mavConnection = new BluetoothConnection(this);
 		} else {
 			return;
@@ -218,9 +253,5 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 			wakeLock = null;
 		}
 	}
-	
-	
-	public void onComError(String errMsg){
-		Log.d(CONNECTIVITY_SERVICE, "MavLink Comm. Error:" + errMsg);		
-	}
+
 }
