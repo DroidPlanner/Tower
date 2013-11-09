@@ -16,6 +16,7 @@ import android.os.PowerManager.WakeLock;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
@@ -216,5 +217,10 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 			wakeLock.release();
 			wakeLock = null;
 		}
+	}
+	
+	
+	public void onComError(String errMsg){
+		Log.d(CONNECTIVITY_SERVICE, "MavLink Comm. Error:" + errMsg);		
 	}
 }
