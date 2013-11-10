@@ -20,7 +20,7 @@ public class DroidPlannerApp extends Application implements
 	private MavLinkMsgHandler mavLinkMsgHandler;
 	public FollowMe followMe;
 	public RecordMe recordMe;
-	public ConnectionStateListner conectionListner;
+	public ConnectionStateListner connectionListner;
 	public OnSystemArmListener onSystemArmListener;
 	private TTS tts;
 
@@ -69,14 +69,14 @@ public class DroidPlannerApp extends Application implements
 
 	@Override
 	public void notifyDisconnected() {
-		conectionListner.notifyDisconnected();
+		connectionListner.notifyDisconnected();
 		tts.speak("Disconnected");
 	}
 
 	@Override
 	public void notifyConnected() {
 		MavLinkStreamRates.setupStreamRatesFromPref(this);
-		conectionListner.notifyConnected();
+		connectionListner.notifyConnected();
 		tts.speak("Connected");
 	}
 
