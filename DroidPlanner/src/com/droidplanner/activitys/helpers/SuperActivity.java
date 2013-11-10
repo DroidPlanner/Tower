@@ -3,22 +3,18 @@ package com.droidplanner.activitys.helpers;
 import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.WindowManager.LayoutParams;
 import android.widget.ArrayAdapter;
 import android.widget.SpinnerAdapter;
 
 import com.droidplanner.DroidPlannerApp;
-import com.droidplanner.DroidPlannerApp.ConnectionStateListner;
-import com.droidplanner.DroidPlannerApp.OnSystemArmListener;
+import com.droidplanner.DroidPlannerApp.SuperActConnectionStateListner;
+import com.droidplanner.DroidPlannerApp.SuperActOnSystemArmListener;
 import com.droidplanner.R;
 import com.droidplanner.activitys.CameraActivity;
 import com.droidplanner.activitys.ChartActivity;
@@ -29,15 +25,13 @@ import com.droidplanner.activitys.PlanningActivity;
 import com.droidplanner.activitys.RCActivity;
 import com.droidplanner.activitys.SettingsActivity;
 import com.droidplanner.dialogs.AltitudeDialog;
-import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
+import com.droidplanner.dialogs.AltitudeDialog.SuperActOnAltitudeChangedListner;
 import com.droidplanner.dialogs.checklist.PreflightDialog;
 import com.droidplanner.drone.Drone;
-import com.droidplanner.fragments.checklist.ListXmlFragment;
 import com.droidplanner.fragments.helpers.OfflineMapFragment;
-import com.google.android.gms.maps.GoogleMap;
 
 public abstract class SuperActivity extends Activity implements
-		OnNavigationListener, ConnectionStateListner, OnAltitudeChangedListner, OnSystemArmListener{
+		OnNavigationListener, SuperActConnectionStateListner, SuperActOnAltitudeChangedListner, SuperActOnSystemArmListener{
 
 	public abstract int getNavigationItem();
 
@@ -61,8 +55,8 @@ public abstract class SuperActivity extends Activity implements
 		// Set up the action bar to show a dropdown list.
 		setUpActionBar();
 		app = (DroidPlannerApp) getApplication();
-		app.connectionListner = this;
-		app.onSystemArmListener = this;
+		app.saConnectionListner = this;
+		app.saOnSystemArmListener = this;
 		this.drone = app.drone;
 
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -184,7 +178,7 @@ public abstract class SuperActivity extends Activity implements
 		drone.notifyMapTypeChanged();
 	}
 
-	public void notifyDisconnected() {
+	public void saNotifyDisconnected() {
 		if (connectButton != null) {
 			connectButton.setTitle(getResources().getString(
 					R.string.menu_connect));
@@ -195,7 +189,7 @@ public abstract class SuperActivity extends Activity implements
 		screenOrientation.unlock();
 	}
 
-	public void notifyConnected() {
+	public void saNotifyConnected() {
 		if (connectButton != null) {
 			connectButton.setTitle(getResources().getString(
 					R.string.menu_disconnect));
@@ -206,14 +200,14 @@ public abstract class SuperActivity extends Activity implements
 		screenOrientation.requestLock();
 	}
 
-	public void notifyArmed() {
+	public void saNotifyArmed() {
 		if (armButton != null) {
 			armButton.setTitle(getResources().getString(
 					R.string.menu_disarm));
 		}
 	}
 
-	public void notifyDisarmed() {
+	public void saNotifyDisarmed() {
 		if (armButton != null) {
 			armButton.setTitle(getResources().getString(
 					R.string.menu_arm));
@@ -234,7 +228,7 @@ public abstract class SuperActivity extends Activity implements
 	}
 
 	@Override
-	public void onAltitudeChanged(double newAltitude) {
+	public void saOnAltitudeChanged(double newAltitude) {
 		drone.mission.setDefaultAlt(newAltitude);
 	}
 }
