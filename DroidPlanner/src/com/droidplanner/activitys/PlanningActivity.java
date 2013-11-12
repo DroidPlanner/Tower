@@ -176,8 +176,8 @@ public class PlanningActivity extends SuperActivity implements
 	}
 
 	@Override
-	public void onAltitudeChanged(double newAltitude) {
-		super.onAltitudeChanged(newAltitude);
+	public void onAltitudeChanged(double newAltitude,boolean applyToAll) {
+		super.onAltitudeChanged(newAltitude, applyToAll);
 		update();
 	}
 

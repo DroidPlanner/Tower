@@ -1,5 +1,7 @@
 package com.droidplanner.activitys.helpers;
 
+import java.util.List;
+
 import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
@@ -32,9 +34,11 @@ import com.droidplanner.dialogs.AltitudeDialog;
 import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
 import com.droidplanner.dialogs.checklist.PreflightDialog;
 import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.variables.waypoint;
 import com.droidplanner.fragments.checklist.ListXmlFragment;
 import com.droidplanner.fragments.helpers.OfflineMapFragment;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
 
 public abstract class SuperActivity extends Activity implements
 		OnNavigationListener, ConnectionStateListner, OnAltitudeChangedListner, OnSystemArmListener{
@@ -234,7 +238,20 @@ public abstract class SuperActivity extends Activity implements
 	}
 
 	@Override
-	public void onAltitudeChanged(double newAltitude) {
+	public void onAltitudeChanged(double newAltitude,boolean applyToAll) {
 		drone.mission.setDefaultAlt(newAltitude);
+		if(applyToAll){
+			changeAllAltitudes(newAltitude);
+		}
+	}
+	
+	public void changeAllAltitudes(double newAltitude){
+		List<LatLng> pathPoints = drone.mission.getPathPoints();
+		drone.mission.clearWaypoints();
+		for(LatLng wPoint:pathPoints){
+			drone.mission.addWaypoint(wPoint.latitude,
+					wPoint.longitude, newAltitude);
+		}
+		
 	}
 }

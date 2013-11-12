@@ -17,7 +17,7 @@ public class AltitudeDialog implements DialogInterface.OnClickListener {
 	private OnAltitudeChangedListner listner;
 
 	public interface OnAltitudeChangedListner {
-		public void onAltitudeChanged(double newAltitude);
+		public void onAltitudeChanged(double newAltitude,boolean applyToAll);
 	}
 
 	public AltitudeDialog(OnAltitudeChangedListner listner) {
@@ -35,6 +35,7 @@ public class AltitudeDialog implements DialogInterface.OnClickListener {
 		builder.setTitle("Altitude");
 		builder.setView(buildAltitudePicker(context));
 		builder.setNegativeButton("Cancel", this).setPositiveButton("Ok", this);
+		builder.setNeutralButton("Apply to All",this);
 		AlertDialog dialog = builder.create();
 		return dialog;
 	}
@@ -73,7 +74,10 @@ public class AltitudeDialog implements DialogInterface.OnClickListener {
 	@Override
 	public void onClick(DialogInterface arg0, int which) {
 		if (which == Dialog.BUTTON_POSITIVE) {
-			listner.onAltitudeChanged(getValue());
+			listner.onAltitudeChanged(getValue(),false);
+		}
+		if(which==Dialog.BUTTON_NEUTRAL){
+			listner.onAltitudeChanged(getValue(),true);
 		}
 	}
 

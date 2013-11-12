@@ -67,8 +67,8 @@ public class FlightDataActivity extends SuperFlightActivity implements
 	}
 
 	@Override
-	public void onAltitudeChanged(double newAltitude) {
-		super.onAltitudeChanged(newAltitude);
+	public void onAltitudeChanged(double newAltitude,boolean applyToAll) {
+		super.onAltitudeChanged(newAltitude,applyToAll);
 		mapFragment.updateFragment();
 	}
 

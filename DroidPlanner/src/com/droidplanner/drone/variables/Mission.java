@@ -17,7 +17,7 @@ public class Mission extends DroneVariable implements PathSource, OnWaypointUpda
 
 	private Home home = new Home();
 	private List<waypoint> waypoints = new ArrayList<waypoint>();
-	private Double defaultAlt = 50.0;
+	private Double defaultAlt = 25.0;
 	private int wpno = -1;
 	private double disttowp = 0;
 
