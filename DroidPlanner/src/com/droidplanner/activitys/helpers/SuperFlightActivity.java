@@ -18,6 +18,7 @@ import com.droidplanner.widgets.spinners.SelectModeSpinner;
 import com.droidplanner.widgets.spinners.SelectModeSpinner.OnModeSpinnerSelectedListener;
 import com.droidplanner.widgets.spinners.SelectWaypointSpinner;
 import com.droidplanner.widgets.spinners.SelectWaypointSpinner.OnWaypointSpinnerSelectedListener;
+import com.droidplanner.helpers.RcOutput;
 
 public abstract class SuperFlightActivity extends SuperActivity implements
 		OnModeSpinnerSelectedListener, OnWaypointSpinnerSelectedListener,
@@ -77,6 +78,10 @@ public abstract class SuperFlightActivity extends SuperActivity implements
 		ApmModes mode = ApmModes.getMode(text, drone.type.getType());
 		if (ApmModes.isValid(mode)) {
 			drone.state.changeFlightMode(mode);
+            
+            if(mode == ApmModes.ROTOR_AUTO){
+                sendRC();
+            }
 		}
 	}
 
@@ -113,5 +118,20 @@ public abstract class SuperFlightActivity extends SuperActivity implements
 		if (mapFragment != null) {
 			mapFragment.updateFragment();
 		}
-	}
+        
+    }
+    
+    public void sendRC(){
+        RcOutput rcOutput = new RcOutput(drone, this);
+        rcOutput.enableRcOverride();
+        rcOutput.setRcChannel(RcOutput.TROTTLE, 1);
+        try{
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            //TODO Auto-generated catch block
+            e.printStackTrace();
+            
+        }
+        rcOutput.disableRcOverride();
+    }
 }
