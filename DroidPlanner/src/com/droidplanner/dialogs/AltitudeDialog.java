@@ -8,19 +8,20 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.NumberPicker;
+import com.droidplanner.R;
 
 public class AltitudeDialog implements DialogInterface.OnClickListener {
 	private NumberPicker thousandPicker;
 	private NumberPicker hundredPicker;
 	private NumberPicker decadePicker;
 	private NumberPicker unitPicker;
-	private OnAltitudeChangedListner listner;
+	private SuperActOnAltitudeChangedListner listner;
 
-	public interface OnAltitudeChangedListner {
-		public void onAltitudeChanged(double newAltitude);
+	public interface SuperActOnAltitudeChangedListner {
+		public void saOnAltitudeChanged(double newAltitude);
 	}
 
-	public AltitudeDialog(OnAltitudeChangedListner listner) {
+	public AltitudeDialog(SuperActOnAltitudeChangedListner listner) {
 		this.listner = listner;
 	}
 
@@ -32,9 +33,9 @@ public class AltitudeDialog implements DialogInterface.OnClickListener {
 
 	private AlertDialog buildDialog(Context context) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setTitle("Altitude");
+		builder.setTitle(R.string.dialog_box_title_altitude);
 		builder.setView(buildAltitudePicker(context));
-		builder.setNegativeButton("Cancel", this).setPositiveButton("Ok", this);
+		builder.setNegativeButton(R.string.dialog_box_btn_txt_cancel, this).setPositiveButton(R.string.dialog_box_btn_txt_ok, this);
 		AlertDialog dialog = builder.create();
 		return dialog;
 	}
@@ -73,7 +74,7 @@ public class AltitudeDialog implements DialogInterface.OnClickListener {
 	@Override
 	public void onClick(DialogInterface arg0, int which) {
 		if (which == Dialog.BUTTON_POSITIVE) {
-			listner.onAltitudeChanged(getValue());
+			listner.saOnAltitudeChanged(getValue());
 		}
 	}
 

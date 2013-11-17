@@ -8,7 +8,6 @@ import android.view.MenuItem;
 
 import android.view.View;
 import android.widget.TextView;
-import com.MAVLink.Messages.ApmModes;
 import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperFlightActivity;
@@ -67,8 +66,8 @@ public class FlightDataActivity extends SuperFlightActivity implements
 	}
 
 	@Override
-	public void onAltitudeChanged(double newAltitude) {
-		super.onAltitudeChanged(newAltitude);
+	public void saOnAltitudeChanged(double newAltitude) {
+		super.saOnAltitudeChanged(newAltitude);
 		mapFragment.updateFragment();
 	}
 
