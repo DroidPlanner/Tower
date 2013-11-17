@@ -20,24 +20,22 @@ public class DroidPlannerApp extends Application implements
 	private MavLinkMsgHandler mavLinkMsgHandler;
 	public FollowMe followMe;
 	public RecordMe recordMe;
-	public ConnectionStateListner conectionListner;
-	public OnSystemArmListener onSystemArmListener;
+	public SuperActConnectionStateListner saConnectionListner;
+	public SuperActOnSystemArmListener saOnSystemArmListener;
 	private TTS tts;
 
 	public interface OnWaypointUpdateListner {
 		public void onWaypointsUpdate();
 	}
 
-	public interface ConnectionStateListner {
-		public void notifyConnected();
-		
-		public void notifyDisconnected();
+	public interface SuperActConnectionStateListner {
+		public void saNotifyConnected();		
+		public void saNotifyDisconnected();
 	}
 
-	public interface OnSystemArmListener {
-		public void notifyArmed();
-		
-		public void notifyDisarmed();
+	public interface SuperActOnSystemArmListener {
+		public void saNotifyArmed();		
+		public void saNotifyDisarmed();
 	}
 
 	@Override
@@ -69,24 +67,24 @@ public class DroidPlannerApp extends Application implements
 
 	@Override
 	public void notifyDisconnected() {
-		conectionListner.notifyDisconnected();
+		saConnectionListner.saNotifyDisconnected();
 		tts.speak("Disconnected");
 	}
 
 	@Override
 	public void notifyConnected() {
 		MavLinkStreamRates.setupStreamRatesFromPref(this);
-		conectionListner.notifyConnected();
+		saConnectionListner.saNotifyConnected();
 		tts.speak("Connected");
 	}
 
 	@Override
 	public void notifyArmed() {
-		onSystemArmListener.notifyArmed();
+		saOnSystemArmListener.saNotifyArmed();
 	}
 
 	@Override
 	public void notifyDisarmed() {
-		onSystemArmListener.notifyDisarmed();
+		saOnSystemArmListener.saNotifyDisarmed();
 	}
 }

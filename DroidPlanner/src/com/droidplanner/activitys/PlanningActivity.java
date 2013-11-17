@@ -14,7 +14,7 @@ import android.widget.Toast;
 import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperActivity;
-import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
+import com.droidplanner.dialogs.AltitudeDialog.SuperActOnAltitudeChangedListner;
 import com.droidplanner.dialogs.openfile.OpenFileDialog;
 import com.droidplanner.dialogs.openfile.OpenMissionDialog;
 import com.droidplanner.drone.variables.waypoint;
@@ -37,7 +37,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class PlanningActivity extends SuperActivity implements
 		OnMapInteractionListener, OnWaypointUpdateListner,
-		OnAltitudeChangedListner, OnPathFinishedListner, OnNewGridListner {
+		SuperActOnAltitudeChangedListner, OnPathFinishedListner, OnNewGridListner {
 
 	public Polygon polygon;
 	private PlanningMapFragment planningMapFragment;
@@ -176,8 +176,8 @@ public class PlanningActivity extends SuperActivity implements
 	}
 
 	@Override
-	public void onAltitudeChanged(double newAltitude) {
-		super.onAltitudeChanged(newAltitude);
+	public void saOnAltitudeChanged(double newAltitude) {
+		super.saOnAltitudeChanged(newAltitude);
 		update();
 	}
 

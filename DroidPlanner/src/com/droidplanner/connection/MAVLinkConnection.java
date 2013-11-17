@@ -33,6 +33,9 @@ public abstract class MAVLinkConnection extends Thread {
 		public void onReceiveMessage(MAVLinkMessage msg);
 
 		public void onDisconnect();
+		
+		public void onComError(String errMsg);		
+		
 	}
 
 	protected Context parentContext;
@@ -46,7 +49,7 @@ public abstract class MAVLinkConnection extends Thread {
 	protected int iavailable, i;
 	protected boolean connected = true;
 
-	private ByteBuffer logBuffer;
+	private ByteBuffer logBuffer;	
 
 	public MAVLinkConnection(Context parentContext) {
 		this.parentContext = parentContext;
@@ -75,11 +78,15 @@ public abstract class MAVLinkConnection extends Thread {
 				handleData();
 			}
 			closeConnection();
+
 		} catch (FileNotFoundException e) {
+			listner.onComError(e.getMessage());
 			e.printStackTrace();
 		} catch (IOException e) {
+			listner.onComError(e.getMessage());
 			e.printStackTrace();
 		}
+
 		listner.onDisconnect();
 	}
 
@@ -125,6 +132,7 @@ public abstract class MAVLinkConnection extends Thread {
 			sendBuffer(buffer);
 			saveToLog(packet);
 		} catch (IOException e) {
+			listner.onComError(e.getMessage());			
 			e.printStackTrace();
 		}
 	}
