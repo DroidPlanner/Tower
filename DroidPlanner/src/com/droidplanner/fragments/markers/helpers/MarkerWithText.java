@@ -94,13 +94,19 @@ public class MarkerWithText {
 		paint.setFakeBoldText(true);
 		dpaint.setShadowLayer(1f, 0f, 1f, Color.WHITE);
 
-		Rect dbounds = new Rect();
-		dpaint.getTextBounds(gDetail, 0, gDetail.length(), dbounds);
-		dbounds.offsetTo(0, bounds.bottom + 2);
+		Rect dbounds;
+		if (gDetail!=null) {			
+			dbounds = new Rect();
+			dpaint.getTextBounds(gDetail, 0, gDetail.length(), dbounds);
+			dbounds.offsetTo(0, bounds.bottom + 2);
+		}else{
+			dbounds = new Rect(bounds);
+		}
 
 
 		// include text and detail bounds
 		Rect brect = new Rect(bounds);
+		
 		brect.union(dbounds);
 
 		// position and inflate w/ padding
@@ -115,10 +121,13 @@ public class MarkerWithText {
 		y = bounds.top + (bitmap.getHeight() - (bounds.height() + dbounds.height())) / 2;
 		canvas.drawText(gText, x, y, paint);
 
-		// draw detail
-		x = (bitmap.getWidth() - dbounds.width()) / 2;
-		y = y + bounds.height() + 2;
-		canvas.drawText(gDetail, x, y, dpaint);
+
+		if (gDetail!=null) {
+			// draw detail
+			x = (bitmap.getWidth() - dbounds.width()) / 2;
+			y = y + bounds.height() + 2;
+			canvas.drawText(gDetail, x, y, dpaint);
+		}
 
 		return bitmap;
 	}

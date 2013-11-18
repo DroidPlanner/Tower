@@ -3,6 +3,7 @@ package com.droidplanner.drone.variables.mission;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.util.Log;
 import android.widget.Toast;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
@@ -153,6 +154,19 @@ public class Mission extends DroneVariable implements PathSource,
 
 	public int getNumber(MissionItem waypoint) {
 		return itens.indexOf(waypoint)+1; // plus one to account for the fact that this is an index
+	}
+
+	public boolean checkIfAltitudeHasChangedFromPreviusItem(
+			SpatialCoordItem waypoint) {
+		int i = itens.indexOf(waypoint);
+		if (i > 0) {
+			MissionItem previus = itens.get(i - 1);
+			if (previus instanceof SpatialCoordItem) {
+				return !waypoint.getAltitude().equals(
+						((SpatialCoordItem) previus).getAltitude());
+			}
+		}
+		return true;
 	}
 
 }

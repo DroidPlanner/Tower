@@ -81,7 +81,11 @@ public abstract class SpatialCoordItem extends MissionItem implements
 	}
 
 	private String getIconDetail() {
-		return "detail";
+		if (mission.checkIfAltitudeHasChangedFromPreviusItem(this)) {
+			return altitude.toString();
+		}else{
+			return null;
+		}
 	}
 
 	private String getIconText() {
