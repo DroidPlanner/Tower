@@ -7,7 +7,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
-import com.droidplanner.R;
 import com.droidplanner.drone.variables.mission.Mission;
 import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.fragments.markers.GenericMarker;
@@ -26,6 +25,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
  */
 public abstract class SpatialCoordItem extends MissionItem implements
 		MarkerSource {
+
+	protected abstract int getIconDrawable();
 
 	LatLng coordinate;
 	Altitude altitude;
@@ -85,10 +86,6 @@ public abstract class SpatialCoordItem extends MissionItem implements
 
 	private String getIconText() {
 		return Integer.toString(mission.getNumber(this));
-	}
-
-	private int getIconDrawable() {
-		return R.drawable.ic_wp_map;
 	}
 
 	public void setCoordinate(LatLng position) {

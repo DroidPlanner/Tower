@@ -2,17 +2,12 @@ package com.droidplanner.drone.variables.mission.waypoints;
 
 import java.util.List;
 
-import android.content.Context;
-
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.droidplanner.R;
 import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
-import com.droidplanner.fragments.markers.helpers.MarkerWithText;
 import com.droidplanner.fragments.mission.MissionDetailFragment;
 import com.droidplanner.fragments.mission.MissionRegionOfInterestFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 
 public class RegionOfInterest extends SpatialCoordItem implements MarkerSource{
@@ -43,6 +38,11 @@ public class RegionOfInterest extends SpatialCoordItem implements MarkerSource{
 	public void unpackMAVMessage(msg_mission_item mavMsg) {
 		// TODO Auto-generated method stub
 		super.unpackMAVMessage(mavMsg);
+	}
+
+	@Override
+	protected int getIconDrawable() {
+		return R.drawable.ic_wp_map;
 	}
 	
 	/*

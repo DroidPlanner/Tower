@@ -3,6 +3,7 @@ package com.droidplanner.drone.variables.mission.waypoints;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_CMD;
+import com.droidplanner.R;
 import com.droidplanner.drone.variables.mission.Mission;
 import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.fragments.mission.MissionDetailFragment;
@@ -91,6 +92,11 @@ public class Waypoint extends SpatialCoordItem {
 
 	public void setOrbitCCW(boolean orbitCCW) {
 		this.orbitCCW = orbitCCW;
+	}
+
+	@Override
+	protected int getIconDrawable() {
+		return R.drawable.ic_wp_map;
 	}
 	
 }

@@ -1,17 +1,12 @@
 package com.droidplanner.drone.variables.mission.waypoints;
 
-import android.content.Context;
-
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_CMD;
 import com.droidplanner.R;
 import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
-import com.droidplanner.fragments.markers.helpers.MarkerWithText;
 import com.droidplanner.fragments.mission.MissionDetailFragment;
 import com.droidplanner.fragments.mission.MissionTakeoffFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
 public class Takeoff extends SpatialCoordItem implements MarkerSource {
 
@@ -59,5 +54,10 @@ public class Takeoff extends SpatialCoordItem implements MarkerSource {
 
 	public void setMinPitch(double minPitch) {
 		this.minPitch = minPitch;
+	}
+
+	@Override
+	protected int getIconDrawable() {
+		return R.drawable.ic_wp_takeoff_off;
 	}
 }

@@ -1,10 +1,7 @@
 package com.droidplanner.drone.variables.mission.survey.grid;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import com.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
-import com.droidplanner.drone.variables.mission.waypoints.Waypoint;
 import com.droidplanner.helpers.geoTools.PolylineTools;
 import com.droidplanner.helpers.units.Altitude;
 import com.droidplanner.helpers.units.Length;

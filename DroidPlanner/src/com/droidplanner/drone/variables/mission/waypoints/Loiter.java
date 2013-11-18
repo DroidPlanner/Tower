@@ -1,19 +1,21 @@
 package com.droidplanner.drone.variables.mission.waypoints;
 
-import android.content.Context;
-
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.droidplanner.R;
 import com.droidplanner.drone.variables.mission.Mission;
 import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
-import com.droidplanner.fragments.markers.helpers.MarkerWithText;
+import com.droidplanner.fragments.mission.MissionDetailFragment;
 import com.droidplanner.helpers.units.Altitude;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 
 public abstract class Loiter extends SpatialCoordItem implements MarkerSource {
+	@Override
+	public MissionDetailFragment getDetailFragment() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	private double orbitalRadius;
 	private double yawAngle;
 	private boolean orbitCCW;
@@ -64,5 +66,10 @@ public abstract class Loiter extends SpatialCoordItem implements MarkerSource {
 		super.unpackMAVMessage(mavMsg);
 		setOrbitCCW(mavMsg.param3<0);
 		setOrbitalRadius(Math.abs(mavMsg.param3));
+	}
+
+	@Override
+	protected int getIconDrawable() {
+		return R.drawable.ic_wp_loiter;
 	}
 }
