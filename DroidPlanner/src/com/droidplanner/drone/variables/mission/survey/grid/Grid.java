@@ -19,14 +19,6 @@ public class Grid {
 		this.gridPoints = list;
 		this.cameraLocations = cameraLocations;
 	}
-
-	public ArrayList<SpatialCoordItem> getWaypoints() {
-		ArrayList<SpatialCoordItem> list = new ArrayList<SpatialCoordItem>();
-		for (LatLng point : gridPoints) {
-			list.add(new Waypoint(point, altitude));
-		}
-		return list;
-	}
 	
 	public Length getLength(){
 		return PolylineTools.getPolylineLength(gridPoints);

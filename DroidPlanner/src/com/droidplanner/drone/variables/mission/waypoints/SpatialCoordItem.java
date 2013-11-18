@@ -4,13 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
+import com.droidplanner.R;
+import com.droidplanner.drone.variables.mission.Mission;
 import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.fragments.markers.GenericMarker;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
+import com.droidplanner.fragments.markers.helpers.MarkerWithText;
 import com.droidplanner.helpers.units.Altitude;
 import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -21,17 +26,18 @@ import com.google.android.gms.maps.model.MarkerOptions;
  */
 public abstract class SpatialCoordItem extends MissionItem implements
 		MarkerSource {
-	protected abstract BitmapDescriptor getIcon(Context context);
 
 	LatLng coordinate;
 	Altitude altitude;
 
-	public SpatialCoordItem(LatLng coord, Altitude altitude) {
+	public SpatialCoordItem(Mission mission, LatLng coord, Altitude altitude) {
+		super(mission);
 		this.coordinate = coord;
 		this.altitude = altitude;
 	}
 
 	public SpatialCoordItem(MissionItem item) {
+		super(item);
 		if (item instanceof SpatialCoordItem) {
 			coordinate = ((SpatialCoordItem) item).getCoordinate();
 			altitude = ((SpatialCoordItem) item).getAltitude();
@@ -64,6 +70,25 @@ public abstract class SpatialCoordItem extends MissionItem implements
 		ArrayList<LatLng> points = new ArrayList<LatLng>();
 		points.add(coordinate);
 		return points;
+	}
+	
+	protected BitmapDescriptor getIcon(Context context) {
+		Bitmap marker = MarkerWithText
+				.getMarkerWithTextAndDetail(getIconDrawable(), getIconText(),
+						getIconDetail(), context);
+		return BitmapDescriptorFactory.fromBitmap(marker);
+	}
+
+	private String getIconDetail() {
+		return "detail";
+	}
+
+	private String getIconText() {
+		return Integer.toString(mission.getNumber(this));
+	}
+
+	private int getIconDrawable() {
+		return R.drawable.ic_wp_map;
 	}
 
 	public void setCoordinate(LatLng position) {

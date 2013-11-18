@@ -9,6 +9,7 @@ import com.google.android.gms.maps.model.LatLng;
 public abstract class MissionCMD extends MissionItem{
 	
 	public MissionCMD(MissionItem item) {
+		super(item);
 	}
 
 	@Override

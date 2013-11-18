@@ -1,21 +1,16 @@
 package com.droidplanner.drone.variables.mission.waypoints;
 
-import android.content.Context;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_CMD;
-import com.droidplanner.R;
+import com.droidplanner.drone.variables.mission.Mission;
 import com.droidplanner.drone.variables.mission.MissionItem;
-import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
-import com.droidplanner.fragments.markers.helpers.MarkerWithText;
 import com.droidplanner.fragments.mission.MissionDetailFragment;
 import com.droidplanner.fragments.mission.MissionWaypointFragment;
 import com.droidplanner.helpers.units.Altitude;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 
-public class Waypoint extends SpatialCoordItem implements MarkerSource {
+public class Waypoint extends SpatialCoordItem {
 	private double delay;
 	private double acceptanceRadius;
 	private double yawAngle;
@@ -26,17 +21,10 @@ public class Waypoint extends SpatialCoordItem implements MarkerSource {
 		super(item);
 	}
 
-	public Waypoint(LatLng point, Altitude defaultAlt) {
-		super(point, defaultAlt);
+	public Waypoint(Mission mission, LatLng point, Altitude defaultAlt) {
+		super(mission, point, defaultAlt);
 	}
 
-	@Override
-	protected BitmapDescriptor getIcon(Context context) {
-		return BitmapDescriptorFactory.fromBitmap(MarkerWithText
-				.getMarkerWithTextAndDetail(R.drawable.ic_wp_map, "text",
-						"detail", context));
-	}	
-	
 	@Override
 	public MissionDetailFragment getDetailFragment() {
 		MissionDetailFragment fragment = new MissionWaypointFragment();

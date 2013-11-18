@@ -7,6 +7,7 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
+import com.droidplanner.drone.variables.mission.Mission;
 import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.drone.variables.mission.survey.grid.Grid;
 import com.droidplanner.drone.variables.mission.survey.grid.GridBuilder;
@@ -26,7 +27,8 @@ public class Survey extends MissionItem {
 	private CameraInfoLoader avaliableCameras;
 	private Context context;
 
-	public Survey(List<LatLng> points, Context context) {
+	public Survey(Mission mission,List<LatLng> points, Context context) {
+		super(mission);
 		this.context = context;
 		avaliableCameras = new CameraInfoLoader(context);
 		polygon.addPoints(points);

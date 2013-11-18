@@ -22,13 +22,6 @@ public class Land extends SpatialCoordItem implements MarkerSource {
 	}
 
 	@Override
-	protected BitmapDescriptor getIcon(Context context) {
-		return BitmapDescriptorFactory.fromBitmap(MarkerWithText
-				.getMarkerWithTextAndDetail(R.drawable.ic_wp_map, "text",
-						"detail", context));
-	}
-
-	@Override
 	public MissionDetailFragment getDetailFragment() {
 		MissionDetailFragment fragment = new MissionLandFragment();
 		fragment.setItem(this);

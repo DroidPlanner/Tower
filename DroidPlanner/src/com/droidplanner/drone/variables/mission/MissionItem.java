@@ -2,12 +2,28 @@ package com.droidplanner.drone.variables.mission;
 
 import java.util.List;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
+import com.droidplanner.R;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
+import com.droidplanner.fragments.markers.helpers.MarkerWithText;
 import com.droidplanner.fragments.mission.MissionDetailFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 
 public abstract class MissionItem {
+	protected Mission mission;
+	
+	public MissionItem(Mission mission) {
+		this.mission = mission;
+	}
+
+	public MissionItem(MissionItem item) {
+		this(item.mission);
+	}
 
 	/**
 	 * Gets a flight path for this item

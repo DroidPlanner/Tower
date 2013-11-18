@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.droidplanner.R;
+import com.droidplanner.drone.variables.mission.Mission;
 import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import com.droidplanner.fragments.markers.helpers.MarkerWithText;
@@ -21,8 +22,8 @@ public abstract class Loiter extends SpatialCoordItem implements MarkerSource {
 		super(item);
 	}
 	
-	public Loiter(LatLng coord, Altitude altitude) {
-		super(coord, altitude);
+	public Loiter(Mission mission,LatLng coord, Altitude altitude) {
+		super(mission, coord, altitude);
 	}
 
 	public void setOrbitalRadius(double radius) {
@@ -64,11 +65,4 @@ public abstract class Loiter extends SpatialCoordItem implements MarkerSource {
 		setOrbitCCW(mavMsg.param3<0);
 		setOrbitalRadius(Math.abs(mavMsg.param3));
 	}
-
-	@Override
-	protected BitmapDescriptor getIcon(Context context) {
-		return BitmapDescriptorFactory.fromBitmap(MarkerWithText
-				.getMarkerWithTextAndDetail(R.drawable.ic_wp_loiter, "text",
-						"detail", context));
-	}	
 }

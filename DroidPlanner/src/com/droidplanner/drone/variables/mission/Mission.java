@@ -45,13 +45,13 @@ public class Mission extends DroneVariable implements PathSource,
 
 	public void addWaypointsWithDefaultAltitude(List<LatLng> points) {
 		for (LatLng point : points) {
-			itens.add(new Waypoint(point,defaultAlt));
+			itens.add(new Waypoint(this, point,defaultAlt));
 		}		
 		onMissionUpdate();
 	}
 
 	public void addWaypoint(LatLng point, Altitude alt) {
-		itens.add(new Waypoint(point,alt));
+		itens.add(new Waypoint(this,point,alt));
 		onMissionUpdate();
 	}
 	
@@ -63,7 +63,7 @@ public class Mission extends DroneVariable implements PathSource,
 	}
 
 	public void addSurveyPolygon(List<LatLng> points) {
-		Survey survey = new Survey(points, myDrone.context);
+		Survey survey = new Survey(this, points, myDrone.context);
 		itens.add(survey);
 		onMissionUpdate();		
 	}
@@ -149,6 +149,10 @@ public class Mission extends DroneVariable implements PathSource,
 	public void removeOnMissionUpdateListner(
 			OnWaypointChangedListner listner) {
 		missionListner.remove(listner);
+	}
+
+	public int getNumber(MissionItem waypoint) {
+		return itens.indexOf(waypoint)+1; // plus one to account for the fact that this is an index
 	}
 
 }

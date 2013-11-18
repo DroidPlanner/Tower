@@ -20,13 +20,6 @@ public class RegionOfInterest extends SpatialCoordItem implements MarkerSource{
 	public RegionOfInterest(MissionItem item) {
 		super(item);
 	}
-
-	@Override
-	protected BitmapDescriptor getIcon(Context context) {
-		return BitmapDescriptorFactory.fromBitmap(MarkerWithText
-				.getMarkerWithTextAndDetail(R.drawable.ic_wp_map, "text",
-						"detail", context));
-	}
 	
 	@Override
 	public List<LatLng> getPath() throws Exception {
