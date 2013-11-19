@@ -3,10 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content" >
 
-    <com.mobeta.android.dslv.HorizontalListView
+    <it.sephiroth.android.library.widget.HListView
         android:id="@+id/listView1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-    </com.mobeta.android.dslv.HorizontalListView>
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

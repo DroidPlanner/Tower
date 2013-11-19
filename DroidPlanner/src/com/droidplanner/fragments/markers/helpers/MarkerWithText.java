@@ -3,6 +3,7 @@ package com.droidplanner.fragments.markers.helpers;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.*;
+import android.graphics.Paint.Align;
 
 import com.droidplanner.R;
 
@@ -100,7 +101,7 @@ public class MarkerWithText {
 			dpaint.getTextBounds(gDetail, 0, gDetail.length(), dbounds);
 			dbounds.offsetTo(0, bounds.bottom + 2);
 		}else{
-			dbounds = new Rect(bounds);
+			dbounds = new Rect(0, 0, 0, 0);
 		}
 
 

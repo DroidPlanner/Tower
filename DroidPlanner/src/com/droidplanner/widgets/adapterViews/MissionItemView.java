@@ -38,21 +38,19 @@ public class MissionItemView extends ArrayAdapter<com.droidplanner.drone.variabl
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		return createRowViews(parent, position);
-	}
-
-	private View createRowViews(ViewGroup root, int position) {
 		com.droidplanner.drone.variables.mission.MissionItem waypoint = waypoints.get(position);
-		View view = createLayoutFromResource();
+		View view = createLayoutFromResource(parent);
 		findViewObjects(view);		
 		setupViewsText(waypoint);
 		return view;
 	}
 
-	private View createLayoutFromResource() {
+
+
+	private View createLayoutFromResource(ViewGroup parent) {
 		LayoutInflater inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View view = inflater.inflate(R.layout.adapterview_mission_item, null);
+		View view = inflater.inflate(R.layout.adapterview_mission_item, parent,false);
 		return view;
 	}
 

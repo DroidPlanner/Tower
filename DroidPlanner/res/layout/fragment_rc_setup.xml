@@ -79,7 +79,7 @@
             android:background="#303030" >
 
             <Button
-                android:id="@+id/button1"
+                android:id="@+id/backgroundMissionItem"
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -92,9 +92,9 @@
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/button1"
-                android:layout_alignRight="@+id/button1"
-                android:layout_below="@+id/button1"
+                android:layout_alignLeft="@+id/backgroundMissionItem"
+                android:layout_alignRight="@+id/backgroundMissionItem"
+                android:layout_below="@+id/backgroundMissionItem"
                 android:text="Button" />
 
             <Button
@@ -113,7 +113,7 @@
                 android:layout_height="fill_parent"
                 android:layout_alignBottom="@id/Button02"
                 android:layout_alignParentTop="false"
-                android:layout_alignTop="@id/button1"
+                android:layout_alignTop="@id/backgroundMissionItem"
                 android:layout_centerHorizontal="true"
                 android:background="#E0E0E0" />
 
@@ -139,8 +139,8 @@
                 android:id="@+id/checkBox1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/button1"
-                android:layout_alignBottom="@+id/button1"
+                android:layout_alignBaseline="@+id/backgroundMissionItem"
+                android:layout_alignBottom="@+id/backgroundMissionItem"
                 android:layout_marginRight="10dp"
                 android:layout_toLeftOf="@+id/firstDivider"
                 android:text="Simple" />

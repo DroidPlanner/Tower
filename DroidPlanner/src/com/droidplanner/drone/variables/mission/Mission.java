@@ -3,7 +3,6 @@ package com.droidplanner.drone.variables.mission;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.util.Log;
 import android.widget.Toast;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
