@@ -144,9 +144,7 @@ public class MissionFragment extends Fragment implements  OnWaypointChangedListn
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		// TODO Auto-generated method stub
-
-
+		mListner.onMarkerClick(((MissionItem) parent.getItemAtPosition(position)));
 		Log.d("LIST", "you onItemClick "+ position);		
 	}
 
