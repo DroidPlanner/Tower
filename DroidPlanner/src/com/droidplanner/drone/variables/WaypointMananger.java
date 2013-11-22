@@ -30,6 +30,7 @@ public class WaypointMananger extends DroneVariable {
 	 */
 	public void getWaypoints() {
 		state = waypointStates.READ_REQUEST;
+		myDrone.MavClient.setTimeOut(3000, true);
 		MavLinkWaypoint.requestWaypointsList(myDrone);
 	}
 
@@ -119,6 +120,7 @@ public class WaypointMananger extends DroneVariable {
 			if (msg.msgid == msg_mission_count.MAVLINK_MSG_ID_MISSION_COUNT) {
 				waypointCount = ((msg_mission_count) msg).count;
 				waypoints.clear();
+				myDrone.MavClient.setTimeOut(3000, true);
 				MavLinkWaypoint.requestWayPoint(myDrone, waypoints.size());
 				state = waypointStates.READING_WP;
 				return true;
@@ -126,10 +128,12 @@ public class WaypointMananger extends DroneVariable {
 			break;
 		case READING_WP:
 			if (msg.msgid == msg_mission_item.MAVLINK_MSG_ID_MISSION_ITEM) {
+				myDrone.MavClient.setTimeOut(3000, true);
 				processReceivedWaypoint((msg_mission_item) msg);
 				if (waypoints.size() < waypointCount) {
 					MavLinkWaypoint.requestWayPoint(myDrone, waypoints.size());
 				} else {
+					myDrone.MavClient.resetTimeOut();
 					state = waypointStates.IDLE;
 					MavLinkWaypoint.sendAck(myDrone);
 					myDrone.mission.onWaypointsReceived(waypoints);

@@ -14,6 +14,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.util.Log;
 
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
@@ -79,28 +80,36 @@ public class MAVLinkClient {
 		}
 	}
 
-	synchronized void resetTimeOut() {
+	public synchronized void resetTimeOut() {
 		if (timeOutTimer != null) {
 			timeOutTimer.cancel();
 			timeOutTimer = null;
+			Log.d("TIMEOUT", "reset " + String.valueOf(timeOutTimer));
 		}
 	}
 
-	synchronized void setTimeout(long timeout, boolean resetTimeOutCount) {
+	public synchronized void setTimeOut(long timeout_ms,
+			boolean resetTimeOutCount) {
+		Log.d("TIMEOUT", "set " + String.valueOf(timeout_ms));
 		resetTimeOut();
 		if (resetTimeOutCount)
 			timeOutCount = 0;
 
 		if (timeOutTimer == null) {
+			Log.d("TIMEOUT", "pre set " + String.valueOf(timeOutTimer));
 			timeOutTimer = new Timer();
+			Log.d("TIMEOUT", "post set " + String.valueOf(timeOutTimer));
 			timeOutTimer.schedule(new TimerTask() {
 				public void run() {
-					resetTimeOut();
-					timeOutCount++;
+					if (timeOutTimer != null) {
+						resetTimeOut();
+						timeOutCount++;
+						Log.d("TIMEOUT", "timed out");
 
-					listner.notifyTimeOut(timeOutCount);
+						listner.notifyTimeOut(timeOutCount);
+					}
 				}
-			}, timeout); //delay in milliseconds
+			}, timeout_ms); // delay in milliseconds
 		}
 	}
 
