@@ -128,9 +128,7 @@ public class MAVLinkClient {
 			timeOutCount = 0;
 
 		if (timeOutTimer == null) {
-			Log.d("TIMEOUT", "pre set " + String.valueOf(timeOutTimer));
 			timeOutTimer = new Timer();
-			Log.d("TIMEOUT", "post set " + String.valueOf(timeOutTimer));
 			timeOutTimer.schedule(new TimerTask() {
 				public void run() {
 					if (timeOutTimer != null) {

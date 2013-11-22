@@ -217,6 +217,8 @@ public class WaypointMananger extends DroneVariable {
 			MavLinkWaypoint.sendWaypointCount(myDrone, waypoints.size());
 			break;
 		case WRITTING_WP:
+			Log.d("TIMEOUT",
+					"re Write Msg: " + String.valueOf(writeIndex));
 			if(writeIndex<waypoints.size()){
 				MavLinkWaypoint.sendWaypoint(myDrone, writeIndex,
 						waypoints.get(writeIndex));				
@@ -232,6 +234,8 @@ public class WaypointMananger extends DroneVariable {
 	}
 
 	private void processWaypointToSend(msg_mission_request msg) {
+		Log.d("TIMEOUT",
+				"Write Msg: " + String.valueOf(msg.seq));
 		writeIndex = msg.seq;
 		MavLinkWaypoint.sendWaypoint(myDrone, writeIndex,
 				waypoints.get(writeIndex));
@@ -242,8 +246,8 @@ public class WaypointMananger extends DroneVariable {
 	}
 
 	private void processReceivedWaypoint(msg_mission_item msg) {
-		Log.d("WP",
-				"Last/Curr: " + String.valueOf(lastWPSeq) + "/"
+		Log.d("TIMEOUT",
+				"Read Last/Curr: " + String.valueOf(lastWPSeq) + "/"
 						+ String.valueOf(msg.seq));
 		
 		// in case of we receive the same WP again after retry
