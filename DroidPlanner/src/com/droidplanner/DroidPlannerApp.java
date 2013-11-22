@@ -90,7 +90,6 @@ public class DroidPlannerApp extends Application implements
 
 	@Override
 	public void notifyTimeOut(int timeOutCount) {
-		// TODO Auto-generated method stub
-		
+		tts.speak("MAVLink has timed out");
 	}
 }

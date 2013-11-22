@@ -30,7 +30,7 @@ public class MAVLinkClient {
 	private boolean mIsBound;
 	private Timer timeOutTimer;
 	private int timeOutCount;
-	
+
 	public interface OnMavlinkClientListner {
 		public void notifyConnected();
 
@@ -41,7 +41,7 @@ public class MAVLinkClient {
 		void notifyArmed();
 
 		void notifyDisarmed();
-		
+
 		void notifyTimeOut(int timeOutCount);
 	}
 
@@ -79,28 +79,31 @@ public class MAVLinkClient {
 		}
 	}
 
-	synchronized void setTimeout(long timeout, boolean resetTimeOut) {
-	  if(timeOutTimer != null) {
-	    timeOutTimer.cancel();
-	    timeOutTimer = null;
-	  }
-	  
-	  if(resetTimeOut)
-		  timeOutCount = 0;
-	  
-	  if(timeOutTimer == null) {
-	     timeOutTimer = new Timer();
-	    timeOutTimer.schedule(new TimerTask() {
-	      public void run() {
-	        timeOutTimer.cancel();
-	        timeOutTimer = null;
-	        timeOutCount++;
-	        
-	        listner.notifyTimeOut(timeOutCount);
-	      }
-	    }, 30000 /*delay in milliseconds i.e. 5 min = 300000 ms or use timeout argument*/);
-	  }
-	}	
+	synchronized void resetTimeOut() {
+		if (timeOutTimer != null) {
+			timeOutTimer.cancel();
+			timeOutTimer = null;
+		}
+	}
+
+	synchronized void setTimeout(long timeout, boolean resetTimeOutCount) {
+		resetTimeOut();
+		if (resetTimeOutCount)
+			timeOutCount = 0;
+
+		if (timeOutTimer == null) {
+			timeOutTimer = new Timer();
+			timeOutTimer.schedule(new TimerTask() {
+				public void run() {
+					resetTimeOut();
+					timeOutCount++;
+
+					listner.notifyTimeOut(timeOutCount);
+				}
+			}, 30000); //delay in milliseconds
+		}
+	}
+
 	/**
 	 * Handler of incoming messages from service.
 	 */
