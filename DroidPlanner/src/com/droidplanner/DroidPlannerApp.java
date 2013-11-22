@@ -87,4 +87,10 @@ public class DroidPlannerApp extends Application implements
 	public void notifyDisarmed() {
 		saOnSystemArmListener.saNotifyDisarmed();
 	}
+
+	@Override
+	public void notifyTimeOut(int timeOutCount) {
+		// TODO Auto-generated method stub
+		
+	}
 }

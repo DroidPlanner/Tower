@@ -41,6 +41,8 @@ public class MAVLinkClient {
 		void notifyArmed();
 
 		void notifyDisarmed();
+		
+		void notifyTimeOut(int timeOutCount);
 	}
 
 	public MAVLinkClient(Context context, OnMavlinkClientListner listner) {
@@ -93,6 +95,8 @@ public class MAVLinkClient {
 	        timeOutTimer.cancel();
 	        timeOutTimer = null;
 	        timeOutCount++;
+	        
+	        listner.notifyTimeOut(timeOutCount);
 	      }
 	    }, 30000 /*delay in milliseconds i.e. 5 min = 300000 ms or use timeout argument*/);
 	  }
