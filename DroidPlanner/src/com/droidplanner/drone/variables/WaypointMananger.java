@@ -3,6 +3,8 @@ package com.droidplanner.drone.variables;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.util.Log;
+
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_count;
@@ -23,13 +25,16 @@ import com.droidplanner.drone.DroneVariable;
  * 
  */
 public class WaypointMananger extends DroneVariable {
-	
+	private int lastWPSeq;
 	/**
 	 * Try to receive all waypoints from the MAV.
 	 * 
 	 * If all runs well the callback will return the list of waypoints.
 	 */
 	public void getWaypoints() {
+		lastWPSeq = -1;
+		myDrone.MavClient.setTimeOutValue(3000);
+		myDrone.MavClient.setTimeOutRetry(3);
 		state = waypointStates.READ_REQUEST;
 		myDrone.MavClient.setTimeOut();
 		MavLinkWaypoint.requestWaypointsList(myDrone);
@@ -103,8 +108,6 @@ public class WaypointMananger extends DroneVariable {
 
 	public WaypointMananger(Drone drone) {
 		super(drone);
-		myDrone.MavClient.setTimeOutValue(3000);
-		myDrone.MavClient.setTimeOutRetry(3);
 	}
 
 	/**
@@ -187,12 +190,23 @@ public class WaypointMananger extends DroneVariable {
 			myDrone.MavClient.setTimeOut(false);
 			MavLinkWaypoint.requestWaypointsList(myDrone);
 			break;
+		case READING_WP:
+			myDrone.MavClient.setTimeOut(false);
+			if (waypoints.size() < waypointCount) {
+				MavLinkWaypoint.requestWayPoint(myDrone, waypoints.size());//request last lost WP
+			}
+			break;
 		}
 
 		return true;
 	}
 
 	private void processReceivedWaypoint(msg_mission_item msg) {
+		Log.d("WP", "Last/Curr: " + String.valueOf(lastWPSeq) + "/" + String.valueOf(msg.seq));
+		if(msg.seq<=lastWPSeq)//in case of we receive the same WP again after retry
+			return;
+		
+		lastWPSeq = msg.seq;
 		waypoints.add(new waypoint(msg));
 	}
 }
