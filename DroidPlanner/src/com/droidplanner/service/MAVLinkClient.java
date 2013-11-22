@@ -31,7 +31,8 @@ public class MAVLinkClient {
 	private boolean mIsBound;
 	private Timer timeOutTimer;
 	private int timeOutCount;
-
+	private int timeOut;
+	
 	public interface OnMavlinkClientListner {
 		public void notifyConnected();
 
@@ -80,6 +81,10 @@ public class MAVLinkClient {
 		}
 	}
 
+	public void setTimeOutValue(int timeout_ms){
+		this.timeOut = timeout_ms;
+	}
+	
 	public synchronized void resetTimeOut() {
 		if (timeOutTimer != null) {
 			timeOutTimer.cancel();
@@ -88,6 +93,10 @@ public class MAVLinkClient {
 		}
 	}
 
+	public void setTimeOut(){
+		setTimeOut(this.timeOut,true);
+	}
+	
 	public synchronized void setTimeOut(long timeout_ms,
 			boolean resetTimeOutCount) {
 		Log.d("TIMEOUT", "set " + String.valueOf(timeout_ms));
