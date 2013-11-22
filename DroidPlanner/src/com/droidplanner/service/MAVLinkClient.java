@@ -1,5 +1,8 @@
 package com.droidplanner.service;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
@@ -25,7 +28,9 @@ public class MAVLinkClient {
 	Messenger mService = null;
 	final Messenger mMessenger = new Messenger(new IncomingHandler());
 	private boolean mIsBound;
-
+	private Timer timeOutTimer;
+	private int timeOutCount;
+	
 	public interface OnMavlinkClientListner {
 		public void notifyConnected();
 
@@ -72,6 +77,26 @@ public class MAVLinkClient {
 		}
 	}
 
+	synchronized void setTimeout(long timeout, boolean resetTimeOut) {
+	  if(timeOutTimer != null) {
+	    timeOutTimer.cancel();
+	    timeOutTimer = null;
+	  }
+	  
+	  if(resetTimeOut)
+		  timeOutCount = 0;
+	  
+	  if(timeOutTimer == null) {
+	     timeOutTimer = new Timer();
+	    timeOutTimer.schedule(new TimerTask() {
+	      public void run() {
+	        timeOutTimer.cancel();
+	        timeOutTimer = null;
+	        timeOutCount++;
+	      }
+	    }, 30000 /*delay in milliseconds i.e. 5 min = 300000 ms or use timeout argument*/);
+	  }
+	}	
 	/**
 	 * Handler of incoming messages from service.
 	 */
