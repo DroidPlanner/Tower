@@ -173,6 +173,23 @@ public class WaypointMananger extends DroneVariable {
 		return false;
 	}
 
+	public boolean processTimeOut(int mTimeOutCount) {
+		if (mTimeOutCount >= 3)
+			return false;
+
+		switch (state) {
+		default:
+		case IDLE:
+			break;
+		case READ_REQUEST:
+			myDrone.MavClient.setTimeOut(3000, false);
+			MavLinkWaypoint.requestWaypointsList(myDrone);
+			break;
+		}
+
+		return true;
+	}
+
 	private void processReceivedWaypoint(msg_mission_item msg) {
 		waypoints.add(new waypoint(msg));
 	}

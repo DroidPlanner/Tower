@@ -90,6 +90,10 @@ public class DroidPlannerApp extends Application implements
 
 	@Override
 	public void notifyTimeOut(int timeOutCount) {
-		tts.speak("MAVLink has timed out");
+		if(drone.waypointMananger.processTimeOut(timeOutCount)){
+			tts.speak("Retrying - " + String.valueOf(timeOutCount));
+		}else{
+			tts.speak("MAVLink has timed out");
+		}
 	}
 }

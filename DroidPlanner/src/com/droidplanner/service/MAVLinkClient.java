@@ -23,7 +23,8 @@ import com.MAVLink.Messages.MAVLinkPacket;
 public class MAVLinkClient {
 	public static final int MSG_RECEIVED_DATA = 0;
 	public static final int MSG_SELF_DESTRY_SERVICE = 1;
-
+	public static final int MSG_TIMEOUT = 2;
+	
 	Context parent;
 	private OnMavlinkClientListner listner;
 	Messenger mService = null;
