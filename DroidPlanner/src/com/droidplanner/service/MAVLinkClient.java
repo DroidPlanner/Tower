@@ -24,7 +24,7 @@ public class MAVLinkClient {
 	public static final int MSG_RECEIVED_DATA = 0;
 	public static final int MSG_SELF_DESTRY_SERVICE = 1;
 	public static final int MSG_TIMEOUT = 2;
-	
+
 	Context parent;
 	private OnMavlinkClientListner listner;
 	Messenger mService = null;
@@ -34,7 +34,7 @@ public class MAVLinkClient {
 	private int timeOutCount;
 	private long timeOut;
 	private int timeOutRetry;
-	
+
 	public interface OnMavlinkClientListner {
 		public void notifyConnected();
 
@@ -83,46 +83,51 @@ public class MAVLinkClient {
 		}
 	}
 
-	public void setTimeOutValue(long timeout_ms){
+	public void setTimeOutValue(long timeout_ms) {
 		this.timeOut = timeout_ms;
 	}
-	
-	public long getTimeOutValue(){
-		if(this.timeOut <= 0)
-			return 3000; //default value
-		
+
+	public long getTimeOutValue() {
+		if (this.timeOut <= 0)
+			return 3000; // default value
+
 		return this.timeOut;
 	}
-	
-	public void setTimeOutRetry(int timeout_retry){
+
+	public void setTimeOutRetry(int timeout_retry) {
 		this.timeOutRetry = timeout_retry;
 	}
 
-	public int getTimeOutRetry(){
-		if(this.timeOutRetry <= 0)
-			return 3; //default value
-		
+	public int getTimeOutRetry() {
+		if (this.timeOutRetry <= 0)
+			return 3; // default value
+
 		return this.timeOutRetry;
 	}
+
 	public synchronized void resetTimeOut() {
 		if (timeOutTimer != null) {
 			timeOutTimer.cancel();
 			timeOutTimer = null;
-			Log.d("TIMEOUT", "reset " + String.valueOf(timeOutTimer));
+			/*
+			 * Log.d("TIMEOUT", "reset " + String.valueOf(timeOutTimer));
+			 */
 		}
 	}
 
-	public void setTimeOut(){
-		setTimeOut(this.timeOut,true);
+	public void setTimeOut() {
+		setTimeOut(this.timeOut, true);
 	}
-	
-	public void setTimeOut(boolean resetTimeOutCount){
-		setTimeOut(this.timeOut,resetTimeOutCount);
+
+	public void setTimeOut(boolean resetTimeOutCount) {
+		setTimeOut(this.timeOut, resetTimeOutCount);
 	}
 
 	public synchronized void setTimeOut(long timeout_ms,
 			boolean resetTimeOutCount) {
-		Log.d("TIMEOUT", "set " + String.valueOf(timeout_ms));
+		/*
+		 * Log.d("TIMEOUT", "set " + String.valueOf(timeout_ms));
+		 */
 		resetTimeOut();
 		if (resetTimeOutCount)
 			timeOutCount = 0;
@@ -134,7 +139,10 @@ public class MAVLinkClient {
 					if (timeOutTimer != null) {
 						resetTimeOut();
 						timeOutCount++;
-						Log.d("TIMEOUT", "timed out");
+
+						/*
+						 * Log.d("TIMEOUT", "timed out");
+						 */
 
 						listner.notifyTimeOut(timeOutCount);
 					}
