@@ -100,7 +100,7 @@ public class MAVLinkClient {
 
 					listner.notifyTimeOut(timeOutCount);
 				}
-			}, 30000); //delay in milliseconds
+			}, timeout); //delay in milliseconds
 		}
 	}
 
