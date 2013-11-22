@@ -23,6 +23,7 @@ import com.droidplanner.drone.DroneVariable;
  * 
  */
 public class WaypointMananger extends DroneVariable {
+	
 	/**
 	 * Try to receive all waypoints from the MAV.
 	 * 
@@ -30,7 +31,6 @@ public class WaypointMananger extends DroneVariable {
 	 */
 	public void getWaypoints() {
 		state = waypointStates.READ_REQUEST;
-		myDrone.MavClient.setTimeOutValue(3000);
 		myDrone.MavClient.setTimeOut();
 		MavLinkWaypoint.requestWaypointsList(myDrone);
 	}
@@ -103,6 +103,8 @@ public class WaypointMananger extends DroneVariable {
 
 	public WaypointMananger(Drone drone) {
 		super(drone);
+		myDrone.MavClient.setTimeOutValue(3000);
+		myDrone.MavClient.setTimeOutRetry(3);
 	}
 
 	/**
@@ -174,7 +176,7 @@ public class WaypointMananger extends DroneVariable {
 	}
 
 	public boolean processTimeOut(int mTimeOutCount) {
-		if (mTimeOutCount >= 3)
+		if (mTimeOutCount >= myDrone.MavClient.getTimeOutRetry())
 			return false;
 
 		switch (state) {
@@ -182,7 +184,7 @@ public class WaypointMananger extends DroneVariable {
 		case IDLE:
 			break;
 		case READ_REQUEST:
-			myDrone.MavClient.setTimeOut(3000, false);
+			myDrone.MavClient.setTimeOut(false);
 			MavLinkWaypoint.requestWaypointsList(myDrone);
 			break;
 		}
