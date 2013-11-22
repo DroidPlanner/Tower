@@ -40,6 +40,10 @@ public class WaypointMananger extends DroneVariable {
 	 * If all runs well the callback will return the list of waypoints.
 	 */
 	public void getWaypoints() {
+		// ensure that WPManager is not doing anything else		
+		if (state != waypointStates.IDLE)
+			return;
+
 		lastWPSeq = -1;
 		myDrone.MavClient.setTimeOutValue(3000);
 		myDrone.MavClient.setTimeOutRetry(3);
@@ -57,6 +61,10 @@ public class WaypointMananger extends DroneVariable {
 	 *            waypoints to be written
 	 */
 	public void writeWaypoints(List<waypoint> data) {
+		// ensure that WPManager is not doing anything else		
+		if (state != waypointStates.IDLE)
+			return;
+
 		if ((waypoints != null)) {
 			waypoints.clear();
 			waypoints.addAll(data);
@@ -184,8 +192,12 @@ public class WaypointMananger extends DroneVariable {
 	}
 
 	public boolean processTimeOut(int mTimeOutCount) {
-		if (mTimeOutCount >= myDrone.MavClient.getTimeOutRetry())
+		
+		//If max retry is reached, set state to IDLE. No more retry.
+		if (mTimeOutCount >= myDrone.MavClient.getTimeOutRetry()){
+			state = waypointStates.IDLE;
 			return false;
+		}
 
 		myDrone.MavClient.setTimeOut(false);
 
