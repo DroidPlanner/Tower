@@ -82,13 +82,13 @@
     <string name="menu_disarm">Disarm</string>
     <string name="rtl_Land">Land al punto di RTL</string>
     <string name="takeoff_pitch">Angolo min. di Pitch</string>
-    <string name="waypointInfo_Land">Imposta l'atterraggio nella posizione in cui il comando è stato attivato. Se è attivo il Sonar il veicolo mantiene la posizione fino a 3 metri dal suolo e quindi scende in linea retta. I motori non si fermano automaticamente; per fermare i motori occorre uscire dal modo di volo.</string>
+    <string name="waypointInfo_Land">Imposta l\'atterraggio nella posizione in cui il comando è stato attivato. Se è attivo il Sonar il veicolo mantiene la posizione fino a 3 metri dal suolo e quindi scende in linea retta. I motori non si fermano automaticamente; per fermare i motori occorre uscire dal modo di volo.</string>
     <string name="waypointInfo_Generic">Waypoint generico</string>
     <string name="waypointInfo_Loiter">Il veicolo inizia un Loiter dalla posizione in cui il comando è stato attivato.</string>
     <string name="waypointInfo_LoiterN">Il veicolo inizia a orbitare dalla posizione in cui il comando è stato attivato.</string>
     <string name="waypointInfo_LoiterT">Il veicolo inizia un Loiter dalla posizione in cui il comando è stato attivato. Il tempo di Loiter inizia quando il WP è raggiunto.</string>
     <string name="waypointInfo_RTL">Il veicolo ritorna alla posizione di home impostata quando il veicolo è stato armato (richiede GPS Lock!). Se Altezza è 0 il veicolo tornerà alla home alla quota RTL specificata nella parameter list.</string>
-    <string name="waypointInfo_TakeOff">Il veicolo decolla automaticamente fino alla quota specificata. Usare l'angolo di Pitch solo per aerei e lasciare il paramero a 0 per multicotteri.</string>
+    <string name="waypointInfo_TakeOff">Il veicolo decolla automaticamente fino alla quota specificata. Usare l\'angolo di Pitch solo per aerei e lasciare il paramero a 0 per multicotteri.</string>
     <string name="waypointInfo_Waypoint">Il prossimo comando viene attivato dopo il ritardo impostato (Delay). Il tempo di ritardo è in secondi e si attiva dopo che il veicolo raggiunge il WP. Impostare Raggio orbitale a 0 per proseguire o specificare un raggio orbitale in metri. Yaw angle imposta la direzione della prua ad ogni waypoint - solo per multicotteri.</string>
     <string name="waypointDesc_Waypoint_1" formatted="false">Prossimo WP eseguito immediatamente; prua impostata a %03.0f°</string>
     <string name="waypointDesc_Waypoint_2" formatted="false">Prossimo WP eseguito dopo %1.1fs; prua impostata a %03.0f°</string>

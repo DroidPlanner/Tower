@@ -91,8 +91,8 @@ public abstract class SuperFlightActivity extends SuperActivity implements
 	}
 
 	@Override
-	public void onAltitudeChanged(double newAltitude) {
-		super.onAltitudeChanged(newAltitude);
+	public void saOnAltitudeChanged(double newAltitude) {
+		super.saOnAltitudeChanged(newAltitude);
 		if (drone.guidedPoint.isCoordValid()) {
 			drone.guidedPoint.setGuidedMode();
 		}
