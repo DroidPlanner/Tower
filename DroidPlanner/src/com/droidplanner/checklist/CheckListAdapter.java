@@ -89,6 +89,7 @@ public class CheckListAdapter extends ListXmlAdapter implements
 				} else if (listItem.getTagName().equalsIgnoreCase("level_item")) {
 					ListRow_Level row = new ListRow_Level(this.inflater,
 							listItem);
+					row.setOnRowItemChangeListener(this);
 					xmlRows.add(row);
 				} else if (listItem.getTagName().equalsIgnoreCase("note_item")) {
 					ListRow_Note row = new ListRow_Note(this.inflater, listItem);
