@@ -32,6 +32,7 @@
     <orderEntry type="library" name="google-play-services" level="project" />
     <orderEntry type="library" exported="" name="android-support-v13" level="application" />
     <orderEntry type="library" exported="" name="gdk" level="application" />
+    <orderEntry type="module" module-name="HorizontalListView" exported="" />
   </component>
 </module>
 
