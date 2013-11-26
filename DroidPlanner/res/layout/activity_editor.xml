@@ -47,7 +47,7 @@
 
     <SlidingDrawer
         android:id="@+id/slidingDrawer1"
-        android:layout_width="260dp"
+        android:layout_width="360dp"
         android:layout_height="wrap_content"
         android:layout_above="@+id/missionFragment1"
         android:layout_alignParentRight="true"
@@ -60,9 +60,7 @@
 
         <ImageView
             android:id="@+id/slideButtonLeft"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/slide_left"
+            android:src="@drawable/drawer_tab"
             tools:ignore="ContentDescription" />
 
         <LinearLayout

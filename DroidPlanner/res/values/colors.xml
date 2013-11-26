@@ -2,5 +2,19 @@
 <resources>
 
     <color name="opaque_black">#000</color>
+    <color name="ground_speed_units">#57eccd</color>
+    <color name="ground_speed_label">#0a5242</color>
+
+    <color name="air_speed_units">#7bd8ff</color>
+    <color name="air_speed_label">#0a3f55</color>
+
+    <color name="climb_rate_units">#d5eaf2</color>
+    <color name="climb_rate_label">#384043</color>
+
+    <color name="altitude_units">#d5eaf2</color>
+    <color name="altitude_label">#134456</color>
+
+    <color name="altitude_target">#55d8ff</color>
+
 
 </resources>

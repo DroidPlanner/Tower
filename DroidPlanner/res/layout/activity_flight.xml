@@ -13,7 +13,7 @@
     <fragment
         android:id="@+id/fragment2"
         android:name="com.droidplanner.fragments.TelemetryFragment"
-        android:layout_width="135dp"
+        android:layout_width="190dp"
         android:layout_height="match_parent"
         tools:layout="@layout/fragment_telemetry" />
 
@@ -37,10 +37,10 @@
 
     <SlidingDrawer
         android:id="@+id/SlidingDrawerLeft"
-        android:layout_width="220dp"
-        android:layout_height="300dp"
+        android:layout_width="210dp"
+        android:layout_height="540dp"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
+        android:layout_alignParentTop="true"
         android:content="@+id/LinearLayout01"
         android:handle="@+id/slideButtonLeft"
         android:orientation="horizontal"
@@ -49,15 +49,15 @@
 
         <ImageView
             android:id="@+id/slideButtonLeft"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/slide_left"
+            android:layout_width="16dp"
+            android:layout_height="72dp"
+            android:src="@drawable/drawer_tab"
             tools:ignore="ContentDescription" />
 
         <LinearLayout
             android:id="@+id/LinearLayout01"
-            style="@style/transparentLayout"
-            android:layout_width="match_parent"
+            style="@style/flyoutPanelLayout"
+            android:layout_width="81dp"
             android:layout_height="match_parent"
             android:orientation="vertical" >
         </LinearLayout>
