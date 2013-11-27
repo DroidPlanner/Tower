@@ -8,6 +8,7 @@
     <string name="settings">Settings</string>
     <string name="configuration">Configuration</string>
     <string name="editor">Editor</string>
+    <string name="flight_data">Flight Data</string>
     <string name="menu_connect">Connect</string>
     <string name="menu_disconnect">Disconnect</string>
     <string name="conected">Connected</string>
@@ -167,5 +168,9 @@
     <string name="menu_preflight_checklist">Pre-Flight Checklist</string>
     <string name="lst_note_hint">To add more rows, just press Enter</string>
     <string name="parameter_row_edit">Edit</string>
-    
+
+    <string name="expandable_listview_icon_desc">Expandable listview icon</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+
 </resources>

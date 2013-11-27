@@ -4,7 +4,6 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperUI;
 import com.droidplanner.drone.DroneInterfaces.OnStateListner;
@@ -31,6 +30,8 @@ public class FlightActivity extends SuperUI implements
 		failsafeTextView = findViewById(R.id.failsafeTextView);
 		drone.state.addFlightStateListner(this);
 
+        //Setup the navigation drawer
+        setupNavDrawer();
 	}
 
 	@Override

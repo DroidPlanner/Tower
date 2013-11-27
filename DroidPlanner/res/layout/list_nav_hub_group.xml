@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:gravity="center_vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView
+            android:id="@+id/nav_hub_group_title"
+            android:layout_width="wrap_content"
+            android:drawablePadding="10dp"
+            android:layout_height="?android:attr/listPreferredItemHeight"
+            android:paddingStart="5dp"
+            android:layout_weight="1"
+            android:textAppearance="?android:attr/textAppearanceListItem"
+            android:gravity="start|center_vertical"
+            android:text="Flight Data"
+            android:drawableLeft="@drawable/ic_action_plane"
+            android:textAlignment="viewStart"/>
+
+    <ImageView
+            android:id="@+id/nav_hub_group_expand_icon"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:gravity="end|center_vertical"
+            android:scaleType="centerInside"
+            android:contentDescription="@string/expandable_listview_icon_desc"
+            android:src="@drawable/listview_expand_icon"/>
+
+</LinearLayout>

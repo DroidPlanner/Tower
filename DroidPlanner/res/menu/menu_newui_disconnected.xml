@@ -4,7 +4,7 @@
     <item
         android:id="@+id/menu_connect"
         android:showAsAction="always|withText"
-        android:title="@string/disconnected"/>
+        android:title="@string/menu_connect"/>
     <item
         android:id="@+id/menu_configuration"
         android:showAsAction="never"
