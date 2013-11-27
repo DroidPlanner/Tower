@@ -1,62 +1,55 @@
 package com.droidplanner.activitys;
 
-import android.app.ActionBar;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v13.app.FragmentTabHost;
-import android.support.v4.app.NavUtils;
-import android.view.MenuItem;
-
+import android.support.v13.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperUI;
-import com.droidplanner.fragments.ParametersTableFragment;
-import com.droidplanner.fragments.RcSetupFragment;
-import com.droidplanner.fragments.SettingsFragment;
-import com.droidplanner.fragments.TuningFragment;
+import com.droidplanner.widgets.adapterViews.ConfigurationPagerAdapter;
 
 public class ConfigurationActivity extends SuperUI{
 
-	public static final String SCREEN_INTENT = "screen";
-	public static final String TUNING = "tuning";
-	public static final String PARAMETERS = "parameters";
-    public static final String SETTINGS = "settings";
-	private static final String RC_SETUP = "rc_setup";
-	private FragmentTabHost mTabHost;
+    /**
+     * Activity title.
+     * Used to update the action bar when the navigation drawer opens/closes.
+     * @since 1.2.0
+     */
+    public static final int LABEL_RESOURCE = R.string.configuration;
+
+    /**
+     * Activity logo.
+     * Used by the navigation drawer.
+     * @since 1.2.0
+     */
+    public static final int LOGO_RESOURCE = R.drawable.ic_action_gear;
+
+    /**
+     * View pager allowing to swipe right/left to access the different configuration tabs.
+     * @since 1.2.0
+     */
+    private ViewPager mViewPager;
+
+    /**
+     * Adapter for the view pager
+     */
+    private FragmentPagerAdapter mPagerAdapter;
     
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_configuration);
 
-		ActionBar actionBar = getActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
-		
-		mTabHost = (FragmentTabHost)findViewById(R.id.configurationTabHost);
-	    mTabHost.setup(this, getFragmentManager(), R.id.realtabcontent);
-	    mTabHost.addTab(mTabHost.newTabSpec(TUNING).setIndicator("Tuning"),
-	            TuningFragment.class, null);
-	    mTabHost.addTab(mTabHost.newTabSpec(RC_SETUP).setIndicator("RC"),
-	            RcSetupFragment.class, null);
-	    mTabHost.addTab(mTabHost.newTabSpec(PARAMETERS).setIndicator("Parameters"),
-	            ParametersTableFragment.class, null);
-	    mTabHost.addTab(mTabHost.newTabSpec(SETTINGS).setIndicator("Settings"),
-	            SettingsFragment.class, null);
-	    
-	    Intent intent = getIntent();
-	    String stringExtra = intent.getStringExtra(SCREEN_INTENT);
-		if(SETTINGS.equalsIgnoreCase(stringExtra)){
-	    	mTabHost.setCurrentTabByTag(SETTINGS);    	
-	    }
+        setupNavDrawer();
+
+        mPagerAdapter = new ConfigurationPagerAdapter(getFragmentManager());
+        mViewPager = (ViewPager) findViewById(R.id.configuration_view_pager);
+        mViewPager.setAdapter(mPagerAdapter);
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			NavUtils.navigateUpFromSameTask(this);
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
+    @Override
+    protected int getLabelResource(){
+        return LABEL_RESOURCE;
+    }
+
 
 }

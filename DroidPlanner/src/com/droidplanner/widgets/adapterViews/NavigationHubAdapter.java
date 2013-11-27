@@ -1,12 +1,7 @@
 package com.droidplanner.widgets.adapterViews;
 
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -105,19 +100,20 @@ public class NavigationHubAdapter extends BaseExpandableListAdapter {
         mUIActivity = uiActivity;
         mInflater = mUIActivity.getLayoutInflater();
 
-        final Context context = uiActivity.getApplicationContext();
-
         //Add the elements for the supported expandable view.
         mGroupList = new ArrayList<HubGroup>(3);
 
         //Adding the group for the flight data activity.
-        HubGroup flightDataGroup = new HubGroup(context, FlightActivity.class);
+        HubGroup flightDataGroup = new HubGroup(FlightActivity.class,
+                FlightActivity.LABEL_RESOURCE, FlightActivity.LOGO_RESOURCE);
 
         //Adding the editor activity as child of the flight data group.
-        flightDataGroup.addChild(new HubGroupItem(context, EditorActivity.class));
+        flightDataGroup.addChild(new HubGroupItem(EditorActivity.class,
+                EditorActivity.LABEL_RESOURCE, EditorActivity.LOGO_RESOURCE));
 
         //Adding the group for the Configuration activity.
-        HubGroup configGroup = new HubGroup(context, ConfigurationActivity.class);
+        HubGroup configGroup = new HubGroup(ConfigurationActivity.class,
+                ConfigurationActivity.LABEL_RESOURCE, ConfigurationActivity.LOGO_RESOURCE);
 
         mGroupList.add(flightDataGroup);
         mGroupList.add(configGroup);
@@ -183,7 +179,7 @@ public class NavigationHubAdapter extends BaseExpandableListAdapter {
 
         //Set the title, and icon for the group.
         TextView hubTitleView = (TextView) convertView.findViewById(R.id.nav_hub_group_title);
-        hubTitleView.setText(hubGroup.getHubName());
+        hubTitleView.setText(hubGroup.getLabelResource());
         hubTitleView.setCompoundDrawablesWithIntrinsicBounds(hubGroup.getIconResource(), 0, 0, 0);
 
         //Update the expand/collapse icon.
@@ -230,8 +226,8 @@ public class NavigationHubAdapter extends BaseExpandableListAdapter {
 
         //Set the title, and icon for the group child.
         TextView childTitleView = (TextView) convertView.findViewById(R.id.nav_hub_child_title);
-        childTitleView.setText(groupChild.getHubName());
-        childTitleView.setCompoundDrawablesWithIntrinsicBounds(groupChild.getIconResource(), 0,
+        childTitleView.setText(groupChild.getLabelResource());
+        childTitleView.setCompoundDrawablesWithIntrinsicBounds(groupChild.getLogoResource(), 0,
                 0, 0);
 
         return convertView;
@@ -250,24 +246,17 @@ public class NavigationHubAdapter extends BaseExpandableListAdapter {
      */
     private static class HubGroup {
 
-        private String mHubName;
-        private int mIconResource;
+        private int mLabelResource;
+        private int mLogoResource;
         private final Class<? extends SuperUI> mHubActivityClass;
         private final List<HubGroupItem> mHubChildren;
 
-        public HubGroup(Context context, Class<? extends SuperUI> hubActivityClass) {
+        public HubGroup(Class<? extends SuperUI> hubActivityClass,
+                        int labelResource, int logoResource) {
             mHubActivityClass = hubActivityClass;
+            mLabelResource = labelResource;
+            mLogoResource = logoResource;
             mHubChildren = new ArrayList<HubGroupItem>();
-
-            try {
-                final PackageManager pm = context.getPackageManager();
-                final ActivityInfo ai = pm.getActivityInfo(new ComponentName(context,
-                        hubActivityClass), 0);
-                mHubName = ai.loadLabel(pm).toString();
-                mIconResource = ai.getIconResource();
-            } catch (PackageManager.NameNotFoundException e) {
-                Log.e(TAG, e.getMessage(), e);
-            }
         }
 
         public void addChild(HubGroupItem child) {
@@ -278,12 +267,12 @@ public class NavigationHubAdapter extends BaseExpandableListAdapter {
             return mHubActivityClass;
         }
 
-        public String getHubName() {
-            return mHubName;
+        public int getLabelResource() {
+            return mLabelResource;
         }
 
         public int getIconResource() {
-            return mIconResource;
+            return mLogoResource;
         }
 
         public List<HubGroupItem> getChildren() {
@@ -300,34 +289,27 @@ public class NavigationHubAdapter extends BaseExpandableListAdapter {
      */
     private static class HubGroupItem {
 
-        private String mHubName;
-        private int mIconResource;
+        private int mLabelResource;
+        private int mLogoResource;
         private final Class<? extends SuperUI> mHubActivityClass;
 
-        public HubGroupItem(Context context, Class<? extends SuperUI> hubActivityClass) {
+        public HubGroupItem(Class<? extends SuperUI> hubActivityClass,
+                            int labelResource, int logoResource) {
             mHubActivityClass = hubActivityClass;
-
-            try {
-                final PackageManager pm = context.getPackageManager();
-                final ActivityInfo ai = pm.getActivityInfo(new ComponentName(context,
-                        hubActivityClass), 0);
-                mHubName = ai.loadLabel(pm).toString();
-                mIconResource = ai.getIconResource();
-            } catch (PackageManager.NameNotFoundException e) {
-                Log.e(TAG, e.getMessage(), e);
-            }
+            mLabelResource = labelResource;
+            mLogoResource = logoResource;
         }
 
         public Class<? extends SuperUI> getActivityClass() {
             return mHubActivityClass;
         }
 
-        public String getHubName() {
-            return mHubName;
+        public int getLabelResource() {
+            return mLabelResource;
         }
 
-        public int getIconResource() {
-            return mIconResource;
+        public int getLogoResource() {
+            return mLogoResource;
         }
     }
 }

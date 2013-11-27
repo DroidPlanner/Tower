@@ -5,10 +5,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.droidplanner.DroidPlannerApp;
-import com.droidplanner.R;
 import com.droidplanner.MAVLink.MavLinkStreamRates;
+import com.droidplanner.R;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.OnRcDataChangedListner;
 import com.droidplanner.widgets.FillBar.FillBarWithText;
@@ -20,6 +19,12 @@ public class RcSetupFragment extends Fragment implements OnRcDataChangedListner 
 
 	// Extreme RC update rate in this screen
 	private static final int RC_MSG_RATE = 50;
+
+    /**
+     * Title for this fragment.
+     * @since 1.2.0
+     */
+    public static final String TITLE = "RC";
 
 	private Drone drone;
 

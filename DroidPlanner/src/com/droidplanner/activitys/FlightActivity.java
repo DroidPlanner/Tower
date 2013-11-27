@@ -17,6 +17,21 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class FlightActivity extends SuperUI implements
 		OnMapInteractionListener, OnMissionControlInteraction, OnStateListner {
+
+    /**
+     * Activity logo.
+     * Used by the navigation drawer.
+     * @since 1.2.0
+     */
+    public static final int LOGO_RESOURCE = R.drawable.ic_action_plane;
+
+    /**
+     * Activity title.
+     * Used to update the action bar when the navigation drawer opens/closes.
+     * @since 1.2.0
+     */
+    public static final int LABEL_RESOURCE = R.string.flight_data;
+
 	private FragmentManager fragmentManager;
 	private RCFragment rcFragment;
 	private View failsafeTextView;
@@ -123,5 +138,10 @@ public class FlightActivity extends SuperUI implements
 			failsafeTextView.setVisibility(View.GONE);
 		}
 	}
+
+    @Override
+    protected int getLabelResource(){
+        return LABEL_RESOURCE;
+    }
 
 }

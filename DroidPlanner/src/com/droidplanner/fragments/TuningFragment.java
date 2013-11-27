@@ -6,10 +6,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.droidplanner.DroidPlannerApp;
-import com.droidplanner.R;
 import com.droidplanner.MAVLink.MavLinkStreamRates;
+import com.droidplanner.R;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.OnTuningDataListner;
 import com.droidplanner.parameters.Parameter;
@@ -22,6 +21,11 @@ public class TuningFragment extends Fragment implements OnTuningDataListner {
 	private static final int NAV_MSG_RATE = 50;
 	private static final int CHART_BUFFER_SIZE = 20*NAV_MSG_RATE; // About 20s of data on the buffer
 
+    /**
+     * Title for this fragment.
+     * @since 1.2.0
+     */
+    public static final String TITLE = "Tuning";
 
 	private Drone drone;
 	

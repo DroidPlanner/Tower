@@ -1,14 +1,11 @@
 package com.droidplanner.activitys;
 
-import java.util.List;
-
 import android.app.ActionBar;
 import android.app.FragmentManager;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
-
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperUI;
 import com.droidplanner.drone.variables.mission.Mission;
@@ -27,9 +24,25 @@ import com.droidplanner.fragments.mission.MissionDetailFragment.OnWayPointTypeCh
 import com.droidplanner.polygon.PolygonPoint;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.List;
+
 public class EditorActivity extends SuperUI implements
 		OnMapInteractionListener, OnPathFinishedListner, OnEditorToolSelected,
 		OnWayPointTypeChangeListener {
+
+    /**
+     * Activity title.
+     * Used to update the action bar when the navigation drawer opens/closes.
+     * @since 1.2.0
+     */
+    public static final int LABEL_RESOURCE = R.string.editor;
+
+    /**
+     * Activity logo.
+     * Used by the navigation drawer.
+     * @since 1.2.0
+     */
+    public static final int LOGO_RESOURCE = R.drawable.ic_action_edit;
 
 	private PlanningMapFragment planningMapFragment;
 	private GestureMapFragment gestureMapFragment;
@@ -142,6 +155,11 @@ public class EditorActivity extends SuperUI implements
 			break;
 		}
 	}
+
+    @Override
+    protected int getLabelResource(){
+        return LABEL_RESOURCE;
+    }
 
 	private void showItemDetail(MissionItem item) {
 		if (itemDetailFragment == null) {

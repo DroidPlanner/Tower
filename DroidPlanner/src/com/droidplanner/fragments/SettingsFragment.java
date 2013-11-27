@@ -7,13 +7,18 @@ import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
 import com.droidplanner.file.DirectoryPath;
 
 public class SettingsFragment extends PreferenceFragment implements
 		OnSharedPreferenceChangeListener {
+
+    /**
+     *Title for this fragment.
+     * @since 1.2.0
+     */
+    public static final String TITLE = "Settings";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

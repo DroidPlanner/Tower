@@ -67,9 +67,7 @@
         <service android:name=".service.MAVLinkService" >
         </service>
 
-        <activity android:name=".activitys.FlightActivity"
-                  android:icon="@drawable/ic_action_plane"
-                android:label="@string/flight_data">
+        <activity android:name=".activitys.FlightActivity">
 
             <!-- Launcher Intent -->
             <intent-filter>
@@ -89,7 +87,7 @@
         </activity>
         <activity
             android:name=".activitys.EditorActivity"
-            android:icon="@drawable/ic_action_edit"
+            android:logo="@drawable/ic_action_edit"
             android:label="@string/editor"
             android:parentActivityName=".activitys.FlightActivity" >
 
@@ -110,8 +108,7 @@
         <activity
             android:name=".activitys.ConfigurationActivity"
             android:label="@string/configuration"
-            android:icon="@drawable/ic_action_gear"
-            android:parentActivityName=".activitys.FlightActivity" >
+            android:logo="@drawable/ic_action_gear">
 
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data

@@ -14,21 +14,16 @@ import com.droidplanner.R;
 import com.droidplanner.widgets.adapterViews.NavigationHubAdapter;
 
 public abstract class SuperUI extends SuperActivity implements ConnectionStateListner {
-    private ScreenOrientation screenOrientation = new ScreenOrientation(this);
-    private InfoMenu infoMenu;
 
     /**
      * Application title.
      * Used to update the action bar when the navigation drawer opens/closes.
-     */
-    private CharSequence mAppName;
-
-    /**
-     * Activity label, used to update the action bar when the navigation drawer opens/closes.
-     *
      * @since 1.2.0
      */
-    private CharSequence mActivityLabel;
+    private static final int LABEL_RESOURCE = R.string.app_title;
+
+    private ScreenOrientation screenOrientation = new ScreenOrientation(this);
+    private InfoMenu infoMenu;
 
     /**
      * Activates the navigation drawer when the home button is clicked.
@@ -67,9 +62,6 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
         super.onCreate(savedInstanceState);
         screenOrientation.unlock();
         infoMenu = new InfoMenu(drone);
-
-        mAppName = getString(R.string.app_title);
-        mActivityLabel = getTitle();
     }
 
     @Override
@@ -136,13 +128,12 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
                 R.string.drawer_open, R.string.drawer_close) {
             @Override
             public void onDrawerClosed(View view) {
-                updateActionBar(mActivityLabel, getIcon());
+                updateActionBar(getLabelResource());
             }
 
             @Override
             public void onDrawerOpened(View view) {
-                setTitle(R.string.app_title);
-                updateActionBar(mAppName, R.drawable.ic_launcher);
+                updateActionBar(LABEL_RESOURCE);
             }
         };
 
@@ -163,30 +154,29 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
     }
 
     /**
-     * Returns the activity icon id.
+     * Returns the activity label resource.
+     * The label is used to update the action bar when the navigation drawer opens/closes.
+     * This is done here because setting the label for the launcher activity overrides the label
+     * for the application.
      *
-     * @return activity icon id
+     * @return activity label resource
      * @since 1.2.0
      */
-    protected int getIcon() {
-        return R.drawable.ic_action_plane;
-    }
+    protected abstract int getLabelResource();
 
     /**
      * Updates the action bar title, and icon.
      *
-     * @param actionBarTitle  new action bar title
-     * @param actionBarIconId new action bar icon
+     * @param actionBarTitleResource  new action bar title resource
      * @since 1.2.0
      */
-    private void updateActionBar(CharSequence actionBarTitle, int actionBarIconId) {
+    private void updateActionBar(int actionBarTitleResource) {
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
-            actionBar.setTitle(actionBarTitle);
-            actionBar.setIcon(actionBarIconId);
+            actionBar.setTitle(actionBarTitleResource);
         }
         else {
-            setTitle(actionBarTitle);
+            setTitle(actionBarTitleResource);
         }
     }
 
