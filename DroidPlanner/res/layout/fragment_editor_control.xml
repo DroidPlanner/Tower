@@ -4,48 +4,49 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
-    android:gravity="center" 
+    android:gravity="center"
      android:layout_centerInParent="true">
 
     <RadioButton
         android:id="@+id/editor_tools_marker"
         style="@style/editorButton"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
         android:background="@drawable/button_editor"
         android:button="@null"
         android:checked="true"
-        android:drawableTop="@drawable/editor_tools_marker" />
+        android:drawableTop="@drawable/ic_editor_wp" 
+        />
 
 	<RadioButton
     	android:id="@+id/editor_tools_draw"
 	    style="@style/editorButton"
     	android:button="@null"
-	    android:layout_width="48dp"
-	    android:layout_height="48dp"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
 	    android:background="@drawable/button_editor"
-	    android:drawableTop="@drawable/editor_tools_draw"
+	    android:drawableStart="@drawable/ic_editor_draw"
 	    />
 
 	<RadioButton
     	android:id="@+id/editor_tools_poly"
 	    style="@style/editorButton"
     	android:button="@null"
-	    android:layout_width="48dp"
-	    android:layout_height="48dp"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
 	    android:background="@drawable/button_editor"
-	    android:drawableTop="@drawable/editor_tools_poly"
+	    android:drawableStart="@drawable/ic_editor_poly"
 	    />
 
 	<RadioButton
 	    android:id="@+id/editor_tools_trash"
 	    style="@style/editorButton"
-	
-	    android:layout_width="48dp"
-	    android:layout_height="48dp"
-	    android:background="@drawable/button_editor"
+
+        android:layout_width="75dp"
+        android:layout_height="75dp"
 	    android:button="@null"
-	    android:drawableTop="@drawable/editor_tools_trash"
+	    android:drawableStart="@drawable/ic_editor_trash"
+	    android:background="@drawable/button_editor_trash"
 	    android:paddingTop="10dp" />
-	
+
 </RadioGroup>

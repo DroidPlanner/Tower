@@ -31,7 +31,7 @@ public class Takeoff extends SpatialCoordItem implements MarkerSource {
 		mavMsg.param1 = (float) getMinPitch();
 		mavMsg.param4 = (float) getYawAngle();
 		return mavMsg;
-	} 
+	}
 
 	@Override
 	public void unpackMAVMessage(msg_mission_item mavMsg) {
@@ -58,6 +58,6 @@ public class Takeoff extends SpatialCoordItem implements MarkerSource {
 
 	@Override
 	protected int getIconDrawable() {
-		return R.drawable.ic_wp_takeoff_off;
+		return R.drawable.ic_wp_takeoff;
 	}
 }

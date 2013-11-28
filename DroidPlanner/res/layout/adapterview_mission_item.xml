@@ -1,61 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/dragHandler"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/dragHandler"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    tools:ignore="HardcodedText" >
+	tools:ignore="HardcodedText"
+	>
 
-    <ImageView
-        android:id="@+id/backgroundMissionItem"
-        android:layout_width="64dp"
-        android:layout_height="60dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_margin="6dp"
-        android:src="@drawable/ic_mission_button" />
+	<ImageView
+		android:id="@+id/backgroundMissionItem"
+		android:layout_width="80dp"
+		android:layout_height="80dp"
+		android:layout_alignParentLeft="true"
+		android:layout_alignParentTop="true"
+		android:layout_margin="4dp"
+		android:src="@drawable/ic_mission_button"
+		tools:ignore="ContentDescription"
+		/>
 
-    <TextView
-        android:id="@+id/rowNameView"
-        android:layout_width="64dp"
-        android:layout_height="40dp"
-        android:paddingTop="4dp"
-        android:gravity="center"
-        android:text="100"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#000000"
-        android:textStyle="bold" />
+	<TextView
+	    android:id="@+id/rowNameView"
+	    android:layout_width="80dp"
+	    android:layout_height="44dp"
+	    android:layout_alignParentLeft="true"
+	    android:paddingTop="4dp"
+	    android:gravity="center"
+	    android:text="22"
+	    android:textColor="#FFFFFF"
+	    android:textSize="30sp"
+	    android:textStyle="bold"
+	    />
 
-    <LinearLayout
-        android:layout_width="76dp"
-        android:paddingTop="2dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/rowNameView"
-        android:gravity="center">
-
-        <ImageView
-            android:id="@+id/ImageView02"
-	        android:padding="1dp"
-	        android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_mission_ascend"
-            tools:ignore="ContentDescription" />
-
-        <ImageView
-            android:id="@+id/imageView1"
-	        android:padding="1dp"
-            android:layout_height="wrap_content"
-	        android:layout_width="wrap_content"
-            android:src="@drawable/ic_mission_wp"
-            tools:ignore="ContentDescription" />
-
-        <ImageView
-            android:id="@+id/ImageView01"
-	        android:padding="1dp"
-	        android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_mission_delay"
-            tools:ignore="ContentDescription" />
-    </LinearLayout>
+	<ImageView
+		android:id="@+id/imageView1"
+		android:padding="1dp"
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:layout_alignParentLeft="true"
+		android:layout_below="@id/rowNameView"
+		android:layout_marginTop="2dp"
+		android:layout_marginRight="5dp"
+		android:layout_marginLeft="10dp"
+		android:src="@drawable/ic_mission_wp"
+		tools:ignore="ContentDescription"
+		/>
+	<TextView
+		android:id="@+id/rowAltitudeView"
+		android:layout_below="@id/rowNameView"
+		android:layout_toRightOf="@id/imageView1"
+		android:layout_width="wrap_content"
+		android:layout_height="40dp"
+		android:paddingTop="4dp"
+		android:text="200m"
+		android:textColor="#FFFFFF"
+		android:textStyle="bold"
+		/>
 
 </RelativeLayout>

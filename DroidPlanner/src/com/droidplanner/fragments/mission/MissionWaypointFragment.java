@@ -15,10 +15,10 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
 		OnTextSeekBarChangedListner, OnCheckedChangeListener {
 	private SeekBarWithText altitudeSeekBar;
 	private SeekBarWithText delaySeekBar;
-	private SeekBarWithText yawSeekBar;
-	private SeekBarWithText radiusSeekBar;
-	private SeekBarWithText orbitSeekBar;
-	private CheckBox orbitCCW;
+	//private SeekBarWithText yawSeekBar;
+	//private SeekBarWithText radiusSeekBar;
+	//private SeekBarWithText orbitSeekBar;
+	//private CheckBox orbitCCW;
 
 	@Override
 	protected int getResource() {
@@ -29,9 +29,9 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
 	protected void setupViews(View view) {
 		super.setupViews(view);
 		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemTypes.WAYPOINT));
-		
+
 		Waypoint item = (Waypoint) this.item;
-		
+
 		altitudeSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.altitudeView);
 		altitudeSeekBar.setValue(item.getAltitude().valueInMeters());
@@ -41,6 +41,7 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
 		delaySeekBar.setValue(item.getDelay());
 		delaySeekBar.setOnChangedListner(this);
 
+		/*
 		radiusSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.waypointAcceptanceRadius);
 		radiusSeekBar.setValue(item.getAcceptanceRadius());
@@ -58,6 +59,7 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
 		orbitCCW = (CheckBox) view.findViewById(R.id.waypoint_CCW);
 		orbitCCW.setChecked(item.isOrbitCCW());
 		orbitCCW.setOnCheckedChangeListener(this);
+		*/
 	}
 
 	@Override
@@ -70,10 +72,10 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
 		Waypoint item = (Waypoint) this.item;
 		item.setAltitude(new Altitude(altitudeSeekBar.getValue()));
 		item.setDelay((float) delaySeekBar.getValue());
-		item.setAcceptanceRadius((float) radiusSeekBar.getValue());
-		item.setYawAngle((float) yawSeekBar.getValue());
-		item.setOrbitalRadius((float) orbitSeekBar.getValue());
-		item.setOrbitCCW(orbitCCW.isChecked());
+		//item.setAcceptanceRadius((float) radiusSeekBar.getValue());
+		//item.setYawAngle((float) yawSeekBar.getValue());
+		//item.setOrbitalRadius((float) orbitSeekBar.getValue());
+		//item.setOrbitCCW(orbitCCW.isChecked());
 	}
 
 }

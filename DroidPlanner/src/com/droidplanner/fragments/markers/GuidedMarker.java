@@ -32,7 +32,7 @@ public class GuidedMarker {
 
 	private static BitmapDescriptor getIcon(GuidedPoint guidedPoint, Altitude altitude, Context context)
 	{
-		return BitmapDescriptorFactory.fromBitmap(MarkerWithText.getMarkerWithTextAndDetail(R.drawable.ic_wp_map_on,
+		return BitmapDescriptorFactory.fromBitmap(MarkerWithText.getMarkerWithTextAndDetail(R.drawable.ic_wp_map,
 			"Guided",  "", context));
 	}
 }

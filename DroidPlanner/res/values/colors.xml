@@ -2,6 +2,8 @@
 <resources>
 
     <color name="opaque_black">#000</color>
+    <color name="opaque_white">#fff</color>
+
     <color name="ground_speed_units">#57eccd</color>
     <color name="ground_speed_label">#0a5242</color>
 
