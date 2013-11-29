@@ -390,8 +390,10 @@ public class NavigationHubAdapter extends BaseExpandableListAdapter {
         else {
             boolean expandFlag = hubGroup.isExpanded(mContext, isExpanded);
             if (expandFlag) {
-                if (!mTargetView.isGroupExpanded(groupPosition))
+                if (!mTargetView.isGroupExpanded(groupPosition)){
                     mTargetView.expandGroup(groupPosition);
+                    updateItemChecked();
+                }
 
                 //Group is expanded. Show the collapse icon
                 expandCollapseIcon.setImageResource(R.drawable.listview_collapse_icon);
@@ -407,8 +409,10 @@ public class NavigationHubAdapter extends BaseExpandableListAdapter {
                 });
             }
             else {
-                if (mTargetView.isGroupExpanded(groupPosition))
+                if (mTargetView.isGroupExpanded(groupPosition)){
                     mTargetView.collapseGroup(groupPosition);
+                    updateItemChecked();
+                }
 
                 //Group is collapsed. Show the expand icon
                 expandCollapseIcon.setImageResource(R.drawable.listview_expand_icon);
