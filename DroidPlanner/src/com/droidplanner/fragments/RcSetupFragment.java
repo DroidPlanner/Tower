@@ -21,10 +21,18 @@ public class RcSetupFragment extends Fragment implements OnRcDataChangedListner 
 	private static final int RC_MSG_RATE = 50;
 
     /**
-     * Title for this fragment.
+     * Fragment label.
+     * Used by the navigation drawer.
      * @since 1.2.0
      */
-    public static final String TITLE = "RC";
+    public static final int LABEL_RESOURCE = R.string.screen_rc;
+
+    /**
+     * Fragment logo.
+     * Used by the navigation drawer.
+     * @since 1.2.0
+     */
+    public static final int LOGO_RESOURCE = R.drawable.ic_control;
 
 	private Drone drone;
 

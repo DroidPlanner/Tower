@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="@string/menu_editor_send"
+            android:showAsAction="never"
+            android:id="@+id/menu_editor_send"/>
+
+    <item android:title="@string/menu_editor_receive"
+          android:showAsAction="never"
+          android:id="@+id/menu_editor_receive"/>
+
+    <item android:title="@string/menu_editor_save"
+          android:showAsAction="never"
+          android:id="@+id/menu_editor_save"/>
+
+    <item android:title="@string/menu_editor_load"
+          android:showAsAction="never"
+          android:id="@+id/menu_editor_load"/>
+</menu>

@@ -112,10 +112,11 @@
     <style name="NavDrawer">
         <item name="android:layout_width">@dimen/nav_drawer_width</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:background">#aa000000</item>
+        <item name="android:background">#e0272626</item>
     </style>
 
     <style name="NavHubDrawer" parent="NavDrawer">
+        <item name="android:choiceMode">singleChoice</item>
         <item name="android:layout_gravity">start</item>
     </style>
 

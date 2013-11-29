@@ -34,10 +34,18 @@ public class ParametersTableFragment extends Fragment implements
 		OnClickListener, OnParameterManagerListner {
 
     /**
-     * Title for this fragment.
+     * Fragment label.
+     * Used by the navigation drawer.
      * @since 1.2.0
      */
-    public static final String TITLE = "Parameters";
+    public static final int LABEL_RESOURCE = R.string.screen_parameters;
+
+    /**
+     * Fragment logo.
+     * Used by the navigation drawer.
+     * @since 1.2.0
+     */
+    public static final int LOGO_RESOURCE = R.drawable.ic_action_database;
 
 	private TableLayout parameterTable;
 	private List<ParamRow> rowList = new ArrayList<ParamRow>();
@@ -63,7 +71,7 @@ public class ParametersTableFragment extends Fragment implements
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		context = (Context) activity;
+		context = activity.getApplicationContext();
 		drone = ((SuperActivity) activity).drone;
 		drone.parameters.parameterListner = this;
 	}

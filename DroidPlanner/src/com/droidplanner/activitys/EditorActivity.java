@@ -4,7 +4,7 @@ import android.app.ActionBar;
 import android.app.FragmentManager;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
+import android.view.Menu;
 import android.view.MenuItem;
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperUI;
@@ -22,6 +22,7 @@ import com.droidplanner.fragments.helpers.OnMapInteractionListener;
 import com.droidplanner.fragments.mission.MissionDetailFragment;
 import com.droidplanner.fragments.mission.MissionDetailFragment.OnWayPointTypeChangeListener;
 import com.droidplanner.polygon.PolygonPoint;
+import com.droidplanner.widgets.adapterViews.NavigationHubAdapter;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
@@ -35,14 +36,14 @@ public class EditorActivity extends SuperUI implements
      * Used to update the action bar when the navigation drawer opens/closes.
      * @since 1.2.0
      */
-    public static final int LABEL_RESOURCE = R.string.editor;
+    public static final int LABEL_RESOURCE = R.string.screen_editor;
 
     /**
      * Activity logo.
      * Used by the navigation drawer.
      * @since 1.2.0
      */
-    public static final int LOGO_RESOURCE = R.drawable.ic_action_edit;
+    public static final int LOGO_RESOURCE = R.drawable.ic_edit;
 
 	private PlanningMapFragment planningMapFragment;
 	private GestureMapFragment gestureMapFragment;
@@ -72,6 +73,7 @@ public class EditorActivity extends SuperUI implements
 		gestureMapFragment.setOnPathFinishedListner(this);
 		mission.onMissionUpdate();
 
+        setupNavDrawer();
 	}
 
 	@Override
@@ -80,15 +82,31 @@ public class EditorActivity extends SuperUI implements
 		mission.removeOnMissionUpdateListner(planningMapFragment);
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			NavUtils.navigateUpFromSameTask(this);
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_editor, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch(item.getItemId()){
+            case R.id.menu_editor_load:
+                return true;
+
+            case R.id.menu_editor_receive:
+                return true;
+
+            case R.id.menu_editor_save:
+                return true;
+
+            case R.id.menu_editor_send:
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
 	@Override
 	public boolean onMarkerClick(MissionItem wp) {
@@ -159,6 +177,11 @@ public class EditorActivity extends SuperUI implements
     @Override
     protected int getLabelResource(){
         return LABEL_RESOURCE;
+    }
+
+    @Override
+    protected NavigationHubAdapter.HubItem getNavigationHubItem(){
+        return NavigationHubAdapter.HubItem.EDITOR;
     }
 
 	private void showItemDetail(MissionItem item) {

@@ -8,7 +8,7 @@
     <android.support.v4.view.ViewPager
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/configuration_view_pager">
+            android:id="@+id/activity_content_view">
 
         <android.support.v4.view.PagerTitleStrip
                 android:id="@+id/configuration_view_pager_title_strip"

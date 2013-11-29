@@ -3,6 +3,7 @@ package com.droidplanner.widgets.adapterViews;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.util.Log;
 import com.droidplanner.fragments.ParametersTableFragment;
@@ -16,9 +17,11 @@ import com.droidplanner.fragments.TuningFragment;
 public class ConfigurationPagerAdapter extends FragmentPagerAdapter {
 
     private static final String TAG = ConfigurationPagerAdapter.class.getName();
+    private final Context mContext;
 
-    public ConfigurationPagerAdapter(FragmentManager fm) {
+    public ConfigurationPagerAdapter(Context context, FragmentManager fm) {
         super(fm);
+        mContext = context;
     }
 
     @Override
@@ -58,19 +61,19 @@ public class ConfigurationPagerAdapter extends FragmentPagerAdapter {
         CharSequence title = null;
         switch(position){
             case 0:
-                title = TuningFragment.TITLE;
+                title = mContext.getString(TuningFragment.LABEL_RESOURCE);
                 break;
 
             case 1:
-                title= RcSetupFragment.TITLE;
+                title= mContext.getString(RcSetupFragment.LABEL_RESOURCE);
                 break;
 
             case 2:
-                title = ParametersTableFragment.TITLE;
+                title = mContext.getString(ParametersTableFragment.LABEL_RESOURCE);
                 break;
 
             case 3:
-                title = SettingsFragment.TITLE;
+                title = mContext.getString(SettingsFragment.LABEL_RESOURCE);
                 break;
 
             default:

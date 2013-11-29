@@ -5,10 +5,6 @@
     <string name="about">About</string>
     <string name="version">Version</string>
     <string name="storage_folder">Storage Folder</string>
-    <string name="settings">Settings</string>
-    <string name="configuration">Configuration</string>
-    <string name="editor">Editor</string>
-    <string name="flight_data">Flight Data</string>
     <string name="menu_connect">Connect</string>
     <string name="menu_disconnect">Disconnect</string>
     <string name="conected">Connected</string>
@@ -66,7 +62,11 @@
     <string name="flight_altitude">Flight Altitude:</string>
     <string name="overlap">Overlap:</string>
     <string name="sidelap">Sidelap:</string>
-    
+
+    <string name="screen_editor">Editor</string>
+    <string name="screen_configuration">Configuration</string>
+    <string name="screen_tuning">Tuning</string>
+    <string name="screen_settings">Settings</string>
     <string name="screen_planning">Planning</string>
     <string name="screen_flight_data">Flight Data</string>
     <string name="screen_rc">RC</string>
@@ -172,5 +172,11 @@
     <string name="expandable_listview_icon_desc">Expandable listview icon</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    <string name="menu_editor_load">Load</string>
+    <string name="menu_editor_save">Save</string>
+    <string name="menu_editor_receive">Receive</string>
+    <string name="menu_editor_send">Send</string>
+    <string name="pref_menu_drawer_lock_title">Keep menu drawer opened</string>
+    <string name="pref_menu_drawer_lock_summary">Enable to keep the flight data menu drawer opened at all times.</string>
 
 </resources>

@@ -23,6 +23,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
 
     <uses-feature android:name="android.hardware.screen.portrait" />
 
@@ -67,7 +68,8 @@
         <service android:name=".service.MAVLinkService" >
         </service>
 
-        <activity android:name=".activitys.FlightActivity">
+        <activity android:name=".activitys.FlightActivity"
+                android:launchMode="singleTask">
 
             <!-- Launcher Intent -->
             <intent-filter>
@@ -87,8 +89,8 @@
         </activity>
         <activity
             android:name=".activitys.EditorActivity"
-            android:logo="@drawable/ic_action_edit"
-            android:label="@string/editor"
+            android:label="@string/screen_editor"
+            android:launchMode="singleTask"
             android:parentActivityName=".activitys.FlightActivity" >
 
             <!-- Parent activity meta-data to support API level 7+ -->
@@ -107,8 +109,8 @@
         </activity>
         <activity
             android:name=".activitys.ConfigurationActivity"
-            android:label="@string/configuration"
-            android:logo="@drawable/ic_action_gear">
+            android:launchMode="singleTask"
+            android:label="@string/screen_configuration">
 
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data

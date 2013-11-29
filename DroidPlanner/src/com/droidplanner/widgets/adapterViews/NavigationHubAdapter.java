@@ -1,6 +1,8 @@
 package com.droidplanner.widgets.adapterViews;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +16,15 @@ import com.droidplanner.activitys.ConfigurationActivity;
 import com.droidplanner.activitys.EditorActivity;
 import com.droidplanner.activitys.FlightActivity;
 import com.droidplanner.activitys.helpers.SuperUI;
+import com.droidplanner.fragments.ParametersTableFragment;
+import com.droidplanner.fragments.RcSetupFragment;
+import com.droidplanner.fragments.SettingsFragment;
+import com.droidplanner.fragments.TuningFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.droidplanner.utils.Constants.*;
 
 /**
  * ExpandableListAdapter to provide views for the app navigation hub interface.
@@ -26,8 +34,179 @@ import java.util.List;
  */
 public class NavigationHubAdapter extends BaseExpandableListAdapter {
 
+    /**
+     * Class tag, used for logging.
+     *
+     * @since 1.2.0
+     */
     private static final String TAG = NavigationHubAdapter.class.getName();
 
+    /**
+     * Represents a navigation hub item.
+     *
+     * @author fhuya
+     * @since 1.2.0
+     */
+    public enum HubItem {
+        FLIGHT_DATA(FlightActivity.class, null, FlightActivity.LABEL_RESOURCE,
+                FlightActivity.LOGO_RESOURCE),
+
+        EDITOR(EditorActivity.class, null, EditorActivity.LABEL_RESOURCE,
+                EditorActivity.LOGO_RESOURCE),
+
+        CONFIGURATION(ConfigurationActivity.class, null, ConfigurationActivity.LABEL_RESOURCE,
+                ConfigurationActivity.LOGO_RESOURCE),
+
+        TUNING(ConfigurationActivity.class, ACTION_CONFIGURATION_TUNING,
+                TuningFragment.LABEL_RESOURCE, TuningFragment.LOGO_RESOURCE),
+
+        RC(ConfigurationActivity.class, ACTION_CONFIGURATION_RC, RcSetupFragment.LABEL_RESOURCE,
+                RcSetupFragment.LOGO_RESOURCE),
+
+        PARAMETERS(ConfigurationActivity.class, ACTION_CONFIGURATION_PARAMETERS,
+                ParametersTableFragment.LABEL_RESOURCE, ParametersTableFragment.LOGO_RESOURCE),
+
+        SETTINGS(ConfigurationActivity.class, ACTION_CONFIGURATION_SETTINGS, SettingsFragment
+                .LABEL_RESOURCE, SettingsFragment.LOGO_RESOURCE);
+
+        static {
+            int position = 0;
+            //Setting the group for the flight data activity.
+            HubItem flightData = HubItem.FLIGHT_DATA;
+            flightData.setPosition(position++);
+            flightData.addChild(HubItem.EDITOR);
+
+            //Setting the group for the Configuration activity.
+            HubItem configuration = HubItem.CONFIGURATION;
+            configuration.setPosition(position++);
+            configuration.addChild(HubItem.TUNING);
+            configuration.addChild(HubItem.RC);
+            configuration.addChild(HubItem.PARAMETERS);
+            configuration.addChild(HubItem.SETTINGS);
+        }
+
+        private final int mLabelResource;
+        private final int mLogoResource;
+        private final Class<? extends SuperUI> mActivityClass;
+        private final String mIntentAction;
+
+        private boolean mIsExpanded;
+        private int mPosition;
+        private HubItem mParent;
+        private final List<HubItem> mChildren = new ArrayList<HubItem>();
+
+        private HubItem(Class<? extends SuperUI> activityClass,
+                        String intentAction, int labelResource,
+                        int logoResource) {
+            mActivityClass = activityClass;
+            mIntentAction = intentAction;
+            mLabelResource = labelResource;
+            mLogoResource = logoResource;
+        }
+
+        public Class<? extends SuperUI> getActivityClass() {
+            return mActivityClass;
+        }
+
+        public String getIntentAction() {
+            return mIntentAction;
+        }
+
+        public int getLabelResource() {
+            return mLabelResource;
+        }
+
+        public int getLogoResource() {
+            return mLogoResource;
+        }
+
+        public HubItem getParent() {
+            return mParent;
+        }
+
+        private void setParent(HubItem parent) {
+            if (parent == this) {
+                throw new IllegalStateException("Bootstrap Paradox.. Object cannot be its " +
+                        "own parent.");
+            }
+
+            mParent = parent;
+        }
+
+        public List<HubItem> getChildren() {
+            return mChildren;
+        }
+
+        public void addChild(HubItem child) {
+            if (child == this) {
+                throw new IllegalStateException("Bootstrap Paradox.. Object cannot be its own " +
+                        "child.");
+            }
+
+            int position = mChildren.size();
+
+            child.setParent(this);
+            child.setPosition(position);
+            mChildren.add(position, child);
+        }
+
+        void setPosition(int position) {
+            mPosition = position;
+        }
+
+        public int getPosition() {
+            return mPosition;
+        }
+
+        boolean isExpanded() {
+            return mIsExpanded;
+        }
+
+        void setIsExpanded(boolean isExpanded) {
+            mIsExpanded = isExpanded;
+        }
+    }
+
+    /**
+     * Delay used to launch the activity on selection in the drawer layout. This delay allows the
+     * drawer layout to close smoothly without stuttering/janking.
+     */
+    private final static long ACTIVITY_LAUNCH_DELAY = 200l;// milliseconds
+
+    /**
+     * Handler used to launch the selected activity.
+     *
+     * @since 1.2.0
+     */
+    private final Handler mHandler = new Handler();
+
+    /**
+     * Context used to start hub activities.
+     *
+     * @since 1.2.0
+     */
+    private final Context mContext;
+
+    /**
+     * Runnable used to launch the activity selected in the drawer layout.
+     *
+     * @since 1.2.0
+     */
+    private final Runnable mLaunchActivity = new Runnable() {
+        @Override
+        public void run() {
+            if (mIntentToLaunch != null) {
+                mContext.startActivity(mIntentToLaunch);
+                mIntentToLaunch = null;
+            }
+        }
+    };
+
+    /**
+     * Drawer layout to which the expandable listview this adapter serves is attached.
+     *
+     * @since 1.2.0
+     */
     private final DrawerLayout mNavDrawer;
 
     /**
@@ -35,14 +214,14 @@ public class NavigationHubAdapter extends BaseExpandableListAdapter {
      *
      * @since 1.2.0
      */
-    private final ExpandableListView mTargetView;
+    private ExpandableListView mTargetView;
 
     /**
      * Use to identify which activity is currently hosting the navigation hub drawer.
      *
      * @since 1.2.0
      */
-    private final SuperUI mUIActivity;
+    private final HubItem mHubItem;
 
     /**
      * Use to inflate the layout use by the listview item.
@@ -56,7 +235,14 @@ public class NavigationHubAdapter extends BaseExpandableListAdapter {
      *
      * @since 1.2.0
      */
-    private final List<HubGroup> mGroupList;
+    private final List<HubItem> mGroupList = new ArrayList<HubItem>();
+
+    /**
+     * Next activity to launch.
+     *
+     * @since 1.2.0
+     */
+    private Intent mIntentToLaunch;
 
     /**
      * Set against the expandable listview to handle click on group item.
@@ -70,15 +256,22 @@ public class NavigationHubAdapter extends BaseExpandableListAdapter {
                 @Override
                 public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition,
                                             long id) {
-                    HubGroup hubGroup = (HubGroup) getGroup(groupPosition);
-                    Class<? extends SuperUI> hubClass = hubGroup.getActivityClass();
-                    launchActivity(hubClass);
+
+                    //Update the selected item.
+                    int flatPosition = mTargetView.getFlatListPosition(ExpandableListView
+                            .getPackedPositionForGroup(groupPosition));
+                    mTargetView.setItemChecked(flatPosition, true);
+
+                    HubItem hubGroup = (HubItem) getGroup(groupPosition);
+                    launchHubItem(hubGroup);
                     return true;
                 }
             };
 
     /**
-     * Set agains the expandable listview to handle click events on group child items.
+     * Set against the expandable listview to handle click events on group child items.
+     *
+     * @since 1.2.0
      */
     private final ExpandableListView.OnChildClickListener mChildClickListener = new
             ExpandableListView.OnChildClickListener() {
@@ -87,49 +280,47 @@ public class NavigationHubAdapter extends BaseExpandableListAdapter {
                 @Override
                 public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
                                             int childPosition, long id) {
-                    HubGroupItem hubChild = (HubGroupItem) getChild(groupPosition, childPosition);
-                    Class<? extends SuperUI> childClass = hubChild.getActivityClass();
-                    launchActivity(childClass);
+                    //Update the selected item.
+                    int flatPosition = mTargetView.getFlatListPosition(ExpandableListView
+                            .getPackedPositionForChild(groupPosition, childPosition));
+                    mTargetView.setItemChecked(flatPosition, true);
+
+                    HubItem hubChild = (HubItem) getChild(groupPosition, childPosition);
+                    launchHubItem(hubChild);
                     return true;
                 }
             };
 
-    public NavigationHubAdapter(SuperUI uiActivity, DrawerLayout navDrawer,
+    public NavigationHubAdapter(Context context, HubItem hubItem, DrawerLayout navDrawer,
                                 ExpandableListView targetView) {
+        mContext = context;
+        mHubItem = hubItem;
+        mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mNavDrawer = navDrawer;
-        mUIActivity = uiActivity;
-        mInflater = mUIActivity.getLayoutInflater();
-
-        //Add the elements for the supported expandable view.
-        mGroupList = new ArrayList<HubGroup>(3);
-
-        //Adding the group for the flight data activity.
-        HubGroup flightDataGroup = new HubGroup(FlightActivity.class,
-                FlightActivity.LABEL_RESOURCE, FlightActivity.LOGO_RESOURCE);
-
-        //Adding the editor activity as child of the flight data group.
-        flightDataGroup.addChild(new HubGroupItem(EditorActivity.class,
-                EditorActivity.LABEL_RESOURCE, EditorActivity.LOGO_RESOURCE));
-
-        //Adding the group for the Configuration activity.
-        HubGroup configGroup = new HubGroup(ConfigurationActivity.class,
-                ConfigurationActivity.LABEL_RESOURCE, ConfigurationActivity.LOGO_RESOURCE);
-
-        mGroupList.add(flightDataGroup);
-        mGroupList.add(configGroup);
 
         mTargetView = targetView;
         mTargetView.setGroupIndicator(null);
         mTargetView.setOnGroupClickListener(mGroupClickListener);
         mTargetView.setOnChildClickListener(mChildClickListener);
+
+        mGroupList.add(HubItem.FLIGHT_DATA);
+        mGroupList.add(HubItem.CONFIGURATION);
     }
 
-    private void launchActivity(Class<? extends SuperUI> activityClass) {
-        if (!activityClass.isInstance(mUIActivity)) {
-            mUIActivity.startActivity(new Intent(mUIActivity, activityClass));
-        }
-
+    private void launchHubItem(HubItem hubItem) {
+        //Close the drawer
         mNavDrawer.closeDrawer(mTargetView);
+
+        if (hubItem != mHubItem) {
+            /*
+            Launch the activity after the drawer is almost closed.
+            Another solution would be to listen to DrawerListener.onDrawerClosed calls,
+            but this has a high amount of latency.
+             */
+            mIntentToLaunch = new Intent(mContext, hubItem.getActivityClass()).setAction(hubItem
+                    .getIntentAction()).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            mHandler.postDelayed(mLaunchActivity, ACTIVITY_LAUNCH_DELAY);
+        }
     }
 
     @Override
@@ -169,9 +360,8 @@ public class NavigationHubAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getGroupView(final int groupPosition, boolean isExpanded, View convertView,
-                             ViewGroup
-                                     parent) {
-        HubGroup hubGroup = (HubGroup) getGroup(groupPosition);
+                             ViewGroup parent) {
+        final HubItem hubGroup = (HubItem) getGroup(groupPosition);
 
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.list_nav_hub_group, parent, false);
@@ -180,7 +370,7 @@ public class NavigationHubAdapter extends BaseExpandableListAdapter {
         //Set the title, and icon for the group.
         TextView hubTitleView = (TextView) convertView.findViewById(R.id.nav_hub_group_title);
         hubTitleView.setText(hubGroup.getLabelResource());
-        hubTitleView.setCompoundDrawablesWithIntrinsicBounds(hubGroup.getIconResource(), 0, 0, 0);
+        hubTitleView.setCompoundDrawablesWithIntrinsicBounds(hubGroup.getLogoResource(), 0, 0, 0);
 
         //Update the expand/collapse icon.
         ImageView expandCollapseIcon = (ImageView) convertView.findViewById(R.id
@@ -189,6 +379,7 @@ public class NavigationHubAdapter extends BaseExpandableListAdapter {
             expandCollapseIcon.setVisibility(View.INVISIBLE);
         }
         else {
+            boolean expandFlag = isExpanded || hubGroup.isExpanded();
             if (isExpanded) {
                 //Group is expanded. Show the collapse icon
                 expandCollapseIcon.setImageResource(R.drawable.listview_collapse_icon);
@@ -197,6 +388,9 @@ public class NavigationHubAdapter extends BaseExpandableListAdapter {
                     public void onClick(View v) {
                         //Onclick, collapse this group.
                         mTargetView.collapseGroup(groupPosition);
+                        hubGroup.setIsExpanded(false);
+
+                        updateItemChecked();
                     }
                 });
             }
@@ -208,6 +402,9 @@ public class NavigationHubAdapter extends BaseExpandableListAdapter {
                     public void onClick(View v) {
                         //Onclick, expand this group
                         mTargetView.expandGroup(groupPosition, true);
+                        hubGroup.setIsExpanded(true);
+
+                        updateItemChecked();
                     }
                 });
             }
@@ -216,10 +413,38 @@ public class NavigationHubAdapter extends BaseExpandableListAdapter {
         return convertView;
     }
 
+    private void updateItemChecked() {
+        HubItem hubParent = mHubItem.getParent();
+
+        if (hubParent != null) {
+            //Selected item is a child.
+            if (hubParent.isExpanded()) {
+                //Select current item, since it's a child of the group that expanded.
+                int flatPosition = mTargetView.getFlatListPosition(ExpandableListView
+                        .getPackedPositionForChild(hubParent.getPosition(),
+                                mHubItem.getPosition()));
+                mTargetView.setItemChecked(flatPosition, true);
+            }
+            else {
+                //Unselect current item since it's a child of the group that collapsed.
+                int flatPosition = mTargetView.getFlatListPosition
+                        (ExpandableListView.getPackedPositionForGroup(hubParent.getPosition()));
+                mTargetView.setItemChecked(flatPosition, true);
+            }
+        }
+        else {
+            //Selected item is a group.
+            //It's not the current group, so its position might change.
+            int flatPosition = mTargetView.getFlatListPosition
+                    (ExpandableListView.getPackedPositionForGroup(mHubItem.getPosition()));
+            mTargetView.setItemChecked(flatPosition, true);
+        }
+    }
+
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View
             convertView, ViewGroup parent) {
-        HubGroupItem groupChild = (HubGroupItem) getChild(groupPosition, childPosition);
+        HubItem groupChild = (HubItem) getChild(groupPosition, childPosition);
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.list_nav_hub_child, parent, false);
         }
@@ -236,80 +461,5 @@ public class NavigationHubAdapter extends BaseExpandableListAdapter {
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
-    }
-
-    /**
-     * Represent a top level hub navigation item.
-     *
-     * @author fhuya
-     * @since 1.2.0
-     */
-    private static class HubGroup {
-
-        private int mLabelResource;
-        private int mLogoResource;
-        private final Class<? extends SuperUI> mHubActivityClass;
-        private final List<HubGroupItem> mHubChildren;
-
-        public HubGroup(Class<? extends SuperUI> hubActivityClass,
-                        int labelResource, int logoResource) {
-            mHubActivityClass = hubActivityClass;
-            mLabelResource = labelResource;
-            mLogoResource = logoResource;
-            mHubChildren = new ArrayList<HubGroupItem>();
-        }
-
-        public void addChild(HubGroupItem child) {
-            mHubChildren.add(child);
-        }
-
-        public Class<? extends SuperUI> getActivityClass() {
-            return mHubActivityClass;
-        }
-
-        public int getLabelResource() {
-            return mLabelResource;
-        }
-
-        public int getIconResource() {
-            return mLogoResource;
-        }
-
-        public List<HubGroupItem> getChildren() {
-            return mHubChildren;
-        }
-
-    }
-
-    /**
-     * Represents a sub level hub navigation item.
-     *
-     * @author fhuya
-     * @since 1.2.0
-     */
-    private static class HubGroupItem {
-
-        private int mLabelResource;
-        private int mLogoResource;
-        private final Class<? extends SuperUI> mHubActivityClass;
-
-        public HubGroupItem(Class<? extends SuperUI> hubActivityClass,
-                            int labelResource, int logoResource) {
-            mHubActivityClass = hubActivityClass;
-            mLabelResource = labelResource;
-            mLogoResource = logoResource;
-        }
-
-        public Class<? extends SuperUI> getActivityClass() {
-            return mHubActivityClass;
-        }
-
-        public int getLabelResource() {
-            return mLabelResource;
-        }
-
-        public int getLogoResource() {
-            return mLogoResource;
-        }
     }
 }

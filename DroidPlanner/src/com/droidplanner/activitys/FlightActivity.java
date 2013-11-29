@@ -13,6 +13,7 @@ import com.droidplanner.fragments.MissionControlFragment.OnMissionControlInterac
 import com.droidplanner.fragments.RCFragment;
 import com.droidplanner.fragments.helpers.OnMapInteractionListener;
 import com.droidplanner.polygon.PolygonPoint;
+import com.droidplanner.widgets.adapterViews.NavigationHubAdapter;
 import com.google.android.gms.maps.model.LatLng;
 
 public class FlightActivity extends SuperUI implements
@@ -30,7 +31,7 @@ public class FlightActivity extends SuperUI implements
      * Used to update the action bar when the navigation drawer opens/closes.
      * @since 1.2.0
      */
-    public static final int LABEL_RESOURCE = R.string.flight_data;
+    public static final int LABEL_RESOURCE = R.string.screen_flight_data;
 
 	private FragmentManager fragmentManager;
 	private RCFragment rcFragment;
@@ -102,6 +103,11 @@ public class FlightActivity extends SuperUI implements
 		navigationIntent = new Intent(this, EditorActivity.class);
 		startActivity(navigationIntent);
 	}
+
+    @Override
+    protected NavigationHubAdapter.HubItem getNavigationHubItem(){
+        return NavigationHubAdapter.HubItem.FLIGHT_DATA;
+    }
 
 	private void toggleRCFragment() {
 		if (rcFragment == null) {
