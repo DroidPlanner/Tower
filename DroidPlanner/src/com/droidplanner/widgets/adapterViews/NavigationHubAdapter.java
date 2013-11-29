@@ -2,7 +2,9 @@ package com.droidplanner.widgets.adapterViews;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -90,7 +92,6 @@ public class NavigationHubAdapter extends BaseExpandableListAdapter {
         private final Class<? extends SuperUI> mActivityClass;
         private final String mIntentAction;
 
-        private boolean mIsExpanded;
         private int mPosition;
         private HubItem mParent;
         private final List<HubItem> mChildren = new ArrayList<HubItem>();
@@ -158,12 +159,20 @@ public class NavigationHubAdapter extends BaseExpandableListAdapter {
             return mPosition;
         }
 
-        boolean isExpanded() {
-            return mIsExpanded;
+        boolean isExpanded(Context context, boolean defaultValue) {
+            return PreferenceManager.getDefaultSharedPreferences(context).getBoolean
+                    (getPreferenceName(), defaultValue);
         }
 
-        void setIsExpanded(boolean isExpanded) {
-            mIsExpanded = isExpanded;
+        void setIsExpanded(Context context, boolean isExpanded) {
+            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences
+                    (context).edit();
+            editor.putBoolean(getPreferenceName(), isExpanded).apply();
+        }
+
+        private String getPreferenceName() {
+            return new StringBuilder("pref_").append(name().toLowerCase()).append
+                    ("_group_is_expanded").toString();
         }
     }
 
@@ -379,8 +388,11 @@ public class NavigationHubAdapter extends BaseExpandableListAdapter {
             expandCollapseIcon.setVisibility(View.INVISIBLE);
         }
         else {
-            boolean expandFlag = isExpanded || hubGroup.isExpanded();
-            if (isExpanded) {
+            boolean expandFlag = hubGroup.isExpanded(mContext, isExpanded);
+            if (expandFlag) {
+                if (!mTargetView.isGroupExpanded(groupPosition))
+                    mTargetView.expandGroup(groupPosition);
+
                 //Group is expanded. Show the collapse icon
                 expandCollapseIcon.setImageResource(R.drawable.listview_collapse_icon);
                 expandCollapseIcon.setOnClickListener(new View.OnClickListener() {
@@ -388,13 +400,16 @@ public class NavigationHubAdapter extends BaseExpandableListAdapter {
                     public void onClick(View v) {
                         //Onclick, collapse this group.
                         mTargetView.collapseGroup(groupPosition);
-                        hubGroup.setIsExpanded(false);
+                        hubGroup.setIsExpanded(mContext, false);
 
                         updateItemChecked();
                     }
                 });
             }
             else {
+                if (mTargetView.isGroupExpanded(groupPosition))
+                    mTargetView.collapseGroup(groupPosition);
+
                 //Group is collapsed. Show the expand icon
                 expandCollapseIcon.setImageResource(R.drawable.listview_expand_icon);
                 expandCollapseIcon.setOnClickListener(new View.OnClickListener() {
@@ -402,7 +417,7 @@ public class NavigationHubAdapter extends BaseExpandableListAdapter {
                     public void onClick(View v) {
                         //Onclick, expand this group
                         mTargetView.expandGroup(groupPosition, true);
-                        hubGroup.setIsExpanded(true);
+                        hubGroup.setIsExpanded(mContext, true);
 
                         updateItemChecked();
                     }
@@ -418,7 +433,7 @@ public class NavigationHubAdapter extends BaseExpandableListAdapter {
 
         if (hubParent != null) {
             //Selected item is a child.
-            if (hubParent.isExpanded()) {
+            if (hubParent.isExpanded(mContext, false)) {
                 //Select current item, since it's a child of the group that expanded.
                 int flatPosition = mTargetView.getFlatListPosition(ExpandableListView
                         .getPackedPositionForChild(hubParent.getPosition(),
