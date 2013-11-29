@@ -17,14 +17,12 @@
     <TextView
         android:id="@+id/textView1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="64dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:background="#80000000"
-        android:gravity="center"
-        android:padding="3dp"
         android:text="Distance: 200m, Flight time: 3:30s"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+		style="@style/editorMissionDetailText"
+        />
 
     <fragment
         android:id="@+id/editorToolsFragment"
@@ -107,6 +105,7 @@
         android:id="@+id/containerItemDetail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/missionFragment1"
         android:layout_alignLeft="@+id/slidingDrawer1"
         android:layout_gravity="bottom"
         android:measureAllChildren="true" >

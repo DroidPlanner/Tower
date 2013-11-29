@@ -4,7 +4,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-
+import android.widget.TextView;
 import com.droidplanner.R;
 import com.droidplanner.drone.variables.mission.waypoints.Waypoint;
 import com.droidplanner.helpers.units.Altitude;
@@ -13,8 +13,11 @@ import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarCha
 
 public class MissionWaypointFragment extends MissionDetailFragment implements
 		OnTextSeekBarChangedListner, OnCheckedChangeListener {
+
 	private SeekBarWithText altitudeSeekBar;
 	private SeekBarWithText delaySeekBar;
+	private TextView missionIndex;
+
 	//private SeekBarWithText yawSeekBar;
 	//private SeekBarWithText radiusSeekBar;
 	//private SeekBarWithText orbitSeekBar;
@@ -32,14 +35,16 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
 
 		Waypoint item = (Waypoint) this.item;
 
-		altitudeSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.altitudeView);
+		altitudeSeekBar = (SeekBarWithText) view.findViewById(R.id.altitudeView);
 		altitudeSeekBar.setValue(item.getAltitude().valueInMeters());
 		altitudeSeekBar.setOnChangedListner(this);
 
 		delaySeekBar = (SeekBarWithText) view.findViewById(R.id.waypointDelay);
 		delaySeekBar.setValue(item.getDelay());
 		delaySeekBar.setOnChangedListner(this);
+
+		missionIndex = (TextView) view.findViewById(R.id.WaypointIndex);
+		missionIndex.setText("1");
 
 		/*
 		radiusSeekBar = (SeekBarWithText) view

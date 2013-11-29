@@ -69,10 +69,10 @@
 
     <Button
         android:id="@+id/buttonGroundSpeed"
+        style="@style/telemButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/icon_rpy"
-        android:layout_marginTop="16dp"
+        android:layout_below="@id/hudView"
         android:background="@drawable/button_ground_speed" />
 
     <TextView

@@ -65,7 +65,7 @@
     <string name="flight_altitude">Flight Altitude:</string>
     <string name="overlap">Overlap:</string>
     <string name="sidelap">Sidelap:</string>
-    
+
     <string name="screen_planning">Planning</string>
     <string name="screen_flight_data">Flight Data</string>
     <string name="screen_rc">RC</string>
@@ -167,5 +167,6 @@
     <string name="menu_preflight_checklist">Pre-Flight Checklist</string>
     <string name="lst_note_hint">To add more rows, just press Enter</string>
     <string name="parameter_row_edit">Edit</string>
-    
+    <string name="Orbits">Orbits</string>
+
 </resources>

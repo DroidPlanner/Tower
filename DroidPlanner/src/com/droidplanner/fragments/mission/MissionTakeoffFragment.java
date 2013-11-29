@@ -11,41 +11,29 @@ import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarCha
 public class MissionTakeoffFragment extends MissionDetailFragment implements
 		OnTextSeekBarChangedListner {
 	private SeekBarWithText altitudeSeekBar;
-	private SeekBarWithText angleSeekBar;
-	private SeekBarWithText yawSeekBar;
 
 	@Override
 	protected int getResource() {
 		return R.layout.fragment_detail_takeoff;
 	}
-	
+
 	@Override
 	protected void setupViews(View view) {
 		super.setupViews(view);
 		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemTypes.TAKEOFF));
-		
+
 		Takeoff item = (Takeoff) this.item;
-		
-		altitudeSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.altitudeView);
+
+		altitudeSeekBar = (SeekBarWithText) view.findViewById(R.id.altitudeView);
 		altitudeSeekBar.setValue(item.getAltitude().valueInMeters());
 		altitudeSeekBar.setOnChangedListner(this);
 
-		angleSeekBar = (SeekBarWithText) view.findViewById(R.id.takeoffPitch);
-		angleSeekBar.setValue(item.getMinPitch());
-		angleSeekBar.setOnChangedListner(this);
-
-		yawSeekBar = (SeekBarWithText) view.findViewById(R.id.waypointAngle);
-		yawSeekBar.setValue(item.getYawAngle());
-		yawSeekBar.setOnChangedListner(this);
 	}
 
 	@Override
 	public void onSeekBarChanged() {
 		Takeoff item = (Takeoff) this.item;
 		item.setAltitude(new Altitude(altitudeSeekBar.getValue()));
-		item.setMinPitch(angleSeekBar.getValue());
-		item.setYawAngle(yawSeekBar.getValue());
 	}
 
 }

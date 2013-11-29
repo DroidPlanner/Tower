@@ -1,208 +1,257 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res/com.droidplanner"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/opaque_white"
-    android:orientation="vertical" >
-
+	tools:ignore="HardcodedText"
+    >
     <com.droidplanner.widgets.spinners.SpinnerSelfSelect
         android:id="@+id/spinnerWaypointType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:entries="@array/ExampleWaypointType" />
+		android:layout_alignParentTop="true"
+        android:entries="@array/ExampleWaypointType"
+        />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+	<View
+		android:id="@+id/title_rect"
+		android:layout_width="match_parent"
+		android:layout_height="64dp"
+		android:layout_alignParentTop="true"
+		android:background="@drawable/wp_title_rectangle"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/camera_"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+	<TextView
+		android:id="@+id/WaypointIndex"
+		style="@style/largeMissionDetailText"
+		android:layout_alignParentTop="true"
+		android:layout_width="64dp"
+		android:layout_height="wrap_content"
+		android:text="22" />
 
-        <com.droidplanner.widgets.spinners.SpinnerSelfSelect
-            android:id="@+id/cameraFileSpinner"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:entries="@array/ExampleCameraArray" />
+	<TextView
+		android:id="@+id/WaypointType"
+		style="@style/missionHeaderTitle"
+		android:layout_toRightOf="@id/WaypointIndex"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="0dp"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Survey Polygon" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
+	<TextView
+		android:id="@+id/DistanceLabel"
+		style="@style/missionHeaderlabel"
+		android:layout_toRightOf="@id/WaypointIndex"
+		android:layout_below="@id/WaypointType"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Area " />
 
-            <CheckBox
-                android:id="@+id/checkBoxInnerWPs"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/inner_wps" />
+	<TextView
+		android:id="@+id/DistanceValue"
+		style="@style/missionHeaderValue"
+		android:layout_toRightOf="@id/DistanceLabel"
+		android:layout_alignBaseline="@id/DistanceLabel"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="2154m sq" />
 
-            <CheckBox
-                android:id="@+id/CheckBoxFootprints"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/footprint" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:layout_margin="3dp"
-        android:background="@android:color/darker_gray" />
 
     <ScrollView
         android:id="@+id/scrollView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-            <GridLayout
-                android:id="@+id/myGrid"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:columnCount="2" >
-
-                <TextView
-                    android:id="@+id/footprintTextView"
-                    android:layout_gravity="left"
-                    android:text="@string/footprint" />
-
-                <TextView
-                    android:id="@+id/groundResolutionTextView"
-                    android:layout_gravity="left"
-                    android:text="@string/ground_resolution" />
-
-                <TextView
-                    android:id="@+id/distanceTextView"
-                    android:layout_gravity="left"
-                    android:text="@string/distance_between_pictures" />
-
-                <TextView
-                    android:id="@+id/distanceBetweenLinesTextView"
-                    android:layout_gravity="left"
-                    android:text="@string/distance_between_lines" />
-
-                <TextView
-                    android:id="@+id/areaTextView"
-                    android:layout_gravity="left"
-                    android:text="@string/area" />
-
-                <TextView
-                    android:id="@+id/lengthTextView"
-                    android:layout_gravity="left"
-                    android:text="@string/mission_length" />
-
-                <TextView
-                    android:id="@+id/numberOfPicturesTextView"
-                    android:layout_gravity="left"
-                    android:text="@string/pictures" />
-
-                <TextView
-                    android:id="@+id/numberOfStripsTextView"
-                    android:layout_gravity="left"
-                    android:text="@string/number_of_strips" />
-            </GridLayout>
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_margin="3dp"
-                android:background="@android:color/darker_gray" />
-
-            <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
-                android:id="@+id/angleView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="2dp"
-                custom:inc="1"
-                custom:max="180"
-                custom:min="0"
-                custom:title="@string/hatch_angle"
-                custom:unit="º" >
-            </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
-
-            <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
-                android:id="@+id/altitudeView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="2dp"
-                custom:inc="5"
-                custom:max="1000"
-                custom:min="5"
-                custom:title="@string/flight_altitude"
-                custom:unit="m" >
-            </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
-
-                <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
-                    android:id="@+id/overlapView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:layout_weight="0.5"
-                    custom:inc="1"
-                    custom:max="99"
-                    custom:min="0"
-                    custom:title="@string/overlap"
-                    custom:unit="%" >
-                </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
-
-                <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
-                    android:id="@+id/sidelapView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    custom:inc="1"
-                    custom:max="99"
-                    custom:min="0"
-                    custom:title="@string/sidelap"
-                    custom:unit="%" >
-                </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
-            </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
-
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:layout_margin="3dp"
-        android:background="@android:color/darker_gray" />
-
-    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:baselineAligned="false" >
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:layout_below="@id/title_rect">
 
-        <ToggleButton
-            android:id="@+id/surveyModeButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textOff="@string/mission_mode"
-            android:textOn="@string/polygon_mode" />
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical" >
 
-        <Button
-            android:id="@+id/clearPolyButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/clear_polygon" />
-    </LinearLayout>
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="left"
+				android:text="@string/camera_"
+				android:textAppearance="?android:attr/textAppearanceMedium" />
 
-</LinearLayout>
+			<com.droidplanner.widgets.spinners.SpinnerSelfSelect
+			    android:id="@+id/cameraFileSpinner"
+			    android:layout_width="196dp"
+			    android:layout_height="wrap_content"
+			    android:layout_gravity="center"
+			    android:entries="@array/ExampleCameraArray" />
+
+			<LinearLayout
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:orientation="vertical" >
+
+				<CheckBox
+					android:id="@+id/checkBoxInnerWPs"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/inner_wps" />
+
+				<CheckBox
+					android:id="@+id/CheckBoxFootprints"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/footprint" />
+			</LinearLayout>
+
+			<View
+				android:layout_width="fill_parent"
+				android:layout_height="4dp"
+				android:layout_margin="3dp"
+				android:background="@android:color/darker_gray" />
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical" >
+
+				<GridLayout
+					android:id="@+id/myGrid"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+					android:columnCount="2" >
+
+					<TextView
+						android:id="@+id/footprintTextView"
+						android:layout_gravity="left"
+						android:text="@string/footprint" />
+
+					<TextView
+						android:id="@+id/groundResolutionTextView"
+						android:layout_gravity="left"
+						android:text="@string/ground_resolution" />
+
+					<TextView
+						android:id="@+id/distanceTextView"
+						android:layout_gravity="left"
+						android:text="@string/distance_between_pictures" />
+
+					<TextView
+						android:id="@+id/distanceBetweenLinesTextView"
+						android:layout_gravity="left"
+						android:text="@string/distance_between_lines" />
+
+					<TextView
+						android:id="@+id/areaTextView"
+						android:layout_gravity="left"
+						android:text="@string/area" />
+
+					<TextView
+						android:id="@+id/lengthTextView"
+						android:layout_gravity="left"
+						android:text="@string/mission_length" />
+
+					<TextView
+						android:id="@+id/numberOfPicturesTextView"
+						android:layout_gravity="left"
+						android:text="@string/pictures" />
+
+					<TextView
+						android:id="@+id/numberOfStripsTextView"
+						android:layout_gravity="left"
+						android:text="@string/number_of_strips" />
+				</GridLayout>
+
+				<View
+					android:layout_width="fill_parent"
+					android:layout_height="1dp"
+					android:layout_margin="3dp"
+					android:background="@android:color/darker_gray" />
+
+				<com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+					android:id="@+id/angleView"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_margin="2dp"
+					custom:inc="1"
+					custom:max="180"
+					custom:min="0"
+					custom:title="@string/hatch_angle"
+					custom:unit="º" >
+				</com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+
+				<com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+					android:id="@+id/altitudeView"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_margin="2dp"
+					custom:inc="5"
+					custom:max="1000"
+					custom:min="5"
+					custom:title="@string/flight_altitude"
+					custom:unit="m" >
+				</com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="horizontal" >
+
+					<com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+						android:id="@+id/overlapView"
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_margin="2dp"
+						android:layout_weight="0.5"
+						custom:inc="1"
+						custom:max="99"
+						custom:min="0"
+						custom:title="@string/overlap"
+						custom:unit="%" >
+					</com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+
+					<com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+						android:id="@+id/sidelapView"
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_weight="0.5"
+						custom:inc="1"
+						custom:max="99"
+						custom:min="0"
+						custom:title="@string/sidelap"
+						custom:unit="%" >
+					</com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+				</LinearLayout>
+			</LinearLayout>
+
+		<View
+			android:layout_width="fill_parent"
+			android:layout_height="1dp"
+			android:layout_margin="3dp"
+			android:background="@android:color/darker_gray" />
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:baselineAligned="false" >
+
+			<ToggleButton
+				android:id="@+id/surveyModeButton"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:textOff="@string/mission_mode"
+				android:textOn="@string/polygon_mode" />
+
+			<Button
+				android:id="@+id/clearPolyButton"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:text="@string/clear_polygon" />
+		</LinearLayout>
+		</LinearLayout>
+    </ScrollView>
+</RelativeLayout>

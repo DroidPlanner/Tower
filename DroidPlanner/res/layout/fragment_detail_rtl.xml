@@ -1,39 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res/com.droidplanner"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/opaque_white"
-    android:orientation="vertical" >
-
+	tools:ignore="HardcodedText"
+    >
     <com.droidplanner.widgets.spinners.SpinnerSelfSelect
         android:id="@+id/spinnerWaypointType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:entries="@array/ExampleWaypointType" />
+		android:layout_alignParentTop="true"
+        android:entries="@array/ExampleWaypointType"
+        />
+
+	<View
+		android:id="@+id/title_rect"
+		android:layout_width="match_parent"
+		android:layout_height="64dp"
+		android:layout_alignParentTop="true"
+		android:background="@drawable/wp_title_rectangle"/>
+
+	<TextView
+		android:id="@+id/WaypointIndex"
+		style="@style/largeMissionDetailText"
+		android:layout_alignParentTop="true"
+		android:layout_width="64dp"
+		android:layout_height="wrap_content"
+		android:text="22" />
+
+	<TextView
+		android:id="@+id/WaypointType"
+		style="@style/missionHeaderTitle"
+		android:layout_toRightOf="@id/WaypointIndex"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="0dp"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="RETURN TO LAUNCH" />
+
+	<TextView
+		android:id="@+id/DistanceLabel"
+		style="@style/missionHeaderlabel"
+		android:layout_toRightOf="@id/WaypointIndex"
+		android:layout_below="@id/WaypointType"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Distance to home " />
+
+	<TextView
+		android:id="@+id/DistanceValue"
+		style="@style/missionHeaderValue"
+		android:layout_toRightOf="@id/DistanceLabel"
+		android:layout_alignBaseline="@id/DistanceLabel"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="20m" />
+
+
 
     <ScrollView
         android:id="@+id/scrollView1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:layout_below="@id/spinnerWaypointType">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
-
-            <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
-                android:id="@+id/altitudeView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="2dp"
-                custom:inc="5"
-                custom:max="1000"
-                custom:min="0"
-                custom:title="@string/waypoint_altitude"
-                custom:unit="m" >
-            </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
 
             <TextView
                 android:id="@+id/textView1"
@@ -43,4 +82,4 @@
         </LinearLayout>
     </ScrollView>
 
-</LinearLayout>
+</RelativeLayout>
