@@ -1,7 +1,7 @@
 package com.droidplanner.fragments.mission;
 
 import android.app.Activity;
-import android.app.Fragment;
+import android.app.DialogFragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
-
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
 import com.droidplanner.drone.variables.mission.Mission;
@@ -17,7 +16,7 @@ import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.fragments.mission.MissionItemTypes.InvalidItemException;
 import com.droidplanner.widgets.spinners.SpinnerSelfSelect;
 
-public abstract class MissionDetailFragment extends Fragment implements
+public abstract class MissionDetailFragment extends DialogFragment implements
 		OnItemSelectedListener {
 	
 	public interface OnWayPointTypeChangeListener{
@@ -32,7 +31,12 @@ public abstract class MissionDetailFragment extends Fragment implements
 	private OnWayPointTypeChangeListener mListner;
 	
 	protected MissionItem item;
-	
+
+    @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        setStyle(DialogFragment.STYLE_NO_TITLE,0);
+    }
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,

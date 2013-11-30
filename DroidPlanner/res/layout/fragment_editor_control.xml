@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
-    android:gravity="center" 
+    android:gravity="center"
+    android:orientation="horizontal"
      android:layout_centerInParent="true">
 
     <RadioButton
@@ -12,7 +12,7 @@
         style="@style/editorButton"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:background="@drawable/button_editor"
+        android:layout_weight="1"
         android:button="@null"
         android:checked="true"
         android:drawableTop="@drawable/editor_tools_marker" />
@@ -23,7 +23,7 @@
     	android:button="@null"
 	    android:layout_width="48dp"
 	    android:layout_height="48dp"
-	    android:background="@drawable/button_editor"
+        android:layout_weight="1"
 	    android:drawableTop="@drawable/editor_tools_draw"
 	    />
 
@@ -33,17 +33,16 @@
     	android:button="@null"
 	    android:layout_width="48dp"
 	    android:layout_height="48dp"
-	    android:background="@drawable/button_editor"
+        android:layout_weight="1"
 	    android:drawableTop="@drawable/editor_tools_poly"
 	    />
 
 	<RadioButton
 	    android:id="@+id/editor_tools_trash"
 	    style="@style/editorButton"
-	
+        android:layout_weight="1"
 	    android:layout_width="48dp"
 	    android:layout_height="48dp"
-	    android:background="@drawable/button_editor"
 	    android:button="@null"
 	    android:drawableTop="@drawable/editor_tools_trash"
 	    android:paddingTop="10dp" />

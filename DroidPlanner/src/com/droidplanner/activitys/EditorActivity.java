@@ -6,6 +6,7 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperUI;
 import com.droidplanner.drone.variables.mission.Mission;
@@ -45,22 +46,29 @@ public class EditorActivity extends SuperUI implements
      */
     public static final int LOGO_RESOURCE = R.drawable.ic_edit;
 
+    /**
+     * This textview displays the status of the mission(s) that's being edited.
+     * @since 1.2.0
+     */
+    private TextView mMissionsStatusView;
+
 	private PlanningMapFragment planningMapFragment;
 	private GestureMapFragment gestureMapFragment;
 	private Mission mission;
 	private EditorToolsFragment editorToolsFragment;
 	private MissionDetailFragment itemDetailFragment;
-	private FragmentManager fragmentManager;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_editor);
 
+        mMissionsStatusView = (TextView) findViewById(R.id.editor_missions_status);
+
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
-		fragmentManager = getFragmentManager();
+		final FragmentManager fragmentManager = getFragmentManager();
 
 		planningMapFragment = ((PlanningMapFragment) fragmentManager
 				.findFragmentById(R.id.mapFragment));
@@ -81,6 +89,27 @@ public class EditorActivity extends SuperUI implements
 		super.onDestroy();
 		mission.removeOnMissionUpdateListner(planningMapFragment);
 	}
+
+    @Override
+    public void onStart(){
+        super.onStart();
+
+        //Update the map top padding to account for the mission(s) status view
+        if(mMissionsStatusView != null && mMapFragment != null){
+            int topPadding = mMissionsStatusView.getLayoutParams().height;
+            mMapFragment.setTopPadding(topPadding);
+        }
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+
+        //Reset the map top padding.
+        if(mMissionsStatusView != null && mMapFragment != null){
+            mMapFragment.setTopPadding(0);
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -184,33 +213,18 @@ public class EditorActivity extends SuperUI implements
         return NavigationHubAdapter.HubItem.EDITOR;
     }
 
-	private void showItemDetail(MissionItem item) {
-		if (itemDetailFragment == null) {
-			addItemDetail(item);
-		} else {
-			switchItemDetail(item);
-		}
-	}
+    private void showItemDetail(MissionItem item) {
+        removeItemDetail();
 
-	private void addItemDetail(MissionItem item) {
-		itemDetailFragment = item.getDetailFragment();
-		fragmentManager.beginTransaction()
-				.add(R.id.containerItemDetail, itemDetailFragment).commit();
-	}
+        itemDetailFragment = item.getDetailFragment();
+        if (itemDetailFragment != null)
+            itemDetailFragment.show(getFragmentManager(), "Item Dialog");
+    }
 
-	private void switchItemDetail(MissionItem item) {
-		itemDetailFragment = item.getDetailFragment();
-		fragmentManager.beginTransaction()
-				.replace(R.id.containerItemDetail, itemDetailFragment).commit();
-	}
-
-	private void removeItemDetail() {
-		if (itemDetailFragment != null) {
-			fragmentManager.beginTransaction().remove(itemDetailFragment)
-					.commit();
-			itemDetailFragment = null;
-		}
-	}
+    private void removeItemDetail() {
+        if (itemDetailFragment != null)
+            itemDetailFragment.dismiss();
+    }
 
 	@Override
 	public void onPathFinished(List<Point> path) {

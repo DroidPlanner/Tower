@@ -112,7 +112,7 @@
     <style name="NavDrawer">
         <item name="android:layout_width">@dimen/nav_drawer_width</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:background">#e0272626</item>
+        <item name="android:background">@color/nav_drawer_background</item>
     </style>
 
     <style name="NavHubDrawer" parent="NavDrawer">

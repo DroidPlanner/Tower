@@ -20,25 +20,17 @@
                 tools:layout="@layout/fragment_gesture_map"/>
 
         <TextView
-                android:id="@+id/textView1"
+                android:id="@+id/editor_missions_status"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/editor_missions_status_height"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:background="#80000000"
+                android:background="@color/nav_drawer_background"
                 android:gravity="center"
                 android:padding="3dp"
                 android:text="Distance: 200m, Flight time: 3:30s"
                 android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-        <FrameLayout
-                android:id="@+id/containerItemDetail"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="bottom"
-                android:measureAllChildren="true">
-
-        </FrameLayout>
     </RelativeLayout>
 
     <ExpandableListView
@@ -48,22 +40,31 @@
 
     <LinearLayout
             android:id="@+id/nav_menu_drawer_container"
+            android:layout_marginTop="@dimen/editor_missions_status_height"
             style="@style/NavMenuDrawer"
             android:orientation="vertical">
 
         <fragment
                 android:id="@+id/editorToolsFragment"
                 android:name="com.droidplanner.fragments.EditorToolsFragment"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="10dp"
                 tools:layout="@layout/fragment_editor_control"/>
+
+        <ImageView
+                android:src="@drawable/title_bar_shadow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="fitXY"/>
 
         <fragment
                 android:id="@+id/missionFragment1"
+                android:layout_margin="10dp"
                 android:name="com.droidplanner.fragments.MissionFragment"
                 android:layout_width="match_parent"
-                android:layout_height="72dp"
+                android:layout_height="match_parent"
                 tools:layout="@layout/fragment_mission"/>
     </LinearLayout>
 </android.support.v4.widget.DrawerLayout>

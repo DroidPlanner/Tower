@@ -1,23 +1,14 @@
 package com.droidplanner.fragments;
 
-import it.sephiroth.android.library.util.v11.MultiChoiceModeListener;
-import it.sephiroth.android.library.widget.AdapterView;
-import it.sephiroth.android.library.widget.AdapterView.OnItemClickListener;
-import it.sephiroth.android.library.widget.AdapterView.OnItemLongClickListener;
-import it.sephiroth.android.library.widget.AdapterView.OnItemSelectedListener;
-import it.sephiroth.android.library.widget.HListView;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ActionMode;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ListView;
-
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.DroidPlannerApp.OnWaypointChangedListner;
 import com.droidplanner.R;
@@ -26,8 +17,13 @@ import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.fragments.helpers.OnMapInteractionListener;
 import com.droidplanner.widgets.adapterViews.MissionItemView;
 
-public class MissionFragment extends Fragment implements  OnWaypointChangedListner, OnItemLongClickListener,  OnItemClickListener, OnItemSelectedListener, MultiChoiceModeListener{
-	public HListView list;
+public class MissionFragment extends Fragment implements  OnWaypointChangedListner, AdapterView.OnItemLongClickListener, AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener, AbsListView.MultiChoiceModeListener {
+
+    /**
+     * Gridview storing the mission items.
+     * @since 1.2.0
+     */
+    public GridView grid;
 	private Mission mission;
 	private MissionItemView adapter;
 	private OnMapInteractionListener mListner;
@@ -37,18 +33,18 @@ public class MissionFragment extends Fragment implements  OnWaypointChangedListn
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_mission, container,
 				false);
-		list = (HListView) view.findViewById(R.id.listView1);
+		grid = (GridView) view.findViewById(R.id.mission_items_grid);
 		
 		mission = ((DroidPlannerApp) getActivity().getApplication()).drone.mission;
 		mission.addOnMissionUpdateListner(this);
 		adapter = new MissionItemView(this.getActivity(), android.R.layout.simple_list_item_1,mission.getItems());
-		list.setOnItemClickListener(this);
-		list.setMultiChoiceModeListener( this );		
-		list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+		grid.setOnItemClickListener(this);
+		grid.setMultiChoiceModeListener(this);
+		grid.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 		
-		list.setAdapter(adapter);
+		grid.setAdapter(adapter);
 
-		Log.i( "LIST", "choice mode: " + list.getChoiceMode() );
+		Log.i("Grid", "choice mode: " + grid.getChoiceMode());
 
 		return view;
 	}

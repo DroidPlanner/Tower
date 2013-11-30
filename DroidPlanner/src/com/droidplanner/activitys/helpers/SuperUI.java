@@ -165,6 +165,11 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu){
+        return false;
+    }
+
+    @Override
     public void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 

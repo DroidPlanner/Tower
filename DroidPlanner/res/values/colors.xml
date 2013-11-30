@@ -2,5 +2,6 @@
 <resources>
 
     <color name="opaque_black">#000</color>
+    <color name="nav_drawer_background">#e0272626</color>
 
 </resources>

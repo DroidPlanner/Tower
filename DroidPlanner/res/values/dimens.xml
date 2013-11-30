@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="nav_drawer_width">240dp</dimen>
+    <dimen name="editor_missions_status_height">30dp</dimen>
 </resources>
