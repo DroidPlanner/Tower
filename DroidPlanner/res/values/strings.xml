@@ -176,7 +176,8 @@
     <string name="menu_editor_save">Save</string>
     <string name="menu_editor_receive">Receive</string>
     <string name="menu_editor_send">Send</string>
-    <string name="pref_menu_drawer_lock_title">Keep menu drawer opened</string>
+    <string name="pref_menu_drawer_lock_title">Lock open menu drawer</string>
     <string name="pref_menu_drawer_lock_summary">Enable to keep the flight data menu drawer opened at all times.</string>
+    <string name="menu_drawer_lock_default_value">false</string>
 
 </resources>

@@ -77,7 +77,7 @@
                 android:key="pref_menu_drawer_lock"
                 android:title="@string/pref_menu_drawer_lock_title"
                 android:summary="@string/pref_menu_drawer_lock_summary"
-                android:defaultValue="false"/>
+                android:defaultValue="@string/menu_drawer_lock_default_value"/>
         <PreferenceCategory
                 android:key="pref_connection_actions"
                 android:summary="Actions to perform on or while connected to the Drone\nTo apply disconnect and reconnect"

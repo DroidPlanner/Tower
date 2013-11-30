@@ -1,13 +1,11 @@
 package com.droidplanner.activitys.helpers;
 
 import android.app.ActionBar;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.*;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
@@ -160,13 +158,38 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
         if (mDrawerToggle.onOptionsItemSelected(item))
             return true;
 
-        infoMenu.onOptionsItemSelected(item);
+        if(infoMenu.onOptionsItemSelected(item))
+            return true;
+
+        switch(item.getItemId()){
+            case R.id.menu_toggle_drawer_menu_lock:
+                boolean newValue = !item.isChecked();
+
+                //Store the update.
+                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences
+                        (getApplicationContext()).edit();
+                editor.putBoolean(PREF_MENU_DRAWER_LOCK, newValue).apply();
+
+                //Notify listeners.
+                sendStickyBroadcast(new Intent(ACTION_MENU_DRAWER_LOCK_UPDATE)
+                    .putExtra(EXTRA_MENU_DRAWER_LOCK, newValue));
+                return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu){
-        return false;
+        infoMenu.onPrepareOptionsMenu(menu);
+
+        //Update the state of the 'toggle drawer menu lock' menu item.
+        MenuItem drawerMenuLock = menu.findItem(R.id.menu_toggle_drawer_menu_lock);
+        if(drawerMenuLock != null){
+            drawerMenuLock.setChecked(Utils.isMenuDrawerLocked(getApplicationContext()));
+        }
+
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -358,9 +381,11 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
                 mNavDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED,
                         mNavMenuView);
 
-                //Reset the map right padding
-                if(mMapFragment != null){
-                    mMapFragment.setRightPadding(0);
+                if (!mNavDrawerLayout.isDrawerOpen(mNavMenuView)) {
+                    //Reset the map right padding
+                    if (mMapFragment != null) {
+                        mMapFragment.setRightPadding(0);
+                    }
                 }
             }
         }
