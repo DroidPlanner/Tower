@@ -65,6 +65,9 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyDFsAn5xo-mILEirpcUsF9BU9Vb_yR-Er4" />
 
+        <meta-data android:name="com.google.android.gms.version"
+                   android:value="@integer/google_play_services_version" />
+
         <service android:name=".service.MAVLinkService" >
         </service>
 

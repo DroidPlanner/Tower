@@ -1,7 +1,5 @@
 package com.droidplanner.fragments.helpers;
 
-import java.util.List;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,19 +7,16 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.drone.DroneInterfaces;
 import com.droidplanner.helpers.LocalMapTileProvider;
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
+
+import java.util.List;
 
 public class OfflineMapFragment extends MapFragment
 		implements DroneInterfaces.MapConfigListener {
@@ -33,7 +28,34 @@ public class OfflineMapFragment extends MapFragment
 	public static final String MAP_TYPE_NORMAL = "Normal";
 	public static final String MAP_TYPE_TERRAIN = "Terrain";
 
+    /**
+     * Map interface.
+     */
 	private GoogleMap mMap;
+
+    /**
+     * Map left padding.
+     * @since 1.2.0
+     */
+    private int mMapLeftPadding;
+
+    /**
+     * Map right padding.
+     * @since 1.2.0
+     */
+    private int mMapRightPadding;
+
+    /**
+     * Map top padding.
+     * @since 1.2.0
+     */
+    private int mMapTopPadding;
+
+    /**
+     * Map bottom padding.
+     * @since 1.2.0
+     */
+    private int mMapBottomPadding;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
@@ -155,4 +177,56 @@ public class OfflineMapFragment extends MapFragment
 	public void onMapTypeChanged() {
 		setupMap();
 	}
+
+    /**
+     * Updates the map left padding.
+     * @param leftPadding map left padding
+     * @since 1.2.0
+     */
+    public void setLeftPadding(int leftPadding){
+        if(mMap == null)
+            return;
+
+        mMapLeftPadding = leftPadding;
+        mMap.setPadding(mMapLeftPadding, mMapTopPadding, mMapRightPadding, mMapBottomPadding);
+    }
+
+    /**
+     * Updates the map top padding.
+     * @param topPadding map top padding
+     * @since 1.2.0
+     */
+    public void setTopPadding(int topPadding){
+        if(mMap == null)
+            return;
+
+        mMapTopPadding = topPadding;
+        mMap.setPadding(mMapLeftPadding, mMapTopPadding, mMapRightPadding, mMapBottomPadding);
+    }
+
+    /**
+     * Updates the map right padding.
+     * @param rightPadding map right padding
+     * @since 1.2.0
+     */
+    public void setRightPadding(int rightPadding){
+        if(mMap == null)
+            return;
+
+        mMapRightPadding = rightPadding;
+        mMap.setPadding(mMapLeftPadding, mMapTopPadding, mMapRightPadding, mMapBottomPadding);
+    }
+
+    /**
+     * Updates the map bottom padding.
+     * @param bottomPadding map bottom padding
+     * @since 1.2.0
+     */
+    public void setBottomPadding(int bottomPadding){
+        if(mMap == null)
+            return;
+
+        mMapBottomPadding = bottomPadding;
+        mMap.setPadding(mMapLeftPadding, mMapTopPadding, mMapRightPadding, mMapBottomPadding);
+    }
 }

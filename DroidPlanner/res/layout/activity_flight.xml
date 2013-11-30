@@ -12,7 +12,7 @@
             android:layout_height="match_parent">
 
         <fragment
-                android:id="@+id/fragment1"
+                android:id="@id/mapFragment"
                 android:name="com.droidplanner.fragments.FlightMapFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
@@ -57,20 +57,6 @@
                 android:layout_height="wrap_content"
                 tools:layout="@layout/fragment_telemetry"/>
 
-        <LinearLayout
-                android:id="@+id/LinearLayout01"
-                style="@style/transparentLayout"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:orientation="vertical">
-        </LinearLayout>
-
-        <fragment
-                android:id="@+id/editorToolsFragment"
-                android:name="com.droidplanner.fragments.MissionControlFragment"
-                android:layout_width="wrap_content"
-                android:layout_height="80dp"
-                tools:layout="@layout/fragment_mission_control"/>
-
     </LinearLayout>
+
 </android.support.v4.widget.DrawerLayout>

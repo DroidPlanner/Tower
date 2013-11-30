@@ -1,7 +1,6 @@
 package com.droidplanner.activitys;
 
 import android.app.FragmentManager;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import com.droidplanner.R;
@@ -95,13 +94,6 @@ public class FlightActivity extends SuperUI implements
 	@Override
 	public void onJoystickSelected() {
 		toggleRCFragment();
-	}
-
-	@Override
-	public void onPlanningSelected() {
-		Intent navigationIntent;
-		navigationIntent = new Intent(this, EditorActivity.class);
-		startActivity(navigationIntent);
 	}
 
     @Override

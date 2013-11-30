@@ -26,13 +26,12 @@
     </content>
     <orderEntry type="jdk" jdkName="Android 4.3 SDK" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="google-play-services_lib" exported="" />
     <orderEntry type="module" module-name="Mavlink" exported="" />
     <orderEntry type="library" name="usbseriallibrary" level="project" />
-    <orderEntry type="library" name="google-play-services" level="project" />
-    <orderEntry type="library" exported="" name="android-support-v13" level="application" />
+    <orderEntry type="library" name="android-support-v13" level="application" />
     <orderEntry type="library" exported="" name="gdk" level="application" />
     <orderEntry type="module" module-name="HorizontalListView" exported="" />
+    <orderEntry type="module" module-name="google-play-services_lib" exported="" />
   </component>
 </module>
 

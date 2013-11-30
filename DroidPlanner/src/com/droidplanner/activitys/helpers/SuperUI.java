@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.ExpandableListView;
 import com.droidplanner.DroidPlannerApp.ConnectionStateListner;
 import com.droidplanner.R;
+import com.droidplanner.fragments.helpers.OfflineMapFragment;
 import com.droidplanner.utils.Utils;
 import com.droidplanner.widgets.adapterViews.NavigationHubAdapter;
 
@@ -77,6 +78,13 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
      * @since 1.2.0
      */
     protected final IntentFilter mIntentFilter = new IntentFilter();
+
+    /**
+     * Handle to the map fragment used to update the map padding when the navigation drawer
+     * opens/closes.
+     * @since 1.2.0
+     */
+    protected OfflineMapFragment mMapFragment;
 
     /**
      * Broadcast receiver to handle received broadcast events.
@@ -184,6 +192,10 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
      * Set up the navigation drawer for the children of this class.
      */
     protected void setupNavDrawer() {
+        //Retrieves the map fragment, if it exists
+        mMapFragment = (OfflineMapFragment) getFragmentManager().findFragmentById(R.id
+                .mapFragment);
+
         final View contentLayout = findViewById(R.id.activity_content_view);
 
         mNavMenuView = findViewById(R.id.nav_menu_drawer_container);
@@ -210,11 +222,28 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
             public void onDrawerClosed(View drawerView) {
                 updateActionBar(getLabelResource());
 
-                //Make sure we're dealing with the navigation hub view
-                if(mNavMenuView != null && drawerView.getId() == R.id.nav_drawer_container){
-                    //Open the menu drawer if it's in open lock mode.
-                    if(mNavDrawerLayout.getDrawerLockMode(mNavMenuView) == DrawerLayout.LOCK_MODE_LOCKED_OPEN)
-                        mNavDrawerLayout.openDrawer(mNavMenuView);
+                switch(drawerView.getId()){
+                    //Navigation drawer
+                    case R.id.nav_drawer_container:
+                        if(mNavMenuView != null){
+                            //Open the menu drawer if it's in open lock mode.
+                            if(mNavDrawerLayout.getDrawerLockMode(mNavMenuView) == DrawerLayout.LOCK_MODE_LOCKED_OPEN)
+                                mNavDrawerLayout.openDrawer(mNavMenuView);
+                        }
+
+                        if(mMapFragment != null){
+                            //Reset the map left padding
+                            mMapFragment.setLeftPadding(0);
+                        }
+                        break;
+
+                    //Menu drawer
+                    case R.id.nav_menu_drawer_container:
+                        if(mMapFragment != null){
+                            //Reset the map right padding.
+                            mMapFragment.setRightPadding(0);
+                        }
+                        break;
                 }
             }
 
@@ -222,11 +251,29 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
             public void onDrawerOpened(View drawerView) {
                 updateActionBar(LABEL_RESOURCE);
 
-                //Make sure we're dealing with the navigation hub view
-                if(mNavMenuView != null && drawerView.getId() == R.id.nav_drawer_container){
-                    //Close the menu drawer if it's opened.
-                    if(mNavDrawerLayout.isDrawerVisible(mNavMenuView))
-                        mNavDrawerLayout.closeDrawer(mNavMenuView);
+                switch(drawerView.getId()){
+                    case R.id.nav_drawer_container:
+                        if(mNavMenuView != null){
+                            //Close the menu drawer if it's opened.
+                            if(mNavDrawerLayout.isDrawerVisible(mNavMenuView))
+                                mNavDrawerLayout.closeDrawer(mNavMenuView);
+                        }
+
+                        if(mMapFragment != null){
+                            //Update the map left padding.
+                            int leftPadding = drawerView.getLayoutParams().width;
+                            mMapFragment.setLeftPadding(leftPadding);
+                        }
+                        break;
+
+                    //Menu drawer
+                    case R.id.nav_menu_drawer_container:
+                        if(mMapFragment != null){
+                            //Update the map right padding.
+                            int rightPadding = drawerView.getLayoutParams().width;
+                            mMapFragment.setRightPadding(rightPadding);
+                        }
+                        break;
                 }
             }
         };
@@ -283,10 +330,33 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
             if (isMenuDrawerLocked) {
                 mNavDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN,
                         mNavMenuView);
+
+                //Close the drawer if the navigation drawer is already opened.
+                if(mNavHubView != null && mNavDrawerLayout.isDrawerOpen(mNavHubView)){
+                    mNavDrawerLayout.closeDrawer(mNavMenuView);
+
+                    //Update the map left padding
+                    if (mMapFragment != null) {
+                        int leftPadding = mNavHubView.getLayoutParams().width;
+                        mMapFragment.setLeftPadding(leftPadding);
+                    }
+                }
+                else {
+                    //Update the map right padding
+                    if (mMapFragment != null) {
+                        int rightPadding = mNavMenuView.getLayoutParams().width;
+                        mMapFragment.setRightPadding(rightPadding);
+                    }
+                }
             }
             else {
                 mNavDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED,
                         mNavMenuView);
+
+                //Reset the map right padding
+                if(mMapFragment != null){
+                    mMapFragment.setRightPadding(0);
+                }
             }
         }
     }
