@@ -167,8 +167,44 @@
         <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:gravity">center</item>
         <item name="android:background">#66848484</item>
-        <!-- android:padding="3dp"-->
-
         </style>
 
+
+	 <!-- Mode info Style -->
+    <style name="modeHeaderTitle">
+        <item name="android:textColor">#fff</item>
+        <item name="android:textSize">20dp</item>
+	    <item name="android:textStyle">bold</item>
+	    <item name="android:layout_alignParentTop">true</item>
+	    <item name="android:layout_alignParentTop">true</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        </style>
+    <style name="modeHeaderOptions">
+        <item name="android:textColor">#85daff</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        </style>
+
+    <style name="ModeDetailText">
+        <item name="android:textColor">#4d4d4d</item>
+        <item name="android:textSize">14dp</item>
+	    <item name="android:textStyle">italic</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        </style>
+
+    <style name="modeControl">
+        <item name="android:textColor">#fff</item>
+	    <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        </style>
+
+    <style name="modeLabel">
+        <item name="android:textColor">#4d4d4d</item>
+	    <item name="android:textStyle">bold|italic</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+      	<item name="android:layout_marginTop">4dp</item>
+      	<item name="android:layout_marginBottom">4dp</item>
+        </style>
 </resources>

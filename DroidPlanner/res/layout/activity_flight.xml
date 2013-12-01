@@ -43,7 +43,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
 
-        android:content="@+id/LinearLayout01"
+        android:content="@+id/modeStabilizeFragment"
         android:handle="@+id/slideButtonLeft"
         android:orientation="horizontal"
         android:padding="0dp"
@@ -57,13 +57,32 @@
             android:src="@drawable/drawer_tab"
             tools:ignore="ContentDescription" />
 
-        <LinearLayout
+        <!--<LinearLayout
             android:id="@+id/LinearLayout01"
             style="@style/flyoutPanelLayout"
             android:layout_width="81dp"
             android:layout_height="match_parent"
             android:orientation="vertical" >
-        </LinearLayout>
+        </LinearLayout>-->
+            <!-- style="@style/flyoutPanelLayout" -->
+		<!--<fragment
+			android:id="@+id/modeCircleFragment"
+			android:name="com.droidplanner.fragments.mode.ModeCircleFragment"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_alignParentBottom="true"
+			android:layout_centerHorizontal="true"
+			tools:layout="@layout/fragment_mode_circle" />-->
+
+		<fragment
+			android:id="@+id/modeStabilizeFragment"
+			android:name="com.droidplanner.fragments.mode.ModeRTLFragment"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_alignParentBottom="true"
+			android:layout_centerHorizontal="true"
+			tools:layout="@layout/fragment_mode_rtl" />
+
     </SlidingDrawer>
 
     <TextView
