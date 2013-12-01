@@ -1,86 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/contentLayoutMissionControl"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:layout_gravity="center_horizontal"
-    android:orientation="horizontal" >
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/contentLayoutMissionControl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:padding="5dp">
 
-	<Button
-	    android:id="@+id/mc_joystickBtn"
-	    style="@style/actionButton"
-	    android:layout_width="75dp"
-	    android:layout_height="match_parent"
-	    android:background="@drawable/black_button"
-	    android:drawableTop="@drawable/ic_control"
-	    android:text="Control" />
+    <Button
+            android:id="@+id/mc_joystickBtn"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/ic_control"
+            android:layout_weight="1"
+            android:textSize="@dimen/mission_control_button_text_size"
+            android:text="Control"/>
 
-	<Button
-	    android:id="@+id/mc_planningBtn"
-	    style="@style/actionButton"
-	    android:layout_width="75dp"
-	    android:layout_height="match_parent"
-	    android:background="@drawable/black_button"
-	    android:drawableTop="@drawable/ic_edit"
-	    android:text="Edit" />
+    <Button
+            android:id="@+id/mc_homeBtn"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/ic_home"
+            android:layout_weight="1"
+            android:textSize="@dimen/mission_control_button_text_size"
+            android:text="Home"/>
 
-    <Space
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_margin="5dp"/>
+    <Button
+            android:id="@+id/mc_land"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/ic_land"
+            android:layout_weight="1"
+            android:textSize="@dimen/mission_control_button_text_size"
+            android:text="Land"
+            tools:ignore="ContentDescription"/>
 
-	<Button
-	    android:id="@+id/mc_homeBtn"
-	    style="@style/actionButton"
-	    android:layout_width="75dp"
-	    android:layout_height="match_parent"
-	    android:background="@drawable/black_button"
-	    android:drawableTop="@drawable/ic_home"
-	    android:text="Home" />
+    <Button
+            android:id="@+id/mc_takeoff"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/ic_takeoff"
+            android:layout_weight="1"
+            android:text="Takeoff"
+            android:textSize="@dimen/mission_control_button_text_size"
+            tools:ignore="ContentDescription"/>
 
-    <Space
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent" />
+    <Button
+            android:id="@+id/mc_loiter"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/ic_loiter"
+            android:layout_weight="1"
+            android:textSize="@dimen/mission_control_button_text_size"
+            android:text="Loiter"
+            tools:ignore="ContentDescription"/>
 
-	<Button
-	    android:id="@+id/mc_land"
-	    style="@style/actionButton"
-	    android:layout_width="75dp"
-	    android:layout_height="match_parent"
-	    android:background="@drawable/black_button"
-	    android:drawableTop="@drawable/ic_land"
-	    android:text="Land"
-	    tools:ignore="ContentDescription" />
-
-	<Button
-	    android:id="@+id/mc_takeoff"
-	    style="@style/actionButton"
-	    android:layout_width="75dp"
-	    android:layout_height="match_parent"
-	    android:background="@drawable/black_button"
-	    android:drawableTop="@drawable/ic_takeoff"
-	    android:text="Takeoff"
-	    tools:ignore="ContentDescription" />
-
-	<Button
-	    android:id="@+id/mc_loiter"
-	    style="@style/actionButton"
-	    android:layout_width="75dp"
-	    android:layout_height="match_parent"
-	    android:background="@drawable/black_button"
-	    android:drawableTop="@drawable/ic_loiter"
-	    android:text="Loiter"
-	    tools:ignore="ContentDescription" />
-
-	<Button
-	    android:id="@+id/mc_follow"
-	    style="@style/actionButton"
-	    android:layout_width="75dp"
-	    android:layout_height="match_parent"
-	    android:background="@drawable/black_button"
-	    android:drawableTop="@drawable/ic_follow"
-	    android:text="Follow"
-	    tools:ignore="ContentDescription" />
+    <Button
+            android:id="@+id/mc_follow"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/ic_follow"
+            android:layout_weight="1"
+            android:textSize="@dimen/mission_control_button_text_size"
+            android:text="Follow"
+            tools:ignore="ContentDescription"/>
 
 </LinearLayout>

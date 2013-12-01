@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="nav_drawer_width">240dp</dimen>
+    <dimen name="editor_missions_status_height">30dp</dimen>
+    <dimen name="mission_control_button_text_size">13sp</dimen>
+    <dimen name="bottom_bar_height">60dp</dimen>
+</resources>

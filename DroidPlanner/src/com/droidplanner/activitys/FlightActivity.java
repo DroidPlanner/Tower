@@ -1,10 +1,8 @@
 package com.droidplanner.activitys;
 
 import android.app.FragmentManager;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperUI;
 import com.droidplanner.drone.DroneInterfaces.OnStateListner;
@@ -14,10 +12,26 @@ import com.droidplanner.fragments.MissionControlFragment.OnMissionControlInterac
 import com.droidplanner.fragments.RCFragment;
 import com.droidplanner.fragments.helpers.OnMapInteractionListener;
 import com.droidplanner.polygon.PolygonPoint;
+import com.droidplanner.widgets.adapterViews.NavigationHubAdapter;
 import com.google.android.gms.maps.model.LatLng;
 
 public class FlightActivity extends SuperUI implements
 		OnMapInteractionListener, OnMissionControlInteraction, OnStateListner {
+
+    /**
+     * Activity logo.
+     * Used by the navigation drawer.
+     * @since 1.2.0
+     */
+    public static final int LOGO_RESOURCE = R.drawable.ic_action_plane;
+
+    /**
+     * Activity title.
+     * Used to update the action bar when the navigation drawer opens/closes.
+     * @since 1.2.0
+     */
+    public static final int LABEL_RESOURCE = R.string.screen_flight_data;
+
 	private FragmentManager fragmentManager;
 	private RCFragment rcFragment;
 	private View failsafeTextView;
@@ -31,6 +45,8 @@ public class FlightActivity extends SuperUI implements
 		failsafeTextView = findViewById(R.id.failsafeTextView);
 		drone.state.addFlightStateListner(this);
 
+        //Setup the navigation drawer
+        setupNavDrawer();
 	}
 
 	@Override
@@ -80,12 +96,10 @@ public class FlightActivity extends SuperUI implements
 		toggleRCFragment();
 	}
 
-	@Override
-	public void onPlanningSelected() {
-		Intent navigationIntent;
-		navigationIntent = new Intent(this, EditorActivity.class);
-		startActivity(navigationIntent);
-	}
+    @Override
+    protected NavigationHubAdapter.HubItem getNavigationHubItem(){
+        return NavigationHubAdapter.HubItem.FLIGHT_DATA;
+    }
 
 	private void toggleRCFragment() {
 		if (rcFragment == null) {
@@ -122,5 +136,10 @@ public class FlightActivity extends SuperUI implements
 			failsafeTextView.setVisibility(View.GONE);
 		}
 	}
+
+    @Override
+    protected int getLabelResource(){
+        return LABEL_RESOURCE;
+    }
 
 }

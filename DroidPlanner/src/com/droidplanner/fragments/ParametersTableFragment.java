@@ -1,10 +1,5 @@
 package com.droidplanner.fragments;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
@@ -18,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.MAVLink.Messages.enums.MAV_TYPE;
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperActivity;
@@ -31,8 +25,27 @@ import com.droidplanner.file.IO.ParameterWriter;
 import com.droidplanner.parameters.Parameter;
 import com.droidplanner.widgets.adapterViews.ParamRow;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 public class ParametersTableFragment extends Fragment implements
 		OnClickListener, OnParameterManagerListner {
+
+    /**
+     * Fragment label.
+     * Used by the navigation drawer.
+     * @since 1.2.0
+     */
+    public static final int LABEL_RESOURCE = R.string.screen_parameters;
+
+    /**
+     * Fragment logo.
+     * Used by the navigation drawer.
+     * @since 1.2.0
+     */
+    public static final int LOGO_RESOURCE = R.drawable.ic_action_database;
 
 	private TableLayout parameterTable;
 	private List<ParamRow> rowList = new ArrayList<ParamRow>();
@@ -55,13 +68,15 @@ public class ParametersTableFragment extends Fragment implements
 		return view;
 	}
 
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		context = (Context) activity;
-		drone = ((SuperActivity) activity).drone;
-		drone.parameters.parameterListner = this;
-	}
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState){
+        super.onActivityCreated(savedInstanceState);
+
+        final Activity activity = getActivity();
+        context = activity.getApplicationContext();
+        drone = ((SuperActivity) activity).drone;
+        drone.parameters.parameterListner = this;
+    }
 
 	public void refreshRowParameter(Parameter parameter, Parameters parameters) {
 		try {

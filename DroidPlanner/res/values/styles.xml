@@ -19,7 +19,7 @@
 	<style name="textLabels">
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
         <item name="android:textColor">#808080</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">20sp</item>
         <item name="android:layout_marginLeft">8dp</item>
       	<item name="android:layout_marginBottom">-6dp</item>
         </style>
@@ -41,7 +41,7 @@
 
     <style name="largeTelemetryText">
         <item name="android:textColor">#ffffff</item>
-        <item name="android:textSize">40sp</item>
+        <item name="android:textSize">30sp</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:layout_marginRight">4dp</item>
         <item name="android:layout_marginTop">0dp</item>
@@ -107,5 +107,30 @@
 	<style name="myCustomMenuTextApearance" parent="@android:style/TextAppearance.Widget.TextView.PopupMenu">
 		<item name="android:textColor">#000000</item>
 	</style>
+
+    <!-- Navigation drawer style -->
+    <style name="NavDrawer">
+        <item name="android:layout_width">@dimen/nav_drawer_width</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/nav_drawer_background</item>
+    </style>
+
+    <style name="NavHubDrawer" parent="NavDrawer">
+        <item name="android:choiceMode">singleChoice</item>
+        <item name="android:layout_gravity">start</item>
+    </style>
+
+    <style name="NavMenuDrawer" parent="NavDrawer">
+        <item name="android:layout_gravity">end</item>
+        <item name="android:layout_marginBottom">@dimen/bottom_bar_height</item>
+    </style>
+
+    <style name="BottomBarStyle">
+        <item name="android:id">@id/bottom_bar_id</item>
+        <item name="android:background">#a0000000</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/bottom_bar_height</item>
+        <item name="android:layout_alignParentBottom">true</item>
+    </style>
 
 </resources>

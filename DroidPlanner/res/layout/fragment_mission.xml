@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
-
-    <it.sephiroth.android.library.widget.HListView
-        android:id="@+id/listView1"
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:padding="5dp">
+
+    <GridView
+            android:id="@+id/mission_items_grid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:numColumns="auto_fit"
+            android:gravity="center"
+            android:verticalSpacing="5dp"
+            android:stretchMode="columnWidth"
+            android:fadeScrollbars="false"
+            android:scrollbars="vertical"/>
 
 </LinearLayout>

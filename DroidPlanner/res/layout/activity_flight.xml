@@ -1,79 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-
-    <fragment
-        android:id="@+id/fragment1"
-        android:name="com.droidplanner.fragments.FlightMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <fragment
-        android:id="@+id/fragment2"
-        android:name="com.droidplanner.fragments.TelemetryFragment"
-        android:layout_width="135dp"
+<android.support.v4.widget.DrawerLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/drawer_layout"
         android:layout_height="match_parent"
-        tools:layout="@layout/fragment_telemetry" />
+        android:layout_width="match_parent">
 
-    <FrameLayout
-        android:id="@+id/containerRC"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="bottom"
-        android:measureAllChildren="true" >
-
-    </FrameLayout>
-
-    <fragment
-        android:id="@+id/editorToolsFragment"
-        android:name="com.droidplanner.fragments.MissionControlFragment"
-        android:layout_width="wrap_content"
-        android:layout_height="80dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        tools:layout="@layout/fragment_mission_control" />
-
-    <SlidingDrawer
-        android:id="@+id/SlidingDrawerLeft"
-        android:layout_width="220dp"
-        android:layout_height="300dp"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:content="@+id/LinearLayout01"
-        android:handle="@+id/slideButtonLeft"
-        android:orientation="horizontal"
-        android:padding="0dp"
-        android:visibility="visible" >
-
-        <ImageView
-            android:id="@+id/slideButtonLeft"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/slide_left"
-            tools:ignore="ContentDescription" />
-
-        <LinearLayout
-            android:id="@+id/LinearLayout01"
-            style="@style/transparentLayout"
+    <RelativeLayout
+            android:id="@+id/activity_content_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" >
-        </LinearLayout>
-    </SlidingDrawer>
+            android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/failsafeTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/fragment2"
-        android:background="#80ff0000"
-        android:gravity="center"
-        android:padding="3dp"
-        android:text="FAILSAFE"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:visibility="gone" />
+        <fragment
+                android:id="@id/mapFragment"
+                android:name="com.droidplanner.fragments.FlightMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
 
-</RelativeLayout>
+        <FrameLayout
+                android:id="@+id/containerRC"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="bottom"
+                android:measureAllChildren="true">
+
+        </FrameLayout>
+
+        <TextView
+                android:id="@+id/failsafeTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:background="#80ff0000"
+                android:gravity="center"
+                android:padding="3dp"
+                android:text="FAILSAFE"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:visibility="gone"/>
+
+        <FrameLayout
+                style="@style/BottomBarStyle"
+                android:layout_centerHorizontal="true"
+                android:orientation="vertical">
+
+            <ImageView
+                    android:src="@drawable/title_bar_shadow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitXY"/>
+
+            <fragment
+                    android:id="@+id/editorToolsFragment"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:name="com.droidplanner.fragments.MissionControlFragment"
+                    tools:layout="@layout/fragment_mission_control"/>
+        </FrameLayout>
+
+    </RelativeLayout>
+
+    <ExpandableListView
+            android:id="@+id/nav_drawer_container"
+            style="@style/NavHubDrawer"
+            android:orientation="vertical"/>
+
+    <LinearLayout
+            android:id="@+id/nav_menu_drawer_container"
+            style="@style/NavMenuDrawer"
+            android:orientation="vertical">
+
+        <fragment
+                android:id="@+id/fragment2"
+                android:name="com.droidplanner.fragments.TelemetryFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                tools:layout="@layout/fragment_telemetry"/>
+
+    </LinearLayout>
+
+</android.support.v4.widget.DrawerLayout>

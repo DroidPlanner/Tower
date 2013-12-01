@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-
 import com.droidplanner.R;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.HomeDistanceChangedListner;
@@ -22,40 +21,42 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner,
 	private MenuItem home;
 	private MenuItem signal;
 	public SelectModeSpinner mode;
-	
+
 	private TimerView timer;
 
 	public InfoMenu(Drone drone) {
 		this.drone = drone;
 	}
 
-	public void inflateMenu(Menu menu, MenuInflater menuInflater) {
-		if (drone.MavClient.isConnected()) {
-			menuInflater.inflate(R.menu.menu_newui_connected, menu);
-			battery = menu.findItem(R.id.bar_battery);
-			gps = menu.findItem(R.id.bar_gps);
-			propeler = menu.findItem(R.id.bar_propeller);
-			home = menu.findItem(R.id.bar_home);
-			signal = menu.findItem(R.id.bar_signal);
-			mode = (SelectModeSpinner) menu.findItem(R.id.bar_mode)
-					.getActionView();
+    public void inflateMenu(Menu menu, MenuInflater menuInflater) {
+        menuInflater.inflate(R.menu.menu_newui, menu);
+        battery = menu.findItem(R.id.bar_battery);
+        gps = menu.findItem(R.id.bar_gps);
+        propeler = menu.findItem(R.id.bar_propeller);
+        home = menu.findItem(R.id.bar_home);
+        signal = menu.findItem(R.id.bar_signal);
+        mode = (SelectModeSpinner) menu.findItem(R.id.bar_mode)
+                .getActionView();
 
-			timer = new TimerView(propeler);
-			drone.setHomeChangedListner(this);
-			drone.setInfoListner(this);
-			drone.state.addFlightStateListner(this);
+        timer = new TimerView(propeler);
+        drone.setHomeChangedListner(this);
+        drone.setInfoListner(this);
+        drone.state.addFlightStateListner(this);
+    }
 
-		} else {
-			menuInflater.inflate(R.menu.menu_newui_disconnected, menu);
-		}
-	}
+    public void onPrepareOptionsMenu(Menu menu) {
+        final boolean isConnected = drone.MavClient.isConnected();
+        menu.setGroupVisible(R.id.menu_group_connected_state, isConnected);
+        menu.setGroupVisible(R.id.menu_group_disconnected_state, !isConnected);
+    }
 
-	public void onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.bar_home:
 			drone.waypointMananger.getWaypoints();
-			break;
+            return true;
 		}
+        return false;
 	}
 
 	@Override
@@ -96,7 +97,7 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner,
 	public void onFailsafeChanged() {
 		// TODO Auto-generated method stub
 
-	}	
+	}
 
 
 }

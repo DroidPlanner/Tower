@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.droidplanner"
-    android:versionCode="56"
-    android:versionName="1.2.0" >
+          package="com.droidplanner"
+          android:versionCode="56"
+          android:versionName="1.2.0">
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -24,6 +23,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
 
     <uses-feature android:name="android.hardware.screen.portrait" />
 
@@ -65,10 +65,14 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyDFsAn5xo-mILEirpcUsF9BU9Vb_yR-Er4" />
 
+        <meta-data android:name="com.google.android.gms.version"
+                   android:value="@integer/google_play_services_version" />
+
         <service android:name=".service.MAVLinkService" >
         </service>
 
-        <activity android:name=".activitys.FlightActivity" >
+        <activity android:name=".activitys.FlightActivity"
+                android:launchMode="singleTask">
 
             <!-- Launcher Intent -->
             <intent-filter>
@@ -88,7 +92,8 @@
         </activity>
         <activity
             android:name=".activitys.EditorActivity"
-            android:label="@string/editor"
+            android:label="@string/screen_editor"
+            android:launchMode="singleTask"
             android:parentActivityName=".activitys.FlightActivity" >
 
             <!-- Parent activity meta-data to support API level 7+ -->
@@ -107,8 +112,8 @@
         </activity>
         <activity
             android:name=".activitys.ConfigurationActivity"
-            android:label="@string/configuration"
-            android:parentActivityName=".activitys.FlightActivity" >
+            android:launchMode="singleTask"
+            android:label="@string/screen_configuration">
 
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data

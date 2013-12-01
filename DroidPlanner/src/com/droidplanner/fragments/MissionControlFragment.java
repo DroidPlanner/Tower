@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-
 import com.MAVLink.Messages.ApmModes;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
@@ -20,14 +19,11 @@ public class MissionControlFragment extends Fragment implements
 
 	public interface OnMissionControlInteraction {
 		public void onJoystickSelected();
-
-		public void onPlanningSelected();
 	}
 
 	private Drone drone;
 	private OnMissionControlInteraction listner;
 	private Button homeBtn;
-	private Button missionBtn;
 	private Button joystickBtn;
 	private Button landBtn;
 	private Button loiterBtn;
@@ -59,7 +55,6 @@ public class MissionControlFragment extends Fragment implements
 	}
 
 	private void setupViews(View parentView) {
-		missionBtn = (Button) parentView.findViewById(R.id.mc_planningBtn);
 		joystickBtn = (Button) parentView.findViewById(R.id.mc_joystickBtn);
 		homeBtn = (Button) parentView.findViewById(R.id.mc_homeBtn);
 		landBtn = (Button) parentView.findViewById(R.id.mc_land);
@@ -70,7 +65,6 @@ public class MissionControlFragment extends Fragment implements
 	}
 
 	private void setupListner() {
-		missionBtn.setOnClickListener(this);
 		joystickBtn.setOnClickListener(this);
 		homeBtn.setOnClickListener(this);
 		landBtn.setOnClickListener(this);
@@ -82,9 +76,6 @@ public class MissionControlFragment extends Fragment implements
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.mc_planningBtn:
-			listner.onPlanningSelected();
-			break;
 		case R.id.mc_joystickBtn:
 			listner.onJoystickSelected();
 			break;
