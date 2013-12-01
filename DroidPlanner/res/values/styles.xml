@@ -122,6 +122,15 @@
 
     <style name="NavMenuDrawer" parent="NavDrawer">
         <item name="android:layout_gravity">end</item>
+        <item name="android:layout_marginBottom">@dimen/bottom_bar_height</item>
+    </style>
+
+    <style name="BottomBarStyle">
+        <item name="android:id">@id/bottom_bar_id</item>
+        <item name="android:background">#a0000000</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/bottom_bar_height</item>
+        <item name="android:layout_alignParentBottom">true</item>
     </style>
 
 </resources>

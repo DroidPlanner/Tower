@@ -85,6 +85,12 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
     protected OfflineMapFragment mMapFragment;
 
     /**
+     * View bottom bar. Contains buttons, or info depending on the underlying activity.
+     * @since 1.2.0
+     */
+    private View mBottomBarView;
+
+    /**
      * Broadcast receiver to handle received broadcast events.
      * @since 1.2.0
      */
@@ -134,6 +140,12 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
 
         app.conectionListner = this;
         drone.MavClient.queryConnectionState();
+
+        //Update the map bottom padding to account for the bottom bar view
+        if(mBottomBarView != null && mMapFragment != null){
+            int bottomPadding = mBottomBarView.getLayoutParams().height;
+            mMapFragment.setBottomPadding(bottomPadding);
+        }
     }
 
     @Override
@@ -142,6 +154,11 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
 
         //Unregister the broadcast receiver
         unregisterReceiver(mBroadcastReceiver);
+
+        //Reset the map top padding.
+        if(mBottomBarView != null && mMapFragment != null){
+            mMapFragment.setBottomPadding(0);
+        }
     }
 
     @Override
@@ -223,6 +240,9 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
         //Retrieves the map fragment, if it exists
         mMapFragment = (OfflineMapFragment) getFragmentManager().findFragmentById(R.id
                 .mapFragment);
+
+        //Retrieve the bottom bar if it exists.
+        mBottomBarView = findViewById(R.id.bottom_bar_id);
 
         final View contentLayout = findViewById(R.id.activity_content_view);
 
@@ -381,9 +401,14 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
                 mNavDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED,
                         mNavMenuView);
 
-                if (!mNavDrawerLayout.isDrawerOpen(mNavMenuView)) {
-                    //Reset the map right padding
-                    if (mMapFragment != null) {
+                if (mMapFragment != null) {
+                    if (mNavDrawerLayout.isDrawerOpen(mNavMenuView)) {
+                        //Update the map right padding
+                        int rightPadding = mNavMenuView.getLayoutParams().width;
+                        mMapFragment.setRightPadding(rightPadding);
+                    }
+                    else {
+                        //Reset the map right padding
                         mMapFragment.setRightPadding(0);
                     }
                 }

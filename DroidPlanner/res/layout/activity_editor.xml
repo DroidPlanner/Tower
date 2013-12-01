@@ -19,17 +19,28 @@
                 android:layout_height="match_parent"
                 tools:layout="@layout/fragment_gesture_map"/>
 
-        <TextView
-                android:id="@+id/editor_missions_status"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/editor_missions_status_height"
-                android:layout_alignParentTop="true"
+        <FrameLayout
+                style="@style/BottomBarStyle"
                 android:layout_centerHorizontal="true"
-                android:background="@color/nav_drawer_background"
-                android:gravity="center"
-                android:padding="3dp"
-                android:text="Distance: 200m, Flight time: 3:30s"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+                android:orientation="vertical">
+
+            <ImageView
+                    android:src="@drawable/title_bar_shadow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitXY"/>
+
+            <TextView
+                    android:id="@+id/editor_missions_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:padding="3dp"
+                    android:text="Distance: 200m, Flight time: 3:30s"
+                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+        </FrameLayout>
+
 
     </RelativeLayout>
 
@@ -40,7 +51,6 @@
 
     <LinearLayout
             android:id="@+id/nav_menu_drawer_container"
-            android:layout_marginTop="@dimen/editor_missions_status_height"
             style="@style/NavMenuDrawer"
             android:orientation="vertical">
 
