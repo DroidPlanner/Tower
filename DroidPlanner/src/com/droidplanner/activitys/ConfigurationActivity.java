@@ -22,7 +22,7 @@ public class ConfigurationActivity extends SuperUI{
     public static final String SETTINGS = "settings";
 	private static final String RC_SETUP = "rc_setup";
 	private FragmentTabHost mTabHost;
-    
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -30,22 +30,18 @@ public class ConfigurationActivity extends SuperUI{
 
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		
+
 		mTabHost = (FragmentTabHost)findViewById(R.id.configurationTabHost);
 	    mTabHost.setup(this, getFragmentManager(), R.id.realtabcontent);
-	    mTabHost.addTab(mTabHost.newTabSpec(TUNING).setIndicator("Tuning"),
-	            TuningFragment.class, null);
-	    mTabHost.addTab(mTabHost.newTabSpec(RC_SETUP).setIndicator("RC"),
-	            RcSetupFragment.class, null);
-	    mTabHost.addTab(mTabHost.newTabSpec(PARAMETERS).setIndicator("Parameters"),
-	            ParametersTableFragment.class, null);
-	    mTabHost.addTab(mTabHost.newTabSpec(SETTINGS).setIndicator("Settings"),
-	            SettingsFragment.class, null);
-	    
+	    mTabHost.addTab(mTabHost.newTabSpec(SETTINGS).setIndicator("Settings"),SettingsFragment.class, null);
+	    mTabHost.addTab(mTabHost.newTabSpec(TUNING).setIndicator("Tuning"),TuningFragment.class, null);
+	    mTabHost.addTab(mTabHost.newTabSpec(RC_SETUP).setIndicator("RC"),RcSetupFragment.class, null);
+	    mTabHost.addTab(mTabHost.newTabSpec(PARAMETERS).setIndicator("Parameters"),ParametersTableFragment.class, null);
+
 	    Intent intent = getIntent();
 	    String stringExtra = intent.getStringExtra(SCREEN_INTENT);
 		if(SETTINGS.equalsIgnoreCase(stringExtra)){
-	    	mTabHost.setCurrentTabByTag(SETTINGS);    	
+	    	mTabHost.setCurrentTabByTag(SETTINGS);
 	    }
 	}
 

@@ -45,9 +45,9 @@ public abstract class SuperActivity extends Activity implements
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.menu_configuration:
-			startActivity(new Intent(this, ConfigurationActivity.class));
-			return true;
+		//case R.id.menu_configuration:
+		//	startActivity(new Intent(this, ConfigurationActivity.class));
+		//	return true;
 		case R.id.menu_settings:
 			Intent intent = new Intent(this, ConfigurationActivity.class);
 			intent.putExtra(ConfigurationActivity.SCREEN_INTENT,

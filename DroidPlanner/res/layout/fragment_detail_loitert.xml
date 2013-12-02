@@ -92,13 +92,26 @@
         android:id="@+id/scrollView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
         android:layout_below="@id/title_rect">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
+
+			<TextView
+				android:id="@+id/textView1"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+		        android:padding="12dp"
+				android:background="@drawable/mode_desc_rectangle"
+				android:text="@string/waypointInfo_LoiterT" />
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+		        android:padding="12dp"
+				android:orientation="vertical" >
 
             <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
                 android:id="@+id/altitudeView"
@@ -124,12 +137,7 @@
                 custom:unit="s" >
             </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
 
-
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/waypointInfo_LoiterT" />
+			</LinearLayout>
         </LinearLayout>
     </ScrollView>
 
