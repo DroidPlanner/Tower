@@ -1,5 +1,7 @@
 package com.droidplanner.fragments;
 
+import java.util.ArrayList;
+
 import it.sephiroth.android.library.util.v11.MultiChoiceModeListener;
 import it.sephiroth.android.library.widget.AdapterView;
 import it.sephiroth.android.library.widget.AdapterView.OnItemClickListener;
@@ -10,6 +12,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,6 +30,7 @@ import com.droidplanner.fragments.helpers.OnMapInteractionListener;
 import com.droidplanner.widgets.adapterViews.MissionItemView;
 
 public class MissionFragment extends Fragment implements  OnWaypointChangedListner, OnItemLongClickListener,  OnItemClickListener, OnItemSelectedListener, MultiChoiceModeListener{
+	private static final int MENU_DELETE = 1;
 	public HListView list;
 	private Mission mission;
 	private MissionItemView adapter;
@@ -83,11 +87,29 @@ public class MissionFragment extends Fragment implements  OnWaypointChangedListn
 	}
 
 	@Override
-	public boolean onActionItemClicked(ActionMode arg0, MenuItem arg1) {
+	public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 		// TODO Auto-generated method stub
-
 		Log.d("LIST", "you onActionItemClicked ");
+		
+		if (item.getItemId()==MENU_DELETE) {
+			deleteSelected();
+		}
+		mode.finish();
 		return false;
+	}
+
+	private void deleteSelected() {
+		SparseBooleanArray selected = list.getCheckedItemPositions();
+		ArrayList<MissionItem> toRemove = new ArrayList<MissionItem>();
+		
+		for( int i = 0; i < selected.size(); i++ ) {
+			if( selected.valueAt( i ) ) {
+				MissionItem item = adapter.getItem(selected.keyAt(i));
+				toRemove.add(item);
+			}
+		}		
+		
+		mission.removeWaypoints(toRemove);
 	}
 
 	@Override
@@ -95,7 +117,7 @@ public class MissionFragment extends Fragment implements  OnWaypointChangedListn
 		// TODO Auto-generated method stub
 
 		Log.d("LIST", "you onCreateActionMode ");
-		menu.add( 0, 0, 0, "Delete" );
+		menu.add( 0, MENU_DELETE, 0, "Delete" );
 		return true;
 	}
 

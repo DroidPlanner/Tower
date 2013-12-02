@@ -38,9 +38,14 @@ public class Mission extends DroneVariable implements PathSource,
 		defaultAlt = newAltitude;		
 	}
 
-	public void removeWaypoint(SpatialCoordItem waypoint) {
-		itens.remove(waypoint);
+	public void removeWaypoint(MissionItem item) {
+		itens.remove(item);
 		onMissionUpdate();
+	}
+
+	public void removeWaypoints(ArrayList<MissionItem> toRemove) {
+		itens.removeAll(toRemove);
+		onMissionUpdate();		
 	}
 
 	public void addWaypointsWithDefaultAltitude(List<LatLng> points) {
