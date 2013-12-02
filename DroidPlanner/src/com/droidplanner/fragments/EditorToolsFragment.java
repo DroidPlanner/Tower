@@ -56,15 +56,28 @@ public class EditorToolsFragment extends Fragment implements OnClickListener {
 		switch (v.getId()) {
 			case R.id.editor_tools_marker:
 				tool = EditorTools.MARKER;
+				buttonDraw.setChecked(false);
+				buttonPoly.setChecked(false);
+				buttonTrash.setChecked(false);
 				break;
 			case R.id.editor_tools_draw:
 				tool = EditorTools.DRAW;
+				buttonMarker.setChecked(false);
+				buttonPoly.setChecked(false);
+				buttonTrash.setChecked(false);
 				break;
 			case R.id.editor_tools_poly:
 				tool = EditorTools.POLY;
+
+				buttonMarker.setChecked(false);
+				buttonDraw.setChecked(false);
+				buttonTrash.setChecked(false);
 				break;
 			case R.id.editor_tools_trash:
 				tool = EditorTools.TRASH;
+				buttonMarker.setChecked(false);
+				buttonDraw.setChecked(false);
+				buttonPoly.setChecked(false);
 				break;
 		}
 		listner.editorToolChanged(getTool());
@@ -76,11 +89,6 @@ public class EditorToolsFragment extends Fragment implements OnClickListener {
 
 	public void setTool(EditorTools marker) {
 		RadioButton selected = null;
-
-		buttonDraw.setChecked(false);
-		buttonMarker.setChecked(false);
-		buttonPoly.setChecked(false);
-		buttonTrash.setChecked(false);
 
 		switch (marker) {
 			case DRAW:
