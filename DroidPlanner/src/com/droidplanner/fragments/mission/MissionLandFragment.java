@@ -4,7 +4,6 @@ import android.view.View;
 
 import com.droidplanner.R;
 import com.droidplanner.drone.variables.mission.waypoints.Land;
-import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
 
 public class MissionLandFragment extends MissionDetailFragment implements

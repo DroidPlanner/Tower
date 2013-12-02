@@ -1,14 +1,11 @@
 package com.droidplanner.fragments.mission;
 
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.droidplanner.R;
 import com.droidplanner.drone.variables.mission.waypoints.Loiter;
-import com.droidplanner.drone.variables.mission.waypoints.LoiterInfinite;
-import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
 
 public class MissionLoiterFragment extends MissionDetailFragment implements
