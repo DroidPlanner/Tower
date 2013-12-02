@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
 import com.droidplanner.drone.Drone;
@@ -67,7 +66,7 @@ public class TelemetryFragment extends Fragment implements HudUpdatedListner {
 		groundSpeed.setText(String.format("%3.1fº", drone.speed.getGroundSpeed()));
 		climbRate.setText(String.format("%3.1f", drone.speed.getVerticalSpeed()));
 		double alt = drone.altitude.getAltitude();
-		altitude.setText(String.format("%3.0f\n%3.0f\n%3.0f", alt+1,alt,alt-1));
+		altitude.setText(String.format("%3.0f", alt));
 	}
 
 }

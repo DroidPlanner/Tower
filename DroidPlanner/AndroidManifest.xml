@@ -71,24 +71,23 @@
         <service android:name=".service.MAVLinkService" >
         </service>
 
-        <activity android:name=".activitys.FlightActivity"
+        <activity
+                android:name=".activitys.FlightActivity"
                 android:launchMode="singleTask">
 
-            <!-- Launcher Intent -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-            <!-- USB connection  intent -->
-            <intent-filter>
+                <action android:name="com.google.android.glass.action.VOICE_TRIGGER" />
                 <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
             <meta-data
                 android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
                 android:resource="@xml/device_filter" />
+            <meta-data
+                    android:name="com.google.android.glass.VoiceTrigger"
+                    android:resource="@xml/glass_trigger"/>
         </activity>
         <activity
             android:name=".activitys.EditorActivity"

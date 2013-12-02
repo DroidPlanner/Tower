@@ -180,4 +180,7 @@
     <string name="pref_menu_drawer_lock_summary">Enable to keep the flight data menu drawer opened at all times.</string>
     <string name="menu_drawer_lock_default_value">false</string>
 
+    <!-- Google glass related strings -->
+    <string name="glass_voice_trigger">Let\'s fly</string>
+
 </resources>
