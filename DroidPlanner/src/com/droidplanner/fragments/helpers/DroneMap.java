@@ -8,8 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.droidplanner.DroidPlannerApp;
-import com.droidplanner.DroidPlannerApp.OnWaypointChangedListner;
 import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.DroneInterfaces.OnWaypointChangedListner;
 import com.droidplanner.drone.variables.Home;
 import com.droidplanner.drone.variables.mission.Mission;
 import com.droidplanner.fragments.markers.MarkerManager;

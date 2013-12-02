@@ -11,6 +11,7 @@ import android.view.MenuItem;
 
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperUI;
+import com.droidplanner.drone.DroneInterfaces.OnWaypointChangedListner;
 import com.droidplanner.drone.variables.mission.Mission;
 import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
@@ -29,7 +30,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class EditorActivity extends SuperUI implements
 		OnMapInteractionListener, OnPathFinishedListner, OnEditorToolSelected,
-		OnWayPointTypeChangeListener {
+		OnWayPointTypeChangeListener, OnWaypointChangedListner {
 
 	private PlanningMapFragment planningMapFragment;
 	private GestureMapFragment gestureMapFragment;
@@ -58,13 +59,15 @@ public class EditorActivity extends SuperUI implements
 		mission = drone.mission;
 		gestureMapFragment.setOnPathFinishedListner(this);
 		mission.onMissionUpdate();
+		
+		mission.addOnMissionUpdateListner(this);
 
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		mission.removeOnMissionUpdateListner(planningMapFragment);
+		mission.removeOnMissionUpdateListner(this);
 	}
 
 	@Override
@@ -130,7 +133,7 @@ public class EditorActivity extends SuperUI implements
 
 	@Override
 	public void editorToolChanged(EditorTools tools) {
-		removeItemDetail(); // TODO remove this, used for debbuging
+		removeItemDetail();
 		switch (tools) {
 		case DRAW:
 		case POLY:
@@ -192,6 +195,16 @@ public class EditorActivity extends SuperUI implements
 	public void onWaypointTypeChanged(MissionItem newItem, MissionItem oldItem) {
 		mission.replace(oldItem, newItem);
 		showItemDetail(newItem);
+	}
+
+	@Override
+	public void onMissionUpdate() {
+		//Remove detail window if item is removed
+		if (itemDetailFragment!=null) {
+			if (!mission.hasItem(itemDetailFragment.getItem())) {
+				removeItemDetail();
+			}
+		}
 	}
 
 }

@@ -44,10 +44,6 @@ public class DroidPlannerApp extends Application implements
         }
     };
 
-	public interface OnWaypointChangedListner {
-		public void onMissionUpdate();
-	}
-
 	public interface ConnectionStateListner {
 		public void notifyConnected();
 		

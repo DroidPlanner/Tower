@@ -50,6 +50,11 @@ public class DroneInterfaces {
 		void onFailsafeChanged();
 	}
 	
+	
+	public interface OnWaypointChangedListner {
+			public void onMissionUpdate();
+	}
+	
 	public interface OnTuningDataListner{
 		void onNewOrientationData();
 

@@ -12,7 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.droidplanner.DroidPlannerApp.OnWaypointChangedListner;
+import com.droidplanner.drone.DroneInterfaces.OnWaypointChangedListner;
 import com.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
 import com.droidplanner.fragments.PathGesture.OnPathFinishedListner;
 import com.droidplanner.fragments.helpers.CameraGroundOverlays;

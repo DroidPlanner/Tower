@@ -1,13 +1,14 @@
 package com.droidplanner.fragments;
 
-import java.util.ArrayList;
-
 import it.sephiroth.android.library.util.v11.MultiChoiceModeListener;
 import it.sephiroth.android.library.widget.AdapterView;
 import it.sephiroth.android.library.widget.AdapterView.OnItemClickListener;
 import it.sephiroth.android.library.widget.AdapterView.OnItemLongClickListener;
 import it.sephiroth.android.library.widget.AdapterView.OnItemSelectedListener;
 import it.sephiroth.android.library.widget.HListView;
+
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
@@ -22,8 +23,8 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.droidplanner.DroidPlannerApp;
-import com.droidplanner.DroidPlannerApp.OnWaypointChangedListner;
 import com.droidplanner.R;
+import com.droidplanner.drone.DroneInterfaces.OnWaypointChangedListner;
 import com.droidplanner.drone.variables.mission.Mission;
 import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.fragments.helpers.OnMapInteractionListener;

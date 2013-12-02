@@ -7,8 +7,8 @@ import android.widget.Toast;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
-import com.droidplanner.DroidPlannerApp.OnWaypointChangedListner;
 import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.DroneInterfaces.OnWaypointChangedListner;
 import com.droidplanner.drone.DroneVariable;
 import com.droidplanner.drone.variables.mission.survey.Survey;
 import com.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
@@ -18,8 +18,7 @@ import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import com.droidplanner.helpers.units.Altitude;
 import com.google.android.gms.maps.model.LatLng;
 
-public class Mission extends DroneVariable implements PathSource,
-		OnWaypointChangedListner {
+public class Mission extends DroneVariable implements PathSource{
 
 	private List<MissionItem> itens = new ArrayList<MissionItem>();
 	private Altitude defaultAlt = new Altitude(50.0);
@@ -142,7 +141,6 @@ public class Mission extends DroneVariable implements PathSource,
 		return markers;
 	}
 
-	@Override
 	public void onMissionUpdate() {
 		for (OnWaypointChangedListner listner : missionListner) {
 			if (listner!=null) {
@@ -171,6 +169,10 @@ public class Mission extends DroneVariable implements PathSource,
 			}
 		}
 		return true;
+	}
+
+	public boolean hasItem(MissionItem item) {
+		return itens.contains(item);
 	}
 
 }
