@@ -2,7 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+	tools:ignore="HardcodedText"
+    >
 
     <fragment
         android:id="@+id/fragment1"
@@ -13,7 +15,7 @@
     <fragment
         android:id="@+id/fragment2"
         android:name="com.droidplanner.fragments.TelemetryFragment"
-        android:layout_width="135dp"
+        android:layout_width="190dp"
         android:layout_height="match_parent"
         tools:layout="@layout/fragment_telemetry" />
 
@@ -23,7 +25,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="bottom"
         android:measureAllChildren="true" >
-
     </FrameLayout>
 
     <fragment
@@ -37,30 +38,51 @@
 
     <SlidingDrawer
         android:id="@+id/SlidingDrawerLeft"
-        android:layout_width="220dp"
-        android:layout_height="300dp"
+        android:layout_width="210dp"
+        android:layout_height="540dp"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:content="@+id/LinearLayout01"
+        android:layout_alignParentTop="true"
+
+        android:content="@+id/modeStabilizeFragment"
         android:handle="@+id/slideButtonLeft"
         android:orientation="horizontal"
         android:padding="0dp"
-        android:visibility="visible" >
+        android:visibility="visible"
+        >
 
         <ImageView
             android:id="@+id/slideButtonLeft"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/slide_left"
+            android:layout_width="16dp"
+            android:layout_height="72dp"
+            android:src="@drawable/drawer_tab"
             tools:ignore="ContentDescription" />
 
-        <LinearLayout
+        <!--<LinearLayout
             android:id="@+id/LinearLayout01"
-            style="@style/transparentLayout"
-            android:layout_width="match_parent"
+            style="@style/flyoutPanelLayout"
+            android:layout_width="81dp"
             android:layout_height="match_parent"
             android:orientation="vertical" >
-        </LinearLayout>
+        </LinearLayout>-->
+            <!-- style="@style/flyoutPanelLayout" -->
+		<!--<fragment
+			android:id="@+id/modeCircleFragment"
+			android:name="com.droidplanner.fragments.mode.ModeCircleFragment"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_alignParentBottom="true"
+			android:layout_centerHorizontal="true"
+			tools:layout="@layout/fragment_mode_circle" />-->
+
+		<fragment
+			android:id="@+id/modeStabilizeFragment"
+			android:name="com.droidplanner.fragments.mode.ModeRTLFragment"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_alignParentBottom="true"
+			android:layout_centerHorizontal="true"
+			tools:layout="@layout/fragment_mode_rtl" />
+
     </SlidingDrawer>
 
     <TextView

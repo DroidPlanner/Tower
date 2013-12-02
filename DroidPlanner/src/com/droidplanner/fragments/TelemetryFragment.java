@@ -24,6 +24,7 @@ public class TelemetryFragment extends Fragment implements HudUpdatedListner {
 	private TextView airSpeed;
 	private TextView climbRate;
 	private TextView altitude;
+	private TextView targetAltitude;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,12 +36,13 @@ public class TelemetryFragment extends Fragment implements HudUpdatedListner {
 		roll = (TextView) view.findViewById(R.id.rollValueText);
 		yaw = (TextView) view.findViewById(R.id.yawValueText);
 		pitch = (TextView) view.findViewById(R.id.pitchValueText);
-		
+
 
 		groundSpeed = (TextView) view.findViewById(R.id.groundSpeedValue);
 		airSpeed = (TextView) view.findViewById(R.id.airSpeedValue);
 		climbRate = (TextView) view.findViewById(R.id.climbRateValue);
 		altitude = (TextView) view.findViewById(R.id.altitudeValue);
+		targetAltitude = (TextView) view.findViewById(R.id.targetAltitudeValue);
 
 		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
 		drone.setHudListner(this);
@@ -52,22 +54,25 @@ public class TelemetryFragment extends Fragment implements HudUpdatedListner {
 		float r = (float) drone.orientation.getRoll();
 		float p = (float) drone.orientation.getPitch();
 		float y = (float) drone.orientation.getYaw();
-		
+
 		hud.setAttitude(r, p, y);
-		
-		roll.setText(String.format("%3.0fº", r));
-		pitch.setText(String.format("%3.0fº", p));
-		yaw.setText(String.format("%3.0fº", y));
+
+		roll.setText(String.format("%3.0f\u00B0", r));
+		pitch.setText(String.format("%3.0f\u00B0", p));
+		yaw.setText(String.format("%3.0f\u00B0", y));
 
 	}
 
 	@Override
 	public void onSpeedAltitudeAndClimbRateUpdate() {
-		airSpeed.setText(String.format("%3.1fº", drone.speed.getAirSpeed()));
-		groundSpeed.setText(String.format("%3.1fº", drone.speed.getGroundSpeed()));
+		airSpeed.setText(String.format("%3.1f", drone.speed.getAirSpeed()));
+		groundSpeed.setText(String.format("%3.1f", drone.speed.getGroundSpeed()));
 		climbRate.setText(String.format("%3.1f", drone.speed.getVerticalSpeed()));
 		double alt = drone.altitude.getAltitude();
-		altitude.setText(String.format("%3.0f\n%3.0f\n%3.0f", alt+1,alt,alt-1));
+		double targetAlt = drone.altitude.getTargetAltitude();
+		altitude.setText(String.format("%3.1f", alt));
+		targetAltitude.setText(String.format("%3.1f", targetAlt));
+
 	}
 
 }

@@ -65,7 +65,7 @@
     <string name="flight_altitude">Flight Altitude:</string>
     <string name="overlap">Overlap:</string>
     <string name="sidelap">Sidelap:</string>
-    
+
     <string name="screen_planning">Planning</string>
     <string name="screen_flight_data">Flight Data</string>
     <string name="screen_rc">RC</string>
@@ -167,5 +167,21 @@
     <string name="menu_preflight_checklist">Pre-Flight Checklist</string>
     <string name="lst_note_hint">To add more rows, just press Enter</string>
     <string name="parameter_row_edit">Edit</string>
-    
+    <string name="Orbits">Orbits</string>
+
+    <string name="mode_acro">Acro allows a pilot to control rate of rotation directly.</string>
+    <string name="mode_althold">Alt Hold automatically controls throttle and maintains alitude. Does not require GPS.</string>
+    <string name="mode_auto">Auto follows the scripted mission stored on the vehicle.</string>
+    <string name="mode_circle">Circle rotates the vehicle around a point of interest. The vehicle will always point toward the center. Requires GPS lock.</string>
+    <string name="mode_drift">Drift combines roll and yaw to produce a more natural and intuitive flight. Requires GPS lock.</string>
+    <string name="mode_guided">Guided enables position control from a ground station. Requires GPS lock.</string>
+    <string name="mode_land">Land at the current location. Requires GPS lock.</string>
+    <string name="mode_loiter">Loiter allows the pilot to fly completely through GPS. </string>
+    <string name="mode_ofloiter">Optical Flow enabled Loiter holds position and altitude assisted by the required optical flow sensors. </string>
+    <string name="mode_position">Position allows the pilot to fly completely through GPS, but with manual throttle control. </string>
+    <string name="mode_rtl">RTL rises to the minimum altitude, returns to the home location and lands. Requires GPS lock.</string>
+    <string name="mode_sport">Sport allows a pilot to control rate of rotation directly with the addition of self-leveling.</string>
+    <string name="mode_stabilize">Stabilize levels the vehicle in flight.</string>
+
+
 </resources>

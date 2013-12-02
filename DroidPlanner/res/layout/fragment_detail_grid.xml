@@ -3,7 +3,7 @@
     xmlns:custom="http://schemas.android.com/apk/res/com.droidplanner"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/opaque_black"
+    android:background="@color/opaque_white"
     android:orientation="vertical" >
 
     <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText

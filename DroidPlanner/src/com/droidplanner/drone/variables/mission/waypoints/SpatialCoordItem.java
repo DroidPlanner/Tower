@@ -21,7 +21,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
  * Generic Mission item with Spatial Coordinates
- * 
+ *
  */
 public abstract class SpatialCoordItem extends MissionItem implements
 		MarkerSource {
@@ -72,17 +72,16 @@ public abstract class SpatialCoordItem extends MissionItem implements
 		points.add(coordinate);
 		return points;
 	}
-	
+
 	protected BitmapDescriptor getIcon(Context context) {
-		Bitmap marker = MarkerWithText
-				.getMarkerWithTextAndDetail(getIconDrawable(), getIconText(),
+		Bitmap marker = MarkerWithText.getMarkerWithTextAndDetail(getIconDrawable(), getIconText(),
 						getIconDetail(), context);
 		return BitmapDescriptorFactory.fromBitmap(marker);
 	}
 
 	private String getIconDetail() {
 		if (mission.checkIfAltitudeHasChangedFromPreviusItem(this)) {
-			return altitude.toString();
+			return null; //altitude.toString();
 		}else{
 			return null;
 		}
@@ -107,7 +106,7 @@ public abstract class SpatialCoordItem extends MissionItem implements
 	public void setAltitude(Altitude altitude) {
 		this.altitude = altitude;
 	}
-	
+
 	@Override
 	public msg_mission_item packMissionItem() {
 		msg_mission_item mavMsg = new msg_mission_item();
@@ -117,7 +116,7 @@ public abstract class SpatialCoordItem extends MissionItem implements
 		mavMsg.x = (float) getCoordinate().latitude;
 		mavMsg.y = (float) getCoordinate().longitude;
 		mavMsg.z = (float) getAltitude().valueInMeters();
-//		mavMsg.compid = 
+//		mavMsg.compid =
 		return mavMsg;
 	}
 

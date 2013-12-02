@@ -14,7 +14,7 @@ import android.view.View;
 
 public class newHUD extends View {
 
-	private static final float INTERNAL_RADIUS = 0.95f;
+	private static final float INTERNAL_RADIUS = 0.85f;
 	private static final float YAW_ARROW_SIZE = 1.2f;
 	private static final float YAW_ARROW_ANGLE = 4.5f;
 	private static final float PITCH_TICK_LINE_LENGTH = 0.4f;
@@ -46,7 +46,7 @@ public class newHUD extends View {
 	public newHUD(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		initialize();
-		setAttitude(-30, 20, -45);
+		setAttitude(-30, 20, 0);
 	}
 
 	private void initialize() {
@@ -61,13 +61,15 @@ public class newHUD extends View {
 		skyPaint = new Paint(fillPaint);
 
 		groundPaint = new Paint(fillPaint);
-		groundPaint.setColor(Color.parseColor("#723700"));
+		//groundPaint.setColor(Color.parseColor("#723700")); // brown
+		//groundPaint.setColor(Color.parseColor("#4bbba1"));	// blue
+//0083d6
 
 		planePaint = new Paint(fillPaint);
 		planePaint.setColor(Color.WHITE);
 
 		tickPaint = new Paint(fillPaint);
-		tickPaint.setColor(Color.WHITE);
+		tickPaint.setColor(Color.parseColor("#44ffffff"));
 		tickPaint.setStrokeWidth(2);
 	}
 
@@ -76,14 +78,21 @@ public class newHUD extends View {
 		super.onSizeChanged(w, h, oldw, oldh);
 		halfHeight = h / 2f;
 		halfWidth = w / 2f;
+
 		radiusExternal = Math.min(halfHeight, halfWidth) / YAW_ARROW_SIZE;
 		radiusInternal = radiusExternal * INTERNAL_RADIUS;
-		internalBounds = new RectF(-radiusInternal, -radiusInternal,
-				radiusInternal, radiusInternal);
+
+		internalBounds = new RectF(-radiusInternal, -radiusInternal, radiusInternal, radiusInternal);
+
 		buildPlanePath();
+
 		skyPaint.setShader(new LinearGradient(0, -radiusInternal, 0,
-				radiusInternal, Color.parseColor("#004444"), Color
-						.parseColor("#00FFFF"), TileMode.CLAMP));
+				radiusInternal, Color.parseColor("#0082d6"), Color
+						.parseColor("#2cb1e1"), TileMode.CLAMP));
+
+		groundPaint.setShader(new LinearGradient(0, radiusInternal, 0,
+				radiusInternal, Color.parseColor("#4bbba1"), Color
+						.parseColor("#008f63"), TileMode.CLAMP));
 
 	}
 

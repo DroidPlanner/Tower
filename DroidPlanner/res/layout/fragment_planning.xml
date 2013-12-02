@@ -19,7 +19,7 @@
             android:id="@+id/ImageView01"
             android:layout_width="50dip"
             android:layout_height="50dip"
-            android:src="@drawable/slide_left"
+            android:src="@drawable/drawer_tab"
             app:ignore="ContentDescription" />
 
         <LinearLayout

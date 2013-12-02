@@ -40,7 +40,7 @@ public class MissionItemView extends ArrayAdapter<com.droidplanner.drone.variabl
 	public View getView(int position, View convertView, ViewGroup parent) {
 		com.droidplanner.drone.variables.mission.MissionItem waypoint = waypoints.get(position);
 		View view = createLayoutFromResource(parent);
-		findViewObjects(view);		
+		findViewObjects(view);
 		setupViewsText(waypoint);
 		return view;
 	}
@@ -54,27 +54,37 @@ public class MissionItemView extends ArrayAdapter<com.droidplanner.drone.variabl
 		return view;
 	}
 
-	
+
 	private void findViewObjects(View view) {
 		nameView = (TextView) view.findViewById(R.id.rowNameView);
-		/*altitudeView = (TextView) view.findViewById(R.id.rowAltitudeView);
+		//altitudeView = (TextView) view.findViewById(R.id.rowAltitudeView);
+
+		//nameView.setText(String.format("%3d", waypoint.getNumber()));
+		//nameView.setText(String.format("%3d", waypoints.size()));
+
+		//
+
+		/*
 		typeView = (TextView) view.findViewById(R.id.rowTypeView);
 		descView = (TextView) view.findViewById(R.id.rowDescView);
 		distanceView = (TextView) view.findViewById(R.id.rowDistanceView);
 */
 	}
 	private void setupViewsText(com.droidplanner.drone.variables.mission.MissionItem waypoint) {
+		nameView.setText(String.format("%3d", this.waypoints.indexOf(waypoint)+1));
+		//altitudeView.setText("50m");
+
 		/*
 		if (waypoint.getCmd().showOnMap()) {
 			altitudeView.setText(String.format(Locale.ENGLISH, "%3.0fm", waypoint.getHeight()));
 		} else {
 			altitudeView.setText("-");
 		}
-*/		
+*/
 		//TODO fix the numbering
-		//nameView.setText(String.format("%3d", waypoint.getNumber()));	
-		
-		
+		//nameView.setText(String.format("%3d", waypoint.getNumber()));
+
+
 	/*	typeView.setText(waypoint.getCmd().getName());
 		descView.setText(setupDescription(waypoint));
 
@@ -93,14 +103,14 @@ public class MissionItemView extends ArrayAdapter<com.droidplanner.drone.variabl
 		String tmpStr = null;
 		float tmpVal;
 		descStr = "";
-		
+
 		switch(waypoint.getCmd().getType())
 		{
 		case MAV_CMD.MAV_CMD_NAV_WAYPOINT:
 			if(waypoint.missionItem.param1<=0){
 				descStr = String.format(Locale.ENGLISH, context.getString(R.string.waypointDesc_Waypoint_1),
 						waypoint.missionItem.param4);
-			} 
+			}
 			else{
 				descStr = String.format(Locale.ENGLISH, context.getString(R.string.waypointDesc_Waypoint_2),
 						waypoint.missionItem.param1,waypoint.missionItem.param4);
@@ -108,23 +118,23 @@ public class MissionItemView extends ArrayAdapter<com.droidplanner.drone.variabl
 			break;
 
 		case MAV_CMD.MAV_CMD_NAV_LOITER_UNLIM:
-			tmpVal = waypoint.missionItem.param3<0?-1*waypoint.missionItem.param3:waypoint.missionItem.param3;			
+			tmpVal = waypoint.missionItem.param3<0?-1*waypoint.missionItem.param3:waypoint.missionItem.param3;
 			tmpStr = waypoint.missionItem.param3<0?context.getString(R.string.waypointDesc_CCW):context.getString(R.string.waypointDesc_CW);
-			descStr += String.format(Locale.ENGLISH, context.getString(R.string.waypointDesc_Loiter), 
+			descStr += String.format(Locale.ENGLISH, context.getString(R.string.waypointDesc_Loiter),
 					tmpVal,tmpStr,waypoint.missionItem.param4);
 			break;
 
 		case MAV_CMD.MAV_CMD_NAV_LOITER_TURNS:
-			tmpVal = waypoint.missionItem.param3<0?-1*waypoint.missionItem.param3:waypoint.missionItem.param3;			
+			tmpVal = waypoint.missionItem.param3<0?-1*waypoint.missionItem.param3:waypoint.missionItem.param3;
 			tmpStr = waypoint.missionItem.param3<0?context.getString(R.string.waypointDesc_CCW):context.getString(R.string.waypointDesc_CW);
-			descStr += String.format(Locale.ENGLISH, context.getString(R.string.waypointDesc_LoiterN), 
+			descStr += String.format(Locale.ENGLISH, context.getString(R.string.waypointDesc_LoiterN),
 					waypoint.missionItem.param1,tmpVal,tmpStr,waypoint.missionItem.param4);
 			break;
 
 		case MAV_CMD.MAV_CMD_NAV_LOITER_TIME:
-			tmpVal = waypoint.missionItem.param3<0?-1*waypoint.missionItem.param3:waypoint.missionItem.param3;			
+			tmpVal = waypoint.missionItem.param3<0?-1*waypoint.missionItem.param3:waypoint.missionItem.param3;
 			tmpStr = waypoint.missionItem.param3<0?context.getString(R.string.waypointDesc_CCW):context.getString(R.string.waypointDesc_CW);
-			descStr += String.format(Locale.ENGLISH, context.getString(R.string.waypointDesc_LoiterT), 
+			descStr += String.format(Locale.ENGLISH, context.getString(R.string.waypointDesc_LoiterT),
 					waypoint.missionItem.param1,tmpVal,tmpStr,waypoint.missionItem.param4);
 			break;
 
@@ -173,11 +183,11 @@ public class MissionItemView extends ArrayAdapter<com.droidplanner.drone.variabl
 					break;
 				}
 				descStr +=" ";
-				descStr += String.format(Locale.ENGLISH, context.getString(R.string.waypointDesc_GPS), 
+				descStr += String.format(Locale.ENGLISH, context.getString(R.string.waypointDesc_GPS),
 						waypoint.getCoord().latitude,waypoint.getCoord().longitude);
 				break;
 			}
-	
+
 			break;
 
 		case MAV_CMD.MAV_CMD_DO_CHANGE_SPEED:
@@ -202,7 +212,7 @@ public class MissionItemView extends ArrayAdapter<com.droidplanner.drone.variabl
 			descStr += " ";
 			break;
 		}
-		
+
 		return descStr;
 	}
 	 */
