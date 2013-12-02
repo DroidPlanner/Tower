@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--
+Used to Style the horizontal list of mission items.
+-->
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:id="@+id/dragHandler"
@@ -25,7 +30,7 @@
 	    android:layout_alignParentLeft="true"
 	    android:paddingTop="4dp"
 	    android:gravity="center"
-	    android:text="22"
+	    android:text="44"
 	    android:textColor="#FFFFFF"
 	    android:textSize="30sp"
 	    android:textStyle="bold"
@@ -44,6 +49,7 @@
 		android:src="@drawable/ic_mission_wp"
 		tools:ignore="ContentDescription"
 		/>
+
 	<TextView
 		android:id="@+id/rowAltitudeView"
 		android:layout_below="@id/rowNameView"

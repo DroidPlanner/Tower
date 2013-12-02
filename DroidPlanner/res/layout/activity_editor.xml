@@ -35,78 +35,13 @@
         android:layout_margin="5dp"
         tools:layout="@layout/fragment_editor_control" />
 
-    <SlidingDrawer
-        android:id="@+id/slidingDrawer1"
-        android:layout_width="356dp"
-        android:layout_height="446dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-
-        android:content="@+id/content"
-        android:handle="@+id/slideButtonLeft"
-        android:orientation="horizontal"
-        android:padding="0dp"
-        android:visibility="visible"
-        android:layout_below="@+id/textView1"
-
-		>
-
-        <!--
-        android:layout_above="@+id/missionFragment1"
-        android:layout_below="@+id/textView1"
-        android:gravity="center"
-        -->
-
-
-
-        <ImageView
-            android:id="@+id/slideButtonLeft"
-            android:layout_width="16dp"
-            android:layout_height="72dp"
-            android:src="@drawable/drawer_tab"
-            tools:ignore="ContentDescription" />
-
-        <LinearLayout
-            android:id="@+id/content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical|right"
-            android:orientation="vertical"
-            style="@style/flyoutPanelLayout"
-            >
-
-            <Button
-                android:id="@+id/Button03"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Jason" />
-
-            <Button
-                android:id="@+id/Button02"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Receive" />
-
-            <Button
-                android:id="@+id/Button01"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Save" />
-
-            <Button
-                android:id="@+id/backgroundMissionItem"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Load" />
-        </LinearLayout>
-    </SlidingDrawer>
 
     <FrameLayout
         android:id="@+id/containerItemDetail"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="356dp"
+        android:layout_height="446dp"
         android:layout_above="@+id/missionFragment1"
-        android:layout_alignLeft="@+id/slidingDrawer1"
+        android:layout_alignParentRight="true"
         android:layout_gravity="bottom"
         android:measureAllChildren="true" >
 

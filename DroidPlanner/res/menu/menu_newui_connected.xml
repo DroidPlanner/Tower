@@ -30,6 +30,7 @@
     <item
         android:id="@+id/bar_mode"
         android:actionViewClass="com.droidplanner.widgets.spinners.SelectModeSpinner"
+	    style="@style/ModeSpinnerText"
         android:showAsAction="always"
         tools:ignore="MenuTitle"/>
     <item
@@ -44,5 +45,14 @@
         android:id="@+id/menu_settings"
         android:showAsAction="never"
         android:title="@string/settings"/>
+
+    <item
+        android:id="@+id/menu_send_mission"
+        android:showAsAction="never"
+        android:title="@string/send_mission"/>
+    <item
+        android:id="@+id/menu_load_mission"
+        android:showAsAction="never"
+        android:title="@string/load_mission"/>
 
 </menu>

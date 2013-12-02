@@ -183,5 +183,8 @@
     <string name="mode_sport">Sport allows a pilot to control rate of rotation directly with the addition of self-leveling.</string>
     <string name="mode_stabilize">Stabilize levels the vehicle in flight.</string>
 
+    <string name="send_mission">Send mission</string>
+    <string name="load_mission">Load mission</string>
+
 
 </resources>
