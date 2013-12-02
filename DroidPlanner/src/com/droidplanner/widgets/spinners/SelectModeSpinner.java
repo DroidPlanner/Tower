@@ -21,7 +21,6 @@ public class SelectModeSpinner extends SpinnerSelfSelect implements
 		super(context);
 		this.context = context;
 		selectable = false;
-		setBackgroundResource(R.drawable.modes);
 	}
 
 	public void buildSpinner(Context context, Drone drone) {
@@ -57,7 +56,7 @@ public class SelectModeSpinner extends SpinnerSelfSelect implements
 	@Override
 	public void onSpinnerItemSelected(Spinner spinner, int position, String text) {
 		ApmModes newMode = modeAdapter.getItem(position);
-		drone.state.changeFlightMode(newMode);		
+		drone.state.changeFlightMode(newMode);
 	}
 
 }
