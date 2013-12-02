@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.TextView;
 import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.droidplanner.DroidPlannerApp;
@@ -30,6 +31,7 @@ public abstract class MissionDetailFragment extends Fragment implements
 	protected AdapterMissionItens commandAdapter;
 	protected Mission mission;
 	private OnWayPointTypeChangeListener mListner;
+	private TextView waypointIndex;
 	
 	protected MissionItem item;
 	
@@ -49,6 +51,9 @@ public abstract class MissionDetailFragment extends Fragment implements
 				android.R.layout.simple_list_item_1, MissionItemTypes.values());
 		typeSpinner.setAdapter(commandAdapter);
 		typeSpinner.setOnItemSelectedListener(this);
+		waypointIndex = (TextView) view.findViewById(R.id.WaypointIndex);
+		Integer temp = mission.getNumber(item);
+		waypointIndex.setText( temp.toString());
 	}
 
 	@Override

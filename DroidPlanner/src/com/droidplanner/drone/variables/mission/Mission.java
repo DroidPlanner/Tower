@@ -154,7 +154,7 @@ public class Mission extends DroneVariable implements PathSource{
 		missionListner.remove(listner);
 	}
 
-	public int getNumber(MissionItem waypoint) {
+	public Integer getNumber(MissionItem waypoint) {
 		return itens.indexOf(waypoint)+1; // plus one to account for the fact that this is an index
 	}
 
