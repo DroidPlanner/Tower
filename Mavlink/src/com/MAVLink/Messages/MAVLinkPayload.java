@@ -67,6 +67,22 @@ public class MAVLinkPayload {
 		index += 8;
 		return (long) result;
 	}
+	
+	//getLong is broken when using uint64_t from APM's to pack bit commands
+	//Created this to use on my custom message unpack so as to not break anything else with getLong downstream.
+	public long getLongReverse() {
+                long result = 0;
+                result |= (payload.get(index + 0) & (long)0xFF) << 56;
+                result |= (payload.get(index + 1) & (long)0xFF) << 48;
+                result |= (payload.get(index + 2) & (long)0xFF) << 40;
+                result |= (payload.get(index + 3) & (long)0xFF) << 32;
+                result |= (payload.get(index + 4) & (long)0xFF) << 24;
+                result |= (payload.get(index + 5) & (long)0xFF) << 16;
+                result |= (payload.get(index + 6) & (long)0xFF) << 8;
+                result |= (payload.get(index + 7) & (long)0xFF);
+                index += 8;
+                return (long) result;
+        }
 
 	public float getFloat() {
 		return Float.intBitsToFloat(getInt());
