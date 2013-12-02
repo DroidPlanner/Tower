@@ -46,24 +46,24 @@ public class MAVLinkPayload {
 
 	public int getInt() {
 		int result = 0;
-		result |= (payload.get(index + 3) & 0xFF) << 24;
-		result |= (payload.get(index + 2) & 0xFF) << 16;
-		result |= (payload.get(index + 1) & 0xFF) << 8;
-		result |= (payload.get(index + 0) & 0xFF);
+		result |= (payload.get(index + 3) & (int)0xFF) << 24;
+		result |= (payload.get(index + 2) & (int)0xFF) << 16;
+		result |= (payload.get(index + 1) & (int)0xFF) << 8;
+		result |= (payload.get(index + 0) & (int)0xFF);
 		index += 4;
 		return (int) result;
 	}
 
 	public long getLong() {
 		long result = 0;
-		result |= (payload.get(index + 7) & 0xFF) << 56;
-		result |= (payload.get(index + 6) & 0xFF) << 48;
-		result |= (payload.get(index + 5) & 0xFF) << 40;
-		result |= (payload.get(index + 4) & 0xFF) << 32;
-		result |= (payload.get(index + 3) & 0xFF) << 24;
-		result |= (payload.get(index + 2) & 0xFF) << 16;
-		result |= (payload.get(index + 1) & 0xFF) << 8;
-		result |= (payload.get(index + 0) & 0xFF);
+		result |= (payload.get(index + 7) & (long)0xFF) << 56;
+		result |= (payload.get(index + 6) & (long)0xFF) << 48;
+		result |= (payload.get(index + 5) & (long)0xFF) << 40;
+		result |= (payload.get(index + 4) & (long)0xFF) << 32;
+		result |= (payload.get(index + 3) & (long)0xFF) << 24;
+		result |= (payload.get(index + 2) & (long)0xFF) << 16;
+		result |= (payload.get(index + 1) & (long)0xFF) << 8;
+		result |= (payload.get(index + 0) & (long)0xFF);
 		index += 8;
 		return (long) result;
 	}
