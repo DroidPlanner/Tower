@@ -4,48 +4,97 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
-    android:gravity="center" 
-     android:layout_centerInParent="true">
+    android:gravity="center"
+    android:layout_centerInParent="true">
 
-    <RadioButton
-        android:id="@+id/editor_tools_marker"
-        style="@style/editorButton"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:background="@drawable/button_editor"
-        android:button="@null"
-        android:checked="true"
-        android:drawableTop="@drawable/editor_tools_marker" />
+	<RelativeLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content" >
 
-	<RadioButton
+		<RadioButton
+    	android:id="@+id/editor_tools_marker"
+	    style="@style/editorButton"
+    	android:button="@null"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+	    android:background="@drawable/button_editor"
+		/>
+
+		<ImageView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerInParent="true"
+		android:src="@drawable/ic_editor_wp"
+		/>
+
+	</RelativeLayout>
+
+
+	<RelativeLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content" >
+
+		<RadioButton
     	android:id="@+id/editor_tools_draw"
 	    style="@style/editorButton"
     	android:button="@null"
-	    android:layout_width="48dp"
-	    android:layout_height="48dp"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
 	    android:background="@drawable/button_editor"
-	    android:drawableTop="@drawable/editor_tools_draw"
-	    />
+		/>
 
-	<RadioButton
+		<ImageView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerInParent="true"
+		android:src="@drawable/ic_editor_draw"
+		/>
+
+	</RelativeLayout>
+
+	<RelativeLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content" >
+
+		<RadioButton
     	android:id="@+id/editor_tools_poly"
 	    style="@style/editorButton"
     	android:button="@null"
-	    android:layout_width="48dp"
-	    android:layout_height="48dp"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
 	    android:background="@drawable/button_editor"
-	    android:drawableTop="@drawable/editor_tools_poly"
-	    />
+		/>
 
-	<RadioButton
-	    android:id="@+id/editor_tools_trash"
+		<ImageView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerInParent="true"
+		android:src="@drawable/ic_editor_poly"
+		/>
+
+	</RelativeLayout>
+
+	<RelativeLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content" >
+
+		<RadioButton
+    	android:id="@+id/editor_tools_trash"
 	    style="@style/editorButton"
-	
-	    android:layout_width="48dp"
-	    android:layout_height="48dp"
+    	android:button="@null"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
 	    android:background="@drawable/button_editor"
-	    android:button="@null"
-	    android:drawableTop="@drawable/editor_tools_trash"
-	    android:paddingTop="10dp" />
-	
+		/>
+
+		<ImageView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerInParent="true"
+		android:src="@drawable/ic_editor_trash"
+		/>
+
+	</RelativeLayout>
+
 </RadioGroup>
+

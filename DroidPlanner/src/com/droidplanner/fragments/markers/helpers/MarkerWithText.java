@@ -78,25 +78,28 @@ public class MarkerWithText {
 		Canvas canvas = new Canvas(bitmap);
 		canvas.drawBitmap(bitmap, 0, 0, paint);
 
+
 		paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		paint.setColor(Color.BLACK);
-		paint.setTextSize((int) (15 * scale));
+		paint.setColor(Color.WHITE);
+		paint.setTextSize((int) (13 * scale));
 		paint.setFakeBoldText(true);
-		paint.setShadowLayer(1f, 0f, 1f, Color.TRANSPARENT);
+		paint.setShadowLayer(1f, 0f, 1f, Color.BLACK);
 
 		Rect bounds = new Rect();
 		paint.getTextBounds(gText, 0, gText.length(), bounds);
-		bounds.offsetTo(0, bounds.height() / 2);
+		bounds.offsetTo(-6, bounds.height() / 2);
+
 
 		// paint and bounds for details
 		Paint dpaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		dpaint.setColor(Color.BLACK);
+		dpaint.setColor(Color.WHITE);
 		dpaint.setTextSize((int) (10 * scale));
 		paint.setFakeBoldText(true);
-		dpaint.setShadowLayer(1f, 0f, 1f, Color.WHITE);
+		dpaint.setShadowLayer(1f, 0f, 1f, Color.BLACK);
 
 		Rect dbounds;
-		if (gDetail!=null) {			
+
+		if (gDetail!=null) {
 			dbounds = new Rect();
 			dpaint.getTextBounds(gDetail, 0, gDetail.length(), dbounds);
 			dbounds.offsetTo(0, bounds.bottom + 2);
@@ -107,7 +110,7 @@ public class MarkerWithText {
 
 		// include text and detail bounds
 		Rect brect = new Rect(bounds);
-		
+
 		brect.union(dbounds);
 
 		// position and inflate w/ padding

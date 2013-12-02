@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center" >
+    android:gravity="center"
+   	tools:ignore="HardcodedText">
 
     <fragment
         android:id="@+id/gestureMapFragment"
@@ -13,26 +14,15 @@
         android:layout_above="@+id/missionFragment1"
         tools:layout="@layout/fragment_gesture_map" />
 
-    <fragment
-        android:id="@+id/missionFragment1"
-        android:name="com.droidplanner.fragments.MissionFragment"
-        android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        tools:layout="@layout/fragment_mission" />
-
     <TextView
         android:id="@+id/textView1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="64dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:background="#80000000"
-        android:gravity="center"
-        android:padding="3dp"
         android:text="Distance: 200m, Flight time: 3:30s"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+		style="@style/editorMissionDetailText"
+        />
 
     <fragment
         android:id="@+id/editorToolsFragment"
@@ -47,22 +37,33 @@
 
     <SlidingDrawer
         android:id="@+id/slidingDrawer1"
-        android:layout_width="260dp"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/missionFragment1"
+        android:layout_width="356dp"
+        android:layout_height="446dp"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/textView1"
+        android:layout_alignParentTop="true"
+
         android:content="@+id/content"
-        android:gravity="center"
         android:handle="@+id/slideButtonLeft"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:padding="0dp"
+        android:visibility="visible"
+        android:layout_below="@+id/textView1"
+
+		>
+
+        <!--
+        android:layout_above="@+id/missionFragment1"
+        android:layout_below="@+id/textView1"
+        android:gravity="center"
+        -->
+
 
 
         <ImageView
             android:id="@+id/slideButtonLeft"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/slide_left"
+            android:layout_width="16dp"
+            android:layout_height="72dp"
+            android:src="@drawable/drawer_tab"
             tools:ignore="ContentDescription" />
 
         <LinearLayout
@@ -70,13 +71,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical|right"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            style="@style/flyoutPanelLayout"
+            >
 
             <Button
                 android:id="@+id/Button03"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Send" />
+                android:text="Jason" />
 
             <Button
                 android:id="@+id/Button02"
@@ -102,9 +105,20 @@
         android:id="@+id/containerItemDetail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/missionFragment1"
         android:layout_alignLeft="@+id/slidingDrawer1"
         android:layout_gravity="bottom"
         android:measureAllChildren="true" >
 
     </FrameLayout>
+
+    <fragment
+        android:id="@+id/missionFragment1"
+        android:name="com.droidplanner.fragments.MissionFragment"
+        android:layout_width="match_parent"
+        android:layout_height="94dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        tools:layout="@layout/fragment_mission" />
+
 </RelativeLayout>

@@ -3,4 +3,7 @@
     <issue id="DefaultLocale">
         <ignore path="src/com/droidplanner/fragments/RCFragment.java" />
     </issue>
+    <issue id="NewApi">
+        <ignore path="res/values/styles.xml" />
+    </issue>
 </lint>

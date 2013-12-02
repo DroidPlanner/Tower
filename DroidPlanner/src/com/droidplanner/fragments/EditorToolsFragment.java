@@ -31,13 +31,12 @@ public class EditorToolsFragment extends Fragment implements OnClickListener {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_editor_control,
-				container, false);
-		buttonDraw = (RadioButton) view.findViewById(R.id.editor_tools_draw);
-		buttonMarker = (RadioButton) view
-				.findViewById(R.id.editor_tools_marker);
-		buttonPoly = (RadioButton) view.findViewById(R.id.editor_tools_poly);
-		buttonTrash = (RadioButton) view.findViewById(R.id.editor_tools_trash);
+		View view = inflater.inflate(R.layout.fragment_editor_control,container, false);
+
+		buttonDraw 		= (RadioButton) view.findViewById(R.id.editor_tools_draw);
+		buttonMarker 	= (RadioButton) view.findViewById(R.id.editor_tools_marker);
+		buttonPoly 		= (RadioButton) view.findViewById(R.id.editor_tools_poly);
+		buttonTrash 	= (RadioButton) view.findViewById(R.id.editor_tools_trash);
 
 		buttonDraw.setOnClickListener(this);
 		buttonMarker.setOnClickListener(this);
@@ -55,18 +54,18 @@ public class EditorToolsFragment extends Fragment implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.editor_tools_marker:
-			tool = EditorTools.MARKER;
-			break;
-		case R.id.editor_tools_draw:
-			tool = EditorTools.DRAW;
-			break;
-		case R.id.editor_tools_poly:
-			tool = EditorTools.POLY;
-			break;
-		case R.id.editor_tools_trash:
-			tool = EditorTools.TRASH;
-			break;
+			case R.id.editor_tools_marker:
+				tool = EditorTools.MARKER;
+				break;
+			case R.id.editor_tools_draw:
+				tool = EditorTools.DRAW;
+				break;
+			case R.id.editor_tools_poly:
+				tool = EditorTools.POLY;
+				break;
+			case R.id.editor_tools_trash:
+				tool = EditorTools.TRASH;
+				break;
 		}
 		listner.editorToolChanged(getTool());
 	}
@@ -77,23 +76,25 @@ public class EditorToolsFragment extends Fragment implements OnClickListener {
 
 	public void setTool(EditorTools marker) {
 		RadioButton selected = null;
+
 		buttonDraw.setChecked(false);
 		buttonMarker.setChecked(false);
 		buttonPoly.setChecked(false);
 		buttonTrash.setChecked(false);
+
 		switch (marker) {
-		case DRAW:
-			selected = buttonDraw;
-			break;
-		case MARKER:
-			selected = buttonMarker;
-			break;
-		case POLY:
-			selected = buttonPoly;
-			break;
-		case TRASH:
-			selected = buttonTrash;
-			break;
+			case DRAW:
+				selected = buttonDraw;
+				break;
+			case MARKER:
+				selected = buttonMarker;
+				break;
+			case POLY:
+				selected = buttonPoly;
+				break;
+			case TRASH:
+				selected = buttonTrash;
+				break;
 		}
 		selected.setChecked(true);
 		onClick(selected);
