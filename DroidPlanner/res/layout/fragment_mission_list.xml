@@ -1,13 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content" >
+
+    <ImageButton
+        android:id="@+id/listLeftArrow"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="left"
+        android:background="#000000"
+        android:src="@drawable/slide_left"
+        android:visibility="gone"
+        tools:ignore="ContentDescription" />
+
+    <ImageButton
+        android:id="@+id/listRightArrow"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="#000000"
+        android:src="@drawable/slide_right"
+        android:visibility="gone"
+        tools:ignore="ContentDescription" />
 
     <it.sephiroth.android.library.widget.HListView
         android:id="@+id/listView1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#000000"
-        />
+        android:layout_alignParentTop="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_toLeftOf="@+id/listRightArrow"
+        android:layout_toRightOf="@+id/listLeftArrow"
+        android:background="#000000" >
 
-</LinearLayout>
+    </it.sephiroth.android.library.widget.HListView>
+
+</RelativeLayout>
