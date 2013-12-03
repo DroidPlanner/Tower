@@ -42,8 +42,8 @@ public class Mission extends DroneVariable implements PathSource{
 		onMissionUpdate();
 	}
 
-	public void removeWaypoints(ArrayList<MissionItem> toRemove) {
-		itens.removeAll(toRemove);
+	public void removeWaypoints(List<MissionItem> selection) {
+		itens.removeAll(selection);
 		onMissionUpdate();		
 	}
 

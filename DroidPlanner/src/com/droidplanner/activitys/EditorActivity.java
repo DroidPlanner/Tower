@@ -200,7 +200,9 @@ public class EditorActivity extends SuperUI implements
 		Log.d("LIST", "you onActionItemClicked ");
 		
 		if (item.getItemId()==MENU_DELETE) {
-			//deleteSelected();
+			mission.removeWaypoints(selection);
+			selection.clear();
+			notifySelectionChanged();
 		}
 		mode.finish();
 		return false;
@@ -219,6 +221,7 @@ public class EditorActivity extends SuperUI implements
 		missionListFragment.list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);		
 		selection.clear();
 		notifySelectionChanged();
+		contextualActionBar = null;
 	}
 
 
@@ -254,19 +257,28 @@ public class EditorActivity extends SuperUI implements
 	public void onItemClick(MissionItem item) {
 		switch (editorToolsFragment.getTool()) {
 		default:
-			if (selection.contains(item)) {
-				selection.remove(item);
-				removeItemDetail();
-			}else{
-				selection.add(item);
-				showItemDetail(item);
+			if (contextualActionBar != null) {
+				if (selection.contains(item)) {
+					selection.remove(item);
+				} else {
+					selection.add(item);
+				}				
+			} else {
+				if (selection.contains(item)) {
+					selection.clear();
+					removeItemDetail();
+				} else {
+					selection.add(item);
+					showItemDetail(item);
+				}
 			}
-			notifySelectionChanged();
 			break;
 		case TRASH:
 			mission.removeWaypoint(item);
+			selection.clear();
 			break;
 		}
+		notifySelectionChanged();
 	}
 
 	private void notifySelectionChanged() {
