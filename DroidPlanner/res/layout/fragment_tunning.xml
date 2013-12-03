@@ -58,106 +58,189 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/opaque_white"
+	tools:ignore="HardcodedText"
+    android:layout_weight="7"
+    >
+    <com.droidplanner.widgets.spinners.SpinnerSelfSelect
+        android:id="@+id/spinnerWaypointType"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="7"
-        android:gravity="center_horizontal" >
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+		android:layout_alignParentTop="true"
+        android:entries="@array/ExampleWaypointType"
+        />
 
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="match_parent"
-            android:layout_height="96dp"
-            android:layout_alignParentTop="true"
-            android:text="Type:"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+    <RelativeLayout
+		android:id="@+id/title_rect"
+		android:layout_width="match_parent"
+		android:layout_height="64dp"
+		android:layout_alignParentTop="true"
+		android:background="@drawable/wp_title_rectangle"
+		>
+		<RelativeLayout
+			android:id="@+id/title_content"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:orientation="vertical"
+			android:layout_centerVertical="true"
+			>
 
-        <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
-            android:id="@+id/SeekBarYawControl"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/SeekBarRollPitchDampenning"
-            android:layout_weight="1"
-            app:formatString="%1.3f"
-            app:inc="0.001"
-            app:max="0.25"
-            app:min="0.15"
-            app:title="Rate P.\t" >
-        </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+			<TextView
+				android:id="@+id/WaypointType"
+				style="@style/missionHeaderTitle"
+				android:layout_marginLeft="12dp"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Region of Interest" />
 
-        <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
-            android:id="@+id/SeekBarRollPitchControl"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/SeekBarYawControl"
-            android:layout_weight="1"
-            app:formatString="%1.3f"
-            app:inc="0.002"
-            app:max="0.2"
-            app:min="0.08"
-            app:title="Rate I.\t\t" >
-        </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+			<TextView
+				android:id="@+id/DistanceLabel"
+				style="@style/missionHeaderlabel"
+				android:layout_alignLeft="@id/WaypointType"
+				android:layout_below="@id/WaypointType"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text=" " />
 
-        <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
-            android:id="@+id/SeekBarThrottleAccel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/SeekBarRollPitchControl"
-            android:layout_weight="1"
-            app:formatString="%1.2f"
-            app:inc="0.01"
-            app:max="1.5"
-            app:min="0.5"
-            app:title="Rate D.\t" >
-        </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+		</RelativeLayout>
+	</RelativeLayout>
 
-        <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
-            android:id="@+id/SeekBarRollPitchDampenning"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/textView1"
-            android:layout_weight="1"
-            app:formatString="%1.4f"
-            app:inc="0.0001"
-            app:max="0.008"
-            app:min="0.001"
-            app:title="Stab P.\t" >
-        </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+	<ImageView
+        android:id="@+id/menuHint"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentRight="true"
+		android:layout_alignBottom="@id/title_rect"
+		android:src="@drawable/ic_menu_hint"
+		android:layout_margin="10dp"
+		tools:ignore="ContentDescription"
+		/>
 
-        <com.droidplanner.widgets.spinners.SpinnerSelfSelect
-            android:id="@+id/spinnerSelfSelect1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/SeekBarRollPitchDampenning"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/textView1"
-            android:layout_weight="1"
-            android:entries="@array/ExampleWaypointType" />
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title_rect">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/SeekBarThrottleAccel"
-            android:layout_centerHorizontal="true"
-            android:orientation="horizontal" >
+            android:orientation="vertical" >
 
-            <Button
-                android:id="@+id/backgroundMissionItem"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Reset" />
+			<TextView
+				android:id="@+id/textView1"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				style="@style/ModeDetailText"
+		        android:padding="12dp"
+				android:background="@drawable/mode_desc_rectangle"
+				android:text="@string/tune_roll" />
 
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Send" />
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+		        android:padding="12dp"
+				android:orientation="vertical" >
+
+				<com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+					android:id="@+id/SeekBarYawControl"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_alignParentLeft="true"
+					android:layout_below="@+id/SeekBarRollPitchDampenning"
+					android:layout_weight="1"
+					app:formatString="%1.3f"
+					app:inc="0.001"
+					app:max="0.25"
+					app:min="0.15"
+					app:title="Rate P.\t" >
+				</com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+
+				<com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+					android:id="@+id/SeekBarRollPitchControl"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_alignParentLeft="true"
+					android:layout_below="@+id/SeekBarYawControl"
+					android:layout_weight="1"
+					app:formatString="%1.3f"
+					app:inc="0.002"
+					app:max="0.2"
+					app:min="0.08"
+					app:title="Rate I.\t\t" >
+				</com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+
+				<com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+					android:id="@+id/SeekBarThrottleAccel"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_alignParentLeft="true"
+					android:layout_below="@+id/SeekBarRollPitchControl"
+					android:layout_weight="1"
+					app:formatString="%1.2f"
+					app:inc="0.01"
+					app:max="1.5"
+					app:min="0.5"
+					app:title="Rate D.\t" >
+				</com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+
+				<com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+					android:id="@+id/SeekBarRollPitchDampenning"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_alignParentLeft="true"
+					android:layout_below="@+id/textView1"
+					android:layout_weight="1"
+					app:formatString="%1.4f"
+					app:inc="0.0001"
+					app:max="0.008"
+					app:min="0.001"
+					app:title="Stab P.\t" >
+				</com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+
+				<com.droidplanner.widgets.spinners.SpinnerSelfSelect
+					android:id="@+id/spinnerSelfSelect1"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_above="@+id/SeekBarRollPitchDampenning"
+					android:layout_alignParentRight="true"
+					android:layout_alignParentTop="true"
+					android:layout_toRightOf="@+id/textView1"
+					android:layout_weight="1"
+					android:entries="@array/ExampleWaypointType" />
+
+
+					<LinearLayout
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_below="@+id/SeekBarThrottleAccel"
+						android:layout_centerHorizontal="true"
+						android:orientation="horizontal" >
+
+
+						<Button
+							android:id="@+id/backgroundMissionItem"
+							style="@style/modeControl"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="Reset"
+							android:background="@drawable/button_blue"
+							/>
+						<Button
+							android:id="@+id/button2"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:background="@drawable/button_green"
+							android:text="Send" />
+					</LinearLayout>
+
+			</LinearLayout>
         </LinearLayout>
-    </RelativeLayout>
+    </ScrollView>
 
+</RelativeLayout>
 </LinearLayout>

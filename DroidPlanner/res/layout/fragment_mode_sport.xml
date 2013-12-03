@@ -22,9 +22,6 @@
 		style="@style/ModeDetailText"
 		android:layout_alignTop="@id/desc_rect"
 		android:layout_alignLeft="@id/desc_rect"
-        android:layout_marginTop="12dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginLeft="16dp"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="@string/mode_sport" />

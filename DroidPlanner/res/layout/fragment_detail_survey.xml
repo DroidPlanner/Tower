@@ -105,6 +105,7 @@
 				android:layout_height="wrap_content"
 				android:layout_gravity="left"
 				android:text="@string/camera_"
+				style="@style/ModeDetailText"
 				android:textAppearance="?android:attr/textAppearanceMedium" />
 
 			<com.droidplanner.widgets.spinners.SpinnerSelfSelect
