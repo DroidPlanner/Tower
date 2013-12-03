@@ -115,6 +115,9 @@ public class EditorActivity extends SuperUI implements
 	@Override
 	public void editorToolChanged(EditorTools tools) {
 		removeItemDetail();
+		mission.clearSelection();
+		notifySelectionChanged();
+		
 		switch (tools) {
 		case DRAW:
 		case POLY:
