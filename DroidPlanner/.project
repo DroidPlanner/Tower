@@ -21,7 +21,7 @@
 			<arguments>
 				<dictionary>
 					<key>LaunchConfigHandle</key>
-					<value>&lt;project&gt;/.externalToolBuilders/DroidPlanner AutoVersion.launch</value>
+					<value>&lt;project&gt;/.externalToolBuilders/Verisoning script.launch</value>
 				</dictionary>
 			</arguments>
 		</buildCommand>
