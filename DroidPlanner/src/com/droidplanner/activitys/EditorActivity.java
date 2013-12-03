@@ -12,6 +12,7 @@ import android.view.ActionMode;
 import android.view.ActionMode.Callback;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.OnEditorInteraction;
@@ -22,12 +23,14 @@ import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.fragments.EditorToolsFragment;
 import com.droidplanner.fragments.EditorToolsFragment.EditorTools;
 import com.droidplanner.fragments.EditorToolsFragment.OnEditorToolSelected;
+import com.droidplanner.fragments.MissionFragment;
 import com.droidplanner.fragments.PlanningMapFragment;
 import com.droidplanner.fragments.helpers.GestureMapFragment;
 import com.droidplanner.fragments.helpers.GestureMapFragment.OnPathFinishedListner;
 import com.droidplanner.fragments.helpers.MapProjection;
 import com.droidplanner.fragments.mission.MissionDetailFragment;
 import com.droidplanner.fragments.mission.MissionDetailFragment.OnWayPointTypeChangeListener;
+import com.droidplanner.widgets.adapterViews.MissionItemView;
 import com.google.android.gms.maps.model.LatLng;
 
 public class EditorActivity extends SuperUI implements
@@ -41,6 +44,8 @@ public class EditorActivity extends SuperUI implements
 	private EditorToolsFragment editorToolsFragment;
 	private MissionDetailFragment itemDetailFragment;
 	private FragmentManager fragmentManager;
+	private MissionFragment missionListFragment;
+	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -58,7 +63,10 @@ public class EditorActivity extends SuperUI implements
 				.findFragmentById(R.id.gestureMapFragment));
 		editorToolsFragment = (EditorToolsFragment) fragmentManager
 				.findFragmentById(R.id.editorToolsFragment);
+		missionListFragment = (MissionFragment) fragmentManager
+				.findFragmentById(R.id.missionFragment1);
 
+		
 		removeItemDetail(); // When doing things like screen rotation remove the detail window
 		
 		mission = drone.mission;
@@ -205,8 +213,11 @@ public class EditorActivity extends SuperUI implements
 	@Override
 	public void onDestroyActionMode(ActionMode arg0) {
 		Log.d("LIST", "you onDestroyActionMode ");
-		
+		missionListFragment.list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+		missionListFragment.list.clearChoices();
+		missionListFragment.list.requestLayout();
 	}
+
 
 	@Override
 	public boolean onPrepareActionMode(ActionMode arg0, Menu arg1) {
@@ -216,19 +227,35 @@ public class EditorActivity extends SuperUI implements
 	
 	@Override
 	public void onItemLongClick(MissionItem item) {
+		//missionListFragment.list.setItemChecked(0, true);
+		
 		startActionMode(this);
+		missionListFragment.list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+		removeItemDetail();
+		
 	}
 
 	@Override
 	public void onItemClick(MissionItem item) {
+		
 		switch (editorToolsFragment.getTool()) {
 		default:
-			showItemDetail(item);
+			if(isItemSelected(item)){
+				showItemDetail(item);
+			}else{
+				removeItemDetail();
+			}
+			missionListFragment.list.requestLayout();
 			break;
 		case TRASH:
 			mission.removeWaypoint(item);
 			break;
 		}
+	}
+
+	private boolean isItemSelected(MissionItem item) {
+		MissionItemView adapter = (MissionItemView) missionListFragment.list.getAdapter();
+		return missionListFragment.list.isItemChecked(adapter.getPosition(item));
 	}
 
 }
