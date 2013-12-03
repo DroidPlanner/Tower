@@ -56,6 +56,8 @@ public class EditorActivity extends SuperUI implements
 		editorToolsFragment = (EditorToolsFragment) fragmentManager
 				.findFragmentById(R.id.editorToolsFragment);
 
+		removeItemDetail(); // When doing things like screen rotation remove the detail window
+		
 		mission = drone.mission;
 		gestureMapFragment.setOnPathFinishedListner(this);
 		mission.onMissionUpdate();
