@@ -16,6 +16,7 @@ import com.droidplanner.drone.variables.mission.waypoints.Waypoint;
 import com.droidplanner.fragments.helpers.MapPath.PathSource;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import com.droidplanner.helpers.units.Altitude;
+import com.droidplanner.helpers.units.Length;
 import com.google.android.gms.maps.model.LatLng;
 
 public class Mission extends DroneVariable implements PathSource{
@@ -166,17 +167,17 @@ public class Mission extends DroneVariable implements PathSource{
 		return itens.indexOf(waypoint)+1; // plus one to account for the fact that this is an index
 	}
 
-	public boolean checkIfAltitudeHasChangedFromPreviusItem(
-			SpatialCoordItem waypoint) {
+	public Length getAltitudeDiffFromPreviusItem(
+			SpatialCoordItem waypoint) throws Exception {
 		int i = itens.indexOf(waypoint);
 		if (i > 0) {
 			MissionItem previus = itens.get(i - 1);
 			if (previus instanceof SpatialCoordItem) {
-				return !waypoint.getAltitude().equals(
+				return waypoint.getAltitude().subtract(
 						((SpatialCoordItem) previus).getAltitude());
 			}
 		}
-		return true;
+		throw new Exception("Last waypoint doesn't have an altitude");
 	}
 
 	public boolean hasItem(MissionItem item) {

@@ -3,6 +3,7 @@ package com.droidplanner.widgets.adapterViews;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,8 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.droidplanner.R;
+import com.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
+import com.droidplanner.helpers.units.Length;
 
 public class MissionItemView extends ArrayAdapter<com.droidplanner.drone.variables.mission.MissionItem> {
 
@@ -57,7 +60,7 @@ public class MissionItemView extends ArrayAdapter<com.droidplanner.drone.variabl
 
 	private void findViewObjects(View view) {
 		nameView = (TextView) view.findViewById(R.id.rowNameView);
-		//altitudeView = (TextView) view.findViewById(R.id.rowAltitudeView);
+		altitudeView = (TextView) view.findViewById(R.id.rowAltitudeView);
 
 		//nameView.setText(String.format("%3d", waypoint.getNumber()));
 		//nameView.setText(String.format("%3d", waypoints.size()));
@@ -70,9 +73,30 @@ public class MissionItemView extends ArrayAdapter<com.droidplanner.drone.variabl
 		distanceView = (TextView) view.findViewById(R.id.rowDistanceView);
 */
 	}
-	private void setupViewsText(com.droidplanner.drone.variables.mission.MissionItem waypoint) {
-		nameView.setText(String.format("%3d", this.waypoints.indexOf(waypoint)+1));
-		//altitudeView.setText("50m");
+	private void setupViewsText(com.droidplanner.drone.variables.mission.MissionItem item) {
+		nameView.setText(String.format("%3d", this.waypoints.indexOf(item)+1));
+
+		if (item instanceof SpatialCoordItem) {
+			SpatialCoordItem waypoint = (SpatialCoordItem) item;
+			altitudeView.setText(String.format("%3.0fm",
+					waypoint.getAltitude().valueInMeters()));
+			
+			
+			Length diff;
+			try {
+				diff = waypoint.getMission().getAltitudeDiffFromPreviusItem(
+						waypoint);
+				if (diff.valueInMeters() > 0) {
+					altitudeView.setTextColor(Color.RED);
+				} else if (diff.valueInMeters() < 0) {
+					altitudeView.setTextColor(Color.BLUE);
+				}
+			} catch (Exception e) {
+				// Do nothing when last item doesn't have an altitude
+			}
+		} else {
+			altitudeView.setText("");
+		}
 
 		/*
 		if (waypoint.getCmd().showOnMap()) {
