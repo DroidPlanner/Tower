@@ -45,6 +45,11 @@ public class RegionOfInterest extends SpatialCoordItem implements MarkerSource{
 		return R.drawable.ic_wp_map;
 	}
 	
+	@Override
+	protected int getIconDrawableSelected() {
+		return R.drawable.ic_wp_map_selected;
+	}
+	
 	/*
 	private static String getRoiDetail(GenericWaypoint wp, Context context) {
 		if (wp.getParam1() == MAV_ROI.MAV_ROI_WPNEXT)

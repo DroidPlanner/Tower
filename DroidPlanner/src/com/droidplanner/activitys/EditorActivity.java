@@ -286,7 +286,9 @@ public class EditorActivity extends SuperUI implements
 		missionListFragment.list.clearChoices();
 		for (MissionItem item : selection) {
 			missionListFragment.list.setItemChecked(adapter.getPosition(item), true);
+			item.select();
 		}
 		adapter.notifyDataSetChanged();
+		planningMapFragment.update();
 	}
 }

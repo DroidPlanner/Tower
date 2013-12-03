@@ -60,4 +60,9 @@ public class Takeoff extends SpatialCoordItem implements MarkerSource {
 	protected int getIconDrawable() {
 		return R.drawable.ic_wp_takeoff;
 	}
+	
+	@Override
+	protected int getIconDrawableSelected() {
+		return R.drawable.ic_wp_takeof_selected;
+	}
 }

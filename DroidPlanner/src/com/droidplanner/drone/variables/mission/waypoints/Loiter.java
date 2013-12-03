@@ -72,4 +72,9 @@ public abstract class Loiter extends SpatialCoordItem implements MarkerSource {
 	protected int getIconDrawable() {
 		return R.drawable.ic_wp_loiter;
 	}
+	
+	@Override
+	protected int getIconDrawableSelected() {
+		return R.drawable.ic_wp_loiter_selected;
+	}
 }

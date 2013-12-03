@@ -98,5 +98,10 @@ public class Waypoint extends SpatialCoordItem {
 	protected int getIconDrawable() {
 		return R.drawable.ic_wp_map;
 	}
+
+	@Override
+	protected int getIconDrawableSelected() {
+		return R.drawable.ic_wp_map_selected;
+	}
 	
 }

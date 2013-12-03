@@ -27,6 +27,7 @@ public abstract class SpatialCoordItem extends MissionItem implements
 		MarkerSource {
 
 	protected abstract int getIconDrawable();
+	protected abstract int getIconDrawableSelected();
 
 	LatLng coordinate;
 	Altitude altitude;
@@ -74,7 +75,13 @@ public abstract class SpatialCoordItem extends MissionItem implements
 	}
 
 	protected BitmapDescriptor getIcon(Context context) {
-		Bitmap marker = MarkerWithText.getMarkerWithTextAndDetail(getIconDrawable(), getIconText(),
+		int drawable;
+		if (selected) {
+			drawable = getIconDrawableSelected();
+		} else {
+			drawable = getIconDrawable();
+		}
+		Bitmap marker = MarkerWithText.getMarkerWithTextAndDetail(drawable, getIconText(),
 						getIconDetail(), context);
 		return BitmapDescriptorFactory.fromBitmap(marker);
 	}

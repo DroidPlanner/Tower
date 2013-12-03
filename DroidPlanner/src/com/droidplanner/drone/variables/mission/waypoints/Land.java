@@ -49,5 +49,10 @@ public class Land extends SpatialCoordItem implements MarkerSource {
 	protected int getIconDrawable() {
 		return R.drawable.ic_wp_land;
 	}
+	
+	@Override
+	protected int getIconDrawableSelected() {
+		return R.drawable.ic_wp_lan_selected;
+	}
 
 }
