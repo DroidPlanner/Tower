@@ -7,9 +7,14 @@ import android.app.FragmentManager;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
+import android.view.ActionMode;
+import android.view.ActionMode.Callback;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.droidplanner.R;
+import com.droidplanner.activitys.helpers.OnEditorInteraction;
 import com.droidplanner.activitys.helpers.SuperUI;
 import com.droidplanner.drone.DroneInterfaces.OnWaypointChangedListner;
 import com.droidplanner.drone.variables.mission.Mission;
@@ -30,7 +35,8 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class EditorActivity extends SuperUI implements
 		OnMapInteractionListener, OnPathFinishedListner, OnEditorToolSelected,
-		OnWayPointTypeChangeListener, OnWaypointChangedListner {
+		OnWayPointTypeChangeListener, OnWaypointChangedListner, OnEditorInteraction ,Callback{
+
 
 	private PlanningMapFragment planningMapFragment;
 	private GestureMapFragment gestureMapFragment;
@@ -120,7 +126,7 @@ public class EditorActivity extends SuperUI implements
 
 	@Override
 	public void onMapClick(LatLng point) {
-		switch (editorToolsFragment.getTool()) {
+		switch (getTool()) {
 		case MARKER:
 			mission.addWaypoint(point, mission.getDefaultAlt());
 			break;
@@ -131,6 +137,10 @@ public class EditorActivity extends SuperUI implements
 		case TRASH:
 			break;
 		}
+	}
+
+	public EditorTools getTool() {
+		return editorToolsFragment.getTool();
 	}
 
 	@Override
@@ -180,7 +190,7 @@ public class EditorActivity extends SuperUI implements
 	public void onPathFinished(List<Point> path) {
 		List<LatLng> points = MapProjection.projectPathIntoMap(path,
 				planningMapFragment.mMap);
-		switch (editorToolsFragment.getTool()) {
+		switch (getTool()) {
 		case DRAW:
 			drone.mission.addWaypointsWithDefaultAltitude(points);
 			break;
@@ -206,6 +216,58 @@ public class EditorActivity extends SuperUI implements
 			if (!mission.hasItem(itemDetailFragment.getItem())) {
 				removeItemDetail();
 			}
+		}
+	}
+
+
+
+	private static final int MENU_DELETE = 1;
+
+	@Override
+	public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+		// TODO Auto-generated method stub
+		Log.d("LIST", "you onActionItemClicked ");
+		
+		if (item.getItemId()==MENU_DELETE) {
+			//deleteSelected();
+		}
+		mode.finish();
+		return false;
+	}
+
+	@Override
+	public boolean onCreateActionMode(ActionMode arg0, Menu menu) {
+		Log.d("LIST", "you onCreateActionMode ");
+		menu.add( 0, MENU_DELETE, 0, "Delete" );
+		return true;
+	}
+
+	@Override
+	public void onDestroyActionMode(ActionMode arg0) {
+		Log.d("LIST", "you onDestroyActionMode ");
+		
+	}
+
+	@Override
+	public boolean onPrepareActionMode(ActionMode arg0, Menu arg1) {
+		Log.d("LIST", "you onPrepareActionMode ");
+		return false;
+	}
+	
+	@Override
+	public void onItemLongClick(MissionItem item) {
+		startActionMode(this);
+	}
+
+	@Override
+	public void onItemClick(MissionItem item) {
+		switch (editorToolsFragment.getTool()) {
+		default:
+			showItemDetail(item);
+			break;
+		case TRASH:
+			mission.removeWaypoint(item);
+			break;
 		}
 	}
 

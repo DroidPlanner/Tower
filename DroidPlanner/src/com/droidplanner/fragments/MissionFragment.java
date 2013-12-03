@@ -1,6 +1,5 @@
 package com.droidplanner.fragments;
 
-import it.sephiroth.android.library.util.v11.MultiChoiceModeListener;
 import it.sephiroth.android.library.widget.AdapterView;
 import it.sephiroth.android.library.widget.AdapterView.OnItemClickListener;
 import it.sephiroth.android.library.widget.AdapterView.OnItemLongClickListener;
@@ -14,28 +13,24 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseBooleanArray;
-import android.view.ActionMode;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
+import com.droidplanner.activitys.helpers.OnEditorInteraction;
 import com.droidplanner.drone.DroneInterfaces.OnWaypointChangedListner;
 import com.droidplanner.drone.variables.mission.Mission;
 import com.droidplanner.drone.variables.mission.MissionItem;
-import com.droidplanner.fragments.helpers.OnMapInteractionListener;
 import com.droidplanner.widgets.adapterViews.MissionItemView;
 
-public class MissionFragment extends Fragment implements  OnWaypointChangedListner, OnItemLongClickListener,  OnItemClickListener, OnItemSelectedListener, MultiChoiceModeListener{
-	private static final int MENU_DELETE = 1;
+public class MissionFragment extends Fragment implements  OnWaypointChangedListner, OnItemLongClickListener,  OnItemClickListener, OnItemSelectedListener{
 	public HListView list;
 	private Mission mission;
 	private MissionItemView adapter;
-	private OnMapInteractionListener mListner;
+	private OnEditorInteraction editorListner;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,8 +43,8 @@ public class MissionFragment extends Fragment implements  OnWaypointChangedListn
 		mission.addOnMissionUpdateListner(this);
 		adapter = new MissionItemView(this.getActivity(), android.R.layout.simple_list_item_1,mission.getItems());
 		list.setOnItemClickListener(this);
-		list.setMultiChoiceModeListener( this );		
-		list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+		list.setOnItemLongClickListener(this);
+		list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		
 		list.setAdapter(adapter);
 
@@ -61,7 +56,7 @@ public class MissionFragment extends Fragment implements  OnWaypointChangedListn
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		mListner = (OnMapInteractionListener) activity;
+		editorListner = (OnEditorInteraction) ( activity);
 	}
 
 	@Override
@@ -87,18 +82,6 @@ public class MissionFragment extends Fragment implements  OnWaypointChangedListn
 		update();		
 	}
 
-	@Override
-	public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-		// TODO Auto-generated method stub
-		Log.d("LIST", "you onActionItemClicked ");
-		
-		if (item.getItemId()==MENU_DELETE) {
-			deleteSelected();
-		}
-		mode.finish();
-		return false;
-	}
-
 	private void deleteSelected() {
 		SparseBooleanArray selected = list.getCheckedItemPositions();
 		ArrayList<MissionItem> toRemove = new ArrayList<MissionItem>();
@@ -111,40 +94,6 @@ public class MissionFragment extends Fragment implements  OnWaypointChangedListn
 		}		
 		
 		mission.removeWaypoints(toRemove);
-	}
-
-	@Override
-	public boolean onCreateActionMode(ActionMode arg0, Menu menu) {
-		// TODO Auto-generated method stub
-
-		Log.d("LIST", "you onCreateActionMode ");
-		menu.add( 0, MENU_DELETE, 0, "Delete" );
-		return true;
-	}
-
-	@Override
-	public void onDestroyActionMode(ActionMode arg0) {
-		// TODO Auto-generated method stub
-
-		Log.d("LIST", "you onDestroyActionMode ");
-		
-	}
-
-	@Override
-	public boolean onPrepareActionMode(ActionMode arg0, Menu arg1) {
-		// TODO Auto-generated method stub
-
-		Log.d("LIST", "you onPrepareActionMode ");
-		return false;
-	}
-
-	@Override
-	public void onItemCheckedStateChanged(ActionMode mode, int position,
-			long id, boolean checked) {
-		// TODO Auto-generated method stub
-
-		Log.d("LIST", "you onItemCheckedStateChanged "+ position);
-		
 	}
 
 	@Override
@@ -165,19 +114,20 @@ public class MissionFragment extends Fragment implements  OnWaypointChangedListn
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
+	public void onItemClick(AdapterView<?> adapter, View view, int position,
 			long id) {
-		mListner.onMarkerClick(((MissionItem) parent.getItemAtPosition(position)));
 		Log.d("LIST", "you onItemClick "+ position);		
+		MissionItem missionItem = (MissionItem) adapter.getItemAtPosition(position);
+		editorListner.onItemClick(missionItem);
 	}
 
 	@Override
-	public boolean onItemLongClick(AdapterView<?> parent, View view,
+	public boolean onItemLongClick(AdapterView<?> adapter, View view,
 			int position, long id) {
-		// TODO Auto-generated method stub
-		Log.d("LIST", "you onItemLongClick "+ position);
+		Log.d("LIST", "you longcliked item "+position);
+		MissionItem missionItem = (MissionItem) adapter.getItemAtPosition(position);
+		editorListner.onItemLongClick(missionItem);
 		return false;
 	}
-
 
 }
