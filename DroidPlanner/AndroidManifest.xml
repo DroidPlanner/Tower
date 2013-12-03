@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.droidplanner"
     android:versionCode="56"
-    android:versionName="1.2.0" >
+    android:versionName="please run version.sh to get the version name" >
 
     <uses-sdk
         android:minSdkVersion="14"
