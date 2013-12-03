@@ -42,6 +42,8 @@ public class EditorToolsFragment extends Fragment implements OnClickListener {
 		buttonMarker.setOnClickListener(this);
 		buttonPoly.setOnClickListener(this);
 		buttonTrash.setOnClickListener(this);
+		
+		buttonMarker.setChecked(true);
 		return view;
 	}
 
