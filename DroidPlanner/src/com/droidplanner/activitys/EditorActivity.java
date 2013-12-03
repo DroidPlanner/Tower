@@ -13,6 +13,7 @@ import android.view.ActionMode.Callback;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.OnEditorInteraction;
@@ -20,11 +21,11 @@ import com.droidplanner.activitys.helpers.SuperUI;
 import com.droidplanner.drone.DroneInterfaces.OnWaypointChangedListner;
 import com.droidplanner.drone.variables.mission.Mission;
 import com.droidplanner.drone.variables.mission.MissionItem;
+import com.droidplanner.fragments.EditorListFragment;
+import com.droidplanner.fragments.EditorMapFragment;
 import com.droidplanner.fragments.EditorToolsFragment;
 import com.droidplanner.fragments.EditorToolsFragment.EditorTools;
 import com.droidplanner.fragments.EditorToolsFragment.OnEditorToolSelected;
-import com.droidplanner.fragments.EditorListFragment;
-import com.droidplanner.fragments.EditorMapFragment;
 import com.droidplanner.fragments.helpers.GestureMapFragment;
 import com.droidplanner.fragments.helpers.GestureMapFragment.OnPathFinishedListner;
 import com.droidplanner.fragments.helpers.MapProjection;
@@ -37,7 +38,6 @@ public class EditorActivity extends SuperUI implements
 		OnPathFinishedListner, OnEditorToolSelected,
 		OnWayPointTypeChangeListener, OnWaypointChangedListner, OnEditorInteraction ,Callback{
 
-
 	private EditorMapFragment planningMapFragment;
 	private GestureMapFragment gestureMapFragment;
 	private Mission mission;
@@ -45,6 +45,7 @@ public class EditorActivity extends SuperUI implements
 	private MissionDetailFragment itemDetailFragment;
 	private FragmentManager fragmentManager;
 	private EditorListFragment missionListFragment;
+	private TextView infoView;
 	
 	private ActionMode contextualActionBar;
 
@@ -66,7 +67,7 @@ public class EditorActivity extends SuperUI implements
 				.findFragmentById(R.id.editorToolsFragment);
 		missionListFragment = (EditorListFragment) fragmentManager
 				.findFragmentById(R.id.missionFragment1);
-
+		infoView = (TextView) findViewById(R.id.editorInfoWindow);
 		
 		removeItemDetail(); // When doing things like screen rotation remove the detail window
 		
@@ -75,7 +76,15 @@ public class EditorActivity extends SuperUI implements
 		mission.onMissionUpdate();
 		
 		mission.addOnMissionUpdateListner(this);
-
+	}
+	
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+		// TODO Auto-generated method stub
+		super.onWindowFocusChanged(hasFocus);
+		int right = editorToolsFragment.getView().getRight();
+		int bottom = infoView.getBottom();
+		planningMapFragment.mMap.setPadding(right, bottom, 0, 0);		
 	}
 
 	@Override

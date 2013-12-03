@@ -15,7 +15,7 @@
         tools:layout="@layout/fragment_gesture_map" />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/editorInfoWindow"
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:layout_alignParentTop="true"
