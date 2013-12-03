@@ -43,7 +43,7 @@ public class FlightMapFragment extends DroneMap implements
 		View view = super.onCreateView(inflater, viewGroup, bundle);
 
 		droneMarker = new DroneMarker(this);
-		droneLeashPath = new MapPath(mMap,Color.WHITE,5);
+		droneLeashPath = new MapPath(mMap,getResources());
 
 		addFlightPathToMap();
 		getPreferences();

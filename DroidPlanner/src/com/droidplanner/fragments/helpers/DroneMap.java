@@ -32,7 +32,7 @@ public abstract class DroneMap extends OfflineMapFragment implements OnWaypointC
 		mission = drone.mission;
 		mMap = getMap();
 		markers = new MarkerManager(mMap);
-		missionPath = new MapPath(mMap);
+		missionPath = new MapPath(mMap,getResources());
 		mission.addOnMissionUpdateListner(this);
 		return view;
 	}

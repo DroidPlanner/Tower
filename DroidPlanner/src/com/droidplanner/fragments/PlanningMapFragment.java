@@ -50,7 +50,7 @@ public class PlanningMapFragment extends DroneMap implements
 		mMap.setOnMarkerClickListener(this);
 		mMap.setOnMapClickListener(this);
 		mMap.setOnMapLongClickListener(this);
-		polygonPath = new MapPath(mMap, Color.BLACK, 2);
+		polygonPath = new MapPath(mMap, Color.BLACK, getResources());
 		cameraOverlays = new CameraGroundOverlays(mMap);
 
 		return view;
