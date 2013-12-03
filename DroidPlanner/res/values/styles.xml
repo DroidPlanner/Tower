@@ -134,6 +134,7 @@
         <!--<item name="android:background">@drawable/action_texture</item>-->
 		<item name="android:titleTextStyle">@style/CustomActionBarTheme.ActionBar.TitleTextStyle</item>
 	    <item name="android:subtitleTextStyle">@style/CustomActionBarTheme.ActionBar.Text</item>
+	    <item name="android:background">@null</item>
      </style>
 
 
