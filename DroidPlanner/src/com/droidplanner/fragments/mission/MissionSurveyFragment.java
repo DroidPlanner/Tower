@@ -8,7 +8,7 @@ public class MissionSurveyFragment extends MissionDetailFragment {
 	
 	@Override
 	protected int getResource() {
-		return R.layout.fragment_detail_survey;
+		return R.layout.fragment_editor_detail_survey;
 	}
 
 	@Override

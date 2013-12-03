@@ -13,7 +13,7 @@ public class MissionLandFragment extends MissionDetailFragment implements
 
 	@Override
 	protected int getResource() {
-		return R.layout.fragment_detail_land;
+		return R.layout.fragment_editor_detail_land;
 	}
 
 	@Override

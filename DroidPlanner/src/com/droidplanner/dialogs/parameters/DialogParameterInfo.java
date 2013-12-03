@@ -20,7 +20,7 @@ public class DialogParameterInfo {
 
     private static View buildView(ParameterMetadata metadata, Context context) {
         final LayoutInflater inflater = LayoutInflater.from(context);
-        final View view = inflater.inflate(R.layout.dialog_parameters_info, null);
+        final View view = inflater.inflate(R.layout.fragment_parameters_info, null);
 
         setTextView(view, R.id.nameView, metadata.getDisplayName());
         setTextView(view, R.id.descView, metadata.getDescription());

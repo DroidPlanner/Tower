@@ -32,7 +32,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/textView1"
         android:layout_margin="5dp"
-        tools:layout="@layout/fragment_editor_control" />
+        tools:layout="@layout/fragment_editor_tools" />
 
 
     <FrameLayout
@@ -53,6 +53,6 @@
         android:layout_height="94dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        tools:layout="@layout/fragment_mission_list" />
+        tools:layout="@layout/fragment_editor_list" />
 
 </RelativeLayout>

@@ -15,7 +15,7 @@ public class MissionRegionOfInterestFragment extends MissionDetailFragment
 
 	@Override
 	protected int getResource() {
-		return R.layout.fragment_detail_roi;
+		return R.layout.fragment_editor_detail_roi;
 	}
 
 	@Override
