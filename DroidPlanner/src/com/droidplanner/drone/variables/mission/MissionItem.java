@@ -50,4 +50,8 @@ public abstract class MissionItem {
 	 */
 	public abstract void unpackMAVMessage(msg_mission_item mavMsg);
 	
+	
+	public Mission getMission(){
+		return mission;
+	}
 }
