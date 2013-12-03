@@ -26,7 +26,7 @@ import com.droidplanner.drone.variables.mission.Mission;
 import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.widgets.adapterViews.MissionItemView;
 
-public class MissionFragment extends Fragment implements  OnWaypointChangedListner, OnItemLongClickListener,  OnItemClickListener, OnItemSelectedListener{
+public class EditorListFragment extends Fragment implements  OnWaypointChangedListner, OnItemLongClickListener,  OnItemClickListener, OnItemSelectedListener{
 	public HListView list;
 	private Mission mission;
 	private MissionItemView adapter;

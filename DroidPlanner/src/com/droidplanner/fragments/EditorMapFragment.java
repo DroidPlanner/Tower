@@ -27,7 +27,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
 @SuppressLint("UseSparseArrays")
-public class PlanningMapFragment extends DroneMap implements
+public class EditorMapFragment extends DroneMap implements
 		OnMapLongClickListener, OnMarkerDragListener, OnMapClickListener,
 		OnMarkerClickListener, OnWaypointChangedListner {
 

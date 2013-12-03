@@ -14,7 +14,7 @@ import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
 import com.droidplanner.drone.Drone;
 
-public class MissionControlFragment extends Fragment implements
+public class FlightActionsFragment extends Fragment implements
 		OnClickListener {
 
 	public interface OnMissionControlInteraction {
