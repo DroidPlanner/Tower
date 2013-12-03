@@ -1,5 +1,6 @@
 package com.droidplanner.activitys;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ActionBar;
@@ -21,9 +22,9 @@ import com.droidplanner.drone.DroneInterfaces.OnWaypointChangedListner;
 import com.droidplanner.drone.variables.mission.Mission;
 import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.fragments.EditorToolsFragment;
+import com.droidplanner.fragments.MissionFragment;
 import com.droidplanner.fragments.EditorToolsFragment.EditorTools;
 import com.droidplanner.fragments.EditorToolsFragment.OnEditorToolSelected;
-import com.droidplanner.fragments.MissionFragment;
 import com.droidplanner.fragments.PlanningMapFragment;
 import com.droidplanner.fragments.helpers.GestureMapFragment;
 import com.droidplanner.fragments.helpers.GestureMapFragment.OnPathFinishedListner;
@@ -46,6 +47,8 @@ public class EditorActivity extends SuperUI implements
 	private FragmentManager fragmentManager;
 	private MissionFragment missionListFragment;
 	
+	List<MissionItem> selection = new ArrayList<MissionItem>();
+	private ActionMode contextualActionBar;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -213,9 +216,9 @@ public class EditorActivity extends SuperUI implements
 	@Override
 	public void onDestroyActionMode(ActionMode arg0) {
 		Log.d("LIST", "you onDestroyActionMode ");
-		missionListFragment.list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-		missionListFragment.list.clearChoices();
-		missionListFragment.list.requestLayout();
+		missionListFragment.list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);		
+		selection.clear();
+		notifySelectionChanged();
 	}
 
 
@@ -226,26 +229,39 @@ public class EditorActivity extends SuperUI implements
 	}
 	
 	@Override
-	public void onItemLongClick(MissionItem item) {
-		//missionListFragment.list.setItemChecked(0, true);
-		
-		startActionMode(this);
-		missionListFragment.list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-		removeItemDetail();
-		
+	public boolean onItemLongClick(MissionItem item) {
+		if (contextualActionBar != null) {
+			if (selection.contains(item)) {
+				selection.clear();
+			} else {
+				selection.clear();
+				selection.addAll(mission.getItems());
+			}
+			notifySelectionChanged();
+		} else {
+			removeItemDetail();
+			missionListFragment.list
+					.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+			contextualActionBar = startActionMode(this);
+			selection.clear();
+			selection.add(item);
+			notifySelectionChanged();
+		}
+		return true;
 	}
 
 	@Override
 	public void onItemClick(MissionItem item) {
-		
 		switch (editorToolsFragment.getTool()) {
 		default:
-			if(isItemSelected(item)){
-				showItemDetail(item);
-			}else{
+			if (selection.contains(item)) {
+				selection.remove(item);
 				removeItemDetail();
+			}else{
+				selection.add(item);
+				showItemDetail(item);
 			}
-			missionListFragment.list.requestLayout();
+			notifySelectionChanged();
 			break;
 		case TRASH:
 			mission.removeWaypoint(item);
@@ -253,9 +269,12 @@ public class EditorActivity extends SuperUI implements
 		}
 	}
 
-	private boolean isItemSelected(MissionItem item) {
+	private void notifySelectionChanged() {
 		MissionItemView adapter = (MissionItemView) missionListFragment.list.getAdapter();
-		return missionListFragment.list.isItemChecked(adapter.getPosition(item));
+		missionListFragment.list.clearChoices();
+		for (MissionItem item : selection) {
+			missionListFragment.list.setItemChecked(adapter.getPosition(item), true);
+		}
+		adapter.notifyDataSetChanged();
 	}
-
 }

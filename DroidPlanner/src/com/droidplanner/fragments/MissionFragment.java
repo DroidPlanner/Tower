@@ -126,8 +126,7 @@ public class MissionFragment extends Fragment implements  OnWaypointChangedListn
 			int position, long id) {
 		Log.d("LIST", "you longcliked item "+position);
 		MissionItem missionItem = (MissionItem) adapter.getItemAtPosition(position);
-		editorListner.onItemLongClick(missionItem);
-		return false;
+		return editorListner.onItemLongClick(missionItem);
 	}
 
 }
