@@ -87,7 +87,6 @@ public class DroidPlannerApp extends Application implements
 	@Override
 	public void notifyDisconnected() {
 		conectionListner.notifyDisconnected();
-		tts.speak("Disconnected");
 
 		// stop watchdog
 		watchdog.removeCallbacks(watchdogCallback);
