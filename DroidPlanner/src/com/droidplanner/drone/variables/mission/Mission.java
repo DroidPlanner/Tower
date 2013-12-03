@@ -21,7 +21,9 @@ import com.google.android.gms.maps.model.LatLng;
 public class Mission extends DroneVariable implements PathSource{
 
 	private List<MissionItem> itens = new ArrayList<MissionItem>();
+	private List<MissionItem> selection = new ArrayList<MissionItem>();
 	private Altitude defaultAlt = new Altitude(50.0);
+
 
 	private List<OnWaypointChangedListner> missionListner = new ArrayList<OnWaypointChangedListner>();
 
@@ -39,11 +41,13 @@ public class Mission extends DroneVariable implements PathSource{
 
 	public void removeWaypoint(MissionItem item) {
 		itens.remove(item);
+		selection.remove(item);
 		onMissionUpdate();
 	}
 
-	public void removeWaypoints(List<MissionItem> selection) {
-		itens.removeAll(selection);
+	public void removeWaypoints(List<MissionItem> toRemove) {
+		itens.removeAll(toRemove);
+		selection.removeAll(toRemove);
 		onMissionUpdate();		
 	}
 
@@ -174,5 +178,35 @@ public class Mission extends DroneVariable implements PathSource{
 	public boolean hasItem(MissionItem item) {
 		return itens.contains(item);
 	}
+
+	public void clearSelection() {
+		selection.clear();		
+	}
+
+	public boolean selectionContains(MissionItem item) {
+		return selection.contains(item);
+	}
+
+	public void addToSelection(List<MissionItem> items) {
+		selection.addAll(items);		
+	}
+
+	public void addToSelection(MissionItem item) {
+		selection.add(item);		
+	}
+
+	public void setSelectionTo(MissionItem item) {
+		selection.clear();
+		selection.add(item);
+	}
+
+	public void removeItemFromSelection(MissionItem item) {
+		selection.remove(item);		
+	}
+
+	public List<MissionItem> getSelected() {
+		return selection;
+	}
+
 
 }

@@ -1,6 +1,5 @@
 package com.droidplanner.activitys;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ActionBar;
@@ -22,9 +21,9 @@ import com.droidplanner.drone.DroneInterfaces.OnWaypointChangedListner;
 import com.droidplanner.drone.variables.mission.Mission;
 import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.fragments.EditorToolsFragment;
-import com.droidplanner.fragments.MissionFragment;
 import com.droidplanner.fragments.EditorToolsFragment.EditorTools;
 import com.droidplanner.fragments.EditorToolsFragment.OnEditorToolSelected;
+import com.droidplanner.fragments.MissionFragment;
 import com.droidplanner.fragments.PlanningMapFragment;
 import com.droidplanner.fragments.helpers.GestureMapFragment;
 import com.droidplanner.fragments.helpers.GestureMapFragment.OnPathFinishedListner;
@@ -47,7 +46,6 @@ public class EditorActivity extends SuperUI implements
 	private FragmentManager fragmentManager;
 	private MissionFragment missionListFragment;
 	
-	List<MissionItem> selection = new ArrayList<MissionItem>();
 	private ActionMode contextualActionBar;
 
 	@Override
@@ -196,12 +194,10 @@ public class EditorActivity extends SuperUI implements
 
 	@Override
 	public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-		// TODO Auto-generated method stub
 		Log.d("LIST", "you onActionItemClicked ");
 		
 		if (item.getItemId()==MENU_DELETE) {
-			mission.removeWaypoints(selection);
-			selection.clear();
+			mission.removeWaypoints(mission.getSelected());
 			notifySelectionChanged();
 		}
 		mode.finish();
@@ -219,7 +215,7 @@ public class EditorActivity extends SuperUI implements
 	public void onDestroyActionMode(ActionMode arg0) {
 		Log.d("LIST", "you onDestroyActionMode ");
 		missionListFragment.list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);		
-		selection.clear();
+		mission.clearSelection();
 		notifySelectionChanged();
 		contextualActionBar = null;
 	}
@@ -234,11 +230,11 @@ public class EditorActivity extends SuperUI implements
 	@Override
 	public boolean onItemLongClick(MissionItem item) {
 		if (contextualActionBar != null) {
-			if (selection.contains(item)) {
-				selection.clear();
+			if (mission.selectionContains(item)) {
+				mission.clearSelection();
 			} else {
-				selection.clear();
-				selection.addAll(mission.getItems());
+				mission.clearSelection();
+				mission.addToSelection(mission.getItems());
 			}
 			notifySelectionChanged();
 		} else {
@@ -246,8 +242,8 @@ public class EditorActivity extends SuperUI implements
 			missionListFragment.list
 					.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 			contextualActionBar = startActionMode(this);
-			selection.clear();
-			selection.add(item);
+			mission.clearSelection();
+			mission.addToSelection(item);
 			notifySelectionChanged();
 		}
 		return true;
@@ -258,24 +254,24 @@ public class EditorActivity extends SuperUI implements
 		switch (editorToolsFragment.getTool()) {
 		default:
 			if (contextualActionBar != null) {
-				if (selection.contains(item)) {
-					selection.remove(item);
+				if (mission.selectionContains(item)) {
+					mission.removeItemFromSelection(item);
 				} else {
-					selection.add(item);
+					mission.addToSelection(item);
 				}				
 			} else {
-				if (selection.contains(item)) {
-					selection.clear();
+				if (mission.selectionContains(item)) {
+					mission.clearSelection();
 					removeItemDetail();
 				} else {
-					selection.add(item);
+					mission.setSelectionTo(item);
 					showItemDetail(item);
 				}
 			}
 			break;
 		case TRASH:
 			mission.removeWaypoint(item);
-			selection.clear();
+			mission.clearSelection();
 			break;
 		}
 		notifySelectionChanged();
@@ -284,9 +280,8 @@ public class EditorActivity extends SuperUI implements
 	private void notifySelectionChanged() {
 		MissionItemView adapter = (MissionItemView) missionListFragment.list.getAdapter();
 		missionListFragment.list.clearChoices();
-		for (MissionItem item : selection) {
+		for (MissionItem item : mission.getSelected()) {
 			missionListFragment.list.setItemChecked(adapter.getPosition(item), true);
-			item.select();
 		}
 		adapter.notifyDataSetChanged();
 		planningMapFragment.update();

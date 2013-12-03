@@ -9,7 +9,6 @@ import com.google.android.gms.maps.model.LatLng;
 
 public abstract class MissionItem {
 	protected Mission mission;
-	protected boolean selected = false;
 	
 	public MissionItem(Mission mission) {
 		this.mission = mission;
@@ -50,9 +49,5 @@ public abstract class MissionItem {
 	 * @return
 	 */
 	public abstract void unpackMAVMessage(msg_mission_item mavMsg);
-
-	public void select() {
-		selected = true;
-	}
 	
 }

@@ -76,7 +76,7 @@ public abstract class SpatialCoordItem extends MissionItem implements
 
 	protected BitmapDescriptor getIcon(Context context) {
 		int drawable;
-		if (selected) {
+		if (mission.selectionContains(this)) {
 			drawable = getIconDrawableSelected();
 		} else {
 			drawable = getIconDrawable();
