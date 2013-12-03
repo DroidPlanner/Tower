@@ -53,6 +53,6 @@
         android:layout_height="94dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        tools:layout="@layout/fragment_mission" />
+        tools:layout="@layout/fragment_mission_list" />
 
 </RelativeLayout>
