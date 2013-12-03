@@ -65,8 +65,12 @@ public class Mission extends DroneVariable implements PathSource{
 	
 	public void replace(MissionItem oldItem, MissionItem newItem) {
 		int index = itens.indexOf(oldItem);
+		if (selectionContains(oldItem)) {
+			removeItemFromSelection(oldItem);
+			addToSelection(newItem);
+		}
 		itens.remove(index);
-		itens.add(index, newItem);		
+		itens.add(index, newItem);
 		onMissionUpdate();		
 	}
 
