@@ -50,7 +50,7 @@ public class MissionItemView extends ArrayAdapter<com.droidplanner.drone.variabl
 	private View createLayoutFromResource(ViewGroup parent) {
 		LayoutInflater inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View view = inflater.inflate(R.layout.adapterview_mission_item, parent,false);
+		View view = inflater.inflate(R.layout.fragment_editor_list_item, parent,false);
 		return view;
 	}
 

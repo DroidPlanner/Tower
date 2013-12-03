@@ -38,7 +38,7 @@ public class EditorListFragment extends Fragment implements  OnWaypointChangedLi
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_mission_list, container,
+		View view = inflater.inflate(R.layout.fragment_editor_list, container,
 				false);
 		list = (HListView) view.findViewById(R.id.listView1);
 		leftArrow = (ImageButton) view.findViewById(R.id.listLeftArrow);

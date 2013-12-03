@@ -14,7 +14,7 @@ public class MissionTakeoffFragment extends MissionDetailFragment implements
 
 	@Override
 	protected int getResource() {
-		return R.layout.fragment_detail_takeoff;
+		return R.layout.fragment_editor_detail_takeoff;
 	}
 
 	@Override

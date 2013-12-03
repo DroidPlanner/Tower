@@ -31,7 +31,7 @@ public class EditorToolsFragment extends Fragment implements OnClickListener {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_editor_control,container, false);
+		View view = inflater.inflate(R.layout.fragment_editor_tools,container, false);
 
 		buttonDraw 		= (RadioButton) view.findViewById(R.id.editor_tools_draw);
 		buttonMarker 	= (RadioButton) view.findViewById(R.id.editor_tools_marker);

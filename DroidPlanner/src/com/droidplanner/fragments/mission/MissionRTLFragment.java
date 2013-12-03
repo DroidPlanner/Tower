@@ -11,7 +11,7 @@ public class MissionRTLFragment extends MissionDetailFragment implements
 
 	@Override
 	protected int getResource() {
-		return R.layout.fragment_detail_rtl;
+		return R.layout.fragment_editor_detail_rtl;
 	}
 
 
