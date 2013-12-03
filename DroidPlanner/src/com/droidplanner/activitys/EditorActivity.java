@@ -19,7 +19,6 @@ import com.droidplanner.activitys.helpers.SuperUI;
 import com.droidplanner.drone.DroneInterfaces.OnWaypointChangedListner;
 import com.droidplanner.drone.variables.mission.Mission;
 import com.droidplanner.drone.variables.mission.MissionItem;
-import com.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
 import com.droidplanner.fragments.EditorToolsFragment;
 import com.droidplanner.fragments.EditorToolsFragment.EditorTools;
 import com.droidplanner.fragments.EditorToolsFragment.OnEditorToolSelected;
@@ -27,14 +26,12 @@ import com.droidplanner.fragments.PlanningMapFragment;
 import com.droidplanner.fragments.helpers.GestureMapFragment;
 import com.droidplanner.fragments.helpers.GestureMapFragment.OnPathFinishedListner;
 import com.droidplanner.fragments.helpers.MapProjection;
-import com.droidplanner.fragments.helpers.OnMapInteractionListener;
 import com.droidplanner.fragments.mission.MissionDetailFragment;
 import com.droidplanner.fragments.mission.MissionDetailFragment.OnWayPointTypeChangeListener;
-import com.droidplanner.polygon.PolygonPoint;
 import com.google.android.gms.maps.model.LatLng;
 
 public class EditorActivity extends SuperUI implements
-		OnMapInteractionListener, OnPathFinishedListner, OnEditorToolSelected,
+		OnPathFinishedListner, OnEditorToolSelected,
 		OnWayPointTypeChangeListener, OnWaypointChangedListner, OnEditorInteraction ,Callback{
 
 
@@ -87,43 +84,6 @@ public class EditorActivity extends SuperUI implements
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
-	@Override
-	public boolean onMarkerClick(MissionItem wp) {
-		showItemDetail(wp);
-		return true;
-	}
-
-	@Override
-	public void onAddPoint(LatLng point) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onMoveHome(LatLng coord) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onMoveWaypoint(SpatialCoordItem waypoint, LatLng latLng) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onMovingWaypoint(SpatialCoordItem source, LatLng latLng) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onMovePolygonPoint(PolygonPoint source, LatLng newCoord) {
-		// TODO Auto-generated method stub
-
-	}
-
 	@Override
 	public void onMapClick(LatLng point) {
 		switch (getTool()) {

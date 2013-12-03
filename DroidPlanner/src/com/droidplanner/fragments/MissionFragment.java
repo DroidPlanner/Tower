@@ -82,7 +82,7 @@ public class MissionFragment extends Fragment implements  OnWaypointChangedListn
 		update();		
 	}
 
-	private void deleteSelected() {
+	public void deleteSelected() {
 		SparseBooleanArray selected = list.getCheckedItemPositions();
 		ArrayList<MissionItem> toRemove = new ArrayList<MissionItem>();
 		

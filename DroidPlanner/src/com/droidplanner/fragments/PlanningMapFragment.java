@@ -1,24 +1,21 @@
 package com.droidplanner.fragments;
 
 
-import java.util.List;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.droidplanner.activitys.helpers.OnEditorInteraction;
 import com.droidplanner.drone.DroneInterfaces.OnWaypointChangedListner;
+import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
-import com.droidplanner.fragments.PathGesture.OnPathFinishedListner;
 import com.droidplanner.fragments.helpers.CameraGroundOverlays;
 import com.droidplanner.fragments.helpers.DroneMap;
 import com.droidplanner.fragments.helpers.MapPath;
-import com.droidplanner.fragments.helpers.OnMapInteractionListener;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import com.droidplanner.polygon.Polygon;
 import com.droidplanner.polygon.PolygonPoint;
@@ -32,14 +29,13 @@ import com.google.android.gms.maps.model.Marker;
 @SuppressLint("UseSparseArrays")
 public class PlanningMapFragment extends DroneMap implements
 		OnMapLongClickListener, OnMarkerDragListener, OnMapClickListener,
-		OnMarkerClickListener, OnPathFinishedListner, OnWaypointChangedListner {
+		OnMarkerClickListener, OnWaypointChangedListner {
 
-
-	public OnMapInteractionListener mListener;
 	public MapPath polygonPath;
 
 	public CameraGroundOverlays cameraOverlays;
 	public Polygon polygon = new Polygon();
+	private OnEditorInteraction editorListner;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
@@ -65,7 +61,7 @@ public class PlanningMapFragment extends DroneMap implements
 	
 	@Override
 	public void onMapLongClick(LatLng point) {
-		mListener.onAddPoint(point);
+		//mListener.onAddPoint(point);
 	}
 
 	@Override
@@ -99,7 +95,6 @@ public class PlanningMapFragment extends DroneMap implements
 
 			// update flight path
 			missionPath.update(mission);
-			mListener.onMovingWaypoint(waypoint, position);
 		}
 	}
 
@@ -125,42 +120,36 @@ public class PlanningMapFragment extends DroneMap implements
 
 	private void checkForWaypointMarker(MarkerSource source, Marker marker) {
 		if (SpatialCoordItem.class.isInstance(source)) {
-			mListener.onMoveWaypoint((SpatialCoordItem) source, marker.getPosition());
+			//mListener.onMoveWaypoint((SpatialCoordItem) source, marker.getPosition());
 		}
 	}
 
 	private void checkForPolygonMarker(MarkerSource source, Marker marker) {
 		if (PolygonPoint.class.isInstance(source)) {
-			mListener.onMovePolygonPoint((PolygonPoint) source,
-					marker.getPosition());
+			//mListener.onMovePolygonPoint((PolygonPoint) source,marker.getPosition());
 		}
 	}
 
 	@Override
 	public void onMapClick(LatLng point) {
-		mListener.onMapClick(point);
+		editorListner.onMapClick(point);
 	}
 
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		mListener = (OnMapInteractionListener) activity;
+		editorListner = (OnEditorInteraction) activity;
 	}
 
 	@Override
 	public boolean onMarkerClick(Marker marker) {
 		MarkerSource source = markers.getSourceFromMarker(marker);
-		if (source instanceof SpatialCoordItem) {
-			return mListener.onMarkerClick((SpatialCoordItem) source);
+		if (source instanceof MissionItem) {
+			editorListner.onItemClick((MissionItem) source);
+			return true;
 		} else {
 			return false;
 		}
-	}
-
-	@Override
-	public void onPathFinished(List<Point> path) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }
