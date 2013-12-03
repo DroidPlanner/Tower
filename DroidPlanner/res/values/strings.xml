@@ -87,14 +87,24 @@
     <string name="rtl_Land">Land on reaching RTL position</string>
     <string name="takeoff_pitch">Min. Pitch Angle</string>
 
-	<string name="waypointInfo_Land">Will cause the craft to land at the current location when the command is invoked. If you have Sonar, the craft will stop holding position at 3 meters and drop straight down.The motors will not stop on their own, you must exit the AP mode to cut the engines.</string>
+	<string name="waypointInfo_Land">Land vehicle at the current location. You must manually exit Auto mode to disarm motors.</string>
     <string name="waypointInfo_Generic">Generic Waypoint</string>
-    <string name="waypointInfo_Loiter">Will cause the craft to begin to Loiter at the current location when the command is invoked.</string>
-    <string name="waypointInfo_LoiterN">Will cause the craft to begin to orbit the current location when the command is invoked.</string>
-    <string name="waypointInfo_LoiterT">Will cause the craft to begin to Loiter at the current location when the command is invoked. Optionally give a location to loiter at that wp – The clock starts ticking after the WP is reached.</string>
-    <string name="waypointInfo_RTL">Will cause the craft to return to the home position set when the craft is armed (requires GPS Lock!). If Altitude is 0, craft will return to home at the altitude specified by the Mission Planner.</string>
-    <string name="waypointInfo_TakeOff">Will cause the craft to auto take off to specified altitude. Use Pitch Angle only for planes and set to 0 for copters.</string>
-    <string name="waypointInfo_Waypoint">Delay option is triggered after the craft reaches the waypoint radius. The Next command is loaded after the delay.Delay time is in seconds, the default is 0. Set Orbital radius to 0 for pass through or specify the orbit radius in meter. Yaw angle sets the heading at each waypoint - for rotary wing only.</string>
+    <string name="waypointInfo_Loiter">not used.</string>
+    <string name="waypointInfo_LoiterN">Orbit the current location for the desired number of turns.</string>
+    <string name="waypointInfo_LoiterT">Hold the current location for the desired number of seconds or indefinitely to end the mission.</string>
+    <string name="waypointInfo_RTL">Send the vehicle to the home location set when armed. An altitude of 0 will return to home at the RTL altitude parameter.</string>
+    <string name="waypointInfo_TakeOff">Lift off from the ground to the specified altitude before proceeding to the next waypoint.</string>
+    <string name="waypointInfo_Waypoint">Travel to a position in 3D space. Optional delay (in seconds) to hold position.</string>
+    <string name="waypointInfo_CondAlt">Ascend/descend at specified rate. Delay mission state machine until desired altitude reached.</string>
+    <string name="waypointInfo_CondYaw">Set condition to reach a certain target angle.</string>
+    <string name="waypointInfo_CondDistance">Delay mission state machine until within desired distance of next NAV point</string>
+    <string name="waypointInfo_SetHome">Changes the home location either to the current location or a specified location.</string>
+    <string name="waypointInfo_SetSpeed">Change speed and/or throttle set points.Set -1 for both Speed and Throttle if no changes is required</string>
+    <string name="waypointInfo_SetRelay">Set a relay to a condition.</string>
+    <string name="waypointInfo_SetRepeatRelay">Cycle a relay on and off for a desired number of cyles with a desired period.</string>
+    <string name="waypointInfo_ROI">Sets a location and altitude to point copter towards and to aim an optional camera.</string>
+	<string name="waypointInfo_SetJump">Repeat waypoint</string>
+
 
     <string name="waypointDesc_Waypoint_1" formatted="false">Executing next waypoint immediately, heading is set to %03.0f°</string>
     <string name="waypointDesc_Waypoint_2" formatted="false">Executing next waypoint after %1.1fs, heading is set to %03.0f°</string>
@@ -132,14 +142,6 @@
     <string name="waypoint_yawrelative">Realtive Offset</string>
     <string name="waypoint_yawabsolute">Absolute Angle</string>
     <string name="waypoint_yawoffset">Use relative offset</string>
-    <string name="waypointInfo_CondAlt">Ascend/descend at specified rate. Delay mission state machine until desired altitude reached.</string>
-    <string name="waypointInfo_CondYaw">Set condition to reach a certain target angle.</string>
-    <string name="waypointInfo_CondDistance">Delay mission state machine until within desired distance of next NAV point</string>
-    <string name="waypointInfo_SetHome">Changes the home location either to the current location or a specified location.</string>
-    <string name="waypointInfo_SetSpeed">Change speed and/or throttle set points.Set -1 for both Speed and Throttle if no changes is required</string>
-    <string name="waypointInfo_SetRelay">Set a relay to a condition.</string>
-    <string name="waypointInfo_SetRepeatRelay">Cycle a relay on and off for a desired number of cyles with a desired period.</string>
-    <string name="waypointInfo_ROI">Sets the region of interest (ROI) for a sensor set or the vehicle itself. This can then be used by the vehicles control system to control the vehicle attitude and the attitude of various sensors such as cameras.</string>
     <string name="waypoint_distance">Distance</string>
     <string name="waypoint_homecurrent">"Set Home using current position "</string>
     <string name="waypoint_longitude">Longitude :</string>
@@ -153,7 +155,6 @@
     <string name="waypoint_coordsrc">Source data :</string>
     <string name="waypoint_jumpto">Jump to waypoint :</string>
     <string name="waypoint_repeat">Repeat waypoint</string>
-	<string name="waypointInfo_SetJump">Repeat waypoint</string>
 	<string name="next">next</string>
 	<string name="menu_map_type">Map Type</string>
 	<string name="menu_map_type_satellite">Satellite</string>
@@ -187,6 +188,7 @@
 
     <string name="send_mission">Send mission</string>
     <string name="load_mission">Load mission</string>
+    <string name="tune_roll">Manual adjustment of roll and pitch tuning. Rate_P is the primary value to adjust.</string>
 
 
 </resources>
