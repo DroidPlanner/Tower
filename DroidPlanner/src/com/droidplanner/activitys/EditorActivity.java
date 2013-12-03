@@ -275,6 +275,9 @@ public class EditorActivity extends SuperUI implements
 		case TRASH:
 			mission.removeWaypoint(item);
 			mission.clearSelection();
+			if (mission.getItems().size() <= 0) {
+				editorToolsFragment.setTool(EditorTools.MARKER);
+			}
 			break;
 		}
 		notifySelectionChanged();
