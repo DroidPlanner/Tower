@@ -16,6 +16,7 @@ import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.droidplanner.DroidPlannerApp;
@@ -31,6 +32,8 @@ public class EditorListFragment extends Fragment implements  OnWaypointChangedLi
 	private Mission mission;
 	private MissionItemView adapter;
 	private OnEditorInteraction editorListner;
+	private ImageButton leftArrow;
+	private ImageButton rightArrow;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,6 +41,8 @@ public class EditorListFragment extends Fragment implements  OnWaypointChangedLi
 		View view = inflater.inflate(R.layout.fragment_mission_list, container,
 				false);
 		list = (HListView) view.findViewById(R.id.listView1);
+		leftArrow = (ImageButton) view.findViewById(R.id.listLeftArrow);
+		rightArrow = (ImageButton) view.findViewById(R.id.listRightArrow);
 		
 		mission = ((DroidPlannerApp) getActivity().getApplication()).drone.mission;
 		mission.addOnMissionUpdateListner(this);
@@ -127,6 +132,16 @@ public class EditorListFragment extends Fragment implements  OnWaypointChangedLi
 		Log.d("LIST", "you longcliked item "+position);
 		MissionItem missionItem = (MissionItem) adapter.getItemAtPosition(position);
 		return editorListner.onItemLongClick(missionItem);
+	}
+
+	public void setArrowsVisibility(boolean visible) {
+		if (visible) {
+			leftArrow.setVisibility(View.VISIBLE);
+			rightArrow.setVisibility(View.VISIBLE);			
+		}else{
+			leftArrow.setVisibility(View.GONE);
+			rightArrow.setVisibility(View.GONE);
+		}
 	}
 
 }

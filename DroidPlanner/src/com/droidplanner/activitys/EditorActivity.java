@@ -289,6 +289,11 @@ public class EditorActivity extends SuperUI implements
 		for (MissionItem item : mission.getSelected()) {
 			missionListFragment.list.setItemChecked(adapter.getPosition(item), true);
 		}
+		if (mission.getSelected().size()==0) {
+			missionListFragment.setArrowsVisibility(false);
+		}else{
+			missionListFragment.setArrowsVisibility(true);
+		}
 		adapter.notifyDataSetChanged();
 		planningMapFragment.update();
 	}
