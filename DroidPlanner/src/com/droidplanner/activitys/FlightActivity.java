@@ -10,7 +10,7 @@ import com.droidplanner.activitys.helpers.SuperUI;
 import com.droidplanner.drone.DroneInterfaces.OnStateListner;
 import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
-import com.droidplanner.fragments.MissionControlFragment.OnMissionControlInteraction;
+import com.droidplanner.fragments.FlightActionsFragment.OnMissionControlInteraction;
 import com.droidplanner.fragments.RCFragment;
 import com.droidplanner.fragments.helpers.OnMapInteractionListener;
 import com.droidplanner.polygon.PolygonPoint;

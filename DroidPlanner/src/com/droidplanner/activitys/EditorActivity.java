@@ -23,8 +23,8 @@ import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.fragments.EditorToolsFragment;
 import com.droidplanner.fragments.EditorToolsFragment.EditorTools;
 import com.droidplanner.fragments.EditorToolsFragment.OnEditorToolSelected;
-import com.droidplanner.fragments.MissionFragment;
-import com.droidplanner.fragments.PlanningMapFragment;
+import com.droidplanner.fragments.EditorListFragment;
+import com.droidplanner.fragments.EditorMapFragment;
 import com.droidplanner.fragments.helpers.GestureMapFragment;
 import com.droidplanner.fragments.helpers.GestureMapFragment.OnPathFinishedListner;
 import com.droidplanner.fragments.helpers.MapProjection;
@@ -38,13 +38,13 @@ public class EditorActivity extends SuperUI implements
 		OnWayPointTypeChangeListener, OnWaypointChangedListner, OnEditorInteraction ,Callback{
 
 
-	private PlanningMapFragment planningMapFragment;
+	private EditorMapFragment planningMapFragment;
 	private GestureMapFragment gestureMapFragment;
 	private Mission mission;
 	private EditorToolsFragment editorToolsFragment;
 	private MissionDetailFragment itemDetailFragment;
 	private FragmentManager fragmentManager;
-	private MissionFragment missionListFragment;
+	private EditorListFragment missionListFragment;
 	
 	private ActionMode contextualActionBar;
 
@@ -58,13 +58,13 @@ public class EditorActivity extends SuperUI implements
 
 		fragmentManager = getFragmentManager();
 
-		planningMapFragment = ((PlanningMapFragment) fragmentManager
+		planningMapFragment = ((EditorMapFragment) fragmentManager
 				.findFragmentById(R.id.mapFragment));
 		gestureMapFragment = ((GestureMapFragment) fragmentManager
 				.findFragmentById(R.id.gestureMapFragment));
 		editorToolsFragment = (EditorToolsFragment) fragmentManager
 				.findFragmentById(R.id.editorToolsFragment);
-		missionListFragment = (MissionFragment) fragmentManager
+		missionListFragment = (EditorListFragment) fragmentManager
 				.findFragmentById(R.id.missionFragment1);
 
 		
