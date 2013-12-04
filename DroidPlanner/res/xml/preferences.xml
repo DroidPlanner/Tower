@@ -119,7 +119,7 @@
             android:entries="@array/MapTypes"
             android:entryValues="@array/MapTypes"
             android:key="pref_map_type"
-            android:summary="Which type of map to use, user must reset the app"
+            android:summary="Which type of map to use"
             android:title="Map Type" />
 
         <CheckBoxPreference
@@ -129,12 +129,12 @@
             android:title="Enable Text To Speech" />
 
         <ListPreference
-            android:defaultValue="None"
-            android:entries="@array/ParamMeta"
-            android:entryValues="@array/ParamMetaValues"
-            android:key="pref_param_metadata"
-            android:summary="Metadata to use when displaying parameters"
-            android:title="Parameter Metadata" />
+            android:defaultValue="ArduCopter"
+            android:entries="@array/VehicleType"
+            android:entryValues="@array/VehicleType"
+            android:key="pref_vehicle_type"
+            android:summary="Default vehicle profile when disconnected"
+            android:title="Vehicle Type" />
 
         <PreferenceScreen
             android:key="pref_rc"

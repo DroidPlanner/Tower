@@ -1,5 +1,6 @@
 package com.droidplanner.dialogs.mission;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -14,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.MAVLink.Messages.ApmCommands;
+import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
 import com.droidplanner.R;
 import com.droidplanner.drone.variables.waypoint;
@@ -62,11 +64,14 @@ public abstract class DialogMission implements OnItemSelectedListener,
 		typeSpinner.setOnItemSelectedListener(this);
 		typeSpinner.setSelection(commandAdapter.getPosition(wp.getCmd()));
 
-		return view;
+        final DroidPlannerApp app = (DroidPlannerApp) ((Activity) context).getApplication();
+        app.drone.profile.applyMissionViewProfile(view, getResource());
+
+        return view;
 
 	}
 
-	@Override
+    @Override
 	public void onClick(DialogInterface arg0, int which) {
 		if (which == Dialog.BUTTON_POSITIVE) {
 			listner.onWaypointsUpdate();
