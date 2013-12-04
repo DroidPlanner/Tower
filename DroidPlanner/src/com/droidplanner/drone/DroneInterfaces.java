@@ -17,7 +17,7 @@ public class DroneInterfaces {
 	public interface DroneTypeListner {
 		public void onDroneTypeChanged();
 	}
-
+	
 	public interface InfoListner {
 		public void onInfoUpdate();
 	}
@@ -39,14 +39,11 @@ public class DroneInterfaces {
 		public void onBeginReceivingParameters();
 		public void onParameterReceived(Parameter parameter, int index,	int count);
 		public void onEndReceivingParameters(List<Parameter> parameter);
-		public void onParamterMetaDataChanged();
 	}
 
 	public interface OnStateListner {
 		void onFlightStateChanged();
-
 		void onArmChanged();
-
 		void onFailsafeChanged();
 	}
 	
@@ -57,7 +54,6 @@ public class DroneInterfaces {
 	
 	public interface OnTuningDataListner{
 		void onNewOrientationData();
-
 		void onNewNavigationData();
 	}
 	

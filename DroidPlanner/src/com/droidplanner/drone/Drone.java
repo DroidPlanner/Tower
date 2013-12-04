@@ -22,6 +22,7 @@ import com.droidplanner.drone.variables.MissionStats;
 import com.droidplanner.drone.variables.Navigation;
 import com.droidplanner.drone.variables.Orientation;
 import com.droidplanner.drone.variables.Parameters;
+import com.droidplanner.drone.variables.Profile;
 import com.droidplanner.drone.variables.RC;
 import com.droidplanner.drone.variables.Speed;
 import com.droidplanner.drone.variables.State;
@@ -33,6 +34,7 @@ import com.droidplanner.service.MAVLinkClient;
 
 public class Drone {
 	public Type type = new Type(this);
+    public Profile profile = new Profile(this);
 	public GPS GPS = new GPS(this);
 	public RC RC = new RC(this);
 	public Speed speed = new Speed(this);
@@ -67,6 +69,8 @@ public class Drone {
 		this.tts = tts;
 		this.MavClient = mavClient;
 		this.context = context;
+
+        profile.load();
 	}
 
 	public void setHudListner(HudUpdatedListner listner) {
@@ -145,6 +149,8 @@ public class Drone {
 	}
 
 	public void notifyTypeChanged() {
+        profile.load();
+
 		if (typeListner != null) {
 			typeListner.onDroneTypeChanged();
 		}
