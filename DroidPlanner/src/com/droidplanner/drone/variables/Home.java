@@ -42,7 +42,7 @@ public class Home extends DroneVariable implements MarkerSource {
 		
 	public Length getDroneDistanceToHome() {
 		if (isValid()) {
-			return new Length(GeoTools.getDistance(coordinate, myDrone.GPS.getPosition()));			
+			return GeoTools.getDistance(coordinate, myDrone.GPS.getPosition());			
 		}else{
 			return new Length(0); // TODO fix this
 		}
