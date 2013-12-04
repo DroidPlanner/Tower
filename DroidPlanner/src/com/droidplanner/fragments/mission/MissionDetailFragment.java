@@ -15,6 +15,7 @@ import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
 import com.droidplanner.drone.variables.mission.Mission;
 import com.droidplanner.drone.variables.mission.MissionItem;
+import com.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
 import com.droidplanner.fragments.mission.MissionItemTypes.InvalidItemException;
 import com.droidplanner.widgets.spinners.SpinnerSelfSelect;
 
@@ -34,6 +35,8 @@ public abstract class MissionDetailFragment extends Fragment implements
 	private TextView waypointIndex;
 	
 	protected MissionItem item;
+	private TextView distanceView;
+	private TextView distanceLabelView;
 	
 
 	@Override
@@ -54,6 +57,19 @@ public abstract class MissionDetailFragment extends Fragment implements
 		waypointIndex = (TextView) view.findViewById(R.id.WaypointIndex);
 		Integer temp = mission.getNumber(item);
 		waypointIndex.setText( temp.toString());
+		
+		distanceView = (TextView) view.findViewById(R.id.DistanceValue);
+		distanceLabelView = (TextView) view.findViewById(R.id.DistanceLabel);
+		try{
+			distanceLabelView.setVisibility(View.VISIBLE);
+			distanceView.setText(mission.getDistanceFromLastWaypoint((SpatialCoordItem) item).toString());
+		}catch(NullPointerException e){
+			// Can fail if distanceView doesn't exists
+		}catch (Exception e){
+			//Or if the last item doesn't have a coordinate
+			distanceView.setText("");
+			distanceLabelView.setVisibility(View.INVISIBLE);
+		}
 	}
 
 	@Override

@@ -15,6 +15,7 @@ import com.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
 import com.droidplanner.drone.variables.mission.waypoints.Waypoint;
 import com.droidplanner.fragments.helpers.MapPath.PathSource;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
+import com.droidplanner.helpers.geoTools.GeoTools;
 import com.droidplanner.helpers.units.Altitude;
 import com.droidplanner.helpers.units.Length;
 import com.google.android.gms.maps.model.LatLng;
@@ -178,6 +179,18 @@ public class Mission extends DroneVariable implements PathSource{
 			}
 		}
 		throw new Exception("Last waypoint doesn't have an altitude");
+	}
+
+	public Length getDistanceFromLastWaypoint(SpatialCoordItem waypoint) throws Exception {
+		int i = itens.indexOf(waypoint);
+		if (i > 0) {
+			MissionItem previus = itens.get(i - 1);
+			if (previus instanceof SpatialCoordItem) {
+				return GeoTools.getDistance(waypoint.getCoordinate(),
+						((SpatialCoordItem) previus).getCoordinate());
+			}
+		}
+		throw new Exception("Last waypoint doesn't have a coordinate");
 	}
 
 	public boolean hasItem(MissionItem item) {
