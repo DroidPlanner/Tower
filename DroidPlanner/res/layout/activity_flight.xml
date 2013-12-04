@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
 	tools:ignore="HardcodedText"
     >
 
@@ -35,6 +36,16 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         tools:layout="@layout/fragment_mission_control" />
+    <TextView
+        android:id="@+id/failsafeTextView"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/fragment2"
+        android:background="#D8ee2d3e"
+        android:text="Warning! RC Fasilsafe – Returning to launch"
+		style="@style/editorMissionOverviewText"
+        />
 
     <SlidingDrawer
         android:id="@+id/SlidingDrawerLeft"
@@ -65,7 +76,9 @@
             android:orientation="vertical" >
         </LinearLayout>-->
             <!-- style="@style/flyoutPanelLayout" -->
-		<!--<fragment
+		<!--
+        android:visibility="gone"
+		<fragment
 			android:id="@+id/modeCircleFragment"
 			android:name="com.droidplanner.fragments.mode.ModeCircleFragment"
 			android:layout_width="match_parent"
@@ -85,17 +98,5 @@
 
     </SlidingDrawer>
 
-    <TextView
-        android:id="@+id/failsafeTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/fragment2"
-        android:background="#80ff0000"
-        android:gravity="center"
-        android:padding="3dp"
-        android:text="FAILSAFE"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:visibility="gone" />
 
 </RelativeLayout>
