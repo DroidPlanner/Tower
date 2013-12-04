@@ -139,8 +139,8 @@ public class EditorListFragment extends Fragment implements  OnWaypointChangedLi
 			leftArrow.setVisibility(View.VISIBLE);
 			rightArrow.setVisibility(View.VISIBLE);			
 		}else{
-			leftArrow.setVisibility(View.GONE);
-			rightArrow.setVisibility(View.GONE);
+			leftArrow.setVisibility(View.INVISIBLE);
+			rightArrow.setVisibility(View.INVISIBLE);
 		}
 	}
 
