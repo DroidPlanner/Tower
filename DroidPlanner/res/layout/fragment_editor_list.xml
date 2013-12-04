@@ -3,15 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content" 
-        android:background="#000">
+    android:background="#141414"
+    >
 
     <ImageButton
         android:id="@+id/listLeftArrow"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="left"
-        android:background="#00000000"
-        android:src="@drawable/slide_left"
+        android:background="#141414"
+        android:src="@drawable/button_left_mission"
         android:visibility="invisible"
         tools:ignore="ContentDescription" />
 
@@ -21,8 +22,8 @@
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:background="#00000000"
-        android:src="@drawable/slide_right"
+        android:background="#141414"
+        android:src="@drawable/button_right_mission"
         android:visibility="invisible"
         tools:ignore="ContentDescription" />
 
@@ -34,7 +35,7 @@
         android:layout_alignWithParentIfMissing="true"
         android:layout_toLeftOf="@+id/listRightArrow"
         android:layout_toRightOf="@+id/listLeftArrow"
-        android:background="#00000000" >
+        android:background="#141414" >
 
     </it.sephiroth.android.library.widget.HListView>
 

@@ -14,6 +14,7 @@
 	    android:layout_height="match_parent"
 	    android:background="@drawable/button_macro"
 	    android:drawableTop="@drawable/ic_control"
+		android:visibility="gone"
 	    android:text="Control" />
 
 	<Button
@@ -61,6 +62,7 @@
 	    android:background="@drawable/button_macro"
 	    android:drawableTop="@drawable/ic_takeoff"
 	    android:text="Takeoff"
+		android:visibility="gone"
 	    tools:ignore="ContentDescription" />
 
 	<Button
