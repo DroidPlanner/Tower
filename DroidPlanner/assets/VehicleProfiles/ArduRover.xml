@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Profile>
+    <!-- Section to be loaded from ParameterMetaData.xml to be used for this vehicle type       -->
+    <!-- Parameter metadata is used to add descriptions and validation to the Parameters screen -->
+    <ParameterMetadataType
+        type="ArduRover"/>
+
+    <!-- Vehicle type defaults             -->
+    <!--   wpNavSpeed: waypoint horz speed -->
+    <!--   maxAltitude: service ceiling    -->
+    <!-- * extend as needed                -->
+    <Default
+        wpNavSpeed="500"
+        maxAltitude="12000"/>
+
+</Profile>
