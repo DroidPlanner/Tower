@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
+import com.MAVLink.Messages.enums.MAV_CMD;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.OnWaypointChangedListner;
 import com.droidplanner.drone.DroneVariable;
@@ -87,33 +88,6 @@ public class Mission extends DroneVariable implements PathSource{
 			missionListner.add(listner);
 		}
 		
-	}
-
-	public void onMissionReceived(List<msg_mission_item> mission) {
-		throw new IllegalArgumentException("NOT implemented"); //TODO implement this
-		/*
-		if (mission != null) {
-			Toast.makeText(myDrone.context, "Waypoints received from Drone",
-					Toast.LENGTH_SHORT).show();
-			myDrone.tts.speak("Waypoints received");
-			home.updateData(mission.get(0));
-			mission.remove(0); // Remove Home waypoint
-			clearWaypoints();
-			addWaypoints(mission);
-			onMissionUpdate();
-			myDrone.notifyDistanceToHomeChange();
-		}
-		*/
-	}
-
-	public void sendMissionToAPM() {
-		throw new IllegalArgumentException("NOT implemented"); //TODO implement this
-		/*
-		List<Waypoint> data = new ArrayList<Waypoint>();
-		data.add(myDrone.home.getHome());
-		data.addAll(getWaypoints());
-		myDrone.waypointMananger.writeWaypoints(data);
-		*/
 	}
 
 	public void onWriteWaypoints(msg_mission_ack msg) {
@@ -224,6 +198,45 @@ public class Mission extends DroneVariable implements PathSource{
 
 	public List<MissionItem> getSelected() {
 		return selection;
+	}
+
+	public void onMissionReceived(List<msg_mission_item> msgs) {
+		if (msgs != null) {
+			Toast.makeText(myDrone.context, "Waypoints received from Drone",
+					Toast.LENGTH_SHORT).show();
+			myDrone.tts.speak("Waypoints received");
+			myDrone.home.setHome(msgs.get(0));
+			msgs.remove(0); // Remove Home waypoint
+			selection.clear();
+			itens.clear();
+			itens.addAll(processMavLinkMessages(msgs));
+			onMissionUpdate();
+			myDrone.notifyDistanceToHomeChange();
+		}
+	}
+
+	private List<MissionItem> processMavLinkMessages(List<msg_mission_item> msgs) {
+		List<MissionItem> received = new ArrayList<MissionItem>();
+		
+		for (msg_mission_item msg : msgs) {
+			switch (msg.command) {
+			case MAV_CMD.MAV_CMD_NAV_WAYPOINT:
+				received.add(new Waypoint(msg, this));
+				break;
+			default:
+				break;
+			}
+		}		
+		return received;
+	}
+
+	public void sendMissionToAPM() {
+		List<msg_mission_item> data = new ArrayList<msg_mission_item>();
+		data.add(myDrone.home.packMavlink());
+		for (MissionItem item : itens) {
+			data.add(item.packMissionItem());			
+		}
+		myDrone.waypointMananger.writeWaypoints(data);
 	}
 
 

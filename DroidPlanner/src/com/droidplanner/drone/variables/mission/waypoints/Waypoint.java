@@ -26,6 +26,11 @@ public class Waypoint extends SpatialCoordItem {
 		super(mission, point, defaultAlt);
 	}
 
+	public Waypoint(msg_mission_item msg, Mission mission) {
+		super(mission, null, null);
+		unpackMAVMessage(msg);
+	}
+
 	@Override
 	public MissionDetailFragment getDetailFragment() {
 		MissionDetailFragment fragment = new MissionWaypointFragment();

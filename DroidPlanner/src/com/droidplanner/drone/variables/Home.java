@@ -2,6 +2,7 @@ package com.droidplanner.drone.variables;
 
 import android.content.Context;
 
+import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneVariable;
 import com.droidplanner.fragments.markers.HomeMarker;
@@ -54,6 +55,25 @@ public class Home extends DroneVariable implements MarkerSource {
 
 	public Length getAltitude() {
 		return altitude;
+	}
+
+	public void setHome(msg_mission_item msg) {
+		this.coordinate = new LatLng(msg.y, msg.x);
+		this.altitude = new Altitude(msg.z);		
+	}
+
+	public msg_mission_item packMavlink() {
+		msg_mission_item mavMsg = new msg_mission_item();
+		mavMsg.autocontinue = 1;
+		mavMsg.current = 1;
+		mavMsg.target_component = 1;
+		mavMsg.target_system = 1;
+		if (isValid()) {
+			mavMsg.x = (float) getCoord().longitude;
+			mavMsg.y = (float) getCoord().latitude;
+			mavMsg.z = (float) getAltitude().valueInMeters();			
+		}
+		return mavMsg;
 	}
 
 }

@@ -55,6 +55,12 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner,
 		case R.id.bar_home:
 			drone.waypointMananger.getWaypoints();
 			break;
+		case R.id.menu_send_mission:
+			drone.mission.sendMissionToAPM();
+			break;
+		case R.id.menu_load_mission:
+			drone.waypointMananger.getWaypoints();
+			break;
 		}
 	}
 

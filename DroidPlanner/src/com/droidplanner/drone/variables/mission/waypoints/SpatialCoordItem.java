@@ -31,7 +31,7 @@ public abstract class SpatialCoordItem extends MissionItem implements
 
 	LatLng coordinate;
 	Altitude altitude;
-
+	
 	public SpatialCoordItem(Mission mission, LatLng coord, Altitude altitude) {
 		super(mission);
 		this.coordinate = coord;
@@ -124,8 +124,8 @@ public abstract class SpatialCoordItem extends MissionItem implements
 		mavMsg.autocontinue = 1;
 		mavMsg.target_component = 1;
 		mavMsg.target_system = 1;
-		mavMsg.x = (float) getCoordinate().latitude;
-		mavMsg.y = (float) getCoordinate().longitude;
+		mavMsg.x = (float) getCoordinate().longitude;
+		mavMsg.y = (float) getCoordinate().latitude;
 		mavMsg.z = (float) getAltitude().valueInMeters();
 //		mavMsg.compid =
 		return mavMsg;
