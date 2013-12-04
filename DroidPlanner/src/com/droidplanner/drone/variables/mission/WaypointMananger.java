@@ -43,11 +43,19 @@ public class WaypointMananger extends DroneVariable {
 	 */
 	public void writeWaypoints(List<msg_mission_item> data) {
 		if ((mission != null)) {
+			updateMsgIndexes(data);
 			mission.clear();
 			mission.addAll(data);
 			writeIndex = 0;
 			state = waypointStates.WRITTING_WP;
 			MavLinkWaypoint.sendWaypointCount(myDrone, mission.size());
+		}
+	}
+
+	private void updateMsgIndexes(List<msg_mission_item> data) {
+		short index = 0;
+		for (msg_mission_item msg : data) {
+			msg.seq = index++;
 		}
 	}
 

@@ -69,8 +69,8 @@ public class Home extends DroneVariable implements MarkerSource {
 		mavMsg.target_component = 1;
 		mavMsg.target_system = 1;
 		if (isValid()) {
-			mavMsg.x = (float) getCoord().longitude;
-			mavMsg.y = (float) getCoord().latitude;
+			mavMsg.x = (float) getCoord().latitude;
+			mavMsg.y = (float) getCoord().longitude;
 			mavMsg.z = (float) getAltitude().valueInMeters();			
 		}
 		return mavMsg;

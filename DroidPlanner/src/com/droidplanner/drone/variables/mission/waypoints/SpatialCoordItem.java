@@ -124,8 +124,8 @@ public abstract class SpatialCoordItem extends MissionItem implements
 		mavMsg.autocontinue = 1;
 		mavMsg.target_component = 1;
 		mavMsg.target_system = 1;
-		mavMsg.x = (float) getCoordinate().longitude;
-		mavMsg.y = (float) getCoordinate().latitude;
+		mavMsg.x = (float) getCoordinate().latitude;
+		mavMsg.y = (float) getCoordinate().longitude;
 		mavMsg.z = (float) getAltitude().valueInMeters();
 //		mavMsg.compid =
 		return mavMsg;
