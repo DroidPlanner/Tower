@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
@@ -22,6 +23,7 @@ public class RcSetupFragment extends Fragment implements OnRcDataChangedListner 
 	private static final int RC_MSG_RATE = 50;
 
 	private Drone drone;
+	private TextView textViewThrottle, textViewYaw, textViewRoll, textViewPitch;
 
 	private FillBarWithText bar5;
 	private FillBarWithText bar6;
@@ -56,6 +58,11 @@ public class RcSetupFragment extends Fragment implements OnRcDataChangedListner 
 		bar6.setup("CH 6", RC_MAX, RC_MIN);
 		bar7.setup("CH 7", RC_MAX, RC_MIN);
 		bar8.setup("CH 8", RC_MAX, RC_MIN);
+
+		textViewRoll 		= (TextView) view.findViewById(R.id.RCRollPWM);
+		textViewPitch 		= (TextView) view.findViewById(R.id.RCPitchPWM);
+		textViewThrottle 	= (TextView) view.findViewById(R.id.RCThrottlePWM);
+		textViewYaw 		= (TextView) view.findViewById(R.id.RCYawPWM);
 	}
 
 	@Override
@@ -84,15 +91,20 @@ public class RcSetupFragment extends Fragment implements OnRcDataChangedListner 
 		bar6.setValue(data[5]);
 		bar7.setValue(data[6]);
 		bar8.setValue(data[7]);
-		
+
 		float x,y;
 		x = (data[3] - RC_MIN) / ((float) (RC_MAX - RC_MIN))*2-1;
 		y = (data[2] - RC_MIN) / ((float) (RC_MAX - RC_MIN))*2-1;
 		stickLeft.setPosition(x, y);
-		
+
 		x = (data[0] - RC_MIN) / ((float) (RC_MAX - RC_MIN))*2-1;
 		y = (data[1] - RC_MIN) / ((float) (RC_MAX - RC_MIN))*2-1;
 		stickRight.setPosition(x, -y);
+
+		textViewRoll.setText(Integer.toString(data[0]));
+		textViewPitch.setText(Integer.toString(data[1]));
+		textViewThrottle.setText(Integer.toString(data[2]));
+		textViewYaw.setText(Integer.toString(data[3]));
 	}
 
 	@Override

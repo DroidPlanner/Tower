@@ -189,6 +189,7 @@
     <string name="send_mission">Send mission</string>
     <string name="load_mission">Load mission</string>
     <string name="tune_roll">Manual adjustment of roll and pitch tuning. Rate_P is the primary value to adjust.</string>
+    <string name="rc_options">Assign features to channels 7 and 8 on RC radios. Trigger each feature by bringing the switch to the high position.</string>
 
 
 </resources>

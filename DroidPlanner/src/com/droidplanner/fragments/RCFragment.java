@@ -27,14 +27,15 @@ public class RCFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_rc, container, false);
 
-		textViewThrottle = (TextView) view
-				.findViewById(R.id.textViewRCThrottle);
+		textViewThrottle = (TextView) view.findViewById(R.id.textViewRCThrottle);
 		textViewThrottle.setText("(Thrt: 0%)");
+
 		textViewRudder = (TextView) view.findViewById(R.id.textViewRCRudder);
 		textViewRudder.setText("(Rudd: 0%)");
-		textViewElevator = (TextView) view
-				.findViewById(R.id.textViewRCElevator);
+
+		textViewElevator = (TextView) view.findViewById(R.id.textViewRCElevator);
 		textViewElevator.setText("(Elev: 0%)");
+
 		textViewAileron = (TextView) view.findViewById(R.id.textViewRCAileron);
 		textViewAileron.setText("(Ail: 0%)");
 

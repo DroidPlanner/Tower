@@ -61,6 +61,15 @@
         <item name="android:gravity">center</item>
         </style>
 
+    <style name="whiteHeaderTitle">
+        <item name="android:textColor">#fff</item>
+        <item name="android:textSize">24dp</item>
+	    <item name="android:textStyle">bold</item>
+	    <item name="android:layout_alignParentTop">true</item>
+	    <item name="android:layout_alignParentTop">true</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        </style>
+
     <style name="missionHeaderTitle">
         <item name="android:textColor">#85daff</item>
         <item name="android:textSize">24dp</item>
@@ -115,6 +124,15 @@
     <style name="transparentLayout">
         <item name="android:background">#66848484</item>
     </style>
+
+    <style name="configLayout">
+        <item name="android:background">#151515</item>
+    </style>
+
+    <style name="settingsLayout">
+        <item name="android:background">#ededed</item>
+    </style>
+
     <style name="flyoutPanelLayout">
         <item name="android:background">#ffededed</item>
     </style>
@@ -201,6 +219,7 @@
 	    <item name="android:textStyle">bold</item>
         <item name="android:textSize">20dp</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:gravity">center</item>
         </style>
 
     <style name="modeLabel">
@@ -218,6 +237,25 @@
 		<item name="android:textSize">16dp</item>
 	    <item name="android:textStyle">bold</item>
 	</style>
+
+	 <!-- RC setup screen -->
+
+	<style name="rc_textTitle" >
+        <item name="android:textColor">#fff</item>
+		<item name="android:textSize">16dp</item>
+	    <item name="android:textStyle">bold</item>
+	</style>
+	<style name="rc_textPWM" >
+        <item name="android:textColor">#fff</item>
+		<item name="android:textSize">16dp</item>
+	</style>
+    <style name="SetupTitle">
+        <item name="android:textColor">#fff</item>
+        <item name="android:textSize">20dp</item>
+	    <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:padding">16dp</item>
+        </style>
 
 
 </resources>

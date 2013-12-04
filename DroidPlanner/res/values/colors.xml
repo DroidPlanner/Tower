@@ -17,6 +17,7 @@
     <color name="altitude_label">#134456</color>
 
     <color name="altitude_target">#55d8ff</color>
+    <color name="dark_title_bg">#737373</color>
 
 
 </resources>
