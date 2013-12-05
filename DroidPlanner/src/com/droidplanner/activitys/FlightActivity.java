@@ -57,6 +57,12 @@ public class FlightActivity extends SuperUI implements
 	}
 
 	@Override
+	protected void onResume() {
+		super.onResume();
+		onModeChanged();	// Update the mode detail panel;
+	}
+
+	@Override
 	public void onAddPoint(LatLng point) {
 		// TODO Auto-generated method stub
 
