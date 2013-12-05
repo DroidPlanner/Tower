@@ -215,8 +215,9 @@ public class MissionItemView extends ArrayAdapter<com.droidplanner.drone.variabl
 			break;
 
 		case MAV_CMD.MAV_CMD_DO_CHANGE_SPEED:
-			tmpStr = waypoint.missionItem.param1>0?"Ground Speed":"Air Speed";
-			descStr += String.format(Locale.ENGLISH, context.getString(R.string.waypointDesc_SetSpeed),
+			tmpStr = waypoint.missionItem.param1 > 0 ? context
+					.getString(R.string.waypoint_groundspeed) : context
+					.getString(R.string.waypoint_airspeed);	descStr += String.format(Locale.ENGLISH, context.getString(R.string.waypointDesc_SetSpeed),
 					waypoint.missionItem.param2,waypoint.missionItem.param3, tmpStr);
 			break;
 

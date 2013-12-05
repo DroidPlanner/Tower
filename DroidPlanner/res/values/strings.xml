@@ -191,5 +191,10 @@
     <string name="tune_roll">Manual adjustment of roll and pitch tuning. Rate_P is the primary value to adjust.</string>
     <string name="rc_options">Assign features to channels 7 and 8 on RC radios. Trigger each feature by bringing the switch to the high position.</string>
 
-
+    <string name="lointer_unit_turns">turn(s)</string>
+    <string name="rowheader_wp_type">WP Type</string>
+    <string name="rowheader_wp_alt">ALT</string>
+    <string name="rowheader_wp_no">WP#</string>
+    <string name="rowheader_wp_delta">∆ WP</string>
+    <string name="rowheader_wp_desc">Description</string>
 </resources>
