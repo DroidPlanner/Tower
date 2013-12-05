@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
     <string name="app_title">DroidPlanner</string>
     <string name="about">Info</string>
     <string name="version">Versione</string>
@@ -18,7 +17,7 @@
     <string name="menu_send_to_apm">Invia a APM</string>
     <string name="menu_follow_me">Segui</string>
     <string name="menu_record_me">Registra</string>
-    <string name="menu_clear">Annulla WPs</string>
+    <string name="menu_clear">Cancella WPs</string>
     <string name="menu_zoom">Zoom</string>
     <string name="file_saved">File Salvato</string>
     <string name="no_waypoint_files">No Waypoint Files</string>
@@ -26,7 +25,7 @@
     <string name="select_file_to_open">Seleziona il file da aprire:</string>
     <string name="error_when_saving">Errore durante il salvataggio</string>
     <string name="error_when_opening_file">Errore in apertura file</string>
-    <string name="waypoint_altitude">Altitudine</string>
+    <string name="waypoint_altitude">Altezza</string>
     <string name="default_alt">Modifica Alt.</string>
     <string name="menu_open_kmz">Apri KMZ</string>
     <string name="menu_add_polygon">Aggiungi Poligono</string>
@@ -34,10 +33,10 @@
     <string name="clear_polygon">Ripulisci Poligono</string>
     <string name="menu_generate_polygon">Genera</string>
     <string name="menu_survey">Sondaggio</string>
-    <string name="menu_finish_polygon">Exit</string>
+    <string name="menu_finish_polygon">Esci</string>
     <string name="menu_clear_path">Ripulisci Percorso</string>
     <string name="generate">Genera</string>
-    <string name="exit">Exit</string>
+    <string name="exit">Esci</string>
     <string name="menu_clearFlightPath">Ripulisci Traccia</string>
     <string name="mission_mode">Missione</string>
     <string name="polygon_mode">Poligono</string>
@@ -52,7 +51,7 @@
     <string name="this_is_very_experimental_please_be_careful">Funzione sperimentale. Prestare attenzione.</string>
     <string name="menu_advanced">Avanzata</string>
     <string name="menu_calibration">Calibrazione</string>
-    <string name="rc_control">controllo RC</string>
+    <string name="rc_control">Controllo RC</string>
     <string name="footprint">Footprint</string>
     <string name="ground_resolution">Ground Resolution</string>
     <string name="distance_between_pictures">Distanza tra le foto</string>
@@ -62,35 +61,35 @@
     <string name="hatch_angle">Hatch angle:</string>
     <string name="flight_altitude">Quota di volo:</string>
     <string name="overlap">Overlap:</string>
-    <string name="sidelap">Sidelap:</string>   
+    <string name="sidelap">Sidelap:</string>
     <string name="screen_planning">Planning</string>
     <string name="screen_flight_data">Dati di volo</string>
     <string name="screen_rc">RC</string>
     <string name="screen_parameters">Parametri</string>
     <string name="screen_camera">Camera</string>
     <string name="screen_gcp">GCP</string>
-    <string name="screen_chart">Mappa</string>
+    <string name="screen_chart">Grafici</string>
     <string name="length">Distanza</string>
     <string name="mission_length">Lunghezza della missione</string>
     <string name="pictures">Foto</string>
     <string name="number_of_strips">Numero di Strips</string>
-    <string name="loiter_time">Loiter Time</string>
-    <string name="loiter_turn">Loiter Turn</string>
-    <string name="waypoint_delay">Delay before next waypoint</string>
-    <string name="loiter_radius">Loiter Radius</string>
+    <string name="loiter_time">Tempo di Loiter</string>
+    <string name="loiter_turn">Giri di Loiter</string>
+    <string name="waypoint_delay">Ritardo prima del prossimo WP</string>
+    <string name="loiter_radius">Raggio di Loiter</string>
     <string name="loiter_ccw">CCW</string>
     <string name="menu_arm">Arm</string>
     <string name="menu_disarm">Disarm</string>
     <string name="rtl_Land">Land al punto di RTL</string>
     <string name="takeoff_pitch">Angolo min. di Pitch</string>
-    <string name="waypointInfo_Land">Imposta l\'atterraggio nella posizione in cui il comando è stato attivato. Se è attivo il Sonar il veicolo mantiene la posizione fino a 3 metri dal suolo e quindi scende in linea retta. I motori non si fermano automaticamente; per fermare i motori occorre uscire dal modo di volo AP.</string>
-    <string name="waypointInfo_Generic">Generic Waypoint</string>
+    <string name="waypointInfo_Land">Imposta l\'atterraggio nella posizione in cui il comando è stato attivato. Se è attivo il Sonar il veicolo mantiene la posizione fino a 3 metri dal suolo e quindi scende in linea retta. I motori non si fermano automaticamente; per fermare i motori occorre uscire dal modo di volo.</string>
+    <string name="waypointInfo_Generic">Waypoint generico</string>
     <string name="waypointInfo_Loiter">Il veicolo inizia un Loiter dalla posizione in cui il comando è stato attivato.</string>
     <string name="waypointInfo_LoiterN">Il veicolo inizia a orbitare dalla posizione in cui il comando è stato attivato.</string>
-    <string name="waypointInfo_LoiterT">Il veicolo inizia un Loiter dalla posizione in cui il comando è stato attivato per un tempo definito. E\' possibile specificare una posizione di Loiter – Il tempo di Loiter inizia quando il WP è raggiunto.</string>
-    <string name="waypointInfo_RTL">Il veicolo ritorna alla posizione di home impostata quando il veicolo è stato armato (richiede anche GPS Lock!). Se Altitude è 0 il veicolo tornerà alla home alla quota specificata in Mission Planner.</string>
-    <string name="waypointInfo_TakeOff">Il veicolo decolla automaticamente fino alla quota specificata. Usare Pitch Angle solo per aerei e lasciare il paramero a 0 per multicotteri.</string>
-    <string name="waypointInfo_Waypoint">L\'opzione Delay è attivata dopo che il veicolo raggiunge il WP radius. Il prossimo comando viene attivato dopo il ritardo impostato (Delay). Il tempo di ritardo è in secondi; il default è 0. Impostare Orbital radius a 0 per proseguire o specificare un raggio orbitale in metri. Yaw angle imposta la direzione della prua ad ogni waypoint - solo per multicotteri.</string>
+    <string name="waypointInfo_LoiterT">Il veicolo inizia un Loiter dalla posizione in cui il comando è stato attivato. Il tempo di Loiter inizia quando il WP è raggiunto.</string>
+    <string name="waypointInfo_RTL">Il veicolo ritorna alla posizione di home impostata quando il veicolo è stato armato (richiede GPS Lock!). Se Altezza è 0 il veicolo tornerà alla home alla quota RTL specificata nella parameter list.</string>
+    <string name="waypointInfo_TakeOff">Il veicolo decolla automaticamente fino alla quota specificata. Usare l\'angolo di Pitch solo per aerei e lasciare il paramero a 0 per multicotteri.</string>
+    <string name="waypointInfo_Waypoint">Il prossimo comando viene attivato dopo il ritardo impostato (Delay). Il tempo di ritardo è in secondi e si attiva dopo che il veicolo raggiunge il WP. Impostare Raggio orbitale a 0 per proseguire o specificare un raggio orbitale in metri. Yaw angle imposta la direzione della prua ad ogni waypoint - solo per multicotteri.</string>
     <string name="waypointDesc_Waypoint_1" formatted="false">Prossimo WP eseguito immediatamente; prua impostata a %03.0f°</string>
     <string name="waypointDesc_Waypoint_2" formatted="false">Prossimo WP eseguito dopo %1.1fs; prua impostata a %03.0f°</string>
     <string name="waypointDesc_Loiter" formatted="false">Loiter fino al prossimo comando %1.1fm raggio %s, prua impostata a %03.0f°</string>
@@ -102,7 +101,7 @@
     <string name="waypointDesc_SetSpeed" formatted="false">Speed è impostata a %1.1fm/s con throttle a %1.0f%% usando %s come riferimento</string>
     <string name="waypointDesc_SetRelay" formatted="false">Relay è impostato a</string>
     <string name="waypointDesc_SetRepeat" formatted="false">Repeating relay</string>
-    <string name="waypointDesc_CondAlt" formatted="false">Altitude è impostata a %1.1fm velocità %1.1fm/s</string>
+    <string name="waypointDesc_CondAlt" formatted="false">Altezza %1.1fm - velocità %1.1fm/s</string>
     <string name="waypointDesc_CondDist" formatted="false">Distance è impostata a %1.1fm</string>
     <string name="waypointDesc_CondYaw" formatted="false">Yaw è impostata a  %03.0f° velocità %1.1f°/s %s, usando %s</string>
     <string name="waypointDesc_GPS" formatted="false">Lat/Lon [%1.12f/%1.12f]</string>
@@ -120,7 +119,7 @@
     <string name="waypointDesc_CW">CW</string>
     <string name="waypointDesc_CCW">CCW</string>
     <string name="waypoint_angle">Yaw Angle</string>
-    <string name="waypoint_finalaltitude">Target Altitude</string>
+    <string name="waypoint_finalaltitude">Altezza finale</string>
     <string name="waypoint_altrate">Velocità di salita/discesa</string>
     <string name="waypoint_yawrate">Yaw rate</string>
     <string name="waypoint_yawdir">Imposta yaw direction a CCW</string>
@@ -147,15 +146,15 @@
     <string name="waypoint_coordsrc">Source data :</string>
     <string name="waypoint_jumpto">Salta al waypoint :</string>
     <string name="waypoint_repeat">Ripeti waypoint</string>
-	<string name="waypointInfo_SetJump">Ripeti waypoint</string>
+    <string name="waypointInfo_SetJump">Ripeti waypoint</string>
     <string name="next">prossimo</string>
     <string name="menu_map_type">Tipo mappa</string>
     <string name="menu_map_type_satellite">Satellite</string>
     <string name="menu_map_type_hybrid">Hybrid</string>
     <string name="menu_map_type_normal">Normal</string>
     <string name="menu_map_type_terrain">Terrain</string>
-    <string name="waypoint_AcceptRadius">Acceptance radius</string>
-    <string name="waypoint_orbitalRadius">Orbital radius</string>
+    <string name="waypoint_AcceptRadius">Raggio di accettazione</string>
+    <string name="waypoint_orbitalRadius">Raggio Orbitale</string>
     <string name="none">None</string>
     <string name="metadata_values">Valori:</string>
     <string name="metadata_units">Units:</string>
@@ -169,12 +168,11 @@
     <string name="rowheader_wp_no">WP#</string>
     <string name="rowheader_wp_delta">∆ WP</string>
     <string name="rowheader_wp_desc">Descrizione</string>
-    <string name="dialog_box_title_altitude">Quota</string>
+    <string name="dialog_box_title_altitude">Altezza</string>
     <string name="dialog_box_btn_txt_cancel">Cancel</string>
     <string name="dialog_box_btn_txt_ok">Ok</string>
     <string name="exception_draw_polygon">Disegna un poligono/WPTs</string>
     <string name="exception_draw_2_more_polygon_points">Disegna almeno 2 ulteriori punti del poligono</string>
     <string name="exception_draw_1_more_polygon_points">Disegna almeno 1 ulteriore punto del poligono</string>
-    <string name="mission_is_too_lengthy">Mission troppo lunga</string>   
-    
+    <string name="mission_is_too_lengthy">Mission troppo lunga</string>
 </resources>
