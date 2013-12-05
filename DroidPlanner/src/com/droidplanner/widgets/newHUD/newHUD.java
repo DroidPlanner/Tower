@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
+import android.graphics.Paint.Cap;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.graphics.RectF;
@@ -21,9 +22,9 @@ public class newHUD extends View {
 	private static final int PITCH_RANGE = 45;
 	private static final int PITCH_TICK_SPACING = 15;
 	private static final int PITCH_TICK_PADDING = 2;
-	private static final float PLANE_BODY_SIZE = 0.2f;
-	private static final float PLANE_WING_WIDTH = 0.05f;
 	private static final float PLANE_SIZE = 0.8f;
+	private static final float PLANE_BODY_SIZE = 0.2f;
+	private static final float PLANE_WING_WIDTH = 5f;
 
 	private float halfWidth;
 	private float halfHeight;
@@ -35,10 +36,11 @@ public class newHUD extends View {
 	private Paint skyPaint;
 	private Paint groundPaint;
 	private Paint planePaint;
+	private Paint planeFinPaint;
+	private Paint planeCenterPaint;
 
 	private Path yawPath = new Path();
 	private Path groundPath = new Path();
-	private Path planePath = new Path();
 
 	private float yaw, roll, pitch;
 	private Paint tickPaint;
@@ -61,13 +63,17 @@ public class newHUD extends View {
 		skyPaint = new Paint(fillPaint);
 
 		groundPaint = new Paint(fillPaint);
-		//groundPaint.setColor(Color.parseColor("#723700")); // brown
-		//groundPaint.setColor(Color.parseColor("#4bbba1"));	// blue
-//0083d6
 
 		planePaint = new Paint(fillPaint);
 		planePaint.setColor(Color.WHITE);
-
+		planePaint.setStrokeWidth(PLANE_WING_WIDTH);
+		planePaint.setStrokeCap(Cap.ROUND);
+		planeCenterPaint = new Paint(planePaint);
+		planeCenterPaint.setColor(Color.RED);
+		planeFinPaint = new Paint(planePaint);
+		planeFinPaint.setStrokeWidth(PLANE_WING_WIDTH/2f);
+		
+		
 		tickPaint = new Paint(fillPaint);
 		tickPaint.setColor(Color.parseColor("#44ffffff"));
 		tickPaint.setStrokeWidth(2);
@@ -84,8 +90,6 @@ public class newHUD extends View {
 
 		internalBounds = new RectF(-radiusInternal, -radiusInternal, radiusInternal, radiusInternal);
 
-		buildPlanePath();
-
 		skyPaint.setShader(new LinearGradient(0, -radiusInternal, 0,
 				radiusInternal, Color.parseColor("#0082d6"), Color
 						.parseColor("#2cb1e1"), TileMode.CLAMP));
@@ -93,19 +97,6 @@ public class newHUD extends View {
 		groundPaint.setShader(new LinearGradient(0, radiusInternal, 0,
 				radiusInternal, Color.parseColor("#4bbba1"), Color
 						.parseColor("#008f63"), TileMode.CLAMP));
-
-	}
-
-	private void buildPlanePath() {
-		planePath.reset();
-		planePath.moveTo(0, radiusInternal * PLANE_SIZE * PLANE_WING_WIDTH);
-		planePath.lineTo(radiusInternal * PLANE_SIZE, 0);
-		planePath.lineTo(0, -radiusInternal * PLANE_SIZE * PLANE_WING_WIDTH);
-		planePath.lineTo(-radiusInternal * PLANE_SIZE, 0);
-		planePath.lineTo(0, radiusInternal * PLANE_SIZE * PLANE_WING_WIDTH);
-		planePath.moveTo(radiusInternal * PLANE_SIZE * PLANE_WING_WIDTH, 0);
-		planePath.lineTo(0, -radiusInternal * PLANE_SIZE / 2);
-		planePath.lineTo(-radiusInternal * PLANE_SIZE * PLANE_WING_WIDTH, 0);
 
 	}
 
@@ -171,9 +162,14 @@ public class newHUD extends View {
 	}
 
 	private void drawPlane(Canvas canvas) {
-		canvas.drawPath(planePath, planePaint);
+		canvas.drawLine(radiusInternal * PLANE_SIZE, 0, -radiusInternal
+				* PLANE_SIZE, 0, planePaint);
+		canvas.drawLine(0, 0, 0, -radiusInternal * PLANE_SIZE *5/12,
+				planeFinPaint);
 		canvas.drawCircle(0, 0, radiusInternal * PLANE_SIZE * PLANE_BODY_SIZE,
 				planePaint);
+		canvas.drawCircle(0, 0, radiusInternal * PLANE_SIZE * PLANE_BODY_SIZE /2f,
+				planeCenterPaint);
 	}
 
 	public void setAttitude(float roll, float pitch, float yaw) {
