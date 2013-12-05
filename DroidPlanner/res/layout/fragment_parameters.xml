@@ -1,20 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:layout_height="wrap_content" >
 
-    <TableLayout
-        android:id="@+id/parametersTable"
+    <TextView
+        android:id="@+id/refreshTextView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="Click to refresh the parameters" />
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:dividerPadding="1dp"
-        android:stretchColumns="1"
-        android:shrinkColumns="1"
-        android:paddingLeft="6dp"
-        android:paddingRight="6dp" >
+        android:orientation="vertical" >
 
-    </TableLayout>
-
-</ScrollView>
+        <TableLayout
+            android:id="@+id/parametersTable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:dividerPadding="1dp"
+            android:paddingLeft="6dp"
+            android:paddingRight="6dp"
+            android:shrinkColumns="1"
+            android:stretchColumns="1" >
+        </TableLayout>
+    </ScrollView>
+</FrameLayout>

@@ -1,5 +1,7 @@
 package com.droidplanner.dialogs;
 
+import com.droidplanner.helpers.units.Altitude;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -8,34 +10,33 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.NumberPicker;
-import com.droidplanner.R;
 
 public class AltitudeDialog implements DialogInterface.OnClickListener {
 	private NumberPicker thousandPicker;
 	private NumberPicker hundredPicker;
 	private NumberPicker decadePicker;
 	private NumberPicker unitPicker;
-	private SuperActOnAltitudeChangedListner listner;
+	private OnAltitudeChangedListner listner;
 
-	public interface SuperActOnAltitudeChangedListner {
-		public void saOnAltitudeChanged(double newAltitude);
+	public interface OnAltitudeChangedListner {
+		public void onAltitudeChanged(Altitude newAltitude);
 	}
 
-	public AltitudeDialog(SuperActOnAltitudeChangedListner listner) {
+	public AltitudeDialog(OnAltitudeChangedListner listner) {
 		this.listner = listner;
 	}
 
-	public void build(double defaultAltitude, Context context) {
+	public void build(Altitude altitude, Context context) {
 		AlertDialog dialog = buildDialog(context);
-		setValue(defaultAltitude);
+		setValue(altitude.valueInMeters());
 		dialog.show();
 	}
 
 	private AlertDialog buildDialog(Context context) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setTitle(R.string.dialog_box_title_altitude);
+		builder.setTitle("Altitude");
 		builder.setView(buildAltitudePicker(context));
-		builder.setNegativeButton(R.string.dialog_box_btn_txt_cancel, this).setPositiveButton(R.string.dialog_box_btn_txt_ok, this);
+		builder.setNegativeButton("Cancel", this).setPositiveButton("Ok", this);
 		AlertDialog dialog = builder.create();
 		return dialog;
 	}
@@ -74,7 +75,7 @@ public class AltitudeDialog implements DialogInterface.OnClickListener {
 	@Override
 	public void onClick(DialogInterface arg0, int which) {
 		if (which == Dialog.BUTTON_POSITIVE) {
-			listner.saOnAltitudeChanged(getValue());
+			listner.onAltitudeChanged(new Altitude(getValue()));
 		}
 	}
 

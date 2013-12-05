@@ -1,6 +1,7 @@
 package com.droidplanner;
 
 import android.app.Application;
+import android.os.Handler;
 
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_heartbeat;
@@ -16,26 +17,43 @@ import com.droidplanner.service.MAVLinkClient.OnMavlinkClientListner;
 
 public class DroidPlannerApp extends Application implements
 		OnMavlinkClientListner {
+
+	private static long HEARTBEAT_NORMAL_TIMEOUT = 5000;
+	private static long HEARTBEAT_LOST_TIMEOUT = 15000;
+
 	public Drone drone;
 	private MavLinkMsgHandler mavLinkMsgHandler;
 	public FollowMe followMe;
 	public RecordMe recordMe;
-	public SuperActConnectionStateListner saConnectionListner;
-	public SuperActOnSystemArmListener saOnSystemArmListener;
+	public ConnectionStateListner conectionListner;
+	public OnSystemArmListener onSystemArmListener;
 	private TTS tts;
 
-	public interface OnWaypointUpdateListner {
-		public void onWaypointsUpdate();
+    enum HeartbeatState {
+        FIRST_HEARTBEAT, LOST_HEARTBEAT, NORMAL_HEARTBEAT
+    }
+
+    private HeartbeatState heartbeatState;
+    private Handler watchdog = new Handler();
+    private Runnable watchdogCallback = new Runnable()
+    {
+        @Override
+        public void run()
+        {
+            onHeartbeatTimeout();
+        }
+    };
+
+	public interface ConnectionStateListner {
+		public void notifyConnected();
+		
+		public void notifyDisconnected();
 	}
 
-	public interface SuperActConnectionStateListner {
-		public void saNotifyConnected();		
-		public void saNotifyDisconnected();
-	}
-
-	public interface SuperActOnSystemArmListener {
-		public void saNotifyArmed();		
-		public void saNotifyDisarmed();
+	public interface OnSystemArmListener {
+		public void notifyArmed();
+		
+		public void notifyDisarmed();
 	}
 
 	@Override
@@ -61,30 +79,77 @@ public class DroidPlannerApp extends Application implements
 			else {
 				notifyDisarmed();
 			}
+			onHeartbeat();
 		}
 		mavLinkMsgHandler.receiveData(msg);
 	}
 
 	@Override
 	public void notifyDisconnected() {
-		saConnectionListner.saNotifyDisconnected();
-		tts.speak("Disconnected");
+		conectionListner.notifyDisconnected();
+
+		// stop watchdog
+		watchdog.removeCallbacks(watchdogCallback);
 	}
 
 	@Override
 	public void notifyConnected() {
 		MavLinkStreamRates.setupStreamRatesFromPref(this);
-		saConnectionListner.saNotifyConnected();
-		tts.speak("Connected");
+		conectionListner.notifyConnected();
+		// don't announce 'connected' until first heartbeat received
+
+		// start watchdog
+		heartbeatState = HeartbeatState.FIRST_HEARTBEAT;
+		restartWatchdog(HEARTBEAT_NORMAL_TIMEOUT);
 	}
 
 	@Override
 	public void notifyArmed() {
-		saOnSystemArmListener.saNotifyArmed();
+		onSystemArmListener.notifyArmed();
 	}
 
 	@Override
 	public void notifyDisarmed() {
-		saOnSystemArmListener.saNotifyDisarmed();
+		onSystemArmListener.notifyDisarmed();
 	}
+
+	private void onHeartbeat() {
+
+		switch(heartbeatState) {
+			case FIRST_HEARTBEAT:
+				tts.speak("Connected");
+				break;
+
+			case LOST_HEARTBEAT:
+				tts.speak("Data link restored");
+				break;
+		case NORMAL_HEARTBEAT:
+			break;
+		}
+
+		heartbeatState = HeartbeatState.NORMAL_HEARTBEAT;
+		restartWatchdog(HEARTBEAT_NORMAL_TIMEOUT);
+	}
+
+	private void onHeartbeatTimeout() {
+		tts.speak("Data link lost, check connection.");
+		heartbeatState = HeartbeatState.LOST_HEARTBEAT;
+		restartWatchdog(HEARTBEAT_LOST_TIMEOUT);
+	}
+
+	private void restartWatchdog(long timeout)
+	{
+		// re-start watchdog
+		watchdog.removeCallbacks(watchdogCallback);
+		watchdog.postDelayed(watchdogCallback, timeout);
+	}
+
+	@Override
+	public void notifyTimeOut(int timeOutCount) {
+		if (drone.waypointMananger.processTimeOut(timeOutCount)) {
+			tts.speak("Retrying - " + String.valueOf(timeOutCount));
+		} else {
+			tts.speak("MAVLink has timed out");
+		}
+	}	
 }

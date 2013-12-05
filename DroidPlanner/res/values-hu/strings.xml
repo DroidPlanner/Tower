@@ -5,7 +5,7 @@
     <string name="about">Névjegy</string>
     <string name="version">Verzió</string>
     <string name="storage_folder">Adat könyvtár</string>
-    <string name="menu_settings">Beállítások</string>
+    <string name="settings">Beállítások</string>
     <string name="menu_connect">Kapcsolódj</string>
     <string name="menu_disconnect">Kapcsolat bontása</string>
     <string name="conected">Kapcsolódva</string>

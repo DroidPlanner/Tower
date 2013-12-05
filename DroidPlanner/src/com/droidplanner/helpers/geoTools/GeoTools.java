@@ -3,6 +3,7 @@ package com.droidplanner.helpers.geoTools;
 import java.util.List;
 
 import com.droidplanner.helpers.units.Area;
+import com.droidplanner.helpers.units.Length;
 import com.droidplanner.polygon.Polygon;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -91,8 +92,8 @@ public class GeoTools {
 	 * 
 	 * @return distance in meters
 	 */
-	public static double getDistance(LatLng from, LatLng to) {
-		return RADIUS_OF_EARTH * Math.toRadians(getArcInRadians(from, to));
+	public static Length getDistance(LatLng from, LatLng to) {
+		return new Length(RADIUS_OF_EARTH * Math.toRadians(getArcInRadians(from, to)));
 	}
 
 	/**

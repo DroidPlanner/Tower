@@ -5,11 +5,11 @@
     android:layout_height="match_parent" >
 
     <fragment
-        android:id="@+id/planningMapFragment"
+        android:id="@id/mapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="false"
-        class="com.droidplanner.fragments.PlanningMapFragment" />
+        class="com.droidplanner.fragments.EditorMapFragment" />
 
     <android.gesture.GestureOverlayView
         android:id="@+id/overlay1"

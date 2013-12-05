@@ -34,7 +34,7 @@ public class LineSampler {
 			double samplingDistance) {
 		List<LatLng> result = new ArrayList<LatLng>();
 		double heading = GeoTools.getHeadingFromCoordinates(from, to);
-		double totalLength = GeoTools.getDistance(from, to);
+		double totalLength = GeoTools.getDistance(from, to).valueInMeters();
 		double distance = 0;
 
 		while (distance < totalLength) {

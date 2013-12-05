@@ -5,7 +5,7 @@
     <string name="about">About</string>
     <string name="version">当前版本：</string>
     <string name="storage_folder">存储目录：</string>
-    <string name="menu_settings">设置</string>
+    <string name="settings">设置</string>
     <string name="menu_connect">连接</string>
     <string name="menu_disconnect">断开连接</string>
     <string name="conected">已连接</string>

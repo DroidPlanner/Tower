@@ -1,46 +1,29 @@
 package com.droidplanner.activitys.helpers;
 
-import android.app.ActionBar;
-import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.SpinnerAdapter;
 
 import com.droidplanner.DroidPlannerApp;
-import com.droidplanner.DroidPlannerApp.SuperActConnectionStateListner;
-import com.droidplanner.DroidPlannerApp.SuperActOnSystemArmListener;
+import com.droidplanner.DroidPlannerApp.OnSystemArmListener;
 import com.droidplanner.R;
-import com.droidplanner.activitys.CameraActivity;
-import com.droidplanner.activitys.ChartActivity;
-import com.droidplanner.activitys.FlightDataActivity;
-import com.droidplanner.activitys.GCPActivity;
-import com.droidplanner.activitys.ParametersActivity;
-import com.droidplanner.activitys.PlanningActivity;
-import com.droidplanner.activitys.RCActivity;
-import com.droidplanner.activitys.SettingsActivity;
+import com.droidplanner.activitys.ConfigurationActivity;
 import com.droidplanner.dialogs.AltitudeDialog;
-import com.droidplanner.dialogs.AltitudeDialog.SuperActOnAltitudeChangedListner;
+import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
 import com.droidplanner.dialogs.checklist.PreflightDialog;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.fragments.helpers.OfflineMapFragment;
+import com.droidplanner.helpers.units.Altitude;
 
 public abstract class SuperActivity extends Activity implements
-		OnNavigationListener, SuperActConnectionStateListner, SuperActOnAltitudeChangedListner, SuperActOnSystemArmListener{
-
-	public abstract int getNavigationItem();
+		OnAltitudeChangedListner, OnSystemArmListener {
 
 	public DroidPlannerApp app;
 	public Drone drone;
-	private MenuItem connectButton;
 	private MenuItem armButton;
-
-	private ScreenOrientation screenOrientation = new ScreenOrientation(this);
 
 	public SuperActivity() {
 		super();
@@ -52,68 +35,24 @@ public abstract class SuperActivity extends Activity implements
 
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
-		// Set up the action bar to show a dropdown list.
-		setUpActionBar();
 		app = (DroidPlannerApp) getApplication();
-		app.saConnectionListner = this;
-		app.saOnSystemArmListener = this;
+		app.onSystemArmListener = this;
 		this.drone = app.drone;
 
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
-		screenOrientation.unlock();
-	}
-
-	public void setUpActionBar() {
-		final ActionBar actionBar = getActionBar();
-		actionBar.setDisplayShowTitleEnabled(false);
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-		SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this,
-				R.array.menu_dropdown,
-				android.R.layout.simple_spinner_dropdown_item);
-		actionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
-		actionBar.setSelectedNavigationItem(getNavigationItem());
-	}
-
-	@Override
-	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-		if (itemPosition == getNavigationItem()) {
-			return false;
-		}
-		Intent navigationIntent;
-		switch (itemPosition) {
-		case 0: // Planning
-			navigationIntent = new Intent(this, PlanningActivity.class);
-			break;
-		default:
-		case 1: // Flight Data
-			navigationIntent = new Intent(this, FlightDataActivity.class);
-			navigationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			break;
-		case 2: // RC
-			navigationIntent = new Intent(this, RCActivity.class);
-			break;
-		case 3: // Parameters
-			navigationIntent = new Intent(this, ParametersActivity.class);
-			break;
-		case 4: // Camera
-			navigationIntent = new Intent(this, CameraActivity.class);
-			break;
-		case 5: // GCP
-			navigationIntent = new Intent(this, GCPActivity.class);
-			break;
-		case 6: // Chart
-			navigationIntent = new Intent(this, ChartActivity.class);
-			break;
-		}
-		startActivity(navigationIntent);
-		return false;
 	}
 
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
+		//case R.id.menu_configuration:
+		//	startActivity(new Intent(this, ConfigurationActivity.class));
+		//	return true;
 		case R.id.menu_settings:
-			startActivity(new Intent(this, SettingsActivity.class));
+			Intent intent = new Intent(this, ConfigurationActivity.class);
+			intent.putExtra(ConfigurationActivity.SCREEN_INTENT,
+					ConfigurationActivity.SETTINGS);
+			startActivity(intent);
 			return true;
 		case R.id.menu_connect:
 			drone.MavClient.toggleConnectionState();
@@ -150,76 +89,42 @@ public abstract class SuperActivity extends Activity implements
 	private void showCheckList() {
 		PreflightDialog dialog = new PreflightDialog();
 		dialog.build(this, drone, false);
-		
+
 	}
 
 	private void setMapTypeFromItemId(int itemId) {
-
 		final String mapType;
-		switch(itemId) {
-			case R.id.menu_map_type_hybrid:
-				mapType = OfflineMapFragment.MAP_TYPE_HYBRID;
-				break;
-			case R.id.menu_map_type_normal:
-				mapType = OfflineMapFragment.MAP_TYPE_NORMAL;
-				break;
-			case R.id.menu_map_type_terrain:
-				mapType = OfflineMapFragment.MAP_TYPE_TERRAIN;
-				break;
-			default:
-				mapType = OfflineMapFragment.MAP_TYPE_SATELLITE;
-				break;
+		switch (itemId) {
+		case R.id.menu_map_type_hybrid:
+			mapType = OfflineMapFragment.MAP_TYPE_HYBRID;
+			break;
+		case R.id.menu_map_type_normal:
+			mapType = OfflineMapFragment.MAP_TYPE_NORMAL;
+			break;
+		case R.id.menu_map_type_terrain:
+			mapType = OfflineMapFragment.MAP_TYPE_TERRAIN;
+			break;
+		default:
+			mapType = OfflineMapFragment.MAP_TYPE_SATELLITE;
+			break;
 		}
 
 		PreferenceManager.getDefaultSharedPreferences(this).edit()
-				.putString(OfflineMapFragment.PREF_MAP_TYPE, mapType)
-				.commit();
+				.putString(OfflineMapFragment.PREF_MAP_TYPE, mapType).commit();
 
 		drone.notifyMapTypeChanged();
 	}
 
-	public void saNotifyDisconnected() {
-		if (connectButton != null) {
-			connectButton.setTitle(getResources().getString(
-					R.string.menu_connect));
-		}
-		if(armButton != null){
-			armButton.setEnabled(false);
-		}
-		screenOrientation.unlock();
-	}
-
-	public void saNotifyConnected() {
-		if (connectButton != null) {
-			connectButton.setTitle(getResources().getString(
-					R.string.menu_disconnect));
-		}
-		if(armButton != null){
-			armButton.setEnabled(true);
-		}
-		screenOrientation.requestLock();
-	}
-
-	public void saNotifyArmed() {
+	public void notifyArmed() {
 		if (armButton != null) {
-			armButton.setTitle(getResources().getString(
-					R.string.menu_disarm));
+			armButton.setTitle(getResources().getString(R.string.menu_disarm));
 		}
 	}
 
-	public void saNotifyDisarmed() {
+	public void notifyDisarmed() {
 		if (armButton != null) {
-			armButton.setTitle(getResources().getString(
-					R.string.menu_arm));
+			armButton.setTitle(getResources().getString(R.string.menu_arm));
 		}
-	}
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu_super_activiy, menu);
-		armButton = menu.findItem(R.id.menu_arm);
-		connectButton = menu.findItem(R.id.menu_connect);
-		drone.MavClient.queryConnectionState();
-		return super.onCreateOptionsMenu(menu);
 	}
 
 	public void changeDefaultAlt() {
@@ -228,7 +133,7 @@ public abstract class SuperActivity extends Activity implements
 	}
 
 	@Override
-	public void saOnAltitudeChanged(double newAltitude) {
+	public void onAltitudeChanged(Altitude newAltitude) {
 		drone.mission.setDefaultAlt(newAltitude);
 	}
 }

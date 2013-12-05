@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <style name="tinyText">
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:textColor">#808080</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="smallTelemetryText">
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+		<item name="android:gravity">left</item>
+		</style>
+
+	<style name="textLabels">
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:textColor">#808080</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:layout_marginLeft">8dp</item>
+      	<item name="android:layout_marginBottom">-6dp</item>
+        </style>
+
+	<style name="RPYtextLabels">
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:textSize">13sp</item>
+      	<item name="android:layout_marginLeft">0dp</item>
+        </style>
+
+    <style name="unitText">
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+		<item name="android:gravity">left</item>
+	</style>
+
+    <style name="largeTelemetryText">
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textSize">40sp</item>
+	    <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:layout_marginRight">4dp</item>
+        <item name="android:layout_marginTop">0dp</item>
+        <item name="android:gravity">right</item>
+        </style>
+
+
+
+
+
+    <style name="largeMissionDetailText">
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textSize">40dp</item>
+	    <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:gravity">center</item>
+        </style>
+
+    <style name="whiteHeaderTitle">
+        <item name="android:textColor">#fff</item>
+        <item name="android:textSize">24dp</item>
+	    <item name="android:textStyle">bold</item>
+	    <item name="android:layout_alignParentTop">true</item>
+	    <item name="android:layout_alignParentTop">true</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        </style>
+
+    <style name="missionHeaderTitle">
+        <item name="android:textColor">#85daff</item>
+        <item name="android:textSize">24dp</item>
+	    <item name="android:textStyle">bold</item>
+	    <item name="android:layout_alignParentTop">true</item>
+	    <item name="android:layout_alignParentTop">true</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        </style>
+    <style name="missionHeaderlabel">
+        <item name="android:textColor">#85daff</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        </style>
+    <style name="missionHeaderValue">
+        <item name="android:textColor">#cbefff</item>
+        <item name="android:textSize">14dp</item>
+	    <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        </style>
+
+
+
+    <style name="actionButton">
+        <item name="android:layout_margin">4dp</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:background">#000000</item>
+        <item name="android:textSize">13dp</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:adjustViewBounds">true</item>
+    </style>
+
+    <style name="telemButton">
+        <item name="android:layout_margin">1dp</item>
+        <item name="android:padding">1dp</item>
+    </style>
+    <style name="telemButton_top">
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:layout_marginLeft">1dp</item>
+        <item name="android:layout_marginRight">1dp</item>
+        <item name="android:layout_marginBottom">1dp</item>
+
+        <item name="android:padding">1dp</item>
+    </style>
+
+    <style name="editorButton">
+        <item name="android:padding">0dp</item>
+        <item name="android:layout_margin">0dp</item>
+    </style>
+
+
+
+    <style name="transparentLayout">
+        <item name="android:background">#66848484</item>
+    </style>
+
+    <style name="configLayout">
+        <item name="android:background">#151515</item>
+    </style>
+
+    <style name="settingsLayout">
+        <item name="android:background">#ededed</item>
+    </style>
+
+    <style name="flyoutPanelLayout">
+        <item name="android:background">#ffededed</item>
+    </style>
+
+    <!-- the theme applied to the application or activity -->
+    <style name="CustomActionBarTheme" parent="@android:style/Theme.Holo.Light">
+        <item name="android:actionBarStyle">@style/CustomActionBarTheme.ActionBar</item>
+		<item name="android:actionMenuTextAppearance">@style/CustomActionBarTheme.ActionBar.Text</item>
+		<item name="android:actionBarDivider">@null</item>
+
+		<item name="android:popupMenuStyle">@style/MyPopupMenu</item>
+		<item name="android:itemTextAppearance">@style/myCustomMenuTextApearance</item>
+
+	</style>
+
+	<style name="CustomActionBarTheme.ActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <!--<item name="android:background">@drawable/action_texture</item>-->
+		<item name="android:titleTextStyle">@style/CustomActionBarTheme.ActionBar.TitleTextStyle</item>
+	    <item name="android:subtitleTextStyle">@style/CustomActionBarTheme.ActionBar.Text</item>
+	    <item name="android:background">@null</item>
+     </style>
+
+
+	<style name="CustomActionBarTheme.ActionBar.Text" parent="@android:style/TextAppearance">
+		<item name="android:textSize">16dp</item>
+	    <item name="android:textStyle">bold</item>
+	</style>
+
+	<style name="CustomActionBarTheme.ActionBar.TitleTextStyle" parent="android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+	    <item name="android:textColor">#333</item>
+	    <item name="android:textStyle">bold</item>
+	    <item name="android:textSize">16dp</item>
+	</style>
+
+
+
+	 <!-- Popup Menu Style -->
+	<style name="MyPopupMenu" parent="android:style/Widget.Holo.Light.ListPopupWindow">
+		<item name="android:popupBackground">#ffffff</item>
+	</style>
+	<style name="myCustomMenuTextApearance" parent="@android:style/TextAppearance.Widget.TextView.PopupMenu">
+		<item name="android:textColor">#000000</item>
+	</style>
+
+
+	 <!-- Editor overview info Style -->
+    <style name="editorMissionOverviewText">
+        <item name="android:textColor">#fff</item>
+        <item name="android:textSize">20dp</item>
+	    <item name="android:textStyle">bold</item>
+	    <item name="android:layout_centerVertical">true</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:gravity">center_vertical|left</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:background">#66848484</item>
+        </style>
+
+	 <!-- Mode info Style -->
+    <style name="modeHeaderTitle">
+        <item name="android:textColor">#fff</item>
+        <item name="android:textSize">20dp</item>
+	    <item name="android:textStyle">bold</item>
+	    <item name="android:layout_alignParentTop">true</item>
+	    <item name="android:layout_alignParentTop">true</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        </style>
+
+    <style name="modeHeaderOptions">
+        <item name="android:textColor">#85daff</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        </style>
+
+    <style name="ModeDetailText">
+        <item name="android:textColor">#4d4d4d</item>
+        <item name="android:textSize">14dp</item>
+	    <item name="android:textStyle">italic</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:padding">16dp</item>
+        </style>
+
+    <style name="modeControl">
+        <item name="android:textColor">#fff</item>
+	    <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:gravity">center</item>
+        </style>
+
+    <style name="modeLabel">
+        <item name="android:textColor">#4d4d4d</item>
+	    <item name="android:textStyle">bold|italic</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+      	<item name="android:layout_marginTop">4dp</item>
+      	<item name="android:layout_marginBottom">4dp</item>
+        </style>
+
+	 <!-- Mode Spinner Style -->
+
+	<style name="ModeSpinnerText" >
+		<item name="android:textSize">16dp</item>
+	    <item name="android:textStyle">bold</item>
+	</style>
+
+	 <!-- RC setup screen -->
+
+	<style name="rc_textTitle" >
+        <item name="android:textColor">#fff</item>
+		<item name="android:textSize">16dp</item>
+	    <item name="android:textStyle">bold</item>
+	</style>
+	<style name="rc_textPWM" >
+        <item name="android:textColor">#fff</item>
+		<item name="android:textSize">16dp</item>
+	</style>
+    <style name="SetupTitle">
+        <item name="android:textColor">#fff</item>
+        <item name="android:textSize">20dp</item>
+	    <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:padding">16dp</item>
+        </style>
+
+
+</resources>

@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_title">DroidPlanner</string>
-    <string name="menu_settings">Iestatījumi</string>
+    <string name="settings">Iestatījumi</string>
     <string name="menu_connect">Savienot</string>
     <string name="menu_disconnect">Atvienot</string>      
     <string name="conected">Savienots</string>

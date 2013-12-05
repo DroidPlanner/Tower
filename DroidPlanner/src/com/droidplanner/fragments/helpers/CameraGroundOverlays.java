@@ -5,8 +5,8 @@ import java.util.List;
 
 import android.graphics.Color;
 
+import com.droidplanner.drone.variables.mission.survey.SurveyData;
 import com.droidplanner.helpers.geoTools.GeoTools;
-import com.droidplanner.survey.SurveyData;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polygon;
