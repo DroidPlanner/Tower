@@ -2,15 +2,12 @@ package com.droidplanner.checklist.row;
 
 import com.droidplanner.R;
 import com.droidplanner.checklist.CheckListItem;
-
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 
 public class ListRow_Value extends ListRow implements OnFocusChangeListener {
 	@SuppressWarnings("unused")
@@ -41,7 +38,7 @@ public class ListRow_Value extends ListRow implements OnFocusChangeListener {
 
 		}
 
-		updateDisplay(view, (ViewHolder)holder, checkListItem);
+		updateDisplay(view, (ViewHolder) holder, checkListItem);
 		return view;
 	}
 
@@ -53,6 +50,8 @@ public class ListRow_Value extends ListRow implements OnFocusChangeListener {
 		double sysValue = mListItem.getSys_value();
 		String unit = mListItem.getUnit();
 		boolean failMandatory = sysValue <= minVal;
+
+		getData(mListItem);
 
 		editText = holder.editTextView;
 		if (holder.editTextView.getText().toString() == null)
@@ -78,23 +77,23 @@ public class ListRow_Value extends ListRow implements OnFocusChangeListener {
 		@Override
 		protected void setupViewItems(ViewGroup viewGroup,
 				CheckListItem checkListItem) {
-			this.layoutView = (LinearLayout) viewGroup
-					.findViewById(R.id.lst_layout);
 			this.editTextView = (EditText) viewGroup
 					.findViewById(R.id.lst_editText);
 			this.editTextView.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL
 					| InputType.TYPE_NUMBER_FLAG_SIGNED
 					| InputType.TYPE_CLASS_NUMBER);
-			// this.editTextView.setInputType(InputType.TYPE_CLASS_PHONE);
-
-			this.checkBox = (CheckBox) viewGroup.findViewById(R.id.lst_check);
 		}
 	}
 
 	@Override
 	public void onFocusChange(View v, boolean hasFocus) {
-		if (lastFocusState != hasFocus) {
-			lastFocusState = hasFocus;
+		if (!hasFocus) {
+			
+			if(!lastFocusState)
+				return;
+			
+			lastFocusState = false;
+
 			float a = (float) 0.0;
 
 			try {
@@ -113,7 +112,8 @@ public class ListRow_Value extends ListRow implements OnFocusChangeListener {
 			if (listener != null)
 				listener.onRowItemChanged(v, this.checkListItem,
 						this.checkListItem.isVerified());
-
+		} else if (hasFocus){
+			lastFocusState = !lastFocusState;
 		}
 	}
 }

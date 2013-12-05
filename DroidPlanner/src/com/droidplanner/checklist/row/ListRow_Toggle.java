@@ -2,22 +2,18 @@ package com.droidplanner.checklist.row;
 
 import com.droidplanner.R;
 import com.droidplanner.checklist.CheckListItem;
-import com.droidplanner.drone.Drone;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.LinearLayout;
 import android.widget.ToggleButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
-public class ListRow_Toggle extends ListRow implements OnCheckedChangeListener{
-	
-	public ListRow_Toggle(Drone drone, LayoutInflater inflater, CheckListItem checkListItem) {
-		super(inflater,checkListItem);
-		getDroneVariable(drone, checkListItem);
+public class ListRow_Toggle extends ListRow implements OnCheckedChangeListener {
+
+	public ListRow_Toggle(LayoutInflater inflater,
+			CheckListItem checkListItem) {
+		super(inflater, checkListItem);
 	}
 
 	public View getView(View convertView) {
@@ -34,18 +30,22 @@ public class ListRow_Toggle extends ListRow implements OnCheckedChangeListener{
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		updateDisplay(view, (ViewHolder)holder, checkListItem);
+		updateDisplay(view, (ViewHolder) holder, checkListItem);
 		return view;
 	}
 
 	private void updateDisplay(View view, ViewHolder holder,
 			CheckListItem mListItem) {
-		boolean failMandatory = !checkListItem.isSys_activated();
+		boolean failMandatory = false;
+
+		getData(mListItem);
+
+		failMandatory = !checkListItem.isSys_activated();
 
 		holder.toggleButton.setOnCheckedChangeListener(this);
 		holder.toggleButton.setChecked(checkListItem.isSys_activated());
 		holder.toggleButton.setClickable(checkListItem.isEditable());
-		
+
 		updateCheckBox(checkListItem.isMandatory() && !failMandatory);
 	}
 
@@ -53,27 +53,24 @@ public class ListRow_Toggle extends ListRow implements OnCheckedChangeListener{
 		return ListRow_Type.TOGGLE_ROW.ordinal();
 	}
 
-	private static class ViewHolder extends BaseViewHolder{
+	private static class ViewHolder extends BaseViewHolder {
 		private ToggleButton toggleButton;
 
 		private ViewHolder(ViewGroup viewGroup, CheckListItem checkListItem) {
-				super(viewGroup, checkListItem);
+			super(viewGroup, checkListItem);
 		}
-		
+
 		@Override
-		protected void setupViewItems(ViewGroup viewGroup, CheckListItem checkListItem)
-		{
-			this.layoutView = (LinearLayout) viewGroup
-					.findViewById(R.id.lst_layout);
+		protected void setupViewItems(ViewGroup viewGroup,
+				CheckListItem checkListItem) {
 			this.toggleButton = (ToggleButton) viewGroup
 					.findViewById(R.id.lst_toggle);
-			this.checkBox = (CheckBox) viewGroup.findViewById(R.id.lst_check);
 		}
 	}
-	
+
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		this.checkListItem.setSys_activated(isChecked);
-		updateRowChanged((View)(buttonView),this.checkListItem);
+		updateRowChanged((View) (buttonView), this.checkListItem);
 	}
 }

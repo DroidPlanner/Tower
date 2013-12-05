@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.droidplanner.R;
 import com.droidplanner.checklist.CheckListItem;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,8 +36,10 @@ public class ListRow_Radio extends ListRow implements OnCheckedChangeListener {
 
 	private void updateDisplay(View view, ViewHolder holder,
 			CheckListItem mListItem) {
+
 		holder.radioGroupView.setOnCheckedChangeListener(this);
 		
+		getData(mListItem);
 		updateCheckBox(checkListItem.isVerified());
 
 	}

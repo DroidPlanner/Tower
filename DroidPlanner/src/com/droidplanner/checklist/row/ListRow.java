@@ -1,8 +1,5 @@
 package com.droidplanner.checklist.row;
 
-import com.droidplanner.checklist.CheckListItem;
-import com.droidplanner.drone.Drone;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -10,10 +7,12 @@ import android.view.View.OnLongClickListener;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
+import com.droidplanner.checklist.CheckListItem;
+import com.droidplanner.drone.Drone;
+
 public class ListRow implements ListRow_Interface, OnClickListener, OnLongClickListener {
 	protected final CheckListItem checkListItem;
 	protected final LayoutInflater inflater;
-	protected  Drone drone;
 	
 	public OnRowItemChangeListener listener;
 	public BaseViewHolder holder;
@@ -21,11 +20,6 @@ public class ListRow implements ListRow_Interface, OnClickListener, OnLongClickL
 	public ListRow(LayoutInflater mInflater, CheckListItem mCheckListItem) {
 		this.checkListItem = mCheckListItem;
 		this.inflater = mInflater;
-	}
-	public ListRow(Drone mDrone,LayoutInflater mInflater, CheckListItem mCheckListItem) {
-		this.checkListItem = mCheckListItem;
-		this.inflater = mInflater;
-		this.drone = mDrone;
 	}
 
 	protected void updateCheckBox(boolean mState) {
@@ -88,6 +82,11 @@ public class ListRow implements ListRow_Interface, OnClickListener, OnLongClickL
 		} else if (sys_tag.equalsIgnoreCase("SYS_CONNECTION_STATE")) {
 			mListItem.setSys_activated(mDrone.MavClient.isConnected());
 		}
+	}
+	
+	protected void getData(CheckListItem mListItem) {
+		if(this.listener!=null)
+			this.listener.onRowItemGetData(checkListItem, checkListItem.getSys_tag());
 	}
 
 	@Override
