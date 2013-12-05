@@ -54,7 +54,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
 
-        android:content="@+id/modeStabilizeFragment"
+        android:content="@+id/modeInfoPanel"
         android:handle="@+id/slideButtonLeft"
         android:orientation="horizontal"
         android:padding="0dp"
@@ -88,12 +88,10 @@
 			tools:layout="@layout/fragment_mode_circle" />-->
 
 		<fragment
-			android:id="@+id/modeStabilizeFragment"
+			android:id="@+id/modeInfoPanel"
 			android:name="com.droidplanner.fragments.mode.ModeRTLFragment"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
-			android:layout_alignParentBottom="true"
-			android:layout_centerHorizontal="true"
 			tools:layout="@layout/fragment_mode_rtl" />
 
     </SlidingDrawer>

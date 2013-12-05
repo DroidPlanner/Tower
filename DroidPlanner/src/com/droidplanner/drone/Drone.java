@@ -9,7 +9,6 @@ import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
 import com.droidplanner.drone.DroneInterfaces.InfoListner;
 import com.droidplanner.drone.DroneInterfaces.MapConfigListener;
 import com.droidplanner.drone.DroneInterfaces.MapUpdatedListner;
-import com.droidplanner.drone.DroneInterfaces.ModeChangedListener;
 import com.droidplanner.drone.DroneInterfaces.OnTuningDataListner;
 import com.droidplanner.drone.variables.Altitude;
 import com.droidplanner.drone.variables.Battery;
@@ -59,7 +58,6 @@ public class Drone {
 	private DroneTypeListner typeListner;
 	private InfoListner infoListner;
 	private HomeDistanceChangedListner homeChangedListner;
-	private ModeChangedListener modeChangedListener;
 	private OnGuidedListener guidedListner;
 	public OnTuningDataListner tuningDataListner;
 	
@@ -95,10 +93,6 @@ public class Drone {
 	
 	public void setTuningDataListner(OnTuningDataListner listner) {
 		tuningDataListner = listner;
-	}
-
-	public void setModeChangedListener(ModeChangedListener listener){
-		this.modeChangedListener = listener;
 	}
 
 	public void setGuidedPointListner(OnGuidedListener listner) {
@@ -167,11 +161,6 @@ public class Drone {
 	public void notifyMapTypeChanged() {
 		if (mapConfigListener != null)
 			mapConfigListener.onMapTypeChanged();
-	}
-
-	public void notifyModeChanged(){
-		if (modeChangedListener != null)
-			modeChangedListener.onModeChanged();
 	}
 
 }

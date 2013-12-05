@@ -8,6 +8,7 @@ import android.util.Log;
 import com.MAVLink.Messages.ApmModes;
 import com.droidplanner.MAVLink.MavLinkModes;
 import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.DroneInterfaces.ModeChangedListener;
 import com.droidplanner.drone.DroneInterfaces.OnStateListner;
 import com.droidplanner.drone.DroneVariable;
 
@@ -17,6 +18,7 @@ public class State extends DroneVariable {
 	private boolean isFlying = false;
 	private ApmModes mode = ApmModes.UNKNOWN;
 	public List<OnStateListner> stateListner = new ArrayList<OnStateListner>();
+	private List<ModeChangedListener> modeListner= new ArrayList<ModeChangedListener>();
 
 	public State(Drone myDrone) {
 		super(myDrone);
@@ -63,7 +65,7 @@ public class State extends DroneVariable {
 		if (this.mode != mode) {
 			this.mode = mode;
 			myDrone.tts.speakMode(mode);
-			myDrone.notifyModeChanged();
+			myDrone.state.notifyModeChanged();
 
 			if (getMode() != ApmModes.ROTOR_GUIDED) {
 				myDrone.guidedPoint.invalidateCoord();
@@ -83,15 +85,32 @@ public class State extends DroneVariable {
 		stateListner.add(listner);
 	}
 	
+	public void addModeChangedListener(ModeChangedListener listner) {
+		modeListner.add(listner);
+		
+	}
+
 	public void removeFlightStateListner(OnStateListner listner) {
 		if (stateListner.contains(listner)) {
 			stateListner.remove(listner);			
+		}
+	}
+	
+	public void removeModeListner(ModeChangedListener listner) {
+		if (modeListner.contains(listner)) {
+			modeListner.remove(listner);			
 		}
 	}
 
 	private void notifyFlightStateChanged() {
 		for (OnStateListner listner : stateListner) {
 			listner.onFlightStateChanged();			
+		}
+	}
+	
+	private void notifyModeChanged() {
+		for (ModeChangedListener listner : modeListner) {
+			listner.onModeChanged();			
 		}
 	}
 

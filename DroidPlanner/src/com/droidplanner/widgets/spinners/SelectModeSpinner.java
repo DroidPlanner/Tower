@@ -4,7 +4,6 @@ import android.content.Context;
 import android.widget.Spinner;
 
 import com.MAVLink.Messages.ApmModes;
-import com.droidplanner.R;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.DroneTypeListner;
 import com.droidplanner.drone.DroneInterfaces.ModeChangedListener;
@@ -26,7 +25,7 @@ public class SelectModeSpinner extends SpinnerSelfSelect implements
 	public void buildSpinner(Context context, Drone drone) {
 		this.drone = drone;
 		setOnSpinnerItemSelectedListener(this);
-		this.drone.setModeChangedListener(this);
+		this.drone.state.addModeChangedListener(this);
 		this.drone.setDroneTypeChangedListner(this);
 
 		onDroneTypeChanged();

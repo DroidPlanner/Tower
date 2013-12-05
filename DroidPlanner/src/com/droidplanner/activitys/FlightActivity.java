@@ -1,42 +1,53 @@
 package com.droidplanner.activitys;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperUI;
+import com.droidplanner.drone.DroneInterfaces.ModeChangedListener;
 import com.droidplanner.drone.DroneInterfaces.OnStateListner;
 import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
 import com.droidplanner.fragments.FlightActionsFragment.OnMissionControlInteraction;
 import com.droidplanner.fragments.RCFragment;
 import com.droidplanner.fragments.helpers.OnMapInteractionListener;
+import com.droidplanner.fragments.mode.ModeAutoFragment;
+import com.droidplanner.fragments.mode.ModeLandFragment;
+import com.droidplanner.fragments.mode.ModeLoiterFragment;
+import com.droidplanner.fragments.mode.ModeRTLFragment;
+import com.droidplanner.fragments.mode.ModeStabilizeFragment;
 import com.droidplanner.polygon.PolygonPoint;
 import com.google.android.gms.maps.model.LatLng;
 
 public class FlightActivity extends SuperUI implements
-		OnMapInteractionListener, OnMissionControlInteraction, OnStateListner {
+		OnMapInteractionListener, OnMissionControlInteraction, OnStateListner, ModeChangedListener {
 	private FragmentManager fragmentManager;
 	private RCFragment rcFragment;
 	private View failsafeTextView;
+	private Fragment modeInfoPanel;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_flight);
 		fragmentManager = getFragmentManager();
+		modeInfoPanel = fragmentManager.findFragmentById(R.id.modeInfoPanel);
 
 		failsafeTextView = findViewById(R.id.failsafeTextView);
 		drone.state.addFlightStateListner(this);
-
+		drone.state.addModeChangedListener(this);
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		drone.state.removeFlightStateListner(this);
+		drone.state.removeModeListner(this);
 	}
 
 	@Override
@@ -106,7 +117,6 @@ public class FlightActivity extends SuperUI implements
 
 	@Override
 	public void onFlightStateChanged() {
-
 	}
 
 	@Override
@@ -121,6 +131,32 @@ public class FlightActivity extends SuperUI implements
 		} else {
 			failsafeTextView.setVisibility(View.GONE);
 		}
+	}
+
+	@Override
+	public void onModeChanged() {
+		Log.d("MODE",	"switched to "+drone.state.getMode());
+		
+		switch (drone.state.getMode()) {
+		default:
+		case ROTOR_RTL:
+			modeInfoPanel = new ModeRTLFragment();
+			break;
+		case ROTOR_AUTO:
+			modeInfoPanel = new ModeAutoFragment();
+			break;
+		case ROTOR_LAND:
+			modeInfoPanel = new ModeLandFragment();
+			break;
+		case ROTOR_LOITER:
+			modeInfoPanel = new ModeLoiterFragment();
+			break;
+		case ROTOR_STABILIZE:
+			modeInfoPanel = new ModeStabilizeFragment();
+			break;
+		}
+		fragmentManager.beginTransaction()
+				.replace(R.id.modeInfoPanel, modeInfoPanel).commit();		
 	}
 
 }
