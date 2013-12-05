@@ -16,9 +16,15 @@ import com.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
 import com.droidplanner.fragments.FlightActionsFragment.OnMissionControlInteraction;
 import com.droidplanner.fragments.RCFragment;
 import com.droidplanner.fragments.helpers.OnMapInteractionListener;
+import com.droidplanner.fragments.mode.ModeAcroFragment;
+import com.droidplanner.fragments.mode.ModeAltholdFragment;
 import com.droidplanner.fragments.mode.ModeAutoFragment;
+import com.droidplanner.fragments.mode.ModeCircleFragment;
+import com.droidplanner.fragments.mode.ModeDriftFragment;
+import com.droidplanner.fragments.mode.ModeGuidedFragment;
 import com.droidplanner.fragments.mode.ModeLandFragment;
 import com.droidplanner.fragments.mode.ModeLoiterFragment;
+import com.droidplanner.fragments.mode.ModePositionFragment;
 import com.droidplanner.fragments.mode.ModeRTLFragment;
 import com.droidplanner.fragments.mode.ModeStabilizeFragment;
 import com.droidplanner.polygon.PolygonPoint;
@@ -138,7 +144,6 @@ public class FlightActivity extends SuperUI implements
 		Log.d("MODE",	"switched to "+drone.state.getMode());
 		
 		switch (drone.state.getMode()) {
-		default:
 		case ROTOR_RTL:
 			modeInfoPanel = new ModeRTLFragment();
 			break;
@@ -154,6 +159,27 @@ public class FlightActivity extends SuperUI implements
 		case ROTOR_STABILIZE:
 			modeInfoPanel = new ModeStabilizeFragment();
 			break;
+		case ROTOR_ACRO:
+			modeInfoPanel = new ModeAcroFragment();
+			break;
+		case ROTOR_ALT_HOLD:
+			modeInfoPanel = new ModeAltholdFragment();
+			break;
+		case ROTOR_CIRCLE:
+			modeInfoPanel = new ModeCircleFragment();
+			break;
+		case ROTOR_GUIDED:
+			modeInfoPanel = new ModeGuidedFragment();
+			break;
+		case ROTOR_POSITION:
+			modeInfoPanel = new ModePositionFragment();
+			break;
+		case ROTOR_TOY:
+			modeInfoPanel = new ModeDriftFragment();
+			break;
+		default:
+			//TODO do something better than just nothing
+			return;
 		}
 		fragmentManager.beginTransaction()
 				.replace(R.id.modeInfoPanel, modeInfoPanel).commit();		
