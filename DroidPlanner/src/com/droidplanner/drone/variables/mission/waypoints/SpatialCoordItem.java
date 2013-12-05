@@ -7,6 +7,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
+import com.MAVLink.Messages.enums.MAV_FRAME;
 import com.droidplanner.drone.variables.mission.Mission;
 import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.fragments.markers.GenericMarker;
@@ -124,6 +125,7 @@ public abstract class SpatialCoordItem extends MissionItem implements
 		mavMsg.autocontinue = 1;
 		mavMsg.target_component = 1;
 		mavMsg.target_system = 1;
+		mavMsg.frame = MAV_FRAME.MAV_FRAME_GLOBAL_RELATIVE_ALT;
 		mavMsg.x = (float) getCoordinate().latitude;
 		mavMsg.y = (float) getCoordinate().longitude;
 		mavMsg.z = (float) getAltitude().valueInMeters();

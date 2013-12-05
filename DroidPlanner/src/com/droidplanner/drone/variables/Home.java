@@ -3,6 +3,7 @@ package com.droidplanner.drone.variables;
 import android.content.Context;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
+import com.MAVLink.Messages.enums.MAV_FRAME;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneVariable;
 import com.droidplanner.fragments.markers.HomeMarker;
@@ -66,6 +67,7 @@ public class Home extends DroneVariable implements MarkerSource {
 		msg_mission_item mavMsg = new msg_mission_item();
 		mavMsg.autocontinue = 1;
 		mavMsg.current = 1;
+		mavMsg.frame = MAV_FRAME.MAV_FRAME_GLOBAL;
 		mavMsg.target_component = 1;
 		mavMsg.target_system = 1;
 		if (isValid()) {
