@@ -55,15 +55,17 @@ public class ParametersTableFragment extends Fragment implements
 		return view;
 	}
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState){
-        super.onActivityCreated(savedInstanceState);
 
-        final Activity activity = getActivity();
-        context = activity.getApplicationContext();
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+        context = activity;
         drone = ((SuperActivity) activity).drone;
         drone.parameters.parameterListner = this;
-    }
+	}
+
+
 
 	public void refreshRowParameter(Parameter parameter, Parameters parameters) {
 		try {
