@@ -46,7 +46,7 @@ public abstract class MAVLinkConnection extends Thread {
 	protected int iavailable, i;
 	protected boolean connected = true;
 
-	private ByteBuffer logBuffer;
+	private ByteBuffer logBuffer;	
 
 	public MAVLinkConnection(Context parentContext) {
 		this.parentContext = parentContext;
@@ -78,6 +78,12 @@ public abstract class MAVLinkConnection extends Thread {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
+
+			// we need the kind of AlertBox here to advice rebooting other side of the BT connection
+			//AlertDialog.Builder dialog = new AlertDialog.Builder();
+			//dialog.setTitle("BT connection failed. Restart Drone BT module.");
+			//dialog.create().show();
+
 			e.printStackTrace();
 		}
 		listner.onDisconnect();
