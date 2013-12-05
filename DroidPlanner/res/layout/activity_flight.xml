@@ -64,7 +64,7 @@
             style="@style/NavHubDrawer"
             android:orientation="vertical"/>
 
-    <LinearLayout
+    <ScrollView
             android:id="@+id/nav_menu_drawer_container"
             style="@style/NavMenuDrawer"
             android:orientation="vertical">
@@ -77,6 +77,6 @@
                 android:layout_marginBottom="10dp"
                 tools:layout="@layout/fragment_telemetry"/>
 
-    </LinearLayout>
+    </ScrollView>
 
 </android.support.v4.widget.DrawerLayout>
