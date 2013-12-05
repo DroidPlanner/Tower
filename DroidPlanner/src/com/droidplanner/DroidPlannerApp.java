@@ -87,4 +87,13 @@ public class DroidPlannerApp extends Application implements
 	public void notifyDisarmed() {
 		saOnSystemArmListener.saNotifyDisarmed();
 	}
+
+	@Override
+	public void notifyTimeOut(int timeOutCount) {
+		if(drone.waypointMananger.processTimeOut(timeOutCount)){
+			tts.speak("Retrying - " + String.valueOf(timeOutCount));
+		}else{
+			tts.speak("MAVLink has timed out");
+		}
+	}
 }

@@ -3,6 +3,8 @@ package com.droidplanner.drone.variables;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.util.Log;
+
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_count;
@@ -23,13 +25,30 @@ import com.droidplanner.drone.DroneVariable;
  * 
  */
 public class WaypointMananger extends DroneVariable {
+	enum waypointStates {
+		IDLE, READ_REQUEST, READING_WP, WRITTING_WP_COUNT, WRITTING_WP, WAITING_WRITE_ACK
+	}
+
+	private int readIndex;
+	private int writeIndex;
+
+	waypointStates state = waypointStates.IDLE;
+
 	/**
 	 * Try to receive all waypoints from the MAV.
 	 * 
 	 * If all runs well the callback will return the list of waypoints.
 	 */
 	public void getWaypoints() {
+		// ensure that WPManager is not doing anything else
+		if (state != waypointStates.IDLE)
+			return;
+
+		readIndex = -1;
+		myDrone.MavClient.setTimeOutValue(3000);
+		myDrone.MavClient.setTimeOutRetry(3);
 		state = waypointStates.READ_REQUEST;
+		myDrone.MavClient.setTimeOut();
 		MavLinkWaypoint.requestWaypointsList(myDrone);
 	}
 
@@ -42,11 +61,18 @@ public class WaypointMananger extends DroneVariable {
 	 *            waypoints to be written
 	 */
 	public void writeWaypoints(List<waypoint> data) {
+		// ensure that WPManager is not doing anything else
+		if (state != waypointStates.IDLE)
+			return;
+
 		if ((waypoints != null)) {
 			waypoints.clear();
 			waypoints.addAll(data);
 			writeIndex = 0;
-			state = waypointStates.WRITTING_WP;
+			myDrone.MavClient.setTimeOutValue(3000);
+			myDrone.MavClient.setTimeOutRetry(3);
+			state = waypointStates.WRITTING_WP_COUNT;
+			myDrone.MavClient.setTimeOut();
 			MavLinkWaypoint.sendWaypointCount(myDrone, waypoints.size());
 		}
 	}
@@ -88,16 +114,10 @@ public class WaypointMananger extends DroneVariable {
 	 * list of waypoints used when writing or receiving
 	 */
 	private List<waypoint> waypoints = new ArrayList<waypoint>();
+
 	/**
 	 * waypoint witch is currently being written
 	 */
-	private int writeIndex;
-
-	enum waypointStates {
-		IDLE, READ_REQUEST, READING_WP, WRITTING_WP, WAITING_WRITE_ACK
-	}
-
-	waypointStates state = waypointStates.IDLE;
 
 	public WaypointMananger(Drone drone) {
 		super(drone);
@@ -119,6 +139,7 @@ public class WaypointMananger extends DroneVariable {
 			if (msg.msgid == msg_mission_count.MAVLINK_MSG_ID_MISSION_COUNT) {
 				waypointCount = ((msg_mission_count) msg).count;
 				waypoints.clear();
+				myDrone.MavClient.setTimeOut();
 				MavLinkWaypoint.requestWayPoint(myDrone, waypoints.size());
 				state = waypointStates.READING_WP;
 				return true;
@@ -126,10 +147,12 @@ public class WaypointMananger extends DroneVariable {
 			break;
 		case READING_WP:
 			if (msg.msgid == msg_mission_item.MAVLINK_MSG_ID_MISSION_ITEM) {
+				myDrone.MavClient.setTimeOut();
 				processReceivedWaypoint((msg_mission_item) msg);
 				if (waypoints.size() < waypointCount) {
 					MavLinkWaypoint.requestWayPoint(myDrone, waypoints.size());
 				} else {
+					myDrone.MavClient.resetTimeOut();
 					state = waypointStates.IDLE;
 					MavLinkWaypoint.sendAck(myDrone);
 					myDrone.mission.onWaypointsReceived(waypoints);
@@ -137,19 +160,18 @@ public class WaypointMananger extends DroneVariable {
 				return true;
 			}
 			break;
+		case WRITTING_WP_COUNT:
+			state = waypointStates.WRITTING_WP;
 		case WRITTING_WP:
 			if (msg.msgid == msg_mission_request.MAVLINK_MSG_ID_MISSION_REQUEST) {
-				MavLinkWaypoint.sendWaypoint(myDrone, writeIndex,
-						waypoints.get(writeIndex));
-				writeIndex++;
-				if (writeIndex >= waypoints.size()) {
-					state = waypointStates.WAITING_WRITE_ACK;
-				}
+				myDrone.MavClient.setTimeOut();
+				processWaypointToSend((msg_mission_request) msg);
 				return true;
 			}
 			break;
 		case WAITING_WRITE_ACK:
 			if (msg.msgid == msg_mission_ack.MAVLINK_MSG_ID_MISSION_ACK) {
+				myDrone.MavClient.resetTimeOut();
 				myDrone.mission.onWriteWaypoints((msg_mission_ack) msg);
 				state = waypointStates.IDLE;
 				return true;
@@ -168,7 +190,70 @@ public class WaypointMananger extends DroneVariable {
 		return false;
 	}
 
+	public boolean processTimeOut(int mTimeOutCount) {
+
+		// If max retry is reached, set state to IDLE. No more retry.
+		if (mTimeOutCount >= myDrone.MavClient.getTimeOutRetry()) {
+			state = waypointStates.IDLE;
+			return false;
+		}
+
+		myDrone.MavClient.setTimeOut(false);
+
+		switch (state) {
+		default:
+		case IDLE:
+			break;
+		case READ_REQUEST:
+			MavLinkWaypoint.requestWaypointsList(myDrone);
+			break;
+		case READING_WP:
+			if (waypoints.size() < waypointCount) { // request last lost WP
+				MavLinkWaypoint.requestWayPoint(myDrone, waypoints.size());
+			}
+			break;
+		case WRITTING_WP_COUNT:
+			MavLinkWaypoint.sendWaypointCount(myDrone, waypoints.size());
+			break;
+		case WRITTING_WP:
+			Log.d("TIMEOUT", "re Write Msg: " + String.valueOf(writeIndex));
+			if (writeIndex < waypoints.size()) {
+				MavLinkWaypoint.sendWaypoint(myDrone, writeIndex,
+						waypoints.get(writeIndex));
+			}
+			break;
+		case WAITING_WRITE_ACK:
+			MavLinkWaypoint.sendWaypoint(myDrone, waypoints.size() - 1,
+					waypoints.get(waypoints.size() - 1));
+			break;
+		}
+
+		return true;
+	}
+
+	private void processWaypointToSend(msg_mission_request msg) {
+		/*
+		 * Log.d("TIMEOUT", "Write Msg: " + String.valueOf(msg.seq));
+		 */
+		writeIndex = msg.seq;
+		MavLinkWaypoint.sendWaypoint(myDrone, writeIndex,
+				waypoints.get(writeIndex));
+
+		if (writeIndex + 1 >= waypoints.size()) {
+			state = waypointStates.WAITING_WRITE_ACK;
+		}
+	}
+
 	private void processReceivedWaypoint(msg_mission_item msg) {
+		/*
+		 * Log.d("TIMEOUT", "Read Last/Curr: " + String.valueOf(readIndex) + "/"
+		 * + String.valueOf(msg.seq));
+		 */
+		// in case of we receive the same WP again after retry
+		if (msg.seq <= readIndex)
+			return;
+
+		readIndex = msg.seq;
 		waypoints.add(new waypoint(msg));
 	}
 }
