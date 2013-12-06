@@ -197,4 +197,11 @@
     <string name="rowheader_wp_no">WP#</string>
     <string name="rowheader_wp_delta">∆ WP</string>
     <string name="rowheader_wp_desc">Description</string>
+
+
+    <string name="RCFailsafe">Warning! RC Fasilsafe – Returning to Launch</string>
+    <string name="GPSFailsafe">Warning! GPS Fasilsafe – Switching to Altitude Hold</string>
+    <string name="BatteryFailsafeLand">Warning! Battery Fasilsafe – Returning to Launch</string>
+    <string name="BatteryFailsafeRTL">Warning! Battery Fasilsafe – Returning to Launch</string>
+
 </resources>
