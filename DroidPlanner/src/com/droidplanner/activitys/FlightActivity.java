@@ -1,6 +1,7 @@
 package com.droidplanner.activitys;
 
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import com.droidplanner.R;
@@ -11,6 +12,8 @@ import com.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
 import com.droidplanner.fragments.MissionControlFragment.OnMissionControlInteraction;
 import com.droidplanner.fragments.RCFragment;
 import com.droidplanner.fragments.helpers.OnMapInteractionListener;
+import com.droidplanner.glass.activities.GlassActivity;
+import com.droidplanner.glass.utils.GlassUtils;
 import com.droidplanner.polygon.PolygonPoint;
 import com.droidplanner.widgets.adapterViews.NavigationHubAdapter;
 import com.google.android.gms.maps.model.LatLng;
@@ -38,16 +41,24 @@ public class FlightActivity extends SuperUI implements
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_flight);
-		fragmentManager = getFragmentManager();
+        super.onCreate(savedInstanceState);
 
-		failsafeTextView = findViewById(R.id.failsafeTextView);
-		drone.state.addFlightStateListner(this);
+        if (!GlassUtils.isGlassDevice()) {
+            setContentView(R.layout.activity_flight);
+            fragmentManager = getFragmentManager();
 
-        //Setup the navigation drawer
-        setupNavDrawer();
-	}
+            failsafeTextView = findViewById(R.id.failsafeTextView);
+            drone.state.addFlightStateListner(this);
+
+            //Setup the navigation drawer
+            setupNavDrawer();
+        }
+        else {
+            //Start the glass activity
+            startActivity(new Intent(this, GlassActivity.class));
+            finish();
+        }
+    }
 
 	@Override
 	protected void onDestroy() {

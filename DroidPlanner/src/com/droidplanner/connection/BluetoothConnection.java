@@ -1,12 +1,5 @@
 package com.droidplanner.connection;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.UnknownHostException;
-import java.util.Set;
-import java.util.UUID;
-
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -15,6 +8,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.ParcelUuid;
 import android.util.Log;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.UnknownHostException;
+import java.util.Set;
+import java.util.UUID;
 
 public class BluetoothConnection extends MAVLinkConnection {
 	private static final String BLUE = "BLUETOOTH";
@@ -33,12 +33,11 @@ public class BluetoothConnection extends MAVLinkConnection {
 	}
 
 	@Override
-	protected void openConnection() throws UnknownHostException, IOException {
+	protected void openConnection() throws IOException {
 		Log.d(BLUE, "Conenct");
 		BluetoothDevice device = findBluetoothDevice();
 
-		bluetoothSocket = device.createRfcommSocketToServiceRecord(UUID
-				.fromString(UUID_SPP_DEVICE)); // TODO May need work
+		bluetoothSocket = device.createRfcommSocketToServiceRecord(UUID.fromString(UUID_SPP_DEVICE)); // TODO May need work
 		mBluetoothAdapter.cancelDiscovery();
 		bluetoothSocket.connect();
 
@@ -48,8 +47,7 @@ public class BluetoothConnection extends MAVLinkConnection {
 
 	@SuppressLint("NewApi")
 	private BluetoothDevice findBluetoothDevice() throws UnknownHostException {
-		Set<BluetoothDevice> pairedDevices = mBluetoothAdapter
-				.getBondedDevices();
+		Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
 		// If there are paired devices
 		if (pairedDevices.size() > 0) {
 			// Loop through paired devices

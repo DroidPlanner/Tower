@@ -182,5 +182,6 @@
 
     <!-- Google glass related strings -->
     <string name="glass_voice_trigger">Let\'s fly</string>
+    <string name="screen_glass">Glass View</string>
 
 </resources>

@@ -119,6 +119,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activitys.FlightActivity" />
         </activity>
+        <activity
+                android:name=".glass.activities.GlassActivity"
+                android:theme="@android:style/Theme.DeviceDefault"/>
     </application>
 
 </manifest>
