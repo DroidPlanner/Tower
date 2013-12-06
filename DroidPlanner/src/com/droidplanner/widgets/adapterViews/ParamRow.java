@@ -118,7 +118,7 @@ public class ParamRow extends TableRow implements
 
         final int color;
         if(isValueEqualToDroneParam(newValue)) {
-            color = Color.WHITE;
+            color = Color.BLACK;
             valueView.setTypeface(null, Typeface.NORMAL);
         } else {
             final Validation validation = validateValue(newValue);
