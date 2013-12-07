@@ -38,7 +38,7 @@ public class RcSetupFragment extends Fragment implements OnRcDataChangedListner 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
-		View view = inflater.inflate(R.layout.fragment_rc_setup, container,
+		View view = inflater.inflate(R.layout.fragment_setup_rc, container,
 				false);
 		setupLocalViews(view);
 
