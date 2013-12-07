@@ -1,6 +1,5 @@
 package com.droidplanner;
 
-import android.app.Application;
 import android.os.Handler;
 
 import com.MAVLink.Messages.MAVLinkMessage;
@@ -15,7 +14,7 @@ import com.droidplanner.helpers.TTS;
 import com.droidplanner.service.MAVLinkClient;
 import com.droidplanner.service.MAVLinkClient.OnMavlinkClientListner;
 
-public class DroidPlannerApp extends Application implements
+public class DroidPlannerApp extends ErrorReportApp implements
 		OnMavlinkClientListner {
 
 	private static long HEARTBEAT_NORMAL_TIMEOUT = 5000;
