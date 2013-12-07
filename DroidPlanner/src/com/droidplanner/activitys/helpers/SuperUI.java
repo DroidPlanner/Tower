@@ -18,7 +18,7 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		screenOrientation.unlock();
-		infoMenu = new InfoMenu(drone);
+		infoMenu = new InfoMenu(drone,SuperUI.this);
 	}
 
 	@Override
