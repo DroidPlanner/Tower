@@ -35,7 +35,7 @@ public class WaypointMananger extends DroneVariable {
 	private OnWaypointManagerListener wpEventListener;
 	waypointStates state = waypointStates.IDLE;
 
-	public void setWpEventListener(OnWaypointManagerListener wpEventListener) {
+	public void setWaypointManagerListener(OnWaypointManagerListener wpEventListener) {
 		this.wpEventListener = wpEventListener;
 	}
 
