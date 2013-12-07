@@ -14,6 +14,7 @@ import com.MAVLink.Messages.ardupilotmega.msg_mission_item_reached;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_request;
 import com.droidplanner.MAVLink.MavLinkWaypoint;
 import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.DroneInterfaces.OnWaypointManagerListener;
 import com.droidplanner.drone.DroneVariable;
 
 /**
@@ -31,8 +32,15 @@ public class WaypointMananger extends DroneVariable {
 
 	private int readIndex;
 	private int writeIndex;
+	private int retryIndex;
+	final private int maxRetry = 3; 
+	private OnWaypointManagerListener wpEventListener;
 
 	waypointStates state = waypointStates.IDLE;
+
+	public void setWaypointManagerListener(OnWaypointManagerListener wpEventListener) {
+		this.wpEventListener = wpEventListener;
+	}
 
 	/**
 	 * Try to receive all waypoints from the MAV.
@@ -43,10 +51,11 @@ public class WaypointMananger extends DroneVariable {
 		// ensure that WPManager is not doing anything else
 		if (state != waypointStates.IDLE)
 			return;
-
+		
+		doBeginWaypointEvent(WaypointEvent_Type.WP_DOWNLOAD);
 		readIndex = -1;
 		myDrone.MavClient.setTimeOutValue(3000);
-		myDrone.MavClient.setTimeOutRetry(3);
+		myDrone.MavClient.setTimeOutRetry(maxRetry);
 		state = waypointStates.READ_REQUEST;
 		myDrone.MavClient.setTimeOut();
 		MavLinkWaypoint.requestWaypointsList(myDrone);
@@ -67,6 +76,7 @@ public class WaypointMananger extends DroneVariable {
 			return;
 		
 		if ((mission != null)) {
+			doBeginWaypointEvent(WaypointEvent_Type.WP_UPLOAD);
 			updateMsgIndexes(data);
 			mission.clear();
 			mission.addAll(data);
@@ -160,6 +170,7 @@ public class WaypointMananger extends DroneVariable {
 			if (msg.msgid == msg_mission_item.MAVLINK_MSG_ID_MISSION_ITEM) {
 				myDrone.MavClient.setTimeOut();
 				processReceivedWaypoint((msg_mission_item) msg);
+				doWaypointEvent(WaypointEvent_Type.WP_DOWNLOAD, readIndex+1, waypointCount);
 				if (mission.size() < waypointCount) {
 					MavLinkWaypoint.requestWayPoint(myDrone, mission.size());
 				} else {
@@ -167,6 +178,7 @@ public class WaypointMananger extends DroneVariable {
 					state = waypointStates.IDLE;
 					MavLinkWaypoint.sendAck(myDrone);
 					myDrone.mission.onMissionReceived(mission);
+					doEndWaypointEvent(WaypointEvent_Type.WP_DOWNLOAD);
 				}
 				return true;
 			}
@@ -177,6 +189,7 @@ public class WaypointMananger extends DroneVariable {
 			if (msg.msgid == msg_mission_request.MAVLINK_MSG_ID_MISSION_REQUEST) {
 				myDrone.MavClient.setTimeOut();
 				processWaypointToSend((msg_mission_request) msg);
+				doWaypointEvent(WaypointEvent_Type.WP_UPLOAD,writeIndex+1,mission.size());
 				return true;
 			}
 			break;
@@ -185,6 +198,7 @@ public class WaypointMananger extends DroneVariable {
 				myDrone.MavClient.resetTimeOut();
 				myDrone.mission.onWriteWaypoints((msg_mission_ack) msg);
 				state = waypointStates.IDLE;
+				doEndWaypointEvent(WaypointEvent_Type.WP_UPLOAD);
 				return true;
 			}
 			break;
@@ -207,11 +221,15 @@ public class WaypointMananger extends DroneVariable {
 		// If max retry is reached, set state to IDLE. No more retry.
 		if (mTimeOutCount >= myDrone.MavClient.getTimeOutRetry()) {
 			state = waypointStates.IDLE;
+			doWaypointEvent(WaypointEvent_Type.WP_TIMEDOUT,retryIndex, maxRetry);
 			return false;
 		}
-
+		
+		retryIndex++;
+		doWaypointEvent(WaypointEvent_Type.WP_RETRY,retryIndex, maxRetry);
+		
 		myDrone.MavClient.setTimeOut(false);
-
+		
 		switch (state) {
 		default:
 		case IDLE:
@@ -266,5 +284,36 @@ public class WaypointMananger extends DroneVariable {
 
 		mission.add(msg);
 	}
-	
+
+	private void doBeginWaypointEvent(WaypointEvent_Type wpEvent) {
+		retryIndex = 0;
+
+		if(wpEventListener==null)
+			return;
+
+		wpEventListener.onBeginWaypointEvent(wpEvent);
+	}
+
+	private void doEndWaypointEvent(WaypointEvent_Type wpEvent) {
+		if(retryIndex>0)//if retry successful, notify that we now continue
+			doWaypointEvent(WaypointEvent_Type.WP_CONTINUE, retryIndex, maxRetry);
+
+		retryIndex = 0;
+
+		if(wpEventListener==null)
+			return;
+		
+		wpEventListener.onEndWaypointEvent(wpEvent);
+	}
+
+	private void doWaypointEvent(WaypointEvent_Type wpEvent, int index,
+			int count) {
+		retryIndex = 0;
+
+		if(wpEventListener==null)
+			return;
+		
+		wpEventListener.onWaypointEvent(wpEvent, index, count);
+	}
+
 }

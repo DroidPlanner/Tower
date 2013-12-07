@@ -1,5 +1,6 @@
 package com.droidplanner.activitys.helpers;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -10,23 +11,31 @@ import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.HomeDistanceChangedListner;
 import com.droidplanner.drone.DroneInterfaces.InfoListner;
 import com.droidplanner.drone.DroneInterfaces.OnStateListner;
+import com.droidplanner.drone.DroneInterfaces.OnWaypointManagerListener;
+import com.droidplanner.drone.variables.mission.WaypointEvent_Type;
 import com.droidplanner.widgets.TimerView;
 import com.droidplanner.widgets.spinners.SelectModeSpinner;
 
 public class InfoMenu implements InfoListner, HomeDistanceChangedListner,
-		OnStateListner {
+		OnStateListner, OnWaypointManagerListener {
 	private Drone drone;
 	private MenuItem battery;
 	private MenuItem gps;
 	private MenuItem propeler;
 	private MenuItem home;
 	private MenuItem signal;
-	public SelectModeSpinner mode;
+	private Context context;
+	private ProgressDialog pd;
+	private int pdTitle;
 	
+	public SelectModeSpinner mode;
+
 	private TimerView timer;
 
-	public InfoMenu(Drone drone) {
+	public InfoMenu(Drone drone, Context context) {
 		this.drone = drone;
+		this.context = context;
+		this.drone.waypointMananger.setWaypointManagerListener(this);
 	}
 
 	public void inflateMenu(Menu menu, MenuInflater menuInflater) {
@@ -87,7 +96,7 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner,
 	public void onFlightStateChanged() {
 		if (drone.state.isFlying()) {
 			timer.reStart();
-		}else{
+		} else {
 			timer.stop();
 		}
 	}
@@ -102,7 +111,61 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner,
 	public void onFailsafeChanged() {
 		// TODO Auto-generated method stub
 
-	}	
+	}
 
+	@Override
+	public void onBeginWaypointEvent(WaypointEvent_Type wpEvent) {
+		if (pd != null) {
+			pd.dismiss();
+			pd = null;
+		}
+		pd = new ProgressDialog(context);
+		switch (wpEvent) {
+		case WP_UPLOAD:
+			pdTitle = R.string.wpevent_upload;
+			break;
+		case WP_DOWNLOAD:
+			pdTitle = R.string.wpevent_download;
+			break;
+		default:
+			break;
+		}
+		pd.setTitle(pdTitle);
+		pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+		pd.setIndeterminate(true);
+		pd.setCancelable(false);
+		pd.setCanceledOnTouchOutside(true);
+
+		pd.show();
+	}
+
+	@Override
+	public void onWaypointEvent(WaypointEvent_Type wpEvent, int index, int count) {
+		if (pd != null) {
+			if (wpEvent != WaypointEvent_Type.WP_RETRY) {
+				
+				if(wpEvent.equals(WaypointEvent_Type.WP_CONTINUE))
+					pd.setTitle(pdTitle);
+				
+				if (pd.isIndeterminate()) {
+					pd.setIndeterminate(false);
+					pd.setMax(count);
+				}
+				pd.setProgress(index);
+			} 
+			else {
+				pd.setIndeterminate(true);
+				pd.setTitle(R.string.wpevent_retry);
+			}
+		}
+	}
+
+	@Override
+	public void onEndWaypointEvent(WaypointEvent_Type wpEvent) {
+		if (pd != null) {
+			pd.dismiss();
+			pd = null;
+		}
+	}
 
 }
