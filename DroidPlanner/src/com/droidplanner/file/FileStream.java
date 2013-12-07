@@ -19,6 +19,17 @@ public class FileStream {
 		return out;
 	}
 
+	public static FileOutputStream getExceptionFileStream() throws FileNotFoundException {
+		File myDir = new File(DirectoryPath.getLogCatPath());
+		myDir.mkdirs();
+		File file = new File(myDir, FileManager.getTimeStamp()
+				+ ".txt");
+		if (file.exists())
+			file.delete();
+		FileOutputStream out = new FileOutputStream(file);
+		return out;
+	}
+
 	static public FileOutputStream getWaypointFileStream(String name)
 			throws FileNotFoundException {
 		File myDir = new File(DirectoryPath.getWaypointsPath());
