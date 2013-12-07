@@ -1,6 +1,7 @@
 package com.droidplanner.activitys.helpers;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -15,11 +16,13 @@ import com.droidplanner.dialogs.AltitudeDialog;
 import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
 import com.droidplanner.dialogs.checklist.PreflightDialog;
 import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.DroneInterfaces.OnWaypointManagerListener;
+import com.droidplanner.drone.variables.mission.WaypointEvent_Type;
 import com.droidplanner.fragments.helpers.OfflineMapFragment;
 import com.droidplanner.helpers.units.Altitude;
 
 public abstract class SuperActivity extends Activity implements
-		OnAltitudeChangedListner, OnSystemArmListener {
+		OnAltitudeChangedListner, OnSystemArmListener, OnWaypointManagerListener {
 
 	public DroidPlannerApp app;
 	public Drone drone;
@@ -58,6 +61,7 @@ public abstract class SuperActivity extends Activity implements
 			drone.MavClient.toggleConnectionState();
 			return true;
 		case R.id.menu_load_from_apm:
+			drone.waypointMananger.setWpEventListener(this);
 			drone.waypointMananger.getWaypoints();
 			return true;
 		case R.id.menu_default_alt:
@@ -113,6 +117,22 @@ public abstract class SuperActivity extends Activity implements
 				.putString(OfflineMapFragment.PREF_MAP_TYPE, mapType).commit();
 
 		drone.notifyMapTypeChanged();
+	}
+
+	@Override
+	public void onBeginWaypointEvent(WaypointEvent_Type wpEvent){
+		
+	}
+	
+	
+	@Override
+	public void onEndWaypointEvent(WaypointEvent_Type wpEvent){
+		
+	}
+	
+	@Override
+	public void onWaypointEvent(WaypointEvent_Type wpEvent, int index, int count){
+		
 	}
 
 	public void notifyArmed() {
