@@ -200,4 +200,5 @@
 
     <string name="wpevent_upload">Uploading mission to APM&#8230;</string>
     <string name="wpevent_download">Downloading mission from APM&#8230;</string>   
+    <string name="wpevent_retry">Retrying&#8230;</string>   
 </resources>

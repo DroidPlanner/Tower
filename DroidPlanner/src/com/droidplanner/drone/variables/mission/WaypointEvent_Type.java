@@ -5,5 +5,5 @@ public enum WaypointEvent_Type {
 	WP_DOWNLOAD,
 	WP_RETRY,
 	WP_CONTINUE,
-	WP_TIMEEOUT
+	WP_TIMEDOUT
 }

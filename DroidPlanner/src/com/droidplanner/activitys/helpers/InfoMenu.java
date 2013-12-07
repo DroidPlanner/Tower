@@ -26,9 +26,10 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner,
 	private MenuItem signal;
 	private Context context;
 	private ProgressDialog pd;
-
-	public SelectModeSpinner mode;
+	private int pdTitle;
 	
+	public SelectModeSpinner mode;
+
 	private TimerView timer;
 
 	public InfoMenu(Drone drone, Context context) {
@@ -95,7 +96,7 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner,
 	public void onFlightStateChanged() {
 		if (drone.state.isFlying()) {
 			timer.reStart();
-		}else{
+		} else {
 			timer.stop();
 		}
 	}
@@ -114,20 +115,22 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner,
 
 	@Override
 	public void onBeginWaypointEvent(WaypointEvent_Type wpEvent) {
-		if(pd!=null){
+		if (pd != null) {
 			pd.dismiss();
 			pd = null;
 		}
-		
 		pd = new ProgressDialog(context);
-		switch(wpEvent){
+		switch (wpEvent) {
 		case WP_UPLOAD:
-			pd.setTitle(R.string.wpevent_upload);
+			pdTitle = R.string.wpevent_upload;
 			break;
 		case WP_DOWNLOAD:
-			pd.setTitle(R.string.wpevent_download);
+			pdTitle = R.string.wpevent_download;
+			break;
+		default:
 			break;
 		}
+		pd.setTitle(pdTitle);
 		pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		pd.setIndeterminate(true);
 		pd.setCancelable(false);
@@ -139,11 +142,21 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner,
 	@Override
 	public void onWaypointEvent(WaypointEvent_Type wpEvent, int index, int count) {
 		if (pd != null) {
-			if (pd.isIndeterminate()) {
-				pd.setIndeterminate(false);
-				pd.setMax(count);
+			if (wpEvent != WaypointEvent_Type.WP_RETRY) {
+				
+				if(wpEvent.equals(WaypointEvent_Type.WP_CONTINUE))
+					pd.setTitle(pdTitle);
+				
+				if (pd.isIndeterminate()) {
+					pd.setIndeterminate(false);
+					pd.setMax(count);
+				}
+				pd.setProgress(index);
+			} 
+			else {
+				pd.setIndeterminate(true);
+				pd.setTitle(R.string.wpevent_retry);
 			}
-			pd.setProgress(index);
 		}
 	}
 
@@ -152,8 +165,7 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner,
 		if (pd != null) {
 			pd.dismiss();
 			pd = null;
-		}		
-	}	
-
+		}
+	}
 
 }

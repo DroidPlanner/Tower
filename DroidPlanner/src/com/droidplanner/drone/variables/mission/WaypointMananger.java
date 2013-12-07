@@ -221,7 +221,7 @@ public class WaypointMananger extends DroneVariable {
 		// If max retry is reached, set state to IDLE. No more retry.
 		if (mTimeOutCount >= myDrone.MavClient.getTimeOutRetry()) {
 			state = waypointStates.IDLE;
-			doWaypointEvent(WaypointEvent_Type.WP_TIMEEOUT,retryIndex, maxRetry);
+			doWaypointEvent(WaypointEvent_Type.WP_TIMEDOUT,retryIndex, maxRetry);
 			return false;
 		}
 		
@@ -295,7 +295,7 @@ public class WaypointMananger extends DroneVariable {
 	}
 
 	private void doEndWaypointEvent(WaypointEvent_Type wpEvent) {
-		if(retryIndex>0)//if retry successfull, notify that we now continue
+		if(retryIndex>0)//if retry successful, notify that we now continue
 			doWaypointEvent(WaypointEvent_Type.WP_CONTINUE, retryIndex, maxRetry);
 
 		retryIndex = 0;
