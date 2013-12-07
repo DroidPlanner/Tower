@@ -32,7 +32,10 @@ public class WaypointMananger extends DroneVariable {
 
 	private int readIndex;
 	private int writeIndex;
+	private int retryIndex;
+	final private int maxRetry = 3; 
 	private OnWaypointManagerListener wpEventListener;
+
 	waypointStates state = waypointStates.IDLE;
 
 	public void setWaypointManagerListener(OnWaypointManagerListener wpEventListener) {
@@ -52,7 +55,7 @@ public class WaypointMananger extends DroneVariable {
 		doBeginWaypointEvent(WaypointEvent_Type.WP_DOWNLOAD);
 		readIndex = -1;
 		myDrone.MavClient.setTimeOutValue(3000);
-		myDrone.MavClient.setTimeOutRetry(3);
+		myDrone.MavClient.setTimeOutRetry(maxRetry);
 		state = waypointStates.READ_REQUEST;
 		myDrone.MavClient.setTimeOut();
 		MavLinkWaypoint.requestWaypointsList(myDrone);
@@ -218,11 +221,15 @@ public class WaypointMananger extends DroneVariable {
 		// If max retry is reached, set state to IDLE. No more retry.
 		if (mTimeOutCount >= myDrone.MavClient.getTimeOutRetry()) {
 			state = waypointStates.IDLE;
+			doWaypointEvent(WaypointEvent_Type.WP_TIMEEOUT,retryIndex, maxRetry);
 			return false;
 		}
-
+		
+		retryIndex++;
+		doWaypointEvent(WaypointEvent_Type.WP_RETRY,retryIndex, maxRetry);
+		
 		myDrone.MavClient.setTimeOut(false);
-
+		
 		switch (state) {
 		default:
 		case IDLE:
@@ -279,13 +286,17 @@ public class WaypointMananger extends DroneVariable {
 	}
 
 	private void doBeginWaypointEvent(WaypointEvent_Type wpEvent) {
+		retryIndex = 0;
+
 		if(wpEventListener==null)
 			return;
-		
+
 		wpEventListener.onBeginWaypointEvent(wpEvent);
 	}
 
 	private void doEndWaypointEvent(WaypointEvent_Type wpEvent) {
+		retryIndex = 0;
+
 		if(wpEventListener==null)
 			return;
 		
@@ -294,6 +305,8 @@ public class WaypointMananger extends DroneVariable {
 
 	private void doWaypointEvent(WaypointEvent_Type wpEvent, int index,
 			int count) {
+		retryIndex = 0;
+
 		if(wpEventListener==null)
 			return;
 		
