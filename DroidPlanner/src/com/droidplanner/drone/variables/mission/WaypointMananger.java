@@ -167,6 +167,7 @@ public class WaypointMananger extends DroneVariable {
 			if (msg.msgid == msg_mission_item.MAVLINK_MSG_ID_MISSION_ITEM) {
 				myDrone.MavClient.setTimeOut();
 				processReceivedWaypoint((msg_mission_item) msg);
+				doWaypointEvent(WaypointEvent_Type.WP_DOWNLOAD, readIndex+1, waypointCount);
 				if (mission.size() < waypointCount) {
 					MavLinkWaypoint.requestWayPoint(myDrone, mission.size());
 				} else {
@@ -174,6 +175,7 @@ public class WaypointMananger extends DroneVariable {
 					state = waypointStates.IDLE;
 					MavLinkWaypoint.sendAck(myDrone);
 					myDrone.mission.onMissionReceived(mission);
+					doEndWaypointEvent(WaypointEvent_Type.WP_DOWNLOAD);
 				}
 				return true;
 			}
