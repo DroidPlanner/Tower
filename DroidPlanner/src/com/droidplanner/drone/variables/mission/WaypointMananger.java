@@ -14,6 +14,7 @@ import com.MAVLink.Messages.ardupilotmega.msg_mission_item_reached;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_request;
 import com.droidplanner.MAVLink.MavLinkWaypoint;
 import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.DroneInterfaces.OnWaypointManagerListener;
 import com.droidplanner.drone.DroneVariable;
 
 /**
@@ -31,8 +32,12 @@ public class WaypointMananger extends DroneVariable {
 
 	private int readIndex;
 	private int writeIndex;
-
+	private OnWaypointManagerListener wpEventListener;
 	waypointStates state = waypointStates.IDLE;
+
+	public void setWpEventListener(OnWaypointManagerListener wpEventListener) {
+		this.wpEventListener = wpEventListener;
+	}
 
 	/**
 	 * Try to receive all waypoints from the MAV.
