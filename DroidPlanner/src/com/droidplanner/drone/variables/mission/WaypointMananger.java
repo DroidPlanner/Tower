@@ -295,6 +295,9 @@ public class WaypointMananger extends DroneVariable {
 	}
 
 	private void doEndWaypointEvent(WaypointEvent_Type wpEvent) {
+		if(retryIndex>0)//if retry successfull, notify that we now continue
+			doWaypointEvent(WaypointEvent_Type.WP_CONTINUE, retryIndex, maxRetry);
+
 		retryIndex = 0;
 
 		if(wpEventListener==null)
