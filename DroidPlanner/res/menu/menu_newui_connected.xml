@@ -54,5 +54,9 @@
         android:id="@+id/menu_load_mission"
         android:showAsAction="never"
         android:title="@string/load_mission"/>
-
+    <item
+        android:id="@+id/menu_checklist" 
+        android:showAsAction="never"
+        android:title="@string/checklist"/>
+    
 </menu>
