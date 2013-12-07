@@ -44,7 +44,7 @@ public class DroneInterfaces {
 	}
 
 	public interface OnWaypointManagerListener {
-		public void onBeginWaypointsEvent(WaypointEvent_Type wpEvent);
+		public void onBeginWaypointEvent(WaypointEvent_Type wpEvent);
 		public void onWaypointEvent(WaypointEvent_Type wpEvent, int index,	int count);
 		public void onEndWaypointEvent(WaypointEvent_Type wpEvent);
 	}
