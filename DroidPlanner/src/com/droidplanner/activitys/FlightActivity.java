@@ -32,7 +32,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class FlightActivity extends SuperUI implements
 		OnMapInteractionListener, OnMissionControlInteraction, OnStateListner, ModeChangedListener {
-	private FragmentManager fragmentManager;
+	private static FragmentManager fragmentManager;
 	private RCFragment rcFragment;
 	private View failsafeTextView;
 	private Fragment modeInfoPanel;
@@ -45,21 +45,22 @@ public class FlightActivity extends SuperUI implements
 		modeInfoPanel = fragmentManager.findFragmentById(R.id.modeInfoPanel);
 
 		failsafeTextView = findViewById(R.id.failsafeTextView);
-		drone.state.addFlightStateListner(this);
-		drone.state.addModeChangedListener(this);
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		drone.state.removeFlightStateListner(this);
-		drone.state.removeModeListner(this);
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
+		drone.state.addFlightStateListner(this);
+		drone.state.addModeChangedListener(this);
 		onModeChanged();	// Update the mode detail panel;
+	}
+
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		drone.state.removeModeListner(this);
+		drone.state.removeFlightStateListner(this);
 	}
 
 	@Override
