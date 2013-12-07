@@ -1,6 +1,9 @@
 package com.droidplanner.drone;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Context;
 
 import com.droidplanner.drone.DroneInterfaces.DroneTypeListner;
@@ -56,7 +59,7 @@ public class Drone {
 	private MapUpdatedListner mapListner;
 	private MapConfigListener mapConfigListener;
 	private DroneTypeListner typeListner;
-	private InfoListner infoListner;
+	private List<InfoListner> infoListeners = new ArrayList<InfoListner>();
 	private HomeDistanceChangedListner homeChangedListner;
 	private OnGuidedListener guidedListner;
 	public OnTuningDataListner tuningDataListner;
@@ -83,8 +86,8 @@ public class Drone {
 		typeListner = listner;
 	}
 
-	public void setInfoListner(InfoListner listner) {
-		infoListner = listner;
+	public void addInfoListener(InfoListner listener) {
+		infoListeners.add(listener);
 	}
 
 	public void setHomeChangedListner(HomeDistanceChangedListner listner) {
@@ -127,8 +130,10 @@ public class Drone {
 	}
 
 	public void notifyInfoChange() {
-		if (infoListner != null) {
-			infoListner.onInfoUpdate();
+		if (!infoListeners.isEmpty()) {
+			for(InfoListner infoListner : infoListeners){
+				infoListner.onInfoUpdate();
+			}
 		}
 	}
 		

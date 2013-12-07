@@ -45,7 +45,7 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner,
 
 			timer = new TimerView(propeler);
 			drone.setHomeChangedListner(this);
-			drone.setInfoListner(this);
+			drone.addInfoListener(this);
 			drone.state.addFlightStateListner(this);
 
 		} else {
