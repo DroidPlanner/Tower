@@ -9,7 +9,6 @@ import org.xmlpull.v1.XmlPullParser;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -31,6 +30,7 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 	private Context context;
 	private View view;
 	private Drone drone;
+	private String listTitle;
 	private List<String> listDataHeader;
 	private List<CheckListItem> checkItemList;
 	private HashMap<String, List<CheckListItem>> listDataChild;
@@ -55,7 +55,7 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 		xml.setOnXMLParserError(this);
 		listDataHeader = xml.getCategories();
 		checkItemList = xml.getCheckListItems();
-
+		listTitle = xml.getCheckListTitle();
 		dialog = buildDialog(mpreflight);
 		drone.addInfoListener(this);
 		dialog.show();
@@ -63,7 +63,7 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 
 	private AlertDialog buildDialog(boolean mpreflight) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setTitle("Pre-Flight Check");
+		builder.setTitle(listTitle);
 		builder.setView(buildView());
 		builder.setPositiveButton("Ok", this);
 		if (mpreflight) {
@@ -111,12 +111,18 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 
 	private void listViewAutoExpand(boolean autoExpand, boolean autoCollapse) {
 		boolean allVerified;
-		for(int h =0; h<listDataHeader.size();h++){
-			allVerified = listAdapter.areAllVerified(h);
-			if(!allVerified&&autoExpand)
-					expListView.expandGroup(h);
-			else if(allVerified&&autoCollapse)
-				expListView.collapseGroup(h);
+
+		try {
+			for(int h =0; h<listDataHeader.size();h++){
+				allVerified = listAdapter.areAllVerified(h);
+				if(!allVerified&&autoExpand)
+						expListView.expandGroup(h);
+				else if(allVerified&&autoCollapse)
+					expListView.collapseGroup(h);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 	}
@@ -163,17 +169,22 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 
 	@Override
 	public void onInfoUpdate() {
+		if(!dialog.isShowing())
+			return;
 		if(checkItemList==null)
 			return;
 		if(checkItemList.size()<=0)
 			return;
-		for(CheckListItem checkListItem: checkItemList){
-			if(checkListItem.getSys_tag()!=null){
+		
+		for(int i=0;i< checkItemList.size();i++){
+			CheckListItem checkListItem = checkItemList.get(i);
+			if(checkListItem!=null && checkListItem.getSys_tag()!=null){
 //			Log.d("CHKLST", checkListItem.getSys_tag());
  				sysLink.getSystemData(checkListItem, checkListItem.getSys_tag());
 			}
 		}
 		listAdapter.notifyDataSetChanged();
+//		listViewAutoExpand(true,true);
 
 	}
 
