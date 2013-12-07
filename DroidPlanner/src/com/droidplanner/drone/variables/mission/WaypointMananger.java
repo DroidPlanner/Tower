@@ -186,6 +186,7 @@ public class WaypointMananger extends DroneVariable {
 			if (msg.msgid == msg_mission_request.MAVLINK_MSG_ID_MISSION_REQUEST) {
 				myDrone.MavClient.setTimeOut();
 				processWaypointToSend((msg_mission_request) msg);
+				doWaypointEvent(WaypointEvent_Type.WP_UPLOAD,writeIndex+1,mission.size());
 				return true;
 			}
 			break;
@@ -194,6 +195,7 @@ public class WaypointMananger extends DroneVariable {
 				myDrone.MavClient.resetTimeOut();
 				myDrone.mission.onWriteWaypoints((msg_mission_ack) msg);
 				state = waypointStates.IDLE;
+				doEndWaypointEvent(WaypointEvent_Type.WP_UPLOAD);
 				return true;
 			}
 			break;
@@ -291,7 +293,7 @@ public class WaypointMananger extends DroneVariable {
 	}
 
 	private void doWaypointEvent(WaypointEvent_Type wpEvent, int index,
-			short count) {
+			int count) {
 		if(wpEventListener==null)
 			return;
 		
