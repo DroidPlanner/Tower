@@ -48,7 +48,8 @@ public class WaypointMananger extends DroneVariable {
 		// ensure that WPManager is not doing anything else
 		if (state != waypointStates.IDLE)
 			return;
-
+		
+		doBeginWaypointEvent(WaypointEvent_Type.WP_DOWNLOAD);
 		readIndex = -1;
 		myDrone.MavClient.setTimeOutValue(3000);
 		myDrone.MavClient.setTimeOutRetry(3);
@@ -72,6 +73,7 @@ public class WaypointMananger extends DroneVariable {
 			return;
 		
 		if ((mission != null)) {
+			doBeginWaypointEvent(WaypointEvent_Type.WP_UPLOAD);
 			updateMsgIndexes(data);
 			mission.clear();
 			mission.addAll(data);
@@ -271,5 +273,11 @@ public class WaypointMananger extends DroneVariable {
 
 		mission.add(msg);
 	}
-	
+
+	private void doBeginWaypointEvent(WaypointEvent_Type wpEvent) {
+		if(wpEventListener==null)
+			return;
+		
+		wpEventListener.onBeginWaypointsEvent(wpEvent);
+	}
 }
