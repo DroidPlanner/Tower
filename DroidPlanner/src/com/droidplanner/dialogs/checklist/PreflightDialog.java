@@ -9,6 +9,7 @@ import org.xmlpull.v1.XmlPullParser;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -22,9 +23,10 @@ import com.droidplanner.checklist.CheckListSysLink;
 import com.droidplanner.checklist.CheckListXmlParser;
 import com.droidplanner.checklist.xml.ListXmlParser.OnXmlParserError;
 import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.DroneInterfaces.InfoListner;
 
 public class PreflightDialog implements DialogInterface.OnClickListener,
-		OnXmlParserError, OnCheckListItemUpdateListener {
+		OnXmlParserError, OnCheckListItemUpdateListener, InfoListner {
 
 	private Context context;
 	private View view;
@@ -55,6 +57,7 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 		checkItemList = xml.getCheckListItems();
 
 		dialog = buildDialog(mpreflight);
+		drone.addInfoListener(this);
 		dialog.show();
 	}
 
@@ -156,6 +159,22 @@ public class PreflightDialog implements DialogInterface.OnClickListener,
 	@Override
 	public void onRowItemGetData(CheckListItem checkListItem, String mSysTag) {
 		sysLink.getSystemData(checkListItem, mSysTag);
+	}
+
+	@Override
+	public void onInfoUpdate() {
+		if(checkItemList==null)
+			return;
+		if(checkItemList.size()<=0)
+			return;
+		for(CheckListItem checkListItem: checkItemList){
+			if(checkListItem.getSys_tag()!=null){
+//			Log.d("CHKLST", checkListItem.getSys_tag());
+ 				sysLink.getSystemData(checkListItem, checkListItem.getSys_tag());
+			}
+		}
+		listAdapter.notifyDataSetChanged();
+
 	}
 
 
