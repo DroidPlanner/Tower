@@ -280,4 +280,13 @@ public class WaypointMananger extends DroneVariable {
 		
 		wpEventListener.onBeginWaypointsEvent(wpEvent);
 	}
+
+	private void doWaypointEvent(WaypointEvent_Type wpEvent, int index,
+			short count) {
+		if(wpEventListener==null)
+			return;
+		
+		wpEventListener.onWaypointEvent(wpEvent, index, count);
+	}
+
 }
