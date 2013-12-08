@@ -1,5 +1,7 @@
 package com.droidplanner.fragments;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -27,6 +29,7 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError{
 	private ExpandableListView expListView;
 	private List<String> listDataHeader;
 	private List<CheckListItem> checklistItems;
+	private HashMap<String, List<CheckListItem>> listDataChild;
 
 	//Load checklist from file
 	private void loadXMLChecklist() {
@@ -39,6 +42,21 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError{
 		xml.setOnXMLParserError(this);
 		listDataHeader = xml.getCategories();
 		checklistItems = xml.getCheckListItems();
+	}
+
+	private void prepareListData() {
+		listDataChild = new HashMap<String, List<CheckListItem>>();
+		List<CheckListItem> cli;
+
+		for (int h = 0; h < listDataHeader.size(); h++) {
+			cli = new ArrayList<CheckListItem>();
+			for (int i = 0; i < checklistItems.size(); i++) {
+				CheckListItem c = checklistItems.get(i);
+				if (c.getCategoryIndex() == h)
+					cli.add(c);
+			}
+			listDataChild.put(listDataHeader.get(h), cli);
+		}
 	}
 
 	@Override
@@ -54,9 +72,13 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError{
 		super.onAttach(activity);
         this.context = activity;
         this.drone = ((SuperActivity) activity).drone;
-        loadXMLChecklist();
 	}
 
+	@Override
+	public void onStart() {
+		super.onStart();
+        loadXMLChecklist();
+	}
 	@Override
 	public void onPause() {
 		// TODO Auto-generated method stub
