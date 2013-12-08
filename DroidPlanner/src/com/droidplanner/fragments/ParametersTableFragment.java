@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.MAVLink.Messages.enums.MAV_TYPE;
+import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperActivity;
 import com.droidplanner.dialogs.openfile.OpenFileDialog;
@@ -35,36 +36,38 @@ public class ParametersTableFragment extends Fragment implements
 	private TableLayout parameterTable;
 	private List<ParamRow> rowList = new ArrayList<ParamRow>();
 	private Drone drone;
-	private Context context;
 
 	private ProgressDialog pd;
 	private TextView refreshTextView;
 
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_parameters, container,
-				false);
+		View view = inflater.inflate(R.layout.fragment_parameters, container, false);
 		parameterTable = (TableLayout) view.findViewById(R.id.parametersTable);
 
-		refreshTextView = (TextView) view
-				.findViewById(R.id.refreshTextView);
+		refreshTextView = (TextView) view.findViewById(R.id.refreshTextView);
 		refreshTextView.setOnClickListener(this);
 
         setHasOptionsMenu(true);
 		return view;
 	}
 
-
-
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-        context = activity;
 
         drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
         drone.parameters.parameterListner = this;
 	}
+
+    @Override
+    public void onDetach() {
+        drone.parameters.parameterListner = null;
+
+        super.onDetach();
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -121,7 +124,7 @@ public class ParametersTableFragment extends Fragment implements
 	}
 
 	private void addParameterRow(Parameter param, Parameters parameters) {
-		ParamRow pRow = new ParamRow(this.getActivity());
+		ParamRow pRow = new ParamRow(getActivity());
 		pRow.setParam(param, parameters);
 
 		// alternate background colors for clarity
@@ -167,8 +170,7 @@ public class ParametersTableFragment extends Fragment implements
 		if (drone.MavClient.isConnected()) {
 			drone.parameters.getAllParameters();
 		} else {
-			Toast.makeText(context, "Please connect first", Toast.LENGTH_SHORT)
-					.show();
+			Toast.makeText(getActivity(), "Please connect first", Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -179,7 +181,7 @@ public class ParametersTableFragment extends Fragment implements
 				drone.parameters.sendParameter(row.getParameterFromRow());
 			}
 		}
-		Toast.makeText(context, "Write " + modRows.size() + " parameters",
+		Toast.makeText(getActivity(), "Write " + modRows.size() + " parameters",
 				Toast.LENGTH_SHORT).show();
 	}
 
@@ -193,12 +195,16 @@ public class ParametersTableFragment extends Fragment implements
 						return p1.name.compareTo(p2.name);
 					}
 				});
-				drone.parameters.loadMetadata(context, null);
+                // load parameters from file
+				drone.parameters.loadMetadata(getActivity(), null);
 				for (Parameter parameter : parameters)
 					refreshRowParameter(parameter, drone.parameters);
+
+                //Remove the Refresh text view
+                refreshTextView.setVisibility(View.GONE);
 			}
 		};
-		dialog.openDialog(context);
+		dialog.openDialog(getActivity());
 	}
 
     private void saveParametersToFile() {
@@ -214,7 +220,7 @@ public class ParametersTableFragment extends Fragment implements
 
 	@Override
 	public void onBeginReceivingParameters() {
-		pd = new ProgressDialog(context);
+		pd = new ProgressDialog(getActivity());
 		pd.setTitle("Refreshing Parameters...");
 		pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		pd.setIndeterminate(true);
@@ -243,7 +249,7 @@ public class ParametersTableFragment extends Fragment implements
 				return p1.name.compareTo(p2.name);
 			}
 		});
-		drone.parameters.loadMetadata(context, getMetadataType());
+		drone.parameters.loadMetadata(getActivity(), getMetadataType());
 		for (Parameter parameter : parameters)
 			refreshRowParameter(parameter, drone.parameters);
 
@@ -255,13 +261,11 @@ public class ParametersTableFragment extends Fragment implements
 		
 		//Remove the Refresh text view
 		refreshTextView.setVisibility(View.GONE);
-		
-		
 	}
 
 	@Override
 	public void onParamterMetaDataChanged() {
-		drone.parameters.loadMetadata(context, null);
+		drone.parameters.loadMetadata(getActivity(), null);
 		refresh(drone.parameters);
 	}
 
