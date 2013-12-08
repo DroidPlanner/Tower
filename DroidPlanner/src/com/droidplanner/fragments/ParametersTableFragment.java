@@ -11,10 +11,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
+import android.view.*;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,6 +50,8 @@ public class ParametersTableFragment extends Fragment implements
 		refreshTextView = (TextView) view
 				.findViewById(R.id.refreshTextView);
 		refreshTextView.setOnClickListener(this);
+
+        setHasOptionsMenu(true);
 		return view;
 	}
 
@@ -65,9 +65,39 @@ public class ParametersTableFragment extends Fragment implements
         drone.parameters.parameterListner = this;
 	}
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
 
+        inflater.inflate(R.menu.menu_parameters, menu);
+    }
 
-	public void refreshRowParameter(Parameter parameter, Parameters parameters) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_load_parameters:
+                refreshParameters();
+                break;
+
+            case R.id.menu_write_parameters:
+                writeModifiedParametersToDrone();
+                break;
+
+            case R.id.menu_open_parameters:
+                openParametersFromFile();
+                break;
+
+            case R.id.menu_save_parameters:
+                saveParametersToFile();
+                break;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
+
+    public void refreshRowParameter(Parameter parameter, Parameters parameters) {
 		try {
 			Parameter.checkParameterName(parameter.name);
 			ParamRow row = findRowByName(parameter.name);
@@ -117,17 +147,6 @@ public class ParametersTableFragment extends Fragment implements
 			}
 		}
 		return modParameters;
-	}
-
-	public void saveParametersToFile() {
-		List<Parameter> parameterList = getParameterListFromTable();
-		if (parameterList.size() > 0) {
-			ParameterWriter parameterWriter = new ParameterWriter(parameterList);
-			if (parameterWriter.saveParametersToFile()) {
-				Toast.makeText(this.getActivity(), "Parameters saved",
-						Toast.LENGTH_SHORT).show();
-			}
-		}
 	}
 
 	public void refresh(Parameters parameters) {
@@ -180,6 +199,17 @@ public class ParametersTableFragment extends Fragment implements
 		};
 		dialog.openDialog(context);
 	}
+
+    private void saveParametersToFile() {
+        List<Parameter> parameterList = getParameterListFromTable();
+        if (parameterList.size() > 0) {
+            ParameterWriter parameterWriter = new ParameterWriter(parameterList);
+            if (parameterWriter.saveParametersToFile()) {
+                Toast.makeText(this.getActivity(), "Parameters saved",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 
 	@Override
 	public void onBeginReceivingParameters() {
