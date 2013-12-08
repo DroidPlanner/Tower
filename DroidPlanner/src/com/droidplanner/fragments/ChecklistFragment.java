@@ -50,7 +50,7 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 		checklistItems = xml.getCheckListItems();
 	}
 
-	//create hash list
+	// create hash list
 	private void prepareListData() {
 		listDataChild = new HashMap<String, List<CheckListItem>>();
 		List<CheckListItem> cli;
@@ -66,7 +66,7 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 		}
 	}
 
-	//create listAdapter
+	// create listAdapter
 	private void createListAdapter() {
 		if (drone == null || inflater == null || listDataHeader == null
 				|| listDataChild == null)
@@ -82,13 +82,26 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 		listAdapter.setHeaderLayout(R.layout.list_group_header);
 		listAdapter.setOnCheckListItemUpdateListener(this);
 		expListView.setAdapter(listAdapter);
+
+		listViewAutoExpand(true,true);
+	}
+
+	private void listViewAutoExpand(boolean autoExpand, boolean autoCollapse) {
+		boolean allVerified;
+		for (int h = 0; h < listDataHeader.size(); h++) {
+			allVerified = listAdapter.areAllVerified(h);
+			if (!allVerified && autoExpand)
+				expListView.expandGroup(h);
+			else if (allVerified && autoCollapse)
+				expListView.collapseGroup(h);
+		}
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		this.inflater = inflater;
-		view = inflater.inflate(R.layout.fragment_checklist, null);		
+		view = inflater.inflate(R.layout.fragment_checklist, null);
 		expListView = (ExpandableListView) view.findViewById(R.id.expListView);
 
 		return view;
