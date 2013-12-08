@@ -15,19 +15,20 @@ import com.droidplanner.checklist.CheckListSysLink;
 import com.droidplanner.checklist.CheckListXmlParser;
 import com.droidplanner.checklist.xml.ListXmlParser.OnXmlParserError;
 import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.DroneInterfaces.InfoListner;
 
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ExpandableListView;
 
 public class ChecklistFragment extends Fragment implements OnXmlParserError,
-		OnCheckListItemUpdateListener {
+		OnCheckListItemUpdateListener, InfoListner {
 	private Context context;
 	private Drone drone;
 	private View view;
@@ -131,13 +132,17 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 
 	@Override
 	public void onPause() {
-		// TODO Auto-generated method stub
+		if(drone!=null){
+			drone.removeInfoListener(this);
+		}
 		super.onPause();
 	}
 
 	@Override
 	public void onResume() {
-		// TODO Auto-generated method stub
+		if(drone!=null){
+			drone.addInfoListener(this);
+		}
 		super.onResume();
 	}
 
@@ -158,6 +163,17 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 	@Override
 	public void onRowItemGetData(CheckListItem checkListItem, String mSysTag) {
 		sysLink.getSystemData(checkListItem, mSysTag);
+	}
+
+	@Override
+	public void onInfoUpdate() {
+		Log.d("CHKLST", "checklistItems - " + String.valueOf(checklistItems.size()));
+		for(CheckListItem item : checklistItems){
+			if(item.getSys_tag()!=null)
+				sysLink.getSystemData(item, item.getSys_tag());
+		}
+		if(listAdapter!=null)
+			listAdapter.notifyDataSetChanged();
 	}
 
 }
