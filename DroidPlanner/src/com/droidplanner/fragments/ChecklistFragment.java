@@ -8,6 +8,8 @@ import org.xmlpull.v1.XmlPullParser;
 
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperActivity;
+import com.droidplanner.checklist.CheckListAdapter;
+import com.droidplanner.checklist.CheckListAdapter.OnCheckListItemUpdateListener;
 import com.droidplanner.checklist.CheckListItem;
 import com.droidplanner.checklist.CheckListXmlParser;
 import com.droidplanner.checklist.xml.ListXmlParser.OnXmlParserError;
@@ -20,9 +22,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ExpandableListView;
 
-public class ChecklistFragment extends Fragment implements OnXmlParserError{
+public class ChecklistFragment extends Fragment implements OnXmlParserError,
+		OnCheckListItemUpdateListener {
 	private Context context;
 	private Drone drone;
 	private View view;
@@ -30,20 +34,23 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError{
 	private List<String> listDataHeader;
 	private List<CheckListItem> checklistItems;
 	private HashMap<String, List<CheckListItem>> listDataChild;
+	private CheckListAdapter listAdapter;
+	private LayoutInflater inflater;
 
-	//Load checklist from file
+	// Load checklist from file
 	private void loadXMLChecklist() {
-		if(context==null)
+		if (context == null)
 			return;
-		
-		CheckListXmlParser xml = new CheckListXmlParser("checklist_ext.xml",context,
-				R.xml.checklist_default);
+
+		CheckListXmlParser xml = new CheckListXmlParser("checklist_ext.xml",
+				context, R.xml.checklist_default);
 
 		xml.setOnXMLParserError(this);
 		listDataHeader = xml.getCategories();
 		checklistItems = xml.getCheckListItems();
 	}
 
+	//create hash list
 	private void prepareListData() {
 		listDataChild = new HashMap<String, List<CheckListItem>>();
 		List<CheckListItem> cli;
@@ -59,26 +66,49 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError{
 		}
 	}
 
+	//create listAdapter
+	private void createListAdapter() {
+		if (drone == null || inflater == null || listDataHeader == null
+				|| listDataChild == null)
+			return;
+
+		if (listAdapter != null) {
+			listAdapter = null;
+		}
+
+		listAdapter = new CheckListAdapter(drone, inflater, listDataHeader,
+				listDataChild);
+
+		listAdapter.setHeaderLayout(R.layout.list_group_header);
+		listAdapter.setOnCheckListItemUpdateListener(this);
+		expListView.setAdapter(listAdapter);
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		view = inflater.inflate(R.layout.fragment_checklist, null);
+		this.inflater = inflater;
+		view = inflater.inflate(R.layout.fragment_checklist, null);		
 		expListView = (ExpandableListView) view.findViewById(R.id.expListView);
+
 		return view;
 	}
 
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-        this.context = activity;
-        this.drone = ((SuperActivity) activity).drone;
+		this.context = activity;
+		this.drone = ((SuperActivity) activity).drone;
 	}
 
 	@Override
 	public void onStart() {
 		super.onStart();
-        loadXMLChecklist();
+		loadXMLChecklist();
+		prepareListData();
+		createListAdapter();
 	}
+
 	@Override
 	public void onPause() {
 		// TODO Auto-generated method stub
@@ -98,7 +128,20 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError{
 	@Override
 	public void onError(XmlPullParser parser) {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	@Override
+	public void onRowItemChanged(CheckListItem checkListItem, String mSysTag,
+			boolean isChecked) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onRowItemGetData(CheckListItem checkListItem, String mSysTag) {
+		// TODO Auto-generated method stub
+
 	}
 
 }
