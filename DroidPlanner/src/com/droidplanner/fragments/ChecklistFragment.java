@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
-public class ChecklistFragament extends Fragment{
+public class ChecklistFragment extends Fragment{
 	private Context context;
 	private Drone drone;
 	private View view;
@@ -47,7 +47,7 @@ public class ChecklistFragament extends Fragment{
 		super.onResume();
 	}
 
-	public ChecklistFragament() {
+	public ChecklistFragment() {
 		// TODO Auto-generated constructor stub
 	}
 
