@@ -7,12 +7,16 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.ParcelUuid;
+import android.preference.PreferenceManager;
 import android.util.Log;
+import com.droidplanner.utils.Constants;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -34,15 +38,37 @@ public class BluetoothConnection extends MAVLinkConnection {
 
 	@Override
 	protected void openConnection() throws IOException {
-		Log.d(BLUE, "Conenct");
-		BluetoothDevice device = findBluetoothDevice();
+		Log.d(BLUE, "Connect");
 
-		bluetoothSocket = device.createRfcommSocketToServiceRecord(UUID.fromString(UUID_SPP_DEVICE)); // TODO May need work
-		mBluetoothAdapter.cancelDiscovery();
-		bluetoothSocket.connect();
+        //Retrieve the stored address
+        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(parentContext);
+        String address = settings.getString(Constants.PREF_BLUETOOTH_DEVICE_ADDRESS, null);
+//                "E4:32:CB:1F:2B:91");
 
-		out = bluetoothSocket.getOutputStream();
-		in = bluetoothSocket.getInputStream();
+		BluetoothDevice device = address == null ? findBluetoothDevice(): mBluetoothAdapter
+                .getRemoteDevice(address);
+
+        List<UUID> uuidList = new ArrayList<UUID>();
+        uuidList.add(UUID.fromString(UUID_SPP_DEVICE));
+        for(UUID uuid : BluetoothServer.UUIDS){
+            uuidList.add(uuid);
+        }
+
+        for (UUID uuid : uuidList) {
+            try {
+                bluetoothSocket = device.createRfcommSocketToServiceRecord(uuid);
+                mBluetoothAdapter.cancelDiscovery();
+                bluetoothSocket.connect();
+
+                out = bluetoothSocket.getOutputStream();
+                in = bluetoothSocket.getInputStream();
+
+                //Found a good one... break
+                break;
+            } catch (IOException e) {
+                //try another uuid
+            }
+        }
 	}
 
 	@SuppressLint("NewApi")

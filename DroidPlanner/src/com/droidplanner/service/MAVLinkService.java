@@ -16,17 +16,14 @@ import android.os.PowerManager.WakeLock;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
-
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
 import com.droidplanner.R;
 import com.droidplanner.activitys.FlightActivity;
-import com.droidplanner.connection.BluetoothConnection;
 import com.droidplanner.connection.MAVLinkConnection;
 import com.droidplanner.connection.MAVLinkConnection.MavLinkConnectionListner;
-import com.droidplanner.connection.TcpConnection;
-import com.droidplanner.connection.UdpConnection;
-import com.droidplanner.connection.UsbConnection;
+import com.droidplanner.utils.Constants;
+import com.droidplanner.utils.Utils;
 
 /**
  * http://developer.android.com/guide/components/bound-services.html#Messenger
@@ -142,19 +139,12 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 	 * the as needed. May throw a onConnect or onDisconnect callback
 	 */
 	private void connectMAVconnection() {
-		String connectionType = PreferenceManager.getDefaultSharedPreferences(
-				getApplicationContext()).getString("pref_connection_type", "");
-		if (connectionType.equals("USB")) {
-			mavConnection = new UsbConnection(this);
-		} else if (connectionType.equals("TCP")) {
-			mavConnection = new TcpConnection(this);
-		} else if (connectionType.equals("UDP")) {
-			mavConnection = new UdpConnection(this);
-		} else if (connectionType.equals("BLUETOOTH")) {	
-			mavConnection = new BluetoothConnection(this);
-		} else {
-			return;
-		}
+		String connectionType = PreferenceManager
+                .getDefaultSharedPreferences(getApplicationContext())
+                .getString(Constants.PREF_CONNECTION_TYPE, Constants.DEFAULT_CONNECTION_TYPE);
+
+        Utils.ConnectionType connType = Utils.ConnectionType.valueOf(connectionType);
+        mavConnection = connType.getConnection(this);
 		mavConnection.start();
 	}
 

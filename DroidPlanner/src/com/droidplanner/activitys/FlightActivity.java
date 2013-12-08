@@ -115,8 +115,7 @@ public class FlightActivity extends SuperUI implements
 	private void toggleRCFragment() {
 		if (rcFragment == null) {
 			rcFragment = new RCFragment();
-			fragmentManager.beginTransaction()
-					.add(R.id.containerRC, rcFragment).commit();
+			fragmentManager.beginTransaction().add(R.id.containerRC, rcFragment).commit();
 		} else {
 			fragmentManager.beginTransaction().remove(rcFragment).commit();
 			rcFragment = null;

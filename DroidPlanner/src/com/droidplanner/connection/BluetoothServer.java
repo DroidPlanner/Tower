@@ -53,6 +53,10 @@ public class BluetoothServer {
             UUID.fromString("51f88046-5ea2-11e3-949a-0800200c9a66")
     };
 
+    public interface RelayListener {
+        public void onReceivedRelayedMessage(MAVLinkPacket packet);
+    }
+
     /**
      * This is the bluetooth adapter.
      *

@@ -12,11 +12,16 @@ import com.droidplanner.dialogs.AltitudeDialog;
 import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
 import com.droidplanner.dialogs.checklist.PreflightDialog;
 import com.droidplanner.drone.Drone;
+import com.droidplanner.fragments.helpers.BTDeviceListFragment;
 import com.droidplanner.fragments.helpers.OfflineMapFragment;
 import com.droidplanner.helpers.units.Altitude;
+import com.droidplanner.utils.Constants;
+import com.droidplanner.utils.Utils;
 
 public abstract class SuperActivity extends Activity implements
         OnAltitudeChangedListner, OnSystemArmListener {
+
+    private static final int BLUETOOTH_DEVICE_SELECTION = 101;
 
     public DroidPlannerApp app;
     public Drone drone;
@@ -43,6 +48,17 @@ public abstract class SuperActivity extends Activity implements
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_connect:
+                final String connectionType = PreferenceManager
+                        .getDefaultSharedPreferences(getApplicationContext())
+                        .getString(Constants.PREF_CONNECTION_TYPE, Constants.DEFAULT_CONNECTION_TYPE);
+
+                if(Utils.ConnectionType.BLUETOOTH.name().equals(connectionType)){
+                    //TODO: Launch a dialog for the user to select the device to connect to.
+                    BTDeviceListFragment deviceListFragment = new BTDeviceListFragment();
+                    deviceListFragment.show(getFragmentManager(), "Bluetooth Device List");
+                    return true;
+                }
+
             case R.id.menu_disconnect:
                 drone.MavClient.toggleConnectionState();
                 return true;

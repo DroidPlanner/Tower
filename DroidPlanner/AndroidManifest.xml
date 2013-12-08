@@ -121,6 +121,7 @@
         </activity>
         <activity
                 android:name=".glass.activities.GlassActivity"
+                android:launchMode="singleTask"
                 android:theme="@android:style/Theme.DeviceDefault"/>
     </application>
 
