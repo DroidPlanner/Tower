@@ -257,5 +257,12 @@
         <item name="android:padding">16dp</item>
         </style>
 
+    <!-- Parameters screen -->
+    <style name="paramsClickToRefresh">
+        <item name="android:textColor">#ffb6b6b6</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+    </style>
 
 </resources>
