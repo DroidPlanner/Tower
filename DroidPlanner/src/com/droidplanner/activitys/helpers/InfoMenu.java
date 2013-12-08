@@ -1,12 +1,12 @@
 package com.droidplanner.activitys.helpers;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.droidplanner.R;
-import com.droidplanner.dialogs.checklist.PreflightDialog;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.HomeDistanceChangedListner;
 import com.droidplanner.drone.DroneInterfaces.InfoListner;
@@ -22,14 +22,12 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner,
 	private MenuItem propeler;
 	private MenuItem home;
 	private MenuItem signal;
-	private Context context;
 	public SelectModeSpinner mode;
 	
 	private TimerView timer;
 
-	public InfoMenu(Drone drone, Context context) {
+	public InfoMenu(Drone drone, Activity activity) {
 		this.drone = drone;
-		this.context = context;
 	}
 
 	public void inflateMenu(Menu menu, MenuInflater menuInflater) {
@@ -70,9 +68,7 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner,
 	}
 
 	private void showCheckList() {
-		PreflightDialog dialog = new PreflightDialog();
-		dialog.build(this.context, drone, false);
-	}
+		}
 
 	@Override
 	public void onInfoUpdate() {
