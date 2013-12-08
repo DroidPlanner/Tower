@@ -61,7 +61,8 @@ public class ParametersTableFragment extends Fragment implements
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
         context = activity;
-        drone = ((SuperActivity) activity).drone;
+
+        drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
         drone.parameters.parameterListner = this;
 	}
 
