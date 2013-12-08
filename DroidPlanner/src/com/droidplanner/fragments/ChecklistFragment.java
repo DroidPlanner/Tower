@@ -11,6 +11,7 @@ import com.droidplanner.activitys.helpers.SuperActivity;
 import com.droidplanner.checklist.CheckListAdapter;
 import com.droidplanner.checklist.CheckListAdapter.OnCheckListItemUpdateListener;
 import com.droidplanner.checklist.CheckListItem;
+import com.droidplanner.checklist.CheckListSysLink;
 import com.droidplanner.checklist.CheckListXmlParser;
 import com.droidplanner.checklist.xml.ListXmlParser.OnXmlParserError;
 import com.droidplanner.drone.Drone;
@@ -36,6 +37,11 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 	private HashMap<String, List<CheckListItem>> listDataChild;
 	private CheckListAdapter listAdapter;
 	private LayoutInflater inflater;
+	private CheckListSysLink sysLink;
+
+	public ChecklistFragment() {
+		// TODO Auto-generated constructor stub
+	}
 
 	// Load checklist from file
 	private void loadXMLChecklist() {
@@ -112,6 +118,7 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 		super.onAttach(activity);
 		this.context = activity;
 		this.drone = ((SuperActivity) activity).drone;
+		sysLink = new CheckListSysLink(drone);
 	}
 
 	@Override
@@ -134,10 +141,6 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 		super.onResume();
 	}
 
-	public ChecklistFragment() {
-		// TODO Auto-generated constructor stub
-	}
-
 	@Override
 	public void onError(XmlPullParser parser) {
 		// TODO Auto-generated method stub
@@ -147,14 +150,14 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 	@Override
 	public void onRowItemChanged(CheckListItem checkListItem, String mSysTag,
 			boolean isChecked) {
-		// TODO Auto-generated method stub
-
+		sysLink.setSystemData(checkListItem);
+		listAdapter.notifyDataSetChanged();
+		listViewAutoExpand(false,true);
 	}
 
 	@Override
 	public void onRowItemGetData(CheckListItem checkListItem, String mSysTag) {
-		// TODO Auto-generated method stub
-
+		sysLink.getSystemData(checkListItem, mSysTag);
 	}
 
 }
