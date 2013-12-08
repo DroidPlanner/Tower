@@ -13,7 +13,6 @@ import com.droidplanner.R;
 import com.droidplanner.activitys.ConfigurationActivity;
 import com.droidplanner.dialogs.AltitudeDialog;
 import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
-import com.droidplanner.dialogs.checklist.PreflightDialog;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.fragments.helpers.OfflineMapFragment;
 import com.droidplanner.helpers.units.Altitude;
@@ -73,7 +72,6 @@ public abstract class SuperActivity extends Activity implements
 			app.followMe.toogleFollowMeState();
 			return true;
 		case R.id.menu_preflight_checklist:
-			showCheckList();
 			return true;
 		case R.id.menu_map_type_hybrid:
 		case R.id.menu_map_type_normal:
@@ -84,12 +82,6 @@ public abstract class SuperActivity extends Activity implements
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
-	}
-
-	private void showCheckList() {
-		PreflightDialog dialog = new PreflightDialog();
-		dialog.build(this, drone, false);
-
 	}
 
 	private void setMapTypeFromItemId(int itemId) {
