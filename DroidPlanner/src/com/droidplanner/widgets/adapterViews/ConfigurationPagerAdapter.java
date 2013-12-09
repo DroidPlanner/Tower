@@ -12,7 +12,9 @@ import com.droidplanner.fragments.SettingsFragment;
 import com.droidplanner.fragments.TuningFragment;
 
 /**
+ * This is the Configuration Activity pager adapter.
  * @author fhuya
+ * @since 1.2.0
  */
 public class ConfigurationPagerAdapter extends FragmentPagerAdapter {
 

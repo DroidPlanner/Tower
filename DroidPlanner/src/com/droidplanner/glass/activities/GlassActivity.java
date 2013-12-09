@@ -5,10 +5,13 @@ import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperActivity;
+import com.droidplanner.fragments.SettingsFragment;
+import com.droidplanner.glass.fragments.ChartFragment;
 import com.droidplanner.glass.fragments.HudFragment;
 import com.droidplanner.glass.utils.GlassUtils;
 import com.google.android.glass.touchpad.GestureDetector;
@@ -29,16 +32,23 @@ public class GlassActivity extends SuperActivity implements DroidPlannerApp.Conn
      */
     private GestureDetector mGestureDetector;
 
+    /**
+     * This is the activity fragment manager.
+     * @since 1.2.0
+     */
+    private FragmentManager mFragManager;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_glass);
 
-        final FragmentManager fm = getFragmentManager();
-        Fragment glassFragment = fm.findFragmentById(R.id.glass_layout);
+        mFragManager = getFragmentManager();
+
+        Fragment glassFragment = getCurrentFragment();
         if(glassFragment == null){
             glassFragment = new HudFragment();
-            fm.beginTransaction().add(R.id.glass_layout, glassFragment).commit();
+            mFragManager.beginTransaction().add(R.id.glass_layout, glassFragment).commit();
         }
     }
 
@@ -52,8 +62,42 @@ public class GlassActivity extends SuperActivity implements DroidPlannerApp.Conn
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.menu_super_activiy, menu);
+        getMenuInflater().inflate(R.menu.menu_glass_activity, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch(item.getItemId()){
+            case R.id.menu_settings:{
+                //Replace the current fragment with the SettingsFragment.
+                Fragment currentFragment = getCurrentFragment();
+                if(!(currentFragment instanceof SettingsFragment)){
+                    currentFragment = new SettingsFragment();
+                    mFragManager.beginTransaction()
+                            .replace(R.id.glass_layout, currentFragment)
+                            .addToBackStack(null)
+                            .commit();
+                }
+                return true;
+            }
+
+            case R.id.menu_chart:{
+                //Replace the current fragment with the chart fragment.
+                Fragment currentFragment = getCurrentFragment();
+                if(!(currentFragment instanceof ChartFragment)){
+                    currentFragment = new ChartFragment();
+                    mFragManager.beginTransaction()
+                            .replace(R.id.glass_layout, currentFragment)
+                            .addToBackStack(null)
+                            .commit();
+                }
+                return true;
+            }
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -85,5 +129,9 @@ public class GlassActivity extends SuperActivity implements DroidPlannerApp.Conn
     @Override
     public void notifyDisconnected() {
 
+    }
+
+    private Fragment getCurrentFragment(){
+        return mFragManager.findFragmentById(R.id.glass_layout);
     }
 }

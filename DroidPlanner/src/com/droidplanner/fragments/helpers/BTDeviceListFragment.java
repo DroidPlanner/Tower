@@ -22,6 +22,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
+import com.droidplanner.activitys.helpers.BTDeviceSelectionActivity;
 import com.droidplanner.utils.Constants;
 
 import java.util.Set;
@@ -41,12 +42,6 @@ public class BTDeviceListFragment extends DialogFragment {
      */
     private static final String TAG = BTDeviceListFragment.class.getName();
 
-    /**
-     * Request code used in onActivityResult to check for bluetooth activation result.
-     *
-     * @since 1.2.0
-     */
-    private static final int REQUEST_ENABLE_BT = 111;
 
     /**
      * Bluetooth adapter.
@@ -97,7 +92,7 @@ public class BTDeviceListFragment extends DialogFragment {
     private TextView mNewDevicesTitle;
 
     /**
-     * The broadcast receiver that listens for discovered devices, and changes the title when
+     * The broadcast receiver listens for discovered devices, and changes the title when
      * discovery is finished
      *
      * @since 1.2.0
@@ -141,8 +136,7 @@ public class BTDeviceListFragment extends DialogFragment {
             //Cancel discovery because it's costly, and we're about to connect
             mBtAdapter.cancelDiscovery();
 
-            //Get the device MAC address, which is the last 17 chars in the View
-            //find a better way to retrieve the mac address.
+            //Retrieve the selected bluetooth device
             final BluetoothDevice device = (BluetoothDevice) parent.getItemAtPosition(position);
 
             //Stores the mac address in the shared preferences,
@@ -155,15 +149,15 @@ public class BTDeviceListFragment extends DialogFragment {
             //Toggle the drone connection
             ((DroidPlannerApp) activity.getApplication()).drone.MavClient.toggleConnectionState();
 
-            //Dismiss this dialog
-            dismiss();
+            //Close the parent activity
+            getActivity().finish();
         }
     };
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case REQUEST_ENABLE_BT:
+            case BTDeviceSelectionActivity.REQUEST_ENABLE_BT:
                 if (resultCode == Activity.RESULT_CANCELED) {
                     //Bluetooth activation was denied by the user. Dismiss this dialog.
                     dismiss();
@@ -223,6 +217,14 @@ public class BTDeviceListFragment extends DialogFragment {
         newDevicesListView.setAdapter(mNewDevicesArrayAdapter);
         newDevicesListView.setOnItemClickListener(mDeviceClickListener);
 
+        //Register for broadcasts when a device is discovered
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        activity.registerReceiver(mReceiver, filter);
+
+        //Register for broadcasts when discovery has finished
+        filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        activity.registerReceiver(mReceiver, filter);
+
         return view;
     }
 
@@ -231,16 +233,6 @@ public class BTDeviceListFragment extends DialogFragment {
         super.onResume();
 
         if (mBtAdapter.isEnabled()) {
-            final Activity activity = getActivity();
-
-            //Register for broadcasts when a device is discovered
-            IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-            activity.registerReceiver(mReceiver, filter);
-
-            //Register for broadcasts when discovery has finished
-            filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-            activity.registerReceiver(mReceiver, filter);
-
             // Get a set of currently paired devices
             Set<BluetoothDevice> pairedDevices = mBtAdapter.getBondedDevices();
 
@@ -258,22 +250,20 @@ public class BTDeviceListFragment extends DialogFragment {
         else {
             //Request that bluetooth be enabled
             startActivityForResult(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE),
-                    REQUEST_ENABLE_BT);
+                    BTDeviceSelectionActivity.REQUEST_ENABLE_BT);
         }
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onDestroy() {
+        super.onDestroy();
 
         // Make sure we're not doing discovery anymore
         if (mBtAdapter != null) {
             mBtAdapter.cancelDiscovery();
-
-            // Unregister broadcast listeners
-            if (mBtAdapter.isEnabled())
-                getActivity().unregisterReceiver(mReceiver);
         }
+
+        getActivity().unregisterReceiver(mReceiver);
     }
 
     /**

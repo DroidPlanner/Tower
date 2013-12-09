@@ -43,7 +43,6 @@ public class BluetoothConnection extends MAVLinkConnection {
         //Retrieve the stored address
         final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(parentContext);
         String address = settings.getString(Constants.PREF_BLUETOOTH_DEVICE_ADDRESS, null);
-//                "E4:32:CB:1F:2B:91");
 
 		BluetoothDevice device = address == null ? findBluetoothDevice(): mBluetoothAdapter
                 .getRemoteDevice(address);
@@ -68,6 +67,10 @@ public class BluetoothConnection extends MAVLinkConnection {
             } catch (IOException e) {
                 //try another uuid
             }
+        }
+
+        if (out == null || in == null){
+            throw new IOException("Bluetooth socket connect failed.");
         }
 	}
 

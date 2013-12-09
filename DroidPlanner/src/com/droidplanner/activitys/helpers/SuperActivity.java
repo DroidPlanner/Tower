@@ -1,9 +1,10 @@
 package com.droidplanner.activitys.helpers;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentActivity;
 import android.view.MenuItem;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.DroidPlannerApp.OnSystemArmListener;
@@ -12,16 +13,13 @@ import com.droidplanner.dialogs.AltitudeDialog;
 import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
 import com.droidplanner.dialogs.checklist.PreflightDialog;
 import com.droidplanner.drone.Drone;
-import com.droidplanner.fragments.helpers.BTDeviceListFragment;
 import com.droidplanner.fragments.helpers.OfflineMapFragment;
 import com.droidplanner.helpers.units.Altitude;
 import com.droidplanner.utils.Constants;
 import com.droidplanner.utils.Utils;
 
-public abstract class SuperActivity extends Activity implements
+public abstract class SuperActivity extends FragmentActivity implements
         OnAltitudeChangedListner, OnSystemArmListener {
-
-    private static final int BLUETOOTH_DEVICE_SELECTION = 101;
 
     public DroidPlannerApp app;
     public Drone drone;
@@ -53,9 +51,8 @@ public abstract class SuperActivity extends Activity implements
                         .getString(Constants.PREF_CONNECTION_TYPE, Constants.DEFAULT_CONNECTION_TYPE);
 
                 if(Utils.ConnectionType.BLUETOOTH.name().equals(connectionType)){
-                    //TODO: Launch a dialog for the user to select the device to connect to.
-                    BTDeviceListFragment deviceListFragment = new BTDeviceListFragment();
-                    deviceListFragment.show(getFragmentManager(), "Bluetooth Device List");
+                    //Launch a bluetooth device selection screen for the user
+                    startActivity(new Intent(this, BTDeviceSelectionActivity.class));
                     return true;
                 }
 
