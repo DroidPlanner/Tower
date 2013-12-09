@@ -1,4 +1,4 @@
-package com.droidplanner.fragments.mode;
+package com.droidplanner.adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,18 +13,26 @@ import com.droidplanner.R;
 import com.droidplanner.parameters.Parameter;
 import com.droidplanner.parameters.ParameterMetadata;
 
+import java.util.List;
+
 /**
  * User: rgayle
  * Date: 2013-12-08
  * Time: 11:00 PM
  */
-public class ParamsAdapter extends ArrayAdapter<ParamsAdapter.ParameterWithMetadata> {
+public class ParamsAdapter extends ArrayAdapter<ParameterWithMetadata> {
     private final int resource;
 
     public ParamsAdapter(Context context, int resource) {
         super(context, resource);
 
         this.resource = resource;
+    }
+
+    public ParamsAdapter(Context context, int resource, List<ParameterWithMetadata> objects) {
+        super(context, resource, objects);
+
+        this. resource = resource;
     }
 
     @Override
@@ -71,33 +79,6 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapter.ParameterWithMetad
                 desc += " (" + metadata.getUnits() + ")";
         }
         return desc;
-    }
-
-
-    public static class ParameterWithMetadata {
-        private Parameter parameter;
-        private ParameterMetadata metadata;
-
-        public ParameterWithMetadata(Parameter parameter, ParameterMetadata metadata) {
-            this.parameter = parameter;
-            this.metadata = metadata;
-        }
-
-        public Parameter getParameter() {
-            return parameter;
-        }
-
-        public void setParameter(Parameter parameter) {
-            this.parameter = parameter;
-        }
-
-        public ParameterMetadata getMetadata() {
-            return metadata;
-        }
-
-        public void setMetadata(ParameterMetadata metadata) {
-            this.metadata = metadata;
-        }
     }
 
 
