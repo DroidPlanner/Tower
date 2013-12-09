@@ -95,7 +95,7 @@ public class ParametersTableFragment extends Fragment implements
 
 		// alternate background colors for clarity
 		if ((rowList.size() % 2) == 1)
-			pRow.setBackgroundColor(Color.BLACK);
+			pRow.setBackgroundColor(0xd2d2d2);
 
 		rowList.add(pRow);
 		parameterTable.addView(pRow);
@@ -221,11 +221,11 @@ public class ParametersTableFragment extends Fragment implements
 			pd.dismiss();
 			pd = null;
 		}
-		
+
 		//Remove the Refresh text view
 		refreshTextView.setVisibility(View.GONE);
-		
-		
+
+
 	}
 
 	@Override

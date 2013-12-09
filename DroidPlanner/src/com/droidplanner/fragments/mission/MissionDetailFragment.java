@@ -21,23 +21,23 @@ import com.droidplanner.widgets.spinners.SpinnerSelfSelect;
 
 public abstract class MissionDetailFragment extends Fragment implements
 		OnItemSelectedListener {
-	
+
 	public interface OnWayPointTypeChangeListener{
 		public void onWaypointTypeChanged(MissionItem newItem, MissionItem oldItem);
 	}
-	
+
 	protected abstract int getResource();
-	
+
 	protected SpinnerSelfSelect typeSpinner;
 	protected AdapterMissionItens commandAdapter;
 	protected Mission mission;
 	private OnWayPointTypeChangeListener mListner;
 	private TextView waypointIndex;
-	
+
 	protected MissionItem item;
 	private TextView distanceView;
 	private TextView distanceLabelView;
-	
+
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,7 +57,8 @@ public abstract class MissionDetailFragment extends Fragment implements
 		waypointIndex = (TextView) view.findViewById(R.id.WaypointIndex);
 		Integer temp = mission.getNumber(item);
 		waypointIndex.setText( temp.toString());
-		
+
+		/*
 		distanceView = (TextView) view.findViewById(R.id.DistanceValue);
 		distanceLabelView = (TextView) view.findViewById(R.id.DistanceLabel);
 		try{
@@ -70,6 +71,7 @@ public abstract class MissionDetailFragment extends Fragment implements
 			distanceView.setText("");
 			distanceLabelView.setVisibility(View.INVISIBLE);
 		}
+		*/
 	}
 
 	@Override
@@ -79,7 +81,7 @@ public abstract class MissionDetailFragment extends Fragment implements
 		mListner = (OnWayPointTypeChangeListener) activity;
 	}
 
-	
+
 	@Override
 	public void onItemSelected(AdapterView<?> arg0, View v, int position,
 			long id) {

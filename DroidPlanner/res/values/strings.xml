@@ -203,5 +203,6 @@
     <string name="GPSFailsafe">Warning! GPS Fasilsafe – Switching to Altitude Hold</string>
     <string name="BatteryFailsafeLand">Warning! Battery Fasilsafe – Returning to Launch</string>
     <string name="BatteryFailsafeRTL">Warning! Battery Fasilsafe – Returning to Launch</string>
+    <string name="mode_switch">Assign RC channel 5 to a switch on your radio to control flight modes. Move the switch to each position and select the desired flight mode below.</string>
 
 </resources>

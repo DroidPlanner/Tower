@@ -258,4 +258,15 @@
         </style>
 
 
+	 <!-- RC Modes setup screen -->
+    <style name="ModeDetailText">
+        <item name="android:textColor">#000</item>
+        <item name="android:textSize">14dp</item>
+	    <item name="android:textStyle">italic</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:padding">16dp</item>
+        </style>
+
+
+
 </resources>

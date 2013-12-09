@@ -22,7 +22,7 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner,
 	private MenuItem home;
 	private MenuItem signal;
 	public SelectModeSpinner mode;
-	
+
 	private TimerView timer;
 
 	public InfoMenu(Drone drone) {
@@ -32,15 +32,15 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner,
 	public void inflateMenu(Menu menu, MenuInflater menuInflater) {
 		if (drone.MavClient.isConnected()) {
 			menuInflater.inflate(R.menu.menu_newui_connected, menu);
-			battery = menu.findItem(R.id.bar_battery);
-			gps = menu.findItem(R.id.bar_gps);
-			propeler = menu.findItem(R.id.bar_propeller);
-			home = menu.findItem(R.id.bar_home);
-			signal = menu.findItem(R.id.bar_signal);
-			mode = (SelectModeSpinner) menu.findItem(R.id.bar_mode)
-					.getActionView();
+			battery 	= menu.findItem(R.id.bar_battery);
+			gps 		= menu.findItem(R.id.bar_gps);
+			propeler 	= menu.findItem(R.id.bar_propeller);
+			home 		= menu.findItem(R.id.bar_home);
+			signal 		= menu.findItem(R.id.bar_signal);
+			mode 		= (SelectModeSpinner) menu.findItem(R.id.bar_mode).getActionView();
 
-			timer = new TimerView(propeler);
+			timer 		= new TimerView(propeler);
+
 			drone.setHomeChangedListner(this);
 			drone.setInfoListner(this);
 			drone.state.addFlightStateListner(this);
@@ -66,15 +66,14 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner,
 
 	@Override
 	public void onInfoUpdate() {
-		battery.setTitle(String.format("%2.1fv, %2.0f%%",
-				drone.battery.getBattVolt(), drone.battery.getBattRemain()));
-		gps.setTitle(String.format("%d, %s", drone.GPS.getSatCount(),
-				drone.GPS.getFixType()));
+		battery.setTitle(String.format(" %2.1fv, %2.0f%% ", drone.battery.getBattVolt(), drone.battery.getBattRemain()));
+		gps.setTitle(String.format(" %d, %s", drone.GPS.getSatCount(), drone.GPS.getFixType()));
 	}
 
 	@Override
 	public void onDistanceToHomeHasChanged() {
-		home.setTitle(drone.home.getDroneDistanceToHome().toString());
+		//home.setTitle(drone.home.getDroneDistanceToHome().toString());
+		home.setTitle(String.format(" %1f ", drone.home.getDroneDistanceToHome()));
 	}
 
 	public void setupModeSpinner(Context context) {
@@ -102,7 +101,7 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner,
 	public void onFailsafeChanged() {
 		// TODO Auto-generated method stub
 
-	}	
+	}
 
 
 }
