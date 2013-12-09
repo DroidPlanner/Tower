@@ -67,7 +67,9 @@ public class UsbConnection extends MAVLinkConnection {
 	@Override
 	protected void getPreferences(SharedPreferences prefs) {
 		String baud_type = prefs.getString("pref_baud_type", "57600");
-		if (baud_type.equals("57600"))
+		if (baud_type.equals("38400"))
+			baud_rate = 38400;
+		else if (baud_type.equals("57600"))
 			baud_rate = 57600;
 		else
 			baud_rate = 115200;
