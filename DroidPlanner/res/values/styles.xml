@@ -265,4 +265,23 @@
         <item name="android:fontFamily">sans-serif-condensed</item>
     </style>
 
+    <style name="paramRowLabelText" >
+        <item name="android:textSize">14dp</item>
+    </style>
+
+    <style name="paramValueUnchanged" >
+    </style>
+
+    <style name="paramValueChanged" parent="paramValueUnchanged">
+        <item name="android:textColor">#000</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="paramValueValid" parent="paramValueChanged">
+    </style>
+
+    <style name="paramValueInvalid" parent="paramValueChanged">
+        <item name="android:textColor">#fff</item>
+    </style>
+
 </resources>

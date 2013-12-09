@@ -19,5 +19,8 @@
     <color name="altitude_target">#55d8ff</color>
     <color name="dark_title_bg">#737373</color>
 
+    <color name="paramValueChanged">#ffffff00</color>
+    <color name="paramValueValid">#ff00ff00</color>
+    <color name="paramValueInvalid">#ffff0000</color>
 
 </resources>

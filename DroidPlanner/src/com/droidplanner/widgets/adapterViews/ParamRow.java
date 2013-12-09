@@ -72,12 +72,14 @@ public class ParamRow extends TableRow implements
     private void createRowViews(Context context) {
         // name
         nameView = new TextView(context);
+        nameView.setTextAppearance(context, R.style.paramRowLabelText);
         nameView.setWidth(300);
         nameView.setOnClickListener(this);
         addView(nameView);
 
-        // display
+        // description
         displayNameView = new TextView(context);
+        displayNameView.setTextAppearance(context, R.style.paramRowLabelText);
         displayNameView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT, (float) 1.0));
         displayNameView.setGravity(Gravity.CENTER_VERTICAL);
         displayNameView.setOnClickListener(this);
@@ -116,22 +118,28 @@ public class ParamRow extends TableRow implements
 	public void afterTextChanged(Editable s) {
         final String newValue = valueView.getText().toString();
 
-        final int color;
+        final int styleId;
+        final int backgroundColor;
         if(isValueEqualToDroneParam(newValue)) {
-            color = Color.WHITE;
-            valueView.setTypeface(null, Typeface.NORMAL);
+            styleId = R.style.paramValueUnchanged;
+            backgroundColor = Color.TRANSPARENT;
         } else {
+            final int background;
             final Validation validation = validateValue(newValue);
             if (validation == Validation.VALID) {
-                color = Color.GREEN;
+                styleId = R.style.paramValueValid;
+                background = R.color.paramValueValid;
             } else if (validation == Validation.INVALID) {
-                color = Color.RED;
+                styleId = R.style.paramValueInvalid;
+                background = R.color.paramValueInvalid;
             } else {
-                color = Color.YELLOW;
+                styleId = R.style.paramValueChanged;
+                background = R.color.paramValueChanged;
             }
-            valueView.setTypeface(null, Typeface.BOLD);
+            backgroundColor = getResources().getColor(background);
         }
-        valueView.setTextColor(color);
+        valueView.setBackgroundColor(backgroundColor);
+        valueView.setTextAppearance(getContext(), styleId);
     }
 
 	public boolean isNewValueEqualToDroneParam() {
