@@ -119,26 +119,19 @@ public class ParamRow extends TableRow implements
         final String newValue = valueView.getText().toString();
 
         final int styleId;
-        final int backgroundColor;
         if(isValueEqualToDroneParam(newValue)) {
             styleId = R.style.paramValueUnchanged;
-            backgroundColor = Color.TRANSPARENT;
         } else {
             final int background;
             final Validation validation = validateValue(newValue);
             if (validation == Validation.VALID) {
                 styleId = R.style.paramValueValid;
-                background = R.color.paramValueValid;
             } else if (validation == Validation.INVALID) {
                 styleId = R.style.paramValueInvalid;
-                background = R.color.paramValueInvalid;
             } else {
                 styleId = R.style.paramValueChanged;
-                background = R.color.paramValueChanged;
             }
-            backgroundColor = getResources().getColor(background);
         }
-        valueView.setBackgroundColor(backgroundColor);
         valueView.setTextAppearance(getContext(), styleId);
     }
 

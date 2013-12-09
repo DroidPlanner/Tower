@@ -266,22 +266,26 @@
     </style>
 
     <style name="paramRowLabelText" >
-        <item name="android:textSize">14dp</item>
+        <item name="android:textSize">15sp</item>
     </style>
 
     <style name="paramValueUnchanged" >
+        <item name="android:textColor">@android:color/primary_text_light</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">normal</item>
     </style>
 
     <style name="paramValueChanged" parent="paramValueUnchanged">
-        <item name="android:textColor">#000</item>
+        <item name="android:textColor">#fff49633</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="paramValueValid" parent="paramValueChanged">
+        <item name="android:textColor">#ff06aa09</item>
     </style>
 
     <style name="paramValueInvalid" parent="paramValueChanged">
-        <item name="android:textColor">#fff</item>
+        <item name="android:textColor">#ffe01d0f</item>
     </style>
-
 </resources>

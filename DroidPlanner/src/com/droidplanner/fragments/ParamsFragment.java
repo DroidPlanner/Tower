@@ -2,19 +2,16 @@ package com.droidplanner.fragments;
 
 import android.app.Activity;
 import android.app.ListFragment;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.*;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
-import com.droidplanner.adapters.ParameterWithMetadata;
+import com.droidplanner.adapters.ParamsAdapterItem;
 import com.droidplanner.dialogs.openfile.OpenFileDialog;
 import com.droidplanner.dialogs.openfile.OpenParameterDialog;
 import com.droidplanner.drone.Drone;
-import com.droidplanner.drone.variables.Parameters;
 import com.droidplanner.adapters.ParamsAdapter;
 import com.droidplanner.parameters.Parameter;
-import com.droidplanner.widgets.adapterViews.ParamRow;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,7 +19,6 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * User: rgayle
  * Date: 2013-12-08
  * Time: 6:27 PM
  */
@@ -47,8 +43,8 @@ public class ParamsFragment extends ListFragment {
         // create adapter
         if(savedInstanceState != null) {
             // load adapter items
-            final ArrayList<ParameterWithMetadata> pwms =
-                    (ArrayList<ParameterWithMetadata>) savedInstanceState.getSerializable(ADAPTER_ITEMS);
+            final ArrayList<ParamsAdapterItem> pwms =
+                    (ArrayList<ParamsAdapterItem>) savedInstanceState.getSerializable(ADAPTER_ITEMS);
             adapter = new ParamsAdapter(getActivity(), R.layout.row_params, pwms);
 
         } else {
@@ -71,7 +67,7 @@ public class ParamsFragment extends ListFragment {
         super.onSaveInstanceState(outState);
 
         // save adapter items
-        final ArrayList<ParameterWithMetadata> pwms = new ArrayList<ParameterWithMetadata>();
+        final ArrayList<ParamsAdapterItem> pwms = new ArrayList<ParamsAdapterItem>();
         for(int i = 0; i < adapter.getCount(); i++)
             pwms.add(adapter.getItem(i));
         outState.putSerializable(ADAPTER_ITEMS, pwms);
@@ -120,7 +116,7 @@ public class ParamsFragment extends ListFragment {
     private void adapterAdd(Parameter parameter) {
         try {
             Parameter.checkParameterName(parameter.name);
-            adapter.add(new ParameterWithMetadata(parameter, drone.parameters.getMetadata(parameter.name)));
+            adapter.add(new ParamsAdapterItem(parameter, drone.parameters.getMetadata(parameter.name)));
 
         } catch (Exception ex) {
             // eat it
