@@ -21,7 +21,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +30,6 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 		OnCheckListItemUpdateListener, InfoListner {
 	private Context context;
 	private Drone drone;
-	private View view;
 	private ExpandableListView expListView;
 	private List<String> listDataHeader;
 	private List<CheckListItem> checklistItems;
@@ -41,14 +39,11 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 	private CheckListSysLink sysLink;
 
 	public ChecklistFragment() {
-		// TODO Auto-generated constructor stub
+
 	}
 
 	// Load checklist from file
 	private void loadXMLChecklist() {
-		if (context == null)
-			return;
-
 		CheckListXmlParser xml = new CheckListXmlParser("checklist_ext.xml",
 				context, R.xml.checklist_default);
 
@@ -75,22 +70,11 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 
 	// create listAdapter
 	private void createListAdapter() {
-		if (drone == null || inflater == null || listDataHeader == null
-				|| listDataChild == null)
-			return;
-
-		if (listAdapter != null) {
-			listAdapter = null;
-		}
-
-		listAdapter = new CheckListAdapter(drone, inflater, listDataHeader,
+		listAdapter = new CheckListAdapter(this.inflater, listDataHeader,
 				listDataChild);
 
 		listAdapter.setHeaderLayout(R.layout.list_group_header);
 		listAdapter.setOnCheckListItemUpdateListener(this);
-		expListView.setAdapter(listAdapter);
-
-		listViewAutoExpand(true,true);
 	}
 
 	private void listViewAutoExpand(boolean autoExpand, boolean autoCollapse) {
@@ -108,8 +92,13 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		this.inflater = inflater;
-		view = inflater.inflate(R.layout.fragment_checklist, null);
+		View view = inflater.inflate(R.layout.fragment_checklist, null);
 		expListView = (ExpandableListView) view.findViewById(R.id.expListView);
+
+		createListAdapter();
+		expListView.setAdapter(listAdapter);
+
+		listViewAutoExpand(true, true);
 
 		return view;
 	}
@@ -118,31 +107,32 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		this.context = activity;
-		this.drone = ((SuperActivity) activity).drone;
-		sysLink = new CheckListSysLink(drone);
+		loadXMLChecklist();
+		prepareListData();
 	}
 
 	@Override
-	public void onStart() {
-		super.onStart();
-		loadXMLChecklist();
-		prepareListData();
-		createListAdapter();
+	public void onDetach() {
+		sysLink = null;
+		listAdapter = null;
+		listDataHeader = null;
+		listDataChild = null;
+		checklistItems = null;
+
+		super.onDetach();
 	}
 
 	@Override
 	public void onPause() {
-		if(drone!=null){
-			drone.removeInfoListener(this);
-		}
 		super.onPause();
+		this.drone.removeInfoListener(this);
 	}
 
 	@Override
 	public void onResume() {
-		if(drone!=null){
-			drone.addInfoListener(this);
-		}
+		this.drone = ((SuperActivity) this.context).drone;
+		sysLink = new CheckListSysLink(this.drone);
+		this.drone.addInfoListener(this);
 		super.onResume();
 	}
 
@@ -157,7 +147,7 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 			boolean isChecked) {
 		sysLink.setSystemData(checkListItem);
 		listAdapter.notifyDataSetChanged();
-		listViewAutoExpand(false,true);
+		listViewAutoExpand(false, true);
 	}
 
 	@Override
@@ -167,12 +157,12 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 
 	@Override
 	public void onInfoUpdate() {
-		Log.d("CHKLST", "checklistItems - " + String.valueOf(checklistItems.size()));
-		for(CheckListItem item : checklistItems){
-			if(item.getSys_tag()!=null)
+		for (CheckListItem item : checklistItems) {
+			if (item.getSys_tag() != null) {
 				sysLink.getSystemData(item, item.getSys_tag());
+			}
 		}
-		if(listAdapter!=null)
+		if (listAdapter != null)
 			listAdapter.notifyDataSetChanged();
 	}
 
