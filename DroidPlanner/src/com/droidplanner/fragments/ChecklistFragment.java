@@ -190,7 +190,7 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 
 	@Override
 	public void onRowItemGetData(CheckListItem checkListItem, String mSysTag) {
-//		sysLink.getSystemData(checkListItem, mSysTag);
+		sysLink.getSystemData(checkListItem, mSysTag);
 	}
 
 	@Override
@@ -198,7 +198,7 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 		Log.d("CHKLST", "checklistItems - " + String.valueOf(checklistItems.size()));
 		for(CheckListItem item : checklistItems){
 			if(item.getSys_tag()!=null){
-//				sysLink.getSystemData(item, item.getSys_tag());
+				sysLink.getSystemData(item, item.getSys_tag());
 			}
 		}
 		if(listAdapter!=null)
