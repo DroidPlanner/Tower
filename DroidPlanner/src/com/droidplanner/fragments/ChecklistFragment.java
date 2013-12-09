@@ -31,7 +31,6 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 		OnCheckListItemUpdateListener, InfoListner {
 	private Context context;
 	private Drone drone;
-	private View view;
 	private ExpandableListView expListView;
 	private List<String> listDataHeader;
 	private List<CheckListItem> checklistItems;
@@ -41,13 +40,13 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 	private CheckListSysLink sysLink;
 
 	public ChecklistFragment() {
-		// TODO Auto-generated constructor stub
+		Log.d("CHKLST", "Contructor");
+
 	}
 
 	// Load checklist from file
 	private void loadXMLChecklist() {
-		if (context == null)
-			return;
+		Log.d("CHKLST", "loadXMLCheckList");
 
 		CheckListXmlParser xml = new CheckListXmlParser("checklist_ext.xml",
 				context, R.xml.checklist_default);
@@ -59,6 +58,8 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 
 	// create hash list
 	private void prepareListData() {
+		Log.d("CHKLST", "prepareListData");
+				
 		listDataChild = new HashMap<String, List<CheckListItem>>();
 		List<CheckListItem> cli;
 
@@ -75,22 +76,13 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 
 	// create listAdapter
 	private void createListAdapter() {
-		if (drone == null || inflater == null || listDataHeader == null
-				|| listDataChild == null)
-			return;
+		Log.d("CHKLST", "createListAdapter");
 
-		if (listAdapter != null) {
-			listAdapter = null;
-		}
-
-		listAdapter = new CheckListAdapter(drone, inflater, listDataHeader,
+		listAdapter = new CheckListAdapter(this.inflater, listDataHeader,
 				listDataChild);
 
 		listAdapter.setHeaderLayout(R.layout.list_group_header);
 		listAdapter.setOnCheckListItemUpdateListener(this);
-		expListView.setAdapter(listAdapter);
-
-		listViewAutoExpand(true,true);
 	}
 
 	private void listViewAutoExpand(boolean autoExpand, boolean autoCollapse) {
@@ -107,45 +99,75 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		Log.d("CHKLST", "OnCreateView");
 		this.inflater = inflater;
-		view = inflater.inflate(R.layout.fragment_checklist, null);
+		View view = inflater.inflate(R.layout.fragment_checklist, null);
 		expListView = (ExpandableListView) view.findViewById(R.id.expListView);
+
+		createListAdapter();
+		expListView.setAdapter(listAdapter);
+
+		listViewAutoExpand(true,true);
 
 		return view;
 	}
 
 	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		this.context = activity;
-		this.drone = ((SuperActivity) activity).drone;
-		sysLink = new CheckListSysLink(drone);
+	public void onCreate(Bundle savedInstanceState) {
+		Log.d("CHKLST", "OnCreate");
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
 	}
 
 	@Override
-	public void onStart() {
-		super.onStart();
+	public void onAttach(Activity activity) {
+		Log.d("CHKLST", "OnAttach");
+		this.context = activity;
+		this.drone = ((SuperActivity) activity).drone;			
+		sysLink = new CheckListSysLink(this.drone);
+		
+		if(this.context==null)
+			Log.d("CHKLST", "OnAttach context null");
+			
+		if(this.drone==null)
+			Log.d("CHKLST", "OnAttach drone null");
+
 		loadXMLChecklist();
 		prepareListData();
-		createListAdapter();
+
+		super.onAttach(activity);
+	}
+
+
+	@Override
+	public void onDetach() {
+		Log.d("CHKLST", "OnDetach");
+		sysLink = null;
+		listAdapter = null;
+		listDataHeader = null;
+		listDataChild = null;
+		checklistItems = null;
+
+		super.onDetach();
 	}
 
 	@Override
-	public void onPause() {
-		if(drone!=null){
-			drone.removeInfoListener(this);
-		}
-		super.onPause();
-	}
+	public void onResume(){
+		Log.d("CHKLST", "OnResume");
+		if(this.drone==null)
+		{
+			this.drone = ((SuperActivity) this.context).drone;
+			
+			if(this.drone==null)
+				Log.d("CHKLST", "OnResume - drone still null");
+			else
+				Log.d("CHKLST", "OnResume - drone ok");
+				
 
-	@Override
-	public void onResume() {
-		if(drone!=null){
-			drone.addInfoListener(this);
 		}
 		super.onResume();
 	}
-
+	
 	@Override
 	public void onError(XmlPullParser parser) {
 		// TODO Auto-generated method stub
@@ -162,15 +184,16 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 
 	@Override
 	public void onRowItemGetData(CheckListItem checkListItem, String mSysTag) {
-		sysLink.getSystemData(checkListItem, mSysTag);
+//		sysLink.getSystemData(checkListItem, mSysTag);
 	}
 
 	@Override
 	public void onInfoUpdate() {
 		Log.d("CHKLST", "checklistItems - " + String.valueOf(checklistItems.size()));
 		for(CheckListItem item : checklistItems){
-			if(item.getSys_tag()!=null)
-				sysLink.getSystemData(item, item.getSys_tag());
+			if(item.getSys_tag()!=null){
+//				sysLink.getSystemData(item, item.getSys_tag());
+			}
 		}
 		if(listAdapter!=null)
 			listAdapter.notifyDataSetChanged();
