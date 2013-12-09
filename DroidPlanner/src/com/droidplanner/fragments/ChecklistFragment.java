@@ -150,6 +150,7 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 
 	@Override
 	public void onPause(){
+		this.drone.removeInfoListener(this);
 		super.onPause();
 	}
 	
@@ -157,8 +158,9 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 	public void onResume(){
 		Log.d("CHKLST", "OnResume");
 		
-		this.drone = ((SuperActivity) this.context).drone;			
+		this.drone = ((SuperActivity) this.context).drone;	
 		sysLink = new CheckListSysLink(this.drone);
+		this.drone.addInfoListener(this);
 
 		if(this.drone==null)
 		{
