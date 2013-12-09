@@ -9,11 +9,7 @@ import android.view.MenuItem;
 
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperUI;
-import com.droidplanner.fragments.ParametersTableFragment;
-import com.droidplanner.fragments.RcSetupFragment;
-import com.droidplanner.fragments.SettingsFragment;
-import com.droidplanner.fragments.TuningFragment;
-import com.droidplanner.fragments.ModesSetupFragment;
+import com.droidplanner.fragments.*;
 
 public class ConfigurationActivity extends SuperUI{
 
@@ -23,6 +19,7 @@ public class ConfigurationActivity extends SuperUI{
     public static final String SETTINGS = "settings";
 	private static final String RC_SETUP = "rc_setup";
 	private static final String MODES_SETUP = "flight_modes";
+    private static final String PARAMS = "params";
 	private FragmentTabHost mTabHost;
 
 	@Override
@@ -41,6 +38,7 @@ public class ConfigurationActivity extends SuperUI{
 	    mTabHost.addTab(mTabHost.newTabSpec(RC_SETUP).setIndicator("RC"),RcSetupFragment.class, null);
 	    mTabHost.addTab(mTabHost.newTabSpec(MODES_SETUP).setIndicator("Modes"),ModesSetupFragment.class, null);
 	    mTabHost.addTab(mTabHost.newTabSpec(PARAMETERS).setIndicator("Parameters"),ParametersTableFragment.class, null);
+        mTabHost.addTab(mTabHost.newTabSpec(PARAMS).setIndicator("Params"), ParamsFragment.class, null);
 
 	    Intent intent = getIntent();
 	    String stringExtra = intent.getStringExtra(SCREEN_INTENT);

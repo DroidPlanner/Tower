@@ -42,25 +42,37 @@ public class ParametersTableFragment extends Fragment implements
 
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_parameters, container, false);
-		parameterTable = (TableLayout) view.findViewById(R.id.parametersTable);
-
-		refreshTextView = (TextView) view.findViewById(R.id.refreshTextView);
-		refreshTextView.setOnClickListener(this);
-
-        setHasOptionsMenu(true);
-		return view;
-	}
-
-	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 
         drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
         drone.parameters.parameterListner = this;
 	}
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        final View view = inflater.inflate(R.layout.fragment_parameters, container, false);
+
+        parameterTable = (TableLayout) view.findViewById(R.id.parametersTable);
+        for(ParamRow row: rowList)
+            parameterTable.addView(row);
+
+        refreshTextView = (TextView) view.findViewById(R.id.refreshTextView);
+        refreshTextView.setOnClickListener(this);
+        if(!rowList.isEmpty())
+            refreshTextView.setVisibility(View.GONE);
+
+        setHasOptionsMenu(true);
+        return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        for(ParamRow row: rowList)
+            parameterTable.removeView(row);
+
+        super.onDestroyView();
+    }
 
     @Override
     public void onDetach() {
@@ -129,7 +141,7 @@ public class ParametersTableFragment extends Fragment implements
 
 		// alternate background colors for clarity
 		if ((rowList.size() % 2) == 1)
-			pRow.setBackgroundColor(Color.BLACK);
+			pRow.setBackgroundColor(Color.rgb(0xF0, 0xF0, 0xF0));
 
 		rowList.add(pRow);
 		parameterTable.addView(pRow);
@@ -195,13 +207,13 @@ public class ParametersTableFragment extends Fragment implements
 						return p1.name.compareTo(p2.name);
 					}
 				});
+                //Remove the Refresh text view
+                refreshTextView.setVisibility(View.GONE);
+
                 // load parameters from file
 				drone.parameters.loadMetadata(getActivity(), null);
 				for (Parameter parameter : parameters)
 					refreshRowParameter(parameter, drone.parameters);
-
-                //Remove the Refresh text view
-                refreshTextView.setVisibility(View.GONE);
 			}
 		};
 		dialog.openDialog(getActivity());
