@@ -40,7 +40,6 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 	private CheckListSysLink sysLink;
 
 	public ChecklistFragment() {
-		Log.d("CHKLST", "Contructor");
 
 	}
 
@@ -123,8 +122,6 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 	public void onAttach(Activity activity) {
 		Log.d("CHKLST", "OnAttach");
 		this.context = activity;
-		this.drone = ((SuperActivity) activity).drone;			
-		sysLink = new CheckListSysLink(this.drone);
 		
 		if(this.context==null)
 			Log.d("CHKLST", "OnAttach context null");
@@ -152,8 +149,17 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 	}
 
 	@Override
+	public void onPause(){
+		super.onPause();
+	}
+	
+	@Override
 	public void onResume(){
 		Log.d("CHKLST", "OnResume");
+		
+		this.drone = ((SuperActivity) this.context).drone;			
+		sysLink = new CheckListSysLink(this.drone);
+
 		if(this.drone==null)
 		{
 			this.drone = ((SuperActivity) this.context).drone;
