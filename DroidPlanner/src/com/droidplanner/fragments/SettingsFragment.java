@@ -1,26 +1,62 @@
 package com.droidplanner.fragments;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
-import android.preference.EditTextPreference;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-
+import android.preference.*;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
 import com.droidplanner.file.DirectoryPath;
 
+import static com.droidplanner.utils.Constants.*;
+
 public class SettingsFragment extends PreferenceFragment implements
 		OnSharedPreferenceChangeListener {
+
+    /**
+     * Fragment label.
+     * Used by the navigation drawer.
+     * @since 1.2.0
+     */
+    public static final int LABEL_RESOURCE = R.string.screen_settings;
+
+    /**
+     * Fragment logo.
+     * Used by the navigation drawer.
+     * @since 1.2.0
+     */
+    public static final int LOGO_RESOURCE = R.drawable.ic_action_settings;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.preferences);
-		SharedPreferences sharedPref = PreferenceManager
-				.getDefaultSharedPreferences(getActivity());
+
+        final Context context = getActivity().getApplicationContext();
+		final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences
+                (context);
+
+        //User interface preferences
+        CheckBoxPreference menuDrawerLock = (CheckBoxPreference) findPreference
+                (PREF_MENU_DRAWER_LOCK);
+        if(menuDrawerLock != null){
+            boolean defaultValue = sharedPref.getBoolean(PREF_MENU_DRAWER_LOCK,
+                    DEFAULT_MENU_DRAWER_LOCK );
+            menuDrawerLock.setChecked(defaultValue);
+            menuDrawerLock.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    //Broadcast the preference change.
+                    context.sendStickyBroadcast(new Intent(ACTION_MENU_DRAWER_LOCK_UPDATE)
+                            .putExtra(EXTRA_MENU_DRAWER_LOCK, (Boolean)newValue));
+                    return true;
+                }
+            });
+        }
 
 		findPreference("pref_connection_type").setSummary(
 				sharedPref.getString("pref_connection_type", ""));

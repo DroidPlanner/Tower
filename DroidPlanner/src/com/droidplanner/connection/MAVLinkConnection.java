@@ -1,20 +1,20 @@
 package com.droidplanner.connection;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import com.MAVLink.Messages.MAVLinkMessage;
+import com.MAVLink.Messages.MAVLinkPacket;
+import com.MAVLink.Parser;
+import com.droidplanner.file.FileStream;
+import com.droidplanner.utils.Constants;
+
 import java.io.BufferedOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-
-import com.MAVLink.Parser;
-import com.MAVLink.Messages.MAVLinkMessage;
-import com.MAVLink.Messages.MAVLinkPacket;
-import com.droidplanner.file.FileStream;
 
 public abstract class MAVLinkConnection extends Thread {
 
@@ -49,7 +49,14 @@ public abstract class MAVLinkConnection extends Thread {
 	protected int iavailable, i;
 	protected boolean connected = true;
 
-	private ByteBuffer logBuffer;	
+	private ByteBuffer logBuffer;
+
+    /**
+     * Bluetooth server to relay the mavlink packet to listening connected clients.
+     *
+     * @since 1.2.0
+     */
+    private BluetoothServer mBtServer;
 
 	public MAVLinkConnection(Context parentContext) {
 		this.parentContext = parentContext;
@@ -59,6 +66,14 @@ public abstract class MAVLinkConnection extends Thread {
 				.getDefaultSharedPreferences(parentContext);
 		logEnabled = prefs.getBoolean("pref_mavlink_log_enabled", false);
 		getPreferences(prefs);
+
+        //Create the bluetooth server if the user allows it
+        boolean isBtRelayServerEnabled = prefs.getBoolean(Constants
+                .PREF_MAVLINK_BLUETOOTH_RELAY_SERVER_TOGGLE,
+                Constants.DEFAULT_MAVLINK_BLUETOOTH_RELAY_SERVER_TOGGLE);
+
+        if (isBtRelayServerEnabled)
+            mBtServer = new BluetoothServer();
 	}
 
 	@Override
@@ -73,20 +88,27 @@ public abstract class MAVLinkConnection extends Thread {
 				logBuffer.order(ByteOrder.BIG_ENDIAN);
 			}
 
+            if (mBtServer != null) {
+                //Start the bluetooth server
+                mBtServer.start();
+            }
+            
 			while (connected) {
 				readDataBlock();
 				handleData();
 			}
-			closeConnection();
 
+            if (mBtServer != null) {
+                //Stop the bluetooth server
+                mBtServer.stop();
+            }
+            
+			closeConnection();
 		} catch (FileNotFoundException e) {
-			listner.onComError(e.getMessage());
 			e.printStackTrace();
 		} catch (IOException e) {
-			listner.onComError(e.getMessage());
 			e.printStackTrace();
 		}
-
 		listner.onDisconnect();
 	}
 
@@ -100,6 +122,11 @@ public abstract class MAVLinkConnection extends Thread {
 				saveToLog(receivedPacket);
 				MAVLinkMessage msg = receivedPacket.unpack();
 				listner.onReceiveMessage(msg);
+
+                if (mBtServer != null) {
+                    //Send the received packet to the connected clients
+                    mBtServer.relayMavPacket(receivedPacket);
+                }
 			}
 		}
 

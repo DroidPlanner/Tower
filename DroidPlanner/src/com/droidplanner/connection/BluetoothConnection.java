@@ -1,23 +1,24 @@
 package com.droidplanner.connection;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.UnknownHostException;
-import java.util.Set;
-import java.util.UUID;
-
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.ParcelUuid;
+import android.preference.PreferenceManager;
 import android.util.Log;
+import com.droidplanner.utils.Constants;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 public class BluetoothConnection extends MAVLinkConnection {
 	private static final String BLUE = "BLUETOOTH";
@@ -36,48 +37,46 @@ public class BluetoothConnection extends MAVLinkConnection {
 	}
 
 	@Override
-	protected void openConnection() throws UnknownHostException, IOException {
+	protected void openConnection() throws IOException {
+		Log.d(BLUE, "Connect");
 
-		Log.d(BLUE, "Looking for BT devs ...");
-		BluetoothDevice device = findBluetoothDevice();
+        //Retrieve the stored address
+        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(parentContext);
+        String address = settings.getString(Constants.PREF_BLUETOOTH_DEVICE_ADDRESS, null);
 
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD) { 
-				bluetoothSocket = device.createRfcommSocketToServiceRecord(UUID.fromString(UUID_SPP_DEVICE));
-		} else {			
-				Method BTSocketMethod = null;
-			try {
-				BTSocketMethod = device.getClass().getMethod("createInsecureRfcommSocketToServiceRecord", new Class[] { UUID.class });
-			} catch (NoSuchMethodException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		BluetoothDevice device = address == null ? findBluetoothDevice(): mBluetoothAdapter
+                .getRemoteDevice(address);
 
-			try {
-				bluetoothSocket = (BluetoothSocket) BTSocketMethod.invoke(device, (UUID) UUID.fromString(UUID_SPP_DEVICE));
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+        List<UUID> uuidList = new ArrayList<UUID>();
+        uuidList.add(UUID.fromString(UUID_SPP_DEVICE));
+        for(UUID uuid : BluetoothServer.UUIDS){
+            uuidList.add(uuid);
+        }
 
-		}
+        for (UUID uuid : uuidList) {
+            try {
+                bluetoothSocket = device.createRfcommSocketToServiceRecord(uuid);
+                mBluetoothAdapter.cancelDiscovery();
+                bluetoothSocket.connect();
 
-		
+                out = bluetoothSocket.getOutputStream();
+                in = bluetoothSocket.getInputStream();
 
-		mBluetoothAdapter.cancelDiscovery();
-		bluetoothSocket.connect(); //Here the IOException will rise on BT protocol/handshake error.
-		Log.d(BLUE, "## BT Connected ##");			
+                //Found a good one... break
+                break;
+            } catch (IOException e) {
+                //try another uuid
+            }
+        }
 
-		out = bluetoothSocket.getOutputStream();
-		in = bluetoothSocket.getInputStream();
+        if (out == null || in == null){
+            throw new IOException("Bluetooth socket connect failed.");
+        }
 	}
 
 	@SuppressLint("NewApi")
 	private BluetoothDevice findBluetoothDevice() throws UnknownHostException {
-		Set<BluetoothDevice> pairedDevices = mBluetoothAdapter
-				.getBondedDevices();
+		Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
 		// If there are paired devices
 		if (pairedDevices.size() > 0) {
 			// Loop through paired devices
@@ -89,8 +88,6 @@ public class BluetoothConnection extends MAVLinkConnection {
 					// TODO maybe this will not work on newer devices
 					Log.d(BLUE, "id:" + id.toString());
 					if (id.toString().equalsIgnoreCase(UUID_SPP_DEVICE)) {
-						Log.d(BLUE, ">> Selected: " + device.getName()
-								+ " Using: " + id.toString());
 						return device;
 					}
 				}
@@ -115,7 +112,6 @@ public class BluetoothConnection extends MAVLinkConnection {
 	@Override
 	protected void closeConnection() throws IOException {
 		bluetoothSocket.close();
-		Log.d(BLUE, "## BT Closed ##");
 	}
 
 	@Override

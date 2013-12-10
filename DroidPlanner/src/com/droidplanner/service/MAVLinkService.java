@@ -25,15 +25,13 @@ import com.droidplanner.activitys.FlightActivity;
 import com.droidplanner.connection.BluetoothConnection;
 import com.droidplanner.connection.MAVLinkConnection;
 import com.droidplanner.connection.MAVLinkConnection.MavLinkConnectionListner;
-import com.droidplanner.connection.TcpConnection;
-import com.droidplanner.connection.UdpConnection;
-import com.droidplanner.connection.UsbConnection;
+import com.droidplanner.utils.Constants;
+import com.droidplanner.utils.Utils;
 
 /**
  * http://developer.android.com/guide/components/bound-services.html#Messenger
  * 
  */
-
 public class MAVLinkService extends Service implements MavLinkConnectionListner {
 	public static final int MSG_REGISTER_CLIENT = 1;
 	public static final int MSG_UNREGISTER_CLIENT = 2;
@@ -178,19 +176,12 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 	 * the as needed. May throw a onConnect or onDisconnect callback
 	 */
 	private void connectMAVconnection() {
-		String connectionType = PreferenceManager.getDefaultSharedPreferences(
-				getApplicationContext()).getString("pref_connection_type", "");
-		if (connectionType.equals("USB")) {
-			mavConnection = new UsbConnection(this);
-		} else if (connectionType.equals("TCP")) {
-			mavConnection = new TcpConnection(this);
-		} else if (connectionType.equals("UDP")) {
-			mavConnection = new UdpConnection(this);
-		} else if (connectionType.equals("BLUETOOTH")) {
-			mavConnection = new BluetoothConnection(this);
-		} else {
-			return;
-		}
+		String connectionType = PreferenceManager
+                .getDefaultSharedPreferences(getApplicationContext())
+                .getString(Constants.PREF_CONNECTION_TYPE, Constants.DEFAULT_CONNECTION_TYPE);
+
+        Utils.ConnectionType connType = Utils.ConnectionType.valueOf(connectionType);
+        mavConnection = connType.getConnection(this);
 		mavConnection.start();
 	}
 
@@ -253,5 +244,4 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 			wakeLock = null;
 		}
 	}
-
 }

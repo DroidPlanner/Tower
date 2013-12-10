@@ -4,9 +4,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <com.droidplanner.widgets.HUD.HUD
+    <com.droidplanner.glass.utils.hud.HUD
         android:id="@+id/hudWidget"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>
