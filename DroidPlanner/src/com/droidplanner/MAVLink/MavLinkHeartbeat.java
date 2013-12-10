@@ -17,14 +17,13 @@ public class MavLinkHeartbeat {
 	public MavLinkHeartbeat(Drone drone,int freqHz){
 		this.drone = drone;
 		this.freqHz = freqHz;
-		handler.postDelayed(runnable, freqHz*1000);
 	}
 
 	private Runnable runnable = new Runnable() {
 	   @Override
 	   public void run() {
-	      //sendMavHeartbeat(drone);
-		   Log.d("Hearbeat", "beating");
+	      sendMavHeartbeat(drone);
+//		  Log.d("Hearbeat", "beating");
 		  
 		   if(isActive())
 			  handler.postDelayed(this, freqHz*1000);
@@ -37,6 +36,9 @@ public class MavLinkHeartbeat {
 
 	public void setActive(boolean active) {
 		this.active = active;
+		if(active){
+			handler.postDelayed(runnable, freqHz*1000);			
+		}
 	}
 
 	public static void sendMavHeartbeat(Drone drone) {
