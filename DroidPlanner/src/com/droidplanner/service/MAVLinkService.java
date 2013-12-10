@@ -21,7 +21,7 @@ import android.widget.Toast;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
 import com.droidplanner.R;
-import com.droidplanner.activitys.FlightDataActivity;
+import com.droidplanner.activitys.FlightActivity;
 import com.droidplanner.connection.BluetoothConnection;
 import com.droidplanner.connection.MAVLinkConnection;
 import com.droidplanner.connection.MAVLinkConnection.MavLinkConnectionListner;
@@ -216,7 +216,7 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 				.setContentTitle(getResources().getString(R.string.app_title))
 				.setContentText(text);
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-				new Intent(this, FlightDataActivity.class), 0);
+				new Intent(this, FlightActivity.class), 0);
 		mBuilder.setContentIntent(contentIntent);
 
 		NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

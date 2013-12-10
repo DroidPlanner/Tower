@@ -3,8 +3,6 @@ package com.droidplanner.polygon;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Context;
-import com.droidplanner.R;
 import com.droidplanner.fragments.helpers.MapPath.PathSource;
 import com.droidplanner.helpers.geoTools.GeoTools;
 import com.droidplanner.helpers.geoTools.LineLatLng;
@@ -68,14 +66,14 @@ public class Polygon implements PathSource {
 		return path;
 	}
 
-	public void checkIfValid(Context currContext) throws Exception {
+	public void checkIfValid() throws Exception {
 		switch (points.size()) {
 		case 0:
-			throw new Exception(currContext.getString(R.string.exception_draw_polygon));
+			throw new Exception("Draw a polygon");
 		case 1:
-			throw new Exception(currContext.getString(R.string.exception_draw_2_more_polygon_points));
+			throw new Exception("Draw at least 2 more polygon points");
 		case 2:
-			throw new Exception(currContext.getString(R.string.exception_draw_1_more_polygon_points));
+			throw new Exception("Draw at least 1 more polygon points");
 		default:
 			return;
 		}

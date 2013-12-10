@@ -1,20 +1,14 @@
 package com.droidplanner.dialogs.parameters;
 
+import java.text.ParseException;
+import java.util.Map;
+
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.TextView;
-import com.droidplanner.R;
+
 import com.droidplanner.parameters.Parameter;
 import com.droidplanner.parameters.ParameterMetadata;
-
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 
 public class DialogParameterValues {

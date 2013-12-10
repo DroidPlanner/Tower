@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" >
+
+    <item
+        android:id="@+id/bar_home"
+        android:icon="@drawable/bar_home"
+        android:showAsAction="always|withText"
+        android:title=" 29m  "/>
+    <item
+        android:id="@+id/bar_gps"
+        android:icon="@drawable/bar_gps"
+        android:showAsAction="always|withText"
+        android:title="  8, 3D  "/>
+    <item
+        android:id="@+id/bar_propeller"
+        android:icon="@drawable/bar_propeller"
+        android:showAsAction="always|withText"
+        android:title="  1:20  "/>
+    <item
+        android:id="@+id/bar_battery"
+        android:icon="@drawable/bar_battery"
+        android:showAsAction="always|withText"
+        android:title="  12.2v, 72%  "/>
+    <item
+        android:id="@+id/bar_signal"
+        android:icon="@drawable/bar_signal"
+        android:showAsAction="always|withText"
+        android:title="  86%  "/>
+    <item
+        android:id="@+id/bar_mode"
+        android:actionViewClass="com.droidplanner.widgets.spinners.SelectModeSpinner"
+	    style="@style/ModeSpinnerText"
+        android:showAsAction="always"
+        tools:ignore="MenuTitle"/>
+    <item
+        android:id="@+id/menu_connect"
+        android:showAsAction="never"
+        android:title="@string/menu_disconnect"/>
+    <!--<item
+        android:id="@+id/menu_configuration"
+        android:showAsAction="never"
+        android:title="@string/configuration"/>-->
+    <item
+        android:id="@+id/menu_settings"
+        android:showAsAction="never"
+        android:title="@string/settings"/>
+
+    <item
+        android:id="@+id/menu_send_mission"
+        android:showAsAction="never"
+        android:title="@string/send_mission"/>
+    <item
+        android:id="@+id/menu_load_mission"
+        android:showAsAction="never"
+        android:title="@string/load_mission"/>
+
+</menu>

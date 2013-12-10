@@ -14,6 +14,7 @@
         <item>@string/screen_camera</item>
         <item>@string/screen_gcp</item>
         <item>@string/screen_chart</item>
+        <item >"NewUI"</item>
     </string-array>
     <string-array name="RCQuickModes">
         <item name="Stabilize">Stabilize</item>
@@ -71,6 +72,34 @@
     </string-array>
     <string-array name="ExampleWaypointType">
         <item >Waypoint Type</item>
+    </string-array>
+    <string-array name="RC_Tuning">
+        <item >Auto-tune</item>
+        <item >Roll / Pitch</item>
+        <item >Altitude Hold</item>
+        <item >Loiter</item>
+        <item >Navigation</item>
+    </string-array>
+    <string-array name="RC_Features">
+		<item>Do Nothing</item>
+		<item>Set Hover</item>
+		<item>Flip</item>
+		<item>Simple Mode</item>
+		<item>RTL</item>
+		<item>Save Trim</item>
+		<item>ADC Filter</item>
+		<item>Save Wp</item>
+		<item>Multi Mode</item>
+		<item>Camera Trigger</item>
+		<item>Sonar</item>
+		<item>Fence</item>
+		<item>Resettoarmedyaw</item>
+		<item>Supersimple_Mode</item>
+		<item>Acro_Trainer</item>
+		<item>Sprayer</item>
+		<item>Auto</item>
+		<item>Autotune</item>
+		<item>Land</item>
     </string-array>
     <string-array name="ParamMeta">
         <item>None</item>

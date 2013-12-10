@@ -1,6 +1,5 @@
 package com.droidplanner.fragments;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -11,28 +10,25 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.MAVLink.Messages.ApmModes;
-import com.droidplanner.DroidPlannerApp;
-import com.droidplanner.drone.Drone;
-import com.droidplanner.drone.variables.WaypointLabel;
-import com.droidplanner.drone.variables.waypoint;
+import com.droidplanner.drone.DroneInterfaces.MapUpdatedListner;
+import com.droidplanner.drone.variables.GuidedPoint;
+import com.droidplanner.drone.variables.GuidedPoint.OnGuidedListener;
 import com.droidplanner.fragments.helpers.DroneMap;
-import com.droidplanner.fragments.helpers.GuidePointListener;
+import com.droidplanner.fragments.helpers.MapPath;
 import com.droidplanner.fragments.markers.DroneMarker;
-import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
-import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 public class FlightMapFragment extends DroneMap implements
-		OnMapLongClickListener, OnMarkerClickListener, OnMarkerDragListener {
+		OnMapLongClickListener, OnMarkerClickListener, OnMarkerDragListener, OnGuidedListener, MapUpdatedListner {
 	private Polyline flightPath;
+	private MapPath droneLeashPath;
 	private int maxFlightPathSize;
 	public boolean isAutoPanEnabled;
 	private boolean isGuidedModeEnabled;
@@ -40,26 +36,25 @@ public class FlightMapFragment extends DroneMap implements
 	public boolean hasBeenZoomed = false;
 
 	public DroneMarker droneMarker;
-	public Drone drone;
-
-	private GuidePointListener guidePointListener;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
 			Bundle bundle) {
 		View view = super.onCreateView(inflater, viewGroup, bundle);
-		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
 
 		droneMarker = new DroneMarker(this);
+		droneLeashPath = new MapPath(mMap,getResources());
 
 		addFlightPathToMap();
 		getPreferences();
 
-		drone.setMapListner(droneMarker);
+
+		drone.setMapListner(this);
 		mMap.setOnMapLongClickListener(this);
 		mMap.setOnMarkerDragListener(this);
 		mMap.setOnMarkerClickListener(this);
-
+		
+		drone.setGuidedPointListner(this);
 		return view;
 	}
 
@@ -72,6 +67,11 @@ public class FlightMapFragment extends DroneMap implements
 		isGuidedModeEnabled = prefs.getBoolean("pref_guided_mode_enabled",
 				false);
 		isAutoPanEnabled = prefs.getBoolean("pref_auto_pan_enabled", false);
+	}
+
+	@Override
+	public void update() {
+		super.update();
 	}
 
 	public void addFlithPathPoint(LatLng position) {
@@ -91,94 +91,54 @@ public class FlightMapFragment extends DroneMap implements
 		flightPath.setPoints(oldFlightPath);
 	}
 
-	public void zoomToLastKnowPosition() {
-		if (drone.GPS.isPositionValid()) {
-			mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-					drone.GPS.getPosition(), 16));
-		} else {
-			Toast.makeText(getActivity(),
-					"There is no valid location for the Drone",
-					Toast.LENGTH_SHORT).show();
-		}
-	}
-
 	private void addFlightPathToMap() {
 		PolylineOptions flightPathOptions = new PolylineOptions();
 		flightPathOptions.color(Color.argb(180, 0, 0, 200)).width(2).zIndex(1);
 		flightPath = mMap.addPolyline(flightPathOptions);
 	}
 
-	public void setGuidePointListener(GuidePointListener guidePointListener) {
-		this.guidePointListener = guidePointListener;
-	}
-
 	@Override
 	public void onMapLongClick(LatLng coord) {
 		getPreferences();
 		if (isGuidedModeEnabled)
-			drone.guidedPoint.newGuidedPoint(coord);
+			drone.guidedPoint.newGuidedPointWithCurrentAlt(coord);
 	}
 
 	@Override
-	public void onMarkerDragStart(Marker marker)
-	{
-		checkForGuidePointMoving(marker);
+	public void onMarkerDragStart(Marker marker){
 	}
 
 	@Override
-	public void onMarkerDrag(Marker marker)
-	{
-		checkForGuidePointMoving(marker);
+	public void onMarkerDrag(Marker marker){
+	}
+
+	
+	@Override
+	public void onMarkerDragEnd(Marker marker){
+		drone.guidedPoint.newGuidedPointwithLastAltitude(marker.getPosition());
 	}
 
 	@Override
-	public void onMarkerDragEnd(Marker marker)
-	{
-		checkForGuidePointMoving(marker);
-		drone.guidedPoint.newGuidedPoint(marker.getPosition());
-	}
-
-	@Override
-	public boolean onMarkerClick(Marker marker)
-	{
-		drone.guidedPoint.newGuidedPoint(marker.getPosition());
+	public boolean onMarkerClick(Marker marker){
+		drone.guidedPoint.newGuidedPointWithCurrentAlt(marker.getPosition());
 		return true;
 	}
 
-	private void checkForGuidePointMoving(Marker marker)
-	{
-		final Context context = getActivity().getApplicationContext();
-		drone.guidedPoint.setCoord(marker.getPosition());
-		guidePointListener.OnGuidePointMoved();
+	@Override
+	public void onGuidedPoint() {
+		GuidedPoint guidedPoint = drone.guidedPoint;
+		markers.updateMarker(guidedPoint, true, context);
+		droneLeashPath.update(guidedPoint);
 	}
 
-	public void updateFragment() {
-		final Context context = getActivity().getApplicationContext();
-
-		missionPath.update(drone.mission);
-		markers.updateMarker(drone.mission.getHome(), false, context);
-        markers.updateMarkers(cloneLabelMarkersFromWaypoints(drone.mission.getWaypoints()), false, context);
-
-		if(drone.guidedPoint.isCoordValid()) {
-			markers.updateMarker(drone.guidedPoint, true, context);
-			guidePointListener.OnGuidePointMoved();
-		}
+	@Override
+	public void onDroneUpdate() {
+		droneMarker.onDroneUpdate();
+		droneLeashPath.update(drone.guidedPoint);
 	}
 
-	public void onModeChanged() {
-		if(drone.state.getMode() != ApmModes.ROTOR_GUIDED) {
-			if(drone.guidedPoint.isCoordValid()) {
-				markers.clear();
-				drone.guidedPoint.invalidateCoord();
-			}
-		}
+	@Override
+	public void onDroneTypeChanged() {
+		droneMarker.onDroneTypeChanged();
 	}
-
-    private List<WaypointLabel> cloneLabelMarkersFromWaypoints(List<waypoint> waypoints) {
-        List<WaypointLabel> labels = new ArrayList<WaypointLabel>();
-        for (waypoint waypoint : waypoints) {
-            labels.add(new WaypointLabel(waypoint));
-        }
-        return labels;
-    }
 }

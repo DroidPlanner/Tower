@@ -37,7 +37,7 @@
     <!-- Original value: DroidPlanner -->
     <string name="app_title">DroidPlanner</string>
     <!-- Original value: Settings -->
-    <string name="menu_settings">Настройки</string>
+    <string name="settings">Настройки</string>
     <!-- Original value: Connect -->
     <string name="menu_connect">Подключить</string>
     <!-- Original value: Disconnect -->

@@ -30,4 +30,12 @@ public class Length {
 		}
 	}	
 	
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof Length) {
+			return lengthInMeters == ((Length)o).lengthInMeters;
+		}
+		return false; 
+	}
+	
 }

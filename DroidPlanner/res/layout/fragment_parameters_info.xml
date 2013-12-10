@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/opaque_black"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/nameView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp" />
+
+    <TextView
+        android:id="@+id/descView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp" />
+
+    <LinearLayout
+        android:id="@+id/unitsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="@string/metadata_units" />
+
+        <TextView
+            android:id="@+id/unitsView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/rangeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="@string/metadata_range" />
+
+        <TextView
+            android:id="@+id/rangeView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/valuesLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="@string/metadata_values" />
+
+        <TextView
+            android:id="@+id/valuesView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp" />
+    </LinearLayout>
+
+</LinearLayout>

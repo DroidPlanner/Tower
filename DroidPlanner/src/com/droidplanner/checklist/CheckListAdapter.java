@@ -18,8 +18,6 @@ import com.droidplanner.checklist.row.ListRow_Switch;
 import com.droidplanner.checklist.row.ListRow_Toggle;
 import com.droidplanner.checklist.row.ListRow_Type;
 import com.droidplanner.checklist.row.ListRow_Value;
-import com.droidplanner.drone.Drone;
-
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +35,7 @@ public class CheckListAdapter extends ListXmlAdapter implements
 
 	private OnCheckListItemUpdateListener listener;
 
-	public CheckListAdapter(Drone drone, LayoutInflater inflater,
+	public CheckListAdapter(LayoutInflater inflater,
 			List<String> listHeader,
 			HashMap<String, List<CheckListItem>> listDataChild) {
 		super(inflater, listHeader);
@@ -89,6 +87,7 @@ public class CheckListAdapter extends ListXmlAdapter implements
 				} else if (listItem.getTagName().equalsIgnoreCase("level_item")) {
 					ListRow_Level row = new ListRow_Level(this.inflater,
 							listItem);
+					row.setOnRowItemChangeListener(this);
 					xmlRows.add(row);
 				} else if (listItem.getTagName().equalsIgnoreCase("note_item")) {
 					ListRow_Note row = new ListRow_Note(this.inflater, listItem);

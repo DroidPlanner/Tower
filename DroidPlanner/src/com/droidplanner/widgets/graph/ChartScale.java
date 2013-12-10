@@ -11,11 +11,11 @@ public class ChartScale {
 	private OnScaleListner listner;
 
 	// range values to display
-	private double range = 180;
+	private double range = 45;
 	// minimal range
 	private double min = 10;
 	// maximal range
-	private double max = 180;
+	private double max = 45;
 
 	protected ScaleGestureDetector scaleDetector;
 
