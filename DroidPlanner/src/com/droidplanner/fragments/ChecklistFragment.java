@@ -104,6 +104,13 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 	}
 
 	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		this.drone = ((SuperActivity) this.context).drone;
+		sysLink = new CheckListSysLink(this.drone);
+		super.onActivityCreated(savedInstanceState);
+	}
+
+	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		this.context = activity;
@@ -130,8 +137,6 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 
 	@Override
 	public void onResume() {
-		this.drone = ((SuperActivity) this.context).drone;
-		sysLink = new CheckListSysLink(this.drone);
 		this.drone.addInfoListener(this);
 		super.onResume();
 	}
