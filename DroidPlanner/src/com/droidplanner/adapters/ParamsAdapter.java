@@ -26,7 +26,6 @@ import java.util.List;
  */
 public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
     private final int resource;
-
     private final int colorAltRow;
 
 
@@ -46,26 +45,26 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final View view;
-        final ParamView paramView;
+        final ParamTag paramTag;
 
         if(convertView == null) {
             // create new view
             final LayoutInflater inflater = ((Activity) getContext()).getLayoutInflater();
             view = inflater.inflate(resource, parent, false);
 
-            paramView = new ParamView();
-            paramView.setNameView((TextView) view.findViewById(R.id.params_row_name));
-            paramView.setDescView((TextView) view.findViewById(R.id.params_row_desc));
-            paramView.setValueView((EditText) view.findViewById(R.id.params_row_value));
-            view.setTag(paramView);
+            paramTag = new ParamTag();
+            paramTag.setNameView((TextView) view.findViewById(R.id.params_row_name));
+            paramTag.setDescView((TextView) view.findViewById(R.id.params_row_desc));
+            paramTag.setValueView((EditText) view.findViewById(R.id.params_row_value));
+            view.setTag(paramTag);
 
         } else {
             // recycle view
             view = convertView;
-            paramView = (ParamView) convertView.getTag();
+            paramTag = (ParamTag) convertView.getTag();
 
             // remove focus
-            final EditText valueView = paramView.getValueView();
+            final EditText valueView = paramTag.getValueView();
             if(valueView.hasFocus()) {
                 valueView.clearFocus();
 
@@ -75,7 +74,7 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
             }
 
             // detatch listeners
-            valueView.removeTextChangedListener(paramView);
+            valueView.removeTextChangedListener(paramTag);
             valueView.setOnFocusChangeListener(null);
         }
 
@@ -84,17 +83,17 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
         final Parameter param = item.getParameter();
         final ParameterMetadata metadata = item.getMetadata();
 
-        paramView.setPosition(position);
-        paramView.getNameView().setText(param.name);
-        paramView.getDescView().setText(getDescription(metadata));
-        paramView.setAppearance(item);
+        paramTag.setPosition(position);
+        paramTag.getNameView().setText(param.name);
+        paramTag.getDescView().setText(getDescription(metadata));
+        paramTag.setAppearance(item);
 
-        final EditText valueView = paramView.getValueView();
+        final EditText valueView = paramTag.getValueView();
         valueView.setText(item.getValue());
 
         // attach listeners
-        valueView.addTextChangedListener(paramView);
-        valueView.setOnFocusChangeListener(paramView);
+        valueView.addTextChangedListener(paramTag);
+        valueView.setOnFocusChangeListener(paramTag);
 
         // alternate background color for clarity
         view.setBackgroundColor((position % 2 == 1) ? colorAltRow : Color.TRANSPARENT);
@@ -114,7 +113,7 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
     }
 
 
-    private class ParamView implements TextWatcher, View.OnFocusChangeListener {
+    private class ParamTag implements TextWatcher, View.OnFocusChangeListener {
         private int position;
         private TextView nameView;
         private TextView descView;
