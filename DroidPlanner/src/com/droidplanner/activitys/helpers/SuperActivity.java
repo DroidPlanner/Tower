@@ -6,14 +6,12 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
-
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.DroidPlannerApp.OnSystemArmListener;
 import com.droidplanner.R;
 import com.droidplanner.activitys.ConfigurationActivity;
 import com.droidplanner.dialogs.AltitudeDialog;
 import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
-import com.droidplanner.dialogs.checklist.PreflightDialog;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.fragments.helpers.OfflineMapFragment;
 import com.droidplanner.helpers.units.Altitude;
@@ -85,7 +83,6 @@ public abstract class SuperActivity extends Activity implements
 			app.followMe.toogleFollowMeState();
 			return true;
 		case R.id.menu_preflight_checklist:
-			showCheckList();
 			return true;
 		case R.id.menu_map_type_hybrid:
 		case R.id.menu_map_type_normal:

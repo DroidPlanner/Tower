@@ -6,7 +6,11 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
-import android.preference.*;
+import android.preference.CheckBoxPreference;
+import android.preference.EditTextPreference;
+import android.preference.Preference;
+import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
 import com.droidplanner.file.DirectoryPath;
@@ -15,20 +19,6 @@ import static com.droidplanner.utils.Constants.*;
 
 public class SettingsFragment extends PreferenceFragment implements
 		OnSharedPreferenceChangeListener {
-
-    /**
-     * Fragment label.
-     * Used by the navigation drawer.
-     * @since 1.2.0
-     */
-    public static final int LABEL_RESOURCE = R.string.screen_settings;
-
-    /**
-     * Fragment logo.
-     * Used by the navigation drawer.
-     * @since 1.2.0
-     */
-    public static final int LOGO_RESOURCE = R.drawable.ic_action_settings;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

@@ -27,6 +27,7 @@
     </content>
     <orderEntry type="jdk" jdkName="Android 4.3 SDK" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" exported="" name="google-play-services" level="project" />
   </component>
 </module>
 

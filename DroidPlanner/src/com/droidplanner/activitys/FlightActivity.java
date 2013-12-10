@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperUI;
 import com.droidplanner.drone.DroneInterfaces.ModeChangedListener;
@@ -16,17 +15,9 @@ import com.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
 import com.droidplanner.fragments.FlightActionsFragment.OnMissionControlInteraction;
 import com.droidplanner.fragments.RCFragment;
 import com.droidplanner.fragments.helpers.OnMapInteractionListener;
-import com.droidplanner.fragments.mode.ModeAcroFragment;
-import com.droidplanner.fragments.mode.ModeAltholdFragment;
-import com.droidplanner.fragments.mode.ModeAutoFragment;
-import com.droidplanner.fragments.mode.ModeCircleFragment;
-import com.droidplanner.fragments.mode.ModeDriftFragment;
-import com.droidplanner.fragments.mode.ModeGuidedFragment;
-import com.droidplanner.fragments.mode.ModeLandFragment;
-import com.droidplanner.fragments.mode.ModeLoiterFragment;
-import com.droidplanner.fragments.mode.ModePositionFragment;
-import com.droidplanner.fragments.mode.ModeRTLFragment;
-import com.droidplanner.fragments.mode.ModeStabilizeFragment;
+import com.droidplanner.fragments.mode.*;
+import com.droidplanner.glass.activities.GlassActivity;
+import com.droidplanner.glass.utils.GlassUtils;
 import com.droidplanner.polygon.PolygonPoint;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -40,11 +31,21 @@ public class FlightActivity extends SuperUI implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        if (!GlassUtils.isGlassDevice()) {
+
+
 		setContentView(R.layout.activity_flight);
 		fragmentManager = getFragmentManager();
 		modeInfoPanel = fragmentManager.findFragmentById(R.id.modeInfoPanel);
 
 		failsafeTextView = findViewById(R.id.failsafeTextView);
+
+        }
+        else {
+            //Start the glass activity
+            startActivity(new Intent(this, GlassActivity.class));
+            finish();
+        }
 	}
 
 	@Override

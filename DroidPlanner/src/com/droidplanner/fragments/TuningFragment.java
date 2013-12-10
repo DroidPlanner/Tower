@@ -21,19 +21,6 @@ public class TuningFragment extends Fragment implements OnTuningDataListner {
 	private static final int NAV_MSG_RATE = 50;
 	private static final int CHART_BUFFER_SIZE = 20*NAV_MSG_RATE; // About 20s of data on the buffer
 
-    /**
-     * Fragment label.
-     * Used by the navigation drawer, and the view pager.
-     * @since 1.2.0
-     */
-    public static final int LABEL_RESOURCE = R.string.screen_tuning;
-
-    /**
-     * Fragment logo.
-     * Used by the navigation drawer.
-     * @since 1.2.0
-     */
-    public static final int LOGO_RESOURCE = R.drawable.ic_action_line_chart;
 
 	private Drone drone;
 	

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.droidplanner"
     android:versionCode="56"
     android:versionName="please run version.sh to get the version name" >
@@ -69,10 +68,6 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <meta-data
-                android:name="com.google.android.gms.version"
-                android:value="@integer/google_play_services_version"/>
-
         <service android:name=".service.MAVLinkService">
         </service>
 
@@ -97,7 +92,6 @@
         </activity>
         <activity
                 android:name=".activitys.EditorActivity"
-                android:label="@string/screen_editor"
                 android:launchMode="singleTask"
                 android:parentActivityName=".activitys.FlightActivity">
 
@@ -118,7 +112,7 @@
         <activity
                 android:name=".activitys.ConfigurationActivity"
                 android:launchMode="singleTask"
-                android:label="@string/screen_configuration">
+                >
 
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data

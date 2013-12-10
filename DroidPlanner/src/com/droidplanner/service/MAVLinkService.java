@@ -22,7 +22,6 @@ import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
 import com.droidplanner.R;
 import com.droidplanner.activitys.FlightActivity;
-import com.droidplanner.connection.BluetoothConnection;
 import com.droidplanner.connection.MAVLinkConnection;
 import com.droidplanner.connection.MAVLinkConnection.MavLinkConnectionListner;
 import com.droidplanner.utils.Constants;
