@@ -72,7 +72,10 @@ public class MavLinkMsgHandler {
 					m_sys.battery_remaining, m_sys.current_battery / 100.0);
 			break;
 		case msg_radio.MAVLINK_MSG_ID_RADIO:
-			// TODO implement link quality
+			msg_radio m_radio = (msg_radio) msg;
+			drone.radio.setRadioState(m_radio.rxerrors, m_radio.fixed,
+					m_radio.rssi, m_radio.remrssi, m_radio.txbuf,
+					m_radio.noise, m_radio.remnoise);
 			break;
 		case msg_gps_raw_int.MAVLINK_MSG_ID_GPS_RAW_INT:
 			drone.GPS.setGpsState(((msg_gps_raw_int) msg).fix_type,
