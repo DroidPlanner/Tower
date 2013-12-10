@@ -23,7 +23,7 @@ public class MavLinkHeartbeat {
 	   @Override
 	   public void run() {
 	      sendMavHeartbeat(drone);
-//		  Log.d("Hearbeat", "beating");
+		  Log.d("Heartbeat", "beating");
 		  
 		   if(isActive())
 			  handler.postDelayed(this, freqHz*1000);
@@ -44,7 +44,8 @@ public class MavLinkHeartbeat {
 	public static void sendMavHeartbeat(Drone drone) {
 		msg_heartbeat msg = new msg_heartbeat();
 		msg.type = MAV_TYPE.MAV_TYPE_GCS;
-		msg.autopilot = MAV_AUTOPILOT.MAV_AUTOPILOT_GENERIC;		
+		msg.autopilot = MAV_AUTOPILOT.MAV_AUTOPILOT_GENERIC;	
+		if(drone!=null)
 		drone.MavClient.sendMavPacket(msg.pack());
 	}
 
