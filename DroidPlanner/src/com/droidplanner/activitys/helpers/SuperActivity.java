@@ -1,10 +1,10 @@
 package com.droidplanner.activitys.helpers;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentActivity;
 import android.view.MenuItem;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.DroidPlannerApp.OnSystemArmListener;
@@ -18,7 +18,7 @@ import com.droidplanner.helpers.units.Altitude;
 import com.droidplanner.utils.Constants;
 import com.droidplanner.utils.Utils;
 
-public abstract class SuperActivity extends FragmentActivity implements
+public abstract class SuperActivity extends Activity implements
         OnAltitudeChangedListner, OnSystemArmListener {
 
     public DroidPlannerApp app;
@@ -46,14 +46,17 @@ public abstract class SuperActivity extends FragmentActivity implements
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_connect:
-                final String connectionType = PreferenceManager
-                        .getDefaultSharedPreferences(getApplicationContext())
-                        .getString(Constants.PREF_CONNECTION_TYPE, Constants.DEFAULT_CONNECTION_TYPE);
+                if (!drone.MavClient.isConnected()) {
+                    final String connectionType = PreferenceManager
+                            .getDefaultSharedPreferences(getApplicationContext())
+                            .getString(Constants.PREF_CONNECTION_TYPE,
+                                    Constants.DEFAULT_CONNECTION_TYPE);
 
-                if(Utils.ConnectionType.BLUETOOTH.name().equals(connectionType)){
-                    //Launch a bluetooth device selection screen for the user
-                    startActivity(new Intent(this, BTDeviceSelectionActivity.class));
-                    return true;
+                    if (Utils.ConnectionType.BLUETOOTH.name().equals(connectionType)) {
+                        //Launch a bluetooth device selection screen for the user
+                        startActivity(new Intent(this, BTDeviceSelectionActivity.class));
+                        return true;
+                    }
                 }
 
             case R.id.menu_disconnect:

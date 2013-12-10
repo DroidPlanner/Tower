@@ -35,6 +35,7 @@ public class ChartFragment extends Fragment implements DroneInterfaces.HudUpdate
         readoutMenu = (LinearLayout) view.findViewById(R.id.readoutMenu);
 
         checkBoxList.populateView(readoutMenu, labels, chart);
+        readoutMenu.requestFocus();
 
         return view;
     }

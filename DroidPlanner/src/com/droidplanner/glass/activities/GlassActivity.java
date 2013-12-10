@@ -3,6 +3,7 @@ package com.droidplanner.glass.activities;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +15,7 @@ import com.droidplanner.fragments.SettingsFragment;
 import com.droidplanner.glass.fragments.ChartFragment;
 import com.droidplanner.glass.fragments.HudFragment;
 import com.droidplanner.glass.utils.GlassUtils;
+import com.google.android.glass.touchpad.Gesture;
 import com.google.android.glass.touchpad.GestureDetector;
 
 /**
@@ -42,6 +44,8 @@ public class GlassActivity extends SuperActivity implements DroidPlannerApp.Conn
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_glass);
+
+        setUpGestureDetector();
 
         mFragManager = getFragmentManager();
 
@@ -102,10 +106,20 @@ public class GlassActivity extends SuperActivity implements DroidPlannerApp.Conn
 
     @Override
     public boolean onGenericMotionEvent(MotionEvent event){
-        if(mGestureDetector != null){
+        if(mGestureDetector != null && event.getSource() == InputDevice.SOURCE_TOUCHPAD){
             return mGestureDetector.onMotionEvent(event);
         }
         return super.onGenericMotionEvent(event);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu){
+        final MenuItem connectMenuItem = menu.findItem(R.id.menu_connect);
+        int titleRes = drone.MavClient.isConnected() ? R.string.menu_disconnect: R.string
+                .menu_connect;
+
+        connectMenuItem.setTitle(titleRes);
+        return true;
     }
 
     /**
@@ -133,5 +147,17 @@ public class GlassActivity extends SuperActivity implements DroidPlannerApp.Conn
 
     private Fragment getCurrentFragment(){
         return mFragManager.findFragmentById(R.id.glass_layout);
+    }
+
+    private void setUpGestureDetector(){
+        if(GlassUtils.isGlassDevice()){
+            mGestureDetector = new GestureDetector(getApplicationContext());
+            mGestureDetector.setBaseListener(new GestureDetector.BaseListener() {
+                @Override
+                public boolean onGesture(Gesture gesture) {
+                    return false;
+                }
+            });
+        }
     }
 }
