@@ -25,6 +25,7 @@ import com.droidplanner.drone.variables.Navigation;
 import com.droidplanner.drone.variables.Orientation;
 import com.droidplanner.drone.variables.Parameters;
 import com.droidplanner.drone.variables.RC;
+import com.droidplanner.drone.variables.Radio;
 import com.droidplanner.drone.variables.Speed;
 import com.droidplanner.drone.variables.State;
 import com.droidplanner.drone.variables.Type;
@@ -40,6 +41,7 @@ public class Drone {
 	public Speed speed = new Speed(this);
 	public State state = new State(this);
 	public Battery battery = new Battery(this);
+	public Radio radio = new Radio(this);
 	public Home home = new Home(this);
 	public Mission mission = new Mission(this);
 	public MissionStats missionStats = new MissionStats(this);
