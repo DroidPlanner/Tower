@@ -79,6 +79,7 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner,
 				drone.battery.getBattVolt(), drone.battery.getBattRemain()));
 		gps.setTitle(String.format("%d, %s", drone.GPS.getSatCount(),
 				drone.GPS.getFixType()));
+		signal.setTitle(String.format("%d%%",drone.radio.getRssi()));
 	}
 
 	@Override

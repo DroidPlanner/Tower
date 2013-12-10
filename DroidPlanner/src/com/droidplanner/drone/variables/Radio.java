@@ -1,5 +1,7 @@
 package com.droidplanner.drone.variables;
 
+import android.util.Log;
+
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneVariable;
 
@@ -49,6 +51,8 @@ public class Radio extends DroneVariable {
 		if (this.rxerrors != rxerrors | this.fixed != fixed | this.rssi != rssi
 				| this.remrssi != remrssi | this.txbuf != txbuf
 				| this.noise != noise | this.remnoise != remnoise) {
+			Log.d("LINK", String.valueOf(remrssi) +"/"+String.valueOf(rssi));
+
 			this.rxerrors = rxerrors;
 			this.fixed = fixed;
 			this.rssi = rssi;
