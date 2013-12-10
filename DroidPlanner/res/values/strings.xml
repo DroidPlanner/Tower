@@ -210,7 +210,7 @@
 
     <!--  Bluetooth device selection strings -->
     <string name="scanning">scanning for devices...</string>
-    <string name="select_device">select a device to connect</string>
+    <string name="select_device">Select device to connect</string>
     <string name="none_paired">No devices have been paired</string>
     <string name="none_found">No devices found</string>
     <string name="title_paired_devices">Paired Devices</string>

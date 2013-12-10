@@ -126,7 +126,7 @@
         <activity
                 android:name=".activitys.helpers.BTDeviceSelectionActivity"
                 android:launchMode="singleTop"
-                android:theme="@android:style/Theme.Holo.Dialog"
+                android:theme="@style/CustomActionBarTheme.Dialog"
                 android:excludeFromRecents="true"/>
     </application>
 

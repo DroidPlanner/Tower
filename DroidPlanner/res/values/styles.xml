@@ -167,7 +167,10 @@
 	    <item name="android:textSize">16dp</item>
 	</style>
 
-
+    <style name="CustomActionBarTheme.Dialog" parent="@android:style/Theme.Holo.Light.Dialog">
+       <item name="android:popupMenuStyle">@style/MyPopupMenu</item>
+        <item name="android:itemTextAppearance">@style/myCustomMenuTextApearance</item>
+    </style>
 
 	 <!-- Popup Menu Style -->
 	<style name="MyPopupMenu" parent="android:style/Widget.Holo.Light.ListPopupWindow">
