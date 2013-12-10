@@ -27,14 +27,17 @@ public class MavLinkStreamRates {
 				"pref_mavlink_stream_rate_rc_channels", "0"));
 		int rawSensors = Integer.parseInt(prefs.getString(
 				"pref_mavlink_stream_rate_raw_sensors", "0"));
+		int rawController = Integer.parseInt(prefs.getString(
+				"pref_mavlink_stream_rate_raw_controller", "0"));
 
 		setupStreamRates(droidPlannerApp.drone.MavClient, extendedStatus,
-				extra1, extra2, extra3, position, rcChannels, rawSensors);
+				extra1, extra2, extra3, position, rcChannels, rawSensors,
+				rawController);
 	}
 
-	private static void setupStreamRates(MAVLinkClient MAVClient,
+	public static void setupStreamRates(MAVLinkClient MAVClient,
 			int extendedStatus, int extra1, int extra2, int extra3,
-			int position, int rcChannels, int rawSensors) {
+			int position, int rcChannels, int rawSensors, int rawControler) {
 		requestMavlinkDataStream(MAVClient,
 				MAV_DATA_STREAM.MAV_DATA_STREAM_EXTENDED_STATUS, extendedStatus);
 		requestMavlinkDataStream(MAVClient,
@@ -47,6 +50,8 @@ public class MavLinkStreamRates {
 				MAV_DATA_STREAM.MAV_DATA_STREAM_POSITION, position);
 		requestMavlinkDataStream(MAVClient,
 				MAV_DATA_STREAM.MAV_DATA_STREAM_RAW_SENSORS, rawSensors);
+		requestMavlinkDataStream(MAVClient,
+				MAV_DATA_STREAM.MAV_DATA_STREAM_RAW_CONTROLLER, rawControler);
 		requestMavlinkDataStream(MAVClient,
 				MAV_DATA_STREAM.MAV_DATA_STREAM_RC_CHANNELS, rcChannels);
 	}

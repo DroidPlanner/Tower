@@ -62,6 +62,11 @@
 			        android:inputType="number"
 			        android:key="pref_mavlink_stream_rate_raw_sensors"
 			        android:title="Raw sensors" />
+            <EditTextPreference
+                android:defaultValue="3"
+                android:inputType="number"
+                android:key="pref_mavlink_stream_rate_raw_controller"
+                android:title="Raw Controler" />
         </PreferenceScreen>
     </PreferenceCategory>
     <PreferenceCategory

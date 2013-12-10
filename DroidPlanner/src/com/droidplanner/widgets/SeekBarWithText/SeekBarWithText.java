@@ -23,6 +23,7 @@ public class SeekBarWithText extends LinearLayout implements
 	private double inc = 1;
 	private String title = "";
 	private String unit = "";
+	private String formatString = "%2.1f";
 	private OnTextSeekBarChangedListner listner;
 
 	public SeekBarWithText(Context context) {
@@ -42,9 +43,16 @@ public class SeekBarWithText extends LinearLayout implements
 			setMinMaxInc(a.getFloat(R.styleable.SeekBarWithText_min, 0),
 					a.getFloat(R.styleable.SeekBarWithText_max, 100),
 					a.getFloat(R.styleable.SeekBarWithText_inc, 1));
+			setFormat(a.getString(R.styleable.SeekBarWithText_formatString));
 		} finally {
 			a.recycle();
 		}
+	}
+
+	private void setFormat(String string) {
+		if (string!=null) {
+			formatString = string;
+		}		
 	}
 
 	private void createViews(Context context) {
@@ -67,7 +75,9 @@ public class SeekBarWithText extends LinearLayout implements
 	}
 
 	public void setUnit(String unit) {
-		this.unit = unit;
+		if (unit != null) {
+			this.unit = unit;			
+		}
 	}
 
 	public void setTitle(CharSequence text) {
@@ -78,7 +88,7 @@ public class SeekBarWithText extends LinearLayout implements
 	}
 
 	private void updateTitle() {
-		textView.setText(String.format("%s\t%2.1f %s", title, getValue(), unit));
+		textView.setText(String.format("%s\t"+formatString+" %s", title, getValue(), unit));
 	}
 
 	public double getValue() {

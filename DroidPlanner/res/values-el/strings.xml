@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_title">DroidPlanner</string>
-    <string name="menu_settings">Ρυθμίσεις</string>
+    <string name="settings">Ρυθμίσεις</string>
     <string name="menu_connect">Σύνδεση</string>
     <string name="menu_disconnect">Αποσύνδεση</string>
     <string name="conected">Σύνδεση</string>

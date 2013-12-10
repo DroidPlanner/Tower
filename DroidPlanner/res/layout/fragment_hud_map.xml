@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="right" >
+
+    <View
+        android:id="@+id/strutCenter"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerHorizontal="true" />
+
+    <FrameLayout
+        android:id="@+id/containerHud"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@id/strutCenter" >
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_alignLeft="@+id/strutCenter" >
+
+        <FrameLayout
+            android:id="@+id/containerMap"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+        </FrameLayout>
+
+        <android.gesture.GestureOverlayView
+            android:id="@+id/overlay1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:eventsInterceptionEnabled="false"
+            android:fadeEnabled="false"
+            android:gestureColor="@android:color/white"
+            android:gestureStrokeLengthThreshold="0.1"
+            android:gestureStrokeType="single" >
+        </android.gesture.GestureOverlayView>
+    </FrameLayout>
+
+</RelativeLayout>

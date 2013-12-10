@@ -53,6 +53,10 @@ public class GestureMapFragment extends Fragment implements OnGestureListener {
 		overlay.setEnabled(true);
 	}
 
+	public void disableGestureDetection() {
+		overlay.setEnabled(false);		
+	}
+	
 	public void setOnPathFinishedListner(OnPathFinishedListner listner) {
 		this.listner = listner;
 	}
@@ -91,5 +95,6 @@ public class GestureMapFragment extends Fragment implements OnGestureListener {
 	@Override
 	public void onGestureStarted(GestureOverlayView arg0, MotionEvent arg1) {
 	}
+
 
 }

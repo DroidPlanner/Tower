@@ -28,6 +28,10 @@ public class Parameter {
 		this(name, value, 0); // TODO Setting type to Zero may cause an error
 	}
 
+	public Parameter(String name) {
+		this(name, 0, 0); // TODO Setting type to Zero may cause an error
+	}
+
 	public String getValue() {
 		return format.format(value);
 	}

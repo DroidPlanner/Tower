@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_title">DroidPlanner</string>
-    <string name="menu_settings">Configuration</string>
+    <string name="settings">Configuration</string>
     <string name="menu_connect">Connection</string>
     <string name="menu_disconnect">Deconnection</string>
     <string name="conected">Connecte</string>

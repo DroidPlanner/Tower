@@ -1,11 +1,11 @@
 package com.droidplanner.dialogs.parameters;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+
 import com.droidplanner.R;
 import com.droidplanner.parameters.ParameterMetadata;
 
@@ -20,7 +20,7 @@ public class DialogParameterInfo {
 
     private static View buildView(ParameterMetadata metadata, Context context) {
         final LayoutInflater inflater = LayoutInflater.from(context);
-        final View view = inflater.inflate(R.layout.dialog_parameter_info, null);
+        final View view = inflater.inflate(R.layout.fragment_parameters_info, null);
 
         setTextView(view, R.id.nameView, metadata.getDisplayName());
         setTextView(view, R.id.descView, metadata.getDescription());

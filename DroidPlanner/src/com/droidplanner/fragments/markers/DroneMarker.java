@@ -8,6 +8,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class DroneMarker implements MapUpdatedListner {
+	private static final int ZOOM_LEVEL = 18;
+	
 	private Marker droneMarker;
 	private FlightMapFragment flightMapFragment;
 	private DroneBitmaps bitmaps;
@@ -34,11 +36,11 @@ public class DroneMarker implements MapUpdatedListner {
 		if (!flightMapFragment.hasBeenZoomed) {
 			flightMapFragment.hasBeenZoomed = true;
 			flightMapFragment.mMap.animateCamera(CameraUpdateFactory
-					.newLatLngZoom(coord, 16));
+					.newLatLngZoom(coord, ZOOM_LEVEL));
 		}
 		if (flightMapFragment.isAutoPanEnabled) {
 			flightMapFragment.mMap.animateCamera(CameraUpdateFactory
-					.newLatLngZoom(droneMarker.getPosition(), 17));
+					.newLatLngZoom(droneMarker.getPosition(), ZOOM_LEVEL));
 		}
 	}
 
@@ -66,5 +68,10 @@ public class DroneMarker implements MapUpdatedListner {
 				flightMapFragment.drone.GPS.getPosition());
 		flightMapFragment.addFlithPathPoint(flightMapFragment.drone.GPS
 				.getPosition());
+	}
+
+	@Override
+	public void onDroneTypeChanged() {
+		updateDroneMarkers();		
 	}
 }
