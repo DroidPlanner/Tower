@@ -56,6 +56,7 @@ public class ParamsFragment extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // bind & initialize UI
         final View view = inflater.inflate(R.layout.fragment_params, container, false);
 
         setHasOptionsMenu(true);

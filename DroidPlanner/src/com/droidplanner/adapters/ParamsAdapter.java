@@ -8,6 +8,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -48,6 +49,7 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
         final ParamView paramView;
 
         if(convertView == null) {
+            // create new view
             final LayoutInflater inflater = ((Activity) getContext()).getLayoutInflater();
             view = inflater.inflate(resource, parent, false);
 
@@ -58,11 +60,23 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
             view.setTag(paramView);
 
         } else {
+            // recycle view
             view = convertView;
             paramView = (ParamView) convertView.getTag();
 
-            // detatch text listener
-            paramView.getValueView().addTextChangedListener(paramView);
+            // remove focus
+            final EditText valueView = paramView.getValueView();
+            if(valueView.hasFocus()) {
+                valueView.clearFocus();
+
+                final InputMethodManager inputMethodManager =
+                        (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(valueView.getWindowToken(), 0);
+            }
+
+            // detatch listeners
+            valueView.removeTextChangedListener(paramView);
+            valueView.setOnFocusChangeListener(null);
         }
 
         // populate fields, set appearance
@@ -73,14 +87,14 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
         paramView.setPosition(position);
         paramView.getNameView().setText(param.name);
         paramView.getDescView().setText(getDescription(metadata));
-        paramView.getValueView().setText(item.getValue());
         paramView.setAppearance(item);
 
-        // attach listener
         final EditText valueView = paramView.getValueView();
+        valueView.setText(item.getValue());
+
+        // attach listeners
         valueView.addTextChangedListener(paramView);
         valueView.setOnFocusChangeListener(paramView);
-
 
         // alternate background color for clarity
         view.setBackgroundColor((position % 2 == 1) ? colorAltRow : Color.TRANSPARENT);
@@ -187,7 +201,6 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
         public void onFocusChange(View view, boolean hasFocus) {
             if(!hasFocus) {
                 // refresh value on leaving view - show results of rounding etc.
-                final ParamsAdapterItem item = getItem(position);
                 valueView.setText(Parameter.getFormat().format(getValue()));
             }
 
