@@ -32,6 +32,8 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
 
     private final int resource;
     private final int colorAltRow;
+
+    private View focusView;
     private OnHelpListener onHelpListener;
 
 
@@ -123,6 +125,16 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
         return desc;
     }
 
+    private void clearFocus() {
+        if(focusView != null) {
+            final InputMethodManager inputMethodManager = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(focusView.getWindowToken(), 0);
+
+            focusView.clearFocus();
+            focusView = null;
+        }
+    }
+
 
     private class ParamTag implements TextWatcher, View.OnFocusChangeListener, View.OnClickListener {
         private int position;
@@ -212,12 +224,18 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
             if(!hasFocus) {
                 // refresh value on leaving view - show results of rounding etc.
                 valueView.setText(Parameter.getFormat().format(getValue()));
+                focusView = null;
+
+            } else {
+                focusView = view;
             }
 
         }
 
         @Override
         public void onClick(View view) {
+            clearFocus();
+
             if(onHelpListener != null)
                 onHelpListener.onHelp(position, valueView);
         }
