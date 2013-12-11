@@ -16,8 +16,6 @@ import com.droidplanner.fragments.FlightActionsFragment.OnMissionControlInteract
 import com.droidplanner.fragments.RCFragment;
 import com.droidplanner.fragments.helpers.OnMapInteractionListener;
 import com.droidplanner.fragments.mode.*;
-import com.droidplanner.glass.activities.GlassActivity;
-import com.droidplanner.glass.utils.GlassUtils;
 import com.droidplanner.polygon.PolygonPoint;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -31,8 +29,6 @@ public class FlightActivity extends SuperUI implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-        if (!GlassUtils.isGlassDevice()) {
-
 
 		setContentView(R.layout.activity_flight);
 		fragmentManager = getFragmentManager();
@@ -40,12 +36,6 @@ public class FlightActivity extends SuperUI implements
 
 		failsafeTextView = findViewById(R.id.failsafeTextView);
 
-        }
-        else {
-            //Start the glass activity
-            startActivity(new Intent(this, GlassActivity.class));
-            finish();
-        }
 	}
 
 	@Override

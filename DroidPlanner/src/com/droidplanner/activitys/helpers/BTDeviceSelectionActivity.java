@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.view.Window;
 import com.droidplanner.R;
 import com.droidplanner.fragments.helpers.BTDeviceListFragment;
-import com.droidplanner.glass.fragments.BTDeviceCardsFragment;
-import com.droidplanner.glass.utils.GlassUtils;
 
 /**
  * This class is used to handle the selection of bluetooth devices on connection request.
@@ -35,20 +33,13 @@ public class BTDeviceSelectionActivity extends SuperActivity {
     public void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        //Update the theme if we're on a glass device
-        final boolean isGlassDevice = GlassUtils.isGlassDevice();
-        if (isGlassDevice) {
-            setTheme(android.R.style.Theme_DeviceDefault);
-        }
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bt_device_selection);
 
         final FragmentManager fm = getFragmentManager();
         Fragment deviceSelection = fm.findFragmentById(R.id.bt_device_selection_layout);
         if (deviceSelection == null) {
-            deviceSelection = isGlassDevice ? new BTDeviceCardsFragment() : new
-                    BTDeviceListFragment();
+            deviceSelection =  new BTDeviceListFragment();
             fm.beginTransaction().add(R.id.bt_device_selection_layout, deviceSelection).commit();
         }
     }

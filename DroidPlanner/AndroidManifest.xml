@@ -115,17 +115,6 @@
                     android:value=".activitys.FlightActivity"/>
         </activity>
         <activity
-                android:name=".glass.activities.GlassActivity"
-                android:launchMode="singleTask"
-                android:theme="@android:style/Theme.DeviceDefault">
-            <intent-filter>
-                <action android:name="com.google.android.glass.action.VOICE_TRIGGER"/>
-            </intent-filter>
-            <meta-data
-                    android:name="com.google.android.glass.VoiceTrigger"
-                    android:resource="@xml/glass_trigger"/>
-                </activity>
-        <activity
                 android:name=".activitys.helpers.BTDeviceSelectionActivity"
                 android:launchMode="singleTop"
                 android:theme="@style/CustomActionBarTheme.Dialog"

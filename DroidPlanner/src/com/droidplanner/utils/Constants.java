@@ -1,6 +1,5 @@
 package com.droidplanner.utils;
 
-import static com.droidplanner.glass.utils.GlassUtils.isGlassDevice;
 import static com.droidplanner.utils.Utils.ConnectionType;
 
 /**
@@ -37,9 +36,7 @@ public class Constants {
      *
      * @since 1.2.0
      */
-    public static final String DEFAULT_CONNECTION_TYPE = isGlassDevice()
-            ? ConnectionType.BLUETOOTH.name()
-            : ConnectionType.USB.name();
+    public static final String DEFAULT_CONNECTION_TYPE = ConnectionType.USB.name();
 
     /**
      * This preference controls the activation of the mavlink bluetooth relay server.
