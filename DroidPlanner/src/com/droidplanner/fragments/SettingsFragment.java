@@ -29,20 +29,21 @@ public class SettingsFragment extends PreferenceFragment implements
 		final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences
                 (context);
 
-        //User interface preferences
-        CheckBoxPreference menuDrawerLock = (CheckBoxPreference) findPreference
-                (PREF_MENU_DRAWER_LOCK);
-        if(menuDrawerLock != null){
-            boolean defaultValue = sharedPref.getBoolean(PREF_MENU_DRAWER_LOCK,
-                    DEFAULT_MENU_DRAWER_LOCK );
-            menuDrawerLock.setChecked(defaultValue);
-            menuDrawerLock.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+        //Mavlink preferences
+        final CheckBoxPreference btRelayServerSwitch = (CheckBoxPreference) findPreference
+                (PREF_BLUETOOTH_RELAY_SERVER_TOGGLE);
+        if(btRelayServerSwitch != null){
+            boolean defaultValue = sharedPref.getBoolean
+                    (PREF_BLUETOOTH_RELAY_SERVER_TOGGLE,
+                            DEFAULT_BLUETOOTH_RELAY_SERVER_TOGGLE);
+            btRelayServerSwitch.setChecked(defaultValue);
+            btRelayServerSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    //Broadcast the preference change.
-                    context.sendStickyBroadcast(new Intent(ACTION_MENU_DRAWER_LOCK_UPDATE)
-                            .putExtra(EXTRA_MENU_DRAWER_LOCK, (Boolean)newValue));
+                    //Broadcast the preference update
+                    context.sendBroadcast(new Intent(ACTION_BLUETOOTH_RELAY_SERVER)
+                    .putExtra(EXTRA_BLUETOOTH_RELAY_SERVER_ENABLED, (Boolean)newValue));
                     return true;
                 }
             });

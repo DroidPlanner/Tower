@@ -73,7 +73,7 @@ public class GlassActivity extends SuperActivity implements DroidPlannerApp.Conn
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
-            case R.id.menu_settings:{
+            case R.id.menu_glass_settings:{
                 //Replace the current fragment with the SettingsFragment.
                 Fragment currentFragment = getCurrentFragment();
                 if(!(currentFragment instanceof SettingsFragment)){
@@ -86,7 +86,7 @@ public class GlassActivity extends SuperActivity implements DroidPlannerApp.Conn
                 return true;
             }
 
-            case R.id.menu_chart:{
+            case R.id.menu_glass_chart:{
                 //Replace the current fragment with the chart fragment.
                 Fragment currentFragment = getCurrentFragment();
                 if(!(currentFragment instanceof ChartFragment)){

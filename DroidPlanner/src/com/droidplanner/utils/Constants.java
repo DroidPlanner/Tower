@@ -21,9 +21,6 @@ public class Constants {
     /*
     Preferences, and default values.
      */
-    public static final String PREF_MENU_DRAWER_LOCK = "pref_menu_drawer_lock";
-    public static final boolean DEFAULT_MENU_DRAWER_LOCK = false;
-
     public static final String PREF_BLUETOOTH_DEVICE_ADDRESS = "pref_bluetooth_device_address";
 
     /**
@@ -48,37 +45,29 @@ public class Constants {
      * This preference controls the activation of the mavlink bluetooth relay server.
      * @since 1.2.0
      */
-    public static final String PREF_MAVLINK_BLUETOOTH_RELAY_SERVER_TOGGLE =
-            "pref_mavlink_bluetooth_relay_server_toggle";
+    public static final String PREF_BLUETOOTH_RELAY_SERVER_TOGGLE =
+            "pref_bluetooth_relay_server_toggle";
 
     /**
      * By default, the mavlink bluetooth relay server is turned off.
      * @since 1.2.0
      */
-    public static final boolean DEFAULT_MAVLINK_BLUETOOTH_RELAY_SERVER_TOGGLE = false;
+    public static final boolean DEFAULT_BLUETOOTH_RELAY_SERVER_TOGGLE = false;
 
 
     /*
     Intent actions
      */
     private static final String PREFIX_ACTION = PACKAGE_NAME + ".action.";
-
-    public static final String ACTION_MENU_DRAWER_LOCK_UPDATE = PREFIX_ACTION +
-            "MENU_DRAWER_LOCK_UPDATE";
-    public static final String ACTION_CONFIGURATION_TUNING = PREFIX_ACTION +
-            "CONFIGURATION_TUNING";
-    public static final String ACTION_CONFIGURATION_RC = PREFIX_ACTION + "CONFIGURATION_RC";
-    public static final String ACTION_CONFIGURATION_PARAMETERS = PREFIX_ACTION +
-            "CONFIGURATION_PARAMETERS";
-    public static final String ACTION_CONFIGURATION_SETTINGS = PREFIX_ACTION +
-            "CONFIGURATION_SETTINGS";
+    public static final String ACTION_BLUETOOTH_RELAY_SERVER = PREFIX_ACTION + "RELAY_SERVER";
 
 
     /*
     Bundle extras
      */
     private static final String PREFIX_EXTRA = PACKAGE_NAME + ".extra.";
-    public static final String EXTRA_MENU_DRAWER_LOCK = PREFIX_EXTRA + "MENU_DRAWER_LOCK";
+    public static final String EXTRA_BLUETOOTH_RELAY_SERVER_ENABLED = PREFIX_EXTRA +
+            "BLUETOOTH_RELAY_SERVER_ENABLED";
 
     /**
      * Private constructor to prevent instantiation of this class.

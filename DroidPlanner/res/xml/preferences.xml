@@ -22,7 +22,7 @@
                 android:title="Enable bluetooth relay server"
                 android:summary="Mavlink data is relayed from this device to other bluetooth connected devices."
                 android:defaultValue="false"
-                android:key="pref_mavlink_bluetooth_relay_server_toggle"/>
+                android:key="pref_bluetooth_relay_server_toggle"/>
 
         <PreferenceScreen
                 android:key="pref_mavlink_rates"
@@ -79,11 +79,6 @@
     <PreferenceScreen
             android:key="pref_ui"
             android:title="User Interface">
-        <CheckBoxPreference
-                android:key="pref_menu_drawer_lock"
-                android:title="@string/pref_menu_drawer_lock_title"
-                android:summary="@string/pref_menu_drawer_lock_summary"
-                android:defaultValue="@string/menu_drawer_lock_default_value"/>
         <PreferenceCategory
                 android:key="pref_connection_actions"
                 android:summary="Actions to perform on or while connected to the Drone\nTo apply disconnect and reconnect"

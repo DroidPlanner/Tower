@@ -203,11 +203,6 @@
     <string name="wpevent_retry">Retrying&#8230;</string>
     <string name="screen_settings">Settings</string>
 
-    <!-- Preference strings -->
-    <string name="pref_menu_drawer_lock_title">Lock open menu drawer</string>
-    <string name="pref_menu_drawer_lock_summary">Enable to keep the flight data menu drawer opened at all times.</string>
-    <string name="menu_drawer_lock_default_value">false</string>
-
     <!--  Bluetooth device selection strings -->
     <string name="scanning">scanning for devices...</string>
     <string name="select_device">Select device to connect</string>

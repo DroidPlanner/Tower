@@ -1,6 +1,9 @@
 package com.droidplanner.connection;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import com.MAVLink.Messages.MAVLinkMessage;
@@ -58,6 +61,32 @@ public abstract class MAVLinkConnection extends Thread {
      */
     private BluetoothServer mBtServer;
 
+    /**
+     * Listens to broadcast events, and appropriately enable or disable the bluetooth relay server.
+     * @since 1.2.0
+     */
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if(Constants.ACTION_BLUETOOTH_RELAY_SERVER.equals(action)){
+                boolean isEnabled = intent.getBooleanExtra(Constants
+                        .EXTRA_BLUETOOTH_RELAY_SERVER_ENABLED,
+                        Constants.DEFAULT_BLUETOOTH_RELAY_SERVER_TOGGLE);
+
+                if(isEnabled){
+                    if(mBtServer == null)
+                        mBtServer = new BluetoothServer();
+                    mBtServer.start();
+                }
+                else if(mBtServer != null){
+                    mBtServer.stop();
+                    mBtServer = null;
+                }
+            }
+        }
+    };
+
 	public MAVLinkConnection(Context parentContext) {
 		this.parentContext = parentContext;
 		this.listner = (MavLinkConnectionListner) parentContext;
@@ -69,8 +98,8 @@ public abstract class MAVLinkConnection extends Thread {
 
         //Create the bluetooth server if the user allows it
         boolean isBtRelayServerEnabled = prefs.getBoolean(Constants
-                .PREF_MAVLINK_BLUETOOTH_RELAY_SERVER_TOGGLE,
-                Constants.DEFAULT_MAVLINK_BLUETOOTH_RELAY_SERVER_TOGGLE);
+                .PREF_BLUETOOTH_RELAY_SERVER_TOGGLE,
+                Constants.DEFAULT_BLUETOOTH_RELAY_SERVER_TOGGLE);
 
         if (isBtRelayServerEnabled)
             mBtServer = new BluetoothServer();
@@ -78,8 +107,12 @@ public abstract class MAVLinkConnection extends Thread {
 
 	@Override
 	public void run() {
-		super.run();
 		try {
+            //Register a broadcast event receiver in case the relay server is enabled/disabled
+            // while the mavlink connection is running.
+            parentContext.registerReceiver(mReceiver, new IntentFilter(Constants
+                    .ACTION_BLUETOOTH_RELAY_SERVER));
+
 			parser.stats.mavlinkResetStats(); 
 			openConnection();
 			if (logEnabled) {
@@ -92,7 +125,7 @@ public abstract class MAVLinkConnection extends Thread {
                 //Start the bluetooth server
                 mBtServer.start();
             }
-            
+
 			while (connected) {
 				readDataBlock();
 				handleData();
@@ -109,7 +142,10 @@ public abstract class MAVLinkConnection extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		listner.onDisconnect();
+        finally {
+            parentContext.unregisterReceiver(mReceiver);
+        }
+        listner.onDisconnect();
 	}
 
 	private void handleData() throws IOException {
