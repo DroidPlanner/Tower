@@ -25,8 +25,14 @@ import java.util.List;
  * Time: 11:00 PM
  */
 public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
+
+    public interface OnHelpListener {
+        void onHelp(int position, EditText valueView);
+    }
+
     private final int resource;
     private final int colorAltRow;
+    private OnHelpListener onHelpListener;
 
 
     public ParamsAdapter(Context context, int resource) {
@@ -41,6 +47,9 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
         colorAltRow = context.getResources().getColor(R.color.paramAltRow);
     }
 
+    public void setOnHelpListener(OnHelpListener onHelpListener) {
+        this.onHelpListener = onHelpListener;
+    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -92,6 +101,8 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
         valueView.setText(item.getValue());
 
         // attach listeners
+        paramTag.getNameView().setOnClickListener(paramTag);
+        paramTag.getDescView().setOnClickListener(paramTag);
         valueView.addTextChangedListener(paramTag);
         valueView.setOnFocusChangeListener(paramTag);
 
@@ -113,7 +124,7 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
     }
 
 
-    private class ParamTag implements TextWatcher, View.OnFocusChangeListener {
+    private class ParamTag implements TextWatcher, View.OnFocusChangeListener, View.OnClickListener {
         private int position;
         private TextView nameView;
         private TextView descView;
@@ -203,6 +214,12 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
                 valueView.setText(Parameter.getFormat().format(getValue()));
             }
 
+        }
+
+        @Override
+        public void onClick(View view) {
+            if(onHelpListener != null)
+                onHelpListener.onHelp(position, valueView);
         }
     }
 }

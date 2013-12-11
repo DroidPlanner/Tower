@@ -1,18 +1,25 @@
 package com.droidplanner.fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ListFragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.*;
+import android.widget.EditText;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
 import com.droidplanner.adapters.ParamsAdapterItem;
 import com.droidplanner.dialogs.openfile.OpenFileDialog;
 import com.droidplanner.dialogs.openfile.OpenParameterDialog;
+import com.droidplanner.dialogs.parameters.DialogParameterInfo;
+import com.droidplanner.dialogs.parameters.DialogParameterValues;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.adapters.ParamsAdapter;
 import com.droidplanner.parameters.Parameter;
+import com.droidplanner.parameters.ParameterMetadata;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -51,6 +58,16 @@ public class ParamsFragment extends ListFragment {
             // empty adapter
             adapter = new ParamsAdapter(getActivity(), R.layout.row_params);
         }
+
+        // help handler
+        adapter.setOnHelpListener(new ParamsAdapter.OnHelpListener() {
+            @Override
+            public void onHelp(int position, EditText valueView) {
+                showHelp(position, valueView);
+            }
+        });
+
+        // attach adapter
         setListAdapter(adapter);
     }
 
@@ -92,6 +109,43 @@ public class ParamsFragment extends ListFragment {
                 return super.onOptionsItemSelected(item);
         }
         return true;
+    }
+
+    private void showHelp(int position, EditText valueView) {
+        final ParamsAdapterItem item = adapter.getItem(position);
+        final ParameterMetadata metadata = item.getMetadata();
+        if(metadata == null || !metadata.hasInfo())
+            return;
+
+        final AlertDialog.Builder builder = DialogParameterInfo.build(metadata, getActivity());
+
+        // add edit button if metadata supplies known values
+        if(metadata.getValues() != null)
+            addEditValuesButton(builder, item, valueView);
+
+        builder.show();
+    }
+
+    private AlertDialog.Builder addEditValuesButton(AlertDialog.Builder builder, final ParamsAdapterItem item, final EditText valueView) {
+        return builder.setPositiveButton(
+                R.string.parameter_row_edit, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                final ParameterMetadata metadata = item.getMetadata();
+                DialogParameterValues.build(item.getParameter().name, metadata, valueView.getText().toString(), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int which) {
+                        try {
+                            final List<Double> values = new ArrayList<Double>(metadata.parseValues().keySet());
+                            valueView.setText(Parameter.getFormat().format(values.get(which)));
+                            dialogInterface.dismiss();
+                        } catch (ParseException ex) {
+                            // nop
+                        }
+                    }
+                }, getActivity()).show();
+            }
+        });
     }
 
     private void openParametersFromFile() {

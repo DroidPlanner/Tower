@@ -14,7 +14,6 @@ public class DialogParameterInfo {
 
     public static AlertDialog.Builder build(ParameterMetadata metadata, Context context) {
         return new AlertDialog.Builder(context)
-                .setTitle(metadata.getName())
                 .setView(buildView(metadata, context));
     }
 
@@ -22,7 +21,8 @@ public class DialogParameterInfo {
         final LayoutInflater inflater = LayoutInflater.from(context);
         final View view = inflater.inflate(R.layout.fragment_parameters_info, null);
 
-        setTextView(view, R.id.nameView, metadata.getDisplayName());
+        setTextView(view, R.id.displayNameView, metadata.getDisplayName());
+        setTextView(view, R.id.nameView, metadata.getName());
         setTextView(view, R.id.descView, metadata.getDescription());
 
         setTextLayout(view, R.id.unitsLayout, R.id.unitsView, metadata.getUnits());

@@ -2,38 +2,55 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/opaque_black"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/nameView"
+    <LinearLayout
+        android:orientation="vertical"
+        android:background="@color/dark_title_bg"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp" />
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/displayNameView"
+            style="@style/paramHelpTitleText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/nameView"
+            style="@style/paramHelpNameText"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/descView"
+        style="@style/paramHelpDescText"
+        android:background="@drawable/mode_desc_rectangle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp" />
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:id="@+id/unitsLayout"
+        android:background="@drawable/mode_desc_rectangle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
         <TextView
-            android:layout_width="50dp"
+            style="@style/paramHelpDescText"
+            android:paddingRight="4dp"
+            android:layout_width="64sp"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
             android:text="@string/metadata_units" />
 
         <TextView
             android:id="@+id/unitsView"
+            style="@style/paramHelpDescText"
+            android:paddingLeft="4dp"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp" />
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <LinearLayout
@@ -43,16 +60,18 @@
         android:orientation="horizontal" >
 
         <TextView
-            android:layout_width="50dp"
+            style="@style/paramHelpValuesText"
+            android:paddingRight="4dp"
+            android:layout_width="64sp"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
             android:text="@string/metadata_range" />
 
         <TextView
             android:id="@+id/rangeView"
+            style="@style/paramHelpValuesText"
+            android:paddingLeft="4dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp" />
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <LinearLayout
@@ -62,16 +81,18 @@
         android:orientation="horizontal" >
 
         <TextView
-            android:layout_width="50dp"
+            style="@style/paramHelpValuesText"
+            android:paddingRight="4dp"
+            android:layout_width="64sp"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
             android:text="@string/metadata_values" />
 
         <TextView
             android:id="@+id/valuesView"
+            style="@style/paramHelpValuesText"
+            android:paddingLeft="4dp"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp" />
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 </LinearLayout>

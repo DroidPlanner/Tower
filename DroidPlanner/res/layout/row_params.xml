@@ -3,7 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/params_row_name"
@@ -11,15 +11,18 @@
         android:gravity="center_vertical"
         android:paddingLeft="6dp"
         android:layout_width="160dp"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"/>
 
     <TextView
         android:id="@+id/params_row_desc"
         android:textAppearance="@style/paramRowLabelText"
         android:gravity="center_vertical"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:layout_gravity="center_vertical"
         android:layout_weight="1"
         android:layout_width="0dp"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"/>
 
     <EditText
         android:id="@+id/params_row_value"
