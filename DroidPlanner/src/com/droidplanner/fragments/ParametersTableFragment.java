@@ -26,13 +26,14 @@ import com.droidplanner.dialogs.openfile.OpenFileDialog;
 import com.droidplanner.dialogs.openfile.OpenParameterDialog;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.OnParameterManagerListner;
+import com.droidplanner.drone.DroneInterfaces.VehicleTypeListener;
 import com.droidplanner.drone.variables.Parameters;
 import com.droidplanner.file.IO.ParameterWriter;
 import com.droidplanner.parameters.Parameter;
 import com.droidplanner.widgets.adapterViews.ParamRow;
 
 public class ParametersTableFragment extends Fragment implements
-		OnClickListener, OnParameterManagerListner {
+		OnClickListener, OnParameterManagerListner, VehicleTypeListener {
 
 	private TableLayout parameterTable;
 	private List<ParamRow> rowList = new ArrayList<ParamRow>();
@@ -63,6 +64,7 @@ public class ParametersTableFragment extends Fragment implements
         context = activity;
         drone = ((SuperActivity) activity).drone;
         drone.parameters.parameterListner = this;
+        drone.setVehicleTypeListener(this);
 	}
 
 
@@ -173,7 +175,7 @@ public class ParametersTableFragment extends Fragment implements
 						return p1.name.compareTo(p2.name);
 					}
 				});
-				drone.parameters.loadMetadata(context, null);
+				drone.parameters.loadMetadata();
 				for (Parameter parameter : parameters)
 					refreshRowParameter(parameter, drone.parameters);
 			}
@@ -207,12 +209,12 @@ public class ParametersTableFragment extends Fragment implements
 	@Override
 	public void onEndReceivingParameters(List<Parameter> parameters) {
 		Collections.sort(parameters, new Comparator<Parameter>() {
-			@Override
-			public int compare(Parameter p1, Parameter p2) {
-				return p1.name.compareTo(p2.name);
-			}
-		});
-		drone.parameters.loadMetadata(context, getMetadataType());
+            @Override
+            public int compare(Parameter p1, Parameter p2) {
+                return p1.name.compareTo(p2.name);
+            }
+        });
+		drone.parameters.loadMetadata();
 		for (Parameter parameter : parameters)
 			refreshRowParameter(parameter, drone.parameters);
 
@@ -228,53 +230,9 @@ public class ParametersTableFragment extends Fragment implements
 		
 	}
 
-	@Override
-	public void onParamterMetaDataChanged() {
-		drone.parameters.loadMetadata(context, null);
+    @Override
+    public void onVehicleTypeChanged() {
+		drone.parameters.loadMetadata();
 		refresh(drone.parameters);
-	}
-
-	private String getMetadataType() {
-		if (drone.MavClient.isConnected()) {
-			// online: derive from connected vehicle type
-			switch (drone.type.getType()) {
-			case MAV_TYPE.MAV_TYPE_FIXED_WING: /* Fixed wing aircraft. | */
-				return "ArduPlane";
-
-			case MAV_TYPE.MAV_TYPE_GENERIC: /* Generic micro air vehicle. | */
-			case MAV_TYPE.MAV_TYPE_QUADROTOR: /* Quadrotor | */
-			case MAV_TYPE.MAV_TYPE_COAXIAL: /* Coaxial helicopter | */
-			case MAV_TYPE.MAV_TYPE_HELICOPTER: /*
-												 * Normal helicopter with tail
-												 * rotor. |
-												 */
-			case MAV_TYPE.MAV_TYPE_HEXAROTOR: /* Hexarotor | */
-			case MAV_TYPE.MAV_TYPE_OCTOROTOR: /* Octorotor | */
-			case MAV_TYPE.MAV_TYPE_TRICOPTER: /* Octorotor | */
-				return "ArduCopter2";
-
-			case MAV_TYPE.MAV_TYPE_GROUND_ROVER: /* Ground rover | */
-			case MAV_TYPE.MAV_TYPE_SURFACE_BOAT: /* Surface vessel, boat, ship | */
-				return "ArduRover";
-
-				// case MAV_TYPE.MAV_TYPE_ANTENNA_TRACKER: /* Ground
-				// installation | */
-				// case MAV_TYPE.MAV_TYPE_GCS: /* Operator control unit / ground
-				// control station | */
-				// case MAV_TYPE.MAV_TYPE_AIRSHIP: /* Airship, controlled | */
-				// case MAV_TYPE.MAV_TYPE_FREE_BALLOON: /* Free balloon,
-				// uncontrolled | */
-				// case MAV_TYPE.MAV_TYPE_ROCKET: /* Rocket | */
-				// case MAV_TYPE.MAV_TYPE_SUBMARINE: /* Submarine | */
-				// case MAV_TYPE.MAV_TYPE_FLAPPING_WING: /* Flapping wing | */
-				// case MAV_TYPE.MAV_TYPE_KITE: /* Flapping wing | */
-			default:
-				// unsupported
-				return null;
-			}
-		} else {
-			// offline: use configured parameter metadata type
-			return null;
-		}
 	}
 }
