@@ -110,6 +110,7 @@
         </activity>
         <activity
             android:name=".activitys.ConfigurationActivity"
+            android:windowSoftInputMode="adjustPan"
             android:label="@string/configuration"
             android:parentActivityName=".activitys.FlightActivity" >
 

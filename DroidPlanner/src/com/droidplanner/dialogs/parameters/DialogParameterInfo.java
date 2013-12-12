@@ -1,32 +1,51 @@
 package com.droidplanner.dialogs.parameters;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.*;
 
 import com.droidplanner.R;
+import com.droidplanner.adapters.ParamsAdapterItem;
+import com.droidplanner.parameters.Parameter;
 import com.droidplanner.parameters.ParameterMetadata;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 
 public class DialogParameterInfo {
 
-    public static AlertDialog.Builder build(ParameterMetadata metadata, Context context) {
-        return new AlertDialog.Builder(context)
-                .setTitle(metadata.getName())
-                .setView(buildView(metadata, context));
+    public static AlertDialog build(ParamsAdapterItem item, EditText valueView, Context context) {
+        final View view = buildView(item, valueView, context);
+
+        final AlertDialog dialog = new AlertDialog.Builder(context)
+                .setView(view)
+                .create();
+
+        // spinner's onItemSelcted impl needs ref to Dialog interface
+        buildValueSpinner(dialog, view, item.getMetadata(), valueView, context);
+
+        return dialog;
     }
 
-    private static View buildView(ParameterMetadata metadata, Context context) {
+    private static View buildView(ParamsAdapterItem item, EditText valueView, Context context) {
         final LayoutInflater inflater = LayoutInflater.from(context);
         final View view = inflater.inflate(R.layout.fragment_parameters_info, null);
 
-        setTextView(view, R.id.nameView, metadata.getDisplayName());
+        final ParameterMetadata metadata = item.getMetadata();
+        setTextView(view, R.id.displayNameView, metadata.getDisplayName());
+        setTextView(view, R.id.nameView, metadata.getName());
         setTextView(view, R.id.descView, metadata.getDescription());
 
         setTextLayout(view, R.id.unitsLayout, R.id.unitsView, metadata.getUnits());
         setTextLayout(view, R.id.rangeLayout, R.id.rangeView, formatRange(metadata.getRange()));
+
         setTextLayout(view, R.id.valuesLayout, R.id.valuesView, metadata.getValues());
 
         return view;
@@ -53,13 +72,69 @@ public class DialogParameterInfo {
     }
 
     private static void setTextLayout(View view, int ridLayout, int ridTextView, String text) {
-        TextView textView;
         if(text != null) {
-            textView = (TextView) view.findViewById(ridTextView);
+            final TextView textView = (TextView) view.findViewById(ridTextView);
             textView.setText(text);
         } else {
             view.findViewById(ridLayout).setVisibility(View.GONE);
         }
     }
 
+    private static void buildValueSpinner(final DialogInterface dialogInterface, View view, ParameterMetadata metadata, final EditText valueView, Context context) {
+        // bail if nothing to do
+        if (metadata.getValues() == null)
+            return;
+
+        try {
+            final Map<Double,String> valueMap = metadata.parseValues();
+            final List<Double> values = new ArrayList<Double>(valueMap.keySet());
+            final List<String> strings = new ArrayList<String>();
+
+            // get current dirty value
+            final DecimalFormat formatter = Parameter.getFormat();
+            final double dirtyValue = formatter.parse(valueView.getText().toString()).doubleValue();
+
+            // build value / string collections
+            int position = values.indexOf(dirtyValue);
+            if(position == -1) {
+                // not found: add 'custom value'
+                position = 0;
+                values.add(position, dirtyValue);
+                strings.add(String.format("%s: %s", formatter.format(dirtyValue), context.getResources().getString(R.string.metadata_custom_value)));
+            }
+            for (Map.Entry<Double, String> entry : valueMap.entrySet())
+                strings.add(String.format("%s: %s", formatter.format(entry.getKey()), entry.getValue()));
+
+            // build adapter
+            final ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, R.layout.spinner_param_value_item, strings);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            // setup spinner
+            final Spinner valueSpinner = (Spinner) view.findViewById(R.id.valueSpinner);
+            valueSpinner.setAdapter(adapter);
+            valueSpinner.setSelection(position);
+            valueSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                boolean once = true;
+
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                    valueView.setText(formatter.format(values.get(position)));
+                    if(once)
+                        once = false;
+                    else
+                        dialogInterface.dismiss();
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+                    // nop
+                }
+            });
+
+        } catch (Exception e) {
+            // can't populate spinner - remove it
+            view.findViewById(R.id.valueSpinnerView).setVisibility(View.GONE);
+            view.findViewById(R.id.valueTextView).setVisibility(View.VISIBLE);
+        }
+    }
 }
