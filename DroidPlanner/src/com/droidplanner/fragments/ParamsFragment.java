@@ -3,9 +3,11 @@ package com.droidplanner.fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListFragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.*;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
@@ -60,10 +62,10 @@ public class ParamsFragment extends ListFragment {
         }
 
         // help handler
-        adapter.setOnHelpListener(new ParamsAdapter.OnHelpListener() {
+        adapter.setOnInfoListener(new ParamsAdapter.OnInfoListener() {
             @Override
             public void onHelp(int position, EditText valueView) {
-                showHelp(position, valueView);
+                showInfo(position, valueView);
             }
         });
 
@@ -111,19 +113,15 @@ public class ParamsFragment extends ListFragment {
         return true;
     }
 
-    private void showHelp(int position, EditText valueView) {
+    private void showInfo(int position, EditText valueView) {
         final ParamsAdapterItem item = adapter.getItem(position);
         final ParameterMetadata metadata = item.getMetadata();
         if(metadata == null || !metadata.hasInfo())
             return;
 
-        final AlertDialog.Builder builder = DialogParameterInfo.build(metadata, getActivity());
+        final AlertDialog dialog = DialogParameterInfo.build(item, valueView, getActivity());
 
-        // add edit button if metadata supplies known values
-        if(metadata.getValues() != null)
-            addEditValuesButton(builder, item, valueView);
-
-        builder.show();
+        dialog.show();
     }
 
     private AlertDialog.Builder addEditValuesButton(AlertDialog.Builder builder, final ParamsAdapterItem item, final EditText valueView) {

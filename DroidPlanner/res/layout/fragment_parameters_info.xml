@@ -12,45 +12,38 @@
 
         <TextView
             android:id="@+id/displayNameView"
-            style="@style/paramHelpTitleText"
+            style="@style/paramInfoText.displayName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/nameView"
-            style="@style/paramHelpNameText"
-            android:textStyle="bold"
+            style="@style/paramInfoText.name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/descView"
-        style="@style/paramHelpDescText"
+        style="@style/paramInfoText.desc"
         android:background="@drawable/mode_desc_rectangle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <LinearLayout
         android:id="@+id/unitsLayout"
+        android:orientation="horizontal"
         android:background="@drawable/mode_desc_rectangle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:layout_height="wrap_content" >
 
         <TextView
-            style="@style/paramHelpDescText"
-            android:paddingRight="4dp"
-            android:layout_width="64sp"
-            android:layout_height="wrap_content"
+            style="@style/paramInfoText.label"
             android:text="@string/metadata_units" />
 
         <TextView
             android:id="@+id/unitsView"
-            style="@style/paramHelpDescText"
-            android:paddingLeft="4dp"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            style="@style/paramInfoText.content.units" />
     </LinearLayout>
 
     <LinearLayout
@@ -60,39 +53,63 @@
         android:orientation="horizontal" >
 
         <TextView
-            style="@style/paramHelpValuesText"
-            android:paddingRight="4dp"
-            android:layout_width="64sp"
-            android:layout_height="wrap_content"
+            style="@style/paramInfoText.label"
             android:text="@string/metadata_range" />
 
         <TextView
             android:id="@+id/rangeView"
-            style="@style/paramHelpValuesText"
-            android:paddingLeft="4dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            style="@style/paramInfoText.content.values" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/valuesLayout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/valueTextView"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                style="@style/paramInfoText.label"
+                android:text="@string/metadata_values" />
+
+            <TextView
+                android:id="@+id/valuesView"
+                style="@style/paramInfoText.content.values" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/valueSpinnerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                style="@style/paramInfoText.label"
+                android:text="@string/metadata_value" />
+
+            <Spinner
+                android:id="@+id/valueSpinner"
+                style="@style/paramInfoText.content.values"
+                android:layout_marginRight="12dp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/editLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
         <TextView
-            style="@style/paramHelpValuesText"
-            android:paddingRight="4dp"
-            android:layout_width="64sp"
-            android:layout_height="wrap_content"
-            android:text="@string/metadata_values" />
+            style="@style/paramInfoText.label" />
 
-        <TextView
-            android:id="@+id/valuesView"
-            style="@style/paramHelpValuesText"
-            android:paddingLeft="4dp"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
     </LinearLayout>
 
 </LinearLayout>

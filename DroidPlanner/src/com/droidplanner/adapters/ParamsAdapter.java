@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
 
-    public interface OnHelpListener {
+    public interface OnInfoListener {
         void onHelp(int position, EditText valueView);
     }
 
@@ -34,7 +34,7 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
     private final int colorAltRow;
 
     private View focusView;
-    private OnHelpListener onHelpListener;
+    private OnInfoListener onInfoListener;
 
 
     public ParamsAdapter(Context context, int resource) {
@@ -49,8 +49,8 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
         colorAltRow = context.getResources().getColor(R.color.paramAltRow);
     }
 
-    public void setOnHelpListener(OnHelpListener onHelpListener) {
-        this.onHelpListener = onHelpListener;
+    public void setOnInfoListener(OnInfoListener onInfoListener) {
+        this.onInfoListener = onInfoListener;
     }
 
     @Override
@@ -236,8 +236,8 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
         public void onClick(View view) {
             clearFocus();
 
-            if(onHelpListener != null)
-                onHelpListener.onHelp(position, valueView);
+            if(onInfoListener != null)
+                onInfoListener.onHelp(position, valueView);
         }
     }
 }

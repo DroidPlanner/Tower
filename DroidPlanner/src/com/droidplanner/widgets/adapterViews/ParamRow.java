@@ -3,8 +3,6 @@ package com.droidplanner.widgets.adapterViews;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -209,13 +207,13 @@ public class ParamRow extends TableRow implements
         if(metadata == null || !metadata.hasInfo())
             return;
 
-        final AlertDialog.Builder builder = DialogParameterInfo.build(metadata, getContext());
-
-        // add edit button if metadata supplies known values
-        if(metadata.getValues() != null)
-            addEditValuesButton(builder);
-
-        builder.show();
+//        final AlertDialog.Builder builder = DialogParameterInfo.build(metadata, valueView, getContext());
+//
+//        // add edit button if metadata supplies known values
+//        if(metadata.getValues() != null)
+//            addEditValuesButton(builder);
+//
+//        builder.show();
     }
 
     private AlertDialog.Builder addEditValuesButton(AlertDialog.Builder builder) {
