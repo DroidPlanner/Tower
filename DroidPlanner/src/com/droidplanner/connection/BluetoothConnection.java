@@ -66,15 +66,7 @@ public class BluetoothConnection extends MAVLinkConnection {
 
         for (UUID uuid : sValidUuids) {
             try {
-                /*
-                If the current uuid is equals to the serial board uuid,
-                then connect using an insecure connection.
-                Otherwise we're most likely talking to another android device acting as a relay
-                server, so connect using a secure connection.
-                 */
-                bluetoothSocket = uuid.toString().equals(UUID_SPP_DEVICE)
-                        ? device.createInsecureRfcommSocketToServiceRecord(uuid)
-                        : device.createRfcommSocketToServiceRecord(uuid);
+                bluetoothSocket = device.createInsecureRfcommSocketToServiceRecord(uuid);
 
                 mBluetoothAdapter.cancelDiscovery();
                 bluetoothSocket.connect();

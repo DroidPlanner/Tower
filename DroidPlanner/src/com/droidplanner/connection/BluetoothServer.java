@@ -181,7 +181,7 @@ public class BluetoothServer {
                 while (mIsRunning.get()) {
                     final UUID uuid = mUUIDPool.take();
 
-                    mServerSocket = mAdapter.listenUsingRfcommWithServiceRecord(NAME, uuid);
+                    mServerSocket = mAdapter.listenUsingInsecureRfcommWithServiceRecord(NAME, uuid);
                     BluetoothSocket socket = mServerSocket.accept();
 
                     //Close the server socket now the connection has been made
