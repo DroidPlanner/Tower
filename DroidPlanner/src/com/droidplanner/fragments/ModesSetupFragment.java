@@ -23,7 +23,7 @@ public class ModesSetupFragment extends Fragment implements OnRcDataChangedListn
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
-		View view = inflater.inflate(R.layout.fragment_mode_setup, container,false);
+		View view = inflater.inflate(R.layout.fragment_setup_modes, container,false);
 
 		setupLocalViews(view);
 		drone.RC.setListner(this);

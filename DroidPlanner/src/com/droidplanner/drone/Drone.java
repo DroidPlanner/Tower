@@ -1,6 +1,9 @@
 package com.droidplanner.drone;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Context;
 
 import com.droidplanner.drone.DroneInterfaces.DroneTypeListner;
@@ -50,6 +53,7 @@ public class Drone {
 	public Parameters parameters = new Parameters(this);
 	public Calibration calibrationSetup = new Calibration(this);
 	public WaypointMananger waypointMananger = new WaypointMananger(this);
+	private List<InfoListner> infoListeners = new ArrayList<InfoListner>();
 
 	public TTS tts;
 	public MAVLinkClient MavClient;
@@ -60,7 +64,6 @@ public class Drone {
 	private MapConfigListener mapConfigListener;
 	private DroneTypeListner typeListner;
     private VehicleTypeListener vehicleTypeListener;
-	private InfoListner infoListner;
 	private HomeDistanceChangedListner homeChangedListner;
 	private OnGuidedListener guidedListner;
 	public OnTuningDataListner tuningDataListner;
@@ -93,8 +96,14 @@ public class Drone {
         this.vehicleTypeListener = vehicleTypeListener;
     }
 
-	public void setInfoListner(InfoListner listner) {
-		infoListner = listner;
+	public void addInfoListener(InfoListner listener) {
+		if(listener!=null)
+			infoListeners.add(listener);
+	}
+
+	public void removeInfoListener(InfoListner listener) {
+		if(listener!=null && infoListeners.contains(listener))
+			infoListeners.remove(listener);
 	}
 
 	public void setHomeChangedListner(HomeDistanceChangedListner listner) {
@@ -137,8 +146,10 @@ public class Drone {
 	}
 
 	public void notifyInfoChange() {
-		if (infoListner != null) {
-			infoListner.onInfoUpdate();
+		if (infoListeners.size()>0) {
+			for(InfoListner listener : infoListeners){
+				listener.onInfoUpdate();
+			}
 		}
 	}
 		

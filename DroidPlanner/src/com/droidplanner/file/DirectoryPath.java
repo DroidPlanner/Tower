@@ -32,5 +32,9 @@ public class DirectoryPath {
 	public static String getCameraInfoPath() {
 		return getDroidPlannerPath() + "/CameraInfo/";
 	}
+	
+	public static String getLogCatPath() {
+		return getDroidPlannerPath() + "/LogCat/";
+	}
 
 }

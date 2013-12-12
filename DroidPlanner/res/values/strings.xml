@@ -197,4 +197,8 @@
     <string name="rowheader_wp_no">WP#</string>
     <string name="rowheader_wp_delta">∆ WP</string>
     <string name="rowheader_wp_desc">Description</string>
+
+    <string name="wpevent_upload">Uploading mission to APM&#8230;</string>
+    <string name="wpevent_download">Downloading mission from APM&#8230;</string>   
+    <string name="wpevent_retry">Retrying&#8230;</string>   
 </resources>
