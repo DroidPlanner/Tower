@@ -52,6 +52,14 @@ public class ParamsFragment extends ListFragment
         super.onAttach(activity);
 
         drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
+        drone.parameters.parameterListner = this;
+    }
+
+    @Override
+    public void onDetach() {
+        drone.parameters.parameterListner = null;
+
+        super.onDetach();
     }
 
     @Override
@@ -69,6 +77,7 @@ public class ParamsFragment extends ListFragment
             // empty adapter
             adapter = new ParamsAdapter(getActivity(), R.layout.row_params);
         }
+        setListAdapter(adapter);
 
         // help handler
         adapter.setOnInfoListener(new ParamsAdapter.OnInfoListener() {
@@ -77,15 +86,20 @@ public class ParamsFragment extends ListFragment
                 showInfo(position, valueView);
             }
         });
-
-        // attach adapter
-        setListAdapter(adapter);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // bind & initialize UI
         final View view = inflater.inflate(R.layout.fragment_params, container, false);
+
+        // listen for clicks on empty
+        view.findViewById(android.R.id.empty).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                refreshParameters();
+            }
+        });
 
         setHasOptionsMenu(true);
         return view;
