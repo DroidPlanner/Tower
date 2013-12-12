@@ -205,4 +205,6 @@
     <string name="params_click_to_refresh">Click to refresh parameters from drone</string>
     <string name="metadata_value">Value:</string>
     <string name="metadata_custom_value">** Custom value **</string>
+    <string name="refreshing_parameters">Refreshing Parameters...</string>
+    <string name="parameters_saved">Parameters saved</string>
 </resources>

@@ -4,6 +4,7 @@ import com.droidplanner.parameters.Parameter;
 import com.droidplanner.parameters.ParameterMetadata;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.Map;
 
@@ -13,6 +14,8 @@ import java.util.Map;
 */
 public class ParamsAdapterItem implements Serializable {
     public enum Validation { NA, INVALID, VALID }
+
+    private static final DecimalFormat formatter = Parameter.getFormat();
 
     private final Parameter parameter;
     private final ParameterMetadata metadata;
@@ -27,7 +30,16 @@ public class ParamsAdapterItem implements Serializable {
     }
 
     public Parameter getParameter() {
-        return parameter;
+        if(dirtyValue == null)
+            return parameter;
+
+        try {
+            final double dval = formatter.parse(dirtyValue).doubleValue();
+            return new Parameter(parameter.name, dval, parameter.type);
+
+        } catch (ParseException e) {
+            return parameter;
+        }
     }
 
     public ParameterMetadata getMetadata() {
@@ -41,8 +53,13 @@ public class ParamsAdapterItem implements Serializable {
             validation = validateValue(dirtyValue);
     }
 
-    public String getValue() {
-        return (dirtyValue != null) ? dirtyValue : parameter.getValue();
+    public void commit() {
+        try {
+            parameter.value = formatter.parse(dirtyValue).doubleValue();
+            dirtyValue = null;
+        } catch (ParseException e) {
+            // nop
+        }
     }
 
     public boolean isDirty() {
@@ -71,7 +88,7 @@ public class ParamsAdapterItem implements Serializable {
 
     private Validation validateInRange(String value) {
         try {
-            final double dval = Parameter.getFormat().parse(value).doubleValue();
+            final double dval = formatter.parse(value).doubleValue();
             final double[] range = metadata.parseRange();
             return (dval >= range[ParameterMetadata.RANGE_LOW] && dval <= range[ParameterMetadata.RANGE_HIGH]) ?
                     Validation.VALID : Validation.INVALID;
@@ -82,7 +99,7 @@ public class ParamsAdapterItem implements Serializable {
 
     private Validation validateInValues(String value) {
         try {
-            final double dval = Parameter.getFormat().parse(value).doubleValue();
+            final double dval = formatter.parse(value).doubleValue();
             final Map<Double, String> values = metadata.parseValues();
             if (values.keySet().contains(dval)) {
                 return Validation.VALID;

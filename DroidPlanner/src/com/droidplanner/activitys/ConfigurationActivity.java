@@ -37,8 +37,8 @@ public class ConfigurationActivity extends SuperUI{
 	    mTabHost.addTab(mTabHost.newTabSpec(TUNING).setIndicator("Tuning"),TuningFragment.class, null);
 	    mTabHost.addTab(mTabHost.newTabSpec(RC_SETUP).setIndicator("RC"),RcSetupFragment.class, null);
 	    mTabHost.addTab(mTabHost.newTabSpec(MODES_SETUP).setIndicator("Modes"),ModesSetupFragment.class, null);
-	    mTabHost.addTab(mTabHost.newTabSpec(PARAMETERS).setIndicator("Parameters"),ParametersTableFragment.class, null);
-        mTabHost.addTab(mTabHost.newTabSpec(PARAMS).setIndicator("Params"), ParamsFragment.class, null);
+//	    mTabHost.addTab(mTabHost.newTabSpec(PARAMETERS).setIndicator("Parameters"),ParametersTableFragment.class, null);
+        mTabHost.addTab(mTabHost.newTabSpec(PARAMETERS).setIndicator("Parameters"), ParamsFragment.class, null);
 
 	    Intent intent = getIntent();
 	    String stringExtra = intent.getStringExtra(SCREEN_INTENT);

@@ -16,6 +16,7 @@ import com.droidplanner.R;
 import com.droidplanner.parameters.Parameter;
 import com.droidplanner.parameters.ParameterMetadata;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,8 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
     public interface OnInfoListener {
         void onHelp(int position, EditText valueView);
     }
+
+    private static final DecimalFormat formatter = Parameter.getFormat();
 
     private final int resource;
     private final int colorAltRow;
@@ -47,6 +50,13 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
         this. resource = resource;
 
         colorAltRow = context.getResources().getColor(R.color.paramAltRow);
+    }
+
+    public void clearFocus() {
+        if (focusView != null) {
+            clearFocus(focusView);
+            focusView = null;
+        }
     }
 
     public void setOnInfoListener(OnInfoListener onInfoListener) {
@@ -76,13 +86,8 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
 
             // remove focus
             final EditText valueView = paramTag.getValueView();
-            if(valueView.hasFocus()) {
-                valueView.clearFocus();
-
-                final InputMethodManager inputMethodManager =
-                        (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(valueView.getWindowToken(), 0);
-            }
+            if(valueView.hasFocus())
+                clearFocus(valueView);
 
             // detatch listeners
             valueView.removeTextChangedListener(paramTag);
@@ -100,7 +105,7 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
         paramTag.setAppearance(item);
 
         final EditText valueView = paramTag.getValueView();
-        valueView.setText(item.getValue());
+        valueView.setText(param.getValue());
 
         // attach listeners
         paramTag.getNameView().setOnClickListener(paramTag);
@@ -125,13 +130,12 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
         return desc;
     }
 
-    private void clearFocus() {
-        if(focusView != null) {
-            final InputMethodManager inputMethodManager = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(focusView.getWindowToken(), 0);
+    private void clearFocus(View view) {
+        if(view != null) {
+            view.clearFocus();
 
-            focusView.clearFocus();
-            focusView = null;
+            final InputMethodManager inputMethodManager = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
 
@@ -173,7 +177,7 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
 
         public double getValue() {
             try {
-                return Parameter.getFormat().parse(valueView.getText().toString()).doubleValue();
+                return formatter.parse(valueView.getText().toString()).doubleValue();
             } catch (ParseException ex) {
                 throw new NumberFormatException(ex.getMessage());
             }
@@ -223,7 +227,7 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
         public void onFocusChange(View view, boolean hasFocus) {
             if(!hasFocus) {
                 // refresh value on leaving view - show results of rounding etc.
-                valueView.setText(Parameter.getFormat().format(getValue()));
+                valueView.setText(formatter.format(getValue()));
                 focusView = null;
 
             } else {
