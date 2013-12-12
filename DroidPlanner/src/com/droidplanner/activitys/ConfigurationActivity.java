@@ -19,7 +19,7 @@ public class ConfigurationActivity extends SuperUI{
     public static final String SETTINGS = "settings";
 	private static final String RC_SETUP = "rc_setup";
 	private static final String MODES_SETUP = "flight_modes";
-    private static final String PARAMS = "params";
+	private static final String CHECKLIST = "flight_checklist";
 	private FragmentTabHost mTabHost;
 
 	@Override
@@ -37,8 +37,8 @@ public class ConfigurationActivity extends SuperUI{
 	    mTabHost.addTab(mTabHost.newTabSpec(TUNING).setIndicator("Tuning"),TuningFragment.class, null);
 	    mTabHost.addTab(mTabHost.newTabSpec(RC_SETUP).setIndicator("RC"),RcSetupFragment.class, null);
 	    mTabHost.addTab(mTabHost.newTabSpec(MODES_SETUP).setIndicator("Modes"),ModesSetupFragment.class, null);
-//	    mTabHost.addTab(mTabHost.newTabSpec(PARAMETERS).setIndicator("Parameters"),ParametersTableFragment.class, null);
-        mTabHost.addTab(mTabHost.newTabSpec(PARAMETERS).setIndicator("Parameters"), ParamsFragment.class, null);
+	    mTabHost.addTab(mTabHost.newTabSpec(CHECKLIST).setIndicator("Checklist"),ChecklistFragment.class, null);
+        mTabHost.addTab(mTabHost.newTabSpec(PARAMETERS).setIndicator("Parameters"),ParamsFragment.class, null);
 
 	    Intent intent = getIntent();
 	    String stringExtra = intent.getStringExtra(SCREEN_INTENT);
