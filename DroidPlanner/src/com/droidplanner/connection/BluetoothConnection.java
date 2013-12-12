@@ -64,20 +64,22 @@ public class BluetoothConnection extends MAVLinkConnection {
                 ? findSerialBluetoothBoard()
                 : mBluetoothAdapter.getRemoteDevice(address);
 
-        for (UUID uuid : sValidUuids) {
-            try {
-                bluetoothSocket = device.createInsecureRfcommSocketToServiceRecord(uuid);
+        if (isUuidValid(device.getUuids())) {
+            for (UUID uuid : sValidUuids) {
+                try {
+                    bluetoothSocket = device.createInsecureRfcommSocketToServiceRecord(uuid);
 
-                mBluetoothAdapter.cancelDiscovery();
-                bluetoothSocket.connect();
+                    mBluetoothAdapter.cancelDiscovery();
+                    bluetoothSocket.connect();
 
-                out = bluetoothSocket.getOutputStream();
-                in = bluetoothSocket.getInputStream();
+                    out = bluetoothSocket.getOutputStream();
+                    in = bluetoothSocket.getInputStream();
 
-                //Found a good one... break
-                break;
-            } catch (IOException e) {
-                //try another uuid
+                    //Found a good one... break
+                    break;
+                } catch (IOException e) {
+                    //try another uuid
+                }
             }
         }
 
@@ -132,5 +134,22 @@ public class BluetoothConnection extends MAVLinkConnection {
     @Override
     protected void getPreferences(SharedPreferences prefs) {
         // TODO Auto-generated method stub
+    }
+
+    /**
+     * Checks if the passed list of uuids is valid.
+     * @param parcelUuids list of uuids
+     * @return true if they are valid
+     */
+    public boolean isUuidValid(ParcelUuid[] parcelUuids){
+        if(parcelUuids == null)
+            return false;
+
+        for(ParcelUuid parcelUuid: parcelUuids){
+            if(sValidUuids.contains(parcelUuid.getUuid()))
+                return true;
+        }
+
+        return false;
     }
 }
