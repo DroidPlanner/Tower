@@ -217,6 +217,11 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
 
         @Override
         public void afterTextChanged(Editable editable) {
+            // During reload text may change as valueView looses focus
+            // after underlying data has been evalidated - avoid this
+            if(position >= getCount())
+                return;
+
             final ParamsAdapterItem item = getItem(position);
             item.setDirtyValue(editable.toString());
 
