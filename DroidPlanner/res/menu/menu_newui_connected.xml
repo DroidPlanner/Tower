@@ -21,12 +21,33 @@
         android:id="@+id/bar_battery"
         android:icon="@drawable/bar_battery"
         android:showAsAction="always|withText"
-        android:title="  12.2v, 72%  "/>
-    <item
+        android:title="  12.2v, 72%  "/><item
         android:id="@+id/bar_signal"
         android:icon="@drawable/bar_signal"
         android:showAsAction="always|withText"
-        android:title="  86%  "/>
+        android:title="  86%  ">
+        <menu>
+            <item
+                android:id="@+id/bar_signal_rssi"
+                android:title="RSSI"/>
+            <item
+                android:id="@+id/bar_signal_rssirem"
+                android:title="remRSSI"/>
+            <item
+                android:id="@+id/bar_signal_noise"
+                android:title="Noise"/>
+            <item
+                android:id="@+id/bar_signal_noiserem"
+                android:title="remNoise"/>
+            <item
+                android:id="@+id/bar_signal_fade"
+                android:title="Fade"/>
+            <item
+                android:id="@+id/bar_signal_faderem"
+                android:title="remFade"/>
+        </menu>
+    </item>
+
     <item
         android:id="@+id/bar_mode"
         android:actionViewClass="com.droidplanner.widgets.spinners.SelectModeSpinner"
