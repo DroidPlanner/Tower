@@ -24,6 +24,12 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner,
 	private MenuItem propeler;
 	private MenuItem home;
 	private MenuItem signal;
+	private MenuItem signalRSSI;
+	private MenuItem signalRemRSSI;
+	private MenuItem signalNoise;
+	private MenuItem signalRemNoise;
+	private MenuItem signalRemFade;
+	private MenuItem signalFade;
 	private Context context;
 	private ProgressDialog pd;
 	private int pdTitle;
@@ -46,6 +52,12 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner,
 			propeler = menu.findItem(R.id.bar_propeller);
 			home = menu.findItem(R.id.bar_home);
 			signal = menu.findItem(R.id.bar_signal);
+			signalRSSI = menu.findItem(R.id.bar_signal_rssi);
+			signalRemRSSI =menu.findItem(R.id.bar_signal_rssirem);
+			signalNoise =menu.findItem(R.id.bar_signal_noise);
+			signalRemNoise = menu.findItem(R.id.bar_signal_noiserem);
+			signalFade = menu.findItem(R.id.bar_signal_fade);
+			signalRemFade = menu.findItem(R.id.bar_signal_faderem);
 			mode = (SelectModeSpinner) menu.findItem(R.id.bar_mode)
 					.getActionView();
 
@@ -79,7 +91,13 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner,
 				drone.battery.getBattVolt(), drone.battery.getBattRemain()));
 		gps.setTitle(String.format("%d, %s", drone.GPS.getSatCount(),
 				drone.GPS.getFixType()));
-		signal.setTitle(String.format("%d%%",drone.radio.getRssi()));
+		signal.setTitle(String.format("%d%%",drone.radio.getSignalStrength()));
+		signalRSSI.setTitle(String.format("RSSI %d dB",drone.radio.getRssi()));
+		signalRemRSSI.setTitle(String.format("RemRSSI %d dB",drone.radio.getRemRssi()));
+		signalNoise.setTitle(String.format("Noise %d dB",drone.radio.getNoise()));
+		signalRemNoise.setTitle(String.format("RemNoise %d dB",drone.radio.getRemNoise()));
+		signalFade.setTitle(String.format("Fade %d dB",drone.radio.getFadeMargin()));
+		signalRemFade.setTitle(String.format("RemFade %d dB",drone.radio.getRemFadeMargin()));
 	}
 
 	@Override
