@@ -92,12 +92,12 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner,
 		gps.setTitle(String.format("%d, %s", drone.GPS.getSatCount(),
 				drone.GPS.getFixType()));
 		signal.setTitle(String.format("%d%%",drone.radio.getSignalStrength()));
-		signalRSSI.setTitle(String.format("RSSI %d dB",drone.radio.getRssi()));
-		signalRemRSSI.setTitle(String.format("RemRSSI %d dB",drone.radio.getRemRssi()));
-		signalNoise.setTitle(String.format("Noise %d dB",drone.radio.getNoise()));
-		signalRemNoise.setTitle(String.format("RemNoise %d dB",drone.radio.getRemNoise()));
-		signalFade.setTitle(String.format("Fade %d dB",drone.radio.getFadeMargin()));
-		signalRemFade.setTitle(String.format("RemFade %d dB",drone.radio.getRemFadeMargin()));
+		signalRSSI.setTitle(String.format("RSSI %2.0f dB",drone.radio.getRssi()));
+		signalRemRSSI.setTitle(String.format("RemRSSI %2.0f dB",drone.radio.getRemRssi()));
+		signalNoise.setTitle(String.format("Noise %2.0f dB",drone.radio.getNoise()));
+		signalRemNoise.setTitle(String.format("RemNoise %2.0f dB",drone.radio.getRemNoise()));
+		signalFade.setTitle(String.format("Fade %2.0f dB",drone.radio.getFadeMargin()));
+		signalRemFade.setTitle(String.format("RemFade %2.0f dB",drone.radio.getRemFadeMargin()));
 	}
 
 	@Override
