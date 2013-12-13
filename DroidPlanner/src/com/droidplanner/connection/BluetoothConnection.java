@@ -1,11 +1,13 @@
 package com.droidplanner.connection;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.ParcelUuid;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -15,7 +17,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.UnknownHostException;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -28,14 +32,14 @@ public class BluetoothConnection extends MAVLinkConnection {
      *
      * @since 1.2.0
      */
-    private static final Set<UUID> sValidUuids = new HashSet<UUID>(BluetoothServer.UUIDS.length +
-            1);
+    private static final Set<UUID> sValidUuids = new LinkedHashSet<UUID>(BluetoothServer.UUIDS
+            .length + 1);
 
     static {
+        sValidUuids.add(UUID.fromString(UUID_SPP_DEVICE));
         for (UUID uuid : BluetoothServer.UUIDS) {
             sValidUuids.add(uuid);
         }
-        sValidUuids.add(UUID.fromString(UUID_SPP_DEVICE));
     }
 
     private BluetoothAdapter mBluetoothAdapter;
@@ -55,6 +59,10 @@ public class BluetoothConnection extends MAVLinkConnection {
     protected void openConnection() throws IOException {
         Log.d(BLUE, "Connect");
 
+        //Reset the input, and output stream
+        in = null;
+        out = null;
+
         //Retrieve the stored address
         final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences
                 (parentContext);
@@ -64,22 +72,20 @@ public class BluetoothConnection extends MAVLinkConnection {
                 ? findSerialBluetoothBoard()
                 : mBluetoothAdapter.getRemoteDevice(address);
 
-        if (isUuidValid(device.getUuids())) {
-            for (UUID uuid : sValidUuids) {
-                try {
-                    bluetoothSocket = device.createInsecureRfcommSocketToServiceRecord(uuid);
+        final List<UUID> supportedUuids = retrieveSupportedUuids(device);
+        for (UUID uuid : supportedUuids) {
+            try {
+                bluetoothSocket = device.createInsecureRfcommSocketToServiceRecord(uuid);
+                mBluetoothAdapter.cancelDiscovery();
+                bluetoothSocket.connect();
 
-                    mBluetoothAdapter.cancelDiscovery();
-                    bluetoothSocket.connect();
+                out = bluetoothSocket.getOutputStream();
+                in = bluetoothSocket.getInputStream();
 
-                    out = bluetoothSocket.getOutputStream();
-                    in = bluetoothSocket.getInputStream();
-
-                    //Found a good one... break
-                    break;
-                } catch (IOException e) {
-                    //try another uuid
-                }
+                //Found a good one... break
+                break;
+            } catch (IOException e) {
+                //try another uuid
             }
         }
 
@@ -137,19 +143,30 @@ public class BluetoothConnection extends MAVLinkConnection {
     }
 
     /**
-     * Checks if the passed list of uuids is valid.
-     * @param parcelUuids list of uuids
-     * @return true if they are valid
+     * Retrieves the supported list of uuid from the device uuids.
+     * @param device bluetooth device whose uuids to check
+     * @return support uuids from the passed bluetooth device
+     * @since 1.2.0
      */
-    public boolean isUuidValid(ParcelUuid[] parcelUuids){
-        if(parcelUuids == null)
-            return false;
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
+    public List<UUID> retrieveSupportedUuids(BluetoothDevice device){
+        List<UUID> validUuids = new ArrayList<UUID>();
 
-        for(ParcelUuid parcelUuid: parcelUuids){
-            if(sValidUuids.contains(parcelUuid.getUuid()))
-                return true;
+        if (device != null) {
+            ParcelUuid[] deviceUuids = device.getUuids();
+            if (deviceUuids == null) {
+                //We have yet to pair with/connect to the device, so try all the supported uuids.
+                validUuids = new ArrayList<UUID>(sValidUuids);
+            }
+            else{
+                for(ParcelUuid parcelUuid: deviceUuids){
+                    final UUID uuid = parcelUuid.getUuid();
+                    if(sValidUuids.contains(uuid)){
+                        validUuids.add(uuid);
+                    }
+                }
+            }
         }
-
-        return false;
+        return validUuids;
     }
 }
