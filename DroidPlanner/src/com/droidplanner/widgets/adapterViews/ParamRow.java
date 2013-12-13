@@ -3,8 +3,6 @@ package com.droidplanner.widgets.adapterViews;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -72,12 +70,14 @@ public class ParamRow extends TableRow implements
     private void createRowViews(Context context) {
         // name
         nameView = new TextView(context);
+        nameView.setTextAppearance(context, R.style.paramRowLabelText);
         nameView.setWidth(300);
         nameView.setOnClickListener(this);
         addView(nameView);
 
-        // display
+        // description
         displayNameView = new TextView(context);
+        displayNameView.setTextAppearance(context, R.style.paramRowLabelText);
         displayNameView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT, (float) 1.0));
         displayNameView.setGravity(Gravity.CENTER_VERTICAL);
         displayNameView.setOnClickListener(this);
@@ -116,22 +116,21 @@ public class ParamRow extends TableRow implements
 	public void afterTextChanged(Editable s) {
         final String newValue = valueView.getText().toString();
 
-        final int color;
+        final int styleId;
         if(isValueEqualToDroneParam(newValue)) {
-            color = Color.WHITE;
-            valueView.setTypeface(null, Typeface.NORMAL);
+            styleId = R.style.paramValueUnchanged;
         } else {
+            final int background;
             final Validation validation = validateValue(newValue);
             if (validation == Validation.VALID) {
-                color = Color.GREEN;
+                styleId = R.style.paramValueValid;
             } else if (validation == Validation.INVALID) {
-                color = Color.RED;
+                styleId = R.style.paramValueInvalid;
             } else {
-                color = Color.YELLOW;
+                styleId = R.style.paramValueChanged;
             }
-            valueView.setTypeface(null, Typeface.BOLD);
         }
-        valueView.setTextColor(color);
+        valueView.setTextAppearance(getContext(), styleId);
     }
 
 	public boolean isNewValueEqualToDroneParam() {
@@ -208,13 +207,13 @@ public class ParamRow extends TableRow implements
         if(metadata == null || !metadata.hasInfo())
             return;
 
-        final AlertDialog.Builder builder = DialogParameterInfo.build(metadata, getContext());
-
-        // add edit button if metadata supplies known values
-        if(metadata.getValues() != null)
-            addEditValuesButton(builder);
-
-        builder.show();
+//        final AlertDialog.Builder builder = DialogParameterInfo.build(metadata, valueView, getContext());
+//
+//        // add edit button if metadata supplies known values
+//        if(metadata.getValues() != null)
+//            addEditValuesButton(builder);
+//
+//        builder.show();
     }
 
     private AlertDialog.Builder addEditValuesButton(AlertDialog.Builder builder) {
