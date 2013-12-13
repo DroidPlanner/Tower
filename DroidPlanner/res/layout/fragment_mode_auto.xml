@@ -36,11 +36,12 @@
 
 		<!--  Pause button -->
 		<Button
-			android:id="@+id/Pause_02"
+			android:id="@+id/PauseButton"
 			style="@style/modeControl"
+			android:visibility="gone"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:text="Pause"
+			android:text="@string/Pause"
 	        android:background="@drawable/button_mode_options"
 			/>
 

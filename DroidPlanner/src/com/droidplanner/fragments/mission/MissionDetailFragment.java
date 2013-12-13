@@ -44,6 +44,7 @@ public abstract class MissionDetailFragment extends Fragment implements
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(getResource(), null);
 		setupViews(view);
+        applyProfie(view);
 		return view;
 	}
 
@@ -106,5 +107,10 @@ public abstract class MissionDetailFragment extends Fragment implements
 	public void setItem(MissionItem item) {
 		this.item = item;
 	}
+
+    private void applyProfie(View view) {
+        final DroidPlannerApp app = (DroidPlannerApp) getActivity().getApplication();
+        app.drone.profile.applyMissionViewProfile(view, getResource());
+    }
 
 }

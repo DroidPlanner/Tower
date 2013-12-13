@@ -31,6 +31,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
         android:padding="16dp"
+		android:visibility="gone"
 		android:layout_below="@id/desc_rect"
 		android:orientation="vertical" >
 
@@ -40,7 +41,7 @@
 			style="@style/modeControl"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:text="Pause"
+			android:text="@string/Pause"
 	        android:background="@drawable/button_mode_options"
 			/>
 

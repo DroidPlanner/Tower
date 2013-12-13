@@ -129,11 +129,11 @@
             android:title="语音提示" />
 
         <ListPreference
-            android:defaultValue="None"
-            android:entries="@array/ParamMeta"
-            android:entryValues="@array/ParamMetaValues"
-            android:key="pref_param_metadata"
-            android:summary="Metadata to use when displaying parameters"
+            android:defaultValue="ArduCopter"
+            android:entries="@array/VehicleType"
+            android:entryValues="@array/VehicleType"
+            android:key="pref_vehicle_type"
+            android:summary="Default vehicle type when disconnected"
             android:title="模型参数类型" />
         
         <PreferenceScreen
