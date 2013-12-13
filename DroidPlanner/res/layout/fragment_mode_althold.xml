@@ -34,7 +34,7 @@
 		android:layout_below="@id/desc_rect"
 		android:orientation="vertical" >
 
-		<!--  Pause button -->
+		<!--  Mission control -->
 		<TextView
 			android:id="@+id/DistanceLabel"
 			style="@style/modeLabel"
@@ -42,17 +42,15 @@
 			android:layout_height="wrap_content"
 			android:text="Mission recording" />
 		<Button
-			android:id="@+id/Pause_01"
+			android:id="@+id/SaveWaypoint"
 			style="@style/modeControl"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:text="Save waypoint"
 	        android:background="@drawable/button_mode_options"
 			/>
-
-		<!--  Pause button -->
 		<Button
-			android:id="@+id/Pause_02"
+			android:id="@+id/ClearMission"
 			style="@style/modeControl"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"

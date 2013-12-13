@@ -36,6 +36,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         tools:layout="@layout/fragment_mission_control" />
+
     <TextView
         android:id="@+id/failsafeTextView"
         android:layout_width="match_parent"
@@ -43,8 +44,9 @@
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/fragment2"
         android:background="#D8ee2d3e"
-        android:text="Warning! RC Fasilsafe – Returning to launch"
+        android:text="@string/RCFailsafe"
 		style="@style/editorMissionOverviewText"
+        android:visibility="gone"
         />
 
     <SlidingDrawer
