@@ -40,7 +40,8 @@
 			style="@style/modeControl"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:text="Pause"
+	        android:visibility="gone"
+			android:text="@string/Pause"
 	        android:background="@drawable/button_mode_options"
 			/>
 

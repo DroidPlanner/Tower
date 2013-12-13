@@ -28,7 +28,7 @@
     <HS1_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </HS1_REV>
     <HS1_DZ>
@@ -63,7 +63,7 @@
     <HS2_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </HS2_REV>
     <HS2_DZ>
@@ -98,7 +98,7 @@
     <HS3_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </HS3_REV>
     <HS3_DZ>
@@ -133,7 +133,7 @@
     <HS4_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </HS4_REV>
     <HS4_DZ>
@@ -168,7 +168,7 @@
     <RC1_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </RC1_REV>
     <RC1_DZ>
@@ -203,7 +203,7 @@
     <RC2_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </RC2_REV>
     <RC2_DZ>
@@ -238,7 +238,7 @@
     <RC3_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </RC3_REV>
     <RC3_DZ>
@@ -273,7 +273,7 @@
     <RC4_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </RC4_REV>
     <RC4_DZ>
@@ -308,7 +308,7 @@
     <RC5_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </RC5_REV>
     <RC5_DZ>
@@ -319,7 +319,7 @@
     <RC5_FUNCTION>
       <DisplayName>Servo out function</DisplayName>
       <Description>Setting this to Disabled(0) will disable this output, any other value will enable the corresponding function</Description>
-      <Values>0:Disabled,1:RCPassThru,2:Flap,3:Flap_auto,4:Aileron,5:flaperon,6:mount_pan,7:mount_tilt,8:mount_roll,9:mount_open,10:camera_trigger,11:release,12:mount2_pan,13:mount2_tilt,14:mount2_roll,15:mount2_open,16:DifferentialSpoiler1,17:DifferentialSpoiler2,18:AileronWithInput,19:Elevator,20:ElevatorWithInput,21:Rudder</Values>
+      <Values>0:Disabled, 1:RCPassThru, 2:Flap, 3:Flap_auto, 4:Aileron, 5:flaperon, 6:mount_pan, 7:mount_tilt, 8:mount_roll, 9:mount_open, 10:camera_trigger, 11:release, 12:mount2_pan, 13:mount2_tilt, 14:mount2_roll, 15:mount2_open, 16:DifferentialSpoiler1, 17:DifferentialSpoiler2, 18:AileronWithInput, 19:Elevator, 20:ElevatorWithInput, 21:Rudder</Values>
       <User>Standard</User>
     </RC5_FUNCTION>
     <RC6_MIN>
@@ -349,7 +349,7 @@
     <RC6_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </RC6_REV>
     <RC6_DZ>
@@ -360,7 +360,7 @@
     <RC6_FUNCTION>
       <DisplayName>Servo out function</DisplayName>
       <Description>Setting this to Disabled(0) will disable this output, any other value will enable the corresponding function</Description>
-      <Values>0:Disabled,1:RCPassThru,2:Flap,3:Flap_auto,4:Aileron,5:flaperon,6:mount_pan,7:mount_tilt,8:mount_roll,9:mount_open,10:camera_trigger,11:release,12:mount2_pan,13:mount2_tilt,14:mount2_roll,15:mount2_open,16:DifferentialSpoiler1,17:DifferentialSpoiler2,18:AileronWithInput,19:Elevator,20:ElevatorWithInput,21:Rudder</Values>
+      <Values>0:Disabled, 1:RCPassThru, 2:Flap, 3:Flap_auto, 4:Aileron, 5:flaperon, 6:mount_pan, 7:mount_tilt, 8:mount_roll, 9:mount_open, 10:camera_trigger, 11:release, 12:mount2_pan, 13:mount2_tilt, 14:mount2_roll, 15:mount2_open, 16:DifferentialSpoiler1, 17:DifferentialSpoiler2, 18:AileronWithInput, 19:Elevator, 20:ElevatorWithInput, 21:Rudder</Values>
       <User>Standard</User>
     </RC6_FUNCTION>
     <RC7_MIN>
@@ -390,7 +390,7 @@
     <RC7_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </RC7_REV>
     <RC7_DZ>
@@ -401,7 +401,7 @@
     <RC7_FUNCTION>
       <DisplayName>Servo out function</DisplayName>
       <Description>Setting this to Disabled(0) will disable this output, any other value will enable the corresponding function</Description>
-      <Values>0:Disabled,1:RCPassThru,2:Flap,3:Flap_auto,4:Aileron,5:flaperon,6:mount_pan,7:mount_tilt,8:mount_roll,9:mount_open,10:camera_trigger,11:release,12:mount2_pan,13:mount2_tilt,14:mount2_roll,15:mount2_open,16:DifferentialSpoiler1,17:DifferentialSpoiler2,18:AileronWithInput,19:Elevator,20:ElevatorWithInput,21:Rudder</Values>
+      <Values>0:Disabled, 1:RCPassThru, 2:Flap, 3:Flap_auto, 4:Aileron, 5:flaperon, 6:mount_pan, 7:mount_tilt, 8:mount_roll, 9:mount_open, 10:camera_trigger, 11:release, 12:mount2_pan, 13:mount2_tilt, 14:mount2_roll, 15:mount2_open, 16:DifferentialSpoiler1, 17:DifferentialSpoiler2, 18:AileronWithInput, 19:Elevator, 20:ElevatorWithInput, 21:Rudder</Values>
       <User>Standard</User>
     </RC7_FUNCTION>
     <RC8_MIN>
@@ -431,7 +431,7 @@
     <RC8_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </RC8_REV>
     <RC8_DZ>
@@ -442,7 +442,7 @@
     <RC8_FUNCTION>
       <DisplayName>Servo out function</DisplayName>
       <Description>Setting this to Disabled(0) will disable this output, any other value will enable the corresponding function</Description>
-      <Values>0:Disabled,1:RCPassThru,2:Flap,3:Flap_auto,4:Aileron,5:flaperon,6:mount_pan,7:mount_tilt,8:mount_roll,9:mount_open,10:camera_trigger,11:release,12:mount2_pan,13:mount2_tilt,14:mount2_roll,15:mount2_open,16:DifferentialSpoiler1,17:DifferentialSpoiler2,18:AileronWithInput,19:Elevator,20:ElevatorWithInput,21:Rudder</Values>
+      <Values>0:Disabled, 1:RCPassThru, 2:Flap, 3:Flap_auto, 4:Aileron, 5:flaperon, 6:mount_pan, 7:mount_tilt, 8:mount_roll, 9:mount_open, 10:camera_trigger, 11:release, 12:mount2_pan, 13:mount2_tilt, 14:mount2_roll, 15:mount2_open, 16:DifferentialSpoiler1, 17:DifferentialSpoiler2, 18:AileronWithInput, 19:Elevator, 20:ElevatorWithInput, 21:Rudder</Values>
       <User>Standard</User>
     </RC8_FUNCTION>
     <RC10_MIN>
@@ -472,7 +472,7 @@
     <RC10_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </RC10_REV>
     <RC10_DZ>
@@ -483,7 +483,7 @@
     <RC10_FUNCTION>
       <DisplayName>Servo out function</DisplayName>
       <Description>Setting this to Disabled(0) will disable this output, any other value will enable the corresponding function</Description>
-      <Values>0:Disabled,1:RCPassThru,2:Flap,3:Flap_auto,4:Aileron,5:flaperon,6:mount_pan,7:mount_tilt,8:mount_roll,9:mount_open,10:camera_trigger,11:release,12:mount2_pan,13:mount2_tilt,14:mount2_roll,15:mount2_open,16:DifferentialSpoiler1,17:DifferentialSpoiler2,18:AileronWithInput,19:Elevator,20:ElevatorWithInput,21:Rudder</Values>
+      <Values>0:Disabled, 1:RCPassThru, 2:Flap, 3:Flap_auto, 4:Aileron, 5:flaperon, 6:mount_pan, 7:mount_tilt, 8:mount_roll, 9:mount_open, 10:camera_trigger, 11:release, 12:mount2_pan, 13:mount2_tilt, 14:mount2_roll, 15:mount2_open, 16:DifferentialSpoiler1, 17:DifferentialSpoiler2, 18:AileronWithInput, 19:Elevator, 20:ElevatorWithInput, 21:Rudder</Values>
       <User>Standard</User>
     </RC10_FUNCTION>
     <RC11_MIN>
@@ -513,7 +513,7 @@
     <RC11_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </RC11_REV>
     <RC11_DZ>
@@ -524,7 +524,7 @@
     <RC11_FUNCTION>
       <DisplayName>Servo out function</DisplayName>
       <Description>Setting this to Disabled(0) will disable this output, any other value will enable the corresponding function</Description>
-      <Values>0:Disabled,1:RCPassThru,2:Flap,3:Flap_auto,4:Aileron,5:flaperon,6:mount_pan,7:mount_tilt,8:mount_roll,9:mount_open,10:camera_trigger,11:release,12:mount2_pan,13:mount2_tilt,14:mount2_roll,15:mount2_open,16:DifferentialSpoiler1,17:DifferentialSpoiler2,18:AileronWithInput,19:Elevator,20:ElevatorWithInput,21:Rudder</Values>
+      <Values>0:Disabled, 1:RCPassThru, 2:Flap, 3:Flap_auto, 4:Aileron, 5:flaperon, 6:mount_pan, 7:mount_tilt, 8:mount_roll, 9:mount_open, 10:camera_trigger, 11:release, 12:mount2_pan, 13:mount2_tilt, 14:mount2_roll, 15:mount2_open, 16:DifferentialSpoiler1, 17:DifferentialSpoiler2, 18:AileronWithInput, 19:Elevator, 20:ElevatorWithInput, 21:Rudder</Values>
       <User>Standard</User>
     </RC11_FUNCTION>
     <RC9_MIN>
@@ -554,7 +554,7 @@
     <RC9_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </RC9_REV>
     <RC9_DZ>
@@ -565,7 +565,7 @@
     <RC9_FUNCTION>
       <DisplayName>Servo out function</DisplayName>
       <Description>Setting this to Disabled(0) will disable this output, any other value will enable the corresponding function</Description>
-      <Values>0:Disabled,1:RCPassThru,2:Flap,3:Flap_auto,4:Aileron,5:flaperon,6:mount_pan,7:mount_tilt,8:mount_roll,9:mount_open,10:camera_trigger,11:release,12:mount2_pan,13:mount2_tilt,14:mount2_roll,15:mount2_open,16:DifferentialSpoiler1,17:DifferentialSpoiler2,18:AileronWithInput,19:Elevator,20:ElevatorWithInput,21:Rudder</Values>
+      <Values>0:Disabled, 1:RCPassThru, 2:Flap, 3:Flap_auto, 4:Aileron, 5:flaperon, 6:mount_pan, 7:mount_tilt, 8:mount_roll, 9:mount_open, 10:camera_trigger, 11:release, 12:mount2_pan, 13:mount2_tilt, 14:mount2_roll, 15:mount2_open, 16:DifferentialSpoiler1, 17:DifferentialSpoiler2, 18:AileronWithInput, 19:Elevator, 20:ElevatorWithInput, 21:Rudder</Values>
       <User>Standard</User>
     </RC9_FUNCTION>
     <RC12_MIN>
@@ -595,7 +595,7 @@
     <RC12_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </RC12_REV>
     <RC12_DZ>
@@ -606,13 +606,13 @@
     <RC12_FUNCTION>
       <DisplayName>Servo out function</DisplayName>
       <Description>Setting this to Disabled(0) will disable this output, any other value will enable the corresponding function</Description>
-      <Values>0:Disabled,1:RCPassThru,2:Flap,3:Flap_auto,4:Aileron,5:flaperon,6:mount_pan,7:mount_tilt,8:mount_roll,9:mount_open,10:camera_trigger,11:release,12:mount2_pan,13:mount2_tilt,14:mount2_roll,15:mount2_open,16:DifferentialSpoiler1,17:DifferentialSpoiler2,18:AileronWithInput,19:Elevator,20:ElevatorWithInput,21:Rudder</Values>
+      <Values>0:Disabled, 1:RCPassThru, 2:Flap, 3:Flap_auto, 4:Aileron, 5:flaperon, 6:mount_pan, 7:mount_tilt, 8:mount_roll, 9:mount_open, 10:camera_trigger, 11:release, 12:mount2_pan, 13:mount2_tilt, 14:mount2_roll, 15:mount2_open, 16:DifferentialSpoiler1, 17:DifferentialSpoiler2, 18:AileronWithInput, 19:Elevator, 20:ElevatorWithInput, 21:Rudder</Values>
       <User>Standard</User>
     </RC12_FUNCTION>
     <CAM_TRIGG_TYPE>
       <DisplayName>Camera shutter (trigger) type</DisplayName>
       <Description>how to trigger the camera to take a picture</Description>
-      <Values>0:Servo,1:Relay</Values>
+      <Values>0:Servo, 1:Relay</Values>
       <User>Standard</User>
     </CAM_TRIGG_TYPE>
     <CAM_DURATION>
@@ -643,7 +643,7 @@
       <DisplayName>Relay Pin</DisplayName>
       <Description>Digital pin number for relay control.</Description>
       <User>Standard</User>
-      <Values>13:APM2 A9 pin,47:APM1 relay,111:PX4 FMU Relay1,112:PX4 FMU Relay2,113:PX4IO Relay1,114:PX4IO Relay2,115:PX4IO ACC1,116:PX4IO ACC2</Values>
+      <Values>13:APM2 A9 pin, 47:APM1 relay, 111:PX4 FMU Relay1, 112:PX4 FMU Relay2, 113:PX4IO Relay1, 114:PX4IO Relay2, 115:PX4IO ACC1, 116:PX4IO ACC2</Values>
     </RELAY_PIN>
     <COMPASS_OFS_X>
       <DisplayName>Compass offsets on the X axis</DisplayName>
@@ -674,25 +674,25 @@
     <COMPASS_LEARN>
       <DisplayName>Learn compass offsets automatically</DisplayName>
       <Description>Enable or disable the automatic learning of compass offsets</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Advanced</User>
     </COMPASS_LEARN>
     <COMPASS_USE>
       <DisplayName>Use compass for yaw</DisplayName>
       <Description>Enable or disable the use of the compass (instead of the GPS) for determining heading</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Advanced</User>
     </COMPASS_USE>
     <COMPASS_AUTODEC>
       <DisplayName>Auto Declination</DisplayName>
       <Description>Enable or disable the automatic calculation of the declination based on gps location</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Advanced</User>
     </COMPASS_AUTODEC>
     <COMPASS_MOTCT>
       <DisplayName>Motor interference compensation type</DisplayName>
       <Description>Set motor interference compensation type to disabled, throttle or current.  Do not change manually.</Description>
-      <Values>0:Disabled,1:Use Throttle,2:Use Current</Values>
+      <Values>0:Disabled, 1:Use Throttle, 2:Use Current</Values>
       <Increment>1</Increment>
     </COMPASS_MOTCT>
     <COMPASS_MOT_X>
@@ -719,12 +719,12 @@
     <COMPASS_ORIENT>
       <DisplayName>Compass orientation</DisplayName>
       <Description>The orientation of the compass relative to the autopilot board. This will default to the right value for each board type, but can be changed if you have an external compass. See the documentation for your external compass for the right value. The correct orientation should give the X axis forward, the Y axis to the right and the Z axis down. So if your aircraft is pointing west it should show a positive value for the Y axis, and a value close to zero for the X axis. NOTE: This orientation is combined with any AHRS_ORIENTATION setting.</Description>
-      <Values>0:None,1:Yaw45,2:Yaw90,3:Yaw135,4:Yaw180,5:Yaw225,6:Yaw270,7:Yaw315,8:Roll180,9:Roll180Yaw45,10:Roll180Yaw90,11:Roll180Yaw135,12:Pitch180,13:Roll180Yaw225,14:Roll180Yaw270,15:Roll180Yaw315,16:Roll90,17:Roll90Yaw45,18:Roll90Yaw90,19:Roll90Yaw135,20:Roll270,21:Roll270Yaw45,22:Roll270Yaw90,23:Roll270Yaw136,24:Pitch90,25:Pitch270,26:Pitch180Yaw90,27:Pitch180Yaw270,28:Roll90Pitch90,29:Roll180Pitch90,30:Roll270Pitch90,31:Roll90Pitch180,32:Roll270Pitch180,33:Roll90Pitch270,34:Roll180Pitch270,35:Roll270Pitch270,36:Roll90Pitch180Yaw90,37:Roll90Yaw270</Values>
+      <Values>0:None, 1:Yaw45, 2:Yaw90, 3:Yaw135, 4:Yaw180, 5:Yaw225, 6:Yaw270, 7:Yaw315, 8:Roll180, 9:Roll180Yaw45, 10:Roll180Yaw90, 11:Roll180Yaw135, 12:Pitch180, 13:Roll180Yaw225, 14:Roll180Yaw270, 15:Roll180Yaw315, 16:Roll90, 17:Roll90Yaw45, 18:Roll90Yaw90, 19:Roll90Yaw135, 20:Roll270, 21:Roll270Yaw45, 22:Roll270Yaw90, 23:Roll270Yaw136, 24:Pitch90, 25:Pitch270, 26:Pitch180Yaw90, 27:Pitch180Yaw270, 28:Roll90Pitch90, 29:Roll180Pitch90, 30:Roll270Pitch90, 31:Roll90Pitch180, 32:Roll270Pitch180, 33:Roll90Pitch270, 34:Roll180Pitch270, 35:Roll270Pitch270, 36:Roll90Pitch180Yaw90, 37:Roll90Yaw270</Values>
     </COMPASS_ORIENT>
     <COMPASS_EXTERNAL>
       <DisplayName>Compass is attached via an external cable</DisplayName>
       <Description>Configure compass so it is attached externally. This is auto-detected on PX4, but must be set correctly on an APM2. Set to 1 if the compass is externally connected. When externally connected the COMPASS_ORIENT option operates independently of the AHRS_ORIENTATION board orientation option</Description>
-      <Values>0:Internal,1:External</Values>
+      <Values>0:Internal, 1:External</Values>
       <User>Advanced</User>
     </COMPASS_EXTERNAL>
     <INS_PRODUCT_ID>
@@ -793,7 +793,7 @@
       <DisplayName>MPU6000 filter frequency</DisplayName>
       <Description>Filter frequency to ask the MPU6000 to apply to samples. This can be set to a lower value to try to cope with very high vibration levels in aircraft. The default value on ArduPlane, APMrover2 and ArduCopter is 20Hz. This option takes effect on the next reboot or gyro initialisation</Description>
       <Units>Hz</Units>
-      <Values>0:Default,5:5Hz,10:10Hz,20:20Hz,42:42Hz,98:98Hz</Values>
+      <Values>0:Default, 5:5Hz, 10:10Hz, 20:20Hz, 42:42Hz, 98:98Hz</Values>
       <User>Advanced</User>
     </INS_MPU6K_FILTER>
     <INAV_TC_XY>
@@ -865,7 +865,7 @@
     <AHRS_GPS_USE>
       <DisplayName>AHRS use GPS for navigation</DisplayName>
       <Description>This controls whether to use dead-reckoning or GPS based navigation. If set to 0 then the GPS won't be used for navigation, and only dead reckoning will be used. A value of zero should never be used for normal flight.</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Advanced</User>
     </AHRS_GPS_USE>
     <AHRS_YAW_P>
@@ -911,7 +911,7 @@
     <AHRS_ORIENTATION>
       <DisplayName>Board Orientation</DisplayName>
       <Description>Overall board orientation relative to the standard orientation for the board type. This rotates the IMU and compass readings to allow the board to be oriented in your vehicle at any 90 or 45 degree angle. This option takes affect on next boot. After changing you will need to re-level your vehicle.</Description>
-      <Values>0:None,1:Yaw45,2:Yaw90,3:Yaw135,4:Yaw180,5:Yaw225,6:Yaw270,7:Yaw315,8:Roll180,9:Roll180Yaw45,10:Roll180Yaw90,11:Roll180Yaw135,12:Pitch180,13:Roll180Yaw225,14:Roll180Yaw270,15:Roll180Yaw315,16:Roll90,17:Roll90Yaw45,18:Roll90Yaw90,19:Roll90Yaw135,20:Roll270,21:Roll270Yaw45,22:Roll270Yaw90,23:Roll270Yaw136,24:Pitch90,25:Pitch270,26:Pitch180Yaw90,27:Pitch180Yaw270,28:Roll90Pitch90,29:Roll180Pitch90,30:Roll270Pitch90,31:Roll90Pitch180,32:Roll270Pitch180,33:Roll90Pitch270,34:Roll180Pitch270,35:Roll270Pitch270,36:Roll90Pitch180Yaw90,37:Roll90Yaw270</Values>
+      <Values>0:None, 1:Yaw45, 2:Yaw90, 3:Yaw135, 4:Yaw180, 5:Yaw225, 6:Yaw270, 7:Yaw315, 8:Roll180, 9:Roll180Yaw45, 10:Roll180Yaw90, 11:Roll180Yaw135, 12:Pitch180, 13:Roll180Yaw225, 14:Roll180Yaw270, 15:Roll180Yaw315, 16:Roll90, 17:Roll90Yaw45, 18:Roll90Yaw90, 19:Roll90Yaw135, 20:Roll270, 21:Roll270Yaw45, 22:Roll270Yaw90, 23:Roll270Yaw136, 24:Pitch90, 25:Pitch270, 26:Pitch180Yaw90, 27:Pitch180Yaw270, 28:Roll90Pitch90, 29:Roll180Pitch90, 30:Roll270Pitch90, 31:Roll90Pitch180, 32:Roll270Pitch180, 33:Roll90Pitch270, 34:Roll180Pitch270, 35:Roll270Pitch270, 36:Roll90Pitch180Yaw90, 37:Roll90Yaw270</Values>
       <User>Advanced</User>
     </AHRS_ORIENTATION>
     <AHRS_COMP_BETA>
@@ -931,7 +931,7 @@
     <MNT_MODE>
       <DisplayName>Mount operation mode</DisplayName>
       <Description>Camera or antenna mount operation mode</Description>
-      <Values>0:retract,1:neutral,2:MavLink_targeting,3:RC_targeting,4:GPS_point</Values>
+      <Values>0:retract, 1:neutral, 2:MavLink_targeting, 3:RC_targeting, 4:GPS_point</Values>
       <User>Standard</User>
     </MNT_MODE>
     <MNT_RETRACT_X>
@@ -1006,25 +1006,25 @@
     <MNT_STAB_ROLL>
       <DisplayName>Stabilize mount's roll angle</DisplayName>
       <Description>enable roll stabilisation relative to Earth</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Standard</User>
     </MNT_STAB_ROLL>
     <MNT_STAB_TILT>
       <DisplayName>Stabilize mount's pitch/tilt angle</DisplayName>
       <Description>enable tilt/pitch stabilisation relative to Earth</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Standard</User>
     </MNT_STAB_TILT>
     <MNT_STAB_PAN>
       <DisplayName>Stabilize mount pan/yaw angle</DisplayName>
       <Description>enable pan/yaw stabilisation relative to Earth</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Standard</User>
     </MNT_STAB_PAN>
     <MNT_RC_IN_ROLL>
       <DisplayName>roll RC input channel</DisplayName>
       <Description>0 for none, any other for the RC channel to be used to control roll movements</Description>
-      <Values>0:Disabled,5:RC5,6:RC6,7:RC7,8:RC8</Values>
+      <Values>0:Disabled, 5:RC5, 6:RC6, 7:RC7, 8:RC8</Values>
       <User>Standard</User>
     </MNT_RC_IN_ROLL>
     <MNT_ANGMIN_ROL>
@@ -1046,7 +1046,7 @@
     <MNT_RC_IN_TILT>
       <DisplayName>tilt (pitch) RC input channel</DisplayName>
       <Description>0 for none, any other for the RC channel to be used to control tilt (pitch) movements</Description>
-      <Values>0:Disabled,5:RC5,6:RC6,7:RC7,8:RC8</Values>
+      <Values>0:Disabled, 5:RC5, 6:RC6, 7:RC7, 8:RC8</Values>
       <User>Standard</User>
     </MNT_RC_IN_TILT>
     <MNT_ANGMIN_TIL>
@@ -1068,7 +1068,7 @@
     <MNT_RC_IN_PAN>
       <DisplayName>pan (yaw) RC input channel</DisplayName>
       <Description>0 for none, any other for the RC channel to be used to control pan (yaw) movements</Description>
-      <Values>0:Disabled,5:RC5,6:RC6,7:RC7,8:RC8</Values>
+      <Values>0:Disabled, 5:RC5, 6:RC6, 7:RC7, 8:RC8</Values>
       <User>Standard</User>
     </MNT_RC_IN_PAN>
     <MNT_ANGMIN_PAN>
@@ -1097,7 +1097,7 @@
     <MNT2_MODE>
       <DisplayName>Mount operation mode</DisplayName>
       <Description>Camera or antenna mount operation mode</Description>
-      <Values>0:retract,1:neutral,2:MavLink_targeting,3:RC_targeting,4:GPS_point</Values>
+      <Values>0:retract, 1:neutral, 2:MavLink_targeting, 3:RC_targeting, 4:GPS_point</Values>
       <User>Standard</User>
     </MNT2_MODE>
     <MNT2_RETRACT_X>
@@ -1172,25 +1172,25 @@
     <MNT2_STAB_ROLL>
       <DisplayName>Stabilize mount's roll angle</DisplayName>
       <Description>enable roll stabilisation relative to Earth</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Standard</User>
     </MNT2_STAB_ROLL>
     <MNT2_STAB_TILT>
       <DisplayName>Stabilize mount's pitch/tilt angle</DisplayName>
       <Description>enable tilt/pitch stabilisation relative to Earth</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Standard</User>
     </MNT2_STAB_TILT>
     <MNT2_STAB_PAN>
       <DisplayName>Stabilize mount pan/yaw angle</DisplayName>
       <Description>enable pan/yaw stabilisation relative to Earth</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Standard</User>
     </MNT2_STAB_PAN>
     <MNT2_RC_IN_ROLL>
       <DisplayName>roll RC input channel</DisplayName>
       <Description>0 for none, any other for the RC channel to be used to control roll movements</Description>
-      <Values>0:Disabled,5:RC5,6:RC6,7:RC7,8:RC8</Values>
+      <Values>0:Disabled, 5:RC5, 6:RC6, 7:RC7, 8:RC8</Values>
       <User>Standard</User>
     </MNT2_RC_IN_ROLL>
     <MNT2_ANGMIN_ROL>
@@ -1212,7 +1212,7 @@
     <MNT2_RC_IN_TILT>
       <DisplayName>tilt (pitch) RC input channel</DisplayName>
       <Description>0 for none, any other for the RC channel to be used to control tilt (pitch) movements</Description>
-      <Values>0:Disabled,5:RC5,6:RC6,7:RC7,8:RC8</Values>
+      <Values>0:Disabled, 5:RC5, 6:RC6, 7:RC7, 8:RC8</Values>
       <User>Standard</User>
     </MNT2_RC_IN_TILT>
     <MNT2_ANGMIN_TIL>
@@ -1234,7 +1234,7 @@
     <MNT2_RC_IN_PAN>
       <DisplayName>pan (yaw) RC input channel</DisplayName>
       <Description>0 for none, any other for the RC channel to be used to control pan (yaw) movements</Description>
-      <Values>0:Disabled,5:RC5,6:RC6,7:RC7,8:RC8</Values>
+      <Values>0:Disabled, 5:RC5, 6:RC6, 7:RC7, 8:RC8</Values>
       <User>Standard</User>
     </MNT2_RC_IN_PAN>
     <MNT2_ANGMIN_PAN>
@@ -1263,7 +1263,7 @@
     <BATT_MONITOR>
       <DisplayName>Battery monitoring</DisplayName>
       <Description>Controls enabling monitoring of the battery's voltage and current</Description>
-      <Values>0:Disabled,3:Voltage Only,4:Voltage and Current</Values>
+      <Values>0:Disabled, 3:Voltage Only, 4:Voltage and Current</Values>
       <User>Standard</User>
     </BATT_MONITOR>
     <BATT_VOLT_PIN>
@@ -1304,7 +1304,7 @@
     <SPRAYER_ENABLE>
       <DisplayName>Sprayer enable/disable</DisplayName>
       <Description>Allows you to enable (1) or disable (0) the sprayer</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Standard</User>
     </SPRAYER_ENABLE>
     <SPRAYER_PUMP_RATE>
@@ -1355,25 +1355,25 @@
     <SCHED_DEBUG>
       <DisplayName>Scheduler debug level</DisplayName>
       <Description>Set to non-zero to enable scheduler debug messages. When set to show "Slips" the scheduler will display a message whenever a scheduled task is delayed due to too much CPU load. When set to ShowOverruns the scheduled will display a message whenever a task takes longer than the limit promised in the task table.</Description>
-      <Values>0:Disabled,1:ShowSlips,2:ShowOverruns</Values>
+      <Values>0:Disabled, 1:ShowSlips, 2:ShowOverruns</Values>
       <User>Advanced</User>
     </SCHED_DEBUG>
     <FENCE_ENABLE>
       <DisplayName>Fence enable/disable</DisplayName>
       <Description>Allows you to enable (1) or disable (0) the fence functionality</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Standard</User>
     </FENCE_ENABLE>
     <FENCE_TYPE>
       <DisplayName>Fence Type</DisplayName>
       <Description>Enabled fence types held as bitmask</Description>
-      <Values>0:None,1:Altitude,2:Circle,3:Altitude and Circle</Values>
+      <Values>0:None, 1:Altitude, 2:Circle, 3:Altitude and Circle</Values>
       <User>Standard</User>
     </FENCE_TYPE>
     <FENCE_ACTION>
       <DisplayName>Action to perform when the limit is breached</DisplayName>
       <Description>What to do on fence breach</Description>
-      <Values>0:Report Only,1:RTL or Land</Values>
+      <Values>0:Report Only, 1:RTL or Land</Values>
       <User>Standard</User>
     </FENCE_ACTION>
     <FENCE_ALT_MAX>
@@ -1401,7 +1401,7 @@
     <GPSGLITCH_ENABLE>
       <DisplayName>GPS Glitch protection enable/disable</DisplayName>
       <Description>Allows you to enable (1) or disable (0) gps glitch protection</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Standard</User>
     </GPSGLITCH_ENABLE>
     <GPSGLITCH_RADIUS>
@@ -1487,7 +1487,7 @@
     <H_GYR_ENABLE>
       <DisplayName>External Gyro Enabled</DisplayName>
       <Description>Setting this to Enabled(1) will enable an external rudder gyro control which means outputting a gain on channel 7 and using a simpler heading control algorithm. Setting this to Disabled(0) will disable the external gyro gain on channel 7 and revert to a more complex yaw control algorithm.</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Standard</User>
     </H_GYR_ENABLE>
     <H_SWASH_TYPE>
@@ -1506,7 +1506,7 @@
     <H_SV_MAN>
       <DisplayName>Manual Servo Mode</DisplayName>
       <Description>Setting this to Enabled(1) will pass radio inputs directly to servos. Setting this to Disabled(0) will enable Arducopter control of servos.  This is only meant to be used by the Mission Planner using swash plate set-up.</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Standard</User>
     </H_SV_MAN>
     <H_PHANG>
@@ -1568,7 +1568,7 @@
     <MOT_TCRV_ENABLE>
       <DisplayName>Thrust Curve Enable</DisplayName>
       <Description>Controls whether a curve is used to linearize the thrust produced by the motors</Description>
-      <Values>0:Disabled,1:Enable</Values>
+      <Values>0:Disabled, 1:Enable</Values>
     </MOT_TCRV_ENABLE>
     <MOT_TCRV_MIDPCT>
       <DisplayName>Thrust Curve mid-point percentage</DisplayName>
@@ -1583,7 +1583,7 @@
     <MOT_SPIN_ARMED>
       <DisplayName>Motors always spin when armed</DisplayName>
       <Description>Controls whether motors always spin when armed (must be below THR_MIN)</Description>
-      <Values>0:Do Not Spin,70:VerySlow,100:Slow,130:Medium,150:Fast</Values>
+      <Values>0:Do Not Spin, 70:VerySlow, 100:Slow, 130:Medium, 150:Fast</Values>
     </MOT_SPIN_ARMED>
     <RCMAP_ROLL>
       <DisplayName>Roll channel</DisplayName>
@@ -1636,7 +1636,7 @@
     <SERIAL3_BAUD>
       <DisplayName>Telemetry Baud Rate</DisplayName>
       <Description>The baud rate used on the telemetry port</Description>
-      <Values>1:1200,2:2400,4:4800,9:9600,19:19200,38:38400,57:57600,111:111100,115:115200</Values>
+      <Values>1:1200, 2:2400, 4:4800, 9:9600, 19:19200, 38:38400, 57:57600, 111:111100, 115:115200</Values>
       <User>Standard</User>
     </SERIAL3_BAUD>
     <TELEM_DELAY>
@@ -1658,13 +1658,13 @@
     <SONAR_ENABLE>
       <DisplayName>Enable Sonar</DisplayName>
       <Description>Setting this to Enabled(1) will enable the sonar. Setting this to Disabled(0) will disable the sonar</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Standard</User>
     </SONAR_ENABLE>
     <SONAR_TYPE>
       <DisplayName>Sonar type</DisplayName>
       <Description>Used to adjust scaling to match the sonar used (only Maxbotix sonars are supported at this time)</Description>
-      <Values>0:XL-EZ0 / XL-EZ4,1:LV-EZ0,2:XLL-EZ0,3:HRLV</Values>
+      <Values>0:XL-EZ0 / XL-EZ4, 1:LV-EZ0, 2:XLL-EZ0, 3:HRLV</Values>
       <User>Standard</User>
     </SONAR_TYPE>
     <SONAR_GAIN>
@@ -1677,7 +1677,7 @@
     <FS_BATT_ENABLE>
       <DisplayName>Battery Failsafe Enable</DisplayName>
       <Description>Controls whether failsafe will be invoked when battery voltage or current runs low</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Standard</User>
     </FS_BATT_ENABLE>
     <FS_BATT_VOLTAGE>
@@ -1695,13 +1695,13 @@
     <FS_GPS_ENABLE>
       <DisplayName>GPS Failsafe Enable</DisplayName>
       <Description>Controls whether failsafe will be invoked when gps signal is lost</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Standard</User>
     </FS_GPS_ENABLE>
     <FS_GCS_ENABLE>
       <DisplayName>Ground Station Failsafe Enable</DisplayName>
       <Description>Controls whether failsafe will be invoked (and what action to take) when connection with Ground station is lost for at least 5 seconds</Description>
-      <Values>0:Disabled,1:Enabled always RTL,2:Enabled Continue with Mission in Auto Mode</Values>
+      <Values>0:Disabled, 1:Enabled always RTL, 2:Enabled Continue with Mission in Auto Mode</Values>
       <User>Standard</User>
     </FS_GCS_ENABLE>
     <GPS_HDOP_GOOD>
@@ -1713,19 +1713,19 @@
     <MAG_ENABLE>
       <DisplayName>Enable Compass</DisplayName>
       <Description>Setting this to Enabled(1) will enable the compass. Setting this to Disabled(0) will disable the compass</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Standard</User>
     </MAG_ENABLE>
     <FLOW_ENABLE>
       <DisplayName>Enable Optical Flow</DisplayName>
       <Description>Setting this to Enabled(1) will enable optical flow. Setting this to Disabled(0) will disable optical flow</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Standard</User>
     </FLOW_ENABLE>
     <SUPER_SIMPLE>
       <DisplayName>Enable Super Simple Mode</DisplayName>
       <Description>Enabling this turn on one of the Super Simple Mode variants. Setting this to Disabled(0) will disable Super Simple Mode</Description>
-      <Values>0:Disabled,1:Mode1,2:Mode2,3:Mode1+2,4:Mode3,5:Mode1+3,6:Mode2+3,7:Mode1+2+3,8:Mode4,9:Mode1+4,10:Mode2+4,11:Mode1+2+4,12:Mode3+4,13:Mode1+3+4,14:Mode2+3+4,15:Mode1+2+3+4,16:Mode5,17:Mode1+5,18:Mode2+5,19:Mode1+2+5,20:Mode3+5,21:Mode1+3+5,22:Mode2+3+5,23:Mode1+2+3+5,24:Mode4+5,25:Mode1+4+5,26:Mode2+4+5,27:Mode1+2+4+5,28:Mode3+4+5,29:Mode1+3+4+5,30:Mode2+3+4+5,31:Mode1+2+3+4+5,32:Mode6,33:Mode1+6,34:Mode2+6,35:Mode1+2+6,36:Mode3+6,37:Mode1+3+6,38:Mode2+3+6,39:Mode1+2+3+6,40:Mode4+6,41:Mode1+4+6,42:Mode2+4+6,43:Mode1+2+4+6,44:Mode3+4+6,45:Mode1+3+4+6,46:Mode2+3+4+6,47:Mode1+2+3+4+6,48:Mode5+6,49:Mode1+5+6,50:Mode2+5+6,51:Mode1+2+5+6,52:Mode3+5+6,53:Mode1+3+5+6,54:Mode2+3+5+6,55:Mode1+2+3+5+6,56:Mode4+5+6,57:Mode1+4+5+6,58:Mode2+4+5+6,59:Mode1+2+4+5+6,60:Mode3+4+5+6,61:Mode1+3+4+5+6,62:Mode2+3+4+5+6,63:Mode1+2+3+4+5+6</Values>
+      <Values>0:Disabled, 1:Mode1, 2:Mode2, 3:Mode1+2, 4:Mode3, 5:Mode1+3, 6:Mode2+3, 7:Mode1+2+3, 8:Mode4, 9:Mode1+4, 10:Mode2+4, 11:Mode1+2+4, 12:Mode3+4, 13:Mode1+3+4, 14:Mode2+3+4, 15:Mode1+2+3+4, 16:Mode5, 17:Mode1+5, 18:Mode2+5, 19:Mode1+2+5, 20:Mode3+5, 21:Mode1+3+5, 22:Mode2+3+5, 23:Mode1+2+3+5, 24:Mode4+5, 25:Mode1+4+5, 26:Mode2+4+5, 27:Mode1+2+4+5, 28:Mode3+4+5, 29:Mode1+3+4+5, 30:Mode2+3+4+5, 31:Mode1+2+3+4+5, 32:Mode6, 33:Mode1+6, 34:Mode2+6, 35:Mode1+2+6, 36:Mode3+6, 37:Mode1+3+6, 38:Mode2+3+6, 39:Mode1+2+3+6, 40:Mode4+6, 41:Mode1+4+6, 42:Mode2+4+6, 43:Mode1+2+4+6, 44:Mode3+4+6, 45:Mode1+3+4+6, 46:Mode2+3+4+6, 47:Mode1+2+3+4+6, 48:Mode5+6, 49:Mode1+5+6, 50:Mode2+5+6, 51:Mode1+2+5+6, 52:Mode3+5+6, 53:Mode1+3+5+6, 54:Mode2+3+5+6, 55:Mode1+2+3+5+6, 56:Mode4+5+6, 57:Mode1+4+5+6, 58:Mode2+4+5+6, 59:Mode1+2+4+5+6, 60:Mode3+4+5+6, 61:Mode1+3+4+5+6, 62:Mode2+3+4+5+6, 63:Mode1+2+3+4+5+6</Values>
       <User>Standard</User>
     </SUPER_SIMPLE>
     <RTL_ALT_FINAL>
@@ -1817,7 +1817,7 @@
     <FS_THR_ENABLE>
       <DisplayName>Throttle Failsafe Enable</DisplayName>
       <Description>The throttle failsafe allows you to configure a software failsafe activated by a setting on the throttle input channel</Description>
-      <Values>0:Disabled,1:Enabled always RTL,2:Enabled Continue with Mission in Auto Mode,3:Enabled always LAND</Values>
+      <Values>0:Disabled, 1:Enabled always RTL, 2:Enabled Continue with Mission in Auto Mode, 3:Enabled always LAND</Values>
       <User>Standard</User>
     </FS_THR_ENABLE>
     <FS_THR_VALUE>
@@ -1845,37 +1845,37 @@
     <FLTMODE1>
       <DisplayName>Flight Mode 1</DisplayName>
       <Description>Flight mode when Channel 5 pwm is &lt;= 1230</Description>
-      <Values>0:Stabilize,1:Acro,2:AltHold,3:Auto,4:Guided,5:Loiter,6:RTL,7:Circle,8:Position,9:Land,10:OF_Loiter,11:ToyA,12:ToyM,13:Sport</Values>
+      <Values>0:Stabilize, 1:Acro, 2:AltHold, 3:Auto, 4:Guided, 5:Loiter, 6:RTL, 7:Circle, 8:Position, 9:Land, 10:OF_Loiter, 11:ToyA, 12:ToyM, 13:Sport</Values>
       <User>Standard</User>
     </FLTMODE1>
     <FLTMODE2>
       <DisplayName>Flight Mode 2</DisplayName>
       <Description>Flight mode when Channel 5 pwm is &gt;1230, &lt;= 1360</Description>
-      <Values>0:Stabilize,1:Acro,2:AltHold,3:Auto,4:Guided,5:Loiter,6:RTL,7:Circle,8:Position,9:Land,10:OF_Loiter,11:ToyA,12:ToyM,13:Sport</Values>
+      <Values>0:Stabilize, 1:Acro, 2:AltHold, 3:Auto, 4:Guided, 5:Loiter, 6:RTL, 7:Circle, 8:Position, 9:Land, 10:OF_Loiter, 11:ToyA, 12:ToyM, 13:Sport</Values>
       <User>Standard</User>
     </FLTMODE2>
     <FLTMODE3>
       <DisplayName>Flight Mode 3</DisplayName>
       <Description>Flight mode when Channel 5 pwm is &gt;1360, &lt;= 1490</Description>
-      <Values>0:Stabilize,1:Acro,2:AltHold,3:Auto,4:Guided,5:Loiter,6:RTL,7:Circle,8:Position,9:Land,10:OF_Loiter,11:ToyA,12:ToyM,13:Sport</Values>
+      <Values>0:Stabilize, 1:Acro, 2:AltHold, 3:Auto, 4:Guided, 5:Loiter, 6:RTL, 7:Circle, 8:Position, 9:Land, 10:OF_Loiter, 11:ToyA, 12:ToyM, 13:Sport</Values>
       <User>Standard</User>
     </FLTMODE3>
     <FLTMODE4>
       <DisplayName>Flight Mode 4</DisplayName>
       <Description>Flight mode when Channel 5 pwm is &gt;1490, &lt;= 1620</Description>
-      <Values>0:Stabilize,1:Acro,2:AltHold,3:Auto,4:Guided,5:Loiter,6:RTL,7:Circle,8:Position,9:Land,10:OF_Loiter,11:ToyA,12:ToyM,13:Sport</Values>
+      <Values>0:Stabilize, 1:Acro, 2:AltHold, 3:Auto, 4:Guided, 5:Loiter, 6:RTL, 7:Circle, 8:Position, 9:Land, 10:OF_Loiter, 11:ToyA, 12:ToyM, 13:Sport</Values>
       <User>Standard</User>
     </FLTMODE4>
     <FLTMODE5>
       <DisplayName>Flight Mode 5</DisplayName>
       <Description>Flight mode when Channel 5 pwm is &gt;1620, &lt;= 1749</Description>
-      <Values>0:Stabilize,1:Acro,2:AltHold,3:Auto,4:Guided,5:Loiter,6:RTL,7:Circle,8:Position,9:Land,10:OF_Loiter,11:ToyA,12:ToyM,13:Sport</Values>
+      <Values>0:Stabilize, 1:Acro, 2:AltHold, 3:Auto, 4:Guided, 5:Loiter, 6:RTL, 7:Circle, 8:Position, 9:Land, 10:OF_Loiter, 11:ToyA, 12:ToyM, 13:Sport</Values>
       <User>Standard</User>
     </FLTMODE5>
     <FLTMODE6>
       <DisplayName>Flight Mode 6</DisplayName>
       <Description>Flight mode when Channel 5 pwm is &gt;=1750</Description>
-      <Values>0:Stabilize,1:Acro,2:AltHold,3:Auto,4:Guided,5:Loiter,6:RTL,7:Circle,8:Position,9:Land,10:OF_Loiter,11:ToyA,12:ToyM,13:Sport</Values>
+      <Values>0:Stabilize, 1:Acro, 2:AltHold, 3:Auto, 4:Guided, 5:Loiter, 6:RTL, 7:Circle, 8:Position, 9:Land, 10:OF_Loiter, 11:ToyA, 12:ToyM, 13:Sport</Values>
       <User>Standard</User>
     </FLTMODE6>
     <SIMPLE>
@@ -1886,7 +1886,7 @@
     <LOG_BITMASK>
       <DisplayName>Log bitmask</DisplayName>
       <Description>2 byte bitmap of log types to enable</Description>
-      <Values>0:Disabled,830:Default,958:Default+IMU,1854:Default+Motors,17214:Default+INav</Values>
+      <Values>0:Disabled, 830:Default, 958:Default+IMU, 1854:Default+Motors, 17214:Default+INav</Values>
       <User>Advanced</User>
     </LOG_BITMASK>
     <TOY_RATE>
@@ -1899,13 +1899,13 @@
       <DisplayName>ESC Calibration</DisplayName>
       <Description>Controls whether ArduCopter will enter ESC calibration on the next restart.  Do not adjust this parameter manually.</Description>
       <User>Advanced</User>
-      <Values>0:Normal Start-up,1:Start-up in ESC Calibration mode</Values>
+      <Values>0:Normal Start-up, 1:Start-up in ESC Calibration mode</Values>
     </ESC>
     <TUNE>
       <DisplayName>Channel 6 Tuning</DisplayName>
       <Description>Controls which parameters (normally PID gains) are being tuned with transmitter's channel 6 knob</Description>
       <User>Standard</User>
-      <Values>0:None,1:Stab Roll/Pitch kP,4:Rate Roll/Pitch kP,5:Rate Roll/Pitch kI,21:Rate Roll/Pitch kD,3:Stab Yaw kP,6:Rate Yaw kP,26:Rate Yaw kD,14:Altitude Hold kP,7:Throttle Rate kP,37:Throttle Rate kD,34:Throttle Accel kP,35:Throttle Accel kI,36:Throttle Accel kD,12:Loiter Pos kP,22:Loiter Rate kP,28:Loiter Rate kI,23:Loiter Rate kD,10:WP Speed,25:Acro RollPitch kP,40:Acro Yaw kP,9:Relay On/Off,13:Heli Ext Gyro,17:OF Loiter kP,18:OF Loiter kI,19:OF Loiter kD,30:AHRS Yaw kP,31:AHRS kP,32:INAV_TC,38:Declination,39:Circle Rate,41:Sonar Gain</Values>
+      <Values>0:None, 1:Stab Roll/Pitch kP, 4:Rate Roll/Pitch kP, 5:Rate Roll/Pitch kI, 21:Rate Roll/Pitch kD, 3:Stab Yaw kP, 6:Rate Yaw kP, 26:Rate Yaw kD, 14:Altitude Hold kP, 7:Throttle Rate kP, 37:Throttle Rate kD, 34:Throttle Accel kP, 35:Throttle Accel kI, 36:Throttle Accel kD, 12:Loiter Pos kP, 22:Loiter Rate kP, 28:Loiter Rate kI, 23:Loiter Rate kD, 10:WP Speed, 25:Acro RollPitch kP, 40:Acro Yaw kP, 9:Relay On/Off, 13:Heli Ext Gyro, 17:OF Loiter kP, 18:OF Loiter kI, 19:OF Loiter kD, 30:AHRS Yaw kP, 31:AHRS kP, 32:INAV_TC, 38:Declination, 39:Circle Rate, 41:Sonar Gain</Values>
     </TUNE>
     <TUNE_LOW>
       <DisplayName>Tuning minimum</DisplayName>
@@ -2007,13 +2007,13 @@
     <ACRO_TRAINER>
       <DisplayName>Acro Trainer</DisplayName>
       <Description>Type of trainer used in acro mode</Description>
-      <Values>0:Disabled,1:Leveling,2:Leveling and Limited</Values>
+      <Values>0:Disabled, 1:Leveling, 2:Leveling and Limited</Values>
       <User>Advanced</User>
     </ACRO_TRAINER>
     <LED_MODE>
       <DisplayName>Copter LED Mode</DisplayName>
       <Description>bitmap to control the copter led mode</Description>
-      <Values>0:Disabled,1:Enable,3:GPS On,4:Aux,9:Buzzer,17:Oscillate,33:Nav Blink,65:GPS Nav Blink</Values>
+      <Values>0:Disabled, 1:Enable, 3:GPS On, 4:Aux, 9:Buzzer, 17:Oscillate, 33:Nav Blink, 65:GPS Nav Blink</Values>
       <User>Standard</User>
     </LED_MODE>
     <RATE_RLL_P>
@@ -2399,7 +2399,7 @@
     <CAM_TRIGG_TYPE>
       <DisplayName>Camera shutter (trigger) type</DisplayName>
       <Description>how to trigger the camera to take a picture</Description>
-      <Values>0:Servo,1:Relay</Values>
+      <Values>0:Servo, 1:Relay</Values>
       <User>Standard</User>
     </CAM_TRIGG_TYPE>
     <CAM_DURATION>
@@ -2430,7 +2430,7 @@
       <DisplayName>Relay Pin</DisplayName>
       <Description>Digital pin number for relay control.</Description>
       <User>Standard</User>
-      <Values>13:APM2 A9 pin,47:APM1 relay,111:PX4 FMU Relay1,112:PX4 FMU Relay2,113:PX4IO Relay1,114:PX4IO Relay2,115:PX4IO ACC1,116:PX4IO ACC2</Values>
+      <Values>13:APM2 A9 pin, 47:APM1 relay, 111:PX4 FMU Relay1, 112:PX4 FMU Relay2, 113:PX4IO Relay1, 114:PX4IO Relay2, 115:PX4IO ACC1, 116:PX4IO ACC2</Values>
     </RELAY_PIN>
     <RC1_MIN>
       <DisplayName>RC min PWM</DisplayName>
@@ -2459,7 +2459,7 @@
     <RC1_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </RC1_REV>
     <RC1_DZ>
@@ -2494,7 +2494,7 @@
     <RC2_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </RC2_REV>
     <RC2_DZ>
@@ -2529,7 +2529,7 @@
     <RC3_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </RC3_REV>
     <RC3_DZ>
@@ -2564,7 +2564,7 @@
     <RC4_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </RC4_REV>
     <RC4_DZ>
@@ -2599,7 +2599,7 @@
     <RC5_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </RC5_REV>
     <RC5_DZ>
@@ -2610,7 +2610,7 @@
     <RC5_FUNCTION>
       <DisplayName>Servo out function</DisplayName>
       <Description>Setting this to Disabled(0) will disable this output, any other value will enable the corresponding function</Description>
-      <Values>0:Disabled,1:RCPassThru,2:Flap,3:Flap_auto,4:Aileron,5:flaperon,6:mount_pan,7:mount_tilt,8:mount_roll,9:mount_open,10:camera_trigger,11:release,12:mount2_pan,13:mount2_tilt,14:mount2_roll,15:mount2_open,16:DifferentialSpoiler1,17:DifferentialSpoiler2,18:AileronWithInput,19:Elevator,20:ElevatorWithInput,21:Rudder</Values>
+      <Values>0:Disabled, 1:RCPassThru, 2:Flap, 3:Flap_auto, 4:Aileron, 5:flaperon, 6:mount_pan, 7:mount_tilt, 8:mount_roll, 9:mount_open, 10:camera_trigger, 11:release, 12:mount2_pan, 13:mount2_tilt, 14:mount2_roll, 15:mount2_open, 16:DifferentialSpoiler1, 17:DifferentialSpoiler2, 18:AileronWithInput, 19:Elevator, 20:ElevatorWithInput, 21:Rudder</Values>
       <User>Standard</User>
     </RC5_FUNCTION>
     <RC6_MIN>
@@ -2640,7 +2640,7 @@
     <RC6_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </RC6_REV>
     <RC6_DZ>
@@ -2651,7 +2651,7 @@
     <RC6_FUNCTION>
       <DisplayName>Servo out function</DisplayName>
       <Description>Setting this to Disabled(0) will disable this output, any other value will enable the corresponding function</Description>
-      <Values>0:Disabled,1:RCPassThru,2:Flap,3:Flap_auto,4:Aileron,5:flaperon,6:mount_pan,7:mount_tilt,8:mount_roll,9:mount_open,10:camera_trigger,11:release,12:mount2_pan,13:mount2_tilt,14:mount2_roll,15:mount2_open,16:DifferentialSpoiler1,17:DifferentialSpoiler2,18:AileronWithInput,19:Elevator,20:ElevatorWithInput,21:Rudder</Values>
+      <Values>0:Disabled, 1:RCPassThru, 2:Flap, 3:Flap_auto, 4:Aileron, 5:flaperon, 6:mount_pan, 7:mount_tilt, 8:mount_roll, 9:mount_open, 10:camera_trigger, 11:release, 12:mount2_pan, 13:mount2_tilt, 14:mount2_roll, 15:mount2_open, 16:DifferentialSpoiler1, 17:DifferentialSpoiler2, 18:AileronWithInput, 19:Elevator, 20:ElevatorWithInput, 21:Rudder</Values>
       <User>Standard</User>
     </RC6_FUNCTION>
     <RC7_MIN>
@@ -2681,7 +2681,7 @@
     <RC7_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </RC7_REV>
     <RC7_DZ>
@@ -2692,7 +2692,7 @@
     <RC7_FUNCTION>
       <DisplayName>Servo out function</DisplayName>
       <Description>Setting this to Disabled(0) will disable this output, any other value will enable the corresponding function</Description>
-      <Values>0:Disabled,1:RCPassThru,2:Flap,3:Flap_auto,4:Aileron,5:flaperon,6:mount_pan,7:mount_tilt,8:mount_roll,9:mount_open,10:camera_trigger,11:release,12:mount2_pan,13:mount2_tilt,14:mount2_roll,15:mount2_open,16:DifferentialSpoiler1,17:DifferentialSpoiler2,18:AileronWithInput,19:Elevator,20:ElevatorWithInput,21:Rudder</Values>
+      <Values>0:Disabled, 1:RCPassThru, 2:Flap, 3:Flap_auto, 4:Aileron, 5:flaperon, 6:mount_pan, 7:mount_tilt, 8:mount_roll, 9:mount_open, 10:camera_trigger, 11:release, 12:mount2_pan, 13:mount2_tilt, 14:mount2_roll, 15:mount2_open, 16:DifferentialSpoiler1, 17:DifferentialSpoiler2, 18:AileronWithInput, 19:Elevator, 20:ElevatorWithInput, 21:Rudder</Values>
       <User>Standard</User>
     </RC7_FUNCTION>
     <RC8_MIN>
@@ -2722,7 +2722,7 @@
     <RC8_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </RC8_REV>
     <RC8_DZ>
@@ -2733,7 +2733,7 @@
     <RC8_FUNCTION>
       <DisplayName>Servo out function</DisplayName>
       <Description>Setting this to Disabled(0) will disable this output, any other value will enable the corresponding function</Description>
-      <Values>0:Disabled,1:RCPassThru,2:Flap,3:Flap_auto,4:Aileron,5:flaperon,6:mount_pan,7:mount_tilt,8:mount_roll,9:mount_open,10:camera_trigger,11:release,12:mount2_pan,13:mount2_tilt,14:mount2_roll,15:mount2_open,16:DifferentialSpoiler1,17:DifferentialSpoiler2,18:AileronWithInput,19:Elevator,20:ElevatorWithInput,21:Rudder</Values>
+      <Values>0:Disabled, 1:RCPassThru, 2:Flap, 3:Flap_auto, 4:Aileron, 5:flaperon, 6:mount_pan, 7:mount_tilt, 8:mount_roll, 9:mount_open, 10:camera_trigger, 11:release, 12:mount2_pan, 13:mount2_tilt, 14:mount2_roll, 15:mount2_open, 16:DifferentialSpoiler1, 17:DifferentialSpoiler2, 18:AileronWithInput, 19:Elevator, 20:ElevatorWithInput, 21:Rudder</Values>
       <User>Standard</User>
     </RC8_FUNCTION>
     <RC9_MIN>
@@ -2763,7 +2763,7 @@
     <RC9_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </RC9_REV>
     <RC9_DZ>
@@ -2774,7 +2774,7 @@
     <RC9_FUNCTION>
       <DisplayName>Servo out function</DisplayName>
       <Description>Setting this to Disabled(0) will disable this output, any other value will enable the corresponding function</Description>
-      <Values>0:Disabled,1:RCPassThru,2:Flap,3:Flap_auto,4:Aileron,5:flaperon,6:mount_pan,7:mount_tilt,8:mount_roll,9:mount_open,10:camera_trigger,11:release,12:mount2_pan,13:mount2_tilt,14:mount2_roll,15:mount2_open,16:DifferentialSpoiler1,17:DifferentialSpoiler2,18:AileronWithInput,19:Elevator,20:ElevatorWithInput,21:Rudder</Values>
+      <Values>0:Disabled, 1:RCPassThru, 2:Flap, 3:Flap_auto, 4:Aileron, 5:flaperon, 6:mount_pan, 7:mount_tilt, 8:mount_roll, 9:mount_open, 10:camera_trigger, 11:release, 12:mount2_pan, 13:mount2_tilt, 14:mount2_roll, 15:mount2_open, 16:DifferentialSpoiler1, 17:DifferentialSpoiler2, 18:AileronWithInput, 19:Elevator, 20:ElevatorWithInput, 21:Rudder</Values>
       <User>Standard</User>
     </RC9_FUNCTION>
     <RC10_MIN>
@@ -2804,7 +2804,7 @@
     <RC10_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </RC10_REV>
     <RC10_DZ>
@@ -2815,7 +2815,7 @@
     <RC10_FUNCTION>
       <DisplayName>Servo out function</DisplayName>
       <Description>Setting this to Disabled(0) will disable this output, any other value will enable the corresponding function</Description>
-      <Values>0:Disabled,1:RCPassThru,2:Flap,3:Flap_auto,4:Aileron,5:flaperon,6:mount_pan,7:mount_tilt,8:mount_roll,9:mount_open,10:camera_trigger,11:release,12:mount2_pan,13:mount2_tilt,14:mount2_roll,15:mount2_open,16:DifferentialSpoiler1,17:DifferentialSpoiler2,18:AileronWithInput,19:Elevator,20:ElevatorWithInput,21:Rudder</Values>
+      <Values>0:Disabled, 1:RCPassThru, 2:Flap, 3:Flap_auto, 4:Aileron, 5:flaperon, 6:mount_pan, 7:mount_tilt, 8:mount_roll, 9:mount_open, 10:camera_trigger, 11:release, 12:mount2_pan, 13:mount2_tilt, 14:mount2_roll, 15:mount2_open, 16:DifferentialSpoiler1, 17:DifferentialSpoiler2, 18:AileronWithInput, 19:Elevator, 20:ElevatorWithInput, 21:Rudder</Values>
       <User>Standard</User>
     </RC10_FUNCTION>
     <RC11_MIN>
@@ -2845,7 +2845,7 @@
     <RC11_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </RC11_REV>
     <RC11_DZ>
@@ -2856,7 +2856,7 @@
     <RC11_FUNCTION>
       <DisplayName>Servo out function</DisplayName>
       <Description>Setting this to Disabled(0) will disable this output, any other value will enable the corresponding function</Description>
-      <Values>0:Disabled,1:RCPassThru,2:Flap,3:Flap_auto,4:Aileron,5:flaperon,6:mount_pan,7:mount_tilt,8:mount_roll,9:mount_open,10:camera_trigger,11:release,12:mount2_pan,13:mount2_tilt,14:mount2_roll,15:mount2_open,16:DifferentialSpoiler1,17:DifferentialSpoiler2,18:AileronWithInput,19:Elevator,20:ElevatorWithInput,21:Rudder</Values>
+      <Values>0:Disabled, 1:RCPassThru, 2:Flap, 3:Flap_auto, 4:Aileron, 5:flaperon, 6:mount_pan, 7:mount_tilt, 8:mount_roll, 9:mount_open, 10:camera_trigger, 11:release, 12:mount2_pan, 13:mount2_tilt, 14:mount2_roll, 15:mount2_open, 16:DifferentialSpoiler1, 17:DifferentialSpoiler2, 18:AileronWithInput, 19:Elevator, 20:ElevatorWithInput, 21:Rudder</Values>
       <User>Standard</User>
     </RC11_FUNCTION>
     <RC12_MIN>
@@ -2886,7 +2886,7 @@
     <RC12_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </RC12_REV>
     <RC12_DZ>
@@ -2897,7 +2897,7 @@
     <RC12_FUNCTION>
       <DisplayName>Servo out function</DisplayName>
       <Description>Setting this to Disabled(0) will disable this output, any other value will enable the corresponding function</Description>
-      <Values>0:Disabled,1:RCPassThru,2:Flap,3:Flap_auto,4:Aileron,5:flaperon,6:mount_pan,7:mount_tilt,8:mount_roll,9:mount_open,10:camera_trigger,11:release,12:mount2_pan,13:mount2_tilt,14:mount2_roll,15:mount2_open,16:DifferentialSpoiler1,17:DifferentialSpoiler2,18:AileronWithInput,19:Elevator,20:ElevatorWithInput,21:Rudder</Values>
+      <Values>0:Disabled, 1:RCPassThru, 2:Flap, 3:Flap_auto, 4:Aileron, 5:flaperon, 6:mount_pan, 7:mount_tilt, 8:mount_roll, 9:mount_open, 10:camera_trigger, 11:release, 12:mount2_pan, 13:mount2_tilt, 14:mount2_roll, 15:mount2_open, 16:DifferentialSpoiler1, 17:DifferentialSpoiler2, 18:AileronWithInput, 19:Elevator, 20:ElevatorWithInput, 21:Rudder</Values>
       <User>Standard</User>
     </RC12_FUNCTION>
     <RLL2SRV_T_CONST>
@@ -3107,25 +3107,25 @@
     <COMPASS_LEARN>
       <DisplayName>Learn compass offsets automatically</DisplayName>
       <Description>Enable or disable the automatic learning of compass offsets</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Advanced</User>
     </COMPASS_LEARN>
     <COMPASS_USE>
       <DisplayName>Use compass for yaw</DisplayName>
       <Description>Enable or disable the use of the compass (instead of the GPS) for determining heading</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Advanced</User>
     </COMPASS_USE>
     <COMPASS_AUTODEC>
       <DisplayName>Auto Declination</DisplayName>
       <Description>Enable or disable the automatic calculation of the declination based on gps location</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Advanced</User>
     </COMPASS_AUTODEC>
     <COMPASS_MOTCT>
       <DisplayName>Motor interference compensation type</DisplayName>
       <Description>Set motor interference compensation type to disabled, throttle or current.  Do not change manually.</Description>
-      <Values>0:Disabled,1:Use Throttle,2:Use Current</Values>
+      <Values>0:Disabled, 1:Use Throttle, 2:Use Current</Values>
       <Increment>1</Increment>
     </COMPASS_MOTCT>
     <COMPASS_MOT_X>
@@ -3152,18 +3152,18 @@
     <COMPASS_ORIENT>
       <DisplayName>Compass orientation</DisplayName>
       <Description>The orientation of the compass relative to the autopilot board. This will default to the right value for each board type, but can be changed if you have an external compass. See the documentation for your external compass for the right value. The correct orientation should give the X axis forward, the Y axis to the right and the Z axis down. So if your aircraft is pointing west it should show a positive value for the Y axis, and a value close to zero for the X axis. NOTE: This orientation is combined with any AHRS_ORIENTATION setting.</Description>
-      <Values>0:None,1:Yaw45,2:Yaw90,3:Yaw135,4:Yaw180,5:Yaw225,6:Yaw270,7:Yaw315,8:Roll180,9:Roll180Yaw45,10:Roll180Yaw90,11:Roll180Yaw135,12:Pitch180,13:Roll180Yaw225,14:Roll180Yaw270,15:Roll180Yaw315,16:Roll90,17:Roll90Yaw45,18:Roll90Yaw90,19:Roll90Yaw135,20:Roll270,21:Roll270Yaw45,22:Roll270Yaw90,23:Roll270Yaw136,24:Pitch90,25:Pitch270,26:Pitch180Yaw90,27:Pitch180Yaw270,28:Roll90Pitch90,29:Roll180Pitch90,30:Roll270Pitch90,31:Roll90Pitch180,32:Roll270Pitch180,33:Roll90Pitch270,34:Roll180Pitch270,35:Roll270Pitch270,36:Roll90Pitch180Yaw90,37:Roll90Yaw270</Values>
+      <Values>0:None, 1:Yaw45, 2:Yaw90, 3:Yaw135, 4:Yaw180, 5:Yaw225, 6:Yaw270, 7:Yaw315, 8:Roll180, 9:Roll180Yaw45, 10:Roll180Yaw90, 11:Roll180Yaw135, 12:Pitch180, 13:Roll180Yaw225, 14:Roll180Yaw270, 15:Roll180Yaw315, 16:Roll90, 17:Roll90Yaw45, 18:Roll90Yaw90, 19:Roll90Yaw135, 20:Roll270, 21:Roll270Yaw45, 22:Roll270Yaw90, 23:Roll270Yaw136, 24:Pitch90, 25:Pitch270, 26:Pitch180Yaw90, 27:Pitch180Yaw270, 28:Roll90Pitch90, 29:Roll180Pitch90, 30:Roll270Pitch90, 31:Roll90Pitch180, 32:Roll270Pitch180, 33:Roll90Pitch270, 34:Roll180Pitch270, 35:Roll270Pitch270, 36:Roll90Pitch180Yaw90, 37:Roll90Yaw270</Values>
     </COMPASS_ORIENT>
     <COMPASS_EXTERNAL>
       <DisplayName>Compass is attached via an external cable</DisplayName>
       <Description>Configure compass so it is attached externally. This is auto-detected on PX4, but must be set correctly on an APM2. Set to 1 if the compass is externally connected. When externally connected the COMPASS_ORIENT option operates independently of the AHRS_ORIENTATION board orientation option</Description>
-      <Values>0:Internal,1:External</Values>
+      <Values>0:Internal, 1:External</Values>
       <User>Advanced</User>
     </COMPASS_EXTERNAL>
     <SCHED_DEBUG>
       <DisplayName>Scheduler debug level</DisplayName>
       <Description>Set to non-zero to enable scheduler debug messages. When set to show "Slips" the scheduler will display a message whenever a scheduled task is delayed due to too much CPU load. When set to ShowOverruns the scheduled will display a message whenever a task takes longer than the limit promised in the task table.</Description>
-      <Values>0:Disabled,1:ShowSlips,2:ShowOverruns</Values>
+      <Values>0:Disabled, 1:ShowSlips, 2:ShowOverruns</Values>
       <User>Advanced</User>
     </SCHED_DEBUG>
     <RCMAP_ROLL>
@@ -3260,7 +3260,7 @@
       <DisplayName>MPU6000 filter frequency</DisplayName>
       <Description>Filter frequency to ask the MPU6000 to apply to samples. This can be set to a lower value to try to cope with very high vibration levels in aircraft. The default value on ArduPlane, APMrover2 and ArduCopter is 20Hz. This option takes effect on the next reboot or gyro initialisation</Description>
       <Units>Hz</Units>
-      <Values>0:Default,5:5Hz,10:10Hz,20:20Hz,42:42Hz,98:98Hz</Values>
+      <Values>0:Default, 5:5Hz, 10:10Hz, 20:20Hz, 42:42Hz, 98:98Hz</Values>
       <User>Advanced</User>
     </INS_MPU6K_FILTER>
     <AHRS_GPS_GAIN>
@@ -3272,7 +3272,7 @@
     <AHRS_GPS_USE>
       <DisplayName>AHRS use GPS for navigation</DisplayName>
       <Description>This controls whether to use dead-reckoning or GPS based navigation. If set to 0 then the GPS won't be used for navigation, and only dead reckoning will be used. A value of zero should never be used for normal flight.</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Advanced</User>
     </AHRS_GPS_USE>
     <AHRS_YAW_P>
@@ -3318,7 +3318,7 @@
     <AHRS_ORIENTATION>
       <DisplayName>Board Orientation</DisplayName>
       <Description>Overall board orientation relative to the standard orientation for the board type. This rotates the IMU and compass readings to allow the board to be oriented in your vehicle at any 90 or 45 degree angle. This option takes affect on next boot. After changing you will need to re-level your vehicle.</Description>
-      <Values>0:None,1:Yaw45,2:Yaw90,3:Yaw135,4:Yaw180,5:Yaw225,6:Yaw270,7:Yaw315,8:Roll180,9:Roll180Yaw45,10:Roll180Yaw90,11:Roll180Yaw135,12:Pitch180,13:Roll180Yaw225,14:Roll180Yaw270,15:Roll180Yaw315,16:Roll90,17:Roll90Yaw45,18:Roll90Yaw90,19:Roll90Yaw135,20:Roll270,21:Roll270Yaw45,22:Roll270Yaw90,23:Roll270Yaw136,24:Pitch90,25:Pitch270,26:Pitch180Yaw90,27:Pitch180Yaw270,28:Roll90Pitch90,29:Roll180Pitch90,30:Roll270Pitch90,31:Roll90Pitch180,32:Roll270Pitch180,33:Roll90Pitch270,34:Roll180Pitch270,35:Roll270Pitch270,36:Roll90Pitch180Yaw90,37:Roll90Yaw270</Values>
+      <Values>0:None, 1:Yaw45, 2:Yaw90, 3:Yaw135, 4:Yaw180, 5:Yaw225, 6:Yaw270, 7:Yaw315, 8:Roll180, 9:Roll180Yaw45, 10:Roll180Yaw90, 11:Roll180Yaw135, 12:Pitch180, 13:Roll180Yaw225, 14:Roll180Yaw270, 15:Roll180Yaw315, 16:Roll90, 17:Roll90Yaw45, 18:Roll90Yaw90, 19:Roll90Yaw135, 20:Roll270, 21:Roll270Yaw45, 22:Roll270Yaw90, 23:Roll270Yaw136, 24:Pitch90, 25:Pitch270, 26:Pitch180Yaw90, 27:Pitch180Yaw270, 28:Roll90Pitch90, 29:Roll180Pitch90, 30:Roll270Pitch90, 31:Roll90Pitch180, 32:Roll270Pitch180, 33:Roll90Pitch270, 34:Roll180Pitch270, 35:Roll270Pitch270, 36:Roll90Pitch180Yaw90, 37:Roll90Yaw270</Values>
       <User>Advanced</User>
     </AHRS_ORIENTATION>
     <AHRS_COMP_BETA>
@@ -3338,12 +3338,12 @@
     <ARSPD_ENABLE>
       <DisplayName>Airspeed enable</DisplayName>
       <Description>enable airspeed sensor</Description>
-      <Values>0:Disable,1:Enable</Values>
+      <Values>0:Disable, 1:Enable</Values>
     </ARSPD_ENABLE>
     <ARSPD_USE>
       <DisplayName>Airspeed use</DisplayName>
       <Description>use airspeed for flight control</Description>
-      <Values>1:Use,0:Don't Use</Values>
+      <Values>1:Use, 0:Don't Use</Values>
     </ARSPD_USE>
     <ARSPD_OFFSET>
       <DisplayName>Airspeed offset</DisplayName>
@@ -3462,7 +3462,7 @@
     <MNT_MODE>
       <DisplayName>Mount operation mode</DisplayName>
       <Description>Camera or antenna mount operation mode</Description>
-      <Values>0:retract,1:neutral,2:MavLink_targeting,3:RC_targeting,4:GPS_point</Values>
+      <Values>0:retract, 1:neutral, 2:MavLink_targeting, 3:RC_targeting, 4:GPS_point</Values>
       <User>Standard</User>
     </MNT_MODE>
     <MNT_RETRACT_X>
@@ -3537,25 +3537,25 @@
     <MNT_STAB_ROLL>
       <DisplayName>Stabilize mount's roll angle</DisplayName>
       <Description>enable roll stabilisation relative to Earth</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Standard</User>
     </MNT_STAB_ROLL>
     <MNT_STAB_TILT>
       <DisplayName>Stabilize mount's pitch/tilt angle</DisplayName>
       <Description>enable tilt/pitch stabilisation relative to Earth</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Standard</User>
     </MNT_STAB_TILT>
     <MNT_STAB_PAN>
       <DisplayName>Stabilize mount pan/yaw angle</DisplayName>
       <Description>enable pan/yaw stabilisation relative to Earth</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Standard</User>
     </MNT_STAB_PAN>
     <MNT_RC_IN_ROLL>
       <DisplayName>roll RC input channel</DisplayName>
       <Description>0 for none, any other for the RC channel to be used to control roll movements</Description>
-      <Values>0:Disabled,5:RC5,6:RC6,7:RC7,8:RC8</Values>
+      <Values>0:Disabled, 5:RC5, 6:RC6, 7:RC7, 8:RC8</Values>
       <User>Standard</User>
     </MNT_RC_IN_ROLL>
     <MNT_ANGMIN_ROL>
@@ -3577,7 +3577,7 @@
     <MNT_RC_IN_TILT>
       <DisplayName>tilt (pitch) RC input channel</DisplayName>
       <Description>0 for none, any other for the RC channel to be used to control tilt (pitch) movements</Description>
-      <Values>0:Disabled,5:RC5,6:RC6,7:RC7,8:RC8</Values>
+      <Values>0:Disabled, 5:RC5, 6:RC6, 7:RC7, 8:RC8</Values>
       <User>Standard</User>
     </MNT_RC_IN_TILT>
     <MNT_ANGMIN_TIL>
@@ -3599,7 +3599,7 @@
     <MNT_RC_IN_PAN>
       <DisplayName>pan (yaw) RC input channel</DisplayName>
       <Description>0 for none, any other for the RC channel to be used to control pan (yaw) movements</Description>
-      <Values>0:Disabled,5:RC5,6:RC6,7:RC7,8:RC8</Values>
+      <Values>0:Disabled, 5:RC5, 6:RC6, 7:RC7, 8:RC8</Values>
       <User>Standard</User>
     </MNT_RC_IN_PAN>
     <MNT_ANGMIN_PAN>
@@ -3628,7 +3628,7 @@
     <MNT2_MODE>
       <DisplayName>Mount operation mode</DisplayName>
       <Description>Camera or antenna mount operation mode</Description>
-      <Values>0:retract,1:neutral,2:MavLink_targeting,3:RC_targeting,4:GPS_point</Values>
+      <Values>0:retract, 1:neutral, 2:MavLink_targeting, 3:RC_targeting, 4:GPS_point</Values>
       <User>Standard</User>
     </MNT2_MODE>
     <MNT2_RETRACT_X>
@@ -3703,25 +3703,25 @@
     <MNT2_STAB_ROLL>
       <DisplayName>Stabilize mount's roll angle</DisplayName>
       <Description>enable roll stabilisation relative to Earth</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Standard</User>
     </MNT2_STAB_ROLL>
     <MNT2_STAB_TILT>
       <DisplayName>Stabilize mount's pitch/tilt angle</DisplayName>
       <Description>enable tilt/pitch stabilisation relative to Earth</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Standard</User>
     </MNT2_STAB_TILT>
     <MNT2_STAB_PAN>
       <DisplayName>Stabilize mount pan/yaw angle</DisplayName>
       <Description>enable pan/yaw stabilisation relative to Earth</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Standard</User>
     </MNT2_STAB_PAN>
     <MNT2_RC_IN_ROLL>
       <DisplayName>roll RC input channel</DisplayName>
       <Description>0 for none, any other for the RC channel to be used to control roll movements</Description>
-      <Values>0:Disabled,5:RC5,6:RC6,7:RC7,8:RC8</Values>
+      <Values>0:Disabled, 5:RC5, 6:RC6, 7:RC7, 8:RC8</Values>
       <User>Standard</User>
     </MNT2_RC_IN_ROLL>
     <MNT2_ANGMIN_ROL>
@@ -3743,7 +3743,7 @@
     <MNT2_RC_IN_TILT>
       <DisplayName>tilt (pitch) RC input channel</DisplayName>
       <Description>0 for none, any other for the RC channel to be used to control tilt (pitch) movements</Description>
-      <Values>0:Disabled,5:RC5,6:RC6,7:RC7,8:RC8</Values>
+      <Values>0:Disabled, 5:RC5, 6:RC6, 7:RC7, 8:RC8</Values>
       <User>Standard</User>
     </MNT2_RC_IN_TILT>
     <MNT2_ANGMIN_TIL>
@@ -3765,7 +3765,7 @@
     <MNT2_RC_IN_PAN>
       <DisplayName>pan (yaw) RC input channel</DisplayName>
       <Description>0 for none, any other for the RC channel to be used to control pan (yaw) movements</Description>
-      <Values>0:Disabled,5:RC5,6:RC6,7:RC7,8:RC8</Values>
+      <Values>0:Disabled, 5:RC5, 6:RC6, 7:RC7, 8:RC8</Values>
       <User>Standard</User>
     </MNT2_RC_IN_PAN>
     <MNT2_ANGMIN_PAN>
@@ -3794,7 +3794,7 @@
     <BATT_MONITOR>
       <DisplayName>Battery monitoring</DisplayName>
       <Description>Controls enabling monitoring of the battery's voltage and current</Description>
-      <Values>0:Disabled,3:Voltage Only,4:Voltage and Current</Values>
+      <Values>0:Disabled, 3:Voltage Only, 4:Voltage and Current</Values>
       <User>Standard</User>
     </BATT_MONITOR>
     <BATT_VOLT_PIN>
@@ -3847,13 +3847,13 @@
     <SERIAL0_BAUD>
       <DisplayName>USB Console Baud Rate</DisplayName>
       <Description>The baud rate used on the main uart</Description>
-      <Values>1:1200,2:2400,4:4800,9:9600,19:19200,38:38400,57:57600,111:111100,115:115200</Values>
+      <Values>1:1200, 2:2400, 4:4800, 9:9600, 19:19200, 38:38400, 57:57600, 111:111100, 115:115200</Values>
       <User>Standard</User>
     </SERIAL0_BAUD>
     <SERIAL3_BAUD>
       <DisplayName>Telemetry Baud Rate</DisplayName>
       <Description>The baud rate used on the telemetry port</Description>
-      <Values>1:1200,2:2400,4:4800,9:9600,19:19200,38:38400,57:57600,111:111100,115:115200</Values>
+      <Values>1:1200, 2:2400, 4:4800, 9:9600, 19:19200, 38:38400, 57:57600, 111:111100, 115:115200</Values>
       <User>Standard</User>
     </SERIAL3_BAUD>
     <TELEM_DELAY>
@@ -3881,19 +3881,19 @@
     <STICK_MIXING>
       <DisplayName>Stick Mixing</DisplayName>
       <Description>When enabled, this adds user stick input to the control surfaces in auto modes, allowing the user to have some degree of flight control without changing modes.  There are two types of stick mixing available. If you set STICK_MIXING to 1 then it will use "fly by wire" mixing, which controls the roll and pitch in the same way that the FBWA mode does. This is the safest option if you usually fly ArduPlane in FBWA or FBWB mode. If you set STICK_MIXING to 2 then it will enable direct mixing mode, which is what the STABILIZE mode uses. That will allow for much more extreme maneuvers while in AUTO mode.</Description>
-      <Values>0:Disabled,1:FBWMixing,2:DirectMixing</Values>
+      <Values>0:Disabled, 1:FBWMixing, 2:DirectMixing</Values>
       <User>Advanced</User>
     </STICK_MIXING>
     <SKIP_GYRO_CAL>
       <DisplayName>Skip gyro calibration</DisplayName>
       <Description>When enabled this tells the APM to skip the normal gyroscope calibration at startup, and instead use the saved gyro calibration from the last flight. You should only enable this if you are careful to check that your aircraft has good attitude control before flying, as some boards may have significantly different gyro calibration between boots, especially if the temperature changes a lot. If gyro calibration is skipped then APM relies on using the gyro drift detection code to get the right gyro calibration in the few minutes after it boots. This option is mostly useful where the requirement to hold the plane still while it is booting is a significant problem.</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Advanced</User>
     </SKIP_GYRO_CAL>
     <AUTO_FBW_STEER>
       <DisplayName>Use FBWA steering in AUTO</DisplayName>
       <Description>When enabled this option gives FBWA navigation and steering in AUTO mode. This can be used to allow manual stabilised piloting with waypoint logic for triggering payloads. With this enabled the pilot has the same control over the plane as in FBWA mode, and the normal AUTO navigation is completely disabled. This option is not recommended for normal use.</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Advanced</User>
     </AUTO_FBW_STEER>
     <TKOFF_THR_MINSPD>
@@ -3951,7 +3951,7 @@
     <NAV_CONTROLLER>
       <DisplayName>Navigation controller selection</DisplayName>
       <Description>Which navigation controller to enable</Description>
-      <Values>0:Legacy,1:L1Controller</Values>
+      <Values>0:Legacy, 1:L1Controller</Values>
       <User>Standard</User>
     </NAV_CONTROLLER>
     <ALT_MIX>
@@ -3965,7 +3965,7 @@
     <ALT_CTRL_ALG>
       <DisplayName>Altitude control algorithm</DisplayName>
       <Description>This sets what algorithm will be used for altitude control. The default is zero, which selects the most appropriate algorithm for your airframe. Currently the default is to use TECS (total energy control system). If you set it to 1 then you will get the old (deprecated) non-airspeed based algorithm. If you set it to 3 then you will get the old (deprecated) airspeed based algorithm. Setting it to 2 selects the new 'TECS' (total energy control system) altitude control, which currently is equivalent to setting 0. Note that TECS is able to handle aircraft both with and without an airspeed sensor.</Description>
-      <Values>0:Automatic,1:non-airspeed(deprecated),2:TECS,3:airspeed(deprecated)</Values>
+      <Values>0:Automatic, 1:non-airspeed(deprecated), 2:TECS, 3:airspeed(deprecated)</Values>
       <User>Advanced</User>
     </ALT_CTRL_ALG>
     <ALT_OFFSET>
@@ -4015,7 +4015,7 @@
     <FENCE_ACTION>
       <DisplayName>Action on geofence breach</DisplayName>
       <Description>What to do on fence breach. If this is set to 0 then no action is taken, and geofencing is disabled. If this is set to 1 then the plane will enter GUIDED mode, with the target waypoint as the fence return point. If this is set to 2 then the fence breach is reported to the ground station, but no other action is taken. If set to 3 then the plane enters guided mode but the pilot retains manual throttle control.</Description>
-      <Values>0:None,1:GuidedMode,2:ReportOnly,3:GuidedModeThrPass</Values>
+      <Values>0:None, 1:GuidedMode, 2:ReportOnly, 3:GuidedModeThrPass</Values>
       <User>Standard</User>
     </FENCE_ACTION>
     <FENCE_TOTAL>
@@ -4075,7 +4075,7 @@
     <FBWB_ELEV_REV>
       <DisplayName>Fly By Wire elevator reverse</DisplayName>
       <Description>Reverse sense of elevator in FBWB and CRUISE modes. When set to 0 up elevator (pulling back on the stick) means to lower altitude. When set to 1, up elevator means to raise altitude.</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Standard</User>
     </FBWB_ELEV_REV>
     <FBWB_CLIMB_RATE>
@@ -4112,19 +4112,19 @@
     <THR_SUPP_MAN>
       <DisplayName>Throttle suppress manual passthru</DisplayName>
       <Description>When throttle is supressed in auto mode it is normally forced to zero. If you enable this option, then while suppressed it will be manual throttle. This is useful on petrol engines to hold the idle throttle manually while waiting for takeoff</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Advanced</User>
     </THR_SUPP_MAN>
     <THR_PASS_STAB>
       <DisplayName>Throttle passthru in stabilize</DisplayName>
       <Description>If this is set then when in STABILIZE, FBWA or ACRO modes the throttle is a direct passthru from the transmitter. This means the THR_MIN and THR_MAX settings are not used in these modes. This is useful for petrol engines where you setup a throttle cut switch that suppresses the throttle below the normal minimum.</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Advanced</User>
     </THR_PASS_STAB>
     <THR_FAILSAFE>
       <DisplayName>Throttle Failsafe Enable</DisplayName>
       <Description>The throttle failsafe allows you to configure a software failsafe activated by a setting on the throttle input channel</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Standard</User>
     </THR_FAILSAFE>
     <THR_FS_VALUE>
@@ -4145,13 +4145,13 @@
     <THROTTLE_NUDGE>
       <DisplayName>Throttle nudge enable</DisplayName>
       <Description>When enabled, this uses the throttle input in auto-throttle modes to 'nudge' the throttle to higher or lower values</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Standard</User>
     </THROTTLE_NUDGE>
     <FS_SHORT_ACTN>
       <DisplayName>Short failsafe action</DisplayName>
       <Description>The action to take on a short (FS_SHORT_TIMEOUT) failsafe event in AUTO, GUIDED or LOITER modes. A short failsafe event in stabilization modes will always cause an immediate change to CIRCLE mode. In AUTO mode you can choose whether it will enter CIRCLE mode or continue with the mission. If FS_SHORT_ACTN is 0 then it will continue with the mission, if it is 1 then it will enter CIRCLE mode, and then enter RTL if the failsafe condition persists for FS_LONG_TIMEOUT seconds. If it is set to 2 then the plane will enter FBWA mode with zero throttle and level attitude to glide in.</Description>
-      <Values>0:Continue,1:Circle/ReturnToLaunch,2:Glide</Values>
+      <Values>0:Continue, 1:Circle/ReturnToLaunch, 2:Glide</Values>
       <User>Standard</User>
     </FS_SHORT_ACTN>
     <FS_SHORT_TIMEOUT>
@@ -4165,7 +4165,7 @@
     <FS_LONG_ACTN>
       <DisplayName>Long failsafe action</DisplayName>
       <Description>The action to take on a long (FS_LONG_TIMEOUT seconds) failsafe event in AUTO, GUIDED or LOITER modes. A long failsafe event in stabilization modes will always cause an RTL (ReturnToLaunch). In AUTO modes you can choose whether it will RTL or continue with the mission. If FS_LONG_ACTN is 0 then it will continue with the mission, if it is 1 then it will enter RTL mode. Note that if FS_SHORT_ACTN is 1, then the aircraft will enter CIRCLE mode after FS_SHORT_TIMEOUT seconds of failsafe, and will always enter RTL after FS_LONG_TIMEOUT seconds of failsafe, regardless of the FS_LONG_ACTN setting. If FS_LONG_ACTN is set to 2 then instead of using RTL it will enter a FBWA glide with zero throttle.</Description>
-      <Values>0:Continue,1:ReturnToLaunch,2:Glide</Values>
+      <Values>0:Continue, 1:ReturnToLaunch, 2:Glide</Values>
       <User>Standard</User>
     </FS_LONG_ACTN>
     <FS_LONG_TIMEOUT>
@@ -4191,7 +4191,7 @@
     <FS_GCS_ENABL>
       <DisplayName>GCS failsafe enable</DisplayName>
       <Description>Enable ground control station telemetry failsafe. Failsafe will trigger after 20 seconds of no MAVLink heartbeat messages. WARNING: Enabling this option opens up the possibility of your plane going into failsafe mode and running the motor on the ground it it loses contact with your ground station. If this option is enabled on an electric plane then either use a separate motor arming switch or remove the propeller in any ground testing.</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Standard</User>
     </FS_GCS_ENABL>
     <FLTMODE_CH>
@@ -4201,38 +4201,38 @@
     </FLTMODE_CH>
     <FLTMODE1>
       <DisplayName>FlightMode1</DisplayName>
-      <Values>0:Manual,1:CIRCLE,2:STABILIZE,3:TRAINING,4:ACRO,5:FBWA,6:FBWB,7:CRUISE,10:Auto,11:RTL,12:Loiter,15:Guided</Values>
+      <Values>0:Manual, 1:CIRCLE, 2:STABILIZE, 3:TRAINING, 4:ACRO, 5:FBWA, 6:FBWB, 7:CRUISE, 10:Auto, 11:RTL, 12:Loiter, 15:Guided</Values>
       <User>Standard</User>
       <Description>Flight mode for switch position 1 (910 to 1230 and above 2049)</Description>
     </FLTMODE1>
     <FLTMODE2>
       <DisplayName>FlightMode2</DisplayName>
       <Description>Flight mode for switch position 2 (1231 to 1360)</Description>
-      <Values>0:Manual,1:CIRCLE,2:STABILIZE,3:TRAINING,4:ACRO,5:FBWA,6:FBWB,7:CRUISE,10:Auto,11:RTL,12:Loiter,15:Guided</Values>
+      <Values>0:Manual, 1:CIRCLE, 2:STABILIZE, 3:TRAINING, 4:ACRO, 5:FBWA, 6:FBWB, 7:CRUISE, 10:Auto, 11:RTL, 12:Loiter, 15:Guided</Values>
       <User>Standard</User>
     </FLTMODE2>
     <FLTMODE3>
       <DisplayName>FlightMode3</DisplayName>
       <Description>Flight mode for switch position 3 (1361 to 1490)</Description>
-      <Values>0:Manual,1:CIRCLE,2:STABILIZE,3:TRAINING,4:ACRO,5:FBWA,6:FBWB,7:CRUISE,10:Auto,11:RTL,12:Loiter,15:Guided</Values>
+      <Values>0:Manual, 1:CIRCLE, 2:STABILIZE, 3:TRAINING, 4:ACRO, 5:FBWA, 6:FBWB, 7:CRUISE, 10:Auto, 11:RTL, 12:Loiter, 15:Guided</Values>
       <User>Standard</User>
     </FLTMODE3>
     <FLTMODE4>
       <DisplayName>FlightMode4</DisplayName>
       <Description>Flight mode for switch position 4 (1491 to 1620)</Description>
-      <Values>0:Manual,1:CIRCLE,2:STABILIZE,3:TRAINING,4:ACRO,5:FBWA,6:FBWB,7:CRUISE,10:Auto,11:RTL,12:Loiter,15:Guided</Values>
+      <Values>0:Manual, 1:CIRCLE, 2:STABILIZE, 3:TRAINING, 4:ACRO, 5:FBWA, 6:FBWB, 7:CRUISE, 10:Auto, 11:RTL, 12:Loiter, 15:Guided</Values>
       <User>Standard</User>
     </FLTMODE4>
     <FLTMODE5>
       <DisplayName>FlightMode5</DisplayName>
       <Description>Flight mode for switch position 5 (1621 to 1749)</Description>
-      <Values>0:Manual,1:CIRCLE,2:STABILIZE,3:TRAINING,4:ACRO,5:FBWA,6:FBWB,7:CRUISE,10:Auto,11:RTL,12:Loiter,15:Guided</Values>
+      <Values>0:Manual, 1:CIRCLE, 2:STABILIZE, 3:TRAINING, 4:ACRO, 5:FBWA, 6:FBWB, 7:CRUISE, 10:Auto, 11:RTL, 12:Loiter, 15:Guided</Values>
       <User>Standard</User>
     </FLTMODE5>
     <FLTMODE6>
       <DisplayName>FlightMode6</DisplayName>
       <Description>Flight mode for switch position 6 (1750 to 2049)</Description>
-      <Values>0:Manual,1:CIRCLE,2:STABILIZE,3:TRAINING,4:ACRO,5:FBWA,6:FBWB,7:CRUISE,10:Auto,11:RTL,12:Loiter,15:Guided</Values>
+      <Values>0:Manual, 1:CIRCLE, 2:STABILIZE, 3:TRAINING, 4:ACRO, 5:FBWA, 6:FBWB, 7:CRUISE, 10:Auto, 11:RTL, 12:Loiter, 15:Guided</Values>
       <User>Standard</User>
     </FLTMODE6>
     <LIM_ROLL_CD>
@@ -4278,7 +4278,7 @@
     <ACRO_LOCKING>
       <DisplayName>ACRO mode attitude locking</DisplayName>
       <Description>Enable attitude locking when sticks are released</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Standard</User>
     </ACRO_LOCKING>
     <GROUND_STEER_ALT>
@@ -4300,43 +4300,43 @@
     <TRIM_AUTO>
       <DisplayName>Automatic trim adjustment</DisplayName>
       <Description>Set RC trim PWM levels to current levels when switching away from manual mode. When this option is enabled and you change from MANUAL to any other mode then the APM will take the current position of the control sticks as the trim values for aileron, elevator and rudder. It will use those to set RC1_TRIM, RC2_TRIM and RC4_TRIM. This option is disabled by default as if a pilot is not aware of this option and changes from MANUAL to another mode while control inputs are not centered then the trim could be changed to a dangerously bad value. You can enable this option to assist with trimming your plane, by enabling it before takeoff then switching briefly to MANUAL in flight, and seeing how the plane reacts. You can then switch back to FBWA, trim the surfaces then again test MANUAL mode. Each time you switch from MANUAL the APM will take your control inputs as the new trim. After you have good trim on your aircraft you can disable TRIM_AUTO for future flights.</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Standard</User>
     </TRIM_AUTO>
     <ELEVON_MIXING>
       <DisplayName>Elevon mixing</DisplayName>
       <Description>Enable elevon mixing  on both input and output. To enable just output mixing see the ELEVON_OUTPUT option.</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>User</User>
     </ELEVON_MIXING>
     <ELEVON_REVERSE>
       <DisplayName>Elevon reverse</DisplayName>
       <Description>Reverse elevon mixing</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>User</User>
     </ELEVON_REVERSE>
     <ELEVON_CH1_REV>
       <DisplayName>Elevon reverse</DisplayName>
       <Description>Reverse elevon channel 1</Description>
-      <Values>-1:Disabled,1:Enabled</Values>
+      <Values>-1:Disabled, 1:Enabled</Values>
       <User>User</User>
     </ELEVON_CH1_REV>
     <ELEVON_CH2_REV>
       <DisplayName>Elevon reverse</DisplayName>
       <Description>Reverse elevon channel 2</Description>
-      <Values>-1:Disabled,1:Enabled</Values>
+      <Values>-1:Disabled, 1:Enabled</Values>
       <User>User</User>
     </ELEVON_CH2_REV>
     <VTAIL_OUTPUT>
       <DisplayName>VTail output</DisplayName>
       <Description>Enable VTail output in software. If enabled then the APM will provide software VTail mixing on the elevator and rudder channels. There are 4 different mixing modes available, which refer to the 4 ways the elevator can be mapped to the two VTail servos. Note that you must not use VTail output mixing with hardware pass-through of RC values, such as with channel 8 manual control on an APM1. So if you use an APM1 then set FLTMODE_CH to something other than 8 before you enable VTAIL_OUTPUT. Please also see the MIXING_GAIN parameter for the output gain of the mixer.</Description>
-      <Values>0:Disabled,1:UpUp,2:UpDown,3:DownUp,4:DownDown</Values>
+      <Values>0:Disabled, 1:UpUp, 2:UpDown, 3:DownUp, 4:DownDown</Values>
       <User>User</User>
     </VTAIL_OUTPUT>
     <ELEVON_OUTPUT>
       <DisplayName>Elevon output</DisplayName>
       <Description>Enable software elevon output mixer. If enabled then the APM will provide software elevon mixing on the aileron and elevator channels. There are 4 different mixing modes available, which refer to the 4 ways the elevator can be mapped to the two elevon servos. Note that you must not use elevon output mixing with hardware pass-through of RC values, such as with channel 8 manual control on an APM1. So if you use an APM1 then set FLTMODE_CH to something other than 8 before you enable ELEVON_OUTPUT. Please also see the MIXING_GAIN parameter for the output gain of the mixer.</Description>
-      <Values>0:Disabled,1:UpUp,2:UpDown,3:DownUp,4:DownDown</Values>
+      <Values>0:Disabled, 1:UpUp, 2:UpDown, 3:DownUp, 4:DownDown</Values>
       <User>User</User>
     </ELEVON_OUTPUT>
     <MIXING_GAIN>
@@ -4353,7 +4353,7 @@
     <LOG_BITMASK>
       <DisplayName>Log bitmask</DisplayName>
       <Description>Two byte bitmap of log types to enable in dataflash</Description>
-      <Values>0:Disabled,1902:Default,2030:Default+IMU</Values>
+      <Values>0:Disabled, 1902:Default, 2030:Default+IMU</Values>
       <User>Advanced</User>
     </LOG_BITMASK>
     <RST_SWITCH_CH>
@@ -4405,7 +4405,7 @@
     <MAG_ENABLE>
       <DisplayName>Enable Compass</DisplayName>
       <Description>Setting this to Enabled(1) will enable the compass. Setting this to Disabled(0) will disable the compass. Note that this is separate from COMPASS_USE. This will enable the low level senor, and will enable logging of magnetometer data. To use the compass for navigation you must also set COMPASS_USE to 1.</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Standard</User>
     </MAG_ENABLE>
     <FLAP_1_PERCNT>
@@ -4447,13 +4447,13 @@
     <INVERTEDFLT_CH>
       <DisplayName>Inverted flight channel</DisplayName>
       <Description>A RC input channel number to enable inverted flight. If this is non-zero then the APM will monitor the correcponding RC input channel and will enable inverted flight when the channel goes above 1750.</Description>
-      <Values>0:Disabled,1:Channel1,2:Channel2,3:Channel3,4:Channel4,5:Channel5,6:Channel6,7:Channel7,8:Channel8</Values>
+      <Values>0:Disabled, 1:Channel1, 2:Channel2, 3:Channel3, 4:Channel4, 5:Channel5, 6:Channel6, 7:Channel7, 8:Channel8</Values>
       <User>Standard</User>
     </INVERTEDFLT_CH>
     <HIL_SERVOS>
       <DisplayName>HIL Servos enable</DisplayName>
       <Description>This controls whether real servo controls are used in HIL mode. If you enable this then the APM will control the real servos in HIL mode. If disabled it will report servo values, but will not output to the real servos. Be careful that your motor and propeller are not connected if you enable this option.</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Advanced</User>
       <Group>GND_</Group>
       <Path>../libraries/AP_Baro/AP_Baro.cpp</Path>
@@ -4487,7 +4487,7 @@
     <RC1_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </RC1_REV>
     <RC1_DZ>
@@ -4522,7 +4522,7 @@
     <RC2_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </RC2_REV>
     <RC2_DZ>
@@ -4557,7 +4557,7 @@
     <RC3_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </RC3_REV>
     <RC3_DZ>
@@ -4592,7 +4592,7 @@
     <RC4_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </RC4_REV>
     <RC4_DZ>
@@ -4627,7 +4627,7 @@
     <RC5_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </RC5_REV>
     <RC5_DZ>
@@ -4662,7 +4662,7 @@
     <RC6_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </RC6_REV>
     <RC6_DZ>
@@ -4697,7 +4697,7 @@
     <RC7_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </RC7_REV>
     <RC7_DZ>
@@ -4732,7 +4732,7 @@
     <RC8_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </RC8_REV>
     <RC8_DZ>
@@ -4767,7 +4767,7 @@
     <RC9_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </RC9_REV>
     <RC9_DZ>
@@ -4778,7 +4778,7 @@
     <RC9_FUNCTION>
       <DisplayName>Servo out function</DisplayName>
       <Description>Setting this to Disabled(0) will disable this output, any other value will enable the corresponding function</Description>
-      <Values>0:Disabled,1:RCPassThru,2:Flap,3:Flap_auto,4:Aileron,5:flaperon,6:mount_pan,7:mount_tilt,8:mount_roll,9:mount_open,10:camera_trigger,11:release,12:mount2_pan,13:mount2_tilt,14:mount2_roll,15:mount2_open,16:DifferentialSpoiler1,17:DifferentialSpoiler2,18:AileronWithInput,19:Elevator,20:ElevatorWithInput,21:Rudder</Values>
+      <Values>0:Disabled, 1:RCPassThru, 2:Flap, 3:Flap_auto, 4:Aileron, 5:flaperon, 6:mount_pan, 7:mount_tilt, 8:mount_roll, 9:mount_open, 10:camera_trigger, 11:release, 12:mount2_pan, 13:mount2_tilt, 14:mount2_roll, 15:mount2_open, 16:DifferentialSpoiler1, 17:DifferentialSpoiler2, 18:AileronWithInput, 19:Elevator, 20:ElevatorWithInput, 21:Rudder</Values>
       <User>Standard</User>
     </RC9_FUNCTION>
     <RC10_MIN>
@@ -4808,7 +4808,7 @@
     <RC10_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </RC10_REV>
     <RC10_DZ>
@@ -4819,7 +4819,7 @@
     <RC10_FUNCTION>
       <DisplayName>Servo out function</DisplayName>
       <Description>Setting this to Disabled(0) will disable this output, any other value will enable the corresponding function</Description>
-      <Values>0:Disabled,1:RCPassThru,2:Flap,3:Flap_auto,4:Aileron,5:flaperon,6:mount_pan,7:mount_tilt,8:mount_roll,9:mount_open,10:camera_trigger,11:release,12:mount2_pan,13:mount2_tilt,14:mount2_roll,15:mount2_open,16:DifferentialSpoiler1,17:DifferentialSpoiler2,18:AileronWithInput,19:Elevator,20:ElevatorWithInput,21:Rudder</Values>
+      <Values>0:Disabled, 1:RCPassThru, 2:Flap, 3:Flap_auto, 4:Aileron, 5:flaperon, 6:mount_pan, 7:mount_tilt, 8:mount_roll, 9:mount_open, 10:camera_trigger, 11:release, 12:mount2_pan, 13:mount2_tilt, 14:mount2_roll, 15:mount2_open, 16:DifferentialSpoiler1, 17:DifferentialSpoiler2, 18:AileronWithInput, 19:Elevator, 20:ElevatorWithInput, 21:Rudder</Values>
       <User>Standard</User>
     </RC10_FUNCTION>
     <RC11_MIN>
@@ -4849,7 +4849,7 @@
     <RC11_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </RC11_REV>
     <RC11_DZ>
@@ -4860,7 +4860,7 @@
     <RC11_FUNCTION>
       <DisplayName>Servo out function</DisplayName>
       <Description>Setting this to Disabled(0) will disable this output, any other value will enable the corresponding function</Description>
-      <Values>0:Disabled,1:RCPassThru,2:Flap,3:Flap_auto,4:Aileron,5:flaperon,6:mount_pan,7:mount_tilt,8:mount_roll,9:mount_open,10:camera_trigger,11:release,12:mount2_pan,13:mount2_tilt,14:mount2_roll,15:mount2_open,16:DifferentialSpoiler1,17:DifferentialSpoiler2,18:AileronWithInput,19:Elevator,20:ElevatorWithInput,21:Rudder</Values>
+      <Values>0:Disabled, 1:RCPassThru, 2:Flap, 3:Flap_auto, 4:Aileron, 5:flaperon, 6:mount_pan, 7:mount_tilt, 8:mount_roll, 9:mount_open, 10:camera_trigger, 11:release, 12:mount2_pan, 13:mount2_tilt, 14:mount2_roll, 15:mount2_open, 16:DifferentialSpoiler1, 17:DifferentialSpoiler2, 18:AileronWithInput, 19:Elevator, 20:ElevatorWithInput, 21:Rudder</Values>
       <User>Standard</User>
     </RC11_FUNCTION>
     <RC12_MIN>
@@ -4890,7 +4890,7 @@
     <RC12_REV>
       <DisplayName>RC reverse</DisplayName>
       <Description>Reverse servo operation. Set to 1 for normal (forward) operation. Set to -1 to reverse this channel.</Description>
-      <Values>-1:Reversed,1:Normal</Values>
+      <Values>-1:Reversed, 1:Normal</Values>
       <User>Advanced</User>
     </RC12_REV>
     <RC12_DZ>
@@ -4901,7 +4901,7 @@
     <RC12_FUNCTION>
       <DisplayName>Servo out function</DisplayName>
       <Description>Setting this to Disabled(0) will disable this output, any other value will enable the corresponding function</Description>
-      <Values>0:Disabled,1:RCPassThru,2:Flap,3:Flap_auto,4:Aileron,5:flaperon,6:mount_pan,7:mount_tilt,8:mount_roll,9:mount_open,10:camera_trigger,11:release,12:mount2_pan,13:mount2_tilt,14:mount2_roll,15:mount2_open,16:DifferentialSpoiler1,17:DifferentialSpoiler2,18:AileronWithInput,19:Elevator,20:ElevatorWithInput,21:Rudder</Values>
+      <Values>0:Disabled, 1:RCPassThru, 2:Flap, 3:Flap_auto, 4:Aileron, 5:flaperon, 6:mount_pan, 7:mount_tilt, 8:mount_roll, 9:mount_open, 10:camera_trigger, 11:release, 12:mount2_pan, 13:mount2_tilt, 14:mount2_roll, 15:mount2_open, 16:DifferentialSpoiler1, 17:DifferentialSpoiler2, 18:AileronWithInput, 19:Elevator, 20:ElevatorWithInput, 21:Rudder</Values>
       <User>Standard</User>
     </RC12_FUNCTION>
     <STEER2SRV_T_CONST>
@@ -4977,25 +4977,25 @@
     <COMPASS_LEARN>
       <DisplayName>Learn compass offsets automatically</DisplayName>
       <Description>Enable or disable the automatic learning of compass offsets</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Advanced</User>
     </COMPASS_LEARN>
     <COMPASS_USE>
       <DisplayName>Use compass for yaw</DisplayName>
       <Description>Enable or disable the use of the compass (instead of the GPS) for determining heading</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Advanced</User>
     </COMPASS_USE>
     <COMPASS_AUTODEC>
       <DisplayName>Auto Declination</DisplayName>
       <Description>Enable or disable the automatic calculation of the declination based on gps location</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Advanced</User>
     </COMPASS_AUTODEC>
     <COMPASS_MOTCT>
       <DisplayName>Motor interference compensation type</DisplayName>
       <Description>Set motor interference compensation type to disabled, throttle or current.  Do not change manually.</Description>
-      <Values>0:Disabled,1:Use Throttle,2:Use Current</Values>
+      <Values>0:Disabled, 1:Use Throttle, 2:Use Current</Values>
       <Increment>1</Increment>
     </COMPASS_MOTCT>
     <COMPASS_MOT_X>
@@ -5022,25 +5022,25 @@
     <COMPASS_ORIENT>
       <DisplayName>Compass orientation</DisplayName>
       <Description>The orientation of the compass relative to the autopilot board. This will default to the right value for each board type, but can be changed if you have an external compass. See the documentation for your external compass for the right value. The correct orientation should give the X axis forward, the Y axis to the right and the Z axis down. So if your aircraft is pointing west it should show a positive value for the Y axis, and a value close to zero for the X axis. NOTE: This orientation is combined with any AHRS_ORIENTATION setting.</Description>
-      <Values>0:None,1:Yaw45,2:Yaw90,3:Yaw135,4:Yaw180,5:Yaw225,6:Yaw270,7:Yaw315,8:Roll180,9:Roll180Yaw45,10:Roll180Yaw90,11:Roll180Yaw135,12:Pitch180,13:Roll180Yaw225,14:Roll180Yaw270,15:Roll180Yaw315,16:Roll90,17:Roll90Yaw45,18:Roll90Yaw90,19:Roll90Yaw135,20:Roll270,21:Roll270Yaw45,22:Roll270Yaw90,23:Roll270Yaw136,24:Pitch90,25:Pitch270,26:Pitch180Yaw90,27:Pitch180Yaw270,28:Roll90Pitch90,29:Roll180Pitch90,30:Roll270Pitch90,31:Roll90Pitch180,32:Roll270Pitch180,33:Roll90Pitch270,34:Roll180Pitch270,35:Roll270Pitch270,36:Roll90Pitch180Yaw90,37:Roll90Yaw270</Values>
+      <Values>0:None, 1:Yaw45, 2:Yaw90, 3:Yaw135, 4:Yaw180, 5:Yaw225, 6:Yaw270, 7:Yaw315, 8:Roll180, 9:Roll180Yaw45, 10:Roll180Yaw90, 11:Roll180Yaw135, 12:Pitch180, 13:Roll180Yaw225, 14:Roll180Yaw270, 15:Roll180Yaw315, 16:Roll90, 17:Roll90Yaw45, 18:Roll90Yaw90, 19:Roll90Yaw135, 20:Roll270, 21:Roll270Yaw45, 22:Roll270Yaw90, 23:Roll270Yaw136, 24:Pitch90, 25:Pitch270, 26:Pitch180Yaw90, 27:Pitch180Yaw270, 28:Roll90Pitch90, 29:Roll180Pitch90, 30:Roll270Pitch90, 31:Roll90Pitch180, 32:Roll270Pitch180, 33:Roll90Pitch270, 34:Roll180Pitch270, 35:Roll270Pitch270, 36:Roll90Pitch180Yaw90, 37:Roll90Yaw270</Values>
     </COMPASS_ORIENT>
     <COMPASS_EXTERNAL>
       <DisplayName>Compass is attached via an external cable</DisplayName>
       <Description>Configure compass so it is attached externally. This is auto-detected on PX4, but must be set correctly on an APM2. Set to 1 if the compass is externally connected. When externally connected the COMPASS_ORIENT option operates independently of the AHRS_ORIENTATION board orientation option</Description>
-      <Values>0:Internal,1:External</Values>
+      <Values>0:Internal, 1:External</Values>
       <User>Advanced</User>
     </COMPASS_EXTERNAL>
     <SCHED_DEBUG>
       <DisplayName>Scheduler debug level</DisplayName>
       <Description>Set to non-zero to enable scheduler debug messages. When set to show "Slips" the scheduler will display a message whenever a scheduled task is delayed due to too much CPU load. When set to ShowOverruns the scheduled will display a message whenever a task takes longer than the limit promised in the task table.</Description>
-      <Values>0:Disabled,1:ShowSlips,2:ShowOverruns</Values>
+      <Values>0:Disabled, 1:ShowSlips, 2:ShowOverruns</Values>
       <User>Advanced</User>
     </SCHED_DEBUG>
     <RELAY_PIN>
       <DisplayName>Relay Pin</DisplayName>
       <Description>Digital pin number for relay control.</Description>
       <User>Standard</User>
-      <Values>13:APM2 A9 pin,47:APM1 relay,111:PX4 FMU Relay1,112:PX4 FMU Relay2,113:PX4IO Relay1,114:PX4IO Relay2,115:PX4IO ACC1,116:PX4IO ACC2</Values>
+      <Values>13:APM2 A9 pin, 47:APM1 relay, 111:PX4 FMU Relay1, 112:PX4 FMU Relay2, 113:PX4IO Relay1, 114:PX4IO Relay2, 115:PX4IO ACC1, 116:PX4IO ACC2</Values>
     </RELAY_PIN>
     <RCMAP_ROLL>
       <DisplayName>Roll channel</DisplayName>
@@ -5102,7 +5102,7 @@
     <SONAR_FUNCTION>
       <DisplayName>Sonar function</DisplayName>
       <Description>Control over what function is used to calculate distance. For a linear function, the distance is (voltage-offset)*scaling. For a inverted function the distance is (offset-voltage)*scaling. For a hyperbolic function the distance is scaling/(voltage-offset). The functions return the distance in meters.</Description>
-      <Values>0:Linear,1:Inverted,2:Hyperbolic</Values>
+      <Values>0:Linear, 1:Inverted, 2:Hyperbolic</Values>
     </SONAR_FUNCTION>
     <SONAR_MIN_CM>
       <DisplayName>Sonar minimum distance</DisplayName>
@@ -5119,7 +5119,7 @@
     <SONAR_ENABLE>
       <DisplayName>Sonar enabled</DisplayName>
       <Description>set to 1 to enable this sonar</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
     </SONAR_ENABLE>
     <SONAR_STOP_PIN>
       <DisplayName>Sonar stop pin</DisplayName>
@@ -5150,7 +5150,7 @@
     <SONAR2_FUNCTION>
       <DisplayName>Sonar function</DisplayName>
       <Description>Control over what function is used to calculate distance. For a linear function, the distance is (voltage-offset)*scaling. For a inverted function the distance is (offset-voltage)*scaling. For a hyperbolic function the distance is scaling/(voltage-offset). The functions return the distance in meters.</Description>
-      <Values>0:Linear,1:Inverted,2:Hyperbolic</Values>
+      <Values>0:Linear, 1:Inverted, 2:Hyperbolic</Values>
     </SONAR2_FUNCTION>
     <SONAR2_MIN_CM>
       <DisplayName>Sonar minimum distance</DisplayName>
@@ -5167,7 +5167,7 @@
     <SONAR2_ENABLE>
       <DisplayName>Sonar enabled</DisplayName>
       <Description>set to 1 to enable this sonar</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
     </SONAR2_ENABLE>
     <SONAR2_STOP_PIN>
       <DisplayName>Sonar stop pin</DisplayName>
@@ -5245,7 +5245,7 @@
       <DisplayName>MPU6000 filter frequency</DisplayName>
       <Description>Filter frequency to ask the MPU6000 to apply to samples. This can be set to a lower value to try to cope with very high vibration levels in aircraft. The default value on ArduPlane, APMrover2 and ArduCopter is 20Hz. This option takes effect on the next reboot or gyro initialisation</Description>
       <Units>Hz</Units>
-      <Values>0:Default,5:5Hz,10:10Hz,20:20Hz,42:42Hz,98:98Hz</Values>
+      <Values>0:Default, 5:5Hz, 10:10Hz, 20:20Hz, 42:42Hz, 98:98Hz</Values>
       <User>Advanced</User>
     </INS_MPU6K_FILTER>
     <AHRS_GPS_GAIN>
@@ -5257,7 +5257,7 @@
     <AHRS_GPS_USE>
       <DisplayName>AHRS use GPS for navigation</DisplayName>
       <Description>This controls whether to use dead-reckoning or GPS based navigation. If set to 0 then the GPS won't be used for navigation, and only dead reckoning will be used. A value of zero should never be used for normal flight.</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Advanced</User>
     </AHRS_GPS_USE>
     <AHRS_YAW_P>
@@ -5303,7 +5303,7 @@
     <AHRS_ORIENTATION>
       <DisplayName>Board Orientation</DisplayName>
       <Description>Overall board orientation relative to the standard orientation for the board type. This rotates the IMU and compass readings to allow the board to be oriented in your vehicle at any 90 or 45 degree angle. This option takes affect on next boot. After changing you will need to re-level your vehicle.</Description>
-      <Values>0:None,1:Yaw45,2:Yaw90,3:Yaw135,4:Yaw180,5:Yaw225,6:Yaw270,7:Yaw315,8:Roll180,9:Roll180Yaw45,10:Roll180Yaw90,11:Roll180Yaw135,12:Pitch180,13:Roll180Yaw225,14:Roll180Yaw270,15:Roll180Yaw315,16:Roll90,17:Roll90Yaw45,18:Roll90Yaw90,19:Roll90Yaw135,20:Roll270,21:Roll270Yaw45,22:Roll270Yaw90,23:Roll270Yaw136,24:Pitch90,25:Pitch270,26:Pitch180Yaw90,27:Pitch180Yaw270,28:Roll90Pitch90,29:Roll180Pitch90,30:Roll270Pitch90,31:Roll90Pitch180,32:Roll270Pitch180,33:Roll90Pitch270,34:Roll180Pitch270,35:Roll270Pitch270,36:Roll90Pitch180Yaw90,37:Roll90Yaw270</Values>
+      <Values>0:None, 1:Yaw45, 2:Yaw90, 3:Yaw135, 4:Yaw180, 5:Yaw225, 6:Yaw270, 7:Yaw315, 8:Roll180, 9:Roll180Yaw45, 10:Roll180Yaw90, 11:Roll180Yaw135, 12:Pitch180, 13:Roll180Yaw225, 14:Roll180Yaw270, 15:Roll180Yaw315, 16:Roll90, 17:Roll90Yaw45, 18:Roll90Yaw90, 19:Roll90Yaw135, 20:Roll270, 21:Roll270Yaw45, 22:Roll270Yaw90, 23:Roll270Yaw136, 24:Pitch90, 25:Pitch270, 26:Pitch180Yaw90, 27:Pitch180Yaw270, 28:Roll90Pitch90, 29:Roll180Pitch90, 30:Roll270Pitch90, 31:Roll90Pitch180, 32:Roll270Pitch180, 33:Roll90Pitch270, 34:Roll180Pitch270, 35:Roll270Pitch270, 36:Roll90Pitch180Yaw90, 37:Roll90Yaw270</Values>
       <User>Advanced</User>
     </AHRS_ORIENTATION>
     <AHRS_COMP_BETA>
@@ -5323,7 +5323,7 @@
     <CAM_TRIGG_TYPE>
       <DisplayName>Camera shutter (trigger) type</DisplayName>
       <Description>how to trigger the camera to take a picture</Description>
-      <Values>0:Servo,1:Relay</Values>
+      <Values>0:Servo, 1:Relay</Values>
       <User>Standard</User>
     </CAM_TRIGG_TYPE>
     <CAM_DURATION>
@@ -5353,7 +5353,7 @@
     <MNT_MODE>
       <DisplayName>Mount operation mode</DisplayName>
       <Description>Camera or antenna mount operation mode</Description>
-      <Values>0:retract,1:neutral,2:MavLink_targeting,3:RC_targeting,4:GPS_point</Values>
+      <Values>0:retract, 1:neutral, 2:MavLink_targeting, 3:RC_targeting, 4:GPS_point</Values>
       <User>Standard</User>
     </MNT_MODE>
     <MNT_RETRACT_X>
@@ -5428,25 +5428,25 @@
     <MNT_STAB_ROLL>
       <DisplayName>Stabilize mount's roll angle</DisplayName>
       <Description>enable roll stabilisation relative to Earth</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Standard</User>
     </MNT_STAB_ROLL>
     <MNT_STAB_TILT>
       <DisplayName>Stabilize mount's pitch/tilt angle</DisplayName>
       <Description>enable tilt/pitch stabilisation relative to Earth</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Standard</User>
     </MNT_STAB_TILT>
     <MNT_STAB_PAN>
       <DisplayName>Stabilize mount pan/yaw angle</DisplayName>
       <Description>enable pan/yaw stabilisation relative to Earth</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Standard</User>
     </MNT_STAB_PAN>
     <MNT_RC_IN_ROLL>
       <DisplayName>roll RC input channel</DisplayName>
       <Description>0 for none, any other for the RC channel to be used to control roll movements</Description>
-      <Values>0:Disabled,5:RC5,6:RC6,7:RC7,8:RC8</Values>
+      <Values>0:Disabled, 5:RC5, 6:RC6, 7:RC7, 8:RC8</Values>
       <User>Standard</User>
     </MNT_RC_IN_ROLL>
     <MNT_ANGMIN_ROL>
@@ -5468,7 +5468,7 @@
     <MNT_RC_IN_TILT>
       <DisplayName>tilt (pitch) RC input channel</DisplayName>
       <Description>0 for none, any other for the RC channel to be used to control tilt (pitch) movements</Description>
-      <Values>0:Disabled,5:RC5,6:RC6,7:RC7,8:RC8</Values>
+      <Values>0:Disabled, 5:RC5, 6:RC6, 7:RC7, 8:RC8</Values>
       <User>Standard</User>
     </MNT_RC_IN_TILT>
     <MNT_ANGMIN_TIL>
@@ -5490,7 +5490,7 @@
     <MNT_RC_IN_PAN>
       <DisplayName>pan (yaw) RC input channel</DisplayName>
       <Description>0 for none, any other for the RC channel to be used to control pan (yaw) movements</Description>
-      <Values>0:Disabled,5:RC5,6:RC6,7:RC7,8:RC8</Values>
+      <Values>0:Disabled, 5:RC5, 6:RC6, 7:RC7, 8:RC8</Values>
       <User>Standard</User>
     </MNT_RC_IN_PAN>
     <MNT_ANGMIN_PAN>
@@ -5519,7 +5519,7 @@
     <BATT_MONITOR>
       <DisplayName>Battery monitoring</DisplayName>
       <Description>Controls enabling monitoring of the battery's voltage and current</Description>
-      <Values>0:Disabled,3:Voltage Only,4:Voltage and Current</Values>
+      <Values>0:Disabled, 3:Voltage Only, 4:Voltage and Current</Values>
       <User>Standard</User>
     </BATT_MONITOR>
     <BATT_VOLT_PIN>
@@ -5560,7 +5560,7 @@
     <LOG_BITMASK>
       <DisplayName>Log bitmask</DisplayName>
       <Description>Two byte bitmap of log types to enable in dataflash</Description>
-      <Values>0:Disabled,3950:Default,4078:Default+IMU</Values>
+      <Values>0:Disabled, 3950:Default, 4078:Default+IMU</Values>
       <User>Advanced</User>
     </LOG_BITMASK>
     <RST_SWITCH_CH>
@@ -5571,7 +5571,7 @@
     <INITIAL_MODE>
       <DisplayName>Initial driving mode</DisplayName>
       <Description>This selects the mode to start in on boot. This is useful for when you want to start in AUTO mode on boot without a receiver. Usuallly used in combination with when AUTO_TRIGGER_PIN or AUTO_KICKSTART.</Description>
-      <Values>0:MANUAL,2:LEARNING,3:STEERING,4:HOLD,10:AUTO,11:RTL,15:GUIDED</Values>
+      <Values>0:MANUAL, 2:LEARNING, 3:STEERING, 4:HOLD, 10:AUTO, 11:RTL, 15:GUIDED</Values>
       <User>Advanced</User>
     </INITIAL_MODE>
     <RSSI_PIN>
@@ -5593,13 +5593,13 @@
     <SERIAL0_BAUD>
       <DisplayName>USB Console Baud Rate</DisplayName>
       <Description>The baud rate used on the first serial port</Description>
-      <Values>1:1200,2:2400,4:4800,9:9600,19:19200,38:38400,57:57600,111:111100,115:115200</Values>
+      <Values>1:1200, 2:2400, 4:4800, 9:9600, 19:19200, 38:38400, 57:57600, 111:111100, 115:115200</Values>
       <User>Standard</User>
     </SERIAL0_BAUD>
     <SERIAL3_BAUD>
       <DisplayName>Telemetry Baud Rate</DisplayName>
       <Description>The baud rate used on the telemetry port</Description>
-      <Values>1:1200,2:2400,4:4800,9:9600,19:19200,38:38400,57:57600,111:111100,115:115200</Values>
+      <Values>1:1200, 2:2400, 4:4800, 9:9600, 19:19200, 38:38400, 57:57600, 111:111100, 115:115200</Values>
       <User>Standard</User>
     </SERIAL3_BAUD>
     <TELEM_DELAY>
@@ -5614,12 +5614,12 @@
       <DisplayName>Magnetometer (compass) enabled</DisplayName>
       <Description>This should be set to 1 if a compass is installed</Description>
       <User>Standard</User>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
     </MAG_ENABLED>
     <AUTO_TRIGGER_PIN>
       <DisplayName>Auto mode trigger pin</DisplayName>
       <Description>pin number to use to enable the throttle in auto mode. If set to -1 then don't use a trigger, otherwise this is a pin number which if held low in auto mode will enable the motor to run. If the switch is released while in AUTO then the motor will stop again. This can be used in combination with INITIAL_MODE to give a 'press button to start' rover with no receiver.</Description>
-      <Values>-1:Disabled,0-8:TiggerPin</Values>
+      <Values>-1:Disabled, 0-8:TiggerPin</Values>
       <User>standard</User>
     </AUTO_TRIGGER_PIN>
     <AUTO_KICKSTART>
@@ -5657,7 +5657,7 @@
     <CH7_OPTION>
       <DisplayName>Channel 7 option</DisplayName>
       <Description>What to do use channel 7 for</Description>
-      <Values>0:Nothing,1:LearnWaypoint</Values>
+      <Values>0:Nothing, 1:LearnWaypoint</Values>
       <User>Standard</User>
       <Group>RC1_</Group>
       <Path>../libraries/RC_Channel/RC_Channel.cpp</Path>
@@ -5709,7 +5709,7 @@
     <FS_ACTION>
       <DisplayName>Failsafe Action</DisplayName>
       <Description>What to do on a failsafe event</Description>
-      <Values>0:Nothing,1:RTL,2:HOLD</Values>
+      <Values>0:Nothing, 1:RTL, 2:HOLD</Values>
       <User>Standard</User>
     </FS_ACTION>
     <FS_TIMEOUT>
@@ -5721,7 +5721,7 @@
     <FS_THR_ENABLE>
       <DisplayName>Throttle Failsafe Enable</DisplayName>
       <Description>The throttle failsafe allows you to configure a software failsafe activated by a setting on the throttle input channel to a low value. This can be used to detect the RC transmitter going out of range. Failsafe will be triggered when the throttle channel goes below the FS_THR_VALUE for FS_TIMEOUT seconds.</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Standard</User>
     </FS_THR_ENABLE>
     <FS_THR_VALUE>
@@ -5734,7 +5734,7 @@
     <FS_GCS_ENABLE>
       <DisplayName>GCS failsafe enable</DisplayName>
       <Description>Enable ground control station telemetry failsafe. When enabled the Rover will execute the FS_ACTION when it fails to receive MAVLink heartbeat packets for FS_TIMEOUT seconds.</Description>
-      <Values>0:Disabled,1:Enabled</Values>
+      <Values>0:Disabled, 1:Enabled</Values>
       <User>Standard</User>
     </FS_GCS_ENABLE>
     <SONAR_TRIGGER_CM>
@@ -5780,38 +5780,38 @@
     </MODE_CH>
     <MODE1>
       <DisplayName>Mode1</DisplayName>
-      <Values>0:Manual,2:LEARNING,3:STEERING,4:HOLD,10:Auto,11:RTL,15:Guided</Values>
+      <Values>0:Manual, 2:LEARNING, 3:STEERING, 4:HOLD, 10:Auto, 11:RTL, 15:Guided</Values>
       <User>Standard</User>
       <Description>Driving mode for switch position 1 (910 to 1230 and above 2049)</Description>
     </MODE1>
     <MODE2>
       <DisplayName>Mode2</DisplayName>
       <Description>Driving mode for switch position 2 (1231 to 1360)</Description>
-      <Values>0:Manual,2:LEARNING,3:STEERING,4:HOLD,10:Auto,11:RTL,15:Guided</Values>
+      <Values>0:Manual, 2:LEARNING, 3:STEERING, 4:HOLD, 10:Auto, 11:RTL, 15:Guided</Values>
       <User>Standard</User>
     </MODE2>
     <MODE3>
       <DisplayName>Mode3</DisplayName>
       <Description>Driving mode for switch position 3 (1361 to 1490)</Description>
-      <Values>0:Manual,2:LEARNING,3:STEERING,4:HOLD,10:Auto,11:RTL,15:Guided</Values>
+      <Values>0:Manual, 2:LEARNING, 3:STEERING, 4:HOLD, 10:Auto, 11:RTL, 15:Guided</Values>
       <User>Standard</User>
     </MODE3>
     <MODE4>
       <DisplayName>Mode4</DisplayName>
       <Description>Driving mode for switch position 4 (1491 to 1620)</Description>
-      <Values>0:Manual,2:LEARNING,3:STEERING,4:HOLD,10:Auto,11:RTL,15:Guided</Values>
+      <Values>0:Manual, 2:LEARNING, 3:STEERING, 4:HOLD, 10:Auto, 11:RTL, 15:Guided</Values>
       <User>Standard</User>
     </MODE4>
     <MODE5>
       <DisplayName>Mode5</DisplayName>
       <Description>Driving mode for switch position 5 (1621 to 1749)</Description>
-      <Values>0:Manual,2:LEARNING,3:STEERING,4:HOLD,10:Auto,11:RTL,15:Guided</Values>
+      <Values>0:Manual, 2:LEARNING, 3:STEERING, 4:HOLD, 10:Auto, 11:RTL, 15:Guided</Values>
       <User>Standard</User>
     </MODE5>
     <MODE6>
       <DisplayName>Mode6</DisplayName>
       <Description>Driving mode for switch position 6 (1750 to 2049)</Description>
-      <Values>0:Manual,2:LEARNING,3:STEERING,4:HOLD,10:Auto,11:RTL,15:Guided</Values>
+      <Values>0:Manual, 2:LEARNING, 3:STEERING, 4:HOLD, 10:Auto, 11:RTL, 15:Guided</Values>
       <User>Standard</User>
     </MODE6>
     <WP_RADIUS>

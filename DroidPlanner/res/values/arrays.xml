@@ -18,18 +18,18 @@
     </string-array>
     <string-array name="RCQuickModes">
         <item name="Stabilize">Stabilize</item>
-        <item name="Loiter">Loiter</item>
-        <item name="Auto">Auto</item>
-        <item name="FBW A">FBW A</item>
-        <item name="FBW B">FBW B</item>
-        <item name="Manual">Manual</item>
-        <item name="RTL">RTL</item>
-        <item name="Guided">Guided</item>
-        <item name="Circle">Circle</item>
-        <item name="Alt Hold">Alt Hold</item>
-        <item name="Toy">Toy</item>
         <item name="Acro">Acro</item>
-        <item name="Training">Training</item>
+        <item name="Alt_Hold">Alt_Hold</item>
+        <item name="Auto">Auto</item>
+        <item name="Guided">Guided</item>
+        <item name="Loiter">Loiter</item>
+        <item name="Rtl">RTL</item>
+        <item name="Circle">Circle</item>
+        <item name="Position">Position</item>
+        <item name="Land">Land</item>
+        <item name="Of_Loiter">Of_Loiter</item>
+        <item name="Drift">Drift</item>
+        <item name="Sport">Sport</item>
     </string-array>
     <string-array name="TelemetryConnectionTypes">
         <item name="USB">USB</item>

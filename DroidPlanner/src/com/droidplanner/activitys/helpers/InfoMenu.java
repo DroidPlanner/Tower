@@ -62,6 +62,7 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner,
 					.getActionView();
 
 			timer = new TimerView(propeler);
+
 			drone.setHomeChangedListner(this);
 			drone.addInfoListener(this);
 			drone.state.addFlightStateListner(this);
@@ -87,10 +88,6 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner,
 
 	@Override
 	public void onInfoUpdate() {
-		battery.setTitle(String.format("%2.1fv, %2.0f%%",
-				drone.battery.getBattVolt(), drone.battery.getBattRemain()));
-		gps.setTitle(String.format("%d, %s", drone.GPS.getSatCount(),
-				drone.GPS.getFixType()));
 		signal.setTitle(String.format("%d%%",drone.radio.getSignalStrength()));
 		signalRSSI.setTitle(String.format("RSSI %2.0f dB",drone.radio.getRssi()));
 		signalRemRSSI.setTitle(String.format("RemRSSI %2.0f dB",drone.radio.getRemRssi()));
@@ -98,6 +95,8 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner,
 		signalRemNoise.setTitle(String.format("RemNoise %2.0f dB",drone.radio.getRemNoise()));
 		signalFade.setTitle(String.format("Fade %2.0f dB",drone.radio.getFadeMargin()));
 		signalRemFade.setTitle(String.format("RemFade %2.0f dB",drone.radio.getRemFadeMargin()));
+		battery.setTitle(String.format(" %2.1fv, %2.0f%% ", drone.battery.getBattVolt(), drone.battery.getBattRemain()));
+		gps.setTitle(String.format(" %d, %s", drone.GPS.getSatCount(), drone.GPS.getFixType()));
 	}
 
 	@Override
