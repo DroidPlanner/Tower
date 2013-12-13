@@ -5,16 +5,16 @@ import com.droidplanner.drone.DroneVariable;
 import com.droidplanner.helpers.math.MathUtil;
 
 public class Radio extends DroneVariable {
-	private static final int MAX_FADE_MARGIN = 100;
-	private static final int MIN_FADE_MARGIN = 5;
+	private static final int MAX_FADE_MARGIN = 50;
+	private static final int MIN_FADE_MARGIN = 6;
 	
 	private int rxerrors = -1;
 	private int fixed = -1;
-	private int rssi = -1;
-	private int remrssi = -1;
 	private int txbuf = -1;
-	private int noise = -1;
-	private int remnoise = -1;
+	private double rssi = -1;
+	private double remrssi = -1;
+	private double noise = -1;
+	private double remnoise = -1;
 
 	public Radio(Drone myDrone) {
 		super(myDrone);
@@ -28,11 +28,11 @@ public class Radio extends DroneVariable {
 		return fixed;
 	}
 
-	public int getRssi() {
+	public double getRssi() {
 		return rssi;
 	}
 
-	public int getRemRssi() {
+	public double getRemRssi() {
 		return remrssi;
 	}
 
@@ -40,19 +40,19 @@ public class Radio extends DroneVariable {
 		return txbuf;
 	}
 
-	public int getNoise() {
+	public double getNoise() {
 		return noise;
 	}
 
-	public int getRemNoise() {
+	public double getRemNoise() {
 		return remnoise;
 	}
 
-	public int getFadeMargin() {
+	public double getFadeMargin() {
 		return rssi-noise;
 	}
 
-	public int getRemFadeMargin() {
+	public double getRemFadeMargin() {
 		return remrssi-remnoise;
 	}
 	
@@ -72,14 +72,22 @@ public class Radio extends DroneVariable {
 
 			this.rxerrors = rxerrors & 0xFFFF;
 			this.fixed = fixed & 0xFFFF;
-			this.rssi = rssi & 0xFF;
-			this.remrssi = remrssi & 0xFF;
+			this.rssi = SikValueToDB(rssi & 0xFF);
+			this.remrssi = SikValueToDB(remrssi & 0xFF);
+			this.noise = SikValueToDB(noise & 0xFF);
+			this.remnoise = SikValueToDB(remnoise & 0xFF);
 			this.txbuf = txbuf & 0xFF;
-			this.noise = noise & 0xFF;
-			this.remnoise = remnoise & 0xFF;
 			myDrone.notifyInfoChange();
 		}
 
+	}
+
+	/**
+	 * Scalling done at the Si1000 radio
+	 * More info can be found at: http://copter.ardupilot.com/wiki/common-using-the-3dr-radio-for-telemetry-with-apm-and-px4/#Power_levels
+	 */
+	private double SikValueToDB(int value) {
+		return (value / 1.9) - 127;
 	}
 
 }
