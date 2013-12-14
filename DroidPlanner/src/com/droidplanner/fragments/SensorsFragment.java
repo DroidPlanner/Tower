@@ -12,6 +12,7 @@ import com.droidplanner.R;
 import com.droidplanner.MAVLink.MavLinkStreamRates;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.OnSensorDataListner;
+import com.droidplanner.helpers.math.FFT;
 import com.droidplanner.widgets.graph.Chart;
 import com.droidplanner.widgets.graph.series.ChartSeries;
 import com.droidplanner.widgets.graph.series.DynamicSeries;
@@ -20,7 +21,7 @@ import com.droidplanner.widgets.graph.series.StaticSeries;
 public class SensorsFragment extends Fragment implements OnSensorDataListner {
 
 	private static final int NAV_MSG_RATE = 50;
-	private static final int CHART_BUFFER_SIZE = 64; 
+	public static final int CHART_BUFFER_SIZE = 64; 
 
 
 	private Drone drone;
@@ -28,11 +29,14 @@ public class SensorsFragment extends Fragment implements OnSensorDataListner {
 	private Chart topChart;
 	private Chart bottomChart;
 
-	private DynamicSeries dataX;
+	public DynamicSeries dataX;
 	private DynamicSeries dataY;
 	private DynamicSeries dataZ;
-	private ChartSeries dataFFT;
+	private ChartSeries dataFftX;
+	private ChartSeries dataFftY;
+	private ChartSeries dataFftZ;
 	private int fftDataCounter = 0;
+	private FFT fft;
 	
 
 	@Override
@@ -45,6 +49,8 @@ public class SensorsFragment extends Fragment implements OnSensorDataListner {
 
 		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
 		drone.setSensorsDatalistner(this);
+		
+		fft = new FFT(CHART_BUFFER_SIZE);
 		
 		return view;	
 	}
@@ -88,12 +94,22 @@ public class SensorsFragment extends Fragment implements OnSensorDataListner {
 		topChart.scale.y.setRange(1.5);
 		topChart.scale.x.setRange(CHART_BUFFER_SIZE);
 		
-		dataFFT = new StaticSeries(CHART_BUFFER_SIZE);
-		dataFFT.setColor(Color.WHITE);
-		dataFFT.enable();
-		bottomChart.series.add(dataFFT);
-		bottomChart.scale.y.setRange(1.5);
-		bottomChart.scale.x.setRange(CHART_BUFFER_SIZE);
+		dataFftX = new StaticSeries(CHART_BUFFER_SIZE);
+		dataFftX.setColor(Color.BLUE);
+		dataFftX.enable();
+		bottomChart.series.add(dataFftX);
+		dataFftY = new StaticSeries(CHART_BUFFER_SIZE);
+		dataFftY.setColor(Color.RED);
+		dataFftY.enable();
+		bottomChart.series.add(dataFftY);
+		dataFftZ = new StaticSeries(CHART_BUFFER_SIZE);
+		dataFftZ.setColor(Color.GREEN);
+		dataFftZ.enable();
+		bottomChart.series.add(dataFftZ);		
+		bottomChart.scale.y.setRange(2);
+		bottomChart.scale.y.setPan(-2);
+		bottomChart.scale.x.setRange(CHART_BUFFER_SIZE/2);
+		bottomChart.scale.x.setPan(CHART_BUFFER_SIZE/2);
 	}
 
 	@Override
@@ -104,8 +120,10 @@ public class SensorsFragment extends Fragment implements OnSensorDataListner {
 		topChart.update();		
 		
 		if(++fftDataCounter>=CHART_BUFFER_SIZE){
-			dataFFT.data = dataX.data;
-			bottomChart.update();		
+			dataFftX.data = fft.fftModulo(dataX.data.clone());
+			dataFftY.data = fft.fftModulo(dataY.data.clone());
+			dataFftZ.data = fft.fftModulo(dataZ.data.clone());
+			bottomChart.update(); 		
 			fftDataCounter=0;
 		}
 	}
