@@ -121,19 +121,19 @@ public class BluetoothConnection extends MAVLinkConnection {
 	}
 	
 	
-	private void resetConnection() {
+	private void resetConnection() throws IOException {
         if (in != null) {
-                try {in.close();} catch (Exception e) {}
+                in.close(); 
                 in = null;
         }
 
         if (out != null) {
-                try {out.close();} catch (Exception e) {}
+                out.close();
                 out = null;
         }
 
         if (bluetoothSocket != null) {
-                try {bluetoothSocket.close();} catch (Exception e) {}
+                bluetoothSocket.close();
                 bluetoothSocket = null;
         }
 
