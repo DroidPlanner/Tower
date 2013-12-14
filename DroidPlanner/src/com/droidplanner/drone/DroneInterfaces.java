@@ -70,6 +70,10 @@ public class DroneInterfaces {
 
 		void onNewNavigationData();
 	}
+
+	public interface OnSensorDataListner{
+		void onNewAccelData();
+	}
 	
 	public interface OnRcDataChangedListner{
 		void onNewOutputRcData();

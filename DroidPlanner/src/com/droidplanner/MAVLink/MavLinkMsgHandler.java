@@ -9,6 +9,7 @@ import com.MAVLink.Messages.ardupilotmega.msg_heartbeat;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_current;
 import com.MAVLink.Messages.ardupilotmega.msg_nav_controller_output;
 import com.MAVLink.Messages.ardupilotmega.msg_radio;
+import com.MAVLink.Messages.ardupilotmega.msg_raw_imu;
 import com.MAVLink.Messages.ardupilotmega.msg_rc_channels_raw;
 import com.MAVLink.Messages.ardupilotmega.msg_servo_output_raw;
 import com.MAVLink.Messages.ardupilotmega.msg_sys_status;
@@ -87,6 +88,9 @@ public class MavLinkMsgHandler {
 			break;
 		case msg_servo_output_raw.MAVLINK_MSG_ID_SERVO_OUTPUT_RAW:
 			drone.RC.setRcOutputValues((msg_servo_output_raw) msg);
+			break;
+		case msg_raw_imu.MAVLINK_MSG_ID_RAW_IMU:
+			drone.sensors.newImuData((msg_raw_imu)msg);
 			break;
 		}
 	}
