@@ -12,14 +12,24 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
+import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
+import com.droidplanner.drone.Drone;
+import com.droidplanner.file.DirectoryPath;
+import com.droidplanner.file.IO.ParameterMetadataMapReader;
+import com.droidplanner.file.IO.VehicleProfile;
 import com.droidplanner.parameters.Parameter;
 import com.droidplanner.parameters.ParameterMetadata;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Date: 2013-12-08
@@ -35,6 +45,8 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
 
     private final int resource;
     private final int colorAltRow;
+
+    private Map<String, ParameterMetadata> metadataMap;
 
     private View focusView;
     private OnInfoListener onInfoListener;
@@ -117,6 +129,56 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
         view.setBackgroundColor((position % 2 == 1) ? colorAltRow : Color.TRANSPARENT);
 
         return view;
+    }
+
+    public void loadParameters(Drone drone, List<Parameter> parameters) {
+        loadMetadataInternal(drone);
+
+        clear();
+        for (Parameter parameter : parameters)
+            addParameter(parameter);
+    }
+
+    private void addParameter(Parameter parameter) {
+        try {
+            Parameter.checkParameterName(parameter.name);
+            add(new ParamsAdapterItem(parameter, getMetadata(parameter.name)));
+
+        } catch (Exception ex) {
+            // eat it
+        }
+    }
+
+    public void loadMetadata(Drone drone) {
+        loadMetadataInternal(drone);
+
+        for(int i = 0; i < getCount(); i++) {
+            final ParamsAdapterItem item = getItem(i);
+            item.setMetadata(getMetadata(item.getParameter().name));
+        }
+        notifyDataSetChanged();
+    }
+
+    private void loadMetadataInternal(Drone drone) {
+        metadataMap = null;
+
+        // get metadata type from profile, bail if none
+        final String metadataType;
+        final VehicleProfile profile = drone.profile.getProfile();
+        if(profile == null || (metadataType = profile.getParameterMetadataType()) == null)
+            return;
+
+        try {
+            // load
+            metadataMap = ParameterMetadataMapReader.load(getContext(), metadataType);
+
+        } catch (Exception ex) {
+            // nop
+        }
+    }
+
+    private ParameterMetadata getMetadata(String name) {
+        return (metadataMap == null) ? null : metadataMap.get(name);
     }
 
     private String getDescription(ParameterMetadata metadata) {
