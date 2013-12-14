@@ -32,6 +32,8 @@ public class SensorsFragment extends Fragment implements OnSensorDataListner {
 	private DynamicSeries dataY;
 	private DynamicSeries dataZ;
 	private ChartSeries dataFFT;
+	private int fftDataCounter = 0;
+	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -90,6 +92,7 @@ public class SensorsFragment extends Fragment implements OnSensorDataListner {
 		dataFFT.setColor(Color.WHITE);
 		dataFFT.enable();
 		bottomChart.series.add(dataFFT);
+		bottomChart.scale.y.setRange(1.5);
 		bottomChart.scale.x.setRange(CHART_BUFFER_SIZE);
 	}
 
@@ -98,10 +101,13 @@ public class SensorsFragment extends Fragment implements OnSensorDataListner {
 		dataX.newData(drone.sensors.xacc);
 		dataY.newData(drone.sensors.yacc);
 		dataZ.newData(drone.sensors.zacc);
-		//dataFFT.newData(drone);
-
-		bottomChart.update();
 		topChart.update();		
+		
+		if(++fftDataCounter>=CHART_BUFFER_SIZE){
+			dataFFT.data = dataX.data;
+			bottomChart.update();		
+			fftDataCounter=0;
+		}
 	}
 	
 }
