@@ -15,6 +15,7 @@ import com.droidplanner.drone.DroneInterfaces.OnSensorDataListner;
 import com.droidplanner.widgets.graph.Chart;
 import com.droidplanner.widgets.graph.series.ChartSeries;
 import com.droidplanner.widgets.graph.series.DynamicSeries;
+import com.droidplanner.widgets.graph.series.StaticSeries;
 
 public class SensorsFragment extends Fragment implements OnSensorDataListner {
 
@@ -70,11 +71,11 @@ public class SensorsFragment extends Fragment implements OnSensorDataListner {
 	}
 
 	private void setupCharts() {
-		dataX = new DynamicSeries(800);
+		dataX = new DynamicSeries(CHART_BUFFER_SIZE);
 		dataX.setColor(Color.BLUE);
 		dataX.enable();
 		topChart.series.add(dataX);
-		dataY = new DynamicSeries(800);
+		dataY = new DynamicSeries(CHART_BUFFER_SIZE);
 		dataY.setColor(Color.RED);
 		dataY.enable();
 		topChart.series.add(dataY);
@@ -83,11 +84,13 @@ public class SensorsFragment extends Fragment implements OnSensorDataListner {
 		dataZ.enable();
 		topChart.series.add(dataZ);
 		topChart.scale.y.setRange(1.5);
+		topChart.scale.x.setRange(CHART_BUFFER_SIZE);
 		
-		dataFFT = new DynamicSeries(CHART_BUFFER_SIZE);
+		dataFFT = new StaticSeries(CHART_BUFFER_SIZE);
 		dataFFT.setColor(Color.WHITE);
 		dataFFT.enable();
 		bottomChart.series.add(dataFFT);
+		bottomChart.scale.x.setRange(CHART_BUFFER_SIZE);
 	}
 
 	@Override

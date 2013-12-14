@@ -12,6 +12,10 @@ public class StaticSeries extends ChartSeries {
 		enable();
 	}
 
+	public StaticSeries(int chartBufferSize) {
+		super(chartBufferSize);
+	}
+
 	@Override
 	public int getFirstIndex() {
 		return 0;
