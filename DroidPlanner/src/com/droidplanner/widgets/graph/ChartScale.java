@@ -2,6 +2,7 @@ package com.droidplanner.widgets.graph;
 
 
 public class ChartScale {
+	private boolean isScalable = true;
 	private double range;
 	private double pan;
 	private double min;
@@ -15,8 +16,10 @@ public class ChartScale {
 	}
 
 	void scale(float scale) {
-		range /= scale;
-		range = Math.max(min, Math.min(range, max));
+		if (isScalable) {
+			range /= scale;
+			range = Math.max(min, Math.min(range, max));
+		}
 	}
 
 	public double getRange() {
