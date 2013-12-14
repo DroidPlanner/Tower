@@ -14,16 +14,17 @@ public class ChartGrid {
 		grid_paint_center_line.setStrokeWidth(5f);
 	}
 
-	void drawGrid(Chart chart, Canvas canvas) {
-		// clear screen
+	void drawGrid(Canvas canvas, ChartScaleHandler scale) {
+		drawBackground(canvas);
+		drawVerticalLines(canvas, scale);
+		drawHorizontalLines(canvas);
+	}
+
+	private void drawBackground(Canvas canvas) {
 		canvas.drawColor(Color.rgb(20, 20, 20));
+	}
 
-		for (int vertical = 1; vertical < 10; vertical++) {
-			canvas.drawLine(vertical * (chart.width / 10) + 1, 1, vertical
-					* (chart.width / 10) + 1, chart.height + 1, grid_paint);
-
-		}
-
+	private void drawHorizontalLines(Canvas canvas) {
 		for (int horizontal = 1; horizontal < 10; horizontal++) {
 			Paint paint;
 			if (horizontal == 5) {
@@ -31,10 +32,18 @@ public class ChartGrid {
 			} else {
 				paint = grid_paint;
 			}
-			canvas.drawLine(1, horizontal * (chart.height / 10) + 1,
-					chart.width + 1, horizontal * (chart.height / 10) + 1,
-					paint);
+			int spacingY = horizontal * (canvas.getHeight() / 10) + 1;
+			canvas.drawLine(1, spacingY, canvas.getWidth() + 1, spacingY, paint);
 
+		}
+	}
+
+	private void drawVerticalLines(Canvas canvas, ChartScaleHandler scale) {
+		double spacingX = (canvas.getWidth() / scale.x.getGridSize());
+		for (double vertical = -scale.x.getOffset() % spacingX; vertical < canvas
+				.getWidth(); vertical += spacingX) {
+			canvas.drawLine((int) vertical, 1, (int) vertical,
+					canvas.getHeight() + 1, grid_paint);
 		}
 	}
 }

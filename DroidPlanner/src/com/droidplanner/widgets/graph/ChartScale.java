@@ -1,44 +1,56 @@
 package com.droidplanner.widgets.graph;
 
-import android.content.Context;
-import android.view.ScaleGestureDetector;
 
 public class ChartScale {
-	public interface OnScaleListner {
-		public void onScaleListner();
+	private boolean isScalable = true;
+	private double range;
+	private double pan;
+	private double min;
+	private double max;
+
+	public ChartScale(double range, double min, double max) {
+		this.range = range;
+		this.pan = 0;
+		this.min = min;
+		this.max = max;
 	}
 
-	private OnScaleListner listner;
-
-	// range values to display
-	private double range = 45;
-	// minimal range
-	private double min = 10;
-	// maximal range
-	private double max = 45;
-
-	protected ScaleGestureDetector scaleDetector;
-
-	public ChartScale(Context context, OnScaleListner listner) {
-		scaleDetector = new ScaleGestureDetector(context,
-				new ChartScaleListener());
-		this.listner = listner;
+	void scale(float scale) {
+		if (isScalable) {
+			range /= scale;
+			range = Math.max(min, Math.min(range, max));
+		}
 	}
 
 	public double getRange() {
 		return range;
 	}
+	
+	public double getMax() {
+		return max;
+	}
 
-	class ChartScaleListener extends
-			ScaleGestureDetector.SimpleOnScaleGestureListener {
+	public void setMax(double d) {
+		max = d;
+	}
 
-		@Override
-		public boolean onScale(ScaleGestureDetector detector) {
-			range /= detector.getScaleFactor();
+	public void setRange(double range) {
+		this.range = range;
+	}
 
-			range = Math.max(min, Math.min(range, max));
-			listner.onScaleListner();
-			return true;
-		}
+	public double getOffset() {
+		return pan;
+	}
+
+	public void setPan(double i) {
+		pan = i;		
+	}
+
+	public void pan(float distanceY) {
+		pan+=distanceY;		
+	}
+
+	public double getGridSize() {
+		return range/10;
 	}
 }

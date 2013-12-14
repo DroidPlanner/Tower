@@ -1,5 +1,8 @@
 package com.droidplanner.widgets.graph;
 
+import com.droidplanner.widgets.graph.series.ChartSeries;
+import com.droidplanner.widgets.graph.series.DynamicSeries;
+
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
@@ -17,7 +20,7 @@ public class ChartCheckBox extends CheckBox implements OnCheckedChangeListener {
 
 	public ChartCheckBox(Context context, String label, Chart chart) {
 		super(context);
-		ChartSeries serie = new ChartSeries(800);
+		DynamicSeries serie = new DynamicSeries(800);
 		this.chart = chart;
 		this.chart.series.add(serie);
 		setText(label);

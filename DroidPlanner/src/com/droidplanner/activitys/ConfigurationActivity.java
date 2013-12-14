@@ -20,6 +20,7 @@ public class ConfigurationActivity extends SuperUI{
 	private static final String RC_SETUP = "rc_setup";
 	private static final String MODES_SETUP = "flight_modes";
 	private static final String CHECKLIST = "flight_checklist";
+	private static final String SENSORS = "sensors";
 	private FragmentTabHost mTabHost;
 
 	@Override
@@ -35,6 +36,7 @@ public class ConfigurationActivity extends SuperUI{
 
 	    mTabHost.addTab(mTabHost.newTabSpec(SETTINGS).setIndicator("Settings"),SettingsFragment.class, null);
 	    mTabHost.addTab(mTabHost.newTabSpec(TUNING).setIndicator("Tuning"),TuningFragment.class, null);
+	    mTabHost.addTab(mTabHost.newTabSpec(SENSORS).setIndicator("Sensors"),SensorsFragment.class, null);
 	    mTabHost.addTab(mTabHost.newTabSpec(RC_SETUP).setIndicator("RC"),RcSetupFragment.class, null);
 	    mTabHost.addTab(mTabHost.newTabSpec(MODES_SETUP).setIndicator("Modes"),ModesSetupFragment.class, null);
 	    mTabHost.addTab(mTabHost.newTabSpec(CHECKLIST).setIndicator("Checklist"),ChecklistFragment.class, null);

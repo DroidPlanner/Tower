@@ -12,6 +12,7 @@ import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
 import com.droidplanner.drone.DroneInterfaces.InfoListner;
 import com.droidplanner.drone.DroneInterfaces.MapConfigListener;
 import com.droidplanner.drone.DroneInterfaces.MapUpdatedListner;
+import com.droidplanner.drone.DroneInterfaces.OnSensorDataListner;
 import com.droidplanner.drone.DroneInterfaces.OnTuningDataListner;
 import com.droidplanner.drone.DroneInterfaces.VehicleTypeListener;
 import com.droidplanner.drone.variables.Altitude;
@@ -28,6 +29,7 @@ import com.droidplanner.drone.variables.Parameters;
 import com.droidplanner.drone.variables.RC;
 import com.droidplanner.drone.variables.Profile;
 import com.droidplanner.drone.variables.Radio;
+import com.droidplanner.drone.variables.Sensors;
 import com.droidplanner.drone.variables.Speed;
 import com.droidplanner.drone.variables.State;
 import com.droidplanner.drone.variables.Type;
@@ -43,6 +45,7 @@ public class Drone {
 	public RC RC = new RC(this);
 	public Speed speed = new Speed(this);
 	public State state = new State(this);
+	public Sensors sensors = new Sensors(this);
 	public Battery battery = new Battery(this);
 	public Radio radio = new Radio(this);
 	public Home home = new Home(this);
@@ -69,6 +72,7 @@ public class Drone {
 	private HomeDistanceChangedListner homeChangedListner;
 	private OnGuidedListener guidedListner;
 	public OnTuningDataListner tuningDataListner;
+	public OnSensorDataListner sensorDataListner;
 	
 	public Drone(TTS tts, MAVLinkClient mavClient, Context context) {
 		this.tts = tts;
@@ -114,6 +118,10 @@ public class Drone {
 	
 	public void setTuningDataListner(OnTuningDataListner listner) {
 		tuningDataListner = listner;
+	}
+
+	public void setSensorsDatalistner(OnSensorDataListner listner) {
+		sensorDataListner = listner;
 	}
 
 	public void setGuidedPointListner(OnGuidedListener listner) {
