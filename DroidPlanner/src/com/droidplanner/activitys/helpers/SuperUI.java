@@ -28,7 +28,6 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
 		super.onStart();
 		app.conectionListner = this;
 		drone.MavClient.queryConnectionState();
-		infoMenu = new InfoMenu(drone,this);
 	}
 
 	@Override
@@ -39,6 +38,7 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		infoMenu = new InfoMenu(drone,this);
 		infoMenu.inflateMenu(menu, getMenuInflater());	
 		infoMenu.setupModeSpinner(this);
 		return super.onCreateOptionsMenu(menu);
