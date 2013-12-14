@@ -20,7 +20,6 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		screenOrientation.unlock();
-		infoMenu = new InfoMenu(drone,this);
 		mavLinkHeartbeat = new MavLinkHeartbeat(drone,1);
 	}
 
@@ -29,6 +28,13 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
 		super.onStart();
 		app.conectionListner = this;
 		drone.MavClient.queryConnectionState();
+		infoMenu = new InfoMenu(drone,this);
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		infoMenu = null;
 	}
 
 	@Override
