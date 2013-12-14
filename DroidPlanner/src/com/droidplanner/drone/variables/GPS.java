@@ -2,6 +2,7 @@ package com.droidplanner.drone.variables;
 
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneVariable;
+import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.google.android.gms.maps.model.LatLng;
 
 public class GPS extends DroneVariable {
@@ -59,15 +60,14 @@ public class GPS extends DroneVariable {
 			satCount = satellites_visible;
 			gps_eph = (double) eph / 100; // convert from eph(cm) to gps_eph(m)
 
-			myDrone.notifyInfoChange();
+			myDrone.events.notifyDroneEvent(DroneEventsType.GPS);
 		}
 	}
 
 	public void setPosition(LatLng position) {
 		if (this.position != position) {
 			this.position = position;
-			myDrone.notifyPositionChange();
-			myDrone.notifyDistanceToHomeChange();
+			myDrone.events.notifyDroneEvent(DroneEventsType.GPS);
 		}
 	}
 }

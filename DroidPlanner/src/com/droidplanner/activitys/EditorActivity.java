@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.OnEditorInteraction;
 import com.droidplanner.activitys.helpers.SuperUI;
+import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.drone.DroneInterfaces.OnWaypointChangedListner;
 import com.droidplanner.drone.variables.mission.Mission;
 import com.droidplanner.drone.variables.mission.MissionItem;
@@ -73,7 +74,7 @@ public class EditorActivity extends SuperUI implements
 		
 		mission = drone.mission;
 		gestureMapFragment.setOnPathFinishedListner(this);
-		mission.onMissionUpdate();
+		mission.myDrone.events.notifyDroneEvent(DroneEventsType.MISSION);
 		
 		mission.addOnMissionUpdateListner(this);
 	}

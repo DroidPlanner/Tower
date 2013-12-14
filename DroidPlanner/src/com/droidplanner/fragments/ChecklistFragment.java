@@ -125,7 +125,7 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 	@Override
 	public void onPause() {
 		super.onPause();
-		this.drone.removeInfoListener(this);
+		this.drone.removeDroneListener(this);
 	}
 
 	@Override

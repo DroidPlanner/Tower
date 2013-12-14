@@ -18,7 +18,7 @@ public class Type extends DroneVariable {
 	public void setType(int type) {
 		if (this.type != type) {
 			this.type = type;
-			myDrone.notifyTypeChanged();
+			myDrone.profile.load();
 		}
 	}
 }
