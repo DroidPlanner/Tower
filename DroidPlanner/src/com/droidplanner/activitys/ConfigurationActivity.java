@@ -6,10 +6,14 @@ import android.os.Bundle;
 import android.support.v13.app.FragmentTabHost;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
-
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperUI;
-import com.droidplanner.fragments.*;
+import com.droidplanner.fragments.ChecklistFragment;
+import com.droidplanner.fragments.ModesSetupFragment;
+import com.droidplanner.fragments.ParamsFragment;
+import com.droidplanner.fragments.RcSetupFragment;
+import com.droidplanner.fragments.SettingsFragment;
+import com.droidplanner.fragments.TuningFragment;
 
 public class ConfigurationActivity extends SuperUI{
 

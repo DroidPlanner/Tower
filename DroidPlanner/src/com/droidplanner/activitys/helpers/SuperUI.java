@@ -3,7 +3,6 @@ package com.droidplanner.activitys.helpers;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import com.droidplanner.DroidPlannerApp.ConnectionStateListner;
 import com.droidplanner.MAVLink.MavLinkHeartbeat;
 

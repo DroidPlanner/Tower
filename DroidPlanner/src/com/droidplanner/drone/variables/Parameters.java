@@ -1,10 +1,5 @@
 package com.droidplanner.drone.variables;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.*;
-
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_param_value;
 import com.droidplanner.MAVLink.MavLinkParameters;
@@ -17,6 +12,12 @@ import com.droidplanner.file.IO.ParameterMetadataMapReader;
 import com.droidplanner.file.IO.VehicleProfile;
 import com.droidplanner.parameters.Parameter;
 import com.droidplanner.parameters.ParameterMetadata;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class to manage the communication of parameters to the MAV.

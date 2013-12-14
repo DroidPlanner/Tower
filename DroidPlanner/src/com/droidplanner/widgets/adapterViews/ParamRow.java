@@ -12,9 +12,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TableRow;
 import android.widget.TextView;
-
 import com.droidplanner.R;
-import com.droidplanner.dialogs.parameters.DialogParameterInfo;
 import com.droidplanner.dialogs.parameters.DialogParameterValues;
 import com.droidplanner.drone.variables.Parameters;
 import com.droidplanner.parameters.Parameter;

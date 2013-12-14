@@ -17,9 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -72,7 +70,7 @@ public class BluetoothConnection extends MAVLinkConnection {
                 ? findSerialBluetoothBoard()
                 : mBluetoothAdapter.getRemoteDevice(address);
 
-        final List<UUID> supportedUuids = retrieveSupportedUuids(device);
+        final Set<UUID> supportedUuids = retrieveSupportedUuids(device);
         for (UUID uuid : supportedUuids) {
             try {
                 bluetoothSocket = device.createInsecureRfcommSocketToServiceRecord(uuid);
@@ -144,24 +142,36 @@ public class BluetoothConnection extends MAVLinkConnection {
 
     /**
      * Retrieves the supported list of uuid from the device uuids.
+     *
      * @param device bluetooth device whose uuids to check
      * @return support uuids from the passed bluetooth device
      * @since 1.2.0
      */
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
-    public List<UUID> retrieveSupportedUuids(BluetoothDevice device){
-        List<UUID> validUuids = new ArrayList<UUID>();
+    public Set<UUID> retrieveSupportedUuids(BluetoothDevice device) {
+        Set<UUID> validUuids = new LinkedHashSet<UUID>();
 
         if (device != null) {
             ParcelUuid[] deviceUuids = device.getUuids();
             if (deviceUuids == null) {
                 //We have yet to pair with/connect to the device, so try all the supported uuids.
-                validUuids = new ArrayList<UUID>(sValidUuids);
+                validUuids = sValidUuids;
             }
-            else{
-                for(ParcelUuid parcelUuid: deviceUuids){
+            else {
+                boolean isDeviceValid = false;
+
+                for (ParcelUuid parcelUuid : deviceUuids) {
                     final UUID uuid = parcelUuid.getUuid();
-                    if(sValidUuids.contains(uuid)){
+                    if (sValidUuids.contains(uuid)) {
+                        validUuids.add(uuid);
+                        isDeviceValid = true;
+                    }
+                }
+
+                if (isDeviceValid) {
+                    //The device could be a bluetooth relay server, so add the rest of the uuids to
+                    // test them all
+                    for (UUID uuid : sValidUuids) {
                         validUuids.add(uuid);
                     }
                 }

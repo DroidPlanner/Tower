@@ -1,11 +1,13 @@
 package com.droidplanner.fragments;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import org.xmlpull.v1.XmlPullParser;
-
+import android.app.Activity;
+import android.app.Fragment;
+import android.content.Context;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ExpandableListView;
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperActivity;
 import com.droidplanner.checklist.CheckListAdapter;
@@ -16,15 +18,11 @@ import com.droidplanner.checklist.CheckListXmlParser;
 import com.droidplanner.checklist.xml.ListXmlParser.OnXmlParserError;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.InfoListner;
+import org.xmlpull.v1.XmlPullParser;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.content.Context;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ExpandableListView;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class ChecklistFragment extends Fragment implements OnXmlParserError,
 		OnCheckListItemUpdateListener, InfoListner {

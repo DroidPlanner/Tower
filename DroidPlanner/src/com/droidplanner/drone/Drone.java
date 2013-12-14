@@ -1,11 +1,7 @@
 package com.droidplanner.drone;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
-
 import com.droidplanner.drone.DroneInterfaces.DroneTypeListner;
 import com.droidplanner.drone.DroneInterfaces.HomeDistanceChangedListner;
 import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
@@ -14,27 +10,15 @@ import com.droidplanner.drone.DroneInterfaces.MapConfigListener;
 import com.droidplanner.drone.DroneInterfaces.MapUpdatedListner;
 import com.droidplanner.drone.DroneInterfaces.OnTuningDataListner;
 import com.droidplanner.drone.DroneInterfaces.VehicleTypeListener;
-import com.droidplanner.drone.variables.Altitude;
-import com.droidplanner.drone.variables.Battery;
-import com.droidplanner.drone.variables.Calibration;
-import com.droidplanner.drone.variables.GPS;
-import com.droidplanner.drone.variables.GuidedPoint;
+import com.droidplanner.drone.variables.*;
 import com.droidplanner.drone.variables.GuidedPoint.OnGuidedListener;
-import com.droidplanner.drone.variables.Home;
-import com.droidplanner.drone.variables.MissionStats;
-import com.droidplanner.drone.variables.Navigation;
-import com.droidplanner.drone.variables.Orientation;
-import com.droidplanner.drone.variables.Parameters;
-import com.droidplanner.drone.variables.RC;
-import com.droidplanner.drone.variables.Profile;
-import com.droidplanner.drone.variables.Radio;
-import com.droidplanner.drone.variables.Speed;
-import com.droidplanner.drone.variables.State;
-import com.droidplanner.drone.variables.Type;
 import com.droidplanner.drone.variables.mission.Mission;
 import com.droidplanner.drone.variables.mission.WaypointMananger;
 import com.droidplanner.helpers.TTS;
 import com.droidplanner.service.MAVLinkClient;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Drone {
 	public Type type = new Type(this);

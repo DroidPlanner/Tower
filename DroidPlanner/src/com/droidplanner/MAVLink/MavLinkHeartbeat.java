@@ -2,7 +2,6 @@ package com.droidplanner.MAVLink;
 
 import android.os.Handler;
 import android.util.Log;
-
 import com.MAVLink.Messages.ardupilotmega.msg_heartbeat;
 import com.MAVLink.Messages.enums.MAV_AUTOPILOT;
 import com.MAVLink.Messages.enums.MAV_TYPE;

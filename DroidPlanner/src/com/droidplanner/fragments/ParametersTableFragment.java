@@ -1,10 +1,5 @@
 package com.droidplanner.fragments;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
@@ -18,8 +13,6 @@ import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.MAVLink.Messages.enums.MAV_TYPE;
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperActivity;
 import com.droidplanner.dialogs.openfile.OpenFileDialog;
@@ -31,6 +24,11 @@ import com.droidplanner.drone.variables.Parameters;
 import com.droidplanner.file.IO.ParameterWriter;
 import com.droidplanner.parameters.Parameter;
 import com.droidplanner.widgets.adapterViews.ParamRow;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class ParametersTableFragment extends Fragment implements
         OnClickListener, OnParameterManagerListner, VehicleTypeListener {
