@@ -71,7 +71,9 @@
         <service android:name=".service.MAVLinkService" >
         </service>
 	
-		<activity android:name=".activitys.FlightActivity" >
+		<activity
+		    android:name=".activitys.FlightActivity"
+		    android:launchMode="singleTask" >
 
             <!-- Launcher Intent -->
             <intent-filter>
