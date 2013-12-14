@@ -13,12 +13,13 @@ import com.droidplanner.MAVLink.MavLinkStreamRates;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.OnSensorDataListner;
 import com.droidplanner.widgets.graph.Chart;
-import com.droidplanner.widgets.graph.ChartSeries;
+import com.droidplanner.widgets.graph.series.ChartSeries;
+import com.droidplanner.widgets.graph.series.DynamicSeries;
 
 public class SensorsFragment extends Fragment implements OnSensorDataListner {
 
 	private static final int NAV_MSG_RATE = 50;
-	private static final int CHART_BUFFER_SIZE = 20*NAV_MSG_RATE; // About 20s of data on the buffer
+	private static final int CHART_BUFFER_SIZE = 64; 
 
 
 	private Drone drone;
@@ -26,9 +27,9 @@ public class SensorsFragment extends Fragment implements OnSensorDataListner {
 	private Chart topChart;
 	private Chart bottomChart;
 
-	private ChartSeries dataX;
-	private ChartSeries dataY;
-	private ChartSeries dataZ;
+	private DynamicSeries dataX;
+	private DynamicSeries dataY;
+	private DynamicSeries dataZ;
 	private ChartSeries dataFFT;
 
 	@Override
@@ -69,20 +70,21 @@ public class SensorsFragment extends Fragment implements OnSensorDataListner {
 	}
 
 	private void setupCharts() {
-		dataX = new ChartSeries(800);
+		dataX = new DynamicSeries(800);
 		dataX.setColor(Color.BLUE);
 		dataX.enable();
 		topChart.series.add(dataX);
-		dataY = new ChartSeries(800);
+		dataY = new DynamicSeries(800);
 		dataY.setColor(Color.RED);
 		dataY.enable();
 		topChart.series.add(dataY);
-		dataZ = new ChartSeries(CHART_BUFFER_SIZE);
+		dataZ = new DynamicSeries(CHART_BUFFER_SIZE);
 		dataZ.setColor(Color.GREEN);
 		dataZ.enable();
 		topChart.series.add(dataZ);
+		topChart.scale.y.setRange(1.5);
 		
-		dataFFT = new ChartSeries(CHART_BUFFER_SIZE);
+		dataFFT = new DynamicSeries(CHART_BUFFER_SIZE);
 		dataFFT.setColor(Color.WHITE);
 		dataFFT.enable();
 		bottomChart.series.add(dataFFT);

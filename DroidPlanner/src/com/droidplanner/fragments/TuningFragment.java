@@ -15,7 +15,7 @@ import com.droidplanner.drone.DroneInterfaces.OnTuningDataListner;
 import com.droidplanner.parameters.Parameter;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.graph.Chart;
-import com.droidplanner.widgets.graph.ChartSeries;
+import com.droidplanner.widgets.graph.series.DynamicSeries;
 
 public class TuningFragment extends Fragment implements OnTuningDataListner {
 
@@ -38,13 +38,13 @@ public class TuningFragment extends Fragment implements OnTuningDataListner {
 	private Parameter yawP;
 	private Parameter thrAcl;
 
-	private ChartSeries bottomDataReference;
+	private DynamicSeries bottomDataReference;
 
-	private ChartSeries bottomDataValue;
+	private DynamicSeries bottomDataValue;
 
-	private ChartSeries topDataReference;
+	private DynamicSeries topDataReference;
 
-	private ChartSeries topDataValue;
+	private DynamicSeries topDataValue;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -92,20 +92,20 @@ public class TuningFragment extends Fragment implements OnTuningDataListner {
 	}
 
 	private void setupCharts() {
-		topDataReference = new ChartSeries(800);
+		topDataReference = new DynamicSeries(800);
 		topDataReference.setColor(Color.BLUE);
 		topDataReference.enable();
 		topChart.series.add(topDataReference);
-		topDataValue = new ChartSeries(800);
+		topDataValue = new DynamicSeries(800);
 		topDataValue.setColor(Color.WHITE);
 		topDataValue.enable();
 		topChart.series.add(topDataValue);
 		
-		bottomDataReference = new ChartSeries(CHART_BUFFER_SIZE);
+		bottomDataReference = new DynamicSeries(CHART_BUFFER_SIZE);
 		bottomDataReference.setColor(Color.BLUE);
 		bottomDataReference.enable();
 		bottomChart.series.add(bottomDataReference);
-		bottomDataValue = new ChartSeries(CHART_BUFFER_SIZE);
+		bottomDataValue = new DynamicSeries(CHART_BUFFER_SIZE);
 		bottomDataValue.setColor(Color.WHITE);
 		bottomDataValue.enable();
 		bottomChart.series.add(bottomDataValue);
