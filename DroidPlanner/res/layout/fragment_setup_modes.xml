@@ -1,160 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res/com.droidplanner"
     style="@style/configLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal" android:baselineAligned="false">
+	android:background="@color/opaque_white"
+    >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.3"
-        android:orientation="vertical" >
+	<TextView
+	    android:id="@+id/SetupTitle"
+	    style="@style/SetupTitle"
+	    android:layout_width="match_parent"
+	    android:layout_height="64dp"
+	    android:layout_alignParentLeft="true"
+	    android:layout_alignParentTop="true"
+	    android:background="@color/dark_title_bg"
+	    android:text="Flight modes" />
+	<TextView
+	    android:id="@+id/SetupHint"
+		style="@style/ModeDetailText"
+	    android:layout_width="match_parent"
+	    android:layout_height="64dp"
+	    android:layout_alignParentLeft="true"
+	    android:layout_below="@id/SetupTitle"
+	    android:background="@color/light_title_bg"
+	    android:text="@string/mode_switch" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="#303030" >
+	<LinearLayout
+	    android:id="@+id/mode_col1"
+	    android:layout_width="300dp"
+	    android:layout_height="match_parent"
+		android:layout_marginLeft="40dp"
+		android:orientation="vertical"
+		android:layout_below="@id/SetupHint"
+	    >
+		<com.droidplanner.widgets.spinners.SpinnerSelfSelect
+			android:id="@+id/spinnerCH5Modes"
+			android:layout_width="200dp"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="40dp"
+			android:layout_marginBottom="20dp"
+			android:entries="@array/RCQuickModes"
+			/>
 
-            <Button
-                android:id="@+id/backgroundMissionItem"
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignRight="@+id/textView1"
-                android:layout_below="@+id/textView1"
-                android:text="Button" />
+		<TextView
+			android:id="@+id/RCModeHint"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Channel 5 input: 1600pwm"
+			style="@style/ModeDetailText"
+			/>
+	</LinearLayout>
 
-            <Button
-                android:id="@+id/Button01"
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/backgroundMissionItem"
-                android:layout_alignRight="@+id/backgroundMissionItem"
-                android:layout_below="@+id/backgroundMissionItem"
-                android:text="Button" />
+	<LinearLayout
+	    android:id="@+id/mode_col2"
+	    android:layout_width="220dp"
+	    android:layout_height="match_parent"
+		android:layout_marginLeft="40dp"
+		android:orientation="vertical"
+		android:layout_toRightOf="@id/mode_col1"
+		android:layout_alignTop="@id/mode_col1"
+	    >
+		<CheckBox
+			android:id="@+id/CheckBoxSimpleMode"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="40dp"
+			android:text="Simple" />
 
-            <Button
-                android:id="@+id/Button02"
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/Button01"
-                android:layout_alignRight="@+id/Button01"
-                android:layout_below="@+id/Button01"
-                android:text="Button" />
+		<TextView
+			android:id="@+id/RCSimpleHint"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="40dp"
+			android:text="Remember orientation when arming copter and translate user input during flight."
+			style="@style/ModeDetailText"
+			/>
+	</LinearLayout>
 
-            <View
-                android:id="@+id/firstDivider"
-                android:layout_width="3dp"
-                android:layout_height="fill_parent"
-                android:layout_alignBottom="@id/Button02"
-                android:layout_alignParentTop="false"
-                android:layout_alignTop="@id/backgroundMissionItem"
-                android:layout_centerHorizontal="true"
-                android:background="#E0E0E0" />
+	<LinearLayout
+	    android:layout_width="220dp"
+	    android:layout_height="match_parent"
+		android:layout_marginLeft="40dp"
+		android:orientation="vertical"
+		android:layout_toRightOf="@id/mode_col2"
+		android:layout_alignTop="@id/mode_col1"
+		android:layout_marginTop="40dp"
+	    >
+		<CheckBox
+			android:id="@+id/CheckBoxSuperSimpleMode"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Super Simple" />
 
-            <CheckBox
-                android:id="@+id/CheckBox01"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/Button01"
-                android:layout_alignBottom="@+id/Button01"
-                android:layout_toRightOf="@+id/Button01"
-                android:text="Simple" />
+		<TextView
+			android:id="@+id/RCSuperSimpleHint"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="40dp"
+			style="@style/ModeDetailText"
+			android:text="Update orientation relative to home when flying farther than 10 meters." />
+	</LinearLayout>
 
-            <CheckBox
-                android:id="@+id/CheckBox02"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/Button02"
-                android:layout_alignBottom="@+id/Button02"
-                android:layout_toRightOf="@+id/Button02"
-                android:text="Simple" />
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:gravity="center"
+		android:layout_margin="10dp"
+		android:orientation="horizontal"
+		>
 
-            <CheckBox
-                android:id="@+id/checkBox1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/backgroundMissionItem"
-                android:layout_alignBottom="@+id/backgroundMissionItem"
-                android:layout_marginRight="10dp"
-                android:layout_toLeftOf="@+id/firstDivider"
-                android:text="Simple" />
+		<Button
+			android:id="@+id/button2"
+			style="@style/modeControl"
+			android:layout_width="120dp"
+			android:layout_height="wrap_content"
+			android:background="@drawable/button_green"
+			android:text="Send" />
+	</LinearLayout>
 
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="30dp"
-                android:layout_toLeftOf="@+id/checkBox1"
-                android:text="Flight Modes:"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <CheckBox
-                android:id="@+id/CheckBox05"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/Button02"
-                android:layout_below="@+id/Button02"
-                android:text="Simple" />
-
-            <Button
-                android:id="@+id/Button03"
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/Button02"
-                android:layout_below="@+id/CheckBox05"
-                android:text="Button" />
-
-            <Button
-                android:id="@+id/Button04"
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/Button02"
-                android:layout_below="@+id/Button03"
-                android:text="Button" />
-
-            <Button
-                android:id="@+id/Button05"
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/Button02"
-                android:layout_below="@+id/Button04"
-                android:text="Button" />
-
-            <CheckBox
-                android:id="@+id/CheckBox04"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/Button02"
-                android:layout_below="@+id/Button05"
-                android:text="Simple" />
-
-            <CheckBox
-                android:id="@+id/CheckBox03"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/Button02"
-                android:layout_below="@+id/CheckBox04"
-                android:text="Simple" />
-        </RelativeLayout>
-
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.7"
-        android:background="#E0E0E0" >
-    </RelativeLayout>
-
-</LinearLayout>
+</RelativeLayout>

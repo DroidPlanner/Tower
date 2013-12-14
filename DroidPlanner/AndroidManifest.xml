@@ -86,9 +86,10 @@
                     android:resource="@xml/device_filter"/>
         </activity>
         <activity
-                android:name=".activitys.EditorActivity"
-                android:launchMode="singleTask"
-                android:parentActivityName=".activitys.FlightActivity">
+            android:name=".activitys.EditorActivity"
+            android:label="@string/editor"
+            android:launchMode="singleTask"
+            android:parentActivityName=".activitys.FlightActivity" >
 
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
@@ -105,9 +106,11 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".activitys.ConfigurationActivity"
-                android:launchMode="singleTask"
-                >
+            android:name=".activitys.ConfigurationActivity"
+            android:label="@string/configuration"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan"
+            android:parentActivityName=".activitys.FlightActivity" >
 
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data

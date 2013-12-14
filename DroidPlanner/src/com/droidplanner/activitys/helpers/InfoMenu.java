@@ -24,6 +24,12 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner,
 	private MenuItem propeler;
 	private MenuItem home;
 	private MenuItem signal;
+	private MenuItem signalRSSI;
+	private MenuItem signalRemRSSI;
+	private MenuItem signalNoise;
+	private MenuItem signalRemNoise;
+	private MenuItem signalRemFade;
+	private MenuItem signalFade;
 	private Context context;
 	private ProgressDialog pd;
 	private int pdTitle;
@@ -46,10 +52,17 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner,
 			propeler = menu.findItem(R.id.bar_propeller);
 			home = menu.findItem(R.id.bar_home);
 			signal = menu.findItem(R.id.bar_signal);
+			signalRSSI = menu.findItem(R.id.bar_signal_rssi);
+			signalRemRSSI =menu.findItem(R.id.bar_signal_rssirem);
+			signalNoise =menu.findItem(R.id.bar_signal_noise);
+			signalRemNoise = menu.findItem(R.id.bar_signal_noiserem);
+			signalFade = menu.findItem(R.id.bar_signal_fade);
+			signalRemFade = menu.findItem(R.id.bar_signal_faderem);
 			mode = (SelectModeSpinner) menu.findItem(R.id.bar_mode)
 					.getActionView();
 
 			timer = new TimerView(propeler);
+
 			drone.setHomeChangedListner(this);
 			drone.addInfoListener(this);
 			drone.state.addFlightStateListner(this);
@@ -75,10 +88,15 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner,
 
 	@Override
 	public void onInfoUpdate() {
-		battery.setTitle(String.format("%2.1fv, %2.0f%%",
-				drone.battery.getBattVolt(), drone.battery.getBattRemain()));
-		gps.setTitle(String.format("%d, %s", drone.GPS.getSatCount(),
-				drone.GPS.getFixType()));
+		signal.setTitle(String.format("%d%%",drone.radio.getSignalStrength()));
+		signalRSSI.setTitle(String.format("RSSI %2.0f dB",drone.radio.getRssi()));
+		signalRemRSSI.setTitle(String.format("RemRSSI %2.0f dB",drone.radio.getRemRssi()));
+		signalNoise.setTitle(String.format("Noise %2.0f dB",drone.radio.getNoise()));
+		signalRemNoise.setTitle(String.format("RemNoise %2.0f dB",drone.radio.getRemNoise()));
+		signalFade.setTitle(String.format("Fade %2.0f dB",drone.radio.getFadeMargin()));
+		signalRemFade.setTitle(String.format("RemFade %2.0f dB",drone.radio.getRemFadeMargin()));
+		battery.setTitle(String.format(" %2.1fv, %2.0f%% ", drone.battery.getBattVolt(), drone.battery.getBattRemain()));
+		gps.setTitle(String.format(" %d, %s", drone.GPS.getSatCount(), drone.GPS.getFixType()));
 	}
 
 	@Override
