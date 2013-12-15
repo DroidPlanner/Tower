@@ -12,8 +12,11 @@ import com.droidplanner.drone.DroneInterfaces.ModeChangedListener;
 import com.droidplanner.drone.DroneInterfaces.OnStateListner;
 import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
+import com.droidplanner.fragments.FlightActionsFragment;
 import com.droidplanner.fragments.FlightActionsFragment.OnMissionControlInteraction;
+import com.droidplanner.fragments.FlightMapFragment;
 import com.droidplanner.fragments.RCFragment;
+import com.droidplanner.fragments.TelemetryFragment;
 import com.droidplanner.fragments.helpers.OnMapInteractionListener;
 import com.droidplanner.fragments.mode.*;
 import com.droidplanner.polygon.PolygonPoint;
@@ -29,13 +32,37 @@ public class FlightActivity extends SuperUI implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		setContentView(R.layout.activity_flight);
 		fragmentManager = getFragmentManager();
 		modeInfoPanel = fragmentManager.findFragmentById(R.id.modeInfoPanel);
 
 		failsafeTextView = findViewById(R.id.failsafeTextView);
 
+        //Load the activity fragments
+        Fragment modeRtl = fragmentManager.findFragmentById(R.id.modeInfoPanel);
+        if(modeRtl == null){
+            modeRtl = new ModeRTLFragment();
+            fragmentManager.beginTransaction().add(R.id.modeInfoPanel, modeRtl).commit();
+        }
+
+        Fragment mapFragment = fragmentManager.findFragmentById(R.id.mapFragment);
+        if(mapFragment == null){
+            mapFragment = new FlightMapFragment();
+            fragmentManager.beginTransaction().add(R.id.mapFragment, mapFragment).commit();
+        }
+
+        Fragment telemetryFragment = fragmentManager.findFragmentById(R.id.telemetryFragment);
+        if(telemetryFragment == null){
+            telemetryFragment = new TelemetryFragment();
+            fragmentManager.beginTransaction().add(R.id.telemetryFragment,
+                    telemetryFragment).commit();
+        }
+
+        Fragment editorTools = fragmentManager.findFragmentById(R.id.editorToolsFragment);
+        if(editorTools == null){
+            editorTools = new FlightActionsFragment();
+            fragmentManager.beginTransaction().add(R.id.editorToolsFragment, editorTools).commit();
+        }
 	}
 
 	@Override
