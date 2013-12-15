@@ -1,8 +1,5 @@
 package com.droidplanner.service;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
@@ -14,10 +11,11 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import android.util.Log;
-
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 // provide a common class for some ease of use functionality
 public class MAVLinkClient {
@@ -164,7 +162,9 @@ public class MAVLinkClient {
 			case MSG_RECEIVED_DATA:
 				Bundle b = msg.getData();
 				MAVLinkMessage m = (MAVLinkMessage) b.getSerializable("msg");
-				listner.notifyReceivedData(m);
+                if(m != null){
+				    listner.notifyReceivedData(m);
+                }
 				break;
 			case MSG_SELF_DESTRY_SERVICE:
 				close();

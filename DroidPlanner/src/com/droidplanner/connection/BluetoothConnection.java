@@ -1,13 +1,11 @@
 package com.droidplanner.connection;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.ParcelUuid;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -30,15 +28,7 @@ public class BluetoothConnection extends MAVLinkConnection {
      *
      * @since 1.2.0
      */
-    private static final Set<UUID> sValidUuids = new LinkedHashSet<UUID>(BluetoothServer.UUIDS
-            .length + 1);
-
-    static {
-        sValidUuids.add(UUID.fromString(UUID_SPP_DEVICE));
-        for (UUID uuid : BluetoothServer.UUIDS) {
-            sValidUuids.add(uuid);
-        }
-    }
+    private final Set<UUID> sValidUuids;
 
     private BluetoothAdapter mBluetoothAdapter;
     private OutputStream out;
@@ -50,6 +40,12 @@ public class BluetoothConnection extends MAVLinkConnection {
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter == null) {
             Log.d(BLUE, "Null adapters");
+        }
+
+        sValidUuids = new LinkedHashSet<UUID>();
+        sValidUuids.add(UUID.fromString(UUID_SPP_DEVICE));
+        for (UUID uuid : BluetoothServer.UUIDS) {
+            sValidUuids.add(uuid);
         }
     }
 
@@ -69,24 +65,30 @@ public class BluetoothConnection extends MAVLinkConnection {
                 ? findSerialBluetoothBoard()
                 : mBluetoothAdapter.getRemoteDevice(address);
 
-        final Set<UUID> supportedUuids = retrieveSupportedUuids(device);
-        for (UUID uuid : supportedUuids) {
+        Log.d(BLUE, "Trying to connect to device with address #" + device.getAddress());
+
+        for (UUID uuid : sValidUuids) {
             try {
+                Log.d(BLUE, "Attempting to connect with uuid #" + uuid.toString());
                 bluetoothSocket = device.createInsecureRfcommSocketToServiceRecord(uuid);
                 mBluetoothAdapter.cancelDiscovery();
                 bluetoothSocket.connect();
 
+                Log.d(BLUE, "Successful connection to uuid #" + uuid.toString());
                 out = bluetoothSocket.getOutputStream();
                 in = bluetoothSocket.getInputStream();
 
                 //Found a good one... break
+                Log.d(BLUE, "Exiting the connection process.");
                 break;
             } catch (IOException e) {
                 //try another uuid
+                Log.d(BLUE, "Not able to connect with uuid #" + uuid.toString());
             }
         }
 
         if (out == null || in == null) {
+            Log.d(BLUE, "No successful connection.");
             throw new IOException("Bluetooth socket connect failed.");
         }
     }
@@ -160,45 +162,5 @@ public class BluetoothConnection extends MAVLinkConnection {
     @Override
     protected void getPreferences(SharedPreferences prefs) {
         // TODO Auto-generated method stub
-    }
-
-    /**
-     * Retrieves the supported list of uuid from the device uuids.
-     *
-     * @param device bluetooth device whose uuids to check
-     * @return support uuids from the passed bluetooth device
-     * @since 1.2.0
-     */
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
-    public Set<UUID> retrieveSupportedUuids(BluetoothDevice device) {
-        Set<UUID> validUuids = new LinkedHashSet<UUID>();
-
-        if (device != null) {
-            ParcelUuid[] deviceUuids = device.getUuids();
-            if (deviceUuids == null) {
-                //We have yet to pair with/connect to the device, so try all the supported uuids.
-                validUuids = sValidUuids;
-            }
-            else {
-                boolean isDeviceValid = false;
-
-                for (ParcelUuid parcelUuid : deviceUuids) {
-                    final UUID uuid = parcelUuid.getUuid();
-                    if (sValidUuids.contains(uuid)) {
-                        validUuids.add(uuid);
-                        isDeviceValid = true;
-                    }
-                }
-
-                if (isDeviceValid) {
-                    //The device could be a bluetooth relay server, so add the rest of the uuids to
-                    // test them all
-                    for (UUID uuid : sValidUuids) {
-                        validUuids.add(uuid);
-                    }
-                }
-            }
-        }
-        return validUuids;
     }
 }
