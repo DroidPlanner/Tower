@@ -65,16 +65,16 @@ public class BluetoothConnection extends MAVLinkConnection {
                 ? findSerialBluetoothBoard()
                 : mBluetoothAdapter.getRemoteDevice(address);
 
-        Log.d(BLUE, "Trying to connect to device with address #" + device.getAddress());
+        Log.d(BLUE, "Trying to connect to device with address " + device.getAddress());
 
         for (UUID uuid : sValidUuids) {
             try {
-                Log.d(BLUE, "Attempting to connect with uuid #" + uuid.toString());
+                Log.d(BLUE, "Attempting to connect with uuid " + uuid.toString());
                 bluetoothSocket = device.createInsecureRfcommSocketToServiceRecord(uuid);
                 mBluetoothAdapter.cancelDiscovery();
                 bluetoothSocket.connect();
 
-                Log.d(BLUE, "Successful connection to uuid #" + uuid.toString());
+                Log.d(BLUE, "Successful connection to uuid " + uuid.toString());
                 out = bluetoothSocket.getOutputStream();
                 in = bluetoothSocket.getInputStream();
 
