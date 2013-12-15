@@ -4,8 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -22,6 +24,7 @@ import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
 import com.droidplanner.R;
 import com.droidplanner.activitys.FlightActivity;
+import com.droidplanner.connection.BluetoothServer;
 import com.droidplanner.connection.MAVLinkConnection;
 import com.droidplanner.connection.MAVLinkConnection.MavLinkConnectionListner;
 import com.droidplanner.utils.Constants;
@@ -41,6 +44,78 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 	Messenger msgCenter = null;
 	final Messenger mMessenger = new Messenger(new IncomingHandler());
 	private boolean couldNotOpenConnection = false;
+
+    /**
+     * Bluetooth server to relay the mavlink packet to listening connected clients.
+     *
+     * @since 1.2.0
+     */
+    private BluetoothServer mBtServer;
+
+    /**
+     * This is the bluetooth server relay listener. Handles the messages received by the
+     * bluetooth relay server by the connected client devices, and push them through the mavlink
+     * connection.
+     * @since 1.2.0
+     */
+    private BluetoothServer.RelayListener mRelayListener = new BluetoothServer.RelayListener() {
+        @Override
+        public void onMessageToRelay(MAVLinkPacket[] relayedPackets) {
+            if (relayedPackets != null) {
+                for (MAVLinkPacket packet : relayedPackets){
+                    if(mavConnection != null && packet != null)
+                        mavConnection.sendMavPacket(packet);
+                }
+
+            }
+        }
+    };
+
+    /**
+     * Listens to broadcast events, and appropriately enable or disable the bluetooth relay server.
+     * @since 1.2.0
+     */
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if(Constants.ACTION_BLUETOOTH_RELAY_SERVER.equals(action)){
+                boolean isEnabled = intent.getBooleanExtra(Constants
+                        .EXTRA_BLUETOOTH_RELAY_SERVER_ENABLED,
+                        Constants.DEFAULT_BLUETOOTH_RELAY_SERVER_TOGGLE);
+
+                setupBtRelayServer(isEnabled);
+            }
+        }
+    };
+
+    /**
+     * @return true if the user has enabled the bluetooth relay server.
+     * @since 1.2.0
+     */
+    private boolean isBtRelayServerEnabled(){
+        return PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean(
+                Constants.PREF_BLUETOOTH_RELAY_SERVER_TOGGLE,
+                Constants.DEFAULT_BLUETOOTH_RELAY_SERVER_TOGGLE);
+    }
+
+    /**
+     * Setup the bluetooth relay server based on the passed argument.
+     * @param isEnabled true to initialize, and start the bluetooth relay server; false to stop it.
+     * @since 1.2.0
+     */
+    private void setupBtRelayServer(boolean isEnabled){
+        if(isEnabled){
+            if(mBtServer == null)
+                mBtServer = new BluetoothServer();
+            mBtServer.addRelayListener(mRelayListener);
+            mBtServer.start();
+        }else if(mBtServer != null){
+            mBtServer.stop();
+            mBtServer.removeRelayListener(mRelayListener);
+            mBtServer = null;
+        }
+    }
 
 	/**
 	 * 
@@ -114,14 +189,39 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 	}
 
 	@Override
-	public void onReceiveMessage(MAVLinkMessage msg) {
-		notifyNewMessage(msg);
+	public void onReceiveMessage(MAVLinkPacket msgPacket) {
+		notifyNewMessage(msgPacket.unpack());
+
+        //Additionally, relay the message to the relay server.
+        if (mBtServer != null) {
+            //Send the received packet to the connected clients
+            mBtServer.relayMavPacket(msgPacket);
+        }
 	}
+
+    /**
+     * Successful mavlink connection, so start the relay server is the user has it enabled.
+     */
+    @Override
+    public void onConnect(){
+        //Register a broadcast event receiver in case the relay server is enabled/disabled
+        // while the mavlink connection is running.
+        registerReceiver(mReceiver, new IntentFilter(Constants
+                .ACTION_BLUETOOTH_RELAY_SERVER));
+
+        setupBtRelayServer(isBtRelayServerEnabled());
+    }
 
 	@Override
 	public void onDisconnect() {
 		couldNotOpenConnection = true;
 		selfDestryService();
+
+        //Stop listening for relay server activation broadcast events
+        unregisterReceiver(mReceiver);
+
+        //Stop the relay server
+        setupBtRelayServer(false);
 	}
 
 	private void selfDestryService() {
@@ -155,7 +255,8 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 
 	/**
 	 * Called after the exception raised in any of the
-	 * MavLinkConnection classes 
+	 * MavLinkConnection classes
+     * @since 1.2.0
 	 */
 	public void onComError(String errMsg) {
 

@@ -57,9 +57,8 @@ public class BluetoothConnection extends MAVLinkConnection {
     protected void openConnection() throws IOException {
         Log.d(BLUE, "Connect");
 
-        //Reset the input, and output stream
-        in = null;
-        out = null;
+        //Reset the bluetooth connection
+        resetConnection();
 
         //Retrieve the stored address
         final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences
@@ -131,8 +130,31 @@ public class BluetoothConnection extends MAVLinkConnection {
 
     @Override
     protected void closeConnection() throws IOException {
-        bluetoothSocket.close();
+        resetConnection();
         Log.d(BLUE, "## BT Closed ##");
+    }
+
+    /**
+     * Reset the bluetooth connection.
+     * @throws IOException
+     * @since 1.2.0
+     */
+    private void resetConnection() throws IOException {
+        if (in != null) {
+            in.close();
+            in = null;
+        }
+
+        if (out != null) {
+            out.close();
+            out = null;
+        }
+
+        if (bluetoothSocket != null) {
+            bluetoothSocket.close();
+            bluetoothSocket = null;
+        }
+
     }
 
     @Override

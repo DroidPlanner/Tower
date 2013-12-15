@@ -1,17 +1,12 @@
 package com.droidplanner.connection;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
 import com.MAVLink.Parser;
 import com.droidplanner.file.FileStream;
-import com.droidplanner.utils.Constants;
 
 import java.io.BufferedOutputStream;
 import java.io.FileNotFoundException;
@@ -20,6 +15,11 @@ import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+/**
+ * This class holds the logic to instantiate, communicate over,
+ * and close a mavlink data connection.
+ * @since 1.2.0
+ */
 public abstract class MAVLinkConnection extends Thread {
 
     /**
@@ -40,7 +40,15 @@ public abstract class MAVLinkConnection extends Thread {
 	protected abstract void getPreferences(SharedPreferences prefs);
 
 	public interface MavLinkConnectionListner {
-		public void onReceiveMessage(MAVLinkMessage msg);
+
+        /**
+         * This method is called by the mavlink connection when a successful connection is
+         * established.
+         * @since 1.2.0
+         */
+        public void onConnect();
+
+		public void onReceiveMessage(MAVLinkPacket msgPacket);
 
 		public void onDisconnect();
 		
@@ -60,50 +68,6 @@ public abstract class MAVLinkConnection extends Thread {
 
 	private ByteBuffer logBuffer;
 
-    /**
-     * Bluetooth server to relay the mavlink packet to listening connected clients.
-     *
-     * @since 1.2.0
-     */
-    private BluetoothServer mBtServer;
-
-    /**
-     * This is the bluetooth server relay listener. Handles the messages received by the
-     * bluetooth relay server by the connected client devices, and push them through the mavlink
-     * connection.
-     * @since 1.2.0
-     */
-    private BluetoothServer.RelayListener mRelayListener = new BluetoothServer.RelayListener() {
-        @Override
-        public void onMessageToRelay(MAVLinkPacket[] relayedPackets) {
-            if (relayedPackets != null) {
-                for (MAVLinkPacket packet : relayedPackets){
-                    if(packet != null)
-                        sendMavPacket(packet);
-                }
-
-            }
-        }
-    };
-
-    /**
-     * Listens to broadcast events, and appropriately enable or disable the bluetooth relay server.
-     * @since 1.2.0
-     */
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            final String action = intent.getAction();
-            if(Constants.ACTION_BLUETOOTH_RELAY_SERVER.equals(action)){
-                boolean isEnabled = intent.getBooleanExtra(Constants
-                        .EXTRA_BLUETOOTH_RELAY_SERVER_ENABLED,
-                        Constants.DEFAULT_BLUETOOTH_RELAY_SERVER_TOGGLE);
-
-                setupBtRelayServer(isEnabled);
-            }
-        }
-    };
-
 	public MAVLinkConnection(Context parentContext) {
 		this.parentContext = parentContext;
 		this.listner = (MavLinkConnectionListner) parentContext;
@@ -114,60 +78,29 @@ public abstract class MAVLinkConnection extends Thread {
 		getPreferences(prefs);
 	}
 
-    /**
-     * @return true if the user has enabled the bluetooth relay server.
-     * @since 1.2.0
-     */
-    private boolean isBtRelayServerEnabled(){
-        return PreferenceManager.getDefaultSharedPreferences(parentContext).getBoolean(
-                Constants.PREF_BLUETOOTH_RELAY_SERVER_TOGGLE,
-                Constants.DEFAULT_BLUETOOTH_RELAY_SERVER_TOGGLE);
-    }
 
-    /**
-     * Setup the bluetooth relay server based on the passed argument.
-     * @param isEnabled true to initialize, and start the bluetooth relay server; false to stop it.
-     * @since 1.2.0
-     */
-    private void setupBtRelayServer(boolean isEnabled){
-        if(isEnabled){
-            if(mBtServer == null)
-                mBtServer = new BluetoothServer();
-            mBtServer.addRelayListener(mRelayListener);
-            mBtServer.start();
-        }else if(mBtServer != null){
-            mBtServer.stop();
-            mBtServer.removeRelayListener(mRelayListener);
-            mBtServer = null;
-        }
-    }
 
 
 	@Override
 	public void run() {
 		try {
-            //Register a broadcast event receiver in case the relay server is enabled/disabled
-            // while the mavlink connection is running.
-            parentContext.registerReceiver(mReceiver, new IntentFilter(Constants
-                    .ACTION_BLUETOOTH_RELAY_SERVER));
-
-			parser.stats.mavlinkResetStats(); 
+			parser.stats.mavlinkResetStats();
 			openConnection();
+
+            //If we get here, the connection is successful. Notify the listener
+            listner.onConnect();
+
 			if (logEnabled) {
 				logWriter = FileStream.getTLogFileStream();
 				logBuffer = ByteBuffer.allocate(Long.SIZE / Byte.SIZE);
 				logBuffer.order(ByteOrder.BIG_ENDIAN);
 			}
 
-            setupBtRelayServer(isBtRelayServerEnabled());
-
 			while (connected) {
 				readDataBlock();
 				handleData();
 			}
 
-            setupBtRelayServer(false);
-            
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 
@@ -176,11 +109,11 @@ public abstract class MAVLinkConnection extends Thread {
 		}
         finally {
             try {
+                //No matter what exception is thrown, the connection gets closed.
                 closeConnection();
             } catch (IOException e) {
                 Log.e(TAG, "Unable to close open connection.", e);
             }
-            parentContext.unregisterReceiver(mReceiver);
         }
         listner.onDisconnect();
 	}
@@ -194,13 +127,7 @@ public abstract class MAVLinkConnection extends Thread {
         for(MAVLinkPacket receivedPacket: receivedPackets){
 			if (receivedPacket != null) {
 				saveToLog(receivedPacket);
-				MAVLinkMessage msg = receivedPacket.unpack();
-				listner.onReceiveMessage(msg);
-
-                if (mBtServer != null) {
-                    //Send the received packet to the connected clients
-                    mBtServer.relayMavPacket(receivedPacket);
-                }
+				listner.onReceiveMessage(receivedPacket);
 			}
 		}
 	}
