@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
 import com.MAVLink.Parser;
@@ -167,13 +168,18 @@ public abstract class MAVLinkConnection extends Thread {
 
             setupBtRelayServer(false);
             
-			closeConnection();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
         finally {
+            try {
+                closeConnection();
+            } catch (IOException e) {
+                Log.e(TAG, "Unable to close open connection.", e);
+            }
             parentContext.unregisterReceiver(mReceiver);
         }
         listner.onDisconnect();
