@@ -14,6 +14,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.ParcelUuid;
@@ -37,12 +38,32 @@ public class BluetoothConnection extends MAVLinkConnection {
 
 	@Override
 	protected void openConnection() throws UnknownHostException, IOException {
-
+		
+		if (!mBluetoothAdapter.isEnabled())
+		{
+			Log.d(BLUE, "BT Adapter disabled...");
+			
+			//Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);    
+			//startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);			
+			return;
+		}
+		
 		resetConnection();
+		
+		//mBluetoothAdapter.disable();
+		//mBluetoothAdapter.enable();
+		
+		Log.d(BLUE, "BT Cancel Discovery Call...");		
+		mBluetoothAdapter.cancelDiscovery();		
 		
 		Log.d(BLUE, "Looking for BT devs ...");
 		BluetoothDevice device = findBluetoothDevice();
 
+		
+		
+		Log.d(BLUE, "BT Create Socket Call...");
+		
+/*
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD) { 
 				bluetoothSocket = device.createRfcommSocketToServiceRecord(UUID.fromString(UUID_SPP_DEVICE));
 		} else {			
@@ -66,10 +87,15 @@ public class BluetoothConnection extends MAVLinkConnection {
 
 		}
 
+*/
+		
+		bluetoothSocket = device.createInsecureRfcommSocketToServiceRecord(UUID.fromString(UUID_SPP_DEVICE));
+		//bluetoothSocket = device.createRfcommSocketToServiceRecord(UUID.fromString(UUID_SPP_DEVICE));
 		
 
-		mBluetoothAdapter.cancelDiscovery();
+		Log.d(BLUE, "BT Connect Call...");				
 		bluetoothSocket.connect(); //Here the IOException will rise on BT protocol/handshake error.
+
 		Log.d(BLUE, "## BT Connected ##");			
 
 		out = bluetoothSocket.getOutputStream();
