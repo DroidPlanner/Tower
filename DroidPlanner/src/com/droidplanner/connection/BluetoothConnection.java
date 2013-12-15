@@ -38,6 +38,8 @@ public class BluetoothConnection extends MAVLinkConnection {
 	@Override
 	protected void openConnection() throws UnknownHostException, IOException {
 
+		resetConnection();
+		
 		Log.d(BLUE, "Looking for BT devs ...");
 		BluetoothDevice device = findBluetoothDevice();
 
@@ -114,9 +116,29 @@ public class BluetoothConnection extends MAVLinkConnection {
 
 	@Override
 	protected void closeConnection() throws IOException {
-		bluetoothSocket.close();
+		resetConnection();
 		Log.d(BLUE, "## BT Closed ##");
 	}
+	
+	
+	private void resetConnection() throws IOException {
+        if (in != null) {
+                in.close(); 
+                in = null;
+        }
+
+        if (out != null) {
+                out.close();
+                out = null;
+        }
+
+        if (bluetoothSocket != null) {
+                bluetoothSocket.close();
+                bluetoothSocket = null;
+        }
+
+}	
+	
 
 	@Override
 	protected void getPreferences(SharedPreferences prefs) {
