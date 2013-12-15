@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <PreferenceScreen
-            android:key="pref_mavlink"
-            android:title="MavLink">
         <ListPreference
                 android:defaultValue="USB"
                 android:entries="@array/TelemetryConnectionTypes"
@@ -11,6 +8,9 @@
                 android:key="pref_connection_type"
                 android:summary="Which link to use to connect to the drone"
                 android:title="Telemetry Connection Type" />
+    <PreferenceScreen
+            android:key="pref_mavlink"
+            android:title="MavLink">
 
         <CheckBoxPreference
                 android:defaultValue="true"
