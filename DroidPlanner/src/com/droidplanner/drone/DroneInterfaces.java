@@ -9,11 +9,12 @@ public class DroneInterfaces {
 
 	public enum DroneEventsType {
 		ORIENTATION, SPEED, BATTERY, GPS, GUIDEDPOINT, NAVIGATION, ATTIUTDE, RADIO, RC_IN, RC_OUT, ARMING, FAILSAFE, MODE, STATE, MISSION;
-
 	}
 
 	public interface OnDroneListner {
 		public void onDroneEvent(DroneEventsType droneEvents);
+		
+		public List<DroneEventsType> getSupportedEvents();
 	}
 	
 	public interface OnParameterManagerListner {
