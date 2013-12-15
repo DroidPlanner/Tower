@@ -4,22 +4,17 @@ import android.app.Activity;
 import android.app.ListFragment;
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
-import com.droidplanner.adapters.ParamsAdapter;
 import com.droidplanner.adapters.ParamsAdapterItem;
 import com.droidplanner.dialogs.openfile.OpenFileDialog;
 import com.droidplanner.dialogs.openfile.OpenParameterDialog;
 import com.droidplanner.dialogs.parameters.DialogParameterInfo;
 import com.droidplanner.drone.Drone;
+import com.droidplanner.adapters.ParamsAdapter;
 import com.droidplanner.drone.DroneInterfaces;
 import com.droidplanner.file.IO.ParameterWriter;
 import com.droidplanner.parameters.Parameter;
@@ -193,10 +188,7 @@ public class ParamsFragment extends ListFragment
                     }
                 });
                 // load parameters from file
-                drone.parameters.loadMetadata();
-                adapter.clear();
-                for (Parameter parameter : parameters)
-                    adapterAdd(parameter);
+                adapter.loadParameters(drone, parameters);
             }
         };
         dialog.openDialog(getActivity());
@@ -213,16 +205,6 @@ public class ParamsFragment extends ListFragment
                 Toast.makeText(getActivity(), getResources().getString(R.string.parameters_saved),
                         Toast.LENGTH_SHORT).show();
             }
-        }
-    }
-
-    private void adapterAdd(Parameter parameter) {
-        try {
-            Parameter.checkParameterName(parameter.name);
-            adapter.add(new ParamsAdapterItem(parameter, drone.parameters.getMetadata(parameter.name)));
-
-        } catch (Exception ex) {
-            // eat it
         }
     }
 
@@ -257,10 +239,7 @@ public class ParamsFragment extends ListFragment
                 return p1.name.compareTo(p2.name);
             }
         });
-        drone.parameters.loadMetadata();
-        adapter.clear();
-        for (Parameter parameter : parameters)
-            adapterAdd(parameter);
+        adapter.loadParameters(drone, parameters);
 
         // dismiss progress dialog
         if (pd != null) {
@@ -271,12 +250,6 @@ public class ParamsFragment extends ListFragment
 
     @Override
     public void onVehicleTypeChanged() {
-        drone.parameters.loadMetadata();
-
-        for(int i = 0; i < adapter.getCount(); i++) {
-            final ParamsAdapterItem item = adapter.getItem(i);
-            item.setMetadata(drone.parameters.getMetadata(item.getParameter().name));
-        }
-        adapter.notifyDataSetChanged();
+        adapter.loadMetadata(drone);
     }
 }

@@ -28,10 +28,7 @@ import java.util.List;
  * 
  */
 public class Parameters extends DroneVariable {
-    private static final String PARAMETERMETADATA_PATH = "Parameters/ParameterMetaData.xml";
-
     private List<Parameter> parameters = new ArrayList<Parameter>();
-    private ParameterMetadataMap metadataMap;
 
 	public DroneInterfaces.OnParameterManagerListner parameterListner;
 
@@ -82,37 +79,6 @@ public class Parameters extends DroneVariable {
 	public void sendParameter(Parameter parameter) {
 		MavLinkParameters.sendParameter(myDrone, parameter);
 	}
-
-
-    public ParameterMetadata getMetadata(String name) {
-        return (metadataMap == null) ? null : metadataMap.get(name);
-    }
-
-    public void loadMetadata() {
-        metadataMap = null;
-
-        // get metadata type from profile, bail if none
-        final String metadataType;
-        final VehicleProfile profile = myDrone.profile.getProfile();
-        if(profile == null || (metadataType = profile.getParameterMetadataType()) == null)
-            return;
-
-        try {
-            // use user supplied file in ~/Parameters if available, else fallback to asset from resources
-            final InputStream inputStream;
-            final File file = new File(DirectoryPath.getDroidPlannerPath() + PARAMETERMETADATA_PATH);
-            if(file.exists()) {
-                inputStream = new FileInputStream(file);
-            } else {
-                inputStream = myDrone.context.getAssets().open(PARAMETERMETADATA_PATH);
-            }
-            // load
-            metadataMap = ParameterMetadataMapReader.open(inputStream, metadataType);
-
-        } catch (Exception ex) {
-            // nop
-        }
-    }
     
 	public void ReadParameter(String name) {
 		MavLinkParameters.readParameter(myDrone, name);
