@@ -42,9 +42,6 @@ public class BluetoothConnection extends MAVLinkConnection {
 		if (!mBluetoothAdapter.isEnabled())
 		{
 			Log.d(BLUE, "BT Adapter disabled...");
-			
-			//Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);    
-			//startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);			
 			return;
 		}
 		
@@ -53,16 +50,11 @@ public class BluetoothConnection extends MAVLinkConnection {
 		//mBluetoothAdapter.disable();
 		//mBluetoothAdapter.enable();
 		
-		Log.d(BLUE, "BT Cancel Discovery Call...");		
-		mBluetoothAdapter.cancelDiscovery();		
-		
+
 		Log.d(BLUE, "Looking for BT devs ...");
 		BluetoothDevice device = findBluetoothDevice();
-
 		
-		
-		Log.d(BLUE, "BT Create Socket Call...");
-		
+		Log.d(BLUE, "BT Create Socket Call...");		
 /*
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD) { 
 				bluetoothSocket = device.createRfcommSocketToServiceRecord(UUID.fromString(UUID_SPP_DEVICE));
@@ -90,9 +82,11 @@ public class BluetoothConnection extends MAVLinkConnection {
 */
 		
 		bluetoothSocket = device.createInsecureRfcommSocketToServiceRecord(UUID.fromString(UUID_SPP_DEVICE));
-		//bluetoothSocket = device.createRfcommSocketToServiceRecord(UUID.fromString(UUID_SPP_DEVICE));
+	
+		Log.d(BLUE, "BT Cancel Discovery Call...");		
+		mBluetoothAdapter.cancelDiscovery();		
 		
-
+		
 		Log.d(BLUE, "BT Connect Call...");				
 		bluetoothSocket.connect(); //Here the IOException will rise on BT protocol/handshake error.
 
