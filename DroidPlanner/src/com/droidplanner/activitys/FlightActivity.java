@@ -7,27 +7,19 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperUI;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
 import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
+import com.droidplanner.fragments.FlightActionsFragment;
 import com.droidplanner.fragments.FlightActionsFragment.OnMissionControlInteraction;
+import com.droidplanner.fragments.FlightMapFragment;
 import com.droidplanner.fragments.RCFragment;
+import com.droidplanner.fragments.TelemetryFragment;
 import com.droidplanner.fragments.helpers.OnMapInteractionListener;
-import com.droidplanner.fragments.mode.ModeAcroFragment;
-import com.droidplanner.fragments.mode.ModeAltholdFragment;
-import com.droidplanner.fragments.mode.ModeAutoFragment;
-import com.droidplanner.fragments.mode.ModeCircleFragment;
-import com.droidplanner.fragments.mode.ModeDriftFragment;
-import com.droidplanner.fragments.mode.ModeGuidedFragment;
-import com.droidplanner.fragments.mode.ModeLandFragment;
-import com.droidplanner.fragments.mode.ModeLoiterFragment;
-import com.droidplanner.fragments.mode.ModePositionFragment;
-import com.droidplanner.fragments.mode.ModeRTLFragment;
-import com.droidplanner.fragments.mode.ModeStabilizeFragment;
+import com.droidplanner.fragments.mode.*;
 import com.droidplanner.polygon.PolygonPoint;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -45,6 +37,32 @@ public class FlightActivity extends SuperUI implements
 		fragmentManager = getFragmentManager();
 		modeInfoPanel = fragmentManager.findFragmentById(R.id.modeInfoPanel);
 		failsafeTextView = findViewById(R.id.failsafeTextView);
+
+        //Load the activity fragments
+        Fragment modeRtl = fragmentManager.findFragmentById(R.id.modeInfoPanel);
+        if(modeRtl == null){
+            modeRtl = new ModeRTLFragment();
+            fragmentManager.beginTransaction().add(R.id.modeInfoPanel, modeRtl).commit();
+        }
+
+        Fragment mapFragment = fragmentManager.findFragmentById(R.id.mapFragment);
+        if(mapFragment == null){
+            mapFragment = new FlightMapFragment();
+            fragmentManager.beginTransaction().add(R.id.mapFragment, mapFragment).commit();
+        }
+
+        Fragment telemetryFragment = fragmentManager.findFragmentById(R.id.telemetryFragment);
+        if(telemetryFragment == null){
+            telemetryFragment = new TelemetryFragment();
+            fragmentManager.beginTransaction().add(R.id.telemetryFragment,
+                    telemetryFragment).commit();
+        }
+
+        Fragment editorTools = fragmentManager.findFragmentById(R.id.editorToolsFragment);
+        if(editorTools == null){
+            editorTools = new FlightActionsFragment();
+            fragmentManager.beginTransaction().add(R.id.editorToolsFragment, editorTools).commit();
+        }
 	}
 
 	@Override
