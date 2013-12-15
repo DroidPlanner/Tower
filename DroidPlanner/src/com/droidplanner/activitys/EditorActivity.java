@@ -7,7 +7,6 @@ import android.app.FragmentManager;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.ActionMode.Callback;
 import android.view.Menu;
@@ -19,7 +18,6 @@ import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.OnEditorInteraction;
 import com.droidplanner.activitys.helpers.SuperUI;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import com.droidplanner.drone.DroneInterfaces.OnWaypointChangedListner;
 import com.droidplanner.drone.variables.mission.Mission;
 import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.fragments.EditorListFragment;
@@ -35,9 +33,9 @@ import com.droidplanner.fragments.mission.MissionDetailFragment.OnWayPointTypeCh
 import com.droidplanner.widgets.adapterViews.MissionItemView;
 import com.google.android.gms.maps.model.LatLng;
 
-public class EditorActivity extends SuperUI implements
-		OnPathFinishedListner, OnEditorToolSelected,
-		OnWayPointTypeChangeListener, OnWaypointChangedListner, OnEditorInteraction ,Callback{
+public class EditorActivity extends SuperUI implements OnPathFinishedListner,
+		OnEditorToolSelected, OnWayPointTypeChangeListener,
+		OnEditorInteraction, Callback {
 
 	private EditorMapFragment planningMapFragment;
 	private GestureMapFragment gestureMapFragment;
@@ -47,7 +45,7 @@ public class EditorActivity extends SuperUI implements
 	private FragmentManager fragmentManager;
 	private EditorListFragment missionListFragment;
 	private TextView infoView;
-	
+
 	private ActionMode contextualActionBar;
 
 	@Override
@@ -69,29 +67,43 @@ public class EditorActivity extends SuperUI implements
 		missionListFragment = (EditorListFragment) fragmentManager
 				.findFragmentById(R.id.missionFragment1);
 		infoView = (TextView) findViewById(R.id.editorInfoWindow);
-		
-		removeItemDetail(); // When doing things like screen rotation remove the detail window
-		
+
+		removeItemDetail(); // When doing things like screen rotation remove the
+							// detail window
+
 		mission = drone.mission;
 		gestureMapFragment.setOnPathFinishedListner(this);
-		mission.myDrone.events.notifyDroneEvent(DroneEventsType.MISSION);
-		
-		mission.addOnMissionUpdateListner(this);
 	}
-	
+
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
 		// TODO Auto-generated method stub
 		super.onWindowFocusChanged(hasFocus);
 		int right = editorToolsFragment.getView().getRight();
 		int bottom = infoView.getBottom();
-		planningMapFragment.mMap.setPadding(right, bottom, 0, 0);		
+		planningMapFragment.mMap.setPadding(right, bottom, 0, 0);
 	}
 
 	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		mission.removeOnMissionUpdateListner(this);
+	protected void onStart() {
+		super.onStart();
+		drone.events.notifyDroneEvent(DroneEventsType.MISSION);
+	}
+
+	@Override
+	public void onDroneEvent(DroneEventsType event) {
+		switch (event) {
+		case MISSION:
+			// Remove detail window if item is removed
+			if (itemDetailFragment != null) {
+				if (!mission.hasItem(itemDetailFragment.getItem())) {
+					removeItemDetail();
+				}
+			}
+			break;
+		default:
+			break;
+		}
 	}
 
 	@Override
@@ -103,6 +115,7 @@ public class EditorActivity extends SuperUI implements
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
 	@Override
 	public void onMapClick(LatLng point) {
 		switch (getTool()) {
@@ -127,7 +140,7 @@ public class EditorActivity extends SuperUI implements
 		removeItemDetail();
 		mission.clearSelection();
 		notifySelectionChanged();
-		
+
 		switch (tools) {
 		case DRAW:
 		case POLY:
@@ -179,7 +192,7 @@ public class EditorActivity extends SuperUI implements
 		case POLY:
 			drone.mission.addSurveyPolygon(points);
 			break;
-		default:			
+		default:
 			break;
 		}
 		editorToolsFragment.setTool(EditorTools.MARKER);
@@ -191,25 +204,11 @@ public class EditorActivity extends SuperUI implements
 		showItemDetail(newItem);
 	}
 
-	@Override
-	public void onMissionUpdate() {
-		//Remove detail window if item is removed
-		if (itemDetailFragment!=null) {
-			if (!mission.hasItem(itemDetailFragment.getItem())) {
-				removeItemDetail();
-			}
-		}
-	}
-
-
-
 	private static final int MENU_DELETE = 1;
 
 	@Override
 	public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-		Log.d("LIST", "you onActionItemClicked ");
-		
-		if (item.getItemId()==MENU_DELETE) {
+		if (item.getItemId() == MENU_DELETE) {
 			mission.removeWaypoints(mission.getSelected());
 			notifySelectionChanged();
 		}
@@ -219,27 +218,23 @@ public class EditorActivity extends SuperUI implements
 
 	@Override
 	public boolean onCreateActionMode(ActionMode arg0, Menu menu) {
-		Log.d("LIST", "you onCreateActionMode ");
-		menu.add( 0, MENU_DELETE, 0, "Delete" );
+		menu.add(0, MENU_DELETE, 0, "Delete");
 		return true;
 	}
 
 	@Override
 	public void onDestroyActionMode(ActionMode arg0) {
-		Log.d("LIST", "you onDestroyActionMode ");
-		missionListFragment.list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);		
+		missionListFragment.list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		mission.clearSelection();
 		notifySelectionChanged();
 		contextualActionBar = null;
 	}
 
-
 	@Override
 	public boolean onPrepareActionMode(ActionMode arg0, Menu arg1) {
-		Log.d("LIST", "you onPrepareActionMode ");
 		return false;
 	}
-	
+
 	@Override
 	public boolean onItemLongClick(MissionItem item) {
 		if (contextualActionBar != null) {
@@ -271,7 +266,7 @@ public class EditorActivity extends SuperUI implements
 					mission.removeItemFromSelection(item);
 				} else {
 					mission.addToSelection(item);
-				}				
+				}
 			} else {
 				if (mission.selectionContains(item)) {
 					mission.clearSelection();
@@ -294,14 +289,16 @@ public class EditorActivity extends SuperUI implements
 	}
 
 	private void notifySelectionChanged() {
-		MissionItemView adapter = (MissionItemView) missionListFragment.list.getAdapter();
+		MissionItemView adapter = (MissionItemView) missionListFragment.list
+				.getAdapter();
 		missionListFragment.list.clearChoices();
 		for (MissionItem item : mission.getSelected()) {
-			missionListFragment.list.setItemChecked(adapter.getPosition(item), true);
+			missionListFragment.list.setItemChecked(adapter.getPosition(item),
+					true);
 		}
-		if (mission.getSelected().size()==0) {
+		if (mission.getSelected().size() == 0) {
 			missionListFragment.setArrowsVisibility(false);
-		}else{
+		} else {
 			missionListFragment.setArrowsVisibility(true);
 		}
 		adapter.notifyDataSetChanged();

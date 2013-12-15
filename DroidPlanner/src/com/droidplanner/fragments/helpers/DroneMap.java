@@ -9,14 +9,15 @@ import android.view.ViewGroup;
 
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.drone.Drone;
-import com.droidplanner.drone.DroneInterfaces.OnWaypointChangedListner;
+import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
+import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
 import com.droidplanner.drone.variables.Home;
 import com.droidplanner.drone.variables.mission.Mission;
 import com.droidplanner.fragments.markers.MarkerManager;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 
-public abstract class DroneMap extends OfflineMapFragment implements OnWaypointChangedListner {
+public abstract class DroneMap extends OfflineMapFragment implements OnDroneListner {
 	public GoogleMap mMap;
 	protected MarkerManager markers;
 	protected MapPath missionPath;
@@ -33,8 +34,19 @@ public abstract class DroneMap extends OfflineMapFragment implements OnWaypointC
 		mMap = getMap();
 		markers = new MarkerManager(mMap);
 		missionPath = new MapPath(mMap,getResources());
-		mission.addOnMissionUpdateListner(this);
 		return view;
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		drone.events.addDroneListener(this);
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		drone.events.removeDroneListener(this);
 	}
 
 	@Override
@@ -44,9 +56,14 @@ public abstract class DroneMap extends OfflineMapFragment implements OnWaypointC
 	}
 
 	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		mission.removeOnMissionUpdateListner(this);
+	public void onDroneEvent(DroneEventsType event) {
+		switch (event) {
+		case MISSION:
+			update();
+			break;
+		default:
+			break;
+		}		
 	}
 
 	public LatLng getMyLocation() {
@@ -69,11 +86,6 @@ public abstract class DroneMap extends OfflineMapFragment implements OnWaypointC
 		markers.updateMarkers(mission.getMarkers(), true, context);
 		
 		missionPath.update(mission);
-	}
-
-	@Override
-	public void onMissionUpdate() {
-		update();
 	}
 
 }

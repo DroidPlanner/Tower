@@ -9,9 +9,10 @@ import android.view.ViewGroup;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
 import com.droidplanner.drone.Drone;
-import com.droidplanner.drone.DroneInterfaces.OnRcDataChangedListner;
+import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
+import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
 
-public class ModesSetupFragment extends Fragment implements OnRcDataChangedListner {
+public class ModesSetupFragment extends Fragment implements OnDroneListner {
 
 	// Extreme RC update rate in this screen
 	//private static final int RC_MSG_RATE = 50;
@@ -26,7 +27,7 @@ public class ModesSetupFragment extends Fragment implements OnRcDataChangedListn
 		View view = inflater.inflate(R.layout.fragment_setup_modes, container,false);
 
 		setupLocalViews(view);
-		drone.RC.setListner(this);
+		drone.events.addDroneListener(this);
 		return view;
 	}
 
@@ -44,13 +45,16 @@ public class ModesSetupFragment extends Fragment implements OnRcDataChangedListn
 	}
 
 	@Override
-	public void onNewInputRcData() {
-		int[] data = drone.RC.in;
-	}
-
-	@Override
-	public void onNewOutputRcData() {
-		// TODO Auto-generated method stub
+	public void onDroneEvent(DroneEventsType event) {
+		switch (event) {
+		case RC_IN:
+			int[] data = drone.RC.in;
+			break;
+		case RC_OUT:
+			break;
+		default:
+			break;
+		}		
 	}
 
 }

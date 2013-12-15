@@ -9,6 +9,7 @@ import android.view.MenuItem;
 
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperUI;
+import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.fragments.*;
 
 public class ConfigurationActivity extends SuperUI{
@@ -55,6 +56,10 @@ public class ConfigurationActivity extends SuperUI{
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public void onDroneEvent(DroneEventsType event) {		
 	}
 
 }

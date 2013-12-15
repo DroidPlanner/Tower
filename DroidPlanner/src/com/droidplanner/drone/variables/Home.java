@@ -6,6 +6,7 @@ import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_FRAME;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneVariable;
+import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.fragments.markers.HomeMarker;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import com.droidplanner.helpers.geoTools.GeoTools;
@@ -61,6 +62,7 @@ public class Home extends DroneVariable implements MarkerSource {
 	public void setHome(msg_mission_item msg) {
 		this.coordinate = new LatLng(msg.y, msg.x);
 		this.altitude = new Altitude(msg.z);		
+		myDrone.events.notifyDroneEvent(DroneEventsType.HOME);
 	}
 
 	public msg_mission_item packMavlink() {

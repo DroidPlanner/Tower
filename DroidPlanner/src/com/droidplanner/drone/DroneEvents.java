@@ -5,9 +5,7 @@ import java.util.List;
 
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
-import com.droidplanner.drone.variables.mission.WaypointEvent_Type;
 import com.droidplanner.helpers.TTS;
-import com.droidplanner.parameters.Parameter;
 
 public class DroneEvents extends DroneVariable {
 	private TTS tts;
@@ -44,19 +42,22 @@ public class DroneEvents extends DroneVariable {
 	 * @param event
 	 */
 	void notifyViaTTS(DroneEventsType event) {
-		switch (event) {
-		case ARMING:
-			tts.speakArmedState(myDrone.state.isArmed());
-			break;
-		case BATTERY:
-			tts.batteryDischargeNotification(myDrone.battery.getBattRemain());
-			break;
-		case MODE:
-			tts.speakMode(myDrone.state.getMode());
-			break;
-		default:
-			break;
+		if (tts != null) {
+			switch (event) {
+			case ARMING:
+				tts.speakArmedState(myDrone.state.isArmed());
+				break;
+			case BATTERY:
+				tts.batteryDischargeNotification(myDrone.battery
+						.getBattRemain());
+				break;
+			case MODE:
+				tts.speakMode(myDrone.state.getMode());
+				break;
+			default:
+				break;
+			}
 		}
-	
+
 	}
 }
