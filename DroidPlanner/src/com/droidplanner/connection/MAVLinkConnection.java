@@ -114,8 +114,9 @@ public abstract class MAVLinkConnection extends Thread {
             } catch (IOException e) {
                 Log.e(TAG, "Unable to close open connection.", e);
             }
+
+            listner.onDisconnect();
         }
-        listner.onDisconnect();
 	}
 
 	private void handleData() throws IOException {

@@ -209,6 +209,10 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
         registerReceiver(mReceiver, new IntentFilter(Constants
                 .ACTION_BLUETOOTH_RELAY_SERVER));
 
+        showNotification();
+        aquireWakelock();
+        updateNotification(getResources().getString(R.string.conected));
+
         setupBtRelayServer(isBtRelayServerEnabled());
     }
 
@@ -217,8 +221,15 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 		couldNotOpenConnection = true;
 		selfDestryService();
 
-        //Stop listening for relay server activation broadcast events
-        unregisterReceiver(mReceiver);
+        try{
+            //Stop listening for relay server activation broadcast events
+            unregisterReceiver(mReceiver);
+        }catch(IllegalArgumentException e){
+            //Falls here is onDisconnect was called before we had a change to register.
+        }
+
+        dismissNotification();
+        releaseWakelock();
 
         //Stop the relay server
         setupBtRelayServer(false);
@@ -240,16 +251,11 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 	public void onCreate() {
 		super.onCreate();
 		connectMAVconnection();
-		showNotification();
-		aquireWakelock();
-		updateNotification(getResources().getString(R.string.conected));
 	}
 
 	@Override
 	public void onDestroy() {
 		disconnectMAVConnection();
-		dismissNotification();
-		releaseWakelock();
 		super.onDestroy();
 	}
 
