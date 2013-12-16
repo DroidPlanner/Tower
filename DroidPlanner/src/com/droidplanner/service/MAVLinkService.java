@@ -52,16 +52,11 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 	 * 
 	 * */
 
-	private String commErrMsgLocalStore = "Mavlink Error: ";
+	//private String commErrMsgLocalStore = "Mavlink Error: ";
+	private String commErrMsgLocalStore;
 	@SuppressLint("HandlerLeak")
-	private Handler commErrHandler = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			Toast.makeText(getApplicationContext(), commErrMsgLocalStore,
-					Toast.LENGTH_LONG).show();
-		}
-	};
-
+	private Handler commErrHandler;
+	
 	/**
 	 * Handler of incoming messages from clients.
 	 */
@@ -142,10 +137,20 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		commErrMsgLocalStore = getResources().getString(R.string.MAVLinkError);
+		
+		commErrHandler = new Handler() {
+				@Override
+				public void handleMessage(Message msg) {
+					Toast.makeText(getApplicationContext(), commErrMsgLocalStore,
+							Toast.LENGTH_LONG).show();
+				}
+			};		
+		
 		connectMAVconnection();
 		showNotification();
 		aquireWakelock();
-		updateNotification(getResources().getString(R.string.conected));
+		updateNotification(getResources().getString(R.string.connected));
 	}
 
 	@Override

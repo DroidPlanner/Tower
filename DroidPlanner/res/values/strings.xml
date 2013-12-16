@@ -10,7 +10,7 @@
     <string name="editor">Editor</string>
     <string name="menu_connect">Connect</string>
     <string name="menu_disconnect">Disconnect</string>
-    <string name="conected">Connected</string>
+    <string name="connected">Connected</string>
     <string name="disconnected">Disconnected</string>
     <string name="save">Save</string>
     <string name="open">Open</string>
@@ -212,7 +212,7 @@
     <string name="params_click_to_refresh">Click to refresh parameters from drone</string>
     <string name="metadata_value">Value:</string>
     <string name="metadata_custom_value">** Custom value **</string>
-    <string name="refreshing_parameters">Refreshing Parameters...</string>
+    <string name="refreshing_parameters">Refreshing Parameters&#8230;</string>
     <string name="parameters_saved">Parameters saved</string>
 
     <string name="RCFailsafe">Warning! RC Failsafe – Returning to Launch</string>
@@ -221,5 +221,7 @@
     <string name="BatteryFailsafeRTL">Warning! Battery Failsafe – Returning to Launch</string>
     <string name="mode_switch">Assign RC channel 5 to a switch on your radio to control flight modes. Move the switch to each position and select the desired flight mode below.</string>
     <string name="Pause">Pause</string>
+    
+    <string name="MAVLinkError">MAVLink Error:</string>
 
 </resources>
