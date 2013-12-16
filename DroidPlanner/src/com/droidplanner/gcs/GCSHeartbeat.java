@@ -20,7 +20,7 @@ public class GCSHeartbeat {
 	/**
 	 * This is the heartbeat period in seconds.
 	 */
-	private final int freqHz;
+	private final int period;
 
 	/**
 	 * ScheduledExecutorService used to periodically schedule the heartbeat.
@@ -29,7 +29,7 @@ public class GCSHeartbeat {
 
 	public GCSHeartbeat(Drone drone, int freqHz) {
 		this.drone = drone;
-		this.freqHz = freqHz;
+		this.period = freqHz;
 	}
 
 	/**
@@ -46,7 +46,7 @@ public class GCSHeartbeat {
 				public void run() {
 					MavLinkHeartbeat.sendMavHeartbeat(drone);
 				}
-			}, 0, freqHz, TimeUnit.SECONDS);
+			}, 0, period, TimeUnit.SECONDS);
 		} else if (heartbeatExecutor != null) {
 			heartbeatExecutor.shutdownNow();
 			heartbeatExecutor = null;
