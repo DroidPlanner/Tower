@@ -78,7 +78,6 @@ public class GPS extends DroneVariable {
 	protected void processMAVLinkMessage(MAVLinkMessage msg) {
 		switch (msg.msgid) {
 		case msg_gps_raw_int.MAVLINK_MSG_ID_GPS_RAW_INT:
-
 			setGpsState(((msg_gps_raw_int) msg).fix_type,
 					((msg_gps_raw_int) msg).satellites_visible,
 					((msg_gps_raw_int) msg).eph);

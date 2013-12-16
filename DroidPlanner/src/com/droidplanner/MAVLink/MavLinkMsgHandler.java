@@ -86,13 +86,14 @@ public class MavLinkMsgHandler {
 			newMode = ApmModes.getMode(msg_heart.custom_mode,
 					drone.type.getType());
 			drone.state.setMode(newMode);
-			break;
-		case msg_global_position_int.MAVLINK_MSG_ID_GLOBAL_POSITION_INT:
+			break;	
+/*
+			case msg_global_position_int.MAVLINK_MSG_ID_GLOBAL_POSITION_INT:
 			drone.GPS.setPosition(new LatLng(
 					((msg_global_position_int) msg).lat / 1E7,
 					((msg_global_position_int) msg).lon / 1E7));
 			break;
-/*
+
   		case msg_sys_status.MAVLINK_MSG_ID_SYS_STATUS:
 			msg_sys_status m_sys = (msg_sys_status) msg;
 			drone.battery.setBatteryState(m_sys.voltage_battery / 1000.0,
@@ -109,13 +110,13 @@ public class MavLinkMsgHandler {
 					((msg_gps_raw_int) msg).satellites_visible,
 					((msg_gps_raw_int) msg).eph);
 			break;
- */
-		case msg_rc_channels_raw.MAVLINK_MSG_ID_RC_CHANNELS_RAW:
+ 		case msg_rc_channels_raw.MAVLINK_MSG_ID_RC_CHANNELS_RAW:
 			drone.RC.setRcInputValues((msg_rc_channels_raw) msg);
 			break;
 		case msg_servo_output_raw.MAVLINK_MSG_ID_SERVO_OUTPUT_RAW:
 			drone.RC.setRcOutputValues((msg_servo_output_raw) msg);
 			break;
+*/
 		}
 	}
 
