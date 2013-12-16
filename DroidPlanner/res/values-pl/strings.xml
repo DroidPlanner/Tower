@@ -176,6 +176,23 @@
     <string name="exception_draw_2_more_polygon_points">Zaznacz jeszcze co najmniej 2 punkty</string>
     <string name="exception_draw_1_more_polygon_points">Zaznacz jeszcze co najmniej 1 punkt</string>
     <string name="mission_is_too_lengthy">Misja jest zbyt długa!</string>    
+	
+    <string name="wpevent_upload">Uploading mission to APM&#8230;</string>
+    <string name="wpevent_download">Downloading mission from APM&#8230;</string>   
+    <string name="wpevent_retry">Retrying&#8230;</string>
+
+    <string name="params_click_to_refresh">Click to refresh parameters from drone</string>
+    <string name="metadata_value">Value:</string>
+    <string name="metadata_custom_value">** Custom value **</string>
+    <string name="refreshing_parameters">Refreshing Parameters...</string>
+    <string name="parameters_saved">Parameters saved</string>
+
+    <string name="RCFailsafe">Warning! RC Failsafe – Returning to Launch</string>
+    <string name="GPSFailsafe">Warning! GPS Failsafe – Switching to Altitude Hold</string>
+    <string name="BatteryFailsafeLand">Warning! Battery Failsafe – Returning to Launch</string>
+    <string name="BatteryFailsafeRTL">Warning! Battery Failsafe – Returning to Launch</string>
+    <string name="mode_switch">Assign RC channel 5 to a switch on your radio to control flight modes. Move the switch to each position and select the desired flight mode below.</string>
+    <string name="Pause">Pause</string>	
     
     
 </resources>
