@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
-
 import com.droidplanner.R;
+
 import com.droidplanner.helpers.geoTools.GeoTools;
 import com.droidplanner.helpers.geoTools.LineLatLng;
 import com.droidplanner.polygon.PolyBounds;

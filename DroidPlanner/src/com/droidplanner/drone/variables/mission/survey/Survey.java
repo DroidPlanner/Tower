@@ -42,7 +42,7 @@ public class Survey extends MissionItem {
 		
 		try {
 			GridBuilder gridBuilder = new GridBuilder(polygon, surveyData, new LatLng(0, 0),context);
-			polygon.checkIfValid();
+			polygon.checkIfValid(context);
 			Grid grid = gridBuilder.generate();
 			grid.setAltitude(surveyData.getAltitude());
 			return grid.getCameraLocations();
