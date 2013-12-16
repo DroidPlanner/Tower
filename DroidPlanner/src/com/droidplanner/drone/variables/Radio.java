@@ -1,5 +1,7 @@
 package com.droidplanner.drone.variables;
 
+import com.MAVLink.Messages.MAVLinkMessage;
+import com.MAVLink.Messages.ardupilotmega.msg_radio;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneVariable;
 import com.droidplanner.helpers.math.MathUtil;
@@ -88,6 +90,16 @@ public class Radio extends DroneVariable {
 	 */
 	private double SikValueToDB(int value) {
 		return (value / 1.9) - 127;
+	}
+	
+	@Override
+	protected void processMAVLinkMessage(MAVLinkMessage msg) {
+		if (msg.msgid == msg_radio.MAVLINK_MSG_ID_RADIO) {
+			msg_radio m_radio = (msg_radio) msg;
+			setRadioState(m_radio.rxerrors, m_radio.fixed,
+					m_radio.rssi, m_radio.remrssi, m_radio.txbuf,
+					m_radio.noise, m_radio.remnoise);
+		}
 	}
 
 }

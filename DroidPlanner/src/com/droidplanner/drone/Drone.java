@@ -198,6 +198,7 @@ public class Drone {
 
 	public void setMavLinkMsgHandler(MavLinkMsgHandler mavLinkMsgHandler) {
 		mavLinkMsgHandler.registerMsgListeners(battery);
+		mavLinkMsgHandler.registerMsgListeners(radio);
 	}
 
 }
