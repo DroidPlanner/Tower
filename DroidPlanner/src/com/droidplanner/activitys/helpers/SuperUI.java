@@ -52,8 +52,14 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
 	public boolean onCreateOptionsMenu(Menu menu) {
 		infoMenu = new InfoMenu(drone,this);
 		infoMenu.inflateMenu(menu, getMenuInflater());	
-		infoMenu.setupModeSpinner(this);
+		infoMenu.setupModeSpinner(this);		
 		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		infoMenu.forceViewsUpdate();
+		return super.onPrepareOptionsMenu(menu);
 	}
 
 	@Override

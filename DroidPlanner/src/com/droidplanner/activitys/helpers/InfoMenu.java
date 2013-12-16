@@ -37,23 +37,35 @@ public class InfoMenu implements OnDroneListner {
 	public void inflateMenu(Menu menu, MenuInflater menuInflater) {
 		if (drone.MavClient.isConnected()) {
 			menuInflater.inflate(R.menu.menu_newui_connected, menu);
-			battery = menu.findItem(R.id.bar_battery);
-			gps = menu.findItem(R.id.bar_gps);
-			propeler = menu.findItem(R.id.bar_propeller);
-			home = menu.findItem(R.id.bar_home);
-			signal = menu.findItem(R.id.bar_signal);
-			signalRSSI = menu.findItem(R.id.bar_signal_rssi);
-			signalRemRSSI = menu.findItem(R.id.bar_signal_rssirem);
-			signalNoise = menu.findItem(R.id.bar_signal_noise);
-			signalRemNoise = menu.findItem(R.id.bar_signal_noiserem);
-			signalFade = menu.findItem(R.id.bar_signal_fade);
-			signalRemFade = menu.findItem(R.id.bar_signal_faderem);
-			mode = (SelectModeSpinner) menu.findItem(R.id.bar_mode)
-					.getActionView();
-			timer = new TimerView(propeler);
+			findViews(menu);
 		} else {
 			menuInflater.inflate(R.menu.menu_newui_disconnected, menu);
 		}
+	}
+
+	private void findViews(Menu menu) {
+		battery = menu.findItem(R.id.bar_battery);
+		gps = menu.findItem(R.id.bar_gps);
+		propeler = menu.findItem(R.id.bar_propeller);
+		home = menu.findItem(R.id.bar_home);
+		signal = menu.findItem(R.id.bar_signal);
+		signalRSSI = menu.findItem(R.id.bar_signal_rssi);
+		signalRemRSSI = menu.findItem(R.id.bar_signal_rssirem);
+		signalNoise = menu.findItem(R.id.bar_signal_noise);
+		signalRemNoise = menu.findItem(R.id.bar_signal_noiserem);
+		signalFade = menu.findItem(R.id.bar_signal_fade);
+		signalRemFade = menu.findItem(R.id.bar_signal_faderem);
+		mode = (SelectModeSpinner) menu.findItem(R.id.bar_mode).getActionView();
+		timer = new TimerView(propeler);
+	}
+
+	public void forceViewsUpdate() {
+		onDroneEvent(DroneEventsType.BATTERY, drone);
+		onDroneEvent(DroneEventsType.GPS_FIX, drone);
+		onDroneEvent(DroneEventsType.RADIO, drone);
+		onDroneEvent(DroneEventsType.STATE, drone);
+		onDroneEvent(DroneEventsType.HOME, drone);
+		onDroneEvent(DroneEventsType.MODE, drone);
 	}
 
 	@Override
