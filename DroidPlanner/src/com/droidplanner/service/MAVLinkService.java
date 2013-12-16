@@ -47,16 +47,14 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 
 	/**
 	 * 
-	 * Handler for Communication Errors Messages
-	 * used in onComError() to display Toast msg.
+	 * Handler for Communication Errors Messages used in onComError() to display
+	 * Toast msg.
 	 * 
 	 * */
 
-	//private String commErrMsgLocalStore = "Mavlink Error: ";
 	private String commErrMsgLocalStore;
-	@SuppressLint("HandlerLeak")
 	private Handler commErrHandler;
-	
+
 	/**
 	 * Handler of incoming messages from clients.
 	 */
@@ -134,19 +132,20 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 		}
 	}
 
+	@SuppressLint("HandlerLeak")
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		commErrMsgLocalStore = getResources().getString(R.string.MAVLinkError);
-		
+
 		commErrHandler = new Handler() {
-				@Override
-				public void handleMessage(Message msg) {
-					Toast.makeText(getApplicationContext(), commErrMsgLocalStore,
-							Toast.LENGTH_LONG).show();
-				}
-			};		
-		
+			@Override
+			public void handleMessage(Message msg) {
+				Toast.makeText(getApplicationContext(), commErrMsgLocalStore,
+						Toast.LENGTH_LONG).show();
+			}
+		};
+
 		connectMAVconnection();
 		showNotification();
 		aquireWakelock();
@@ -162,8 +161,7 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 	}
 
 	/**
-	 * Called after the exception raised in any of the
-	 * MavLinkConnection classes 
+	 * Called after the exception raised in any of the MavLinkConnection classes
 	 */
 	public void onComError(String errMsg) {
 
