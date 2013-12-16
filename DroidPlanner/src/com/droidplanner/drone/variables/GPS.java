@@ -1,5 +1,7 @@
 package com.droidplanner.drone.variables;
 
+import com.MAVLink.Messages.MAVLinkMessage;
+import com.MAVLink.Messages.ardupilotmega.msg_gps_raw_int;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneVariable;
 import com.google.android.gms.maps.model.LatLng;
@@ -20,8 +22,8 @@ public class GPS extends DroneVariable {
 
 	public LatLng getPosition() {
 		if (isPositionValid()) {
-			return position;			
-		}else{
+			return position;
+		} else {
 			return new LatLng(0, 0);
 		}
 	}
@@ -69,5 +71,15 @@ public class GPS extends DroneVariable {
 			myDrone.notifyPositionChange();
 			myDrone.notifyDistanceToHomeChange();
 		}
+	}
+
+	@Override
+	protected void processMAVLinkMessage(MAVLinkMessage msg) {
+		if (msg.msgid == msg_gps_raw_int.MAVLINK_MSG_ID_GPS_RAW_INT) {
+			setGpsState(((msg_gps_raw_int) msg).fix_type,
+					((msg_gps_raw_int) msg).satellites_visible,
+					((msg_gps_raw_int) msg).eph);
+		}
+
 	}
 }

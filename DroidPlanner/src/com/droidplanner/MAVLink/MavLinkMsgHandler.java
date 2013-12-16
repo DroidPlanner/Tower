@@ -104,12 +104,12 @@ public class MavLinkMsgHandler {
 					m_radio.rssi, m_radio.remrssi, m_radio.txbuf,
 					m_radio.noise, m_radio.remnoise);
 			break;
- */
 		case msg_gps_raw_int.MAVLINK_MSG_ID_GPS_RAW_INT:
 			drone.GPS.setGpsState(((msg_gps_raw_int) msg).fix_type,
 					((msg_gps_raw_int) msg).satellites_visible,
 					((msg_gps_raw_int) msg).eph);
 			break;
+ */
 		case msg_rc_channels_raw.MAVLINK_MSG_ID_RC_CHANNELS_RAW:
 			drone.RC.setRcInputValues((msg_rc_channels_raw) msg);
 			break;
