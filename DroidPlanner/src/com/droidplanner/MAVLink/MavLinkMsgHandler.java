@@ -92,11 +92,13 @@ public class MavLinkMsgHandler {
 					((msg_global_position_int) msg).lat / 1E7,
 					((msg_global_position_int) msg).lon / 1E7));
 			break;
-		case msg_sys_status.MAVLINK_MSG_ID_SYS_STATUS:
+/*
+  		case msg_sys_status.MAVLINK_MSG_ID_SYS_STATUS:
 			msg_sys_status m_sys = (msg_sys_status) msg;
 			drone.battery.setBatteryState(m_sys.voltage_battery / 1000.0,
 					m_sys.battery_remaining, m_sys.current_battery / 100.0);
 			break;
+ */
 		case msg_radio.MAVLINK_MSG_ID_RADIO:
 			msg_radio m_radio = (msg_radio) msg;
 			drone.radio.setRadioState(m_radio.rxerrors, m_radio.fixed,

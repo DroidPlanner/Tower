@@ -1,9 +1,12 @@
 package com.droidplanner.drone.variables;
 
+import com.MAVLink.Messages.MAVLinkMessage;
+import com.MAVLink.Messages.ardupilotmega.msg_sys_status;
+import com.droidplanner.MAVLink.MavLinkMsgHandler.OnMavLinkMsgListener;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneVariable;
 
-public class Battery extends DroneVariable {
+public class Battery extends DroneVariable implements OnMavLinkMsgListener {
 	private double battVolt = -1;
 	private double battRemain = -1;
 	private double battCurrent = -1;
@@ -33,6 +36,15 @@ public class Battery extends DroneVariable {
 			this.battRemain = battRemain;
 			this.battCurrent = battCurrent;
 			myDrone.notifyInfoChange();
+		}
+	}
+
+	@Override
+	public void onMavLinkMsg(MAVLinkMessage msg) {
+		if (msg.msgid == msg_sys_status.MAVLINK_MSG_ID_SYS_STATUS) {
+			msg_sys_status m_sys = (msg_sys_status) msg;
+			setBatteryState(m_sys.voltage_battery / 1000.0,
+					m_sys.battery_remaining, m_sys.current_battery / 100.0);
 		}
 	}
 }
