@@ -63,6 +63,7 @@ public class InfoMenu implements OnDroneListner {
 			updateBatteryInfo(drone);
 			break;
 		case GPS_FIX:
+		case GPS_COUNT:
 			updateGpsInfo(drone);
 			break;
 		case RADIO:

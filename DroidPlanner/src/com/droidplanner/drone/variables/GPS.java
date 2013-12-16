@@ -56,11 +56,13 @@ public class GPS extends DroneVariable {
 	}
 
 	public void setGpsState(int fix, int satellites_visible, int eph) {
-		if (satCount != satellites_visible | fixType != fix) {
-			fixType = fix;
-			satCount = satellites_visible;
+		if(satCount != satellites_visible){
+			satCount = satellites_visible;			
 			gps_eph = (double) eph / 100; // convert from eph(cm) to gps_eph(m)
-
+			myDrone.events.notifyDroneEvent(DroneEventsType.GPS_COUNT);
+		}
+		if (fixType != fix) {
+			fixType = fix;
 			myDrone.events.notifyDroneEvent(DroneEventsType.GPS_FIX);
 		}
 	}
