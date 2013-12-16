@@ -1,13 +1,12 @@
 package com.droidplanner.fragments.markers;
 
-import com.droidplanner.drone.DroneInterfaces.MapUpdatedListner;
 import com.droidplanner.fragments.FlightMapFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class DroneMarker implements MapUpdatedListner {
+public class DroneMarker {
 	private static final int ZOOM_LEVEL = 18;
 	
 	private Marker droneMarker;
@@ -68,10 +67,5 @@ public class DroneMarker implements MapUpdatedListner {
 				flightMapFragment.drone.GPS.getPosition());
 		flightMapFragment.addFlithPathPoint(flightMapFragment.drone.GPS
 				.getPosition());
-	}
-
-	@Override
-	public void onDroneTypeChanged() {
-		updateDroneMarkers();		
 	}
 }

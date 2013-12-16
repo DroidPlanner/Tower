@@ -3,23 +3,15 @@ package com.droidplanner.drone.variables;
 import com.MAVLink.Messages.ardupilotmega.msg_rc_channels_raw;
 import com.MAVLink.Messages.ardupilotmega.msg_servo_output_raw;
 import com.droidplanner.drone.Drone;
-import com.droidplanner.drone.DroneInterfaces.OnRcDataChangedListner;
+import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.drone.DroneVariable;
 
 public class RC extends DroneVariable {
-	
-	public OnRcDataChangedListner listner;
-
-
 	public int in[] = new int[8];
 	public int out[] = new int[8];
 
 	public RC(Drone myDrone) {
 		super(myDrone);
-	}
-
-	public void setListner(OnRcDataChangedListner listner) {
-		this.listner = listner;
 	}
 
 	public void setRcInputValues(msg_rc_channels_raw msg) {
@@ -31,9 +23,7 @@ public class RC extends DroneVariable {
 		in[5] = msg.chan6_raw;
 		in[6] = msg.chan7_raw;
 		in[7] = msg.chan8_raw;
-		if (listner!=null) {
-			listner.onNewInputRcData();			
-		}
+		myDrone.events.notifyDroneEvent(DroneEventsType.RC_IN);
 	}
 
 	public void setRcOutputValues(msg_servo_output_raw msg) {
@@ -45,9 +35,7 @@ public class RC extends DroneVariable {
 		out[5] = msg.servo6_raw;
 		out[6] = msg.servo7_raw;
 		out[7] = msg.servo8_raw;
-		if (listner!=null) {
-			listner.onNewOutputRcData();			
-		}
+		myDrone.events.notifyDroneEvent(DroneEventsType.RC_OUT);
 	}
 	
 	

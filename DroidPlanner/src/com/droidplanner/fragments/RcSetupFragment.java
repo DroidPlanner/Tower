@@ -11,11 +11,12 @@ import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
 import com.droidplanner.MAVLink.MavLinkStreamRates;
 import com.droidplanner.drone.Drone;
-import com.droidplanner.drone.DroneInterfaces.OnRcDataChangedListner;
+import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
+import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
 import com.droidplanner.widgets.FillBar.FillBarWithText;
 import com.droidplanner.widgets.RcStick.RcStick;
 
-public class RcSetupFragment extends Fragment implements OnRcDataChangedListner {
+public class RcSetupFragment extends Fragment implements  OnDroneListner {
 	private static final int RC_MIN = 1000;
 	private static final int RC_MAX = 2000;
 
@@ -41,9 +42,23 @@ public class RcSetupFragment extends Fragment implements OnRcDataChangedListner 
 		View view = inflater.inflate(R.layout.fragment_setup_rc, container,
 				false);
 		setupLocalViews(view);
-
-		drone.RC.setListner(this);
 		return view;
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		drone.events.addDroneListener(this);
+		setupDataStreamingForRcSetup();
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		drone.events.removeDroneListener(this);
+		MavLinkStreamRates
+				.setupStreamRatesFromPref((DroidPlannerApp) getActivity()
+						.getApplication());
 	}
 
 	private void setupLocalViews(View view) {
@@ -53,22 +68,16 @@ public class RcSetupFragment extends Fragment implements OnRcDataChangedListner 
 		bar6 = (FillBarWithText) view.findViewById(R.id.fillBar6);
 		bar7 = (FillBarWithText) view.findViewById(R.id.fillBar7);
 		bar8 = (FillBarWithText) view.findViewById(R.id.fillBar8);
-
+	
 		bar5.setup("CH 5", RC_MAX, RC_MIN);
 		bar6.setup("CH 6", RC_MAX, RC_MIN);
 		bar7.setup("CH 7", RC_MAX, RC_MIN);
 		bar8.setup("CH 8", RC_MAX, RC_MIN);
-
+	
 		textViewRoll 		= (TextView) view.findViewById(R.id.RCRollPWM);
 		textViewPitch 		= (TextView) view.findViewById(R.id.RCPitchPWM);
 		textViewThrottle 	= (TextView) view.findViewById(R.id.RCThrottlePWM);
 		textViewYaw 		= (TextView) view.findViewById(R.id.RCYawPWM);
-	}
-
-	@Override
-	public void onStart() {
-		super.onStart();
-		setupDataStreamingForRcSetup();
 	}
 
 	private void setupDataStreamingForRcSetup() {
@@ -77,39 +86,39 @@ public class RcSetupFragment extends Fragment implements OnRcDataChangedListner 
 	}
 
 	@Override
-	public void onStop() {
-		super.onStop();
-		MavLinkStreamRates
-				.setupStreamRatesFromPref((DroidPlannerApp) getActivity()
-						.getApplication());
+	public void onDroneEvent(DroneEventsType event, Drone drone) {
+		switch (event) {
+		case RC_IN:
+			onNewInputRcData();
+			break;
+		case RC_OUT:
+			break;
+		default:
+			break;		
+		}
+		
 	}
 
-	@Override
 	public void onNewInputRcData() {
 		int[] data = drone.RC.in;
 		bar5.setValue(data[4]);
 		bar6.setValue(data[5]);
 		bar7.setValue(data[6]);
 		bar8.setValue(data[7]);
-
+	
 		float x,y;
 		x = (data[3] - RC_MIN) / ((float) (RC_MAX - RC_MIN))*2-1;
 		y = (data[2] - RC_MIN) / ((float) (RC_MAX - RC_MIN))*2-1;
 		stickLeft.setPosition(x, y);
-
+	
 		x = (data[0] - RC_MIN) / ((float) (RC_MAX - RC_MIN))*2-1;
 		y = (data[1] - RC_MIN) / ((float) (RC_MAX - RC_MIN))*2-1;
 		stickRight.setPosition(x, -y);
-
+	
 		textViewRoll.setText(Integer.toString(data[0]));
 		textViewPitch.setText(Integer.toString(data[1]));
 		textViewThrottle.setText(Integer.toString(data[2]));
 		textViewYaw.setText(Integer.toString(data[3]));
-	}
-
-	@Override
-	public void onNewOutputRcData() {
-		// TODO Auto-generated method stub
 	}
 
 }

@@ -10,10 +10,11 @@ import android.widget.TextView;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
 import com.droidplanner.drone.Drone;
-import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
+import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
+import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
 import com.droidplanner.widgets.newHUD.newHUD;
 
-public class TelemetryFragment extends Fragment implements HudUpdatedListner {
+public class TelemetryFragment extends Fragment implements OnDroneListner{
 
 	private newHUD hud;
 	private Drone drone;
@@ -45,12 +46,39 @@ public class TelemetryFragment extends Fragment implements HudUpdatedListner {
 		targetAltitude = (TextView) view.findViewById(R.id.targetAltitudeValue);
 
 		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
-		drone.setHudListner(this);
 		return view;
 	}
 
 	@Override
-	public void onOrientationUpdate() {
+	public void onStart() {
+		super.onStart();
+		drone.events.addDroneListener(this);
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		drone.events.removeDroneListener(this);
+	}
+
+	@Override
+	public void onDroneEvent(DroneEventsType event, Drone drone) {
+		switch (event) {
+		case NAVIGATION:
+			break;
+		case ORIENTATION:
+			onOrientationUpdate(drone);
+			break;
+		case SPEED:
+			onSpeedAltitudeAndClimbRateUpdate(drone);
+			break;
+		default:
+			break;		
+		}
+		
+	}
+	
+	public void onOrientationUpdate(Drone drone) {
 		float r = (float) drone.orientation.getRoll();
 		float p = (float) drone.orientation.getPitch();
 		float y = (float) drone.orientation.getYaw();
@@ -63,8 +91,7 @@ public class TelemetryFragment extends Fragment implements HudUpdatedListner {
 
 	}
 
-	@Override
-	public void onSpeedAltitudeAndClimbRateUpdate() {
+	public void onSpeedAltitudeAndClimbRateUpdate(Drone drone) {
 		airSpeed.setText(String.format("%3.1f", drone.speed.getAirSpeed()));
 		groundSpeed.setText(String.format("%3.1f", drone.speed.getGroundSpeed()));
 		climbRate.setText(String.format("%3.1f", drone.speed.getVerticalSpeed()));
@@ -74,5 +101,6 @@ public class TelemetryFragment extends Fragment implements HudUpdatedListner {
 		targetAltitude.setText(String.format("%3.1f", targetAlt));
 
 	}
+
 
 }
