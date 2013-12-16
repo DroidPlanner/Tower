@@ -9,12 +9,9 @@ import android.view.MenuItem;
 
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperUI;
-import com.droidplanner.fragments.ChecklistFragment;
-import com.droidplanner.fragments.ParametersTableFragment;
-import com.droidplanner.fragments.RcSetupFragment;
-import com.droidplanner.fragments.SettingsFragment;
-import com.droidplanner.fragments.TuningFragment;
-import com.droidplanner.fragments.ModesSetupFragment;
+import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
+import com.droidplanner.fragments.*;
 
 public class ConfigurationActivity extends SuperUI{
 
@@ -42,8 +39,8 @@ public class ConfigurationActivity extends SuperUI{
 	    mTabHost.addTab(mTabHost.newTabSpec(TUNING).setIndicator("Tuning"),TuningFragment.class, null);
 	    mTabHost.addTab(mTabHost.newTabSpec(RC_SETUP).setIndicator("RC"),RcSetupFragment.class, null);
 	    mTabHost.addTab(mTabHost.newTabSpec(MODES_SETUP).setIndicator("Modes"),ModesSetupFragment.class, null);
-	    mTabHost.addTab(mTabHost.newTabSpec(PARAMETERS).setIndicator("Parameters"),ParametersTableFragment.class, null);
 	    mTabHost.addTab(mTabHost.newTabSpec(CHECKLIST).setIndicator("Checklist"),ChecklistFragment.class, null);
+        mTabHost.addTab(mTabHost.newTabSpec(PARAMETERS).setIndicator("Parameters"),ParamsFragment.class, null);
 
 	    Intent intent = getIntent();
 	    String stringExtra = intent.getStringExtra(SCREEN_INTENT);
@@ -60,6 +57,11 @@ public class ConfigurationActivity extends SuperUI{
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public void onDroneEvent(DroneEventsType event, Drone drone) {
+		super.onDroneEvent(event,drone);
 	}
 
 }

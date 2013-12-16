@@ -1,25 +1,15 @@
 package com.droidplanner.drone.variables;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_param_value;
 import com.droidplanner.MAVLink.MavLinkParameters;
-import com.droidplanner.R;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces;
 import com.droidplanner.drone.DroneVariable;
-import com.droidplanner.file.DirectoryPath;
-import com.droidplanner.file.IO.ParameterMetadataMap;
-import com.droidplanner.file.IO.ParameterMetadataMapReader;
 import com.droidplanner.parameters.Parameter;
-import com.droidplanner.parameters.ParameterMetadata;
 
 /**
  * Class to manage the communication of parameters to the MAV.
@@ -30,11 +20,7 @@ import com.droidplanner.parameters.ParameterMetadata;
  * 
  */
 public class Parameters extends DroneVariable {
-
-    private static final String PARAMETERMETADATA_PATH = "Parameters/ParameterMetaData.xml";
-
     private List<Parameter> parameters = new ArrayList<Parameter>();
-    private ParameterMetadataMap metadataMap;
 
 	public DroneInterfaces.OnParameterManagerListner parameterListner;
 
@@ -85,47 +71,6 @@ public class Parameters extends DroneVariable {
 	public void sendParameter(Parameter parameter) {
 		MavLinkParameters.sendParameter(myDrone, parameter);
 	}
-
-    public void notifyParameterMetadataChanged() {
-        if(parameterListner != null)
-            parameterListner.onParamterMetaDataChanged();
-    }
-
-    public ParameterMetadata getMetadata(String name) {
-        return (metadataMap == null) ? null : metadataMap.get(name);
-    }
-
-    public void loadMetadata(Context context, String metadataType) {
-        metadataMap = null;
-
-        // use metadata type from prefs if not specified, bail if none
-        if(metadataType == null) {
-            final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            metadataType = prefs.getString("pref_param_metadata", null);
-        }
-        if(metadataType == null || metadataType.equals(context.getString(R.string.none)))
-            return;
-
-        try {
-            // use user supplied file in ~/Parameters if available, else fallback to asset from resources
-            final InputStream inputStream;
-            final File file = new File(DirectoryPath.getDroidPlannerPath() + PARAMETERMETADATA_PATH);
-            if(file.exists()) {
-                // load from file
-                inputStream = new FileInputStream(file);
-            } else {
-                // load from resource
-                inputStream = context.getAssets().open(PARAMETERMETADATA_PATH);
-            }
-
-            // parse
-            metadataMap = ParameterMetadataMapReader.open(inputStream, metadataType);
-
-        } catch (Exception ex) {
-            // nop
-
-        }
-    }
     
 	public void ReadParameter(String name) {
 		MavLinkParameters.readParameter(myDrone, name);

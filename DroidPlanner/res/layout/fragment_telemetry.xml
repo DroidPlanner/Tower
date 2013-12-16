@@ -102,7 +102,7 @@
             style="@style/largeTelemetryText"
             android:layout_width="98dp"
             android:layout_height="wrap_content"
-            android:text="1.9" />
+            android:text="0.0" />
 
         <TextView
             android:id="@+id/groundSpeedUnits"
@@ -152,7 +152,7 @@
             style="@style/largeTelemetryText"
             android:layout_width="98dp"
             android:layout_height="wrap_content"
-            android:text="999.9" />
+            android:text="0.0" />
 
         <TextView
             android:id="@+id/airSpeedUnits"
@@ -204,7 +204,7 @@
             style="@style/largeTelemetryText"
             android:layout_width="98dp"
             android:layout_height="wrap_content"
-            android:text="999.9" />
+            android:text="0.0" />
 
         <TextView
             android:id="@+id/climbRateUnits"
@@ -255,7 +255,7 @@
             style="@style/largeTelemetryText"
             android:layout_width="98dp"
             android:layout_height="wrap_content"
-            android:text="12" />
+            android:text="0" />
 
         <TextView
             android:id="@+id/altitudeUnits"
@@ -278,7 +278,7 @@
             android:layout_width="98dp"
             android:layout_height="wrap_content"
 	        android:textColor="@color/altitude_target"
-            android:text="12" />
+            android:text="0" />
 
         <TextView
             android:id="@+id/targetAltitudeUnits"

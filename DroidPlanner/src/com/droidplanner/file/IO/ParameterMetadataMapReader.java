@@ -1,12 +1,14 @@
 package com.droidplanner.file.IO;
 
+import android.content.Context;
 import android.util.Xml;
+import com.droidplanner.file.DirectoryPath;
 import com.droidplanner.parameters.ParameterMetadata;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.util.Map;
 
 
 /**
@@ -15,6 +17,8 @@ import java.io.InputStream;
  */
 public class ParameterMetadataMapReader {
 
+    private static final String PARAMETERMETADATA_PATH = "Parameters/ParameterMetaData.xml";
+
     private static final String METADATA_DISPLAYNAME = "DisplayName";
     private static final String METADATA_DESCRIPTION = "Description";
     private static final String METADATA_UNITS = "Units";
@@ -22,7 +26,19 @@ public class ParameterMetadataMapReader {
     private static final String METADATA_RANGE = "Range";
 
 
-    public static ParameterMetadataMap open(InputStream inputStream, String metadataType) throws XmlPullParserException, IOException {
+    public static Map<String, ParameterMetadata> load(Context context, String metadataType) throws IOException, XmlPullParserException {
+        // use user supplied file in ~/Parameters if available, else fallback to asset from resources
+        final InputStream inputStream;
+        final File file = new File(DirectoryPath.getDroidPlannerPath() + PARAMETERMETADATA_PATH);
+        if(file.exists()) {
+            inputStream = new FileInputStream(file);
+        } else {
+            inputStream = context.getAssets().open(PARAMETERMETADATA_PATH);
+        }
+        return open(inputStream, metadataType);
+    }
+
+    private static ParameterMetadataMap open(InputStream inputStream, String metadataType) throws XmlPullParserException, IOException {
         try {
             XmlPullParser parser = Xml.newPullParser();
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
@@ -33,7 +49,6 @@ public class ParameterMetadataMapReader {
             try { inputStream.close(); } catch (IOException e) { /*nop*/ }
         }
     }
-
 
     private static ParameterMetadataMap parseMetadata(XmlPullParser parser, String metadataType) throws XmlPullParserException, IOException {
         String name;

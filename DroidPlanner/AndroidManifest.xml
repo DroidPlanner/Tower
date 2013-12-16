@@ -33,31 +33,31 @@
 
     <!-- Support devices without USB host mode since there are other connection types -->
     <uses-feature
-            android:name="android.hardware.usb.host"
-            android:required="false"/>
+        android:name="android.hardware.usb.host"
+        android:required="false" />
 
     <!-- Support devices that don't have location services -->
     <uses-feature
-            android:name="android.hardware.location.gps"
-            android:required="false"/>
+        android:name="android.hardware.location.gps"
+        android:required="false" />
     <uses-feature
-            android:name="android.hardware.location.network"
-            android:required="false"/>
+        android:name="android.hardware.location.network"
+        android:required="false" />
     <uses-feature
-            android:name="android.hardware.location"
-            android:required="false"/>
+        android:name="android.hardware.location"
+        android:required="false" />
     <uses-feature
-            android:glEsVersion="0x00020000"
-            android:required="true"/>
+        android:glEsVersion="0x00020000"
+        android:required="true" />
 
     <application
-            android:name=".DroidPlannerApp"
-            android:allowBackup="true"
-            android:hardwareAccelerated="true"
-            android:icon="@drawable/ic_launcher"
-            android:label="@string/app_title"
-            android:theme="@style/CustomActionBarTheme"
-            android:windowSoftInputMode="adjustPan">
+        android:name=".DroidPlannerApp"
+        android:allowBackup="true"
+        android:hardwareAccelerated="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_title"
+        android:theme="@style/CustomActionBarTheme"
+        android:windowSoftInputMode="adjustPan" >
 
         <!-- You must insert your own Google Maps for Android API v2 key in here. -->
         <meta-data
@@ -67,52 +67,56 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <service android:name=".service.MAVLinkService">
+        <service android:name=".service.MAVLinkService" >
         </service>
+	
+		<activity
+		    android:name=".activitys.FlightActivity"
+		    android:launchMode="singleTask" >
 
-        <activity
-                android:name=".activitys.FlightActivity"
-                android:launchMode="singleTask">
-
+            <!-- Launcher Intent -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"/>
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
             <meta-data
-                    android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
-                    android:resource="@xml/device_filter"/>
+                android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+                android:resource="@xml/device_filter" />
         </activity>
         <activity
-                android:name=".activitys.EditorActivity"
-                android:launchMode="singleTask"
-                android:parentActivityName=".activitys.FlightActivity">
+            android:name=".activitys.EditorActivity"
+            android:label="@string/editor"
+            android:launchMode="singleTask"
+            android:parentActivityName=".activitys.FlightActivity" >
 
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
-                    android:name="android.support.PARENT_ACTIVITY"
-                    android:value=".activitys.FlightActivity"/>
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activitys.FlightActivity" />
 
             <!-- Intent for opening mission files -->
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:mimeType="text/plain"/>
+                <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
         <activity
-                android:name=".activitys.ConfigurationActivity"
-                android:launchMode="singleTask"
-                >
+            android:name=".activitys.ConfigurationActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:label="@string/configuration"
+            android:launchMode="singleTask"
+            android:parentActivityName=".activitys.FlightActivity" >
 
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
-                    android:name="android.support.PARENT_ACTIVITY"
-                    android:value=".activitys.FlightActivity"/>
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activitys.FlightActivity" />
         </activity>
         <activity
                 android:name=".glass.activities.GlassActivity"

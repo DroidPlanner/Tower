@@ -7,15 +7,13 @@
 	tools:ignore="HardcodedText"
     >
 
-    <fragment
-        android:id="@+id/fragment1"
-        android:name="com.droidplanner.fragments.FlightMapFragment"
+    <FrameLayout
+        android:id="@+id/mapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <fragment
-        android:id="@+id/fragment2"
-        android:name="com.droidplanner.fragments.TelemetryFragment"
+    <FrameLayout
+        android:id="@+id/telemetryFragment"
         android:layout_width="190dp"
         android:layout_height="match_parent"
         tools:layout="@layout/fragment_telemetry" />
@@ -28,14 +26,14 @@
         android:measureAllChildren="true" >
     </FrameLayout>
 
-    <fragment
+    <FrameLayout
         android:id="@+id/editorToolsFragment"
-        android:name="com.droidplanner.fragments.FlightActionsFragment"
         android:layout_width="wrap_content"
         android:layout_height="80dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         tools:layout="@layout/fragment_mission_control" />
+
     <TextView
         android:id="@+id/failsafeTextView"
         android:layout_width="match_parent"
@@ -43,8 +41,9 @@
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/fragment2"
         android:background="#D8ee2d3e"
-        android:text="Warning! RC Fasilsafe – Returning to launch"
+        android:text="@string/RCFailsafe"
 		style="@style/editorMissionOverviewText"
+        android:visibility="gone"
         />
 
     <SlidingDrawer
@@ -87,9 +86,8 @@
 			android:layout_centerHorizontal="true"
 			tools:layout="@layout/fragment_mode_circle" />-->
 
-		<fragment
+		<FrameLayout
 			android:id="@+id/modeInfoPanel"
-			android:name="com.droidplanner.fragments.mode.ModeRTLFragment"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			tools:layout="@layout/fragment_mode_rtl" />

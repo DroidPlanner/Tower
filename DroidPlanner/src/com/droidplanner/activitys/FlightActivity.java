@@ -4,25 +4,37 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperUI;
-import com.droidplanner.drone.DroneInterfaces.ModeChangedListener;
-import com.droidplanner.drone.DroneInterfaces.OnStateListner;
+import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
+import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
 import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
+import com.droidplanner.fragments.FlightActionsFragment;
 import com.droidplanner.fragments.FlightActionsFragment.OnMissionControlInteraction;
+import com.droidplanner.fragments.FlightMapFragment;
 import com.droidplanner.fragments.RCFragment;
+import com.droidplanner.fragments.TelemetryFragment;
 import com.droidplanner.fragments.helpers.OnMapInteractionListener;
-import com.droidplanner.fragments.mode.*;
-import com.droidplanner.glass.activities.GlassActivity;
-import com.droidplanner.glass.utils.GlassUtils;
+import com.droidplanner.fragments.mode.ModeAcroFragment;
+import com.droidplanner.fragments.mode.ModeAltholdFragment;
+import com.droidplanner.fragments.mode.ModeAutoFragment;
+import com.droidplanner.fragments.mode.ModeCircleFragment;
+import com.droidplanner.fragments.mode.ModeDriftFragment;
+import com.droidplanner.fragments.mode.ModeGuidedFragment;
+import com.droidplanner.fragments.mode.ModeLandFragment;
+import com.droidplanner.fragments.mode.ModeLoiterFragment;
+import com.droidplanner.fragments.mode.ModePositionFragment;
+import com.droidplanner.fragments.mode.ModeRTLFragment;
+import com.droidplanner.fragments.mode.ModeStabilizeFragment;
 import com.droidplanner.polygon.PolygonPoint;
 import com.google.android.gms.maps.model.LatLng;
 
 public class FlightActivity extends SuperUI implements
-		OnMapInteractionListener, OnMissionControlInteraction, OnStateListner, ModeChangedListener {
+		OnMapInteractionListener, OnMissionControlInteraction, OnDroneListner{
 	private static FragmentManager fragmentManager;
 	private RCFragment rcFragment;
 	private View failsafeTextView;
@@ -31,39 +43,44 @@ public class FlightActivity extends SuperUI implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-        if (!GlassUtils.isGlassDevice()) {
-
-
 		setContentView(R.layout.activity_flight);
 		fragmentManager = getFragmentManager();
 		modeInfoPanel = fragmentManager.findFragmentById(R.id.modeInfoPanel);
-
 		failsafeTextView = findViewById(R.id.failsafeTextView);
 
+        //Load the activity fragments
+        Fragment modeRtl = fragmentManager.findFragmentById(R.id.modeInfoPanel);
+        if(modeRtl == null){
+            modeRtl = new ModeRTLFragment();
+            fragmentManager.beginTransaction().add(R.id.modeInfoPanel, modeRtl).commit();
         }
-        else {
-            //Start the glass activity
-            startActivity(new Intent(this, GlassActivity.class));
-            finish();
+
+        Fragment mapFragment = fragmentManager.findFragmentById(R.id.mapFragment);
+        if(mapFragment == null){
+            mapFragment = new FlightMapFragment();
+            fragmentManager.beginTransaction().add(R.id.mapFragment, mapFragment).commit();
+        }
+
+        Fragment telemetryFragment = fragmentManager.findFragmentById(R.id.telemetryFragment);
+        if(telemetryFragment == null){
+            telemetryFragment = new TelemetryFragment();
+            fragmentManager.beginTransaction().add(R.id.telemetryFragment,
+                    telemetryFragment).commit();
+        }
+
+        Fragment editorTools = fragmentManager.findFragmentById(R.id.editorToolsFragment);
+        if(editorTools == null){
+            editorTools = new FlightActionsFragment();
+            fragmentManager.beginTransaction().add(R.id.editorToolsFragment, editorTools).commit();
         }
 	}
 
 	@Override
-	protected void onResume() {
-		super.onResume();
-		drone.state.addFlightStateListner(this);
-		drone.state.addModeChangedListener(this);
-		onModeChanged();	// Update the mode detail panel;
+	protected void onStart() {
+		super.onStart();
+		onModeChanged(drone);	// Update the mode detail panel;
 	}
-
-	@Override
-	protected void onStop() {
-		// TODO Auto-generated method stub
-		super.onStop();
-		drone.state.removeModeListner(this);
-		drone.state.removeFlightStateListner(this);
-	}
-
+	
 	@Override
 	public void onAddPoint(LatLng point) {
 		// TODO Auto-generated method stub
@@ -128,18 +145,24 @@ public class FlightActivity extends SuperUI implements
 		// TODO Auto-generated method stub
 
 	}
-
+	
 	@Override
-	public void onFlightStateChanged() {
+	public void onDroneEvent(DroneEventsType event, Drone drone) {
+		super.onDroneEvent(event,drone);
+		switch (event) {
+		case FAILSAFE:
+			onFailsafeChanged(drone);
+			break;
+		case MODE:
+			onModeChanged(drone);
+			break;
+		default:
+			break;
+		}
+		
 	}
 
-	@Override
-	public void onArmChanged() {
-
-	}
-
-	@Override
-	public void onFailsafeChanged() {
+	public void onFailsafeChanged(Drone drone) {
 		if (drone.state.isFailsafe()) {
 			failsafeTextView.setVisibility(View.VISIBLE);
 		} else {
@@ -147,10 +170,7 @@ public class FlightActivity extends SuperUI implements
 		}
 	}
 
-	@Override
-	public void onModeChanged() {
-		Log.d("MODE",	"switched to "+drone.state.getMode());
-		
+	public void onModeChanged(Drone drone) {
 		switch (drone.state.getMode()) {
 		case ROTOR_RTL:
 			modeInfoPanel = new ModeRTLFragment();
