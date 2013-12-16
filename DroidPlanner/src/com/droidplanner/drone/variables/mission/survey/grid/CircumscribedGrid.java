@@ -3,6 +3,9 @@ package com.droidplanner.drone.variables.mission.survey.grid;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
+
+import com.droidplanner.R;
 import com.droidplanner.helpers.geoTools.GeoTools;
 import com.droidplanner.helpers.geoTools.LineLatLng;
 import com.droidplanner.polygon.PolyBounds;
@@ -14,10 +17,12 @@ public class CircumscribedGrid {
 	private LatLng gridLowerLeft;
 	private double extrapolatedDiag;
 	private Double angle;
+	private Context currContext;
 
 	public CircumscribedGrid(List<LatLng> polygonPoints, Double angle,
-			Double lineDist) throws Exception {
+			Double lineDist,Context usedContext) throws Exception {
 		this.angle = angle;
+		this.currContext = usedContext;
 
 		findPolygonBounds(polygonPoints);
 		drawGrid(lineDist);
@@ -37,7 +42,7 @@ public class CircumscribedGrid {
 					angle + 90, lineDist);
 			lines++;
 			if (lines>MAX_NUMBER_OF_LINES) {
-				throw new Exception("Mission is too lengthy");				
+				throw new Exception(currContext.getString(R.string.mission_is_too_lengthy));				
 			}
 		}
 	}

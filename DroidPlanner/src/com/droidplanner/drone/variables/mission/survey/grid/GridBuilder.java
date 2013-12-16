@@ -3,7 +3,6 @@ package com.droidplanner.drone.variables.mission.survey.grid;
 import java.util.List;
 
 import com.droidplanner.drone.variables.mission.survey.SurveyData;
-import com.droidplanner.helpers.geoTools.LineLatLng;
 import com.droidplanner.polygon.Polygon;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -15,11 +14,12 @@ public class GridBuilder {
 	private LatLng origin;
 	private boolean innerWPs;
 	private Double wpDistance;
+	private Context currContext;
 
 	private Grid grid;
 
 	public GridBuilder(Polygon polygon, SurveyData surveyData,
-			LatLng originPoint) {
+			LatLng originPoint,Context usedContext) {
 		this.poly = polygon;
 		this.origin = originPoint;
 		this.angle = surveyData.getAngle();
@@ -27,6 +27,7 @@ public class GridBuilder {
 		this.innerWPs = surveyData.shouldGenerateInnerWPs();
 		this.wpDistance = surveyData.getLongitudinalPictureDistance()
 				.valueInMeters();
+		this.currContext = usedContext;
 	}
 
 	public GridBuilder(Polygon polygon, double angle, double distance,
@@ -42,7 +43,7 @@ public class GridBuilder {
 		List<LatLng> polygonPoints = poly.getLatLngList();
 
 		List<LineLatLng> circumscribedGrid = new CircumscribedGrid(
-				polygonPoints, angle, lineDist).getGrid();
+				polygonPoints, angle, lineDist,currContext).getGrid();
 		List<LineLatLng> trimedGrid = new Trimmer(circumscribedGrid,
 				poly.getLines()).getTrimmedGrid();
 		EndpointSorter gridSorter = new EndpointSorter(trimedGrid, wpDistance);
