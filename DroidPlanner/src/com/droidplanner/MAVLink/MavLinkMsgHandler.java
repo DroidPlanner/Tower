@@ -51,6 +51,12 @@ public class MavLinkMsgHandler {
 		drone.parameters.processMessage(msg);
 		drone.calibrationSetup.processMessage(msg);
 
+		if(msgListeners.size()>0){
+			for(OnMavLinkMsgListener listener: msgListeners){
+				listener.onMavLinkMsg(msg);
+			}
+		}
+		
 		switch (msg.msgid) {
 		case msg_attitude.MAVLINK_MSG_ID_ATTITUDE:
 			msg_attitude m_att = (msg_attitude) msg;
