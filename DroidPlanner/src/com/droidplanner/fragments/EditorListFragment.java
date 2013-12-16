@@ -3,7 +3,6 @@ package com.droidplanner.fragments;
 import it.sephiroth.android.library.widget.AdapterView;
 import it.sephiroth.android.library.widget.AdapterView.OnItemClickListener;
 import it.sephiroth.android.library.widget.AdapterView.OnItemLongClickListener;
-import it.sephiroth.android.library.widget.AdapterView.OnItemSelectedListener;
 import it.sephiroth.android.library.widget.HListView;
 
 import java.util.ArrayList;
@@ -11,7 +10,6 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,18 +20,21 @@ import android.widget.ListView;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.OnEditorInteraction;
-import com.droidplanner.drone.DroneInterfaces.OnWaypointChangedListner;
+import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
+import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
 import com.droidplanner.drone.variables.mission.Mission;
 import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.widgets.adapterViews.MissionItemView;
 
-public class EditorListFragment extends Fragment implements  OnWaypointChangedListner, OnItemLongClickListener,  OnItemClickListener, OnItemSelectedListener{
+public class EditorListFragment extends Fragment implements  OnItemLongClickListener,  OnItemClickListener, OnDroneListner{
 	public HListView list;
 	private Mission mission;
 	private MissionItemView adapter;
 	private OnEditorInteraction editorListner;
 	private ImageButton leftArrow;
 	private ImageButton rightArrow;
+	private Drone drone;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,18 +45,27 @@ public class EditorListFragment extends Fragment implements  OnWaypointChangedLi
 		leftArrow = (ImageButton) view.findViewById(R.id.listLeftArrow);
 		rightArrow = (ImageButton) view.findViewById(R.id.listRightArrow);
 		
-		mission = ((DroidPlannerApp) getActivity().getApplication()).drone.mission;
-		mission.addOnMissionUpdateListner(this);
+		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
+		mission = drone.mission;
 		adapter = new MissionItemView(this.getActivity(), android.R.layout.simple_list_item_1,mission.getItems());
 		list.setOnItemClickListener(this);
 		list.setOnItemLongClickListener(this);
 		list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		
 		list.setAdapter(adapter);
-
-		Log.i( "LIST", "choice mode: " + list.getChoiceMode() );
-
 		return view;
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		drone.events.addDroneListener(this);
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		drone.events.removeDroneListener(this);
 	}
 
 	@Override
@@ -65,26 +75,10 @@ public class EditorListFragment extends Fragment implements  OnWaypointChangedLi
 	}
 
 	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		mission.removeOnMissionUpdateListner(this);
-	}
-
-	public void update() {
-		adapter.notifyDataSetChanged();
-	}
-	
-	/*
-	@Override
-	public void onListItemClick(ListView l, View v, int position, long id) {
-		Log.d("T", "touched "+position);
-		DialogMissionFactory.getDialog(adapter.getItem(position), this.getActivity(), mission);		
-		super.onListItemClick(l, v, position, id);
-	}*/
-
-	@Override
-	public void onMissionUpdate() {
-		update();		
+	public void onDroneEvent(DroneEventsType event, Drone drone) {
+		if (event == DroneEventsType.MISSION) {
+			adapter.notifyDataSetChanged();			
+		}		
 	}
 
 	public void deleteSelected() {
@@ -102,26 +96,8 @@ public class EditorListFragment extends Fragment implements  OnWaypointChangedLi
 	}
 
 	@Override
-	public void onItemSelected(AdapterView<?> parent, View view, int position,
-			long id) {
-		// TODO Auto-generated method stub
-
-
-		Log.d("LIST", "you onItemSelected "+ position);
-	}
-
-	@Override
-	public void onNothingSelected(AdapterView<?> parent) {
-		// TODO Auto-generated method stub
-
-
-		Log.d("LIST", "you onNothingSelected ");
-	}
-
-	@Override
 	public void onItemClick(AdapterView<?> adapter, View view, int position,
-			long id) {
-		Log.d("LIST", "you onItemClick "+ position);		
+			long id) {	
 		MissionItem missionItem = (MissionItem) adapter.getItemAtPosition(position);
 		editorListner.onItemClick(missionItem);
 	}
@@ -129,7 +105,6 @@ public class EditorListFragment extends Fragment implements  OnWaypointChangedLi
 	@Override
 	public boolean onItemLongClick(AdapterView<?> adapter, View view,
 			int position, long id) {
-		Log.d("LIST", "you longcliked item "+position);
 		MissionItem missionItem = (MissionItem) adapter.getItemAtPosition(position);
 		return editorListner.onItemLongClick(missionItem);
 	}
