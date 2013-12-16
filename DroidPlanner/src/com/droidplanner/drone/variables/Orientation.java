@@ -1,5 +1,7 @@
 package com.droidplanner.drone.variables;
 
+import com.MAVLink.Messages.MAVLinkMessage;
+import com.MAVLink.Messages.ardupilotmega.msg_attitude;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneVariable;
 
@@ -38,4 +40,14 @@ public class Orientation extends DroneVariable {
 		}
 	}
 
+	@Override
+	protected void processMAVLinkMessage(MAVLinkMessage msg) {
+		switch (msg.msgid) {
+		case msg_attitude.MAVLINK_MSG_ID_ATTITUDE:
+			msg_attitude m_att = (msg_attitude) msg;
+			setRollPitchYaw(m_att.roll * 180.0 / Math.PI,
+					m_att.pitch * 180.0 / Math.PI, m_att.yaw * 180.0 / Math.PI);
+			break;
+		}
+	}
 }

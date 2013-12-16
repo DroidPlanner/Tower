@@ -58,11 +58,6 @@ public class MavLinkMsgHandler {
 		}
 		
 		switch (msg.msgid) {
-		case msg_attitude.MAVLINK_MSG_ID_ATTITUDE:
-			msg_attitude m_att = (msg_attitude) msg;
-			drone.orientation.setRollPitchYaw(m_att.roll * 180.0 / Math.PI,
-					m_att.pitch * 180.0 / Math.PI, m_att.yaw * 180.0 / Math.PI);
-			break;
 		case msg_vfr_hud.MAVLINK_MSG_ID_VFR_HUD:
 			msg_vfr_hud m_hud = (msg_vfr_hud) msg;
 			drone.setAltitudeGroundAndAirSpeeds(m_hud.alt, m_hud.groundspeed,
@@ -88,12 +83,16 @@ public class MavLinkMsgHandler {
 			drone.state.setMode(newMode);
 			break;	
 /*
+		case msg_attitude.MAVLINK_MSG_ID_ATTITUDE:
+			msg_attitude m_att = (msg_attitude) msg;
+			drone.orientation.setRollPitchYaw(m_att.roll * 180.0 / Math.PI,
+					m_att.pitch * 180.0 / Math.PI, m_att.yaw * 180.0 / Math.PI);
+			break;
 			case msg_global_position_int.MAVLINK_MSG_ID_GLOBAL_POSITION_INT:
 			drone.GPS.setPosition(new LatLng(
 					((msg_global_position_int) msg).lat / 1E7,
 					((msg_global_position_int) msg).lon / 1E7));
 			break;
-
   		case msg_sys_status.MAVLINK_MSG_ID_SYS_STATUS:
 			msg_sys_status m_sys = (msg_sys_status) msg;
 			drone.battery.setBatteryState(m_sys.voltage_battery / 1000.0,

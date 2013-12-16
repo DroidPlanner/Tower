@@ -201,6 +201,8 @@ public class Drone {
 		mavLinkMsgHandler.registerMsgListeners(radio);
 		mavLinkMsgHandler.registerMsgListeners(GPS);
 		mavLinkMsgHandler.registerMsgListeners(RC);
+		mavLinkMsgHandler.registerMsgListeners(orientation);
+		
 	}
 
 }
