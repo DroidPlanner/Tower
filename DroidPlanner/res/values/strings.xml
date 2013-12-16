@@ -215,7 +215,6 @@
     <string name="mode_switch">Assign RC channel 5 to a switch on your radio to control flight modes. Move the switch to each position and select the desired flight mode below.</string>
     <string name="Pause">Pause</string>
 
-    <string name="wpevent_retry">Retrying&#8230;</string>
     <string name="screen_settings">Settings</string>
 
     <!--  Bluetooth device selection strings -->
