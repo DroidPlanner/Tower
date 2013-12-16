@@ -41,7 +41,7 @@ public class Survey extends MissionItem {
 		surveyData.update(0, new Altitude(50), 0, 0);
 		
 		try {
-			GridBuilder gridBuilder = new GridBuilder(polygon, surveyData, new LatLng(0, 0));
+			GridBuilder gridBuilder = new GridBuilder(polygon, surveyData, new LatLng(0, 0),context);
 			polygon.checkIfValid();
 			Grid grid = gridBuilder.generate();
 			grid.setAltitude(surveyData.getAltitude());
