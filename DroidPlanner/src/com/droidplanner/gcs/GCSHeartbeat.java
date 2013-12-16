@@ -27,6 +27,16 @@ public class GCSHeartbeat {
 	 */
 	private ScheduledExecutorService heartbeatExecutor;
 
+    /**
+     * Runnable used to send the heartbeat.
+     */
+    private final Runnable heartbeatRunnable = new Runnable() {
+        @Override
+        public void run() {
+            MavLinkHeartbeat.sendMavHeartbeat(drone);
+        }
+    };
+
 	public GCSHeartbeat(Drone drone, int freqHz) {
 		this.drone = drone;
 		this.period = freqHz;
@@ -41,12 +51,7 @@ public class GCSHeartbeat {
 	public void setActive(boolean active) {
 		if (active) {
 			heartbeatExecutor = Executors.newSingleThreadScheduledExecutor();
-			heartbeatExecutor.scheduleWithFixedDelay(new Runnable() {
-				@Override
-				public void run() {
-					MavLinkHeartbeat.sendMavHeartbeat(drone);
-				}
-			}, 0, period, TimeUnit.SECONDS);
+			heartbeatExecutor.scheduleWithFixedDelay(heartbeatRunnable, 0, period, TimeUnit.SECONDS);
 		} else if (heartbeatExecutor != null) {
 			heartbeatExecutor.shutdownNow();
 			heartbeatExecutor = null;
