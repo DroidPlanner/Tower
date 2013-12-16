@@ -6,6 +6,7 @@ import android.view.MenuItem;
 
 import com.droidplanner.DroidPlannerApp.ConnectionStateListner;
 import com.droidplanner.MAVLink.MavLinkHeartbeat;
+import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
 
@@ -41,9 +42,9 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
 	}
 	
 	@Override
-	public void onDroneEvent(DroneEventsType event) {	
+	public void onDroneEvent(DroneEventsType event, Drone drone) {	
 		if (infoMenu!=null) {
-			infoMenu.onDroneEvent(event);			
+			infoMenu.onDroneEvent(event,drone);			
 		}
 	}
 

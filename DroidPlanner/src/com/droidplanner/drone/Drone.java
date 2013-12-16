@@ -4,7 +4,6 @@ package com.droidplanner.drone;
 import android.content.Context;
 
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
 import com.droidplanner.drone.variables.Altitude;
 import com.droidplanner.drone.variables.Battery;
 import com.droidplanner.drone.variables.Calibration;
@@ -52,10 +51,11 @@ public class Drone {
 	public Context context;
 
 	public Drone(TTS tts, MAVLinkClient mavClient, Context context) {
-		this.tts = tts;
 		this.MavClient = mavClient;
 		this.context = context;
-
+		this.tts = tts;
+		events.addDroneListener(tts);
+		
 		profile.load();
 	}
 

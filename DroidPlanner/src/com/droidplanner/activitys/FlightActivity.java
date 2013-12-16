@@ -1,14 +1,14 @@
 package com.droidplanner.activitys;
 
-import java.util.List;
-
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperUI;
+import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
 import com.droidplanner.drone.variables.mission.MissionItem;
@@ -19,7 +19,17 @@ import com.droidplanner.fragments.FlightMapFragment;
 import com.droidplanner.fragments.RCFragment;
 import com.droidplanner.fragments.TelemetryFragment;
 import com.droidplanner.fragments.helpers.OnMapInteractionListener;
-import com.droidplanner.fragments.mode.*;
+import com.droidplanner.fragments.mode.ModeAcroFragment;
+import com.droidplanner.fragments.mode.ModeAltholdFragment;
+import com.droidplanner.fragments.mode.ModeAutoFragment;
+import com.droidplanner.fragments.mode.ModeCircleFragment;
+import com.droidplanner.fragments.mode.ModeDriftFragment;
+import com.droidplanner.fragments.mode.ModeGuidedFragment;
+import com.droidplanner.fragments.mode.ModeLandFragment;
+import com.droidplanner.fragments.mode.ModeLoiterFragment;
+import com.droidplanner.fragments.mode.ModePositionFragment;
+import com.droidplanner.fragments.mode.ModeRTLFragment;
+import com.droidplanner.fragments.mode.ModeStabilizeFragment;
 import com.droidplanner.polygon.PolygonPoint;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -68,7 +78,7 @@ public class FlightActivity extends SuperUI implements
 	@Override
 	protected void onStart() {
 		super.onStart();
-		onModeChanged();	// Update the mode detail panel;
+		onModeChanged(drone);	// Update the mode detail panel;
 	}
 	
 	@Override
@@ -137,14 +147,14 @@ public class FlightActivity extends SuperUI implements
 	}
 	
 	@Override
-	public void onDroneEvent(DroneEventsType event) {
-		super.onDroneEvent(event);
+	public void onDroneEvent(DroneEventsType event, Drone drone) {
+		super.onDroneEvent(event,drone);
 		switch (event) {
 		case FAILSAFE:
-			onFailsafeChanged();
+			onFailsafeChanged(drone);
 			break;
 		case MODE:
-			onModeChanged();
+			onModeChanged(drone);
 			break;
 		default:
 			break;
@@ -152,7 +162,7 @@ public class FlightActivity extends SuperUI implements
 		
 	}
 
-	public void onFailsafeChanged() {
+	public void onFailsafeChanged(Drone drone) {
 		if (drone.state.isFailsafe()) {
 			failsafeTextView.setVisibility(View.VISIBLE);
 		} else {
@@ -160,7 +170,7 @@ public class FlightActivity extends SuperUI implements
 		}
 	}
 
-	public void onModeChanged() {
+	public void onModeChanged(Drone drone) {
 		switch (drone.state.getMode()) {
 		case ROTOR_RTL:
 			modeInfoPanel = new ModeRTLFragment();

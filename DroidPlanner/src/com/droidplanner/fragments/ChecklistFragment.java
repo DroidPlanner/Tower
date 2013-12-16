@@ -91,7 +91,7 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 	}
 
 	@Override
-	public void onDroneEvent(DroneEventsType event) {
+	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		onInfoUpdate();
 	}
 

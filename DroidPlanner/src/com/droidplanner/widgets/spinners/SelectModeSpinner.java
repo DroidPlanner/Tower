@@ -23,19 +23,19 @@ public class SelectModeSpinner extends SpinnerSelfSelect implements
 	}
 
 	@Override
-	public void onDroneEvent(DroneEventsType event) {
+	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch (event) {
 		case TYPE:
-			buildAdapter();			
+			buildAdapter(drone);			
 			break;
 		case MODE:
-			onModeChanged();
+			onModeChanged(drone);
 		default:
 			break;
 		}		
 	}
 
-	public void onModeChanged() {
+	public void onModeChanged(Drone drone) {
 		try {
 			this.forcedSetSelection(modeAdapter.getPosition(drone.state.getMode()));
 		} catch (Exception e) {
@@ -46,10 +46,10 @@ public class SelectModeSpinner extends SpinnerSelfSelect implements
 	public void buildSpinner(Context context, Drone drone) {
 		this.drone = drone;
 		setOnSpinnerItemSelectedListener(this);
-		buildAdapter();
+		buildAdapter(drone);
 	}
 
-	private void buildAdapter() {
+	private void buildAdapter(Drone drone) {
 		modeAdapter = new ModeAdapter(this.context,
 				android.R.layout.simple_spinner_dropdown_item,
 				ApmModes.getModeList(this.drone.type.getType()));

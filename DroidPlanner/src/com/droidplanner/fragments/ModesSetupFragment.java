@@ -45,7 +45,7 @@ public class ModesSetupFragment extends Fragment implements OnDroneListner {
 	}
 
 	@Override
-	public void onDroneEvent(DroneEventsType event) {
+	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch (event) {
 		case RC_IN:
 			int[] data = drone.RC.in;

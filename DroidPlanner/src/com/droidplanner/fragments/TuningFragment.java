@@ -114,10 +114,10 @@ public class TuningFragment extends Fragment implements OnDroneListner {
 	}
 
 	@Override
-	public void onDroneEvent(DroneEventsType event) {
+	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch (event) {
 		case ORIENTATION:
-			onNewOrientationData();
+			onNewOrientationData(drone);
 			break;
 		default:
 			break;
@@ -125,7 +125,7 @@ public class TuningFragment extends Fragment implements OnDroneListner {
 		
 	}
 
-	public void onNewOrientationData() {
+	public void onNewOrientationData(Drone drone) {
 		 bottomDataValue.newData(drone.orientation.getPitch());
 		 topDataValue.newData(drone.orientation.getRoll());		 
 		 bottomDataReference.newData(drone.navigation.getNavPitch());		 

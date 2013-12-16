@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.OnEditorInteraction;
 import com.droidplanner.activitys.helpers.SuperUI;
+import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.drone.variables.mission.Mission;
 import com.droidplanner.drone.variables.mission.MissionItem;
@@ -91,12 +92,12 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 	}
 
 	@Override
-	public void onDroneEvent(DroneEventsType event) {
+	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch (event) {
 		case MISSION:
 			// Remove detail window if item is removed
 			if (itemDetailFragment != null) {
-				if (!mission.hasItem(itemDetailFragment.getItem())) {
+				if (!drone.mission.hasItem(itemDetailFragment.getItem())) {
 					removeItemDetail();
 				}
 			}

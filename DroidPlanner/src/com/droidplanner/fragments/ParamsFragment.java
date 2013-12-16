@@ -100,7 +100,7 @@ public class ParamsFragment extends ListFragment
 	}
 
 	@Override
-	public void onDroneEvent(DroneEventsType event) {
+	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		if (event == DroneEventsType.TYPE) {
 	        adapter.loadMetadata(drone);
 		}		

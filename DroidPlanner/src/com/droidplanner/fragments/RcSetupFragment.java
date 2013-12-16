@@ -86,7 +86,7 @@ public class RcSetupFragment extends Fragment implements  OnDroneListner {
 	}
 
 	@Override
-	public void onDroneEvent(DroneEventsType event) {
+	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch (event) {
 		case RC_IN:
 			onNewInputRcData();

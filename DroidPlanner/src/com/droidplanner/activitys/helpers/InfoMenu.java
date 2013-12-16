@@ -57,40 +57,42 @@ public class InfoMenu implements OnDroneListner {
 	}
 
 	@Override
-	public void onDroneEvent(DroneEventsType event) {
-		mode.onDroneEvent(event);
+	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch (event) {
 		case BATTERY:
-			updateBatteryInfo();
+			updateBatteryInfo(drone);
 			break;
-		case GPS:
-			updateGpsInfo();
+		case GPS_FIX:
+			updateGpsInfo(drone);
 			break;
 		case RADIO:
-			updateRadioInfo();
+			updateRadioInfo(drone);
 			break;
 		case STATE:
-			updateFlightStateInfo();
+			updateFlightStateInfo(drone);
 			break;
 		case HOME:
-			updateHomeInfo();
+			updateHomeInfo(drone);
 			break;
 		default:
 			break;
 		}
+		if(mode!=null){
+			mode.onDroneEvent(event,drone);
+		}
 	}
 
-	private void updateBatteryInfo() {
+	private void updateBatteryInfo(Drone drone) {
 		battery.setTitle(String.format(" %2.1fv, %2.0f%% ",
 				drone.battery.getBattVolt(), drone.battery.getBattRemain()));
 	}
 
-	private void updateGpsInfo() {
+	private void updateGpsInfo(Drone drone) {
 		gps.setTitle(String.format(" %d, %s", drone.GPS.getSatCount(),
 				drone.GPS.getFixType()));
 	}
 
-	private void updateRadioInfo() {
+	private void updateRadioInfo(Drone drone) {
 		signal.setTitle(String.format("%d%%", drone.radio.getSignalStrength()));
 		signalRSSI.setTitle(String.format("RSSI %2.0f dB",
 				drone.radio.getRssi()));
@@ -106,11 +108,11 @@ public class InfoMenu implements OnDroneListner {
 				drone.radio.getRemFadeMargin()));
 	}
 
-	public void updateHomeInfo() {
+	public void updateHomeInfo(Drone drone) {
 		home.setTitle(drone.home.getDroneDistanceToHome().toString());
 	}
 
-	public void updateFlightStateInfo() {
+	public void updateFlightStateInfo(Drone drone) {
 		if (drone.state.isFlying()) {
 			timer.reStart();
 		} else {

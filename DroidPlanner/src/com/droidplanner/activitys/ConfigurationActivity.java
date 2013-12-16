@@ -9,6 +9,7 @@ import android.view.MenuItem;
 
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperUI;
+import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.fragments.*;
 
@@ -59,7 +60,7 @@ public class ConfigurationActivity extends SuperUI{
 	}
 
 	@Override
-	public void onDroneEvent(DroneEventsType event) {		
+	public void onDroneEvent(DroneEventsType event, Drone drone) {		
 	}
 
 }

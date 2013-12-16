@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.drone.variables.GuidedPoint;
 import com.droidplanner.drone.variables.GuidedPoint.OnGuidedListener;
@@ -128,7 +129,7 @@ public class FlightMapFragment extends DroneMap implements
 	}
 
 	@Override
-	public void onDroneEvent(DroneEventsType event) {
+	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch (event) {
 		case GPS:
 			droneMarker.onDroneUpdate();
@@ -140,6 +141,6 @@ public class FlightMapFragment extends DroneMap implements
 		default:
 			break;
 		}
-		super.onDroneEvent(event);
+		super.onDroneEvent(event,drone);
 	}
 }

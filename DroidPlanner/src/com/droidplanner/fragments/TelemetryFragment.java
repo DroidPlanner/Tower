@@ -62,15 +62,15 @@ public class TelemetryFragment extends Fragment implements OnDroneListner{
 	}
 
 	@Override
-	public void onDroneEvent(DroneEventsType event) {
+	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch (event) {
 		case NAVIGATION:
 			break;
 		case ORIENTATION:
-			onOrientationUpdate();
+			onOrientationUpdate(drone);
 			break;
 		case SPEED:
-			onSpeedAltitudeAndClimbRateUpdate();
+			onSpeedAltitudeAndClimbRateUpdate(drone);
 			break;
 		default:
 			break;		
@@ -78,7 +78,7 @@ public class TelemetryFragment extends Fragment implements OnDroneListner{
 		
 	}
 	
-	public void onOrientationUpdate() {
+	public void onOrientationUpdate(Drone drone) {
 		float r = (float) drone.orientation.getRoll();
 		float p = (float) drone.orientation.getPitch();
 		float y = (float) drone.orientation.getYaw();
@@ -91,7 +91,7 @@ public class TelemetryFragment extends Fragment implements OnDroneListner{
 
 	}
 
-	public void onSpeedAltitudeAndClimbRateUpdate() {
+	public void onSpeedAltitudeAndClimbRateUpdate(Drone drone) {
 		airSpeed.setText(String.format("%3.1f", drone.speed.getAirSpeed()));
 		groundSpeed.setText(String.format("%3.1f", drone.speed.getGroundSpeed()));
 		climbRate.setText(String.format("%3.1f", drone.speed.getVerticalSpeed()));
