@@ -3,14 +3,13 @@ package com.droidplanner.activitys.helpers;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import com.droidplanner.DroidPlannerApp.ConnectionStateListner;
-import com.droidplanner.MAVLink.MavLinkHeartbeat;
+import com.droidplanner.gcs.GCSHeartbeat;
 
 public abstract class SuperUI extends SuperActivity implements ConnectionStateListner {
 	private ScreenOrientation screenOrientation = new ScreenOrientation(this);
 	private InfoMenu infoMenu;
-	private MavLinkHeartbeat mavLinkHeartbeat;
+	private GCSHeartbeat gcsHeartbeat;
 	
 	public SuperUI() {
 		super();        
@@ -20,7 +19,7 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		screenOrientation.unlock();
-		mavLinkHeartbeat = new MavLinkHeartbeat(drone,1);
+		gcsHeartbeat = new GCSHeartbeat(drone,1);
 	}
 
 	@Override
@@ -51,7 +50,7 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
 	}
 
 	public void notifyDisconnected() {
-		mavLinkHeartbeat.setActive(false);
+		gcsHeartbeat.setActive(false);
 		invalidateOptionsMenu();		
 		/*
 		if(armButton != null){
@@ -61,7 +60,7 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
 	}
 
 	public void notifyConnected() {
-		mavLinkHeartbeat.setActive(true);
+		gcsHeartbeat.setActive(true);
 		invalidateOptionsMenu();
 		
 		/*
