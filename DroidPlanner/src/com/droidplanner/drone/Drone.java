@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.content.Context;
 
+import com.droidplanner.MAVLink.MavLinkMsgHandler;
 import com.droidplanner.drone.DroneInterfaces.DroneTypeListner;
 import com.droidplanner.drone.DroneInterfaces.HomeDistanceChangedListner;
 import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
@@ -74,7 +75,7 @@ public class Drone {
 		this.tts = tts;
 		this.MavClient = mavClient;
 		this.context = context;
-
+		
         profile.load();
 	}
 
@@ -193,6 +194,10 @@ public class Drone {
 	public void notifyMapTypeChanged() {
 		if (mapConfigListener != null)
 			mapConfigListener.onMapTypeChanged();
+	}
+
+	public void setMavLinkMsgHandler(MavLinkMsgHandler mavLinkMsgHandler) {
+		mavLinkMsgHandler.registerMsgListeners(battery);
 	}
 
 }
