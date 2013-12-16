@@ -10,8 +10,11 @@ import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
+
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperUI;
+import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.fragments.ChecklistFragment;
 import com.droidplanner.fragments.ModesSetupFragment;
 import com.droidplanner.fragments.ParamsFragment;
@@ -19,7 +22,6 @@ import com.droidplanner.fragments.RcSetupFragment;
 import com.droidplanner.fragments.SettingsFragment;
 import com.droidplanner.fragments.TuningFragment;
 import com.droidplanner.widgets.viewPager.TabPageIndicator;
-
 
 public class ConfigurationActivity extends SuperUI{
 
@@ -53,6 +55,12 @@ public class ConfigurationActivity extends SuperUI{
 	    }
 	}
 
+
+	@Override
+	public void onDroneEvent(DroneEventsType event, Drone drone) {
+		super.onDroneEvent(event,drone);
+	}
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {

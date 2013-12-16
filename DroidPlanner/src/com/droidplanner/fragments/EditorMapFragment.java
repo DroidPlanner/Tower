@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.droidplanner.activitys.helpers.OnEditorInteraction;
-import com.droidplanner.drone.DroneInterfaces.OnWaypointChangedListner;
 import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
 import com.droidplanner.fragments.helpers.CameraGroundOverlays;
@@ -29,7 +28,7 @@ import com.google.android.gms.maps.model.Marker;
 @SuppressLint("UseSparseArrays")
 public class EditorMapFragment extends DroneMap implements
 		OnMapLongClickListener, OnMarkerDragListener, OnMapClickListener,
-		OnMarkerClickListener, OnWaypointChangedListner {
+		OnMarkerClickListener{
 
 	public MapPath polygonPath;
 

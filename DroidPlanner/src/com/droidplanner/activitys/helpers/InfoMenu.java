@@ -1,6 +1,5 @@
 package com.droidplanner.activitys.helpers;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -8,16 +7,12 @@ import android.view.MenuItem;
 
 import com.droidplanner.R;
 import com.droidplanner.drone.Drone;
-import com.droidplanner.drone.DroneInterfaces.HomeDistanceChangedListner;
-import com.droidplanner.drone.DroneInterfaces.InfoListner;
-import com.droidplanner.drone.DroneInterfaces.OnStateListner;
-import com.droidplanner.drone.DroneInterfaces.OnWaypointManagerListener;
-import com.droidplanner.drone.variables.mission.WaypointEvent_Type;
+import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
+import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
 import com.droidplanner.widgets.TimerView;
 import com.droidplanner.widgets.spinners.SelectModeSpinner;
 
-public class InfoMenu implements InfoListner, HomeDistanceChangedListner,
-		OnStateListner, OnWaypointManagerListener {
+public class InfoMenu implements OnDroneListner {
 	private Drone drone;
 	private MenuItem battery;
 	private MenuItem gps;
@@ -30,45 +25,114 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner,
 	private MenuItem signalRemNoise;
 	private MenuItem signalRemFade;
 	private MenuItem signalFade;
-	private Context context;
-	private ProgressDialog pd;
-	private int pdTitle;
-	
+
 	public SelectModeSpinner mode;
 
 	private TimerView timer;
 
 	public InfoMenu(Drone drone, Context context) {
 		this.drone = drone;
-		this.context = context;
-		this.drone.waypointMananger.setWaypointManagerListener(this);
 	}
 
 	public void inflateMenu(Menu menu, MenuInflater menuInflater) {
 		if (drone.MavClient.isConnected()) {
 			menuInflater.inflate(R.menu.menu_newui_connected, menu);
-			battery = menu.findItem(R.id.bar_battery);
-			gps = menu.findItem(R.id.bar_gps);
-			propeler = menu.findItem(R.id.bar_propeller);
-			home = menu.findItem(R.id.bar_home);
-			signal = menu.findItem(R.id.bar_signal);
-			signalRSSI = menu.findItem(R.id.bar_signal_rssi);
-			signalRemRSSI =menu.findItem(R.id.bar_signal_rssirem);
-			signalNoise =menu.findItem(R.id.bar_signal_noise);
-			signalRemNoise = menu.findItem(R.id.bar_signal_noiserem);
-			signalFade = menu.findItem(R.id.bar_signal_fade);
-			signalRemFade = menu.findItem(R.id.bar_signal_faderem);
-			mode = (SelectModeSpinner) menu.findItem(R.id.bar_mode)
-					.getActionView();
-
-			timer = new TimerView(propeler);
-
-			drone.setHomeChangedListner(this);
-			drone.addInfoListener(this);
-			drone.state.addFlightStateListner(this);
-
+			findViews(menu);
 		} else {
 			menuInflater.inflate(R.menu.menu_newui_disconnected, menu);
+		}
+	}
+
+	private void findViews(Menu menu) {
+		battery = menu.findItem(R.id.bar_battery);
+		gps = menu.findItem(R.id.bar_gps);
+		propeler = menu.findItem(R.id.bar_propeller);
+		home = menu.findItem(R.id.bar_home);
+		signal = menu.findItem(R.id.bar_signal);
+		signalRSSI = menu.findItem(R.id.bar_signal_rssi);
+		signalRemRSSI = menu.findItem(R.id.bar_signal_rssirem);
+		signalNoise = menu.findItem(R.id.bar_signal_noise);
+		signalRemNoise = menu.findItem(R.id.bar_signal_noiserem);
+		signalFade = menu.findItem(R.id.bar_signal_fade);
+		signalRemFade = menu.findItem(R.id.bar_signal_faderem);
+		mode = (SelectModeSpinner) menu.findItem(R.id.bar_mode).getActionView();
+		timer = new TimerView(propeler);
+	}
+
+	public void forceViewsUpdate() {
+		onDroneEvent(DroneEventsType.BATTERY, drone);
+		onDroneEvent(DroneEventsType.GPS_FIX, drone);
+		onDroneEvent(DroneEventsType.RADIO, drone);
+		onDroneEvent(DroneEventsType.STATE, drone);
+		onDroneEvent(DroneEventsType.HOME, drone);
+		onDroneEvent(DroneEventsType.MODE, drone);
+	}
+
+	@Override
+	public void onDroneEvent(DroneEventsType event, Drone drone) {
+		try {
+			switch (event) {
+			case BATTERY:
+				updateBatteryInfo(drone);
+				break;
+			case GPS_FIX:
+			case GPS_COUNT:
+				updateGpsInfo(drone);
+				break;
+			case RADIO:
+				updateRadioInfo(drone);
+				break;
+			case STATE:
+				updateFlightStateInfo(drone);
+				break;
+			case HOME:
+				updateHomeInfo(drone);
+				break;
+			default:
+				break;
+			}
+			mode.onDroneEvent(event, drone);
+		} catch (NullPointerException e) {
+			// Can fail saftly with null pointer if the layout's have not been
+			// inflated yet
+		}
+	}
+
+	private void updateBatteryInfo(Drone drone) {
+		battery.setTitle(String.format(" %2.1fv, %2.0f%% ",
+				drone.battery.getBattVolt(), drone.battery.getBattRemain()));
+	}
+
+	private void updateGpsInfo(Drone drone) {
+		gps.setTitle(String.format(" %d, %s", drone.GPS.getSatCount(),
+				drone.GPS.getFixType()));
+	}
+
+	private void updateRadioInfo(Drone drone) {
+		signal.setTitle(String.format("%d%%", drone.radio.getSignalStrength()));
+		signalRSSI.setTitle(String.format("RSSI %2.0f dB",
+				drone.radio.getRssi()));
+		signalRemRSSI.setTitle(String.format("RemRSSI %2.0f dB",
+				drone.radio.getRemRssi()));
+		signalNoise.setTitle(String.format("Noise %2.0f dB",
+				drone.radio.getNoise()));
+		signalRemNoise.setTitle(String.format("RemNoise %2.0f dB",
+				drone.radio.getRemNoise()));
+		signalFade.setTitle(String.format("Fade %2.0f dB",
+				drone.radio.getFadeMargin()));
+		signalRemFade.setTitle(String.format("RemFade %2.0f dB",
+				drone.radio.getRemFadeMargin()));
+	}
+
+	public void updateHomeInfo(Drone drone) {
+		home.setTitle(drone.home.getDroneDistanceToHome().toString());
+	}
+
+	public void updateFlightStateInfo(Drone drone) {
+		if (drone.state.isFlying()) {
+			timer.reStart();
+		} else {
+			timer.stop();
 		}
 	}
 
@@ -86,104 +150,9 @@ public class InfoMenu implements InfoListner, HomeDistanceChangedListner,
 		}
 	}
 
-	@Override
-	public void onInfoUpdate() {
-		signal.setTitle(String.format("%d%%",drone.radio.getSignalStrength()));
-		signalRSSI.setTitle(String.format("RSSI %2.0f dB",drone.radio.getRssi()));
-		signalRemRSSI.setTitle(String.format("RemRSSI %2.0f dB",drone.radio.getRemRssi()));
-		signalNoise.setTitle(String.format("Noise %2.0f dB",drone.radio.getNoise()));
-		signalRemNoise.setTitle(String.format("RemNoise %2.0f dB",drone.radio.getRemNoise()));
-		signalFade.setTitle(String.format("Fade %2.0f dB",drone.radio.getFadeMargin()));
-		signalRemFade.setTitle(String.format("RemFade %2.0f dB",drone.radio.getRemFadeMargin()));
-		battery.setTitle(String.format(" %2.1fv, %2.0f%% ", drone.battery.getBattVolt(), drone.battery.getBattRemain()));
-		gps.setTitle(String.format(" %d, %s", drone.GPS.getSatCount(), drone.GPS.getFixType()));
-	}
-
-	@Override
-	public void onDistanceToHomeHasChanged() {
-		home.setTitle(drone.home.getDroneDistanceToHome().toString());
-	}
-
 	public void setupModeSpinner(Context context) {
 		if (mode != null) {
 			mode.buildSpinner(context, drone);
 		}
 	}
-
-	@Override
-	public void onFlightStateChanged() {
-		if (drone.state.isFlying()) {
-			timer.reStart();
-		} else {
-			timer.stop();
-		}
-	}
-
-	@Override
-	public void onArmChanged() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onFailsafeChanged() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onBeginWaypointEvent(WaypointEvent_Type wpEvent) {
-		if (pd != null) {
-			pd.dismiss();
-			pd = null;
-		}
-		pd = new ProgressDialog(context);
-		switch (wpEvent) {
-		case WP_UPLOAD:
-			pdTitle = R.string.wpevent_upload;
-			break;
-		case WP_DOWNLOAD:
-			pdTitle = R.string.wpevent_download;
-			break;
-		default:
-			break;
-		}
-		pd.setTitle(pdTitle);
-		pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-		pd.setIndeterminate(true);
-		pd.setCancelable(false);
-		pd.setCanceledOnTouchOutside(true);
-
-		pd.show();
-	}
-
-	@Override
-	public void onWaypointEvent(WaypointEvent_Type wpEvent, int index, int count) {
-		if (pd != null) {
-			if (wpEvent != WaypointEvent_Type.WP_RETRY) {
-				
-				if(wpEvent.equals(WaypointEvent_Type.WP_CONTINUE))
-					pd.setTitle(pdTitle);
-				
-				if (pd.isIndeterminate()) {
-					pd.setIndeterminate(false);
-					pd.setMax(count);
-				}
-				pd.setProgress(index);
-			} 
-			else {
-				pd.setIndeterminate(true);
-				pd.setTitle(R.string.wpevent_retry);
-			}
-		}
-	}
-
-	@Override
-	public void onEndWaypointEvent(WaypointEvent_Type wpEvent) {
-		if (pd != null) {
-			pd.dismiss();
-			pd = null;
-		}
-	}
-
 }
