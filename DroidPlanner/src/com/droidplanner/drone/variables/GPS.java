@@ -1,6 +1,7 @@
 package com.droidplanner.drone.variables;
 
 import com.MAVLink.Messages.MAVLinkMessage;
+import com.MAVLink.Messages.ardupilotmega.msg_global_position_int;
 import com.MAVLink.Messages.ardupilotmega.msg_gps_raw_int;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneVariable;
@@ -75,10 +76,17 @@ public class GPS extends DroneVariable {
 
 	@Override
 	protected void processMAVLinkMessage(MAVLinkMessage msg) {
-		if (msg.msgid == msg_gps_raw_int.MAVLINK_MSG_ID_GPS_RAW_INT) {
+		switch (msg.msgid) {
+		case msg_gps_raw_int.MAVLINK_MSG_ID_GPS_RAW_INT:
+
 			setGpsState(((msg_gps_raw_int) msg).fix_type,
 					((msg_gps_raw_int) msg).satellites_visible,
 					((msg_gps_raw_int) msg).eph);
+			break;
+		case msg_global_position_int.MAVLINK_MSG_ID_GLOBAL_POSITION_INT:
+			setPosition(new LatLng(((msg_global_position_int) msg).lat / 1E7,
+					((msg_global_position_int) msg).lon / 1E7));
+			break;
 		}
 
 	}
