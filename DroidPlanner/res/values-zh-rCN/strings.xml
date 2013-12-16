@@ -8,7 +8,7 @@
     <string name="settings">设置</string>
     <string name="menu_connect">连接</string>
     <string name="menu_disconnect">断开连接</string>
-    <string name="conected">已连接</string>
+    <string name="connected">已连接</string>
     <string name="disconnected">已断开</string>
     <string name="save">保存</string>
     <string name="open">打开</string>

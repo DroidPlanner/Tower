@@ -5,7 +5,7 @@
     <string name="settings">Iestatījumi</string>
     <string name="menu_connect">Savienot</string>
     <string name="menu_disconnect">Atvienot</string>      
-    <string name="conected">Savienots</string>
+    <string name="connected">Savienots</string>
     <string name="disconnected">Atvienots</string>
     <string name="save">Saglabāt</string>
     <string name="open">Atvērt</string>

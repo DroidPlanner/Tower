@@ -43,7 +43,7 @@
     <!-- Original value: Disconnect -->
     <string name="menu_disconnect">Отключить</string>
     <!-- Original value: Connected -->
-    <string name="conected">Подключение</string>
+    <string name="connected">Подключение</string>
     <!-- Original value: Disconnected -->
     <string name="disconnected">Отключение</string>
     <!-- Original value: Save -->
