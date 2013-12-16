@@ -1,13 +1,15 @@
 package com.droidplanner.MAVLink;
 
-import android.os.Handler;
-import android.util.Log;
 import com.MAVLink.Messages.MAVLinkPacket;
 import com.MAVLink.Messages.ardupilotmega.msg_heartbeat;
 import com.MAVLink.Messages.enums.MAV_AUTOPILOT;
 import com.MAVLink.Messages.enums.MAV_TYPE;
 import com.droidplanner.drone.Drone;
 
+/**
+ * This class contains logic used to send an heartbeat to a {@link com.droidplanner.drone.Drone}.
+ * @since 1.2.0
+ */
 public class MavLinkHeartbeat {
 
     /**
@@ -27,38 +29,11 @@ public class MavLinkHeartbeat {
      */
     private static final MAVLinkPacket sMsgPacket = sMsg.pack();
 
-	private final Drone drone;
-	private boolean active;
-	private final int freqHz;
-	private final Handler handler = new Handler();
-	
-	public MavLinkHeartbeat(Drone drone,int freqHz){
-		this.drone = drone;
-		this.freqHz = freqHz;
-	}
-
-	private final Runnable runnable = new Runnable() {
-	   @Override
-	   public void run() {
-	      sendMavHeartbeat(drone);
-		  Log.d("Heartbeat", "beating");
-		  
-		   if(isActive())
-			  handler.postDelayed(this, freqHz*1000);
-	   }
-	};
-	
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-		if(active){
-			handler.postDelayed(runnable, freqHz*1000);			
-		}
-	}
-
+    /**
+     * Sends the heartbeat to the {@link com.droidplanner.drone.Drone} object.
+     * @param drone drone to send the heartbeat to
+     * @since 1.2.0
+     */
 	public static void sendMavHeartbeat(Drone drone) {
 		if(drone!=null)
 		drone.MavClient.sendMavPacket(sMsgPacket);
