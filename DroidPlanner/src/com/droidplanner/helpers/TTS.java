@@ -9,8 +9,11 @@ import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 
 import com.MAVLink.Messages.ApmModes;
+import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
+import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
 
-public class TTS implements OnInitListener {
+public class TTS implements OnInitListener, OnDroneListner {
 	private static final double BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT = 10;
 
 	TextToSpeech tts;
@@ -38,22 +41,35 @@ public class TTS implements OnInitListener {
 	private boolean shouldEnableTTS() {
 		return prefs.getBoolean("pref_enable_tts", false);
 	}
-
-	public void speakGpsMode(int fix) {
-		switch (fix) {
-		case 2:
-			speak("GPS 2D Lock");
-			break;
-		case 3:
-			speak("GPS 3D Lock");
-			break;
-		default:
-			speak("Lost GPS Lock");
-			break;
+	
+	
+	/**
+	 * Warn the user if needed via the TTS module
+	 */
+	public void onDroneEvent(DroneEventsType event, Drone drone) {
+		if (tts != null) {
+			switch (event) {
+			case ARMING:
+				speakArmedState(drone.state.isArmed());
+				break;
+			case BATTERY:
+				batteryDischargeNotification(drone.battery
+						.getBattRemain());
+				break;
+			case MODE:
+				speakMode(drone.state.getMode());
+				break;
+			case GPS_FIX:
+				speakGpsMode(drone.GPS.getFixTypeNumeric());
+				break;
+			default:
+				break;
+			}
 		}
+
 	}
 
-	public void speakArmedState(boolean armed) {
+	private void speakArmedState(boolean armed) {
 		if (armed) {
 			speak("Armed");
 		} else {
@@ -61,7 +77,14 @@ public class TTS implements OnInitListener {
 		}
 	}
 
-	public void speakMode(ApmModes mode) {
+	private void batteryDischargeNotification(double battRemain) {
+		if (lastBatteryDischargeNotification != (int) ((battRemain - 1) / BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT)) {
+			lastBatteryDischargeNotification = (int) ((battRemain - 1) / BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT);
+			speak("Battery at" + (int) battRemain + "%");
+		}
+	}
+
+	private void speakMode(ApmModes mode) {
 		String modeString = "Mode ";
 		switch (mode) {
 		case FIXED_WING_FLY_BY_WIRE_A:
@@ -90,10 +113,17 @@ public class TTS implements OnInitListener {
 		speak(modeString);
 	}
 
-	public void batteryDischargeNotification(double battRemain) {
-		if (lastBatteryDischargeNotification != (int) ((battRemain - 1) / BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT)) {
-			lastBatteryDischargeNotification = (int) ((battRemain - 1) / BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT);
-			speak("Battery at" + (int) battRemain + "%");
+	private void speakGpsMode(int fix) {
+		switch (fix) {
+		case 2:
+			speak("GPS 2D Lock");
+			break;
+		case 3:
+			speak("GPS 3D Lock");
+			break;
+		default:
+			speak("Lost GPS Lock");
+			break;
 		}
 	}
 }

@@ -11,13 +11,14 @@ import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
 import com.droidplanner.MAVLink.MavLinkStreamRates;
 import com.droidplanner.drone.Drone;
-import com.droidplanner.drone.DroneInterfaces.OnTuningDataListner;
+import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
+import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
 import com.droidplanner.parameters.Parameter;
 import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.graph.Chart;
 import com.droidplanner.widgets.graph.ChartSeries;
 
-public class TuningFragment extends Fragment implements OnTuningDataListner {
+public class TuningFragment extends Fragment implements OnDroneListner {
 
 	private static final int NAV_MSG_RATE = 50;
 	private static final int CHART_BUFFER_SIZE = 20*NAV_MSG_RATE; // About 20s of data on the buffer
@@ -54,27 +55,27 @@ public class TuningFragment extends Fragment implements OnTuningDataListner {
 		setupLocalViews(view);		
 		setupCharts();
 
-		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
-		drone.setTuningDataListner(this);
-		
+		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;		
 		return view;	
 	}
 
 	@Override
 	public void onStart() {
 		super.onStart();
+		drone.events.addDroneListener(this);
 		setupDataStreamingForTuning(); 
-	}
-
-	private void setupDataStreamingForTuning() {
-		// Sets the nav messages at 50Hz and other messages at a low rate 1Hz
-		MavLinkStreamRates.setupStreamRates(drone.MavClient, 1, 0, 1, 1, 1, 0, 0, NAV_MSG_RATE);
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
+		drone.events.removeDroneListener(this);
 		MavLinkStreamRates.setupStreamRatesFromPref((DroidPlannerApp) getActivity().getApplication());
+	}
+
+	private void setupDataStreamingForTuning() {
+		// Sets the nav messages at 50Hz and other messages at a low rate 1Hz
+		MavLinkStreamRates.setupStreamRates(drone.MavClient, 1, 0, 1, 1, 1, 0, 0, NAV_MSG_RATE);
 	}
 
 	private void setupLocalViews(View view) {
@@ -113,7 +114,18 @@ public class TuningFragment extends Fragment implements OnTuningDataListner {
 	}
 
 	@Override
-	public void onNewOrientationData() {
+	public void onDroneEvent(DroneEventsType event, Drone drone) {
+		switch (event) {
+		case ORIENTATION:
+			onNewOrientationData(drone);
+			break;
+		default:
+			break;
+		}
+		
+	}
+
+	public void onNewOrientationData(Drone drone) {
 		 bottomDataValue.newData(drone.orientation.getPitch());
 		 topDataValue.newData(drone.orientation.getRoll());		 
 		 bottomDataReference.newData(drone.navigation.getNavPitch());		 
@@ -121,10 +133,4 @@ public class TuningFragment extends Fragment implements OnTuningDataListner {
 		 bottomChart.update();
 		 topChart.update();
 	}
-
-
-	@Override
-	public void onNewNavigationData() {
-	}
-	
 }

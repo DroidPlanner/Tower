@@ -23,8 +23,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 
-public class OfflineMapFragment extends MapFragment
-		implements DroneInterfaces.MapConfigListener {
+public class OfflineMapFragment extends MapFragment{
 
 	public static final String PREF_MAP_TYPE = "pref_map_type";
 
@@ -40,7 +39,7 @@ public class OfflineMapFragment extends MapFragment
 			Bundle bundle) {
 		View view = super.onCreateView(inflater, viewGroup, bundle);
 
-		((DroidPlannerApp) getActivity().getApplication()).drone.setMapConfigListener(this);
+		//((DroidPlannerApp) getActivity().getApplication()).drone.setMapConfigListener(this);
 
 		setupMap();
 		return view;
@@ -151,8 +150,10 @@ public class OfflineMapFragment extends MapFragment
 		return getMap() != null;
 	}
 
+	/*
 	@Override
 	public void onMapTypeChanged() {
 		setupMap();
 	}
+	*/
 }
