@@ -3,8 +3,6 @@ package com.droidplanner.drone;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.util.Log;
-
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
 
@@ -17,7 +15,7 @@ public class DroneEvents extends DroneVariable {
 	private List<OnDroneListner> droneListeners = new ArrayList<OnDroneListner>();
 
 	public void addDroneListener(OnDroneListner listener) {
-		if (listener != null)
+		if (listener != null & !droneListeners.contains(listener))
 			droneListeners.add(listener);
 	}
 
