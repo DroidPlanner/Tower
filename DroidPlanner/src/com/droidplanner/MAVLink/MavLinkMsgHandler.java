@@ -70,6 +70,7 @@ public class MavLinkMsgHandler {
 			drone.navigation.setNavPitchRollYaw(m_nav.nav_pitch,
 					m_nav.nav_roll, m_nav.nav_bearing);
 			break;
+			/*
 		case msg_heartbeat.MAVLINK_MSG_ID_HEARTBEAT:
 			msg_heartbeat msg_heart = (msg_heartbeat) msg;
 			drone.type.setType(msg_heart.type);
@@ -79,7 +80,6 @@ public class MavLinkMsgHandler {
 					drone.type.getType());
 			drone.state.setMode(newMode);
 			break;	
-/*
 		case msg_mission_current.MAVLINK_MSG_ID_MISSION_CURRENT:
 			drone.missionStats.setWpno(((msg_mission_current) msg).seq);
 			break;
@@ -119,7 +119,7 @@ public class MavLinkMsgHandler {
 		}
 	}
 
-	public void processState(msg_heartbeat msg_heart) {
+/*	public void processState(msg_heartbeat msg_heart) {
 		checkArmState(msg_heart);
 		checkFailsafe(msg_heart);
 		checkIfIsFlying(msg_heart);
@@ -147,5 +147,5 @@ public class MavLinkMsgHandler {
 			break;
 		}
 	}
-
+*/
 }
