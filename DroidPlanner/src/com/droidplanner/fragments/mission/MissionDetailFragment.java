@@ -21,23 +21,23 @@ import com.droidplanner.widgets.spinners.SpinnerSelfSelect;
 
 public abstract class MissionDetailFragment extends Fragment implements
 		OnItemSelectedListener {
-	
+
 	public interface OnWayPointTypeChangeListener{
 		public void onWaypointTypeChanged(MissionItem newItem, MissionItem oldItem);
 	}
-	
+
 	protected abstract int getResource();
-	
+
 	protected SpinnerSelfSelect typeSpinner;
 	protected AdapterMissionItens commandAdapter;
 	protected Mission mission;
 	private OnWayPointTypeChangeListener mListner;
 	private TextView waypointIndex;
-	
+
 	protected MissionItem item;
 	private TextView distanceView;
 	private TextView distanceLabelView;
-	
+
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,9 +58,11 @@ public abstract class MissionDetailFragment extends Fragment implements
 		waypointIndex = (TextView) view.findViewById(R.id.WaypointIndex);
 		Integer temp = mission.getNumber(item);
 		waypointIndex.setText( temp.toString());
-		
+
 		distanceView = (TextView) view.findViewById(R.id.DistanceValue);
+
 		distanceLabelView = (TextView) view.findViewById(R.id.DistanceLabel);
+
 		try{
 			distanceLabelView.setVisibility(View.VISIBLE);
 			distanceView.setText(mission.getDistanceFromLastWaypoint((SpatialCoordItem) item).toString());
@@ -68,8 +70,8 @@ public abstract class MissionDetailFragment extends Fragment implements
 			// Can fail if distanceView doesn't exists
 		}catch (Exception e){
 			//Or if the last item doesn't have a coordinate
-			distanceView.setText("");
-			distanceLabelView.setVisibility(View.INVISIBLE);
+			//distanceView.setText("");
+			//distanceLabelView.setVisibility(View.INVISIBLE);
 		}
 	}
 
@@ -80,7 +82,7 @@ public abstract class MissionDetailFragment extends Fragment implements
 		mListner = (OnWayPointTypeChangeListener) activity;
 	}
 
-	
+
 	@Override
 	public void onItemSelected(AdapterView<?> arg0, View v, int position,
 			long id) {
