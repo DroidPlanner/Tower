@@ -63,9 +63,6 @@ public class MavLinkMsgHandler {
 			drone.setAltitudeGroundAndAirSpeeds(m_hud.alt, m_hud.groundspeed,
 					m_hud.airspeed, m_hud.climb);
 			break;
-		case msg_mission_current.MAVLINK_MSG_ID_MISSION_CURRENT:
-			drone.missionStats.setWpno(((msg_mission_current) msg).seq);
-			break;
 		case msg_nav_controller_output.MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT:
 			msg_nav_controller_output m_nav = (msg_nav_controller_output) msg;
 			drone.setDisttowpAndSpeedAltErrors(m_nav.wp_dist, m_nav.alt_error,
@@ -83,6 +80,9 @@ public class MavLinkMsgHandler {
 			drone.state.setMode(newMode);
 			break;	
 /*
+		case msg_mission_current.MAVLINK_MSG_ID_MISSION_CURRENT:
+			drone.missionStats.setWpno(((msg_mission_current) msg).seq);
+			break;
 		case msg_attitude.MAVLINK_MSG_ID_ATTITUDE:
 			msg_attitude m_att = (msg_attitude) msg;
 			drone.orientation.setRollPitchYaw(m_att.roll * 180.0 / Math.PI,
