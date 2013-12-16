@@ -5,7 +5,7 @@
     <string name="settings">Einstellungen</string>
     <string name="menu_connect">Verbinden</string>
     <string name="menu_disconnect">Trennen</string>
-    <string name="conected">Verbunden</string>
+    <string name="connected">Verbunden</string>
     <string name="disconnected">Getrennt</string>
     <string name="save">Speichern</string>
     <string name="open">Öffnen</string>
