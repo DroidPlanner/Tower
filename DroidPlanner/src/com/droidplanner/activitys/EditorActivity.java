@@ -93,6 +93,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
+		super.onDroneEvent(event,drone);
 		switch (event) {
 		case MISSION:
 			// Remove detail window if item is removed

@@ -60,7 +60,8 @@ public class ConfigurationActivity extends SuperUI{
 	}
 
 	@Override
-	public void onDroneEvent(DroneEventsType event, Drone drone) {		
+	public void onDroneEvent(DroneEventsType event, Drone drone) {
+		super.onDroneEvent(event,drone);
 	}
 
 }
