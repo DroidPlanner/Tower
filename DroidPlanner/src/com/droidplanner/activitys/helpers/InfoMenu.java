@@ -58,28 +58,31 @@ public class InfoMenu implements OnDroneListner {
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		switch (event) {
-		case BATTERY:
-			updateBatteryInfo(drone);
-			break;
-		case GPS_FIX:
-		case GPS_COUNT:
-			updateGpsInfo(drone);
-			break;
-		case RADIO:
-			updateRadioInfo(drone);
-			break;
-		case STATE:
-			updateFlightStateInfo(drone);
-			break;
-		case HOME:
-			updateHomeInfo(drone);
-			break;
-		default:
-			break;
-		}
-		if(mode!=null){
-			mode.onDroneEvent(event,drone);
+		try {
+			switch (event) {
+			case BATTERY:
+				updateBatteryInfo(drone);
+				break;
+			case GPS_FIX:
+			case GPS_COUNT:
+				updateGpsInfo(drone);
+				break;
+			case RADIO:
+				updateRadioInfo(drone);
+				break;
+			case STATE:
+				updateFlightStateInfo(drone);
+				break;
+			case HOME:
+				updateHomeInfo(drone);
+				break;
+			default:
+				break;
+			}
+			mode.onDroneEvent(event, drone);
+		} catch (NullPointerException e) {
+			// Can fail saftly with null pointer if the layout's have not been
+			// inflated yet
 		}
 	}
 
