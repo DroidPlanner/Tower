@@ -144,13 +144,6 @@ public class WaypointMananger extends DroneVariable {
 		super(drone);
 	}
 
-	/**
-	 * Try to process a Mavlink message if it is a mission related message
-	 * 
-	 * @param msg
-	 *            Mavlink message to process
-	 * @return Returns true if the message has been processed
-	 */
 	@Override
 	protected void processMAVLinkMessage(MAVLinkMessage msg) {
 		switch (state) {

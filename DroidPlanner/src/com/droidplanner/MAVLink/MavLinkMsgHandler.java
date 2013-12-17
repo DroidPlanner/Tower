@@ -47,7 +47,6 @@ public class MavLinkMsgHandler {
 	}
 
 	public void receiveData(MAVLinkMessage msg) {
-		drone.parameters.processMessage(msg);
 		drone.calibrationSetup.processMessage(msg);
 
 		if(msgListeners.size()>0){
@@ -58,6 +57,7 @@ public class MavLinkMsgHandler {
 		
 			/*
 		drone.waypointMananger.processMessage(msg);
+		drone.parameters.processMessage(msg);
 		switch (msg.msgid) {
 		case msg_nav_controller_output.MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT:
 			msg_nav_controller_output m_nav = (msg_nav_controller_output) msg;

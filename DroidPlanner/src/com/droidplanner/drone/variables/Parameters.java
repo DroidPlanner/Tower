@@ -1,8 +1,5 @@
 package com.droidplanner.drone.variables;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.*;
 
 import com.MAVLink.Messages.MAVLinkMessage;
@@ -11,12 +8,7 @@ import com.droidplanner.MAVLink.MavLinkParameters;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces;
 import com.droidplanner.drone.DroneVariable;
-import com.droidplanner.file.DirectoryPath;
-import com.droidplanner.file.IO.ParameterMetadataMap;
-import com.droidplanner.file.IO.ParameterMetadataMapReader;
-import com.droidplanner.file.IO.VehicleProfile;
 import com.droidplanner.parameters.Parameter;
-import com.droidplanner.parameters.ParameterMetadata;
 
 /**
  * Class to manage the communication of parameters to the MAV.
@@ -43,19 +35,11 @@ public class Parameters extends DroneVariable {
 		MavLinkParameters.requestParametersList(myDrone);
 	}
 
-	/**
-	 * Try to process a Mavlink message if it is a parameter related message
-	 * 
-	 * @param msg
-	 *            Mavlink message to process
-	 * @return Returns true if the message has been processed
-	 */
-	public boolean processMessage(MAVLinkMessage msg) {
+	@Override
+	protected void processMAVLinkMessage(MAVLinkMessage msg) {
 		if (msg.msgid == msg_param_value.MAVLINK_MSG_ID_PARAM_VALUE) {
 			processReceivedParam((msg_param_value) msg);
-			return true;
 		}
-		return false;
 	}
 
 	private void processReceivedParam(msg_param_value m_value) {
