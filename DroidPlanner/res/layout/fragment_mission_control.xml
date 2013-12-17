@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/contentLayoutMissionControl"
     android:layout_width="wrap_content"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
     android:orientation="horizontal" >
 
@@ -15,6 +15,7 @@
 	    android:background="@drawable/button_macro"
 	    android:drawableTop="@drawable/ic_control"
 		android:visibility="gone"
+        android:layout_weight="1"
 	    android:text="Control" />
 
 	<Button
@@ -24,12 +25,9 @@
 	    android:layout_height="match_parent"
 	    android:background="@drawable/button_macro"
 	    android:drawableTop="@drawable/ic_edit"
+        android:layout_weight="1"
 	    android:text="Edit" />
 
-    <Space
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_margin="5dp"/>
 
 	<Button
 	    android:id="@+id/mc_homeBtn"
@@ -38,11 +36,9 @@
 	    android:layout_height="match_parent"
 	    android:background="@drawable/button_macro"
 	    android:drawableTop="@drawable/ic_home"
+        android:layout_weight="1"
 	    android:text="Home" />
 
-    <Space
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent" />
 
 	<Button
 	    android:id="@+id/mc_land"
@@ -52,6 +48,7 @@
 	    android:background="@drawable/button_macro"
 	    android:drawableTop="@drawable/ic_land"
 	    android:text="Land"
+        android:layout_weight="1"
 	    tools:ignore="ContentDescription" />
 
 	<Button
@@ -63,6 +60,7 @@
 	    android:drawableTop="@drawable/ic_takeoff"
 	    android:text="Takeoff"
 		android:visibility="gone"
+        android:layout_weight="1"
 	    tools:ignore="ContentDescription" />
 
 	<Button
@@ -73,6 +71,7 @@
 	    android:background="@drawable/button_macro"
 	    android:drawableTop="@drawable/ic_loiter"
 	    android:text="Loiter"
+        android:layout_weight="1"
 	    tools:ignore="ContentDescription" />
 
 	<Button
@@ -83,6 +82,7 @@
 	    android:background="@drawable/button_macro"
 	    android:drawableTop="@drawable/ic_follow"
 	    android:text="Follow"
+        android:layout_weight="1"
 	    tools:ignore="ContentDescription" />
 
 </LinearLayout>

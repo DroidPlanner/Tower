@@ -187,7 +187,7 @@
         <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:gravity">center_vertical|left</item>
         <item name="android:paddingLeft">16dp</item>
-        <item name="android:background">#66848484</item>
+        <item name="android:background">@color/bottom_top_bar</item>
         </style>
 
 	 <!-- Mode info Style -->

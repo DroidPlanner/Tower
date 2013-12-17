@@ -1,11 +1,13 @@
 package com.droidplanner.fragments;
 
+import android.util.Log;
 import it.sephiroth.android.library.widget.AdapterView;
 import it.sephiroth.android.library.widget.AdapterView.OnItemClickListener;
 import it.sephiroth.android.library.widget.AdapterView.OnItemLongClickListener;
 import it.sephiroth.android.library.widget.HListView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -28,7 +30,7 @@ import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.widgets.adapterViews.MissionItemView;
 
 public class EditorListFragment extends Fragment implements  OnItemLongClickListener,  OnItemClickListener, OnDroneListner{
-	public HListView list;
+	private HListView list;
 	private Mission mission;
 	private MissionItemView adapter;
 	private OnEditorInteraction editorListner;
@@ -44,15 +46,17 @@ public class EditorListFragment extends Fragment implements  OnItemLongClickList
 		list = (HListView) view.findViewById(R.id.listView1);
 		leftArrow = (ImageButton) view.findViewById(R.id.listLeftArrow);
 		rightArrow = (ImageButton) view.findViewById(R.id.listRightArrow);
-		
+
 		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
 		mission = drone.mission;
 		adapter = new MissionItemView(this.getActivity(), android.R.layout.simple_list_item_1,mission.getItems());
 		list.setOnItemClickListener(this);
 		list.setOnItemLongClickListener(this);
 		list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-		
+
 		list.setAdapter(adapter);
+
+        updateViewVisibility(view);
 		return view;
 	}
 
@@ -77,27 +81,40 @@ public class EditorListFragment extends Fragment implements  OnItemLongClickList
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		if (event == DroneEventsType.MISSION) {
-			adapter.notifyDataSetChanged();			
-		}		
+			adapter.notifyDataSetChanged();
+            updateViewVisibility(getView());
+		}
 	}
+
+    /**
+     * Updates the fragment view visibility based on the count of stored mission items.
+     */
+    private void updateViewVisibility(final View view){
+        if (adapter != null && view != null) {
+            if (adapter.getCount() > 0)
+                view.setVisibility(View.VISIBLE);
+            else
+                view.setVisibility(View.INVISIBLE);
+        }
+    }
 
 	public void deleteSelected() {
 		SparseBooleanArray selected = list.getCheckedItemPositions();
 		ArrayList<MissionItem> toRemove = new ArrayList<MissionItem>();
-		
+
 		for( int i = 0; i < selected.size(); i++ ) {
 			if( selected.valueAt( i ) ) {
 				MissionItem item = adapter.getItem(selected.keyAt(i));
 				toRemove.add(item);
 			}
-		}		
-		
+		}
+
 		mission.removeWaypoints(toRemove);
 	}
 
 	@Override
 	public void onItemClick(AdapterView<?> adapter, View view, int position,
-			long id) {	
+			long id) {
 		MissionItem missionItem = (MissionItem) adapter.getItemAtPosition(position);
 		editorListner.onItemClick(missionItem);
 	}
@@ -112,11 +129,36 @@ public class EditorListFragment extends Fragment implements  OnItemLongClickList
 	public void setArrowsVisibility(boolean visible) {
 		if (visible) {
 			leftArrow.setVisibility(View.VISIBLE);
-			rightArrow.setVisibility(View.VISIBLE);			
+			rightArrow.setVisibility(View.VISIBLE);
 		}else{
 			leftArrow.setVisibility(View.INVISIBLE);
 			rightArrow.setVisibility(View.INVISIBLE);
 		}
 	}
+
+    /**
+     * Updates the choice mode of the listview containing the mission items.
+     * @param choiceMode
+     */
+    public void updateChoiceMode(int choiceMode){
+        switch(choiceMode){
+            case ListView.CHOICE_MODE_SINGLE:
+            case ListView.CHOICE_MODE_MULTIPLE:
+                list.setChoiceMode(choiceMode);
+                break;
+        }
+    }
+
+    /**
+     * Updates the selected mission items in the list.
+     * @param selected list of selected mission items
+     */
+    public void updateMissionItemSelection(List<MissionItem> selected){
+        list.clearChoices();
+        for(MissionItem item: selected){
+            list.setItemChecked(adapter.getPosition(item), true);
+        }
+        adapter.notifyDataSetChanged();
+    }
 
 }

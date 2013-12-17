@@ -74,15 +74,18 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 
 		mission = drone.mission;
 		gestureMapFragment.setOnPathFinishedListner(this);
+
+        //Refresh the map
+        planningMapFragment.update();
 	}
 
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
 		// TODO Auto-generated method stub
 		super.onWindowFocusChanged(hasFocus);
-		int right = editorToolsFragment.getView().getRight();
-		int bottom = infoView.getBottom();
-		planningMapFragment.mMap.setPadding(right, bottom, 0, 0);
+		int rightPadding = editorToolsFragment.getView().getRight();
+		int topPadding = infoView.getBottom();
+		planningMapFragment.mMap.setPadding(rightPadding, topPadding, 0, 0);
 	}
 
 	@Override
@@ -120,6 +123,11 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 
 	@Override
 	public void onMapClick(LatLng point) {
+        //If an mission item is selected, unselect it.
+        mission.clearSelection();
+        removeItemDetail();
+        notifySelectionChanged();
+
 		switch (getTool()) {
 		case MARKER:
 			mission.addWaypoint(point, mission.getDefaultAlt());
@@ -226,7 +234,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 
 	@Override
 	public void onDestroyActionMode(ActionMode arg0) {
-		missionListFragment.list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+		missionListFragment.updateChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		mission.clearSelection();
 		notifySelectionChanged();
 		contextualActionBar = null;
@@ -249,8 +257,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 			notifySelectionChanged();
 		} else {
 			removeItemDetail();
-			missionListFragment.list
-					.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+			missionListFragment.updateChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 			contextualActionBar = startActionMode(this);
 			mission.clearSelection();
 			mission.addToSelection(item);
@@ -291,19 +298,14 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 	}
 
 	private void notifySelectionChanged() {
-		MissionItemView adapter = (MissionItemView) missionListFragment.list
-				.getAdapter();
-		missionListFragment.list.clearChoices();
-		for (MissionItem item : mission.getSelected()) {
-			missionListFragment.list.setItemChecked(adapter.getPosition(item),
-					true);
-		}
-		if (mission.getSelected().size() == 0) {
+        List<MissionItem> selectedItems = mission.getSelected();
+        missionListFragment.updateMissionItemSelection(selectedItems);
+
+		if (selectedItems.size() == 0) {
 			missionListFragment.setArrowsVisibility(false);
 		} else {
 			missionListFragment.setArrowsVisibility(true);
 		}
-		adapter.notifyDataSetChanged();
 		planningMapFragment.update();
 	}
 }
