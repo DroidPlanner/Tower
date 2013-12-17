@@ -36,7 +36,8 @@ public class Calibration extends DroneVariable implements OnClickListener {
 		}
 	}
 
-	public void processMessage(MAVLinkMessage msg) {
+	@Override
+	protected void processMAVLinkMessage(MAVLinkMessage msg) {
 		if (msg.msgid == msg_statustext.MAVLINK_MSG_ID_STATUSTEXT) {
 			msg_statustext statusMsg = (msg_statustext) msg;
 			if (statusMsg.getText().contains("Place APM")) {
