@@ -4,19 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.MAVLink.Messages.MAVLinkMessage;
-import com.droidplanner.drone.Drone;
 
 public class MavLinkMsgHandler {
 
-	private Drone drone;
 	private List<OnMavLinkMsgListener>msgListeners = new ArrayList<OnMavLinkMsgListener>();
 
 	public interface OnMavLinkMsgListener {
 		public void onMavLinkMsg(MAVLinkMessage msg);
 	}
 	
-	public MavLinkMsgHandler(Drone drone) {
-		this.drone = drone;
+	public MavLinkMsgHandler() {
 	}
 
 	public void unregisterMsgListeners(OnMavLinkMsgListener listener) {

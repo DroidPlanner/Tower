@@ -64,8 +64,7 @@ public class DroidPlannerApp extends ErrorReportApp implements
 		drone = new Drone(tts, MAVClient, getApplicationContext());
 		followMe = new FollowMe(this, drone);
 		recordMe = new RecordMe(this, drone);
-		mavLinkMsgHandler = new com.droidplanner.MAVLink.MavLinkMsgHandler(
-				drone);
+		mavLinkMsgHandler = new com.droidplanner.MAVLink.MavLinkMsgHandler();
 		drone.setMavLinkMsgHandler(mavLinkMsgHandler);
 	}
 
