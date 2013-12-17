@@ -121,12 +121,6 @@ public class Drone {
 		guidedListner = listner;		
 	}
 
-	public void setAltitudeGroundAndAirSpeeds(double altitude,
-			double groundSpeed, double airSpeed, double climb) {
-		this.altitude.setAltitude(altitude);
-		speed.setGroundAndAirSpeeds(groundSpeed, airSpeed, climb);
-		onSpeedAltitudeAndClimbRateUpdate();
-	}
 
 	public void setDisttowpAndSpeedAltErrors(double disttowp, double alt_error,
 			double aspd_error) {
@@ -134,6 +128,12 @@ public class Drone {
 		altitude.setAltitudeError(alt_error);
 		speed.setSpeedError(aspd_error);
 		onOrientationUpdate();
+	}
+
+	public void notifyHUDChange() {
+		this.altitude.setAltitude(speed.getAltitude());
+		if (hudListner != null)
+			hudListner.onSpeedAltitudeAndClimbRateUpdate();
 	}
 
 	public void notifyPositionChange() {
@@ -186,11 +186,6 @@ public class Drone {
 			hudListner.onOrientationUpdate();
 	}
 	
-	public void onSpeedAltitudeAndClimbRateUpdate() {
-		if (hudListner != null)
-			hudListner.onSpeedAltitudeAndClimbRateUpdate();
-	}
-
 	public void notifyMapTypeChanged() {
 		if (mapConfigListener != null)
 			mapConfigListener.onMapTypeChanged();

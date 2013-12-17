@@ -58,11 +58,6 @@ public class MavLinkMsgHandler {
 		}
 		
 		switch (msg.msgid) {
-		case msg_vfr_hud.MAVLINK_MSG_ID_VFR_HUD:
-			msg_vfr_hud m_hud = (msg_vfr_hud) msg;
-			drone.setAltitudeGroundAndAirSpeeds(m_hud.alt, m_hud.groundspeed,
-					m_hud.airspeed, m_hud.climb);
-			break;
 		case msg_nav_controller_output.MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT:
 			msg_nav_controller_output m_nav = (msg_nav_controller_output) msg;
 			drone.setDisttowpAndSpeedAltErrors(m_nav.wp_dist, m_nav.alt_error,
@@ -71,6 +66,11 @@ public class MavLinkMsgHandler {
 					m_nav.nav_roll, m_nav.nav_bearing);
 			break;
 			/*
+		case msg_vfr_hud.MAVLINK_MSG_ID_VFR_HUD:
+			msg_vfr_hud m_hud = (msg_vfr_hud) msg;
+			drone.setAltitudeGroundAndAirSpeeds(m_hud.alt, m_hud.groundspeed,
+					m_hud.airspeed, m_hud.climb);
+			break;
 		case msg_heartbeat.MAVLINK_MSG_ID_HEARTBEAT:
 			msg_heartbeat msg_heart = (msg_heartbeat) msg;
 			drone.type.setType(msg_heart.type);
