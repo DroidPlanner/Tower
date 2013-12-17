@@ -5,14 +5,14 @@ import com.MAVLink.Messages.ardupilotmega.msg_vfr_hud;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneVariable;
 
-public class Speed extends DroneVariable {
+public class HUD extends DroneVariable {
 	private double verticalSpeed = 0;
 	private double groundSpeed = 0;
 	private double airSpeed = 0;
 	private double targetSpeed = 0;
 	private double altitude = 0;
 
-	public Speed(Drone myDrone) {
+	public HUD(Drone myDrone) {
 		super(myDrone);
 	}
 

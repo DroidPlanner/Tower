@@ -29,7 +29,7 @@ import com.droidplanner.drone.variables.Parameters;
 import com.droidplanner.drone.variables.RC;
 import com.droidplanner.drone.variables.Profile;
 import com.droidplanner.drone.variables.Radio;
-import com.droidplanner.drone.variables.Speed;
+import com.droidplanner.drone.variables.HUD;
 import com.droidplanner.drone.variables.State;
 import com.droidplanner.drone.variables.Type;
 import com.droidplanner.drone.variables.mission.Mission;
@@ -42,7 +42,7 @@ public class Drone {
     public Profile profile = new Profile(this);
 	public GPS GPS = new GPS(this);
 	public RC RC = new RC(this);
-	public Speed speed = new Speed(this);
+	public HUD hud = new HUD(this);
 	public State state = new State(this);
 	public Battery battery = new Battery(this);
 	public Radio radio = new Radio(this);
@@ -126,12 +126,12 @@ public class Drone {
 			double aspd_error) {
 		missionStats.setDistanceToWp(disttowp);
 		altitude.setAltitudeError(alt_error);
-		speed.setSpeedError(aspd_error);
+		hud.setSpeedError(aspd_error);
 		onOrientationUpdate();
 	}
 
 	public void notifyHUDChange() {
-		this.altitude.setAltitude(speed.getAltitude());
+		this.altitude.setAltitude(hud.getAltitude());
 		if (hudListner != null)
 			hudListner.onSpeedAltitudeAndClimbRateUpdate();
 	}
@@ -200,6 +200,7 @@ public class Drone {
 		mavLinkMsgHandler.registerMsgListeners(missionStats);
 		mavLinkMsgHandler.registerMsgListeners(type);
 		mavLinkMsgHandler.registerMsgListeners(state);
+		mavLinkMsgHandler.registerMsgListeners(hud);
 		
 	}
 

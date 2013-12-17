@@ -65,9 +65,9 @@ public class TelemetryFragment extends Fragment implements HudUpdatedListner {
 
 	@Override
 	public void onSpeedAltitudeAndClimbRateUpdate() {
-		airSpeed.setText(String.format("%3.1f", drone.speed.getAirSpeed()));
-		groundSpeed.setText(String.format("%3.1f", drone.speed.getGroundSpeed()));
-		climbRate.setText(String.format("%3.1f", drone.speed.getVerticalSpeed()));
+		airSpeed.setText(String.format("%3.1f", drone.hud.getAirSpeed()));
+		groundSpeed.setText(String.format("%3.1f", drone.hud.getGroundSpeed()));
+		climbRate.setText(String.format("%3.1f", drone.hud.getVerticalSpeed()));
 		double alt = drone.altitude.getAltitude();
 		double targetAlt = drone.altitude.getTargetAltitude();
 		altitude.setText(String.format("%3.1f", alt));
