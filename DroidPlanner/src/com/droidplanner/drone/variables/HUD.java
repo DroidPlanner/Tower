@@ -1,7 +1,6 @@
 package com.droidplanner.drone.variables;
 
 import com.MAVLink.Messages.MAVLinkMessage;
-import com.MAVLink.Messages.ardupilotmega.msg_nav_controller_output;
 import com.MAVLink.Messages.ardupilotmega.msg_vfr_hud;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneVariable;
