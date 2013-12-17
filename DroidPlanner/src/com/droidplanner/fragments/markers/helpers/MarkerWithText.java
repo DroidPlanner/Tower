@@ -3,7 +3,6 @@ package com.droidplanner.fragments.markers.helpers;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.*;
-import android.graphics.Paint.Align;
 
 import com.droidplanner.R;
 

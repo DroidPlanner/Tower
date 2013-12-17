@@ -2,7 +2,7 @@
 <resources>
     
     <string name="menu_connect">Conectar</string>
-    <string name="conected">Conectado</string>
+    <string name="connected">Conectado</string>
     
     <string name="settings">Configurar</string>
     <string name="menu_disconnect">Desconectar</string>

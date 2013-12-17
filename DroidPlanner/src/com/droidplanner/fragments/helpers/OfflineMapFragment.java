@@ -10,8 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.droidplanner.DroidPlannerApp;
-import com.droidplanner.drone.DroneInterfaces;
 import com.droidplanner.helpers.LocalMapTileProvider;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;

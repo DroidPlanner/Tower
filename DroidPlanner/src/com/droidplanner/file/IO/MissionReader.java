@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.MAVLink.Messages.ApmCommands;
 import com.droidplanner.dialogs.openfile.OpenFileDialog.FileReader;
 import com.droidplanner.drone.variables.Home;
 import com.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
