@@ -30,14 +30,8 @@ public class Orientation extends DroneVariable {
 		this.roll = roll;
 		this.pitch = pitch;
 		this.yaw = yaw;
-		myDrone.onOrientationUpdate();
-		notifyNewOrientationData();
-	}
-
-	private void notifyNewOrientationData() {
-		if (myDrone.tuningDataListner != null) {
-			myDrone.tuningDataListner.onNewOrientationData();
-		}
+		myDrone.notifyOrientationChange();
+		myDrone.notifyNavDataChange();
 	}
 
 	@Override

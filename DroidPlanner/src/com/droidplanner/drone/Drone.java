@@ -122,12 +122,20 @@ public class Drone {
 	}
 
 
-	public void setDisttowpAndSpeedAltErrors(double disttowp, double alt_error,
-			double aspd_error) {
-		missionStats.setDistanceToWp(disttowp);
-		altitude.setAltitudeError(alt_error);
-		hud.setSpeedError(aspd_error);
-		onOrientationUpdate();
+	public void notifyNavDataChange() {
+		missionStats.setDistanceToWp(navigation.getNavWpDist());
+		altitude.setAltitudeError(navigation.getNavAltError());
+		hud.setSpeedError(navigation.getNavAspdError());
+
+		if (tuningDataListner != null) {
+			tuningDataListner.onNewNavigationData();
+		}
+		notifyOrientationChange();
+	}
+
+	public void notifyOrientationChange() {
+		if (hudListner != null)
+			hudListner.onOrientationUpdate();		
 	}
 
 	public void notifyHUDChange() {
@@ -181,11 +189,6 @@ public class Drone {
             vehicleTypeListener.onVehicleTypeChanged();
     }
 
-	public void onOrientationUpdate() {
-		if (hudListner != null)
-			hudListner.onOrientationUpdate();
-	}
-	
 	public void notifyMapTypeChanged() {
 		if (mapConfigListener != null)
 			mapConfigListener.onMapTypeChanged();

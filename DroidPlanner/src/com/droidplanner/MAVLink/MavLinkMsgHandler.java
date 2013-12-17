@@ -57,6 +57,7 @@ public class MavLinkMsgHandler {
 			}
 		}
 		
+			/*
 		switch (msg.msgid) {
 		case msg_nav_controller_output.MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT:
 			msg_nav_controller_output m_nav = (msg_nav_controller_output) msg;
@@ -65,7 +66,6 @@ public class MavLinkMsgHandler {
 			drone.navigation.setNavPitchRollYaw(m_nav.nav_pitch,
 					m_nav.nav_roll, m_nav.nav_bearing);
 			break;
-			/*
 		case msg_vfr_hud.MAVLINK_MSG_ID_VFR_HUD:
 			msg_vfr_hud m_hud = (msg_vfr_hud) msg;
 			drone.setAltitudeGroundAndAirSpeeds(m_hud.alt, m_hud.groundspeed,
@@ -115,8 +115,8 @@ public class MavLinkMsgHandler {
 		case msg_servo_output_raw.MAVLINK_MSG_ID_SERVO_OUTPUT_RAW:
 			drone.RC.setRcOutputValues((msg_servo_output_raw) msg);
 			break;
-*/
 		}
+*/
 	}
 
 /*	public void processState(msg_heartbeat msg_heart) {
