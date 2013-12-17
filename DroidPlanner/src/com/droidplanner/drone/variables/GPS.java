@@ -3,7 +3,6 @@ package com.droidplanner.drone.variables;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneVariable;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import com.google.android.gms.internal.fi;
 import com.google.android.gms.maps.model.LatLng;
 
 public class GPS extends DroneVariable {

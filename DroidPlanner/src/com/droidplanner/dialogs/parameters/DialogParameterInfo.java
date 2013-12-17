@@ -1,7 +1,6 @@
 package com.droidplanner.dialogs.parameters;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;

@@ -6,8 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Locale;
 
-import android.util.Log;
-
 import com.droidplanner.file.DirectoryPath;
 import com.droidplanner.file.FileStream;
 import com.google.android.gms.maps.model.Tile;

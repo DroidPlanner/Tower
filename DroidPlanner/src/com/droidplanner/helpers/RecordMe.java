@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.droidplanner.drone.Drone;
-import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
+
 import com.google.android.gms.maps.model.LatLng;
 
 public class RecordMe implements LocationListener {
