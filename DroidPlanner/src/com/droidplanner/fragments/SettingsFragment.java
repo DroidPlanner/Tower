@@ -28,7 +28,7 @@ public class SettingsFragment extends PreferenceFragment implements
 				sharedPref.getString("pref_baud_type", ""));
 		findPreference("pref_max_fligth_path_size").setSummary(
 				sharedPref.getString("pref_max_fligth_path_size", "")
-						+ " (set to zero to disable).");
+						+ " "+getResources().getString(R.string.set_to_zero_to_disable));
 		findPreference("pref_server_ip").setSummary(
 				sharedPref.getString("pref_server_ip", ""));
 		findPreference("pref_server_port").setSummary(
@@ -42,10 +42,10 @@ public class SettingsFragment extends PreferenceFragment implements
 		if (sharedPref.getString("pref_rc_mode", "MODE2").equalsIgnoreCase(
 				"MODE1")) {
 			findPreference("pref_rc_mode").setSummary(
-					"Mode1: Throttle on RIGHT stick");
+					getResources().getString(R.string.mode1_throttle_on_right_stick));
 		} else {
 			findPreference("pref_rc_mode").setSummary(
-					"Mode2: Throttle on LEFT stick");
+					getResources().getString(R.string.mode2_throttle_on_left_stick));
 		}
 		findPreference("pref_rc_quickmode_left").setSummary(
 				sharedPref.getString("pref_rc_quickmode_left", ""));
@@ -79,7 +79,7 @@ public class SettingsFragment extends PreferenceFragment implements
 			findPreference(key).setSummary(
 					sharedPreferences
 							.getString("pref_max_fligth_path_size", "")
-							+ " (set to zero to disable).");
+							+ " "+getResources().getString(R.string.set_to_zero_to_disable));
 		}
 		if (key.equals("pref_server_ip")) {
 			findPreference(key)
@@ -105,9 +105,9 @@ public class SettingsFragment extends PreferenceFragment implements
 			if (sharedPreferences.getString(key, "MODE2").equalsIgnoreCase(
 					"MODE1")) {
 				findPreference(key)
-						.setSummary("Mode1: Throttle on RIGHT stick");
+						.setSummary(R.string.mode1_throttle_on_right_stick);
 			} else {
-				findPreference(key).setSummary("Mode2: Throttle on LEFT stick");
+				findPreference(key).setSummary(R.string.mode2_throttle_on_left_stick);
 			}
 		}
 		if (key.equals("pref_rc_quickmode_left")) {
