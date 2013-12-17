@@ -47,6 +47,7 @@ public class HUD extends DroneVariable {
 			this.groundSpeed = groundSpeed;
 			this.airSpeed = airSpeed;
 			this.verticalSpeed = climb;
+			this.altitude = altitude;
 			myDrone.notifyHUDChange();
 		}
 	}
