@@ -83,6 +83,7 @@
 	    android:background="@drawable/button_macro"
 	    android:drawableTop="@drawable/ic_follow"
 	    android:text="Follow"
-	    tools:ignore="ContentDescription" />
+	    tools:ignore="ContentDescription"
+	    android:visibility="invisible" />
 
 </LinearLayout>

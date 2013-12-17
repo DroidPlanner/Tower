@@ -85,61 +85,50 @@ public class ConfigurationActivity extends SuperUI{
 
         public ConfigurationPagerAdapter(Context context, FragmentManager fm){
             super(fm);
-            mContext = context;
-        }
-
-        @Override
-        public Fragment getItem(int position){
-            switch(position){
-                case 0:
-                    return new SettingsFragment();
-
-                case 1:
-                    return new TuningFragment();
-
-                case 2:
-                    return new RcSetupFragment();
-
-                case 3:
-                    return new ModesSetupFragment();
-
-                case 4:
-                    return new ChecklistFragment();
-
-                case 5:
-                    return new ParamsFragment();
-
-                default:
-                    return null;
-            }
-        }
+			mContext = context;
+		}
 
         @Override
         public int getCount(){
-            return 6;
+            //return 6; 
+        	return 3; // TODO re-enable all the settings fragments
         }
+        
+		@Override
+		public Fragment getItem(int position) {
+			switch (position) {
+			case 0:
+				return new SettingsFragment();
+			case 1:
+				return new ParamsFragment();
+			case 2:
+				return new ChecklistFragment();
+			case 3:
+				return new ModesSetupFragment();
+			case 4:
+				return new RcSetupFragment();
+			case 5:
+				return new TuningFragment();
+			default:
+				return null;
+			}
+		}
 
         @Override
         public CharSequence getPageTitle(int position){
             switch(position){
                 case 0:
                     return mContext.getText(R.string.settings);
-
                 case 1:
-                    return mContext.getString(R.string.screen_tuning);
-
+                	return mContext.getText(R.string.screen_parameters);
                 case 2:
-                    return mContext.getText(R.string.screen_rc);
-
+                	return mContext.getString(R.string.screen_checklist);
                 case 3:
                     return mContext.getString(R.string.screen_modes);
-
                 case 4:
-                    return mContext.getString(R.string.screen_checklist);
-
+                	return mContext.getString(R.string.screen_tuning);
                 case 5:
-                    return mContext.getText(R.string.screen_parameters);
-
+                	return mContext.getText(R.string.screen_rc);
                 default:
                     return null;
             }
