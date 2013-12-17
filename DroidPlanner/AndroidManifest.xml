@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.droidplanner"
-    android:versionCode="56"
-    android:versionName="please run version.sh to get the version name" >
+          package="com.droidplanner"
+          android:versionCode="56"
+          android:versionName="please run version.sh to get the version name">
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -113,6 +112,7 @@
         <activity
             android:name=".activitys.ConfigurationActivity"
             android:windowSoftInputMode="adjustPan"
+            android:theme="@style/Theme.PageIndicatorDefaults"
             android:label="@string/configuration"
             android:parentActivityName=".activitys.FlightActivity" >
 
