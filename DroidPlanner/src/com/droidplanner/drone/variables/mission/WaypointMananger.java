@@ -151,7 +151,8 @@ public class WaypointMananger extends DroneVariable {
 	 *            Mavlink message to process
 	 * @return Returns true if the message has been processed
 	 */
-	public boolean processMessage(MAVLinkMessage msg) {
+	@Override
+	protected void processMAVLinkMessage(MAVLinkMessage msg) {
 		switch (state) {
 		default:
 		case IDLE:
@@ -163,7 +164,6 @@ public class WaypointMananger extends DroneVariable {
 				myDrone.MavClient.setTimeOut();
 				MavLinkWaypoint.requestWayPoint(myDrone, mission.size());
 				state = waypointStates.READING_WP;
-				return true;
 			}
 			break;
 		case READING_WP:
@@ -180,7 +180,6 @@ public class WaypointMananger extends DroneVariable {
 					myDrone.mission.onMissionReceived(mission);
 					doEndWaypointEvent(WaypointEvent_Type.WP_DOWNLOAD);
 				}
-				return true;
 			}
 			break;
 		case WRITTING_WP_COUNT:
@@ -190,7 +189,6 @@ public class WaypointMananger extends DroneVariable {
 				myDrone.MavClient.setTimeOut();
 				processWaypointToSend((msg_mission_request) msg);
 				doWaypointEvent(WaypointEvent_Type.WP_UPLOAD,writeIndex+1,mission.size());
-				return true;
 			}
 			break;
 		case WAITING_WRITE_ACK:
@@ -199,20 +197,16 @@ public class WaypointMananger extends DroneVariable {
 				myDrone.mission.onWriteWaypoints((msg_mission_ack) msg);
 				state = waypointStates.IDLE;
 				doEndWaypointEvent(WaypointEvent_Type.WP_UPLOAD);
-				return true;
 			}
 			break;
 		}
 
 		if (msg.msgid == msg_mission_item_reached.MAVLINK_MSG_ID_MISSION_ITEM_REACHED) {
 			onWaypointReached(((msg_mission_item_reached) msg).seq);
-			return true;
 		}
 		if (msg.msgid == msg_mission_current.MAVLINK_MSG_ID_MISSION_CURRENT) {
 			onCurrentWaypointUpdate(((msg_mission_current) msg).seq);
-			return true;
 		}
-		return false;
 	}
 
 
@@ -315,5 +309,5 @@ public class WaypointMananger extends DroneVariable {
 		
 		wpEventListener.onWaypointEvent(wpEvent, index, count);
 	}
-
+	
 }

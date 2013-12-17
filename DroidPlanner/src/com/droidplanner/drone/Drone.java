@@ -79,6 +79,23 @@ public class Drone {
         profile.load();
 	}
 
+	public void setMavLinkMsgHandler(MavLinkMsgHandler mavLinkMsgHandler) {
+		mavLinkMsgHandler.registerMsgListeners(waypointMananger);
+		
+		mavLinkMsgHandler.registerMsgListeners(battery);
+		mavLinkMsgHandler.registerMsgListeners(radio);
+		mavLinkMsgHandler.registerMsgListeners(GPS);
+		mavLinkMsgHandler.registerMsgListeners(RC);
+		mavLinkMsgHandler.registerMsgListeners(orientation);
+		mavLinkMsgHandler.registerMsgListeners(missionStats);
+		mavLinkMsgHandler.registerMsgListeners(type);
+		mavLinkMsgHandler.registerMsgListeners(state);
+		mavLinkMsgHandler.registerMsgListeners(hud);
+		mavLinkMsgHandler.registerMsgListeners(navigation);
+		mavLinkMsgHandler.registerMsgListeners(orientation);
+		
+	}
+
 	public void setHudListner(HudUpdatedListner listner) {
 		hudListner = listner;
 	}
@@ -192,19 +209,6 @@ public class Drone {
 	public void notifyMapTypeChanged() {
 		if (mapConfigListener != null)
 			mapConfigListener.onMapTypeChanged();
-	}
-
-	public void setMavLinkMsgHandler(MavLinkMsgHandler mavLinkMsgHandler) {
-		mavLinkMsgHandler.registerMsgListeners(battery);
-		mavLinkMsgHandler.registerMsgListeners(radio);
-		mavLinkMsgHandler.registerMsgListeners(GPS);
-		mavLinkMsgHandler.registerMsgListeners(RC);
-		mavLinkMsgHandler.registerMsgListeners(orientation);
-		mavLinkMsgHandler.registerMsgListeners(missionStats);
-		mavLinkMsgHandler.registerMsgListeners(type);
-		mavLinkMsgHandler.registerMsgListeners(state);
-		mavLinkMsgHandler.registerMsgListeners(hud);
-		
 	}
 
 }
