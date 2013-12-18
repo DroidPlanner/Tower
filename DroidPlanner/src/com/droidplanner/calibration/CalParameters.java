@@ -28,14 +28,30 @@ public class CalParameters{
 	}
 	
 	protected void processReceivedParam(msg_param_value m_value) {
-		//Do Nothing
+		Parameter param = new Parameter(m_value);
+		calParameterItems.add(param);
+		readCaliberationParameter(calParameterItems.size());
 	}
 
+	public void getCaliberationParameters(){
+		for(@SuppressWarnings("unused") Parameter param : calParameterItems){
+			param = null;
+		}
+		calParameterItems.clear();
+		readCaliberationParameter(calParameterItems.size());
+	}
+	
+	private void readCaliberationParameter(int seq){
+		if(seq>calParameterNames.size())
+			return;
+		readParameter(calParameterNames.get(seq));
+	}
+	
 	public void sendParameter(Parameter parameter) {
 		MavLinkParameters.sendParameter(myDrone, parameter);
 	}
     
-	public void ReadParameter(String name) {
+	public void readParameter(String name) {
 		MavLinkParameters.readParameter(myDrone, name);
 	}
 }
