@@ -4,19 +4,22 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
 import com.droidplanner.MAVLink.MavLinkStreamRates;
+import com.droidplanner.calibration.RC_CalParameters;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
 import com.droidplanner.widgets.FillBar.FillBarWithText;
 import com.droidplanner.widgets.RcStick.RcStick;
 
-public class RcSetupFragment extends Fragment implements  OnDroneListner {
+public class RcSetupFragment extends Fragment implements  OnDroneListner, OnClickListener {
 	private static final int RC_MIN = 1000;
 	private static final int RC_MAX = 2000;
 
@@ -24,6 +27,7 @@ public class RcSetupFragment extends Fragment implements  OnDroneListner {
 	private static final int RC_MSG_RATE = 50;
 
 	private Drone drone;
+	private RC_CalParameters rcParameters;
 	private TextView textViewThrottle, textViewYaw, textViewRoll, textViewPitch;
 
 	private FillBarWithText bar5;
@@ -34,6 +38,8 @@ public class RcSetupFragment extends Fragment implements  OnDroneListner {
 	private RcStick stickLeft;
 
 	private RcStick stickRight;
+	
+	private Button btnCalibrate;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,6 +55,7 @@ public class RcSetupFragment extends Fragment implements  OnDroneListner {
 	public void onStart() {
 		super.onStart();
 		drone.events.addDroneListener(this);
+		rcParameters = new RC_CalParameters(drone);
 		setupDataStreamingForRcSetup();
 	}
 
@@ -78,6 +85,8 @@ public class RcSetupFragment extends Fragment implements  OnDroneListner {
 		textViewPitch 		= (TextView) view.findViewById(R.id.RCPitchPWM);
 		textViewThrottle 	= (TextView) view.findViewById(R.id.RCThrottlePWM);
 		textViewYaw 		= (TextView) view.findViewById(R.id.RCYawPWM);
+		
+		btnCalibrate		= (Button) view.findViewById(R.id.buttonRCCalibrate);
 	}
 
 	private void setupDataStreamingForRcSetup() {
@@ -119,6 +128,13 @@ public class RcSetupFragment extends Fragment implements  OnDroneListner {
 		textViewPitch.setText(Integer.toString(data[1]));
 		textViewThrottle.setText(Integer.toString(data[2]));
 		textViewYaw.setText(Integer.toString(data[3]));
+	}
+
+	@Override
+	public void onClick(View arg0) {
+		if(arg0.equals(btnCalibrate)){
+			rcParameters.getCaliberationParameters();
+		}
 	}
 
 }
