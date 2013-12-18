@@ -3,6 +3,8 @@ package com.droidplanner.calibration;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.util.Log;
+
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_param_value;
 import com.droidplanner.MAVLink.MavLinkParameters;
@@ -28,6 +30,7 @@ public class CalParameters{
 	}
 	
 	protected void processReceivedParam(msg_param_value m_value) {
+		Log.d("CAL", m_value.getParam_Id() +": " + String.valueOf(m_value.param_value));
 		Parameter param = new Parameter(m_value);
 		calParameterItems.add(param);
 		readCaliberationParameter(calParameterItems.size());
