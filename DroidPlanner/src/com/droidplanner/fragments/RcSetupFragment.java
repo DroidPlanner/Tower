@@ -226,4 +226,10 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 		changeSetupPanel(0);		
 	}
 
+	public void updateRCOptionsData() {
+		// TODO Auto-generated method stub
+		calibStep = 0;
+		changeSetupPanel(0);				
+	}
+
 }
