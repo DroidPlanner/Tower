@@ -19,6 +19,7 @@ import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
 import com.droidplanner.fragments.calibration.FragmentSetupRCCompleted;
+import com.droidplanner.fragments.calibration.FragmentSetupRCMenu;
 import com.droidplanner.fragments.calibration.FragmentSetupRCMiddle;
 import com.droidplanner.fragments.calibration.FragmentSetupRCMinMax;
 import com.droidplanner.fragments.calibration.FragmentSetupRCOptions;
@@ -70,7 +71,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 		Fragment defPanel = fragmentManager
 				.findFragmentById(R.id.fragment_setup_rc);
 		if (defPanel == null) {
-			defPanel = new FragmentSetupRCOptions();
+			defPanel = new FragmentSetupRCMenu();
 			fragmentManager.beginTransaction()
 					.add(R.id.fragment_setup_rc, defPanel).commit();
 
@@ -173,7 +174,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 		calibStep = step;
 		switch (step) {
 		case 0:
-			setupPanel = new FragmentSetupRCOptions();
+			setupPanel = new FragmentSetupRCMenu();
 			break;
 		case 1:
 			setupPanel = new FragmentSetupRCMinMax();
@@ -186,6 +187,9 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 		case 3:
 			setupPanel = new FragmentSetupRCCompleted();
 			((FragmentSetupRCCompleted) setupPanel).rcSetupFragment = this;
+			break;
+		case 5:
+			setupPanel = new FragmentSetupRCOptions();
 			break;
 		}
 		fragmentManager.beginTransaction()
