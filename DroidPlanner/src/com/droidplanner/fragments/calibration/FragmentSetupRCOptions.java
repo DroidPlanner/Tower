@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 
 public class FragmentSetupRCOptions extends Fragment {
 	public RcSetupFragment rcSetupFragment;
-
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
