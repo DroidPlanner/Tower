@@ -3,7 +3,6 @@ package com.droidplanner.fragments;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,6 +18,7 @@ import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
 import com.droidplanner.fragments.calibration.FragmentSetupRCCompleted;
+import com.droidplanner.fragments.calibration.FragmentSetupRCFailsafe;
 import com.droidplanner.fragments.calibration.FragmentSetupRCMenu;
 import com.droidplanner.fragments.calibration.FragmentSetupRCMiddle;
 import com.droidplanner.fragments.calibration.FragmentSetupRCMinMax;
@@ -77,7 +77,10 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 			fragmentManager.beginTransaction()
 					.add(R.id.fragment_setup_rc, defPanel).commit();
 
+		}else{
+			cancel();
 		}
+
 		setupLocalViews(view);
 		return view;
 	}
@@ -190,6 +193,10 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 		case 3:
 			setupPanel = new FragmentSetupRCCompleted();
 			((FragmentSetupRCCompleted) setupPanel).rcSetupFragment = this;
+			break;
+		case 4:
+			setupPanel = new FragmentSetupRCFailsafe();
+			((FragmentSetupRCFailsafe) setupPanel).rcSetupFragment = this;
 			break;
 		case 5:
 			setupPanel = new FragmentSetupRCOptions();
