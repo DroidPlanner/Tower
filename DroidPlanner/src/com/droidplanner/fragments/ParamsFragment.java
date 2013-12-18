@@ -1,59 +1,45 @@
 package com.droidplanner.fragments;
 
-import android.app.Activity;
-import android.app.ListFragment;
-import android.app.ProgressDialog;
-import android.os.Bundle;
-import android.view.*;
-import android.widget.EditText;
-import android.widget.Toast;
-import com.droidplanner.DroidPlannerApp;
-import com.droidplanner.R;
-import com.droidplanner.adapters.ParamsAdapterItem;
-import com.droidplanner.dialogs.openfile.OpenFileDialog;
-import com.droidplanner.dialogs.openfile.OpenParameterDialog;
-import com.droidplanner.dialogs.parameters.DialogParameterInfo;
-import com.droidplanner.drone.Drone;
-import com.droidplanner.adapters.ParamsAdapter;
-import com.droidplanner.drone.DroneInterfaces;
-import com.droidplanner.file.IO.ParameterWriter;
-import com.droidplanner.parameters.Parameter;
-import com.droidplanner.parameters.ParameterMetadata;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-/**
- * Date: 2013-12-08
- * Time: 6:27 PM
- */
+import android.app.ListFragment;
+import android.app.ProgressDialog;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.droidplanner.DroidPlannerApp;
+import com.droidplanner.R;
+import com.droidplanner.adapters.ParamsAdapter;
+import com.droidplanner.adapters.ParamsAdapterItem;
+import com.droidplanner.dialogs.openfile.OpenFileDialog;
+import com.droidplanner.dialogs.openfile.OpenParameterDialog;
+import com.droidplanner.dialogs.parameters.DialogParameterInfo;
+import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.DroneInterfaces;
+import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
+import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import com.droidplanner.file.IO.ParameterWriter;
+import com.droidplanner.parameters.Parameter;
+import com.droidplanner.parameters.ParameterMetadata;
+
 public class ParamsFragment extends ListFragment
-        implements DroneInterfaces.OnParameterManagerListner, DroneInterfaces.VehicleTypeListener {
+        implements DroneInterfaces.OnParameterManagerListner, OnDroneListner{
     public static final String ADAPTER_ITEMS = ParamsFragment.class.getName() + ".adapter.items";
 
     private ProgressDialog pd;
 
     private Drone drone;
     private ParamsAdapter adapter;
-
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
-        drone.parameters.parameterListner = this;
-        drone.setVehicleTypeListener(this);
-    }
-
-    @Override
-    public void onDetach() {
-        drone.parameters.parameterListner = null;
-
-        super.onDetach();
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -99,6 +85,28 @@ public class ParamsFragment extends ListFragment
     }
 
     @Override
+	public void onStart() {
+		super.onStart();
+		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
+		drone.events.addDroneListener(this);
+		drone.parameters.parameterListner = this;
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		drone.events.removeDroneListener(this);
+		drone.parameters.parameterListner = null;
+	}
+
+	@Override
+	public void onDroneEvent(DroneEventsType event, Drone drone) {
+		if (event == DroneEventsType.TYPE) {
+	        adapter.loadMetadata(drone);
+		}		
+	}
+
+	@Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
@@ -246,10 +254,5 @@ public class ParamsFragment extends ListFragment
             pd.dismiss();
             pd = null;
         }
-    }
-
-    @Override
-    public void onVehicleTypeChanged() {
-        adapter.loadMetadata(drone);
     }
 }

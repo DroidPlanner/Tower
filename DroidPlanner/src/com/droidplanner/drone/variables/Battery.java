@@ -2,6 +2,7 @@ package com.droidplanner.drone.variables;
 
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneVariable;
+import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 
 public class Battery extends DroneVariable {
 	private double battVolt = -1;
@@ -28,11 +29,10 @@ public class Battery extends DroneVariable {
 			double battCurrent) {
 		if (this.battVolt != battVolt | this.battRemain != battRemain
 				| this.battCurrent != battCurrent) {
-			myDrone.tts.batteryDischargeNotification(battRemain);
 			this.battVolt = battVolt;
 			this.battRemain = battRemain;
 			this.battCurrent = battCurrent;
-			myDrone.notifyInfoChange();
+			myDrone.events.notifyDroneEvent(DroneEventsType.BATTERY);
 		}
 	}
 }
