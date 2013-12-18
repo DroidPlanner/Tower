@@ -28,7 +28,7 @@ public class FragmentSetupRCMinMax extends Fragment implements OnClickListener{
 	@Override
 	public void onClick(View arg0) {
 		if(rcSetupFragment!=null){
-			rcSetupFragment.cancel();
+			rcSetupFragment.changeSetupPanel(2);
 		}
 	}
 

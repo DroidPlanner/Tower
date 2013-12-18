@@ -218,12 +218,15 @@
     <string name="screen_checklist">Checklist</string>
     <string name="rc_title_options">RC options</string>
   	<string name="rc_desc_options">Assign features to channels 7 and 8 on RC radios. Trigger each feature by bringing the switch to the high position.</string>
-  	<string name="rc_desc_minmax">Move the joystics all the way out several times and toggle the swithces and levers to all possible positions</string>
+  	<string name="rc_desc_minmax">Move the joystics all the way out several times and toggle the swithces, levers and knobs to all possible positions</string>
   	<string name="rc_title_minmax">Set Min &amp; Max values</string>
   	<string name="rc_btn_next">Next</string>
   	<string name="rc_btn_cancel">Cancel</string>
-  	<string name="rc_btn_calibrate">Calibrate</string>
-  	<string name="rc_desc_middle">Set throttle stick to the lowest position and other joysticks, switches, levers &amp; knobs to their center position</string>
-  	<string name="rc_title_middle">Set center values</string>
-  	
+  	<string name="rc_btn_send">Send</string>
+  		<string name="rc_btn_calibrate">Calibrate</string>
+  	<string name="rc_desc_middle">Set throttle stick to the lowest position and other joysticks, switches, levers and knobs to their center position</string>
+  	<string name="rc_title_middle">Set Center values</string>
+  	<string name="rc_title_complete">Calibration complete</string>
+  	<string name="rc_desc_complete">RC calibration completed. Press \'Save\' to upload data to vehicle</string>
+  			
 </resources>

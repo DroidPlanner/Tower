@@ -161,16 +161,15 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 	@Override
 	public void onClick(View arg0) {
 		if (arg0.equals(btnCalibrate)) {
-			// rcParameters.getCaliberationParameters();
-			calibStep++;
-			if (calibStep > 2)
-				calibStep = 0;
-			changeSetupPanel(calibStep);
-
+			if (calibStep > 0)
+				cancel();
+			else
+				changeSetupPanel(1);
 		}
 	}
 
 	public void changeSetupPanel(int step) {
+		calibStep = step;
 		switch (step) {
 		case 0:
 			setupPanel = new FragmentSetupRCOptions();

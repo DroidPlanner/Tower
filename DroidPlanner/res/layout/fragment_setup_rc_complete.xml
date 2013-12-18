@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="@string/rc_title_middle" />
+            android:text="@string/rc_title_complete" />
     </RelativeLayout>
 
     <TextView
@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/mode_desc_rectangle"
         android:padding="12dp"
-        android:text="@string/rc_desc_middle" />
+        android:text="@string/rc_desc_complete" />
 
     <LinearLayout
         android:id="@+id/layoutSetupDetails"
@@ -36,6 +36,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="12dp" >
+
     </LinearLayout>
 
     <LinearLayout
@@ -51,7 +52,7 @@
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:background="@drawable/button_green"
-            android:text="@string/rc_btn_next" />
+            android:text="@string/rc_btn_send" />
     </LinearLayout>
 
 </LinearLayout>
