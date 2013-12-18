@@ -46,12 +46,12 @@
         android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/buttonRCNext"
+            android:id="@+id/buttonRCCancel"
             style="@style/modeControl"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:background="@drawable/button_green"
-            android:text="@string/rc_btn_next" />
+            android:text="@string/rc_btn_cancel" />
     </LinearLayout>
 
 </LinearLayout>

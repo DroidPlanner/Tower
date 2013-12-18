@@ -11,14 +11,14 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-public class FragmentSetupRCMinMax extends Fragment implements OnClickListener{
+public class FragmentSetupRCMiddle extends Fragment implements OnClickListener{
 	public RcSetupFragment rcSetupFragment;
 	private Button btnNext;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_setup_rc_minmax, container,
+		View view = inflater.inflate(R.layout.fragment_setup_rc_middle, container,
 				false);
 		btnNext = (Button)view.findViewById(R.id.buttonRCCancel);
 		btnNext.setOnClickListener(this);

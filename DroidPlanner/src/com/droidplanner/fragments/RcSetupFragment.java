@@ -18,6 +18,7 @@ import com.droidplanner.calibration.RC_CalParameters;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import com.droidplanner.fragments.calibration.FragmentSetupRCMiddle;
 import com.droidplanner.fragments.calibration.FragmentSetupRCMinMax;
 import com.droidplanner.fragments.calibration.FragmentSetupRCOptions;
 import com.droidplanner.widgets.FillBar.FillBarWithText;
@@ -162,7 +163,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 		if (arg0.equals(btnCalibrate)) {
 			// rcParameters.getCaliberationParameters();
 			calibStep++;
-			if (calibStep > 1)
+			if (calibStep > 2)
 				calibStep = 0;
 			changeSetupPanel(calibStep);
 
@@ -176,16 +177,28 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 			break;
 		case 1:
 			setupPanel = new FragmentSetupRCMinMax();
-			((FragmentSetupRCMinMax)setupPanel).rcSetupFragment = this;
+			((FragmentSetupRCMinMax) setupPanel).rcSetupFragment = this;
+			break;
+		case 2:
+			setupPanel = new FragmentSetupRCMiddle();
+			((FragmentSetupRCMiddle) setupPanel).rcSetupFragment = this;
 			break;
 		}
 		fragmentManager.beginTransaction()
 				.replace(R.id.fragment_setup_rc, setupPanel).commit();
+		if (btnCalibrate != null) {
+			if (step > 0) {
+				btnCalibrate.setText(R.string.rc_btn_cancel);
+			} else {
+				btnCalibrate.setText(R.string.rc_btn_calibrate);
+			}
+		}
 	}
 
 	public void cancel() {
 		// TODO Auto-generated method stub
-		changeSetupPanel(0);		
+		calibStep = 0;
+		changeSetupPanel(0);
 	}
 
 }

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".fragments.calibration.FragmentSetupRCOptions" >
+    tools:context=".fragments.calibration.FragmentSetupRCMiddle" >
 
     <RelativeLayout
         android:id="@+id/title_rect"
@@ -13,12 +13,12 @@
         android:background="@color/dark_title_bg" >
 
         <TextView
-            android:id="@+id/textviewSetupTitle"
+            android:id="@+id/RCSetupTitle"
             style="@style/SetupTitle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="@string/rc_title_options" />
+            android:text="@string/rc_title_middle" />
     </RelativeLayout>
 
     <TextView
@@ -28,45 +28,14 @@
         android:layout_height="wrap_content"
         android:background="@drawable/mode_desc_rectangle"
         android:padding="12dp"
-        android:text="@string/rc_desc_options" />
+        android:text="@string/rc_desc_middle" />
 
     <LinearLayout
-        android:id="@+id/layoutSetupDetail"
+        android:id="@+id/layoutSetupDetails"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="12dp" >
-
-        <TextView
-            android:id="@+id/RadiusLabel"
-            style="@style/modeLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Channel 7" />
-
-        <com.droidplanner.widgets.spinners.SpinnerSelfSelect
-            android:id="@+id/spinnerCH7Features"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_margin="5dp"
-            android:entries="@array/RC_Features" />
-
-        <TextView
-            android:id="@+id/RadiusLabel"
-            style="@style/modeLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Channel 8" />
-
-        <com.droidplanner.widgets.spinners.SpinnerSelfSelect
-            android:id="@+id/spinnerCH8Features"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_margin="5dp"
-            android:entries="@array/RC_Features" />
     </LinearLayout>
 
     <LinearLayout
@@ -82,7 +51,7 @@
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:background="@drawable/button_green"
-            android:text="Send" />
+            android:text="@string/rc_btn_cancel" />
     </LinearLayout>
 
 </LinearLayout>
