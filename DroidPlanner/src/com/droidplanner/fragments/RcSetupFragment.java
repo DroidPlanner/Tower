@@ -18,6 +18,7 @@ import com.droidplanner.calibration.RC_CalParameters;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import com.droidplanner.fragments.calibration.FragmentSetupRCCompleted;
 import com.droidplanner.fragments.calibration.FragmentSetupRCMiddle;
 import com.droidplanner.fragments.calibration.FragmentSetupRCMinMax;
 import com.droidplanner.fragments.calibration.FragmentSetupRCOptions;
@@ -182,6 +183,10 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 			setupPanel = new FragmentSetupRCMiddle();
 			((FragmentSetupRCMiddle) setupPanel).rcSetupFragment = this;
 			break;
+		case 3:
+			setupPanel = new FragmentSetupRCCompleted();
+			((FragmentSetupRCCompleted) setupPanel).rcSetupFragment = this;
+			break;
 		}
 		fragmentManager.beginTransaction()
 				.replace(R.id.fragment_setup_rc, setupPanel).commit();
@@ -198,6 +203,12 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 		// TODO Auto-generated method stub
 		calibStep = 0;
 		changeSetupPanel(0);
+	}
+
+	public void updateCalibrationData() {
+		// TODO Auto-generated method stub
+		calibStep = 0;
+		changeSetupPanel(0);		
 	}
 
 }

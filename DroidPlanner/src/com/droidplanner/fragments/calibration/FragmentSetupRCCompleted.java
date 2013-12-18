@@ -11,14 +11,14 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-public class FragmentSetupRCMiddle extends Fragment implements OnClickListener{
+public class FragmentSetupRCCompleted extends Fragment implements OnClickListener{
 	public RcSetupFragment rcSetupFragment;
 	private Button btnNext;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_setup_rc_middle, container,
+		View view = inflater.inflate(R.layout.fragment_setup_rc_complete, container,
 				false);
 		btnNext = (Button)view.findViewById(R.id.buttonRCCancel);
 		btnNext.setOnClickListener(this);
@@ -28,7 +28,7 @@ public class FragmentSetupRCMiddle extends Fragment implements OnClickListener{
 	@Override
 	public void onClick(View arg0) {
 		if(rcSetupFragment!=null){
-			rcSetupFragment.changeSetupPanel(3);
+			rcSetupFragment.updateCalibrationData();
 		}
 	}
 
