@@ -31,7 +31,6 @@ import com.droidplanner.fragments.helpers.GestureMapFragment.OnPathFinishedListn
 import com.droidplanner.fragments.helpers.MapProjection;
 import com.droidplanner.fragments.mission.MissionDetailFragment;
 import com.droidplanner.fragments.mission.MissionDetailFragment.OnWayPointTypeChangeListener;
-import com.droidplanner.widgets.adapterViews.MissionItemView;
 import com.google.android.gms.maps.model.LatLng;
 
 public class EditorActivity extends SuperUI implements OnPathFinishedListner,
@@ -83,9 +82,17 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 	public void onWindowFocusChanged(boolean hasFocus) {
 		// TODO Auto-generated method stub
 		super.onWindowFocusChanged(hasFocus);
-		int rightPadding = editorToolsFragment.getView().getRight();
+		updateMapPadding(false);
+	}
+
+	private void updateMapPadding(boolean addBottomPadding) {
 		int topPadding = infoView.getBottom();
-		planningMapFragment.mMap.setPadding(rightPadding, topPadding, 0, 0);
+		int rightPadding = 0,bottomPadding = 0;
+		if (addBottomPadding) {
+			rightPadding = editorToolsFragment.getView().getRight();
+			bottomPadding = missionListFragment.getView().getHeight();			
+		}
+		planningMapFragment.mMap.setPadding(rightPadding, topPadding, 0, bottomPadding);
 	}
 
 	@Override
@@ -307,5 +314,10 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 			missionListFragment.setArrowsVisibility(true);
 		}
 		planningMapFragment.update();
+	}
+
+	@Override
+	public void onListVisibilityChanged(boolean listIsVisible) {
+		updateMapPadding(listIsVisible);
 	}
 }

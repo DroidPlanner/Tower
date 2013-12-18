@@ -1,6 +1,5 @@
 package com.droidplanner.fragments;
 
-import android.util.Log;
 import it.sephiroth.android.library.widget.AdapterView;
 import it.sephiroth.android.library.widget.AdapterView.OnItemClickListener;
 import it.sephiroth.android.library.widget.AdapterView.OnItemLongClickListener;
@@ -55,8 +54,6 @@ public class EditorListFragment extends Fragment implements  OnItemLongClickList
 		list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
 		list.setAdapter(adapter);
-
-        updateViewVisibility(view);
 		return view;
 	}
 
@@ -89,12 +86,13 @@ public class EditorListFragment extends Fragment implements  OnItemLongClickList
     /**
      * Updates the fragment view visibility based on the count of stored mission items.
      */
-    private void updateViewVisibility(final View view){
+    private void updateViewVisibility(final View view){    	
         if (adapter != null && view != null) {
             if (adapter.getCount() > 0)
                 view.setVisibility(View.VISIBLE);
             else
                 view.setVisibility(View.INVISIBLE);
+            editorListner.onListVisibilityChanged(view.getVisibility() == View.VISIBLE);
         }
     }
 
