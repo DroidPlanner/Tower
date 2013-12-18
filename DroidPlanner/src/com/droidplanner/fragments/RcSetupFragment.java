@@ -3,6 +3,7 @@ package com.droidplanner.fragments;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,11 +18,13 @@ import com.droidplanner.calibration.RC_CalParameters;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import com.droidplanner.fragments.calibration.FragmentSetupRCMinMax;
 import com.droidplanner.fragments.calibration.FragmentSetupRCOptions;
 import com.droidplanner.widgets.FillBar.FillBarWithText;
 import com.droidplanner.widgets.RcStick.RcStick;
 
-public class RcSetupFragment extends Fragment implements  OnDroneListner, OnClickListener {
+public class RcSetupFragment extends Fragment implements OnDroneListner,
+		OnClickListener {
 	private static final int RC_MIN = 1000;
 	private static final int RC_MAX = 2000;
 
@@ -31,7 +34,8 @@ public class RcSetupFragment extends Fragment implements  OnDroneListner, OnClic
 	private Drone drone;
 	private FragmentManager fragmentManager;
 	private RC_CalParameters rcParameters;
-	private TextView textViewThrottle, textViewYaw, textViewRoll, textViewPitch;
+	private TextView textViewThrottle, textViewYaw, textViewRoll,
+			textViewPitch;
 
 	private FillBarWithText bar5;
 	private FillBarWithText bar6;
@@ -41,10 +45,11 @@ public class RcSetupFragment extends Fragment implements  OnDroneListner, OnClic
 	private RcStick stickLeft;
 
 	private RcStick stickRight;
-	
+
 	private Button btnCalibrate;
-	
+
 	private Fragment setupPanel;
+	private int calibStep = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -59,11 +64,13 @@ public class RcSetupFragment extends Fragment implements  OnDroneListner, OnClic
 		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
 		View view = inflater.inflate(R.layout.fragment_setup_rc, container,
 				false);
-		
-		Fragment defPanel = fragmentManager.findFragmentById(R.id.fragment_setup_rc);
-		if(defPanel==null){
+
+		Fragment defPanel = fragmentManager
+				.findFragmentById(R.id.fragment_setup_rc);
+		if (defPanel == null) {
 			defPanel = new FragmentSetupRCOptions();
-            fragmentManager.beginTransaction().add(R.id.fragment_setup_rc, defPanel).commit();
+			fragmentManager.beginTransaction()
+					.add(R.id.fragment_setup_rc, defPanel).commit();
 
 		}
 		setupLocalViews(view);
@@ -94,18 +101,19 @@ public class RcSetupFragment extends Fragment implements  OnDroneListner, OnClic
 		bar6 = (FillBarWithText) view.findViewById(R.id.fillBar6);
 		bar7 = (FillBarWithText) view.findViewById(R.id.fillBar7);
 		bar8 = (FillBarWithText) view.findViewById(R.id.fillBar8);
-	
+
 		bar5.setup("CH 5", RC_MAX, RC_MIN);
 		bar6.setup("CH 6", RC_MAX, RC_MIN);
 		bar7.setup("CH 7", RC_MAX, RC_MIN);
 		bar8.setup("CH 8", RC_MAX, RC_MIN);
-	
-		textViewRoll 		= (TextView) view.findViewById(R.id.RCRollPWM);
-		textViewPitch 		= (TextView) view.findViewById(R.id.RCPitchPWM);
-		textViewThrottle 	= (TextView) view.findViewById(R.id.RCThrottlePWM);
-		textViewYaw 		= (TextView) view.findViewById(R.id.RCYawPWM);
-		
-		btnCalibrate		= (Button) view.findViewById(R.id.buttonRCCalibrate);
+
+		textViewRoll = (TextView) view.findViewById(R.id.RCRollPWM);
+		textViewPitch = (TextView) view.findViewById(R.id.RCPitchPWM);
+		textViewThrottle = (TextView) view.findViewById(R.id.RCThrottlePWM);
+		textViewYaw = (TextView) view.findViewById(R.id.RCYawPWM);
+
+		btnCalibrate = (Button) view.findViewById(R.id.buttonRCCalibrate);
+		btnCalibrate.setOnClickListener(this);
 	}
 
 	private void setupDataStreamingForRcSetup() {
@@ -122,9 +130,9 @@ public class RcSetupFragment extends Fragment implements  OnDroneListner, OnClic
 		case RC_OUT:
 			break;
 		default:
-			break;		
+			break;
 		}
-		
+
 	}
 
 	public void onNewInputRcData() {
@@ -133,16 +141,16 @@ public class RcSetupFragment extends Fragment implements  OnDroneListner, OnClic
 		bar6.setValue(data[5]);
 		bar7.setValue(data[6]);
 		bar8.setValue(data[7]);
-	
-		float x,y;
-		x = (data[3] - RC_MIN) / ((float) (RC_MAX - RC_MIN))*2-1;
-		y = (data[2] - RC_MIN) / ((float) (RC_MAX - RC_MIN))*2-1;
+
+		float x, y;
+		x = (data[3] - RC_MIN) / ((float) (RC_MAX - RC_MIN)) * 2 - 1;
+		y = (data[2] - RC_MIN) / ((float) (RC_MAX - RC_MIN)) * 2 - 1;
 		stickLeft.setPosition(x, y);
-	
-		x = (data[0] - RC_MIN) / ((float) (RC_MAX - RC_MIN))*2-1;
-		y = (data[1] - RC_MIN) / ((float) (RC_MAX - RC_MIN))*2-1;
+
+		x = (data[0] - RC_MIN) / ((float) (RC_MAX - RC_MIN)) * 2 - 1;
+		y = (data[1] - RC_MIN) / ((float) (RC_MAX - RC_MIN)) * 2 - 1;
 		stickRight.setPosition(x, -y);
-	
+
 		textViewRoll.setText(Integer.toString(data[0]));
 		textViewPitch.setText(Integer.toString(data[1]));
 		textViewThrottle.setText(Integer.toString(data[2]));
@@ -151,9 +159,28 @@ public class RcSetupFragment extends Fragment implements  OnDroneListner, OnClic
 
 	@Override
 	public void onClick(View arg0) {
-		if(arg0.equals(btnCalibrate)){
-			rcParameters.getCaliberationParameters();
+		if (arg0.equals(btnCalibrate)) {
+			// rcParameters.getCaliberationParameters();
+			calibStep++;
+			if (calibStep > 1)
+				calibStep = 0;
+			changeSetupPanel(calibStep);
+
 		}
+	}
+
+	private void changeSetupPanel(int step) {
+		Log.d("CAL", String.valueOf(step));
+		switch (step) {
+		case 0:
+			setupPanel = new FragmentSetupRCOptions();
+			break;
+		case 1:
+			setupPanel = new FragmentSetupRCMinMax();
+			break;
+		}
+		fragmentManager.beginTransaction()
+				.replace(R.id.fragment_setup_rc, setupPanel).commit();
 	}
 
 }
