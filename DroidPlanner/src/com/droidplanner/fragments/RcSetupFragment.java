@@ -1,6 +1,7 @@
 package com.droidplanner.fragments;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.droidplanner.calibration.RC_CalParameters;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import com.droidplanner.fragments.calibration.FragmentSetupRCOptions;
 import com.droidplanner.widgets.FillBar.FillBarWithText;
 import com.droidplanner.widgets.RcStick.RcStick;
 
@@ -27,6 +29,7 @@ public class RcSetupFragment extends Fragment implements  OnDroneListner, OnClic
 	private static final int RC_MSG_RATE = 50;
 
 	private Drone drone;
+	private FragmentManager fragmentManager;
 	private RC_CalParameters rcParameters;
 	private TextView textViewThrottle, textViewYaw, textViewRoll, textViewPitch;
 
@@ -40,6 +43,15 @@ public class RcSetupFragment extends Fragment implements  OnDroneListner, OnClic
 	private RcStick stickRight;
 	
 	private Button btnCalibrate;
+	
+	private Fragment setupPanel;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		fragmentManager = getFragmentManager();
+		setupPanel = fragmentManager.findFragmentById(R.id.fragment_setup_rc);
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,6 +59,13 @@ public class RcSetupFragment extends Fragment implements  OnDroneListner, OnClic
 		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
 		View view = inflater.inflate(R.layout.fragment_setup_rc, container,
 				false);
+		
+		Fragment defPanel = fragmentManager.findFragmentById(R.id.fragment_setup_rc);
+		if(defPanel==null){
+			defPanel = new FragmentSetupRCOptions();
+            fragmentManager.beginTransaction().add(R.id.fragment_setup_rc, defPanel).commit();
+
+		}
 		setupLocalViews(view);
 		return view;
 	}

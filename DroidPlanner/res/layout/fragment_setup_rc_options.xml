@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".fragments.calibration.FragmentSetupRCOptions" >
+
+    <RelativeLayout
+        android:id="@+id/title_rect"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="@color/dark_title_bg" >
+
+        <TextView
+            android:id="@+id/textviewSetupTitle"
+            style="@style/SetupTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="@string/rc_title_options" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/textView1"
+        style="@style/ModeDetailText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/mode_desc_rectangle"
+        android:padding="12dp"
+        android:text="@string/rc_desc_options" />
+
+    <LinearLayout
+        android:id="@+id/layoutSetupDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp" >
+
+        <TextView
+            android:id="@+id/RadiusLabel"
+            style="@style/modeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Channel 7" />
+
+        <com.droidplanner.widgets.spinners.SpinnerSelfSelect
+            android:id="@+id/spinnerCH7Features"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_margin="5dp"
+            android:entries="@array/RC_Features" />
+
+        <TextView
+            android:id="@+id/RadiusLabel"
+            style="@style/modeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Channel 8" />
+
+        <com.droidplanner.widgets.spinners.SpinnerSelfSelect
+            android:id="@+id/spinnerCH8Features"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_margin="5dp"
+            android:entries="@array/RC_Features" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/buttonRCCalibrate"
+            style="@style/modeControl"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_green"
+            android:text="Send" />
+    </LinearLayout>
+
+</LinearLayout>
