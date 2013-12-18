@@ -201,8 +201,9 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 		if (btnCalibrate != null) {
 			if (step > 0) {
 				btnCalibrate.setText(R.string.rc_btn_cancel);
+				btnCalibrate.setVisibility(View.VISIBLE);
 			} else {
-				btnCalibrate.setText(R.string.rc_btn_calibrate);
+				btnCalibrate.setVisibility(View.GONE);
 			}
 		}
 	}
