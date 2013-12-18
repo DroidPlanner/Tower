@@ -37,7 +37,7 @@ public class FragmentSetupRCMenu extends Fragment implements OnClickListener{
 	public void onClick(View arg0) {
 		if(rcSetupFragment!=null){
 			if(arg0.equals(btnCalibration)){
-				rcSetupFragment.changeSetupPanel(2);
+				rcSetupFragment.changeSetupPanel(1);
 			}
 			if(arg0.equals(btnFailsafe)){
 				rcSetupFragment.changeSetupPanel(4);				

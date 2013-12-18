@@ -72,6 +72,8 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 				.findFragmentById(R.id.fragment_setup_rc);
 		if (defPanel == null) {
 			defPanel = new FragmentSetupRCMenu();
+			((FragmentSetupRCMenu) defPanel).rcSetupFragment = this;
+
 			fragmentManager.beginTransaction()
 					.add(R.id.fragment_setup_rc, defPanel).commit();
 
@@ -175,6 +177,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 		switch (step) {
 		case 0:
 			setupPanel = new FragmentSetupRCMenu();
+			((FragmentSetupRCMenu) setupPanel).rcSetupFragment = this;
 			break;
 		case 1:
 			setupPanel = new FragmentSetupRCMinMax();
@@ -190,6 +193,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 			break;
 		case 5:
 			setupPanel = new FragmentSetupRCOptions();
+			((FragmentSetupRCOptions) setupPanel).rcSetupFragment = this;
 			break;
 		}
 		fragmentManager.beginTransaction()
