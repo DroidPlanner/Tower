@@ -115,7 +115,7 @@ public class FillBar extends View {
 				paintOutline.setColor(colorMin);
 				canvas.drawPath(outlinePath, paintOutline);
 
-				f = height * max;
+				f = width * max;
 				outlinePath.reset();
 				outlinePath.moveTo(f, 0);
 				outlinePath.lineTo(f, height);

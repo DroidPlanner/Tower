@@ -23,13 +23,13 @@ import com.droidplanner.fragments.calibration.FragmentSetupRCMenu;
 import com.droidplanner.fragments.calibration.FragmentSetupRCMiddle;
 import com.droidplanner.fragments.calibration.FragmentSetupRCMinMax;
 import com.droidplanner.fragments.calibration.FragmentSetupRCOptions;
-import com.droidplanner.widgets.FillBar.FillBarWithText;
+import com.droidplanner.widgets.FillBar.FillBarMinMaxText;
 import com.droidplanner.widgets.RcStick.RcStick;
 
 public class RcSetupFragment extends Fragment implements OnDroneListner,
 		OnClickListener {
-	private static final int RC_MIN = 1000;
-	private static final int RC_MAX = 2000;
+	private static final int RC_MIN = 900;
+	private static final int RC_MAX = 2100;
 
 	// Extreme RC update rate in this screen
 	private static final int RC_MSG_RATE = 50;
@@ -40,10 +40,10 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 	private TextView textViewThrottle, textViewYaw, textViewRoll,
 			textViewPitch;
 
-	private FillBarWithText bar5;
-	private FillBarWithText bar6;
-	private FillBarWithText bar7;
-	private FillBarWithText bar8;
+	private FillBarMinMaxText bar5;
+	private FillBarMinMaxText bar6;
+	private FillBarMinMaxText bar7;
+	private FillBarMinMaxText bar8;
 
 	private RcStick stickLeft;
 
@@ -105,10 +105,10 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 	private void setupLocalViews(View view) {
 		stickLeft = (RcStick) view.findViewById(R.id.stickLeft);
 		stickRight = (RcStick) view.findViewById(R.id.stickRight);
-		bar5 = (FillBarWithText) view.findViewById(R.id.fillBar5);
-		bar6 = (FillBarWithText) view.findViewById(R.id.fillBar6);
-		bar7 = (FillBarWithText) view.findViewById(R.id.fillBar7);
-		bar8 = (FillBarWithText) view.findViewById(R.id.fillBar8);
+		bar5 = (FillBarMinMaxText) view.findViewById(R.id.fillBar5);
+		bar6 = (FillBarMinMaxText) view.findViewById(R.id.fillBar6);
+		bar7 = (FillBarMinMaxText) view.findViewById(R.id.fillBar7);
+		bar8 = (FillBarMinMaxText) view.findViewById(R.id.fillBar8);
 
 		bar5.setup("CH 5", RC_MAX, RC_MIN);
 		bar6.setup("CH 6", RC_MAX, RC_MIN);

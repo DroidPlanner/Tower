@@ -1,227 +1,224 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res/com.droidplanner"
     style="@style/configLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent" >
 
-	<TextView
-	    android:id="@+id/SetupTitle"
-	    style="@style/SetupTitle"
-	    android:layout_width="match_parent"
-	    android:layout_height="64dp"
-	    android:layout_alignParentLeft="true"
-	    android:layout_alignParentTop="true"
-	    android:layout_toLeftOf="@+id/relativeLayout1"
-	    android:background="@drawable/rc_setup_rectangle"
-	    android:text="This is a title for RC setup" />
+    <TextView
+        android:id="@+id/SetupTitle"
+        style="@style/SetupTitle"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/relativeLayout1"
+        android:background="@drawable/rc_setup_rectangle"
+        android:text="This is a title for RC setup" />
 
-	<LinearLayout
-		android:layout_width="wrap_content"
-		android:layout_height="300dp"
-		android:layout_below="@id/SetupTitle"
-		android:layout_marginTop="40dp"
-		android:orientation="horizontal"
-		>
-		<Space
-			android:layout_width="wrap_content"
-			android:layout_height="match_parent"
-			android:layout_margin="20dp"/>
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="wrap_content"
+        android:layout_height="300dp"
+        android:layout_below="@id/SetupTitle"
+        android:layout_marginTop="40dp"
+        android:orientation="horizontal" >
 
-		<RelativeLayout
-			android:id="@+id/stickLeftGroup"
-			android:layout_width="190dp"
-			android:layout_height="280dp"
-			android:layout_below="@id/SetupTitle"
-			android:layout_alignParentLeft="true"
-			>
-			<com.droidplanner.widgets.RcStick.RcStick
-				android:id="@+id/stickLeft"
-				android:layout_width="120dp"
-				android:layout_height="120dp"
-				android:layout_alignParentTop="true"
-				android:layout_alignParentRight="true"
-				/>
-			<TextView
-				android:id="@+id/RCThrottleTitle"
-				android:layout_width="60dp"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="40dp"
-				android:layout_marginRight="10dp"
-				android:layout_toLeftOf="@id/stickLeft"
-				android:gravity="left"
-				android:text="Throttle"
-				style="@style/rc_textTitle"
-				/>
-			<TextView
-				android:id="@+id/RCThrottlePWM"
-				android:layout_width="40dp"
-				android:layout_height="wrap_content"
-				android:layout_alignLeft="@id/RCThrottleTitle"
-				android:layout_below="@id/RCThrottleTitle"
-				android:gravity="left"
-				android:text="1500"
-				style="@style/rc_textPWM"
-				/>
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="20dp" />
 
-			<TextView
-				android:id="@+id/RCYawTitle"
-				android:layout_marginTop="10dp"
-				android:layout_width="80dp"
-				android:layout_height="wrap_content"
-				android:layout_below="@id/stickLeft"
-				android:layout_alignParentRight="true"
-				android:gravity="left"
-				android:text="Yaw"
-				style="@style/rc_textTitle"
-				/>
+        <RelativeLayout
+            android:id="@+id/stickLeftGroup"
+            android:layout_width="190dp"
+            android:layout_height="280dp"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/SetupTitle" >
 
-			<TextView
-				android:id="@+id/RCYawPWM"
-				android:layout_width="80dp"
-				android:layout_height="wrap_content"
-				android:layout_below="@id/RCYawTitle"
-				android:layout_alignLeft="@id/RCYawTitle"
-				android:gravity="left"
-				android:text="1500"
-				style="@style/rc_textPWM"
-				/>
-		</RelativeLayout>
-		<Space
-			android:layout_width="wrap_content"
-			android:layout_height="match_parent"
-			android:layout_margin="10dp"/>
-		<RelativeLayout
-			android:layout_width="190dp"
-			android:layout_height="280dp"
-			android:layout_toRightOf="@id/stickLeftGroup"
-			android:layout_below="@id/SetupTitle"
-			>
-			<com.droidplanner.widgets.RcStick.RcStick
-				android:id="@+id/stickRight"
-				android:layout_width="120dp"
-				android:layout_height="120dp"
-				android:layout_alignParentTop="true"
-				android:layout_alignParentLeft="true"
-				/>
-			<TextView
-				android:id="@+id/RCPitchTitle"
-				android:layout_width="40dp"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="40dp"
-				android:layout_marginLeft="10dp"
-				android:layout_toRightOf="@id/stickRight"
-				android:gravity="left"
-				android:text="Pitch"
-				style="@style/rc_textTitle"
-				/>
-			<TextView
-				android:id="@+id/RCPitchPWM"
-				android:layout_width="40dp"
-				android:layout_height="wrap_content"
-				android:layout_alignLeft="@id/RCPitchTitle"
-				android:layout_below="@id/RCPitchTitle"
-				android:gravity="left"
-				android:text="1500"
-				style="@style/rc_textPWM"
-				/>
+            <com.droidplanner.widgets.RcStick.RcStick
+                android:id="@+id/stickLeft"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true" />
 
-			<TextView
-				android:id="@+id/RCRollTitle"
-				android:layout_marginTop="10dp"
-				android:layout_marginLeft="40dp"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_below="@id/stickRight"
-				android:layout_alignParentLeft="true"
-				android:gravity="left"
-				android:text="Roll"
-				style="@style/rc_textTitle"
-				/>
+            <TextView
+                android:id="@+id/RCThrottleTitle"
+                style="@style/rc_textTitle"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="40dp"
+                android:layout_toLeftOf="@id/stickLeft"
+                android:gravity="left"
+                android:text="Throttle" />
 
-			<TextView
-				android:id="@+id/RCRollPWM"
-				android:layout_width="80dp"
-				android:layout_height="wrap_content"
-				android:layout_below="@id/RCRollTitle"
-				android:layout_alignLeft="@id/RCRollTitle"
-				android:gravity="left"
-				android:text="1500"
-				style="@style/rc_textPWM"
-				/>
-		</RelativeLayout>
-		<Space
-			android:layout_width="wrap_content"
-			android:layout_height="match_parent"
-			android:layout_margin="10dp"/>
+            <TextView
+                android:id="@+id/RCThrottlePWM"
+                style="@style/rc_textPWM"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/RCThrottleTitle"
+                android:layout_below="@id/RCThrottleTitle"
+                android:gravity="left"
+                android:text="1500" />
 
-		<com.droidplanner.widgets.FillBar.FillBarWithText
-			android:id="@+id/fillBar5"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_margin="5dp" />
+            <TextView
+                android:id="@+id/RCYawTitle"
+                style="@style/rc_textTitle"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/stickLeft"
+                android:layout_marginTop="10dp"
+                android:gravity="left"
+                android:text="Yaw" />
 
-		<com.droidplanner.widgets.FillBar.FillBarWithText
-			android:id="@+id/fillBar6"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_margin="5dp"/>
+            <TextView
+                android:id="@+id/RCYawPWM"
+                style="@style/rc_textPWM"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/RCYawTitle"
+                android:layout_below="@id/RCYawTitle"
+                android:gravity="left"
+                android:text="1500" />
+        </RelativeLayout>
 
-		<com.droidplanner.widgets.FillBar.FillBarWithText
-			android:id="@+id/fillBar7"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_margin="5dp" />
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp" />
 
-		<com.droidplanner.widgets.FillBar.FillBarWithText
-			android:id="@+id/fillBar8"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_margin="5dp"
-			android:layout_weight="1" />
+        <RelativeLayout
+            android:layout_width="190dp"
+            android:layout_height="280dp"
+            android:layout_below="@id/SetupTitle"
+            android:layout_toRightOf="@id/stickLeftGroup" >
 
-	</LinearLayout>
+            <com.droidplanner.widgets.RcStick.RcStick
+                android:id="@+id/stickRight"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true" />
 
-	<LinearLayout
-		android:layout_width="742dp"
-		android:layout_height="wrap_content"
-		android:layout_alignParentBottom="true"
-		android:gravity="center"
-		android:orientation="horizontal"
-		>
+            <TextView
+                android:id="@+id/RCPitchTitle"
+                style="@style/rc_textTitle"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="40dp"
+                android:layout_toRightOf="@id/stickRight"
+                android:gravity="left"
+                android:text="Pitch" />
 
-		<Button
-		    android:id="@+id/buttonRCCalibrate"
-		    style="@style/modeControl"
-		    android:layout_width="120dp"
-		    android:layout_height="wrap_content"
-		    android:layout_marginBottom="10dp"
-		    android:background="@drawable/button_green"
-		    android:text="@string/rc_btn_cancel"
-		    android:visibility="gone" />
+            <TextView
+                android:id="@+id/RCPitchPWM"
+                style="@style/rc_textPWM"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/RCPitchTitle"
+                android:layout_below="@id/RCPitchTitle"
+                android:gravity="left"
+                android:text="1500" />
 
-	</LinearLayout>
+            <TextView
+                android:id="@+id/RCRollTitle"
+                style="@style/rc_textTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@id/stickRight"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="10dp"
+                android:gravity="left"
+                android:text="Roll" />
 
+            <TextView
+                android:id="@+id/RCRollPWM"
+                style="@style/rc_textPWM"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/RCRollTitle"
+                android:layout_below="@id/RCRollTitle"
+                android:gravity="left"
+                android:text="1500" />
+        </RelativeLayout>
 
-	<RelativeLayout
-		android:layout_width="220dp"
-		android:layout_height="match_parent"
-		android:layout_alignParentRight="true"
-		android:background="@color/opaque_white"
-		android:layout_weight="7"
-		>
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp" />
+    </LinearLayout>
 
-		<FrameLayout
-		    android:id="@+id/fragment_setup_rc"
-		    android:layout_width="fill_parent"
-		    android:layout_height="fill_parent"
-		    android:layout_alignParentLeft="true"
-		    android:layout_alignParentTop="true" >
+    <LinearLayout
+        android:layout_width="742dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:orientation="horizontal" >
 
-		</FrameLayout>
+        <Button
+            android:id="@+id/buttonRCCalibrate"
+            style="@style/modeControl"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/button_green"
+            android:text="@string/rc_btn_cancel"
+            android:visibility="gone" />
+    </LinearLayout>
 
-	</RelativeLayout>
+    <RelativeLayout
+        android:layout_width="220dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_weight="7"
+        android:background="@color/opaque_white" >
+
+        <FrameLayout
+            android:id="@+id/fragment_setup_rc"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true" >
+        </FrameLayout>
+    </RelativeLayout>
+
+    <com.droidplanner.widgets.FillBar.FillBarMinMaxText
+        android:id="@+id/fillBar6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/fillBar5"
+        android:layout_below="@+id/fillBar5" >
+    </com.droidplanner.widgets.FillBar.FillBarMinMaxText>
+
+    <com.droidplanner.widgets.FillBar.FillBarMinMaxText
+        android:id="@+id/fillBar5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/linearLayout1"
+        android:layout_marginLeft="34dp"
+        android:layout_toRightOf="@+id/linearLayout1" >
+    </com.droidplanner.widgets.FillBar.FillBarMinMaxText>
+
+    <com.droidplanner.widgets.FillBar.FillBarMinMaxText
+        android:id="@+id/fillBar7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/fillBar8"
+        android:layout_below="@+id/fillBar6" >
+    </com.droidplanner.widgets.FillBar.FillBarMinMaxText>
+
+    <com.droidplanner.widgets.FillBar.FillBarMinMaxText
+        android:id="@+id/fillBar8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/fillBar6"
+        android:layout_below="@+id/fillBar7" >
+    </com.droidplanner.widgets.FillBar.FillBarMinMaxText>
 
 </RelativeLayout>
