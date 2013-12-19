@@ -80,15 +80,15 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
-		// TODO Auto-generated method stub
 		super.onWindowFocusChanged(hasFocus);
-		updateMapPadding(false);
+		updateMapPadding();
+		missionListFragment.updateViewVisibility();
 	}
 
-	private void updateMapPadding(boolean addBottomPadding) {
+	private void updateMapPadding() {
 		int topPadding = infoView.getBottom();
 		int rightPadding = 0,bottomPadding = 0;
-		if (addBottomPadding) {
+		if (mission.getItems().size()>0) {
 			rightPadding = editorToolsFragment.getView().getRight();
 			bottomPadding = missionListFragment.getView().getHeight();			
 		}
@@ -317,7 +317,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 	}
 
 	@Override
-	public void onListVisibilityChanged(boolean listIsVisible) {
-		updateMapPadding(listIsVisible);
+	public void onListVisibilityChanged() {
+		updateMapPadding();
 	}
 }

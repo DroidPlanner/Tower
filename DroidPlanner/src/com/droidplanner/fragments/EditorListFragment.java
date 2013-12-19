@@ -79,20 +79,21 @@ public class EditorListFragment extends Fragment implements  OnItemLongClickList
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		if (event == DroneEventsType.MISSION) {
 			adapter.notifyDataSetChanged();
-            updateViewVisibility(getView());
+            updateViewVisibility();
 		}
 	}
 
     /**
      * Updates the fragment view visibility based on the count of stored mission items.
      */
-    private void updateViewVisibility(final View view){    	
+    public void updateViewVisibility(){
+    	View view = getView();
         if (adapter != null && view != null) {
             if (adapter.getCount() > 0)
                 view.setVisibility(View.VISIBLE);
             else
                 view.setVisibility(View.INVISIBLE);
-            editorListner.onListVisibilityChanged(view.getVisibility() == View.VISIBLE);
+            editorListner.onListVisibilityChanged();
         }
     }
 
