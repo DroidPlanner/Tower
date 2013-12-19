@@ -24,13 +24,13 @@ public class FillBarMinMaxText extends LinearLayout {
 
 		setOrientation(VERTICAL);
 
-		inflate(context, R.layout.subview_fillbar_with_minmax, this);
+		inflate(context, R.layout.subview_minmax_fillbar, this);
 
-		title = (TextView) findViewById(R.id.textViewBarTitle);
-		value = (TextView) findViewById(R.id.TextViewBarValue);
-		minValue = (TextView) findViewById(R.id.TextViewMinValue);
-		maxValue = (TextView) findViewById(R.id.TextViewMaxValue);
-		bar = (FillBar) findViewById(R.id.fillBarSubview);
+		title = (TextView) findViewById(R.id.textViewTitle);
+		value = (TextView) findViewById(R.id.TextViewMid);
+		minValue = (TextView) findViewById(R.id.TextViewMin);
+		maxValue = (TextView) findViewById(R.id.TextViewMax);
+		bar = (FillBar) findViewById(R.id.fillBar);
 		bar.setShowMinMax(true);
 	}
 

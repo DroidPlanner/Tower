@@ -6,13 +6,13 @@
     >
 
 	<com.droidplanner.widgets.FillBar.FillBar
-		android:id="@+id/fillBarSubview"
+		android:id="@+id/fillBar"
 		android:layout_width="20dp"
 		android:layout_height="90dp"
 		/>
 
     <TextView
-        android:id="@+id/textViewBarTitle"
+        android:id="@+id/textViewTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="left"
@@ -21,7 +21,7 @@
         />
 
     <TextView
-        android:id="@+id/TextViewBarValue"
+        android:id="@+id/TextViewMid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="left"
