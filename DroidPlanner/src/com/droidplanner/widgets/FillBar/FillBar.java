@@ -18,8 +18,9 @@ public class FillBar extends View {
 	private int height;
 	private int width;
 	private float percentage = 0.5f;
+	private float fheight;
+	private float fwidth;
 
-	
 	public FillBar(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		initialize();
@@ -42,6 +43,8 @@ public class FillBar extends View {
 		super.onSizeChanged(w, h, oldw, oldh);
 		width = w - 1;
 		height = h - 1;
+		fheight = height < width ? height : (height * (1 - percentage));
+		fwidth = height  < width ? (width * (1 - percentage)) : width;
 	}
 
 	@Override
@@ -57,13 +60,21 @@ public class FillBar extends View {
 		outlinePath.lineTo(0, 0);
 		canvas.drawPath(outlinePath, paintOutline);
 
-		float fillHeight = height * (1 - percentage);
 		fillPath.reset();
-		fillPath.moveTo(0, fillHeight);
-		fillPath.lineTo(0, height);
-		fillPath.lineTo(width, height);
-		fillPath.lineTo(width, fillHeight);
-		fillPath.lineTo(0, fillHeight);
+		if (height > width) {
+			fillPath.moveTo(0, fheight);
+			fillPath.lineTo(0, height);
+			fillPath.lineTo(fwidth, height);
+			fillPath.lineTo(fwidth, fheight);
+			fillPath.lineTo(0, fheight);
+		}else{
+			fillPath.moveTo(0, 0);
+			fillPath.lineTo(0, fheight);
+			fillPath.lineTo(fwidth, fheight);
+			fillPath.lineTo(fwidth, 0);
+			fillPath.lineTo(0, 0);
+			
+		}
 		canvas.drawPath(fillPath, paintFill);
 	}
 
