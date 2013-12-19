@@ -7,4 +7,5 @@ public interface OnEditorInteraction {
 		public boolean onItemLongClick(MissionItem item);
 		public void onItemClick(MissionItem item);
 		public void onMapClick(LatLng coord);
+		public void onListVisibilityChanged();
 }

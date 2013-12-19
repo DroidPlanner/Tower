@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content" 
-    android:background="#141414"
+    android:background="@color/bottom_top_bar"
+    android:visibility="invisible"
     >
 
     <ImageButton
@@ -11,7 +12,6 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="left"
-        android:background="#141414"
         android:src="@drawable/button_left_mission"
         android:visibility="invisible"
         tools:ignore="ContentDescription" />
@@ -20,9 +20,9 @@
         android:id="@+id/listRightArrow"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:background="#141414"
         android:src="@drawable/button_right_mission"
         android:visibility="invisible"
         tools:ignore="ContentDescription" />
@@ -31,11 +31,14 @@
         android:id="@+id/listView1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
         android:layout_alignWithParentIfMissing="true"
+        android:layout_toStartOf="@+id/listRightArrow"
         android:layout_toLeftOf="@+id/listRightArrow"
-        android:layout_toRightOf="@+id/listLeftArrow"
-        android:background="#141414" >
+        android:scrollbars="horizontal"
+        android:fadeScrollbars="false"
+        android:layout_toEndOf="@+id/listLeftArrow"
+        android:layout_toRightOf="@+id/listLeftArrow">
 
     </it.sephiroth.android.library.widget.HListView>
 
