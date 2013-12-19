@@ -27,7 +27,7 @@
             android:text="1500" />
 
         <TextView
-            android:id="@+id/TextViewMAxValue"
+            android:id="@+id/TextViewMaxValue"
             style="@style/rc_textPWM"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

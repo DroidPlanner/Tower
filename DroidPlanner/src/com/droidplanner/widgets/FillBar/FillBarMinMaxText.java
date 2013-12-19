@@ -15,6 +15,8 @@ public class FillBarMinMaxText extends LinearLayout {
 	private int min;
 	private TextView title;
 	private TextView value;
+	private TextView minValue;
+	private TextView maxValue;
 	private FillBar bar;
 
 	public FillBarMinMaxText(Context context, AttributeSet attrs) {
@@ -26,6 +28,8 @@ public class FillBarMinMaxText extends LinearLayout {
 
 		title = (TextView) findViewById(R.id.textViewBarTitle);
 		value = (TextView) findViewById(R.id.TextViewBarValue);
+		minValue = (TextView) findViewById(R.id.TextViewMinValue);
+		maxValue = (TextView) findViewById(R.id.TextViewMaxValue);
 		bar = (FillBar) findViewById(R.id.fillBarSubview);
 		bar.setShowMinMax(true);
 	}
@@ -40,6 +44,10 @@ public class FillBarMinMaxText extends LinearLayout {
 	public void setValue(int value) {
 		this.value.setText(Integer.toString(value));
 		this.bar.setPercentage((value - min) / ((float)(max - min)));
+		int fmin = min + (int) (bar.getMin()*((float)(max-min)));
+		int fmax = min + (int) (bar.getMax()*((float)(max-min)));
+		maxValue.setText(String.valueOf(fmax));
+		minValue.setText(String.valueOf(fmin));
 	}
 
 }

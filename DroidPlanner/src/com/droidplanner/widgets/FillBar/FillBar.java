@@ -151,6 +151,14 @@ public class FillBar extends View {
 		}
 	}
 
+	public float getMin(){
+		return this.min;
+	}
+	
+	public float getMax(){
+		return this.max;
+	}
+	
 	public int getColorOutline() {
 		return colorOutline;
 	}
