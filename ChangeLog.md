@@ -1,3 +1,5 @@
+## Droidplanner v2.0.0
+
 ## Droidplanner v1.2.0
 * Planning: renamed column header - #348
 * Planning: Markers - additional UI + zooming fixes, distance while dragging marker - #324
