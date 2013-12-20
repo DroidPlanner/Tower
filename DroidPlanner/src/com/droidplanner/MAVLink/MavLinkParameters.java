@@ -29,6 +29,7 @@ public class MavLinkParameters {
 		msg.target_system = 1;
 		msg.target_component = 1;
 		msg.setParam_Id(name);
+		msg.param_index = -1;
 		drone.MavClient.sendMavPacket(msg.pack());
 	}
 }
