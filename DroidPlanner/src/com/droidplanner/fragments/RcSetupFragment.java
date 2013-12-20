@@ -23,6 +23,8 @@ import com.droidplanner.fragments.calibration.FragmentSetupRCMenu;
 import com.droidplanner.fragments.calibration.FragmentSetupRCMiddle;
 import com.droidplanner.fragments.calibration.FragmentSetupRCMinMax;
 import com.droidplanner.fragments.calibration.FragmentSetupRCOptions;
+import com.droidplanner.widgets.FillBar.FillBarMinMaxL;
+import com.droidplanner.widgets.FillBar.FillBarMinMaxR;
 import com.droidplanner.widgets.FillBar.FillBarMinMaxText;
 import com.droidplanner.widgets.RcStick.RcStick;
 
@@ -37,9 +39,11 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 	private Drone drone;
 	private FragmentManager fragmentManager;
 	private RC_CalParameters rcParameters;
-	private TextView textViewThrottle, textViewYaw, textViewRoll,
-			textViewPitch;
 
+	private FillBarMinMaxR barELE;
+	private FillBarMinMaxL barTHR;
+	private FillBarMinMaxText barYAW;
+	private FillBarMinMaxText barAIL;
 	private FillBarMinMaxText bar5;
 	private FillBarMinMaxText bar6;
 	private FillBarMinMaxText bar7;
@@ -105,20 +109,23 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 	private void setupLocalViews(View view) {
 		stickLeft = (RcStick) view.findViewById(R.id.stickLeft);
 		stickRight = (RcStick) view.findViewById(R.id.stickRight);
+		barTHR = (FillBarMinMaxL) view.findViewById(R.id.fillBarTHR);
+		barELE = (FillBarMinMaxR) view.findViewById(R.id.fillBarELE);
+		barYAW = (FillBarMinMaxText) view.findViewById(R.id.fillBarYAW);
+		barAIL = (FillBarMinMaxText) view.findViewById(R.id.fillBarAIL);
 		bar5 = (FillBarMinMaxText) view.findViewById(R.id.fillBar5);
 		bar6 = (FillBarMinMaxText) view.findViewById(R.id.fillBar6);
 		bar7 = (FillBarMinMaxText) view.findViewById(R.id.fillBar7);
 		bar8 = (FillBarMinMaxText) view.findViewById(R.id.fillBar8);
 
+		barAIL.setup("AILERON", RC_MAX, RC_MIN);
+		barELE.setup("ELEVATOR", RC_MAX, RC_MIN);
+		barTHR.setup("THROTTLE", RC_MAX, RC_MIN);
+		barYAW.setup("RUDDER", RC_MAX, RC_MIN);
 		bar5.setup("CH 5", RC_MAX, RC_MIN);
 		bar6.setup("CH 6", RC_MAX, RC_MIN);
 		bar7.setup("CH 7", RC_MAX, RC_MIN);
 		bar8.setup("CH 8", RC_MAX, RC_MIN);
-
-		textViewRoll = (TextView) view.findViewById(R.id.RCRollPWM);
-		textViewPitch = (TextView) view.findViewById(R.id.RCPitchPWM);
-		textViewThrottle = (TextView) view.findViewById(R.id.RCThrottlePWM);
-		textViewYaw = (TextView) view.findViewById(R.id.RCYawPWM);
 
 		btnCalibrate = (Button) view.findViewById(R.id.buttonRCCalibrate);
 		btnCalibrate.setOnClickListener(this);
@@ -145,6 +152,10 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 
 	public void onNewInputRcData() {
 		int[] data = drone.RC.in;
+		barAIL.setValue(data[0]);
+		barELE.setValue(data[1]);
+		barTHR.setValue(data[2]);
+		barYAW.setValue(data[3]);
 		bar5.setValue(data[4]);
 		bar6.setValue(data[5]);
 		bar7.setValue(data[6]);
@@ -159,10 +170,6 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 		y = (data[1] - RC_MIN) / ((float) (RC_MAX - RC_MIN)) * 2 - 1;
 		stickRight.setPosition(x, -y);
 
-		textViewRoll.setText(Integer.toString(data[0]));
-		textViewPitch.setText(Integer.toString(data[1]));
-		textViewThrottle.setText(Integer.toString(data[2]));
-		textViewYaw.setText(Integer.toString(data[3]));
 	}
 
 	@Override
