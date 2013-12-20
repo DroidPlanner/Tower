@@ -1,7 +1,6 @@
 package com.droidplanner.widgets.FillBar;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -37,7 +36,6 @@ public class FillBarMinMaxL extends LinearLayout {
 		this.max = max;
 		this.min = min;
 		this.title.setText(title);
-		this.bar.setColorBar(Color.parseColor("#0EF80E"));
 	}
 
 	public void setValue(int value) {

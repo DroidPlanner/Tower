@@ -18,7 +18,7 @@ public class FragmentSetupRCFailsafe extends Fragment implements OnClickListener
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_setup_rc_failsafe, container,
+		View view = inflater.inflate(R.layout.fragment_setup_rc_summary, container,
 				false);
 		btnNext = (Button)view.findViewById(R.id.buttonRCCancel);
 		btnNext.setOnClickListener(this);

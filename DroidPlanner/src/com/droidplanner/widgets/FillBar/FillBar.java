@@ -36,9 +36,9 @@ public class FillBar extends View {
 
 	private void initialize() {
 		colorOutline = Color.parseColor("#E0E0E0");
-		colorMin = Color.parseColor("#FF0E0E");
-		colorMax = Color.parseColor("#FF0E0E");
-		colorBar = Color.parseColor("#E0E0E0");
+		colorMin = Color.parseColor("#FA0E0E");
+		colorMax = Color.parseColor("#FA0E0E");
+		colorBar = Color.parseColor("#B0FAB0");
 
 		paintOutline = new Paint();
 		paintOutline.setAntiAlias(false);
@@ -149,6 +149,7 @@ public class FillBar extends View {
 			min = 0.5f;
 			max = 0.5f;
 		}
+		invalidate();
 	}
 
 	public float getMin(){
