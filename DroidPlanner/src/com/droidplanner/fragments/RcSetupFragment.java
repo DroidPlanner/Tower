@@ -190,6 +190,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 			((FragmentSetupRCMenu) setupPanel).rcSetupFragment = this;
 			break;
 		case 1:
+			setFillBarShowMinMax(true);
 			setupPanel = new FragmentSetupRCMinMax();
 			((FragmentSetupRCMinMax) setupPanel).rcSetupFragment = this;
 			break;
@@ -222,16 +223,30 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 		}
 	}
 
+	private void setFillBarShowMinMax(boolean b) {
+		barAIL.setShowMinMax(b);
+		barELE.setShowMinMax(b);
+		barTHR.setShowMinMax(b);
+		barYAW.setShowMinMax(b);
+		bar5.setShowMinMax(b);
+		bar6.setShowMinMax(b);
+		bar7.setShowMinMax(b);
+		bar8.setShowMinMax(b);
+	}
+
 	public void cancel() {
 		// TODO Auto-generated method stub
 		calibStep = 0;
 		changeSetupPanel(0);
+		setFillBarShowMinMax(false);
 	}
 
 	public void updateCalibrationData() {
 		// TODO Auto-generated method stub
 		calibStep = 0;
 		changeSetupPanel(0);		
+		setFillBarShowMinMax(false);
+
 	}
 
 	public void updateFailsafaData() {

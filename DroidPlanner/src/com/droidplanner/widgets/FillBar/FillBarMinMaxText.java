@@ -53,7 +53,7 @@ public class FillBarMinMaxText extends LinearLayout {
 		if(bar==null)
 			return false;
 		
-		return bar.isShowMinMax();
+		return showMinMax;
 	}
 
 	public void setShowMinMax(boolean showMinMax) {

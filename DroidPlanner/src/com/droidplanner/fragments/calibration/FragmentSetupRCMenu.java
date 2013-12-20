@@ -14,7 +14,6 @@ import android.widget.Button;
 public class FragmentSetupRCMenu extends Fragment implements OnClickListener{
 	public RcSetupFragment rcSetupFragment;
 	private Button btnCalibration;
-	private Button btnFailsafe;
 	private Button btnRCOptions;
 	
 	@Override
@@ -26,7 +25,6 @@ public class FragmentSetupRCMenu extends Fragment implements OnClickListener{
 		btnRCOptions = (Button)view.findViewById(R.id.Button03);
 		
 		btnCalibration.setOnClickListener(this);
-		btnFailsafe.setOnClickListener(this);
 		btnRCOptions.setOnClickListener(this);
 		
 		return view;
@@ -38,7 +36,7 @@ public class FragmentSetupRCMenu extends Fragment implements OnClickListener{
 			if(arg0.equals(btnCalibration)){
 				rcSetupFragment.changeSetupPanel(1);
 			}
-			if(arg0.equals(btnFailsafe)){
+			if(arg0.equals(btnRCOptions)){
 				rcSetupFragment.changeSetupPanel(4);				
 			}
 		}

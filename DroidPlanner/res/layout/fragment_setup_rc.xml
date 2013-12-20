@@ -76,6 +76,18 @@
             android:layout_marginRight="230dp" >
         </com.droidplanner.widgets.FillBar.FillBarMinMaxText>
 
+        <com.droidplanner.widgets.FillBar.FillBarMinMaxText
+            android:id="@+id/fillBar7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+        </com.droidplanner.widgets.FillBar.FillBarMinMaxText>
+
+        <com.droidplanner.widgets.FillBar.FillBarMinMaxText
+            android:id="@+id/fillBar8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+        </com.droidplanner.widgets.FillBar.FillBarMinMaxText>
+
     </LinearLayout>
 
     <RelativeLayout
@@ -144,21 +156,5 @@
             android:layout_marginBottom="18dp" />
 
     </RelativeLayout>
-
-    <com.droidplanner.widgets.FillBar.FillBarMinMaxText
-        android:id="@+id/fillBar7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/linearLayout1"
-        android:layout_centerVertical="true" >
-    </com.droidplanner.widgets.FillBar.FillBarMinMaxText>
-
-    <com.droidplanner.widgets.FillBar.FillBarMinMaxText
-        android:id="@+id/fillBar8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/relativeLayout3"
-        android:layout_alignLeft="@+id/fillBar7" >
-    </com.droidplanner.widgets.FillBar.FillBarMinMaxText>
 
 </RelativeLayout>
