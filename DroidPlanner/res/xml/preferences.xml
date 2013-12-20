@@ -123,6 +123,12 @@
             android:key="pref_auto_pan_enabled"
             android:summary="Auto pan the map when a new GPS coordinate is received"
             android:title="Enable auto pan"/>
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_heading_mode"
+            android:summary="Change heading mode to FPV (relative)"
+            android:title="Enable FPV heading mode"/>
+        
     </PreferenceScreen>
     <PreferenceScreen
         android:key="pref_advanced"
