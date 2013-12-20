@@ -126,7 +126,7 @@
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="pref_heading_mode"
-            android:summary="Change heading mode to FPV (relative)"
+            android:summary="Change heading mode to FPV (-180º to 180º)"
             android:title="Enable FPV heading mode"/>
         
     </PreferenceScreen>
