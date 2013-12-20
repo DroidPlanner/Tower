@@ -61,14 +61,6 @@
         android:layout_margin="10dp"
         android:gravity="center"
         android:orientation="vertical" >
-
-        <Button
-            android:id="@+id/Button02"
-            style="@style/modeControl"
-            android:layout_width="154dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_green"
-            android:text="@string/rc_btn_failsafe" />
     </LinearLayout>
 
     <LinearLayout

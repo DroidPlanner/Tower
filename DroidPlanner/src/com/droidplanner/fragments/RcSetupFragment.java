@@ -202,14 +202,14 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 			((FragmentSetupRCCompleted) setupPanel).rcSetupFragment = this;
 			break;
 		case 4:
-			setupPanel = new FragmentSetupRCFailsafe();
-			((FragmentSetupRCFailsafe) setupPanel).rcSetupFragment = this;
-			break;
-		case 5:
 			setupPanel = new FragmentSetupRCOptions();
 			((FragmentSetupRCOptions) setupPanel).rcSetupFragment = this;
 			break;
-		}
+/*		case 4:
+			setupPanel = new FragmentSetupRCFailsafe();
+			((FragmentSetupRCFailsafe) setupPanel).rcSetupFragment = this;
+			break;
+*/		}
 		fragmentManager.beginTransaction()
 				.replace(R.id.fragment_setup_rc, setupPanel).commit();
 		if (btnCalibrate != null) {

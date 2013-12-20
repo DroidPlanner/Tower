@@ -7,7 +7,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.droidplanner.R;
-import com.droidplanner.R.color;
 
 public class FillBarMinMaxL extends LinearLayout {
 
@@ -31,7 +30,6 @@ public class FillBarMinMaxL extends LinearLayout {
 		minValue = (TextView) findViewById(R.id.TextViewMin);
 		maxValue = (TextView) findViewById(R.id.TextViewMax);
 		bar = (FillBar) findViewById(R.id.fillBar);
-		bar.setShowMinMax(true);
 	}
 
 	public void setup(String title, int max, int min) {

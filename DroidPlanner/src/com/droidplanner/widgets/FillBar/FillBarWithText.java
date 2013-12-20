@@ -25,7 +25,6 @@ public class FillBarWithText extends LinearLayout {
 		title = (TextView) findViewById(R.id.textViewTitle);
 		value = (TextView) findViewById(R.id.TextViewMid);
 		bar = (FillBar) findViewById(R.id.fillBar);
-		bar.setShowMinMax(true);
 	}
 
 	public void setup(String title, int max, int min) {

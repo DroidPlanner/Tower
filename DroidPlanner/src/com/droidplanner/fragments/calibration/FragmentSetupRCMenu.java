@@ -23,7 +23,6 @@ public class FragmentSetupRCMenu extends Fragment implements OnClickListener{
 		View view = inflater.inflate(R.layout.fragment_setup_rc_menu, container,
 				false);
 		btnCalibration = (Button)view.findViewById(R.id.Button01);
-		btnFailsafe = (Button)view.findViewById(R.id.Button02);
 		btnRCOptions = (Button)view.findViewById(R.id.Button03);
 		
 		btnCalibration.setOnClickListener(this);
@@ -41,9 +40,6 @@ public class FragmentSetupRCMenu extends Fragment implements OnClickListener{
 			}
 			if(arg0.equals(btnFailsafe)){
 				rcSetupFragment.changeSetupPanel(4);				
-			}
-			if(arg0.equals(btnRCOptions)){
-				rcSetupFragment.changeSetupPanel(5);				
 			}
 		}
 	}

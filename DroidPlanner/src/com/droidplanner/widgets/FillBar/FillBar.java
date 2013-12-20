@@ -23,7 +23,7 @@ public class FillBar extends View {
 	private float fwidth;
 	private float min = 0.5f;
 	private float max = 0.5f;
-	private boolean showMinMax = true;
+	private boolean showMinMax = false;
 	private int colorOutline;
 	private int colorMax;
 	private int colorMin;

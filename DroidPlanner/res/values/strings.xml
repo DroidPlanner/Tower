@@ -228,8 +228,8 @@
   	<string name="rc_title_middle">Set Center values</string>
   	<string name="rc_title_complete">Calibration complete</string>
   	<string name="rc_desc_complete">RC calibration completed. Press \'Save\' to upload data to vehicle</string>
-  	<string name="rc_title_menu">RC configuration</string>
-  	<string name="rc_desc_menu">Select to calibrate, set Failsafe or other RC options</string>
+  	<string name="rc_title_menu">Radio control setup</string>
+  	<string name="rc_desc_menu">Select to calibrate Radio Control signals or set other RC options</string>
   	<string name="rc_btn_failsafe">RC Failsafe</string>
   	<string name="rc_title_failsafe">Set RC failsafe</string>
   	<string name="rc_desc_failsafe">Set the RC failsafe. Failsafe value should be at least 50 units below minimum throttle value</string>
