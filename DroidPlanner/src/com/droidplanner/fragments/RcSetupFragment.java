@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
@@ -18,7 +17,6 @@ import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
 import com.droidplanner.fragments.calibration.FragmentSetupRCCompleted;
-import com.droidplanner.fragments.calibration.FragmentSetupRCFailsafe;
 import com.droidplanner.fragments.calibration.FragmentSetupRCMenu;
 import com.droidplanner.fragments.calibration.FragmentSetupRCMiddle;
 import com.droidplanner.fragments.calibration.FragmentSetupRCMinMax;
@@ -58,6 +56,8 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 	private Fragment setupPanel;
 	private int calibStep = 0;
 
+	private int[] data;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -81,7 +81,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 			fragmentManager.beginTransaction()
 					.add(R.id.fragment_setup_rc, defPanel).commit();
 
-		}else{
+		} else {
 			cancel();
 		}
 
@@ -151,7 +151,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 	}
 
 	public void onNewInputRcData() {
-		int[] data = drone.RC.in;
+		data = drone.RC.in;
 		barAIL.setValue(data[0]);
 		barELE.setValue(data[1]);
 		barTHR.setValue(data[2]);
@@ -199,18 +199,18 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 			((FragmentSetupRCMiddle) setupPanel).rcSetupFragment = this;
 			break;
 		case 3:
+			readTrimData();
 			setupPanel = new FragmentSetupRCCompleted();
 			((FragmentSetupRCCompleted) setupPanel).rcSetupFragment = this;
+			((FragmentSetupRCCompleted) setupPanel)
+					.setText(getCalibrationStr());
+
 			break;
 		case 4:
 			setupPanel = new FragmentSetupRCOptions();
 			((FragmentSetupRCOptions) setupPanel).rcSetupFragment = this;
 			break;
-/*		case 4:
-			setupPanel = new FragmentSetupRCFailsafe();
-			((FragmentSetupRCFailsafe) setupPanel).rcSetupFragment = this;
-			break;
-*/		}
+		}
 		fragmentManager.beginTransaction()
 				.replace(R.id.fragment_setup_rc, setupPanel).commit();
 		if (btnCalibrate != null) {
@@ -221,6 +221,49 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 				btnCalibrate.setVisibility(View.GONE);
 			}
 		}
+	}
+
+	private void readTrimData() {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void readMinMaxData() {
+
+	}
+
+	private String getCalibrationStr() {
+		int[] cMin = new int[8], cMid = new int[8], cMax = new int[8];
+		String txt = "RC #\tMIN\t\tMID\t\tMAX";
+
+		cMin[0] = barAIL.getMin();
+		cMin[1] = barELE.getMin();
+		cMin[2] = barTHR.getMin();
+		cMin[3] = barYAW.getMin();
+		cMin[4] = bar5.getMin();
+		cMin[5] = bar6.getMin();
+		cMin[6] = bar7.getMin();
+		cMin[7] = bar8.getMin();
+
+		cMax[0] = barAIL.getMax();
+		cMax[1] = barELE.getMax();
+		cMax[2] = barTHR.getMax();
+		cMax[3] = barYAW.getMax();
+		cMax[4] = bar5.getMax();
+		cMax[5] = bar6.getMax();
+		cMax[6] = bar7.getMax();
+		cMax[7] = bar8.getMax();
+
+		if(data!=null)
+			cMid = data;
+
+		for (int i = 0; i < 8; i++) {
+			txt += "\nRC " + String.valueOf(i) + "\t";
+			txt += String.valueOf(cMin[i]) + "\t\t";
+			txt += String.valueOf(cMid[i]) + "\t\t";
+			txt += String.valueOf(cMax[i]);
+		}
+		return txt;
 	}
 
 	private void setFillBarShowMinMax(boolean b) {
@@ -244,7 +287,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 	public void updateCalibrationData() {
 		// TODO Auto-generated method stub
 		calibStep = 0;
-		changeSetupPanel(0);		
+		changeSetupPanel(0);
 		setFillBarShowMinMax(false);
 
 	}
@@ -252,13 +295,19 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 	public void updateFailsafaData() {
 		// TODO Auto-generated method stub
 		calibStep = 0;
-		changeSetupPanel(0);		
+		changeSetupPanel(0);
 	}
 
 	public void updateRCOptionsData() {
 		// TODO Auto-generated method stub
 		calibStep = 0;
-		changeSetupPanel(0);				
+		changeSetupPanel(0);
+	}
+
+	public void done() {
+		// TODO Auto-generated method stub
+		calibStep = 0;
+		changeSetupPanel(0);
 	}
 
 }

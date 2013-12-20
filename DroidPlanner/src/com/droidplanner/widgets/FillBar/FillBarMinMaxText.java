@@ -61,4 +61,12 @@ public class FillBarMinMaxText extends LinearLayout {
 		this.showMinMax = showMinMax;
 	}
 
+	public int getMin() {
+		return min + (int) (bar.getMin()*((float)(max-min)));
+	}
+
+	public int getMax() {
+		return min + (int) (bar.getMax()*((float)(max-min)));
+	}
+
 }

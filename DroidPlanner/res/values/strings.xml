@@ -234,5 +234,6 @@
   	<string name="rc_title_failsafe">Set RC failsafe</string>
   	<string name="rc_desc_failsafe">Set the RC failsafe. Failsafe value should be at least 50 units below minimum throttle value</string>
   	<string name="rc_btn_done">Done</string>
+  	<string name="rc_desc_summary">New RC caliberation data has been saved and uploaded to your vehicle</string>
   			
 </resources>

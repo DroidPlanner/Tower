@@ -40,9 +40,9 @@ public class FillBarMinMaxL extends LinearLayout {
 
 	public void setValue(int value) {
 		this.value.setText(Integer.toString(value));
-		this.bar.setPercentage((value - min) / ((float)(max - min)));
-		int fmin = min + (int) (bar.getMin()*((float)(max-min)));
-		int fmax = min + (int) (bar.getMax()*((float)(max-min)));
+		this.bar.setPercentage((value - min) / ((float) (max - min)));
+		int fmin = min + (int) (bar.getMin() * ((float) (max - min)));
+		int fmax = min + (int) (bar.getMax() * ((float) (max - min)));
 		maxValue.setText(String.valueOf(fmax));
 		minValue.setText(String.valueOf(fmin));
 	}
@@ -53,8 +53,16 @@ public class FillBarMinMaxL extends LinearLayout {
 
 	public void setShowMinMax(boolean showMinMax) {
 		this.showMinMax = showMinMax;
-		if(bar!=null){
+		if (bar != null) {
 			bar.setShowMinMax(showMinMax);
 		}
+	}
+
+	public int getMin() {
+		return min + (int) (bar.getMin()*((float)(max-min)));
+	}
+
+	public int getMax() {
+		return min + (int) (bar.getMax()*((float)(max-min)));
 	}
 }
