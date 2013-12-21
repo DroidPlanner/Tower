@@ -55,6 +55,7 @@ public class CalParameters{
 	}
     
 	public void readParameter(String name) {
+		Log.d("CAL", "send read param : " + name);
 		MavLinkParameters.readParameter(myDrone, name);
 	}
 }
