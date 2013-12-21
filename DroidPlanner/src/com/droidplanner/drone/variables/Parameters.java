@@ -84,4 +84,10 @@ public class Parameters extends DroneVariable {
 		}
 		return null;
 	}
+	public Parameter getLastParameter(){
+		if(parameters.size()>0)
+			return parameters.get(parameters.size()-1);
+		
+		return null;
+	}
 }
