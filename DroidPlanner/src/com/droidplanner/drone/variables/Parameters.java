@@ -8,6 +8,7 @@ import com.MAVLink.Messages.ardupilotmega.msg_param_value;
 import com.droidplanner.MAVLink.MavLinkParameters;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces;
+import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.drone.DroneVariable;
 import com.droidplanner.parameters.Parameter;
 
@@ -21,7 +22,7 @@ import com.droidplanner.parameters.Parameter;
  */
 public class Parameters extends DroneVariable {
     private List<Parameter> parameters = new ArrayList<Parameter>();
-
+    
 	public DroneInterfaces.OnParameterManagerListner parameterListner;
 
 	public Parameters(Drone myDrone) {
@@ -32,7 +33,6 @@ public class Parameters extends DroneVariable {
 		parameters.clear();
 		if(parameterListner!=null)
 			parameterListner.onBeginReceivingParameters();
-
 		MavLinkParameters.requestParametersList(myDrone);
 	}
 
@@ -45,7 +45,8 @@ public class Parameters extends DroneVariable {
 	 */
 	public boolean processMessage(MAVLinkMessage msg) {
 		if (msg.msgid == msg_param_value.MAVLINK_MSG_ID_PARAM_VALUE) {
-			processReceivedParam((msg_param_value) msg);
+			myDrone.events.notifyDroneEvent(DroneEventsType.PARAMETER);
+				processReceivedParam((msg_param_value) msg);
 			return true;
 		}
 		return false;
