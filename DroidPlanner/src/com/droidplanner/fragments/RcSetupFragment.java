@@ -144,6 +144,9 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 			break;
 		case RC_OUT:
 			break;
+		case PARAMETER:
+			rcParameters.processReceivedParam();
+			break;
 		default:
 			break;
 		}
@@ -190,6 +193,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 			((FragmentSetupRCMenu) setupPanel).rcSetupFragment = this;
 			break;
 		case 1:
+			rcParameters.getCaliberationParameters(drone);
 			setFillBarShowMinMax(true);
 			setupPanel = new FragmentSetupRCMinMax();
 			((FragmentSetupRCMinMax) setupPanel).rcSetupFragment = this;

@@ -26,7 +26,7 @@ public class MavLinkParameters {
 
 	public static void readParameter(Drone drone, String name) {
 		msg_param_request_read msg = new msg_param_request_read();
-//		msg.param_index = -1;
+		msg.param_index = -1;
 		msg.target_system = 1;
 		msg.target_component = 1;
 		msg.setParam_Id(name);

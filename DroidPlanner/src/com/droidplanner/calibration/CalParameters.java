@@ -5,9 +5,6 @@ import java.util.List;
 
 import android.util.Log;
 
-import com.MAVLink.Messages.MAVLinkMessage;
-import com.MAVLink.Messages.ardupilotmega.msg_param_value;
-import com.droidplanner.MAVLink.MavLinkParameters;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.parameters.Parameter;
 
@@ -21,41 +18,25 @@ public class CalParameters{
 		
 	}
 
-	public boolean processMessage(MAVLinkMessage msg) {
-		if (msg.msgid == msg_param_value.MAVLINK_MSG_ID_PARAM_VALUE) {
-			processReceivedParam((msg_param_value) msg);
-			return true;
-		}
-		return false;
-	}
-	
-	protected void processReceivedParam(msg_param_value m_value) {
-		Log.d("CAL", m_value.getParam_Id() +": " + String.valueOf(m_value.param_value));
-		Parameter param = new Parameter(m_value);
+	public void processReceivedParam() {
+		if(myDrone==null)
+			return;
+		Parameter param = myDrone.parameters.getLastParameter();
+		Log.d("CAL", param.name +": " + String.valueOf(param.value));
 		calParameterItems.add(param);
 		readCaliberationParameter(calParameterItems.size());
 	}
 
-	public void getCaliberationParameters(){
-		for(@SuppressWarnings("unused") Parameter param : calParameterItems){
-			param = null;
-		}
+	public void getCaliberationParameters(Drone drone){
+		this.myDrone = drone;
 		calParameterItems.clear();
-		readCaliberationParameter(calParameterItems.size());
+		readCaliberationParameter(0);
 	}
 	
 	private void readCaliberationParameter(int seq){
-		if(seq>calParameterNames.size())
+		if(seq>=calParameterNames.size())
 			return;
-		readParameter(calParameterNames.get(seq));
-	}
-	
-	public void sendParameter(Parameter parameter) {
-		MavLinkParameters.sendParameter(myDrone, parameter);
-	}
-    
-	public void readParameter(String name) {
-		Log.d("CAL", "send read param : " + name);
-		MavLinkParameters.readParameter(myDrone, name);
+		if(myDrone!=null)
+			myDrone.parameters.ReadParameter(calParameterNames.get(seq));
 	}
 }
