@@ -76,4 +76,12 @@ public class Parameters extends DroneVariable {
 	public void ReadParameter(String name) {
 		MavLinkParameters.readParameter(myDrone, name);
 	}
+	
+	public Parameter getParamter(String name){
+		for(Parameter parameter : parameters){
+			if(parameter.name.equalsIgnoreCase(name))
+				return parameter;
+		}
+		return null;
+	}
 }
