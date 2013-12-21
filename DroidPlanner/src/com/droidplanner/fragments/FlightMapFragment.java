@@ -72,7 +72,7 @@ public class FlightMapFragment extends DroneMap implements
 		super.update();
 	}
 
-	public void addFlithPathPoint(LatLng position) {
+	public void addFlightPathPoint(LatLng position) {
 		if (maxFlightPathSize > 0) {
 			List<LatLng> oldFlightPath = flightPath.getPoints();
 			if (oldFlightPath.size() > maxFlightPathSize) {
@@ -91,7 +91,7 @@ public class FlightMapFragment extends DroneMap implements
 
 	private void addFlightPathToMap() {
 		PolylineOptions flightPathOptions = new PolylineOptions();
-		flightPathOptions.color(Color.argb(180, 0, 0, 200)).width(2).zIndex(1);
+		flightPathOptions.color(0xfffd693f).width(6).zIndex(1);
 		flightPath = mMap.addPolyline(flightPathOptions);
 	}
 
