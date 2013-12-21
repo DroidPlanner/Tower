@@ -40,23 +40,25 @@
         style="@style/RPYtextLabels"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/rollValueText"
-        android:layout_below="@id/rollValueText"
-        android:layout_marginTop="13dp"
+        android:layout_alignLeft="@+id/rollValueText"        
+        android:layout_alignBottom="@+id/icon_rpy"
+        android:layout_marginBottom="33dp"
         android:text="22°"
         android:textSize="16sp" />
-
+    
     <TextView
         android:id="@+id/yawValueText"
         style="@style/RPYtextLabels"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/pitchValueText"
-        android:layout_alignLeft="@id/rollValueText"
-        android:layout_marginTop="13dp"
+        android:layout_alignLeft="@+id/rollValueText"
+        android:layout_alignBottom="@+id/icon_rpy"
+        android:layout_marginBottom="3dp"        
         android:text="328°"
-        android:textSize="16sp"
-        />
+        android:textSize="16sp" />
+
+
+    
 
     <com.droidplanner.widgets.newHUD.newHUD
         android:id="@+id/hudView"
