@@ -214,6 +214,9 @@
     <string name="BatteryFailsafeRTL">Warning! Battery Fasilsafe – Returning to Launch</string>
     <string name="mode_switch">Assign RC channel 5 to a switch on your radio to control flight modes. Move the switch to each position and select the desired flight mode below.</string>
     <string name="Pause">Pause</string>
+    <string name="screen_tuning">Tuning</string>
+    <string name="screen_modes">Modes</string>
+    <string name="screen_checklist">Checklist</string>
 
     <string name="screen_settings">Settings</string>
 

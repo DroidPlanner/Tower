@@ -7,8 +7,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class DroneMarker {
-	private static final int ZOOM_LEVEL = 18;
-	
+	private static final int ZOOM_LEVEL = 20;
+
 	private Marker droneMarker;
 	private FlightMapFragment flightMapFragment;
 	private DroneBitmaps bitmaps;
@@ -65,7 +65,7 @@ public class DroneMarker {
 	public void onDroneUpdate() {
 		updatePosition(flightMapFragment.drone.orientation.getYaw(),
 				flightMapFragment.drone.GPS.getPosition());
-		flightMapFragment.addFlithPathPoint(flightMapFragment.drone.GPS
+		flightMapFragment.addFlightPathPoint(flightMapFragment.drone.GPS
 				.getPosition());
 	}
 }

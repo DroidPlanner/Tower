@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.droidplanner"
-    android:versionCode="56"
-    android:versionName="please run version.sh to get the version name" >
+          package="com.droidplanner"
+          android:versionCode="56"
+          android:versionName="please run version.sh to get the version name">
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -12,24 +12,24 @@
         android:name=".permission.MAPS_RECEIVE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name=".permission.MAPS_RECEIVE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name=".permission.MAPS_RECEIVE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
-    <uses-feature android:name="android.hardware.screen.portrait"/>
+    <uses-feature android:name="android.hardware.screen.portrait" />
 
     <!-- Support devices without Bluetooth since there are other connection types -->
     <uses-feature
-            android:name="android.hardware.bluetooth"
-            android:required="false"/>
+        android:name="android.hardware.bluetooth"
+        android:required="false" />
 
     <!-- Support devices without USB host mode since there are other connection types -->
     <uses-feature
@@ -76,10 +76,14 @@
 
             <!-- Launcher Intent -->
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"/>
+                <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!-- USB connection  intent -->
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
             </intent-filter>
 
             <meta-data
@@ -109,6 +113,7 @@
         <activity
             android:name=".activitys.ConfigurationActivity"
             android:windowSoftInputMode="adjustPan"
+            android:theme="@style/Theme.PageIndicatorDefaults"
             android:label="@string/configuration"
             android:launchMode="singleTask"
             android:parentActivityName=".activitys.FlightActivity" >

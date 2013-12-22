@@ -32,7 +32,7 @@
         android:layout_marginLeft="28dp"
         android:layout_alignTop="@+id/icon_rpy"
         android:layout_marginTop="2dp"
-        android:text="55°"
+        android:text="--°"
         android:textSize="16sp" />
 
     <TextView
@@ -40,23 +40,22 @@
         style="@style/RPYtextLabels"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/rollValueText"
-        android:layout_below="@id/rollValueText"
-        android:layout_marginTop="13dp"
-        android:text="22°"
+        android:layout_alignBottom="@+id/icon_rpy"
+        android:layout_alignLeft="@+id/rollValueText"
+        android:layout_marginBottom="34dp"
+        android:text="--°"
         android:textSize="16sp" />
-
+    
     <TextView
         android:id="@+id/yawValueText"
         style="@style/RPYtextLabels"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/pitchValueText"
-        android:layout_alignLeft="@id/rollValueText"
-        android:layout_marginTop="13dp"
-        android:text="328°"
-        android:textSize="16sp"
-        />
+        android:layout_alignBottom="@+id/icon_rpy"
+        android:layout_alignLeft="@+id/rollValueText"
+        android:layout_marginBottom="2dp"
+        android:text="--°"
+        android:textSize="16sp" />
 
     <com.droidplanner.widgets.newHUD.newHUD
         android:id="@+id/hudView"

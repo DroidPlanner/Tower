@@ -190,7 +190,7 @@
         <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:gravity">center_vertical|left</item>
         <item name="android:paddingLeft">16dp</item>
-        <item name="android:background">#66848484</item>
+        <item name="android:background">@color/bottom_top_bar</item>
         </style>
 
 	 <!-- Mode info Style -->
@@ -355,5 +355,31 @@
         <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:padding">16dp</item>
         </style>
+
+    <!-- Styles for the view pager tab strip -->
+    <style name="Theme.PageIndicatorDefaults" parent="android:Theme.Holo.Light">
+        <item name="vpiTabPageIndicatorStyle">@style/Widget.TabPageIndicator</item>
+    </style>
+
+    <style name="Widget">
+    </style>
+
+    <style name="Widget.TabPageIndicator" parent="Widget">
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/vpi__tab_indicator</item>
+        <item name="android:paddingRight">10dip</item>
+        <item name="android:paddingLeft">10dip</item>
+        <item name="android:paddingTop">20dip</item>
+        <item name="android:paddingBottom">20dip</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textAppearance">@style/TextAppearance.TabPageIndicator</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="TextAppearance.TabPageIndicator" parent="Widget">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@drawable/vpi__light_theme</item>
+    </style>
 
 </resources>
