@@ -6,7 +6,6 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
-
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.DroidPlannerApp.OnSystemArmListener;
 import com.droidplanner.R;
@@ -16,6 +15,8 @@ import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.fragments.helpers.OfflineMapFragment;
 import com.droidplanner.helpers.units.Altitude;
+import com.droidplanner.utils.Constants;
+import com.droidplanner.utils.Utils;
 
 public abstract class SuperActivity extends Activity implements
 		OnAltitudeChangedListner, OnSystemArmListener {
@@ -44,16 +45,26 @@ public abstract class SuperActivity extends Activity implements
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
-		//case R.id.menu_configuration:
-		//	startActivity(new Intent(this, ConfigurationActivity.class));
-		//	return true;
 		case R.id.menu_settings:
 			Intent intent = new Intent(this, ConfigurationActivity.class);
 			intent.putExtra(ConfigurationActivity.SCREEN_INTENT,
 					ConfigurationActivity.SETTINGS);
 			startActivity(intent);
 			return true;
+        
 		case R.id.menu_connect:
+            if (!drone.MavClient.isConnected()) {
+                final String connectionType = PreferenceManager
+                        .getDefaultSharedPreferences(getApplicationContext())
+                        .getString(Constants.PREF_CONNECTION_TYPE,
+                                Constants.DEFAULT_CONNECTION_TYPE);
+
+                if (Utils.ConnectionType.BLUETOOTH.name().equals(connectionType)) {
+                    //Launch a bluetooth device selection screen for the user
+                    startActivity(new Intent(this, BTDeviceSelectionActivity.class));
+                    return true;
+                }
+            }
 			drone.MavClient.toggleConnectionState();
 			return true;
 		case R.id.menu_load_from_apm:

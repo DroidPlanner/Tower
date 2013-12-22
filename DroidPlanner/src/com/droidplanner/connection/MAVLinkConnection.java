@@ -1,5 +1,13 @@
 package com.droidplanner.connection;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.util.Log;
+import com.MAVLink.Messages.MAVLinkPacket;
+import com.MAVLink.Parser;
+import com.droidplanner.file.FileStream;
+
 import java.io.BufferedOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -7,16 +15,18 @@ import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-
-import com.MAVLink.Parser;
-import com.MAVLink.Messages.MAVLinkMessage;
-import com.MAVLink.Messages.MAVLinkPacket;
-import com.droidplanner.file.FileStream;
-
+/**
+ * This class holds the logic to instantiate, communicate over,
+ * and close a mavlink data connection.
+ * @since 1.2.0
+ */
 public abstract class MAVLinkConnection extends Thread {
+
+    /**
+     * This tag is used for logging.
+     * @since 1.2.0
+     */
+    private static final String TAG = MAVLinkConnection.class.getName();
 
 	protected abstract void openConnection() throws UnknownHostException,
 			IOException;
@@ -30,7 +40,15 @@ public abstract class MAVLinkConnection extends Thread {
 	protected abstract void getPreferences(SharedPreferences prefs);
 
 	public interface MavLinkConnectionListner {
-		public void onReceiveMessage(MAVLinkMessage msg);
+
+        /**
+         * This method is called by the mavlink connection when a successful connection is
+         * established.
+         * @since 1.2.0
+         */
+        public void onConnect();
+
+		public void onReceiveMessage(MAVLinkPacket msgPacket);
 
 		public void onDisconnect();
 		
@@ -43,13 +61,12 @@ public abstract class MAVLinkConnection extends Thread {
 	private boolean logEnabled;
 	private BufferedOutputStream logWriter;
 
-	protected MAVLinkPacket receivedPacket;
-	protected Parser parser = new Parser();
+	protected static Parser parser = new Parser();
 	protected byte[] readData = new byte[4096];
 	protected int iavailable, i;
 	protected boolean connected = true;
 
-	private ByteBuffer logBuffer;	
+	private ByteBuffer logBuffer;
 
 	public MAVLinkConnection(Context parentContext) {
 		this.parentContext = parentContext;
@@ -61,12 +78,18 @@ public abstract class MAVLinkConnection extends Thread {
 		getPreferences(prefs);
 	}
 
+
+
+
 	@Override
 	public void run() {
-		super.run();
 		try {
-			parser.stats.mavlinkResetStats(); 
+			parser.stats.mavlinkResetStats();
 			openConnection();
+
+            //If we get here, the connection is successful. Notify the listener
+            listner.onConnect();
+
 			if (logEnabled) {
 				logWriter = FileStream.getTLogFileStream();
 				logBuffer = ByteBuffer.allocate(Long.SIZE / Byte.SIZE);
@@ -77,47 +100,52 @@ public abstract class MAVLinkConnection extends Thread {
 				readDataBlock();
 				handleData();
 			}
-			closeConnection();
 
 		} catch (FileNotFoundException e) {
-			listner.onComError(e.getMessage());
 			e.printStackTrace();
+
 		} catch (IOException e) {
-			listner.onComError(e.getMessage());
 			e.printStackTrace();
 		}
+        finally {
+            try {
+                //No matter what exception is thrown, the connection gets closed.
+                closeConnection();
+            } catch (IOException e) {
+                Log.e(TAG, "Unable to close open connection.", e);
+            }
 
-		listner.onDisconnect();
+            listner.onDisconnect();
+        }
 	}
 
 	private void handleData() throws IOException {
-		if (iavailable < 1) {
+        MAVLinkPacket[] receivedPackets = parseMavlinkBuffer(readData, iavailable);
+		if (receivedPackets == null) {
 			return;
 		}
-		for (i = 0; i < iavailable; i++) {
-			receivedPacket = parser.mavlink_parse_char(readData[i] & 0x00ff);
+
+        for(MAVLinkPacket receivedPacket: receivedPackets){
 			if (receivedPacket != null) {
 				saveToLog(receivedPacket);
-				MAVLinkMessage msg = receivedPacket.unpack();
-				listner.onReceiveMessage(msg);
+				listner.onReceiveMessage(receivedPacket);
 			}
 		}
-
 	}
 
 	private void saveToLog(MAVLinkPacket receivedPacket) throws IOException {
-		if (logEnabled) {
-			try {
-				logBuffer.clear();
-				long time = System.currentTimeMillis() * 1000;
-				logBuffer.putLong(time);
-				logWriter.write(logBuffer.array());
-				logWriter.write(receivedPacket.encodePacket());
-			} catch (Exception e) {
-				// There was a null pointer error for some users on
-				// logBuffer.clear();
-			}
-		}
+        if (logEnabled) {
+            try {
+                logBuffer.clear();
+                long time = System.currentTimeMillis() * 1000;
+                logBuffer.putLong(time);
+                logWriter.write(logBuffer.array());
+                logWriter.write(receivedPacket.encodePacket());
+            } catch (Exception e) {
+                // There was a null pointer error for some users on
+                // logBuffer.clear();
+            }
+        }
 	}
 
 	/**
@@ -128,17 +156,35 @@ public abstract class MAVLinkConnection extends Thread {
 	 */
 	public void sendMavPacket(MAVLinkPacket packet) {
 		byte[] buffer = packet.encodePacket();
-		try {
-			sendBuffer(buffer);
-			saveToLog(packet);
-		} catch (IOException e) {
-			listner.onComError(e.getMessage());			
-			e.printStackTrace();
-		}
+        try {
+            sendBuffer(buffer);
+            saveToLog(packet);
+        } catch (IOException e) {
+            listner.onComError(e.getMessage());
+            e.printStackTrace();
+        }
 	}
 
 	public void disconnect() {
 		connected = false;
 	}
+
+    /**
+     * Parse the received byte(s) into mavlink packets.
+     * @param mavlinkBuffer received byte(s) buffer
+     * @param numBytes bytes count
+     * @return parsed mavlink packets
+     * @since 1.2.0
+     */
+    public static MAVLinkPacket[] parseMavlinkBuffer(byte[] mavlinkBuffer, int numBytes){
+        if(numBytes < 1)
+            return null;
+
+        MAVLinkPacket[] parsedPackets = new MAVLinkPacket[numBytes];
+        for(int i = 0; i < numBytes; i++){
+            parsedPackets[i] = parser.mavlink_parse_char(mavlinkBuffer[i] & 0x00ff);
+        }
+        return parsedPackets;
+    }
 
 }

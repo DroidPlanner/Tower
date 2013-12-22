@@ -93,6 +93,7 @@
         <activity
             android:name=".activitys.EditorActivity"
             android:label="@string/editor"
+            android:launchMode="singleTask"
             android:parentActivityName=".activitys.FlightActivity" >
 
             <!-- Parent activity meta-data to support API level 7+ -->
@@ -114,6 +115,7 @@
             android:windowSoftInputMode="adjustPan"
             android:theme="@style/Theme.PageIndicatorDefaults"
             android:label="@string/configuration"
+            android:launchMode="singleTask"
             android:parentActivityName=".activitys.FlightActivity" >
 
             <!-- Parent activity meta-data to support API level 7+ -->
@@ -121,6 +123,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activitys.FlightActivity" />
         </activity>
+        <activity
+                android:name=".activitys.helpers.BTDeviceSelectionActivity"
+                android:launchMode="singleTop"
+                android:theme="@style/CustomActionBarTheme.Dialog"
+                android:excludeFromRecents="true"/>
     </application>
 
 </manifest>

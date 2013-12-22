@@ -3,7 +3,6 @@ package com.droidplanner.parameters;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.ParseException;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 

@@ -201,6 +201,18 @@
     <string name="wpevent_upload">Uploading mission to APM&#8230;</string>
     <string name="wpevent_download">Downloading mission from APM&#8230;</string>   
     <string name="wpevent_retry">Retrying&#8230;</string>
+    <string name="screen_settings">Settings</string>
+
+    <!--  Bluetooth device selection strings -->
+    <string name="scanning">scanning for devices...</string>
+    <string name="select_device">Select device to connect</string>
+    <string name="none_paired">No devices have been paired</string>
+    <string name="none_found">No devices found</string>
+    <string name="title_paired_devices">Paired Devices</string>
+    <string name="title_other_devices">Other Available Devices</string>
+    <string name="button_scan">Scan for devices</string>
+
+    <string name="wpevent_retry">Retrying&#8230;</string>
 
     <string name="params_click_to_refresh">Click to refresh parameters from drone</string>
     <string name="metadata_value">Value:</string>

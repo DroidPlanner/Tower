@@ -1,13 +1,15 @@
 package com.droidplanner.dialogs.parameters;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.*;
-
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 import com.droidplanner.R;
 import com.droidplanner.adapters.ParamsAdapterItem;
 import com.droidplanner.parameters.Parameter;

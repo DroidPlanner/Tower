@@ -1,17 +1,22 @@
 package com.droidplanner.fragments;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.file.DirectoryPath;
+
+import static com.droidplanner.utils.Constants.*;
 
 public class SettingsFragment extends PreferenceFragment implements
 		OnSharedPreferenceChangeListener {
@@ -20,8 +25,30 @@ public class SettingsFragment extends PreferenceFragment implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.preferences);
-		SharedPreferences sharedPref = PreferenceManager
-				.getDefaultSharedPreferences(getActivity());
+
+        final Context context = getActivity().getApplicationContext();
+		final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences
+                (context);
+
+        //Mavlink preferences
+        final CheckBoxPreference btRelayServerSwitch = (CheckBoxPreference) findPreference
+                (PREF_BLUETOOTH_RELAY_SERVER_TOGGLE);
+        if(btRelayServerSwitch != null){
+            boolean defaultValue = sharedPref.getBoolean
+                    (PREF_BLUETOOTH_RELAY_SERVER_TOGGLE,
+                            DEFAULT_BLUETOOTH_RELAY_SERVER_TOGGLE);
+            btRelayServerSwitch.setChecked(defaultValue);
+            btRelayServerSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    //Broadcast the preference update
+                    context.sendBroadcast(new Intent(ACTION_BLUETOOTH_RELAY_SERVER)
+                    .putExtra(EXTRA_BLUETOOTH_RELAY_SERVER_ENABLED, (Boolean)newValue));
+                    return true;
+                }
+            });
+        }
 
 		findPreference("pref_connection_type").setSummary(
 				sharedPref.getString("pref_connection_type", ""));
