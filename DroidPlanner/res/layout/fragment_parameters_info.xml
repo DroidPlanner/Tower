@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/opaque_white"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:background="@color/dark_title_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/displayNameView"
+            style="@style/paramInfoText.displayName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/nameView"
+            style="@style/paramInfoText.name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/descView"
+        style="@style/paramInfoText.desc"
+        android:background="@drawable/mode_desc_rectangle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:id="@+id/unitsLayout"
+        android:orientation="horizontal"
+        android:background="@drawable/mode_desc_rectangle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            style="@style/paramInfoText.label"
+            android:text="@string/metadata_units" />
+
+        <TextView
+            android:id="@+id/unitsView"
+            style="@style/paramInfoText.content.units" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/rangeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            style="@style/paramInfoText.label"
+            android:text="@string/metadata_range" />
+
+        <TextView
+            android:id="@+id/rangeView"
+            style="@style/paramInfoText.content.values" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/valuesLayout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/valueTextView"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                style="@style/paramInfoText.label"
+                android:text="@string/metadata_values" />
+
+            <TextView
+                android:id="@+id/valuesView"
+                style="@style/paramInfoText.content.values" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/valueSpinnerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                style="@style/paramInfoText.label"
+                android:text="@string/metadata_value" />
+
+            <Spinner
+                android:id="@+id/valueSpinner"
+                style="@style/paramInfoText.content.values"
+                android:layout_marginRight="12dp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/editLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            style="@style/paramInfoText.label" />
+
+    </LinearLayout>
+
+</LinearLayout>

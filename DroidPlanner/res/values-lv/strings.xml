@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_title">DroidPlanner</string>
+    <string name="settings">Iestatījumi</string>
+    <string name="menu_connect">Savienot</string>
+    <string name="menu_disconnect">Atvienot</string>      
+    <string name="conected">Savienots</string>
+    <string name="disconnected">Atvienots</string>
+    <string name="save">Saglabāt</string>
+    <string name="open">Atvērt</string>
+    <string name="menu_open_file">Atvērt failu</string>
+    <string name="menu_save_file">Saglabāt failu</string>
+    <string name="menu_load_from_apm">Ielādēt no APM</string>
+    <string name="menu_send_to_apm">Ssūtīt uz APM</string>
+    <string name="menu_follow_me">Sekot</string>
+    <string name="menu_clear">Nodzēst WPs</string>
+    <string name="menu_zoom">Pietuvināt</string>
+    <string name="file_saved">Fails saglabāts</string>
+    <string name="no_waypoint_files">Nav atrasts WP fails</string>
+    <string name="no_files">Nav failu</string>
+    <string name="select_file_to_open">Izvēlēties failu, kuru atvērt:</string>
+    <string name="error_when_saving">Kļūda veicot saglabāšanu</string>
+    <string name="error_when_opening_file">Kļūda veicot faila atvēršanu</string>
+    <string name="waypoint_altitude">Augstums</string>
+    <string name="default_alt">Izmainīt augstumu</string>
+    <string name="menu_open_kmz">Atvērt KMZ</string>
+    <string name="menu_add_polygon">Pievienot poligonu</string>
+    <string name="menu_polygon">Poligons</string>
+    <string name="clear_polygon">Izdzēst poligonu</string>
+    <string name="generate">Ģenerēt</string>
+    <string name="exit">Izeja</string>
+    <string name="menu_clearFlightPath">Izdzēst lidošanas ceļu</string>
+    <string name="mission_mode">Izeju no Poligona režīma</string>
+    <string name="polygon_mode">Ieeju poligona režīmā</string>
+    <string name="dialog_polygon_hatch_angle">Lūka leņķis:</string>
+    <string name="distance_between_lines">Distance starp līnijām</string>
+    <string name="enable">Dot iespēju</string>
+    <string name="disable">Atslēgt</string>
+    <string name="write">Ierakstīt</string>
+    <string name="refresh">Atjaunot</string>
+    <string name="this_is_very_experimental_please_be_careful">Šī ir eksperimentālā funkcija. Lūdzu, uzmanīgi izmantot.</string>
+    <string name="menu_advanced">Advancēti</string>
+    <string name="menu_calibration">Kalibrācija</string>
+    <string name="rc_control">RC vadību</string>
+    
+</resources>

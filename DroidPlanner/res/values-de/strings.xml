@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_title">DroidPlanner</string>
+    <string name="settings">Einstellungen</string>
+    <string name="menu_connect">Verbinden</string>
+    <string name="menu_disconnect">Trennen</string>
+    <string name="conected">Verbunden</string>
+    <string name="disconnected">Getrennt</string>
+    <string name="save">Speichern</string>
+    <string name="open">Öffnen</string>
+    <string name="menu_open_file">Datei öffnen</string>
+    <string name="menu_save_file">Datei speichern</string>
+    <string name="menu_load_from_apm">Von APM empfangen</string>
+    <string name="menu_send_to_apm">An APM senden</string>
+    <string name="menu_follow_me">Folge mir!</string>
+    <string name="menu_clear">Lösche WP</string>
+    <string name="menu_zoom">Zoom</string>
+    <string name="file_saved">Gespeichert</string>
+    <string name="no_waypoint_files">Keine Wegpunkt Dateien</string>
+    <string name="no_files">Keine Dateien</string>
+    <string name="select_file_to_open">Wähle Datei zum öffnen:</string>
+    <string name="error_when_saving">Fehler beim speichern</string>
+    <string name="error_when_opening_file">Fehler beim laden</string>
+    <string name="waypoint_altitude">Höhe</string>
+    <string name="default_alt">Höhe ändern</string>
+    <string name="menu_open_kmz">KMZ öffnen</string>
+    <string name="menu_add_polygon">Polygon hinzufügen</string>
+    <string name="menu_polygon">Polygon</string>
+    <string name="clear_polygon">Poly löschen</string>
+    <string name="generate">Generieren</string>
+    <string name="exit">Fertig</string>
+    <string name="menu_clearFlightPath">Pfad löschen</string>
+    <string name="mission_mode">Verlasse Polygon Mode</string>
+    <string name="polygon_mode">Starte Polygon Mode</string>
+    <string name="dialog_polygon_hatch_angle">Hatch Winkel:</string>
+    <string name="distance_between_lines">Distanz zwischen Linien:</string>
+    <string name="enable">Aktiviere</string>
+    <string name="disable">Deaktiviere</string>
+    <string name="on">An</string>
+    <string name="off">Aus</string>
+    <string name="write">Schreiben</string>
+    <string name="refresh">Aktualisieren</string>
+    <string name="this_is_very_experimental_please_be_careful">Dies ist experimentell!, VORSICHT!</string>
+    <string name="rc_control">RC Kontrolle</string>
+    
+    <string name="screen_planning">Planung</string>
+    <string name="screen_flight_data">Flugdaten</string>
+    <string name="screen_rc">RC</string>
+    <string name="screen_parameters">Parameter</string>
+    <string name="screen_camera">Kamera</string>
+    <string name="screen_gcp">GCP</string>
+    <string name="screen_chart">Chart</string>
+
+</resources>

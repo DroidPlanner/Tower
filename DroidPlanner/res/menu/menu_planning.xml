@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menu_default_alt"
+        android:showAsAction="ifRoom"
+        android:title="@string/default_alt"/>
+    <item
+        android:id="@+id/menu_zoom"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_zoom"/>
+    <item
+        android:id="@+id/menu_clear_wp"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_clear"/>
+    <item
+        android:id="@+id/menu_record_me"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_record_me"/>
+    <item
+        android:id="@+id/menu_save_file"
+        android:showAsAction="never"
+        android:title="@string/menu_save_file"/>
+    <item
+        android:id="@+id/menu_open_file"
+        android:showAsAction="never"
+        android:title="@string/menu_open_file"/>
+    <item
+        android:id="@+id/menu_send_to_apm"
+        android:showAsAction="never"
+        android:title="@string/menu_send_to_apm"/>
+    <item
+        android:id="@+id/menu_load_from_apm"
+        android:showAsAction="never"
+        android:title="@string/menu_load_from_apm"/>
+
+</menu>

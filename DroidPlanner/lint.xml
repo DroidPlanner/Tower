@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="DefaultLocale">
+        <ignore path="src/com/droidplanner/fragments/RCFragment.java" />
+    </issue>
+    <issue id="NewApi">
+        <ignore path="res/values/styles.xml" />
+    </issue>
+</lint>

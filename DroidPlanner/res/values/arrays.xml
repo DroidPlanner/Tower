@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- This string is just used to help in the layout editor -->
+    <string-array name="ExampleCameraArray">
+        <item>No cameras Avaliable</item>
+    </string-array>
+    <!-- Do not change the names here, instead extract the extrings -->
+    <string-array name="menu_dropdown">
+        <item>@string/screen_planning</item>
+        <item>@string/screen_flight_data</item>
+        <item>@string/screen_rc</item>
+        <item>@string/screen_parameters</item>
+        <item>@string/screen_camera</item>
+        <item>@string/screen_gcp</item>
+        <item>@string/screen_chart</item>
+        <item >"NewUI"</item>
+    </string-array>
+    <string-array name="RCQuickModes">
+        <item name="Stabilize">Stabilize</item>
+        <item name="Acro">Acro</item>
+        <item name="Alt_Hold">Alt_Hold</item>
+        <item name="Auto">Auto</item>
+        <item name="Guided">Guided</item>
+        <item name="Loiter">Loiter</item>
+        <item name="Rtl">RTL</item>
+        <item name="Circle">Circle</item>
+        <item name="Position">Position</item>
+        <item name="Land">Land</item>
+        <item name="Of_Loiter">Of_Loiter</item>
+        <item name="Drift">Drift</item>
+        <item name="Sport">Sport</item>
+    </string-array>
+    <string-array name="TelemetryConnectionTypes">
+        <item name="USB">USB</item>
+        <item name="TCP">TCP</item>
+        <item name="UDP">UDP</item>
+        <item name="BLUETOOTH">BLUETOOTH</item>
+    </string-array>
+    <string-array name="MapTypes">
+        <item>Satellite</item>
+        <item>Hybrid</item>
+        <item>Normal</item>
+        <item>Terrain</item>
+    </string-array>
+    <string-array name="TelemetryBaudTypes">
+        <item name="38400">38400</item>
+        <item name="57600">57600</item>
+        <item name="115200">115200</item>
+    </string-array>
+    <string-array name="RCModes">
+        <item name="MODE1">(Mode1) Throttle Right</item>
+        <item name="MODE2">(Mode2) Throttle Left</item>
+    </string-array>
+    <string-array name="RCModeValues">
+        <item name="MODE1">MODE1</item>
+        <item name="MODE2">MODE2</item>
+    </string-array>
+    <string-array name="WPData">
+        <item name="Nos">#</item>
+        <item name="Alt">Altitude</item>
+        <item name="Lat">Latitude</item>
+        <item name="Lon">Longitude</item>
+        <item name="Param1">P1</item>
+        <item name="Param2">P2</item>
+        <item name="Param3">P3</item>
+        <item name="Param4">P4</item>
+        </string-array>
+    <string-array name="CoordSource">
+        <item >Waypoint</item>
+        <item >Ground station</item>
+        <item >Manual entry</item>
+    </string-array>
+    <string-array name="ExampleWaypointType">
+        <item >Waypoint Type</item>
+    </string-array>
+    <string-array name="RC_Tuning">
+        <item >Auto-tune</item>
+        <item >Roll / Pitch</item>
+        <item >Altitude Hold</item>
+        <item >Loiter</item>
+        <item >Navigation</item>
+    </string-array>
+    <string-array name="RC_Features">
+		<item>Do Nothing</item>
+		<item>Set Hover</item>
+		<item>Flip</item>
+		<item>Simple Mode</item>
+		<item>RTL</item>
+		<item>Save Trim</item>
+		<item>ADC Filter</item>
+		<item>Save Wp</item>
+		<item>Multi Mode</item>
+		<item>Camera Trigger</item>
+		<item>Sonar</item>
+		<item>Fence</item>
+		<item>Resettoarmedyaw</item>
+		<item>Supersimple_Mode</item>
+		<item>Acro_Trainer</item>
+		<item>Sprayer</item>
+		<item>Auto</item>
+		<item>Autotune</item>
+		<item>Land</item>
+    </string-array>
+    <string-array name="VehicleType">
+        <item>ArduCopter</item>
+        <item>ArduPlane</item>
+        <item>ArduRover</item>
+    </string-array>
+</resources>

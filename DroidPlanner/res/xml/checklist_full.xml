@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<preflightcheck
+    title="Pre-Flight Checklist"
+    type="APM"
+    version="1" >
+
+    <category label="User Checklist" >
+        <check_item
+            description="Ensure Camera is connected and switch on"
+            editable="yes"
+            mandatory="yes"
+            title="Camera connected and switch on" />
+    </category>
+    <category label="Control Surface" >
+        <check_item
+            description="Ensure surface control is in the right direction"
+            editable="yes"
+            mandatory="yes"
+            title="Aileron" />
+        <check_item
+            description="Ensure surface control is in the right direction"
+            editable="yes"
+            mandatory="yes"
+            title="Elevator" />
+        <check_item
+            description="Ensure surface control is in the right direction"
+            editable="yes"
+            mandatory="yes"
+            title="Rudder" />
+    </category>
+    <category label="System Checklist" >
+        <switch_item
+            description="Telemetry connection state"
+            editable="yes"
+            mandatory="yes"
+            system_tag="SYS_CONNECTION_STATE"
+            title="Telemetry connection" />
+
+        <value_item
+            description="Show default Altitude"
+            editable="yes"
+            mandatory="yes"
+            minimum_val="10"
+            nominal_val="50"
+            system_tag="SYS_DEF_ALT"
+            title="Default Alt "
+            unit="%0.2fm" />
+
+        <level_item
+            description="Show GPS Satellites"
+            editable="no"
+            mandatory="yes"
+            maximum_val="8"
+            minimum_val="5"
+            nominal_val="6"
+            system_tag="SYS_GPS3D_LVL"
+            title="GPS(3D) Sats"
+            unit="%.0f Sats." />
+        <level_item
+            description="Show battery level"
+            editable="no"
+            mandatory="yes"
+            maximum_val="100"
+            minimum_val="75"
+            nominal_val="80"
+            system_tag="SYS_BATTREM_LVL"
+            title="Battery level"
+            unit="%.1f%%" />
+        <level_item
+            description="Show battery voltage"
+            editable="no"
+            mandatory="yes"
+            maximum_val="13"
+            minimum_val="10.5"
+            nominal_val="11.1"
+            system_tag="SYS_BATTVOL_LVL"
+            title="Battery voltage"
+            unit="%.1fV" />
+        <level_item
+            description="Show battery current"
+            editable="no"
+            mandatory="yes"
+            maximum_val="20"
+            minimum_val="5"
+            nominal_val="10"
+            system_tag="SYS_BATTCUR_LVL"
+            title="Battery current"
+            unit="%.1fA" />
+    </category>
+    <category label="Misc." >
+        <select_item
+            description="Select connection type"
+            mandatory="yes"
+            optionlist="Bluetooth,USB,WiFi"
+            selectindex="0"
+            system_tag="SYS_TELEMETRY_TYPE"
+            title="Telemetry connection " />
+
+        <toggle_item
+            description="Toggle system arm or disarm"
+            editable="yes"
+            mandatory="yes"
+            system_tag="SYS_ARM_STATE"
+            title="Arm System" />
+
+        <radio_item
+            description="Select connection state"
+            editable="yes"
+            mandatory="yes"
+            optionlist="Connect,Disconnect"
+            selectindex="0"
+            system_tag="SYS_CONNECT_STATE"
+            title="Telemetry connect" />
+        <radio_item
+            description="Select Drone Type"
+            editable="yes"
+            mandatory="yes"
+            optionlist="Quad+,Quadx,Hex+,HexX"
+            selectindex="0"
+            title="Drone Type" />
+    </category>
+    
+</preflightcheck>

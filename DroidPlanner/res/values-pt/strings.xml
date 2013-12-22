@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string name="menu_connect">Conectar</string>
+    <string name="conected">Conectado</string>
+    
+    <string name="settings">Configurar</string>
+    <string name="menu_disconnect">Desconectar</string>
+    <string name="disconnected">Desconectado</string>
+    <string name="save">Salvar</string>
+    <string name="open">Abrir</string>
+    <string name="menu_open_file">Abrir Arquivo</string>
+    <string name="menu_save_file">Salvar Arquivo</string>
+    <string name="menu_load_from_apm">Ler do APM</string>
+    <string name="menu_send_to_apm">Gravar no APM</string>
+    <string name="menu_follow_me">Siga-me</string>
+    <string name="menu_clear">Limpar WPs</string>
+    <string name="menu_zoom">Zoom</string>
+    <string name="file_saved">Arquivo Salvo</string>
+    <string name="no_waypoint_files">Arquivo Waypoint Inexistente</string>
+    <string name="no_files">Arquivo Inexistente</string>
+    <string name="select_file_to_open">Selecione Arquivo:</string>
+    <string name="error_when_saving">Erro ao Salvar</string>
+    <string name="error_when_opening_file">Erro ao Abrir Arquivo</string>
+    <string name="waypoint_altitude">Altitude</string>
+    <string name="default_alt">Mudar Alt.</string>
+    <string name="menu_open_kmz">Abrir KMZ</string>
+    <string name="menu_add_polygon">Desenhar Polig.</string>
+    <string name="menu_polygon">Poligono</string>
+    <string name="clear_polygon">Limpar Polig.</string>
+    <string name="generate">Gerar WPs</string>
+    <string name="exit">Sair</string>
+    <string name="menu_clearFlightPath">Limpar Trilhas</string>
+    <string name="mission_mode">Sair Modo Poligono</string>
+    <string name="polygon_mode">Entrar Modo Poligono</string>
+    <string name="dialog_polygon_hatch_angle">Ângulo do Grid:</string>
+    <string name="distance_between_lines">Distancia entre Linhas:</string>
+    <string name="enable">Habilitar</string>
+    <string name="disable">Desabilitar</string>
+    <string name="write">Gravar</string>
+    <string name="refresh">Atualizar</string>
+    <string name="this_is_very_experimental_please_be_careful">Recurso experimental, cuidado ao utilizar.</string>
+    <string name="menu_advanced">Avançado</string>
+    <string name="menu_calibration">Calibração</string>
+    <string name="rc_control">Controle RC</string>
+    
+    <string name="screen_planning">Missão</string>
+    <string name="screen_flight_data">Navegação</string>
+    <string name="screen_rc">Controle</string>
+    <string name="screen_parameters">Parametros</string>
+    <string name="screen_camera">Câmera</string>
+    <string name="screen_gcp">GCP</string>
+    <string name="screen_chart">Gráfico</string>    
+</resources>
