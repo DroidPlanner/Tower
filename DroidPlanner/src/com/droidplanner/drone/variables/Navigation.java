@@ -2,6 +2,7 @@ package com.droidplanner.drone.variables;
 
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneVariable;
+import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 
 public class Navigation extends DroneVariable {
 
@@ -18,13 +19,7 @@ public class Navigation extends DroneVariable {
 		this.nav_pitch = (double) nav_pitch;
 		this.nav_roll = (double) nav_roll;
 		this.nav_bearing = (double) nav_bearing;
-		notifyNewNavigationData();
-	}
-
-	private void notifyNewNavigationData() {
-		if (myDrone.tuningDataListner != null) {
-			myDrone.tuningDataListner.onNewNavigationData();
-		}
+		myDrone.events.notifyDroneEvent(DroneEventsType.NAVIGATION);
 	}
 
 	public double getNavPitch() {

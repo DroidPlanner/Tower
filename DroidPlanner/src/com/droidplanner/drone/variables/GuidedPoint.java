@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.droidplanner.MAVLink.MavLinkModes;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneVariable;
+import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.fragments.helpers.MapPath.PathSource;
 import com.droidplanner.fragments.markers.GuidedMarker;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
@@ -40,7 +41,7 @@ public class GuidedPoint extends DroneVariable implements MarkerSource, PathSour
 	}
 
 	private void sendGuidedPoint() {
-		myDrone.notifyGuidedPointChange();
+		myDrone.events.notifyDroneEvent(DroneEventsType.GUIDEDPOINT);
 		MavLinkModes.setGuidedMode(myDrone, coord.latitude, coord.longitude,
 				this.altitude.valueInMeters());
 		Toast.makeText(myDrone.context, "Guided Mode (" + altitude + ")",
@@ -55,7 +56,7 @@ public class GuidedPoint extends DroneVariable implements MarkerSource, PathSour
 		if (isValid()) {
 			coord = null;
 			altitude = null;
-			myDrone.notifyGuidedPointChange();			
+			myDrone.events.notifyDroneEvent(DroneEventsType.GUIDEDPOINT);			
 		}
 	}
 

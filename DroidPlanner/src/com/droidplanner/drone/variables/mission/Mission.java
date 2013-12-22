@@ -9,8 +9,8 @@ import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_CMD;
 import com.droidplanner.drone.Drone;
-import com.droidplanner.drone.DroneInterfaces.OnWaypointChangedListner;
 import com.droidplanner.drone.DroneVariable;
+import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.drone.variables.mission.survey.Survey;
 import com.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
 import com.droidplanner.drone.variables.mission.waypoints.Waypoint;
@@ -27,9 +27,6 @@ public class Mission extends DroneVariable implements PathSource{
 	private List<MissionItem> selection = new ArrayList<MissionItem>();
 	private Altitude defaultAlt = new Altitude(50.0);
 
-
-	private List<OnWaypointChangedListner> missionListner = new ArrayList<OnWaypointChangedListner>();
-
 	public Mission(Drone myDrone) {
 		super(myDrone);
 	}
@@ -45,25 +42,25 @@ public class Mission extends DroneVariable implements PathSource{
 	public void removeWaypoint(MissionItem item) {
 		itens.remove(item);
 		selection.remove(item);
-		onMissionUpdate();
+		myDrone.events.notifyDroneEvent(DroneEventsType.MISSION);
 	}
 
 	public void removeWaypoints(List<MissionItem> toRemove) {
 		itens.removeAll(toRemove);
 		selection.removeAll(toRemove);
-		onMissionUpdate();		
+		myDrone.events.notifyDroneEvent(DroneEventsType.MISSION);		
 	}
 
 	public void addWaypointsWithDefaultAltitude(List<LatLng> points) {
 		for (LatLng point : points) {
 			itens.add(new Waypoint(this, point,defaultAlt));
 		}		
-		onMissionUpdate();
+		myDrone.events.notifyDroneEvent(DroneEventsType.MISSION);
 	}
 
 	public void addWaypoint(LatLng point, Altitude alt) {
 		itens.add(new Waypoint(this,point,alt));
-		onMissionUpdate();
+		myDrone.events.notifyDroneEvent(DroneEventsType.MISSION);
 	}
 	
 	public void replace(MissionItem oldItem, MissionItem newItem) {
@@ -74,20 +71,13 @@ public class Mission extends DroneVariable implements PathSource{
 		}
 		itens.remove(index);
 		itens.add(index, newItem);
-		onMissionUpdate();		
+		myDrone.events.notifyDroneEvent(DroneEventsType.MISSION);		
 	}
 
 	public void addSurveyPolygon(List<LatLng> points) {
 		Survey survey = new Survey(this, points, myDrone.context);
 		itens.add(survey);
-		onMissionUpdate();		
-	}
-
-	public void addOnMissionUpdateListner(OnWaypointChangedListner listner) {
-		if (!missionListner.contains(listner)) {
-			missionListner.add(listner);
-		}
-		
+		myDrone.events.notifyDroneEvent(DroneEventsType.MISSION);		
 	}
 
 	public void onWriteWaypoints(msg_mission_ack msg) {
@@ -123,19 +113,6 @@ public class Mission extends DroneVariable implements PathSource{
 			}
 		}
 		return markers;
-	}
-
-	public void onMissionUpdate() {
-		for (OnWaypointChangedListner listner : missionListner) {
-			if (listner!=null) {
-				listner.onMissionUpdate();
-			}
-		}
-	}
-
-	public void removeOnMissionUpdateListner(
-			OnWaypointChangedListner listner) {
-		missionListner.remove(listner);
 	}
 
 	public Integer getNumber(MissionItem waypoint) {
@@ -210,8 +187,7 @@ public class Mission extends DroneVariable implements PathSource{
 			selection.clear();
 			itens.clear();
 			itens.addAll(processMavLinkMessages(msgs));
-			onMissionUpdate();
-			myDrone.notifyDistanceToHomeChange();
+			myDrone.events.notifyDroneEvent(DroneEventsType.MISSION);
 		}
 	}
 

@@ -13,6 +13,7 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
+import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.file.DirectoryPath;
 
 import static com.droidplanner.utils.Constants.*;
@@ -119,14 +120,12 @@ public class SettingsFragment extends PreferenceFragment implements
 		if (key.equals("pref_map_type")) {
 			findPreference(key)
 					.setSummary(sharedPreferences.getString(key, ""));
-			((DroidPlannerApp) getActivity().getApplication()).drone
-					.notifyMapTypeChanged();
+			//((DroidPlannerApp) getActivity().getApplication()).drone.notifyMapTypeChanged();
 		}
         if (key.equals("pref_vehicle_type")) {
 			findPreference(key)
 					.setSummary(sharedPreferences.getString(key, ""));
-			((DroidPlannerApp) getActivity().getApplication()).drone.
-                    notifyVehicleTypeChanged();
+			((DroidPlannerApp) getActivity().getApplication()).drone.events.notifyDroneEvent(DroneEventsType.TYPE);
         }
 		if (key.equals("pref_rc_mode")) {
 			if (sharedPreferences.getString(key, "MODE2").equalsIgnoreCase(

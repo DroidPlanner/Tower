@@ -2,6 +2,7 @@ package com.droidplanner.drone.variables;
 
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneVariable;
+import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.helpers.math.MathUtil;
 
 public class Radio extends DroneVariable {
@@ -77,7 +78,8 @@ public class Radio extends DroneVariable {
 			this.noise = SikValueToDB(noise & 0xFF);
 			this.remnoise = SikValueToDB(remnoise & 0xFF);
 			this.txbuf = txbuf & 0xFF;
-			myDrone.notifyInfoChange();
+
+			myDrone.events.notifyDroneEvent(DroneEventsType.RADIO);
 		}
 
 	}

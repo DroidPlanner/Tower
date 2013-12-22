@@ -2,6 +2,7 @@ package com.droidplanner.drone.variables;
 
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneVariable;
+import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 
 public class Orientation extends DroneVariable {
 	private double roll = 0;
@@ -28,14 +29,7 @@ public class Orientation extends DroneVariable {
 		this.roll = roll;
 		this.pitch = pitch;
 		this.yaw = yaw;
-		myDrone.onOrientationUpdate();
-		notifyNewOrientationData();
-	}
-
-	private void notifyNewOrientationData() {
-		if (myDrone.tuningDataListner != null) {
-			myDrone.tuningDataListner.onNewOrientationData();
-		}
+		myDrone.events.notifyDroneEvent(DroneEventsType.ATTIUTDE);
 	}
 
 }

@@ -115,7 +115,7 @@ public abstract class SuperActivity extends Activity implements
 		PreferenceManager.getDefaultSharedPreferences(this).edit()
 				.putString(OfflineMapFragment.PREF_MAP_TYPE, mapType).commit();
 
-		drone.notifyMapTypeChanged();
+		//drone.notifyMapTypeChanged();
 	}
 
 	public void notifyArmed() {

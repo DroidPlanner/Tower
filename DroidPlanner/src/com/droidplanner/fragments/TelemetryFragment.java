@@ -1,7 +1,9 @@
 package com.droidplanner.fragments;
 
 import android.app.Fragment;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +12,11 @@ import android.widget.TextView;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
 import com.droidplanner.drone.Drone;
-import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
+import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
+import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
 import com.droidplanner.widgets.newHUD.newHUD;
 
-public class TelemetryFragment extends Fragment implements HudUpdatedListner {
+public class TelemetryFragment extends Fragment implements OnDroneListner{
 
 	private newHUD hud;
 	private Drone drone;
@@ -25,6 +28,7 @@ public class TelemetryFragment extends Fragment implements HudUpdatedListner {
 	private TextView climbRate;
 	private TextView altitude;
 	private TextView targetAltitude;
+	private boolean headingModeFPV;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,16 +49,51 @@ public class TelemetryFragment extends Fragment implements HudUpdatedListner {
 		targetAltitude = (TextView) view.findViewById(R.id.targetAltitudeValue);
 
 		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
-		drone.setHudListner(this);
 		return view;
 	}
 
 	@Override
-	public void onOrientationUpdate() {
+	public void onStart() {
+		super.onStart();
+		drone.events.addDroneListener(this);
+		
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(getActivity().getApplicationContext());		
+		headingModeFPV = prefs.getBoolean("pref_heading_mode", false);
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		drone.events.removeDroneListener(this);
+	}
+
+	@Override
+	public void onDroneEvent(DroneEventsType event, Drone drone) {
+		switch (event) {
+		case NAVIGATION:
+			break;
+		case ORIENTATION:
+			onOrientationUpdate(drone);
+			break;
+		case SPEED:
+			onSpeedAltitudeAndClimbRateUpdate(drone);
+			break;
+		default:
+			break;		
+		}
+		
+	}
+	
+	public void onOrientationUpdate(Drone drone) {
 		float r = (float) drone.orientation.getRoll();
 		float p = (float) drone.orientation.getPitch();
 		float y = (float) drone.orientation.getYaw();
-
+		
+		if (!headingModeFPV & y<0 ) {
+			y = 360+y;			
+		}
+		
 		hud.setAttitude(r, p, y);
 
 		roll.setText(String.format("%3.0f\u00B0", r));
@@ -63,8 +102,7 @@ public class TelemetryFragment extends Fragment implements HudUpdatedListner {
 
 	}
 
-	@Override
-	public void onSpeedAltitudeAndClimbRateUpdate() {
+	public void onSpeedAltitudeAndClimbRateUpdate(Drone drone) {
 		airSpeed.setText(String.format("%3.1f", drone.speed.getAirSpeed()));
 		groundSpeed.setText(String.format("%3.1f", drone.speed.getGroundSpeed()));
 		climbRate.setText(String.format("%3.1f", drone.speed.getVerticalSpeed()));
@@ -74,5 +112,6 @@ public class TelemetryFragment extends Fragment implements HudUpdatedListner {
 		targetAltitude.setText(String.format("%3.1f", targetAlt));
 
 	}
+
 
 }
