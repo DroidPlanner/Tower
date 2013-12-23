@@ -14,9 +14,10 @@ import android.widget.TextView;
 
 public class FragmentSetupRCCompleted extends Fragment implements OnClickListener{
 	public RcSetupFragment rcSetupFragment;
-	private Button btnNext;
 	private TextView textView;
 	private String txt;
+	private Button btnSend;
+	private Button btnCancel;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -25,8 +26,12 @@ public class FragmentSetupRCCompleted extends Fragment implements OnClickListene
 				false);
 		textView = (TextView)view.findViewById(R.id.textViewSummary);
 		textView.setText(txt);
-		btnNext = (Button)view.findViewById(R.id.buttonRCCancel);
-		btnNext.setOnClickListener(this);
+
+		btnSend = (Button)view.findViewById(R.id.ButtonSend);
+		btnSend.setOnClickListener(this);
+		
+		btnCancel = (Button)view.findViewById(R.id.ButtonCancel);
+		btnCancel.setOnClickListener(this);
 		return view;
 	}
 	public void setText(String text){
@@ -36,7 +41,12 @@ public class FragmentSetupRCCompleted extends Fragment implements OnClickListene
 	@Override
 	public void onClick(View arg0) {
 		if(rcSetupFragment!=null){
-			rcSetupFragment.updateCalibrationData();
+			if(arg0.equals(btnSend)){
+				rcSetupFragment.updateCalibrationData();
+			}
+			else if(arg0.equals(btnCancel)) {
+				rcSetupFragment.cancel();
+			}
 		}
 	}
 
