@@ -33,7 +33,7 @@
     <LinearLayout
         android:id="@+id/layoutSetupDetails"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="185dp"
         android:orientation="vertical"
         android:padding="12dp" >
 
@@ -42,7 +42,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="RC #\tMin \t\tMid \t\tMax " />
-
     </LinearLayout>
 
     <LinearLayout
@@ -50,15 +49,31 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:gravity="center"
-        android:orientation="horizontal" >
+        android:orientation="vertical" >
 
         <Button
-            android:id="@+id/buttonRCCancel"
+            android:id="@+id/ButtonNext"
             style="@style/modeControl"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:background="@drawable/button_green"
-            android:text="@string/rc_btn_send" />
+            android:text="@string/rc_btn_next" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/ButtonCancel"
+            style="@style/modeControl"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_green"
+            android:text="@string/rc_btn_cancel" />
     </LinearLayout>
 
 </LinearLayout>
