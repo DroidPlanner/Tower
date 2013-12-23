@@ -34,6 +34,7 @@ public class FragmentSetupRCCompleted extends Fragment implements OnClickListene
 		btnCancel.setOnClickListener(this);
 		return view;
 	}
+
 	public void setText(String text){
 		txt = text;
 	}

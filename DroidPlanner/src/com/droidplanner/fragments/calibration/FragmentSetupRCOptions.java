@@ -13,22 +13,31 @@ import android.widget.Button;
 
 public class FragmentSetupRCOptions extends Fragment implements OnClickListener{
 	public RcSetupFragment rcSetupFragment;
-	private Button btnNext;
+	private Button btnSend;
+	private Button btnCancel;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_setup_rc_options, container,
 				false);
-		btnNext = (Button)view.findViewById(R.id.buttonRCCancel);
-		btnNext.setOnClickListener(this);
+		btnSend = (Button)view.findViewById(R.id.ButtonSend);
+		btnSend.setOnClickListener(this);
+		
+		btnCancel = (Button)view.findViewById(R.id.ButtonCancel);
+		btnCancel.setOnClickListener(this);
 		return view;
 	}
 
 	@Override
 	public void onClick(View arg0) {
 		if(rcSetupFragment!=null){
-			rcSetupFragment.updateRCOptionsData();
+			if(arg0.equals(btnSend)){
+				rcSetupFragment.updateRCOptionsData();
+			}
+			else if(arg0.equals(btnCancel)) {
+				rcSetupFragment.cancel();
+			}
 		}
 	}
 
