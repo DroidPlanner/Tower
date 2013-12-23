@@ -8,7 +8,7 @@
     <string name="settings">Beállítások</string>
     <string name="menu_connect">Kapcsolódj</string>
     <string name="menu_disconnect">Kapcsolat bontása</string>
-    <string name="conected">Kapcsolódva</string>
+    <string name="connected">Kapcsolódva</string>
     <string name="disconnected">Nincs kapcsolat</string>
     <string name="save">Mentés</string>
     <string name="open">Megnyitás</string>
