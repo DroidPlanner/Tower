@@ -5,10 +5,7 @@ import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
-
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
 import com.droidplanner.MAVLink.MavLinkStreamRates;
@@ -26,8 +23,7 @@ import com.droidplanner.widgets.FillBar.FillBarMinMaxR;
 import com.droidplanner.widgets.FillBar.FillBarMinMaxText;
 import com.droidplanner.widgets.RcStick.RcStick;
 
-public class RcSetupFragment extends Fragment implements OnDroneListner,
-		OnClickListener {
+public class RcSetupFragment extends Fragment implements OnDroneListner {
 	private static final int RC_MIN = 900;
 	private static final int RC_MAX = 2100;
 
@@ -48,13 +44,9 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 	private FillBarMinMaxText bar8;
 
 	private RcStick stickLeft;
-
 	private RcStick stickRight;
 
-	private Button btnCalibrate;
-
 	private Fragment setupPanel;
-	private int calibStep = 0;
 
 	private int[] data;
 
@@ -126,9 +118,6 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 		bar6.setup("CH 6", RC_MAX, RC_MIN);
 		bar7.setup("CH 7", RC_MAX, RC_MIN);
 		bar8.setup("CH 8", RC_MAX, RC_MIN);
-
-		btnCalibrate = (Button) view.findViewById(R.id.buttonRCCalibrate);
-		btnCalibrate.setOnClickListener(this);
 	}
 
 	private void setupDataStreamingForRcSetup() {
@@ -175,18 +164,8 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 
 	}
 
-	@Override
-	public void onClick(View arg0) {
-		if (arg0.equals(btnCalibrate)) {
-			if (calibStep > 0)
-				cancel();
-			else
-				changeSetupPanel(1);
-		}
-	}
 
 	public void changeSetupPanel(int step) {
-		calibStep = step;
 		switch (step) {
 		case 0:
 			setupPanel = new FragmentSetupRCMenu();
@@ -217,14 +196,6 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 		}
 		fragmentManager.beginTransaction()
 				.replace(R.id.fragment_setup_rc, setupPanel).commit();
-		if (btnCalibrate != null) {
-			if (step > 0) {
-				btnCalibrate.setText(R.string.rc_btn_cancel);
-				btnCalibrate.setVisibility(View.VISIBLE);
-			} else {
-				btnCalibrate.setVisibility(View.GONE);
-			}
-		}
 	}
 
 	private void readTrimData() {
@@ -283,14 +254,12 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 
 	public void cancel() {
 		// TODO Auto-generated method stub
-		calibStep = 0;
 		changeSetupPanel(0);
 		setFillBarShowMinMax(false);
 	}
 
 	public void updateCalibrationData() {
 		// TODO Auto-generated method stub
-		calibStep = 0;
 		changeSetupPanel(0);
 		setFillBarShowMinMax(false);
 
@@ -298,19 +267,16 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 
 	public void updateFailsafaData() {
 		// TODO Auto-generated method stub
-		calibStep = 0;
 		changeSetupPanel(0);
 	}
 
 	public void updateRCOptionsData() {
 		// TODO Auto-generated method stub
-		calibStep = 0;
 		changeSetupPanel(0);
 	}
 
 	public void done() {
 		// TODO Auto-generated method stub
-		calibStep = 0;
 		changeSetupPanel(0);
 	}
 
