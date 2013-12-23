@@ -33,7 +33,7 @@
     <LinearLayout
         android:id="@+id/layoutSetupDetail"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="168dp"
         android:orientation="vertical"
         android:padding="12dp" >
 
@@ -74,15 +74,31 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:gravity="center"
-        android:orientation="horizontal" >
+        android:orientation="vertical" >
 
         <Button
-            android:id="@+id/buttonRCCancel"
+            android:id="@+id/ButtonSend"
             style="@style/modeControl"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:background="@drawable/button_green"
-            android:text="Send" />
+            android:text="@string/rc_btn_send" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/ButtonCancel"
+            style="@style/modeControl"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_green"
+            android:text="@string/rc_btn_cancel" />
     </LinearLayout>
 
 </LinearLayout>

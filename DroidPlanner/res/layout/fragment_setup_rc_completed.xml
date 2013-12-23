@@ -52,12 +52,12 @@
         android:orientation="vertical" >
 
         <Button
-            android:id="@+id/ButtonNext"
+            android:id="@+id/ButtonSend"
             style="@style/modeControl"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:background="@drawable/button_green"
-            android:text="@string/rc_btn_next" />
+            android:text="@string/rc_btn_send" />
     </LinearLayout>
 
     <LinearLayout
