@@ -16,26 +16,6 @@
         android:background="@drawable/rc_setup_rectangle"
         android:text="This is a title for RC setup" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="742dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:gravity="center"
-        android:orientation="horizontal" >
-
-        <Button
-            android:id="@+id/buttonRCCalibrate"
-            style="@style/modeControl"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/button_green"
-            android:text="@string/rc_btn_cancel"
-            android:visibility="gone" />
-
-    </LinearLayout>
-
     <RelativeLayout
         android:id="@+id/relativeLayout1"
         android:layout_width="220dp"
