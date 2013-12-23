@@ -30,6 +30,8 @@ import com.droidplanner.fragments.mode.ModeLoiterFragment;
 import com.droidplanner.fragments.mode.ModePositionFragment;
 import com.droidplanner.fragments.mode.ModeRTLFragment;
 import com.droidplanner.fragments.mode.ModeStabilizeFragment;
+import com.droidplanner.glass.activities.GlassActivity;
+import com.droidplanner.glass.utils.GlassUtils;
 import com.droidplanner.polygon.PolygonPoint;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -43,37 +45,44 @@ public class FlightActivity extends SuperUI implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_flight);
-		fragmentManager = getFragmentManager();
-		modeInfoPanel = fragmentManager.findFragmentById(R.id.modeInfoPanel);
-		failsafeTextView = findViewById(R.id.failsafeTextView);
-
-        //Load the activity fragments
-        Fragment modeRtl = fragmentManager.findFragmentById(R.id.modeInfoPanel);
-        if(modeRtl == null){
-            modeRtl = new ModeRTLFragment();
-            fragmentManager.beginTransaction().add(R.id.modeInfoPanel, modeRtl).commit();
+        if(GlassUtils.isGlassDevice()){
+            //Start the glass activity
+            startActivity(new Intent(this, GlassActivity.class));
+            finish();
         }
+        else {
+            setContentView(R.layout.activity_flight);
+            fragmentManager = getFragmentManager();
+            modeInfoPanel = fragmentManager.findFragmentById(R.id.modeInfoPanel);
+            failsafeTextView = findViewById(R.id.failsafeTextView);
 
-        Fragment mapFragment = fragmentManager.findFragmentById(R.id.mapFragment);
-        if(mapFragment == null){
-            mapFragment = new FlightMapFragment();
-            fragmentManager.beginTransaction().add(R.id.mapFragment, mapFragment).commit();
-        }
+            //Load the activity fragments
+            Fragment modeRtl = fragmentManager.findFragmentById(R.id.modeInfoPanel);
+            if (modeRtl == null) {
+                modeRtl = new ModeRTLFragment();
+                fragmentManager.beginTransaction().add(R.id.modeInfoPanel, modeRtl).commit();
+            }
 
-        Fragment telemetryFragment = fragmentManager.findFragmentById(R.id.telemetryFragment);
-        if(telemetryFragment == null){
-            telemetryFragment = new TelemetryFragment();
-            fragmentManager.beginTransaction().add(R.id.telemetryFragment,
-                    telemetryFragment).commit();
-        }
+            Fragment mapFragment = fragmentManager.findFragmentById(R.id.mapFragment);
+            if (mapFragment == null) {
+                mapFragment = new FlightMapFragment();
+                fragmentManager.beginTransaction().add(R.id.mapFragment, mapFragment).commit();
+            }
 
-        Fragment editorTools = fragmentManager.findFragmentById(R.id.editorToolsFragment);
-        if(editorTools == null){
-            editorTools = new FlightActionsFragment();
-            fragmentManager.beginTransaction().add(R.id.editorToolsFragment, editorTools).commit();
+            Fragment telemetryFragment = fragmentManager.findFragmentById(R.id.telemetryFragment);
+            if (telemetryFragment == null) {
+                telemetryFragment = new TelemetryFragment();
+                fragmentManager.beginTransaction().add(R.id.telemetryFragment,
+                        telemetryFragment).commit();
+            }
+
+            Fragment editorTools = fragmentManager.findFragmentById(R.id.editorToolsFragment);
+            if (editorTools == null) {
+                editorTools = new FlightActionsFragment();
+                fragmentManager.beginTransaction().add(R.id.editorToolsFragment, editorTools).commit();
+            }
         }
-	}
+    }
 
 	@Override
 	protected void onStart() {

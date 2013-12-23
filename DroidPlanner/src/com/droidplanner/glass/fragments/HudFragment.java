@@ -19,8 +19,7 @@ public class HudFragment extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_hud, container, false);
 		hudWidget = (HUD) view.findViewById(R.id.hudWidget);
 		hudWidget.setDrone(((SuperActivity) getActivity()).app.drone);
-		hudWidget.onOrientationUpdate();
-        hudWidget.onSpeedAltitudeAndClimbRateUpdate();
+		hudWidget.update();
 		return view;
 	}
 

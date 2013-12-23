@@ -231,7 +231,7 @@ public class BTDeviceCardsFragment extends Fragment {
             else {
                 final BluetoothDevice device = (BluetoothDevice) getItem(i);
                 card.setText(device.getName())
-                        .setInfo(device.getAddress())
+                        .setFootnote(device.getAddress())
                         .addImage(R.drawable.ic_action_bluetooth);
             }
             return card.toView();

@@ -7,7 +7,8 @@ import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import com.droidplanner.drone.Drone;
-import com.droidplanner.drone.DroneInterfaces.HudUpdatedListner;
+import com.droidplanner.drone.DroneInterfaces;
+import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
 import com.droidplanner.widgets.helpers.RenderThread;
 import com.droidplanner.widgets.helpers.RenderThread.canvasPainter;
 
@@ -24,7 +25,7 @@ import com.droidplanner.widgets.helpers.RenderThread.canvasPainter;
  */
 
 public class HUD extends SurfaceView implements SurfaceHolder.Callback,
-		HudUpdatedListner, canvasPainter {
+		OnDroneListner, canvasPainter {
 	public RenderThread renderer;
 	int width;
 	int height;
@@ -118,18 +119,17 @@ public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 
 	public void setDrone(Drone drone) {
 		this.drone = drone;
-		this.drone.setHudListner(this);
+		this.drone.events.addDroneListener(this);
 	}
 
 	@Override
-	public void onOrientationUpdate() {
-		if (renderer != null)
-			renderer.setDirty();
+	public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
+		update();
 	}
 
-    @Override
-    public void onSpeedAltitudeAndClimbRateUpdate(){
+    public void update(){
         if (renderer != null)
             renderer.setDirty();
     }
+
 }

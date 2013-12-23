@@ -16,7 +16,7 @@ import com.droidplanner.widgets.graph.ChartCheckBoxList;
 /**
  * @author Fredia Huya-Kouadio
  */
-public class ChartFragment extends Fragment implements DroneInterfaces.HudUpdatedListner {
+public class ChartFragment extends Fragment implements DroneInterfaces.OnDroneListner {
 
     private Drone drone;
 
@@ -45,7 +45,7 @@ public class ChartFragment extends Fragment implements DroneInterfaces.HudUpdate
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         drone = ((SuperActivity) getActivity()).drone;
-        drone.setHudListner(this);
+        drone.events.addDroneListener(this);
     }
 
     private void updateChart() {
@@ -66,12 +66,8 @@ public class ChartFragment extends Fragment implements DroneInterfaces.HudUpdate
     }
 
     @Override
-    public void onOrientationUpdate() {
+    public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
         updateChart();
     }
 
-    @Override
-    public void onSpeedAltitudeAndClimbRateUpdate() {
-        updateChart();
-    }
 }

@@ -230,6 +230,6 @@
     <string name="button_scan">Scan for devices</string>
 
     <!-- Google glass strings -->
-    <string name="glass_voice_trigger">Let\' fly</string>
+    <string name="glass_voice_trigger">Let\'s fly</string>
     <string name="screen_glass">Glass View</string>
 </resources>
