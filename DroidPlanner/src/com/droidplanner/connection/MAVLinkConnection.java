@@ -1,16 +1,12 @@
 package com.droidplanner.connection;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import com.MAVLink.Messages.MAVLinkMessage;
+import android.util.Log;
 import com.MAVLink.Messages.MAVLinkPacket;
 import com.MAVLink.Parser;
 import com.droidplanner.file.FileStream;
-import com.droidplanner.utils.Constants;
 
 import java.io.BufferedOutputStream;
 import java.io.FileNotFoundException;
@@ -19,7 +15,18 @@ import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+/**
+ * This class holds the logic to instantiate, communicate over,
+ * and close a mavlink data connection.
+ * @since 1.2.0
+ */
 public abstract class MAVLinkConnection extends Thread {
+
+    /**
+     * This tag is used for logging.
+     * @since 1.2.0
+     */
+    private static final String TAG = MAVLinkConnection.class.getName();
 
 	protected abstract void openConnection() throws UnknownHostException,
 			IOException;
@@ -33,7 +40,15 @@ public abstract class MAVLinkConnection extends Thread {
 	protected abstract void getPreferences(SharedPreferences prefs);
 
 	public interface MavLinkConnectionListner {
-		public void onReceiveMessage(MAVLinkMessage msg);
+
+        /**
+         * This method is called by the mavlink connection when a successful connection is
+         * established.
+         * @since 1.2.0
+         */
+        public void onConnect();
+
+		public void onReceiveMessage(MAVLinkPacket msgPacket);
 
 		public void onDisconnect();
 		
@@ -46,46 +61,12 @@ public abstract class MAVLinkConnection extends Thread {
 	private boolean logEnabled;
 	private BufferedOutputStream logWriter;
 
-	protected MAVLinkPacket receivedPacket;
-	protected Parser parser = new Parser();
+	protected static Parser parser = new Parser();
 	protected byte[] readData = new byte[4096];
 	protected int iavailable, i;
 	protected boolean connected = true;
 
 	private ByteBuffer logBuffer;
-
-    /**
-     * Bluetooth server to relay the mavlink packet to listening connected clients.
-     *
-     * @since 1.2.0
-     */
-    private BluetoothServer mBtServer;
-
-    /**
-     * Listens to broadcast events, and appropriately enable or disable the bluetooth relay server.
-     * @since 1.2.0
-     */
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            final String action = intent.getAction();
-            if(Constants.ACTION_BLUETOOTH_RELAY_SERVER.equals(action)){
-                boolean isEnabled = intent.getBooleanExtra(Constants
-                        .EXTRA_BLUETOOTH_RELAY_SERVER_ENABLED,
-                        Constants.DEFAULT_BLUETOOTH_RELAY_SERVER_TOGGLE);
-
-                if(isEnabled){
-                    if(mBtServer == null)
-                        mBtServer = new BluetoothServer();
-                    mBtServer.start();
-                }
-                else if(mBtServer != null){
-                    mBtServer.stop();
-                    mBtServer = null;
-                }
-            }
-        }
-    };
 
 	public MAVLinkConnection(Context parentContext) {
 		this.parentContext = parentContext;
@@ -95,92 +76,76 @@ public abstract class MAVLinkConnection extends Thread {
 				.getDefaultSharedPreferences(parentContext);
 		logEnabled = prefs.getBoolean("pref_mavlink_log_enabled", false);
 		getPreferences(prefs);
-
-        //Create the bluetooth server if the user allows it
-        boolean isBtRelayServerEnabled = prefs.getBoolean(Constants
-                .PREF_BLUETOOTH_RELAY_SERVER_TOGGLE,
-                Constants.DEFAULT_BLUETOOTH_RELAY_SERVER_TOGGLE);
-
-        if (isBtRelayServerEnabled)
-            mBtServer = new BluetoothServer();
 	}
+
+
+
 
 	@Override
 	public void run() {
 		try {
-            //Register a broadcast event receiver in case the relay server is enabled/disabled
-            // while the mavlink connection is running.
-            parentContext.registerReceiver(mReceiver, new IntentFilter(Constants
-                    .ACTION_BLUETOOTH_RELAY_SERVER));
-
-			parser.stats.mavlinkResetStats(); 
+			parser.stats.mavlinkResetStats();
 			openConnection();
+
+            //If we get here, the connection is successful. Notify the listener
+            listner.onConnect();
+
 			if (logEnabled) {
 				logWriter = FileStream.getTLogFileStream();
 				logBuffer = ByteBuffer.allocate(Long.SIZE / Byte.SIZE);
 				logBuffer.order(ByteOrder.BIG_ENDIAN);
 			}
 
-            if (mBtServer != null) {
-                //Start the bluetooth server
-                mBtServer.start();
-            }
-
 			while (connected) {
 				readDataBlock();
 				handleData();
 			}
 
-            if (mBtServer != null) {
-                //Stop the bluetooth server
-                mBtServer.stop();
-            }
-            
-			closeConnection();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
         finally {
-            parentContext.unregisterReceiver(mReceiver);
+            try {
+                //No matter what exception is thrown, the connection gets closed.
+                closeConnection();
+            } catch (IOException e) {
+                Log.e(TAG, "Unable to close open connection.", e);
+            }
+
+            listner.onDisconnect();
         }
-        listner.onDisconnect();
 	}
 
 	private void handleData() throws IOException {
-		if (iavailable < 1) {
+        MAVLinkPacket[] receivedPackets = parseMavlinkBuffer(readData, iavailable);
+		if (receivedPackets == null) {
 			return;
 		}
-		for (i = 0; i < iavailable; i++) {
-			receivedPacket = parser.mavlink_parse_char(readData[i] & 0x00ff);
+
+        for(MAVLinkPacket receivedPacket: receivedPackets){
 			if (receivedPacket != null) {
 				saveToLog(receivedPacket);
-				MAVLinkMessage msg = receivedPacket.unpack();
-				listner.onReceiveMessage(msg);
-
-                if (mBtServer != null) {
-                    //Send the received packet to the connected clients
-                    mBtServer.relayMavPacket(receivedPacket);
-                }
+				listner.onReceiveMessage(receivedPacket);
 			}
 		}
-
 	}
 
 	private void saveToLog(MAVLinkPacket receivedPacket) throws IOException {
-		if (logEnabled) {
-			try {
-				logBuffer.clear();
-				long time = System.currentTimeMillis() * 1000;
-				logBuffer.putLong(time);
-				logWriter.write(logBuffer.array());
-				logWriter.write(receivedPacket.encodePacket());
-			} catch (Exception e) {
-				// There was a null pointer error for some users on
-				// logBuffer.clear();
-			}
-		}
+        if (logEnabled) {
+            try {
+                logBuffer.clear();
+                long time = System.currentTimeMillis() * 1000;
+                logBuffer.putLong(time);
+                logWriter.write(logBuffer.array());
+                logWriter.write(receivedPacket.encodePacket());
+            } catch (Exception e) {
+                // There was a null pointer error for some users on
+                // logBuffer.clear();
+            }
+        }
 	}
 
 	/**
@@ -191,17 +156,35 @@ public abstract class MAVLinkConnection extends Thread {
 	 */
 	public void sendMavPacket(MAVLinkPacket packet) {
 		byte[] buffer = packet.encodePacket();
-		try {
-			sendBuffer(buffer);
-			saveToLog(packet);
-		} catch (IOException e) {
-			listner.onComError(e.getMessage());			
-			e.printStackTrace();
-		}
+        try {
+            sendBuffer(buffer);
+            saveToLog(packet);
+        } catch (IOException e) {
+            listner.onComError(e.getMessage());
+            e.printStackTrace();
+        }
 	}
 
 	public void disconnect() {
 		connected = false;
 	}
+
+    /**
+     * Parse the received byte(s) into mavlink packets.
+     * @param mavlinkBuffer received byte(s) buffer
+     * @param numBytes bytes count
+     * @return parsed mavlink packets
+     * @since 1.2.0
+     */
+    public static MAVLinkPacket[] parseMavlinkBuffer(byte[] mavlinkBuffer, int numBytes){
+        if(numBytes < 1)
+            return null;
+
+        MAVLinkPacket[] parsedPackets = new MAVLinkPacket[numBytes];
+        for(int i = 0; i < numBytes; i++){
+            parsedPackets[i] = parser.mavlink_parse_char(mavlinkBuffer[i] & 0x00ff);
+        }
+        return parsedPackets;
+    }
 
 }

@@ -9,7 +9,9 @@ import com.MAVLink.Messages.MAVLinkPacket;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -53,9 +55,20 @@ public class BluetoothServer {
             UUID.fromString("51f88046-5ea2-11e3-949a-0800200c9a66")
     };
 
+    /**
+     * Listeners interested in received messages from the connected bluetooth device(s)
+     * implements this interface.
+     * @since 1.2.0
+     */
     public interface RelayListener {
-        public void onReceivedRelayedMessage(MAVLinkPacket packet);
+        public void onMessageToRelay(MAVLinkPacket[] relayedPackets);
     }
+
+    /**
+     * Stores the set of relay listeners.
+     * @since 1.2.0
+     */
+    private final Set<RelayListener> mRelayListenerSet = new HashSet<RelayListener>();
 
     /**
      * This is the bluetooth adapter.
@@ -99,6 +112,26 @@ public class BluetoothServer {
         for (final UUID uuid : UUIDS) {
             mUUIDPool.add(uuid);
         }
+    }
+
+    /**
+     * Adds the passed relay listener to the listeners set.
+     * @param listener {@link com.droidplanner.connection.BluetoothServer.RelayListener} object
+     * @since 1.2.0
+     */
+    public void addRelayListener(RelayListener listener){
+        if(listener != null)
+        mRelayListenerSet.add(listener);
+    }
+
+    /**
+     * Removes the passed relay listener from the listeners set.
+     * @param listener {@link com.droidplanner.connection.BluetoothServer.RelayListener} object
+     * @since 1.2.0
+     */
+    public void removeRelayListener(RelayListener listener){
+        if(listener != null)
+            mRelayListenerSet.remove(listener);
     }
 
     /**
@@ -181,7 +214,7 @@ public class BluetoothServer {
                 while (mIsRunning.get()) {
                     final UUID uuid = mUUIDPool.take();
 
-                    mServerSocket = mAdapter.listenUsingRfcommWithServiceRecord(NAME, uuid);
+                    mServerSocket = mAdapter.listenUsingInsecureRfcommWithServiceRecord(NAME, uuid);
                     BluetoothSocket socket = mServerSocket.accept();
 
                     //Close the server socket now the connection has been made
@@ -287,7 +320,7 @@ public class BluetoothServer {
             final String address = mSocket.getRemoteDevice().getAddress();
             Log.d(TAG, "Starting connected thread for " + address);
 
-            byte[] buffer = new byte[1024];
+            byte[] buffer = new byte[4096];
             int bytes;
 
             //Keep listening to the input stream while connected
@@ -296,7 +329,12 @@ public class BluetoothServer {
                     //Read from the input stream
                     bytes = mInStream.read(buffer);
 
-                    //TODO: figure out what to do with the incoming data
+                    //Relayed the received messages
+                    MAVLinkPacket[] receivedPackets = MAVLinkConnection.parseMavlinkBuffer
+                            (buffer, bytes);
+                    for(RelayListener listener: mRelayListenerSet){
+                        listener.onMessageToRelay(receivedPackets);
+                    }
                 } catch (IOException e) {
                     Log.e(TAG, "Disconnected", e);
                     cancel();

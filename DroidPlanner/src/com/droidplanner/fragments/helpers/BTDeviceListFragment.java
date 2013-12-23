@@ -80,6 +80,7 @@ public class BTDeviceListFragment extends DialogFragment {
 
     /**
      * Title for the paired devices.
+     *
      * @since 1.2.0
      */
     private TextView mPairedDevicesTitle;
@@ -218,11 +219,9 @@ public class BTDeviceListFragment extends DialogFragment {
         newDevicesListView.setOnItemClickListener(mDeviceClickListener);
 
         //Register for broadcasts when a device is discovered
-        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-        activity.registerReceiver(mReceiver, filter);
-
-        //Register for broadcasts when discovery has finished
-        filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BluetoothDevice.ACTION_FOUND);
+        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
         activity.registerReceiver(mReceiver, filter);
 
         return view;

@@ -18,6 +18,12 @@
             android:summary="Logs the MAVlink communication to a *.tlog file, may degrade performance"
             android:title="Enable Logging"/>
 
+        <CheckBoxPreference
+                android:title="Enable bluetooth relay server"
+                android:summary="Mavlink data is relayed from this device to other bluetooth connected devices."
+                android:defaultValue="false"
+                android:key="pref_bluetooth_relay_server_toggle"/>
+
         <PreferenceScreen
             android:key="pref_mavlink_rates"
             android:summary="Rate in which flight data should be received from the drone (in Hz)"
