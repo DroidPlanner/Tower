@@ -82,20 +82,25 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 	}
 
 	@Override
-	public void onStart() {
-		super.onStart();
-		drone.events.addDroneListener(this);
+	public void onActivityCreated(Bundle savedInstanceState) {
 		rcParameters = new RC_CalParameters(drone);
-		setupDataStreamingForRcSetup();
+		super.onActivityCreated(savedInstanceState);
 	}
 
 	@Override
-	public void onStop() {
-		super.onStop();
-		drone.events.removeDroneListener(this);
+	public void onPause() {
 		MavLinkStreamRates
-				.setupStreamRatesFromPref((DroidPlannerApp) getActivity()
-						.getApplication());
+		.setupStreamRatesFromPref((DroidPlannerApp) getActivity()
+				.getApplication());
+		drone.events.removeDroneListener(this);
+		super.onPause();
+	}
+
+	@Override
+	public void onResume() {
+		drone.events.addDroneListener(this);
+		setupDataStreamingForRcSetup();
+		super.onResume();
 	}
 
 	private void setupLocalViews(View view) {
