@@ -30,75 +30,88 @@
         android:padding="12dp"
         android:text="@string/rc_desc_options" />
 
-    <LinearLayout
-        android:id="@+id/layoutSetupDetail"
+    <ScrollView
+        android:id="@+id/scrollView1"
         android:layout_width="match_parent"
-        android:layout_height="168dp"
-        android:orientation="vertical"
-        android:padding="12dp" >
+        android:layout_height="wrap_content" >
 
-        <TextView
-            android:id="@+id/RadiusLabel"
-            style="@style/modeLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Channel 7" />
-
-        <com.droidplanner.widgets.spinners.SpinnerSelfSelect
-            android:id="@+id/spinnerCH7Features"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_margin="5dp"
-            android:entries="@array/RC_Features" />
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
 
-        <TextView
-            android:id="@+id/RadiusLabel"
-            style="@style/modeLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Channel 8" />
+            <LinearLayout
+                android:id="@+id/layoutSetupDetail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp" >
 
-        <com.droidplanner.widgets.spinners.SpinnerSelfSelect
-            android:id="@+id/spinnerCH8Features"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_margin="5dp"
-            android:entries="@array/RC_Features" />
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/RadiusLabel"
+                    style="@style/modeLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Channel 7" />
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:gravity="center"
-        android:orientation="vertical" >
+                <com.droidplanner.widgets.spinners.SpinnerSelfSelect
+                    android:id="@+id/spinnerCH7Features"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_margin="5dp"
+                    android:entries="@array/RC_Features" />
 
-        <Button
-            android:id="@+id/ButtonSend"
-            style="@style/modeControl"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_green"
-            android:text="@string/rc_btn_send" />
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/RadiusLabel"
+                    style="@style/modeLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Channel 8" />
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:gravity="center"
-        android:orientation="vertical" >
+                <com.droidplanner.widgets.spinners.SpinnerSelfSelect
+                    android:id="@+id/spinnerCH8Features"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_margin="5dp"
+                    android:entries="@array/RC_Features" />
+            </LinearLayout>
 
-        <Button
-            android:id="@+id/ButtonCancel"
-            style="@style/modeControl"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_green"
-            android:text="@string/rc_btn_cancel" />
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:orientation="vertical" >
+
+                <Button
+                    android:id="@+id/ButtonSend"
+                    style="@style/modeControl"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_green"
+                    android:text="@string/rc_btn_send" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:orientation="vertical" >
+
+                <Button
+                    android:id="@+id/ButtonCancel"
+                    style="@style/modeControl"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_green"
+                    android:text="@string/rc_btn_cancel" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>
