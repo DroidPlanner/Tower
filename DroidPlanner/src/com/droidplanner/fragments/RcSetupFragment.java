@@ -3,7 +3,6 @@ package com.droidplanner.fragments;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +26,7 @@ import com.droidplanner.widgets.RcStick.RcStick;
 public class RcSetupFragment extends Fragment implements OnDroneListner {
 	private static final int RC_MIN = 900;
 	private static final int RC_MAX = 2100;
-
+	private static final String[] RCStr = {"AIL ","ELE ","THR ","RUD ","CH 5","CH 6","CH 7", "CH 8"};
 	// Extreme RC update rate in this screen
 	private static final int RC_MSG_RATE = 50;
 
@@ -146,7 +145,6 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch (event) {
 		case RC_IN:
-			Log.d("CAL", "RC IN");
 			onNewInputRcData();
 			break;
 		case RC_OUT:
@@ -251,10 +249,10 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 			cMid = data;
 
 		for (int i = 0; i < 8; i++) {
-			txt += "\nRC " + String.valueOf(i) + "\t";
-			txt += String.valueOf(cMin[i]) + "\t\t";
-			txt += String.valueOf(cMid[i]) + "\t\t";
-			txt += String.valueOf(cMax[i]);
+			txt += "\n" + RCStr[i];
+			txt += "\t" + String.valueOf(cMin[i]) + "\t";
+			txt += "\t" + String.valueOf(cMid[i]) + "\t";
+			txt += "\t" + String.valueOf(cMax[i]);
 		}
 		return txt;
 	}
