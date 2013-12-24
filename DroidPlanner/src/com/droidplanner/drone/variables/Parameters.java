@@ -3,8 +3,6 @@ package com.droidplanner.drone.variables;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.util.Log;
-
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_param_value;
 import com.droidplanner.MAVLink.MavLinkParameters;
@@ -54,7 +52,6 @@ public class Parameters extends DroneVariable {
 	}
 
 	private void processReceivedParam(msg_param_value m_value) {
-		Log.d("CAL", "Prameters : processReceivedParam");
 		// collect params in parameter list
 		Parameter param = new Parameter(m_value);
 		parameters.add(param);

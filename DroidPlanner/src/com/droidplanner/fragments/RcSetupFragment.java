@@ -172,7 +172,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 			((FragmentSetupRCMenu) setupPanel).rcSetupFragment = this;
 			break;
 		case 1:
-			rcParameters.getCaliberationParameters(drone);
+			rcParameters.getCalibrationParameters(drone);
 			setFillBarShowMinMax(true);
 			setupPanel = new FragmentSetupRCMinMax();
 			((FragmentSetupRCMinMax) setupPanel).rcSetupFragment = this;
@@ -259,7 +259,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 	}
 
 	public void updateCalibrationData() {
-		// TODO Auto-generated method stub
+		rcParameters.sendCalibrationParameters();
 		changeSetupPanel(0);
 		setFillBarShowMinMax(false);
 

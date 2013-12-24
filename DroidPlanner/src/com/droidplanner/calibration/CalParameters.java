@@ -12,6 +12,7 @@ public class CalParameters{
 	private Drone myDrone;
 	protected List<String>calParameterNames = new ArrayList<String>();
 	protected List<Parameter>calParameterItems = new ArrayList<Parameter>();
+	private boolean isUpdating = false;
 	
 	public CalParameters(Drone myDrone) {
 		this.myDrone = myDrone;
@@ -19,24 +20,51 @@ public class CalParameters{
 	}
 
 	public void processReceivedParam() {
-		if(myDrone==null)
+		if(myDrone==null){
 			return;
+		}
 		Parameter param = myDrone.parameters.getLastParameter();
 		Log.d("CAL", param.name +": " + String.valueOf(param.value));
-		calParameterItems.add(param);
-		readCaliberationParameter(calParameterItems.size());
+		if(isUpdating){
+			compareCalibrationParameter(param);
+		}
+		else{
+			calParameterItems.add(param);
+			readCalibrationParameter(calParameterItems.size());
+		}
 	}
 
-	public void getCaliberationParameters(Drone drone){
+	private void compareCalibrationParameter(Parameter param) {
+		Parameter paramRef = calParameterItems.get(calParameterItems.size()-1);
+		
+		if(paramRef.name.equalsIgnoreCase(param.name) &&
+				paramRef.value==param.value){
+			Log.d("CAL", "Comp: " + paramRef.name +" : " + param.name);
+			Log.d("CAL", "Comp: " + String.valueOf(paramRef.value) +" : " + String.valueOf(param.value));
+			calParameterItems.remove(calParameterItems.size()-1);
+		}
+		sendCalibrationParameters();		
+	}
+
+	public void getCalibrationParameters(Drone drone){
 		this.myDrone = drone;
 		calParameterItems.clear();
-		readCaliberationParameter(0);
+		readCalibrationParameter(0);
 	}
 	
-	private void readCaliberationParameter(int seq){
+	private void readCalibrationParameter(int seq){
 		if(seq>=calParameterNames.size())
 			return;
 		if(myDrone!=null)
 			myDrone.parameters.ReadParameter(calParameterNames.get(seq));
+	}
+	public void sendCalibrationParameters(){
+		isUpdating = true;
+		if(calParameterItems.size()>0 && myDrone!=null){
+			myDrone.parameters.sendParameter(calParameterItems.get(calParameterItems.size()-1));
+		}
+		else {
+			isUpdating = false;
+		}
 	}
 }
