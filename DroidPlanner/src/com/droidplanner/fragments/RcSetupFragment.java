@@ -3,6 +3,7 @@ package com.droidplanner.fragments;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,12 +87,24 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 		rcParameters = new RC_CalParameters(drone);
 		super.onActivityCreated(savedInstanceState);
 	}
+	
+	
+	@Override
+	public void onStart() {
+		super.onStart();
+		setupDataStreamingForRcSetup();
+	}
 
 	@Override
-	public void onPause() {
+	public void onStop() {
+		super.onStop();
 		MavLinkStreamRates
 		.setupStreamRatesFromPref((DroidPlannerApp) getActivity()
 				.getApplication());
+	}
+
+	@Override
+	public void onPause() {
 		drone.events.removeDroneListener(this);
 		super.onPause();
 	}
@@ -99,7 +112,6 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 	@Override
 	public void onResume() {
 		drone.events.addDroneListener(this);
-		setupDataStreamingForRcSetup();
 		super.onResume();
 	}
 
@@ -134,6 +146,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch (event) {
 		case RC_IN:
+			Log.d("CAL", "RC IN");
 			onNewInputRcData();
 			break;
 		case RC_OUT:
