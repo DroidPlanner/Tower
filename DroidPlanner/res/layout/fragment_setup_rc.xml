@@ -14,7 +14,7 @@
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/relativeLayout1"
         android:background="@drawable/rc_setup_rectangle"
-        android:text="This is a title for RC setup" />
+        android:text="@string/rc_setup_title" />
 
     <RelativeLayout
         android:id="@+id/relativeLayout1"
