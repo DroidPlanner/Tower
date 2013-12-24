@@ -7,7 +7,6 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 public class FillBar extends View {
@@ -133,8 +132,8 @@ public class FillBar extends View {
 		this.percentage = percentage;
 		this.min = this.min > percentage ? percentage : this.min;
 		this.max = this.max < percentage ? percentage : this.max;
-		Log.d("fillbar", "Min: " + String.valueOf(min));
-		Log.d("fillbar", "Max: " + String.valueOf(max));
+//		Log.d("fillbar", "Min: " + String.valueOf(min));
+//		Log.d("fillbar", "Max: " + String.valueOf(max));
 
 		invalidate();
 	}

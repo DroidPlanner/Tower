@@ -3,8 +3,6 @@ package com.droidplanner.calibration;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.util.Log;
-
 import com.droidplanner.drone.Drone;
 import com.droidplanner.parameters.Parameter;
 
@@ -24,7 +22,7 @@ public class CalParameters{
 			return;
 		}
 		Parameter param = myDrone.parameters.getLastParameter();
-		Log.d("CAL", param.name +": " + String.valueOf(param.value));
+//		Log.d("CAL", param.name +": " + String.valueOf(param.value));
 		if(isUpdating){
 			compareCalibrationParameter(param);
 		}
@@ -39,8 +37,8 @@ public class CalParameters{
 		
 		if(paramRef.name.equalsIgnoreCase(param.name) &&
 				paramRef.value==param.value){
-			Log.d("CAL", "Comp: " + paramRef.name +" : " + param.name);
-			Log.d("CAL", "Comp: " + String.valueOf(paramRef.value) +" : " + String.valueOf(param.value));
+//			Log.d("CAL", "Comp: " + paramRef.name +" : " + param.name);
+//			Log.d("CAL", "Comp: " + String.valueOf(paramRef.value) +" : " + String.valueOf(param.value));
 			calParameterItems.remove(calParameterItems.size()-1);
 		}
 		sendCalibrationParameters();		
