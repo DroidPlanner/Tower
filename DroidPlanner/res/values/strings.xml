@@ -238,5 +238,7 @@
   	<string name="rc_setup_title">Radio Calibration</string>
   	<string name="rc_options_ch7">Channel 7</string>
   	<string name="rc_options_ch8">Channel 8</string>
+  	<string name="rc_title_downloading">Downloading calibration data</string>
+  	<string name="rc_desc_downloading">DroidPlanner is downloading calibration data from APM. If system is not connected, press Cancel</string>
   			
 </resources>

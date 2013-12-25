@@ -21,6 +21,7 @@ import com.droidplanner.fragments.calibration.rc.FragmentSetupRCMenu;
 import com.droidplanner.fragments.calibration.rc.FragmentSetupRCMiddle;
 import com.droidplanner.fragments.calibration.rc.FragmentSetupRCMinMax;
 import com.droidplanner.fragments.calibration.rc.FragmentSetupRCOptions;
+import com.droidplanner.fragments.calibration.rc.FragmentSetupRCProgress;
 import com.droidplanner.widgets.FillBar.FillBarMinMaxL;
 import com.droidplanner.widgets.FillBar.FillBarMinMaxR;
 import com.droidplanner.widgets.FillBar.FillBarMinMaxText;
@@ -196,12 +197,14 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 			break;
 		case 1:
 			currParameters = rcParameters;
-			setFillBarShowMinMax(true);
-			setupPanel = new FragmentSetupRCMinMax();
-			((FragmentSetupRCMinMax) setupPanel).rcSetupFragment = this;
 			if (!rcParameters.isParameterDownloaded()) {
+				setupPanel = new FragmentSetupRCProgress();
+				((FragmentSetupRCProgress) setupPanel).rcSetupFragment = this;
 				rcParameters.getCalibrationParameters(drone);
-				return;
+			} else {
+				setFillBarShowMinMax(true);
+				setupPanel = new FragmentSetupRCMinMax();
+				((FragmentSetupRCMinMax) setupPanel).rcSetupFragment = this;
 			}
 			break;
 		case 2:
@@ -217,11 +220,13 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 			break;
 		case 4:
 			currParameters = chParameters;
-			setupPanel = new FragmentSetupRCOptions();
-			((FragmentSetupRCOptions) setupPanel).rcSetupFragment = this;
 			if (!chParameters.isParameterDownloaded()) {
+				setupPanel = new FragmentSetupRCProgress();
+				((FragmentSetupRCProgress) setupPanel).rcSetupFragment = this;
 				chParameters.getCalibrationParameters(drone);
-				return;
+			} else {
+				setupPanel = new FragmentSetupRCOptions();
+				((FragmentSetupRCOptions) setupPanel).rcSetupFragment = this;
 			}
 			break;
 		}
@@ -311,6 +316,15 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 	@Override
 	public void onReadCalibration(CalParameters calParameters) {
 		if (setupPanel != null) {
+			if (currParameters.equals(rcParameters)) {
+				setFillBarShowMinMax(true);
+				setupPanel = new FragmentSetupRCMinMax();
+				((FragmentSetupRCMinMax) setupPanel).rcSetupFragment = this;
+			} else if (currParameters.equals(chParameters)) {
+				setupPanel = new FragmentSetupRCOptions();
+				((FragmentSetupRCOptions) setupPanel).rcSetupFragment = this;
+			}
+
 			fragmentManager.beginTransaction()
 					.replace(R.id.fragment_setup_rc_panel, setupPanel).commit();
 		}
