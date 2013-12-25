@@ -1,4 +1,4 @@
-package com.droidplanner.fragments.calibration;
+package com.droidplanner.fragments.calibration.rc;
 
 import com.droidplanner.R;
 import com.droidplanner.fragments.RcSetupFragment;
@@ -10,31 +10,40 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
-public class FragmentSetupRCMinMax extends Fragment implements OnClickListener{
+public class FragmentSetupRCCompleted extends Fragment implements OnClickListener{
 	public RcSetupFragment rcSetupFragment;
-	private Button btnNext;
+	private TextView textView;
+	private String txt;
+	private Button btnSend;
 	private Button btnCancel;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_setup_rc_minmax, container,
+		View view = inflater.inflate(R.layout.fragment_setup_rc_completed, container,
 				false);
-		btnNext = (Button)view.findViewById(R.id.ButtonNext);
-		btnNext.setOnClickListener(this);
+		textView = (TextView)view.findViewById(R.id.textViewSummary);
+		textView.setText(txt);
+
+		btnSend = (Button)view.findViewById(R.id.ButtonSend);
+		btnSend.setOnClickListener(this);
 		
 		btnCancel = (Button)view.findViewById(R.id.ButtonCancel);
 		btnCancel.setOnClickListener(this);
-
 		return view;
 	}
 
+	public void setText(String text){
+		txt = text;
+	}
+	
 	@Override
 	public void onClick(View arg0) {
 		if(rcSetupFragment!=null){
-			if(arg0.equals(btnNext)){
-				rcSetupFragment.changeSetupPanel(2);
+			if(arg0.equals(btnSend)){
+				rcSetupFragment.updateCalibrationData();
 			}
 			else if(arg0.equals(btnCancel)) {
 				rcSetupFragment.cancel();

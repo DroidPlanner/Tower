@@ -1,4 +1,4 @@
-package com.droidplanner.fragments.calibration;
+package com.droidplanner.fragments.calibration.rc;
 
 import com.droidplanner.R;
 import com.droidplanner.fragments.RcSetupFragment;
