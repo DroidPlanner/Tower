@@ -60,7 +60,6 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
 		View view = inflater.inflate(R.layout.fragment_setup_rc, container,
 				false);
 
@@ -80,17 +79,12 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 		setupLocalViews(view);
 		return view;
 	}
-
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		rcParameters = new RC_CalParameters(drone);
-		super.onActivityCreated(savedInstanceState);
-	}
-	
 	
 	@Override
 	public void onStart() {
 		super.onStart();
+		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
+		rcParameters = new RC_CalParameters(drone);
 		setupDataStreamingForRcSetup();
 	}
 
@@ -117,8 +111,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 	private void setupLocalViews(View view) {
 		stickLeft = (RcStick) view.findViewById(R.id.stickLeft);
 		stickRight = (RcStick) view.findViewById(R.id.stickRight);
-		barTHR = (FillBarMinMaxL) view.findViewById(R.id.fillBarTHR);
-		
+		barTHR = (FillBarMinMaxL) view.findViewById(R.id.fillBarTHR);		
 		barELE = (FillBarMinMaxR) view.findViewById(R.id.fillBarELE);
 		barYAW = (FillBarMinMaxText) view.findViewById(R.id.fillBarYAW);
 		barAIL = (FillBarMinMaxText) view.findViewById(R.id.fillBarAIL);
