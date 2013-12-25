@@ -26,7 +26,6 @@ import com.droidplanner.widgets.FillBar.FillBarMinMaxL;
 import com.droidplanner.widgets.FillBar.FillBarMinMaxR;
 import com.droidplanner.widgets.FillBar.FillBarMinMaxText;
 import com.droidplanner.widgets.RcStick.RcStick;
-import com.google.android.gms.internal.ch;
 
 public class RcSetupFragment extends Fragment implements OnDroneListner,
 		OnCalibrationEvent {
@@ -327,6 +326,21 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 	public void onSentCalibration(CalParameters calParameters) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void onReadSendCalibration(CalParameters calParameters, int index,
+			int count, boolean isSending) {
+		if(!isSending){
+			if(currParameters.equals(rcParameters)){
+				((FragmentSetupRCProgress) setupPanel).setText("Downloading RC calibration data");
+			}
+			if(currParameters.equals(chParameters)){
+				((FragmentSetupRCProgress) setupPanel).setText("Downloading RC options data");
+			}
+			((FragmentSetupRCProgress) setupPanel).updateProgress(index,count);
+		}
+		
 	}
 
 }

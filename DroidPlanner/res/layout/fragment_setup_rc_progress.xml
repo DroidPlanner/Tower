@@ -48,10 +48,32 @@
                 android:padding="12dp" >
 
                 <TextView
-                    android:id="@+id/textViewSummary"
-                    android:layout_width="fill_parent"
+                    android:id="@+id/textViewProgressTitle"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Downloading..." />
+                    android:text="Downloading parameters" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center" >
+
+                    <ProgressBar
+                        android:id="@+id/progressBarRCSetup"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="218dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp" />
+
+                    <TextView
+                        android:id="@+id/textViewProgress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="1/10" />
+
+                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
