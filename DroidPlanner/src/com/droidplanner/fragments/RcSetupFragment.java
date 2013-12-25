@@ -54,7 +54,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		fragmentManager = getFragmentManager();
-		setupPanel = fragmentManager.findFragmentById(R.id.fragment_setup_rc);
+		setupPanel = fragmentManager.findFragmentById(R.id.fragment_setup_rc_panel);
 	}
 
 	@Override
@@ -65,13 +65,13 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 				false);
 
 		Fragment defPanel = fragmentManager
-				.findFragmentById(R.id.fragment_setup_rc);
+				.findFragmentById(R.id.fragment_setup_rc_panel);
 		if (defPanel == null) {
 			defPanel = new FragmentSetupRCMenu();
 			((FragmentSetupRCMenu) defPanel).rcSetupFragment = this;
 
 			fragmentManager.beginTransaction()
-					.add(R.id.fragment_setup_rc, defPanel).commit();
+					.add(R.id.fragment_setup_rc_panel, defPanel).commit();
 
 		} else {
 			cancel();
@@ -118,6 +118,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 		stickLeft = (RcStick) view.findViewById(R.id.stickLeft);
 		stickRight = (RcStick) view.findViewById(R.id.stickRight);
 		barTHR = (FillBarMinMaxL) view.findViewById(R.id.fillBarTHR);
+		
 		barELE = (FillBarMinMaxR) view.findViewById(R.id.fillBarELE);
 		barYAW = (FillBarMinMaxText) view.findViewById(R.id.fillBarYAW);
 		barAIL = (FillBarMinMaxText) view.findViewById(R.id.fillBarAIL);
@@ -211,7 +212,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 			break;
 		}
 		fragmentManager.beginTransaction()
-				.replace(R.id.fragment_setup_rc, setupPanel).commit();
+				.replace(R.id.fragment_setup_rc_panel, setupPanel).commit();
 	}
 
 	private void readTrimData() {
