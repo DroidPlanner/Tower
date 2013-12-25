@@ -3,6 +3,8 @@ package com.droidplanner.calibration;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.util.Log;
+
 import com.droidplanner.drone.Drone;
 import com.droidplanner.parameters.Parameter;
 
@@ -12,14 +14,16 @@ public class CalParameters {
 	protected List<Parameter> calParameterItems = new ArrayList<Parameter>();
 	private boolean isUpdating = false;
 	private OnCalibrationEvent listner;
+	private int paramCount = 0;
+	private int uploadIndex = 0;
 
 	public interface OnCalibrationEvent {
 		public void onReadCalibration(CalParameters calParameters);
 
 		public void onSentCalibration(CalParameters calParameters);
 
-		public void onReadSendCalibration(CalParameters calParameters,
-				int index, int count, boolean isSending);
+		public void onCalibrationData(CalParameters calParameters, int index,
+				int count, boolean isSending);
 	}
 
 	public CalParameters(Drone myDrone) {
@@ -35,25 +39,21 @@ public class CalParameters {
 			return;
 		}
 		Parameter param = myDrone.parameters.getLastParameter();
-		// Log.d("CAL", param.name +": " + String.valueOf(param.value));
 		if (isUpdating) {
 			compareCalibrationParameter(param);
 		} else {
 			calParameterItems.add(param);
+			paramCount = calParameterItems.size();
 			readCalibrationParameter(calParameterItems.size());
 		}
 	}
 
 	private void compareCalibrationParameter(Parameter param) {
-		Parameter paramRef = calParameterItems
-				.get(calParameterItems.size() - 1);
+		Parameter paramRef = calParameterItems.get(uploadIndex);
 
 		if (paramRef.name.equalsIgnoreCase(param.name)
 				&& paramRef.value == param.value) {
-			// Log.d("CAL", "Comp: " + paramRef.name +" : " + param.name);
-			// Log.d("CAL", "Comp: " + String.valueOf(paramRef.value) +" : " +
-			// String.valueOf(param.value));
-			calParameterItems.remove(calParameterItems.size() - 1);
+			uploadIndex++;
 		}
 		sendCalibrationParameters();
 	}
@@ -61,6 +61,7 @@ public class CalParameters {
 	public void getCalibrationParameters(Drone drone) {
 		this.myDrone = drone;
 		calParameterItems.clear();
+		paramCount = 0;
 		readCalibrationParameter(0);
 	}
 
@@ -70,31 +71,60 @@ public class CalParameters {
 				this.listner.onReadCalibration(this);
 			return;
 		}
+
 		if (myDrone != null)
 			myDrone.parameters.ReadParameter(calParameterNames.get(seq));
-		if (this.listner!=null) {
-			this.listner.onReadSendCalibration(this,
-					seq, calParameterNames.size(), isUpdating);
+
+		if (this.listner != null) {
+			this.listner.onCalibrationData(this, seq, calParameterNames.size(),
+					isUpdating);
 		}
 	}
 
 	public void sendCalibrationParameters() {
 		isUpdating = true;
-		if (calParameterItems.size() > 0 && myDrone != null) {
-			myDrone.parameters.sendParameter(calParameterItems
-					.get(calParameterItems.size() - 1));
-			if (this.listner!=null) {
-				this.listner.onReadSendCalibration(this,
-						calParameterItems.size() - 1, calParameterItems.size(), isUpdating);
+		if (calParameterItems.size() > 0 && uploadIndex < paramCount) {
+			if (this.listner != null) {
+				this.listner.onCalibrationData(this, uploadIndex, paramCount,
+						isUpdating);
+			}
+			if (myDrone != null) {
+				myDrone.parameters.sendParameter(calParameterItems
+						.get(uploadIndex));
 			}
 		} else {
 			isUpdating = false;
-			if (this.listner != null)
+			if (this.listner != null) {
 				this.listner.onSentCalibration(this);
+			}
 		}
 	}
 
 	public boolean isParameterDownloaded() {
 		return calParameterItems.size() == calParameterNames.size();
+	}
+
+	public double getParamValue(int paramIndex) {
+		if (paramIndex >= calParameterItems.size())
+			return -1;
+		Parameter param = calParameterItems.get(paramIndex);
+		return param.value;
+	}
+
+	public void setParamValue(int paramIndex, double value) {
+		if (paramIndex >= calParameterItems.size())
+			return;
+		Parameter param = calParameterItems.get(paramIndex);
+		param.value = value;
+	}
+
+	public void setParamValueByName(String paramName, double value) {
+		for (Parameter param : calParameterItems) {
+			if (param.name.contentEquals(paramName)) {
+				param.value = value;
+				Log.d("CAL", param.name + ": " + String.valueOf(value));
+				return;
+			}
+		}
 	}
 }

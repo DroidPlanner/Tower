@@ -3,6 +3,7 @@ package com.droidplanner.fragments;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +58,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 	private Fragment setupPanel;
 
 	private int[] data;
+	private int[] cMin = new int[8], cMid = new int[8], cMax = new int[8];
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -190,9 +192,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 	public void changeSetupPanel(int step) {
 		switch (step) {
 		case 0:
-			currParameters = null;
-			setupPanel = new FragmentSetupRCMenu();
-			((FragmentSetupRCMenu) setupPanel).rcSetupFragment = this;
+			setupPanel = getRCMenuPanel();
 			break;
 		case 1:
 			currParameters = rcParameters;
@@ -217,6 +217,18 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 				.replace(R.id.fragment_setup_rc_panel, setupPanel).commit();
 	}
 
+	private Fragment getRCMenuPanel() {
+		if(currParameters != null){
+			setupPanel = new FragmentSetupRCProgress();
+			((FragmentSetupRCProgress) setupPanel).rcSetupFragment = this;			
+		}
+		else{
+			setupPanel = new FragmentSetupRCMenu();
+			((FragmentSetupRCMenu) setupPanel).rcSetupFragment = this;			
+		}
+		return setupPanel;
+	}
+
 	private Fragment getCHCalibrationPanel() {
 		if (!chParameters.isParameterDownloaded()) {
 			setupPanel = new FragmentSetupRCProgress();
@@ -225,6 +237,10 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 		} else {
 			setupPanel = new FragmentSetupRCOptions();
 			((FragmentSetupRCOptions) setupPanel).rcSetupFragment = this;
+			((FragmentSetupRCOptions) setupPanel)
+					.setOptionCH7((int) chParameters.getParamValue(0));
+			((FragmentSetupRCOptions) setupPanel)
+					.setOptionCH8((int) chParameters.getParamValue(1));
 		}
 		return setupPanel;
 	}
@@ -244,7 +260,6 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 	}
 
 	private String getCalibrationStr() {
-		int[] cMin = new int[8], cMid = new int[8], cMax = new int[8];
 		String txt = "RC #\t\tMIN\t\tMID\t\tMAX";
 
 		cMin[0] = barAIL.getMin();
@@ -274,6 +289,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 			txt += "\t" + String.valueOf(cMid[i]) + "\t";
 			txt += "\t" + String.valueOf(cMax[i]);
 		}
+
 		return txt;
 	}
 
@@ -296,16 +312,32 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 
 	public void updateCalibrationData() {
 		currParameters = rcParameters;
-		rcParameters.sendCalibrationParameters();
-		changeSetupPanel(0);
+
+		for (int i = 0; i < 8; i++) {
+			rcParameters.setParamValueByName("RC" + String.valueOf(i + 1)
+					+ "_MIN", cMin[i]);
+			rcParameters.setParamValueByName("RC" + String.valueOf(i + 1)
+					+ "_MAX", cMax[i]);
+			rcParameters.setParamValueByName("RC" + String.valueOf(i + 1)
+					+ "_TRIM", cMid[i]);
+		}
+
 		setFillBarShowMinMax(false);
+		changeSetupPanel(0);
+		rcParameters.sendCalibrationParameters();
 
 	}
 
 	public void updateRCOptionsData() {
 		currParameters = chParameters;
-		chParameters.sendCalibrationParameters();
+		int ch7 = ((FragmentSetupRCOptions) setupPanel).getOptionCH7();
+		int ch8 = ((FragmentSetupRCOptions) setupPanel).getOptionCH8();
+		
+		chParameters.setParamValueByName("CH7_OPT", ch7);
+		chParameters.setParamValueByName("CH8_OPT", ch8);
+		
 		changeSetupPanel(0);
+		chParameters.sendCalibrationParameters();
 	}
 
 	public void done() {
@@ -324,23 +356,32 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 
 	@Override
 	public void onSentCalibration(CalParameters calParameters) {
-		// TODO Auto-generated method stub
-
+		currParameters = null;
+		changeSetupPanel(0);
 	}
 
 	@Override
-	public void onReadSendCalibration(CalParameters calParameters, int index,
+	public void onCalibrationData(CalParameters calParameters, int index,
 			int count, boolean isSending) {
-		if(!isSending){
-			if(currParameters.equals(rcParameters)){
-				((FragmentSetupRCProgress) setupPanel).setText("Downloading RC calibration data");
+		if (setupPanel != null && currParameters!=null) {
+			String title;
+			if(isSending){
+				if(currParameters.equals(rcParameters))
+					title = "Uploading RC calibration data";
+				else
+					title = "Uploading RC options data";
 			}
-			if(currParameters.equals(chParameters)){
-				((FragmentSetupRCProgress) setupPanel).setText("Downloading RC options data");
+			else {
+				if(currParameters.equals(rcParameters))
+					title = "Downloading RC calibration data";
+				else
+					title = "Downloading RC options data";
+				
 			}
-			((FragmentSetupRCProgress) setupPanel).updateProgress(index,count);
+			((FragmentSetupRCProgress) setupPanel)
+					.setText(title);
+			((FragmentSetupRCProgress) setupPanel).updateProgress(index, count);
 		}
-		
 	}
 
 }

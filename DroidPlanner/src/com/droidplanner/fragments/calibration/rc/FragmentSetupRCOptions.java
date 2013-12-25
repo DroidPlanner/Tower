@@ -36,9 +36,11 @@ public class FragmentSetupRCOptions extends Fragment implements OnClickListener,
 		btnCancel.setOnClickListener(this);
 		
 		spinnerCH7 = (Spinner)view.findViewById(R.id.spinnerCH7Features);
+		spinnerCH7.setSelection(optionCH7-1,true);
 		spinnerCH7.setOnItemSelectedListener(this);
 		
 		spinnerCH8 = (Spinner)view.findViewById(R.id.spinnerCH8Features);
+		spinnerCH8.setSelection(optionCH8-1,true);
 		spinnerCH8.setOnItemSelectedListener(this);
 		
 		return view;
@@ -63,7 +65,7 @@ public class FragmentSetupRCOptions extends Fragment implements OnClickListener,
 	public void setOptionCH7(int optionCH7) {
 		this.optionCH7 = optionCH7;
 		if(spinnerCH7!=null){
-			spinnerCH7.setSelection(optionCH7);
+			spinnerCH7.setSelection(optionCH7-1,true);
 		}
 	}
 
@@ -74,7 +76,7 @@ public class FragmentSetupRCOptions extends Fragment implements OnClickListener,
 	public void setOptionCH8(int optionCH8) {
 		this.optionCH8 = optionCH8;
 		if(spinnerCH8!=null){
-			spinnerCH8.setSelection(optionCH8);
+			spinnerCH8.setSelection(optionCH8-1,true);
 		}
 	}
 
