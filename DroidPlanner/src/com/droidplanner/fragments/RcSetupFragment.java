@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
 import com.droidplanner.MAVLink.MavLinkStreamRates;
+import com.droidplanner.calibration.CH_CalParameters;
 import com.droidplanner.calibration.RC_CalParameters;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
@@ -33,6 +34,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 	private Drone drone;
 	private FragmentManager fragmentManager;
 	private RC_CalParameters rcParameters;
+	private CH_CalParameters chParameters;
 
 	private FillBarMinMaxR barELE;
 	private FillBarMinMaxL barTHR;
@@ -85,6 +87,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 		super.onStart();
 		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
 		rcParameters = new RC_CalParameters(drone);
+		chParameters = new CH_CalParameters(drone);
 		setupDataStreamingForRcSetup();
 	}
 
@@ -200,6 +203,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 
 			break;
 		case 4:
+			chParameters.getCalibrationParameters(drone);
 			setupPanel = new FragmentSetupRCOptions();
 			((FragmentSetupRCOptions) setupPanel).rcSetupFragment = this;
 			break;
@@ -275,13 +279,8 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 
 	}
 
-	public void updateFailsafaData() {
-		// TODO Auto-generated method stub
-		changeSetupPanel(0);
-	}
-
 	public void updateRCOptionsData() {
-		// TODO Auto-generated method stub
+		chParameters.sendCalibrationParameters();
 		changeSetupPanel(0);
 	}
 
