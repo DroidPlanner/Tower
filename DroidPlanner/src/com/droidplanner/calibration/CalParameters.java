@@ -82,4 +82,8 @@ public class CalParameters {
 				this.listner.onSentCalibration(this);
 		}
 	}
+	
+	public boolean isParameterDownloaded(){
+		return calParameterItems.size()==calParameterNames.size();
+	}
 }

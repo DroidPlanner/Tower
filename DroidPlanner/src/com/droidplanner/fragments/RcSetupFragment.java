@@ -25,6 +25,7 @@ import com.droidplanner.widgets.FillBar.FillBarMinMaxL;
 import com.droidplanner.widgets.FillBar.FillBarMinMaxR;
 import com.droidplanner.widgets.FillBar.FillBarMinMaxText;
 import com.droidplanner.widgets.RcStick.RcStick;
+import com.google.android.gms.internal.ch;
 
 public class RcSetupFragment extends Fragment implements OnDroneListner,
 		OnCalibrationEvent {
@@ -195,8 +196,14 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 			break;
 		case 1:
 			currParameters = rcParameters;
-			rcParameters.getCalibrationParameters(drone);
-			return;
+			setFillBarShowMinMax(true);
+			setupPanel = new FragmentSetupRCMinMax();
+			((FragmentSetupRCMinMax) setupPanel).rcSetupFragment = this;
+			if (!rcParameters.isParameterDownloaded()) {
+				rcParameters.getCalibrationParameters(drone);
+				return;
+			}
+			break;
 		case 2:
 			setupPanel = new FragmentSetupRCMiddle();
 			((FragmentSetupRCMiddle) setupPanel).rcSetupFragment = this;
@@ -210,8 +217,13 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 			break;
 		case 4:
 			currParameters = chParameters;
-			chParameters.getCalibrationParameters(drone);
-			return;
+			setupPanel = new FragmentSetupRCOptions();
+			((FragmentSetupRCOptions) setupPanel).rcSetupFragment = this;
+			if (!chParameters.isParameterDownloaded()) {
+				chParameters.getCalibrationParameters(drone);
+				return;
+			}
+			break;
 		}
 		fragmentManager.beginTransaction()
 				.replace(R.id.fragment_setup_rc_panel, setupPanel).commit();
@@ -298,15 +310,6 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 
 	@Override
 	public void onReadCalibration(CalParameters calParameters) {
-		if (currParameters.equals(rcParameters)) {
-			setFillBarShowMinMax(true);
-			setupPanel = new FragmentSetupRCMinMax();
-			((FragmentSetupRCMinMax) setupPanel).rcSetupFragment = this;
-		} else if (currParameters.equals(chParameters)) {
-			setupPanel = new FragmentSetupRCOptions();
-			((FragmentSetupRCOptions) setupPanel).rcSetupFragment = this;
-		}
-
 		if (setupPanel != null) {
 			fragmentManager.beginTransaction()
 					.replace(R.id.fragment_setup_rc_panel, setupPanel).commit();
