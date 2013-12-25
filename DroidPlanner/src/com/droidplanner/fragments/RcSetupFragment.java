@@ -197,22 +197,13 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 			break;
 		case 1:
 			currParameters = rcParameters;
-			if (!rcParameters.isParameterDownloaded()) {
-				setupPanel = new FragmentSetupRCProgress();
-				((FragmentSetupRCProgress) setupPanel).rcSetupFragment = this;
-				rcParameters.getCalibrationParameters(drone);
-			} else {
-				setFillBarShowMinMax(true);
-				setupPanel = new FragmentSetupRCMinMax();
-				((FragmentSetupRCMinMax) setupPanel).rcSetupFragment = this;
-			}
+			setupPanel = getRCCalibrationPanel();
 			break;
 		case 2:
 			setupPanel = new FragmentSetupRCMiddle();
 			((FragmentSetupRCMiddle) setupPanel).rcSetupFragment = this;
 			break;
 		case 3:
-			readTrimData();
 			setupPanel = new FragmentSetupRCCompleted();
 			((FragmentSetupRCCompleted) setupPanel).rcSetupFragment = this;
 			((FragmentSetupRCCompleted) setupPanel)
@@ -220,27 +211,37 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 			break;
 		case 4:
 			currParameters = chParameters;
-			if (!chParameters.isParameterDownloaded()) {
-				setupPanel = new FragmentSetupRCProgress();
-				((FragmentSetupRCProgress) setupPanel).rcSetupFragment = this;
-				chParameters.getCalibrationParameters(drone);
-			} else {
-				setupPanel = new FragmentSetupRCOptions();
-				((FragmentSetupRCOptions) setupPanel).rcSetupFragment = this;
-			}
+			setupPanel = getCHCalibrationPanel();
 			break;
 		}
 		fragmentManager.beginTransaction()
 				.replace(R.id.fragment_setup_rc_panel, setupPanel).commit();
 	}
 
-	private void readTrimData() {
-		// TODO Auto-generated method stub
-
+	private Fragment getCHCalibrationPanel() {
+		if (!chParameters.isParameterDownloaded()) {
+			setupPanel = new FragmentSetupRCProgress();
+			((FragmentSetupRCProgress) setupPanel).rcSetupFragment = this;
+			chParameters.getCalibrationParameters(drone);
+		} else {
+			setupPanel = new FragmentSetupRCOptions();
+			((FragmentSetupRCOptions) setupPanel).rcSetupFragment = this;
+		}
+		return setupPanel;
 	}
 
-	public void readMinMaxData() {
-
+	private Fragment getRCCalibrationPanel() {
+		if (!rcParameters.isParameterDownloaded()) {
+			setupPanel = new FragmentSetupRCProgress();
+			((FragmentSetupRCProgress) setupPanel).rcSetupFragment = this;
+			rcParameters.getCalibrationParameters(drone);
+		} else {
+			setFillBarShowMinMax(true);
+			setupPanel = new FragmentSetupRCMinMax();
+			((FragmentSetupRCMinMax) setupPanel).rcSetupFragment = this;
+		}
+		// TODO Auto-generated method stub
+		return setupPanel;
 	}
 
 	private String getCalibrationStr() {
@@ -315,18 +316,10 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 
 	@Override
 	public void onReadCalibration(CalParameters calParameters) {
-		if (setupPanel != null) {
-			if (currParameters.equals(rcParameters)) {
-				setFillBarShowMinMax(true);
-				setupPanel = new FragmentSetupRCMinMax();
-				((FragmentSetupRCMinMax) setupPanel).rcSetupFragment = this;
-			} else if (currParameters.equals(chParameters)) {
-				setupPanel = new FragmentSetupRCOptions();
-				((FragmentSetupRCOptions) setupPanel).rcSetupFragment = this;
-			}
-
-			fragmentManager.beginTransaction()
-					.replace(R.id.fragment_setup_rc_panel, setupPanel).commit();
+		if (currParameters.equals(rcParameters)) {
+			changeSetupPanel(1);
+		} else if (currParameters.equals(chParameters)) {
+			changeSetupPanel(4);
 		}
 	}
 
