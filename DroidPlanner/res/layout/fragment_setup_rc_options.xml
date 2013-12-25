@@ -97,7 +97,7 @@
                     android:text="@string/rc_btn_cancel" />
 
                 <Button
-                    android:id="@+id/ButtonNext"
+                    android:id="@+id/ButtonSend"
                     style="@style/modeControl"
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
