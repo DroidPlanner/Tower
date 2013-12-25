@@ -37,6 +37,7 @@
                     android:id="@+id/TextViewMax"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="2dp"
                     android:layout_weight="0.2"
                     android:gravity="right"
                     android:text="1500"
@@ -47,6 +48,7 @@
                     android:id="@+id/TextViewMid"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="2dp"
                     android:layout_weight="0.6"
                     android:gravity="center"
                     android:text="1500"
@@ -57,11 +59,13 @@
                     android:id="@+id/TextViewMin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="2dp"
                     android:layout_weight="0.2"
                     android:gravity="bottom"
                     android:text="1500"
                     android:textColor="#fff"
                     android:textSize="16sp" />
+
             </LinearLayout>
 
             <com.droidplanner.widgets.FillBar.FillBar
