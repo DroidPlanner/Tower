@@ -64,7 +64,7 @@ public class CalParameters {
 	private void readCalibrationParameter(int seq) {
 		if (seq >= calParameterNames.size()) {
 			if (this.listner != null)
-				this.listner.onSentCalibration(this);
+				this.listner.onReadCalibration(this);
 			return;
 		}
 		if (myDrone != null)

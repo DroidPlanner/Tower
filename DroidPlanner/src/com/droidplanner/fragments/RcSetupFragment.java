@@ -11,6 +11,7 @@ import com.droidplanner.R;
 import com.droidplanner.MAVLink.MavLinkStreamRates;
 import com.droidplanner.calibration.CH_CalParameters;
 import com.droidplanner.calibration.CalParameters;
+import com.droidplanner.calibration.CalParameters.OnCalibrationEvent;
 import com.droidplanner.calibration.RC_CalParameters;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
@@ -25,10 +26,12 @@ import com.droidplanner.widgets.FillBar.FillBarMinMaxR;
 import com.droidplanner.widgets.FillBar.FillBarMinMaxText;
 import com.droidplanner.widgets.RcStick.RcStick;
 
-public class RcSetupFragment extends Fragment implements OnDroneListner {
+public class RcSetupFragment extends Fragment implements OnDroneListner,
+		OnCalibrationEvent {
 	private static final int RC_MIN = 900;
 	private static final int RC_MAX = 2100;
-	private static final String[] RCStr = {"AIL ","ELE ","THR ","RUD ","CH 5","CH 6","CH 7", "CH 8"};
+	private static final String[] RCStr = { "AIL ", "ELE ", "THR ", "RUD ",
+			"CH 5", "CH 6", "CH 7", "CH 8" };
 	// Extreme RC update rate in this screen
 	private static final int RC_MSG_RATE = 50;
 
@@ -37,7 +40,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 	private RC_CalParameters rcParameters;
 	private CH_CalParameters chParameters;
 	private CalParameters currParameters = null;
-	
+
 	private FillBarMinMaxR barELE;
 	private FillBarMinMaxL barTHR;
 	private FillBarMinMaxText barYAW;
@@ -58,7 +61,8 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		fragmentManager = getFragmentManager();
-		setupPanel = fragmentManager.findFragmentById(R.id.fragment_setup_rc_panel);
+		setupPanel = fragmentManager
+				.findFragmentById(R.id.fragment_setup_rc_panel);
 	}
 
 	@Override
@@ -83,13 +87,15 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 		setupLocalViews(view);
 		return view;
 	}
-	
+
 	@Override
 	public void onStart() {
 		super.onStart();
 		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
 		rcParameters = new RC_CalParameters(drone);
 		chParameters = new CH_CalParameters(drone);
+		rcParameters.setOnCalibrationEventListener(this);
+		chParameters.setOnCalibrationEventListener(this);
 		setupDataStreamingForRcSetup();
 	}
 
@@ -97,8 +103,8 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 	public void onStop() {
 		super.onStop();
 		MavLinkStreamRates
-		.setupStreamRatesFromPref((DroidPlannerApp) getActivity()
-				.getApplication());
+				.setupStreamRatesFromPref((DroidPlannerApp) getActivity()
+						.getApplication());
 	}
 
 	@Override
@@ -116,7 +122,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 	private void setupLocalViews(View view) {
 		stickLeft = (RcStick) view.findViewById(R.id.stickLeft);
 		stickRight = (RcStick) view.findViewById(R.id.stickRight);
-		barTHR = (FillBarMinMaxL) view.findViewById(R.id.fillBarTHR);		
+		barTHR = (FillBarMinMaxL) view.findViewById(R.id.fillBarTHR);
 		barELE = (FillBarMinMaxR) view.findViewById(R.id.fillBarELE);
 		barYAW = (FillBarMinMaxText) view.findViewById(R.id.fillBarYAW);
 		barAIL = (FillBarMinMaxText) view.findViewById(R.id.fillBarAIL);
@@ -149,7 +155,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 		case RC_OUT:
 			break;
 		case PARAMETER:
-			if(currParameters!=null)
+			if (currParameters != null)
 				currParameters.processReceivedParam();
 			break;
 		default:
@@ -180,7 +186,6 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 
 	}
 
-
 	public void changeSetupPanel(int step) {
 		switch (step) {
 		case 0:
@@ -191,10 +196,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 		case 1:
 			currParameters = rcParameters;
 			rcParameters.getCalibrationParameters(drone);
-			setFillBarShowMinMax(true);
-			setupPanel = new FragmentSetupRCMinMax();
-			((FragmentSetupRCMinMax) setupPanel).rcSetupFragment = this;
-			break;
+			return;
 		case 2:
 			setupPanel = new FragmentSetupRCMiddle();
 			((FragmentSetupRCMiddle) setupPanel).rcSetupFragment = this;
@@ -205,14 +207,11 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 			((FragmentSetupRCCompleted) setupPanel).rcSetupFragment = this;
 			((FragmentSetupRCCompleted) setupPanel)
 					.setText(getCalibrationStr());
-
 			break;
 		case 4:
 			currParameters = chParameters;
 			chParameters.getCalibrationParameters(drone);
-			setupPanel = new FragmentSetupRCOptions();
-			((FragmentSetupRCOptions) setupPanel).rcSetupFragment = this;
-			break;
+			return;
 		}
 		fragmentManager.beginTransaction()
 				.replace(R.id.fragment_setup_rc_panel, setupPanel).commit();
@@ -249,7 +248,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 		cMax[6] = bar7.getMax();
 		cMax[7] = bar8.getMax();
 
-		if(data!=null)
+		if (data != null)
 			cMid = data;
 
 		for (int i = 0; i < 8; i++) {
@@ -295,6 +294,29 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 	public void done() {
 		currParameters = null;
 		changeSetupPanel(0);
+	}
+
+	@Override
+	public void onReadCalibration(CalParameters calParameters) {
+		if (currParameters.equals(rcParameters)) {
+			setFillBarShowMinMax(true);
+			setupPanel = new FragmentSetupRCMinMax();
+			((FragmentSetupRCMinMax) setupPanel).rcSetupFragment = this;
+		} else if (currParameters.equals(chParameters)) {
+			setupPanel = new FragmentSetupRCOptions();
+			((FragmentSetupRCOptions) setupPanel).rcSetupFragment = this;
+		}
+
+		if (setupPanel != null) {
+			fragmentManager.beginTransaction()
+					.replace(R.id.fragment_setup_rc_panel, setupPanel).commit();
+		}
+	}
+
+	@Override
+	public void onSentCalibration(CalParameters calParameters) {
+		// TODO Auto-generated method stub
+
 	}
 
 }
