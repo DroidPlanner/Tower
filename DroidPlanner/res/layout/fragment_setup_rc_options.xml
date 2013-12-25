@@ -52,7 +52,7 @@
                     style="@style/modeLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Channel 7" />
+                    android:text="@string/rc_options_ch7" />
 
                 <com.droidplanner.widgets.spinners.SpinnerSelfSelect
                     android:id="@+id/spinnerCH7Features"
