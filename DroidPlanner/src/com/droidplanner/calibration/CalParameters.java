@@ -17,6 +17,9 @@ public class CalParameters {
 		public void onReadCalibration(CalParameters calParameters);
 
 		public void onSentCalibration(CalParameters calParameters);
+
+		public void onReadSendCalibration(CalParameters calParameters,
+				int index, int count, boolean isSending);
 	}
 
 	public CalParameters(Drone myDrone) {
@@ -69,6 +72,10 @@ public class CalParameters {
 		}
 		if (myDrone != null)
 			myDrone.parameters.ReadParameter(calParameterNames.get(seq));
+		if (this.listner!=null) {
+			this.listner.onReadSendCalibration(this,
+					seq, calParameterNames.size(), isUpdating);
+		}
 	}
 
 	public void sendCalibrationParameters() {
@@ -76,14 +83,18 @@ public class CalParameters {
 		if (calParameterItems.size() > 0 && myDrone != null) {
 			myDrone.parameters.sendParameter(calParameterItems
 					.get(calParameterItems.size() - 1));
+			if (this.listner!=null) {
+				this.listner.onReadSendCalibration(this,
+						calParameterItems.size() - 1, calParameterItems.size(), isUpdating);
+			}
 		} else {
 			isUpdating = false;
 			if (this.listner != null)
 				this.listner.onSentCalibration(this);
 		}
 	}
-	
-	public boolean isParameterDownloaded(){
-		return calParameterItems.size()==calParameterNames.size();
+
+	public boolean isParameterDownloaded() {
+		return calParameterItems.size() == calParameterNames.size();
 	}
 }
