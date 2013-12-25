@@ -51,7 +51,7 @@
                     android:id="@+id/textViewSummary"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="RC #\\ttMin \t\tMid \t\tMax " />
+                    android:text="RC #\t\tMin \t\tMid \t\tMax " />
             </LinearLayout>
 
             <LinearLayout

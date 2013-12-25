@@ -226,7 +226,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 
 	private String getCalibrationStr() {
 		int[] cMin = new int[8], cMid = new int[8], cMax = new int[8];
-		String txt = "RC #\tMIN\t\tMID\t\tMAX";
+		String txt = "RC #\t\tMIN\t\tMID\t\tMAX";
 
 		cMin[0] = barAIL.getMin();
 		cMin[1] = barELE.getMin();
@@ -250,7 +250,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 			cMid = data;
 
 		for (int i = 0; i < 8; i++) {
-			txt += "\n" + RCStr[i];
+			txt += "\n" + RCStr[i] + "\t";
 			txt += "\t" + String.valueOf(cMin[i]) + "\t";
 			txt += "\t" + String.valueOf(cMid[i]) + "\t";
 			txt += "\t" + String.valueOf(cMax[i]);
