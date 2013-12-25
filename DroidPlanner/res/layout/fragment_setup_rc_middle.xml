@@ -43,7 +43,16 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:gravity="center"
-        android:orientation="vertical" >
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/ButtonCancel"
+            style="@style/modeControl"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/button_blue"
+            android:text="@string/rc_btn_cancel" />
 
         <Button
             android:id="@+id/ButtonNext"
@@ -52,23 +61,6 @@
             android:layout_height="wrap_content"
             android:background="@drawable/button_green"
             android:text="@string/rc_btn_next" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_margin="10dp"
-        android:gravity="center"
-        android:orientation="vertical" >
-
-        <Button
-            android:id="@+id/ButtonCancel"
-            style="@style/modeControl"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_green"
-            android:text="@string/rc_btn_cancel" />
-
     </LinearLayout>
 
 </LinearLayout>
