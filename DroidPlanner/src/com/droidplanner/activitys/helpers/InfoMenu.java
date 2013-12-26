@@ -109,7 +109,7 @@ public class InfoMenu implements OnDroneListner {
 	}
 
 	private void updateRadioInfo(Drone drone) {
-		signal.setTitle(String.format("%d%%", drone.radio.getSignalStrength()));
+		signal.setTitle(String.format(" %d%%", drone.radio.getSignalStrength()));
 		signalRSSI.setTitle(String.format("RSSI %2.0f dB",
 				drone.radio.getRssi()));
 		signalRemRSSI.setTitle(String.format("RemRSSI %2.0f dB",
@@ -130,7 +130,7 @@ public class InfoMenu implements OnDroneListner {
 
 	public void updateFlightStateInfo(Drone drone) {
 		if (drone.state.isFlying()) {
-			timer.reStart();
+			timer.start();
 		} else {
 			timer.stop();
 		}
@@ -138,6 +138,9 @@ public class InfoMenu implements OnDroneListner {
 
 	public void onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+		case R.id.bar_timer_reset:
+			timer.resetTimer();
+			break;
 		case R.id.bar_home:
 			drone.waypointMananger.getWaypoints();
 			break;

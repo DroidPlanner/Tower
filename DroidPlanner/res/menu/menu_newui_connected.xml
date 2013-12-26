@@ -16,7 +16,13 @@
         android:id="@+id/bar_propeller"
         android:icon="@drawable/ic_status_flight_time"
         android:showAsAction="always|withText"
-        android:title="  1:20  "/>
+        android:title="  1:20  ">
+        <menu>
+            <item
+                android:id="@+id/bar_timer_reset"
+                android:title="Reset Timer"/>
+        </menu>
+    </item>
     <item
         android:id="@+id/bar_battery"
         android:icon="@drawable/ic_status_battery"
