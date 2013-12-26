@@ -16,6 +16,7 @@ import com.droidplanner.activitys.helpers.SuperUI;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.fragments.ChecklistFragment;
+import com.droidplanner.fragments.IMUSetupFragment;
 import com.droidplanner.fragments.ModesSetupFragment;
 import com.droidplanner.fragments.ParamsFragment;
 import com.droidplanner.fragments.RcSetupFragment;
@@ -101,12 +102,15 @@ public class ConfigurationActivity extends SuperUI{
                     return new RcSetupFragment();
 
                 case 3:
-                    return new ModesSetupFragment();
+                    return new IMUSetupFragment();
 
                 case 4:
-                    return new ChecklistFragment();
+                    return new ModesSetupFragment();
 
                 case 5:
+                    return new ChecklistFragment();
+
+                case 6:
                     return new ParamsFragment();
 
                 default:
@@ -116,7 +120,7 @@ public class ConfigurationActivity extends SuperUI{
 
         @Override
         public int getCount(){
-            return 6;
+            return 7;
         }
 
         @Override
@@ -132,12 +136,15 @@ public class ConfigurationActivity extends SuperUI{
                     return mContext.getText(R.string.screen_rc);
 
                 case 3:
-                    return mContext.getString(R.string.screen_modes);
+                    return mContext.getString(R.string.screen_imu);
 
                 case 4:
-                    return mContext.getString(R.string.screen_checklist);
+                    return mContext.getString(R.string.screen_modes);
 
                 case 5:
+                    return mContext.getString(R.string.screen_checklist);
+
+                case 6:
                     return mContext.getText(R.string.screen_parameters);
 
                 default:
