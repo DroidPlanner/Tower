@@ -217,5 +217,6 @@
     <string name="screen_tuning">Tuning</string>
     <string name="screen_modes">Modes</string>
     <string name="screen_checklist">Checklist</string>
+    <string name="setup_imu_title">Accelerometer Calibration</string>
 
 </resources>
