@@ -3,7 +3,6 @@ package com.droidplanner.fragments;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -344,8 +343,6 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 		currParameters = chParameters;
 		int ch7 = ((FragmentSetupRCOptions) setupPanel).getOptionCH7();
 		int ch8 = ((FragmentSetupRCOptions) setupPanel).getOptionCH8();
-		Log.d("CAL", "CH7 : "+String.valueOf(ch7));
-		Log.d("CAL", "CH8 : "+String.valueOf(ch8));
 		chParameters.setParamValueByName("CH7_OPT", ch7);
 		chParameters.setParamValueByName("CH8_OPT", ch8);
 

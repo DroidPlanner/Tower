@@ -2,7 +2,6 @@ package com.droidplanner.fragments.calibration.rc;
 
 import com.droidplanner.R;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,7 +63,6 @@ public class FragmentSetupRCOptions extends FragmentSetupRCPanel implements OnCl
 	public void setOptionCH7(int optionCH7) {
 		this.optionCH7 = optionCH7;
 		if(spinnerCH7!=null){
-			Log.d("CAL", "Spinner index: " + String.valueOf(getSpinnerPosition(optionCH7)));
 			spinnerCH7.setSelection(getSpinnerPosition(optionCH7), true);
 		}
 	}
@@ -72,7 +70,6 @@ public class FragmentSetupRCOptions extends FragmentSetupRCPanel implements OnCl
 	public void setOptionCH8(int optionCH8) {
 		this.optionCH8 = optionCH8;
 		if(spinnerCH8!=null){
-			Log.d("CAL", "Spinner index: " + String.valueOf(getSpinnerPosition(optionCH8)));
 			spinnerCH8.setSelection(getSpinnerPosition(optionCH8), true);
 		}
 	}
