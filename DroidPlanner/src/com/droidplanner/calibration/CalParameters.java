@@ -94,6 +94,7 @@ public class CalParameters {
 			}
 		} else {
 			isUpdating = false;
+			uploadIndex = 0;
 			if (this.listner != null) {
 				this.listner.onSentCalibration(this);
 			}
@@ -109,6 +110,15 @@ public class CalParameters {
 			return -1;
 		Parameter param = calParameterItems.get(paramIndex);
 		return param.value;
+	}
+
+	public double getParamValueByName(String paramName) {
+		for (Parameter param : calParameterItems) {
+			if (param.name.contentEquals(paramName)) {
+				return param.value;
+			}
+		}
+		return -1;
 	}
 
 	public void setParamValue(int paramIndex, double value) {

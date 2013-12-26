@@ -1,8 +1,6 @@
 package com.droidplanner.fragments.calibration.rc;
 
 import com.droidplanner.R;
-import com.droidplanner.fragments.RcSetupFragment;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 public class FragmentSetupRCMiddle extends FragmentSetupRCPanel implements OnClickListener{
-	public RcSetupFragment rcSetupFragment;
 	private Button btnNext;
 	private Button btnCancel;
 	
@@ -33,10 +30,10 @@ public class FragmentSetupRCMiddle extends FragmentSetupRCPanel implements OnCli
 	public void onClick(View arg0) {
 		if(rcSetupFragment!=null){
 			if(arg0.equals(btnNext)){
-//				rcSetupFragment.changeSetupPanel(3);
+				rcSetupFragment.changeSetupPanel(3);
 			}
 			else if(arg0.equals(btnCancel)) {
-//				rcSetupFragment.cancel();
+				rcSetupFragment.cancel();
 			}
 		}
 	}

@@ -39,10 +39,10 @@ public class FragmentSetupRCCompleted extends FragmentSetupRCPanel implements On
 	public void onClick(View arg0) {
 		if(rcSetupFragment!=null){
 			if(arg0.equals(btnSend)){
-//				rcSetupFragment.updateCalibrationData();
+				rcSetupFragment.updateCalibrationData();
 			}
 			else if(arg0.equals(btnCancel)) {
-//				rcSetupFragment.cancel();
+				rcSetupFragment.cancel();
 			}
 		}
 	}

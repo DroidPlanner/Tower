@@ -25,7 +25,6 @@ public class DroneEvents extends DroneVariable {
 	}
 
 	public void notifyDroneEvent(DroneEventsType event) {
-		//Log.d("EVENT", "event: "+event.name());
 		if (droneListeners.size() > 0) {
 			for (OnDroneListner listener : droneListeners) {
 				listener.onDroneEvent(event,myDrone);
