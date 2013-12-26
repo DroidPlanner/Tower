@@ -1,6 +1,5 @@
 package com.droidplanner.fragments.calibration.rc;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,11 +7,10 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import com.droidplanner.R;
-import com.droidplanner.fragments.RcSetupFragment;
 
-public class FragmentSetupRCMenu extends Fragment implements
+public class FragmentSetupRCMenu extends FragmentSetupRCPanel implements
 		OnClickListener {
-	public RcSetupFragment rcSetupFragment;
+	
 	private Button btnCalibrate;
 	private Button btnRCOption;
 	

@@ -1,9 +1,6 @@
 package com.droidplanner.fragments.calibration.rc;
 
 import com.droidplanner.R;
-import com.droidplanner.fragments.RcSetupFragment;
-
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class FragmentSetupRCCompleted extends Fragment implements OnClickListener{
-	public RcSetupFragment rcSetupFragment;
+public class FragmentSetupRCCompleted extends FragmentSetupRCPanel implements OnClickListener{
 	private TextView textView;
 	private String txt;
 	private Button btnSend;

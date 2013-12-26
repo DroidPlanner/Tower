@@ -1,9 +1,6 @@
 package com.droidplanner.fragments.calibration.rc;
 
 import com.droidplanner.R;
-import com.droidplanner.fragments.RcSetupFragment;
-
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +10,8 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-public class FragmentSetupRCProgress extends Fragment implements
+public class FragmentSetupRCProgress extends FragmentSetupRCPanel implements
 		OnClickListener {
-	public RcSetupFragment rcSetupFragment;
 	private TextView textTitle;
 	private TextView textProgress;
 	private String txt;

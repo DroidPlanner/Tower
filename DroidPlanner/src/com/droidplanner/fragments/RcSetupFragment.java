@@ -20,6 +20,7 @@ import com.droidplanner.fragments.calibration.rc.FragmentSetupRCCompleted;
 import com.droidplanner.fragments.calibration.rc.FragmentSetupRCMenu;
 import com.droidplanner.fragments.calibration.rc.FragmentSetupRCMiddle;
 import com.droidplanner.fragments.calibration.rc.FragmentSetupRCMinMax;
+import com.droidplanner.fragments.calibration.rc.FragmentSetupRCPanel;
 import com.droidplanner.fragments.calibration.rc.FragmentSetupRCProgress;
 import com.droidplanner.widgets.FillBar.FillBarMinMaxL;
 import com.droidplanner.widgets.FillBar.FillBarMinMaxR;
@@ -52,7 +53,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 	private RcStick stickRight;
 
 	private FragmentManager fragmentManager;
-	private Fragment setupPanel;
+	private FragmentSetupRCPanel setupPanel;
 
 	int data[];
 
@@ -63,7 +64,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 		rcParameters = new RC_CalParameters(drone);
 		chParameters = new CH_CalParameters(drone);
 		fragmentManager = getFragmentManager();
-		setupPanel = fragmentManager
+		setupPanel = (FragmentSetupRCPanel) fragmentManager
 				.findFragmentById(R.id.fragment_setup_rc_panel);		
 	}
 
@@ -117,7 +118,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 		// TODO Auto-generated method stub
 		super.onResume();
 		if(setupPanel!=null){
-			
+			setupPanel.rcSetupFragment = this;
 		}
 	}
 
@@ -225,7 +226,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 				.replace(R.id.fragment_setup_rc_panel, setupPanel).commit();
 	}
 
-	private Fragment getRCMenuPanel() {
+	private FragmentSetupRCPanel getRCMenuPanel() {
 		if(currParameters != null){
 			setupPanel = new FragmentSetupRCProgress();
 			((FragmentSetupRCProgress) setupPanel).rcSetupFragment = this;			
@@ -237,7 +238,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner {
 		return setupPanel;
 	}
 
-	private Fragment getRCCalibrationPanel() {
+	private FragmentSetupRCPanel getRCCalibrationPanel() {
 		if (!rcParameters.isParameterDownloaded()) {
 			setupPanel = new FragmentSetupRCProgress();
 			((FragmentSetupRCProgress) setupPanel).rcSetupFragment = this;

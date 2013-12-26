@@ -3,7 +3,6 @@ package com.droidplanner.fragments.calibration.rc;
 import com.droidplanner.R;
 import com.droidplanner.fragments.RcSetupFragment;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-public class FragmentSetupRCMiddle extends Fragment implements OnClickListener{
+public class FragmentSetupRCMiddle extends FragmentSetupRCPanel implements OnClickListener{
 	public RcSetupFragment rcSetupFragment;
 	private Button btnNext;
 	private Button btnCancel;
