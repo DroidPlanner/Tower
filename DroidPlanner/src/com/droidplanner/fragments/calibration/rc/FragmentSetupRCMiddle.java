@@ -34,10 +34,10 @@ public class FragmentSetupRCMiddle extends Fragment implements OnClickListener{
 	public void onClick(View arg0) {
 		if(rcSetupFragment!=null){
 			if(arg0.equals(btnNext)){
-				rcSetupFragment.changeSetupPanel(3);
+//				rcSetupFragment.changeSetupPanel(3);
 			}
 			else if(arg0.equals(btnCancel)) {
-				rcSetupFragment.cancel();
+//				rcSetupFragment.cancel();
 			}
 		}
 	}

@@ -34,10 +34,10 @@ public class FragmentSetupRCMinMax extends Fragment implements OnClickListener{
 	public void onClick(View arg0) {
 		if(rcSetupFragment!=null){
 			if(arg0.equals(btnNext)){
-				rcSetupFragment.changeSetupPanel(2);
+//				rcSetupFragment.changeSetupPanel(2);
 			}
 			else if(arg0.equals(btnCancel)) {
-				rcSetupFragment.cancel();
+//				rcSetupFragment.cancel();
 			}
 		}
 	}

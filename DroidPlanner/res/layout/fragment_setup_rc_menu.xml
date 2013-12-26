@@ -47,7 +47,7 @@
         android:orientation="vertical" >
 
         <Button
-            android:id="@+id/Button01"
+            android:id="@+id/ButtonRCCalibrate"
             style="@style/modeControl"
             android:layout_width="154dp"
             android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
         android:orientation="vertical" >
 
         <Button
-            android:id="@+id/Button03"
+            android:id="@+id/ButtonRCOptions"
             style="@style/modeControl"
             android:layout_width="154dp"
             android:layout_height="wrap_content"

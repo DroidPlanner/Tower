@@ -50,10 +50,10 @@ public class FragmentSetupRCOptions extends Fragment implements OnClickListener,
 	public void onClick(View arg0) {
 		if(rcSetupFragment!=null){
 			if(arg0.equals(btnSend)){
-				rcSetupFragment.updateRCOptionsData();
+//				rcSetupFragment.updateRCOptionsData();
 			}
 			else if(arg0.equals(btnCancel)) {
-				rcSetupFragment.cancel();
+//				rcSetupFragment.cancel();
 			}
 		}
 	}
