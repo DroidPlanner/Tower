@@ -4,26 +4,27 @@
 
     <item
         android:id="@+id/bar_home"
-        android:icon="@drawable/bar_home"
+        android:icon="@drawable/ic_status_home"
         android:showAsAction="always|withText"
         android:title=" 29m  "/>
     <item
         android:id="@+id/bar_gps"
-        android:icon="@drawable/bar_gps"
+        android:icon="@drawable/ic_status_gps"
         android:showAsAction="always|withText"
         android:title="  8, 3D  "/>
     <item
         android:id="@+id/bar_propeller"
-        android:icon="@drawable/bar_propeller"
+        android:icon="@drawable/ic_status_flight_time"
         android:showAsAction="always|withText"
         android:title="  1:20  "/>
     <item
         android:id="@+id/bar_battery"
-        android:icon="@drawable/bar_battery"
+        android:icon="@drawable/ic_status_battery"
         android:showAsAction="always|withText"
-        android:title="  12.2v, 72%  "/><item
+        android:title="  12.2v, 72%  "/>
+    <item
         android:id="@+id/bar_signal"
-        android:icon="@drawable/bar_signal"
+        android:icon="@drawable/ic_status_rssi"
         android:showAsAction="always|withText"
         android:title="  86%  ">
         <menu>
