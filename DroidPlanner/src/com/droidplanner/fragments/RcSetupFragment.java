@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +34,7 @@ import com.droidplanner.widgets.FillBar.FillBarMinMaxText;
 import com.droidplanner.widgets.RcStick.RcStick;
 
 public class RcSetupFragment extends Fragment implements OnDroneListner,
-		OnCalibrationEvent {
+		OnCalibrationEvent, OnPageChangeListener {
 
 	private static final int RC_MIN = 900;
 	private static final int RC_MAX = 2100;
@@ -101,6 +103,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 	@Override
 	public void onAttach(Activity activity) {
 		parent = (ConfigurationActivity)activity;
+		parent.addOnPageChangeListener(this);
 		super.onAttach(activity);
 	}
 
@@ -410,6 +413,26 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 			}
 			((FragmentSetupRCProgress) setupPanel).setText(title);
 			((FragmentSetupRCProgress) setupPanel).updateProgress(index, count);
+		}
+	}
+
+	@Override
+	public void onPageScrollStateChanged(int arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPageScrolled(int arg0, float arg1, int arg2) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPageSelected(int arg0) {
+		if(arg0==2){
+			Log.d("CAL", "RC Setup");
+			setupDataStreamingForRcSetup();
 		}
 	}
 }
