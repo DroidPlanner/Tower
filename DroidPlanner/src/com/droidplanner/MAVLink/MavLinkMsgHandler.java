@@ -29,8 +29,8 @@ public class MavLinkMsgHandler {
 			break;
 		case msg_vfr_hud.MAVLINK_MSG_ID_VFR_HUD:
 			msg_vfr_hud m_hud = (msg_vfr_hud) msg;
-			drone.setAltitudeGroundAndAirSpeeds(m_hud.alt, m_hud.groundspeed,
-					m_hud.airspeed, m_hud.climb);
+			drone.setAltitudeGroundAndAirSpeeds(m_hud.alt, m_hud.groundspeed,m_hud.airspeed, m_hud.climb);
+			checkIsFlying(m_hud);
 			break;
 		case msg_mission_current.MAVLINK_MSG_ID_MISSION_CURRENT:
 			drone.missionStats.setWpno(((msg_mission_current) msg).seq);
@@ -84,7 +84,10 @@ public class MavLinkMsgHandler {
 	public void processState(msg_heartbeat msg_heart) {
 		checkArmState(msg_heart);
 		checkFailsafe(msg_heart);
-		checkIfIsFlying(msg_heart);
+	}
+
+	public void checkIsFlying(msg_vfr_hud m_hud) {
+		drone.state.setIsFlying(m_hud.throttle > 0);
 	}
 
 	private void checkFailsafe(msg_heartbeat msg_heart) {
@@ -95,18 +98,5 @@ public class MavLinkMsgHandler {
 	private void checkArmState(msg_heartbeat msg_heart) {
 		drone.state
 				.setArmed((msg_heart.base_mode & (byte) MAV_MODE_FLAG.MAV_MODE_FLAG_SAFETY_ARMED) == (byte) MAV_MODE_FLAG.MAV_MODE_FLAG_SAFETY_ARMED);
-	}
-
-	private void checkIfIsFlying(msg_heartbeat msg_heart) {
-		switch (msg_heart.system_status) {
-		case MAV_STATE.MAV_STATE_ACTIVE:
-		case MAV_STATE.MAV_STATE_CRITICAL:
-			drone.state.setIsFlying(true);
-			break;
-		case MAV_STATE.MAV_STATE_STANDBY:
-		case MAV_STATE.MAV_STATE_CALIBRATING:
-			drone.state.setIsFlying(false);
-			break;
-		}
 	}
 }
