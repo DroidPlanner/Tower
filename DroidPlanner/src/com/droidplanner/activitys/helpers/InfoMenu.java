@@ -114,7 +114,7 @@ public class InfoMenu implements OnDroneListner {
 		battery.setTitle(text);
 	}
 
-	private void updateGpsInfo() {
+	private void updateGpsInfo(Drone drone) {
 		SpannableString text = new SpannableString(String.format("Satellite\n%d, %s", drone.GPS.getSatCount(), drone.GPS.getFixType()));
 		text.setSpan(new RelativeSizeSpan(.7f), 0, 10, 0);
 		text.setSpan(new AlignmentSpan.Standard(Alignment.ALIGN_NORMAL),0, text.length()-1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
