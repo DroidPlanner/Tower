@@ -101,7 +101,7 @@
         android:key="pref_flight_data"
         android:title="Flight Data">
         <EditTextPreference
-            android:defaultValue="100"
+            android:defaultValue="500"
             android:inputType="number"
             android:gravity="center"
             android:key="pref_max_fligth_path_size"
