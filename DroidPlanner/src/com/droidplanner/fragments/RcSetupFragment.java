@@ -1,5 +1,6 @@
 package com.droidplanner.fragments;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
 import com.droidplanner.MAVLink.MavLinkStreamRates;
+import com.droidplanner.activitys.ConfigurationActivity;
 import com.droidplanner.calibration.CH_CalParameters;
 import com.droidplanner.calibration.CalParameters;
 import com.droidplanner.calibration.CalParameters.OnCalibrationEvent;
@@ -41,7 +43,8 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 			"CH 5", "CH 6", "CH 7", "CH 8" };
 
 	private Drone drone;
-
+	private ConfigurationActivity parent;
+	
 	private RC_CalParameters rcParameters;
 	private CH_CalParameters chParameters;
 	private CalParameters currParameters = null;
@@ -96,6 +99,18 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 	}
 
 	@Override
+	public void onAttach(Activity activity) {
+		parent = (ConfigurationActivity)activity;
+		super.onAttach(activity);
+	}
+
+	@Override
+	public void onDetach() {
+		// TODO Auto-generated method stub
+		super.onDetach();
+	}
+
+	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		this.drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
 		super.onActivityCreated(savedInstanceState);
@@ -111,11 +126,10 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 	@Override
 	public void onStop() {
 		drone.events.removeDroneListener(this);
-		MavLinkStreamRates
-				.setupStreamRatesFromPref((DroidPlannerApp) getActivity()
-						.getApplication());
+		resetDataStreamingForRcSetup();
 		super.onStop();
 	}
+
 
 	@Override
 	public void onResume() {
@@ -152,6 +166,12 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 		default:
 			break;
 		}
+	}
+
+	private void resetDataStreamingForRcSetup() {
+		MavLinkStreamRates
+		.setupStreamRatesFromPref((DroidPlannerApp) getActivity()
+				.getApplication());
 	}
 
 	private void setupDataStreamingForRcSetup() {

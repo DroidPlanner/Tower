@@ -1,5 +1,8 @@
 package com.droidplanner.activitys;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -9,6 +12,7 @@ import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.MenuItem;
 
 import com.droidplanner.R;
@@ -23,11 +27,12 @@ import com.droidplanner.fragments.SettingsFragment;
 import com.droidplanner.fragments.TuningFragment;
 import com.droidplanner.widgets.viewPager.TabPageIndicator;
 
-public class ConfigurationActivity extends SuperUI{
+public class ConfigurationActivity extends SuperUI implements OnPageChangeListener{
 
 	public static final String SCREEN_INTENT = "screen";
     public static final String SETTINGS = "settings";
-
+    private List<OnPageChangeListener>pageListeners = new ArrayList<OnPageChangeListener>();
+    
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -42,7 +47,8 @@ public class ConfigurationActivity extends SuperUI{
         final TabPageIndicator tabIndicator = (TabPageIndicator)findViewById(R.id
                 .configuration_tab_strip);
         tabIndicator.setViewPager(viewPager);
-
+        tabIndicator.setOnPageChangeListener(this);
+        
 		final ActionBar actionBar = getActionBar();
         if(actionBar != null){
 		    actionBar.setDisplayHomeAsUpEnabled(true);
@@ -71,6 +77,21 @@ public class ConfigurationActivity extends SuperUI{
 		return super.onOptionsItemSelected(item);
 	}
 
+	public void addOnPageChangeListener(OnPageChangeListener listener){
+		if(listener==null)
+			return;
+		
+		if(pageListeners!=null && !pageListeners.contains(listener))
+			pageListeners.add(listener);
+	}
+
+	public void removeOnPageChangeListener(OnPageChangeListener listener){
+		if(listener==null)
+			return;
+		
+		if(pageListeners!=null && pageListeners.contains(listener))
+			pageListeners.remove(listener);
+	}
     /**
      * This is the fragment pager adapter to handle the tabs of the Configuration activity.
      * @since 1.2.0
@@ -146,5 +167,28 @@ public class ConfigurationActivity extends SuperUI{
         }
 
     }
+
+	@Override
+	public void onPageScrollStateChanged(int arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void onPageScrolled(int arg0, float arg1, int arg2) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void onPageSelected(int arg0) {
+		if(pageListeners!=null && pageListeners.size()>0){
+			for(OnPageChangeListener listener : pageListeners){
+				listener.onPageSelected(arg0);
+			}
+		}
+	}
 
 }

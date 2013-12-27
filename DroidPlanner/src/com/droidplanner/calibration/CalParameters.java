@@ -3,8 +3,6 @@ package com.droidplanner.calibration;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.util.Log;
-
 import com.droidplanner.drone.Drone;
 import com.droidplanner.parameters.Parameter;
 
@@ -132,7 +130,6 @@ public class CalParameters {
 		for (Parameter param : calParameterItems) {
 			if (param.name.contentEquals(paramName)) {
 				param.value = value;
-				Log.d("CAL", param.name + ": " + String.valueOf(value));
 				return;
 			}
 		}
