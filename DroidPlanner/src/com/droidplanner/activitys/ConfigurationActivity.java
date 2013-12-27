@@ -27,46 +27,48 @@ import com.droidplanner.fragments.SettingsFragment;
 import com.droidplanner.fragments.TuningFragment;
 import com.droidplanner.widgets.viewPager.TabPageIndicator;
 
-public class ConfigurationActivity extends SuperUI implements OnPageChangeListener{
+public class ConfigurationActivity extends SuperUI implements
+		OnPageChangeListener {
 
 	public static final String SCREEN_INTENT = "screen";
-    public static final String SETTINGS = "settings";
-    private List<OnPageChangeListener>pageListeners = new ArrayList<OnPageChangeListener>();
-    
+	public static final String SETTINGS = "settings";
+	private ViewPager viewPager;
+
+	private List<OnPageChangeListener> pageListeners = new ArrayList<OnPageChangeListener>();
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_configuration);
 
-        final ConfigurationPagerAdapter pagerAdapter = new ConfigurationPagerAdapter
-                (getApplicationContext(), getFragmentManager());
+		final ConfigurationPagerAdapter pagerAdapter = new ConfigurationPagerAdapter(
+				getApplicationContext(), getFragmentManager());
 
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.configuration_pager);
-        viewPager.setAdapter(pagerAdapter);
+		final ViewPager viewPager = (ViewPager) findViewById(R.id.configuration_pager);
+		viewPager.setAdapter(pagerAdapter);
+		this.viewPager = viewPager;
+		
+		final TabPageIndicator tabIndicator = (TabPageIndicator) findViewById(R.id.configuration_tab_strip);
+		tabIndicator.setViewPager(viewPager);
+		tabIndicator.setOnPageChangeListener(this);
 
-        final TabPageIndicator tabIndicator = (TabPageIndicator)findViewById(R.id
-                .configuration_tab_strip);
-        tabIndicator.setViewPager(viewPager);
-        tabIndicator.setOnPageChangeListener(this);
-        
 		final ActionBar actionBar = getActionBar();
-        if(actionBar != null){
-		    actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+		if (actionBar != null) {
+			actionBar.setDisplayHomeAsUpEnabled(true);
+		}
 
-	    Intent intent = getIntent();
-	    String stringExtra = intent.getStringExtra(SCREEN_INTENT);
-		if(SETTINGS.equalsIgnoreCase(stringExtra)){
-	    	viewPager.setCurrentItem(0);
-	    }
+		Intent intent = getIntent();
+		String stringExtra = intent.getStringExtra(SCREEN_INTENT);
+		if (SETTINGS.equalsIgnoreCase(stringExtra)) {
+			viewPager.setCurrentItem(0);
+		}
 	}
-
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		super.onDroneEvent(event,drone);
+		super.onDroneEvent(event, drone);
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -77,115 +79,118 @@ public class ConfigurationActivity extends SuperUI implements OnPageChangeListen
 		return super.onOptionsItemSelected(item);
 	}
 
-	public void addOnPageChangeListener(OnPageChangeListener listener){
-		if(listener==null)
+	public void addOnPageChangeListener(OnPageChangeListener listener) {
+		if (listener == null)
 			return;
-		
-		if(pageListeners!=null && !pageListeners.contains(listener))
+
+		if (pageListeners != null && !pageListeners.contains(listener))
 			pageListeners.add(listener);
 	}
 
-	public void removeOnPageChangeListener(OnPageChangeListener listener){
-		if(listener==null)
+	public void removeOnPageChangeListener(OnPageChangeListener listener) {
+		if (listener == null)
 			return;
-		
-		if(pageListeners!=null && pageListeners.contains(listener))
+
+		if (pageListeners != null && pageListeners.contains(listener))
 			pageListeners.remove(listener);
 	}
-    /**
-     * This is the fragment pager adapter to handle the tabs of the Configuration activity.
-     * @since 1.2.0
-     */
-    private static class ConfigurationPagerAdapter extends FragmentPagerAdapter {
 
-        /**
-         * Application context object used to retrieve the tabs' title.
-         * @since 1.2.0
-         */
-        private final Context mContext;
+	/**
+	 * This is the fragment pager adapter to handle the tabs of the
+	 * Configuration activity.
+	 * 
+	 * @since 1.2.0
+	 */
+	private static class ConfigurationPagerAdapter extends FragmentPagerAdapter {
 
-        public ConfigurationPagerAdapter(Context context, FragmentManager fm){
-            super(fm);
-            mContext = context;
-        }
+		/**
+		 * Application context object used to retrieve the tabs' title.
+		 * 
+		 * @since 1.2.0
+		 */
+		private final Context mContext;
 
-        @Override
-        public Fragment getItem(int position){
-            switch(position){
-                case 0:
-                    return new SettingsFragment();
+		public ConfigurationPagerAdapter(Context context, FragmentManager fm) {
+			super(fm);
+			mContext = context;
+		}
 
-                case 1:
-                    return new TuningFragment();
+		@Override
+		public Fragment getItem(int position) {
+			switch (position) {
+			case 0:
+				return new SettingsFragment();
 
-                case 2:
-                    return new RcSetupFragment();
+			case 1:
+				return new TuningFragment();
 
-                case 3:
-                    return new ModesSetupFragment();
+			case 2:
+				return new RcSetupFragment();
 
-                case 4:
-                    return new ChecklistFragment();
+			case 3:
+				return new ModesSetupFragment();
 
-                case 5:
-                    return new ParamsFragment();
+			case 4:
+				return new ChecklistFragment();
 
-                default:
-                    return null;
-            }
-        }
+			case 5:
+				return new ParamsFragment();
 
-        @Override
-        public int getCount(){
-            return 6;
-        }
+			default:
+				return null;
+			}
+		}
 
-        @Override
-        public CharSequence getPageTitle(int position){
-            switch(position){
-                case 0:
-                    return mContext.getText(R.string.settings);
+		@Override
+		public int getCount() {
+			return 6;
+		}
 
-                case 1:
-                    return mContext.getString(R.string.screen_tuning);
+		@Override
+		public CharSequence getPageTitle(int position) {
+			switch (position) {
+			case 0:
+				return mContext.getText(R.string.settings);
 
-                case 2:
-                    return mContext.getText(R.string.screen_rc);
+			case 1:
+				return mContext.getString(R.string.screen_tuning);
 
-                case 3:
-                    return mContext.getString(R.string.screen_modes);
+			case 2:
+				return mContext.getText(R.string.screen_rc);
 
-                case 4:
-                    return mContext.getString(R.string.screen_checklist);
+			case 3:
+				return mContext.getString(R.string.screen_modes);
 
-                case 5:
-                    return mContext.getText(R.string.screen_parameters);
+			case 4:
+				return mContext.getString(R.string.screen_checklist);
 
-                default:
-                    return null;
-            }
-        }
+			case 5:
+				return mContext.getText(R.string.screen_parameters);
 
-    }
+			default:
+				return null;
+			}
+		}
+
+	}
 
 	@Override
 	public void onPageScrollStateChanged(int arg0) {
-		// TODO Auto-generated method stub
-		
+		if (arg0 == ViewPager.SCROLL_STATE_IDLE) {
+			onPageSelected(viewPager.getCurrentItem());
+		}
 	}
-
 
 	@Override
 	public void onPageScrolled(int arg0, float arg1, int arg2) {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	@Override
 	public void onPageSelected(int arg0) {
-		if(pageListeners!=null && pageListeners.size()>0){
-			for(OnPageChangeListener listener : pageListeners){
+		if (pageListeners != null && pageListeners.size() > 0) {
+			for (OnPageChangeListener listener : pageListeners) {
 				listener.onPageSelected(arg0);
 			}
 		}
