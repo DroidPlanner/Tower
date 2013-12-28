@@ -2,28 +2,39 @@ package com.droidplanner.fragments.calibration.fs;
 
 import com.droidplanner.R;
 import com.droidplanner.fragments.calibration.FragmentCalibration;
-
-import android.os.Bundle;
+import com.droidplanner.fragments.calibration.FragmentSetupSidePanel;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 public class FragmentSetupFS extends FragmentCalibration {
+
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_setup_fs_main, container,
+	protected View getView(LayoutInflater inflater, ViewGroup container) {
+		return inflater.inflate(R.layout.fragment_setup_fs_main, container,
 				false);
-		setupLocalViews(view);
-
-		return view;
-	}
-
-	private void setupLocalViews(View view) {
 	}
 
 	@Override
-	protected void setupSidePanel() {
+	protected FragmentSetupSidePanel getSidePanel() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected void setupLocalViews(View view) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void initSidePanel() {
+/*		sidePanel = (FragmentSetupIMUCalibrate) fragmentManager
+				.findFragmentById(R.id.fragment_setup_sidepanel);
+*/	}
+
+	@Override
+	protected void updateSidePanel() {
 		// TODO Auto-generated method stub
 		
 	}

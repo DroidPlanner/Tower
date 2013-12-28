@@ -103,7 +103,7 @@ public class SetupFragment extends Fragment implements OnDroneListner, OnItemSel
 		
 		
 		final ArrayAdapter<String> adapter=new ArrayAdapter<String>(parent, R.layout.spinner_setup);
-		adapter.add("Acc Calibration");
+		adapter.add("ACC Calibration");
 		adapter.add("Compass Calibration");
 		adapter.add("Failsafe setup");
 		spinnerSetup.setAdapter(adapter);
@@ -116,8 +116,6 @@ public class SetupFragment extends Fragment implements OnDroneListner, OnItemSel
 			
 			fragmentManager.beginTransaction()
 					.add(R.id.fragment_setup_mainpanel, setupPanel).commit();
-		} else {
-//			cancel();
 		}
 	}
 	

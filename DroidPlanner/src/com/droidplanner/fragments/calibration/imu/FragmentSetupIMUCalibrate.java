@@ -1,8 +1,9 @@
 package com.droidplanner.fragments.calibration.imu;
 
 import com.droidplanner.R;
+import com.droidplanner.fragments.calibration.FragmentCalibration;
+import com.droidplanner.fragments.calibration.FragmentSetupSidePanel;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class FragmentSetupIMUCalibrate extends Fragment implements OnClickListener{
+public class FragmentSetupIMUCalibrate extends FragmentSetupSidePanel implements OnClickListener{
 	private FragmentSetupIMU parent;
 	private Button btnStep;
 	private TextView textDesc;
@@ -38,12 +39,9 @@ public class FragmentSetupIMUCalibrate extends Fragment implements OnClickListen
 		
 	}
 
-	public void setParent(FragmentSetupIMU parent) {
-		this.parent = parent;
-	}
-
-	public FragmentSetupIMU getParent() {
-		return this.parent;
+	@Override
+	public void setParent(FragmentCalibration parent) {
+		this.parent = (FragmentSetupIMU) parent;
 	}
 
 	public void setButtonCaption(int id){
@@ -55,4 +53,5 @@ public class FragmentSetupIMUCalibrate extends Fragment implements OnClickListen
 		if(textDesc!=null)
 			textDesc.setText(id);
 	}
+
 }
