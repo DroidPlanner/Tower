@@ -218,6 +218,7 @@
     <string name="screen_modes">Modes</string>
     <string name="screen_cal">Calibration</string>
     <string name="screen_checklist">Checklist</string>
+    <string name="setup_fs_title">Failsafe Setup</string>
     <string name="setup_mag_title">Compass Calibration</string>
     <string name="setup_imu_title">Accelerometer Calibration</string>
     <string name="setup_imu_start">Press Calibrate to start IMU calibration. Ensure vehicle is placed on a flat surface before beginning the calibration process</string>

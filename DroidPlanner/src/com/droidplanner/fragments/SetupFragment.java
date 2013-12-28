@@ -20,6 +20,7 @@ import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
 import com.droidplanner.fragments.calibration.FragmentCalibration;
+import com.droidplanner.fragments.calibration.fs.FragmentSetupFS;
 import com.droidplanner.fragments.calibration.imu.FragmentSetupIMU;
 import com.droidplanner.fragments.calibration.mag.FragmentSetupMAG;
 
@@ -129,10 +130,18 @@ public class SetupFragment extends Fragment implements OnDroneListner, OnItemSel
 				setupPanel = getMAGPanel();
 			break;
 		case 2:
+				setupPanel = getFSPanel();
 			break;
 		}
 		fragmentManager.beginTransaction()
 				.replace(R.id.fragment_setup_mainpanel, setupPanel).commit();
+	}
+
+	private FragmentCalibration getFSPanel() {
+		setupPanel = new FragmentSetupFS();
+		setupPanel.setParent(this);
+		textViewTitle.setText(R.string.setup_fs_title);
+		return setupPanel;
 	}
 
 	private FragmentCalibration getMAGPanel() {
