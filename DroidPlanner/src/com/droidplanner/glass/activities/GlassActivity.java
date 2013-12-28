@@ -15,6 +15,7 @@ import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperActivity;
 import com.droidplanner.fragments.SettingsFragment;
 import com.droidplanner.glass.fragments.ChartFragment;
+import com.droidplanner.glass.fragments.GlassMapFragment;
 import com.droidplanner.glass.fragments.HudFragment;
 import com.droidplanner.glass.utils.GlassUtils;
 import com.droidplanner.utils.Constants;
@@ -112,6 +113,20 @@ public class GlassActivity extends SuperActivity implements DroidPlannerApp.Conn
                 }
                 return true;
             }
+
+            case R.id.menu_glass_map:{
+                //Replace the current fragment with the map fragment.
+                Fragment currentFragment = getCurrentFragment();
+                if(!(currentFragment instanceof GlassMapFragment)){
+                    currentFragment = new GlassMapFragment();
+                    mFragManager.beginTransaction()
+                            .replace(R.id.glass_layout, currentFragment)
+                            .addToBackStack(null)
+                            .commit();
+                }
+                return true;
+            }
+
 
             default:
                 return super.onOptionsItemSelected(item);

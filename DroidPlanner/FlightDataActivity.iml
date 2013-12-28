@@ -33,6 +33,8 @@
     <orderEntry type="library" exported="" name="android-support-v13" level="application" />
     <orderEntry type="library" exported="" name="gdk" level="application" />
     <orderEntry type="module" module-name="HorizontalListView" exported="" />
+    <orderEntry type="library" name="osmdroid-android-4.0" level="project" />
+    <orderEntry type="library" name="slf4j-android-1.5.8" level="project" />
   </component>
 </module>
 
