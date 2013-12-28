@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
@@ -20,11 +21,14 @@ import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
 import com.droidplanner.fragments.calibration.FragmentCalibration;
 import com.droidplanner.fragments.calibration.imu.FragmentSetupIMU;
+import com.droidplanner.fragments.calibration.mag.FragmentSetupMAG;
 
 public class SetupFragment extends Fragment implements OnDroneListner, OnItemSelectedListener {
 	private Drone drone;
+	
 	private ConfigurationActivity parent;
 	private Spinner spinnerSetup;
+	private TextView textViewTitle;
 	
 	private FragmentManager fragmentManager;
 	private FragmentCalibration setupPanel;
@@ -92,8 +96,10 @@ public class SetupFragment extends Fragment implements OnDroneListner, OnItemSel
 	}
 
 	private void setupLocalViews(View view) {
+		textViewTitle = (TextView)view.findViewById(R.id.textViewSetupTitle);
 		spinnerSetup = (Spinner)view.findViewById(R.id.spinnerSetupType);
 		spinnerSetup.setOnItemSelectedListener(this);
+		
 		
 		final ArrayAdapter<String> adapter=new ArrayAdapter<String>(parent, R.layout.spinner_setup);
 		adapter.add("Acc Calibration");
@@ -120,6 +126,7 @@ public class SetupFragment extends Fragment implements OnDroneListner, OnItemSel
 				setupPanel = getIMUPanel();
 			break;
 		case 1:
+				setupPanel = getMAGPanel();
 			break;
 		case 2:
 			break;
@@ -128,9 +135,17 @@ public class SetupFragment extends Fragment implements OnDroneListner, OnItemSel
 				.replace(R.id.fragment_setup_mainpanel, setupPanel).commit();
 	}
 
+	private FragmentCalibration getMAGPanel() {
+		setupPanel = new FragmentSetupMAG();
+		setupPanel.setParent(this);
+		textViewTitle.setText(R.string.setup_mag_title);
+		return setupPanel;
+	}
+
 	private FragmentCalibration getIMUPanel() {
 		setupPanel = new FragmentSetupIMU();
 		setupPanel.setParent(this);
+		textViewTitle.setText(R.string.setup_imu_title);
 		return setupPanel;
 	}
 

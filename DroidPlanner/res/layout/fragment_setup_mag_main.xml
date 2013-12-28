@@ -12,7 +12,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="25dp"
         android:layout_marginTop="29dp"
-        android:text="IMU Main Screen"
+        android:text="MAG Main Screen"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#ffff" />
 

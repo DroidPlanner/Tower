@@ -136,7 +136,7 @@ public class ConfigurationActivity extends SuperUI{
                     return mContext.getText(R.string.screen_rc);
 
                 case 3:
-                    return mContext.getString(R.string.screen_imu);
+                    return mContext.getString(R.string.screen_cal);
 
                 case 4:
                     return mContext.getString(R.string.screen_modes);

@@ -1,4 +1,4 @@
-package com.droidplanner.fragments.calibration.imu;
+package com.droidplanner.fragments.calibration.mag;
 
 import com.droidplanner.R;
 import com.droidplanner.fragments.SetupFragment;
@@ -10,13 +10,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
-public class FragmentSetupIMU extends FragmentCalibration implements OnClickListener{
+public class FragmentSetupMAG extends FragmentCalibration implements OnClickListener{
 	private SetupFragment parent;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_setup_imu_main, container,
+		View view = inflater.inflate(R.layout.fragment_setup_mag_main, container,
 				false);
 		setupLocalViews(view);
 
