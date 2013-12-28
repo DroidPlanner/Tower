@@ -10,10 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public abstract class FragmentCalibration extends Fragment {
-	protected SetupFragment parent;
-	protected FragmentSetupSidePanel sidePanel;
+	protected static SetupFragment parent;
+	protected static FragmentSetupSidePanel sidePanel;
 	protected FragmentManager fragmentManager;
-
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		fragmentManager = getFragmentManager();
@@ -37,7 +37,7 @@ public abstract class FragmentCalibration extends Fragment {
 	public void setParent(SetupFragment parent) {
 		this.parent = parent;
 	}
-
+	
 	protected void setupSidePanel() {
 		if (sidePanel == null) {
 			sidePanel = (FragmentSetupSidePanel) getSidePanel();

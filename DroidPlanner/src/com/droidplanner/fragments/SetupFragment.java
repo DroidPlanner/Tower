@@ -95,7 +95,11 @@ public class SetupFragment extends Fragment implements OnDroneListner, OnItemSel
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+	public Drone getDrone(){
+		return this.drone;
+	}
+	
 	private void setupLocalViews(View view) {
 		textViewTitle = (TextView)view.findViewById(R.id.textViewSetupTitle);
 		spinnerSetup = (Spinner)view.findViewById(R.id.spinnerSetupType);

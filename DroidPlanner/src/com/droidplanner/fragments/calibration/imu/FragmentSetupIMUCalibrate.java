@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 public class FragmentSetupIMUCalibrate extends FragmentSetupSidePanel implements
 		OnClickListener {
-	private FragmentSetupIMU parent;
+	private static FragmentSetupIMU parent;
 	private Button btnStep;
 	private TextView textDesc;
 
@@ -38,7 +38,6 @@ public class FragmentSetupIMUCalibrate extends FragmentSetupSidePanel implements
 	public void onClick(View v) {
 		if (parent != null) {
 			parent.doCalibrationStep();
-			updateTitle(parent.calibration_step);
 		}
 	}
 
