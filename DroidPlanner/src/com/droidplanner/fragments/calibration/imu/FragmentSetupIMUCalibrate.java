@@ -1,6 +1,7 @@
 package com.droidplanner.fragments.calibration.imu;
 
 import com.droidplanner.R;
+
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class FragmentSetupIMUStep extends Fragment implements OnClickListener{
+public class FragmentSetupIMUCalibrate extends Fragment implements OnClickListener{
 	private FragmentSetupIMU parent;
 	private Button btnStep;
 	private TextView textDesc;
@@ -18,11 +19,11 @@ public class FragmentSetupIMUStep extends Fragment implements OnClickListener{
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_setup_imu_step, container,
+		View view = inflater.inflate(R.layout.fragment_setup_imu_calibrate, container,
 				false);
 		setupLocalViews(view);
 
-		return super.onCreateView(inflater, container, savedInstanceState);
+		return view;
 	}
 
 	private void setupLocalViews(View view) {
@@ -37,14 +38,14 @@ public class FragmentSetupIMUStep extends Fragment implements OnClickListener{
 		
 	}
 
+	public void setParent(FragmentSetupIMU parent) {
+		this.parent = parent;
+	}
+
 	public FragmentSetupIMU getParent() {
 		return this.parent;
 	}
 
-	public void setParent(FragmentSetupIMU parent) {
-		this.parent = parent;
-	}
-	
 	public void setButtonCaption(int id){
 		if(btnStep!=null)
 			btnStep.setText(id);

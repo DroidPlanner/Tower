@@ -21,4 +21,10 @@ public class FragmentSetupFS extends FragmentCalibration {
 
 	private void setupLocalViews(View view) {
 	}
+
+	@Override
+	protected void setupSidePanel() {
+		// TODO Auto-generated method stub
+		
+	}
 }
