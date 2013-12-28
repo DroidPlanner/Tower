@@ -1,8 +1,6 @@
 package com.droidplanner.fragments.calibration.imu;
 
 import com.droidplanner.R;
-import com.droidplanner.fragments.SetupFragment;
-
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,14 +11,14 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class FragmentSetupIMUStep extends Fragment implements OnClickListener{
-	private SetupFragment parent;
+	private FragmentSetupIMU parent;
 	private Button btnStep;
 	private TextView textDesc;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_setup_rc, container,
+		View view = inflater.inflate(R.layout.fragment_setup_imu_step, container,
 				false);
 		setupLocalViews(view);
 
@@ -39,11 +37,11 @@ public class FragmentSetupIMUStep extends Fragment implements OnClickListener{
 		
 	}
 
-	public SetupFragment getParent() {
-		return parent;
+	public FragmentSetupIMU getParent() {
+		return this.parent;
 	}
 
-	public void setParent(SetupFragment parent) {
+	public void setParent(FragmentSetupIMU parent) {
 		this.parent = parent;
 	}
 	

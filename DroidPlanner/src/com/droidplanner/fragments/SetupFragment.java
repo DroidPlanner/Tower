@@ -2,6 +2,7 @@ package com.droidplanner.fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,16 +18,29 @@ import com.droidplanner.activitys.ConfigurationActivity;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import com.droidplanner.fragments.calibration.FragmentCalibration;
+import com.droidplanner.fragments.calibration.imu.FragmentSetupIMU;
 
 public class SetupFragment extends Fragment implements OnDroneListner, OnItemSelectedListener {
 	private Drone drone;
 	private ConfigurationActivity parent;
 	private Spinner spinnerSetup;
 	
+	private FragmentManager fragmentManager;
+	private FragmentCalibration setupPanel;
+
 	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		this.drone = ((DroidPlannerApp) getActivity().getApplication()).drone;		
-		super.onActivityCreated(savedInstanceState);
+	public void onAttach(Activity activity) {
+		parent = (ConfigurationActivity)activity;
+		super.onAttach(activity);
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		fragmentManager = getFragmentManager();
+		setupPanel = (FragmentCalibration) fragmentManager
+				.findFragmentById(R.id.fragment_setup_mainpanel);
+		super.onCreate(savedInstanceState);
 	}
 
 	@Override
@@ -36,14 +50,15 @@ public class SetupFragment extends Fragment implements OnDroneListner, OnItemSel
   		View view = inflater.inflate(R.layout.fragment_setup, container,
 				false);
 		setupLocalViews(view);		
+		setupFragmentPanel(view);
 
-		return view;	
+		return view;
 	}
 
 	@Override
-	public void onAttach(Activity activity) {
-		parent = (ConfigurationActivity)activity;
-		super.onAttach(activity);
+	public void onActivityCreated(Bundle savedInstanceState) {
+		this.drone = ((DroidPlannerApp) getActivity().getApplication()).drone;		
+		super.onActivityCreated(savedInstanceState);
 	}
 
 	@Override
@@ -56,6 +71,18 @@ public class SetupFragment extends Fragment implements OnDroneListner, OnItemSel
 	public void onStop() {
 		drone.events.removeDroneListener(this);
 		super.onStop();
+	}
+
+	@Override
+	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
+			long arg3) {
+		changeSetupPanel(arg2);
+	}
+
+	@Override
+	public void onNothingSelected(AdapterView<?> arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
@@ -75,17 +102,36 @@ public class SetupFragment extends Fragment implements OnDroneListner, OnItemSel
 		spinnerSetup.setAdapter(adapter);
 	}
 
-	@Override
-	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
-			long arg3) {
-		// TODO Auto-generated method stub
-		
+	private void setupFragmentPanel(View view) {
+		if (setupPanel == null) {
+			setupPanel = new FragmentSetupIMU();
+			setupPanel.setParent(this);
+			
+			fragmentManager.beginTransaction()
+					.add(R.id.fragment_setup_mainpanel, setupPanel).commit();
+		} else {
+//			cancel();
+		}
+	}
+	
+	public void changeSetupPanel(int step) {
+		switch (step) {
+		case 0:
+				setupPanel = getIMUPanel();
+			break;
+		case 1:
+			break;
+		case 2:
+			break;
+		}
+		fragmentManager.beginTransaction()
+				.replace(R.id.fragment_setup_mainpanel, setupPanel).commit();
 	}
 
-	@Override
-	public void onNothingSelected(AdapterView<?> arg0) {
-		// TODO Auto-generated method stub
-		
+	private FragmentCalibration getIMUPanel() {
+		setupPanel = new FragmentSetupIMU();
+		setupPanel.setParent(this);
+		return setupPanel;
 	}
 
 }
