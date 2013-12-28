@@ -7,6 +7,7 @@ import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
 import com.droidplanner.fragments.calibration.FragmentCalibration;
 import com.droidplanner.fragments.calibration.FragmentSetupSidePanel;
 
+import android.provider.CalendarContract.Reminders;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +16,10 @@ import android.widget.TextView;
 
 public class FragmentSetupIMU extends FragmentCalibration implements
 		OnDroneListner {
-	private static String msg, offset, scaling;
+	private static String msg;
+	private static String offset;
+	private static String scaling;
+	private static String remindMsg="";
 	boolean calibrationPassed;
 	private static int calibration_step = 0;
 	private static TextView tv;
@@ -97,10 +101,24 @@ public class FragmentSetupIMU extends FragmentCalibration implements
 		if (event == DroneEventsType.CALIBRATION_IMU) {
 			processMAVMessage(drone.calibrationSetup.getMessage());
 		}
+		else if(event == DroneEventsType.CALIBRATION_TIMEOUT){
+			if(parent.getDrone()!=null){
+				Log.d("CAL", "remind :" + msg);
+				parent.getDrone().tts.speak(msg);
+			}
+		}
 	}
 
 	private void processMAVMessage(String message) {
-		Log.d("CAL", message);
+		if(message.contains("Place")||message.contains("Calibration"))
+			processOrientation(message);
+		else if(message.contains("offset"))
+			offset = message;
+		else if(message.contains("scaling"))
+			scaling = message;
+	}
+
+	private void processOrientation(String message) {
 		if(message.contains("level"))
 			calibration_step = 1;
 		else if(message.contains("LEFT"))
@@ -113,20 +131,10 @@ public class FragmentSetupIMU extends FragmentCalibration implements
 			calibration_step = 5;
 		else if(message.contains("BACK"))
 			calibration_step = 6;
-		else if(message.contains("offset")){
-			offset = message;
-			return;
-		}
-		else if(message.contains("scaling")){
-			scaling = message;
-			return;
-		}
-		else if(message.contains("Calibration")){
+		else if(message.contains("Calibration"))
 			calibration_step=7;
-				msg = message;
-		}
 		
-		
+		msg = message;
 		
 		((FragmentSetupIMUCalibrate) sidePanel).updateTitle(calibration_step);
 	}

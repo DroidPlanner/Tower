@@ -10,6 +10,7 @@ import com.droidplanner.drone.DroneVariable;
 public class Calibration extends DroneVariable{
 	private Drone myDrone;
 	private String mavMsg;
+	private static boolean calibrating;
 	
 	public Calibration(Drone drone) {
 		super(drone);
@@ -17,6 +18,7 @@ public class Calibration extends DroneVariable{
 	}
 
 	public void startCalibration() {
+		Calibration.calibrating = true;
 		MavLinkCalibration.sendStartCalibrationMessage(myDrone);
 	}
 
@@ -28,10 +30,22 @@ public class Calibration extends DroneVariable{
 		if (msg.msgid == msg_statustext.MAVLINK_MSG_ID_STATUSTEXT) {
 			msg_statustext statusMsg = (msg_statustext) msg;
 			mavMsg = statusMsg.getText();
+			
+			if(mavMsg.contains("Calibration"))
+				Calibration.calibrating = false;
+			
 			myDrone.events.notifyDroneEvent(DroneEventsType.CALIBRATION_IMU);
 		}
 	}
 	public String getMessage(){
 		return mavMsg;
+	}
+	
+	public void setClibrating(boolean flag){
+		Calibration.calibrating = flag;
+	}
+	
+	public static boolean isCalibrating(){
+		return Calibration.calibrating;
 	}
 }

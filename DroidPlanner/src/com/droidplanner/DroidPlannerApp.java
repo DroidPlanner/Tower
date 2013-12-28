@@ -8,6 +8,8 @@ import com.MAVLink.Messages.enums.MAV_MODE_FLAG;
 import com.droidplanner.MAVLink.MavLinkMsgHandler;
 import com.droidplanner.MAVLink.MavLinkStreamRates;
 import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
+import com.droidplanner.drone.variables.Calibration;
 import com.droidplanner.helpers.FollowMe;
 import com.droidplanner.helpers.RecordMe;
 import com.droidplanner.helpers.TTS;
@@ -120,7 +122,8 @@ public class DroidPlannerApp extends ErrorReportApp implements
 				break;
 
 			case LOST_HEARTBEAT:
-				tts.speak("Data link restored");
+				if(!drone.calibrationSetup.isCalibrating())
+					tts.speak("Data link restored");
 				break;
 		case NORMAL_HEARTBEAT:
 			break;
@@ -131,7 +134,11 @@ public class DroidPlannerApp extends ErrorReportApp implements
 	}
 
 	private void onHeartbeatTimeout() {
-		tts.speak("Data link lost, check connection.");
+		if(Calibration.isCalibrating()){ 
+			drone.events.notifyDroneEvent(DroneEventsType.CALIBRATION_TIMEOUT);
+		}
+		else
+			tts.speak("Data link lost, check connection.");
 		heartbeatState = HeartbeatState.LOST_HEARTBEAT;
 		restartWatchdog(HEARTBEAT_LOST_TIMEOUT);
 	}
