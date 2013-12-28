@@ -47,9 +47,17 @@ public abstract class FragmentCalibration extends Fragment {
 						.add(R.id.fragment_setup_sidepanel, sidePanel).commit();
 			}
 		} else {
-			updateSidePanel();
+			doUpdateSidePanel();
 		}
 
+	}
+
+	private void doUpdateSidePanel() {
+		updateSidePanel();
+		if(sidePanel!=null){
+			fragmentManager.beginTransaction()
+			.replace(R.id.fragment_setup_sidepanel, sidePanel).commit();			
+		}
 	}
 
 	protected abstract View getView(LayoutInflater inflater, ViewGroup container);

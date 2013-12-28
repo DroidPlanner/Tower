@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 
 public class FragmentSetupIMU extends FragmentCalibration {
 
+	public int calibration_step = 0;
+
 	@Override
 	protected View getView(LayoutInflater inflater, ViewGroup container) {
 		return inflater.inflate(R.layout.fragment_setup_imu_main,
@@ -36,8 +38,19 @@ public class FragmentSetupIMU extends FragmentCalibration {
 
 	@Override
 	protected void updateSidePanel() {
+		sidePanel = new FragmentSetupIMUCalibrate();
+		sidePanel.setParent(this);
+	}
+
+	public void doCalibrationStep(){
+		calibration_step++;
+		if(calibration_step>7)
+			calibration_step = 0;
+		processCalibrationStep(calibration_step);
+	}
+
+	private void processCalibrationStep(int calibration_step2) {
 		// TODO Auto-generated method stub
 		
 	}
-
 }
