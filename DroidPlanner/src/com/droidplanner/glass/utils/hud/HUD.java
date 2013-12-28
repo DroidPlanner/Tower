@@ -24,11 +24,13 @@ import com.droidplanner.widgets.helpers.RenderThread.canvasPainter;
  * - Some minor layout changes
  */
 
-public class HUD extends SurfaceView implements SurfaceHolder.Callback,
-		OnDroneListner, canvasPainter {
+public class HUD extends SurfaceView implements SurfaceHolder.Callback, OnDroneListner,
+        canvasPainter {
+
 	public RenderThread renderer;
 	int width;
 	int height;
+
 	public HudYaw hudYaw = new HudYaw();
 	public HudInfo hudInfo = new HudInfo();
 	public HurRoll hudRoll = new HurRoll();
@@ -41,12 +43,13 @@ public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 
 	Drone drone;
 
+    public HUD(Context context, AttributeSet attributeSet) {
+        super(context, attributeSet);
+        getHolder().addCallback(this);
+    }
+
 	@Override
 	public void onDraw(Canvas canvas) {
-		if (drone == null) {
-			return;
-		}
-
 		// clear screen
 		canvas.drawColor(Color.rgb(20, 20, 20));
 		canvas.translate(width / 2, hudInfo.attHeightPx / 2
@@ -66,11 +69,6 @@ public class HUD extends SurfaceView implements SurfaceHolder.Callback,
 		hudScroller.drawLeftScroller(this, canvas);
 		hudInfo.drawAttitudeInfoText(this, canvas);
 		hudFailsafe.drawFailsafe(this, canvas);
-	}
-
-	public HUD(Context context, AttributeSet attributeSet) {
-		super(context, attributeSet);
-		getHolder().addCallback(this);
 	}
 
 	@Override
