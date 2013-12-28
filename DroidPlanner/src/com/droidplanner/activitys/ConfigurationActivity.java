@@ -16,7 +16,7 @@ import com.droidplanner.activitys.helpers.SuperUI;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.fragments.ChecklistFragment;
-import com.droidplanner.fragments.IMUSetupFragment;
+import com.droidplanner.fragments.SetupFragment;
 import com.droidplanner.fragments.ModesSetupFragment;
 import com.droidplanner.fragments.ParamsFragment;
 import com.droidplanner.fragments.RcSetupFragment;
@@ -102,7 +102,7 @@ public class ConfigurationActivity extends SuperUI{
                     return new RcSetupFragment();
 
                 case 3:
-                    return new IMUSetupFragment();
+                    return new SetupFragment();
 
                 case 4:
                     return new ModesSetupFragment();

@@ -21,35 +21,44 @@
             android:background="@drawable/rc_setup_rectangle"
             android:text="@string/setup_imu_title" />
 
-        <TextView
-            android:id="@+id/textViewTitle"
-            style="@style/SetupTitle"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
-            android:background="@color/dark_title_bg"
-            android:gravity="center_vertical"
-            android:text="RC options" />
+            android:background="@drawable/wp_title_rectangle"
+            android:orientation="vertical" >
+
+            <Spinner
+                android:id="@+id/spinnerSetupType"
+                style="@style/ModeSpinnerText"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_margin="5dp"
+                android:entries="@array/SetupType" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="3" >
+        android:layout_height="match_parent">
 
-        <RelativeLayout
+        <FrameLayout
+            android:id="@+id/fragment_setup_mainpanel"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="7" >
 
-        </RelativeLayout>
+        </FrameLayout>
 
         <FrameLayout
+            android:id="@+id/fragment_setup_sidepanel"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
             android:background="@color/opaque_white" >
+
         </FrameLayout>
     </LinearLayout>
 
