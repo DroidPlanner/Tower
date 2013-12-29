@@ -7,7 +7,6 @@ import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
 import com.droidplanner.fragments.calibration.FragmentCalibration;
 import com.droidplanner.fragments.calibration.FragmentSetupSidePanel;
 
-import android.provider.CalendarContract.Reminders;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,8 +17,6 @@ import android.widget.TextView;
 public class FragmentSetupIMU extends FragmentCalibration implements
 		OnDroneListner {
 	private static String msg;
-	private static String offset;
-	private static String scaling;
 	boolean calibrationPassed;
 	private static int calibration_step = 0;
 	private static TextView textViewStep;
@@ -27,7 +24,6 @@ public class FragmentSetupIMU extends FragmentCalibration implements
 	private static TextView textViewScaling;
 	private static TextView textViewTimeOut;
 	private static ProgressBar pbTimeOut;
-
 
 	@Override
 	public void onPause() {
@@ -58,7 +54,7 @@ public class FragmentSetupIMU extends FragmentCalibration implements
 		textViewScaling = (TextView) view.findViewById(R.id.TextViewIMUScaling);
 		textViewTimeOut = (TextView) view.findViewById(R.id.textViewIMUTimeOut);
 		pbTimeOut = (ProgressBar) view.findViewById(R.id.progressBarTimeOut);
-		
+
 		pbTimeOut.setVisibility(View.INVISIBLE);
 		textViewTimeOut.setVisibility(View.INVISIBLE);
 		textViewOffset.setVisibility(View.INVISIBLE);
@@ -89,16 +85,23 @@ public class FragmentSetupIMU extends FragmentCalibration implements
 	private void processCalibrationStep(int step) {
 		if (step == 0)
 			startCalibration();
-		else if (step > 0 && step < 7)
+		else if (step > 0 && step < 7) {
 			sendAck(step);
-		else
-		{
+			if (step == 6) {
+				textViewOffset.setVisibility(View.VISIBLE);
+				textViewScaling.setVisibility(View.VISIBLE);
+			}
+		} else {
 			calibration_step = 0;
 			textViewStep.setText(R.string.setup_imu_step);
-			((FragmentSetupIMUCalibrate) sidePanel).updateTitle(calibration_step);			
+
+			textViewOffset.setVisibility(View.INVISIBLE);
+			textViewScaling.setVisibility(View.INVISIBLE);
+
+			((FragmentSetupIMUCalibrate) sidePanel)
+					.updateTitle(calibration_step);
 		}
-			
-		
+
 	}
 
 	private void sendAck(int step) {
@@ -117,9 +120,8 @@ public class FragmentSetupIMU extends FragmentCalibration implements
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		if (event == DroneEventsType.CALIBRATION_IMU) {
 			processMAVMessage(drone.calibrationSetup.getMessage());
-		}
-		else if(event == DroneEventsType.CALIBRATION_TIMEOUT){
-			if(parent.getDrone()!=null){
+		} else if (event == DroneEventsType.CALIBRATION_TIMEOUT) {
+			if (parent.getDrone() != null) {
 				Log.d("CAL", "remind :" + msg);
 				parent.getDrone().tts.speak(msg);
 			}
@@ -127,34 +129,36 @@ public class FragmentSetupIMU extends FragmentCalibration implements
 	}
 
 	private void processMAVMessage(String message) {
-		if(message.contains("Place")||message.contains("Calibration"))
+		Log.d("CAL", message);
+		if (message.contains("Place") || message.contains("Calibration"))
 			processOrientation(message);
-		else if(message.contains("offset"))
-			offset = message;
-		else if(message.contains("scaling"))
-			scaling = message;
+		else if (message.contains("Offsets")) {
+			textViewOffset.setText(message);
+		} else if (message.contains("Scaling")) {
+			textViewScaling.setText(message);
+		}
 	}
 
 	private void processOrientation(String message) {
-		if(message.contains("level"))
+		if (message.contains("level"))
 			calibration_step = 1;
-		else if(message.contains("LEFT"))
+		else if (message.contains("LEFT"))
 			calibration_step = 2;
-		else if(message.contains("RIGHT"))
+		else if (message.contains("RIGHT"))
 			calibration_step = 3;
-		else if(message.contains("DOWN"))
+		else if (message.contains("DOWN"))
 			calibration_step = 4;
-		else if(message.contains("UP"))
+		else if (message.contains("UP"))
 			calibration_step = 5;
-		else if(message.contains("BACK"))
+		else if (message.contains("BACK"))
 			calibration_step = 6;
-		else if(message.contains("Calibration"))
-			calibration_step=7;
-		
+		else if (message.contains("Calibration"))
+			calibration_step = 7;
+
 		msg = message.replace("any key.", "'Next'");
-		
+
 		textViewStep.setText(msg);
-		
+
 		((FragmentSetupIMUCalibrate) sidePanel).updateTitle(calibration_step);
 	}
 }
