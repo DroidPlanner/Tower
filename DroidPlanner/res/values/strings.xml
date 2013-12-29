@@ -223,5 +223,6 @@
     <string name="button_setup_next">Next</string>
     <string name="button_setup_done">Done</string>
     <string name="button_setup_cancel">Cancel</string>
+    <string name="setup_imu_step">To start calibration, press Calibrate</string>
 
 </resources>

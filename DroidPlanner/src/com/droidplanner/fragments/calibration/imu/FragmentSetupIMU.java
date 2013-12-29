@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class FragmentSetupIMU extends FragmentCalibration implements
@@ -19,10 +20,14 @@ public class FragmentSetupIMU extends FragmentCalibration implements
 	private static String msg;
 	private static String offset;
 	private static String scaling;
-	private static String remindMsg="";
 	boolean calibrationPassed;
 	private static int calibration_step = 0;
-	private static TextView tv;
+	private static TextView textViewStep;
+	private static TextView textViewOffset;
+	private static TextView textViewScaling;
+	private static TextView textViewTimeOut;
+	private static ProgressBar pbTimeOut;
+
 
 	@Override
 	public void onPause() {
@@ -48,8 +53,16 @@ public class FragmentSetupIMU extends FragmentCalibration implements
 
 	@Override
 	protected void setupLocalViews(View view) {
-		tv = (TextView) view.findViewById(R.id.textView1);
-
+		textViewStep = (TextView) view.findViewById(R.id.textViewIMUStep);
+		textViewOffset = (TextView) view.findViewById(R.id.TextViewIMUOffset);
+		textViewScaling = (TextView) view.findViewById(R.id.TextViewIMUScaling);
+		textViewTimeOut = (TextView) view.findViewById(R.id.textViewIMUTimeOut);
+		pbTimeOut = (ProgressBar) view.findViewById(R.id.progressBarTimeOut);
+		
+		pbTimeOut.setVisibility(View.INVISIBLE);
+		textViewTimeOut.setVisibility(View.INVISIBLE);
+		textViewOffset.setVisibility(View.INVISIBLE);
+		textViewScaling.setVisibility(View.INVISIBLE);
 	}
 
 	@Override
@@ -78,10 +91,14 @@ public class FragmentSetupIMU extends FragmentCalibration implements
 			startCalibration();
 		else if (step > 0 && step < 7)
 			sendAck(step);
-		else{
+		else
+		{
 			calibration_step = 0;
-			tv.setText(msg);
+			textViewStep.setText(R.string.setup_imu_step);
+			((FragmentSetupIMUCalibrate) sidePanel).updateTitle(calibration_step);			
 		}
+			
+		
 	}
 
 	private void sendAck(int step) {
@@ -134,7 +151,9 @@ public class FragmentSetupIMU extends FragmentCalibration implements
 		else if(message.contains("Calibration"))
 			calibration_step=7;
 		
-		msg = message;
+		msg = message.replace("any key.", "'Next'");
+		
+		textViewStep.setText(msg);
 		
 		((FragmentSetupIMUCalibrate) sidePanel).updateTitle(calibration_step);
 	}
