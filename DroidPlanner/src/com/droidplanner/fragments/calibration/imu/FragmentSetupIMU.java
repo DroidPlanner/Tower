@@ -160,5 +160,10 @@ public class FragmentSetupIMU extends FragmentCalibration implements
 		textViewStep.setText(msg);
 
 		((FragmentSetupIMUCalibrate) sidePanel).updateTitle(calibration_step);
+		if(calibration_step==7){
+			if(parent !=null && parent.getDrone()!=null){
+				parent.getDrone().tts.speak(msg);
+			}
+		}
 	}
 }
