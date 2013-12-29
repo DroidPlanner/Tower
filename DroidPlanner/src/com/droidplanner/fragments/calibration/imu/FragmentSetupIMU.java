@@ -1,6 +1,5 @@
 package com.droidplanner.fragments.calibration.imu;
 
-import java.util.Timer;
 import com.droidplanner.R;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
@@ -138,14 +137,13 @@ public class FragmentSetupIMU extends FragmentCalibration implements
 			processMAVMessage(drone.calibrationSetup.getMessage());
 		} else if (event == DroneEventsType.CALIBRATION_TIMEOUT) {
 			if (parent.getDrone() != null) {
-				Log.d("CAL", "remind :" + msg);
 				parent.getDrone().tts.speak(msg);
+				//TODO: Check if msg is empty - reset the Calibrating isCalibrating flag
 			}
 		}
 	}
 
 	private void processMAVMessage(String message) {
-		Log.d("CAL", message);
 		if (message.contains("Place") || message.contains("Calibration"))
 			processOrientation(message);
 		else if (message.contains("Offsets")) {
@@ -187,7 +185,6 @@ public class FragmentSetupIMU extends FragmentCalibration implements
 			textViewTimeOut.setVisibility(View.INVISIBLE);
 		} else {
 			h.removeCallbacks(runnable);
-			Log.d("CAL", "updating");
 			timeCount = 0;
 			textViewTimeOut.setVisibility(View.VISIBLE);
 			pbTimeOut.setVisibility(View.VISIBLE);
@@ -199,9 +196,7 @@ public class FragmentSetupIMU extends FragmentCalibration implements
 	private Runnable runnable = new Runnable() {
 		   @Override
 		   public void run() {
-		      /* do what you need to do */
 			   updateTimeOutProgress();
-		      /* and here comes the "trick" */
 		      h.postDelayed(this, 100);
 		   }
 		};
