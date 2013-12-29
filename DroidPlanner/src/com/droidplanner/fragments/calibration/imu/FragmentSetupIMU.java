@@ -1,5 +1,6 @@
 package com.droidplanner.fragments.calibration.imu;
 
+import java.util.Timer;
 import com.droidplanner.R;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
@@ -7,6 +8,8 @@ import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
 import com.droidplanner.fragments.calibration.FragmentCalibration;
 import com.droidplanner.fragments.calibration.FragmentSetupSidePanel;
 
+import android.graphics.drawable.Drawable;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,13 +20,19 @@ import android.widget.TextView;
 public class FragmentSetupIMU extends FragmentCalibration implements
 		OnDroneListner {
 	private static String msg;
+	private static int TIMEOUT_MAX = 300;
 	boolean calibrationPassed;
+	private static long timeCount, timeLeft;
 	private static int calibration_step = 0;
+	private static View view;
 	private static TextView textViewStep;
 	private static TextView textViewOffset;
 	private static TextView textViewScaling;
 	private static TextView textViewTimeOut;
 	private static ProgressBar pbTimeOut;
+	private static String timeLeftStr;
+	private static Drawable drawableGood, drawableWarning, drawablePoor;
+	private Handler h = new Handler();
 
 	@Override
 	public void onPause() {
@@ -43,8 +52,9 @@ public class FragmentSetupIMU extends FragmentCalibration implements
 
 	@Override
 	protected View getView(LayoutInflater inflater, ViewGroup container) {
-		return inflater.inflate(R.layout.fragment_setup_imu_main, container,
+		view = inflater.inflate(R.layout.fragment_setup_imu_main, container,
 				false);
+		return view;
 	}
 
 	@Override
@@ -59,6 +69,11 @@ public class FragmentSetupIMU extends FragmentCalibration implements
 		textViewTimeOut.setVisibility(View.INVISIBLE);
 		textViewOffset.setVisibility(View.INVISIBLE);
 		textViewScaling.setVisibility(View.INVISIBLE);
+		timeLeftStr = getResources().getString(R.string.setup_imu_timeleft);
+		drawableGood = getResources().getDrawable(R.drawable.pstate_good);
+		drawableWarning = getResources().getDrawable(R.drawable.pstate_warning);
+		drawablePoor = getResources().getDrawable(R.drawable.pstate_poor);
+
 	}
 
 	@Override
@@ -83,9 +98,10 @@ public class FragmentSetupIMU extends FragmentCalibration implements
 	}
 
 	private void processCalibrationStep(int step) {
-		if (step == 0)
+		if (step == 0) {
 			startCalibration();
-		else if (step > 0 && step < 7) {
+			timeCount = 0;
+		} else if (step > 0 && step < 7) {
 			sendAck(step);
 			if (step == 6) {
 				textViewOffset.setVisibility(View.VISIBLE);
@@ -160,10 +176,57 @@ public class FragmentSetupIMU extends FragmentCalibration implements
 		textViewStep.setText(msg);
 
 		((FragmentSetupIMUCalibrate) sidePanel).updateTitle(calibration_step);
-		if(calibration_step==7){
-			if(parent !=null && parent.getDrone()!=null){
+
+		if (calibration_step == 7) {
+			if (parent != null && parent.getDrone() != null) {
 				parent.getDrone().tts.speak(msg);
 			}
+			h.removeCallbacks(runnable);
+
+			pbTimeOut.setVisibility(View.INVISIBLE);
+			textViewTimeOut.setVisibility(View.INVISIBLE);
+		} else {
+			h.removeCallbacks(runnable);
+			Log.d("CAL", "updating");
+			timeCount = 0;
+			textViewTimeOut.setVisibility(View.VISIBLE);
+			pbTimeOut.setVisibility(View.VISIBLE);
+			h.postDelayed(runnable, 100);
 		}
+	}
+
+	
+	private Runnable runnable = new Runnable() {
+		   @Override
+		   public void run() {
+		      /* do what you need to do */
+			   updateTimeOutProgress();
+		      /* and here comes the "trick" */
+		      h.postDelayed(this, 100);
+		   }
+		};
+	protected static void updateTimeOutProgress() {
+		timeLeft = (int) (TIMEOUT_MAX - timeCount);
+
+		if (timeLeft >= 0) {
+			timeCount++;
+			int secLeft = (int) (timeLeft / 10) + 1;
+
+			pbTimeOut.setMax(TIMEOUT_MAX);
+			pbTimeOut.setProgress((int) timeLeft);
+			textViewTimeOut
+					.setText(timeLeftStr + String.valueOf(secLeft) + "s");
+			if (secLeft > 15)
+				pbTimeOut.setProgressDrawable(drawableGood);
+			else if (secLeft <= 15 && secLeft > 5)
+				pbTimeOut.setProgressDrawable(drawableWarning);
+			else if (secLeft == 5)
+				pbTimeOut.setProgressDrawable(drawablePoor);
+
+		} else {
+			textViewTimeOut.setText(timeLeftStr + "0s");
+
+		}
+
 	}
 }

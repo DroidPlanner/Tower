@@ -224,5 +224,6 @@
     <string name="button_setup_done">Done</string>
     <string name="button_setup_cancel">Cancel</string>
     <string name="setup_imu_step">To start calibration, press Calibrate</string>
-
+    <string name="setup_imu_timeleft">"Time left before next orientation: "</string>
+    
 </resources>

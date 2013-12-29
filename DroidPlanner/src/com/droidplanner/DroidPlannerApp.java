@@ -122,7 +122,7 @@ public class DroidPlannerApp extends ErrorReportApp implements
 				break;
 
 			case LOST_HEARTBEAT:
-				if(!drone.calibrationSetup.isCalibrating())
+				if(!Calibration.isCalibrating())
 					tts.speak("Data link restored");
 				break;
 		case NORMAL_HEARTBEAT:

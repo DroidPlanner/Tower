@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 public class FragmentSetupIMUCalibrate extends FragmentSetupSidePanel implements
 		OnClickListener {
-	private static FragmentSetupIMU parent;
+	private FragmentSetupIMU parent;
 	private Button btnStep;
 	private TextView textDesc;
 
