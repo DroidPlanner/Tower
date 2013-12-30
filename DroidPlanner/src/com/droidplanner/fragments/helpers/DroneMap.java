@@ -61,6 +61,10 @@ public abstract class DroneMap extends OfflineMapFragment implements OnDroneList
 		context = activity.getApplicationContext();
 	}
 	
+	/**
+	 * Save the map camera state on a preference file
+	 * http://stackoverflow.com/questions/16697891/google-maps-android-api-v2-restoring-map-state/16698624#16698624
+	 */
 	public void saveCameraPosition() {
 		CameraPosition camera = mMap.getCameraPosition();
 		SharedPreferences settings = context.getSharedPreferences("MAP", 0);
