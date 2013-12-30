@@ -24,6 +24,7 @@ import com.droidplanner.fragments.mode.ModeAcroFragment;
 import com.droidplanner.fragments.mode.ModeAltholdFragment;
 import com.droidplanner.fragments.mode.ModeAutoFragment;
 import com.droidplanner.fragments.mode.ModeCircleFragment;
+import com.droidplanner.fragments.mode.ModeDisconnectedFragment;
 import com.droidplanner.fragments.mode.ModeDriftFragment;
 import com.droidplanner.fragments.mode.ModeGuidedFragment;
 import com.droidplanner.fragments.mode.ModeLandFragment;
@@ -209,8 +210,11 @@ public class FlightActivity extends SuperUI implements
 			modeInfoPanel = new ModeDriftFragment();
 			break;
 		default:
-			//TODO do something better than just nothing
-			return;
+			modeInfoPanel = new ModeDisconnectedFragment();
+			break;
+		}
+		if (!drone.MavClient.isConnected()) {
+			modeInfoPanel = new ModeDisconnectedFragment();
 		}
 		fragmentManager.beginTransaction()
 				.replace(R.id.modeInfoPanel, modeInfoPanel).commit();		
