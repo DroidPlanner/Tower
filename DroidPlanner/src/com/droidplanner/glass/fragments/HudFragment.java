@@ -18,9 +18,19 @@ public class HudFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_hud, container, false);
 		hudWidget = (HUD) view.findViewById(R.id.hudWidget);
-		hudWidget.setDrone(((SuperActivity) getActivity()).app.drone);
-		hudWidget.update();
 		return view;
 	}
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        ((SuperActivity) getActivity()).app.drone.events.addDroneListener(hudWidget);
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        ((SuperActivity) getActivity()).app.drone.events.removeDroneListener(hudWidget);
+    }
 
 }

@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.droidplanner.glass.utils.hud.HUD
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:hud="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/hudWidget"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
-
-    <com.droidplanner.glass.utils.hud.HUD
-        android:id="@+id/hudWidget"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-</LinearLayout>
+    hud:reticleColor="@android:color/holo_red_dark"
+    hud:reticleRadius="10dp"
+    hud:skyColor="@android:color/holo_blue_dark"
+    hud:groundColor="@android:color/holo_green_dark"
+    hud:failsafeTextSize="25dp"
+    hud:failsafeTextPadding="10dp"
+    hud:textSize="13sp"
+    hud:scrollerBgColor="@android:color/transparent"
+    hud:pitchScaleWidth="40dp"
+    hud:bottomBarHeight="28dp"
+    hud:bottomBarBgColor="@android:color/black"
+    hud:bottomBarVerticalPadding="14dp"
+    hud:bottomBarHorizontalPadding="50dp"
+    hud:topBarHeight="25dp"/>

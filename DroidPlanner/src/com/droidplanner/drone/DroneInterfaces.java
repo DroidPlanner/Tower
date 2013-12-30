@@ -7,8 +7,29 @@ import com.droidplanner.parameters.Parameter;
 
 public class DroneInterfaces {
 
+    /**
+     * Type of drone events generated.
+     */
 	public enum DroneEventsType {
-		ORIENTATION, SPEED, BATTERY, GUIDEDPOINT, NAVIGATION, ATTIUTDE, RADIO, RC_IN, RC_OUT, ARMING, FAILSAFE, MODE, STATE, MISSION, TYPE, HOME,GPS, GPS_FIX,GPS_COUNT;
+		ORIENTATION,
+        SPEED,
+        BATTERY,
+        GUIDEDPOINT,
+        NAVIGATION,
+        ATTIUTDE,
+        RADIO,
+        RC_IN,
+        RC_OUT,
+        ARMING,
+        FAILSAFE,
+        MODE,
+        STATE,
+        MISSION,
+        TYPE,
+        HOME,
+        GPS,
+        GPS_FIX,
+        GPS_COUNT;
 	}
 
 	public interface OnDroneListner {
