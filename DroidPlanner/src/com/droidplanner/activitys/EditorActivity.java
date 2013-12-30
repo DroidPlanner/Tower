@@ -102,6 +102,12 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 	}
 
 	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		planningMapFragment.saveCameraPosition();
+	}
+
+	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		super.onDroneEvent(event,drone);
 		switch (event) {
@@ -122,6 +128,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
+			planningMapFragment.saveCameraPosition();
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
 		}
@@ -137,13 +144,15 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 
 		switch (getTool()) {
 		case MARKER:
-			mission.addWaypoint(point, mission.getDefaultAlt());
+			mission.addWaypoint(point);
 			break;
 		case DRAW:
 			break;
 		case POLY:
 			break;
 		case TRASH:
+			break;
+		case NONE:
 			break;
 		}
 	}
@@ -165,6 +174,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 			break;
 		case MARKER:
 		case TRASH:
+		case NONE:
 			gestureMapFragment.disableGestureDetection();
 			break;
 		}
@@ -204,7 +214,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 				planningMapFragment.mMap);
 		switch (getTool()) {
 		case DRAW:
-			drone.mission.addWaypointsWithDefaultAltitude(points);
+			drone.mission.addWaypoints(points);
 			break;
 		case POLY:
 			drone.mission.addSurveyPolygon(points);

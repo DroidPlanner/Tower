@@ -51,16 +51,28 @@ public class Mission extends DroneVariable implements PathSource{
 		myDrone.events.notifyDroneEvent(DroneEventsType.MISSION);		
 	}
 
-	public void addWaypointsWithDefaultAltitude(List<LatLng> points) {
+	public void addWaypoints(List<LatLng> points) {
+		Altitude alt = getLastAltitude();
 		for (LatLng point : points) {
-			itens.add(new Waypoint(this, point,defaultAlt));
+			itens.add(new Waypoint(this, point,alt));
 		}		
 		myDrone.events.notifyDroneEvent(DroneEventsType.MISSION);
 	}
 
-	public void addWaypoint(LatLng point, Altitude alt) {
-		itens.add(new Waypoint(this,point,alt));
+	public void addWaypoint(LatLng point) {
+		itens.add(new Waypoint(this,point,getLastAltitude()));
 		myDrone.events.notifyDroneEvent(DroneEventsType.MISSION);
+	}
+
+	private Altitude getLastAltitude() {
+		Altitude alt;
+		try{
+			SpatialCoordItem lastItem = (SpatialCoordItem) itens.get(itens.size()-1);
+			alt = lastItem.getAltitude();
+		}catch (Exception e){
+			alt = defaultAlt;			
+		}
+		return alt;
 	}
 	
 	public void replace(MissionItem oldItem, MissionItem newItem) {
@@ -214,6 +226,5 @@ public class Mission extends DroneVariable implements PathSource{
 		}				
 		myDrone.waypointMananger.writeWaypoints(data);
 	}
-
 
 }
