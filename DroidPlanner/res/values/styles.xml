@@ -269,6 +269,7 @@
 	<style name="ModeSpinnerText" >
 		<item name="android:textSize">16dp</item>
 	    <item name="android:textStyle">bold</item>
+	    <item name="android:textColor">#4d4d4d</item>
 	</style>
 
 	 <!-- RC setup screen -->
