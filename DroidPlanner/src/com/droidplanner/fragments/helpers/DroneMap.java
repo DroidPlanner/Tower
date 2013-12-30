@@ -64,7 +64,7 @@ public abstract class DroneMap extends OfflineMapFragment implements OnDroneList
 		act = activity;
 	}
 	
-	private void saveCameraPosition() {
+	public void saveCameraPosition() {
 		Log.d("MAP", "save at "+act.getClass().getName());
 		CameraPosition camera = mMap.getCameraPosition();
 		SharedPreferences settings = context.getSharedPreferences("MAP", 0);
