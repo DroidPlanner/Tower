@@ -11,6 +11,7 @@ import android.view.ActionMode;
 import android.view.ActionMode.Callback;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -246,6 +247,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 	@Override
 	public boolean onCreateActionMode(ActionMode arg0, Menu menu) {
 		menu.add(0, MENU_DELETE, 0, "Delete");
+		editorToolsFragment.getView().setVisibility(View.INVISIBLE);
 		return true;
 	}
 
@@ -255,6 +257,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 		mission.clearSelection();
 		notifySelectionChanged();
 		contextualActionBar = null;
+		editorToolsFragment.getView().setVisibility(View.VISIBLE);
 	}
 
 	@Override
