@@ -165,6 +165,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 			break;
 		case MARKER:
 		case TRASH:
+		case NONE:
 			gestureMapFragment.disableGestureDetection();
 			break;
 		}
