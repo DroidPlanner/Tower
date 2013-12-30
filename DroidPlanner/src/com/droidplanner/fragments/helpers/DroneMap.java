@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +28,6 @@ public abstract class DroneMap extends OfflineMapFragment implements OnDroneList
 	public Drone drone;
 	public Mission mission;
 	protected Context context;
-	private Activity act;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
@@ -61,11 +59,9 @@ public abstract class DroneMap extends OfflineMapFragment implements OnDroneList
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		context = activity.getApplicationContext();
-		act = activity;
 	}
 	
 	public void saveCameraPosition() {
-		Log.d("MAP", "save at "+act.getClass().getName());
 		CameraPosition camera = mMap.getCameraPosition();
 		SharedPreferences settings = context.getSharedPreferences("MAP", 0);
 		SharedPreferences.Editor editor = settings.edit();
@@ -78,7 +74,6 @@ public abstract class DroneMap extends OfflineMapFragment implements OnDroneList
 	}
 
 	private void loadCameraPosition() {
-		Log.d("MAP", "load at "+act.getClass().getName());
 		Builder camera = new CameraPosition.Builder();
 		SharedPreferences settings = context.getSharedPreferences("MAP", 0);
 		camera.bearing(settings.getFloat("bea", 0));
