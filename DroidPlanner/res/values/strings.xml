@@ -67,7 +67,7 @@
     <string name="sidelap">Sidelap:</string>
     <string name="screen_planning">Planning</string>
     <string name="screen_flight_data">Flight Data</string>
-    <string name="screen_rc">RC</string>
+    <string name="screen_rc">Radio Calibration</string>
     <string name="screen_parameters">Parameters</string>
     <string name="screen_camera">Camera</string>
     <string name="screen_gcp">GCP</string>
@@ -183,7 +183,6 @@
     <string name="send_mission">Send mission</string>
     <string name="load_mission">Load mission</string>
     <string name="tune_roll">Manual adjustment of roll and pitch tuning. Rate_P is the primary value to adjust.</string>
-    <string name="rc_options">Assign features to channels 7 and 8 on RC radios. Trigger each feature by bringing the switch to the high position.</string>
     <string name="lointer_unit_turns">turn(s)</string>
     <string name="rowheader_wp_type">WP Type</string>
     <string name="rowheader_wp_alt">ALT</string>
@@ -208,6 +207,30 @@
     <string name="screen_modes">Modes</string>
     <string name="screen_cal">Calibration</string>
     <string name="screen_checklist">Checklist</string>
+    <string name="rc_title_options">RC options</string>
+  	<string name="rc_desc_options">Assign features to channels 7 and 8 on RC radios. Trigger each feature by bringing the switch to the high position.</string>
+  	<string name="rc_desc_minmax">Move the joystics all the way out several times and toggle the swithces, levers and knobs to all possible positions</string>
+  	<string name="rc_title_minmax">Set Min &amp; Max values</string>
+  	<string name="rc_btn_next">Next</string>
+  	<string name="rc_btn_cancel">Cancel</string>
+  	<string name="rc_btn_send">Send</string>
+  	<string name="rc_btn_calibrate">Calibrate</string>
+  	<string name="rc_desc_middle">Set throttle stick to the lowest position and other joysticks, switches, levers and knobs to their center position</string>
+  	<string name="rc_title_middle">Set Center values</string>
+  	<string name="rc_title_complete">Calibration complete</string>
+  	<string name="rc_desc_complete">RC calibration completed. Press \'Save\' to upload data to vehicle</string>
+  	<string name="rc_title_menu">Radio control setup</string>
+  	<string name="rc_desc_menu">Select to calibrate Radio Control signals or set other RC options</string>
+  	<string name="rc_btn_failsafe">RC Failsafe</string>
+  	<string name="rc_title_failsafe">Set RC failsafe</string>
+  	<string name="rc_desc_failsafe">Set the RC failsafe. Failsafe value should be at least 50 units below minimum throttle value</string>
+  	<string name="rc_btn_done">Done</string>
+  	<string name="rc_desc_summary">New RC caliberation data has been saved and uploaded to your vehicle</string>
+  	<string name="rc_setup_title">Radio Calibration</string>
+  	<string name="rc_options_ch7">Channel 7</string>
+  	<string name="rc_options_ch8">Channel 8</string>
+  	<string name="rc_title_downloading">Downloading calibration data</string>
+  	<string name="rc_desc_downloading">DroidPlanner is downloading calibration data from APM. If system is not connected, press Cancel</string>
     <string name="setup_fs_title">Failsafe Setup</string>
     <string name="setup_mag_title">Compass Calibration</string>
     <string name="setup_imu_title">Accelerometer Calibration</string>
@@ -225,5 +248,4 @@
     <string name="button_setup_cancel">Cancel</string>
     <string name="setup_imu_step">To start calibration, press Calibrate</string>
     <string name="setup_imu_timeleft">"Time left before next orientation: "</string>
-    
 </resources>

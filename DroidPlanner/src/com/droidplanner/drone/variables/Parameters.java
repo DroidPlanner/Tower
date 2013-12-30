@@ -8,6 +8,7 @@ import com.MAVLink.Messages.ardupilotmega.msg_param_value;
 import com.droidplanner.MAVLink.MavLinkParameters;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces;
+import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.drone.DroneVariable;
 import com.droidplanner.parameters.Parameter;
 
@@ -21,7 +22,7 @@ import com.droidplanner.parameters.Parameter;
  */
 public class Parameters extends DroneVariable {
     private List<Parameter> parameters = new ArrayList<Parameter>();
-
+    
 	public DroneInterfaces.OnParameterManagerListner parameterListner;
 
 	public Parameters(Drone myDrone) {
@@ -32,7 +33,6 @@ public class Parameters extends DroneVariable {
 		parameters.clear();
 		if(parameterListner!=null)
 			parameterListner.onBeginReceivingParameters();
-
 		MavLinkParameters.requestParametersList(myDrone);
 	}
 
@@ -45,14 +45,13 @@ public class Parameters extends DroneVariable {
 	 */
 	public boolean processMessage(MAVLinkMessage msg) {
 		if (msg.msgid == msg_param_value.MAVLINK_MSG_ID_PARAM_VALUE) {
-			processReceivedParam((msg_param_value) msg);
+				processReceivedParam((msg_param_value) msg);
 			return true;
 		}
 		return false;
 	}
 
 	private void processReceivedParam(msg_param_value m_value) {
-
 		// collect params in parameter list
 		Parameter param = new Parameter(m_value);
 		parameters.add(param);
@@ -66,6 +65,7 @@ public class Parameters extends DroneVariable {
 			if(parameterListner!=null)
 				parameterListner.onEndReceivingParameters(parameters);
 		}
+		myDrone.events.notifyDroneEvent(DroneEventsType.PARAMETER);
 	}
 
 	public void sendParameter(Parameter parameter) {
@@ -74,5 +74,19 @@ public class Parameters extends DroneVariable {
     
 	public void ReadParameter(String name) {
 		MavLinkParameters.readParameter(myDrone, name);
+	}
+	
+	public Parameter getParamter(String name){
+		for(Parameter parameter : parameters){
+			if(parameter.name.equalsIgnoreCase(name))
+				return parameter;
+		}
+		return null;
+	}
+	public Parameter getLastParameter(){
+		if(parameters.size()>0)
+			return parameters.get(parameters.size()-1);
+		
+		return null;
 	}
 }
