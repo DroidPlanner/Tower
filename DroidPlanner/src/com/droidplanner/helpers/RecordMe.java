@@ -56,7 +56,7 @@ public class RecordMe implements LocationListener {
 	public void onLocationChanged(Location location) {
 		// TODO find a better way to do the altitude
 		LatLng coord = new LatLng(location.getLatitude(), location.getLongitude());
-		drone.mission.addWaypoint(coord, drone.mission.getDefaultAlt());
+		drone.mission.addWaypoint(coord);
 	}
 
 	@Override

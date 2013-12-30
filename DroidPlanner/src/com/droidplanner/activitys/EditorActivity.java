@@ -137,7 +137,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 
 		switch (getTool()) {
 		case MARKER:
-			mission.addWaypoint(point, mission.getDefaultAlt());
+			mission.addWaypoint(point);
 			break;
 		case DRAW:
 			break;
@@ -205,7 +205,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 				planningMapFragment.mMap);
 		switch (getTool()) {
 		case DRAW:
-			drone.mission.addWaypointsWithDefaultAltitude(points);
+			drone.mission.addWaypoints(points);
 			break;
 		case POLY:
 			drone.mission.addSurveyPolygon(points);
