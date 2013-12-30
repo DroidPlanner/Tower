@@ -65,7 +65,6 @@
     <string name="flight_altitude">Flight Altitude:</string>
     <string name="overlap">Overlap:</string>
     <string name="sidelap">Sidelap:</string>
-
     <string name="screen_planning">Planning</string>
     <string name="screen_flight_data">Flight Data</string>
     <string name="screen_rc">Radio Calibration</string>
@@ -83,11 +82,10 @@
     <string name="loiter_radius">Loiter Radius</string>
     <string name="loiter_ccw">CCW</string>
     <string name="menu_arm">Arm</string>
-	<string name="menu_disarm">Disarm</string>
+    <string name="menu_disarm">Disarm</string>
     <string name="rtl_Land">Land on reaching RTL position</string>
     <string name="takeoff_pitch">Min. Pitch Angle</string>
-
-	<string name="waypointInfo_Land">Land vehicle at the current location. You must manually exit Auto mode to disarm motors.</string>
+    <string name="waypointInfo_Land">Land vehicle at the current location. You must manually exit Auto mode to disarm motors.</string>
     <string name="waypointInfo_Generic">Generic Waypoint</string>
     <string name="waypointInfo_Loiter">not used.</string>
     <string name="waypointInfo_LoiterN">Orbit the current location for the desired number of turns.</string>
@@ -103,9 +101,7 @@
     <string name="waypointInfo_SetRelay">Set a relay to a condition.</string>
     <string name="waypointInfo_SetRepeatRelay">Cycle a relay on and off for a desired number of cyles with a desired period.</string>
     <string name="waypointInfo_ROI">Sets a location and altitude to point copter towards and to aim an optional camera.</string>
-	<string name="waypointInfo_SetJump">Repeat waypoint</string>
-
-
+    <string name="waypointInfo_SetJump">Repeat waypoint</string>
     <string name="waypointDesc_Waypoint_1" formatted="false">Executing next waypoint immediately, heading is set to %03.0f°</string>
     <string name="waypointDesc_Waypoint_2" formatted="false">Executing next waypoint after %1.1fs, heading is set to %03.0f°</string>
     <string name="waypointDesc_Loiter" formatted="false">Loiter until next command within %1.1fm radius %s, heading is set to %03.0f°</string>
@@ -155,14 +151,14 @@
     <string name="waypoint_coordsrc">Source data :</string>
     <string name="waypoint_jumpto">Jump to waypoint :</string>
     <string name="waypoint_repeat">Repeat waypoint</string>
-	<string name="next">next</string>
-	<string name="menu_map_type">Map Type</string>
-	<string name="menu_map_type_satellite">Satellite</string>
-	<string name="menu_map_type_hybrid">Hybrid</string>
-	<string name="menu_map_type_normal">Normal</string>
-	<string name="menu_map_type_terrain">Terrain</string>
-	<string name="waypoint_AcceptRadius">Acceptance radius</string>
-	<string name="waypoint_orbitalRadius">Orbital radius</string>
+    <string name="next">next</string>
+    <string name="menu_map_type">Map Type</string>
+    <string name="menu_map_type_satellite">Satellite</string>
+    <string name="menu_map_type_hybrid">Hybrid</string>
+    <string name="menu_map_type_normal">Normal</string>
+    <string name="menu_map_type_terrain">Terrain</string>
+    <string name="waypoint_AcceptRadius">Acceptance radius</string>
+    <string name="waypoint_orbitalRadius">Orbital radius</string>
     <string name="none">None</string>
     <string name="metadata_values">Values:</string>
     <string name="metadata_units">Units:</string>
@@ -171,7 +167,6 @@
     <string name="lst_note_hint">To add more rows, just press Enter</string>
     <string name="parameter_row_edit">Edit</string>
     <string name="Orbits">Orbits</string>
-
     <string name="mode_acro">Acro allows a pilot to control rate of rotation directly.</string>
     <string name="mode_althold">Alt Hold automatically controls throttle and maintains alitude. Does not require GPS.</string>
     <string name="mode_auto">Auto follows the scripted mission stored on the vehicle.</string>
@@ -185,28 +180,23 @@
     <string name="mode_rtl">RTL rises to the minimum altitude, returns to the home location and lands. Requires GPS lock.</string>
     <string name="mode_sport">Sport allows a pilot to control rate of rotation directly with the addition of self-leveling.</string>
     <string name="mode_stabilize">Stabilize levels the vehicle in flight.</string>
-
     <string name="send_mission">Send mission</string>
     <string name="load_mission">Load mission</string>
     <string name="tune_roll">Manual adjustment of roll and pitch tuning. Rate_P is the primary value to adjust.</string>
-  
     <string name="lointer_unit_turns">turn(s)</string>
     <string name="rowheader_wp_type">WP Type</string>
     <string name="rowheader_wp_alt">ALT</string>
     <string name="rowheader_wp_no">WP#</string>
     <string name="rowheader_wp_delta">∆ WP</string>
     <string name="rowheader_wp_desc">Description</string>
-
     <string name="wpevent_upload">Uploading mission to APM&#8230;</string>
-    <string name="wpevent_download">Downloading mission from APM&#8230;</string>   
+    <string name="wpevent_download">Downloading mission from APM&#8230;</string>
     <string name="wpevent_retry">Retrying&#8230;</string>
-
     <string name="params_click_to_refresh">Click to refresh parameters from drone</string>
     <string name="metadata_value">Value:</string>
     <string name="metadata_custom_value">** Custom value **</string>
     <string name="refreshing_parameters">Refreshing Parameters...</string>
     <string name="parameters_saved">Parameters saved</string>
-
     <string name="RCFailsafe">Warning! RC Fasilsafe – Returning to Launch</string>
     <string name="GPSFailsafe">Warning! GPS Fasilsafe – Switching to Altitude Hold</string>
     <string name="BatteryFailsafeLand">Warning! Battery Fasilsafe – Returning to Launch</string>
@@ -215,6 +205,7 @@
     <string name="Pause">Pause</string>
     <string name="screen_tuning">Tuning</string>
     <string name="screen_modes">Modes</string>
+    <string name="screen_cal">Calibration</string>
     <string name="screen_checklist">Checklist</string>
     <string name="rc_title_options">RC options</string>
   	<string name="rc_desc_options">Assign features to channels 7 and 8 on RC radios. Trigger each feature by bringing the switch to the high position.</string>
@@ -223,7 +214,7 @@
   	<string name="rc_btn_next">Next</string>
   	<string name="rc_btn_cancel">Cancel</string>
   	<string name="rc_btn_send">Send</string>
-  		<string name="rc_btn_calibrate">Calibrate</string>
+  	<string name="rc_btn_calibrate">Calibrate</string>
   	<string name="rc_desc_middle">Set throttle stick to the lowest position and other joysticks, switches, levers and knobs to their center position</string>
   	<string name="rc_title_middle">Set Center values</string>
   	<string name="rc_title_complete">Calibration complete</string>
@@ -240,5 +231,21 @@
   	<string name="rc_options_ch8">Channel 8</string>
   	<string name="rc_title_downloading">Downloading calibration data</string>
   	<string name="rc_desc_downloading">DroidPlanner is downloading calibration data from APM. If system is not connected, press Cancel</string>
-  			
+    <string name="setup_fs_title">Failsafe Setup</string>
+    <string name="setup_mag_title">Compass Calibration</string>
+    <string name="setup_imu_title">Accelerometer Calibration</string>
+    <string name="setup_imu_start">Press Calibrate to start IMU calibration. Ensure vehicle is placed on a FLAT surface before beginning the calibration process</string>
+    <string name="setup_imu_normal">Place the vehicle on its NORMAL position ensuring very minimal movement and press Next</string>
+    <string name="setup_imu_left">Place the vehicle on its LEFT ensuring very minimal movement and press Next</string>
+    <string name="setup_imu_right">Place the vehicle on its RIGHT ensuring very minimal movement and press Next</string>
+    <string name="setup_imu_nosedown">Place the vehicle NOSE DOWN ensuring very minimal movement and press Next</string>
+    <string name="setup_imu_noseup">Place the vehicle NOSE UP ensuring very minimal movement and press Next</string>
+    <string name="setup_imu_back">Place the vehicle on its BACK ensuring very minimal movement and press Next</string>
+    <string name="setup_imu_completed">Accelerometer calibration completed. If it is not successful, please recalibrate</string>
+    <string name="button_setup_calibrate">Calibrate</string>
+    <string name="button_setup_next">Next</string>
+    <string name="button_setup_done">Done</string>
+    <string name="button_setup_cancel">Cancel</string>
+    <string name="setup_imu_step">To start calibration, press Calibrate</string>
+    <string name="setup_imu_timeleft">"Time left before next orientation: "</string>
 </resources>

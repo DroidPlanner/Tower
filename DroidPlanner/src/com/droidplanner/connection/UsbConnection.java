@@ -86,7 +86,7 @@ public class UsbConnection extends MAVLinkConnection {
 
 		if (sDriver == null) {
 			Log.d("USB", "No Devices found");	
-			throw new IOException();
+			throw new IOException("No Devices found");
 		}
 		else
 		{	

@@ -20,6 +20,7 @@ import com.droidplanner.activitys.helpers.SuperUI;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.fragments.ChecklistFragment;
+import com.droidplanner.fragments.SetupFragment;
 import com.droidplanner.fragments.ModesSetupFragment;
 import com.droidplanner.fragments.ParamsFragment;
 import com.droidplanner.fragments.RcSetupFragment;
@@ -47,7 +48,7 @@ public class ConfigurationActivity extends SuperUI implements
 		final ViewPager viewPager = (ViewPager) findViewById(R.id.configuration_pager);
 		viewPager.setAdapter(pagerAdapter);
 		this.viewPager = viewPager;
-		
+
 		final TabPageIndicator tabIndicator = (TabPageIndicator) findViewById(R.id.configuration_tab_strip);
 		tabIndicator.setViewPager(viewPager);
 		tabIndicator.setOnPageChangeListener(this);
@@ -128,12 +129,15 @@ public class ConfigurationActivity extends SuperUI implements
 				return new RcSetupFragment();
 
 			case 3:
-				return new ModesSetupFragment();
+				return new SetupFragment();
 
 			case 4:
-				return new ChecklistFragment();
+				return new ModesSetupFragment();
 
 			case 5:
+				return new ChecklistFragment();
+
+			case 6:
 				return new ParamsFragment();
 
 			default:
@@ -143,7 +147,7 @@ public class ConfigurationActivity extends SuperUI implements
 
 		@Override
 		public int getCount() {
-			return 6;
+			return 7;
 		}
 
 		@Override
@@ -159,19 +163,21 @@ public class ConfigurationActivity extends SuperUI implements
 				return mContext.getText(R.string.screen_rc);
 
 			case 3:
-				return mContext.getString(R.string.screen_modes);
+				return mContext.getString(R.string.screen_cal);
 
 			case 4:
-				return mContext.getString(R.string.screen_checklist);
+				return mContext.getString(R.string.screen_modes);
 
 			case 5:
+				return mContext.getString(R.string.screen_checklist);
+
+			case 6:
 				return mContext.getText(R.string.screen_parameters);
 
 			default:
 				return null;
 			}
 		}
-
 	}
 
 	@Override

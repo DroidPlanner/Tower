@@ -1,7 +1,9 @@
 package com.droidplanner.fragments;
 
 import android.app.Fragment;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +28,7 @@ public class TelemetryFragment extends Fragment implements OnDroneListner{
 	private TextView climbRate;
 	private TextView altitude;
 	private TextView targetAltitude;
+	private boolean headingModeFPV;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,6 +56,10 @@ public class TelemetryFragment extends Fragment implements OnDroneListner{
 	public void onStart() {
 		super.onStart();
 		drone.events.addDroneListener(this);
+		
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(getActivity().getApplicationContext());		
+		headingModeFPV = prefs.getBoolean("pref_heading_mode", false);
 	}
 
 	@Override
@@ -82,7 +89,11 @@ public class TelemetryFragment extends Fragment implements OnDroneListner{
 		float r = (float) drone.orientation.getRoll();
 		float p = (float) drone.orientation.getPitch();
 		float y = (float) drone.orientation.getYaw();
-
+		
+		if (!headingModeFPV & y<0 ) {
+			y = 360+y;			
+		}
+		
 		hud.setAttitude(r, p, y);
 
 		roll.setText(String.format("%3.0f\u00B0", r));
