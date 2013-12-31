@@ -223,7 +223,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 		default:
 			break;
 		}
-		editorToolsFragment.setTool(EditorTools.MARKER);
+		editorToolsFragment.setTool(EditorTools.NONE);
 	}
 
 	@Override
@@ -282,6 +282,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 			mission.clearSelection();
 			mission.addToSelection(item);
 			notifySelectionChanged();
+			editorToolsFragment.setTool(EditorTools.NONE);
 		}
 		return true;
 	}
@@ -310,7 +311,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 			mission.removeWaypoint(item);
 			mission.clearSelection();
 			if (mission.getItems().size() <= 0) {
-				editorToolsFragment.setTool(EditorTools.MARKER);
+				editorToolsFragment.setTool(EditorTools.NONE);
 			}
 			break;
 		}
