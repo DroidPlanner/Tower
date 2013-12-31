@@ -233,20 +233,29 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 	}
 
 	private static final int MENU_DELETE = 1;
+	private static final int MENU_REVERSE = 2;
 
 	@Override
 	public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-		if (item.getItemId() == MENU_DELETE) {
+		switch(item.getItemId()){
+		case MENU_DELETE:
 			mission.removeWaypoints(mission.getSelected());
 			notifySelectionChanged();
+			mode.finish();
+			return true;
+		case MENU_REVERSE:
+			mission.reverse();
+			notifySelectionChanged();
+			return true;
+		default:
+			return false;
 		}
-		mode.finish();
-		return false;
 	}
 
 	@Override
 	public boolean onCreateActionMode(ActionMode arg0, Menu menu) {
 		menu.add(0, MENU_DELETE, 0, "Delete");
+		menu.add(0, MENU_REVERSE, 0, "Reverse");
 		editorToolsFragment.getView().setVisibility(View.INVISIBLE);
 		return true;
 	}
