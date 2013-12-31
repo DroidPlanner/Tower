@@ -83,7 +83,9 @@ public class GlassActivity extends SuperActivity implements DroidPlannerApp.Conn
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_glass_activity, menu);
-		SelectModeSpinner barMode = (SelectModeSpinner) menu.findItem(R.id.menu_bar_mode);
+
+		SelectModeSpinner barMode = (SelectModeSpinner) menu.findItem(R.id.menu_bar_mode)
+                .getActionView();
 		barMode.buildSpinner(this, drone);
         return true;
     }

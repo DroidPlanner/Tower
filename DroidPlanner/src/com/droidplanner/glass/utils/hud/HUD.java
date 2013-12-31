@@ -218,9 +218,13 @@ public class HUD extends View implements OnDroneListner {
     public Paint whiteThickTics;
     public Paint whiteThinTics;
     public Paint blackSolid;
-	
-	private final Rect commonRect = new Rect();
-	private final RectF commonRectF = new RectF();
+
+    /*
+    Common variables, used to avoid unnecessary allocation within draw's related calls.
+     */
+    private final Path commonPath = new Path();
+    private final Rect commonRect = new Rect();
+    private final RectF commonRectFloat = new RectF();
 
     /*
     Drone's properties
@@ -416,7 +420,7 @@ public class HUD extends View implements OnDroneListner {
 
 
         scrollerHeightPx = Math.round(attHeightPx * SCROLLER_MAX_HEIGHT_FACTOR);
-            tempAttTextClearance = Math.round((attHeightPx - scrollerHeightPx - 4 * textSize) / 6);
+        tempAttTextClearance = Math.round((attHeightPx - scrollerHeightPx - 4 * textSize) / 6);
 
         scrollerWidthPx = Math.round(width * SCROLLER_WIDTH_FACTOR);
         scrollerSizePxTextYOffset = Math.round(textSize * SCROLLER_FACTOR_TEXT_Y_OFFSET);
@@ -570,16 +574,18 @@ public class HUD extends View implements OnDroneListner {
                 armStatus = "DISARMED";
             }
 
+            commonRect.set(0, 0, 0, 0);
             failsafeTextPaint.getTextBounds(armStatus, 0, armStatus.length(), commonRect);
 
             commonRect.offset(-commonRect.width() / 2, canvas.getHeight() / 3);
-            commonRectF.set(commonRect.left - failsafeTextPadding, 
-					commonRect.top - failsafeTextPadding,
-					commonRect.right + failsafeTextPadding,
-					commonRect.bottom + failsafeTextPadding);
-            canvas.drawRoundRect(commonRectF, failsafeTextPadding, failsafeTextPadding,
+            commonRectFloat.set(commonRect.left - failsafeTextPadding,
+                    commonRect.top - failsafeTextPadding,
+                    commonRect.right + failsafeTextPadding,
+                    commonRect.bottom + failsafeTextPadding);
+            canvas.drawRoundRect(commonRectFloat, failsafeTextPadding, failsafeTextPadding,
                     blackSolid);
-            canvas.drawText(armStatus, commonRect.left - 3, commonRect.bottom - 1, failsafeTextPaint);
+            canvas.drawText(armStatus, commonRect.left - 3, commonRect.bottom - 1,
+                    failsafeTextPaint);
         }
     }
 
@@ -601,14 +607,12 @@ public class HUD extends View implements OnDroneListner {
         canvas.drawLine(-width, pitchOffsetPx, width, pitchOffsetPx, whiteThinTics);
 
         // Draw roll triangle
-        Path arrow = new Path();
-        int tempOffset = Math.round(reticlePaint.getStrokeWidth()
-                + whiteBorder.getStrokeWidth() / 2);
+        commonPath.reset();
+        Path arrow = commonPath;
+        int tempOffset = Math.round(reticlePaint.getStrokeWidth() + whiteBorder.getStrokeWidth() / 2);
         arrow.moveTo(0, -attHeightPx / 2 + rollTopOffsetPx + tempOffset);
-        arrow.lineTo(0 - rollTopOffsetPx / 3,
-                rollTriangleBottom + tempOffset);
-        arrow.lineTo(0 + rollTopOffsetPx / 3,
-                rollTriangleBottom + tempOffset);
+        arrow.lineTo(0 - rollTopOffsetPx / 3, rollTriangleBottom + tempOffset);
+        arrow.lineTo(0 + rollTopOffsetPx / 3, rollTriangleBottom + tempOffset);
         arrow.close();
         canvas.drawPath(arrow, reticlePaint);
 
@@ -645,19 +649,18 @@ public class HUD extends View implements OnDroneListner {
 
     private void drawRoll(Canvas canvas) {
         int r = Math.round(attHeightPx / 2 - rollTopOffsetPx);
-        RectF rec = new RectF(-r, -r, r, r);
+        commonRectFloat.set(-r, -r, r, r);
 
         //Draw the arc
-        canvas.drawArc(rec, 225, 90, false, whiteBorder);
+        canvas.drawArc(commonRectFloat, 225, 90, false, whiteBorder);
 
         //Draw center triangle
-        Path arrow = new Path();
+        commonPath.reset();
+        Path arrow = commonPath;
         int tempOffset = Math.round(reticlePaint.getStrokeWidth() / 2);
         arrow.moveTo(0, -attHeightPx / 2 + rollTopOffsetPx - tempOffset);
-        arrow.lineTo(-rollTopOffsetPx / 3, -attHeightPx / 2 + rollTopOffsetPx / 2 -
-                tempOffset);
-        arrow.lineTo(rollTopOffsetPx / 3, -attHeightPx / 2 + rollTopOffsetPx / 2 -
-                tempOffset);
+        arrow.lineTo(-rollTopOffsetPx / 3, -attHeightPx / 2 + rollTopOffsetPx / 2 - tempOffset);
+        arrow.lineTo(rollTopOffsetPx / 3, -attHeightPx / 2 + rollTopOffsetPx / 2 -  tempOffset);
         arrow.close();
         canvas.drawPath(arrow, reticlePaint);
 
@@ -698,42 +701,42 @@ public class HUD extends View implements OnDroneListner {
             speed = groundSpeed;
 
         // Outside box
-        RectF scroller = new RectF(-width / 2, -scrollerHeightPx / 2,
-                -width / 2 + scrollerWidthPx, scrollerHeightPx / 2);
+        commonRectFloat.set(-width / 2, -scrollerHeightPx / 2, -width / 2 + scrollerWidthPx,
+                scrollerHeightPx / 2);
 
         // Draw Scroll
-        canvas.drawRect(scroller, scrollerBgPaint);
-        canvas.drawRect(scroller, whiteBorder);
-        // Clip to Scroller
-        canvas.clipRect(scroller, Region.Op.REPLACE);
+        canvas.drawRect(commonRectFloat, scrollerBgPaint);
+        canvas.drawRect(commonRectFloat, whiteBorder);
 
-        float space = scroller.height()
-                / (float) SCROLLER_SPEED_RANGE;
+        // Clip to Scroller
+        canvas.clipRect(commonRectFloat, Region.Op.REPLACE);
+
+        float space = commonRectFloat.height() / (float) SCROLLER_SPEED_RANGE;
         int start = ((int) speed - SCROLLER_SPEED_RANGE / 2);
 
         if (start > targetSpeed) {
-            canvas.drawLine(scroller.left, scroller.bottom, scroller.right,
-                    scroller.bottom, greenPen);
+            canvas.drawLine(commonRectFloat.left, commonRectFloat.bottom, commonRectFloat.right,
+                    commonRectFloat.bottom, greenPen);
         }
         else if ((speed + SCROLLER_SPEED_RANGE / 2) < targetSpeed) {
-            canvas.drawLine(scroller.left, scroller.top, scroller.right,
-                    scroller.top, greenPen);
+            canvas.drawLine(commonRectFloat.left, commonRectFloat.top, commonRectFloat.right,
+                    commonRectFloat.top, greenPen);
         }
 
         float targetSpdPos = Float.MIN_VALUE;
         for (int a = start; a <= (speed + SCROLLER_SPEED_RANGE / 2); a += 1) {
-            float lineHeight = scroller.centerY() - space * (a - (int) speed);
+            float lineHeight = commonRectFloat.centerY() - space * (a - (int) speed);
 
             if (a == ((int) targetSpeed) && targetSpeed != 0) {
-                canvas.drawLine(scroller.left, lineHeight, scroller.right,
+                canvas.drawLine(commonRectFloat.left, lineHeight, commonRectFloat.right,
                         lineHeight, greenPen);
                 targetSpdPos = lineHeight;
             }
             if (a % 5 == 0) {
-                canvas.drawLine(scroller.right, lineHeight, scroller.right
+                canvas.drawLine(commonRectFloat.right, lineHeight, commonRectFloat.right
                         - scrollerSizePxTicLength, lineHeight,
                         whiteThickTics);
-                canvas.drawText(Integer.toString(a), scroller.right
+                canvas.drawText(Integer.toString(a), commonRectFloat.right
                         - scrollerSizePxTextXOffset, lineHeight + textHalfSize
                         + scrollerSizePxTextYOffset, textPaint);
             }
@@ -741,30 +744,31 @@ public class HUD extends View implements OnDroneListner {
 
         // Arrow with current speed
         String actualText = Integer.toString((int) speed);
-        int borderWidth = Math.round(whiteBorder
-                .getStrokeWidth());
-        Path arrow = new Path();
-        arrow.moveTo(scroller.left - borderWidth,
-                -scrollerSizePxArrowHeight / 2);
-        arrow.lineTo(scroller.right - scrollerSizePxArrowHeight / 4
+        int borderWidth = Math.round(whiteBorder.getStrokeWidth());
+
+        commonPath.reset();
+        Path arrow = commonPath;
+        arrow.moveTo(commonRectFloat.left - borderWidth, -scrollerSizePxArrowHeight / 2);
+        arrow.lineTo(commonRectFloat.right - scrollerSizePxArrowHeight / 4
                 - borderWidth, -scrollerSizePxArrowHeight / 2);
-        arrow.lineTo(scroller.right - borderWidth, 0);
-        arrow.lineTo(scroller.right - scrollerSizePxArrowHeight / 4
+        arrow.lineTo(commonRectFloat.right - borderWidth, 0);
+        arrow.lineTo(commonRectFloat.right - scrollerSizePxArrowHeight / 4
                 - borderWidth, scrollerSizePxArrowHeight / 2);
-        arrow.lineTo(scroller.left - borderWidth, scrollerSizePxArrowHeight / 2);
+        arrow.lineTo(commonRectFloat.left - borderWidth, scrollerSizePxArrowHeight / 2);
         canvas.drawPath(arrow, blackSolid);
+
         if ((targetSpdPos != Float.MIN_VALUE)
                 && (targetSpdPos > -scrollerSizePxArrowHeight / 2)
                 && (targetSpdPos < scrollerSizePxArrowHeight / 2)) {
-            Rect actualTextRec = new Rect();
-            textPaint.getTextBounds(actualText, 0,
-                    actualText.length(), actualTextRec);
-            canvas.drawLine(scroller.left, targetSpdPos, scroller.right
-                    - actualTextRec.width() - scrollerSizePxTextXOffset
-                    - textHalfSize, targetSpdPos, greenPen);
+            commonRect.set(0, 0, 0, 0);
+            textPaint.getTextBounds(actualText, 0, actualText.length(), commonRect);
+            canvas.drawLine(commonRectFloat.left, targetSpdPos,
+                    commonRectFloat.right - commonRect.width() - scrollerSizePxTextXOffset
+                            - textHalfSize, targetSpdPos, greenPen);
         }
+
         canvas.drawPath(arrow, reticlePaint);
-        canvas.drawText(actualText, scroller.right - scrollerSizePxTextXOffset,
+        canvas.drawText(actualText, commonRectFloat.right - scrollerSizePxTextXOffset,
                 textPaint.getTextSize() / 2
                         + scrollerSizePxActualTextYOffset, textPaint);
         // Reset clipping of Scroller
@@ -777,72 +781,74 @@ public class HUD extends View implements OnDroneListner {
         double verticalSpeed = droneSpeed.getVerticalSpeed();
 
         // Outside box
-        scroller = new RectF(width / 2 - scrollerWidthPx,
-                -scrollerHeightPx / 2, width / 2, scrollerHeightPx / 2);
+        commonRectFloat.set(width / 2 - scrollerWidthPx, -scrollerHeightPx / 2, width / 2,
+                scrollerHeightPx / 2);
 
         // Draw Vertical speed indicator
-        final float vsi_width = scroller.width() / 4;
-        float linespace = scroller.height() / SCROLLER_VSI_RANGE;
-        Path vsiBox = new Path();
-        vsiBox.moveTo(scroller.left, scroller.top); // draw outside box
-        vsiBox.lineTo(scroller.left - vsi_width, scroller.top + vsi_width);
-        vsiBox.lineTo(scroller.left - vsi_width, scroller.bottom - vsi_width);
-        vsiBox.lineTo(scroller.left, scroller.bottom);
-        Path vsiFill = new Path();
-        float vsiIndicatorEnd = scroller.centerY() - ((float) verticalSpeed)
-                * linespace;
-        vsiFill.moveTo(scroller.left, scroller.centerY());
-        vsiFill.lineTo(scroller.left - vsi_width, scroller.centerY());
-        vsiFill.lineTo(scroller.left - vsi_width, vsiIndicatorEnd);
-        vsiFill.lineTo(scroller.left, vsiIndicatorEnd);
-        vsiFill.lineTo(scroller.left, scroller.centerY());
+        final float vsi_width = commonRectFloat.width() / 4;
+        float linespace = commonRectFloat.height() / SCROLLER_VSI_RANGE;
+
+        commonPath.reset();
+        Path vsiBox = commonPath;
+        vsiBox.moveTo(commonRectFloat.left, commonRectFloat.top); // draw outside box
+        vsiBox.lineTo(commonRectFloat.left - vsi_width, commonRectFloat.top + vsi_width);
+        vsiBox.lineTo(commonRectFloat.left - vsi_width, commonRectFloat.bottom - vsi_width);
+        vsiBox.lineTo(commonRectFloat.left, commonRectFloat.bottom);
         canvas.drawPath(vsiBox, scrollerBgPaint);
-        canvas.drawPath(vsiFill, blueVSI);
-        canvas.drawLine(scroller.left - vsi_width, vsiIndicatorEnd, scroller.left, vsiIndicatorEnd,
-                whiteThinTics);
         canvas.drawPath(vsiBox, whiteBorder);
 
+        commonPath.reset();
+        Path vsiFill = commonPath;
+        float vsiIndicatorEnd = commonRectFloat.centerY() - ((float) verticalSpeed) * linespace;
+        vsiFill.moveTo(commonRectFloat.left, commonRectFloat.centerY());
+        vsiFill.lineTo(commonRectFloat.left - vsi_width, commonRectFloat.centerY());
+        vsiFill.lineTo(commonRectFloat.left - vsi_width, vsiIndicatorEnd);
+        vsiFill.lineTo(commonRectFloat.left, vsiIndicatorEnd);
+        vsiFill.lineTo(commonRectFloat.left, commonRectFloat.centerY());
+        canvas.drawPath(vsiFill, blueVSI);
+
+        canvas.drawLine(commonRectFloat.left - vsi_width, vsiIndicatorEnd, commonRectFloat.left,
+                vsiIndicatorEnd, whiteThinTics);
+
         for (int a = 1; a < SCROLLER_VSI_RANGE; a++) { // draw ticks
-            float lineHeight = scroller.top + linespace * a;
-            canvas.drawLine(scroller.left - vsi_width, lineHeight, scroller.left - vsi_width +
-                    vsi_width / 3, lineHeight, whiteThickTics);
+            float lineHeight = commonRectFloat.top + linespace * a;
+            canvas.drawLine(commonRectFloat.left - vsi_width, lineHeight,
+                    commonRectFloat.left - vsi_width + vsi_width / 3, lineHeight, whiteThickTics);
         }
 
         // Draw Altitude Scroller
-        canvas.drawRect(scroller, scrollerBgPaint);
-        canvas.drawRect(scroller, whiteBorder);
+        canvas.drawRect(commonRectFloat, scrollerBgPaint);
+        canvas.drawRect(commonRectFloat, whiteBorder);
 
         // Clip to Scroller
-        canvas.clipRect(scroller, Region.Op.REPLACE);
+        canvas.clipRect(commonRectFloat, Region.Op.REPLACE);
 
-        space = scroller.height() / (float) SCROLLER_ALT_RANGE;
+        space = commonRectFloat.height() / (float) SCROLLER_ALT_RANGE;
         start = ((int) altitude - SCROLLER_ALT_RANGE / 2);
 
         if (start > targetAltitude) {
-            canvas.drawLine(scroller.left, scroller.bottom, scroller.right, scroller.bottom,
-                    greenPen);
+            canvas.drawLine(commonRectFloat.left, commonRectFloat.bottom, commonRectFloat.right,
+                    commonRectFloat.bottom,                    greenPen);
         }
         else if ((altitude + SCROLLER_SPEED_RANGE / 2) < targetAltitude) {
-            canvas.drawLine(scroller.left, scroller.top, scroller.right,
-                    scroller.top, greenPen);
+            canvas.drawLine(commonRectFloat.left, commonRectFloat.top, commonRectFloat.right,
+                    commonRectFloat.top, greenPen);
         }
 
         float targetAltPos = Float.MIN_VALUE;
         for (int a = start; a <= (altitude + SCROLLER_ALT_RANGE / 2); a += 1) { // go
             // trough 1m steps
-
-            float lineHeight = scroller.centerY() - space * (a - (int) altitude);
+            float lineHeight = commonRectFloat.centerY() - space * (a - (int) altitude);
 
             if (a == ((int) targetAltitude) && targetAltitude != 0) {
-                canvas.drawLine(scroller.left, lineHeight, scroller.right,
+                canvas.drawLine(commonRectFloat.left, lineHeight, commonRectFloat.right,
                         lineHeight, greenPen);
                 targetAltPos = lineHeight;
             }
             if (a % 5 == 0) {
-                canvas.drawLine(scroller.left, lineHeight, scroller.left
-                        + scrollerSizePxTicLength, lineHeight,
-                        whiteThickTics);
-                canvas.drawText(Integer.toString(a), scroller.left
+                canvas.drawLine(commonRectFloat.left, lineHeight, commonRectFloat.left
+                        + scrollerSizePxTicLength, lineHeight,     whiteThickTics);
+                canvas.drawText(Integer.toString(a), commonRectFloat.left
                         + scrollerSizePxTextXOffset, lineHeight + textHalfSize
                         + scrollerSizePxTextYOffset, textPaint);
             }
@@ -851,33 +857,36 @@ public class HUD extends View implements OnDroneListner {
         // Arrow with current altitude
         actualText = Integer.toString((int) altitude);
         borderWidth = Math.round(whiteBorder.getStrokeWidth());
-        arrow = new Path();
-        arrow.moveTo(scroller.right, -scrollerSizePxArrowHeight / 2);
-        arrow.lineTo(scroller.left + scrollerSizePxArrowHeight / 4
+
+        commonPath.reset();
+        arrow = commonPath;
+        arrow.moveTo(commonRectFloat.right, -scrollerSizePxArrowHeight / 2);
+        arrow.lineTo(commonRectFloat.left + scrollerSizePxArrowHeight / 4
                 + borderWidth, -scrollerSizePxArrowHeight / 2);
-        arrow.lineTo(scroller.left + borderWidth, 0);
-        arrow.lineTo(scroller.left + scrollerSizePxArrowHeight / 4
+        arrow.lineTo(commonRectFloat.left + borderWidth, 0);
+        arrow.lineTo(commonRectFloat.left + scrollerSizePxArrowHeight / 4
                 + borderWidth, scrollerSizePxArrowHeight / 2);
-        arrow.lineTo(scroller.right, scrollerSizePxArrowHeight / 2);
+        arrow.lineTo(commonRectFloat.right, scrollerSizePxArrowHeight / 2);
         canvas.drawPath(arrow, blackSolid);
+
         if ((targetAltPos != Float.MIN_VALUE)
                 && (targetAltPos > -scrollerSizePxArrowHeight / 2)
                 && (targetAltPos < scrollerSizePxArrowHeight / 2)) {
-            Rect actualTextRec = new Rect();
-            textPaint.getTextBounds(actualText, 0, actualText.length(), actualTextRec);
-            canvas.drawLine(scroller.right, targetAltPos, scroller.left
-                    + actualTextRec.width() + scrollerSizePxTextXOffset
+            commonRect.set(0, 0, 0, 0);
+            textPaint.getTextBounds(actualText, 0, actualText.length(), commonRect);
+            canvas.drawLine(commonRectFloat.right, targetAltPos, commonRectFloat.left
+                    + commonRect.width() + scrollerSizePxTextXOffset
                     + textHalfSize, targetAltPos, greenPen);
         }
         canvas.drawPath(arrow, reticlePaint);
-        canvas.drawText(actualText, scroller.left + scrollerSizePxTextXOffset,
-                textPaint.getTextSize() / 2
-                        + scrollerSizePxActualTextYOffset, textPaint);
+        canvas.drawText(actualText, commonRectFloat.left + scrollerSizePxTextXOffset,
+                textPaint.getTextSize() / 2 + scrollerSizePxActualTextYOffset, textPaint);
+
         // Reset clipping of Scroller
-        canvas.clipRect(-width / 2, -height / 2,
-                width / 2, height / 2, Region.Op.REPLACE);
+        canvas.clipRect(-width / 2, -height / 2, width / 2, height / 2, Region.Op.REPLACE);
+
         // Draw VSI center indicator
-        canvas.drawLine(scroller.left + borderWidth, 0, scroller.left
+        canvas.drawLine(commonRectFloat.left + borderWidth, 0, commonRectFloat.left
                 - vsi_width - borderWidth, 0, reticlePaint);
     }
 
