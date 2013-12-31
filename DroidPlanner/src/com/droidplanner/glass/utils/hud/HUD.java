@@ -218,6 +218,9 @@ public class HUD extends View implements OnDroneListner {
     public Paint whiteThickTics;
     public Paint whiteThinTics;
     public Paint blackSolid;
+	
+	private final Rect commonRect = new Rect();
+	private final RectF commonRectF = new RectF();
 
     /*
     Drone's properties
@@ -567,18 +570,16 @@ public class HUD extends View implements OnDroneListner {
                 armStatus = "DISARMED";
             }
 
-            Rect textRec = new Rect();
-            failsafeTextPaint.getTextBounds(armStatus, 0, armStatus.length(), textRec);
+            failsafeTextPaint.getTextBounds(armStatus, 0, armStatus.length(), commonRect);
 
-            textRec.offset(-textRec.width() / 2, canvas.getHeight() / 3);
-            RectF boxRec = new RectF(textRec.left
-                    - failsafeTextPadding, textRec.top
-                    - failsafeTextPadding, textRec.right
-                    + failsafeTextPadding, textRec.bottom
-                    + failsafeTextPadding);
-            canvas.drawRoundRect(boxRec, failsafeTextPadding, failsafeTextPadding,
+            commonRect.offset(-commonRect.width() / 2, canvas.getHeight() / 3);
+            commonRectF.set(commonRect.left - failsafeTextPadding, 
+					commonRect.top - failsafeTextPadding,
+					commonRect.right + failsafeTextPadding,
+					commonRect.bottom + failsafeTextPadding);
+            canvas.drawRoundRect(commonRectF, failsafeTextPadding, failsafeTextPadding,
                     blackSolid);
-            canvas.drawText(armStatus, textRec.left - 3, textRec.bottom - 1, failsafeTextPaint);
+            canvas.drawText(armStatus, commonRect.left - 3, commonRect.bottom - 1, failsafeTextPaint);
         }
     }
 
