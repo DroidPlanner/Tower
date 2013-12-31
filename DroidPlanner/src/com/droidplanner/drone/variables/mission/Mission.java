@@ -1,6 +1,7 @@
 package com.droidplanner.drone.variables.mission;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import android.widget.Toast;
@@ -84,6 +85,48 @@ public class Mission extends DroneVariable implements PathSource{
 		itens.remove(index);
 		itens.add(index, newItem);
 		myDrone.events.notifyDroneEvent(DroneEventsType.MISSION);		
+	}
+
+	/**
+	 * Moves the selected objects up or down into the mission listing
+	 * 
+	 * Think of it as pushing the selected objects, while you can only move a
+	 * single unselected object per turn.
+	 * 
+	 * @param moveUp
+	 *            true to move up, but can be false to move down
+	 */
+	public void moveSelection(boolean moveUp) {
+		if (selection.size() > 0 | selection.size() < itens.size()) {
+			Collections.sort(selection);
+			if (moveUp) {
+				Collections.rotate(getSublistToRotateUp(), 1);				
+			}else{
+				Collections.rotate(getSublistToRotateDown(), -1);
+			}
+			myDrone.events.notifyDroneEvent(DroneEventsType.MISSION);
+		}
+	}
+
+	private List<MissionItem> getSublistToRotateUp() {
+		int from = itens.indexOf(selection.get(0));
+		int to = from;
+		while (selection.contains(itens.get(++to))) {
+			if (itens.size() < to + 2)
+				return itens.subList(0, 0);
+		}
+		return itens.subList(from, to + 1); // includes one unselected item
+	}
+
+	private List<MissionItem> getSublistToRotateDown() {
+		int from = itens.indexOf(selection.get(selection.size() - 1));
+		int to = from;
+		do {
+			if (to < 1) {
+				return itens.subList(0, 0);
+			}
+		} while (selection.contains(itens.get(--to)));
+		return itens.subList(to, from + 1); // includes one unselected item
 	}
 
 	public void addSurveyPolygon(List<LatLng> points) {

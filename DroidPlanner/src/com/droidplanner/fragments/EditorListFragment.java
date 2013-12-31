@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -28,7 +29,7 @@ import com.droidplanner.drone.variables.mission.Mission;
 import com.droidplanner.drone.variables.mission.MissionItem;
 import com.droidplanner.widgets.adapterViews.MissionItemView;
 
-public class EditorListFragment extends Fragment implements  OnItemLongClickListener,  OnItemClickListener, OnDroneListner{
+public class EditorListFragment extends Fragment implements  OnItemLongClickListener,  OnItemClickListener, OnDroneListner, OnClickListener{
 	private HListView list;
 	private Mission mission;
 	private MissionItemView adapter;
@@ -45,7 +46,9 @@ public class EditorListFragment extends Fragment implements  OnItemLongClickList
 		list = (HListView) view.findViewById(R.id.listView1);
 		leftArrow = (ImageButton) view.findViewById(R.id.listLeftArrow);
 		rightArrow = (ImageButton) view.findViewById(R.id.listRightArrow);
-
+		leftArrow.setOnClickListener(this);
+		rightArrow.setOnClickListener(this);
+		
 		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
 		mission = drone.mission;
 		adapter = new MissionItemView(this.getActivity(), android.R.layout.simple_list_item_1,mission.getItems());
@@ -160,4 +163,18 @@ public class EditorListFragment extends Fragment implements  OnItemLongClickList
         adapter.notifyDataSetChanged();
     }
 
+	@Override
+	public void onClick(View v) {
+		if (v == leftArrow ) {
+			mission.moveSelection(false);	
+	        adapter.notifyDataSetChanged();
+	        updateMissionItemSelection(mission.getSelected());
+		}
+		if (v == rightArrow) {
+			mission.moveSelection(true);
+	        adapter.notifyDataSetChanged();
+	        updateMissionItemSelection(mission.getSelected());
+		}		
+	}
+	
 }
