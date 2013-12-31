@@ -87,6 +87,11 @@ public class Mission extends DroneVariable implements PathSource{
 		myDrone.events.notifyDroneEvent(DroneEventsType.MISSION);		
 	}
 
+	public void reverse() {
+		Collections.reverse(itens);
+		myDrone.events.notifyDroneEvent(DroneEventsType.MISSION);	
+	}
+
 	/**
 	 * Moves the selected objects up or down into the mission listing
 	 * 
