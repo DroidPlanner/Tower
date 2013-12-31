@@ -51,8 +51,9 @@
         android:id="@+id/missionFragment1"
         android:name="com.droidplanner.fragments.EditorListFragment"
         android:layout_width="match_parent"
-        android:layout_height="75dp"
+        android:layout_height="80dp"
         android:layout_alignParentBottom="true"
-        tools:layout="@layout/fragment_editor_list" />
+        tools:layout="@layout/fragment_editor_list"
+        />
 
 </RelativeLayout>
