@@ -87,19 +87,28 @@ public class Mission extends DroneVariable implements PathSource{
 		myDrone.events.notifyDroneEvent(DroneEventsType.MISSION);		
 	}
 
-	public void moveSelection(boolean moveRight) {
+	/**
+	 * Moves the selected objects up or down into the mission listing
+	 * 
+	 * Think of it as pushing the selected objects, while you can only move a
+	 * single unselected object per turn.
+	 * 
+	 * @param moveUp
+	 *            true to move up, but can be false to move down
+	 */
+	public void moveSelection(boolean moveUp) {
 		if (selection.size() > 0 | selection.size() < itens.size()) {
 			Collections.sort(selection);
-			if (moveRight) {
-				Collections.rotate(getSublistToRotateRight(), 1);				
+			if (moveUp) {
+				Collections.rotate(getSublistToRotateUp(), 1);				
 			}else{
-				Collections.rotate(getSublistToRotateLeft(), -1);
+				Collections.rotate(getSublistToRotateDown(), -1);
 			}
 			myDrone.events.notifyDroneEvent(DroneEventsType.MISSION);
 		}
 	}
 
-	private List<MissionItem> getSublistToRotateRight() {
+	private List<MissionItem> getSublistToRotateUp() {
 		int from = itens.indexOf(selection.get(0));
 		int to = from;
 		while (selection.contains(itens.get(++to))) {
@@ -109,7 +118,7 @@ public class Mission extends DroneVariable implements PathSource{
 		return itens.subList(from, to + 1); // includes one unselected item
 	}
 
-	private List<MissionItem> getSublistToRotateLeft() {
+	private List<MissionItem> getSublistToRotateDown() {
 		int from = itens.indexOf(selection.get(selection.size() - 1));
 		int to = from;
 		do {
