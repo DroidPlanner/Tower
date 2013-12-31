@@ -111,10 +111,10 @@ public class Mission extends DroneVariable implements PathSource{
 	private List<MissionItem> getSublistToRotateUp() {
 		int from = itens.indexOf(selection.get(0));
 		int to = from;
-		while (selection.contains(itens.get(++to))) {
+		do{
 			if (itens.size() < to + 2)
 				return itens.subList(0, 0);
-		}
+		}while (selection.contains(itens.get(++to)));
 		return itens.subList(from, to + 1); // includes one unselected item
 	}
 
