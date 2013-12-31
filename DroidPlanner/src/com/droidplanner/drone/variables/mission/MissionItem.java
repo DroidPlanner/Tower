@@ -7,7 +7,7 @@ import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import com.droidplanner.fragments.mission.MissionDetailFragment;
 import com.google.android.gms.maps.model.LatLng;
 
-public abstract class MissionItem {
+public abstract class MissionItem implements Comparable<MissionItem>{
 	protected Mission mission;
 	
 	public MissionItem(Mission mission) {
@@ -54,4 +54,10 @@ public abstract class MissionItem {
 	public Mission getMission(){
 		return mission;
 	}
+	
+	@Override
+	public int compareTo(MissionItem another) {
+		return mission.getNumber(this) - mission.getNumber(another);
+	}
+	
 }

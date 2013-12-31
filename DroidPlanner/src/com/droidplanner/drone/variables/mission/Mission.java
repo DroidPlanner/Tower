@@ -1,6 +1,7 @@
 package com.droidplanner.drone.variables.mission;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import android.widget.Toast;
@@ -84,6 +85,24 @@ public class Mission extends DroneVariable implements PathSource{
 		itens.remove(index);
 		itens.add(index, newItem);
 		myDrone.events.notifyDroneEvent(DroneEventsType.MISSION);		
+	}
+
+	public void moveSelection(boolean moveRight) {
+		if (selection.size() > 0 | selection.size() < itens.size()) {
+			Collections.sort(selection);
+			Collections.rotate(getSublistToRotate(), 1);
+			myDrone.events.notifyDroneEvent(DroneEventsType.MISSION);
+		}
+	}
+
+	private List<MissionItem> getSublistToRotate() {
+		int from = itens.indexOf(selection.get(0));
+		int to = from;
+		while (selection.contains(itens.get(++to))) {
+			if (itens.size() < to + 2)
+				return itens.subList(0, 0);
+		}
+		return itens.subList(from, to + 1); // includes one unselected item
 	}
 
 	public void addSurveyPolygon(List<LatLng> points) {
