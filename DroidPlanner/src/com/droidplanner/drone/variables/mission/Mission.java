@@ -90,12 +90,16 @@ public class Mission extends DroneVariable implements PathSource{
 	public void moveSelection(boolean moveRight) {
 		if (selection.size() > 0 | selection.size() < itens.size()) {
 			Collections.sort(selection);
-			Collections.rotate(getSublistToRotate(), 1);
+			if (moveRight) {
+				Collections.rotate(getSublistToRotateRight(), 1);				
+			}else{
+				Collections.rotate(getSublistToRotateLeft(), -1);
+			}
 			myDrone.events.notifyDroneEvent(DroneEventsType.MISSION);
 		}
 	}
 
-	private List<MissionItem> getSublistToRotate() {
+	private List<MissionItem> getSublistToRotateRight() {
 		int from = itens.indexOf(selection.get(0));
 		int to = from;
 		while (selection.contains(itens.get(++to))) {
@@ -103,6 +107,17 @@ public class Mission extends DroneVariable implements PathSource{
 				return itens.subList(0, 0);
 		}
 		return itens.subList(from, to + 1); // includes one unselected item
+	}
+
+	private List<MissionItem> getSublistToRotateLeft() {
+		int from = itens.indexOf(selection.get(selection.size() - 1));
+		int to = from;
+		do {
+			if (to < 1) {
+				return itens.subList(0, 0);
+			}
+		} while (selection.contains(itens.get(--to)));
+		return itens.subList(to, from + 1); // includes one unselected item
 	}
 
 	public void addSurveyPolygon(List<LatLng> points) {
