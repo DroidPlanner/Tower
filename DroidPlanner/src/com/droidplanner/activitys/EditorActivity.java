@@ -279,10 +279,10 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 			removeItemDetail();
 			missionListFragment.updateChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 			contextualActionBar = startActionMode(this);
+			editorToolsFragment.setTool(EditorTools.NONE);
 			mission.clearSelection();
 			mission.addToSelection(item);
 			notifySelectionChanged();
-			editorToolsFragment.setTool(EditorTools.NONE);
 		}
 		return true;
 	}
