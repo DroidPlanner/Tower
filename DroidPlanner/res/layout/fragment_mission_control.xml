@@ -83,6 +83,7 @@
 	    android:drawableTop="@drawable/ic_follow"
 	    android:text="Follow"
         android:layout_weight="1"
-	    tools:ignore="ContentDescription" />
+	    tools:ignore="ContentDescription" 
+	    android:visibility="gone"/>
 
 </LinearLayout>
