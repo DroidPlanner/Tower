@@ -20,12 +20,9 @@ import com.droidplanner.activitys.helpers.SuperUI;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.fragments.ChecklistFragment;
-import com.droidplanner.fragments.SetupFragment;
-import com.droidplanner.fragments.ModesSetupFragment;
 import com.droidplanner.fragments.ParamsFragment;
 import com.droidplanner.fragments.RcSetupFragment;
 import com.droidplanner.fragments.SettingsFragment;
-import com.droidplanner.fragments.TuningFragment;
 import com.droidplanner.widgets.viewPager.TabPageIndicator;
 
 public class ConfigurationActivity extends SuperUI implements
@@ -121,25 +118,12 @@ public class ConfigurationActivity extends SuperUI implements
 			switch (position) {
 			case 0:
 				return new SettingsFragment();
-
 			case 1:
-				return new TuningFragment();
-
+				return new ChecklistFragment();
 			case 2:
 				return new RcSetupFragment();
-
 			case 3:
-				return new SetupFragment();
-
-			case 4:
-				return new ModesSetupFragment();
-
-			case 5:
-				return new ChecklistFragment();
-
-			case 6:
 				return new ParamsFragment();
-
 			default:
 				return null;
 			}
@@ -147,7 +131,7 @@ public class ConfigurationActivity extends SuperUI implements
 
 		@Override
 		public int getCount() {
-			return 7;
+			return 4;
 		}
 
 		@Override
@@ -155,25 +139,12 @@ public class ConfigurationActivity extends SuperUI implements
 			switch (position) {
 			case 0:
 				return mContext.getText(R.string.settings);
-
 			case 1:
-				return mContext.getString(R.string.screen_tuning);
-
+				return mContext.getString(R.string.screen_checklist);
 			case 2:
 				return mContext.getText(R.string.screen_rc);
-
 			case 3:
-				return mContext.getString(R.string.screen_cal);
-
-			case 4:
-				return mContext.getString(R.string.screen_modes);
-
-			case 5:
-				return mContext.getString(R.string.screen_checklist);
-
-			case 6:
 				return mContext.getText(R.string.screen_parameters);
-
 			default:
 				return null;
 			}
