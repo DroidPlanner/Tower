@@ -9,7 +9,7 @@
 
 	<Button
 	    android:id="@+id/mc_joystickBtn"
-	    style="@style/actionButton"
+	    style="@style/flightControlButton"
 	    android:layout_width="75dp"
 	    android:layout_height="match_parent"
 	    android:background="@drawable/button_macro"
@@ -20,7 +20,7 @@
 
 	<Button
 	    android:id="@+id/mc_planningBtn"
-	    style="@style/actionButton"
+	    style="@style/flightControlButton"
 	    android:layout_width="75dp"
 	    android:layout_height="match_parent"
 	    android:background="@drawable/button_macro"
@@ -31,7 +31,7 @@
 
 	<Button
 	    android:id="@+id/mc_homeBtn"
-	    style="@style/actionButton"
+	    style="@style/flightControlButton"
 	    android:layout_width="75dp"
 	    android:layout_height="match_parent"
 	    android:background="@drawable/button_macro"
@@ -42,7 +42,7 @@
 
 	<Button
 	    android:id="@+id/mc_land"
-	    style="@style/actionButton"
+	    style="@style/flightControlButton"
 	    android:layout_width="75dp"
 	    android:layout_height="match_parent"
 	    android:background="@drawable/button_macro"
@@ -53,7 +53,7 @@
 
 	<Button
 	    android:id="@+id/mc_takeoff"
-	    style="@style/actionButton"
+	    style="@style/flightControlButton"
 	    android:layout_width="75dp"
 	    android:layout_height="match_parent"
 	    android:background="@drawable/button_macro"
@@ -65,7 +65,7 @@
 
 	<Button
 	    android:id="@+id/mc_loiter"
-	    style="@style/actionButton"
+	    style="@style/flightControlButton"
 	    android:layout_width="75dp"
 	    android:layout_height="match_parent"
 	    android:background="@drawable/button_macro"
@@ -76,7 +76,7 @@
 
 	<Button
 	    android:id="@+id/mc_follow"
-	    style="@style/actionButton"
+	    style="@style/flightControlButton"
 	    android:layout_width="75dp"
 	    android:layout_height="match_parent"
 	    android:background="@drawable/button_macro"

@@ -11,6 +11,7 @@ import android.view.ActionMode;
 import android.view.ActionMode.Callback;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -102,6 +103,12 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 	}
 
 	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		planningMapFragment.saveCameraPosition();
+	}
+
+	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		super.onDroneEvent(event,drone);
 		switch (event) {
@@ -122,6 +129,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
+			planningMapFragment.saveCameraPosition();
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
 		}
@@ -137,13 +145,15 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 
 		switch (getTool()) {
 		case MARKER:
-			mission.addWaypoint(point, mission.getDefaultAlt());
+			mission.addWaypoint(point);
 			break;
 		case DRAW:
 			break;
 		case POLY:
 			break;
 		case TRASH:
+			break;
+		case NONE:
 			break;
 		}
 	}
@@ -165,6 +175,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 			break;
 		case MARKER:
 		case TRASH:
+		case NONE:
 			gestureMapFragment.disableGestureDetection();
 			break;
 		}
@@ -204,7 +215,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 				planningMapFragment.mMap);
 		switch (getTool()) {
 		case DRAW:
-			drone.mission.addWaypointsWithDefaultAltitude(points);
+			drone.mission.addWaypoints(points);
 			break;
 		case POLY:
 			drone.mission.addSurveyPolygon(points);
@@ -212,7 +223,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 		default:
 			break;
 		}
-		editorToolsFragment.setTool(EditorTools.MARKER);
+		editorToolsFragment.setTool(EditorTools.NONE);
 	}
 
 	@Override
@@ -222,20 +233,30 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 	}
 
 	private static final int MENU_DELETE = 1;
+	private static final int MENU_REVERSE = 2;
 
 	@Override
 	public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-		if (item.getItemId() == MENU_DELETE) {
+		switch(item.getItemId()){
+		case MENU_DELETE:
 			mission.removeWaypoints(mission.getSelected());
 			notifySelectionChanged();
+			mode.finish();
+			return true;
+		case MENU_REVERSE:
+			mission.reverse();
+			notifySelectionChanged();
+			return true;
+		default:
+			return false;
 		}
-		mode.finish();
-		return false;
 	}
 
 	@Override
 	public boolean onCreateActionMode(ActionMode arg0, Menu menu) {
 		menu.add(0, MENU_DELETE, 0, "Delete");
+		menu.add(0, MENU_REVERSE, 0, "Reverse");
+		editorToolsFragment.getView().setVisibility(View.INVISIBLE);
 		return true;
 	}
 
@@ -245,6 +266,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 		mission.clearSelection();
 		notifySelectionChanged();
 		contextualActionBar = null;
+		editorToolsFragment.getView().setVisibility(View.VISIBLE);
 	}
 
 	@Override
@@ -266,6 +288,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 			removeItemDetail();
 			missionListFragment.updateChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 			contextualActionBar = startActionMode(this);
+			editorToolsFragment.setTool(EditorTools.NONE);
 			mission.clearSelection();
 			mission.addToSelection(item);
 			notifySelectionChanged();
@@ -297,7 +320,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 			mission.removeWaypoint(item);
 			mission.clearSelection();
 			if (mission.getItems().size() <= 0) {
-				editorToolsFragment.setTool(EditorTools.MARKER);
+				editorToolsFragment.setTool(EditorTools.NONE);
 			}
 			break;
 		}

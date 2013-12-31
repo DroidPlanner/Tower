@@ -92,7 +92,7 @@
 
 
 
-    <style name="actionButton">
+    <style name="flightControlButton">
         <item name="android:layout_margin">4dp</item>
         <item name="android:padding">10dp</item>
         <item name="android:background">#000000</item>
@@ -143,6 +143,8 @@
 		<item name="android:actionMenuTextAppearance">@style/CustomActionBarTheme.ActionBar.Text</item>
 		<item name="android:actionMenuTextColor">@color/greyText</item>
 		<item name="android:actionBarTabTextStyle">@style/CustomActionBarTheme.ActionBar.Text</item>
+   	 	<item name="android:spinnerDropDownItemStyle">@style/DropDownItem</item>
+		<item name="android:spinnerItemStyle">@style/SpinnerItem</item>
 
 		<item name="android:actionBarDivider">@null</item>
 		<item name="android:popupMenuStyle">@style/MyPopupMenu</item>
@@ -159,11 +161,27 @@
      </style>
 
 
-	<!--  Overflow menu text-->
+	<!--  Actionbar text-->
 	<style name="CustomActionBarTheme.ActionBar.Text" parent="@android:style/TextAppearance">
 		<item name="android:textSize">16dp</item>
 	    <item name="android:textStyle">bold</item>
-        <item name="android:gravity">left</item>
+        <item name="android:textColor">@color/greyText</item>
+        <item name="android:layout_marginLeft">20dp</item>
+        <item name="android:paddingLeft">20dp</item>
+	</style>
+
+	<!-- style the list navigation -->
+	<style name="DropDownItem" parent="@android:style/Widget.Holo.Light.DropDownItem.Spinner">
+		<item name="android:textSize">18dp</item>
+		<item name="android:minWidth">120dp</item>
+	    <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/greyText</item>
+        <item name="android:layout_width">100dp</item>
+	</style>
+
+	<style name="SpinnerItem" parent="@android:style/Widget.Holo.TextView.SpinnerItem">
+		<item name="android:textSize">26dp</item>
+	    <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/greyText</item>
 	</style>
 
@@ -256,6 +274,7 @@
 	<style name="ModeSpinnerText" >
 		<item name="android:textSize">16dp</item>
 	    <item name="android:textStyle">bold</item>
+	    <item name="android:textColor">#4d4d4d</item>
 	</style>
 
 	 <!-- RC setup screen -->

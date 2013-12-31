@@ -74,7 +74,7 @@ public abstract class SuperActivity extends Activity implements
 			changeDefaultAlt();
 			return true;
 		case R.id.menu_preflight_calibration:
-			drone.calibrationSetup.startCalibration(this);
+//			drone.calibrationSetup.startCalibration(this);
 			return true;
 		case R.id.menu_record_me:
 			app.recordMe.toogleRecordMeState();

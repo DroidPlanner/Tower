@@ -31,7 +31,7 @@
                 android:orientation="horizontal" >
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/textViewSummary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/waypoint_speedtype" />

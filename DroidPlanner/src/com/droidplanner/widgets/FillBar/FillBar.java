@@ -18,23 +18,34 @@ public class FillBar extends View {
 	private int height;
 	private int width;
 	private float percentage = 0.5f;
+	private float fheight;
+	private float fwidth;
+	private float min = 0.5f;
+	private float max = 0.5f;
+	private boolean showMinMax = false;
+	private int colorOutline;
+	private int colorMax;
+	private int colorMin;
+	private int colorBar;
 
-	
 	public FillBar(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		initialize();
 	}
 
 	private void initialize() {
+		colorOutline = Color.parseColor("#E0E0E0");
+		colorMin = Color.parseColor("#FA0E0E");
+		colorMax = Color.parseColor("#FA0E0E");
+		colorBar = Color.parseColor("#B0FAB0");
 
 		paintOutline = new Paint();
 		paintOutline.setAntiAlias(false);
 		paintOutline.setStyle(Style.STROKE);
 		paintOutline.setStrokeWidth(3);
-		paintOutline.setColor(Color.parseColor("#E0E0E0"));
 
 		paintFill = new Paint(paintOutline);
-		paintFill.setStyle(Style.FILL);
+		paintFill.setStyle(Style.FILL_AND_STROKE);
 	}
 
 	@Override
@@ -48,7 +59,10 @@ public class FillBar extends View {
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 
-		// Yaw Arrow
+		fheight = height < width ? height : (height * (1 - percentage));
+		fwidth = height < width ? (width * (percentage)) : width;
+
+		paintOutline.setColor(colorOutline);
 		outlinePath.reset();
 		outlinePath.moveTo(0, 0);
 		outlinePath.lineTo(0, height);
@@ -57,14 +71,57 @@ public class FillBar extends View {
 		outlinePath.lineTo(0, 0);
 		canvas.drawPath(outlinePath, paintOutline);
 
-		float fillHeight = height * (1 - percentage);
+		paintFill.setColor(colorBar);
 		fillPath.reset();
-		fillPath.moveTo(0, fillHeight);
-		fillPath.lineTo(0, height);
-		fillPath.lineTo(width, height);
-		fillPath.lineTo(width, fillHeight);
-		fillPath.lineTo(0, fillHeight);
+		if (height > width) {
+			fillPath.moveTo(0, fheight);
+			fillPath.lineTo(0, height);
+			fillPath.lineTo(fwidth, height);
+			fillPath.lineTo(fwidth, fheight);
+			fillPath.lineTo(0, fheight);
+		} else {
+			fillPath.moveTo(0, 0);
+			fillPath.lineTo(0, height);
+			fillPath.lineTo(fwidth, height);
+			fillPath.lineTo(fwidth, 0);
+			fillPath.lineTo(0, 0);
+		}
 		canvas.drawPath(fillPath, paintFill);
+
+		if (isShowMinMax()) {
+			float f;
+			outlinePath.reset();
+			if (height > width) {
+				f = height * (1-min);
+
+				outlinePath.reset();
+				outlinePath.moveTo(0, f);
+				outlinePath.lineTo(width, f);
+				paintOutline.setColor(colorMin);
+				canvas.drawPath(outlinePath, paintOutline);
+				
+				outlinePath.reset();
+				f = height * (1-max);
+				outlinePath.moveTo(0, f);
+				outlinePath.lineTo(width, f);
+				paintOutline.setColor(colorMax);
+				canvas.drawPath(outlinePath, paintOutline);
+			} else {
+				f = width * min;
+				outlinePath.reset();
+				outlinePath.moveTo(f, 0);
+				outlinePath.lineTo(f, height);
+				paintOutline.setColor(colorMin);
+				canvas.drawPath(outlinePath, paintOutline);
+
+				f = width * max;
+				outlinePath.reset();
+				outlinePath.moveTo(f, 0);
+				outlinePath.lineTo(f, height);
+				paintOutline.setColor(colorMax);
+				canvas.drawPath(outlinePath, paintOutline);
+			}
+		}
 	}
 
 	public float getPercentage() {
@@ -73,6 +130,64 @@ public class FillBar extends View {
 
 	public void setPercentage(float percentage) {
 		this.percentage = percentage;
+		this.min = this.min > percentage ? percentage : this.min;
+		this.max = this.max < percentage ? percentage : this.max;
+//		Log.d("fillbar", "Min: " + String.valueOf(min));
+//		Log.d("fillbar", "Max: " + String.valueOf(max));
+
 		invalidate();
+	}
+
+	public boolean isShowMinMax() {
+		return showMinMax;
+	}
+
+	public void setShowMinMax(boolean showMinMax) {
+		this.showMinMax = showMinMax;
+		if (showMinMax) {
+			min = 0.5f;
+			max = 0.5f;
+		}
+		invalidate();
+	}
+
+	public float getMin(){
+		return this.min;
+	}
+	
+	public float getMax(){
+		return this.max;
+	}
+	
+	public int getColorOutline() {
+		return colorOutline;
+	}
+
+	public void setColorOutline(int colorOutline) {
+		this.colorOutline = colorOutline;
+	}
+
+	public int getColorMax() {
+		return colorMax;
+	}
+
+	public void setColorMax(int colorMax) {
+		this.colorMax = colorMax;
+	}
+
+	public int getColorMin() {
+		return colorMin;
+	}
+
+	public void setColorMin(int colorMin) {
+		this.colorMin = colorMin;
+	}
+
+	public int getColorBar() {
+		return colorBar;
+	}
+
+	public void setColorBar(int colorBar) {
+		this.colorBar = colorBar;
 	}
 }

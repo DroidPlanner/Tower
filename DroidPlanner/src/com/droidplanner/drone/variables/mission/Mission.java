@@ -1,6 +1,7 @@
 package com.droidplanner.drone.variables.mission;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import android.widget.Toast;
@@ -51,16 +52,28 @@ public class Mission extends DroneVariable implements PathSource{
 		myDrone.events.notifyDroneEvent(DroneEventsType.MISSION);		
 	}
 
-	public void addWaypointsWithDefaultAltitude(List<LatLng> points) {
+	public void addWaypoints(List<LatLng> points) {
+		Altitude alt = getLastAltitude();
 		for (LatLng point : points) {
-			itens.add(new Waypoint(this, point,defaultAlt));
+			itens.add(new Waypoint(this, point,alt));
 		}		
 		myDrone.events.notifyDroneEvent(DroneEventsType.MISSION);
 	}
 
-	public void addWaypoint(LatLng point, Altitude alt) {
-		itens.add(new Waypoint(this,point,alt));
+	public void addWaypoint(LatLng point) {
+		itens.add(new Waypoint(this,point,getLastAltitude()));
 		myDrone.events.notifyDroneEvent(DroneEventsType.MISSION);
+	}
+
+	private Altitude getLastAltitude() {
+		Altitude alt;
+		try{
+			SpatialCoordItem lastItem = (SpatialCoordItem) itens.get(itens.size()-1);
+			alt = lastItem.getAltitude();
+		}catch (Exception e){
+			alt = defaultAlt;			
+		}
+		return alt;
 	}
 	
 	public void replace(MissionItem oldItem, MissionItem newItem) {
@@ -72,6 +85,53 @@ public class Mission extends DroneVariable implements PathSource{
 		itens.remove(index);
 		itens.add(index, newItem);
 		myDrone.events.notifyDroneEvent(DroneEventsType.MISSION);		
+	}
+
+	public void reverse() {
+		Collections.reverse(itens);
+		myDrone.events.notifyDroneEvent(DroneEventsType.MISSION);	
+	}
+
+	/**
+	 * Moves the selected objects up or down into the mission listing
+	 * 
+	 * Think of it as pushing the selected objects, while you can only move a
+	 * single unselected object per turn.
+	 * 
+	 * @param moveUp
+	 *            true to move up, but can be false to move down
+	 */
+	public void moveSelection(boolean moveUp) {
+		if (selection.size() > 0 | selection.size() < itens.size()) {
+			Collections.sort(selection);
+			if (moveUp) {
+				Collections.rotate(getSublistToRotateUp(), 1);				
+			}else{
+				Collections.rotate(getSublistToRotateDown(), -1);
+			}
+			myDrone.events.notifyDroneEvent(DroneEventsType.MISSION);
+		}
+	}
+
+	private List<MissionItem> getSublistToRotateUp() {
+		int from = itens.indexOf(selection.get(0));
+		int to = from;
+		do{
+			if (itens.size() < to + 2)
+				return itens.subList(0, 0);
+		}while (selection.contains(itens.get(++to)));
+		return itens.subList(from, to + 1); // includes one unselected item
+	}
+
+	private List<MissionItem> getSublistToRotateDown() {
+		int from = itens.indexOf(selection.get(selection.size() - 1));
+		int to = from;
+		do {
+			if (to < 1) {
+				return itens.subList(0, 0);
+			}
+		} while (selection.contains(itens.get(--to)));
+		return itens.subList(to, from + 1); // includes one unselected item
 	}
 
 	public void addSurveyPolygon(List<LatLng> points) {
@@ -214,6 +274,5 @@ public class Mission extends DroneVariable implements PathSource{
 		}				
 		myDrone.waypointMananger.writeWaypoints(data);
 	}
-
 
 }
