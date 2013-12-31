@@ -22,6 +22,7 @@ import com.droidplanner.utils.Constants;
 import com.droidplanner.utils.Utils;
 import com.google.android.glass.touchpad.Gesture;
 import com.google.android.glass.touchpad.GestureDetector;
+import com.droidplanner.widgets.spinners.SelectModeSpinner;
 
 /**
  * This is the main activity for the glass interface.
@@ -82,6 +83,8 @@ public class GlassActivity extends SuperActivity implements DroidPlannerApp.Conn
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_glass_activity, menu);
+		SelectModeSpinner barMode = (SelectModeSpinner) menu.findItem(R.id.menu_bar_mode);
+		barMode.buildSpinner(this, drone);
         return true;
     }
 

@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools">
 
     <item
             android:id="@+id/menu_connect"
             android:showAsAction="always"
             android:title="@string/menu_connect"/>
+		
+	<item
+        android:id="@+id/menu_bar_mode"
+        android:actionViewClass="com.droidplanner.widgets.spinners.SelectModeSpinner"
+	    style="@style/ModeSpinnerText"
+        android:showAsAction="always"
+        tools:ignore="MenuTitle"/>
 
     <item
         android:id="@+id/menu_glass_map"
