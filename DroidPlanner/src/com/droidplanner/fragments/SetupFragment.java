@@ -41,7 +41,7 @@ public class SetupFragment extends Fragment implements OnDroneListner, OnItemSel
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		fragmentManager = getFragmentManager();
+		fragmentManager = getChildFragmentManager();
 		setupPanel = (FragmentCalibration) fragmentManager
 				.findFragmentById(R.id.fragment_setup_mainpanel);
 		super.onCreate(savedInstanceState);
