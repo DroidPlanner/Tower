@@ -97,7 +97,7 @@ public class FlightMapFragment extends DroneMap implements
 	@Override
 	public void onMapLongClick(LatLng coord) {
 		getPreferences();
-		if (isGuidedModeEnabled)
+		if (isGuidedModeEnabled && drone.MavClient.isConnected())
 			drone.guidedPoint.newGuidedPointWithCurrentAlt(coord);
 	}
 
