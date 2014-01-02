@@ -520,22 +520,22 @@ public class HUD extends View implements OnDroneListner {
         final float topTextYPos = topInfoBar + bottomBarVerticalPadding;
         final float bottomTextYPos = topTextYPos + bottomBarVerticalPadding;
 
-        //Divide the bottom bar into 4 regions
-        final float regionWidth = width / 4;
+        //Divide the bottom bar into 3 regions
+        final float regionWidth = width / 3.5f;
 
         //Draw the info bar region
         canvas.drawRect(-width, topInfoBar, width, height, bottomBarBgPaint);
         canvas.drawLine(-width, topInfoBar, width, topInfoBar, whiteBorder);
 
         // Left Text
-        final float leftTextXPos = -halfWidth + bottomBarHorizontalPadding;
+        final float leftTextXPos = -regionWidth;
         canvas.drawText(String.format("AS %.1fms", airSpeed), leftTextXPos, topTextYPos,
                 textPaint);
         canvas.drawText(String.format("GS %.1fms", groundSpeed), leftTextXPos, bottomTextYPos,
                 textPaint);
 
-        // Center left Text
-        final float centerLeftTextXPos = -regionWidth + bottomBarHorizontalPadding;
+        // Center Text
+        final float centerLeftTextXPos = 0;
         if ((battVolt >= 0) || (battRemain >= 0)) {
             canvas.drawText(String.format("%2.1fV  %.0f%%", battVolt, battRemain),
                     centerLeftTextXPos, topTextYPos, textPaint);
@@ -545,17 +545,15 @@ public class HUD extends View implements OnDroneListner {
                     centerLeftTextXPos, bottomTextYPos, textPaint);
         }
 
-        // Center right Text
-        final float centerRightTextXPos = bottomBarHorizontalPadding;
-        canvas.drawText(modeName, centerRightTextXPos, topTextYPos, textPaint);
+        // Right Text
+        final float rightTextXPos = regionWidth;
+        canvas.drawText(modeName, rightTextXPos, topTextYPos, textPaint);
 
-        // Right Bottom Text
-        final float rightTextXPos = regionWidth + bottomBarHorizontalPadding;
-        canvas.drawText(fixType, rightTextXPos, topTextYPos, textPaint);
-        if (gpsEPH >= 0) {
-            canvas.drawText(String.format("hp%.1fm", gpsEPH), rightTextXPos,
-                    bottomTextYPos, textPaint);
+        String satInfo = fixType;
+        if(gpsEPH >= 0){
+            satInfo += String.format(" ( hp%.1fm )" , gpsEPH);
         }
+        canvas.drawText(satInfo, rightTextXPos, bottomTextYPos, textPaint);
     }
 
     private void drawFailsafe(Canvas canvas) {

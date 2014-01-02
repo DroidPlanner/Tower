@@ -102,6 +102,12 @@
                 android:summary="Locks screen to the orientation which is present when connecting"
                 android:title="Lock Screen Orientation"/>
         </PreferenceCategory>
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_glass_voice_control"
+            android:summary="use voice to control the user interface for Google Glass"
+            android:title="Use Voice control" />
     </PreferenceScreen>
     <PreferenceScreen
         android:key="pref_flight_data"

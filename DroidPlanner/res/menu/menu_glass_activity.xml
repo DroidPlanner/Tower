@@ -1,31 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/menu_group_drone_connected"
+        android:visible="false"
+        android:enabled="false">
+
+        <item
+            android:id="@+id/menu_flight_modes"
+            android:title="@string/menu_flight_modes">
+            <menu/>
+        </item>
+
+        <item
+            android:id="@+id/menu_arming_state"
+            android:title="@string/menu_arm"
+            android:enabled="false"
+            android:visible="false"/>
+
+        <item
+            android:id="@+id/menu_glass_control"
+            android:title="@string/menu_glass_control"
+            android:enabled="false"
+            android:visible="false"/>
+    </group>
 
     <item
-            android:id="@+id/menu_connect"
-            android:showAsAction="always"
-            android:title="@string/menu_connect"/>
-		
-	<item
-        android:id="@+id/menu_bar_mode"
-        android:actionViewClass="com.droidplanner.widgets.spinners.SelectModeSpinner"
-	    style="@style/ModeSpinnerText"
-        android:showAsAction="always"
-        tools:ignore="MenuTitle"/>
+        android:id="@+id/menu_connect"
+        android:title="@string/menu_connect"/>
+
+    <item
+        android:id="@+id/menu_glass_hud"
+        android:title="@string/menu_hud"
+        android:icon="@drawable/ic_action_plane"/>
 
     <item
         android:id="@+id/menu_glass_map"
         android:icon="@android:drawable/ic_dialog_map"
-        android:title="Map"/>
+        android:title="@string/menu_map"/>
 
     <item
-            android:id="@+id/menu_glass_chart"
-            android:icon="@drawable/ic_action_line_chart"
-            android:title="@string/screen_chart"/>
-
-    <item android:id="@+id/menu_glass_settings"
-          android:icon="@drawable/ic_gear_50"
-          android:title="@string/screen_settings"/>
+        android:id="@+id/menu_glass_settings"
+        android:icon="@drawable/ic_gear_50"
+        android:title="@string/screen_settings"/>
 </menu>

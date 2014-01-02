@@ -51,5 +51,7 @@
     <string name="screen_parameters">Parametres</string>
     <string name="screen_camera">Camera</string>
     <string name="screen_gcp">GCP</string>
+    <string name="menu_map">Carte</string>
+    <string name="menu_flight_modes">Mode de vol</string>
 
 </resources>

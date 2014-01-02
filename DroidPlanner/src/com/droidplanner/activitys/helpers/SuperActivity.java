@@ -53,19 +53,7 @@ public abstract class SuperActivity extends Activity implements
 			return true;
         
 		case R.id.menu_connect:
-            if (!drone.MavClient.isConnected()) {
-                final String connectionType = PreferenceManager
-                        .getDefaultSharedPreferences(getApplicationContext())
-                        .getString(Constants.PREF_CONNECTION_TYPE,
-                                Constants.DEFAULT_CONNECTION_TYPE);
-
-                if (Utils.ConnectionType.BLUETOOTH.name().equals(connectionType)) {
-                    //Launch a bluetooth device selection screen for the user
-                    startActivity(new Intent(this, BTDeviceSelectionActivity.class));
-                    return true;
-                }
-            }
-			drone.MavClient.toggleConnectionState();
+            toggleDroneConnection();
 			return true;
 		case R.id.menu_load_from_apm:
 			drone.waypointMananger.getWaypoints();
@@ -94,6 +82,22 @@ public abstract class SuperActivity extends Activity implements
 			return super.onMenuItemSelected(featureId, item);
 		}
 	}
+
+    protected void toggleDroneConnection(){
+        if (!drone.MavClient.isConnected()) {
+            final String connectionType = PreferenceManager
+                    .getDefaultSharedPreferences(getApplicationContext())
+                    .getString(Constants.PREF_CONNECTION_TYPE,
+                            Constants.DEFAULT_CONNECTION_TYPE);
+
+            if (Utils.ConnectionType.BLUETOOTH.name().equals(connectionType)) {
+                //Launch a bluetooth device selection screen for the user
+                startActivity(new Intent(this, BTDeviceSelectionActivity.class));
+                return;
+            }
+        }
+        drone.MavClient.toggleConnectionState();
+    }
 
 	private void setMapTypeFromItemId(int itemId) {
 		final String mapType;

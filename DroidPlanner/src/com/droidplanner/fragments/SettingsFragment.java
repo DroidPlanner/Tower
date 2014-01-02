@@ -11,10 +11,12 @@ import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.file.DirectoryPath;
+import com.droidplanner.glass.utils.GlassUtils;
 
 import static com.droidplanner.utils.Constants.*;
 
@@ -48,6 +50,18 @@ public class SettingsFragment extends PreferenceFragment implements
                     return true;
                 }
             });
+        }
+
+        //User Interface preferences
+        final PreferenceScreen uiPrefScreen = (PreferenceScreen) findPreference(PREF_UI_SCREEN);
+        if (uiPrefScreen != null) {
+            final CheckBoxPreference voiceControlPref = (CheckBoxPreference) findPreference
+                    (PREF_GLASS_VOICE_CONTROL);
+            if (voiceControlPref != null) {
+                if (!GlassUtils.isGlassDevice()) {
+                    uiPrefScreen.removePreference(voiceControlPref);
+                }
+            }
         }
 
 		findPreference("pref_connection_type").setSummary(
@@ -93,8 +107,7 @@ public class SettingsFragment extends PreferenceFragment implements
 		}
 	}
 
-	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
-			String key) {
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,	String key) {
 		if (key.equals("pref_connection_type")) {
 			findPreference(key)
 					.setSummary(sharedPreferences.getString(key, ""));

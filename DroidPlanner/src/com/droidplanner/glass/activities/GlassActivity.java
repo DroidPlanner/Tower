@@ -2,27 +2,33 @@ package com.droidplanner.glass.activities;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.text.style.UpdateAppearance;
+import android.speech.RecognizerIntent;
 import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.SubMenu;
+import android.widget.Toast;
+import com.MAVLink.Messages.ApmModes;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperActivity;
 import com.droidplanner.fragments.SettingsFragment;
-import com.droidplanner.glass.fragments.ChartFragment;
 import com.droidplanner.glass.fragments.GlassMapFragment;
 import com.droidplanner.glass.fragments.HudFragment;
 import com.droidplanner.glass.utils.GlassUtils;
+import com.droidplanner.glass.utils.GlassVoiceMenu;
 import com.droidplanner.utils.Constants;
 import com.droidplanner.utils.Utils;
 import com.google.android.glass.touchpad.Gesture;
 import com.google.android.glass.touchpad.GestureDetector;
-import com.droidplanner.widgets.spinners.SelectModeSpinner;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * This is the main activity for the glass interface.
@@ -31,8 +37,6 @@ import com.droidplanner.widgets.spinners.SelectModeSpinner;
  * @since 1.2.0
  */
 public class GlassActivity extends SuperActivity implements DroidPlannerApp.ConnectionStateListner {
-
-    private static final String TAG = GlassActivity.class.getName();
 
     /**
      * Glass gesture detector.
@@ -48,6 +52,13 @@ public class GlassActivity extends SuperActivity implements DroidPlannerApp.Conn
      * @since 1.2.0
      */
     private FragmentManager mFragManager;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == GlassVoiceMenu.SPEECH_REQUEST && resultCode == RESULT_OK) {
+            GlassVoiceMenu.onSpeechComplete(getApplicationContext(), data);
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -84,57 +95,103 @@ public class GlassActivity extends SuperActivity implements DroidPlannerApp.Conn
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_glass_activity, menu);
 
-		SelectModeSpinner barMode = (SelectModeSpinner) menu.findItem(R.id.menu_bar_mode)
-                .getActionView();
-		barMode.buildSpinner(this, drone);
+        //Fill the flight modes menu with all the implemented flight modes
+        MenuItem flightModes = menu.findItem(R.id.menu_flight_modes);
+        SubMenu flightModesMenu = flightModes.getSubMenu();
+
+        //Get the list of apm modes for this drone
+        List<ApmModes> apmModesList = ApmModes.getModeList(drone.type.getType());
+
+        //Add them to the flight modes menu
+        for (ApmModes apmMode : apmModesList) {
+            flightModesMenu.add(apmMode.getName());
+        }
+
+        final boolean isDroneConnected = drone.MavClient.isConnected();
+
+        //Update the toggle connection menu title
+        final MenuItem connectMenuItem = menu.findItem(R.id.menu_connect);
+        if (connectMenuItem != null) {
+            connectMenuItem.setTitle(isDroneConnected
+                    ? R.string.menu_disconnect
+                    : R.string.menu_connect);
+        }
+
+        //Make the drone control menu visible if connected
+        menu.setGroupVisible(R.id.menu_group_drone_connected, isDroneConnected);
+        menu.setGroupEnabled(R.id.menu_group_drone_connected, isDroneConnected);
+
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case Menu.NONE: {
+                //Handle the flight modes
+                final String itemTitle = item.getTitle().toString();
+                final ApmModes selectedMode = ApmModes.getMode(itemTitle, drone.type.getType());
+                if (ApmModes.isValid(selectedMode)) {
+                    drone.state.changeFlightMode(selectedMode);
+                    return true;
+                }
+
+                return false;
+            }
+
+            case R.id.menu_glass_hud: {
+                launchHud();
+                return true;
+            }
+
+            case R.id.menu_glass_map: {
+                launchMap();
+                return true;
+            }
+
             case R.id.menu_glass_settings: {
-                //Replace the current fragment with the SettingsFragment.
-                Fragment currentFragment = getCurrentFragment();
-                if (!(currentFragment instanceof SettingsFragment)) {
-                    currentFragment = new SettingsFragment();
-                    mFragManager.beginTransaction()
-                            .replace(R.id.glass_layout, currentFragment)
-                            .addToBackStack(null)
-                            .commit();
-                }
+                launchSettings();
                 return true;
             }
-
-            case R.id.menu_glass_chart: {
-                //Replace the current fragment with the chart fragment.
-                Fragment currentFragment = getCurrentFragment();
-                if (!(currentFragment instanceof ChartFragment)) {
-                    currentFragment = new ChartFragment();
-                    mFragManager.beginTransaction()
-                            .replace(R.id.glass_layout, currentFragment)
-                            .addToBackStack(null)
-                            .commit();
-                }
-                return true;
-            }
-
-            case R.id.menu_glass_map:{
-                //Replace the current fragment with the map fragment.
-                Fragment currentFragment = getCurrentFragment();
-                if(!(currentFragment instanceof GlassMapFragment)){
-                    currentFragment = new GlassMapFragment();
-                    mFragManager.beginTransaction()
-                            .replace(R.id.glass_layout, currentFragment)
-                            .addToBackStack(null)
-                            .commit();
-                }
-                return true;
-            }
-
 
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void launchHud(){
+        //Replace the current fragment with the hud fragment.
+        Fragment currentFragment = getCurrentFragment();
+        if (!(currentFragment instanceof HudFragment)) {
+            currentFragment = new HudFragment();
+            mFragManager.beginTransaction()
+                    .replace(R.id.glass_layout, currentFragment)
+                    .addToBackStack(null)
+                    .commit();
+        }
+    }
+
+    private void launchSettings(){
+        //Replace the current fragment with the SettingsFragment.
+        Fragment currentFragment = getCurrentFragment();
+        if (!(currentFragment instanceof SettingsFragment)) {
+            currentFragment = new SettingsFragment();
+            mFragManager.beginTransaction()
+                    .replace(R.id.glass_layout, currentFragment)
+                    .addToBackStack(null)
+                    .commit();
+        }
+    }
+
+    private void launchMap(){
+        //Replace the current fragment with the map fragment.
+        Fragment currentFragment = getCurrentFragment();
+        if (!(currentFragment instanceof GlassMapFragment)) {
+            currentFragment = new GlassMapFragment();
+            mFragManager.beginTransaction()
+                    .replace(R.id.glass_layout, currentFragment)
+                    .addToBackStack(null)
+                    .commit();
         }
     }
 
@@ -148,11 +205,31 @@ public class GlassActivity extends SuperActivity implements DroidPlannerApp.Conn
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        final MenuItem connectMenuItem = menu.findItem(R.id.menu_connect);
-        int titleRes = drone.MavClient.isConnected() ? R.string.menu_disconnect : R.string
-                .menu_connect;
+        //Update the app navigation menu item based on the current fragment
+        final Fragment currentFragment = getCurrentFragment();
 
-        connectMenuItem.setTitle(titleRes);
+        final MenuItem hudMenu = menu.findItem(R.id.menu_glass_hud);
+        if (hudMenu != null) {
+            final boolean isHudFragment = currentFragment instanceof HudFragment;
+            hudMenu.setEnabled(!isHudFragment);
+            hudMenu.setVisible(!isHudFragment);
+        }
+
+        final MenuItem mapMenu = menu.findItem(R.id.menu_glass_map);
+        if (mapMenu != null) {
+            final boolean isMapFragment = currentFragment instanceof GlassMapFragment;
+            mapMenu.setEnabled(!isMapFragment);
+            mapMenu.setVisible(!isMapFragment);
+        }
+
+        final MenuItem settingsMenu = menu.findItem(R.id.menu_glass_settings);
+        if (settingsMenu != null) {
+            final boolean isSettingsFragment = currentFragment instanceof SettingsFragment;
+            settingsMenu.setEnabled(!isSettingsFragment);
+            settingsMenu.setVisible(!isSettingsFragment);
+        }
+
+        //TODO: If connected, update the title for the drone arming state.
         return true;
     }
 
@@ -163,7 +240,12 @@ public class GlassActivity extends SuperActivity implements DroidPlannerApp.Conn
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (GlassUtils.isGlassDevice() && keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
-            openOptionsMenu();
+            if (GlassUtils.isVoiceControlActive(getApplicationContext())) {
+                GlassVoiceMenu.openVoiceMenu(this);
+            }
+            else {
+                openOptionsMenu();
+            }
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -171,12 +253,12 @@ public class GlassActivity extends SuperActivity implements DroidPlannerApp.Conn
 
     @Override
     public void notifyConnected() {
-
+        invalidateOptionsMenu();
     }
 
     @Override
     public void notifyDisconnected() {
-
+        invalidateOptionsMenu();
     }
 
     private Fragment getCurrentFragment() {

@@ -263,4 +263,8 @@
     <!-- Google glass strings -->
     <string name="glass_voice_trigger">Let\'s fly</string>
     <string name="screen_glass">Glass View</string>
+    <string name="menu_flight_modes">Flight Modes</string>
+    <string name="menu_map">Map</string>
+    <string name="menu_hud">Hud</string>
+    <string name="menu_glass_control">Glass Control</string>
 </resources>

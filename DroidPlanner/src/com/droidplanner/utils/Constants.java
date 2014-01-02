@@ -54,6 +54,20 @@ public class Constants {
      */
     public static final boolean DEFAULT_BLUETOOTH_RELAY_SERVER_TOGGLE = false;
 
+    /**
+     * Preference screen grouping the ui related preferences.
+     */
+    public static final String PREF_UI_SCREEN = "pref_ui";
+
+    /**
+     * This preference controls the use of voice to control the user interface for Google Glass.
+     */
+    public static final String PREF_GLASS_VOICE_CONTROL = "pref_glass_voice_control";
+
+    /**
+     * By default, the use of voice to control the Google Glass user interface is disabled.
+     */
+    public static final boolean DEFAULT_GLASS_VOICE_CONTROL = false;
 
     /*
     Intent actions
