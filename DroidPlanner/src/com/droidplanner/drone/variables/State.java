@@ -59,6 +59,8 @@ public class State extends DroneVariable {
 			myDrone.events.notifyDroneEvent(DroneEventsType.MODE);
 			if (getMode() != ApmModes.ROTOR_GUIDED) {
 				myDrone.guidedPoint.invalidateCoord();
+			}else{
+				myDrone.guidedPoint.initCoord();
 			}
 		}
 	}
