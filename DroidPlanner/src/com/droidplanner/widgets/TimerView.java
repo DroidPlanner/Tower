@@ -27,8 +27,8 @@ public class TimerView {
 	public void resetTimer() {
 		startTime = SystemClock.elapsedRealtime();
 		offsetTime = 0;
-		SpannableString text = new SpannableString("Flight Time\n00:00");
-		text.setSpan(new RelativeSizeSpan(.8f), 0, 11, 0);
+		SpannableString text = new SpannableString("   Flight Time\n  00:00");
+		text.setSpan(new RelativeSizeSpan(.8f), 0, 14, 0);
 		text.setSpan(new AlignmentSpan.Standard(Alignment.ALIGN_NORMAL),0, text.length()-1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		timerValue.setTitle(text);
 
@@ -55,8 +55,8 @@ public class TimerView {
 			long seconds = timeInSeconds%60;
 
 
-			SpannableString text = new SpannableString(String.format("Flight Time\n%02d:%02d", minutes,seconds));
-			text.setSpan(new RelativeSizeSpan(.8f), 0, 11, 0);
+			SpannableString text = new SpannableString(String.format("   Flight Time\n  %02d:%02d", minutes,seconds));
+			text.setSpan(new RelativeSizeSpan(.8f), 0, 14, 0);
 	        text.setSpan(new AlignmentSpan.Standard(Alignment.ALIGN_NORMAL),0, text.length()-1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 			timerValue.setTitle(text);
 
