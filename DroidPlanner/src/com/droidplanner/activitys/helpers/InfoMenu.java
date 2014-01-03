@@ -65,7 +65,7 @@ public class InfoMenu implements OnDroneListner {
 		signalFade = menu.findItem(R.id.bar_signal_fade);
 		signalRemFade = menu.findItem(R.id.bar_signal_faderem);
 		mode = (SelectModeSpinner) menu.findItem(R.id.bar_mode).getActionView();
-		timer = new TimerView(propeler);
+		timer = new TimerView(propeler, drone);
 	}
 
 	public void forceViewsUpdate() {
@@ -91,9 +91,6 @@ public class InfoMenu implements OnDroneListner {
 			case RADIO:
 				updateRadioInfo(drone);
 				break;
-			case STATE:
-				updateFlightStateInfo(drone);
-				break;
 			case HOME:
 				updateHomeInfo(drone);
 				break;
@@ -108,22 +105,22 @@ public class InfoMenu implements OnDroneListner {
 	}
 
 	private void updateBatteryInfo(Drone drone) {
-		SpannableString text = new SpannableString(String.format("Battery\n%2.1fv, %2.0f%% ",drone.battery.getBattVolt(), drone.battery.getBattRemain()));
-		text.setSpan(new RelativeSizeSpan(.8f), 0, 7, 0);
+		SpannableString text = new SpannableString(String.format("   Battery\n  %2.1fv, %2.0f%% ",drone.battery.getBattVolt(), drone.battery.getBattRemain()));
+		text.setSpan(new RelativeSizeSpan(.8f), 0, 10, 0);
 		text.setSpan(new AlignmentSpan.Standard(Alignment.ALIGN_NORMAL),0, text.length()-1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		battery.setTitle(text);
 	}
 
 	private void updateGpsInfo(Drone drone) {
-		SpannableString text = new SpannableString(String.format("Satellite\n%d, %s", drone.GPS.getSatCount(), drone.GPS.getFixType()));
-		text.setSpan(new RelativeSizeSpan(.8f), 0, 10, 0);
+		SpannableString text = new SpannableString(String.format("   Satellite\n  %d, %s", drone.GPS.getSatCount(), drone.GPS.getFixType()));
+		text.setSpan(new RelativeSizeSpan(.8f), 0, 13, 0);
 		text.setSpan(new AlignmentSpan.Standard(Alignment.ALIGN_NORMAL),0, text.length()-1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		gps.setTitle(text);
 	}
 
 	private void updateRadioInfo(Drone drone) {
-		SpannableString text = new SpannableString(String.format("Signal\n%d%%", drone.radio.getSignalStrength()));
-		text.setSpan(new RelativeSizeSpan(.8f), 0, 6, 0);
+		SpannableString text = new SpannableString(String.format("   Signal\n  %d%%", drone.radio.getSignalStrength()));
+		text.setSpan(new RelativeSizeSpan(.8f), 0, 9, 0);
 		text.setSpan(new AlignmentSpan.Standard(Alignment.ALIGN_NORMAL),0, text.length()-1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		signal.setTitle(text);
 
@@ -142,24 +139,16 @@ public class InfoMenu implements OnDroneListner {
 	}
 
 	public void updateHomeInfo(Drone drone) {
-		SpannableString text = new SpannableString(String.format("Home\n%s", drone.home.getDroneDistanceToHome().toString()));
-		text.setSpan(new RelativeSizeSpan(.8f), 0, 4, 0);
+		SpannableString text = new SpannableString(String.format("   Home\n  %s", drone.home.getDroneDistanceToHome().toString()));
+		text.setSpan(new RelativeSizeSpan(.8f), 0, 7, 0);
 		text.setSpan(new AlignmentSpan.Standard(Alignment.ALIGN_NORMAL),0, text.length()-1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		home.setTitle(text);
-	}
-
-	public void updateFlightStateInfo(Drone drone) {
-		if (drone.state.isFlying()) {
-			timer.start();
-		} else {
-			timer.stop();
-		}
 	}
 
 	public void onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.bar_timer_reset:
-			timer.resetTimer();
+			drone.state.resetFlightTimer();
 			break;
 		case R.id.bar_home:
 			drone.waypointMananger.getWaypoints();
