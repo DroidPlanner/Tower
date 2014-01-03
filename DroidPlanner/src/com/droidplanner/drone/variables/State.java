@@ -5,6 +5,7 @@ import com.droidplanner.MAVLink.MavLinkModes;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.drone.DroneVariable;
+import android.os.SystemClock;
 
 public class State extends DroneVariable {
 	private boolean failsafe = false;
@@ -12,8 +13,14 @@ public class State extends DroneVariable {
 	private boolean isFlying = false;
 	private ApmModes mode = ApmModes.UNKNOWN;
 
+	// flightTimer
+	// ----------------
+	private long startTime = 0;
+	private long elapsedFlightTime = 0;
+
 	public State(Drone myDrone) {
 		super(myDrone);
+		resetFlightTimer();
 	}
 
 	public boolean isFailsafe() {
@@ -36,6 +43,11 @@ public class State extends DroneVariable {
 		if (newState != isFlying) {
 			isFlying = newState;
 			myDrone.events.notifyDroneEvent(DroneEventsType.STATE);
+			if(isFlying){
+				startTimer();
+			}else{
+				stopTimer();
+			}
 		}
 	}
 
@@ -70,4 +82,33 @@ public class State extends DroneVariable {
 			MavLinkModes.changeFlightMode(myDrone, mode);
 		}
 	}
+
+
+	// flightTimer
+	// ----------------
+
+	public void resetFlightTimer() {
+		elapsedFlightTime = 0;
+		startTime = SystemClock.elapsedRealtime();
+	}
+
+	public void startTimer() {
+		startTime = SystemClock.elapsedRealtime();
+	}
+
+	public void stopTimer() {
+		// lets calc the final elapsed timer
+		elapsedFlightTime 	+= SystemClock.elapsedRealtime() - startTime;
+		startTime 			= SystemClock.elapsedRealtime();
+	}
+
+	public long getFlightTime() {
+		if(isFlying){
+			// calc delta time since last checked
+			elapsedFlightTime 	+= SystemClock.elapsedRealtime() - startTime;
+			startTime 			= SystemClock.elapsedRealtime();
+		}
+		return elapsedFlightTime / 1000;
+	}
+
 }
