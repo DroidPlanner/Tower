@@ -6,8 +6,10 @@
     android:orientation="horizontal">
 
     <RelativeLayout
-        android:layout_width="680dp"
-        android:layout_height="match_parent" >
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="7"
+        android:minWidth="680dp" >
 
         <TextView
             android:id="@+id/SetupTitle"
@@ -122,8 +124,9 @@
 
     <RelativeLayout
         android:id="@+id/relativeLayout1"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_weight="3"
         android:background="@color/opaque_white" >
 
         <FrameLayout
