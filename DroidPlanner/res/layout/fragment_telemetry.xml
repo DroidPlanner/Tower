@@ -238,6 +238,14 @@
         android:layout_marginLeft="6dp"
 		/>
 
+    <com.droidplanner.widgets.gauges.LinearGauge
+        android:id="@+id/linearGauge1"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/buttonAltitude"
+        android:layout_alignRight="@id/buttonAltitude"
+        android:layout_alignTop="@id/buttonAltitude" />
+
     <LinearLayout
         android:id="@+id/alt_layout"
         android:layout_width="match_parent"
