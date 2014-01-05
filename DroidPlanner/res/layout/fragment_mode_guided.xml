@@ -54,12 +54,39 @@
 		<LinearLayout
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			>
+
+			<Button
+			android:id="@+id/button_altitude_plus_1"
+			style="@style/modeControl"
+			android:layout_width="76dp"
+			android:layout_height="64dp"
+			android:background="@drawable/button_mode_options"
+			android:text="+1"
+			android:layout_marginRight="3dp"
+			/>
+			<Button
+			android:id="@+id/button_altitude_minus_1"
+			style="@style/modeControl"
+			android:layout_width="76dp"
+			android:layout_height="64dp"
+			android:background="@drawable/button_mode_options"
+			android:text="-1"
+			android:layout_marginRight="3dp"
+			android:layout_marginBottom="20dp"
+			/>
+		</LinearLayout>
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
 			android:orientation="horizontal" >
 
 			<Button
 			android:id="@+id/button_altitude_plus_10"
 			style="@style/modeControl"
-			android:layout_width="64dp"
+			android:layout_width="76dp"
 			android:layout_height="64dp"
 			android:background="@drawable/button_mode_options"
 			android:text="+10"
@@ -67,32 +94,12 @@
 			/>
 
 			<Button
-			android:id="@+id/button_altitude_plus_10"
+			android:id="@+id/button_altitude_minus_10"
 			style="@style/modeControl"
-			android:layout_width="64dp"
-			android:layout_height="64dp"
-			android:background="@drawable/button_mode_options"
-			android:text="+1"
-			android:layout_marginRight="16dp"
-			/>
-			<Button
-			android:id="@+id/button_altitude_plus_10"
-			style="@style/modeControl"
-			android:layout_width="64dp"
-			android:layout_height="64dp"
-			android:background="@drawable/button_mode_options"
-			android:text="-1"
-			android:layout_marginRight="3dp"
-			/>
-
-			<Button
-			android:id="@+id/button_altitude_plus_10"
-			style="@style/modeControl"
-			android:layout_width="64dp"
+			android:layout_width="76dp"
 			android:layout_height="64dp"
 			android:background="@drawable/button_mode_options"
 			android:text="-10"
-			android:layout_marginRight="0dp"
 			/>
 		</LinearLayout>
 
