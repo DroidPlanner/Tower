@@ -14,6 +14,7 @@ import com.droidplanner.R;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import com.droidplanner.widgets.gauges.LinearGauge;
 import com.droidplanner.widgets.newHUD.newHUD;
 
 public class TelemetryFragment extends Fragment implements OnDroneListner{
@@ -29,6 +30,7 @@ public class TelemetryFragment extends Fragment implements OnDroneListner{
 	private TextView altitude;
 	private TextView targetAltitude;
 	private boolean headingModeFPV;
+	private LinearGauge altimeter;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,6 +50,8 @@ public class TelemetryFragment extends Fragment implements OnDroneListner{
 		altitude = (TextView) view.findViewById(R.id.altitudeValue);
 		targetAltitude = (TextView) view.findViewById(R.id.targetAltitudeValue);
 
+		altimeter = (LinearGauge) view.findViewById(R.id.altimeterGauge);
+		
 		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
 		return view;
 	}
@@ -110,7 +114,8 @@ public class TelemetryFragment extends Fragment implements OnDroneListner{
 		double targetAlt = drone.altitude.getTargetAltitude();
 		altitude.setText(String.format("%3.1f", alt));
 		targetAltitude.setText(String.format("%3.1f", targetAlt));
-
+		
+		altimeter.setValueAndTarget((float)alt,(float)targetAlt);
 	}
 
 
