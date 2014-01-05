@@ -18,8 +18,6 @@ public class LinearGauge extends View {
 	private static final float TRIANGLE_SIZE = 0.15f;
 
 	private static final float RANGE = 7f;
-	private static final float TICK_SPACING = 0.5f;
-	private static final float TICK_PADDING = 0.5f;
 
 	private int w;
 	private int h;
@@ -112,6 +110,12 @@ public class LinearGauge extends View {
 		background.lineTo(w, h);
 		background.lineTo(w, 0);
 		background.close();
+	}
+
+	public void setValueAndTarget(float value, float target) {
+		this.value = value;
+		this.target = target;
+		invalidate();
 	}
 
 }
