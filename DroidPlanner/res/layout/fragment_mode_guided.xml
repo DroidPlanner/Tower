@@ -47,6 +47,7 @@
 		<!--  Altitude buttons -->
 		<TextView
 			style="@style/modeLabel"
+			android:id="@+id/guided_altitude"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:text="Target Altitude 10m" />
