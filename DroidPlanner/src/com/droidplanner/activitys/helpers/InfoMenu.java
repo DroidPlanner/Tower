@@ -65,7 +65,7 @@ public class InfoMenu implements OnDroneListner {
 		signalFade = menu.findItem(R.id.bar_signal_fade);
 		signalRemFade = menu.findItem(R.id.bar_signal_faderem);
 		mode = (SelectModeSpinner) menu.findItem(R.id.bar_mode).getActionView();
-		timer = new TimerView(propeler);
+		timer = new TimerView(propeler, drone);
 	}
 
 	public void forceViewsUpdate() {
@@ -90,9 +90,6 @@ public class InfoMenu implements OnDroneListner {
 				break;
 			case RADIO:
 				updateRadioInfo(drone);
-				break;
-			case STATE:
-				updateFlightStateInfo(drone);
 				break;
 			case HOME:
 				updateHomeInfo(drone);
@@ -148,18 +145,10 @@ public class InfoMenu implements OnDroneListner {
 		home.setTitle(text);
 	}
 
-	public void updateFlightStateInfo(Drone drone) {
-		if (drone.state.isFlying()) {
-			timer.start();
-		} else {
-			timer.stop();
-		}
-	}
-
 	public void onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.bar_timer_reset:
-			timer.resetTimer();
+			drone.state.resetFlightTimer();
 			break;
 		case R.id.bar_home:
 			drone.waypointMananger.getWaypoints();
