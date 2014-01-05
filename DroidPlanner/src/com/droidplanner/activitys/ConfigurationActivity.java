@@ -34,7 +34,7 @@ public class ConfigurationActivity extends SuperUI implements
 	public static final String SCREEN_INTENT = "screen";
 	public static final String SETTINGS = "settings";
 	private ViewPager viewPager;
-
+	
 	private List<OnPageChangeListener> pageListeners = new ArrayList<OnPageChangeListener>();
 
 	@Override
@@ -200,6 +200,11 @@ public class ConfigurationActivity extends SuperUI implements
 				listener.onPageSelected(arg0);
 			}
 		}
+	}
+
+	@Override
+	public CharSequence[][] getHelpItems() {
+		return new CharSequence[][] { {}, {} };
 	}
 
 }

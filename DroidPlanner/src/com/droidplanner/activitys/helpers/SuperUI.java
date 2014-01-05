@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.droidplanner.DroidPlannerApp.ConnectionStateListner;
 import com.droidplanner.R;
@@ -20,13 +19,12 @@ import com.droidplanner.gcs.GCSHeartbeat;
 
 public abstract class SuperUI extends SuperActivity implements ConnectionStateListner, OnDroneListner, OnClickListener {
 	/**
-	 * Contains a list of help guides names, with the associated youtube video
-	 * link
+	 * Get help items to be populated
+	 * 
+	 * @return A matrix with pars of help guides names, with the associated
+	 *         video url
 	 */
-	public CharSequence[][] help = {
-			{ "Spline", "DP v3" },
-			{ "https://www.youtube.com/watch?v=v9ydP-NWoJE",
-					"https://www.youtube.com/watch?v=miwWUgX6nwY" } };
+	public abstract CharSequence[][] getHelpItems();
 
 	private ScreenOrientation screenOrientation = new ScreenOrientation(this);
 	private InfoMenu infoMenu;
@@ -92,7 +90,7 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
 	private void showHelpDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(R.string.help);
-		builder.setItems(help[0], this);
+		builder.setItems(getHelpItems()[0], this);
 		builder.create().show();		
 	}
 
@@ -120,7 +118,6 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
 	
 	@Override
 	public void onClick(DialogInterface dialog, int which) {
-		Toast.makeText(this, help[1][which], Toast.LENGTH_LONG).show();
-		startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(help[1][which].toString())));		
+		startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getHelpItems()[1][which].toString())));		
 	}
 }

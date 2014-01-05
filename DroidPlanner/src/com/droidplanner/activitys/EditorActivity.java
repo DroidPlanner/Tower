@@ -343,4 +343,9 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 	public void onListVisibilityChanged() {
 		updateMapPadding();
 	}
+
+	@Override
+	public CharSequence[][] getHelpItems() {
+		return new CharSequence[][] { {}, {} };
+	}
 }
