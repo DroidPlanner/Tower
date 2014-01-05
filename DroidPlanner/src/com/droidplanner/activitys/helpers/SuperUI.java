@@ -1,10 +1,6 @@
 package com.droidplanner.activitys.helpers;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,15 +13,7 @@ import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
 import com.droidplanner.gcs.GCSHeartbeat;
 
 
-public abstract class SuperUI extends SuperActivity implements ConnectionStateListner, OnDroneListner, OnClickListener {
-	/**
-	 * Get help items to be populated
-	 * 
-	 * @return A matrix with pars of help guides names, with the associated
-	 *         video url
-	 */
-	public abstract CharSequence[][] getHelpItems();
-
+public abstract class SuperUI extends SuperActivity implements ConnectionStateListner, OnDroneListner {
 	private ScreenOrientation screenOrientation = new ScreenOrientation(this);
 	private InfoMenu infoMenu;
 	private GCSHeartbeat gcsHeartbeat;
@@ -81,17 +69,7 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		infoMenu.onOptionsItemSelected(item);
-		if (item.getItemId() == R.id.menu_help) {
-			showHelpDialog();
-		}
 		return super.onOptionsItemSelected(item);
-	}
-
-	private void showHelpDialog() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(R.string.help);
-		builder.setItems(getHelpItems()[0], this);
-		builder.create().show();		
 	}
 
 	public void notifyDisconnected() {
@@ -114,10 +92,5 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
 		}
 		*/
 		screenOrientation.requestLock();
-	}
-	
-	@Override
-	public void onClick(DialogInterface dialog, int which) {
-		startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getHelpItems()[1][which].toString())));		
 	}
 }
