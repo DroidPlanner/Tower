@@ -5,11 +5,11 @@ import java.util.List;
 
 import android.content.Context;
 import android.widget.Toast;
-import com.MAVLink.Messages.ApmModes;
+
 import com.droidplanner.MAVLink.MavLinkModes;
 import com.droidplanner.drone.Drone;
-import com.droidplanner.drone.DroneVariable;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
+import com.droidplanner.drone.DroneVariable;
 import com.droidplanner.fragments.helpers.MapPath.PathSource;
 import com.droidplanner.fragments.markers.GuidedMarker;
 import com.droidplanner.fragments.markers.MarkerManager.MarkerSource;
@@ -28,11 +28,6 @@ public class GuidedPoint extends DroneVariable implements MarkerSource, PathSour
 
 	public GuidedPoint(Drone myDrone) {
 		super(myDrone);
-	}
-
-	public void newGuidedPointWithCurrentAlt(LatLng coord) {
-		altitude = new Altitude(myDrone.altitude.getAltitude());
-		newGuidedPointwithLastAltitude(coord);
 	}
 
 	public void newGuidedPointwithLastAltitude(LatLng coord) {

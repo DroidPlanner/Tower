@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.MAVLink.Messages.ApmModes;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.drone.variables.GuidedPoint;
@@ -32,7 +33,6 @@ public class FlightMapFragment extends DroneMap implements
 	private MapPath droneLeashPath;
 	private int maxFlightPathSize;
 	public boolean isAutoPanEnabled;
-	private boolean isGuidedModeEnabled;
 
 	public boolean hasBeenZoomed = false;
 
@@ -61,8 +61,6 @@ public class FlightMapFragment extends DroneMap implements
 				.getDefaultSharedPreferences(context);
 		maxFlightPathSize = Integer.valueOf(prefs.getString(
 				"pref_max_fligth_path_size", "0"));
-		isGuidedModeEnabled = prefs.getBoolean("pref_guided_mode_enabled",
-				false);
 		isAutoPanEnabled = prefs.getBoolean("pref_auto_pan_enabled", false);
 	}
 
@@ -96,9 +94,10 @@ public class FlightMapFragment extends DroneMap implements
 
 	@Override
 	public void onMapLongClick(LatLng coord) {
-		getPreferences();
-		if (isGuidedModeEnabled && drone.MavClient.isConnected())
-			drone.guidedPoint.newGuidedPointWithCurrentAlt(coord);
+		if (drone.state.getMode()==ApmModes.ROTOR_GUIDED) {
+			if (drone.MavClient.isConnected())
+				drone.guidedPoint.newGuidedPointwithLastAltitude(coord);			
+		}
 	}
 
 	@Override
@@ -116,7 +115,7 @@ public class FlightMapFragment extends DroneMap implements
 
 	@Override
 	public boolean onMarkerClick(Marker marker) {
-		drone.guidedPoint.newGuidedPointWithCurrentAlt(marker.getPosition());
+		drone.guidedPoint.newGuidedPointwithLastAltitude(marker.getPosition());
 		return true;
 	}
 
