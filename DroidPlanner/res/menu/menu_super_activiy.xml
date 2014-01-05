@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" >
-    
-    <item
-        android:id="@+id/menu_connect"
-        android:showAsAction="always"
-        android:title="@string/menu_connect"/>
     <item
         android:id="@+id/menu_settings"
         android:showAsAction="never"
         android:title="@string/settings"/>
-    
-    
+    <item
+        android:id="@+id/menu_help"
+        android:showAsAction="never"
+        android:title="@string/help"/>
 </menu>

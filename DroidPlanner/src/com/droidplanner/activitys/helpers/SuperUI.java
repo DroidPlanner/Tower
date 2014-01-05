@@ -1,10 +1,12 @@
 package com.droidplanner.activitys.helpers;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.droidplanner.DroidPlannerApp.ConnectionStateListner;
+import com.droidplanner.R;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
@@ -53,7 +55,8 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
 	public boolean onCreateOptionsMenu(Menu menu) {
 		infoMenu = new InfoMenu(drone,this);
 		infoMenu.inflateMenu(menu, getMenuInflater());	
-		infoMenu.setupModeSpinner(this);		
+		infoMenu.setupModeSpinner(this);
+		getMenuInflater().inflate(R.menu.menu_super_activiy, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -66,7 +69,17 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		infoMenu.onOptionsItemSelected(item);
+		if (item.getItemId() == R.id.menu_help) {
+			showHelpDialog();
+		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	private void showHelpDialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(R.string.help);
+		
+		builder.create().show();		
 	}
 
 	public void notifyDisconnected() {
