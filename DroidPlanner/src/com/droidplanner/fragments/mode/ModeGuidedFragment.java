@@ -68,7 +68,6 @@ public class ModeGuidedFragment extends Fragment implements
 	}
 
 	private void updateLabel() {
-		String tmp = String.format("%2.0f", drone.guidedPoint.getAltitude());
-		this.altTextView.setText("Target Altitude: " + tmp +"m" );
+		this.altTextView.setText("Target Altitude: " + drone.guidedPoint.getAltitude());
 	}
 }

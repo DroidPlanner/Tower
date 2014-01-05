@@ -46,7 +46,6 @@ public class GuidedPoint extends DroneVariable implements MarkerSource, PathSour
 			this.altitude = new Altitude(alt + altChange);
 		}
 
-		//Toast.makeText(myDrone.context, "change alt: " + this.altitude, Toast.LENGTH_SHORT).show();
 		sendGuidedPoint();
 	}
 
@@ -54,16 +53,14 @@ public class GuidedPoint extends DroneVariable implements MarkerSource, PathSour
 		myDrone.events.notifyDroneEvent(DroneEventsType.GUIDEDPOINT);
 		MavLinkModes.setGuidedMode(myDrone, coord.latitude, coord.longitude,
 				this.altitude.valueInMeters());
-		//Toast.makeText(myDrone.context, "Guided Mode (" + altitude + ")",
-		//		Toast.LENGTH_SHORT).show();
 	}
 
 	public LatLng getCoord() {
 		return coord;
 	}
 
-	public Double getAltitude() {
-		return this.altitude.valueInMeters();
+	public Altitude getAltitude() {
+		return this.altitude;
 	}
 
 	public void invalidateCoord() {
