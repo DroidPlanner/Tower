@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.MAVLink.Messages.ApmModes;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.drone.variables.GuidedPoint;
@@ -94,10 +93,7 @@ public class FlightMapFragment extends DroneMap implements
 
 	@Override
 	public void onMapLongClick(LatLng coord) {
-		if (drone.state.getMode()==ApmModes.ROTOR_GUIDED) {
-			if (drone.MavClient.isConnected())
-				drone.guidedPoint.newGuidedPointwithLastAltitude(coord);			
-		}
+		drone.guidedPoint.changeGuidedCoordinate(coord);
 	}
 
 	@Override
@@ -110,12 +106,12 @@ public class FlightMapFragment extends DroneMap implements
 
 	@Override
 	public void onMarkerDragEnd(Marker marker) {
-		drone.guidedPoint.newGuidedPointwithLastAltitude(marker.getPosition());
+		drone.guidedPoint.changeGuidedCoordinate(marker.getPosition());
 	}
 
 	@Override
 	public boolean onMarkerClick(Marker marker) {
-		drone.guidedPoint.newGuidedPointwithLastAltitude(marker.getPosition());
+		drone.guidedPoint.changeGuidedCoordinate(marker.getPosition());
 		return true;
 	}
 

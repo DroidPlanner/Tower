@@ -6,6 +6,7 @@ import java.util.List;
 import android.content.Context;
 import android.widget.Toast;
 
+import com.MAVLink.Messages.ApmModes;
 import com.droidplanner.MAVLink.MavLinkModes;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
@@ -30,23 +31,26 @@ public class GuidedPoint extends DroneVariable implements MarkerSource, PathSour
 		super(myDrone);
 	}
 
-	public void newGuidedPointwithLastAltitude(LatLng coord) {
-		this.coord = coord;
-		sendGuidedPoint();
+	public void changeGuidedCoordinate(LatLng coord) {
+		if(canChange()){
+			this.coord = coord;
+			sendGuidedPoint();
+		}
 	}
 
-	public void updateGuidedPointwithDeltaAltitude(double altChange) {
-		double alt = Math.floor(this.altitude.valueInMeters());
-		alt = Math.max(alt, 2.0);
-
-		if(altChange < -1 && alt <= 10)
-			altChange = -1;
-
-		if ((alt + altChange) > 1.0){
-			this.altitude = new Altitude(alt + altChange);
+	public void changeGuidedAltitude(double altChange) {
+		if(canChange()){
+			double alt = Math.floor(this.altitude.valueInMeters());
+			alt = Math.max(alt, 2.0);
+	
+			if(altChange < -1 && alt <= 10)
+				altChange = -1;
+	
+			if ((alt + altChange) > 1.0){
+				this.altitude = new Altitude(alt + altChange);
+			}	
+			sendGuidedPoint();
 		}
-
-		sendGuidedPoint();
 	}
 
 	private void sendGuidedPoint() {
@@ -84,6 +88,11 @@ public class GuidedPoint extends DroneVariable implements MarkerSource, PathSour
 
 	public boolean isValid() {
 		return (coord != null) & (altitude != null);
+	}
+
+	private boolean canChange() {
+		return (myDrone.state.getMode() == ApmModes.ROTOR_GUIDED)
+				& (myDrone.MavClient.isConnected());
 	}
 
 	@Override
