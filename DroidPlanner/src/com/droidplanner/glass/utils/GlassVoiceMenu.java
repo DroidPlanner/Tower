@@ -10,12 +10,13 @@ import com.droidplanner.glass.activities.GlassFlightActivity;
 
 import java.util.List;
 import com.droidplanner.glass.activities.GlassActivity;
+import android.view.Menu;
 
 /**
  * This class implements the menu to drive the Glass interface with voice.
  * @author Fredia Huya-Kouadio
  */
-public class GlassVoiceMenu {
+public class GlassVoiceMenu implements Menu {
 
     public static final int SPEECH_REQUEST = 0;
 	

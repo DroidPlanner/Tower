@@ -56,9 +56,7 @@ public class GlassActivity extends SuperActivity {
 		voiceMenu = null;
 	}
 	
-	protected void onCreateVoiceMenu(GlassVoiceMenu voiceMenu){
-		
-	}
+	protected void onCreateVoiceMenu(GlassVoiceMenu voiceMenu){}
 	
 	protected void onPrepareVoiceMenu(GlassVoiceMenu voiceMenu){
 		
