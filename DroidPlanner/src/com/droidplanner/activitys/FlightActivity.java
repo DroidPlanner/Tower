@@ -32,7 +32,7 @@ import com.droidplanner.fragments.mode.ModeLoiterFragment;
 import com.droidplanner.fragments.mode.ModePositionFragment;
 import com.droidplanner.fragments.mode.ModeRTLFragment;
 import com.droidplanner.fragments.mode.ModeStabilizeFragment;
-import com.droidplanner.glass.activities.GlassActivity;
+import com.droidplanner.glass.activities.GlassFlightActivity;
 import com.droidplanner.glass.utils.GlassUtils;
 import com.droidplanner.polygon.PolygonPoint;
 import com.google.android.gms.maps.model.LatLng;
@@ -50,7 +50,7 @@ public class FlightActivity extends SuperUI implements
 		super.onCreate(savedInstanceState);
         if(GlassUtils.isGlassDevice()){
             //Start the glass activity
-            startActivity(new Intent(this, GlassActivity.class));
+            startActivity(new Intent(this, GlassFlightActivity.class));
             finish();
         }
         else {

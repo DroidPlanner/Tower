@@ -6,9 +6,10 @@ import android.content.Intent;
 import android.speech.RecognizerIntent;
 import android.widget.Toast;
 import com.droidplanner.R;
-import com.droidplanner.glass.activities.GlassActivity;
+import com.droidplanner.glass.activities.GlassFlightActivity;
 
 import java.util.List;
+import com.droidplanner.glass.activities.GlassActivity;
 
 /**
  * This class implements the menu to drive the Glass interface with voice.
@@ -17,21 +18,27 @@ import java.util.List;
 public class GlassVoiceMenu {
 
     public static final int SPEECH_REQUEST = 0;
+	
+	private final GlassActivity glassActivity;
+	
+	public GlassVoiceMenu(GlassActivity activity){
+		glassActivity = activity;
+	}
 
-    public static void openVoiceMenu(final GlassActivity activity){
+    public void openVoiceMenu(){
         //Start the voice recognizer. List the available options as prompt.
         String extraPrompt = "Say,\n";
-        extraPrompt += activity.drone.MavClient.isConnected()
+        extraPrompt += glassActivity.drone.MavClient.isConnected()
                 ?"\t\t\" Flight Modes \"\n\t\t\" Disconnect \"\n"
                 :"\t\t\" Connect \"\n";
         extraPrompt += "\t\t\" Hud \"\n\t\t\" Map \"\n\t\t\" Settings \"";
 
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
                 .putExtra(RecognizerIntent.EXTRA_PROMPT, extraPrompt);
-        activity.startActivityForResult(intent, SPEECH_REQUEST);
+        glassActivity.startActivityForResult(intent, SPEECH_REQUEST);
     }
 
-    public static void onSpeechComplete(Context context, Intent data){
+    public void onSpeechComplete(Context context, Intent data){
         List<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
         String recognizedText = null;
         if(!results.isEmpty()){
