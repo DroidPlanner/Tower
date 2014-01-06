@@ -3,11 +3,11 @@ package com.droidplanner.fragments.helpers;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Fragment;
 import android.gesture.GestureOverlayView;
 import android.gesture.GestureOverlayView.OnGestureListener;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;

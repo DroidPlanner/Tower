@@ -5,9 +5,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import android.app.ListFragment;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,8 +32,9 @@ import com.droidplanner.file.IO.ParameterWriter;
 import com.droidplanner.parameters.Parameter;
 import com.droidplanner.parameters.ParameterMetadata;
 
-public class ParamsFragment extends ListFragment
-        implements DroneInterfaces.OnParameterManagerListner, OnDroneListner{
+public class ParamsFragment extends ListFragment implements DroneInterfaces
+        .OnParameterManagerListner, OnDroneListner{
+
     public static final String ADAPTER_ITEMS = ParamsFragment.class.getName() + ".adapter.items";
 
     private ProgressDialog pd;

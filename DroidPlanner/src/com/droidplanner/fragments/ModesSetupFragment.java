@@ -1,7 +1,7 @@
 package com.droidplanner.fragments;
 
-import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,30 +19,20 @@ public class ModesSetupFragment extends Fragment implements OnDroneListner {
 
 	private Drone drone;
 
-
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
 		View view = inflater.inflate(R.layout.fragment_setup_modes, container,false);
 
-		setupLocalViews(view);
-		drone.events.addDroneListener(this);
 		return view;
 	}
 
-	private void setupLocalViews(View view) {
-	}
-
-	@Override
-	public void onStart() {
-		super.onStart();
-	}
-
-	@Override
-	public void onStop() {
-		super.onStop();
-	}
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState){
+        super.onActivityCreated(savedInstanceState);
+        drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
+        drone.events.addDroneListener(this);
+    }
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {

@@ -1,10 +1,8 @@
 package com.droidplanner.fragments;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +11,6 @@ import android.view.ViewGroup;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
 import com.droidplanner.MAVLink.MavLinkStreamRates;
-import com.droidplanner.activitys.ConfigurationActivity;
 import com.droidplanner.calibration.CH_CalParameters;
 import com.droidplanner.calibration.CalParameters;
 import com.droidplanner.calibration.CalParameters.OnCalibrationEvent;
@@ -26,18 +23,27 @@ import com.droidplanner.fragments.calibration.rc.FragmentSetupRCMenu;
 import com.droidplanner.fragments.calibration.rc.FragmentSetupRCMiddle;
 import com.droidplanner.fragments.calibration.rc.FragmentSetupRCMinMax;
 import com.droidplanner.fragments.calibration.rc.FragmentSetupRCOptions;
-import com.droidplanner.fragments.calibration.rc.FragmentSetupRCPanel;
 import com.droidplanner.fragments.calibration.rc.FragmentSetupRCProgress;
 import com.droidplanner.widgets.FillBar.FillBarMinMaxL;
 import com.droidplanner.widgets.FillBar.FillBarMinMaxR;
 import com.droidplanner.widgets.FillBar.FillBarMinMaxText;
 import com.droidplanner.widgets.RcStick.RcStick;
 
-public class RcSetupFragment extends Fragment implements OnDroneListner,
-		OnCalibrationEvent, OnPageChangeListener {
+/**
+ * This fragment is used to calibrate the drone's radio.
+ */
+public class RcSetupFragment extends Fragment implements OnDroneListner, OnCalibrationEvent {
 
+    /**
+     * Minimum threshold for the RC value.
+     */
 	private static final int RC_MIN = 900;
+
+    /**
+     * Maximum threshold for the RC value.
+     */
 	private static final int RC_MAX = 2100;
+
 	// Extreme RC update rate in this screen
 	private static final int RC_MSG_RATE = 50;
 
@@ -45,11 +51,10 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 			"CH 5", "CH 6", "CH 7", "CH 8" };
 
 	private Drone drone;
-	private ConfigurationActivity parent;
-	
+
 	private RC_CalParameters rcParameters;
 	private CH_CalParameters chParameters;
-	private CalParameters currParameters = null;
+	private CalParameters currParameters;
 
 	private FillBarMinMaxR barELE;
 	private FillBarMinMaxL barTHR;
@@ -64,73 +69,55 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 	private RcStick stickRight;
 
 	private FragmentManager fragmentManager;
-	private FragmentSetupRCPanel setupPanel;
+	private Fragment setupPanel;
 
-	int data[], cMin[] = new int[8], cMid[] = new int[8], cMax[] = new int[8];
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		rcParameters = new RC_CalParameters(drone);
-		chParameters = new CH_CalParameters(drone);
-		fragmentManager = getFragmentManager();
-		setupPanel = (FragmentSetupRCPanel) fragmentManager
-				.findFragmentById(R.id.fragment_setup_rc_panel);
-	}
+	private int data[] = new int[8];
+    private int cMin[] = new int[8];
+    private int cMid[] = new int[8];
+    private int cMax[] = new int[8];
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_setup_rc, container,
-				false);
-		setupLocalViews(view);
-		setupFragmentPanel(view);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		final View view = inflater.inflate(R.layout.fragment_setup_rc, container,	false);
+        setupLocalViews(view);
 
-		return view;
-	}
+        fragmentManager = getChildFragmentManager();
+        setupPanel = fragmentManager.findFragmentById(R.id.fragment_setup_rc_panel);
+        if (setupPanel == null) {
+            setupPanel = new FragmentSetupRCMenu();
+            fragmentManager
+                    .beginTransaction()
+                    .add(R.id.fragment_setup_rc_panel, setupPanel)
+                    .commit();
+        } else {
+            cancel();
+        }
 
-	private void setupFragmentPanel(View view) {
-		if (setupPanel == null) {
-			setupPanel = new FragmentSetupRCMenu();
-			((FragmentSetupRCMenu) setupPanel).rcSetupFragment = this;
-			fragmentManager.beginTransaction()
-					.add(R.id.fragment_setup_rc_panel, setupPanel).commit();
-		} else {
-			cancel();
-		}
-	}
-
-	@Override
-	public void onAttach(Activity activity) {
-		parent = (ConfigurationActivity)activity;
-		parent.addOnPageChangeListener(this);
-		super.onAttach(activity);
-	}
-
-	@Override
-	public void onDetach() {
-		// TODO Auto-generated method stub
-		super.onDetach();
+        return view;
 	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
 		this.drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
-		super.onActivityCreated(savedInstanceState);
+        rcParameters = new RC_CalParameters(drone);
+        chParameters = new CH_CalParameters(drone);
 	}
 
 	@Override
 	public void onStart() {
+        super.onStart();
 		drone.events.addDroneListener(this);
 		setupDataStreamingForRcSetup();
-		super.onStart();
 	}
 
 	@Override
 	public void onStop() {
+        super.onStop();
 		drone.events.removeDroneListener(this);
 		resetDataStreamingForRcSetup();
-		super.onStop();
+
 	}
 
 
@@ -138,9 +125,6 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 	public void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		if (setupPanel != null) {
-			setupPanel.rcSetupFragment = this;
-		}
 
 		if (rcParameters != null) {
 			rcParameters.setOnCalibrationEventListener(this);
@@ -150,6 +134,8 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 			chParameters.setOnCalibrationEventListener(this);
 		}
 
+        Log.d("CAL", "RC Setup");
+        setupDataStreamingForRcSetup();
 	}
 
 	@Override
@@ -158,28 +144,26 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 		case RC_IN:
 			onNewInputRcData();
 			break;
-		case RC_OUT:
-			break;
-		case PARAMETER:
 
+		case PARAMETER:
 			if (currParameters != null) {
 				currParameters.processReceivedParam();
 			}
 			break;
+
+        case RC_OUT:
 		default:
 			break;
 		}
 	}
 
 	private void resetDataStreamingForRcSetup() {
-		MavLinkStreamRates
-		.setupStreamRatesFromPref((DroidPlannerApp) getActivity()
+		MavLinkStreamRates.setupStreamRatesFromPref((DroidPlannerApp) getActivity()
 				.getApplication());
 	}
 
 	private void setupDataStreamingForRcSetup() {
-		MavLinkStreamRates.setupStreamRates(drone.MavClient, 1, 0, 1, 1, 1,
-				RC_MSG_RATE, 0, 0);
+		MavLinkStreamRates.setupStreamRates(drone.MavClient, 1, 0, 1, 1, 1,	RC_MSG_RATE, 0, 0);
 	}
 
 	private void onNewInputRcData() {
@@ -241,20 +225,23 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 		case 0:
 			setupPanel = getRCMenuPanel();
 			break;
+
 		case 1:
-			currParameters = rcParameters;
+            currParameters = rcParameters;
 			setupPanel = getRCCalibrationPanel();
 			break;
+
 		case 2:
 			setupPanel = new FragmentSetupRCMiddle();
-			setupPanel.rcSetupFragment = this;
 			break;
+
 		case 3:
+            Bundle args = new Bundle();
+            args.putString(FragmentSetupRCCompleted.EXTRA_TEXT_SUMMARY, getCalibrationStr());
 			setupPanel = new FragmentSetupRCCompleted();
-			setupPanel.rcSetupFragment = this;
-			((FragmentSetupRCCompleted) setupPanel)
-					.setText(getCalibrationStr());
+            setupPanel.setArguments(args);
 			break;
+
 		case 4:
 			currParameters = chParameters;
 			setupPanel = getCHCalibrationPanel();
@@ -264,48 +251,37 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 				.replace(R.id.fragment_setup_rc_panel, setupPanel).commit();
 	}
 
-	private FragmentSetupRCPanel getRCMenuPanel() {
-		if (currParameters != null) {
-			setupPanel = new FragmentSetupRCProgress();
-			((FragmentSetupRCProgress) setupPanel).rcSetupFragment = this;
-		} else {
-			currParameters = null;
-			setupPanel = new FragmentSetupRCMenu();
-			((FragmentSetupRCMenu) setupPanel).rcSetupFragment = this;
-		}
+	private Fragment getRCMenuPanel() {
+        setupPanel = currParameters == null
+                ? new FragmentSetupRCMenu()
+                : new FragmentSetupRCProgress();
+
 		return setupPanel;
 	}
 
-	private FragmentSetupRCPanel getRCCalibrationPanel() {
+	private Fragment getRCCalibrationPanel() {
 		if (!rcParameters.isParameterDownloaded()) {
-			currParameters = rcParameters;
 			setupPanel = new FragmentSetupRCProgress();
-			((FragmentSetupRCProgress) setupPanel).rcSetupFragment = this;
 			rcParameters.getCalibrationParameters(drone);
-		} else {
+		}
+        else {
 			setFillBarShowMinMax(true);
 			setupPanel = new FragmentSetupRCMinMax();
-			((FragmentSetupRCMinMax) setupPanel).rcSetupFragment = this;
 		}
-		// TODO Auto-generated method stub
 		return setupPanel;
 	}
 
-	private FragmentSetupRCPanel getCHCalibrationPanel() {
+	private Fragment getCHCalibrationPanel() {
 		if (!chParameters.isParameterDownloaded()) {
-			currParameters = chParameters;
 			setupPanel = new FragmentSetupRCProgress();
-			setupPanel.rcSetupFragment = this;
 			chParameters.getCalibrationParameters(drone);
-		} else {
+		}
+        else {
 			setupPanel = new FragmentSetupRCOptions();
-			setupPanel.rcSetupFragment = this;
 			((FragmentSetupRCOptions) setupPanel)
-					.setOptionCH7((int) chParameters
-							.getParamValueByName("CH7_OPT"));
+                    .setOptionCH7((int) chParameters.getParamValueByName("CH7_OPT"));
 			((FragmentSetupRCOptions) setupPanel)
-					.setOptionCH8((int) chParameters
-							.getParamValueByName("CH8_OPT"));
+					.setOptionCH8((int) chParameters.getParamValueByName("CH8_OPT"));
 		}
 		return setupPanel;
 	}
@@ -348,18 +324,14 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 		currParameters = rcParameters;
 
 		for (int i = 0; i < 8; i++) {
-			rcParameters.setParamValueByName("RC" + String.valueOf(i + 1)
-					+ "_MIN", cMin[i]);
-			rcParameters.setParamValueByName("RC" + String.valueOf(i + 1)
-					+ "_MAX", cMax[i]);
-			rcParameters.setParamValueByName("RC" + String.valueOf(i + 1)
-					+ "_TRIM", cMid[i]);
+			rcParameters.setParamValueByName("RC" + String.valueOf(i + 1) + "_MIN", cMin[i]);
+			rcParameters.setParamValueByName("RC" + String.valueOf(i + 1) + "_MAX", cMax[i]);
+			rcParameters.setParamValueByName("RC" + String.valueOf(i + 1) + "_TRIM", cMid[i]);
 		}
 
 		setFillBarShowMinMax(false);
 		changeSetupPanel(0);
 		rcParameters.sendCalibrationParameters();
-
 	}
 
 	public void updateRCOptionsData() {
@@ -395,8 +367,8 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 	}
 
 	@Override
-	public void onCalibrationData(CalParameters calParameters, int index,
-			int count, boolean isSending) {
+	public void onCalibrationData(CalParameters calParameters, int index, int count,
+                                  boolean isSending) {
 		if (setupPanel != null && currParameters != null) {
 			String title;
 			if (isSending) {
@@ -409,30 +381,8 @@ public class RcSetupFragment extends Fragment implements OnDroneListner,
 					title = "Downloading RC calibration data";
 				else
 					title = "Downloading RC options data";
-
 			}
-			((FragmentSetupRCProgress) setupPanel).setText(title);
-			((FragmentSetupRCProgress) setupPanel).updateProgress(index, count);
-		}
-	}
-
-	@Override
-	public void onPageScrollStateChanged(int arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onPageScrolled(int arg0, float arg1, int arg2) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onPageSelected(int arg0) {
-		if(arg0==2){
-			Log.d("CAL", "RC Setup");
-			setupDataStreamingForRcSetup();
+			((FragmentSetupRCProgress) setupPanel).updateProgress(index, count, title);
 		}
 	}
 }

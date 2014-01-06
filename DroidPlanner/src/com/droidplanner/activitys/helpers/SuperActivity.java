@@ -1,23 +1,23 @@
 package com.droidplanner.activitys.helpers;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentActivity;
 import android.view.MenuItem;
-
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.DroidPlannerApp.OnSystemArmListener;
 import com.droidplanner.R;
 import com.droidplanner.activitys.ConfigurationActivity;
+import com.droidplanner.activitys.SettingsActivity;
 import com.droidplanner.dialogs.AltitudeDialog;
 import com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.fragments.helpers.OfflineMapFragment;
 import com.droidplanner.helpers.units.Altitude;
 
-public abstract class SuperActivity extends Activity implements
+public abstract class SuperActivity extends FragmentActivity implements
 		OnAltitudeChangedListner, OnSystemArmListener {
 
 	public DroidPlannerApp app;
@@ -44,14 +44,11 @@ public abstract class SuperActivity extends Activity implements
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
-		//case R.id.menu_configuration:
-		//	startActivity(new Intent(this, ConfigurationActivity.class));
-		//	return true;
+		case R.id.menu_configuration:
+			startActivity(new Intent(this, ConfigurationActivity.class));
+			return true;
 		case R.id.menu_settings:
-			Intent intent = new Intent(this, ConfigurationActivity.class);
-			intent.putExtra(ConfigurationActivity.SCREEN_INTENT,
-					ConfigurationActivity.SETTINGS);
-			startActivity(intent);
+			startActivity(new Intent(this, SettingsActivity.class));
 			return true;
 		case R.id.menu_connect:
 			drone.MavClient.toggleConnectionState();

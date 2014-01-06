@@ -5,7 +5,6 @@
     style="@style/configLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-	tools:ignore="HardcodedText"
     android:orientation="horizontal" >
 
     <RelativeLayout
@@ -19,7 +18,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
             android:layout_below="@+id/chartTop"
-            android:layout_weight="1" />
+             />
 
         <com.droidplanner.widgets.graph.Chart
             android:id="@+id/chartTop"
@@ -28,7 +27,7 @@
             android:layout_alignBottom="@+id/firstDivider"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_weight="1" />
+             />
 
         <View
             android:id="@+id/firstDivider"
@@ -44,7 +43,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignTop="@+id/chartBottom"
-            android:layout_weight="1"
             android:text="Large Text"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
