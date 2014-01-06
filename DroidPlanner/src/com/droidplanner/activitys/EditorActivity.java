@@ -83,7 +83,6 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
 		updateMapPadding();
-		missionListFragment.updateViewVisibility();
 	}
 
 	private void updateMapPadding() {

@@ -63,6 +63,7 @@ public class EditorListFragment extends Fragment implements  OnItemLongClickList
 	@Override
 	public void onStart() {
 		super.onStart();
+        updateViewVisibility();
 		drone.events.addDroneListener(this);
 	}
 
