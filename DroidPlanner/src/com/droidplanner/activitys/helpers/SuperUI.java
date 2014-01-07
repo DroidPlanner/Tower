@@ -1,6 +1,5 @@
 package com.droidplanner.activitys.helpers;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;

@@ -74,9 +74,6 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 
 		mission = drone.mission;
 		gestureMapFragment.setOnPathFinishedListner(this);
-
-        //Refresh the map
-        planningMapFragment.update();
 	}
 
 	@Override

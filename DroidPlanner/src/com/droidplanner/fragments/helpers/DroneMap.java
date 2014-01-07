@@ -46,6 +46,7 @@ public abstract class DroneMap extends OfflineMapFragment implements OnDroneList
 		super.onStart();
 		drone.events.addDroneListener(this);
 		loadCameraPosition();
+		update();
 	}
 
 	@Override
