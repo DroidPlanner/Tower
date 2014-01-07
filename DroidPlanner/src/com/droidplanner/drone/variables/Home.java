@@ -60,7 +60,7 @@ public class Home extends DroneVariable implements MarkerSource {
 	}
 
 	public void setHome(msg_mission_item msg) {
-		this.coordinate = new LatLng(msg.y, msg.x);
+		this.coordinate = new LatLng(msg.x, msg.y);
 		this.altitude = new Altitude(msg.z);		
 		myDrone.events.notifyDroneEvent(DroneEventsType.HOME);
 	}
