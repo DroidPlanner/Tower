@@ -2,33 +2,23 @@ package com.droidplanner.glass.activities;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.speech.RecognizerIntent;
-import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.SubMenu;
-import android.widget.Toast;
 import com.MAVLink.Messages.ApmModes;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.R;
-import com.droidplanner.activitys.helpers.SuperActivity;
 import com.droidplanner.fragments.SettingsFragment;
 import com.droidplanner.glass.fragments.GlassMapFragment;
 import com.droidplanner.glass.fragments.HudFragment;
 import com.droidplanner.glass.utils.GlassUtils;
-import com.droidplanner.glass.utils.GlassVoiceMenu;
 import com.droidplanner.utils.Constants;
 import com.droidplanner.utils.Utils;
-import com.google.android.glass.touchpad.Gesture;
-import com.google.android.glass.touchpad.GestureDetector;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * This is the main activity for the glass interface.
@@ -36,7 +26,8 @@ import java.util.Map;
  * @author Fredia Huya-Kouadio
  * @since 1.2.0
  */
-public class GlassFlightActivity extends GlassActivity implements DroidPlannerApp.ConnectionStateListner {
+public class GlassFlightActivity extends GlassActivity implements DroidPlannerApp
+        .ConnectionStateListner {
 
     /**
      * This is the activity fragment manager.
@@ -143,7 +134,7 @@ public class GlassFlightActivity extends GlassActivity implements DroidPlannerAp
         }
     }
 
-    private void launchHud(){
+    private void launchHud() {
         //Replace the current fragment with the hud fragment.
         Fragment currentFragment = getCurrentFragment();
         if (!(currentFragment instanceof HudFragment)) {
@@ -155,7 +146,7 @@ public class GlassFlightActivity extends GlassActivity implements DroidPlannerAp
         }
     }
 
-    private void launchSettings(){
+    private void launchSettings() {
         //Replace the current fragment with the SettingsFragment.
         Fragment currentFragment = getCurrentFragment();
         if (!(currentFragment instanceof SettingsFragment)) {
@@ -167,7 +158,7 @@ public class GlassFlightActivity extends GlassActivity implements DroidPlannerAp
         }
     }
 
-    private void launchMap(){
+    private void launchMap() {
         //Replace the current fragment with the map fragment.
         Fragment currentFragment = getCurrentFragment();
         if (!(currentFragment instanceof GlassMapFragment)) {
@@ -234,7 +225,12 @@ public class GlassFlightActivity extends GlassActivity implements DroidPlannerAp
 
     @Override
     public void notifyDisconnected() {
-        invalidateOptionsMenu();
+        if (GlassUtils.isVoiceControlActive(getApplicationContext())) {
+            invalidateVoiceMenu();
+        }
+        else {
+            invalidateOptionsMenu();
+        }
     }
 
     private Fragment getCurrentFragment() {

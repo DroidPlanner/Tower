@@ -1,82 +1,93 @@
 package com.droidplanner.glass.activities;
 
-import com.droidplanner.activitys.helpers.SuperActivity;
-import com.droidplanner.glass.utils.GlassVoiceMenu;
-import android.os.Bundle;
-import com.google.android.glass.touchpad.GestureDetector;
-import android.view.MotionEvent;
-import android.view.InputDevice;
 import android.content.Intent;
-import com.google.android.glass.touchpad.Gesture;
+import android.os.Bundle;
+import android.speech.RecognizerIntent;
+import android.view.InputDevice;
+import android.view.MotionEvent;
+import android.widget.Toast;
+import com.droidplanner.activitys.helpers.SuperActivity;
 import com.droidplanner.glass.utils.GlassUtils;
+import com.droidplanner.glass.utils.voice_menu.VoiceMenu;
+import com.google.android.glass.touchpad.Gesture;
+import com.google.android.glass.touchpad.GestureDetector;
 
+import java.util.List;
+
+/**
+ * Parent to most activities running on glass. This holds common glass specific functionalities.
+ */
 public class GlassActivity extends SuperActivity {
-	
-	private GlassVoiceMenu voiceMenu;
-	
-	/**
+
+    /**
+     * This is used to instantiate, and activate the voice menu.
+     */
+    private VoiceMenu voiceMenu;
+
+    /**
      * Glass gesture detector.
      * Detects glass specific swipes, and taps, and uses it for navigation.
      *
      * @since 1.2.0
      */
     protected GestureDetector mGestureDetector;
-	
-	@Override
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == GlassVoiceMenu.SPEECH_REQUEST && resultCode == RESULT_OK) {
-            GlassVoiceMenu.onSpeechComplete(getApplicationContext(), data);
+        if (requestCode == VoiceMenu.SPEECH_REQUEST && resultCode == RESULT_OK) {
+            List<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+
+            String recognizedText = null;
+            if (!results.isEmpty()) {
+                recognizedText = results.get(0);
+            }
+
+            if (recognizedText == null) {
+                Toast.makeText(getApplicationContext(), "Unable to recognize speech!",
+                        Toast.LENGTH_LONG).show();
+            }
         }
     }
-	
-	protected GestureDetector.BaseListener getGestureDetectorBaseListener(){
-		return new GestureDetector.BaseListener() {
-			@Override
-			public boolean onGesture(Gesture gesture) {
-				return false;
-			}
-		};
-	}
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState){
-		super.onCreate(savedInstanceState);
-		setUpGestureDetector();
-	}
-	
-	@Override
+
+    protected GestureDetector.BaseListener getGestureDetectorBaseListener() {
+        return new GestureDetector.BaseListener() {
+            @Override
+            public boolean onGesture(Gesture gesture) {
+                return false;
+            }
+        };
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setUpGestureDetector();
+    }
+
+    @Override
     public boolean onGenericMotionEvent(MotionEvent event) {
         if (mGestureDetector != null && event.getSource() == InputDevice.SOURCE_TOUCHPAD) {
             return mGestureDetector.onMotionEvent(event);
         }
         return super.onGenericMotionEvent(event);
     }
-	
-	protected void invalidateVoiceMenu(){
-		voiceMenu = null;
-	}
-	
-	protected void onCreateVoiceMenu(GlassVoiceMenu voiceMenu){}
-	
-	protected void onPrepareVoiceMenu(GlassVoiceMenu voiceMenu){
-		
-	}
-	
-	protected void onSpeechDetected(final String speech){
-		
-	}
-	
-	protected void openVoiceMenu(){
-		//Check if the voice menu instance was initialized.
-		if(voiceMenu == null){
-		voiceMenu = new GlassVoiceMenu(this);
-		onCreateVoiceMenu(voiceMenu);
-		}
-		
-		onPrepareVoiceMenu(voiceMenu);
-	}
-	
-	protected void setUpGestureDetector() {
+
+    protected void invalidateVoiceMenu() {
+        voiceMenu = null;
+    }
+
+    protected void openVoiceMenu() {
+        //Check if the voice menu instance was initialized.
+        if (voiceMenu == null) {
+            voiceMenu = new VoiceMenu(this);
+            onCreateOptionsMenu(voiceMenu);
+        }
+
+        onPrepareOptionsMenu(voiceMenu);
+        voiceMenu.openVoiceMenu();
+    }
+
+    protected void setUpGestureDetector() {
         if (GlassUtils.isGlassDevice()) {
             mGestureDetector = new GestureDetector(getApplicationContext());
             mGestureDetector.setBaseListener(getGestureDetectorBaseListener());
