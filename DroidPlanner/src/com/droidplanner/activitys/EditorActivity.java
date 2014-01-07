@@ -99,7 +99,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 	@Override
 	protected void onStart() {
 		super.onStart();
-		drone.events.notifyDroneEvent(DroneEventsType.MISSION);
+		drone.events.notifyDroneEvent(DroneEventsType.MISSION_UPDATE);
 	}
 
 	@Override
@@ -112,7 +112,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		super.onDroneEvent(event,drone);
 		switch (event) {
-		case MISSION:
+		case MISSION_UPDATE:
 			// Remove detail window if item is removed
 			if (itemDetailFragment != null) {
 				if (!drone.mission.hasItem(itemDetailFragment.getItem())) {

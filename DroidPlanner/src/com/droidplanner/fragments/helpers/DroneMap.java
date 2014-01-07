@@ -90,7 +90,7 @@ public abstract class DroneMap extends OfflineMapFragment implements OnDroneList
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch (event) {
-		case MISSION:
+		case MISSION_UPDATE:
 			update();
 			break;
 		default:
