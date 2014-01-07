@@ -147,7 +147,6 @@ public class InfoMenu implements OnDroneListner {
 			drone.state.resetFlightTimer();
 			break;
 		case R.id.bar_home:
-			drone.waypointMananger.getWaypoints();
 			break;
 		case R.id.menu_send_mission:
 			drone.mission.sendMissionToAPM();
