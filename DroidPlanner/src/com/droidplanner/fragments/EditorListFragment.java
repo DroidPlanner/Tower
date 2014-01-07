@@ -80,7 +80,7 @@ public class EditorListFragment extends Fragment implements  OnItemLongClickList
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		if (event == DroneEventsType.MISSION) {
+		if (event == DroneEventsType.MISSION_UPDATE) {
 			adapter.notifyDataSetChanged();
             updateViewVisibility();
 		}

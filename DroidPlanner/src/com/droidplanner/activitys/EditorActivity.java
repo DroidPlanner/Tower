@@ -74,9 +74,6 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 
 		mission = drone.mission;
 		gestureMapFragment.setOnPathFinishedListner(this);
-
-        //Refresh the map
-        planningMapFragment.update();
 	}
 
 	@Override
@@ -99,7 +96,13 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 	@Override
 	protected void onStart() {
 		super.onStart();
-		drone.events.notifyDroneEvent(DroneEventsType.MISSION);
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		mission.clearSelection();
+		drone.events.notifyDroneEvent(DroneEventsType.MISSION_UPDATE);
 	}
 
 	@Override
@@ -112,7 +115,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		super.onDroneEvent(event,drone);
 		switch (event) {
-		case MISSION:
+		case MISSION_UPDATE:
 			// Remove detail window if item is removed
 			if (itemDetailFragment != null) {
 				if (!drone.mission.hasItem(itemDetailFragment.getItem())) {

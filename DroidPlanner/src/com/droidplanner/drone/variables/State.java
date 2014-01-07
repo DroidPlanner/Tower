@@ -1,11 +1,12 @@
 package com.droidplanner.drone.variables;
 
+import android.os.SystemClock;
+
 import com.MAVLink.Messages.ApmModes;
 import com.droidplanner.MAVLink.MavLinkModes;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.drone.DroneVariable;
-import android.os.SystemClock;
 
 public class State extends DroneVariable {
 	private boolean failsafe = false;
@@ -62,6 +63,9 @@ public class State extends DroneVariable {
 		if (this.armed != newState) {
 			this.armed = newState;
 			myDrone.events.notifyDroneEvent(DroneEventsType.ARMING);
+			if (newState == true) {
+				myDrone.waypointMananger.getWaypoints();				
+			}
 		}
 	}
 

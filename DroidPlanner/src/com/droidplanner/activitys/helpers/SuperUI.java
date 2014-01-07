@@ -1,6 +1,5 @@
 package com.droidplanner.activitys.helpers;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,6 +34,7 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
 		drone.events.addDroneListener(this);
 		app.conectionListner = this;
 		drone.MavClient.queryConnectionState();
+		drone.events.notifyDroneEvent(DroneEventsType.MISSION_UPDATE);
 	}
 
 	@Override

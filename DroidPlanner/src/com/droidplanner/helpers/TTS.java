@@ -62,11 +62,13 @@ public class TTS implements OnInitListener, OnDroneListner {
 			case GPS_FIX:
 				speakGpsMode(drone.GPS.getFixTypeNumeric());
 				break;
+			case MISSION_RECEIVED:
+				speak("Waypoints received");
+				break;
 			default:
 				break;
 			}
 		}
-
 	}
 
 	private void speakArmedState(boolean armed) {
