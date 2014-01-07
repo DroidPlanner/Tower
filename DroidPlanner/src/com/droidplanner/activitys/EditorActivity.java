@@ -99,6 +99,13 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 	}
 
 	@Override
+	protected void onStop() {
+		super.onStop();
+		mission.clearSelection();
+		drone.events.notifyDroneEvent(DroneEventsType.MISSION_UPDATE);
+	}
+
+	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
 		planningMapFragment.saveCameraPosition();
