@@ -20,11 +20,11 @@ import com.droidplanner.activitys.helpers.SuperUI;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.fragments.ChecklistFragment;
-import com.droidplanner.fragments.SetupFragment;
 import com.droidplanner.fragments.ModesSetupFragment;
 import com.droidplanner.fragments.ParamsFragment;
 import com.droidplanner.fragments.RcSetupFragment;
 import com.droidplanner.fragments.SettingsFragment;
+import com.droidplanner.fragments.SetupFragment;
 import com.droidplanner.fragments.TuningFragment;
 import com.droidplanner.widgets.viewPager.TabPageIndicator;
 
@@ -34,7 +34,7 @@ public class ConfigurationActivity extends SuperUI implements
 	public static final String SCREEN_INTENT = "screen";
 	public static final String SETTINGS = "settings";
 	private ViewPager viewPager;
-
+	
 	private List<OnPageChangeListener> pageListeners = new ArrayList<OnPageChangeListener>();
 
 	@Override
@@ -200,6 +200,11 @@ public class ConfigurationActivity extends SuperUI implements
 				listener.onPageSelected(arg0);
 			}
 		}
+	}
+
+	@Override
+	public CharSequence[][] getHelpItems() {
+		return new CharSequence[][] { {}, {} };
 	}
 
 }

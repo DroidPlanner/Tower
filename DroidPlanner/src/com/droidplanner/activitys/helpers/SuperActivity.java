@@ -1,6 +1,5 @@
 package com.droidplanner.activitys.helpers;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -17,7 +16,7 @@ import com.droidplanner.drone.Drone;
 import com.droidplanner.fragments.helpers.OfflineMapFragment;
 import com.droidplanner.helpers.units.Altitude;
 
-public abstract class SuperActivity extends Activity implements
+public abstract class SuperActivity extends HelpActivity implements
 		OnAltitudeChangedListner, OnSystemArmListener {
 
 	public DroidPlannerApp app;
