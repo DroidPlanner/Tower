@@ -99,7 +99,6 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 	@Override
 	protected void onStart() {
 		super.onStart();
-		drone.events.notifyDroneEvent(DroneEventsType.MISSION_UPDATE);
 	}
 
 	@Override
