@@ -82,9 +82,13 @@ public class VoiceMenu implements Menu {
 
         String extraPrompt = "";
 		if(promptHeader != null){
-			extraPrompt += promptHeader.toString() + '\n';
+			extraPrompt += promptHeader.toString();
 		}
 		
+		for(VoiceMenuItem item : visibleItems){
+			String itemTitle = item.getTitle().toString();
+			extraPrompt += "\n\t\t\" " + itemTitle + " \""; 
+		}
 //        extraPrompt += glassActivity.drone.MavClient.isConnected()
 //			?"\t\t\" Flight Modes \"\n\t\t\" Disconnect \"\n"
 //			:"\t\t\" Connect \"\n";
