@@ -56,12 +56,44 @@ public class VoiceMenu implements Menu {
      * Contains all of the items for this menu
      */
     private ArrayList<VoiceMenuItem> mItems;
+	
+	/**
+	* Header for speech recognizer prompt.
+	*/
+	private CharSequence promptHeader;
 
 	public VoiceMenu(GlassActivity activity){
 		glassActivity = activity;
 
         mItems = new ArrayList<VoiceMenuItem>();
 	}
+	
+	public VoiceMenu setPromptHeader(CharSequence header){
+		promptHeader = header;
+		return this;
+	}
+	
+	/**
+     * Start the voice recognizer, displaying the configured MenuItem as prompt options.
+     */
+    public void openVoiceMenu(){
+		//Build the voice menu prompt 
+		ArrayList<VoiceMenuItem> visibleItems = getVisibleItems();
+
+        String extraPrompt = "";
+		if(promptHeader != null){
+			extraPrompt += promptHeader.toString() + '\n';
+		}
+		
+//        extraPrompt += glassActivity.drone.MavClient.isConnected()
+//			?"\t\t\" Flight Modes \"\n\t\t\" Disconnect \"\n"
+//			:"\t\t\" Connect \"\n";
+//        extraPrompt += "\t\t\" Hud \"\n\t\t\" Map \"\n\t\t\" Settings \"";
+//
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+			.putExtra(RecognizerIntent.EXTRA_PROMPT, extraPrompt);
+        glassActivity.startActivityForResult(intent, VoiceMenu.SPEECH_REQUEST);
+    }
 
     /**
      * @return the container activity's context.
@@ -79,21 +111,6 @@ public class VoiceMenu implements Menu {
         }
 
         return visibleItems;
-    }
-
-    /**
-     * Start the voice recognizer, displaying the configured MenuItem as prompt options.
-     */
-    public void openVoiceMenu(){
-        String extraPrompt = "Say,\n";
-        extraPrompt += glassActivity.drone.MavClient.isConnected()
-                ?"\t\t\" Flight Modes \"\n\t\t\" Disconnect \"\n"
-                :"\t\t\" Connect \"\n";
-        extraPrompt += "\t\t\" Hud \"\n\t\t\" Map \"\n\t\t\" Settings \"";
-
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-                .putExtra(RecognizerIntent.EXTRA_PROMPT, extraPrompt);
-        glassActivity.startActivityForResult(intent, SPEECH_REQUEST);
     }
 
     @Override
