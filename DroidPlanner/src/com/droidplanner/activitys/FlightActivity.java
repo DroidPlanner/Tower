@@ -18,11 +18,13 @@ import com.droidplanner.fragments.FlightActionsFragment.OnMissionControlInteract
 import com.droidplanner.fragments.FlightMapFragment;
 import com.droidplanner.fragments.RCFragment;
 import com.droidplanner.fragments.TelemetryFragment;
+import com.droidplanner.fragments.helpers.DroneMap;
 import com.droidplanner.fragments.helpers.OnMapInteractionListener;
 import com.droidplanner.fragments.mode.ModeAcroFragment;
 import com.droidplanner.fragments.mode.ModeAltholdFragment;
 import com.droidplanner.fragments.mode.ModeAutoFragment;
 import com.droidplanner.fragments.mode.ModeCircleFragment;
+import com.droidplanner.fragments.mode.ModeDisconnectedFragment;
 import com.droidplanner.fragments.mode.ModeDriftFragment;
 import com.droidplanner.fragments.mode.ModeGuidedFragment;
 import com.droidplanner.fragments.mode.ModeLandFragment;
@@ -39,6 +41,7 @@ public class FlightActivity extends SuperUI implements
 	private RCFragment rcFragment;
 	private View failsafeTextView;
 	private Fragment modeInfoPanel;
+	private Fragment mapFragment;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -55,7 +58,7 @@ public class FlightActivity extends SuperUI implements
             fragmentManager.beginTransaction().add(R.id.modeInfoPanel, modeRtl).commit();
         }
 
-        Fragment mapFragment = fragmentManager.findFragmentById(R.id.mapFragment);
+        mapFragment = fragmentManager.findFragmentById(R.id.mapFragment);
         if(mapFragment == null){
             mapFragment = new FlightMapFragment();
             fragmentManager.beginTransaction().add(R.id.mapFragment, mapFragment).commit();
@@ -124,6 +127,7 @@ public class FlightActivity extends SuperUI implements
 
 	@Override
 	public void onPlanningSelected() {
+		((DroneMap) mapFragment ).saveCameraPosition();
 		Intent navigationIntent;
 		navigationIntent = new Intent(this, EditorActivity.class);
 		startActivity(navigationIntent);
@@ -206,8 +210,11 @@ public class FlightActivity extends SuperUI implements
 			modeInfoPanel = new ModeDriftFragment();
 			break;
 		default:
-			//TODO do something better than just nothing
-			return;
+			modeInfoPanel = new ModeDisconnectedFragment();
+			break;
+		}
+		if (!drone.MavClient.isConnected()) {
+			modeInfoPanel = new ModeDisconnectedFragment();
 		}
 		fragmentManager.beginTransaction()
 				.replace(R.id.modeInfoPanel, modeInfoPanel).commit();		

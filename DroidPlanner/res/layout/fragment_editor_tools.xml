@@ -84,7 +84,7 @@
     	android:button="@null"
         android:layout_width="75dp"
         android:layout_height="75dp"
-	    android:background="@drawable/button_editor"
+	    android:background="@drawable/button_editor_trash"
 		/>
 
 		<ImageView

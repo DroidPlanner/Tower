@@ -40,7 +40,9 @@
 			style="@style/modeLabel"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="Mission recording" />
+			android:text="Mission recording"
+        	android:visibility="gone"
+			/>
 		<Button
 			android:id="@+id/SaveWaypoint"
 			style="@style/modeControl"
@@ -48,6 +50,7 @@
 			android:layout_height="wrap_content"
 			android:text="Save waypoint"
 	        android:background="@drawable/button_mode_options"
+        	android:visibility="gone"
 			/>
 		<Button
 			android:id="@+id/ClearMission"
@@ -56,6 +59,7 @@
 			android:layout_height="wrap_content"
 			android:text="Clear mission"
 	        android:background="@drawable/button_mode_options"
+        	android:visibility="gone"
 			/>
 
 	</LinearLayout>

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/configLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6" >
+
+        <TextView
+            android:id="@+id/SetupTitle"
+            style="@style/SetupTitle"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:background="@drawable/rc_setup_rectangle"
+            android:text="@string/rc_setup_title" />
+
+        <LinearLayout
+            android:id="@+id/LinearLayout01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/relativeLayout3"
+            android:layout_alignTop="@+id/linearLayout1"
+            android:orientation="vertical" >
+
+            <com.droidplanner.widgets.FillBar.FillBarMinMaxText
+                android:id="@+id/fillBar7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+            </com.droidplanner.widgets.FillBar.FillBarMinMaxText>
+
+            <com.droidplanner.widgets.FillBar.FillBarMinMaxText
+                android:id="@+id/fillBar8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+            </com.droidplanner.widgets.FillBar.FillBarMinMaxText>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout3"
+            android:layout_width="250dp"
+            android:layout_height="245dp"
+            android:layout_above="@+id/LinearLayout01"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="39dp" >
+
+            <com.droidplanner.widgets.FillBar.FillBarMinMaxText
+                android:id="@+id/fillBarAIL"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true" >
+            </com.droidplanner.widgets.FillBar.FillBarMinMaxText>
+
+            <com.droidplanner.widgets.RcStick.RcStick
+                android:id="@+id/stickRight"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_alignBottom="@+id/fillBarELE"
+                android:layout_alignParentLeft="true"
+                android:layout_marginBottom="18dp" />
+
+            <com.droidplanner.widgets.FillBar.FillBarMinMaxR
+                android:id="@+id/fillBarELE"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/stickRight" >
+            </com.droidplanner.widgets.FillBar.FillBarMinMaxR>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/relativeLayout2"
+            android:layout_below="@+id/relativeLayout2"
+            android:orientation="vertical" >
+
+            <com.droidplanner.widgets.FillBar.FillBarMinMaxText
+                android:id="@+id/fillBar5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+            </com.droidplanner.widgets.FillBar.FillBarMinMaxText>
+
+            <com.droidplanner.widgets.FillBar.FillBarMinMaxText
+                android:id="@+id/fillBar6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+            </com.droidplanner.widgets.FillBar.FillBarMinMaxText>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout2"
+            android:layout_width="245dp"
+            android:layout_height="245dp"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/SetupTitle"
+            android:layout_marginLeft="27dp"
+            android:layout_marginTop="26dp" >
+
+            <com.droidplanner.widgets.FillBar.FillBarMinMaxText
+                android:id="@+id/fillBarYAW"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true" >
+            </com.droidplanner.widgets.FillBar.FillBarMinMaxText>
+
+            <com.droidplanner.widgets.RcStick.RcStick
+                android:id="@+id/stickLeft"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_alignBottom="@+id/fillBarTHR"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="18dp" />
+
+            <com.droidplanner.widgets.FillBar.FillBarMinMaxL
+                android:id="@+id/fillBarTHR"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/stickLeft" >
+            </com.droidplanner.widgets.FillBar.FillBarMinMaxL>
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:background="@color/opaque_white" >
+
+        <FrameLayout
+            android:id="@+id/fragment_setup_rc_panel"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true" >
+        </FrameLayout>
+    </RelativeLayout>
+
+</LinearLayout>

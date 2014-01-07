@@ -170,7 +170,7 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 		resBundle.putString("status", "SUCCESS");
 		errMessageObj.obj = resBundle;
 
-		commErrMsgLocalStore = commErrMsgLocalStore + errMsg;
+		commErrMsgLocalStore = commErrMsgLocalStore +" "+ errMsg;
 		commErrHandler.sendMessage(errMessageObj);
 
 		Log.d(CONNECTIVITY_SERVICE, commErrMsgLocalStore);

@@ -9,9 +9,9 @@
     android:orientation="horizontal" >
 
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="3" >
+        android:layout_weight="7" >
 
         <com.droidplanner.widgets.graph.Chart
             android:id="@+id/chartBottom"
@@ -60,11 +60,10 @@
     </RelativeLayout>
 
 	<RelativeLayout
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:background="@color/opaque_white"
-		android:layout_weight="7"
-		>
+	    android:layout_width="0dp"
+	    android:layout_height="match_parent"
+	    android:layout_weight="3"
+	    android:background="@color/opaque_white" >
 
 		<com.droidplanner.widgets.spinners.SpinnerSelfSelect
 			android:id="@+id/spinnerWaypointType"

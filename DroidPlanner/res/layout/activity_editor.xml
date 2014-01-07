@@ -11,7 +11,6 @@
         android:name="com.droidplanner.fragments.helpers.GestureMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/missionFragment1"
         tools:layout="@layout/fragment_gesture_map" />
 
     <TextView
@@ -29,8 +28,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/missionFragment1"
+        android:layout_below="@+id/editorInfoWindow"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView1"
+        android:layout_alignParentStart="true"
         android:layout_margin="5dp"
         tools:layout="@layout/fragment_editor_tools" />
 
@@ -41,6 +41,7 @@
         android:layout_height="446dp"
         android:layout_above="@+id/missionFragment1"
         android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_gravity="bottom"
         android:measureAllChildren="true" >
 
@@ -50,9 +51,9 @@
         android:id="@+id/missionFragment1"
         android:name="com.droidplanner.fragments.EditorListFragment"
         android:layout_width="match_parent"
-        android:layout_height="94dp"
+        android:layout_height="80dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        tools:layout="@layout/fragment_editor_list" />
+        tools:layout="@layout/fragment_editor_list"
+        />
 
 </RelativeLayout>

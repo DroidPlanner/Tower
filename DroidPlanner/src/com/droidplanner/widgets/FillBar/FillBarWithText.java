@@ -22,9 +22,9 @@ public class FillBarWithText extends LinearLayout {
 
 		inflate(context, R.layout.subview_fillbar_with_text, this);
 
-		title = (TextView) findViewById(R.id.textViewBarTitle);
-		value = (TextView) findViewById(R.id.TextViewBarValue);
-		bar = (FillBar) findViewById(R.id.fillBarSubview);
+		title = (TextView) findViewById(R.id.textViewTitle);
+		value = (TextView) findViewById(R.id.TextViewMid);
+		bar = (FillBar) findViewById(R.id.fillBar);
 	}
 
 	public void setup(String title, int max, int min) {
