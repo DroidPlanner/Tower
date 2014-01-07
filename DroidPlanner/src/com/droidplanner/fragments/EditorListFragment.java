@@ -1,5 +1,6 @@
 package com.droidplanner.fragments;
 
+import android.support.v4.app.Fragment;
 import it.sephiroth.android.library.widget.AdapterView;
 import it.sephiroth.android.library.widget.AdapterView.OnItemClickListener;
 import it.sephiroth.android.library.widget.AdapterView.OnItemLongClickListener;
@@ -9,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -63,6 +63,7 @@ public class EditorListFragment extends Fragment implements  OnItemLongClickList
 	@Override
 	public void onStart() {
 		super.onStart();
+        updateViewVisibility();
 		drone.events.addDroneListener(this);
 	}
 

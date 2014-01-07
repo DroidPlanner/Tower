@@ -1,9 +1,9 @@
 package com.droidplanner.activitys;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 
 import com.droidplanner.R;
@@ -37,7 +37,8 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class FlightActivity extends SuperUI implements
 		OnMapInteractionListener, OnMissionControlInteraction, OnDroneListner{
-	private static FragmentManager fragmentManager;
+
+    private FragmentManager fragmentManager;
 	private RCFragment rcFragment;
 	private View failsafeTextView;
 	private Fragment modeInfoPanel;
@@ -47,7 +48,8 @@ public class FlightActivity extends SuperUI implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_flight);
-		fragmentManager = getFragmentManager();
+
+		fragmentManager = getSupportFragmentManager();
 		modeInfoPanel = fragmentManager.findFragmentById(R.id.modeInfoPanel);
 		failsafeTextView = findViewById(R.id.failsafeTextView);
 

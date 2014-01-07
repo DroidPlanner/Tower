@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import android.support.v4.app.Fragment;
 import org.xmlpull.v1.XmlPullParser;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -29,6 +29,7 @@ import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
 
 public class ChecklistFragment extends Fragment implements OnXmlParserError,
 		OnCheckListItemUpdateListener, OnDroneListner {
+
 	private Context context;
 	private Drone drone;
 	private ExpandableListView expListView;
@@ -36,17 +37,12 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 	private List<CheckListItem> checklistItems;
 	private HashMap<String, List<CheckListItem>> listDataChild;
 	private CheckListAdapter listAdapter;
-	private LayoutInflater inflater;
 	private CheckListSysLink sysLink;
-
-	public ChecklistFragment() {
-
-	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		this.inflater = inflater;
+
 		View view = inflater.inflate(R.layout.fragment_checklist, null);
 		expListView = (ExpandableListView) view.findViewById(R.id.expListView);
 
@@ -133,8 +129,10 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 
 	// create listAdapter
 	private void createListAdapter() {
-		listAdapter = new CheckListAdapter(this.inflater, listDataHeader,
-				listDataChild);
+        final LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context
+                .LAYOUT_INFLATER_SERVICE);
+
+		listAdapter = new CheckListAdapter(layoutInflater, listDataHeader,	listDataChild);
 	
 		listAdapter.setHeaderLayout(R.layout.list_group_header);
 		listAdapter.setOnCheckListItemUpdateListener(this);

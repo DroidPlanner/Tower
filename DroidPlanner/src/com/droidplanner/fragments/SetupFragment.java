@@ -1,9 +1,10 @@
 package com.droidplanner.fragments;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +20,24 @@ import com.droidplanner.activitys.ConfigurationActivity;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
-import com.droidplanner.fragments.calibration.FragmentCalibration;
 import com.droidplanner.fragments.calibration.imu.FragmentSetupIMU;
 import com.droidplanner.fragments.calibration.mag.FragmentSetupMAG;
 
+/**
+ * This fragment is used to calibrate the drone's compass, and accelerometer.
+ */
 public class SetupFragment extends Fragment implements OnDroneListner, OnItemSelectedListener {
+
+    public static abstract class SetupCalibration extends Fragment {
+        public abstract void doCalibrationStep();
+
+        public abstract SetupSidePanel getSidePanel();
+    }
+
+    public static abstract class SetupSidePanel extends Fragment {
+        public abstract void updateTitle(int calibrationStep);
+    }
+
 	private Drone drone;
 	
 	private ConfigurationActivity parent;
@@ -31,38 +45,63 @@ public class SetupFragment extends Fragment implements OnDroneListner, OnItemSel
 	private TextView textViewTitle;
 	
 	private FragmentManager fragmentManager;
-	private FragmentCalibration setupPanel;
+	private SetupCalibration setupPanel;
+    private SetupSidePanel sidePanel;
 
 	@Override
 	public void onAttach(Activity activity) {
-		parent = (ConfigurationActivity)activity;
 		super.onAttach(activity);
+        if(!(activity instanceof ConfigurationActivity)){
+            throw new IllegalStateException("Parent activity must be " + ConfigurationActivity
+                    .class.getName());
+        }
+
+        parent = (ConfigurationActivity)activity;
 	}
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		fragmentManager = getFragmentManager();
-		setupPanel = (FragmentCalibration) fragmentManager
-				.findFragmentById(R.id.fragment_setup_mainpanel);
-		super.onCreate(savedInstanceState);
-	}
+    @Override
+    public void onDetach(){
+        super.onDetach();
+        parent = null;
+    }
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-  		View view = inflater.inflate(R.layout.fragment_setup, container,
-				false);
-		setupLocalViews(view);		
-		setupFragmentPanel(view);
+  		final View view = inflater.inflate(R.layout.fragment_setup, container, false);
+
+        setupLocalViews(view);
+
+        fragmentManager = getChildFragmentManager();
+        setupPanel = (SetupCalibration) fragmentManager.findFragmentById(R.id
+                .fragment_setup_mainpanel);
+
+        if (setupPanel == null) {
+            setupPanel = new FragmentSetupIMU();
+
+            fragmentManager.beginTransaction()
+                    .add(R.id.fragment_setup_mainpanel, setupPanel)
+                    .commit();
+        }
+
+        sidePanel =  (SetupSidePanel) fragmentManager.findFragmentById(R.id.fragment_setup_sidepanel);
+        if (sidePanel == null) {
+            sidePanel = setupPanel.getSidePanel();
+            if (sidePanel != null) {
+                fragmentManager.beginTransaction()
+                        .add(R.id.fragment_setup_sidepanel, sidePanel)
+                        .commit();
+            }
+        }
 
 		return view;
 	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
-		this.drone = ((DroidPlannerApp) getActivity().getApplication()).drone;		
-		super.onActivityCreated(savedInstanceState);
+        super.onActivityCreated(savedInstanceState);
+		this.drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
 	}
 
 	@Override
@@ -78,8 +117,7 @@ public class SetupFragment extends Fragment implements OnDroneListner, OnItemSel
 	}
 
 	@Override
-	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
-			long arg3) {
+	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		changeSetupPanel(arg2);
 	}
 
@@ -95,57 +133,64 @@ public class SetupFragment extends Fragment implements OnDroneListner, OnItemSel
 		
 	}
 	
-	public Drone getDrone(){
-		return this.drone;
-	}
-	
 	private void setupLocalViews(View view) {
 		textViewTitle = (TextView)view.findViewById(R.id.textViewSetupTitle);
 		spinnerSetup = (Spinner)view.findViewById(R.id.spinnerSetupType);
 		spinnerSetup.setOnItemSelectedListener(this);
-		
-		
+
 		final ArrayAdapter<String> adapter=new ArrayAdapter<String>(parent, R.layout.spinner_setup);
 		adapter.add("ACC Calibration");
 		adapter.add("Compass Calibration");
 		spinnerSetup.setAdapter(adapter);
 	}
 
-	private void setupFragmentPanel(View view) {
-		if (setupPanel == null) {
-			setupPanel = new FragmentSetupIMU();
-			setupPanel.setParent(this);
-			
-			fragmentManager.beginTransaction()
-					.add(R.id.fragment_setup_mainpanel, setupPanel).commit();
-		}
-	}
-	
 	public void changeSetupPanel(int step) {
 		switch (step) {
 		case 0:
-				setupPanel = getIMUPanel();
+            setupPanel = getIMUPanel();
+            sidePanel = setupPanel.getSidePanel();
 			break;
+
 		case 1:
-				setupPanel = getMAGPanel();
+            setupPanel = getMAGPanel();
+            sidePanel = setupPanel.getSidePanel();
 			break;
 		}
-		fragmentManager.beginTransaction()
-				.replace(R.id.fragment_setup_mainpanel, setupPanel).commit();
+
+        final FragmentTransaction ft = fragmentManager.beginTransaction();
+        if(setupPanel != null){
+            ft.replace(R.id.fragment_setup_mainpanel, setupPanel);
+        }
+
+        if(sidePanel != null){
+            ft.replace(R.id.fragment_setup_sidepanel, sidePanel);
+        }
+
+		ft.commit();
 	}
 
-	private FragmentCalibration getMAGPanel() {
+	private SetupCalibration getMAGPanel() {
 		setupPanel = new FragmentSetupMAG();
-		setupPanel.setParent(this);
 		textViewTitle.setText(R.string.setup_mag_title);
 		return setupPanel;
 	}
 
-	private FragmentCalibration getIMUPanel() {
+	private SetupCalibration getIMUPanel() {
 		setupPanel = new FragmentSetupIMU();
-		setupPanel.setParent(this);
 		textViewTitle.setText(R.string.setup_imu_title);
 		return setupPanel;
 	}
+
+    public void doCalibrationStep(){
+        if(setupPanel != null){
+            setupPanel.doCalibrationStep();
+        }
+    }
+
+    public void updateSidePanelTitle(int calibrationStep){
+        if(sidePanel != null){
+            sidePanel.updateTitle(calibrationStep);
+        }
+    }
 
 }

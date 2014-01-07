@@ -1,8 +1,8 @@
 package com.droidplanner.fragments.mission.survey;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,7 +23,7 @@ import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarCha
 import com.droidplanner.widgets.spinners.SpinnerSelfSelect.OnSpinnerItemSelectedListener;
 import com.google.android.gms.maps.model.LatLng;
 
-public class SurveyFragment extends Fragment implements 
+public class SurveyFragment extends Fragment implements
 		OnTextSeekBarChangedListner, OnSpinnerItemSelectedListener, OnClickListener {
 	//public abstract void onPolygonGenerated(List<waypoint> list);
 

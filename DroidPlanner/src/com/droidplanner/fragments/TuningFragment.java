@@ -1,8 +1,8 @@
 package com.droidplanner.fragments;
 
-import android.app.Fragment;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +18,13 @@ import com.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import com.droidplanner.widgets.graph.Chart;
 import com.droidplanner.widgets.graph.ChartSeries;
 
+/**
+ * This fragment is used to tune the roll and pitch of the drone.
+ */
 public class TuningFragment extends Fragment implements OnDroneListner {
 
 	private static final int NAV_MSG_RATE = 50;
 	private static final int CHART_BUFFER_SIZE = 20*NAV_MSG_RATE; // About 20s of data on the buffer
-
 
 	private Drone drone;
 	
@@ -47,16 +49,21 @@ public class TuningFragment extends Fragment implements OnDroneListner {
 
 	private ChartSeries topDataValue;
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState){
+        super.onActivityCreated(savedInstanceState);
+        drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
+    }
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_tunning, container,
-				false);
+		View view = inflater.inflate(R.layout.fragment_tunning, container, false);
+
 		setupLocalViews(view);		
 		setupCharts();
 
-		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;		
-		return view;	
+		return view;
 	}
 
 	@Override
@@ -82,14 +89,10 @@ public class TuningFragment extends Fragment implements OnDroneListner {
 		topChart = (Chart) view.findViewById(R.id.chartTop);
 		bottomChart = (Chart) view.findViewById(R.id.chartBottom);
 		
-		rollPSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.SeekBarRollPitchControl);
-		rollDSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.SeekBarRollPitchDampenning);
-		yawPSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.SeekBarYawControl);
-		thrAclSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.SeekBarThrottleAccel);
+		rollPSeekBar = (SeekBarWithText) view.findViewById(R.id.SeekBarRollPitchControl);
+		rollDSeekBar = (SeekBarWithText) view.findViewById(R.id.SeekBarRollPitchDampenning);
+		yawPSeekBar = (SeekBarWithText) view.findViewById(R.id.SeekBarYawControl);
+		thrAclSeekBar = (SeekBarWithText) view.findViewById(R.id.SeekBarThrottleAccel);
 	}
 
 	private void setupCharts() {
@@ -110,7 +113,6 @@ public class TuningFragment extends Fragment implements OnDroneListner {
 		bottomDataValue.setColor(Color.WHITE);
 		bottomDataValue.enable();
 		bottomChart.series.add(bottomDataValue);
-		
 	}
 
 	@Override
@@ -119,6 +121,7 @@ public class TuningFragment extends Fragment implements OnDroneListner {
 		case ORIENTATION:
 			onNewOrientationData(drone);
 			break;
+
 		default:
 			break;
 		}
