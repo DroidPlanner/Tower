@@ -1,53 +1,33 @@
 package org.droidplanner.fragments.markers;
 
 import org.droidplanner.R;
+import org.droidplanner.drone.Drone;
+import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
+import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
 import org.droidplanner.fragments.FlightMapFragment;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class DroneMarker {
-	private static final int ZOOM_LEVEL = 20;
+public class DroneMarker implements OnDroneListner {
 
 	private Marker droneMarker;
 	private FlightMapFragment flightMapFragment;
+	private Drone drone;
 
 	public DroneMarker(FlightMapFragment flightMapFragment) {
 		this.flightMapFragment = flightMapFragment;
-		updateDroneMarkers();
+		this.drone = flightMapFragment.drone;
+		addMarkerToMap();
+		drone.events.addDroneListener(this);
 	}
 
 	private void updatePosition(float yaw, LatLng coord) {
-		try {
 			droneMarker.setPosition(coord);
 			droneMarker.setRotation(yaw);
 			droneMarker.setVisible(true);
-
-			animateCamera(coord);
-		} catch (Exception e) {
-		}
-	}
-
-	private void animateCamera(LatLng coord) {
-		if (!flightMapFragment.hasBeenZoomed) {
-			flightMapFragment.hasBeenZoomed = true;
-			flightMapFragment.mMap.animateCamera(CameraUpdateFactory
-					.newLatLngZoom(coord, ZOOM_LEVEL));
-		}
-		if (flightMapFragment.isAutoPanEnabled) {
-			flightMapFragment.mMap.animateCamera(CameraUpdateFactory
-					.newLatLngZoom(droneMarker.getPosition(), ZOOM_LEVEL));
-		}
-	}
-
-	public void updateDroneMarkers() {
-		if (droneMarker!=null) {
-			droneMarker.remove();			
-		}
-		addMarkerToMap();
 	}
 
 	private void addMarkerToMap() {
@@ -57,10 +37,16 @@ public class DroneMarker {
 				.flat(true));
 	}
 
-	public void onDroneUpdate() {
-		updatePosition((float)flightMapFragment.drone.orientation.getYaw(),
-				flightMapFragment.drone.GPS.getPosition());
-		flightMapFragment.addFlightPathPoint(flightMapFragment.drone.GPS
-				.getPosition());
+	@Override
+	public void onDroneEvent(DroneEventsType event, Drone drone) {
+		switch (event) {
+		case GPS:
+			updatePosition((float)flightMapFragment.drone.orientation.getYaw(),
+					flightMapFragment.drone.GPS.getPosition());	
+			break;
+		default:
+			break;
+		}
+		
 	}
 }

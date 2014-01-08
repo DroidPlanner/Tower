@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
@@ -29,6 +30,9 @@ import com.google.android.gms.maps.model.PolylineOptions;
 public class FlightMapFragment extends DroneMap implements
 		OnMapLongClickListener, OnMarkerClickListener, OnMarkerDragListener,
 		OnGuidedListener {
+
+	private static final int ZOOM_LEVEL = 20;
+	
 	private Polyline flightPath;
 	private MapPath droneLeashPath;
 	private int maxFlightPathSize;
@@ -72,6 +76,20 @@ public class FlightMapFragment extends DroneMap implements
 		super.update();
 	}
 
+	
+
+	private void animateCamera(LatLng coord) {
+		if (!hasBeenZoomed) {
+			hasBeenZoomed = true;
+			mMap.animateCamera(CameraUpdateFactory
+					.newLatLngZoom(coord, ZOOM_LEVEL));
+		}
+		if (isAutoPanEnabled) {
+			mMap.animateCamera(CameraUpdateFactory
+					.newLatLngZoom(coord, ZOOM_LEVEL));
+		}
+	}
+	
 	public void addFlightPathPoint(LatLng position) {
 		if (maxFlightPathSize > 0) {
 			List<LatLng> oldFlightPath = flightPath.getPoints();
@@ -132,11 +150,10 @@ public class FlightMapFragment extends DroneMap implements
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch (event) {
 		case GPS:
-			droneMarker.onDroneUpdate();
 			droneLeashPath.update(drone.guidedPoint);
-			break;
-		case TYPE:
-			droneMarker.updateDroneMarkers();
+			addFlightPathPoint(drone.GPS
+					.getPosition());
+			animateCamera(drone.GPS.getPosition());
 			break;
 		default:
 			break;
