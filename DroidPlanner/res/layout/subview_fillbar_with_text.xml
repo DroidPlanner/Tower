@@ -5,7 +5,7 @@
     android:orientation="vertical"
     >
 
-	<com.droidplanner.widgets.FillBar.FillBar
+	<org.droidplanner.widgets.FillBar.FillBar
 		android:id="@+id/fillBar"
 		android:layout_width="20dp"
 		android:layout_height="90dp"

@@ -68,7 +68,7 @@
 
             </LinearLayout>
 
-            <com.droidplanner.widgets.FillBar.FillBar
+            <org.droidplanner.widgets.FillBar.FillBar
                 android:id="@id/fillBar"
                 android:layout_width="22dp"
                 android:layout_height="150dp" />

@@ -79,7 +79,7 @@
         android:visibility="gone"
 		<fragment
 			android:id="@+id/modeCircleFragment"
-			android:name="com.droidplanner.fragments.mode.ModeCircleFragment"
+			android:name="org.droidplanner.fragments.mode.ModeCircleFragment"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			android:layout_alignParentBottom="true"

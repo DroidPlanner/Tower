@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="false"
-        class="com.droidplanner.fragments.EditorMapFragment" />
+        class="org.droidplanner.fragments.EditorMapFragment" />
 
     <android.gesture.GestureOverlayView
         android:id="@+id/overlay1"

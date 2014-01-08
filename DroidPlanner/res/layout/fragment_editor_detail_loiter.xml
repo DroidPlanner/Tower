@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res/com.droidplanner"
+    xmlns:app="http://schemas.android.com/apk/res/org.droidplanner"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/opaque_white"
     android:orientation="vertical" >
 
-    <com.droidplanner.widgets.spinners.SpinnerSelfSelect
+    <org.droidplanner.widgets.spinners.SpinnerSelfSelect
         android:id="@+id/spinnerWaypointType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
                     android:layout_marginRight="20dp"
                     android:text="@string/loiter_ccw" />
 
-                <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+                <org.droidplanner.widgets.SeekBarWithText.SeekBarWithText
                     android:id="@+id/loiterRadius"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -48,10 +48,10 @@
                     app:min="0"
                     app:title="@string/loiter_radius"
                     app:unit="m" >
-                </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+                </org.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
             </FrameLayout>
 
-            <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+            <org.droidplanner.widgets.SeekBarWithText.SeekBarWithText
                 android:id="@+id/waypointAngle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -61,7 +61,7 @@
                 app:min="0"
                 app:title="@string/waypoint_angle"
                 app:unit="°" >
-            </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+            </org.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
 
             <TextView
                 android:id="@+id/textView1"

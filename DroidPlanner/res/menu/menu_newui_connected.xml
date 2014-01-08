@@ -57,7 +57,7 @@
 
     <item
         android:id="@+id/bar_mode"
-        android:actionViewClass="com.droidplanner.widgets.spinners.SelectModeSpinner"
+        android:actionViewClass="org.droidplanner.widgets.spinners.SelectModeSpinner"
         android:showAsAction="always"
         tools:ignore="MenuTitle"/>
     <item

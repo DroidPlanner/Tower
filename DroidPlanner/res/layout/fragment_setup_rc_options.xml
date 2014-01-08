@@ -54,7 +54,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/rc_options_ch7" />
 
-                <com.droidplanner.widgets.spinners.SpinnerSelfSelect
+                <org.droidplanner.widgets.spinners.SpinnerSelfSelect
                     android:id="@+id/spinnerCH7Features"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
                     android:layout_marginTop="8dp"
                     android:text="Channel 8" />
 
-                <com.droidplanner.widgets.spinners.SpinnerSelfSelect
+                <org.droidplanner.widgets.spinners.SpinnerSelfSelect
                     android:id="@+id/spinnerCH8Features"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

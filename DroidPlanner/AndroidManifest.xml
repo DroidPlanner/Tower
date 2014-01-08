@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.droidplanner"
+          package="org.droidplanner"
           android:versionCode="56"
           android:versionName="please run version.sh to get the version name">
 
