@@ -7,7 +7,7 @@
     android:background="@color/opaque_white"
 	tools:ignore="HardcodedText"
     >
-    <com.droidplanner.widgets.spinners.SpinnerSelfSelect
+    <org.droidplanner.widgets.spinners.SpinnerSelfSelect
         android:id="@+id/spinnerWaypointType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

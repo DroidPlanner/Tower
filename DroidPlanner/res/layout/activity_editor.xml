@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/gestureMapFragment"
-        android:name="com.droidplanner.fragments.helpers.GestureMapFragment"
+        android:name="org.droidplanner.fragments.helpers.GestureMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout="@layout/fragment_gesture_map" />
@@ -24,7 +24,7 @@
 
     <fragment
         android:id="@+id/editorToolsFragment"
-        android:name="com.droidplanner.fragments.EditorToolsFragment"
+        android:name="org.droidplanner.fragments.EditorToolsFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/missionFragment1"
@@ -49,7 +49,7 @@
 
     <fragment
         android:id="@+id/missionFragment1"
-        android:name="com.droidplanner.fragments.EditorListFragment"
+        android:name="org.droidplanner.fragments.EditorListFragment"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_alignParentBottom="true"
