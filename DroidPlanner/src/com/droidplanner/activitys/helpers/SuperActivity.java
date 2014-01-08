@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentActivity;
 import android.view.MenuItem;
 import com.droidplanner.DroidPlannerApp;
 import com.droidplanner.DroidPlannerApp.OnSystemArmListener;
@@ -17,7 +16,7 @@ import com.droidplanner.drone.Drone;
 import com.droidplanner.fragments.helpers.OfflineMapFragment;
 import com.droidplanner.helpers.units.Altitude;
 
-public abstract class SuperActivity extends FragmentActivity implements
+public abstract class SuperActivity extends HelpActivity implements
 		OnAltitudeChangedListner, OnSystemArmListener {
 
 	public DroidPlannerApp app;

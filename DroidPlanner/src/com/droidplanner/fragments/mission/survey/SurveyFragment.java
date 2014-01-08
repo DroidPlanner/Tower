@@ -83,8 +83,8 @@ public class SurveyFragment extends Fragment implements
 		//TODO find a better origin point than (0,0)
 		
 		try {
-			GridBuilder gridBuilder = new GridBuilder(polygon, surveyData, new LatLng(0, 0));
-			polygon.checkIfValid();
+			GridBuilder gridBuilder = new GridBuilder(polygon, surveyData, new LatLng(0, 0),context);
+			polygon.checkIfValid(context);
 			grid = gridBuilder.generate();
 			views.updateViews(surveyData,grid,polygon.getArea());
 			grid.setAltitude(surveyData.getAltitude());

@@ -1,18 +1,14 @@
 package com.droidplanner.activitys.helpers;
 
 import android.content.Context;
+import android.text.Layout.Alignment;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.AlignmentSpan;
+import android.text.style.RelativeSizeSpan;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.TextView;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.RelativeSizeSpan;
-import android.text.style.AlignmentSpan;
-import android.text.Layout.Alignment;
-
-
-
 
 import com.droidplanner.R;
 import com.droidplanner.drone.Drone;
@@ -151,7 +147,6 @@ public class InfoMenu implements OnDroneListner {
 			drone.state.resetFlightTimer();
 			break;
 		case R.id.bar_home:
-			drone.waypointMananger.getWaypoints();
 			break;
 		case R.id.menu_send_mission:
 			drone.mission.sendMissionToAPM();

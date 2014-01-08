@@ -5,6 +5,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.droidplanner.DroidPlannerApp.ConnectionStateListner;
+import com.droidplanner.R;
 import com.droidplanner.drone.Drone;
 import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
@@ -33,6 +34,7 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
 		drone.events.addDroneListener(this);
 		app.conectionListner = this;
 		drone.MavClient.queryConnectionState();
+		drone.events.notifyDroneEvent(DroneEventsType.MISSION_UPDATE);
 	}
 
 	@Override
@@ -53,7 +55,8 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
 	public boolean onCreateOptionsMenu(Menu menu) {
 		infoMenu = new InfoMenu(drone,this);
 		infoMenu.inflateMenu(menu, getMenuInflater());	
-		infoMenu.setupModeSpinner(this);		
+		infoMenu.setupModeSpinner(this);
+		getMenuInflater().inflate(R.menu.menu_super_activiy, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 

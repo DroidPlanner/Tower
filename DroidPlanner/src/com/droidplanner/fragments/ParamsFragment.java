@@ -165,7 +165,7 @@ public class ParamsFragment extends ListFragment implements DroneInterfaces
         if (drone.MavClient.isConnected()) {
             drone.parameters.getAllParameters();
         } else {
-            Toast.makeText(getActivity(), "Please connect first", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), R.string.msg_connect_first, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -183,7 +183,7 @@ public class ParamsFragment extends ListFragment implements DroneInterfaces
         }
         if(written > 0)
             adapter.notifyDataSetChanged();
-        Toast.makeText(getActivity(), written + " parameters written to drone", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), written +" "+R.string.msg_parameters_written_to_drone, Toast.LENGTH_SHORT).show();
     }
 
     private void openParametersFromFile() {
@@ -211,7 +211,7 @@ public class ParamsFragment extends ListFragment implements DroneInterfaces
         if (parameters.size() > 0) {
             ParameterWriter parameterWriter = new ParameterWriter(parameters);
             if (parameterWriter.saveParametersToFile()) {
-                Toast.makeText(getActivity(), getResources().getString(R.string.parameters_saved),
+                Toast.makeText(getActivity(), R.string.parameters_saved,
                         Toast.LENGTH_SHORT).show();
             }
         }
@@ -220,7 +220,7 @@ public class ParamsFragment extends ListFragment implements DroneInterfaces
     @Override
     public void onBeginReceivingParameters() {
         pd = new ProgressDialog(getActivity());
-        pd.setTitle(getResources().getString(R.string.refreshing_parameters));
+        pd.setTitle(R.string.refreshing_parameters);
         pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         pd.setIndeterminate(true);
         pd.setCancelable(false);

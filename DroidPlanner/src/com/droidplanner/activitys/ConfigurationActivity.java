@@ -135,4 +135,9 @@ public class ConfigurationActivity extends SuperUI {
 			}
 		}
 	}
+
+	@Override
+	public CharSequence[][] getHelpItems() {
+		return new CharSequence[][] { {}, {} };
+	}
 }

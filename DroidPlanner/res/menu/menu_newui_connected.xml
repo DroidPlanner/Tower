@@ -65,15 +65,6 @@
         android:showAsAction="never"
         android:title="@string/menu_disconnect"/>
     <item
-        android:id="@+id/menu_configuration"
-        android:showAsAction="never"
-        android:title="@string/configuration"/>
-    <item
-        android:id="@+id/menu_settings"
-        android:showAsAction="never"
-        android:title="@string/settings"/>
-
-    <item
         android:id="@+id/menu_send_mission"
         android:showAsAction="never"
         android:title="@string/send_mission"/>

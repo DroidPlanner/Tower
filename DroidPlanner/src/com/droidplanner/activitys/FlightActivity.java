@@ -222,4 +222,12 @@ public class FlightActivity extends SuperUI implements
 				.replace(R.id.modeInfoPanel, modeInfoPanel).commit();		
 	}
 
+	@Override
+	public CharSequence[][] getHelpItems() {
+		return new CharSequence[][] {
+				{ "Spline", "DP v3" },
+				{ "https://www.youtube.com/watch?v=v9ydP-NWoJE",
+						"https://www.youtube.com/watch?v=miwWUgX6nwY" } };
+	}
+
 }

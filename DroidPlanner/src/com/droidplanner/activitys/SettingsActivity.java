@@ -23,4 +23,9 @@ public class SettingsActivity extends SuperUI {
             fm.beginTransaction().add(R.id.fragment_settings_layout, settingsFragment).commit();
         }
     }
+
+	@Override
+	public CharSequence[][] getHelpItems() {
+		return new CharSequence[][] { {}, {} };
+	}
 }
