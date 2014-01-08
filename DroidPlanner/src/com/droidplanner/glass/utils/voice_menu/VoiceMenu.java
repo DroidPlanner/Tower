@@ -89,14 +89,39 @@ public class VoiceMenu implements Menu {
 			String itemTitle = item.getTitle().toString();
 			extraPrompt += "\n\t\t\" " + itemTitle + " \""; 
 		}
-//        extraPrompt += glassActivity.drone.MavClient.isConnected()
-//			?"\t\t\" Flight Modes \"\n\t\t\" Disconnect \"\n"
-//			:"\t\t\" Connect \"\n";
-//        extraPrompt += "\t\t\" Hud \"\n\t\t\" Map \"\n\t\t\" Settings \"";
-//
+
+        glassActivity.setRecognizerIntentOriginMenu(this);
+
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
 			.putExtra(RecognizerIntent.EXTRA_PROMPT, extraPrompt);
         glassActivity.startActivityForResult(intent, VoiceMenu.SPEECH_REQUEST);
+    }
+
+    /**
+     * When the speech recognizer returns, this is used to parse the recognized speech,
+     * and identify the corresponding voice menu item.
+     * @param recognizedSpeech result from the RecognizerIntent
+     * @return true if the corresponding voice menu item was identified and handled.
+     */
+    public boolean dispatchVoiceMenuItemRecognized(String recognizedSpeech){
+        ArrayList<VoiceMenuItem> visibleItems = getVisibleItems();
+        for(VoiceMenuItem item: visibleItems){
+            String itemTitle = item.getTitle().toString();
+            if(itemTitle.equalsIgnoreCase(recognizedSpeech)){
+                //Check if the menu item has a sub menu.
+                if(item.hasSubMenu()){
+                    //Launch the recognizer intent for the sub menu items.
+                    SubVoiceMenu subMenu = (SubVoiceMenu)item.getSubMenu();
+                    subMenu.openVoiceMenu();
+                    return true;
+                }
+                else {
+                    return glassActivity.onOptionsItemSelected(item) || glassActivity
+                            .onMenuItemSelected(0, item);
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -157,6 +182,7 @@ public class VoiceMenu implements Menu {
     public SubMenu addSubMenu(int groupId, int itemId, int order, CharSequence title) {
         final VoiceMenuItem item = (VoiceMenuItem) add(groupId, itemId, order, title);
         final SubVoiceMenu subMenu = new SubVoiceMenu(glassActivity, this, item);
+        subMenu.setPromptHeader(title);
         item.setSubMenu(subMenu);
 
         return subMenu;

@@ -25,6 +25,11 @@ public class GlassActivity extends SuperActivity {
     private VoiceMenu voiceMenu;
 
     /**
+     * This is used to track which menu, or sub menus last launched the recognizer intent.
+     */
+    private VoiceMenu recognizerIntentOriginMenu;
+
+    /**
      * Glass gesture detector.
      * Detects glass specific swipes, and taps, and uses it for navigation.
      *
@@ -46,6 +51,9 @@ public class GlassActivity extends SuperActivity {
                 Toast.makeText(getApplicationContext(), "Unable to recognize speech!",
                         Toast.LENGTH_LONG).show();
             }
+            else if(recognizerIntentOriginMenu != null){
+                recognizerIntentOriginMenu.dispatchVoiceMenuItemRecognized(recognizedText);
+            }
         }
     }
 
@@ -56,6 +64,10 @@ public class GlassActivity extends SuperActivity {
                 return false;
             }
         };
+    }
+
+    public void setRecognizerIntentOriginMenu(VoiceMenu menu){
+        this.recognizerIntentOriginMenu = menu;
     }
 
     @Override
@@ -80,6 +92,7 @@ public class GlassActivity extends SuperActivity {
         //Check if the voice menu instance was initialized.
         if (voiceMenu == null) {
             voiceMenu = new VoiceMenu(this);
+            voiceMenu.setPromptHeader("Say, ");
             onCreateOptionsMenu(voiceMenu);
         }
 
