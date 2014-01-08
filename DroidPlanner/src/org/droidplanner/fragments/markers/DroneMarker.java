@@ -1,8 +1,10 @@
 package org.droidplanner.fragments.markers;
 
+import org.droidplanner.R;
 import org.droidplanner.fragments.FlightMapFragment;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -12,20 +14,17 @@ public class DroneMarker {
 
 	private Marker droneMarker;
 	private FlightMapFragment flightMapFragment;
-	private DroneBitmaps bitmaps;
 
 	public DroneMarker(FlightMapFragment flightMapFragment) {
 		this.flightMapFragment = flightMapFragment;
 		updateDroneMarkers();
 	}
 
-	private void updatePosition(double yaw, LatLng coord) {
-		// This ensure the 0 to 360 range
-		double correctHeading = (yaw - flightMapFragment.getMapRotation() + 360) % 360;
+	private void updatePosition(float yaw, LatLng coord) {
 		try {
-			droneMarker.setVisible(true);
 			droneMarker.setPosition(coord);
-			droneMarker.setIcon(bitmaps.getIcon(correctHeading));
+			droneMarker.setRotation(yaw);
+			droneMarker.setVisible(true);
 
 			animateCamera(coord);
 		} catch (Exception e) {
@@ -48,23 +47,18 @@ public class DroneMarker {
 		if (droneMarker!=null) {
 			droneMarker.remove();			
 		}
-		buildBitmaps();
 		addMarkerToMap();
 	}
 
 	private void addMarkerToMap() {
 		droneMarker = flightMapFragment.mMap.addMarker(new MarkerOptions()
 				.anchor((float) 0.5, (float) 0.5).position(new LatLng(0, 0))
-				.icon(bitmaps.getIcon(0)).visible(false));
-	}
-
-	private void buildBitmaps() {
-		bitmaps = new DroneBitmaps(flightMapFragment.getResources(),
-				flightMapFragment.drone.type.getType());
+				.icon(BitmapDescriptorFactory.fromResource(R.drawable.quad)).visible(false)
+				.flat(true));
 	}
 
 	public void onDroneUpdate() {
-		updatePosition(flightMapFragment.drone.orientation.getYaw(),
+		updatePosition((float)flightMapFragment.drone.orientation.getYaw(),
 				flightMapFragment.drone.GPS.getPosition());
 		flightMapFragment.addFlightPathPoint(flightMapFragment.drone.GPS
 				.getPosition());
