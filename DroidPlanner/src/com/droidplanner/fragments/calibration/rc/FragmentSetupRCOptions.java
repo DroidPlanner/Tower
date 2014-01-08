@@ -1,5 +1,6 @@
 package com.droidplanner.fragments.calibration.rc;
 
+import android.support.v4.app.Fragment;
 import com.droidplanner.R;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,10 +11,9 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.Spinner;
+import com.droidplanner.fragments.RcSetupFragment;
 
-public class FragmentSetupRCOptions extends FragmentSetupRCPanel implements OnClickListener, OnItemSelectedListener{
-	private Button btnSend;
-	private Button btnCancel;
+public class FragmentSetupRCOptions extends Fragment {
 	private Spinner spinnerCH7;
 	private Spinner spinnerCH8;
 	private int optionCH7;
@@ -23,13 +23,29 @@ public class FragmentSetupRCOptions extends FragmentSetupRCPanel implements OnCl
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_setup_rc_options, container,
-				false);
-		btnSend = (Button)view.findViewById(R.id.ButtonSend);
-		btnSend.setOnClickListener(this);
+
+        final RcSetupFragment rcSetupFragment = (RcSetupFragment) getParentFragment();
+
+		final View view = inflater.inflate(R.layout.fragment_setup_rc_options, container,	false);
+		final Button btnSend = (Button)view.findViewById(R.id.ButtonSend);
+		btnSend.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(rcSetupFragment != null){
+                    rcSetupFragment.updateRCOptionsData();
+                }
+            }
+        });
 		
-		btnCancel = (Button)view.findViewById(R.id.ButtonCancel);
-		btnCancel.setOnClickListener(this);
+		final Button btnCancel = (Button)view.findViewById(R.id.ButtonCancel);
+		btnCancel.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(rcSetupFragment != null){
+                    rcSetupFragment.cancel();
+                }
+            }
+        });
 		
 		spinnerCH7 = (Spinner)view.findViewById(R.id.spinnerCH7Features);
 		spinnerCH7.setSelection(getSpinnerPosition(optionCH7),true);
@@ -38,18 +54,6 @@ public class FragmentSetupRCOptions extends FragmentSetupRCPanel implements OnCl
 		spinnerCH8.setSelection(getSpinnerPosition(optionCH8),true);
 		
 		return view;
-	}
-
-	@Override
-	public void onClick(View arg0) {
-		if(rcSetupFragment!=null){
-			if(arg0.equals(btnSend)){
-				rcSetupFragment.updateRCOptionsData();
-			}
-			else if(arg0.equals(btnCancel)) {
-				rcSetupFragment.cancel();
-			}
-		}
 	}
 
 	public int getOptionCH7() {
@@ -89,16 +93,4 @@ public class FragmentSetupRCOptions extends FragmentSetupRCPanel implements OnCl
 			return -1;
 		}
 	}
-	
-	@Override
-	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
-			long arg3) {
-	}
-
-	@Override
-	public void onNothingSelected(AdapterView<?> arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

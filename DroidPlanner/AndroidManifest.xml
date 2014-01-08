@@ -121,6 +121,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activitys.FlightActivity" />
         </activity>
+        <activity android:name=".activitys.SettingsActivity"
+                  android:label="@string/settings"
+                  android:parentActivityName=".activitys.FlightActivity">
+
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activitys.FlightActivity" />
+        </activity>
     </application>
 
 </manifest>

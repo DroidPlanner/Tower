@@ -1,63 +1,85 @@
 package com.droidplanner.fragments.calibration.imu;
 
-import com.droidplanner.R;
-import com.droidplanner.drone.Drone;
-import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
-import com.droidplanner.fragments.calibration.FragmentCalibration;
-import com.droidplanner.fragments.calibration.FragmentSetupSidePanel;
-
+import android.app.Activity;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import com.droidplanner.R;
+import com.droidplanner.activitys.ConfigurationActivity;
+import com.droidplanner.drone.Drone;
+import com.droidplanner.drone.DroneInterfaces.DroneEventsType;
+import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import com.droidplanner.fragments.SetupFragment;
 
-public class FragmentSetupIMU extends FragmentCalibration implements
-		OnDroneListner {
-	private static String msg;
-	private static int TIMEOUT_MAX = 300;
+public class FragmentSetupIMU extends SetupFragment.SetupCalibration implements OnDroneListner{
+
+    private  final static int TIMEOUT_MAX = 300;
+
+    private String msg;
 	boolean calibrationPassed;
-	private static long timeCount, timeLeft;
-	private static int calibration_step = 0;
-	private static View view;
-	private static TextView textViewStep;
-	private static TextView textViewOffset;
-	private static TextView textViewScaling;
-	private static TextView textViewTimeOut;
-	private static ProgressBar pbTimeOut;
-	private static String timeLeftStr;
-	private static Drawable drawableGood, drawableWarning, drawablePoor;
-	private Handler h = new Handler();
+	private  long timeCount, timeLeft;
+	private  int calibration_step = 0;
+	private  TextView textViewStep;
+	private  TextView textViewOffset;
+	private  TextView textViewScaling;
+	private  TextView textViewTimeOut;
+	private  ProgressBar pbTimeOut;
+	private  String timeLeftStr;
+	private  Drawable drawableGood, drawableWarning, drawablePoor;
+
+	private final Handler handler = new Handler();
+    private ConfigurationActivity parentActivity;
+
+    @Override
+    public void onAttach(Activity activity){
+        super.onAttach(activity);
+        if(!(activity instanceof ConfigurationActivity)){
+            throw new IllegalStateException("Parent activity must be " + ConfigurationActivity
+                    .class.getName());
+        }
+
+        parentActivity = (ConfigurationActivity) activity;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstaneState) {
+        final View view = inflater.inflate(R.layout.fragment_setup_imu_main, container, false);
+
+        setupLocalViews(view);
+
+        return view;
+    }
+
+    @Override
+    public void onDetach(){
+        super.onDetach();
+        parentActivity = null;
+    }
 
 	@Override
 	public void onPause() {
-		if (parent != null) {
-			parent.getDrone().events.addDroneListener(this);
+        super.onPause();
+		if (parentActivity != null) {
+			parentActivity.drone.events.removeDroneListener(this);
 		}
-		super.onPause();
 	}
 
 	@Override
 	public void onResume() {
-		if (parent != null) {
-			parent.getDrone().events.removeDroneListener(this);
+        super.onResume();
+
+		if (parentActivity != null) {
+			parentActivity.drone.events.addDroneListener(this);
 		}
-		super.onResume();
 	}
 
-	@Override
-	protected View getView(LayoutInflater inflater, ViewGroup container) {
-		view = inflater.inflate(R.layout.fragment_setup_imu_main, container,
-				false);
-		return view;
-	}
-
-	@Override
-	protected void setupLocalViews(View view) {
+	private void setupLocalViews(View view) {
 		textViewStep = (TextView) view.findViewById(R.id.textViewIMUStep);
 		textViewOffset = (TextView) view.findViewById(R.id.TextViewIMUOffset);
 		textViewScaling = (TextView) view.findViewById(R.id.TextViewIMUScaling);
@@ -76,20 +98,8 @@ public class FragmentSetupIMU extends FragmentCalibration implements
 	}
 
 	@Override
-	protected FragmentSetupSidePanel getSidePanel() {
+	public SetupFragment.SetupSidePanel getSidePanel() {
 		return new FragmentSetupIMUCalibrate();
-	}
-
-	@Override
-	protected void initSidePanel() {
-		sidePanel = (FragmentSetupIMUCalibrate) fragmentManager
-				.findFragmentById(R.id.fragment_setup_sidepanel);
-	}
-
-	@Override
-	protected void updateSidePanel() {
-		sidePanel = new FragmentSetupIMUCalibrate();
-		sidePanel.setParent(this);
 	}
 
 	public void doCalibrationStep() {
@@ -113,21 +123,19 @@ public class FragmentSetupIMU extends FragmentCalibration implements
 			textViewOffset.setVisibility(View.INVISIBLE);
 			textViewScaling.setVisibility(View.INVISIBLE);
 
-			((FragmentSetupIMUCalibrate) sidePanel)
-					.updateTitle(calibration_step);
+            ((SetupFragment) getParentFragment()).updateSidePanelTitle(calibration_step);
 		}
-
 	}
 
 	private void sendAck(int step) {
-		if (parent.getDrone() != null) {
-			parent.getDrone().calibrationSetup.sendAckk(step);
+		if (parentActivity.drone != null) {
+			parentActivity.drone.calibrationSetup.sendAckk(step);
 		}
 	}
 
 	private void startCalibration() {
-		if (parent.getDrone() != null) {
-			parent.getDrone().calibrationSetup.startCalibration();
+		if (parentActivity.drone != null) {
+			parentActivity.drone.calibrationSetup.startCalibration();
 		}
 	}
 
@@ -135,9 +143,10 @@ public class FragmentSetupIMU extends FragmentCalibration implements
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		if (event == DroneEventsType.CALIBRATION_IMU) {
 			processMAVMessage(drone.calibrationSetup.getMessage());
-		} else if (event == DroneEventsType.CALIBRATION_TIMEOUT) {
-			if (parent.getDrone() != null) {
-				parent.getDrone().tts.speak(msg);
+		}
+        else if (event == DroneEventsType.CALIBRATION_TIMEOUT) {
+			if (parentActivity.drone != null) {
+				parentActivity.drone.tts.speak(msg);
 				//TODO: Check if msg is empty - reset the Calibrating isCalibrating flag
 			}
 		}
@@ -173,22 +182,22 @@ public class FragmentSetupIMU extends FragmentCalibration implements
 
 		textViewStep.setText(msg);
 
-		((FragmentSetupIMUCalibrate) sidePanel).updateTitle(calibration_step);
+        ((SetupFragment) getParentFragment()).updateSidePanelTitle(calibration_step);
 
 		if (calibration_step == 7) {
-			if (parent != null && parent.getDrone() != null) {
-				parent.getDrone().tts.speak(msg);
+			if (parentActivity != null && parentActivity.drone != null) {
+				parentActivity.drone.tts.speak(msg);
 			}
-			h.removeCallbacks(runnable);
+			handler.removeCallbacks(runnable);
 
 			pbTimeOut.setVisibility(View.INVISIBLE);
 			textViewTimeOut.setVisibility(View.INVISIBLE);
 		} else {
-			h.removeCallbacks(runnable);
+			handler.removeCallbacks(runnable);
 			timeCount = 0;
 			textViewTimeOut.setVisibility(View.VISIBLE);
 			pbTimeOut.setVisibility(View.VISIBLE);
-			h.postDelayed(runnable, 100);
+			handler.postDelayed(runnable, 100);
 		}
 	}
 
@@ -197,10 +206,10 @@ public class FragmentSetupIMU extends FragmentCalibration implements
 		   @Override
 		   public void run() {
 			   updateTimeOutProgress();
-		      h.postDelayed(this, 100);
+		      handler.postDelayed(this, 100);
 		   }
 		};
-	protected static void updateTimeOutProgress() {
+	protected void updateTimeOutProgress() {
 		timeLeft = (int) (TIMEOUT_MAX - timeCount);
 
 		if (timeLeft >= 0) {

@@ -3,9 +3,9 @@ package com.droidplanner.activitys;
 import java.util.List;
 
 import android.app.ActionBar;
-import android.app.FragmentManager;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
 import android.view.ActionMode;
 import android.view.ActionMode.Callback;
@@ -57,7 +57,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
-		fragmentManager = getFragmentManager();
+		fragmentManager = getSupportFragmentManager();
 
 		planningMapFragment = ((EditorMapFragment) fragmentManager
 				.findFragmentById(R.id.mapFragment));
@@ -80,7 +80,6 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
 		updateMapPadding();
-		missionListFragment.updateViewVisibility();
 	}
 
 	private void updateMapPadding() {

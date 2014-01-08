@@ -1,7 +1,5 @@
 package com.droidplanner.fragments.helpers;
 
-import java.util.List;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,21 +7,20 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.droidplanner.DroidPlannerApp;
-import com.droidplanner.drone.DroneInterfaces;
 import com.droidplanner.helpers.LocalMapTileProvider;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 
-public class OfflineMapFragment extends MapFragment{
+import java.util.List;
+
+public class OfflineMapFragment extends SupportMapFragment {
 
 	public static final String PREF_MAP_TYPE = "pref_map_type";
 
