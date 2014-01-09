@@ -7,17 +7,21 @@ import org.droidplanner.drone.variables.mission.survey.SurveyData;
 import org.droidplanner.drone.variables.mission.survey.grid.Grid;
 import org.droidplanner.helpers.units.Area;
 import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
+import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
 import org.droidplanner.widgets.spinners.SpinnerSelfSelect;
+import org.droidplanner.widgets.spinners.SpinnerSelfSelect.OnSpinnerItemSelectedListener;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
-public class SurveyViews {
+public class SurveyViews implements OnClickListener, OnTextSeekBarChangedListner, OnSpinnerItemSelectedListener {
 	public SeekBarWithText overlapView;
 	public SeekBarWithText angleView;
 	public SeekBarWithText altitudeView;
@@ -115,13 +119,13 @@ public class SurveyViews {
 				.findViewById(id.numberOfStripsTextView);
 		lengthView = (TextView) layout.findViewById(id.lengthTextView);
 
-		footprintCheckBox.setOnClickListener(surveyDialog);
-		angleView.setOnChangedListner(surveyDialog);
-		altitudeView.setOnChangedListner(surveyDialog);
-		overlapView.setOnChangedListner(surveyDialog);
-		sidelapView.setOnChangedListner(surveyDialog);
-		innerWPsCheckbox.setOnClickListener(surveyDialog);
-		cameraSpinner.setOnSpinnerItemSelectedListener(surveyDialog);
+		footprintCheckBox.setOnClickListener(this);
+		angleView.setOnChangedListner(this);
+		altitudeView.setOnChangedListner(this);
+		overlapView.setOnChangedListner(this);
+		sidelapView.setOnChangedListner(this);
+		innerWPsCheckbox.setOnClickListener(this);
+		cameraSpinner.setOnSpinnerItemSelectedListener(this);
 	}
 
 	void updateCameraSpinner(SpinnerAdapter spinnerAdapter) {
@@ -131,6 +135,49 @@ public class SurveyViews {
 
 	public View getLayout() {
 		return layout;
+	}
+	
+	@Override
+	public void onClick(View view) {
+		switch (view.getId()) {
+		case R.id.checkBoxInnerWPs:
+			surveyData.setInnerWpsState(innerWPsCheckbox.isChecked());
+			update();
+			break;
+		case R.id.CheckBoxFootprints:
+			update();
+			break;
+		}		
+	}
+	
+	@Override
+	public void onSpinnerItemSelected(Spinner spinner, int position, String text) {
+		//onCameraSelected(text);
+	}
+	
+
+	@Override
+	public void onSeekBarChanged() {					
+	}
+	
+	/*
+	private void onCameraSelected(String text) {
+		CameraInfo cameraInfo;
+		try {
+			cameraInfo = avaliableCameras.openFile(text);
+		} catch (Exception e) {
+			Toast.makeText(context,
+					context.getString(R.string.error_when_opening_file),
+					Toast.LENGTH_SHORT).show();
+			cameraInfo = CameraInfoReader.getNewMockCameraInfo();
+		}
+		surveyData.setCameraInfo(cameraInfo);
+		update();
+	}
+	
+	 */
+	private void update() {
+		//views.updateSeekBarsValues();
 	}
 
 }
