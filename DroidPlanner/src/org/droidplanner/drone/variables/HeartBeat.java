@@ -4,18 +4,22 @@ import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneVariable;
 
+import com.MAVLink.Messages.ardupilotmega.msg_heartbeat;
+
 import android.os.Handler;
 
 public class HeartBeat extends DroneVariable {
 
 	private static long HEARTBEAT_NORMAL_TIMEOUT = 5000;
 	private static long HEARTBEAT_LOST_TIMEOUT = 15000;
+	
+	public HeartbeatState heartbeatState;
+	public int droneID = 1;
 
 	enum HeartbeatState {
 		FIRST_HEARTBEAT, LOST_HEARTBEAT, NORMAL_HEARTBEAT
 	}
-
-	public HeartbeatState heartbeatState;
+	
 	public Handler watchdog = new Handler();
 	public Runnable watchdogCallback = new Runnable() {
 		@Override
@@ -28,7 +32,9 @@ public class HeartBeat extends DroneVariable {
 		super(myDrone);
 	}
 
-	public void onHeartbeat() {
+	public void onHeartbeat(msg_heartbeat msg) {
+		droneID = msg.sysid;
+		
 		switch (heartbeatState) {
 		case FIRST_HEARTBEAT:
 			myDrone.tts.speak("Connected");
