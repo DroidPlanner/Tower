@@ -25,9 +25,7 @@ public class DroidPlannerApp extends ErrorReportApp implements
 	public OnSystemArmListener onSystemArmListener;
 	private TTS tts;
 
-    private HeartBeat Heartbeat;
-
-	public interface ConnectionStateListner {
+    public interface ConnectionStateListner {
 		public void notifyConnected();
 		
 		public void notifyDisconnected();
@@ -50,7 +48,6 @@ public class DroidPlannerApp extends ErrorReportApp implements
 		recordMe = new RecordMe(this, drone);
 		mavLinkMsgHandler = new org.droidplanner.MAVLink.MavLinkMsgHandler(
 				drone);
-		Heartbeat = new HeartBeat(tts);
 	}
 
 	@Override
@@ -63,7 +60,7 @@ public class DroidPlannerApp extends ErrorReportApp implements
 			else {
 				notifyDisarmed();
 			}
-			Heartbeat.onHeartbeat();
+			drone.heartbeat.onHeartbeat();
 		}
 		mavLinkMsgHandler.receiveData(msg);
 	}
@@ -73,7 +70,7 @@ public class DroidPlannerApp extends ErrorReportApp implements
 		conectionListner.notifyDisconnected();
 
 		// stop watchdog
-		Heartbeat.watchdog.removeCallbacks(Heartbeat.watchdogCallback);
+		drone.heartbeat.watchdog.removeCallbacks(drone.heartbeat.watchdogCallback);
 	}
 
 	@Override
@@ -83,7 +80,7 @@ public class DroidPlannerApp extends ErrorReportApp implements
 		// don't announce 'connected' until first heartbeat received
 
 		// start watchdog
-		Heartbeat.notifyConnected();
+		drone.heartbeat.notifyConnected();
 	}
 
 	@Override

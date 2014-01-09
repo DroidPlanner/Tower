@@ -1,11 +1,15 @@
-package org.droidplanner;
+package org.droidplanner.drone.variables;
 
-import org.droidplanner.drone.variables.Calibration;
-import org.droidplanner.helpers.TTS;
+import org.droidplanner.drone.Drone;
+import org.droidplanner.drone.DroneVariable;
 
 import android.os.Handler;
 
-public class HeartBeat {
+public class HeartBeat extends DroneVariable {
+
+	public HeartBeat(Drone myDrone) {
+		super(myDrone);
+	}
 
 	private static long HEARTBEAT_NORMAL_TIMEOUT = 5000;
 	private static long HEARTBEAT_LOST_TIMEOUT = 15000;
@@ -18,26 +22,20 @@ public class HeartBeat {
 			onHeartbeatTimeout();
 		}
 	};
-	private TTS tts;
-
 	enum HeartbeatState {
 		FIRST_HEARTBEAT, LOST_HEARTBEAT, NORMAL_HEARTBEAT
-	}
-
-	public HeartBeat(TTS tts) {
-		this.tts = tts;
 	}
 
 	public void onHeartbeat() {
 
 		switch (heartbeatState) {
 		case FIRST_HEARTBEAT:
-			tts.speak("Connected");
+			myDrone.tts.speak("Connected");
 			break;
 
 		case LOST_HEARTBEAT:
 			if (!Calibration.isCalibrating())
-				tts.speak("Data link restored");
+				myDrone.tts.speak("Data link restored");
 			break;
 		case NORMAL_HEARTBEAT:
 			break;
@@ -51,7 +49,7 @@ public class HeartBeat {
 		if (Calibration.isCalibrating()) {
 			//drone.events.notifyDroneEvent(DroneEventsType.CALIBRATION_TIMEOUT);
 		} else
-			tts.speak("Data link lost, check connection.");
+			myDrone.tts.speak("Data link lost, check connection.");
 		heartbeatState = HeartbeatState.LOST_HEARTBEAT;
 		restartWatchdog(HEARTBEAT_LOST_TIMEOUT);
 	}
