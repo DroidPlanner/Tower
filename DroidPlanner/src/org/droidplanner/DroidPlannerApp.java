@@ -60,7 +60,6 @@ public class DroidPlannerApp extends ErrorReportApp implements
 			else {
 				notifyDisarmed();
 			}
-			drone.heartbeat.onHeartbeat();
 		}
 		mavLinkMsgHandler.receiveData(msg);
 	}
@@ -70,7 +69,7 @@ public class DroidPlannerApp extends ErrorReportApp implements
 		conectionListner.notifyDisconnected();
 
 		// stop watchdog
-		drone.heartbeat.watchdog.removeCallbacks(drone.heartbeat.watchdogCallback);
+		drone.heartbeat.notifiyDisconnected();
 	}
 
 	@Override
