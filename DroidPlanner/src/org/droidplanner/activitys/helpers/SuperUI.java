@@ -33,7 +33,7 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
 	protected void onStart() {
 		super.onStart();
 		drone.events.addDroneListener(this);
-		app.conectionListner = this;
+		app.connectionListner = this;
 		drone.MavClient.queryConnectionState();
 		drone.events.notifyDroneEvent(DroneEventsType.MISSION_UPDATE);
 	}
