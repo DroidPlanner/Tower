@@ -66,6 +66,15 @@ public class TTS implements OnInitListener, OnDroneListner {
 			case MISSION_RECEIVED:
 				speak("Waypoints received");
 				break;
+			case HEARTBEAT_FIRST:
+				speak("Connected");		
+				break;
+			case HEARTBEAT_TIMEOUT:
+				speak("Data link lost, check connection.");
+				break;
+			case HEARTBEAT_RESTORED:
+				speak("Data link restored");
+				break;
 			default:
 				break;
 			}

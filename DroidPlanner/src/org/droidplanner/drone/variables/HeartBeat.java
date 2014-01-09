@@ -37,12 +37,10 @@ public class HeartBeat extends DroneVariable {
 		
 		switch (heartbeatState) {
 		case FIRST_HEARTBEAT:
-			myDrone.tts.speak("Connected");
+			myDrone.events.notifyDroneEvent(DroneEventsType.HEARTBEAT_FIRST);
 			break;
-
 		case LOST_HEARTBEAT:
-			if (!Calibration.isCalibrating())
-				myDrone.tts.speak("Data link restored");
+			myDrone.events.notifyDroneEvent(DroneEventsType.HEARTBEAT_RESTORED);
 			break;
 		case NORMAL_HEARTBEAT:
 			break;
@@ -64,10 +62,10 @@ public class HeartBeat extends DroneVariable {
 	private void onHeartbeatTimeout() {
 		if (Calibration.isCalibrating()) {
 			myDrone.events.notifyDroneEvent(DroneEventsType.CALIBRATION_TIMEOUT);
-		} else
-			myDrone.tts.speak("Data link lost, check connection.");
+		}
 		heartbeatState = HeartbeatState.LOST_HEARTBEAT;
 		restartWatchdog(HEARTBEAT_LOST_TIMEOUT);
+		myDrone.events.notifyDroneEvent(DroneEventsType.HEARTBEAT_TIMEOUT);
 	}
 
 	private void restartWatchdog(long timeout) {
