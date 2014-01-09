@@ -26,15 +26,10 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class SurveyFragment extends Fragment implements
 		OnTextSeekBarChangedListner, OnSpinnerItemSelectedListener, OnClickListener {
-	//public abstract void onPolygonGenerated(List<waypoint> list);
 
 	public interface OnNewGridListner{
 		public void onNewGrid(Grid grid);
 		public void onClearPolygon();
-	}
-	
-	public enum pathModes {
-		MISSION, POLYGON;
 	}
 	
 	private Context context;
@@ -52,10 +47,9 @@ public class SurveyFragment extends Fragment implements
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		context = getActivity().getApplicationContext();
-		views = new SurveyViews(context);
-		views.build(inflater, container,this);
-		
 		surveyData = new SurveyData();
+		views = new SurveyViews(context, surveyData);
+		views.build(inflater, container,this);		
 		avaliableCameras = new CameraInfoLoader(context);
 		views.updateCameraSpinner(avaliableCameras.getCameraInfoList());
 		
@@ -87,7 +81,7 @@ public class SurveyFragment extends Fragment implements
 			GridBuilder gridBuilder = new GridBuilder(polygon, surveyData, new LatLng(0, 0),context);
 			polygon.checkIfValid(context);
 			grid = gridBuilder.generate();
-			views.updateViews(surveyData,grid,polygon.getArea());
+			views.updateViews(grid,polygon.getArea());
 			grid.setAltitude(surveyData.getAltitude());
 			onSurveyListner.onNewGrid(grid);
 		} catch (Exception e) {
@@ -116,7 +110,7 @@ public class SurveyFragment extends Fragment implements
 	}
 
 	private void update() {
-		views.updateSeekBarsValues(surveyData);
+		views.updateSeekBarsValues();
 		generateGrid();
 	}
 	
@@ -127,22 +121,10 @@ public class SurveyFragment extends Fragment implements
 			surveyData.setInnerWpsState(views.innerWPsCheckbox.isChecked());
 			update();
 			break;
-		case R.id.clearPolyButton:
-			onSurveyListner.onClearPolygon();
-			break;
 		case R.id.CheckBoxFootprints:
 			update();
 			break;
-		}
-		
-	}
-
-	public pathModes getPathToDraw() {
-		if (views.modeButton.isChecked()) {
-			return pathModes.POLYGON;
-		}else{
-			return pathModes.MISSION;
-		}
+		}		
 	}
 
 	public  SurveyData getSurveyData() {

@@ -1,5 +1,8 @@
 package org.droidplanner.fragments.mission.survey;
 
+import org.droidplanner.R;
+import org.droidplanner.R.id;
+import org.droidplanner.R.string;
 import org.droidplanner.drone.variables.mission.survey.SurveyData;
 import org.droidplanner.drone.variables.mission.survey.grid.Grid;
 import org.droidplanner.helpers.units.Area;
@@ -10,15 +13,9 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
-import android.widget.ToggleButton;
-
-import org.droidplanner.R;
-import org.droidplanner.R.id;
-import org.droidplanner.R.string;
 
 public class SurveyViews {
 	public SeekBarWithText overlapView;
@@ -37,15 +34,15 @@ public class SurveyViews {
 	public TextView lengthView;
 	private Context context;
 	private View layout;
-	protected ToggleButton modeButton;
-	private Button clearPolyButton;
 	public CheckBox footprintCheckBox;
+	private SurveyData surveyData;
 
-	public SurveyViews(Context context) {
+	public SurveyViews(Context context, SurveyData surveyData) {
 		this.context = context;
+		this.surveyData = surveyData;
 	}
 
-	void updateViews(SurveyData surveyData, Grid grid, Area area) {
+	void updateViews(Grid grid, Area area) {
 		footprintTextView.setText(context.getString(string.footprint) + ": "
 				+ surveyData.getLateralFootPrint() + " x"
 				+ surveyData.getLongitudinalFootPrint());
@@ -82,7 +79,7 @@ public class SurveyViews {
 
 	}
 
-	void updateSeekBarsValues(SurveyData surveyData) {
+	void updateSeekBarsValues() {
 		angleView.setValue(surveyData.getAngle());
 		altitudeView.setValue(surveyData.getAltitude().valueInMeters());
 		sidelapView.setValue(surveyData.getSidelap());
@@ -94,8 +91,6 @@ public class SurveyViews {
 		layout = inflater.inflate(R.layout.fragment_editor_detail_survey, null);
 		cameraSpinner = (SpinnerSelfSelect) layout
 				.findViewById(id.cameraFileSpinner);
-		modeButton = (ToggleButton) layout.findViewById(id.surveyModeButton);
-		clearPolyButton = (Button) layout.findViewById(id.clearPolyButton);
 		footprintCheckBox = (CheckBox) layout
 				.findViewById(id.CheckBoxFootprints);
 
@@ -127,7 +122,6 @@ public class SurveyViews {
 		sidelapView.setOnChangedListner(surveyDialog);
 		innerWPsCheckbox.setOnClickListener(surveyDialog);
 		cameraSpinner.setOnSpinnerItemSelectedListener(surveyDialog);
-		clearPolyButton.setOnClickListener(surveyDialog);
 	}
 
 	void updateCameraSpinner(SpinnerAdapter spinnerAdapter) {
