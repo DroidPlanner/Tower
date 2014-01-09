@@ -61,6 +61,7 @@ public class MavLinkMsgHandler {
 			newMode = ApmModes.getMode(msg_heart.custom_mode,
 					drone.type.getType());
 			drone.state.setMode(newMode);
+			drone.heartbeat.onHeartbeat(msg_heart);
 			break;
 		case msg_global_position_int.MAVLINK_MSG_ID_GLOBAL_POSITION_INT:
 			drone.GPS.setPosition(new LatLng(

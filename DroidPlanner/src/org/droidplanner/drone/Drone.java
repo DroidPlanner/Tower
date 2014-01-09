@@ -7,6 +7,7 @@ import org.droidplanner.drone.variables.Battery;
 import org.droidplanner.drone.variables.Calibration;
 import org.droidplanner.drone.variables.GPS;
 import org.droidplanner.drone.variables.GuidedPoint;
+import org.droidplanner.drone.variables.HeartBeat;
 import org.droidplanner.drone.variables.Home;
 import org.droidplanner.drone.variables.MissionStats;
 import org.droidplanner.drone.variables.Navigation;
@@ -38,6 +39,7 @@ public class Drone {
 	public Home home = new Home(this);
 	public Mission mission = new Mission(this);
 	public MissionStats missionStats = new MissionStats(this);
+	public HeartBeat heartbeat = new HeartBeat(this);
 	public Altitude altitude = new Altitude(this);
 	public Orientation orientation = new Orientation(this);
 	public Navigation navigation = new Navigation(this);

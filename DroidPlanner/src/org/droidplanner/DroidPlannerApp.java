@@ -3,15 +3,11 @@ package org.droidplanner;
 import org.droidplanner.MAVLink.MavLinkMsgHandler;
 import org.droidplanner.MAVLink.MavLinkStreamRates;
 import org.droidplanner.drone.Drone;
-import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.drone.variables.Calibration;
 import org.droidplanner.helpers.FollowMe;
 import org.droidplanner.helpers.RecordMe;
 import org.droidplanner.helpers.TTS;
 import org.droidplanner.service.MAVLinkClient;
 import org.droidplanner.service.MAVLinkClient.OnMavlinkClientListner;
-
-import android.os.Handler;
 
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_heartbeat;
@@ -20,8 +16,6 @@ import com.MAVLink.Messages.enums.MAV_MODE_FLAG;
 public class DroidPlannerApp extends ErrorReportApp implements
 		OnMavlinkClientListner {
 
-	private static long HEARTBEAT_NORMAL_TIMEOUT = 5000;
-	private static long HEARTBEAT_LOST_TIMEOUT = 15000;
 
 	public Drone drone;
 	private MavLinkMsgHandler mavLinkMsgHandler;
@@ -31,22 +25,7 @@ public class DroidPlannerApp extends ErrorReportApp implements
 	public OnSystemArmListener onSystemArmListener;
 	private TTS tts;
 
-    enum HeartbeatState {
-        FIRST_HEARTBEAT, LOST_HEARTBEAT, NORMAL_HEARTBEAT
-    }
-
-    private HeartbeatState heartbeatState;
-    private Handler watchdog = new Handler();
-    private Runnable watchdogCallback = new Runnable()
-    {
-        @Override
-        public void run()
-        {
-            onHeartbeatTimeout();
-        }
-    };
-
-	public interface ConnectionStateListner {
+    public interface ConnectionStateListner {
 		public void notifyConnected();
 		
 		public void notifyDisconnected();
@@ -81,7 +60,6 @@ public class DroidPlannerApp extends ErrorReportApp implements
 			else {
 				notifyDisarmed();
 			}
-			onHeartbeat();
 		}
 		mavLinkMsgHandler.receiveData(msg);
 	}
@@ -91,7 +69,7 @@ public class DroidPlannerApp extends ErrorReportApp implements
 		conectionListner.notifyDisconnected();
 
 		// stop watchdog
-		watchdog.removeCallbacks(watchdogCallback);
+		drone.heartbeat.notifiyDisconnected();
 	}
 
 	@Override
@@ -101,8 +79,7 @@ public class DroidPlannerApp extends ErrorReportApp implements
 		// don't announce 'connected' until first heartbeat received
 
 		// start watchdog
-		heartbeatState = HeartbeatState.FIRST_HEARTBEAT;
-		restartWatchdog(HEARTBEAT_NORMAL_TIMEOUT);
+		drone.heartbeat.notifyConnected();
 	}
 
 	@Override
@@ -113,42 +90,6 @@ public class DroidPlannerApp extends ErrorReportApp implements
 	@Override
 	public void notifyDisarmed() {
 		onSystemArmListener.notifyDisarmed();
-	}
-
-	private void onHeartbeat() {
-
-		switch(heartbeatState) {
-			case FIRST_HEARTBEAT:
-				tts.speak("Connected");
-				break;
-
-			case LOST_HEARTBEAT:
-				if(!Calibration.isCalibrating())
-					tts.speak("Data link restored");
-				break;
-		case NORMAL_HEARTBEAT:
-			break;
-		}
-
-		heartbeatState = HeartbeatState.NORMAL_HEARTBEAT;
-		restartWatchdog(HEARTBEAT_NORMAL_TIMEOUT);
-	}
-
-	private void onHeartbeatTimeout() {
-		if(Calibration.isCalibrating()){ 
-			drone.events.notifyDroneEvent(DroneEventsType.CALIBRATION_TIMEOUT);
-		}
-		else
-			tts.speak("Data link lost, check connection.");
-		heartbeatState = HeartbeatState.LOST_HEARTBEAT;
-		restartWatchdog(HEARTBEAT_LOST_TIMEOUT);
-	}
-
-	private void restartWatchdog(long timeout)
-	{
-		// re-start watchdog
-		watchdog.removeCallbacks(watchdogCallback);
-		watchdog.postDelayed(watchdogCallback, timeout);
 	}
 
 	@Override
