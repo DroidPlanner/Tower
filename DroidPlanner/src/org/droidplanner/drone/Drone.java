@@ -18,6 +18,7 @@ import org.droidplanner.drone.variables.RC;
 import org.droidplanner.drone.variables.Radio;
 import org.droidplanner.drone.variables.Speed;
 import org.droidplanner.drone.variables.State;
+import org.droidplanner.drone.variables.StreamRates;
 import org.droidplanner.drone.variables.Type;
 import org.droidplanner.drone.variables.mission.Mission;
 import org.droidplanner.drone.variables.mission.WaypointMananger;
@@ -39,6 +40,7 @@ public class Drone {
 	public Home home = new Home(this);
 	public Mission mission = new Mission(this);
 	public MissionStats missionStats = new MissionStats(this);
+	public StreamRates streamRates = new StreamRates(this);
 	public HeartBeat heartbeat = new HeartBeat(this);
 	public Altitude altitude = new Altitude(this);
 	public Orientation orientation = new Orientation(this);

@@ -42,10 +42,6 @@ public class MAVLinkClient {
 
 		public void notifyReceivedData(MAVLinkMessage m);
 
-		void notifyArmed();
-
-		void notifyDisarmed();
-
 		void notifyTimeOut(int timeOutCount);
 	}
 

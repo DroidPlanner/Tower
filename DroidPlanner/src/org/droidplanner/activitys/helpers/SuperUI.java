@@ -1,6 +1,6 @@
 package org.droidplanner.activitys.helpers;
 
-import org.droidplanner.DroidPlannerApp.ConnectionStateListner;
+import org.droidplanner.R;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
@@ -10,10 +10,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import org.droidplanner.R;
 
-
-public abstract class SuperUI extends SuperActivity implements ConnectionStateListner, OnDroneListner {
+public abstract class SuperUI extends SuperActivity implements OnDroneListner {
 	private ScreenOrientation screenOrientation = new ScreenOrientation(this);
 	private InfoMenu infoMenu;
 	private GCSHeartbeat gcsHeartbeat;
@@ -33,7 +31,6 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
 	protected void onStart() {
 		super.onStart();
 		drone.events.addDroneListener(this);
-		app.conectionListner = this;
 		drone.MavClient.queryConnectionState();
 		drone.events.notifyDroneEvent(DroneEventsType.MISSION_UPDATE);
 	}
@@ -44,11 +41,25 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
 		drone.events.removeDroneListener(this);
 		infoMenu = null;
 	}
-	
+
 	@Override
-	public void onDroneEvent(DroneEventsType event, Drone drone) {	
-		if (infoMenu!=null) {
-			infoMenu.onDroneEvent(event,drone);			
+	public void onDroneEvent(DroneEventsType event, Drone drone) {
+		if (infoMenu != null) {
+			infoMenu.onDroneEvent(event, drone);
+		}
+		switch (event) {
+		case CONNECTED:
+			gcsHeartbeat.setActive(true);
+			invalidateOptionsMenu();
+			screenOrientation.requestLock();
+			break;
+		case DISCONNECTED:
+			gcsHeartbeat.setActive(false);
+			invalidateOptionsMenu();
+			screenOrientation.unlock();
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -71,27 +82,5 @@ public abstract class SuperUI extends SuperActivity implements ConnectionStateLi
 	public boolean onOptionsItemSelected(MenuItem item) {
 		infoMenu.onOptionsItemSelected(item);
 		return super.onOptionsItemSelected(item);
-	}
-
-	public void notifyDisconnected() {
-		gcsHeartbeat.setActive(false);
-		invalidateOptionsMenu();		
-		/*
-		if(armButton != null){
-			armButton.setEnabled(false);
-		}*/
-		screenOrientation.unlock();
-	}
-
-	public void notifyConnected() {
-		gcsHeartbeat.setActive(true);
-		invalidateOptionsMenu();
-		
-		/*
-		if(armButton != null){
-			armButton.setEnabled(true);
-		}
-		*/
-		screenOrientation.requestLock();
 	}
 }

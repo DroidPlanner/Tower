@@ -78,7 +78,7 @@ public class TuningFragment extends Fragment implements OnDroneListner {
 	public void onStop() {
 		super.onStop();
 		drone.events.removeDroneListener(this);
-		MavLinkStreamRates.setupStreamRatesFromPref((DroidPlannerApp) getActivity().getApplication());
+		drone.streamRates.setupStreamRatesFromPref();
 	}
 
 	private void setupDataStreamingForTuning() {
