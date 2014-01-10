@@ -2,13 +2,14 @@ package org.droidplanner.fragments.mission;
 
 import org.droidplanner.R;
 import org.droidplanner.R.id;
+import org.droidplanner.drone.variables.mission.survey.Survey;
 import org.droidplanner.fragments.mission.survey.CamerasAdapter;
+import org.droidplanner.helpers.units.Altitude;
 import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
 import org.droidplanner.widgets.spinners.SpinnerSelfSelect;
 import org.droidplanner.widgets.spinners.SpinnerSelfSelect.OnSpinnerItemSelectedListener;
 
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
@@ -35,6 +36,8 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 	public TextView lengthView;
 	public CheckBox footprintCheckBox;
 	private CamerasAdapter cameraAdapter;
+	
+	private Survey survey;
 
 	@Override
 	protected int getResource() {
@@ -47,6 +50,8 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 		typeSpinner.setSelection(commandAdapter
 				.getPosition(MissionItemTypes.SURVEY));
 		setupLocalViews(view);
+		
+		this.survey = ((Survey) item);
 	}
 
 	public void setupLocalViews(View view) {
@@ -90,14 +95,13 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 
 	@Override
 	public void onSpinnerItemSelected(Spinner spinner, int position, String text) {
-		Log.d("SL", "selected " + text);
-		cameraAdapter.getCamera(position);
+		survey.setCameraInfo(cameraAdapter.getCamera(position));
 	}
 
 	@Override
 	public void onSeekBarChanged() {
-		// TODO Auto-generated method stub
-
+		survey.update(angleView.getValue(), new Altitude(altitudeView.getValue()),
+				overlapView.getValue(), sidelapView.getValue());
 	}
 
 	@Override

@@ -44,13 +44,13 @@ public class Mission extends DroneVariable implements PathSource{
 	public void removeWaypoint(MissionItem item) {
 		itens.remove(item);
 		selection.remove(item);
-		myDrone.events.notifyDroneEvent(DroneEventsType.MISSION_UPDATE);
+		notifiyMissionUpdate();
 	}
 
 	public void removeWaypoints(List<MissionItem> toRemove) {
 		itens.removeAll(toRemove);
 		selection.removeAll(toRemove);
-		myDrone.events.notifyDroneEvent(DroneEventsType.MISSION_UPDATE);		
+		notifiyMissionUpdate();		
 	}
 
 	public void addWaypoints(List<LatLng> points) {
@@ -58,11 +58,15 @@ public class Mission extends DroneVariable implements PathSource{
 		for (LatLng point : points) {
 			itens.add(new Waypoint(this, point,alt));
 		}		
-		myDrone.events.notifyDroneEvent(DroneEventsType.MISSION_UPDATE);
+		notifiyMissionUpdate();
 	}
 
 	public void addWaypoint(LatLng point) {
 		itens.add(new Waypoint(this,point,getLastAltitude()));
+		notifiyMissionUpdate();
+	}
+
+	public void notifiyMissionUpdate() {
 		myDrone.events.notifyDroneEvent(DroneEventsType.MISSION_UPDATE);
 	}
 
@@ -85,12 +89,12 @@ public class Mission extends DroneVariable implements PathSource{
 		}
 		itens.remove(index);
 		itens.add(index, newItem);
-		myDrone.events.notifyDroneEvent(DroneEventsType.MISSION_UPDATE);		
+		notifiyMissionUpdate();		
 	}
 
 	public void reverse() {
 		Collections.reverse(itens);
-		myDrone.events.notifyDroneEvent(DroneEventsType.MISSION_UPDATE);	
+		notifiyMissionUpdate();	
 	}
 
 	/**
@@ -110,7 +114,7 @@ public class Mission extends DroneVariable implements PathSource{
 			}else{
 				Collections.rotate(getSublistToRotateDown(), -1);
 			}
-			myDrone.events.notifyDroneEvent(DroneEventsType.MISSION_UPDATE);
+			notifiyMissionUpdate();
 		}
 	}
 
@@ -138,7 +142,7 @@ public class Mission extends DroneVariable implements PathSource{
 	public void addSurveyPolygon(List<LatLng> points) {
 		Survey survey = new Survey(this, points, myDrone.context);
 		itens.add(survey);
-		myDrone.events.notifyDroneEvent(DroneEventsType.MISSION_UPDATE);		
+		notifiyMissionUpdate();		
 	}
 
 	public void onWriteWaypoints(msg_mission_ack msg) {
@@ -248,7 +252,7 @@ public class Mission extends DroneVariable implements PathSource{
 			itens.clear();
 			itens.addAll(processMavLinkMessages(msgs));
 			myDrone.events.notifyDroneEvent(DroneEventsType.MISSION_RECEIVED);
-			myDrone.events.notifyDroneEvent(DroneEventsType.MISSION_UPDATE);
+			notifiyMissionUpdate();
 		}
 	}
 
