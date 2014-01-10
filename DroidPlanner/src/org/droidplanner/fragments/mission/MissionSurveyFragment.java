@@ -2,6 +2,9 @@ package org.droidplanner.fragments.mission;
 
 import org.droidplanner.R;
 import org.droidplanner.R.id;
+import org.droidplanner.drone.Drone;
+import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
+import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
 import org.droidplanner.drone.variables.mission.survey.Survey;
 import org.droidplanner.fragments.mission.survey.CamerasAdapter;
 import org.droidplanner.helpers.units.Altitude;
@@ -10,6 +13,7 @@ import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarCha
 import org.droidplanner.widgets.spinners.SpinnerSelfSelect;
 import org.droidplanner.widgets.spinners.SpinnerSelfSelect.OnSpinnerItemSelectedListener;
 
+import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
@@ -18,7 +22,7 @@ import android.widget.TextView;
 
 public class MissionSurveyFragment extends MissionDetailFragment implements
 		OnClickListener, OnTextSeekBarChangedListner,
-		OnSpinnerItemSelectedListener {
+		OnSpinnerItemSelectedListener, OnDroneListner {
 
 	public SeekBarWithText overlapView;
 	public SeekBarWithText angleView;
@@ -42,6 +46,18 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 	@Override
 	protected int getResource() {
 		return R.layout.fragment_editor_detail_survey;
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		mission.addMissionUpdatesListner(this);
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		mission.removeMissionUpdatesListner(this);
 	}
 
 	@Override
@@ -107,6 +123,44 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
+	}
 
+	@Override
+	public void onDroneEvent(DroneEventsType event, Drone drone) {
+		switch (event) {
+		case MISSION_UPDATE:
+			updateViews();
+			break;
+		default:
+			break;
+		}
+		
+	}
+
+	private void updateViews() {
+		Context context = getActivity();
+		footprintTextView.setText(context.getString(R.string.footprint) + ": "
+				+ survey.surveyData.getLateralFootPrint() + " x"
+				+ survey.surveyData.getLongitudinalFootPrint());
+		groundResolutionTextView.setText(context
+				.getString(R.string.ground_resolution)
+				+ ": "
+				+ survey.surveyData.getGroundResolution() + "/px");
+		distanceTextView.setText(context
+				.getString(R.string.distance_between_pictures)
+				+ ": "
+				+ survey.surveyData.getLongitudinalPictureDistance());
+		distanceBetweenLinesTextView.setText(context
+				.getString(R.string.distance_between_lines)
+				+ ": "
+				+ survey.surveyData.getLateralPictureDistance());
+		areaTextView.setText(context.getString(R.string.area) + ": "
+				+ survey.polygon.getArea());
+		lengthView.setText(context.getString(R.string.mission_length) + ": "
+				+ survey.grid.getLength());
+		numberOfPicturesView.setText(context.getString(R.string.pictures)
+				+ ": " + survey.grid.getCameraCount());
+		numberOfStripsView.setText(context.getString(R.string.number_of_strips)
+				+ ": " + survey.grid.getNumberOfLines());
 	}
 }

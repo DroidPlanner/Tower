@@ -5,8 +5,9 @@ import java.util.Collections;
 import java.util.List;
 
 import org.droidplanner.drone.Drone;
-import org.droidplanner.drone.DroneVariable;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
+import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import org.droidplanner.drone.DroneVariable;
 import org.droidplanner.drone.variables.mission.survey.Survey;
 import org.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.drone.variables.mission.waypoints.Waypoint;
@@ -278,6 +279,16 @@ public class Mission extends DroneVariable implements PathSource{
 			data.add(item.packMissionItem());			
 		}				
 		myDrone.waypointMananger.writeWaypoints(data);
+	}
+
+	public void addMissionUpdatesListner(
+			OnDroneListner listner) {
+		myDrone.events.addDroneListener(listner);
+	}
+
+	public void removeMissionUpdatesListner(
+			OnDroneListner listener) {
+		myDrone.events.removeDroneListener(listener);		
 	}
 
 }

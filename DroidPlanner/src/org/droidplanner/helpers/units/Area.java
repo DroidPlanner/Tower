@@ -24,7 +24,7 @@ public class Area {
 			return String.format(Locale.US,"%2.1f km"+SQUARE,areaInSqMeters/1000000);
 		}else if (areaInSqMeters>1) {
 			return String.format(Locale.US,"%2.1f m"+SQUARE,areaInSqMeters);
-		}else if (areaInSqMeters>0.00001) {
+		}else if (areaInSqMeters>0.000001) {
 			return String.format(Locale.US,"%2.2f cm"+SQUARE,areaInSqMeters*10000);
 		}else{
 			return areaInSqMeters + " m"+SQUARE;

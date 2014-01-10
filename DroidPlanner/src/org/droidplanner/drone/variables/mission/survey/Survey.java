@@ -22,8 +22,9 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class Survey extends MissionItem {
 
-	private Polygon polygon = new Polygon();
+	public Polygon polygon = new Polygon();
 	public SurveyData surveyData = new SurveyData();
+	public Grid grid;
 	private Context context;
 
 	public Survey(Mission mission,List<LatLng> points, Context context) {
@@ -50,7 +51,7 @@ public class Survey extends MissionItem {
 			//TODO find better point than (0,0) to reference the grid
 			GridBuilder gridBuilder = new GridBuilder(polygon, surveyData, new LatLng(0, 0),context);
 			polygon.checkIfValid(context);
-			Grid grid = gridBuilder.generate();
+			grid = gridBuilder.generate();
 			grid.setAltitude(surveyData.getAltitude());
 			return grid.getCameraLocations();
 		} catch (Exception e) {
