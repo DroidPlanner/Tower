@@ -117,8 +117,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner, OnCalib
 	public void onStop() {
         super.onStop();
 		drone.events.removeDroneListener(this);
-		resetDataStreamingForRcSetup();
-
+		drone.streamRates.setupStreamRatesFromPref();
 	}
 
 
@@ -156,11 +155,6 @@ public class RcSetupFragment extends Fragment implements OnDroneListner, OnCalib
 		default:
 			break;
 		}
-	}
-
-	private void resetDataStreamingForRcSetup() {
-		MavLinkStreamRates.setupStreamRatesFromPref((DroidPlannerApp) getActivity()
-				.getApplication());
 	}
 
 	private void setupDataStreamingForRcSetup() {

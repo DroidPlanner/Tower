@@ -1,7 +1,7 @@
 package org.droidplanner.activitys.helpers;
 
 import org.droidplanner.DroidPlannerApp;
-import org.droidplanner.DroidPlannerApp.OnSystemArmListener;
+import org.droidplanner.R;
 import org.droidplanner.activitys.ConfigurationActivity;
 import org.droidplanner.activitys.SettingsActivity;
 import org.droidplanner.dialogs.AltitudeDialog;
@@ -15,14 +15,12 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
-import org.droidplanner.R;
 
 public abstract class SuperActivity extends HelpActivity implements
-		OnAltitudeChangedListner, OnSystemArmListener {
+		OnAltitudeChangedListner {
 
 	public DroidPlannerApp app;
 	public Drone drone;
-	private MenuItem armButton;
 
 	public SuperActivity() {
 		super();
@@ -35,7 +33,6 @@ public abstract class SuperActivity extends HelpActivity implements
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
 		app = (DroidPlannerApp) getApplication();
-		app.onSystemArmListener = this;
 		this.drone = app.drone;
 
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -102,18 +99,6 @@ public abstract class SuperActivity extends HelpActivity implements
 				.putString(OfflineMapFragment.PREF_MAP_TYPE, mapType).commit();
 
 		//drone.notifyMapTypeChanged();
-	}
-
-	public void notifyArmed() {
-		if (armButton != null) {
-			armButton.setTitle(getResources().getString(R.string.menu_disarm));
-		}
-	}
-
-	public void notifyDisarmed() {
-		if (armButton != null) {
-			armButton.setTitle(getResources().getString(R.string.menu_arm));
-		}
 	}
 
 	public void changeDefaultAlt() {
