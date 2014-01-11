@@ -42,7 +42,7 @@ public class Calibration extends DroneVariable{
 		return mavMsg;
 	}
 	
-	public void setClibrating(boolean flag){
+	public static void setClibrating(boolean flag){
 		Calibration.calibrating = flag;
 	}
 	
