@@ -82,6 +82,7 @@ public class SeekBarWithText extends LinearLayout implements
 		editText.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL
 				| InputType.TYPE_CLASS_NUMBER);
 		editText.setOnEditorActionListener(this);
+		editText.setOnFocusChangeListener(this);
 
 		seekBar = new SeekBar(context);
 		seekBar.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
@@ -172,22 +173,22 @@ public class SeekBarWithText extends LinearLayout implements
 		setValue(val);
 	}
 
-	@Override
-	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-		if (v.equals(editText)) {
-			if (actionId == EditorInfo.IME_ACTION_DONE
-					|| actionId == EditorInfo.IME_ACTION_NEXT) {
-				getValueFromEditText();
-			}
-		}
-		return false;
-	}
 
 	@Override
 	public void onFocusChange(View v, boolean isFocused) {
 		if (v.equals(editText)&& isFocused!=true) {
 			getValueFromEditText();
 		}
+	}
+
+	@Override
+	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+		if (v.equals(editText)) {
+			if (actionId == EditorInfo.IME_ACTION_DONE) {
+				getValueFromEditText();
+			}
+		}
+		return false;
 	}
 
 }
