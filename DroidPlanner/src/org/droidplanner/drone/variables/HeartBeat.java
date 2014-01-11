@@ -76,9 +76,6 @@ public class HeartBeat extends DroneVariable implements OnDroneListner {
 	}
 
 	private void onHeartbeatTimeout() {
-		if (Calibration.isCalibrating()) {
-			myDrone.events.notifyDroneEvent(DroneEventsType.CALIBRATION_TIMEOUT);
-		}
 		heartbeatState = HeartbeatState.LOST_HEARTBEAT;
 		restartWatchdog(HEARTBEAT_LOST_TIMEOUT);
 		myDrone.events.notifyDroneEvent(DroneEventsType.HEARTBEAT_TIMEOUT);

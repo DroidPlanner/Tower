@@ -5,6 +5,7 @@ import java.util.Locale;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import org.droidplanner.drone.variables.Calibration;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -70,7 +71,9 @@ public class TTS implements OnInitListener, OnDroneListner {
 				speak("Connected");		
 				break;
 			case HEARTBEAT_TIMEOUT:
-				speak("Data link lost, check connection.");
+				if (!Calibration.isCalibrating()) {
+					speak("Data link lost, check connection.");
+				}
 				break;
 			case HEARTBEAT_RESTORED:
 				speak("Data link restored");
