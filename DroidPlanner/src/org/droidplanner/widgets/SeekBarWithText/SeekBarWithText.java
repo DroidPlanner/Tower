@@ -2,16 +2,20 @@ package org.droidplanner.widgets.SeekBarWithText;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.text.InputType;
 import android.util.AttributeSet;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
+import android.view.View;
+
 
 import org.droidplanner.R;
 
 public class SeekBarWithText extends LinearLayout implements
-		OnSeekBarChangeListener {
+		OnSeekBarChangeListener{
 
 	public interface OnTextSeekBarChangedListner {
 		public void onSeekBarChanged();
@@ -19,6 +23,8 @@ public class SeekBarWithText extends LinearLayout implements
 
 	private TextView textView;
 	private SeekBar seekBar;
+	private EditText editText;
+	private LinearLayout innerLayout;
 	private double min = 0;
 	private double inc = 1;
 	private String title = "";
@@ -50,22 +56,41 @@ public class SeekBarWithText extends LinearLayout implements
 	}
 
 	private void setFormat(String string) {
-		if (string!=null) {
+		if (string != null) {
 			formatString = string;
-		}		
+		}
 	}
 
 	private void createViews(Context context) {
 		setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
 				LayoutParams.WRAP_CONTENT));
-		setOrientation(VERTICAL);
+		setOrientation(HORIZONTAL);
+
+		innerLayout = new LinearLayout(context);
+		innerLayout.setLayoutParams(new LayoutParams(0,
+				LayoutParams.MATCH_PARENT,9));
+		innerLayout.setOrientation(VERTICAL);
+		innerLayout.setFocusable(true);
+		innerLayout.setFocusableInTouchMode(true);
+
 		textView = new TextView(context);
+		editText = new EditText(context);
+		editText.setLayoutParams(new LayoutParams(80, LayoutParams.MATCH_PARENT));
+		editText.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL
+				| InputType.TYPE_CLASS_NUMBER);
+
 		seekBar = new SeekBar(context);
 		seekBar.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-				LayoutParams.WRAP_CONTENT));
+				LayoutParams.MATCH_PARENT));
 		seekBar.setOnSeekBarChangeListener(this);
-		addView(textView);
-		addView(seekBar);
+
+		innerLayout.addView(textView);
+		innerLayout.addView(seekBar);
+		addView(innerLayout);
+		addView(editText);
+
+		editText.clearFocus();
+		innerLayout.requestFocus();
 	}
 
 	public void setMinMaxInc(double min, double max, double inc) {
@@ -76,7 +101,7 @@ public class SeekBarWithText extends LinearLayout implements
 
 	public void setUnit(String unit) {
 		if (unit != null) {
-			this.unit = unit;			
+			this.unit = unit;
 		}
 	}
 
@@ -88,7 +113,9 @@ public class SeekBarWithText extends LinearLayout implements
 	}
 
 	private void updateTitle() {
-		textView.setText(String.format("%s\t"+formatString+" %s", title, getValue(), unit));
+		textView.setText(String.format("%s\t" + formatString + " %s", title,
+				getValue(), unit));
+		editText.setText(String.format(formatString, (getValue())));
 	}
 
 	public double getValue() {
@@ -97,10 +124,11 @@ public class SeekBarWithText extends LinearLayout implements
 
 	public void setValue(double value) {
 		seekBar.setProgress((int) ((value - min) / inc));
+//		editText.setText(String.valueOf(getValue()));
 	}
 
 	public void setAbsValue(double value) {
-		if(value<0)
+		if (value < 0)
 			value *= -1.0;
 		seekBar.setProgress((int) ((value - min) / inc));
 	}
@@ -126,5 +154,4 @@ public class SeekBarWithText extends LinearLayout implements
 	public void setOnChangedListner(OnTextSeekBarChangedListner listner) {
 		this.listner = listner;
 	}
-
 }
