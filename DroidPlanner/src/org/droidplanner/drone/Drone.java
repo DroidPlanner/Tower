@@ -29,6 +29,7 @@ import android.content.Context;
 
 
 public class Drone {
+	public DroneEvents events = new DroneEvents(this);
 	public Type type = new Type(this);
 	public Profile profile = new Profile(this);
 	public GPS GPS = new GPS(this);
@@ -49,7 +50,6 @@ public class Drone {
 	public Parameters parameters = new Parameters(this);
 	public Calibration calibrationSetup = new Calibration(this);
 	public WaypointMananger waypointMananger = new WaypointMananger(this);
-	public DroneEvents events = new DroneEvents(this);
 
 	public TTS tts;
 	public MAVLinkClient MavClient;
