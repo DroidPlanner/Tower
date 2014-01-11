@@ -9,13 +9,16 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
+import android.view.KeyEvent;
 import android.view.View;
-
+import android.view.View.OnFocusChangeListener;
+import android.view.inputmethod.EditorInfo;
 
 import org.droidplanner.R;
 
 public class SeekBarWithText extends LinearLayout implements
-		OnSeekBarChangeListener{
+		OnSeekBarChangeListener, OnEditorActionListener, OnFocusChangeListener {
 
 	public interface OnTextSeekBarChangedListner {
 		public void onSeekBarChanged();
@@ -68,7 +71,7 @@ public class SeekBarWithText extends LinearLayout implements
 
 		innerLayout = new LinearLayout(context);
 		innerLayout.setLayoutParams(new LayoutParams(0,
-				LayoutParams.MATCH_PARENT,9));
+				LayoutParams.MATCH_PARENT, 9));
 		innerLayout.setOrientation(VERTICAL);
 		innerLayout.setFocusable(true);
 		innerLayout.setFocusableInTouchMode(true);
@@ -78,6 +81,7 @@ public class SeekBarWithText extends LinearLayout implements
 		editText.setLayoutParams(new LayoutParams(80, LayoutParams.MATCH_PARENT));
 		editText.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL
 				| InputType.TYPE_CLASS_NUMBER);
+		editText.setOnEditorActionListener(this);
 
 		seekBar = new SeekBar(context);
 		seekBar.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
@@ -124,7 +128,7 @@ public class SeekBarWithText extends LinearLayout implements
 
 	public void setValue(double value) {
 		seekBar.setProgress((int) ((value - min) / inc));
-//		editText.setText(String.valueOf(getValue()));
+		// editText.setText(String.valueOf(getValue()));
 	}
 
 	public void setAbsValue(double value) {
@@ -154,4 +158,36 @@ public class SeekBarWithText extends LinearLayout implements
 	public void setOnChangedListner(OnTextSeekBarChangedListner listner) {
 		this.listner = listner;
 	}
+
+	private void getValueFromEditText() {
+		double val;
+		try {
+			val = Double.parseDouble(editText.getText().toString());
+		} catch (NumberFormatException e) {
+			val = -1;
+			e.printStackTrace();
+		}
+		val = val > seekBar.getMax() ? seekBar.getMax() : val;
+		val = val < min ? min : val;
+		setValue(val);
+	}
+
+	@Override
+	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+		if (v.equals(editText)) {
+			if (actionId == EditorInfo.IME_ACTION_DONE
+					|| actionId == EditorInfo.IME_ACTION_NEXT) {
+				getValueFromEditText();
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public void onFocusChange(View v, boolean isFocused) {
+		if (v.equals(editText)&& isFocused!=true) {
+			getValueFromEditText();
+		}
+	}
+
 }
