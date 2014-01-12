@@ -7,6 +7,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import org.droidplanner.R;
+import org.droidplanner.glass.utils.GlassUtils;
 
 /**
  * This activity holds the SettingsFragment.
@@ -14,6 +15,11 @@ import org.droidplanner.R;
 public class SettingsActivity extends SuperUI {
 
     public void onCreate(Bundle savedInstanceState) {
+        //Update the theme if we're on a glass device
+        if(GlassUtils.isGlassDevice()){
+            setTheme(android.R.style.Theme_DeviceDefault);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 

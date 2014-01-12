@@ -5,13 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.speech.RecognizerIntent;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
+import org.droidplanner.glass.activities.GlassActivity;
+import org.droidplanner.glass.utils.LevenshteinDistance;
 
 import java.util.ArrayList;
-
-import org.droidplanner.glass.activities.GlassActivity;
-import android.view.Menu;
+import java.util.List;
+import java.util.TreeMap;
 
 /**
  * Implementation of the {@link android.view.Menu} interface for creating a voice menu UI.
@@ -38,7 +40,7 @@ public class VoiceMenu implements Menu {
      */
     public static final int SPEECH_REQUEST = 0;
 
-    private static final int[]  sCategoryToOrder = new int[] {
+    private static final int[] sCategoryToOrder = new int[]{
             1, /* No category */
             4, /* CONTAINER */
             5, /* SYSTEM */
@@ -50,91 +52,113 @@ public class VoiceMenu implements Menu {
     /**
      * Glass activity container.
      */
-	private final GlassActivity glassActivity;
+    private final GlassActivity glassActivity;
 
     /**
      * Contains all of the items for this menu
      */
     private ArrayList<VoiceMenuItem> mItems;
-	
-	/**
-	* Header for speech recognizer prompt.
-	*/
-	private CharSequence promptHeader;
 
-	public VoiceMenu(GlassActivity activity){
-		glassActivity = activity;
+    /**
+     * Header for speech recognizer prompt.
+     */
+    private CharSequence promptHeader;
+
+    public VoiceMenu(GlassActivity activity) {
+        glassActivity = activity;
 
         mItems = new ArrayList<VoiceMenuItem>();
-	}
-	
-	public VoiceMenu setPromptHeader(CharSequence header){
-		promptHeader = header;
-		return this;
-	}
-	
-	/**
+    }
+
+    public VoiceMenu setPromptHeader(CharSequence header) {
+        promptHeader = header;
+        return this;
+    }
+
+    /**
      * Start the voice recognizer, displaying the configured MenuItem as prompt options.
      */
-    public void openVoiceMenu(){
-		//Build the voice menu prompt 
-		ArrayList<VoiceMenuItem> visibleItems = getVisibleItems();
+    public void openVoiceMenu() {
+        //Build the voice menu prompt
+        ArrayList<VoiceMenuItem> visibleItems = getVisibleItems();
 
         String extraPrompt = "";
-		if(promptHeader != null){
-			extraPrompt += promptHeader.toString();
-		}
-		
-		for(VoiceMenuItem item : visibleItems){
-			String itemTitle = item.getTitle().toString();
-			extraPrompt += "\n\t\t\" " + itemTitle + " \""; 
-		}
+        if (promptHeader != null) {
+            extraPrompt += promptHeader.toString();
+        }
+
+        for (VoiceMenuItem item : visibleItems) {
+            String itemTitle = item.getTitle().toString();
+            extraPrompt += "\n\t\t\" " + itemTitle + " \"";
+        }
 
         glassActivity.setRecognizerIntentOriginMenu(this);
 
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-			.putExtra(RecognizerIntent.EXTRA_PROMPT, extraPrompt);
+                .putExtra(RecognizerIntent.EXTRA_PROMPT, extraPrompt);
         glassActivity.startActivityForResult(intent, VoiceMenu.SPEECH_REQUEST);
     }
 
     /**
      * When the speech recognizer returns, this is used to parse the recognized speech,
      * and identify the corresponding voice menu item.
+     *
      * @param recognizedSpeech result from the RecognizerIntent
      * @return true if the corresponding voice menu item was identified and handled.
      */
-    public boolean dispatchVoiceMenuItemRecognized(String recognizedSpeech){
-        ArrayList<VoiceMenuItem> visibleItems = getVisibleItems();
-        for(VoiceMenuItem item: visibleItems){
+    public boolean dispatchVoiceMenuItemRecognized(String recognizedSpeech) {
+        final TreeMap<Integer, List<VoiceMenuItem>> menuItemByLevDst = new TreeMap<Integer,
+                List<VoiceMenuItem>>();
+
+        final ArrayList<VoiceMenuItem> visibleItems = getVisibleItems();
+        for (VoiceMenuItem item : visibleItems) {
+
             String itemTitle = item.getTitle().toString();
-            if(itemTitle.equalsIgnoreCase(recognizedSpeech)){
-                //Check if the menu item has a sub menu.
-                if(item.hasSubMenu()){
-                    //Launch the recognizer intent for the sub menu items.
-                    SubVoiceMenu subMenu = (SubVoiceMenu)item.getSubMenu();
-                    subMenu.openVoiceMenu();
-                    return true;
-                }
-                else {
-                    return glassActivity.onOptionsItemSelected(item) || glassActivity
-                            .onMenuItemSelected(0, item);
-                }
+
+            //Get the Levenshtein distance between this menu item title, and the recognized speech
+            Integer levDst = LevenshteinDistance.computeLevenshteinDistance(itemTitle,
+                    recognizedSpeech);
+
+            List<VoiceMenuItem> equiDistants = menuItemByLevDst.get(levDst);
+            if (equiDistants == null) {
+                menuItemByLevDst.put(levDst, equiDistants = new ArrayList<VoiceMenuItem>());
+            }
+
+            equiDistants.add(item);
+        }
+
+        //Get the menu item(s) with the lowest Levenshtein distance.
+        List<VoiceMenuItem> closestMatches = menuItemByLevDst.firstEntry().getValue();
+        if (closestMatches == null || closestMatches.size() != 1) {
+            return false;
+        }
+        else {
+            final VoiceMenuItem item = closestMatches.get(0);
+            //Check if the menu item has a sub menu.
+            if (item.hasSubMenu()) {
+                //Launch the recognizer intent for the sub menu items.
+                SubVoiceMenu subMenu = (SubVoiceMenu) item.getSubMenu();
+                subMenu.openVoiceMenu();
+                return true;
+            }
+            else {
+                return glassActivity.onOptionsItemSelected(item) || glassActivity
+                        .onMenuItemSelected(0, item);
             }
         }
-        return false;
     }
 
     /**
      * @return the container activity's context.
      */
-    public Context getContext(){
+    public Context getContext() {
         return glassActivity.getApplicationContext();
     }
 
-    public ArrayList<VoiceMenuItem> getVisibleItems(){
+    public ArrayList<VoiceMenuItem> getVisibleItems() {
         ArrayList<VoiceMenuItem> visibleItems = new ArrayList<VoiceMenuItem>();
-        for(VoiceMenuItem item: mItems){
-            if(item.isVisible()){
+        for (VoiceMenuItem item : mItems) {
+            if (item.isVisible()) {
                 visibleItems.add(item);
             }
         }
@@ -149,7 +173,7 @@ public class VoiceMenu implements Menu {
 
     @Override
     public MenuItem add(int titleRes) {
-        return add(0,0,0, titleRes);
+        return add(0, 0, 0, titleRes);
     }
 
     @Override
@@ -175,7 +199,7 @@ public class VoiceMenu implements Menu {
 
     @Override
     public SubMenu addSubMenu(int titleRes) {
-        return addSubMenu(0, 0, 0 , titleRes);
+        return addSubMenu(0, 0, 0, titleRes);
     }
 
     @Override
@@ -195,7 +219,8 @@ public class VoiceMenu implements Menu {
 
     @Override
     public int addIntentOptions(int groupId, int itemId, int order, ComponentName caller,
-                                Intent[] specifics, Intent intent, int flags, MenuItem[] outSpecificItems) {
+                                Intent[] specifics, Intent intent, int flags,
+                                MenuItem[] outSpecificItems) {
         return 0;
     }
 
@@ -244,7 +269,7 @@ public class VoiceMenu implements Menu {
      * update.
      *
      * @param index The index of the item to be removed. If this index is
-     *            invalid an exception is thrown.
+     *              invalid an exception is thrown.
      */
     private void removeItemAtInt(int index) {
         if ((index < 0) || (index >= mItems.size())) return;
@@ -256,10 +281,10 @@ public class VoiceMenu implements Menu {
     public void removeGroup(int groupId) {
         final int i = findGroupIndex(groupId);
 
-        if(i >= 0){
+        if (i >= 0) {
             final int maxRemovable = mItems.size() - i;
             int numRemoved = 0;
-            while((numRemoved++ < maxRemovable) && (mItems.get(i).getGroupId() == groupId)){
+            while ((numRemoved++ < maxRemovable) && (mItems.get(i).getGroupId() == groupId)) {
                 removeItemAtInt(i);
             }
         }
@@ -271,12 +296,13 @@ public class VoiceMenu implements Menu {
     }
 
     @Override
-    public void setGroupCheckable(int group, boolean checkable, boolean exclusive) { }
+    public void setGroupCheckable(int group, boolean checkable, boolean exclusive) {
+    }
 
     @Override
     public void setGroupVisible(int group, boolean visible) {
-        for(VoiceMenuItem item: mItems){
-            if(item.getGroupId() == group){
+        for (VoiceMenuItem item : mItems) {
+            if (item.getGroupId() == group) {
                 item.setVisible(visible);
             }
         }
@@ -284,8 +310,8 @@ public class VoiceMenu implements Menu {
 
     @Override
     public void setGroupEnabled(int group, boolean enabled) {
-        for(VoiceMenuItem item: mItems){
-            if(item.getGroupId() == group){
+        for (VoiceMenuItem item : mItems) {
+            if (item.getGroupId() == group) {
                 item.setEnabled(enabled);
             }
         }
@@ -293,8 +319,8 @@ public class VoiceMenu implements Menu {
 
     @Override
     public boolean hasVisibleItems() {
-        for(VoiceMenuItem item: mItems){
-            if(item.isVisible())
+        for (VoiceMenuItem item : mItems) {
+            if (item.isVisible())
                 return true;
         }
 
@@ -303,13 +329,13 @@ public class VoiceMenu implements Menu {
 
     @Override
     public MenuItem findItem(int id) {
-        for(VoiceMenuItem item: mItems){
-            if(item.getItemId() == id){
+        for (VoiceMenuItem item : mItems) {
+            if (item.getItemId() == id) {
                 return item;
             }
-            else if(item.hasSubMenu()){
+            else if (item.hasSubMenu()) {
                 MenuItem possibleItem = item.getSubMenu().findItem(id);
-                if(possibleItem != null){
+                if (possibleItem != null) {
                     return possibleItem;
                 }
             }
@@ -329,7 +355,8 @@ public class VoiceMenu implements Menu {
     }
 
     @Override
-    public void close() {}
+    public void close() {
+    }
 
     @Override
     public boolean performShortcut(int keyCode, KeyEvent event, int flags) {
@@ -347,7 +374,8 @@ public class VoiceMenu implements Menu {
     }
 
     @Override
-    public void setQwertyMode(boolean isQwerty) { }
+    public void setQwertyMode(boolean isQwerty) {
+    }
 
     private static int findInsertIndex(ArrayList<VoiceMenuItem> items, int ordering) {
         for (int i = items.size() - 1; i >= 0; i--) {
@@ -366,10 +394,10 @@ public class VoiceMenu implements Menu {
      * categories, and combine it with the lower bits.
      *
      * @param categoryOrder The category order for a particular item (if it has
-     *            not been or/add with a category, the default category is
-     *            assumed).
+     *                      not been or/add with a category, the default category is
+     *                      assumed).
      * @return An ordering integer that can be used to order this item across
-     *         all the items (even from other categories).
+     * all the items (even from other categories).
      */
     private static int getOrdering(int categoryOrder) {
         final int index = (categoryOrder & CATEGORY_MASK) >> CATEGORY_SHIFT;
