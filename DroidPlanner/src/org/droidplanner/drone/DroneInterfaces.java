@@ -12,10 +12,73 @@ public class DroneInterfaces {
      * Type of drone events generated.
      */
 	public enum DroneEventsType {
-		ORIENTATION, SPEED, BATTERY, GUIDEDPOINT, NAVIGATION, ATTIUTDE, RADIO, 
-		RC_IN, RC_OUT, ARMING, FAILSAFE, MODE, STATE, 
-		MISSION_UPDATE,MISSION_RECEIVED, TYPE, HOME, GPS, GPS_FIX, GPS_COUNT,
-		PARAMETER, CALIBRATION_IMU, CALIBRATION_TIMEOUT, HEARTBEAT_TIMEOUT, HEARTBEAT_FIRST, HEARTBEAT_RESTORED, DISCONNECTED, CONNECTED;
+        /**
+         * Event sent when the drone's arming status changes.
+         */
+        ARMING,
+        ATTIUTDE,
+
+        /**
+         * Event sent when information about the drone battery is updated.
+         */
+        BATTERY,
+        GUIDEDPOINT,
+        NAVIGATION,
+
+        RADIO,
+		RC_IN,
+        RC_OUT,
+
+        FAILSAFE,
+
+        /**
+         * Event sent when the drone apm mode (flight mode) changes.
+         */
+        MODE,
+        STATE,
+		MISSION_UPDATE,
+        MISSION_RECEIVED,
+
+        ORIENTATION,
+        SPEED,
+
+        /**
+         * Event sent when the drone type is updated (fixed wing, helicopter, etc...).
+         */
+        TYPE,
+        HOME,
+
+        /**
+         * Event fired when the drone gps position is updated.
+         */
+        GPS,
+
+        /**
+         * Event fired when the drone's gps count is updated.
+         */
+        GPS_COUNT,
+
+        /**
+         * Event fired when the drone gets a gps fix.
+         */
+        GPS_FIX,
+
+		PARAMETER,
+        CALIBRATION_IMU,
+        CALIBRATION_TIMEOUT,
+        HEARTBEAT_TIMEOUT,
+        HEARTBEAT_FIRST,
+        HEARTBEAT_RESTORED,
+
+        /**
+         * Event sent when connection with the drone is broken/lost.
+         */
+        DISCONNECTED,
+
+        /**
+         * Event sent when connection with the drone is established.
+         */
+        CONNECTED;
 	}
 
 	public interface OnDroneListner {

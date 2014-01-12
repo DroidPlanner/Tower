@@ -12,6 +12,7 @@ import android.graphics.Region;
 import android.util.AttributeSet;
 import android.view.View;
 import com.MAVLink.Messages.ApmModes;
+import com.MAVLink.Messages.enums.MAV_TYPE;
 import org.droidplanner.R;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces;
@@ -35,23 +36,8 @@ import org.droidplanner.drone.variables.Type;
  * <p/>
  * - Some minor layout changes
  */
-public class HUD extends View implements OnDroneListner {
+public class HUD extends View {
 
-    // in relation to width (total HUD widget width)
-    static final float SCROLLER_WIDTH_FACTOR = .15f;
-    // in relation to attHeightPx
-    static final float SCROLLER_MAX_HEIGHT_FACTOR = .80f;
-    // in relation to attHeightPx
-    // in relation to scrollerSizePxText
-    static final float SCROLLER_FACTOR_TEXT_Y_OFFSET = -.16f;
-    // in relation to the resulting size of SCROLLER_FACTOR_TEXT
-    static final float SCROLLER_FACTOR_TEXT_X_OFFSET = .037f;
-    // in relation to width
-    static final float SCROLLER_FACTOR_TIC_LENGTH = .025f;
-    // in relation to scrollerSizePxText
-    static final float SCROLLER_FACTOR_ARROW_HEIGTH = 1.4f;
-    // in relation to attHeightPx
-    static final float SCROLLER_FACTOR_TARGET_BAR_WIDTH = .015f;
     static final int SCROLLER_VSI_RANGE = 12;
     static final int SCROLLER_ALT_RANGE = 26;
     static final int SCROLLER_SPEED_RANGE = 26;
@@ -89,11 +75,20 @@ public class HUD extends View implements OnDroneListner {
     static final float ATT_FACTOR_INFOTEXT_Y_OFFSET = -.1f;
     // in relation to width
     static final float ATT_FACTOR_INFOTEXT_X_OFFSET = .013f;
-    // in relation to attSizePxInfoText
-    static final float ATT_FACTOR_INFOTEXT_CLEARANCE = .1f;
 
     private int width;
     private int height;
+    private boolean enabled;
+
+    /**
+     * Paint used to draw the ground when the hud is disabled.
+     */
+    private Paint disabledGroundPaint;
+
+    /**
+     * Paint used to draw the sky when the hud is disabled.
+     */
+    private Paint disabledSkyPaint;
 
     /**
      * Paint used to draw the hud ground.
@@ -169,13 +164,12 @@ public class HUD extends View implements OnDroneListner {
     /*
     Scroller's related variables.
      */
-    public float scrollerHeightPx;
-    public int scrollerWidthPx;
-    public int scrollerSizePxTextYOffset;
-    public int scrollerSizePxActualTextYOffset;
-    public int scrollerSizePxTextXOffset;
-    public int scrollerSizePxArrowHeight;
-    public int scrollerSizePxTicLength;
+    private float scrollerHeight;
+    private float scrollerWidth;
+    private float scrollerArrowHeight;
+    private float scrollerTicWidth;
+    private float scrollerTextHorizontalMargin;
+    private float scrollerTextVerticalMargin;
 
     private Paint greenPen;
     private Paint blueVSI;
@@ -206,11 +200,6 @@ public class HUD extends View implements OnDroneListner {
      */
     private float bottomBarVerticalPadding;
 
-    /**
-     * Horizontal padding for elements in the bottom bar.
-     */
-    private float bottomBarHorizontalPadding;
-
     /*
     Common paint's variables
      */
@@ -227,15 +216,32 @@ public class HUD extends View implements OnDroneListner {
     private final RectF commonRectFloat = new RectF();
 
     /*
-    Drone's properties
+    HUD's properties
      */
-    private Altitude droneAltitude = new Altitude(null);
-    private Battery droneBattery = new Battery(null);
-    private GPS droneGPS = new GPS(null);
-    private Orientation droneOrientation = new Orientation(null);
-    private Speed droneSpeed = new Speed(null);
-    private State droneState = new State(null);
-    private Type droneType = new Type(null);
+    private double altitude;
+    private double targetAltitude;
+
+    private double verticalSpeed;
+    private double groundSpeed;
+    private double airSpeed;
+    private double targetSpeed;
+
+    private double pitch;
+    private double roll;
+    private double yaw;
+
+    private int droneType = MAV_TYPE.MAV_TYPE_FIXED_WING;
+
+    private double battVolt = -1;
+    private double battRemain = -1;
+    private double battCurrent = -1;
+
+    private boolean isDroneArmed;
+    private ApmModes flightMode = ApmModes.UNKNOWN;
+
+    private double gps_eph = -1;
+    private int satCount = -1;
+    private int fixType = -1;
 
     public HUD(Context context, AttributeSet attributeSet) {
         this(context, attributeSet, 0);
@@ -248,6 +254,22 @@ public class HUD extends View implements OnDroneListner {
                 defStyle, 0);
 
         try {
+            enabled = attributes.getBoolean(R.styleable.HUD_enabled, false);
+
+            disabledGroundPaint = new Paint();
+            disabledGroundPaint.setColor(Color.DKGRAY);
+
+            disabledSkyPaint = new Paint();
+            disabledSkyPaint.setColor(Color.LTGRAY);
+
+            groundPaint = new Paint();
+            groundPaint.setColor(attributes.getColor(R.styleable.HUD_groundColor, Color.argb(220,
+                    148, 193, 31)));
+
+            skyPaint = new Paint();
+            skyPaint.setColor(attributes.getColor(R.styleable.HUD_skyColor, Color.argb(220, 0,
+                    113, 188)));
+
             textPaint = new Paint();
             textPaint.setAntiAlias(true);
             textPaint.setTextAlign(Paint.Align.CENTER);
@@ -262,14 +284,6 @@ public class HUD extends View implements OnDroneListner {
 
             reticleRadius = attributes.getDimension(R.styleable.HUD_reticleRadius, 10f);
 
-            groundPaint = new Paint();
-            groundPaint.setColor(attributes.getColor(R.styleable.HUD_groundColor, Color.argb(220,
-                    148, 193, 31)));
-
-            skyPaint = new Paint();
-            skyPaint.setColor(attributes.getColor(R.styleable.HUD_skyColor, Color.argb(220, 0,
-                    113, 188)));
-
             failsafeTextPaint = new Paint();
             failsafeTextPaint.setAntiAlias(true);
             failsafeTextPaint.setTextSize(attributes.getDimension(R.styleable
@@ -277,10 +291,6 @@ public class HUD extends View implements OnDroneListner {
 
             failsafeTextPadding = attributes.getDimension(R.styleable.HUD_failsafeTextPadding,
                     25f);
-
-            scrollerBgPaint = new Paint();
-            scrollerBgPaint.setColor(attributes.getColor(R.styleable.HUD_scrollerBgColor,
-                    Color.argb(64, 255, 255, 255)));
 
             greenPen = new Paint();
             greenPen.setColor(Color.GREEN);
@@ -326,14 +336,24 @@ public class HUD extends View implements OnDroneListner {
             bottomBarVerticalPadding = attributes.getDimension(R.styleable
                     .HUD_bottomBarVerticalPadding, 30f);
 
-            bottomBarHorizontalPadding = attributes.getDimension(R.styleable
-                    .HUD_bottomBarHorizontalPadding, 30f);
-
             //top bar properties
             topBarBgPaint = new Paint();
             topBarBgPaint.setColor(attributes.getColor(R.styleable.HUD_topBarBgColor, Color.BLACK));
 
             topBarHeight = attributes.getDimension(R.styleable.HUD_topBarHeight, 30f);
+
+            //Scroller properties
+            scrollerHeight = attributes.getDimension(R.styleable.HUD_scrollerHeight, 200f);
+            scrollerWidth = attributes.getDimension(R.styleable.HUD_scrollerWidth, 96f);
+            scrollerBgPaint = new Paint();
+            scrollerBgPaint.setColor(attributes.getColor(R.styleable.HUD_scrollerBgColor,
+                    Color.argb(64, 255, 255, 255)));
+            scrollerArrowHeight = attributes.getDimension(R.styleable.HUD_scrollerArrowHeight,
+                    25f);
+            scrollerTicWidth = attributes.getDimension(R.styleable.HUD_scrollerTicWidth, 16f);
+            scrollerTextHorizontalMargin = attributes.getDimension(R.styleable.HUD_scrollerTextHorizontalMargin, 23f);
+            scrollerTextVerticalMargin = attributes.getDimension(R.styleable
+                    .HUD_scrollerTextVerticalMargin, 10f);
         } finally {
             attributes.recycle();
         }
@@ -375,6 +395,24 @@ public class HUD extends View implements OnDroneListner {
         updateRollVariables();
     }
 
+    private Paint getGroundPaint(){
+        if(isEnabled()){
+            return groundPaint;
+        }
+        else{
+            return disabledGroundPaint;
+        }
+    }
+
+    private Paint getSkyPaint(){
+        if(isEnabled()){
+            return skyPaint;
+        }
+        else{
+            return disabledSkyPaint;
+        }
+    }
+
     private void updateCommonPaints() {
         float hudScaleThickTicStrokeWidth;
         float hudScaleThinTicStrokeWidth;
@@ -404,7 +442,7 @@ public class HUD extends View implements OnDroneListner {
         int tempOffset = Math.round(textSize * ATT_FACTOR_INFOTEXT_Y_OFFSET);
         attPosPxInfoTextXOffset = Math.round(width * ATT_FACTOR_INFOTEXT_X_OFFSET);
 
-        int tempAttTextClearance = updateScroller();
+        int tempAttTextClearance = Math.round((attHeightPx - scrollerHeight - 4 * textSize) / 6);
 
         attPosPxInfoTextUpperTop = -attHeightPx / 2 + textSize + tempOffset + tempAttTextClearance;
         attPosPxInfoTextUpperBottom = -attHeightPx / 2 + 2 * textSize + tempOffset + 2 *
@@ -412,25 +450,6 @@ public class HUD extends View implements OnDroneListner {
         attPosPxInfoTextLowerBottom = attHeightPx / 2 + tempOffset - tempAttTextClearance;
         attPosPxInfoTextLowerTop = attHeightPx / 2 - textSize + tempOffset - 2 *
                 tempAttTextClearance;
-    }
-
-    private int updateScroller() {
-        final float textSize = textPaint.getTextSize();
-        int tempAttTextClearance = Math.round(textSize * ATT_FACTOR_INFOTEXT_CLEARANCE);
-
-
-        scrollerHeightPx = Math.round(attHeightPx * SCROLLER_MAX_HEIGHT_FACTOR);
-        tempAttTextClearance = Math.round((attHeightPx - scrollerHeightPx - 4 * textSize) / 6);
-
-        scrollerWidthPx = Math.round(width * SCROLLER_WIDTH_FACTOR);
-        scrollerSizePxTextYOffset = Math.round(textSize * SCROLLER_FACTOR_TEXT_Y_OFFSET);
-        scrollerSizePxActualTextYOffset = Math.round(textSize * SCROLLER_FACTOR_TEXT_Y_OFFSET);
-        scrollerSizePxArrowHeight = Math.round(textSize * SCROLLER_FACTOR_ARROW_HEIGTH);
-        scrollerSizePxTextXOffset = Math.round(width * SCROLLER_FACTOR_TEXT_X_OFFSET);
-        scrollerSizePxTicLength = Math.round(width * SCROLLER_FACTOR_TIC_LENGTH);
-
-        greenPen.setStrokeWidth(Math.round(attHeightPx * SCROLLER_FACTOR_TARGET_BAR_WIDTH));
-        return tempAttTextClearance;
     }
 
     private void updatePitchVariables() {
@@ -464,54 +483,11 @@ public class HUD extends View implements OnDroneListner {
         yawDegreesPerPixel = width / YAW_DEGREES_TO_SHOW;
     }
 
-    @Override
-    public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
-        switch (event) {
-            case ORIENTATION:
-                onOrientationUpdate(drone);
-                break;
-
-            case SPEED:
-                onSpeedAltitudeAndClimbRateUpdate(drone);
-                break;
-
-            default:
-                updateDroneInfo(drone);
-                break;
-        }
-        invalidate();
-        requestLayout();
-    }
-
-    private void updateDroneInfo(Drone drone) {
-        droneType = drone.type;
-        droneState = drone.state;
-        droneBattery = drone.battery;
-        droneGPS = drone.GPS;
-    }
-
-    private void onOrientationUpdate(Drone drone) {
-        droneOrientation = drone.orientation;
-    }
-
-    private void onSpeedAltitudeAndClimbRateUpdate(Drone drone) {
-        droneSpeed = drone.speed;
-        droneAltitude = drone.altitude;
-    }
-
     /*
     Private drawing methods
      */
     private void drawInfoText(Canvas canvas) {
-        double battVolt = droneBattery.getBattVolt();
-        double battCurrent = droneBattery.getBattCurrent();
-        double battRemain = droneBattery.getBattRemain();
-        double groundSpeed = droneSpeed.getGroundSpeed();
-        double airSpeed = droneSpeed.getAirSpeed();
-        int satCount = droneGPS.getSatCount();
-        String fixType = droneGPS.getFixType();
-        String modeName = droneState.getMode().getName();
-        double gpsEPH = droneGPS.getGpsEPH();
+        String fixType = getFixType();
 
         final float halfWidth = width / 2;
         final float halfHeight = height / 2;
@@ -527,42 +503,44 @@ public class HUD extends View implements OnDroneListner {
         canvas.drawRect(-width, topInfoBar, width, height, bottomBarBgPaint);
         canvas.drawLine(-width, topInfoBar, width, topInfoBar, whiteBorder);
 
-        // Left Text
-        final float leftTextXPos = -regionWidth;
-        canvas.drawText(String.format("AS %.1fms", airSpeed), leftTextXPos, topTextYPos,
-                textPaint);
-        canvas.drawText(String.format("GS %.1fms", groundSpeed), leftTextXPos, bottomTextYPos,
-                textPaint);
+        if (isEnabled()) {
+            // Left Text
+            final float leftTextXPos = -regionWidth;
+            canvas.drawText(String.format("AS %.1fms", airSpeed), leftTextXPos, topTextYPos,
+                    textPaint);
+            canvas.drawText(String.format("GS %.1fms", groundSpeed), leftTextXPos, bottomTextYPos,
+                    textPaint);
 
-        // Center Text
-        final float centerLeftTextXPos = 0;
-        if ((battVolt >= 0) || (battRemain >= 0)) {
-            canvas.drawText(String.format("%2.1fV  %.0f%%", battVolt, battRemain),
-                    centerLeftTextXPos, topTextYPos, textPaint);
-        }
-        if (battCurrent >= 0) {
-            canvas.drawText(String.format("%2.1fA", battCurrent),
-                    centerLeftTextXPos, bottomTextYPos, textPaint);
-        }
+            // Center Text
+            final float centerLeftTextXPos = 0;
+            if ((battVolt >= 0) || (battRemain >= 0)) {
+                canvas.drawText(String.format("%2.1fV  %.0f%%", battVolt, battRemain),
+                        centerLeftTextXPos, topTextYPos, textPaint);
+            }
+            if (battCurrent >= 0) {
+                canvas.drawText(String.format("%2.1fA", battCurrent),
+                        centerLeftTextXPos, bottomTextYPos, textPaint);
+            }
 
-        // Right Text
-        final float rightTextXPos = regionWidth;
-        canvas.drawText(modeName, rightTextXPos, topTextYPos, textPaint);
+            // Right Text
+            final float rightTextXPos = regionWidth;
+            canvas.drawText(flightMode.getName(), rightTextXPos, topTextYPos, textPaint);
 
-        String satInfo = fixType;
-        if(gpsEPH >= 0){
-            satInfo += String.format(" ( hp%.1fm )" , gpsEPH);
+            String satInfo = fixType;
+            if (gps_eph >= 0) {
+                satInfo += String.format(" ( hp%.1fm )", gps_eph);
+            }
+            canvas.drawText(satInfo, rightTextXPos, bottomTextYPos, textPaint);
         }
-        canvas.drawText(satInfo, rightTextXPos, bottomTextYPos, textPaint);
     }
 
     private void drawFailsafe(Canvas canvas) {
-        int type = droneType.getType();
-        boolean isArmed = droneState.isArmed();
+        if (!isEnabled())
+            return;
 
-        if (ApmModes.isCopter(type)) {
+        if (ApmModes.isCopter(droneType)) {
             String armStatus;
-            if (isArmed) {
+            if (isDroneArmed) {
                 failsafeTextPaint.setColor(Color.RED);
                 armStatus = "ARMED";
 
@@ -588,9 +566,6 @@ public class HUD extends View implements OnDroneListner {
     }
 
     private void drawPitch(Canvas canvas) {
-        double pitch = droneOrientation.getPitch();
-        double roll = droneOrientation.getRoll();
-
         int pitchOffsetPx = (int) (pitch * pitchPixPerDegree);
         int rollTriangleBottom = -attHeightPx / 2
                 + rollTopOffsetPx / 2
@@ -600,14 +575,15 @@ public class HUD extends View implements OnDroneListner {
 
 
         // Draw the background
-        canvas.drawRect(-width, pitchOffsetPx, width, height, groundPaint);
-        canvas.drawRect(-width, -height, width, pitchOffsetPx, skyPaint);
+        canvas.drawRect(-width, pitchOffsetPx, width, height, getGroundPaint());
+        canvas.drawRect(-width, -height, width, pitchOffsetPx, getSkyPaint());
         canvas.drawLine(-width, pitchOffsetPx, width, pitchOffsetPx, whiteThinTics);
 
         // Draw roll triangle
         commonPath.reset();
         Path arrow = commonPath;
-        int tempOffset = Math.round(reticlePaint.getStrokeWidth() + whiteBorder.getStrokeWidth() / 2);
+        int tempOffset = Math.round(reticlePaint.getStrokeWidth() + whiteBorder.getStrokeWidth()
+                / 2);
         arrow.moveTo(0, -attHeightPx / 2 + rollTopOffsetPx + tempOffset);
         arrow.lineTo(0 - rollTopOffsetPx / 3, rollTriangleBottom + tempOffset);
         arrow.lineTo(0 + rollTopOffsetPx / 3, rollTriangleBottom + tempOffset);
@@ -658,7 +634,7 @@ public class HUD extends View implements OnDroneListner {
         int tempOffset = Math.round(reticlePaint.getStrokeWidth() / 2);
         arrow.moveTo(0, -attHeightPx / 2 + rollTopOffsetPx - tempOffset);
         arrow.lineTo(-rollTopOffsetPx / 3, -attHeightPx / 2 + rollTopOffsetPx / 2 - tempOffset);
-        arrow.lineTo(rollTopOffsetPx / 3, -attHeightPx / 2 + rollTopOffsetPx / 2 -  tempOffset);
+        arrow.lineTo(rollTopOffsetPx / 3, -attHeightPx / 2 + rollTopOffsetPx / 2 - tempOffset);
         arrow.close();
         canvas.drawPath(arrow, reticlePaint);
 
@@ -688,10 +664,6 @@ public class HUD extends View implements OnDroneListner {
 
     private void drawScrollers(Canvas canvas) {
         //Drawing left scroller
-        double groundSpeed = droneSpeed.getGroundSpeed();
-        double airSpeed = droneSpeed.getAirSpeed();
-        double targetSpeed = droneSpeed.getTargetSpeed();
-
         final float textHalfSize = textPaint.getTextSize() / 2;
 
         double speed = airSpeed;
@@ -699,8 +671,8 @@ public class HUD extends View implements OnDroneListner {
             speed = groundSpeed;
 
         // Outside box
-        commonRectFloat.set(-width / 2, -scrollerHeightPx / 2, -width / 2 + scrollerWidthPx,
-                scrollerHeightPx / 2);
+        commonRectFloat.set(-width / 2, -scrollerHeight / 2, -width / 2 + scrollerWidth,
+                scrollerHeight / 2);
 
         // Draw Scroll
         canvas.drawRect(commonRectFloat, scrollerBgPaint);
@@ -732,11 +704,10 @@ public class HUD extends View implements OnDroneListner {
             }
             if (a % 5 == 0) {
                 canvas.drawLine(commonRectFloat.right, lineHeight, commonRectFloat.right
-                        - scrollerSizePxTicLength, lineHeight,
-                        whiteThickTics);
+                        - scrollerTicWidth, lineHeight, whiteThickTics);
                 canvas.drawText(Integer.toString(a), commonRectFloat.right
-                        - scrollerSizePxTextXOffset, lineHeight + textHalfSize
-                        + scrollerSizePxTextYOffset, textPaint);
+                        - scrollerTextHorizontalMargin, lineHeight + textHalfSize
+                        - scrollerTextVerticalMargin, textPaint);
             }
         }
 
@@ -746,41 +717,37 @@ public class HUD extends View implements OnDroneListner {
 
         commonPath.reset();
         Path arrow = commonPath;
-        arrow.moveTo(commonRectFloat.left - borderWidth, -scrollerSizePxArrowHeight / 2);
-        arrow.lineTo(commonRectFloat.right - scrollerSizePxArrowHeight / 4
-                - borderWidth, -scrollerSizePxArrowHeight / 2);
+        arrow.moveTo(commonRectFloat.left - borderWidth, -scrollerArrowHeight / 2);
+        arrow.lineTo(commonRectFloat.right - scrollerArrowHeight / 4
+                - borderWidth, -scrollerArrowHeight / 2);
         arrow.lineTo(commonRectFloat.right - borderWidth, 0);
-        arrow.lineTo(commonRectFloat.right - scrollerSizePxArrowHeight / 4
-                - borderWidth, scrollerSizePxArrowHeight / 2);
-        arrow.lineTo(commonRectFloat.left - borderWidth, scrollerSizePxArrowHeight / 2);
+        arrow.lineTo(commonRectFloat.right - scrollerArrowHeight / 4
+                - borderWidth, scrollerArrowHeight / 2);
+        arrow.lineTo(commonRectFloat.left - borderWidth, scrollerArrowHeight / 2);
         canvas.drawPath(arrow, blackSolid);
 
         if ((targetSpdPos != Float.MIN_VALUE)
-                && (targetSpdPos > -scrollerSizePxArrowHeight / 2)
-                && (targetSpdPos < scrollerSizePxArrowHeight / 2)) {
+                && (targetSpdPos > -scrollerArrowHeight / 2)
+                && (targetSpdPos < scrollerArrowHeight / 2)) {
             commonRect.set(0, 0, 0, 0);
             textPaint.getTextBounds(actualText, 0, actualText.length(), commonRect);
             canvas.drawLine(commonRectFloat.left, targetSpdPos,
-                    commonRectFloat.right - commonRect.width() - scrollerSizePxTextXOffset
+                    commonRectFloat.right - commonRect.width() - scrollerTextHorizontalMargin
                             - textHalfSize, targetSpdPos, greenPen);
         }
 
         canvas.drawPath(arrow, reticlePaint);
-        canvas.drawText(actualText, commonRectFloat.right - scrollerSizePxTextXOffset,
-                textPaint.getTextSize() / 2
-                        + scrollerSizePxActualTextYOffset, textPaint);
+        canvas.drawText(actualText, commonRectFloat.right - scrollerTextHorizontalMargin,
+                textPaint.getTextSize() / 2 - scrollerTextVerticalMargin, textPaint);
+
         // Reset clipping of Scroller
         canvas.clipRect(-width / 2, -height / 2,
                 width / 2, height / 2, Region.Op.REPLACE);
 
         /* Drawing right scroller */
-        double altitude = droneAltitude.getAltitude();
-        double targetAltitude = droneAltitude.getTargetAltitude();
-        double verticalSpeed = droneSpeed.getVerticalSpeed();
-
         // Outside box
-        commonRectFloat.set(width / 2 - scrollerWidthPx, -scrollerHeightPx / 2, width / 2,
-                scrollerHeightPx / 2);
+        commonRectFloat.set(width / 2 - scrollerWidth, -scrollerHeight / 2, width / 2,
+                scrollerHeight / 2);
 
         // Draw Vertical speed indicator
         final float vsi_width = commonRectFloat.width() / 4;
@@ -826,7 +793,7 @@ public class HUD extends View implements OnDroneListner {
 
         if (start > targetAltitude) {
             canvas.drawLine(commonRectFloat.left, commonRectFloat.bottom, commonRectFloat.right,
-                    commonRectFloat.bottom,                    greenPen);
+                    commonRectFloat.bottom, greenPen);
         }
         else if ((altitude + SCROLLER_SPEED_RANGE / 2) < targetAltitude) {
             canvas.drawLine(commonRectFloat.left, commonRectFloat.top, commonRectFloat.right,
@@ -845,10 +812,10 @@ public class HUD extends View implements OnDroneListner {
             }
             if (a % 5 == 0) {
                 canvas.drawLine(commonRectFloat.left, lineHeight, commonRectFloat.left
-                        + scrollerSizePxTicLength, lineHeight,     whiteThickTics);
+                        + scrollerTicWidth, lineHeight, whiteThickTics);
                 canvas.drawText(Integer.toString(a), commonRectFloat.left
-                        + scrollerSizePxTextXOffset, lineHeight + textHalfSize
-                        + scrollerSizePxTextYOffset, textPaint);
+                        + scrollerTextHorizontalMargin, lineHeight + textHalfSize
+                        - scrollerTextVerticalMargin, textPaint);
             }
         }
 
@@ -858,27 +825,27 @@ public class HUD extends View implements OnDroneListner {
 
         commonPath.reset();
         arrow = commonPath;
-        arrow.moveTo(commonRectFloat.right, -scrollerSizePxArrowHeight / 2);
-        arrow.lineTo(commonRectFloat.left + scrollerSizePxArrowHeight / 4
-                + borderWidth, -scrollerSizePxArrowHeight / 2);
+        arrow.moveTo(commonRectFloat.right, -scrollerArrowHeight / 2);
+        arrow.lineTo(commonRectFloat.left + scrollerArrowHeight / 4
+                + borderWidth, -scrollerArrowHeight / 2);
         arrow.lineTo(commonRectFloat.left + borderWidth, 0);
-        arrow.lineTo(commonRectFloat.left + scrollerSizePxArrowHeight / 4
-                + borderWidth, scrollerSizePxArrowHeight / 2);
-        arrow.lineTo(commonRectFloat.right, scrollerSizePxArrowHeight / 2);
+        arrow.lineTo(commonRectFloat.left + scrollerArrowHeight / 4
+                + borderWidth, scrollerArrowHeight / 2);
+        arrow.lineTo(commonRectFloat.right, scrollerArrowHeight / 2);
         canvas.drawPath(arrow, blackSolid);
 
         if ((targetAltPos != Float.MIN_VALUE)
-                && (targetAltPos > -scrollerSizePxArrowHeight / 2)
-                && (targetAltPos < scrollerSizePxArrowHeight / 2)) {
+                && (targetAltPos > -scrollerArrowHeight / 2)
+                && (targetAltPos < scrollerArrowHeight / 2)) {
             commonRect.set(0, 0, 0, 0);
             textPaint.getTextBounds(actualText, 0, actualText.length(), commonRect);
             canvas.drawLine(commonRectFloat.right, targetAltPos, commonRectFloat.left
-                    + commonRect.width() + scrollerSizePxTextXOffset
+                    + commonRect.width() + scrollerTextHorizontalMargin
                     + textHalfSize, targetAltPos, greenPen);
         }
         canvas.drawPath(arrow, reticlePaint);
-        canvas.drawText(actualText, commonRectFloat.left + scrollerSizePxTextXOffset,
-                textPaint.getTextSize() / 2 + scrollerSizePxActualTextYOffset, textPaint);
+        canvas.drawText(actualText, commonRectFloat.left + scrollerTextHorizontalMargin,
+                textPaint.getTextSize() / 2 - scrollerTextVerticalMargin, textPaint);
 
         // Reset clipping of Scroller
         canvas.clipRect(-width / 2, -height / 2, width / 2, height / 2, Region.Op.REPLACE);
@@ -889,8 +856,6 @@ public class HUD extends View implements OnDroneListner {
     }
 
     private void drawYaw(Canvas canvas) {
-        double yaw = droneOrientation.getYaw();
-
         int yawBottom = -attHeightPx / 2;
         canvas.drawRect(-width / 2, yawBottom - topBarHeight, width / 2, yawBottom, topBarBgPaint);
         canvas.drawLine(-width / 2, yawBottom, width / 2, yawBottom, whiteBorder);
@@ -941,6 +906,80 @@ public class HUD extends View implements OnDroneListner {
     /*
     Properties getters, and setters
      */
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+        invalidate();
+    }
+
+    public void updateGpsInfo(GPS gps){
+        this.gps_eph = gps.getGpsEPH();
+        this.fixType = gps.getFixTypeNumeric();
+        this.satCount = gps.getSatCount();
+        invalidate();
+    }
+
+    private String getFixType() {
+        String gpsFix;
+        switch (fixType) {
+            case 2:
+                gpsFix = ("2D");
+                break;
+            case 3:
+                gpsFix = ("3D");
+                break;
+            default:
+                gpsFix = ("NoFix");
+                break;
+        }
+        return gpsFix;
+    }
+
+    public void updateDroneState(State state){
+        this.isDroneArmed = state.isArmed();
+        this.flightMode = state.getMode();
+        invalidate();
+    }
+
+    public void updateBatteryInfo(Battery droneBattery){
+        this.battCurrent = droneBattery.getBattCurrent();
+        this.battRemain = droneBattery.getBattRemain();
+        this.battVolt = droneBattery.getBattVolt();
+        invalidate();
+    }
+
+
+    public int getDroneType() {
+        return droneType;
+    }
+
+    public void setDroneType(int droneType) {
+        this.droneType = droneType;
+        invalidate();
+    }
+
+    public void updateOrientation(Orientation orientation){
+        this.pitch = orientation.getPitch();
+        this.roll = orientation.getRoll();
+        this.yaw = orientation.getYaw();
+        invalidate();
+    }
+
+    public void updateAltitudeAndSpeed(Altitude droneAltitude, Speed droneSpeed){
+        this.altitude = droneAltitude.getAltitude();
+        this.targetAltitude = droneAltitude.getTargetAltitude();
+
+        this.verticalSpeed = droneSpeed.getVerticalSpeed();
+        this.airSpeed = droneSpeed.getAirSpeed();
+        this.groundSpeed = droneSpeed.getGroundSpeed();
+        this.targetSpeed = droneSpeed.getTargetSpeed();
+
+        invalidate();
+    }
+
     public int getGroundColor() {
         return groundPaint.getColor();
     }
@@ -948,7 +987,6 @@ public class HUD extends View implements OnDroneListner {
     public void setGroundColor(int color) {
         groundPaint.setColor(color);
         invalidate();
-        requestLayout();
     }
 
     public int getSkyColor() {
@@ -958,7 +996,6 @@ public class HUD extends View implements OnDroneListner {
     public void setSkyColor(int color) {
         skyPaint.setColor(color);
         invalidate();
-        requestLayout();
     }
 
     public int getReticleColor() {
@@ -968,7 +1005,6 @@ public class HUD extends View implements OnDroneListner {
     public void setReticleColor(int color) {
         reticlePaint.setColor(color);
         invalidate();
-        requestLayout();
     }
 
     public float getReticleRadius() {
@@ -978,7 +1014,6 @@ public class HUD extends View implements OnDroneListner {
     public void setReticleRadius(float radius) {
         reticleRadius = radius;
         invalidate();
-        requestLayout();
     }
 
     public int getTextColor() {
@@ -988,7 +1023,6 @@ public class HUD extends View implements OnDroneListner {
     public void setTextColor(int color) {
         textPaint.setColor(color);
         invalidate();
-        requestLayout();
     }
 
     public float getTextSize() {
@@ -998,7 +1032,6 @@ public class HUD extends View implements OnDroneListner {
     public void setTextSize(float textSize) {
         textPaint.setTextSize(textSize);
         invalidate();
-        requestLayout();
     }
 
     public int getYawBgColor() {
@@ -1008,7 +1041,6 @@ public class HUD extends View implements OnDroneListner {
     public void setYawBgColor(int color) {
         topBarBgPaint.setColor(color);
         invalidate();
-        requestLayout();
     }
 
 }

@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import com.MAVLink.Messages.ApmModes;
+import org.droidplanner.MAVLink.MavLinkArm;
 import org.droidplanner.R;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces;
@@ -88,6 +89,15 @@ public class GlassFlightActivity extends GlassActivity implements DroneInterface
         menu.setGroupVisible(R.id.menu_group_drone_connected, isDroneConnected);
         menu.setGroupEnabled(R.id.menu_group_drone_connected, isDroneConnected);
 
+        //Update the drone arming state if connected
+        if(isDroneConnected){
+            final MenuItem armingMenuItem = menu.findItem(R.id.menu_arming_state);
+            if(armingMenuItem != null){
+                boolean isArmed = drone.state.isArmed();
+                armingMenuItem.setTitle(isArmed ? R.string.menu_disarm : R.string.menu_arm);
+            }
+        }
+
         return true;
     }
 
@@ -111,10 +121,14 @@ public class GlassFlightActivity extends GlassActivity implements DroneInterface
                 return true;
             }
 
-            case R.id.menu_glass_map: {
+            /*case R.id.menu_glass_map: {
                 launchMap();
                 return true;
-            }
+            }*/
+
+            case R.id.menu_arming_state:
+                toggleArming();
+                return true;
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -124,6 +138,15 @@ public class GlassFlightActivity extends GlassActivity implements DroneInterface
     @Override
     public CharSequence[][] getHelpItems() {
         return new CharSequence[0][];
+    }
+
+    private void toggleArming(){
+        final boolean isDroneArmed = drone.state.isArmed();
+        if (!isDroneArmed){
+            drone.tts.speak("Arming the vehicle, please standby");
+        }
+
+        MavLinkArm.sendArmMessage(drone, !isDroneArmed);
     }
 
     private void launchHud() {
@@ -162,12 +185,12 @@ public class GlassFlightActivity extends GlassActivity implements DroneInterface
             hudMenu.setVisible(!isHudFragment);
         }
 
-        final MenuItem mapMenu = menu.findItem(R.id.menu_glass_map);
+        /*final MenuItem mapMenu = menu.findItem(R.id.menu_glass_map);
         if (mapMenu != null) {
             final boolean isMapFragment = currentFragment instanceof GlassMapFragment;
             mapMenu.setEnabled(!isMapFragment);
             mapMenu.setVisible(!isMapFragment);
-        }
+        }*/
 
         //TODO: If connected, update the title for the drone arming state.
         return true;
@@ -200,6 +223,7 @@ public class GlassFlightActivity extends GlassActivity implements DroneInterface
         switch (event) {
             case CONNECTED:
             case DISCONNECTED:
+            case ARMING:
                 if (GlassUtils.isVoiceControlActive(getApplicationContext())) {
                     invalidateVoiceMenu();
                 }

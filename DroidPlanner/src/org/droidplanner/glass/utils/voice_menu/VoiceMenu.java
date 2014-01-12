@@ -8,6 +8,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
+import android.widget.Toast;
 import org.droidplanner.glass.activities.GlassActivity;
 import org.droidplanner.glass.utils.LevenshteinDistance;
 
@@ -130,10 +131,15 @@ public class VoiceMenu implements Menu {
         //Get the menu item(s) with the lowest Levenshtein distance.
         List<VoiceMenuItem> closestMatches = menuItemByLevDst.firstEntry().getValue();
         if (closestMatches == null || closestMatches.size() != 1) {
+            Toast.makeText(glassActivity, "Unable to match menu item for speech \"" +
+                    recognizedSpeech + "\".", Toast.LENGTH_LONG).show();
             return false;
         }
         else {
             final VoiceMenuItem item = closestMatches.get(0);
+            Toast.makeText(glassActivity, "Matched menu item \"" + item.getTitle() + "\".",
+                    Toast.LENGTH_LONG).show();
+
             //Check if the menu item has a sub menu.
             if (item.hasSubMenu()) {
                 //Launch the recognizer intent for the sub menu items.

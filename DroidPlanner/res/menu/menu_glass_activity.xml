@@ -16,14 +16,13 @@
         <item
             android:id="@+id/menu_arming_state"
             android:title="@string/menu_arm"
-            android:enabled="false"
-            android:visible="false"/>
+            />
 
-        <item
+        <!--<item
             android:id="@+id/menu_glass_control"
             android:title="@string/menu_glass_control"
             android:enabled="false"
-            android:visible="false"/>
+            android:visible="false"/>-->
     </group>
 
     <item
@@ -35,10 +34,10 @@
         android:title="@string/menu_hud"
         android:icon="@drawable/ic_action_plane"/>
 
-    <item
+    <!--<item
         android:id="@+id/menu_glass_map"
         android:icon="@android:drawable/ic_dialog_map"
-        android:title="@string/menu_map"/>
+        android:title="@string/menu_map"/>-->
 
     <item
         android:id="@+id/menu_settings"
