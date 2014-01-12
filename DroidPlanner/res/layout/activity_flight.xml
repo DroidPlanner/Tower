@@ -48,7 +48,7 @@
 
     <SlidingDrawer
         android:id="@+id/SlidingDrawerLeft"
-        android:layout_width="210dp"
+        android:layout_width="260dp"
         android:layout_height="540dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
