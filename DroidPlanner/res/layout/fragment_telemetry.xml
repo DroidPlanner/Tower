@@ -45,7 +45,7 @@
         android:layout_marginBottom="34dp"
         android:text="--°"
         android:textSize="16sp" />
-    
+
     <TextView
         android:id="@+id/yawValueText"
         style="@style/RPYtextLabels"
@@ -254,7 +254,7 @@
             style="@style/largeTelemetryText"
             android:layout_width="98dp"
             android:layout_height="wrap_content"
-            android:text="0" />
+            android:text="0.0" />
 
         <TextView
             android:id="@+id/altitudeUnits"
@@ -277,7 +277,7 @@
             android:layout_width="98dp"
             android:layout_height="wrap_content"
 	        android:textColor="@color/altitude_target"
-            android:text="0" />
+            android:text="0.0" />
 
         <TextView
             android:id="@+id/targetAltitudeUnits"
