@@ -6,11 +6,12 @@
     <string name="version">Version</string>
     <string name="storage_folder">Storage Folder</string>
     <string name="settings">Settings</string>
+    <string name="help">Help</string>
     <string name="configuration">Configuration</string>
     <string name="editor">Editor</string>
     <string name="menu_connect">Connect</string>
     <string name="menu_disconnect">Disconnect</string>
-    <string name="conected">Connected</string>
+    <string name="connected">Connected</string>
     <string name="disconnected">Disconnected</string>
     <string name="save">Save</string>
     <string name="open">Open</string>
@@ -183,30 +184,54 @@
     <string name="send_mission">Send mission</string>
     <string name="load_mission">Load mission</string>
     <string name="tune_roll">Manual adjustment of roll and pitch tuning. Rate_P is the primary value to adjust.</string>
+    <string name="rc_options">Assign features to channels 7 and 8 on RC radios. Trigger each feature by bringing the switch to the high position.</string>
     <string name="lointer_unit_turns">turn(s)</string>
     <string name="rowheader_wp_type">WP Type</string>
     <string name="rowheader_wp_alt">ALT</string>
     <string name="rowheader_wp_no">WP#</string>
     <string name="rowheader_wp_delta">∆ WP</string>
     <string name="rowheader_wp_desc">Description</string>
+    <string name="dialog_box_title_altitude">Altitude</string>
+    <string name="dialog_box_btn_txt_cancel">Cancel</string>
+    <string name="dialog_box_btn_txt_ok">Ok</string>
+    <string name="exception_draw_polygon">Draw a polygon/WPTs</string>
+    <string name="exception_draw_2_more_polygon_points">Draw at least 2 more polygon points</string>
+    <string name="exception_draw_1_more_polygon_points">Draw at least 1 more polygon points</string>
+    <string name="mission_is_too_lengthy">Mission is too lengthy</string>
     <string name="wpevent_upload">Uploading mission to APM&#8230;</string>
     <string name="wpevent_download">Downloading mission from APM&#8230;</string>
     <string name="wpevent_retry">Retrying&#8230;</string>
     <string name="params_click_to_refresh">Click to refresh parameters from drone</string>
     <string name="metadata_value">Value:</string>
     <string name="metadata_custom_value">** Custom value **</string>
-    <string name="refreshing_parameters">Refreshing Parameters...</string>
+    <string name="refreshing_parameters">Refreshing Parameters&#8230;</string>
     <string name="parameters_saved">Parameters saved</string>
-    <string name="RCFailsafe">Warning! RC Fasilsafe – Returning to Launch</string>
-    <string name="GPSFailsafe">Warning! GPS Fasilsafe – Switching to Altitude Hold</string>
-    <string name="BatteryFailsafeLand">Warning! Battery Fasilsafe – Returning to Launch</string>
-    <string name="BatteryFailsafeRTL">Warning! Battery Fasilsafe – Returning to Launch</string>
+   
+    <string name="RCFailsafe">Warning! RC Failsafe – Returning to Launch</string>
+    <string name="GPSFailsafe">Warning! GPS Failsafe – Switching to Altitude Hold</string>
+    <string name="BatteryFailsafeLand">Warning! Battery Failsafe – Returning to Launch</string>
+    <string name="BatteryFailsafeRTL">Warning! Battery Failsafe – Returning to Launch</string>
+    
+    
     <string name="mode_switch">Assign RC channel 5 to a switch on your radio to control flight modes. Move the switch to each position and select the desired flight mode below.</string>
     <string name="Pause">Pause</string>
     <string name="screen_tuning">Tuning</string>
     <string name="screen_modes">Modes</string>
     <string name="screen_cal">Calibration</string>
     <string name="screen_checklist">Checklist</string>
+
+    <string name="MAVLinkError">MAVLink Error:</string>
+    
+    <string name="msg_connect_first">Please connect first</string>
+    
+    <string name="msg_parameters_written_to_drone">"parameters written to drone"</string>
+    
+    <string name="set_to_zero_to_disable">(set to zero to disable).</string>
+    
+    <string name="mode1_throttle_on_right_stick">Mode1: Throttle on RIGHT stick</string>
+    
+    <string name="mode2_throttle_on_left_stick">Mode2: Throttle on LEFT stick</string>
+
     <string name="rc_title_options">RC options</string>
   	<string name="rc_desc_options">Assign features to channels 7 and 8 on RC radios. Trigger each feature by bringing the switch to the high position.</string>
   	<string name="rc_desc_minmax">Move the joystics all the way out several times and toggle the swithces, levers and knobs to all possible positions</string>

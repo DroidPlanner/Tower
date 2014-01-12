@@ -2,13 +2,13 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:custom="http://schemas.android.com/apk/res/com.droidplanner"
+    xmlns:custom="http://schemas.android.com/apk/res/org.droidplanner"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/opaque_white"
 	tools:ignore="HardcodedText"
     >
-    <com.droidplanner.widgets.spinners.SpinnerSelfSelect
+    <org.droidplanner.widgets.spinners.SpinnerSelfSelect
         android:id="@+id/spinnerWaypointType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -113,7 +113,7 @@
 		        android:padding="12dp"
 				android:orientation="vertical" >
 
-            <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+            <org.droidplanner.widgets.SeekBarWithText.SeekBarWithText
                 android:id="@+id/altitudeView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -123,9 +123,9 @@
                 custom:min="0"
                 custom:title="@string/waypoint_altitude"
                 custom:unit="m" >
-            </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+            </org.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
 
-            <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+            <org.droidplanner.widgets.SeekBarWithText.SeekBarWithText
                 android:id="@+id/loiterTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -135,7 +135,7 @@
                 custom:min="0"
                 custom:title="@string/loiter_time"
                 custom:unit="s" >
-            </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+            </org.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
 
 			</LinearLayout>
         </LinearLayout>

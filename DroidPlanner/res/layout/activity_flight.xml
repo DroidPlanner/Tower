@@ -62,10 +62,10 @@
 
         <ImageView
             android:id="@+id/slideButtonLeft"
-            android:layout_width="16dp"
-            android:layout_height="72dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:src="@drawable/drawer_tab"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"/>
 
         <!--<LinearLayout
             android:id="@+id/LinearLayout01"
@@ -79,7 +79,7 @@
         android:visibility="gone"
 		<fragment
 			android:id="@+id/modeCircleFragment"
-			android:name="com.droidplanner.fragments.mode.ModeCircleFragment"
+			android:name="org.droidplanner.fragments.mode.ModeCircleFragment"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			android:layout_alignParentBottom="true"

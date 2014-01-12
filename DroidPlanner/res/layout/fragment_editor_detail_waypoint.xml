@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:custom="http://schemas.android.com/apk/res/com.droidplanner"
+    xmlns:custom="http://schemas.android.com/apk/res/org.droidplanner"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/opaque_white"
 	tools:ignore="HardcodedText"
     >
-    <com.droidplanner.widgets.spinners.SpinnerSelfSelect
+    <org.droidplanner.widgets.spinners.SpinnerSelfSelect
         android:id="@+id/spinnerWaypointType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -112,7 +112,7 @@
 				android:layout_height="wrap_content"
 		        android:padding="12dp"
 				android:orientation="vertical" >
-				<com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+				<org.droidplanner.widgets.SeekBarWithText.SeekBarWithText
 					android:id="@+id/altitudeView"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
@@ -122,9 +122,9 @@
 					custom:min="0"
 					custom:title="@string/waypoint_altitude"
 					custom:unit="m" >
-				</com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+				</org.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
 
-				<com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+				<org.droidplanner.widgets.SeekBarWithText.SeekBarWithText
 					android:id="@+id/waypointDelay"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
@@ -134,7 +134,7 @@
 					custom:min="0"
 					custom:title="@string/waypoint_delay"
 					custom:unit="s" >
-				</com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+				</org.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
 			</LinearLayout>
         </LinearLayout>
     </ScrollView>

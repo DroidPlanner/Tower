@@ -4,12 +4,12 @@
 
     <item
         android:id="@+id/menu_flight_modes_spinner"
-        android:actionViewClass="com.droidplanner.widgets.spinners.SelectModeSpinner"
+        android:actionViewClass="org.droidplanner.widgets.spinners.SelectModeSpinner"
         android:showAsAction="always"
         tools:ignore="MenuTitle"/>
     <item
         android:id="@+id/menu_wp_spinner"
-        android:actionViewClass="com.droidplanner.widgets.spinners.SelectWaypointSpinner"
+        android:actionViewClass="org.droidplanner.widgets.spinners.SelectWaypointSpinner"
         android:showAsAction="always"
         tools:ignore="MenuTitle"/>
     <item

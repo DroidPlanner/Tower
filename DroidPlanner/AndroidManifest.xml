@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.droidplanner"
+          package="org.droidplanner"
           android:versionCode="56"
           android:versionName="please run version.sh to get the version name">
 
@@ -120,6 +120,15 @@
             android:uiOptions="splitActionBarWhenNarrow"
             android:launchMode="singleTask"
             android:parentActivityName=".activitys.FlightActivity" >
+
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activitys.FlightActivity" />
+        </activity>
+        <activity android:name=".activitys.SettingsActivity"
+                  android:label="@string/settings"
+                  android:parentActivityName=".activitys.FlightActivity">
 
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data

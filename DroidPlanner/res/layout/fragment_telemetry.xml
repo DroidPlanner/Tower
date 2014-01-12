@@ -57,7 +57,7 @@
         android:text="--°"
         android:textSize="16sp" />
 
-    <com.droidplanner.widgets.newHUD.newHUD
+    <org.droidplanner.widgets.newHUD.newHUD
         android:id="@+id/hudView"
         android:layout_width="100dp"
         android:layout_height="100dp"
