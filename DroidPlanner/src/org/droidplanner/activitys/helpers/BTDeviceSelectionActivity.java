@@ -1,13 +1,13 @@
 package org.droidplanner.activitys.helpers;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.Window;
-import com.droidplanner.R;
-import com.droidplanner.fragments.helpers.BTDeviceListFragment;
-import com.droidplanner.glass.fragments.BTDeviceCardsFragment;
-import com.droidplanner.glass.utils.GlassUtils;
+import org.droidplanner.R;
+import org.droidplanner.fragments.helpers.BTDeviceListFragment;
+import org.droidplanner.glass.fragments.BTDeviceCardsFragment;
+import org.droidplanner.glass.utils.GlassUtils;
 
 /**
  * This class is used to handle the selection of bluetooth devices on connection request.
@@ -44,12 +44,17 @@ public class BTDeviceSelectionActivity extends SuperActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bt_device_selection);
 
-        final FragmentManager fm = getFragmentManager();
+        final FragmentManager fm = getSupportFragmentManager();
         Fragment deviceSelection = fm.findFragmentById(R.id.bt_device_selection_layout);
         if (deviceSelection == null) {
             deviceSelection = isGlassDevice ? new BTDeviceCardsFragment() : new
                     BTDeviceListFragment();
             fm.beginTransaction().add(R.id.bt_device_selection_layout, deviceSelection).commit();
         }
+    }
+
+    @Override
+    public CharSequence[][] getHelpItems() {
+        return new CharSequence[0][];
     }
 }

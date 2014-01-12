@@ -25,6 +25,8 @@ import org.droidplanner.fragments.mode.ModeLoiterFragment;
 import org.droidplanner.fragments.mode.ModePositionFragment;
 import org.droidplanner.fragments.mode.ModeRTLFragment;
 import org.droidplanner.fragments.mode.ModeStabilizeFragment;
+import org.droidplanner.glass.activities.GlassFlightActivity;
+import org.droidplanner.glass.utils.GlassUtils;
 import org.droidplanner.polygon.PolygonPoint;
 
 import android.content.Intent;
@@ -55,7 +57,7 @@ public class FlightActivity extends SuperUI implements
         }
         else {
             setContentView(R.layout.activity_flight);
-            fragmentManager = getFragmentManager();
+            fragmentManager = getSupportFragmentManager();
             modeInfoPanel = fragmentManager.findFragmentById(R.id.modeInfoPanel);
             failsafeTextView = findViewById(R.id.failsafeTextView);
 

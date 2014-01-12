@@ -1,6 +1,6 @@
 package org.droidplanner.utils;
 
-import static com.droidplanner.glass.utils.GlassUtils.isGlassDevice;
+import static org.droidplanner.glass.utils.GlassUtils.isGlassDevice;
 import static org.droidplanner.utils.Utils.ConnectionType;
 
 /**

@@ -1,11 +1,11 @@
 package org.droidplanner.utils;
 
 import android.content.Context;
-import com.droidplanner.connection.BluetoothConnection;
-import com.droidplanner.connection.MAVLinkConnection;
-import com.droidplanner.connection.TcpConnection;
-import com.droidplanner.connection.UdpConnection;
-import com.droidplanner.connection.UsbConnection;
+import org.droidplanner.connection.BluetoothConnection;
+import org.droidplanner.connection.MAVLinkConnection;
+import org.droidplanner.connection.TcpConnection;
+import org.droidplanner.connection.UdpConnection;
+import org.droidplanner.connection.UsbConnection;
 
 /**
  * Contains application related functions.

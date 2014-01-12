@@ -1,7 +1,6 @@
 package org.droidplanner.glass.fragments;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -11,17 +10,18 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import com.droidplanner.DroidPlannerApp;
-import com.droidplanner.R;
-import org.droidplanner.activitys.helpers.BTDeviceSelectionActivity;
-import org.droidplanner.utils.Constants;
 import com.google.android.glass.app.Card;
 import com.google.android.glass.widget.CardScrollAdapter;
 import com.google.android.glass.widget.CardScrollView;
+import org.droidplanner.DroidPlannerApp;
+import org.droidplanner.R;
+import org.droidplanner.activitys.helpers.BTDeviceSelectionActivity;
+import org.droidplanner.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;

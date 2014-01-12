@@ -1,7 +1,6 @@
 package org.droidplanner.fragments.helpers;
 
 import android.app.Activity;
-import android.app.DialogFragment;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -11,6 +10,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +20,10 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import com.droidplanner.DroidPlannerApp;
-import com.droidplanner.R;
+import org.droidplanner.DroidPlannerApp;
+import org.droidplanner.R;
 import org.droidplanner.activitys.helpers.BTDeviceSelectionActivity;
-import com.droidplanner.utils.Constants;
+import org.droidplanner.utils.Constants;
 
 import java.util.Set;
 

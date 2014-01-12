@@ -6,12 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import com.droidplanner.R;
-import com.droidplanner.activitys.helpers.SuperActivity;
-import com.droidplanner.drone.Drone;
-import com.droidplanner.drone.DroneInterfaces;
-import com.droidplanner.widgets.graph.Chart;
-import com.droidplanner.widgets.graph.ChartCheckBoxList;
+import org.droidplanner.R;
+import org.droidplanner.activitys.helpers.SuperActivity;
+import org.droidplanner.drone.Drone;
+import org.droidplanner.drone.DroneInterfaces;
+import org.droidplanner.widgets.graph.Chart;
+import org.droidplanner.widgets.graph.ChartCheckBoxList;
 
 /**
  * @author Fredia Huya-Kouadio

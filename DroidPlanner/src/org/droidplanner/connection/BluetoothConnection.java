@@ -1,4 +1,4 @@
-package com.droidplanner.connection;
+package org.droidplanner.connection;
 
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
@@ -9,7 +9,7 @@ import android.content.SharedPreferences;
 import android.os.ParcelUuid;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import com.droidplanner.utils.Constants;
+import org.droidplanner.utils.Constants;
 
 import java.io.IOException;
 import java.io.InputStream;

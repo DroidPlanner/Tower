@@ -1,13 +1,5 @@
 package org.droidplanner.service;
 
-import org.droidplanner.activitys.FlightActivity;
-import org.droidplanner.connection.BluetoothConnection;
-import org.droidplanner.connection.MAVLinkConnection;
-import org.droidplanner.connection.TcpConnection;
-import org.droidplanner.connection.UdpConnection;
-import org.droidplanner.connection.UsbConnection;
-import org.droidplanner.connection.MAVLinkConnection.MavLinkConnectionListner;
-
 import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -31,6 +23,12 @@ import android.widget.Toast;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
 import org.droidplanner.R;
+import org.droidplanner.activitys.FlightActivity;
+import org.droidplanner.connection.BluetoothServer;
+import org.droidplanner.connection.MAVLinkConnection;
+import org.droidplanner.connection.MAVLinkConnection.MavLinkConnectionListner;
+import org.droidplanner.utils.Constants;
+import org.droidplanner.utils.Utils;
 
 /**
  * http://developer.android.com/guide/components/bound-services.html#Messenger
@@ -206,7 +204,7 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 
         showNotification();
         aquireWakelock();
-        updateNotification(getResources().getString(R.string.conected));
+        updateNotification(getResources().getString(R.string.connected));
 
         setupBtRelayServer(isBtRelayServerEnabled());
     }

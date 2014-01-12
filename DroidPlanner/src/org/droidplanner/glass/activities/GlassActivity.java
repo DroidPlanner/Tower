@@ -6,18 +6,18 @@ import android.speech.RecognizerIntent;
 import android.view.InputDevice;
 import android.view.MotionEvent;
 import android.widget.Toast;
-import com.droidplanner.activitys.helpers.SuperActivity;
-import org.droidplanner.glass.utils.GlassUtils;
-import org.droidplanner.glass.utils.voice_menu.VoiceMenu;
 import com.google.android.glass.touchpad.Gesture;
 import com.google.android.glass.touchpad.GestureDetector;
+import org.droidplanner.activitys.helpers.SuperActivity;
+import org.droidplanner.glass.utils.GlassUtils;
+import org.droidplanner.glass.utils.voice_menu.VoiceMenu;
 
 import java.util.List;
 
 /**
  * Parent to most activities running on glass. This holds common glass specific functionalities.
  */
-public class GlassActivity extends SuperActivity {
+public abstract class GlassActivity extends SuperActivity {
 
     /**
      * This is used to instantiate, and activate the voice menu.

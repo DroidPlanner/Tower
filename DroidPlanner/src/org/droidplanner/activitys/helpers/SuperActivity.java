@@ -15,6 +15,8 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
+import org.droidplanner.utils.Constants;
+import org.droidplanner.utils.Utils;
 
 public abstract class SuperActivity extends HelpActivity implements
 		OnAltitudeChangedListner {

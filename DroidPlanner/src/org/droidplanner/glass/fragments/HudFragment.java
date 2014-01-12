@@ -1,12 +1,12 @@
 package org.droidplanner.glass.fragments;
 
-import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.droidplanner.R;
-import com.droidplanner.activitys.helpers.SuperActivity;
+import org.droidplanner.R;
+import org.droidplanner.activitys.helpers.SuperActivity;
 import org.droidplanner.glass.utils.hud.HUD;
 
 public class HudFragment extends Fragment {

@@ -1,5 +1,6 @@
 package org.droidplanner.fragments;
 
+import android.preference.PreferenceScreen;
 import org.droidplanner.DroidPlannerApp;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.file.DirectoryPath;
@@ -17,8 +18,9 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 
 import org.droidplanner.R;
+import org.droidplanner.glass.utils.GlassUtils;
 
-import static com.droidplanner.utils.Constants.*;
+import static org.droidplanner.utils.Constants.*;
 
 public class SettingsFragment extends PreferenceFragment implements
 		OnSharedPreferenceChangeListener {

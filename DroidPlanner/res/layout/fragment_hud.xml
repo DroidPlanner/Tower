@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.droidplanner.glass.utils.hud.HUD
+<org.droidplanner.glass.utils.hud.HUD
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:hud="http://schemas.android.com/apk/res-auto"
     android:id="@+id/hudWidget"

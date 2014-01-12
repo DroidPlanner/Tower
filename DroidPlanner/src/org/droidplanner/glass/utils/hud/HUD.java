@@ -12,17 +12,17 @@ import android.graphics.Region;
 import android.util.AttributeSet;
 import android.view.View;
 import com.MAVLink.Messages.ApmModes;
-import com.droidplanner.R;
-import com.droidplanner.drone.Drone;
-import com.droidplanner.drone.DroneInterfaces;
-import com.droidplanner.drone.DroneInterfaces.OnDroneListner;
-import com.droidplanner.drone.variables.Altitude;
-import com.droidplanner.drone.variables.Battery;
-import com.droidplanner.drone.variables.GPS;
-import com.droidplanner.drone.variables.Orientation;
-import com.droidplanner.drone.variables.Speed;
-import com.droidplanner.drone.variables.State;
-import com.droidplanner.drone.variables.Type;
+import org.droidplanner.R;
+import org.droidplanner.drone.Drone;
+import org.droidplanner.drone.DroneInterfaces;
+import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import org.droidplanner.drone.variables.Altitude;
+import org.droidplanner.drone.variables.Battery;
+import org.droidplanner.drone.variables.GPS;
+import org.droidplanner.drone.variables.Orientation;
+import org.droidplanner.drone.variables.Speed;
+import org.droidplanner.drone.variables.State;
+import org.droidplanner.drone.variables.Type;
 
 /**
  * Widget for a HUD Originally copied from http://code.google.com/p/copter-gcs/

@@ -1,17 +1,18 @@
 package org.droidplanner.glass.activities;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import com.MAVLink.Messages.ApmModes;
-import com.droidplanner.DroidPlannerApp;
-import com.droidplanner.R;
-import com.droidplanner.fragments.SettingsFragment;
+import org.droidplanner.R;
+import org.droidplanner.drone.Drone;
+import org.droidplanner.drone.DroneInterfaces;
+import org.droidplanner.fragments.SettingsFragment;
 import org.droidplanner.glass.fragments.GlassMapFragment;
 import org.droidplanner.glass.fragments.HudFragment;
 import org.droidplanner.glass.utils.GlassUtils;
@@ -26,8 +27,7 @@ import java.util.List;
  * @author Fredia Huya-Kouadio
  * @since 1.2.0
  */
-public class GlassFlightActivity extends GlassActivity implements DroidPlannerApp
-        .ConnectionStateListner {
+public class GlassFlightActivity extends GlassActivity implements DroneInterfaces.OnDroneListner {
 
     /**
      * This is the activity fragment manager.
@@ -43,7 +43,7 @@ public class GlassFlightActivity extends GlassActivity implements DroidPlannerAp
 
         updateConnectionPrefs();
 
-        mFragManager = getFragmentManager();
+        mFragManager = getSupportFragmentManager();
 
         Fragment glassFragment = getCurrentFragment();
         if (glassFragment == null) {
@@ -56,14 +56,6 @@ public class GlassFlightActivity extends GlassActivity implements DroidPlannerAp
         PreferenceManager.getDefaultSharedPreferences
                 (getApplicationContext()).edit().putString(Constants.PREF_CONNECTION_TYPE,
                 Utils.ConnectionType.BLUETOOTH.name()).apply();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        app.conectionListner = this;
-        drone.MavClient.queryConnectionState();
     }
 
     @Override
@@ -124,14 +116,14 @@ public class GlassFlightActivity extends GlassActivity implements DroidPlannerAp
                 return true;
             }
 
-            case R.id.menu_glass_settings: {
-                launchSettings();
-                return true;
-            }
-
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public CharSequence[][] getHelpItems() {
+        return new CharSequence[0][];
     }
 
     private void launchHud() {
@@ -139,18 +131,6 @@ public class GlassFlightActivity extends GlassActivity implements DroidPlannerAp
         Fragment currentFragment = getCurrentFragment();
         if (!(currentFragment instanceof HudFragment)) {
             currentFragment = new HudFragment();
-            mFragManager.beginTransaction()
-                    .replace(R.id.glass_layout, currentFragment)
-                    .addToBackStack(null)
-                    .commit();
-        }
-    }
-
-    private void launchSettings() {
-        //Replace the current fragment with the SettingsFragment.
-        Fragment currentFragment = getCurrentFragment();
-        if (!(currentFragment instanceof SettingsFragment)) {
-            currentFragment = new SettingsFragment();
             mFragManager.beginTransaction()
                     .replace(R.id.glass_layout, currentFragment)
                     .addToBackStack(null)
@@ -189,13 +169,6 @@ public class GlassFlightActivity extends GlassActivity implements DroidPlannerAp
             mapMenu.setVisible(!isMapFragment);
         }
 
-        final MenuItem settingsMenu = menu.findItem(R.id.menu_glass_settings);
-        if (settingsMenu != null) {
-            final boolean isSettingsFragment = currentFragment instanceof SettingsFragment;
-            settingsMenu.setEnabled(!isSettingsFragment);
-            settingsMenu.setVisible(!isSettingsFragment);
-        }
-
         //TODO: If connected, update the title for the drone arming state.
         return true;
     }
@@ -218,23 +191,22 @@ public class GlassFlightActivity extends GlassActivity implements DroidPlannerAp
         return super.onKeyDown(keyCode, event);
     }
 
-    @Override
-    public void notifyConnected() {
-        invalidateOptionsMenu();
-    }
-
-    @Override
-    public void notifyDisconnected() {
-        if (GlassUtils.isVoiceControlActive(getApplicationContext())) {
-            invalidateVoiceMenu();
-        }
-        else {
-            invalidateOptionsMenu();
-        }
-    }
-
     private Fragment getCurrentFragment() {
         return mFragManager.findFragmentById(R.id.glass_layout);
     }
 
+    @Override
+    public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
+        switch (event) {
+            case CONNECTED:
+            case DISCONNECTED:
+                if (GlassUtils.isVoiceControlActive(getApplicationContext())) {
+                    invalidateVoiceMenu();
+                }
+                else {
+                    invalidateOptionsMenu();
+                }
+                break;
+        }
+    }
 }
