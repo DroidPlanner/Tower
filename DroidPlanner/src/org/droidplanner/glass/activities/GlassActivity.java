@@ -30,6 +30,12 @@ public abstract class GlassActivity extends SuperActivity {
     private VoiceMenu recognizerIntentOriginMenu;
 
     /**
+     * Stored the text returned by the recognizer intent in onActivityResult. If not null,
+     * this text is used to trigger the voice menu in onResume.
+     */
+    private String recognizedSpeech;
+
+    /**
      * Glass gesture detector.
      * Detects glass specific swipes, and taps, and uses it for navigation.
      *
@@ -42,17 +48,14 @@ public abstract class GlassActivity extends SuperActivity {
         if (requestCode == VoiceMenu.SPEECH_REQUEST && resultCode == RESULT_OK) {
             List<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
-            String recognizedText = null;
+            recognizedSpeech = null;
             if (!results.isEmpty()) {
-                recognizedText = results.get(0);
+                recognizedSpeech = results.get(0);
             }
 
-            if (recognizedText == null) {
+            if (recognizedSpeech == null) {
                 Toast.makeText(getApplicationContext(), "Unable to recognize speech!",
                         Toast.LENGTH_LONG).show();
-            }
-            else if(recognizerIntentOriginMenu != null){
-                recognizerIntentOriginMenu.dispatchVoiceMenuItemRecognized(recognizedText);
             }
         }
     }
@@ -82,6 +85,23 @@ public abstract class GlassActivity extends SuperActivity {
             return mGestureDetector.onMotionEvent(event);
         }
         return super.onGenericMotionEvent(event);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        if(recognizedSpeech != null && recognizerIntentOriginMenu != null){
+            recognizerIntentOriginMenu.dispatchVoiceMenuItemRecognized(recognizedSpeech);
+        }
+        recognizedSpeech = null;
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+
+        recognizedSpeech = null;
     }
 
     protected void invalidateVoiceMenu() {
