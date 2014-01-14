@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:custom="http://schemas.android.com/apk/res/com.droidplanner"
+    xmlns:custom="http://schemas.android.com/apk/res/org.droidplanner"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/opaque_white"
     android:orientation="vertical" >
 
-    <com.droidplanner.widgets.spinners.SpinnerSelfSelect
+    <org.droidplanner.widgets.spinners.SpinnerSelfSelect
         android:id="@+id/spinnerWaypointType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
                 android:orientation="horizontal" >
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/textViewSummary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/waypoint_speedtype" />
@@ -50,7 +50,7 @@
                     android:text="@string/waypoint_groundspeed" />
             </RadioGroup>
 
-            <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+            <org.droidplanner.widgets.SeekBarWithText.SeekBarWithText
                 android:id="@+id/waypointSpeed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -60,9 +60,9 @@
                 custom:min="-1"
                 custom:title="@string/waypoint_speed"
                 custom:unit="m/s" >
-            </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+            </org.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
 
-            <com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+            <org.droidplanner.widgets.SeekBarWithText.SeekBarWithText
                 android:id="@+id/waypointThrottle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -72,7 +72,7 @@
                 custom:min="-1"
                 custom:title="@string/waypoint_throttle"
                 custom:unit="%" >
-            </com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+            </org.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
 
             <TextView
                 android:id="@+id/textView1"

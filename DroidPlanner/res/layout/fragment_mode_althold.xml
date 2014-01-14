@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:custom="http://schemas.android.com/apk/res/com.droidplanner"
+    xmlns:custom="http://schemas.android.com/apk/res/org.droidplanner"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -40,7 +40,9 @@
 			style="@style/modeLabel"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="Mission recording" />
+			android:text="Mission recording"
+        	android:visibility="gone"
+			/>
 		<Button
 			android:id="@+id/SaveWaypoint"
 			style="@style/modeControl"
@@ -48,6 +50,7 @@
 			android:layout_height="wrap_content"
 			android:text="Save waypoint"
 	        android:background="@drawable/button_mode_options"
+        	android:visibility="gone"
 			/>
 		<Button
 			android:id="@+id/ClearMission"
@@ -56,6 +59,7 @@
 			android:layout_height="wrap_content"
 			android:text="Clear mission"
 	        android:background="@drawable/button_mode_options"
+        	android:visibility="gone"
 			/>
 
 	</LinearLayout>

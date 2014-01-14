@@ -2,13 +2,13 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:custom="http://schemas.android.com/apk/res/com.droidplanner"
+    xmlns:custom="http://schemas.android.com/apk/res/org.droidplanner"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/opaque_white"
 	tools:ignore="HardcodedText"
     >
-    <com.droidplanner.widgets.spinners.SpinnerSelfSelect
+    <org.droidplanner.widgets.spinners.SpinnerSelfSelect
         android:id="@+id/spinnerWaypointType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -108,7 +108,7 @@
 				style="@style/ModeDetailText"
 				android:textAppearance="?android:attr/textAppearanceMedium" />
 
-			<com.droidplanner.widgets.spinners.SpinnerSelfSelect
+			<org.droidplanner.widgets.spinners.SpinnerSelfSelect
 			    android:id="@+id/cameraFileSpinner"
 			    android:layout_width="196dp"
 			    android:layout_height="wrap_content"
@@ -197,7 +197,7 @@
 					android:layout_margin="3dp"
 					android:background="@android:color/darker_gray" />
 
-				<com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+				<org.droidplanner.widgets.SeekBarWithText.SeekBarWithText
 					android:id="@+id/angleView"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
@@ -207,9 +207,9 @@
 					custom:min="0"
 					custom:title="@string/hatch_angle"
 					custom:unit="º" >
-				</com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+				</org.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
 
-				<com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+				<org.droidplanner.widgets.SeekBarWithText.SeekBarWithText
 					android:id="@+id/altitudeView"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
@@ -219,14 +219,14 @@
 					custom:min="5"
 					custom:title="@string/flight_altitude"
 					custom:unit="m" >
-				</com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+				</org.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
 
 				<LinearLayout
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:orientation="horizontal" >
 
-					<com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+					<org.droidplanner.widgets.SeekBarWithText.SeekBarWithText
 						android:id="@+id/overlapView"
 						android:layout_width="0dp"
 						android:layout_height="wrap_content"
@@ -237,9 +237,9 @@
 						custom:min="0"
 						custom:title="@string/overlap"
 						custom:unit="%" >
-					</com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+					</org.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
 
-					<com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+					<org.droidplanner.widgets.SeekBarWithText.SeekBarWithText
 						android:id="@+id/sidelapView"
 						android:layout_width="0dp"
 						android:layout_height="wrap_content"
@@ -249,7 +249,7 @@
 						custom:min="0"
 						custom:title="@string/sidelap"
 						custom:unit="%" >
-					</com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+					</org.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
 				</LinearLayout>
 			</LinearLayout>
 
