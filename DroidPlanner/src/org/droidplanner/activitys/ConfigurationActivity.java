@@ -83,23 +83,11 @@ public class ConfigurationActivity extends SuperUI {
 		public Fragment getItem(int position) {
 			switch (position) {
 			case 0:
-				return new TuningFragment();
-
+				return new ChecklistFragment();
 			case 1:
 				return new RcSetupFragment();
-
 			case 2:
-				return new SetupFragment();
-
-			case 3:
-				return new ModesSetupFragment();
-
-			case 4:
-				return new ChecklistFragment();
-
-			case 5:
 				return new ParamsFragment();
-
 			default:
 				return null;
 			}
@@ -107,30 +95,18 @@ public class ConfigurationActivity extends SuperUI {
 
 		@Override
 		public int getCount() {
-			return 6;
+			return 3;
 		}
 
 		@Override
 		public CharSequence getPageTitle(int position) {
 			switch (position) {
 			case 0:
-				return mContext.getString(R.string.screen_tuning);
-
+				return mContext.getString(R.string.screen_checklist);
 			case 1:
 				return mContext.getText(R.string.screen_rc);
-
 			case 2:
-				return mContext.getString(R.string.screen_cal);
-
-			case 3:
-				return mContext.getString(R.string.screen_modes);
-
-			case 4:
-				return mContext.getString(R.string.screen_checklist);
-
-			case 5:
 				return mContext.getText(R.string.screen_parameters);
-
 			default:
 				return null;
 			}
