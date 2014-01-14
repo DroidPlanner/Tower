@@ -52,7 +52,7 @@ local.properties
 
 
 #Do not ignore the versioning script
-!.externalToolBuilders/Verisoning.launch
+!.externalToolBuilders/*
 
 # PDT-specific
 .buildpath
