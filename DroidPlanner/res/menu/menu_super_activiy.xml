@@ -3,13 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools" >
     
     <item
-        android:id="@+id/menu_connect"
-        android:showAsAction="always"
-        android:title="@string/menu_connect"/>
+        android:id="@+id/menu_configuration"
+        android:showAsAction="never"
+        android:title="@string/configuration"/>
     <item
         android:id="@+id/menu_settings"
         android:showAsAction="never"
         android:title="@string/settings"/>
-    
-    
+    <item
+        android:id="@+id/menu_help"
+        android:showAsAction="never"
+        android:title="@string/help"/>
 </menu>

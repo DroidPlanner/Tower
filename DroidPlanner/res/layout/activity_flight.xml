@@ -48,7 +48,7 @@
 
     <SlidingDrawer
         android:id="@+id/SlidingDrawerLeft"
-        android:layout_width="210dp"
+        android:layout_width="260dp"
         android:layout_height="540dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
@@ -79,7 +79,7 @@
         android:visibility="gone"
 		<fragment
 			android:id="@+id/modeCircleFragment"
-			android:name="com.droidplanner.fragments.mode.ModeCircleFragment"
+			android:name="org.droidplanner.fragments.mode.ModeCircleFragment"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			android:layout_alignParentBottom="true"

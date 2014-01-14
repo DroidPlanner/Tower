@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res/com.droidplanner"
+    xmlns:app="http://schemas.android.com/apk/res/org.droidplanner"
     style="@style/configLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,7 +13,7 @@
         android:layout_height="0dp"
         android:layout_weight="5" >
 
-        <com.droidplanner.widgets.graph.Chart
+        <org.droidplanner.widgets.graph.Chart
             android:id="@+id/chartBottom"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -21,7 +21,7 @@
             android:layout_below="@+id/chartTop"
             android:layout_weight="1" />
 
-        <com.droidplanner.widgets.graph.Chart
+        <org.droidplanner.widgets.graph.Chart
             android:id="@+id/chartTop"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -67,7 +67,7 @@
 
 	    android:background="@color/opaque_white" >
 
-		<com.droidplanner.widgets.spinners.SpinnerSelfSelect
+		<org.droidplanner.widgets.spinners.SpinnerSelfSelect
 			android:id="@+id/spinnerWaypointType"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
@@ -140,7 +140,7 @@
 		    android:orientation="vertical"
 		    android:padding="12dp" >
 
-			<com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+			<org.droidplanner.widgets.SeekBarWithText.SeekBarWithText
 				android:id="@+id/SeekBarRollPitchStabP"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
@@ -153,9 +153,9 @@
 				app:min="2.0"
 				app:title="Stab P.\t"
 				>
-			</com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+			</org.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
 
-			<com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+			<org.droidplanner.widgets.SeekBarWithText.SeekBarWithText
 				android:id="@+id/SeekBarRollPitchControl"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
@@ -168,9 +168,9 @@
 				app:min="0.08"
 				app:title="Rate P.\t"
 				>
-			</com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+			</org.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
 
-			<com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+			<org.droidplanner.widgets.SeekBarWithText.SeekBarWithText
 				android:id="@+id/SeekBarRollPitchControl"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
@@ -183,9 +183,9 @@
 				app:min="0.00"
 				app:title="Rate I.\t\t"
 				>
-			</com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+			</org.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
 
-			<com.droidplanner.widgets.SeekBarWithText.SeekBarWithText
+			<org.droidplanner.widgets.SeekBarWithText.SeekBarWithText
 				android:id="@+id/SeekBarThrottleAccel"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
@@ -198,7 +198,7 @@
 				app:min="0.0"
 				app:title="Rate D.\t"
 				>
-			</com.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+			</org.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
 
 			<LinearLayout
 			    android:layout_width="fill_parent"

@@ -57,22 +57,13 @@
 
     <item
         android:id="@+id/bar_mode"
-        android:actionViewClass="com.droidplanner.widgets.spinners.SelectModeSpinner"
+        android:actionViewClass="org.droidplanner.widgets.spinners.SelectModeSpinner"
         android:showAsAction="always"
         tools:ignore="MenuTitle"/>
     <item
         android:id="@+id/menu_connect"
         android:showAsAction="never"
         android:title="@string/menu_disconnect"/>
-    <!--<item
-        android:id="@+id/menu_configuration"
-        android:showAsAction="never"
-        android:title="@string/configuration"/>-->
-    <item
-        android:id="@+id/menu_settings"
-        android:showAsAction="never"
-        android:title="@string/settings"/>
-
     <item
         android:id="@+id/menu_send_mission"
         android:showAsAction="never"
