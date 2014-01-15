@@ -244,14 +244,6 @@
         <item name="android:fontFamily">sans-serif-condensed</item>
         </style>
 
-    <style name="ModeDetailText">
-        <item name="android:textColor">@color/greyText</item>
-        <item name="android:textSize">14dp</item>
-	    <item name="android:textStyle">italic</item>
-        <item name="android:fontFamily">sans-serif-condensed</item>
-        <item name="android:padding">16dp</item>
-        </style>
-
     <style name="modeControl">
         <item name="android:textColor">#fff</item>
 	    <item name="android:textStyle">bold</item>
