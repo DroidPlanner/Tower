@@ -1,6 +1,8 @@
 package org.droidplanner.widgets.SeekBarWithText;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.text.InputType;
 import android.util.AttributeSet;
@@ -8,17 +10,14 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
-import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
-import android.view.KeyEvent;
+import android.view.Gravity;
 import android.view.View;
-import android.view.View.OnFocusChangeListener;
-import android.view.inputmethod.EditorInfo;
+import android.widget.TextView;
 
 import org.droidplanner.R;
 
 public class SeekBarWithText extends LinearLayout implements
-		OnSeekBarChangeListener, OnEditorActionListener, OnFocusChangeListener {
+		OnSeekBarChangeListener {
 
 	public interface OnTextSeekBarChangedListner {
 		public void onSeekBarChanged();
@@ -26,8 +25,6 @@ public class SeekBarWithText extends LinearLayout implements
 
 	private TextView textView;
 	private SeekBar seekBar;
-	private EditText editText;
-	private LinearLayout innerLayout;
 	private double min = 0;
 	private double inc = 1;
 	private String title = "";
@@ -64,38 +61,19 @@ public class SeekBarWithText extends LinearLayout implements
 		}
 	}
 
-	private void createViews(Context context) {
+	private void createViews(final Context context) {
 		setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
 				LayoutParams.WRAP_CONTENT));
-		setOrientation(HORIZONTAL);
-
-		innerLayout = new LinearLayout(context);
-		innerLayout.setLayoutParams(new LayoutParams(0,
-				LayoutParams.MATCH_PARENT, 9));
-		innerLayout.setOrientation(VERTICAL);
-		innerLayout.setFocusable(true);
-		innerLayout.setFocusableInTouchMode(true);
-
+		setOrientation(VERTICAL);
 		textView = new TextView(context);
-		editText = new EditText(context);
-		editText.setLayoutParams(new LayoutParams(80, LayoutParams.MATCH_PARENT));
-		editText.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL
-				| InputType.TYPE_CLASS_NUMBER);
-		editText.setOnEditorActionListener(this);
-		editText.setOnFocusChangeListener(this);
-
 		seekBar = new SeekBar(context);
 		seekBar.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-				LayoutParams.MATCH_PARENT));
+				LayoutParams.WRAP_CONTENT));
 		seekBar.setOnSeekBarChangeListener(this);
 
-		innerLayout.addView(textView);
-		innerLayout.addView(seekBar);
-		addView(innerLayout);
-		addView(editText);
+		addView(textView);
+		addView(seekBar);
 
-		editText.clearFocus();
-		innerLayout.requestFocus();
 	}
 
 	public void setMinMaxInc(double min, double max, double inc) {
@@ -120,7 +98,6 @@ public class SeekBarWithText extends LinearLayout implements
 	private void updateTitle() {
 		textView.setText(String.format("%s\t" + formatString + " %s", title,
 				getValue(), unit));
-		editText.setText(String.format(formatString, (getValue())));
 	}
 
 	public double getValue() {
@@ -129,7 +106,6 @@ public class SeekBarWithText extends LinearLayout implements
 
 	public void setValue(double value) {
 		seekBar.setProgress((int) ((value - min) / inc));
-		// editText.setText(String.valueOf(getValue()));
 	}
 
 	public void setAbsValue(double value) {
@@ -158,37 +134,6 @@ public class SeekBarWithText extends LinearLayout implements
 
 	public void setOnChangedListner(OnTextSeekBarChangedListner listner) {
 		this.listner = listner;
-	}
-
-	private void getValueFromEditText() {
-		double val;
-		try {
-			val = Double.parseDouble(editText.getText().toString());
-		} catch (NumberFormatException e) {
-			val = -1;
-			e.printStackTrace();
-		}
-		val = val > seekBar.getMax() ? seekBar.getMax() : val;
-		val = val < min ? min : val;
-		setValue(val);
-	}
-
-
-	@Override
-	public void onFocusChange(View v, boolean isFocused) {
-		if (v.equals(editText)&& isFocused!=true) {
-			getValueFromEditText();
-		}
-	}
-
-	@Override
-	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-		if (v.equals(editText)) {
-			if (actionId == EditorInfo.IME_ACTION_DONE) {
-				getValueFromEditText();
-			}
-		}
-		return false;
 	}
 
 }
