@@ -15,10 +15,9 @@ import org.droidplanner.fragments.calibration.rc.FragmentSetupRCMiddle;
 import org.droidplanner.fragments.calibration.rc.FragmentSetupRCMinMax;
 import org.droidplanner.fragments.calibration.rc.FragmentSetupRCOptions;
 import org.droidplanner.fragments.calibration.rc.FragmentSetupRCProgress;
-import org.droidplanner.widgets.FillBar.FillBarMinMaxL;
-import org.droidplanner.widgets.FillBar.FillBarMinMaxR;
-import org.droidplanner.widgets.FillBar.FillBarMinMaxText;
+import org.droidplanner.widgets.FillBar.FillBar;
 import org.droidplanner.widgets.RcStick.RcStick;
+import android.widget.TextView;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -48,8 +47,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner, OnCalib
 	// Extreme RC update rate in this screen
 	private static final int RC_MSG_RATE = 50;
 
-	private static final String[] RCStr = { "AIL ", "ELE ", "THR ", "RUD ",
-			"CH 5", "CH 6", "CH 7", "CH 8" };
+	private static final String[] RCStr = { "CH 1 ", "CH 2 ", "CH 3 ", "CH 4 ", "CH 5", "CH 6", "CH 7", "CH 8" };
 
 	private Drone drone;
 
@@ -57,20 +55,27 @@ public class RcSetupFragment extends Fragment implements OnDroneListner, OnCalib
 	private CH_CalParameters chParameters;
 	private CalParameters currParameters;
 
-	private FillBarMinMaxR barELE;
-	private FillBarMinMaxL barTHR;
-	private FillBarMinMaxText barYAW;
-	private FillBarMinMaxText barAIL;
-	private FillBarMinMaxText bar5;
-	private FillBarMinMaxText bar6;
-	private FillBarMinMaxText bar7;
-	private FillBarMinMaxText bar8;
+	private FillBar 	bar1;
+	private FillBar		bar2;
+	private FillBar 	bar3;
+	private FillBar 	bar4;
+	private FillBar 	bar5;
+	private FillBar 	bar6;
+	private FillBar 	bar7;
+	private FillBar 	bar8;
+;
+	private TextView	roll_pitch_text;
+	private TextView	thr_yaw_text;
+	private TextView	ch_5_text;
+	private TextView	ch_6_text;
+	private TextView	ch_7_text;
+	private TextView	ch_8_text;
 
-	private RcStick stickLeft;
-	private RcStick stickRight;
+	private RcStick 	stickLeft;
+	private RcStick 	stickRight;
 
 	private FragmentManager fragmentManager;
-	private Fragment setupPanel;
+	private Fragment 		setupPanel;
 
 	private int data[] = new int[8];
     private int cMin[] = new int[8];
@@ -84,6 +89,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner, OnCalib
 
         fragmentManager = getChildFragmentManager();
         setupPanel = fragmentManager.findFragmentById(R.id.fragment_setup_rc_panel);
+
         if (setupPanel == null) {
             setupPanel = new FragmentSetupRCMenu();
             fragmentManager
@@ -163,14 +169,21 @@ public class RcSetupFragment extends Fragment implements OnDroneListner, OnCalib
 
 	private void onNewInputRcData() {
 		data = drone.RC.in;
-		barAIL.setValue(data[0]);
-		barELE.setValue(data[1]);
-		barTHR.setValue(data[2]);
-		barYAW.setValue(data[3]);
+		bar1.setValue(data[0]);
+		bar2.setValue(data[1]);
+		bar3.setValue(data[2]);
+		bar4.setValue(data[3]);
 		bar5.setValue(data[4]);
 		bar6.setValue(data[5]);
 		bar7.setValue(data[6]);
 		bar8.setValue(data[7]);
+
+		roll_pitch_text.setText("Roll: " + Integer.toString(data[0]) + "\nPitch: " + Integer.toString(data[1]));
+		thr_yaw_text.setText("Throttle: " + Integer.toString(data[2]) + "\nYaw: " + Integer.toString(data[3]));
+		ch_5_text.setText("CH 5: " + Integer.toString(data[4]));
+		ch_6_text.setText("CH 6: " + Integer.toString(data[5]));
+		ch_7_text.setText("CH 7: " + Integer.toString(data[6]));
+		ch_8_text.setText("CH 8: " + Integer.toString(data[7]));
 
 		float x, y;
 		x = (data[3] - RC_MIN) / ((float) (RC_MAX - RC_MIN)) * 2 - 1;
@@ -185,30 +198,40 @@ public class RcSetupFragment extends Fragment implements OnDroneListner, OnCalib
 	private void setupLocalViews(View view) {
 		stickLeft = (RcStick) view.findViewById(R.id.stickLeft);
 		stickRight = (RcStick) view.findViewById(R.id.stickRight);
-		barTHR = (FillBarMinMaxL) view.findViewById(R.id.fillBarTHR);
-		barELE = (FillBarMinMaxR) view.findViewById(R.id.fillBarELE);
-		barYAW = (FillBarMinMaxText) view.findViewById(R.id.fillBarYAW);
-		barAIL = (FillBarMinMaxText) view.findViewById(R.id.fillBarAIL);
-		bar5 = (FillBarMinMaxText) view.findViewById(R.id.fillBar5);
-		bar6 = (FillBarMinMaxText) view.findViewById(R.id.fillBar6);
-		bar7 = (FillBarMinMaxText) view.findViewById(R.id.fillBar7);
-		bar8 = (FillBarMinMaxText) view.findViewById(R.id.fillBar8);
 
-		barAIL.setup("AILERON", RC_MAX, RC_MIN);
-		barELE.setup("ELEVATOR", RC_MAX, RC_MIN);
-		barTHR.setup("THROTTLE", RC_MAX, RC_MIN);
-		barYAW.setup("RUDDER", RC_MAX, RC_MIN);
-		bar5.setup("CH 5", RC_MAX, RC_MIN);
-		bar6.setup("CH 6", RC_MAX, RC_MIN);
-		bar7.setup("CH 7", RC_MAX, RC_MIN);
-		bar8.setup("CH 8", RC_MAX, RC_MIN);
+		bar1 = (FillBar) view.findViewById(R.id.fillBar1);
+		bar2 = (FillBar) view.findViewById(R.id.fillBar2);
+		bar3 = (FillBar) view.findViewById(R.id.fillBar3);
+		bar4 = (FillBar) view.findViewById(R.id.fillBar4);
+		bar5   = (FillBar) view.findViewById(R.id.fillBar5);
+		bar6   = (FillBar) view.findViewById(R.id.fillBar6);
+		bar7   = (FillBar) view.findViewById(R.id.fillBar7);
+		bar8   = (FillBar) view.findViewById(R.id.fillBar8);
+		bar2.invertBar(true);
+
+		roll_pitch_text    = (TextView) view.findViewById(R.id.roll_pitch_text);
+		thr_yaw_text   = (TextView) view.findViewById(R.id.thr_yaw_text);
+		ch_5_text   = (TextView) view.findViewById(R.id.ch_5_text);
+		ch_6_text   = (TextView) view.findViewById(R.id.ch_6_text);
+		ch_7_text   = (TextView) view.findViewById(R.id.ch_7_text);
+		ch_8_text   = (TextView) view.findViewById(R.id.ch_8_text);
+
+
+		bar1.setup(RC_MAX, RC_MIN);
+		bar2.setup(RC_MAX, RC_MIN);
+		bar3.setup(RC_MAX, RC_MIN);
+		bar4.setup(RC_MAX, RC_MIN);
+		bar5.setup(RC_MAX, RC_MIN);
+		bar6.setup(RC_MAX, RC_MIN);
+		bar7.setup(RC_MAX, RC_MIN);
+		bar8.setup(RC_MAX, RC_MIN);
 	}
 
 	private void setFillBarShowMinMax(boolean b) {
-		barAIL.setShowMinMax(b);
-		barELE.setShowMinMax(b);
-		barTHR.setShowMinMax(b);
-		barYAW.setShowMinMax(b);
+		bar1.setShowMinMax(b);
+		bar2.setShowMinMax(b);
+		bar3.setShowMinMax(b);
+		bar4.setShowMinMax(b);
 		bar5.setShowMinMax(b);
 		bar6.setShowMinMax(b);
 		bar7.setShowMinMax(b);
@@ -284,23 +307,23 @@ public class RcSetupFragment extends Fragment implements OnDroneListner, OnCalib
 	private String getCalibrationStr() {
 		String txt = "RC #\t\tMIN\t\tMID\t\tMAX";
 
-		cMin[0] = barAIL.getMin();
-		cMin[1] = barELE.getMin();
-		cMin[2] = barTHR.getMin();
-		cMin[3] = barYAW.getMin();
-		cMin[4] = bar5.getMin();
-		cMin[5] = bar6.getMin();
-		cMin[6] = bar7.getMin();
-		cMin[7] = bar8.getMin();
+		cMin[0] = bar1.getMinValue();
+		cMin[1] = bar2.getMinValue();
+		cMin[2] = bar3.getMinValue();
+		cMin[3] = bar4.getMinValue();
+		cMin[4] = bar5.getMinValue();
+		cMin[5] = bar6.getMinValue();
+		cMin[6] = bar7.getMinValue();
+		cMin[7] = bar8.getMinValue();
 
-		cMax[0] = barAIL.getMax();
-		cMax[1] = barELE.getMax();
-		cMax[2] = barTHR.getMax();
-		cMax[3] = barYAW.getMax();
-		cMax[4] = bar5.getMax();
-		cMax[5] = bar6.getMax();
-		cMax[6] = bar7.getMax();
-		cMax[7] = bar8.getMax();
+		cMax[0] = bar1.getMaxValue();
+		cMax[1] = bar2.getMaxValue();
+		cMax[2] = bar3.getMaxValue();
+		cMax[3] = bar4.getMaxValue();
+		cMax[4] = bar5.getMaxValue();
+		cMax[5] = bar6.getMaxValue();
+		cMax[6] = bar7.getMaxValue();
+		cMax[7] = bar8.getMaxValue();
 
 		if (data != null)
 			cMid = data;

@@ -28,14 +28,15 @@ public class RcStick extends View {
 	}
 
 	private void initialize() {
-		paintOutline = new Paint();
-		paintOutline.setAntiAlias(true);
-		paintOutline.setStyle(Style.STROKE);
-		paintOutline.setStrokeWidth(3);
-		paintOutline.setColor(Color.parseColor("#E0E0E0"));
-
-		paintFill = new Paint(paintOutline);
+		paintFill = new Paint();
+		paintFill.setAntiAlias(true);
 		paintFill.setStyle(Style.FILL);
+		paintFill.setColor(Color.parseColor("#333333"));
+
+		paintOutline = new Paint(paintFill);
+		paintOutline.setColor(Color.parseColor("#3CB4E5"));
+		paintOutline.setStrokeWidth(6);
+		paintOutline.setStyle(Style.STROKE);
 	}
 
 	@Override
@@ -52,9 +53,9 @@ public class RcStick extends View {
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 
-		canvas.drawRoundRect(borders, stickRadius, stickRadius, paintOutline);
+		canvas.drawRoundRect(borders, stickRadius, stickRadius, paintFill);
 
-		canvas.drawCircle(xPos, yPos, stickRadius, paintFill);
+		canvas.drawCircle(xPos, yPos, stickRadius, paintOutline);
 	}
 
 	public void setPosition(float x, float y) {

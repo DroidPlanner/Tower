@@ -68,7 +68,7 @@
     <string name="sidelap">Sidelap:</string>
     <string name="screen_planning">Planning</string>
     <string name="screen_flight_data">Flight Data</string>
-    <string name="screen_rc">Radio Calibration</string>
+    <string name="screen_rc">Radio</string>
     <string name="screen_parameters">Parameters</string>
     <string name="screen_camera">Camera</string>
     <string name="screen_gcp">GCP</string>
@@ -206,13 +206,13 @@
     <string name="metadata_custom_value">** Custom value **</string>
     <string name="refreshing_parameters">Refreshing Parameters&#8230;</string>
     <string name="parameters_saved">Parameters saved</string>
-   
+
     <string name="RCFailsafe">Warning! RC Failsafe – Returning to Launch</string>
     <string name="GPSFailsafe">Warning! GPS Failsafe – Switching to Altitude Hold</string>
     <string name="BatteryFailsafeLand">Warning! Battery Failsafe – Returning to Launch</string>
     <string name="BatteryFailsafeRTL">Warning! Battery Failsafe – Returning to Launch</string>
-    
-    
+
+
     <string name="mode_switch">Assign RC channel 5 to a switch on your radio to control flight modes. Move the switch to each position and select the desired flight mode below.</string>
     <string name="Pause">Pause</string>
     <string name="screen_tuning">Tuning</string>
@@ -221,15 +221,15 @@
     <string name="screen_checklist">Checklist</string>
 
     <string name="MAVLinkError">MAVLink Error:</string>
-    
+
     <string name="msg_connect_first">Please connect first</string>
-    
+
     <string name="msg_parameters_written_to_drone">"parameters written to drone"</string>
-    
+
     <string name="set_to_zero_to_disable">(set to zero to disable).</string>
-    
+
     <string name="mode1_throttle_on_right_stick">Mode1: Throttle on RIGHT stick</string>
-    
+
     <string name="mode2_throttle_on_left_stick">Mode2: Throttle on LEFT stick</string>
 
     <string name="rc_title_options">RC options</string>

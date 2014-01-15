@@ -37,7 +37,6 @@ public class FlightMapFragment extends DroneMap implements
 	private MapPath droneLeashPath;
 	private int maxFlightPathSize;
 	public boolean isAutoPanEnabled;
-	private boolean isGuidedModeEnabled;
 
 	public boolean hasBeenZoomed = false;
 
@@ -66,8 +65,6 @@ public class FlightMapFragment extends DroneMap implements
 				.getDefaultSharedPreferences(context);
 		maxFlightPathSize = Integer.valueOf(prefs.getString(
 				"pref_max_fligth_path_size", "0"));
-		isGuidedModeEnabled = prefs.getBoolean("pref_guided_mode_enabled",
-				false);
 		isAutoPanEnabled = prefs.getBoolean("pref_auto_pan_enabled", false);
 	}
 
@@ -115,9 +112,7 @@ public class FlightMapFragment extends DroneMap implements
 
 	@Override
 	public void onMapLongClick(LatLng coord) {
-		getPreferences();
-		if (isGuidedModeEnabled && drone.MavClient.isConnected())
-			drone.guidedPoint.newGuidedPointWithCurrentAlt(coord);
+		drone.guidedPoint.changeGuidedCoordinate(coord);
 	}
 
 	@Override
@@ -130,12 +125,12 @@ public class FlightMapFragment extends DroneMap implements
 
 	@Override
 	public void onMarkerDragEnd(Marker marker) {
-		drone.guidedPoint.newGuidedPointwithLastAltitude(marker.getPosition());
+		drone.guidedPoint.changeGuidedCoordinate(marker.getPosition());
 	}
 
 	@Override
 	public boolean onMarkerClick(Marker marker) {
-		drone.guidedPoint.newGuidedPointWithCurrentAlt(marker.getPosition());
+		drone.guidedPoint.changeGuidedCoordinate(marker.getPosition());
 		return true;
 	}
 
