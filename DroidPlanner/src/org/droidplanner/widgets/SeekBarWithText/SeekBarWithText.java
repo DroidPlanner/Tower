@@ -74,7 +74,44 @@ public class SeekBarWithText extends LinearLayout implements
 		addView(textView);
 		addView(seekBar);
 
-	}
+		textView.setOnLongClickListener(new View.OnLongClickListener() {
+
+			@Override
+			public boolean onLongClick(View v) {
+				AlertDialog.Builder alert = new AlertDialog.Builder(context);
+				alert.setTitle(String.format("Enter value for %s ",title));
+				alert.setMessage(unit.isEmpty()?"":(String.format("Value is in %s",unit)));
+
+				final EditText input = new EditText(context);
+				
+				input.setInputType(InputType.TYPE_CLASS_NUMBER|InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
+				alert.setView(input);
+
+				alert.setPositiveButton("OK",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								try {
+									setValue(Double.parseDouble(input.getEditableText().toString()));
+								} catch (NumberFormatException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							}
+						});
+				alert.setNegativeButton("CANCEL",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								dialog.cancel();
+							}
+						});
+				AlertDialog alertDialog = alert.create();
+				alertDialog.show();
+				return false;
+			}
+		});	}
 
 	public void setMinMaxInc(double min, double max, double inc) {
 		this.min = min;
