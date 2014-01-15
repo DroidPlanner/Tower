@@ -1,7 +1,5 @@
 package org.droidplanner.widgets.SeekBarWithText;
 
-import java.text.DecimalFormat;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,7 +10,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
