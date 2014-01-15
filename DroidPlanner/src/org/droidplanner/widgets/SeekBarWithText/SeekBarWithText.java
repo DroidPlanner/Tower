@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
@@ -90,6 +91,8 @@ public class SeekBarWithText extends LinearLayout implements
 
 				input.setInputType(InputType.TYPE_CLASS_NUMBER
 						| InputType.TYPE_NUMBER_FLAG_DECIMAL);
+				input.setGravity(Gravity.RIGHT);
+				
 				input.setText(String.format(formatString, getValue()));
 				alert.setView(input);
 
