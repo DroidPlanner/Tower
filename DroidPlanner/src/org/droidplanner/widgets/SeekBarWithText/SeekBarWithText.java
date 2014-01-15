@@ -1,5 +1,7 @@
 package org.droidplanner.widgets.SeekBarWithText;
 
+import java.text.DecimalFormat;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -85,7 +87,7 @@ public class SeekBarWithText extends LinearLayout implements
 				final EditText input = new EditText(context);
 				
 				input.setInputType(InputType.TYPE_CLASS_NUMBER|InputType.TYPE_NUMBER_FLAG_DECIMAL);
-
+				input.setText(String.format(formatString, getValue()));
 				alert.setView(input);
 
 				alert.setPositiveButton("OK",
@@ -93,7 +95,7 @@ public class SeekBarWithText extends LinearLayout implements
 							public void onClick(DialogInterface dialog,
 									int whichButton) {
 								try {
-									setValue(Double.parseDouble(input.getEditableText().toString()));
+									setValue(Double.valueOf(input.getEditableText().toString()));
 								} catch (NumberFormatException e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
@@ -142,7 +144,7 @@ public class SeekBarWithText extends LinearLayout implements
 	}
 
 	public void setValue(double value) {
-		seekBar.setProgress((int) ((value - min) / inc));
+		seekBar.setProgress((int) (Math.round((value - min) / inc)));
 	}
 
 	public void setAbsValue(double value) {
