@@ -3,6 +3,7 @@ package org.droidplanner.widgets.SeekBarWithText;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.text.InputType;
 import android.util.AttributeSet;
@@ -78,12 +79,17 @@ public class SeekBarWithText extends LinearLayout implements
 			@Override
 			public boolean onLongClick(View v) {
 				AlertDialog.Builder alert = new AlertDialog.Builder(context);
-				alert.setTitle(String.format("Enter value for %s ",title));
-				alert.setMessage(unit.isEmpty()?"":(String.format("Value is in %s",unit)));
+				alert.setTitle(String.format(
+						getResources().getString(R.string.seekbar_edit_title),
+						title));
+				alert.setMessage(unit.isEmpty() ? "" : (String.format(
+						getResources().getString(R.string.seekbar_edit_unit),
+						unit)));
 
 				final EditText input = new EditText(context);
-				
-				input.setInputType(InputType.TYPE_CLASS_NUMBER|InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
+				input.setInputType(InputType.TYPE_CLASS_NUMBER
+						| InputType.TYPE_NUMBER_FLAG_DECIMAL);
 				input.setText(String.format(formatString, getValue()));
 				alert.setView(input);
 
@@ -92,7 +98,8 @@ public class SeekBarWithText extends LinearLayout implements
 							public void onClick(DialogInterface dialog,
 									int whichButton) {
 								try {
-									setValue(Double.valueOf(input.getEditableText().toString()));
+									setValue(Double.valueOf(input
+											.getEditableText().toString()));
 								} catch (NumberFormatException e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
@@ -110,7 +117,8 @@ public class SeekBarWithText extends LinearLayout implements
 				alertDialog.show();
 				return false;
 			}
-		});	}
+		});
+	}
 
 	public void setMinMaxInc(double min, double max, double inc) {
 		this.min = min;
