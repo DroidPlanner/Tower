@@ -80,6 +80,7 @@ public class NumberFieldEdit extends LinearLayout {
 		
 		editText.setInputType(InputType.TYPE_CLASS_NUMBER|InputType.TYPE_NUMBER_FLAG_DECIMAL);
 		editText.clearFocus();
+
 		
 		LayoutParams p =new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
 		p.setMargins(5, 0, 0, 0);

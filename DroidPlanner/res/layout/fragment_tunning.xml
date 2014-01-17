@@ -136,65 +136,41 @@
 			android:padding="12dp"
 			android:orientation="vertical" >
 
-			<org.droidplanner.widgets.SeekBarWithText.SeekBarWithText
-				android:id="@+id/SeekBarRollPitchStabP"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_alignParentLeft="true"
-				android:layout_below="@+id/textView1"
-				android:layout_weight="1"
-				app:formatString="%1.1f"
-				app:inc="0.1"
-				app:max="5.0"
-				app:min="2.0"
-				app:title="Stab P.\t"
-				>
-			</org.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+			<org.droidplanner.widgets.NumberFieldEdit.NumberFieldEdit
+			    android:id="@+id/numberFieldEdit1"
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    app:Inc="0.1"
+			    app:Max="100"
+			    app:Min="0"
+			    app:Title="Stab. P" >
 
-			<org.droidplanner.widgets.SeekBarWithText.SeekBarWithText
-				android:id="@+id/SeekBarRollPitchControl"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_alignParentLeft="true"
-				android:layout_below="@+id/SeekBarRollPitchDampenning"
-				android:layout_weight="1"
-				app:formatString="%1.2f"
-				app:inc="0.01"
-				app:max="0.4"
-				app:min="0.08"
-				app:title="Rate P.\t"
-				>
-			</org.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+			</org.droidplanner.widgets.NumberFieldEdit.NumberFieldEdit>
 
-			<org.droidplanner.widgets.SeekBarWithText.SeekBarWithText
-				android:id="@+id/SeekBarRollPitchControl"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_alignParentLeft="true"
-				android:layout_below="@+id/SeekBarYawControl"
-				android:layout_weight="1"
-				app:formatString="%1.2f"
-				app:inc="0.01"
-				app:max="0.6"
-				app:min="0.00"
-				app:title="Rate I.\t\t"
-				>
-			</org.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+			<org.droidplanner.widgets.NumberFieldEdit.NumberFieldEdit
+			    android:id="@+id/numberFieldEdit1"
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    app:Title="Rate P" >
 
-			<org.droidplanner.widgets.SeekBarWithText.SeekBarWithText
-				android:id="@+id/SeekBarThrottleAccel"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_alignParentLeft="true"
-				android:layout_below="@+id/SeekBarRollPitchControl"
-				android:layout_weight="1"
-				app:formatString="%1.3f"
-				app:inc="0.001"
-				app:max=".014"
-				app:min="0.0"
-				app:title="Rate D.\t"
-				>
-			</org.droidplanner.widgets.SeekBarWithText.SeekBarWithText>
+			</org.droidplanner.widgets.NumberFieldEdit.NumberFieldEdit>
+
+			<org.droidplanner.widgets.NumberFieldEdit.NumberFieldEdit
+			    android:id="@+id/numberFieldEdit1"
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    app:Title="Rate I" >
+
+			</org.droidplanner.widgets.NumberFieldEdit.NumberFieldEdit>
+
+			<org.droidplanner.widgets.NumberFieldEdit.NumberFieldEdit
+			    android:id="@+id/numberFieldEdit1"
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    app:Title="Rate D" >
+
+			</org.droidplanner.widgets.NumberFieldEdit.NumberFieldEdit>
+
 		</LinearLayout>
 
 		<LinearLayout
