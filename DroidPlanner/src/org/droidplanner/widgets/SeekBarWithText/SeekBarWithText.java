@@ -1,11 +1,18 @@
 package org.droidplanner.widgets.SeekBarWithText;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.text.InputType;
 import android.util.AttributeSet;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.view.Gravity;
+import android.view.View;
 import android.widget.TextView;
 
 import org.droidplanner.R;
@@ -50,12 +57,12 @@ public class SeekBarWithText extends LinearLayout implements
 	}
 
 	private void setFormat(String string) {
-		if (string!=null) {
+		if (string != null) {
 			formatString = string;
-		}		
+		}
 	}
 
-	private void createViews(Context context) {
+	private void createViews(final Context context) {
 		setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
 				LayoutParams.WRAP_CONTENT));
 		setOrientation(VERTICAL);
@@ -64,8 +71,56 @@ public class SeekBarWithText extends LinearLayout implements
 		seekBar.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
 				LayoutParams.WRAP_CONTENT));
 		seekBar.setOnSeekBarChangeListener(this);
+
 		addView(textView);
 		addView(seekBar);
+
+		textView.setOnLongClickListener(new View.OnLongClickListener() {
+
+			@Override
+			public boolean onLongClick(View v) {
+				AlertDialog.Builder alert = new AlertDialog.Builder(context);
+				alert.setTitle(String.format(
+						getResources().getString(R.string.seekbar_edit_title),
+						title));
+				alert.setMessage(unit.isEmpty() ? "" : (String.format(
+						getResources().getString(R.string.seekbar_edit_unit),
+						unit)));
+
+				final EditText input = new EditText(context);
+
+				input.setInputType(InputType.TYPE_CLASS_NUMBER
+						| InputType.TYPE_NUMBER_FLAG_DECIMAL);
+				input.setGravity(Gravity.RIGHT);
+				
+				input.setText(String.format(formatString, getValue()));
+				alert.setView(input);
+
+				alert.setPositiveButton("OK",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								try {
+									setValue(Double.valueOf(input
+											.getEditableText().toString()));
+								} catch (NumberFormatException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							}
+						});
+				alert.setNegativeButton("CANCEL",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								dialog.cancel();
+							}
+						});
+				AlertDialog alertDialog = alert.create();
+				alertDialog.show();
+				return false;
+			}
+		});
 	}
 
 	public void setMinMaxInc(double min, double max, double inc) {
@@ -76,7 +131,7 @@ public class SeekBarWithText extends LinearLayout implements
 
 	public void setUnit(String unit) {
 		if (unit != null) {
-			this.unit = unit;			
+			this.unit = unit;
 		}
 	}
 
@@ -88,7 +143,8 @@ public class SeekBarWithText extends LinearLayout implements
 	}
 
 	private void updateTitle() {
-		textView.setText(String.format("%s\t"+formatString+" %s", title, getValue(), unit));
+		textView.setText(String.format("%s\t" + formatString + " %s", title,
+				getValue(), unit));
 	}
 
 	public double getValue() {
@@ -96,11 +152,11 @@ public class SeekBarWithText extends LinearLayout implements
 	}
 
 	public void setValue(double value) {
-		seekBar.setProgress((int) ((value - min) / inc));
+		seekBar.setProgress((int) (Math.round((value - min) / inc)));
 	}
 
 	public void setAbsValue(double value) {
-		if(value<0)
+		if (value < 0)
 			value *= -1.0;
 		seekBar.setProgress((int) ((value - min) / inc));
 	}
