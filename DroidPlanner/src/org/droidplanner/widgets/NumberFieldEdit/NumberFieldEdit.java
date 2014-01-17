@@ -76,7 +76,9 @@ public class NumberFieldEdit extends LinearLayout {
 		
 		textView.setLayoutParams(new LayoutParams(0,LayoutParams.MATCH_PARENT,5));
 		editText.setLayoutParams(new LayoutParams(0,LayoutParams.MATCH_PARENT,5));
-		buttonLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.MATCH_PARENT,2));
+		buttonLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
+		buttonLayout.setFocusable(true);
+		buttonLayout.setFocusableInTouchMode(true);
 		
 		editText.setInputType(InputType.TYPE_CLASS_NUMBER|InputType.TYPE_NUMBER_FLAG_DECIMAL);
 		editText.clearFocus();
@@ -94,10 +96,15 @@ public class NumberFieldEdit extends LinearLayout {
 		buttonMinus.setImageResource(R.drawable.ic_minus);
 		buttonMinus.setLayoutParams(p);
 		
+		buttonLayout.addView(buttonPlus);
+		buttonLayout.addView(buttonMinus);
+
 		addView(textView);
 		addView(editText);
-		addView(buttonPlus);
-		addView(buttonMinus);
+		addView(buttonLayout);
+		
+		editText.clearFocus();
+		buttonLayout.requestFocus();
 	}
 
 	public void setMinMaxInc(double min, double max, double inc) {
