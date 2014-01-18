@@ -15,6 +15,7 @@ public abstract class SetupMainPanel extends Fragment{
     public abstract SetupSidePanel getSidePanel();
     public abstract void setupLocalViews(View v);
     public abstract int getPanelLayout();
+    public abstract void doCalibrationStep(int step);
     
     @Override
 	public void onAttach(Activity activity) {
@@ -45,7 +46,4 @@ public abstract class SetupMainPanel extends Fragment{
 		return view;
 	}
 
-    public void doCalibrationStep() {
-        //TODO: complete implementation
-    }
 }
