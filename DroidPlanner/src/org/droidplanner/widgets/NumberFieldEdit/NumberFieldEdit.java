@@ -18,7 +18,8 @@ import org.droidplanner.R;
 
 public class NumberFieldEdit extends LinearLayout implements OnTouchListener {
 
-	private TextView textView;
+	private TextView titleText;
+	private TextView separatorText;
 	private EditText editText;
 	private LinearLayout buttonLayout;
 	private ImageButton buttonPlus;
@@ -29,6 +30,7 @@ public class NumberFieldEdit extends LinearLayout implements OnTouchListener {
 	private double value = 0.0;
 	private String title = "Title";
 	private String unit = "";
+	private String separator = ";";
 	private String formatString = "%2.1f";
 	private short delay = 1000;
 	private boolean countUp;
@@ -52,6 +54,7 @@ public class NumberFieldEdit extends LinearLayout implements OnTouchListener {
 					a.getFloat(R.styleable.NumberFieldEdit_Max, 100),
 					a.getFloat(R.styleable.NumberFieldEdit_Inc, 1));
 			setFormat(a.getString(R.styleable.NumberFieldEdit_Format));
+			setSeparator(a.getString(R.styleable.NumberFieldEdit_Separator));
 			setValue(this.value);
 		} finally {
 			a.recycle();
@@ -69,24 +72,31 @@ public class NumberFieldEdit extends LinearLayout implements OnTouchListener {
 				LayoutParams.WRAP_CONTENT));
 		setOrientation(HORIZONTAL);
 
-		textView = new TextView(context);
+		titleText = new TextView(context);
+		separatorText = new TextView(context);
 		editText = new EditText(context);
 		buttonPlus = new ImageButton(context);
 		buttonMinus = new ImageButton(context);
 		buttonLayout = new LinearLayout(context);
 
-		textView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
+		titleText.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
+		separatorText.setGravity(Gravity.CENTER_HORIZONTAL
+				| Gravity.CENTER_VERTICAL);
 		editText.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
 
-		textView.setTextSize(16);
+		titleText.setTextSize(16);
+		separatorText.setTextSize(16);
 		editText.setTextSize(16);
 
-		textView.setLayoutParams(new LayoutParams(0, LayoutParams.MATCH_PARENT,
-				5));
+		separatorText.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
+				LayoutParams.MATCH_PARENT));
+		titleText.setLayoutParams(new LayoutParams(0,
+				LayoutParams.MATCH_PARENT, 5));
 		editText.setLayoutParams(new LayoutParams(0, LayoutParams.MATCH_PARENT,
 				5));
 		buttonLayout.setLayoutParams(new LayoutParams(
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+
 		buttonLayout.setFocusable(true);
 		buttonLayout.setFocusableInTouchMode(true);
 
@@ -112,7 +122,8 @@ public class NumberFieldEdit extends LinearLayout implements OnTouchListener {
 		buttonLayout.addView(buttonPlus);
 		buttonLayout.addView(buttonMinus);
 
-		addView(textView);
+		addView(titleText);
+		addView(separatorText);
 		addView(editText);
 		addView(buttonLayout);
 
@@ -140,10 +151,28 @@ public class NumberFieldEdit extends LinearLayout implements OnTouchListener {
 		}
 	}
 
+	public void setSeparator(CharSequence text) {
+		if (text != null) {
+			this.separator = (String) text;
+			updateSeparator();
+		}
+	}
+
+	private void updateSeparator() {
+		String t = separator;
+		if (t.isEmpty()) {
+			separatorText.setVisibility(GONE);
+		} else {
+
+			separatorText.setVisibility(VISIBLE);
+			separatorText.setText(separator);
+		}
+	}
+
 	private void updateTitle() {
 		String t = title;
 		t += unit.isEmpty() ? "" : String.format(" (%s)", unit);
-		textView.setText(t);
+		titleText.setText(t);
 	}
 
 	public double getValue() {
@@ -190,7 +219,7 @@ public class NumberFieldEdit extends LinearLayout implements OnTouchListener {
 			countUp = v.equals(buttonPlus);
 
 			if (event.getAction() == MotionEvent.ACTION_DOWN) {
-				if (!waitingForLongPress ) {
+				if (!waitingForLongPress) {
 					waitingForLongPress = true;
 					handler.postDelayed(mLongPressed, delay);
 				}

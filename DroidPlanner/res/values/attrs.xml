@@ -5,6 +5,7 @@
         <attr name="Title" format="string" />
         <attr name="Unit" format="string" />
         <attr name="Format" format="string" />
+        <attr name="Separator" format="string" />
         <attr name="Min" format="float" />
         <attr name="Inc" format="float" />
         <attr name="Max" format="float" />

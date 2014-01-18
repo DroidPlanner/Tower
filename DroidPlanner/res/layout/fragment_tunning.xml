@@ -144,6 +144,7 @@
 			    app:Inc="0.1"
 			    app:Max="100"
 			    app:Min="0"
+			    app:Separator=":"
 			    app:Title="Stab. P" >
 
 			</org.droidplanner.widgets.NumberFieldEdit.NumberFieldEdit>
@@ -152,6 +153,7 @@
 			    android:id="@+id/numberFieldEdit1"
 			    android:layout_width="fill_parent"
 			    android:layout_height="wrap_content"
+			    app:Separator=":"
 			    app:Title="Rate P" >
 
 			</org.droidplanner.widgets.NumberFieldEdit.NumberFieldEdit>
@@ -160,6 +162,7 @@
 			    android:id="@+id/numberFieldEdit1"
 			    android:layout_width="fill_parent"
 			    android:layout_height="wrap_content"
+			    app:Separator=":"
 			    app:Title="Rate I" >
 
 			</org.droidplanner.widgets.NumberFieldEdit.NumberFieldEdit>
@@ -168,6 +171,7 @@
 			    android:id="@+id/numberFieldEdit1"
 			    android:layout_width="fill_parent"
 			    android:layout_height="wrap_content"
+			    app:Separator=":"
 			    app:Title="Rate D" >
 
 			</org.droidplanner.widgets.NumberFieldEdit.NumberFieldEdit>
