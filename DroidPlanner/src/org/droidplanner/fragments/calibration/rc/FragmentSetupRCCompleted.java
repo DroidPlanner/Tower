@@ -1,8 +1,8 @@
 package org.droidplanner.fragments.calibration.rc;
 
-import org.droidplanner.fragments.RcSetupFragment;
+import org.droidplanner.fragments.SetupRadioFragment;
+import org.droidplanner.fragments.calibration.SetupSidePanel;
 
-import android.support.v4.app.Fragment;
 import org.droidplanner.R;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class FragmentSetupRCCompleted extends Fragment {
+public class FragmentSetupRCCompleted extends SetupSidePanel {
 
     public final static String EXTRA_TEXT_SUMMARY = FragmentSetupRCCompleted.class.getName() + "" +
             ".extra.TEXT_SUMMARY";
@@ -21,7 +21,7 @@ public class FragmentSetupRCCompleted extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-        final RcSetupFragment rcSetupFragment = (RcSetupFragment) getParentFragment();
+		final SetupRadioFragment setupFragment = (SetupRadioFragment) getParentFragment();
 
 		final View view = inflater.inflate(R.layout.fragment_setup_rc_completed, container,	false);
 		final TextView textView = (TextView)view.findViewById(R.id.textViewSummary);
@@ -35,8 +35,8 @@ public class FragmentSetupRCCompleted extends Fragment {
 		btnSend.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(rcSetupFragment != null){
-                    rcSetupFragment.updateCalibrationData();
+                if(setupFragment != null){
+                    setupFragment.doCalibrationStep(3);
                 }
             }
         });
@@ -45,12 +45,18 @@ public class FragmentSetupRCCompleted extends Fragment {
 		btnCancel.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(rcSetupFragment != null){
-                    rcSetupFragment.cancel();
+                if(setupFragment != null){
+                    setupFragment.doCalibrationStep(-1);
                 }
             }
         });
 		return view;
+	}
+
+	@Override
+	public void updateDescription(int idDescription) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

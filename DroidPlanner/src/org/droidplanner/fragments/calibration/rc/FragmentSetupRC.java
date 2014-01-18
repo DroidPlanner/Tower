@@ -210,9 +210,17 @@ public class FragmentSetupRC extends SetupMainPanel implements OnDroneListner,
 	@Override
 	public void doCalibrationStep(int step) {
 		switch (step){
-		case 0:
+		case 0: //Get MinMax
 			((SetupRadioFragment) getParentFragment())
 			.changeSidePanel(new FragmentSetupRCMinMax());
+			break;
+		case 1: //Get Mid
+			((SetupRadioFragment) getParentFragment())
+			.changeSidePanel(new FragmentSetupRCMiddle());
+			break;
+		case 2: //Get MinMax
+			((SetupRadioFragment) getParentFragment())
+			.changeSidePanel(new FragmentSetupRCCompleted());
 			break;
 		default:
 			((SetupRadioFragment) getParentFragment())
