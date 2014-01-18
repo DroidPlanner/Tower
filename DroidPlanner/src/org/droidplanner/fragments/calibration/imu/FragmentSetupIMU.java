@@ -5,7 +5,7 @@ import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
 import org.droidplanner.drone.variables.Calibration;
-import org.droidplanner.fragments.SetupFragment;
+import org.droidplanner.fragments.SetupSensorFragment;
 import org.droidplanner.fragments.calibration.SetupMainPanel;
 import org.droidplanner.fragments.calibration.SetupSidePanel;
 
@@ -129,7 +129,7 @@ public class FragmentSetupIMU extends SetupMainPanel implements
 			textViewOffset.setVisibility(View.INVISIBLE);
 			textViewScaling.setVisibility(View.INVISIBLE);
 
-			((SetupFragment) getParentFragment())
+			((SetupSensorFragment) getParentFragment())
 					.updateSidePanelTitle(calibration_step);
 		}
 	}
@@ -198,7 +198,7 @@ public class FragmentSetupIMU extends SetupMainPanel implements
 
 		textViewStep.setText(msg);
 
-		((SetupFragment) getParentFragment())
+		((SetupSensorFragment) getParentFragment())
 				.updateSidePanelTitle(calibration_step);
 
 		if (calibration_step == 7) {

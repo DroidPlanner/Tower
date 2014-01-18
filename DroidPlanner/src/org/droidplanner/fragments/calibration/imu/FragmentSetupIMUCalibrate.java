@@ -1,6 +1,6 @@
 package org.droidplanner.fragments.calibration.imu;
 
-import org.droidplanner.fragments.SetupFragment;
+import org.droidplanner.fragments.SetupSensorFragment;
 import org.droidplanner.fragments.calibration.SetupSidePanel;
 
 import android.os.Bundle;
@@ -22,7 +22,7 @@ public class FragmentSetupIMUCalibrate extends SetupSidePanel {
 		final View view = inflater.inflate(R.layout.fragment_setup_imu_calibrate,
 				container, false);
 
-        final SetupFragment setupFragment = (SetupFragment) getParentFragment();
+        final SetupSensorFragment setupFragment = (SetupSensorFragment) getParentFragment();
 
         textDesc = (TextView) view.findViewById(R.id.textViewDesc);
         btnStep = (Button) view.findViewById(R.id.buttonNext);
