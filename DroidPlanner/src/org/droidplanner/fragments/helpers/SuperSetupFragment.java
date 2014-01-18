@@ -125,7 +125,13 @@ public abstract class SuperSetupFragment extends Fragment implements OnDroneList
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public void updateTitle(int id){
+		textViewTitle.setText(id);
+	}
+	
 	public abstract void setupSpinnerItems(ArrayAdapter<String> adapter);
+	public abstract SetupMainPanel getMainPanel(int index);
 	
 	private void setupLocalViews(View view) {
 		textViewTitle = (TextView)view.findViewById(R.id.textViewSetupTitle);
@@ -138,19 +144,10 @@ public abstract class SuperSetupFragment extends Fragment implements OnDroneList
 	}
 
 	public void changeSetupPanel(int step) {
-		switch (step) {
-		case 0:
-            setupPanel = getIMUPanel();
-            sidePanel = setupPanel.getSidePanel();
-			break;
+		setupPanel = getMainPanel(step);
+		sidePanel = setupPanel.getSidePanel();
 
-		case 1:
-            setupPanel = getMAGPanel();
-            sidePanel = setupPanel.getSidePanel();
-			break;
-		}
-
-        final FragmentTransaction ft = fragmentManager.beginTransaction();
+		final FragmentTransaction ft = fragmentManager.beginTransaction();
         if(setupPanel != null){
             ft.replace(R.id.fragment_setup_mainpanel, setupPanel);
         }
@@ -160,18 +157,6 @@ public abstract class SuperSetupFragment extends Fragment implements OnDroneList
         }
 
 		ft.commit();
-	}
-
-	private SetupMainPanel getMAGPanel() {
-		setupPanel = new FragmentSetupMAG();
-		textViewTitle.setText(R.string.setup_mag_title);
-		return setupPanel;
-	}
-
-	private SetupMainPanel getIMUPanel() {
-		setupPanel = new FragmentSetupIMU();
-		textViewTitle.setText(R.string.setup_imu_title);
-		return setupPanel;
 	}
 
     public void doCalibrationStep(){
