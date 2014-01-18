@@ -193,7 +193,7 @@
     <string name="rowheader_wp_desc">Description</string>
     <string name="dialog_box_title_altitude">Altitude</string>
     <string name="dialog_box_btn_txt_cancel">Cancel</string>
-    <string name="dialog_box_btn_txt_ok">Ok</string>
+    <string name="dialog_box_btn_txt_ok">OK</string>
     <string name="exception_draw_polygon">Draw a polygon/WPTs</string>
     <string name="exception_draw_2_more_polygon_points">Draw at least 2 more polygon points</string>
     <string name="exception_draw_1_more_polygon_points">Draw at least 1 more polygon points</string>
@@ -258,7 +258,9 @@
   	<string name="rc_desc_downloading">DroidPlanner is downloading calibration data from APM. If system is not connected, press Cancel</string>
     <string name="setup_fs_title">Failsafe Setup</string>
   	<string name="setup_radio_title">Radio Channel Calibration</string>
-    <string name="setup_mag_title">Compass Calibration</string>
+  	<string name="setup_radio_cal_title">Start Calibration</string>
+  	<string name="setup_radio_cal_desc">Press Calibrate to start the radio calibration. Ensure the radio transmitter is switched \'ON\' and transmitting</string>		
+  	<string name="setup_mag_title">Compass Calibration</string>
     <string name="setup_imu_title">Accelerometer Calibration</string>
     <string name="setup_imu_start">Press Calibrate to start IMU calibration. Ensure vehicle is placed on a FLAT surface before beginning the calibration process</string>
     <string name="setup_imu_normal">Place the vehicle on its NORMAL position ensuring very minimal movement and press Next</string>
