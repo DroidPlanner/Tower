@@ -8,6 +8,7 @@ import org.droidplanner.fragments.ChecklistFragment;
 import org.droidplanner.fragments.ModesSetupFragment;
 import org.droidplanner.fragments.ParamsFragment;
 import org.droidplanner.fragments.RcSetupFragment;
+import org.droidplanner.fragments.SetupRadioFragment;
 import org.droidplanner.fragments.SetupSensorFragment;
 import org.droidplanner.fragments.TuningFragment;
 import org.droidplanner.widgets.viewPager.TabPageIndicator;
@@ -99,7 +100,10 @@ public class ConfigurationActivity extends SuperUI {
 
 			case 5:
 				return new ParamsFragment();
-
+				
+			case 6:
+				return new SetupRadioFragment();
+				
 			default:
 				return null;
 			}
@@ -107,7 +111,7 @@ public class ConfigurationActivity extends SuperUI {
 
 		@Override
 		public int getCount() {
-			return 6;
+			return 7;
 		}
 
 		@Override
@@ -130,6 +134,9 @@ public class ConfigurationActivity extends SuperUI {
 
 			case 5:
 				return mContext.getText(R.string.screen_parameters);
+
+			case 6:
+				return mContext.getText(R.string.screen_rc);
 
 			default:
 				return null;
