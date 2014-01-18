@@ -1,7 +1,6 @@
 package org.droidplanner.fragments.calibration.rc;
 
 import org.droidplanner.MAVLink.MavLinkStreamRates;
-import org.droidplanner.calibration.CH_CalParameters;
 import org.droidplanner.calibration.CalParameters;
 import org.droidplanner.calibration.CalParameters.OnCalibrationEvent;
 import org.droidplanner.calibration.RC_CalParameters;
@@ -9,6 +8,7 @@ import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
 import org.droidplanner.fragments.SetupRadioFragment;
+import org.droidplanner.fragments.calibration.FragmentSetupProgress;
 import org.droidplanner.fragments.calibration.SetupMainPanel;
 import org.droidplanner.fragments.calibration.SetupSidePanel;
 import org.droidplanner.widgets.FillBar.FillBar;
@@ -43,8 +43,6 @@ public class FragmentSetupRC extends SetupMainPanel implements OnDroneListner,
 	private Drone drone;
 
 	private RC_CalParameters rcParameters;
-	private CH_CalParameters chParameters;
-	private CalParameters currParameters;
 
 	private FillBar bar1;
 	private FillBar bar2;
@@ -63,8 +61,6 @@ public class FragmentSetupRC extends SetupMainPanel implements OnDroneListner,
 
 	private RcStick stickLeft;
 	private RcStick stickRight;
-
-	private SetupSidePanel sidePanel;
 
 	private int data[] = new int[8];
 	private int cMin[] = new int[8];
@@ -87,7 +83,6 @@ public class FragmentSetupRC extends SetupMainPanel implements OnDroneListner,
 
 		this.drone = parentActivity.drone;
 		rcParameters = new RC_CalParameters(drone);
-		chParameters = new CH_CalParameters(drone);
 	}
 
 	@Override
@@ -113,10 +108,6 @@ public class FragmentSetupRC extends SetupMainPanel implements OnDroneListner,
 			rcParameters.setOnCalibrationEventListener(this);
 		}
 
-		if (chParameters != null) {
-			chParameters.setOnCalibrationEventListener(this);
-		}
-
 		Log.d("CAL", "RC Setup");
 		setupDataStreamingForRcSetup();
 	}
@@ -129,8 +120,8 @@ public class FragmentSetupRC extends SetupMainPanel implements OnDroneListner,
 			break;
 
 		case PARAMETER:
-			if (currParameters != null) {
-				currParameters.processReceivedParam();
+			if (rcParameters != null) {
+				rcParameters.processReceivedParam();
 			}
 			break;
 
@@ -142,36 +133,33 @@ public class FragmentSetupRC extends SetupMainPanel implements OnDroneListner,
 
 	@Override
 	public void onReadCalibration(CalParameters calParameters) {
-		if (currParameters.equals(rcParameters)) {
-//			changeSetupPanel(1);
-		} else if (currParameters.equals(chParameters)) {
-//			changeSetupPanel(4);
-		}
+		doCalibrationStep(99);// show progress sidepanel
 	}
 
 	@Override
 	public void onSentCalibration(CalParameters calParameters) {
-		currParameters = null;
-//		changeSetupPanel(0);
+		doCalibrationStep(3);
 	}
 
 	@Override
-	public void onCalibrationData(CalParameters calParameters, int index, int count,
-                                  boolean isSending) {
-		if (sidePanel != null && currParameters != null) {
+	public void onCalibrationData(CalParameters calParameters, int index,
+			int count, boolean isSending) {
+		if (sidePanel != null && rcParameters != null) {
 			String title;
 			if (isSending) {
-				if (currParameters.equals(rcParameters))
+				if (rcParameters.equals(rcParameters))
 					title = "Uploading RC calibration data";
 				else
 					title = "Uploading RC options data";
 			} else {
-				if (currParameters.equals(rcParameters))
+				if (rcParameters.equals(rcParameters))
 					title = "Downloading RC calibration data";
 				else
 					title = "Downloading RC options data";
 			}
-//			((FragmentSetupRCProgress) sidePanel).updateProgress(index, count, title);
+
+			((FragmentSetupProgress) sidePanel).updateProgress(index, count,
+					title);
 		}
 	}
 
@@ -209,24 +197,35 @@ public class FragmentSetupRC extends SetupMainPanel implements OnDroneListner,
 
 	@Override
 	public void doCalibrationStep(int step) {
-		switch (step){
-		case 0: //Get MinMax
+		switch (step) {
+		case 0: // Get MinMax
+			setFillBarShowMinMax(true);
 			((SetupRadioFragment) getParentFragment())
-			.changeSidePanel(new FragmentSetupRCMinMax());
+					.changeSidePanel(new FragmentSetupRCMinMax());
 			break;
-		case 1: //Get Mid
+		case 1: // Get Mid
 			((SetupRadioFragment) getParentFragment())
-			.changeSidePanel(new FragmentSetupRCMiddle());
+					.changeSidePanel(new FragmentSetupRCMiddle());
 			break;
-		case 2: //Get MinMax
+		case 2: // Upload calibration data
+			updateCalibrationData();
+			break;
+		case 3: // Get MinMax
+			getCalibrationStr();
 			((SetupRadioFragment) getParentFragment())
-			.changeSidePanel(new FragmentSetupRCCompleted());
+					.changeSidePanel(new FragmentSetupRCCompleted());
+			break;
+		case 99: // ShowProfress
+			((SetupRadioFragment) getParentFragment())
+					.changeSidePanel(new FragmentSetupProgress());
 			break;
 		default:
+			setFillBarShowMinMax(false);
 			((SetupRadioFragment) getParentFragment())
-			.changeSidePanel(new FragmentSetupRCCalibrate());
+					.changeSidePanel(new FragmentSetupRCCalibrate());
 		}
 	}
+
 	private void onNewInputRcData() {
 		data = drone.RC.in;
 		bar1.setValue(data[0]);
@@ -308,23 +307,18 @@ public class FragmentSetupRC extends SetupMainPanel implements OnDroneListner,
 	}
 
 	public void updateCalibrationData() {
-		currParameters = rcParameters;
-
 		for (int i = 0; i < 8; i++) {
-			rcParameters.setParamValueByName("RC" + String.valueOf(i + 1) + "_MIN", cMin[i]);
-			rcParameters.setParamValueByName("RC" + String.valueOf(i + 1) + "_MAX", cMax[i]);
-			rcParameters.setParamValueByName("RC" + String.valueOf(i + 1) + "_TRIM", cMid[i]);
+			rcParameters.setParamValueByName("RC" + String.valueOf(i + 1)
+					+ "_MIN", cMin[i]);
+			rcParameters.setParamValueByName("RC" + String.valueOf(i + 1)
+					+ "_MAX", cMax[i]);
+			rcParameters.setParamValueByName("RC" + String.valueOf(i + 1)
+					+ "_TRIM", cMid[i]);
 		}
 
 		setFillBarShowMinMax(false);
-//		changeSetupPanel(0);
-//		rcParameters.sendCalibrationParameters();
-	}
-
-	public void cancel() {
-		setFillBarShowMinMax(false);
-		currParameters = null;
-//		changeSetupPanel(0);
+		doCalibrationStep(99);
+		rcParameters.sendCalibrationParameters();
 	}
 
 }
