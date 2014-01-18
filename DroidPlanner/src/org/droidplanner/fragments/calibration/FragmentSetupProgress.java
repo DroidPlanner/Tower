@@ -1,8 +1,7 @@
-package org.droidplanner.fragments.calibration.rc;
+package org.droidplanner.fragments.calibration;
 
-import org.droidplanner.fragments.RcSetupFragment;
+import org.droidplanner.fragments.helpers.SuperSetupFragment;
 
-import android.support.v4.app.Fragment;
 import org.droidplanner.R;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,7 +15,7 @@ import android.widget.TextView;
 /**
  * This fragment displays the progress for the RC setup process.
  */
-public class FragmentSetupRCProgress extends Fragment {
+public class FragmentSetupProgress extends SetupSidePanel {
 	private TextView textTitle;
 	private TextView textProgress;
 	private ProgressBar pb;
@@ -25,7 +24,7 @@ public class FragmentSetupRCProgress extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-        final RcSetupFragment rcSetupFragment = (RcSetupFragment) getParentFragment();
+        final SuperSetupFragment setupFragment = (SuperSetupFragment) getParentFragment();
 
 		final View view = inflater.inflate(R.layout.fragment_setup_rc_progress,
 				container, false);
@@ -42,8 +41,8 @@ public class FragmentSetupRCProgress extends Fragment {
 		btnCancel.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (rcSetupFragment != null) {
-                    rcSetupFragment.cancel();
+                if (setupFragment != null) {
+                    setupFragment.doCalibrationStep(-1);
                 }
             }
         });
@@ -65,6 +64,12 @@ public class FragmentSetupRCProgress extends Fragment {
 		if(textProgress!=null){
 			textProgress.setText(String.valueOf(index)+"/"+String.valueOf(count));
 		}
+	}
+
+	@Override
+	public void updateDescription(int idDescription) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
