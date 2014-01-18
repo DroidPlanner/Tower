@@ -24,4 +24,10 @@ public class FragmentSetupMAG extends SetupMainPanel {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void doCalibrationStep(int step) {
+		// TODO Auto-generated method stub
+		
+	}
 }

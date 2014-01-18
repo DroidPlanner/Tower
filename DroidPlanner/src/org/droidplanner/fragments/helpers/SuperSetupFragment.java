@@ -168,15 +168,15 @@ public abstract class SuperSetupFragment extends Fragment implements OnDroneList
 		ft.commit();
 	}
 
-    public void doCalibrationStep(){
+    public void doCalibrationStep(int step){
         if(setupPanel != null){
-            setupPanel.doCalibrationStep();
+            setupPanel.doCalibrationStep(step);
         }
     }
 
     public void updateSidePanelTitle(int calibrationStep){
         if(sidePanel != null){
-            sidePanel.updateTitle(calibrationStep);
+            sidePanel.updateDescription(calibrationStep);
         }
     }
 

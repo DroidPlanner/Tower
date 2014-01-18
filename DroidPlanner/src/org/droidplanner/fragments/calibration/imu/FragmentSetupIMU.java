@@ -61,7 +61,8 @@ public class FragmentSetupIMU extends SetupMainPanel  implements OnDroneListner{
 		return new FragmentSetupIMUCalibrate();
 	}
 
-	public void doCalibrationStep() {
+	@Override
+	public void doCalibrationStep(int step) {
 		processCalibrationStep(calibration_step);
 	}
 

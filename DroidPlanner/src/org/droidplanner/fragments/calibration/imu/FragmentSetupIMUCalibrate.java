@@ -30,7 +30,7 @@ public class FragmentSetupIMUCalibrate extends SetupSidePanel {
             @Override
             public void onClick(View v) {
                 if(setupFragment != null){
-                    setupFragment.doCalibrationStep();
+                    setupFragment.doCalibrationStep(0);
                 }
             }
         });
@@ -38,7 +38,8 @@ public class FragmentSetupIMUCalibrate extends SetupSidePanel {
 		return view;
 	}
 
-	public void updateTitle(int calibration_step) {
+	@Override
+	public void updateDescription(int calibration_step) {
 		int id = -1;
 		switch (calibration_step) {
 		case 0:
