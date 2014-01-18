@@ -140,6 +140,7 @@
 			    android:id="@+id/numberFieldEdit1"
 			    android:layout_width="fill_parent"
 			    android:layout_height="wrap_content"
+			    app:Format="%2.4f"
 			    app:Inc="0.1"
 			    app:Max="100"
 			    app:Min="0"
