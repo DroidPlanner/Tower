@@ -29,7 +29,7 @@ import org.droidplanner.R;
 /**
  * This fragment is used to calibrate the drone's compass, and accelerometer.
  */
-public class SuperSetupFragment extends Fragment implements OnDroneListner, OnItemSelectedListener {
+public abstract class SuperSetupFragment extends Fragment implements OnDroneListner, OnItemSelectedListener {
 
 	private Drone drone;
 	
@@ -125,6 +125,7 @@ public class SuperSetupFragment extends Fragment implements OnDroneListner, OnIt
 		// TODO Auto-generated method stub
 		
 	}
+	public abstract void setupSpinnerItems(ArrayAdapter<String> adapter);
 	
 	private void setupLocalViews(View view) {
 		textViewTitle = (TextView)view.findViewById(R.id.textViewSetupTitle);
@@ -132,8 +133,7 @@ public class SuperSetupFragment extends Fragment implements OnDroneListner, OnIt
 		spinnerSetup.setOnItemSelectedListener(this);
 
 		final ArrayAdapter<String> adapter=new ArrayAdapter<String>(parent, R.layout.spinner_setup);
-		adapter.add("ACC Calibration");
-		adapter.add("Compass Calibration");
+		setupSpinnerItems(adapter);
 		spinnerSetup.setAdapter(adapter);
 	}
 

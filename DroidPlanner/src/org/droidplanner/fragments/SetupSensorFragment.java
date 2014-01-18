@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 
 /**
  * This fragment is used to calibrate the drone's compass, and accelerometer.
@@ -41,6 +42,12 @@ public class SetupSensorFragment extends SuperSetupFragment {
 	@Override
 	public void onStop() {
 		super.onStop();
+	}
+
+	@Override
+	public void setupSpinnerItems(ArrayAdapter<String> adapter) {
+		adapter.add("ACC Calibration");
+		adapter.add("Compass Calibration");
 	}
 
 }
