@@ -7,9 +7,6 @@ import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
 import org.droidplanner.fragments.calibration.SetupMainPanel;
 import org.droidplanner.fragments.calibration.SetupSidePanel;
-import org.droidplanner.fragments.calibration.imu.FragmentSetupIMU;
-import org.droidplanner.fragments.calibration.mag.FragmentSetupMAG;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -41,6 +38,10 @@ public abstract class SuperSetupFragment extends Fragment implements OnDroneList
 	private SetupMainPanel setupPanel;
     private SetupSidePanel sidePanel;
 
+	public abstract void setupSpinnerItems(ArrayAdapter<String> adapter);
+	public abstract SetupMainPanel getMainPanel(int index);
+	public abstract SetupMainPanel initMainPanel();
+
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -71,7 +72,7 @@ public abstract class SuperSetupFragment extends Fragment implements OnDroneList
                 .fragment_setup_mainpanel);
 
         if (setupPanel == null) {
-            setupPanel = new FragmentSetupIMU();
+            setupPanel = initMainPanel();
 
             fragmentManager.beginTransaction()
                     .add(R.id.fragment_setup_mainpanel, setupPanel)
@@ -129,10 +130,7 @@ public abstract class SuperSetupFragment extends Fragment implements OnDroneList
 	public void updateTitle(int id){
 		textViewTitle.setText(id);
 	}
-	
-	public abstract void setupSpinnerItems(ArrayAdapter<String> adapter);
-	public abstract SetupMainPanel getMainPanel(int index);
-	
+		
 	private void setupLocalViews(View view) {
 		textViewTitle = (TextView)view.findViewById(R.id.textViewSetupTitle);
 		spinnerSetup = (Spinner)view.findViewById(R.id.spinnerSetupType);

@@ -23,9 +23,10 @@ public class SetupSensorFragment extends SuperSetupFragment {
 		super.onAttach(activity);
 	}
 
-    @Override
-    public void onDetach(){
-        super.onDetach();    }
+	@Override
+	public void onDetach() {
+		super.onDetach();
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,7 +36,7 @@ public class SetupSensorFragment extends SuperSetupFragment {
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+		super.onActivityCreated(savedInstanceState);
 	}
 
 	@Override
@@ -49,6 +50,11 @@ public class SetupSensorFragment extends SuperSetupFragment {
 	}
 
 	@Override
+	public SetupMainPanel initMainPanel() {
+		return new FragmentSetupIMU();
+	}
+
+	@Override
 	public void setupSpinnerItems(ArrayAdapter<String> adapter) {
 		adapter.add("ACC Calibration");
 		adapter.add("Compass Calibration");
@@ -57,20 +63,18 @@ public class SetupSensorFragment extends SuperSetupFragment {
 	@Override
 	public SetupMainPanel getMainPanel(int index) {
 		switch (index) {
- 		case 0:
+		case 0:
 			updateTitle(R.string.setup_imu_title);
- 			return new FragmentSetupIMU();
+			return new FragmentSetupIMU();
 		case 1:
 			updateTitle(R.string.setup_mag_title);
-            return new FragmentSetupMAG();
+			return new FragmentSetupMAG();
 		}
 		return null;
 	}
-	
+
 	@Override
-	public void updateTitle(int id){
+	public void updateTitle(int id) {
 		super.updateTitle(id);
 	}
-
-	
 }
