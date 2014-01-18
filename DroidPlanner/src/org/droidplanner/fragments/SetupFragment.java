@@ -5,6 +5,8 @@ import org.droidplanner.activitys.ConfigurationActivity;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import org.droidplanner.fragments.calibration.SetupMainPanel;
+import org.droidplanner.fragments.calibration.SetupSidePanel;
 import org.droidplanner.fragments.calibration.imu.FragmentSetupIMU;
 import org.droidplanner.fragments.calibration.mag.FragmentSetupMAG;
 
@@ -29,16 +31,6 @@ import org.droidplanner.R;
  */
 public class SetupFragment extends Fragment implements OnDroneListner, OnItemSelectedListener {
 
-    public static abstract class SetupCalibration extends Fragment {
-        public abstract void doCalibrationStep();
-
-        public abstract SetupSidePanel getSidePanel();
-    }
-
-    public static abstract class SetupSidePanel extends Fragment {
-        public abstract void updateTitle(int calibrationStep);
-    }
-
 	private Drone drone;
 	
 	private ConfigurationActivity parent;
@@ -46,7 +38,7 @@ public class SetupFragment extends Fragment implements OnDroneListner, OnItemSel
 	private TextView textViewTitle;
 	
 	private FragmentManager fragmentManager;
-	private SetupCalibration setupPanel;
+	private SetupMainPanel setupPanel;
     private SetupSidePanel sidePanel;
 
 	@Override
@@ -75,7 +67,7 @@ public class SetupFragment extends Fragment implements OnDroneListner, OnItemSel
         setupLocalViews(view);
 
         fragmentManager = getChildFragmentManager();
-        setupPanel = (SetupCalibration) fragmentManager.findFragmentById(R.id
+        setupPanel = (SetupMainPanel) fragmentManager.findFragmentById(R.id
                 .fragment_setup_mainpanel);
 
         if (setupPanel == null) {
@@ -170,13 +162,13 @@ public class SetupFragment extends Fragment implements OnDroneListner, OnItemSel
 		ft.commit();
 	}
 
-	private SetupCalibration getMAGPanel() {
+	private SetupMainPanel getMAGPanel() {
 		setupPanel = new FragmentSetupMAG();
 		textViewTitle.setText(R.string.setup_mag_title);
 		return setupPanel;
 	}
 
-	private SetupCalibration getIMUPanel() {
+	private SetupMainPanel getIMUPanel() {
 		setupPanel = new FragmentSetupIMU();
 		textViewTitle.setText(R.string.setup_imu_title);
 		return setupPanel;
