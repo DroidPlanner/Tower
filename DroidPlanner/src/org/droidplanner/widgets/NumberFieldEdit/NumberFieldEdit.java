@@ -28,13 +28,15 @@ public class NumberFieldEdit extends LinearLayout implements OnTouchListener {
 	private double inc = 1;
 	private double max = 100;
 	private double value = 0.0;
+	private double fastInc = 5.0;
 	private String title = "Title";
 	private String unit = "";
 	private String separator = ";";
 	private String formatString = "%2.1f";
 	private short delay = 1000;
-	private boolean countUp;
+	private boolean countUp, fastCount;
 	private boolean waitingForLongPress = false;
+	private int startX, startY;
 
 	public NumberFieldEdit(Context context) {
 		super(context);
@@ -52,7 +54,8 @@ public class NumberFieldEdit extends LinearLayout implements OnTouchListener {
 			setUnit(a.getString(R.styleable.NumberFieldEdit_Unit));
 			setMinMaxInc(a.getFloat(R.styleable.NumberFieldEdit_Min, 0),
 					a.getFloat(R.styleable.NumberFieldEdit_Max, 100),
-					a.getFloat(R.styleable.NumberFieldEdit_Inc, 1));
+					a.getFloat(R.styleable.NumberFieldEdit_Inc, 1),
+					a.getFloat(R.styleable.NumberFieldEdit_FastInc, 2));
 			setFormat(a.getString(R.styleable.NumberFieldEdit_Format));
 			setSeparator(a.getString(R.styleable.NumberFieldEdit_Separator));
 			setValue(this.value);
@@ -88,8 +91,8 @@ public class NumberFieldEdit extends LinearLayout implements OnTouchListener {
 		separatorText.setTextSize(16);
 		editText.setTextSize(16);
 
-		separatorText.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
-				LayoutParams.MATCH_PARENT));
+		separatorText.setLayoutParams(new LayoutParams(
+				LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT));
 		titleText.setLayoutParams(new LayoutParams(0,
 				LayoutParams.MATCH_PARENT, 5));
 		editText.setLayoutParams(new LayoutParams(0, LayoutParams.MATCH_PARENT,
@@ -131,10 +134,11 @@ public class NumberFieldEdit extends LinearLayout implements OnTouchListener {
 		buttonLayout.requestFocus();
 	}
 
-	public void setMinMaxInc(double min, double max, double inc) {
+	public void setMinMaxInc(double min, double max, double inc, float fastinc) {
 		this.min = min;
 		this.inc = inc;
 		this.max = max;
+		this.fastInc = fastinc;
 	}
 
 	public void setUnit(String unit) {
@@ -198,10 +202,11 @@ public class NumberFieldEdit extends LinearLayout implements OnTouchListener {
 	}
 
 	private void updateValue() {
+		double incVal = fastCount?fastInc:inc;
 		if (countUp)
-			setValue(this.value + inc);
+			setValue(this.value + incVal);
 		else
-			setValue(this.value - inc);
+			setValue(this.value - incVal);
 	}
 
 	final Handler handler = new Handler();
@@ -220,14 +225,20 @@ public class NumberFieldEdit extends LinearLayout implements OnTouchListener {
 
 			if (event.getAction() == MotionEvent.ACTION_DOWN) {
 				if (!waitingForLongPress) {
+					startX = (int) event.getRawX();
+					startY = (int) event.getRawY();
 					waitingForLongPress = true;
 					handler.postDelayed(mLongPressed, delay);
 				}
 			} else if (event.getAction() == MotionEvent.ACTION_UP) {
 				waitingForLongPress = false;
+				fastCount = false;
 				handler.removeCallbacks(mLongPressed);
 				delay = 1000;
 				updateValue();
+			} else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+				fastCount = (Math.abs(event.getRawX() - startX) > 20)
+						|| (Math.abs(event.getRawY() - startY) > 2);
 			}
 		}
 		return super.onTouchEvent(event);

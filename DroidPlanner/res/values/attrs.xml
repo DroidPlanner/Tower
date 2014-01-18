@@ -7,9 +7,10 @@
         <attr name="Format" format="string" />
         <attr name="Separator" format="string" />
         <attr name="Min" format="float" />
-        <attr name="Inc" format="float" />
         <attr name="Max" format="float" />
-    </declare-styleable>
+        <attr name="Inc" format="float" />
+        <attr name="FastInc" format="float" />
+        </declare-styleable>
     
     <declare-styleable name="SeekBarWithText">
         <attr name="title" format="string" />
