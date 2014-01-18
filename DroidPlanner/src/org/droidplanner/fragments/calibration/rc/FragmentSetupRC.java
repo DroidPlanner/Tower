@@ -8,6 +8,7 @@ import org.droidplanner.calibration.RC_CalParameters;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import org.droidplanner.fragments.SetupRadioFragment;
 import org.droidplanner.fragments.calibration.SetupMainPanel;
 import org.droidplanner.fragments.calibration.SetupSidePanel;
 import org.droidplanner.widgets.FillBar.FillBar;
@@ -77,8 +78,7 @@ public class FragmentSetupRC extends SetupMainPanel implements OnDroneListner,
 
 	@Override
 	public SetupSidePanel getSidePanel() {
-		// TODO Auto-generated method stub
-		return null;
+		return new FragmentSetupRCCalibrate();
 	}
 
 	@Override
@@ -207,6 +207,18 @@ public class FragmentSetupRC extends SetupMainPanel implements OnDroneListner,
 		bar8.setup(RC_MAX, RC_MIN);
 	}
 
+	@Override
+	public void doCalibrationStep(int step) {
+		switch (step){
+		case 0:
+			((SetupRadioFragment) getParentFragment())
+			.changeSidePanel(new FragmentSetupRCMinMax());
+			break;
+		default:
+			((SetupRadioFragment) getParentFragment())
+			.changeSidePanel(new FragmentSetupRCCalibrate());
+		}
+	}
 	private void onNewInputRcData() {
 		data = drone.RC.in;
 		bar1.setValue(data[0]);
@@ -306,4 +318,5 @@ public class FragmentSetupRC extends SetupMainPanel implements OnDroneListner,
 		currParameters = null;
 //		changeSetupPanel(0);
 	}
+
 }
