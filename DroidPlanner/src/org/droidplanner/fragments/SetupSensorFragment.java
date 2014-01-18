@@ -6,8 +6,6 @@ import org.droidplanner.fragments.calibration.imu.FragmentSetupIMU;
 import org.droidplanner.fragments.calibration.mag.FragmentSetupMAG;
 import org.droidplanner.fragments.helpers.SuperSetupFragment;
 
-import android.widget.ArrayAdapter;
-
 /**
  * This fragment is used to calibrate the drone's compass, and accelerometer.
  */
@@ -19,9 +17,8 @@ public class SetupSensorFragment extends SuperSetupFragment {
 	}
 
 	@Override
-	public void setupSpinnerItems(ArrayAdapter<String> adapter) {
-		adapter.add("ACC Calibration");
-		adapter.add("Compass Calibration");
+	public int getSpinnerItems() {
+		return R.array.Setup_Sensor_Menu;
 	}
 
 	@Override

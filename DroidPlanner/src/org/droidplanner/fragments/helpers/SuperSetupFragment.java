@@ -38,7 +38,7 @@ public abstract class SuperSetupFragment extends Fragment implements OnDroneList
 	private SetupMainPanel setupPanel;
     private SetupSidePanel sidePanel;
 
-	public abstract void setupSpinnerItems(ArrayAdapter<String> adapter);
+	public abstract int getSpinnerItems();
 	public abstract SetupMainPanel getMainPanel(int index);
 	public abstract SetupMainPanel initMainPanel();
 
@@ -136,12 +136,14 @@ public abstract class SuperSetupFragment extends Fragment implements OnDroneList
 		spinnerSetup = (Spinner)view.findViewById(R.id.spinnerSetupType);
 		spinnerSetup.setOnItemSelectedListener(this);
 
-		final ArrayAdapter<String> adapter=new ArrayAdapter<String>(parent, R.layout.spinner_setup);
-		setupSpinnerItems(adapter);
-		spinnerSetup.setAdapter(adapter);
+		final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(parent,
+		        getSpinnerItems(), R.layout.spinner_setup);
+		
+		if(adapter!=null)
+			spinnerSetup.setAdapter(adapter);
 	}
 
-	public void changeMainPanel(int step) {
+	public SetupMainPanel changeMainPanel(int step) {
 		setupPanel = getMainPanel(step);
 		sidePanel = setupPanel.getSidePanel();
 
@@ -155,9 +157,10 @@ public abstract class SuperSetupFragment extends Fragment implements OnDroneList
         }
 
 		ft.commit();
+		return setupPanel;
 	}
 
-	public void changeSidePanel(SetupSidePanel sPanel) {
+	public SetupSidePanel changeSidePanel(SetupSidePanel sPanel) {
 		sidePanel = sPanel;
 		
 		if(setupPanel != null && sidePanel != null)
@@ -169,6 +172,8 @@ public abstract class SuperSetupFragment extends Fragment implements OnDroneList
         }
 
 		ft.commit();
+		
+		return sidePanel;
 	}
 
     public void doCalibrationStep(int step){

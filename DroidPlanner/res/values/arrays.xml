@@ -14,7 +14,7 @@
         <item>@string/screen_camera</item>
         <item>@string/screen_gcp</item>
         <item>@string/screen_chart</item>
-        <item >"NewUI"</item>
+        <item>"NewUI"</item>
     </string-array>
     <string-array name="RCQuickModes">
         <item name="Stabilize">Stabilize</item>
@@ -65,44 +65,55 @@
         <item name="Param2">P2</item>
         <item name="Param3">P3</item>
         <item name="Param4">P4</item>
-        </string-array>
+    </string-array>
     <string-array name="CoordSource">
-        <item >Waypoint</item>
-        <item >Ground station</item>
-        <item >Manual entry</item>
+        <item>Waypoint</item>
+        <item>Ground station</item>
+        <item>Manual entry</item>
     </string-array>
     <string-array name="ExampleWaypointType">
-        <item >Waypoint Type</item>
+        <item>Waypoint Type</item>
     </string-array>
     <string-array name="RC_Tuning">
-        <item >Auto-tune</item>
-        <item >Roll / Pitch</item>
-        <item >Altitude Hold</item>
-        <item >Loiter</item>
-        <item >Navigation</item>
+        <item>Auto-tune</item>
+        <item>Roll / Pitch</item>
+        <item>Altitude Hold</item>
+        <item>Loiter</item>
+        <item>Navigation</item>
     </string-array>
     <string-array name="RC_Features">
-		<item>Do Nothing</item>
-		<item>Flip</item>
-		<item>Simple Mode</item>
-		<item>RTL</item>
-		<item>Save Trim</item>
-		<item>Save WP</item>
-		<item>Multi Mode</item>
-		<item>Camera Trigger</item>
-		<item>Sonar</item>
-		<item>Fence</item>
-		<item>ResetToArmedYaw</item>
-		<item>Super Simple Mode</item>
-		<item>Acro Trainer</item>
-		<item>Auto</item>
-		<item>AutoTune</item>
-		<item>Land</item>
-		<item>EPM</item>
+        <item>Do Nothing</item>
+        <item>Flip</item>
+        <item>Simple Mode</item>
+        <item>RTL</item>
+        <item>Save Trim</item>
+        <item>Save WP</item>
+        <item>Multi Mode</item>
+        <item>Camera Trigger</item>
+        <item>Sonar</item>
+        <item>Fence</item>
+        <item>ResetToArmedYaw</item>
+        <item>Super Simple Mode</item>
+        <item>Acro Trainer</item>
+        <item>Auto</item>
+        <item>AutoTune</item>
+        <item>Land</item>
+        <item>EPM</item>
+    </string-array>
+    <string-array name="Setup_Radio_Menu">
+        <item>Radio Calibration</item>
+        <item>Flight Modes</item>
+        <item>Channel Options</item>
+        <item>Servo Functions</item>
+    </string-array>
+    <string-array name="Setup_Sensor_Menu">
+        <item>IMU Calibration</item>
+        <item>MAG Calibration</item>
     </string-array>
     <string-array name="VehicleType">
         <item>ArduCopter</item>
         <item>ArduPlane</item>
         <item>ArduRover</item>
     </string-array>
+
 </resources>
