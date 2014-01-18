@@ -159,7 +159,10 @@ public abstract class SuperSetupFragment extends Fragment implements OnDroneList
 
 	public void changeSidePanel(SetupSidePanel sPanel) {
 		sidePanel = sPanel;
-
+		
+		if(setupPanel != null && sidePanel != null)
+			setupPanel.setSidePanel(sidePanel);
+		
 		final FragmentTransaction ft = fragmentManager.beginTransaction();
         if(sidePanel != null){
             ft.replace(R.id.fragment_setup_sidepanel, sidePanel);

@@ -11,7 +11,8 @@ import android.view.ViewGroup;
 public abstract class SetupMainPanel extends Fragment{
  
 	protected ConfigurationActivity parentActivity;
-
+	protected SetupSidePanel sidePanel;
+	
     public abstract SetupSidePanel getSidePanel();
     public abstract void setupLocalViews(View v);
     public abstract int getPanelLayout();
@@ -46,4 +47,7 @@ public abstract class SetupMainPanel extends Fragment{
 		return view;
 	}
 
+	public void setSidePanel(SetupSidePanel sidePanel){
+		this.sidePanel = sidePanel;
+	}
 }
