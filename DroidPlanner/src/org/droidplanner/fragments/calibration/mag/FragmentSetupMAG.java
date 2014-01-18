@@ -1,6 +1,5 @@
 package org.droidplanner.fragments.calibration.mag;
 
-import org.droidplanner.fragments.SetupRadioFragment.SetupRCSidePanel;
 import org.droidplanner.fragments.calibration.SetupMainPanel;
 import org.droidplanner.fragments.calibration.SetupSidePanel;
 
