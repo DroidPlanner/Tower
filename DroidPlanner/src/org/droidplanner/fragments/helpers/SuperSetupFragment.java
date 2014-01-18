@@ -112,7 +112,7 @@ public abstract class SuperSetupFragment extends Fragment implements OnDroneList
 
 	@Override
 	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-		changeSetupPanel(arg2);
+		changeMainPanel(arg2);
 	}
 
 	@Override
@@ -141,7 +141,7 @@ public abstract class SuperSetupFragment extends Fragment implements OnDroneList
 		spinnerSetup.setAdapter(adapter);
 	}
 
-	public void changeSetupPanel(int step) {
+	public void changeMainPanel(int step) {
 		setupPanel = getMainPanel(step);
 		sidePanel = setupPanel.getSidePanel();
 
@@ -150,6 +150,17 @@ public abstract class SuperSetupFragment extends Fragment implements OnDroneList
             ft.replace(R.id.fragment_setup_mainpanel, setupPanel);
         }
 
+        if(sidePanel != null){
+            ft.replace(R.id.fragment_setup_sidepanel, sidePanel);
+        }
+
+		ft.commit();
+	}
+
+	public void changeSidePanel(SetupSidePanel sPanel) {
+		sidePanel = sPanel;
+
+		final FragmentTransaction ft = fragmentManager.beginTransaction();
         if(sidePanel != null){
             ft.replace(R.id.fragment_setup_sidepanel, sidePanel);
         }
