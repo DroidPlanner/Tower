@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/configLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+        android:gravity="center" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:orientation="vertical"
+            tools:ignore="UselessParent" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp" >
+
+                <TextView
+                    android:id="@+id/textViewFM1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:text="@string/setup_fm_mode1"
+                    android:textAppearance="?android:attr/textAppearance"
+                    android:textColor="#fff" />
+
+                <Spinner
+                    android:id="@+id/spinnerFM1"
+                    style="@style/ModeSpinnerText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:entries="@array/FligthMode_CopterV3_1" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxFM1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setup_fm_simple"
+                    android:textColor="#fff" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxFMS1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setup_fm_super"
+                    android:textColor="#fff" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp" >
+
+                <TextView
+                    android:id="@+id/TextViewFM2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:text="@string/setup_fm_mode2"
+                    android:textAppearance="?android:attr/textAppearance"
+                    android:textColor="#fff" />
+
+                <Spinner
+                    android:id="@+id/SpinnerFM2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:entries="@array/FligthMode_CopterV3_1" />
+
+                <CheckBox
+                    android:id="@+id/CheckBoxFM2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setup_fm_simple"
+                    android:textColor="#fff" />
+
+                <CheckBox
+                    android:id="@+id/CheckBoxFMS2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setup_fm_super"
+                    android:textColor="#fff" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp" >
+
+                <TextView
+                    android:id="@+id/TextViewFM3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:text="@string/setup_fm_mode3"
+                    android:textAppearance="?android:attr/textAppearance"
+                    android:textColor="#fff" />
+
+                <Spinner
+                    android:id="@+id/SpinnerFM3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:entries="@array/FligthMode_CopterV3_1" />
+
+                <CheckBox
+                    android:id="@+id/CheckBoxFM3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setup_fm_simple"
+                    android:textColor="#fff" />
+
+                <CheckBox
+                    android:id="@+id/CheckBoxFMS3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setup_fm_super"
+                    android:textColor="#fff" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp" >
+
+                <TextView
+                    android:id="@+id/TextViewFM4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:text="@string/setup_fm_mode4"
+                    android:textAppearance="?android:attr/textAppearance"
+                    android:textColor="#fff" />
+
+                <Spinner
+                    android:id="@+id/SpinnerFM4"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:entries="@array/FligthMode_CopterV3_1" />
+
+                <CheckBox
+                    android:id="@+id/CheckBoxFM4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setup_fm_simple"
+                    android:textColor="#fff" />
+
+                <CheckBox
+                    android:id="@+id/CheckBoxFMS4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setup_fm_super"
+                    android:textColor="#fff" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp" >
+
+                <TextView
+                    android:id="@+id/TextViewFM5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:text="@string/setup_fm_mode5"
+                    android:textAppearance="?android:attr/textAppearance"
+                    android:textColor="#fff" />
+
+                <Spinner
+                    android:id="@+id/SpinnerFM5"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:entries="@array/FligthMode_CopterV3_1" />
+
+                <CheckBox
+                    android:id="@+id/CheckBoxFM5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setup_fm_simple"
+                    android:textColor="#fff" />
+
+                <CheckBox
+                    android:id="@+id/CheckBoxFMS5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setup_fm_super"
+                    android:textColor="#fff" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp" >
+
+                <TextView
+                    android:id="@+id/TextViewFM6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:text="@string/setup_fm_mode6"
+                    android:textAppearance="?android:attr/textAppearance"
+                    android:textColor="#fff" />
+
+                <Spinner
+                    android:id="@+id/SpinnerFM6"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:entries="@array/FligthMode_CopterV3_1" />
+
+                <CheckBox
+                    android:id="@+id/CheckBoxFM6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setup_fm_simple"
+                    android:textColor="#fff" />
+
+                <CheckBox
+                    android:id="@+id/CheckBoxFMS6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setup_fm_super"
+                    android:textColor="#fff" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>

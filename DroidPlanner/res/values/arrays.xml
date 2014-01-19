@@ -115,5 +115,20 @@
         <item>ArduPlane</item>
         <item>ArduRover</item>
     </string-array>
+    <string-array name="FligthMode_CopterV3_1">
+        <item>Stabilize</item>
+        <item>Acro</item>
+        <item>AltHold</item>
+        <item>Auto</item>
+        <item>Guided</item>
+        <item>Loiter</item>
+        <item>RTL</item>
+        <item>Circle</item>
+        <item>Position</item>
+        <item>Land</item>
+        <item>OF_Loiter</item>
+        <item>Drift</item>
+        <item>Sport</item>
+    </string-array>
 
 </resources>
