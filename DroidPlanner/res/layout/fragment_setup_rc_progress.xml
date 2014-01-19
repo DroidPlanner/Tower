@@ -37,7 +37,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical" >
 
             <LinearLayout
@@ -51,7 +51,8 @@
                     android:id="@+id/textViewProgressTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Downloading parameters" />
+                    android:text="Downloading parameters"
+                    tools:ignore="HardcodedText" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -73,7 +74,8 @@
                         android:layout_marginLeft="10dp"
                         android:layout_weight="0.15"
                         android:gravity="center"
-                        android:text="10/10" />
+                        android:text="10/10"
+                        tools:ignore="HardcodedText" />
 
                 </LinearLayout>
 
@@ -95,7 +97,7 @@
                     android:layout_gravity="center"
                     android:layout_marginRight="16dp"
                     android:background="@drawable/button_blue"
-                    android:text="@string/rc_btn_cancel" />
+                    android:text="@string/button_setup_cancel" />
 
             </LinearLayout>
 
