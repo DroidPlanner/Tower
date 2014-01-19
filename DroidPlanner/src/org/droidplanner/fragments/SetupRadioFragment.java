@@ -4,8 +4,10 @@ import org.droidplanner.R;
 import org.droidplanner.MAVLink.MavLinkStreamRates;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.fragments.calibration.SetupMainPanel;
+import org.droidplanner.fragments.calibration.ch.FragmentSetupCH;
 import org.droidplanner.fragments.calibration.flightmodes.FragmentSetupFM;
 import org.droidplanner.fragments.calibration.rc.FragmentSetupRC;
+import org.droidplanner.fragments.calibration.sf.FragmentSetupSF;
 import org.droidplanner.fragments.helpers.SuperSetupFragment;
 
 import android.app.Activity;
@@ -77,8 +79,16 @@ public class SetupRadioFragment extends SuperSetupFragment {
  		SetupMainPanel setupPanel = null;
 		switch (index) {
 		case 1:
-			updateTitle(R.string.setup_radio_title);
+			updateTitle(R.string.setup_fm_title);
 			setupPanel = new FragmentSetupFM();
+			break;
+		case 2:
+			updateTitle(R.string.setup_ch_title);
+			setupPanel = new FragmentSetupCH();
+			break;
+		case 3:
+			updateTitle(R.string.setup_sf_title);
+			setupPanel = new FragmentSetupSF();
 			break;
 		case 0:
 		default:
