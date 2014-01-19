@@ -2,6 +2,7 @@ package org.droidplanner.fragments;
 
 import org.droidplanner.R;
 import org.droidplanner.fragments.calibration.SetupMainPanel;
+import org.droidplanner.fragments.calibration.flightmodes.FragmentSetupFM;
 import org.droidplanner.fragments.calibration.rc.FragmentSetupRC;
 import org.droidplanner.fragments.helpers.SuperSetupFragment;
 
@@ -22,8 +23,19 @@ public class SetupRadioFragment extends SuperSetupFragment {
 
 	@Override
 	public SetupMainPanel getMainPanel(int index) {
-		updateTitle(R.string.setup_radio_title);
-		return new FragmentSetupRC();
+		SetupMainPanel setupPanel = null;
+		switch (index) {
+		case 0:
+			updateTitle(R.string.setup_radio_title);
+			setupPanel = new FragmentSetupRC();
+			break;
+		case 1:
+			updateTitle(R.string.setup_radio_title);
+			setupPanel = new FragmentSetupFM();
+			break;
+		}
+		
+		return setupPanel;
 	}
 
 	@Override

@@ -13,9 +13,9 @@ public abstract class SetupMainPanel extends Fragment{
 	protected ConfigurationActivity parentActivity;
 	protected SetupSidePanel sidePanel;
 	
+    public abstract int getPanelLayout();
     public abstract SetupSidePanel getSidePanel();
     public abstract void setupLocalViews(View v);
-    public abstract int getPanelLayout();
     public abstract void doCalibrationStep(int step);
     
     @Override
