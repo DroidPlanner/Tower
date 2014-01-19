@@ -106,7 +106,12 @@
             android:gravity="center"
             android:key="pref_max_fligth_path_size"
             android:summary="Size of the fligth path, set to zero to disable."
-            android:title="Flight path size"/>
+            android:title="Flight path size"/>        
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="pref_warn_guided_mode"
+            android:summary="Always warn on entering the Guided Mode (by long pressing the map)."
+            android:title="Warn on Guided Mode"/>                
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="pref_follow_me_mode_enabled"

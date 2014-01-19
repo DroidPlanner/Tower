@@ -36,15 +36,19 @@ public class FlightMapFragment extends DroneMap implements
 		OnGuidedListener {
 
 	private static final int ZOOM_LEVEL = 20;
-
+	
 	private Polyline flightPath;
 	private MapPath droneLeashPath;
 	private int maxFlightPathSize;
 	public boolean isAutoPanEnabled;
+	
+	private boolean warnOnGuidedMode;
 
 	public boolean hasBeenZoomed = false;
 
 	public DroneMarker droneMarker;
+	
+	Activity parentActivity;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
@@ -70,6 +74,8 @@ public class FlightMapFragment extends DroneMap implements
 		maxFlightPathSize = Integer.valueOf(prefs.getString(
 				"pref_max_fligth_path_size", "0"));
 		isAutoPanEnabled = prefs.getBoolean("pref_auto_pan_enabled", false);
+		warnOnGuidedMode = prefs.getBoolean("pref_warn_guided_mode", true);
+		
 	}
 
 	@Override
@@ -90,7 +96,7 @@ public class FlightMapFragment extends DroneMap implements
 					.newLatLngZoom(coord, ZOOM_LEVEL));
 		}
 	}
-
+	
 	public void addFlightPathPoint(LatLng position) {
 		if (maxFlightPathSize > 0) {
 			List<LatLng> oldFlightPath = flightPath.getPoints();
@@ -113,31 +119,49 @@ public class FlightMapFragment extends DroneMap implements
 		flightPathOptions.color(0xfffd693f).width(6).zIndex(1);
 		flightPath = mMap.addPolyline(flightPathOptions);
 	}
+	
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		//we need true current and directly linked Activity object for AlertDialog - kind of bug - we can not use context here.
+		parentActivity = activity;
+	}	
 
 	@Override
 	public void onMapLongClick(LatLng coord) {
+		///
+		
+		//we need new and final variable to use it inside the listener below		
+		final LatLng tmpCoord = coord;
 
-		FragmentTransaction fragManager = getFragmentManager()
-				.beginTransaction();
+		
+		OnClickListener positiveButtonClickListener = new AlertDialog.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				drone.guidedPoint.changeGuidedCoordinate(tmpCoord);
+			}
+		};
 
-		// this is a piece to check if we are not displayed - do not need it
-		// here in my opinion
-
-		/*
-		 * Fragment prev = getFragmentManager().findFragmentByTag("warn"); if
-		 * (prev != null) { fragManager.remove(prev); }
-		 * 
-		 * // and back key action fragManager.addToBackStack(null);
-		 */
-
-		// we have a lot of possible parameters for this dialog ...
-		// activity context, style mode,title, message,action be executed
-		// code, and it's params (have to be parcelable class)
-		DialogFragment warnGuidedDialog = AlertDialogFragment.newInstance(
-				context, 7, "Sample Title", "Do not go Guided !!!", 0, coord);
-		warnGuidedDialog.setCancelable(false);
-		warnGuidedDialog.show(fragManager, "warn");
-
+		OnClickListener negativeButtonClickListener = new AlertDialog.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+			}
+		};		
+		
+		getPreferences();
+		if (warnOnGuidedMode){
+			
+			final AlertDialog.Builder dlg = new AlertDialog.Builder(parentActivity);
+			dlg.setTitle("Guided Mode Warning !!!");
+			dlg.setMessage("You are about to enter the Guided Mode");
+			dlg.setCancelable(false);
+			dlg.setPositiveButton("Ok - go Guided", positiveButtonClickListener);
+			dlg.setNegativeButton("Take me back ...", negativeButtonClickListener);
+			dlg.create();
+			dlg.show();									
+		}else{
+			//here var is not so important but use the same for clarity.
+			drone.guidedPoint.changeGuidedCoordinate(tmpCoord);
+		}
 	}
 
 	@Override
@@ -178,6 +202,6 @@ public class FlightMapFragment extends DroneMap implements
 		default:
 			break;
 		}
-		super.onDroneEvent(event, drone);
+		super.onDroneEvent(event,drone);
 	}
 }
