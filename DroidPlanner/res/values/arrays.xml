@@ -130,5 +130,13 @@
         <item>Drift</item>
         <item>Sport</item>
     </string-array>
+    <string-array name="FligthMode_PWM_Range">
+        <item>&lt; 1230</item>
+        <item>1230 &#8211; 1360</item>
+        <item>1360 &#8211; 1490</item>
+        <item>1490 &#8211; 1620</item>
+        <item>1620 &#8211; 1749</item>
+        <item>&gt; 1750</item>
+    </string-array>
 
 </resources>

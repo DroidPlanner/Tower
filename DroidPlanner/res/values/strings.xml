@@ -243,13 +243,6 @@
     <string name="rc_desc_downloading">DroidPlanner is downloading calibration data from APM. If system is not connected, press Cancel</string>
 
     <!-- Common Setup Buttons Resource Strings-->
-	<!-- 
-    <string name="rc_btn_failsafe">RC Failsafe</string>
-    <string name="rc_btn_next">Next</string>
-    <string name="rc_btn_cancel">Cancel</string>
-    <string name="rc_btn_send">Send</string>
-    <string name="rc_btn_done">Done</string>
- -->
     <string name="button_setup_calibrate">Calibrate</string>
     <string name="button_setup_cancel">Cancel</string>
     <string name="button_setup_reset">Reset</string>
@@ -281,15 +274,6 @@
     <string name="setup_imu_completed">Accelerometer calibration completed. If it is not successful, please recalibrate</string>
 	<string name="setup_imu_step">To start calibration, press Calibrate</string>
     <string name="setup_imu_timeleft">"Time left before next orientation: "</string>
-
-    <!--
-	<string name="setup_fm_mode1">"(  &lt; 1230 ) Flight Mode 1 : "</string>
-    <string name="setup_fm_mode2">"( 1230 &#8211; 1360 ) Flight Mode 2 : "</string>
-    <string name="setup_fm_mode3">"( 1360 &#8211; 1490 ) Flight Mode 3 : "</string>
-    <string name="setup_fm_mode4">"( 1490 &#8211; 1620 ) Flight Mode 4 : "</string>
-    <string name="setup_fm_mode5">"( 1620 &#8211; 1749 ) Flight Mode 5 : "</string>
-    <string name="setup_fm_mode6">"(    &gt; 1750   ) Flight Mode 6 : "</string>
-    -->
 
     <!-- Flight Setup Resource Strings-->
     <string name="setup_fm_title">"Flight Mode Configuration"</string>
