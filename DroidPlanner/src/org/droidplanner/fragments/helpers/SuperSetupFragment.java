@@ -30,7 +30,7 @@ public abstract class SuperSetupFragment extends Fragment implements OnDroneList
 
 	private Drone drone;
 	
-	private ConfigurationActivity parent;
+	protected ConfigurationActivity parentActivity;
 	private Spinner spinnerSetup;
 	private TextView textViewTitle;
 	
@@ -50,13 +50,13 @@ public abstract class SuperSetupFragment extends Fragment implements OnDroneList
                     .class.getName());
         }
 
-        parent = (ConfigurationActivity)activity;
+        parentActivity = (ConfigurationActivity)activity;
 	}
 
     @Override
     public void onDetach(){
         super.onDetach();
-        parent = null;
+        parentActivity = null;
     }
 
 	@Override
@@ -136,7 +136,7 @@ public abstract class SuperSetupFragment extends Fragment implements OnDroneList
 		spinnerSetup = (Spinner)view.findViewById(R.id.spinnerSetupType);
 		spinnerSetup.setOnItemSelectedListener(this);
 
-		final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(parent,
+		final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(parentActivity,
 		        getSpinnerItems(), R.layout.spinner_setup);
 		
 		if(adapter!=null)
