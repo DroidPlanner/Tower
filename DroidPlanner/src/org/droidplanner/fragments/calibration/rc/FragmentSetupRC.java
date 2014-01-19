@@ -1,6 +1,5 @@
 package org.droidplanner.fragments.calibration.rc;
 
-import org.droidplanner.MAVLink.MavLinkStreamRates;
 import org.droidplanner.calibration.CalParameters;
 import org.droidplanner.calibration.CalParameters.OnCalibrationEvent;
 import org.droidplanner.calibration.RC_CalParameters;
@@ -33,9 +32,6 @@ public class FragmentSetupRC extends SetupMainPanel implements OnDroneListner,
 	 * Maximum threshold for the RC value.
 	 */
 	private static final int RC_MAX = 2100;
-
-	// Extreme RC update rate in this screen
-	private static final int RC_MSG_RATE = 50;
 
 	private static final String[] RCStr = { "CH 1 ", "CH 2 ", "CH 3 ", "CH 4 ",
 			"CH 5", "CH 6", "CH 7", "CH 8" };
@@ -89,19 +85,16 @@ public class FragmentSetupRC extends SetupMainPanel implements OnDroneListner,
 	public void onStart() {
 		super.onStart();
 		drone.events.addDroneListener(this);
-//		setupDataStreamingForRcSetup();
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
 		drone.events.removeDroneListener(this);
-//		drone.streamRates.setupStreamRatesFromPref();
 	}
 
 	@Override
 	public void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
 
 		if (rcParameters != null) {
@@ -109,7 +102,6 @@ public class FragmentSetupRC extends SetupMainPanel implements OnDroneListner,
 		}
 
 		Log.d("CAL", "RC Setup");
-//		setupDataStreamingForRcSetup();
 	}
 
 	@Override
@@ -147,15 +139,9 @@ public class FragmentSetupRC extends SetupMainPanel implements OnDroneListner,
 		if (sidePanel != null && rcParameters != null) {
 			String title;
 			if (isSending) {
-				if (rcParameters.equals(rcParameters))
 					title = "Uploading RC calibration data";
-				else
-					title = "Uploading RC options data";
 			} else {
-				if (rcParameters.equals(rcParameters))
 					title = "Downloading RC calibration data";
-				else
-					title = "Downloading RC options data";
 			}
 
 			((FragmentSetupProgress) sidePanel).updateProgress(index, count,
@@ -284,11 +270,6 @@ public class FragmentSetupRC extends SetupMainPanel implements OnDroneListner,
 		x = (data[0] - RC_MIN) / ((float) (RC_MAX - RC_MIN)) * 2 - 1;
 		y = (data[1] - RC_MIN) / ((float) (RC_MAX - RC_MIN)) * 2 - 1;
 		stickRight.setPosition(x, -y);
-	}
-
-	private void setupDataStreamingForRcSetup() {
-		MavLinkStreamRates.setupStreamRates(drone.MavClient, 1, 0, 1, 1, 1,
-				RC_MSG_RATE, 0, 0);
 	}
 
 	private void setFillBarShowMinMax(boolean b) {
