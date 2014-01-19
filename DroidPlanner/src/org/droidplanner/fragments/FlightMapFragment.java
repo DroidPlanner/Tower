@@ -22,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.MAVLink.Messages.ApmModes;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
@@ -130,12 +131,15 @@ public class FlightMapFragment extends DroneMap implements
 
 	@Override
 	public void onMapLongClick(LatLng coord) {
-		///
+
+		// some checks to add
+		if (!drone.MavClient.isConnected() || drone.state.getMode() == ApmModes.ROTOR_GUIDED) return;		
 		
 		//we need new and final variable to use it inside the listener below		
 		final LatLng tmpCoord = coord;
-
 		
+
+							
 		OnClickListener positiveButtonClickListener = new AlertDialog.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
 				drone.guidedPoint.changeGuidedCoordinate(tmpCoord);
@@ -162,6 +166,8 @@ public class FlightMapFragment extends DroneMap implements
 			//here var is not so important but use the same for clarity.
 			drone.guidedPoint.changeGuidedCoordinate(tmpCoord);
 		}
+		
+		
 	}
 
 	@Override
