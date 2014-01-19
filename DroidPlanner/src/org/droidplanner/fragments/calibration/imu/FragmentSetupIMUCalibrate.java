@@ -92,4 +92,10 @@ public class FragmentSetupIMUCalibrate extends SetupSidePanel {
 			textDesc.setText(id);
 	}
 
+	@Override
+	public void updateTitle(int idTitle) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

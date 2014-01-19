@@ -59,4 +59,10 @@ public class FragmentSetupRCCompleted extends SetupSidePanel {
 		
 	}
 
+	@Override
+	public void updateTitle(int idTitle) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

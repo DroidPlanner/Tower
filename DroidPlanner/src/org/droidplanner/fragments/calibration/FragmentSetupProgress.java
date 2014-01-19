@@ -18,6 +18,8 @@ import android.widget.TextView;
 public class FragmentSetupProgress extends SetupSidePanel {
 	private TextView textTitle;
 	private TextView textProgress;
+	private TextView textAction;
+	private TextView textDesc;
 	private ProgressBar pb;
 
 	@Override
@@ -29,9 +31,11 @@ public class FragmentSetupProgress extends SetupSidePanel {
 		final View view = inflater.inflate(R.layout.fragment_setup_progress,
 				container, false);
 		
-		textTitle = (TextView) view.findViewById(R.id.textViewProgressTitle);
-
+		textTitle = (TextView) view.findViewById(R.id.setupTitle);
+		textDesc = (TextView) view.findViewById(R.id.setupDesc);
+		textAction = (TextView) view.findViewById(R.id.textViewProgressTitle);
 		textProgress = (TextView) view.findViewById(R.id.textViewProgress);
+		
 		textProgress.setText("0/0");
 		
 		pb = (ProgressBar) view.findViewById(R.id.progressBarRCSetup);
@@ -51,8 +55,8 @@ public class FragmentSetupProgress extends SetupSidePanel {
 	}
 
 	public void updateProgress(int index, int count, String txt) {
-		if (textTitle!=null) {
-			textTitle.setText(txt);
+		if (textAction!=null) {
+			textAction.setText(txt);
 		}
 
 		if(pb!=null){
@@ -68,8 +72,12 @@ public class FragmentSetupProgress extends SetupSidePanel {
 
 	@Override
 	public void updateDescription(int idDescription) {
-		// TODO Auto-generated method stub
-		
+		textDesc.setText(idDescription);
+	}
+
+	@Override
+	public void updateTitle(int idTitle) {
+		textTitle.setText(idTitle);
 	}
 
 }

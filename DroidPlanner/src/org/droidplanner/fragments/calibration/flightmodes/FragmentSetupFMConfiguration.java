@@ -48,4 +48,10 @@ public class FragmentSetupFMConfiguration extends SetupSidePanel {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void updateTitle(int idTitle) {
+		// TODO Auto-generated method stub
+		
+	}
 }

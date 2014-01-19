@@ -13,7 +13,7 @@
         android:background="@color/dark_title_bg" >
 
         <TextView
-            android:id="@+id/RCSetupTitle"
+            android:id="@+id/setupTitle"
             style="@style/SetupTitle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -22,7 +22,7 @@
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/setupDesc"
         style="@style/ModeDetailText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

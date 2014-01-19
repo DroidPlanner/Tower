@@ -49,4 +49,10 @@ public class FragmentSetupRCMinMax extends SetupSidePanel {
 		
 	}
 
+	@Override
+	public void updateTitle(int idTitle) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
