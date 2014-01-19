@@ -89,14 +89,14 @@ public class FragmentSetupRC extends SetupMainPanel implements OnDroneListner,
 	public void onStart() {
 		super.onStart();
 		drone.events.addDroneListener(this);
-		setupDataStreamingForRcSetup();
+//		setupDataStreamingForRcSetup();
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
 		drone.events.removeDroneListener(this);
-		drone.streamRates.setupStreamRatesFromPref();
+//		drone.streamRates.setupStreamRatesFromPref();
 	}
 
 	@Override
@@ -109,7 +109,7 @@ public class FragmentSetupRC extends SetupMainPanel implements OnDroneListner,
 		}
 
 		Log.d("CAL", "RC Setup");
-		setupDataStreamingForRcSetup();
+//		setupDataStreamingForRcSetup();
 	}
 
 	@Override
@@ -133,7 +133,7 @@ public class FragmentSetupRC extends SetupMainPanel implements OnDroneListner,
 
 	@Override
 	public void onReadCalibration(CalParameters calParameters) {
-		doCalibrationStep(-1);// show progress sidepanel
+		doCalibrationStep(0);// show progress sidepanel
 	}
 
 	@Override
