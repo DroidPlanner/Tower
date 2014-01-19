@@ -54,6 +54,12 @@ public class FragmentSetupFM extends SetupMainPanel implements OnDroneListner, O
 	}
 
 	@Override
+	public void onStart() {
+		super.onStart();
+		doCalibrationStep(0);
+	}
+
+	@Override
 	public void onResume() {
 		super.onResume();
 		drone.events.addDroneListener(this);
@@ -136,16 +142,32 @@ public class FragmentSetupFM extends SetupMainPanel implements OnDroneListner, O
 
 	}
 
-	private void setupSpinners() {
-		final ArrayAdapter<CharSequence> adapter = ArrayAdapter
-				.createFromResource(parentActivity,
-						R.array.FligthMode_CopterV3_1,
-						R.layout.spinner_setup_item);
+	@Override
+	public void onReadCalibration(CalParameters calParameters) {
+		updateFMPanel();
+		doCalibrationStep(0);
+	}
 
-		adapter.setDropDownViewResource(R.layout.spinner_setup_item_dropdown);
 
-		for (Spinner spinner : pwmSpinners) {
-			spinner.setAdapter(adapter);
+	@Override
+	public void onSentCalibration(CalParameters calParameters) {
+		doCalibrationStep(0);
+	}
+
+	@Override
+	public void onCalibrationData(CalParameters calParameters, int index,
+			int count, boolean isSending) {
+
+		if (sidePanel != null && fmParameters != null) {
+			String title;
+			if (isSending) {
+					title = getResources().getString(R.string.setup_fm_desc_uploading);
+			} else {
+				title = getResources().getString(R.string.setup_fm_desc_downloading);
+			}
+
+			((FragmentSetupProgress) sidePanel).updateProgress(index, count,
+					title);
 		}
 	}
 
@@ -159,22 +181,6 @@ public class FragmentSetupFM extends SetupMainPanel implements OnDroneListner, O
 		default:
 			sidePanel = getInitialPanel();
 		}
-	}
-
-	private SetupSidePanel getInitialPanel() {
-		if (!fmParameters.isParameterDownloaded()&&drone.MavClient.isConnected()) {
-			sidePanel = ((SetupRadioFragment) getParentFragment())
-					.changeSidePanel(new FragmentSetupProgress());
-			
-			sidePanel.updateDescription(R.string.progress_desc_downloading);
-			
-			fmParameters.getCalibrationParameters(drone);
-		}
-		else {
-			sidePanel = ((SetupRadioFragment) getParentFragment())
-					.changeSidePanel(new FragmentSetupFMConfiguration());
-		}
-		return sidePanel;
 	}
 
 	private void uploadCalibrationData() {
@@ -203,7 +209,45 @@ public class FragmentSetupFM extends SetupMainPanel implements OnDroneListner, O
 			}
 			cnt++;
 		}
+		sidePanel = getProgressPanel();
+		sidePanel.updateTitle(R.string.progress_title_uploading);
+		sidePanel.updateDescription(R.string.progress_desc_uploading);
+		
 		fmParameters.setFMData(dataFM);
+		fmParameters.sendCalibrationParameters();
+	}
+
+	private SetupSidePanel getInitialPanel() {
+		if (!fmParameters.isParameterDownloaded()&&drone.MavClient.isConnected()) {
+			sidePanel = getProgressPanel();
+			sidePanel.updateTitle(R.string.progress_title_downloading);
+			sidePanel.updateDescription(R.string.progress_desc_downloading);
+			fmParameters.getCalibrationParameters(drone);
+		}
+		else {
+			sidePanel = ((SetupRadioFragment) getParentFragment())
+					.changeSidePanel(new FragmentSetupFMConfiguration());
+		}
+		return sidePanel;
+	}
+
+	private SetupSidePanel getProgressPanel() {
+		sidePanel = ((SetupRadioFragment) getParentFragment())
+				.changeSidePanel(new FragmentSetupProgress());
+
+		return sidePanel;
+	}
+	private void setupSpinners() {
+		final ArrayAdapter<CharSequence> adapter = ArrayAdapter
+				.createFromResource(parentActivity,
+						R.array.FligthMode_CopterV3_1,
+						R.layout.spinner_setup_item);
+
+		adapter.setDropDownViewResource(R.layout.spinner_setup_item_dropdown);
+
+		for (Spinner spinner : pwmSpinners) {
+			spinner.setAdapter(adapter);
+		}
 	}
 
 	private void updatePWMPanels() {
@@ -217,6 +261,22 @@ public class FragmentSetupFM extends SetupMainPanel implements OnDroneListner, O
 
 	}
 
+	private void updateFMPanel() {
+		for(int i=0;i<6;i++){
+			int fmData = (int)fmParameters.getParamValue(i);
+			pwmSpinners[i].setSelection(fmData, true);
+		}
+		
+		for(int i=0;i<6;i++){
+			int fmData;
+			fmData = (int)fmParameters.getParamValue(6);
+			chkbxSimple[i].setChecked((fmData&flightModeIndex[i])==flightModeIndex[i]);
+
+			fmData = (int)fmParameters.getParamValue(7);
+			chkbxSuperSimple[i].setChecked((fmData&flightModeIndex[i])==flightModeIndex[i]);
+		}
+	}
+	
 	private void updateLayout(int pwmId) {
 		int cnt = 0;
 		for (LinearLayout layout : layoutPWM) {
@@ -245,50 +305,6 @@ public class FragmentSetupFM extends SetupMainPanel implements OnDroneListner, O
 			return 5;
 
 		return -1;
-	}
-
-	@Override
-	public void onReadCalibration(CalParameters calParameters) {
-		updateFMPanel();
-		doCalibrationStep(0);
-	}
-
-	private void updateFMPanel() {
-		for(int i=0;i<6;i++){
-			int fmData = (int)fmParameters.getParamValue(i);
-			pwmSpinners[i].setSelection(fmData, true);
-		}
-		
-		for(int i=0;i<6;i++){
-			int fmData;
-			fmData = (int)fmParameters.getParamValue(6);
-			chkbxSimple[i].setChecked((fmData&flightModeIndex[i])==flightModeIndex[i]);
-
-			fmData = (int)fmParameters.getParamValue(7);
-			chkbxSuperSimple[i].setChecked((fmData&flightModeIndex[i])==flightModeIndex[i]);
-		}
-	}
-
-	@Override
-	public void onSentCalibration(CalParameters calParameters) {
-		doCalibrationStep(0);
-	}
-
-	@Override
-	public void onCalibrationData(CalParameters calParameters, int index,
-			int count, boolean isSending) {
-
-		if (sidePanel != null && fmParameters != null) {
-			String title;
-			if (isSending) {
-					title = "Uploading Flight Mode configuration data";
-			} else {
-					title = "Downloading Flight Mode configuration data";
-			}
-
-			((FragmentSetupProgress) sidePanel).updateProgress(index, count,
-					title);
-		}
 	}
 
 }

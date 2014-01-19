@@ -32,7 +32,7 @@ public class FragmentSetupFMConfiguration extends SetupSidePanel {
 			}
 		});
 
-		final Button btnCancel = (Button) view.findViewById(R.id.ButtonCancel);
+		final Button btnCancel = (Button) view.findViewById(R.id.ButtonReset);
 		btnCancel.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -42,15 +42,6 @@ public class FragmentSetupFMConfiguration extends SetupSidePanel {
 			}
 		});
 		return view;
-	}
-
-	@Override
-	public void setUserVisibleHint(boolean isVisibleToUser) {
-		super.setUserVisibleHint(isVisibleToUser);
-		if (isVisibleToUser) {
-			final SetupRadioFragment setupFragment = (SetupRadioFragment) getParentFragment();
-			setupFragment.doCalibrationStep(0);
-		}
 	}
 
 	@Override

@@ -51,7 +51,7 @@
             android:orientation="horizontal" >
 
             <Button
-                android:id="@+id/ButtonCancel"
+                android:id="@+id/ButtonReset"
                 style="@style/modeControl"
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
