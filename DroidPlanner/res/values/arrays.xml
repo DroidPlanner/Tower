@@ -138,5 +138,83 @@
         <item>1620 &#8211; 1749</item>
         <item>&gt; 1750</item>
     </string-array>
+    <string-array name="CH6_Options">
+        <item>0;None</item>
+        <item>1;Stab Roll/Pitch kP</item>
+        <item>4;Rate Roll/Pitch kP</item>
+        <item>5;Rate Roll/Pitch kI</item>
+        <item>21;Rate Roll/Pitch kD</item>
+        <item>3;Stab Yaw kP</item>
+        <item>6;Rate Yaw kP</item>
+        <item>26;Rate Yaw kD</item>
+        <item>14;Altitude Hold kP</item>
+        <item>7;Throttle Rate kP</item>
+        <item>37;Throttle Rate kD</item>
+        <item>34;Throttle Accel kP</item>
+        <item>35;Throttle Accel kI</item>
+        <item>36;Throttle Accel kD</item>
+        <item>42;Loiter Speed</item>
+        <item>12;Loiter Pos kP</item>
+        <item>22;Loiter Rate kP</item>
+        <item>28;Loiter Rate kI</item>
+        <item>23;Loiter Rate kD</item>
+        <item>10;WP Speed</item>
+        <item>25;Acro RollPitch kP</item>
+        <item>40;Acro Yaw kP</item>
+        <item>9;Relay On/Off</item>
+        <item>13;Heli Ext Gyro</item>
+        <item>17;OF Loiter kP</item>
+        <item>18;OF Loiter kI</item>
+        <item>19;OF Loiter kD</item>
+        <item>30;AHRS Yaw kP</item>
+        <item>31;AHRS kP</item>
+        <item>32;INAV_TC</item>
+        <item>38;Declination</item>
+        <item>39;Circle Rate</item>
+        <item>41;Sonar Gain</item>
+    </string-array>
+    <string-array name="CH_Options">
+        <item>0;Do Nothing</item>
+        <item>2;Flip</item>
+        <item>3;Simple Mode</item>
+        <item>4;RTL</item>
+        <item>5;Save Trim</item>
+        <item>7;Save WP</item>
+        <item>8;Multi Mode</item>
+        <item>9;Camera Trigger</item>
+        <item>10;Sonar</item>
+        <item>11;Fence</item>
+        <item>12;ResetToArmedYaw</item>
+        <item>13;Super Simple Mode</item>
+        <item>14;Acro Trainer</item>
+        <item>16;Auto</item>
+        <item>17;AutoTune</item>
+        <item>18;Land</item>
+        <item>19;EPM</item>
+    </string-array>
+    <string-array name="Servo_Functions">
+        <item>0;Disabled</item>
+        <item>1;RCPassThru</item>
+        <item>2;Flap</item>
+        <item>3;Flap_auto</item>
+        <item>4;Aileron</item>
+        <item>5;flaperon</item>
+        <item>6;mount_pan</item>
+        <item>7;mount_tilt</item>
+        <item>8;mount_roll</item>
+        <item>9;mount_open</item>
+        <item>10;camera_trigger</item>
+        <item>11;release</item>
+        <item>12;mount2_pan</item>
+        <item>13;mount2_tilt</item>
+        <item>14;mount2_roll</item>
+        <item>15;mount2_open</item>
+        <item>16;DifferentialSpoiler1</item>
+        <item>17;DifferentialSpoiler2</item>
+        <item>18;AileronWithInput</item>
+        <item>19;Elevator</item>
+        <item>20;ElevatorWithInput</item>
+        <item>21;Rudder</item>
+    </string-array>
 
 </resources>

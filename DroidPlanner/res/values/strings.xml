@@ -240,7 +240,7 @@
     <string name="rc_options_ch7">Channel 7</string>
     <string name="rc_options_ch8">Channel 8</string>
 
-    <!-- Common Setup Buttons Resource Strings-->
+    <!-- Common Setup Buttons Resource Strings -->
     <string name="button_setup_calibrate">Calibrate</string>
     <string name="button_setup_cancel">Cancel</string>
     <string name="button_setup_reset">Reset</string>
@@ -251,20 +251,19 @@
     <string name="progress_desc_uploading">DroidPlanner is uploading calibration data to vehicel</string>
     <string name="progress_title_downloading">Downloading calibration data</string>
     <string name="progress_desc_downloading">DroidPlanner is downloading calibration data from vehicle. If system is not connected, press Cancel</string>
-    
-    <!-- Failsafe Setup Resource Strings-->
+
+    <!-- Failsafe Setup Resource Strings -->
     <string name="setup_fs_title">Failsafe Setup</string>
 
-
-    <!-- Radio Setup Resource Strings-->
+    <!-- Radio Setup Resource Strings -->
     <string name="setup_radio_title">Radio Channel Calibration</string>
     <string name="setup_radio_cal_title">Start Calibration</string>
     <string name="setup_radio_cal_desc">Press Calibrate to start the radio calibration. Ensure the radio transmitter is switched \'ON\' and transmitting</string>
 
-    <!-- Compass Setup Resource Strings-->
+    <!-- Compass Setup Resource Strings -->
     <string name="setup_mag_title">Compass Calibration</string>
 
-    <!-- Accelerometer Setup Resource Strings-->
+    <!-- Accelerometer Setup Resource Strings -->
     <string name="setup_imu_title">Accelerometer Calibration</string>
     <string name="setup_imu_start">Press Calibrate to start IMU calibration. Ensure vehicle is placed on a FLAT surface before beginning the calibration process</string>
     <string name="setup_imu_normal">Place the vehicle on its NORMAL position ensuring very minimal movement and press Next</string>
@@ -274,10 +273,10 @@
     <string name="setup_imu_noseup">Place the vehicle NOSE UP ensuring very minimal movement and press Next</string>
     <string name="setup_imu_back">Place the vehicle on its BACK ensuring very minimal movement and press Next</string>
     <string name="setup_imu_completed">Accelerometer calibration completed. If it is not successful, please recalibrate</string>
-	<string name="setup_imu_step">To start calibration, press Calibrate</string>
+    <string name="setup_imu_step">To start calibration, press Calibrate</string>
     <string name="setup_imu_timeleft">"Time left before next orientation: "</string>
 
-    <!-- Flight Setup Resource Strings-->
+    <!-- Flight Setup Resource Strings -->
     <string name="setup_fm_title">"Flight Mode Configuration"</string>
     <string name="setup_fm_side_title">"Update Flight Mode"</string>
     <string name="setup_fm_side_desc">"Press \'Send\' to update the new flight modes to vehicle."</string>
@@ -291,5 +290,25 @@
     <string name="setup_fm_mode6">"Flight Mode 6 : "</string>
     <string name="setup_fm_simple">"Simple Mode "</string>
     <string name="setup_fm_super">"Super Simple Mode "</string>
+
+    <!-- Channel Options Setup Resource Strings -->
+    <string name="setup_ch_title">"Channel Options Configuration"</string>
+    <string name="setup_ch_side_title">"Update Channel Options"</string>
+    <string name="setup_ch_side_desc">"Press \'Send\' to update the new servo function to vehicle."</string>
+    <string name="setup_ch_CH6_options">"Channel 6 Tuning  :"</string>
+    <string name="setup_ch_CH7_options">"Channel 7 Options :"</string>
+    <string name="setup_ch_CH8_options">"Channel 8 Options :"</string>
     
+    <!-- Servo functions Setup Resource Strings -->
+    <string name="setup_sf_title">"Servo Function Configuration"</string>
+    <string name="setup_sf_side_title">"Update Servo Function"</string>
+    <string name="setup_sf_side_desc">"Press \'Send\' to update the new servo function to vehicle."</string>
+    <string name="setup_sf_servo5">"Servo  5 : "</string>
+    <string name="setup_sf_servo6">"Servo  6 : "</string>
+    <string name="setup_sf_servo7">"Servo  7 : "</string>
+    <string name="setup_sf_servo8">"Servo  8 : "</string>
+    <string name="setup_sf_servo9">"Servo  9 : "</string>
+    <string name="setup_sf_servo10">"Servo 10 : "</string>
+    <string name="setup_sf_servo11">"Servo 11 : "</string>
+    <string name="setup_sf_servo12">"Servo 12 : "</string>
 </resources>
