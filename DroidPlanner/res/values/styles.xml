@@ -184,7 +184,13 @@
         <item name="android:textColor">@color/greyText</item>
 	</style>
 
-	<!--  App title style-->
+	<style name="SetupSpinnerItem" parent="@android:style/Widget.Holo.Light.TextView">
+		<item name="android:textSize">26dp</item>
+	    <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#fff</item>
+	</style>
+
+		<!--  App title style-->
 	<style name="CustomActionBarTheme.ActionBar.TitleTextStyle" parent="android:style/TextAppearance.Holo.Widget.ActionBar.Title">
 	    <item name="android:textColor">#333</item>
 	    <item name="android:textStyle">bold</item>
