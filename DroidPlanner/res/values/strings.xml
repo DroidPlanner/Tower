@@ -239,8 +239,6 @@
     <string name="rc_setup_title">Radio Calibration</string>
     <string name="rc_options_ch7">Channel 7</string>
     <string name="rc_options_ch8">Channel 8</string>
-    <string name="rc_title_downloading">Downloading calibration data</string>
-    <string name="rc_desc_downloading">DroidPlanner is downloading calibration data from APM. If system is not connected, press Cancel</string>
 
     <!-- Common Setup Buttons Resource Strings-->
     <string name="button_setup_calibrate">Calibrate</string>
@@ -249,6 +247,10 @@
     <string name="button_setup_send">Send</string>
     <string name="button_setup_next">Next</string>
     <string name="button_setup_done">Done</string>
+    <string name="progress_title_uploading">Uploading calibration data</string>
+    <string name="progress_desc_uploading">DroidPlanner is uploading calibration data to vehicel</string>
+    <string name="progress_title_downloading">Downloading calibration data</string>
+    <string name="progress_desc_downloading">DroidPlanner is downloading calibration data from vehicle. If system is not connected, press Cancel</string>
     
     <!-- Failsafe Setup Resource Strings-->
     <string name="setup_fs_title">Failsafe Setup</string>
@@ -287,5 +289,5 @@
     <string name="setup_fm_mode6">"Flight Mode 6 : "</string>
     <string name="setup_fm_simple">"Simple Mode "</string>
     <string name="setup_fm_super">"Super Simple Mode "</string>
-
+    
 </resources>

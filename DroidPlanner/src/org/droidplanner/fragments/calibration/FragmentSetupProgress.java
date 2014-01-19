@@ -26,7 +26,7 @@ public class FragmentSetupProgress extends SetupSidePanel {
 
         final SuperSetupFragment setupFragment = (SuperSetupFragment) getParentFragment();
 
-		final View view = inflater.inflate(R.layout.fragment_setup_rc_progress,
+		final View view = inflater.inflate(R.layout.fragment_setup_progress,
 				container, false);
 		
 		textTitle = (TextView) view.findViewById(R.id.textViewProgressTitle);
