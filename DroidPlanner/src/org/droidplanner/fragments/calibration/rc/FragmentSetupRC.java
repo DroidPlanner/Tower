@@ -233,6 +233,8 @@ public class FragmentSetupRC extends SetupMainPanel implements OnDroneListner,
 	private SetupSidePanel getMinMaxPanel() {
 		if (!rcParameters.isParameterDownloaded()) {
 			getProgressPanel();
+			sidePanel.updateTitle(R.string.progress_title_downloading);
+			sidePanel.updateDescription(R.string.progress_desc_downloading);
 			rcParameters.getCalibrationParameters(drone);
 		} else {
 			setFillBarShowMinMax(true);
@@ -329,6 +331,9 @@ public class FragmentSetupRC extends SetupMainPanel implements OnDroneListner,
 
 		setFillBarShowMinMax(false);
 		getProgressPanel();
+		sidePanel.updateTitle(R.string.progress_title_uploading);
+		sidePanel.updateDescription(R.string.progress_desc_uploading);
+
 		rcParameters.sendCalibrationParameters();
 	}
 

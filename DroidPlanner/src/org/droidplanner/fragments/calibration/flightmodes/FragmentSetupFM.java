@@ -1,13 +1,15 @@
 package org.droidplanner.fragments.calibration.flightmodes;
 
+import org.droidplanner.calibration.CalParameters;
+import org.droidplanner.calibration.CalParameters.OnCalibrationEvent;
 import org.droidplanner.calibration.FM_CalParameters;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
 import org.droidplanner.fragments.SetupRadioFragment;
+import org.droidplanner.fragments.calibration.FragmentSetupProgress;
 import org.droidplanner.fragments.calibration.SetupMainPanel;
 import org.droidplanner.fragments.calibration.SetupSidePanel;
-import org.droidplanner.widgets.spinners.SpinnerSelfSelect.OnSpinnerItemSelectedListener;
 import org.droidplanner.R;
 
 import android.app.Activity;
@@ -19,12 +21,12 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-public class FragmentSetupFM extends SetupMainPanel implements OnDroneListner {
+public class FragmentSetupFM extends SetupMainPanel implements OnDroneListner, OnCalibrationEvent {
 
 	private int[] pwm = { 1230, 1360, 1490, 1620, 1750 };
 	private int[] flightModeValue = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13 };
 	private int[] flightModeIndex = { 1, 2, 4, 8, 16, 32 };
-	private double dataFM[] = new double[8];
+	private int dataFM[] = new int[8];
 
 	private String[] listPWM;
 	private CheckBox[] chkbxSimple = new CheckBox[6];
@@ -48,6 +50,7 @@ public class FragmentSetupFM extends SetupMainPanel implements OnDroneListner {
 		super.onActivityCreated(savedInstanceState);
 		this.drone = parentActivity.drone;
 		fmParameters = new FM_CalParameters(drone);
+		fmParameters.setOnCalibrationEventListener(this);
 	}
 
 	@Override
@@ -67,6 +70,11 @@ public class FragmentSetupFM extends SetupMainPanel implements OnDroneListner {
 		switch (event) {
 		case RC_IN:
 			updatePWMPanels();
+			break;
+		case PARAMETER:
+			if (fmParameters != null) {
+				fmParameters.processReceivedParam();
+			}
 			break;
 		case RC_OUT:
 		default:
@@ -154,8 +162,18 @@ public class FragmentSetupFM extends SetupMainPanel implements OnDroneListner {
 	}
 
 	private SetupSidePanel getInitialPanel() {
-		sidePanel = ((SetupRadioFragment) getParentFragment())
-				.changeSidePanel(new FragmentSetupFMConfiguration());
+		if (!fmParameters.isParameterDownloaded()&&drone.MavClient.isConnected()) {
+			sidePanel = ((SetupRadioFragment) getParentFragment())
+					.changeSidePanel(new FragmentSetupProgress());
+			
+			sidePanel.updateDescription(R.string.progress_desc_downloading);
+			
+			fmParameters.getCalibrationParameters(drone);
+		}
+		else {
+			sidePanel = ((SetupRadioFragment) getParentFragment())
+					.changeSidePanel(new FragmentSetupFMConfiguration());
+		}
 		return sidePanel;
 	}
 
@@ -164,7 +182,7 @@ public class FragmentSetupFM extends SetupMainPanel implements OnDroneListner {
 
 		// Read all spinners value
 		for (Spinner spinner : pwmSpinners) {
-			dataFM[cnt] = spinner.getSelectedItemPosition();
+			dataFM[cnt] = flightModeValue[spinner.getSelectedItemPosition()];
 			cnt++;
 		}
 
@@ -185,7 +203,7 @@ public class FragmentSetupFM extends SetupMainPanel implements OnDroneListner {
 			}
 			cnt++;
 		}
-
+		fmParameters.setFMData(dataFM);
 	}
 
 	private void updatePWMPanels() {
@@ -227,6 +245,50 @@ public class FragmentSetupFM extends SetupMainPanel implements OnDroneListner {
 			return 5;
 
 		return -1;
+	}
+
+	@Override
+	public void onReadCalibration(CalParameters calParameters) {
+		updateFMPanel();
+		doCalibrationStep(0);
+	}
+
+	private void updateFMPanel() {
+		for(int i=0;i<6;i++){
+			int fmData = (int)fmParameters.getParamValue(i);
+			pwmSpinners[i].setSelection(fmData, true);
+		}
+		
+		for(int i=0;i<6;i++){
+			int fmData;
+			fmData = (int)fmParameters.getParamValue(6);
+			chkbxSimple[i].setChecked((fmData&flightModeIndex[i])==flightModeIndex[i]);
+
+			fmData = (int)fmParameters.getParamValue(7);
+			chkbxSuperSimple[i].setChecked((fmData&flightModeIndex[i])==flightModeIndex[i]);
+		}
+	}
+
+	@Override
+	public void onSentCalibration(CalParameters calParameters) {
+		doCalibrationStep(0);
+	}
+
+	@Override
+	public void onCalibrationData(CalParameters calParameters, int index,
+			int count, boolean isSending) {
+
+		if (sidePanel != null && fmParameters != null) {
+			String title;
+			if (isSending) {
+					title = "Uploading Flight Mode configuration data";
+			} else {
+					title = "Downloading Flight Mode configuration data";
+			}
+
+			((FragmentSetupProgress) sidePanel).updateProgress(index, count,
+					title);
+		}
 	}
 
 }

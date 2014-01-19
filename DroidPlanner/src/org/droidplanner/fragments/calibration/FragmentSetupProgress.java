@@ -21,6 +21,7 @@ public class FragmentSetupProgress extends SetupSidePanel {
 	private TextView textAction;
 	private TextView textDesc;
 	private ProgressBar pb;
+	private int titleId=0, descId=0;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,6 +36,11 @@ public class FragmentSetupProgress extends SetupSidePanel {
 		textDesc = (TextView) view.findViewById(R.id.setupDesc);
 		textAction = (TextView) view.findViewById(R.id.textViewProgressTitle);
 		textProgress = (TextView) view.findViewById(R.id.textViewProgress);
+		
+		if(titleId!=0)
+			textTitle.setText(titleId);
+		if(descId!=0)
+			textDesc.setText(descId);
 		
 		textProgress.setText("0/0");
 		
@@ -72,12 +78,16 @@ public class FragmentSetupProgress extends SetupSidePanel {
 
 	@Override
 	public void updateDescription(int idDescription) {
-		textDesc.setText(idDescription);
+		this.descId = idDescription;
+		if(textDesc!=null)
+			textDesc.setText(idDescription);
 	}
 
 	@Override
 	public void updateTitle(int idTitle) {
-		textTitle.setText(idTitle);
+		this.titleId = idTitle;
+		if(textTitle!=null)
+			textTitle.setText(idTitle);
 	}
 
 }

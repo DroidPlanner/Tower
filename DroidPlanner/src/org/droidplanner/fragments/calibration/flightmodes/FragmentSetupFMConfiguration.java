@@ -12,46 +12,56 @@ import android.widget.Button;
 import org.droidplanner.R;
 
 public class FragmentSetupFMConfiguration extends SetupSidePanel {
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-        final SetupRadioFragment setupFragment = (SetupRadioFragment) getParentFragment();
+		final SetupRadioFragment setupFragment = (SetupRadioFragment) getParentFragment();
 
-		final View view = inflater.inflate(R.layout.fragment_setup_fm_send, container, false);
+		final View view = inflater.inflate(R.layout.fragment_setup_fm_send,
+				container, false);
 
-		final Button btnSend = (Button)view.findViewById(R.id.ButtonSend);
+		final Button btnSend = (Button) view.findViewById(R.id.ButtonSend);
 		btnSend.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(setupFragment != null){
-                    setupFragment.doCalibrationStep(1);
-                }
-            }
-        });
-		
-		final Button btnCancel = (Button)view.findViewById(R.id.ButtonCancel);
+			@Override
+			public void onClick(View v) {
+				if (setupFragment != null) {
+					setupFragment.doCalibrationStep(1);
+				}
+			}
+		});
+
+		final Button btnCancel = (Button) view.findViewById(R.id.ButtonCancel);
 		btnCancel.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(setupFragment != null){
-                    setupFragment.doCalibrationStep(0);
-                }
-            }
-        });
+			@Override
+			public void onClick(View v) {
+				if (setupFragment != null) {
+					setupFragment.doCalibrationStep(0);
+				}
+			}
+		});
 		return view;
+	}
+
+	@Override
+	public void setUserVisibleHint(boolean isVisibleToUser) {
+		super.setUserVisibleHint(isVisibleToUser);
+		if (isVisibleToUser) {
+			final SetupRadioFragment setupFragment = (SetupRadioFragment) getParentFragment();
+			setupFragment.doCalibrationStep(0);
+		}
 	}
 
 	@Override
 	public void updateDescription(int idDescription) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void updateTitle(int idTitle) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }
