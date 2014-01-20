@@ -1,8 +1,7 @@
-package org.droidplanner.fragments.calibration.rc;
+package org.droidplanner.fragments.calibration;
 
-import org.droidplanner.fragments.RcSetupFragment;
+import org.droidplanner.fragments.helpers.SuperSetupFragment;
 
-import android.support.v4.app.Fragment;
 import org.droidplanner.R;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,23 +15,33 @@ import android.widget.TextView;
 /**
  * This fragment displays the progress for the RC setup process.
  */
-public class FragmentSetupRCProgress extends Fragment {
+public class FragmentSetupProgress extends SetupSidePanel {
 	private TextView textTitle;
 	private TextView textProgress;
+	private TextView textAction;
+	private TextView textDesc;
 	private ProgressBar pb;
+	private int titleId=0, descId=0;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-        final RcSetupFragment rcSetupFragment = (RcSetupFragment) getParentFragment();
+        final SuperSetupFragment setupFragment = (SuperSetupFragment) getParentFragment();
 
-		final View view = inflater.inflate(R.layout.fragment_setup_rc_progress,
+		final View view = inflater.inflate(R.layout.fragment_setup_progress,
 				container, false);
 		
-		textTitle = (TextView) view.findViewById(R.id.textViewProgressTitle);
-
+		textTitle = (TextView) view.findViewById(R.id.setupTitle);
+		textDesc = (TextView) view.findViewById(R.id.setupDesc);
+		textAction = (TextView) view.findViewById(R.id.textViewProgressTitle);
 		textProgress = (TextView) view.findViewById(R.id.textViewProgress);
+		
+		if(titleId!=0)
+			textTitle.setText(titleId);
+		if(descId!=0)
+			textDesc.setText(descId);
+		
 		textProgress.setText("0/0");
 		
 		pb = (ProgressBar) view.findViewById(R.id.progressBarRCSetup);
@@ -42,8 +51,8 @@ public class FragmentSetupRCProgress extends Fragment {
 		btnCancel.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (rcSetupFragment != null) {
-                    rcSetupFragment.cancel();
+                if (setupFragment != null) {
+                    setupFragment.doCalibrationStep(-1);
                 }
             }
         });
@@ -52,8 +61,8 @@ public class FragmentSetupRCProgress extends Fragment {
 	}
 
 	public void updateProgress(int index, int count, String txt) {
-		if (textTitle!=null) {
-			textTitle.setText(txt);
+		if (textAction!=null) {
+			textAction.setText(txt);
 		}
 
 		if(pb!=null){
@@ -65,6 +74,20 @@ public class FragmentSetupRCProgress extends Fragment {
 		if(textProgress!=null){
 			textProgress.setText(String.valueOf(index)+"/"+String.valueOf(count));
 		}
+	}
+
+	@Override
+	public void updateDescription(int idDescription) {
+		this.descId = idDescription;
+		if(textDesc!=null)
+			textDesc.setText(idDescription);
+	}
+
+	@Override
+	public void updateTitle(int idTitle) {
+		this.titleId = idTitle;
+		if(textTitle!=null)
+			textTitle.setText(idTitle);
 	}
 
 }

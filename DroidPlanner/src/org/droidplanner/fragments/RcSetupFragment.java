@@ -9,12 +9,12 @@ import org.droidplanner.calibration.CalParameters.OnCalibrationEvent;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import org.droidplanner.fragments.calibration.FragmentSetupProgress;
 import org.droidplanner.fragments.calibration.rc.FragmentSetupRCCompleted;
 import org.droidplanner.fragments.calibration.rc.FragmentSetupRCMenu;
 import org.droidplanner.fragments.calibration.rc.FragmentSetupRCMiddle;
 import org.droidplanner.fragments.calibration.rc.FragmentSetupRCMinMax;
 import org.droidplanner.fragments.calibration.rc.FragmentSetupRCOptions;
-import org.droidplanner.fragments.calibration.rc.FragmentSetupRCProgress;
 import org.droidplanner.widgets.FillBar.FillBar;
 import org.droidplanner.widgets.RcStick.RcStick;
 import android.widget.TextView;
@@ -272,14 +272,14 @@ public class RcSetupFragment extends Fragment implements OnDroneListner, OnCalib
 	private Fragment getRCMenuPanel() {
         setupPanel = currParameters == null
                 ? new FragmentSetupRCMenu()
-                : new FragmentSetupRCProgress();
+                : new FragmentSetupProgress();
 
 		return setupPanel;
 	}
 
 	private Fragment getRCCalibrationPanel() {
 		if (!rcParameters.isParameterDownloaded()) {
-			setupPanel = new FragmentSetupRCProgress();
+			setupPanel = new FragmentSetupProgress();
 			rcParameters.getCalibrationParameters(drone);
 		}
         else {
@@ -291,7 +291,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner, OnCalib
 
 	private Fragment getCHCalibrationPanel() {
 		if (!chParameters.isParameterDownloaded()) {
-			setupPanel = new FragmentSetupRCProgress();
+			setupPanel = new FragmentSetupProgress();
 			chParameters.getCalibrationParameters(drone);
 		}
         else {
@@ -400,7 +400,7 @@ public class RcSetupFragment extends Fragment implements OnDroneListner, OnCalib
 				else
 					title = "Downloading RC options data";
 			}
-			((FragmentSetupRCProgress) setupPanel).updateProgress(index, count, title);
+			((FragmentSetupProgress) setupPanel).updateProgress(index, count, title);
 		}
 	}
 }

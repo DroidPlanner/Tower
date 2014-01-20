@@ -1,13 +1,12 @@
-package org.droidplanner.fragments;
+package org.droidplanner.fragments.helpers;
 
 import org.droidplanner.DroidPlannerApp;
 import org.droidplanner.activitys.ConfigurationActivity;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
-import org.droidplanner.fragments.calibration.imu.FragmentSetupIMU;
-import org.droidplanner.fragments.calibration.mag.FragmentSetupMAG;
-
+import org.droidplanner.fragments.calibration.SetupMainPanel;
+import org.droidplanner.fragments.calibration.SetupSidePanel;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -27,27 +26,21 @@ import org.droidplanner.R;
 /**
  * This fragment is used to calibrate the drone's compass, and accelerometer.
  */
-public class SetupFragment extends Fragment implements OnDroneListner, OnItemSelectedListener {
-
-    public static abstract class SetupCalibration extends Fragment {
-        public abstract void doCalibrationStep();
-
-        public abstract SetupSidePanel getSidePanel();
-    }
-
-    public static abstract class SetupSidePanel extends Fragment {
-        public abstract void updateTitle(int calibrationStep);
-    }
+public abstract class SuperSetupFragment extends Fragment implements OnDroneListner, OnItemSelectedListener {
 
 	private Drone drone;
 	
-	private ConfigurationActivity parent;
+	protected ConfigurationActivity parentActivity;
 	private Spinner spinnerSetup;
 	private TextView textViewTitle;
 	
 	private FragmentManager fragmentManager;
-	private SetupCalibration setupPanel;
+	private SetupMainPanel setupPanel;
     private SetupSidePanel sidePanel;
+
+	public abstract int getSpinnerItems();
+	public abstract SetupMainPanel getMainPanel(int index);
+	public abstract SetupMainPanel initMainPanel();
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -57,13 +50,13 @@ public class SetupFragment extends Fragment implements OnDroneListner, OnItemSel
                     .class.getName());
         }
 
-        parent = (ConfigurationActivity)activity;
+        parentActivity = (ConfigurationActivity)activity;
 	}
 
     @Override
     public void onDetach(){
         super.onDetach();
-        parent = null;
+        parentActivity = null;
     }
 
 	@Override
@@ -75,11 +68,11 @@ public class SetupFragment extends Fragment implements OnDroneListner, OnItemSel
         setupLocalViews(view);
 
         fragmentManager = getChildFragmentManager();
-        setupPanel = (SetupCalibration) fragmentManager.findFragmentById(R.id
+        setupPanel = (SetupMainPanel) fragmentManager.findFragmentById(R.id
                 .fragment_setup_mainpanel);
 
         if (setupPanel == null) {
-            setupPanel = new FragmentSetupIMU();
+            setupPanel = initMainPanel();
 
             fragmentManager.beginTransaction()
                     .add(R.id.fragment_setup_mainpanel, setupPanel)
@@ -119,7 +112,7 @@ public class SetupFragment extends Fragment implements OnDroneListner, OnItemSel
 
 	@Override
 	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-		changeSetupPanel(arg2);
+		changeMainPanel(arg2);
 	}
 
 	@Override
@@ -134,31 +127,27 @@ public class SetupFragment extends Fragment implements OnDroneListner, OnItemSel
 		
 	}
 	
+	public void updateTitle(int id){
+		textViewTitle.setText(id);
+	}
+		
 	private void setupLocalViews(View view) {
 		textViewTitle = (TextView)view.findViewById(R.id.textViewSetupTitle);
 		spinnerSetup = (Spinner)view.findViewById(R.id.spinnerSetupType);
 		spinnerSetup.setOnItemSelectedListener(this);
 
-		final ArrayAdapter<String> adapter=new ArrayAdapter<String>(parent, R.layout.spinner_setup);
-		adapter.add("ACC Calibration");
-		adapter.add("Compass Calibration");
-		spinnerSetup.setAdapter(adapter);
+		final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(parentActivity,
+		        getSpinnerItems(), R.layout.spinner_setup);
+		
+		if(adapter!=null)
+			spinnerSetup.setAdapter(adapter);
 	}
 
-	public void changeSetupPanel(int step) {
-		switch (step) {
-		case 0:
-            setupPanel = getIMUPanel();
-            sidePanel = setupPanel.getSidePanel();
-			break;
+	public SetupMainPanel changeMainPanel(int step) {
+		setupPanel = getMainPanel(step);
+		sidePanel = setupPanel.getSidePanel();
 
-		case 1:
-            setupPanel = getMAGPanel();
-            sidePanel = setupPanel.getSidePanel();
-			break;
-		}
-
-        final FragmentTransaction ft = fragmentManager.beginTransaction();
+		final FragmentTransaction ft = fragmentManager.beginTransaction();
         if(setupPanel != null){
             ft.replace(R.id.fragment_setup_mainpanel, setupPanel);
         }
@@ -168,29 +157,34 @@ public class SetupFragment extends Fragment implements OnDroneListner, OnItemSel
         }
 
 		ft.commit();
-	}
-
-	private SetupCalibration getMAGPanel() {
-		setupPanel = new FragmentSetupMAG();
-		textViewTitle.setText(R.string.setup_mag_title);
 		return setupPanel;
 	}
 
-	private SetupCalibration getIMUPanel() {
-		setupPanel = new FragmentSetupIMU();
-		textViewTitle.setText(R.string.setup_imu_title);
-		return setupPanel;
+	public SetupSidePanel changeSidePanel(SetupSidePanel sPanel) {
+		sidePanel = sPanel;
+		
+		if(setupPanel != null && sidePanel != null)
+			setupPanel.setSidePanel(sidePanel);
+		
+		final FragmentTransaction ft = fragmentManager.beginTransaction();
+        if(sidePanel != null){
+            ft.replace(R.id.fragment_setup_sidepanel, sidePanel);
+        }
+
+		ft.commit();
+		
+		return sidePanel;
 	}
 
-    public void doCalibrationStep(){
+    public void doCalibrationStep(int step){
         if(setupPanel != null){
-            setupPanel.doCalibrationStep();
+            setupPanel.doCalibrationStep(step);
         }
     }
 
     public void updateSidePanelTitle(int calibrationStep){
         if(sidePanel != null){
-            sidePanel.updateTitle(calibrationStep);
+            sidePanel.updateDescription(calibrationStep);
         }
     }
 

@@ -7,8 +7,8 @@ import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.fragments.ChecklistFragment;
 import org.droidplanner.fragments.ModesSetupFragment;
 import org.droidplanner.fragments.ParamsFragment;
-import org.droidplanner.fragments.RcSetupFragment;
-import org.droidplanner.fragments.SetupFragment;
+import org.droidplanner.fragments.SetupRadioFragment;
+import org.droidplanner.fragments.SetupSensorFragment;
 import org.droidplanner.fragments.TuningFragment;
 import org.droidplanner.widgets.viewPager.TabPageIndicator;
 
@@ -86,10 +86,10 @@ public class ConfigurationActivity extends SuperUI {
 				return new TuningFragment();
 
 			case 1:
-				return new RcSetupFragment();
+				return new SetupRadioFragment();
 
 			case 2:
-				return new SetupFragment();
+				return new SetupSensorFragment();
 
 			case 3:
 				return new ModesSetupFragment();
@@ -99,7 +99,7 @@ public class ConfigurationActivity extends SuperUI {
 
 			case 5:
 				return new ParamsFragment();
-
+				
 			default:
 				return null;
 			}
