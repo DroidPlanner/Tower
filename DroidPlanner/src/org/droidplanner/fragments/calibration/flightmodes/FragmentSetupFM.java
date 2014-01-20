@@ -166,7 +166,7 @@ public class FragmentSetupFM extends SetupMainPanel implements OnDroneListner, O
 				title = getResources().getString(R.string.setup_fm_desc_downloading);
 			}
 
-			((FragmentSetupProgress) sidePanel).updateProgress(index, count,
+			((FragmentSetupProgress) sidePanel).updateProgress(index+1, count,
 					title);
 		}
 	}
@@ -237,6 +237,7 @@ public class FragmentSetupFM extends SetupMainPanel implements OnDroneListner, O
 
 		return sidePanel;
 	}
+
 	private void setupSpinners() {
 		final ArrayAdapter<CharSequence> adapter = ArrayAdapter
 				.createFromResource(parentActivity,
@@ -264,7 +265,7 @@ public class FragmentSetupFM extends SetupMainPanel implements OnDroneListner, O
 	private void updateFMPanel() {
 		for(int i=0;i<6;i++){
 			int fmData = (int)fmParameters.getParamValue(i);
-			pwmSpinners[i].setSelection(fmData, true);
+			pwmSpinners[i].setSelection(getSpinnerIndexFromValue(fmData,flightModeValue), true);
 		}
 		
 		for(int i=0;i<6;i++){
@@ -307,4 +308,11 @@ public class FragmentSetupFM extends SetupMainPanel implements OnDroneListner, O
 		return -1;
 	}
 
+	private int getSpinnerIndexFromValue(int value, int[] valueList) {
+		for (int i = 0; i < valueList.length; i++) {
+			if (valueList[i] == value)
+				return i;
+		}
+		return -1;
+	}
 }
