@@ -41,7 +41,7 @@ public abstract class SuperActivity extends HelpActivity implements
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.menu_configuration:
+		case R.id.menu_drone_setup:
 			startActivity(new Intent(this, ConfigurationActivity.class));
 			return true;
 		case R.id.menu_settings:
