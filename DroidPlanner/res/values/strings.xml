@@ -309,6 +309,9 @@
     <string name="setup_sf_title">"Servo Function Configuration"</string>
     <string name="setup_sf_side_title">"Update Servo Function"</string>
     <string name="setup_sf_side_desc">"Press \'Send\' to update the new servo function to vehicle."</string>
+    <string name="setup_sf_desc_uploading">Uploading Servo configuration data</string>
+    <string name="setup_sf_desc_downloading">Downloading Servo configuration data</string>
+    <string name="setup_sf_servo_title">Servo Functions Configuration</string>
     <string name="setup_sf_servo5">"Servo  5 : "</string>
     <string name="setup_sf_servo6">"Servo  6 : "</string>
     <string name="setup_sf_servo7">"Servo  7 : "</string>
