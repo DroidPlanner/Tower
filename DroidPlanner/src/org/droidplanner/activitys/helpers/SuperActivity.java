@@ -50,23 +50,6 @@ public abstract class SuperActivity extends HelpActivity implements
 		case R.id.menu_connect:
 			drone.MavClient.toggleConnectionState();
 			return true;
-		case R.id.menu_load_from_apm:
-			drone.waypointMananger.getWaypoints();
-			return true;
-		case R.id.menu_default_alt:
-			changeDefaultAlt();
-			return true;
-		case R.id.menu_preflight_calibration:
-//			drone.calibrationSetup.startCalibration(this);
-			return true;
-		case R.id.menu_record_me:
-			app.recordMe.toogleRecordMeState();
-			return true;
-		case R.id.menu_follow_me:
-			app.followMe.toogleFollowMeState();
-			return true;
-		case R.id.menu_preflight_checklist:
-			return true;
 		case R.id.menu_map_type_hybrid:
 		case R.id.menu_map_type_normal:
 		case R.id.menu_map_type_terrain:
