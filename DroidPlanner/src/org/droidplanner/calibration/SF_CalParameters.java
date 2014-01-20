@@ -6,10 +6,12 @@ public class SF_CalParameters extends CalParameters {
 
 	public SF_CalParameters(Drone myDrone) {
 		super(myDrone);
-			calParameterNames.add("CH7_OPT");
-			calParameterNames.add("CH8_OPT");
-			calParameterNames.add("TUNE");
-			calParameterNames.add("TUNE_LOW");
-			calParameterNames.add("TUNE_HIGH");
+		calParameterNames.add("RC5_FUNCTION");
+		calParameterNames.add("RC6_FUNCTION");
+		calParameterNames.add("RC7_FUNCTION");
+		calParameterNames.add("RC8_FUNCTION");
+		calParameterNames.add("RC10_FUNCTION");
+		calParameterNames.add("RC11_FUNCTION");
+		calParameterNames.add("RC12_FUNCTION");
 	}
 }
