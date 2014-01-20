@@ -144,16 +144,16 @@
                 android:paddingRight="10dp" >
 
                 <TextView
-                    android:id="@+id/textViewSF9"
+                    android:id="@+id/textViewSF8"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="right"
-                    android:text="@string/setup_sf_servo9"
+                    android:text="@string/setup_sf_servo8"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="#fff" />
 
                 <Spinner
-                    android:id="@+id/spinnerSF9"
+                    android:id="@+id/spinnerSF8"
                     style="@style/ModeSpinnerText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
