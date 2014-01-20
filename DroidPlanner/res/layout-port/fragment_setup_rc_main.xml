@@ -15,7 +15,8 @@
             <RelativeLayout
                 android:id="@+id/relativeLayout2"
                 android:layout_width="210dp"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp" >
 
                 <org.droidplanner.widgets.FillBar.FillBar
                     android:id="@+id/fillBar3"
@@ -34,14 +35,6 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginRight="5dp" />
 
-                <org.droidplanner.widgets.FillBar.FillBar
-                    android:id="@+id/fillBar4"
-                    android:layout_width="150dp"
-                    android:layout_height="22dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@id/stickLeft"
-                    android:layout_marginTop="20dp" />
-
                 <TextView
                     android:id="@+id/thr_yaw_text"
                     style="@style/rc_textTitle"
@@ -53,12 +46,21 @@
                     android:text="Throttle: 1000\nYaw: 1500"
                     tools:ignore="HardcodedText" />
 
+                <org.droidplanner.widgets.FillBar.FillBar
+                    android:id="@+id/fillBar4"
+                    android:layout_width="150dp"
+                    android:layout_height="22dp"
+                    android:layout_alignLeft="@+id/stickLeft"
+                    android:layout_below="@+id/stickLeft"
+                    android:layout_marginTop="21dp" />
+
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/relativeLayout3"
                 android:layout_width="210dp"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp" >
 
                 <org.droidplanner.widgets.FillBar.FillBar
                     android:id="@+id/fillBar2"
@@ -77,14 +79,6 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginLeft="5dp" />
 
-                <org.droidplanner.widgets.FillBar.FillBar
-                    android:id="@+id/fillBar1"
-                    android:layout_width="150dp"
-                    android:layout_height="22dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_below="@id/stickRight"
-                    android:layout_marginTop="20dp" />
-
                 <TextView
                     android:id="@+id/roll_pitch_text"
                     style="@style/rc_textTitle"
@@ -96,12 +90,21 @@
                     android:text="Roll: 1500\nPitch: 1500"
                     tools:ignore="HardcodedText" />
 
+                <org.droidplanner.widgets.FillBar.FillBar
+                    android:id="@+id/fillBar1"
+                    android:layout_width="150dp"
+                    android:layout_height="22dp"
+                    android:layout_alignLeft="@+id/stickRight"
+                    android:layout_below="@+id/stickRight"
+                    android:layout_marginTop="21dp" />
+
             </RelativeLayout>
 
             <LinearLayout
                 android:id="@+id/linearLayout1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="3dp"
                 android:orientation="vertical" >
 
                 <org.droidplanner.widgets.FillBar.FillBar
