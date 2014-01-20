@@ -22,7 +22,7 @@ public class FragmentSetupSF extends SetupMainPanel implements
 		OnCalibrationEvent, OnDroneListner {
 	private int[] valueSF;
 	private String[] stringSF;
-	private Spinner[] spinnerSFs = new Spinner[7];
+	private Spinner[] spinnerSFs = new Spinner[6];
 
 	private Drone drone;
 	private SF_CalParameters sfParameters;
@@ -115,7 +115,6 @@ public class FragmentSetupSF extends SetupMainPanel implements
 		spinnerSFs[3] = (Spinner) v.findViewById(R.id.spinnerSF8);
 		spinnerSFs[4] = (Spinner) v.findViewById(R.id.spinnerSF10);
 		spinnerSFs[5] = (Spinner) v.findViewById(R.id.spinnerSF11);
-		spinnerSFs[6] = (Spinner) v.findViewById(R.id.spinnerSF12);
 
 		setupSpinners();
 	}
@@ -167,7 +166,7 @@ public class FragmentSetupSF extends SetupMainPanel implements
 
 		sidePanel = getProgressPanel(true);
 
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < 6; i++) {
 			sfParameters.setParamValue(i,
 					valueSF[spinnerSFs[i].getSelectedItemPosition()]);
 		}
@@ -186,7 +185,7 @@ public class FragmentSetupSF extends SetupMainPanel implements
 		if (sfParameters == null)
 			return;
 
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < 6; i++) {
 			spinnerSFs[i].setSelection(
 					getSpinnerIndexFromValue((int)sfParameters.getParamValue(i),
 							valueSF), true);
