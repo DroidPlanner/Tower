@@ -49,8 +49,6 @@ public class FlightMapFragment extends DroneMap implements
 
 	public DroneMarker droneMarker;
 	
-	Activity parentActivity;
-
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
 			Bundle bundle) {
@@ -123,48 +121,20 @@ public class FlightMapFragment extends DroneMap implements
 	
 	
 	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		//we need true current and directly linked Activity object for AlertDialog - kind of bug - we can not use context here.
-		parentActivity = activity;
-	}	
-
-	@Override
 	public void onMapLongClick(LatLng coord) {
 
 		// some checks to add
 		if (!drone.MavClient.isConnected() || drone.state.getMode() == ApmModes.ROTOR_GUIDED) return;		
 		
-		//we need new and final variable to use it inside the listener below		
-		final LatLng tmpCoord = coord;
-		
-
-							
-		OnClickListener positiveButtonClickListener = new AlertDialog.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				drone.guidedPoint.changeGuidedCoordinate(tmpCoord);
-			}
-		};
-
-		OnClickListener negativeButtonClickListener = new AlertDialog.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-			}
-		};		
+	
 		
 		getPreferences();
 		if (warnOnGuidedMode){
 			
-			final AlertDialog.Builder dlg = new AlertDialog.Builder(parentActivity);
-			dlg.setTitle("Guided Mode Warning !!!");
-			dlg.setMessage("You are about to enter the Guided Mode");
-			dlg.setCancelable(false);
-			dlg.setPositiveButton("Ok - go Guided", positiveButtonClickListener);
-			dlg.setNegativeButton("Take me back ...", negativeButtonClickListener);
-			dlg.create();
-			dlg.show();									
+								
 		}else{
 			//here var is not so important but use the same for clarity.
-			drone.guidedPoint.changeGuidedCoordinate(tmpCoord);
+			drone.guidedPoint.changeGuidedCoordinate(coord);
 		}
 		
 		
