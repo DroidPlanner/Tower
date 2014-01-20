@@ -13,22 +13,22 @@
         android:background="@color/dark_title_bg" >
 
         <TextView
-            android:id="@+id/RCSetupTitle"
+            android:id="@+id/setupTitle"
             style="@style/SetupTitle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="@string/rc_title_downloading" />
+            android:text="@string/progress_title_downloading" />
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/setupDesc"
         style="@style/ModeDetailText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/mode_desc_rectangle"
         android:padding="12dp"
-        android:text="@string/rc_desc_downloading" />
+        android:text="@string/progress_desc_downloading" />
 
     <ScrollView
         android:id="@+id/scrollView1"
@@ -37,7 +37,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical" >
 
             <LinearLayout
@@ -51,7 +51,8 @@
                     android:id="@+id/textViewProgressTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Downloading parameters" />
+                    android:text="Downloading parameters"
+                    tools:ignore="HardcodedText" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -73,7 +74,8 @@
                         android:layout_marginLeft="10dp"
                         android:layout_weight="0.15"
                         android:gravity="center"
-                        android:text="10/10" />
+                        android:text="10/10"
+                        tools:ignore="HardcodedText" />
 
                 </LinearLayout>
 
@@ -95,7 +97,7 @@
                     android:layout_gravity="center"
                     android:layout_marginRight="16dp"
                     android:background="@drawable/button_blue"
-                    android:text="@string/rc_btn_cancel" />
+                    android:text="@string/button_setup_cancel" />
 
             </LinearLayout>
 
