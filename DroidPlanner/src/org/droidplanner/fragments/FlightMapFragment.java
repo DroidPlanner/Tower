@@ -2,6 +2,7 @@ package org.droidplanner.fragments;
 
 import java.util.List;
 
+import org.droidplanner.dialogs.AlertDialogFragment;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.variables.GuidedPoint;
@@ -14,6 +15,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +36,7 @@ public class FlightMapFragment extends DroneMap implements
 		OnGuidedListener {
 
 	private static final int ZOOM_LEVEL = 20;
-	
+
 	private Polyline flightPath;
 	private MapPath droneLeashPath;
 	private int maxFlightPathSize;
@@ -86,7 +90,7 @@ public class FlightMapFragment extends DroneMap implements
 					.newLatLngZoom(coord, ZOOM_LEVEL));
 		}
 	}
-	
+
 	public void addFlightPathPoint(LatLng position) {
 		if (maxFlightPathSize > 0) {
 			List<LatLng> oldFlightPath = flightPath.getPoints();
@@ -112,7 +116,28 @@ public class FlightMapFragment extends DroneMap implements
 
 	@Override
 	public void onMapLongClick(LatLng coord) {
-		drone.guidedPoint.changeGuidedCoordinate(coord);
+
+		FragmentTransaction fragManager = getFragmentManager()
+				.beginTransaction();
+
+		// this is a piece to check if we are not displayed - do not need it
+		// here in my opinion
+
+		/*
+		 * Fragment prev = getFragmentManager().findFragmentByTag("warn"); if
+		 * (prev != null) { fragManager.remove(prev); }
+		 * 
+		 * // and back key action fragManager.addToBackStack(null);
+		 */
+
+		// we have a lot of possible parameters for this dialog ...
+		// activity context, style mode,title, message,action be executed
+		// code, and it's params (have to be parcelable class)
+		DialogFragment warnGuidedDialog = AlertDialogFragment.newInstance(
+				context, 7, "Sample Title", "Do not go Guided !!!", 0, coord);
+		warnGuidedDialog.setCancelable(false);
+		warnGuidedDialog.show(fragManager, "warn");
+
 	}
 
 	@Override
@@ -153,6 +178,6 @@ public class FlightMapFragment extends DroneMap implements
 		default:
 			break;
 		}
-		super.onDroneEvent(event,drone);
+		super.onDroneEvent(event, drone);
 	}
 }
