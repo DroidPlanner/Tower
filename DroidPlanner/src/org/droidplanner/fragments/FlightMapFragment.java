@@ -2,6 +2,7 @@ package org.droidplanner.fragments;
 
 import java.util.List;
 
+import org.droidplanner.dialogs.AlertDialogFragment;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.variables.GuidedPoint;
@@ -14,10 +15,14 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.MAVLink.Messages.ApmModes;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
@@ -37,11 +42,13 @@ public class FlightMapFragment extends DroneMap implements
 	private MapPath droneLeashPath;
 	private int maxFlightPathSize;
 	public boolean isAutoPanEnabled;
+	
+	private boolean warnOnGuidedMode;
 
 	public boolean hasBeenZoomed = false;
 
 	public DroneMarker droneMarker;
-
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
 			Bundle bundle) {
@@ -66,6 +73,8 @@ public class FlightMapFragment extends DroneMap implements
 		maxFlightPathSize = Integer.valueOf(prefs.getString(
 				"pref_max_fligth_path_size", "0"));
 		isAutoPanEnabled = prefs.getBoolean("pref_auto_pan_enabled", false);
+		warnOnGuidedMode = prefs.getBoolean("pref_warn_guided_mode", true);
+		
 	}
 
 	@Override
@@ -109,10 +118,51 @@ public class FlightMapFragment extends DroneMap implements
 		flightPathOptions.color(0xfffd693f).width(6).zIndex(1);
 		flightPath = mMap.addPolyline(flightPathOptions);
 	}
-
+	
+	
 	@Override
 	public void onMapLongClick(LatLng coord) {
-		drone.guidedPoint.changeGuidedCoordinate(coord);
+
+		// some checks to add - now disabled for testing
+		//if (!drone.MavClient.isConnected() || drone.state.getMode() == ApmModes.ROTOR_GUIDED) 
+		//	return;		
+					
+		getPreferences();
+		if (warnOnGuidedMode){
+			
+			
+			FragmentTransaction fragManager = getFragmentManager()
+					.beginTransaction();
+
+			// this is a piece to check if we are not displayed - do not need it
+			// here in my opinion as both exits form the fragment ends with dismiss()
+
+			/*
+			 * Fragment prev = getFragmentManager().findFragmentByTag("warn"); if
+			 * (prev != null) { fragManager.remove(prev); }
+			 * 
+			 * // and back key action fragManager.addToBackStack(null);
+			 */
+
+			// we have a lot of possible parameters for this dialog ...
+			// activity context, style mode,title, message,action to be executed
+			// and it's params (have to be parcelable class)
+
+			// Some enums for style and action would be nice :)
+			
+			DialogFragment warnGuidedDialog = AlertDialogFragment.newInstance(
+					context, 7, "Sample Title", "Do not go Guided !!!", 0, coord);
+			warnGuidedDialog.setCancelable(false);
+			warnGuidedDialog.show(fragManager, "warn");
+			
+			
+								
+		}else{
+			//no warning - just go guided
+			drone.guidedPoint.changeGuidedCoordinate(coord);
+		}
+		
+		
 	}
 
 	@Override
