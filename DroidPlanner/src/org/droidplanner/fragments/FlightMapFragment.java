@@ -123,17 +123,42 @@ public class FlightMapFragment extends DroneMap implements
 	@Override
 	public void onMapLongClick(LatLng coord) {
 
-		// some checks to add
-		if (!drone.MavClient.isConnected() || drone.state.getMode() == ApmModes.ROTOR_GUIDED) return;		
-		
-	
-		
+		// some checks to add - now disabled for testing
+		//if (!drone.MavClient.isConnected() || drone.state.getMode() == ApmModes.ROTOR_GUIDED) 
+		//	return;		
+					
 		getPreferences();
 		if (warnOnGuidedMode){
 			
+			
+			FragmentTransaction fragManager = getFragmentManager()
+					.beginTransaction();
+
+			// this is a piece to check if we are not displayed - do not need it
+			// here in my opinion as both exits form the fragment ends with dismiss()
+
+			/*
+			 * Fragment prev = getFragmentManager().findFragmentByTag("warn"); if
+			 * (prev != null) { fragManager.remove(prev); }
+			 * 
+			 * // and back key action fragManager.addToBackStack(null);
+			 */
+
+			// we have a lot of possible parameters for this dialog ...
+			// activity context, style mode,title, message,action to be executed
+			// and it's params (have to be parcelable class)
+
+			// Some enums for style and action would be nice :)
+			
+			DialogFragment warnGuidedDialog = AlertDialogFragment.newInstance(
+					context, 7, "Sample Title", "Do not go Guided !!!", 0, coord);
+			warnGuidedDialog.setCancelable(false);
+			warnGuidedDialog.show(fragManager, "warn");
+			
+			
 								
 		}else{
-			//here var is not so important but use the same for clarity.
+			//no warning - just go guided
 			drone.guidedPoint.changeGuidedCoordinate(coord);
 		}
 		
