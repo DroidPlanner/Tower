@@ -109,9 +109,9 @@
             android:title="Flight path size"/>        
         <CheckBoxPreference
             android:defaultValue="true"
-            android:key="pref_warn_guided_mode"
-            android:summary="Always warn on entering the Guided Mode (by long pressing the map)."
-            android:title="Warn on Guided Mode"/>                
+            android:key="pref_guided_mode_on_long_press"
+            android:summary="Enable entering the Guided Mode by long pressing the map."
+            android:title="Guided Mode on long press"/>                
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="pref_follow_me_mode_enabled"

@@ -22,7 +22,7 @@ public class GuidedMarker {
 	}
 
 	public static void update(Marker marker, GuidedPoint guidedPoint, Altitude altitude, Context context) {
-		if (guidedPoint.isValid()) {			
+		if (guidedPoint.isActive()) {			
 			marker.setPosition(guidedPoint.getCoord());
 			marker.setIcon(getIcon(guidedPoint, altitude, context));
 			marker.setVisible(true);
