@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:id="@+id/linearLayout1"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
@@ -19,7 +19,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="40dp"
             android:layout_marginBottom="10dp"
             android:background="@color/ground_speed_label"
             android:orientation="horizontal" >
@@ -31,9 +31,11 @@
                 android:layout_gravity="center"
                 android:layout_marginRight="10dp"
                 android:layout_weight="5"
-                android:gravity="right"
+                android:gravity="center"
+                android:text="PWM in: 0000"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#fff" />
+                android:textColor="#fff"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textViewPWMRange"
@@ -42,8 +44,10 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="10dp"
                 android:layout_weight="5"
+                android:text="PWM Range ( No Signal )"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#fff" />
+                android:textColor="#fff"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -60,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="right"
                 android:text="@string/setup_fm_mode1"
-                android:textAppearance="?android:attr/textAppearance"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#fff" />
 
             <Spinner
@@ -68,7 +72,7 @@
                 style="@style/ModeSpinnerText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="4"
+                android:layout_weight="6"
                 android:entries="@array/FligthMode_CopterV3_1" />
 
             <CheckBox
@@ -76,6 +80,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/setup_fm_simple"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#fff" />
 
             <CheckBox
@@ -83,6 +88,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/setup_fm_super"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#fff" />
         </LinearLayout>
 
@@ -90,7 +96,6 @@
             android:id="@+id/layoutFM2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/air_speed_label"
             android:paddingLeft="10dp"
             android:paddingRight="10dp" >
 
@@ -100,14 +105,14 @@
                 android:layout_height="wrap_content"
                 android:gravity="right"
                 android:text="@string/setup_fm_mode2"
-                android:textAppearance="?android:attr/textAppearance"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#fff" />
 
             <Spinner
                 android:id="@+id/spinnerFM2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="4"
+                android:layout_weight="6"
                 android:entries="@array/FligthMode_CopterV3_1" />
 
             <CheckBox
@@ -115,6 +120,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/setup_fm_simple"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#fff" />
 
             <CheckBox
@@ -122,6 +128,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/setup_fm_super"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#fff" />
         </LinearLayout>
 
@@ -138,14 +145,14 @@
                 android:layout_height="wrap_content"
                 android:gravity="right"
                 android:text="@string/setup_fm_mode3"
-                android:textAppearance="?android:attr/textAppearance"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#fff" />
 
             <Spinner
                 android:id="@+id/spinnerFM3"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="4"
+                android:layout_weight="6"
                 android:entries="@array/FligthMode_CopterV3_1" />
 
             <CheckBox
@@ -153,6 +160,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/setup_fm_simple"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#fff" />
 
             <CheckBox
@@ -160,6 +168,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/setup_fm_super"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#fff" />
         </LinearLayout>
 
@@ -176,14 +185,14 @@
                 android:layout_height="wrap_content"
                 android:gravity="right"
                 android:text="@string/setup_fm_mode4"
-                android:textAppearance="?android:attr/textAppearance"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#fff" />
 
             <Spinner
                 android:id="@+id/spinnerFM4"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="4"
+                android:layout_weight="6"
                 android:entries="@array/FligthMode_CopterV3_1" />
 
             <CheckBox
@@ -191,6 +200,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/setup_fm_simple"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#fff" />
 
             <CheckBox
@@ -198,6 +208,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/setup_fm_super"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#fff" />
         </LinearLayout>
 
@@ -214,14 +225,14 @@
                 android:layout_height="wrap_content"
                 android:gravity="right"
                 android:text="@string/setup_fm_mode5"
-                android:textAppearance="?android:attr/textAppearance"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#fff" />
 
             <Spinner
                 android:id="@+id/spinnerFM5"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="4"
+                android:layout_weight="6"
                 android:entries="@array/FligthMode_CopterV3_1" />
 
             <CheckBox
@@ -229,6 +240,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/setup_fm_simple"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#fff" />
 
             <CheckBox
@@ -236,6 +248,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/setup_fm_super"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#fff" />
         </LinearLayout>
 
@@ -252,14 +265,14 @@
                 android:layout_height="wrap_content"
                 android:gravity="right"
                 android:text="@string/setup_fm_mode6"
-                android:textAppearance="?android:attr/textAppearance"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#fff" />
 
             <Spinner
                 android:id="@+id/spinnerFM6"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="4"
+                android:layout_weight="6"
                 android:entries="@array/FligthMode_CopterV3_1" />
 
             <CheckBox
@@ -267,6 +280,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/setup_fm_simple"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#fff" />
 
             <CheckBox
@@ -274,9 +288,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/setup_fm_super"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#fff" />
         </LinearLayout>
-
     </LinearLayout>
 
 </RelativeLayout>
