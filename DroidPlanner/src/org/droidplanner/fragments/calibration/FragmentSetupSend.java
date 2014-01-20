@@ -9,10 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
+
 import org.droidplanner.R;
 
 public class FragmentSetupSend extends SetupSidePanel {
-
+	
+	private int titleId=0,descId=0;
+	private TextView textTitle,textDesc;;
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -22,7 +27,16 @@ public class FragmentSetupSend extends SetupSidePanel {
 		final View view = inflater.inflate(R.layout.fragment_setup_fm_send,
 				container, false);
 
-		final Button btnSend = (Button) view.findViewById(R.id.ButtonSend);
+		textTitle = (TextView)view.findViewById(R.id.setupTitle);
+		textDesc = (TextView)view.findViewById(R.id.setupDesc);
+		
+		if(titleId!=0)
+			textTitle.setText(titleId);
+		
+		if(descId!=0)
+			textDesc.setText(descId);
+		
+		final Button btnSend = (Button) view.findViewById(R.id.ButtonSend);		
 		btnSend.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -46,13 +60,18 @@ public class FragmentSetupSend extends SetupSidePanel {
 
 	@Override
 	public void updateDescription(int idDescription) {
-		// TODO Auto-generated method stub
-
+		this.descId = idDescription;
+		
+		if(textDesc!=null)
+			textDesc.setText(descId);
+				
 	}
 
 	@Override
 	public void updateTitle(int idTitle) {
-		// TODO Auto-generated method stub
-
+		this.titleId = idTitle;
+		
+		if(textTitle!=null)
+			textTitle.setText(titleId);
 	}
 }

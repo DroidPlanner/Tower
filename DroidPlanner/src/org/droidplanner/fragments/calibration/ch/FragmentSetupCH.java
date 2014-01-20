@@ -5,12 +5,13 @@ import org.droidplanner.calibration.CH_CalParameters;
 import org.droidplanner.calibration.CalParameters;
 import org.droidplanner.calibration.CalParameters.OnCalibrationEvent;
 import org.droidplanner.drone.Drone;
+import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
+import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
 import org.droidplanner.fragments.SetupRadioFragment;
 import org.droidplanner.fragments.calibration.FragmentSetupProgress;
 import org.droidplanner.fragments.calibration.FragmentSetupSend;
 import org.droidplanner.fragments.calibration.SetupMainPanel;
 import org.droidplanner.fragments.calibration.SetupSidePanel;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -18,7 +19,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 public class FragmentSetupCH extends SetupMainPanel implements
-		OnCalibrationEvent {
+		OnCalibrationEvent, OnDroneListner {
 
 	private int[] valueCH6;
 	private int[] valueCH;
@@ -35,25 +36,49 @@ public class FragmentSetupCH extends SetupMainPanel implements
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		this.drone = parentActivity.drone;
+		chParameters = new CH_CalParameters(drone);
+		chParameters.setOnCalibrationEventListener(this);
 	}
 
 	@Override
 	public void onStart() {
 		super.onStart();
-		downloadCalibrationData();
+		doCalibrationStep(0);
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		drone.events.addDroneListener(this);
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		drone.events.removeDroneListener(this);
+	}
+
+	@Override
+	public void onDroneEvent(DroneEventsType event, Drone drone) {
+		switch (event) {
+		case PARAMETER:
+			if (chParameters != null) {
+				chParameters.processReceivedParam();
+			}
+		default:
+			break;
+		}
 	}
 
 	@Override
 	public void onReadCalibration(CalParameters calParameters) {
 		doCalibrationStep(0);
 		updatePanelInfo();
-
 	}
 
 	@Override
 	public void onSentCalibration(CalParameters calParameters) {
-		// TODO Auto-generated method stub
-
+		doCalibrationStep(0);
 	}
 
 	@Override
@@ -81,7 +106,10 @@ public class FragmentSetupCH extends SetupMainPanel implements
 
 	@Override
 	public SetupSidePanel getSidePanel() {
-		return getInitialPanel();
+		sidePanel = new FragmentSetupSend();
+		sidePanel.updateTitle(R.string.setup_ch_side_title);
+		sidePanel.updateDescription(R.string.setup_ch_side_desc);
+		return sidePanel;
 	}
 
 	@Override
@@ -109,10 +137,16 @@ public class FragmentSetupCH extends SetupMainPanel implements
 	}
 
 	private SetupSidePanel getInitialPanel() {
-		sidePanel = new FragmentSetupSend();
-		sidePanel.updateTitle(R.string.setup_ch_side_title);
-		sidePanel.updateDescription(R.string.setup_ch_side_desc);
 
+		if (chParameters != null && !chParameters.isParameterDownloaded()
+				&& drone.MavClient.isConnected()) {
+			downloadCalibrationData();
+		} else {
+			sidePanel = ((SetupRadioFragment) getParentFragment())
+					.changeSidePanel(new FragmentSetupSend());
+			sidePanel.updateTitle(R.string.setup_ch_side_title);
+			sidePanel.updateDescription(R.string.setup_ch_side_desc);
+		}
 		return sidePanel;
 	}
 
@@ -137,7 +171,12 @@ public class FragmentSetupCH extends SetupMainPanel implements
 
 		sidePanel = getProgressPanel(true);
 
-		// TODO setParameterValues here
+		chParameters.setParamValueByName("CH7_OPT", valueCH[spinnerCH7.getSelectedItemPosition()]);
+		chParameters.setParamValueByName("CH8_OPT", valueCH[spinnerCH8.getSelectedItemPosition()]);
+		chParameters.setParamValueByName("TUNE", valueCH6[spinnerCH6.getSelectedItemPosition()]);
+		chParameters.setParamValueByName("TUNE_LOW", Integer.parseInt(editTuneL.getText().toString()));
+		chParameters.setParamValueByName("TUNE_HIGH", Integer.parseInt(editTuneH.getText().toString()));
+
 		chParameters.sendCalibrationParameters();
 	}
 
@@ -152,14 +191,16 @@ public class FragmentSetupCH extends SetupMainPanel implements
 		if (chParameters == null)
 			return;
 
-		editTuneL.setText(String.format("%d", chParameters.getParamValueByName("TUNE_LOW")));
-		editTuneH.setText(String.format("%d", chParameters.getParamValueByName("TUNE_HIGH")));
+		editTuneL.setText(String.format("%d",
+				(int)chParameters.getParamValueByName("TUNE_LOW")));
+		editTuneH.setText(String.format("%d",
+				(int) chParameters.getParamValueByName("TUNE_HIGH")));
 
 		spinnerCH6.setSelection(getSpinnerIndexFromValue(
 				(int) chParameters.getParamValueByName("TUNE"), valueCH6));
 		spinnerCH7.setSelection(getSpinnerIndexFromValue(
 				(int) chParameters.getParamValueByName("CH7_OPT"), valueCH));
-		spinnerCH7.setSelection(getSpinnerIndexFromValue(
+		spinnerCH8.setSelection(getSpinnerIndexFromValue(
 				(int) chParameters.getParamValueByName("CH8_OPT"), valueCH));
 	}
 
