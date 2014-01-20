@@ -153,13 +153,6 @@ public class FlightMapFragment extends DroneMap implements
 		return true;
 	}
 
-	// TODO  Reimplement
-	public void onGuidedPoint() {
-		GuidedPoint guidedPoint = drone.guidedPoint;
-		markers.updateMarker(guidedPoint, true, context);
-		droneLeashPath.update(guidedPoint);
-	}
-
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch (event) {
@@ -168,6 +161,11 @@ public class FlightMapFragment extends DroneMap implements
 			addFlightPathPoint(drone.GPS
 					.getPosition());
 			animateCamera(drone.GPS.getPosition());
+			break;
+		case GUIDEDPOINT:
+			GuidedPoint guidedPoint = drone.guidedPoint;			
+			markers.updateMarker(guidedPoint, true, context);
+			droneLeashPath.update(guidedPoint);
 			break;
 		default:
 			break;

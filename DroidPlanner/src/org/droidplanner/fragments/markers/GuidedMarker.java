@@ -18,7 +18,8 @@ public class GuidedMarker {
 		return new MarkerOptions()
 				.position(guidedPoint.getCoord())
 				.icon(getIcon(guidedPoint, altitude, context))
-				.anchor(0.5f, 0.5f);
+				.anchor(0.5f, 0.5f)
+				.visible(false);
 	}
 
 	public static void update(Marker marker, GuidedPoint guidedPoint, Altitude altitude, Context context) {

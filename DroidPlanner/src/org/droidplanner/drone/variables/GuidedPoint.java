@@ -24,7 +24,7 @@ public class GuidedPoint extends DroneVariable implements MarkerSource,
 		PathSource, OnDroneListner {
 
 	private GuidedStates state = GuidedStates.UNINITIALIZED;
-	private LatLng coord;
+	private LatLng coord = new LatLng(0, 0);
 	private Altitude altitude = new Altitude(0.0);
 
 	private enum GuidedStates {
