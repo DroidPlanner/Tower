@@ -295,6 +295,8 @@
     <string name="setup_ch_title">"Channel Options Configuration"</string>
     <string name="setup_ch_side_title">"Update Channel Options"</string>
     <string name="setup_ch_side_desc">"Press \'Send\' to update the new servo function to vehicle."</string>
+    <string name="setup_ch_desc_uploading">Uploading Channel configuration data</string>
+    <string name="setup_ch_desc_downloading">Downloading Channel configuration data</string>
     <string name="setup_ch_tune_title">"Channel 6 - Tuning Function"</string>
     <string name="setup_ch_options_title">"Channel Options - CH7 &amp; CH8"</string>
     <string name="setup_ch_CH7_options">"Channel 7 Options :"</string>
