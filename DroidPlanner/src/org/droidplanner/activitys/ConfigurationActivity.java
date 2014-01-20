@@ -5,7 +5,6 @@ import org.droidplanner.activitys.helpers.SuperUI;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.fragments.ChecklistFragment;
-import org.droidplanner.fragments.ModesSetupFragment;
 import org.droidplanner.fragments.ParamsFragment;
 import org.droidplanner.fragments.SetupRadioFragment;
 import org.droidplanner.fragments.SetupSensorFragment;
@@ -84,22 +83,14 @@ public class ConfigurationActivity extends SuperUI {
 			switch (position) {
 			case 0:
 				return new TuningFragment();
-
 			case 1:
 				return new SetupRadioFragment();
-
 			case 2:
 				return new SetupSensorFragment();
-
 			case 3:
-				return new ModesSetupFragment();
-
-			case 4:
 				return new ChecklistFragment();
-
-			case 5:
+			case 4:
 				return new ParamsFragment();
-				
 			default:
 				return null;
 			}
@@ -107,7 +98,7 @@ public class ConfigurationActivity extends SuperUI {
 
 		@Override
 		public int getCount() {
-			return 6;
+			return 5;
 		}
 
 		@Override
@@ -115,22 +106,14 @@ public class ConfigurationActivity extends SuperUI {
 			switch (position) {
 			case 0:
 				return mContext.getString(R.string.screen_tuning);
-
 			case 1:
 				return mContext.getText(R.string.screen_rc);
-
 			case 2:
 				return mContext.getString(R.string.screen_cal);
-
 			case 3:
-				return mContext.getString(R.string.screen_modes);
-
-			case 4:
 				return mContext.getString(R.string.screen_checklist);
-
-			case 5:
+			case 4:
 				return mContext.getText(R.string.screen_parameters);
-
 			default:
 				return null;
 			}
