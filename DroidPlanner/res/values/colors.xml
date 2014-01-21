@@ -22,6 +22,8 @@
 
     <color name="paramAltRow">#fff0f0f0</color>
     <color name="light_title_bg">#e4e4e4</color>
+    <color name="Droidblue">#3CB4E5</color>
+
 
     <!-- Colors for the view pager tab strip -->
     <color name="vpi__background_holo_dark">#ff000000</color>

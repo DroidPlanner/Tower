@@ -24,7 +24,7 @@
     <TextView
         android:id="@+id/textView1"
         style="@style/ModeDetailText"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/mode_desc_rectangle"
         android:padding="12dp"
@@ -37,7 +37,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical" >
 
             <LinearLayout
@@ -51,7 +51,9 @@
                     android:id="@+id/textViewSummary"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="RC #\t\tMin \t\tMid \t\tMax " />
+                    android:text="RC #\t\tMin \t\tMid \t\tMax "
+                    tools:ignore="HardcodedText" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -68,7 +70,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="16dp"
                     android:background="@drawable/button_blue"
-                    android:text="@string/rc_btn_cancel" />
+                    android:text="@string/button_setup_cancel" />
 
                 <Button
                     android:id="@+id/ButtonSend"
@@ -76,7 +78,7 @@
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_green"
-                    android:text="@string/rc_btn_send" />
+                    android:text="@string/button_setup_send" />
             </LinearLayout>
 
         </LinearLayout>

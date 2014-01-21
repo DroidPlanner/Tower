@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/configLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+        android:gravity="center" >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            tools:ignore="UselessParent" >
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout2"
+                android:layout_width="210dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp" >
+
+                <org.droidplanner.widgets.FillBar.FillBar
+                    android:id="@+id/fillBar3"
+                    android:layout_width="22dp"
+                    android:layout_height="150dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginRight="20dp"
+                    android:layout_toLeftOf="@+id/stickLeft" />
+
+                <org.droidplanner.widgets.RcStick.RcStick
+                    android:id="@+id/stickLeft"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_alignBottom="@id/fillBar3"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginRight="5dp" />
+
+                <TextView
+                    android:id="@+id/thr_yaw_text"
+                    style="@style/rc_textTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/fillBar4"
+                    android:layout_below="@id/fillBar4"
+                    android:layout_marginTop="8dp"
+                    android:text="Throttle: 1000\nYaw: 1500"
+                    tools:ignore="HardcodedText" />
+
+                <org.droidplanner.widgets.FillBar.FillBar
+                    android:id="@+id/fillBar4"
+                    android:layout_width="150dp"
+                    android:layout_height="22dp"
+                    android:layout_alignLeft="@+id/stickLeft"
+                    android:layout_below="@+id/stickLeft"
+                    android:layout_marginTop="21dp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout3"
+                android:layout_width="210dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp" >
+
+                <org.droidplanner.widgets.FillBar.FillBar
+                    android:id="@+id/fillBar2"
+                    android:layout_width="22dp"
+                    android:layout_height="150dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="20dp"
+                    android:layout_toRightOf="@+id/stickRight" />
+
+                <org.droidplanner.widgets.RcStick.RcStick
+                    android:id="@+id/stickRight"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_alignBottom="@id/fillBar2"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="5dp" />
+
+                <TextView
+                    android:id="@+id/roll_pitch_text"
+                    style="@style/rc_textTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/fillBar1"
+                    android:layout_below="@id/fillBar1"
+                    android:layout_marginTop="8dp"
+                    android:text="Roll: 1500\nPitch: 1500"
+                    tools:ignore="HardcodedText" />
+
+                <org.droidplanner.widgets.FillBar.FillBar
+                    android:id="@+id/fillBar1"
+                    android:layout_width="150dp"
+                    android:layout_height="22dp"
+                    android:layout_alignLeft="@+id/stickRight"
+                    android:layout_below="@+id/stickRight"
+                    android:layout_marginTop="21dp" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:orientation="vertical" >
+
+                <org.droidplanner.widgets.FillBar.FillBar
+                    android:id="@+id/fillBar5"
+                    android:layout_width="150dp"
+                    android:layout_height="22dp"
+                    android:layout_marginBottom="5dp" />
+
+                <TextView
+                    android:id="@+id/ch_5_text"
+                    style="@style/rc_textTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="Ch 5: 1500"
+                    tools:ignore="HardcodedText" />
+
+                <org.droidplanner.widgets.FillBar.FillBar
+                    android:id="@+id/fillBar6"
+                    android:layout_width="150dp"
+                    android:layout_height="22dp"
+                    android:layout_marginBottom="5dp" />
+
+                <TextView
+                    android:id="@+id/ch_6_text"
+                    style="@style/rc_textTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="Ch 5: 1500"
+                    tools:ignore="HardcodedText" />
+
+                <org.droidplanner.widgets.FillBar.FillBar
+                    android:id="@+id/fillBar7"
+                    android:layout_width="150dp"
+                    android:layout_height="22dp"
+                    android:layout_marginBottom="5dp" />
+
+                <TextView
+                    android:id="@+id/ch_7_text"
+                    style="@style/rc_textTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="Ch 5: 1500"
+                    tools:ignore="HardcodedText" />
+
+                <org.droidplanner.widgets.FillBar.FillBar
+                    android:id="@+id/fillBar8"
+                    android:layout_width="150dp"
+                    android:layout_height="22dp"
+                    android:layout_marginBottom="5dp" />
+
+                <TextView
+                    android:id="@+id/ch_8_text"
+                    style="@style/rc_textTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="Ch 5: 1500"
+                    tools:ignore="HardcodedText" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>

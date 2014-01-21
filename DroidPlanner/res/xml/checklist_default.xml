@@ -41,7 +41,7 @@
             editable="yes"
             mandatory="yes"
             minimum_val="10"
-            nominal_val="50"
+            nominal_val="20"
             system_tag="SYS_DEF_ALT"
             title="Default Alt "
             unit="%0.2fm" />

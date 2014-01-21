@@ -27,7 +27,7 @@ public class Mission extends DroneVariable implements PathSource{
 
 	private List<MissionItem> itens = new ArrayList<MissionItem>();
 	private List<MissionItem> selection = new ArrayList<MissionItem>();
-	private Altitude defaultAlt = new Altitude(50.0);
+	private Altitude defaultAlt = new Altitude(20.0);
 
 	public Mission(Drone myDrone) {
 		super(myDrone);

@@ -116,9 +116,9 @@
             android:name=".activitys.ConfigurationActivity"
             android:windowSoftInputMode="adjustPan"
             android:theme="@style/Theme.PageIndicatorDefaults"
-            android:label="@string/configuration"
             android:uiOptions="splitActionBarWhenNarrow"
             android:launchMode="singleTask"
+            android:label="@string/menu_drone_setup"
             android:parentActivityName=".activitys.FlightActivity" >
 
             <!-- Parent activity meta-data to support API level 7+ -->
