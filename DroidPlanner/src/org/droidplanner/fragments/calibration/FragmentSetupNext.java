@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import org.droidplanner.R;
 
-public class FragmentSetupSend extends SetupSidePanel {
+public class FragmentSetupNext extends SetupSidePanel {
 	
 	private int titleId=0,descId=0;
 	private TextView textTitle,textDesc;;
@@ -24,7 +24,7 @@ public class FragmentSetupSend extends SetupSidePanel {
 
 		final SetupRadioFragment setupFragment = (SetupRadioFragment) getParentFragment();
 
-		final View view = inflater.inflate(R.layout.fragment_setup_panel_send,
+		final View view = inflater.inflate(R.layout.fragment_setup_panel_next,
 				container, false);
 
 		textTitle = (TextView)view.findViewById(R.id.setupTitle);
@@ -36,8 +36,8 @@ public class FragmentSetupSend extends SetupSidePanel {
 		if(descId!=0)
 			textDesc.setText(descId);
 		
-		final Button btnSend = (Button) view.findViewById(R.id.buttonSend);		
-		btnSend.setOnClickListener(new OnClickListener() {
+		final Button btnNext = (Button) view.findViewById(R.id.buttonNext);		
+		btnNext.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				if (setupFragment != null) {

@@ -47,7 +47,7 @@ public class FragmentSetupProgress extends SetupSidePanel {
 		pb = (ProgressBar) view.findViewById(R.id.setupProgressBar);
 		pb.setIndeterminate(true);
 		
-		final Button btnCancel = (Button) view.findViewById(R.id.ButtonCancel);
+		final Button btnCancel = (Button) view.findViewById(R.id.buttonCancel);
 		btnCancel.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
