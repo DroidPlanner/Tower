@@ -26,7 +26,7 @@ public class FragmentSetupStart extends SetupSidePanel {
 
         final SetupRadioFragment setupFragment = (SetupRadioFragment) getParentFragment();
 
-		final View view = inflater.inflate(R.layout.fragment_setup_rc_calibrate, container, false);
+		final View view = inflater.inflate(R.layout.fragment_setup_panel_start, container, false);
 
 		textTitle = (TextView) view.findViewById(R.id.setupTitle);
 		textDesc = (TextView) view.findViewById(R.id.setupDesc);
@@ -41,7 +41,7 @@ public class FragmentSetupStart extends SetupSidePanel {
             @Override
             public void onClick(View v) {
                 if(setupFragment != null){
-                    setupFragment.doCalibrationStep(0);
+                    setupFragment.doCalibrationStep(1);
                 }
             }
         });

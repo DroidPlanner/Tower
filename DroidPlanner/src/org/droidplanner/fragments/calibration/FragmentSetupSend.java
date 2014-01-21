@@ -41,7 +41,7 @@ public class FragmentSetupSend extends SetupSidePanel {
 			@Override
 			public void onClick(View v) {
 				if (setupFragment != null) {
-					setupFragment.doCalibrationStep(1);
+					setupFragment.doCalibrationStep(3);
 				}
 			}
 		});

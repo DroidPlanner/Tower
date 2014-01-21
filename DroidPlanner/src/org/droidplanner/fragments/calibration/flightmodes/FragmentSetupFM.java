@@ -8,6 +8,8 @@ import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
 import org.droidplanner.fragments.SetupRadioFragment;
 import org.droidplanner.fragments.calibration.FragmentSetupProgress;
+import org.droidplanner.fragments.calibration.FragmentSetupSend;
+import org.droidplanner.fragments.calibration.FragmentSetupStart;
 import org.droidplanner.fragments.calibration.SetupMainPanel;
 import org.droidplanner.fragments.calibration.SetupSidePanel;
 import org.droidplanner.R;
@@ -95,7 +97,7 @@ public class FragmentSetupFM extends SetupMainPanel implements OnDroneListner, O
 
 	@Override
 	public SetupSidePanel getSidePanel() {
-		return new FragmentSetupFMConfiguration();
+		return new FragmentSetupSend();
 	}
 
 	@Override
@@ -220,21 +222,25 @@ public class FragmentSetupFM extends SetupMainPanel implements OnDroneListner, O
 	private SetupSidePanel getInitialPanel() {
 		if (!fmParameters.isParameterDownloaded()&&drone.MavClient.isConnected()) {
 			sidePanel = getProgressPanel();
-			sidePanel.updateTitle(R.string.progress_title_downloading);
-			sidePanel.updateDescription(R.string.progress_desc_downloading);
 			fmParameters.getCalibrationParameters(drone);
 		}
 		else {
-			sidePanel = ((SetupRadioFragment) getParentFragment())
-					.changeSidePanel(new FragmentSetupFMConfiguration());
+			sidePanel = new FragmentSetupSend();
+			sidePanel.updateTitle(R.string.setup_fm_side_title);
+			sidePanel.updateDescription(R.string.setup_fm_side_desc);
+			((SetupRadioFragment) getParentFragment())
+					.changeSidePanel(sidePanel);
 		}
 		return sidePanel;
 	}
 
 	private SetupSidePanel getProgressPanel() {
-		sidePanel = ((SetupRadioFragment) getParentFragment())
-				.changeSidePanel(new FragmentSetupProgress());
-
+		sidePanel = new FragmentSetupProgress();
+		sidePanel.updateTitle(R.string.progress_title_downloading);
+		sidePanel.updateDescription(R.string.progress_desc_downloading);
+		
+		((SetupRadioFragment) getParentFragment())
+				.changeSidePanel(sidePanel);
 		return sidePanel;
 	}
 
