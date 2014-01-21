@@ -43,7 +43,7 @@
             android:layout_width="154dp"
             android:layout_height="wrap_content"
             android:background="@drawable/button_green"
-            android:text="@string/rc_btn_calibrate" />
+            android:text="@string/button_setup_calibrate" />
     </LinearLayout>
 
 </LinearLayout>

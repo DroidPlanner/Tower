@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="@string/rc_title_minmax" />
+            android:text="@string/setup_radio_title_minmax" />
     </RelativeLayout>
 
     <TextView
@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/mode_desc_rectangle"
         android:padding="12dp"
-        android:text="@string/rc_desc_minmax" />
+        android:text="@string/setup_radio_desc_minmax" />
 
     <LinearLayout
         android:id="@+id/layoutSetupDetails"

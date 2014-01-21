@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:background="@drawable/rc_setup_rectangle"
-        android:text="@string/rc_setup_title" />
+        android:text="@string/setup_radio_title" />
 
     <RelativeLayout
         android:layout_width="match_parent"
