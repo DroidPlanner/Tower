@@ -122,7 +122,7 @@ public class FragmentSetupSF extends SetupMainPanel implements
 	@Override
 	public void doCalibrationStep(int step) {
 		switch (step) {
-		case 1:
+		case 3:
 			uploadCalibrationData();
 			break;
 		case 0:

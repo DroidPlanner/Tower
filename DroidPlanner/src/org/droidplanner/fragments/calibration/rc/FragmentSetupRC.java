@@ -7,6 +7,7 @@ import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
 import org.droidplanner.fragments.SetupRadioFragment;
+import org.droidplanner.fragments.calibration.FragmentSetupNext;
 import org.droidplanner.fragments.calibration.FragmentSetupProgress;
 import org.droidplanner.fragments.calibration.FragmentSetupStart;
 import org.droidplanner.fragments.calibration.FragmentSetupSummary;
@@ -71,7 +72,7 @@ public class FragmentSetupRC extends SetupMainPanel implements OnDroneListner,
 
 	@Override
 	public SetupSidePanel getSidePanel() {
-		return new FragmentSetupRCCalibrate();
+		return new FragmentSetupStart();
 	}
 
 	@Override
@@ -129,7 +130,7 @@ public class FragmentSetupRC extends SetupMainPanel implements OnDroneListner,
 
 	@Override
 	public void onSentCalibration(CalParameters calParameters) {
-		doCalibrationStep(-1);
+		doCalibrationStep(0);
 	}
 
 	@Override
@@ -183,16 +184,16 @@ public class FragmentSetupRC extends SetupMainPanel implements OnDroneListner,
 	@Override
 	public void doCalibrationStep(int step) {
 		switch (step) {
-		case 1: // Get Mid
+		case 1: 
 			sidePanel = getNextPanel();
 			break;
-		case 2: // Get MinMax
+		case 2: 
 			sidePanel = getCompletedPanel();
 			break;
 		case 3: // Upload calibration data
 			updateCalibrationData();
 			break;
-		case 0: // Get MinMax
+		case 0: 
 		default:
 			sidePanel = getInitialPanel();
 		}
@@ -209,7 +210,7 @@ public class FragmentSetupRC extends SetupMainPanel implements OnDroneListner,
 	private SetupSidePanel getCompletedPanel() {
 		calibrationStep = 0;
 		Bundle args = new Bundle();
-		args.putString(FragmentSetupRCCompleted.EXTRA_TEXT_SUMMARY,
+		args.putString(FragmentSetupSummary.EXTRA_TEXT_SUMMARY,
 				getCalibrationStr());
 		sidePanel = ((SetupRadioFragment) getParentFragment())
 				.changeSidePanel(new FragmentSetupSummary());
@@ -220,34 +221,47 @@ public class FragmentSetupRC extends SetupMainPanel implements OnDroneListner,
 	}
 
 	private SetupSidePanel getNextPanel() {
-		int textId, descId;
+		int textId=0, descId=0;
+
+		
 		switch(calibrationStep){
 		case 0:
+			if(!rcParameters.isParameterDownloaded()&&drone.MavClient.isConnected()){
+				getProgressPanel(true);
+				rcParameters.getCalibrationParameters(drone);
+				return sidePanel;
+			}
+			setFillBarShowMinMax(true);
 			textId = R.string.setup_radio_title_minmax;
+			descId = R.string.setup_radio_desc_minmax;
+			break;
+		case 1:
+			textId = R.string.setup_radio_title_middle;
+			descId = R.string.setup_radio_desc_middle;
 			break;
 		}
 		calibrationStep++;
+		
+		sidePanel = new FragmentSetupNext();
+		sidePanel.updateTitle(textId);
+		sidePanel.updateDescription(descId);
+		
 		return ((SetupRadioFragment) getParentFragment())
-				.changeSidePanel(new FragmentSetupRCMiddle());
+				.changeSidePanel(sidePanel);
 	}
 
-	private SetupSidePanel getProgressPanel() {
-		return ((SetupRadioFragment) getParentFragment())
-				.changeSidePanel(new FragmentSetupProgress());
-	}
-
-	private SetupSidePanel getMinMaxPanel() {
-		if (!rcParameters.isParameterDownloaded()) {
-			getProgressPanel();
+	private SetupSidePanel getProgressPanel(boolean isSending) {
+		sidePanel = new FragmentSetupProgress();
+		if(isSending){
+			sidePanel.updateTitle(R.string.progress_title_uploading);
+			sidePanel.updateDescription(R.string.progress_desc_uploading);			
+		}else{
 			sidePanel.updateTitle(R.string.progress_title_downloading);
 			sidePanel.updateDescription(R.string.progress_desc_downloading);
-			rcParameters.getCalibrationParameters(drone);
-		} else {
-			setFillBarShowMinMax(true);
-			((SetupRadioFragment) getParentFragment())
-					.changeSidePanel(new FragmentSetupRCMinMax());
 		}
-		return sidePanel;
+		
+		return ((SetupRadioFragment) getParentFragment())
+				.changeSidePanel(sidePanel);
 	}
 
 	private void onNewInputRcData() {
@@ -336,10 +350,7 @@ public class FragmentSetupRC extends SetupMainPanel implements OnDroneListner,
 		}
 
 		setFillBarShowMinMax(false);
-		getProgressPanel();
-		sidePanel.updateTitle(R.string.progress_title_uploading);
-		sidePanel.updateDescription(R.string.progress_desc_uploading);
-
+		getProgressPanel(true);
 		rcParameters.sendCalibrationParameters();
 	}
 

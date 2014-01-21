@@ -31,6 +31,14 @@
         android:text="@string/setup_radio_cal_desc" />
 
     <LinearLayout
+        android:id="@+id/layoutSetupDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp" >
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
