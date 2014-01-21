@@ -29,13 +29,13 @@ public class FragmentSetupProgress extends SetupSidePanel {
 
         final SuperSetupFragment setupFragment = (SuperSetupFragment) getParentFragment();
 
-		final View view = inflater.inflate(R.layout.fragment_setup_progress,
+		final View view = inflater.inflate(R.layout.fragment_setup_panel_progress,
 				container, false);
 		
 		textTitle = (TextView) view.findViewById(R.id.setupTitle);
 		textDesc = (TextView) view.findViewById(R.id.setupDesc);
-		textAction = (TextView) view.findViewById(R.id.textViewProgressTitle);
-		textProgress = (TextView) view.findViewById(R.id.textViewProgress);
+		textAction = (TextView) view.findViewById(R.id.setupProgressTitle);
+		textProgress = (TextView) view.findViewById(R.id.setupProgressRatio);
 		
 		if(titleId!=0)
 			textTitle.setText(titleId);
@@ -44,7 +44,7 @@ public class FragmentSetupProgress extends SetupSidePanel {
 		
 		textProgress.setText("0/0");
 		
-		pb = (ProgressBar) view.findViewById(R.id.progressBarRCSetup);
+		pb = (ProgressBar) view.findViewById(R.id.setupProgressBar);
 		pb.setIndeterminate(true);
 		
 		final Button btnCancel = (Button) view.findViewById(R.id.ButtonCancel);
