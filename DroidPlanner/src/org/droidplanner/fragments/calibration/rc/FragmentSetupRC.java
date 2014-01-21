@@ -8,6 +8,8 @@ import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
 import org.droidplanner.fragments.SetupRadioFragment;
 import org.droidplanner.fragments.calibration.FragmentSetupProgress;
+import org.droidplanner.fragments.calibration.FragmentSetupStart;
+import org.droidplanner.fragments.calibration.FragmentSetupSummary;
 import org.droidplanner.fragments.calibration.SetupMainPanel;
 import org.droidplanner.fragments.calibration.SetupSidePanel;
 import org.droidplanner.widgets.FillBar.FillBar;
@@ -16,7 +18,6 @@ import org.droidplanner.widgets.RcStick.RcStick;
 import org.droidplanner.R;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -36,8 +37,8 @@ public class FragmentSetupRC extends SetupMainPanel implements OnDroneListner,
 	private static final String[] RCStr = { "CH 1 ", "CH 2 ", "CH 3 ", "CH 4 ",
 			"CH 5", "CH 6", "CH 7", "CH 8" };
 
+	private int calibrationStep = 0;
 	private Drone drone;
-
 	private RC_CalParameters rcParameters;
 
 	private FillBar bar1;
@@ -100,8 +101,6 @@ public class FragmentSetupRC extends SetupMainPanel implements OnDroneListner,
 		if (rcParameters != null) {
 			rcParameters.setOnCalibrationEventListener(this);
 		}
-
-		Log.d("CAL", "RC Setup");
 	}
 
 	@Override
@@ -144,7 +143,7 @@ public class FragmentSetupRC extends SetupMainPanel implements OnDroneListner,
 					title = "Downloading RC calibration data";
 			}
 
-			((FragmentSetupProgress) sidePanel).updateProgress(index, count,
+			((FragmentSetupProgress) sidePanel).updateProgress(index+1, count,
 					title);
 		}
 	}
@@ -184,11 +183,8 @@ public class FragmentSetupRC extends SetupMainPanel implements OnDroneListner,
 	@Override
 	public void doCalibrationStep(int step) {
 		switch (step) {
-		case 0: // Get MinMax
-			sidePanel = getMinMaxPanel();
-			break;
 		case 1: // Get Mid
-			sidePanel = getMidPanel();
+			sidePanel = getNextPanel();
 			break;
 		case 2: // Get MinMax
 			sidePanel = getCompletedPanel();
@@ -196,31 +192,41 @@ public class FragmentSetupRC extends SetupMainPanel implements OnDroneListner,
 		case 3: // Upload calibration data
 			updateCalibrationData();
 			break;
+		case 0: // Get MinMax
 		default:
 			sidePanel = getInitialPanel();
 		}
 	}
 
 	private SetupSidePanel getInitialPanel() {
+		calibrationStep = 0;
 		setFillBarShowMinMax(false);
 		sidePanel = ((SetupRadioFragment) getParentFragment())
-				.changeSidePanel(new FragmentSetupRCCalibrate());
+				.changeSidePanel(new FragmentSetupStart());
 		return sidePanel;
 	}
 
 	private SetupSidePanel getCompletedPanel() {
+		calibrationStep = 0;
 		Bundle args = new Bundle();
 		args.putString(FragmentSetupRCCompleted.EXTRA_TEXT_SUMMARY,
 				getCalibrationStr());
 		sidePanel = ((SetupRadioFragment) getParentFragment())
-				.changeSidePanel(new FragmentSetupRCCompleted());
+				.changeSidePanel(new FragmentSetupSummary());
 		if (sidePanel != null) {
 			sidePanel.setArguments(args);
 		}
 		return sidePanel;
 	}
 
-	private SetupSidePanel getMidPanel() {
+	private SetupSidePanel getNextPanel() {
+		int textId, descId;
+		switch(calibrationStep){
+		case 0:
+			textId = R.string.setup_radio_title_minmax;
+			break;
+		}
+		calibrationStep++;
 		return ((SetupRadioFragment) getParentFragment())
 				.changeSidePanel(new FragmentSetupRCMiddle());
 	}
