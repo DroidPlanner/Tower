@@ -319,4 +319,12 @@
     <string name="setup_sf_servo10">"Servo 10 : "</string>
     <string name="setup_sf_servo11">"Servo 11 : "</string>
     <string name="setup_sf_servo12">"Servo 12 : "</string>
+    <string name="telemetry_default_value">0.0</string>
+    <string name="climb_rate_label">Climb rate</string>
+    <string name="altitude_label">Altitude</string>
+    <string name="meter_unit">m</string>
+    <string name="speed_unit">m/s</string>
+    <string name="ground_speed_label">Ground speed</string>
+    <string name="air_speed_label">Air speed</string>
+    <string name="default_angle_value">--°</string>
 </resources>
