@@ -15,6 +15,8 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
+import org.droidplanner.utils.Constants;
+import org.droidplanner.utils.Utils;
 
 public abstract class SuperActivity extends HelpActivity implements
 		OnAltitudeChangedListner {
@@ -48,7 +50,7 @@ public abstract class SuperActivity extends HelpActivity implements
 			startActivity(new Intent(this, SettingsActivity.class));
 			return true;
 		case R.id.menu_connect:
-			drone.MavClient.toggleConnectionState();
+            toggleDroneConnection();
 			return true;
 		case R.id.menu_map_type_hybrid:
 		case R.id.menu_map_type_normal:
@@ -60,6 +62,22 @@ public abstract class SuperActivity extends HelpActivity implements
 			return super.onMenuItemSelected(featureId, item);
 		}
 	}
+
+    protected void toggleDroneConnection(){
+        if (!drone.MavClient.isConnected()) {
+            final String connectionType = PreferenceManager
+                    .getDefaultSharedPreferences(getApplicationContext())
+                    .getString(Constants.PREF_CONNECTION_TYPE,
+                            Constants.DEFAULT_CONNECTION_TYPE);
+
+            if (Utils.ConnectionType.BLUETOOTH.name().equals(connectionType)) {
+                //Launch a bluetooth device selection screen for the user
+                startActivity(new Intent(this, BTDeviceSelectionActivity.class));
+                return;
+            }
+        }
+        drone.MavClient.toggleConnectionState();
+    }
 
 	private void setMapTypeFromItemId(int itemId) {
 		final String mapType;

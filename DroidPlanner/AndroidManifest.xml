@@ -130,6 +130,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activitys.FlightActivity" />
         </activity>
+        <activity
+            android:name=".activitys.helpers.BTDeviceSelectionActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/CustomActionBarTheme.Dialog"
+            android:excludeFromRecents="true"/>
     </application>
 
 </manifest>

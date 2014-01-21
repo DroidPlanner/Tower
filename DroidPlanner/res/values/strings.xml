@@ -319,4 +319,13 @@
     <string name="setup_sf_servo10">"Servo 10 : "</string>
     <string name="setup_sf_servo11">"Servo 11 : "</string>
     <string name="setup_sf_servo12">"Servo 12 : "</string>
+
+    <!--  Bluetooth device selection strings -->
+    <string name="scanning">scanning for devices...</string>
+    <string name="select_device">Select device to connect</string>
+    <string name="none_paired">No devices have been paired</string>
+    <string name="none_found">No devices found</string>
+    <string name="title_paired_devices">Paired Devices</string>
+    <string name="title_other_devices">Other Available Devices</string>
+    <string name="button_scan">Scan for devices</string>
 </resources>
