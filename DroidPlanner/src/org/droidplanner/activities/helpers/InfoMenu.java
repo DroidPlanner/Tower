@@ -1,4 +1,4 @@
-package org.droidplanner.activitys.helpers;
+package org.droidplanner.activities.helpers;
 
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;

@@ -1,9 +1,9 @@
-package org.droidplanner.activitys;
+package org.droidplanner.activities;
 
 import java.util.List;
 
-import org.droidplanner.activitys.helpers.OnEditorInteraction;
-import org.droidplanner.activitys.helpers.SuperUI;
+import org.droidplanner.activities.helpers.OnEditorInteraction;
+import org.droidplanner.activities.helpers.SuperUI;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.variables.mission.Mission;
@@ -88,7 +88,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 		int rightPadding = 0,bottomPadding = 0;
 		if (mission.getItems().size()>0) {
 			rightPadding = editorToolsFragment.getView().getRight();
-			bottomPadding = missionListFragment.getView().getHeight();			
+			bottomPadding = missionListFragment.getView().getHeight();
 		}
 		planningMapFragment.mMap.setPadding(rightPadding, topPadding, 0, bottomPadding);
 	}

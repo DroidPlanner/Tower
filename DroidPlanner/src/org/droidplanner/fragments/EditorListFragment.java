@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.droidplanner.DroidPlannerApp;
-import org.droidplanner.activitys.helpers.OnEditorInteraction;
+import org.droidplanner.activities.helpers.OnEditorInteraction;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
@@ -49,7 +49,7 @@ public class EditorListFragment extends Fragment implements  OnItemLongClickList
 		rightArrow = (ImageButton) view.findViewById(R.id.listRightArrow);
 		leftArrow.setOnClickListener(this);
 		rightArrow.setOnClickListener(this);
-		
+
 		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
 		mission = drone.mission;
 		adapter = new MissionItemView(this.getActivity(), android.R.layout.simple_list_item_1,mission.getItems());
@@ -168,7 +168,7 @@ public class EditorListFragment extends Fragment implements  OnItemLongClickList
 	@Override
 	public void onClick(View v) {
 		if (v == leftArrow ) {
-			mission.moveSelection(false);	
+			mission.moveSelection(false);
 	        adapter.notifyDataSetChanged();
 	        updateMissionItemSelection(mission.getSelected());
 		}
@@ -176,7 +176,7 @@ public class EditorListFragment extends Fragment implements  OnItemLongClickList
 			mission.moveSelection(true);
 	        adapter.notifyDataSetChanged();
 	        updateMissionItemSelection(mission.getSelected());
-		}		
+		}
 	}
-	
+
 }

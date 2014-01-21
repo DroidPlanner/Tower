@@ -1,4 +1,4 @@
-package org.droidplanner.activitys.helpers;
+package org.droidplanner.activities.helpers;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -15,7 +15,7 @@ public abstract class HelpActivity extends FragmentActivity implements OnClickLi
 	public HelpActivity() {
 		super();
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 				if (item.getItemId() == R.id.menu_help) {
@@ -28,12 +28,12 @@ public abstract class HelpActivity extends FragmentActivity implements OnClickLi
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(R.string.help);
 		builder.setItems(getHelpItems()[0], this);
-		builder.create().show();		
+		builder.create().show();
 	}
 
 	/**
 	 * Get help items to be populated
-	 * 
+	 *
 	 * @return A matrix with pars of help guides names, with the associated
 	 *         video url
 	 */
@@ -41,7 +41,7 @@ public abstract class HelpActivity extends FragmentActivity implements OnClickLi
 
 	@Override
 	public void onClick(DialogInterface dialog, int which) {
-		startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getHelpItems()[1][which].toString())));		
+		startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getHelpItems()[1][which].toString())));
 	}
 
 }

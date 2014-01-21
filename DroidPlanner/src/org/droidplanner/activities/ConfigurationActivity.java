@@ -1,7 +1,7 @@
-package org.droidplanner.activitys;
+package org.droidplanner.activities;
 
 import org.droidplanner.R;
-import org.droidplanner.activitys.helpers.SuperUI;
+import org.droidplanner.activities.helpers.SuperUI;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.fragments.ChecklistFragment;
@@ -61,14 +61,14 @@ public class ConfigurationActivity extends SuperUI {
 	/**
 	 * This is the fragment pager adapter to handle the tabs of the
 	 * Configuration activity.
-	 * 
+	 *
 	 * @since 1.2.0
 	 */
 	private static class ConfigurationPagerAdapter extends FragmentPagerAdapter {
 
 		/**
 		 * Application context object used to retrieve the tabs' title.
-		 * 
+		 *
 		 * @since 1.2.0
 		 */
 		private final Context mContext;

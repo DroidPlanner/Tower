@@ -1,4 +1,4 @@
-package org.droidplanner.activitys.helpers;
+package org.droidplanner.activities.helpers;
 
 import org.droidplanner.R;
 import org.droidplanner.drone.Drone;
@@ -15,9 +15,9 @@ public abstract class SuperUI extends SuperActivity implements OnDroneListner {
 	private ScreenOrientation screenOrientation = new ScreenOrientation(this);
 	private InfoMenu infoMenu;
 	private GCSHeartbeat gcsHeartbeat;
-	
+
 	public SuperUI() {
-		super();        
+		super();
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public abstract class SuperUI extends SuperActivity implements OnDroneListner {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		infoMenu = new InfoMenu(drone,this);
-		infoMenu.inflateMenu(menu, getMenuInflater());	
+		infoMenu.inflateMenu(menu, getMenuInflater());
 		infoMenu.setupModeSpinner(this);
 		getMenuInflater().inflate(R.menu.menu_super_activiy, menu);
 		return super.onCreateOptionsMenu(menu);

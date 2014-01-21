@@ -6,7 +6,7 @@ import java.util.List;
 
 import android.support.v4.app.Fragment;
 
-import org.droidplanner.activitys.helpers.SuperActivity;
+import org.droidplanner.activities.helpers.SuperActivity;
 import org.droidplanner.checklist.CheckListAdapter;
 import org.droidplanner.checklist.CheckListItem;
 import org.droidplanner.checklist.CheckListSysLink;
@@ -80,7 +80,7 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 		sysLink = new CheckListSysLink(this.drone);
 		drone.events.addDroneListener(this);
 	}
-	
+
 	@Override
 	public void onStop() {
 		super.onStop();
@@ -106,7 +106,7 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 	private void loadXMLChecklist() {
 		CheckListXmlParser xml = new CheckListXmlParser("checklist_ext.xml",
 				context, R.xml.checklist_default);
-	
+
 		xml.setOnXMLParserError(this);
 		listDataHeader = xml.getCategories();
 		checklistItems = xml.getCheckListItems();
@@ -116,7 +116,7 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 	private void prepareListData() {
 		listDataChild = new HashMap<String, List<CheckListItem>>();
 		List<CheckListItem> cli;
-	
+
 		for (int h = 0; h < listDataHeader.size(); h++) {
 			cli = new ArrayList<CheckListItem>();
 			for (int i = 0; i < checklistItems.size(); i++) {
@@ -134,7 +134,7 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
                 .LAYOUT_INFLATER_SERVICE);
 
 		listAdapter = new CheckListAdapter(layoutInflater, listDataHeader,	listDataChild);
-	
+
 		listAdapter.setHeaderLayout(R.layout.list_group_header);
 		listAdapter.setOnCheckListItemUpdateListener(this);
 	}
