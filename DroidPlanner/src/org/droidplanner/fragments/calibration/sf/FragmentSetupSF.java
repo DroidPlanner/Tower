@@ -5,6 +5,7 @@ import org.droidplanner.calibration.CalParameters;
 import org.droidplanner.calibration.SF_CalParameters;
 import org.droidplanner.fragments.calibration.FragmentSetupSend;
 import org.droidplanner.fragments.calibration.SetupSidePanel;
+import org.droidplanner.fragments.helpers.SuperSetupMainPanel;
 
 import android.view.View;
 import android.widget.ArrayAdapter;

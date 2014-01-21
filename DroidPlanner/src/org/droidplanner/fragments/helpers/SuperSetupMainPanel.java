@@ -1,4 +1,4 @@
-package org.droidplanner.fragments.calibration.sf;
+package org.droidplanner.fragments.helpers;
 
 import org.droidplanner.R;
 import org.droidplanner.calibration.CalParameters;
@@ -14,18 +14,21 @@ import org.droidplanner.fragments.calibration.SetupSidePanel;
 
 import android.os.Bundle;
 
-public abstract class SuperSetupMainPanel extends SetupMainPanel  implements
-OnCalibrationEvent, OnDroneListner {
+@SuppressWarnings("unused")
+public abstract class SuperSetupMainPanel extends SetupMainPanel implements
+		OnCalibrationEvent, OnDroneListner {
 
 	protected Drone drone;
 	protected CalParameters parameters;
 
 	protected abstract CalParameters getParameterHandler();
-	protected abstract int getInitialPanelTitle();
-	protected abstract int getInitialPanelDescription();
+
+	protected abstract SetupSidePanel getDefaultPanel();
+
 	protected abstract void updatePanelInfo();
+
 	protected abstract void updateCalibrationData();
-	
+
 	public SuperSetupMainPanel() {
 		super();
 	}
@@ -80,22 +83,22 @@ OnCalibrationEvent, OnDroneListner {
 	}
 
 	@Override
-	public void onCalibrationData(CalParameters calParameters, int index, int count,
-			boolean isSending) {
-				if (sidePanel != null && parameters != null) {
-					String title;
-					if (isSending) {
-						title = getResources().getString(
-								R.string.setup_sf_desc_uploading);
-					} else {
-						title = getResources().getString(
-								R.string.setup_sf_desc_downloading);
-					}
-			
-					((FragmentSetupProgress) sidePanel).updateProgress(index + 1,
-							count, title);
-				}
+	public void onCalibrationData(CalParameters calParameters, int index,
+			int count, boolean isSending) {
+		if (sidePanel != null && parameters != null) {
+			String title;
+			if (isSending) {
+				title = getResources().getString(
+						R.string.setup_sf_desc_uploading);
+			} else {
+				title = getResources().getString(
+						R.string.setup_sf_desc_downloading);
 			}
+
+			((FragmentSetupProgress) sidePanel).updateProgress(index + 1,
+					count, title);
+		}
+	}
 
 	@Override
 	public void doCalibrationStep(int step) {
@@ -110,15 +113,15 @@ OnCalibrationEvent, OnDroneListner {
 	}
 
 	private SetupSidePanel getInitialPanel() {
-	
+
 		if (parameters != null && !parameters.isParameterDownloaded()
 				&& drone.MavClient.isConnected()) {
 			downloadCalibrationData();
 		} else {
-			sidePanel = ((SetupRadioFragment) getParentFragment())
-					.changeSidePanel(new FragmentSetupSend());
-			sidePanel.updateTitle(getInitialPanelTitle());
-			sidePanel.updateDescription(getInitialPanelDescription());
+			sidePanel = getDefaultPanel();
+			((SetupRadioFragment) getParentFragment())
+					.changeSidePanel(sidePanel);
+
 		}
 		return sidePanel;
 	}
@@ -126,7 +129,7 @@ OnCalibrationEvent, OnDroneListner {
 	private SetupSidePanel getProgressPanel(boolean isSending) {
 		sidePanel = ((SetupRadioFragment) getParentFragment())
 				.changeSidePanel(new FragmentSetupProgress());
-	
+
 		if (isSending) {
 			sidePanel.updateTitle(R.string.progress_title_uploading);
 			sidePanel.updateDescription(R.string.progress_desc_uploading);
@@ -134,16 +137,16 @@ OnCalibrationEvent, OnDroneListner {
 			sidePanel.updateTitle(R.string.progress_title_downloading);
 			sidePanel.updateDescription(R.string.progress_desc_downloading);
 		}
-	
+
 		return sidePanel;
 	}
 
 	private void uploadCalibrationData() {
 		if (parameters == null || !drone.MavClient.isConnected())
 			return;
-	
+
 		sidePanel = getProgressPanel(true);
-	
+
 		updateCalibrationData();
 		parameters.sendCalibrationParameters();
 	}
