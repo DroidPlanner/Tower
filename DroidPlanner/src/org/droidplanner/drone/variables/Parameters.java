@@ -15,16 +15,16 @@ import com.MAVLink.Messages.ardupilotmega.msg_param_value;
 
 /**
  * Class to manage the communication of parameters to the MAV.
- * 
+ *
  * Should be initialized with a MAVLink Object, so the manager can send messages
  * via the MAV link. The function processMessage must be called with every new
  * MAV Message.
- * 
+ *
  */
 public class Parameters extends DroneVariable {
     private List<Parameter> parameters = new ArrayList<Parameter>();
-    
-	public DroneInterfaces.OnParameterManagerListner parameterListner;
+
+	public DroneInterfaces.OnParameterManagerListener parameterListener;
 
 	public Parameters(Drone myDrone) {
 		super(myDrone);
@@ -32,14 +32,14 @@ public class Parameters extends DroneVariable {
 
 	public void getAllParameters() {
 		parameters.clear();
-		if(parameterListner!=null)
-			parameterListner.onBeginReceivingParameters();
+		if(parameterListener!=null)
+			parameterListener.onBeginReceivingParameters();
 		MavLinkParameters.requestParametersList(myDrone);
 	}
 
 	/**
 	 * Try to process a Mavlink message if it is a parameter related message
-	 * 
+	 *
 	 * @param msg
 	 *            Mavlink message to process
 	 * @return Returns true if the message has been processed
@@ -58,13 +58,13 @@ public class Parameters extends DroneVariable {
 		parameters.add(param);
 
 		// update listener
-		if(parameterListner!=null)
-			parameterListner.onParameterReceived(param, m_value.param_index, m_value.param_count);
+		if(parameterListener!=null)
+			parameterListener.onParameterReceived(param, m_value.param_index, m_value.param_count);
 
 		// last param? notify listener w/ params
 		if (m_value.param_index == m_value.param_count - 1) {
-			if(parameterListner!=null)
-				parameterListner.onEndReceivingParameters(parameters);
+			if(parameterListener!=null)
+				parameterListener.onEndReceivingParameters(parameters);
 		}
 		myDrone.events.notifyDroneEvent(DroneEventsType.PARAMETER);
 	}
@@ -72,11 +72,11 @@ public class Parameters extends DroneVariable {
 	public void sendParameter(Parameter parameter) {
 		MavLinkParameters.sendParameter(myDrone, parameter);
 	}
-    
+
 	public void ReadParameter(String name) {
 		MavLinkParameters.readParameter(myDrone, name);
 	}
-	
+
 	public Parameter getParamter(String name){
 		for(Parameter parameter : parameters){
 			if(parameter.name.equalsIgnoreCase(name))
@@ -87,7 +87,7 @@ public class Parameters extends DroneVariable {
 	public Parameter getLastParameter(){
 		if(parameters.size()>0)
 			return parameters.get(parameters.size()-1);
-		
+
 		return null;
 	}
 }

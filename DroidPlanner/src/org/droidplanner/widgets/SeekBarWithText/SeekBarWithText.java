@@ -13,7 +13,7 @@ import org.droidplanner.R;
 public class SeekBarWithText extends LinearLayout implements
 		OnSeekBarChangeListener {
 
-	public interface OnTextSeekBarChangedListner {
+	public interface OnTextSeekBarChangedListener {
 		public void onSeekBarChanged();
 	}
 
@@ -24,7 +24,7 @@ public class SeekBarWithText extends LinearLayout implements
 	private String title = "";
 	private String unit = "";
 	private String formatString = "%2.1f";
-	private OnTextSeekBarChangedListner listner;
+	private OnTextSeekBarChangedListener listener;
 
 	public SeekBarWithText(Context context) {
 		super(context);
@@ -52,7 +52,7 @@ public class SeekBarWithText extends LinearLayout implements
 	private void setFormat(String string) {
 		if (string!=null) {
 			formatString = string;
-		}		
+		}
 	}
 
 	private void createViews(Context context) {
@@ -76,7 +76,7 @@ public class SeekBarWithText extends LinearLayout implements
 
 	public void setUnit(String unit) {
 		if (unit != null) {
-			this.unit = unit;			
+			this.unit = unit;
 		}
 	}
 
@@ -118,13 +118,13 @@ public class SeekBarWithText extends LinearLayout implements
 
 	@Override
 	public void onStopTrackingTouch(SeekBar seekBar) {
-		if (listner != null) {
-			listner.onSeekBarChanged();
+		if (listener != null) {
+			listener.onSeekBarChanged();
 		}
 	}
 
-	public void setOnChangedListner(OnTextSeekBarChangedListner listner) {
-		this.listner = listner;
+	public void setOnChangedListener(OnTextSeekBarChangedListener listener) {
+		this.listener = listener;
 	}
 
 }

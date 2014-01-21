@@ -3,7 +3,7 @@ package org.droidplanner.activities;
 import org.droidplanner.activities.helpers.SuperUI;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.drone.variables.mission.MissionItem;
 import org.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.fragments.FlightActionsFragment;
@@ -37,7 +37,7 @@ import org.droidplanner.R;
 import com.google.android.gms.maps.model.LatLng;
 
 public class FlightActivity extends SuperUI implements
-		OnMapInteractionListener, OnMissionControlInteraction, OnDroneListner{
+		OnMapInteractionListener, OnMissionControlInteraction, OnDroneListener{
 
     private FragmentManager fragmentManager;
 	private RCFragment rcFragment;

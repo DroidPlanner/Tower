@@ -3,7 +3,7 @@ package org.droidplanner.fragments.mission;
 import org.droidplanner.drone.variables.mission.waypoints.Waypoint;
 import org.droidplanner.helpers.units.Altitude;
 import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
-import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
+import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListener;
 
 import android.view.View;
 import android.widget.CompoundButton;
@@ -12,7 +12,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import org.droidplanner.R;
 
 public class MissionWaypointFragment extends MissionDetailFragment implements
-		OnTextSeekBarChangedListner, OnCheckedChangeListener {
+		OnTextSeekBarChangedListener, OnCheckedChangeListener {
 
 	private SeekBarWithText altitudeSeekBar;
 	private SeekBarWithText delaySeekBar;
@@ -36,25 +36,25 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
 
 		altitudeSeekBar = (SeekBarWithText) view.findViewById(R.id.altitudeView);
 		altitudeSeekBar.setValue(item.getAltitude().valueInMeters());
-		altitudeSeekBar.setOnChangedListner(this);
+		altitudeSeekBar.setOnChangedListener(this);
 
 		delaySeekBar = (SeekBarWithText) view.findViewById(R.id.waypointDelay);
 		delaySeekBar.setValue(item.getDelay());
-		delaySeekBar.setOnChangedListner(this);
+		delaySeekBar.setOnChangedListener(this);
 
 		/*
 		radiusSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.waypointAcceptanceRadius);
 		radiusSeekBar.setValue(item.getAcceptanceRadius());
-		radiusSeekBar.setOnChangedListner(this);
+		radiusSeekBar.setOnChangedListener(this);
 
 		yawSeekBar = (SeekBarWithText) view.findViewById(R.id.waypointAngle);
 		yawSeekBar.setValue(item.getYawAngle());
-		yawSeekBar.setOnChangedListner(this);
+		yawSeekBar.setOnChangedListener(this);
 
 		orbitSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.waypointOrbitalRadius);
-		orbitSeekBar.setOnChangedListner(this);
+		orbitSeekBar.setOnChangedListener(this);
 		orbitSeekBar.setAbsValue(item.getOrbitalRadius());
 
 		orbitCCW = (CheckBox) view.findViewById(R.id.waypoint_CCW);

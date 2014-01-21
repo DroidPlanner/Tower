@@ -6,7 +6,7 @@ import org.droidplanner.connection.MAVLinkConnection;
 import org.droidplanner.connection.TcpConnection;
 import org.droidplanner.connection.UdpConnection;
 import org.droidplanner.connection.UsbConnection;
-import org.droidplanner.connection.MAVLinkConnection.MavLinkConnectionListner;
+import org.droidplanner.connection.MAVLinkConnection.MavLinkConnectionListener;
 
 import android.annotation.SuppressLint;
 import android.app.NotificationManager;
@@ -35,7 +35,7 @@ import org.droidplanner.R;
  *
  */
 
-public class MAVLinkService extends Service implements MavLinkConnectionListner {
+public class MAVLinkService extends Service implements MavLinkConnectionListener {
 	public static final int MSG_REGISTER_CLIENT = 1;
 	public static final int MSG_UNREGISTER_CLIENT = 2;
 	public static final int MSG_SEND_DATA = 3;

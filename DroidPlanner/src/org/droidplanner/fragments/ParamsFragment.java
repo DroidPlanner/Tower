@@ -14,7 +14,7 @@ import org.droidplanner.dialogs.parameters.DialogParameterInfo;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.file.IO.ParameterWriter;
 import org.droidplanner.parameters.Parameter;
 import org.droidplanner.parameters.ParameterMetadata;
@@ -34,7 +34,7 @@ import android.widget.Toast;
 import org.droidplanner.R;
 
 public class ParamsFragment extends ListFragment implements DroneInterfaces
-        .OnParameterManagerListner, OnDroneListner{
+        .OnParameterManagerListener, OnDroneListener{
 
     public static final String ADAPTER_ITEMS = ParamsFragment.class.getName() + ".adapter.items";
 
@@ -91,21 +91,21 @@ public class ParamsFragment extends ListFragment implements DroneInterfaces
 		super.onStart();
 		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
 		drone.events.addDroneListener(this);
-		drone.parameters.parameterListner = this;
+		drone.parameters.parameterListener = this;
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
 		drone.events.removeDroneListener(this);
-		drone.parameters.parameterListner = null;
+		drone.parameters.parameterListener = null;
 	}
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		if (event == DroneEventsType.TYPE) {
 	        adapter.loadMetadata(drone);
-		}		
+		}
 	}
 
 	@Override

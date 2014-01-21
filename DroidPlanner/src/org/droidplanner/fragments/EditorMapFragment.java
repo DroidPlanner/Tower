@@ -35,7 +35,7 @@ public class EditorMapFragment extends DroneMap implements
 
 	public CameraGroundOverlays cameraOverlays;
 	public Polygon polygon = new Polygon();
-	private OnEditorInteraction editorListner;
+	private OnEditorInteraction editorListener;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
@@ -132,20 +132,20 @@ public class EditorMapFragment extends DroneMap implements
 
 	@Override
 	public void onMapClick(LatLng point) {
-		editorListner.onMapClick(point);
+		editorListener.onMapClick(point);
 	}
 
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		editorListner = (OnEditorInteraction) activity;
+		editorListener = (OnEditorInteraction) activity;
 	}
 
 	@Override
 	public boolean onMarkerClick(Marker marker) {
 		MarkerSource source = markers.getSourceFromMarker(marker);
 		if (source instanceof MissionItem) {
-			editorListner.onItemClick((MissionItem) source);
+			editorListener.onItemClick((MissionItem) source);
 			return true;
 		} else {
 			return false;

@@ -8,7 +8,7 @@ import org.droidplanner.file.IO.CameraInfoReader;
 import org.droidplanner.file.help.CameraInfoLoader;
 import org.droidplanner.helpers.units.Altitude;
 import org.droidplanner.polygon.Polygon;
-import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
+import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListener;
 import org.droidplanner.widgets.spinners.SpinnerSelfSelect.OnSpinnerItemSelectedListener;
 
 import android.content.Context;
@@ -25,18 +25,18 @@ import org.droidplanner.R;
 import com.google.android.gms.maps.model.LatLng;
 
 public class SurveyFragment extends Fragment implements
-		OnTextSeekBarChangedListner, OnSpinnerItemSelectedListener, OnClickListener {
+		OnTextSeekBarChangedListener, OnSpinnerItemSelectedListener, OnClickListener {
 	//public abstract void onPolygonGenerated(List<waypoint> list);
 
-	public interface OnNewGridListner{
+	public interface OnNewGridListener{
 		public void onNewGrid(Grid grid);
 		public void onClearPolygon();
 	}
-	
+
 	public enum pathModes {
 		MISSION, POLYGON;
 	}
-	
+
 	private Context context;
 	private Polygon polygon;
 
@@ -44,52 +44,52 @@ public class SurveyFragment extends Fragment implements
 	private CameraInfoLoader avaliableCameras;
 	private SurveyViews views;
 	private Grid grid;
-	
-	private OnNewGridListner onSurveyListner;
 
-	
+	private OnNewGridListener onSurveyListener;
+
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		context = getActivity().getApplicationContext();
 		views = new SurveyViews(context);
 		views.build(inflater, container,this);
-		
+
 		surveyData = new SurveyData();
 		avaliableCameras = new CameraInfoLoader(context);
 		views.updateCameraSpinner(avaliableCameras.getCameraInfoList());
-		
+
 		return views.getLayout();
 	}
 
 	public void setSurveyData(Polygon polygon, Altitude defaultAltitude){
-		this.polygon = polygon;		
+		this.polygon = polygon;
 		surveyData.setAltitude(defaultAltitude);
 		update();
 	}
-	
-	public void setOnSurveyListner(OnNewGridListner listner){
-		this.onSurveyListner = listner;
+
+	public void setOnSurveyListener(OnNewGridListener listener){
+		this.onSurveyListener = listener;
 	}
 
-	
+
 	@Override
-	public void onSeekBarChanged() {		
-		generateGrid();						
+	public void onSeekBarChanged() {
+		generateGrid();
 	}
 
 	public void generateGrid() {
 		surveyData.update(views.angleView.getValue(), new Altitude(views.altitudeView.getValue()),
 				views.overlapView.getValue(), views.sidelapView.getValue());
 		//TODO find a better origin point than (0,0)
-		
+
 		try {
 			GridBuilder gridBuilder = new GridBuilder(polygon, surveyData, new LatLng(0, 0),context);
 			polygon.checkIfValid(context);
 			grid = gridBuilder.generate();
 			views.updateViews(surveyData,grid,polygon.getArea());
 			grid.setAltitude(surveyData.getAltitude());
-			onSurveyListner.onNewGrid(grid);
+			onSurveyListener.onNewGrid(grid);
 		} catch (Exception e) {
 			Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
 			views.blank();
@@ -119,7 +119,7 @@ public class SurveyFragment extends Fragment implements
 		views.updateSeekBarsValues(surveyData);
 		generateGrid();
 	}
-	
+
 	@Override
 	public void onClick(View view) {
 		switch (view.getId()) {
@@ -128,13 +128,13 @@ public class SurveyFragment extends Fragment implements
 			update();
 			break;
 		case R.id.clearPolyButton:
-			onSurveyListner.onClearPolygon();
+			onSurveyListener.onClearPolygon();
 			break;
 		case R.id.CheckBoxFootprints:
 			update();
 			break;
 		}
-		
+
 	}
 
 	public pathModes getPathToDraw() {

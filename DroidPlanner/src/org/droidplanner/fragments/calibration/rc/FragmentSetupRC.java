@@ -5,7 +5,7 @@ import org.droidplanner.calibration.CalParameters.OnCalibrationEvent;
 import org.droidplanner.calibration.RC_CalParameters;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.fragments.SetupRadioFragment;
 import org.droidplanner.fragments.calibration.FragmentSetupProgress;
 import org.droidplanner.fragments.calibration.SetupMainPanel;
@@ -20,7 +20,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-public class FragmentSetupRC extends SetupMainPanel implements OnDroneListner,
+public class FragmentSetupRC extends SetupMainPanel implements OnDroneListener,
 		OnCalibrationEvent {
 
 	/**

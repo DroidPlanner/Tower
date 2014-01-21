@@ -2,7 +2,7 @@ package org.droidplanner.widgets.spinners;
 
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.widgets.spinners.SpinnerSelfSelect.OnSpinnerItemSelectedListener;
 
 import android.content.Context;
@@ -11,7 +11,7 @@ import android.widget.Spinner;
 import com.MAVLink.Messages.ApmModes;
 
 public class SelectModeSpinner extends SpinnerSelfSelect implements
-		OnSpinnerItemSelectedListener, OnDroneListner {
+		OnSpinnerItemSelectedListener, OnDroneListener {
 
 	private ModeAdapter modeAdapter;
 	private Drone drone;
@@ -27,13 +27,13 @@ public class SelectModeSpinner extends SpinnerSelfSelect implements
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch (event) {
 		case TYPE:
-			buildAdapter(drone);			
+			buildAdapter(drone);
 			break;
 		case MODE:
 			onModeChanged(drone);
 		default:
 			break;
-		}		
+		}
 	}
 
 	public void onModeChanged(Drone drone) {

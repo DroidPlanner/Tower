@@ -3,7 +3,7 @@ package org.droidplanner.activities.helpers;
 import org.droidplanner.R;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.gcs.GCSHeartbeat;
 
 import android.os.Bundle;
@@ -11,7 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-public abstract class SuperUI extends SuperActivity implements OnDroneListner {
+public abstract class SuperUI extends SuperActivity implements OnDroneListener {
 	private ScreenOrientation screenOrientation = new ScreenOrientation(this);
 	private InfoMenu infoMenu;
 	private GCSHeartbeat gcsHeartbeat;

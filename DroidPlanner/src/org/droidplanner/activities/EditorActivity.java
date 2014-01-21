@@ -15,7 +15,7 @@ import org.droidplanner.fragments.EditorToolsFragment.EditorTools;
 import org.droidplanner.fragments.EditorToolsFragment.OnEditorToolSelected;
 import org.droidplanner.fragments.helpers.GestureMapFragment;
 import org.droidplanner.fragments.helpers.MapProjection;
-import org.droidplanner.fragments.helpers.GestureMapFragment.OnPathFinishedListner;
+import org.droidplanner.fragments.helpers.GestureMapFragment.OnPathFinishedListener;
 import org.droidplanner.fragments.mission.MissionDetailFragment;
 import org.droidplanner.fragments.mission.MissionDetailFragment.OnWayPointTypeChangeListener;
 
@@ -35,7 +35,7 @@ import android.widget.TextView;
 import org.droidplanner.R;
 import com.google.android.gms.maps.model.LatLng;
 
-public class EditorActivity extends SuperUI implements OnPathFinishedListner,
+public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		OnEditorToolSelected, OnWayPointTypeChangeListener,
 		OnEditorInteraction, Callback {
 
@@ -74,7 +74,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 							// detail window
 
 		mission = drone.mission;
-		gestureMapFragment.setOnPathFinishedListner(this);
+		gestureMapFragment.setOnPathFinishedListener(this);
 	}
 
 	@Override

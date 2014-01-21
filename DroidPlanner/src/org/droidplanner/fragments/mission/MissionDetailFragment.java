@@ -32,7 +32,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 	protected SpinnerSelfSelect typeSpinner;
 	protected AdapterMissionItens commandAdapter;
 	protected Mission mission;
-	private OnWayPointTypeChangeListener mListner;
+	private OnWayPointTypeChangeListener mListener;
 	private TextView waypointIndex;
 
 	protected MissionItem item;
@@ -86,7 +86,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		mission = ((DroidPlannerApp) getActivity().getApplication()).drone.mission;
-		mListner = (OnWayPointTypeChangeListener) activity;
+		mListener = (OnWayPointTypeChangeListener) activity;
 	}
 
 
@@ -99,7 +99,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 			MissionItem newItem = selected.getNewItem(getItem());
 			if (!newItem.getClass().equals(getItem().getClass())) {
 				Log.d("CLASS", "Diferent waypoint Classes");
-				mListner.onWaypointTypeChanged(newItem, getItem());
+				mListener.onWaypointTypeChanged(newItem, getItem());
 			}
 		} catch (InvalidItemException e) {
 		}

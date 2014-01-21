@@ -13,7 +13,7 @@ import org.droidplanner.DroidPlannerApp;
 import org.droidplanner.activities.helpers.OnEditorInteraction;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.drone.variables.mission.Mission;
 import org.droidplanner.drone.variables.mission.MissionItem;
 import org.droidplanner.widgets.adapterViews.MissionItemView;
@@ -30,11 +30,11 @@ import android.widget.ListView;
 
 import org.droidplanner.R;
 
-public class EditorListFragment extends Fragment implements  OnItemLongClickListener,  OnItemClickListener, OnDroneListner, OnClickListener{
+public class EditorListFragment extends Fragment implements  OnItemLongClickListener,  OnItemClickListener, OnDroneListener, OnClickListener{
 	private HListView list;
 	private Mission mission;
 	private MissionItemView adapter;
-	private OnEditorInteraction editorListner;
+	private OnEditorInteraction editorListener;
 	private ImageButton leftArrow;
 	private ImageButton rightArrow;
 	private Drone drone;
@@ -77,7 +77,7 @@ public class EditorListFragment extends Fragment implements  OnItemLongClickList
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		editorListner = (OnEditorInteraction) ( activity);
+		editorListener = (OnEditorInteraction) ( activity);
 	}
 
 	@Override
@@ -98,7 +98,7 @@ public class EditorListFragment extends Fragment implements  OnItemLongClickList
                 view.setVisibility(View.VISIBLE);
             else
                 view.setVisibility(View.INVISIBLE);
-            editorListner.onListVisibilityChanged();
+            editorListener.onListVisibilityChanged();
         }
     }
 
@@ -120,14 +120,14 @@ public class EditorListFragment extends Fragment implements  OnItemLongClickList
 	public void onItemClick(AdapterView<?> adapter, View view, int position,
 			long id) {
 		MissionItem missionItem = (MissionItem) adapter.getItemAtPosition(position);
-		editorListner.onItemClick(missionItem);
+		editorListener.onItemClick(missionItem);
 	}
 
 	@Override
 	public boolean onItemLongClick(AdapterView<?> adapter, View view,
 			int position, long id) {
 		MissionItem missionItem = (MissionItem) adapter.getItemAtPosition(position);
-		return editorListner.onItemLongClick(missionItem);
+		return editorListener.onItemLongClick(missionItem);
 	}
 
 	public void setArrowsVisibility(boolean visible) {

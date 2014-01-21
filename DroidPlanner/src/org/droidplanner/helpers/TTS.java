@@ -4,7 +4,7 @@ import java.util.Locale;
 
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.drone.variables.Calibration;
 
 import android.content.Context;
@@ -15,7 +15,7 @@ import android.speech.tts.TextToSpeech.OnInitListener;
 
 import com.MAVLink.Messages.ApmModes;
 
-public class TTS implements OnInitListener, OnDroneListner {
+public class TTS implements OnInitListener, OnDroneListener {
 	private static final double BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT = 10;
 
 	TextToSpeech tts;
@@ -43,8 +43,8 @@ public class TTS implements OnInitListener, OnDroneListner {
 	private boolean shouldEnableTTS() {
 		return prefs.getBoolean("pref_enable_tts", false);
 	}
-	
-	
+
+
 	/**
 	 * Warn the user if needed via the TTS module
 	 */
@@ -68,7 +68,7 @@ public class TTS implements OnInitListener, OnDroneListner {
 				speak("Waypoints received");
 				break;
 			case HEARTBEAT_FIRST:
-				speak("Connected");		
+				speak("Connected");
 				break;
 			case HEARTBEAT_TIMEOUT:
 				if (!Calibration.isCalibrating()) {
