@@ -3,7 +3,7 @@ package org.droidplanner.fragments;
 import org.droidplanner.DroidPlannerApp;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.widgets.newHUD.newHUD;
 
 import android.content.SharedPreferences;
@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import org.droidplanner.R;
 
-public class TelemetryFragment extends Fragment implements OnDroneListner{
+public class TelemetryFragment extends Fragment implements OnDroneListener{
 
 	private newHUD hud;
 	private Drone drone;
@@ -57,9 +57,9 @@ public class TelemetryFragment extends Fragment implements OnDroneListner{
 	public void onStart() {
 		super.onStart();
 		drone.events.addDroneListener(this);
-		
+
 		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(getActivity().getApplicationContext());		
+				.getDefaultSharedPreferences(getActivity().getApplicationContext());
 		headingModeFPV = prefs.getBoolean("pref_heading_mode", false);
 	}
 
@@ -81,20 +81,20 @@ public class TelemetryFragment extends Fragment implements OnDroneListner{
 			onSpeedAltitudeAndClimbRateUpdate(drone);
 			break;
 		default:
-			break;		
+			break;
 		}
-		
+
 	}
-	
+
 	public void onOrientationUpdate(Drone drone) {
 		float r = (float) drone.orientation.getRoll();
 		float p = (float) drone.orientation.getPitch();
 		float y = (float) drone.orientation.getYaw();
-		
+
 		if (!headingModeFPV & y<0 ) {
-			y = 360+y;			
+			y = 360+y;
 		}
-		
+
 		hud.setAttitude(r, p, y);
 
 		roll.setText(String.format("%3.0f\u00B0", r));

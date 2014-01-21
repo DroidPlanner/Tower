@@ -29,7 +29,7 @@ public class ModeGuidedFragment extends Fragment implements
 		View view = inflater.inflate(R.layout.fragment_mode_guided, container, false);
 		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
 		setupViews(view);
-		setupListner();
+		setupListener();
 		updateLabel();
 		return view;
 	}
@@ -42,7 +42,7 @@ public class ModeGuidedFragment extends Fragment implements
 		altTextView = (TextView) parentView.findViewById(R.id.guided_altitude);
 	}
 
-	private void setupListner() {
+	private void setupListener() {
 		altPlus1.setOnClickListener(this);
 		altPlus10.setOnClickListener(this);
 		altMinus1.setOnClickListener(this);

@@ -121,10 +121,10 @@ public class SurveyViews {
 		lengthView = (TextView) layout.findViewById(id.lengthTextView);
 
 		footprintCheckBox.setOnClickListener(surveyDialog);
-		angleView.setOnChangedListner(surveyDialog);
-		altitudeView.setOnChangedListner(surveyDialog);
-		overlapView.setOnChangedListner(surveyDialog);
-		sidelapView.setOnChangedListner(surveyDialog);
+		angleView.setOnChangedListener(surveyDialog);
+		altitudeView.setOnChangedListener(surveyDialog);
+		overlapView.setOnChangedListener(surveyDialog);
+		sidelapView.setOnChangedListener(surveyDialog);
 		innerWPsCheckbox.setOnClickListener(surveyDialog);
 		cameraSpinner.setOnSpinnerItemSelectedListener(surveyDialog);
 		clearPolyButton.setOnClickListener(surveyDialog);

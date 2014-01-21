@@ -8,7 +8,7 @@ import org.droidplanner.calibration.RC_CalParameters;
 import org.droidplanner.calibration.CalParameters.OnCalibrationEvent;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.fragments.calibration.FragmentSetupProgress;
 import org.droidplanner.fragments.calibration.rc.FragmentSetupRCCompleted;
 import org.droidplanner.fragments.calibration.rc.FragmentSetupRCMenu;
@@ -32,7 +32,7 @@ import org.droidplanner.R;
 /**
  * This fragment is used to calibrate the drone's radio.
  */
-public class RcSetupFragment extends Fragment implements OnDroneListner, OnCalibrationEvent {
+public class RcSetupFragment extends Fragment implements OnDroneListener, OnCalibrationEvent {
 
     /**
      * Minimum threshold for the RC value.

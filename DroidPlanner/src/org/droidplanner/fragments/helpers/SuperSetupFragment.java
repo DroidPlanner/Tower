@@ -1,10 +1,10 @@
 package org.droidplanner.fragments.helpers;
 
 import org.droidplanner.DroidPlannerApp;
-import org.droidplanner.activitys.ConfigurationActivity;
+import org.droidplanner.activities.ConfigurationActivity;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.fragments.calibration.SetupMainPanel;
 import org.droidplanner.fragments.calibration.SetupSidePanel;
 import android.app.Activity;
@@ -26,14 +26,14 @@ import org.droidplanner.R;
 /**
  * This fragment is used to calibrate the drone's compass, and accelerometer.
  */
-public abstract class SuperSetupFragment extends Fragment implements OnDroneListner, OnItemSelectedListener {
+public abstract class SuperSetupFragment extends Fragment implements OnDroneListener, OnItemSelectedListener {
 
 	private Drone drone;
-	
+
 	protected ConfigurationActivity parentActivity;
 	private Spinner spinnerSetup;
 	private TextView textViewTitle;
-	
+
 	private FragmentManager fragmentManager;
 	private SetupMainPanel setupPanel;
     private SetupSidePanel sidePanel;
@@ -118,19 +118,19 @@ public abstract class SuperSetupFragment extends Fragment implements OnDroneList
 	@Override
 	public void onNothingSelected(AdapterView<?> arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	public void updateTitle(int id){
 		textViewTitle.setText(id);
 	}
-		
+
 	private void setupLocalViews(View view) {
 		textViewTitle = (TextView)view.findViewById(R.id.textViewSetupTitle);
 		spinnerSetup = (Spinner)view.findViewById(R.id.spinnerSetupType);
@@ -138,7 +138,7 @@ public abstract class SuperSetupFragment extends Fragment implements OnDroneList
 
 		final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(parentActivity,
 		        getSpinnerItems(), R.layout.spinner_setup);
-		
+
 		if(adapter!=null)
 			spinnerSetup.setAdapter(adapter);
 	}
@@ -162,17 +162,17 @@ public abstract class SuperSetupFragment extends Fragment implements OnDroneList
 
 	public SetupSidePanel changeSidePanel(SetupSidePanel sPanel) {
 		sidePanel = sPanel;
-		
+
 		if(setupPanel != null && sidePanel != null)
 			setupPanel.setSidePanel(sidePanel);
-		
+
 		final FragmentTransaction ft = fragmentManager.beginTransaction();
         if(sidePanel != null){
             ft.replace(R.id.fragment_setup_sidepanel, sidePanel);
         }
 
 		ft.commit();
-		
+
 		return sidePanel;
 	}
 

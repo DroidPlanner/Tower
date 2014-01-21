@@ -1,9 +1,9 @@
-package org.droidplanner.activitys;
+package org.droidplanner.activities;
 
 import java.util.List;
 
-import org.droidplanner.activitys.helpers.OnEditorInteraction;
-import org.droidplanner.activitys.helpers.SuperUI;
+import org.droidplanner.activities.helpers.OnEditorInteraction;
+import org.droidplanner.activities.helpers.SuperUI;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.variables.mission.Mission;
@@ -15,7 +15,7 @@ import org.droidplanner.fragments.EditorToolsFragment.EditorTools;
 import org.droidplanner.fragments.EditorToolsFragment.OnEditorToolSelected;
 import org.droidplanner.fragments.helpers.GestureMapFragment;
 import org.droidplanner.fragments.helpers.MapProjection;
-import org.droidplanner.fragments.helpers.GestureMapFragment.OnPathFinishedListner;
+import org.droidplanner.fragments.helpers.GestureMapFragment.OnPathFinishedListener;
 import org.droidplanner.fragments.mission.MissionDetailFragment;
 import org.droidplanner.fragments.mission.MissionDetailFragment.OnWayPointTypeChangeListener;
 
@@ -35,7 +35,7 @@ import android.widget.TextView;
 import org.droidplanner.R;
 import com.google.android.gms.maps.model.LatLng;
 
-public class EditorActivity extends SuperUI implements OnPathFinishedListner,
+public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		OnEditorToolSelected, OnWayPointTypeChangeListener,
 		OnEditorInteraction, Callback {
 
@@ -74,7 +74,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 							// detail window
 
 		mission = drone.mission;
-		gestureMapFragment.setOnPathFinishedListner(this);
+		gestureMapFragment.setOnPathFinishedListener(this);
 	}
 
 	@Override
@@ -88,7 +88,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 		int rightPadding = 0,bottomPadding = 0;
 		if (mission.getItems().size()>0) {
 			rightPadding = editorToolsFragment.getView().getRight();
-			bottomPadding = missionListFragment.getView().getHeight();			
+			bottomPadding = missionListFragment.getView().getHeight();
 		}
 		planningMapFragment.mMap.setPadding(rightPadding, topPadding, 0, bottomPadding);
 	}

@@ -6,7 +6,7 @@ import org.droidplanner.calibration.SF_CalParameters;
 import org.droidplanner.calibration.CalParameters.OnCalibrationEvent;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.fragments.SetupRadioFragment;
 import org.droidplanner.fragments.calibration.FragmentSetupProgress;
 import org.droidplanner.fragments.calibration.FragmentSetupSend;
@@ -19,7 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 public class FragmentSetupSF extends SetupMainPanel implements
-		OnCalibrationEvent, OnDroneListner {
+		OnCalibrationEvent, OnDroneListener {
 	private int[] valueSF;
 	private String[] stringSF;
 	private Spinner[] spinnerSFs = new Spinner[7];

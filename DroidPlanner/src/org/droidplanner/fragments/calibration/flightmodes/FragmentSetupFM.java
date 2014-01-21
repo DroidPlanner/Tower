@@ -5,7 +5,7 @@ import org.droidplanner.calibration.CalParameters.OnCalibrationEvent;
 import org.droidplanner.calibration.FM_CalParameters;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.fragments.SetupRadioFragment;
 import org.droidplanner.fragments.calibration.FragmentSetupProgress;
 import org.droidplanner.fragments.calibration.SetupMainPanel;
@@ -21,7 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-public class FragmentSetupFM extends SetupMainPanel implements OnDroneListner, OnCalibrationEvent {
+public class FragmentSetupFM extends SetupMainPanel implements OnDroneListener, OnCalibrationEvent {
 
 	private int[] pwm = { 1230, 1360, 1490, 1620, 1750 };
 	private int[] flightModeValue = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13 };
@@ -212,7 +212,7 @@ public class FragmentSetupFM extends SetupMainPanel implements OnDroneListner, O
 		sidePanel = getProgressPanel();
 		sidePanel.updateTitle(R.string.progress_title_uploading);
 		sidePanel.updateDescription(R.string.progress_desc_uploading);
-		
+
 		fmParameters.setFMData(dataFM);
 		fmParameters.sendCalibrationParameters();
 	}
@@ -267,7 +267,7 @@ public class FragmentSetupFM extends SetupMainPanel implements OnDroneListner, O
 			int fmData = (int)fmParameters.getParamValue(i);
 			pwmSpinners[i].setSelection(getSpinnerIndexFromValue(fmData,flightModeValue), true);
 		}
-		
+
 		for(int i=0;i<6;i++){
 			int fmData;
 			fmData = (int)fmParameters.getParamValue(6);
@@ -277,7 +277,7 @@ public class FragmentSetupFM extends SetupMainPanel implements OnDroneListner, O
 			chkbxSuperSimple[i].setChecked((fmData&flightModeIndex[i])==flightModeIndex[i]);
 		}
 	}
-	
+
 	private void updateLayout(int pwmId) {
 		int cnt = 0;
 		for (LinearLayout layout : layoutPWM) {

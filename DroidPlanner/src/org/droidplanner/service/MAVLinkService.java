@@ -1,12 +1,12 @@
 package org.droidplanner.service;
 
-import org.droidplanner.activitys.FlightActivity;
+import org.droidplanner.activities.FlightActivity;
 import org.droidplanner.connection.BluetoothConnection;
 import org.droidplanner.connection.MAVLinkConnection;
 import org.droidplanner.connection.TcpConnection;
 import org.droidplanner.connection.UdpConnection;
 import org.droidplanner.connection.UsbConnection;
-import org.droidplanner.connection.MAVLinkConnection.MavLinkConnectionListner;
+import org.droidplanner.connection.MAVLinkConnection.MavLinkConnectionListener;
 
 import android.annotation.SuppressLint;
 import android.app.NotificationManager;
@@ -32,10 +32,10 @@ import org.droidplanner.R;
 
 /**
  * http://developer.android.com/guide/components/bound-services.html#Messenger
- * 
+ *
  */
 
-public class MAVLinkService extends Service implements MavLinkConnectionListner {
+public class MAVLinkService extends Service implements MavLinkConnectionListener {
 	public static final int MSG_REGISTER_CLIENT = 1;
 	public static final int MSG_UNREGISTER_CLIENT = 2;
 	public static final int MSG_SEND_DATA = 3;
@@ -47,10 +47,10 @@ public class MAVLinkService extends Service implements MavLinkConnectionListner 
 	private boolean couldNotOpenConnection = false;
 
 	/**
-	 * 
+	 *
 	 * Handler for Communication Errors Messages used in onComError() to display
 	 * Toast msg.
-	 * 
+	 *
 	 * */
 
 	private String commErrMsgLocalStore;

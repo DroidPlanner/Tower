@@ -2,7 +2,7 @@ package org.droidplanner.fragments.calibration.imu;
 
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.drone.variables.Calibration;
 import org.droidplanner.fragments.SetupSensorFragment;
 import org.droidplanner.fragments.calibration.SetupMainPanel;
@@ -15,7 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import org.droidplanner.R;
 
-public class FragmentSetupIMU extends SetupMainPanel  implements OnDroneListner{
+public class FragmentSetupIMU extends SetupMainPanel  implements OnDroneListener{
 
 	private final static int TIMEOUT_MAX = 300;
 
