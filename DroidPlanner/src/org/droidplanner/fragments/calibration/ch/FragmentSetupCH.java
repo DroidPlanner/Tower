@@ -4,7 +4,7 @@ import org.droidplanner.R;
 import org.droidplanner.calibration.CH_CalParameters;
 import org.droidplanner.calibration.CalParameters;
 import org.droidplanner.calibration.CalParameters.OnCalibrationEvent;
-import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.fragments.calibration.FragmentSetupSend;
 import org.droidplanner.fragments.calibration.SetupSidePanel;
 import org.droidplanner.fragments.helpers.SuperSetupMainPanel;
@@ -15,7 +15,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 public class FragmentSetupCH extends SuperSetupMainPanel implements
-		OnCalibrationEvent, OnDroneListner {
+		OnCalibrationEvent, OnDroneListener {
 
 	private int[] valueCH6;
 	private int[] valueCH;

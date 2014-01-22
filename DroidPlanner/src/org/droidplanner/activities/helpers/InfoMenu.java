@@ -1,8 +1,8 @@
-package org.droidplanner.activitys.helpers;
+package org.droidplanner.activities.helpers;
 
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.widgets.TimerView;
 import org.droidplanner.widgets.spinners.SelectModeSpinner;
 
@@ -18,7 +18,7 @@ import android.view.MenuItem;
 
 import org.droidplanner.R;
 
-public class InfoMenu implements OnDroneListner {
+public class InfoMenu implements OnDroneListener {
 	private Drone drone;
 	private MenuItem battery;
 	private MenuItem gps;

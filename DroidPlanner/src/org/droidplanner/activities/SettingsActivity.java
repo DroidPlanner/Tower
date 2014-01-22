@@ -1,6 +1,6 @@
-package org.droidplanner.activitys;
+package org.droidplanner.activities;
 
-import org.droidplanner.activitys.helpers.SuperUI;
+import org.droidplanner.activities.helpers.SuperUI;
 import org.droidplanner.fragments.SettingsFragment;
 
 import android.app.Fragment;

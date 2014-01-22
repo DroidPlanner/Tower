@@ -1,9 +1,9 @@
-package org.droidplanner.activitys;
+package org.droidplanner.activities;
 
-import org.droidplanner.activitys.helpers.SuperUI;
+import org.droidplanner.activities.helpers.SuperUI;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.drone.variables.mission.MissionItem;
 import org.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.fragments.FlightActionsFragment;
@@ -37,7 +37,7 @@ import org.droidplanner.R;
 import com.google.android.gms.maps.model.LatLng;
 
 public class FlightActivity extends SuperUI implements
-		OnMapInteractionListener, OnMissionControlInteraction, OnDroneListner{
+		OnMapInteractionListener, OnMissionControlInteraction, OnDroneListener{
 
     private FragmentManager fragmentManager;
 	private RCFragment rcFragment;
@@ -86,7 +86,7 @@ public class FlightActivity extends SuperUI implements
 		super.onStart();
 		onModeChanged(drone);	// Update the mode detail panel;
 	}
-	
+
 	@Override
 	public void onAddPoint(LatLng point) {
 		// TODO Auto-generated method stub
@@ -152,7 +152,7 @@ public class FlightActivity extends SuperUI implements
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		super.onDroneEvent(event,drone);
@@ -166,7 +166,7 @@ public class FlightActivity extends SuperUI implements
 		default:
 			break;
 		}
-		
+
 	}
 
 	public void onFailsafeChanged(Drone drone) {
@@ -220,7 +220,7 @@ public class FlightActivity extends SuperUI implements
 			modeInfoPanel = new ModeDisconnectedFragment();
 		}
 		fragmentManager.beginTransaction()
-				.replace(R.id.modeInfoPanel, modeInfoPanel).commit();		
+				.replace(R.id.modeInfoPanel, modeInfoPanel).commit();
 	}
 
 	@Override

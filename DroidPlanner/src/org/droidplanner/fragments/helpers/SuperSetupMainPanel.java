@@ -5,7 +5,7 @@ import org.droidplanner.calibration.CalParameters;
 import org.droidplanner.calibration.CalParameters.OnCalibrationEvent;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.fragments.SetupRadioFragment;
 import org.droidplanner.fragments.calibration.FragmentSetupProgress;
 import org.droidplanner.fragments.calibration.FragmentSetupSend;
@@ -16,7 +16,7 @@ import android.os.Bundle;
 
 @SuppressWarnings("unused")
 public abstract class SuperSetupMainPanel extends SetupMainPanel implements
-		OnCalibrationEvent, OnDroneListner {
+		OnCalibrationEvent, OnDroneListener {
 
 	protected Drone drone;
 	protected CalParameters parameters;

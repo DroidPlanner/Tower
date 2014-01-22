@@ -3,7 +3,7 @@ package org.droidplanner.fragments.markers;
 import org.droidplanner.R;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.fragments.FlightMapFragment;
 
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -11,7 +11,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class DroneMarker implements OnDroneListner {
+public class DroneMarker implements OnDroneListener {
 
 	private Marker droneMarker;
 	private FlightMapFragment flightMapFragment;
@@ -42,11 +42,11 @@ public class DroneMarker implements OnDroneListner {
 		switch (event) {
 		case GPS:
 			updatePosition((float)flightMapFragment.drone.orientation.getYaw(),
-					flightMapFragment.drone.GPS.getPosition());	
+					flightMapFragment.drone.GPS.getPosition());
 			break;
 		default:
 			break;
 		}
-		
+
 	}
 }

@@ -28,7 +28,7 @@
 * Reduce the chance of unintentionally deleting waypoints while scrolling
 
 ## Droidplanner v1.0.0
-* No new changes to the codebase, just setting a milestone 
+* No new changes to the codebase, just setting a milestone
 
 ## Droidplanner v0.16.0
 * Bluetooth Support
@@ -104,7 +104,7 @@
 ## Droidplanner v0.11.0
 * New Chart screen
 * HUD code clean-up
-* Activitys clean-up
+* Activities clean-up
 * All markers are using the markerManager
 * Colorful markers in the planning screen
 

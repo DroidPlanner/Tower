@@ -9,17 +9,17 @@ import org.droidplanner.parameters.Parameter;
 public class DroneInterfaces {
 
 	public enum DroneEventsType {
-		ORIENTATION, SPEED, BATTERY, GUIDEDPOINT, NAVIGATION, ATTIUTDE, RADIO, 
-		RC_IN, RC_OUT, ARMING, FAILSAFE, MODE, STATE, 
+		ORIENTATION, SPEED, BATTERY, GUIDEDPOINT, NAVIGATION, ATTIUTDE, RADIO,
+		RC_IN, RC_OUT, ARMING, FAILSAFE, MODE, STATE,
 		MISSION_UPDATE,MISSION_RECEIVED, TYPE, HOME, GPS, GPS_FIX, GPS_COUNT,
 		PARAMETER, CALIBRATION_IMU, CALIBRATION_TIMEOUT, HEARTBEAT_TIMEOUT, HEARTBEAT_FIRST, HEARTBEAT_RESTORED, DISCONNECTED, CONNECTED;
 	}
 
-	public interface OnDroneListner {
+	public interface OnDroneListener {
 		public void onDroneEvent(DroneEventsType event, Drone drone);
 	}
 
-	public interface OnParameterManagerListner {
+	public interface OnParameterManagerListener {
 		public void onBeginReceivingParameters();
 
 		public void onParameterReceived(Parameter parameter, int index,
