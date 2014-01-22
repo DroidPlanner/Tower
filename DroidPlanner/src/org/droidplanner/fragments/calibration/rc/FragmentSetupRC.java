@@ -125,7 +125,7 @@ public class FragmentSetupRC extends SetupMainPanel implements OnDroneListner,
 
 	@Override
 	public void onReadCalibration(CalParameters calParameters) {
-		doCalibrationStep(0);// show progress sidepanel
+		doCalibrationStep(1);// show progress sidepanel
 	}
 
 	@Override
