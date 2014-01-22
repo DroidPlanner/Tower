@@ -99,7 +99,7 @@ public class FragmentSetupRC extends SuperSetupMainPanel {
 
 	@Override
 	public void onReadCalibration(CalParameters calParameters) {
-		doCalibrationStep(1);// show progress sidepanel
+		doCalibrationStep(0);// show progress sidepanel
 	}
 
 	@Override
