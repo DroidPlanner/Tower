@@ -87,13 +87,9 @@
         <item name="android:fontFamily">sans-serif-condensed</item>
         </style>
 
-
-
     <style name="flightControlButton">
-        <item name="android:layout_margin">4dp</item>
-        <item name="android:padding">10dp</item>
-        <item name="android:background">#000000</item>
-        <item name="android:textSize">13dp</item>
+        <item name="android:padding">@dimen/flightControlPadding</item>
+        <item name="android:textSize">@dimen/flightControlTextSize</item>
         <item name="android:textColor">#ffffff</item>
         <item name="android:adjustViewBounds">true</item>
     </style>

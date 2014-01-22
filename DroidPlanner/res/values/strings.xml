@@ -327,4 +327,6 @@
     <string name="ground_speed_label">Ground speed</string>
     <string name="air_speed_label">Air speed</string>
     <string name="default_angle_value">--°</string>
+    <string name="telemetry_label">Telemetry</string>
+    <string name="flight_modes_label">Flight modes</string>
 </resources>

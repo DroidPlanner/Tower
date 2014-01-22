@@ -13,12 +13,6 @@
         android:layout_height="match_parent" />
 
     <FrameLayout
-        android:id="@+id/telemetryFragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:layout="@layout/fragment_telemetry" />
-
-    <FrameLayout
         android:id="@+id/containerRC"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -46,12 +40,13 @@
         />
 
     <SlidingDrawer
-        android:id="@+id/SlidingDrawerLeft"
-        android:layout_width="260dp"
+        android:id="@+id/SlidingDrawerRight"
+        android:layout_width="210dp"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:content="@+id/modeInfoPanel"
+        android:layout_above="@+id/editorToolsFragment"
+        android:content="@+id/sliding_drawer_content"
         android:handle="@+id/slideButtonLeft"
         android:orientation="horizontal"
         android:visibility="visible"
@@ -65,10 +60,10 @@
             tools:ignore="ContentDescription"/>
 
 		<FrameLayout
-			android:id="@+id/modeInfoPanel"
+			android:id="@+id/sliding_drawer_content"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
-			tools:layout="@layout/fragment_mode_rtl" />
+			tools:layout="@layout/fragment_flight_sliding_drawer_content" />
 
     </SlidingDrawer>
 

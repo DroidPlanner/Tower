@@ -2,4 +2,8 @@
 <resources>
     <!-- Dimension for the telemetry ui elements -->
     <dimen name="largeTelemetryTextSize">40sp</dimen>
+
+    <!-- Dimension for the flight control buttons -->
+    <dimen name="flightControlPadding">10dp</dimen>
+    <dimen name="flightControlTextSize">13sp</dimen>
 </resources>
