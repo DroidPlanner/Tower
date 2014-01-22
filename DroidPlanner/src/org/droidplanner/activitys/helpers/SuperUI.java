@@ -80,7 +80,8 @@ public abstract class SuperUI extends SuperActivity implements OnDroneListner {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		infoMenu.onOptionsItemSelected(item);
+		if(infoMenu.onOptionsItemSelected(item))
+            return true;
 		return super.onOptionsItemSelected(item);
 	}
 }

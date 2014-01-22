@@ -13,7 +13,7 @@
         android:background="@color/dark_title_bg" >
 
         <TextView
-            android:id="@+id/RCSetupTitle"
+            android:id="@+id/setupTitle"
             style="@style/SetupTitle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -22,13 +22,21 @@
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/setupDesc"
         style="@style/ModeDetailText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/mode_desc_rectangle"
         android:padding="12dp"
         android:text="@string/setup_radio_cal_desc" />
+
+    <LinearLayout
+        android:id="@+id/layoutSetupDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp" >
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -38,12 +46,12 @@
         android:orientation="vertical" >
 
         <Button
-            android:id="@+id/ButtonRCCalibrate"
+            android:id="@+id/buttonStart"
             style="@style/modeControl"
             android:layout_width="154dp"
             android:layout_height="wrap_content"
             android:background="@drawable/button_green"
-            android:text="@string/rc_btn_calibrate" />
+            android:text="@string/button_setup_calibrate" />
     </LinearLayout>
 
 </LinearLayout>

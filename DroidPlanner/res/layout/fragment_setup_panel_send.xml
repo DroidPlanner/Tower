@@ -51,16 +51,16 @@
             android:orientation="horizontal" >
 
             <Button
-                android:id="@+id/ButtonReset"
+                android:id="@+id/buttonCancel"
                 style="@style/modeControl"
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="16dp"
                 android:background="@drawable/button_blue"
-                android:text="@string/button_setup_reset" />
+                android:text="@string/button_setup_cancel" />
 
             <Button
-                android:id="@+id/ButtonSend"
+                android:id="@+id/buttonSend"
                 style="@style/modeControl"
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
