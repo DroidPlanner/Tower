@@ -13,22 +13,22 @@
         android:background="@color/dark_title_bg" >
 
         <TextView
-            android:id="@+id/RCSetupTitle"
+            android:id="@+id/setupTitle"
             style="@style/SetupTitle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="@string/rc_title_complete" />
+            android:text="@string/progress_title_downloading" />
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/setupDesc"
         style="@style/ModeDetailText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/mode_desc_rectangle"
         android:padding="12dp"
-        android:text="@string/rc_desc_complete" />
+        android:text="@string/progress_desc_downloading" />
 
     <ScrollView
         android:id="@+id/scrollView1"
@@ -48,37 +48,57 @@
                 android:padding="12dp" >
 
                 <TextView
-                    android:id="@+id/textViewSummary"
-                    android:layout_width="fill_parent"
+                    android:id="@+id/setupProgressTitle"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="RC #\t\tMin \t\tMid \t\tMax "
+                    android:text="Downloading parameters"
                     tools:ignore="HardcodedText" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center" >
+
+                    <ProgressBar
+                        android:id="@+id/setupProgressBar"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="0.85" />
+
+                    <TextView
+                        android:id="@+id/setupProgressRatio"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="0.15"
+                        android:gravity="center"
+                        android:text="10/10"
+                        tools:ignore="HardcodedText" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_margin="10dp"
                 android:gravity="center"
                 android:orientation="horizontal" >
 
                 <Button
-                    android:id="@+id/ButtonCancel"
+                    android:id="@+id/buttonCancel"
                     style="@style/modeControl"
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_marginRight="16dp"
                     android:background="@drawable/button_blue"
                     android:text="@string/button_setup_cancel" />
 
-                <Button
-                    android:id="@+id/ButtonSend"
-                    style="@style/modeControl"
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/button_green"
-                    android:text="@string/button_setup_send" />
             </LinearLayout>
 
         </LinearLayout>
