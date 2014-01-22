@@ -116,19 +116,19 @@
         <item>ArduRover</item>
     </string-array>
     <string-array name="FligthMode_CopterV3_1">
-        <item>1;Stabilize</item>
-        <item>2;Acro</item>
-        <item>3;AltHold</item>
-        <item>4;Auto</item>
-        <item>5;Guided</item>
-        <item>6;Loiter</item>
-        <item>7;RTL</item>
-        <item>8;Circle</item>
-        <item>9;Position</item>
-        <item>10;Land</item>
-        <item>11;OF_Loiter</item>
-        <item>13;Drift</item>
-        <item>14;Sport</item>
+        <item>0;Stabilize</item>
+        <item>1;Acro</item>
+        <item>2;AltHold</item>
+        <item>3;Auto</item>
+        <item>4;Guided</item>
+        <item>5;Loiter</item>
+        <item>6;RTL</item>
+        <item>7;Circle</item>
+        <item>8;Position</item>
+        <item>9;Land</item>
+        <item>10;OF_Loiter</item>
+        <item>11;Drift</item>
+        <item>13;Sport</item>
     </string-array>
     <string-array name="FligthMode_PWM_Range">
         <item>&lt; 1230</item>
