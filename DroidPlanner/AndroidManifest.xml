@@ -8,6 +8,9 @@
         android:minSdkVersion="14"
         android:targetSdkVersion="18" />
 
+    <supports-screens
+        android:requiresSmallestWidthDp="540"/>
+
     <permission
         android:name=".permission.MAPS_RECEIVE"
         android:protectionLevel="signature" />

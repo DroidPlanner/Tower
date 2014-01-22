@@ -142,20 +142,25 @@ public class InfoMenu implements OnDroneListener {
 		home.setTitle(text);
 	}
 
-	public void onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.bar_timer_reset:
 			drone.state.resetFlightTimer();
-			break;
+			return true;
+
 		case R.id.bar_home:
-			break;
+			return true;
+
 		case R.id.menu_send_mission:
 			drone.mission.sendMissionToAPM();
-			break;
+			return true;
+
 		case R.id.menu_load_mission:
 			drone.waypointMananger.getWaypoints();
-			break;
+			return true;
 		}
+
+        return false;
 	}
 
 	public void setupModeSpinner(Context context) {

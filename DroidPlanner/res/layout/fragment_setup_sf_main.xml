@@ -144,16 +144,16 @@
                 android:paddingRight="10dp" >
 
                 <TextView
-                    android:id="@+id/textViewSF9"
+                    android:id="@+id/textViewSF8"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="right"
-                    android:text="@string/setup_sf_servo9"
+                    android:text="@string/setup_sf_servo8"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="#fff" />
 
                 <Spinner
-                    android:id="@+id/spinnerSF9"
+                    android:id="@+id/spinnerSF8"
                     style="@style/ModeSpinnerText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -222,54 +222,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:entries="@array/FligthMode_CopterV3_1" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:orientation="horizontal"
-            tools:ignore="DisableBaselineAlignment" >
-
-            <LinearLayout
-                android:id="@+id/LinearLayout01"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_weight="5"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp" >
-
-                <TextView
-                    android:id="@+id/textViewSF12"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:text="@string/setup_sf_servo12"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="#fff" />
-
-                <Spinner
-                    android:id="@+id/spinnerSF12"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:entries="@array/FligthMode_CopterV3_1" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/LinearLayout05"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="5"
-            >
-
-                <TextView
-                    android:id="@+id/textView1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
             </LinearLayout>
         </LinearLayout>
 

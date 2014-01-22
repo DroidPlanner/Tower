@@ -5,10 +5,9 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.net.Uri;
-import android.view.MenuItem;
-
-import org.droidplanner.R;
 import android.support.v4.app.FragmentActivity;
+import android.view.MenuItem;
+import org.droidplanner.R;
 
 public abstract class HelpActivity extends FragmentActivity implements OnClickListener {
 
@@ -18,10 +17,14 @@ public abstract class HelpActivity extends FragmentActivity implements OnClickLi
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-				if (item.getItemId() == R.id.menu_help) {
-					showHelpDialog();
-				}
-		return super.onOptionsItemSelected(item);
+        switch(item.getItemId()){
+            case R.id.menu_help:
+                showHelpDialog();
+                return true;
+
+            default:
+                return false;
+        }
 	}
 
 	private void showHelpDialog() {

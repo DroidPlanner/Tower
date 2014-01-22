@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".fragments.calibration.FragmentSetupRCMenu" >
+    tools:context=".fragments.calibration.FragmentSetupRCMinMax" >
 
     <RelativeLayout
         android:id="@+id/title_rect"
@@ -13,22 +13,22 @@
         android:background="@color/dark_title_bg" >
 
         <TextView
-            android:id="@+id/RCSetupTitle"
+            android:id="@+id/setupTitle"
             style="@style/SetupTitle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="@string/rc_title_menu" />
+            android:text="@string/setup_radio_title_minmax" />
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/setupDesc"
         style="@style/ModeDetailText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/mode_desc_rectangle"
         android:padding="12dp"
-        android:text="@string/rc_desc_menu" />
+        android:text="@string/setup_radio_desc_minmax" />
 
     <LinearLayout
         android:id="@+id/layoutSetupDetails"
@@ -36,7 +36,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="12dp" >
-
     </LinearLayout>
 
     <LinearLayout
@@ -44,40 +43,24 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:gravity="center"
-        android:orientation="vertical" >
+        android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/ButtonRCCalibrate"
+            android:id="@+id/buttonCancel"
             style="@style/modeControl"
-            android:layout_width="154dp"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_green"
-            android:text="@string/rc_btn_calibrate" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:gravity="center"
-        android:orientation="vertical" >
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:gravity="center"
-        android:orientation="vertical" >
+            android:layout_marginRight="16dp"
+            android:background="@drawable/button_blue"
+            android:text="@string/button_setup_cancel" />
 
         <Button
-            android:id="@+id/ButtonRCOptions"
+            android:id="@+id/buttonNext"
             style="@style/modeControl"
-            android:layout_width="154dp"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:background="@drawable/button_green"
-            android:text="@string/rc_title_options" />
-
+            android:text="@string/button_setup_next" />
     </LinearLayout>
 
 </LinearLayout>

@@ -1,4 +1,4 @@
-package org.droidplanner.fragments.calibration.flightmodes;
+package org.droidplanner.fragments.calibration;
 
 import org.droidplanner.fragments.SetupRadioFragment;
 import org.droidplanner.fragments.calibration.SetupSidePanel;
@@ -9,30 +9,44 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
+
 import org.droidplanner.R;
 
-public class FragmentSetupFMConfiguration extends SetupSidePanel {
-
+public class FragmentSetupNext extends SetupSidePanel {
+	
+	private int titleId=0,descId=0;
+	private TextView textTitle,textDesc;;
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
 		final SetupRadioFragment setupFragment = (SetupRadioFragment) getParentFragment();
 
-		final View view = inflater.inflate(R.layout.fragment_setup_fm_send,
+		final View view = inflater.inflate(R.layout.fragment_setup_panel_next,
 				container, false);
 
-		final Button btnSend = (Button) view.findViewById(R.id.ButtonSend);
-		btnSend.setOnClickListener(new OnClickListener() {
+		textTitle = (TextView)view.findViewById(R.id.setupTitle);
+		textDesc = (TextView)view.findViewById(R.id.setupDesc);
+		
+		if(titleId!=0)
+			textTitle.setText(titleId);
+		
+		if(descId!=0)
+			textDesc.setText(descId);
+		
+		final Button btnNext = (Button) view.findViewById(R.id.buttonNext);		
+		btnNext.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				if (setupFragment != null) {
-					setupFragment.doCalibrationStep(1);
+					setupFragment.doCalibrationStep(2);
 				}
 			}
 		});
 
-		final Button btnCancel = (Button) view.findViewById(R.id.ButtonReset);
+		final Button btnCancel = (Button) view.findViewById(R.id.buttonCancel);
 		btnCancel.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -46,13 +60,18 @@ public class FragmentSetupFMConfiguration extends SetupSidePanel {
 
 	@Override
 	public void updateDescription(int idDescription) {
-		// TODO Auto-generated method stub
-
+		this.descId = idDescription;
+		
+		if(textDesc!=null)
+			textDesc.setText(descId);
+				
 	}
 
 	@Override
 	public void updateTitle(int idTitle) {
-		// TODO Auto-generated method stub
-
+		this.titleId = idTitle;
+		
+		if(textTitle!=null)
+			textTitle.setText(titleId);
 	}
 }
