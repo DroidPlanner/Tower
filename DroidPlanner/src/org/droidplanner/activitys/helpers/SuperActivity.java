@@ -7,6 +7,7 @@ import org.droidplanner.activitys.SettingsActivity;
 import org.droidplanner.dialogs.AltitudeDialog;
 import org.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner;
 import org.droidplanner.drone.Drone;
+import org.droidplanner.fragments.helpers.BTDeviceListFragment;
 import org.droidplanner.fragments.helpers.OfflineMapFragment;
 import org.droidplanner.helpers.units.Altitude;
 
@@ -72,7 +73,7 @@ public abstract class SuperActivity extends HelpActivity implements
 
             if (Utils.ConnectionType.BLUETOOTH.name().equals(connectionType)) {
                 //Launch a bluetooth device selection screen for the user
-                startActivity(new Intent(this, BTDeviceSelectionActivity.class));
+                new BTDeviceListFragment().show(getSupportFragmentManager(), "Device selection dialog");
                 return;
             }
         }
