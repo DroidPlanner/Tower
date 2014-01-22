@@ -1,4 +1,28 @@
+## Droidplanner v2.0.1
+* Cleaning minor bugs (#581)
+* Fixed typo errors(#589)
+* Improved Radio setup (#593,#596)
+* Removing unused assets (#594,#601)
+* Small mavlink library fix (#585)
+* Improved Guided mode (#595)
+* Rescrict disctribution to tablets only (#597)
+* Dialog for BlueTooth device selection(#598)
+* Fixed typos on source-code (#605)
+
 ## Droidplanner v2.0.0
+* Renamed package to org.droidplanner
+* Redesing of the mission handling code
+* Completely redesigned graphical user interface
+* Easy to use Home, Land, and Loiter buttons
+* New Artificial Horizon
+* Added telemetry to the ActionBar
+* Mode detail fragment
+* New guided mode with changeable altitude
+* New planning screen for quick mission generation
+* Easy and powerful mission editing tools
+* New mission listing fragment
+* Drone Setup screen with multiple tabs like:Radio,Checklist,Parameters
+* Improved BlueTooth Connection
 
 ## Droidplanner v1.2.0
 * Planning: renamed column header - #348
@@ -28,7 +52,7 @@
 * Reduce the chance of unintentionally deleting waypoints while scrolling
 
 ## Droidplanner v1.0.0
-* No new changes to the codebase, just setting a milestone 
+* No new changes to the codebase, just setting a milestone
 
 ## Droidplanner v0.16.0
 * Bluetooth Support
@@ -104,7 +128,7 @@
 ## Droidplanner v0.11.0
 * New Chart screen
 * HUD code clean-up
-* Activitys clean-up
+* Activities clean-up
 * All markers are using the markerManager
 * Colorful markers in the planning screen
 

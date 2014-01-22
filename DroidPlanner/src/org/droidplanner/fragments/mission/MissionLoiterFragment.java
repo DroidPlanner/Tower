@@ -1,7 +1,7 @@
 package org.droidplanner.fragments.mission;
 
 import org.droidplanner.drone.variables.mission.waypoints.Loiter;
-import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
+import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListener;
 
 import android.view.View;
 import android.widget.CompoundButton;
@@ -10,7 +10,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import org.droidplanner.R;
 
 public class MissionLoiterFragment extends MissionDetailFragment implements
-		OnTextSeekBarChangedListner, OnCheckedChangeListener{
+		OnTextSeekBarChangedListener, OnCheckedChangeListener{
 
 
 	@Override

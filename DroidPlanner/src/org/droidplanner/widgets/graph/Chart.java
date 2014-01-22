@@ -3,7 +3,7 @@ package org.droidplanner.widgets.graph;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.droidplanner.widgets.graph.ChartScale.OnScaleListner;
+import org.droidplanner.widgets.graph.ChartScale.OnScaleListener;
 import org.droidplanner.widgets.helpers.RenderThread;
 import org.droidplanner.widgets.helpers.RenderThread.canvasPainter;
 
@@ -19,7 +19,7 @@ import android.view.SurfaceView;
  * Widget for a Chart Originally copied from http://code.google.com/p/copter-gcs/
  */
 public class Chart extends SurfaceView implements SurfaceHolder.Callback,
-		canvasPainter, OnScaleListner {
+		canvasPainter, OnScaleListener {
 	private RenderThread renderer;
 	protected int width;
 	protected int height;
@@ -90,7 +90,7 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback,
 	}
 
 	@Override
-	public void onScaleListner() {
+	public void onScaleListener() {
 		update();
 	}
 }

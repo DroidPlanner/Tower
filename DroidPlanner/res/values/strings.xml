@@ -7,7 +7,7 @@
     <string name="storage_folder">Storage Folder</string>
     <string name="settings">Settings</string>
     <string name="help">Help</string>
-    <string name="configuration">Configuration</string>
+    <string name="menu_drone_setup">Drone Setup</string>
     <string name="editor">Editor</string>
     <string name="menu_connect">Connect</string>
     <string name="menu_disconnect">Disconnect</string>
@@ -193,7 +193,7 @@
     <string name="rowheader_wp_desc">Description</string>
     <string name="dialog_box_title_altitude">Altitude</string>
     <string name="dialog_box_btn_txt_cancel">Cancel</string>
-    <string name="dialog_box_btn_txt_ok">Ok</string>
+    <string name="dialog_box_btn_txt_ok">OK</string>
     <string name="exception_draw_polygon">Draw a polygon/WPTs</string>
     <string name="exception_draw_2_more_polygon_points">Draw at least 2 more polygon points</string>
     <string name="exception_draw_1_more_polygon_points">Draw at least 1 more polygon points</string>
@@ -206,58 +206,56 @@
     <string name="metadata_custom_value">** Custom value **</string>
     <string name="refreshing_parameters">Refreshing Parameters&#8230;</string>
     <string name="parameters_saved">Parameters saved</string>
-
     <string name="RCFailsafe">Warning! RC Failsafe – Returning to Launch</string>
     <string name="GPSFailsafe">Warning! GPS Failsafe – Switching to Altitude Hold</string>
     <string name="BatteryFailsafeLand">Warning! Battery Failsafe – Returning to Launch</string>
     <string name="BatteryFailsafeRTL">Warning! Battery Failsafe – Returning to Launch</string>
-
-
     <string name="mode_switch">Assign RC channel 5 to a switch on your radio to control flight modes. Move the switch to each position and select the desired flight mode below.</string>
     <string name="Pause">Pause</string>
     <string name="screen_tuning">Tuning</string>
-    <string name="screen_modes">Modes</string>
     <string name="screen_cal">Calibration</string>
     <string name="screen_checklist">Checklist</string>
-
     <string name="MAVLinkError">MAVLink Error:</string>
-
     <string name="msg_connect_first">Please connect first</string>
-
     <string name="msg_parameters_written_to_drone">"parameters written to drone"</string>
-
     <string name="set_to_zero_to_disable">(set to zero to disable).</string>
-
     <string name="mode1_throttle_on_right_stick">Mode1: Throttle on RIGHT stick</string>
-
     <string name="mode2_throttle_on_left_stick">Mode2: Throttle on LEFT stick</string>
+ 
+    
+    <!-- Common Setup Buttons Resource Strings -->
+    <string name="button_setup_calibrate">Calibrate</string>
+    <string name="button_setup_cancel">Cancel</string>
+    <string name="button_setup_reset">Reset</string>
+    <string name="button_setup_send">Send</string>
+    <string name="button_setup_next">Next</string>
+    <string name="button_setup_done">Done</string>
+    <string name="progress_title_uploading">Uploading calibration data</string>
+    <string name="progress_desc_uploading">DroidPlanner is uploading calibration data to vehicel</string>
+    <string name="progress_title_downloading">Downloading calibration data</string>
+    <string name="progress_desc_downloading">DroidPlanner is downloading calibration data from vehicle. If system is not connected, press Cancel</string>
 
-    <string name="rc_title_options">RC options</string>
-  	<string name="rc_desc_options">Assign features to channels 7 and 8 on RC radios. Trigger each feature by bringing the switch to the high position.</string>
-  	<string name="rc_desc_minmax">Move the joystics all the way out several times and toggle the swithces, levers and knobs to all possible positions</string>
-  	<string name="rc_title_minmax">Set Min &amp; Max values</string>
-  	<string name="rc_btn_next">Next</string>
-  	<string name="rc_btn_cancel">Cancel</string>
-  	<string name="rc_btn_send">Send</string>
-  	<string name="rc_btn_calibrate">Calibrate</string>
-  	<string name="rc_desc_middle">Set throttle stick to the lowest position and other joysticks, switches, levers and knobs to their center position</string>
-  	<string name="rc_title_middle">Set Center values</string>
-  	<string name="rc_title_complete">Calibration complete</string>
-  	<string name="rc_desc_complete">RC calibration completed. Press \'Save\' to upload data to vehicle</string>
-  	<string name="rc_title_menu">Radio control setup</string>
-  	<string name="rc_desc_menu">Select to calibrate Radio Control signals or set other RC options</string>
-  	<string name="rc_btn_failsafe">RC Failsafe</string>
-  	<string name="rc_title_failsafe">Set RC failsafe</string>
-  	<string name="rc_desc_failsafe">Set the RC failsafe. Failsafe value should be at least 50 units below minimum throttle value</string>
-  	<string name="rc_btn_done">Done</string>
-  	<string name="rc_desc_summary">New RC caliberation data has been saved and uploaded to your vehicle</string>
-  	<string name="rc_setup_title">Radio Calibration</string>
-  	<string name="rc_options_ch7">Channel 7</string>
-  	<string name="rc_options_ch8">Channel 8</string>
-  	<string name="rc_title_downloading">Downloading calibration data</string>
-  	<string name="rc_desc_downloading">DroidPlanner is downloading calibration data from APM. If system is not connected, press Cancel</string>
+    <!-- Failsafe Setup Resource Strings -->
     <string name="setup_fs_title">Failsafe Setup</string>
+
+    <!-- Radio Setup Resource Strings -->
+    <string name="setup_radio_title">Radio Channel Calibration</string>
+    <string name="setup_radio_cal_title">Start Calibration</string>
+    <string name="setup_radio_cal_desc">Press Calibrate to start the radio calibration. Ensure the radio transmitter is switched \'ON\' and transmitting</string>
+    <string name="setup_radio_title_options">RC options</string>
+    <string name="setup_radio_title_minmax">Set Min &amp; Max values</string>
+    <string name="setup_radio_title_middle">Set Center values</string>
+    <string name="setup_radio_title_complete">Calibration complete</string>
+    <string name="setup_radio_desc_options">Assign features to channels 7 and 8 on RC radios. Trigger each feature by bringing the switch to the high position.</string>
+    <string name="setup_radio_desc_minmax">Move the joystics all the way out several times and toggle the swithces, levers and knobs to all possible positions</string>
+    <string name="setup_radio_desc_middle">Set throttle stick to the lowest position and other joysticks, switches, levers and knobs to their center position</string>
+    <string name="setup_radio_desc_complete">RC calibration completed. Press \'Save\' to upload data to vehicle</string>
+    <string name="setup_radio_desc_summary">New RC caliberation data has been saved and uploaded to your vehicle</string>
+    
+    <!-- Compass Setup Resource Strings -->
     <string name="setup_mag_title">Compass Calibration</string>
+
+    <!-- Accelerometer Setup Resource Strings -->
     <string name="setup_imu_title">Accelerometer Calibration</string>
     <string name="setup_imu_start">Press Calibrate to start IMU calibration. Ensure vehicle is placed on a FLAT surface before beginning the calibration process</string>
     <string name="setup_imu_normal">Place the vehicle on its NORMAL position ensuring very minimal movement and press Next</string>
@@ -267,10 +265,68 @@
     <string name="setup_imu_noseup">Place the vehicle NOSE UP ensuring very minimal movement and press Next</string>
     <string name="setup_imu_back">Place the vehicle on its BACK ensuring very minimal movement and press Next</string>
     <string name="setup_imu_completed">Accelerometer calibration completed. If it is not successful, please recalibrate</string>
-    <string name="button_setup_calibrate">Calibrate</string>
-    <string name="button_setup_next">Next</string>
-    <string name="button_setup_done">Done</string>
-    <string name="button_setup_cancel">Cancel</string>
     <string name="setup_imu_step">To start calibration, press Calibrate</string>
     <string name="setup_imu_timeleft">"Time left before next orientation: "</string>
+
+    <!-- Flight Setup Resource Strings -->
+    <string name="setup_fm_title">"Flight Mode Configuration"</string>
+    <string name="setup_fm_side_title">"Update Flight Mode"</string>
+    <string name="setup_fm_side_desc">"Press \'Send\' to update the new flight modes to vehicle."</string>
+    <string name="setup_fm_desc_uploading">Uploading Flight Mode configuration data</string>
+    <string name="setup_fm_desc_downloading">Downloading Flight Mode configuration data</string>
+    <string name="setup_fm_mode1">"Flight Mode 1 : "</string>
+    <string name="setup_fm_mode2">"Flight Mode 2 : "</string>
+    <string name="setup_fm_mode3">"Flight Mode 3 : "</string>
+    <string name="setup_fm_mode4">"Flight Mode 4 : "</string>
+    <string name="setup_fm_mode5">"Flight Mode 5 : "</string>
+    <string name="setup_fm_mode6">"Flight Mode 6 : "</string>
+    <string name="setup_fm_simple">"Simple Mode "</string>
+    <string name="setup_fm_super">"Super Simple Mode "</string>
+
+    <!-- Channel Options Setup Resource Strings -->
+    <string name="setup_ch_title">"Channel Options Configuration"</string>
+    <string name="setup_ch_side_title">"Update Channel Options"</string>
+    <string name="setup_ch_side_desc">"Press \'Send\' to update the new servo function to vehicle."</string>
+    <string name="setup_ch_desc_uploading">Uploading Channel configuration data</string>
+    <string name="setup_ch_desc_downloading">Downloading Channel configuration data</string>
+    <string name="setup_ch_tune_title">"Channel 6 - Tuning Function"</string>
+    <string name="setup_ch_options_title">"Channel Options - CH7 &amp; CH8"</string>
+    <string name="setup_ch_CH7_options">"Channel 7 Options :"</string>
+    <string name="setup_ch_CH6_options">"Channel 6 Tuning  :"</string>
+    <string name="setup_ch_CH8_options">"Channel 8 Tuning  :"</string>
+    <string name="setup_ch_tune_low">"Tune Value - Low  :"</string>
+    <string name="setup_ch_tune_high">"Tune Value - High :"</string>
+    
+    <!-- Servo functions Setup Resource Strings -->
+    <string name="setup_sf_title">"Servo Function Configuration"</string>
+    <string name="setup_sf_side_title">"Update Servo Function"</string>
+    <string name="setup_sf_side_desc">"Press \'Send\' to update the new servo function to vehicle."</string>
+    <string name="setup_sf_desc_uploading">Uploading Servo configuration data</string>
+    <string name="setup_sf_desc_downloading">Downloading Servo configuration data</string>
+    <string name="setup_sf_servo_title">Servo Functions Configuration</string>
+    <string name="setup_sf_servo5">"Servo  5 : "</string>
+    <string name="setup_sf_servo6">"Servo  6 : "</string>
+    <string name="setup_sf_servo7">"Servo  7 : "</string>
+    <string name="setup_sf_servo8">"Servo  8 : "</string>
+    <string name="setup_sf_servo9">"Servo  9 : "</string>
+    <string name="setup_sf_servo10">"Servo 10 : "</string>
+    <string name="setup_sf_servo11">"Servo 11 : "</string>
+    <string name="setup_sf_servo12">"Servo 12 : "</string>
+    <string name="telemetry_default_value">0.0</string>
+    <string name="climb_rate_label">Climb rate</string>
+    <string name="altitude_label">Altitude</string>
+    <string name="meter_unit">m</string>
+    <string name="speed_unit">m/s</string>
+    <string name="ground_speed_label">Ground speed</string>
+    <string name="air_speed_label">Air speed</string>
+    <string name="default_angle_value">--°</string>
+
+    <!--  Bluetooth device selection strings -->
+    <string name="scanning">scanning for devices...</string>
+    <string name="select_device">Select device to connect</string>
+    <string name="none_paired">No devices have been paired</string>
+    <string name="none_found">No devices found</string>
+    <string name="title_paired_devices">Paired Devices</string>
+    <string name="title_other_devices">Other Available Devices</string>
+    <string name="button_scan">Scan for devices</string>
 </resources>

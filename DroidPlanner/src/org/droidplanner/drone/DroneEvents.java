@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 
 
 public class DroneEvents extends DroneVariable {
@@ -13,21 +13,21 @@ public class DroneEvents extends DroneVariable {
 		super(myDrone);
 	}
 
-	private List<OnDroneListner> droneListeners = new ArrayList<OnDroneListner>();
+	private List<OnDroneListener> droneListeners = new ArrayList<OnDroneListener>();
 
-	public void addDroneListener(OnDroneListner listener) {
+	public void addDroneListener(OnDroneListener listener) {
 		if (listener != null & !droneListeners.contains(listener))
 			droneListeners.add(listener);
 	}
 
-	public void removeDroneListener(OnDroneListner listener) {
+	public void removeDroneListener(OnDroneListener listener) {
 		if (listener != null && droneListeners.contains(listener))
 			droneListeners.remove(listener);
 	}
 
 	public void notifyDroneEvent(DroneEventsType event) {
 		if (droneListeners.size() > 0) {
-			for (OnDroneListner listener : droneListeners) {
+			for (OnDroneListener listener : droneListeners) {
 				listener.onDroneEvent(event,myDrone);
 			}
 		}

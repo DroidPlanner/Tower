@@ -1,25 +1,21 @@
 package org.droidplanner.fragments.calibration.imu;
 
-import org.droidplanner.activitys.ConfigurationActivity;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.drone.variables.Calibration;
-import org.droidplanner.fragments.SetupFragment;
+import org.droidplanner.fragments.SetupSensorFragment;
+import org.droidplanner.fragments.calibration.SetupMainPanel;
+import org.droidplanner.fragments.calibration.SetupSidePanel;
 
-import android.app.Activity;
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
 import android.os.Handler;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import org.droidplanner.R;
 
-public class FragmentSetupIMU extends SetupFragment.SetupCalibration implements
-		OnDroneListner {
+public class FragmentSetupIMU extends SetupMainPanel  implements OnDroneListener{
 
 	private final static int TIMEOUT_MAX = 300;
 
@@ -36,54 +32,8 @@ public class FragmentSetupIMU extends SetupFragment.SetupCalibration implements
 	private Drawable drawableGood, drawableWarning, drawablePoor;
 
 	private final Handler handler = new Handler();
-	private ConfigurationActivity parentActivity;
 
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		if (!(activity instanceof ConfigurationActivity)) {
-			throw new IllegalStateException("Parent activity must be "
-					+ ConfigurationActivity.class.getName());
-		}
-
-		parentActivity = (ConfigurationActivity) activity;
-	}
-
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstaneState) {
-		final View view = inflater.inflate(R.layout.fragment_setup_imu_main,
-				container, false);
-
-		setupLocalViews(view);
-
-		return view;
-	}
-
-	@Override
-	public void onDetach() {
-		super.onDetach();
-		parentActivity = null;
-	}
-
-	@Override
-	public void onPause() {
-		super.onPause();
-		if (parentActivity != null) {
-			parentActivity.drone.events.removeDroneListener(this);
-		}
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-
-		if (parentActivity != null) {
-			parentActivity.drone.events.addDroneListener(this);
-		}
-	}
-
-	private void setupLocalViews(View view) {
+	public void setupLocalViews(View view) {
 		textViewStep = (TextView) view.findViewById(R.id.textViewIMUStep);
 		textViewOffset = (TextView) view.findViewById(R.id.TextViewIMUOffset);
 		textViewScaling = (TextView) view.findViewById(R.id.TextViewIMUScaling);
@@ -102,11 +52,17 @@ public class FragmentSetupIMU extends SetupFragment.SetupCalibration implements
 	}
 
 	@Override
-	public SetupFragment.SetupSidePanel getSidePanel() {
+	public int getPanelLayout() {
+		return R.layout.fragment_setup_imu_main;
+	}
+
+	@Override
+	public SetupSidePanel getSidePanel() {
 		return new FragmentSetupIMUCalibrate();
 	}
 
-	public void doCalibrationStep() {
+	@Override
+	public void doCalibrationStep(int step) {
 		processCalibrationStep(calibration_step);
 	}
 
@@ -127,7 +83,7 @@ public class FragmentSetupIMU extends SetupFragment.SetupCalibration implements
 			textViewOffset.setVisibility(View.INVISIBLE);
 			textViewScaling.setVisibility(View.INVISIBLE);
 
-			((SetupFragment) getParentFragment())
+			((SetupSensorFragment) getParentFragment())
 					.updateSidePanelTitle(calibration_step);
 		}
 	}
@@ -150,10 +106,12 @@ public class FragmentSetupIMU extends SetupFragment.SetupCalibration implements
 			processMAVMessage(drone.calibrationSetup.getMessage());
 		} else if (event == DroneEventsType.HEARTBEAT_TIMEOUT) {
 			if (parentActivity.drone != null) {
-				/* here we will check if we are in calibration mode
-				 * but if at the same time 'msg' is empty - then it is actually not doing calibration
-				 * what we should do is to reset the calibration flag and re-trigger the HEARBEAT_TIMEOUT
-				 * this however should not be happening
+				/*
+				 * here we will check if we are in calibration mode but if at
+				 * the same time 'msg' is empty - then it is actually not doing
+				 * calibration what we should do is to reset the calibration
+				 * flag and re-trigger the HEARBEAT_TIMEOUT this however should
+				 * not be happening
 				 */
 				if (Calibration.isCalibrating() && msg.isEmpty()) {
 					Calibration.setClibrating(false);
@@ -196,7 +154,7 @@ public class FragmentSetupIMU extends SetupFragment.SetupCalibration implements
 
 		textViewStep.setText(msg);
 
-		((SetupFragment) getParentFragment())
+		((SetupSensorFragment) getParentFragment())
 				.updateSidePanelTitle(calibration_step);
 
 		if (calibration_step == 7) {
@@ -247,5 +205,22 @@ public class FragmentSetupIMU extends SetupFragment.SetupCalibration implements
 
 		}
 
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		if (parentActivity != null) {
+			parentActivity.drone.events.removeDroneListener(this);
+		}
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+
+		if (parentActivity != null) {
+			parentActivity.drone.events.addDroneListener(this);
+		}
 	}
 }
