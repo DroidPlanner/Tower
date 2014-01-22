@@ -21,27 +21,23 @@ public class FragmentSetupSF extends SuperSetupMainPanel{
 		return R.layout.fragment_setup_sf_main;
 	}
 
+
 	@Override
-	public SetupSidePanel getSidePanel() {
+	protected SetupSidePanel getDefaultPanel() {
 		sidePanel = new FragmentSetupSend();
 		sidePanel.updateTitle(R.string.setup_sf_side_title);
 		sidePanel.updateDescription(R.string.setup_sf_side_desc);
 		return sidePanel;
 	}
+	
+	@Override
+	public SetupSidePanel getSidePanel() {
+		return getDefaultPanel();
+	}
 
 	@Override
 	protected CalParameters getParameterHandler() {		
 		return new SF_CalParameters(drone);
-	}
-
-	@Override
-	protected int getInitialPanelTitle() {
-		return R.string.setup_sf_side_title;
-	}
-
-	@Override
-	protected int getInitialPanelDescription() {
-		return R.string.setup_sf_side_desc;
 	}
 
 	@Override
@@ -53,18 +49,6 @@ public class FragmentSetupSF extends SuperSetupMainPanel{
 	}
 	
 	@Override
-	public void setupLocalViews(View v) {
-		spinnerSFs[0] = (Spinner) v.findViewById(R.id.spinnerSF5);
-		spinnerSFs[1] = (Spinner) v.findViewById(R.id.spinnerSF6);
-		spinnerSFs[2] = (Spinner) v.findViewById(R.id.spinnerSF7);
-		spinnerSFs[3] = (Spinner) v.findViewById(R.id.spinnerSF8);
-		spinnerSFs[4] = (Spinner) v.findViewById(R.id.spinnerSF10);
-		spinnerSFs[5] = (Spinner) v.findViewById(R.id.spinnerSF11);
-
-		setupSpinners();
-	}
-
-	@Override
 	protected void updatePanelInfo() {
 		if (parameters == null)
 			return;
@@ -74,6 +58,18 @@ public class FragmentSetupSF extends SuperSetupMainPanel{
 					getSpinnerIndexFromValue((int)parameters.getParamValue(i),
 							valueSF), true);
 		}
+	}
+
+	@Override
+	public void setupLocalViews(View v) {
+		spinnerSFs[0] = (Spinner) v.findViewById(R.id.spinnerSF5);
+		spinnerSFs[1] = (Spinner) v.findViewById(R.id.spinnerSF6);
+		spinnerSFs[2] = (Spinner) v.findViewById(R.id.spinnerSF7);
+		spinnerSFs[3] = (Spinner) v.findViewById(R.id.spinnerSF8);
+		spinnerSFs[4] = (Spinner) v.findViewById(R.id.spinnerSF10);
+		spinnerSFs[5] = (Spinner) v.findViewById(R.id.spinnerSF11);
+
+		setupSpinners();
 	}
 
 	private void setupSpinners() {
@@ -102,7 +98,5 @@ public class FragmentSetupSF extends SuperSetupMainPanel{
 			i++;
 		}
 	}
-
-
 
 }

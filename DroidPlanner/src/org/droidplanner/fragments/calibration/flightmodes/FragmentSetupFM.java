@@ -19,10 +19,11 @@ import android.widget.TextView;
 public class FragmentSetupFM extends SuperSetupMainPanel {
 
 	private int[] pwm = { 1230, 1360, 1490, 1620, 1750 };
-	private int[] flightModeValue = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13 };
 	private int[] flightModeIndex = { 1, 2, 4, 8, 16, 32 };
 	private int dataFM[] = new int[8];
 
+	private int[] valueFM;
+	private String[] stringFM;
 	private String[] listPWM;
 	private CheckBox[] chkbxSimple = new CheckBox[6];
 	private CheckBox[] chkbxSuperSimple = new CheckBox[6];;
@@ -32,6 +33,10 @@ public class FragmentSetupFM extends SuperSetupMainPanel {
 
 	private TextView textPWMRange, textPWMCurrent;
 
+	@Override
+	protected void onInitialize() {
+		listPWM = getResources().getStringArray(R.array.FligthMode_PWM_Range);
+	}
 	@Override
 	protected CalParameters getParameterHandler() {
 		return new FM_CalParameters(drone);
@@ -51,7 +56,7 @@ public class FragmentSetupFM extends SuperSetupMainPanel {
 	protected SetupSidePanel getDefaultPanel() {
 		sidePanel =  new FragmentSetupSend();
 		sidePanel.updateTitle(R.string.setup_fm_side_title);
-		sidePanel.updateTitle(R.string.setup_fm_side_desc);
+		sidePanel.updateDescription(R.string.setup_fm_side_desc);
 		return sidePanel;
 	}
 
@@ -61,7 +66,7 @@ public class FragmentSetupFM extends SuperSetupMainPanel {
 
 		// Read all spinners value
 		for (Spinner spinner : pwmSpinners) {
-			dataFM[cnt] = flightModeValue[spinner.getSelectedItemPosition()];
+			dataFM[cnt] = valueFM[spinner.getSelectedItemPosition()];
 			cnt++;
 		}
 
@@ -90,7 +95,7 @@ public class FragmentSetupFM extends SuperSetupMainPanel {
 		for (int i = 0; i < 6; i++) {
 			int fmData = (int) parameters.getParamValue(i);
 			pwmSpinners[i].setSelection(
-					getSpinnerIndexFromValue(fmData, flightModeValue), true);
+					getSpinnerIndexFromValue(fmData, valueFM), true);
 		}
 
 		for (int i = 0; i < 6; i++) {
@@ -162,10 +167,10 @@ public class FragmentSetupFM extends SuperSetupMainPanel {
 	}
 
 	private void setupSpinners() {
-		final ArrayAdapter<CharSequence> adapter = ArrayAdapter
-				.createFromResource(parentActivity,
-						R.array.FligthMode_CopterV3_1,
-						R.layout.spinner_setup_item);
+		getFMOptions();
+		
+		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+				parentActivity, R.layout.spinner_setup_item, stringFM);
 
 		adapter.setDropDownViewResource(R.layout.spinner_setup_item_dropdown);
 
@@ -215,5 +220,20 @@ public class FragmentSetupFM extends SuperSetupMainPanel {
 		return -1;
 	}
 
+	private void getFMOptions() {
+		String pairs[] = getResources().getStringArray(R.array.FligthMode_CopterV3_1);
+		valueFM = null;
+		valueFM = new int[pairs.length];
+		stringFM = null;
+		stringFM = new String[pairs.length];
+
+		int i = 0;
+		for (String item : pairs) {
+			String pair[] = item.split(";");
+			valueFM[i] = Integer.parseInt(pair[0]);
+			stringFM[i] = pair[1];
+			i++;
+		}
+	}
 
 }

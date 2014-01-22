@@ -28,6 +28,8 @@ public abstract class SuperSetupMainPanel extends SetupMainPanel implements
 	protected abstract void updatePanelInfo();
 
 	protected abstract void updateCalibrationData();
+	
+	protected void onInitialize(){};//can be overridden if necessary
 
 	public SuperSetupMainPanel() {
 		super();
@@ -39,6 +41,7 @@ public abstract class SuperSetupMainPanel extends SetupMainPanel implements
 		this.drone = parentActivity.drone;
 		parameters = getParameterHandler();
 		parameters.setOnCalibrationEventListener(this);
+		onInitialize();
 	}
 
 	@Override
