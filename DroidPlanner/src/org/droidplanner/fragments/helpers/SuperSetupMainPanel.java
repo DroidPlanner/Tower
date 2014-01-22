@@ -115,7 +115,7 @@ public abstract class SuperSetupMainPanel extends SetupMainPanel implements
 		}
 	}
 
-	private SetupSidePanel getInitialPanel() {
+	protected SetupSidePanel getInitialPanel() {
 
 		if (parameters != null && !parameters.isParameterDownloaded()
 				&& drone.MavClient.isConnected()) {
