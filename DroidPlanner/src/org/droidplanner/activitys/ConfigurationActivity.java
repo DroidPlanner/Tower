@@ -1,5 +1,16 @@
 package org.droidplanner.activitys;
 
+import android.app.ActionBar;
+import android.content.Context;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.NavUtils;
+import android.support.v4.view.ViewPager;
+import android.util.Log;
+import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import org.droidplanner.R;
 import org.droidplanner.activitys.helpers.SuperUI;
 import org.droidplanner.drone.Drone;
@@ -11,35 +22,74 @@ import org.droidplanner.fragments.SetupSensorFragment;
 import org.droidplanner.fragments.TuningFragment;
 import org.droidplanner.widgets.viewPager.TabPageIndicator;
 
-import android.app.ActionBar;
-import android.content.Context;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.NavUtils;
-import android.support.v4.view.ViewPager;
-import android.view.MenuItem;
-
+/**
+ * This class implements and handles the various ui used for the drone configuration.
+ */
 public class ConfigurationActivity extends SuperUI {
+
+    private static final String TAG = ConfigurationActivity.class.getSimpleName();
+
+    /**
+     * Holds the list of configuration screens this activity supports.
+     */
+    private static final Class<? extends Fragment>[] sConfigurationFragments = new Class[]{
+            TuningFragment.class,
+            SetupRadioFragment.class,
+            SetupSensorFragment.class,
+            ChecklistFragment.class,
+            ParamsFragment.class
+    };
+
+    /**
+     * Holds the title resources for the configuration screens.
+     */
+    private static final int[] sConfigurationFragmentTitlesRes = {
+            R.string.screen_tuning,
+            R.string.screen_rc,
+            R.string.screen_cal,
+            R.string.screen_checklist,
+            R.string.screen_parameters
+    };
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_configuration);
 
-		final ConfigurationPagerAdapter pagerAdapter = new ConfigurationPagerAdapter(
-				getApplicationContext(), getSupportFragmentManager());
+        //Check that the arrays are the same length.
+        if(sConfigurationFragments.length != sConfigurationFragmentTitlesRes.length){
+            throw new IllegalStateException("The fragment and title resource arrays must match in" +
+                    " length.");
+        }
 
-		final ViewPager viewPager = (ViewPager) findViewById(R.id.configuration_pager);
-		viewPager.setAdapter(pagerAdapter);
+        final ConfigurationPagerAdapter pagerAdapter = new ConfigurationPagerAdapter(
+                getApplicationContext(), getSupportFragmentManager());
 
-		final TabPageIndicator tabIndicator = (TabPageIndicator) findViewById(R.id.configuration_tab_strip);
-		tabIndicator.setViewPager(viewPager);
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.configuration_pager);
+        viewPager.setAdapter(pagerAdapter);
+
+        /*
+        Figure out if we're running on a tablet like device, or a phone.
+        The phone layout doesn't the tab strip, so the tabIndicator will be null.
+         */
+        final TabPageIndicator tabIndicator = (TabPageIndicator) findViewById(R.id
+                .configuration_tab_strip);
+        final boolean isPhone = tabIndicator == null;
+
+        if (!isPhone) {
+            tabIndicator.setViewPager(viewPager);
+        }
 
 		final ActionBar actionBar = getActionBar();
 		if (actionBar != null) {
 			actionBar.setDisplayHomeAsUpEnabled(true);
+
+            if(isPhone){
+                actionBar.setDisplayShowTitleEnabled(false);
+                actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+
+                //Display the sections as an action bar drop down list.
+            }
 		}
 	}
 
@@ -58,17 +108,22 @@ public class ConfigurationActivity extends SuperUI {
 		return super.onOptionsItemSelected(item);
 	}
 
+    @Override
+    public CharSequence[][] getHelpItems() {
+        return new CharSequence[][] { {}, {} };
+    }
+
 	/**
 	 * This is the fragment pager adapter to handle the tabs of the
 	 * Configuration activity.
-	 * 
+	 *
 	 * @since 1.2.0
 	 */
 	private static class ConfigurationPagerAdapter extends FragmentPagerAdapter {
 
 		/**
 		 * Application context object used to retrieve the tabs' title.
-		 * 
+		 *
 		 * @since 1.2.0
 		 */
 		private final Context mContext;
@@ -80,48 +135,32 @@ public class ConfigurationActivity extends SuperUI {
 
 		@Override
 		public Fragment getItem(int position) {
-			switch (position) {
-			case 0:
-				return new TuningFragment();
-			case 1:
-				return new SetupRadioFragment();
-			case 2:
-				return new SetupSensorFragment();
-			case 3:
-				return new ChecklistFragment();
-			case 4:
-				return new ParamsFragment();
-			default:
-				return null;
-			}
+            try {
+                return sConfigurationFragments[position].newInstance();
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
+            }
+            return null;
 		}
 
 		@Override
 		public int getCount() {
-			return 5;
+			return sConfigurationFragments.length;
 		}
 
 		@Override
 		public CharSequence getPageTitle(int position) {
-			switch (position) {
-			case 0:
-				return mContext.getString(R.string.screen_tuning);
-			case 1:
-				return mContext.getText(R.string.screen_rc);
-			case 2:
-				return mContext.getString(R.string.screen_cal);
-			case 3:
-				return mContext.getString(R.string.screen_checklist);
-			case 4:
-				return mContext.getText(R.string.screen_parameters);
-			default:
-				return null;
-			}
+            final int titleRes = sConfigurationFragmentTitlesRes[position];
+            return mContext.getText(titleRes);
 		}
 	}
 
-	@Override
-	public CharSequence[][] getHelpItems() {
-		return new CharSequence[][] { {}, {} };
-	}
+    private static class ConfigurationSpinnerAdapter extends ArrayAdapter<String> {
+
+        public ConfigurationSpinnerAdapter(Context context, int resource) {
+            super(context, resource);
+        }
+
+    }
+
 }
