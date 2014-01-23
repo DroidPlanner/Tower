@@ -13,4 +13,11 @@
     <dimen name="editor_button_width">70dp</dimen>
     <dimen name="editor_button_height">70dp</dimen>
     <dimen name="editor_button_margin">5dp</dimen>
+
+    <!-- Dimension for the editor list items -->
+    <dimen name="editor_list_item_text_size">24sp</dimen>
+
+    <!-- Dimension for the editor mission fragment -->
+    <dimen name="editor_mission_fragment_height">80dp</dimen>
+
 </resources>

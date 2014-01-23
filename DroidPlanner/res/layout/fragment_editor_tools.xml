@@ -1,99 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+<RadioGroup
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/editor_tools_layout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_gravity="center_horizontal"
-    android:gravity="center"
-    android:layout_centerInParent="true">
+    android:gravity="center">
 
-	<RelativeLayout
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content" >
+    <org.droidplanner.widgets.button.RadioButtonCenter
+        android:id="@+id/editor_tools_marker"
+        style="@style/editorButton"
+        android:button="@drawable/ic_editor_wp"
+        android:background="@drawable/button_editor"
+        />
 
-		<RadioButton
-    	android:id="@+id/editor_tools_marker"
-	    style="@style/editorButton"
-    	android:button="@null"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-	    android:background="@drawable/button_editor"
-		/>
+    <org.droidplanner.widgets.button.RadioButtonCenter
+        android:id="@+id/editor_tools_draw"
+        style="@style/editorButton"
+        android:button="@drawable/ic_editor_draw"
+        android:background="@drawable/button_editor"
+        />
 
-		<ImageView
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_centerInParent="true"
-		android:src="@drawable/ic_editor_wp"
-		/>
+    <org.droidplanner.widgets.button.RadioButtonCenter
+        android:id="@+id/editor_tools_poly"
+        style="@style/editorButton"
+        android:button="@drawable/ic_editor_poly"
+        android:background="@drawable/button_editor"
+        />
 
-	</RelativeLayout>
-
-
-	<RelativeLayout
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content" >
-
-		<RadioButton
-    	android:id="@+id/editor_tools_draw"
-	    style="@style/editorButton"
-    	android:button="@null"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-	    android:background="@drawable/button_editor"
-		/>
-
-		<ImageView
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_centerInParent="true"
-		android:src="@drawable/ic_editor_draw"
-		/>
-
-	</RelativeLayout>
-
-	<RelativeLayout
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content" >
-
-		<RadioButton
-    	android:id="@+id/editor_tools_poly"
-	    style="@style/editorButton"
-    	android:button="@null"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-	    android:background="@drawable/button_editor"
-		/>
-
-		<ImageView
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_centerInParent="true"
-		android:src="@drawable/ic_editor_poly"
-		/>
-
-	</RelativeLayout>
-
-	<RelativeLayout
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content" >
-
-		<RadioButton
-    	android:id="@+id/editor_tools_trash"
-	    style="@style/editorButton"
-    	android:button="@null"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-	    android:background="@drawable/button_editor_trash"
-		/>
-
-		<ImageView
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_centerInParent="true"
-		android:src="@drawable/ic_editor_trash"
-		/>
-
-	</RelativeLayout>
+    <org.droidplanner.widgets.button.RadioButtonCenter
+        android:id="@+id/editor_tools_trash"
+        style="@style/editorButton"
+        android:button="@drawable/ic_editor_trash"
+        android:background="@drawable/button_editor_trash"
+        />
 
 </RadioGroup>
 

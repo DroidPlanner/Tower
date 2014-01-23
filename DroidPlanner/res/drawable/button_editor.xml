@@ -3,5 +3,5 @@
     <item android:drawable="@drawable/button_edit_pressed"		android:state_pressed="true" />
     <item android:drawable="@drawable/button_edit_active"		android:state_focused="true" />
 	<item android:drawable="@drawable/button_edit_active"  		android:state_checked="true"/>
-    <item android:drawable="@drawable/mission_control_bg" />
+    <item android:drawable="@drawable/button_edit" />
 </selector>

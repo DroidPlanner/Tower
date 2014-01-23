@@ -217,7 +217,7 @@
 	 <!-- Editor overview info Style -->
     <style name="editorMissionOverviewText">
         <item name="android:textColor">#fff</item>
-        <item name="android:textSize">20dp</item>
+        <item name="android:textSize">20sp</item>
 	    <item name="android:textStyle">bold</item>
 	    <item name="android:layout_centerVertical">true</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
@@ -416,12 +416,9 @@
         <item name="android:textColor">@drawable/vpi__light_theme</item>
     </style>
 
-
-
-
     <!-- Listview styles -->
     <style name="myHListView">
-        <item name="dividerWidth">0dip</item>
+        <item name="dividerWidth">5dp</item>
         <item name="stackFromRight">false</item>
         <item name="measureWithChild">0</item>
         <item name="android:smoothScrollbar">true</item>

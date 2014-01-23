@@ -26,10 +26,6 @@ public class EditorToolsFragment extends Fragment implements OnClickListener {
 	private OnEditorToolSelected listner;
 
     private RadioGroup mEditorRadioGroup;
-	private RadioButtonCenter buttonDraw;
-	private RadioButtonCenter buttonMarker;
-	private RadioButtonCenter buttonPoly;
-	private RadioButtonCenter buttonTrash;
 
 	private EditorTools tool = EditorTools.MARKER;
 
@@ -40,10 +36,14 @@ public class EditorToolsFragment extends Fragment implements OnClickListener {
 				false);
 
         mEditorRadioGroup = (RadioGroup) view.findViewById(R.id.editor_tools_layout);
-		buttonDraw = (RadioButtonCenter) view.findViewById(R.id.editor_tools_draw);
-		buttonMarker = (RadioButtonCenter) view.findViewById(R.id.editor_tools_marker);
-		buttonPoly = (RadioButtonCenter) view.findViewById(R.id.editor_tools_poly);
-		buttonTrash = (RadioButtonCenter) view.findViewById(R.id.editor_tools_trash);
+		final RadioButtonCenter buttonDraw = (RadioButtonCenter) view.findViewById(R.id
+                .editor_tools_draw);
+        final RadioButtonCenter buttonMarker = (RadioButtonCenter) view.findViewById(R.id
+                .editor_tools_marker);
+        final RadioButtonCenter buttonPoly = (RadioButtonCenter) view.findViewById(R.id
+                .editor_tools_poly);
+        final RadioButtonCenter buttonTrash = (RadioButtonCenter) view.findViewById(R.id
+                .editor_tools_trash);
 
 		buttonDraw.setOnClickListener(this);
 		buttonMarker.setOnClickListener(this);

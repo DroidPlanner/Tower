@@ -7,4 +7,16 @@
     <dimen name="flightControlMargin">0dp</dimen>
     <dimen name="flightControlPadding">5dp</dimen>
     <dimen name="flightControlTextSize">10sp</dimen>
+
+    <!-- Dimension for the editor buttons -->
+    <dimen name="editor_button_width">48dp</dimen>
+    <dimen name="editor_button_height">48dp</dimen>
+    <dimen name="editor_button_margin">1dp</dimen>
+
+    <!-- Dimension for the editor list items -->
+    <dimen name="editor_list_item_text_size">20sp</dimen>
+
+    <!-- Dimension for the editor mission fragment -->
+    <dimen name="editor_mission_fragment_height">60dp</dimen>
+
 </resources>
