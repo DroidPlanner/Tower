@@ -3,8 +3,10 @@ package org.droidplanner.fragments;
 import org.droidplanner.R;
 import org.droidplanner.MAVLink.MavLinkStreamRates;
 import org.droidplanner.fragments.calibration.SetupMainPanel;
+import org.droidplanner.fragments.calibration.failsafe.FragmentSetupFSBattery;
+import org.droidplanner.fragments.calibration.failsafe.FragmentSetupFSFence;
+import org.droidplanner.fragments.calibration.failsafe.FragmentSetupFSGPSGCS;
 import org.droidplanner.fragments.calibration.failsafe.FragmentSetupFSThrottle;
-import org.droidplanner.fragments.calibration.radio.FragmentSetupRC;
 import org.droidplanner.fragments.helpers.SuperSetupFragment;
 
 /**
@@ -52,16 +54,16 @@ public class SetupFailsafeFragment extends SuperSetupFragment {
  		SetupMainPanel setupPanel = null;
 		switch (index) {
 		case 1:
-//			updateTitle(R.string.setup_fm_title);
-//			setupPanel = new FragmentSetupTHR();
+			updateTitle(R.string.setup_fs_bat_title);
+			setupPanel = new FragmentSetupFSBattery();
 			break;
 		case 2:
-//			updateTitle(R.string.setup_ch_title);
-//			setupPanel = new FragmentSetupCH();
+			updateTitle(R.string.setup_fs_fnc_title);
+			setupPanel = new FragmentSetupFSFence();
 			break;
 		case 3:
-//			updateTitle(R.string.setup_sf_title);
-//			setupPanel = new FragmentSetupSF();
+			updateTitle(R.string.setup_fs_gpsgcs_title);
+			setupPanel = new FragmentSetupFSGPSGCS();
 			break;
 		case 0:
 		default:

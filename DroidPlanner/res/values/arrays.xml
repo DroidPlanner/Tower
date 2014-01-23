@@ -92,11 +92,11 @@
         <item>MAG Calibration</item>
     </string-array>
     <string-array name="Setup_Failsafe_Menu">
-        <item>GPS Failsafe</item>
-        <item>GCS Failsafe</item>
-        <item>Battery Failsafe</item>
         <item>Throttle FAilsafe</item>
-    </string-array>
+        <item>Battery Failsafe</item>
+        <item>Fence Failsafe</item>
+        <item>GPS &amp; GCS Failsafe</item>
+        </string-array>
     <string-array name="VehicleType">
         <item>ArduCopter</item>
         <item>ArduPlane</item>
