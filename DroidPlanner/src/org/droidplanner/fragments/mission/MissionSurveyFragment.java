@@ -63,11 +63,11 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 	@Override
 	protected void setupViews(View view) {
 		super.setupViews(view);
+		this.survey = ((Survey) item);
 		typeSpinner.setSelection(commandAdapter
 				.getPosition(MissionItemTypes.SURVEY));
 		setupLocalViews(view);
-		
-		this.survey = ((Survey) item);
+		updateViews();
 	}
 
 	public void setupLocalViews(View view) {
