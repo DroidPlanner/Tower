@@ -59,8 +59,9 @@ public abstract class SuperActivity extends HelpActivity implements
 		case R.id.menu_map_type_satellite:
 			setMapTypeFromItemId(item.getItemId());
 			return true;
+
 		default:
-			return super.onMenuItemSelected(featureId, item);
+			return false;
 		}
 	}
 
