@@ -162,5 +162,10 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 				+ ": " + survey.grid.getCameraCount());
 		numberOfStripsView.setText(context.getString(R.string.number_of_strips)
 				+ ": " + survey.grid.getNumberOfLines());
+		
+		altitudeView.setValue(survey.surveyData.getAltitude().valueInMeters());
+		angleView.setValue(survey.surveyData.getAngle());
+		overlapView.setValue(survey.surveyData.getOverlap());
+		sidelapView.setValue(survey.surveyData.getSidelap());
 	}
 }
