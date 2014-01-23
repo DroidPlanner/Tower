@@ -225,5 +225,15 @@
         <item>2;AltHold</item>
         <item>3;Land even from Stabilize</item>
     </string-array>
+    <string-array name="Fence_Type_Options">
+        <item>0;None</item>
+        <item>1;Altitude</item>
+        <item>2;Circle</item>
+        <item>3;Altitude and Circle</item>
+    </string-array>
+    <string-array name="Fence_Action_Options">
+        <item>0;Report Only</item>
+        <item>1;RTL or Land</item>
+    </string-array>
     
 </resources>
