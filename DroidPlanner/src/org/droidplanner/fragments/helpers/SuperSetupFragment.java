@@ -28,7 +28,7 @@ import org.droidplanner.R;
  */
 public abstract class SuperSetupFragment extends Fragment implements OnDroneListener, OnItemSelectedListener {
 
-	private Drone drone;
+	protected Drone drone;
 
 	protected ConfigurationActivity parentActivity;
 	private Spinner spinnerSetup;
