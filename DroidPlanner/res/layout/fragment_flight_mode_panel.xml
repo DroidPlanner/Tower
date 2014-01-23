@@ -10,6 +10,7 @@
 
     <Spinner
         android:layout_width="match_parent"
+        style="@style/ModeSpinnerText"
         android:layout_height="wrap_content"
         android:id="@+id/flight_mode_spinner"/>
     

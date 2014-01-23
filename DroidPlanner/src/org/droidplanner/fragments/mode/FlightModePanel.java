@@ -132,7 +132,7 @@ public class FlightModePanel extends Fragment implements DroneInterfaces.OnDrone
         final List<ApmModes> flightModes = ApmModes.getModeList(type);
         if(mModeAdapter == null){
             mModeAdapter = new ModeAdapter(getActivity().getApplicationContext(),
-                    R.layout.spinner_flight_mode_item, flightModes);
+                    R.layout.spinner_setup, flightModes);
             mModeSpinner.setAdapter(mModeAdapter);
         }
         else{

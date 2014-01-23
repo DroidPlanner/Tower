@@ -70,9 +70,6 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 				.findFragmentById(R.id.missionFragment1);
 		infoView = (TextView) findViewById(R.id.editorInfoWindow);
 
-		removeItemDetail(); // When doing things like screen rotation remove the
-							// detail window
-
 		mission = drone.mission;
 		gestureMapFragment.setOnPathFinishedListner(this);
 	}
@@ -91,18 +88,6 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 			bottomPadding = missionListFragment.getView().getHeight();			
 		}
 		planningMapFragment.mMap.setPadding(rightPadding, topPadding, 0, bottomPadding);
-	}
-
-	@Override
-	protected void onStart() {
-		super.onStart();
-	}
-
-	@Override
-	protected void onStop() {
-		super.onStop();
-		mission.clearSelection();
-		drone.events.notifyDroneEvent(DroneEventsType.MISSION_UPDATE);
 	}
 
 	@Override
@@ -197,7 +182,11 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 		itemDetailFragment.show(fragmentManager, "Item detail dialog");
 	}
 
-	private void switchItemDetail(MissionItem item) {
+    public MissionDetailFragment getItemDetailFragment(){
+        return itemDetailFragment;
+    }
+
+	public void switchItemDetail(MissionItem item) {
         removeItemDetail();
 		addItemDetail(item);
 	}
