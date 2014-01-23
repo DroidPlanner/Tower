@@ -2,9 +2,11 @@ package org.droidplanner.widgets.NumberFieldEdit;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.os.Handler;
 import android.text.InputType;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -58,11 +60,24 @@ public class NumberFieldEdit extends LinearLayout implements OnTouchListener {
 					a.getFloat(R.styleable.NumberFieldEdit_FastInc, 2));
 			setFormat(a.getString(R.styleable.NumberFieldEdit_Format));
 			setSeparator(a.getString(R.styleable.NumberFieldEdit_Separator));
+
+			setTextColor(a.getColor(R.styleable.NumberFieldEdit_TextColor,
+					Color.BLACK));
+			if (a.hasValue(R.styleable.NumberFieldEdit_TextAppearance)) {
+				TypedValue styleID = new TypedValue();
+				a.getValue(R.styleable.NumberFieldEdit_TextAppearance, styleID);
+				setTextAppearance(context,styleID.data);
+			}
+			
 			setValue(this.value);
 		} finally {
 			a.recycle();
 		}
 	}
+	private void setTextAppearance(Context context, int data) {
+		titleText.setTextAppearance(context,data);
+	}
+
 
 	private void setFormat(String string) {
 		if (string != null) {
@@ -134,6 +149,14 @@ public class NumberFieldEdit extends LinearLayout implements OnTouchListener {
 		buttonLayout.requestFocus();
 	}
 
+	private void setTextColor(int color) {
+		if (color != 0) {
+			titleText.setTextColor(color);
+			separatorText.setTextColor(color);
+			editText.setTextColor(color);
+		}
+	}
+
 	public void setMinMaxInc(double min, double max, double inc, float fastinc) {
 		this.min = min;
 		this.inc = inc;
@@ -202,7 +225,7 @@ public class NumberFieldEdit extends LinearLayout implements OnTouchListener {
 	}
 
 	private void updateValue() {
-		double incVal = fastCount?fastInc:inc;
+		double incVal = fastCount ? fastInc : inc;
 		if (countUp)
 			setValue(this.value + incVal);
 		else
