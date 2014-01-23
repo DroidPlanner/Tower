@@ -167,5 +167,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 		angleView.setValue(survey.surveyData.getAngle());
 		overlapView.setValue(survey.surveyData.getOverlap());
 		sidelapView.setValue(survey.surveyData.getSidelap());
+		
+		cameraAdapter.setTitle(survey.surveyData.getCameraName());
 	}
 }

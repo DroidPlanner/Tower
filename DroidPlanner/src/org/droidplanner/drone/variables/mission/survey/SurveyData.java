@@ -85,6 +85,10 @@ public class SurveyData {
 		return overlap;
 	}
 
+	public String getCameraName() {
+		return camera.name;
+	}
+
 	public boolean shouldGenerateInnerWPs() {
 		return generateInnerWps;
 	}

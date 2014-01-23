@@ -16,6 +16,7 @@ public class CamerasAdapter extends ArrayAdapter<String> {
 
 	private CameraInfoLoader loader;
 	private Context context;
+	private String title = "";
 
 	public CamerasAdapter(Context context, int resource) {
 		super(context, resource);
@@ -23,11 +24,15 @@ public class CamerasAdapter extends ArrayAdapter<String> {
 		loader = new CameraInfoLoader(context);
 		addAll(loader.getCameraInfoList());
 	}
+	
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		TextView view = (TextView) super.getView(position, convertView, parent);
-		view.setText(getItem(position));
+		view.setText(title);
 		return view;
 	}
 
