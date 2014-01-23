@@ -92,7 +92,7 @@
         <item>MAG Calibration</item>
     </string-array>
     <string-array name="Setup_Failsafe_Menu">
-        <item>Throttle FAilsafe</item>
+        <item>Throttle Failsafe</item>
         <item>Battery Failsafe</item>
         <item>Fence Failsafe</item>
         <item>GPS &amp; GCS Failsafe</item>
@@ -204,9 +204,9 @@
         <item>21;Rudder</item>
     </string-array>
     <string-array name="FailSafe_Battery_Options">
-        <item>0:Disable</item>
-        <item>1:Land</item>
-        <item>2:Retun to lauch</item>
+        <item>0;Disable</item>
+        <item>1;Land</item>
+        <item>2;Retun to lauch</item>
     </string-array>
     <string-array name="FailSafe_Throttle_Options">
         <item>0;Disabled</item>
