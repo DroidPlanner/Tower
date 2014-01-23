@@ -120,7 +120,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@id/cameraFileSpinner"
-                android:text="@string/inner_wps" />
+                android:text="@string/inner_wps"
+                android:visibility="gone" />
 
             <CheckBox
                 android:id="@+id/CheckBoxFootprints"
@@ -129,7 +130,8 @@
                 android:layout_alignParentRight="false"
                 android:layout_below="@id/cameraFileSpinner"
                 android:layout_toRightOf="@id/checkBoxInnerWPs"
-                android:text="@string/footprint" />
+                android:text="@string/footprint"
+                android:visibility="gone" />
 
             <View
                 android:id="@+id/divider"
