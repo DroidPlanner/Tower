@@ -24,9 +24,11 @@ public class FillBar extends View {
 	private float max = 0.5f;
 	private boolean showMinMax = false;
 	private int colorOutline;
-	private int colorMax;
 	private int colorMin;
 	private int colorBar;
+	private int val_max, val_min;
+	private boolean invert = false;
+
 
 	public FillBar(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -34,10 +36,9 @@ public class FillBar extends View {
 	}
 
 	private void initialize() {
-		colorOutline = Color.parseColor("#E0E0E0");
-		colorMin = Color.parseColor("#FA0E0E");
-		colorMax = Color.parseColor("#FA0E0E");
-		colorBar = Color.parseColor("#B0FAB0");
+		colorOutline = Color.parseColor("#333333");
+		colorMin = Color.parseColor("#FFFFFF");
+		colorBar = Color.parseColor("#3CB4E5");
 
 		paintOutline = new Paint();
 		paintOutline.setAntiAlias(false);
@@ -45,7 +46,7 @@ public class FillBar extends View {
 		paintOutline.setStrokeWidth(3);
 
 		paintFill = new Paint(paintOutline);
-		paintFill.setStyle(Style.FILL_AND_STROKE);
+		paintFill.setStyle(Style.FILL);
 	}
 
 	@Override
@@ -62,64 +63,114 @@ public class FillBar extends View {
 		fheight = height < width ? height : (height * (1 - percentage));
 		fwidth = height < width ? (width * (percentage)) : width;
 
-		paintOutline.setColor(colorOutline);
+		paintFill.setColor(colorOutline);
 		outlinePath.reset();
 		outlinePath.moveTo(0, 0);
 		outlinePath.lineTo(0, height);
 		outlinePath.lineTo(width, height);
 		outlinePath.lineTo(width, 0);
 		outlinePath.lineTo(0, 0);
-		canvas.drawPath(outlinePath, paintOutline);
+		canvas.drawPath(outlinePath, paintFill);
 
 		paintFill.setColor(colorBar);
 		fillPath.reset();
-		if (height > width) {
-			fillPath.moveTo(0, fheight);
-			fillPath.lineTo(0, height);
-			fillPath.lineTo(fwidth, height);
-			fillPath.lineTo(fwidth, fheight);
-			fillPath.lineTo(0, fheight);
-		} else {
-			fillPath.moveTo(0, 0);
-			fillPath.lineTo(0, height);
-			fillPath.lineTo(fwidth, height);
-			fillPath.lineTo(fwidth, 0);
-			fillPath.lineTo(0, 0);
+
+		if (invert){
+			if (height > width) {
+				fillPath.moveTo(0, 0);
+				fillPath.lineTo(0, height - fheight);
+				fillPath.lineTo(width, height - fheight);
+				fillPath.lineTo(width, 0);
+				fillPath.lineTo(0, 0);
+			} else {
+				fillPath.moveTo(0, 0);
+				fillPath.lineTo(0, height);
+				fillPath.lineTo(width - fwidth, height);
+				fillPath.lineTo(width - fwidth, 0);
+				fillPath.lineTo(0, 0);
+			}
+		}else {
+			if (height > width) {
+				fillPath.moveTo(0, fheight);
+				fillPath.lineTo(0, height);
+				fillPath.lineTo(fwidth, height);
+				fillPath.lineTo(fwidth, fheight);
+				fillPath.lineTo(0, fheight);
+			} else {
+				fillPath.moveTo(0, 0);
+				fillPath.lineTo(0, height);
+				fillPath.lineTo(fwidth, height);
+				fillPath.lineTo(fwidth, 0);
+				fillPath.lineTo(0, 0);
+			}
 		}
 		canvas.drawPath(fillPath, paintFill);
 
+		paintOutline.setColor(colorMin);
+
 		if (isShowMinMax()) {
 			float f;
+			//int _t, _l, _w, _h;
 			outlinePath.reset();
-			if (height > width) {
-				f = height * (1-min);
 
-				outlinePath.reset();
-				outlinePath.moveTo(0, f);
-				outlinePath.lineTo(width, f);
-				paintOutline.setColor(colorMin);
-				canvas.drawPath(outlinePath, paintOutline);
-				
-				outlinePath.reset();
-				f = height * (1-max);
-				outlinePath.moveTo(0, f);
-				outlinePath.lineTo(width, f);
-				paintOutline.setColor(colorMax);
-				canvas.drawPath(outlinePath, paintOutline);
-			} else {
-				f = width * min;
-				outlinePath.reset();
-				outlinePath.moveTo(f, 0);
-				outlinePath.lineTo(f, height);
-				paintOutline.setColor(colorMin);
-				canvas.drawPath(outlinePath, paintOutline);
+			if(invert){
+				if (height > width) {
+					//
+					f = height * (min);
+					outlinePath.reset();
+					outlinePath.moveTo(0, f);
+					outlinePath.lineTo(width, f);
+					canvas.drawPath(outlinePath, paintOutline);
 
-				f = width * max;
-				outlinePath.reset();
-				outlinePath.moveTo(f, 0);
-				outlinePath.lineTo(f, height);
-				paintOutline.setColor(colorMax);
-				canvas.drawPath(outlinePath, paintOutline);
+					outlinePath.reset();
+					f = height * (max);
+					outlinePath.moveTo(0, f);
+					outlinePath.lineTo(width, f);
+					canvas.drawPath(outlinePath, paintOutline);
+
+				} else {
+
+					f = width * max;
+					outlinePath.reset();
+					outlinePath.moveTo(f, 0);
+					outlinePath.lineTo(f, height);
+					canvas.drawPath(outlinePath, paintOutline);
+
+					f = width * min;
+					outlinePath.reset();
+					outlinePath.moveTo(f, 0);
+					outlinePath.lineTo(f, height);
+					canvas.drawPath(outlinePath, paintOutline);
+				}
+			}else{
+				if (height > width) {
+					f = height * (1-min);
+
+					outlinePath.reset();
+					outlinePath.moveTo(0, f);
+					outlinePath.lineTo(width, f);
+					canvas.drawPath(outlinePath, paintOutline);
+
+					outlinePath.reset();
+					f = height * (1-max);
+					outlinePath.moveTo(0, f);
+					outlinePath.lineTo(width, f);
+					canvas.drawPath(outlinePath, paintOutline);
+
+				} else {
+
+					f = width * min;
+					outlinePath.reset();
+					outlinePath.moveTo(f, 0);
+					outlinePath.lineTo(f, height);
+					canvas.drawPath(outlinePath, paintOutline);
+
+					f = width * max;
+					outlinePath.reset();
+					outlinePath.moveTo(f, 0);
+					outlinePath.lineTo(f, height);
+					canvas.drawPath(outlinePath, paintOutline);
+				}
 			}
 		}
 	}
@@ -134,12 +185,23 @@ public class FillBar extends View {
 		this.max = this.max < percentage ? percentage : this.max;
 //		Log.d("fillbar", "Min: " + String.valueOf(min));
 //		Log.d("fillbar", "Max: " + String.valueOf(max));
-
 		invalidate();
+	}
+
+	public void setup(int max, int min) {
+		this.val_max = max;
+		this.val_min = min;
+	}
+
+	public void setValue(int value) {
+		this.setPercentage((value - val_min) / ((float)(val_max - val_min)));
 	}
 
 	public boolean isShowMinMax() {
 		return showMinMax;
+	}
+	public void invertBar(boolean inv) {
+		invert = inv;
 	}
 
 	public void setShowMinMax(boolean showMinMax) {
@@ -154,25 +216,25 @@ public class FillBar extends View {
 	public float getMin(){
 		return this.min;
 	}
-	
+
 	public float getMax(){
 		return this.max;
 	}
-	
+
+	public int getMinValue() {
+		return val_min + (int) (getMin() * ((float)(val_max - val_min)));
+	}
+
+	public int getMaxValue() {
+		return val_min + (int) (getMax() * ((float)(val_max - val_min)));
+	}
+
 	public int getColorOutline() {
 		return colorOutline;
 	}
 
 	public void setColorOutline(int colorOutline) {
 		this.colorOutline = colorOutline;
-	}
-
-	public int getColorMax() {
-		return colorMax;
-	}
-
-	public void setColorMax(int colorMax) {
-		this.colorMax = colorMax;
 	}
 
 	public int getColorMin() {

@@ -3,14 +3,14 @@ package org.droidplanner.fragments.mission;
 import org.droidplanner.drone.variables.mission.waypoints.Takeoff;
 import org.droidplanner.helpers.units.Altitude;
 import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
-import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
+import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListener;
 
 import android.view.View;
 
 import org.droidplanner.R;
 
 public class MissionTakeoffFragment extends MissionDetailFragment implements
-		OnTextSeekBarChangedListner {
+		OnTextSeekBarChangedListener {
 	private SeekBarWithText altitudeSeekBar;
 
 	@Override
@@ -27,7 +27,7 @@ public class MissionTakeoffFragment extends MissionDetailFragment implements
 
 		altitudeSeekBar = (SeekBarWithText) view.findViewById(R.id.altitudeView);
 		altitudeSeekBar.setValue(item.getAltitude().valueInMeters());
-		altitudeSeekBar.setOnChangedListner(this);
+		altitudeSeekBar.setOnChangedListener(this);
 
 	}
 

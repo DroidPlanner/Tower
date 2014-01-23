@@ -3,7 +3,7 @@ package org.droidplanner.fragments.mission;
 import org.droidplanner.drone.variables.mission.waypoints.Loiter;
 import org.droidplanner.drone.variables.mission.waypoints.LoiterTime;
 import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
-import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
+import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListener;
 
 import android.view.View;
 import android.widget.CompoundButton;
@@ -12,7 +12,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import org.droidplanner.R;
 
 public class MissionLoiterTFragment extends MissionDetailFragment implements
-		OnTextSeekBarChangedListner, OnCheckedChangeListener {
+		OnTextSeekBarChangedListener, OnCheckedChangeListener {
 
 	private SeekBarWithText altitudeSeekBar;
 	private SeekBarWithText loiterTimeSeekBar;
@@ -32,10 +32,10 @@ public class MissionLoiterTFragment extends MissionDetailFragment implements
 
 		altitudeSeekBar = (SeekBarWithText) view.findViewById(R.id.altitudeView);
 		altitudeSeekBar.setValue(item.getAltitude().valueInMeters());
-		altitudeSeekBar.setOnChangedListner(this);
+		altitudeSeekBar.setOnChangedListener(this);
 
 		loiterTimeSeekBar = (SeekBarWithText) view.findViewById(R.id.loiterTime);
-		loiterTimeSeekBar .setOnChangedListner(this);
+		loiterTimeSeekBar .setOnChangedListener(this);
 		loiterTimeSeekBar.setValue(item.getTime());
 
 	}

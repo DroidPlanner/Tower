@@ -8,5 +8,8 @@ public class CH_CalParameters extends CalParameters {
 		super(myDrone);
 			calParameterNames.add("CH7_OPT");
 			calParameterNames.add("CH8_OPT");
+			calParameterNames.add("TUNE");
+			calParameterNames.add("TUNE_LOW");
+			calParameterNames.add("TUNE_HIGH");
 	}
 }

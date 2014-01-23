@@ -17,14 +17,14 @@ public class AltitudeDialog implements DialogInterface.OnClickListener {
 	private NumberPicker hundredPicker;
 	private NumberPicker decadePicker;
 	private NumberPicker unitPicker;
-	private OnAltitudeChangedListner listner;
+	private OnAltitudeChangedListener listener;
 
-	public interface OnAltitudeChangedListner {
+	public interface OnAltitudeChangedListener {
 		public void onAltitudeChanged(Altitude newAltitude);
 	}
 
-	public AltitudeDialog(OnAltitudeChangedListner listner) {
-		this.listner = listner;
+	public AltitudeDialog(OnAltitudeChangedListener listener) {
+		this.listener = listener;
 	}
 
 	public void build(Altitude altitude, Context context) {
@@ -76,7 +76,7 @@ public class AltitudeDialog implements DialogInterface.OnClickListener {
 	@Override
 	public void onClick(DialogInterface arg0, int which) {
 		if (which == Dialog.BUTTON_POSITIVE) {
-			listner.onAltitudeChanged(new Altitude(getValue()));
+			listener.onAltitudeChanged(new Altitude(getValue()));
 		}
 	}
 
