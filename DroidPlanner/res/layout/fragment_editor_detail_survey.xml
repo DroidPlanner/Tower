@@ -109,7 +109,9 @@
                 android:id="@+id/cameraFileSpinner"
                 android:layout_width="196dp"
                 android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/staticText"
                 android:layout_alignParentRight="true"
+                android:layout_alignTop="@id/staticText"
                 android:layout_gravity="center"
                 android:layout_toRightOf="@id/staticText"
                 android:entries="@array/ExampleCameraArray" />
