@@ -321,8 +321,36 @@
     <string name="air_speed_label">Air speed</string>
     <string name="default_angle_value">--°</string>
 
+    <!-- Throttle Failsafe Setup Resource Strings -->
+    <string name="setup_fs_thr_title">"Throttle Failsafe Setting"</string>
+    <string name="setup_fs_thr_side_title">"Update Failsafe Settings"</string>
+    <string name="setup_fs_thr_side_desc">"Press \'Send\' to update the new Throttle Failsafe settings to vehicle."</string>
+    <string name="setup_fs_thr_desc_uploading">Uploading Throttle Failsafe data</string>
+    <string name="setup_fs_thr_desc_downloading">Downloading Throttle Failsafe data</string>
+    
+    <!-- Battery Failsafe Setup Resource Strings -->
+    <string name="setup_fs_bat_title">"Battery Failsafe Setting"</string>
+    <string name="setup_fs_bat_side_title">"Update Failsafe Settings"</string>
+    <string name="setup_fs_bat_side_desc">"Press \'Send\' to update the new Battery Failsafe settings to vehicle."</string>
+    <string name="setup_fs_bat_desc_uploading">Uploading Battery Failsafe data</string>
+    <string name="setup_fs_bat_desc_downloading">Downloading Battery Failsafe data</string>
+    
+    <!-- GPS Failsafe Setup Resource Strings -->
+    <string name="setup_fs_gps_title">"GPS Failsafe Setting"</string>
+    <string name="setup_fs_gps_side_title">"Update Failsafe Settings"</string>
+    <string name="setup_fs_gps_side_desc">"Press \'Send\' to update the new GPS Failsafe settings to vehicle."</string>
+    <string name="setup_fs_gps_desc_uploading">Uploading GPS Failsafe data</string>
+    <string name="setup_fs_gps_desc_downloading">Downloading GPS Failsafe data</string>
+    
+    <!-- GCS Failsafe Setup Resource Strings -->
+    <string name="setup_fs_gcs_title">"GCS Failsafe Setting"</string>
+    <string name="setup_fs_gcs_side_title">"Update Failsafe Settings"</string>
+    <string name="setup_fs_gcs_side_desc">"Press \'Send\' to update the new GCS Failsafe settings to vehicle."</string>
+    <string name="setup_fs_gcs_desc_uploading">Uploading GCS Failsafe data</string>
+    <string name="setup_fs_gcs_desc_downloading">Downloading GCS Failsafe data</string>
+    
     <!--  Bluetooth device selection strings -->
-    <string name="scanning">scanning for devices...</string>
+    <string name="scanning">scanning for devices &#8320;</string>
     <string name="select_device">Select device to connect</string>
     <string name="none_paired">No devices have been paired</string>
     <string name="none_found">No devices found</string>
