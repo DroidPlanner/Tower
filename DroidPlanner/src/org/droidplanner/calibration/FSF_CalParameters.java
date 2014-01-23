@@ -6,7 +6,11 @@ public class FSF_CalParameters extends CalParameters {
 
 	public FSF_CalParameters(Drone myDrone) {
 		super(myDrone);
-			calParameterNames.add("FS_GPS_ENABLE");
-			calParameterNames.add("GPS_HDOP_GOOD");
+			calParameterNames.add("FENCE_ENABLE");
+			calParameterNames.add("FENCE_TYPE");
+			calParameterNames.add("FENCE_ACTION");
+			calParameterNames.add("FENCE_MARGIN");
+			calParameterNames.add("FENCE_RADIUS");
+			calParameterNames.add("FENCE_ALT_MAX");
 	}
 }
