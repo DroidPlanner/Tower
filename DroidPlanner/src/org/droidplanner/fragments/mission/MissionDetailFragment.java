@@ -98,7 +98,6 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 		mListner = (OnWayPointTypeChangeListener) activity;
 	}
 
-
 	@Override
 	public void onItemSelected(AdapterView<?> arg0, View v, int position,
 			long id) {

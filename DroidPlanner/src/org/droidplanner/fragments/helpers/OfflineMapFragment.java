@@ -59,6 +59,7 @@ public class OfflineMapFragment extends SupportMapFragment {
 		mUiSettings.setMyLocationButtonEnabled(true);
 		mUiSettings.setCompassEnabled(true);
 		mUiSettings.setTiltGesturesEnabled(false);
+        mUiSettings.setZoomControlsEnabled(false);
 	}
 
 	private void setupMapOverlay() {

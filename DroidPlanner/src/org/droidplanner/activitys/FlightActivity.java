@@ -1,5 +1,7 @@
 package org.droidplanner.activitys;
 
+import android.view.ViewGroup;
+import android.widget.SlidingDrawer;
 import org.droidplanner.activitys.helpers.SuperUI;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
@@ -32,7 +34,12 @@ public class FlightActivity extends SuperUI implements
     private FragmentManager fragmentManager;
 	private RCFragment rcFragment;
 	private View failsafeTextView;
-	private Fragment mapFragment;
+	private FlightMapFragment mapFragment;
+    private Fragment editorTools;
+
+    private SlidingDrawer mSlidingDrawer;
+
+    private boolean mIsPhone;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -42,13 +49,28 @@ public class FlightActivity extends SuperUI implements
 		fragmentManager = getSupportFragmentManager();
 		failsafeTextView = findViewById(R.id.failsafeTextView);
 
-        mapFragment = fragmentManager.findFragmentById(R.id.mapFragment);
+        mSlidingDrawer = (SlidingDrawer) findViewById(R.id.SlidingDrawerRight);
+        mSlidingDrawer.setOnDrawerCloseListener(new SlidingDrawer.OnDrawerCloseListener() {
+            @Override
+            public void onDrawerClosed() {
+                updateMapPadding();
+            }
+        });
+
+        mSlidingDrawer.setOnDrawerOpenListener(new SlidingDrawer.OnDrawerOpenListener() {
+            @Override
+            public void onDrawerOpened() {
+                updateMapPadding();
+            }
+        });
+
+        mapFragment = (FlightMapFragment) fragmentManager.findFragmentById(R.id.mapFragment);
         if(mapFragment == null){
             mapFragment = new FlightMapFragment();
             fragmentManager.beginTransaction().add(R.id.mapFragment, mapFragment).commit();
         }
 
-        Fragment editorTools = fragmentManager.findFragmentById(R.id.editorToolsFragment);
+        editorTools = fragmentManager.findFragmentById(R.id.editorToolsFragment);
         if(editorTools == null){
             editorTools = new FlightActionsFragment();
             fragmentManager.beginTransaction().add(R.id.editorToolsFragment, editorTools).commit();
@@ -60,9 +82,9 @@ public class FlightActivity extends SuperUI implements
         as it was merged with the right sliding drawer because of space constraints.
          */
         View telemetryView = findViewById(R.id.telemetryFragment);
-        final boolean isPhone = telemetryView == null;
+        mIsPhone = telemetryView == null;
 
-        if(isPhone){
+        if(mIsPhone){
             Fragment slidingDrawerContent = fragmentManager.findFragmentById(R.id
                     .sliding_drawer_content);
             if (slidingDrawerContent == null) {
@@ -88,6 +110,41 @@ public class FlightActivity extends SuperUI implements
                         flightModePanel).commit();
             }
         }
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus){
+        super.onWindowFocusChanged(hasFocus);
+        updateMapPadding();
+    }
+
+    /**
+     * Account for the various ui elements and update the map padding so that it remains 'visible'.
+     */
+    private void updateMapPadding(){
+        int rightPadding = getSlidingDrawerWidth();
+
+        int bottomPadding = 0;
+        int leftPadding = 0;
+        if(mIsPhone){
+            final View editorToolsView = editorTools.getView();
+            ViewGroup.LayoutParams lp = editorToolsView.getLayoutParams();
+            if(lp.height == ViewGroup.LayoutParams.MATCH_PARENT){
+                leftPadding = editorToolsView.getRight();
+            }
+
+            if(lp.width == ViewGroup.LayoutParams.MATCH_PARENT){
+                bottomPadding = editorToolsView.getHeight();
+            }
+        }
+        mapFragment.mMap.setPadding(leftPadding, 0, rightPadding, bottomPadding);
+    }
+
+    private int getSlidingDrawerWidth(){
+        if(mSlidingDrawer.isOpened()){
+            return mSlidingDrawer.getContent().getWidth();
+        }
+        return 0;
     }
 
 	@Override
