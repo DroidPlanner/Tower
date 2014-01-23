@@ -18,6 +18,8 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
+import com.MAVLink.Messages.enums.MAV_CMD;
+import com.MAVLink.Messages.enums.MAV_FRAME;
 import com.google.android.gms.maps.model.LatLng;
 
 public class Survey extends MissionItem {
@@ -80,8 +82,34 @@ public class Survey extends MissionItem {
 
 	@Override
 	public List<msg_mission_item> packMissionItem() {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			List<msg_mission_item> list = new ArrayList<msg_mission_item>();
+			build();
+			for (LatLng point : grid.gridPoints) {
+				msg_mission_item mavMsg = packSurveyPoint(point);
+				list.add(mavMsg);
+			}
+			return list;
+		} catch (Exception e) {
+			return new ArrayList<msg_mission_item>();
+		}
+	}
+
+	private msg_mission_item packSurveyPoint(LatLng point) {
+		msg_mission_item mavMsg = new msg_mission_item();
+		mavMsg.autocontinue = 1;
+		mavMsg.target_component = 1;
+		mavMsg.target_system = 1;
+		mavMsg.frame = MAV_FRAME.MAV_FRAME_GLOBAL_RELATIVE_ALT;
+		mavMsg.command = MAV_CMD.MAV_CMD_NAV_WAYPOINT;
+		mavMsg.x = (float) point.latitude;
+		mavMsg.y = (float) point.longitude;
+		mavMsg.z = (float) surveyData.getAltitude().valueInMeters();
+		mavMsg.param1 = 0f;
+		mavMsg.param2 = 0f;
+		mavMsg.param3 = 0f;
+		mavMsg.param4 = 0f;
+		return mavMsg;
 	}
 
 	@Override
