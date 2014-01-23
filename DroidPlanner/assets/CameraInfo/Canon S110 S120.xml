@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <cameraInfo>
+    <Name>Canon S110/S120</Name>
     <SensorWidth>7.60</SensorWidth>
     <SensorHeight>5.70</SensorHeight>
     <SensorResolution>12.1</SensorResolution>
