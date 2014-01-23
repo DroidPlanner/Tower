@@ -1,5 +1,7 @@
 package org.droidplanner.drone.variables.mission.waypoints;
 
+import java.util.List;
+
 import org.droidplanner.drone.variables.mission.MissionItem;
 import org.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import org.droidplanner.fragments.mission.MissionDetailFragment;
@@ -21,7 +23,7 @@ public class LoiterInfinite extends Loiter implements MarkerSource {
 	}
 
 	@Override
-	public msg_mission_item packMissionItem() {
+	public List<msg_mission_item> packMissionItem() {
 		return super.packMissionItem();
 	}
 

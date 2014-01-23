@@ -276,7 +276,7 @@ public class Mission extends DroneVariable implements PathSource{
 		List<msg_mission_item> data = new ArrayList<msg_mission_item>();
 		data.add(myDrone.home.packMavlink());
 		for (MissionItem item : itens) {
-			data.add(item.packMissionItem());			
+			data.addAll(item.packMissionItem());			
 		}				
 		myDrone.waypointMananger.writeWaypoints(data);
 	}

@@ -79,7 +79,7 @@ public class Survey extends MissionItem {
 	}
 
 	@Override
-	public msg_mission_item packMissionItem() {
+	public List<msg_mission_item> packMissionItem() {
 		// TODO Auto-generated method stub
 		return null;
 	}
