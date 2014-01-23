@@ -3,10 +3,10 @@ package org.droidplanner.fragments;
 import org.droidplanner.R;
 import org.droidplanner.MAVLink.MavLinkStreamRates;
 import org.droidplanner.fragments.calibration.SetupMainPanel;
-import org.droidplanner.fragments.calibration.ch.FragmentSetupCH;
-import org.droidplanner.fragments.calibration.flightmodes.FragmentSetupFM;
-import org.droidplanner.fragments.calibration.rc.FragmentSetupRC;
-import org.droidplanner.fragments.calibration.sf.FragmentSetupSF;
+import org.droidplanner.fragments.calibration.radio.FragmentSetupCH;
+import org.droidplanner.fragments.calibration.radio.FragmentSetupFM;
+import org.droidplanner.fragments.calibration.radio.FragmentSetupRC;
+import org.droidplanner.fragments.calibration.radio.FragmentSetupSF;
 import org.droidplanner.fragments.helpers.SuperSetupFragment;
 
 /**

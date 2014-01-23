@@ -1,4 +1,4 @@
-package org.droidplanner.fragments.calibration.flightmodes;
+package org.droidplanner.fragments.calibration.radio;
 
 import org.droidplanner.calibration.CalParameters;
 import org.droidplanner.calibration.FM_CalParameters;

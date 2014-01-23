@@ -1,4 +1,4 @@
-package org.droidplanner.fragments.calibration.rc;
+package org.droidplanner.fragments.calibration.radio;
 
 import org.droidplanner.calibration.CalParameters;
 import org.droidplanner.calibration.RC_CalParameters;
