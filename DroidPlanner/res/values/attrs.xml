@@ -10,7 +10,7 @@
         <attr name="Max" format="float" />
         <attr name="Inc" format="float" />
         <attr name="FastInc" format="float" />
-        <attr name="TextColor" format="color, reference"/>
+        <attr name="TextColor" format="color"/>
         <attr name="TextAppearance" format="reference"/>
         </declare-styleable>
     

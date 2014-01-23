@@ -63,7 +63,7 @@
                     android:textColor="#fff" />
 
                 <Spinner
-                    android:id="@+id/spinnerCH6"
+                    android:id="@+id/spinnerGPS"
                     style="@style/ModeSpinnerText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -76,6 +76,7 @@
                 android:layout_height="match_parent" >
 
                 <org.droidplanner.widgets.NumberFieldEdit.NumberFieldEdit
+                    android:id="@+id/numberFieldEditGPS"
                     android:layout_width="450dp"
                     android:layout_height="wrap_content"
                     app:FastInc="10"
@@ -87,6 +88,7 @@
                     app:TextAppearance="?android:attr/textAppearanceMedium"
                     app:TextColor="#fff"
                     app:Title="@string/setup_fs_gps_hdop" >
+
                 </org.droidplanner.widgets.NumberFieldEdit.NumberFieldEdit>
             </LinearLayout>
 
@@ -132,7 +134,7 @@
                 android:textColor="#fff" />
 
             <Spinner
-                android:id="@+id/spinnerCH7"
+                android:id="@+id/spinnerGCS"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
@@ -147,6 +149,7 @@
             android:paddingRight="10dp" >
 
             <org.droidplanner.widgets.NumberFieldEdit.NumberFieldEdit
+		        android:id="@+id/numberFieldEditGCS"
                 android:layout_width="450dp"
                 android:layout_height="wrap_content"
                 app:FastInc="5"

@@ -9,5 +9,6 @@ public class FSG_CalParameters extends CalParameters {
 			calParameterNames.add("FS_GPS_ENABLE");
 			calParameterNames.add("FS_GCS_ENABLE");
 			calParameterNames.add("GPS_HDOP_GOOD");
+			calParameterNames.add("GCS_SYSID");
 	}
 }

@@ -2,19 +2,23 @@ package org.droidplanner.fragments.calibration.failsafe;
 
 import org.droidplanner.R;
 import org.droidplanner.calibration.CalParameters;
-import org.droidplanner.calibration.FST_CalParameters;
+import org.droidplanner.calibration.FSG_CalParameters;
 import org.droidplanner.fragments.calibration.FragmentSetupSend;
 import org.droidplanner.fragments.calibration.SetupSidePanel;
 import org.droidplanner.fragments.helpers.SuperSetupMainPanel;
 import org.droidplanner.helpers.ValueKey;
 import org.droidplanner.helpers.ValueKey.ValueKeyData;
+import org.droidplanner.widgets.NumberFieldEdit.NumberFieldEdit;
 
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 public class FragmentSetupFSGPSGCS extends SuperSetupMainPanel {
 
 	private ValueKeyData optionsGPS, optionsGCS;
+	private Spinner spinnerGPS, spinnerGCS;
+	private NumberFieldEdit numberFieldGPS, numberFieldGCS;
 
 	@Override
 	public int getPanelLayout() {
@@ -36,21 +40,52 @@ public class FragmentSetupFSGPSGCS extends SuperSetupMainPanel {
 
 	@Override
 	protected CalParameters getParameterHandler() {
-		return new FST_CalParameters(drone);
+		return new FSG_CalParameters(drone);
 	}
 
 	@Override
 	protected void updateCalibrationData() {
+		parameters.setParamValueByName("FS_GPS_ENABLE",
+				optionsGPS.values[spinnerGPS.getSelectedItemPosition()]);
+
+		parameters.setParamValueByName("FS_GCS_ENABLE",
+				optionsGCS.values[spinnerGCS.getSelectedItemPosition()]);
+		
+		parameters.setParamValueByName("GPS_HDOP_GOOD",
+				numberFieldGPS.getValue());
+		
+		parameters.setParamValueByName("GCS_HDOP_GOOD",
+				numberFieldGCS.getValue());
 	}
 
 	@Override
 	protected void updatePanelInfo() {
 		if (parameters == null)
 			return;
+
+		spinnerGPS.setSelection(
+				getSpinnerIndexFromValue(
+						(int) parameters.getParamValueByName("FS_GPS_ENABLE"),
+						optionsGPS.values), true);
+		spinnerGCS.setSelection(
+				getSpinnerIndexFromValue(
+						(int) parameters.getParamValueByName("FS_GCS_ENABLE"),
+						optionsGCS.values), true);
+
+		numberFieldGPS
+				.setValue(parameters.getParamValueByName("GPS_HDOP_GOOD"));
+		numberFieldGPS.setValue(parameters.getParamValueByName("GCS_SYSID"));
 	}
 
 	@Override
 	public void setupLocalViews(View v) {
+		spinnerGPS = (Spinner) v.findViewById(R.id.spinnerGPS);
+		spinnerGCS = (Spinner) v.findViewById(R.id.spinnerGCS);
+
+		numberFieldGPS = (NumberFieldEdit) v
+				.findViewById(R.id.numberFieldEditGPS);
+		numberFieldGCS = (NumberFieldEdit) v
+				.findViewById(R.id.numberFieldEditGCS);
 		setupSpinners();
 	}
 
@@ -69,6 +104,9 @@ public class FragmentSetupFSGPSGCS extends SuperSetupMainPanel {
 				parentActivity, R.layout.spinner_setup_item, optionsGCS.keys);
 		adapterGCS
 				.setDropDownViewResource(R.layout.spinner_setup_item_dropdown);
+
+		spinnerGPS.setAdapter(adapterGPS);
+		spinnerGCS.setAdapter(adapterGCS);
 
 	}
 
