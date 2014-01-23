@@ -1,3 +1,6 @@
+## Droidplanner v2.1.0
+* Implemented the Survey Tool
+
 ## Droidplanner v2.0.1
 * Cleaning minor bugs (#581)
 * Fixed typo errors(#589)
