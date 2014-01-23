@@ -2,7 +2,7 @@ package org.droidplanner.fragments.calibration.failsafe;
 
 import org.droidplanner.R;
 import org.droidplanner.calibration.CalParameters;
-import org.droidplanner.calibration.FST_CalParameters;
+import org.droidplanner.calibration.FSB_CalParameters;
 import org.droidplanner.fragments.calibration.FragmentSetupSend;
 import org.droidplanner.fragments.calibration.SetupSidePanel;
 import org.droidplanner.fragments.helpers.SuperSetupMainPanel;
@@ -36,7 +36,7 @@ public class FragmentSetupFSBattery extends SuperSetupMainPanel{
 
 	@Override
 	protected CalParameters getParameterHandler() {		
-		return new FST_CalParameters(drone);
+		return new FSB_CalParameters(drone);
 	}
 
 	@Override

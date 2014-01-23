@@ -338,6 +338,12 @@
     <string name="setup_fs_bat_desc_downloading">Downloading Battery Failsafe data</string>
     
     <!-- GPS & GCS Failsafe Setup Resource Strings -->
+    <string name="setup_fs_gps_title">"GPS Failsafe Setting"</string>
+    <string name="setup_fs_gps_options">"On GPS Failsafe :"</string>
+    <string name="setup_fs_gps_hdop">"Good HDOP Value "</string>
+    <string name="setup_fs_gcs_title">"GCS Failsafe Setting"</string>
+    <string name="setup_fs_gcs_options">"On GCS Failsafe :"</string>
+    <string name="setup_fs_gcs_sysid">"GCS System ID      "</string>
     <string name="setup_fs_gpsgcs_title">"GPS &amp; GCS Failsafe Setting"</string>
     <string name="setup_fs_gpsgcs_side_title">"Update Failsafe Settings"</string>
     <string name="setup_fs_gpsgcs_side_desc">"Press \'Send\' to update the new GPS &amp; GCS Failsafe settings to vehicle."</string>

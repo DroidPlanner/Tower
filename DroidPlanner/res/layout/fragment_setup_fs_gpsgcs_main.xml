@@ -32,7 +32,7 @@
                 android:gravity="center|left"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:text="@string/setup_ch_tune_title"
+                android:text="@string/setup_fs_gps_title"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#fff"
                 android:textStyle="bold" />
@@ -58,7 +58,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="right"
-                    android:text="@string/setup_ch_CH6_options"
+                    android:text="@string/setup_fs_gps_options"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="#fff" />
 
@@ -76,19 +76,20 @@
                 android:layout_height="match_parent" >
 
                 <org.droidplanner.widgets.NumberFieldEdit.NumberFieldEdit
-                    android:layout_width="wrap_content"
+                    android:layout_width="450dp"
                     android:layout_height="wrap_content"
                     app:FastInc="10"
+                    app:Format="%.0f"
                     app:Inc="1"
                     app:Max="900"
                     app:Min="100"
                     app:Separator=":"
+                    app:TextAppearance="?android:attr/textAppearanceMedium"
                     app:TextColor="#fff"
-                    app:Title="Good HDOP Value " >
-
+                    app:Title="@string/setup_fs_gps_hdop" >
                 </org.droidplanner.widgets.NumberFieldEdit.NumberFieldEdit>
-
             </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
@@ -106,7 +107,7 @@
                 android:gravity="center|left"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:text="@string/setup_ch_options_title"
+                android:text="@string/setup_fs_gcs_title"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#fff"
                 android:textStyle="bold" />
@@ -126,7 +127,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="right"
-                android:text="@string/setup_ch_CH7_options"
+                android:text="@string/setup_fs_gcs_options"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#fff" />
 
@@ -145,22 +146,21 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp" >
 
-            <TextView
-                android:id="@+id/textViewFM3"
-                android:layout_width="wrap_content"
+            <org.droidplanner.widgets.NumberFieldEdit.NumberFieldEdit
+                android:layout_width="450dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="right"
-                android:text="@string/setup_ch_CH8_options"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#fff" />
+                app:FastInc="5"
+                app:Format="%.0f"
+                app:Inc="1"
+                app:Max="255"
+                app:Min="0"
+                app:Separator=":"
+                app:TextAppearance="?android:attr/textAppearanceMedium"
+                app:TextColor="#fff"
+                app:Title="@string/setup_fs_gcs_sysid" >
 
-            <Spinner
-                android:id="@+id/spinnerCH8"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="4"
-                android:entries="@array/FligthMode_CopterV3_1" />
+            </org.droidplanner.widgets.NumberFieldEdit.NumberFieldEdit>
+
         </LinearLayout>
     </LinearLayout>
 
