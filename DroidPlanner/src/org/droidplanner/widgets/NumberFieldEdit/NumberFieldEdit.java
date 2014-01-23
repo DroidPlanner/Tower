@@ -61,13 +61,13 @@ public class NumberFieldEdit extends LinearLayout implements OnTouchListener {
 			setFormat(a.getString(R.styleable.NumberFieldEdit_Format));
 			setSeparator(a.getString(R.styleable.NumberFieldEdit_Separator));
 
+			
+			if (a.hasValue(R.styleable.NumberFieldEdit_TextAppearance)) {
+				int at = a.getResourceId(R.styleable.NumberFieldEdit_TextAppearance, android.R.style.TextAppearance);
+				setTextAppearance(context,at);
+			}
 			setTextColor(a.getColor(R.styleable.NumberFieldEdit_TextColor,
 					Color.BLACK));
-			if (a.hasValue(R.styleable.NumberFieldEdit_TextAppearance)) {
-				TypedValue styleID = new TypedValue();
-				a.getValue(R.styleable.NumberFieldEdit_TextAppearance, styleID);
-				setTextAppearance(context,styleID.data);
-			}
 			
 			setValue(this.value);
 		} finally {
@@ -75,7 +75,7 @@ public class NumberFieldEdit extends LinearLayout implements OnTouchListener {
 		}
 	}
 	private void setTextAppearance(Context context, int data) {
-		titleText.setTextAppearance(context,data);
+		titleText.setTextAppearance(context, data);
 	}
 
 
