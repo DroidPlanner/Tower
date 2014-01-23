@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.os.Handler;
 import android.text.InputType;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -76,6 +75,9 @@ public class NumberFieldEdit extends LinearLayout implements OnTouchListener {
 	}
 	private void setTextAppearance(Context context, int data) {
 		titleText.setTextAppearance(context, data);
+		separatorText.setTextAppearance(context, data);
+		titleText.setTextAppearance(context, data);
+		editText.setTextAppearance(context, data);
 	}
 
 
