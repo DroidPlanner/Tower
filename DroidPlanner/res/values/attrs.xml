@@ -30,4 +30,8 @@
         <attr name="vpiTabPageIndicatorStyle" format="reference"/>
     </declare-styleable>
 
+    <declare-styleable name="RadioButtonCenter">
+        <attr name="android:button" />
+    </declare-styleable>
+
 </resources>

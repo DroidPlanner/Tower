@@ -4,6 +4,7 @@
     <dimen name="largeTelemetryTextSize">30sp</dimen>
 
     <!-- Dimension for the flight control buttons -->
+    <dimen name="flightControlMargin">0dp</dimen>
     <dimen name="flightControlPadding">5dp</dimen>
     <dimen name="flightControlTextSize">10sp</dimen>
 </resources>

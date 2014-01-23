@@ -10,6 +10,7 @@ import org.droidplanner.fragments.FlightActionsFragment;
 import org.droidplanner.fragments.FlightMapFragment;
 import org.droidplanner.fragments.RCFragment;
 import org.droidplanner.fragments.FlightActionsFragment.OnMissionControlInteraction;
+import org.droidplanner.fragments.TelemetryFragment;
 import org.droidplanner.fragments.helpers.DroneMap;
 import org.droidplanner.fragments.helpers.FlightSlidingDrawerContent;
 import org.droidplanner.fragments.helpers.OnMapInteractionListener;
@@ -53,13 +54,41 @@ public class FlightActivity extends SuperUI implements
             fragmentManager.beginTransaction().add(R.id.editorToolsFragment, editorTools).commit();
         }
 
-        Fragment slidingDrawerContent = fragmentManager.findFragmentById(R.id.sliding_drawer_content);
-        if(slidingDrawerContent == null){
-            slidingDrawerContent = new FlightSlidingDrawerContent();
-            fragmentManager.beginTransaction().add(R.id.sliding_drawer_content,
-                    slidingDrawerContent).commit();
+        /*
+        Check to see if we're using a phone layout, or a tablet layout.
+        If the 'telemetryFragment' view doesn't exist, then we're in phone layout,
+        as it was merged with the right sliding drawer because of space constraints.
+         */
+        View telemetryView = findViewById(R.id.telemetryFragment);
+        final boolean isPhone = telemetryView == null;
+
+        if(isPhone){
+            Fragment slidingDrawerContent = fragmentManager.findFragmentById(R.id
+                    .sliding_drawer_content);
+            if (slidingDrawerContent == null) {
+                slidingDrawerContent = new FlightSlidingDrawerContent();
+                fragmentManager.beginTransaction().add(R.id.sliding_drawer_content,
+                        slidingDrawerContent).commit();
+            }
         }
-	}
+        else{
+            //Add the telemtry fragment
+            Fragment telemetryFragment = fragmentManager.findFragmentById(R.id.telemetryFragment);
+            if(telemetryFragment == null){
+                telemetryFragment = new TelemetryFragment();
+                fragmentManager.beginTransaction().add(R.id.telemetryFragment,
+                        telemetryFragment).commit();
+            }
+
+            //Add the mode info panel fragment
+            Fragment flightModePanel = fragmentManager.findFragmentById(R.id.sliding_drawer_content);
+            if(flightModePanel == null){
+                flightModePanel = new FlightModePanel();
+                fragmentManager.beginTransaction().add(R.id.sliding_drawer_content,
+                        flightModePanel).commit();
+            }
+        }
+    }
 
 	@Override
 	public void onAddPoint(LatLng point) {
@@ -126,7 +155,7 @@ public class FlightActivity extends SuperUI implements
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		super.onDroneEvent(event,drone);

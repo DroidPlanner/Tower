@@ -52,8 +52,7 @@
         android:layout_height="540dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-
-        android:content="@+id/modeInfoPanel"
+        android:content="@+id/sliding_drawer_content"
         android:handle="@+id/slideButtonLeft"
         android:orientation="horizontal"
         android:padding="0dp"
@@ -67,30 +66,11 @@
             android:src="@drawable/drawer_tab"
             tools:ignore="ContentDescription"/>
 
-        <!--<LinearLayout
-            android:id="@+id/LinearLayout01"
-            style="@style/flyoutPanelLayout"
-            android:layout_width="81dp"
-            android:layout_height="match_parent"
-            android:orientation="vertical" >
-        </LinearLayout>-->
-            <!-- style="@style/flyoutPanelLayout" -->
-		<!--
-        android:visibility="gone"
-		<fragment
-			android:id="@+id/modeCircleFragment"
-			android:name="org.droidplanner.fragments.mode.ModeCircleFragment"
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:layout_alignParentBottom="true"
-			android:layout_centerHorizontal="true"
-			tools:layout="@layout/fragment_mode_circle" />-->
-
 		<FrameLayout
-			android:id="@+id/modeInfoPanel"
+			android:id="@+id/sliding_drawer_content"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
-			tools:layout="@layout/fragment_mode_rtl" />
+			tools:layout="@layout/fragment_flight_mode_panel" />
 
     </SlidingDrawer>
 

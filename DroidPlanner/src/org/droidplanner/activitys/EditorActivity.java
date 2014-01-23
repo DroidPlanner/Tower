@@ -194,20 +194,17 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListner,
 
 	private void addItemDetail(MissionItem item) {
 		itemDetailFragment = item.getDetailFragment();
-		fragmentManager.beginTransaction()
-				.add(R.id.containerItemDetail, itemDetailFragment).commit();
+		itemDetailFragment.show(fragmentManager, "Item detail dialog");
 	}
 
 	private void switchItemDetail(MissionItem item) {
-		itemDetailFragment = item.getDetailFragment();
-		fragmentManager.beginTransaction()
-				.replace(R.id.containerItemDetail, itemDetailFragment).commit();
+        removeItemDetail();
+		addItemDetail(item);
 	}
 
 	private void removeItemDetail() {
 		if (itemDetailFragment != null) {
-			fragmentManager.beginTransaction().remove(itemDetailFragment)
-					.commit();
+			itemDetailFragment.dismiss();
 			itemDetailFragment = null;
 		}
 	}
