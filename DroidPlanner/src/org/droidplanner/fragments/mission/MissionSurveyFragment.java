@@ -40,7 +40,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 	public TextView lengthView;
 	public CheckBox footprintCheckBox;
 	private CamerasAdapter cameraAdapter;
-	
+
 	private Survey survey;
 
 	@Override
@@ -116,8 +116,9 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 
 	@Override
 	public void onSeekBarChanged() {
-		survey.update(angleView.getValue(), new Altitude(altitudeView.getValue()),
-				overlapView.getValue(), sidelapView.getValue());
+		survey.update(angleView.getValue(),
+				new Altitude(altitudeView.getValue()), overlapView.getValue(),
+				sidelapView.getValue());
 	}
 
 	@Override
@@ -134,10 +135,27 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 		default:
 			break;
 		}
-		
+
 	}
 
 	private void updateViews() {
+		updateTextViews();
+		updateSeekBars();
+		updateCameraSpinner();
+	}
+
+	private void updateCameraSpinner() {
+		cameraAdapter.setTitle(survey.surveyData.getCameraName());
+	}
+
+	private void updateSeekBars() {
+		altitudeView.setValue(survey.surveyData.getAltitude().valueInMeters());
+		angleView.setValue(survey.surveyData.getAngle());
+		overlapView.setValue(survey.surveyData.getOverlap());
+		sidelapView.setValue(survey.surveyData.getSidelap());
+	}
+
+	private void updateTextViews() {
 		Context context = getActivity();
 		footprintTextView.setText(context.getString(R.string.footprint) + ": "
 				+ survey.surveyData.getLateralFootPrint() + " x"
@@ -162,12 +180,5 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 				+ ": " + survey.grid.getCameraCount());
 		numberOfStripsView.setText(context.getString(R.string.number_of_strips)
 				+ ": " + survey.grid.getNumberOfLines());
-		
-		altitudeView.setValue(survey.surveyData.getAltitude().valueInMeters());
-		angleView.setValue(survey.surveyData.getAngle());
-		overlapView.setValue(survey.surveyData.getOverlap());
-		sidelapView.setValue(survey.surveyData.getSidelap());
-		
-		cameraAdapter.setTitle(survey.surveyData.getCameraName());
 	}
 }
