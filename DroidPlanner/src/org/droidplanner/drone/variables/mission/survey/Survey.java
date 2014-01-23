@@ -46,18 +46,22 @@ public class Survey extends MissionItem {
 	
 
 	@Override
-	public List<LatLng> getPath() throws Exception {		
-		try {
-			//TODO find better point than (0,0) to reference the grid
-			GridBuilder gridBuilder = new GridBuilder(polygon, surveyData, new LatLng(0, 0),context);
-			polygon.checkIfValid(context);
-			grid = gridBuilder.generate();
-			grid.setAltitude(surveyData.getAltitude());
+	public List<LatLng> getPath() throws Exception {
+			build();
 			return grid.getCameraLocations();
+	}
+
+	private void build() throws Exception {		
+		try {
+		//TODO find better point than (0,0) to reference the grid
+		GridBuilder gridBuilder = new GridBuilder(polygon, surveyData, new LatLng(0, 0),context);
+		polygon.checkIfValid(context);
+		grid = gridBuilder.generate();
+		grid.setAltitude(surveyData.getAltitude());
 		} catch (Exception e) {
 			Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+			throw new Exception();
 		}
-		throw new Exception();
 	}
 
 	@Override
