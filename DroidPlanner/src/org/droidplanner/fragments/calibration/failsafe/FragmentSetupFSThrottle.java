@@ -2,7 +2,7 @@ package org.droidplanner.fragments.calibration.failsafe;
 
 import org.droidplanner.R;
 import org.droidplanner.calibration.CalParameters;
-import org.droidplanner.calibration.THR_CalParameters;
+import org.droidplanner.calibration.FST_CalParameters;
 import org.droidplanner.fragments.calibration.FragmentSetupSend;
 import org.droidplanner.fragments.calibration.SetupSidePanel;
 import org.droidplanner.fragments.helpers.SuperSetupMainPanel;
@@ -12,7 +12,7 @@ import org.droidplanner.helpers.ValueKey.ValueKeyData;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
-public class FragmentSetupTHR extends SuperSetupMainPanel{
+public class FragmentSetupFSThrottle extends SuperSetupMainPanel{
 
 	private ValueKeyData options;
 	
@@ -37,7 +37,7 @@ public class FragmentSetupTHR extends SuperSetupMainPanel{
 
 	@Override
 	protected CalParameters getParameterHandler() {		
-		return new THR_CalParameters(drone);
+		return new FST_CalParameters(drone);
 	}
 
 	@Override

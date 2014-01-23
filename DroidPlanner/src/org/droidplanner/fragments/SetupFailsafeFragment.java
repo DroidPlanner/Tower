@@ -3,7 +3,7 @@ package org.droidplanner.fragments;
 import org.droidplanner.R;
 import org.droidplanner.MAVLink.MavLinkStreamRates;
 import org.droidplanner.fragments.calibration.SetupMainPanel;
-import org.droidplanner.fragments.calibration.failsafe.FragmentSetupTHR;
+import org.droidplanner.fragments.calibration.failsafe.FragmentSetupFSThrottle;
 import org.droidplanner.fragments.calibration.radio.FragmentSetupRC;
 import org.droidplanner.fragments.helpers.SuperSetupFragment;
 
@@ -39,7 +39,7 @@ public class SetupFailsafeFragment extends SuperSetupFragment {
 
 	@Override
 	public SetupMainPanel initMainPanel() {
-		return new FragmentSetupTHR();
+		return new FragmentSetupFSThrottle();
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public class SetupFailsafeFragment extends SuperSetupFragment {
 		case 0:
 		default:
 			updateTitle(R.string.setup_fs_thr_title);
-			setupPanel = new FragmentSetupTHR();
+			setupPanel = new FragmentSetupFSThrottle();
 		}		
 		
 		return setupPanel;
