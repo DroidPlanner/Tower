@@ -254,7 +254,7 @@ public class HUD extends View {
                 defStyle, 0);
 
         try {
-            enabled = attributes.getBoolean(R.styleable.HUD_enabled, false);
+            enabled = attributes.getBoolean(R.styleable.HUD_android_enabled, false);
 
             disabledGroundPaint = new Paint();
             disabledGroundPaint.setColor(Color.DKGRAY);
@@ -273,8 +273,8 @@ public class HUD extends View {
             textPaint = new Paint();
             textPaint.setAntiAlias(true);
             textPaint.setTextAlign(Paint.Align.CENTER);
-            textPaint.setColor(attributes.getColor(R.styleable.HUD_textColor, Color.WHITE));
-            textPaint.setTextSize(attributes.getDimension(R.styleable.HUD_textSize, 25f));
+            textPaint.setColor(attributes.getColor(R.styleable.HUD_android_textColor, Color.WHITE));
+            textPaint.setTextSize(attributes.getDimension(R.styleable.HUD_android_textSize, 25f));
 
             reticlePaint = new Paint();
             reticlePaint.setStyle(Paint.Style.STROKE);
