@@ -4,12 +4,12 @@ import org.droidplanner.R;
 import org.droidplanner.R.id;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.drone.variables.mission.survey.Survey;
 import org.droidplanner.fragments.mission.survey.CamerasAdapter;
 import org.droidplanner.helpers.units.Altitude;
 import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
-import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
+import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListener;
 import org.droidplanner.widgets.spinners.SpinnerSelfSelect;
 import org.droidplanner.widgets.spinners.SpinnerSelfSelect.OnSpinnerItemSelectedListener;
 
@@ -21,8 +21,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 public class MissionSurveyFragment extends MissionDetailFragment implements
-		OnClickListener, OnTextSeekBarChangedListner,
-		OnSpinnerItemSelectedListener, OnDroneListner {
+		OnClickListener, OnTextSeekBarChangedListener,
+		OnSpinnerItemSelectedListener, OnDroneListener {
 
 	public SeekBarWithText overlapView;
 	public SeekBarWithText angleView;
@@ -100,10 +100,10 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 		cameraSpinner.setAdapter(cameraAdapter);
 
 		footprintCheckBox.setOnClickListener(this);
-		angleView.setOnChangedListner(this);
-		altitudeView.setOnChangedListner(this);
-		overlapView.setOnChangedListner(this);
-		sidelapView.setOnChangedListner(this);
+		angleView.setOnChangedListener(this);
+		altitudeView.setOnChangedListener(this);
+		overlapView.setOnChangedListener(this);
+		sidelapView.setOnChangedListener(this);
 		innerWPsCheckbox.setOnClickListener(this);
 		cameraSpinner.setOnSpinnerItemSelectedListener(this);
 

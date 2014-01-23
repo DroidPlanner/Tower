@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.drone.DroneVariable;
 import org.droidplanner.drone.variables.mission.survey.Survey;
 import org.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
@@ -282,12 +282,12 @@ public class Mission extends DroneVariable implements PathSource{
 	}
 
 	public void addMissionUpdatesListner(
-			OnDroneListner listner) {
+			OnDroneListener listner) {
 		myDrone.events.addDroneListener(listner);
 	}
 
 	public void removeMissionUpdatesListner(
-			OnDroneListner listener) {
+			OnDroneListener listener) {
 		myDrone.events.removeDroneListener(listener);		
 	}
 
