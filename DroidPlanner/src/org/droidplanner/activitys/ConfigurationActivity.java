@@ -62,8 +62,10 @@ public class ConfigurationActivity extends SuperUI {
                     " length.");
         }
 
+        final Context context = getApplicationContext();
+
         final ConfigurationPagerAdapter pagerAdapter = new ConfigurationPagerAdapter(
-                getApplicationContext(), getSupportFragmentManager());
+                context, getSupportFragmentManager());
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.configuration_pager);
         viewPager.setAdapter(pagerAdapter);
@@ -89,6 +91,22 @@ public class ConfigurationActivity extends SuperUI {
                 actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
                 //Display the sections as an action bar drop down list.
+                actionBar.setListNavigationCallbacks(new ConfigurationSpinnerAdapter(context,
+                        R.layout.spinner_configuration_screen_item), new ActionBar.OnNavigationListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+                        viewPager.setCurrentItem(itemPosition, true);
+                        return true;
+                    }
+                });
+
+                viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+
+                    @Override
+                    public void onPageSelected(int i) {
+                        actionBar.setSelectedNavigationItem(i);
+                    }
+                });
             }
 		}
 	}
@@ -155,10 +173,20 @@ public class ConfigurationActivity extends SuperUI {
 		}
 	}
 
-    private static class ConfigurationSpinnerAdapter extends ArrayAdapter<String> {
+    private static class ConfigurationSpinnerAdapter extends ArrayAdapter<CharSequence> {
 
         public ConfigurationSpinnerAdapter(Context context, int resource) {
             super(context, resource);
+        }
+
+        @Override
+        public int getCount(){
+            return sConfigurationFragmentTitlesRes.length;
+        }
+
+        @Override
+        public CharSequence getItem(int position){
+            return getContext().getText(sConfigurationFragmentTitlesRes[position]);
         }
 
     }

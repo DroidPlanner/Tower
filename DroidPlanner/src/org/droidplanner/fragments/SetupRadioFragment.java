@@ -79,29 +79,20 @@ public class SetupRadioFragment extends SuperSetupFragment {
  		SetupMainPanel setupPanel = null;
 		switch (index) {
 		case 1:
-			updateTitle(R.string.setup_fm_title);
 			setupPanel = new FragmentSetupFM();
 			break;
 		case 2:
-			updateTitle(R.string.setup_ch_title);
 			setupPanel = new FragmentSetupCH();
 			break;
 		case 3:
-			updateTitle(R.string.setup_sf_title);
 			setupPanel = new FragmentSetupSF();
 			break;
 		case 0:
 		default:
-			updateTitle(R.string.setup_radio_title);
 			setupPanel = new FragmentSetupRC();
 		}		
 		
 		return setupPanel;
-	}
-
-	@Override
-	public void updateTitle(int id) {
-		super.updateTitle(id);
 	}
 
 	public void setupDataStreamingForRcSetup() {

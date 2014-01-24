@@ -107,8 +107,8 @@
         <item>Servo Functions</item>
     </string-array>
     <string-array name="Setup_Sensor_Menu">
-        <item>IMU Calibration</item>
-        <item>MAG Calibration</item>
+        <item>@string/setup_imu_title</item>
+        <item>@string/setup_mag_title</item>
     </string-array>
     <string-array name="VehicleType">
         <item>ArduCopter</item>

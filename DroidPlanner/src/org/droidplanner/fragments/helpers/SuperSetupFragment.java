@@ -32,8 +32,7 @@ public abstract class SuperSetupFragment extends Fragment implements OnDroneList
 	
 	protected ConfigurationActivity parentActivity;
 	private Spinner spinnerSetup;
-	private TextView textViewTitle;
-	
+
 	private FragmentManager fragmentManager;
 	private SetupMainPanel setupPanel;
     private SetupSidePanel sidePanel;
@@ -127,20 +126,14 @@ public abstract class SuperSetupFragment extends Fragment implements OnDroneList
 		
 	}
 	
-	public void updateTitle(int id){
-		textViewTitle.setText(id);
-	}
-		
 	private void setupLocalViews(View view) {
-		textViewTitle = (TextView)view.findViewById(R.id.textViewSetupTitle);
 		spinnerSetup = (Spinner)view.findViewById(R.id.spinnerSetupType);
 		spinnerSetup.setOnItemSelectedListener(this);
 
 		final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(parentActivity,
 		        getSpinnerItems(), R.layout.spinner_setup);
 		
-		if(adapter!=null)
-			spinnerSetup.setAdapter(adapter);
+		spinnerSetup.setAdapter(adapter);
 	}
 
 	public SetupMainPanel changeMainPanel(int step) {
