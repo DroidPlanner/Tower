@@ -14,7 +14,7 @@ import android.app.Activity;
 import android.os.Bundle;
 
 /**
- * This fragment is used to calibrate the drone's compass, and accelerometer.
+ * This fragment is used to calibrate the drone's radio related functionalities.
  */
 public class SetupRadioFragment extends SuperSetupFragment {
 	// Extreme RC update rate in this screen
@@ -24,20 +24,8 @@ public class SetupRadioFragment extends SuperSetupFragment {
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
 		this.drone = parentActivity.drone;
-	}
-
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-	}
-
-	@Override
-	public void onDetach() {
-		super.onDetach();
-
 	}
 
 	@Override
@@ -50,12 +38,6 @@ public class SetupRadioFragment extends SuperSetupFragment {
 	public void onStop() {
 		super.onStop();
 		drone.streamRates.setupStreamRatesFromPref();
-	}
-
-	@Override
-	public void onPause() {
-		// TODO Auto-generated method stub
-		super.onPause();
 	}
 
 	@Override
@@ -76,7 +58,7 @@ public class SetupRadioFragment extends SuperSetupFragment {
 
 	@Override
 	public SetupMainPanel getMainPanel(int index) {
- 		SetupMainPanel setupPanel = null;
+ 		SetupMainPanel setupPanel;
 		switch (index) {
 		case 1:
 			setupPanel = new FragmentSetupFM();

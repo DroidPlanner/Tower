@@ -44,27 +44,27 @@
         android:orientation="vertical" >
 
         <org.droidplanner.widgets.FillBar.FillBarMinMaxText
-            android:id="@+id/fillBar5"
+            android:id="@+id/fillBar_ch_5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="230dp" >
         </org.droidplanner.widgets.FillBar.FillBarMinMaxText>
 
         <org.droidplanner.widgets.FillBar.FillBarMinMaxText
-            android:id="@+id/fillBar6"
+            android:id="@+id/fillBar_ch_6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="230dp" >
         </org.droidplanner.widgets.FillBar.FillBarMinMaxText>
 
         <org.droidplanner.widgets.FillBar.FillBarMinMaxText
-            android:id="@+id/fillBar7"
+            android:id="@+id/fillBar_ch_7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
         </org.droidplanner.widgets.FillBar.FillBarMinMaxText>
 
         <org.droidplanner.widgets.FillBar.FillBarMinMaxText
-            android:id="@+id/fillBar8"
+            android:id="@+id/fillBar_ch_8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
         </org.droidplanner.widgets.FillBar.FillBarMinMaxText>

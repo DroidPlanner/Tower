@@ -25,4 +25,13 @@
     <dimen name="setup_title_padding">16dp</dimen>
     <dimen name="setup_title_text_size">20sp</dimen>
 
+    <!-- Dimensions for the fillbar and rc stick widgets in the setup screens -->
+    <dimen name="fillbar_thickness">22dp</dimen>
+    <dimen name="fillbar_length">150dp</dimen>
+    <dimen name="setup_rc_stick_width">150dp</dimen>
+    <dimen name="setup_rc_stick_height">150dp</dimen>
+    <dimen name="setup_rc_extra_chan_inter_column_width">40dp</dimen>
+    <dimen name="setup_rc_extra_chan_top_margin">40dp</dimen>
+    <dimen name="setup_rc_text_title_size">16sp</dimen>
+
 </resources>

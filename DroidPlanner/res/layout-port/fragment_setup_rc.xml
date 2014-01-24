@@ -28,7 +28,7 @@
             android:layout_marginTop="23dp" >
 
             <org.droidplanner.widgets.FillBar.FillBar
-                android:id="@+id/fillBar3"
+                android:id="@+id/fillBar_throttle"
                 android:layout_width="22dp"
                 android:layout_height="150dp"
                 android:layout_alignParentTop="true"
@@ -39,13 +39,13 @@
                 android:id="@+id/stickLeft"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
-                android:layout_alignBottom="@id/fillBar3"
+                android:layout_alignBottom="@id/fillBar_throttle"
                 android:layout_alignParentRight="true"
                 android:layout_marginBottom="5dp"
                 android:layout_marginRight="5dp" />
 
             <org.droidplanner.widgets.FillBar.FillBar
-                android:id="@+id/fillBar4"
+                android:id="@+id/fillBar_yaw"
                 android:layout_width="150dp"
                 android:layout_height="22dp"
                 android:layout_alignParentRight="true"
@@ -57,8 +57,8 @@
                 style="@style/rc_textTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/fillBar4"
-                android:layout_below="@id/fillBar4"
+                android:layout_alignLeft="@id/fillBar_yaw"
+                android:layout_below="@id/fillBar_yaw"
                 android:layout_marginTop="8dp"
                 android:text="Throttle: 1000\nYaw: 1500" />
         </RelativeLayout>
@@ -74,7 +74,7 @@
             android:orientation="vertical" >
 
             <org.droidplanner.widgets.FillBar.FillBar
-                android:id="@+id/fillBar5"
+                android:id="@+id/fillBar_ch_5"
                 android:layout_width="150dp"
                 android:layout_height="22dp"
                 android:layout_marginBottom="5dp" />
@@ -88,7 +88,7 @@
                 android:text="Ch 5: 1500" />
 
             <org.droidplanner.widgets.FillBar.FillBar
-                android:id="@+id/fillBar6"
+                android:id="@+id/fillBar_ch_6"
                 android:layout_width="150dp"
                 android:layout_height="22dp"
                 android:layout_marginBottom="5dp" />
@@ -102,7 +102,7 @@
                 android:text="Ch 5: 1500" />
 
             <org.droidplanner.widgets.FillBar.FillBar
-                android:id="@+id/fillBar7"
+                android:id="@+id/fillBar_ch_7"
                 android:layout_width="150dp"
                 android:layout_height="22dp"
                 android:layout_marginBottom="5dp" />
@@ -116,7 +116,7 @@
                 android:text="Ch 5: 1500" />
 
             <org.droidplanner.widgets.FillBar.FillBar
-                android:id="@+id/fillBar8"
+                android:id="@+id/fillBar_ch_8"
                 android:layout_width="150dp"
                 android:layout_height="22dp"
                 android:layout_marginBottom="5dp" />
@@ -138,7 +138,7 @@
             android:layout_toRightOf="@+id/relativeLayout2" >
 
             <org.droidplanner.widgets.FillBar.FillBar
-                android:id="@+id/fillBar2"
+                android:id="@+id/fillBar_pitch"
                 android:layout_width="22dp"
                 android:layout_height="150dp"
                 android:layout_alignParentTop="true"
@@ -149,13 +149,13 @@
                 android:id="@+id/stickRight"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
-                android:layout_alignBottom="@id/fillBar2"
+                android:layout_alignBottom="@id/fillBar_pitch"
                 android:layout_alignParentLeft="true"
                 android:layout_marginBottom="5dp"
                 android:layout_marginLeft="5dp" />
 
             <org.droidplanner.widgets.FillBar.FillBar
-                android:id="@+id/fillBar1"
+                android:id="@+id/fillBar_roll"
                 android:layout_width="150dp"
                 android:layout_height="22dp"
                 android:layout_alignParentLeft="true"
@@ -167,8 +167,8 @@
                 style="@style/rc_textTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/fillBar1"
-                android:layout_below="@id/fillBar1"
+                android:layout_alignLeft="@id/fillBar_roll"
+                android:layout_below="@id/fillBar_roll"
                 android:layout_marginTop="8dp"
                 android:text="Roll: 1500\nPitch: 1500" />
         </RelativeLayout>
