@@ -6,6 +6,15 @@
     android:orientation="vertical"
     tools:context=".fragments.calibration.FragmentSetupRCMiddle" >
 
+        <TextView
+            android:id="@+id/RCSetupTitle"
+            style="@style/SetupTitle"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:background="@color/dark_title_bg"
+            android:gravity="center_vertical"
+            android:text="@string/rc_title_middle" />
+
     <TextView
         android:id="@+id/textView1"
         style="@style/ModeDetailText"

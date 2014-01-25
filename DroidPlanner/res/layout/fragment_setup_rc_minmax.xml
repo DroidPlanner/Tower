@@ -6,37 +6,14 @@
     android:orientation="vertical"
     tools:context=".fragments.calibration.FragmentSetupRCMinMax" >
 
-    <RelativeLayout
-        android:id="@+id/title_rect"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:background="@color/dark_title_bg" >
-
-        <TextView
-            android:id="@+id/RCSetupTitle"
-            style="@style/SetupTitle"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:text="@string/rc_title_minmax" />
-    </RelativeLayout>
-
     <TextView
         android:id="@+id/textView1"
         style="@style/ModeDetailText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/mode_desc_rectangle"
-        android:padding="12dp"
+        android:padding="10dp"
         android:text="@string/rc_desc_minmax" />
-
-    <LinearLayout
-        android:id="@+id/layoutSetupDetails"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="12dp" >
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"

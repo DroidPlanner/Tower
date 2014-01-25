@@ -6,6 +6,15 @@
     android:orientation="vertical"
     tools:context=".fragments.calibration.FragmentSetupRCFailsafe" >
 
+        <TextView
+            android:id="@+id/setupTitle"
+            style="@style/SetupTitle"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:background="@color/dark_title_bg"
+            android:gravity="center_vertical"
+            android:text="@string/progress_title_downloading" />
+
     <TextView
         android:id="@+id/setupDesc"
         style="@style/ModeDetailText"

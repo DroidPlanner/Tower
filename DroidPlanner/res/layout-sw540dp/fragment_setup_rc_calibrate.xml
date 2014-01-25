@@ -8,12 +8,21 @@
     tools:context=".fragments.calibration.FragmentSetupRCMenu">
 
     <TextView
+        android:id="@+id/RCSetupTitle"
+        style="@style/SetupTitle"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:gravity="center_vertical"
+        android:background="@color/dark_title_bg"
+        android:text="@string/setup_radio_cal_title"/>
+
+    <TextView
         android:id="@+id/textView1"
         style="@style/ModeDetailText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/mode_desc_rectangle"
-        android:padding="10dp"
+        android:padding="12dp"
         android:text="@string/setup_radio_cal_desc"/>
 
 
