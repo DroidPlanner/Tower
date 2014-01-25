@@ -21,7 +21,7 @@ public class EditorToolsFragment extends Fragment implements OnClickListener {
 		public void editorToolChanged(EditorTools tools);
 	}
 
-	private OnEditorToolSelected listner;
+	private OnEditorToolSelected listener;
 	private RadioButton buttonDraw;
 	private RadioButton buttonMarker;
 	private RadioButton buttonPoly;
@@ -52,7 +52,7 @@ public class EditorToolsFragment extends Fragment implements OnClickListener {
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		listner = (OnEditorToolSelected) activity;
+		listener = (OnEditorToolSelected) activity;
 	}
 
 	@Override
@@ -104,7 +104,7 @@ public class EditorToolsFragment extends Fragment implements OnClickListener {
 			break;
 		}
 		this.tool = tool;
-		listner.editorToolChanged(this.tool);
+		listener.editorToolChanged(this.tool);
 	}
 
 }

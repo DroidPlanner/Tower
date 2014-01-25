@@ -3,13 +3,13 @@ package org.droidplanner.drone.variables;
 import org.droidplanner.MAVLink.MavLinkStreamRates;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.drone.DroneVariable;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-public class StreamRates extends DroneVariable implements OnDroneListner {
+public class StreamRates extends DroneVariable implements OnDroneListener {
 
 	public StreamRates(Drone myDrone) {
 		super(myDrone);

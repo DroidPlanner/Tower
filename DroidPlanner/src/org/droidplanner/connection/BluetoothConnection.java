@@ -1,24 +1,22 @@
 package org.droidplanner.connection;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.UnknownHostException;
-import java.util.Set;
-import java.util.UUID;
-
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.ParcelUuid;
+import android.preference.PreferenceManager;
 import android.util.Log;
+import org.droidplanner.utils.Constants;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.UnknownHostException;
+import java.util.Set;
+import java.util.UUID;
 
 public class BluetoothConnection extends MAVLinkConnection {
 	private static final String BLUE = "BLUETOOTH";
@@ -36,90 +34,60 @@ public class BluetoothConnection extends MAVLinkConnection {
 		}
 	}
 
-	@Override
-	protected void openConnection() throws UnknownHostException, IOException {
-		
-		if (!mBluetoothAdapter.isEnabled())
-		{
-			Log.d(BLUE, "BT Adapter disabled...");
-			return;
-		}
-		
-		resetConnection();
-		
-		//mBluetoothAdapter.disable();
-		//mBluetoothAdapter.enable();
-		
+    @Override
+    protected void openConnection() throws IOException {
+        Log.d(BLUE, "Connect");
 
-		Log.d(BLUE, "Looking for BT devs ...");
-		BluetoothDevice device = findBluetoothDevice();
-		
-		Log.d(BLUE, "BT Create Socket Call...");		
-/*
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD) { 
-				bluetoothSocket = device.createRfcommSocketToServiceRecord(UUID.fromString(UUID_SPP_DEVICE));
-		} else {			
-				Method BTSocketMethod = null;
-			try {
-				BTSocketMethod = device.getClass().getMethod("createInsecureRfcommSocketToServiceRecord", new Class[] { UUID.class });
-			} catch (NoSuchMethodException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+        //Reset the bluetooth connection
+        resetConnection();
 
-			try {
-				bluetoothSocket = (BluetoothSocket) BTSocketMethod.invoke(device, (UUID) UUID.fromString(UUID_SPP_DEVICE));
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+        //Retrieve the stored address
+        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences
+                (parentContext);
+        String address = settings.getString(Constants.PREF_BLUETOOTH_DEVICE_ADDRESS, null);
 
-		}
+        BluetoothDevice device = address == null
+                ? findSerialBluetoothBoard()
+                : mBluetoothAdapter.getRemoteDevice(address);
 
-*/
-		
+        Log.d(BLUE, "Trying to connect to device with address " + device.getAddress());
+		Log.d(BLUE, "BT Create Socket Call...");
 		bluetoothSocket = device.createInsecureRfcommSocketToServiceRecord(UUID.fromString(UUID_SPP_DEVICE));
 	
 		Log.d(BLUE, "BT Cancel Discovery Call...");		
 		mBluetoothAdapter.cancelDiscovery();		
-		
-		
+
 		Log.d(BLUE, "BT Connect Call...");				
 		bluetoothSocket.connect(); //Here the IOException will rise on BT protocol/handshake error.
 
 		Log.d(BLUE, "## BT Connected ##");			
-
 		out = bluetoothSocket.getOutputStream();
 		in = bluetoothSocket.getInputStream();
 	}
 
-	@SuppressLint("NewApi")
-	private BluetoothDevice findBluetoothDevice() throws UnknownHostException {
-		Set<BluetoothDevice> pairedDevices = mBluetoothAdapter
-				.getBondedDevices();
-		// If there are paired devices
-		if (pairedDevices.size() > 0) {
-			// Loop through paired devices
-			for (BluetoothDevice device : pairedDevices) {
-				// Add the name and address to an array adapter to show in a
-				// ListView
-				Log.d(BLUE, device.getName() + " #" + device.getAddress() + "#");
-				for (ParcelUuid id : device.getUuids()) {
-					// TODO maybe this will not work on newer devices
-					Log.d(BLUE, "id:" + id.toString());
-					if (id.toString().equalsIgnoreCase(UUID_SPP_DEVICE)) {
-						Log.d(BLUE, ">> Selected: " + device.getName()
-								+ " Using: " + id.toString());
-						return device;
-					}
-				}
-			}
-		}
-		throw new UnknownHostException("No Bluetooth Device found");
-	}
+    @SuppressLint("NewApi")
+    private BluetoothDevice findSerialBluetoothBoard() throws UnknownHostException {
+        Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
+        // If there are paired devices
+        if (pairedDevices.size() > 0) {
+            // Loop through paired devices
+            for (BluetoothDevice device : pairedDevices) {
+                // Add the name and address to an array adapter to show in a
+                // ListView
+                Log.d(BLUE, device.getName() + " #" + device.getAddress() + "#");
+                for (ParcelUuid id : device.getUuids()) {
+                    // TODO maybe this will not work on newer devices
+                    Log.d(BLUE, "id:" + id.toString());
+                    if (id.toString().equalsIgnoreCase(UUID_SPP_DEVICE)) {
+                        Log.d(BLUE, ">> Selected: " + device.getName()
+                                + " Using: " + id.toString());
+                        return device;
+                    }
+                }
+            }
+        }
+        throw new UnknownHostException("No Bluetooth Device found");
+    }
 
 	@Override
 	protected void readDataBlock() throws IOException {

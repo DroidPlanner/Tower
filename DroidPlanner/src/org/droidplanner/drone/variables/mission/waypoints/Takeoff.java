@@ -1,5 +1,7 @@
 package org.droidplanner.drone.variables.mission.waypoints;
 
+import java.util.List;
+
 import org.droidplanner.drone.variables.mission.MissionItem;
 import org.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import org.droidplanner.fragments.mission.MissionDetailFragment;
@@ -26,12 +28,13 @@ public class Takeoff extends SpatialCoordItem implements MarkerSource {
 	}
 
 	@Override
-	public msg_mission_item packMissionItem() {
-		msg_mission_item mavMsg = super.packMissionItem();
+	public List<msg_mission_item> packMissionItem() {
+		List<msg_mission_item> list = super.packMissionItem();
+		msg_mission_item mavMsg = list.get(0);
 		mavMsg.command = MAV_CMD.MAV_CMD_NAV_TAKEOFF;
 		mavMsg.param1 = (float) getMinPitch();
 		mavMsg.param4 = (float) getYawAngle();
-		return mavMsg;
+		return list;
 	}
 
 	@Override

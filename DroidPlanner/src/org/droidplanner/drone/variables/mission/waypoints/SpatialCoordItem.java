@@ -121,8 +121,10 @@ public abstract class SpatialCoordItem extends MissionItem implements
 	}
 
 	@Override
-	public msg_mission_item packMissionItem() {
+	public List<msg_mission_item> packMissionItem() {
+		List<msg_mission_item> list = new ArrayList<msg_mission_item>();
 		msg_mission_item mavMsg = new msg_mission_item();
+		list.add(mavMsg);
 		mavMsg.autocontinue = 1;
 		mavMsg.target_component = 1;
 		mavMsg.target_system = 1;
@@ -131,7 +133,7 @@ public abstract class SpatialCoordItem extends MissionItem implements
 		mavMsg.y = (float) getCoordinate().longitude;
 		mavMsg.z = (float) getAltitude().valueInMeters();
 //		mavMsg.compid =
-		return mavMsg;
+		return list;
 	}
 
 	@Override

@@ -12,7 +12,7 @@ public class CalParameters {
 	protected List<String> calParameterNames = new ArrayList<String>();
 	protected List<Parameter> calParameterItems = new ArrayList<Parameter>();
 	private boolean isUpdating = false;
-	private OnCalibrationEvent listner;
+	private OnCalibrationEvent listener;
 	private int paramCount = 0;
 	private int uploadIndex = 0;
 
@@ -30,7 +30,7 @@ public class CalParameters {
 	}
 
 	public void setOnCalibrationEventListener(OnCalibrationEvent listener) {
-		this.listner = listener;
+		this.listener = listener;
 	}
 
 	public void processReceivedParam() {
@@ -66,16 +66,16 @@ public class CalParameters {
 
 	private void readCalibrationParameter(int seq) {
 		if (seq >= calParameterNames.size()) {
-			if (this.listner != null)
-				this.listner.onReadCalibration(this);
+			if (this.listener != null)
+				this.listener.onReadCalibration(this);
 			return;
 		}
 
 		if (myDrone != null)
 			myDrone.parameters.ReadParameter(calParameterNames.get(seq));
 
-		if (this.listner != null) {
-			this.listner.onCalibrationData(this, seq, calParameterNames.size(),
+		if (this.listener != null) {
+			this.listener.onCalibrationData(this, seq, calParameterNames.size(),
 					isUpdating);
 		}
 	}
@@ -83,8 +83,8 @@ public class CalParameters {
 	public void sendCalibrationParameters() {
 		isUpdating = true;
 		if (calParameterItems.size() > 0 && uploadIndex < paramCount) {
-			if (this.listner != null) {
-				this.listner.onCalibrationData(this, uploadIndex, paramCount,
+			if (this.listener != null) {
+				this.listener.onCalibrationData(this, uploadIndex, paramCount,
 						isUpdating);
 			}
 			if (myDrone != null) {
@@ -94,8 +94,8 @@ public class CalParameters {
 		} else {
 			isUpdating = false;
 			uploadIndex = 0;
-			if (this.listner != null) {
-				this.listner.onSentCalibration(this);
+			if (this.listener != null) {
+				this.listener.onSentCalibration(this);
 			}
 		}
 	}

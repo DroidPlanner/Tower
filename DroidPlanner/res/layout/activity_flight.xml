@@ -14,8 +14,8 @@
 
     <FrameLayout
         android:id="@+id/telemetryFragment"
-        android:layout_width="190dp"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         tools:layout="@layout/fragment_telemetry" />
 
     <FrameLayout
@@ -39,7 +39,6 @@
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/fragment2"
         android:background="#D8ee2d3e"
         android:text="@string/RCFailsafe"
 		style="@style/editorMissionOverviewText"
@@ -49,14 +48,12 @@
     <SlidingDrawer
         android:id="@+id/SlidingDrawerLeft"
         android:layout_width="260dp"
-        android:layout_height="540dp"
+        android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-
         android:content="@+id/modeInfoPanel"
         android:handle="@+id/slideButtonLeft"
         android:orientation="horizontal"
-        android:padding="0dp"
         android:visibility="visible"
         >
 
@@ -66,25 +63,6 @@
             android:layout_height="wrap_content"
             android:src="@drawable/drawer_tab"
             tools:ignore="ContentDescription"/>
-
-        <!--<LinearLayout
-            android:id="@+id/LinearLayout01"
-            style="@style/flyoutPanelLayout"
-            android:layout_width="81dp"
-            android:layout_height="match_parent"
-            android:orientation="vertical" >
-        </LinearLayout>-->
-            <!-- style="@style/flyoutPanelLayout" -->
-		<!--
-        android:visibility="gone"
-		<fragment
-			android:id="@+id/modeCircleFragment"
-			android:name="org.droidplanner.fragments.mode.ModeCircleFragment"
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:layout_alignParentBottom="true"
-			android:layout_centerHorizontal="true"
-			tools:layout="@layout/fragment_mode_circle" />-->
 
 		<FrameLayout
 			android:id="@+id/modeInfoPanel"

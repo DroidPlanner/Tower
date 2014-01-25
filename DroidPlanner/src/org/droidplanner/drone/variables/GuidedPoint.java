@@ -6,7 +6,7 @@ import java.util.List;
 import org.droidplanner.MAVLink.MavLinkModes;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.drone.DroneVariable;
 import org.droidplanner.fragments.helpers.MapPath.PathSource;
 import org.droidplanner.fragments.markers.GuidedMarker;
@@ -21,7 +21,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class GuidedPoint extends DroneVariable implements MarkerSource,
-		PathSource, OnDroneListner {
+		PathSource, OnDroneListener {
 
 	private GuidedStates state = GuidedStates.UNINITIALIZED;
 	private LatLng coord = new LatLng(0, 0);
@@ -92,10 +92,10 @@ public class GuidedPoint extends DroneVariable implements MarkerSource,
 		case ACTIVE:
 			double alt = Math.floor(altitude.valueInMeters());
 			alt = Math.max(alt, 2.0);
-	
+
 			if (altChange < -1 && alt <= 10)
 				altChange = -1;
-	
+
 			if ((alt + altChange) > 1.0) {
 				altitude.set(alt + altChange);
 			}
