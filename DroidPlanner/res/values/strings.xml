@@ -281,12 +281,12 @@
     <string name="setup_fm_side_desc">"Press \'Send\' to update the new flight modes to vehicle."</string>
     <string name="setup_fm_desc_uploading">Uploading Flight Mode configuration data</string>
     <string name="setup_fm_desc_downloading">Downloading Flight Mode configuration data</string>
-    <string name="setup_fm_mode1">"Flight Mode 1 : "</string>
-    <string name="setup_fm_mode2">"Flight Mode 2 : "</string>
-    <string name="setup_fm_mode3">"Flight Mode 3 : "</string>
-    <string name="setup_fm_mode4">"Flight Mode 4 : "</string>
-    <string name="setup_fm_mode5">"Flight Mode 5 : "</string>
-    <string name="setup_fm_mode6">"Flight Mode 6 : "</string>
+    <string name="setup_fm_mode1">"1."</string>
+    <string name="setup_fm_mode2">"2."</string>
+    <string name="setup_fm_mode3">"3."</string>
+    <string name="setup_fm_mode4">"4."</string>
+    <string name="setup_fm_mode5">"5."</string>
+    <string name="setup_fm_mode6">"6."</string>
     <string name="setup_fm_simple">"Simple Mode "</string>
     <string name="setup_fm_super">"Super Simple Mode "</string>
 

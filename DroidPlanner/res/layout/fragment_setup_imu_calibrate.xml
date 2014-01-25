@@ -17,7 +17,6 @@
     <Button
         android:id="@+id/buttonNext"
         style="@style/modeControl"
-        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:layout_gravity="center"

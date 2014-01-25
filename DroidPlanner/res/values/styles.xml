@@ -255,6 +255,7 @@
         <item name="android:textSize">20sp</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:gravity">center</item>
+        <item name="android:layout_width">@dimen/setup_action_button_width</item>
         </style>
 
     <style name="modeLabel">

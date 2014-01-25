@@ -71,7 +71,7 @@
                 <Button
                     android:id="@+id/ButtonCancel"
                     style="@style/modeControl"
-                    android:layout_width="120dp"
+                    android:layout_width="@dimen/setup_action_button_width"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="10dp"

@@ -33,5 +33,6 @@
     <dimen name="setup_rc_extra_chan_inter_column_width">40dp</dimen>
     <dimen name="setup_rc_extra_chan_top_margin">40dp</dimen>
     <dimen name="setup_rc_text_title_size">16sp</dimen>
+    <dimen name="setup_action_button_width">120dp</dimen>
 
 </resources>

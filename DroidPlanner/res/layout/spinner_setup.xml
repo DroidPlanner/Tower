@@ -3,7 +3,7 @@
     android:id="@android:id/text1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="30dp"
+    android:minHeight="48dp"
     android:background="@drawable/wp_title_rectangle"
     android:gravity="center"
     android:textColor="#fff"

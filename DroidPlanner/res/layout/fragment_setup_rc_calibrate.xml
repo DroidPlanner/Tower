@@ -20,7 +20,6 @@
     <Button
         android:id="@+id/ButtonRCCalibrate"
         style="@style/modeControl"
-        android:layout_width="154dp"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:layout_gravity="center"
