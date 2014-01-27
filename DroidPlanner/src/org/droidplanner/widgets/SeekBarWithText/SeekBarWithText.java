@@ -27,46 +27,51 @@ public class SeekBarWithText extends LinearLayout implements
 	private OnTextSeekBarChangedListner listner;
 
 	public SeekBarWithText(Context context) {
-		super(context);
-		createViews(context);
+		this(context, null);
 	}
 
 	public SeekBarWithText(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		createViews(context);
-		TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
-				R.styleable.SeekBarWithText, 0, 0);
-
-		try {
-			setTitle(a.getString(R.styleable.SeekBarWithText_title));
-			setUnit(a.getString(R.styleable.SeekBarWithText_unit));
-			setMinMaxInc(a.getFloat(R.styleable.SeekBarWithText_min, 0),
-					a.getFloat(R.styleable.SeekBarWithText_max, 100),
-					a.getFloat(R.styleable.SeekBarWithText_inc, 1));
-			setFormat(a.getString(R.styleable.SeekBarWithText_formatString));
-		} finally {
-			a.recycle();
-		}
+		this(context, attrs, 0);
 	}
+
+    public SeekBarWithText(Context context, AttributeSet attrs, int defStyle){
+        super(context, attrs, defStyle);
+        createViews(context, attrs, defStyle);
+    }
 
 	private void setFormat(String string) {
 		if (string!=null) {
 			formatString = string;
+            invalidate();
 		}		
 	}
 
-	private void createViews(Context context) {
-		setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-				LayoutParams.WRAP_CONTENT));
-		setOrientation(VERTICAL);
-		textView = new TextView(context);
-		seekBar = new SeekBar(context);
-		seekBar.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-				LayoutParams.WRAP_CONTENT));
-		seekBar.setOnSeekBarChangeListener(this);
-		addView(textView);
-		addView(seekBar);
-	}
+    private void createViews(Context context, AttributeSet attrs, int defStyle) {
+        TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
+                R.styleable.SeekBarWithText, 0, 0);
+
+        try {
+            setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+                    LayoutParams.WRAP_CONTENT));
+            setOrientation(VERTICAL);
+            textView = new TextView(context);
+            seekBar = new SeekBar(context);
+            seekBar.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+                    LayoutParams.WRAP_CONTENT));
+            seekBar.setOnSeekBarChangeListener(this);
+            addView(textView);
+            addView(seekBar);
+
+            setTitle(a.getString(R.styleable.SeekBarWithText_title));
+            setUnit(a.getString(R.styleable.SeekBarWithText_unit));
+            setMinMaxInc(a.getFloat(R.styleable.SeekBarWithText_min, 0),
+                    a.getFloat(R.styleable.SeekBarWithText_max, 100),
+                    a.getFloat(R.styleable.SeekBarWithText_inc, 1));
+            setFormat(a.getString(R.styleable.SeekBarWithText_formatString));
+        } finally {
+            a.recycle();
+        }
+    }
 
 	public void setMinMaxInc(double min, double max, double inc) {
 		this.min = min;
@@ -76,7 +81,8 @@ public class SeekBarWithText extends LinearLayout implements
 
 	public void setUnit(String unit) {
 		if (unit != null) {
-			this.unit = unit;			
+			this.unit = unit;
+            invalidate();
 		}
 	}
 

@@ -34,4 +34,12 @@
     <dimen name="setup_rc_text_title_size">13sp</dimen>
     <dimen name="setup_action_button_width">90dp</dimen>
 
+    <!-- Dimensions for the setup tuning screen -->
+    <integer name="tuning_graph_weight">6</integer>
+    <integer name="tuning_params_weight">5</integer>
+    <dimen name="tuning_edit_number_button_width">55dp</dimen>
+    <dimen name="tuning_edit_number_button_height">55dp</dimen>
+    <dimen name="tuning_edit_number_text_size">9sp</dimen>
+    <dimen name="tuning_mission_header_title_height">48dp</dimen>
+
 </resources>
