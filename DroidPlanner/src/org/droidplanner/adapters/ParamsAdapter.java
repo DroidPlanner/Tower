@@ -242,7 +242,8 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
             try {
                 return formatter.parse(valueView.getText().toString()).doubleValue();
             } catch (ParseException ex) {
-                throw new NumberFormatException(ex.getMessage());
+                // invalid number, return 0
+                return 0;
             }
         }
 
