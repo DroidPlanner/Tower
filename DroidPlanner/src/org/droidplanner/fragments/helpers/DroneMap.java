@@ -29,6 +29,8 @@ public abstract class DroneMap extends OfflineMapFragment implements OnDroneList
 	public Drone drone;
 	public Mission mission;
 	protected Context context;
+	
+	protected abstract boolean isMissionDraggable();
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
@@ -117,7 +119,7 @@ public abstract class DroneMap extends OfflineMapFragment implements OnDroneList
 			markers.updateMarker(home, false, context);
 		}
 
-		markers.updateMarkers(mission.getMarkers(), true, context);
+		markers.updateMarkers(mission.getMarkers(), isMissionDraggable(), context);
 
 		missionPath.update(mission);
 	}
