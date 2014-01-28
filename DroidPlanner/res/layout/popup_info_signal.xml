@@ -15,7 +15,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="left|center_vertical"
-        android:text="RSSI 22 dB"/>
+        android:text="RSSI 22 dB"
+        android:textSize="@dimen/info_bar_text_size"/>
 
     <TextView
         android:id="@+id/bar_signal_remrssi"
@@ -23,7 +24,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="left|center_vertical"
-        android:text="RemRSSI 22 dB"/>
+        android:text="RemRSSI 22 dB"
+        android:textSize="@dimen/info_bar_text_size"/>
 
     <TextView
         android:id="@+id/bar_signal_noise"
@@ -31,7 +33,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="left|center_vertical"
-        android:text="Noise 22 dB"/>
+        android:text="Noise 22 dB"
+        android:textSize="@dimen/info_bar_text_size"/>
 
     <TextView
         android:id="@+id/bar_signal_remnoise"
@@ -39,7 +42,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="left|center_vertical"
-        android:text="RemNoise 22 dB"/>
+        android:text="RemNoise 22 dB"
+        android:textSize="@dimen/info_bar_text_size"/>
 
     <TextView
         android:id="@+id/bar_signal_fade"
@@ -47,7 +51,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="left|center_vertical"
-        android:text="Fade 22 dB"/>
+        android:text="Fade 22 dB"
+        android:textSize="@dimen/info_bar_text_size"/>
 
     <TextView
         android:id="@+id/bar_signal_remfade"
@@ -55,6 +60,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="left|center_vertical"
-        android:text="RemFade 22 dB"/>
+        android:text="RemFade 22 dB"
+        android:textSize="@dimen/info_bar_text_size"/>
 
 </LinearLayout>

@@ -42,4 +42,8 @@
     <dimen name="tuning_edit_number_text_size">9sp</dimen>
     <dimen name="tuning_mission_header_title_height">48dp</dimen>
 
+    <!-- Dimension for the info bar -->
+    <dimen name="info_bar_text_size">12sp</dimen>
+    <dimen name="info_bar_drawable_padding">0dp</dimen>
+
 </resources>

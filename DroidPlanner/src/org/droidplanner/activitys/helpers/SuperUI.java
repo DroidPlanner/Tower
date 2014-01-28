@@ -36,9 +36,11 @@ public abstract class SuperUI extends SuperActivity implements OnDroneListner {
 		super.onStop();
 		drone.events.removeDroneListener(this);
 
-		infoBar.setDrone(null);
-        infoBar = null;
-	}
+        if (infoBar != null) {
+            infoBar.setDrone(null);
+            infoBar = null;
+        }
+    }
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
@@ -69,6 +71,7 @@ public abstract class SuperUI extends SuperActivity implements OnDroneListner {
             infoBar.setDrone(null);
             infoBar = null;
         }
+
 		getMenuInflater().inflate(R.menu.menu_super_activiy, menu);
 
         final MenuItem toggleConnectionItem = menu.findItem(R.id.menu_connect);
@@ -86,7 +89,6 @@ public abstract class SuperUI extends SuperActivity implements OnDroneListner {
 
             if(infoBar != null){
                 infoBar.setDrone(drone);
-                infoBar.updateInfoBar(drone);
             }
         }
         else{
@@ -99,7 +101,6 @@ public abstract class SuperUI extends SuperActivity implements OnDroneListner {
 
             if(infoBar != null){
                 infoBar.setDrone(null);
-                infoBar.updateInfoBar(drone);
             }
         }
 		return super.onCreateOptionsMenu(menu);

@@ -13,13 +13,18 @@
         style="@style/ModeSpinnerText"
         android:layout_height="wrap_content"
         android:id="@+id/flight_mode_spinner"/>
-    
-    <FrameLayout
-        android:id="@+id/modeInfoPanel"
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         style="@style/flyoutPanelLayout"
-        tools:layout="@layout/fragment_mode_rtl" />
+        android:layout_weight="1">
+
+        <FrameLayout
+            android:id="@+id/modeInfoPanel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:layout="@layout/fragment_mode_rtl"/>
+    </ScrollView>
 
 </LinearLayout>
