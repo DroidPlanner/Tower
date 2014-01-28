@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Do not translate the following strings -->
     <string name="app_title">DroidPlanner</string>
+
+    <!-- Generic strings -->
     <string name="about">About</string>
     <string name="version">Version</string>
     <string name="storage_folder">Storage Folder</string>
@@ -9,19 +12,45 @@
     <string name="help">Help</string>
     <string name="menu_drone_setup">Drone Setup</string>
     <string name="editor">Editor</string>
+    <string name="send_mission">Send mission</string>
+    <string name="load_mission">Load mission</string>
+
+    <!-- Drone Setup tabs -->
+    <string name="screen_tuning">Tuning</string>
+    <string name="screen_cal">Calibration</string>
+    <string name="screen_checklist">Checklist</string>
+    <string name="screen_rc">Radio</string>
+    <string name="screen_parameters">Parameters</string>
+
+    <!-- Connection State -->
     <string name="menu_connect">Connect</string>
     <string name="menu_disconnect">Disconnect</string>
     <string name="connected">Connected</string>
     <string name="disconnected">Disconnected</string>
+
+    <!-- Failsafe Strings -->
+    <string name="RCFailsafe">Warning! RC Failsafe – Returning to Launch</string>
+
+    <!-- Common Setup Buttons Resource Strings -->
+    <string name="button_setup_calibrate">Calibrate</string>
+    <string name="button_setup_cancel">Cancel</string>
+    <string name="button_setup_send">Send</string>
+    <string name="button_setup_next">Next</string>
+    <string name="button_setup_done">Done</string>
+    <string name="Pause">Pause</string>
+    <string name="dialog_box_btn_txt_ok">OK</string>
+
+    <!-- File operations -->
+    <string name="select_file_to_open">Select file to open:</string>
+    <string name="no_files">No Files</string>
+    <string name="error_when_opening_file">Error when opening file</string>
     <string name="save">Save</string>
     <string name="open">Open</string>
-    <string name="no_files">No Files</string>
-    <string name="select_file_to_open">Select file to open:</string>
-    <string name="error_when_opening_file">Error when opening file</string>
-    <string name="waypoint_altitude">Altitude</string>
-    <string name="distance_between_lines">Lateral</string>
     <string name="write">Write</string>
     <string name="refresh">Refresh</string>
+
+    <!-- Survey/Mapping related strings -->
+    <string name="distance_between_lines">Lateral</string>
     <string name="footprint">Footprint</string>
     <string name="ground_resolution">GSD</string>
     <string name="distance_between_pictures">Longitudinal</string>
@@ -32,20 +61,30 @@
     <string name="flight_altitude">Flight Altitude:</string>
     <string name="overlap">Overlap:</string>
     <string name="sidelap">Sidelap:</string>
-    <string name="screen_planning">Planning</string>
-    <string name="screen_flight_data">Flight Data</string>
-    <string name="screen_rc">Radio</string>
-    <string name="screen_parameters">Parameters</string>
-    <string name="screen_camera">Camera</string>
-    <string name="screen_gcp">GCP</string>
-    <string name="screen_chart">Chart</string>
     <string name="mission_length">Grid Length</string>
     <string name="pictures">Pictures</string>
     <string name="number_of_strips">Number Of Strips</string>
-    <string name="loiter_time">Loiter Time</string>
-    <string name="waypoint_delay">Delay before next waypoint</string>
-    <string name="loiter_radius">Loiter Radius</string>
-    <string name="loiter_ccw">CCW</string>
+    <string name="exception_draw_polygon">Draw a polygon/WPTs</string>
+    <string name="exception_draw_2_more_polygon_points">Draw at least 2 more polygon points</string>
+    <string name="exception_draw_1_more_polygon_points">Draw at least 1 more polygon points</string>
+    <string name="mission_is_too_lengthy">Mission is too lengthy</string>
+
+    <!-- Flight Mode information -->
+    <string name="mode_acro">Acro allows a pilot to control rate of rotation directly.</string>
+    <string name="mode_althold">Alt Hold automatically controls throttle and maintains alitude. Does not require GPS.</string>
+    <string name="mode_auto">Auto follows the scripted mission stored on the vehicle.</string>
+    <string name="mode_circle">Circle rotates the vehicle around a point of interest. The vehicle will always point toward the center. Requires GPS lock.</string>
+    <string name="mode_drift">Drift combines roll and yaw to produce a more natural and intuitive flight. Requires GPS lock.</string>
+    <string name="mode_guided">Guided enables position control from a ground station. Requires GPS lock.</string>
+    <string name="mode_land">Land at the current location. Requires GPS lock.</string>
+    <string name="mode_loiter">Loiter allows the pilot to fly completely through GPS. </string>
+    <string name="mode_ofloiter">Optical Flow enabled Loiter holds position and altitude assisted by the required optical flow sensors. </string>
+    <string name="mode_position">Position allows the pilot to fly completely through GPS, but with manual throttle control. </string>
+    <string name="mode_rtl">RTL rises to the minimum altitude, returns to the home location and lands. Requires GPS lock.</string>
+    <string name="mode_sport">Sport allows a pilot to control rate of rotation directly with the addition of self-leveling.</string>
+    <string name="mode_stabilize">Stabilize levels the vehicle in flight.</string>
+
+    <!-- Waypoint info -->
     <string name="waypointInfo_Land">Land vehicle at the current location. You must manually exit Auto mode to disarm motors.</string>
     <string name="waypointInfo_Generic">Generic Waypoint</string>
     <string name="waypointInfo_Loiter">not used.</string>
@@ -61,6 +100,13 @@
     <string name="waypointInfo_SetSpeed">Change speed and/or throttle set points.Set -1 for both Speed and Throttle if no changes is required</string>
     <string name="waypointInfo_ROI">Sets a location and altitude to point copter towards and to aim an optional camera.</string>
     <string name="waypointInfo_SetJump">Repeat waypoint</string>
+
+    <!-- Waypoint editor -->
+    <string name="loiter_time">Loiter Time</string>
+    <string name="waypoint_delay">Delay before next waypoint</string>
+    <string name="loiter_radius">Loiter Radius</string>
+    <string name="loiter_ccw">CCW</string>
+    <string name="waypoint_altitude">Altitude</string>
     <string name="waypoint_angle">Yaw Angle</string>
     <string name="waypoint_finalaltitude">Target Altitude</string>
     <string name="waypoint_altrate">Descent / Ascend rate</string>
@@ -80,64 +126,29 @@
     <string name="waypoint_coordsrc">Source data :</string>
     <string name="waypoint_jumpto">Jump to waypoint :</string>
     <string name="waypoint_repeat">Repeat waypoint</string>
+    <string name="Orbits">Orbits</string>
+
+    <!-- Selection of map style -->
     <string name="menu_map_type">Map Type</string>
     <string name="menu_map_type_satellite">Satellite</string>
     <string name="menu_map_type_hybrid">Hybrid</string>
     <string name="menu_map_type_normal">Normal</string>
     <string name="menu_map_type_terrain">Terrain</string>
+
+    <!-- Parameters screen -->
+    <string name="params_click_to_refresh">Click to refresh parameters from drone</string>
+    <string name="refreshing_parameters">Refreshing Parameters&#8230;</string>
+    <string name="parameters_saved">Parameters saved</string>
+    <string name="msg_parameters_written_to_drone">"parameters written to drone"</string>
+    <string name="metadata_value">Value:</string>
+    <string name="metadata_custom_value">** Custom value **</string>
     <string name="metadata_values">Values:</string>
     <string name="metadata_units">Units:</string>
     <string name="metadata_range">Range:</string>
     <string name="lst_note_hint">To add more rows, just press Enter</string>
-    <string name="Orbits">Orbits</string>
-    <string name="mode_acro">Acro allows a pilot to control rate of rotation directly.</string>
-    <string name="mode_althold">Alt Hold automatically controls throttle and maintains alitude. Does not require GPS.</string>
-    <string name="mode_auto">Auto follows the scripted mission stored on the vehicle.</string>
-    <string name="mode_circle">Circle rotates the vehicle around a point of interest. The vehicle will always point toward the center. Requires GPS lock.</string>
-    <string name="mode_drift">Drift combines roll and yaw to produce a more natural and intuitive flight. Requires GPS lock.</string>
-    <string name="mode_guided">Guided enables position control from a ground station. Requires GPS lock.</string>
-    <string name="mode_land">Land at the current location. Requires GPS lock.</string>
-    <string name="mode_loiter">Loiter allows the pilot to fly completely through GPS. </string>
-    <string name="mode_ofloiter">Optical Flow enabled Loiter holds position and altitude assisted by the required optical flow sensors. </string>
-    <string name="mode_position">Position allows the pilot to fly completely through GPS, but with manual throttle control. </string>
-    <string name="mode_rtl">RTL rises to the minimum altitude, returns to the home location and lands. Requires GPS lock.</string>
-    <string name="mode_sport">Sport allows a pilot to control rate of rotation directly with the addition of self-leveling.</string>
-    <string name="mode_stabilize">Stabilize levels the vehicle in flight.</string>
-    <string name="send_mission">Send mission</string>
-    <string name="load_mission">Load mission</string>
-    <string name="tune_roll">Manual adjustment of roll and pitch tuning. Rate_P is the primary value to adjust.</string>
-    <string name="dialog_box_title_altitude">Altitude</string>
-    <string name="dialog_box_btn_txt_cancel">Cancel</string>
-    <string name="dialog_box_btn_txt_ok">OK</string>
-    <string name="exception_draw_polygon">Draw a polygon/WPTs</string>
-    <string name="exception_draw_2_more_polygon_points">Draw at least 2 more polygon points</string>
-    <string name="exception_draw_1_more_polygon_points">Draw at least 1 more polygon points</string>
-    <string name="mission_is_too_lengthy">Mission is too lengthy</string>
-    <string name="params_click_to_refresh">Click to refresh parameters from drone</string>
-    <string name="metadata_value">Value:</string>
-    <string name="metadata_custom_value">** Custom value **</string>
-    <string name="refreshing_parameters">Refreshing Parameters&#8230;</string>
-    <string name="parameters_saved">Parameters saved</string>
-    <string name="RCFailsafe">Warning! RC Failsafe – Returning to Launch</string>
-    <string name="mode_switch">Assign RC channel 5 to a switch on your radio to control flight modes. Move the switch to each position and select the desired flight mode below.</string>
-    <string name="Pause">Pause</string>
-    <string name="screen_tuning">Tuning</string>
-    <string name="screen_cal">Calibration</string>
-    <string name="screen_checklist">Checklist</string>
-    <string name="MAVLinkError">MAVLink Error:</string>
-    <string name="msg_connect_first">Please connect first</string>
-    <string name="msg_parameters_written_to_drone">"parameters written to drone"</string>
     <string name="set_to_zero_to_disable">(set to zero to disable).</string>
-    <string name="mode1_throttle_on_right_stick">Mode1: Throttle on RIGHT stick</string>
-    <string name="mode2_throttle_on_left_stick">Mode2: Throttle on LEFT stick</string>
- 
-    
-    <!-- Common Setup Buttons Resource Strings -->
-    <string name="button_setup_calibrate">Calibrate</string>
-    <string name="button_setup_cancel">Cancel</string>
-    <string name="button_setup_send">Send</string>
-    <string name="button_setup_next">Next</string>
-    <string name="button_setup_done">Done</string>
+
+    <!-- Calibration data progress -->
     <string name="progress_title_uploading">Uploading calibration data</string>
     <string name="progress_desc_uploading">DroidPlanner is uploading calibration data to vehicel</string>
     <string name="progress_title_downloading">Downloading calibration data</string>
@@ -153,7 +164,7 @@
     <string name="setup_radio_desc_minmax">Move the joystics all the way out several times and toggle the swithces, levers and knobs to all possible positions</string>
     <string name="setup_radio_desc_middle">Set throttle stick to the lowest position and other joysticks, switches, levers and knobs to their center position</string>
     <string name="setup_radio_desc_complete">RC calibration completed. Press \'Save\' to upload data to vehicle</string>
-    
+
     <!-- Compass Setup Resource Strings -->
     <string name="setup_mag_title">Compass Calibration</string>
 
@@ -194,7 +205,7 @@
     <string name="setup_ch_CH8_options">"Channel 8 Tuning  :"</string>
     <string name="setup_ch_tune_low">"Tune Value - Low  :"</string>
     <string name="setup_ch_tune_high">"Tune Value - High :"</string>
-    
+
     <!-- Servo functions Setup Resource Strings -->
     <string name="setup_sf_title">"Servo Function Configuration"</string>
     <string name="setup_sf_side_title">"Update Servo Function"</string>
@@ -217,7 +228,7 @@
     <string name="air_speed_label">Air speed</string>
     <string name="default_angle_value">--°</string>
 
-    <!--  Bluetooth device selection strings -->
+    <!-- Bluetooth device selection strings -->
     <string name="select_device">Select device to connect</string>
     <string name="none_paired">No devices have been paired</string>
     <string name="none_found">No devices found</string>
@@ -225,4 +236,14 @@
     <string name="title_other_devices">Other Available Devices</string>
     <string name="button_scan">Scan for devices</string>
     <string name="scanning">Scanning for devices</string>
+
+    <!-- Others (when possible move to a grouping above) -->
+    <string name="tune_roll">Manual adjustment of roll and pitch tuning. Rate_P is the primary value to adjust.</string>
+    <string name="dialog_box_title_altitude">Altitude</string>
+    <string name="mode_switch">Assign RC channel 5 to a switch on your radio to control flight modes. Move the switch to each position and select the desired flight mode below.</string>
+    <string name="MAVLinkError">MAVLink Error:</string>
+    <string name="msg_connect_first">Please connect first</string>
+    <string name="mode1_throttle_on_right_stick">Mode1: Throttle on RIGHT stick</string>
+    <string name="mode2_throttle_on_left_stick">Mode2: Throttle on LEFT stick</string>
+
 </resources>
