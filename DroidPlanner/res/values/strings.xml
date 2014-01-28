@@ -15,47 +15,13 @@
     <string name="disconnected">Disconnected</string>
     <string name="save">Save</string>
     <string name="open">Open</string>
-    <string name="menu_open_file">Open file</string>
-    <string name="menu_save_file">Save file</string>
-    <string name="menu_load_from_apm">Load from APM</string>
-    <string name="menu_send_to_apm">Send to APM</string>
-    <string name="menu_follow_me">Follow</string>
-    <string name="menu_record_me">Record</string>
-    <string name="menu_clear">Clear WPs</string>
-    <string name="menu_zoom">Zoom</string>
-    <string name="file_saved">File Saved</string>
-    <string name="no_waypoint_files">No Waypoint Files</string>
     <string name="no_files">No Files</string>
     <string name="select_file_to_open">Select file to open:</string>
-    <string name="error_when_saving">Error when saving</string>
     <string name="error_when_opening_file">Error when opening file</string>
     <string name="waypoint_altitude">Altitude</string>
-    <string name="default_alt">Change Alt.</string>
-    <string name="menu_open_kmz">Open KMZ</string>
-    <string name="menu_add_polygon">Add Polygon</string>
-    <string name="menu_polygon">Polygon</string>
-    <string name="clear_polygon">Clear Poly</string>
-    <string name="menu_generate_polygon">Generate</string>
-    <string name="menu_survey">Survey</string>
-    <string name="menu_finish_polygon">Exit</string>
-    <string name="menu_clear_path">Clear Path</string>
-    <string name="generate">Generate</string>
-    <string name="exit">Exit</string>
-    <string name="menu_clearFlightPath">Clear Track</string>
-    <string name="mission_mode">Mission</string>
-    <string name="polygon_mode">Polygon</string>
-    <string name="dialog_polygon_hatch_angle">Hatch angle:</string>
     <string name="distance_between_lines">Lateral</string>
-    <string name="enable">Enable</string>
-    <string name="disable">Disable</string>
-    <string name="on">On</string>
-    <string name="off">Off</string>
     <string name="write">Write</string>
     <string name="refresh">Refresh</string>
-    <string name="this_is_very_experimental_please_be_careful">This is very experimental, please be careful.</string>
-    <string name="menu_advanced">Advanced</string>
-    <string name="menu_calibration">Calibration</string>
-    <string name="rc_control">RC control</string>
     <string name="footprint">Footprint</string>
     <string name="ground_resolution">GSD</string>
     <string name="distance_between_pictures">Longitudinal</string>
@@ -73,19 +39,13 @@
     <string name="screen_camera">Camera</string>
     <string name="screen_gcp">GCP</string>
     <string name="screen_chart">Chart</string>
-    <string name="length">Distance</string>
     <string name="mission_length">Grid Length</string>
     <string name="pictures">Pictures</string>
     <string name="number_of_strips">Number Of Strips</string>
     <string name="loiter_time">Loiter Time</string>
-    <string name="loiter_turn">Loiter Turn</string>
     <string name="waypoint_delay">Delay before next waypoint</string>
     <string name="loiter_radius">Loiter Radius</string>
     <string name="loiter_ccw">CCW</string>
-    <string name="menu_arm">Arm</string>
-    <string name="menu_disarm">Disarm</string>
-    <string name="rtl_Land">Land on reaching RTL position</string>
-    <string name="takeoff_pitch">Min. Pitch Angle</string>
     <string name="waypointInfo_Land">Land vehicle at the current location. You must manually exit Auto mode to disarm motors.</string>
     <string name="waypointInfo_Generic">Generic Waypoint</string>
     <string name="waypointInfo_Loiter">not used.</string>
@@ -99,45 +59,13 @@
     <string name="waypointInfo_CondDistance">Delay mission state machine until within desired distance of next NAV point</string>
     <string name="waypointInfo_SetHome">Changes the home location either to the current location or a specified location.</string>
     <string name="waypointInfo_SetSpeed">Change speed and/or throttle set points.Set -1 for both Speed and Throttle if no changes is required</string>
-    <string name="waypointInfo_SetRelay">Set a relay to a condition.</string>
-    <string name="waypointInfo_SetRepeatRelay">Cycle a relay on and off for a desired number of cyles with a desired period.</string>
     <string name="waypointInfo_ROI">Sets a location and altitude to point copter towards and to aim an optional camera.</string>
     <string name="waypointInfo_SetJump">Repeat waypoint</string>
-    <string name="waypointDesc_Waypoint_1" formatted="false">Executing next waypoint immediately, heading is set to %03.0f°</string>
-    <string name="waypointDesc_Waypoint_2" formatted="false">Executing next waypoint after %1.1fs, heading is set to %03.0f°</string>
-    <string name="waypointDesc_Loiter" formatted="false">Loiter until next command within %1.1fm radius %s, heading is set to %03.0f°</string>
-    <string name="waypointDesc_LoiterN" formatted="false">Loiter for %1.0f turns within %1.1fm radius %s, heading is set to %03.0f°</string>
-    <string name="waypointDesc_LoiterT" formatted="false">Loiter for %1.0fs within %1.1fm radius %s, heading is set to %03.0f°</string>
-    <string name="waypointDesc_Takeoff" formatted="false">Takeoff with pitch set to %1.2f°</string>
-    <string name="waypointDesc_SetJump" formatted="false">Jump to Waypoint %d - %s</string>
-    <string name="waypointDesc_SetHome" formatted="false">Home is set to</string>
-    <string name="waypointDesc_SetSpeed" formatted="false">Speed is set to %1.1fm/s with throttle at %1.0f%% using %s as reference</string>
-    <string name="waypointDesc_SetRelay" formatted="false">Relay is set to</string>
-    <string name="waypointDesc_SetRepeat" formatted="false">Repeating relay</string>
-    <string name="waypointDesc_CondAlt" formatted="false">Altitude condition is set to %1.1fm at the rate of %1.1fm/s</string>
-    <string name="waypointDesc_CondDist" formatted="false">Distance condition is set to %1.1fm</string>
-    <string name="waypointDesc_CondYaw" formatted="false">Yaw condition is set to %03.0f° at the rate of %1.1f°/s %s, using %s</string>
-    <string name="waypointDesc_GPS" formatted="false">Lat/Lon [%1.12f/%1.12f]</string>
-    <string name="waypointDesc_coordmav">current vehicle position</string>
-    <string name="waypointDesc_coordwp">current Waypoint position</string>
-    <string name="waypointDesc_coordgcs">current GCS position</string>
-    <string name="waypointDesc_coordmanual">entered coordinate</string>
-    <string name="waypointDesc_immediate">immediately</string>
-    <string name="waypointDesc_s">s</string>
-    <string name="waypointDesc_m">m</string>
-    <string name="waypointDesc_after">after</string>
-    <string name="waypointDesc_turns">turns</string>
-    <string name="waypointDesc_radius">radius</string>
-    <string name="waypointDesc_degrees">°</string>
-    <string name="waypointDesc_CW">CW</string>
-    <string name="waypointDesc_CCW">CCW</string>
     <string name="waypoint_angle">Yaw Angle</string>
     <string name="waypoint_finalaltitude">Target Altitude</string>
     <string name="waypoint_altrate">Descent / Ascend rate</string>
     <string name="waypoint_yawrate">Yaw rate</string>
     <string name="waypoint_yawdir">Set yaw direction to CCW</string>
-    <string name="waypoint_yawrelative">Realtive Offset</string>
-    <string name="waypoint_yawabsolute">Absolute Angle</string>
     <string name="waypoint_yawoffset">Use relative offset</string>
     <string name="waypoint_distance">Distance</string>
     <string name="waypoint_homecurrent">"Set Home using current position "</string>
@@ -152,21 +80,15 @@
     <string name="waypoint_coordsrc">Source data :</string>
     <string name="waypoint_jumpto">Jump to waypoint :</string>
     <string name="waypoint_repeat">Repeat waypoint</string>
-    <string name="next">next</string>
     <string name="menu_map_type">Map Type</string>
     <string name="menu_map_type_satellite">Satellite</string>
     <string name="menu_map_type_hybrid">Hybrid</string>
     <string name="menu_map_type_normal">Normal</string>
     <string name="menu_map_type_terrain">Terrain</string>
-    <string name="waypoint_AcceptRadius">Acceptance radius</string>
-    <string name="waypoint_orbitalRadius">Orbital radius</string>
-    <string name="none">None</string>
     <string name="metadata_values">Values:</string>
     <string name="metadata_units">Units:</string>
     <string name="metadata_range">Range:</string>
-    <string name="menu_preflight_checklist">Pre-Flight Checklist</string>
     <string name="lst_note_hint">To add more rows, just press Enter</string>
-    <string name="parameter_row_edit">Edit</string>
     <string name="Orbits">Orbits</string>
     <string name="mode_acro">Acro allows a pilot to control rate of rotation directly.</string>
     <string name="mode_althold">Alt Hold automatically controls throttle and maintains alitude. Does not require GPS.</string>
@@ -184,13 +106,6 @@
     <string name="send_mission">Send mission</string>
     <string name="load_mission">Load mission</string>
     <string name="tune_roll">Manual adjustment of roll and pitch tuning. Rate_P is the primary value to adjust.</string>
-    <string name="rc_options">Assign features to channels 7 and 8 on RC radios. Trigger each feature by bringing the switch to the high position.</string>
-    <string name="lointer_unit_turns">turn(s)</string>
-    <string name="rowheader_wp_type">WP Type</string>
-    <string name="rowheader_wp_alt">ALT</string>
-    <string name="rowheader_wp_no">WP#</string>
-    <string name="rowheader_wp_delta">∆ WP</string>
-    <string name="rowheader_wp_desc">Description</string>
     <string name="dialog_box_title_altitude">Altitude</string>
     <string name="dialog_box_btn_txt_cancel">Cancel</string>
     <string name="dialog_box_btn_txt_ok">OK</string>
@@ -198,18 +113,12 @@
     <string name="exception_draw_2_more_polygon_points">Draw at least 2 more polygon points</string>
     <string name="exception_draw_1_more_polygon_points">Draw at least 1 more polygon points</string>
     <string name="mission_is_too_lengthy">Mission is too lengthy</string>
-    <string name="wpevent_upload">Uploading mission to APM&#8230;</string>
-    <string name="wpevent_download">Downloading mission from APM&#8230;</string>
-    <string name="wpevent_retry">Retrying&#8230;</string>
     <string name="params_click_to_refresh">Click to refresh parameters from drone</string>
     <string name="metadata_value">Value:</string>
     <string name="metadata_custom_value">** Custom value **</string>
     <string name="refreshing_parameters">Refreshing Parameters&#8230;</string>
     <string name="parameters_saved">Parameters saved</string>
     <string name="RCFailsafe">Warning! RC Failsafe – Returning to Launch</string>
-    <string name="GPSFailsafe">Warning! GPS Failsafe – Switching to Altitude Hold</string>
-    <string name="BatteryFailsafeLand">Warning! Battery Failsafe – Returning to Launch</string>
-    <string name="BatteryFailsafeRTL">Warning! Battery Failsafe – Returning to Launch</string>
     <string name="mode_switch">Assign RC channel 5 to a switch on your radio to control flight modes. Move the switch to each position and select the desired flight mode below.</string>
     <string name="Pause">Pause</string>
     <string name="screen_tuning">Tuning</string>
@@ -226,7 +135,6 @@
     <!-- Common Setup Buttons Resource Strings -->
     <string name="button_setup_calibrate">Calibrate</string>
     <string name="button_setup_cancel">Cancel</string>
-    <string name="button_setup_reset">Reset</string>
     <string name="button_setup_send">Send</string>
     <string name="button_setup_next">Next</string>
     <string name="button_setup_done">Done</string>
@@ -235,22 +143,16 @@
     <string name="progress_title_downloading">Downloading calibration data</string>
     <string name="progress_desc_downloading">DroidPlanner is downloading calibration data from vehicle. If system is not connected, press Cancel</string>
 
-    <!-- Failsafe Setup Resource Strings -->
-    <string name="setup_fs_title">Failsafe Setup</string>
-
     <!-- Radio Setup Resource Strings -->
     <string name="setup_radio_title">Radio Channel Calibration</string>
     <string name="setup_radio_cal_title">Start Calibration</string>
     <string name="setup_radio_cal_desc">Press Calibrate to start the radio calibration. Ensure the radio transmitter is switched \'ON\' and transmitting</string>
-    <string name="setup_radio_title_options">RC options</string>
     <string name="setup_radio_title_minmax">Set Min &amp; Max values</string>
     <string name="setup_radio_title_middle">Set Center values</string>
     <string name="setup_radio_title_complete">Calibration complete</string>
-    <string name="setup_radio_desc_options">Assign features to channels 7 and 8 on RC radios. Trigger each feature by bringing the switch to the high position.</string>
     <string name="setup_radio_desc_minmax">Move the joystics all the way out several times and toggle the swithces, levers and knobs to all possible positions</string>
     <string name="setup_radio_desc_middle">Set throttle stick to the lowest position and other joysticks, switches, levers and knobs to their center position</string>
     <string name="setup_radio_desc_complete">RC calibration completed. Press \'Save\' to upload data to vehicle</string>
-    <string name="setup_radio_desc_summary">New RC caliberation data has been saved and uploaded to your vehicle</string>
     
     <!-- Compass Setup Resource Strings -->
     <string name="setup_mag_title">Compass Calibration</string>
@@ -272,8 +174,6 @@
     <string name="setup_fm_title">"Flight Mode Configuration"</string>
     <string name="setup_fm_side_title">"Update Flight Mode"</string>
     <string name="setup_fm_side_desc">"Press \'Send\' to update the new flight modes to vehicle."</string>
-    <string name="setup_fm_desc_uploading">Uploading Flight Mode configuration data</string>
-    <string name="setup_fm_desc_downloading">Downloading Flight Mode configuration data</string>
     <string name="setup_fm_mode1">"Flight Mode 1 : "</string>
     <string name="setup_fm_mode2">"Flight Mode 2 : "</string>
     <string name="setup_fm_mode3">"Flight Mode 3 : "</string>
@@ -287,8 +187,6 @@
     <string name="setup_ch_title">"Channel Options Configuration"</string>
     <string name="setup_ch_side_title">"Update Channel Options"</string>
     <string name="setup_ch_side_desc">"Press \'Send\' to update the new servo function to vehicle."</string>
-    <string name="setup_ch_desc_uploading">Uploading Channel configuration data</string>
-    <string name="setup_ch_desc_downloading">Downloading Channel configuration data</string>
     <string name="setup_ch_tune_title">"Channel 6 - Tuning Function"</string>
     <string name="setup_ch_options_title">"Channel Options - CH7 &amp; CH8"</string>
     <string name="setup_ch_CH7_options">"Channel 7 Options :"</string>
@@ -308,10 +206,8 @@
     <string name="setup_sf_servo6">"Servo  6 : "</string>
     <string name="setup_sf_servo7">"Servo  7 : "</string>
     <string name="setup_sf_servo8">"Servo  8 : "</string>
-    <string name="setup_sf_servo9">"Servo  9 : "</string>
     <string name="setup_sf_servo10">"Servo 10 : "</string>
     <string name="setup_sf_servo11">"Servo 11 : "</string>
-    <string name="setup_sf_servo12">"Servo 12 : "</string>
     <string name="telemetry_default_value">0.0</string>
     <string name="climb_rate_label">Climb rate</string>
     <string name="altitude_label">Altitude</string>
@@ -322,11 +218,11 @@
     <string name="default_angle_value">--°</string>
 
     <!--  Bluetooth device selection strings -->
-    <string name="scanning">scanning for devices...</string>
     <string name="select_device">Select device to connect</string>
     <string name="none_paired">No devices have been paired</string>
     <string name="none_found">No devices found</string>
     <string name="title_paired_devices">Paired Devices</string>
     <string name="title_other_devices">Other Available Devices</string>
     <string name="button_scan">Scan for devices</string>
+    <string name="scanning">Scanning for devices</string>
 </resources>
