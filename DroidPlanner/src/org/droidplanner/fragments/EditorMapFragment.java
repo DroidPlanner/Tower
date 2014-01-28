@@ -152,4 +152,9 @@ public class EditorMapFragment extends DroneMap implements
 		}
 	}
 
+	@Override
+	protected boolean isMissionDraggable() {
+		return true;
+	}
+
 }
