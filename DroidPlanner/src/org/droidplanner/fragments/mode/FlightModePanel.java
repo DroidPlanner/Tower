@@ -113,6 +113,12 @@ public class FlightModePanel extends Fragment implements DroneInterfaces.OnDrone
     @Override
     public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
         switch (event) {
+            case CONNECTED:
+            case DISCONNECTED:
+                onDroneTypeUpdate(drone.type.getType());
+                onModeUpdate(drone.state.getMode());
+                break;
+
             case MODE:
                 //Update the spinner, and the mode info panel
                 onModeUpdate(drone.state.getMode());

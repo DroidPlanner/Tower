@@ -4,8 +4,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    style="@style/flyoutPanelLayout"
     android:layout_width="match_parent"
+    android:background="@drawable/wp_title_rectangle"
     android:layout_height="match_parent">
 
     <Spinner
@@ -19,6 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        style="@style/flyoutPanelLayout"
         tools:layout="@layout/fragment_mode_rtl" />
 
 </LinearLayout>

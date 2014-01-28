@@ -329,4 +329,5 @@
     <string name="default_angle_value">--°</string>
     <string name="telemetry_label">Telemetry</string>
     <string name="flight_modes_label">Flight modes</string>
+    <string name="menu_info_bar">Info Bar</string>
 </resources>
