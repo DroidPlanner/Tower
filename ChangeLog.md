@@ -1,3 +1,7 @@
+## Droidplanner v2.1.1
+* Fix Parameters screen issue (#613)
+* Making flight screen mission markers un-draggable (#614)
+
 ## Droidplanner v2.1.0
 * Implemented the Survey Tool
 
