@@ -11,9 +11,10 @@ import android.widget.Spinner;
 import com.MAVLink.Messages.ApmModes;
 import com.google.android.gms.internal.cl;
 import org.droidplanner.R;
-import org.droidplanner.activitys.helpers.SuperActivity;
+import org.droidplanner.activities.helpers.SuperActivity;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces;
+import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.widgets.spinners.ModeAdapter;
 
 import java.util.List;
@@ -21,7 +22,7 @@ import java.util.List;
 /**
  * @author Fredia Huya-Kouadio
  */
-public class FlightModePanel extends Fragment implements DroneInterfaces.OnDroneListner {
+public class FlightModePanel extends Fragment implements OnDroneListener {
 
     /**
      * This is the parent activity for this fragment.

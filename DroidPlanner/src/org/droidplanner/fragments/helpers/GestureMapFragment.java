@@ -22,14 +22,14 @@ public class GestureMapFragment extends Fragment implements OnGestureListener {
 	private static final int STROKE_WIDTH = 3;
 
 	private double toleranceInPixels;
-	
-	public interface OnPathFinishedListner {
+
+	public interface OnPathFinishedListener {
 
 		void onPathFinished(List<Point> path);
 	}
 
 	private GestureOverlayView overlay;
-	private OnPathFinishedListner listner;
+	private OnPathFinishedListener listener;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,7 +39,7 @@ public class GestureMapFragment extends Fragment implements OnGestureListener {
 		overlay = (GestureOverlayView) view.findViewById(R.id.overlay1);
 		overlay.addOnGestureListener(this);
 		overlay.setEnabled(false);
-		
+
 		overlay.setGestureStrokeWidth(scaleDpToPixels(STROKE_WIDTH));
 		toleranceInPixels = scaleDpToPixels(TOLERANCE);
 		return view;
@@ -55,11 +55,11 @@ public class GestureMapFragment extends Fragment implements OnGestureListener {
 	}
 
 	public void disableGestureDetection() {
-		overlay.setEnabled(false);		
+		overlay.setEnabled(false);
 	}
-	
-	public void setOnPathFinishedListner(OnPathFinishedListner listner) {
-		this.listner = listner;
+
+	public void setOnPathFinishedListener(OnPathFinishedListener listener) {
+		this.listener = listener;
 	}
 
 	@Override
@@ -69,12 +69,12 @@ public class GestureMapFragment extends Fragment implements OnGestureListener {
 		if (path.size() > 1) {
 			path = Simplify.simplify(path, toleranceInPixels);
 		}
-		listner.onPathFinished(path);
+		listener.onPathFinished(path);
 	}
 
 	private List<Point> decodeGesture() {
 		List<Point> path = new ArrayList<Point>();
-		extractPathFromGesture(path);		
+		extractPathFromGesture(path);
 		return path;
 	}
 

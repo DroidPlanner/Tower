@@ -32,15 +32,6 @@
     <orderEntry type="library" name="google-play-services" level="project" />
     <orderEntry type="library" exported="" name="gdk" level="application" />
     <orderEntry type="module" module-name="HorizontalListView" />
-    <orderEntry type="module-library" exported="">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/libs/android-support-v4.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
   </component>
 </module>
 

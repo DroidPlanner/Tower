@@ -1,10 +1,10 @@
 package org.droidplanner.fragments.helpers;
 
 import org.droidplanner.DroidPlannerApp;
-import org.droidplanner.activitys.ConfigurationActivity;
+import org.droidplanner.activities.ConfigurationActivity;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.fragments.calibration.SetupMainPanel;
 import org.droidplanner.fragments.calibration.SetupSidePanel;
 import android.app.Activity;
@@ -26,7 +26,8 @@ import org.droidplanner.R;
 /**
  * This fragment is used to calibrate the drone's compass, and accelerometer.
  */
-public abstract class SuperSetupFragment extends Fragment implements OnDroneListner, OnItemSelectedListener {
+public abstract class SuperSetupFragment extends Fragment implements OnDroneListener,
+        OnItemSelectedListener {
 
 	private Drone drone;
 	

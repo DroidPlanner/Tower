@@ -36,8 +36,8 @@
             style="@style/rc_textTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/fillBar_yaw"
-            android:layout_below="@id/fillBar_yaw"
+            android:layout_alignLeft="@+id/fillBar_yaw"
+            android:layout_below="@+id/fillBar_yaw"
             android:layout_marginTop="8dp"
             android:text="Throttle: 1000\nYaw: 1500"
             />
@@ -81,8 +81,8 @@
             style="@style/rc_textTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/fillBar_roll"
-            android:layout_below="@id/fillBar_roll"
+            android:layout_alignLeft="@+id/fillBar_roll"
+            android:layout_below="@+id/fillBar_roll"
             android:layout_marginTop="8dp"
             android:text="Roll: 1500\nPitch: 1500"
             />

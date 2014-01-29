@@ -32,7 +32,7 @@ public class MAVLinkClient {
 	public static final int MSG_TIMEOUT = 2;
 
 	Context parent;
-	private OnMavlinkClientListner listner;
+	private OnMavlinkClientListener listener;
 	Messenger mService = null;
 	final Messenger mMessenger = new Messenger(new IncomingHandler());
 	private boolean mIsBound;
@@ -41,7 +41,7 @@ public class MAVLinkClient {
 	private long timeOut;
 	private int timeOutRetry;
 
-	public interface OnMavlinkClientListner {
+	public interface OnMavlinkClientListener {
 		public void notifyConnected();
 
 		public void notifyDisconnected();
@@ -51,9 +51,9 @@ public class MAVLinkClient {
 		void notifyTimeOut(int timeOutCount);
 	}
 
-	public MAVLinkClient(Context context, OnMavlinkClientListner listner) {
+	public MAVLinkClient(Context context, OnMavlinkClientListener listener) {
 		parent = context;
-		this.listner = listner;
+		this.listener = listener;
 	}
 
 	public void init() {
@@ -146,7 +146,7 @@ public class MAVLinkClient {
 						 * Log.d("TIMEOUT", "timed out");
 						 */
 
-						listner.notifyTimeOut(timeOutCount);
+						listener.notifyTimeOut(timeOutCount);
 					}
 				}
 			}, timeout_ms); // delay in milliseconds
@@ -166,7 +166,7 @@ public class MAVLinkClient {
 			case MSG_RECEIVED_DATA:
 				Bundle b = msg.getData();
 				MAVLinkMessage m = (MAVLinkMessage) b.getSerializable("msg");
-				listner.notifyReceivedData(m);
+				listener.notifyReceivedData(m);
 				break;
 			case MSG_SELF_DESTRY_SERVICE:
 				close();
@@ -216,19 +216,19 @@ public class MAVLinkClient {
 	}
 
 	private void onConnectedService() {
-		listner.notifyConnected();
+		listener.notifyConnected();
 	}
 
 	private void onDisconnectService() {
 		mIsBound = false;
-		listner.notifyDisconnected();
+		listener.notifyDisconnected();
 	}
 
 	public void queryConnectionState() {
 		if (mIsBound) {
-			listner.notifyConnected();
+			listener.notifyConnected();
 		} else {
-			listner.notifyDisconnected();
+			listener.notifyDisconnected();
 		}
 
 	}

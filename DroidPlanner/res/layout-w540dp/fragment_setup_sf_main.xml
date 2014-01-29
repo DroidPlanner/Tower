@@ -9,7 +9,6 @@
     >
 
     <TextView
-        android:id="@+id/TextView01"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginBottom="10dp"
@@ -102,18 +101,18 @@
 
 
         <TextView
-            android:id="@+id/textViewSF9"
+            android:id="@+id/textViewSF8"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="right"
-            android:text="@string/setup_sf_servo9"
+            android:text="@string/setup_sf_servo8"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#fff"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"/>
 
         <Spinner
-            android:id="@+id/spinnerSF9"
+            android:id="@+id/spinnerSF8"
             style="@style/ModeSpinnerText"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -132,6 +131,26 @@
         >
 
         <TextView
+            android:id="@+id/textViewSF9"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="right"
+            android:text="@string/setup_sf_servo9"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#fff"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"/>
+
+        <Spinner
+            android:id="@+id/spinnerSF9"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:entries="@array/FligthMode_CopterV3_1"
+            android:layout_weight="1"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"/>
+
+        <TextView
             android:id="@+id/textViewSF10"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -144,26 +163,6 @@
 
         <Spinner
             android:id="@+id/spinnerSF10"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:entries="@array/FligthMode_CopterV3_1"
-            android:layout_weight="1"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"/>
-
-        <TextView
-            android:id="@+id/textViewSF11"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="right"
-            android:text="@string/setup_sf_servo11"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#fff"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"/>
-
-        <Spinner
-            android:id="@+id/spinnerSF11"
             style="@style/ModeSpinnerText"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -179,18 +178,18 @@
         >
 
         <TextView
-            android:id="@+id/textViewSF12"
+            android:id="@+id/textViewSF11"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="right"
-            android:text="@string/setup_sf_servo12"
+            android:text="@string/setup_sf_servo11"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#fff"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"/>
 
         <Spinner
-            android:id="@+id/spinnerSF12"
+            android:id="@+id/spinnerSF11"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

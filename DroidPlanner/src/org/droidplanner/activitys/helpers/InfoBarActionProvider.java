@@ -11,6 +11,7 @@ import android.widget.TextView;
 import org.droidplanner.R;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces;
+import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 
 /**
  * This implements the info bar displayed on the action bar after connection with the drone.
@@ -18,8 +19,7 @@ import org.droidplanner.drone.DroneInterfaces;
  * <b>Note:</b> The parent activity must add instantiations of this class to the list of
  * DroneEvent listeners.
  */
-public class InfoBarActionProvider extends ActionProvider implements DroneInterfaces
-        .OnDroneListner {
+public class InfoBarActionProvider extends ActionProvider implements OnDroneListener {
 
     /**
      * Set of actions supported by the info bar

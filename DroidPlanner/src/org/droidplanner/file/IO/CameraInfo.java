@@ -1,7 +1,7 @@
 package org.droidplanner.file.IO;
 
 public class CameraInfo {
-
+	public String name;
 	public Double sensorWidth;
 	public Double sensorHeight;
 	public Double focalLength;

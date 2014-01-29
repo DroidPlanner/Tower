@@ -1,5 +1,7 @@
 package org.droidplanner.drone.variables.mission.commands;
 
+import java.util.List;
+
 import org.droidplanner.drone.variables.mission.MissionItem;
 import org.droidplanner.fragments.mission.MissionDetailFragment;
 import org.droidplanner.fragments.mission.MissionRTLFragment;
@@ -31,7 +33,7 @@ public class ReturnToHome extends MissionCMD{
 	}
 
 	@Override
-	public msg_mission_item packMissionItem() {
+	public List<msg_mission_item> packMissionItem() {
 		// TODO Auto-generated method stub
 		return null;
 	}

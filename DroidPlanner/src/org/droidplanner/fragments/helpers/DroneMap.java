@@ -3,7 +3,7 @@ package org.droidplanner.fragments.helpers;
 import org.droidplanner.DroidPlannerApp;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.drone.variables.Home;
 import org.droidplanner.drone.variables.mission.Mission;
 import org.droidplanner.fragments.markers.MarkerManager;
@@ -22,19 +22,21 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.CameraPosition.Builder;
 import com.google.android.gms.maps.model.LatLng;
 
-public abstract class DroneMap extends OfflineMapFragment implements OnDroneListner {
+public abstract class DroneMap extends OfflineMapFragment implements OnDroneListener {
 	public GoogleMap mMap;
 	protected MarkerManager markers;
 	protected MapPath missionPath;
 	public Drone drone;
 	public Mission mission;
 	protected Context context;
+	
+	protected abstract boolean isMissionDraggable();
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
 			Bundle bundle) {
 		View view = super.onCreateView(inflater, viewGroup, bundle);
-		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;		
+		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
 		mission = drone.mission;
 		mMap = getMap();
 		markers = new MarkerManager(mMap);
@@ -56,13 +58,13 @@ public abstract class DroneMap extends OfflineMapFragment implements OnDroneList
 		drone.events.removeDroneListener(this);
 		saveCameraPosition();
 	}
-	
+
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		context = activity.getApplicationContext();
 	}
-	
+
 	/**
 	 * Save the map camera state on a preference file
 	 * http://stackoverflow.com/questions/16697891/google-maps-android-api-v2-restoring-map-state/16698624#16698624
@@ -86,7 +88,7 @@ public abstract class DroneMap extends OfflineMapFragment implements OnDroneList
 		camera.tilt(settings.getFloat("tilt", 0));
 		camera.zoom(settings.getFloat("zoom", 0));
 		camera.target(new LatLng(settings.getFloat("lat", 0),settings.getFloat("lng", 0)));
-		mMap.moveCamera(CameraUpdateFactory.newCameraPosition(camera.build()));		
+		mMap.moveCamera(CameraUpdateFactory.newCameraPosition(camera.build()));
 	}
 
 	@Override
@@ -97,7 +99,7 @@ public abstract class DroneMap extends OfflineMapFragment implements OnDroneList
 			break;
 		default:
 			break;
-		}		
+		}
 	}
 
 	public LatLng getMyLocation() {
@@ -111,14 +113,14 @@ public abstract class DroneMap extends OfflineMapFragment implements OnDroneList
 
 	public void update() {
 		markers.clean();
-		
+
 		Home home = drone.home.getHome();
 		if (home.isValid()) {
-			markers.updateMarker(home, false, context);			
+			markers.updateMarker(home, false, context);
 		}
-		
-		markers.updateMarkers(mission.getMarkers(), true, context);
-		
+
+		markers.updateMarkers(mission.getMarkers(), isMissionDraggable(), context);
+
 		missionPath.update(mission);
 	}
 

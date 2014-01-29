@@ -13,7 +13,7 @@ import org.droidplanner.R;
 public class SeekBarWithText extends LinearLayout implements
 		OnSeekBarChangeListener {
 
-	public interface OnTextSeekBarChangedListner {
+	public interface OnTextSeekBarChangedListener {
 		public void onSeekBarChanged();
 	}
 
@@ -24,7 +24,7 @@ public class SeekBarWithText extends LinearLayout implements
 	private String title = "";
 	private String unit = "";
 	private String formatString = "%2.1f";
-	private OnTextSeekBarChangedListner listner;
+	private OnTextSeekBarChangedListener listner;
 
 	public SeekBarWithText(Context context) {
 		this(context, null);
@@ -129,7 +129,7 @@ public class SeekBarWithText extends LinearLayout implements
 		}
 	}
 
-	public void setOnChangedListner(OnTextSeekBarChangedListner listner) {
+	public void setOnChangedListener(OnTextSeekBarChangedListener listner) {
 		this.listner = listner;
 	}
 

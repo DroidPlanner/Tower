@@ -195,6 +195,11 @@
         <item name="android:gravity">left</item>
 	</style>
 
+    <style name="CustomActionBarTheme.Dialog" parent="@android:style/Theme.Holo.Light.Dialog">
+       <item name="android:popupMenuStyle">@style/MyPopupMenu</item>
+        <item name="android:itemTextAppearance">@style/myCustomMenuTextApearance</item>
+    </style>
+
     <style name="action_text">
         <item name="android:textColor">#ff0000</item>
         <item name="android:textSize">16dp</item>

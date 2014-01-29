@@ -4,7 +4,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import org.droidplanner.file.DirectoryPath;
 import org.droidplanner.file.FileList;
@@ -12,8 +15,6 @@ import org.droidplanner.file.IO.CameraInfo;
 import org.droidplanner.file.IO.CameraInfoReader;
 
 import android.content.Context;
-import android.widget.ArrayAdapter;
-import android.widget.SpinnerAdapter;
 
 
 public class CameraInfoLoader {
@@ -53,16 +54,17 @@ public class CameraInfoLoader {
 		inputStream.close();
 		return reader.getCameraInfo();
 	}
+	
+	public List<String> getCameraInfoList() {
+				ArrayList<String> avaliableCameras = new ArrayList<String>();
+				List<String> cameraInfoListFromStorage = getCameraInfoListFromStorage();
+				avaliableCameras.addAll(cameraInfoListFromStorage);
+				List<String> cameraInfoListFromAssets = getCameraInfoListFromAssets();
+				avaliableCameras.addAll(cameraInfoListFromAssets);
+				return avaliableCameras;
+			}
 
-	public SpinnerAdapter getCameraInfoList() {
-		ArrayAdapter<CharSequence> avaliableCameras = new ArrayAdapter<CharSequence>(
-				context, android.R.layout.simple_spinner_dropdown_item);
-		avaliableCameras.addAll(getCameraInfoListFromStorage());
-		avaliableCameras.addAll(getCameraInfoListFromAssets());
-		return avaliableCameras;
-	}
-
-	private String[] getCameraInfoListFromAssets() {
+	private List<String> getCameraInfoListFromAssets() {
 		try {
 			String[] list = context.getAssets()
 					.list(CAMERA_INFO_ASSESTS_FOLDER);
@@ -71,15 +73,15 @@ public class CameraInfoLoader {
 				filesInAssets.put(string, CAMERA_INFO_ASSESTS_FOLDER + "/"
 						+ string);
 			}
-			return list;
+			return Arrays.asList(list);
 
 		} catch (IOException e) {
-			return new String[0];
+			return new ArrayList<String>();
 		}
 	}
 
-	private String[] getCameraInfoListFromStorage() {
-		String[] list = FileList.getCameraInfoFileList();
+	private List<String> getCameraInfoListFromStorage() {
+		List<String> list = Arrays.asList(FileList.getCameraInfoFileList());
 		filesInSdCard.clear();
 		for (String string : list) {
 			filesInSdCard.put(string, DirectoryPath.getCameraInfoPath()

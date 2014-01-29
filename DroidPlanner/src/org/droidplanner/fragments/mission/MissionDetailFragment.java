@@ -1,7 +1,7 @@
 package org.droidplanner.fragments.mission;
 
 import org.droidplanner.DroidPlannerApp;
-import org.droidplanner.activitys.EditorActivity;
+import org.droidplanner.activities.EditorActivity;
 import org.droidplanner.drone.variables.mission.Mission;
 import org.droidplanner.drone.variables.mission.MissionItem;
 import org.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;

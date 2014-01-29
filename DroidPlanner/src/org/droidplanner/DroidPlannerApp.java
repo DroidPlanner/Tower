@@ -7,12 +7,12 @@ import org.droidplanner.helpers.FollowMe;
 import org.droidplanner.helpers.RecordMe;
 import org.droidplanner.helpers.TTS;
 import org.droidplanner.service.MAVLinkClient;
-import org.droidplanner.service.MAVLinkClient.OnMavlinkClientListner;
+import org.droidplanner.service.MAVLinkClient.OnMavlinkClientListener;
 
 import com.MAVLink.Messages.MAVLinkMessage;
 
 public class DroidPlannerApp extends ErrorReportApp implements
-		OnMavlinkClientListner {
+		OnMavlinkClientListener {
 	public Drone drone;
 	private MavLinkMsgHandler mavLinkMsgHandler;
 	public FollowMe followMe;
@@ -36,7 +36,7 @@ public class DroidPlannerApp extends ErrorReportApp implements
 	public void notifyReceivedData(MAVLinkMessage msg) {
 		mavLinkMsgHandler.receiveData(msg);
 	}
-	
+
 	@Override
 	public void notifyTimeOut(int timeOutCount) {
 		if (drone.waypointMananger.processTimeOut(timeOutCount)) {
@@ -53,6 +53,6 @@ public class DroidPlannerApp extends ErrorReportApp implements
 
 	@Override
 	public void notifyDisconnected() {
-		drone.events.notifyDroneEvent(DroneEventsType.DISCONNECTED);		
+		drone.events.notifyDroneEvent(DroneEventsType.DISCONNECTED);
 	}
 }
