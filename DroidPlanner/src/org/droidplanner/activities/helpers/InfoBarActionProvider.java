@@ -1,4 +1,4 @@
-package org.droidplanner.activitys.helpers;
+package org.droidplanner.activities.helpers;
 
 import android.content.Context;
 import android.os.Handler;
