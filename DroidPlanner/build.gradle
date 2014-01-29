@@ -1,7 +1,8 @@
 apply plugin: 'android'
 
 dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
+    compile files('libs/usbseriallibrary.jar')
+    compile project(':google-play-services_lib')
     compile project(':Mavlink')
     compile project(':HorizontalVariableListView:HorizontalVariableListView')
 }

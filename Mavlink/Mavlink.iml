@@ -11,6 +11,7 @@
         <option name="ALLOW_USER_CONFIGURATION" value="false" />
         <option name="RES_FOLDERS_RELATIVE_PATH" value="file://$MODULE_DIR$/res" />
         <option name="LIBRARY_PROJECT" value="true" />
+        <option name="UPDATE_PROPERTY_FILES" value="false" />
       </configuration>
     </facet>
     <facet type="android-gradle" name="Android-Gradle">
@@ -66,7 +67,8 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 19 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="android-support-v4" level="project" />
+    <orderEntry type="library" exported="" name="support-v4-13.0.0" level="project" />
+    <orderEntry type="module" module-name="google-play-services_lib" exported="" />
   </component>
 </module>
 
