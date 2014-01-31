@@ -45,7 +45,7 @@
     <string name="mission_mode">Mission</string>
     <string name="polygon_mode">Polygon</string>
     <string name="dialog_polygon_hatch_angle">Hatch angle:</string>
-    <string name="distance_between_lines">Distance Between Lines</string>
+    <string name="distance_between_lines">Lateral</string>
     <string name="enable">Enable</string>
     <string name="disable">Disable</string>
     <string name="on">On</string>
@@ -57,8 +57,8 @@
     <string name="menu_calibration">Calibration</string>
     <string name="rc_control">RC control</string>
     <string name="footprint">Footprint</string>
-    <string name="ground_resolution">Ground Resolution</string>
-    <string name="distance_between_pictures">Distance Between Pictures</string>
+    <string name="ground_resolution">GSD</string>
+    <string name="distance_between_pictures">Longitudinal</string>
     <string name="area">Area</string>
     <string name="camera_">Camera:</string>
     <string name="inner_wps">Inner WPs</string>
@@ -72,7 +72,7 @@
     <string name="screen_gcp">GCP</string>
     <string name="screen_chart">Chart</string>
     <string name="length">Distance</string>
-    <string name="mission_length">Mission Length</string>
+    <string name="mission_length">Grid Length</string>
     <string name="pictures">Pictures</string>
     <string name="number_of_strips">Number Of Strips</string>
     <string name="loiter_time">Loiter Time</string>

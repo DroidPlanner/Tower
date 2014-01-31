@@ -38,12 +38,14 @@ public abstract class MissionItem implements Comparable<MissionItem>{
 	 * @return
 	 */
 	public abstract MissionDetailFragment getDetailFragment();
-	
+
 	/**
-	 * Return a new MAVLinkMessage msg_mission_item for this MissionItem
+	 * Return a new list (one or more) of MAVLinkMessage msg_mission_item that
+	 * represent this MissionItem
+	 * 
 	 * @return
 	 */
-	public abstract msg_mission_item packMissionItem();
+	public abstract List<msg_mission_item> packMissionItem();
 	
 	/**
 	 * Gets data from MAVLinkMessage msg_mission_item for this MissionItem

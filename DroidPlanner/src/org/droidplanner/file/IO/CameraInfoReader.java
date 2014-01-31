@@ -30,6 +30,7 @@ public class CameraInfoReader {
 
 	public static CameraInfo getNewMockCameraInfo() {
 		CameraInfo cameraInfo = new CameraInfo();
+		cameraInfo.name = "Default";
 		cameraInfo.sensorHeight = 4.22;
 		cameraInfo.sensorWidth = 6.12;
 		cameraInfo.focalLength = 7.0;
@@ -70,12 +71,22 @@ public class CameraInfoReader {
 				cameraInfo.overlap = readDouble("Overlap");
 			} else if (name.equals("Sidelap")) {
 				cameraInfo.sidelap = readDouble("Sidelap");
+			}else if (name.equals("Name")) {
+					cameraInfo.name = readString("Name");
 			} else if (name.equals("Orientation")) {
 				cameraInfo.isInLandscapeOrientation = readText().equals("Portrait")?false:true;
 			} else {
 				skip();
 			}
 		}
+	}
+
+	private String readString(String entry) throws IOException,
+			XmlPullParserException {
+		parser.require(XmlPullParser.START_TAG, null, entry);
+		String value = readText();
+		parser.require(XmlPullParser.END_TAG, null, entry);
+		return value;
 	}
 
 	private Double readDouble(String entry) throws IOException,

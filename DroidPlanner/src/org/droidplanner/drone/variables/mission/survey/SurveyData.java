@@ -3,18 +3,19 @@ package org.droidplanner.drone.variables.mission.survey;
 import java.util.Locale;
 
 import org.droidplanner.file.IO.CameraInfo;
+import org.droidplanner.file.IO.CameraInfoReader;
 import org.droidplanner.helpers.units.Altitude;
 import org.droidplanner.helpers.units.Area;
 import org.droidplanner.helpers.units.Length;
 
 
 public class SurveyData {
-	private Altitude altitude = new Altitude(0.0);
+	private Altitude altitude = new Altitude(50.0);
 	private Double angle = 0.0;
 	private Double overlap = 50.0;
 	private Double sidelap = 60.0;
 	private boolean generateInnerWps = false;
-	private CameraInfo camera = new CameraInfo();
+	private CameraInfo camera = CameraInfoReader.getNewMockCameraInfo();
 
 	public void update(double angle, Altitude altitude, double overlap,
 			double sidelap) {
@@ -82,6 +83,10 @@ public class SurveyData {
 
 	public double getOverlap() {
 		return overlap;
+	}
+
+	public String getCameraName() {
+		return camera.name;
 	}
 
 	public boolean shouldGenerateInnerWPs() {

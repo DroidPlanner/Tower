@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="org.droidplanner"
-          android:versionCode="56"
+          android:versionCode="59"
           android:versionName="please run version.sh to get the version name">
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="18" />
+        android:targetSdkVersion="19" />
 
     <supports-screens
         android:requiresSmallestWidthDp="540"/>
