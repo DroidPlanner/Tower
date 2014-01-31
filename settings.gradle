@@ -1,4 +1,3 @@
-include ':google-play-services_lib'
 include ':Mavlink'
 include ':HorizontalVariableListView:HorizontalVariableListView'
 include ':DroidPlanner'
