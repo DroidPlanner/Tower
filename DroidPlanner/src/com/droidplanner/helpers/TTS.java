@@ -29,8 +29,13 @@ public class TTS implements OnInitListener {
 
 	public void speak(String string) {
 		if (tts != null) {
-			if (shouldEnableTTS()) {
-				tts.speak(string, TextToSpeech.QUEUE_FLUSH, null);
+			if (shouldEnableTTS()){
+				
+				// Sends the requested string to be spoken, if there are any other strings waiting to be spoken they will be flushed out of the queue
+				// Original - tts.speak(string, TextToSpeech.QUEUE_FLUSH, null);
+				
+				// UAVForge specific to queue up our requested string
+				tts.speak(string, TextToSpeech.QUEUE_ADD, null);
 			}
 		}
 	}

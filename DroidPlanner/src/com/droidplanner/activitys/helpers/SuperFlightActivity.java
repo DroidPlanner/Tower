@@ -126,7 +126,7 @@ public abstract class SuperFlightActivity extends SuperActivity implements
         rcOutput.enableRcOverride();
         rcOutput.setRcChannel(RcOutput.TROTTLE, 1);
         try{
-            Thread.sleep(1000);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             //TODO Auto-generated catch block
             e.printStackTrace();
