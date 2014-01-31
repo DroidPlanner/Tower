@@ -68,8 +68,6 @@
     <string name="sidelap">Sidelap:</string>
     <string name="screen_planning">Planning</string>
     <string name="screen_flight_data">Flight Data</string>
-    <string name="screen_rc">Radio</string>
-    <string name="screen_parameters">Parameters</string>
     <string name="screen_camera">Camera</string>
     <string name="screen_gcp">GCP</string>
     <string name="screen_chart">Chart</string>
@@ -212,9 +210,6 @@
     <string name="BatteryFailsafeRTL">Warning! Battery Failsafe – Returning to Launch</string>
     <string name="mode_switch">Assign RC channel 5 to a switch on your radio to control flight modes. Move the switch to each position and select the desired flight mode below.</string>
     <string name="Pause">Pause</string>
-    <string name="screen_tuning">Tuning</string>
-    <string name="screen_cal">Calibration</string>
-    <string name="screen_checklist">Checklist</string>
     <string name="MAVLinkError">MAVLink Error:</string>
     <string name="msg_connect_first">Please connect first</string>
     <string name="msg_parameters_written_to_drone">"parameters written to drone"</string>
@@ -222,6 +217,15 @@
     <string name="mode1_throttle_on_right_stick">Mode1: Throttle on RIGHT stick</string>
     <string name="mode2_throttle_on_left_stick">Mode2: Throttle on LEFT stick</string>
  
+    
+    <!-- Drone Setup Page Title Resource Strings -->
+    <string name="screen_rc">Radio</string>
+    <string name="screen_failsafe">Failsafe</string>
+    <string name="screen_parameters">Parameters</string>
+    <string name="screen_tuning">Tuning</string>
+    <string name="screen_cal">Calibration</string>
+    <string name="screen_checklist">Checklist</string>
+    
     
     <!-- Common Setup Buttons Resource Strings -->
     <string name="button_setup_calibrate">Calibrate</string>
@@ -235,8 +239,6 @@
     <string name="progress_title_downloading">Downloading calibration data</string>
     <string name="progress_desc_downloading">DroidPlanner is downloading calibration data from vehicle. If system is not connected, press Cancel</string>
 
-    <!-- Failsafe Setup Resource Strings -->
-    <string name="setup_fs_title">Failsafe Setup</string>
 
     <!-- Radio Setup Resource Strings -->
     <string name="setup_radio_title">Radio Channel Calibration</string>
@@ -321,8 +323,57 @@
     <string name="air_speed_label">Air speed</string>
     <string name="default_angle_value">--°</string>
 
+    <!-- Throttle Failsafe Setup Resource Strings -->
+    <string name="setup_fs_thr_title">"Throttle Failsafe Setting"</string>
+    <string name="setup_fs_thr_side_title">"Update Failsafe Settings"</string>
+    <string name="setup_fs_thr_side_desc">"Press \'Send\' to update the new Throttle Failsafe settings to vehicle."</string>
+    <string name="setup_fs_thr_desc_uploading">Uploading Throttle Failsafe data</string>
+    <string name="setup_fs_thr_desc_downloading">Downloading Throttle Failsafe data</string>
+    
+    <!-- Battery Failsafe Setup Resource Strings -->
+    <string name="setup_fs_bat_title">"Battery Failsafe Setting"</string>
+    <string name="setup_fs_bat_side_title">"Update Failsafe Settings"</string>
+    <string name="setup_fs_bat_side_desc">"Press \'Send\' to update the new Battery Failsafe settings to vehicle."</string>
+    <string name="setup_fs_bat_desc_uploading">Uploading Battery Failsafe data</string>
+    <string name="setup_fs_bat_desc_downloading">Downloading Battery Failsafe data</string>
+    
+    <!-- GPS Failsafe Setup Resource Strings -->
+    <string name="setup_fs_gps_title">"GPS Failsafe Setting"</string>
+    <string name="setup_fs_gps_options">"GPS Action               :"</string>
+    <string name="setup_fs_gps_hdop">"Good HDOP Value  "</string>
+    <string name="setup_fs_gps_glt_enable">"Enable / Disable GPS Glitch Protection "</string>
+    <string name="setup_fs_gps_glt_radius">"Glitch Radius       "</string>
+    <string name="setup_fs_gps_glt_accel">"Glitch Accelaration "</string>
+    <string name="setup_fs_gps_side_title">"Update Failsafe Settings"</string>
+    <string name="setup_fs_gps_side_desc">"Press \'Send\' to update the new GPS Failsafe settings to vehicle."</string>
+    <string name="setup_fs_gps_desc_uploading">Uploading GPS Failsafe data</string>
+    <string name="setup_fs_gps_desc_downloading">Downloading GPS Failsafe data</string>
+    
+    <!-- GCS Failsafe Setup Resource Strings -->
+    <string name="setup_fs_gcs_title">"Ground Control System Failsafe Settings"</string>
+    <string name="setup_fs_gcs_options">"GCS Action               :"</string>
+    <string name="setup_fs_gcs_sysid">"GCS System ID        "</string>
+    <string name="setup_fs_gcs_side_title">"Update Failsafe Settings"</string>
+    <string name="setup_fs_gcs_side_desc">"Press \'Send\' to update the new GCS Failsafe settings to vehicle."</string>
+    <string name="setup_fs_gcs_desc_uploading">Uploading GCS Failsafe data</string>
+    <string name="setup_fs_gcs_desc_downloading">Downloading GCS Failsafe data</string>
+    
+    <!-- Fence Failsafe Setup Resource Strings -->
+    <string name="setup_fs_fnc_title">"Fence Failsafe Setting"</string>
+    <string name="setup_fs_fnc_side_title">"Update Failsafe Settings"</string>
+    <string name="setup_fs_fnc_side_desc">"Press \'Send\' to update the new Fence Failsafe settings to vehicle."</string>
+    <string name="setup_fs_fnc_desc_uploading">Uploading Fence Failsafe data</string>
+    <string name="setup_fs_fnc_desc_downloading">Downloading Fence Failsafe data</string>
+    <string name="setup_fs_fnc_margin">"Fence Margin "</string>
+    <string name="setup_fs_fnc_radius">"Fence Radius "</string>
+    <string name="setup_fs_fnc_altitude">"Fence Altitude"</string> 
+    <string name="setup_fs_fnc_enable">"Enable / Disable Fence Failsafe"</string>
+    <string name="setup_fs_fnc_type_options">"Fence Type              :"</string>
+    <string name="setup_fs_fnc_action_options">"Fence Action           :"</string>
+    
+    
     <!--  Bluetooth device selection strings -->
-    <string name="scanning">scanning for devices...</string>
+    <string name="scanning">scanning for devices &#8320;</string>
     <string name="select_device">Select device to connect</string>
     <string name="none_paired">No devices have been paired</string>
     <string name="none_found">No devices found</string>

@@ -3,16 +3,17 @@ package org.droidplanner.fragments;
 import org.droidplanner.R;
 import org.droidplanner.MAVLink.MavLinkStreamRates;
 import org.droidplanner.fragments.calibration.SetupMainPanel;
-import org.droidplanner.fragments.calibration.radio.FragmentSetupCH;
-import org.droidplanner.fragments.calibration.radio.FragmentSetupFM;
-import org.droidplanner.fragments.calibration.radio.FragmentSetupRC;
-import org.droidplanner.fragments.calibration.radio.FragmentSetupSF;
+import org.droidplanner.fragments.calibration.failsafe.FragmentSetupFSBattery;
+import org.droidplanner.fragments.calibration.failsafe.FragmentSetupFSFence;
+import org.droidplanner.fragments.calibration.failsafe.FragmentSetupFSGCS;
+import org.droidplanner.fragments.calibration.failsafe.FragmentSetupFSGPS;
+import org.droidplanner.fragments.calibration.failsafe.FragmentSetupFSThrottle;
 import org.droidplanner.fragments.helpers.SuperSetupFragment;
 
 /**
  * This fragment is used to calibrate the drone's compass, and accelerometer.
  */
-public class SetupRadioFragment extends SuperSetupFragment {
+public class SetupFailsafeFragment extends SuperSetupFragment {
 	// Extreme RC update rate in this screen
 	private static final int RC_MSG_RATE = 50;
 
@@ -41,12 +42,12 @@ public class SetupRadioFragment extends SuperSetupFragment {
 
 	@Override
 	public SetupMainPanel initMainPanel() {
-		return new FragmentSetupRC();
+		return new FragmentSetupFSThrottle();
 	}
 
 	@Override
 	public int getSpinnerItems() {
-		return R.array.Setup_Radio_Menu;
+		return R.array.Setup_Failsafe_Menu;
 	}
 
 	@Override
@@ -54,21 +55,25 @@ public class SetupRadioFragment extends SuperSetupFragment {
  		SetupMainPanel setupPanel = null;
 		switch (index) {
 		case 1:
-			updateTitle(R.string.setup_fm_title);
-			setupPanel = new FragmentSetupFM();
+			updateTitle(R.string.setup_fs_bat_title);
+			setupPanel = new FragmentSetupFSBattery();
 			break;
 		case 2:
-			updateTitle(R.string.setup_ch_title);
-			setupPanel = new FragmentSetupCH();
+			updateTitle(R.string.setup_fs_fnc_title);
+			setupPanel = new FragmentSetupFSFence();
 			break;
 		case 3:
-			updateTitle(R.string.setup_sf_title);
-			setupPanel = new FragmentSetupSF();
+			updateTitle(R.string.setup_fs_gps_title);
+			setupPanel = new FragmentSetupFSGPS();
+			break;
+		case 4:
+			updateTitle(R.string.setup_fs_gcs_title);
+			setupPanel = new FragmentSetupFSGCS();
 			break;
 		case 0:
 		default:
-			updateTitle(R.string.setup_radio_title);
-			setupPanel = new FragmentSetupRC();
+			updateTitle(R.string.setup_fs_thr_title);
+			setupPanel = new FragmentSetupFSThrottle();
 		}		
 		
 		return setupPanel;

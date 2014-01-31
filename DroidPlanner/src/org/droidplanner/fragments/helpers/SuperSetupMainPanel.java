@@ -122,7 +122,7 @@ public abstract class SuperSetupMainPanel extends SetupMainPanel implements
 			downloadCalibrationData();
 		} else {
 			sidePanel = getDefaultPanel();
-			((SetupRadioFragment) getParentFragment())
+			((SuperSetupFragment) getParentFragment())
 					.changeSidePanel(sidePanel);
 
 		}
@@ -130,7 +130,7 @@ public abstract class SuperSetupMainPanel extends SetupMainPanel implements
 	}
 
 	private SetupSidePanel getProgressPanel(boolean isSending) {
-		sidePanel = ((SetupRadioFragment) getParentFragment())
+		sidePanel = ((SuperSetupFragment) getParentFragment())
 				.changeSidePanel(new FragmentSetupProgress());
 
 		if (isSending) {

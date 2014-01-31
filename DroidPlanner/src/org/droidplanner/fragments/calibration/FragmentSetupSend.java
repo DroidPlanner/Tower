@@ -1,7 +1,7 @@
 package org.droidplanner.fragments.calibration;
 
-import org.droidplanner.fragments.SetupRadioFragment;
 import org.droidplanner.fragments.calibration.SetupSidePanel;
+import org.droidplanner.fragments.helpers.SuperSetupFragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -22,7 +22,7 @@ public class FragmentSetupSend extends SetupSidePanel {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		final SetupRadioFragment setupFragment = (SetupRadioFragment) getParentFragment();
+		final SuperSetupFragment setupFragment = (SuperSetupFragment) getParentFragment();
 
 		final View view = inflater.inflate(R.layout.fragment_setup_panel_send,
 				container, false);

@@ -2,10 +2,12 @@ package org.droidplanner.widgets.NumberFieldEdit;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.os.Handler;
 import android.text.InputType;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -13,10 +15,11 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 import org.droidplanner.R;
 
-public class NumberFieldEdit extends LinearLayout implements OnTouchListener {
+public class NumberFieldEdit extends LinearLayout implements OnTouchListener,OnEditorActionListener {
 
 	private TextView titleText;
 	private TextView separatorText;
@@ -58,11 +61,27 @@ public class NumberFieldEdit extends LinearLayout implements OnTouchListener {
 					a.getFloat(R.styleable.NumberFieldEdit_FastInc, 2));
 			setFormat(a.getString(R.styleable.NumberFieldEdit_Format));
 			setSeparator(a.getString(R.styleable.NumberFieldEdit_Separator));
+
+			
+			if (a.hasValue(R.styleable.NumberFieldEdit_TextAppearance)) {
+				int at = a.getResourceId(R.styleable.NumberFieldEdit_TextAppearance, android.R.style.TextAppearance);
+				setTextAppearance(context,at);
+			}
+			setTextColor(a.getColor(R.styleable.NumberFieldEdit_TextColor,
+					Color.BLACK));
+			
 			setValue(this.value);
 		} finally {
 			a.recycle();
 		}
 	}
+	private void setTextAppearance(Context context, int data) {
+		titleText.setTextAppearance(context, data);
+		separatorText.setTextAppearance(context, data);
+		titleText.setTextAppearance(context, data);
+		editText.setTextAppearance(context, data);
+	}
+
 
 	private void setFormat(String string) {
 		if (string != null) {
@@ -93,18 +112,22 @@ public class NumberFieldEdit extends LinearLayout implements OnTouchListener {
 
 		separatorText.setLayoutParams(new LayoutParams(
 				LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT));
-		titleText.setLayoutParams(new LayoutParams(0,
-				LayoutParams.MATCH_PARENT, 5));
-		editText.setLayoutParams(new LayoutParams(0, LayoutParams.MATCH_PARENT,
-				5));
+		titleText.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
+				LayoutParams.MATCH_PARENT));
+		editText.setLayoutParams(new LayoutParams(0, LayoutParams.MATCH_PARENT,10));
 		buttonLayout.setLayoutParams(new LayoutParams(
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 
 		buttonLayout.setFocusable(true);
 		buttonLayout.setFocusableInTouchMode(true);
-
+		
+		titleText.setMinEms(3);
+		editText.setMinEms(3);
+		
+		editText.setMinWidth(80);
 		editText.setInputType(InputType.TYPE_CLASS_NUMBER
 				| InputType.TYPE_NUMBER_FLAG_DECIMAL);
+		editText.setOnEditorActionListener(this);
 		editText.clearFocus();
 
 		LayoutParams p = new LayoutParams(LayoutParams.WRAP_CONTENT,
@@ -132,6 +155,14 @@ public class NumberFieldEdit extends LinearLayout implements OnTouchListener {
 
 		editText.clearFocus();
 		buttonLayout.requestFocus();
+	}
+
+	private void setTextColor(int color) {
+		if (color != 0) {
+			titleText.setTextColor(color);
+			separatorText.setTextColor(color);
+			editText.setTextColor(color);
+		}
 	}
 
 	public void setMinMaxInc(double min, double max, double inc, float fastinc) {
@@ -202,7 +233,7 @@ public class NumberFieldEdit extends LinearLayout implements OnTouchListener {
 	}
 
 	private void updateValue() {
-		double incVal = fastCount?fastInc:inc;
+		double incVal = fastCount ? fastInc : inc;
 		if (countUp)
 			setValue(this.value + incVal);
 		else
@@ -242,6 +273,22 @@ public class NumberFieldEdit extends LinearLayout implements OnTouchListener {
 			}
 		}
 		return super.onTouchEvent(event);
+	}
+
+	@Override
+	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+		if(v.equals(editText)){
+			double tmp = 0;
+			
+			try {
+				tmp = Double.valueOf(editText.getText().toString());
+			} catch (NumberFormatException e) {
+				tmp = 0;
+				e.printStackTrace();
+			}
+			setValue(tmp);
+		}
+		return false;
 	}
 
 }

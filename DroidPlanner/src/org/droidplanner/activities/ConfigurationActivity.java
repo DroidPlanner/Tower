@@ -6,6 +6,7 @@ import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.fragments.ChecklistFragment;
 import org.droidplanner.fragments.ParamsFragment;
+import org.droidplanner.fragments.SetupFailsafeFragment;
 import org.droidplanner.fragments.SetupRadioFragment;
 import org.droidplanner.fragments.SetupSensorFragment;
 import org.droidplanner.fragments.TuningFragment;
@@ -88,8 +89,10 @@ public class ConfigurationActivity extends SuperUI {
 			case 2:
 				return new SetupSensorFragment();
 			case 3:
-				return new ChecklistFragment();
+				return new SetupFailsafeFragment();
 			case 4:
+				return new ChecklistFragment();
+			case 5:
 				return new ParamsFragment();
 			default:
 				return null;
@@ -98,7 +101,7 @@ public class ConfigurationActivity extends SuperUI {
 
 		@Override
 		public int getCount() {
-			return 5;
+			return 6;
 		}
 
 		@Override
@@ -111,8 +114,10 @@ public class ConfigurationActivity extends SuperUI {
 			case 2:
 				return mContext.getString(R.string.screen_cal);
 			case 3:
-				return mContext.getString(R.string.screen_checklist);
+				return mContext.getString(R.string.screen_failsafe);
 			case 4:
+				return mContext.getString(R.string.screen_checklist);
+			case 5:
 				return mContext.getText(R.string.screen_parameters);
 			default:
 				return null;
