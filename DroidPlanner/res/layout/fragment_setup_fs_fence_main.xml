@@ -29,7 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/setup_fs_fnc_enable"
-                android:textAppearance="?android:attr/textAppearanceMediumInverse"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#fff"
                 android:textStyle="bold" />
 

@@ -95,7 +95,8 @@
         <item>Throttle Failsafe</item>
         <item>Battery Failsafe</item>
         <item>Fence Failsafe</item>
-        <item>GPS &amp; GCS Failsafe</item>
+        <item>GPS Failsafe</item>
+        <item>GCS Failsafe</item>
         </string-array>
     <string-array name="VehicleType">
         <item>ArduCopter</item>

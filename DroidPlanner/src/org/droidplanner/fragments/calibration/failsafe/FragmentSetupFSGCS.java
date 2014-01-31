@@ -8,28 +8,25 @@ import org.droidplanner.fragments.calibration.SetupSidePanel;
 import org.droidplanner.fragments.helpers.SuperSetupMainPanel;
 import org.droidplanner.helpers.ValueKey;
 import org.droidplanner.helpers.ValueKey.ValueKeyData;
-import org.droidplanner.widgets.NumberFieldEdit.NumberFieldEdit;
-
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-public class FragmentSetupFSGPSGCS extends SuperSetupMainPanel {
+public class FragmentSetupFSGCS extends SuperSetupMainPanel {
 
-	private ValueKeyData optionsGPS, optionsGCS;
-	private Spinner spinnerGPS, spinnerGCS;
-	private NumberFieldEdit numberFieldGPS, numberFieldGCS;
+	private ValueKeyData optionsGCS;
+	private Spinner spinnerGCS;
 
 	@Override
 	public int getPanelLayout() {
-		return R.layout.fragment_setup_fs_gpsgcs_main;
+		return R.layout.fragment_setup_fs_gcs_main;
 	}
 
 	@Override
 	protected SetupSidePanel getDefaultPanel() {
 		sidePanel = new FragmentSetupSend();
-		sidePanel.updateTitle(R.string.setup_fs_gpsgcs_side_title);
-		sidePanel.updateDescription(R.string.setup_fs_gpsgcs_side_desc);
+		sidePanel.updateTitle(R.string.setup_fs_gcs_side_title);
+		sidePanel.updateDescription(R.string.setup_fs_gcs_side_desc);
 		return sidePanel;
 	}
 
@@ -45,17 +42,8 @@ public class FragmentSetupFSGPSGCS extends SuperSetupMainPanel {
 
 	@Override
 	protected void updateCalibrationData() {
-		parameters.setParamValueByName("FS_GPS_ENABLE",
-				optionsGPS.values[spinnerGPS.getSelectedItemPosition()]);
-
 		parameters.setParamValueByName("FS_GCS_ENABLE",
 				optionsGCS.values[spinnerGCS.getSelectedItemPosition()]);
-		
-		parameters.setParamValueByName("GPS_HDOP_GOOD",
-				numberFieldGPS.getValue());
-		
-		parameters.setParamValueByName("GCS_HDOP_GOOD",
-				numberFieldGCS.getValue());
 	}
 
 	@Override
@@ -63,49 +51,29 @@ public class FragmentSetupFSGPSGCS extends SuperSetupMainPanel {
 		if (parameters == null)
 			return;
 
-		spinnerGPS.setSelection(
-				getSpinnerIndexFromValue(
-						(int) parameters.getParamValueByName("FS_GPS_ENABLE"),
-						optionsGPS.values), true);
 		spinnerGCS.setSelection(
 				getSpinnerIndexFromValue(
 						(int) parameters.getParamValueByName("FS_GCS_ENABLE"),
 						optionsGCS.values), true);
 
-		numberFieldGPS
-				.setValue(parameters.getParamValueByName("GPS_HDOP_GOOD"));
-		numberFieldGPS.setValue(parameters.getParamValueByName("GCS_SYSID"));
 	}
 
 	@Override
 	public void setupLocalViews(View v) {
-		spinnerGPS = (Spinner) v.findViewById(R.id.spinnerGPS);
 		spinnerGCS = (Spinner) v.findViewById(R.id.spinnerGCS);
 
-		numberFieldGPS = (NumberFieldEdit) v
-				.findViewById(R.id.numberFieldEditGPS);
-		numberFieldGCS = (NumberFieldEdit) v
-				.findViewById(R.id.numberFieldEditGCS);
 		setupSpinners();
 	}
 
 	private void setupSpinners() {
-		optionsGPS = ValueKey.getOptions(parentActivity,
-				R.array.FailSafe_GPS_Options);
 		optionsGCS = ValueKey.getOptions(parentActivity,
 				R.array.FailSafe_GCS_Options);
-
-		final ArrayAdapter<String> adapterGPS = new ArrayAdapter<String>(
-				parentActivity, R.layout.spinner_setup_item, optionsGPS.keys);
-		adapterGPS
-				.setDropDownViewResource(R.layout.spinner_setup_item_dropdown);
 
 		final ArrayAdapter<String> adapterGCS = new ArrayAdapter<String>(
 				parentActivity, R.layout.spinner_setup_item, optionsGCS.keys);
 		adapterGCS
 				.setDropDownViewResource(R.layout.spinner_setup_item_dropdown);
 
-		spinnerGPS.setAdapter(adapterGPS);
 		spinnerGCS.setAdapter(adapterGCS);
 
 	}

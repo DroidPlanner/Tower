@@ -337,18 +337,26 @@
     <string name="setup_fs_bat_desc_uploading">Uploading Battery Failsafe data</string>
     <string name="setup_fs_bat_desc_downloading">Downloading Battery Failsafe data</string>
     
-    <!-- GPS & GCS Failsafe Setup Resource Strings -->
+    <!-- GPS Failsafe Setup Resource Strings -->
     <string name="setup_fs_gps_title">"GPS Failsafe Setting"</string>
-    <string name="setup_fs_gps_options">"On GPS Failsafe        :"</string>
-    <string name="setup_fs_gps_hdop">"Good HDOP Value "</string>
-    <string name="setup_fs_gcs_title">"GCS Failsafe Settings"</string>
-    <string name="setup_fs_gcs_options">"On GCS Failsafe        :"</string>
-    <string name="setup_fs_gcs_sysid">"GCS System ID   "</string>
-    <string name="setup_fs_gpsgcs_title">"GPS &amp; GCS Failsafe Setting"</string>
-    <string name="setup_fs_gpsgcs_side_title">"Update Failsafe Settings"</string>
-    <string name="setup_fs_gpsgcs_side_desc">"Press \'Send\' to update the new GPS &amp; GCS Failsafe settings to vehicle."</string>
-    <string name="setup_fs_gpsgcs_desc_uploading">Uploading GPS &amp; GCS Failsafe data</string>
-    <string name="setup_fs_gpsgcs_desc_downloading">Downloading GPS &amp; GCS Failsafe data</string>
+    <string name="setup_fs_gps_options">"GPS Action               :"</string>
+    <string name="setup_fs_gps_hdop">"Good HDOP Value  "</string>
+    <string name="setup_fs_gps_glt_enable">"Enable / Disable GPS Glitch Protection "</string>
+    <string name="setup_fs_gps_glt_radius">"Glitch Radius       "</string>
+    <string name="setup_fs_gps_glt_accel">"Glitch Accelaration "</string>
+    <string name="setup_fs_gps_side_title">"Update Failsafe Settings"</string>
+    <string name="setup_fs_gps_side_desc">"Press \'Send\' to update the new GPS Failsafe settings to vehicle."</string>
+    <string name="setup_fs_gps_desc_uploading">Uploading GPS Failsafe data</string>
+    <string name="setup_fs_gps_desc_downloading">Downloading GPS Failsafe data</string>
+    
+    <!-- GCS Failsafe Setup Resource Strings -->
+    <string name="setup_fs_gcs_title">"Ground Control System Failsafe Settings"</string>
+    <string name="setup_fs_gcs_options">"GCS Action               :"</string>
+    <string name="setup_fs_gcs_sysid">"GCS System ID        "</string>
+    <string name="setup_fs_gcs_side_title">"Update Failsafe Settings"</string>
+    <string name="setup_fs_gcs_side_desc">"Press \'Send\' to update the new GCS Failsafe settings to vehicle."</string>
+    <string name="setup_fs_gcs_desc_uploading">Uploading GCS Failsafe data</string>
+    <string name="setup_fs_gcs_desc_downloading">Downloading GCS Failsafe data</string>
     
     <!-- Fence Failsafe Setup Resource Strings -->
     <string name="setup_fs_fnc_title">"Fence Failsafe Setting"</string>
@@ -356,6 +364,12 @@
     <string name="setup_fs_fnc_side_desc">"Press \'Send\' to update the new Fence Failsafe settings to vehicle."</string>
     <string name="setup_fs_fnc_desc_uploading">Uploading Fence Failsafe data</string>
     <string name="setup_fs_fnc_desc_downloading">Downloading Fence Failsafe data</string>
+    <string name="setup_fs_fnc_margin">"Fence Margin "</string>
+    <string name="setup_fs_fnc_radius">"Fence Radius "</string>
+    <string name="setup_fs_fnc_altitude">"Fence Altitude"</string> 
+    <string name="setup_fs_fnc_enable">"Enable / Disable Fence Failsafe"</string>
+    <string name="setup_fs_fnc_type_options">"Fence Type              :"</string>
+    <string name="setup_fs_fnc_action_options">"Fence Action           :"</string>
     
     
     <!--  Bluetooth device selection strings -->

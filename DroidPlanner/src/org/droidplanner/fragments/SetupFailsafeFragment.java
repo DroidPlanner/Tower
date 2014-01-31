@@ -5,7 +5,8 @@ import org.droidplanner.MAVLink.MavLinkStreamRates;
 import org.droidplanner.fragments.calibration.SetupMainPanel;
 import org.droidplanner.fragments.calibration.failsafe.FragmentSetupFSBattery;
 import org.droidplanner.fragments.calibration.failsafe.FragmentSetupFSFence;
-import org.droidplanner.fragments.calibration.failsafe.FragmentSetupFSGPSGCS;
+import org.droidplanner.fragments.calibration.failsafe.FragmentSetupFSGCS;
+import org.droidplanner.fragments.calibration.failsafe.FragmentSetupFSGPS;
 import org.droidplanner.fragments.calibration.failsafe.FragmentSetupFSThrottle;
 import org.droidplanner.fragments.helpers.SuperSetupFragment;
 
@@ -62,8 +63,12 @@ public class SetupFailsafeFragment extends SuperSetupFragment {
 			setupPanel = new FragmentSetupFSFence();
 			break;
 		case 3:
-			updateTitle(R.string.setup_fs_gpsgcs_title);
-			setupPanel = new FragmentSetupFSGPSGCS();
+			updateTitle(R.string.setup_fs_gps_title);
+			setupPanel = new FragmentSetupFSGPS();
+			break;
+		case 4:
+			updateTitle(R.string.setup_fs_gcs_title);
+			setupPanel = new FragmentSetupFSGCS();
 			break;
 		case 0:
 		default:

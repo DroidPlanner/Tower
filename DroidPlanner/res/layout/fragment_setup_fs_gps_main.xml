@@ -7,16 +7,10 @@
     android:gravity="center" xmlns:app="http://schemas.android.com/apk/res/org.droidplanner">
 
     <LinearLayout
-        android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:minWidth="300dp"
-        android:orientation="vertical"
-        tools:ignore="UselessParent" >
+        android:layout_margin="20dp"
+        android:orientation="vertical" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -36,7 +30,6 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#fff"
                 android:textStyle="bold" />
-
         </LinearLayout>
 
         <LinearLayout
@@ -77,7 +70,7 @@
 
                 <org.droidplanner.widgets.NumberFieldEdit.NumberFieldEdit
                     android:id="@+id/numberFieldEditGPS"
-                    android:layout_width="450dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:FastInc="10"
                     app:Format="%.0f"
@@ -88,10 +81,8 @@
                     app:TextAppearance="?android:attr/textAppearanceMedium"
                     app:TextColor="#fff"
                     app:Title="@string/setup_fs_gps_hdop" >
-
                 </org.droidplanner.widgets.NumberFieldEdit.NumberFieldEdit>
             </LinearLayout>
-
         </LinearLayout>
 
         <LinearLayout
@@ -102,43 +93,37 @@
             android:background="@color/ground_speed_label"
             android:orientation="horizontal" >
 
-            <TextView
-                android:id="@+id/textViewPWM"
+            <CheckBox
+                android:id="@+id/chkbxGPSGlitch"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center|left"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:text="@string/setup_fs_gcs_title"
+                android:text="@string/setup_fs_gps_glt_enable"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#fff"
                 android:textStyle="bold" />
-
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/layoutFM2"
+            android:id="@+id/LinearLayout01"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:paddingRight="10dp" >
 
-            <TextView
-                android:id="@+id/textViewFM2"
-                android:layout_width="wrap_content"
+            <org.droidplanner.widgets.NumberFieldEdit.NumberFieldEdit
+                android:id="@+id/numberFieldEditGPSRadius"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="right"
-                android:text="@string/setup_fs_gcs_options"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#fff" />
-
-            <Spinner
-                android:id="@+id/spinnerGCS"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="4"
-                android:entries="@array/FligthMode_CopterV3_1" />
+                app:FastInc="5"
+                app:Format="%.0f"
+                app:Inc="1"
+                app:Max="255"
+                app:Min="0"
+                app:Separator=":"
+                app:TextAppearance="?android:attr/textAppearanceMedium"
+                app:TextColor="#fff"
+                app:Title="@string/setup_fs_gps_glt_radius" >
+            </org.droidplanner.widgets.NumberFieldEdit.NumberFieldEdit>
         </LinearLayout>
 
         <LinearLayout
@@ -149,8 +134,8 @@
             android:paddingRight="10dp" >
 
             <org.droidplanner.widgets.NumberFieldEdit.NumberFieldEdit
-		        android:id="@+id/numberFieldEditGCS"
-                android:layout_width="450dp"
+                android:id="@+id/numberFieldEditGPSACCL"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:FastInc="5"
                 app:Format="%.0f"
@@ -160,10 +145,8 @@
                 app:Separator=":"
                 app:TextAppearance="?android:attr/textAppearanceMedium"
                 app:TextColor="#fff"
-                app:Title="@string/setup_fs_gcs_sysid" >
-
+                app:Title="@string/setup_fs_gps_glt_accel" >
             </org.droidplanner.widgets.NumberFieldEdit.NumberFieldEdit>
-
         </LinearLayout>
     </LinearLayout>
 
