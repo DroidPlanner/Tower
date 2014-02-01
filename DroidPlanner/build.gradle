@@ -9,8 +9,7 @@ dependencies {
 
 android {
     compileSdkVersion 19
-    buildToolsVersion "19.0.1"
-
+    buildToolsVersion '19.0.1'
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -33,5 +32,10 @@ android {
         // by a similar customization.
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
+    }
+    signingConfigs {
+        debug {
+            storeFile file('/home/fhuya/.android/debug.keystore')
+        }
     }
 }
