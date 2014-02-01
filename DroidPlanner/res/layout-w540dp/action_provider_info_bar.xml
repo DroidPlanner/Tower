@@ -68,5 +68,12 @@
         android:drawablePadding="@dimen/info_bar_drawable_padding"
         />
 
+    <Spinner
+        android:id="@+id/bar_flight_mode"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        />
 
 </LinearLayout>

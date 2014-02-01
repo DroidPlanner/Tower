@@ -7,11 +7,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
+import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.MAVLink.Messages.ApmModes;
+
 import org.droidplanner.R;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
+import org.droidplanner.widgets.spinners.ModeAdapter;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * This implements the info bar displayed on the action bar after connection with the drone.
@@ -93,6 +101,8 @@ public class InfoBarActionProvider extends ActionProvider implements OnDroneList
                 }
             }
         },
+
+        FLIGHT_MODES(R.id.bar_flight_mode, 0),
 
         PHONE_EXTRA(R.id.bar_phone_extra, R.layout.popup_info_phone_extra) {
             @Override
@@ -292,6 +302,10 @@ public class InfoBarActionProvider extends ActionProvider implements OnDroneList
                 updatePhoneExtraInfo();
                 break;
 
+            case MODE:
+                updateFlightModesInfoSelection();
+                break;
+
             case RADIO:
                 updateRadioInfo();
                 break;
@@ -300,11 +314,21 @@ public class InfoBarActionProvider extends ActionProvider implements OnDroneList
                 updateFlightTimeInfo();
                 break;
 
+            case TYPE:
+                updateFlightModesInfoType();
+                break;
+
             default:
                 break;
         }
     }
 
+    /**
+     * Go through the list of action bar item, and check they're present on the action provider
+     * view. If they're, and have a valid popup window, set the onclicklistener to show the popup.
+     *
+     * @param view initialized action provider view.
+     */
     private void setupActionView(View view) {
         final InfoBarItem[] barActions = InfoBarItem.values();
 
@@ -424,6 +448,51 @@ public class InfoBarActionProvider extends ActionProvider implements OnDroneList
     }
 
     /**
+     * Updates the flight modes info bar item mode list.
+     */
+    private void updateFlightModesInfoType() {
+        final InfoBarItem flightModesItem = InfoBarItem.FLIGHT_MODES;
+        flightModesItem.updatePopupView(mContext, mDrone);
+
+        if (mView != null) {
+            final Spinner modesSpinner = (Spinner) mView.findViewById(flightModesItem.getItemId());
+            if (modesSpinner != null) {
+                final List<ApmModes> flightModes = mDrone == null
+                        ? Collections.<ApmModes>emptyList()
+                        : ApmModes.getModeList(mDrone.type.getType());
+
+                ModeAdapter modesAdapter = (ModeAdapter) modesSpinner.getAdapter();
+                if (modesAdapter == null) {
+                    modesAdapter = new ModeAdapter(mContext, R.layout.spinner_setup, flightModes);
+                    modesSpinner.setAdapter(modesAdapter);
+                } else {
+                    modesAdapter.clear();
+                    modesAdapter.addAll(flightModes);
+                    modesAdapter.notifyDataSetChanged();
+                }
+            }
+        }
+    }
+
+    /**
+     * Updates the flight modes info bar item mode selection.
+     */
+    private void updateFlightModesInfoSelection() {
+        final InfoBarItem flightModesItem = InfoBarItem.FLIGHT_MODES;
+        flightModesItem.updatePopupView(mContext, mDrone);
+
+        if(mDrone != null && mView != null){
+            final Spinner modesSpinner = (Spinner) mView.findViewById(flightModesItem.getItemId());
+            if(modesSpinner != null){
+                final ModeAdapter modesAdapter = (ModeAdapter) modesSpinner.getAdapter();
+                if(modesAdapter != null){
+                    modesSpinner.setSelection(modesAdapter.getPosition(mDrone.state.getMode()));
+                }
+            }
+        }
+    }
+
+    /**
      * Contains logic to update the flight time info bar item.
      */
     private void updateFlightTimeInfo() {
@@ -443,6 +512,9 @@ public class InfoBarActionProvider extends ActionProvider implements OnDroneList
         }
     }
 
+    /**
+     * Updates the info bars item tucked in the 'extra' window.
+     */
     private void updatePhoneExtraInfo(){
         final InfoBarItem phoneExtraItem = InfoBarItem.PHONE_EXTRA;
         phoneExtraItem.updatePopupView(mContext, mDrone);
@@ -458,5 +530,8 @@ public class InfoBarActionProvider extends ActionProvider implements OnDroneList
         updateHomeInfo();
         updatePhoneExtraInfo();
         updateRadioInfo();
+
+        updateFlightModesInfoType();
+        updateFlightModesInfoSelection();
     }
 }
