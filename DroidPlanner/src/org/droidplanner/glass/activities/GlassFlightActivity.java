@@ -28,7 +28,7 @@ import java.util.List;
  * @author Fredia Huya-Kouadio
  * @since 1.2.0
  */
-public class GlassFlightActivity extends GlassActivity implements DroneInterfaces.OnDroneListner {
+public class GlassFlightActivity extends GlassActivity implements DroneInterfaces.OnDroneListener {
 
     /**
      * This is the activity fragment manager.

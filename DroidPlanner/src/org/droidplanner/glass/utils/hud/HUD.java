@@ -16,7 +16,7 @@ import com.MAVLink.Messages.enums.MAV_TYPE;
 import org.droidplanner.R;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces;
-import org.droidplanner.drone.DroneInterfaces.OnDroneListner;
+import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.drone.variables.Altitude;
 import org.droidplanner.drone.variables.Battery;
 import org.droidplanner.drone.variables.GPS;

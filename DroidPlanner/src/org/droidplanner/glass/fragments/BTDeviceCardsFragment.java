@@ -10,7 +10,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +20,7 @@ import com.google.android.glass.widget.CardScrollAdapter;
 import com.google.android.glass.widget.CardScrollView;
 import org.droidplanner.DroidPlannerApp;
 import org.droidplanner.R;
-import org.droidplanner.activitys.helpers.BTDeviceSelectionActivity;
+import org.droidplanner.fragments.helpers.BTDeviceListFragment;
 import org.droidplanner.utils.Constants;
 
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ import java.util.Set;
  * @author Fredia Huya-Kouadio
  * @since 1.2.0
  */
-public class BTDeviceCardsFragment extends Fragment {
+public class BTDeviceCardsFragment extends DialogFragment {
 
     /**
      * This tag is used for logging.
@@ -87,6 +87,12 @@ public class BTDeviceCardsFragment extends Fragment {
             }
         }
     };
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -160,7 +166,7 @@ public class BTDeviceCardsFragment extends Fragment {
         else {
             //Request that bluetooth be enabled
             startActivityForResult(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE),
-                    BTDeviceSelectionActivity.REQUEST_ENABLE_BT);
+                    BTDeviceListFragment.REQUEST_ENABLE_BT);
         }
     }
 

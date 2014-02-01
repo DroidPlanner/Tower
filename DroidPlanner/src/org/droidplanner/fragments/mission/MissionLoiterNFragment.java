@@ -3,7 +3,7 @@ package org.droidplanner.fragments.mission;
 import org.droidplanner.drone.variables.mission.waypoints.Loiter;
 import org.droidplanner.drone.variables.mission.waypoints.LoiterTurns;
 import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
-import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
+import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListener;
 
 import android.view.View;
 import android.widget.CheckBox;
@@ -13,7 +13,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import org.droidplanner.R;
 
 public class MissionLoiterNFragment extends MissionDetailFragment implements
-		OnTextSeekBarChangedListner, OnCheckedChangeListener {
+		OnTextSeekBarChangedListener, OnCheckedChangeListener {
 
 
 	private SeekBarWithText altitudeSeekBar;
@@ -40,19 +40,19 @@ public class MissionLoiterNFragment extends MissionDetailFragment implements
 
 		altitudeSeekBar = (SeekBarWithText) view.findViewById(R.id.altitudeView);
 		altitudeSeekBar.setValue(item.getAltitude().valueInMeters());
-		altitudeSeekBar.setOnChangedListner(this);
+		altitudeSeekBar.setOnChangedListener(this);
 
 		loiterTurnSeekBar = (SeekBarWithText) view.findViewById(R.id.loiterTurn);
-		loiterTurnSeekBar.setOnChangedListner(this);
+		loiterTurnSeekBar.setOnChangedListener(this);
 		loiterTurnSeekBar.setValue(item.getTurns());
 
 		loiterRadiusSeekBar = (SeekBarWithText) view.findViewById(R.id.loiterRadius);
 		loiterRadiusSeekBar.setAbsValue(item.getOrbitalRadius());
-		loiterRadiusSeekBar .setOnChangedListner(this);
+		loiterRadiusSeekBar .setOnChangedListener(this);
 
 		//yawSeekBar = (SeekBarWithText) view.findViewById(R.id.waypointAngle);
 		//yawSeekBar.setValue(item.getYawAngle());
-		//yawSeekBar.setOnChangedListner(this);
+		//yawSeekBar.setOnChangedListener(this);
 	}
 
 

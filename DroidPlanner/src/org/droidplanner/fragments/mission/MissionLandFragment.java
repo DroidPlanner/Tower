@@ -1,14 +1,14 @@
 package org.droidplanner.fragments.mission;
 
 import org.droidplanner.drone.variables.mission.waypoints.Land;
-import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
+import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListener;
 
 import android.view.View;
 
 import org.droidplanner.R;
 
 public class MissionLandFragment extends MissionDetailFragment implements
-		OnTextSeekBarChangedListner {
+		OnTextSeekBarChangedListener {
 
 	//private SeekBarWithText yawSeekBar;
 
@@ -24,7 +24,7 @@ public class MissionLandFragment extends MissionDetailFragment implements
 		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemTypes.LAND));
 		//yawSeekBar = (SeekBarWithText) view.findViewById(R.id.waypointAngle);
 		//yawSeekBar.setValue(item.getYawAngle());
-		//yawSeekBar.setOnChangedListner(this);
+		//yawSeekBar.setOnChangedListener(this);
 	}
 
 	@Override

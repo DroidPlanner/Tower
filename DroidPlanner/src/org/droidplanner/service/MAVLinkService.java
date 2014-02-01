@@ -23,7 +23,7 @@ import android.widget.Toast;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
 import org.droidplanner.R;
-import org.droidplanner.activitys.FlightActivity;
+import org.droidplanner.activities.FlightActivity;
 import org.droidplanner.connection.BluetoothServer;
 import org.droidplanner.connection.MAVLinkConnection;
 import org.droidplanner.connection.MAVLinkConnection.MavLinkConnectionListner;

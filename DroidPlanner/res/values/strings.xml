@@ -45,7 +45,7 @@
     <string name="mission_mode">Mission</string>
     <string name="polygon_mode">Polygon</string>
     <string name="dialog_polygon_hatch_angle">Hatch angle:</string>
-    <string name="distance_between_lines">Distance Between Lines</string>
+    <string name="distance_between_lines">Lateral</string>
     <string name="enable">Enable</string>
     <string name="disable">Disable</string>
     <string name="on">On</string>
@@ -57,8 +57,8 @@
     <string name="menu_calibration">Calibration</string>
     <string name="rc_control">RC control</string>
     <string name="footprint">Footprint</string>
-    <string name="ground_resolution">Ground Resolution</string>
-    <string name="distance_between_pictures">Distance Between Pictures</string>
+    <string name="ground_resolution">GSD</string>
+    <string name="distance_between_pictures">Longitudinal</string>
     <string name="area">Area</string>
     <string name="camera_">Camera:</string>
     <string name="inner_wps">Inner WPs</string>
@@ -74,7 +74,7 @@
     <string name="screen_gcp">GCP</string>
     <string name="screen_chart">Chart</string>
     <string name="length">Distance</string>
-    <string name="mission_length">Mission Length</string>
+    <string name="mission_length">Grid Length</string>
     <string name="pictures">Pictures</string>
     <string name="number_of_strips">Number Of Strips</string>
     <string name="loiter_time">Loiter Time</string>
@@ -221,24 +221,8 @@
     <string name="set_to_zero_to_disable">(set to zero to disable).</string>
     <string name="mode1_throttle_on_right_stick">Mode1: Throttle on RIGHT stick</string>
     <string name="mode2_throttle_on_left_stick">Mode2: Throttle on LEFT stick</string>
-    <string name="rc_title_options">RC options</string>
-    <string name="rc_desc_options">Assign features to channels 7 and 8 on RC radios. Trigger each feature by bringing the switch to the high position.</string>
-    <string name="rc_desc_minmax">Move the joystics all the way out several times and toggle the swithces, levers and knobs to all possible positions</string>
-    <string name="rc_title_minmax">Set Min &amp; Max values</string>
-    <string name="rc_btn_calibrate">Calibrate</string>
-    <string name="rc_desc_middle">Set throttle stick to the lowest position and other joysticks, switches, levers and knobs to their center position</string>
-    <string name="rc_title_middle">Set Center values</string>
-    <string name="rc_title_complete">Calibration complete</string>
-    <string name="rc_desc_complete">RC calibration completed. Press \'Save\' to upload data to vehicle</string>
-    <string name="rc_title_menu">Radio control setup</string>
-    <string name="rc_desc_menu">Select to calibrate Radio Control signals or set other RC options</string>
-    <string name="rc_title_failsafe">Set RC failsafe</string>
-    <string name="rc_desc_failsafe">Set the RC failsafe. Failsafe value should be at least 50 units below minimum throttle value</string>
-    <string name="rc_desc_summary">New RC caliberation data has been saved and uploaded to your vehicle</string>
-    <string name="rc_setup_title">Radio Calibration</string>
-    <string name="rc_options_ch7">Channel 7</string>
-    <string name="rc_options_ch8">Channel 8</string>
-
+ 
+    
     <!-- Common Setup Buttons Resource Strings -->
     <string name="button_setup_calibrate">Calibrate</string>
     <string name="button_setup_cancel">Cancel</string>
@@ -258,7 +242,16 @@
     <string name="setup_radio_title">Radio Channel Calibration</string>
     <string name="setup_radio_cal_title">Start Calibration</string>
     <string name="setup_radio_cal_desc">Press Calibrate to start the radio calibration. Ensure the radio transmitter is switched \'ON\' and transmitting</string>
-
+    <string name="setup_radio_title_options">RC options</string>
+    <string name="setup_radio_title_minmax">Set Min &amp; Max values</string>
+    <string name="setup_radio_title_middle">Set Center values</string>
+    <string name="setup_radio_title_complete">Calibration complete</string>
+    <string name="setup_radio_desc_options">Assign features to channels 7 and 8 on RC radios. Trigger each feature by bringing the switch to the high position.</string>
+    <string name="setup_radio_desc_minmax">Move the joystics all the way out several times and toggle the swithces, levers and knobs to all possible positions</string>
+    <string name="setup_radio_desc_middle">Set throttle stick to the lowest position and other joysticks, switches, levers and knobs to their center position</string>
+    <string name="setup_radio_desc_complete">RC calibration completed. Press \'Save\' to upload data to vehicle</string>
+    <string name="setup_radio_desc_summary">New RC caliberation data has been saved and uploaded to your vehicle</string>
+    
     <!-- Compass Setup Resource Strings -->
     <string name="setup_mag_title">Compass Calibration</string>
 
@@ -319,8 +312,14 @@
     <string name="setup_sf_servo10">"Servo 10 : "</string>
     <string name="setup_sf_servo11">"Servo 11 : "</string>
     <string name="setup_sf_servo12">"Servo 12 : "</string>
-
-    <string name="screen_settings">Settings</string>
+    <string name="telemetry_default_value">0.0</string>
+    <string name="climb_rate_label">Climb rate</string>
+    <string name="altitude_label">Altitude</string>
+    <string name="meter_unit">m</string>
+    <string name="speed_unit">m/s</string>
+    <string name="ground_speed_label">Ground speed</string>
+    <string name="air_speed_label">Air speed</string>
+    <string name="default_angle_value">--°</string>
 
     <!--  Bluetooth device selection strings -->
     <string name="scanning">scanning for devices...</string>
@@ -330,6 +329,8 @@
     <string name="title_paired_devices">Paired Devices</string>
     <string name="title_other_devices">Other Available Devices</string>
     <string name="button_scan">Scan for devices</string>
+
+    <string name="screen_settings">Settings</string>
 
     <!-- Google glass strings -->
     <string name="glass_voice_trigger">Let\'s fly</string>

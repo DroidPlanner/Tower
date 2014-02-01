@@ -24,7 +24,7 @@ public class MAVLinkClient {
 	public static final int MSG_TIMEOUT = 2;
 
 	Context parent;
-	private OnMavlinkClientListner listner;
+	private OnMavlinkClientListener listner;
 	Messenger mService = null;
 	final Messenger mMessenger = new Messenger(new IncomingHandler());
 	private boolean mIsBound;
@@ -33,7 +33,7 @@ public class MAVLinkClient {
 	private long timeOut;
 	private int timeOutRetry;
 
-	public interface OnMavlinkClientListner {
+	public interface OnMavlinkClientListener {
 		public void notifyConnected();
 
 		public void notifyDisconnected();
@@ -43,7 +43,7 @@ public class MAVLinkClient {
 		void notifyTimeOut(int timeOutCount);
 	}
 
-	public MAVLinkClient(Context context, OnMavlinkClientListner listner) {
+	public MAVLinkClient(Context context, OnMavlinkClientListener listner) {
 		parent = context;
 		this.listner = listner;
 	}

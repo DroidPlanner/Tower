@@ -12,6 +12,5 @@ public class SF_CalParameters extends CalParameters {
 		calParameterNames.add("RC8_FUNCTION");
 		calParameterNames.add("RC10_FUNCTION");
 		calParameterNames.add("RC11_FUNCTION");
-		calParameterNames.add("RC12_FUNCTION");
 	}
 }

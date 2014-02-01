@@ -1,6 +1,6 @@
 package org.droidplanner.fragments.calibration;
 
-import org.droidplanner.activitys.ConfigurationActivity;
+import org.droidplanner.activities.ConfigurationActivity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,15 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public abstract class SetupMainPanel extends Fragment{
- 
+
 	protected ConfigurationActivity parentActivity;
 	protected SetupSidePanel sidePanel;
-	
+
     public abstract int getPanelLayout();
     public abstract SetupSidePanel getSidePanel();
     public abstract void setupLocalViews(View v);
     public abstract void doCalibrationStep(int step);
-    
+
     @Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);

@@ -172,4 +172,9 @@ public class FlightMapFragment extends DroneMap implements
 		}
 		super.onDroneEvent(event,drone);
 	}
+
+	@Override
+	protected boolean isMissionDraggable() {
+		return false;
+	}
 }

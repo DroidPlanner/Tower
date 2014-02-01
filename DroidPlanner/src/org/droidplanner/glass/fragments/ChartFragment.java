@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import org.droidplanner.R;
-import org.droidplanner.activitys.helpers.SuperActivity;
+import org.droidplanner.activities.helpers.SuperActivity;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces;
 import org.droidplanner.widgets.graph.Chart;
@@ -16,7 +16,7 @@ import org.droidplanner.widgets.graph.ChartCheckBoxList;
 /**
  * @author Fredia Huya-Kouadio
  */
-public class ChartFragment extends Fragment implements DroneInterfaces.OnDroneListner {
+public class ChartFragment extends Fragment implements DroneInterfaces.OnDroneListener {
 
     private Drone drone;
 

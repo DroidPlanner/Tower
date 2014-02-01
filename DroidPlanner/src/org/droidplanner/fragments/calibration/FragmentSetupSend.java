@@ -24,7 +24,7 @@ public class FragmentSetupSend extends SetupSidePanel {
 
 		final SetupRadioFragment setupFragment = (SetupRadioFragment) getParentFragment();
 
-		final View view = inflater.inflate(R.layout.fragment_setup_fm_send,
+		final View view = inflater.inflate(R.layout.fragment_setup_panel_send,
 				container, false);
 
 		textTitle = (TextView)view.findViewById(R.id.setupTitle);
@@ -36,17 +36,17 @@ public class FragmentSetupSend extends SetupSidePanel {
 		if(descId!=0)
 			textDesc.setText(descId);
 		
-		final Button btnSend = (Button) view.findViewById(R.id.ButtonSend);		
+		final Button btnSend = (Button) view.findViewById(R.id.buttonSend);		
 		btnSend.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				if (setupFragment != null) {
-					setupFragment.doCalibrationStep(1);
+					setupFragment.doCalibrationStep(3);
 				}
 			}
 		});
 
-		final Button btnCancel = (Button) view.findViewById(R.id.ButtonReset);
+		final Button btnCancel = (Button) view.findViewById(R.id.buttonCancel);
 		btnCancel.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {

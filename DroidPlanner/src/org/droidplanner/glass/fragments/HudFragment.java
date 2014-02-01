@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import org.droidplanner.R;
-import org.droidplanner.activitys.helpers.SuperActivity;
+import org.droidplanner.activities.helpers.SuperActivity;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneEvents;
 import org.droidplanner.drone.DroneInterfaces;
@@ -17,7 +17,7 @@ import org.droidplanner.drone.variables.Orientation;
 import org.droidplanner.drone.variables.Speed;
 import org.droidplanner.glass.utils.hud.HUD;
 
-public class HudFragment extends Fragment implements DroneInterfaces.OnDroneListner{
+public class HudFragment extends Fragment implements DroneInterfaces.OnDroneListener{
 
 	private HUD hudWidget;
 

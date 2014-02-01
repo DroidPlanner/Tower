@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="org.droidplanner"
-          android:versionCode="56"
+          android:versionCode="59"
           android:versionName="please run version.sh to get the version name">
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="18" />
+        android:targetSdkVersion="19" />
+
+    <supports-screens
+        android:requiresSmallestWidthDp="540"/>
 
     <permission
         android:name=".permission.MAPS_RECEIVE"
@@ -69,10 +72,9 @@
 
         <service android:name=".service.MAVLinkService" >
         </service>
-	
+
 		<activity
-		    android:name=".activitys.FlightActivity"
-            android:uiOptions="splitActionBarWhenNarrow"
+		    android:name=".activities.FlightActivity"
 		    android:launchMode="singleTask" >
 
             <!-- Launcher Intent -->
@@ -92,16 +94,14 @@
                 android:resource="@xml/device_filter" />
         </activity>
         <activity
-            android:name=".activitys.EditorActivity"
+            android:name=".activities.EditorActivity"
             android:label="@string/editor"
-            android:uiOptions="splitActionBarWhenNarrow"
-            android:launchMode="singleTask"
-            android:parentActivityName=".activitys.FlightActivity" >
+            android:parentActivityName=".activities.FlightActivity" >
 
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activitys.FlightActivity" />
+                android:value=".activities.FlightActivity" />
 
             <!-- Intent for opening mission files -->
             <intent-filter>
@@ -113,27 +113,26 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activitys.ConfigurationActivity"
+            android:name=".activities.ConfigurationActivity"
             android:windowSoftInputMode="adjustPan"
             android:theme="@style/Theme.PageIndicatorDefaults"
-            android:uiOptions="splitActionBarWhenNarrow"
             android:launchMode="singleTask"
             android:label="@string/menu_drone_setup"
-            android:parentActivityName=".activitys.FlightActivity" >
+            android:parentActivityName=".activities.FlightActivity" >
 
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activitys.FlightActivity" />
+                android:value=".activities.FlightActivity" />
         </activity>
-        <activity android:name=".activitys.SettingsActivity"
+        <activity android:name=".activities.SettingsActivity"
                   android:label="@string/settings"
-                  android:parentActivityName=".activitys.FlightActivity">
+                  android:parentActivityName=".activities.FlightActivity">
 
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activitys.FlightActivity" />
+                android:value=".activities.FlightActivity" />
         </activity>
         <activity
                 android:name=".glass.activities.GlassFlightActivity"
@@ -146,11 +145,6 @@
                     android:name="com.google.android.glass.VoiceTrigger"
                     android:resource="@xml/glass_trigger"/>
                 </activity>
-        <activity
-                android:name=".activitys.helpers.BTDeviceSelectionActivity"
-                android:launchMode="singleTop"
-                android:theme="@style/CustomActionBarTheme.Dialog"
-                android:excludeFromRecents="true"/>
     </application>
 
 </manifest>

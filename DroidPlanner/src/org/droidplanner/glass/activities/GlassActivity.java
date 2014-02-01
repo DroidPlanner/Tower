@@ -8,7 +8,7 @@ import android.view.MotionEvent;
 import android.widget.Toast;
 import com.google.android.glass.touchpad.Gesture;
 import com.google.android.glass.touchpad.GestureDetector;
-import org.droidplanner.activitys.helpers.SuperActivity;
+import org.droidplanner.activities.helpers.SuperActivity;
 import org.droidplanner.drone.DroneInterfaces;
 import org.droidplanner.glass.utils.GlassUtils;
 import org.droidplanner.glass.utils.voice_menu.VoiceMenu;
@@ -18,7 +18,8 @@ import java.util.List;
 /**
  * Parent to most activities running on glass. This holds common glass specific functionalities.
  */
-public abstract class GlassActivity extends SuperActivity implements DroneInterfaces.OnDroneListner{
+public abstract class GlassActivity extends SuperActivity implements DroneInterfaces
+        .OnDroneListener{
 
     /**
      * This is used to instantiate, and activate the voice menu.

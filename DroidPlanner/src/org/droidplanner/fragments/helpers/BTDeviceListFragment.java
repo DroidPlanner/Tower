@@ -22,7 +22,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import org.droidplanner.DroidPlannerApp;
 import org.droidplanner.R;
-import org.droidplanner.activitys.helpers.BTDeviceSelectionActivity;
 import org.droidplanner.utils.Constants;
 
 import java.util.Set;
@@ -42,6 +41,12 @@ public class BTDeviceListFragment extends DialogFragment {
      */
     private static final String TAG = BTDeviceListFragment.class.getName();
 
+    /**
+     * Request code used in onActivityResult to check for bluetooth activation result.
+     *
+     * @since 1.2.0
+     */
+    public static final int REQUEST_ENABLE_BT = 111;
 
     /**
      * Bluetooth adapter.
@@ -150,15 +155,15 @@ public class BTDeviceListFragment extends DialogFragment {
             //Toggle the drone connection
             ((DroidPlannerApp) activity.getApplication()).drone.MavClient.toggleConnectionState();
 
-            //Close the parent activity
-            getActivity().finish();
+            //Dismiss the dialog
+            dismiss();
         }
     };
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case BTDeviceSelectionActivity.REQUEST_ENABLE_BT:
+            case REQUEST_ENABLE_BT:
                 if (resultCode == Activity.RESULT_CANCELED) {
                     //Bluetooth activation was denied by the user. Dismiss this dialog.
                     dismiss();
@@ -248,8 +253,7 @@ public class BTDeviceListFragment extends DialogFragment {
         }
         else {
             //Request that bluetooth be enabled
-            startActivityForResult(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE),
-                    BTDeviceSelectionActivity.REQUEST_ENABLE_BT);
+            startActivityForResult(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE), REQUEST_ENABLE_BT);
         }
     }
 
