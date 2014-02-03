@@ -2,7 +2,7 @@ apply plugin: 'android'
 
 dependencies {
     compile files('libs/usbseriallibrary.jar')
-    compile 'com.android.support:support-v4:13.0.0'
+    compile 'com.android.support:support-v4:18.0.0'
     compile 'com.google.android.gms:play-services:4.0.30'
     compile project(':Mavlink')
     compile project(':HorizontalVariableListView:HorizontalVariableListView')
