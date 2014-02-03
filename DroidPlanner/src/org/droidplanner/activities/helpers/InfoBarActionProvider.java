@@ -6,6 +6,7 @@ import android.view.ActionProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -33,141 +34,370 @@ public class InfoBarActionProvider extends ActionProvider implements OnDroneList
      * Set of actions supported by the info bar
      */
     public enum InfoBarItem {
-        HOME(R.id.bar_home, 0),
-        GPS(R.id.bar_gps, 0),
 
-        FLIGHT_TIME(R.id.bar_propeller, R.layout.popup_info_flight_time) {
+        /**
+         * Home info bar item: displays the distance of the drone from its home location.
+         */
+        HOME(R.id.bar_home){
             @Override
-            public void updatePopupView(Context context, final Drone drone) {
-                super.updatePopupView(context, drone);
-
-                if (mPopupWindow == null) {
-                    throw new IllegalStateException("Unable to initialize popup window for the " +
-                            "flight time info bar item.");
+            public void updateItemView(final Context context, final Drone drone){
+                if(mItemView != null){
+                    String update = drone == null
+                            ? "--"
+                            : String.format("Home\n%s", drone.home.getDroneDistanceToHome().toString());
+                    ((TextView)mItemView).setText(update);
                 }
+            }
+        },
 
-                final View popupView = mPopupWindow.getContentView();
-                popupView.setOnClickListener(new View.OnClickListener() {
+        /**
+         * GPS info bar item: displays the count of satellites, and other gps information.
+         */
+        GPS(R.id.bar_gps){
+            @Override
+            public void updateItemView(final Context context, final Drone drone){
+                if(mItemView != null){
+                    String update = drone == null
+                            ? "--"
+                            : String.format("Satellite\n%d, %s", drone.GPS.getSatCount(),
+                            drone.GPS.getFixType());
+
+                    ((TextView)mItemView).setText(update);
+                }
+            }
+        },
+
+        /**
+         * Flight time info bar item: displays the amount of time the drone is armed.
+         */
+        FLIGHT_TIME(R.id.bar_propeller) {
+
+            /**
+             * This is the period for the flight time update.
+             */
+            private final static long FLIGHT_TIMER_PERIOD = 1000l; //1 second
+
+            /**
+             * This is the layout resource id for the popup window.
+             */
+            private static final int sPopupWindowLayoutId = R.layout.popup_info_flight_time;
+
+            /**
+             * This popup is used to offer the user the option to reset the flight time.
+             */
+            private PopupWindow mPopup;
+
+            /**
+             * This handler is used to update the flight time value.
+             */
+            private final Handler mHandler = new Handler();
+
+            @Override
+            public  void initItemView(final Context context, View parentView, final Drone drone) {
+                super.initItemView(context, parentView, drone);
+                mPopup = initPopupWindow(context, sPopupWindowLayoutId);
+                updateItemView(context, drone);
+            }
+
+            @Override
+            public void updateItemView(final Context context, final Drone drone){
+                mHandler.removeCallbacksAndMessages(null);
+
+                if(mItemView != null){
+                    mItemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (mPopup == null)
+                                return;
+
+                            final View popupView = mPopup.getContentView();
+                            popupView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if (drone != null) {
+                                        drone.state.resetFlightTimer();
+                                    }
+                                    mPopup.dismiss();
+                                }
+                            });
+
+                            mPopup.showAsDropDown(mItemView);
+                        }
+                    });
+
+                    if(drone != null){
+                        new Runnable(){
+                            @Override
+                            public void run(){
+                                mHandler.removeCallbacks(this);
+                                if(drone == null)
+                                    return;
+
+                                if(mItemView != null){
+                                    long timeInSeconds = drone.state.getFlightTime();
+                                    long minutes = timeInSeconds / 60;
+                                    long seconds = timeInSeconds % 60;
+
+                                    ((TextView)mItemView).setText(String.format("Flight " +
+                                            "Time\n%02d:%02d", minutes, seconds));
+                                }
+
+                                mHandler.postDelayed(this, FLIGHT_TIMER_PERIOD);
+                            }
+                        }.run();
+                    }
+                    else{
+                        ((TextView)mItemView).setText("--:--");
+                    }
+                }
+            }
+        },
+
+        /**
+         * Battery info bar item: displays the drone remaining voltage,
+         * and ratio of remaining to full voltage.
+         */
+        BATTERY(R.id.bar_battery){
+            @Override
+            public void updateItemView(Context context, Drone drone){
+                if(mItemView != null){
+                    String update = drone == null
+                            ? "--"
+                            : String.format("%2.1fv\n%2.0f%%",
+                            drone.battery.getBattVolt(), drone.battery.getBattRemain());
+
+                    ((TextView)mItemView).setText(update);
+                }
+            }
+        },
+
+        /**
+         * Radio signal info bar item: displays the drone radio signal strength.
+         */
+        SIGNAL(R.id.bar_signal) {
+
+            /**
+             * This is the layout resource id for the popup window.
+             */
+            private static final int sPopupWindowLayoutId = R.layout.popup_info_signal;
+
+            /**
+             * This popup is used to show additional signal info.
+             */
+            private PopupWindow mPopup;
+
+            @Override
+            public void initItemView(Context context, View parentView, Drone drone){
+                super.initItemView(context, parentView, drone);
+                mPopup = initPopupWindow(context, sPopupWindowLayoutId);
+                updateItemView(context, drone);
+            }
+
+            @Override
+            public void updateItemView(Context context, final Drone drone){
+                if(mItemView == null)
+                    return;
+
+                mItemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (drone != null) {
-                            drone.state.resetFlightTimer();
-                        }
-                        mPopupWindow.dismiss();
+                        if(mPopup == null)
+                            return;
+
+                        final View popupView = mPopup.getContentView();
+                        ((TextView) popupView.findViewById(R.id.bar_signal_rssi)).setText(String.format
+                                ("RSSI %2.0f dB",         drone.radio.getRssi()));
+                        ((TextView) popupView.findViewById(R.id.bar_signal_remrssi)).setText(String
+                                .format("RemRSSI %2.0f dB",                                    drone.radio.getRemRssi()));
+                        ((TextView) popupView.findViewById(R.id.bar_signal_noise)).setText(String.format
+                                ("Noise %2.0f dB",                                    drone.radio.getNoise()));
+                        ((TextView) popupView.findViewById(R.id.bar_signal_remnoise)).setText(String
+                                .format("RemNoise %2.0f dB",                                    drone.radio.getRemNoise()));
+                        ((TextView) popupView.findViewById(R.id.bar_signal_fade)).setText(String.format
+                                ("Fade %2.0f dB",                                    drone.radio.getFadeMargin()));
+                        ((TextView) popupView.findViewById(R.id.bar_signal_remfade)).setText(String
+                                .format("RemFade %2.0f dB",                                    drone.radio.getRemFadeMargin()));
+
+                        mPopup.update();
+                        mPopup.showAsDropDown(mItemView);
                     }
                 });
 
-                mPopupWindow.update();
+                String update = drone == null
+                        ? "--"
+                        : String.format("%d%%", drone.radio.getSignalStrength());
+                ((TextView)mItemView).setText(update);
             }
         },
 
-        BATTERY(R.id.bar_battery, 0),
+        /**
+         * Flight/APM modes info bar item: allows the user to select/view the drone flight mode.
+         */
+        FLIGHT_MODES(R.id.bar_flight_mode) {
 
-        SIGNAL(R.id.bar_signal, R.layout.popup_info_signal) {
+            /**
+             * Stores the type of the current drone state.
+             */
+            private int mLastDroneType = -1;
+
+            /**
+             * This is the spinner modes adapter.
+             */
+            private ModeAdapter mModeAdapter;
+
             @Override
-            public void updatePopupView(Context context, Drone drone) {
-                if (drone == null) {
-                    mPopupWindow = null;
-                }
-                else {
-                    super.updatePopupView(context, drone);
+            public void initItemView(final Context context, View parentView, final Drone drone) {
+                super.initItemView(context, parentView, drone);
+                updateItemView(context, drone);
+            }
 
-                    if (mPopupWindow == null) {
-                        throw new IllegalStateException("Unable to initialize popup window for " +
-                                "the radio signal info bar item.");
+            @Override
+            public void updateItemView(final Context context, final Drone drone){
+                if(mItemView == null)
+                    return;
+
+                final Spinner modesSpinner = (Spinner) mItemView;
+                modesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position,
+                                               long id) {
+                        if (drone != null) {
+                            ApmModes newMode = (ApmModes) parent.getItemAtPosition(position);
+                            drone.state.changeFlightMode(newMode);
+                        }
                     }
 
-                    final View popupView = mPopupWindow.getContentView();
-                    ((TextView) popupView.findViewById(R.id.bar_signal_rssi)).setText(String.format
-                            ("RSSI %2.0f dB",
-                                    drone.radio.getRssi()));
-                    ((TextView) popupView.findViewById(R.id.bar_signal_remrssi)).setText(String
-                            .format("RemRSSI %2.0f dB",
-                                    drone.radio.getRemRssi()));
-                    ((TextView) popupView.findViewById(R.id.bar_signal_noise)).setText(String.format
-                            ("Noise %2.0f dB",
-                                    drone.radio.getNoise()));
-                    ((TextView) popupView.findViewById(R.id.bar_signal_remnoise)).setText(String
-                            .format("RemNoise %2.0f dB",
-                                    drone.radio.getRemNoise()));
-                    ((TextView) popupView.findViewById(R.id.bar_signal_fade)).setText(String.format
-                            ("Fade %2.0f dB",
-                                    drone.radio.getFadeMargin()));
-                    ((TextView) popupView.findViewById(R.id.bar_signal_remfade)).setText(String
-                            .format("RemFade %2.0f dB",
-                                    drone.radio.getRemFadeMargin()));
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {}
+                });
 
-                    mPopupWindow.update();
+                if(mModeAdapter == null){
+                    mModeAdapter = new ModeAdapter(context, R.layout.spinner_drop_down);
+                    modesSpinner.setAdapter(mModeAdapter);
                 }
+
+                final int droneType = drone == null ? -1: drone.type.getType();
+                if(droneType != mLastDroneType){
+                    final List<ApmModes> flightModes = droneType == -1
+                            ? Collections.<ApmModes>emptyList()
+                            : ApmModes.getModeList(droneType);
+
+                    mModeAdapter.clear();
+                    mModeAdapter.addAll(flightModes);
+                    mModeAdapter.notifyDataSetChanged();
+
+                    mLastDroneType = droneType;
+                }
+
+                if(drone != null)
+                    modesSpinner.setSelection(mModeAdapter.getPosition(drone.state.getMode()));
             }
         },
 
-        FLIGHT_MODES(R.id.bar_flight_mode, 0),
+        /**
+         * This is used on normal screen devices ( 320dp <= x < 540dp) to reduce the width of the
+         * info bar. Items typically on the info bar are moved to the popup displayed by clicking
+         * on this item's icon.
+         */
+        PHONE_EXTRA(R.id.bar_phone_extra) {
+            /**
+             * This is the layout resource id for the popup window.
+             */
+            private static final int sPopupWindowLayoutId = R.layout.popup_info_phone_extra;
 
-        PHONE_EXTRA(R.id.bar_phone_extra, R.layout.popup_info_phone_extra) {
+            /**
+             * This is the list of info bar items stored as extra.
+             */
+            private final InfoBarItem[] mExtraInfoBarItems = {
+              HOME, GPS, BATTERY, FLIGHT_TIME
+            };
+
+            /**
+             * This popup is used to show additional signal info.
+             */
+            private PopupWindow mPopup;
+
             @Override
-            public void updatePopupView(Context context, Drone drone){
-                if(drone == null){
-                    mPopupWindow = null;
-                }
-                else{
-                    super.updatePopupView(context, drone);
+            public void initItemView(Context context, View parentView, Drone drone){
+                super.initItemView(context, parentView, drone);
 
-                    if (mPopupWindow == null) {
-                        throw new IllegalStateException("Unable to initialize popup window for " +
-                                "the phone extra info bar item.");
+                //Initialize the popup window.
+                mPopup = initPopupWindow(context, sPopupWindowLayoutId);
+                if(mPopup != null){
+                    final View popupView = mPopup.getContentView();
+
+                    for(InfoBarItem infoItem: mExtraInfoBarItems){
+                        infoItem.initItemView(context, popupView, drone);
                     }
-
-                    final View popupView = mPopupWindow.getContentView();
-                    final TextView homeView = (TextView) popupView.findViewById(R.id.bar_home);
-                    updateHomeViewHelper(drone, homeView);
-
-                    final TextView gpsView = (TextView) popupView.findViewById(R.id.bar_gps);
-                    updateGpsInfoHelper(drone, gpsView);
-
-                    mPopupWindow.update();
                 }
+
+                updateItemView(context, drone);
+            }
+
+            @Override
+            public void updateItemView(final Context context, final Drone drone){
+                if(mItemView == null)
+                    return;
+
+                mItemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(mPopup == null)
+                            return;
+
+                        final View popupView = mPopup.getContentView();
+
+                        //Update the popup window content.
+                        for(InfoBarItem infoItem: mExtraInfoBarItems){
+                            infoItem.updateItemView(context, drone);
+                        }
+
+                        mPopup.update();
+                        mPopup.showAsDropDown(mItemView);
+                    }
+                });
             }
         };
 
         /**
          * Id for the info action.
          */
-        protected final int mActionId;
+        protected final int mItemId;
 
         /**
-         * Info bar action popup window.
+         * Info bar item view.
          */
-        protected PopupWindow mPopupWindow;
+        protected View mItemView;
 
-        /**
-         * Resource layout for the info popup view.
-         */
-        protected final int mPopupViewRes;
-
-        private InfoBarItem(int actionId, int popupViewRes) {
-            mActionId = actionId;
-            mPopupViewRes = popupViewRes;
+        private InfoBarItem(int itemId) {
+            mItemId = itemId;
         }
 
         /**
          * @return the info bar action id.
          */
         public int getItemId() {
-            return mActionId;
+            return mItemId;
         }
 
         /**
-         * @return the popup window for this info bar action
+         * This initializes the view backing this info bar item.
+         * @param context application context
+         * @param parentView parent view for the info bar item
+         * @param drone current drone state
          */
-        public PopupWindow getPopupWindow(Context context) {
-            if (mPopupWindow == null) {
-                initPopupWindow(context);
-                updatePopupView(context, null);
-            }
-
-            return mPopupWindow;
+        public void initItemView(final Context context, View parentView, Drone drone) {
+            mItemView = parentView.findViewById(mItemId);
         }
+
+        /**
+         * @return the info bar item view.
+         */
+        public View getItemView(){
+            return mItemView;
+        }
+
+        public void updateItemView(Context context, Drone drone){}
 
         /**
          * This is used, during the creation of the {@link InfoBarActionProvider} class,
@@ -175,12 +405,9 @@ public class InfoBarActionProvider extends ActionProvider implements OnDroneList
          *
          * @param context application context
          */
-        protected void initPopupWindow(Context context) {
-            mPopupWindow = null;
-
-            int popupViewRes = mPopupViewRes;
+        protected static PopupWindow initPopupWindow(Context context, int popupViewRes) {
             if (popupViewRes == 0)
-                return;
+                return null;
 
             final LayoutInflater inflater = LayoutInflater.from(context);
             final View popupView = inflater.inflate(popupViewRes, null);
@@ -191,22 +418,13 @@ public class InfoBarActionProvider extends ActionProvider implements OnDroneList
             popup.setBackgroundDrawable(context.getResources().getDrawable(R.drawable
                     .panel_white_bg));
 
-            mPopupWindow = popup;
-        }
-
-        /**
-         * This is used to update the popup window view to match the current drone state
-         *
-         * @param context application context
-         * @param drone   currently connected drone
-         */
-        public void updatePopupView(Context context, Drone drone) {
-            if (mPopupWindow == null) {
-                initPopupWindow(context);
-            }
+            return popup;
         }
     }
 
+    /**
+     * Application context.
+     */
     private final Context mContext;
 
     /**
@@ -219,35 +437,6 @@ public class InfoBarActionProvider extends ActionProvider implements OnDroneList
      */
     private View mView;
 
-    private final Handler mHandler = new Handler();
-
-    private final static long FLIGHT_TIMER_PERIOD = 1000l; //1 second
-
-    private final Runnable mFlightTimer = new Runnable() {
-        @Override
-        public void run() {
-            mHandler.removeCallbacks(this);
-            if (mDrone == null)
-                return;
-
-            if (mView != null) {
-                final TextView flightTimeView = (TextView) mView.findViewById(InfoBarItem
-                        .FLIGHT_TIME.getItemId());
-                if (flightTimeView != null) {
-
-                    long timeInSeconds = mDrone.state.getFlightTime();
-                    long minutes = timeInSeconds / 60;
-                    long seconds = timeInSeconds % 60;
-
-                    flightTimeView.setText(String.format("Flight Time\n%02d:%02d", minutes,
-                            seconds));
-                }
-            }
-
-            mHandler.postDelayed(this, FLIGHT_TIMER_PERIOD);
-        }
-    };
-
     public InfoBarActionProvider(Context context) {
         super(context);
         mContext = context;
@@ -256,13 +445,12 @@ public class InfoBarActionProvider extends ActionProvider implements OnDroneList
     @Override
     public View onCreateActionView() {
         final LayoutInflater inflater = LayoutInflater.from(mContext);
-        final View view = inflater.inflate(R.layout.action_provider_info_bar, null);
-        setupActionView(view);
+        mView = inflater.inflate(R.layout.action_provider_info_bar, null);
 
-        mView = view;
+        setupActionView();
         updateInfoBar();
 
-        return view;
+        return mView;
     }
 
     /**
@@ -277,261 +465,75 @@ public class InfoBarActionProvider extends ActionProvider implements OnDroneList
     @Override
     public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
         setDrone(drone);
+
+        boolean updateExtra = true;
         switch (event) {
             case BATTERY:
-                updateBatteryInfo();
+                ;InfoBarItem.BATTERY.updateItemView(mContext, mDrone);
                 break;
 
             case CONNECTED:
                 updateInfoBar();
+                updateExtra = false;
                 break;
 
             case DISCONNECTED:
                 setDrone(null);
                 updateInfoBar();
+                updateExtra = false;
                 break;
 
             case GPS_FIX:
             case GPS_COUNT:
-                updateGpsInfo();
-                updatePhoneExtraInfo();
+                InfoBarItem.GPS.updateItemView(mContext, mDrone);
                 break;
 
             case HOME:
-                updateHomeInfo();
-                updatePhoneExtraInfo();
-                break;
-
-            case MODE:
-                updateFlightModesInfoSelection();
+                InfoBarItem.HOME.updateItemView(mContext, mDrone);
                 break;
 
             case RADIO:
-                updateRadioInfo();
+                InfoBarItem.SIGNAL.updateItemView(mContext, mDrone);
                 break;
 
             case STATE:
-                updateFlightTimeInfo();
+                InfoBarItem.FLIGHT_TIME.updateItemView(mContext, mDrone);
                 break;
 
+            case MODE:
             case TYPE:
-                updateFlightModesInfoType();
+                InfoBarItem.FLIGHT_MODES.updateItemView(mContext, mDrone);
                 break;
 
             default:
+                updateExtra = false;
                 break;
         }
-    }
 
-    /**
-     * Go through the list of action bar item, and check they're present on the action provider
-     * view. If they're, and have a valid popup window, set the onclicklistener to show the popup.
-     *
-     * @param view initialized action provider view.
-     */
-    private void setupActionView(View view) {
-        final InfoBarItem[] barActions = InfoBarItem.values();
-
-        for (final InfoBarItem action : barActions) {
-            final View actionView = view.findViewById(action.getItemId());
-            if (actionView == null)
-                continue;
-
-            actionView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    final PopupWindow popup = action.getPopupWindow(mContext);
-                    if (popup == null)
-                        return;
-
-                    popup.showAsDropDown(actionView);
-                }
-            });
+        if(updateExtra){
+            InfoBarItem.PHONE_EXTRA.updateItemView(mContext, mDrone);
         }
     }
 
     /**
-     * Contains logic to update the battery info bar item.
+     * Go through the list of action bar item, and initialize their view.
      */
-    private void updateBatteryInfo() {
-        final InfoBarItem batteryItem = InfoBarItem.BATTERY;
-        batteryItem.updatePopupView(mContext, mDrone);
+    private void setupActionView() {
+        final InfoBarItem[] barItems = InfoBarItem.values();
 
-        if (mView != null) {
-            final TextView itemView = (TextView) mView.findViewById(batteryItem.getItemId());
-            if (itemView != null) {
-                String update = mDrone == null
-                        ? "--"
-                        : String.format("%2.1fv\n%2.0f%%",
-                        mDrone.battery.getBattVolt(), mDrone.battery.getBattRemain());
-
-                itemView.setText(update);
-            }
+        for (final InfoBarItem item : barItems) {
+            item.initItemView(mContext, mView, mDrone);
         }
-    }
-
-    /**
-     * Contains logic to update the gps info bar item.
-     */
-    private void updateGpsInfo() {
-        final InfoBarItem gpsItem = InfoBarItem.GPS;
-        gpsItem.updatePopupView(mContext, mDrone);
-
-        if (mView != null) {
-            final TextView gpsItemView = (TextView) mView.findViewById(gpsItem.getItemId());
-            updateGpsInfoHelper(mDrone, gpsItemView);
-        }
-    }
-
-    /**
-     * Abstracts the logic to update the gps info bar view.
-     * @param drone current drone state
-     * @param gpsView {@link TextView} to update
-     */
-    private static void updateGpsInfoHelper(Drone drone, TextView gpsView){
-        if (gpsView != null) {
-            String update = drone == null
-                    ? "--"
-                    : String.format("Satellite\n%d, %s", drone.GPS.getSatCount(),
-                    drone.GPS.getFixType());
-
-            gpsView.setText(update);
-        }
-    }
-
-    /**
-     * Contains logic to update the radio/signal info bar item.
-     */
-    private void updateRadioInfo() {
-        final InfoBarItem radioItem = InfoBarItem.SIGNAL;
-        radioItem.updatePopupView(mContext, mDrone);
-
-        if (mView != null) {
-            final TextView radioItemView = (TextView) mView.findViewById(radioItem.getItemId());
-            if (radioItemView != null) {
-                String update = mDrone == null
-                        ? "--"
-                        : String.format("%d%%", mDrone.radio.getSignalStrength());
-
-
-                radioItemView.setText(update);
-            }
-        }
-    }
-
-    /**
-     * Contains logic to update the home info bar item.
-     */
-    private void updateHomeInfo() {
-        final InfoBarItem homeItem = InfoBarItem.HOME;
-        homeItem.updatePopupView(mContext, mDrone);
-
-        if (mView != null) {
-            final TextView homeItemView = (TextView) mView.findViewById(homeItem.getItemId());
-            updateHomeViewHelper(mDrone, homeItemView);
-        }
-    }
-
-    /**
-     * Abstracts the logic to update the home info bar view.
-     * @param drone current drone state
-     * @param homeView {@link TextView} to update
-     */
-    private static void updateHomeViewHelper(Drone drone, TextView homeView){
-        if (homeView != null) {
-            String update = drone == null
-                    ? "--"
-                    : String.format("Home\n%s", drone.home.getDroneDistanceToHome().toString());
-
-            homeView.setText(update);
-        }
-    }
-
-    /**
-     * Updates the flight modes info bar item mode list.
-     */
-    private void updateFlightModesInfoType() {
-        final InfoBarItem flightModesItem = InfoBarItem.FLIGHT_MODES;
-        flightModesItem.updatePopupView(mContext, mDrone);
-
-        if (mView != null) {
-            final Spinner modesSpinner = (Spinner) mView.findViewById(flightModesItem.getItemId());
-            if (modesSpinner != null) {
-                final List<ApmModes> flightModes = mDrone == null
-                        ? Collections.<ApmModes>emptyList()
-                        : ApmModes.getModeList(mDrone.type.getType());
-
-                ModeAdapter modesAdapter = (ModeAdapter) modesSpinner.getAdapter();
-                if (modesAdapter == null) {
-                    modesAdapter = new ModeAdapter(mContext, R.layout.spinner_setup, flightModes);
-                    modesSpinner.setAdapter(modesAdapter);
-                } else {
-                    modesAdapter.clear();
-                    modesAdapter.addAll(flightModes);
-                    modesAdapter.notifyDataSetChanged();
-                }
-            }
-        }
-    }
-
-    /**
-     * Updates the flight modes info bar item mode selection.
-     */
-    private void updateFlightModesInfoSelection() {
-        final InfoBarItem flightModesItem = InfoBarItem.FLIGHT_MODES;
-        flightModesItem.updatePopupView(mContext, mDrone);
-
-        if(mDrone != null && mView != null){
-            final Spinner modesSpinner = (Spinner) mView.findViewById(flightModesItem.getItemId());
-            if(modesSpinner != null){
-                final ModeAdapter modesAdapter = (ModeAdapter) modesSpinner.getAdapter();
-                if(modesAdapter != null){
-                    modesSpinner.setSelection(modesAdapter.getPosition(mDrone.state.getMode()));
-                }
-            }
-        }
-    }
-
-    /**
-     * Contains logic to update the flight time info bar item.
-     */
-    private void updateFlightTimeInfo() {
-        final InfoBarItem flightTimeItem = InfoBarItem.FLIGHT_TIME;
-        flightTimeItem.updatePopupView(mContext, mDrone);
-
-        mHandler.removeCallbacks(mFlightTimer);
-
-        if (mDrone != null) {
-            mFlightTimer.run();
-        }
-        else if (mView != null) {
-            final TextView flightTimeView = (TextView) mView.findViewById(flightTimeItem
-                    .getItemId());
-            if (flightTimeView != null)
-                flightTimeView.setText("--:--");
-        }
-    }
-
-    /**
-     * Updates the info bars item tucked in the 'extra' window.
-     */
-    private void updatePhoneExtraInfo(){
-        final InfoBarItem phoneExtraItem = InfoBarItem.PHONE_EXTRA;
-        phoneExtraItem.updatePopupView(mContext, mDrone);
     }
 
     /**
      * This updates the info bar with the current drone state.
      */
     private void updateInfoBar() {
-        updateBatteryInfo();
-        updateFlightTimeInfo();
-        updateGpsInfo();
-        updateHomeInfo();
-        updatePhoneExtraInfo();
-        updateRadioInfo();
+        final InfoBarItem[] barItems = InfoBarItem.values();
 
-        updateFlightModesInfoType();
-        updateFlightModesInfoSelection();
+        for (final InfoBarItem item : barItems) {
+            item.updateItemView(mContext, mDrone);
+        }
     }
 }

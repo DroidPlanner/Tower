@@ -11,9 +11,12 @@ import java.util.List;
 
 public class ModeAdapter extends ArrayAdapter<ApmModes> {
 
+    public ModeAdapter(Context context, int resource){
+        super(context, resource);
+    }
+
 	public ModeAdapter(Context context, int resource, List<ApmModes> objects) {
 		super(context, resource, objects);
-		addAll(objects);
 	}
 
 	@Override

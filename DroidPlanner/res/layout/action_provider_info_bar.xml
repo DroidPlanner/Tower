@@ -8,30 +8,6 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/bar_propeller"
-        style="?android:attr/buttonBarButtonStyle"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="match_parent"
-        android:text="--:--"
-        android:drawableLeft="@drawable/ic_status_flight_time"
-        android:textSize="@dimen/info_bar_text_size"
-        android:drawablePadding="@dimen/info_bar_drawable_padding"
-        />
-
-    <TextView
-        android:id="@+id/bar_battery"
-        style="?android:attr/buttonBarButtonStyle"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="match_parent"
-        android:text="--"
-        android:drawableLeft="@drawable/ic_status_battery"
-        android:textSize="@dimen/info_bar_text_size"
-        android:drawablePadding="@dimen/info_bar_drawable_padding"
-        />
-
-    <TextView
         android:id="@+id/bar_signal"
         style="?android:attr/buttonBarButtonStyle"
         android:layout_width="0dp"
@@ -41,6 +17,14 @@
         android:drawableLeft="@drawable/ic_status_rssi"
         android:textSize="@dimen/info_bar_text_size"
         android:drawablePadding="@dimen/info_bar_drawable_padding"
+        />
+
+    <Spinner
+        android:id="@+id/bar_flight_mode"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
         />
 
     <ImageButton
