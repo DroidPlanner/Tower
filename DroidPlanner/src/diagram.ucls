@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.4" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true">  
+  <interface id="1" language="java" name="com.droidplanner.DroidPlannerApp.OnSystemArmListener" 
+    project="FlightDataActivity" file="/FlightDataActivity/src/com/droidplanner/DroidPlannerApp.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="399" y="228"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <interface id="2" language="java" name="com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner" 
+    project="FlightDataActivity" file="/FlightDataActivity/src/com/droidplanner/DroidPlannerApp.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="81" width="173" x="56" y="311"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="3" language="java" name="com.droidplanner.DroidPlannerApp" project="FlightDataActivity" 
+    file="/FlightDataActivity/src/com/droidplanner/DroidPlannerApp.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="279" width="237" x="56" y="-8"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="4" language="java" name="com.droidplanner.DroidPlannerApp.ConnectionStateListner" 
+    project="FlightDataActivity" file="/FlightDataActivity/src/com/droidplanner/DroidPlannerApp.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="99" width="158" x="269" y="311"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="5" language="java" name="com.droidplanner.activitys.FlightDataActivity" project="FlightDataActivity" 
+    file="/FlightDataActivity/src/com/droidplanner/activitys/FlightDataActivity.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="116" y="647"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="com.droidplanner.activitys.LogActivity" project="FlightDataActivity" 
+    file="/FlightDataActivity/src/com/droidplanner/activitys/LogActivity.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="386" y="520"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="com.droidplanner.activitys.helpers.SuperActivity" project="FlightDataActivity" 
+    file="/FlightDataActivity/src/com/droidplanner/activitys/helpers/SuperActivity.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="606" y="211"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="com.droidplanner.activitys.helpers.SuperFlightActivity" 
+    project="FlightDataActivity" 
+    file="/FlightDataActivity/src/com/droidplanner/activitys/helpers/SuperFlightActivity.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="419" y="844"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="9" language="java" name="com.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListner" 
+    project="FlightDataActivity" file="/FlightDataActivity/src/com/droidplanner/dialogs/AltitudeDialog.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="728" y="940"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="10" language="java" name="com.droidplanner.dialogs.AltitudeDialog" project="FlightDataActivity" 
+    file="/FlightDataActivity/src/com/droidplanner/dialogs/AltitudeDialog.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="724" y="698"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="11" language="java" name="com.droidplanner.drone.variables.Mission" project="FlightDataActivity" 
+    file="/FlightDataActivity/src/com/droidplanner/drone/variables/Mission.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="82" y="1202"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <realization id="12">    
+    <bendpoint x="274" y="611"/>    
+    <bendpoint x="277" y="435"/>    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="2"/>  
+  </realization>  
+  <association id="13">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="14" name="conectionListner"/>      
+      <multiplicity id="15" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="16">    
+    <bendpoint x="561" y="516"/>    
+    <bendpoint x="564" y="856"/>    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="9"/>  
+  </realization>  
+  <association id="17">    
+    <bendpoint x="-38" y="800"/>    
+    <bendpoint x="-39" y="442"/>    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="18" name="missionListner"/>      
+      <multiplicity id="19" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="20">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="4"/>  
+  </nesting>  
+  <generalization id="21">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="7"/>  
+  </generalization>  
+  <realization id="22">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="4"/>  
+  </realization>  
+  <nesting id="23">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="9"/>  
+  </nesting>  
+  <generalization id="24">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="7"/>  
+  </generalization>  
+  <nesting id="25">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="2"/>  
+  </nesting>  
+  <realization id="26">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="2"/>  
+  </realization>  
+  <realization id="27">    
+    <bendpoint x="255" y="822"/>    
+    <bendpoint x="250" y="456"/>    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="2"/>  
+  </realization>  
+  <generalization id="28">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="8"/>  
+  </generalization>  
+  <association id="29">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="30" name="listner"/>      
+      <multiplicity id="31" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="32">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="1"/>  
+  </nesting>  
+  <association id="33">    
+    <bendpoint x="417" y="115"/>    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="34" name="app"/>      
+      <multiplicity id="35" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="36">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="37" name="onSystemArmListener"/>      
+      <multiplicity id="38" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

@@ -11,7 +11,7 @@
         android:layout_weight=".5"
         class="com.droidplanner.fragments.HudFragment" />
 
-	<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+	<RelativeLayout 
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:layout_weight=".5">
@@ -30,6 +30,47 @@
 			android:visibility="invisible"
 			android:background="@android:drawable/toast_frame"
 			android:textAppearance="?android:attr/textAppearanceSmall" />
+
+		<Button
+		    android:id="@+id/Launch"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentRight="true"
+		    android:layout_alignParentTop="true"
+		    android:text="Launch" />
+
+		<Button
+		    android:id="@+id/Land"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentRight="true"
+		    android:layout_below="@+id/textViewDistance"
+		    android:text="Land" />
+
+		<Button
+		    android:id="@+id/ArmDisarm"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentRight="true"
+		    android:layout_below="@+id/Land"
+		    android:text="arm" />
+
+		<Button
+		    android:id="@+id/Stabilize"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentRight="true"
+		    android:layout_below="@+id/ArmDisarm"
+		    android:text="Stabilize" />
+
+		<Button
+		    android:id="@+id/RTL"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentRight="true"
+		    android:layout_below="@+id/Stabilize"
+		    android:text="RTL" />
+
 	</RelativeLayout>
     
 </LinearLayout>
