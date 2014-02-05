@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    >
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group
         android:id="@+id/menu_group_connected"
@@ -10,7 +9,7 @@
             android:id="@+id/menu_info_bar"
             android:title="@string/menu_info_bar"
             android:showAsAction="always"
-            android:actionProviderClass="org.droidplanner.activities.helpers.InfoBarActionProvider"
+            android:actionProviderClass="org.droidplanner.widgets.actionProviders.InfoBarActionProvider"
             />
 
         <item
