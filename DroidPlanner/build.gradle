@@ -2,10 +2,11 @@ apply plugin: 'android'
 
 dependencies {
     compile files('libs/usbseriallibrary.jar')
+    compile 'com.android.support:support-v4:18.0.0'
+    compile 'com.google.android.gms:play-services:4.0.30'
     compile files('libs/osmdroid-android-4.0.jar')
     compile files('libs/slf4j-android-1.5.8.jar')
     compile files('libs/gdk.jar')
-    compile project(':google-play-services_lib')
     compile project(':Mavlink')
     compile project(':HorizontalVariableListView:HorizontalVariableListView')
 }
