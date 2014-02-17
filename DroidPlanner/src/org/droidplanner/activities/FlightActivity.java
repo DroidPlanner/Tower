@@ -1,18 +1,5 @@
 package org.droidplanner.activities;
 
-import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.view.View;
-import android.widget.Toast;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.maps.model.LatLng;
-
 import org.droidplanner.R;
 import org.droidplanner.activities.helpers.SuperUI;
 import org.droidplanner.drone.Drone;
@@ -40,6 +27,18 @@ import org.droidplanner.fragments.mode.ModePositionFragment;
 import org.droidplanner.fragments.mode.ModeRTLFragment;
 import org.droidplanner.fragments.mode.ModeStabilizeFragment;
 import org.droidplanner.polygon.PolygonPoint;
+
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.view.View;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.maps.model.LatLng;
 
 public class FlightActivity extends SuperUI implements
 		OnMapInteractionListener, OnMissionControlInteraction, OnDroneListener{
