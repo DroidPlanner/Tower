@@ -36,7 +36,7 @@
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_alignParentRight="true"
-		    android:layout_alignParentTop="true"
+		    android:layout_alignParentBottom="true"
 		    android:text="Launch" />
 
 		<Button
@@ -44,7 +44,7 @@
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_alignParentRight="true"
-		    android:layout_below="@+id/textViewDistance"
+		    android:layout_above="@+id/Launch"
 		    android:text="Land" />
 
 		<Button
@@ -52,15 +52,15 @@
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_alignParentRight="true"
-		    android:layout_below="@+id/Land"
-		    android:text="arm" />
+		    android:layout_above="@+id/Land"
+		    android:text="Arm" />
 
 		<Button
 		    android:id="@+id/Stabilize"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_alignParentRight="true"
-		    android:layout_below="@+id/ArmDisarm"
+		    android:layout_above="@+id/ArmDisarm"
 		    android:text="Stabilize" />
 
 		<Button
@@ -68,7 +68,7 @@
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_alignParentRight="true"
-		    android:layout_below="@+id/Stabilize"
+		    android:layout_above="@+id/Stabilize"
 		    android:text="RTL" />
 
 	</RelativeLayout>
