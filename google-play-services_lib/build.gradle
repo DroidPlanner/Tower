@@ -2,14 +2,11 @@ buildscript {
     repositories {
         mavenCentral()
     }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:0.7.+'
-    }
 }
 apply plugin: 'android-library'
 
 dependencies {
-    compile 'com.android.support:support-v4:13.0.0'
+    compile 'com.android.support:support-v4:18.0.0'
     compile 'com.google.android.gms:play-services:4.0.30'
 }
 

@@ -1,7 +1,7 @@
 apply plugin: 'android-library'
 
 dependencies {
-    compile project(':google-play-services_lib')
+    compile 'com.android.support:support-v4:18.0.0'
 }
 
 android {
