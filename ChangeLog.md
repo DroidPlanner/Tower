@@ -1,3 +1,8 @@
+## Droidplanner v2.1.2
+* Clean-up of Strings.xml (#617)
+* Adds a check for Google Play Services (#639)
+* Adding support for Android Studio, Gradle (#623,#619)
+
 ## Droidplanner v2.1.1
 * Fix Parameters screen issue (#613)
 * Making flight screen mission markers un-draggable (#614)
