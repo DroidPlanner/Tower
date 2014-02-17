@@ -78,10 +78,6 @@ public abstract class SuperFlightActivity extends SuperActivity implements
 		ApmModes mode = ApmModes.getMode(text, drone.type.getType());
 		if (ApmModes.isValid(mode)) {
 			drone.state.changeFlightMode(mode);
-            
-            if(mode == ApmModes.ROTOR_AUTO){
-                sendRC();
-            }
 		}
 	}
 
