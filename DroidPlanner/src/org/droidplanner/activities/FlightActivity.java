@@ -1,5 +1,6 @@
 package org.droidplanner.activities;
 
+import org.droidplanner.R;
 import org.droidplanner.activities.helpers.SuperUI;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
@@ -7,10 +8,10 @@ import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.drone.variables.mission.MissionItem;
 import org.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.fragments.FlightActionsFragment;
+import org.droidplanner.fragments.FlightActionsFragment.OnMissionControlInteraction;
 import org.droidplanner.fragments.FlightMapFragment;
 import org.droidplanner.fragments.RCFragment;
 import org.droidplanner.fragments.TelemetryFragment;
-import org.droidplanner.fragments.FlightActionsFragment.OnMissionControlInteraction;
 import org.droidplanner.fragments.helpers.DroneMap;
 import org.droidplanner.fragments.helpers.OnMapInteractionListener;
 import org.droidplanner.fragments.mode.ModeAcroFragment;
@@ -27,17 +28,22 @@ import org.droidplanner.fragments.mode.ModeRTLFragment;
 import org.droidplanner.fragments.mode.ModeStabilizeFragment;
 import org.droidplanner.polygon.PolygonPoint;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 
-import org.droidplanner.R;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.model.LatLng;
 
 public class FlightActivity extends SuperUI implements
 		OnMapInteractionListener, OnMissionControlInteraction, OnDroneListener{
+
+    private static final int GOOGLE_PLAY_SERVICES_REQUEST_CODE = 101;
 
     private FragmentManager fragmentManager;
 	private RCFragment rcFragment;
@@ -61,12 +67,6 @@ public class FlightActivity extends SuperUI implements
             fragmentManager.beginTransaction().add(R.id.modeInfoPanel, modeRtl).commit();
         }
 
-        mapFragment = fragmentManager.findFragmentById(R.id.mapFragment);
-        if(mapFragment == null){
-            mapFragment = new FlightMapFragment();
-            fragmentManager.beginTransaction().add(R.id.mapFragment, mapFragment).commit();
-        }
-
         Fragment telemetryFragment = fragmentManager.findFragmentById(R.id.telemetryFragment);
         if(telemetryFragment == null){
             telemetryFragment = new TelemetryFragment();
@@ -79,13 +79,60 @@ public class FlightActivity extends SuperUI implements
             editorTools = new FlightActionsFragment();
             fragmentManager.beginTransaction().add(R.id.editorToolsFragment, editorTools).commit();
         }
-	}
+
+    }
+
+    /**
+     * Ensures that the device has the correct version of the Google Play Services.
+     * @return true if the Google Play Services binary is valid
+     */
+    private boolean isGooglePlayServicesValid(boolean showErrorDialog){
+        //Check for the google play services is available
+        final int playStatus = GooglePlayServicesUtil.isGooglePlayServicesAvailable
+                (getApplicationContext());
+        final boolean isValid = playStatus == ConnectionResult.SUCCESS;
+
+        if (!isValid && showErrorDialog) {
+            final Dialog errorDialog = GooglePlayServicesUtil.getErrorDialog(playStatus, this,
+                    GOOGLE_PLAY_SERVICES_REQUEST_CODE, new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    finish();
+                }
+            });
+
+            if (errorDialog != null)
+                errorDialog.show();
+        }
+
+        return isValid;
+    }
+
+    /**
+     * Used to setup the flight screen map fragment. Before attempting to initialize the map
+     * fragment, this checks if the Google Play Services binary is installed and up to date.
+     */
+    private void setupMapFragment(){
+        if(mapFragment == null && isGooglePlayServicesValid(true)) {
+            mapFragment = fragmentManager.findFragmentById(R.id.mapFragment);
+            if (mapFragment == null) {
+                mapFragment = new FlightMapFragment();
+                fragmentManager.beginTransaction().add(R.id.mapFragment, mapFragment).commit();
+            }
+        }
+    }
 
 	@Override
 	protected void onStart() {
 		super.onStart();
 		onModeChanged(drone);	// Update the mode detail panel;
 	}
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        setupMapFragment();
+    }
 
 	@Override
 	public void onAddPoint(LatLng point) {
@@ -130,8 +177,11 @@ public class FlightActivity extends SuperUI implements
 
 	@Override
 	public void onPlanningSelected() {
-		((DroneMap) mapFragment ).saveCameraPosition();
-		Intent navigationIntent;
+        if (mapFragment != null) {
+            ((DroneMap) mapFragment ).saveCameraPosition();
+        }
+
+        Intent navigationIntent;
 		navigationIntent = new Intent(this, EditorActivity.class);
 		startActivity(navigationIntent);
 	}
