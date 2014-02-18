@@ -12,8 +12,8 @@
     <string name="help">Help</string>
     <string name="menu_drone_setup">Drone Setup</string>
     <string name="editor">Editor</string>
-    <string name="send_mission">Send mission</string>
-    <string name="load_mission">Load mission</string>
+    <string name="send_mission">Send Mission</string>
+    <string name="load_mission">Load Mission</string>
 
     <!-- Drone Setup tabs -->
     <string name="screen_tuning">Tuning</string>
@@ -63,7 +63,7 @@
     <string name="sidelap">Sidelap:</string>
     <string name="mission_length">Grid Length</string>
     <string name="pictures">Pictures</string>
-    <string name="number_of_strips">Number Of Strips</string>
+    <string name="number_of_strips">Number of Strips</string>
     <string name="exception_draw_polygon">Draw a polygon/WPTs</string>
     <string name="exception_draw_2_more_polygon_points">Draw at least 2 more polygon points</string>
     <string name="exception_draw_1_more_polygon_points">Draw at least 1 more polygon point</string>
@@ -152,33 +152,33 @@
     <string name="progress_title_uploading">Uploading calibration data</string>
     <string name="progress_desc_uploading">DroidPlanner is uploading calibration data to vehicel</string>
     <string name="progress_title_downloading">Downloading calibration data</string>
-    <string name="progress_desc_downloading">DroidPlanner is downloading calibration data from vehicle. If system is not connected, press Cancel</string>
+    <string name="progress_desc_downloading">DroidPlanner is downloading calibration data from vehicle. If system is not connected, press Cancel.</string>
 
     <!-- Radio Setup Resource Strings -->
     <string name="setup_radio_title">Radio Channel Calibration</string>
     <string name="setup_radio_cal_title">Start Calibration</string>
-    <string name="setup_radio_cal_desc">Press Calibrate to start the radio calibration. Ensure the radio transmitter is switched \'ON\' and transmitting</string>
+    <string name="setup_radio_cal_desc">Press Calibrate to start the radio calibration. Ensure the radio transmitter is switched \'ON\' and transmitting.</string>
     <string name="setup_radio_title_minmax">Set Min &amp; Max values</string>
     <string name="setup_radio_title_middle">Set Center values</string>
     <string name="setup_radio_title_complete">Calibration complete</string>
-    <string name="setup_radio_desc_minmax">Move the joysticks all the way out several times and toggle the switches, levers and knobs to all possible positions</string>
-    <string name="setup_radio_desc_middle">Set throttle stick to the lowest position and other joysticks, switches, levers and knobs to their center position</string>
-    <string name="setup_radio_desc_complete">RC calibration completed. Press \'Save\' to upload data to vehicle</string>
+    <string name="setup_radio_desc_minmax">Move the joysticks all the way out several times and toggle the switches, levers and knobs to all possible positions.</string>
+    <string name="setup_radio_desc_middle">Set throttle stick to the lowest position and other joysticks, switches, levers and knobs to their center position.</string>
+    <string name="setup_radio_desc_complete">RC calibration completed. Press \'Save\' to upload data to vehicle.</string>
 
     <!-- Compass Setup Resource Strings -->
     <string name="setup_mag_title">Compass Calibration</string>
 
     <!-- Accelerometer Setup Resource Strings -->
     <string name="setup_imu_title">Accelerometer Calibration</string>
-    <string name="setup_imu_start">Press Calibrate to start IMU calibration. Ensure vehicle is placed on a FLAT surface before beginning the calibration process</string>
-    <string name="setup_imu_normal">Place the vehicle on its NORMAL position ensuring very minimal movement and press Next</string>
-    <string name="setup_imu_left">Place the vehicle on its LEFT ensuring very minimal movement and press Next</string>
-    <string name="setup_imu_right">Place the vehicle on its RIGHT ensuring very minimal movement and press Next</string>
-    <string name="setup_imu_nosedown">Place the vehicle NOSE DOWN ensuring very minimal movement and press Next</string>
-    <string name="setup_imu_noseup">Place the vehicle NOSE UP ensuring very minimal movement and press Next</string>
-    <string name="setup_imu_back">Place the vehicle on its BACK ensuring very minimal movement and press Next</string>
-    <string name="setup_imu_completed">Accelerometer calibration completed. If it is not successful, please recalibrate</string>
-    <string name="setup_imu_step">To start calibration, press Calibrate</string>
+    <string name="setup_imu_start">Press Calibrate to start IMU calibration. Ensure vehicle is placed on a FLAT surface before beginning the calibration process.</string>
+    <string name="setup_imu_normal">Place the vehicle on its NORMAL position ensuring very minimal movement and press Next.</string>
+    <string name="setup_imu_left">Place the vehicle on its LEFT ensuring very minimal movement and press Next.</string>
+    <string name="setup_imu_right">Place the vehicle on its RIGHT ensuring very minimal movement and press Next.</string>
+    <string name="setup_imu_nosedown">Place the vehicle NOSE DOWN ensuring very minimal movement and press Next.</string>
+    <string name="setup_imu_noseup">Place the vehicle NOSE UP ensuring very minimal movement and press Next.</string>
+    <string name="setup_imu_back">Place the vehicle on its BACK ensuring very minimal movement and press Next.</string>
+    <string name="setup_imu_completed">Accelerometer calibration completed. If it was not successful, please recalibrate.</string>
+    <string name="setup_imu_step">To start calibration, press Calibrate.</string>
     <string name="setup_imu_timeleft">"Time left before next orientation: "</string>
 
     <!-- Flight Setup Resource Strings -->
@@ -220,12 +220,12 @@
     <string name="setup_sf_servo10">"Servo 10:"</string>
     <string name="setup_sf_servo11">"Servo 11:"</string>
     <string name="telemetry_default_value">0.0</string>
-    <string name="climb_rate_label">Climb rate</string>
+    <string name="climb_rate_label">Climb Rate</string>
     <string name="altitude_label">Altitude</string>
     <string name="meter_unit">m</string>
     <string name="speed_unit">m/s</string>
-    <string name="ground_speed_label">Ground speed</string>
-    <string name="air_speed_label">Air speed</string>
+    <string name="ground_speed_label">Ground Speed</string>
+    <string name="air_speed_label">Air Speed</string>
     <string name="default_angle_value">--°</string>
 
     <!-- Bluetooth device selection strings -->
