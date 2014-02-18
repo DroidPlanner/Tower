@@ -48,6 +48,8 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	private EditorListFragment missionListFragment;
 	private TextView infoView;
 
+    private View mContainerItemDetail;
+
 	private ActionMode contextualActionBar;
 
 	@Override
@@ -69,6 +71,11 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		missionListFragment = (EditorListFragment) fragmentManager
 				.findFragmentById(R.id.missionFragment1);
 		infoView = (TextView) findViewById(R.id.editorInfoWindow);
+
+        /*
+         * On phone, this view will be null causing the item detail to be shown as a dialog.
+         */
+        mContainerItemDetail = findViewById(R.id.containerItemDetail);
 
 		mission = drone.mission;
 		gestureMapFragment.setOnPathFinishedListener(this);
@@ -98,7 +105,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		super.onDroneEvent(event,drone);
+		super.onDroneEvent(event, drone);
 		switch (event) {
 		case MISSION_UPDATE:
 			// Remove detail window if item is removed
@@ -179,8 +186,14 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 	private void addItemDetail(MissionItem item) {
 		itemDetailFragment = item.getDetailFragment();
-		itemDetailFragment.show(fragmentManager, "Item detail dialog");
-	}
+
+        if (mContainerItemDetail == null) {
+            itemDetailFragment.show(fragmentManager, "Item detail dialog");
+        } else {
+            fragmentManager.beginTransaction().add(R.id.containerItemDetail,
+                    itemDetailFragment).commit();
+        }
+    }
 
     public MissionDetailFragment getItemDetailFragment(){
         return itemDetailFragment;
@@ -193,8 +206,12 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 	private void removeItemDetail() {
 		if (itemDetailFragment != null) {
-			itemDetailFragment.dismiss();
-			itemDetailFragment = null;
+            if (mContainerItemDetail == null) {
+                itemDetailFragment.dismiss();
+            } else {
+                fragmentManager.beginTransaction().remove(itemDetailFragment).commit();
+            }
+            itemDetailFragment = null;
 		}
 	}
 

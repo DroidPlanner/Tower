@@ -7,7 +7,7 @@
 
     <ImageButton
         android:id="@+id/listLeftArrow"
-        android:layout_width="wrap_content"
+        android:layout_width="48dp"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
         android:src="@drawable/button_left_mission"
@@ -18,7 +18,7 @@
 
     <ImageButton
         android:id="@+id/listRightArrow"
-        android:layout_width="wrap_content"
+        android:layout_width="48dp"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
@@ -30,7 +30,7 @@
         />
 
     <it.sephiroth.android.library.widget.HListView
-        android:id="@+id/listView1"
+        android:id="@+id/mission_item_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"

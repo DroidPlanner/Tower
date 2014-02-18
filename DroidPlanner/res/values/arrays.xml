@@ -1,21 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- This string is just used to help in the layout editor -->
-    <string-array name="ExampleCameraArray">
-        <item>No cameras Avaliable</item>
-    </string-array>
     <!-- Do not change the names here, instead extract the extrings -->
-    <string-array name="menu_dropdown">
-        <item>@string/screen_planning</item>
-        <item>@string/screen_flight_data</item>
-        <item>@string/screen_rc</item>
-        <item>@string/screen_parameters</item>
-        <item>@string/screen_camera</item>
-        <item>@string/screen_gcp</item>
-        <item>@string/screen_chart</item>
-        <item>"NewUI"</item>
-    </string-array>
     <string-array name="RCQuickModes">
         <item name="Stabilize">Stabilize</item>
         <item name="Acro">Acro</item>
@@ -38,10 +24,10 @@
         <item name="BLUETOOTH">BLUETOOTH</item>
     </string-array>
     <string-array name="MapTypes">
-        <item>Satellite</item>
-        <item>Hybrid</item>
-        <item>Normal</item>
-        <item>Terrain</item>
+        <item>@string/menu_map_type_satellite</item>
+        <item>@string/menu_map_type_hybrid</item>
+        <item>@string/menu_map_type_normal</item>
+        <item>@string/menu_map_type_terrain</item>
     </string-array>
     <string-array name="TelemetryBaudTypes">
         <item name="38400">38400</item>
@@ -215,6 +201,11 @@
         <item>19;Elevator</item>
         <item>20;ElevatorWithInput</item>
         <item>21;Rudder</item>
+    </string-array>
+
+    <!-- This string is just used to help in the layout editor -->
+    <string-array name="ExampleCameraArray">
+        <item>No cameras Avaliable</item>
     </string-array>
 
 </resources>
