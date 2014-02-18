@@ -42,7 +42,7 @@
 
     <!-- File operations -->
     <string name="select_file_to_open">Select file to open:</string>
-    <string name="no_files">No Files</string>
+    <string name="no_files">No files</string>
     <string name="error_when_opening_file">Error when opening file</string>
     <string name="save">Save</string>
     <string name="open">Open</string>
@@ -66,20 +66,20 @@
     <string name="number_of_strips">Number Of Strips</string>
     <string name="exception_draw_polygon">Draw a polygon/WPTs</string>
     <string name="exception_draw_2_more_polygon_points">Draw at least 2 more polygon points</string>
-    <string name="exception_draw_1_more_polygon_points">Draw at least 1 more polygon points</string>
+    <string name="exception_draw_1_more_polygon_points">Draw at least 1 more polygon point</string>
     <string name="mission_is_too_lengthy">Mission is too lengthy</string>
 
     <!-- Flight Mode information -->
     <string name="mode_acro">Acro allows a pilot to control rate of rotation directly.</string>
-    <string name="mode_althold">Alt Hold automatically controls throttle and maintains alitude. Does not require GPS.</string>
+    <string name="mode_althold">Alt Hold automatically controls throttle and maintains altitude. Does not require GPS.</string>
     <string name="mode_auto">Auto follows the scripted mission stored on the vehicle.</string>
     <string name="mode_circle">Circle rotates the vehicle around a point of interest. The vehicle will always point toward the center. Requires GPS lock.</string>
     <string name="mode_drift">Drift combines roll and yaw to produce a more natural and intuitive flight. Requires GPS lock.</string>
     <string name="mode_guided">Guided enables position control from a ground station. Requires GPS lock.</string>
     <string name="mode_land">Land at the current location. Requires GPS lock.</string>
-    <string name="mode_loiter">Loiter allows the pilot to fly completely through GPS. </string>
-    <string name="mode_ofloiter">Optical Flow enabled Loiter holds position and altitude assisted by the required optical flow sensors. </string>
-    <string name="mode_position">Position allows the pilot to fly completely through GPS, but with manual throttle control. </string>
+    <string name="mode_loiter">Loiter allows the pilot to fly completely through GPS.</string>
+    <string name="mode_ofloiter">Optical Flow enabled Loiter holds position and altitude assisted by the required optical flow sensors.</string>
+    <string name="mode_position">Position allows the pilot to fly completely through GPS, but with manual throttle control.</string>
     <string name="mode_rtl">RTL rises to the minimum altitude, returns to the home location and lands. Requires GPS lock.</string>
     <string name="mode_sport">Sport allows a pilot to control rate of rotation directly with the addition of self-leveling.</string>
     <string name="mode_stabilize">Stabilize levels the vehicle in flight.</string>
@@ -109,22 +109,22 @@
     <string name="waypoint_altitude">Altitude</string>
     <string name="waypoint_angle">Yaw Angle</string>
     <string name="waypoint_finalaltitude">Target Altitude</string>
-    <string name="waypoint_altrate">Descent / Ascend rate</string>
-    <string name="waypoint_yawrate">Yaw rate</string>
+    <string name="waypoint_altrate">Descent/Ascend rate</string>
+    <string name="waypoint_yawrate">Yaw Rate</string>
     <string name="waypoint_yawdir">Set yaw direction to CCW</string>
     <string name="waypoint_yawoffset">Use relative offset</string>
     <string name="waypoint_distance">Distance</string>
-    <string name="waypoint_homecurrent">"Set Home using current position "</string>
-    <string name="waypoint_longitude">Longitude :</string>
-    <string name="waypoint_latitude">Latitude :</string>
+    <string name="waypoint_homecurrent">Set Home using current position</string>
+    <string name="waypoint_longitude">Longitude:</string>
+    <string name="waypoint_latitude">Latitude:</string>
     <string name="waypoint_speed">Target Speed</string>
     <string name="waypoint_throttle">Throttle</string>
-    <string name="waypoint_speedtype">Speed type</string>
-    <string name="waypoint_airspeed">Air speed</string>
-    <string name="waypoint_groundspeed">Ground speed</string>
+    <string name="waypoint_speedtype">Speed Type</string>
+    <string name="waypoint_airspeed">Air Speed</string>
+    <string name="waypoint_groundspeed">Ground Speed</string>
     <string name="selectCoodSource">Select location source</string>
-    <string name="waypoint_coordsrc">Source data :</string>
-    <string name="waypoint_jumpto">Jump to waypoint :</string>
+    <string name="waypoint_coordsrc">Source data:</string>
+    <string name="waypoint_jumpto">Jump to waypoint:</string>
     <string name="waypoint_repeat">Repeat waypoint</string>
     <string name="Orbits">Orbits</string>
 
@@ -161,7 +161,7 @@
     <string name="setup_radio_title_minmax">Set Min &amp; Max values</string>
     <string name="setup_radio_title_middle">Set Center values</string>
     <string name="setup_radio_title_complete">Calibration complete</string>
-    <string name="setup_radio_desc_minmax">Move the joystics all the way out several times and toggle the swithces, levers and knobs to all possible positions</string>
+    <string name="setup_radio_desc_minmax">Move the joysticks all the way out several times and toggle the switches, levers and knobs to all possible positions</string>
     <string name="setup_radio_desc_middle">Set throttle stick to the lowest position and other joysticks, switches, levers and knobs to their center position</string>
     <string name="setup_radio_desc_complete">RC calibration completed. Press \'Save\' to upload data to vehicle</string>
 
@@ -185,14 +185,14 @@
     <string name="setup_fm_title">"Flight Mode Configuration"</string>
     <string name="setup_fm_side_title">"Update Flight Mode"</string>
     <string name="setup_fm_side_desc">"Press \'Send\' to update the new flight modes to vehicle."</string>
-    <string name="setup_fm_mode1">"Flight Mode 1 : "</string>
-    <string name="setup_fm_mode2">"Flight Mode 2 : "</string>
-    <string name="setup_fm_mode3">"Flight Mode 3 : "</string>
-    <string name="setup_fm_mode4">"Flight Mode 4 : "</string>
-    <string name="setup_fm_mode5">"Flight Mode 5 : "</string>
-    <string name="setup_fm_mode6">"Flight Mode 6 : "</string>
-    <string name="setup_fm_simple">"Simple Mode "</string>
-    <string name="setup_fm_super">"Super Simple Mode "</string>
+    <string name="setup_fm_mode1">"Flight Mode 1:"</string>
+    <string name="setup_fm_mode2">"Flight Mode 2:"</string>
+    <string name="setup_fm_mode3">"Flight Mode 3:"</string>
+    <string name="setup_fm_mode4">"Flight Mode 4:"</string>
+    <string name="setup_fm_mode5">"Flight Mode 5:"</string>
+    <string name="setup_fm_mode6">"Flight Mode 6:"</string>
+    <string name="setup_fm_simple">"Simple Mode"</string>
+    <string name="setup_fm_super">"Super Simple Mode"</string>
 
     <!-- Channel Options Setup Resource Strings -->
     <string name="setup_ch_title">"Channel Options Configuration"</string>
@@ -200,11 +200,11 @@
     <string name="setup_ch_side_desc">"Press \'Send\' to update the new servo function to vehicle."</string>
     <string name="setup_ch_tune_title">"Channel 6 - Tuning Function"</string>
     <string name="setup_ch_options_title">"Channel Options - CH7 &amp; CH8"</string>
-    <string name="setup_ch_CH7_options">"Channel 7 Options :"</string>
-    <string name="setup_ch_CH6_options">"Channel 6 Tuning  :"</string>
-    <string name="setup_ch_CH8_options">"Channel 8 Tuning  :"</string>
-    <string name="setup_ch_tune_low">"Tune Value - Low  :"</string>
-    <string name="setup_ch_tune_high">"Tune Value - High :"</string>
+    <string name="setup_ch_CH7_options">"Channel 7 Options:"</string>
+    <string name="setup_ch_CH6_options">"Channel 6 Tuning:"</string>
+    <string name="setup_ch_CH8_options">"Channel 8 Tuning:"</string>
+    <string name="setup_ch_tune_low">"Tune Value - Low:"</string>
+    <string name="setup_ch_tune_high">"Tune Value - High:"</string>
 
     <!-- Servo functions Setup Resource Strings -->
     <string name="setup_sf_title">"Servo Function Configuration"</string>
@@ -213,12 +213,12 @@
     <string name="setup_sf_desc_uploading">Uploading Servo configuration data</string>
     <string name="setup_sf_desc_downloading">Downloading Servo configuration data</string>
     <string name="setup_sf_servo_title">Servo Functions Configuration</string>
-    <string name="setup_sf_servo5">"Servo  5 : "</string>
-    <string name="setup_sf_servo6">"Servo  6 : "</string>
-    <string name="setup_sf_servo7">"Servo  7 : "</string>
-    <string name="setup_sf_servo8">"Servo  8 : "</string>
-    <string name="setup_sf_servo10">"Servo 10 : "</string>
-    <string name="setup_sf_servo11">"Servo 11 : "</string>
+    <string name="setup_sf_servo5">"Servo  5:"</string>
+    <string name="setup_sf_servo6">"Servo  6:"</string>
+    <string name="setup_sf_servo7">"Servo  7:"</string>
+    <string name="setup_sf_servo8">"Servo  8:"</string>
+    <string name="setup_sf_servo10">"Servo 10:"</string>
+    <string name="setup_sf_servo11">"Servo 11:"</string>
     <string name="telemetry_default_value">0.0</string>
     <string name="climb_rate_label">Climb rate</string>
     <string name="altitude_label">Altitude</string>
