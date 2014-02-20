@@ -9,7 +9,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
 
+import android.widget.RadioGroup;
 import org.droidplanner.R;
+import org.droidplanner.widgets.button.RadioButtonCenter;
 
 public class EditorToolsFragment extends Fragment implements OnClickListener {
 
@@ -21,11 +23,10 @@ public class EditorToolsFragment extends Fragment implements OnClickListener {
 		public void editorToolChanged(EditorTools tools);
 	}
 
-	private OnEditorToolSelected listener;
-	private RadioButton buttonDraw;
-	private RadioButton buttonMarker;
-	private RadioButton buttonPoly;
-	private RadioButton buttonTrash;
+	private OnEditorToolSelected listner;
+
+    private RadioGroup mEditorRadioGroup;
+
 	private EditorTools tool = EditorTools.MARKER;
 
 	@Override
@@ -34,25 +35,29 @@ public class EditorToolsFragment extends Fragment implements OnClickListener {
 		View view = inflater.inflate(R.layout.fragment_editor_tools, container,
 				false);
 
-		buttonDraw = (RadioButton) view.findViewById(R.id.editor_tools_draw);
-		buttonMarker = (RadioButton) view
-				.findViewById(R.id.editor_tools_marker);
-		buttonPoly = (RadioButton) view.findViewById(R.id.editor_tools_poly);
-		buttonTrash = (RadioButton) view.findViewById(R.id.editor_tools_trash);
+        mEditorRadioGroup = (RadioGroup) view.findViewById(R.id.editor_tools_layout);
+		final RadioButtonCenter buttonDraw = (RadioButtonCenter) view.findViewById(R.id
+                .editor_tools_draw);
+        final RadioButtonCenter buttonMarker = (RadioButtonCenter) view.findViewById(R.id
+                .editor_tools_marker);
+        final RadioButtonCenter buttonPoly = (RadioButtonCenter) view.findViewById(R.id
+                .editor_tools_poly);
+        final RadioButtonCenter buttonTrash = (RadioButtonCenter) view.findViewById(R.id
+                .editor_tools_trash);
 
 		buttonDraw.setOnClickListener(this);
 		buttonMarker.setOnClickListener(this);
 		buttonPoly.setOnClickListener(this);
 		buttonTrash.setOnClickListener(this);
 
-		buttonMarker.setChecked(true);
+        mEditorRadioGroup.check(R.id.editor_tools_marker);
 		return view;
 	}
 
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		listener = (OnEditorToolSelected) activity;
+		listner = (OnEditorToolSelected) activity;
 	}
 
 	@Override
@@ -74,6 +79,7 @@ public class EditorToolsFragment extends Fragment implements OnClickListener {
 		}
 		if (newTool == this.tool) {
 			newTool = EditorTools.NONE;
+            mEditorRadioGroup.clearCheck();
 		}
 		setTool(newTool);
 	}
@@ -83,28 +89,8 @@ public class EditorToolsFragment extends Fragment implements OnClickListener {
 	}
 
 	public void setTool(EditorTools tool) {
-		buttonMarker.setChecked(false);
-		buttonDraw.setChecked(false);
-		buttonPoly.setChecked(false);
-		buttonTrash.setChecked(false);
-		switch (tool) {
-		case DRAW:
-			buttonDraw.setChecked(true);
-			break;
-		case MARKER:
-			buttonMarker.setChecked(true);
-			break;
-		case POLY:
-			buttonPoly.setChecked(true);
-			break;
-		case TRASH:
-			buttonTrash.setChecked(true);
-			break;
-		case NONE:
-			break;
-		}
 		this.tool = tool;
-		listener.editorToolChanged(this.tool);
+		listner.editorToolChanged(this.tool);
 	}
 
 }

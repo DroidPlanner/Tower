@@ -1,25 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".fragments.calibration.FragmentSetupRCFailsafe" >
-
-    <RelativeLayout
-        android:id="@+id/title_rect"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:background="@color/dark_title_bg" >
-
-        <TextView
-            android:id="@+id/setupTitle"
-            style="@style/SetupTitle"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:text="@string/setup_fm_side_title" />
-    </RelativeLayout>
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context=".fragments.calibration.FragmentSetupRCFailsafe">
 
     <TextView
         android:id="@+id/setupDesc"
@@ -28,45 +13,29 @@
         android:layout_height="wrap_content"
         android:background="@drawable/mode_desc_rectangle"
         android:padding="12dp"
-        android:text="@string/setup_fm_side_desc" />
+        android:text="@string/setup_fm_side_desc"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" >
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="center"
+        android:orientation="horizontal">
 
-        <LinearLayout
-            android:id="@+id/layoutSetupDetails"
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/buttonCancel"
+            style="@style/modeControl"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="12dp" >
-        </LinearLayout>
+            android:layout_marginRight="10dp"
+            android:background="@drawable/button_blue"
+            android:text="@string/button_setup_cancel"/>
 
-        <LinearLayout
-            android:layout_width="fill_parent"
+        <Button
+            android:id="@+id/buttonSend"
+            style="@style/modeControl"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:gravity="center"
-            android:orientation="horizontal" >
-
-            <Button
-                android:id="@+id/buttonCancel"
-                style="@style/modeControl"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="16dp"
-                android:background="@drawable/button_blue"
-                android:text="@string/button_setup_cancel" />
-
-            <Button
-                android:id="@+id/buttonSend"
-                style="@style/modeControl"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button_green"
-                android:text="@string/button_setup_send" />
-        </LinearLayout>
+            android:background="@drawable/button_green"
+            android:text="@string/button_setup_send"/>
     </LinearLayout>
 
 </LinearLayout>

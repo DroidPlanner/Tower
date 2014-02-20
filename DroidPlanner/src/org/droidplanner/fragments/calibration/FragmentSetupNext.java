@@ -30,7 +30,7 @@ public class FragmentSetupNext extends SetupSidePanel {
 		textTitle = (TextView)view.findViewById(R.id.setupTitle);
 		textDesc = (TextView)view.findViewById(R.id.setupDesc);
 		
-		if(titleId!=0)
+		if(titleId!=0 && textTitle != null)
 			textTitle.setText(titleId);
 		
 		if(descId!=0)

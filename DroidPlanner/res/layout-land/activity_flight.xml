@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+	tools:ignore="HardcodedText"
+    >
+
+    <FrameLayout
+        android:id="@+id/mapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <FrameLayout
+        android:id="@+id/containerRC"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom"
+        android:measureAllChildren="true" >
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/editorToolsFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        tools:layout="@layout/fragment_mission_control" />
+
+    <TextView
+        android:id="@+id/failsafeTextView"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_alignParentTop="true"
+        android:background="#D8ee2d3e"
+        android:text="@string/RCFailsafe"
+		style="@style/editorMissionOverviewText"
+        android:visibility="gone"
+        />
+
+    <SlidingDrawer
+        android:id="@+id/SlidingDrawerRight"
+        android:layout_width="210dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:content="@+id/sliding_drawer_content"
+        android:handle="@+id/slideButtonLeft"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        >
+
+        <ImageView
+            android:id="@+id/slideButtonLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/drawer_tab"
+            tools:ignore="ContentDescription"/>
+
+		<FrameLayout
+			android:id="@+id/sliding_drawer_content"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			tools:layout="@layout/fragment_flight_sliding_drawer_content" />
+
+    </SlidingDrawer>
+
+
+</RelativeLayout>

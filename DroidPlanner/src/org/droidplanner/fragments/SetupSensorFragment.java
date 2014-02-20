@@ -21,21 +21,17 @@ public class SetupSensorFragment extends SuperSetupFragment {
 		return R.array.Setup_Sensor_Menu;
 	}
 
-	@Override
-	public SetupMainPanel getMainPanel(int index) {
-		switch (index) {
-		case 0:
-			updateTitle(R.string.setup_imu_title);
-			return new FragmentSetupIMU();
-		case 1:
-			updateTitle(R.string.setup_mag_title);
-			return new FragmentSetupMAG();
-		}
-		return null;
-	}
+    @Override
+    public SetupMainPanel getMainPanel(int index) {
+        switch (index) {
+            case 0:
+                return new FragmentSetupIMU();
+            case 1:
+                return new FragmentSetupMAG();
 
-	@Override
-	public void updateTitle(int id) {
-		super.updateTitle(id);
-	}
+            default:
+                return null;
+        }
+    }
+
 }

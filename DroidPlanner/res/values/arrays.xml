@@ -87,14 +87,14 @@
         <item>EPM</item>
     </string-array>
     <string-array name="Setup_Radio_Menu">
-        <item>Radio Calibration</item>
-        <item>Flight Modes</item>
-        <item>Channel Options</item>
-        <item>Servo Functions</item>
+        <item>@string/setup_radio_title</item>
+        <item>@string/setup_fm_title</item>
+        <item>@string/setup_ch_title</item>
+        <item>@string/setup_sf_title</item>
     </string-array>
     <string-array name="Setup_Sensor_Menu">
-        <item>IMU Calibration</item>
-        <item>MAG Calibration</item>
+        <item>@string/setup_imu_title</item>
+        <item>@string/setup_mag_title</item>
     </string-array>
     <string-array name="VehicleType">
         <item>ArduCopter</item>

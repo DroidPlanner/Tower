@@ -44,7 +44,7 @@ public class EditorListFragment extends Fragment implements  OnItemLongClickList
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_editor_list, container,
 				false);
-		list = (HListView) view.findViewById(R.id.listView1);
+		list = (HListView) view.findViewById(R.id.mission_item_list);
 		leftArrow = (ImageButton) view.findViewById(R.id.listLeftArrow);
 		rightArrow = (ImageButton) view.findViewById(R.id.listRightArrow);
 		leftArrow.setOnClickListener(this);

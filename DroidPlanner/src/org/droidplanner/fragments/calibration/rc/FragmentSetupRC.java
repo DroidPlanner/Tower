@@ -107,14 +107,14 @@ public class FragmentSetupRC extends SuperSetupMainPanel {
 		stickLeft = (RcStick) view.findViewById(R.id.stickLeft);
 		stickRight = (RcStick) view.findViewById(R.id.stickRight);
 
-		bar1 = (FillBar) view.findViewById(R.id.fillBar1);
-		bar2 = (FillBar) view.findViewById(R.id.fillBar2);
-		bar3 = (FillBar) view.findViewById(R.id.fillBar3);
-		bar4 = (FillBar) view.findViewById(R.id.fillBar4);
-		bar5 = (FillBar) view.findViewById(R.id.fillBar5);
-		bar6 = (FillBar) view.findViewById(R.id.fillBar6);
-		bar7 = (FillBar) view.findViewById(R.id.fillBar7);
-		bar8 = (FillBar) view.findViewById(R.id.fillBar8);
+		bar1 = (FillBar) view.findViewById(R.id.fillBar_roll);
+		bar2 = (FillBar) view.findViewById(R.id.fillBar_pitch);
+		bar3 = (FillBar) view.findViewById(R.id.fillBar_throttle);
+		bar4 = (FillBar) view.findViewById(R.id.fillBar_yaw);
+		bar5 = (FillBar) view.findViewById(R.id.fillBar_ch_5);
+		bar6 = (FillBar) view.findViewById(R.id.fillBar_ch_6);
+		bar7 = (FillBar) view.findViewById(R.id.fillBar_ch_7);
+		bar8 = (FillBar) view.findViewById(R.id.fillBar_ch_8);
 		bar2.invertBar(true);
 
 		roll_pitch_text = (TextView) view.findViewById(R.id.roll_pitch_text);

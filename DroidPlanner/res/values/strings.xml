@@ -185,14 +185,16 @@
     <string name="setup_fm_title">Flight Mode Configuration</string>
     <string name="setup_fm_side_title">Update Flight Mode</string>
     <string name="setup_fm_side_desc">Press \'Send\' to update the new flight modes to vehicle.</string>
-    <string name="setup_fm_mode1">Flight Mode 1:</string>
-    <string name="setup_fm_mode2">Flight Mode 2:</string>
-    <string name="setup_fm_mode3">Flight Mode 3:</string>
-    <string name="setup_fm_mode4">Flight Mode 4:</string>
-    <string name="setup_fm_mode5">Flight Mode 5:</string>
-    <string name="setup_fm_mode6">Flight Mode 6:</string>
-    <string name="setup_fm_simple">Simple Mode</string>
-    <string name="setup_fm_super">Super Simple Mode</string>
+    <string name="setup_fm_desc_uploading">Uploading Flight Mode configuration data</string>
+    <string name="setup_fm_desc_downloading">Downloading Flight Mode configuration data</string>
+    <string name="setup_fm_mode1">1.</string>
+    <string name="setup_fm_mode2">2.</string>
+    <string name="setup_fm_mode3">3.</string>
+    <string name="setup_fm_mode4">4.</string>
+    <string name="setup_fm_mode5">5.</string>
+    <string name="setup_fm_mode6">6.</string>
+    <string name="setup_fm_simple">Simple Mode </string>
+    <string name="setup_fm_super">Super Simple Mode </string>
 
     <!-- Channel Options Setup Resource Strings -->
     <string name="setup_ch_title">Channel Options Configuration</string>
@@ -213,12 +215,12 @@
     <string name="setup_sf_desc_uploading">Uploading Servo configuration data</string>
     <string name="setup_sf_desc_downloading">Downloading Servo configuration data</string>
     <string name="setup_sf_servo_title">Servo Functions Configuration</string>
-    <string name="setup_sf_servo5">Servo 5:</string>
-    <string name="setup_sf_servo6">Servo 6:</string>
-    <string name="setup_sf_servo7">Servo 7:</string>
-    <string name="setup_sf_servo8">Servo 8:</string>
+    <string name="setup_sf_servo5">Servo  5:</string>
+    <string name="setup_sf_servo6">Servo  6:</string>
+    <string name="setup_sf_servo7">Servo  7:</string>
+    <string name="setup_sf_servo8">Servo  8:</string>
+    <string name="setup_sf_servo9">Servo 9:</string>
     <string name="setup_sf_servo10">Servo 10:</string>
-    <string name="setup_sf_servo11">Servo 11:</string>
     <string name="telemetry_default_value">0.0</string>
     <string name="climb_rate_label">Climb Rate</string>
     <string name="altitude_label">Altitude</string>
@@ -246,4 +248,7 @@
     <string name="mode1_throttle_on_right_stick">Mode1: Throttle on RIGHT stick</string>
     <string name="mode2_throttle_on_left_stick">Mode2: Throttle on LEFT stick</string>
 
+    <string name="telemetry_label">Telemetry</string>
+    <string name="flight_modes_label">Flight modes</string>
+    <string name="menu_info_bar">Info Bar</string>
 </resources>

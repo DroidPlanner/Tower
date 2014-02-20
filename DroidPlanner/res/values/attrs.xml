@@ -10,6 +10,9 @@
         <attr name="Max" format="float" />
         <attr name="Inc" format="float" />
         <attr name="FastInc" format="float" />
+        <attr name="android:textSize" />
+        <attr name="buttonWidth" format="reference|dimension" />
+        <attr name="buttonHeight" format="reference|dimension" />
         </declare-styleable>
     
     <declare-styleable name="SeekBarWithText">
@@ -28,6 +31,10 @@
     <declare-styleable name="ViewPagerIndicator">
         <!-- Style of the tab indicator's tabs. -->
         <attr name="vpiTabPageIndicatorStyle" format="reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="RadioButtonCenter">
+        <attr name="android:button" />
     </declare-styleable>
 
 </resources>
