@@ -1,3 +1,13 @@
+# DroidPlanner ChangeLog
+Our convesion for release control is the following (for a release like DPvA.B.C_RCx):
+* A - Main version, changes just with big changes in the app structure or/and layout
+* B - Minor version, add's some significant feature to the app
+* C - Minor changes with bugfixes, or small refactorings, from previous "A" or "B" changes.
+* x - Releases Candidates (RC) are build from the main releases, but may have some feature's disabled. The "x" is used if multiple RC are needed for a new version of the app.
+
+All the changes are logged below (preferable with the pull request numbers in parenteses):
+
+# Releases
 ## Droidplanner v2.2.0
 * Added support for phones (#618)
 * Fixing typos and whitespaces on strings.xml (#640)
