@@ -1,5 +1,5 @@
 # DroidPlanner ChangeLog
-Our convesion for release control is the following (for a release like DPvA.B.C_RCx):
+Our convention for release control is the following (for a release like DPvA.B.C_RCx):
 * A - Main version, changes just with big changes in the app structure or/and layout
 * B - Minor version, add's some significant feature to the app
 * C - Minor changes with bugfixes, or small refactorings, from previous "A" or "B" changes.
