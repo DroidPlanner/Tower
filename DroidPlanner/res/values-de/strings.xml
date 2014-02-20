@@ -215,10 +215,11 @@
     <string name="setup_sf_desc_uploading">Servo-Konfigurationsdaten werden hochgeladen</string>
     <string name="setup_sf_desc_downloading">Servo-Konfigurationsdaten werden herunterladen</string>
     <string name="setup_sf_servo_title">Servo-Funktionskonfiguration</string>
-    <string name="setup_sf_servo5">Servo  5:</string>
-    <string name="setup_sf_servo6">Servo  6:</string>
-    <string name="setup_sf_servo7">Servo  7:</string>
-    <string name="setup_sf_servo8">Servo  8:</string>
+    <string name="setup_sf_servo5">Servo 5:</string>
+    <string name="setup_sf_servo6">Servo 6:</string>
+    <string name="setup_sf_servo7">Servo 7:</string>
+    <string name="setup_sf_servo8">Servo 8:</string>
+    <string name="setup_sf_servo9">Servo 9:</string>
     <string name="setup_sf_servo10">Servo 10:</string>
     <string name="telemetry_default_value">0.0</string>
     <string name="climb_rate_label">Steigrate</string>
@@ -247,4 +248,7 @@
     <string name="mode1_throttle_on_right_stick">Mode1: Schub auf rechtem Steuerknüppel</string>
     <string name="mode2_throttle_on_left_stick">Mode2: Schub auf linkem Steuerknüppel</string>
 
+    <string name="telemetry_label">Telemetrie</string>
+    <string name="flight_modes_label">Flugmodi</string>
+    <string name="menu_info_bar">Infoleiste</string>
 </resources>
