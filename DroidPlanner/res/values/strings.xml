@@ -93,7 +93,7 @@
     <string name="waypointInfo_RTL">Send the vehicle to the home location set when armed. An altitude of 0 will return to home at the RTL altitude parameter.</string>
     <string name="waypointInfo_TakeOff">Lift off from the ground to the specified altitude before proceeding to the next waypoint.</string>
     <string name="waypointInfo_Waypoint">Travel to a position in 3D space. Optional delay (in seconds) to hold position.</string>
-    <string name="waypointInfo_CondAlt">Ascend/descend at specified rate. Delay mission state machine until desired altitude reached.</string>
+    <string name="waypointInfo_CondAlt">Climb/descend at specified rate. Delay mission state machine until desired altitude reached.</string>
     <string name="waypointInfo_CondYaw">Set condition to reach a certain target angle.</string>
     <string name="waypointInfo_CondDistance">Delay mission state machine until within desired distance of next NAV point</string>
     <string name="waypointInfo_SetHome">Changes the home location either to the current location or a specified location.</string>
@@ -109,7 +109,7 @@
     <string name="waypoint_altitude">Altitude</string>
     <string name="waypoint_angle">Yaw Angle</string>
     <string name="waypoint_finalaltitude">Target Altitude</string>
-    <string name="waypoint_altrate">Descent/Ascend rate</string>
+    <string name="waypoint_altrate">Climb/descend Rate</string>
     <string name="waypoint_yawrate">Yaw Rate</string>
     <string name="waypoint_yawdir">Set yaw direction to CCW</string>
     <string name="waypoint_yawoffset">Use relative offset</string>
@@ -139,7 +139,7 @@
     <string name="params_click_to_refresh">Click to refresh parameters from drone</string>
     <string name="refreshing_parameters">Refreshing Parameters&#8230;</string>
     <string name="parameters_saved">Parameters saved</string>
-    <string name="msg_parameters_written_to_drone">"parameters written to drone"</string>
+    <string name="msg_parameters_written_to_drone">parameters written to drone</string>
     <string name="metadata_value">Value:</string>
     <string name="metadata_custom_value">** Custom value **</string>
     <string name="metadata_values">Values:</string>
@@ -179,46 +179,46 @@
     <string name="setup_imu_back">Place the vehicle on its BACK ensuring very minimal movement and press Next.</string>
     <string name="setup_imu_completed">Accelerometer calibration completed. If it was not successful, please recalibrate.</string>
     <string name="setup_imu_step">To start calibration, press Calibrate.</string>
-    <string name="setup_imu_timeleft">"Time left before next orientation: "</string>
+    <string name="setup_imu_timeleft">Time left before next orientation:</string>
 
     <!-- Flight Setup Resource Strings -->
-    <string name="setup_fm_title">"Flight Mode Configuration"</string>
-    <string name="setup_fm_side_title">"Update Flight Mode"</string>
-    <string name="setup_fm_side_desc">"Press \'Send\' to update the new flight modes to vehicle."</string>
-    <string name="setup_fm_mode1">"Flight Mode 1:"</string>
-    <string name="setup_fm_mode2">"Flight Mode 2:"</string>
-    <string name="setup_fm_mode3">"Flight Mode 3:"</string>
-    <string name="setup_fm_mode4">"Flight Mode 4:"</string>
-    <string name="setup_fm_mode5">"Flight Mode 5:"</string>
-    <string name="setup_fm_mode6">"Flight Mode 6:"</string>
-    <string name="setup_fm_simple">"Simple Mode"</string>
-    <string name="setup_fm_super">"Super Simple Mode"</string>
+    <string name="setup_fm_title">Flight Mode Configuration</string>
+    <string name="setup_fm_side_title">Update Flight Mode</string>
+    <string name="setup_fm_side_desc">Press \'Send\' to update the new flight modes to vehicle.</string>
+    <string name="setup_fm_mode1">Flight Mode 1:</string>
+    <string name="setup_fm_mode2">Flight Mode 2:</string>
+    <string name="setup_fm_mode3">Flight Mode 3:</string>
+    <string name="setup_fm_mode4">Flight Mode 4:</string>
+    <string name="setup_fm_mode5">Flight Mode 5:</string>
+    <string name="setup_fm_mode6">Flight Mode 6:</string>
+    <string name="setup_fm_simple">Simple Mode</string>
+    <string name="setup_fm_super">Super Simple Mode</string>
 
     <!-- Channel Options Setup Resource Strings -->
-    <string name="setup_ch_title">"Channel Options Configuration"</string>
-    <string name="setup_ch_side_title">"Update Channel Options"</string>
-    <string name="setup_ch_side_desc">"Press \'Send\' to update the new servo function to vehicle."</string>
-    <string name="setup_ch_tune_title">"Channel 6 - Tuning Function"</string>
-    <string name="setup_ch_options_title">"Channel Options - CH7 &amp; CH8"</string>
-    <string name="setup_ch_CH7_options">"Channel 7 Options:"</string>
-    <string name="setup_ch_CH6_options">"Channel 6 Tuning:"</string>
-    <string name="setup_ch_CH8_options">"Channel 8 Tuning:"</string>
-    <string name="setup_ch_tune_low">"Tune Value - Low:"</string>
-    <string name="setup_ch_tune_high">"Tune Value - High:"</string>
+    <string name="setup_ch_title">Channel Options Configuration</string>
+    <string name="setup_ch_side_title">Update Channel Options</string>
+    <string name="setup_ch_side_desc">Press \'Send\' to update the new servo function to vehicle.</string>
+    <string name="setup_ch_tune_title">Channel 6 - Tuning Function</string>
+    <string name="setup_ch_options_title">Channel Options - CH7 &amp; CH8</string>
+    <string name="setup_ch_CH7_options">Channel 7 Options:</string>
+    <string name="setup_ch_CH6_options">Channel 6 Tuning:</string>
+    <string name="setup_ch_CH8_options">Channel 8 Tuning:</string>
+    <string name="setup_ch_tune_low">Tune Value - Low:</string>
+    <string name="setup_ch_tune_high">Tune Value - High:</string>
 
     <!-- Servo functions Setup Resource Strings -->
-    <string name="setup_sf_title">"Servo Function Configuration"</string>
-    <string name="setup_sf_side_title">"Update Servo Function"</string>
-    <string name="setup_sf_side_desc">"Press \'Send\' to update the new servo function to vehicle."</string>
+    <string name="setup_sf_title">Servo Function Configuration</string>
+    <string name="setup_sf_side_title">Update Servo Function</string>
+    <string name="setup_sf_side_desc">Press \'Send\' to update the new servo function to vehicle.</string>
     <string name="setup_sf_desc_uploading">Uploading Servo configuration data</string>
     <string name="setup_sf_desc_downloading">Downloading Servo configuration data</string>
     <string name="setup_sf_servo_title">Servo Functions Configuration</string>
-    <string name="setup_sf_servo5">"Servo  5:"</string>
-    <string name="setup_sf_servo6">"Servo  6:"</string>
-    <string name="setup_sf_servo7">"Servo  7:"</string>
-    <string name="setup_sf_servo8">"Servo  8:"</string>
-    <string name="setup_sf_servo10">"Servo 10:"</string>
-    <string name="setup_sf_servo11">"Servo 11:"</string>
+    <string name="setup_sf_servo5">Servo 5:</string>
+    <string name="setup_sf_servo6">Servo 6:</string>
+    <string name="setup_sf_servo7">Servo 7:</string>
+    <string name="setup_sf_servo8">Servo 8:</string>
+    <string name="setup_sf_servo10">Servo 10:</string>
+    <string name="setup_sf_servo11">Servo 11:</string>
     <string name="telemetry_default_value">0.0</string>
     <string name="climb_rate_label">Climb Rate</string>
     <string name="altitude_label">Altitude</string>
