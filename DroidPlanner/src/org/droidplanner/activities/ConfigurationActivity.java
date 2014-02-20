@@ -33,9 +33,9 @@ public class ConfigurationActivity extends SuperUI {
      * Holds the list of configuration screens this activity supports.
      */
     private static final Class<? extends Fragment>[] sConfigurationFragments = new Class[]{
-            TuningFragment.class,
+            //TuningFragment.class,
             SetupRadioFragment.class,
-            SetupSensorFragment.class,
+            //SetupSensorFragment.class,
             ChecklistFragment.class,
             ParamsFragment.class
     };
@@ -44,9 +44,9 @@ public class ConfigurationActivity extends SuperUI {
      * Holds the title resources for the configuration screens.
      */
     private static final int[] sConfigurationFragmentTitlesRes = {
-            R.string.screen_tuning,
+            //R.string.screen_tuning,
             R.string.screen_rc,
-            R.string.screen_cal,
+            //R.string.screen_cal,
             R.string.screen_checklist,
             R.string.screen_parameters
     };
