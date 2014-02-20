@@ -66,8 +66,8 @@ public class FragmentSetupSF extends SuperSetupMainPanel{
 		spinnerSFs[1] = (Spinner) v.findViewById(R.id.spinnerSF6);
 		spinnerSFs[2] = (Spinner) v.findViewById(R.id.spinnerSF7);
 		spinnerSFs[3] = (Spinner) v.findViewById(R.id.spinnerSF8);
-		spinnerSFs[4] = (Spinner) v.findViewById(R.id.spinnerSF10);
-		spinnerSFs[5] = (Spinner) v.findViewById(R.id.spinnerSF11);
+		spinnerSFs[4] = (Spinner) v.findViewById(R.id.spinnerSF9);
+		spinnerSFs[5] = (Spinner) v.findViewById(R.id.spinnerSF10);
 
 		setupSpinners();
 	}

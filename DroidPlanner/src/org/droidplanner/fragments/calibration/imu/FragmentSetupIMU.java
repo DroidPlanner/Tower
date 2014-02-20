@@ -20,7 +20,6 @@ public class FragmentSetupIMU extends SetupMainPanel  implements OnDroneListener
 	private final static int TIMEOUT_MAX = 300;
 
 	private String msg;
-	boolean calibrationPassed;
 	private long timeCount, timeLeft;
 	private int calibration_step = 0;
 	private TextView textViewStep;

@@ -1,64 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/configLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-     >
+    android:orientation="horizontal"
+    >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="64dp" >
-
-        <TextView
-            android:id="@+id/textViewSetupTitle"
-            style="@style/SetupTitle"
-            android:layout_width="0dp"
-            android:layout_height="64dp"
-            android:layout_weight="7"
-            android:background="@drawable/rc_setup_rectangle"
-            android:text="@string/setup_imu_title" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:background="@drawable/wp_title_rectangle"
-            android:orientation="vertical" >
-
-            <Spinner
-                android:id="@+id/spinnerSetupType"
-                style="@style/ModeSpinnerText"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_margin="5dp" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <FrameLayout
+        android:id="@+id/fragment_setup_mainpanel"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
-        tools:ignore="DisableBaselineAlignment" >
+        android:layout_weight="7"/>
 
-        <FrameLayout
-            android:id="@+id/fragment_setup_mainpanel"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="7" >
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/wp_title_rectangle"
+        android:layout_weight="3">
 
-        </FrameLayout>
+        <Spinner
+            android:id="@+id/spinnerSetupType"
+            style="@style/ModeSpinnerText"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/setup_title_height"            />
 
         <FrameLayout
             android:id="@+id/fragment_setup_sidepanel"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:background="@color/opaque_white" >
+            android:background="@color/opaque_white"/>
 
-        </FrameLayout>
     </LinearLayout>
 
 </LinearLayout>

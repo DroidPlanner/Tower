@@ -9,7 +9,7 @@
         android:targetSdkVersion="19" />
 
     <supports-screens
-        android:requiresSmallestWidthDp="540"/>
+        android:requiresSmallestWidthDp="320"/>
 
     <permission
         android:name=".permission.MAPS_RECEIVE"

@@ -37,7 +37,7 @@ public class FragmentSetupProgress extends SetupSidePanel {
 		textAction = (TextView) view.findViewById(R.id.setupProgressTitle);
 		textProgress = (TextView) view.findViewById(R.id.setupProgressRatio);
 		
-		if(titleId!=0)
+		if(titleId!=0 && textTitle != null)
 			textTitle.setText(titleId);
 		if(descId!=0)
 			textDesc.setText(descId);

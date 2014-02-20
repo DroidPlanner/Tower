@@ -1,24 +1,20 @@
 package org.droidplanner.activities.helpers;
 
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import org.droidplanner.R;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.gcs.GCSHeartbeat;
-
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import org.droidplanner.widgets.actionProviders.InfoBarActionProvider;
 
 
 public abstract class SuperUI extends SuperActivity implements OnDroneListener {
 	private ScreenOrientation screenOrientation = new ScreenOrientation(this);
-	private InfoMenu infoMenu;
+	private InfoBarActionProvider infoBar;
 	private GCSHeartbeat gcsHeartbeat;
-
-	public SuperUI() {
-		super();
-	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -39,14 +35,19 @@ public abstract class SuperUI extends SuperActivity implements OnDroneListener {
 	protected void onStop() {
 		super.onStop();
 		drone.events.removeDroneListener(this);
-		infoMenu = null;
-	}
+
+        if (infoBar != null) {
+            infoBar.setDrone(null);
+            infoBar = null;
+        }
+    }
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		if (infoMenu != null) {
-			infoMenu.onDroneEvent(event, drone);
+		if (infoBar != null) {
+			infoBar.onDroneEvent(event, drone);
 		}
+
 		switch (event) {
 		case CONNECTED:
 			gcsHeartbeat.setActive(true);
@@ -65,23 +66,59 @@ public abstract class SuperUI extends SuperActivity implements OnDroneListener {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		infoMenu = new InfoMenu(drone,this);
-		infoMenu.inflateMenu(menu, getMenuInflater());
-		infoMenu.setupModeSpinner(this);
+        //Reset the previous info bar
+        if(infoBar != null){
+            infoBar.setDrone(null);
+            infoBar = null;
+        }
+
 		getMenuInflater().inflate(R.menu.menu_super_activiy, menu);
+
+        final MenuItem toggleConnectionItem = menu.findItem(R.id.menu_connect);
+        final MenuItem infoBarItem = menu.findItem(R.id.menu_info_bar);
+        if(infoBarItem != null)
+            infoBar = (InfoBarActionProvider) infoBarItem.getActionProvider();
+
+        //Configure the info bar action provider if we're connected
+        if(drone.MavClient.isConnected()){
+            menu.setGroupEnabled(R.id.menu_group_connected, true);
+            menu.setGroupVisible(R.id.menu_group_connected, true);
+
+            toggleConnectionItem.setTitle(R.string.menu_disconnect);
+            toggleConnectionItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+
+            if(infoBar != null){
+                infoBar.setDrone(drone);
+            }
+        }
+        else{
+            menu.setGroupEnabled(R.id.menu_group_connected, false);
+            menu.setGroupVisible(R.id.menu_group_connected, false);
+
+            toggleConnectionItem.setTitle(R.string.menu_connect);
+            toggleConnectionItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS|MenuItem
+                    .SHOW_AS_ACTION_WITH_TEXT);
+
+            if(infoBar != null){
+                infoBar.setDrone(null);
+            }
+        }
 		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-		infoMenu.forceViewsUpdate();
-		return super.onPrepareOptionsMenu(menu);
-	}
-
-	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if(infoMenu.onOptionsItemSelected(item))
-            return true;
-		return super.onOptionsItemSelected(item);
+		switch(item.getItemId()){
+            case R.id.menu_send_mission:
+                drone.mission.sendMissionToAPM();
+                return true;
+
+            case R.id.menu_load_mission:
+                drone.waypointMananger.getWaypoints();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
 	}
 }

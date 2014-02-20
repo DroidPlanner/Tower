@@ -48,6 +48,8 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	private EditorListFragment missionListFragment;
 	private TextView infoView;
 
+    private View mContainerItemDetail;
+
 	private ActionMode contextualActionBar;
 
 	@Override
@@ -70,8 +72,10 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 				.findFragmentById(R.id.missionFragment1);
 		infoView = (TextView) findViewById(R.id.editorInfoWindow);
 
-		removeItemDetail(); // When doing things like screen rotation remove the
-							// detail window
+        /*
+         * On phone, this view will be null causing the item detail to be shown as a dialog.
+         */
+        mContainerItemDetail = findViewById(R.id.containerItemDetail);
 
 		mission = drone.mission;
 		gestureMapFragment.setOnPathFinishedListener(this);
@@ -94,18 +98,6 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	}
 
 	@Override
-	protected void onStart() {
-		super.onStart();
-	}
-
-	@Override
-	protected void onStop() {
-		super.onStop();
-		mission.clearSelection();
-		drone.events.notifyDroneEvent(DroneEventsType.MISSION_UPDATE);
-	}
-
-	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
 		planningMapFragment.saveCameraPosition();
@@ -113,7 +105,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		super.onDroneEvent(event,drone);
+		super.onDroneEvent(event, drone);
 		switch (event) {
 		case MISSION_UPDATE:
 			// Remove detail window if item is removed
@@ -194,21 +186,32 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 	private void addItemDetail(MissionItem item) {
 		itemDetailFragment = item.getDetailFragment();
-		fragmentManager.beginTransaction()
-				.add(R.id.containerItemDetail, itemDetailFragment).commit();
-	}
 
-	private void switchItemDetail(MissionItem item) {
-		itemDetailFragment = item.getDetailFragment();
-		fragmentManager.beginTransaction()
-				.replace(R.id.containerItemDetail, itemDetailFragment).commit();
+        if (mContainerItemDetail == null) {
+            itemDetailFragment.show(fragmentManager, "Item detail dialog");
+        } else {
+            fragmentManager.beginTransaction().add(R.id.containerItemDetail,
+                    itemDetailFragment).commit();
+        }
+    }
+
+    public MissionDetailFragment getItemDetailFragment(){
+        return itemDetailFragment;
+    }
+
+	public void switchItemDetail(MissionItem item) {
+        removeItemDetail();
+		addItemDetail(item);
 	}
 
 	private void removeItemDetail() {
 		if (itemDetailFragment != null) {
-			fragmentManager.beginTransaction().remove(itemDetailFragment)
-					.commit();
-			itemDetailFragment = null;
+            if (mContainerItemDetail == null) {
+                itemDetailFragment.dismiss();
+            } else {
+                fragmentManager.beginTransaction().remove(itemDetailFragment).commit();
+            }
+            itemDetailFragment = null;
 		}
 	}
 

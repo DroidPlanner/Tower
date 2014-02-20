@@ -1,296 +1,294 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    style="@style/configLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center" >
-
-    <LinearLayout
-        android:id="@+id/linearLayout1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:orientation="vertical"
-        tools:ignore="UselessParent" >
-
-        <LinearLayout
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            style="@style/configLayout"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginBottom="10dp"
-            android:background="@color/ground_speed_label"
-            android:orientation="horizontal" >
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal">
+
+    <TableLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"        >
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:background="@color/ground_speed_label">
 
             <TextView
                 android:id="@+id/textViewPWM"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_marginRight="10dp"
-                android:layout_weight="5"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:text="PWM in: 0000"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#fff"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/textViewPWMRange"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="5"
+                android:layout_weight="1"
                 android:text="PWM Range ( No Signal )"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#fff"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
-        </LinearLayout>
+        </TableRow>
 
-        <LinearLayout
+        <!-- Columns name -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:background="@drawable/mode_desc_rectangle">
+
+            <TextView
+                style="@style/ModeDetailText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:text="Flight Mode"/>
+
+            <TextView
+                style="@style/ModeDetailText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:text="@string/setup_fm_simple"/>
+
+            <TextView
+                style="@style/ModeDetailText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:text="@string/setup_fm_super"/>
+
+        </TableRow>
+
+        <!-- Flight mode rows -->
+        <TableRow
             android:id="@+id/layoutFM1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp" >
+            android:padding="5dp">
 
             <TextView
-                android:id="@+id/textViewFM1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="right"
+                android:layout_height="match_parent"
+                android:gravity="right|center_vertical"
                 android:text="@string/setup_fm_mode1"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#fff" />
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#fff"/>
 
             <Spinner
                 android:id="@+id/spinnerFM1"
                 style="@style/ModeSpinnerText"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="6"
-                android:entries="@array/FligthMode_CopterV3_1" />
+                android:layout_height="match_parent"
+                android:layout_weight="1.5"
+                android:entries="@array/FligthMode_CopterV3_1"/>
 
             <CheckBox
                 android:id="@+id/checkBoxFM1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/setup_fm_simple"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#fff" />
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxFMS1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/setup_fm_super"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#fff" />
-        </LinearLayout>
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                />
 
-        <LinearLayout
+        </TableRow>
+
+        <TableRow
             android:id="@+id/layoutFM2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp" >
+            android:padding="5dp">
 
             <TextView
-                android:id="@+id/textViewFM2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="right"
                 android:text="@string/setup_fm_mode2"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#fff" />
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="right|center_vertical"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#fff"/>
 
             <Spinner
                 android:id="@+id/spinnerFM2"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="6"
-                android:entries="@array/FligthMode_CopterV3_1" />
+                android:layout_height="match_parent"
+                android:layout_weight="1.5"
+                android:entries="@array/FligthMode_CopterV3_1"/>
 
             <CheckBox
                 android:id="@+id/checkBoxFM2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/setup_fm_simple"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#fff" />
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                />
 
             <CheckBox
                 android:id="@+id/checkBoxFMS2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/setup_fm_super"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#fff" />
-        </LinearLayout>
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+        </TableRow>
 
-        <LinearLayout
+        <TableRow
             android:id="@+id/layoutFM3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp" >
+            android:padding="5dp">
 
             <TextView
-                android:id="@+id/textViewFM3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="right"
                 android:text="@string/setup_fm_mode3"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#fff" />
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="right|center_vertical"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#fff"/>
 
             <Spinner
                 android:id="@+id/spinnerFM3"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="6"
-                android:entries="@array/FligthMode_CopterV3_1" />
+                android:layout_height="match_parent"
+                android:layout_weight="1.5"
+                android:entries="@array/FligthMode_CopterV3_1"/>
 
             <CheckBox
                 android:id="@+id/checkBoxFM3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/setup_fm_simple"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#fff" />
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
 
             <CheckBox
                 android:id="@+id/checkBoxFMS3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/setup_fm_super"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#fff" />
-        </LinearLayout>
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
 
-        <LinearLayout
+        </TableRow>
+
+        <TableRow
             android:id="@+id/layoutFM4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp" >
+            android:padding="5dp">
 
             <TextView
-                android:id="@+id/textViewFM4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="right"
                 android:text="@string/setup_fm_mode4"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#fff" />
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="right|center_vertical"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#fff"/>
 
             <Spinner
                 android:id="@+id/spinnerFM4"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="6"
-                android:entries="@array/FligthMode_CopterV3_1" />
+                android:layout_height="match_parent"
+                android:layout_weight="1.5"
+                android:entries="@array/FligthMode_CopterV3_1"/>
 
             <CheckBox
                 android:id="@+id/checkBoxFM4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/setup_fm_simple"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#fff" />
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
 
             <CheckBox
                 android:id="@+id/checkBoxFMS4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/setup_fm_super"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#fff" />
-        </LinearLayout>
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
 
-        <LinearLayout
+        </TableRow>
+
+        <TableRow
             android:id="@+id/layoutFM5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp" >
+            android:padding="5dp">
 
             <TextView
-                android:id="@+id/textViewFM5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="right"
                 android:text="@string/setup_fm_mode5"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#fff" />
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="right|center_vertical"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#fff"/>
 
             <Spinner
                 android:id="@+id/spinnerFM5"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="6"
-                android:entries="@array/FligthMode_CopterV3_1" />
+                android:layout_height="match_parent"
+                android:layout_weight="1.5"
+                android:entries="@array/FligthMode_CopterV3_1"/>
 
             <CheckBox
                 android:id="@+id/checkBoxFM5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/setup_fm_simple"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#fff" />
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
 
             <CheckBox
                 android:id="@+id/checkBoxFMS5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/setup_fm_super"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#fff" />
-        </LinearLayout>
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
 
-        <LinearLayout
+        </TableRow>
+
+        <TableRow
             android:id="@+id/layoutFM6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp" >
+            android:padding="5dp">
 
             <TextView
-                android:id="@+id/textViewFM6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="right"
                 android:text="@string/setup_fm_mode6"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#fff" />
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="right|center_vertical"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#fff"/>
 
             <Spinner
                 android:id="@+id/spinnerFM6"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="6"
-                android:entries="@array/FligthMode_CopterV3_1" />
+                android:layout_height="match_parent"
+                android:layout_weight="1.5"
+                android:entries="@array/FligthMode_CopterV3_1"/>
 
             <CheckBox
                 android:id="@+id/checkBoxFM6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/setup_fm_simple"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#fff" />
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
 
             <CheckBox
                 android:id="@+id/checkBoxFMS6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/setup_fm_super"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#fff" />
-        </LinearLayout>
-    </LinearLayout>
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
 
-</RelativeLayout>
+        </TableRow>
+
+    </TableLayout>
+</ScrollView>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/contentLayoutMissionControl"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:orientation="horizontal" >
+
+	<Button
+	    android:id="@+id/mc_joystickBtn"
+	    style="@style/flightControlButton"
+	    android:layout_width="75dp"
+	    android:layout_height="match_parent"
+	    android:drawableTop="@drawable/ic_control"
+		android:visibility="gone"
+        android:layout_weight="1"
+	    android:text="Control" />
+
+	<Button
+	    android:id="@+id/mc_planningBtn"
+	    style="@style/flightControlButton"
+	    android:layout_width="75dp"
+	    android:layout_height="match_parent"
+	    android:drawableTop="@drawable/ic_edit"
+        android:layout_weight="1"
+	    android:text="Edit" />
+
+
+	<Button
+	    android:id="@+id/mc_homeBtn"
+	    style="@style/flightControlButton"
+	    android:layout_width="75dp"
+	    android:layout_height="match_parent"
+	    android:drawableTop="@drawable/ic_home"
+        android:layout_weight="1"
+	    android:text="Home" />
+
+
+	<Button
+	    android:id="@+id/mc_land"
+	    style="@style/flightControlButton"
+	    android:layout_width="75dp"
+	    android:layout_height="match_parent"
+	    android:drawableTop="@drawable/ic_land"
+	    android:text="Land"
+        android:layout_weight="1"
+	    tools:ignore="ContentDescription" />
+
+	<Button
+	    android:id="@+id/mc_takeoff"
+	    style="@style/flightControlButton"
+	    android:layout_width="75dp"
+	    android:layout_height="match_parent"
+	    android:drawableTop="@drawable/ic_takeoff"
+	    android:text="Takeoff"
+		android:visibility="gone"
+        android:layout_weight="1"
+	    tools:ignore="ContentDescription" />
+
+	<Button
+	    android:id="@+id/mc_loiter"
+	    style="@style/flightControlButton"
+	    android:layout_width="75dp"
+	    android:layout_height="match_parent"
+	    android:drawableTop="@drawable/ic_loiter"
+	    android:text="Loiter"
+        android:layout_weight="1"
+	    tools:ignore="ContentDescription" />
+
+	<Button
+	    android:id="@+id/mc_follow"
+	    style="@style/flightControlButton"
+	    android:layout_width="75dp"
+	    android:layout_height="match_parent"
+	    android:drawableTop="@drawable/ic_follow"
+	    android:text="Follow"
+        android:layout_weight="1"
+	    tools:ignore="ContentDescription" />
+
+</LinearLayout>
