@@ -185,12 +185,14 @@
     <string name="setup_fm_title">Flugmodus-Konfiguration</string>
     <string name="setup_fm_side_title">Flugmodus aktualisieren</string>
     <string name="setup_fm_side_desc">Drücken Sie \"Senden\", um die Flugmodi auf der Drohne zu aktualisieren.</string>
-    <string name="setup_fm_mode1">Flugmodus 1:</string>
-    <string name="setup_fm_mode2">Flugmodus 2:</string>
-    <string name="setup_fm_mode3">Flugmodus 3:</string>
-    <string name="setup_fm_mode4">Flugmodus 4:</string>
-    <string name="setup_fm_mode5">Flugmodus 5:</string>
-    <string name="setup_fm_mode6">Flugmodus 6:</string>
+    <string name="setup_fm_desc_uploading">Flugmodus-Konfigurationsdaten werden hochgeladen</string>
+    <string name="setup_fm_desc_downloading">Flugmodus-Konfigurationsdaten werden geladen</string>
+    <string name="setup_fm_mode1">1.</string>
+    <string name="setup_fm_mode2">2.</string>
+    <string name="setup_fm_mode3">3.</string>
+    <string name="setup_fm_mode4">4.</string>
+    <string name="setup_fm_mode5">5.</string>
+    <string name="setup_fm_mode6">6.</string>
     <string name="setup_fm_simple">Simple Modus</string>
     <string name="setup_fm_super">Super Simple Modus</string>
 
@@ -213,12 +215,11 @@
     <string name="setup_sf_desc_uploading">Servo-Konfigurationsdaten werden hochgeladen</string>
     <string name="setup_sf_desc_downloading">Servo-Konfigurationsdaten werden herunterladen</string>
     <string name="setup_sf_servo_title">Servo-Funktionskonfiguration</string>
-    <string name="setup_sf_servo5">Servo 5:</string>
-    <string name="setup_sf_servo6">Servo 6:</string>
-    <string name="setup_sf_servo7">Servo 7:</string>
-    <string name="setup_sf_servo8">Servo 8:</string>
+    <string name="setup_sf_servo5">Servo  5:</string>
+    <string name="setup_sf_servo6">Servo  6:</string>
+    <string name="setup_sf_servo7">Servo  7:</string>
+    <string name="setup_sf_servo8">Servo  8:</string>
     <string name="setup_sf_servo10">Servo 10:</string>
-    <string name="setup_sf_servo11">Servo 11:</string>
     <string name="telemetry_default_value">0.0</string>
     <string name="climb_rate_label">Steigrate</string>
     <string name="altitude_label">Höhe</string>
