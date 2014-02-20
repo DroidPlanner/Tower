@@ -1,3 +1,7 @@
+## Droidplanner v2.2.0
+* Added support for phones (#618)
+* Fixing typos and whitespaces on strings.xml (#640)
+
 ## Droidplanner v2.1.2
 * Clean-up of Strings.xml (#617)
 * Adds a check for Google Play Services (#639)
