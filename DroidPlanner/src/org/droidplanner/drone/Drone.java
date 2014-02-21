@@ -55,9 +55,10 @@ public class Drone {
 	public Context context;
 	public Preferences preferences;
 
-	public Drone(MAVLinkClient mavClient, Context context) {
+	public Drone(MAVLinkClient mavClient, Context context, Preferences pref) {
 		this.MavClient = mavClient;
 		this.context = context;		
+		this.preferences = pref;
 		profile.load();
 	}
 

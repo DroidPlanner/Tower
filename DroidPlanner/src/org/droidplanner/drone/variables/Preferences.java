@@ -1,20 +1,20 @@
 package org.droidplanner.drone.variables;
 
-import org.droidplanner.drone.Drone;
-import org.droidplanner.drone.DroneVariable;
-
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-public class Preferences extends DroneVariable {
+public class Preferences  {
 
-	public Preferences(Drone myDrone) {
-		super(myDrone);
+	private Context context;
+
+	public Preferences(Context context) {
+		this.context = context;
 	}
 
 	public String getVehicleType() {
 		final SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(myDrone.context);
+				.getDefaultSharedPreferences(context);
 		return prefs.getString("pref_vehicle_type", null);
 	}
 
@@ -22,7 +22,7 @@ public class Preferences extends DroneVariable {
 		Rates rates = new Rates();
 
 		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(myDrone.context);
+				.getDefaultSharedPreferences(context);
 
 		rates.extendedStatus = Integer.parseInt(prefs.getString(
 				"pref_mavlink_stream_rate_ext_stat", "0"));
