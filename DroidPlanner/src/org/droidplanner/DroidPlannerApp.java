@@ -3,7 +3,7 @@ package org.droidplanner;
 import org.droidplanner.MAVLink.MavLinkMsgHandler;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.drone.variables.Preferences;
+import org.droidplanner.helpers.DpPreferences;
 import org.droidplanner.helpers.FollowMe;
 import org.droidplanner.helpers.RecordMe;
 import org.droidplanner.helpers.TTS;
@@ -26,7 +26,7 @@ public class DroidPlannerApp extends ErrorReportApp implements
 
 		tts = new TTS(this);
 		MAVLinkClient MAVClient = new MAVLinkClient(this, this);		
-		drone = new Drone(MAVClient, new Preferences(getApplicationContext()));
+		drone = new Drone(MAVClient, new DpPreferences(getApplicationContext()));
 		drone.events.addDroneListener(tts);
 		followMe = new FollowMe(this, drone);
 		recordMe = new RecordMe(this, drone);
