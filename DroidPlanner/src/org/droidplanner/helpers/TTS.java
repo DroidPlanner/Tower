@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
+import android.widget.Toast;
 
 import com.MAVLink.Messages.ApmModes;
 
@@ -22,7 +23,10 @@ public class TTS implements OnInitListener, OnDroneListener {
 	private SharedPreferences prefs;
 	private int lastBatteryDischargeNotification;
 
+	private Context context;
+
 	public TTS(Context context) {
+		this.context = context;
 		tts = new TextToSpeech(context, this);
 		this.prefs = PreferenceManager.getDefaultSharedPreferences(context);
 	}
@@ -65,12 +69,16 @@ public class TTS implements OnInitListener, OnDroneListener {
 				speakMode(drone.state.getMode());
 				break;
 			case MISSION_SENT:
+				Toast.makeText(context, "Waypoints sent", Toast.LENGTH_SHORT)
+				.show();
 				speak("Waypoints saved to Drone");
 				break;
 			case GPS_FIX:
 				speakGpsMode(drone.GPS.getFixTypeNumeric());
 				break;
 			case MISSION_RECEIVED:
+				Toast.makeText(context, "Waypoints received from Drone",
+						Toast.LENGTH_SHORT).show();
 				speak("Waypoints received");
 				break;
 			case HEARTBEAT_FIRST:

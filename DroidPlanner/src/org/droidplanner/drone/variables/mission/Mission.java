@@ -147,8 +147,6 @@ public class Mission extends DroneVariable implements PathSource{
 	}
 
 	public void onWriteWaypoints(msg_mission_ack msg) {
-		Toast.makeText(myDrone.context, "Waypoints sent", Toast.LENGTH_SHORT)
-				.show();
 		myDrone.events.notifyDroneEvent(DroneEventsType.MISSION_SENT);
 	}
 
@@ -245,8 +243,6 @@ public class Mission extends DroneVariable implements PathSource{
 
 	public void onMissionReceived(List<msg_mission_item> msgs) {
 		if (msgs != null) {
-			Toast.makeText(myDrone.context, "Waypoints received from Drone",
-					Toast.LENGTH_SHORT).show();
 			myDrone.home.setHome(msgs.get(0));
 			msgs.remove(0); // Remove Home waypoint
 			selection.clear();
