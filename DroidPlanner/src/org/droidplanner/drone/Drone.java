@@ -13,6 +13,7 @@ import org.droidplanner.drone.variables.MissionStats;
 import org.droidplanner.drone.variables.Navigation;
 import org.droidplanner.drone.variables.Orientation;
 import org.droidplanner.drone.variables.Parameters;
+import org.droidplanner.drone.variables.Preferences;
 import org.droidplanner.drone.variables.Profile;
 import org.droidplanner.drone.variables.RC;
 import org.droidplanner.drone.variables.Radio;
@@ -52,6 +53,7 @@ public class Drone {
 
 	public MAVLinkClient MavClient;
 	public Context context;
+	public Preferences preferences;
 
 	public Drone(MAVLinkClient mavClient, Context context) {
 		this.MavClient = mavClient;

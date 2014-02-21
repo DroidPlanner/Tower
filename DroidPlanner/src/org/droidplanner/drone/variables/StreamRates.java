@@ -5,9 +5,7 @@ import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.drone.DroneVariable;
-
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+import org.droidplanner.drone.variables.Preferences.Rates;
 
 public class StreamRates extends DroneVariable implements OnDroneListener {
 
@@ -29,29 +27,13 @@ public class StreamRates extends DroneVariable implements OnDroneListener {
 	}
 
 	public void setupStreamRatesFromPref() {
-		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(myDrone.context);
+		Rates rates = myDrone.preferences.getRates();
 
-		int extendedStatus = Integer.parseInt(prefs.getString(
-				"pref_mavlink_stream_rate_ext_stat", "0"));
-		int extra1 = Integer.parseInt(prefs.getString(
-				"pref_mavlink_stream_rate_extra1", "0"));
-		int extra2 = Integer.parseInt(prefs.getString(
-				"pref_mavlink_stream_rate_extra2", "0"));
-		int extra3 = Integer.parseInt(prefs.getString(
-				"pref_mavlink_stream_rate_extra3", "0"));
-		int position = Integer.parseInt(prefs.getString(
-				"pref_mavlink_stream_rate_position", "0"));
-		int rcChannels = Integer.parseInt(prefs.getString(
-				"pref_mavlink_stream_rate_rc_channels", "0"));
-		int rawSensors = Integer.parseInt(prefs.getString(
-				"pref_mavlink_stream_rate_raw_sensors", "0"));
-		int rawController = Integer.parseInt(prefs.getString(
-				"pref_mavlink_stream_rate_raw_controller", "0"));
-
-		MavLinkStreamRates.setupStreamRates(myDrone.MavClient, extendedStatus,
-				extra1, extra2, extra3, position, rcChannels, rawSensors,
-				rawController);
+		MavLinkStreamRates.setupStreamRates(myDrone.MavClient, rates.extendedStatus,
+				rates.extra1, rates.extra2, rates.extra3, rates.position, rates.rcChannels, rates.rawSensors,
+				rates.rawController);
 	}
+	
+	
 
 }
