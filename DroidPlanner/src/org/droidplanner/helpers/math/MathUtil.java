@@ -7,12 +7,11 @@ public class MathUtil {
 		value = Math.min(value, max);
 		return value;
 	}
-	
-	public static double Normalize(double value, double min, double max) {
-		value = Constrain(value,min,max);
-		return (value -min)/(max-min);
-		
-	}
 
+	public static double Normalize(double value, double min, double max) {
+		value = Constrain(value, min, max);
+		return (value - min) / (max - min);
+
+	}
 
 }
