@@ -26,7 +26,7 @@ public class DroidPlannerApp extends ErrorReportApp implements
 
 		tts = new TTS(this);
 		MAVLinkClient MAVClient = new MAVLinkClient(this, this);		
-		drone = new Drone(MAVClient, getApplicationContext(), new Preferences(getApplicationContext()));
+		drone = new Drone(MAVClient, new Preferences(getApplicationContext()));
 		drone.events.addDroneListener(tts);
 		followMe = new FollowMe(this, drone);
 		recordMe = new RecordMe(this, drone);

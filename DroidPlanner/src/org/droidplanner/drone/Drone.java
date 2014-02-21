@@ -25,8 +25,6 @@ import org.droidplanner.drone.variables.mission.Mission;
 import org.droidplanner.drone.variables.mission.WaypointMananger;
 import org.droidplanner.service.MAVLinkClient;
 
-import android.content.Context;
-
 
 public class Drone {
 	public DroneEvents events = new DroneEvents(this);
@@ -52,12 +50,10 @@ public class Drone {
 	public WaypointMananger waypointMananger = new WaypointMananger(this);
 
 	public MAVLinkClient MavClient;
-	public Context context;
 	public Preferences preferences;
 
-	public Drone(MAVLinkClient mavClient, Context context, Preferences pref) {
+	public Drone(MAVLinkClient mavClient, Preferences pref) {
 		this.MavClient = mavClient;
-		this.context = context;		
 		this.preferences = pref;
 		profile.load();
 	}
