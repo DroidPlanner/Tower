@@ -2,10 +2,11 @@ package org.droidplanner.fragments;
 
 import java.util.List;
 
+import org.droidplanner.dialogs.GuidedDialog;
+import org.droidplanner.dialogs.GuidedDialog.GuidedDialogListener;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.variables.GuidedPoint;
-import org.droidplanner.drone.variables.GuidedPoint.OnGuidedListener;
 import org.droidplanner.fragments.helpers.DroneMap;
 import org.droidplanner.fragments.helpers.MapPath;
 import org.droidplanner.fragments.markers.DroneMarker;
@@ -28,21 +29,20 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 public class FlightMapFragment extends DroneMap implements
-		OnMapLongClickListener, OnMarkerClickListener, OnMarkerDragListener,
-		OnGuidedListener {
+		OnMapLongClickListener, OnMarkerClickListener, OnMarkerDragListener,GuidedDialogListener {
 
 	private static final int ZOOM_LEVEL = 20;
 	
 	private Polyline flightPath;
 	private MapPath droneLeashPath;
 	private int maxFlightPathSize;
-	public boolean isAutoPanEnabled;
-	private boolean isGuidedModeEnabled;
+	public boolean isAutoPanEnabled;	
+	private boolean guidedModeOnLongPress;
 
 	public boolean hasBeenZoomed = false;
 
 	public DroneMarker droneMarker;
-
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
 			Bundle bundle) {
@@ -66,9 +66,8 @@ public class FlightMapFragment extends DroneMap implements
 				.getDefaultSharedPreferences(context);
 		maxFlightPathSize = Integer.valueOf(prefs.getString(
 				"pref_max_fligth_path_size", "0"));
-		isGuidedModeEnabled = prefs.getBoolean("pref_guided_mode_enabled",
-				false);
 		isAutoPanEnabled = prefs.getBoolean("pref_auto_pan_enabled", false);
+		guidedModeOnLongPress = prefs.getBoolean("pref_guided_mode_on_long_press", true);		
 	}
 
 	@Override
@@ -116,8 +115,23 @@ public class FlightMapFragment extends DroneMap implements
 	@Override
 	public void onMapLongClick(LatLng coord) {
 		getPreferences();
-		if (isGuidedModeEnabled && drone.MavClient.isConnected())
-			drone.guidedPoint.newGuidedPointWithCurrentAlt(coord);
+		if (drone.MavClient.isConnected()) {
+			if (drone.guidedPoint.isInitialized()) {
+				drone.guidedPoint.newGuidedCoord(coord);
+			} else {
+				if (guidedModeOnLongPress) {
+					GuidedDialog dialog = new GuidedDialog();
+					dialog.setCoord(coord);
+					dialog.setListener(this);
+					dialog.show(getChildFragmentManager(), "GUIDED dialog");
+				}
+			}
+		}
+	}
+
+	@Override
+	public void onForcedGuidedPoint(LatLng coord) {
+		drone.guidedPoint.forcedGuidedCoordinate(coord);		
 	}
 
 	@Override
@@ -130,20 +144,13 @@ public class FlightMapFragment extends DroneMap implements
 
 	@Override
 	public void onMarkerDragEnd(Marker marker) {
-		drone.guidedPoint.newGuidedPointwithLastAltitude(marker.getPosition());
+		drone.guidedPoint.newGuidedCoord(marker.getPosition());
 	}
 
 	@Override
 	public boolean onMarkerClick(Marker marker) {
-		drone.guidedPoint.newGuidedPointWithCurrentAlt(marker.getPosition());
+		drone.guidedPoint.newGuidedCoord(marker.getPosition());
 		return true;
-	}
-
-	@Override
-	public void onGuidedPoint() {
-		GuidedPoint guidedPoint = drone.guidedPoint;
-		markers.updateMarker(guidedPoint, true, context);
-		droneLeashPath.update(guidedPoint);
 	}
 
 	@Override
@@ -155,9 +162,19 @@ public class FlightMapFragment extends DroneMap implements
 					.getPosition());
 			animateCamera(drone.GPS.getPosition());
 			break;
+		case GUIDEDPOINT:
+			GuidedPoint guidedPoint = drone.guidedPoint;			
+			markers.updateMarker(guidedPoint, true, context);
+			droneLeashPath.update(guidedPoint);
+			break;
 		default:
 			break;
 		}
 		super.onDroneEvent(event,drone);
+	}
+
+	@Override
+	protected boolean isMissionDraggable() {
+		return false;
 	}
 }

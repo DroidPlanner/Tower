@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/configLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/ground_speed_label"
+            android:gravity="center_vertical|left"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="@string/setup_ch_tune_title"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#fff"
+            android:textStyle="bold"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <TextView
+                android:id="@+id/textViewTune"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="right"
+                android:text="@string/setup_ch_CH6_options"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#fff"/>
+
+            <Spinner
+                android:id="@+id/spinnerCH6"
+                style="@style/ModeSpinnerText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:entries="@array/FligthMode_CopterV3_1"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="right"
+                android:text="@string/setup_ch_tune_high"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#fff"/>
+
+            <EditText
+                android:id="@+id/editTextTuneH"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="number"
+                android:minWidth="100dp"
+                android:text="0.00"
+                android:gravity="center"
+                android:textColor="#fff">
+
+                <requestFocus/>
+            </EditText>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="right"
+                android:text="@string/setup_ch_tune_low"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#fff"/>
+
+            <EditText
+                android:id="@+id/editTextTuneL"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="number"
+                android:minWidth="100dp"
+                android:text="0.00"
+                android:gravity="center"
+                android:textColor="#fff">
+
+            </EditText>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textViewPWM"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/ground_speed_label"
+            android:gravity="center|left"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="@string/setup_ch_options_title"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#fff"
+            android:textStyle="bold"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <TextView
+                android:id="@+id/textViewFM2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="right"
+                android:text="@string/setup_ch_CH7_options"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#fff"/>
+
+            <Spinner
+                android:id="@+id/spinnerCH7"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:entries="@array/FligthMode_CopterV3_1"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <TextView
+                android:id="@+id/textViewFM3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="right"
+                android:text="@string/setup_ch_CH8_options"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#fff"/>
+
+            <Spinner
+                android:id="@+id/spinnerCH8"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:entries="@array/FligthMode_CopterV3_1"/>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

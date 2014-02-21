@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dimension for the telemetry ui elements -->
+    <dimen name="largeTelemetryTextSize">30sp</dimen>
+
+    <!-- Dimension for the flight control buttons -->
+    <dimen name="flightControlMargin">0dp</dimen>
+    <dimen name="flightControlPadding">5dp</dimen>
+    <dimen name="flightControlTextSize">10sp</dimen>
+
+    <!-- Dimension for the editor buttons -->
+    <dimen name="editor_button_width">48dp</dimen>
+    <dimen name="editor_button_height">48dp</dimen>
+    <dimen name="editor_button_margin">1dp</dimen>
+
+    <!-- Dimension for the editor list items -->
+    <dimen name="editor_list_item_text_size">20sp</dimen>
+
+    <!-- Dimension for the editor mission fragment -->
+    <dimen name="editor_mission_fragment_height">60dp</dimen>
+
+    <!-- Dimension for the setup and calibration screens -->
+    <dimen name="setup_title_height">56dp</dimen>
+    <dimen name="setup_title_padding">10dp</dimen>
+    <dimen name="setup_title_text_size">18sp</dimen>
+
+    <!-- Dimensions for the fillbar and rc stick widgets in the setup screens -->
+    <dimen name="fillbar_thickness">18dp</dimen>
+    <dimen name="fillbar_length">90dp</dimen>
+    <dimen name="setup_rc_stick_width">90dp</dimen>
+    <dimen name="setup_rc_stick_height">90dp</dimen>
+    <dimen name="setup_rc_extra_chan_inter_column_width">30dp</dimen>
+    <dimen name="setup_rc_extra_chan_top_margin">10dp</dimen>
+    <dimen name="setup_rc_text_title_size">13sp</dimen>
+    <dimen name="setup_action_button_width">90dp</dimen>
+
+    <!-- Dimensions for the setup tuning screen -->
+    <integer name="tuning_graph_weight">6</integer>
+    <integer name="tuning_params_weight">5</integer>
+    <dimen name="tuning_edit_number_button_width">55dp</dimen>
+    <dimen name="tuning_edit_number_button_height">55dp</dimen>
+    <dimen name="tuning_edit_number_text_size">9sp</dimen>
+    <dimen name="tuning_mission_header_title_height">48dp</dimen>
+
+    <!-- Dimension for the info bar -->
+    <dimen name="info_bar_text_size">12sp</dimen>
+    <dimen name="info_bar_drawable_padding">0dp</dimen>
+    <dimen name="info_bar_flight_mode_width">90dp</dimen>
+
+</resources>

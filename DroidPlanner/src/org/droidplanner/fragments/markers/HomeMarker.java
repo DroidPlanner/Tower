@@ -16,7 +16,7 @@ public class HomeMarker {
 				.snippet(home.getAltitude().toString())
 				.anchor((float) 0.5, (float) 0.5)
 				.icon(BitmapDescriptorFactory
-						.fromResource(drawable.ic_menu_home)).title("Home");
+						.fromResource(drawable.ic_wp_home)).title("Home");
 	}
 
 	public static void update(Marker marker, Home home) {

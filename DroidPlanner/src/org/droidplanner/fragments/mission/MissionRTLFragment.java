@@ -1,13 +1,13 @@
 package org.droidplanner.fragments.mission;
 
-import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListner;
+import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListener;
 
 import android.view.View;
 
 import org.droidplanner.R;
 
 public class MissionRTLFragment extends MissionDetailFragment implements
-		OnTextSeekBarChangedListner {
+		OnTextSeekBarChangedListener {
 	//private SeekBarWithText altitudeSeekBar;
 
 	@Override
@@ -23,7 +23,7 @@ public class MissionRTLFragment extends MissionDetailFragment implements
 
 		//altitudeSeekBar = (SeekBarWithText) view.findViewById(R.id.altitudeView);
 		//altitudeSeekBar.setValue(((ReturnToHome) item).getHeight().valueInMeters());
-		//altitudeSeekBar.setOnChangedListner(this);
+		//altitudeSeekBar.setOnChangedListener(this);
 	}
 
 	@Override

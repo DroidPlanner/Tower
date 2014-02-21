@@ -30,17 +30,17 @@ public abstract class MAVLinkConnection extends Thread {
 
 	protected abstract void getPreferences(SharedPreferences prefs);
 
-	public interface MavLinkConnectionListner {
+	public interface MavLinkConnectionListener {
 		public void onReceiveMessage(MAVLinkMessage msg);
 
 		public void onDisconnect();
-		
-		public void onComError(String errMsg);		
-		
+
+		public void onComError(String errMsg);
+
 	}
 
 	protected Context parentContext;
-	private MavLinkConnectionListner listner;
+	private MavLinkConnectionListener listener;
 	private boolean logEnabled;
 	private BufferedOutputStream logWriter;
 
@@ -50,11 +50,11 @@ public abstract class MAVLinkConnection extends Thread {
 	protected int iavailable, i;
 	protected boolean connected = true;
 
-	private ByteBuffer logBuffer;	
+	private ByteBuffer logBuffer;
 
 	public MAVLinkConnection(Context parentContext) {
 		this.parentContext = parentContext;
-		this.listner = (MavLinkConnectionListner) parentContext;
+		this.listener = (MavLinkConnectionListener) parentContext;
 
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(parentContext);
@@ -66,7 +66,7 @@ public abstract class MAVLinkConnection extends Thread {
 	public void run() {
 		super.run();
 		try {
-			parser.stats.mavlinkResetStats(); 
+			parser.stats.mavlinkResetStats();
 			openConnection();
 			if (logEnabled) {
 				logWriter = FileStream.getTLogFileStream();
@@ -81,14 +81,14 @@ public abstract class MAVLinkConnection extends Thread {
 			closeConnection();
 
 		} catch (FileNotFoundException e) {
-			listner.onComError(e.getMessage());
+			listener.onComError(e.getMessage());
 			e.printStackTrace();
 		} catch (IOException e) {
-			listner.onComError(e.getMessage());
+			listener.onComError(e.getMessage());
 			e.printStackTrace();
 		}
 
-		listner.onDisconnect();
+		listener.onDisconnect();
 	}
 
 	private void handleData() throws IOException {
@@ -100,7 +100,7 @@ public abstract class MAVLinkConnection extends Thread {
 			if (receivedPacket != null) {
 				saveToLog(receivedPacket);
 				MAVLinkMessage msg = receivedPacket.unpack();
-				listner.onReceiveMessage(msg);
+				listener.onReceiveMessage(msg);
 			}
 		}
 
@@ -123,7 +123,7 @@ public abstract class MAVLinkConnection extends Thread {
 
 	/**
 	 * Format and send a Mavlink packet via the MAVlink stream
-	 * 
+	 *
 	 * @param packet
 	 *            MavLink packet to be transmitted
 	 */
@@ -133,7 +133,7 @@ public abstract class MAVLinkConnection extends Thread {
 			sendBuffer(buffer);
 			saveToLog(packet);
 		} catch (IOException e) {
-			listner.onComError(e.getMessage());			
+			listener.onComError(e.getMessage());
 			e.printStackTrace();
 		}
 	}

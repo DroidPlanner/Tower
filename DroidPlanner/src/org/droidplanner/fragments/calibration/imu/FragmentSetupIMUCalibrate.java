@@ -1,6 +1,7 @@
 package org.droidplanner.fragments.calibration.imu;
 
-import org.droidplanner.fragments.SetupFragment;
+import org.droidplanner.fragments.SetupSensorFragment;
+import org.droidplanner.fragments.calibration.SetupSidePanel;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,7 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import org.droidplanner.R;
 
-public class FragmentSetupIMUCalibrate extends SetupFragment.SetupSidePanel {
+public class FragmentSetupIMUCalibrate extends SetupSidePanel {
 	private Button btnStep;
 	private TextView textDesc;
 
@@ -21,7 +22,7 @@ public class FragmentSetupIMUCalibrate extends SetupFragment.SetupSidePanel {
 		final View view = inflater.inflate(R.layout.fragment_setup_imu_calibrate,
 				container, false);
 
-        final SetupFragment setupFragment = (SetupFragment) getParentFragment();
+        final SetupSensorFragment setupFragment = (SetupSensorFragment) getParentFragment();
 
         textDesc = (TextView) view.findViewById(R.id.textViewDesc);
         btnStep = (Button) view.findViewById(R.id.buttonNext);
@@ -29,7 +30,7 @@ public class FragmentSetupIMUCalibrate extends SetupFragment.SetupSidePanel {
             @Override
             public void onClick(View v) {
                 if(setupFragment != null){
-                    setupFragment.doCalibrationStep();
+                    setupFragment.doCalibrationStep(0);
                 }
             }
         });
@@ -37,8 +38,9 @@ public class FragmentSetupIMUCalibrate extends SetupFragment.SetupSidePanel {
 		return view;
 	}
 
-	public void updateTitle(int calibration_step) {
-		int id = -1;
+	@Override
+	public void updateDescription(int calibration_step) {
+		int id;
 		switch (calibration_step) {
 		case 0:
 			id = R.string.setup_imu_start;
@@ -67,6 +69,7 @@ public class FragmentSetupIMUCalibrate extends SetupFragment.SetupSidePanel {
 		default:
 			return;
 		}
+
 		if (textDesc != null) {
 			textDesc.setText(id);
 		}
@@ -88,6 +91,12 @@ public class FragmentSetupIMUCalibrate extends SetupFragment.SetupSidePanel {
 	public void setDescription(int id) {
 		if (textDesc != null)
 			textDesc.setText(id);
+	}
+
+	@Override
+	public void updateTitle(int idTitle) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

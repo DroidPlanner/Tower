@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            style="@style/configLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal">
+
+    <TableLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"        >
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:background="@color/ground_speed_label">
+
+            <TextView
+                android:id="@+id/textViewPWM"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="PWM in: 0000"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#fff"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/textViewPWMRange"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="PWM Range ( No Signal )"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#fff"
+                android:textStyle="bold"/>
+
+        </TableRow>
+
+        <!-- Columns name -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:background="@drawable/mode_desc_rectangle">
+
+            <TextView
+                style="@style/ModeDetailText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:text="Flight Mode"/>
+
+            <TextView
+                style="@style/ModeDetailText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:text="@string/setup_fm_simple"/>
+
+            <TextView
+                style="@style/ModeDetailText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:text="@string/setup_fm_super"/>
+
+        </TableRow>
+
+        <!-- Flight mode rows -->
+        <TableRow
+            android:id="@+id/layoutFM1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="right|center_vertical"
+                android:text="@string/setup_fm_mode1"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#fff"/>
+
+            <Spinner
+                android:id="@+id/spinnerFM1"
+                style="@style/ModeSpinnerText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.5"
+                android:entries="@array/FligthMode_CopterV3_1"/>
+
+            <CheckBox
+                android:id="@+id/checkBoxFM1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                />
+
+            <CheckBox
+                android:id="@+id/checkBoxFMS1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                />
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/layoutFM2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+
+            <TextView
+                android:text="@string/setup_fm_mode2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="right|center_vertical"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#fff"/>
+
+            <Spinner
+                android:id="@+id/spinnerFM2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.5"
+                android:entries="@array/FligthMode_CopterV3_1"/>
+
+            <CheckBox
+                android:id="@+id/checkBoxFM2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                />
+
+            <CheckBox
+                android:id="@+id/checkBoxFMS2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/layoutFM3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+
+            <TextView
+                android:text="@string/setup_fm_mode3"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="right|center_vertical"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#fff"/>
+
+            <Spinner
+                android:id="@+id/spinnerFM3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.5"
+                android:entries="@array/FligthMode_CopterV3_1"/>
+
+            <CheckBox
+                android:id="@+id/checkBoxFM3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <CheckBox
+                android:id="@+id/checkBoxFMS3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/layoutFM4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+
+            <TextView
+                android:text="@string/setup_fm_mode4"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="right|center_vertical"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#fff"/>
+
+            <Spinner
+                android:id="@+id/spinnerFM4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.5"
+                android:entries="@array/FligthMode_CopterV3_1"/>
+
+            <CheckBox
+                android:id="@+id/checkBoxFM4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <CheckBox
+                android:id="@+id/checkBoxFMS4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/layoutFM5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+
+            <TextView
+                android:text="@string/setup_fm_mode5"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="right|center_vertical"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#fff"/>
+
+            <Spinner
+                android:id="@+id/spinnerFM5"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.5"
+                android:entries="@array/FligthMode_CopterV3_1"/>
+
+            <CheckBox
+                android:id="@+id/checkBoxFM5"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <CheckBox
+                android:id="@+id/checkBoxFMS5"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/layoutFM6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+
+            <TextView
+                android:text="@string/setup_fm_mode6"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="right|center_vertical"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#fff"/>
+
+            <Spinner
+                android:id="@+id/spinnerFM6"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.5"
+                android:entries="@array/FligthMode_CopterV3_1"/>
+
+            <CheckBox
+                android:id="@+id/checkBoxFM6"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <CheckBox
+                android:id="@+id/checkBoxFMS6"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+        </TableRow>
+
+    </TableLayout>
+</ScrollView>

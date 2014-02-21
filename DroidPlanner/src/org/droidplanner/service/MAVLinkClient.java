@@ -21,12 +21,18 @@ import com.MAVLink.Messages.MAVLinkPacket;
 
 // provide a common class for some ease of use functionality
 public class MAVLinkClient {
+
+    /**
+     * This is used as tag for logging.
+     */
+    private static final String TAG = MAVLinkClient.class.getSimpleName();
+
 	public static final int MSG_RECEIVED_DATA = 0;
 	public static final int MSG_SELF_DESTRY_SERVICE = 1;
 	public static final int MSG_TIMEOUT = 2;
 
 	Context parent;
-	private OnMavlinkClientListner listner;
+	private OnMavlinkClientListener listener;
 	Messenger mService = null;
 	final Messenger mMessenger = new Messenger(new IncomingHandler());
 	private boolean mIsBound;
@@ -35,7 +41,7 @@ public class MAVLinkClient {
 	private long timeOut;
 	private int timeOutRetry;
 
-	public interface OnMavlinkClientListner {
+	public interface OnMavlinkClientListener {
 		public void notifyConnected();
 
 		public void notifyDisconnected();
@@ -45,9 +51,9 @@ public class MAVLinkClient {
 		void notifyTimeOut(int timeOutCount);
 	}
 
-	public MAVLinkClient(Context context, OnMavlinkClientListner listner) {
+	public MAVLinkClient(Context context, OnMavlinkClientListener listener) {
 		parent = context;
-		this.listner = listner;
+		this.listener = listener;
 	}
 
 	public void init() {
@@ -140,7 +146,7 @@ public class MAVLinkClient {
 						 * Log.d("TIMEOUT", "timed out");
 						 */
 
-						listner.notifyTimeOut(timeOutCount);
+						listener.notifyTimeOut(timeOutCount);
 					}
 				}
 			}, timeout_ms); // delay in milliseconds
@@ -160,7 +166,7 @@ public class MAVLinkClient {
 			case MSG_RECEIVED_DATA:
 				Bundle b = msg.getData();
 				MAVLinkMessage m = (MAVLinkMessage) b.getSerializable("msg");
-				listner.notifyReceivedData(m);
+				listener.notifyReceivedData(m);
 				break;
 			case MSG_SELF_DESTRY_SERVICE:
 				close();
@@ -194,6 +200,10 @@ public class MAVLinkClient {
 	};
 
 	public void sendMavPacket(MAVLinkPacket pack) {
+        if(mService == null){
+            return;
+        }
+
 		Message msg = Message.obtain(null, MAVLinkService.MSG_SEND_DATA);
 		Bundle data = new Bundle();
 		data.putSerializable("msg", pack);
@@ -201,27 +211,24 @@ public class MAVLinkClient {
 		try {
 			mService.send(msg);
 		} catch (RemoteException e) {
-			e.printStackTrace();
-		} catch (NullPointerException e) {
-			e.printStackTrace();
+			Log.e(TAG, e.getMessage(), e);
 		}
-
 	}
 
 	private void onConnectedService() {
-		listner.notifyConnected();
+		listener.notifyConnected();
 	}
 
 	private void onDisconnectService() {
 		mIsBound = false;
-		listner.notifyDisconnected();
+		listener.notifyDisconnected();
 	}
 
 	public void queryConnectionState() {
 		if (mIsBound) {
-			listner.notifyConnected();
+			listener.notifyConnected();
 		} else {
-			listner.notifyDisconnected();
+			listener.notifyDisconnected();
 		}
 
 	}

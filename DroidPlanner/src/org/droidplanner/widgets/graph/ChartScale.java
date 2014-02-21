@@ -4,11 +4,11 @@ import android.content.Context;
 import android.view.ScaleGestureDetector;
 
 public class ChartScale {
-	public interface OnScaleListner {
-		public void onScaleListner();
+	public interface OnScaleListener {
+		public void onScaleListener();
 	}
 
-	private OnScaleListner listner;
+	private OnScaleListener listener;
 
 	// range values to display
 	private double range = 45;
@@ -19,10 +19,10 @@ public class ChartScale {
 
 	protected ScaleGestureDetector scaleDetector;
 
-	public ChartScale(Context context, OnScaleListner listner) {
+	public ChartScale(Context context, OnScaleListener listener) {
 		scaleDetector = new ScaleGestureDetector(context,
 				new ChartScaleListener());
-		this.listner = listner;
+		this.listener = listener;
 	}
 
 	public double getRange() {
@@ -37,7 +37,7 @@ public class ChartScale {
 			range /= detector.getScaleFactor();
 
 			range = Math.max(min, Math.min(range, max));
-			listner.onScaleListner();
+			listener.onScaleListener();
 			return true;
 		}
 	}

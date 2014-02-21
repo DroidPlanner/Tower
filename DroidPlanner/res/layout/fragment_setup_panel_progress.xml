@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".fragments.calibration.FragmentSetupRCFailsafe" >
+
+    <TextView
+        android:id="@+id/setupDesc"
+        style="@style/ModeDetailText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/mode_desc_rectangle"
+        android:padding="10dp"
+        android:text="@string/progress_desc_downloading" />
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/setupProgressTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Downloading parameters"
+                    tools:ignore="HardcodedText" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center" >
+
+                    <ProgressBar
+                        android:id="@+id/setupProgressBar"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="4" />
+
+                    <TextView
+                        android:id="@+id/setupProgressRatio"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="10/10"
+                        tools:ignore="HardcodedText" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/buttonCancel"
+                    style="@style/modeControl"
+                    android:layout_width="@dimen/setup_action_button_width"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/button_blue"
+                    android:text="@string/button_setup_cancel" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

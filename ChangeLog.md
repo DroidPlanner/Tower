@@ -1,4 +1,54 @@
+# DroidPlanner ChangeLog
+Our convention for release control is the following (for a release like DPvA.B.C_RCx):
+* A - Main version, changes just with big changes in the app structure or/and layout
+* B - Minor version, add's some significant feature to the app
+* C - Minor changes with bugfixes, or small refactorings, from previous "A" or "B" changes.
+* x - Releases Candidates (RC) are build from the main releases, but may have some feature's disabled. The "x" is used if multiple RC are needed for a new version of the app.
+
+All the changes are logged below (preferable with the pull request numbers in parenteses):
+
+# Releases
+## Droidplanner v2.2.0
+* Added support for phones (#618)
+* Fixing typos and whitespaces on strings.xml (#640)
+
+## Droidplanner v2.1.2
+* Clean-up of Strings.xml (#617)
+* Adds a check for Google Play Services (#639)
+* Adding support for Android Studio, Gradle (#623,#619)
+
+## Droidplanner v2.1.1
+* Fix Parameters screen issue (#613)
+* Making flight screen mission markers un-draggable (#614)
+
+## Droidplanner v2.1.0
+* Implemented the Survey Tool
+
+## Droidplanner v2.0.1
+* Cleaning minor bugs (#581)
+* Fixed typo errors(#589)
+* Improved Radio setup (#593,#596)
+* Removing unused assets (#594,#601)
+* Small mavlink library fix (#585)
+* Improved Guided mode (#595)
+* Rescrict disctribution to tablets only (#597)
+* Dialog for BlueTooth device selection(#598)
+* Fixed typos on source-code (#605)
+
 ## Droidplanner v2.0.0
+* Renamed package to org.droidplanner
+* Redesing of the mission handling code
+* Completely redesigned graphical user interface
+* Easy to use Home, Land, and Loiter buttons
+* New Artificial Horizon
+* Added telemetry to the ActionBar
+* Mode detail fragment
+* New guided mode with changeable altitude
+* New planning screen for quick mission generation
+* Easy and powerful mission editing tools
+* New mission listing fragment
+* Drone Setup screen with multiple tabs like:Radio,Checklist,Parameters
+* Improved BlueTooth Connection
 
 ## Droidplanner v1.2.0
 * Planning: renamed column header - #348
@@ -28,7 +78,7 @@
 * Reduce the chance of unintentionally deleting waypoints while scrolling
 
 ## Droidplanner v1.0.0
-* No new changes to the codebase, just setting a milestone 
+* No new changes to the codebase, just setting a milestone
 
 ## Droidplanner v0.16.0
 * Bluetooth Support
@@ -104,7 +154,7 @@
 ## Droidplanner v0.11.0
 * New Chart screen
 * HUD code clean-up
-* Activitys clean-up
+* Activities clean-up
 * All markers are using the markerManager
 * Colorful markers in the planning screen
 

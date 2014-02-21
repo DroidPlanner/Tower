@@ -29,7 +29,7 @@ public class ModeGuidedFragment extends Fragment implements
 		View view = inflater.inflate(R.layout.fragment_mode_guided, container, false);
 		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
 		setupViews(view);
-		setupListner();
+		setupListener();
 		updateLabel();
 		return view;
 	}
@@ -42,7 +42,7 @@ public class ModeGuidedFragment extends Fragment implements
 		altTextView = (TextView) parentView.findViewById(R.id.guided_altitude);
 	}
 
-	private void setupListner() {
+	private void setupListener() {
 		altPlus1.setOnClickListener(this);
 		altPlus10.setOnClickListener(this);
 		altMinus1.setOnClickListener(this);
@@ -53,23 +53,22 @@ public class ModeGuidedFragment extends Fragment implements
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.button_altitude_plus_1:
-			drone.guidedPoint.updateGuidedPointwithDeltaAltitude(1);
+			drone.guidedPoint.changeGuidedAltitude(1);
 			break;
 		case R.id.button_altitude_plus_10:
-			drone.guidedPoint.updateGuidedPointwithDeltaAltitude(10);
+			drone.guidedPoint.changeGuidedAltitude(10);
 			break;
 		case R.id.button_altitude_minus_1:
-			drone.guidedPoint.updateGuidedPointwithDeltaAltitude(-1);
+			drone.guidedPoint.changeGuidedAltitude(-1);
 			break;
 		case R.id.button_altitude_minus_10:
-			drone.guidedPoint.updateGuidedPointwithDeltaAltitude(-10);
+			drone.guidedPoint.changeGuidedAltitude(-10);
 			break;
 		}
 		updateLabel();
 	}
 
 	private void updateLabel() {
-		String tmp = String.format("%2.0f", drone.guidedPoint.getAltitude());
-		this.altTextView.setText("Target Altitude: " + tmp +"m" );
+		this.altTextView.setText("Target Altitude: " + drone.guidedPoint.getAltitude());
 	}
 }

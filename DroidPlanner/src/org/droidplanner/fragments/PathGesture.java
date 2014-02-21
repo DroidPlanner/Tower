@@ -16,14 +16,14 @@ public class PathGesture implements OnGestureListener {
 	private static final int TOLERANCE = 15;
 	private static final int STROKE_WIDTH = 3;
 
-	public interface OnPathFinishedListner {
+	public interface OnPathFinishedListener {
 
 		void onPathFinished(List<Point> path);
 	}
 
 	public double toleranceInPixels;
 	public GestureOverlayView view;
-	public OnPathFinishedListner listner;
+	public OnPathFinishedListener listener;
 
 	public PathGesture(GestureOverlayView view) {
 		this.view = view;
@@ -42,8 +42,8 @@ public class PathGesture implements OnGestureListener {
 		view.setEnabled(true);
 	}
 
-	public void setOnPathFinishedListner(OnPathFinishedListner listner) {
-		this.listner = listner;
+	public void setOnPathFinishedListener(OnPathFinishedListener listener) {
+		this.listener = listener;
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class PathGesture implements OnGestureListener {
 		if (path.size() > 1) {
 			path = Simplify.simplify(path, toleranceInPixels);
 		}
-		listner.onPathFinished(path);
+		listener.onPathFinished(path);
 	}
 
 	private List<Point> decodeGesture() {
