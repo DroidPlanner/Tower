@@ -84,6 +84,16 @@
     <string name="mode_sport">Sport allows a pilot to control rate of rotation directly with the addition of self-leveling.</string>
     <string name="mode_stabilize">Stabilize levels the vehicle in flight.</string>
 
+    <!-- Waypoint types -->
+    <string name="waypointType_Waypoint">Waypoint</string>
+    <string name="waypointType_TakeOff">Take-Off</string>
+    <string name="waypointType_RTL">Return To Launch</string>
+    <string name="waypointType_Land">Land</string>
+    <string name="waypointType_Circle">Circle</string>
+    <string name="waypointType_Loiter">Loiter</string>
+    <string name="waypointType_ROI">Region of Interest</string>
+    <string name="waypointType_Survey">Survey</string>
+
     <!-- Waypoint info -->
     <string name="waypointInfo_Land">Land vehicle at the current location. You must manually exit Auto mode to disarm motors.</string>
     <string name="waypointInfo_Generic">Generic Waypoint</string>
@@ -102,6 +112,8 @@
     <string name="waypointInfo_SetJump">Repeat waypoint</string>
 
     <!-- Waypoint editor -->
+    <string name="editor_info_window">Distance: 200m, Flight time: 3:30s</string>
+    <string name="distance_to_home">Distance to home</string>
     <string name="loiter_time">Loiter Time</string>
     <string name="waypoint_delay">Delay before next waypoint</string>
     <string name="loiter_radius">Loiter Radius</string>
@@ -221,6 +233,8 @@
     <string name="setup_sf_servo8">Servo 8:</string>
     <string name="setup_sf_servo9">Servo 9:</string>
     <string name="setup_sf_servo10">Servo 10:</string>
+
+    <!-- Main Screen and Telemetry -->
     <string name="telemetry_default_value">0.0</string>
     <string name="climb_rate_label">Climb Rate</string>
     <string name="altitude_label">Altitude</string>
@@ -229,6 +243,13 @@
     <string name="ground_speed_label">Ground Speed</string>
     <string name="air_speed_label">Air Speed</string>
     <string name="default_angle_value">--°</string>
+    <string name="mission_control_control">Control</string>
+    <string name="mission_control_edit">Edit</string>
+    <string name="mission_control_home">Home</string>
+    <string name="mission_control_land">Land</string>
+    <string name="mission_control_takeoff">Take</string>
+    <string name="mission_control_loiter">Loiter</string>
+    <string name="mission_control_follow">Follow</string>
 
     <!-- Bluetooth device selection strings -->
     <string name="select_device">Select device to connect</string>
@@ -245,8 +266,8 @@
     <string name="mode_switch">Assign RC channel 5 to a switch on your radio to control flight modes. Move the switch to each position and select the desired flight mode below.</string>
     <string name="MAVLinkError">MAVLink Error:</string>
     <string name="msg_connect_first">Please connect first</string>
-    <string name="mode1_throttle_on_right_stick">Mode1: Throttle on RIGHT stick</string>
-    <string name="mode2_throttle_on_left_stick">Mode2: Throttle on LEFT stick</string>
+    <string name="mode1_throttle_on_right_stick">Mode 1: Throttle on RIGHT stick</string>
+    <string name="mode2_throttle_on_left_stick">Mode 2: Throttle on LEFT stick</string>
 
     <string name="telemetry_label">Telemetry</string>
     <string name="flight_modes_label">Flight modes</string>

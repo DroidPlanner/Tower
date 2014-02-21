@@ -84,6 +84,16 @@
     <string name="mode_sport">Sport erlaubt dem Piloten die direkte Kontrolle der Drehrate mit dem Zusatz der Selbstnivellierung.</string>
     <string name="mode_stabilize">Stabilize hält die Drohne stabil im Flug.</string>
 
+    <!-- Waypoint types -->
+    <string name="waypointType_Waypoint">Wegpunkt</string>
+    <string name="waypointType_TakeOff">Abheben</string>
+    <string name="waypointType_RTL">Zurück zum Start (RTL)</string>
+    <string name="waypointType_Land">Landen</string>
+    <string name="waypointType_Circle">Kreisen</string>
+    <string name="waypointType_Loiter">Loiter</string>
+    <string name="waypointType_ROI">Region von Interesse</string>
+    <string name="waypointType_Survey">Erhebung</string>
+
     <!-- Waypoint info -->
     <string name="waypointInfo_Land">Drohne an aktueller Position landen. Sie müssen den Auto-Modus manuell verlassen, um die Motoren zu sichern.</string>
     <string name="waypointInfo_Generic">Generischer Wegpunkt</string>
@@ -102,9 +112,11 @@
     <string name="waypointInfo_SetJump">Wegpunkt wiederholen</string>
 
     <!-- Waypoint editor -->
-    <string name="loiter_time">Loiter Zeit</string>
+    <string name="editor_info_window">Distanz: 200m, Flugzeit: 3:30s</string>
+    <string name="distance_to_home">Distanz zum Start</string>
+    <string name="loiter_time">Zeit</string>
     <string name="waypoint_delay">Verzögerung vor dem nächsten Wegpunkt</string>
-    <string name="loiter_radius">Loiter Radius</string>
+    <string name="loiter_radius">Radius</string>
     <string name="loiter_ccw">GUZS</string>
     <string name="waypoint_altitude">Höhe</string>
     <string name="waypoint_angle">Gierwinkel</string>
@@ -221,6 +233,8 @@
     <string name="setup_sf_servo8">Servo 8:</string>
     <string name="setup_sf_servo9">Servo 9:</string>
     <string name="setup_sf_servo10">Servo 10:</string>
+
+    <!-- Main Screen and Telemetry -->
     <string name="telemetry_default_value">0.0</string>
     <string name="climb_rate_label">Steigrate</string>
     <string name="altitude_label">Höhe</string>
@@ -229,6 +243,13 @@
     <string name="ground_speed_label">Geschwindigkeit über Grund</string>
     <string name="air_speed_label">Luftgeschwindigkeit</string>
     <string name="default_angle_value">--°</string>
+    <string name="mission_control_control">Steuerung</string>
+    <string name="mission_control_edit">Editor</string>
+    <string name="mission_control_home">Start</string>
+    <string name="mission_control_land">Landen</string>
+    <string name="mission_control_takeoff">Abheben</string>
+    <string name="mission_control_loiter">Loiter</string>
+    <string name="mission_control_follow">Folgen</string>
 
     <!-- Bluetooth device selection strings -->
     <string name="select_device">Wählen Sie das zu verbindende Gerät</string>
@@ -245,8 +266,8 @@
     <string name="mode_switch">Ordnen Sie RC Kanal 5 für die Flugmodi einem Schalter auf der Fernsteuerung zu. Bewegen Sie den Schalter in jede Position und wählen Sie den gewünschten Flugmodus weiter unten.</string>
     <string name="MAVLinkError">MAVLink Fehler:</string>
     <string name="msg_connect_first">Bitte zuerst verbinden</string>
-    <string name="mode1_throttle_on_right_stick">Mode1: Schub auf rechtem Steuerknüppel</string>
-    <string name="mode2_throttle_on_left_stick">Mode2: Schub auf linkem Steuerknüppel</string>
+    <string name="mode1_throttle_on_right_stick">Mode 1: Schub auf rechtem Steuerknüppel</string>
+    <string name="mode2_throttle_on_left_stick">Mode 2: Schub auf linkem Steuerknüppel</string>
 
     <string name="telemetry_label">Telemetrie</string>
     <string name="flight_modes_label">Flugmodi</string>
