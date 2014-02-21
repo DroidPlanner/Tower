@@ -13,8 +13,7 @@ dependencies {
 
 android {
     compileSdkVersion 19
-    buildToolsVersion "19.0.1"
-
+    buildToolsVersion '19.0.1'
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -42,6 +41,11 @@ android {
             debug {
                 storeFile file("/home/fhuya/.android/debug.keystore")
             }
+        }
+    }
+    signingConfigs {
+        debug {
+            storeFile file('/home/fhuya/.android/debug.keystore')
         }
     }
 }

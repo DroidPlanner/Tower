@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    style="?android:attr/buttonBarStyle"
+    android:paddingLeft="5dp"
+    >
+
+    <TextView
+        android:id="@+id/bar_signal_rssi"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left|center_vertical"
+        android:text="RSSI 22 dB"
+        android:textSize="@dimen/info_bar_text_size"/>
+
+    <TextView
+        android:id="@+id/bar_signal_remrssi"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left|center_vertical"
+        android:text="RemRSSI 22 dB"
+        android:textSize="@dimen/info_bar_text_size"/>
+
+    <TextView
+        android:id="@+id/bar_signal_noise"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left|center_vertical"
+        android:text="Noise 22 dB"
+        android:textSize="@dimen/info_bar_text_size"/>
+
+    <TextView
+        android:id="@+id/bar_signal_remnoise"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left|center_vertical"
+        android:text="RemNoise 22 dB"
+        android:textSize="@dimen/info_bar_text_size"/>
+
+    <TextView
+        android:id="@+id/bar_signal_fade"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left|center_vertical"
+        android:text="Fade 22 dB"
+        android:textSize="@dimen/info_bar_text_size"/>
+
+    <TextView
+        android:id="@+id/bar_signal_remfade"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left|center_vertical"
+        android:text="RemFade 22 dB"
+        android:textSize="@dimen/info_bar_text_size"/>
+
+</LinearLayout>

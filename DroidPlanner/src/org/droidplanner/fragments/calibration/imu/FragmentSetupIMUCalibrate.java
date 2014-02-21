@@ -40,7 +40,7 @@ public class FragmentSetupIMUCalibrate extends SetupSidePanel {
 
 	@Override
 	public void updateDescription(int calibration_step) {
-		int id = -1;
+		int id;
 		switch (calibration_step) {
 		case 0:
 			id = R.string.setup_imu_start;
@@ -69,6 +69,7 @@ public class FragmentSetupIMUCalibrate extends SetupSidePanel {
 		default:
 			return;
 		}
+
 		if (textDesc != null) {
 			textDesc.setText(id);
 		}

@@ -1,25 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".fragments.calibration.FragmentSetupRCMenu" >
-
-    <RelativeLayout
-        android:id="@+id/title_rect"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:background="@color/dark_title_bg" >
-
-        <TextView
-            android:id="@+id/setupTitle"
-            style="@style/SetupTitle"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:text="@string/setup_radio_cal_title" />
-    </RelativeLayout>
+    tools:context=".fragments.calibration.FragmentSetupRCMenu">
 
     <TextView
         android:id="@+id/setupDesc"
@@ -28,30 +14,16 @@
         android:layout_height="wrap_content"
         android:background="@drawable/mode_desc_rectangle"
         android:padding="12dp"
-        android:text="@string/setup_radio_cal_desc" />
+        android:text="@string/setup_radio_cal_desc"/>
 
-    <LinearLayout
-        android:id="@+id/layoutSetupDetails"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="12dp" >
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+    <Button
+        android:id="@+id/buttonStart"
+        style="@style/modeControl"
+        android:layout_width="@dimen/setup_action_button_width"
         android:layout_margin="10dp"
-        android:gravity="center"
-        android:orientation="vertical" >
-
-        <Button
-            android:id="@+id/buttonStart"
-            style="@style/modeControl"
-            android:layout_width="154dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_green"
-            android:text="@string/button_setup_calibrate" />
-    </LinearLayout>
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_green"
+        android:text="@string/button_setup_calibrate"/>
 
 </LinearLayout>

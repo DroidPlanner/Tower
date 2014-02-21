@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="org.droidplanner"
-          android:versionCode="59"
+          android:versionCode="61"
           android:versionName="please run version.sh to get the version name">
 
     <uses-sdk
@@ -9,7 +9,7 @@
         android:targetSdkVersion="19" />
 
     <supports-screens
-        android:requiresSmallestWidthDp="540"/>
+        android:requiresSmallestWidthDp="320"/>
 
     <permission
         android:name=".permission.MAPS_RECEIVE"

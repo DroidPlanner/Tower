@@ -11,6 +11,8 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.util.Log;
+
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
 
@@ -19,6 +21,12 @@ import java.util.TimerTask;
 
 // provide a common class for some ease of use functionality
 public class MAVLinkClient {
+
+    /**
+     * This is used as tag for logging.
+     */
+    private static final String TAG = MAVLinkClient.class.getSimpleName();
+
 	public static final int MSG_RECEIVED_DATA = 0;
 	public static final int MSG_SELF_DESTRY_SERVICE = 1;
 	public static final int MSG_TIMEOUT = 2;
@@ -194,6 +202,10 @@ public class MAVLinkClient {
 	};
 
 	public void sendMavPacket(MAVLinkPacket pack) {
+        if(mService == null){
+            return;
+        }
+
 		Message msg = Message.obtain(null, MAVLinkService.MSG_SEND_DATA);
 		Bundle data = new Bundle();
 		data.putSerializable("msg", pack);
@@ -201,11 +213,8 @@ public class MAVLinkClient {
 		try {
 			mService.send(msg);
 		} catch (RemoteException e) {
-			e.printStackTrace();
-		} catch (NullPointerException e) {
-			e.printStackTrace();
+			Log.e(TAG, e.getMessage(), e);
 		}
-
 	}
 
 	private void onConnectedService() {

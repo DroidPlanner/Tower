@@ -1,6 +1,7 @@
 package org.droidplanner.fragments.mission;
 
 import org.droidplanner.DroidPlannerApp;
+import org.droidplanner.activities.EditorActivity;
 import org.droidplanner.drone.variables.mission.Mission;
 import org.droidplanner.drone.variables.mission.MissionItem;
 import org.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
@@ -32,18 +33,26 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 	protected SpinnerSelfSelect typeSpinner;
 	protected AdapterMissionItens commandAdapter;
 	protected Mission mission;
-	private OnWayPointTypeChangeListener mListener;
-	private TextView waypointIndex;
+	private OnWayPointTypeChangeListener mListner;
 
 	protected MissionItem item;
-	private TextView distanceView;
-	private TextView distanceLabelView;
 
+
+    public void onActivityCreated(Bundle savedInstanceState){
+        super.onActivityCreated(savedInstanceState);
+
+        final EditorActivity parentActivity = (EditorActivity) getActivity();
+        if(parentActivity.getItemDetailFragment() != this){
+            dismiss();
+            parentActivity.switchItemDetail(item);
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+        setRetainInstance(true);
     }
 
 	@Override
@@ -62,13 +71,13 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 				android.R.layout.simple_list_item_1, MissionItemTypes.values());
 		typeSpinner.setAdapter(commandAdapter);
 		typeSpinner.setOnItemSelectedListener(this);
-		waypointIndex = (TextView) view.findViewById(R.id.WaypointIndex);
+		final TextView waypointIndex = (TextView) view.findViewById(R.id.WaypointIndex);
 		Integer temp = mission.getNumber(item);
 		waypointIndex.setText( temp.toString());
 
-		distanceView = (TextView) view.findViewById(R.id.DistanceValue);
+		final TextView distanceView = (TextView) view.findViewById(R.id.DistanceValue);
 
-		distanceLabelView = (TextView) view.findViewById(R.id.DistanceLabel);
+		final TextView distanceLabelView = (TextView) view.findViewById(R.id.DistanceLabel);
 
 		try{
 			distanceLabelView.setVisibility(View.VISIBLE);
@@ -86,9 +95,8 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		mission = ((DroidPlannerApp) getActivity().getApplication()).drone.mission;
-		mListener = (OnWayPointTypeChangeListener) activity;
+		mListner = (OnWayPointTypeChangeListener) activity;
 	}
-
 
 	@Override
 	public void onItemSelected(AdapterView<?> arg0, View v, int position,
@@ -99,7 +107,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 			MissionItem newItem = selected.getNewItem(getItem());
 			if (!newItem.getClass().equals(getItem().getClass())) {
 				Log.d("CLASS", "Diferent waypoint Classes");
-				mListener.onWaypointTypeChanged(newItem, getItem());
+				mListner.onWaypointTypeChanged(newItem, getItem());
 			}
 		} catch (InvalidItemException e) {
 		}

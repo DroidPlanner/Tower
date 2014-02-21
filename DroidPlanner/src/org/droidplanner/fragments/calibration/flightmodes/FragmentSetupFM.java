@@ -1,5 +1,6 @@
 package org.droidplanner.fragments.calibration.flightmodes;
 
+import android.widget.TableRow;
 import org.droidplanner.calibration.CalParameters;
 import org.droidplanner.calibration.FM_CalParameters;
 import org.droidplanner.drone.Drone;
@@ -28,8 +29,7 @@ public class FragmentSetupFM extends SuperSetupMainPanel {
 	private CheckBox[] chkbxSimple = new CheckBox[6];
 	private CheckBox[] chkbxSuperSimple = new CheckBox[6];;
 	private Spinner[] pwmSpinners = new Spinner[6];;
-	private TextView[] textPWM = new TextView[6];
-	private LinearLayout[] layoutPWM = new LinearLayout[6];
+	private TableRow[] layoutPWM = new TableRow[6];
 
 	private TextView textPWMRange, textPWMCurrent;
 
@@ -127,13 +127,6 @@ public class FragmentSetupFM extends SuperSetupMainPanel {
 		textPWMRange = (TextView) v.findViewById(R.id.textViewPWMRange);
 		textPWMCurrent = (TextView) v.findViewById(R.id.textViewPWM);
 
-		textPWM[0] = (TextView) v.findViewById(R.id.textViewFM1);
-		textPWM[1] = (TextView) v.findViewById(R.id.textViewFM2);
-		textPWM[2] = (TextView) v.findViewById(R.id.textViewFM3);
-		textPWM[3] = (TextView) v.findViewById(R.id.textViewFM4);
-		textPWM[4] = (TextView) v.findViewById(R.id.textViewFM5);
-		textPWM[5] = (TextView) v.findViewById(R.id.textViewFM6);
-
 		pwmSpinners[0] = (Spinner) v.findViewById(R.id.spinnerFM1);
 		pwmSpinners[1] = (Spinner) v.findViewById(R.id.spinnerFM2);
 		pwmSpinners[2] = (Spinner) v.findViewById(R.id.spinnerFM3);
@@ -155,12 +148,12 @@ public class FragmentSetupFM extends SuperSetupMainPanel {
 		chkbxSuperSimple[4] = (CheckBox) v.findViewById(R.id.checkBoxFMS5);
 		chkbxSuperSimple[5] = (CheckBox) v.findViewById(R.id.checkBoxFMS6);
 
-		layoutPWM[0] = (LinearLayout) v.findViewById(R.id.layoutFM1);
-		layoutPWM[1] = (LinearLayout) v.findViewById(R.id.layoutFM2);
-		layoutPWM[2] = (LinearLayout) v.findViewById(R.id.layoutFM3);
-		layoutPWM[3] = (LinearLayout) v.findViewById(R.id.layoutFM4);
-		layoutPWM[4] = (LinearLayout) v.findViewById(R.id.layoutFM5);
-		layoutPWM[5] = (LinearLayout) v.findViewById(R.id.layoutFM6);
+		layoutPWM[0] = (TableRow) v.findViewById(R.id.layoutFM1);
+		layoutPWM[1] = (TableRow) v.findViewById(R.id.layoutFM2);
+		layoutPWM[2] = (TableRow) v.findViewById(R.id.layoutFM3);
+		layoutPWM[3] = (TableRow) v.findViewById(R.id.layoutFM4);
+		layoutPWM[4] = (TableRow) v.findViewById(R.id.layoutFM5);
+		layoutPWM[5] = (TableRow) v.findViewById(R.id.layoutFM6);
 
 		setupSpinners();
 
@@ -191,15 +184,14 @@ public class FragmentSetupFM extends SuperSetupMainPanel {
 	}
 
 	private void updateLayout(int pwmId) {
-		int cnt = 0;
 		for (LinearLayout layout : layoutPWM) {
-			if (cnt == pwmId)
-				layout.setBackgroundColor(getResources().getColor(
-						R.color.air_speed_label));
-			else
 				layout.setBackgroundColor(0);
-			cnt++;
 		}
+
+        if(pwmId > -1){
+            layoutPWM[pwmId].setBackgroundColor(getResources().getColor(
+                    R.color.air_speed_label));
+        }
 	}
 
 	private int getPWMRangeIndex(int pwmValue) {

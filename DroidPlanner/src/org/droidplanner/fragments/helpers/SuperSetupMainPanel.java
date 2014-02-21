@@ -31,10 +31,6 @@ public abstract class SuperSetupMainPanel extends SetupMainPanel implements
 	
 	protected void onInitialize(){};//can be overridden if necessary
 
-	public SuperSetupMainPanel() {
-		super();
-	}
-
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);

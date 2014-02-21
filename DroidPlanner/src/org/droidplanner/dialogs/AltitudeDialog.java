@@ -37,7 +37,7 @@ public class AltitudeDialog implements DialogInterface.OnClickListener {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle(R.string.dialog_box_title_altitude);
 		builder.setView(buildAltitudePicker(context));
-		builder.setNegativeButton(R.string.dialog_box_btn_txt_cancel, this).setPositiveButton(R.string.dialog_box_btn_txt_ok, this);
+		builder.setNegativeButton(R.string.button_setup_cancel, this).setPositiveButton(R.string.dialog_box_btn_txt_ok, this);
 		AlertDialog dialog = builder.create();
 		return dialog;
 	}
