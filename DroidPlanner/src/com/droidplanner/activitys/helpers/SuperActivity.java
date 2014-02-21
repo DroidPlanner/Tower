@@ -6,8 +6,10 @@ import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -240,6 +242,7 @@ public abstract class SuperActivity extends Activity implements
 	@Override
 	public void onAltitudeChanged(double newAltitude,boolean applyToAll) {
 		drone.mission.setDefaultAlt(newAltitude);
+		
 		if(applyToAll){
 			changeAllAltitudes(newAltitude);
 		}

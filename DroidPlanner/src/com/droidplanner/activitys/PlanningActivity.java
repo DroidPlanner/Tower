@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.MAVLink.Messages.ApmCommands;
 import com.droidplanner.DroidPlannerApp.OnWaypointUpdateListner;
 import com.droidplanner.R;
 import com.droidplanner.activitys.helpers.SuperActivity;
@@ -36,8 +37,8 @@ import com.droidplanner.survey.grid.Grid;
 import com.google.android.gms.maps.model.LatLng;
 
 public class PlanningActivity extends SuperActivity implements
-		OnMapInteractionListener, OnWaypointUpdateListner,
-		OnAltitudeChangedListner, OnPathFinishedListner, OnNewGridListner {
+OnMapInteractionListener, OnWaypointUpdateListner,
+OnAltitudeChangedListner, OnPathFinishedListner, OnNewGridListner {
 
 	public Polygon polygon;
 	private PlanningMapFragment planningMapFragment;
@@ -65,7 +66,7 @@ public class PlanningActivity extends SuperActivity implements
 				.findFragmentById(R.id.missionFragment);
 		surveyFragment = (SurveyFragment) getFragmentManager()
 				.findFragmentById(R.id.surveyFragment);
-		
+
 		lengthView = (TextView) findViewById(R.id.textViewTotalLength);
 
 		polygon = new Polygon();
@@ -75,8 +76,8 @@ public class PlanningActivity extends SuperActivity implements
 		planningMapFragment.setMission(drone.mission);
 		surveyFragment.setSurveyData(polygon,drone.mission.getDefaultAlt());
 		surveyFragment.setOnSurveyListner(this);
-		
-		
+
+
 		drone.mission.missionListner = this;
 
 		checkIntent();
@@ -90,7 +91,7 @@ public class PlanningActivity extends SuperActivity implements
 		String type = intent.getType();
 		if (Intent.ACTION_VIEW.equals(action) && type != null) {
 			Toast.makeText(this, intent.getData().getPath(), Toast.LENGTH_LONG)
-					.show();
+			.show();
 			openMission(intent.getData().getPath());
 			update();
 			zoom();
@@ -115,8 +116,36 @@ public class PlanningActivity extends SuperActivity implements
 		case R.id.menu_open_file:
 			openMissionFile();
 			return true;
+
+			// Menu option Send to APM is pressed
 		case R.id.menu_send_to_apm:
-			drone.mission.sendMissionToAPM();
+			// Start of modification for waypoint safety checks
+
+			// Use the method to make sure the input method safe
+			// Initialize tts engine before use?, seems like first attempt doesn't make any words
+			if(checkValidMission())
+			{
+
+				// Mission path on tablet is valid
+
+				// Sent mission to tablet
+				drone.mission.sendMissionToAPM();
+
+				// Let user know that mission is valid
+				drone.tts.speak("Mission valid");
+
+			}
+			else
+			{
+
+				// Mission path on tablet is invalid
+
+				// let user know waypoint path is invalid
+				drone.tts.speak("Mission incorrect");
+
+				// Put in a break here as we had a failure?
+			}
+
 			return true;
 		case R.id.menu_clear_wp:
 			clearWaypointsAndUpdate();
@@ -128,7 +157,7 @@ public class PlanningActivity extends SuperActivity implements
 
 	private void zoom() {
 		planningMapFragment
-				.zoomToExtents(drone.mission.getAllVisibleCoordinates());
+		.zoomToExtents(drone.mission.getAllVisibleCoordinates());
 	}
 
 	private void processReceivedPoints(List<LatLng> points) {
@@ -250,10 +279,10 @@ public class PlanningActivity extends SuperActivity implements
 	private void menuSaveFile() {
 		if (writeMission()) {
 			Toast.makeText(this, R.string.file_saved, Toast.LENGTH_SHORT)
-					.show();
+			.show();
 		} else {
 			Toast.makeText(this, R.string.error_when_saving, Toast.LENGTH_SHORT)
-					.show();
+			.show();
 		}
 	}
 
@@ -271,6 +300,22 @@ public class PlanningActivity extends SuperActivity implements
 	public void onClearPolygon() {
 		polygon.clearPolygon();
 		update();		
+	}
+
+	// Check that the input mission on the app is fine
+	private boolean checkValidMission(){
+
+		// Might be better to just have wayPoints as a List instead of an ArrayList, polymorphism, also, how DroidPlanner calls stores this data hurts my head
+		// Get an ArrayList of Waypoints class, waypoint.java
+		ArrayList<waypoint>  wayPoints = (ArrayList) drone.mission.getWaypoints();
+
+		// Check if the first waypoint (is this waypoint 1 or home??) is takeoff, last one is land, and there is three or more waypoints
+		if(wayPoints.get(0).getCmd() == ApmCommands.CMD_NAV_TAKEOFF && wayPoints.get(wayPoints.size() - 1).getCmd() == ApmCommands.CMD_NAV_LAND && wayPoints.size() > 2)
+		{
+			return true;
+		}
+
+		return false;
 	}
 
 }

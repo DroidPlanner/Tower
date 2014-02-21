@@ -78,10 +78,6 @@ public abstract class SuperFlightActivity extends SuperActivity implements
 		ApmModes mode = ApmModes.getMode(text, drone.type.getType());
 		if (ApmModes.isValid(mode)) {
 			drone.state.changeFlightMode(mode);
-            
-            if(mode == ApmModes.ROTOR_AUTO){
-                sendRC();
-            }
 		}
 	}
 
@@ -126,7 +122,7 @@ public abstract class SuperFlightActivity extends SuperActivity implements
         rcOutput.enableRcOverride();
         rcOutput.setRcChannel(RcOutput.TROTTLE, 1);
         try{
-            Thread.sleep(1000);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             //TODO Auto-generated catch block
             e.printStackTrace();

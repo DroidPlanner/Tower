@@ -17,9 +17,10 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	// TODO use more up-to-date code
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.preferences);
-		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+		
 
 		findPreference("pref_connection_type").setSummary(sharedPref.getString("pref_connection_type", ""));
 		findPreference("pref_baud_type").setSummary(sharedPref.getString("pref_baud_type", ""));
