@@ -3,7 +3,6 @@ package org.droidplanner.drone.variables.mission.survey.grid;
 import java.util.List;
 
 import org.droidplanner.helpers.geoTools.PolylineTools;
-import org.droidplanner.helpers.units.Altitude;
 import org.droidplanner.helpers.units.Length;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -11,7 +10,6 @@ import com.google.android.gms.maps.model.LatLng;
 public class Grid {
 	public List<LatLng> gridPoints;
 	private List<LatLng> cameraLocations;
-	private Altitude altitude;
 
 	public Grid(List<LatLng> list, List<LatLng> cameraLocations) {
 		this.gridPoints = list;
@@ -28,10 +26,6 @@ public class Grid {
 
 	public List<LatLng> getCameraLocations() {
 		return cameraLocations;
-	}
-
-	public void setAltitude(Altitude altitude) {
-		this.altitude = altitude;
 	}
 
 	public int getCameraCount() {

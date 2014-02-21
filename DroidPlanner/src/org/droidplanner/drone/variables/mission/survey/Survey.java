@@ -14,9 +14,6 @@ import org.droidplanner.fragments.mission.MissionSurveyFragment;
 import org.droidplanner.helpers.units.Altitude;
 import org.droidplanner.polygon.Polygon;
 
-import android.content.Context;
-import android.widget.Toast;
-
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_CMD;
 import com.MAVLink.Messages.enums.MAV_FRAME;
@@ -27,11 +24,9 @@ public class Survey extends MissionItem {
 	public Polygon polygon = new Polygon();
 	public SurveyData surveyData = new SurveyData();
 	public Grid grid;
-	private Context context;
 
-	public Survey(Mission mission,List<LatLng> points, Context context) {
+	public Survey(Mission mission,List<LatLng> points) {
 		super(mission);
-		this.context = context;
 		polygon.addPoints(points);
 	}
 	
@@ -54,16 +49,10 @@ public class Survey extends MissionItem {
 	}
 
 	private void build() throws Exception {		
-		try {
 		//TODO find better point than (0,0) to reference the grid
-		GridBuilder gridBuilder = new GridBuilder(polygon, surveyData, new LatLng(0, 0),context);
-		polygon.checkIfValid(context);
+		GridBuilder gridBuilder = new GridBuilder(polygon, surveyData, new LatLng(0, 0));
+		polygon.checkIfValid();
 		grid = gridBuilder.generate();
-		grid.setAltitude(surveyData.getAltitude());
-		} catch (Exception e) {
-			Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-			throw new Exception();
-		}
 	}
 
 	@Override

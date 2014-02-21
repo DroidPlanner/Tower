@@ -8,8 +8,6 @@ import org.droidplanner.helpers.geoTools.GeoTools;
 import org.droidplanner.helpers.geoTools.LineLatLng;
 import org.droidplanner.helpers.units.Area;
 
-import android.content.Context;
-import org.droidplanner.R;
 import com.google.android.gms.maps.model.LatLng;
 
 public class Polygon implements PathSource {
@@ -69,18 +67,21 @@ public class Polygon implements PathSource {
 		return path;
 	}
 
-	public void checkIfValid(Context currContext) throws Exception {
-		switch (points.size()) {
-		case 0:
-			throw new Exception(currContext.getString(R.string.exception_draw_polygon));
-		case 1:
-			throw new Exception(currContext.getString(R.string.exception_draw_2_more_polygon_points));
-		case 2:
-			throw new Exception(currContext.getString(R.string.exception_draw_1_more_polygon_points));
-		default:
+	public void checkIfValid() throws Exception {
+		if (points.size()<3) {
+			throw new InvalidPolygon(points.size());			
+		}else{
 			return;
-		}
+		}		
+	}
+
+	public class InvalidPolygon extends Exception {
+		private static final long serialVersionUID = 1L;
+		public int size;
 		
+		public InvalidPolygon(int size) {
+			this.size = size;
+		}	
 	}
 
 }

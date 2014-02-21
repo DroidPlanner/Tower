@@ -16,6 +16,7 @@ import org.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import org.droidplanner.helpers.geoTools.GeoTools;
 import org.droidplanner.helpers.units.Altitude;
 import org.droidplanner.helpers.units.Length;
+import org.droidplanner.polygon.Polygon.InvalidPolygon;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
@@ -139,7 +140,7 @@ public class Mission extends DroneVariable implements PathSource{
 	}
 
 	public void addSurveyPolygon(List<LatLng> points) {
-		Survey survey = new Survey(this, points, myDrone.context);
+		Survey survey = new Survey(this, points);
 		itens.add(survey);
 		notifiyMissionUpdate();		
 	}
@@ -154,7 +155,9 @@ public class Mission extends DroneVariable implements PathSource{
 		for (MissionItem item : itens) {
 			try {
 				newPath.addAll(item.getPath());
-			} catch (Exception e) {
+			}catch (InvalidPolygon polyE){
+				myDrone.events.notifyDroneEvent(DroneEventsType.INVALID_POLYGON);
+			}catch (Exception e) {
 				// Exception when no path for the item
 			}
 		}

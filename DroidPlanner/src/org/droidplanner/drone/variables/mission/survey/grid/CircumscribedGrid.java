@@ -7,9 +7,6 @@ import org.droidplanner.helpers.geoTools.GeoTools;
 import org.droidplanner.helpers.geoTools.LineLatLng;
 import org.droidplanner.polygon.PolyBounds;
 
-import android.content.Context;
-import org.droidplanner.R;
-
 import com.google.android.gms.maps.model.LatLng;
 
 public class CircumscribedGrid {
@@ -18,18 +15,16 @@ public class CircumscribedGrid {
 	private LatLng gridLowerLeft;
 	private double extrapolatedDiag;
 	private Double angle;
-	private Context currContext;
-
+	
 	public CircumscribedGrid(List<LatLng> polygonPoints, Double angle,
-			Double lineDist,Context usedContext) throws Exception {
+			Double lineDist) throws Exception {
 		this.angle = angle;
-		this.currContext = usedContext;
 
 		findPolygonBounds(polygonPoints);
 		drawGrid(lineDist);
 	}
 
-	private void drawGrid(Double lineDist) throws Exception {
+	private void drawGrid(Double lineDist) throws GridWithTooManyLines  {
 		int lines = 0;
 		LatLng startPoint = gridLowerLeft;
 		while (lines * lineDist < extrapolatedDiag) {
@@ -43,7 +38,7 @@ public class CircumscribedGrid {
 					angle + 90, lineDist);
 			lines++;
 			if (lines>MAX_NUMBER_OF_LINES) {
-				throw new Exception(currContext.getString(R.string.mission_is_too_lengthy));				
+				throw new GridWithTooManyLines();				
 			}
 		}
 	}
@@ -58,6 +53,10 @@ public class CircumscribedGrid {
 
 	public List<LineLatLng> getGrid() {
 		return grid;
+	}
+
+	public class GridWithTooManyLines extends Exception {
+		private static final long serialVersionUID = 1L;	
 	}
 
 }

@@ -2,6 +2,7 @@ package org.droidplanner.helpers;
 
 import java.util.Locale;
 
+import org.droidplanner.R;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
@@ -55,6 +56,10 @@ public class TTS implements OnInitListener, OnDroneListener {
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		if (tts != null) {
 			switch (event) {
+			case INVALID_POLYGON:
+				Toast.makeText(context, R.string.exception_draw_polygon, Toast.LENGTH_SHORT)
+				.show();
+				break;
 			case ARMING:
 				speakArmedState(drone.state.isArmed());
 				break;
