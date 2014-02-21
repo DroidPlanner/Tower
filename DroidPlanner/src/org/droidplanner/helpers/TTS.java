@@ -54,12 +54,18 @@ public class TTS implements OnInitListener, OnDroneListener {
 			case ARMING:
 				speakArmedState(drone.state.isArmed());
 				break;
+			case ARMING_STARTED:
+				speak("Arming the vehicle, please standby");
+				break;
 			case BATTERY:
 				batteryDischargeNotification(drone.battery
 						.getBattRemain());
 				break;
 			case MODE:
 				speakMode(drone.state.getMode());
+				break;
+			case MISSION_SENT:
+				speak("Waypoints saved to Drone");
 				break;
 			case GPS_FIX:
 				speakGpsMode(drone.GPS.getFixTypeNumeric());

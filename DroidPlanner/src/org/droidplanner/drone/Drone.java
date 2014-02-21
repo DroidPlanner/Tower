@@ -22,7 +22,6 @@ import org.droidplanner.drone.variables.StreamRates;
 import org.droidplanner.drone.variables.Type;
 import org.droidplanner.drone.variables.mission.Mission;
 import org.droidplanner.drone.variables.mission.WaypointMananger;
-import org.droidplanner.helpers.TTS;
 import org.droidplanner.service.MAVLinkClient;
 
 import android.content.Context;
@@ -51,16 +50,12 @@ public class Drone {
 	public Calibration calibrationSetup = new Calibration(this);
 	public WaypointMananger waypointMananger = new WaypointMananger(this);
 
-	public TTS tts;
 	public MAVLinkClient MavClient;
 	public Context context;
 
-	public Drone(TTS tts, MAVLinkClient mavClient, Context context) {
+	public Drone(MAVLinkClient mavClient, Context context) {
 		this.MavClient = mavClient;
-		this.context = context;
-		this.tts = tts;
-		events.addDroneListener(tts);
-		
+		this.context = context;		
 		profile.load();
 	}
 

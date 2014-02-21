@@ -117,7 +117,7 @@ public class FragmentSetupIMU extends SetupMainPanel  implements OnDroneListener
 					parentActivity.drone.events
 							.notifyDroneEvent(DroneEventsType.HEARTBEAT_TIMEOUT);
 				} else {
-					parentActivity.drone.tts.speak(msg);
+					parentActivity.app.tts.speak(msg);
 				}
 			}
 		}
@@ -157,8 +157,8 @@ public class FragmentSetupIMU extends SetupMainPanel  implements OnDroneListener
 				.updateSidePanelTitle(calibration_step);
 
 		if (calibration_step == 7) {
-			if (parentActivity != null && parentActivity.drone != null) {
-				parentActivity.drone.tts.speak(msg);
+			if (parentActivity != null && parentActivity.app != null) {
+				parentActivity.app.tts.speak(msg);
 			}
 			handler.removeCallbacks(runnable);
 

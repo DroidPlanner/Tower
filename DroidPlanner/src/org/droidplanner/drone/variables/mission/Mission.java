@@ -149,7 +149,7 @@ public class Mission extends DroneVariable implements PathSource{
 	public void onWriteWaypoints(msg_mission_ack msg) {
 		Toast.makeText(myDrone.context, "Waypoints sent", Toast.LENGTH_SHORT)
 				.show();
-		myDrone.tts.speak("Waypoints saved to Drone");
+		myDrone.events.notifyDroneEvent(DroneEventsType.MISSION_SENT);
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package org.droidplanner.checklist;
 
 import org.droidplanner.MAVLink.MavLinkArm;
 import org.droidplanner.drone.Drone;
+import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.helpers.units.Altitude;
 
 public class CheckListSysLink {
@@ -57,7 +58,7 @@ public class CheckListSysLink {
 	private void doSysArm(CheckListItem checkListItem, boolean arm) {
 		if (drone.MavClient.isConnected()) {
 			if (checkListItem.isSys_activated() && !drone.state.isArmed()) {
-				drone.tts.speak("Arming the vehicle, please standby");
+				drone.events.notifyDroneEvent(DroneEventsType.ARMING_STARTED);
 				MavLinkArm.sendArmMessage(drone, true);
 			} else {
 				MavLinkArm.sendArmMessage(drone, false);

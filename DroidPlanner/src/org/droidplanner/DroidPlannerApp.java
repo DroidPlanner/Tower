@@ -17,15 +17,16 @@ public class DroidPlannerApp extends ErrorReportApp implements
 	private MavLinkMsgHandler mavLinkMsgHandler;
 	public FollowMe followMe;
 	public RecordMe recordMe;
-	private TTS tts;
+	public TTS tts;
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
 
 		tts = new TTS(this);
-		MAVLinkClient MAVClient = new MAVLinkClient(this, this);
-		drone = new Drone(tts, MAVClient, getApplicationContext());
+		MAVLinkClient MAVClient = new MAVLinkClient(this, this);		
+		drone = new Drone(MAVClient, getApplicationContext());
+		drone.events.addDroneListener(tts);
 		followMe = new FollowMe(this, drone);
 		recordMe = new RecordMe(this, drone);
 		mavLinkMsgHandler = new org.droidplanner.MAVLink.MavLinkMsgHandler(
