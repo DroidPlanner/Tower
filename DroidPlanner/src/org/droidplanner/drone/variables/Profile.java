@@ -3,7 +3,6 @@ package org.droidplanner.drone.variables;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneVariable;
 import org.droidplanner.file.IO.VehicleProfile;
-import org.droidplanner.file.IO.VehicleProfileReader;
 
 import android.view.View;
 
@@ -74,7 +73,7 @@ public class Profile extends DroneVariable {
      * Load vehclie profile for current vehicle type
      */
     public void load() {
-        profile = VehicleProfileReader.load(myDrone.context, getVehicleType());
+        profile = myDrone.preferences.loadVehicleProfile(getVehicleType());
     }
 
     /*

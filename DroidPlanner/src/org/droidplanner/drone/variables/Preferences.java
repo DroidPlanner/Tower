@@ -1,5 +1,8 @@
 package org.droidplanner.drone.variables;
 
+import org.droidplanner.file.IO.VehicleProfile;
+import org.droidplanner.file.IO.VehicleProfileReader;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -16,6 +19,10 @@ public class Preferences  {
 		final SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
 		return prefs.getString("pref_vehicle_type", null);
+	}
+
+	public VehicleProfile loadVehicleProfile(String vehicle) {
+		return VehicleProfileReader.load(context, vehicle);
 	}
 
 	public Rates getRates() {
