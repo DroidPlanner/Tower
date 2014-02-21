@@ -1,7 +1,7 @@
 package org.droidplanner.polygon;
 
-import org.droidplanner.fragments.markers.PolygonMarker;
 import org.droidplanner.fragments.markers.MarkerManager.MarkerSource;
+import org.droidplanner.fragments.markers.PolygonMarker;
 
 import android.content.Context;
 

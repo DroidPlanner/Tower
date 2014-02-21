@@ -1,5 +1,9 @@
 package org.droidplanner.fragments.helpers;
 
+import java.util.List;
+
+import org.droidplanner.helpers.LocalMapTileProvider;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -7,6 +11,7 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -16,10 +21,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
-
-import java.util.List;
-
-import org.droidplanner.helpers.LocalMapTileProvider;
 
 public class OfflineMapFragment extends SupportMapFragment {
 

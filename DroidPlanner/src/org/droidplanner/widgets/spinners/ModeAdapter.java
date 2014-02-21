@@ -1,13 +1,14 @@
 package org.droidplanner.widgets.spinners;
 
+import java.util.List;
+
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import com.MAVLink.Messages.ApmModes;
 
-import java.util.List;
+import com.MAVLink.Messages.ApmModes;
 
 public class ModeAdapter extends ArrayAdapter<ApmModes> {
 

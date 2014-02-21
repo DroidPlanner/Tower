@@ -1,6 +1,7 @@
 package org.droidplanner.fragments;
 
 import org.droidplanner.DroidPlannerApp;
+import org.droidplanner.R;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
@@ -14,8 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import org.droidplanner.R;
 
 public class TelemetryFragment extends Fragment implements OnDroneListener{
 

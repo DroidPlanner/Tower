@@ -1,6 +1,6 @@
 package org.droidplanner.utils;
 
-import static org.droidplanner.utils.Utils.ConnectionType;
+import org.droidplanner.utils.Utils.ConnectionType;
 
 /**
  * Contains application related constants.

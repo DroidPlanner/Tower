@@ -1,6 +1,7 @@
 package org.droidplanner.fragments;
 
 import org.droidplanner.DroidPlannerApp;
+import org.droidplanner.R;
 import org.droidplanner.MAVLink.MavLinkStreamRates;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
@@ -16,8 +17,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import org.droidplanner.R;
 
 /**
  * This fragment is used to tune the roll and pitch of the drone.

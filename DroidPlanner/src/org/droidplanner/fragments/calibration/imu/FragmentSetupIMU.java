@@ -1,5 +1,6 @@
 package org.droidplanner.fragments.calibration.imu;
 
+import org.droidplanner.R;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
@@ -13,7 +14,6 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import org.droidplanner.R;
 
 public class FragmentSetupIMU extends SetupMainPanel  implements OnDroneListener{
 

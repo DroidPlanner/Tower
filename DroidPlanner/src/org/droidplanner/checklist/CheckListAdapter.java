@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.droidplanner.R;
 import org.droidplanner.checklist.listadapter.ListXmlAdapter;
 import org.droidplanner.checklist.row.ListRow;
 import org.droidplanner.checklist.row.ListRow_CheckBox;
 import org.droidplanner.checklist.row.ListRow_Interface;
+import org.droidplanner.checklist.row.ListRow_Interface.OnRowItemChangeListener;
 import org.droidplanner.checklist.row.ListRow_Level;
 import org.droidplanner.checklist.row.ListRow_Note;
 import org.droidplanner.checklist.row.ListRow_Radio;
@@ -16,9 +18,7 @@ import org.droidplanner.checklist.row.ListRow_Switch;
 import org.droidplanner.checklist.row.ListRow_Toggle;
 import org.droidplanner.checklist.row.ListRow_Type;
 import org.droidplanner.checklist.row.ListRow_Value;
-import org.droidplanner.checklist.row.ListRow_Interface.OnRowItemChangeListener;
 
-import org.droidplanner.R;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;

@@ -10,14 +10,14 @@ import org.droidplanner.drone.Drone;
 import org.droidplanner.fragments.helpers.BTDeviceListFragment;
 import org.droidplanner.fragments.helpers.OfflineMapFragment;
 import org.droidplanner.helpers.units.Altitude;
+import org.droidplanner.utils.Constants;
+import org.droidplanner.utils.Utils;
 
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
-import org.droidplanner.utils.Constants;
-import org.droidplanner.utils.Utils;
 
 public abstract class SuperActivity extends HelpActivity implements
 		OnAltitudeChangedListener {

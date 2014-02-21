@@ -2,6 +2,7 @@ package org.droidplanner.drone.variables.mission.waypoints;
 
 import java.util.List;
 
+import org.droidplanner.R;
 import org.droidplanner.drone.variables.mission.MissionItem;
 import org.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import org.droidplanner.fragments.mission.MissionDetailFragment;
@@ -9,7 +10,6 @@ import org.droidplanner.fragments.mission.MissionLandFragment;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_CMD;
-import org.droidplanner.R;
 
 public class Land extends SpatialCoordItem implements MarkerSource {
 

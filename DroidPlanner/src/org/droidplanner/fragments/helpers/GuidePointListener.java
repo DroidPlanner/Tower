@@ -1,8 +1,5 @@
 package org.droidplanner.fragments.helpers;
 
-import org.droidplanner.drone.variables.GuidedPoint;
-
-import com.google.android.gms.maps.model.LatLng;
 
 /**
  * Created with IntelliJ IDEA.

@@ -1,14 +1,15 @@
 package org.droidplanner.activities.helpers;
 
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import org.droidplanner.R;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.gcs.GCSHeartbeat;
 import org.droidplanner.widgets.actionProviders.InfoBarActionProvider;
+
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 
 public abstract class SuperUI extends SuperActivity implements OnDroneListener {

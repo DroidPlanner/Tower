@@ -1,10 +1,9 @@
 package org.droidplanner.fragments.mission;
 
+import org.droidplanner.R;
 import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListener;
 
 import android.view.View;
-
-import org.droidplanner.R;
 
 public class MissionRTLFragment extends MissionDetailFragment implements
 		OnTextSeekBarChangedListener {

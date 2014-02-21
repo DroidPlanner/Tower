@@ -1,8 +1,8 @@
 package org.droidplanner.fragments.markers;
 
+import org.droidplanner.R.drawable;
 import org.droidplanner.drone.variables.Home;
 
-import org.droidplanner.R.drawable;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;

@@ -1,14 +1,14 @@
 package org.droidplanner.checklist.row;
 
+import org.droidplanner.R;
 import org.droidplanner.checklist.CheckListItem;
 
-import org.droidplanner.R;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.ToggleButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ToggleButton;
 
 public class ListRow_Toggle extends ListRow implements OnCheckedChangeListener {
 

@@ -1,6 +1,7 @@
 package org.droidplanner.fragments;
 
 import org.droidplanner.DroidPlannerApp;
+import org.droidplanner.R;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.file.DirectoryPath;
 
@@ -11,8 +12,6 @@ import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-
-import org.droidplanner.R;
 
 public class SettingsFragment extends PreferenceFragment implements
 		OnSharedPreferenceChangeListener {

@@ -1,8 +1,8 @@
 package org.droidplanner.fragments.calibration;
 
+import org.droidplanner.R;
 import org.droidplanner.fragments.helpers.SuperSetupFragment;
 
-import org.droidplanner.R;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;

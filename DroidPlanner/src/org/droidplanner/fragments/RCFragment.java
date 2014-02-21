@@ -1,5 +1,6 @@
 package org.droidplanner.fragments;
 
+import org.droidplanner.R;
 import org.droidplanner.widgets.joystick.JoystickMovedListener;
 import org.droidplanner.widgets.joystick.JoystickView;
 
@@ -13,8 +14,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import org.droidplanner.R;
 
 public class RCFragment extends Fragment {
 

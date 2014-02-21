@@ -1,12 +1,12 @@
 package org.droidplanner.activities;
 
+import org.droidplanner.R;
 import org.droidplanner.activities.helpers.SuperUI;
 import org.droidplanner.fragments.SettingsFragment;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
-import org.droidplanner.R;
 
 /**
  * This activity holds the SettingsFragment.

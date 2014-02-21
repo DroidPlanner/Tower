@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.droidplanner.MAVLink.MavLinkWaypoint;
 import org.droidplanner.drone.Drone;
-import org.droidplanner.drone.DroneVariable;
 import org.droidplanner.drone.DroneInterfaces.OnWaypointManagerListener;
+import org.droidplanner.drone.DroneVariable;
 
 import android.util.Log;
 

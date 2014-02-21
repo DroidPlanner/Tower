@@ -1,5 +1,14 @@
 package org.droidplanner.connection;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.UnknownHostException;
+import java.util.Set;
+import java.util.UUID;
+
+import org.droidplanner.utils.Constants;
+
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -9,14 +18,6 @@ import android.content.SharedPreferences;
 import android.os.ParcelUuid;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import org.droidplanner.utils.Constants;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.UnknownHostException;
-import java.util.Set;
-import java.util.UUID;
 
 public class BluetoothConnection extends MAVLinkConnection {
 	private static final String BLUE = "BLUETOOTH";

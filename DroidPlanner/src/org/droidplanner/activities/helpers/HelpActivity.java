@@ -1,5 +1,7 @@
 package org.droidplanner.activities.helpers;
 
+import org.droidplanner.R;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -7,7 +9,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.view.MenuItem;
-import org.droidplanner.R;
 
 public abstract class HelpActivity extends FragmentActivity implements OnClickListener {
 

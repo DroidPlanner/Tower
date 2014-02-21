@@ -1,7 +1,6 @@
 package org.droidplanner.helpers;
 
 import org.droidplanner.drone.Drone;
-import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 
 import android.content.Context;
 import android.location.Location;

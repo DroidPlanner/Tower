@@ -10,7 +10,6 @@ import org.droidplanner.fragments.calibration.rc.FragmentSetupRC;
 import org.droidplanner.fragments.calibration.sf.FragmentSetupSF;
 import org.droidplanner.fragments.helpers.SuperSetupFragment;
 
-import android.app.Activity;
 import android.os.Bundle;
 
 /**

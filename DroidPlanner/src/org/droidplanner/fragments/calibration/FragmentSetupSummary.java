@@ -1,9 +1,8 @@
 package org.droidplanner.fragments.calibration;
 
-import org.droidplanner.fragments.SetupRadioFragment;
-import org.droidplanner.fragments.calibration.SetupSidePanel;
-
 import org.droidplanner.R;
+import org.droidplanner.fragments.SetupRadioFragment;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;

@@ -8,7 +8,6 @@ import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.fragments.SetupRadioFragment;
 import org.droidplanner.fragments.calibration.FragmentSetupProgress;
-import org.droidplanner.fragments.calibration.FragmentSetupSend;
 import org.droidplanner.fragments.calibration.SetupMainPanel;
 import org.droidplanner.fragments.calibration.SetupSidePanel;
 
