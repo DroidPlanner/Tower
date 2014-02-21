@@ -29,8 +29,9 @@ public class TTS implements OnInitListener {
 
 	public void speak(String string) {
 		if (tts != null) {
-			if (shouldEnableTTS()) {
+			if (shouldEnableTTS()){
 				tts.speak(string, TextToSpeech.QUEUE_FLUSH, null);
+				
 			}
 		}
 	}

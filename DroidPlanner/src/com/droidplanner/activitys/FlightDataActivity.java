@@ -147,15 +147,37 @@ public class FlightDataActivity extends SuperFlightActivity implements
 	public boolean onLongClick(View view) {
 	
 		if(view == launchButton){
-			
-			// Announce that we are launching using text to speech 
-			drone.tts.speak("Launching");
-			
-			// Change the drone state to auto mode
-			drone.state.changeFlightMode(ApmModes.ROTOR_AUTO);
-			
-			// Sent RC input to override safety in APM
-			super.sendRC();
+
+			// Check if we have a MAVLink connection to the drone
+			if (drone.MavClient.isConnected()) {
+
+				// Check if the drone is armed
+				if (drone.state.isArmed())
+				{
+					
+					// Announce that we are launching using text to speech 
+					drone.tts.speak("Launching");
+					
+					// Change the drone state to auto mode
+					drone.state.changeFlightMode(ApmModes.ROTOR_AUTO);
+					
+					// Sent RC input to override safety in APM
+					super.sendRC();
+					
+				}
+				else
+				{
+					// Announce the failure that the drone is not armed
+					drone.tts.speak("Error");
+					drone.tts.speak("Drone is not armed");
+				}
+			}
+			else
+			{
+				// Announce the failure that the telemetry link is not connected
+				drone.tts.speak("Error");
+				drone.tts.speak("No telemetry link");
+			}
 			
 			// We have handled the long press so return true
 			return true;
@@ -172,18 +194,24 @@ public class FlightDataActivity extends SuperFlightActivity implements
 		
 		if(view==armDisarmButton){
 			
-			// Check if we have a MAVLink connection
+			// Check if we have a MAVLink connection to the drone
 			if (drone.MavClient.isConnected()) {
 				
-				// Check that the drone is armed
+				// Check if the drone is disarmed
 				if (!drone.state.isArmed())
+				{
 					
 					// Announce that we are arming the vehicle using text to speech
 					drone.tts.speak("Arming the vehicle, please standby");
+				}
 				
-				// Send the ARM message over MAVLink
+				// Send the ARM message over MAVLink, this is always executed as we toggle the state with the same button
 				MavLinkArm.sendArmMessage(drone, !drone.state.isArmed());
 
+			}
+			else
+			{
+				drone.tts.speak("No telemetry link");
 			}
 			
 			// Flip the name of the button
