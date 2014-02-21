@@ -34,9 +34,4 @@ android {
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
     }
-    signingConfigs {
-        debug {
-            storeFile file('/home/fhuya/.android/debug.keystore')
-        }
-    }
 }
