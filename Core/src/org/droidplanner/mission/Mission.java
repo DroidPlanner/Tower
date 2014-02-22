@@ -13,14 +13,14 @@ import org.droidplanner.helpers.units.Altitude;
 import org.droidplanner.helpers.units.Length;
 import org.droidplanner.mission.survey.Survey;
 import org.droidplanner.mission.waypoints.SpatialCoordItem;
-import org.droidplanner.polygon.Polygon.InvalidPolygon;
+import org.droidplanner.mission.waypoints.Waypoint;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_CMD;
 import com.google.android.gms.maps.model.LatLng;
 
-public class Mission extends DroneVariable implements PathSource{
+public class Mission extends DroneVariable{
 
 	private List<MissionItem> itens = new ArrayList<MissionItem>();
 	private List<MissionItem> selection = new ArrayList<MissionItem>();
@@ -146,35 +146,8 @@ public class Mission extends DroneVariable implements PathSource{
 		myDrone.events.notifyDroneEvent(DroneEventsType.MISSION_SENT);
 	}
 
-	@Override
-	public List<LatLng> getPathPoints() {
-		List<LatLng> newPath = new ArrayList<LatLng>();
-		for (MissionItemUIElements item : itens) {
-			try {
-				newPath.addAll(item.getPath());
-			}catch (InvalidPolygon polyE){
-				myDrone.events.notifyDroneEvent(DroneEventsType.INVALID_POLYGON);
-			}catch (Exception e) {
-				// Exception when no path for the item
-			}
-		}
-		return newPath;
-	}
-
 	public List<MissionItem> getItems() {
 		return itens;
-	}
-
-	public List<MarkerSource> getMarkers() {
-		List<MarkerSource> markers = new ArrayList<MarkerSource>();
-		for (MissionItemUIElements item : itens) {
-			try {
-				markers.addAll(item.getMarkers());
-			} catch (Exception e) {
-				// Exception when no markers for the item
-			}
-		}
-		return markers;
 	}
 
 	public Integer getNumber(MissionItem waypoint) {
