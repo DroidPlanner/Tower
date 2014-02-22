@@ -3,13 +3,8 @@ package org.droidplanner.mission.survey;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.droidplanner.file.IO.CameraInfo;
-import org.droidplanner.fragments.markers.MarkerManager.MarkerSource;
-import org.droidplanner.fragments.mission.MissionDetailFragment;
-import org.droidplanner.fragments.mission.MissionSurveyFragment;
 import org.droidplanner.helpers.units.Altitude;
 import org.droidplanner.mission.Mission;
-import org.droidplanner.mission.MissionItem;
 import org.droidplanner.mission.survey.grid.Grid;
 import org.droidplanner.mission.survey.grid.GridBuilder;
 import org.droidplanner.polygon.Polygon;

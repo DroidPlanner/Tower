@@ -3,13 +3,9 @@ package org.droidplanner.drone.variables;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneVariable;
-import org.droidplanner.fragments.markers.HomeMarker;
-import org.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import org.droidplanner.helpers.geoTools.GeoTools;
 import org.droidplanner.helpers.units.Altitude;
 import org.droidplanner.helpers.units.Length;
-
-import android.content.Context;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_FRAME;

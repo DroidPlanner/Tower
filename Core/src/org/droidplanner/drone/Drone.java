@@ -23,7 +23,6 @@ import org.droidplanner.drone.variables.StreamRates;
 import org.droidplanner.drone.variables.Type;
 import org.droidplanner.mission.Mission;
 import org.droidplanner.mission.WaypointMananger;
-import org.droidplanner.service.MAVLinkClient;
 
 
 public class Drone {

@@ -2,8 +2,6 @@ package org.droidplanner.mission.survey;
 
 import java.util.Locale;
 
-import org.droidplanner.file.IO.CameraInfo;
-import org.droidplanner.file.IO.CameraInfoReader;
 import org.droidplanner.helpers.units.Altitude;
 import org.droidplanner.helpers.units.Area;
 import org.droidplanner.helpers.units.Length;

@@ -2,7 +2,6 @@ package org.droidplanner.mission;
 
 import java.util.List;
 
-
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 
 public abstract class MissionItemD implements Comparable<MissionItemD>{

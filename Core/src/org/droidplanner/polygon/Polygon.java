@@ -3,7 +3,6 @@ package org.droidplanner.polygon;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.droidplanner.helpers.PolygonPoint;
 import org.droidplanner.helpers.geoTools.GeoTools;
 import org.droidplanner.helpers.geoTools.LineLatLng;
 import org.droidplanner.helpers.units.Area;

@@ -1,6 +1,5 @@
 package org.droidplanner.drone.variables;
 
-import org.droidplanner.file.IO.VehicleProfile;
 
 public interface Preferences {
 

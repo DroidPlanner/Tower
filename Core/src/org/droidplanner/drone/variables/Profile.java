@@ -1,10 +1,9 @@
 package org.droidplanner.drone.variables;
 
+import javax.swing.text.View;
+
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneVariable;
-import org.droidplanner.file.IO.VehicleProfile;
-
-import android.view.View;
 
 import com.MAVLink.Messages.enums.MAV_TYPE;
 

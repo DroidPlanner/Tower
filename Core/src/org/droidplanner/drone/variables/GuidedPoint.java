@@ -3,17 +3,11 @@ package org.droidplanner.drone.variables;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.droidplanner.MAVLink.MavLinkModes;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.drone.DroneVariable;
-import org.droidplanner.fragments.helpers.MapPath.PathSource;
-import org.droidplanner.fragments.markers.GuidedMarker;
-import org.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import org.droidplanner.helpers.units.Altitude;
-
-import android.content.Context;
 
 import com.MAVLink.Messages.ApmModes;
 import com.google.android.gms.maps.model.LatLng;

@@ -1,9 +1,8 @@
 package org.droidplanner.helpers.geoTools;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
-
-import android.graphics.Point;
 
 /**
  * Based on the Ramer–Douglas–Peucker algorithm algorithm

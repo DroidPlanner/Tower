@@ -3,7 +3,6 @@ package org.droidplanner.drone.variables;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.droidplanner.MAVLink.MavLinkParameters;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
