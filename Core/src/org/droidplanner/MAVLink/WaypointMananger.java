@@ -1,4 +1,4 @@
-package org.droidplanner.mission;
+package org.droidplanner.MAVLink;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +28,14 @@ public class WaypointMananger extends DroneVariable {
 		IDLE, READ_REQUEST, READING_WP, WRITTING_WP_COUNT, WRITTING_WP, WAITING_WRITE_ACK
 	}
 
+	public enum WaypointEvent_Type {
+		WP_UPLOAD,
+		WP_DOWNLOAD,
+		WP_RETRY,
+		WP_CONTINUE,
+		WP_TIMEDOUT
+	}
+	
 	private int readIndex;
 	private int writeIndex;
 	private int retryIndex;

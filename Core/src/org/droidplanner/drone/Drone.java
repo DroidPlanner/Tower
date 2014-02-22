@@ -1,6 +1,7 @@
 package org.droidplanner.drone;
 
 
+import org.droidplanner.MAVLink.WaypointMananger;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.variables.Altitude;
 import org.droidplanner.drone.variables.Battery;
@@ -22,7 +23,6 @@ import org.droidplanner.drone.variables.State;
 import org.droidplanner.drone.variables.StreamRates;
 import org.droidplanner.drone.variables.Type;
 import org.droidplanner.mission.Mission;
-import org.droidplanner.mission.WaypointMananger;
 
 
 public class Drone {
