@@ -2,13 +2,12 @@ package org.droidplanner.mission.waypoints;
 
 import java.util.List;
 
-import org.droidplanner.helpers.units.Altitude;
+import org.droidplanner.helpers.coordinates.Coord3D;
 import org.droidplanner.mission.Mission;
 import org.droidplanner.mission.MissionItem;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_CMD;
-import com.google.android.gms.maps.model.LatLng;
 
 public class Waypoint extends SpatialCoordItem {
 
@@ -22,13 +21,8 @@ public class Waypoint extends SpatialCoordItem {
 		super(item);
 	}
 
-	public Waypoint(Mission mission, LatLng point, Altitude defaultAlt) {
-		super(mission, point, defaultAlt);
-	}
-
-	public Waypoint(msg_mission_item msg, Mission mission) {
-		super(mission, null, null);
-		unpackMAVMessage(msg);
+	public Waypoint(Mission mission, Coord3D coord) {
+		super(mission, coord);
 	}
 
 	@Override

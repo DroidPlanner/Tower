@@ -4,8 +4,8 @@ public class Coord2D {
 	private double x; // aka Latitude
 	private double y; // aka Longitude
 
-	public Coord2D(int x, double y) {
-		set(x, y);
+	public Coord2D(double x2, double y) {
+		set(x2, y);
 	}
 
 	public void set(double x, double y) {

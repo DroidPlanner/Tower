@@ -8,6 +8,8 @@ import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.drone.DroneVariable;
+import org.droidplanner.helpers.coordinates.Coord2D;
+import org.droidplanner.helpers.coordinates.Coord3D;
 import org.droidplanner.helpers.geoTools.GeoTools;
 import org.droidplanner.helpers.units.Altitude;
 import org.droidplanner.helpers.units.Length;
@@ -50,16 +52,16 @@ public class Mission extends DroneVariable{
 		notifiyMissionUpdate();		
 	}
 
-	public void addWaypoints(List<LatLng> points) {
+	public void addWaypoints(List<Coord2D> points) {
 		Altitude alt = getLastAltitude();
-		for (LatLng point : points) {
-			itens.add(new Waypoint(this, point,alt));
+		for (Coord2D point : points) {
+			itens.add(new Waypoint(this, new Coord3D(point,alt)));
 		}		
 		notifiyMissionUpdate();
 	}
 
-	public void addWaypoint(LatLng point) {
-		itens.add(new Waypoint(this,point,getLastAltitude()));
+	public void addWaypoint(Coord2D point) {
+		itens.add(new Waypoint(this,new Coord3D(point,getLastAltitude())));
 		notifiyMissionUpdate();
 	}
 
@@ -71,7 +73,7 @@ public class Mission extends DroneVariable{
 		Altitude alt;
 		try{
 			SpatialCoordItem lastItem = (SpatialCoordItem) itens.get(itens.size()-1);
-			alt = lastItem.getAltitude();
+			alt = lastItem.getCoordinate().getAltitude();
 		}catch (Exception e){
 			alt = defaultAlt;			
 		}
@@ -160,8 +162,8 @@ public class Mission extends DroneVariable{
 		if (i > 0) {
 			MissionItem previus = itens.get(i - 1);
 			if (previus instanceof SpatialCoordItem) {
-				return waypoint.getAltitude().subtract(
-						((SpatialCoordItem) previus).getAltitude());
+				return waypoint.getCoordinate().getAltitude().subtract(
+						((SpatialCoordItem) previus).getCoordinate().getAltitude());
 			}
 		}
 		throw new Exception("Last waypoint doesn't have an altitude");

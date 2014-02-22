@@ -3,51 +3,39 @@ package org.droidplanner.mission.waypoints;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.droidplanner.helpers.coordinates.Coord3D;
 import org.droidplanner.helpers.units.Altitude;
 import org.droidplanner.mission.Mission;
 import org.droidplanner.mission.MissionItem;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_FRAME;
-import com.google.android.gms.maps.model.LatLng;
 
 public abstract class SpatialCoordItem extends MissionItem {
 
-	protected LatLng coordinate;
-	protected Altitude altitude;
+	protected Coord3D coordinate;
 	
-	public SpatialCoordItem(Mission mission, LatLng coord, Altitude altitude) {
+	public SpatialCoordItem(Mission mission, Coord3D coord) {
 		super(mission);
 		this.coordinate = coord;
-		this.altitude = altitude;
 	}
 
 	public SpatialCoordItem(MissionItem item) {
 		super(item);
 		if (item instanceof SpatialCoordItem) {
 			coordinate = ((SpatialCoordItem) item).getCoordinate();
-			altitude = ((SpatialCoordItem) item).getAltitude();
 		} else {
-			coordinate = new LatLng(0, 0);
-			altitude = new Altitude(0);
+			coordinate = new Coord3D(0, 0, new Altitude(0));
 		}
 	}
 
 
-	public void setCoordinate(LatLng position) {
-		coordinate = position;
+	public void setCoordinate(Coord3D coordNew) {
+		coordinate = coordNew;
 	}
 
-	public LatLng getCoordinate() {
+	public Coord3D getCoordinate() {
 		return coordinate;
-	}
-
-	public Altitude getAltitude() {
-		return altitude;
-	}
-
-	public void setAltitude(Altitude altitude) {
-		this.altitude = altitude;
 	}
 
 	@Override
@@ -59,19 +47,17 @@ public abstract class SpatialCoordItem extends MissionItem {
 			mavMsg.target_component = 1;
 			mavMsg.target_system = 1;
 			mavMsg.frame = MAV_FRAME.MAV_FRAME_GLOBAL_RELATIVE_ALT;
-			mavMsg.x = (float) getCoordinate().latitude;
-			mavMsg.y = (float) getCoordinate().longitude;
-			mavMsg.z = (float) getAltitude().valueInMeters();
+			mavMsg.x = (float) coordinate.getX();
+			mavMsg.y = (float) coordinate.getY();
+			mavMsg.z = (float) coordinate.getAltitude().valueInMeters();
 	//		mavMsg.compid =
 			return list;
 		}
 
 	@Override
 	public void unpackMAVMessage(msg_mission_item mavMsg) {
-		LatLng coord = new LatLng(mavMsg.x,mavMsg.y);
 		Altitude alt = new Altitude(mavMsg.z);
-		setCoordinate(coord);
-		setAltitude(alt);
+		setCoordinate(new Coord3D(mavMsg.x,mavMsg.y, alt));
 	}
 
 }

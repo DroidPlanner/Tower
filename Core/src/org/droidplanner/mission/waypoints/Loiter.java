@@ -2,12 +2,11 @@ package org.droidplanner.mission.waypoints;
 
 import java.util.List;
 
-import org.droidplanner.helpers.units.Altitude;
+import org.droidplanner.helpers.coordinates.Coord3D;
 import org.droidplanner.mission.Mission;
 import org.droidplanner.mission.MissionItem;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
-import com.google.android.gms.maps.model.LatLng;
 
 public class Loiter extends SpatialCoordItem {
 
@@ -15,8 +14,8 @@ public class Loiter extends SpatialCoordItem {
 	private double yawAngle;
 	private boolean orbitCCW;
 
-	public Loiter(Mission mission, LatLng coord, Altitude altitude) {
-		super(mission, coord, altitude);
+	public Loiter(Mission mission, Coord3D coord) {
+		super(mission, coord);
 	}
 
 	public Loiter(MissionItem item) {
