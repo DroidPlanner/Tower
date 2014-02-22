@@ -27,8 +27,8 @@ public class SettingsFragment extends PreferenceFragment implements
 				sharedPref.getString("pref_connection_type", ""));
 		findPreference("pref_baud_type").setSummary(
 				sharedPref.getString("pref_baud_type", ""));
-		findPreference("pref_max_fligth_path_size").setSummary(
-				sharedPref.getString("pref_max_fligth_path_size", "")
+		findPreference("pref_max_flight_path_size").setSummary(
+				sharedPref.getString("pref_max_flight_path_size", "")
 						+ " "+getResources().getString(R.string.set_to_zero_to_disable));
 		findPreference("pref_server_ip").setSummary(
 				sharedPref.getString("pref_server_ip", ""));
@@ -76,10 +76,10 @@ public class SettingsFragment extends PreferenceFragment implements
 			findPreference(key)
 					.setSummary(sharedPreferences.getString(key, ""));
 		}
-		if (key.equals("pref_max_fligth_path_size")) {
+		if (key.equals("pref_max_flight_path_size")) {
 			findPreference(key).setSummary(
 					sharedPreferences
-							.getString("pref_max_fligth_path_size", "")
+							.getString("pref_max_flight_path_size", "")
 							+ " "+getResources().getString(R.string.set_to_zero_to_disable));
 		}
 		if (key.equals("pref_server_ip")) {

@@ -14,6 +14,7 @@ import android.view.MenuItem;
 
 public abstract class SuperUI extends SuperActivity implements OnDroneListener {
 	private ScreenOrientation screenOrientation = new ScreenOrientation(this);
+    private UiLanguage uiLanguage = new UiLanguage(this);
 	private InfoBarActionProvider infoBar;
 	private GCSHeartbeat gcsHeartbeat;
 
@@ -21,6 +22,7 @@ public abstract class SuperUI extends SuperActivity implements OnDroneListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		screenOrientation.unlock();
+        uiLanguage.updateUiLanguage();
 		gcsHeartbeat = new GCSHeartbeat(drone,1);
 	}
 

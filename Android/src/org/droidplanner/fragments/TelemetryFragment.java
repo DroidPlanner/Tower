@@ -5,7 +5,7 @@ import org.droidplanner.R;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.widgets.newHUD.newHUD;
+import org.droidplanner.widgets.HUD.HUD;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 public class TelemetryFragment extends Fragment implements OnDroneListener{
 
-	private newHUD hud;
+	private HUD hud;
 	private Drone drone;
 	private TextView roll;
 	private TextView yaw;
@@ -35,7 +35,7 @@ public class TelemetryFragment extends Fragment implements OnDroneListener{
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_telemetry, container,
 				false);
-		hud = (newHUD) view.findViewById(R.id.hudView);
+		hud = (HUD) view.findViewById(R.id.hudView);
 
 		roll = (TextView) view.findViewById(R.id.rollValueText);
 		yaw = (TextView) view.findViewById(R.id.yawValueText);
