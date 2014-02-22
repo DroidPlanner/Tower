@@ -5,24 +5,24 @@ import java.util.List;
 
 import org.droidplanner.helpers.units.Altitude;
 import org.droidplanner.mission.Mission;
-import org.droidplanner.mission.MissionItemD;
+import org.droidplanner.mission.MissionItem;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_FRAME;
 import com.google.android.gms.maps.model.LatLng;
 
-public abstract class SpatialCoordItemD extends MissionItemD {
+public abstract class SpatialCoordItem extends MissionItem {
 
 	protected LatLng coordinate;
 	protected Altitude altitude;
 	
-	public SpatialCoordItemD(Mission mission, LatLng coord, Altitude altitude) {
+	public SpatialCoordItem(Mission mission, LatLng coord, Altitude altitude) {
 		super(mission);
 		this.coordinate = coord;
 		this.altitude = altitude;
 	}
 
-	public SpatialCoordItemD(MissionItemD item) {
+	public SpatialCoordItem(MissionItem item) {
 		super(item);
 		if (item instanceof SpatialCoordItem) {
 			coordinate = ((SpatialCoordItem) item).getCoordinate();

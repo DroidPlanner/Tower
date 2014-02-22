@@ -4,13 +4,13 @@ import java.util.List;
 
 import org.droidplanner.helpers.units.Altitude;
 import org.droidplanner.mission.Mission;
-import org.droidplanner.mission.MissionItemD;
+import org.droidplanner.mission.MissionItem;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_CMD;
 import com.google.android.gms.maps.model.LatLng;
 
-public abstract class WaypointD extends SpatialCoordItemD {
+public abstract class Waypoint extends SpatialCoordItem {
 
 	private double delay;
 	private double acceptanceRadius;
@@ -18,15 +18,15 @@ public abstract class WaypointD extends SpatialCoordItemD {
 	private double orbitalRadius;
 	private boolean orbitCCW;
 
-	public WaypointD(MissionItemD item) {
+	public Waypoint(MissionItem item) {
 		super(item);
 	}
 
-	public WaypointD(Mission mission, LatLng point, Altitude defaultAlt) {
+	public Waypoint(Mission mission, LatLng point, Altitude defaultAlt) {
 		super(mission, point, defaultAlt);
 	}
 
-	public WaypointD(msg_mission_item msg, Mission mission) {
+	public Waypoint(msg_mission_item msg, Mission mission) {
 		super(mission, null, null);
 		unpackMAVMessage(msg);
 	}

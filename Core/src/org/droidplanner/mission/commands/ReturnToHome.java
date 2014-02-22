@@ -3,15 +3,15 @@ package org.droidplanner.mission.commands;
 import java.util.List;
 
 import org.droidplanner.helpers.units.Altitude;
-import org.droidplanner.mission.MissionItemD;
+import org.droidplanner.mission.MissionItem;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 
-public abstract class ReturnToHomeD extends MissionCMD {
+public abstract class ReturnToHome extends MissionCMD {
 
 	protected Altitude returnAltitude;
 
-	public ReturnToHomeD(MissionItemD item) {
+	public ReturnToHome(MissionItem item) {
 		super(item);
 		returnAltitude = new Altitude(0);
 	}

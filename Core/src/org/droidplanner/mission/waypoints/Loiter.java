@@ -4,22 +4,22 @@ import java.util.List;
 
 import org.droidplanner.helpers.units.Altitude;
 import org.droidplanner.mission.Mission;
-import org.droidplanner.mission.MissionItemD;
+import org.droidplanner.mission.MissionItem;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.google.android.gms.maps.model.LatLng;
 
-public abstract class LoiterD extends SpatialCoordItemD {
+public abstract class Loiter extends SpatialCoordItem {
 
 	private double orbitalRadius;
 	private double yawAngle;
 	private boolean orbitCCW;
 
-	public LoiterD(Mission mission, LatLng coord, Altitude altitude) {
+	public Loiter(Mission mission, LatLng coord, Altitude altitude) {
 		super(mission, coord, altitude);
 	}
 
-	public LoiterD(MissionItemD item) {
+	public Loiter(MissionItem item) {
 		super(item);
 	}
 

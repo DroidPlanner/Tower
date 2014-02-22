@@ -2,17 +2,16 @@ package org.droidplanner.mission.waypoints;
 
 import java.util.List;
 
-import org.droidplanner.mission.MissionItemD;
+import org.droidplanner.mission.MissionItem;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_CMD;
 
-public abstract class TakeoffD extends SpatialCoordItemD {
+public abstract class Land extends SpatialCoordItem {
 
 	private double yawAngle;
-	private double minPitch;
 
-	public TakeoffD(MissionItemD item) {
+	public Land(MissionItem item) {
 		super(item);
 	}
 
@@ -20,8 +19,7 @@ public abstract class TakeoffD extends SpatialCoordItemD {
 	public List<msg_mission_item> packMissionItem() {
 		List<msg_mission_item> list = super.packMissionItem();
 		msg_mission_item mavMsg = list.get(0);
-		mavMsg.command = MAV_CMD.MAV_CMD_NAV_TAKEOFF;
-		mavMsg.param1 = (float) getMinPitch();
+		mavMsg.command = MAV_CMD.MAV_CMD_NAV_LAND;
 		mavMsg.param4 = (float) getYawAngle();
 		return list;
 	}
@@ -29,7 +27,6 @@ public abstract class TakeoffD extends SpatialCoordItemD {
 	@Override
 	public void unpackMAVMessage(msg_mission_item mavMsg) {
 		super.unpackMAVMessage(mavMsg);
-		setMinPitch(mavMsg.param1);
 		setYawAngle(mavMsg.param4);
 	}
 
@@ -39,14 +36,6 @@ public abstract class TakeoffD extends SpatialCoordItemD {
 
 	public void setYawAngle(double yawAngle) {
 		this.yawAngle = yawAngle;
-	}
-
-	public double getMinPitch() {
-		return minPitch;
-	}
-
-	public void setMinPitch(double minPitch) {
-		this.minPitch = minPitch;
 	}
 
 }

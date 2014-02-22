@@ -4,21 +4,21 @@ import java.util.List;
 
 import org.droidplanner.helpers.units.Altitude;
 import org.droidplanner.mission.Mission;
-import org.droidplanner.mission.MissionItemD;
+import org.droidplanner.mission.MissionItem;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_CMD;
 import com.google.android.gms.maps.model.LatLng;
 
-public abstract class LoiterTurnsD extends LoiterD {
+public abstract class LoiterTurns extends Loiter {
 
 	private int turns;
 
-	public LoiterTurnsD(MissionItemD item) {
+	public LoiterTurns(MissionItem item) {
 		super(item);
 	}
 
-	public LoiterTurnsD(Mission mission, LatLng coord, Altitude altitude) {
+	public LoiterTurns(Mission mission, LatLng coord, Altitude altitude) {
 		super(mission, coord, altitude);
 	}
 

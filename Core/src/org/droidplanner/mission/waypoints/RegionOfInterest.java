@@ -2,13 +2,13 @@ package org.droidplanner.mission.waypoints;
 
 import java.util.List;
 
-import org.droidplanner.mission.MissionItemD;
+import org.droidplanner.mission.MissionItem;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 
-public abstract class RegionOfInterestD extends SpatialCoordItemD {
+public abstract class RegionOfInterest extends SpatialCoordItem {
 
-	public RegionOfInterestD(MissionItemD item) {
+	public RegionOfInterest(MissionItem item) {
 		super(item);
 	}
 

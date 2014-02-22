@@ -1,10 +1,10 @@
 package org.droidplanner.mission.commands;
 
-import org.droidplanner.mission.MissionItemD;
+import org.droidplanner.mission.MissionItem;
 
-public abstract class MissionCMD extends MissionItemD{
+public abstract class MissionCMD extends MissionItem{
 	
-	public MissionCMD(MissionItemD item) {
+	public MissionCMD(MissionItem item) {
 		super(item);
 	}
 	

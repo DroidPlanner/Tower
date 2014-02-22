@@ -4,18 +4,18 @@ import java.util.List;
 
 import org.droidplanner.helpers.units.Altitude;
 import org.droidplanner.mission.Mission;
-import org.droidplanner.mission.MissionItemD;
+import org.droidplanner.mission.MissionItem;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.google.android.gms.maps.model.LatLng;
 
-public abstract class LoiterInfiniteD extends LoiterD {
+public abstract class LoiterInfinite extends Loiter {
 
-	public LoiterInfiniteD(MissionItemD item) {
+	public LoiterInfinite(MissionItem item) {
 		super(item);
 	}
 
-	public LoiterInfiniteD(Mission mission, LatLng coord, Altitude altitude) {
+	public LoiterInfinite(Mission mission, LatLng coord, Altitude altitude) {
 		super(mission, coord, altitude);
 	}
 

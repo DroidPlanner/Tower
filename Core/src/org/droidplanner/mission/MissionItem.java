@@ -4,15 +4,15 @@ import java.util.List;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 
-public abstract class MissionItemD implements Comparable<MissionItemD>{
+public abstract class MissionItem implements Comparable<MissionItem>{
 
 	protected Mission mission;
 
-	public MissionItemD(Mission mission) {
+	public MissionItem(Mission mission) {
 		this.mission = mission;
 	}
 
-	public MissionItemD(MissionItemD item) {
+	public MissionItem(MissionItem item) {
 		this(item.mission);
 	}
 	/**
@@ -34,7 +34,7 @@ public abstract class MissionItemD implements Comparable<MissionItemD>{
 	}
 
 	@Override
-	public int compareTo(MissionItemD another) {
+	public int compareTo(MissionItem another) {
 		return mission.getNumber(this) - mission.getNumber(another);
 	}
 
