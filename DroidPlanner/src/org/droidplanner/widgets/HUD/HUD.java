@@ -1,4 +1,4 @@
-package org.droidplanner.widgets.newHUD;
+package org.droidplanner.widgets.HUD;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -13,7 +13,7 @@ import android.graphics.Shader.TileMode;
 import android.util.AttributeSet;
 import android.view.View;
 
-public class newHUD extends View {
+public class HUD extends View {
 
 	private static final float INTERNAL_RADIUS = 0.85f;
 	private static final float YAW_ARROW_SIZE = 1.2f;
@@ -45,7 +45,7 @@ public class newHUD extends View {
 	private float yaw, roll, pitch;
 	private Paint tickPaint;
 
-	public newHUD(Context context, AttributeSet attrs) {
+	public HUD(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		initialize();
 		setAttitude(-30, 20, 0);
