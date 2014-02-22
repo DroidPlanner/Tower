@@ -1,4 +1,4 @@
-package org.droidplanner.drone.variables.mission;
+package org.droidplanner.mission;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,9 +8,6 @@ import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.drone.DroneVariable;
-import org.droidplanner.drone.variables.mission.survey.Survey;
-import org.droidplanner.drone.variables.missionD.MissionItemD;
-import org.droidplanner.drone.variables.missionD.waypoints.SpatialCoordItemD;
 import org.droidplanner.extra.MissionItemUIElements;
 import org.droidplanner.extra.SpatialCoordItem;
 import org.droidplanner.extra.Waypoint;
@@ -19,6 +16,8 @@ import org.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import org.droidplanner.helpers.geoTools.GeoTools;
 import org.droidplanner.helpers.units.Altitude;
 import org.droidplanner.helpers.units.Length;
+import org.droidplanner.mission.survey.Survey;
+import org.droidplanner.mission.waypoints.SpatialCoordItemD;
 import org.droidplanner.polygon.Polygon.InvalidPolygon;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;

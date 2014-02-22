@@ -1,10 +1,10 @@
-package org.droidplanner.drone.variables.missionD.waypoints;
+package org.droidplanner.mission.waypoints;
 
 import java.util.List;
 
-import org.droidplanner.drone.variables.mission.Mission;
-import org.droidplanner.drone.variables.missionD.MissionItemD;
 import org.droidplanner.helpers.units.Altitude;
+import org.droidplanner.mission.Mission;
+import org.droidplanner.mission.MissionItemD;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.google.android.gms.maps.model.LatLng;

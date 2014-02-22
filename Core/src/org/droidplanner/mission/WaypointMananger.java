@@ -1,4 +1,4 @@
-package org.droidplanner.drone.variables.mission;
+package org.droidplanner.mission;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -21,8 +21,8 @@ import org.droidplanner.drone.variables.Speed;
 import org.droidplanner.drone.variables.State;
 import org.droidplanner.drone.variables.StreamRates;
 import org.droidplanner.drone.variables.Type;
-import org.droidplanner.drone.variables.mission.Mission;
-import org.droidplanner.drone.variables.mission.WaypointMananger;
+import org.droidplanner.mission.Mission;
+import org.droidplanner.mission.WaypointMananger;
 import org.droidplanner.service.MAVLinkClient;
 
 

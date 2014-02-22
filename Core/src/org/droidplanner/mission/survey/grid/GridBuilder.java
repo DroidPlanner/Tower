@@ -1,9 +1,9 @@
-package org.droidplanner.drone.variables.mission.survey.grid;
+package org.droidplanner.mission.survey.grid;
 
 import java.util.List;
 
-import org.droidplanner.drone.variables.mission.survey.SurveyData;
 import org.droidplanner.helpers.geoTools.LineLatLng;
+import org.droidplanner.mission.survey.SurveyData;
 import org.droidplanner.polygon.Polygon;
 
 import com.google.android.gms.maps.model.LatLng;

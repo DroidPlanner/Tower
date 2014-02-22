@@ -2,7 +2,7 @@ package org.droidplanner.drone;
 
 import java.util.List;
 
-import org.droidplanner.drone.variables.mission.WaypointEvent_Type;
+import org.droidplanner.mission.WaypointEvent_Type;
 import org.droidplanner.parameters.Parameter;
 
 

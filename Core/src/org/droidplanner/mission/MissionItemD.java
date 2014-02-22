@@ -1,8 +1,7 @@
-package org.droidplanner.drone.variables.missionD;
+package org.droidplanner.mission;
 
 import java.util.List;
 
-import org.droidplanner.drone.variables.mission.Mission;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 

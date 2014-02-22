@@ -1,9 +1,9 @@
-package org.droidplanner.drone.variables.missionD.commands;
+package org.droidplanner.mission.commands;
 
 import java.util.List;
 
-import org.droidplanner.drone.variables.missionD.MissionItemD;
 import org.droidplanner.helpers.units.Altitude;
+import org.droidplanner.mission.MissionItemD;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 

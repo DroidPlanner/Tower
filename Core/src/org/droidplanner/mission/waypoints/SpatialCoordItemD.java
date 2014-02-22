@@ -1,12 +1,12 @@
-package org.droidplanner.drone.variables.missionD.waypoints;
+package org.droidplanner.mission.waypoints;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.droidplanner.drone.variables.mission.Mission;
-import org.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
-import org.droidplanner.drone.variables.missionD.MissionItemD;
 import org.droidplanner.helpers.units.Altitude;
+import org.droidplanner.mission.Mission;
+import org.droidplanner.mission.MissionItemD;
+import org.droidplanner.mission.waypoints.SpatialCoordItem;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_FRAME;
