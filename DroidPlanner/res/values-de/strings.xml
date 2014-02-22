@@ -123,8 +123,8 @@
 
     <!-- Survey/Mapping related strings -->
     <string name="distance_between_lines">Lateral</string>
-    <string name="footprint">Fussabdruck</string>
-    <string name="ground_resolution">Bodenprobenabstand</string>
+    <string name="footprint">Footprint</string>
+    <string name="ground_resolution">GSD</string>
     <string name="distance_between_pictures">Längs</string>
     <string name="area">Fläche</string>
     <string name="camera_">Kamera:</string>
