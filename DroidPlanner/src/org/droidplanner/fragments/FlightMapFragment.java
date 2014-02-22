@@ -65,7 +65,7 @@ public class FlightMapFragment extends DroneMap implements
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
 		maxFlightPathSize = Integer.valueOf(prefs.getString(
-				"pref_max_fligth_path_size", "0"));
+				"pref_max_flight_path_size", "0"));
 		isAutoPanEnabled = prefs.getBoolean("pref_auto_pan_enabled", false);
 		guidedModeOnLongPress = prefs.getBoolean("pref_guided_mode_on_long_press", true);		
 	}

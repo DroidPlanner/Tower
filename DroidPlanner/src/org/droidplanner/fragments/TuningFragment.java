@@ -59,7 +59,7 @@ public class TuningFragment extends Fragment implements OnDroneListener {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_tunning, container, false);
+		View view = inflater.inflate(R.layout.fragment_tuning, container, false);
 
 		setupLocalViews(view);
 		setupCharts();
