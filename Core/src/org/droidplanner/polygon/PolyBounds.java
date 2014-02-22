@@ -2,6 +2,7 @@ package org.droidplanner.polygon;
 
 import java.util.List;
 
+import org.droidplanner.helpers.coordinates.Coord2D;
 import org.droidplanner.helpers.geoTools.GeoTools;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -13,12 +14,12 @@ import com.google.android.gms.maps.model.LatLngBounds;
  * 
  */
 public class PolyBounds {
-	public LatLng sw;
-	public LatLng ne;
+	public Coord2D sw;
+	public Coord2D ne;
 
-	public PolyBounds(List<LatLng> points) {
+	public PolyBounds(List<Coord2D> points) {
 		LatLngBounds.Builder builder = new LatLngBounds.Builder();
-		for (LatLng point : points) {
+		for (Coord2D point : points) {
 			builder.include(point);
 		}
 		LatLngBounds bounds = builder.build();
@@ -30,9 +31,9 @@ public class PolyBounds {
 		return GeoTools.latToMeters(GeoTools.getAproximatedDistance(ne, sw));
 	}
 
-	public LatLng getMiddle() {
-		return (new LatLng((ne.latitude + sw.latitude) / 2,
-				(ne.longitude + sw.longitude) / 2));
+	public Coord2D getMiddle() {
+		return (new Coord2D((ne.getY() + sw.getY()) / 2,
+				(ne.getX() + sw.getX()) / 2));
 
 	}
 }
