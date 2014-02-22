@@ -36,33 +36,12 @@ public class Survey extends MissionItem {
 		surveyData.setCameraInfo(camera);
 		mission.notifiyMissionUpdate();
 	}
-	
-
-	@Override
-	public List<LatLng> getPath() throws Exception {
-			build();
-			return grid.getCameraLocations();
-	}
 
 	private void build() throws Exception {		
 		//TODO find better point than (0,0) to reference the grid
 		GridBuilder gridBuilder = new GridBuilder(polygon, surveyData, new LatLng(0, 0));
 		polygon.checkIfValid();
 		grid = gridBuilder.generate();
-	}
-
-	@Override
-	public List<MarkerSource> getMarkers() throws Exception {
-		ArrayList<MarkerSource> markers = new ArrayList<MarkerSource>();
-		markers.addAll(polygon.getPolygonPoints());
-		return markers;
-	}
-
-	@Override
-	public MissionDetailFragment getDetailFragment() {
-		MissionDetailFragment fragment = new MissionSurveyFragment();
-		fragment.setItem(this);
-		return fragment;
 	}
 
 	@Override
