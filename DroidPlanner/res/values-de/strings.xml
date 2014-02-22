@@ -132,7 +132,7 @@
     <string name="hatch_angle">Lukenwinkel:</string>
     <string name="flight_altitude">Flughöhe:</string>
     <string name="overlap">Überlappung:</string>
-    <string name="sidelap">Seitliche Überlappung:</string>
+    <string name="sidelap">Seitl. Überlappung:</string>
     <string name="mission_length">Raster-Länge</string>
     <string name="pictures">Bilder</string>
     <string name="number_of_strips">Anzahl Streifen</string>
@@ -164,7 +164,7 @@
     <string name="waypointType_Circle">Kreisen</string>
     <string name="waypointType_Loiter">Loiter</string>
     <string name="waypointType_ROI">Region von Interesse</string>
-    <string name="waypointType_Survey">Erhebung</string>
+    <string name="waypointType_Survey">Erhebungspolygon</string>
 
     <!-- Waypoint info -->
     <string name="waypointInfo_Land">Drohne an aktueller Position landen. Sie müssen den Auto-Modus manuell verlassen, um die Motoren zu sichern.</string>
