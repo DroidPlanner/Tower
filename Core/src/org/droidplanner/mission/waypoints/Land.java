@@ -7,7 +7,7 @@ import org.droidplanner.mission.MissionItem;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_CMD;
 
-public abstract class Land extends SpatialCoordItem {
+public class Land extends SpatialCoordItem {
 
 	private double yawAngle;
 

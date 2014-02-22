@@ -9,7 +9,7 @@ import org.droidplanner.mission.MissionItem;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.google.android.gms.maps.model.LatLng;
 
-public abstract class Loiter extends SpatialCoordItem {
+public class Loiter extends SpatialCoordItem {
 
 	private double orbitalRadius;
 	private double yawAngle;

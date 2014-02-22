@@ -7,7 +7,7 @@ import org.droidplanner.mission.MissionItem;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 
-public abstract class ReturnToHome extends MissionCMD {
+public class ReturnToHome extends MissionCMD {
 
 	protected Altitude returnAltitude;
 

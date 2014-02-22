@@ -6,7 +6,7 @@ import org.droidplanner.mission.MissionItem;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 
-public abstract class RegionOfInterest extends SpatialCoordItem {
+public class RegionOfInterest extends SpatialCoordItem {
 
 	public RegionOfInterest(MissionItem item) {
 		super(item);

@@ -7,7 +7,7 @@ import org.droidplanner.mission.MissionItem;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_CMD;
 
-public abstract class Takeoff extends SpatialCoordItem {
+public class Takeoff extends SpatialCoordItem {
 
 	private double yawAngle;
 	private double minPitch;

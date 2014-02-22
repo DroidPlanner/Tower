@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.droidplanner.helpers.units.Altitude;
 import org.droidplanner.mission.Mission;
+import org.droidplanner.mission.MissionItem;
 import org.droidplanner.mission.survey.grid.Grid;
 import org.droidplanner.mission.survey.grid.GridBuilder;
 import org.droidplanner.polygon.Polygon;

@@ -10,7 +10,7 @@ import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_CMD;
 import com.google.android.gms.maps.model.LatLng;
 
-public abstract class LoiterTime extends Loiter {
+public class LoiterTime extends Loiter {
 
 	double time;
 

@@ -9,7 +9,7 @@ import org.droidplanner.mission.MissionItem;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.google.android.gms.maps.model.LatLng;
 
-public abstract class LoiterInfinite extends Loiter {
+public class LoiterInfinite extends Loiter {
 
 	public LoiterInfinite(MissionItem item) {
 		super(item);
