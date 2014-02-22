@@ -55,7 +55,8 @@
 				android:layout_marginLeft="12dp"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="Region of Interest" />
+				android:text="@string/waypointType_ROI"
+                android:textAllCaps="true" />
 
 			<TextView
 				android:id="@+id/DistanceLabel"
