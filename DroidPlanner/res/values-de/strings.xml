@@ -37,6 +37,8 @@
     <string name="pref_mavlink_stream_rate_raw_sensors">Rohdaten Sensoren</string>
     <string name="pref_mavlink_stream_rate_raw_controller">Rohdaten Kontroller</string>
     <string name="pref_ui">Benutzeroberfläche</string>
+    <string name="pref_ui_language_english">Benutzeroberfläche in Englisch</string>
+    <string name="pref_ui_language_english_summary">Englisch als Sprache verwenden (anstelle der Systemsprache). Erfordert ein Neustart der App.</string>
     <string name="pref_connection_actions">Bei Verbindung mit Drohne</string>
     <string name="pref_connection_actions_summary">Aktionen bei Verbindung mit der Drohne\nVerbindung neu aufbauen, um anzuwenden</string>
     <string name="pref_keep_screen_bright">Bildschirm hell halten</string>
