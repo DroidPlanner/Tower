@@ -11,8 +11,8 @@ import java.util.List;
 
 import org.droidplanner.file.DirectoryPath;
 import org.droidplanner.file.FileList;
-import org.droidplanner.file.IO.CameraInfo;
 import org.droidplanner.file.IO.CameraInfoReader;
+import org.droidplanner.mission.survey.CameraInfo;
 
 import android.content.Context;
 

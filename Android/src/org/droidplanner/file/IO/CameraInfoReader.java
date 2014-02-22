@@ -3,6 +3,7 @@ package org.droidplanner.file.IO;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.droidplanner.mission.survey.CameraInfo;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -27,20 +28,7 @@ public class CameraInfoReader {
 	public CameraInfo getCameraInfo() {
 		return cameraInfo;
 	}
-
-	public static CameraInfo getNewMockCameraInfo() {
-		CameraInfo cameraInfo = new CameraInfo();
-		cameraInfo.name = "Default";
-		cameraInfo.sensorHeight = 4.22;
-		cameraInfo.sensorWidth = 6.12;
-		cameraInfo.focalLength = 7.0;
-		cameraInfo.sensorResolution = 10.1;
-		cameraInfo.overlap = 50.0;
-		cameraInfo.sidelap = 60.0;
-		cameraInfo.isInLandscapeOrientation = false;
-		return cameraInfo;
-	}
-
+	
 	public void parse(InputStream in) throws XmlPullParserException,
 			IOException {
 		parser = Xml.newPullParser();

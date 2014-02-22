@@ -1,9 +1,9 @@
 package org.droidplanner.fragments.mission.survey;
 
 import org.droidplanner.R;
-import org.droidplanner.file.IO.CameraInfo;
 import org.droidplanner.file.IO.CameraInfoReader;
 import org.droidplanner.file.help.CameraInfoLoader;
+import org.droidplanner.mission.survey.CameraInfo;
 
 import android.content.Context;
 import android.view.View;

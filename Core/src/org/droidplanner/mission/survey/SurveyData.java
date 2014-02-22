@@ -13,7 +13,7 @@ public class SurveyData {
 	private Double overlap = 50.0;
 	private Double sidelap = 60.0;
 	private boolean generateInnerWps = false;
-	private CameraInfo camera = CameraInfoReader.getNewMockCameraInfo();
+	private CameraInfo camera = new CameraInfo();
 
 	public void update(double angle, Altitude altitude, double overlap,
 			double sidelap) {

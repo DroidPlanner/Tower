@@ -1,15 +1,15 @@
-package org.droidplanner.file.IO;
+package org.droidplanner.mission.survey;
 
 public class CameraInfo {
-	public String name;
-	public Double sensorWidth;
-	public Double sensorHeight;
-	public Double focalLength;
-	public Double overlap;
-	public Double sidelap;
+	public String name= "Default";
+	public Double sensorWidth = 6.12;
+	public Double sensorHeight = 4.22;
+	public Double focalLength = 7.0;
+	public Double overlap = 50.0;
+	public Double sidelap = 60.0;
 	public boolean isInLandscapeOrientation = true;
-	public Double sensorResolution;
-
+	public Double sensorResolution = 10.1;
+	
 	public Double getSensorLateralSize() {
 		if (isInLandscapeOrientation){
 			return  sensorWidth;
