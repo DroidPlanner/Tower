@@ -3,8 +3,8 @@ package org.droidplanner.fragments;
 
 import org.droidplanner.activities.helpers.OnEditorInteraction;
 import org.droidplanner.drone.variables.mission.MissionItem;
-import org.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.drone.variables.missionD.waypoints.SpatialCoordItemD;
+import org.droidplanner.extra.SpatialCoordItem;
 import org.droidplanner.fragments.helpers.CameraGroundOverlays;
 import org.droidplanner.fragments.helpers.DroneMap;
 import org.droidplanner.fragments.helpers.MapPath;

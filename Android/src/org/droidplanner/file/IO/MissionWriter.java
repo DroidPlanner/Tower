@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import org.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.drone.variables.missionD.waypoints.SpatialCoordItemD;
+import org.droidplanner.extra.SpatialCoordItem;
 import org.droidplanner.file.FileManager;
 import org.droidplanner.file.FileStream;
 

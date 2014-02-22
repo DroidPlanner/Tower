@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.droidplanner.dialogs.openfile.OpenFileDialog.FileReader;
 import org.droidplanner.drone.variables.Home;
-import org.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
+import org.droidplanner.extra.SpatialCoordItem;
 import org.droidplanner.file.DirectoryPath;
 import org.droidplanner.file.FileList;
 import org.droidplanner.file.FileManager;

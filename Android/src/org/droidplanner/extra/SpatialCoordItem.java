@@ -1,4 +1,4 @@
-package org.droidplanner.drone.variables.mission.waypoints;
+package org.droidplanner.extra;
 
 import java.util.ArrayList;
 import java.util.List;

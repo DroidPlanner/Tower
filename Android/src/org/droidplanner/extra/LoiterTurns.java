@@ -1,31 +1,33 @@
-package org.droidplanner.drone.variables.mission.waypoints;
+package org.droidplanner.extra;
 
 
 import org.droidplanner.R;
 import org.droidplanner.drone.variables.missionD.MissionItemD;
-import org.droidplanner.drone.variables.missionD.waypoints.LandD;
+import org.droidplanner.drone.variables.missionD.waypoints.LoiterTurnsD;
 import org.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import org.droidplanner.fragments.mission.MissionDetailFragment;
-import org.droidplanner.fragments.mission.MissionLandFragment;
+import org.droidplanner.fragments.mission.MissionLoiterNFragment;
 
 
-public class Land extends LandD implements MarkerSource {
-
-	@Override
-	public MissionDetailFragment getDetailFragment() {
-		MissionDetailFragment fragment = new MissionLandFragment();
-		fragment.setItem(this);
-		return fragment;
+public class LoiterTurns extends LoiterTurnsD implements MarkerSource {
+	public LoiterTurns(MissionItemD item) {
+		super(item);
 	}
 
 	@Override
+	public MissionDetailFragment getDetailFragment() {
+		MissionDetailFragment fragment = new MissionLoiterNFragment();
+		fragment.setItem(this);
+		return fragment;
+	}
+	
+	@Override
 	protected int getIconDrawable() {
-		return R.drawable.ic_wp_land;
+		return R.drawable.ic_wp_loiter;
 	}
 	
 	@Override
 	protected int getIconDrawableSelected() {
-		return R.drawable.ic_wp_lan_selected;
+		return R.drawable.ic_wp_loiter_selected;
 	}
-
 }

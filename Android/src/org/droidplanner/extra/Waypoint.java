@@ -1,4 +1,4 @@
-package org.droidplanner.drone.variables.mission.waypoints;
+package org.droidplanner.extra;
 
 
 

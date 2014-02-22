@@ -1,4 +1,4 @@
-package org.droidplanner.polygon;
+package org.droidplanner.extra;
 
 import org.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import org.droidplanner.fragments.markers.PolygonMarker;

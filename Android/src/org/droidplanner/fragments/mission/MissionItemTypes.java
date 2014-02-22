@@ -4,13 +4,13 @@ import java.security.InvalidParameterException;
 
 import org.droidplanner.drone.variables.mission.MissionItem;
 import org.droidplanner.drone.variables.mission.commands.ReturnToHome;
-import org.droidplanner.drone.variables.mission.waypoints.Land;
-import org.droidplanner.drone.variables.mission.waypoints.LoiterTime;
-import org.droidplanner.drone.variables.mission.waypoints.LoiterTurns;
-import org.droidplanner.drone.variables.mission.waypoints.RegionOfInterest;
-import org.droidplanner.drone.variables.mission.waypoints.Takeoff;
-import org.droidplanner.drone.variables.mission.waypoints.Waypoint;
 import org.droidplanner.drone.variables.missionD.MissionItemD;
+import org.droidplanner.extra.Land;
+import org.droidplanner.extra.LoiterTime;
+import org.droidplanner.extra.LoiterTurns;
+import org.droidplanner.extra.RegionOfInterest;
+import org.droidplanner.extra.Takeoff;
+import org.droidplanner.extra.Waypoint;
 
 
 public enum MissionItemTypes {

@@ -3,14 +3,14 @@ package org.droidplanner.polygon;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.droidplanner.fragments.helpers.MapPath.PathSource;
+import org.droidplanner.helpers.PolygonPoint;
 import org.droidplanner.helpers.geoTools.GeoTools;
 import org.droidplanner.helpers.geoTools.LineLatLng;
 import org.droidplanner.helpers.units.Area;
 
 import com.google.android.gms.maps.model.LatLng;
 
-public class Polygon implements PathSource {
+public class Polygon{
 
 	private List<PolygonPoint> points = new ArrayList<PolygonPoint>();
 
@@ -58,6 +58,7 @@ public class Polygon implements PathSource {
 		return GeoTools.getArea(this);
 	}
 
+	/*
 	@Override
 	public List<LatLng> getPathPoints() {
 		List<LatLng> path = getLatLngList();
@@ -65,7 +66,7 @@ public class Polygon implements PathSource {
 			path.add(path.get(0));
 		}
 		return path;
-	}
+	}*/
 
 	public void checkIfValid() throws Exception {
 		if (points.size()<3) {

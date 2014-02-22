@@ -3,9 +3,9 @@ package org.droidplanner.widgets.adapterViews;
 import java.util.List;
 
 import org.droidplanner.R;
-import org.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.drone.variables.missionD.MissionItemD;
 import org.droidplanner.drone.variables.missionD.waypoints.SpatialCoordItemD;
+import org.droidplanner.extra.SpatialCoordItem;
 import org.droidplanner.helpers.units.Length;
 
 import android.content.Context;
