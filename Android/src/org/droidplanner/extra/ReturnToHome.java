@@ -1,4 +1,4 @@
-package org.droidplanner.drone.variables.mission.commands;
+package org.droidplanner.extra;
 
 
 import org.droidplanner.drone.variables.missionD.MissionItemD;

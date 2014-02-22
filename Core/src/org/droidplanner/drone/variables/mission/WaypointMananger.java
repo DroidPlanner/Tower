@@ -8,8 +8,6 @@ import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.OnWaypointManagerListener;
 import org.droidplanner.drone.DroneVariable;
 
-import android.util.Log;
-
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_count;
@@ -247,7 +245,7 @@ public class WaypointMananger extends DroneVariable {
 			MavLinkWaypoint.sendWaypointCount(myDrone, mission.size());
 			break;
 		case WRITTING_WP:
-			Log.d("TIMEOUT", "re Write Msg: " + String.valueOf(writeIndex));
+//			Log.d("TIMEOUT", "re Write Msg: " + String.valueOf(writeIndex));
 			if (writeIndex < mission.size()) {
 				myDrone.MavClient.sendMavPacket(mission.get(writeIndex).pack());
 			}

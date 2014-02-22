@@ -11,6 +11,7 @@ import org.droidplanner.drone.DroneVariable;
 import org.droidplanner.drone.variables.mission.survey.Survey;
 import org.droidplanner.drone.variables.missionD.MissionItemD;
 import org.droidplanner.drone.variables.missionD.waypoints.SpatialCoordItemD;
+import org.droidplanner.extra.MissionItemUIElements;
 import org.droidplanner.extra.SpatialCoordItem;
 import org.droidplanner.extra.Waypoint;
 import org.droidplanner.fragments.helpers.MapPath.PathSource;
