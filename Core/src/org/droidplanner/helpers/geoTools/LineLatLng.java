@@ -1,21 +1,21 @@
 package org.droidplanner.helpers.geoTools;
 
-import com.google.android.gms.maps.model.LatLng;
+import org.droidplanner.helpers.coordinates.Coord2D;
 
 public class LineLatLng {
-	public LatLng p1;
-	public LatLng p2;
+	public Coord2D p1;
+	public Coord2D p2;
 
-	public LineLatLng(LatLng p1, LatLng p2) {
-		this.p1 = p1;
-		this.p2 = p2;
+	public LineLatLng(Coord2D coord2d, Coord2D coord2d2) {
+		this.p1 = coord2d;
+		this.p2 = coord2d2;
 	}
 
 	public LineLatLng(LineLatLng line) {
 		this(line.p1, line.p2);
 	}
 
-	public LatLng getFarthestEndpointTo(LatLng point) {
+	public Coord2D getFarthestEndpointTo(Coord2D point) {
 		if (getClosestEndpointTo(point).equals(p1)) {
 			return p2;
 		} else {
@@ -23,7 +23,7 @@ public class LineLatLng {
 		}
 	}
 
-	public LatLng getClosestEndpointTo(LatLng point) {
+	public Coord2D getClosestEndpointTo(Coord2D point) {
 		if (getDistanceToStart(point) < getDistanceToEnd(point)) {
 			return p1;
 		} else {
@@ -31,11 +31,11 @@ public class LineLatLng {
 		}
 	}
 
-	private Double getDistanceToEnd(LatLng point) {
+	private Double getDistanceToEnd(Coord2D point) {
 		return GeoTools.getAproximatedDistance(p2, point);
 	}
 
-	private Double getDistanceToStart(LatLng point) {
+	private Double getDistanceToStart(Coord2D point) {
 		return GeoTools.getAproximatedDistance(p1, point);
 	}
 

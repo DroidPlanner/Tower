@@ -2,6 +2,7 @@ package org.droidplanner.helpers.geoTools;
 
 import java.util.List;
 
+import org.droidplanner.helpers.coordinates.Coord2D;
 import org.droidplanner.helpers.units.Area;
 import org.droidplanner.helpers.units.Length;
 import org.droidplanner.polygon.Polygon;
@@ -20,9 +21,9 @@ public class GeoTools {
 	 * 
 	 * @return distance between the points in degrees
 	 */
-	public static Double getAproximatedDistance(LatLng p1, LatLng p2) {
-		return (Math.hypot((p1.latitude - p2.latitude),
-				(p1.longitude - p2.longitude)));
+	public static Double getAproximatedDistance(Coord2D p1, Coord2D p2) {
+		return (Math.hypot((p1.getX() - p2.getX()),
+				(p1.getY() - p2.getY())));
 	}
 
 	public static Double metersTolat(double meters) {
@@ -128,19 +129,19 @@ public class GeoTools {
 	// TODO test and fix this function
 	public static Area getArea(Polygon poly) {
 		double sum = 0.0;
-		int length = poly.getLatLngList().size();
+		int length = poly.getPoints().size();
 		for (int i = 0; i < length - 1; i++) {
 			sum = sum
-					+ (latToMeters(poly.getLatLngList().get(i).longitude) * latToMeters(poly
-							.getLatLngList().get(i + 1).latitude))
-					- (latToMeters(poly.getLatLngList().get(i).latitude) * latToMeters(poly
-							.getLatLngList().get(i + 1).longitude));
+					+ (latToMeters(poly.getPoints().get(i).getX()) * latToMeters(poly
+							.getPoints().get(i + 1).getY()))
+					- (latToMeters(poly.getPoints().get(i).getY()) * latToMeters(poly
+							.getPoints().get(i + 1).getX()));
 		}
 		sum = sum 
-				+ (latToMeters(poly.getLatLngList().get(length-1).longitude) * latToMeters(poly
-				.getLatLngList().get(0).latitude))
-				- (latToMeters(poly.getLatLngList().get(length-1).latitude) * latToMeters(poly
-						.getLatLngList().get(0).longitude));
+				+ (latToMeters(poly.getPoints().get(length-1).getX()) * latToMeters(poly
+				.getPoints().get(0).getY()))
+				- (latToMeters(poly.getPoints().get(length-1).getY()) * latToMeters(poly
+						.getPoints().get(0).getX()));
 		return new Area(Math.abs(0.5 * sum));
 		//return new Area(0);
 	}

@@ -3,54 +3,44 @@ package org.droidplanner.polygon;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.droidplanner.helpers.coordinates.Coord2D;
 import org.droidplanner.helpers.geoTools.GeoTools;
 import org.droidplanner.helpers.geoTools.LineLatLng;
 import org.droidplanner.helpers.units.Area;
 
-import com.google.android.gms.maps.model.LatLng;
-
 public class Polygon{
 
-	private List<PolygonPoint> points = new ArrayList<PolygonPoint>();
+	private List<Coord2D> points = new ArrayList<Coord2D>();
 
-	public void addPoints(List<LatLng> pointList) {
-		for (LatLng point : pointList) {
+	public void addPoints(List<Coord2D> pointList) {
+		for (Coord2D point : pointList) {
 			addPoint(point);
 		}
 	}
 
-	public void addPoint(LatLng coord) {
-		points.add(new PolygonPoint(coord));
+	public void addPoint(Coord2D coord) {
+		points.add(coord);
 	}
 
 	public void clearPolygon() {
 		points.clear();
 	}
 
-	public List<LatLng> getLatLngList() {
-		List<LatLng> list = new ArrayList<LatLng>();
-		for (PolygonPoint point : points) {
-			list.add(point.coord);
-		}
-		return list;
+	public List<Coord2D> getPoints() {
+		return points;
 	}
 
 	public List<LineLatLng> getLines() {
 		List<LineLatLng> list = new ArrayList<LineLatLng>();
 		for (int i = 0; i < points.size(); i++) {
 			int endIndex = (i==0)? points.size()-1: i-1;
-			list.add(new LineLatLng(points.get(i).coord,points.get(endIndex).coord));
+			list.add(new LineLatLng(points.get(i),points.get(endIndex)));
 		}
 		return list;
 	}
 
-	public List<PolygonPoint> getPolygonPoints() {
-		return points;
-	}
-
-	public void movePoint(LatLng coord, int number) {
-		points.get(number).coord = coord;
-
+	public void movePoint(Coord2D coord, int number) {
+		points.get(number).set(coord);
 	}
 
 	public Area getArea() {
