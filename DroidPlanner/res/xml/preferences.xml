@@ -6,267 +6,266 @@
         android:entries="@array/TelemetryConnectionTypes"
         android:entryValues="@array/TelemetryConnectionTypes"
         android:key="pref_connection_type"
-        android:summary="Which link to use to connect to the drone"
-        android:title="Telemetry Connection Type"/>
+        android:summary="@string/pref_connection_type_summary"
+        android:title="@string/pref_connection_type"/>
 
     <PreferenceScreen
         android:key="pref_mavlink"
-        android:title="MavLink">
+        android:title="@string/pref_mavlink">
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="pref_mavlink_log_enabled"
-            android:summary="Logs the MAVlink communication to a *.tlog file, may degrade performance"
-            android:title="Enable Logging"/>
+            android:summary="@string/pref_mavlink_log_summary"
+            android:title="@string/pref_mavlink_log"/>
 
         <PreferenceScreen
             android:key="pref_mavlink_rates"
-            android:summary="Rate in which flight data should be received from the drone (in Hz)"
-            android:title="Stream Rates">
+            android:summary="@string/pref_mavlink_rates_summary"
+            android:title="@string/pref_mavlink_rates">
             <EditTextPreference
                 android:defaultValue="2"
                 android:inputType="number"
                 android:gravity="center"
                 android:key="pref_mavlink_stream_rate_ext_stat"
-                android:title="Waypoints, GPS raw, fence data, current waypoint, etc"/>
+                android:title="@string/pref_mavlink_stream_rate_ext_stat"/>
             <EditTextPreference
                 android:defaultValue="10"
                 android:inputType="number"
                 android:gravity="center"
                 android:key="pref_mavlink_stream_rate_extra1"
-                android:title="Attitude"/>
+                android:title="@string/pref_mavlink_stream_rate_extra1"/>
             <EditTextPreference
                 android:defaultValue="2"
                 android:inputType="number"
                 android:gravity="center"
                 android:key="pref_mavlink_stream_rate_extra2"
-                android:title="VFR_Hud data"/>
+                android:title="@string/pref_mavlink_stream_rate_extra2"/>
             <EditTextPreference
                 android:defaultValue="2"
                 android:inputType="number"
                 android:gravity="center"
                 android:key="pref_mavlink_stream_rate_extra3"
-                android:title="AHRS, Hardware Status, Wind"/>
+                android:title="@string/pref_mavlink_stream_rate_extra3"/>
             <EditTextPreference
                 android:defaultValue="3"
                 android:inputType="number"
                 android:gravity="center"
                 android:key="pref_mavlink_stream_rate_position"
-                android:title="Position data"/>
+                android:title="@string/pref_mavlink_stream_rate_position"/>
             <EditTextPreference
                 android:defaultValue="50"
                 android:inputType="number"
                 android:gravity="center"
                 android:key="pref_mavlink_stream_rate_RC_override"
-                android:title="RC override"/>
+                android:title="@string/pref_mavlink_stream_rate_RC_override"/>
             <EditTextPreference
                 android:defaultValue="5"
                 android:inputType="number"
                 android:gravity="center"
                 android:key="pref_mavlink_stream_rate_rc_channels"
-                android:title="RC channel data"/>
+                android:title="@string/pref_mavlink_stream_rate_rc_channels"/>
             <EditTextPreference
                 android:defaultValue="2"
                 android:inputType="number"
                 android:gravity="center"
                 android:key="pref_mavlink_stream_rate_raw_sensors"
-                android:title="Raw sensors"/>
+                android:title="@string/pref_mavlink_stream_rate_raw_sensors"/>
             <EditTextPreference
                 android:defaultValue="3"
                 android:inputType="number"
                 android:gravity="center"
                 android:key="pref_mavlink_stream_rate_raw_controller"
-                android:title="Raw Controler"/>
+                android:title="@string/pref_mavlink_stream_rate_raw_controller"/>
         </PreferenceScreen>
     </PreferenceScreen>
     <PreferenceScreen
         android:key="pref_ui"
-        android:title="User Interface">
+        android:title="@string/pref_ui">
         <PreferenceCategory
             android:key="pref_connection_actions"
-            android:summary="Actions to perform on or while connected to the Drone\nTo apply disconnect and reconnect"
-            android:title="While Connected to Drone">
+            android:summary="@string/pref_connection_actions_summary"
+            android:title="@string/pref_connection_actions">
             <CheckBoxPreference
                 android:defaultValue="true"
                 android:key="pref_keep_screen_bright"
-                android:summary="If unchecked the Screen will dim after a while (safes Battery)"
-                android:title="Keep Screen bright"/>
+                android:summary="@string/pref_keep_screen_bright_summary"
+                android:title="@string/pref_keep_screen_bright"/>
             <CheckBoxPreference
                 android:defaultValue="true"
                 android:key="pref_lock_screen_orientation"
-                android:summary="Locks screen to the orientation which is present when connecting"
-                android:title="Lock Screen Orientation"/>
+                android:summary="@string/pref_lock_screen_orientation_summary"
+                android:title="@string/pref_lock_screen_orientation"/>
         </PreferenceCategory>
     </PreferenceScreen>
     <PreferenceScreen
         android:key="pref_flight_data"
-        android:title="Flight Data">
+        android:title="@string/pref_flight_data">
         <EditTextPreference
             android:defaultValue="500"
             android:inputType="number"
             android:gravity="center"
-            android:key="pref_max_fligth_path_size"
-            android:summary="Size of the fligth path, set to zero to disable."
-            android:title="Flight path size"/>        
+            android:key="pref_max_flight_path_size"
+            android:summary="@string/pref_max_flight_path_size_summary"
+            android:title="@string/pref_max_flight_path_size"/>
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="pref_guided_mode_on_long_press"
-            android:summary="Enable entering the Guided Mode by long pressing the map."
-            android:title="Guided Mode on long press"/>                
+            android:summary="@string/pref_guided_mode_on_long_press_summary"
+            android:title="@string/pref_guided_mode_on_long_press"/>
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="pref_follow_me_mode_enabled"
-            android:summary="In development"
-            android:title="Enable FollowMe Mode"/>
+            android:summary="@string/pref_follow_me_mode_enabled_summary"
+            android:title="@string/pref_follow_me_mode_enabled"/>
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="pref_auto_pan_enabled"
-            android:summary="Auto pan the map when a new GPS coordinate is received"
-            android:title="Enable auto pan"/>
+            android:summary="@string/pref_auto_pan_enabled_summary"
+            android:title="@string/pref_auto_pan_enabled"/>
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="pref_heading_mode"
-            android:summary="Change heading mode to FPV (-180º to 180º)"
-            android:title="Enable FPV heading mode"/>
-        
+            android:summary="@string/pref_heading_mode_summary"
+            android:title="@string/pref_heading_mode"/>
     </PreferenceScreen>
     <PreferenceScreen
         android:key="pref_advanced"
-        android:title="Advanced">
+        android:title="@string/pref_advanced">
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="pref_advanced_use_offline_maps"
-            android:summary="Use map tiles on the local storage, for offline map view"
-            android:title="Use offline maps"/>
+            android:summary="@string/pref_advanced_use_offline_maps_summary"
+            android:title="@string/pref_advanced_use_offline_maps"/>
 
         <ListPreference
-            android:defaultValue="Satellite"
+            android:defaultValue="@string/pref_map_type_default"
             android:entries="@array/MapTypes"
             android:entryValues="@array/MapTypes"
             android:key="pref_map_type"
-            android:summary="Which type of map to use"
-            android:title="Map Type"/>
+            android:summary="@string/pref_map_type_summary"
+            android:title="@string/pref_map_type"/>
 
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="pref_enable_tts"
-            android:summary="Audible messages for important events"
-            android:title="Enable Text To Speech"/>
+            android:summary="@string/pref_enable_tts_summary"
+            android:title="@string/pref_enable_tts"/>
 
         <ListPreference
             android:defaultValue="ArduCopter"
             android:entries="@array/VehicleType"
             android:entryValues="@array/VehicleType"
             android:key="pref_vehicle_type"
-            android:summary="Default vehicle type when disconnected"
-            android:title="Default Vehicle Type"/>
+            android:summary="@string/pref_vehicle_type_summary"
+            android:title="@string/pref_vehicle_type"/>
 
         <PreferenceScreen
             android:key="pref_rc"
-            android:title="RC Screen">
+            android:title="@string/pref_rc">
             <PreferenceCategory
                 android:key="pref_rc_general"
-                android:title="General">
+                android:title="@string/pref_rc_general">
                 <ListPreference
                     android:defaultValue="MODE2"
                     android:entries="@array/RCModes"
                     android:entryValues="@array/RCModeValues"
                     android:key="pref_rc_mode"
-                    android:summary="Throttle on left or right stick"
-                    android:title="RC Mode"/>
+                    android:summary="@string/pref_rc_mode_summary"
+                    android:title="@string/pref_rc_mode"/>
                 <ListPreference
                     android:defaultValue="Loiter"
                     android:entries="@array/RCQuickModes"
                     android:entryValues="@array/RCQuickModes"
                     android:key="pref_rc_quickmode_left"
-                    android:title="QuickMode Left"/>
+                    android:title="@string/pref_rc_quickmode_left"/>
                 <ListPreference
                     android:defaultValue="Stabilize"
                     android:entries="@array/RCQuickModes"
                     android:entryValues="@array/RCQuickModes"
                     android:key="pref_rc_quickmode_right"
-                    android:title="QuickMode Right"/>
+                    android:title="@string/pref_rc_quickmode_left"/>
             </PreferenceCategory>
             <PreferenceCategory
                 android:key="pref_rc_throttle"
-                android:title="Throttle">
+                android:title="@string/pref_rc_throttle">
                 <CheckBoxPreference
                     android:defaultValue="false"
                     android:key="pref_rc_throttle_reverse"
-                    android:summary="reverses Throttle direction"
-                    android:title="Reverse"/>
+                    android:summary="@string/pref_rc_throttle_reverse_summary"
+                    android:title="@string/pref_rc_reverse"/>
                 <CheckBoxPreference
                     android:defaultValue="false"
                     android:key="pref_rc_throttle_returntocenter"
-                    android:summary="on touch release Throttle returns to center"
-                    android:title="Return to Center"/>
+                    android:summary="@string/pref_rc_throttle_returntocenter_summary"
+                    android:title="@string/pref_rc_throttle_returntocenter"/>
             </PreferenceCategory>
             <PreferenceCategory
                 android:key="pref_rc_rudder"
-                android:title="Rudder">
+                android:title="@string/pref_rc_rudder">
                 <CheckBoxPreference
                     android:defaultValue="false"
                     android:key="pref_rc_rudder_reverse"
-                    android:summary="reverses Rudder/Yaw direction"
-                    android:title="Reverse"/>
+                    android:summary="@string/pref_rc_rudder_reverse_summary"
+                    android:title="@string/pref_rc_reverse"/>
             </PreferenceCategory>
             <PreferenceCategory
                 android:key="pref_rc_aileron"
-                android:title="Aileron">
+                android:title="@string/pref_rc_aileron">
                 <CheckBoxPreference
                     android:defaultValue="false"
                     android:key="pref_rc_aileron_reverse"
-                    android:summary="reverses Aileron/Roll direction"
-                    android:title="Reverse"/>
+                    android:summary="@string/pref_rc_aileron_reverse_summary"
+                    android:title="@string/pref_rc_reverse"/>
             </PreferenceCategory>
             <PreferenceCategory
                 android:key="pref_rc_elevator"
-                android:title="Elevator">
+                android:title="@string/pref_rc_elevator">
                 <CheckBoxPreference
                     android:defaultValue="false"
                     android:key="pref_rc_elevator_reverse"
-                    android:summary="reverses Elevator/Pitch direction"
-                    android:title="Reverse"/>
+                    android:summary="@string/pref_rc_elevator_reverse_summary"
+                    android:title="@string/pref_rc_reverse"/>
             </PreferenceCategory>
         </PreferenceScreen>
     </PreferenceScreen>
     <PreferenceScreen
         android:key="pref_connection"
-        android:title="Connection Preferences">
+        android:title="@string/pref_connection">
         <PreferenceCategory
             android:key="pref_usb"
-            android:title="USB connection">
+            android:title="@string/pref_usb">
             <ListPreference
                 android:defaultValue="57600"
                 android:entries="@array/TelemetryBaudTypes"
                 android:entryValues="@array/TelemetryBaudTypes"
                 android:key="pref_baud_type"
-                android:summary="Baud Rate of the USB Telementry Link"
-                android:title="Telemetry link speed"/>
+                android:summary="@string/pref_baud_type_summary"
+                android:title="@string/pref_baud_type"/>
         </PreferenceCategory>
         <PreferenceCategory
             android:key="pref_server"
-            android:title="TCP connection">
+            android:title="@string/pref_server">
             <EditTextPreference
                 android:defaultValue="192.168.40.100"
                 android:key="pref_server_ip"
                 android:gravity="center"
-                android:title="Server IP"/>
+                android:title="@string/pref_server_ip"/>
             <EditTextPreference
                 android:defaultValue="9761"
                 android:inputType="number"
                 android:gravity="center"
                 android:key="pref_server_port"
-                android:title="Server Port"/>
+                android:title="@string/pref_server_port"/>
         </PreferenceCategory>
         <PreferenceCategory
             android:key="pref_server_udp"
-            android:title="UDP connection">
+            android:title="@string/pref_server_udp">
             <EditTextPreference
                 android:defaultValue="14550"
                 android:inputType="number"
                 android:gravity="center"
                 android:key="pref_udp_server_port"
-                android:title="UDP server Port"/>
+                android:title="@string/pref_udp_server_port"/>
         </PreferenceCategory>
     </PreferenceScreen>
 
