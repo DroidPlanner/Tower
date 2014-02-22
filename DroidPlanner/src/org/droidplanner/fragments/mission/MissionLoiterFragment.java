@@ -1,7 +1,7 @@
 package org.droidplanner.fragments.mission;
 
 import org.droidplanner.R;
-import org.droidplanner.drone.variables.mission.waypoints.Loiter;
+import org.droidplanner.drone.variables.missionD.waypoints.LoiterD;
 import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListener;
 
 import android.view.View;
@@ -30,7 +30,7 @@ public class MissionLoiterFragment extends MissionDetailFragment implements
 
 	@Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		((Loiter) item).setOrbitCCW(isChecked);
+		((LoiterD) item).setOrbitCCW(isChecked);
     }
 
 	@Override

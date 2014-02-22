@@ -1,7 +1,7 @@
 package org.droidplanner.fragments.mission;
 
 import org.droidplanner.R;
-import org.droidplanner.drone.variables.mission.waypoints.RegionOfInterest;
+import org.droidplanner.drone.variables.missionD.waypoints.RegionOfInterestD;
 import org.droidplanner.helpers.units.Altitude;
 import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListener;
@@ -25,13 +25,13 @@ public class MissionRegionOfInterestFragment extends MissionDetailFragment
 				.getPosition(MissionItemTypes.ROI));
 
 		altitudeSeekBar = (SeekBarWithText) view.findViewById(R.id.altitudeView);
-		altitudeSeekBar.setValue(((RegionOfInterest) item).getAltitude().valueInMeters());
+		altitudeSeekBar.setValue(((RegionOfInterestD) item).getAltitude().valueInMeters());
 		altitudeSeekBar.setOnChangedListener(this);
 	}
 
 	@Override
 	public void onSeekBarChanged() {
-		((RegionOfInterest) item).setAltitude(new Altitude(altitudeSeekBar
+		((RegionOfInterestD) item).setAltitude(new Altitude(altitudeSeekBar
 				.getValue()));
 	}
 

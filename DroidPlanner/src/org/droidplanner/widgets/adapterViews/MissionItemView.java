@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.droidplanner.R;
 import org.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
+import org.droidplanner.drone.variables.missionD.MissionItemD;
+import org.droidplanner.drone.variables.missionD.waypoints.SpatialCoordItemD;
 import org.droidplanner.helpers.units.Length;
 
 import android.content.Context;
@@ -41,7 +43,7 @@ public class MissionItemView extends ArrayAdapter<org.droidplanner.drone.variabl
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		org.droidplanner.drone.variables.mission.MissionItem waypoint = waypoints.get(position);
+		MissionItemD waypoint = waypoints.get(position);
 		View view = createLayoutFromResource(parent);
 		findViewObjects(view);
 		setupViewsText(waypoint);
@@ -73,11 +75,11 @@ public class MissionItemView extends ArrayAdapter<org.droidplanner.drone.variabl
 		distanceView = (TextView) view.findViewById(R.id.rowDistanceView);
 */
 	}
-	private void setupViewsText(org.droidplanner.drone.variables.mission.MissionItem item) {
+	private void setupViewsText(MissionItemD item) {
 		nameView.setText(String.format("%3d", this.waypoints.indexOf(item)+1));
 
 		if (item instanceof SpatialCoordItem) {
-			SpatialCoordItem waypoint = (SpatialCoordItem) item;
+			SpatialCoordItemD waypoint = (SpatialCoordItemD) item;
 			altitudeView.setText(String.format("%3.0fm",
 					waypoint.getAltitude().valueInMeters()));
 			

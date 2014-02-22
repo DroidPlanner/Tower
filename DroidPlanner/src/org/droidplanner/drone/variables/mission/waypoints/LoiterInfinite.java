@@ -1,17 +1,17 @@
 package org.droidplanner.drone.variables.mission.waypoints;
 
-import java.util.List;
 
-import org.droidplanner.drone.variables.mission.MissionItem;
+import org.droidplanner.R;
+import org.droidplanner.drone.variables.missionD.MissionItemD;
+import org.droidplanner.drone.variables.missionD.waypoints.LoiterInfiniteD;
 import org.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import org.droidplanner.fragments.mission.MissionDetailFragment;
 import org.droidplanner.fragments.mission.MissionLoiterFragment;
 
-import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 
-public class LoiterInfinite extends Loiter implements MarkerSource {
+public class LoiterInfinite extends LoiterInfiniteD implements MarkerSource {
 	
-	public LoiterInfinite(MissionItem item) {
+	public LoiterInfinite(MissionItemD item) {
 		super(item);
 	}
 
@@ -21,15 +21,15 @@ public class LoiterInfinite extends Loiter implements MarkerSource {
 		fragment.setItem(this);
 		return fragment;
 	}
-
+	
 	@Override
-	public List<msg_mission_item> packMissionItem() {
-		return super.packMissionItem();
+	protected int getIconDrawable() {
+		return R.drawable.ic_wp_loiter;
 	}
-
+	
 	@Override
-	public void unpackMAVMessage(msg_mission_item mavMsg) {
-		super.unpackMAVMessage(mavMsg);
+	protected int getIconDrawableSelected() {
+		return R.drawable.ic_wp_loiter_selected;
 	}
 
 }

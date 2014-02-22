@@ -1,8 +1,8 @@
 package org.droidplanner.fragments.mission;
 
 import org.droidplanner.R;
-import org.droidplanner.drone.variables.mission.waypoints.Loiter;
-import org.droidplanner.drone.variables.mission.waypoints.LoiterTurns;
+import org.droidplanner.drone.variables.missionD.waypoints.LoiterD;
+import org.droidplanner.drone.variables.missionD.waypoints.LoiterTurnsD;
 import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListener;
 
@@ -31,7 +31,7 @@ public class MissionLoiterNFragment extends MissionDetailFragment implements
 		super.setupViews(view);
 		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemTypes.LOITERN));
 
-		LoiterTurns item = (LoiterTurns) this.item;
+		LoiterTurnsD item = (LoiterTurnsD) this.item;
 
 		loiterCCW = (CheckBox) view.findViewById(R.string.loiter_ccw);
 		loiterCCW.setChecked(item.isOrbitCCW());
@@ -57,13 +57,13 @@ public class MissionLoiterNFragment extends MissionDetailFragment implements
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		((Loiter) item).setOrbitCCW(isChecked);
+		((LoiterD) item).setOrbitCCW(isChecked);
     }
 
 
 	@Override
 	public void onSeekBarChanged() {
-		LoiterTurns item = (LoiterTurns) this.item;
+		LoiterTurnsD item = (LoiterTurnsD) this.item;
 
 		item.getAltitude().set(altitudeSeekBar.getValue());
 		item.setTurns((int)loiterTurnSeekBar.getValue());

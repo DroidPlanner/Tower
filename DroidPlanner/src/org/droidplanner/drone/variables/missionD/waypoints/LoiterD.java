@@ -1,41 +1,33 @@
-package org.droidplanner.drone.variables.mission.waypoints;
+package org.droidplanner.drone.variables.missionD.waypoints;
 
 import java.util.List;
 
-import org.droidplanner.R;
 import org.droidplanner.drone.variables.mission.Mission;
-import org.droidplanner.drone.variables.mission.MissionItem;
-import org.droidplanner.fragments.markers.MarkerManager.MarkerSource;
-import org.droidplanner.fragments.mission.MissionDetailFragment;
+import org.droidplanner.drone.variables.missionD.MissionItemD;
 import org.droidplanner.helpers.units.Altitude;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.google.android.gms.maps.model.LatLng;
 
-public abstract class Loiter extends SpatialCoordItem implements MarkerSource {
-	@Override
-	public MissionDetailFragment getDetailFragment() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+public abstract class LoiterD extends SpatialCoordItemD {
 
 	private double orbitalRadius;
 	private double yawAngle;
 	private boolean orbitCCW;
-	
-	public Loiter(MissionItem item) {
-		super(item);
-	}
-	
-	public Loiter(Mission mission,LatLng coord, Altitude altitude) {
+
+	public LoiterD(Mission mission, LatLng coord, Altitude altitude) {
 		super(mission, coord, altitude);
+	}
+
+	public LoiterD(MissionItemD item) {
+		super(item);
 	}
 
 	public void setOrbitalRadius(double radius) {
 		this.orbitalRadius = radius;
 	}
-	
-	public double getOrbitalRadius(){
+
+	public double getOrbitalRadius() {
 		return this.orbitalRadius;
 	}
 
@@ -46,7 +38,6 @@ public abstract class Loiter extends SpatialCoordItem implements MarkerSource {
 	public void setOrbitCCW(boolean orbitCCW) {
 		this.orbitCCW = orbitCCW;
 	}
-	
 
 	public double getYawAngle() {
 		return yawAngle;
@@ -63,7 +54,7 @@ public abstract class Loiter extends SpatialCoordItem implements MarkerSource {
 		mavMsg.param3 = (float) (isOrbitCCW()?getOrbitalRadius()*-1.0:getOrbitalRadius());
 		mavMsg.param4 = (float) getYawAngle();
 		return list;
-	} 
+	}
 
 	@Override
 	public void unpackMAVMessage(msg_mission_item mavMsg) {
@@ -72,13 +63,4 @@ public abstract class Loiter extends SpatialCoordItem implements MarkerSource {
 		setOrbitalRadius(Math.abs(mavMsg.param3));
 	}
 
-	@Override
-	protected int getIconDrawable() {
-		return R.drawable.ic_wp_loiter;
-	}
-	
-	@Override
-	protected int getIconDrawableSelected() {
-		return R.drawable.ic_wp_loiter_selected;
-	}
 }

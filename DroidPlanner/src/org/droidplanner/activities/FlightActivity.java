@@ -5,8 +5,8 @@ import org.droidplanner.activities.helpers.SuperUI;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.drone.variables.mission.MissionItem;
-import org.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
+import org.droidplanner.drone.variables.missionD.MissionItemD;
+import org.droidplanner.drone.variables.missionD.waypoints.SpatialCoordItemD;
 import org.droidplanner.fragments.FlightActionsFragment;
 import org.droidplanner.fragments.FlightMapFragment;
 import org.droidplanner.fragments.RCFragment;
@@ -210,7 +210,7 @@ public class FlightActivity extends SuperUI implements
 	}
 
 	@Override
-	public void onMoveWaypoint(SpatialCoordItem waypoint, LatLng latLng) {
+	public void onMoveWaypoint(SpatialCoordItemD waypoint, LatLng latLng) {
 		// TODO Auto-generated method stub
 
 	}
@@ -228,7 +228,7 @@ public class FlightActivity extends SuperUI implements
 	}
 
 	@Override
-	public boolean onMarkerClick(MissionItem wp) {
+	public boolean onMarkerClick(MissionItemD wp) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -261,7 +261,7 @@ public class FlightActivity extends SuperUI implements
 	}
 
 	@Override
-	public void onMovingWaypoint(SpatialCoordItem source, LatLng latLng) {
+	public void onMovingWaypoint(SpatialCoordItemD source, LatLng latLng) {
 		// TODO Auto-generated method stub
 
 	}

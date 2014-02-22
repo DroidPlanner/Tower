@@ -1,8 +1,8 @@
 package org.droidplanner.fragments.mission;
 
 import org.droidplanner.R;
-import org.droidplanner.drone.variables.mission.waypoints.Loiter;
-import org.droidplanner.drone.variables.mission.waypoints.LoiterTime;
+import org.droidplanner.drone.variables.missionD.waypoints.LoiterD;
+import org.droidplanner.drone.variables.missionD.waypoints.LoiterTimeD;
 import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListener;
 
@@ -27,7 +27,7 @@ public class MissionLoiterTFragment extends MissionDetailFragment implements
 		super.setupViews(view);
 		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemTypes.LOITERT));
 
-		LoiterTime item = (LoiterTime) this.item;
+		LoiterTimeD item = (LoiterTimeD) this.item;
 
 		altitudeSeekBar = (SeekBarWithText) view.findViewById(R.id.altitudeView);
 		altitudeSeekBar.setValue(item.getAltitude().valueInMeters());
@@ -41,13 +41,13 @@ public class MissionLoiterTFragment extends MissionDetailFragment implements
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		((Loiter) item).setOrbitCCW(isChecked);
+		((LoiterD) item).setOrbitCCW(isChecked);
     }
 
 
 	@Override
 	public void onSeekBarChanged() {
-		LoiterTime item = (LoiterTime) this.item;
+		LoiterTimeD item = (LoiterTimeD) this.item;
 
 		item.getAltitude().set(altitudeSeekBar.getValue());
 		item.setTime(loiterTimeSeekBar.getValue());

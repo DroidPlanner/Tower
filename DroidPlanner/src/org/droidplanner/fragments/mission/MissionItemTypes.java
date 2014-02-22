@@ -10,6 +10,7 @@ import org.droidplanner.drone.variables.mission.waypoints.LoiterTurns;
 import org.droidplanner.drone.variables.mission.waypoints.RegionOfInterest;
 import org.droidplanner.drone.variables.mission.waypoints.Takeoff;
 import org.droidplanner.drone.variables.mission.waypoints.Waypoint;
+import org.droidplanner.drone.variables.missionD.MissionItemD;
 
 
 public enum MissionItemTypes {
@@ -33,7 +34,7 @@ public enum MissionItemTypes {
 		return name;
 	}
 
-	public MissionItem getNewItem(MissionItem item) throws InvalidItemException {
+	public MissionItem getNewItem(MissionItemD item) throws InvalidItemException {
 		switch (this) {
 		case LAND:
 			return new Land(item);

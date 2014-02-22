@@ -9,6 +9,8 @@ import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.variables.mission.Mission;
 import org.droidplanner.drone.variables.mission.MissionItem;
+import org.droidplanner.drone.variables.mission.MissionItemUIElements;
+import org.droidplanner.drone.variables.missionD.MissionItemD;
 import org.droidplanner.fragments.EditorListFragment;
 import org.droidplanner.fragments.EditorMapFragment;
 import org.droidplanner.fragments.EditorToolsFragment;
@@ -176,7 +178,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		}
 	}
 
-	private void showItemDetail(MissionItem item) {
+	private void showItemDetail(MissionItemUIElements item) {
 		if (itemDetailFragment == null) {
 			addItemDetail(item);
 		} else {
@@ -184,7 +186,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		}
 	}
 
-	private void addItemDetail(MissionItem item) {
+	private void addItemDetail(MissionItemUIElements item) {
 		itemDetailFragment = item.getDetailFragment();
 
         if (mContainerItemDetail == null) {
@@ -199,7 +201,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
         return itemDetailFragment;
     }
 
-	public void switchItemDetail(MissionItem item) {
+	public void switchItemDetail(MissionItemUIElements item) {
         removeItemDetail();
 		addItemDetail(item);
 	}
@@ -233,7 +235,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	}
 
 	@Override
-	public void onWaypointTypeChanged(MissionItem newItem, MissionItem oldItem) {
+	public void onWaypointTypeChanged(MissionItem newItem, MissionItemD oldItem) {
 		mission.replace(oldItem, newItem);
 		showItemDetail(newItem);
 	}

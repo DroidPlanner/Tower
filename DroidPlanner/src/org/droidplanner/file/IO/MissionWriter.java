@@ -6,22 +6,23 @@ import java.util.List;
 import java.util.Locale;
 
 import org.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
+import org.droidplanner.drone.variables.missionD.waypoints.SpatialCoordItemD;
 import org.droidplanner.file.FileManager;
 import org.droidplanner.file.FileStream;
 
 
 public class MissionWriter {
-	private SpatialCoordItem home;
+	private SpatialCoordItemD home;
 	private List<SpatialCoordItem> waypoints;
 	private String name = "";
 
-	public MissionWriter(SpatialCoordItem home, List<SpatialCoordItem> waypoints, String name) {
+	public MissionWriter(SpatialCoordItemD home, List<SpatialCoordItem> waypoints, String name) {
 		this.home = home;
 		this.waypoints = waypoints;
 		this.name = name;
 	}
 
-	public MissionWriter(SpatialCoordItem home, List<SpatialCoordItem> waypoints) {
+	public MissionWriter(SpatialCoordItemD home, List<SpatialCoordItem> waypoints) {
 		this(home, waypoints, "waypoints");
 	}
 

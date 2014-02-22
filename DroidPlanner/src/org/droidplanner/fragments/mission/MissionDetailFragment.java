@@ -5,7 +5,8 @@ import org.droidplanner.R;
 import org.droidplanner.activities.EditorActivity;
 import org.droidplanner.drone.variables.mission.Mission;
 import org.droidplanner.drone.variables.mission.MissionItem;
-import org.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
+import org.droidplanner.drone.variables.missionD.MissionItemD;
+import org.droidplanner.drone.variables.missionD.waypoints.SpatialCoordItemD;
 import org.droidplanner.fragments.mission.MissionItemTypes.InvalidItemException;
 import org.droidplanner.widgets.spinners.SpinnerSelfSelect;
 
@@ -24,7 +25,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 		OnItemSelectedListener {
 
 	public interface OnWayPointTypeChangeListener{
-		public void onWaypointTypeChanged(MissionItem newItem, MissionItem oldItem);
+		public void onWaypointTypeChanged(MissionItem newItem, MissionItemD oldItem);
 	}
 
 	protected abstract int getResource();
@@ -80,7 +81,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 
 		try{
 			distanceLabelView.setVisibility(View.VISIBLE);
-			distanceView.setText(mission.getDistanceFromLastWaypoint((SpatialCoordItem) item).toString());
+			distanceView.setText(mission.getDistanceFromLastWaypoint((SpatialCoordItemD) item).toString());
 		}catch(NullPointerException e){
 			// Can fail if distanceView doesn't exists
 		}catch (Exception e){
@@ -116,7 +117,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 	public void onNothingSelected(AdapterView<?> arg0) {
 	}
 
-	public MissionItem getItem() {
+	public MissionItemD getItem() {
 		return item;
 	}
 
