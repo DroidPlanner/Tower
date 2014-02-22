@@ -54,7 +54,8 @@
 				android:layout_marginLeft="12dp"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="LAND" />
+				android:text="@string/waypointType_Land"
+                android:textAllCaps="true" />
 
 			<TextView
 				android:id="@+id/DistanceLabel"
@@ -63,13 +64,14 @@
 				android:layout_below="@id/WaypointType"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="Distance to home " />
+				android:text="@string/distance_to_home" />
 
 			<TextView
 				android:id="@+id/DistanceValue"
 				style="@style/missionHeaderValue"
 				android:layout_toRightOf="@id/DistanceLabel"
 				android:layout_alignBaseline="@id/DistanceLabel"
+                android:layout_marginLeft="12dp"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:text="20m" />

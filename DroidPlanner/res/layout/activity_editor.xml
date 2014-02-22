@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:text="Distance: 200m, Flight time: 3:30s"
+        android:text="@string/editor_info_window"
 		style="@style/editorMissionOverviewText"
         />
 

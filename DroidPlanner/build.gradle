@@ -43,9 +43,5 @@ android {
             }
         }
     }
-    signingConfigs {
-        debug {
-            storeFile file('/home/fhuya/.android/debug.keystore')
-        }
-    }
+
 }

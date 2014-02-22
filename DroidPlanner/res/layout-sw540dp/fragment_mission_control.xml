@@ -15,7 +15,7 @@
 	    android:drawableTop="@drawable/ic_control"
 		android:visibility="gone"
         android:layout_weight="1"
-	    android:text="Control" />
+	    android:text="@string/mission_control_control" />
 
 	<Button
 	    android:id="@+id/mc_planningBtn"
@@ -24,7 +24,7 @@
 	    android:layout_height="match_parent"
 	    android:drawableTop="@drawable/ic_edit"
         android:layout_weight="1"
-	    android:text="Edit" />
+	    android:text="@string/mission_control_edit" />
 
 
 	<Button
@@ -34,7 +34,7 @@
 	    android:layout_height="match_parent"
 	    android:drawableTop="@drawable/ic_home"
         android:layout_weight="1"
-	    android:text="Home" />
+	    android:text="@string/mission_control_home" />
 
 
 	<Button
@@ -43,7 +43,7 @@
 	    android:layout_width="75dp"
 	    android:layout_height="match_parent"
 	    android:drawableTop="@drawable/ic_land"
-	    android:text="Land"
+	    android:text="@string/mission_control_land"
         android:layout_weight="1"
 	    tools:ignore="ContentDescription" />
 
@@ -53,7 +53,7 @@
 	    android:layout_width="75dp"
 	    android:layout_height="match_parent"
 	    android:drawableTop="@drawable/ic_takeoff"
-	    android:text="Takeoff"
+	    android:text="@string/mission_control_takeoff"
 		android:visibility="gone"
         android:layout_weight="1"
 	    tools:ignore="ContentDescription" />
@@ -64,7 +64,7 @@
 	    android:layout_width="75dp"
 	    android:layout_height="match_parent"
 	    android:drawableTop="@drawable/ic_loiter"
-	    android:text="Loiter"
+	    android:text="@string/mission_control_loiter"
         android:layout_weight="1"
 	    tools:ignore="ContentDescription" />
 
@@ -74,7 +74,7 @@
 	    android:layout_width="75dp"
 	    android:layout_height="match_parent"
 	    android:drawableTop="@drawable/ic_follow"
-	    android:text="Follow"
+	    android:text="@string/mission_control_follow"
         android:layout_weight="1"
 	    tools:ignore="ContentDescription" />
 
