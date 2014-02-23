@@ -117,22 +117,15 @@
             android:windowSoftInputMode="adjustPan"
             android:theme="@style/Theme.PageIndicatorDefaults"
             android:label="@string/menu_drone_setup"
-            android:parentActivityName=".activities.FlightActivity" >
+            android:parentActivityName=".activities.SettingsActivity" >
 
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.FlightActivity" />
+                android:value=".activities.SettingsActivity" />
         </activity>
         <activity android:name=".activities.SettingsActivity"
-                  android:label="@string/settings"
-                  android:parentActivityName=".activities.FlightActivity">
-
-            <!-- Parent activity meta-data to support API level 7+ -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.FlightActivity" />
-        </activity>
+                  android:label="@string/settings"/>
     </application>
 
 </manifest>

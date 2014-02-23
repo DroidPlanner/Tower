@@ -8,8 +8,10 @@ import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 
 import org.droidplanner.R;
+import org.droidplanner.activities.ConfigurationActivity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,11 +47,17 @@ public class NavigationDrawerAdapter extends SimpleExpandableListAdapter {
         flightData.put(KEY_SECTION_ICON, R.drawable.ic_action_plane);
         mGroupData.add(flightData);
 
-        //Drone setup section
+        //Settings section
         final Map<String, Integer> droneSetupData = new HashMap<String, Integer>();
-        droneSetupData.put(KEY_SECTION_NAME, R.string.menu_drone_setup);
+        droneSetupData.put(KEY_SECTION_NAME, R.string.settings);
         droneSetupData.put(KEY_SECTION_ICON, R.drawable.ic_action_settings);
         mGroupData.add(droneSetupData);
+
+        //Help section
+        final Map<String, Integer> helpData = new HashMap<String, Integer>();
+        helpData.put(KEY_SECTION_NAME, R.string.help);
+        helpData.put(KEY_SECTION_ICON, R.drawable.ic_action_help);
+        mGroupData.add(helpData);
     }
 
     /**
@@ -59,27 +67,43 @@ public class NavigationDrawerAdapter extends SimpleExpandableListAdapter {
             ArrayList<List<Map<String, Integer>>>();
 
     static {
+        /*
+        Flight section
+         */
         //Editor activity
         Map<String, Integer> editorData = new HashMap<String, Integer>();
         editorData.put(KEY_SECTION_NAME, R.string.editor);
-        editorData.put(KEY_SECTION_ICON, android.R.drawable.ic_menu_edit);
+        editorData.put(KEY_SECTION_ICON, R.drawable.ic_action_location);
 
-        //Flight section
         final List<Map<String, Integer>> flightGroup = new ArrayList<Map<String, Integer>>();
         flightGroup.add(editorData);
         mChildData.add(flightGroup);
 
-        //Settings
-        final Map<String, Integer> settingsData = new HashMap<String, Integer>();
-        settingsData.put(KEY_SECTION_NAME, R.string.settings);
-        settingsData.put(KEY_SECTION_ICON, R.drawable.ic_action_gear);
-
-        //TODO: add the remaining settings sections.
-
-        //Drone setup section
+        /*
+        Settings section
+         */
+        //Retrieve the elements in the settings section from the ConfigurationActivity
         final List<Map<String, Integer>> setupGroup = new ArrayList<Map<String, Integer>>();
-        setupGroup.add(settingsData);
+
+        final int configurationFragmentsCount = ConfigurationActivity.sConfigurationFragments
+                .length;
+        for (int i = 0; i < configurationFragmentsCount; i++) {
+            final Map<String, Integer> configData = new HashMap<String, Integer>();
+            configData.put(KEY_SECTION_NAME, ConfigurationActivity
+                    .sConfigurationFragmentTitlesRes[i]);
+            configData.put(KEY_SECTION_ICON, ConfigurationActivity
+                    .sConfigurationFragmentIconRes[i]);
+
+            setupGroup.add(configData);
+        }
+
         mChildData.add(setupGroup);
+
+        /*
+        Help section
+         */
+        //No children for the help section
+        mChildData.add(Collections.<Map<String, Integer>>emptyList());
     }
 
     public NavigationDrawerAdapter(Context context) {
@@ -111,7 +135,10 @@ public class NavigationDrawerAdapter extends SimpleExpandableListAdapter {
         }
 
         final ImageView expandIcon = (ImageView) v.findViewById(R.id.nav_drawer_group_expand_icon);
-        if (expandIcon != null) {
+        if (getChildrenCount(groupPosition) == 0) {
+            expandIcon.setVisibility(View.GONE);
+        } else {
+            expandIcon.setVisibility(View.VISIBLE);
             expandIcon.setImageResource(isExpanded
                     ? R.drawable.expandable_listview_icon_expanded
                     : R.drawable.expandable_listview_icon_collapsed);

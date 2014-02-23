@@ -13,6 +13,8 @@
         android:layout_height="match_parent"
         android:background="#ffededed"
         android:choiceMode="singleChoice"
+        android:childIndicator="@null"
+        android:groupIndicator="@null"
         android:layout_gravity="start"
         android:paddingTop="10dp"
         android:orientation="vertical"/>

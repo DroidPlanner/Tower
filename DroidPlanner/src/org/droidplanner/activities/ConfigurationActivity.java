@@ -32,7 +32,7 @@ public class ConfigurationActivity extends SuperUI {
     /**
      * Holds the list of configuration screens this activity supports.
      */
-    private static final Class<? extends Fragment>[] sConfigurationFragments = new Class[]{
+    public static final Class<? extends Fragment>[] sConfigurationFragments = new Class[]{
             TuningFragment.class,
             SetupRadioFragment.class,
             SetupSensorFragment.class,
@@ -43,12 +43,20 @@ public class ConfigurationActivity extends SuperUI {
     /**
      * Holds the title resources for the configuration screens.
      */
-    private static final int[] sConfigurationFragmentTitlesRes = {
+    public static final int[] sConfigurationFragmentTitlesRes = {
             R.string.screen_tuning,
             R.string.screen_rc,
             R.string.screen_cal,
             R.string.screen_checklist,
             R.string.screen_parameters
+    };
+
+    public static final int[] sConfigurationFragmentIconRes = {
+            android.R.drawable.ic_menu_preferences,
+            R.drawable.ic_status_rssi,
+            R.drawable.ic_action_circles,
+            R.drawable.ic_action_paste,
+            R.drawable.ic_action_database
     };
 
 	@Override
@@ -57,7 +65,8 @@ public class ConfigurationActivity extends SuperUI {
 		setContentView(R.layout.activity_configuration);
 
         //Check that the arrays are the same length.
-        if(sConfigurationFragments.length != sConfigurationFragmentTitlesRes.length){
+        if(sConfigurationFragments.length != sConfigurationFragmentTitlesRes.length ||
+                sConfigurationFragmentTitlesRes.length != sConfigurationFragmentIconRes.length){
             throw new IllegalStateException("The fragment and title resource arrays must match in" +
                     " length.");
         }
