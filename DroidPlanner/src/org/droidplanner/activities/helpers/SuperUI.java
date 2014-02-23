@@ -8,12 +8,12 @@ import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.gcs.GCSHeartbeat;
+import org.droidplanner.utils.Utils;
 import org.droidplanner.widgets.actionProviders.InfoBarActionProvider;
 
 
 public abstract class SuperUI extends SuperActivity implements OnDroneListener {
 	private ScreenOrientation screenOrientation = new ScreenOrientation(this);
-    private UiLanguage uiLanguage = new UiLanguage(this);
 	private InfoBarActionProvider infoBar;
 	private GCSHeartbeat gcsHeartbeat;
 
@@ -21,7 +21,7 @@ public abstract class SuperUI extends SuperActivity implements OnDroneListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		screenOrientation.unlock();
-        uiLanguage.updateUiLanguage();
+        Utils.updateUILanguage(getApplicationContext());
 		gcsHeartbeat = new GCSHeartbeat(drone,1);
 	}
 
