@@ -18,5 +18,7 @@ public interface MAVLinkClient {
 
 	int getTimeOutRetry();
 
+	boolean isConnected();
+
 
 }
