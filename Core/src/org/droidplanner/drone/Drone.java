@@ -1,6 +1,7 @@
 package org.droidplanner.drone;
 
 
+import org.droidplanner.MAVLink.MAVLinkClient;
 import org.droidplanner.MAVLink.WaypointMananger;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.variables.Altitude;
