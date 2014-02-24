@@ -2,25 +2,24 @@ package org.droidplanner.mission.survey.grid;
 
 import java.util.List;
 
+import org.droidplanner.helpers.coordinates.Coord2D;
 import org.droidplanner.helpers.geoTools.LineLatLng;
 import org.droidplanner.mission.survey.SurveyData;
 import org.droidplanner.polygon.Polygon;
-
-import com.google.android.gms.maps.model.LatLng;
 
 public class GridBuilder {
 
 	private Polygon poly;
 	private Double angle;
 	private Double lineDist;
-	private LatLng origin;
+	private Coord2D origin;
 	private boolean innerWPs;
 	private Double wpDistance;
 
 	private Grid grid;
 
 	public GridBuilder(Polygon polygon, SurveyData surveyData,
-			LatLng originPoint) {
+			Coord2D originPoint) {
 		this.poly = polygon;
 		this.origin = originPoint;
 		this.angle = surveyData.getAngle();
@@ -31,7 +30,7 @@ public class GridBuilder {
 	}
 
 	public GridBuilder(Polygon polygon, double angle, double distance,
-			LatLng originPoint) {
+			Coord2D originPoint) {
 		this.poly = polygon;
 		this.origin = originPoint;
 		this.angle = angle;
@@ -40,7 +39,7 @@ public class GridBuilder {
 	}
 
 	public Grid generate() throws Exception {
-		List<LatLng> polygonPoints = poly.getLatLngList();
+		List<Coord2D> polygonPoints = poly.getPoints();
 
 		List<LineLatLng> circumscribedGrid = new CircumscribedGrid(
 				polygonPoints, angle, lineDist).getGrid();

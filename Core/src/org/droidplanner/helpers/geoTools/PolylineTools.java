@@ -2,21 +2,20 @@ package org.droidplanner.helpers.geoTools;
 
 import java.util.List;
 
+import org.droidplanner.helpers.coordinates.Coord2D;
 import org.droidplanner.helpers.units.Length;
-
-import com.google.android.gms.maps.model.LatLng;
 
 public class PolylineTools {
 
 	/**
 	 * 	Total length of the polyline in meters
-	 * @param points
+	 * @param gridPoints
 	 * @return
 	 */
-	public static Length getPolylineLength(List<LatLng> points) {
+	public static Length getPolylineLength(List<Coord2D> gridPoints) {
 		double lenght = 0;
-		for (int i = 1; i < points.size(); i++) {
-			lenght+=GeoTools.getDistance(points.get(i),points.get(i-1)).valueInMeters();
+		for (int i = 1; i < gridPoints.size(); i++) {
+			lenght+=GeoTools.getDistance(gridPoints.get(i),gridPoints.get(i-1)).valueInMeters();
 		}
 		return new Length(lenght);
 	}

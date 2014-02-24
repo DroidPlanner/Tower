@@ -3,20 +3,19 @@ package org.droidplanner.mission.survey.grid;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.droidplanner.helpers.coordinates.Coord2D;
 import org.droidplanner.helpers.geoTools.GeoTools;
 import org.droidplanner.helpers.geoTools.LineLatLng;
 import org.droidplanner.polygon.PolyBounds;
 
-import com.google.android.gms.maps.model.LatLng;
-
 public class CircumscribedGrid {
 	private static final int MAX_NUMBER_OF_LINES = 200;
 	List<LineLatLng> grid = new ArrayList<LineLatLng>();
-	private LatLng gridLowerLeft;
+	private Coord2D gridLowerLeft;
 	private double extrapolatedDiag;
 	private Double angle;
 	
-	public CircumscribedGrid(List<LatLng> polygonPoints, Double angle,
+	public CircumscribedGrid(List<Coord2D> polygonPoints, Double angle,
 			Double lineDist) throws Exception {
 		this.angle = angle;
 
@@ -26,9 +25,9 @@ public class CircumscribedGrid {
 
 	private void drawGrid(Double lineDist) throws GridWithTooManyLines  {
 		int lines = 0;
-		LatLng startPoint = gridLowerLeft;
+		Coord2D startPoint = gridLowerLeft;
 		while (lines * lineDist < extrapolatedDiag) {
-			LatLng endPoint = GeoTools.newCoordFromBearingAndDistance(
+			Coord2D endPoint = GeoTools.newCoordFromBearingAndDistance(
 					startPoint, angle, extrapolatedDiag);
 
 			LineLatLng line = new LineLatLng(startPoint, endPoint);
@@ -43,9 +42,9 @@ public class CircumscribedGrid {
 		}
 	}
 
-	private void findPolygonBounds(List<LatLng> polygonPoints) {
+	private void findPolygonBounds(List<Coord2D> polygonPoints) {
 		PolyBounds bounds = new PolyBounds(polygonPoints);
-		LatLng middlePoint = bounds.getMiddle();
+		Coord2D middlePoint = bounds.getMiddle();
 		gridLowerLeft = GeoTools.newCoordFromBearingAndDistance(middlePoint,
 				angle - 135, bounds.getDiag());
 		extrapolatedDiag = bounds.getDiag() * 1.5;

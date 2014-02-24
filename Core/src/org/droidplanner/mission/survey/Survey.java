@@ -3,6 +3,7 @@ package org.droidplanner.mission.survey;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.droidplanner.helpers.coordinates.Coord2D;
 import org.droidplanner.helpers.units.Altitude;
 import org.droidplanner.mission.Mission;
 import org.droidplanner.mission.MissionItem;
@@ -13,7 +14,6 @@ import org.droidplanner.polygon.Polygon;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_CMD;
 import com.MAVLink.Messages.enums.MAV_FRAME;
-import com.google.android.gms.maps.model.LatLng;
 
 public class Survey extends MissionItem {
 
@@ -21,7 +21,7 @@ public class Survey extends MissionItem {
 	public SurveyData surveyData = new SurveyData();
 	public Grid grid;
 
-	public Survey(Mission mission,List<LatLng> points) {
+	public Survey(Mission mission,List<Coord2D> points) {
 		super(mission);
 		polygon.addPoints(points);
 	}
@@ -39,7 +39,7 @@ public class Survey extends MissionItem {
 
 	private void build() throws Exception {		
 		//TODO find better point than (0,0) to reference the grid
-		GridBuilder gridBuilder = new GridBuilder(polygon, surveyData, new LatLng(0, 0));
+		GridBuilder gridBuilder = new GridBuilder(polygon, surveyData, new Coord2D(0, 0));
 		polygon.checkIfValid();
 		grid = gridBuilder.generate();
 	}
@@ -49,7 +49,7 @@ public class Survey extends MissionItem {
 		try {
 			List<msg_mission_item> list = new ArrayList<msg_mission_item>();
 			build();
-			for (LatLng point : grid.gridPoints) {
+			for (Coord2D point : grid.gridPoints) {
 				msg_mission_item mavMsg = packSurveyPoint(point);
 				list.add(mavMsg);
 			}
@@ -59,15 +59,15 @@ public class Survey extends MissionItem {
 		}
 	}
 
-	private msg_mission_item packSurveyPoint(LatLng point) {
+	private msg_mission_item packSurveyPoint(Coord2D point) {
 		msg_mission_item mavMsg = new msg_mission_item();
 		mavMsg.autocontinue = 1;
 		mavMsg.target_component = 1;
 		mavMsg.target_system = 1;
 		mavMsg.frame = MAV_FRAME.MAV_FRAME_GLOBAL_RELATIVE_ALT;
 		mavMsg.command = MAV_CMD.MAV_CMD_NAV_WAYPOINT;
-		mavMsg.x = (float) point.latitude;
-		mavMsg.y = (float) point.longitude;
+		mavMsg.x = (float) point.getX();
+		mavMsg.y = (float) point.getY();
 		mavMsg.z = (float) surveyData.getAltitude().valueInMeters();
 		mavMsg.param1 = 0f;
 		mavMsg.param2 = 0f;

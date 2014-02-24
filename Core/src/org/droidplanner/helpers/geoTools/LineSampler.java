@@ -3,36 +3,36 @@ package org.droidplanner.helpers.geoTools;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.android.gms.maps.model.LatLng;
+import org.droidplanner.helpers.coordinates.Coord2D;
 
 public class LineSampler {
 
-	private List<LatLng> points;
-	private List<LatLng> sampledPoints = new ArrayList<LatLng>();
+	private List<Coord2D> points;
+	private List<Coord2D> sampledPoints = new ArrayList<Coord2D>();
 
-	public LineSampler(List<LatLng> points) {
+	public LineSampler(List<Coord2D> points) {
 		this.points = points;
 	}
 
-	public LineSampler(LatLng p1, LatLng p2) {
-		points = new ArrayList<LatLng>();
+	public LineSampler(Coord2D p1, Coord2D p2) {
+		points = new ArrayList<Coord2D>();
 		points.add(p1);
 		points.add(p2);
 	}
 
-	public List<LatLng> sample(double sampleDistance) {
+	public List<Coord2D> sample(double sampleDistance) {
 		for (int i = 1; i < points.size(); i++) {
-			LatLng from = points.get(i - 1);
-			LatLng to = points.get(i);
+			Coord2D from = points.get(i - 1);
+			Coord2D to = points.get(i);
 			sampledPoints.addAll(sampleLine(from, to, sampleDistance));
 		}
 		sampledPoints.add(getLast(points));
 		return sampledPoints;
 	}
 
-	private List<LatLng> sampleLine(LatLng from, LatLng to,
+	private List<Coord2D> sampleLine(Coord2D from, Coord2D to,
 			double samplingDistance) {
-		List<LatLng> result = new ArrayList<LatLng>();
+		List<Coord2D> result = new ArrayList<Coord2D>();
 		double heading = GeoTools.getHeadingFromCoordinates(from, to);
 		double totalLength = GeoTools.getDistance(from, to).valueInMeters();
 		double distance = 0;
@@ -45,7 +45,7 @@ public class LineSampler {
 		return result;
 	}
 
-	private LatLng getLast(List<LatLng> list) {
+	private Coord2D getLast(List<Coord2D> list) {
 		return list.get(list.size() - 1);
 	}
 

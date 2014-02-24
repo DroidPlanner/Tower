@@ -2,16 +2,15 @@ package org.droidplanner.mission.survey.grid;
 
 import java.util.List;
 
+import org.droidplanner.helpers.coordinates.Coord2D;
 import org.droidplanner.helpers.geoTools.PolylineTools;
 import org.droidplanner.helpers.units.Length;
 
-import com.google.android.gms.maps.model.LatLng;
-
 public class Grid {
-	public List<LatLng> gridPoints;
-	private List<LatLng> cameraLocations;
+	public List<Coord2D> gridPoints;
+	private List<Coord2D> cameraLocations;
 
-	public Grid(List<LatLng> list, List<LatLng> cameraLocations) {
+	public Grid(List<Coord2D> list, List<Coord2D> cameraLocations) {
 		this.gridPoints = list;
 		this.cameraLocations = cameraLocations;
 	}
@@ -24,7 +23,7 @@ public class Grid {
 		return gridPoints.size()/2;
 	}
 
-	public List<LatLng> getCameraLocations() {
+	public List<Coord2D> getCameraLocations() {
 		return cameraLocations;
 	}
 

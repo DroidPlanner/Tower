@@ -3,25 +3,24 @@ package org.droidplanner.mission.survey.grid;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.droidplanner.helpers.coordinates.Coord2D;
 import org.droidplanner.helpers.geoTools.LineLatLng;
 import org.droidplanner.helpers.geoTools.LineTools;
-
-import com.google.android.gms.maps.model.LatLng;
 
 public class Trimmer {
 	List<LineLatLng> trimedGrid = new ArrayList<LineLatLng>();
 
 	public Trimmer(List<LineLatLng> grid, List<LineLatLng> polygon) {
 		for (LineLatLng gridLine : grid) {
-			ArrayList<LatLng> crosses = findCrossings(polygon, gridLine);
+			ArrayList<Coord2D> crosses = findCrossings(polygon, gridLine);
 			processCrossings(crosses, gridLine);
 		}
 	}
 
-	private ArrayList<LatLng> findCrossings(List<LineLatLng> polygon,
+	private ArrayList<Coord2D> findCrossings(List<LineLatLng> polygon,
 			LineLatLng gridLine) {
 
-		ArrayList<LatLng> crossings = new ArrayList<LatLng>();
+		ArrayList<Coord2D> crossings = new ArrayList<Coord2D>();
 		for (LineLatLng polyLine : polygon) {
 			try {
 				crossings.add(LineTools
@@ -33,7 +32,7 @@ public class Trimmer {
 		return crossings;
 	}
 
-	private void processCrossings(ArrayList<LatLng> crosses, LineLatLng gridLine) {
+	private void processCrossings(ArrayList<Coord2D> crosses, LineLatLng gridLine) {
 		switch (crosses.size()) {
 		case 0:
 		case 1:

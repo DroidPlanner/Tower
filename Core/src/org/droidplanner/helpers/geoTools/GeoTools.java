@@ -7,11 +7,9 @@ import org.droidplanner.helpers.units.Area;
 import org.droidplanner.helpers.units.Length;
 import org.droidplanner.polygon.Polygon;
 
-import com.google.android.gms.maps.model.LatLng;
-
 public class GeoTools {
 	private static final double RADIUS_OF_EARTH = 6372797.560856d;
-	public List<LatLng> waypoints;
+	public List<Coord2D> waypoints;
 
 	public GeoTools() {
 	}
@@ -48,11 +46,11 @@ public class GeoTools {
 	 *            distance to be added
 	 * @return New point with the added distance
 	 */
-	public static LatLng newCoordFromBearingAndDistance(LatLng origin,
+	public static Coord2D newCoordFromBearingAndDistance(Coord2D origin,
 			double bearing, double distance) {
 
-		double lat = origin.latitude;
-		double lon = origin.longitude;
+		double lat = origin.getY();
+		double lon = origin.getX();
 		double lat1 = Math.toRadians(lat);
 		double lon1 = Math.toRadians(lon);
 		double brng = Math.toRadians(bearing);
@@ -64,7 +62,7 @@ public class GeoTools {
 				+ Math.atan2(Math.sin(brng) * Math.sin(dr) * Math.cos(lat1),
 						Math.cos(dr) - Math.sin(lat1) * Math.sin(lat2));
 
-		return (new LatLng(Math.toDegrees(lat2), Math.toDegrees(lon2)));
+		return (new Coord2D(Math.toDegrees(lat2), Math.toDegrees(lon2)));
 	}
 
 	/**
@@ -73,18 +71,18 @@ public class GeoTools {
 	 * 
 	 * @return the arc in degrees
 	 */
-	static double getArcInRadians(LatLng from, LatLng to) {
+	static double getArcInRadians(Coord2D from, Coord2D to) {
 
-		double latitudeArc = Math.toRadians(from.latitude - to.latitude);
-		double longitudeArc = Math.toRadians(from.longitude - to.longitude);
+		double latitudeArc = Math.toRadians(from.getY() - to.getY());
+		double longitudeArc = Math.toRadians(from.getX() - to.getX());
 
 		double latitudeH = Math.sin(latitudeArc * 0.5);
 		latitudeH *= latitudeH;
 		double lontitudeH = Math.sin(longitudeArc * 0.5);
 		lontitudeH *= lontitudeH;
 
-		double tmp = Math.cos(Math.toRadians(from.latitude))
-				* Math.cos(Math.toRadians(to.latitude));
+		double tmp = Math.cos(Math.toRadians(from.getY()))
+				* Math.cos(Math.toRadians(to.getY()));
 		return Math.toDegrees(2.0 * Math.asin(Math.sqrt(latitudeH + tmp
 				* lontitudeH)));
 	}
@@ -94,7 +92,7 @@ public class GeoTools {
 	 * 
 	 * @return distance in meters
 	 */
-	public static Length getDistance(LatLng from, LatLng to) {
+	public static Length getDistance(Coord2D from, Coord2D to) {
 		return new Length(RADIUS_OF_EARTH * Math.toRadians(getArcInRadians(from, to)));
 	}
 
@@ -103,11 +101,11 @@ public class GeoTools {
 	 * 
 	 * @return heading in degrees
 	 */
-	static double getHeadingFromCoordinates(LatLng fromLoc, LatLng toLoc) {
-		double fLat = Math.toRadians(fromLoc.latitude);
-		double fLng = Math.toRadians(fromLoc.longitude);
-		double tLat = Math.toRadians(toLoc.latitude);
-		double tLng = Math.toRadians(toLoc.longitude);
+	static double getHeadingFromCoordinates(Coord2D fromLoc, Coord2D toLoc) {
+		double fLat = Math.toRadians(fromLoc.getY());
+		double fLng = Math.toRadians(fromLoc.getX());
+		double tLat = Math.toRadians(toLoc.getY());
+		double tLng = Math.toRadians(toLoc.getX());
 
 		double degree = Math.toDegrees(Math.atan2(
 				Math.sin(tLng - fLng) * Math.cos(tLat),
