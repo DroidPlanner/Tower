@@ -3,6 +3,7 @@ package org.droidplanner.drone;
 
 import org.droidplanner.MAVLink.MAVLinkClient;
 import org.droidplanner.MAVLink.WaypointMananger;
+import org.droidplanner.drone.DroneInterfaces.Clock;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.variables.Altitude;
 import org.droidplanner.drone.variables.Battery;
@@ -33,7 +34,6 @@ public class Drone {
 	public GPS GPS = new GPS(this);
 	public RC RC = new RC(this);
 	public Speed speed = new Speed(this);
-	public State state = new State(this);
 	public Battery battery = new Battery(this);
 	public Radio radio = new Radio(this);
 	public Home home = new Home(this);
@@ -48,13 +48,15 @@ public class Drone {
 	public Parameters parameters = new Parameters(this);
 	public Calibration calibrationSetup = new Calibration(this);
 	public WaypointMananger waypointMananger = new WaypointMananger(this);
+	public State state;
 
 	public MAVLinkClient MavClient;
 	public Preferences preferences;
 
-	public Drone(MAVLinkClient mavClient, Preferences pref) {
+	public Drone(MAVLinkClient mavClient, Clock clock, Preferences pref) {
 		this.MavClient = mavClient;
 		this.preferences = pref;
+		state = new State(this,clock);
 		profile.load();
 	}
 

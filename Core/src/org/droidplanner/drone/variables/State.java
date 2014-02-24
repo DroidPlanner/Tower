@@ -2,6 +2,7 @@ package org.droidplanner.drone.variables;
 
 import org.droidplanner.MAVLink.MavLinkModes;
 import org.droidplanner.drone.Drone;
+import org.droidplanner.drone.DroneInterfaces.Clock;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneVariable;
 
@@ -17,9 +18,11 @@ public class State extends DroneVariable {
 	// ----------------
 	private long startTime = 0;
 	private long elapsedFlightTime = 0;
+	private Clock clock;
 
-	public State(Drone myDrone) {
+	public State(Drone myDrone, Clock clock) {
 		super(myDrone);
+		this.clock = clock;
 		resetFlightTimer();
 	}
 
@@ -87,24 +90,24 @@ public class State extends DroneVariable {
 
 	public void resetFlightTimer() {
 		elapsedFlightTime = 0;
-		startTime = SystemClock.elapsedRealtime();
+		startTime = clock.elapsedRealtime();
 	}
 
 	public void startTimer() {
-		startTime = SystemClock.elapsedRealtime();
+		startTime = clock.elapsedRealtime();
 	}
 
 	public void stopTimer() {
 		// lets calc the final elapsed timer
-		elapsedFlightTime 	+= SystemClock.elapsedRealtime() - startTime;
-		startTime 			= SystemClock.elapsedRealtime();
+		elapsedFlightTime 	+= clock.elapsedRealtime() - startTime;
+		startTime 			= clock.elapsedRealtime();
 	}
 
 	public long getFlightTime() {
 		if(isFlying){
 			// calc delta time since last checked
-			elapsedFlightTime 	+= SystemClock.elapsedRealtime() - startTime;
-			startTime 			= SystemClock.elapsedRealtime();
+			elapsedFlightTime 	+= clock.elapsedRealtime() - startTime;
+			startTime 			= clock.elapsedRealtime();
 		}
 		return elapsedFlightTime / 1000;
 	}
