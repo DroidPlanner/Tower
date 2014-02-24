@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="@string/drone_settings" />
+    <PreferenceCategory android:title="@string/menu_drone_setup"
+        android:key="pref_drone_settings"/>
+
     <PreferenceCategory android:title="@string/app_settings">
         <ListPreference
             android:defaultValue="USB"

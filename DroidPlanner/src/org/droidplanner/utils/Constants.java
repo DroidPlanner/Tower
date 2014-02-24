@@ -54,6 +54,11 @@ public class Constants {
     public static final boolean DEFAULT_PREF_UI_LANGUAGE = false;
 
     /**
+     * Preference key for the drone settings' category.
+     */
+    public static final String PREF_DRONE_SETTINGS = "pref_drone_settings";
+
+    /**
      * Private constructor to prevent instantiation of this class.
      */
     private Constants() {

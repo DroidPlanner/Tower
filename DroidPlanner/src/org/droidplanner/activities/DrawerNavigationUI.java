@@ -15,13 +15,14 @@ import android.widget.ExpandableListView;
 
 import org.droidplanner.R;
 import org.droidplanner.activities.helpers.SuperUI;
+import org.droidplanner.activities.interfaces.HelpProvider;
 import org.droidplanner.utils.Utils;
 import org.droidplanner.widgets.adapterViews.NavigationDrawerAdapter;
 
 /**
  * This abstract activity provides its children access to a navigation drawer interface.
  */
-public abstract class DrawerNavigationUI extends SuperUI {
+public abstract class DrawerNavigationUI extends SuperUI implements HelpProvider {
 
     /**
      * Activates the navigation drawer when the home button is clicked.
@@ -37,6 +38,11 @@ public abstract class DrawerNavigationUI extends SuperUI {
      * Expandable listview used as layout for the app sections.
      */
     private ExpandableListView mNavHubView;
+
+    /**
+     * Adapter used to populate the expandable list view.
+     */
+    private NavigationDrawerAdapter mNavDrawerAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,7 +66,8 @@ public abstract class DrawerNavigationUI extends SuperUI {
         }
 
         //Set the adapter for the list view
-        mNavHubView.setAdapter(new NavigationDrawerAdapter(getApplicationContext()));
+        mNavDrawerAdapter = new NavigationDrawerAdapter(this);
+        mNavDrawerAdapter.attachExpandableListView();
     }
 
     /**
@@ -104,5 +111,19 @@ public abstract class DrawerNavigationUI extends SuperUI {
             //Sync the toggle state after onRestoreInstanceState has occurred.
             mDrawerToggle.syncState();
         }
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        mNavDrawerAdapter.refreshHubView();
+    }
+
+    public DrawerLayout getDrawerLayout(){
+        return mDrawerLayout;
+    }
+
+    public ExpandableListView getNavHubView(){
+        return mNavHubView;
     }
 }

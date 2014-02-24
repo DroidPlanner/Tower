@@ -96,6 +96,7 @@
         <activity
             android:name=".activities.EditorActivity"
             android:label="@string/editor"
+            android:launchMode="singleTop"
             android:parentActivityName=".activities.FlightActivity" >
 
             <!-- Parent activity meta-data to support API level 7+ -->
@@ -115,6 +116,7 @@
         <activity
             android:name=".activities.ConfigurationActivity"
             android:windowSoftInputMode="adjustPan"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.PageIndicatorDefaults"
             android:label="@string/menu_drone_setup"
             android:parentActivityName=".activities.SettingsActivity" >
@@ -125,6 +127,7 @@
                 android:value=".activities.SettingsActivity" />
         </activity>
         <activity android:name=".activities.SettingsActivity"
+                  android:launchMode="singleTop"
                   android:label="@string/settings"/>
     </application>
 

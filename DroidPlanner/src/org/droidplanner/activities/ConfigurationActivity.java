@@ -2,6 +2,7 @@ package org.droidplanner.activities;
 
 import android.app.ActionBar;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -28,6 +29,9 @@ import org.droidplanner.widgets.viewPager.TabPageIndicator;
 public class ConfigurationActivity extends SuperUI {
 
     private static final String TAG = ConfigurationActivity.class.getSimpleName();
+
+    public static final String EXTRA_CONFIG_SCREEN_INDEX = ConfigurationActivity.class.getPackage
+            ().getName() + ".EXTRA_CONFIG_SCREEN_INDEX";
 
     /**
      * Holds the list of configuration screens this activity supports.
@@ -59,6 +63,8 @@ public class ConfigurationActivity extends SuperUI {
             R.drawable.ic_action_database
     };
 
+    private ViewPager mViewPager;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -76,19 +82,19 @@ public class ConfigurationActivity extends SuperUI {
         final ConfigurationPagerAdapter pagerAdapter = new ConfigurationPagerAdapter(
                 context, getSupportFragmentManager());
 
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.configuration_pager);
-        viewPager.setAdapter(pagerAdapter);
+        mViewPager = (ViewPager) findViewById(R.id.configuration_pager);
+        mViewPager.setAdapter(pagerAdapter);
 
         /*
         Figure out if we're running on a tablet like device, or a phone.
-        The phone layout doesn't the tab strip, so the tabIndicator will be null.
+        The phone layout doesn't have the tab strip, so the tabIndicator will be null.
          */
         final TabPageIndicator tabIndicator = (TabPageIndicator) findViewById(R.id
                 .configuration_tab_strip);
         final boolean isPhone = tabIndicator == null;
 
         if (!isPhone) {
-            tabIndicator.setViewPager(viewPager);
+            tabIndicator.setViewPager(mViewPager);
         }
 
 		final ActionBar actionBar = getActionBar();
@@ -104,12 +110,12 @@ public class ConfigurationActivity extends SuperUI {
                         R.layout.spinner_configuration_screen_item), new ActionBar.OnNavigationListener() {
                     @Override
                     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-                        viewPager.setCurrentItem(itemPosition, true);
+                        mViewPager.setCurrentItem(itemPosition, true);
                         return true;
                     }
                 });
 
-                viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+                mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 
                     @Override
                     public void onPageSelected(int i) {
@@ -118,7 +124,20 @@ public class ConfigurationActivity extends SuperUI {
                 });
             }
 		}
+
+        handleIntent(getIntent());
 	}
+
+    @Override
+    public void onNewIntent(Intent intent){
+        super.onNewIntent(intent);
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent){
+        int configScreenIndex = intent.getIntExtra(EXTRA_CONFIG_SCREEN_INDEX, 0);
+        mViewPager.setCurrentItem(configScreenIndex);
+    }
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
@@ -134,11 +153,6 @@ public class ConfigurationActivity extends SuperUI {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
-    @Override
-    public CharSequence[][] getHelpItems() {
-        return new CharSequence[][] { {}, {} };
-    }
 
 	/**
 	 * This is the fragment pager adapter to handle the tabs of the

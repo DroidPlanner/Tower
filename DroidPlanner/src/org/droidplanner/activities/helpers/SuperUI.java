@@ -4,13 +4,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import org.droidplanner.R;
+import org.droidplanner.activities.interfaces.HelpProvider;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.gcs.GCSHeartbeat;
 import org.droidplanner.utils.Utils;
 import org.droidplanner.widgets.actionProviders.InfoBarActionProvider;
-
 
 public abstract class SuperUI extends SuperActivity implements OnDroneListener {
 	private ScreenOrientation screenOrientation = new ScreenOrientation(this);

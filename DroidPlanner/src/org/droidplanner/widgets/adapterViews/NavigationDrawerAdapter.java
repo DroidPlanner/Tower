@@ -1,14 +1,24 @@
 package org.droidplanner.widgets.adapterViews;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Handler;
+import android.support.v4.widget.DrawerLayout;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
-import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 
 import org.droidplanner.R;
 import org.droidplanner.activities.ConfigurationActivity;
+import org.droidplanner.activities.DrawerNavigationUI;
+import org.droidplanner.activities.EditorActivity;
+import org.droidplanner.activities.FlightActivity;
+import org.droidplanner.activities.SettingsActivity;
+import org.droidplanner.fragments.helpers.HelpDialogFragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,63 +29,167 @@ import java.util.Map;
 /**
  * Adapter for the navigation drawer items
  */
-public class NavigationDrawerAdapter extends SimpleExpandableListAdapter {
+public class NavigationDrawerAdapter extends BaseExpandableListAdapter {
 
     /**
      * Keys used to access the group and child data values.
      */
     private static final String KEY_SECTION_NAME = "key_section_name";
     private static final String KEY_SECTION_ICON = "key_section_icon";
+    private static final String KEY_SECTION_CALLBACK = "key_section_callback";
 
-    private static final String[] mGroupFrom = {KEY_SECTION_NAME, KEY_SECTION_ICON};
-    private static final String[] mChildFrom = mGroupFrom;
+    /**
+     * Maps the activities used as primary section in the drawer layout to their index in the
+     * expandable list view.
+     * Only an activity within the map can instantiate this adapter.
+     */
+    private final static Map<Class<? extends DrawerNavigationUI>, Integer> sActivityGroupIndexMap =
+            new HashMap<Class<? extends DrawerNavigationUI>, Integer>();
 
-    //TODO: complete
-    private static final int[] mGroupTo = {R.id.nav_drawer_group};
-    private static final int[] mChildTo = {R.id.nav_drawer_child};
+    static {
+        sActivityGroupIndexMap.put(FlightActivity.class, 0);
+        sActivityGroupIndexMap.put(SettingsActivity.class, 1);
+    }
+
+    private final static boolean[] sIsGroupExpanded = {false, false, false};
+
+    /**
+     * Delay used to run the callback on selection in the drawer layout. This delay allows the
+     * drawer layout to close smoothly without stuttering/janking.
+     */
+    private final static long CALLBACK_LAUNCH_DELAY = 200l;// milliseconds
+
+    /**
+     * Handler used to launch the selected callback.
+     */
+    private final Handler mHandler = new Handler();
+    /**
+     * Container activity
+     */
+    private final DrawerNavigationUI mActivity;
+
+    /**
+     * Activity's drawer layout. Used to close the drawer on item click.
+     */
+    private final DrawerLayout mDrawerLayout;
 
     /**
      * Each entry in the list corresponds to one section in the app.
      */
-    private static final List<Map<String, Integer>> mGroupData = new ArrayList<Map<String,
-            Integer>>();
-
-    static {
-        //Flight section
-        final Map<String, Integer> flightData = new HashMap<String, Integer>();
-        flightData.put(KEY_SECTION_NAME, R.string.flight_data);
-        flightData.put(KEY_SECTION_ICON, R.drawable.ic_action_plane);
-        mGroupData.add(flightData);
-
-        //Settings section
-        final Map<String, Integer> droneSetupData = new HashMap<String, Integer>();
-        droneSetupData.put(KEY_SECTION_NAME, R.string.settings);
-        droneSetupData.put(KEY_SECTION_ICON, R.drawable.ic_action_settings);
-        mGroupData.add(droneSetupData);
-
-        //Help section
-        final Map<String, Integer> helpData = new HashMap<String, Integer>();
-        helpData.put(KEY_SECTION_NAME, R.string.help);
-        helpData.put(KEY_SECTION_ICON, R.drawable.ic_action_help);
-        mGroupData.add(helpData);
-    }
+    private final List<Map<String, ? extends Object>> mGroupData;
 
     /**
      * Stores the app subsections' data.
      */
-    private static final List<List<Map<String, Integer>>> mChildData = new
-            ArrayList<List<Map<String, Integer>>>();
+    private final List<List<Map<String, ? extends Object>>> mChildData;
 
-    static {
+    /**
+     * Expandable list view this adapter is attached to.
+     * We keep a reference in order to expand/collapse the group(s) when the expand/collapse icon
+     * is clicked.
+     */
+    private final ExpandableListView mNavHubView;
+
+    /**
+     * Uses to inflate the expandable list items' views.
+     */
+    private final LayoutInflater mInflater;
+
+    public NavigationDrawerAdapter(DrawerNavigationUI activity) {
+        if (!sActivityGroupIndexMap.containsKey(activity.getClass())) {
+            throw new IllegalArgumentException("Invalid container activity.");
+        }
+
+        mActivity = activity;
+        mDrawerLayout = activity.getDrawerLayout();
+        mNavHubView = activity.getNavHubView();
+        mNavHubView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition,
+                                        long id) {
+                performCallback((Map<String, Object>) getGroup(groupPosition));
+                return true;
+            }
+        });
+        mNavHubView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
+                                        int childPosition, long id) {
+                performCallback((Map<String, Object>) getChild(groupPosition, childPosition));
+                return true;
+            }
+        });
+
+        mInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        mChildData = new ArrayList<List<Map<String, ? extends Object>>>();
+        initChildData(activity);
+
+        mGroupData = new ArrayList<Map<String, ? extends Object>>();
+        initGroupData(activity);
+
+        if (sIsGroupExpanded.length != getGroupCount()) {
+            throw new IllegalStateException("Group state cache doesn't match with group data.");
+        }
+    }
+
+    /**
+     * Updates the hub view this adapter is attached to.
+     */
+    public void refreshHubView(){
+        //Expand or collapse the group
+        final int groupCount = sIsGroupExpanded.length;
+        for (int i = 0; i < groupCount; i++) {
+            if (sIsGroupExpanded[i])
+                mNavHubView.expandGroup(i);
+            else
+                mNavHubView.collapseGroup(i);
+        }
+
+        //Select the container activity's group
+        final int groupPosition = sActivityGroupIndexMap.get(mActivity.getClass());
+        final int flatPosition = mNavHubView.getFlatListPosition(ExpandableListView
+                .getPackedPositionForGroup(groupPosition));
+        mNavHubView.setItemChecked(flatPosition, true);
+    }
+
+    private void performCallback(Map<String, Object> itemData){
+        mDrawerLayout.closeDrawer(mNavHubView);
+
+         /*
+            Run the callback after the drawer is almost closed.
+            Another solution would be to listen to DrawerListener.onDrawerClosed calls,
+            but that has a high amount of latency.
+             */
+        final Runnable clickCb = (Runnable) itemData.get(KEY_SECTION_CALLBACK);
+        mHandler.postDelayed(clickCb, CALLBACK_LAUNCH_DELAY);
+    }
+
+    /**
+     * Binds the navigation drawer adapter to the expandable list view passed in the constructor.
+     */
+    public void attachExpandableListView() {
+        mNavHubView.setAdapter(this);
+        refreshHubView();
+    }
+
+    private void initChildData(final DrawerNavigationUI activity) {
         /*
         Flight section
          */
         //Editor activity
-        Map<String, Integer> editorData = new HashMap<String, Integer>();
+        Map<String, Object> editorData = new HashMap<String, Object>();
         editorData.put(KEY_SECTION_NAME, R.string.editor);
         editorData.put(KEY_SECTION_ICON, R.drawable.ic_action_location);
+        editorData.put(KEY_SECTION_CALLBACK, new Runnable() {
+            @Override
+            public void run() {
+                activity.startActivity(new Intent(activity, EditorActivity.class));
+            }
+        });
 
-        final List<Map<String, Integer>> flightGroup = new ArrayList<Map<String, Integer>>();
+        final List<Map<String, ? extends Object>> flightGroup = new ArrayList<Map<String,
+                ? extends Object>>();
         flightGroup.add(editorData);
         mChildData.add(flightGroup);
 
@@ -83,16 +197,25 @@ public class NavigationDrawerAdapter extends SimpleExpandableListAdapter {
         Settings section
          */
         //Retrieve the elements in the settings section from the ConfigurationActivity
-        final List<Map<String, Integer>> setupGroup = new ArrayList<Map<String, Integer>>();
+        final List<Map<String, ? extends Object>> setupGroup = new ArrayList<Map<String,
+                ? extends Object>>();
 
         final int configurationFragmentsCount = ConfigurationActivity.sConfigurationFragments
                 .length;
         for (int i = 0; i < configurationFragmentsCount; i++) {
-            final Map<String, Integer> configData = new HashMap<String, Integer>();
+            final int index = i;
+            final Map<String, Object> configData = new HashMap<String, Object>();
             configData.put(KEY_SECTION_NAME, ConfigurationActivity
                     .sConfigurationFragmentTitlesRes[i]);
             configData.put(KEY_SECTION_ICON, ConfigurationActivity
                     .sConfigurationFragmentIconRes[i]);
+            configData.put(KEY_SECTION_CALLBACK, new Runnable() {
+                @Override
+                public void run() {
+                    activity.startActivity(new Intent(activity, ConfigurationActivity.class)
+                            .putExtra(ConfigurationActivity.EXTRA_CONFIG_SCREEN_INDEX, index));
+                }
+            });
 
             setupGroup.add(configData);
         }
@@ -103,12 +226,46 @@ public class NavigationDrawerAdapter extends SimpleExpandableListAdapter {
         Help section
          */
         //No children for the help section
-        mChildData.add(Collections.<Map<String, Integer>>emptyList());
+        mChildData.add(Collections.<Map<String, ? extends Object>>emptyList());
     }
 
-    public NavigationDrawerAdapter(Context context) {
-        super(context, mGroupData, R.layout.adapter_nav_drawer_group, mGroupFrom, mGroupTo,
-                mChildData, R.layout.adapter_nav_drawer_child, mChildFrom, mChildTo);
+    private void initGroupData(final DrawerNavigationUI activity) {
+        //Flight section
+        final Map<String, Object> flightData = new HashMap<String, Object>();
+        flightData.put(KEY_SECTION_NAME, R.string.flight_data);
+        flightData.put(KEY_SECTION_ICON, R.drawable.ic_action_plane);
+        flightData.put(KEY_SECTION_CALLBACK, new Runnable() {
+            @Override
+            public void run() {
+                activity.startActivity(new Intent(activity, FlightActivity.class));
+            }
+        });
+        mGroupData.add(flightData);
+
+        //Settings section
+        final Map<String, Object> droneSetupData = new HashMap<String, Object>();
+        droneSetupData.put(KEY_SECTION_NAME, R.string.settings);
+        droneSetupData.put(KEY_SECTION_ICON, R.drawable.ic_action_settings);
+        droneSetupData.put(KEY_SECTION_CALLBACK, new Runnable() {
+            @Override
+            public void run() {
+                activity.startActivity(new Intent(activity, SettingsActivity.class));
+            }
+        });
+        mGroupData.add(droneSetupData);
+
+        //Help section
+        final Map<String, Object> helpData = new HashMap<String, Object>();
+        helpData.put(KEY_SECTION_NAME, R.string.help);
+        helpData.put(KEY_SECTION_ICON, R.drawable.ic_action_help);
+        helpData.put(KEY_SECTION_CALLBACK, new Runnable() {
+            @Override
+            public void run() {
+                final HelpDialogFragment helpDialog = HelpDialogFragment.newInstance();
+                helpDialog.show(activity.getSupportFragmentManager(), "Help Dialog");
+            }
+        });
+        mGroupData.add(helpData);
     }
 
     @Override
@@ -116,20 +273,70 @@ public class NavigationDrawerAdapter extends SimpleExpandableListAdapter {
                              View convertView, ViewGroup parent) {
         View v;
         if (convertView == null) {
-            v = newChildView(isLastChild, parent);
+            v = newChildView(parent);
         } else {
             v = convertView;
         }
-        bindView(v, mChildData.get(groupPosition).get(childPosition), mChildFrom, mChildTo);
+        bindView(v, mChildData.get(groupPosition).get(childPosition), R.id.nav_drawer_child);
         return v;
     }
 
+    /**
+     * Instantiates a new View for a child.
+     *
+     * @param parent The eventual parent of this new View.
+     * @return A new child View
+     */
+    public View newChildView(ViewGroup parent) {
+        return mInflater.inflate(R.layout.adapter_nav_drawer_child, parent, false);
+    }
+
     @Override
-    public View getGroupView(int groupPosition, boolean isExpanded, View convertView,
+    public boolean isChildSelectable(int groupPosition, int childPosition) {
+        return true;
+    }
+
+    @Override
+    public int getGroupCount() {
+        return mGroupData.size();
+    }
+
+    @Override
+    public int getChildrenCount(int groupPosition) {
+        return mChildData.get(groupPosition).size();
+    }
+
+    @Override
+    public Object getGroup(int groupPosition) {
+        return mGroupData.get(groupPosition);
+    }
+
+    @Override
+    public Object getChild(int groupPosition, int childPosition) {
+        return mChildData.get(groupPosition).get(childPosition);
+    }
+
+    @Override
+    public long getGroupId(int groupPosition) {
+        return groupPosition;
+    }
+
+    @Override
+    public long getChildId(int groupPosition, int childPosition) {
+        return childPosition;
+    }
+
+    @Override
+    public boolean hasStableIds() {
+        return true;
+    }
+
+    @Override
+    public View getGroupView(final int groupPosition, boolean isExpanded, View convertView,
                              ViewGroup parent) {
         View v;
         if (convertView == null) {
-            v = newGroupView(isExpanded, parent);
+            v = newGroupView(parent);
         } else {
             v = convertView;
         }
@@ -139,24 +346,47 @@ public class NavigationDrawerAdapter extends SimpleExpandableListAdapter {
             expandIcon.setVisibility(View.GONE);
         } else {
             expandIcon.setVisibility(View.VISIBLE);
-            expandIcon.setImageResource(isExpanded
-                    ? R.drawable.expandable_listview_icon_expanded
-                    : R.drawable.expandable_listview_icon_collapsed);
+            if (isExpanded) {
+                expandIcon.setImageResource(R.drawable.expandable_listview_icon_expanded);
+                expandIcon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mNavHubView.collapseGroup(groupPosition);
+                        sIsGroupExpanded[groupPosition] = false;
+                    }
+                });
+            } else {
+                expandIcon.setImageResource(R.drawable.expandable_listview_icon_collapsed);
+                expandIcon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mNavHubView.expandGroup(groupPosition);
+                        sIsGroupExpanded[groupPosition] = true;
+                    }
+                });
+            }
         }
 
-        bindView(v, mGroupData.get(groupPosition), mGroupFrom, mGroupTo);
+        bindView(v, mGroupData.get(groupPosition), R.id.nav_drawer_group);
         return v;
     }
 
-    private void bindView(View view, Map<String, Integer> data, String[] from, int[] to) {
-        int len = to.length;
+    /**
+     * Instantiates a new View for a group.
+     *
+     * @param parent The eventual parent of this new View.
+     * @return A new group View
+     */
+    public View newGroupView(ViewGroup parent) {
+        return mInflater.inflate(R.layout.adapter_nav_drawer_group, parent, false);
+    }
 
-        for (int i = 0; i < len; i += 2) {
-            TextView v = (TextView) view.findViewById(to[i]);
-            if (v != null) {
-                v.setText(data.get(from[i]));
-                v.setCompoundDrawablesWithIntrinsicBounds(data.get(from[i + 1]), 0, 0, 0);
-            }
+    private void bindView(View view, Map<String, ? extends Object> data, int textViewId) {
+        final TextView textView = (TextView) view.findViewById(textViewId);
+        if (textView != null) {
+            textView.setText((Integer) data.get(KEY_SECTION_NAME));
+            textView.setCompoundDrawablesWithIntrinsicBounds((Integer) data.get(KEY_SECTION_ICON),
+                    0, 0, 0);
         }
     }
 }
