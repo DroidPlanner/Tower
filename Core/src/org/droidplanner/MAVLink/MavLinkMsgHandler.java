@@ -1,6 +1,7 @@
 package org.droidplanner.MAVLink;
 
 import org.droidplanner.drone.Drone;
+import org.droidplanner.helpers.coordinates.Coord2D;
 
 import com.MAVLink.Messages.ApmModes;
 import com.MAVLink.Messages.MAVLinkMessage;
@@ -17,7 +18,6 @@ import com.MAVLink.Messages.ardupilotmega.msg_sys_status;
 import com.MAVLink.Messages.ardupilotmega.msg_vfr_hud;
 import com.MAVLink.Messages.enums.MAV_MODE_FLAG;
 import com.MAVLink.Messages.enums.MAV_STATE;
-import com.google.android.gms.maps.model.LatLng;
 
 public class MavLinkMsgHandler {
 
@@ -64,7 +64,7 @@ public class MavLinkMsgHandler {
 			drone.heartbeat.onHeartbeat(msg_heart);
 			break;
 		case msg_global_position_int.MAVLINK_MSG_ID_GLOBAL_POSITION_INT:
-			drone.GPS.setPosition(new LatLng(
+			drone.GPS.setPosition(new Coord2D(
 					((msg_global_position_int) msg).lat / 1E7,
 					((msg_global_position_int) msg).lon / 1E7));
 			break;
