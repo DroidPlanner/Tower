@@ -3,34 +3,21 @@ package org.droidplanner.drone.variables;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneVariable;
+import org.droidplanner.helpers.coordinates.Coord2D;
 import org.droidplanner.helpers.geoTools.GeoTools;
 import org.droidplanner.helpers.units.Altitude;
 import org.droidplanner.helpers.units.Length;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_FRAME;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 
-public class Home extends DroneVariable implements MarkerSource {
-	private LatLng coordinate;
+public class Home extends DroneVariable {
+	private Coord2D coordinate;
 	private Altitude altitude = new Altitude(0);
 	
 	public Home(Drone drone) {
 		super(drone);
 	}
-	
-	@Override
-	public MarkerOptions build(Context context) {
-		return HomeMarker.build(this);
-	}
-
-	@Override
-	public void update(Marker marker, Context context) {
-		HomeMarker.update(marker, this);
-	}
-
 
 	public boolean isValid() {
 		return (coordinate!=null);
@@ -48,7 +35,7 @@ public class Home extends DroneVariable implements MarkerSource {
 		}
 	}
 
-	public LatLng getCoord() {
+	public Coord2D getCoord() {
 		return coordinate;
 	}
 
@@ -57,7 +44,7 @@ public class Home extends DroneVariable implements MarkerSource {
 	}
 
 	public void setHome(msg_mission_item msg) {
-		this.coordinate = new LatLng(msg.x, msg.y);
+		this.coordinate = new Coord2D(msg.x, msg.y);
 		this.altitude = new Altitude(msg.z);		
 		myDrone.events.notifyDroneEvent(DroneEventsType.HOME);
 	}
@@ -70,8 +57,8 @@ public class Home extends DroneVariable implements MarkerSource {
 		mavMsg.target_component = 1;
 		mavMsg.target_system = 1;
 		if (isValid()) {
-			mavMsg.x = (float) getCoord().latitude;
-			mavMsg.y = (float) getCoord().longitude;
+			mavMsg.x = (float) getCoord().getX();
+			mavMsg.y = (float) getCoord().getY();
 			mavMsg.z = (float) getAltitude().valueInMeters();			
 		}
 		return mavMsg;

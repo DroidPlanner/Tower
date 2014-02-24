@@ -3,14 +3,13 @@ package org.droidplanner.drone.variables;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneVariable;
-
-import com.google.android.gms.maps.model.LatLng;
+import org.droidplanner.helpers.coordinates.Coord2D;
 
 public class GPS extends DroneVariable {
 	private double gps_eph = -1;
 	private int satCount = -1;
 	private int fixType = -1;
-	private LatLng position;
+	private Coord2D position;
 
 	public GPS(Drone myDrone) {
 		super(myDrone);
@@ -20,11 +19,11 @@ public class GPS extends DroneVariable {
 		return (position != null);
 	}
 
-	public LatLng getPosition() {
+	public Coord2D getPosition() {
 		if (isPositionValid()) {
 			return position;			
 		}else{
-			return new LatLng(0, 0);
+			return new Coord2D(0, 0);
 		}
 	}
 
@@ -67,7 +66,7 @@ public class GPS extends DroneVariable {
 		}
 	}
 
-	public void setPosition(LatLng position) {
+	public void setPosition(Coord2D position) {
 		if (this.position != position) {
 			this.position = position;
 			myDrone.events.notifyDroneEvent(DroneEventsType.GPS);

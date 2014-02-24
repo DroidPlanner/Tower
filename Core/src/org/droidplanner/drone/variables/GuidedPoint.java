@@ -1,25 +1,19 @@
 package org.droidplanner.drone.variables;
 
 import org.droidplanner.MAVLink.MavLinkModes;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.drone.DroneVariable;
+import org.droidplanner.helpers.coordinates.Coord2D;
 import org.droidplanner.helpers.units.Altitude;
 
 import com.MAVLink.Messages.ApmModes;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 
-public class GuidedPoint extends DroneVariable implements MarkerSource,
-		PathSource, OnDroneListener {
+public class GuidedPoint extends DroneVariable implements  OnDroneListener {
 
 	private GuidedStates state = GuidedStates.UNINITIALIZED;
-	private LatLng coord = new LatLng(0, 0);
+	private Coord2D coord = new Coord2D(0, 0);
 	private Altitude altitude = new Altitude(0.0);
 
 	private enum GuidedStates {
@@ -49,7 +43,7 @@ public class GuidedPoint extends DroneVariable implements MarkerSource,
 		}
 	}
 
-	public void newGuidedCoord(LatLng coord) {
+	public void newGuidedCoord(Coord2D coord) {
 		changeCoord(coord);
 	}
 
@@ -57,7 +51,7 @@ public class GuidedPoint extends DroneVariable implements MarkerSource,
 		changeAlt(altChange);
 	}
 
-	public void forcedGuidedCoordinate(LatLng coord) {
+	public void forcedGuidedCoordinate(Coord2D coord) {
 		initialize();
 		changeCoord(coord);
 	}
@@ -99,7 +93,7 @@ public class GuidedPoint extends DroneVariable implements MarkerSource,
 		}
 	}
 
-	private void changeCoord(LatLng coord) {
+	private void changeCoord(Coord2D coord) {
 		switch (state) {
 		case UNINITIALIZED:
 			break;
@@ -117,8 +111,8 @@ public class GuidedPoint extends DroneVariable implements MarkerSource,
 	private void sendGuidedPoint() {
 		if (state == GuidedStates.ACTIVE) {
 			myDrone.events.notifyDroneEvent(DroneEventsType.GUIDEDPOINT);
-			MavLinkModes.setGuidedMode(myDrone, coord.latitude,
-					coord.longitude, altitude.valueInMeters());
+			MavLinkModes.setGuidedMode(myDrone, coord.getY(),
+					coord.getX(), altitude.valueInMeters());
 		}
 	}
 
@@ -127,7 +121,7 @@ public class GuidedPoint extends DroneVariable implements MarkerSource,
 		return Math.max(alt, 2.0);
 	}
 
-	public LatLng getCoord() {
+	public Coord2D getCoord() {
 		return coord;
 	}
 
@@ -143,23 +137,4 @@ public class GuidedPoint extends DroneVariable implements MarkerSource,
 		return !(state == GuidedStates.UNINITIALIZED);
 	}
 
-	@Override
-	public MarkerOptions build(Context context) {
-		return GuidedMarker.build(this, altitude, context);
-	}
-
-	@Override
-	public void update(Marker markerFromGcp, Context context) {
-		GuidedMarker.update(markerFromGcp, this, altitude, context);
-	}
-
-	@Override
-	public List<LatLng> getPathPoints() {
-		List<LatLng> path = new ArrayList<LatLng>();
-		if (isActive()) {
-			path.add(myDrone.GPS.getPosition());
-			path.add(coord);
-		}
-		return path;
-	}
 }
