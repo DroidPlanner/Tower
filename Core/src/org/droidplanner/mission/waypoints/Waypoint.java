@@ -25,6 +25,11 @@ public class Waypoint extends SpatialCoordItem {
 		super(mission, coord);
 	}
 
+	public Waypoint(msg_mission_item msg, Mission mission) {
+		super(mission, null);
+		unpackMAVMessage(msg);
+	}
+
 	@Override
 	public List<msg_mission_item> packMissionItem() {
 		List<msg_mission_item> list = super.packMissionItem();

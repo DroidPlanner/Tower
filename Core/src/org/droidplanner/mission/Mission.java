@@ -20,7 +20,6 @@ import org.droidplanner.mission.waypoints.Waypoint;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_CMD;
-import com.google.android.gms.maps.model.LatLng;
 
 public class Mission extends DroneVariable{
 
@@ -138,7 +137,7 @@ public class Mission extends DroneVariable{
 		return itens.subList(to, from + 1); // includes one unselected item
 	}
 
-	public void addSurveyPolygon(List<LatLng> points) {
+	public void addSurveyPolygon(List<Coord2D> points) {
 		Survey survey = new Survey(this, points);
 		itens.add(survey);
 		notifiyMissionUpdate();		
