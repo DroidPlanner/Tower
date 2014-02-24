@@ -1,5 +1,6 @@
 package org.droidplanner.drone.variables;
 
+import org.droidplanner.MAVLink.MavLinkModes;
 import java.util.ArrayList;
 import java.util.List;
 

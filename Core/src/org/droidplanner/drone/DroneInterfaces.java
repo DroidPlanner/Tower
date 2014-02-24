@@ -2,7 +2,7 @@ package org.droidplanner.drone;
 
 import java.util.List;
 
-import org.droidplanner.mission.WaypointEvent_Type;
+import org.droidplanner.MAVLink.WaypointMananger;
 import org.droidplanner.parameters.Parameter;
 
 
@@ -30,12 +30,12 @@ public class DroneInterfaces {
 	}
 
 	public interface OnWaypointManagerListener {
-		public void onBeginWaypointEvent(WaypointEvent_Type wpEvent);
+		public void onBeginWaypointEvent(WaypointMananger.WaypointEvent_Type wpEvent);
 
-		public void onWaypointEvent(WaypointEvent_Type wpEvent, int index,
+		public void onWaypointEvent(WaypointMananger.WaypointEvent_Type wpEvent, int index,
 				int count);
 
-		public void onEndWaypointEvent(WaypointEvent_Type wpEvent);
+		public void onEndWaypointEvent(WaypointMananger.WaypointEvent_Type wpEvent);
 
 	}
 }
