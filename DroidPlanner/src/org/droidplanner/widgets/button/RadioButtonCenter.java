@@ -1,5 +1,7 @@
 package org.droidplanner.widgets.button;
 
+import org.droidplanner.R;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -7,7 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.widget.RadioButton;
-import org.droidplanner.R;
 
 /**
  * This class implements a radio button with custom gravity. The api's version is always

@@ -1,5 +1,6 @@
 package org.droidplanner.fragments.mission;
 
+import org.droidplanner.R;
 import org.droidplanner.drone.variables.mission.waypoints.Waypoint;
 import org.droidplanner.helpers.units.Altitude;
 import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
@@ -8,8 +9,6 @@ import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarCha
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-
-import org.droidplanner.R;
 
 public class MissionWaypointFragment extends MissionDetailFragment implements
 		OnTextSeekBarChangedListener, OnCheckedChangeListener {

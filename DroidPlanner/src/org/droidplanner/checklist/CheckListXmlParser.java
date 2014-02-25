@@ -8,7 +8,6 @@ import org.droidplanner.checklist.xml.ListXmlParser;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
-
 import android.content.Context;
 
 public class CheckListXmlParser extends ListXmlParser {

@@ -1,10 +1,9 @@
 package org.droidplanner.drone.variables;
 
 import org.droidplanner.drone.Drone;
-import org.droidplanner.drone.DroneVariable;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
+import org.droidplanner.drone.DroneVariable;
 
-import com.google.android.gms.internal.fi;
 import com.google.android.gms.maps.model.LatLng;
 
 public class GPS extends DroneVariable {

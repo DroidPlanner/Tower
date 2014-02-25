@@ -2,13 +2,13 @@ package org.droidplanner.drone.variables.mission.waypoints;
 
 import java.util.List;
 
+import org.droidplanner.R;
 import org.droidplanner.drone.variables.mission.MissionItem;
 import org.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import org.droidplanner.fragments.mission.MissionDetailFragment;
 import org.droidplanner.fragments.mission.MissionRegionOfInterestFragment;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
-import org.droidplanner.R;
 import com.google.android.gms.maps.model.LatLng;
 
 public class RegionOfInterest extends SpatialCoordItem implements MarkerSource{

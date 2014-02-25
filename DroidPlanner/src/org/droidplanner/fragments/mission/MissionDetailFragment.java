@@ -1,6 +1,7 @@
 package org.droidplanner.fragments.mission;
 
 import org.droidplanner.DroidPlannerApp;
+import org.droidplanner.R;
 import org.droidplanner.activities.EditorActivity;
 import org.droidplanner.drone.variables.mission.Mission;
 import org.droidplanner.drone.variables.mission.MissionItem;
@@ -16,10 +17,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.TextView;
 import android.widget.AdapterView.OnItemSelectedListener;
-
-import org.droidplanner.R;
+import android.widget.TextView;
 
 public abstract class MissionDetailFragment extends DialogFragment implements
 		OnItemSelectedListener {

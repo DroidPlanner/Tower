@@ -1,9 +1,11 @@
 package org.droidplanner.fragments;
 
 import org.droidplanner.DroidPlannerApp;
+import org.droidplanner.R;
 import org.droidplanner.activities.ConfigurationActivity;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.file.DirectoryPath;
+import org.droidplanner.utils.Constants;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,9 +18,6 @@ import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-
-import org.droidplanner.R;
-import org.droidplanner.utils.Constants;
 
 public class SettingsFragment extends PreferenceFragment implements
 		OnSharedPreferenceChangeListener {

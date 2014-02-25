@@ -1,5 +1,7 @@
 package org.droidplanner.widgets.NumberFieldEdit;
 
+import org.droidplanner.R;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Handler;
@@ -13,8 +15,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import org.droidplanner.R;
 
 public class NumberFieldEdit extends LinearLayout implements OnTouchListener {
 

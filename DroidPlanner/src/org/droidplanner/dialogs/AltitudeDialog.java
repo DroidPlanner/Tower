@@ -1,5 +1,6 @@
 package org.droidplanner.dialogs;
 
+import org.droidplanner.R;
 import org.droidplanner.helpers.units.Altitude;
 
 import android.app.AlertDialog;
@@ -10,7 +11,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.NumberPicker;
-import org.droidplanner.R;
 
 public class AltitudeDialog implements DialogInterface.OnClickListener {
 	private NumberPicker thousandPicker;

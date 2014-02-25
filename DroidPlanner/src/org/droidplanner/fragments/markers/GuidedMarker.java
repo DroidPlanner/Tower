@@ -1,13 +1,13 @@
 package org.droidplanner.fragments.markers;
 
 
+import org.droidplanner.R;
 import org.droidplanner.drone.variables.GuidedPoint;
 import org.droidplanner.fragments.markers.helpers.MarkerWithText;
 import org.droidplanner.helpers.units.Altitude;
 
 import android.content.Context;
 
-import org.droidplanner.R;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Marker;

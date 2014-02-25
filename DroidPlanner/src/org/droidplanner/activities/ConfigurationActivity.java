@@ -1,5 +1,16 @@
 package org.droidplanner.activities;
 
+import org.droidplanner.R;
+import org.droidplanner.activities.helpers.SuperUI;
+import org.droidplanner.drone.Drone;
+import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
+import org.droidplanner.fragments.ChecklistFragment;
+import org.droidplanner.fragments.ParamsFragment;
+import org.droidplanner.fragments.SetupRadioFragment;
+import org.droidplanner.fragments.SetupSensorFragment;
+import org.droidplanner.fragments.TuningFragment;
+import org.droidplanner.widgets.viewPager.TabPageIndicator;
+
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
@@ -12,16 +23,6 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
-import org.droidplanner.R;
-import org.droidplanner.activities.helpers.SuperUI;
-import org.droidplanner.drone.Drone;
-import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.fragments.ChecklistFragment;
-import org.droidplanner.fragments.ParamsFragment;
-import org.droidplanner.fragments.SetupRadioFragment;
-import org.droidplanner.fragments.SetupSensorFragment;
-import org.droidplanner.fragments.TuningFragment;
-import org.droidplanner.widgets.viewPager.TabPageIndicator;
 
 /**
  * This class implements and handles the various ui used for the drone configuration.

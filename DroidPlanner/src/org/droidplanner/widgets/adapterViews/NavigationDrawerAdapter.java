@@ -1,5 +1,19 @@
 package org.droidplanner.widgets.adapterViews;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.droidplanner.R;
+import org.droidplanner.activities.ConfigurationActivity;
+import org.droidplanner.activities.DrawerNavigationUI;
+import org.droidplanner.activities.EditorActivity;
+import org.droidplanner.activities.FlightActivity;
+import org.droidplanner.activities.SettingsActivity;
+import org.droidplanner.fragments.helpers.HelpDialogFragment;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
@@ -11,20 +25,6 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import org.droidplanner.R;
-import org.droidplanner.activities.ConfigurationActivity;
-import org.droidplanner.activities.DrawerNavigationUI;
-import org.droidplanner.activities.EditorActivity;
-import org.droidplanner.activities.FlightActivity;
-import org.droidplanner.activities.SettingsActivity;
-import org.droidplanner.fragments.helpers.HelpDialogFragment;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Adapter for the navigation drawer items

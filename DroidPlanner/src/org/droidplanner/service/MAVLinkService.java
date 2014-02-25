@@ -1,12 +1,11 @@
 package org.droidplanner.service;
 
+import org.droidplanner.R;
 import org.droidplanner.activities.FlightActivity;
-import org.droidplanner.connection.BluetoothConnection;
 import org.droidplanner.connection.MAVLinkConnection;
-import org.droidplanner.connection.TcpConnection;
-import org.droidplanner.connection.UdpConnection;
-import org.droidplanner.connection.UsbConnection;
 import org.droidplanner.connection.MAVLinkConnection.MavLinkConnectionListener;
+import org.droidplanner.utils.Constants;
+import org.droidplanner.utils.Utils;
 
 import android.annotation.SuppressLint;
 import android.app.NotificationManager;
@@ -26,11 +25,9 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
+
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
-import org.droidplanner.R;
-import org.droidplanner.utils.Constants;
-import org.droidplanner.utils.Utils;
 
 /**
  * http://developer.android.com/guide/components/bound-services.html#Messenger

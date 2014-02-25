@@ -1,5 +1,6 @@
 package org.droidplanner.fragments.calibration.rc;
 
+import org.droidplanner.R;
 import org.droidplanner.calibration.CalParameters;
 import org.droidplanner.calibration.RC_CalParameters;
 import org.droidplanner.drone.Drone;
@@ -13,8 +14,6 @@ import org.droidplanner.fragments.calibration.SetupSidePanel;
 import org.droidplanner.fragments.helpers.SuperSetupMainPanel;
 import org.droidplanner.widgets.FillBar.FillBar;
 import org.droidplanner.widgets.RcStick.RcStick;
-
-import org.droidplanner.R;
 
 import android.os.Bundle;
 import android.view.View;

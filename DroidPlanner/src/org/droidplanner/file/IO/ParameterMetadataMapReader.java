@@ -1,15 +1,18 @@
 package org.droidplanner.file.IO;
 
-import android.content.Context;
-import android.util.Xml;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Map;
 
 import org.droidplanner.file.DirectoryPath;
 import org.droidplanner.parameters.ParameterMetadata;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.*;
-import java.util.Map;
+import android.content.Context;
+import android.util.Xml;
 
 
 /**

@@ -2,6 +2,7 @@ package org.droidplanner.activities;
 
 import java.util.List;
 
+import org.droidplanner.R;
 import org.droidplanner.activities.helpers.OnEditorInteraction;
 import org.droidplanner.activities.helpers.SuperUI;
 import org.droidplanner.drone.Drone;
@@ -14,8 +15,8 @@ import org.droidplanner.fragments.EditorToolsFragment;
 import org.droidplanner.fragments.EditorToolsFragment.EditorTools;
 import org.droidplanner.fragments.EditorToolsFragment.OnEditorToolSelected;
 import org.droidplanner.fragments.helpers.GestureMapFragment;
-import org.droidplanner.fragments.helpers.MapProjection;
 import org.droidplanner.fragments.helpers.GestureMapFragment.OnPathFinishedListener;
+import org.droidplanner.fragments.helpers.MapProjection;
 import org.droidplanner.fragments.mission.MissionDetailFragment;
 import org.droidplanner.fragments.mission.MissionDetailFragment.OnWayPointTypeChangeListener;
 
@@ -32,7 +33,6 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import org.droidplanner.R;
 import com.google.android.gms.maps.model.LatLng;
 
 public class EditorActivity extends SuperUI implements OnPathFinishedListener,

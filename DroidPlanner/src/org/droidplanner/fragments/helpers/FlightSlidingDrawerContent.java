@@ -1,5 +1,9 @@
 package org.droidplanner.fragments.helpers;
 
+import org.droidplanner.R;
+import org.droidplanner.fragments.TelemetryFragment;
+import org.droidplanner.fragments.mode.FlightModePanel;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,10 +13,6 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import org.droidplanner.R;
-import org.droidplanner.fragments.TelemetryFragment;
-import org.droidplanner.fragments.mode.FlightModePanel;
-import org.droidplanner.widgets.viewPager.TabPageIndicator;
 
 /**
  * @author Fredia Huya-Kouadio

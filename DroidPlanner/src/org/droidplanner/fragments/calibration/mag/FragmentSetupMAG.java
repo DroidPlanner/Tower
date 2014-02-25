@@ -1,9 +1,9 @@
 package org.droidplanner.fragments.calibration.mag;
 
+import org.droidplanner.R;
 import org.droidplanner.fragments.calibration.SetupMainPanel;
 import org.droidplanner.fragments.calibration.SetupSidePanel;
 
-import org.droidplanner.R;
 import android.view.View;
 
 public class FragmentSetupMAG extends SetupMainPanel {
