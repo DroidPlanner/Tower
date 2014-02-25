@@ -8,8 +8,11 @@ import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.drone.DroneVariable;
+import org.droidplanner.drone.variables.mission.commands.ReturnToHome;
 import org.droidplanner.drone.variables.mission.survey.Survey;
+import org.droidplanner.drone.variables.mission.waypoints.Land;
 import org.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
+import org.droidplanner.drone.variables.mission.waypoints.Takeoff;
 import org.droidplanner.drone.variables.mission.waypoints.Waypoint;
 import org.droidplanner.fragments.helpers.MapPath.PathSource;
 import org.droidplanner.fragments.markers.MarkerManager.MarkerSource;
@@ -264,6 +267,15 @@ public class Mission extends DroneVariable implements PathSource{
 			switch (msg.command) {
 			case MAV_CMD.MAV_CMD_NAV_WAYPOINT:
 				received.add(new Waypoint(msg, this));
+				break;
+			case MAV_CMD.MAV_CMD_NAV_TAKEOFF:
+				received.add(new Takeoff(msg, this));
+				break;
+			case MAV_CMD.MAV_CMD_NAV_LAND:
+				received.add(new Land(msg, this));
+				break;
+			case MAV_CMD.MAV_CMD_NAV_RETURN_TO_LAUNCH:
+				received.add(new ReturnToHome(msg, this));
 				break;
 			default:
 				break;

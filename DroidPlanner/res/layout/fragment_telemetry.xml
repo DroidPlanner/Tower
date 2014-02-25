@@ -78,7 +78,7 @@
             android:text="@string/default_angle_value"
             android:textSize="16sp"/>
 
-        <org.droidplanner.widgets.newHUD.newHUD
+        <org.droidplanner.widgets.HUD.HUD
             android:id="@+id/hudView"
             android:layout_width="80dp"
             android:layout_height="80dp"

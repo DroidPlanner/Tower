@@ -3,6 +3,8 @@ DroidPlanner - Ground Control Station for Android devices
 If you just want to download the app goto [Google Play](https://play.google.com/store/apps/details?id=com.droidplanner).
 For more info goto [the wiki pages](https://github.com/arthurbenemann/droidplanner/wiki).
 
+This project is licensed by [GPLv3](http://www.gnu.org/licenses/gpl-3.0.html)
+
 Development
 -----------
 To compile the code follow these instructions:

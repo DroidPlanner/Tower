@@ -3,7 +3,7 @@ package org.droidplanner.helpers.units;
 import java.util.Locale;
 
 public class Area {
-	private final String SQUARE = "\u00B2";
+	public final static String SQUARE_SYMBOL = "\u00B2";
 	private double areaInSqMeters;
 	
 	public Area(double areaInSqMeters) {
@@ -20,14 +20,14 @@ public class Area {
 
 	@Override
 	public String toString() {
-		if (areaInSqMeters > 100000) {
-			return String.format(Locale.US,"%2.1f km"+SQUARE,areaInSqMeters/1000000);
-		}else if (areaInSqMeters>1) {
-			return String.format(Locale.US,"%2.1f m"+SQUARE,areaInSqMeters);
-		}else if (areaInSqMeters>0.000001) {
-			return String.format(Locale.US,"%2.2f cm"+SQUARE,areaInSqMeters*10000);
+		if (areaInSqMeters >= 100000) {
+			return String.format(Locale.US,"%2.1f km"+SQUARE_SYMBOL,areaInSqMeters/1000000);
+		}else if (areaInSqMeters>=1) {
+			return String.format(Locale.US,"%2.1f m"+SQUARE_SYMBOL,areaInSqMeters);
+		}else if (areaInSqMeters>=0.00001) {
+			return String.format(Locale.US,"%2.2f cm"+SQUARE_SYMBOL,areaInSqMeters*10000);
 		}else{
-			return areaInSqMeters + " m"+SQUARE;
+			return areaInSqMeters + " m"+SQUARE_SYMBOL;
 		}
 		
 	}	
