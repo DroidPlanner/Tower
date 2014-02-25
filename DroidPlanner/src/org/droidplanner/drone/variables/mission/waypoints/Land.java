@@ -18,6 +18,11 @@ public class Land extends SpatialCoordItem implements MarkerSource {
 		super(item);
 	}
 
+	public Land(msg_mission_item msg, Mission mission) {
+		super(mission, null, null);
+		unpackMAVMessage(msg);
+	}
+
 	@Override
 	public MissionDetailFragment getDetailFragment() {
 		MissionDetailFragment fragment = new MissionLandFragment();

@@ -18,6 +18,11 @@ public class Takeoff extends SpatialCoordItem implements MarkerSource {
 		super(item);
 	}
 
+	public Takeoff(msg_mission_item msg, Mission mission) {
+		super(mission, null, null);
+		unpackMAVMessage(msg);
+	}
+
 	@Override
 	public MissionDetailFragment getDetailFragment() {
 		MissionDetailFragment fragment = new MissionTakeoffFragment();
