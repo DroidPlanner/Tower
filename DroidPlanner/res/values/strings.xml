@@ -8,6 +8,8 @@
     <string name="settings">Settings</string>
     <string name="help">Help</string>
     <string name="menu_drone_setup">Drone Setup</string>
+    <string name="app_settings">App Settings</string>
+    <string name="flight_data">Flight Data</string>
     <string name="editor">Editor</string>
     <string name="send_mission">Send Mission</string>
     <string name="load_mission">Load Mission</string>
@@ -324,6 +326,11 @@
     <string name="mission_control_takeoff">Take</string>
     <string name="mission_control_loiter">Loiter</string>
     <string name="mission_control_follow">Follow</string>
+    <string name="telemetry_label">Telemetry</string>
+    <string name="flight_modes_label">Flight modes</string>
+    <string name="menu_info_bar">Info Bar</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
 
     <!-- Bluetooth device selection strings -->
     <string name="select_device">Select device to connect</string>
@@ -334,6 +341,9 @@
     <string name="button_scan">Scan for devices</string>
     <string name="scanning">Scanning for devices</string>
 
+    <!-- Content description -->
+    <string name="expandable_listview_icon_desc">Expandable listview icon</string>
+
     <!-- Others (when possible move to a grouping above) -->
     <string name="tune_roll">Manual adjustment of roll and pitch tuning. Rate_P is the primary value to adjust.</string>
     <string name="dialog_box_title_altitude">Altitude</string>
@@ -342,10 +352,6 @@
     <string name="msg_connect_first">Please connect first</string>
     <string name="mode1_throttle_on_right_stick">Mode 1: Throttle on RIGHT stick</string>
     <string name="mode2_throttle_on_left_stick">Mode 2: Throttle on LEFT stick</string>
-
-    <string name="telemetry_label">Telemetry</string>
-    <string name="flight_modes_label">Flight modes</string>
-    <string name="menu_info_bar">Info Bar</string>
 
     <!-- Google glass strings -->
     <string name="glass_voice_trigger">Let\'s fly</string>

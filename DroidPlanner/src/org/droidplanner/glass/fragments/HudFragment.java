@@ -24,7 +24,7 @@ public class HudFragment extends Fragment implements DroneInterfaces.OnDroneList
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_hud, container, false);
+		View view = inflater.inflate(R.layout.fragment_attitude_indicator, container, false);
 		hudWidget = (HUD) view.findViewById(R.id.hudWidget);
 		return view;
 	}

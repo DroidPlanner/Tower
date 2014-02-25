@@ -1,5 +1,6 @@
 package org.droidplanner.glass.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.SubMenu;
 import com.MAVLink.Messages.ApmModes;
 import org.droidplanner.MAVLink.MavLinkArm;
 import org.droidplanner.R;
+import org.droidplanner.activities.SettingsActivity;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces;
 import org.droidplanner.fragments.SettingsFragment;
@@ -130,14 +132,13 @@ public class GlassFlightActivity extends GlassActivity implements DroneInterface
                 toggleArming();
                 return true;
 
+            case R.id.menu_settings:
+                launchSettings();
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    public CharSequence[][] getHelpItems() {
-        return new CharSequence[0][];
     }
 
     private void toggleArming(){
@@ -171,6 +172,10 @@ public class GlassFlightActivity extends GlassActivity implements DroneInterface
                     .addToBackStack(null)
                     .commit();
         }
+    }
+
+    private void launchSettings(){
+        startActivity(new Intent(this, SettingsActivity.class));
     }
 
     @Override

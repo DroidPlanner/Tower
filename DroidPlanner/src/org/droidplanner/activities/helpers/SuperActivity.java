@@ -18,19 +18,15 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.MenuItem;
 import org.droidplanner.utils.Constants;
 import org.droidplanner.utils.Utils;
 
-public abstract class SuperActivity extends HelpActivity implements
-		OnAltitudeChangedListener {
+public abstract class SuperActivity extends FragmentActivity implements OnAltitudeChangedListener {
 
 	public DroidPlannerApp app;
 	public Drone drone;
-
-	public SuperActivity() {
-		super();
-	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -47,22 +43,18 @@ public abstract class SuperActivity extends HelpActivity implements
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.menu_drone_setup:
-			startActivity(new Intent(this, ConfigurationActivity.class));
-			return true;
-		case R.id.menu_settings:
-			startActivity(new Intent(this, SettingsActivity.class));
-			return true;
 		case R.id.menu_connect:
             toggleDroneConnection();
 			return true;
+
 		case R.id.menu_map_type_hybrid:
 		case R.id.menu_map_type_normal:
 		case R.id.menu_map_type_terrain:
 		case R.id.menu_map_type_satellite:
 			setMapTypeFromItemId(item.getItemId());
 			return true;
-		default:
+
+            default:
 			return super.onMenuItemSelected(featureId, item);
 		}
 	}
@@ -79,7 +71,7 @@ public abstract class SuperActivity extends HelpActivity implements
                 final DialogFragment btDeviceList = GlassUtils.isGlassDevice()
                         ? new BTDeviceCardsFragment()
                         : new BTDeviceListFragment();
-                btDeviceList.show(getSupportFragmentManager(),  "Device selection dialog");
+                btDeviceList.show(getSupportFragmentManager(), "Device selection dialog");
                 return;
             }
         }
