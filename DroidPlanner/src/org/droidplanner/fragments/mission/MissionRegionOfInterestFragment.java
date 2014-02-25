@@ -22,8 +22,7 @@ public class MissionRegionOfInterestFragment extends MissionDetailFragment
 	@Override
 	protected void setupViews(View view) {
 		super.setupViews(view);
-		typeSpinner.setSelection(commandAdapter
-				.getPosition(MissionItemTypes.ROI));
+		//typeSpinner.setSelection(commandAdapter.getPosition(MissionItemTypes.ROI));
 
 		altitudeSeekBar = (SeekBarWithText) view.findViewById(R.id.altitudeView);
 		altitudeSeekBar.setValue(((RegionOfInterest) item).getAltitude().valueInMeters());

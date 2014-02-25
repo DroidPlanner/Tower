@@ -19,7 +19,7 @@ public class MissionRTLFragment extends MissionDetailFragment implements
 	@Override
 	protected void setupViews(View view) {
 		super.setupViews(view);
-		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemTypes.RTL));
+		//typeSpinner.setSelection(commandAdapter.getPosition(MissionItemTypes.RTL));
 
 		//altitudeSeekBar = (SeekBarWithText) view.findViewById(R.id.altitudeView);
 		//altitudeSeekBar.setValue(((ReturnToHome) item).getHeight().valueInMeters());

@@ -26,7 +26,7 @@ public class MissionLoiterTFragment extends MissionDetailFragment implements
 	@Override
 	protected void setupViews(View view) {
 		super.setupViews(view);
-		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemTypes.LOITERT));
+		//typeSpinner.setSelection(commandAdapter.getPosition(MissionItemTypes.LOITERT));
 
 		LoiterTime item = (LoiterTime) this.item;
 

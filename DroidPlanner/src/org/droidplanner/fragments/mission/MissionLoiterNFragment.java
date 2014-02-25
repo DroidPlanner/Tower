@@ -30,7 +30,7 @@ public class MissionLoiterNFragment extends MissionDetailFragment implements
 	@Override
 	protected void setupViews(View view) {
 		super.setupViews(view);
-		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemTypes.LOITERN));
+		//typeSpinner.setSelection(commandAdapter.getPosition(MissionItemTypes.LOITERN));
 
 		LoiterTurns item = (LoiterTurns) this.item;
 
