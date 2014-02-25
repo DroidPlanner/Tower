@@ -1,18 +1,24 @@
 package org.droidplanner.fragments;
 
 import org.droidplanner.DroidPlannerApp;
+import org.droidplanner.activities.ConfigurationActivity;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.file.DirectoryPath;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
+import android.preference.Preference;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 
 import org.droidplanner.R;
+import org.droidplanner.utils.Constants;
 
 public class SettingsFragment extends PreferenceFragment implements
 		OnSharedPreferenceChangeListener {
@@ -21,8 +27,40 @@ public class SettingsFragment extends PreferenceFragment implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.preferences);
-		SharedPreferences sharedPref = PreferenceManager
-				.getDefaultSharedPreferences(getActivity());
+
+        final Context context = getActivity().getApplicationContext();
+		final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences
+                (context);
+
+        //Populate the drone settings category
+        final PreferenceCategory dronePrefs = (PreferenceCategory) findPreference
+                (Constants.PREF_DRONE_SETTINGS);
+        if(dronePrefs != null){
+            dronePrefs.removeAll();
+
+            final int configSectionsCount = ConfigurationActivity.sConfigurationFragments.length;
+            for(int i = 0; i < configSectionsCount; i++){
+                final int index = i;
+                Preference configPref = new Preference(context);
+                configPref.setLayoutResource(R.layout.preference_config_screen);
+                configPref.setTitle(ConfigurationActivity.sConfigurationFragmentTitlesRes[i]);
+                configPref.setIcon(ConfigurationActivity.sConfigurationFragmentIconRes[i]);
+                configPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        //Launch the configuration activity to show the current config screen
+                        final Intent configIntent = new Intent(context,
+                                ConfigurationActivity.class).putExtra(ConfigurationActivity
+                                .EXTRA_CONFIG_SCREEN_INDEX, index);
+
+                        startActivity(configIntent);
+                        return true;
+                    }
+                });
+
+                dronePrefs.addPreference(configPref);
+            }
+        }
 
 		findPreference("pref_connection_type").setSummary(
 				sharedPref.getString("pref_connection_type", ""));

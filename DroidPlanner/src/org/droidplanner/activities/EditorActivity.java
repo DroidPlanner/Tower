@@ -350,8 +350,4 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		updateMapPadding();
 	}
 
-	@Override
-	public CharSequence[][] getHelpItems() {
-		return new CharSequence[][] { {}, {} };
-	}
 }

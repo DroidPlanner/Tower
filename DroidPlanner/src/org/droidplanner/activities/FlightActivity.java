@@ -43,7 +43,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.model.LatLng;
 
-public class FlightActivity extends SuperUI implements
+public class FlightActivity extends DrawerNavigationUI implements
 		OnMapInteractionListener, FlightActionsFragment.OnMissionControlInteraction, OnDroneListener{
 
     private static final int GOOGLE_PLAY_SERVICES_REQUEST_CODE = 101;
