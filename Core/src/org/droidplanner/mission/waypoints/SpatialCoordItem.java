@@ -1,6 +1,5 @@
 package org.droidplanner.mission.waypoints;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.droidplanner.helpers.coordinates.Coord3D;
@@ -9,7 +8,6 @@ import org.droidplanner.mission.Mission;
 import org.droidplanner.mission.MissionItem;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
-import com.MAVLink.Messages.enums.MAV_FRAME;
 
 public abstract class SpatialCoordItem extends MissionItem {
 
@@ -40,17 +38,11 @@ public abstract class SpatialCoordItem extends MissionItem {
 
 	@Override
 	public List<msg_mission_item> packMissionItem() {
-			List<msg_mission_item> list = new ArrayList<msg_mission_item>();
-			msg_mission_item mavMsg = new msg_mission_item();
-			list.add(mavMsg);
-			mavMsg.autocontinue = 1;
-			mavMsg.target_component = 1;
-			mavMsg.target_system = 1;
-			mavMsg.frame = MAV_FRAME.MAV_FRAME_GLOBAL_RELATIVE_ALT;
+			List<msg_mission_item> list = super.packMissionItem();
+			msg_mission_item mavMsg = list.get(0);
 			mavMsg.x = (float) coordinate.getX();
 			mavMsg.y = (float) coordinate.getY();
 			mavMsg.z = (float) coordinate.getAltitude().valueInMeters();
-	//		mavMsg.compid =
 			return list;
 		}
 

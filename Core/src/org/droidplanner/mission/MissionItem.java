@@ -1,8 +1,10 @@
 package org.droidplanner.mission;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
+import com.MAVLink.Messages.enums.MAV_FRAME;
 
 public abstract class MissionItem implements Comparable<MissionItem>{
 
@@ -21,7 +23,16 @@ public abstract class MissionItem implements Comparable<MissionItem>{
 	 * 
 	 * @return
 	 */
-	public abstract List<msg_mission_item> packMissionItem();
+	public List<msg_mission_item> packMissionItem(){
+		List<msg_mission_item> list = new ArrayList<msg_mission_item>();
+		msg_mission_item mavMsg = new msg_mission_item();
+		list.add(mavMsg);
+		mavMsg.autocontinue = 1;
+		mavMsg.target_component = 1;
+		mavMsg.target_system = 1;
+		mavMsg.frame = MAV_FRAME.MAV_FRAME_GLOBAL_RELATIVE_ALT;
+		return list;
+	}
 
 	/**
 	 * Gets data from MAVLinkMessage msg_mission_item for this MissionItem
