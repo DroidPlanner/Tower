@@ -2,6 +2,8 @@ package org.droidplanner.mission.waypoints;
 
 import java.util.List;
 
+import org.droidplanner.helpers.coordinates.Coord3D;
+import org.droidplanner.helpers.units.Altitude;
 import org.droidplanner.mission.Mission;
 import org.droidplanner.mission.MissionItem;
 
@@ -12,6 +14,10 @@ public class Takeoff extends SpatialCoordItem {
 
 	public Takeoff(MissionItem item) {
 		super(item);
+	}
+	
+	public Takeoff(Mission mission, Altitude alt) {
+		super(mission, new Coord3D(0, 0,alt));	
 	}
 	
 	public Takeoff(msg_mission_item msg, Mission mission) {

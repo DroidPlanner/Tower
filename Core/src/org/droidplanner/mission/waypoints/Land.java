@@ -2,6 +2,7 @@ package org.droidplanner.mission.waypoints;
 
 import java.util.List;
 
+import org.droidplanner.helpers.coordinates.Coord3D;
 import org.droidplanner.mission.Mission;
 import org.droidplanner.mission.MissionItem;
 
@@ -14,11 +15,16 @@ public class Land extends SpatialCoordItem {
 		super(item);
 	}
 
+	public Land(Mission mission) {
+		super(mission, new Coord3D(0,0,0));
+	}
+	
 	public Land(msg_mission_item msg, Mission mission) {
 		super(mission, null);
 		unpackMAVMessage(msg);
 	}
 	
+
 	@Override
 	public List<msg_mission_item> packMissionItem() {
 		List<msg_mission_item> list = super.packMissionItem();
