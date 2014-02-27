@@ -5,35 +5,47 @@ import java.util.List;
 import org.droidplanner.helpers.coordinates.Coord2D;
 import org.droidplanner.helpers.geoTools.GeoTools;
 
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
-
 /**
  * 
  * Object for holding boundary for a polygon
  * 
  */
 public class PolyBounds {
-	public Coord2D sw;
-	public Coord2D ne;
+	public Coord2D sw_3quadrant;
+	public Coord2D ne_1quadrant;
 
 	public PolyBounds(List<Coord2D> points) {
-		LatLngBounds.Builder builder = new LatLngBounds.Builder();
 		for (Coord2D point : points) {
-			builder.include(point);
+			include(point);
 		}
-		LatLngBounds bounds = builder.build();
-		sw = bounds.southwest;
-		ne = bounds.northeast;
+	}
+
+	private void include(Coord2D point) {
+		if ((sw_3quadrant!=null) | (ne_1quadrant!=null) ) {
+			sw_3quadrant = ne_1quadrant = point;
+		}else{
+			if (point.getY()>ne_1quadrant.getY()) {
+				ne_1quadrant.set(ne_1quadrant.getX(), point.getY());
+			}
+			if (point.getX()>ne_1quadrant.getX()) {
+				ne_1quadrant.set(point.getX(), ne_1quadrant.getY());
+			}
+			if (point.getY()<ne_1quadrant.getY()) {
+				sw_3quadrant.set(sw_3quadrant.getX(), point.getY());
+			}
+			if (point.getX()<sw_3quadrant.getX()) {
+				sw_3quadrant.set(point.getX(), sw_3quadrant.getY());
+			}
+		}
 	}
 
 	public double getDiag() {
-		return GeoTools.latToMeters(GeoTools.getAproximatedDistance(ne, sw));
+		return GeoTools.latToMeters(GeoTools.getAproximatedDistance(ne_1quadrant, sw_3quadrant));
 	}
 
 	public Coord2D getMiddle() {
-		return (new Coord2D((ne.getY() + sw.getY()) / 2,
-				(ne.getX() + sw.getX()) / 2));
+		return (new Coord2D((ne_1quadrant.getY() + sw_3quadrant.getY()) / 2,
+				(ne_1quadrant.getX() + sw_3quadrant.getX()) / 2));
 
 	}
 }

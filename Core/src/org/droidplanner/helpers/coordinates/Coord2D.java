@@ -24,5 +24,13 @@ public class Coord2D {
 	public double getY() {
 		return y;
 	}
+	
+	public double getLng() {
+		return x;
+	}
+
+	public double getLat() {
+		return y;
+	}
 
 }
