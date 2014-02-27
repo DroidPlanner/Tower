@@ -78,8 +78,8 @@
             android:text="@string/default_angle_value"
             android:textSize="16sp"/>
 
-        <org.droidplanner.widgets.HUD.HUD
-            android:id="@+id/hudView"
+        <org.droidplanner.widgets.AttitudeIndicator
+            android:id="@+id/aiView"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_toRightOf="@+id/rollValueText"
@@ -100,7 +100,7 @@
             android:paddingRight="10dp"
             android:paddingBottom="1dp"
             android:layout_alignLeft="@+id/rollValueText"
-            android:layout_alignRight="@+id/hudView"
+            android:layout_alignRight="@+id/aiView"
             android:baselineAligned="true">
 
             <TextView
@@ -146,7 +146,7 @@
             android:paddingRight="10dp"
             android:paddingBottom="1dp"
             android:layout_alignLeft="@+id/rollValueText"
-            android:layout_alignRight="@+id/hudView"
+            android:layout_alignRight="@+id/aiView"
             android:baselineAligned="true">
 
             <TextView
@@ -192,7 +192,7 @@
             android:paddingRight="10dp"
             android:paddingBottom="1dp"
             android:layout_alignLeft="@+id/rollValueText"
-            android:layout_alignRight="@+id/hudView"
+            android:layout_alignRight="@+id/aiView"
             android:baselineAligned="true">
 
             <TextView
@@ -237,7 +237,7 @@
             android:paddingRight="10dp"
             android:paddingBottom="1dp"
             android:layout_alignLeft="@+id/rollValueText"
-            android:layout_alignRight="@+id/hudView"
+            android:layout_alignRight="@+id/aiView"
             android:baselineAligned="true">
 
             <TextView

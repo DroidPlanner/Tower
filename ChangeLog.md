@@ -8,6 +8,16 @@ Our convention for release control is the following (for a release like DPvA.B.C
 All the changes are logged below (preferable with the pull request numbers in parenteses):
 
 # Releases
+## Droidplanner v2.2.2
+* Implemented the Android Navigation Drawer (#653)
+* Renamed the HUD to Attitude Indicator (#651)
+
+## Droidplanner v2.2.1
+* Fix errors in Land, Takeoff and RTH mission items (#655)
+* German Translation and Language Selector in settings (#650)
+* Fix Gradle build (#648)
+* Starting to add unit testing to the code (#646)
+
 ## Droidplanner v2.2.0
 * Added support for phones (#618)
 * Fixing typos and whitespaces on strings.xml (#640)

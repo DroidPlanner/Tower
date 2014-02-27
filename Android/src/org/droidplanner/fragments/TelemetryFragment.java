@@ -5,7 +5,7 @@ import org.droidplanner.R;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.widgets.HUD.HUD;
+import org.droidplanner.widgets.AttitudeIndicator;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 public class TelemetryFragment extends Fragment implements OnDroneListener{
 
-	private HUD hud;
+	private AttitudeIndicator attitudeIndicator;
 	private Drone drone;
 	private TextView roll;
 	private TextView yaw;
@@ -35,7 +35,7 @@ public class TelemetryFragment extends Fragment implements OnDroneListener{
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_telemetry, container,
 				false);
-		hud = (HUD) view.findViewById(R.id.hudView);
+		attitudeIndicator = (AttitudeIndicator) view.findViewById(R.id.aiView);
 
 		roll = (TextView) view.findViewById(R.id.rollValueText);
 		yaw = (TextView) view.findViewById(R.id.yawValueText);
@@ -94,7 +94,7 @@ public class TelemetryFragment extends Fragment implements OnDroneListener{
 			y = 360+y;
 		}
 
-		hud.setAttitude(r, p, y);
+		attitudeIndicator.setAttitude(r, p, y);
 
 		roll.setText(String.format("%3.0f\u00B0", r));
 		pitch.setText(String.format("%3.0f\u00B0", p));

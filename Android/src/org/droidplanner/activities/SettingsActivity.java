@@ -1,7 +1,6 @@
 package org.droidplanner.activities;
 
 import org.droidplanner.R;
-import org.droidplanner.activities.helpers.SuperUI;
 import org.droidplanner.fragments.SettingsFragment;
 
 import android.app.Fragment;
@@ -11,7 +10,7 @@ import android.os.Bundle;
 /**
  * This activity holds the SettingsFragment.
  */
-public class SettingsActivity extends SuperUI {
+public class SettingsActivity extends DrawerNavigationUI {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

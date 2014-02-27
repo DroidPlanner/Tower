@@ -2,8 +2,6 @@ package org.droidplanner.activities.helpers;
 
 import org.droidplanner.DroidPlannerApp;
 import org.droidplanner.R;
-import org.droidplanner.activities.ConfigurationActivity;
-import org.droidplanner.activities.SettingsActivity;
 import org.droidplanner.dialogs.AltitudeDialog;
 import org.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListener;
 import org.droidplanner.drone.Drone;
@@ -13,21 +11,16 @@ import org.droidplanner.helpers.units.Altitude;
 import org.droidplanner.utils.Constants;
 import org.droidplanner.utils.Utils;
 
-import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentActivity;
 import android.view.MenuItem;
 
-public abstract class SuperActivity extends HelpActivity implements
-		OnAltitudeChangedListener {
+public abstract class SuperActivity extends FragmentActivity implements OnAltitudeChangedListener {
 
 	public DroidPlannerApp app;
 	public Drone drone;
-
-	public SuperActivity() {
-		super();
-	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -44,22 +37,18 @@ public abstract class SuperActivity extends HelpActivity implements
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.menu_drone_setup:
-			startActivity(new Intent(this, ConfigurationActivity.class));
-			return true;
-		case R.id.menu_settings:
-			startActivity(new Intent(this, SettingsActivity.class));
-			return true;
 		case R.id.menu_connect:
             toggleDroneConnection();
 			return true;
+
 		case R.id.menu_map_type_hybrid:
 		case R.id.menu_map_type_normal:
 		case R.id.menu_map_type_terrain:
 		case R.id.menu_map_type_satellite:
 			setMapTypeFromItemId(item.getItemId());
 			return true;
-		default:
+
+            default:
 			return super.onMenuItemSelected(featureId, item);
 		}
 	}

@@ -1,7 +1,9 @@
 package com.MAVLink.Messages;
 
-import android.util.Log;
 import java.io.Serializable;
+
+import android.util.Log;
+
 import com.MAVLink.Messages.ardupilotmega.*;
 
 /**
