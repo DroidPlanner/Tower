@@ -1,20 +1,17 @@
-package org.droidplanner.polygon;
+package org.droidplanner.helpers.coordinates;
 
 import java.util.List;
 
-import org.droidplanner.helpers.coordinates.Coord2D;
 import org.droidplanner.helpers.geoTools.GeoTools;
 
 /**
- * 
- * Object for holding boundary for a polygon
- * 
+ * Calculate a rectangle that bounds all inserted points 
  */
-public class PolyBounds {
+public class CoordBounds {
 	public Coord2D sw_3quadrant;
 	public Coord2D ne_1quadrant;
 
-	public PolyBounds(List<Coord2D> points) {
+	public CoordBounds(List<Coord2D> points) {
 		for (Coord2D point : points) {
 			include(point);
 		}

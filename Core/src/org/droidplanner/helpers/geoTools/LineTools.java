@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.droidplanner.helpers.coordinates.Coord2D;
-import org.droidplanner.polygon.PolyBounds;
+import org.droidplanner.helpers.coordinates.CoordBounds;
 
 public class LineTools {
 
 	public static LineLatLng findExternalPoints(ArrayList<Coord2D> crosses) {
-		Coord2D meanCoord = new PolyBounds(crosses).getMiddle();
+		Coord2D meanCoord = new CoordBounds(crosses).getMiddle();
 		Coord2D start = PointTools.findFarthestPoint(crosses, meanCoord);
 		Coord2D end = PointTools.findFarthestPoint(crosses, start);
 		return new LineLatLng(start, end);
