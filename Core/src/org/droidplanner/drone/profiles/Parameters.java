@@ -1,4 +1,4 @@
-package org.droidplanner.drone.variables;
+package org.droidplanner.drone.profiles;
 
 import java.util.ArrayList;
 import java.util.List;
