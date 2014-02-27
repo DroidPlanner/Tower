@@ -38,9 +38,9 @@ public class ConfigurationActivity extends SuperUI {
      * Holds the list of configuration screens this activity supports.
      */
     public static final Class<? extends Fragment>[] sConfigurationFragments = new Class[]{
-            TuningFragment.class,
+            //TuningFragment.class,
             SetupRadioFragment.class,
-            SetupSensorFragment.class,
+            //SetupSensorFragment.class,
             ChecklistFragment.class,
             ParamsFragment.class
     };
@@ -49,17 +49,17 @@ public class ConfigurationActivity extends SuperUI {
      * Holds the title resources for the configuration screens.
      */
     public static final int[] sConfigurationFragmentTitlesRes = {
-            R.string.screen_tuning,
+            //R.string.screen_tuning,
             R.string.screen_rc,
-            R.string.screen_cal,
+            //R.string.screen_cal,
             R.string.screen_checklist,
             R.string.screen_parameters
     };
 
     public static final int[] sConfigurationFragmentIconRes = {
-            android.R.drawable.ic_menu_preferences,
+            //android.R.drawable.ic_menu_preferences,
             R.drawable.ic_status_rssi,
-            R.drawable.ic_action_circles,
+            //R.drawable.ic_action_circles,
             R.drawable.ic_action_paste,
             R.drawable.ic_action_database
     };
@@ -86,7 +86,7 @@ public class ConfigurationActivity extends SuperUI {
         mViewPager = (ViewPager) findViewById(R.id.configuration_pager);
         mViewPager.setAdapter(pagerAdapter);
 
-        /*
+        /* 
         Figure out if we're running on a tablet like device, or a phone.
         The phone layout doesn't have the tab strip, so the tabIndicator will be null.
          */

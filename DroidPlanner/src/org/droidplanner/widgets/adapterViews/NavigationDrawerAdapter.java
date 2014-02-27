@@ -51,7 +51,7 @@ public class NavigationDrawerAdapter extends BaseExpandableListAdapter {
         sActivityGroupIndexMap.put(SettingsActivity.class, 1);
     }
 
-    private final static boolean[] sIsGroupExpanded = {false, false, false};
+    private final static boolean[] sIsGroupExpanded = {false, false};
 
     /**
      * Delay used to run the callback on selection in the drawer layout. This delay allows the
@@ -226,7 +226,7 @@ public class NavigationDrawerAdapter extends BaseExpandableListAdapter {
         Help section
          */
         //No children for the help section
-        mChildData.add(Collections.<Map<String, ? extends Object>>emptyList());
+       // mChildData.add(Collections.<Map<String, ? extends Object>>emptyList());
     }
 
     private void initGroupData(final DrawerNavigationUI activity) {
@@ -255,6 +255,7 @@ public class NavigationDrawerAdapter extends BaseExpandableListAdapter {
         mGroupData.add(droneSetupData);
 
         //Help section
+      /*  
         final Map<String, Object> helpData = new HashMap<String, Object>();
         helpData.put(KEY_SECTION_NAME, R.string.help);
         helpData.put(KEY_SECTION_ICON, R.drawable.ic_action_help);
@@ -266,6 +267,7 @@ public class NavigationDrawerAdapter extends BaseExpandableListAdapter {
             }
         });
         mGroupData.add(helpData);
+        */
     }
 
     @Override
