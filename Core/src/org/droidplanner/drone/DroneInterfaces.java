@@ -44,5 +44,13 @@ public class DroneInterfaces {
 		long elapsedRealtime();
 
 	}
+	
+	public interface Handler {
+
+		void removeCallbacks(Runnable thread);
+
+		void postDelayed(Runnable thread, long timeout);
+
+	}
 
 }

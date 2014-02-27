@@ -2,6 +2,7 @@ package org.droidplanner.drone.variables;
 
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
+import org.droidplanner.drone.DroneInterfaces.Handler;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.drone.DroneVariable;
 
@@ -19,7 +20,7 @@ public class HeartBeat extends DroneVariable implements OnDroneListener {
 		FIRST_HEARTBEAT, LOST_HEARTBEAT, NORMAL_HEARTBEAT
 	}
 
-	public Handler watchdog = new Handler();
+	public Handler watchdog;
 	public Runnable watchdogCallback = new Runnable() {
 		@Override
 		public void run() {
@@ -27,8 +28,9 @@ public class HeartBeat extends DroneVariable implements OnDroneListener {
 		}
 	};
 
-	public HeartBeat(Drone myDrone) {
+	public HeartBeat(Drone myDrone, Handler handler) {
 		super(myDrone);
+		this.watchdog = handler;
 		myDrone.events.addDroneListener(this);
 	}
 

@@ -5,6 +5,7 @@ import org.droidplanner.MAVLink.MAVLinkClient;
 import org.droidplanner.MAVLink.WaypointMananger;
 import org.droidplanner.drone.DroneInterfaces.Clock;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
+import org.droidplanner.drone.DroneInterfaces.Handler;
 import org.droidplanner.drone.variables.Altitude;
 import org.droidplanner.drone.variables.Battery;
 import org.droidplanner.drone.variables.Calibration;
@@ -40,7 +41,6 @@ public class Drone {
 	public Mission mission = new Mission(this);
 	public MissionStats missionStats = new MissionStats(this);
 	public StreamRates streamRates = new StreamRates(this);
-	public HeartBeat heartbeat = new HeartBeat(this);
 	public Altitude altitude = new Altitude(this);
 	public Orientation orientation = new Orientation(this);
 	public Navigation navigation = new Navigation(this);
@@ -49,14 +49,16 @@ public class Drone {
 	public Calibration calibrationSetup = new Calibration(this);
 	public WaypointMananger waypointMananger = new WaypointMananger(this);
 	public State state;
+	public HeartBeat heartbeat;
 
 	public MAVLinkClient MavClient;
 	public Preferences preferences;
 
-	public Drone(MAVLinkClient mavClient, Clock clock, Preferences pref) {
+	public Drone(MAVLinkClient mavClient, Clock clock, Handler handler, Preferences pref) {
 		this.MavClient = mavClient;
 		this.preferences = pref;
 		state = new State(this,clock);
+		heartbeat = new HeartBeat(this,handler);
 		profile.load();
 	}
 
