@@ -8,6 +8,10 @@ public class Coord2D {
 		set(x, y);
 	}
 
+	public Coord2D(Coord2D point) {
+		set(point);
+	}
+
 	public void set(double x, double y) {
 		this.x = x;
 		this.y = y;
@@ -32,5 +36,11 @@ public class Coord2D {
 	public double getLat() {
 		return y;
 	}
+	
+	@Override
+	public String toString() {
+		return "X/Y: "+getX()+"/"+getY();
+	}
+
 
 }
