@@ -8,8 +8,8 @@ import java.util.Map;
 
 import org.droidplanner.R;
 import org.droidplanner.drone.Drone;
+import org.droidplanner.drone.VehicleProfile;
 import org.droidplanner.file.IO.ParameterMetadataMapReader;
-import org.droidplanner.file.IO.VehicleProfile;
 import org.droidplanner.parameters.Parameter;
 import org.droidplanner.parameters.ParameterMetadata;
 

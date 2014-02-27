@@ -7,14 +7,11 @@ import org.droidplanner.drone.DroneVariable;
 import com.MAVLink.Messages.enums.MAV_TYPE;
 
 public class Type extends DroneVariable {
+
 	private int type = MAV_TYPE.MAV_TYPE_FIXED_WING;
 
 	public Type(Drone myDrone) {
 		super(myDrone);
-	}
-
-	public int getType() {
-		return type;
 	}
 
 	public void setType(int type) {
@@ -23,5 +20,48 @@ public class Type extends DroneVariable {
 			myDrone.events.notifyDroneEvent(DroneEventsType.TYPE);
 			myDrone.profile.load();
 		}
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public FirmwareType getFirmwareType() {
+		if (myDrone.MavClient.isConnected()) {
+			switch (myDrone.type.getType()) {
+			case MAV_TYPE.MAV_TYPE_FIXED_WING:
+				return FirmwareType.ARDU_PLANE;
+			case MAV_TYPE.MAV_TYPE_GENERIC:
+			case MAV_TYPE.MAV_TYPE_QUADROTOR:
+			case MAV_TYPE.MAV_TYPE_COAXIAL:
+			case MAV_TYPE.MAV_TYPE_HELICOPTER:
+			case MAV_TYPE.MAV_TYPE_HEXAROTOR:
+			case MAV_TYPE.MAV_TYPE_OCTOROTOR:
+			case MAV_TYPE.MAV_TYPE_TRICOPTER:
+				return FirmwareType.ARDU_COPTER;
+			case MAV_TYPE.MAV_TYPE_GROUND_ROVER:
+			case MAV_TYPE.MAV_TYPE_SURFACE_BOAT:
+				return FirmwareType.ARDU_ROVER;
+			default:
+				// unsupported - fall thru to offline condition
+			}
+		}
+		return myDrone.preferences.getVehicleType(); // offline or unsupported
+	}
+
+	public enum FirmwareType {
+		ARDU_PLANE("ArduPlane"), ARDU_COPTER("ArduCopter"), ARDU_ROVER(
+				"ArduRover");
+		private final String type;
+
+		FirmwareType(String type) {
+			this.type = type;
+		}
+
+		@Override
+		public String toString() {
+			return type;
+		}
+
 	}
 }

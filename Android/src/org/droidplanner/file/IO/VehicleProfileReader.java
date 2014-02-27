@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 
 import org.droidplanner.R;
+import org.droidplanner.drone.VehicleProfile;
 import org.droidplanner.file.AssetUtil;
 import org.droidplanner.file.DirectoryPath;
 import org.xmlpull.v1.XmlPullParser;

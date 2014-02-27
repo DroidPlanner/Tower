@@ -1,13 +1,14 @@
 package org.droidplanner.drone;
 
 import org.droidplanner.drone.profiles.VehicleProfile;
+import org.droidplanner.drone.variables.Type.FirmwareType;
 
 
 public interface Preferences {
 
-	public abstract String getVehicleType();
+	public abstract FirmwareType getVehicleType();
 
-	public abstract VehicleProfile loadVehicleProfile(String vehicle);
+	public abstract VehicleProfile loadVehicleProfile(FirmwareType firmwareType);
 
 	public abstract Rates getRates();
 

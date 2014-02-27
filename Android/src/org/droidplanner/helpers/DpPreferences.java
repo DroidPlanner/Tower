@@ -1,7 +1,7 @@
 package org.droidplanner.helpers;
 
+import org.droidplanner.drone.VehicleProfile;
 import org.droidplanner.drone.variables.Preferences;
-import org.droidplanner.file.IO.VehicleProfile;
 import org.droidplanner.file.IO.VehicleProfileReader;
 
 import android.content.Context;
