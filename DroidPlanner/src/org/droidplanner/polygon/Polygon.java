@@ -3,13 +3,14 @@ package org.droidplanner.polygon;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.droidplanner.R;
 import org.droidplanner.fragments.helpers.MapPath.PathSource;
 import org.droidplanner.helpers.geoTools.GeoTools;
 import org.droidplanner.helpers.geoTools.LineLatLng;
 import org.droidplanner.helpers.units.Area;
 
 import android.content.Context;
-import org.droidplanner.R;
+
 import com.google.android.gms.maps.model.LatLng;
 
 public class Polygon implements PathSource {

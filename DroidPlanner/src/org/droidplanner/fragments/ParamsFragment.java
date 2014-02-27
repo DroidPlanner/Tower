@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.droidplanner.DroidPlannerApp;
+import org.droidplanner.R;
 import org.droidplanner.adapters.ParamsAdapter;
 import org.droidplanner.adapters.ParamsAdapterItem;
 import org.droidplanner.dialogs.openfile.OpenFileDialog;
@@ -30,8 +31,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import org.droidplanner.R;
 
 public class ParamsFragment extends ListFragment implements DroneInterfaces
         .OnParameterManagerListener, OnDroneListener{

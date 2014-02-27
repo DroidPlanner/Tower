@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import android.support.v4.app.Fragment;
-
+import org.droidplanner.R;
 import org.droidplanner.activities.helpers.SuperActivity;
 import org.droidplanner.checklist.CheckListAdapter;
+import org.droidplanner.checklist.CheckListAdapter.OnCheckListItemUpdateListener;
 import org.droidplanner.checklist.CheckListItem;
 import org.droidplanner.checklist.CheckListSysLink;
 import org.droidplanner.checklist.CheckListXmlParser;
-import org.droidplanner.checklist.CheckListAdapter.OnCheckListItemUpdateListener;
 import org.droidplanner.checklist.xml.ListXmlParser.OnXmlParserError;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
@@ -21,12 +20,11 @@ import org.xmlpull.v1.XmlPullParser;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
-
-import org.droidplanner.R;
 
 public class ChecklistFragment extends Fragment implements OnXmlParserError,
 		OnCheckListItemUpdateListener, OnDroneListener {

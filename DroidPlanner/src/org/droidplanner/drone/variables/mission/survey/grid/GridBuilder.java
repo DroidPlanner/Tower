@@ -6,11 +6,9 @@ import org.droidplanner.drone.variables.mission.survey.SurveyData;
 import org.droidplanner.helpers.geoTools.LineLatLng;
 import org.droidplanner.polygon.Polygon;
 
-
+import android.content.Context;
 
 import com.google.android.gms.maps.model.LatLng;
-
-import android.content.Context;
 
 public class GridBuilder {
 

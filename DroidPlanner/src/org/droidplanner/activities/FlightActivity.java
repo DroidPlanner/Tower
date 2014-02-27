@@ -1,7 +1,6 @@
 package org.droidplanner.activities;
 
 import org.droidplanner.R;
-import org.droidplanner.activities.helpers.SuperUI;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
@@ -11,22 +10,9 @@ import org.droidplanner.fragments.FlightActionsFragment;
 import org.droidplanner.fragments.FlightMapFragment;
 import org.droidplanner.fragments.RCFragment;
 import org.droidplanner.fragments.TelemetryFragment;
-import org.droidplanner.fragments.helpers.DroneMap;
 import org.droidplanner.fragments.helpers.FlightSlidingDrawerContent;
 import org.droidplanner.fragments.helpers.OnMapInteractionListener;
 import org.droidplanner.fragments.mode.FlightModePanel;
-import org.droidplanner.fragments.mode.ModeAcroFragment;
-import org.droidplanner.fragments.mode.ModeAltholdFragment;
-import org.droidplanner.fragments.mode.ModeAutoFragment;
-import org.droidplanner.fragments.mode.ModeCircleFragment;
-import org.droidplanner.fragments.mode.ModeDisconnectedFragment;
-import org.droidplanner.fragments.mode.ModeDriftFragment;
-import org.droidplanner.fragments.mode.ModeGuidedFragment;
-import org.droidplanner.fragments.mode.ModeLandFragment;
-import org.droidplanner.fragments.mode.ModeLoiterFragment;
-import org.droidplanner.fragments.mode.ModePositionFragment;
-import org.droidplanner.fragments.mode.ModeRTLFragment;
-import org.droidplanner.fragments.mode.ModeStabilizeFragment;
 import org.droidplanner.polygon.PolygonPoint;
 
 import android.app.Dialog;
@@ -43,7 +29,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.model.LatLng;
 
-public class FlightActivity extends SuperUI implements
+public class FlightActivity extends DrawerNavigationUI implements
 		OnMapInteractionListener, FlightActionsFragment.OnMissionControlInteraction, OnDroneListener{
 
     private static final int GOOGLE_PLAY_SERVICES_REQUEST_CODE = 101;

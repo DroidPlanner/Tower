@@ -1,6 +1,6 @@
 package org.droidplanner.utils;
 
-import static org.droidplanner.utils.Utils.ConnectionType;
+import org.droidplanner.utils.Utils.ConnectionType;
 
 /**
  * Contains application related constants.
@@ -42,6 +42,21 @@ public class Constants {
      * Preference screen grouping the ui related preferences.
      */
     public static final String PREF_UI_SCREEN = "pref_ui";
+
+    /**
+     * Sets whether or not the default language for the ui should be english.
+     */
+    public static final String PREF_UI_LANGUAGE = "pref_ui_language_english";
+
+    /**
+     * By default, the system language should be used for the ui.
+     */
+    public static final boolean DEFAULT_PREF_UI_LANGUAGE = false;
+
+    /**
+     * Preference key for the drone settings' category.
+     */
+    public static final String PREF_DRONE_SETTINGS = "pref_drone_settings";
 
     /**
      * Private constructor to prevent instantiation of this class.

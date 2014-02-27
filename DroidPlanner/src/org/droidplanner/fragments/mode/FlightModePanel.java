@@ -1,20 +1,19 @@
 package org.droidplanner.fragments.mode;
 
+import org.droidplanner.R;
+import org.droidplanner.activities.helpers.SuperActivity;
+import org.droidplanner.drone.Drone;
+import org.droidplanner.drone.DroneInterfaces;
+import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 
 import com.MAVLink.Messages.ApmModes;
-
-import org.droidplanner.R;
-import org.droidplanner.activities.helpers.SuperActivity;
-import org.droidplanner.drone.Drone;
-import org.droidplanner.drone.DroneInterfaces;
-import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 
 /**
  * Implements the flight/apm mode panel description.

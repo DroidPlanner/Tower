@@ -1,23 +1,25 @@
 package org.droidplanner.dialogs.parameters;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.*;
-
-import org.droidplanner.R;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.droidplanner.R;
 import org.droidplanner.adapters.ParamsAdapterItem;
 import org.droidplanner.parameters.Parameter;
 import org.droidplanner.parameters.ParameterMetadata;
+
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 
 public class DialogParameterInfo {

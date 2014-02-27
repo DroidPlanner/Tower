@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/nav_drawer_child"
+    android:layout_width="match_parent"
+    android:drawablePadding="10dp"
+    android:background="?android:attr/activatedBackgroundIndicator"
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:paddingStart="40dp"
+    android:paddingLeft="40dp"
+    android:textAppearance="?android:attr/textAppearanceListItemSmall"
+    android:gravity="start|center_vertical"
+    android:textColor="@android:color/black"
+    android:textAlignment="viewStart"
+    />

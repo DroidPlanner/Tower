@@ -1,5 +1,6 @@
 package org.droidplanner.fragments.calibration.imu;
 
+import org.droidplanner.R;
 import org.droidplanner.fragments.SetupSensorFragment;
 import org.droidplanner.fragments.calibration.SetupSidePanel;
 
@@ -10,7 +11,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import org.droidplanner.R;
 
 public class FragmentSetupIMUCalibrate extends SetupSidePanel {
 	private Button btnStep;

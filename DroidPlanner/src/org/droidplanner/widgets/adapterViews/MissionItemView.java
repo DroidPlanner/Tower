@@ -2,6 +2,7 @@ package org.droidplanner.widgets.adapterViews;
 
 import java.util.List;
 
+import org.droidplanner.R;
 import org.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.helpers.units.Length;
 
@@ -12,8 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-
-import org.droidplanner.R;
 
 public class MissionItemView extends ArrayAdapter<org.droidplanner.drone.variables.mission.MissionItem> {
 

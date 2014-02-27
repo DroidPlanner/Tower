@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="org.droidplanner"
-          android:versionCode="62"
+          android:versionCode="63"
           android:versionName="please run version.sh to get the version name">
 
     <uses-sdk
@@ -96,6 +96,7 @@
         <activity
             android:name=".activities.EditorActivity"
             android:label="@string/editor"
+            android:launchMode="singleTop"
             android:parentActivityName=".activities.FlightActivity" >
 
             <!-- Parent activity meta-data to support API level 7+ -->
@@ -115,24 +116,19 @@
         <activity
             android:name=".activities.ConfigurationActivity"
             android:windowSoftInputMode="adjustPan"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.PageIndicatorDefaults"
             android:label="@string/menu_drone_setup"
-            android:parentActivityName=".activities.FlightActivity" >
+            android:parentActivityName=".activities.SettingsActivity" >
 
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.FlightActivity" />
+                android:value=".activities.SettingsActivity" />
         </activity>
         <activity android:name=".activities.SettingsActivity"
-                  android:label="@string/settings"
-                  android:parentActivityName=".activities.FlightActivity">
-
-            <!-- Parent activity meta-data to support API level 7+ -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.FlightActivity" />
-        </activity>
+                  android:launchMode="singleTop"
+                  android:label="@string/settings"/>
     </application>
 
 </manifest>

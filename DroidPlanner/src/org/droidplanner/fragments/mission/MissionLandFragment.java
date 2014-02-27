@@ -1,11 +1,10 @@
 package org.droidplanner.fragments.mission;
 
+import org.droidplanner.R;
 import org.droidplanner.drone.variables.mission.waypoints.Land;
 import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListener;
 
 import android.view.View;
-
-import org.droidplanner.R;
 
 public class MissionLandFragment extends MissionDetailFragment implements
 		OnTextSeekBarChangedListener {

@@ -8,6 +8,7 @@ import org.droidplanner.file.IO.VehicleProfileReader;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.view.View;
+
 import com.MAVLink.Messages.enums.MAV_TYPE;
 
 

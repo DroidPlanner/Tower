@@ -1,16 +1,5 @@
 package org.droidplanner.activities;
 
-import android.app.ActionBar;
-import android.content.Context;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.NavUtils;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
-import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import org.droidplanner.R;
 import org.droidplanner.activities.helpers.SuperUI;
 import org.droidplanner.drone.Drone;
@@ -22,6 +11,19 @@ import org.droidplanner.fragments.SetupSensorFragment;
 import org.droidplanner.fragments.TuningFragment;
 import org.droidplanner.widgets.viewPager.TabPageIndicator;
 
+import android.app.ActionBar;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.NavUtils;
+import android.support.v4.view.ViewPager;
+import android.util.Log;
+import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+
 /**
  * This class implements and handles the various ui used for the drone configuration.
  */
@@ -29,13 +31,16 @@ public class ConfigurationActivity extends SuperUI {
 
     private static final String TAG = ConfigurationActivity.class.getSimpleName();
 
+    public static final String EXTRA_CONFIG_SCREEN_INDEX = ConfigurationActivity.class.getPackage
+            ().getName() + ".EXTRA_CONFIG_SCREEN_INDEX";
+
     /**
      * Holds the list of configuration screens this activity supports.
      */
-    private static final Class<? extends Fragment>[] sConfigurationFragments = new Class[]{
-            //TuningFragment.class,
+    public static final Class<? extends Fragment>[] sConfigurationFragments = new Class[]{
+            TuningFragment.class,
             SetupRadioFragment.class,
-            //SetupSensorFragment.class,
+            SetupSensorFragment.class,
             ChecklistFragment.class,
             ParamsFragment.class
     };
@@ -43,13 +48,23 @@ public class ConfigurationActivity extends SuperUI {
     /**
      * Holds the title resources for the configuration screens.
      */
-    private static final int[] sConfigurationFragmentTitlesRes = {
-            //R.string.screen_tuning,
+    public static final int[] sConfigurationFragmentTitlesRes = {
+            R.string.screen_tuning,
             R.string.screen_rc,
-            //R.string.screen_cal,
+            R.string.screen_cal,
             R.string.screen_checklist,
             R.string.screen_parameters
     };
+
+    public static final int[] sConfigurationFragmentIconRes = {
+            android.R.drawable.ic_menu_preferences,
+            R.drawable.ic_status_rssi,
+            R.drawable.ic_action_circles,
+            R.drawable.ic_action_paste,
+            R.drawable.ic_action_database
+    };
+
+    private ViewPager mViewPager;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -57,7 +72,8 @@ public class ConfigurationActivity extends SuperUI {
 		setContentView(R.layout.activity_configuration);
 
         //Check that the arrays are the same length.
-        if(sConfigurationFragments.length != sConfigurationFragmentTitlesRes.length){
+        if(sConfigurationFragments.length != sConfigurationFragmentTitlesRes.length ||
+                sConfigurationFragmentTitlesRes.length != sConfigurationFragmentIconRes.length){
             throw new IllegalStateException("The fragment and title resource arrays must match in" +
                     " length.");
         }
@@ -67,19 +83,19 @@ public class ConfigurationActivity extends SuperUI {
         final ConfigurationPagerAdapter pagerAdapter = new ConfigurationPagerAdapter(
                 context, getSupportFragmentManager());
 
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.configuration_pager);
-        viewPager.setAdapter(pagerAdapter);
+        mViewPager = (ViewPager) findViewById(R.id.configuration_pager);
+        mViewPager.setAdapter(pagerAdapter);
 
         /*
         Figure out if we're running on a tablet like device, or a phone.
-        The phone layout doesn't the tab strip, so the tabIndicator will be null.
+        The phone layout doesn't have the tab strip, so the tabIndicator will be null.
          */
         final TabPageIndicator tabIndicator = (TabPageIndicator) findViewById(R.id
                 .configuration_tab_strip);
         final boolean isPhone = tabIndicator == null;
 
         if (!isPhone) {
-            tabIndicator.setViewPager(viewPager);
+            tabIndicator.setViewPager(mViewPager);
         }
 
 		final ActionBar actionBar = getActionBar();
@@ -95,12 +111,12 @@ public class ConfigurationActivity extends SuperUI {
                         R.layout.spinner_configuration_screen_item), new ActionBar.OnNavigationListener() {
                     @Override
                     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-                        viewPager.setCurrentItem(itemPosition, true);
+                        mViewPager.setCurrentItem(itemPosition, true);
                         return true;
                     }
                 });
 
-                viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+                mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 
                     @Override
                     public void onPageSelected(int i) {
@@ -109,7 +125,20 @@ public class ConfigurationActivity extends SuperUI {
                 });
             }
 		}
+
+        handleIntent(getIntent());
 	}
+
+    @Override
+    public void onNewIntent(Intent intent){
+        super.onNewIntent(intent);
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent){
+        int configScreenIndex = intent.getIntExtra(EXTRA_CONFIG_SCREEN_INDEX, 0);
+        mViewPager.setCurrentItem(configScreenIndex);
+    }
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
@@ -125,11 +154,6 @@ public class ConfigurationActivity extends SuperUI {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
-    @Override
-    public CharSequence[][] getHelpItems() {
-        return new CharSequence[][] { {}, {} };
-    }
 
 	/**
 	 * This is the fragment pager adapter to handle the tabs of the

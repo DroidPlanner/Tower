@@ -1,6 +1,7 @@
 package org.droidplanner.fragments.calibration;
 
 import org.droidplanner.activities.ConfigurationActivity;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

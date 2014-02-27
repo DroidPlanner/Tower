@@ -9,8 +9,6 @@ import java.util.Locale;
 import org.droidplanner.file.DirectoryPath;
 import org.droidplanner.file.FileStream;
 
-import android.util.Log;
-
 import com.google.android.gms.maps.model.Tile;
 import com.google.android.gms.maps.model.TileProvider;
 

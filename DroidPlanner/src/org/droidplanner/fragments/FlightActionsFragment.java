@@ -1,6 +1,7 @@
 package org.droidplanner.fragments;
 
 import org.droidplanner.DroidPlannerApp;
+import org.droidplanner.R;
 import org.droidplanner.drone.Drone;
 
 import android.app.Activity;
@@ -13,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.MAVLink.Messages.ApmModes;
-import org.droidplanner.R;
 
 public class FlightActionsFragment extends Fragment implements	OnClickListener {
 

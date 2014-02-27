@@ -1,13 +1,12 @@
 package org.droidplanner.fragments.mission;
 
+import org.droidplanner.R;
 import org.droidplanner.drone.variables.mission.waypoints.RegionOfInterest;
 import org.droidplanner.helpers.units.Altitude;
 import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListener;
 
 import android.view.View;
-
-import org.droidplanner.R;
 
 public class MissionRegionOfInterestFragment extends MissionDetailFragment
 		implements OnTextSeekBarChangedListener {
