@@ -89,6 +89,9 @@ public class EditorToolsFragment extends Fragment implements OnClickListener {
 
 	public void setTool(EditorTools tool) {
 		this.tool = tool;
+		if (tool == EditorTools.NONE) {			
+			mEditorRadioGroup.clearCheck();
+		}		
 		listner.editorToolChanged(this.tool);
 	}
 

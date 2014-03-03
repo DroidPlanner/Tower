@@ -294,9 +294,9 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 			notifySelectionChanged();
 		} else {
 			removeItemDetail();
+			editorToolsFragment.setTool(EditorTools.NONE);
 			missionListFragment.updateChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 			contextualActionBar = startActionMode(this);
-			editorToolsFragment.setTool(EditorTools.NONE);
 			mission.clearSelection();
 			mission.addToSelection(item);
 			notifySelectionChanged();
@@ -319,6 +319,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 					mission.clearSelection();
 					removeItemDetail();
 				} else {
+					editorToolsFragment.setTool(EditorTools.NONE);
 					mission.setSelectionTo(item);
 					showItemDetail(item);
 				}
