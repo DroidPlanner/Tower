@@ -21,6 +21,7 @@ import org.droidplanner.fragments.helpers.GestureMapFragment.OnPathFinishedListe
 import org.droidplanner.fragments.helpers.MapProjection;
 import org.droidplanner.fragments.mission.MissionDetailFragment;
 import org.droidplanner.fragments.mission.MissionDetailFragment.OnWayPointTypeChangeListener;
+import org.droidplanner.helpers.coordinates.Coord2D;
 
 import android.app.ActionBar;
 import android.graphics.Point;
@@ -218,7 +219,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	}
 
 	@Override
-	public void onPathFinished(List<Point> path) {
+	public void onPathFinished(List<Coord2D> path) {
 		List<LatLng> points = MapProjection.projectPathIntoMap(path,
 				planningMapFragment.mMap);
 		switch (getTool()) {
