@@ -20,5 +20,9 @@ public interface MAVLinkClient {
 
 	boolean isConnected();
 
+	void toggleConnectionState();
+
+	void queryConnectionState();
+
 
 }
