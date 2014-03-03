@@ -3,10 +3,9 @@ package org.droidplanner.widgets.adapterViews;
 import java.util.List;
 
 import org.droidplanner.R;
-import org.droidplanner.drone.variables.missionD.MissionItemD;
-import org.droidplanner.drone.variables.missionD.waypoints.SpatialCoordItemD;
-import org.droidplanner.extra.SpatialCoordItem;
 import org.droidplanner.helpers.units.Length;
+import org.droidplanner.mission.MissionItem;
+import org.droidplanner.mission.waypoints.SpatialCoordItem;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -16,10 +15,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class MissionItemView extends ArrayAdapter<org.droidplanner.drone.variables.mission.MissionItem> {
+public class MissionItemView extends ArrayAdapter<MissionItem> {
 
 	private Context context;
-	private List<org.droidplanner.drone.variables.mission.MissionItem> waypoints;
+	private List<MissionItem> waypoints;
 
 
 	private TextView nameView;
@@ -30,7 +29,7 @@ public class MissionItemView extends ArrayAdapter<org.droidplanner.drone.variabl
 
 
 
-	public MissionItemView(Context context, int resource, List<org.droidplanner.drone.variables.mission.MissionItem> list) {
+	public MissionItemView(Context context, int resource, List<MissionItem> list) {
 		super(context, resource, list);
 		this.waypoints = list;
 		this.context = context;
@@ -43,7 +42,7 @@ public class MissionItemView extends ArrayAdapter<org.droidplanner.drone.variabl
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		MissionItemD waypoint = waypoints.get(position);
+		MissionItem waypoint = waypoints.get(position);
 		View view = createLayoutFromResource(parent);
 		findViewObjects(view);
 		setupViewsText(waypoint);
@@ -75,13 +74,13 @@ public class MissionItemView extends ArrayAdapter<org.droidplanner.drone.variabl
 		distanceView = (TextView) view.findViewById(R.id.rowDistanceView);
 */
 	}
-	private void setupViewsText(MissionItemD item) {
+	private void setupViewsText(MissionItem item) {
 		nameView.setText(String.format("%3d", this.waypoints.indexOf(item)+1));
 
 		if (item instanceof SpatialCoordItem) {
-			SpatialCoordItemD waypoint = (SpatialCoordItemD) item;
+			SpatialCoordItem waypoint = (SpatialCoordItem) item;
 			altitudeView.setText(String.format("%3.0fm",
-					waypoint.getAltitude().valueInMeters()));
+					waypoint.getCoordinate().getAltitude().valueInMeters()));
 			
 			
 			Length diff;

@@ -208,7 +208,7 @@ public class FlightActivity extends DrawerNavigationUI implements
 	}
 
 	@Override
-	public void onMoveWaypoint(SpatialCoordItemD waypoint, LatLng latLng) {
+	public void onMoveWaypoint(SpatialCoordItem waypoint, LatLng latLng) {
 		// TODO Auto-generated method stub
 
 	}
@@ -226,7 +226,7 @@ public class FlightActivity extends DrawerNavigationUI implements
 	}
 
 	@Override
-	public boolean onMarkerClick(MissionItemD wp) {
+	public boolean onMarkerClick(MissionItem wp) {
 		// TODO Auto-generated method stub
 		return false;
 	}
