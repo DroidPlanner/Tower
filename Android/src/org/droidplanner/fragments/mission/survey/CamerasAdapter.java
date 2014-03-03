@@ -1,7 +1,6 @@
 package org.droidplanner.fragments.mission.survey;
 
 import org.droidplanner.R;
-import org.droidplanner.file.IO.CameraInfoReader;
 import org.droidplanner.file.help.CameraInfoLoader;
 import org.droidplanner.mission.survey.CameraInfo;
 
@@ -51,7 +50,7 @@ public class CamerasAdapter extends ArrayAdapter<String> {
 		try {
 			return loader.openFile(getItem(this.getCount()-1));
 		} catch (Exception e) {
-			return CameraInfoReader.getNewMockCameraInfo();
+			throw new RuntimeException("DP was not able to load a camera");
 		}
 	}
 }

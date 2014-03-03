@@ -1,8 +1,7 @@
 package org.droidplanner.fragments.mission;
 
 import org.droidplanner.R;
-import org.droidplanner.drone.variables.missionD.waypoints.LoiterD;
-import org.droidplanner.drone.variables.missionD.waypoints.LoiterTurnsD;
+import org.droidplanner.mission.*;
 import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListener;
 

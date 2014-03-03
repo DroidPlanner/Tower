@@ -1,6 +1,7 @@
 package org.droidplanner.helpers;
 
 import org.droidplanner.drone.Drone;
+import org.droidplanner.helpers.coordinates.Coord2D;
 
 import android.content.Context;
 import android.location.Location;
@@ -8,8 +9,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.widget.Toast;
-
-import com.google.android.gms.maps.model.LatLng;
 
 public class RecordMe implements LocationListener {
 	private static final long MIN_TIME_MS = 2000;
@@ -55,7 +54,7 @@ public class RecordMe implements LocationListener {
 	// @Override
 	public void onLocationChanged(Location location) {
 		// TODO find a better way to do the altitude
-		LatLng coord = new LatLng(location.getLatitude(), location.getLongitude());
+		Coord2D coord = new Coord2D(location.getLatitude(), location.getLongitude());
 		drone.mission.addWaypoint(coord);
 	}
 

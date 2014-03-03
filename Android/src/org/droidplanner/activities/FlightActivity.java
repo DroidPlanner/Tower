@@ -4,8 +4,7 @@ import org.droidplanner.R;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.drone.variables.missionD.MissionItemD;
-import org.droidplanner.drone.variables.missionD.waypoints.SpatialCoordItemD;
+import org.droidplanner.mission.*;
 import org.droidplanner.fragments.FlightActionsFragment;
 import org.droidplanner.fragments.FlightMapFragment;
 import org.droidplanner.fragments.RCFragment;
@@ -13,7 +12,7 @@ import org.droidplanner.fragments.TelemetryFragment;
 import org.droidplanner.fragments.helpers.FlightSlidingDrawerContent;
 import org.droidplanner.fragments.helpers.OnMapInteractionListener;
 import org.droidplanner.fragments.mode.FlightModePanel;
-import org.droidplanner.polygon.PolygonPoint;
+import org.droidplanner.polygon.*;
 
 import android.app.Dialog;
 import android.content.DialogInterface;

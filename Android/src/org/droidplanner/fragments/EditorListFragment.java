@@ -14,8 +14,7 @@ import org.droidplanner.activities.helpers.OnEditorInteraction;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.drone.variables.mission.Mission;
-import org.droidplanner.drone.variables.mission.MissionItem;
+import org.droidplanner.mission.*;
 import org.droidplanner.widgets.adapterViews.MissionItemView;
 
 import android.app.Activity;

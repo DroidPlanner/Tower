@@ -1,6 +1,6 @@
 package org.droidplanner.activities.helpers;
 
-import org.droidplanner.drone.variables.mission.MissionItem;
+import org.droidplanner.mission.MissionItem;
 
 import com.google.android.gms.maps.model.LatLng;
 

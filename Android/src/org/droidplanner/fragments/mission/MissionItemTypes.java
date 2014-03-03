@@ -2,8 +2,7 @@ package org.droidplanner.fragments.mission;
 
 import java.security.InvalidParameterException;
 
-import org.droidplanner.drone.variables.mission.MissionItem;
-import org.droidplanner.drone.variables.missionD.MissionItemD;
+import org.droidplanner.mission.*;
 import org.droidplanner.extra.Land;
 import org.droidplanner.extra.LoiterTime;
 import org.droidplanner.extra.LoiterTurns;

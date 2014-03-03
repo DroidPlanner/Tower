@@ -2,15 +2,13 @@ package org.droidplanner.fragments;
 
 
 import org.droidplanner.activities.helpers.OnEditorInteraction;
-import org.droidplanner.drone.variables.mission.MissionItem;
-import org.droidplanner.drone.variables.missionD.waypoints.SpatialCoordItemD;
+import org.droidplanner.mission.*;
 import org.droidplanner.extra.SpatialCoordItem;
 import org.droidplanner.fragments.helpers.CameraGroundOverlays;
 import org.droidplanner.fragments.helpers.DroneMap;
 import org.droidplanner.fragments.helpers.MapPath;
 import org.droidplanner.fragments.markers.MarkerManager.MarkerSource;
-import org.droidplanner.polygon.Polygon;
-import org.droidplanner.polygon.PolygonPoint;
+import org.droidplanner.polygon.*;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

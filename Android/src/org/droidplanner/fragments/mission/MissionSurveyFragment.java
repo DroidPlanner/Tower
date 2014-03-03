@@ -5,7 +5,7 @@ import org.droidplanner.R.id;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.drone.variables.mission.survey.Survey;
+import org.droidplanner.mission.*;
 import org.droidplanner.fragments.mission.survey.CamerasAdapter;
 import org.droidplanner.helpers.units.Altitude;
 import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText;

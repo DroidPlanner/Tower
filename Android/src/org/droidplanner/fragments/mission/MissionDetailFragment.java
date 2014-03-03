@@ -3,10 +3,7 @@ package org.droidplanner.fragments.mission;
 import org.droidplanner.DroidPlannerApp;
 import org.droidplanner.R;
 import org.droidplanner.activities.EditorActivity;
-import org.droidplanner.drone.variables.mission.Mission;
-import org.droidplanner.drone.variables.mission.MissionItem;
-import org.droidplanner.drone.variables.missionD.MissionItemD;
-import org.droidplanner.drone.variables.missionD.waypoints.SpatialCoordItemD;
+import org.droidplanner.mission.*;
 import org.droidplanner.fragments.mission.MissionItemTypes.InvalidItemException;
 import org.droidplanner.widgets.spinners.SpinnerSelfSelect;
 
