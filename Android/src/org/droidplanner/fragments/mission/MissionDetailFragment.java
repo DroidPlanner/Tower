@@ -22,7 +22,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 		OnItemSelectedListener {
 
 	public interface OnWayPointTypeChangeListener{
-		public void onWaypointTypeChanged(MissionItem newItem, MissionItemD oldItem);
+		public void onWaypointTypeChanged(MissionItem newItem, MissionItem oldItem);
 	}
 
 	protected abstract int getResource();

@@ -177,7 +177,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		}
 	}
 
-	private void showItemDetail(MissionItemUIElements item) {
+	private void showItemDetail(MissionItem item) {
 		if (itemDetailFragment == null) {
 			addItemDetail(item);
 		} else {
@@ -185,7 +185,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		}
 	}
 
-	private void addItemDetail(MissionItemUIElements item) {
+	private void addItemDetail(MissionItem item) {
 		itemDetailFragment = item.getDetailFragment();
 
         if (mContainerItemDetail == null) {
@@ -200,7 +200,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
         return itemDetailFragment;
     }
 
-	public void switchItemDetail(MissionItemUIElements item) {
+	public void switchItemDetail(MissionItem item) {
         removeItemDetail();
 		addItemDetail(item);
 	}
@@ -218,7 +218,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 	@Override
 	public void onPathFinished(List<Coord2D> path) {
-		List<LatLng> points = MapProjection.projectPathIntoMap(path,
+		List<Coord2D> points = MapProjection.projectPathIntoMap(path,
 				planningMapFragment.mMap);
 		switch (getTool()) {
 		case DRAW:
@@ -234,7 +234,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	}
 
 	@Override
-	public void onWaypointTypeChanged(MissionItem newItem, MissionItemD oldItem) {
+	public void onWaypointTypeChanged(MissionItem newItem, MissionItem oldItem) {
 		mission.replace(oldItem, newItem);
 		showItemDetail(newItem);
 	}
