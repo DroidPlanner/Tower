@@ -71,6 +71,8 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		missionListFragment = (EditorListFragment) fragmentManager
 				.findFragmentById(R.id.missionFragment1);
 		infoView = (TextView) findViewById(R.id.editorInfoWindow);
+		
+		infoView.setVisibility(View.GONE); //TODO Remove after fixing #676 
 
         /*
          * On phone, this view will be null causing the item detail to be shown as a dialog.

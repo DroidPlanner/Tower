@@ -280,7 +280,7 @@ public class FlightActivity extends DrawerNavigationUI implements
 
 	public void onFailsafeChanged(Drone drone) {
 		if (drone.state.isFailsafe()) {
-			failsafeTextView.setVisibility(View.VISIBLE);
+			//failsafeTextView.setVisibility(View.VISIBLE); // TODO re-enable after #677 is fixed 
 		} else {
 			failsafeTextView.setVisibility(View.GONE);
 		}
