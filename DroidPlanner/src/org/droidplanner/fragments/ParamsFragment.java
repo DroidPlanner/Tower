@@ -49,7 +49,8 @@ public class ParamsFragment extends ListFragment implements DroneInterfaces
         // create adapter
         if(savedInstanceState != null) {
             // load adapter items
-            final ArrayList<ParamsAdapterItem> pwms =
+            @SuppressWarnings("unchecked")
+			final ArrayList<ParamsAdapterItem> pwms =
                     (ArrayList<ParamsAdapterItem>) savedInstanceState.getSerializable(ADAPTER_ITEMS);
             adapter = new ParamsAdapter(getActivity(), R.layout.row_params, pwms);
 
@@ -183,7 +184,7 @@ public class ParamsFragment extends ListFragment implements DroneInterfaces
         }
         if(written > 0)
             adapter.notifyDataSetChanged();
-        Toast.makeText(getActivity(), written +" "+R.string.msg_parameters_written_to_drone, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), written +" "+getResources().getString(R.string.msg_parameters_written_to_drone), Toast.LENGTH_SHORT).show();
     }
 
     private void openParametersFromFile() {
