@@ -229,7 +229,6 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 			if (path.size()>2) {
 				drone.mission.addSurveyPolygon(points);				
 			}else{
-				Toast.makeText(this, "Invalid Region", Toast.LENGTH_SHORT).show();
 				editorToolsFragment.setTool(EditorTools.POLY);
 				return;
 			}

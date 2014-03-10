@@ -332,6 +332,7 @@
     <string name="menu_info_bar">Info Bar</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    <string name="guided_mode_warning">"Press OK to enter Guided mode. \nTo change locations, press and hold the map.</string>
 
     <!-- Bluetooth device selection strings -->
     <string name="select_device">Select device to connect</string>
