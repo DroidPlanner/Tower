@@ -1,8 +1,8 @@
 package org.droidplanner.drone.variables;
 
 import org.droidplanner.drone.Drone;
-import org.droidplanner.drone.DroneVariable;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
+import org.droidplanner.drone.DroneVariable;
 
 public class Orientation extends DroneVariable {
 	private double roll = 0;

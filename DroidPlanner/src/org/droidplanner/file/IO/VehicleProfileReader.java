@@ -1,21 +1,21 @@
 package org.droidplanner.file.IO;
 
-import android.content.Context;
-import android.content.res.AssetManager;
-import android.util.Xml;
-import android.view.View;
-import org.droidplanner.R;
-
-import org.droidplanner.file.AssetUtil;
-import org.droidplanner.file.DirectoryPath;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
+
+import org.droidplanner.R;
+import org.droidplanner.file.AssetUtil;
+import org.droidplanner.file.DirectoryPath;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
+import android.content.Context;
+import android.content.res.AssetManager;
+import android.util.Xml;
+import android.view.View;
 
 
 public class VehicleProfileReader {

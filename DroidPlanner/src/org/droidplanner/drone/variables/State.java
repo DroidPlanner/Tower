@@ -2,8 +2,8 @@ package org.droidplanner.drone.variables;
 
 import org.droidplanner.MAVLink.MavLinkModes;
 import org.droidplanner.drone.Drone;
-import org.droidplanner.drone.DroneVariable;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
+import org.droidplanner.drone.DroneVariable;
 
 import android.os.SystemClock;
 

@@ -1,14 +1,14 @@
 package org.droidplanner.file.IO;
 
-import android.view.View;
-import android.widget.TextView;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
+
+import android.view.View;
+import android.widget.TextView;
 
 
 public class VehicleProfile {

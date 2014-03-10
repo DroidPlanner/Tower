@@ -1,5 +1,7 @@
 package org.droidplanner.widgets.SeekBarWithText;
 
+import org.droidplanner.R;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
@@ -7,8 +9,6 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
-
-import org.droidplanner.R;
 
 public class SeekBarWithText extends LinearLayout implements
 		OnSeekBarChangeListener {

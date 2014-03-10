@@ -1,5 +1,18 @@
 package org.droidplanner.adapters;
 
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.droidplanner.R;
+import org.droidplanner.drone.Drone;
+import org.droidplanner.file.IO.ParameterMetadataMapReader;
+import org.droidplanner.file.IO.VehicleProfile;
+import org.droidplanner.parameters.Parameter;
+import org.droidplanner.parameters.ParameterMetadata;
+
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -12,25 +25,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
-import org.droidplanner.R;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.droidplanner.DroidPlannerApp;
-import org.droidplanner.drone.Drone;
-import org.droidplanner.file.DirectoryPath;
-import org.droidplanner.file.IO.ParameterMetadataMapReader;
-import org.droidplanner.file.IO.VehicleProfile;
-import org.droidplanner.parameters.Parameter;
-import org.droidplanner.parameters.ParameterMetadata;
 
 /**
  * Date: 2013-12-08

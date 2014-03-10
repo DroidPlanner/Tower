@@ -1,6 +1,6 @@
 package org.droidplanner.fragments.calibration.flightmodes;
 
-import android.widget.TableRow;
+import org.droidplanner.R;
 import org.droidplanner.calibration.CalParameters;
 import org.droidplanner.calibration.FM_CalParameters;
 import org.droidplanner.drone.Drone;
@@ -8,13 +8,13 @@ import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.fragments.calibration.FragmentSetupSend;
 import org.droidplanner.fragments.calibration.SetupSidePanel;
 import org.droidplanner.fragments.helpers.SuperSetupMainPanel;
-import org.droidplanner.R;
 
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 public class FragmentSetupFM extends SuperSetupMainPanel {

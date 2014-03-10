@@ -1,10 +1,6 @@
 package org.droidplanner.utils;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.preference.PreferenceManager;
+import java.util.Locale;
 
 import org.droidplanner.connection.BluetoothConnection;
 import org.droidplanner.connection.MAVLinkConnection;
@@ -12,7 +8,10 @@ import org.droidplanner.connection.TcpConnection;
 import org.droidplanner.connection.UdpConnection;
 import org.droidplanner.connection.UsbConnection;
 
-import java.util.Locale;
+import android.content.Context;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.preference.PreferenceManager;
 
 /**
  * Contains application related functions.

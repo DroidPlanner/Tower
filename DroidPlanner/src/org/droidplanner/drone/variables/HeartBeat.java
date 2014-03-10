@@ -5,16 +5,16 @@ import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.drone.DroneVariable;
 
-import com.MAVLink.Messages.ardupilotmega.msg_heartbeat;
-
 import android.os.Handler;
+
+import com.MAVLink.Messages.ardupilotmega.msg_heartbeat;
 
 public class HeartBeat extends DroneVariable implements OnDroneListener {
 
 	private static long HEARTBEAT_NORMAL_TIMEOUT = 5000;
 	private static long HEARTBEAT_LOST_TIMEOUT = 15000;
 
-	public HeartbeatState heartbeatState;
+	public HeartbeatState heartbeatState = HeartbeatState.FIRST_HEARTBEAT;;
 	public int droneID = 1;
 
 	enum HeartbeatState {
@@ -67,12 +67,12 @@ public class HeartBeat extends DroneVariable implements OnDroneListener {
 	}
 
 	private void notifyConnected() {
-		heartbeatState = HeartbeatState.FIRST_HEARTBEAT;
 		restartWatchdog(HEARTBEAT_NORMAL_TIMEOUT);
 	}
 
 	private void notifiyDisconnected() {
 		watchdog.removeCallbacks(watchdogCallback);
+		heartbeatState = HeartbeatState.FIRST_HEARTBEAT;
 	}
 
 	private void onHeartbeatTimeout() {

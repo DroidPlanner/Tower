@@ -1,6 +1,5 @@
 package org.droidplanner.fragments;
 
-import android.support.v4.app.Fragment;
 import it.sephiroth.android.library.widget.AdapterView;
 import it.sephiroth.android.library.widget.AdapterView.OnItemClickListener;
 import it.sephiroth.android.library.widget.AdapterView.OnItemLongClickListener;
@@ -10,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.droidplanner.DroidPlannerApp;
+import org.droidplanner.R;
 import org.droidplanner.activities.helpers.OnEditorInteraction;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
@@ -20,6 +20,7 @@ import org.droidplanner.widgets.adapterViews.MissionItemView;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,8 +28,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ListView;
-
-import org.droidplanner.R;
 
 public class EditorListFragment extends Fragment implements  OnItemLongClickListener,  OnItemClickListener, OnDroneListener, OnClickListener{
 	private HListView list;

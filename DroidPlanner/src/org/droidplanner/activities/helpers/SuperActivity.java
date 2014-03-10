@@ -2,8 +2,6 @@ package org.droidplanner.activities.helpers;
 
 import org.droidplanner.DroidPlannerApp;
 import org.droidplanner.R;
-import org.droidplanner.activities.ConfigurationActivity;
-import org.droidplanner.activities.SettingsActivity;
 import org.droidplanner.dialogs.AltitudeDialog;
 import org.droidplanner.dialogs.AltitudeDialog.OnAltitudeChangedListener;
 import org.droidplanner.drone.Drone;
@@ -12,16 +10,15 @@ import org.droidplanner.fragments.helpers.OfflineMapFragment;
 import org.droidplanner.glass.fragments.BTDeviceCardsFragment;
 import org.droidplanner.glass.utils.GlassUtils;
 import org.droidplanner.helpers.units.Altitude;
+import org.droidplanner.utils.Constants;
+import org.droidplanner.utils.Utils;
 
-import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.MenuItem;
-import org.droidplanner.utils.Constants;
-import org.droidplanner.utils.Utils;
 
 public abstract class SuperActivity extends FragmentActivity implements OnAltitudeChangedListener {
 

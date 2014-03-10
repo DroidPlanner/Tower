@@ -6,8 +6,8 @@ import java.util.List;
 import org.droidplanner.MAVLink.MavLinkParameters;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces;
-import org.droidplanner.drone.DroneVariable;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
+import org.droidplanner.drone.DroneVariable;
 import org.droidplanner.parameters.Parameter;
 
 import com.MAVLink.Messages.MAVLinkMessage;

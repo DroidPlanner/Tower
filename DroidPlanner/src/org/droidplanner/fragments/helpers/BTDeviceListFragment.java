@@ -1,5 +1,11 @@
 package org.droidplanner.fragments.helpers;
 
+import java.util.Set;
+
+import org.droidplanner.DroidPlannerApp;
+import org.droidplanner.R;
+import org.droidplanner.utils.Constants;
+
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -20,11 +26,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import org.droidplanner.DroidPlannerApp;
-import org.droidplanner.R;
-import org.droidplanner.utils.Constants;
-
-import java.util.Set;
 
 /**
  * This is used to show the user a list of bluetooth devices to connect to.

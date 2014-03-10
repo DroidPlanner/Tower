@@ -1,10 +1,5 @@
 package org.droidplanner.widgets.actionProviders;
 
-import android.content.Context;
-import android.view.ActionProvider;
-import android.view.LayoutInflater;
-import android.view.View;
-
 import org.droidplanner.R;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces;
@@ -16,6 +11,11 @@ import org.droidplanner.widgets.actionProviders.InfoBarItem.GpsInfo;
 import org.droidplanner.widgets.actionProviders.InfoBarItem.HomeInfo;
 import org.droidplanner.widgets.actionProviders.InfoBarItem.PhoneExtraInfo;
 import org.droidplanner.widgets.actionProviders.InfoBarItem.SignalInfo;
+
+import android.content.Context;
+import android.view.ActionProvider;
+import android.view.LayoutInflater;
+import android.view.View;
 
 /**
  * This implements the info bar displayed on the action bar after connection with the drone.

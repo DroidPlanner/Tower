@@ -139,7 +139,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 	}
 
 	private void updateViews() {
-		updateTextViews();
+		updateTextViews();			
 		updateSeekBars();
 		updateCameraSpinner();
 	}
@@ -157,28 +157,50 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 
 	private void updateTextViews() {
 		Context context = getActivity();
-		footprintTextView.setText(context.getString(R.string.footprint) + ": "
-				+ survey.surveyData.getLateralFootPrint() + " x"
-				+ survey.surveyData.getLongitudinalFootPrint());
-		groundResolutionTextView.setText(context
-				.getString(R.string.ground_resolution)
-				+ ": "
-				+ survey.surveyData.getGroundResolution() + "/px");
-		distanceTextView.setText(context
-				.getString(R.string.distance_between_pictures)
-				+ ": "
-				+ survey.surveyData.getLongitudinalPictureDistance());
-		distanceBetweenLinesTextView.setText(context
-				.getString(R.string.distance_between_lines)
-				+ ": "
-				+ survey.surveyData.getLateralPictureDistance());
-		areaTextView.setText(context.getString(R.string.area) + ": "
-				+ survey.polygon.getArea());
-		lengthView.setText(context.getString(R.string.mission_length) + ": "
-				+ survey.grid.getLength());
-		numberOfPicturesView.setText(context.getString(R.string.pictures)
-				+ ": " + survey.grid.getCameraCount());
-		numberOfStripsView.setText(context.getString(R.string.number_of_strips)
-				+ ": " + survey.grid.getNumberOfLines());
+		try{
+			footprintTextView.setText(context.getString(R.string.footprint) + ": "
+					+ survey.surveyData.getLateralFootPrint() + " x"
+					+ survey.surveyData.getLongitudinalFootPrint());
+			groundResolutionTextView.setText(context
+					.getString(R.string.ground_resolution)
+					+ ": "
+					+ survey.surveyData.getGroundResolution() + "/px");
+			distanceTextView.setText(context
+					.getString(R.string.distance_between_pictures)
+					+ ": "
+					+ survey.surveyData.getLongitudinalPictureDistance());
+			distanceBetweenLinesTextView.setText(context
+					.getString(R.string.distance_between_lines)
+					+ ": "
+					+ survey.surveyData.getLateralPictureDistance());
+			areaTextView.setText(context.getString(R.string.area) + ": "
+					+ survey.polygon.getArea());
+			lengthView.setText(context.getString(R.string.mission_length) + ": "
+					+ survey.grid.getLength());
+			numberOfPicturesView.setText(context.getString(R.string.pictures)
+					+ ": " + survey.grid.getCameraCount());
+			numberOfStripsView.setText(context.getString(R.string.number_of_strips)
+					+ ": " + survey.grid.getNumberOfLines());
+		}catch (Exception e){
+			footprintTextView.setText(context.getString(R.string.footprint) + ": "
+					+ "???");
+			groundResolutionTextView.setText(context
+					.getString(R.string.ground_resolution)
+					+ ": "+ "???");
+			distanceTextView.setText(context
+					.getString(R.string.distance_between_pictures)
+					+ ": "+ "???");
+			distanceBetweenLinesTextView.setText(context
+					.getString(R.string.distance_between_lines)
+					+ ": "+ "???");
+			areaTextView.setText(context.getString(R.string.area) + ": "
+					+ "???");
+			lengthView.setText(context.getString(R.string.mission_length) + ": "
+					+ "???");
+			numberOfPicturesView.setText(context.getString(R.string.pictures)
+					+ "???");
+			numberOfStripsView.setText(context.getString(R.string.number_of_strips)
+					+ "???");
+		}
 	}
 }

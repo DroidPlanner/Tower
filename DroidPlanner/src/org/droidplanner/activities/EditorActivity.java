@@ -2,6 +2,7 @@ package org.droidplanner.activities;
 
 import java.util.List;
 
+import org.droidplanner.R;
 import org.droidplanner.activities.helpers.OnEditorInteraction;
 import org.droidplanner.activities.helpers.SuperUI;
 import org.droidplanner.drone.Drone;
@@ -14,8 +15,8 @@ import org.droidplanner.fragments.EditorToolsFragment;
 import org.droidplanner.fragments.EditorToolsFragment.EditorTools;
 import org.droidplanner.fragments.EditorToolsFragment.OnEditorToolSelected;
 import org.droidplanner.fragments.helpers.GestureMapFragment;
-import org.droidplanner.fragments.helpers.MapProjection;
 import org.droidplanner.fragments.helpers.GestureMapFragment.OnPathFinishedListener;
+import org.droidplanner.fragments.helpers.MapProjection;
 import org.droidplanner.fragments.mission.MissionDetailFragment;
 import org.droidplanner.fragments.mission.MissionDetailFragment.OnWayPointTypeChangeListener;
 
@@ -31,8 +32,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import org.droidplanner.R;
 import com.google.android.gms.maps.model.LatLng;
 
 public class EditorActivity extends SuperUI implements OnPathFinishedListener,
@@ -166,6 +167,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		switch (tools) {
 		case DRAW:
 		case POLY:
+			Toast.makeText(this,R.string.draw_the_survey_region, Toast.LENGTH_SHORT).show();
 			gestureMapFragment.enableGestureDetection();
 			break;
 		case MARKER:
@@ -224,7 +226,12 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 			drone.mission.addWaypoints(points);
 			break;
 		case POLY:
-			drone.mission.addSurveyPolygon(points);
+			if (path.size()>2) {
+				drone.mission.addSurveyPolygon(points);				
+			}else{
+				editorToolsFragment.setTool(EditorTools.POLY);
+				return;
+			}
 			break;
 		default:
 			break;
@@ -292,9 +299,9 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 			notifySelectionChanged();
 		} else {
 			removeItemDetail();
+			editorToolsFragment.setTool(EditorTools.NONE);
 			missionListFragment.updateChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 			contextualActionBar = startActionMode(this);
-			editorToolsFragment.setTool(EditorTools.NONE);
 			mission.clearSelection();
 			mission.addToSelection(item);
 			notifySelectionChanged();
@@ -317,6 +324,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 					mission.clearSelection();
 					removeItemDetail();
 				} else {
+					editorToolsFragment.setTool(EditorTools.NONE);
 					mission.setSelectionTo(item);
 					showItemDetail(item);
 				}

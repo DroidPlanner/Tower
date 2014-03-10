@@ -1,8 +1,8 @@
 package org.droidplanner.drone.variables;
 
 import org.droidplanner.drone.Drone;
-import org.droidplanner.drone.DroneVariable;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
+import org.droidplanner.drone.DroneVariable;
 import org.droidplanner.fragments.markers.HomeMarker;
 import org.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import org.droidplanner.helpers.geoTools.GeoTools;

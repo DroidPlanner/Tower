@@ -1,23 +1,18 @@
 package org.droidplanner.activities;
 
-import android.app.ActionBar;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.widget.DrawerLayout;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ExpandableListView;
-
 import org.droidplanner.R;
 import org.droidplanner.activities.helpers.SuperUI;
 import org.droidplanner.activities.interfaces.HelpProvider;
-import org.droidplanner.utils.Utils;
 import org.droidplanner.widgets.adapterViews.NavigationDrawerAdapter;
+
+import android.app.ActionBar;
+import android.content.res.Configuration;
+import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.widget.DrawerLayout;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ExpandableListView;
 
 /**
  * This abstract activity provides its children access to a navigation drawer interface.

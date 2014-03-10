@@ -3,9 +3,8 @@ package org.droidplanner.checklist.listadapter;
 import java.util.HashMap;
 import java.util.List;
 
-import org.droidplanner.checklist.row.ListRow_Interface;
-
 import org.droidplanner.R;
+import org.droidplanner.checklist.row.ListRow_Interface;
 
 import android.graphics.Typeface;
 import android.view.LayoutInflater;

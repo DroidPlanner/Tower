@@ -3,12 +3,12 @@ package org.droidplanner.drone.variables.mission.survey.grid;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.droidplanner.R;
 import org.droidplanner.helpers.geoTools.GeoTools;
 import org.droidplanner.helpers.geoTools.LineLatLng;
 import org.droidplanner.polygon.PolyBounds;
 
 import android.content.Context;
-import org.droidplanner.R;
 
 import com.google.android.gms.maps.model.LatLng;
 

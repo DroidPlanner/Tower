@@ -2,8 +2,8 @@ package org.droidplanner.drone.variables;
 
 import org.droidplanner.MAVLink.MavLinkCalibration;
 import org.droidplanner.drone.Drone;
-import org.droidplanner.drone.DroneVariable;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
+import org.droidplanner.drone.DroneVariable;
 
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_statustext;

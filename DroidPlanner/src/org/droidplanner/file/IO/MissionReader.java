@@ -14,8 +14,6 @@ import org.droidplanner.file.DirectoryPath;
 import org.droidplanner.file.FileList;
 import org.droidplanner.file.FileManager;
 
-import com.MAVLink.Messages.ApmCommands;
-
 public class MissionReader implements FileReader {
 	private Home home;
 	private List<SpatialCoordItem> waypoints;

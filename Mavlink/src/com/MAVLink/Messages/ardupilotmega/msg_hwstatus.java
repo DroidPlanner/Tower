@@ -2,8 +2,8 @@
 package com.MAVLink.Messages.ardupilotmega;
 
 import com.MAVLink.Messages.MAVLinkMessage;
-import com.MAVLink.Messages.MAVLinkPayload;
 import com.MAVLink.Messages.MAVLinkPacket;
+import com.MAVLink.Messages.MAVLinkPayload;
 //import android.util.Log;
 
 /**

@@ -37,6 +37,11 @@
         <attr name="android:button" />
     </declare-styleable>
 
+    <!-- Properties for org.droidplanner.widgets.spinners.SpinnerSelfSelect widget -->
+    <declare-styleable name="SpinnerSelfSelect">
+        <attr name="isSelectable" format="reference|boolean" />
+    </declare-styleable>
+
     <declare-styleable name="HUD">
         <attr name="android:enabled" />
         <attr name="skyColor" format="color" />
