@@ -117,11 +117,6 @@ public class ParamsFragment extends ListFragment implements DroneInterfaces
         for(int i = 0; i < adapter.getCount(); i++)
             pwms.add(adapter.getItem(i));
         outState.putSerializable(ADAPTER_ITEMS, pwms);
-
-        //If a value is being edited, save the location and keyboard state
-        final int selectedPos = getSelectedItemPosition();
-        Toast.makeText(getActivity(), "Selected Position: " + selectedPos, Toast.LENGTH_LONG).show();
-        outState.putInt("SELECTED_POS", selectedPos);
     }
 
     @Override

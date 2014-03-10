@@ -26,7 +26,7 @@
 
     <EditText
         android:id="@+id/params_row_value"
-        android:inputType="number|numberDecimal|numberSigned"
+        android:inputType="number|text"
         android:digits="0123456789.,-"
         android:gravity="right|center_vertical"
         android:layout_width="120dp"
