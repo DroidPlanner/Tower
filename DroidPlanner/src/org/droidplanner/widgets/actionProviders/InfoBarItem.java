@@ -1,12 +1,5 @@
 package org.droidplanner.widgets.actionProviders;
 
-import java.util.Collections;
-import java.util.List;
-
-import org.droidplanner.R;
-import org.droidplanner.drone.Drone;
-import org.droidplanner.widgets.spinners.ModeAdapter;
-
 import android.content.Context;
 import android.os.Handler;
 import android.view.Gravity;
@@ -19,6 +12,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.MAVLink.Messages.ApmModes;
+
+import org.droidplanner.R;
+import org.droidplanner.drone.Drone;
+import org.droidplanner.drone.variables.State;
+import org.droidplanner.widgets.spinners.ModeAdapter;
+import org.droidplanner.widgets.spinners.SpinnerSelfSelect;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Set of actions supported by the info bar
@@ -377,23 +379,20 @@ public abstract class InfoBarItem {
             if(mItemView == null)
                 return;
 
-            final Spinner modesSpinner = (Spinner) mItemView;
+            final SpinnerSelfSelect modesSpinner = (SpinnerSelfSelect) mItemView;
 
             mModeAdapter = new ModeAdapter(context, R.layout.spinner_drop_down);
             modesSpinner.setAdapter(mModeAdapter);
 
-            modesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            modesSpinner.setOnSpinnerItemSelectedListener(new SpinnerSelfSelect
+                    .OnSpinnerItemSelectedListener() {
                 @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position,
-                                           long id) {
+                public void onSpinnerItemSelected(Spinner parent, int position, String text) {
                     if (mDrone != null) {
-                        ApmModes newMode = (ApmModes) parent.getItemAtPosition(position);
+                        final ApmModes newMode = (ApmModes) parent.getItemAtPosition(position);
                         mDrone.state.changeFlightMode(newMode);
                     }
                 }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {}
             });
 
             updateItemView(context, drone);
@@ -406,7 +405,7 @@ public abstract class InfoBarItem {
             if (mItemView == null)
                 return;
 
-            final Spinner modesSpinner = (Spinner) mItemView;
+            final SpinnerSelfSelect modesSpinner = (SpinnerSelfSelect) mItemView;
             final int droneType = drone == null ? -1: drone.type.getType();
             if(droneType != mLastDroneType){
                 final List<ApmModes> flightModes = droneType == -1
@@ -421,7 +420,7 @@ public abstract class InfoBarItem {
             }
 
             if (mDrone != null)
-                modesSpinner.setSelection(mModeAdapter.getPosition(mDrone.state.getMode()));
+                modesSpinner.forcedSetSelection(mModeAdapter.getPosition(mDrone.state.getMode()));
         }
     }
 

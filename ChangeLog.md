@@ -8,6 +8,11 @@ Our convention for release control is the following (for a release like DPvA.B.C
 All the changes are logged below (preferable with the pull request numbers in parenteses):
 
 # Releases
+## Droidplanner v2.2.4
+* Fix User Experience problems with the Survey tool (#688)
+* Updated the README file (#687)
+* Fix problems with the Flight Mode spinner(#686,#675)
+
 ## Droidplanner v2.2.3
 * Fix User Experience problems at the Editor (#670)
 * Make landscape the default camera orientation for Survey (#671)

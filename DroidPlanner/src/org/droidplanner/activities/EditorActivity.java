@@ -32,6 +32,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -168,6 +169,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		switch (tools) {
 		case DRAW:
 		case POLY:
+			Toast.makeText(this,R.string.draw_the_survey_region, Toast.LENGTH_SHORT).show();
 			gestureMapFragment.enableGestureDetection();
 			break;
 		case MARKER:
@@ -226,7 +228,13 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 			drone.mission.addWaypoints(points);
 			break;
 		case POLY:
-			drone.mission.addSurveyPolygon(points);
+			if (path.size()>2) {
+				drone.mission.addSurveyPolygon(points);				
+			}else{
+				Toast.makeText(this, "Invalid Region", Toast.LENGTH_SHORT).show();
+				editorToolsFragment.setTool(EditorTools.POLY);
+				return;
+			}
 			break;
 		default:
 			break;
