@@ -20,7 +20,7 @@ public class SelectModeSpinner extends SpinnerSelfSelect implements
 	public SelectModeSpinner(Context context) {
 		super(context);
 		this.context = context;
-		selectable = false;
+		setSelectable(false);
 	}
 
 	@Override
