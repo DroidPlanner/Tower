@@ -37,4 +37,9 @@
         <attr name="android:button" />
     </declare-styleable>
 
+    <!-- Properties for org.droidplanner.widgets.spinners.SpinnerSelfSelect widget -->
+    <declare-styleable name="SpinnerSelfSelect">
+        <attr name="isSelectable" format="reference|boolean" />
+    </declare-styleable>
+
 </resources>
