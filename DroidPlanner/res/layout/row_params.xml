@@ -27,8 +27,10 @@
     <EditText
         android:id="@+id/params_row_value"
         android:inputType="number|numberDecimal|numberSigned"
+        android:digits="0123456789.,-"
         android:gravity="right|center_vertical"
         android:layout_width="120dp"
+        android:selectAllOnFocus="true"
         android:layout_height="wrap_content"/>
 
 </LinearLayout>
