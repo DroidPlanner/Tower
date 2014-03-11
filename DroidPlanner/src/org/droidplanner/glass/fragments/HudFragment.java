@@ -33,8 +33,11 @@ public class HudFragment extends Fragment implements DroneInterfaces.OnDroneList
     public void onStart(){
         super.onStart();
 
-        final DroneEvents droneEvents = ((SuperActivity) getActivity()).app.drone.events;
-        droneEvents.addDroneListener(this);
+        final Drone drone = ((SuperActivity) getActivity()).app.drone;
+        drone.events.addDroneListener(this);
+
+        //Check if we're connected to the drone
+        hudWidget.setEnabled(drone.MavClient.isConnected());
     }
 
     @Override

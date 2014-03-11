@@ -2,7 +2,7 @@ package org.droidplanner.utils;
 
 import java.util.Locale;
 
-import org.droidplanner.connection.BluetoothConnection;
+import org.droidplanner.connection.bluetooth.BluetoothConnection;
 import org.droidplanner.connection.MAVLinkConnection;
 import org.droidplanner.connection.TcpConnection;
 import org.droidplanner.connection.UdpConnection;

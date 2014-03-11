@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
+import android.view.SoundEffectConstants;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -111,6 +112,9 @@ public class BTDeviceCardsFragment extends DialogFragment {
         mCardsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //Perform click sound
+                view.playSoundEffect(SoundEffectConstants.CLICK);
+
                 final BluetoothDevice device = (BluetoothDevice) parent.getItemAtPosition(position);
                 if (device == null)
                     return;
@@ -129,8 +133,8 @@ public class BTDeviceCardsFragment extends DialogFragment {
                 ((DroidPlannerApp) activity.getApplication()).drone.MavClient
                         .toggleConnectionState();
 
-                //Close the parent activity
-                activity.finish();
+                //Close the dialog fragment
+                dismiss();
             }
         });
 

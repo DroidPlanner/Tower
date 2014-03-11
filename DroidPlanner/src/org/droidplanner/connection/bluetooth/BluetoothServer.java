@@ -1,19 +1,22 @@
-package org.droidplanner.connection;
+package org.droidplanner.connection.bluetooth;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
+
 import com.MAVLink.Messages.MAVLinkPacket;
+
+import org.droidplanner.connection.MAVLinkConnection;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -65,10 +68,29 @@ public class BluetoothServer {
     }
 
     /**
-     * Stores the set of relay listeners.
-     * @since 1.2.0
+     * Tracks whether or not the bluetooth server was started.
      */
-    private final Set<RelayListener> mRelayListenerSet = new HashSet<RelayListener>();
+    private final AtomicBoolean mIsStarted = new AtomicBoolean(false);
+
+    /**
+     * Handles the various threads used to implement the server's logic.
+     */
+    private ExecutorService mThreadHandler;
+
+    /**
+     * This thread handles connection with the gcs clients.
+     */
+    private AcceptThread mAcceptThread;
+
+    /**
+     * Routes message from the connected drone to the listening gcs clients.
+     */
+    private final DroneToGCSClientsRouter mDroneToGcs;
+
+    /**
+     * Routes message from the gcs clients to the drone.
+     */
+    private final GCSClientsToDroneRouter mGcsToDrone;
 
     /**
      * This is the bluetooth adapter.
@@ -76,13 +98,6 @@ public class BluetoothServer {
      * @since 1.2.0
      */
     private final BluetoothAdapter mAdapter;
-
-    /**
-     * Handle to the worker thread.
-     *
-     * @since 1.2.0
-     */
-    private AcceptThread mAcceptThread;
 
     /**
      * Pool of uuids. The AcceptThread thread creates server sockets from this pool until it's
@@ -112,72 +127,77 @@ public class BluetoothServer {
         for (final UUID uuid : UUIDS) {
             mUUIDPool.add(uuid);
         }
+
+        /*
+        Build the set of threads handling the logic
+         */
+        mDroneToGcs = new DroneToGCSClientsRouter(mUuidToClient.values(), "BT Drone 2 GCS Router");
+        mGcsToDrone = new GCSClientsToDroneRouter("BT GCS 2 drone router");
     }
 
     /**
      * Adds the passed relay listener to the listeners set.
      * @param listener {@link BluetoothServer.RelayListener} object
-     * @since 1.2.0
      */
     public void addRelayListener(RelayListener listener){
-        if(listener != null)
-        mRelayListenerSet.add(listener);
+        mGcsToDrone.addRelayListener(listener);
     }
 
     /**
      * Removes the passed relay listener from the listeners set.
      * @param listener {@link BluetoothServer.RelayListener} object
-     * @since 1.2.0
      */
     public void removeRelayListener(RelayListener listener){
-        if(listener != null)
-            mRelayListenerSet.remove(listener);
+        mGcsToDrone.removeListener(listener);
     }
 
     /**
      * Starts the bluetooth server.
-     *
-     * @since 1.2.0
      */
     public synchronized void start() {
-        Log.d(TAG, "Starting bluetooth server.");
-        //Start the worker thread.
-        if (mAcceptThread == null) {
+        if (mIsStarted.compareAndSet(false, true)) {
+            Log.d(TAG, "Starting bluetooth server.");
+
             mAcceptThread = new AcceptThread();
-            mAcceptThread.start();
+
+            mThreadHandler = Executors.newCachedThreadPool();
+            mThreadHandler.execute(mDroneToGcs);
+            mThreadHandler.execute(mGcsToDrone);
+            mThreadHandler.execute(mAcceptThread);
+        } else {
+            Log.d(TAG, "Bluetooth server was already started.");
         }
     }
 
     /**
      * Stops the bluetooth server.
-     *
-     * @since 1.2.0
      */
     public synchronized void stop() {
-        Log.d(TAG, "Stopping bluetooth server.");
-        if (mAcceptThread != null) {
-            mAcceptThread.cancel();
-            mAcceptThread = null;
-        }
+        if (mIsStarted.compareAndSet(true, false)) {
+            Log.d(TAG, "Stopping bluetooth server.");
 
-        for (final ConnectedThread connectedThread : mUuidToClient.values()) {
-            if (connectedThread != null)
-                connectedThread.cancel();
+            //Stop the accept thread
+            if (mAcceptThread != null)
+                mAcceptThread.cancel();
+
+            //Stop the connected thread
+            for (ConnectedThread gcsThread : mUuidToClient.values()) {
+                gcsThread.cancel();
+            }
+
+            mThreadHandler.shutdownNow();
+            mThreadHandler = null;
+        } else {
+            Log.d(TAG, "Bluetooth server was already stopped.");
         }
     }
 
     /**
-     * Format and relay a Mavlink packet via bluetooth
+     * Pass the mavlink packet to the drone to gcs clients routing thread.
      * @param packet MAVLink packet to be relayed
      */
     public void relayMavPacket(MAVLinkPacket packet){
-        byte[] buffer = packet.encodePacket();
-
-        //Write to all the connected thread.
-         for(ConnectedThread connectedThread: mUuidToClient.values()){
-             if(connectedThread != null)
-                 connectedThread.write(buffer);
-         }
+        mDroneToGcs.addMsg(packet);
     }
 
     /**
@@ -185,7 +205,7 @@ public class BluetoothServer {
      *
      * @since 1.2.0
      */
-    private class AcceptThread extends Thread {
+    private class AcceptThread implements Runnable {
 
         /**
          * Server socket currently listening for incoming connections.
@@ -195,11 +215,9 @@ public class BluetoothServer {
         private BluetoothServerSocket mServerSocket;
 
         /**
-         * Whether or not the thread should be running.
-         *
-         * @since 1.2.0
+         * Keeps track of whether the thread is running or not.
          */
-        private final AtomicBoolean mIsRunning = new AtomicBoolean(true);
+        private final AtomicBoolean mIsRunning = new AtomicBoolean(false);
 
         /**
          * Starts listening for incoming client connections.
@@ -207,11 +225,11 @@ public class BluetoothServer {
          * @since 1.2.0
          */
         public void run() {
+            mIsRunning.set(true);
             Log.d(TAG, "Starting accept thread.");
-            setName(AcceptThread.class.getSimpleName());
 
             try {
-                while (mIsRunning.get()) {
+                while (!Thread.currentThread().isInterrupted() && mIsRunning.get()) {
                     final UUID uuid = mUUIDPool.take();
 
                     mServerSocket = mAdapter.listenUsingInsecureRfcommWithServiceRecord(NAME, uuid);
@@ -223,7 +241,7 @@ public class BluetoothServer {
 
                     //Launch the connected thread.
                     ConnectedThread connectedThread = new ConnectedThread(uuid, socket);
-                    connectedThread.start();
+                    mThreadHandler.execute(connectedThread);
 
                     //Update the uuid to client map.
                     mUuidToClient.put(uuid, connectedThread);
@@ -232,6 +250,8 @@ public class BluetoothServer {
                 Log.e(TAG, "Accept failed", e);
             } catch (InterruptedException e) {
                 Log.e(TAG, "UUID retrieval failed.", e);
+            } finally {
+                cancel();
             }
 
             Log.d(TAG, "Ending accept thread.");
@@ -243,15 +263,14 @@ public class BluetoothServer {
          * @since 1.2.0
          */
         public void cancel() {
-            Log.d(TAG, "Cancelling the accept thread.");
-            mIsRunning.set(false);
-
-            if (mServerSocket != null)
+            if (mIsRunning.compareAndSet(true, false)){
                 try {
+                    Log.d(TAG, "Cancelling the accept thread.");
                     mServerSocket.close();
                 } catch (IOException e) {
                     Log.e(TAG, "Close of server socket failed.", e);
                 }
+            }
         }
     }
 
@@ -260,7 +279,7 @@ public class BluetoothServer {
      *
      * @since 1.2.0
      */
-    private class ConnectedThread extends Thread {
+    public class ConnectedThread implements Runnable {
 
         /**
          * Uuid the bluetooth socket is connected to.
@@ -290,12 +309,7 @@ public class BluetoothServer {
          */
         private final OutputStream mOutStream;
 
-        /**
-         * Wether or not the thread should run.
-         *
-         * @since 1.2.0
-         */
-        private final AtomicBoolean mIsRunning;
+        private final AtomicBoolean mIsRunning = new AtomicBoolean(false);
 
         public ConnectedThread(UUID uuid, BluetoothSocket socket) {
             mUuid = uuid;
@@ -307,8 +321,6 @@ public class BluetoothServer {
             } catch (IOException e) {
                 throw new IllegalStateException(e);
             }
-
-            mIsRunning = new AtomicBoolean(true);
         }
 
         /**
@@ -317,6 +329,8 @@ public class BluetoothServer {
          * @since 1.2.0
          */
         public void run() {
+            mIsRunning.set(true);
+
             final String address = mSocket.getRemoteDevice().getAddress();
             Log.d(TAG, "Starting connected thread for " + address);
 
@@ -324,22 +338,22 @@ public class BluetoothServer {
             int bytes;
 
             //Keep listening to the input stream while connected
-            while (mIsRunning.get()) {
-                try {
+            try {
+                while (!Thread.currentThread().isInterrupted() && mIsRunning.get()) {
                     //Read from the input stream
                     bytes = mInStream.read(buffer);
 
                     //Relayed the received messages
                     MAVLinkPacket[] receivedPackets = MAVLinkConnection.parseMavlinkBuffer
                             (buffer, bytes);
-                    for(RelayListener listener: mRelayListenerSet){
-                        listener.onMessageToRelay(receivedPackets);
-                    }
-                } catch (IOException e) {
-                    Log.e(TAG, "Disconnected", e);
-                    cancel();
-                    break;
+
+                    //Relay the message from the gcs client to the drone
+                    mGcsToDrone.addMsg(receivedPackets);
                 }
+            } catch (IOException e) {
+                Log.e(TAG, "Disconnected", e);
+            } finally {
+                cancel();
             }
         }
 
@@ -363,19 +377,21 @@ public class BluetoothServer {
          * @since 1.2.0
          */
         public void cancel() {
-            mIsRunning.set(false);
+            if (mIsRunning.compareAndSet(true, false)) {
+                Log.d(TAG, "Shutting down connected thread for uuid " + mUuid);
 
-            try {
-                mSocket.close();
-            } catch (IOException e) {
-                Log.e(TAG, "close() of connect socket failed.", e);
+                try {
+                    mSocket.close();
+                } catch (IOException e) {
+                    Log.e(TAG, "close() of connect socket failed.", e);
+                }
+
+                //Remove the mapping for this uuid.
+                mUuidToClient.remove(mUuid);
+
+                //Return the uuid to the pool.
+                mUUIDPool.add(mUuid);
             }
-
-            //Remove the mapping for this uuid.
-            mUuidToClient.remove(mUuid);
-
-            //Return the uuid to the pool.
-            mUUIDPool.add(mUuid);
         }
     }
 }
