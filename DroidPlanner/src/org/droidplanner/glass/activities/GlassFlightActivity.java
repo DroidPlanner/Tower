@@ -15,14 +15,18 @@ import org.droidplanner.R;
 import org.droidplanner.activities.SettingsActivity;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces;
-import org.droidplanner.fragments.SettingsFragment;
+import org.droidplanner.glass.fragments.DashboardFragment;
+import org.droidplanner.glass.fragments.DashboardFragment.*;
 import org.droidplanner.glass.fragments.GlassMapFragment;
 import org.droidplanner.glass.fragments.HudFragment;
 import org.droidplanner.glass.utils.GlassUtils;
 import org.droidplanner.utils.Constants;
 import org.droidplanner.utils.Utils;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This is the main activity for the glass interface.
@@ -30,7 +34,29 @@ import java.util.List;
  * @author Fredia Huya-Kouadio
  * @since 1.2.0
  */
-public class GlassFlightActivity extends GlassActivity implements DroneInterfaces.OnDroneListener {
+public class GlassFlightActivity extends GlassActivity implements DroneInterfaces
+        .OnDroneListener, OnDashboardListener {
+
+    //TODO: update description resource for the section info.
+    private final Map<SectionInfo, Runnable> mSectionInfos = new LinkedHashMap<SectionInfo,
+                Runnable>();
+
+    {
+        mSectionInfos.put(new SectionInfo(R.string.flight_data, R.drawable.ic_action_plane,
+                R.string.flight_data), new Runnable() {
+            @Override
+            public void run() {
+                launchHud();
+            }
+        });
+        mSectionInfos.put(new SectionInfo(R.string.settings, R.drawable.ic_action_settings,
+                R.string.settings), new Runnable() {
+            @Override
+            public void run() {
+                launchSettings();
+            }
+        });
+    }
 
     /**
      * This is the activity fragment manager.
@@ -48,10 +74,10 @@ public class GlassFlightActivity extends GlassActivity implements DroneInterface
 
         mFragManager = getSupportFragmentManager();
 
-        Fragment glassFragment = getCurrentFragment();
-        if (glassFragment == null) {
-            glassFragment = new HudFragment();
-            mFragManager.beginTransaction().add(R.id.glass_layout, glassFragment).commit();
+        Fragment dashboardFragment = getCurrentFragment();
+        if (dashboardFragment == null) {
+            dashboardFragment = new DashboardFragment();
+            mFragManager.beginTransaction().add(R.id.glass_layout, dashboardFragment).commit();
         }
     }
 
@@ -65,89 +91,15 @@ public class GlassFlightActivity extends GlassActivity implements DroneInterface
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_glass_activity, menu);
 
-        //Fill the flight modes menu with all the implemented flight modes
-        MenuItem flightModes = menu.findItem(R.id.menu_flight_modes);
-        SubMenu flightModesMenu = flightModes.getSubMenu();
-
-        //Get the list of apm modes for this drone
-        List<ApmModes> apmModesList = ApmModes.getModeList(drone.type.getType());
-
-        //Add them to the flight modes menu
-        for (ApmModes apmMode : apmModesList) {
-            flightModesMenu.add(apmMode.getName());
-        }
-
-        final boolean isDroneConnected = drone.MavClient.isConnected();
-
         //Update the toggle connection menu title
         final MenuItem connectMenuItem = menu.findItem(R.id.menu_connect);
         if (connectMenuItem != null) {
-            connectMenuItem.setTitle(isDroneConnected
+            connectMenuItem.setTitle(drone.MavClient.isConnected()
                     ? R.string.menu_disconnect
                     : R.string.menu_connect);
         }
 
-        //Make the drone control menu visible if connected
-        menu.setGroupVisible(R.id.menu_group_drone_connected, isDroneConnected);
-        menu.setGroupEnabled(R.id.menu_group_drone_connected, isDroneConnected);
-
-        //Update the drone arming state if connected
-        if(isDroneConnected){
-            final MenuItem armingMenuItem = menu.findItem(R.id.menu_arming_state);
-            if(armingMenuItem != null){
-                boolean isArmed = drone.state.isArmed();
-                armingMenuItem.setTitle(isArmed ? R.string.menu_disarm : R.string.menu_arm);
-            }
-        }
-
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case Menu.NONE: {
-                //Handle the flight modes
-                final String itemTitle = item.getTitle().toString();
-                final ApmModes selectedMode = ApmModes.getMode(itemTitle, drone.type.getType());
-                if (ApmModes.isValid(selectedMode)) {
-                    drone.state.changeFlightMode(selectedMode);
-                    return true;
-                }
-
-                return false;
-            }
-
-            case R.id.menu_glass_hud: {
-                launchHud();
-                return true;
-            }
-
-            /*case R.id.menu_glass_map: {
-                launchMap();
-                return true;
-            }*/
-
-            case R.id.menu_arming_state:
-                toggleArming();
-                return true;
-
-            case R.id.menu_settings:
-                launchSettings();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private void toggleArming(){
-        final boolean isDroneArmed = drone.state.isArmed();
-        if (!isDroneArmed){
-            drone.tts.speak("Arming the vehicle, please standby");
-        }
-
-        MavLinkArm.sendArmMessage(drone, !isDroneArmed);
     }
 
     private void launchHud() {
@@ -176,29 +128,6 @@ public class GlassFlightActivity extends GlassActivity implements DroneInterface
 
     private void launchSettings(){
         startActivity(new Intent(this, SettingsActivity.class));
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        //Update the app navigation menu item based on the current fragment
-        final Fragment currentFragment = getCurrentFragment();
-
-        final MenuItem hudMenu = menu.findItem(R.id.menu_glass_hud);
-        if (hudMenu != null) {
-            final boolean isHudFragment = currentFragment instanceof HudFragment;
-            hudMenu.setEnabled(!isHudFragment);
-            hudMenu.setVisible(!isHudFragment);
-        }
-
-        /*final MenuItem mapMenu = menu.findItem(R.id.menu_glass_map);
-        if (mapMenu != null) {
-            final boolean isMapFragment = currentFragment instanceof GlassMapFragment;
-            mapMenu.setEnabled(!isMapFragment);
-            mapMenu.setVisible(!isMapFragment);
-        }*/
-
-        //TODO: If connected, update the title for the drone arming state.
-        return true;
     }
 
     /**
@@ -237,5 +166,17 @@ public class GlassFlightActivity extends GlassActivity implements DroneInterface
                 }
                 break;
         }
+    }
+
+    @Override
+    public void onSectionSelected(SectionInfo sectionInfo) {
+        Runnable sectionCb = mSectionInfos.get(sectionInfo);
+        if(sectionCb != null)
+            sectionCb.run();
+    }
+
+    @Override
+    public DashboardFragment.SectionInfo[] getSectionsNames() {
+        return mSectionInfos.keySet().toArray(new SectionInfo[mSectionInfos.size()]);
     }
 }
