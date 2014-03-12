@@ -98,6 +98,13 @@
                 android:key="pref_ui_language_english"
                 android:title="@string/pref_ui_language_english"
                 android:summary="@string/pref_ui_language_english_summary"/>
+
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="pref_glass_voice_control"
+                android:summary="use voice to control the user interface for Google Glass"
+                android:title="Use Voice control" />
+
             <PreferenceCategory
                 android:key="pref_connection_actions"
                 android:summary="@string/pref_connection_actions_summary"
@@ -113,11 +120,6 @@
                     android:summary="@string/pref_lock_screen_orientation_summary"
                     android:title="@string/pref_lock_screen_orientation"/>
 
-                <CheckBoxPreference
-                    android:defaultValue="false"
-                    android:key="pref_glass_voice_control"
-                    android:summary="use voice to control the user interface for Google Glass"
-                    android:title="Use Voice control" />
             </PreferenceCategory>
         </PreferenceScreen>
         <PreferenceScreen

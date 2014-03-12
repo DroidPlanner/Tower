@@ -1,11 +1,5 @@
 package org.droidplanner.fragments;
 
-import android.preference.PreferenceScreen;
-import org.droidplanner.DroidPlannerApp;
-import org.droidplanner.activities.ConfigurationActivity;
-import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.file.DirectoryPath;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,15 +10,24 @@ import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
-import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 
+import org.droidplanner.DroidPlannerApp;
 import org.droidplanner.R;
-import org.droidplanner.utils.Constants;
+import org.droidplanner.activities.ConfigurationActivity;
+import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
+import org.droidplanner.file.DirectoryPath;
 import org.droidplanner.glass.utils.GlassUtils;
+import org.droidplanner.utils.Constants;
 
-import static org.droidplanner.utils.Constants.*;
+import static org.droidplanner.utils.Constants.ACTION_BLUETOOTH_RELAY_SERVER;
+import static org.droidplanner.utils.Constants.DEFAULT_BLUETOOTH_RELAY_SERVER_TOGGLE;
+import static org.droidplanner.utils.Constants.EXTRA_BLUETOOTH_RELAY_SERVER_ENABLED;
+import static org.droidplanner.utils.Constants.PREF_BLUETOOTH_RELAY_SERVER_TOGGLE;
+import static org.droidplanner.utils.Constants.PREF_GLASS_VOICE_CONTROL;
+import static org.droidplanner.utils.Constants.PREF_UI_SCREEN;
 
 public class SettingsFragment extends PreferenceFragment implements
 		OnSharedPreferenceChangeListener {
@@ -37,12 +40,17 @@ public class SettingsFragment extends PreferenceFragment implements
         final Context context = getActivity().getApplicationContext();
 		final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences
                 (context);
+        final PreferenceScreen prefScreen = getPreferenceScreen();
 
         //Populate the drone settings category
         final PreferenceCategory dronePrefs = (PreferenceCategory) findPreference
                 (Constants.PREF_DRONE_SETTINGS);
         if(dronePrefs != null){
-            dronePrefs.removeAll();
+            if (GlassUtils.isGlassDevice()) {
+                //Remove the drone setup section from glass for now
+                prefScreen.removePreference(dronePrefs);
+            } else {
+                dronePrefs.removeAll();
 
             final int configSectionsCount = ConfigurationActivity.sConfigurationFragments.length;
             for(int i = 0; i < configSectionsCount; i++){
@@ -65,6 +73,7 @@ public class SettingsFragment extends PreferenceFragment implements
                 });
 
                 dronePrefs.addPreference(configPref);
+            }
             }
         }
 
