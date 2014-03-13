@@ -36,6 +36,9 @@ public class Drone {
 	public Parameters parameters = new Parameters(this);
 	public Calibration calibrationSetup = new Calibration(this);
 	public WaypointMananger waypointMananger = new WaypointMananger(this);
+	
+	// Boolean flag that notes if a waypoint path has been saved on the drone for each launch
+	public boolean waypointsSynced;
 
 	public TTS tts;
 	public MAVLinkClient MavClient;
@@ -51,6 +54,7 @@ public class Drone {
 		this.tts = tts;
 		this.MavClient = mavClient;
 		this.context = context;
+		waypointsSynced = false;
 	}
 
 	public void setHudListner(HudUpdatedListner listner) {

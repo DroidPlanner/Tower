@@ -198,6 +198,10 @@ public abstract class SuperActivity extends Activity implements
 		if(armButton != null){
 			armButton.setEnabled(false);
 		}
+		
+		// Reset launch failsafe on disconnect
+		drone.waypointsSynced = false;
+		
 		screenOrientation.unlock();
 	}
 
@@ -216,6 +220,7 @@ public abstract class SuperActivity extends Activity implements
 		if (armButton != null) {
 			armButton.setTitle(getResources().getString(
 					R.string.menu_disarm));
+			// Add change text for GUI arm/disarm button
 		}
 	}
 
@@ -223,6 +228,7 @@ public abstract class SuperActivity extends Activity implements
 		if (armButton != null) {
 			armButton.setTitle(getResources().getString(
 					R.string.menu_arm));
+			// Add change text for GUI arm/disarm button
 		}
 	}
 	@Override
