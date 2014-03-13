@@ -13,6 +13,7 @@
     <string name="editor">Editor</string>
     <string name="send_mission">Send Mission</string>
     <string name="load_mission">Load Mission</string>
+    <string name="empty_string"></string>
 
     <!-- Drone Setup tabs -->
     <string name="screen_tuning">Tuning</string>

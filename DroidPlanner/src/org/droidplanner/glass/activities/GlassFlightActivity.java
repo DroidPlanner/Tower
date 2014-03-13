@@ -42,15 +42,15 @@ public class GlassFlightActivity extends GlassActivity implements DroneInterface
                 Runnable>();
 
     {
-        mSectionInfos.put(new SectionInfo(R.string.flight_data, R.drawable.ic_action_plane,
-                R.string.flight_data), new Runnable() {
+        mSectionInfos.put(new SectionInfo(R.string.flight_data, R.drawable.ic_action_plane_white,
+                R.string.empty_string), new Runnable() {
             @Override
             public void run() {
                 launchHud();
             }
         });
-        mSectionInfos.put(new SectionInfo(R.string.settings, R.drawable.ic_action_settings,
-                R.string.settings), new Runnable() {
+        mSectionInfos.put(new SectionInfo(R.string.settings, R.drawable.ic_action_settings_white,
+                R.string.empty_string), new Runnable() {
             @Override
             public void run() {
                 launchSettings();
