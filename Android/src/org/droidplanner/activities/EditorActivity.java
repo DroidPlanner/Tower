@@ -7,8 +7,8 @@ import org.droidplanner.activities.helpers.OnEditorInteraction;
 import org.droidplanner.activities.helpers.SuperUI;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.mission.*;
-import org.droidplanner.extra.MissionItemUIElements;
+import org.droidplanner.extra.DroneHelper;
+import org.droidplanner.extra.EditorMissionItem;
 import org.droidplanner.fragments.EditorListFragment;
 import org.droidplanner.fragments.EditorMapFragment;
 import org.droidplanner.fragments.EditorToolsFragment;
@@ -20,9 +20,10 @@ import org.droidplanner.fragments.helpers.MapProjection;
 import org.droidplanner.fragments.mission.MissionDetailFragment;
 import org.droidplanner.fragments.mission.MissionDetailFragment.OnWayPointTypeChangeListener;
 import org.droidplanner.helpers.coordinates.Coord2D;
+import org.droidplanner.mission.Mission;
+import org.droidplanner.mission.MissionItem;
 
 import android.app.ActionBar;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
@@ -142,7 +143,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 		switch (getTool()) {
 		case MARKER:
-			mission.addWaypoint(point);
+			mission.addWaypoint(DroneHelper.LatLngToCoord(point));
 			break;
 		case DRAW:
 			break;
@@ -188,14 +189,16 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	}
 
 	private void addItemDetail(MissionItem item) {
-		itemDetailFragment = item.getDetailFragment();
-
-        if (mContainerItemDetail == null) {
-            itemDetailFragment.show(fragmentManager, "Item detail dialog");
-        } else {
-            fragmentManager.beginTransaction().add(R.id.containerItemDetail,
-                    itemDetailFragment).commit();
-        }
+		if (item instanceof EditorMissionItem) {	
+			itemDetailFragment = ((EditorMissionItem)item).getDetailFragment();
+	
+	        if (mContainerItemDetail == null) {
+	            itemDetailFragment.show(fragmentManager, "Item detail dialog");
+	        } else {
+	            fragmentManager.beginTransaction().add(R.id.containerItemDetail,
+	                    itemDetailFragment).commit();
+	        }
+		}
     }
 
     public MissionDetailFragment getItemDetailFragment(){

@@ -2,7 +2,7 @@ package org.droidplanner.extra;
 
 import org.droidplanner.fragments.mission.MissionDetailFragment;
 
-public interface MissionItemUIElements {
+public interface EditorMissionItem {
 
 	/**
 	 * Return a new detail Fragment for this MissionItem

@@ -16,7 +16,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class GraphicWaypoint extends Waypoint implements MissionItemUIElements,MarkerSource {
+public class GraphicWaypoint extends Waypoint implements EditorMissionItem,MarkerSource {
 
 	public GraphicWaypoint(MissionItem item) {
 		super(item);
