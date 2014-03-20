@@ -8,7 +8,7 @@ import com.MAVLink.Messages.enums.MAV_TYPE;
 
 public class Type extends DroneVariable {
 
-	private int type = MAV_TYPE.MAV_TYPE_FIXED_WING;
+	private int type = MAV_TYPE.MAV_TYPE_GENERIC;
 
 	public Type(Drone myDrone) {
 		super(myDrone);

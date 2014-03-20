@@ -1,33 +1,57 @@
 package org.droidplanner.widgets.spinners;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.Spinner;
 
+import org.droidplanner.R;
+
+
+/**
+ * Spinner like widget that has the ability to disable updates to its view based on a settable
+ * flag.
+ * This is used in instances of the application that requires confirmation from the drone before
+ * updating the GCS ui.
+ */
 public class SpinnerSelfSelect extends Spinner {
 
 	public interface OnSpinnerItemSelectedListener {
 		void onSpinnerItemSelected(Spinner spinner, int position, String text);
 	}
 
-	OnSpinnerItemSelectedListener listener;
+	private OnSpinnerItemSelectedListener listener;
 
-	protected boolean selectable = true;
+    /**
+     * View update flag. If set to true, the widget updates its view on item selection.
+     * Otherwise, the view can only be updated programmatically.
+     */
+    private boolean isSelectable;
 
 	public SpinnerSelfSelect(Context context) {
-		super(context);
+		this(context, null);
 	}
 
 	public SpinnerSelfSelect(Context context, AttributeSet attrs) {
 		super(context, attrs);
+
+        final TypedArray attributes = context.obtainStyledAttributes(attrs,
+                R.styleable.SpinnerSelfSelect, 0, 0);
+
+        try{
+            isSelectable = attributes.getBoolean(R.styleable.SpinnerSelfSelect_isSelectable, true);
+        }
+        finally{
+            attributes.recycle();
+        }
 	}
 
 	@Override
 	public void setSelection(int position) {
 		Log.d("SPIN", "selected - " + position);
 		
-		if (selectable) {
+		if (isSelectable) {
 			forcedSetSelection(position);
 		}
 		
@@ -46,4 +70,15 @@ public class SpinnerSelfSelect extends Spinner {
 		this.listener = listener;
 	}
 
+    /*
+    Widget accessor properties
+     */
+    public boolean isSelectable() {
+        return isSelectable;
+    }
+
+    public void setSelectable(boolean isSelectable) {
+        this.isSelectable = isSelectable;
+        invalidate();
+    }
 }

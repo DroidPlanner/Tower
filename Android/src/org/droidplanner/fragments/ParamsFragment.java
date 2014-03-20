@@ -37,7 +37,7 @@ public class ParamsFragment extends ListFragment implements DroneInterfaces
 
     public static final String ADAPTER_ITEMS = ParamsFragment.class.getName() + ".adapter.items";
 
-    private ProgressDialog pd;
+    private ProgressDialog progressDialog;
 
     private Drone drone;
     private ParamsAdapter adapter;
@@ -49,7 +49,8 @@ public class ParamsFragment extends ListFragment implements DroneInterfaces
         // create adapter
         if(savedInstanceState != null) {
             // load adapter items
-            final ArrayList<ParamsAdapterItem> pwms =
+            @SuppressWarnings("unchecked")
+			final ArrayList<ParamsAdapterItem> pwms =
                     (ArrayList<ParamsAdapterItem>) savedInstanceState.getSerializable(ADAPTER_ITEMS);
             adapter = new ParamsAdapter(getActivity(), R.layout.row_params, pwms);
 
@@ -183,7 +184,7 @@ public class ParamsFragment extends ListFragment implements DroneInterfaces
         }
         if(written > 0)
             adapter.notifyDataSetChanged();
-        Toast.makeText(getActivity(), written +" "+R.string.msg_parameters_written_to_drone, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), written +" "+getResources().getString(R.string.msg_parameters_written_to_drone), Toast.LENGTH_SHORT).show();
     }
 
     private void openParametersFromFile() {
@@ -219,24 +220,24 @@ public class ParamsFragment extends ListFragment implements DroneInterfaces
 
     @Override
     public void onBeginReceivingParameters() {
-        pd = new ProgressDialog(getActivity());
-        pd.setTitle(R.string.refreshing_parameters);
-        pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        pd.setIndeterminate(true);
-        pd.setCancelable(false);
-        pd.setCanceledOnTouchOutside(true);
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setTitle(R.string.refreshing_parameters);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(true);
 
-        pd.show();
+        progressDialog.show();
     }
 
     @Override
     public void onParameterReceived(Parameter parameter, int index, int count) {
-        if (pd != null) {
-            if (pd.isIndeterminate()) {
-                pd.setIndeterminate(false);
-                pd.setMax(count);
+        if (progressDialog != null) {
+            if (progressDialog.isIndeterminate()) {
+                progressDialog.setIndeterminate(false);
+                progressDialog.setMax(count);
             }
-            pd.setProgress(index);
+            progressDialog.setProgress(index);
         }
     }
 
@@ -251,9 +252,9 @@ public class ParamsFragment extends ListFragment implements DroneInterfaces
         adapter.loadParameters(drone, parameters);
 
         // dismiss progress dialog
-        if (pd != null) {
-            pd.dismiss();
-            pd = null;
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+            progressDialog = null;
         }
     }
 }

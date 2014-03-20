@@ -2,6 +2,7 @@
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     style="?android:attr/buttonBarStyle"
     android:orientation="horizontal"
     android:layout_width="match_parent"
@@ -68,11 +69,12 @@
         android:drawablePadding="@dimen/info_bar_drawable_padding"
         />
 
-    <Spinner
+    <org.droidplanner.widgets.spinners.SpinnerSelfSelect
         android:id="@+id/bar_flight_mode"
         style="?android:attr/buttonBarButtonStyle"
         android:layout_width="@dimen/info_bar_flight_mode_width"
         android:layout_height="match_parent"
+        app:isSelectable="false"
         />
 
 </LinearLayout>

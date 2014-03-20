@@ -143,6 +143,7 @@
     <string name="exception_draw_polygon">Draw a polygon/WPTs</string>
     <string name="exception_draw_2_more_polygon_points">Draw at least 2 more polygon points</string>
     <string name="exception_draw_1_more_polygon_points">Draw at least 1 more polygon point</string>
+    <string name="draw_the_survey_region">Draw the survey region</string>
     <string name="mission_is_too_lengthy">Mission is too lengthy</string>
 
     <!-- Flight Mode information -->
@@ -331,6 +332,7 @@
     <string name="menu_info_bar">Info Bar</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    <string name="guided_mode_warning">"Press OK to enter Guided mode. \nTo change locations, press and hold the map.</string>
 
     <!-- Bluetooth device selection strings -->
     <string name="select_device">Select device to connect</string>
