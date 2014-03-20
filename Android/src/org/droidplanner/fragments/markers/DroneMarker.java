@@ -4,7 +4,9 @@ import org.droidplanner.R;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
+import org.droidplanner.extra.DroneHelper;
 import org.droidplanner.fragments.FlightMapFragment;
+import org.droidplanner.helpers.coordinates.Coord2D;
 
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -24,8 +26,8 @@ public class DroneMarker implements OnDroneListener {
 		drone.events.addDroneListener(this);
 	}
 
-	private void updatePosition(float yaw, LatLng coord) {
-			droneMarker.setPosition(coord);
+	private void updatePosition(float yaw, Coord2D coord2d) {
+			droneMarker.setPosition(DroneHelper.CoordToLatLang(coord2d));
 			droneMarker.setRotation(yaw);
 			droneMarker.setVisible(true);
 	}

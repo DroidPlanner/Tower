@@ -3,6 +3,7 @@ package org.droidplanner.fragments.markers;
 
 import org.droidplanner.R;
 import org.droidplanner.drone.variables.GuidedPoint;
+import org.droidplanner.extra.DroneHelper;
 import org.droidplanner.fragments.markers.helpers.MarkerWithText;
 import org.droidplanner.helpers.units.Altitude;
 
@@ -16,7 +17,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class GuidedMarker {
 	public static MarkerOptions build(GuidedPoint guidedPoint, Altitude altitude, Context context) {
 		return new MarkerOptions()
-				.position(guidedPoint.getCoord())
+				.position(DroneHelper.CoordToLatLang(guidedPoint.getCoord()))
 				.icon(getIcon(guidedPoint, altitude, context))
 				.anchor(0.5f, 0.5f)
 				.visible(false);
@@ -24,7 +25,7 @@ public class GuidedMarker {
 
 	public static void update(Marker marker, GuidedPoint guidedPoint, Altitude altitude, Context context) {
 		if (guidedPoint.isActive()) {			
-			marker.setPosition(guidedPoint.getCoord());
+			marker.setPosition(DroneHelper.CoordToLatLang(guidedPoint.getCoord()));
 			marker.setIcon(getIcon(guidedPoint, altitude, context));
 			marker.setVisible(true);
 		}else{

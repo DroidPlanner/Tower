@@ -3,13 +3,14 @@ package org.droidplanner.fragments.helpers;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.droidplanner.drone.variables.mission.survey.SurveyData;
+import org.droidplanner.extra.DroneHelper;
+import org.droidplanner.helpers.coordinates.Coord2D;
 import org.droidplanner.helpers.geoTools.GeoTools;
+import org.droidplanner.mission.survey.SurveyData;
 
 import android.graphics.Color;
 
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 
@@ -21,13 +22,11 @@ public class CameraGroundOverlays {
 		this.mMap = mMap;
 	}
 
-	public void addOverlays(List<LatLng> cameraLocations,
-			SurveyData surveyData) {
-		for (LatLng latLng : cameraLocations) {
+	public void addOverlays(List<Coord2D> cameraLocations, SurveyData surveyData) {
+		for (Coord2D latLng : cameraLocations) {
 			addOneFootprint(latLng, surveyData);
 		}
 	}
-
 
 	public void removeAll() {
 		for (com.google.android.gms.maps.model.Polygon overlay : cameraOverlays) {
@@ -36,29 +35,33 @@ public class CameraGroundOverlays {
 		cameraOverlays.clear();
 	}
 
-	private void addOneFootprint(LatLng latLng, SurveyData surveyData) {
+	private void addOneFootprint(Coord2D center, SurveyData surveyData) {
 		double lng = surveyData.getLateralFootPrint().valueInMeters();
 		double lateral = surveyData.getLongitudinalFootPrint().valueInMeters();
 		double halfDiag = Math.hypot(lng, lateral) / 2;
 		double angle = Math.toDegrees(Math.atan(lng / lateral));
 		Double orientation = surveyData.getAngle();
-		addRectangleOverlay(latLng, halfDiag, angle, orientation);
-		
+		addRectangleOverlay(center, halfDiag, angle, orientation);
+
 	}
 
-	private void addRectangleOverlay(LatLng center, double halfDiagonal,
+	private void addRectangleOverlay(Coord2D center, double halfDiagonal,
 			double centerAngle, Double orientation) {
+		Coord2D c1 = GeoTools.newCoordFromBearingAndDistance(center,
+				orientation - centerAngle, halfDiagonal);
+		Coord2D c2 = GeoTools.newCoordFromBearingAndDistance(center, orientation
+				+ centerAngle, halfDiagonal);
+		Coord2D c3 = GeoTools.newCoordFromBearingAndDistance(center,
+				orientation + 180 - centerAngle, halfDiagonal);
+		Coord2D c4 = GeoTools.newCoordFromBearingAndDistance(center,
+				orientation + 180 + centerAngle, halfDiagonal);
 		cameraOverlays.add(mMap.addPolygon(new PolygonOptions()
-		.add(GeoTools.newCoordFromBearingAndDistance(center,
-				orientation - centerAngle, halfDiagonal),
-				GeoTools.newCoordFromBearingAndDistance(center,
-						orientation + centerAngle, halfDiagonal),
-						GeoTools.newCoordFromBearingAndDistance(center,
-								orientation + 180 - centerAngle, halfDiagonal),
-								GeoTools.newCoordFromBearingAndDistance(center,
-										orientation + 180 + centerAngle, halfDiagonal))
-										.fillColor(Color.argb(40, 0, 0, 127)).strokeWidth(1)
-										.strokeColor(Color.argb(127, 0, 0, 255))));
+				.add(DroneHelper.CoordToLatLang(c1),
+						DroneHelper.CoordToLatLang(c2),
+						DroneHelper.CoordToLatLang(c3),
+						DroneHelper.CoordToLatLang(c4))
+				.fillColor(Color.argb(40, 0, 0, 127)).strokeWidth(1)
+				.strokeColor(Color.argb(127, 0, 0, 255))));
 	}
 
 }

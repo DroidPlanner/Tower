@@ -51,5 +51,11 @@ public abstract class SpatialCoordItem extends MissionItem {
 		Altitude alt = new Altitude(mavMsg.z);
 		setCoordinate(new Coord3D(mavMsg.x,mavMsg.y, alt));
 	}
+	
+
+	public void setAltitude(Altitude altitude) {
+		coordinate.set(coordinate.getX(), coordinate.getY(), altitude);
+		
+	}
 
 }
