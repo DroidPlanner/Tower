@@ -1,14 +1,14 @@
 package org.droidplanner.helpers;
 
-import org.droidplanner.drone.VehicleProfile;
-import org.droidplanner.drone.variables.Preferences;
+import org.droidplanner.drone.profiles.VehicleProfile;
+import org.droidplanner.drone.variables.Type.FirmwareType;
 import org.droidplanner.file.IO.VehicleProfileReader;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-public class DpPreferences implements Preferences  {
+public class DpPreferences implements org.droidplanner.drone.Preferences  {
 
 	private Context context;
 
@@ -21,11 +21,6 @@ public class DpPreferences implements Preferences  {
 		final SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
 		return prefs.getString("pref_vehicle_type", null);
-	}
-
-	@Override
-	public VehicleProfile loadVehicleProfile(String vehicle) {
-		return VehicleProfileReader.load(context, vehicle);
 	}
 
 	@Override
@@ -52,5 +47,10 @@ public class DpPreferences implements Preferences  {
 		rates.rawController = Integer.parseInt(prefs.getString(
 				"pref_mavlink_stream_rate_raw_controller", "0"));
 		return rates;
+	}
+
+	@Override
+	public VehicleProfile loadVehicleProfile(FirmwareType firmwareType) {
+		return VehicleProfileReader.load(context, firmwareType);
 	}
 }
