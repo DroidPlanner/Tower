@@ -3,8 +3,10 @@ package org.droidplanner.fragments.mission;
 import org.droidplanner.DroidPlannerApp;
 import org.droidplanner.R;
 import org.droidplanner.activities.EditorActivity;
-import org.droidplanner.mission.*;
 import org.droidplanner.fragments.mission.MissionItemTypes.InvalidItemException;
+import org.droidplanner.mission.Mission;
+import org.droidplanner.mission.MissionItem;
+import org.droidplanner.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.widgets.spinners.SpinnerSelfSelect;
 
 import android.app.Activity;
@@ -57,7 +59,6 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(getResource(), null);
 		setupViews(view);
-        applyProfie(view);
 		return view;
 	}
 
@@ -78,7 +79,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 
 		try{
 			distanceLabelView.setVisibility(View.VISIBLE);
-			distanceView.setText(mission.getDistanceFromLastWaypoint((SpatialCoordItemD) item).toString());
+			distanceView.setText(mission.getDistanceFromLastWaypoint((SpatialCoordItem) item).toString());
 		}catch(NullPointerException e){
 			// Can fail if distanceView doesn't exists
 		}catch (Exception e){
@@ -114,17 +115,12 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 	public void onNothingSelected(AdapterView<?> arg0) {
 	}
 
-	public MissionItemD getItem() {
+	public MissionItem getItem() {
 		return item;
 	}
 
 	public void setItem(MissionItem item) {
 		this.item = item;
 	}
-
-    private void applyProfie(View view) {
-        final DroidPlannerApp app = (DroidPlannerApp) getActivity().getApplication();
-        app.drone.profile.applyMissionViewProfile(view, getResource());
-    }
 
 }

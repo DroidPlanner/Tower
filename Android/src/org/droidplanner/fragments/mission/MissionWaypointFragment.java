@@ -1,8 +1,8 @@
 package org.droidplanner.fragments.mission;
 
 import org.droidplanner.R;
-import org.droidplanner.mission.*;
 import org.droidplanner.helpers.units.Altitude;
+import org.droidplanner.mission.waypoints.Waypoint;
 import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText;
 import org.droidplanner.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListener;
 
@@ -31,10 +31,10 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
 		super.setupViews(view);
 		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemTypes.WAYPOINT));
 
-		WaypointD item = (WaypointD) this.item;
+		Waypoint item = (Waypoint) this.item;
 
 		altitudeSeekBar = (SeekBarWithText) view.findViewById(R.id.altitudeView);
-		altitudeSeekBar.setValue(item.getAltitude().valueInMeters());
+		altitudeSeekBar.setValue(item.getCoordinate().getAltitude().valueInMeters());
 		altitudeSeekBar.setOnChangedListener(this);
 
 		delaySeekBar = (SeekBarWithText) view.findViewById(R.id.waypointDelay);
@@ -69,7 +69,7 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
 
 	@Override
 	public void onSeekBarChanged() {
-		WaypointD item = (WaypointD) this.item;
+		Waypoint item = (Waypoint) this.item;
 		item.setAltitude(new Altitude(altitudeSeekBar.getValue()));
 		item.setDelay((float) delaySeekBar.getValue());
 		//item.setAcceptanceRadius((float) radiusSeekBar.getValue());

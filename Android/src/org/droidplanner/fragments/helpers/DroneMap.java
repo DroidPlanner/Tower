@@ -4,8 +4,8 @@ import org.droidplanner.DroidPlannerApp;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.drone.variables.Home;
-import org.droidplanner.drone.variables.mission.Mission;
+import org.droidplanner.extra.GraphicHome;
+import org.droidplanner.extra.GraphicMission;
 import org.droidplanner.fragments.markers.MarkerManager;
 
 import android.app.Activity;
@@ -27,8 +27,9 @@ public abstract class DroneMap extends OfflineMapFragment implements OnDroneList
 	protected MarkerManager markers;
 	protected MapPath missionPath;
 	public Drone drone;
-	public Mission mission;
+	public GraphicMission mission;
 	protected Context context;
+	private GraphicHome home;
 	
 	protected abstract boolean isMissionDraggable();
 
@@ -37,7 +38,8 @@ public abstract class DroneMap extends OfflineMapFragment implements OnDroneList
 			Bundle bundle) {
 		View view = super.onCreateView(inflater, viewGroup, bundle);
 		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
-		mission = drone.mission;
+		home = new GraphicHome(drone);
+		mission = new GraphicMission(drone);
 		mMap = getMap();
 		markers = new MarkerManager(mMap);
 		missionPath = new MapPath(mMap,getResources());
@@ -114,7 +116,6 @@ public abstract class DroneMap extends OfflineMapFragment implements OnDroneList
 	public void update() {
 		markers.clean();
 
-		Home home = drone.home.getHome();
 		if (home.isValid()) {
 			markers.updateMarker(home, false, context);
 		}

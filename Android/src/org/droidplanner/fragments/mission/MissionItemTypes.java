@@ -2,14 +2,8 @@ package org.droidplanner.fragments.mission;
 
 import java.security.InvalidParameterException;
 
-import org.droidplanner.mission.*;
-import org.droidplanner.extra.Land;
-import org.droidplanner.extra.LoiterTime;
-import org.droidplanner.extra.LoiterTurns;
-import org.droidplanner.extra.RegionOfInterest;
-import org.droidplanner.extra.ReturnToHome;
-import org.droidplanner.extra.Takeoff;
-import org.droidplanner.extra.Waypoint;
+import org.droidplanner.extra.GraphicWaypoint;
+import org.droidplanner.mission.MissionItem;
 
 
 public enum MissionItemTypes {
@@ -33,28 +27,13 @@ public enum MissionItemTypes {
 		return name;
 	}
 
-	public MissionItem getNewItem(MissionItemD item) throws InvalidItemException {
+	public MissionItem getNewItem(MissionItem item) throws InvalidItemException {
 		switch (this) {
-		case LAND:
-			return new Land(item);
-		//case LOITER:
-		//	return new LoiterInfinite(item);
-		case LOITERN:
-			return new LoiterTurns(item);
-		case LOITERT:
-			return new LoiterTime(item);
-		case ROI:
-			return new RegionOfInterest(item);
-		case RTL:
-			return new ReturnToHome(item);
-		case TAKEOFF:
-			return new Takeoff(item);
 		case WAYPOINT:
-			return new Waypoint(item);
-		case SURVEY:
-			throw new InvalidItemException();
+			return new GraphicWaypoint(item);
+		default:
+			throw new InvalidParameterException();
 		}
-		throw new InvalidParameterException();
 	}
 
 	class InvalidItemException extends Exception{
