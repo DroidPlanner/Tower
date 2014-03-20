@@ -4,7 +4,6 @@ import org.droidplanner.R;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.mission.*;
 import org.droidplanner.fragments.FlightActionsFragment;
 import org.droidplanner.fragments.FlightMapFragment;
 import org.droidplanner.fragments.RCFragment;
@@ -12,7 +11,8 @@ import org.droidplanner.fragments.TelemetryFragment;
 import org.droidplanner.fragments.helpers.FlightSlidingDrawerContent;
 import org.droidplanner.fragments.helpers.OnMapInteractionListener;
 import org.droidplanner.fragments.mode.FlightModePanel;
-import org.droidplanner.polygon.*;
+import org.droidplanner.mission.MissionItem;
+import org.droidplanner.mission.waypoints.SpatialCoordItem;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -196,30 +196,6 @@ public class FlightActivity extends DrawerNavigationUI implements
     }
 
 	@Override
-	public void onAddPoint(LatLng point) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onMoveHome(LatLng coord) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onMoveWaypoint(SpatialCoordItem waypoint, LatLng latLng) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onMovePolygonPoint(PolygonPoint source, LatLng newCoord) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void onMapClick(LatLng point) {
 		// TODO Auto-generated method stub
 
@@ -259,12 +235,6 @@ public class FlightActivity extends DrawerNavigationUI implements
 	}
 
 	@Override
-	public void onMovingWaypoint(SpatialCoordItemD source, LatLng latLng) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		super.onDroneEvent(event,drone);
 		switch (event) {
@@ -291,6 +261,30 @@ public class FlightActivity extends DrawerNavigationUI implements
 				{ "Spline", "DP v3" },
 				{ "https://www.youtube.com/watch?v=v9ydP-NWoJE",
 						"https://www.youtube.com/watch?v=miwWUgX6nwY" } };
+	}
+
+	@Override
+	public void onAddPoint(LatLng point) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onMoveHome(LatLng coord) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onMoveWaypoint(SpatialCoordItem waypoint, LatLng latLng) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onMovingWaypoint(SpatialCoordItem source, LatLng latLng) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
