@@ -122,7 +122,8 @@ public abstract class DroneMap extends OfflineMapFragment implements OnDroneList
 
 		markers.updateMarkers(mission.getMarkers(), isMissionDraggable(), context);
 
-		missionPath.update(mission);
+		//TODO reimplement the mission path
+		//missionPath.update(mission);
 	}
 
 }
