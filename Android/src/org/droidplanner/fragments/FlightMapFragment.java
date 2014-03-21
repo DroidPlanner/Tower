@@ -7,7 +7,7 @@ import org.droidplanner.dialogs.GuidedDialog.GuidedDialogListener;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.extra.DroneHelper;
-import org.droidplanner.extra.DroneMarker;
+import org.droidplanner.extra.GraphicDrone;
 import org.droidplanner.extra.GraphicGuided;
 import org.droidplanner.fragments.helpers.DroneMap;
 import org.droidplanner.fragments.helpers.MapPath;
@@ -42,7 +42,7 @@ public class FlightMapFragment extends DroneMap implements
 
 	public boolean hasBeenZoomed = false;
 
-	public DroneMarker droneMarker;
+	public GraphicDrone droneMarker;
 	public GraphicGuided guided;
 	
 	@Override
@@ -50,7 +50,7 @@ public class FlightMapFragment extends DroneMap implements
 			Bundle bundle) {
 		View view = super.onCreateView(inflater, viewGroup, bundle);
 
-		droneMarker = new DroneMarker(this);
+		droneMarker = new GraphicDrone(this);
 		droneLeashPath = new MapPath(mMap, getResources());
 		guided = new GraphicGuided(drone);
 

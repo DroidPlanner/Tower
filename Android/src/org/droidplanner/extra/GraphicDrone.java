@@ -12,13 +12,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class DroneMarker implements OnDroneListener {
+public class GraphicDrone implements OnDroneListener {
 
 	private Marker droneMarker;
 	private FlightMapFragment flightMapFragment;
 	private Drone drone;
 
-	public DroneMarker(FlightMapFragment flightMapFragment) {
+	public GraphicDrone(FlightMapFragment flightMapFragment) {
 		this.flightMapFragment = flightMapFragment;
 		this.drone = flightMapFragment.drone;
 		addMarkerToMap();
