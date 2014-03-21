@@ -63,5 +63,15 @@ public class Type extends DroneVariable {
 			return type;
 		}
 
+		public static FirmwareType firmwareFromString(String str) {
+			if (str.equalsIgnoreCase(ARDU_PLANE.type)) {
+				return ARDU_PLANE;
+			}
+			if (str.equalsIgnoreCase(ARDU_ROVER.type)) {
+				return ARDU_ROVER;
+			} else {
+				return ARDU_COPTER;
+			}
+		}
 	}
 }

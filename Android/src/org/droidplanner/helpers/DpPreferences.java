@@ -17,10 +17,11 @@ public class DpPreferences implements org.droidplanner.drone.Preferences  {
 	}
 
 	@Override
-	public String getVehicleType() {
+	public FirmwareType getVehicleType() {
 		final SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
-		return prefs.getString("pref_vehicle_type", null);
+		String str = prefs.getString("pref_vehicle_type", null);
+		return FirmwareType.firmwareFromString(str); 
 	}
 
 	@Override
