@@ -1,10 +1,9 @@
-package org.droidplanner.fragments.markers;
+package org.droidplanner.extra;
 
 import org.droidplanner.R;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.extra.DroneHelper;
 import org.droidplanner.fragments.FlightMapFragment;
 import org.droidplanner.helpers.coordinates.Coord2D;
 
