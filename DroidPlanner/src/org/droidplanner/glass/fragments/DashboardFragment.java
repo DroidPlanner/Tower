@@ -68,6 +68,7 @@ public class DashboardFragment extends Fragment {
         CardScrollView dashView = (CardScrollView) view.findViewById(R.id.glass_dashboard);
         dashView.setAdapter(new SectionCardAdapter((Activity) mDashListener,
                 mDashListener.getSectionsNames()));
+        dashView.setHorizontalScrollBarEnabled(true);
         dashView.activate();
         dashView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

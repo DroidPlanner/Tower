@@ -14,11 +14,6 @@ import org.droidplanner.fragments.SettingsFragment;
 public class SettingsActivity extends DrawerNavigationUI {
 
     public void onCreate(Bundle savedInstanceState) {
-        //Update the theme if we're on a glass device
-        if(GlassUtils.isGlassDevice()){
-            setTheme(android.R.style.Theme_DeviceDefault);
-        }
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 

@@ -27,6 +27,11 @@ public abstract class SuperActivity extends FragmentActivity implements OnAltitu
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+        //Update the theme if we're on a glass device
+        if(GlassUtils.isGlassDevice()){
+            setTheme(android.R.style.Theme_DeviceDefault);
+        }
+
 		super.onCreate(savedInstanceState);
 
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);

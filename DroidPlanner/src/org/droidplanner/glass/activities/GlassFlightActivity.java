@@ -136,7 +136,7 @@ public class GlassFlightActivity extends GlassActivity implements DroneInterface
      */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (GlassUtils.isGlassDevice() && keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
+        if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
             if (GlassUtils.isVoiceControlActive(getApplicationContext())) {
                 openVoiceMenu();
             }

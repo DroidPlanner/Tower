@@ -6,11 +6,12 @@ import android.speech.RecognizerIntent;
 import android.view.InputDevice;
 import android.view.MotionEvent;
 import android.widget.Toast;
+
 import com.google.android.glass.touchpad.Gesture;
 import com.google.android.glass.touchpad.GestureDetector;
+
 import org.droidplanner.activities.helpers.SuperActivity;
 import org.droidplanner.drone.DroneInterfaces;
-import org.droidplanner.glass.utils.GlassUtils;
 import org.droidplanner.glass.utils.voice_menu.VoiceMenu;
 
 import java.util.List;
@@ -19,7 +20,7 @@ import java.util.List;
  * Parent to most activities running on glass. This holds common glass specific functionalities.
  */
 public abstract class GlassActivity extends SuperActivity implements DroneInterfaces
-        .OnDroneListener{
+        .OnDroneListener {
 
     /**
      * This is used to instantiate, and activate the voice menu.
@@ -71,7 +72,7 @@ public abstract class GlassActivity extends SuperActivity implements DroneInterf
         };
     }
 
-    public void setRecognizerIntentOriginMenu(VoiceMenu menu){
+    public void setRecognizerIntentOriginMenu(VoiceMenu menu) {
         this.recognizerIntentOriginMenu = menu;
     }
 
@@ -96,17 +97,17 @@ public abstract class GlassActivity extends SuperActivity implements DroneInterf
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
 
-        if(recognizedSpeech != null && recognizerIntentOriginMenu != null){
+        if (recognizedSpeech != null && recognizerIntentOriginMenu != null) {
             recognizerIntentOriginMenu.dispatchVoiceMenuItemRecognized(recognizedSpeech);
         }
         recognizedSpeech = null;
     }
 
     @Override
-    public void onPause(){
+    public void onPause() {
         super.onPause();
 
         recognizedSpeech = null;
@@ -129,9 +130,7 @@ public abstract class GlassActivity extends SuperActivity implements DroneInterf
     }
 
     protected void setUpGestureDetector() {
-        if (GlassUtils.isGlassDevice()) {
-            mGestureDetector = new GestureDetector(getApplicationContext());
-            mGestureDetector.setBaseListener(getGestureDetectorBaseListener());
-        }
+        mGestureDetector = new GestureDetector(getApplicationContext());
+        mGestureDetector.setBaseListener(getGestureDetectorBaseListener());
     }
 }

@@ -132,7 +132,7 @@
         <activity
                 android:name=".glass.activities.GlassFlightActivity"
                 android:launchMode="singleTask"
-                android:theme="@android:style/Theme.DeviceDefault">
+                >
             <intent-filter>
                 <action android:name="com.google.android.glass.action.VOICE_TRIGGER"/>
             </intent-filter>
