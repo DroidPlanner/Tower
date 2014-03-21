@@ -1,4 +1,4 @@
-package org.droidplanner.fragments.markers;
+package org.droidplanner.graphic.markers;
 
 import org.droidplanner.R;
 import org.droidplanner.gcp.Gcp;

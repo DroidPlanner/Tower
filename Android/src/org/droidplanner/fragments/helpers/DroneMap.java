@@ -4,9 +4,9 @@ import org.droidplanner.DroidPlannerApp;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.extra.GraphicHome;
-import org.droidplanner.extra.GraphicMission;
-import org.droidplanner.fragments.markers.MarkerManager;
+import org.droidplanner.graphic.GraphicHome;
+import org.droidplanner.graphic.GraphicMission;
+import org.droidplanner.graphic.markers.MarkerManager;
 
 import android.app.Activity;
 import android.content.Context;

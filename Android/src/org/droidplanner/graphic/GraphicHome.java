@@ -1,9 +1,9 @@
-package org.droidplanner.extra;
+package org.droidplanner.graphic;
 
 import org.droidplanner.R.drawable;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.variables.Home;
-import org.droidplanner.fragments.markers.MarkerManager.MarkerSource;
+import org.droidplanner.graphic.markers.MarkerManager.MarkerSource;
 
 import android.content.Context;
 

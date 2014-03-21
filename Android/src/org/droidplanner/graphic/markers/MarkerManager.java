@@ -1,4 +1,4 @@
-package org.droidplanner.fragments.markers;
+package org.droidplanner.graphic.markers;
 
 import java.util.ArrayList;
 import java.util.HashMap;

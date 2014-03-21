@@ -1,7 +1,7 @@
 package org.droidplanner.gcp;
 
-import org.droidplanner.fragments.markers.GcpMarker;
-import org.droidplanner.fragments.markers.MarkerManager.MarkerSource;
+import org.droidplanner.graphic.markers.GcpMarker;
+import org.droidplanner.graphic.markers.MarkerManager.MarkerSource;
 
 import android.content.Context;
 

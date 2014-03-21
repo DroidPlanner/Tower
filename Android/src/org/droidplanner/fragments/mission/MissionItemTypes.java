@@ -2,7 +2,7 @@ package org.droidplanner.fragments.mission;
 
 import java.security.InvalidParameterException;
 
-import org.droidplanner.extra.GraphicWaypoint;
+import org.droidplanner.graphic.GraphicWaypoint;
 import org.droidplanner.mission.MissionItem;
 
 

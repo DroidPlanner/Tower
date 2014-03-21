@@ -6,11 +6,11 @@ import org.droidplanner.dialogs.GuidedDialog;
 import org.droidplanner.dialogs.GuidedDialog.GuidedDialogListener;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.extra.DroneHelper;
-import org.droidplanner.extra.GraphicDrone;
-import org.droidplanner.extra.GraphicGuided;
 import org.droidplanner.fragments.helpers.DroneMap;
 import org.droidplanner.fragments.helpers.MapPath;
+import org.droidplanner.graphic.DroneHelper;
+import org.droidplanner.graphic.GraphicDrone;
+import org.droidplanner.graphic.GraphicGuided;
 
 import android.content.Context;
 import android.content.SharedPreferences;

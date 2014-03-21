@@ -1,9 +1,8 @@
-package org.droidplanner.fragments.helpers;
+package org.droidplanner.graphic;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.droidplanner.extra.DroneHelper;
 import org.droidplanner.helpers.coordinates.Coord2D;
 import org.droidplanner.helpers.geoTools.GeoTools;
 import org.droidplanner.mission.survey.SurveyData;

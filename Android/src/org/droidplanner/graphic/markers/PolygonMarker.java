@@ -1,6 +1,6 @@
-package org.droidplanner.fragments.markers;
+package org.droidplanner.graphic.markers;
 
-import org.droidplanner.extra.DroneHelper;
+import org.droidplanner.graphic.DroneHelper;
 import org.droidplanner.helpers.coordinates.Coord2D;
 
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;

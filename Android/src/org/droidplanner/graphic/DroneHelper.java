@@ -1,4 +1,4 @@
-package org.droidplanner.extra;
+package org.droidplanner.graphic;
 
 import org.droidplanner.helpers.coordinates.Coord2D;
 

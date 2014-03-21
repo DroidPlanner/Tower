@@ -7,8 +7,6 @@ import org.droidplanner.activities.helpers.OnEditorInteraction;
 import org.droidplanner.activities.helpers.SuperUI;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.extra.DroneHelper;
-import org.droidplanner.extra.EditorMissionItem;
 import org.droidplanner.fragments.EditorListFragment;
 import org.droidplanner.fragments.EditorMapFragment;
 import org.droidplanner.fragments.EditorToolsFragment;
@@ -19,6 +17,8 @@ import org.droidplanner.fragments.helpers.GestureMapFragment.OnPathFinishedListe
 import org.droidplanner.fragments.helpers.MapProjection;
 import org.droidplanner.fragments.mission.MissionDetailFragment;
 import org.droidplanner.fragments.mission.MissionDetailFragment.OnWayPointTypeChangeListener;
+import org.droidplanner.graphic.DroneHelper;
+import org.droidplanner.graphic.EditorMissionItem;
 import org.droidplanner.helpers.coordinates.Coord2D;
 import org.droidplanner.mission.Mission;
 import org.droidplanner.mission.MissionItem;

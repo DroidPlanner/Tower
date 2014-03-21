@@ -1,10 +1,10 @@
-package org.droidplanner.extra;
+package org.droidplanner.graphic;
 
 import org.droidplanner.R;
-import org.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import org.droidplanner.fragments.markers.helpers.MarkerWithText;
 import org.droidplanner.fragments.mission.MissionDetailFragment;
 import org.droidplanner.fragments.mission.MissionWaypointFragment;
+import org.droidplanner.graphic.markers.MarkerManager.MarkerSource;
 import org.droidplanner.mission.MissionItem;
 import org.droidplanner.mission.waypoints.Waypoint;
 
