@@ -8,8 +8,6 @@ import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.Handler;
 import org.droidplanner.drone.Preferences;
 import org.droidplanner.helpers.DpPreferences;
-import org.droidplanner.helpers.FollowMe;
-import org.droidplanner.helpers.RecordMe;
 import org.droidplanner.helpers.TTS;
 import org.droidplanner.service.MAVLinkClient;
 
@@ -21,8 +19,6 @@ public class DroidPlannerApp extends ErrorReportApp implements
 		MAVLinkStreams.MavlinkInputStream {
 	public Drone drone;
 	private MavLinkMsgHandler mavLinkMsgHandler;
-	public FollowMe followMe;
-	public RecordMe recordMe;
 	public TTS tts;
 
 	@Override
