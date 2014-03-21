@@ -2,8 +2,11 @@ package org.droidplanner.MAVLink;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.droidplanner.drone.Drone;
+import org.droidplanner.drone.DroneInterfaces.OnTimeout;
 import org.droidplanner.drone.DroneInterfaces.OnWaypointManagerListener;
 import org.droidplanner.drone.DroneVariable;
 
@@ -23,7 +26,7 @@ import com.MAVLink.Messages.ardupilotmega.msg_mission_request;
  * MAV Message.
  * 
  */
-public class WaypointMananger extends DroneVariable {
+public class WaypointMananger extends DroneVariable implements OnTimeout {
 	enum waypointStates {
 		IDLE, READ_REQUEST, READING_WP, WRITTING_WP_COUNT, WRITTING_WP, WAITING_WRITE_ACK
 	}
@@ -40,9 +43,15 @@ public class WaypointMananger extends DroneVariable {
 	private int writeIndex;
 	private int retryIndex;
 	final private int maxRetry = 3; 
+	private TimeOut timeOut;
 	private OnWaypointManagerListener wpEventListener;
 
 	waypointStates state = waypointStates.IDLE;
+
+	public WaypointMananger(Drone myDrone, TimeOut timeOut) {
+		super(myDrone);
+		this.timeOut = new TimeOut(this);
+	}
 
 	public void setWaypointManagerListener(OnWaypointManagerListener wpEventListener) {
 		this.wpEventListener = wpEventListener;
@@ -60,10 +69,10 @@ public class WaypointMananger extends DroneVariable {
 		
 		doBeginWaypointEvent(WaypointEvent_Type.WP_DOWNLOAD);
 		readIndex = -1;
-		myDrone.MavClient.setTimeOutValue(3000);
-		myDrone.MavClient.setTimeOutRetry(maxRetry);
+		timeOut.setTimeOutValue(3000);
+		timeOut.setTimeOutRetry(maxRetry);
 		state = waypointStates.READ_REQUEST;
-		myDrone.MavClient.setTimeOut();
+		timeOut.setTimeOut();
 		MavLinkWaypoint.requestWaypointsList(myDrone);
 	}
 
@@ -87,10 +96,10 @@ public class WaypointMananger extends DroneVariable {
 			mission.clear();
 			mission.addAll(data);
 			writeIndex = 0;
-			myDrone.MavClient.setTimeOutValue(3000);
-			myDrone.MavClient.setTimeOutRetry(3);
+			timeOut.setTimeOutValue(3000);
+			timeOut.setTimeOutRetry(3);
 			state = waypointStates.WRITTING_WP_COUNT;
-			myDrone.MavClient.setTimeOut();
+			timeOut.setTimeOut();
 			MavLinkWaypoint.sendWaypointCount(myDrone, mission.size());
 		}
 	}
@@ -166,7 +175,7 @@ public class WaypointMananger extends DroneVariable {
 			if (msg.msgid == msg_mission_count.MAVLINK_MSG_ID_MISSION_COUNT) {
 				waypointCount = ((msg_mission_count) msg).count;
 				mission.clear();
-				myDrone.MavClient.setTimeOut();
+				timeOut.setTimeOut();
 				MavLinkWaypoint.requestWayPoint(myDrone, mission.size());
 				state = waypointStates.READING_WP;
 				return true;
@@ -174,13 +183,13 @@ public class WaypointMananger extends DroneVariable {
 			break;
 		case READING_WP:
 			if (msg.msgid == msg_mission_item.MAVLINK_MSG_ID_MISSION_ITEM) {
-				myDrone.MavClient.setTimeOut();
+				timeOut.setTimeOut();
 				processReceivedWaypoint((msg_mission_item) msg);
 				doWaypointEvent(WaypointEvent_Type.WP_DOWNLOAD, readIndex+1, waypointCount);
 				if (mission.size() < waypointCount) {
 					MavLinkWaypoint.requestWayPoint(myDrone, mission.size());
 				} else {
-					myDrone.MavClient.resetTimeOut();
+					timeOut.resetTimeOut();
 					state = waypointStates.IDLE;
 					MavLinkWaypoint.sendAck(myDrone);
 					myDrone.mission.onMissionReceived(mission);
@@ -193,7 +202,7 @@ public class WaypointMananger extends DroneVariable {
 			state = waypointStates.WRITTING_WP;
 		case WRITTING_WP:
 			if (msg.msgid == msg_mission_request.MAVLINK_MSG_ID_MISSION_REQUEST) {
-				myDrone.MavClient.setTimeOut();
+				timeOut.setTimeOut();
 				processWaypointToSend((msg_mission_request) msg);
 				doWaypointEvent(WaypointEvent_Type.WP_UPLOAD,writeIndex+1,mission.size());
 				return true;
@@ -201,7 +210,7 @@ public class WaypointMananger extends DroneVariable {
 			break;
 		case WAITING_WRITE_ACK:
 			if (msg.msgid == msg_mission_ack.MAVLINK_MSG_ID_MISSION_ACK) {
-				myDrone.MavClient.resetTimeOut();
+				timeOut.resetTimeOut();
 				myDrone.mission.onWriteWaypoints((msg_mission_ack) msg);
 				state = waypointStates.IDLE;
 				doEndWaypointEvent(WaypointEvent_Type.WP_UPLOAD);
@@ -222,10 +231,15 @@ public class WaypointMananger extends DroneVariable {
 	}
 
 
+	@Override
+	public void notifyTimeOut(int timeOutCount) {
+		processTimeOut(timeOutCount);
+	}
+
 	public boolean processTimeOut(int mTimeOutCount) {
 
 		// If max retry is reached, set state to IDLE. No more retry.
-		if (mTimeOutCount >= myDrone.MavClient.getTimeOutRetry()) {
+		if (mTimeOutCount >= timeOut.getTimeOutRetry()) {
 			state = waypointStates.IDLE;
 			doWaypointEvent(WaypointEvent_Type.WP_TIMEDOUT,retryIndex, maxRetry);
 			return false;
@@ -234,7 +248,7 @@ public class WaypointMananger extends DroneVariable {
 		retryIndex++;
 		doWaypointEvent(WaypointEvent_Type.WP_RETRY,retryIndex, maxRetry);
 		
-		myDrone.MavClient.setTimeOut(false);
+		timeOut.setTimeOut(false);
 		
 		switch (state) {
 		default:
@@ -320,6 +334,81 @@ public class WaypointMananger extends DroneVariable {
 			return;
 		
 		wpEventListener.onWaypointEvent(wpEvent, index, count);
+	}
+	
+	private class TimeOut {
+		
+		private Timer timeOutTimer;
+		private int timeOutCount;
+		private long timeOut;
+		private int timeOutRetry;
+		private OnTimeout listener;
+		
+		public TimeOut(OnTimeout listner){
+			this.listener = listner;
+		}
+
+		public void setTimeOutValue(long timeout_ms) {
+			this.timeOut = timeout_ms;
+		}
+
+		public void setTimeOutRetry(int timeout_retry) {
+			this.timeOutRetry = timeout_retry;
+		}
+
+		public int getTimeOutRetry() {
+			if (this.timeOutRetry <= 0)
+				return 3; // default value
+
+			return this.timeOutRetry;
+		}
+
+		public synchronized void resetTimeOut() {
+			if (timeOutTimer != null) {
+				timeOutTimer.cancel();
+				timeOutTimer = null;
+				/*
+				 * Log.d("TIMEOUT", "reset " + String.valueOf(timeOutTimer));
+				 */
+			}
+		}
+	
+		public void setTimeOut() {
+			setTimeOut(this.timeOut, true);
+		}
+	
+		public void setTimeOut(boolean resetTimeOutCount) {
+			setTimeOut(this.timeOut, resetTimeOutCount);
+		}
+	
+		public synchronized void setTimeOut(long timeout_ms,
+				boolean resetTimeOutCount) {
+			/*
+			 * Log.d("TIMEOUT", "set " + String.valueOf(timeout_ms));
+			 */
+			resetTimeOut();
+			if (resetTimeOutCount)
+				timeOutCount = 0;
+	
+			if (timeOutTimer == null) {
+				timeOutTimer = new Timer();
+				timeOutTimer.schedule(new TimerTask() {
+					public void run() {
+						if (timeOutTimer != null) {
+							resetTimeOut();
+							timeOutCount++;
+	
+							/*
+							 * Log.d("TIMEOUT", "timed out");
+							 */
+	
+							listener.notifyTimeOut(timeOutCount);
+						}
+					}
+				}, timeout_ms); // delay in milliseconds
+			}
+		}
+
 	}
 
 }

@@ -1,8 +1,5 @@
 package org.droidplanner.service;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
@@ -36,10 +33,6 @@ public class MAVLinkClient {
 	Messenger mService = null;
 	final Messenger mMessenger = new Messenger(new IncomingHandler());
 	private boolean mIsBound;
-	private Timer timeOutTimer;
-	private int timeOutCount;
-	private long timeOut;
-	private int timeOutRetry;
 
 	public interface OnMavlinkClientListener {
 		public void notifyConnected();
@@ -47,8 +40,6 @@ public class MAVLinkClient {
 		public void notifyDisconnected();
 
 		public void notifyReceivedData(MAVLinkMessage m);
-
-		void notifyTimeOut(int timeOutCount);
 	}
 
 	public MAVLinkClient(Context context, OnMavlinkClientListener listener) {
@@ -84,75 +75,7 @@ public class MAVLinkClient {
 			}
 		}
 	}
-
-	public void setTimeOutValue(long timeout_ms) {
-		this.timeOut = timeout_ms;
-	}
-
-	public long getTimeOutValue() {
-		if (this.timeOut <= 0)
-			return 3000; // default value
-
-		return this.timeOut;
-	}
-
-	public void setTimeOutRetry(int timeout_retry) {
-		this.timeOutRetry = timeout_retry;
-	}
-
-	public int getTimeOutRetry() {
-		if (this.timeOutRetry <= 0)
-			return 3; // default value
-
-		return this.timeOutRetry;
-	}
-
-	public synchronized void resetTimeOut() {
-		if (timeOutTimer != null) {
-			timeOutTimer.cancel();
-			timeOutTimer = null;
-			/*
-			 * Log.d("TIMEOUT", "reset " + String.valueOf(timeOutTimer));
-			 */
-		}
-	}
-
-	public void setTimeOut() {
-		setTimeOut(this.timeOut, true);
-	}
-
-	public void setTimeOut(boolean resetTimeOutCount) {
-		setTimeOut(this.timeOut, resetTimeOutCount);
-	}
-
-	public synchronized void setTimeOut(long timeout_ms,
-			boolean resetTimeOutCount) {
-		/*
-		 * Log.d("TIMEOUT", "set " + String.valueOf(timeout_ms));
-		 */
-		resetTimeOut();
-		if (resetTimeOutCount)
-			timeOutCount = 0;
-
-		if (timeOutTimer == null) {
-			timeOutTimer = new Timer();
-			timeOutTimer.schedule(new TimerTask() {
-				public void run() {
-					if (timeOutTimer != null) {
-						resetTimeOut();
-						timeOutCount++;
-
-						/*
-						 * Log.d("TIMEOUT", "timed out");
-						 */
-
-						listener.notifyTimeOut(timeOutCount);
-					}
-				}
-			}, timeout_ms); // delay in milliseconds
-		}
-	}
-
+	
 	/**
 	 * Handler of incoming messages from service.
 	 */

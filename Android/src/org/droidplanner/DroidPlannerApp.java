@@ -63,15 +63,6 @@ public class DroidPlannerApp extends ErrorReportApp implements
 	}
 
 	@Override
-	public void notifyTimeOut(int timeOutCount) {
-		if (drone.waypointMananger.processTimeOut(timeOutCount)) {
-			tts.speak("Retrying - " + String.valueOf(timeOutCount));
-		} else {
-			tts.speak("MAVLink has timed out");
-		}
-	}
-
-	@Override
 	public void notifyConnected() {
 		drone.events.notifyDroneEvent(DroneEventsType.CONNECTED);
 	}
