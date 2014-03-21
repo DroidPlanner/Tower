@@ -3,11 +3,11 @@ package org.droidplanner.fragments;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.droidplanner.helpers.coordinates.Coord2D;
 import org.droidplanner.helpers.geoTools.Simplify;
 
 import android.gesture.GestureOverlayView;
 import android.gesture.GestureOverlayView.OnGestureListener;
-import android.graphics.Point;
 import android.view.MotionEvent;
 
 
@@ -18,7 +18,7 @@ public class PathGesture implements OnGestureListener {
 
 	public interface OnPathFinishedListener {
 
-		void onPathFinished(List<Point> path);
+		void onPathFinished(List<Coord2D> path);
 	}
 
 	public double toleranceInPixels;
@@ -49,24 +49,20 @@ public class PathGesture implements OnGestureListener {
 	@Override
 	public void onGestureEnded(GestureOverlayView arg0, MotionEvent arg1) {
 		view.setEnabled(false);
-		List<Point> path = decodeGesture();
+		List<Coord2D> path = decodeGesture();
 		if (path.size() > 1) {
 			path = Simplify.simplify(path, toleranceInPixels);
 		}
 		listener.onPathFinished(path);
 	}
 
-	private List<Point> decodeGesture() {
-		List<Point> path = new ArrayList<Point>();
-		extractPathFromGesture(path);
-		return path;
-	}
-
-	private void extractPathFromGesture(List<Point> path) {
+	private List<Coord2D> decodeGesture() {
+		List<Coord2D> path = new ArrayList<Coord2D>();
 		float[] points = view.getGesture().getStrokes().get(0).points;
 		for (int i = 0; i < points.length; i += 2) {
-			path.add(new Point((int) points[i], (int) points[i + 1]));
+			path.add(new Coord2D((int) points[i], (int) points[i + 1]));
 		}
+		return path;
 	}
 
 	@Override
