@@ -1,12 +1,14 @@
 package org.droidplanner.MAVLink;
 
 
+import org.droidplanner.MAVLink.MAVLinkStreams.MAVLinkOutputStream;
+
 import com.MAVLink.Messages.ardupilotmega.msg_request_data_stream;
 import com.MAVLink.Messages.enums.MAV_DATA_STREAM;
 
 public class MavLinkStreamRates {
 
-	public static void setupStreamRates(MAVLinkClient MAVClient,
+	public static void setupStreamRates(MAVLinkOutputStream MAVClient,
 			int extendedStatus, int extra1, int extra2, int extra3,
 			int position, int rcChannels, int rawSensors, int rawControler) {
 		requestMavlinkDataStream(MAVClient,
@@ -27,7 +29,7 @@ public class MavLinkStreamRates {
 				MAV_DATA_STREAM.MAV_DATA_STREAM_RC_CHANNELS, rcChannels);
 	}
 
-	private static void requestMavlinkDataStream(MAVLinkClient mAVClient,
+	private static void requestMavlinkDataStream(MAVLinkOutputStream mAVClient,
 			int stream_id, int rate) {
 		msg_request_data_stream msg = new msg_request_data_stream();
 		msg.target_system = 1;

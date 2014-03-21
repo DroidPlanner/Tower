@@ -1,5 +1,6 @@
 package org.droidplanner;
 
+import org.droidplanner.MAVLink.MAVLinkStreams;
 import org.droidplanner.MAVLink.MavLinkMsgHandler;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.Clock;
@@ -11,14 +12,13 @@ import org.droidplanner.helpers.FollowMe;
 import org.droidplanner.helpers.RecordMe;
 import org.droidplanner.helpers.TTS;
 import org.droidplanner.service.MAVLinkClient;
-import org.droidplanner.service.MAVLinkClient.OnMavlinkClientListener;
 
 import android.os.SystemClock;
 
 import com.MAVLink.Messages.MAVLinkMessage;
 
 public class DroidPlannerApp extends ErrorReportApp implements
-		OnMavlinkClientListener {
+		MAVLinkStreams.MavlinkInputStream {
 	public Drone drone;
 	private MavLinkMsgHandler mavLinkMsgHandler;
 	public FollowMe followMe;
@@ -30,7 +30,7 @@ public class DroidPlannerApp extends ErrorReportApp implements
 		super.onCreate();
 
 		tts = new TTS(this);
-		MAVLinkClient MAVClient = new MAVLinkClient(this);		
+		MAVLinkClient MAVClient = new MAVLinkClient(this,this);		
 		Clock clock = new Clock() {
 			@Override
 			public long elapsedRealtime() {

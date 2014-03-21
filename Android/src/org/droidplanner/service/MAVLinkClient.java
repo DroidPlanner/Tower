@@ -1,5 +1,7 @@
 package org.droidplanner.service;
 
+import org.droidplanner.MAVLink.MAVLinkStreams;
+
 import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
@@ -17,7 +19,7 @@ import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
 
 // provide a common class for some ease of use functionality
-public class MAVLinkClient {
+public class MAVLinkClient implements MAVLinkStreams.MAVLinkOutputStream {
 
     /**
      * This is used as tag for logging.
@@ -29,20 +31,12 @@ public class MAVLinkClient {
 	public static final int MSG_TIMEOUT = 2;
 
 	Context parent;
-	private OnMavlinkClientListener listener;
+	private MAVLinkStreams.MavlinkInputStream listener;
 	Messenger mService = null;
 	final Messenger mMessenger = new Messenger(new IncomingHandler());
 	private boolean mIsBound;
 
-	public interface OnMavlinkClientListener {
-		public void notifyConnected();
-
-		public void notifyDisconnected();
-
-		public void notifyReceivedData(MAVLinkMessage m);
-	}
-
-	public MAVLinkClient(Context context, OnMavlinkClientListener listener) {
+	public MAVLinkClient(Context context, MAVLinkStreams.MavlinkInputStream listener) {
 		parent = context;
 		this.listener = listener;
 	}
