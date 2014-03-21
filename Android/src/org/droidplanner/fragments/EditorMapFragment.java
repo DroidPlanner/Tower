@@ -3,7 +3,8 @@ package org.droidplanner.fragments;
 
 import org.droidplanner.activities.helpers.OnEditorInteraction;
 import org.droidplanner.mission.*;
-import org.droidplanner.extra.SpatialCoordItem;
+import org.droidplanner.mission.waypoints.SpatialCoordItem;
+import org.droidplanner.extra.DroneHelper;
 import org.droidplanner.fragments.helpers.CameraGroundOverlays;
 import org.droidplanner.fragments.helpers.DroneMap;
 import org.droidplanner.fragments.helpers.MapPath;
@@ -54,8 +55,8 @@ public class EditorMapFragment extends DroneMap implements
 	@Override
 	public void update() {
 		super.update();
-		markers.updateMarkers(polygon .getPolygonPoints(), true, context);
-		polygonPath.update(polygon);
+		//markers.updateMarkers(polygon .getPolygonPoints(), true, context);
+		//polygonPath.update(polygon);
 	}
 
 	@Override
@@ -80,8 +81,8 @@ public class EditorMapFragment extends DroneMap implements
 			LatLng position = marker.getPosition();
 
 			// update marker source
-			SpatialCoordItemD waypoint = (SpatialCoordItemD) source;
-			waypoint.setCoordinate(position);
+			SpatialCoordItem waypoint = (SpatialCoordItem) source;
+			waypoint.setPosition(DroneHelper.LatLngToCoord(position));
 
 			/*
 			// update info window
@@ -124,9 +125,11 @@ public class EditorMapFragment extends DroneMap implements
 	}
 
 	private void checkForPolygonMarker(MarkerSource source, Marker marker) {
+		/*
 		if (PolygonPoint.class.isInstance(source)) {
-			//mListener.onMovePolygonPoint((PolygonPoint) source,marker.getPosition());
+			Listener.onMovePolygonPoint((PolygonPoint) source,marker.getPosition());
 		}
+		*/
 	}
 
 	@Override

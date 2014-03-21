@@ -2,6 +2,7 @@ package org.droidplanner.mission.waypoints;
 
 import java.util.List;
 
+import org.droidplanner.helpers.coordinates.Coord2D;
 import org.droidplanner.helpers.coordinates.Coord3D;
 import org.droidplanner.helpers.units.Altitude;
 import org.droidplanner.mission.Mission;
@@ -56,6 +57,10 @@ public abstract class SpatialCoordItem extends MissionItem {
 	public void setAltitude(Altitude altitude) {
 		coordinate.set(coordinate.getX(), coordinate.getY(), altitude);
 		
+	}
+
+	public void setPosition(Coord2D position) {
+		coordinate.set(position);		
 	}
 
 }

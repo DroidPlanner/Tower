@@ -7,9 +7,11 @@ import org.droidplanner.dialogs.GuidedDialog.GuidedDialogListener;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.variables.GuidedPoint;
+import org.droidplanner.extra.DroneHelper;
 import org.droidplanner.fragments.helpers.DroneMap;
 import org.droidplanner.fragments.helpers.MapPath;
 import org.droidplanner.fragments.markers.DroneMarker;
+import org.droidplanner.helpers.coordinates.Coord2D;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -117,7 +119,7 @@ public class FlightMapFragment extends DroneMap implements
 		getPreferences();
 		if (drone.MavClient.isConnected()) {
 			if (drone.guidedPoint.isInitialized()) {
-				drone.guidedPoint.newGuidedCoord(coord);
+				drone.guidedPoint.newGuidedCoord(DroneHelper.LatLngToCoord(coord));
 			} else {
 				if (guidedModeOnLongPress) {
 					GuidedDialog dialog = new GuidedDialog();
@@ -131,7 +133,7 @@ public class FlightMapFragment extends DroneMap implements
 
 	@Override
 	public void onForcedGuidedPoint(LatLng coord) {
-		drone.guidedPoint.forcedGuidedCoordinate(coord);		
+		drone.guidedPoint.forcedGuidedCoordinate(DroneHelper.LatLngToCoord(coord));		
 	}
 
 	@Override
@@ -144,23 +146,23 @@ public class FlightMapFragment extends DroneMap implements
 
 	@Override
 	public void onMarkerDragEnd(Marker marker) {
-		drone.guidedPoint.newGuidedCoord(marker.getPosition());
+		drone.guidedPoint.newGuidedCoord(DroneHelper.LatLngToCoord(marker.getPosition()));
 	}
 
 	@Override
 	public boolean onMarkerClick(Marker marker) {
-		drone.guidedPoint.newGuidedCoord(marker.getPosition());
+		drone.guidedPoint.newGuidedCoord(DroneHelper.LatLngToCoord(marker.getPosition()));
 		return true;
 	}
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
+		LatLng position = DroneHelper.CoordToLatLang(drone.GPS.getPosition());
 		switch (event) {
 		case GPS:
 			droneLeashPath.update(drone.guidedPoint);
-			addFlightPathPoint(drone.GPS
-					.getPosition());
-			animateCamera(drone.GPS.getPosition());
+			addFlightPathPoint(position);
+			animateCamera(position);
 			break;
 		case GUIDEDPOINT:
 			GuidedPoint guidedPoint = drone.guidedPoint;			
