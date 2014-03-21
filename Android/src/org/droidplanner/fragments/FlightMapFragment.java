@@ -6,12 +6,11 @@ import org.droidplanner.dialogs.GuidedDialog;
 import org.droidplanner.dialogs.GuidedDialog.GuidedDialogListener;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.drone.variables.GuidedPoint;
 import org.droidplanner.extra.DroneHelper;
+import org.droidplanner.extra.GraphicGuided;
 import org.droidplanner.fragments.helpers.DroneMap;
 import org.droidplanner.fragments.helpers.MapPath;
 import org.droidplanner.fragments.markers.DroneMarker;
-import org.droidplanner.helpers.coordinates.Coord2D;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -44,6 +43,7 @@ public class FlightMapFragment extends DroneMap implements
 	public boolean hasBeenZoomed = false;
 
 	public DroneMarker droneMarker;
+	public GraphicGuided guided;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
@@ -52,6 +52,7 @@ public class FlightMapFragment extends DroneMap implements
 
 		droneMarker = new DroneMarker(this);
 		droneLeashPath = new MapPath(mMap, getResources());
+		guided = new GraphicGuided(drone);
 
 		addFlightPathToMap();
 		getPreferences();
@@ -160,14 +161,13 @@ public class FlightMapFragment extends DroneMap implements
 		LatLng position = DroneHelper.CoordToLatLang(drone.GPS.getPosition());
 		switch (event) {
 		case GPS:
-			droneLeashPath.update(drone.guidedPoint);
+			droneLeashPath.update(guided);
 			addFlightPathPoint(position);
 			animateCamera(position);
 			break;
-		case GUIDEDPOINT:
-			GuidedPoint guidedPoint = drone.guidedPoint;			
-			markers.updateMarker(guidedPoint, true, context);
-			droneLeashPath.update(guidedPoint);
+		case GUIDEDPOINT:			
+			markers.updateMarker(guided, true, context);
+			droneLeashPath.update(guided);
 			break;
 		default:
 			break;
