@@ -27,8 +27,8 @@ import com.MAVLink.Messages.ardupilotmega.msg_mission_request;
  * 
  */
 public class WaypointManager extends DroneVariable implements OnTimeout {
-	enum waypointStates {
-		IDLE, READ_REQUEST, READING_WP, WRITTING_WP_COUNT, WRITTING_WP, WAITING_WRITE_ACK
+	enum WaypointStates {
+		IDLE, READ_REQUEST, READING_WP, WRITING_WP_COUNT, WRITING_WP, WAITING_WRITE_ACK
 	}
 
 	public enum WaypointEvent_Type {
@@ -36,7 +36,7 @@ public class WaypointManager extends DroneVariable implements OnTimeout {
 		WP_DOWNLOAD,
 		WP_RETRY,
 		WP_CONTINUE,
-		WP_TIMEDOUT
+        WP_TIMED_OUT
 	}
 	
 	private int readIndex;
@@ -46,7 +46,7 @@ public class WaypointManager extends DroneVariable implements OnTimeout {
 	private TimeOut timeOut;
 	private OnWaypointManagerListener wpEventListener;
 
-	waypointStates state = waypointStates.IDLE;
+	WaypointStates state = WaypointStates.IDLE;
 
     /**
      * waypoint witch is currently being written
@@ -73,14 +73,14 @@ public class WaypointManager extends DroneVariable implements OnTimeout {
 	 */
 	public void getWaypoints() {
 		// ensure that WPManager is not doing anything else
-		if (state != waypointStates.IDLE)
+		if (state != WaypointStates.IDLE)
 			return;
 		
 		doBeginWaypointEvent(WaypointEvent_Type.WP_DOWNLOAD);
 		readIndex = -1;
 		timeOut.setTimeOutValue(3000);
 		timeOut.setTimeOutRetry(maxRetry);
-		state = waypointStates.READ_REQUEST;
+		state = WaypointStates.READ_REQUEST;
 		timeOut.setTimeOut();
 		MavLinkWaypoint.requestWaypointsList(myDrone);
 	}
@@ -96,7 +96,7 @@ public class WaypointManager extends DroneVariable implements OnTimeout {
 
 	public void writeWaypoints(List<msg_mission_item> data) {
 		// ensure that WPManager is not doing anything else
-		if (state != waypointStates.IDLE)
+		if (state != WaypointStates.IDLE)
 			return;
 		
 		if ((mission != null)) {
@@ -107,7 +107,7 @@ public class WaypointManager extends DroneVariable implements OnTimeout {
 			writeIndex = 0;
 			timeOut.setTimeOutValue(3000);
 			timeOut.setTimeOutRetry(3);
-			state = waypointStates.WRITTING_WP_COUNT;
+			state = WaypointStates.WRITING_WP_COUNT;
 			timeOut.setTimeOut();
 			MavLinkWaypoint.sendWaypointCount(myDrone, mission.size());
 		}
@@ -178,7 +178,7 @@ public class WaypointManager extends DroneVariable implements OnTimeout {
 				mission.clear();
 				timeOut.setTimeOut();
 				MavLinkWaypoint.requestWayPoint(myDrone, mission.size());
-				state = waypointStates.READING_WP;
+				state = WaypointStates.READING_WP;
 				return true;
 			}
 			break;
@@ -191,7 +191,7 @@ public class WaypointManager extends DroneVariable implements OnTimeout {
 					MavLinkWaypoint.requestWayPoint(myDrone, mission.size());
 				} else {
 					timeOut.resetTimeOut();
-					state = waypointStates.IDLE;
+					state = WaypointStates.IDLE;
 					MavLinkWaypoint.sendAck(myDrone);
 					myDrone.mission.onMissionReceived(mission);
 					doEndWaypointEvent(WaypointEvent_Type.WP_DOWNLOAD);
@@ -199,9 +199,9 @@ public class WaypointManager extends DroneVariable implements OnTimeout {
 				return true;
 			}
 			break;
-		case WRITTING_WP_COUNT:
-			state = waypointStates.WRITTING_WP;
-		case WRITTING_WP:
+		case WRITING_WP_COUNT:
+			state = WaypointStates.WRITING_WP;
+		case WRITING_WP:
 			if (msg.msgid == msg_mission_request.MAVLINK_MSG_ID_MISSION_REQUEST) {
 				timeOut.setTimeOut();
 				processWaypointToSend((msg_mission_request) msg);
@@ -213,7 +213,7 @@ public class WaypointManager extends DroneVariable implements OnTimeout {
 			if (msg.msgid == msg_mission_ack.MAVLINK_MSG_ID_MISSION_ACK) {
 				timeOut.resetTimeOut();
 				myDrone.mission.onWriteWaypoints((msg_mission_ack) msg);
-				state = waypointStates.IDLE;
+				state = WaypointStates.IDLE;
 				doEndWaypointEvent(WaypointEvent_Type.WP_UPLOAD);
 				return true;
 			}
@@ -241,8 +241,8 @@ public class WaypointManager extends DroneVariable implements OnTimeout {
 
 		// If max retry is reached, set state to IDLE. No more retry.
 		if (mTimeOutCount >= timeOut.getTimeOutRetry()) {
-			state = waypointStates.IDLE;
-			doWaypointEvent(WaypointEvent_Type.WP_TIMEDOUT,retryIndex, maxRetry);
+			state = WaypointStates.IDLE;
+			doWaypointEvent(WaypointEvent_Type.WP_TIMED_OUT,retryIndex, maxRetry);
 			return false;
 		}
 		
@@ -263,10 +263,10 @@ public class WaypointManager extends DroneVariable implements OnTimeout {
 				MavLinkWaypoint.requestWayPoint(myDrone, mission.size());
 			}
 			break;
-		case WRITTING_WP_COUNT:
+		case WRITING_WP_COUNT:
 			MavLinkWaypoint.sendWaypointCount(myDrone, mission.size());
 			break;
-		case WRITTING_WP:
+		case WRITING_WP:
 //			Log.d("TIMEOUT", "re Write Msg: " + String.valueOf(writeIndex));
 			if (writeIndex < mission.size()) {
 				myDrone.MavClient.sendMavPacket(mission.get(writeIndex).pack());
@@ -288,7 +288,7 @@ public class WaypointManager extends DroneVariable implements OnTimeout {
 		myDrone.MavClient.sendMavPacket(mission.get(writeIndex).pack());
 
 		if (writeIndex + 1 >= mission.size()) {
-			state = waypointStates.WAITING_WRITE_ACK;
+			state = WaypointStates.WAITING_WRITE_ACK;
 		}
 	}
 
@@ -345,8 +345,8 @@ public class WaypointManager extends DroneVariable implements OnTimeout {
 		private int timeOutRetry;
 		private OnTimeout listener;
 		
-		public TimeOut(OnTimeout listner){
-			this.listener = listner;
+		public TimeOut(OnTimeout listener){
+			this.listener = listener;
 		}
 
 		public void setTimeOutValue(long timeout_ms) {
