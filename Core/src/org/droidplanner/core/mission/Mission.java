@@ -23,7 +23,7 @@ import com.MAVLink.Messages.enums.MAV_CMD;
 
 public class Mission extends DroneVariable{
 
-	private List<MissionItem> itens = new ArrayList<MissionItem>();
+	private List<MissionItem> items = new ArrayList<MissionItem>();
 	private List<MissionItem> selection = new ArrayList<MissionItem>();
 	private Altitude defaultAlt = new Altitude(20.0);
 
@@ -40,38 +40,38 @@ public class Mission extends DroneVariable{
 	}
 
 	public void removeWaypoint(MissionItem item) {
-		itens.remove(item);
+		items.remove(item);
 		selection.remove(item);
-		notifiyMissionUpdate();
+		notifyMissionUpdate();
 	}
 
 	public void removeWaypoints(List<MissionItem> toRemove) {
-		itens.removeAll(toRemove);
+		items.removeAll(toRemove);
 		selection.removeAll(toRemove);
-		notifiyMissionUpdate();		
+		notifyMissionUpdate();
 	}
 
 	public void addWaypoints(List<Coord2D> points) {
 		Altitude alt = getLastAltitude();
 		for (Coord2D point : points) {
-			itens.add(new Waypoint(this, new Coord3D(point,alt)));
+			items.add(new Waypoint(this, new Coord3D(point, alt)));
 		}		
-		notifiyMissionUpdate();
+		notifyMissionUpdate();
 	}
 
 	public void addWaypoint(Coord2D point) {
-		itens.add(new Waypoint(this,new Coord3D(point,getLastAltitude())));
-		notifiyMissionUpdate();
+		items.add(new Waypoint(this, new Coord3D(point, getLastAltitude())));
+		notifyMissionUpdate();
 	}
 
-	public void notifiyMissionUpdate() {
+	public void notifyMissionUpdate() {
 		myDrone.events.notifyDroneEvent(DroneEventsType.MISSION_UPDATE);
 	}
 
 	private Altitude getLastAltitude() {
 		Altitude alt;
 		try{
-			SpatialCoordItem lastItem = (SpatialCoordItem) itens.get(itens.size()-1);
+			SpatialCoordItem lastItem = (SpatialCoordItem) items.get(items.size()-1);
 			alt = lastItem.getCoordinate().getAltitude();
 		}catch (Exception e){
 			alt = defaultAlt;			
@@ -80,19 +80,19 @@ public class Mission extends DroneVariable{
 	}
 	
 	public void replace(MissionItem oldItem, MissionItem newItem) {
-		int index = itens.indexOf(oldItem);
+		int index = items.indexOf(oldItem);
 		if (selectionContains(oldItem)) {
 			removeItemFromSelection(oldItem);
 			addToSelection(newItem);
 		}
-		itens.remove(index);
-		itens.add(index, newItem);
-		notifiyMissionUpdate();		
+		items.remove(index);
+		items.add(index, newItem);
+		notifyMissionUpdate();
 	}
 
 	public void reverse() {
-		Collections.reverse(itens);
-		notifiyMissionUpdate();	
+		Collections.reverse(items);
+		notifyMissionUpdate();
 	}
 
 	/**
@@ -105,42 +105,42 @@ public class Mission extends DroneVariable{
 	 *            true to move up, but can be false to move down
 	 */
 	public void moveSelection(boolean moveUp) {
-		if (selection.size() > 0 | selection.size() < itens.size()) {
+		if (selection.size() > 0 | selection.size() < items.size()) {
 			Collections.sort(selection);
 			if (moveUp) {
-				Collections.rotate(getSublistToRotateUp(), 1);				
+				Collections.rotate(getSubListToRotateUp(), 1);
 			}else{
-				Collections.rotate(getSublistToRotateDown(), -1);
+				Collections.rotate(getSubListToRotateDown(), -1);
 			}
-			notifiyMissionUpdate();
+			notifyMissionUpdate();
 		}
 	}
 
-	private List<MissionItem> getSublistToRotateUp() {
-		int from = itens.indexOf(selection.get(0));
+	private List<MissionItem> getSubListToRotateUp() {
+		int from = items.indexOf(selection.get(0));
 		int to = from;
 		do{
-			if (itens.size() < to + 2)
-				return itens.subList(0, 0);
-		}while (selection.contains(itens.get(++to)));
-		return itens.subList(from, to + 1); // includes one unselected item
+			if (items.size() < to + 2)
+				return items.subList(0, 0);
+		}while (selection.contains(items.get(++to)));
+		return items.subList(from, to + 1); // includes one unselected item
 	}
 
-	private List<MissionItem> getSublistToRotateDown() {
-		int from = itens.indexOf(selection.get(selection.size() - 1));
+	private List<MissionItem> getSubListToRotateDown() {
+		int from = items.indexOf(selection.get(selection.size() - 1));
 		int to = from;
 		do {
 			if (to < 1) {
-				return itens.subList(0, 0);
+				return items.subList(0, 0);
 			}
-		} while (selection.contains(itens.get(--to)));
-		return itens.subList(to, from + 1); // includes one unselected item
+		} while (selection.contains(items.get(--to)));
+		return items.subList(to, from + 1); // includes one unselected item
 	}
 
 	public void addSurveyPolygon(List<Coord2D> points) {
 		Survey survey = new Survey(this, points);
-		itens.add(survey);
-		notifiyMissionUpdate();		
+		items.add(survey);
+		notifyMissionUpdate();
 	}
 
 	public void onWriteWaypoints(msg_mission_ack msg) {
@@ -148,18 +148,18 @@ public class Mission extends DroneVariable{
 	}
 
 	public List<MissionItem> getItems() {
-		return itens;
+		return items;
 	}
 
 	public Integer getNumber(MissionItem waypoint) {
-		return itens.indexOf(waypoint)+1; // plus one to account for the fact that this is an index
+		return items.indexOf(waypoint)+1; // plus one to account for the fact that this is an index
 	}
 
-	public Length getAltitudeDiffFromPreviusItem(
-			SpatialCoordItem waypoint) throws Exception {
-		int i = itens.indexOf(waypoint);
+	public Length getAltitudeDiffFromPreviousItem(
+            SpatialCoordItem waypoint) throws Exception {
+		int i = items.indexOf(waypoint);
 		if (i > 0) {
-			MissionItem previus = itens.get(i - 1);
+			MissionItem previus = items.get(i - 1);
 			if (previus instanceof SpatialCoordItem) {
 				return waypoint.getCoordinate().getAltitude().subtract(
 						((SpatialCoordItem) previus).getCoordinate().getAltitude());
@@ -169,19 +169,19 @@ public class Mission extends DroneVariable{
 	}
 
 	public Length getDistanceFromLastWaypoint(SpatialCoordItem waypoint) throws Exception {
-		int i = itens.indexOf(waypoint);
+		int i = items.indexOf(waypoint);
 		if (i > 0) {
-			MissionItem previus = itens.get(i - 1);
-			if (previus instanceof SpatialCoordItem) {
+			MissionItem previous = items.get(i - 1);
+			if (previous instanceof SpatialCoordItem) {
 				return GeoTools.getDistance(waypoint.getCoordinate(),
-						((SpatialCoordItem) previus).getCoordinate());
+						((SpatialCoordItem) previous).getCoordinate());
 			}
 		}
 		throw new Exception("Last waypoint doesn't have a coordinate");
 	}
 
 	public boolean hasItem(MissionItem item) {
-		return itens.contains(item);
+		return items.contains(item);
 	}
 
 	public void clearSelection() {
@@ -218,10 +218,10 @@ public class Mission extends DroneVariable{
 			myDrone.home.setHome(msgs.get(0));
 			msgs.remove(0); // Remove Home waypoint
 			selection.clear();
-			itens.clear();
-			itens.addAll(processMavLinkMessages(msgs));
+			items.clear();
+			items.addAll(processMavLinkMessages(msgs));
 			myDrone.events.notifyDroneEvent(DroneEventsType.MISSION_RECEIVED);
-			notifiyMissionUpdate();
+			notifyMissionUpdate();
 		}
 	}
 
@@ -243,19 +243,19 @@ public class Mission extends DroneVariable{
 	public void sendMissionToAPM() {
 		List<msg_mission_item> data = new ArrayList<msg_mission_item>();
 		data.add(myDrone.home.packMavlink());
-		for (MissionItem item : itens) {
+		for (MissionItem item : items) {
 			data.addAll(item.packMissionItem());			
 		}				
 		myDrone.waypointManager.writeWaypoints(data);
 	}
 
-	public void addMissionUpdatesListner(
-			OnDroneListener listner) {
-		myDrone.events.addDroneListener(listner);
+	public void addMissionUpdatesListener(
+            OnDroneListener listener) {
+		myDrone.events.addDroneListener(listener);
 	}
 
-	public void removeMissionUpdatesListner(
-			OnDroneListener listener) {
+	public void removeMissionUpdatesListener(
+            OnDroneListener listener) {
 		myDrone.events.removeDroneListener(listener);		
 	}
 

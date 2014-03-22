@@ -55,7 +55,7 @@ public class GraphicWaypoint extends Waypoint implements EditorMissionItem,Marke
 
 	private String getIconDetail() {
 		try {
-			if (mission.getAltitudeDiffFromPreviusItem(this).valueInMeters()==0) {
+			if (mission.getAltitudeDiffFromPreviousItem(this).valueInMeters()==0) {
 				return null;
 			}else{
 				return null; //altitude.toString();

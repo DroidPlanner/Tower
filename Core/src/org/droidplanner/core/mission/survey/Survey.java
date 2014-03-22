@@ -29,12 +29,12 @@ public class Survey extends MissionItem {
 	public void update(double angle, Altitude altitude, double overlap,
 			double sidelap) {
 		surveyData.update(angle, altitude, overlap, sidelap);
-		mission.notifiyMissionUpdate();
+		mission.notifyMissionUpdate();
 	}
 
 	public void setCameraInfo(CameraInfo camera) {
 		surveyData.setCameraInfo(camera);
-		mission.notifiyMissionUpdate();
+		mission.notifyMissionUpdate();
 	}
 
 	private void build() throws Exception {		

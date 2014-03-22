@@ -85,8 +85,8 @@ public class MissionItemView extends ArrayAdapter<MissionItem> {
 			
 			Length diff;
 			try {
-				diff = waypoint.getMission().getAltitudeDiffFromPreviusItem(
-						waypoint);
+				diff = waypoint.getMission().getAltitudeDiffFromPreviousItem(
+                        waypoint);
 				if (diff.valueInMeters() > 0) {
 					altitudeView.setTextColor(Color.RED);
 				} else if (diff.valueInMeters() < 0) {

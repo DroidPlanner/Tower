@@ -61,7 +61,8 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		setContentView(R.layout.activity_editor);
 
 		ActionBar actionBar = getActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
+        if(actionBar != null)
+		    actionBar.setDisplayHomeAsUpEnabled(true);
 
 		fragmentManager = getSupportFragmentManager();
 
