@@ -26,7 +26,7 @@ import com.MAVLink.Messages.ardupilotmega.msg_mission_request;
  * MAV Message.
  * 
  */
-public class WaypointMananger extends DroneVariable implements OnTimeout {
+public class WaypointManager extends DroneVariable implements OnTimeout {
 	enum waypointStates {
 		IDLE, READ_REQUEST, READING_WP, WRITTING_WP_COUNT, WRITTING_WP, WAITING_WRITE_ACK
 	}
@@ -48,9 +48,18 @@ public class WaypointMananger extends DroneVariable implements OnTimeout {
 
 	waypointStates state = waypointStates.IDLE;
 
-	public WaypointMananger(Drone myDrone, TimeOut timeOut) {
+    /**
+     * waypoint witch is currently being written
+     */
+
+    public WaypointManager(Drone drone) {
+        super(drone);
+        this.timeOut = new TimeOut(this);
+    }
+
+	public WaypointManager(Drone myDrone, TimeOut timeOut) {
 		super(myDrone);
-		this.timeOut = new TimeOut(this);
+        this.timeOut = timeOut;
 	}
 
 	public void setWaypointManagerListener(OnWaypointManagerListener wpEventListener) {
@@ -150,14 +159,6 @@ public class WaypointMananger extends DroneVariable implements OnTimeout {
 	 * list of waypoints used when writing or receiving
 	 */
 	private List<msg_mission_item> mission = new ArrayList<msg_mission_item>();
-
-	/**
-	 * waypoint witch is currently being written
-	 */
-
-	public WaypointMananger(Drone drone) {
-		super(drone);
-	}
 
 	/**
 	 * Try to process a Mavlink message if it is a mission related message

@@ -246,7 +246,7 @@ public class Mission extends DroneVariable{
 		for (MissionItem item : itens) {
 			data.addAll(item.packMissionItem());			
 		}				
-		myDrone.waypointMananger.writeWaypoints(data);
+		myDrone.waypointManager.writeWaypoints(data);
 	}
 
 	public void addMissionUpdatesListner(

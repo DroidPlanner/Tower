@@ -9,7 +9,7 @@
             android:id="@+id/menu_info_bar"
             android:title="@string/menu_info_bar"
             android:showAsAction="always"
-            android:actionProviderClass="org.droidplanner.widgets.actionProviders.InfoBarActionProvider"
+            android:actionProviderClass="org.droidplanner.android.widgets.actionProviders.InfoBarActionProvider"
             />
 
         <item

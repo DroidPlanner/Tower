@@ -116,7 +116,7 @@ public abstract class SuperUI extends SuperActivity implements OnDroneListener {
                 return true;
 
             case R.id.menu_load_mission:
-                drone.waypointMananger.getWaypoints();
+                drone.waypointManager.getWaypoints();
                 return true;
 
             default:

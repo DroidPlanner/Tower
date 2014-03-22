@@ -2,7 +2,7 @@ package org.droidplanner.core.drone;
 
 
 import org.droidplanner.core.MAVLink.MAVLinkStreams.MAVLinkOutputStream;
-import org.droidplanner.core.MAVLink.WaypointMananger;
+import org.droidplanner.core.MAVLink.WaypointManager;
 import org.droidplanner.core.drone.DroneInterfaces.Clock;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
@@ -46,7 +46,7 @@ public class Drone {
 	public GuidedPoint guidedPoint = new GuidedPoint(this);
 	public Parameters parameters = new Parameters(this);
 	public Calibration calibrationSetup = new Calibration(this);
-	public WaypointMananger waypointMananger = new WaypointMananger(this);
+	public WaypointManager waypointManager = new WaypointManager(this);
 	public State state;
 	public HeartBeat heartbeat;
 
