@@ -69,7 +69,7 @@
         android:drawablePadding="@dimen/info_bar_drawable_padding"
         />
 
-    <org.droidplanner.widgets.spinners.SpinnerSelfSelect
+    <org.droidplanner.android.widgets.spinners.SpinnerSelfSelect
         android:id="@+id/bar_flight_mode"
         style="?android:attr/buttonBarButtonStyle"
         android:layout_width="@dimen/info_bar_flight_mode_width"

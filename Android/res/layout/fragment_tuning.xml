@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
-              xmlns:app="http://schemas.android.com/apk/res/org.droidplanner"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               style="@style/configLayout"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:layout_weight="@integer/tuning_graph_weight">
 
-        <org.droidplanner.widgets.graph.Chart
+        <org.droidplanner.android.widgets.graph.Chart
             android:id="@+id/chartBottom"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -20,7 +20,7 @@
             android:layout_below="@+id/chartTop"
             />
 
-        <org.droidplanner.widgets.graph.Chart
+        <org.droidplanner.android.widgets.graph.Chart
             android:id="@+id/chartTop"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -63,7 +63,7 @@
         android:layout_weight="@integer/tuning_params_weight"
         android:background="@color/opaque_white">
 
-        <org.droidplanner.widgets.spinners.SpinnerSelfSelect
+        <org.droidplanner.android.widgets.spinners.SpinnerSelfSelect
             android:id="@+id/spinnerWaypointType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -117,7 +117,7 @@
                 android:padding="12dp"
                 android:orientation="vertical">
 
-                <org.droidplanner.widgets.NumberFieldEdit.NumberFieldEdit
+                <org.droidplanner.android.widgets.NumberFieldEdit.NumberFieldEdit
                     android:id="@+id/numberFieldEdit1"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -133,7 +133,7 @@
                     app:Title="Stab. P"/>
 
 
-                <org.droidplanner.widgets.NumberFieldEdit.NumberFieldEdit
+                <org.droidplanner.android.widgets.NumberFieldEdit.NumberFieldEdit
                     android:id="@+id/numberFieldEdit1"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -144,7 +144,7 @@
                     app:Title="Rate P"/>
 
 
-                <org.droidplanner.widgets.NumberFieldEdit.NumberFieldEdit
+                <org.droidplanner.android.widgets.NumberFieldEdit.NumberFieldEdit
                     android:id="@+id/numberFieldEdit1"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -155,7 +155,7 @@
                     app:Title="Rate I"/>
 
 
-                <org.droidplanner.widgets.NumberFieldEdit.NumberFieldEdit
+                <org.droidplanner.android.widgets.NumberFieldEdit.NumberFieldEdit
                     android:id="@+id/numberFieldEdit1"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"

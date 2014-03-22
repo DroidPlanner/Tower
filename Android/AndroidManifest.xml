@@ -54,7 +54,7 @@
         android:required="true" />
 
     <application
-        android:name=".DroidPlannerApp"
+        android:name=".android.DroidPlannerApp"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"
@@ -70,11 +70,11 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <service android:name=".service.MAVLinkService" >
+        <service android:name=".android.service.MAVLinkService" >
         </service>
 
 		<activity
-		    android:name=".activities.FlightActivity"
+		    android:name=".android.activities.FlightActivity"
 		    android:launchMode="singleTask" >
 
             <!-- Launcher Intent -->
@@ -94,15 +94,15 @@
                 android:resource="@xml/device_filter" />
         </activity>
         <activity
-            android:name=".activities.EditorActivity"
+            android:name=".android.activities.EditorActivity"
             android:label="@string/editor"
             android:launchMode="singleTop"
-            android:parentActivityName=".activities.FlightActivity" >
+            android:parentActivityName=".android.activities.FlightActivity" >
 
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.FlightActivity" />
+                android:value=".android.activities.FlightActivity" />
 
             <!-- Intent for opening mission files -->
             <intent-filter>
@@ -114,19 +114,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.ConfigurationActivity"
+            android:name=".android.activities.ConfigurationActivity"
             android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTop"
             android:theme="@style/Theme.PageIndicatorDefaults"
             android:label="@string/menu_drone_setup"
-            android:parentActivityName=".activities.SettingsActivity" >
+            android:parentActivityName=".android.activities.SettingsActivity" >
 
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.SettingsActivity" />
+                android:value=".android.activities.SettingsActivity" />
         </activity>
-        <activity android:name=".activities.SettingsActivity"
+        <activity android:name=".android.activities.SettingsActivity"
                   android:launchMode="singleTop"
                   android:label="@string/settings"/>
     </application>

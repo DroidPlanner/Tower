@@ -1,6 +1,7 @@
 apply plugin: 'android'
 
 dependencies {
+    compile project(':Core')
     compile files('libs/usbseriallibrary.jar')
     compile 'com.android.support:support-v4:18.0.0'
     compile 'com.google.android.gms:play-services:4.0.30'
@@ -23,7 +24,7 @@ android {
         }
 
         // Move the tests to tests/java, tests/res, etc...
-        instrumentTest.setRoot('tests')
+        androidTest.setRoot('tests')
 
         // Move the build types to build-types/<type>
         // For instance, build-types/debug/java, build-types/debug/AndroidManifest.xml, ...

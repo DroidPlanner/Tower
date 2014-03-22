@@ -78,7 +78,7 @@
             android:text="@string/default_angle_value"
             android:textSize="16sp"/>
 
-        <org.droidplanner.widgets.AttitudeIndicator
+        <org.droidplanner.android.widgets.AttitudeIndicator
             android:id="@+id/aiView"
             android:layout_width="80dp"
             android:layout_height="80dp"
