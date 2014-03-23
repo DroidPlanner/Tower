@@ -4,6 +4,7 @@ import org.droidplanner.R;
 import org.droidplanner.android.activities.FlightActivity;
 import org.droidplanner.android.connection.MAVLinkConnection;
 import org.droidplanner.android.connection.MAVLinkConnection.MavLinkConnectionListener;
+import org.droidplanner.android.notifications.NotificationHandler;
 import org.droidplanner.android.utils.Constants;
 import org.droidplanner.android.utils.Utils;
 
@@ -147,15 +148,19 @@ public class MAVLinkService extends Service implements MavLinkConnectionListener
 		};
 
 		connectMAVconnection();
-		showNotification();
+
+        final Context context = getApplicationContext();
+
+		NotificationHandler.showNotification(context);
 		aquireWakelock();
-		updateNotification(getResources().getString(R.string.connected));
+		NotificationHandler.updateNotification(context, getResources().getString(R.string
+                .connected));
 	}
 
 	@Override
 	public void onDestroy() {
 		disconnectMAVConnection();
-		dismissNotification();
+		NotificationHandler.dismissNotification(getApplicationContext());
 		releaseWakelock();
 		super.onDestroy();
 	}
@@ -195,34 +200,6 @@ public class MAVLinkService extends Service implements MavLinkConnectionListener
 			mavConnection.disconnect();
 			mavConnection = null;
 		}
-	}
-
-	/**
-	 * Show a notification while this service is running.
-	 */
-	static final int StatusBarNotification = 1;
-
-	private void showNotification() {
-		updateNotification(getResources().getString(R.string.disconnected));
-	}
-
-	private void updateNotification(String text) {
-		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
-				this).setSmallIcon(R.drawable.ic_launcher)
-				.setContentTitle(getResources().getString(R.string.app_title))
-				.setContentText(text);
-		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-				new Intent(this, FlightActivity.class), 0);
-		mBuilder.setContentIntent(contentIntent);
-
-		NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		mNotificationManager.notify(StatusBarNotification, mBuilder.build());
-	}
-
-	private void dismissNotification() {
-		NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		mNotificationManager.cancelAll();
-
 	}
 
 	@SuppressWarnings("deprecation")
