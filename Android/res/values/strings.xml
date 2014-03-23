@@ -43,8 +43,9 @@
     <string name="pref_ui_language_english_summary">Use English language (instead of system language). Requires app restart.</string>
     <string name="pref_connection_actions">While Connected to Drone</string>
     <string name="pref_connection_actions_summary">Actions to perform on or while connected to the Drone\nTo apply disconnect and reconnect</string>
-    <string name="pref_keep_screen_bright">Keep Screen bright</string>
-    <string name="pref_keep_screen_bright_summary">If unchecked the Screen will dim after a while (safes Battery)</string>
+    <string name="pref_keep_screen_bright">Keep Screen On</string>
+    <string name="pref_keep_screen_bright_summary">Check to keep the screen on and bright (affect
+        battery life)</string>
     <string name="pref_lock_screen_orientation">Lock Screen Orientation</string>
     <string name="pref_lock_screen_orientation_summary">Locks screen to the orientation which is present when connecting</string>
     <string name="pref_flight_data">Flight Data</string>
