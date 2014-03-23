@@ -1,7 +1,6 @@
 package org.droidplanner.android.service;
 
 import org.droidplanner.R;
-import org.droidplanner.android.activities.FlightActivity;
 import org.droidplanner.android.connection.MAVLinkConnection;
 import org.droidplanner.android.connection.MAVLinkConnection.MavLinkConnectionListener;
 import org.droidplanner.android.notifications.NotificationHandler;
@@ -9,8 +8,6 @@ import org.droidplanner.android.utils.Constants;
 import org.droidplanner.android.utils.Utils;
 
 import android.annotation.SuppressLint;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -19,11 +16,9 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
-import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -152,7 +147,6 @@ public class MAVLinkService extends Service implements MavLinkConnectionListener
         final Context context = getApplicationContext();
 
 		NotificationHandler.showNotification(context);
-		aquireWakelock();
 		NotificationHandler.updateNotification(context, getResources().getString(R.string
                 .connected));
 	}
@@ -161,7 +155,6 @@ public class MAVLinkService extends Service implements MavLinkConnectionListener
 	public void onDestroy() {
 		disconnectMAVConnection();
 		NotificationHandler.dismissNotification(getApplicationContext());
-		releaseWakelock();
 		super.onDestroy();
 	}
 
@@ -199,31 +192,6 @@ public class MAVLinkService extends Service implements MavLinkConnectionListener
 		if (mavConnection != null) {
 			mavConnection.disconnect();
 			mavConnection = null;
-		}
-	}
-
-	@SuppressWarnings("deprecation")
-	protected void aquireWakelock() {
-		if (wakeLock == null) {
-			PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-			if (PreferenceManager.getDefaultSharedPreferences(
-					getApplicationContext()).getBoolean(
-					"pref_keep_screen_bright", false)) {
-				wakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK
-						| PowerManager.ON_AFTER_RELEASE, "CPU");
-			} else {
-				wakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK,
-						"CPU");
-			}
-
-			wakeLock.acquire();
-		}
-	}
-
-	protected void releaseWakelock() {
-		if (wakeLock != null) {
-			wakeLock.release();
-			wakeLock = null;
 		}
 	}
 
