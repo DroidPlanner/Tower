@@ -188,8 +188,8 @@ public class Mission extends DroneVariable implements PathSource{
 		return itens.indexOf(waypoint)+1; // plus one to account for the fact that this is an index
 	}
 
-	public Length getAltitudeDiffFromPreviusItem(
-			SpatialCoordItem waypoint) throws Exception {
+	public Length getAltitudeDiffFromPreviousItem(
+            SpatialCoordItem waypoint) throws Exception {
 		int i = itens.indexOf(waypoint);
 		if (i > 0) {
 			MissionItem previus = itens.get(i - 1);

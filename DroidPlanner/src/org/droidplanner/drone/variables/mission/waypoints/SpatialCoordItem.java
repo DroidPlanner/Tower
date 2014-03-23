@@ -90,7 +90,7 @@ public abstract class SpatialCoordItem extends MissionItem implements
 
 	private String getIconDetail() {
 		try {
-			if (mission.getAltitudeDiffFromPreviusItem(this).valueInMeters()==0) {
+			if (mission.getAltitudeDiffFromPreviousItem(this).valueInMeters()==0) {
 				return null;
 			}else{
 				return null; //altitude.toString();
