@@ -1,9 +1,11 @@
 package org.droidplanner.android.service;
 
 import org.droidplanner.R;
+import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.connection.MAVLinkConnection;
 import org.droidplanner.android.connection.MAVLinkConnection.MavLinkConnectionListener;
 import org.droidplanner.android.notifications.NotificationHandler;
+import org.droidplanner.android.notifications.StatusBarNotificationProvider;
 import org.droidplanner.android.utils.Constants;
 import org.droidplanner.android.utils.Utils;
 
@@ -16,7 +18,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
-import android.os.PowerManager.WakeLock;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -35,7 +36,6 @@ public class MAVLinkService extends Service implements MavLinkConnectionListener
 	public static final int MSG_UNREGISTER_CLIENT = 2;
 	public static final int MSG_SEND_DATA = 3;
 
-	private WakeLock wakeLock;
 	private MAVLinkConnection mavConnection;
 	Messenger msgCenter = null;
 	final Messenger mMessenger = new Messenger(new IncomingHandler());
@@ -144,17 +144,21 @@ public class MAVLinkService extends Service implements MavLinkConnectionListener
 
 		connectMAVconnection();
 
-        final Context context = getApplicationContext();
+        final StatusBarNotificationProvider statusBarNotification = ((DroidPlannerApp)
+                getApplication()).mNotificationHandler.getStatusBarNotificationProvider();
 
-		NotificationHandler.showNotification(context);
-		NotificationHandler.updateNotification(context, getResources().getString(R.string
-                .connected));
+		statusBarNotification.showNotification();
+		statusBarNotification.updateNotification(getResources().getString(R.string.connected));
 	}
 
 	@Override
 	public void onDestroy() {
 		disconnectMAVConnection();
-		NotificationHandler.dismissNotification(getApplicationContext());
+
+        final StatusBarNotificationProvider statusBarNotification = ((DroidPlannerApp)
+                getApplication()).mNotificationHandler.getStatusBarNotificationProvider();
+		statusBarNotification.dismissNotification();
+
 		super.onDestroy();
 	}
 

@@ -117,7 +117,7 @@ public class FragmentSetupIMU extends SetupMainPanel  implements OnDroneListener
 					parentActivity.drone.events
 							.notifyDroneEvent(DroneEventsType.HEARTBEAT_TIMEOUT);
 				} else {
-					parentActivity.app.tts.speak(msg);
+					parentActivity.app.mNotificationHandler.getTtsNotificationProvider().speak(msg);
 				}
 			}
 		}
@@ -158,7 +158,7 @@ public class FragmentSetupIMU extends SetupMainPanel  implements OnDroneListener
 
 		if (calibration_step == 7) {
 			if (parentActivity != null && parentActivity.app != null) {
-				parentActivity.app.tts.speak(msg);
+				parentActivity.app.mNotificationHandler.getTtsNotificationProvider().speak(msg);
 			}
 			handler.removeCallbacks(runnable);
 

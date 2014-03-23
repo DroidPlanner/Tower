@@ -1,4 +1,4 @@
-package org.droidplanner.android.helpers;
+package org.droidplanner.android.notifications;
 
 import java.util.Locale;
 
@@ -17,7 +17,10 @@ import android.widget.Toast;
 
 import com.MAVLink.Messages.ApmModes;
 
-public class TTS implements OnInitListener, OnDroneListener {
+/**
+ * Implements DroidPlanner audible notifications.
+ */
+public class TTSNotificationProvider implements OnInitListener, NotificationHandler.NotificationProvider {
 	private static final double BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT = 10;
 
 	TextToSpeech tts;
@@ -26,7 +29,7 @@ public class TTS implements OnInitListener, OnDroneListener {
 
 	private Context context;
 
-	public TTS(Context context) {
+	TTSNotificationProvider(Context context) {
 		this.context = context;
 		tts = new TextToSpeech(context, this);
 		this.prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -51,7 +54,7 @@ public class TTS implements OnInitListener, OnDroneListener {
 
 
 	/**
-	 * Warn the user if needed via the TTS module
+	 * Warn the user if needed via the TTSNotificationProvider module
 	 */
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		if (tts != null) {

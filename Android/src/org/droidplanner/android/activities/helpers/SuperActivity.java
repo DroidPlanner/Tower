@@ -26,6 +26,8 @@ public abstract class SuperActivity extends FragmentActivity implements OnAltitu
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
         /*
         Used to supplant wake lock acquisition (previously in org.droidplanner.android.service
         .MAVLinkService) as suggested by the android android.os.PowerManager#newWakeLock
@@ -35,8 +37,6 @@ public abstract class SuperActivity extends FragmentActivity implements OnAltitu
                 ("pref_keep_screen_bright", false)) {
             getWindow().addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
-
-		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
 		app = (DroidPlannerApp) getApplication();
 		this.drone = app.drone;

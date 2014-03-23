@@ -1,60 +1,54 @@
 package org.droidplanner.android.notifications;
 
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
-import android.preview.support.v4.app.NotificationManagerCompat;
-import android.preview.support.wearable.notifications.WearableNotifications;
-import android.support.v4.app.NotificationCompat;
 
-import org.droidplanner.R;
-import org.droidplanner.android.activities.FlightActivity;
+import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.drone.DroneInterfaces;
 
 /**
  * This class handles DroidPlanner's status bar, and audible notifications.
  * It also provides support for the Android Wear functionality.
  */
-public class NotificationHandler {
+public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 
     /**
-     * Android notification id.
+     * Defines the methods that need to be supported by Droidplanner's notification provider
+     * types (i.e: audible (text to speech), status bar).
      */
-    private static final int NOTIFICATION_ID = 1;
+    interface NotificationProvider extends DroneInterfaces.OnDroneListener {}
 
     /**
-     * Dismiss the app status bar notification.
-     * @param context application context
+     * Handles Droidplanner's audible notifications.
      */
-    public static void dismissNotification(Context context){
-        NotificationManagerCompat notificationMgr = NotificationManagerCompat.from(context);
-        notificationMgr.cancelAll();
+    private final TTSNotificationProvider mTtsNotification;
+
+    /**
+     * Handles Droidplanner's status bar notification.
+     */
+    private final StatusBarNotificationProvider mStatusBarNotification;
+
+    public NotificationHandler(Context context){
+        mTtsNotification = new TTSNotificationProvider(context);
+        mStatusBarNotification = new StatusBarNotificationProvider(context);
     }
 
     /**
-     * Updates the app status bar notification with the passed text.
-     * @param context application context
-     * @param text notification text update
+     * @return Droidplanner's audible notification provider instance.
      */
-    public static void updateNotification(Context context, String text){
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                .setSmallIcon(R.drawable.ic_launcher)
-                .setContentTitle(context.getString(R.string.app_title))
-                .setContentText(text);
-        PendingIntent contentIntent = PendingIntent.getActivity(context, 0, new Intent(context,
-                FlightActivity.class), 0);
-        builder.setContentIntent(contentIntent);
-
-        WearableNotifications.Builder wearableBuilder = new WearableNotifications.Builder(builder);
-
-        NotificationManagerCompat notificationMgr = NotificationManagerCompat.from(context);
-        notificationMgr.notify(NOTIFICATION_ID, wearableBuilder.build());
+    public TTSNotificationProvider getTtsNotificationProvider() {
+        return mTtsNotification;
     }
 
     /**
-     * Build and show the initial status bar notification.
-     * @param context application context
+     * @return Droidplanner's status bar notification provider instance.
      */
-    public static void showNotification(Context context){
-        updateNotification(context, context.getString(R.string.disconnected));
+    public StatusBarNotificationProvider getStatusBarNotificationProvider() {
+        return mStatusBarNotification;
+    }
+
+    @Override
+    public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
+        mTtsNotification.onDroneEvent(event, drone);
+        mStatusBarNotification.onDroneEvent(event, drone);
     }
 }

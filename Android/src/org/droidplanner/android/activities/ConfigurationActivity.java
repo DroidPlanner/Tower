@@ -29,6 +29,9 @@ import android.widget.ArrayAdapter;
  */
 public class ConfigurationActivity extends SuperUI {
 
+    /**
+     * Used as logging tag.
+     */
     private static final String TAG = ConfigurationActivity.class.getSimpleName();
 
     public static final String EXTRA_CONFIG_SCREEN_INDEX = ConfigurationActivity.class.getPackage

@@ -1,5 +1,6 @@
 package org.droidplanner.android;
 
+import org.droidplanner.android.notifications.NotificationHandler;
 import org.droidplanner.core.MAVLink.MAVLinkStreams;
 import org.droidplanner.core.MAVLink.MavLinkMsgHandler;
 import org.droidplanner.core.drone.Drone;
@@ -8,7 +9,7 @@ import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
 import org.droidplanner.core.drone.Preferences;
 import org.droidplanner.android.helpers.DpPreferences;
-import org.droidplanner.android.helpers.TTS;
+import org.droidplanner.android.notifications.TTSNotificationProvider;
 import org.droidplanner.android.service.MAVLinkClient;
 
 import android.os.SystemClock;
@@ -19,13 +20,18 @@ public class DroidPlannerApp extends ErrorReportApp implements
 		MAVLinkStreams.MavlinkInputStream {
 	public Drone drone;
 	private MavLinkMsgHandler mavLinkMsgHandler;
-	public TTS tts;
+
+    /**
+     * Handles dispatching of status bar, and audible notification.
+     */
+	public NotificationHandler mNotificationHandler;
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
 
-		tts = new TTS(this);
+		mNotificationHandler = new NotificationHandler(getApplicationContext());
+
 		MAVLinkClient MAVClient = new MAVLinkClient(this,this);		
 		Clock clock = new Clock() {
 			@Override
@@ -48,7 +54,7 @@ public class DroidPlannerApp extends ErrorReportApp implements
 		};
 		Preferences pref = new DpPreferences(getApplicationContext());
 		drone = new Drone(MAVClient,clock,handler,pref);
-		drone.events.addDroneListener(tts);
+		drone.events.addDroneListener(mNotificationHandler);
 		mavLinkMsgHandler = new org.droidplanner.core.MAVLink.MavLinkMsgHandler(
 				drone);
 	}
