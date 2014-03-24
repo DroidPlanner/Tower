@@ -272,8 +272,8 @@ public class Mission extends DroneVariable implements PathSource{
             myDrone.home.setHome(msgs.get(0));
             msgs.remove(0); // Remove Home waypoint
             selection.clear();
-            itens.clear();
-            itens.addAll(processMavLinkMessages(msgs));
+            items.clear();
+            items.addAll(processMavLinkMessages(msgs));
             notifiyMissionUpdate();
         }
     }
@@ -324,7 +324,7 @@ public class Mission extends DroneVariable implements PathSource{
     public List<LatLng> getVisibleCoordinates() {
         final List<LatLng> coords = new ArrayList<LatLng>();
 
-        for (MissionItem item : itens) {
+        for (MissionItem item : items) {
             if(!(item instanceof SpatialCoordItem))
                 continue;
 
