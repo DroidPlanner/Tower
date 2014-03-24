@@ -84,7 +84,15 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		gestureMapFragment.setOnPathFinishedListener(this);
 	}
 
-	@Override
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        getMenuInflater().inflate(R.menu.menu_mission, menu);
+        return true;
+    }
+
+    @Override
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
 		updateMapPadding();
