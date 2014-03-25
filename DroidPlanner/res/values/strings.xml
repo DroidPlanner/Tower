@@ -170,4 +170,10 @@
     <string name="rowheader_wp_no">WP#</string>
     <string name="rowheader_wp_delta">∆ WP</string>
     <string name="rowheader_wp_desc">Description</string>
+    
+    <!-- QuadForge custom FlightData buttons -->
+    <string name="launch">Launch</string>
+    <string name="land">Land</string>
+    <string name="stabilize">Stabilize</string>
+    <string name="rtl">RTL</string>
 </resources>
