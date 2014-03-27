@@ -30,8 +30,6 @@ proguard/
 *.iws
 .idea/
 
-project.properties
-
 *.pydevproject
 #.project
 .metadata
