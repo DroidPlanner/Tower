@@ -15,10 +15,9 @@ import org.droidplanner.android.fragments.EditorToolsFragment.OnEditorToolSelect
 import org.droidplanner.android.fragments.helpers.GestureMapFragment;
 import org.droidplanner.android.fragments.helpers.GestureMapFragment.OnPathFinishedListener;
 import org.droidplanner.android.fragments.helpers.MapProjection;
-import org.droidplanner.android.fragments.mission.MissionDetailFragment;
 import org.droidplanner.android.fragments.mission.MissionDetailFragment.OnWayPointTypeChangeListener;
 import org.droidplanner.android.graphic.DroneHelper;
-import org.droidplanner.android.graphic.EditorMissionItem;
+import org.droidplanner.android.graphic.managers.MissionItemDetailManager;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.mission.MissionItem;
@@ -46,14 +45,13 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	private GestureMapFragment gestureMapFragment;
 	private Mission mission;
 	private EditorToolsFragment editorToolsFragment;
-	private MissionDetailFragment itemDetailFragment;
-	private FragmentManager fragmentManager;
+	public FragmentManager fragmentManager;
 	private EditorListFragment missionListFragment;
 	private TextView infoView;
+	
+	public MissionItemDetailManager itemDetail;
 
-    private View mContainerItemDetail;
-
-	private ActionMode contextualActionBar;
+    private ActionMode contextualActionBar;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -76,10 +74,9 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 				.findFragmentById(R.id.missionFragment1);
 		infoView = (TextView) findViewById(R.id.editorInfoWindow);
 
-        /*
-         * On phone, this view will be null causing the item detail to be shown as a dialog.
-         */
-        mContainerItemDetail = findViewById(R.id.containerItemDetail);
+        View detailView = findViewById(R.id.containerItemDetail);
+        
+        itemDetail = new MissionItemDetailManager(detailView,fragmentManager);
 
 		mission = drone.mission;
 		gestureMapFragment.setOnPathFinishedListener(this);
@@ -113,16 +110,14 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		switch (event) {
 		case MISSION_UPDATE:
 			// Remove detail window if item is removed
-			if (itemDetailFragment != null) {
-				if (!drone.mission.hasItem(itemDetailFragment.getItem())) {
-					removeItemDetail();
-				}
-			}
+			itemDetail.removeDetailIfItemIsRemoved(drone);
 			break;
 		default:
 			break;
 		}
 	}
+
+	
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -139,7 +134,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	public void onMapClick(LatLng point) {
         //If an mission item is selected, unselect it.
         mission.clearSelection();
-        removeItemDetail();
+        itemDetail.removeItemDetail();
         notifySelectionChanged();
 
 		switch (getTool()) {
@@ -163,7 +158,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 	@Override
 	public void editorToolChanged(EditorTools tools) {
-		removeItemDetail();
+		itemDetail.removeItemDetail();
 		mission.clearSelection();
 		notifySelectionChanged();
 
@@ -178,47 +173,6 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		case NONE:
 			gestureMapFragment.disableGestureDetection();
 			break;
-		}
-	}
-
-	private void showItemDetail(MissionItem item) {
-		if (itemDetailFragment == null) {
-			addItemDetail(item);
-		} else {
-			switchItemDetail(item);
-		}
-	}
-
-	private void addItemDetail(MissionItem item) {
-		if (item instanceof EditorMissionItem) {	
-			itemDetailFragment = ((EditorMissionItem)item).getDetailFragment();
-	
-	        if (mContainerItemDetail == null) {
-	            itemDetailFragment.show(fragmentManager, "Item detail dialog");
-	        } else {
-	            fragmentManager.beginTransaction().add(R.id.containerItemDetail,
-	                    itemDetailFragment).commit();
-	        }
-		}
-    }
-
-    public MissionDetailFragment getItemDetailFragment(){
-        return itemDetailFragment;
-    }
-
-	public void switchItemDetail(MissionItem item) {
-        removeItemDetail();
-		addItemDetail(item);
-	}
-
-	private void removeItemDetail() {
-		if (itemDetailFragment != null) {
-            if (mContainerItemDetail == null) {
-                itemDetailFragment.dismiss();
-            } else {
-                fragmentManager.beginTransaction().remove(itemDetailFragment).commit();
-            }
-            itemDetailFragment = null;
 		}
 	}
 
@@ -247,7 +201,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	@Override
 	public void onWaypointTypeChanged(MissionItem newItem, MissionItem oldItem) {
 		mission.replace(oldItem, newItem);
-		showItemDetail(newItem);
+		itemDetail.showItemDetail(newItem);
 	}
 
 	private static final int MENU_DELETE = 1;
@@ -303,7 +257,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 			}
 			notifySelectionChanged();
 		} else {
-			removeItemDetail();
+			itemDetail.removeItemDetail();
 			editorToolsFragment.setTool(EditorTools.NONE);
 			missionListFragment.updateChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 			contextualActionBar = startActionMode(this);
@@ -327,11 +281,11 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 			} else {
 				if (mission.selectionContains(item)) {
 					mission.clearSelection();
-					removeItemDetail();
+					itemDetail.removeItemDetail();
 				} else {
 					editorToolsFragment.setTool(EditorTools.NONE);
 					mission.setSelectionTo(item);
-					showItemDetail(item);
+					itemDetail.showItemDetail(item);
 				}
 			}
 			break;
