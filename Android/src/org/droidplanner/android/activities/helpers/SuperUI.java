@@ -4,7 +4,7 @@ import org.droidplanner.R;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.android.gcs.GCSHeartbeat;
+import org.droidplanner.core.gcs.GCSHeartbeat;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.widgets.actionProviders.InfoBarActionProvider;
 

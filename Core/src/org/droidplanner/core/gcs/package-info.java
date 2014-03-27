@@ -3,4 +3,4 @@
  * @author Fredia Huya-Kouadio
  * @since 1.2.0
  */
-package org.droidplanner.android.gcs;
+package org.droidplanner.core.gcs;

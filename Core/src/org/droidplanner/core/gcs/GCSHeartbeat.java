@@ -1,4 +1,4 @@
-package org.droidplanner.android.gcs;
+package org.droidplanner.core.gcs;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
