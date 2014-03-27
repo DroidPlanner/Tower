@@ -1,4 +1,4 @@
-package org.droidplanner.android.helpers.units;
+package org.droidplanner.core.helpers.units;
 
 import junit.framework.TestCase;
 

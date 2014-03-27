@@ -1,4 +1,4 @@
-package org.droidplanner.android.helpers.math;
+package org.droidplanner.core.helpers.math;
 
 import junit.framework.TestCase;
 

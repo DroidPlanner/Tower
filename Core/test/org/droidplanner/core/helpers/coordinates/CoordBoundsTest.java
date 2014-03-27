@@ -1,4 +1,4 @@
-package org.droidplanner.android.helpers.coordinates;
+package org.droidplanner.core.helpers.coordinates;
 
 import java.util.ArrayList;
 

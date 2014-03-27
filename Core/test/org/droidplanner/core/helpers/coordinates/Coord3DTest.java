@@ -1,4 +1,4 @@
-package org.droidplanner.android.helpers.coordinates;
+package org.droidplanner.core.helpers.coordinates;
 
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.coordinates.Coord3D;
