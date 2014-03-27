@@ -1,4 +1,4 @@
-package org.droidplanner.android.graphic.markers;
+package org.droidplanner.android.graphic.map;
 
 import org.droidplanner.R;
 import org.droidplanner.core.drone.Drone;

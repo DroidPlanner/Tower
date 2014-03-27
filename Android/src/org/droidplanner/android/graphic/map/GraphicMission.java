@@ -1,11 +1,11 @@
-package org.droidplanner.android.graphic.markers;
+package org.droidplanner.android.graphic.map;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.android.fragments.helpers.MapPath.PathSource;
-import org.droidplanner.android.graphic.markers.MarkerManager.MarkerSource;
+import org.droidplanner.android.graphic.map.MarkerManager.MarkerSource;
 import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.mission.MissionItem;
 

@@ -1,4 +1,4 @@
-package org.droidplanner.android.graphic.markers;
+package org.droidplanner.android.graphic.map;
 
 import org.droidplanner.android.graphic.DroneHelper;
 import org.droidplanner.core.helpers.coordinates.Coord2D;

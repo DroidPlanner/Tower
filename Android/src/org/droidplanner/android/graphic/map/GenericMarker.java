@@ -1,4 +1,4 @@
-package org.droidplanner.android.graphic.markers;
+package org.droidplanner.android.graphic.map;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
