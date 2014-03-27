@@ -1,10 +1,11 @@
-package org.droidplanner.android.graphic;
+package org.droidplanner.android.graphic.markers;
 
 import org.droidplanner.R;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.android.fragments.FlightMapFragment;
+import org.droidplanner.android.graphic.DroneHelper;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;

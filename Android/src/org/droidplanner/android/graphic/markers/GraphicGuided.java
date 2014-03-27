@@ -1,4 +1,4 @@
-package org.droidplanner.android.graphic;
+package org.droidplanner.android.graphic.markers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +9,7 @@ import org.droidplanner.core.drone.variables.GPS;
 import org.droidplanner.core.drone.variables.GuidedPoint;
 import org.droidplanner.android.fragments.helpers.MapPath.PathSource;
 import org.droidplanner.android.fragments.markers.helpers.MarkerWithText;
+import org.droidplanner.android.graphic.DroneHelper;
 import org.droidplanner.android.graphic.markers.MarkerManager.MarkerSource;
 
 import android.content.Context;

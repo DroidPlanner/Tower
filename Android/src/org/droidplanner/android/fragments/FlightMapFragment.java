@@ -9,8 +9,8 @@ import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.android.fragments.helpers.DroneMap;
 import org.droidplanner.android.fragments.helpers.MapPath;
 import org.droidplanner.android.graphic.DroneHelper;
-import org.droidplanner.android.graphic.GraphicDrone;
-import org.droidplanner.android.graphic.GraphicGuided;
+import org.droidplanner.android.graphic.markers.GraphicDrone;
+import org.droidplanner.android.graphic.markers.GraphicGuided;
 
 import android.content.Context;
 import android.content.SharedPreferences;

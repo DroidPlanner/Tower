@@ -7,7 +7,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class PolygonMarker {
+public class GraphicPolygonPoint {
 
 	public static MarkerOptions build(Coord2D coord) {
 		return new MarkerOptions()

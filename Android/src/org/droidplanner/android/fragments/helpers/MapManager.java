@@ -1,7 +1,7 @@
 package org.droidplanner.android.fragments.helpers;
 
-import org.droidplanner.android.graphic.GraphicHome;
-import org.droidplanner.android.graphic.GraphicMission;
+import org.droidplanner.android.graphic.markers.GraphicHome;
+import org.droidplanner.android.graphic.markers.GraphicMission;
 import org.droidplanner.android.graphic.markers.MarkerManager;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;

@@ -1,4 +1,4 @@
-package org.droidplanner.android.graphic;
+package org.droidplanner.android.graphic.markers;
 
 import java.util.ArrayList;
 import java.util.List;
