@@ -4,9 +4,6 @@ import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.android.graphic.GraphicHome;
-import org.droidplanner.android.graphic.GraphicMission;
-import org.droidplanner.android.graphic.markers.MarkerManager;
 
 import android.app.Activity;
 import android.content.Context;
@@ -22,14 +19,12 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.CameraPosition.Builder;
 import com.google.android.gms.maps.model.LatLng;
 
-public abstract class DroneMap extends OfflineMapFragment implements OnDroneListener {
-	public GoogleMap mMap;
-	protected MarkerManager markers;
-	protected MapPath missionPath;
+public abstract class DroneMap extends OfflineMapFragment implements OnDroneListener   {
+	public MapManager manager;
 	public Drone drone;
-	public GraphicMission mission;
+	
 	protected Context context;
-	private GraphicHome home;
+	public GoogleMap mMap;
 	
 	protected abstract boolean isMissionDraggable();
 
@@ -38,11 +33,8 @@ public abstract class DroneMap extends OfflineMapFragment implements OnDroneList
 			Bundle bundle) {
 		View view = super.onCreateView(inflater, viewGroup, bundle);
 		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
-		home = new GraphicHome(drone);
-		mission = new GraphicMission(drone);
 		mMap = getMap();
-		markers = new MarkerManager(mMap);
-		missionPath = new MapPath(mMap,getResources());
+		manager = new MapManager(getMap(),drone, getResources(),context,isMissionDraggable());
 		return view;
 	}
 
@@ -97,13 +89,13 @@ public abstract class DroneMap extends OfflineMapFragment implements OnDroneList
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch (event) {
 		case MISSION_UPDATE:
-			update();
+			manager.update();
 			break;
 		default:
 			break;
 		}
 	}
-
+	
 	public LatLng getMyLocation() {
 		if (mMap.getMyLocation() != null) {
 			return new LatLng(mMap.getMyLocation().getLatitude(), mMap
@@ -113,17 +105,10 @@ public abstract class DroneMap extends OfflineMapFragment implements OnDroneList
 		}
 	}
 
+	/**
+	 * @deprecated Use {@link org.droidplanner.android.fragments.helpers.MapManager#update(org.droidplanner.android.fragments.helpers.DroneMap)} instead
+	 */
 	public void update() {
-		markers.clean();
-
-		if (home.isValid()) {
-			markers.updateMarker(home, false, context);
-		}
-
-		markers.updateMarkers(mission.getMarkers(), isMissionDraggable(), context);
-
-		//TODO reimplement the mission path
-		//missionPath.update(mission);
+		manager.update();
 	}
-
 }

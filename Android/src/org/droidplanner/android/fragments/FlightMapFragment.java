@@ -166,7 +166,7 @@ public class FlightMapFragment extends DroneMap implements
 			animateCamera(position);
 			break;
 		case GUIDEDPOINT:			
-			markers.updateMarker(guided, true, context);
+			manager.markers.updateMarker(guided, true, context);
 			droneLeashPath.update(guided);
 			break;
 		default:

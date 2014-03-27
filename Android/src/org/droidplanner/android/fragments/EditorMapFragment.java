@@ -2,14 +2,14 @@ package org.droidplanner.android.fragments;
 
 
 import org.droidplanner.android.activities.helpers.OnEditorInteraction;
-import org.droidplanner.core.mission.*;
-import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.android.fragments.helpers.DroneMap;
 import org.droidplanner.android.fragments.helpers.MapPath;
 import org.droidplanner.android.graphic.CameraGroundOverlays;
 import org.droidplanner.android.graphic.DroneHelper;
 import org.droidplanner.android.graphic.markers.MarkerManager.MarkerSource;
-import org.droidplanner.core.polygon.*;
+import org.droidplanner.core.mission.MissionItem;
+import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
+import org.droidplanner.core.polygon.Polygon;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -66,13 +66,13 @@ public class EditorMapFragment extends DroneMap implements
 
 	@Override
 	public void onMarkerDrag(Marker marker) {
-		MarkerSource source = markers.getSourceFromMarker(marker);
+		MarkerSource source = manager.markers.getSourceFromMarker(marker);
 		checkForWaypointMarkerMoving(source, marker, true);
 	}
 
 	@Override
 	public void onMarkerDragStart(Marker marker) {
-		MarkerSource source = markers.getSourceFromMarker(marker);
+		MarkerSource source = manager.markers.getSourceFromMarker(marker);
 		checkForWaypointMarkerMoving(source, marker, false);
 	}
 
@@ -94,7 +94,7 @@ public class EditorMapFragment extends DroneMap implements
 			 */
 
 			// update flight path
-			missionPath.update(mission);
+			//manager.missionPath.update(mission);
 		}
 	}
 
@@ -113,7 +113,7 @@ public class EditorMapFragment extends DroneMap implements
 
 	@Override
 	public void onMarkerDragEnd(Marker marker) {
-		MarkerSource source = markers.getSourceFromMarker(marker);
+		MarkerSource source = manager.markers.getSourceFromMarker(marker);
 		checkForWaypointMarker(source, marker);
 		checkForPolygonMarker(source, marker);
 	}
@@ -145,7 +145,7 @@ public class EditorMapFragment extends DroneMap implements
 
 	@Override
 	public boolean onMarkerClick(Marker marker) {
-		MarkerSource source = markers.getSourceFromMarker(marker);
+		MarkerSource source = manager.markers.getSourceFromMarker(marker);
 		if (source instanceof MissionItem) {
 			editorListener.onItemClick((MissionItem) source);
 			return true;
