@@ -1,0 +1,16 @@
+Current Version (in development)
+  * New driver: CP2102 (thanks Ducky).
+  * New prober support: LUFA Virtual Serial, Leaflabs Maple, Teensyduino.
+  * New driver methods: getCD, getCTS, getDSR, getDTR, setDTR, getRI, getRTS,
+    setRTS.
+  * API change: setBaudrate() has been removed; use setParameters().
+  * API change: open() no longer implicitly sets the baud rate.  Clients should
+    call setParameters() immediately after open(), when necessary.
+  * Library version is available in `com.hoho.android.usbserial.BuildInfo`.
+
+v0.1.0 (2012-10-12)
+  * New driver: CdcAcmSerialDriver.
+  * Better tuned read and write buffer sizes.
+
+v0.0.1 (2011-12-28)
+  * Initial release.
