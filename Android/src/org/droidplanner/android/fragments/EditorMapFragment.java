@@ -54,13 +54,6 @@ public class EditorMapFragment extends DroneMap implements
 	}
 
 	@Override
-	public void update() {
-		super.update();
-		//markers.updateMarkers(polygon .getPolygonPoints(), true, context);
-		//polygonPath.update(polygon);
-	}
-
-	@Override
 	public void onMapLongClick(LatLng point) {
 		//mListener.onAddPoint(point);
 	}

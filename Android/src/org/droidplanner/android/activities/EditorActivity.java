@@ -309,7 +309,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		} else {
 			missionListFragment.setArrowsVisibility(true);
 		}
-		planningMapFragment.update();
+		planningMapFragment.manager.update();
 	}
 
 	@Override

@@ -73,6 +73,10 @@ public class MapManager implements OnDroneListener {
 	
 		//TODO reimplement the mission path
 		//missionPath.update(mission);
+		
+		//Moved from EditorMap
+		//markers.updateMarkers(polygon .getPolygonPoints(), true, context);
+		//polygonPath.update(polygon);
 	}
 	
 
@@ -96,6 +100,8 @@ public class MapManager implements OnDroneListener {
 		case GUIDEDPOINT:			
 			markers.updateMarker(guided, true, context);
 			droneLeashPath.update(guided);
+			break;
+		default:
 			break;
 		}
 	}

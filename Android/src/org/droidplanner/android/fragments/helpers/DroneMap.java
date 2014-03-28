@@ -40,7 +40,7 @@ public abstract class DroneMap extends OfflineMapFragment {
 	public void onStart() {
 		super.onStart();
 		loadCameraPosition();
-		update();
+		manager.update();
 	}
 
 	@Override
