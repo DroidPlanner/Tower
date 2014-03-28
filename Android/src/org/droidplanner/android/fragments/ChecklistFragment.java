@@ -5,12 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.droidplanner.R;
-import org.droidplanner.android.activities.helpers.SuperActivity;
+import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.widgets.checklist.CheckListAdapter;
+import org.droidplanner.android.widgets.checklist.CheckListAdapter.OnCheckListItemUpdateListener;
 import org.droidplanner.android.widgets.checklist.CheckListItem;
 import org.droidplanner.android.widgets.checklist.CheckListSysLink;
 import org.droidplanner.android.widgets.checklist.CheckListXmlParser;
-import org.droidplanner.android.widgets.checklist.CheckListAdapter.OnCheckListItemUpdateListener;
 import org.droidplanner.android.widgets.checklist.xml.ListXmlParser.OnXmlParserError;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
@@ -74,7 +74,7 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 	@Override
 	public void onStart() {
 		super.onStart();
-		drone = ((SuperActivity) this.context).drone;
+		drone = ((SuperUI) this.context).drone;
 		sysLink = new CheckListSysLink(this.drone);
 		drone.events.addDroneListener(this);
 	}

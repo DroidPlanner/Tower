@@ -1,7 +1,7 @@
 package org.droidplanner.android.fragments.mode;
 
 import org.droidplanner.R;
-import org.droidplanner.android.activities.helpers.SuperActivity;
+import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
@@ -23,18 +23,18 @@ public class FlightModePanel extends Fragment implements OnDroneListener {
     /**
      * This is the parent activity for this fragment.
      */
-    private SuperActivity mParentActivity;
+    private SuperUI mParentActivity;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        if (!(activity instanceof SuperActivity)) {
+        if (!(activity instanceof SuperUI)) {
             throw new IllegalStateException("Parent activity must be an instance of " +
-                    SuperActivity.class.getName());
+            		SuperUI.class.getName());
         }
 
-        mParentActivity = (SuperActivity) activity;
+        mParentActivity = (SuperUI) activity;
     }
 
     @Override
