@@ -1,6 +1,7 @@
 package org.droidplanner.android.fragments.helpers;
 
 import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.graphic.managers.MapManager;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
@@ -106,7 +107,7 @@ public abstract class DroneMap extends OfflineMapFragment implements OnDroneList
 	}
 
 	/**
-	 * @deprecated Use {@link org.droidplanner.android.fragments.helpers.MapManager#update(org.droidplanner.android.fragments.helpers.DroneMap)} instead
+	 * @deprecated Use {@link org.droidplanner.android.graphic.managers.MapManager#update(org.droidplanner.android.fragments.helpers.DroneMap)} instead
 	 */
 	public void update() {
 		manager.update();

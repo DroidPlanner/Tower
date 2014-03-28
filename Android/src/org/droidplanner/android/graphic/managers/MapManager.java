@@ -1,5 +1,6 @@
-package org.droidplanner.android.fragments.helpers;
+package org.droidplanner.android.graphic.managers;
 
+import org.droidplanner.android.fragments.helpers.MapPath;
 import org.droidplanner.android.graphic.map.GraphicHome;
 import org.droidplanner.android.graphic.map.GraphicMission;
 import org.droidplanner.android.graphic.map.MarkerManager;
