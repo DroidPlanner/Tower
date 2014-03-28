@@ -1,19 +1,16 @@
 package org.droidplanner.android.activities.helpers;
 
 import org.droidplanner.R;
-import org.droidplanner.core.drone.Drone;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.core.gcs.GCSHeartbeat;
-import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.dialogs.AltitudeDialog;
-import org.droidplanner.android.dialogs.AltitudeDialog.OnAltitudeChangedListener;
 import org.droidplanner.android.fragments.helpers.BTDeviceListFragment;
 import org.droidplanner.android.fragments.helpers.OfflineMapFragment;
 import org.droidplanner.android.utils.Constants;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.widgets.actionProviders.InfoBarActionProvider;
+import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
+import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
+import org.droidplanner.core.gcs.GCSHeartbeat;
 
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -22,7 +19,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public abstract class SuperUI extends FragmentActivity implements OnDroneListener, OnAltitudeChangedListener {
+public abstract class SuperUI extends FragmentActivity implements OnDroneListener {
 	private ScreenOrientation screenOrientation = new ScreenOrientation(this);
 	private InfoBarActionProvider infoBar;
 	private GCSHeartbeat gcsHeartbeat;
@@ -215,13 +212,4 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 		//drone.notifyMapTypeChanged();
 	}
 
-	public void changeDefaultAlt() {
-		AltitudeDialog dialog = new AltitudeDialog(this);
-		dialog.build(drone.mission.getDefaultAlt(), this);
-	}
-
-	@Override
-	public void onAltitudeChanged(Altitude newAltitude) {
-		drone.mission.setDefaultAlt(newAltitude);
-	}
 }
