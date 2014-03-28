@@ -119,6 +119,12 @@ public class FlightMapFragment extends DroneMap implements
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		LatLng position = DroneHelper.CoordToLatLang(drone.GPS.getPosition());
 		switch (event) {
+        case ARMING:
+            // Clear the previous flight path when arming.
+            if (drone.state.isArmed()) {
+                manager.clearFlightPath();
+            }
+            break;
 		case GPS:
 			animateCameraIfNeeded(position);
 			break;
