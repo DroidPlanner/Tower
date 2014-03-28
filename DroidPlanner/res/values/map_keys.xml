@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="map_key_release">AIzaSyDFsAn5xo-mILEirpcUsF9BU9Vb_yR-Er4</string>
+    <string name="map_key_kelly">AIzaSyDPObiYbzBBBTmLPImIngd5wlml2hy19Z0</string>
+    
+    <string name="map_key">@string/map_key_release</string>
+</resources>

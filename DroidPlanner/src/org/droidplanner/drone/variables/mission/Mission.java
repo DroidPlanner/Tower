@@ -1,5 +1,12 @@
 package org.droidplanner.drone.variables.mission;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -11,15 +18,22 @@ import org.droidplanner.drone.DroneVariable;
 import org.droidplanner.drone.variables.mission.commands.ReturnToHome;
 import org.droidplanner.drone.variables.mission.survey.Survey;
 import org.droidplanner.drone.variables.mission.waypoints.Land;
+import org.droidplanner.drone.variables.mission.waypoints.LoiterInfinite;
+import org.droidplanner.drone.variables.mission.waypoints.LoiterTime;
+import org.droidplanner.drone.variables.mission.waypoints.LoiterTurns;
 import org.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.drone.variables.mission.waypoints.Takeoff;
 import org.droidplanner.drone.variables.mission.waypoints.Waypoint;
 import org.droidplanner.fragments.helpers.MapPath.PathSource;
 import org.droidplanner.fragments.markers.MarkerManager.MarkerSource;
+import org.droidplanner.helpers.MissionItemConverter;
+import org.droidplanner.helpers.Streams;
 import org.droidplanner.helpers.geoTools.GeoTools;
 import org.droidplanner.helpers.units.Altitude;
 import org.droidplanner.helpers.units.Length;
+import org.json.JSONObject;
 
+import android.util.Log;
 import android.widget.Toast;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
@@ -28,6 +42,8 @@ import com.MAVLink.Messages.enums.MAV_CMD;
 import com.google.android.gms.maps.model.LatLng;
 
 public class Mission extends DroneVariable implements PathSource{
+    static final String TAG = Mission.class.getSimpleName();
+    private static final boolean LOGV = false;
 
 	private List<MissionItem> items = new ArrayList<MissionItem>();
 	private List<MissionItem> selection = new ArrayList<MissionItem>();
@@ -269,6 +285,8 @@ public class Mission extends DroneVariable implements PathSource{
 	private List<MissionItem> processMavLinkMessages(List<msg_mission_item> msgs) {
 		List<MissionItem> received = new ArrayList<MissionItem>();
 		
+		if(LOGV) Log.v(TAG, "Process " + msgs.size() + " messages");
+		
 		for (msg_mission_item msg : msgs) {
 			switch (msg.command) {
 			case MAV_CMD.MAV_CMD_NAV_WAYPOINT:
@@ -277,6 +295,15 @@ public class Mission extends DroneVariable implements PathSource{
 			case MAV_CMD.MAV_CMD_NAV_TAKEOFF:
 				received.add(new Takeoff(msg, this));
 				break;
+			case MAV_CMD.MAV_CMD_NAV_LOITER_TURNS:
+			    received.add(new LoiterTurns(msg, this));
+			    break;
+			case MAV_CMD.MAV_CMD_NAV_LOITER_TIME:
+			    received.add(new LoiterTime(msg, this));
+			    break;
+			case MAV_CMD.MAV_CMD_NAV_LOITER_UNLIM:
+			    received.add(new LoiterInfinite(msg, this));
+			    break;
 			case MAV_CMD.MAV_CMD_NAV_LAND:
 				received.add(new Land(msg, this));
 				break;
@@ -284,6 +311,7 @@ public class Mission extends DroneVariable implements PathSource{
 				received.add(new ReturnToHome(msg, this));
 				break;
 			default:
+			    if(LOGV) Log.v(TAG, "Don't know what to do with " + msg.command);
 				break;
 			}
 		}		
@@ -297,6 +325,51 @@ public class Mission extends DroneVariable implements PathSource{
 			data.addAll(item.packMissionItem());			
 		}				
 		myDrone.waypointMananger.writeWaypoints(data);
+	}
+	
+	public void saveToFile(File file) throws Exception {
+	    
+	    List<MissionItem> mi = new ArrayList<MissionItem>();
+	    mi.addAll(items);
+	    
+	    if(LOGV) Log.v(TAG, "Saving " + mi.size() + " mission items");
+	    
+	    byte[] data = toByteArray(mi);
+	    if(data != null) {
+	        OutputStream out = new BufferedOutputStream(new FileOutputStream(file));
+	        try {
+	            out.write(data);
+	        }
+	        finally {
+	            out.flush();
+	            out.close();
+	        }
+	    }
+	}
+	
+	public void loadFromFile(File file) throws Exception {
+	    
+	    String contents = Streams.copyAndClose(
+	            new BufferedInputStream(new FileInputStream(file)),
+	            new ByteArrayOutputStream()).toString();
+	    
+	    try {
+	        final List<MissionItem> missionItems = MissionItemConverter.populate(this, new ArrayList<MissionItem>(), contents);
+	        if(LOGV) Log.v(TAG, "Read " + missionItems.size() + " items from " + file.getName());
+
+	        items.clear();
+	        items.addAll(missionItems);
+	        notifiyMissionUpdate();
+	    }
+	    catch(Exception ex) {
+	        ex.printStackTrace();
+	    }
+	}
+	
+	private byte[] toByteArray(List<MissionItem> data) throws Exception {
+	    final JSONObject jo = MissionItemConverter.populateMissionItems(new JSONObject(), data);
+	    String str = (jo != null)? jo.toString(): null;
+	    return (str != null)? str.getBytes(): null;
 	}
 
 	public void addMissionUpdatesListner(

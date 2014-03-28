@@ -34,6 +34,10 @@ public abstract class SpatialCoordItem extends MissionItem implements
 	LatLng coordinate;
 	Altitude altitude;
 	
+	public SpatialCoordItem(Mission m) {
+	    super(m);
+	}
+	
 	public SpatialCoordItem(Mission mission, LatLng coord, Altitude altitude) {
 		super(mission);
 		this.coordinate = coord;

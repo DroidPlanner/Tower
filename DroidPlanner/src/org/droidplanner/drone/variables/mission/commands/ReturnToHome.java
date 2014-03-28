@@ -19,6 +19,10 @@ public class ReturnToHome extends MissionCMD {
 		super(item);
 		returnAltitude = new Altitude(0);
 	}
+	
+	public ReturnToHome(Mission mission) {
+	    super(mission);
+	}
 
 	public ReturnToHome(msg_mission_item msg, Mission mission) {
 		super(mission);

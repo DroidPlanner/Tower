@@ -20,11 +20,21 @@
             android:id="@+id/menu_load_mission"
             android:showAsAction="never"
             android:title="@string/load_mission"/>
+        
+        <item
+            android:id="@+id/menu_save_mission"
+            android:showAsAction="never"
+            android:title="@string/save_mission"/>
+        
+        <item
+            android:id="@+id/menu_get_saved_mission"
+            android:showAsAction="never"
+            android:title="@string/get_saved_mission"/>
     </group>
 
     <item
         android:id="@+id/menu_connect"
         android:showAsAction="never"
         android:title="@string/menu_disconnect"/>
-
+    
 </menu>

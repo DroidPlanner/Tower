@@ -14,6 +14,10 @@ import com.MAVLink.Messages.enums.MAV_CMD;
 
 public class Takeoff extends SpatialCoordItem implements MarkerSource {
 
+    public Takeoff(Mission m) {
+        super(m);
+    }
+    
 	public Takeoff(MissionItem item) {
 		super(item);
 	}
