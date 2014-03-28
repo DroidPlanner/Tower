@@ -33,8 +33,9 @@
 
 			<Button
 		    android:id="@+id/ArmDisarm"
-		    android:layout_width="wrap_content"
+		    android:layout_width="85dp"
 		    android:layout_height="wrap_content"
+		    android:layout_marginTop="25dp"
 		    android:layout_alignLeft="@+id/Stabilize"
 		    android:layout_alignRight="@+id/Stabilize"
 		    android:layout_alignParentBottom="true"
@@ -45,8 +46,10 @@
 			
 			<Button
 		    android:id="@+id/Stabilize"
-		    android:layout_width="wrap_content"
+		    android:layout_width="85dp"
 		    android:layout_height="wrap_content"
+		    android:layout_marginTop="25dp"
+		    android:layout_marginBottom="25dp"
 		    android:layout_above="@+id/ArmDisarm"
 		    android:layout_alignParentLeft="true"
 		    android:background="@color/yellow"
@@ -55,8 +58,10 @@
 			
 			<Button
 		    android:id="@+id/Launch"
-		    android:layout_width="wrap_content"
+		    android:layout_width="85dp"
 		    android:layout_height="wrap_content"
+		    android:layout_marginTop="25dp"
+		    android:layout_marginBottom="25dp"
 		    android:layout_above="@+id/Stabilize"
 		    android:layout_alignParentRight="true"
 		    android:background="@color/blue"
@@ -64,8 +69,10 @@
 			
 			<Button
 		    android:id="@+id/Land"
-		    android:layout_width="wrap_content"
+		    android:layout_width="85dp"
 		    android:layout_height="wrap_content"
+		    android:layout_marginTop="25dp"
+		    android:layout_marginBottom="25dp"
 		    android:layout_above="@+id/Launch"
 		    android:layout_alignLeft="@+id/Launch"
 		    android:layout_alignParentRight="true"
@@ -75,8 +82,10 @@
 			
 			<Button
 		    android:id="@+id/RTL"
-		    android:layout_width="wrap_content"
+		    android:layout_width="85dp"
 		    android:layout_height="wrap_content"
+		    android:layout_marginTop="25dp"
+		    android:layout_marginBottom="25dp"
 		    android:layout_above="@+id/Land"
 		    android:layout_alignLeft="@+id/Launch"
 		    android:layout_alignParentRight="true"
