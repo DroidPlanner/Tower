@@ -120,30 +120,49 @@ OnAltitudeChangedListner, OnPathFinishedListner, OnNewGridListner {
 			// Menu option Send to APM is pressed
 		case R.id.menu_send_to_apm:
 			// Start of modification for waypoint safety checks
-
-			// Use the method to make sure the input method safe
-			// Initialize tts engine before use?, seems like first attempt doesn't make any words
-			if(checkValidMission())
+			
+			// Check that the drone is connected before we try and send mission
+			if (drone.MavClient.isConnected())
 			{
 
-				// Mission path on tablet is valid
+				// Use the method to make sure the input method safe
+				// Initialize tts engine before use?, seems like first attempt doesn't make any words
+				if(checkValidMission())
+				{
 
-				// Sent mission to tablet
-				drone.mission.sendMissionToAPM();
+					// Mission path on tablet is valid
 
-				// Let user know that mission is valid
-				drone.tts.speak("Mission valid");
+					// Set sync flag to true
+					drone.waypointsSynced = true;
 
+					// Sent mission to tablet
+					drone.mission.sendMissionToAPM();
+
+					// Let user know that mission is valid
+					drone.tts.speak("Mission valid");
+
+
+				}
+				else
+				{
+
+					// Mission path on tablet is invalid
+
+					// let user know waypoint path is invalid
+					drone.tts.speak("Mission incorrect");
+
+					// Set sync flag to false
+					drone.waypointsSynced = false;
+
+					// Put in a break here as we had a failure?
+				}
+			
 			}
 			else
 			{
-
-				// Mission path on tablet is invalid
-
-				// let user know waypoint path is invalid
-				drone.tts.speak("Mission incorrect");
-
-				// Put in a break here as we had a failure?
+				
+				drone.tts.speak("No telemetry link");
+				
 			}
 
 			return true;

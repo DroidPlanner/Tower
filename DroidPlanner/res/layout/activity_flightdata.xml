@@ -11,7 +11,7 @@
         android:layout_weight=".5"
         class="com.droidplanner.fragments.HudFragment" />
 
-	<RelativeLayout 
+<RelativeLayout 
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:layout_weight=".5">
@@ -31,45 +31,58 @@
 			android:background="@android:drawable/toast_frame"
 			android:textAppearance="?android:attr/textAppearanceSmall" />
 
-		<Button
-		    android:id="@+id/Launch"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_alignParentRight="true"
-		    android:layout_alignParentBottom="true"
-		    android:text="Launch" />
-
-		<Button
-		    android:id="@+id/Land"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_alignParentRight="true"
-		    android:layout_above="@+id/Launch"
-		    android:text="Land" />
-
-		<Button
+			<Button
 		    android:id="@+id/ArmDisarm"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
-		    android:layout_alignParentRight="true"
-		    android:layout_above="@+id/Land"
-		    android:text="Arm" />
-
-		<Button
+		    android:layout_alignLeft="@+id/Stabilize"
+		    android:layout_alignRight="@+id/Stabilize"
+		    android:layout_alignParentBottom="true"
+		    android:layout_alignParentLeft="true"
+		    android:background="@color/orange"
+		    android:text="@string/menu_arm"
+		    android:textColor="@color/black" />
+			
+			<Button
 		    android:id="@+id/Stabilize"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
-		    android:layout_alignParentRight="true"
 		    android:layout_above="@+id/ArmDisarm"
-		    android:text="Stabilize" />
-
-		<Button
+		    android:layout_alignParentLeft="true"
+		    android:background="@color/yellow"
+		    android:text="@string/stabilize"
+		    android:textColor="@color/black" />
+			
+			<Button
+		    android:id="@+id/Launch"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_above="@+id/Stabilize"
+		    android:layout_alignParentRight="true"
+		    android:background="@color/blue"
+		    android:text="@string/launch" />
+			
+			<Button
+		    android:id="@+id/Land"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_above="@+id/Launch"
+		    android:layout_alignLeft="@+id/Launch"
+		    android:layout_alignParentRight="true"
+		    android:background="@color/green"
+		    android:text="@string/land"
+		    android:textColor="@color/black" />
+			
+			<Button
 		    android:id="@+id/RTL"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
+		    android:layout_above="@+id/Land"
+		    android:layout_alignLeft="@+id/Launch"
 		    android:layout_alignParentRight="true"
-		    android:layout_above="@+id/Stabilize"
-		    android:text="RTL" />
+		    android:background="@color/red"
+		    android:text="@string/rtl"
+		    android:textColor="@color/black" />
 
 	</RelativeLayout>
     

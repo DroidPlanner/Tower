@@ -168,14 +168,12 @@ public class FlightDataActivity extends SuperFlightActivity implements
 				else
 				{
 					// Announce the failure that the drone is not armed
-					drone.tts.speak("Error");
 					drone.tts.speak("Drone is not armed");
 				}
 			}
 			else
 			{
 				// Announce the failure that the telemetry link is not connected
-				drone.tts.speak("Error");
 				drone.tts.speak("No telemetry link");
 			}
 			
@@ -195,27 +193,57 @@ public class FlightDataActivity extends SuperFlightActivity implements
 		if(view==armDisarmButton){
 			
 			// Check if we have a MAVLink connection to the drone
-			if (drone.MavClient.isConnected()) {
+			if (drone.MavClient.isConnected())
+			{
 				
-				// Check if the drone is disarmed
-				if (!drone.state.isArmed())
+				if (drone.waypointsSynced == true)
 				{
 					
-					// Announce that we are arming the vehicle using text to speech
-					drone.tts.speak("Arming the vehicle, please standby");
+					// Check if the drone is disarmed
+					// Not a sanity check, this is program logic
+					if (!drone.state.isArmed())
+					{
+						
+						// Announce that we are arming the vehicle using text to speech
+						drone.tts.speak("Arming the vehicle, please standby");
+					}
+					else
+					{
+						
+						// Announce that we are disarming the vehicle using text to speech
+						drone.tts.speak("Disarming the vehicle, please standby");						
+					}
+					
+					// Send the ARM message over MAVLink, this is always executed as we toggle the state with the same button
+					MavLinkArm.sendArmMessage(drone, !drone.state.isArmed()); // Since this is inside we can not use this to disarm if only observing 
+					
 				}
-				
-				// Send the ARM message over MAVLink, this is always executed as we toggle the state with the same button
-				MavLinkArm.sendArmMessage(drone, !drone.state.isArmed());
+				else
+				{
+					drone.tts.speak("Waypoints not saved to quad");
+				}
 
 			}
 			else
 			{
+				
+				// No MAVLink connection to quad, give error
 				drone.tts.speak("No telemetry link");
 			}
 			
-			// Flip the name of the button
-			armDisarmButton.setText((!drone.state.isArmed()?"Arm":"Disarm"));
+			// Flip the name of the button and flip the color
+			if(!drone.state.isArmed())
+			{
+				// Disarmed
+				armDisarmButton.setText("Arm");
+				armDisarmButton.setBackgroundColor(0xffffa500); // Should be orange
+			}
+			else
+			{
+				// Armed
+				armDisarmButton.setText("Disarm");
+				armDisarmButton.setBackgroundColor(0xff0000ff); // Should be standard green
+			}
 			
 			// We have handled the long press so return true
 			return true;
