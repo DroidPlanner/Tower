@@ -6,6 +6,7 @@ import org.droidplanner.android.fragments.helpers.DroneMap;
 import org.droidplanner.android.graphic.DroneHelper;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
+import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -23,7 +24,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
 public class FlightMapFragment extends DroneMap implements
-		OnMapLongClickListener, OnMarkerClickListener, OnMarkerDragListener,GuidedDialogListener {
+		OnMapLongClickListener, OnMarkerClickListener, OnMarkerDragListener,GuidedDialogListener, OnDroneListener {
 
 	private static final int ZOOM_LEVEL = 20;
 	
@@ -54,12 +55,19 @@ public class FlightMapFragment extends DroneMap implements
 		isAutoPanEnabled = prefs.getBoolean("pref_auto_pan_enabled", false);
 		guidedModeOnLongPress = prefs.getBoolean("pref_guided_mode_on_long_press", true);		
 	}
+	
+	@Override
+	public void onStart() {
+		super.onStart();
+		drone.events.addDroneListener(this);
+	}
 
 	@Override
-	public void update() {
-		super.update();
-	}	
-
+	public void onStop() {
+		super.onStop();
+		drone.events.removeDroneListener(this);
+	}
+	
 	private void animateCamera(LatLng coord) {
 		if (!hasBeenZoomed) {
 			hasBeenZoomed = true;
@@ -124,7 +132,6 @@ public class FlightMapFragment extends DroneMap implements
 		default:
 			break;
 		}
-		super.onDroneEvent(event,drone);
 	}
 
 }
