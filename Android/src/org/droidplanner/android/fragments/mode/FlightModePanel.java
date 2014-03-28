@@ -85,6 +85,8 @@ public class FlightModePanel extends Fragment implements OnDroneListener {
                 //Update the mode info panel
                 onModeUpdate(drone.state.getMode());
                 break;
+		default:
+			break;
         }
     }
 
