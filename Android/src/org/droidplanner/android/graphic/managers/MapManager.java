@@ -10,6 +10,7 @@ import org.droidplanner.android.graphic.map.GraphicHome;
 import org.droidplanner.android.graphic.map.GraphicMission;
 import org.droidplanner.android.graphic.map.MarkerManager;
 import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.drone.DroneEvents;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 
@@ -24,7 +25,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 public class MapManager implements OnDroneListener {
 	private GoogleMap mMap;
 	private Context context;
-	private boolean isMissionDraggable;
+	private boolean isMissionDraggable = false;
 	
 	public MarkerManager markers;
 	public MapPath missionPath;
@@ -36,11 +37,11 @@ public class MapManager implements OnDroneListener {
 	
 	public GraphicDrone droneMarker;
 	public GraphicGuided guided;
+	private DroneEvents events;
 
-	public MapManager(GoogleMap map, Drone drone, Resources resources, Context context, boolean draggable) {
+	public MapManager(GoogleMap map, Drone drone, Resources resources, Context context) {
 		this.mMap = map;
-		this.context = context;
-		isMissionDraggable = draggable;		
+		this.context = context;		
 		home = new GraphicHome(drone);
 		mission = new GraphicMission(drone);
 		missionPath = new MapPath(mMap,resources);
@@ -53,6 +54,11 @@ public class MapManager implements OnDroneListener {
 		guided = new GraphicGuided(drone);
 
 		addFlightPathToMap();
+	}
+
+
+	public void stopListeningToDrone() {
+		events.removeDroneListener(this);		
 	}
 
 

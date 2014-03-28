@@ -3,8 +3,6 @@ package org.droidplanner.android.fragments.helpers;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.graphic.managers.MapManager;
 import org.droidplanner.core.drone.Drone;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 
 import android.app.Activity;
 import android.content.Context;
@@ -20,7 +18,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.CameraPosition.Builder;
 import com.google.android.gms.maps.model.LatLng;
 
-public abstract class DroneMap extends OfflineMapFragment implements OnDroneListener   {
+public abstract class DroneMap extends OfflineMapFragment {
 	public MapManager manager;
 	public Drone drone;
 	
@@ -33,14 +31,14 @@ public abstract class DroneMap extends OfflineMapFragment implements OnDroneList
 		View view = super.onCreateView(inflater, viewGroup, bundle);
 		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
 		mMap = getMap();
-		manager = new MapManager(getMap(),drone, getResources(),context,isMissionDraggable());
+		manager = new MapManager(getMap(),drone, getResources(),context);
+		drone.events.addDroneListener(manager);
 		return view;
 	}
 
 	@Override
 	public void onStart() {
 		super.onStart();
-		drone.events.addDroneListener(this);
 		loadCameraPosition();
 		update();
 	}
@@ -48,7 +46,7 @@ public abstract class DroneMap extends OfflineMapFragment implements OnDroneList
 	@Override
 	public void onStop() {
 		super.onStop();
-		drone.events.removeDroneListener(this);
+		drone.events.removeDroneListener(manager);
 		saveCameraPosition();
 	}
 
@@ -84,16 +82,6 @@ public abstract class DroneMap extends OfflineMapFragment implements OnDroneList
 		mMap.moveCamera(CameraUpdateFactory.newCameraPosition(camera.build()));
 	}
 
-	@Override
-	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		switch (event) {
-		case MISSION_UPDATE:
-			manager.update();
-			break;
-		default:
-			break;
-		}
-	}
 	
 	public LatLng getMyLocation() {
 		if (mMap.getMyLocation() != null) {
