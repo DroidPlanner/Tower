@@ -11,7 +11,16 @@
     <string name="editor">Editor</string>
     <string name="send_mission">Mission senden</string>
     <string name="load_mission">Mission laden</string>
-
+    
+    <string name="save_mission">Sparen Mission</string>
+    <string name="get_saved_mission">Holen Gespeichert Mission</string>
+    <string name="dlg_enter_mission_name">Geben Sie einen Namen für Ihre Mission.</string>
+    <string name="dlg_get_saved_mission_title">gespeichert Missionen</string>
+    <string name="dlg_select_mission_file">Wählen Sie eine Mission zu laden.</string>
+    <string name="btn_delete">löschen</string>
+    <string name="dlg_delete_file_confirm">1-Mission-Dateien werden gelöscht.</string>
+    <string name="dlg_delete_files_confirm">Mission %d-Dateien werden gelöscht.</string>
+    
     <!-- Drone Setup tabs -->
     <string name="screen_tuning">Tuning</string>
     <string name="screen_cal">Kalibrierung</string>

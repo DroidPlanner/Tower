@@ -20,6 +20,10 @@ public class Waypoint extends SpatialCoordItem {
 	private double yawAngle;
 	private double orbitalRadius;
 	private boolean orbitCCW;
+	
+	public Waypoint(Mission m) {
+	    super(m);
+	}
 
 	public Waypoint(MissionItem item) {
 		super(item);

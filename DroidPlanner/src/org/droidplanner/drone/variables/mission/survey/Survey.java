@@ -28,9 +28,13 @@ public class Survey extends MissionItem {
 	public SurveyData surveyData = new SurveyData();
 	public Grid grid;
 	private Context context;
+	
+	public Survey(Mission m) {
+	    super(m);
+	}
 
 	public Survey(Mission mission,List<LatLng> points, Context context) {
-		super(mission);
+		this(mission);
 		this.context = context;
 		polygon.addPoints(points);
 	}

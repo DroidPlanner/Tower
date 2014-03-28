@@ -3,6 +3,7 @@ package org.droidplanner.drone.variables.mission.waypoints;
 import java.util.List;
 
 import org.droidplanner.R;
+import org.droidplanner.drone.variables.mission.Mission;
 import org.droidplanner.drone.variables.mission.MissionItem;
 import org.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import org.droidplanner.fragments.mission.MissionDetailFragment;
@@ -12,6 +13,10 @@ import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.google.android.gms.maps.model.LatLng;
 
 public class RegionOfInterest extends SpatialCoordItem implements MarkerSource{
+    
+    public RegionOfInterest(Mission m) {
+        super(m);
+    }
 	
 	public RegionOfInterest(MissionItem item) {
 		super(item);

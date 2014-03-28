@@ -13,6 +13,15 @@
     <string name="editor">Editor</string>
     <string name="send_mission">Send Mission</string>
     <string name="load_mission">Load Mission</string>
+    
+    <string name="save_mission">Save Mission</string>
+    <string name="get_saved_mission">Get Saved Mission</string>
+    <string name="dlg_enter_mission_name">Enter a name for your mission.</string>
+    <string name="dlg_get_saved_mission_title">Saved Missions</string>
+    <string name="dlg_select_mission_file">Select a mission to load.</string>
+    <string name="btn_delete">Delete</string>
+    <string name="dlg_delete_file_confirm">%d mission file will be deleted.</string>
+    <string name="dlg_delete_files_confirm">%d mission files will be deleted.</string>
 
     <!-- Drone Setup tabs -->
     <string name="screen_tuning">Tuning</string>
