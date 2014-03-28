@@ -49,7 +49,7 @@ public class MapManager implements OnDroneListener {
 		
 
 		//From Flight Map
-		droneMarker = new GraphicDrone(this);
+		droneMarker = new GraphicDrone(drone,mMap);
 		droneLeashPath = new MapPath(mMap, resources);
 		guided = new GraphicGuided(drone);
 
