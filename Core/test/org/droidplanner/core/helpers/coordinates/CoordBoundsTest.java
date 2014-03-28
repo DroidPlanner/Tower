@@ -41,7 +41,7 @@ public class CoordBoundsTest extends TestCase {
 
 	public void testList() {
 		CoordBounds bounds = new CoordBounds(list);
-		
+
 		assertEquals(2.0, bounds.ne_1quadrant.getX());
 		assertEquals(3.0, bounds.ne_1quadrant.getY());
 		assertEquals(-6.0, bounds.sw_3quadrant.getX());

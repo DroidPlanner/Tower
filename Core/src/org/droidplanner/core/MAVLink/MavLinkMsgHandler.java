@@ -40,7 +40,8 @@ public class MavLinkMsgHandler {
 			break;
 		case msg_vfr_hud.MAVLINK_MSG_ID_VFR_HUD:
 			msg_vfr_hud m_hud = (msg_vfr_hud) msg;
-			drone.setAltitudeGroundAndAirSpeeds(m_hud.alt, m_hud.groundspeed,m_hud.airspeed, m_hud.climb);
+			drone.setAltitudeGroundAndAirSpeeds(m_hud.alt, m_hud.groundspeed,
+					m_hud.airspeed, m_hud.climb);
 			checkIsFlying(m_hud);
 			break;
 		case msg_mission_current.MAVLINK_MSG_ID_MISSION_CURRENT:

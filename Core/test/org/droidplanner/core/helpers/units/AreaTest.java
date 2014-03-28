@@ -23,16 +23,16 @@ public class AreaTest extends TestCase {
 	}
 
 	public void testToString() {
-		assertEquals("1.0 m²",oneSqMeter.toString());		
-		
+		assertEquals("1.0 m²", oneSqMeter.toString());
+
 		oneSqMeter.set(1e6);
-		assertEquals("1.0 km²",oneSqMeter.toString());
-		
+		assertEquals("1.0 km²", oneSqMeter.toString());
+
 		oneSqMeter.set(1e-4);
-		assertEquals("1.00 cm²",oneSqMeter.toString());
-		
+		assertEquals("1.00 cm²", oneSqMeter.toString());
+
 		oneSqMeter.set(1e-10);
-		assertEquals("1.0E-10 m²",oneSqMeter.toString());
+		assertEquals("1.0E-10 m²", oneSqMeter.toString());
 	}
 
 }

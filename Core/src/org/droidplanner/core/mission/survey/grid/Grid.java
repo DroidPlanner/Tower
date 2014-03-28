@@ -14,13 +14,13 @@ public class Grid {
 		this.gridPoints = list;
 		this.cameraLocations = cameraLocations;
 	}
-	
-	public Length getLength(){
+
+	public Length getLength() {
 		return PolylineTools.getPolylineLength(gridPoints);
 	}
-	
-	public int getNumberOfLines(){
-		return gridPoints.size()/2;
+
+	public int getNumberOfLines() {
+		return gridPoints.size() / 2;
 	}
 
 	public List<Coord2D> getCameraLocations() {
@@ -30,5 +30,5 @@ public class Grid {
 	public int getCameraCount() {
 		return getCameraLocations().size();
 	}
-	
+
 }

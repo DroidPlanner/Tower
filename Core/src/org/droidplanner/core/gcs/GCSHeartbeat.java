@@ -7,7 +7,6 @@ import java.util.concurrent.TimeUnit;
 import org.droidplanner.core.MAVLink.MavLinkHeartbeat;
 import org.droidplanner.core.drone.Drone;
 
-
 /**
  * This class is used to send periodic heartbeat messages to the drone.
  */
@@ -28,15 +27,15 @@ public class GCSHeartbeat {
 	 */
 	private ScheduledExecutorService heartbeatExecutor;
 
-    /**
-     * Runnable used to send the heartbeat.
-     */
-    private final Runnable heartbeatRunnable = new Runnable() {
-        @Override
-        public void run() {
-            MavLinkHeartbeat.sendMavHeartbeat(drone);
-        }
-    };
+	/**
+	 * Runnable used to send the heartbeat.
+	 */
+	private final Runnable heartbeatRunnable = new Runnable() {
+		@Override
+		public void run() {
+			MavLinkHeartbeat.sendMavHeartbeat(drone);
+		}
+	};
 
 	public GCSHeartbeat(Drone drone, int freqHz) {
 		this.drone = drone;
@@ -52,7 +51,8 @@ public class GCSHeartbeat {
 	public void setActive(boolean active) {
 		if (active) {
 			heartbeatExecutor = Executors.newSingleThreadScheduledExecutor();
-			heartbeatExecutor.scheduleWithFixedDelay(heartbeatRunnable, 0, period, TimeUnit.SECONDS);
+			heartbeatExecutor.scheduleWithFixedDelay(heartbeatRunnable, 0,
+					period, TimeUnit.SECONDS);
 		} else if (heartbeatExecutor != null) {
 			heartbeatExecutor.shutdownNow();
 			heartbeatExecutor = null;

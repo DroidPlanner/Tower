@@ -1,6 +1,5 @@
 package org.droidplanner.core.MAVLink;
 
-
 import org.droidplanner.core.MAVLink.MAVLinkStreams.MAVLinkOutputStream;
 
 import com.MAVLink.Messages.ardupilotmega.msg_request_data_stream;

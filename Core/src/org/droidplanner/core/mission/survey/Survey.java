@@ -21,11 +21,11 @@ public class Survey extends MissionItem {
 	public SurveyData surveyData = new SurveyData();
 	public Grid grid;
 
-	public Survey(Mission mission,List<Coord2D> points) {
+	public Survey(Mission mission, List<Coord2D> points) {
 		super(mission);
 		polygon.addPoints(points);
 	}
-	
+
 	public void update(double angle, Altitude altitude, double overlap,
 			double sidelap) {
 		surveyData.update(angle, altitude, overlap, sidelap);
@@ -37,9 +37,10 @@ public class Survey extends MissionItem {
 		mission.notifyMissionUpdate();
 	}
 
-	private void build() throws Exception {		
-		//TODO find better point than (0,0) to reference the grid
-		GridBuilder gridBuilder = new GridBuilder(polygon, surveyData, new Coord2D(0, 0));
+	private void build() throws Exception {
+		// TODO find better point than (0,0) to reference the grid
+		GridBuilder gridBuilder = new GridBuilder(polygon, surveyData,
+				new Coord2D(0, 0));
 		polygon.checkIfValid();
 		grid = gridBuilder.generate();
 	}
@@ -79,7 +80,7 @@ public class Survey extends MissionItem {
 	@Override
 	public void unpackMAVMessage(msg_mission_item mavMsg) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

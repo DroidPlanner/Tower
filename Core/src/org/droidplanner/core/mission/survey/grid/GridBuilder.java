@@ -47,7 +47,8 @@ public class GridBuilder {
 				poly.getLines()).getTrimmedGrid();
 		EndpointSorter gridSorter = new EndpointSorter(trimedGrid, wpDistance);
 		gridSorter.sortGrid(origin, innerWPs);
-		grid = new Grid(gridSorter.getSortedGrid(),gridSorter.getCameraLocations());
+		grid = new Grid(gridSorter.getSortedGrid(),
+				gridSorter.getCameraLocations());
 		return grid;
 	}
 

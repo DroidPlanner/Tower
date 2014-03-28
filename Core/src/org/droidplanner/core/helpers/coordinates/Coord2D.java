@@ -28,7 +28,7 @@ public class Coord2D {
 	public double getY() {
 		return y;
 	}
-	
+
 	public double getLng() {
 		return x;
 	}
@@ -36,11 +36,10 @@ public class Coord2D {
 	public double getLat() {
 		return y;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "X/Y: "+getX()+"/"+getY();
+		return "X/Y: " + getX() + "/" + getY();
 	}
-
 
 }

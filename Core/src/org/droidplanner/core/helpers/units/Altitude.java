@@ -7,6 +7,6 @@ public class Altitude extends Length {
 	}
 
 	public Length subtract(Altitude toSubtract) {
-		return new Length(this.valueInMeters()-toSubtract.valueInMeters());
-	}	
+		return new Length(this.valueInMeters() - toSubtract.valueInMeters());
+	}
 }

@@ -10,7 +10,7 @@ import org.droidplanner.core.helpers.units.Altitude;
 
 import com.MAVLink.Messages.ApmModes;
 
-public class GuidedPoint extends DroneVariable implements  OnDroneListener {
+public class GuidedPoint extends DroneVariable implements OnDroneListener {
 
 	private GuidedStates state = GuidedStates.UNINITIALIZED;
 	private Coord2D coord = new Coord2D(0, 0);
@@ -111,8 +111,8 @@ public class GuidedPoint extends DroneVariable implements  OnDroneListener {
 	private void sendGuidedPoint() {
 		if (state == GuidedStates.ACTIVE) {
 			myDrone.events.notifyDroneEvent(DroneEventsType.GUIDEDPOINT);
-			MavLinkModes.setGuidedMode(myDrone, coord.getY(),
-					coord.getX(), altitude.valueInMeters());
+			MavLinkModes.setGuidedMode(myDrone, coord.getY(), coord.getX(),
+					altitude.valueInMeters());
 		}
 	}
 

@@ -20,8 +20,7 @@ public class GeoTools {
 	 * @return distance between the points in degrees
 	 */
 	public static Double getAproximatedDistance(Coord2D p1, Coord2D p2) {
-		return (Math.hypot((p1.getX() - p2.getX()),
-				(p1.getY() - p2.getY())));
+		return (Math.hypot((p1.getX() - p2.getX()), (p1.getY() - p2.getY())));
 	}
 
 	public static Double metersTolat(double meters) {
@@ -93,7 +92,8 @@ public class GeoTools {
 	 * @return distance in meters
 	 */
 	public static Length getDistance(Coord2D from, Coord2D to) {
-		return new Length(RADIUS_OF_EARTH * Math.toRadians(getArcInRadians(from, to)));
+		return new Length(RADIUS_OF_EARTH
+				* Math.toRadians(getArcInRadians(from, to)));
 	}
 
 	/**
@@ -135,14 +135,13 @@ public class GeoTools {
 					- (latToMeters(poly.getPoints().get(i).getY()) * latToMeters(poly
 							.getPoints().get(i + 1).getX()));
 		}
-		sum = sum 
-				+ (latToMeters(poly.getPoints().get(length-1).getX()) * latToMeters(poly
-				.getPoints().get(0).getY()))
-				- (latToMeters(poly.getPoints().get(length-1).getY()) * latToMeters(poly
+		sum = sum
+				+ (latToMeters(poly.getPoints().get(length - 1).getX()) * latToMeters(poly
+						.getPoints().get(0).getY()))
+				- (latToMeters(poly.getPoints().get(length - 1).getY()) * latToMeters(poly
 						.getPoints().get(0).getX()));
 		return new Area(Math.abs(0.5 * sum));
-		//return new Area(0);
+		// return new Area(0);
 	}
-
 
 }

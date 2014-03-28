@@ -14,23 +14,23 @@ import com.MAVLink.Messages.enums.MAV_FRAME;
 public class Home extends DroneVariable {
 	private Coord2D coordinate;
 	private Altitude altitude = new Altitude(0);
-	
+
 	public Home(Drone drone) {
 		super(drone);
 	}
 
 	public boolean isValid() {
-		return (coordinate!=null);
+		return (coordinate != null);
 	}
-	
+
 	public Home getHome() {
 		return this;
 	}
-		
+
 	public Length getDroneDistanceToHome() {
 		if (isValid()) {
-			return GeoTools.getDistance(coordinate, myDrone.GPS.getPosition());			
-		}else{
+			return GeoTools.getDistance(coordinate, myDrone.GPS.getPosition());
+		} else {
 			return new Length(0); // TODO fix this
 		}
 	}
@@ -45,7 +45,7 @@ public class Home extends DroneVariable {
 
 	public void setHome(msg_mission_item msg) {
 		this.coordinate = new Coord2D(msg.x, msg.y);
-		this.altitude = new Altitude(msg.z);		
+		this.altitude = new Altitude(msg.z);
 		myDrone.events.notifyDroneEvent(DroneEventsType.HOME);
 	}
 
@@ -59,7 +59,7 @@ public class Home extends DroneVariable {
 		if (isValid()) {
 			mavMsg.x = (float) getCoord().getX();
 			mavMsg.y = (float) getCoord().getY();
-			mavMsg.z = (float) getAltitude().valueInMeters();			
+			mavMsg.z = (float) getAltitude().valueInMeters();
 		}
 		return mavMsg;
 	}

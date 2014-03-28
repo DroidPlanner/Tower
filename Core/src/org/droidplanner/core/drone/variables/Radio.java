@@ -8,7 +8,7 @@ import org.droidplanner.core.helpers.math.MathUtil;
 public class Radio extends DroneVariable {
 	private static final int MAX_FADE_MARGIN = 50;
 	private static final int MIN_FADE_MARGIN = 6;
-	
+
 	private int rxerrors = -1;
 	private int fixed = -1;
 	private int txbuf = -1;
@@ -50,21 +50,24 @@ public class Radio extends DroneVariable {
 	}
 
 	public double getFadeMargin() {
-		return rssi-noise;
+		return rssi - noise;
 	}
 
 	public double getRemFadeMargin() {
-		return remrssi-remnoise;
+		return remrssi - remnoise;
 	}
-	
+
 	/**
 	 * Signal Strength in percentage
+	 * 
 	 * @return percentage
 	 */
 	public int getSignalStrength() {
-		return (int) (MathUtil.Normalize(Math.min(getFadeMargin(),getRemFadeMargin()),MIN_FADE_MARGIN,MAX_FADE_MARGIN)*100);
+		return (int) (MathUtil.Normalize(
+				Math.min(getFadeMargin(), getRemFadeMargin()), MIN_FADE_MARGIN,
+				MAX_FADE_MARGIN) * 100);
 	}
-	
+
 	public void setRadioState(short rxerrors, short fixed, byte rssi,
 			byte remrssi, byte txbuf, byte noise, byte remnoise) {
 		if (this.rxerrors != rxerrors | this.fixed != fixed | this.rssi != rssi
@@ -85,8 +88,10 @@ public class Radio extends DroneVariable {
 	}
 
 	/**
-	 * Scalling done at the Si1000 radio
-	 * More info can be found at: http://copter.ardupilot.com/wiki/common-using-the-3dr-radio-for-telemetry-with-apm-and-px4/#Power_levels
+	 * Scalling done at the Si1000 radio More info can be found at:
+	 * http://copter
+	 * .ardupilot.com/wiki/common-using-the-3dr-radio-for-telemetry-
+	 * with-apm-and-px4/#Power_levels
 	 */
 	private double SikValueToDB(int value) {
 		return (value / 1.9) - 127;

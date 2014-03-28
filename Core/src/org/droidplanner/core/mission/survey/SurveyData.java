@@ -6,7 +6,6 @@ import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.helpers.units.Area;
 import org.droidplanner.core.helpers.units.Length;
 
-
 public class SurveyData {
 	private Altitude altitude = new Altitude(50.0);
 	private Double angle = 0.0;
@@ -24,29 +23,33 @@ public class SurveyData {
 	}
 
 	public Length getLateralFootPrint() {
-		return new Length(altitude.valueInMeters() * camera.getSensorLateralSize() / camera.focalLength);
+		return new Length(altitude.valueInMeters()
+				* camera.getSensorLateralSize() / camera.focalLength);
 
 	}
 
 	public Length getLongitudinalFootPrint() {
-		return new Length(altitude.valueInMeters() * camera.getSensorLongitudinalSize()
-				/ camera.focalLength);
+		return new Length(altitude.valueInMeters()
+				* camera.getSensorLongitudinalSize() / camera.focalLength);
 	}
 
 	public Area getGroundResolution() {
-		return new Area(((altitude.valueInMeters()
-				* camera.getSensorLateralSize()
-				/ camera.focalLength
-				* (altitude.valueInMeters() * camera.getSensorLongitudinalSize() / camera.focalLength)
-				/ (camera.sensorResolution * 1000)))/10000);
+		return new Area(
+				((altitude.valueInMeters()
+						* camera.getSensorLateralSize()
+						/ camera.focalLength
+						* (altitude.valueInMeters()
+								* camera.getSensorLongitudinalSize() / camera.focalLength) / (camera.sensorResolution * 1000))) / 10000);
 	}
 
 	public Length getLongitudinalPictureDistance() {
-		return new Length(getLongitudinalFootPrint().valueInMeters() * (1 - overlap * .01));
+		return new Length(getLongitudinalFootPrint().valueInMeters()
+				* (1 - overlap * .01));
 	}
 
 	public Length getLateralPictureDistance() {
-		return new Length(getLateralFootPrint().valueInMeters() * (1 - sidelap * .01));
+		return new Length(getLateralFootPrint().valueInMeters()
+				* (1 - sidelap * .01));
 	}
 
 	public void setCameraInfo(CameraInfo info) {
@@ -66,7 +69,7 @@ public class SurveyData {
 	public void setInnerWpsState(boolean state) {
 		generateInnerWps = state;
 	}
-	
+
 	public Altitude getAltitude() {
 		return altitude;
 	}
@@ -90,7 +93,7 @@ public class SurveyData {
 	public boolean shouldGenerateInnerWPs() {
 		return generateInnerWps;
 	}
-	
+
 	@Override
 	public String toString() {
 		return String.format(Locale.US,

@@ -13,7 +13,7 @@ import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 public abstract class SpatialCoordItem extends MissionItem {
 
 	protected Coord3D coordinate;
-	
+
 	public SpatialCoordItem(Mission mission, Coord3D coord) {
 		super(mission);
 		this.coordinate = coord;
@@ -28,7 +28,6 @@ public abstract class SpatialCoordItem extends MissionItem {
 		}
 	}
 
-
 	public void setCoordinate(Coord3D coordNew) {
 		coordinate = coordNew;
 	}
@@ -39,28 +38,27 @@ public abstract class SpatialCoordItem extends MissionItem {
 
 	@Override
 	public List<msg_mission_item> packMissionItem() {
-			List<msg_mission_item> list = super.packMissionItem();
-			msg_mission_item mavMsg = list.get(0);
-			mavMsg.x = (float) coordinate.getX();
-			mavMsg.y = (float) coordinate.getY();
-			mavMsg.z = (float) coordinate.getAltitude().valueInMeters();
-			return list;
-		}
+		List<msg_mission_item> list = super.packMissionItem();
+		msg_mission_item mavMsg = list.get(0);
+		mavMsg.x = (float) coordinate.getX();
+		mavMsg.y = (float) coordinate.getY();
+		mavMsg.z = (float) coordinate.getAltitude().valueInMeters();
+		return list;
+	}
 
 	@Override
 	public void unpackMAVMessage(msg_mission_item mavMsg) {
 		Altitude alt = new Altitude(mavMsg.z);
-		setCoordinate(new Coord3D(mavMsg.x,mavMsg.y, alt));
+		setCoordinate(new Coord3D(mavMsg.x, mavMsg.y, alt));
 	}
-	
 
 	public void setAltitude(Altitude altitude) {
 		coordinate.set(coordinate.getX(), coordinate.getY(), altitude);
-		
+
 	}
 
 	public void setPosition(Coord2D position) {
-		coordinate.set(position);		
+		coordinate.set(position);
 	}
 
 }

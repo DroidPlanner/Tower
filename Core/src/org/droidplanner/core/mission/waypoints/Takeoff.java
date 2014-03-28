@@ -15,11 +15,11 @@ public class Takeoff extends SpatialCoordItem {
 	public Takeoff(MissionItem item) {
 		super(item);
 	}
-	
+
 	public Takeoff(Mission mission, Altitude alt) {
-		super(mission, new Coord3D(0, 0,alt));	
+		super(mission, new Coord3D(0, 0, alt));
 	}
-	
+
 	public Takeoff(msg_mission_item msg, Mission mission) {
 		super(mission, null);
 		unpackMAVMessage(msg);

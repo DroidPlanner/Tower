@@ -13,13 +13,13 @@ public class Simplify {
 	public static List<Coord2D> simplify(List<Coord2D> list, double tolerance) {
 		int index = 0;
 		double dmax = 0;
-		double squareTolerance = tolerance*tolerance;
+		double squareTolerance = tolerance * tolerance;
 		int lastIndex = list.size() - 1;
 
 		// Find the point with the maximum distance
 		for (int i = 1; i < list.size() - 1; i++) {
-			double d = PointTools.pointToLineDistance(list.get(0), list.get(lastIndex),
-					list.get(i));
+			double d = PointTools.pointToLineDistance(list.get(0),
+					list.get(lastIndex), list.get(i));
 			if (d > dmax) {
 				index = i;
 				dmax = d;

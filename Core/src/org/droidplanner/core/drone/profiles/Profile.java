@@ -5,21 +5,21 @@ import org.droidplanner.core.drone.DroneVariable;
 
 public class Profile extends DroneVariable {
 
-    private VehicleProfile profile;
+	private VehicleProfile profile;
 
+	public Profile(Drone myDrone) {
+		super(myDrone);
+	}
 
-    public Profile(Drone myDrone) {
-        super(myDrone);
-    }
+	public VehicleProfile getProfile() {
+		return profile;
+	}
 
-    public VehicleProfile getProfile() {
-        return profile;
-    }
-
-    /*
-     * Load vehicle profile for current vehicle type
-     */
-    public void load() {
-        profile = myDrone.preferences.loadVehicleProfile(myDrone.type.getFirmwareType());
-    }
+	/*
+	 * Load vehicle profile for current vehicle type
+	 */
+	public void load() {
+		profile = myDrone.preferences.loadVehicleProfile(myDrone.type
+				.getFirmwareType());
+	}
 }

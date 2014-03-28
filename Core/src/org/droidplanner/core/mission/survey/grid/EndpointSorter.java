@@ -10,7 +10,7 @@ import org.droidplanner.core.helpers.geoTools.LineTools;
 
 public class EndpointSorter {
 	private static final int MAX_NUMBER_OF_CAMERAS = 2000;
-	
+
 	private List<Coord2D> gridPoints = new ArrayList<Coord2D>();
 	private List<LineLatLng> grid;
 	private Double sampleDistance;
@@ -25,7 +25,8 @@ public class EndpointSorter {
 		while (grid.size() > 0) {
 			LineLatLng closestLine = LineTools.findClosestLineToPoint(lastpnt,
 					grid);
-			Coord2D secondWp = processOneGridLine(closestLine, lastpnt, innerWPs);
+			Coord2D secondWp = processOneGridLine(closestLine, lastpnt,
+					innerWPs);
 			lastpnt = secondWp;
 		}
 	}
@@ -38,7 +39,7 @@ public class EndpointSorter {
 		grid.remove(closestLine);
 
 		addWaypointsBetween(firstWP, secondWp, innerWPs);
-		if (cameraLocations.size()>MAX_NUMBER_OF_CAMERAS) {
+		if (cameraLocations.size() > MAX_NUMBER_OF_CAMERAS) {
 			throw new Exception("Too many camera positions");
 		}
 		return secondWp;
@@ -46,8 +47,8 @@ public class EndpointSorter {
 
 	private void addWaypointsBetween(Coord2D firstWP, Coord2D secondWp,
 			boolean innerWPs) {
-		List<Coord2D> cameraLocationsOnThisStrip = new LineSampler(firstWP, secondWp)
-				.sample(sampleDistance);
+		List<Coord2D> cameraLocationsOnThisStrip = new LineSampler(firstWP,
+				secondWp).sample(sampleDistance);
 		cameraLocations.addAll(cameraLocationsOnThisStrip);
 		if (innerWPs) {
 			for (Coord2D point : cameraLocationsOnThisStrip) {
@@ -62,7 +63,7 @@ public class EndpointSorter {
 	public List<Coord2D> getSortedGrid() {
 		return gridPoints;
 	}
-	
+
 	public List<Coord2D> getCameraLocations() {
 		return cameraLocations;
 	}

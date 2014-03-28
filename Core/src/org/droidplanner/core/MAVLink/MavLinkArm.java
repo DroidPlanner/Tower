@@ -14,7 +14,7 @@ public class MavLinkArm {
 		msg.target_component = (byte) MAV_COMPONENT.MAV_COMP_ID_SYSTEM_CONTROL;
 
 		msg.command = MAV_CMD.MAV_CMD_COMPONENT_ARM_DISARM;
-		msg.param1 = arm?1:0;
+		msg.param1 = arm ? 1 : 0;
 		msg.param2 = 0;
 		msg.param3 = 0;
 		msg.param4 = 0;

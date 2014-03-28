@@ -21,8 +21,8 @@ public class GPS extends DroneVariable {
 
 	public Coord2D getPosition() {
 		if (isPositionValid()) {
-			return position;			
-		}else{
+			return position;
+		} else {
 			return new Coord2D(0, 0);
 		}
 	}
@@ -50,13 +50,14 @@ public class GPS extends DroneVariable {
 		}
 		return gpsFix;
 	}
-	public int getFixTypeNumeric(){
+
+	public int getFixTypeNumeric() {
 		return fixType;
 	}
 
 	public void setGpsState(int fix, int satellites_visible, int eph) {
-		if(satCount != satellites_visible){
-			satCount = satellites_visible;			
+		if (satCount != satellites_visible) {
+			satCount = satellites_visible;
 			gps_eph = (double) eph / 100; // convert from eph(cm) to gps_eph(m)
 			myDrone.events.notifyDroneEvent(DroneEventsType.GPS_COUNT);
 		}

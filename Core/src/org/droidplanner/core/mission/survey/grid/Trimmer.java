@@ -32,7 +32,8 @@ public class Trimmer {
 		return crossings;
 	}
 
-	private void processCrossings(ArrayList<Coord2D> crosses, LineLatLng gridLine) {
+	private void processCrossings(ArrayList<Coord2D> crosses,
+			LineLatLng gridLine) {
 		switch (crosses.size()) {
 		case 0:
 		case 1:

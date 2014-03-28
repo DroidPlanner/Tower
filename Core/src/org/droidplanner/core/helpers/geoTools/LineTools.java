@@ -23,23 +23,27 @@ public class LineTools {
 	 */
 	public static Coord2D FindLineIntersection(LineLatLng first,
 			LineLatLng second) throws Exception {
-		double denom = ((first.p2.getX() - first.p1.getX()) * (second.p2.getY() - second.p1.getY()))
-				- ((first.p2.getY() - first.p1.getY()) * (second.p2.getX() - second.p1.getX()));
+		double denom = ((first.p2.getX() - first.p1.getX()) * (second.p2.getY() - second.p1
+				.getY()))
+				- ((first.p2.getY() - first.p1.getY()) * (second.p2.getX() - second.p1
+						.getX()));
 		if (denom == 0)
 			throw new Exception("Parralel Lines");
-		double numer = ((first.p1.getY() - second.p1.getY()) * (second.p2.getX() - second.p1.getX()))
-				- ((first.p1.getX() - second.p1.getX()) * (second.p2.getY() - second.p1.getY()));
+		double numer = ((first.p1.getY() - second.p1.getY()) * (second.p2
+				.getX() - second.p1.getX()))
+				- ((first.p1.getX() - second.p1.getX()) * (second.p2.getY() - second.p1
+						.getY()));
 		double r = numer / denom;
-		double numer2 = ((first.p1.getY() - second.p1.getY()) * (first.p2.getX() - first.p1.getX()))
-				- ((first.p1.getX() - second.p1.getX()) * (first.p2.getY() - first.p1.getY()));
+		double numer2 = ((first.p1.getY() - second.p1.getY()) * (first.p2
+				.getX() - first.p1.getX()))
+				- ((first.p1.getX() - second.p1.getX()) * (first.p2.getY() - first.p1
+						.getY()));
 		double s = numer2 / denom;
 		if ((r < 0 || r > 1) || (s < 0 || s > 1))
 			throw new Exception("No Intersection");
 		// Find intersection point
-		double x = first.p1.getX()
-				+ (r * (first.p2.getX() - first.p1.getX()));
-		double y = first.p1.getY()
-				+ (r * (first.p2.getY() - first.p1.getY()));
+		double x = first.p1.getX() + (r * (first.p2.getX() - first.p1.getX()));
+		double y = first.p1.getY() + (r * (first.p2.getY() - first.p1.getY()));
 		return (new Coord2D(x, y));
 	}
 

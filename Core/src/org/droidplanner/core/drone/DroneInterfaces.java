@@ -28,9 +28,8 @@ public class DroneInterfaces {
 		public void onBeginWaypointEvent(
 				WaypointManager.WaypointEvent_Type wpEvent);
 
-		public void onWaypointEvent(
-				WaypointManager.WaypointEvent_Type wpEvent, int index,
-				int count);
+		public void onWaypointEvent(WaypointManager.WaypointEvent_Type wpEvent,
+				int index, int count);
 
 		public void onEndWaypointEvent(
 				WaypointManager.WaypointEvent_Type wpEvent);

@@ -13,16 +13,16 @@ public class AltitudeTest extends TestCase {
 		super.setUp();
 		altitude = new Altitude(1.0);
 	}
-	
-	public void testSuperMethods(){
+
+	public void testSuperMethods() {
 		assertEquals(1.0, altitude.valueInMeters());
 		assertEquals("1.0 m", altitude.toString());
 	}
-	
-	public void testSubtraction(){
+
+	public void testSubtraction() {
 		Length difference = altitude.subtract(new Altitude(0.2));
 		assertEquals(1.0, altitude.valueInMeters());
-		assertEquals(new Length(1.0-0.2),difference);
+		assertEquals(new Length(1.0 - 0.2), difference);
 	}
 
 }

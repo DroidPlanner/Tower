@@ -37,7 +37,8 @@ public class Waypoint extends SpatialCoordItem {
 		mavMsg.command = MAV_CMD.MAV_CMD_NAV_WAYPOINT;
 		mavMsg.param1 = (float) getDelay();
 		mavMsg.param2 = (float) getAcceptanceRadius();
-		mavMsg.param3 = (float) (isOrbitCCW()?getOrbitalRadius()*-1.0:getOrbitalRadius());
+		mavMsg.param3 = (float) (isOrbitCCW() ? getOrbitalRadius() * -1.0
+				: getOrbitalRadius());
 		mavMsg.param4 = (float) getYawAngle();
 		return list;
 	}
@@ -47,7 +48,7 @@ public class Waypoint extends SpatialCoordItem {
 		super.unpackMAVMessage(mavMsg);
 		setDelay(mavMsg.param1);
 		setAcceptanceRadius(mavMsg.param2);
-		setOrbitCCW(mavMsg.param3<0);
+		setOrbitCCW(mavMsg.param3 < 0);
 		setOrbitalRadius(Math.abs(mavMsg.param3));
 		setYawAngle(mavMsg.param4);
 	}

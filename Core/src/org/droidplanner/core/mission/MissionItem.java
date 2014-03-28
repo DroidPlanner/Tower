@@ -6,7 +6,7 @@ import java.util.List;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_FRAME;
 
-public abstract class MissionItem implements Comparable<MissionItem>{
+public abstract class MissionItem implements Comparable<MissionItem> {
 
 	protected Mission mission;
 
@@ -17,13 +17,14 @@ public abstract class MissionItem implements Comparable<MissionItem>{
 	public MissionItem(MissionItem item) {
 		this(item.mission);
 	}
+
 	/**
 	 * Return a new list (one or more) of MAVLinkMessage msg_mission_item that
 	 * represent this MissionItem
 	 * 
 	 * @return
 	 */
-	public List<msg_mission_item> packMissionItem(){
+	public List<msg_mission_item> packMissionItem() {
 		List<msg_mission_item> list = new ArrayList<msg_mission_item>();
 		msg_mission_item mavMsg = new msg_mission_item();
 		list.add(mavMsg);
@@ -36,6 +37,7 @@ public abstract class MissionItem implements Comparable<MissionItem>{
 
 	/**
 	 * Gets data from MAVLinkMessage msg_mission_item for this MissionItem
+	 * 
 	 * @return
 	 */
 	public abstract void unpackMAVMessage(msg_mission_item mavMsg);

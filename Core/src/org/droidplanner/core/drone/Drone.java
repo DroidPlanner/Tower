@@ -1,6 +1,5 @@
 package org.droidplanner.core.drone;
 
-
 import org.droidplanner.core.MAVLink.MAVLinkStreams.MAVLinkOutputStream;
 import org.droidplanner.core.MAVLink.WaypointManager;
 import org.droidplanner.core.drone.DroneInterfaces.Clock;
@@ -25,7 +24,6 @@ import org.droidplanner.core.drone.variables.State;
 import org.droidplanner.core.drone.variables.StreamRates;
 import org.droidplanner.core.drone.variables.Type;
 import org.droidplanner.core.mission.Mission;
-
 
 public class Drone {
 	public DroneEvents events = new DroneEvents(this);
@@ -53,11 +51,12 @@ public class Drone {
 	public MAVLinkOutputStream MavClient;
 	public Preferences preferences;
 
-	public Drone(MAVLinkOutputStream mavClient, Clock clock, Handler handler, Preferences pref) {
+	public Drone(MAVLinkOutputStream mavClient, Clock clock, Handler handler,
+			Preferences pref) {
 		this.MavClient = mavClient;
 		this.preferences = pref;
-		state = new State(this,clock);
-		heartbeat = new HeartBeat(this,handler);
+		state = new State(this, clock);
+		heartbeat = new HeartBeat(this, handler);
 		profile.load();
 	}
 

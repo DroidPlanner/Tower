@@ -6,7 +6,6 @@ import java.util.List;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 
-
 public class DroneEvents extends DroneVariable {
 
 	public DroneEvents(Drone myDrone) {
@@ -28,7 +27,7 @@ public class DroneEvents extends DroneVariable {
 	public void notifyDroneEvent(DroneEventsType event) {
 		if (droneListeners.size() > 0) {
 			for (OnDroneListener listener : droneListeners) {
-				listener.onDroneEvent(event,myDrone);
+				listener.onDroneEvent(event, myDrone);
 			}
 		}
 	}

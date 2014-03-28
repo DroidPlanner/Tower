@@ -38,7 +38,5 @@ public class RC extends DroneVariable {
 		out[7] = msg.servo8_raw;
 		myDrone.events.notifyDroneEvent(DroneEventsType.RC_OUT);
 	}
-	
-	
 
 }

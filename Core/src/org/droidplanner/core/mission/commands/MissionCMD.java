@@ -7,8 +7,8 @@ import org.droidplanner.core.mission.MissionItem;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 
-public abstract class MissionCMD extends MissionItem{
-	
+public abstract class MissionCMD extends MissionItem {
+
 	public MissionCMD(Mission mission) {
 		super(mission);
 	}
@@ -21,5 +21,5 @@ public abstract class MissionCMD extends MissionItem{
 	public List<msg_mission_item> packMissionItem() {
 		return super.packMissionItem();
 	}
-	
+
 }

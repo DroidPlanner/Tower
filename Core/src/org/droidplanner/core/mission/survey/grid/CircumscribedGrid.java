@@ -14,7 +14,7 @@ public class CircumscribedGrid {
 	private Coord2D gridLowerLeft;
 	private double extrapolatedDiag;
 	private Double angle;
-	
+
 	public CircumscribedGrid(List<Coord2D> polygonPoints, Double angle,
 			Double lineDist) throws Exception {
 		this.angle = angle;
@@ -23,7 +23,7 @@ public class CircumscribedGrid {
 		drawGrid(lineDist);
 	}
 
-	private void drawGrid(Double lineDist) throws GridWithTooManyLines  {
+	private void drawGrid(Double lineDist) throws GridWithTooManyLines {
 		int lines = 0;
 		Coord2D startPoint = gridLowerLeft;
 		while (lines * lineDist < extrapolatedDiag) {
@@ -36,8 +36,8 @@ public class CircumscribedGrid {
 			startPoint = GeoTools.newCoordFromBearingAndDistance(startPoint,
 					angle + 90, lineDist);
 			lines++;
-			if (lines>MAX_NUMBER_OF_LINES) {
-				throw new GridWithTooManyLines();				
+			if (lines > MAX_NUMBER_OF_LINES) {
+				throw new GridWithTooManyLines();
 			}
 		}
 	}
@@ -55,7 +55,7 @@ public class CircumscribedGrid {
 	}
 
 	public class GridWithTooManyLines extends Exception {
-		private static final long serialVersionUID = 1L;	
+		private static final long serialVersionUID = 1L;
 	}
 
 }

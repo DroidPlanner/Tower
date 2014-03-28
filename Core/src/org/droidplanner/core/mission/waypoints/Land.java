@@ -16,14 +16,13 @@ public class Land extends SpatialCoordItem {
 	}
 
 	public Land(Mission mission) {
-		super(mission, new Coord3D(0,0,0));
+		super(mission, new Coord3D(0, 0, 0));
 	}
-	
+
 	public Land(msg_mission_item msg, Mission mission) {
 		super(mission, null);
 		unpackMAVMessage(msg);
 	}
-	
 
 	@Override
 	public List<msg_mission_item> packMissionItem() {

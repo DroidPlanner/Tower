@@ -50,7 +50,8 @@ public class Loiter extends SpatialCoordItem {
 	public List<msg_mission_item> packMissionItem() {
 		List<msg_mission_item> list = super.packMissionItem();
 		msg_mission_item mavMsg = list.get(0);
-		mavMsg.param3 = (float) (isOrbitCCW()?getOrbitalRadius()*-1.0:getOrbitalRadius());
+		mavMsg.param3 = (float) (isOrbitCCW() ? getOrbitalRadius() * -1.0
+				: getOrbitalRadius());
 		mavMsg.param4 = (float) getYawAngle();
 		return list;
 	}
@@ -58,7 +59,7 @@ public class Loiter extends SpatialCoordItem {
 	@Override
 	public void unpackMAVMessage(msg_mission_item mavMsg) {
 		super.unpackMAVMessage(mavMsg);
-		setOrbitCCW(mavMsg.param3<0);
+		setOrbitCCW(mavMsg.param3 < 0);
 		setOrbitalRadius(Math.abs(mavMsg.param3));
 	}
 

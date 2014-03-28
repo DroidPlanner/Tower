@@ -7,13 +7,15 @@ import com.MAVLink.Messages.ardupilotmega.msg_param_value;
 
 public class Parameter implements Serializable {
 
-    public String name;
+	public String name;
 	public double value;
 	public int type;
 
-    private final static DecimalFormat format = (DecimalFormat) DecimalFormat.getInstance();
-    static { format.applyPattern("0.###"); }
-
+	private final static DecimalFormat format = (DecimalFormat) DecimalFormat
+			.getInstance();
+	static {
+		format.applyPattern("0.###");
+	}
 
 	public Parameter(String name, double value, int type) {
 		this.name = name;
@@ -65,7 +67,7 @@ public class Parameter implements Serializable {
 		}
 	}
 
-    public static DecimalFormat getFormat() {
-        return format;
-    }
+	public static DecimalFormat getFormat() {
+		return format;
+	}
 }

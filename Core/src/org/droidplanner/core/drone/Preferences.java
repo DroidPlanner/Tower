@@ -3,7 +3,6 @@ package org.droidplanner.core.drone;
 import org.droidplanner.core.drone.profiles.VehicleProfile;
 import org.droidplanner.core.drone.variables.Type.FirmwareType;
 
-
 public interface Preferences {
 
 	public abstract FirmwareType getVehicleType();
