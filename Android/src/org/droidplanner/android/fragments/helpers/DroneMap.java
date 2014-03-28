@@ -27,8 +27,6 @@ public abstract class DroneMap extends OfflineMapFragment implements OnDroneList
 	protected Context context;
 	public GoogleMap mMap;
 	
-	protected abstract boolean isMissionDraggable();
-
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
 			Bundle bundle) {
