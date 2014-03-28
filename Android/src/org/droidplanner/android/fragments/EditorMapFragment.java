@@ -92,18 +92,6 @@ public class EditorMapFragment extends DroneMap implements
 		}
 	}
 
-	/*
-	private void updateInfoWindow(GenericWaypoint waypoint, Marker marker) {
-		marker.setTitle(waypoint.getNumber() + " " + waypoint.getCmd().getName());
-
-		// display distance from last waypoint if available
-		double distanceFromPrevPathPoint = waypoint.getDistanceFromPrevPoint();
-		if(distanceFromPrevPathPoint != org.droidplanner.core.drone.variables.mission.waypoints.GenericWaypoint.UNKNOWN_DISTANCE)
-			marker.setSnippet(String.format("%.0fm", distanceFromPrevPathPoint));
-
-		marker.showInfoWindow();
-	}
-	*/
 
 	@Override
 	public void onMarkerDragEnd(Marker marker) {
