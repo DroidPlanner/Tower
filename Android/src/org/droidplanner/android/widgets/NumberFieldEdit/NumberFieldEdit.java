@@ -1,6 +1,5 @@
 package org.droidplanner.android.widgets.NumberFieldEdit;
 
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Handler;
@@ -16,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.droidplanner.R;
-
 
 public class NumberFieldEdit extends LinearLayout implements OnTouchListener {
 
@@ -48,111 +46,114 @@ public class NumberFieldEdit extends LinearLayout implements OnTouchListener {
 		this(context, attrs, 0);
 	}
 
-    public NumberFieldEdit(Context context, AttributeSet attrs, int defStyle){
-        super(context, attrs, defStyle);
-        createViews(context, attrs, defStyle);
-    }
+	public NumberFieldEdit(Context context, AttributeSet attrs, int defStyle) {
+		super(context, attrs, defStyle);
+		createViews(context, attrs, defStyle);
+	}
 
 	private void setFormat(String string) {
 		if (string != null) {
 			formatString = string;
-            invalidate();
+			invalidate();
 		}
 	}
 
-    private void createViews(Context context, AttributeSet attrs, int defStyle) {
-        TypedArray a = context.obtainStyledAttributes(attrs,
-                R.styleable.NumberFieldEdit, defStyle, 0);
+	private void createViews(Context context, AttributeSet attrs, int defStyle) {
+		TypedArray a = context.obtainStyledAttributes(attrs,
+				R.styleable.NumberFieldEdit, defStyle, 0);
 
-        try {
+		try {
 
-            setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-                    LayoutParams.WRAP_CONTENT));
-            setOrientation(HORIZONTAL);
+			setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+					LayoutParams.WRAP_CONTENT));
+			setOrientation(HORIZONTAL);
 
-            titleText = new TextView(context);
-            separatorText = new TextView(context);
-            editText = new EditText(context);
-            buttonPlus = new ImageButton(context);
-            buttonMinus = new ImageButton(context);
-            buttonLayout = new LinearLayout(context);
+			titleText = new TextView(context);
+			separatorText = new TextView(context);
+			editText = new EditText(context);
+			buttonPlus = new ImageButton(context);
+			buttonMinus = new ImageButton(context);
+			buttonLayout = new LinearLayout(context);
 
-            titleText.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
-            separatorText.setGravity(Gravity.CENTER_HORIZONTAL
-                    | Gravity.CENTER_VERTICAL);
-            editText.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
+			titleText.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
+			separatorText.setGravity(Gravity.CENTER_HORIZONTAL
+					| Gravity.CENTER_VERTICAL);
+			editText.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
 
-            final float textSize = a.getDimension(R.styleable.NumberFieldEdit_android_textSize,
-                    16f);
-            titleText.setTextSize(textSize);
-            separatorText.setTextSize(textSize);
-            editText.setTextSize(textSize);
+			final float textSize = a.getDimension(
+					R.styleable.NumberFieldEdit_android_textSize, 16f);
+			titleText.setTextSize(textSize);
+			separatorText.setTextSize(textSize);
+			editText.setTextSize(textSize);
 
-            separatorText.setLayoutParams(new LayoutParams(
-                    LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT));
-            titleText.setLayoutParams(new LayoutParams(0,
-                    LayoutParams.MATCH_PARENT, 5));
-            editText.setLayoutParams(new LayoutParams(0, LayoutParams.MATCH_PARENT,
-                    5));
-            buttonLayout.setLayoutParams(new LayoutParams(
-                    LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+			separatorText.setLayoutParams(new LayoutParams(
+					LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT));
+			titleText.setLayoutParams(new LayoutParams(0,
+					LayoutParams.MATCH_PARENT, 5));
+			editText.setLayoutParams(new LayoutParams(0,
+					LayoutParams.MATCH_PARENT, 5));
+			buttonLayout.setLayoutParams(new LayoutParams(
+					LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 
-            buttonLayout.setFocusable(true);
-            buttonLayout.setFocusableInTouchMode(true);
+			buttonLayout.setFocusable(true);
+			buttonLayout.setFocusableInTouchMode(true);
 
-            editText.setInputType(InputType.TYPE_CLASS_NUMBER
-                    | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-            editText.clearFocus();
+			editText.setInputType(InputType.TYPE_CLASS_NUMBER
+					| InputType.TYPE_NUMBER_FLAG_DECIMAL);
+			editText.clearFocus();
 
-            final float buttonWidth = a.getDimension(R.styleable.NumberFieldEdit_buttonWidth,
-                    LayoutParams.WRAP_CONTENT);
-            final float buttonHeight = a.getDimension(R.styleable.NumberFieldEdit_buttonHeight,
-                    LayoutParams.WRAP_CONTENT);
-            LayoutParams p = new LayoutParams((int)buttonWidth, (int)buttonHeight);
-            p.setMargins(5, 0, 0, 0);
+			final float buttonWidth = a.getDimension(
+					R.styleable.NumberFieldEdit_buttonWidth,
+					LayoutParams.WRAP_CONTENT);
+			final float buttonHeight = a.getDimension(
+					R.styleable.NumberFieldEdit_buttonHeight,
+					LayoutParams.WRAP_CONTENT);
+			LayoutParams p = new LayoutParams((int) buttonWidth,
+					(int) buttonHeight);
+			p.setMargins(5, 0, 0, 0);
 
-            buttonPlus.setBackgroundResource(R.drawable.button_mode_options);
-            buttonPlus.setImageResource(R.drawable.ic_plus);
-            buttonPlus.setLayoutParams(p);
+			buttonPlus.setBackgroundResource(R.drawable.button_mode_options);
+			buttonPlus.setImageResource(R.drawable.ic_plus);
+			buttonPlus.setLayoutParams(p);
 
-            buttonMinus.setBackgroundResource(R.drawable.button_mode_options);
-            buttonMinus.setImageResource(R.drawable.ic_minus);
-            buttonMinus.setLayoutParams(p);
+			buttonMinus.setBackgroundResource(R.drawable.button_mode_options);
+			buttonMinus.setImageResource(R.drawable.ic_minus);
+			buttonMinus.setLayoutParams(p);
 
-            buttonPlus.setOnTouchListener(this);
-            buttonMinus.setOnTouchListener(this);
+			buttonPlus.setOnTouchListener(this);
+			buttonMinus.setOnTouchListener(this);
 
-            buttonLayout.addView(buttonPlus);
-            buttonLayout.addView(buttonMinus);
+			buttonLayout.addView(buttonPlus);
+			buttonLayout.addView(buttonMinus);
 
-            addView(titleText);
-            addView(separatorText);
-            addView(editText);
-            addView(buttonLayout);
+			addView(titleText);
+			addView(separatorText);
+			addView(editText);
+			addView(buttonLayout);
 
-            editText.clearFocus();
-            buttonLayout.requestFocus();
+			editText.clearFocus();
+			buttonLayout.requestFocus();
 
-            setTitle(a.getString(R.styleable.NumberFieldEdit_Title));
-            setUnit(a.getString(R.styleable.NumberFieldEdit_Unit));
-            setMinMaxInc(a.getFloat(R.styleable.NumberFieldEdit_Min, 0),
-                    a.getFloat(R.styleable.NumberFieldEdit_Max, 100),
-                    a.getFloat(R.styleable.NumberFieldEdit_Inc, 1),
-                    a.getFloat(R.styleable.NumberFieldEdit_FastInc, 2));
-            setFormat(a.getString(R.styleable.NumberFieldEdit_Format));
-            setSeparator(a.getString(R.styleable.NumberFieldEdit_Separator));
-            setValue(this.value);
-        } finally {
-            a.recycle();
-        }
-    }
+			setTitle(a.getString(R.styleable.NumberFieldEdit_Title));
+			setUnit(a.getString(R.styleable.NumberFieldEdit_Unit));
+			setMinMaxInc(a.getFloat(R.styleable.NumberFieldEdit_Min, 0),
+					a.getFloat(R.styleable.NumberFieldEdit_Max, 100),
+					a.getFloat(R.styleable.NumberFieldEdit_Inc, 1),
+					a.getFloat(R.styleable.NumberFieldEdit_FastInc, 2));
+			setFormat(a.getString(R.styleable.NumberFieldEdit_Format));
+			setSeparator(a.getString(R.styleable.NumberFieldEdit_Separator));
+			setValue(this.value);
+		} finally {
+			a.recycle();
+		}
+	}
 
 	public void setMinMaxInc(double min, double max, double inc, float fastinc) {
 		this.min = min;
 		this.inc = inc;
 		this.max = max;
 		this.fastInc = fastinc;
-        invalidate();
+		invalidate();
 	}
 
 	public void setUnit(String unit) {
@@ -216,7 +217,7 @@ public class NumberFieldEdit extends LinearLayout implements OnTouchListener {
 	}
 
 	private void updateValue() {
-		double incVal = fastCount?fastInc:inc;
+		double incVal = fastCount ? fastInc : inc;
 		if (countUp)
 			setValue(this.value + incVal);
 		else

@@ -23,7 +23,7 @@ public class CamerasAdapter extends ArrayAdapter<String> {
 		loader = new CameraInfoLoader(context);
 		addAll(loader.getCameraInfoList());
 	}
-	
+
 	public void setTitle(String title) {
 		this.title = title;
 	}
@@ -42,13 +42,13 @@ public class CamerasAdapter extends ArrayAdapter<String> {
 			Toast.makeText(context,
 					context.getString(R.string.error_when_opening_file),
 					Toast.LENGTH_SHORT).show();
-			return loadLastFile(); 
+			return loadLastFile();
 		}
 	}
 
 	private CameraInfo loadLastFile() {
 		try {
-			return loader.openFile(getItem(this.getCount()-1));
+			return loader.openFile(getItem(this.getCount() - 1));
 		} catch (Exception e) {
 			throw new RuntimeException("DP was not able to load a camera");
 		}

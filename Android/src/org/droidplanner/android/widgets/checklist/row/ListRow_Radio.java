@@ -14,7 +14,7 @@ import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
 public class ListRow_Radio extends ListRow implements OnCheckedChangeListener {
-	
+
 	public ListRow_Radio(LayoutInflater inflater, CheckListItem checkListItem) {
 		super(inflater, checkListItem);
 	}
@@ -31,7 +31,7 @@ public class ListRow_Radio extends ListRow implements OnCheckedChangeListener {
 			view = convertView;
 			holder = (ViewHolder) convertView.getTag();
 		}
-		updateDisplay(view, (ViewHolder)holder, checkListItem);
+		updateDisplay(view, (ViewHolder) holder, checkListItem);
 		return view;
 	}
 
@@ -39,7 +39,7 @@ public class ListRow_Radio extends ListRow implements OnCheckedChangeListener {
 			CheckListItem mListItem) {
 
 		holder.radioGroupView.setOnCheckedChangeListener(this);
-		
+
 		getData(mListItem);
 		updateCheckBox(checkListItem.isVerified());
 
@@ -53,7 +53,7 @@ public class ListRow_Radio extends ListRow implements OnCheckedChangeListener {
 		private RadioGroup radioGroupView;
 
 		public ViewHolder(ViewGroup viewGroup, CheckListItem checkListItem) {
-			super(viewGroup,checkListItem);
+			super(viewGroup, checkListItem);
 		}
 
 		@Override
@@ -81,7 +81,7 @@ public class ListRow_Radio extends ListRow implements OnCheckedChangeListener {
 	@Override
 	public void onCheckedChanged(RadioGroup arg0, int arg1) {
 		checkListItem.setSelectedIndex(arg1);
-		updateRowChanged((View)arg0,this.checkListItem);
+		updateRowChanged((View) arg0, this.checkListItem);
 
 	}
 }

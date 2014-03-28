@@ -4,7 +4,6 @@ import org.droidplanner.android.utils.file.IO.ExceptionWriter;
 
 import android.app.Application;
 
-
 public class ErrorReportApp extends Application {
 	private Thread.UncaughtExceptionHandler exceptionHandler;
 

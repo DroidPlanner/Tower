@@ -31,7 +31,7 @@ public class UdpConnection extends MAVLinkConnection {
 	protected void readDataBlock() throws IOException {
 		DatagramPacket packet = new DatagramPacket(readData, readData.length);
 		socket.receive(packet);
-		hostAdd=packet.getAddress();
+		hostAdd = packet.getAddress();
 		hostPort = packet.getPort();
 		iavailable = packet.getLength();
 	}
@@ -40,24 +40,23 @@ public class UdpConnection extends MAVLinkConnection {
 	protected void sendBuffer(byte[] buffer) throws IOException {
 		new UdpSender().execute(buffer);
 	}
-	
+
 	private class UdpSender extends AsyncTask<byte[], Integer, Integer> {
 
 		@Override
 		protected Integer doInBackground(byte[]... params) {
-			try{			
+			try {
 				byte[] buffer = params[0];
-				DatagramPacket packet = new DatagramPacket(buffer, buffer.length,
-						hostAdd, hostPort);
+				DatagramPacket packet = new DatagramPacket(buffer,
+						buffer.length, hostAdd, hostPort);
 				socket.send(packet);
-				
-			}catch (Exception e){
-				e.printStackTrace();				
+
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			return null;			
+			return null;
 		}
 	}
-	
 
 	@Override
 	protected void closeConnection() throws IOException {
@@ -67,7 +66,7 @@ public class UdpConnection extends MAVLinkConnection {
 	@Override
 	protected void getPreferences(SharedPreferences prefs) {
 		serverPort = Integer.parseInt(prefs.getString("pref_udp_server_port",
-		"14550"));
+				"14550"));
 	}
 
 	private void getUdpStream() throws UnknownHostException, IOException {

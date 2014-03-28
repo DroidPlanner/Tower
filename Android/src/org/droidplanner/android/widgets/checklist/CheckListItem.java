@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.droidplanner.android.widgets.checklist.xml.ListXmlData;
 
-
 public class CheckListItem extends ListXmlData {
 	private int categoryIndex;
 	private String title;
@@ -47,7 +46,7 @@ public class CheckListItem extends ListXmlData {
 		if (title == null)
 			return "No Title";
 		if (isMandatory())
-			return "* " +title;
+			return "* " + title;
 		else
 			return title;
 	}
@@ -224,7 +223,7 @@ public class CheckListItem extends ListXmlData {
 
 	public void setSys_value(double d) {
 		this.sys_value = d;
-		
+
 		try {
 			this.value = String.valueOf(this.sys_value);
 		} catch (Exception e) {

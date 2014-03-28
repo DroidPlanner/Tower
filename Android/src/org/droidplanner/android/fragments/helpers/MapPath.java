@@ -23,27 +23,25 @@ public class MapPath {
 	private float width;
 	private int color;
 
-
 	public MapPath(GoogleMap mMap, Resources resources) {
 		this(mMap, DEFAULT_COLOR, resources);
 	}
-	
+
 	public MapPath(GoogleMap mMap, int color, Resources resources) {
 		this(mMap, color, DEFAULT_WITDH, resources);
 	}
-	
+
 	private MapPath(GoogleMap mMap, int color, float width, Resources resources) {
 		this.mMap = mMap;
 		this.color = color;
 		this.width = scaleDpToPixels(width, resources);
-	}	
+	}
 
 	private int scaleDpToPixels(double value, Resources res) {
 		final float scale = res.getDisplayMetrics().density;
-		return (int) Math.round(value*scale);
+		return (int) Math.round(value * scale);
 	}
 
-	
 	public void update(PathSource pathSource) {
 		addToMapIfNeeded();
 		List<LatLng> newPath = pathSource.getPathPoints();

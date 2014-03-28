@@ -28,10 +28,11 @@ import com.MAVLink.Messages.MAVLinkPacket;
 
 /**
  * http://developer.android.com/guide/components/bound-services.html#Messenger
- *
+ * 
  */
 
-public class MAVLinkService extends Service implements MavLinkConnectionListener {
+public class MAVLinkService extends Service implements
+		MavLinkConnectionListener {
 	public static final int MSG_REGISTER_CLIENT = 1;
 	public static final int MSG_UNREGISTER_CLIENT = 2;
 	public static final int MSG_SEND_DATA = 3;
@@ -42,10 +43,10 @@ public class MAVLinkService extends Service implements MavLinkConnectionListener
 	private boolean couldNotOpenConnection = false;
 
 	/**
-	 *
+	 * 
 	 * Handler for Communication Errors Messages used in onComError() to display
 	 * Toast msg.
-	 *
+	 * 
 	 * */
 
 	private String commErrMsgLocalStore;
@@ -144,19 +145,20 @@ public class MAVLinkService extends Service implements MavLinkConnectionListener
 
 		connectMAVconnection();
 
-        final StatusBarNotificationProvider statusBarNotification = ((DroidPlannerApp)
-                getApplication()).mNotificationHandler.getStatusBarNotificationProvider();
+		final StatusBarNotificationProvider statusBarNotification = ((DroidPlannerApp) getApplication()).mNotificationHandler
+				.getStatusBarNotificationProvider();
 
 		statusBarNotification.showNotification();
-		statusBarNotification.updateNotification(getResources().getString(R.string.connected));
+		statusBarNotification.updateNotification(getResources().getString(
+				R.string.connected));
 	}
 
 	@Override
 	public void onDestroy() {
 		disconnectMAVConnection();
 
-        final StatusBarNotificationProvider statusBarNotification = ((DroidPlannerApp)
-                getApplication()).mNotificationHandler.getStatusBarNotificationProvider();
+		final StatusBarNotificationProvider statusBarNotification = ((DroidPlannerApp) getApplication()).mNotificationHandler
+				.getStatusBarNotificationProvider();
 		statusBarNotification.dismissNotification();
 
 		super.onDestroy();
@@ -172,7 +174,7 @@ public class MAVLinkService extends Service implements MavLinkConnectionListener
 		resBundle.putString("status", "SUCCESS");
 		errMessageObj.obj = resBundle;
 
-		commErrMsgLocalStore = commErrMsgLocalStore +" "+ errMsg;
+		commErrMsgLocalStore = commErrMsgLocalStore + " " + errMsg;
 		commErrHandler.sendMessage(errMessageObj);
 
 		Log.d(CONNECTIVITY_SERVICE, commErrMsgLocalStore);
@@ -183,12 +185,14 @@ public class MAVLinkService extends Service implements MavLinkConnectionListener
 	 * the as needed. May throw a onConnect or onDisconnect callback
 	 */
 	private void connectMAVconnection() {
-		String connectionType = PreferenceManager
-                .getDefaultSharedPreferences(getApplicationContext())
-                .getString(Constants.PREF_CONNECTION_TYPE, Constants.DEFAULT_CONNECTION_TYPE);
+		String connectionType = PreferenceManager.getDefaultSharedPreferences(
+				getApplicationContext()).getString(
+				Constants.PREF_CONNECTION_TYPE,
+				Constants.DEFAULT_CONNECTION_TYPE);
 
-        Utils.ConnectionType connType = Utils.ConnectionType.valueOf(connectionType);
-        mavConnection = connType.getConnection(this);
+		Utils.ConnectionType connType = Utils.ConnectionType
+				.valueOf(connectionType);
+		mavConnection = connType.getConnection(this);
 		mavConnection.start();
 	}
 

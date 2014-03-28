@@ -12,17 +12,20 @@ import android.os.Bundle;
  */
 public class SettingsActivity extends DrawerNavigationUI {
 
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_settings);
 
-        FragmentManager fm = getFragmentManager();
-        Fragment settingsFragment = fm.findFragmentById(R.id.fragment_settings_layout);
-        if(settingsFragment == null){
-            settingsFragment = new SettingsFragment();
-            fm.beginTransaction().add(R.id.fragment_settings_layout, settingsFragment).commit();
-        }
-    }
+		FragmentManager fm = getFragmentManager();
+		Fragment settingsFragment = fm
+				.findFragmentById(R.id.fragment_settings_layout);
+		if (settingsFragment == null) {
+			settingsFragment = new SettingsFragment();
+			fm.beginTransaction()
+					.add(R.id.fragment_settings_layout, settingsFragment)
+					.commit();
+		}
+	}
 
 	@Override
 	public CharSequence[][] getHelpItems() {

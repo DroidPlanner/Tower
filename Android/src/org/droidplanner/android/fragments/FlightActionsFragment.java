@@ -15,7 +15,7 @@ import android.widget.Button;
 
 import com.MAVLink.Messages.ApmModes;
 
-public class FlightActionsFragment extends Fragment implements	OnClickListener {
+public class FlightActionsFragment extends Fragment implements OnClickListener {
 
 	public interface OnMissionControlInteraction {
 		public void onJoystickSelected();

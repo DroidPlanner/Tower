@@ -23,8 +23,9 @@ import android.widget.TextView;
 public abstract class MissionDetailFragment extends DialogFragment implements
 		OnItemSelectedListener {
 
-	public interface OnWayPointTypeChangeListener{
-		public void onWaypointTypeChanged(MissionItem newItem, MissionItem oldItem);
+	public interface OnWayPointTypeChangeListener {
+		public void onWaypointTypeChanged(MissionItem newItem,
+				MissionItem oldItem);
 	}
 
 	protected abstract int getResource();
@@ -36,23 +37,22 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 
 	protected MissionItem item;
 
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
 
-    public void onActivityCreated(Bundle savedInstanceState){
-        super.onActivityCreated(savedInstanceState);
+		final EditorActivity parentActivity = (EditorActivity) getActivity();
+		if (parentActivity.itemDetail.getItemDetailFragment(parentActivity) != this) {
+			dismiss();
+			parentActivity.itemDetail.switchItemDetail(item);
+		}
+	}
 
-        final EditorActivity parentActivity = (EditorActivity) getActivity();
-        if(parentActivity.itemDetail.getItemDetailFragment(parentActivity) != this){
-            dismiss();
-            parentActivity.itemDetail.switchItemDetail(item);
-        }
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);
-        setStyle(DialogFragment.STYLE_NO_TITLE, 0);
-        setRetainInstance(true);
-    }
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+		setRetainInstance(true);
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,23 +69,27 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 				android.R.layout.simple_list_item_1, MissionItemTypes.values());
 		typeSpinner.setAdapter(commandAdapter);
 		typeSpinner.setOnItemSelectedListener(this);
-		final TextView waypointIndex = (TextView) view.findViewById(R.id.WaypointIndex);
+		final TextView waypointIndex = (TextView) view
+				.findViewById(R.id.WaypointIndex);
 		Integer temp = mission.getNumber(item);
-		waypointIndex.setText( temp.toString());
+		waypointIndex.setText(temp.toString());
 
-		final TextView distanceView = (TextView) view.findViewById(R.id.DistanceValue);
+		final TextView distanceView = (TextView) view
+				.findViewById(R.id.DistanceValue);
 
-		final TextView distanceLabelView = (TextView) view.findViewById(R.id.DistanceLabel);
+		final TextView distanceLabelView = (TextView) view
+				.findViewById(R.id.DistanceLabel);
 
-		try{
+		try {
 			distanceLabelView.setVisibility(View.VISIBLE);
-			distanceView.setText(mission.getDistanceFromLastWaypoint((SpatialCoordItem) item).toString());
-		}catch(NullPointerException e){
+			distanceView.setText(mission.getDistanceFromLastWaypoint(
+					(SpatialCoordItem) item).toString());
+		} catch (NullPointerException e) {
 			// Can fail if distanceView doesn't exists
-		}catch (Exception e){
-			//Or if the last item doesn't have a coordinate
-			//distanceView.setText("");
-			//distanceLabelView.setVisibility(View.INVISIBLE);
+		} catch (Exception e) {
+			// Or if the last item doesn't have a coordinate
+			// distanceView.setText("");
+			// distanceLabelView.setVisibility(View.INVISIBLE);
 		}
 	}
 

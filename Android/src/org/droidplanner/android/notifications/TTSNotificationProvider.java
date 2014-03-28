@@ -20,7 +20,8 @@ import com.MAVLink.Messages.ApmModes;
 /**
  * Implements DroidPlanner audible notifications.
  */
-public class TTSNotificationProvider implements OnInitListener, NotificationHandler.NotificationProvider {
+public class TTSNotificationProvider implements OnInitListener,
+		NotificationHandler.NotificationProvider {
 	private static final double BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT = 10;
 
 	TextToSpeech tts;
@@ -52,7 +53,6 @@ public class TTSNotificationProvider implements OnInitListener, NotificationHand
 		return prefs.getBoolean("pref_enable_tts", false);
 	}
 
-
 	/**
 	 * Warn the user if needed via the TTSNotificationProvider module
 	 */
@@ -60,8 +60,8 @@ public class TTSNotificationProvider implements OnInitListener, NotificationHand
 		if (tts != null) {
 			switch (event) {
 			case INVALID_POLYGON:
-				Toast.makeText(context, R.string.exception_draw_polygon, Toast.LENGTH_SHORT)
-				.show();
+				Toast.makeText(context, R.string.exception_draw_polygon,
+						Toast.LENGTH_SHORT).show();
 				break;
 			case ARMING:
 				speakArmedState(drone.state.isArmed());
@@ -70,15 +70,14 @@ public class TTSNotificationProvider implements OnInitListener, NotificationHand
 				speak("Arming the vehicle, please standby");
 				break;
 			case BATTERY:
-				batteryDischargeNotification(drone.battery
-						.getBattRemain());
+				batteryDischargeNotification(drone.battery.getBattRemain());
 				break;
 			case MODE:
 				speakMode(drone.state.getMode());
 				break;
 			case MISSION_SENT:
 				Toast.makeText(context, "Waypoints sent", Toast.LENGTH_SHORT)
-				.show();
+						.show();
 				speak("Waypoints saved to Drone");
 				break;
 			case GPS_FIX:

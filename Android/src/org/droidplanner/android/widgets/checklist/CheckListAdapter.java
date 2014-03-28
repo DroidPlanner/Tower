@@ -36,8 +36,7 @@ public class CheckListAdapter extends ListXmlAdapter implements
 
 	private OnCheckListItemUpdateListener listener;
 
-	public CheckListAdapter(LayoutInflater inflater,
-			List<String> listHeader,
+	public CheckListAdapter(LayoutInflater inflater, List<String> listHeader,
 			HashMap<String, List<CheckListItem>> listDataChild) {
 		super(inflater, listHeader);
 

@@ -12,10 +12,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class FragmentSetupSend extends SetupSidePanel {
-	
-	private int titleId=0,descId=0;
-	private TextView textTitle,textDesc;;
-	
+
+	private int titleId = 0, descId = 0;
+	private TextView textTitle, textDesc;;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -25,16 +25,16 @@ public class FragmentSetupSend extends SetupSidePanel {
 		final View view = inflater.inflate(R.layout.fragment_setup_panel_send,
 				container, false);
 
-		textTitle = (TextView)view.findViewById(R.id.setupTitle);
-		textDesc = (TextView)view.findViewById(R.id.setupDesc);
-		
-		if(titleId!=0 && textTitle != null)
+		textTitle = (TextView) view.findViewById(R.id.setupTitle);
+		textDesc = (TextView) view.findViewById(R.id.setupDesc);
+
+		if (titleId != 0 && textTitle != null)
 			textTitle.setText(titleId);
-		
-		if(descId!=0)
+
+		if (descId != 0)
 			textDesc.setText(descId);
-		
-		final Button btnSend = (Button) view.findViewById(R.id.buttonSend);		
+
+		final Button btnSend = (Button) view.findViewById(R.id.buttonSend);
 		btnSend.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -59,17 +59,17 @@ public class FragmentSetupSend extends SetupSidePanel {
 	@Override
 	public void updateDescription(int idDescription) {
 		this.descId = idDescription;
-		
-		if(textDesc!=null)
+
+		if (textDesc != null)
 			textDesc.setText(descId);
-				
+
 	}
 
 	@Override
 	public void updateTitle(int idTitle) {
 		this.titleId = idTitle;
-		
-		if(textTitle!=null)
+
+		if (textTitle != null)
 			textTitle.setText(titleId);
 	}
 }

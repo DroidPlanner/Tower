@@ -46,7 +46,7 @@ public class GestureMapFragment extends Fragment implements OnGestureListener {
 
 	private int scaleDpToPixels(double value) {
 		final float scale = getResources().getDisplayMetrics().density;
-		return (int) Math.round(value*scale);
+		return (int) Math.round(value * scale);
 	}
 
 	public void enableGestureDetection() {
@@ -95,6 +95,5 @@ public class GestureMapFragment extends Fragment implements OnGestureListener {
 	@Override
 	public void onGestureStarted(GestureOverlayView arg0, MotionEvent arg1) {
 	}
-
 
 }

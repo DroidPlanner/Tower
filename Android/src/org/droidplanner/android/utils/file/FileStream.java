@@ -19,11 +19,11 @@ public class FileStream {
 		return out;
 	}
 
-	public static FileOutputStream getExceptionFileStream() throws FileNotFoundException {
+	public static FileOutputStream getExceptionFileStream()
+			throws FileNotFoundException {
 		File myDir = new File(DirectoryPath.getLogCatPath());
 		myDir.mkdirs();
-		File file = new File(myDir, FileManager.getTimeStamp()
-				+ ".txt");
+		File file = new File(myDir, FileManager.getTimeStamp() + ".txt");
 		if (file.exists())
 			file.delete();
 		FileOutputStream out = new FileOutputStream(file);
@@ -58,19 +58,19 @@ public class FileStream {
 				new FileOutputStream(file));
 		return out;
 	}
-	
+
 	/**
 	 * Creates a new .nomedia file on the maps folder
 	 * 
 	 * It's used to hide the maps tiles from android gallery
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 * 
 	 */
-	static public void createNoMediaFile()
-			throws IOException {
+	static public void createNoMediaFile() throws IOException {
 		File myDir = new File(DirectoryPath.getMapsPath());
 		myDir.mkdirs();
-		new File(myDir,".nomedia").createNewFile();
+		new File(myDir, ".nomedia").createNewFile();
 	}
 
 }

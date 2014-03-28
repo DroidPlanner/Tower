@@ -25,23 +25,23 @@ public class GraphicDrone implements OnDroneListener {
 	}
 
 	public void updatePosition(float yaw, Coord2D coord2d) {
-			droneMarker.setPosition(DroneHelper.CoordToLatLang(coord2d));
-			droneMarker.setRotation(yaw);
-			droneMarker.setVisible(true);
+		droneMarker.setPosition(DroneHelper.CoordToLatLang(coord2d));
+		droneMarker.setRotation(yaw);
+		droneMarker.setVisible(true);
 	}
 
 	private void addMarkerToMap() {
 		droneMarker = map.addMarker(new MarkerOptions()
 				.anchor((float) 0.5, (float) 0.5).position(new LatLng(0, 0))
-				.icon(BitmapDescriptorFactory.fromResource(R.drawable.quad)).visible(false)
-				.flat(true));
+				.icon(BitmapDescriptorFactory.fromResource(R.drawable.quad))
+				.visible(false).flat(true));
 	}
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch (event) {
 		case GPS:
-			updatePosition((float)drone.orientation.getYaw(),
+			updatePosition((float) drone.orientation.getYaw(),
 					drone.GPS.getPosition());
 			break;
 		default:

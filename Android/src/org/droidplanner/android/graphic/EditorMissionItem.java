@@ -6,6 +6,7 @@ public interface EditorMissionItem {
 
 	/**
 	 * Return a new detail Fragment for this MissionItem
+	 * 
 	 * @return
 	 */
 	public abstract MissionDetailFragment getDetailFragment();

@@ -29,19 +29,20 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.model.LatLng;
 
 public class FlightActivity extends DrawerNavigationUI implements
-		OnMapInteractionListener, FlightActionsFragment.OnMissionControlInteraction, OnDroneListener{
+		OnMapInteractionListener,
+		FlightActionsFragment.OnMissionControlInteraction, OnDroneListener {
 
-    private static final int GOOGLE_PLAY_SERVICES_REQUEST_CODE = 101;
+	private static final int GOOGLE_PLAY_SERVICES_REQUEST_CODE = 101;
 
-    private FragmentManager fragmentManager;
+	private FragmentManager fragmentManager;
 	private RCFragment rcFragment;
 	private View failsafeTextView;
 	private FlightMapFragment mapFragment;
-    private Fragment editorTools;
+	private Fragment editorTools;
 
-    private SlidingDrawer mSlidingDrawer;
+	private SlidingDrawer mSlidingDrawer;
 
-    private boolean mIsPhone;
+	private boolean mIsPhone;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -51,149 +52,168 @@ public class FlightActivity extends DrawerNavigationUI implements
 		fragmentManager = getSupportFragmentManager();
 		failsafeTextView = findViewById(R.id.failsafeTextView);
 
-        mSlidingDrawer = (SlidingDrawer) findViewById(R.id.SlidingDrawerRight);
-        mSlidingDrawer.setOnDrawerCloseListener(new SlidingDrawer.OnDrawerCloseListener() {
-            @Override
-            public void onDrawerClosed() {
-                updateMapPadding();
-            }
-        });
+		mSlidingDrawer = (SlidingDrawer) findViewById(R.id.SlidingDrawerRight);
+		mSlidingDrawer
+				.setOnDrawerCloseListener(new SlidingDrawer.OnDrawerCloseListener() {
+					@Override
+					public void onDrawerClosed() {
+						updateMapPadding();
+					}
+				});
 
-        mSlidingDrawer.setOnDrawerOpenListener(new SlidingDrawer.OnDrawerOpenListener() {
-            @Override
-            public void onDrawerOpened() {
-                updateMapPadding();
-            }
-        });
+		mSlidingDrawer
+				.setOnDrawerOpenListener(new SlidingDrawer.OnDrawerOpenListener() {
+					@Override
+					public void onDrawerOpened() {
+						updateMapPadding();
+					}
+				});
 
-        mapFragment = (FlightMapFragment) fragmentManager.findFragmentById(R.id.mapFragment);
-        if(mapFragment == null){
-            mapFragment = new FlightMapFragment();
-            fragmentManager.beginTransaction().add(R.id.mapFragment, mapFragment).commit();
-        }
+		mapFragment = (FlightMapFragment) fragmentManager
+				.findFragmentById(R.id.mapFragment);
+		if (mapFragment == null) {
+			mapFragment = new FlightMapFragment();
+			fragmentManager.beginTransaction()
+					.add(R.id.mapFragment, mapFragment).commit();
+		}
 
-        editorTools = fragmentManager.findFragmentById(R.id.editorToolsFragment);
-        if(editorTools == null){
-            editorTools = new FlightActionsFragment();
-            fragmentManager.beginTransaction().add(R.id.editorToolsFragment, editorTools).commit();
-        }
+		editorTools = fragmentManager
+				.findFragmentById(R.id.editorToolsFragment);
+		if (editorTools == null) {
+			editorTools = new FlightActionsFragment();
+			fragmentManager.beginTransaction()
+					.add(R.id.editorToolsFragment, editorTools).commit();
+		}
 
-        /*
-        Check to see if we're using a phone layout, or a tablet layout.
-        If the 'telemetryFragment' view doesn't exist, then we're in phone layout,
-        as it was merged with the right sliding drawer because of space constraints.
-         */
-        View telemetryView = findViewById(R.id.telemetryFragment);
-        mIsPhone = telemetryView == null;
+		/*
+		 * Check to see if we're using a phone layout, or a tablet layout. If
+		 * the 'telemetryFragment' view doesn't exist, then we're in phone
+		 * layout, as it was merged with the right sliding drawer because of
+		 * space constraints.
+		 */
+		View telemetryView = findViewById(R.id.telemetryFragment);
+		mIsPhone = telemetryView == null;
 
-        if(mIsPhone){
-            Fragment slidingDrawerContent = fragmentManager.findFragmentById(R.id
-                    .sliding_drawer_content);
-            if (slidingDrawerContent == null) {
-                slidingDrawerContent = new FlightSlidingDrawerContent();
-                fragmentManager.beginTransaction().add(R.id.sliding_drawer_content,
-                        slidingDrawerContent).commit();
-            }
-        }
-        else{
-            //Add the telemtry fragment
-            Fragment telemetryFragment = fragmentManager.findFragmentById(R.id.telemetryFragment);
-            if(telemetryFragment == null){
-                telemetryFragment = new TelemetryFragment();
-                fragmentManager.beginTransaction().add(R.id.telemetryFragment,
-                        telemetryFragment).commit();
-            }
+		if (mIsPhone) {
+			Fragment slidingDrawerContent = fragmentManager
+					.findFragmentById(R.id.sliding_drawer_content);
+			if (slidingDrawerContent == null) {
+				slidingDrawerContent = new FlightSlidingDrawerContent();
+				fragmentManager.beginTransaction()
+						.add(R.id.sliding_drawer_content, slidingDrawerContent)
+						.commit();
+			}
+		} else {
+			// Add the telemtry fragment
+			Fragment telemetryFragment = fragmentManager
+					.findFragmentById(R.id.telemetryFragment);
+			if (telemetryFragment == null) {
+				telemetryFragment = new TelemetryFragment();
+				fragmentManager.beginTransaction()
+						.add(R.id.telemetryFragment, telemetryFragment)
+						.commit();
+			}
 
-            //Add the mode info panel fragment
-            Fragment flightModePanel = fragmentManager.findFragmentById(R.id.sliding_drawer_content);
-            if(flightModePanel == null){
-                flightModePanel = new FlightModePanel();
-                fragmentManager.beginTransaction().add(R.id.sliding_drawer_content,
-                        flightModePanel).commit();
-            }
-        }
-    }
+			// Add the mode info panel fragment
+			Fragment flightModePanel = fragmentManager
+					.findFragmentById(R.id.sliding_drawer_content);
+			if (flightModePanel == null) {
+				flightModePanel = new FlightModePanel();
+				fragmentManager.beginTransaction()
+						.add(R.id.sliding_drawer_content, flightModePanel)
+						.commit();
+			}
+		}
+	}
 
-    /**
-     * Ensures that the device has the correct version of the Google Play Services.
-     * @return true if the Google Play Services binary is valid
-     */
-    private boolean isGooglePlayServicesValid(boolean showErrorDialog){
-        //Check for the google play services is available
-        final int playStatus = GooglePlayServicesUtil.isGooglePlayServicesAvailable
-                (getApplicationContext());
-        final boolean isValid = playStatus == ConnectionResult.SUCCESS;
+	/**
+	 * Ensures that the device has the correct version of the Google Play
+	 * Services.
+	 * 
+	 * @return true if the Google Play Services binary is valid
+	 */
+	private boolean isGooglePlayServicesValid(boolean showErrorDialog) {
+		// Check for the google play services is available
+		final int playStatus = GooglePlayServicesUtil
+				.isGooglePlayServicesAvailable(getApplicationContext());
+		final boolean isValid = playStatus == ConnectionResult.SUCCESS;
 
-        if (!isValid && showErrorDialog) {
-            final Dialog errorDialog = GooglePlayServicesUtil.getErrorDialog(playStatus, this,
-                    GOOGLE_PLAY_SERVICES_REQUEST_CODE, new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialog) {
-                    finish();
-                }
-            });
+		if (!isValid && showErrorDialog) {
+			final Dialog errorDialog = GooglePlayServicesUtil.getErrorDialog(
+					playStatus, this, GOOGLE_PLAY_SERVICES_REQUEST_CODE,
+					new DialogInterface.OnCancelListener() {
+						@Override
+						public void onCancel(DialogInterface dialog) {
+							finish();
+						}
+					});
 
-            if (errorDialog != null)
-                errorDialog.show();
-        }
+			if (errorDialog != null)
+				errorDialog.show();
+		}
 
-        return isValid;
-    }
+		return isValid;
+	}
 
-    /**
-     * Used to setup the flight screen map fragment. Before attempting to initialize the map
-     * fragment, this checks if the Google Play Services binary is installed and up to date.
-     */
-    private void setupMapFragment(){
-        if(mapFragment == null && isGooglePlayServicesValid(true)) {
-            mapFragment = (FlightMapFragment) fragmentManager.findFragmentById(R.id.mapFragment);
-            if (mapFragment == null) {
-                mapFragment = new FlightMapFragment();
-                fragmentManager.beginTransaction().add(R.id.mapFragment, mapFragment).commit();
-            }
-        }
-    }
+	/**
+	 * Used to setup the flight screen map fragment. Before attempting to
+	 * initialize the map fragment, this checks if the Google Play Services
+	 * binary is installed and up to date.
+	 */
+	private void setupMapFragment() {
+		if (mapFragment == null && isGooglePlayServicesValid(true)) {
+			mapFragment = (FlightMapFragment) fragmentManager
+					.findFragmentById(R.id.mapFragment);
+			if (mapFragment == null) {
+				mapFragment = new FlightMapFragment();
+				fragmentManager.beginTransaction()
+						.add(R.id.mapFragment, mapFragment).commit();
+			}
+		}
+	}
 
-    @Override
-    public void onResume(){
-        super.onResume();
-        setupMapFragment();
-    }
-    
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus){
-        super.onWindowFocusChanged(hasFocus);
-        updateMapPadding();
-    }
+	@Override
+	public void onResume() {
+		super.onResume();
+		setupMapFragment();
+	}
 
-    /**
-     * Account for the various ui elements and update the map padding so that it remains 'visible'.
-     */
-    private void updateMapPadding(){
-        int rightPadding = getSlidingDrawerWidth();
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+		super.onWindowFocusChanged(hasFocus);
+		updateMapPadding();
+	}
 
-        int bottomPadding = 0;
-        int leftPadding = 0;
-        if(mIsPhone){
-            final View editorToolsView = editorTools.getView();
-            ViewGroup.LayoutParams lp = editorToolsView.getLayoutParams();
-            if(lp.height == ViewGroup.LayoutParams.MATCH_PARENT){
-                leftPadding = editorToolsView.getRight();
-            }
+	/**
+	 * Account for the various ui elements and update the map padding so that it
+	 * remains 'visible'.
+	 */
+	private void updateMapPadding() {
+		int rightPadding = getSlidingDrawerWidth();
 
-            if(lp.width == ViewGroup.LayoutParams.MATCH_PARENT){
-                bottomPadding = editorToolsView.getHeight();
-            }
-        }
-        mapFragment.mMap.setPadding(leftPadding, 0, rightPadding, bottomPadding);
-    }
+		int bottomPadding = 0;
+		int leftPadding = 0;
+		if (mIsPhone) {
+			final View editorToolsView = editorTools.getView();
+			ViewGroup.LayoutParams lp = editorToolsView.getLayoutParams();
+			if (lp.height == ViewGroup.LayoutParams.MATCH_PARENT) {
+				leftPadding = editorToolsView.getRight();
+			}
 
-    private int getSlidingDrawerWidth(){
-        if(mSlidingDrawer.isOpened()){
-            return mSlidingDrawer.getContent().getWidth();
-        }
-        return 0;
-    }
+			if (lp.width == ViewGroup.LayoutParams.MATCH_PARENT) {
+				bottomPadding = editorToolsView.getHeight();
+			}
+		}
+		mapFragment.mMap
+				.setPadding(leftPadding, 0, rightPadding, bottomPadding);
+	}
+
+	private int getSlidingDrawerWidth() {
+		if (mSlidingDrawer.isOpened()) {
+			return mSlidingDrawer.getContent().getWidth();
+		}
+		return 0;
+	}
 
 	@Override
 	public void onMapClick(LatLng point) {
@@ -214,11 +234,11 @@ public class FlightActivity extends DrawerNavigationUI implements
 
 	@Override
 	public void onPlanningSelected() {
-        if (mapFragment != null) {
-             mapFragment.saveCameraPosition();
-        }
+		if (mapFragment != null) {
+			mapFragment.saveCameraPosition();
+		}
 
-        Intent navigationIntent;
+		Intent navigationIntent;
 		navigationIntent = new Intent(this, EditorActivity.class);
 		startActivity(navigationIntent);
 	}
@@ -236,7 +256,7 @@ public class FlightActivity extends DrawerNavigationUI implements
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		super.onDroneEvent(event,drone);
+		super.onDroneEvent(event, drone);
 		switch (event) {
 		case FAILSAFE:
 			onFailsafeChanged(drone);
@@ -266,25 +286,25 @@ public class FlightActivity extends DrawerNavigationUI implements
 	@Override
 	public void onAddPoint(LatLng point) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onMoveHome(LatLng coord) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onMoveWaypoint(SpatialCoordItem waypoint, LatLng latLng) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onMovingWaypoint(SpatialCoordItem source, LatLng latLng) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

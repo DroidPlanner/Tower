@@ -13,7 +13,6 @@ public class RcStick extends View {
 
 	private static final float STICK_SIZE = 0.3f;
 
-
 	private Paint paintOutline;
 	private Paint paintFill;
 	private int height;
@@ -45,7 +44,7 @@ public class RcStick extends View {
 		width = w - 1;
 		height = h - 1;
 		borders = new RectF(1, 1, width, height);
-		stickRadius = (int) (STICK_SIZE*Math.min(width, height)/2);
+		stickRadius = (int) (STICK_SIZE * Math.min(width, height) / 2);
 		setPosition(0, 0);
 	}
 
@@ -59,8 +58,7 @@ public class RcStick extends View {
 	}
 
 	public void setPosition(float x, float y) {
-		xPos = (int) ((width - 2 * stickRadius) * ((1 + x) / 2f))
-				+ stickRadius;
+		xPos = (int) ((width - 2 * stickRadius) * ((1 + x) / 2f)) + stickRadius;
 		yPos = (int) ((height - 2 * stickRadius) * ((1 - y) / 2f))
 				+ stickRadius;
 		invalidate();

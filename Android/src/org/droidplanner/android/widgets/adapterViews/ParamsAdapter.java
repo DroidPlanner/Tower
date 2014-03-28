@@ -28,284 +28,295 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 /**
- * Date: 2013-12-08
- * Time: 11:00 PM
+ * Date: 2013-12-08 Time: 11:00 PM
  */
 public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
 
-    public interface OnInfoListener {
-        void onHelp(int position, EditText valueView);
-    }
+	public interface OnInfoListener {
+		void onHelp(int position, EditText valueView);
+	}
 
-    private static final DecimalFormat formatter = Parameter.getFormat();
+	private static final DecimalFormat formatter = Parameter.getFormat();
 
-    private final int resource;
-    private final int colorAltRow;
+	private final int resource;
+	private final int colorAltRow;
 
-    private Map<String, ParameterMetadata> metadataMap;
+	private Map<String, ParameterMetadata> metadataMap;
 
-    private View focusView;
-    private OnInfoListener onInfoListener;
+	private View focusView;
+	private OnInfoListener onInfoListener;
 
+	public ParamsAdapter(Context context, int resource) {
+		this(context, resource, new ArrayList<ParamsAdapterItem>());
+	}
 
-    public ParamsAdapter(Context context, int resource) {
-        this(context, resource, new ArrayList<ParamsAdapterItem>());
-    }
+	public ParamsAdapter(Context context, int resource,
+			List<ParamsAdapterItem> objects) {
+		super(context, resource, objects);
 
-    public ParamsAdapter(Context context, int resource, List<ParamsAdapterItem> objects) {
-        super(context, resource, objects);
+		this.resource = resource;
 
-        this. resource = resource;
+		colorAltRow = context.getResources().getColor(R.color.paramAltRow);
+	}
 
-        colorAltRow = context.getResources().getColor(R.color.paramAltRow);
-    }
+	public void clearFocus() {
+		if (focusView != null) {
+			clearFocus(focusView);
+			focusView = null;
+		}
+	}
 
-    public void clearFocus() {
-        if (focusView != null) {
-            clearFocus(focusView);
-            focusView = null;
-        }
-    }
+	public void setOnInfoListener(OnInfoListener onInfoListener) {
+		this.onInfoListener = onInfoListener;
+	}
 
-    public void setOnInfoListener(OnInfoListener onInfoListener) {
-        this.onInfoListener = onInfoListener;
-    }
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		final View view;
+		final ParamTag paramTag;
 
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        final View view;
-        final ParamTag paramTag;
+		if (convertView == null) {
+			// create new view
+			final LayoutInflater inflater = ((Activity) getContext())
+					.getLayoutInflater();
+			view = inflater.inflate(resource, parent, false);
 
-        if(convertView == null) {
-            // create new view
-            final LayoutInflater inflater = ((Activity) getContext()).getLayoutInflater();
-            view = inflater.inflate(resource, parent, false);
+			paramTag = new ParamTag();
+			paramTag.setNameView((TextView) view
+					.findViewById(R.id.params_row_name));
+			paramTag.setDescView((TextView) view
+					.findViewById(R.id.params_row_desc));
+			paramTag.setValueView((EditText) view
+					.findViewById(R.id.params_row_value));
+			view.setTag(paramTag);
 
-            paramTag = new ParamTag();
-            paramTag.setNameView((TextView) view.findViewById(R.id.params_row_name));
-            paramTag.setDescView((TextView) view.findViewById(R.id.params_row_desc));
-            paramTag.setValueView((EditText) view.findViewById(R.id.params_row_value));
-            view.setTag(paramTag);
+		} else {
+			// recycle view
+			view = convertView;
+			paramTag = (ParamTag) convertView.getTag();
 
-        } else {
-            // recycle view
-            view = convertView;
-            paramTag = (ParamTag) convertView.getTag();
+			// remove focus
+			final EditText valueView = paramTag.getValueView();
+			if (valueView.hasFocus())
+				clearFocus(valueView);
 
-            // remove focus
-            final EditText valueView = paramTag.getValueView();
-            if(valueView.hasFocus())
-                clearFocus(valueView);
+			// detatch listeners
+			valueView.removeTextChangedListener(paramTag);
+			valueView.setOnFocusChangeListener(null);
+		}
 
-            // detatch listeners
-            valueView.removeTextChangedListener(paramTag);
-            valueView.setOnFocusChangeListener(null);
-        }
+		// populate fields, set appearance
+		final ParamsAdapterItem item = getItem(position);
+		final Parameter param = item.getParameter();
+		final ParameterMetadata metadata = item.getMetadata();
 
-        // populate fields, set appearance
-        final ParamsAdapterItem item = getItem(position);
-        final Parameter param = item.getParameter();
-        final ParameterMetadata metadata = item.getMetadata();
+		paramTag.setPosition(position);
+		paramTag.getNameView().setText(param.name);
+		paramTag.getDescView().setText(getDescription(metadata));
+		paramTag.setAppearance(item);
 
-        paramTag.setPosition(position);
-        paramTag.getNameView().setText(param.name);
-        paramTag.getDescView().setText(getDescription(metadata));
-        paramTag.setAppearance(item);
+		final EditText valueView = paramTag.getValueView();
+		valueView.setText(param.getValue());
 
-        final EditText valueView = paramTag.getValueView();
-        valueView.setText(param.getValue());
+		// attach listeners
+		paramTag.getNameView().setOnClickListener(paramTag);
+		paramTag.getDescView().setOnClickListener(paramTag);
+		valueView.addTextChangedListener(paramTag);
+		valueView.setOnFocusChangeListener(paramTag);
 
-        // attach listeners
-        paramTag.getNameView().setOnClickListener(paramTag);
-        paramTag.getDescView().setOnClickListener(paramTag);
-        valueView.addTextChangedListener(paramTag);
-        valueView.setOnFocusChangeListener(paramTag);
+		// alternate background color for clarity
+		view.setBackgroundColor((position % 2 == 1) ? colorAltRow
+				: Color.TRANSPARENT);
 
-        // alternate background color for clarity
-        view.setBackgroundColor((position % 2 == 1) ? colorAltRow : Color.TRANSPARENT);
+		return view;
+	}
 
-        return view;
-    }
+	public void loadParameters(Drone drone, List<Parameter> parameters) {
+		loadMetadataInternal(drone);
 
-    public void loadParameters(Drone drone, List<Parameter> parameters) {
-        loadMetadataInternal(drone);
+		clear();
+		for (Parameter parameter : parameters)
+			addParameter(parameter);
+	}
 
-        clear();
-        for (Parameter parameter : parameters)
-            addParameter(parameter);
-    }
+	private void addParameter(Parameter parameter) {
+		try {
+			Parameter.checkParameterName(parameter.name);
+			add(new ParamsAdapterItem(parameter, getMetadata(parameter.name)));
 
-    private void addParameter(Parameter parameter) {
-        try {
-            Parameter.checkParameterName(parameter.name);
-            add(new ParamsAdapterItem(parameter, getMetadata(parameter.name)));
+		} catch (Exception ex) {
+			// eat it
+		}
+	}
 
-        } catch (Exception ex) {
-            // eat it
-        }
-    }
+	public void loadMetadata(Drone drone) {
+		loadMetadataInternal(drone);
 
-    public void loadMetadata(Drone drone) {
-        loadMetadataInternal(drone);
+		for (int i = 0; i < getCount(); i++) {
+			final ParamsAdapterItem item = getItem(i);
+			item.setMetadata(getMetadata(item.getParameter().name));
+		}
+		notifyDataSetChanged();
+	}
 
-        for(int i = 0; i < getCount(); i++) {
-            final ParamsAdapterItem item = getItem(i);
-            item.setMetadata(getMetadata(item.getParameter().name));
-        }
-        notifyDataSetChanged();
-    }
+	private void loadMetadataInternal(Drone drone) {
+		metadataMap = null;
 
-    private void loadMetadataInternal(Drone drone) {
-        metadataMap = null;
+		// get metadata type from profile, bail if none
+		final String metadataType;
+		final VehicleProfile profile = drone.profile.getProfile();
+		if (profile == null
+				|| (metadataType = profile.getParameterMetadataType()) == null)
+			return;
 
-        // get metadata type from profile, bail if none
-        final String metadataType;
-        final VehicleProfile profile = drone.profile.getProfile();
-        if(profile == null || (metadataType = profile.getParameterMetadataType()) == null)
-            return;
+		try {
+			// load
+			metadataMap = ParameterMetadataMapReader.load(getContext(),
+					metadataType);
 
-        try {
-            // load
-            metadataMap = ParameterMetadataMapReader.load(getContext(), metadataType);
+		} catch (Exception ex) {
+			// nop
+		}
+	}
 
-        } catch (Exception ex) {
-            // nop
-        }
-    }
+	private ParameterMetadata getMetadata(String name) {
+		return (metadataMap == null) ? null : metadataMap.get(name);
+	}
 
-    private ParameterMetadata getMetadata(String name) {
-        return (metadataMap == null) ? null : metadataMap.get(name);
-    }
+	private String getDescription(ParameterMetadata metadata) {
+		String desc = "";
+		if (metadata != null) {
+			// display-name (units)
+			desc = metadata.getDisplayName();
+			if (metadata.getUnits() != null)
+				desc += " (" + metadata.getUnits() + ")";
+		}
+		return desc;
+	}
 
-    private String getDescription(ParameterMetadata metadata) {
-        String desc = "";
-        if(metadata != null) {
-            // display-name (units)
-            desc = metadata.getDisplayName();
-            if(metadata.getUnits() != null)
-                desc += " (" + metadata.getUnits() + ")";
-        }
-        return desc;
-    }
+	private void clearFocus(View view) {
+		if (view != null) {
+			view.clearFocus();
 
-    private void clearFocus(View view) {
-        if(view != null) {
-            view.clearFocus();
+			final InputMethodManager inputMethodManager = (InputMethodManager) getContext()
+					.getSystemService(Context.INPUT_METHOD_SERVICE);
+			inputMethodManager
+					.hideSoftInputFromWindow(view.getWindowToken(), 0);
+		}
+	}
 
-            final InputMethodManager inputMethodManager = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
-    }
+	private class ParamTag implements TextWatcher, View.OnFocusChangeListener,
+			View.OnClickListener {
+		private int position;
+		private TextView nameView;
+		private TextView descView;
+		private EditText valueView;
 
+		public void setPosition(int position) {
+			this.position = position;
+		}
 
-    private class ParamTag implements TextWatcher, View.OnFocusChangeListener, View.OnClickListener {
-        private int position;
-        private TextView nameView;
-        private TextView descView;
-        private EditText valueView;
+		public TextView getNameView() {
+			return nameView;
+		}
 
+		public void setNameView(TextView nameView) {
+			this.nameView = nameView;
+		}
 
-        public void setPosition(int position) {
-            this.position = position;
-        }
+		public TextView getDescView() {
+			return descView;
+		}
 
-        public TextView getNameView() {
-            return nameView;
-        }
+		public void setDescView(TextView descView) {
+			this.descView = descView;
+		}
 
-        public void setNameView(TextView nameView) {
-            this.nameView = nameView;
-        }
+		public EditText getValueView() {
+			return valueView;
+		}
 
-        public TextView getDescView() {
-            return descView;
-        }
+		public void setValueView(EditText valueView) {
+			this.valueView = valueView;
+		}
 
-        public void setDescView(TextView descView) {
-            this.descView = descView;
-        }
+		public double getValue() {
+			try {
+				return formatter.parse(valueView.getText().toString())
+						.doubleValue();
+			} catch (ParseException ex) {
+				// invalid number, return 0
+				return 0;
+			}
+		}
 
-        public EditText getValueView() {
-            return valueView;
-        }
+		public void setAppearance(ParamsAdapterItem item) {
+			final int resid;
+			if (item.isDirty()) {
+				final ParamsAdapterItem.Validation validation = item
+						.getValidation();
+				switch (validation) {
+				case VALID:
+					resid = R.style.paramValueValid;
+					break;
+				case INVALID:
+					resid = R.style.paramValueInvalid;
+					break;
+				default:
+					resid = R.style.paramValueChanged;
+					break;
+				}
 
-        public void setValueView(EditText valueView) {
-            this.valueView = valueView;
-        }
+			} else {
+				resid = R.style.paramValueUnchanged;
+			}
+			valueView.setTextAppearance(getContext(), resid);
+		}
 
-        public double getValue() {
-            try {
-                return formatter.parse(valueView.getText().toString()).doubleValue();
-            } catch (ParseException ex) {
-                // invalid number, return 0
-                return 0;
-            }
-        }
+		@Override
+		public void beforeTextChanged(CharSequence charSequence, int i, int i2,
+				int i3) {
+			// nop
+		}
 
-        public void setAppearance(ParamsAdapterItem item) {
-            final int resid;
-            if(item.isDirty()) {
-                final ParamsAdapterItem.Validation validation = item.getValidation();
-                switch (validation) {
-                    case VALID:
-                        resid = R.style.paramValueValid;
-                        break;
-                    case INVALID:
-                        resid = R.style.paramValueInvalid;
-                        break;
-                    default:
-                        resid = R.style.paramValueChanged;
-                        break;
-                }
+		@Override
+		public void onTextChanged(CharSequence charSequence, int i, int i2,
+				int i3) {
+			// nop
+		}
 
-            } else {
-                resid = R.style.paramValueUnchanged;
-            }
-            valueView.setTextAppearance(getContext(), resid);
-        }
+		@Override
+		public void afterTextChanged(Editable editable) {
+			// During reload text may change as valueView looses focus
+			// after underlying data has been evalidated - avoid this
+			if (position >= getCount())
+				return;
 
-        @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-            // nop
-        }
+			final ParamsAdapterItem item = getItem(position);
+			item.setDirtyValue(editable.toString());
 
-        @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-            // nop
-        }
+			setAppearance(item);
+		}
 
-        @Override
-        public void afterTextChanged(Editable editable) {
-            // During reload text may change as valueView looses focus
-            // after underlying data has been evalidated - avoid this
-            if(position >= getCount())
-                return;
+		@Override
+		public void onFocusChange(View view, boolean hasFocus) {
+			if (!hasFocus) {
+				// refresh value on leaving view - show results of rounding etc.
+				valueView.setText(formatter.format(getValue()));
+				focusView = null;
 
-            final ParamsAdapterItem item = getItem(position);
-            item.setDirtyValue(editable.toString());
+			} else {
+				focusView = view;
+			}
 
-            setAppearance(item);
-        }
+		}
 
-        @Override
-        public void onFocusChange(View view, boolean hasFocus) {
-            if(!hasFocus) {
-                // refresh value on leaving view - show results of rounding etc.
-                valueView.setText(formatter.format(getValue()));
-                focusView = null;
+		@Override
+		public void onClick(View view) {
+			clearFocus();
 
-            } else {
-                focusView = view;
-            }
-
-        }
-
-        @Override
-        public void onClick(View view) {
-            clearFocus();
-
-            if(onInfoListener != null)
-                onInfoListener.onHelp(position, valueView);
-        }
-    }
+			if (onInfoListener != null)
+				onInfoListener.onHelp(position, valueView);
+		}
+	}
 }

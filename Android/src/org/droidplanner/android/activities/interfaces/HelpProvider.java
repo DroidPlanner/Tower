@@ -5,11 +5,11 @@ package org.droidplanner.android.activities.interfaces;
  */
 public interface HelpProvider {
 
-    /**
-     * Get help items to be populated
-     *
-     * @return A matrix with pars of help guides names, with the associated
-     *         video url
-     */
-    public abstract CharSequence[][] getHelpItems();
+	/**
+	 * Get help items to be populated
+	 * 
+	 * @return A matrix with pars of help guides names, with the associated
+	 *         video url
+	 */
+	public abstract CharSequence[][] getHelpItems();
 }

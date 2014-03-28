@@ -72,11 +72,10 @@ public class FragmentSetupRC extends SuperSetupMainPanel {
 	@Override
 	protected SetupSidePanel getDefaultPanel() {
 		calibrationStep = 0;
-//		setFillBarShowMinMax(false);
+		// setFillBarShowMinMax(false);
 		sidePanel = new FragmentSetupStart();
 		return sidePanel;
 	}
-
 
 	@Override
 	public int getPanelLayout() {
@@ -136,19 +135,18 @@ public class FragmentSetupRC extends SuperSetupMainPanel {
 	@Override
 	public void doCalibrationStep(int step) {
 		switch (step) {
-		case 1: 
-		case 2: 
+		case 1:
+		case 2:
 			sidePanel = getNextPanel();
 			break;
 		case 3: // Upload calibration data
 			updateCalibrationData();
 			break;
-		case 0: 
+		case 0:
 		default:
 			sidePanel = getInitialPanel();
 		}
 	}
-
 
 	private SetupSidePanel getCompletedPanel() {
 		calibrationStep = 0;
@@ -164,12 +162,12 @@ public class FragmentSetupRC extends SuperSetupMainPanel {
 	}
 
 	private SetupSidePanel getNextPanel() {
-		int textId=0, descId=0;
+		int textId = 0, descId = 0;
 
-		
-		switch(calibrationStep){
+		switch (calibrationStep) {
 		case 0:
-			if(!parameters.isParameterDownloaded()&&drone.MavClient.isConnected()){
+			if (!parameters.isParameterDownloaded()
+					&& drone.MavClient.isConnected()) {
 				getProgressPanel(true);
 				parameters.getCalibrationParameters(drone);
 				return sidePanel;
@@ -187,25 +185,25 @@ public class FragmentSetupRC extends SuperSetupMainPanel {
 			return sidePanel;
 		}
 		calibrationStep++;
-		
+
 		sidePanel = new FragmentSetupNext();
 		sidePanel.updateTitle(textId);
 		sidePanel.updateDescription(descId);
-		
+
 		return ((SetupRadioFragment) getParentFragment())
 				.changeSidePanel(sidePanel);
 	}
 
 	private SetupSidePanel getProgressPanel(boolean isSending) {
 		sidePanel = new FragmentSetupProgress();
-		if(isSending){
+		if (isSending) {
 			sidePanel.updateTitle(R.string.progress_title_uploading);
-			sidePanel.updateDescription(R.string.progress_desc_uploading);			
-		}else{
+			sidePanel.updateDescription(R.string.progress_desc_uploading);
+		} else {
 			sidePanel.updateTitle(R.string.progress_title_downloading);
 			sidePanel.updateDescription(R.string.progress_desc_downloading);
 		}
-		
+
 		return ((SetupRadioFragment) getParentFragment())
 				.changeSidePanel(sidePanel);
 	}

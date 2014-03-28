@@ -24,7 +24,10 @@ import android.view.ViewGroup;
 public class TuningFragment extends Fragment implements OnDroneListener {
 
 	private static final int NAV_MSG_RATE = 50;
-	private static final int CHART_BUFFER_SIZE = 20*NAV_MSG_RATE; // About 20s of data on the buffer
+	private static final int CHART_BUFFER_SIZE = 20 * NAV_MSG_RATE; // About 20s
+																	// of data
+																	// on the
+																	// buffer
 
 	private Drone drone;
 
@@ -49,16 +52,17 @@ public class TuningFragment extends Fragment implements OnDroneListener {
 
 	private ChartSeries topDataValue;
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState){
-        super.onActivityCreated(savedInstanceState);
-        drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
-    }
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_tuning, container, false);
+		View view = inflater
+				.inflate(R.layout.fragment_tuning, container, false);
 
 		setupLocalViews(view);
 		setupCharts();
@@ -82,17 +86,22 @@ public class TuningFragment extends Fragment implements OnDroneListener {
 
 	private void setupDataStreamingForTuning() {
 		// Sets the nav messages at 50Hz and other messages at a low rate 1Hz
-		MavLinkStreamRates.setupStreamRates(drone.MavClient, 1, 0, 1, 1, 1, 0, 0, NAV_MSG_RATE);
+		MavLinkStreamRates.setupStreamRates(drone.MavClient, 1, 0, 1, 1, 1, 0,
+				0, NAV_MSG_RATE);
 	}
 
 	private void setupLocalViews(View view) {
 		topChart = (Chart) view.findViewById(R.id.chartTop);
 		bottomChart = (Chart) view.findViewById(R.id.chartBottom);
 
-		rollPSeekBar = (SeekBarWithText) view.findViewById(R.id.SeekBarRollPitchControl);
-		rollDSeekBar = (SeekBarWithText) view.findViewById(R.id.SeekBarRollPitchDampenning);
-		yawPSeekBar = (SeekBarWithText) view.findViewById(R.id.SeekBarYawControl);
-		thrAclSeekBar = (SeekBarWithText) view.findViewById(R.id.SeekBarThrottleAccel);
+		rollPSeekBar = (SeekBarWithText) view
+				.findViewById(R.id.SeekBarRollPitchControl);
+		rollDSeekBar = (SeekBarWithText) view
+				.findViewById(R.id.SeekBarRollPitchDampenning);
+		yawPSeekBar = (SeekBarWithText) view
+				.findViewById(R.id.SeekBarYawControl);
+		thrAclSeekBar = (SeekBarWithText) view
+				.findViewById(R.id.SeekBarThrottleAccel);
 	}
 
 	private void setupCharts() {
@@ -129,11 +138,11 @@ public class TuningFragment extends Fragment implements OnDroneListener {
 	}
 
 	public void onNewOrientationData(Drone drone) {
-		 bottomDataValue.newData(drone.orientation.getPitch());
-		 topDataValue.newData(drone.orientation.getRoll());
-		 bottomDataReference.newData(drone.navigation.getNavPitch());
-		 topDataReference.newData(drone.navigation.getNavRoll());
-		 bottomChart.update();
-		 topChart.update();
+		bottomDataValue.newData(drone.orientation.getPitch());
+		topDataValue.newData(drone.orientation.getRoll());
+		bottomDataReference.newData(drone.navigation.getNavPitch());
+		topDataReference.newData(drone.navigation.getNavRoll());
+		bottomChart.update();
+		topChart.update();
 	}
 }

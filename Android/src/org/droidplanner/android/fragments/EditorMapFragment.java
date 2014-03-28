@@ -1,6 +1,5 @@
 package org.droidplanner.android.fragments;
 
-
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 import org.droidplanner.android.fragments.helpers.DroneMap;
 import org.droidplanner.android.fragments.helpers.MapPath;
@@ -29,7 +28,7 @@ import com.google.android.gms.maps.model.Marker;
 @SuppressLint("UseSparseArrays")
 public class EditorMapFragment extends DroneMap implements
 		OnMapLongClickListener, OnMarkerDragListener, OnMapClickListener,
-		OnMarkerClickListener{
+		OnMarkerClickListener {
 
 	public MapPath polygonPath;
 
@@ -55,7 +54,7 @@ public class EditorMapFragment extends DroneMap implements
 
 	@Override
 	public void onMapLongClick(LatLng point) {
-		//mListener.onAddPoint(point);
+		// mListener.onAddPoint(point);
 	}
 
 	@Override
@@ -70,7 +69,8 @@ public class EditorMapFragment extends DroneMap implements
 		checkForWaypointMarkerMoving(source, marker, false);
 	}
 
-	private void checkForWaypointMarkerMoving(MarkerSource source, Marker marker, boolean dragging) {
+	private void checkForWaypointMarkerMoving(MarkerSource source,
+			Marker marker, boolean dragging) {
 		if (SpatialCoordItem.class.isInstance(source)) {
 			LatLng position = marker.getPosition();
 
@@ -79,19 +79,16 @@ public class EditorMapFragment extends DroneMap implements
 			waypoint.setPosition(DroneHelper.LatLngToCoord(position));
 
 			/*
-			// update info window
-			if(dragging)
-				waypoint.updateDistanceFromPrevPoint();
-			else
-				waypoint.setPrevPoint(mission.getWaypoints());
-			updateInfoWindow(waypoint, marker);
+			 * // update info window if(dragging)
+			 * waypoint.updateDistanceFromPrevPoint(); else
+			 * waypoint.setPrevPoint(mission.getWaypoints());
+			 * updateInfoWindow(waypoint, marker);
 			 */
 
 			// update flight path
-			//manager.missionPath.update(mission);
+			// manager.missionPath.update(mission);
 		}
 	}
-
 
 	@Override
 	public void onMarkerDragEnd(Marker marker) {
@@ -102,16 +99,17 @@ public class EditorMapFragment extends DroneMap implements
 
 	private void checkForWaypointMarker(MarkerSource source, Marker marker) {
 		if (SpatialCoordItem.class.isInstance(source)) {
-			//mListener.onMoveWaypoint((SpatialCoordItem) source, marker.getPosition());
+			// mListener.onMoveWaypoint((SpatialCoordItem) source,
+			// marker.getPosition());
 		}
 	}
 
 	private void checkForPolygonMarker(MarkerSource source, Marker marker) {
 		/*
-		if (PolygonPoint.class.isInstance(source)) {
-			Listener.onMovePolygonPoint((PolygonPoint) source,marker.getPosition());
-		}
-		*/
+		 * if (PolygonPoint.class.isInstance(source)) {
+		 * Listener.onMovePolygonPoint((PolygonPoint)
+		 * source,marker.getPosition()); }
+		 */
 	}
 
 	@Override

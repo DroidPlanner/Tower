@@ -89,10 +89,10 @@ public class ListRow_Value extends ListRow implements OnFocusChangeListener {
 	@Override
 	public void onFocusChange(View v, boolean hasFocus) {
 		if (!hasFocus) {
-			
-			if(!lastFocusState)
+
+			if (!lastFocusState)
 				return;
-			
+
 			lastFocusState = false;
 
 			float a = (float) 0.0;
@@ -113,7 +113,7 @@ public class ListRow_Value extends ListRow implements OnFocusChangeListener {
 			if (listener != null)
 				listener.onRowItemChanged(v, this.checkListItem,
 						this.checkListItem.isVerified());
-		} else if (hasFocus){
+		} else if (hasFocus) {
 			lastFocusState = !lastFocusState;
 		}
 	}

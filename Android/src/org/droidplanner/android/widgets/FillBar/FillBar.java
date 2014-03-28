@@ -29,7 +29,6 @@ public class FillBar extends View {
 	private int val_max, val_min;
 	private boolean invert = false;
 
-
 	public FillBar(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		initialize();
@@ -75,7 +74,7 @@ public class FillBar extends View {
 		paintFill.setColor(colorBar);
 		fillPath.reset();
 
-		if (invert){
+		if (invert) {
 			if (height > width) {
 				fillPath.moveTo(0, 0);
 				fillPath.lineTo(0, height - fheight);
@@ -89,7 +88,7 @@ public class FillBar extends View {
 				fillPath.lineTo(width - fwidth, 0);
 				fillPath.lineTo(0, 0);
 			}
-		}else {
+		} else {
 			if (height > width) {
 				fillPath.moveTo(0, fheight);
 				fillPath.lineTo(0, height);
@@ -110,10 +109,10 @@ public class FillBar extends View {
 
 		if (isShowMinMax()) {
 			float f;
-			//int _t, _l, _w, _h;
+			// int _t, _l, _w, _h;
 			outlinePath.reset();
 
-			if(invert){
+			if (invert) {
 				if (height > width) {
 					//
 					f = height * (min);
@@ -142,9 +141,9 @@ public class FillBar extends View {
 					outlinePath.lineTo(f, height);
 					canvas.drawPath(outlinePath, paintOutline);
 				}
-			}else{
+			} else {
 				if (height > width) {
-					f = height * (1-min);
+					f = height * (1 - min);
 
 					outlinePath.reset();
 					outlinePath.moveTo(0, f);
@@ -152,7 +151,7 @@ public class FillBar extends View {
 					canvas.drawPath(outlinePath, paintOutline);
 
 					outlinePath.reset();
-					f = height * (1-max);
+					f = height * (1 - max);
 					outlinePath.moveTo(0, f);
 					outlinePath.lineTo(width, f);
 					canvas.drawPath(outlinePath, paintOutline);
@@ -183,8 +182,8 @@ public class FillBar extends View {
 		this.percentage = percentage;
 		this.min = this.min > percentage ? percentage : this.min;
 		this.max = this.max < percentage ? percentage : this.max;
-//		Log.d("fillbar", "Min: " + String.valueOf(min));
-//		Log.d("fillbar", "Max: " + String.valueOf(max));
+		// Log.d("fillbar", "Min: " + String.valueOf(min));
+		// Log.d("fillbar", "Max: " + String.valueOf(max));
 		invalidate();
 	}
 
@@ -194,12 +193,13 @@ public class FillBar extends View {
 	}
 
 	public void setValue(int value) {
-		this.setPercentage((value - val_min) / ((float)(val_max - val_min)));
+		this.setPercentage((value - val_min) / ((float) (val_max - val_min)));
 	}
 
 	public boolean isShowMinMax() {
 		return showMinMax;
 	}
+
 	public void invertBar(boolean inv) {
 		invert = inv;
 	}
@@ -213,20 +213,20 @@ public class FillBar extends View {
 		invalidate();
 	}
 
-	public float getMin(){
+	public float getMin() {
 		return this.min;
 	}
 
-	public float getMax(){
+	public float getMax() {
 		return this.max;
 	}
 
 	public int getMinValue() {
-		return val_min + (int) (getMin() * ((float)(val_max - val_min)));
+		return val_min + (int) (getMin() * ((float) (val_max - val_min)));
 	}
 
 	public int getMaxValue() {
-		return val_min + (int) (getMax() * ((float)(val_max - val_min)));
+		return val_min + (int) (getMax() * ((float) (val_max - val_min)));
 	}
 
 	public int getColorOutline() {

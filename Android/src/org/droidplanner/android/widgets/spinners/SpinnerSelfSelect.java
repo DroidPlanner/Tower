@@ -8,12 +8,10 @@ import android.widget.Spinner;
 
 import org.droidplanner.R;
 
-
 /**
- * Spinner like widget that has the ability to disable updates to its view based on a settable
- * flag.
- * This is used in instances of the application that requires confirmation from the drone before
- * updating the GCS ui.
+ * Spinner like widget that has the ability to disable updates to its view based
+ * on a settable flag. This is used in instances of the application that
+ * requires confirmation from the drone before updating the GCS ui.
  */
 public class SpinnerSelfSelect extends Spinner {
 
@@ -23,11 +21,11 @@ public class SpinnerSelfSelect extends Spinner {
 
 	private OnSpinnerItemSelectedListener listener;
 
-    /**
-     * View update flag. If set to true, the widget updates its view on item selection.
-     * Otherwise, the view can only be updated programmatically.
-     */
-    private boolean isSelectable;
+	/**
+	 * View update flag. If set to true, the widget updates its view on item
+	 * selection. Otherwise, the view can only be updated programmatically.
+	 */
+	private boolean isSelectable;
 
 	public SpinnerSelfSelect(Context context) {
 		this(context, null);
@@ -36,25 +34,25 @@ public class SpinnerSelfSelect extends Spinner {
 	public SpinnerSelfSelect(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
-        final TypedArray attributes = context.obtainStyledAttributes(attrs,
-                R.styleable.SpinnerSelfSelect, 0, 0);
+		final TypedArray attributes = context.obtainStyledAttributes(attrs,
+				R.styleable.SpinnerSelfSelect, 0, 0);
 
-        try{
-            isSelectable = attributes.getBoolean(R.styleable.SpinnerSelfSelect_isSelectable, true);
-        }
-        finally{
-            attributes.recycle();
-        }
+		try {
+			isSelectable = attributes.getBoolean(
+					R.styleable.SpinnerSelfSelect_isSelectable, true);
+		} finally {
+			attributes.recycle();
+		}
 	}
 
 	@Override
 	public void setSelection(int position) {
 		Log.d("SPIN", "selected - " + position);
-		
+
 		if (isSelectable) {
 			forcedSetSelection(position);
 		}
-		
+
 		if (listener != null) {
 			listener.onSpinnerItemSelected(this, position,
 					getItemAtPosition(position).toString());
@@ -70,15 +68,15 @@ public class SpinnerSelfSelect extends Spinner {
 		this.listener = listener;
 	}
 
-    /*
-    Widget accessor properties
-     */
-    public boolean isSelectable() {
-        return isSelectable;
-    }
+	/*
+	 * Widget accessor properties
+	 */
+	public boolean isSelectable() {
+		return isSelectable;
+	}
 
-    public void setSelectable(boolean isSelectable) {
-        this.isSelectable = isSelectable;
-        invalidate();
-    }
+	public void setSelectable(boolean isSelectable) {
+		this.isSelectable = isSelectable;
+		invalidate();
+	}
 }

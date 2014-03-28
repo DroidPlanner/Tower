@@ -42,7 +42,8 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		View view = inflater.inflate(R.layout.fragment_checklist, container, false);
+		View view = inflater.inflate(R.layout.fragment_checklist, container,
+				false);
 		expListView = (ExpandableListView) view.findViewById(R.id.expListView);
 
 		createListAdapter();
@@ -128,10 +129,11 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 
 	// create listAdapter
 	private void createListAdapter() {
-        final LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context
-                .LAYOUT_INFLATER_SERVICE);
+		final LayoutInflater layoutInflater = (LayoutInflater) context
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-		listAdapter = new CheckListAdapter(layoutInflater, listDataHeader,	listDataChild);
+		listAdapter = new CheckListAdapter(layoutInflater, listDataHeader,
+				listDataChild);
 
 		listAdapter.setHeaderLayout(R.layout.list_group_header);
 		listAdapter.setOnCheckListItemUpdateListener(this);

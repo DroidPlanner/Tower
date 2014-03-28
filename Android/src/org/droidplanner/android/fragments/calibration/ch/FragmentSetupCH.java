@@ -92,7 +92,6 @@ public class FragmentSetupCH extends SuperSetupMainPanel implements
 		setupSpinners();
 	}
 
-
 	private void setupSpinners() {
 		getCH6Options();
 		getCHOptions();

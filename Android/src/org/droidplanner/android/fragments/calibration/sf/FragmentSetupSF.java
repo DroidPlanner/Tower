@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-public class FragmentSetupSF extends SuperSetupMainPanel{
+public class FragmentSetupSF extends SuperSetupMainPanel {
 	int[] valueSF;
 	private String[] stringSF;
 	Spinner[] spinnerSFs = new Spinner[6];
@@ -21,7 +21,6 @@ public class FragmentSetupSF extends SuperSetupMainPanel{
 		return R.layout.fragment_setup_sf_main;
 	}
 
-
 	@Override
 	protected SetupSidePanel getDefaultPanel() {
 		sidePanel = new FragmentSetupSend();
@@ -29,14 +28,14 @@ public class FragmentSetupSF extends SuperSetupMainPanel{
 		sidePanel.updateDescription(R.string.setup_sf_side_desc);
 		return sidePanel;
 	}
-	
+
 	@Override
 	public SetupSidePanel getSidePanel() {
 		return getDefaultPanel();
 	}
 
 	@Override
-	protected CalParameters getParameterHandler() {		
+	protected CalParameters getParameterHandler() {
 		return new SF_CalParameters(drone);
 	}
 
@@ -47,7 +46,7 @@ public class FragmentSetupSF extends SuperSetupMainPanel{
 					valueSF[spinnerSFs[i].getSelectedItemPosition()]);
 		}
 	}
-	
+
 	@Override
 	protected void updatePanelInfo() {
 		if (parameters == null)
@@ -55,7 +54,7 @@ public class FragmentSetupSF extends SuperSetupMainPanel{
 
 		for (int i = 0; i < 6; i++) {
 			spinnerSFs[i].setSelection(
-					getSpinnerIndexFromValue((int)parameters.getParamValue(i),
+					getSpinnerIndexFromValue((int) parameters.getParamValue(i),
 							valueSF), true);
 		}
 	}
@@ -79,7 +78,7 @@ public class FragmentSetupSF extends SuperSetupMainPanel{
 				parentActivity, R.layout.spinner_setup_item, stringSF);
 		adapter.setDropDownViewResource(R.layout.spinner_setup_item_dropdown);
 
-		for(Spinner spinner: spinnerSFs)
+		for (Spinner spinner : spinnerSFs)
 			spinner.setAdapter(adapter);
 	}
 

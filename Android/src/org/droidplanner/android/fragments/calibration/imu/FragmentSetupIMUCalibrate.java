@@ -19,21 +19,21 @@ public class FragmentSetupIMUCalibrate extends SetupSidePanel {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		final View view = inflater.inflate(R.layout.fragment_setup_imu_calibrate,
-				container, false);
+		final View view = inflater.inflate(
+				R.layout.fragment_setup_imu_calibrate, container, false);
 
-        final SetupSensorFragment setupFragment = (SetupSensorFragment) getParentFragment();
+		final SetupSensorFragment setupFragment = (SetupSensorFragment) getParentFragment();
 
-        textDesc = (TextView) view.findViewById(R.id.textViewDesc);
-        btnStep = (Button) view.findViewById(R.id.buttonNext);
-        btnStep.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(setupFragment != null){
-                    setupFragment.doCalibrationStep(0);
-                }
-            }
-        });
+		textDesc = (TextView) view.findViewById(R.id.textViewDesc);
+		btnStep = (Button) view.findViewById(R.id.buttonNext);
+		btnStep.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (setupFragment != null) {
+					setupFragment.doCalibrationStep(0);
+				}
+			}
+		});
 
 		return view;
 	}
@@ -96,7 +96,7 @@ public class FragmentSetupIMUCalibrate extends SetupSidePanel {
 	@Override
 	public void updateTitle(int idTitle) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

@@ -24,11 +24,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
 public class FlightMapFragment extends DroneMap implements
-		OnMapLongClickListener, OnMarkerClickListener, OnMarkerDragListener,GuidedDialogListener, OnDroneListener {
+		OnMapLongClickListener, OnMarkerClickListener, OnMarkerDragListener,
+		GuidedDialogListener, OnDroneListener {
 
 	private static final int ZOOM_LEVEL = 20;
-	
-	public boolean isAutoPanEnabled;	
+
+	public boolean isAutoPanEnabled;
 	private boolean guidedModeOnLongPress;
 
 	public boolean hasBeenZoomed = false;
@@ -53,9 +54,10 @@ public class FlightMapFragment extends DroneMap implements
 		manager.maxFlightPathSize = Integer.valueOf(prefs.getString(
 				"pref_max_flight_path_size", "0"));
 		isAutoPanEnabled = prefs.getBoolean("pref_auto_pan_enabled", false);
-		guidedModeOnLongPress = prefs.getBoolean("pref_guided_mode_on_long_press", true);		
+		guidedModeOnLongPress = prefs.getBoolean(
+				"pref_guided_mode_on_long_press", true);
 	}
-	
+
 	@Override
 	public void onStart() {
 		super.onStart();
@@ -67,13 +69,14 @@ public class FlightMapFragment extends DroneMap implements
 		super.onStop();
 		drone.events.removeDroneListener(this);
 	}
-	
+
 	@Override
 	public void onMapLongClick(LatLng coord) {
 		getPreferences();
 		if (drone.MavClient.isConnected()) {
 			if (drone.guidedPoint.isInitialized()) {
-				drone.guidedPoint.newGuidedCoord(DroneHelper.LatLngToCoord(coord));
+				drone.guidedPoint.newGuidedCoord(DroneHelper
+						.LatLngToCoord(coord));
 			} else {
 				if (guidedModeOnLongPress) {
 					GuidedDialog dialog = new GuidedDialog();
@@ -87,7 +90,8 @@ public class FlightMapFragment extends DroneMap implements
 
 	@Override
 	public void onForcedGuidedPoint(LatLng coord) {
-		drone.guidedPoint.forcedGuidedCoordinate(DroneHelper.LatLngToCoord(coord));		
+		drone.guidedPoint.forcedGuidedCoordinate(DroneHelper
+				.LatLngToCoord(coord));
 	}
 
 	@Override
@@ -100,12 +104,14 @@ public class FlightMapFragment extends DroneMap implements
 
 	@Override
 	public void onMarkerDragEnd(Marker marker) {
-		drone.guidedPoint.newGuidedCoord(DroneHelper.LatLngToCoord(marker.getPosition()));
+		drone.guidedPoint.newGuidedCoord(DroneHelper.LatLngToCoord(marker
+				.getPosition()));
 	}
 
 	@Override
 	public boolean onMarkerClick(Marker marker) {
-		drone.guidedPoint.newGuidedCoord(DroneHelper.LatLngToCoord(marker.getPosition()));
+		drone.guidedPoint.newGuidedCoord(DroneHelper.LatLngToCoord(marker
+				.getPosition()));
 		return true;
 	}
 
@@ -124,12 +130,12 @@ public class FlightMapFragment extends DroneMap implements
 	private void animateCameraIfNeeded(LatLng coord) {
 		if (!hasBeenZoomed) {
 			hasBeenZoomed = true;
-			mMap.animateCamera(CameraUpdateFactory
-					.newLatLngZoom(coord, ZOOM_LEVEL));
+			mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coord,
+					ZOOM_LEVEL));
 		}
 		if (isAutoPanEnabled) {
-			mMap.animateCamera(CameraUpdateFactory
-					.newLatLngZoom(coord, ZOOM_LEVEL));
+			mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coord,
+					ZOOM_LEVEL));
 		}
 	}
 

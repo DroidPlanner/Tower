@@ -12,8 +12,7 @@ import android.widget.Switch;
 
 public class ListRow_Switch extends ListRow implements OnCheckedChangeListener {
 
-	public ListRow_Switch(LayoutInflater inflater,
-			CheckListItem checkListItem) {
+	public ListRow_Switch(LayoutInflater inflater, CheckListItem checkListItem) {
 		super(inflater, checkListItem);
 	}
 
@@ -31,14 +30,14 @@ public class ListRow_Switch extends ListRow implements OnCheckedChangeListener {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		updateDisplay(view, (ViewHolder)holder, checkListItem);
+		updateDisplay(view, (ViewHolder) holder, checkListItem);
 		return view;
 	}
 
 	private void updateDisplay(View view, ViewHolder holder,
 			CheckListItem mListItem) {
 		boolean failMandatory = false;
-		
+
 		getData(mListItem);
 
 		failMandatory = !checkListItem.isSys_activated();
@@ -46,7 +45,7 @@ public class ListRow_Switch extends ListRow implements OnCheckedChangeListener {
 		holder.switchView.setOnCheckedChangeListener(this);
 		holder.switchView.setClickable(checkListItem.isEditable());
 		holder.switchView.setChecked(mListItem.isSys_activated());
-		
+
 		updateCheckBox(checkListItem.isMandatory() && !failMandatory);
 	}
 
@@ -71,6 +70,6 @@ public class ListRow_Switch extends ListRow implements OnCheckedChangeListener {
 	@Override
 	public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
 		this.checkListItem.setSys_activated(arg1);
-		updateRowChanged((View)arg0,this.checkListItem);
+		updateRowChanged((View) arg0, this.checkListItem);
 	}
 }

@@ -35,60 +35,66 @@ public class BluetoothConnection extends MAVLinkConnection {
 		}
 	}
 
-    @Override
-    protected void openConnection() throws IOException {
-        Log.d(BLUE, "Connect");
+	@Override
+	protected void openConnection() throws IOException {
+		Log.d(BLUE, "Connect");
 
-        //Reset the bluetooth connection
-        resetConnection();
+		// Reset the bluetooth connection
+		resetConnection();
 
-        //Retrieve the stored address
-        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences
-                (parentContext);
-        String address = settings.getString(Constants.PREF_BLUETOOTH_DEVICE_ADDRESS, null);
+		// Retrieve the stored address
+		final SharedPreferences settings = PreferenceManager
+				.getDefaultSharedPreferences(parentContext);
+		String address = settings.getString(
+				Constants.PREF_BLUETOOTH_DEVICE_ADDRESS, null);
 
-        BluetoothDevice device = address == null
-                ? findSerialBluetoothBoard()
-                : mBluetoothAdapter.getRemoteDevice(address);
+		BluetoothDevice device = address == null ? findSerialBluetoothBoard()
+				: mBluetoothAdapter.getRemoteDevice(address);
 
-        Log.d(BLUE, "Trying to connect to device with address " + device.getAddress());
+		Log.d(BLUE,
+				"Trying to connect to device with address "
+						+ device.getAddress());
 		Log.d(BLUE, "BT Create Socket Call...");
-		bluetoothSocket = device.createInsecureRfcommSocketToServiceRecord(UUID.fromString(UUID_SPP_DEVICE));
-	
-		Log.d(BLUE, "BT Cancel Discovery Call...");		
-		mBluetoothAdapter.cancelDiscovery();		
+		bluetoothSocket = device.createInsecureRfcommSocketToServiceRecord(UUID
+				.fromString(UUID_SPP_DEVICE));
 
-		Log.d(BLUE, "BT Connect Call...");				
-		bluetoothSocket.connect(); //Here the IOException will rise on BT protocol/handshake error.
+		Log.d(BLUE, "BT Cancel Discovery Call...");
+		mBluetoothAdapter.cancelDiscovery();
 
-		Log.d(BLUE, "## BT Connected ##");			
+		Log.d(BLUE, "BT Connect Call...");
+		bluetoothSocket.connect(); // Here the IOException will rise on BT
+									// protocol/handshake error.
+
+		Log.d(BLUE, "## BT Connected ##");
 		out = bluetoothSocket.getOutputStream();
 		in = bluetoothSocket.getInputStream();
 	}
 
-    @SuppressLint("NewApi")
-    private BluetoothDevice findSerialBluetoothBoard() throws UnknownHostException {
-        Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
-        // If there are paired devices
-        if (pairedDevices.size() > 0) {
-            // Loop through paired devices
-            for (BluetoothDevice device : pairedDevices) {
-                // Add the name and address to an array adapter to show in a
-                // ListView
-                Log.d(BLUE, device.getName() + " #" + device.getAddress() + "#");
-                for (ParcelUuid id : device.getUuids()) {
-                    // TODO maybe this will not work on newer devices
-                    Log.d(BLUE, "id:" + id.toString());
-                    if (id.toString().equalsIgnoreCase(UUID_SPP_DEVICE)) {
-                        Log.d(BLUE, ">> Selected: " + device.getName()
-                                + " Using: " + id.toString());
-                        return device;
-                    }
-                }
-            }
-        }
-        throw new UnknownHostException("No Bluetooth Device found");
-    }
+	@SuppressLint("NewApi")
+	private BluetoothDevice findSerialBluetoothBoard()
+			throws UnknownHostException {
+		Set<BluetoothDevice> pairedDevices = mBluetoothAdapter
+				.getBondedDevices();
+		// If there are paired devices
+		if (pairedDevices.size() > 0) {
+			// Loop through paired devices
+			for (BluetoothDevice device : pairedDevices) {
+				// Add the name and address to an array adapter to show in a
+				// ListView
+				Log.d(BLUE, device.getName() + " #" + device.getAddress() + "#");
+				for (ParcelUuid id : device.getUuids()) {
+					// TODO maybe this will not work on newer devices
+					Log.d(BLUE, "id:" + id.toString());
+					if (id.toString().equalsIgnoreCase(UUID_SPP_DEVICE)) {
+						Log.d(BLUE, ">> Selected: " + device.getName()
+								+ " Using: " + id.toString());
+						return device;
+					}
+				}
+			}
+		}
+		throw new UnknownHostException("No Bluetooth Device found");
+	}
 
 	@Override
 	protected void readDataBlock() throws IOException {
@@ -108,26 +114,24 @@ public class BluetoothConnection extends MAVLinkConnection {
 		resetConnection();
 		Log.d(BLUE, "## BT Closed ##");
 	}
-	
-	
+
 	private void resetConnection() throws IOException {
-        if (in != null) {
-                in.close(); 
-                in = null;
-        }
+		if (in != null) {
+			in.close();
+			in = null;
+		}
 
-        if (out != null) {
-                out.close();
-                out = null;
-        }
+		if (out != null) {
+			out.close();
+			out = null;
+		}
 
-        if (bluetoothSocket != null) {
-                bluetoothSocket.close();
-                bluetoothSocket = null;
-        }
+		if (bluetoothSocket != null) {
+			bluetoothSocket.close();
+			bluetoothSocket = null;
+		}
 
-}	
-	
+	}
 
 	@Override
 	protected void getPreferences(SharedPreferences prefs) {

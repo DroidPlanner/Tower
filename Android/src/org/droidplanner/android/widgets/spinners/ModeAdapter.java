@@ -12,9 +12,9 @@ import com.MAVLink.Messages.ApmModes;
 
 public class ModeAdapter extends ArrayAdapter<ApmModes> {
 
-    public ModeAdapter(Context context, int resource){
-        super(context, resource);
-    }
+	public ModeAdapter(Context context, int resource) {
+		super(context, resource);
+	}
 
 	public ModeAdapter(Context context, int resource, List<ApmModes> objects) {
 		super(context, resource, objects);
@@ -22,7 +22,7 @@ public class ModeAdapter extends ArrayAdapter<ApmModes> {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-        final ApmModes mode = getItem(position);
+		final ApmModes mode = getItem(position);
 		TextView view = (TextView) super.getView(position, convertView, parent);
 		view.setText(mode.getName());
 		return view;

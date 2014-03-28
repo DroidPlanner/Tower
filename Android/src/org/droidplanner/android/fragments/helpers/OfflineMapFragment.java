@@ -38,7 +38,8 @@ public class OfflineMapFragment extends SupportMapFragment {
 			Bundle bundle) {
 		View view = super.onCreateView(inflater, viewGroup, bundle);
 
-		//((DroidPlannerApp) getActivity().getApplication()).drone.setMapConfigListener(this);
+		// ((DroidPlannerApp)
+		// getActivity().getApplication()).drone.setMapConfigListener(this);
 
 		setupMap();
 		return view;
@@ -60,7 +61,7 @@ public class OfflineMapFragment extends SupportMapFragment {
 		mUiSettings.setMyLocationButtonEnabled(true);
 		mUiSettings.setCompassEnabled(true);
 		mUiSettings.setTiltGesturesEnabled(false);
-        mUiSettings.setZoomControlsEnabled(false);
+		mUiSettings.setZoomControlsEnabled(false);
 	}
 
 	private void setupMapOverlay() {
@@ -106,7 +107,7 @@ public class OfflineMapFragment extends SupportMapFragment {
 	private void setupOfflineMapOverlay() {
 		mMap.setMapType(GoogleMap.MAP_TYPE_NONE);
 		TileOverlay tileOverlay = mMap.addTileOverlay(new TileOverlayOptions()
-				                                              .tileProvider(new LocalMapTileProvider()));
+				.tileProvider(new LocalMapTileProvider()));
 		tileOverlay.setZIndex(-1);
 		tileOverlay.clearTileCache();
 	}
@@ -151,9 +152,6 @@ public class OfflineMapFragment extends SupportMapFragment {
 	}
 
 	/*
-	@Override
-	public void onMapTypeChanged() {
-		setupMap();
-	}
-	*/
+	 * @Override public void onMapTypeChanged() { setupMap(); }
+	 */
 }

@@ -5,17 +5,11 @@ import java.security.InvalidParameterException;
 import org.droidplanner.android.graphic.map.GraphicWaypoint;
 import org.droidplanner.core.mission.MissionItem;
 
-
 public enum MissionItemTypes {
-		WAYPOINT("Waypoint"),
-		TAKEOFF("Takeoff"),
-		RTL("Return to Launch"),
-		LAND("Land"),
-		LOITERN("Circle"),
-		LOITERT("Loiter"),
-		//LOITER("Loiter indefinitly"),
-		ROI("Region of Interest"),
-		SURVEY("Survey");
+	WAYPOINT("Waypoint"), TAKEOFF("Takeoff"), RTL("Return to Launch"), LAND(
+			"Land"), LOITERN("Circle"), LOITERT("Loiter"),
+	// LOITER("Loiter indefinitly"),
+	ROI("Region of Interest"), SURVEY("Survey");
 
 	private final String name;
 
@@ -36,7 +30,7 @@ public enum MissionItemTypes {
 		}
 	}
 
-	class InvalidItemException extends Exception{
+	class InvalidItemException extends Exception {
 		private static final long serialVersionUID = 1L;
 
 	}

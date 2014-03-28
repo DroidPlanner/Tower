@@ -18,58 +18,63 @@ import android.view.ViewGroup;
  * @author Fredia Huya-Kouadio
  */
 public class FlightSlidingDrawerContent extends Fragment {
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_flight_sliding_drawer_content,
-                container, false);
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		final View view = inflater.inflate(
+				R.layout.fragment_flight_sliding_drawer_content, container,
+				false);
 
-        final ViewPager viewPager = (ViewPager) view.findViewById(R.id.sliding_drawer_content);
-        viewPager.setAdapter(new FlightSlidingDrawerAdapter(getChildFragmentManager(),
-                getActivity().getApplicationContext()));
+		final ViewPager viewPager = (ViewPager) view
+				.findViewById(R.id.sliding_drawer_content);
+		viewPager.setAdapter(new FlightSlidingDrawerAdapter(
+				getChildFragmentManager(), getActivity()
+						.getApplicationContext()));
 
-        return view;
-    }
+		return view;
+	}
 
-    private static class FlightSlidingDrawerAdapter extends FragmentPagerAdapter {
+	private static class FlightSlidingDrawerAdapter extends
+			FragmentPagerAdapter {
 
-        private final Context mContext;
+		private final Context mContext;
 
-        public FlightSlidingDrawerAdapter(FragmentManager fm, Context context) {
-            super(fm);
-            mContext = context;
-        }
+		public FlightSlidingDrawerAdapter(FragmentManager fm, Context context) {
+			super(fm);
+			mContext = context;
+		}
 
-        @Override
-        public Fragment getItem(int i) {
-            switch(i){
-                case 0:
-                    return new TelemetryFragment();
+		@Override
+		public Fragment getItem(int i) {
+			switch (i) {
+			case 0:
+				return new TelemetryFragment();
 
-                case 1:
-                    return new FlightModePanel();
+			case 1:
+				return new FlightModePanel();
 
-                default:
-                    return null;
-            }
-        }
+			default:
+				return null;
+			}
+		}
 
-        @Override
-        public int getCount() {
-            return 2;
-        }
+		@Override
+		public int getCount() {
+			return 2;
+		}
 
-        @Override
-        public CharSequence getPageTitle(int position){
-            switch(position){
-                case 0:
-                    return mContext.getString(R.string.telemetry_label);
+		@Override
+		public CharSequence getPageTitle(int position) {
+			switch (position) {
+			case 0:
+				return mContext.getString(R.string.telemetry_label);
 
-                case 1:
-                    return mContext.getString(R.string.flight_modes_label);
+			case 1:
+				return mContext.getString(R.string.flight_modes_label);
 
-                default:
-                    return null;
-            }
-        }
-    }
+			default:
+				return null;
+			}
+		}
+	}
 }

@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 public class BaseViewHolder {
 	protected LinearLayout layoutView;
 	protected CheckBox checkBox;
-	
+
 	public BaseViewHolder(ViewGroup viewGroup, CheckListItem checkListItem) {
 		this.layoutView = (LinearLayout) viewGroup
 				.findViewById(R.id.lst_layout);
@@ -18,7 +18,8 @@ public class BaseViewHolder {
 		setupViewItems(viewGroup, checkListItem);
 	}
 
-	protected void setupViewItems(ViewGroup viewGroup, CheckListItem checkListItem){
-		
+	protected void setupViewItems(ViewGroup viewGroup,
+			CheckListItem checkListItem) {
+
 	}
 }

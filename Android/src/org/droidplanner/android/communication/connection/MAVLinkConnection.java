@@ -123,7 +123,7 @@ public abstract class MAVLinkConnection extends Thread {
 
 	/**
 	 * Format and send a Mavlink packet via the MAVlink stream
-	 *
+	 * 
 	 * @param packet
 	 *            MavLink packet to be transmitted
 	 */

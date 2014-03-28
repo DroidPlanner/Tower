@@ -10,11 +10,11 @@ import android.view.View.OnLongClickListener;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
-
-public class ListRow implements ListRow_Interface, OnClickListener, OnLongClickListener {
+public class ListRow implements ListRow_Interface, OnClickListener,
+		OnLongClickListener {
 	protected final CheckListItem checkListItem;
 	protected final LayoutInflater inflater;
-	
+
 	public OnRowItemChangeListener listener;
 	public BaseViewHolder holder;
 
@@ -31,9 +31,9 @@ public class ListRow implements ListRow_Interface, OnClickListener, OnLongClickL
 		holder.checkBox.setText(checkListItem.getTitle());
 		holder.checkBox.setChecked(mState);
 		holder.checkBox
-		.setClickable(checkListItem.getSys_tag() == null ? checkListItem
-				.isEditable() : !checkListItem.getSys_tag().contains(
-				"SYS"));
+				.setClickable(checkListItem.getSys_tag() == null ? checkListItem
+						.isEditable() : !checkListItem.getSys_tag().contains(
+						"SYS"));
 
 		checkListItem.setVerified(mState);
 	}
@@ -43,10 +43,11 @@ public class ListRow implements ListRow_Interface, OnClickListener, OnLongClickL
 			listener.onRowItemChanged(mView, this.checkListItem,
 					this.checkListItem.isVerified());
 	}
-	public CheckListItem getCheckListItem(){
+
+	public CheckListItem getCheckListItem() {
 		return checkListItem;
 	}
-	
+
 	@Override
 	public View getView(View convertView) {
 		// TODO Auto-generated method stub
@@ -75,7 +76,8 @@ public class ListRow implements ListRow_Interface, OnClickListener, OnLongClickL
 		} else if (sys_tag.equalsIgnoreCase("SYS_GPS3D_LVL")) {
 			mListItem.setSys_value(mDrone.GPS.getSatCount());
 		} else if (sys_tag.equalsIgnoreCase("SYS_DEF_ALT")) {
-			mListItem.setSys_value(mDrone.mission.getDefaultAlt().valueInMeters());
+			mListItem.setSys_value(mDrone.mission.getDefaultAlt()
+					.valueInMeters());
 		} else if (sys_tag.equalsIgnoreCase("SYS_ARM_STATE")) {
 			mListItem.setSys_activated(mDrone.state.isArmed());
 		} else if (sys_tag.equalsIgnoreCase("SYS_FAILSAFE_STATE")) {
@@ -84,10 +86,11 @@ public class ListRow implements ListRow_Interface, OnClickListener, OnLongClickL
 			mListItem.setSys_activated(mDrone.MavClient.isConnected());
 		}
 	}
-	
+
 	protected void getData(CheckListItem mListItem) {
-		if(this.listener!=null)
-			this.listener.onRowItemGetData(checkListItem, checkListItem.getSys_tag());
+		if (this.listener != null)
+			this.listener.onRowItemGetData(checkListItem,
+					checkListItem.getSys_tag());
 	}
 
 	@Override
@@ -98,10 +101,8 @@ public class ListRow implements ListRow_Interface, OnClickListener, OnLongClickL
 
 	@Override
 	public boolean onLongClick(View arg0) {
-		if(arg0.equals(this.holder.layoutView)){
-			Toast.makeText(
-					arg0.getContext(),
-					checkListItem.getDesc(),
+		if (arg0.equals(this.holder.layoutView)) {
+			Toast.makeText(arg0.getContext(), checkListItem.getDesc(),
 					Toast.LENGTH_SHORT).show();
 
 		}

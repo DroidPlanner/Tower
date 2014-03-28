@@ -19,7 +19,7 @@ import com.hoho.android.usbserial.driver.UsbSerialProber;
 
 public class UsbConnection extends MAVLinkConnection {
 	private static int baud_rate = 57600;
-    private static UsbSerialDriver sDriver = null;
+	private static UsbSerialDriver sDriver = null;
 
 	public UsbConnection(Context parentContext) {
 		super(parentContext);
@@ -32,20 +32,24 @@ public class UsbConnection extends MAVLinkConnection {
 
 	@Override
 	protected void readDataBlock() throws IOException {
-		//Read data from driver. This call will return upto readData.length bytes.
-		//If no data is received it will timeout after 200ms (as set by parameter 2)
-		iavailable = sDriver.read(readData,200);
-		if (iavailable == 0) iavailable = -1;
-		//Log.d("USB", "Bytes read" + iavailable);
+		// Read data from driver. This call will return upto readData.length
+		// bytes.
+		// If no data is received it will timeout after 200ms (as set by
+		// parameter 2)
+		iavailable = sDriver.read(readData, 200);
+		if (iavailable == 0)
+			iavailable = -1;
+		// Log.d("USB", "Bytes read" + iavailable);
 	}
 
 	@Override
 	protected void sendBuffer(byte[] buffer) {
-		//Write data to driver. This call should write buffer.length bytes 
-		//if data cant be sent , then it will timeout in 500ms (as set by parameter 2)
+		// Write data to driver. This call should write buffer.length bytes
+		// if data cant be sent , then it will timeout in 500ms (as set by
+		// parameter 2)
 		if (connected && sDriver != null) {
-			try{
-				sDriver.write(buffer,500);
+			try {
+				sDriver.write(buffer, 500);
 			} catch (IOException e) {
 				Log.e("USB", "Error Sending: " + e.getMessage(), e);
 			}
@@ -54,14 +58,14 @@ public class UsbConnection extends MAVLinkConnection {
 
 	@Override
 	protected void closeConnection() throws IOException {
-      if (sDriver != null) {
-         try {
-              sDriver.close();
-         } catch (IOException e) {
-             // Ignore.
-         }
-         sDriver = null;
-      }
+		if (sDriver != null) {
+			try {
+				sDriver.close();
+			} catch (IOException e) {
+				// Ignore.
+			}
+			sDriver = null;
+		}
 	}
 
 	@Override
@@ -77,33 +81,33 @@ public class UsbConnection extends MAVLinkConnection {
 
 	private void openCOM() throws IOException {
 		// Get UsbManager from Android.
-		UsbManager manager = (UsbManager) parentContext.getSystemService(Context.USB_SERVICE);
+		UsbManager manager = (UsbManager) parentContext
+				.getSystemService(Context.USB_SERVICE);
 
 		// Find the first available driver.
-		//**TODO: We should probably step through all available USB Devices
-		//...but its unlikely to happen on a Phone/tablet running DroidPlanner.
+		// **TODO: We should probably step through all available USB Devices
+		// ...but its unlikely to happen on a Phone/tablet running DroidPlanner.
 		sDriver = UsbSerialProber.findFirstDevice(manager);
 
 		if (sDriver == null) {
-			Log.d("USB", "No Devices found");	
+			Log.d("USB", "No Devices found");
 			throw new IOException("No Devices found");
-		}
-		else
-		{	
-		Log.d("USB", "Opening using Baud rate " + baud_rate);
-	        try {
-	                sDriver.open();
-	                sDriver.setParameters(baud_rate, 8, UsbSerialDriver.STOPBITS_1, UsbSerialDriver.PARITY_NONE);
-	            } catch (IOException e) {
-	                Log.e("USB", "Error setting up device: " + e.getMessage(), e);
-	                try {
-	                    sDriver.close();
-	                } catch (IOException e2) {
-	                    // Ignore.
-	                }
-	                sDriver = null;
-	                return;
-	        }
+		} else {
+			Log.d("USB", "Opening using Baud rate " + baud_rate);
+			try {
+				sDriver.open();
+				sDriver.setParameters(baud_rate, 8, UsbSerialDriver.STOPBITS_1,
+						UsbSerialDriver.PARITY_NONE);
+			} catch (IOException e) {
+				Log.e("USB", "Error setting up device: " + e.getMessage(), e);
+				try {
+					sDriver.close();
+				} catch (IOException e2) {
+					// Ignore.
+				}
+				sDriver = null;
+				return;
+			}
 		}
 	}
 }

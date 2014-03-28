@@ -26,7 +26,7 @@ public class MapManager implements OnDroneListener {
 	private GoogleMap mMap;
 	private Context context;
 	private boolean isMissionDraggable = false;
-	
+
 	public MarkerManager markers;
 	public MapPath missionPath;
 	public GraphicHome home;
@@ -34,51 +34,48 @@ public class MapManager implements OnDroneListener {
 	private MapPath droneLeashPath;
 	private Polyline flightPath;
 	public int maxFlightPathSize;
-	
+
 	public GraphicDrone droneMarker;
 	public GraphicGuided guided;
 	private DroneEvents events;
 
-	public MapManager(GoogleMap map, Drone drone, Resources resources, Context context) {
+	public MapManager(GoogleMap map, Drone drone, Resources resources,
+			Context context) {
 		this.mMap = map;
-		this.context = context;		
+		this.context = context;
 		home = new GraphicHome(drone);
 		mission = new GraphicMission(drone);
-		missionPath = new MapPath(mMap,resources);
+		missionPath = new MapPath(mMap, resources);
 		markers = new MarkerManager(mMap);
-		
 
-		//From Flight Map
-		droneMarker = new GraphicDrone(drone,mMap);
+		// From Flight Map
+		droneMarker = new GraphicDrone(drone, mMap);
 		droneLeashPath = new MapPath(mMap, resources);
 		guided = new GraphicGuided(drone);
 
 		addFlightPathToMap();
 	}
 
-
 	public void stopListeningToDrone() {
-		events.removeDroneListener(this);		
+		events.removeDroneListener(this);
 	}
-
 
 	public void update() {
 		markers.clean();
-	
+
 		if (home.isValid()) {
 			markers.updateMarker(home, false, context);
 		}
-	
+
 		markers.updateMarkers(mission.getMarkers(), isMissionDraggable, context);
-	
-		//TODO reimplement the mission path
-		//missionPath.update(mission);
-		
-		//Moved from EditorMap
-		//markers.updateMarkers(polygon .getPolygonPoints(), true, context);
-		//polygonPath.update(polygon);
+
+		// TODO reimplement the mission path
+		// missionPath.update(mission);
+
+		// Moved from EditorMap
+		// markers.updateMarkers(polygon .getPolygonPoints(), true, context);
+		// polygonPath.update(polygon);
 	}
-	
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
@@ -89,15 +86,15 @@ public class MapManager implements OnDroneListener {
 		default:
 			break;
 		}
-		
-		//From Flight Activity
+
+		// From Flight Activity
 		LatLng position = DroneHelper.CoordToLatLang(drone.GPS.getPosition());
 		switch (event) {
 		case GPS:
 			droneLeashPath.update(guided);
 			addFlightPathPoint(position);
 			break;
-		case GUIDEDPOINT:			
+		case GUIDEDPOINT:
 			markers.updateMarker(guided, true, context);
 			droneLeashPath.update(guided);
 			break;
@@ -105,8 +102,6 @@ public class MapManager implements OnDroneListener {
 			break;
 		}
 	}
-	
-	
 
 	public void addFlightPathPoint(LatLng position) {
 		if (maxFlightPathSize > 0) {
@@ -130,7 +125,6 @@ public class MapManager implements OnDroneListener {
 		flightPathOptions.color(0xfffd693f).width(6).zIndex(1);
 		flightPath = mMap.addPolyline(flightPathOptions);
 	}
-
 
 	public void setMissionDraggable(boolean isDraggable) {
 		isMissionDraggable = isDraggable;

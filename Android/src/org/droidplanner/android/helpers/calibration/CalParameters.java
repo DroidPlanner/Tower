@@ -6,7 +6,6 @@ import java.util.List;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.parameters.Parameter;
 
-
 public class CalParameters {
 	private Drone myDrone;
 	protected List<String> calParameterNames = new ArrayList<String>();
@@ -75,8 +74,8 @@ public class CalParameters {
 			myDrone.parameters.ReadParameter(calParameterNames.get(seq));
 
 		if (this.listener != null) {
-			this.listener.onCalibrationData(this, seq, calParameterNames.size(),
-					isUpdating);
+			this.listener.onCalibrationData(this, seq,
+					calParameterNames.size(), isUpdating);
 		}
 	}
 

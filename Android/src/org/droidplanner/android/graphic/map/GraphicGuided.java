@@ -20,8 +20,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class GraphicGuided  implements MarkerSource,PathSource {
-	
+public class GraphicGuided implements MarkerSource, PathSource {
+
 	private GuidedPoint guidedPoint;
 	private GPS GPS;
 
@@ -33,28 +33,27 @@ public class GraphicGuided  implements MarkerSource,PathSource {
 	@Override
 	public MarkerOptions build(Context context) {
 		return new MarkerOptions()
-		.position(DroneHelper.CoordToLatLang(guidedPoint.getCoord()))
-		.icon(getIcon(context))
-		.anchor(0.5f, 0.5f)
-		.visible(false);
+				.position(DroneHelper.CoordToLatLang(guidedPoint.getCoord()))
+				.icon(getIcon(context)).anchor(0.5f, 0.5f).visible(false);
 	}
 
 	@Override
 	public void update(Marker marker, Context context) {
 
-		if (guidedPoint.isActive()) {			
-			marker.setPosition(DroneHelper.CoordToLatLang(guidedPoint.getCoord()));
+		if (guidedPoint.isActive()) {
+			marker.setPosition(DroneHelper.CoordToLatLang(guidedPoint
+					.getCoord()));
 			marker.setIcon(getIcon(context));
 			marker.setVisible(true);
-		}else{
+		} else {
 			marker.setVisible(false);
 		}
 	}
-	
 
-	private static BitmapDescriptor getIcon(Context context){
-		return BitmapDescriptorFactory.fromBitmap(MarkerWithText.getMarkerWithTextAndDetail(R.drawable.ic_wp_map,
-			"Guided",  "", context));
+	private static BitmapDescriptor getIcon(Context context) {
+		return BitmapDescriptorFactory.fromBitmap(MarkerWithText
+				.getMarkerWithTextAndDetail(R.drawable.ic_wp_map, "Guided", "",
+						context));
 	}
 
 	@Override

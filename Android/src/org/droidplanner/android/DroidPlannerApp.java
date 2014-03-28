@@ -21,9 +21,9 @@ public class DroidPlannerApp extends ErrorReportApp implements
 	public Drone drone;
 	private MavLinkMsgHandler mavLinkMsgHandler;
 
-    /**
-     * Handles dispatching of status bar, and audible notification.
-     */
+	/**
+	 * Handles dispatching of status bar, and audible notification.
+	 */
 	public NotificationHandler mNotificationHandler;
 
 	@Override
@@ -32,7 +32,7 @@ public class DroidPlannerApp extends ErrorReportApp implements
 
 		mNotificationHandler = new NotificationHandler(getApplicationContext());
 
-		MAVLinkClient MAVClient = new MAVLinkClient(this,this);		
+		MAVLinkClient MAVClient = new MAVLinkClient(this, this);
 		Clock clock = new Clock() {
 			@Override
 			public long elapsedRealtime() {
@@ -41,19 +41,19 @@ public class DroidPlannerApp extends ErrorReportApp implements
 		};
 		Handler handler = new Handler() {
 			android.os.Handler handler = new android.os.Handler();
-			
+
 			@Override
 			public void removeCallbacks(Runnable thread) {
-				handler.removeCallbacks(thread);				
+				handler.removeCallbacks(thread);
 			}
-			
+
 			@Override
 			public void postDelayed(Runnable thread, long timeout) {
-				handler.postDelayed(thread, timeout);				
+				handler.postDelayed(thread, timeout);
 			}
 		};
 		Preferences pref = new DpPreferences(getApplicationContext());
-		drone = new Drone(MAVClient,clock,handler,pref);
+		drone = new Drone(MAVClient, clock, handler, pref);
 		drone.events.addDroneListener(mNotificationHandler);
 		mavLinkMsgHandler = new org.droidplanner.core.MAVLink.MavLinkMsgHandler(
 				drone);

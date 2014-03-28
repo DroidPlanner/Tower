@@ -71,9 +71,8 @@ public class AttitudeIndicator extends View {
 		planeCenterPaint = new Paint(planePaint);
 		planeCenterPaint.setColor(Color.RED);
 		planeFinPaint = new Paint(planePaint);
-		planeFinPaint.setStrokeWidth(PLANE_WING_WIDTH/2f);
-		
-		
+		planeFinPaint.setStrokeWidth(PLANE_WING_WIDTH / 2f);
+
 		tickPaint = new Paint(fillPaint);
 		tickPaint.setColor(Color.parseColor("#44ffffff"));
 		tickPaint.setStrokeWidth(2);
@@ -88,7 +87,8 @@ public class AttitudeIndicator extends View {
 		radiusExternal = Math.min(halfHeight, halfWidth) / YAW_ARROW_SIZE;
 		radiusInternal = radiusExternal * INTERNAL_RADIUS;
 
-		internalBounds = new RectF(-radiusInternal, -radiusInternal, radiusInternal, radiusInternal);
+		internalBounds = new RectF(-radiusInternal, -radiusInternal,
+				radiusInternal, radiusInternal);
 
 		skyPaint.setShader(new LinearGradient(0, -radiusInternal, 0,
 				radiusInternal, Color.parseColor("#0082d6"), Color
@@ -164,12 +164,12 @@ public class AttitudeIndicator extends View {
 	private void drawPlane(Canvas canvas) {
 		canvas.drawLine(radiusInternal * PLANE_SIZE, 0, -radiusInternal
 				* PLANE_SIZE, 0, planePaint);
-		canvas.drawLine(0, 0, 0, -radiusInternal * PLANE_SIZE *5/12,
+		canvas.drawLine(0, 0, 0, -radiusInternal * PLANE_SIZE * 5 / 12,
 				planeFinPaint);
 		canvas.drawCircle(0, 0, radiusInternal * PLANE_SIZE * PLANE_BODY_SIZE,
 				planePaint);
-		canvas.drawCircle(0, 0, radiusInternal * PLANE_SIZE * PLANE_BODY_SIZE /2f,
-				planeCenterPaint);
+		canvas.drawCircle(0, 0, radiusInternal * PLANE_SIZE * PLANE_BODY_SIZE
+				/ 2f, planeCenterPaint);
 	}
 
 	public void setAttitude(float roll, float pitch, float yaw) {

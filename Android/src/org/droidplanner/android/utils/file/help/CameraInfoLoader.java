@@ -16,7 +16,6 @@ import org.droidplanner.core.mission.survey.CameraInfo;
 
 import android.content.Context;
 
-
 public class CameraInfoLoader {
 
 	private static final String CAMERA_INFO_ASSESTS_FOLDER = "CameraInfo";
@@ -54,15 +53,15 @@ public class CameraInfoLoader {
 		inputStream.close();
 		return reader.getCameraInfo();
 	}
-	
+
 	public List<String> getCameraInfoList() {
-				ArrayList<String> avaliableCameras = new ArrayList<String>();
-				List<String> cameraInfoListFromStorage = getCameraInfoListFromStorage();
-				avaliableCameras.addAll(cameraInfoListFromStorage);
-				List<String> cameraInfoListFromAssets = getCameraInfoListFromAssets();
-				avaliableCameras.addAll(cameraInfoListFromAssets);
-				return avaliableCameras;
-			}
+		ArrayList<String> avaliableCameras = new ArrayList<String>();
+		List<String> cameraInfoListFromStorage = getCameraInfoListFromStorage();
+		avaliableCameras.addAll(cameraInfoListFromStorage);
+		List<String> cameraInfoListFromAssets = getCameraInfoListFromAssets();
+		avaliableCameras.addAll(cameraInfoListFromAssets);
+		return avaliableCameras;
+	}
 
 	private List<String> getCameraInfoListFromAssets() {
 		try {

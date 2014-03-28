@@ -30,16 +30,15 @@ public class FragmentSetupSummary extends SetupSidePanel {
 		final View view = inflater.inflate(
 				R.layout.fragment_setup_panel_summary, container, false);
 
-		textTitle = (TextView)view.findViewById(R.id.setupTitle);
-		textDesc = (TextView)view.findViewById(R.id.setupDesc);
-		textSummary = (TextView)view.findViewById(R.id.setupSummary);
-		
-		if(titleId!=0 && textTitle != null)
+		textTitle = (TextView) view.findViewById(R.id.setupTitle);
+		textDesc = (TextView) view.findViewById(R.id.setupDesc);
+		textSummary = (TextView) view.findViewById(R.id.setupSummary);
+
+		if (titleId != 0 && textTitle != null)
 			textTitle.setText(titleId);
-		
-		if(descId!=0)
+
+		if (descId != 0)
 			textDesc.setText(descId);
-		
 
 		final Bundle args = getArguments();
 		if (args != null) {
@@ -71,22 +70,22 @@ public class FragmentSetupSummary extends SetupSidePanel {
 	@Override
 	public void updateDescription(int idDescription) {
 		this.descId = idDescription;
-		
-		if(textDesc!=null)
+
+		if (textDesc != null)
 			textDesc.setText((descId));
-				
+
 	}
 
 	@Override
 	public void updateTitle(int idTitle) {
 		this.titleId = idTitle;
-		
-		if(textTitle!=null)
+
+		if (textTitle != null)
 			textTitle.setText(titleId);
 	}
-	
-	public void updateSummary(String summary){
-		if(textSummary!=null)
+
+	public void updateSummary(String summary) {
+		if (textSummary != null)
 			textSummary.setText(summary);
 	}
 }

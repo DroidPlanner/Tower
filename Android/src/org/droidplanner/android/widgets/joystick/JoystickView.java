@@ -43,10 +43,10 @@ public class JoystickView extends View {
 	private double userX, userY;
 	private double userXold, userYold;
 
-	private float firstTouchX,firstTouchY;
+	private float firstTouchX, firstTouchY;
 	private double releaseX = 0;
 	private double releaseY = 0;
-	
+
 	private boolean handleVisible = false;
 
 	public JoystickView(Context context) {
@@ -121,7 +121,6 @@ public class JoystickView extends View {
 		canvas.restore();
 	}
 
-
 	@Override
 	public boolean onTouchEvent(MotionEvent ev) {
 		int pointerIndex;
@@ -191,14 +190,14 @@ public class JoystickView extends View {
 	private boolean processMove(MotionEvent ev) {
 		if (isPointerValid()) {
 			final int pointerIndex = ev.findPointerIndex(pointerId);
-			
+
 			// Translate touch position to center of view
 			float x = ev.getX(pointerIndex);
 			float y = ev.getY(pointerIndex);
-			
+
 			touchX = x - firstTouchX;
 			touchY = y - firstTouchY;
-						
+
 			reportOnMoved();
 			return true;
 		}
@@ -208,7 +207,7 @@ public class JoystickView extends View {
 	private void reportOnMoved() {
 		calcUserCoordinates();
 		constrainBox();
-		
+
 		hapticFeedback();
 
 		if (moveListener != null) {
@@ -219,19 +218,20 @@ public class JoystickView extends View {
 	private void hapticFeedback() {
 		if (hasEnteredHapticFeedbackZone(userX, userXold)) {
 			performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-			Log.d(TAG, "XonCenter");	
+			Log.d(TAG, "XonCenter");
 		}
 		if (hasEnteredHapticFeedbackZone(userY, userYold)) {
 			performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 			Log.d(TAG, "YonCenter");
 		}
-		
+
 		userXold = userX;
 		userYold = userY;
 	}
 
 	private boolean hasEnteredHapticFeedbackZone(double value, double oldValue) {
-		return isInHapticFeedbackZone(value)&(!isInHapticFeedbackZone(oldValue));
+		return isInHapticFeedbackZone(value)
+				& (!isInHapticFeedbackZone(oldValue));
 	}
 
 	private boolean isInHapticFeedbackZone(double value) {

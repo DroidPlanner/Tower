@@ -8,7 +8,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-public class DpPreferences implements org.droidplanner.core.drone.Preferences  {
+public class DpPreferences implements org.droidplanner.core.drone.Preferences {
 
 	private Context context;
 
@@ -20,8 +20,9 @@ public class DpPreferences implements org.droidplanner.core.drone.Preferences  {
 	public FirmwareType getVehicleType() {
 		final SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
-		String str = prefs.getString("pref_vehicle_type", FirmwareType.ARDU_COPTER.toString());
-		return FirmwareType.firmwareFromString(str); 
+		String str = prefs.getString("pref_vehicle_type",
+				FirmwareType.ARDU_COPTER.toString());
+		return FirmwareType.firmwareFromString(str);
 	}
 
 	@Override

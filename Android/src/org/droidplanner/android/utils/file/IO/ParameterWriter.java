@@ -9,7 +9,6 @@ import org.droidplanner.android.utils.file.FileManager;
 import org.droidplanner.android.utils.file.FileStream;
 import org.droidplanner.core.parameters.Parameter;
 
-
 public class ParameterWriter {
 	private List<Parameter> parameterList;
 

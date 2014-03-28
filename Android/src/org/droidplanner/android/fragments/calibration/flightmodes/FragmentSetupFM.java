@@ -37,6 +37,7 @@ public class FragmentSetupFM extends SuperSetupMainPanel {
 	protected void onInitialize() {
 		listPWM = getResources().getStringArray(R.array.FligthMode_PWM_Range);
 	}
+
 	@Override
 	protected CalParameters getParameterHandler() {
 		return new FM_CalParameters(drone);
@@ -54,7 +55,7 @@ public class FragmentSetupFM extends SuperSetupMainPanel {
 
 	@Override
 	protected SetupSidePanel getDefaultPanel() {
-		sidePanel =  new FragmentSetupSend();
+		sidePanel = new FragmentSetupSend();
 		sidePanel.updateTitle(R.string.setup_fm_side_title);
 		sidePanel.updateDescription(R.string.setup_fm_side_desc);
 		return sidePanel;
@@ -109,8 +110,8 @@ public class FragmentSetupFM extends SuperSetupMainPanel {
 					.setChecked((fmData & flightModeIndex[i]) == flightModeIndex[i]);
 		}
 	}
+
 	@Override
-	
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch (event) {
 		case RC_IN:
@@ -161,7 +162,7 @@ public class FragmentSetupFM extends SuperSetupMainPanel {
 
 	private void setupSpinners() {
 		getFMOptions();
-		
+
 		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(
 				parentActivity, R.layout.spinner_setup_item, stringFM);
 
@@ -185,13 +186,13 @@ public class FragmentSetupFM extends SuperSetupMainPanel {
 
 	private void updateLayout(int pwmId) {
 		for (LinearLayout layout : layoutPWM) {
-				layout.setBackgroundColor(0);
+			layout.setBackgroundColor(0);
 		}
 
-        if(pwmId > -1){
-            layoutPWM[pwmId].setBackgroundColor(getResources().getColor(
-                    R.color.air_speed_label));
-        }
+		if (pwmId > -1) {
+			layoutPWM[pwmId].setBackgroundColor(getResources().getColor(
+					R.color.air_speed_label));
+		}
 	}
 
 	private int getPWMRangeIndex(int pwmValue) {
@@ -213,7 +214,8 @@ public class FragmentSetupFM extends SuperSetupMainPanel {
 	}
 
 	private void getFMOptions() {
-		String pairs[] = getResources().getStringArray(R.array.FligthMode_CopterV3_1);
+		String pairs[] = getResources().getStringArray(
+				R.array.FligthMode_CopterV3_1);
 		valueFM = null;
 		valueFM = new int[pairs.length];
 		stringFM = null;

@@ -15,7 +15,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-public class FragmentSetupIMU extends SetupMainPanel  implements OnDroneListener{
+public class FragmentSetupIMU extends SetupMainPanel implements OnDroneListener {
 
 	private final static int TIMEOUT_MAX = 300;
 
@@ -117,7 +117,8 @@ public class FragmentSetupIMU extends SetupMainPanel  implements OnDroneListener
 					parentActivity.drone.events
 							.notifyDroneEvent(DroneEventsType.HEARTBEAT_TIMEOUT);
 				} else {
-					parentActivity.app.mNotificationHandler.getTtsNotificationProvider().speak(msg);
+					parentActivity.app.mNotificationHandler
+							.getTtsNotificationProvider().speak(msg);
 				}
 			}
 		}
@@ -158,7 +159,8 @@ public class FragmentSetupIMU extends SetupMainPanel  implements OnDroneListener
 
 		if (calibration_step == 7) {
 			if (parentActivity != null && parentActivity.app != null) {
-				parentActivity.app.mNotificationHandler.getTtsNotificationProvider().speak(msg);
+				parentActivity.app.mNotificationHandler
+						.getTtsNotificationProvider().speak(msg);
 			}
 			handler.removeCallbacks(runnable);
 

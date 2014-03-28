@@ -22,12 +22,12 @@ public class FragmentSetupMAG extends SetupMainPanel {
 	@Override
 	public void setupLocalViews(View v) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void doCalibrationStep(int step) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

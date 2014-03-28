@@ -10,7 +10,6 @@ import android.gesture.GestureOverlayView;
 import android.gesture.GestureOverlayView.OnGestureListener;
 import android.view.MotionEvent;
 
-
 public class PathGesture implements OnGestureListener {
 
 	private static final int TOLERANCE = 15;

@@ -49,8 +49,8 @@ public class CameraGroundOverlays {
 			double centerAngle, Double orientation) {
 		Coord2D c1 = GeoTools.newCoordFromBearingAndDistance(center,
 				orientation - centerAngle, halfDiagonal);
-		Coord2D c2 = GeoTools.newCoordFromBearingAndDistance(center, orientation
-				+ centerAngle, halfDiagonal);
+		Coord2D c2 = GeoTools.newCoordFromBearingAndDistance(center,
+				orientation + centerAngle, halfDiagonal);
 		Coord2D c3 = GeoTools.newCoordFromBearingAndDistance(center,
 				orientation + 180 - centerAngle, halfDiagonal);
 		Coord2D c4 = GeoTools.newCoordFromBearingAndDistance(center,

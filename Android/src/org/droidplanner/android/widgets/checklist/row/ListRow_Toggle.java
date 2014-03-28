@@ -12,8 +12,7 @@ import android.widget.ToggleButton;
 
 public class ListRow_Toggle extends ListRow implements OnCheckedChangeListener {
 
-	public ListRow_Toggle(LayoutInflater inflater,
-			CheckListItem checkListItem) {
+	public ListRow_Toggle(LayoutInflater inflater, CheckListItem checkListItem) {
 		super(inflater, checkListItem);
 	}
 

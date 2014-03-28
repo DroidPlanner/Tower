@@ -27,8 +27,9 @@ public abstract class SuperSetupMainPanel extends SetupMainPanel implements
 	protected abstract void updatePanelInfo();
 
 	protected abstract void updateCalibrationData();
-	
-	protected void onInitialize(){};//can be overridden if necessary
+
+	protected void onInitialize() {
+	};// can be overridden if necessary
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {

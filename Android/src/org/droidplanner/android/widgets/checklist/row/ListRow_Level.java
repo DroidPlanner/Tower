@@ -10,9 +10,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class ListRow_Level extends ListRow {
-	
-	public ListRow_Level(LayoutInflater inflater,
-			CheckListItem checkListItem) {
+
+	public ListRow_Level(LayoutInflater inflater, CheckListItem checkListItem) {
 		super(inflater, checkListItem);
 	}
 
@@ -28,8 +27,8 @@ public class ListRow_Level extends ListRow {
 			view = convertView;
 			holder = (ViewHolder) convertView.getTag();
 		}
-		
-		updateDisplay(view, (ViewHolder)holder, checkListItem);
+
+		updateDisplay(view, (ViewHolder) holder, checkListItem);
 		return view;
 	}
 
@@ -45,14 +44,14 @@ public class ListRow_Level extends ListRow {
 		getData(mListItem);
 
 		failMandatory = sysValue <= minVal;
-		
+
 		if (sysValue <= minVal)
 			drawableId = R.drawable.pstate_poor;
 		else if (sysValue > minVal && sysValue <= nomVal)
 			drawableId = R.drawable.pstate_warning;
 		else
 			drawableId = R.drawable.pstate_good;
-		
+
 		holder.progressBar.setMax((int) mListItem.getMax_val());
 		holder.progressBar.setProgressDrawable(view.getResources().getDrawable(
 				drawableId));
@@ -65,14 +64,12 @@ public class ListRow_Level extends ListRow {
 			e.printStackTrace();
 		}
 
-		
-		updateCheckBox(checkListItem.isMandatory()&&!failMandatory);
-/*	
-		if(holder.checkBox.isChecked())
-			holder.layoutView.setBackgroundColor(getViewType());
-		else
-			holder.layoutView.setBackgroundColor(Color.parseColor("#4f0f00"));
-*/
+		updateCheckBox(checkListItem.isMandatory() && !failMandatory);
+		/*
+		 * if(holder.checkBox.isChecked())
+		 * holder.layoutView.setBackgroundColor(getViewType()); else
+		 * holder.layoutView.setBackgroundColor(Color.parseColor("#4f0f00"));
+		 */
 
 	}
 
@@ -85,11 +82,12 @@ public class ListRow_Level extends ListRow {
 		private TextView unitView;
 
 		private ViewHolder(ViewGroup viewGroup, CheckListItem checkListItem) {
-				super(viewGroup,checkListItem);
+			super(viewGroup, checkListItem);
 		}
-		
+
 		@Override
-		protected void setupViewItems(ViewGroup viewGroup, CheckListItem checkListItem){
+		protected void setupViewItems(ViewGroup viewGroup,
+				CheckListItem checkListItem) {
 			this.progressBar = (ProgressBar) viewGroup
 					.findViewById(R.id.lst_level);
 			this.unitView = (TextView) viewGroup.findViewById(R.id.lst_unit);

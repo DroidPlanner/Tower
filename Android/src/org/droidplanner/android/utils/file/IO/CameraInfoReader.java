@@ -17,7 +17,7 @@ import android.util.Xml;
 public class CameraInfoReader {
 
 	private XmlPullParser parser;
-	
+
 	private CameraInfo cameraInfo = new CameraInfo();
 
 	public void openFile(InputStream inputStream) throws Exception {
@@ -28,7 +28,7 @@ public class CameraInfoReader {
 	public CameraInfo getCameraInfo() {
 		return cameraInfo;
 	}
-	
+
 	public void parse(InputStream in) throws XmlPullParserException,
 			IOException {
 		parser = Xml.newPullParser();
@@ -59,10 +59,11 @@ public class CameraInfoReader {
 				cameraInfo.overlap = readDouble("Overlap");
 			} else if (name.equals("Sidelap")) {
 				cameraInfo.sidelap = readDouble("Sidelap");
-			}else if (name.equals("Name")) {
-					cameraInfo.name = readString("Name");
+			} else if (name.equals("Name")) {
+				cameraInfo.name = readString("Name");
 			} else if (name.equals("Orientation")) {
-				cameraInfo.isInLandscapeOrientation = readText().equals("Portrait")?false:true;
+				cameraInfo.isInLandscapeOrientation = readText().equals(
+						"Portrait") ? false : true;
 			} else {
 				skip();
 			}

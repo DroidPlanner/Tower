@@ -11,9 +11,9 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-public class ListRow_Select extends ListRow implements OnItemSelectedListener{
-	
-	public ListRow_Select( LayoutInflater inflater, CheckListItem checkListItem) {
+public class ListRow_Select extends ListRow implements OnItemSelectedListener {
+
+	public ListRow_Select(LayoutInflater inflater, CheckListItem checkListItem) {
 		super(inflater, checkListItem);
 	}
 
@@ -30,7 +30,7 @@ public class ListRow_Select extends ListRow implements OnItemSelectedListener{
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		updateDisplay(view, (ViewHolder)holder, checkListItem);
+		updateDisplay(view, (ViewHolder) holder, checkListItem);
 		return view;
 	}
 
@@ -55,11 +55,12 @@ public class ListRow_Select extends ListRow implements OnItemSelectedListener{
 
 		private ViewHolder(ViewGroup viewGroup, CheckListItem checkListItem) {
 			super(viewGroup, checkListItem);
-			this.checkListItem = checkListItem;			
+			this.checkListItem = checkListItem;
 		}
-		
+
 		@Override
-		protected void setupViewItems(ViewGroup viewGroup, CheckListItem checkListItem){
+		protected void setupViewItems(ViewGroup viewGroup,
+				CheckListItem checkListItem) {
 			this.selectView = (Spinner) viewGroup.findViewById(R.id.lst_select);
 
 			setupSpinner(viewGroup, checkListItem);
@@ -81,7 +82,7 @@ public class ListRow_Select extends ListRow implements OnItemSelectedListener{
 	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
 			long arg3) {
 		checkListItem.setSelectedIndex(arg2);
-		updateRowChanged(arg1,this.checkListItem);
+		updateRowChanged(arg1, this.checkListItem);
 	}
 
 	@Override

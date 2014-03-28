@@ -68,7 +68,7 @@ public class MissionItemDetailManager {
 	private void addItemDetail(MissionItem item) {
 		if (item instanceof EditorMissionItem) {
 			itemDetailFragment = ((EditorMissionItem) item).getDetailFragment();
-	
+
 			if (view == null) {
 				itemDetailFragment.show(fragmentManager, "Item detail dialog");
 			} else {

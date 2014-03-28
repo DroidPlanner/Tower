@@ -1,6 +1,5 @@
 package org.droidplanner.android.dialogs.openfile;
 
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,7 +7,6 @@ import android.content.DialogInterface.OnClickListener;
 import android.widget.Toast;
 
 import org.droidplanner.R;
-
 
 public abstract class OpenFileDialog implements OnClickListener {
 

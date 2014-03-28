@@ -60,7 +60,7 @@ public class CheckListXmlParser extends ListXmlParser {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void process_category(XmlPullParser xpp) {
 		String lbl = xpp.getAttributeValue(null, "label");
 		if (lbl == null)
@@ -87,16 +87,23 @@ public class CheckListXmlParser extends ListXmlParser {
 			checkListItem.setDesc(xpp.getAttributeValue(null, "description"));
 			checkListItem.setUnit(xpp.getAttributeValue(null, "unit"));
 			checkListItem.setOn_label(xpp.getAttributeValue(null, "on_label"));
-			checkListItem.setOff_label(xpp.getAttributeValue(null, "off_label"));
+			checkListItem
+					.setOff_label(xpp.getAttributeValue(null, "off_label"));
 			checkListItem.setSys_tag(xpp.getAttributeValue(null, "system_tag"));
 			checkListItem.setEditable(xpp.getAttributeValue(null, "editable"));
-			checkListItem.setMandatory(xpp.getAttributeValue(null, "mandatory"));
-			checkListItem.setNom_val(xpp.getAttributeValue(null, "nominal_val"));
-			checkListItem.setMin_val(xpp.getAttributeValue(null, "minimum_val"));
-			checkListItem.setMax_val(xpp.getAttributeValue(null, "maximum_val"));
+			checkListItem
+					.setMandatory(xpp.getAttributeValue(null, "mandatory"));
+			checkListItem
+					.setNom_val(xpp.getAttributeValue(null, "nominal_val"));
+			checkListItem
+					.setMin_val(xpp.getAttributeValue(null, "minimum_val"));
+			checkListItem
+					.setMax_val(xpp.getAttributeValue(null, "maximum_val"));
 			checkListItem.setValue(xpp.getAttributeValue(null, "value"));
-			checkListItem.setSelectedIndex(xpp.getAttributeValue(null,"selectindex"));
-			checkListItem.setOptionLists(xpp.getAttributeValue(null,"optionlist"));
+			checkListItem.setSelectedIndex(xpp.getAttributeValue(null,
+					"selectindex"));
+			checkListItem.setOptionLists(xpp.getAttributeValue(null,
+					"optionlist"));
 		}
 	}
 
@@ -126,7 +133,7 @@ public class CheckListXmlParser extends ListXmlParser {
 			process_category(xpp);
 		} else if (xpp.getName().contains("_item")) {
 			process_checkitems(xpp);
-		} else if (xpp.getDepth()==1){
+		} else if (xpp.getDepth() == 1) {
 			this.checkListTitle = xpp.getAttributeValue(null, "title");
 			this.checkListType = xpp.getAttributeValue(null, "type");
 			this.checkListVersion = xpp.getAttributeValue(null, "version");

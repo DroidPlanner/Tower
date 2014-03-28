@@ -12,7 +12,6 @@ import org.droidplanner.android.utils.file.FileList;
 import org.droidplanner.android.utils.file.FileManager;
 import org.droidplanner.core.parameters.Parameter;
 
-
 public class ParameterReader implements
 		org.droidplanner.android.dialogs.openfile.OpenFileDialog.FileReader {
 	private List<Parameter> parameters;

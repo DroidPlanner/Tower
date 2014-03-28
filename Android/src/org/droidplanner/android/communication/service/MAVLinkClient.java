@@ -21,10 +21,10 @@ import com.MAVLink.Messages.MAVLinkPacket;
 // provide a common class for some ease of use functionality
 public class MAVLinkClient implements MAVLinkStreams.MAVLinkOutputStream {
 
-    /**
-     * This is used as tag for logging.
-     */
-    private static final String TAG = MAVLinkClient.class.getSimpleName();
+	/**
+	 * This is used as tag for logging.
+	 */
+	private static final String TAG = MAVLinkClient.class.getSimpleName();
 
 	public static final int MSG_RECEIVED_DATA = 0;
 	public static final int MSG_SELF_DESTRY_SERVICE = 1;
@@ -36,7 +36,8 @@ public class MAVLinkClient implements MAVLinkStreams.MAVLinkOutputStream {
 	final Messenger mMessenger = new Messenger(new IncomingHandler());
 	private boolean mIsBound;
 
-	public MAVLinkClient(Context context, MAVLinkStreams.MavlinkInputStream listener) {
+	public MAVLinkClient(Context context,
+			MAVLinkStreams.MavlinkInputStream listener) {
 		parent = context;
 		this.listener = listener;
 	}
@@ -69,7 +70,7 @@ public class MAVLinkClient implements MAVLinkStreams.MAVLinkOutputStream {
 			}
 		}
 	}
-	
+
 	/**
 	 * Handler of incoming messages from service.
 	 */
@@ -117,9 +118,9 @@ public class MAVLinkClient implements MAVLinkStreams.MAVLinkOutputStream {
 	};
 
 	public void sendMavPacket(MAVLinkPacket pack) {
-        if(mService == null){
-            return;
-        }
+		if (mService == null) {
+			return;
+		}
 
 		Message msg = Message.obtain(null, MAVLinkService.MSG_SEND_DATA);
 		Bundle data = new Bundle();

@@ -20,7 +20,7 @@ public class SetupRadioFragment extends SuperSetupFragment {
 	private static final int RC_MSG_RATE = 50;
 
 	private Drone drone;
-	
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -57,7 +57,7 @@ public class SetupRadioFragment extends SuperSetupFragment {
 
 	@Override
 	public SetupMainPanel getMainPanel(int index) {
- 		SetupMainPanel setupPanel;
+		SetupMainPanel setupPanel;
 		switch (index) {
 		case 1:
 			setupPanel = new FragmentSetupFM();
@@ -71,8 +71,8 @@ public class SetupRadioFragment extends SuperSetupFragment {
 		case 0:
 		default:
 			setupPanel = new FragmentSetupRC();
-		}		
-		
+		}
+
 		return setupPanel;
 	}
 

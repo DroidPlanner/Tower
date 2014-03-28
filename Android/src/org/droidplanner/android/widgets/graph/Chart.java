@@ -14,7 +14,6 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-
 /*
  * Widget for a Chart Originally copied from http://code.google.com/p/copter-gcs/
  */

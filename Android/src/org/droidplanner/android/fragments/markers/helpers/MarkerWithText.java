@@ -1,6 +1,5 @@
 package org.droidplanner.android.fragments.markers.helpers;
 
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -13,22 +12,23 @@ import android.graphics.Rect;
 
 import org.droidplanner.R;
 
-
 public class MarkerWithText {
 
 	private static final int RECT_PADDING = 6;
 
-
-	public static Bitmap getMarkerWithText(int color, String text, Context context) {
-		return drawTextToBitmap(context, R.drawable.ic_marker_white, color, text);
+	public static Bitmap getMarkerWithText(int color, String text,
+			Context context) {
+		return drawTextToBitmap(context, R.drawable.ic_marker_white, color,
+				text);
 	}
 
 	/**
 	 * Copied from:
-	 * http://stackoverflow.com/questions/18335642/how-to-draw-text-in-default-marker-of-google-map-v2?lq=1
+	 * http://stackoverflow.com/questions/18335642/how-to-draw-text-
+	 * in-default-marker-of-google-map-v2?lq=1
 	 */
 	private static Bitmap drawTextToBitmap(Context gContext, int gResId,
-	                                       int color, String gText) {
+			int color, String gText) {
 		Resources resources = gContext.getResources();
 		float scale = resources.getDisplayMetrics().density;
 		Bitmap bitmap = BitmapFactory.decodeResource(resources, gResId);
@@ -53,23 +53,30 @@ public class MarkerWithText {
 		Rect bounds = new Rect();
 		paint.getTextBounds(gText, 0, gText.length(), bounds);
 		int x = (bitmap.getWidth() - bounds.width()) / 2;
-		int y = (bitmap.getHeight() + bounds.height()) * 5/12; // At 5/12 from the top so it stays on the center
+		int y = (bitmap.getHeight() + bounds.height()) * 5 / 12; // At 5/12 from
+																	// the top
+																	// so it
+																	// stays on
+																	// the
+																	// center
 
 		canvas.drawText(gText, x, y, paint);
 
 		return bitmap;
 	}
 
-
-	public static Bitmap getMarkerWithTextAndDetail(int gResId, String text, String detail, Context context) {
+	public static Bitmap getMarkerWithTextAndDetail(int gResId, String text,
+			String detail, Context context) {
 		return drawTextAndDetailToBitmap(context, gResId, text, detail);
 	}
 
 	/**
 	 * Based on:
-	 * http://stackoverflow.com/questions/18335642/how-to-draw-text-in-default-marker-of-google-map-v2?lq=1
+	 * http://stackoverflow.com/questions/18335642/how-to-draw-text-in-
+	 * default-marker-of-google-map-v2?lq=1
 	 */
-	private static Bitmap drawTextAndDetailToBitmap(Context gContext, int gResId, String gText, String gDetail) {
+	private static Bitmap drawTextAndDetailToBitmap(Context gContext,
+			int gResId, String gText, String gDetail) {
 		Resources resources = gContext.getResources();
 		float scale = resources.getDisplayMetrics().density;
 		Bitmap bitmap = BitmapFactory.decodeResource(resources, gResId);
@@ -85,7 +92,6 @@ public class MarkerWithText {
 		Canvas canvas = new Canvas(bitmap);
 		canvas.drawBitmap(bitmap, 0, 0, paint);
 
-
 		paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		paint.setColor(Color.WHITE);
 		paint.setTextSize((int) (13 * scale));
@@ -96,7 +102,6 @@ public class MarkerWithText {
 		paint.getTextBounds(gText, 0, gText.length(), bounds);
 		bounds.offsetTo(-6, bounds.height() / 2);
 
-
 		// paint and bounds for details
 		Paint dpaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		dpaint.setColor(Color.WHITE);
@@ -106,14 +111,13 @@ public class MarkerWithText {
 
 		Rect dbounds;
 
-		if (gDetail!=null) {
+		if (gDetail != null) {
 			dbounds = new Rect();
 			dpaint.getTextBounds(gDetail, 0, gDetail.length(), dbounds);
 			dbounds.offsetTo(0, bounds.bottom + 2);
-		}else{
+		} else {
 			dbounds = new Rect(0, 0, 0, 0);
 		}
-
 
 		// include text and detail bounds
 		Rect brect = new Rect(bounds);
@@ -124,16 +128,17 @@ public class MarkerWithText {
 		int x = (bitmap.getWidth() - brect.width()) / 2;
 		int y = bounds.top + (bitmap.getHeight() - brect.height()) / 2;
 		brect.offsetTo(x, y - (bounds.height()));
-		brect.set(brect.left - RECT_PADDING, brect.top - RECT_PADDING, brect.right + RECT_PADDING, brect.bottom + RECT_PADDING);
-
+		brect.set(brect.left - RECT_PADDING, brect.top - RECT_PADDING,
+				brect.right + RECT_PADDING, brect.bottom + RECT_PADDING);
 
 		// draw text
 		x = (bitmap.getWidth() - bounds.width()) / 2;
-		y = bounds.top + (bitmap.getHeight() - (bounds.height() + dbounds.height())) / 2;
+		y = bounds.top
+				+ (bitmap.getHeight() - (bounds.height() + dbounds.height()))
+				/ 2;
 		canvas.drawText(gText, x, y, paint);
 
-
-		if (gDetail!=null) {
+		if (gDetail != null) {
 			// draw detail
 			x = (bitmap.getWidth() - dbounds.width()) / 2;
 			y = y + bounds.height() + 2;

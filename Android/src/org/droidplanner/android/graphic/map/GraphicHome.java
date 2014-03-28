@@ -40,8 +40,8 @@ public class GraphicHome implements MarkerSource {
 	public void update(Marker marker, Context context) {
 		marker.setVisible(home.isValid());
 		marker.setPosition(DroneHelper.CoordToLatLang(home.getCoord()));
-		marker.setSnippet("Home "+ home.getAltitude());
-		
+		marker.setSnippet("Home " + home.getAltitude());
+
 	}
 
 }
