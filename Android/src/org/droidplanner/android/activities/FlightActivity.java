@@ -1,18 +1,15 @@
 package org.droidplanner.android.activities;
 
 import org.droidplanner.R;
-import org.droidplanner.core.drone.Drone;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.android.fragments.FlightActionsFragment;
 import org.droidplanner.android.fragments.FlightMapFragment;
 import org.droidplanner.android.fragments.RCFragment;
 import org.droidplanner.android.fragments.TelemetryFragment;
 import org.droidplanner.android.fragments.helpers.FlightSlidingDrawerContent;
-import org.droidplanner.android.fragments.helpers.OnMapInteractionListener;
 import org.droidplanner.android.fragments.mode.FlightModePanel;
-import org.droidplanner.core.mission.MissionItem;
-import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
+import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
+import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -26,10 +23,8 @@ import android.widget.SlidingDrawer;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.maps.model.LatLng;
 
 public class FlightActivity extends DrawerNavigationUI implements
-		OnMapInteractionListener,
 		FlightActionsFragment.OnMissionControlInteraction, OnDroneListener {
 
 	private static final int GOOGLE_PLAY_SERVICES_REQUEST_CODE = 101;
@@ -216,18 +211,6 @@ public class FlightActivity extends DrawerNavigationUI implements
 	}
 
 	@Override
-	public void onMapClick(LatLng point) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public boolean onMarkerClick(MissionItem wp) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public void onJoystickSelected() {
 		toggleRCFragment();
 	}
@@ -282,29 +265,4 @@ public class FlightActivity extends DrawerNavigationUI implements
 				{ "https://www.youtube.com/watch?v=v9ydP-NWoJE",
 						"https://www.youtube.com/watch?v=miwWUgX6nwY" } };
 	}
-
-	@Override
-	public void onAddPoint(LatLng point) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onMoveHome(LatLng coord) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onMoveWaypoint(SpatialCoordItem waypoint, LatLng latLng) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onMovingWaypoint(SpatialCoordItem source, LatLng latLng) {
-		// TODO Auto-generated method stub
-
-	}
-
 }
