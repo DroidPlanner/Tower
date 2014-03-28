@@ -68,19 +68,6 @@ public class FlightMapFragment extends DroneMap implements
 		drone.events.removeDroneListener(this);
 	}
 	
-	private void animateCamera(LatLng coord) {
-		if (!hasBeenZoomed) {
-			hasBeenZoomed = true;
-			mMap.animateCamera(CameraUpdateFactory
-					.newLatLngZoom(coord, ZOOM_LEVEL));
-		}
-		if (isAutoPanEnabled) {
-			mMap.animateCamera(CameraUpdateFactory
-					.newLatLngZoom(coord, ZOOM_LEVEL));
-		}
-	}
-	
-
 	@Override
 	public void onMapLongClick(LatLng coord) {
 		getPreferences();
@@ -127,10 +114,22 @@ public class FlightMapFragment extends DroneMap implements
 		LatLng position = DroneHelper.CoordToLatLang(drone.GPS.getPosition());
 		switch (event) {
 		case GPS:
-			animateCamera(position);
+			animateCameraIfNeeded(position);
 			break;
 		default:
 			break;
+		}
+	}
+
+	private void animateCameraIfNeeded(LatLng coord) {
+		if (!hasBeenZoomed) {
+			hasBeenZoomed = true;
+			mMap.animateCamera(CameraUpdateFactory
+					.newLatLngZoom(coord, ZOOM_LEVEL));
+		}
+		if (isAutoPanEnabled) {
+			mMap.animateCamera(CameraUpdateFactory
+					.newLatLngZoom(coord, ZOOM_LEVEL));
 		}
 	}
 
