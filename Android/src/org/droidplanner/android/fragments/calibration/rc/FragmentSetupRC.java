@@ -1,8 +1,6 @@
 package org.droidplanner.android.fragments.calibration.rc;
 
 import org.droidplanner.R;
-import org.droidplanner.android.calibration.CalParameters;
-import org.droidplanner.android.calibration.RC_CalParameters;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.android.fragments.SetupRadioFragment;
@@ -12,6 +10,8 @@ import org.droidplanner.android.fragments.calibration.FragmentSetupStart;
 import org.droidplanner.android.fragments.calibration.FragmentSetupSummary;
 import org.droidplanner.android.fragments.calibration.SetupSidePanel;
 import org.droidplanner.android.fragments.helpers.SuperSetupMainPanel;
+import org.droidplanner.android.helpers.calibration.CalParameters;
+import org.droidplanner.android.helpers.calibration.RC_CalParameters;
 import org.droidplanner.android.widgets.FillBar.FillBar;
 import org.droidplanner.android.widgets.RcStick.RcStick;
 

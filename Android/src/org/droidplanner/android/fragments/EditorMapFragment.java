@@ -1,7 +1,7 @@
 package org.droidplanner.android.fragments;
 
 
-import org.droidplanner.android.activities.helpers.OnEditorInteraction;
+import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 import org.droidplanner.android.fragments.helpers.DroneMap;
 import org.droidplanner.android.fragments.helpers.MapPath;
 import org.droidplanner.android.graphic.DroneHelper;

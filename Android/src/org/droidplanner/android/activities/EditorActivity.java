@@ -3,8 +3,8 @@ package org.droidplanner.android.activities;
 import java.util.List;
 
 import org.droidplanner.R;
-import org.droidplanner.android.activities.helpers.OnEditorInteraction;
 import org.droidplanner.android.activities.helpers.SuperUI;
+import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.android.fragments.EditorListFragment;

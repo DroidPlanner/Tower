@@ -1,13 +1,13 @@
 package org.droidplanner.android.fragments.calibration.flightmodes;
 
 import org.droidplanner.R;
-import org.droidplanner.android.calibration.CalParameters;
-import org.droidplanner.android.calibration.FM_CalParameters;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.android.fragments.calibration.FragmentSetupSend;
 import org.droidplanner.android.fragments.calibration.SetupSidePanel;
 import org.droidplanner.android.fragments.helpers.SuperSetupMainPanel;
+import org.droidplanner.android.helpers.calibration.CalParameters;
+import org.droidplanner.android.helpers.calibration.FM_CalParameters;
 
 import android.view.View;
 import android.widget.ArrayAdapter;

@@ -2,7 +2,7 @@ package org.droidplanner.android.helpers;
 
 import org.droidplanner.core.drone.profiles.VehicleProfile;
 import org.droidplanner.core.drone.variables.Type.FirmwareType;
-import org.droidplanner.android.file.IO.VehicleProfileReader;
+import org.droidplanner.android.utils.file.IO.VehicleProfileReader;
 
 import android.content.Context;
 import android.content.SharedPreferences;

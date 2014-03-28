@@ -1,11 +1,11 @@
 package org.droidplanner.android.fragments.calibration.sf;
 
 import org.droidplanner.R;
-import org.droidplanner.android.calibration.CalParameters;
-import org.droidplanner.android.calibration.SF_CalParameters;
 import org.droidplanner.android.fragments.calibration.FragmentSetupSend;
 import org.droidplanner.android.fragments.calibration.SetupSidePanel;
 import org.droidplanner.android.fragments.helpers.SuperSetupMainPanel;
+import org.droidplanner.android.helpers.calibration.CalParameters;
+import org.droidplanner.android.helpers.calibration.SF_CalParameters;
 
 import android.view.View;
 import android.widget.ArrayAdapter;

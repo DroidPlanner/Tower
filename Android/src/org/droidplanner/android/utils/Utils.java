@@ -2,11 +2,11 @@ package org.droidplanner.android.utils;
 
 import java.util.Locale;
 
-import org.droidplanner.android.connection.BluetoothConnection;
-import org.droidplanner.android.connection.MAVLinkConnection;
-import org.droidplanner.android.connection.TcpConnection;
-import org.droidplanner.android.connection.UdpConnection;
-import org.droidplanner.android.connection.UsbConnection;
+import org.droidplanner.android.communication.connection.BluetoothConnection;
+import org.droidplanner.android.communication.connection.MAVLinkConnection;
+import org.droidplanner.android.communication.connection.TcpConnection;
+import org.droidplanner.android.communication.connection.UdpConnection;
+import org.droidplanner.android.communication.connection.UsbConnection;
 
 import android.content.Context;
 import android.content.res.Configuration;

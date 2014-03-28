@@ -2,7 +2,7 @@ package org.droidplanner.android.dialogs.openfile;
 
 import java.util.List;
 
-import org.droidplanner.android.file.IO.ParameterReader;
+import org.droidplanner.android.utils.file.IO.ParameterReader;
 import org.droidplanner.core.parameters.Parameter;
 
 

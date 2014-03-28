@@ -1,6 +1,6 @@
 package org.droidplanner.android;
 
-import org.droidplanner.android.file.IO.ExceptionWriter;
+import org.droidplanner.android.utils.file.IO.ExceptionWriter;
 
 import android.app.Application;
 

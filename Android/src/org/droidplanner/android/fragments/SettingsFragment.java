@@ -4,8 +4,8 @@ import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.ConfigurationActivity;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.android.file.DirectoryPath;
 import org.droidplanner.android.utils.Constants;
+import org.droidplanner.android.utils.file.DirectoryPath;
 
 import android.content.Context;
 import android.content.Intent;

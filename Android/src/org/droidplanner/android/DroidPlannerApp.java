@@ -8,9 +8,9 @@ import org.droidplanner.core.drone.DroneInterfaces.Clock;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
 import org.droidplanner.core.drone.Preferences;
+import org.droidplanner.android.communication.service.MAVLinkClient;
 import org.droidplanner.android.helpers.DpPreferences;
 import org.droidplanner.android.notifications.TTSNotificationProvider;
-import org.droidplanner.android.service.MAVLinkClient;
 
 import android.os.SystemClock;
 
