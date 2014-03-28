@@ -1,4 +1,4 @@
-package org.droidplanner.android.checklist.xml;
+package org.droidplanner.android.widgets.checklist.xml;
 
 public class ListXmlData implements ListXmlData_Interface {
 	private String tagName;

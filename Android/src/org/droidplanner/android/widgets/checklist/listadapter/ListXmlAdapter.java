@@ -1,10 +1,10 @@
-package org.droidplanner.android.checklist.listadapter;
+package org.droidplanner.android.widgets.checklist.listadapter;
 
 import java.util.HashMap;
 import java.util.List;
 
 import org.droidplanner.R;
-import org.droidplanner.android.checklist.row.ListRow_Interface;
+import org.droidplanner.android.widgets.checklist.row.ListRow_Interface;
 
 import android.graphics.Typeface;
 import android.view.LayoutInflater;

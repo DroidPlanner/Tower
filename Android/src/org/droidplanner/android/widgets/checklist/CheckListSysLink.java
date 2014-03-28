@@ -1,4 +1,4 @@
-package org.droidplanner.android.checklist;
+package org.droidplanner.android.widgets.checklist;
 
 import org.droidplanner.core.MAVLink.MavLinkArm;
 import org.droidplanner.core.drone.Drone;

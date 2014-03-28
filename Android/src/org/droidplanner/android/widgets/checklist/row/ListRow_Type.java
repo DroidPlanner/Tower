@@ -1,4 +1,4 @@
-package org.droidplanner.android.checklist.row;
+package org.droidplanner.android.widgets.checklist.row;
 
 public enum ListRow_Type {
     CHECKBOX_ROW,

@@ -1,4 +1,4 @@
-package org.droidplanner.android.checklist.xml;
+package org.droidplanner.android.widgets.checklist.xml;
 
 public interface ListXmlData_Interface {
 	public String getTagName();

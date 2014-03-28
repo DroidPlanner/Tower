@@ -1,10 +1,10 @@
-package org.droidplanner.android.checklist;
+package org.droidplanner.android.widgets.checklist;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.droidplanner.android.checklist.xml.ListXmlParser;
+import org.droidplanner.android.widgets.checklist.xml.ListXmlParser;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 

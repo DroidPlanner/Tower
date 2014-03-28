@@ -1,10 +1,10 @@
-package org.droidplanner.android.checklist;
+package org.droidplanner.android.widgets.checklist;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.droidplanner.android.checklist.xml.ListXmlData;
+import org.droidplanner.android.widgets.checklist.xml.ListXmlData;
 
 
 public class CheckListItem extends ListXmlData {

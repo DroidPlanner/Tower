@@ -6,12 +6,12 @@ import java.util.List;
 
 import org.droidplanner.R;
 import org.droidplanner.android.activities.helpers.SuperActivity;
-import org.droidplanner.android.checklist.CheckListAdapter;
-import org.droidplanner.android.checklist.CheckListAdapter.OnCheckListItemUpdateListener;
-import org.droidplanner.android.checklist.CheckListItem;
-import org.droidplanner.android.checklist.CheckListSysLink;
-import org.droidplanner.android.checklist.CheckListXmlParser;
-import org.droidplanner.android.checklist.xml.ListXmlParser.OnXmlParserError;
+import org.droidplanner.android.widgets.checklist.CheckListAdapter;
+import org.droidplanner.android.widgets.checklist.CheckListItem;
+import org.droidplanner.android.widgets.checklist.CheckListSysLink;
+import org.droidplanner.android.widgets.checklist.CheckListXmlParser;
+import org.droidplanner.android.widgets.checklist.CheckListAdapter.OnCheckListItemUpdateListener;
+import org.droidplanner.android.widgets.checklist.xml.ListXmlParser.OnXmlParserError;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;

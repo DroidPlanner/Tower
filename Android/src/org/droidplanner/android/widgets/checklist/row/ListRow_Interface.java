@@ -1,6 +1,6 @@
-package org.droidplanner.android.checklist.row;
+package org.droidplanner.android.widgets.checklist.row;
 
-import org.droidplanner.android.checklist.CheckListItem;
+import org.droidplanner.android.widgets.checklist.CheckListItem;
 
 import android.view.View;
 

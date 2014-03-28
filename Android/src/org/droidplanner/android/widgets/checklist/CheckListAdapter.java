@@ -1,23 +1,23 @@
-package org.droidplanner.android.checklist;
+package org.droidplanner.android.widgets.checklist;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import org.droidplanner.R;
-import org.droidplanner.android.checklist.listadapter.ListXmlAdapter;
-import org.droidplanner.android.checklist.row.ListRow;
-import org.droidplanner.android.checklist.row.ListRow_CheckBox;
-import org.droidplanner.android.checklist.row.ListRow_Interface;
-import org.droidplanner.android.checklist.row.ListRow_Interface.OnRowItemChangeListener;
-import org.droidplanner.android.checklist.row.ListRow_Level;
-import org.droidplanner.android.checklist.row.ListRow_Note;
-import org.droidplanner.android.checklist.row.ListRow_Radio;
-import org.droidplanner.android.checklist.row.ListRow_Select;
-import org.droidplanner.android.checklist.row.ListRow_Switch;
-import org.droidplanner.android.checklist.row.ListRow_Toggle;
-import org.droidplanner.android.checklist.row.ListRow_Type;
-import org.droidplanner.android.checklist.row.ListRow_Value;
+import org.droidplanner.android.widgets.checklist.listadapter.ListXmlAdapter;
+import org.droidplanner.android.widgets.checklist.row.ListRow;
+import org.droidplanner.android.widgets.checklist.row.ListRow_CheckBox;
+import org.droidplanner.android.widgets.checklist.row.ListRow_Interface;
+import org.droidplanner.android.widgets.checklist.row.ListRow_Level;
+import org.droidplanner.android.widgets.checklist.row.ListRow_Note;
+import org.droidplanner.android.widgets.checklist.row.ListRow_Radio;
+import org.droidplanner.android.widgets.checklist.row.ListRow_Select;
+import org.droidplanner.android.widgets.checklist.row.ListRow_Switch;
+import org.droidplanner.android.widgets.checklist.row.ListRow_Toggle;
+import org.droidplanner.android.widgets.checklist.row.ListRow_Type;
+import org.droidplanner.android.widgets.checklist.row.ListRow_Value;
+import org.droidplanner.android.widgets.checklist.row.ListRow_Interface.OnRowItemChangeListener;
 
 import android.graphics.Typeface;
 import android.view.LayoutInflater;

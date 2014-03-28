@@ -1,4 +1,4 @@
-package org.droidplanner.android.checklist.xml;
+package org.droidplanner.android.widgets.checklist.xml;
 
 import java.io.File;
 import java.io.FileInputStream;

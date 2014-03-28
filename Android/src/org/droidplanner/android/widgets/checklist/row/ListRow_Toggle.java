@@ -1,18 +1,18 @@
-package org.droidplanner.android.checklist.row;
+package org.droidplanner.android.widgets.checklist.row;
 
 import org.droidplanner.R;
-import org.droidplanner.android.checklist.CheckListItem;
+import org.droidplanner.android.widgets.checklist.CheckListItem;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.Switch;
+import android.widget.ToggleButton;
 
-public class ListRow_Switch extends ListRow implements OnCheckedChangeListener {
+public class ListRow_Toggle extends ListRow implements OnCheckedChangeListener {
 
-	public ListRow_Switch(LayoutInflater inflater,
+	public ListRow_Toggle(LayoutInflater inflater,
 			CheckListItem checkListItem) {
 		super(inflater, checkListItem);
 	}
@@ -21,7 +21,7 @@ public class ListRow_Switch extends ListRow implements OnCheckedChangeListener {
 		View view;
 		if (convertView == null) {
 			ViewGroup viewGroup = (ViewGroup) inflater.inflate(
-					R.layout.list_switch_item, null);
+					R.layout.list_toggle_item, null);
 			holder = new ViewHolder(viewGroup, checkListItem);
 
 			viewGroup.setTag(holder);
@@ -31,31 +31,31 @@ public class ListRow_Switch extends ListRow implements OnCheckedChangeListener {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		updateDisplay(view, (ViewHolder)holder, checkListItem);
+		updateDisplay(view, (ViewHolder) holder, checkListItem);
 		return view;
 	}
 
 	private void updateDisplay(View view, ViewHolder holder,
 			CheckListItem mListItem) {
 		boolean failMandatory = false;
-		
+
 		getData(mListItem);
 
 		failMandatory = !checkListItem.isSys_activated();
 
-		holder.switchView.setOnCheckedChangeListener(this);
-		holder.switchView.setClickable(checkListItem.isEditable());
-		holder.switchView.setChecked(mListItem.isSys_activated());
-		
+		holder.toggleButton.setOnCheckedChangeListener(this);
+		holder.toggleButton.setChecked(checkListItem.isSys_activated());
+		holder.toggleButton.setClickable(checkListItem.isEditable());
+
 		updateCheckBox(checkListItem.isMandatory() && !failMandatory);
 	}
 
 	public int getViewType() {
-		return ListRow_Type.SWITCH_ROW.ordinal();
+		return ListRow_Type.TOGGLE_ROW.ordinal();
 	}
 
 	private static class ViewHolder extends BaseViewHolder {
-		private Switch switchView;
+		private ToggleButton toggleButton;
 
 		private ViewHolder(ViewGroup viewGroup, CheckListItem checkListItem) {
 			super(viewGroup, checkListItem);
@@ -64,13 +64,14 @@ public class ListRow_Switch extends ListRow implements OnCheckedChangeListener {
 		@Override
 		protected void setupViewItems(ViewGroup viewGroup,
 				CheckListItem checkListItem) {
-			this.switchView = (Switch) viewGroup.findViewById(R.id.lst_switch);
+			this.toggleButton = (ToggleButton) viewGroup
+					.findViewById(R.id.lst_toggle);
 		}
 	}
 
 	@Override
-	public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
-		this.checkListItem.setSys_activated(arg1);
-		updateRowChanged((View)arg0,this.checkListItem);
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		this.checkListItem.setSys_activated(isChecked);
+		updateRowChanged((View) (buttonView), this.checkListItem);
 	}
 }
