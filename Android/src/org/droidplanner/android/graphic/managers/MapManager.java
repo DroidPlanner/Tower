@@ -124,4 +124,9 @@ public class MapManager implements OnDroneListener {
 		flightPathOptions.color(0xfffd693f).width(6).zIndex(1);
 		flightPath = mMap.addPolyline(flightPathOptions);
 	}
+
+
+	public void setMissionDraggable(boolean isDraggable) {
+		isMissionDraggable = isDraggable;
+	}
 }

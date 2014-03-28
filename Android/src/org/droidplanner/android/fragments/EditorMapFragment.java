@@ -49,6 +49,7 @@ public class EditorMapFragment extends DroneMap implements
 		polygonPath = new MapPath(mMap, Color.BLACK, getResources());
 		cameraOverlays = new CameraGroundOverlays(mMap);
 
+		manager.setMissionDraggable(true);
 		return view;
 	}
 
@@ -152,11 +153,6 @@ public class EditorMapFragment extends DroneMap implements
 		} else {
 			return false;
 		}
-	}
-
-	@Override
-	protected boolean isMissionDraggable() {
-		return true;
 	}
 
 }
