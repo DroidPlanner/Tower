@@ -8,6 +8,7 @@ dependencies {
     compile 'com.google.android.gms:play-services:4.0.30'
     compile project(':Mavlink')
     compile project(':HorizontalVariableListView:HorizontalVariableListView')
+    compile project(':usb-serial-for-android:UsbSerialLibrary')
 }
 
 android {

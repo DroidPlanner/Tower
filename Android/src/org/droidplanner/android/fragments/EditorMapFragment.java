@@ -48,7 +48,6 @@ public class EditorMapFragment extends DroneMap implements
 		polygonPath = new MapPath(mMap, Color.BLACK, getResources());
 		cameraOverlays = new CameraGroundOverlays(mMap);
 
-		manager.setMissionDraggable(true);
 		return view;
 	}
 
@@ -59,13 +58,13 @@ public class EditorMapFragment extends DroneMap implements
 
 	@Override
 	public void onMarkerDrag(Marker marker) {
-		MarkerSource source = manager.markers.getSourceFromMarker(marker);
+		MarkerSource source = markers.getSourceFromMarker(marker);
 		checkForWaypointMarkerMoving(source, marker, true);
 	}
 
 	@Override
 	public void onMarkerDragStart(Marker marker) {
-		MarkerSource source = manager.markers.getSourceFromMarker(marker);
+		MarkerSource source = markers.getSourceFromMarker(marker);
 		checkForWaypointMarkerMoving(source, marker, false);
 	}
 
@@ -86,13 +85,13 @@ public class EditorMapFragment extends DroneMap implements
 			 */
 
 			// update flight path
-			// manager.missionPath.update(mission);
+			missionPath.update(mission);
 		}
 	}
 
 	@Override
 	public void onMarkerDragEnd(Marker marker) {
-		MarkerSource source = manager.markers.getSourceFromMarker(marker);
+		MarkerSource source = markers.getSourceFromMarker(marker);
 		checkForWaypointMarker(source, marker);
 		checkForPolygonMarker(source, marker);
 	}
@@ -125,13 +124,18 @@ public class EditorMapFragment extends DroneMap implements
 
 	@Override
 	public boolean onMarkerClick(Marker marker) {
-		MarkerSource source = manager.markers.getSourceFromMarker(marker);
+		MarkerSource source = markers.getSourceFromMarker(marker);
 		if (source instanceof MissionItem) {
 			editorListener.onItemClick((MissionItem) source);
 			return true;
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	protected boolean isMissionDraggable() {
+		return true;
 	}
 
 }

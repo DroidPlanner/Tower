@@ -1,8 +1,15 @@
 package org.droidplanner.android.fragments.helpers;
 
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.graphic.managers.MapManager;
+import org.droidplanner.android.graphic.DroneHelper;
+import org.droidplanner.android.graphic.map.GraphicDrone;
+import org.droidplanner.android.graphic.map.GraphicGuided;
 import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
+import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
+import org.droidplanner.android.graphic.map.GraphicHome;
+import org.droidplanner.android.graphic.map.GraphicMission;
+import org.droidplanner.android.graphic.map.MarkerManager;
 
 import android.app.Activity;
 import android.content.Context;
@@ -17,36 +24,61 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.CameraPosition.Builder;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
-public abstract class DroneMap extends OfflineMapFragment {
-	public MapManager manager;
-	public Drone drone;
+import java.util.List;
 
-	protected Context context;
+public abstract class DroneMap extends OfflineMapFragment implements OnDroneListener {
 	public GoogleMap mMap;
 
+	protected MarkerManager markers;
+	protected MapPath missionPath;
+    protected MapPath droneLeashPath;
+    private Polyline flightPath;
+    public GraphicMission mission;
+    private GraphicHome home;
+    public GraphicDrone droneMarker;
+    public GraphicGuided guided;
+    public int maxFlightPathSize;
+
+    public Drone drone;
+
+    protected Context context;
+
+	protected abstract boolean isMissionDraggable();
+
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
-			Bundle bundle) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle bundle) {
 		View view = super.onCreateView(inflater, viewGroup, bundle);
 		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
+		home = new GraphicHome(drone);
+		mission = new GraphicMission(drone);
 		mMap = getMap();
-		manager = new MapManager(getMap(), drone, getResources(), context);
-		drone.events.addDroneListener(manager);
+		markers = new MarkerManager(mMap);
+		missionPath = new MapPath(mMap,getResources());
+
+        droneMarker = new GraphicDrone(drone, mMap);
+        droneLeashPath = new MapPath(mMap, getResources());
+        guided = new GraphicGuided(drone);
+
+        addFlightPathToMap();
+
 		return view;
 	}
 
 	@Override
 	public void onStart() {
 		super.onStart();
+		drone.events.addDroneListener(this);
 		loadCameraPosition();
-		manager.update();
+		update();
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
-		drone.events.removeDroneListener(manager);
+		drone.events.removeDroneListener(this);
 		saveCameraPosition();
 	}
 
@@ -56,11 +88,32 @@ public abstract class DroneMap extends OfflineMapFragment {
 		context = activity.getApplicationContext();
 	}
 
+    public void clearFlightPath() {
+        List<LatLng> oldFlightPath = flightPath.getPoints();
+        oldFlightPath.clear();
+        flightPath.setPoints(oldFlightPath);
+    }
+
+    private void addFlightPathToMap() {
+        PolylineOptions flightPathOptions = new PolylineOptions();
+        flightPathOptions.color(0xfffd693f).width(6).zIndex(1);
+        flightPath = mMap.addPolyline(flightPathOptions);
+    }
+
+    public void addFlightPathPoint(LatLng position) {
+        if (maxFlightPathSize > 0) {
+            List<LatLng> oldFlightPath = flightPath.getPoints();
+            if (oldFlightPath.size() > maxFlightPathSize) {
+                oldFlightPath.remove(0);
+            }
+            oldFlightPath.add(position);
+            flightPath.setPoints(oldFlightPath);
+        }
+    }
+
 	/**
 	 * Save the map camera state on a preference file
-	 * http://stackoverflow.com/questions
-	 * /16697891/google-maps-android-api-v2-restoring
-	 * -map-state/16698624#16698624
+	 * http://stackoverflow.com/questions/16697891/google-maps-android-api-v2-restoring-map-state/16698624#16698624
 	 */
 	public void saveCameraPosition() {
 		CameraPosition camera = mMap.getCameraPosition();
@@ -80,9 +133,31 @@ public abstract class DroneMap extends OfflineMapFragment {
 		camera.bearing(settings.getFloat("bea", 0));
 		camera.tilt(settings.getFloat("tilt", 0));
 		camera.zoom(settings.getFloat("zoom", 0));
-		camera.target(new LatLng(settings.getFloat("lat", 0), settings
-				.getFloat("lng", 0)));
+		camera.target(new LatLng(settings.getFloat("lat", 0),settings.getFloat("lng", 0)));
 		mMap.moveCamera(CameraUpdateFactory.newCameraPosition(camera.build()));
+	}
+
+	@Override
+	public void onDroneEvent(DroneEventsType event, Drone drone) {
+        final LatLng position = DroneHelper.CoordToLatLang(drone.GPS.getPosition());
+		switch (event) {
+		case MISSION_UPDATE:
+			update();
+			break;
+
+            case GPS:
+                droneLeashPath.update(guided);
+                addFlightPathPoint(position);
+                break;
+
+            case GUIDEDPOINT:
+                markers.updateMarker(guided, true, context);
+                droneLeashPath.update(guided);
+                break;
+
+		default:
+			break;
+		}
 	}
 
 	public LatLng getMyLocation() {
@@ -94,12 +169,17 @@ public abstract class DroneMap extends OfflineMapFragment {
 		}
 	}
 
-	/**
-	 * @deprecated Use
-	 *             {@link org.droidplanner.android.graphic.managers.MapManager#update(org.droidplanner.android.fragments.helpers.DroneMap)}
-	 *             instead
-	 */
 	public void update() {
-		manager.update();
+		markers.clean();
+
+		if (home.isValid()) {
+			markers.updateMarker(home, false, context);
+		}
+
+		markers.updateMarkers(mission.getMarkers(), isMissionDraggable(), context);
+
+		//TODO reimplement the mission path
+		//missionPath.update(mission);
 	}
+
 }

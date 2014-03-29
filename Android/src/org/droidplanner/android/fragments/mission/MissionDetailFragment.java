@@ -41,9 +41,9 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 		super.onActivityCreated(savedInstanceState);
 
 		final EditorActivity parentActivity = (EditorActivity) getActivity();
-		if (parentActivity.itemDetail.getItemDetailFragment(parentActivity) != this) {
+		if (parentActivity.getItemDetailFragment() != this) {
 			dismiss();
-			parentActivity.itemDetail.switchItemDetail(item);
+			parentActivity.switchItemDetail(item);
 		}
 	}
 

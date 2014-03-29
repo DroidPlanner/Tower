@@ -51,23 +51,29 @@ public class FlightMapFragment extends DroneMap implements
 		Context context = this.getActivity();
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
-		manager.maxFlightPathSize = Integer.valueOf(prefs.getString(
+		maxFlightPathSize = Integer.valueOf(prefs.getString(
 				"pref_max_flight_path_size", "0"));
 		isAutoPanEnabled = prefs.getBoolean("pref_auto_pan_enabled", false);
-		guidedModeOnLongPress = prefs.getBoolean(
-				"pref_guided_mode_on_long_press", true);
+		guidedModeOnLongPress = prefs.getBoolean("pref_guided_mode_on_long_press", true);
 	}
 
 	@Override
-	public void onStart() {
-		super.onStart();
-		drone.events.addDroneListener(this);
+	public void update() {
+		super.update();
 	}
 
-	@Override
-	public void onStop() {
-		super.onStop();
-		drone.events.removeDroneListener(this);
+
+
+	private void animateCamera(LatLng coord) {
+		if (!hasBeenZoomed) {
+			hasBeenZoomed = true;
+			mMap.animateCamera(CameraUpdateFactory
+					.newLatLngZoom(coord, ZOOM_LEVEL));
+		}
+		if (isAutoPanEnabled) {
+			mMap.animateCamera(CameraUpdateFactory
+					.newLatLngZoom(coord, ZOOM_LEVEL));
+		}
 	}
 
 	@Override
@@ -122,7 +128,7 @@ public class FlightMapFragment extends DroneMap implements
         case ARMING:
             // Clear the previous flight path when arming.
             if (drone.state.isArmed()) {
-                manager.clearFlightPath();
+                clearFlightPath();
             }
             break;
 		case GPS:
@@ -131,6 +137,7 @@ public class FlightMapFragment extends DroneMap implements
 		default:
 			break;
 		}
+		super.onDroneEvent(event,drone);
 	}
 
 	private void animateCameraIfNeeded(LatLng coord) {
@@ -144,5 +151,10 @@ public class FlightMapFragment extends DroneMap implements
 					ZOOM_LEVEL));
 		}
 	}
+
+    @Override
+    protected boolean isMissionDraggable() {
+        return false;
+    }
 
 }
