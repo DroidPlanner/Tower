@@ -216,6 +216,8 @@
     <string name="waypoint_jumpto">Jump to waypoint:</string>
     <string name="waypoint_repeat">Repeat waypoint</string>
     <string name="Orbits">Orbits</string>
+    <string name="dlg_clear_mission_title">Clear Mission</string>
+    <string name="dlg_clear_mission_confirm">Clear all waypoints from the map?</string>
 
     <!-- Selection of map style -->
     <string name="menu_map_type">Map Type</string>
