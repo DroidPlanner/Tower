@@ -56,6 +56,12 @@ public class Mission extends DroneVariable implements PathSource{
 		selection.removeAll(toRemove);
 		notifiyMissionUpdate();		
 	}
+	
+	public void clear() {
+	    itens.clear();
+	    selection.clear();
+	    notifiyMissionUpdate();
+	}
 
 	public void addWaypoints(List<LatLng> points) {
 		Altitude alt = getLastAltitude();
