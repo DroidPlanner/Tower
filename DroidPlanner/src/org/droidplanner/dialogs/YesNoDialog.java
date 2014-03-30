@@ -10,7 +10,6 @@ public class YesNoDialog extends DialogFragment {
 
 	public interface Listener {
 		void onYes();
-
 		void onNo();
 	}
 
