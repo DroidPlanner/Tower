@@ -3,8 +3,10 @@ package org.droidplanner.android.activities;
 import java.util.List;
 
 import org.droidplanner.R;
+import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 import org.droidplanner.android.activities.helpers.SuperUI;
+import org.droidplanner.android.mission.item.MissionItemRender;
 import org.droidplanner.android.mission.item.MissionRender;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
@@ -44,9 +46,14 @@ import com.google.android.gms.maps.model.LatLng;
  */
 public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		OnEditorToolSelected, OnWayPointTypeChangeListener,
-		OnEditorInteraction, Callback {
+		OnEditorInteraction, Callback, MissionRender.OnSelectionUpdateListener {
 
+    /**
+     * Used to provide access and interact with the {@link org.droidplanner.core.mission.Mission}
+     * object on the Android layer.
+     */
     private MissionRender missionRender;
+
 	private EditorMapFragment planningMapFragment;
 	private GestureMapFragment gestureMapFragment;
 	private EditorToolsFragment editorToolsFragment;
@@ -55,6 +62,11 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	private EditorListFragment missionListFragment;
 	private TextView infoView;
 
+    /**
+     * This view hosts the mission item detail fragment.
+     * On phone, or device with limited screen estate, it's removed from the layout,
+     * and the item detail ends up displayed as a dialog.
+     */
     private View mContainerItemDetail;
 
 	private ActionMode contextualActionBar;
@@ -65,8 +77,9 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		setContentView(R.layout.activity_editor);
 
 		ActionBar actionBar = getActionBar();
-        if(actionBar != null)
-		    actionBar.setDisplayHomeAsUpEnabled(true);
+        if(actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
 		fragmentManager = getSupportFragmentManager();
 
@@ -85,9 +98,21 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
          */
         mContainerItemDetail = findViewById(R.id.containerItemDetail);
 
-		missionRender = new MissionRender(drone.mission);
+		missionRender = ((DroidPlannerApp)getApplication()).missionRender;
 		gestureMapFragment.setOnPathFinishedListener(this);
 	}
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        missionRender.addSelectionUpdateListener(this);
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        missionRender.removeSelectionUpdateListener(this);
+    }
 
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
@@ -98,6 +123,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	private void updateMapPadding() {
 		int topPadding = infoView.getBottom();
 		int rightPadding = 0,bottomPadding = 0;
+
 		if (missionRender.getItems().size()>0) {
 			rightPadding = editorToolsFragment.getView().getRight();
 			bottomPadding = missionListFragment.getView().getHeight();
@@ -117,10 +143,6 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 		switch (event) {
 		case MISSION_UPDATE:
-            //Refresh the mission render state
-            //TODO: check to make sure this doesn't introduce any bugs.
-            missionRender.refresh();
-
 			// Remove detail window if item is removed
 			if (itemDetailFragment != null) {
 				if (!drone.mission.hasItem(itemDetailFragment.getItem())) {
@@ -377,4 +399,8 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		updateMapPadding();
 	}
 
+    @Override
+    public void onSelectionUpdate(List<MissionItemRender> selected) {
+
+    }
 }

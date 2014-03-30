@@ -1,9 +1,11 @@
 package org.droidplanner.android;
 
+import org.droidplanner.android.mission.item.MissionRender;
 import org.droidplanner.android.notifications.NotificationHandler;
 import org.droidplanner.core.MAVLink.MAVLinkStreams;
 import org.droidplanner.core.MAVLink.MavLinkMsgHandler;
 import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.DroneInterfaces.Clock;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
@@ -16,9 +18,11 @@ import android.os.SystemClock;
 
 import com.MAVLink.Messages.MAVLinkMessage;
 
-public class DroidPlannerApp extends ErrorReportApp implements
-		MAVLinkStreams.MavlinkInputStream {
+public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.MavlinkInputStream,
+        DroneInterfaces.OnDroneListener {
+
 	public Drone drone;
+    public MissionRender missionRender;
 	private MavLinkMsgHandler mavLinkMsgHandler;
 
 	/**
@@ -54,9 +58,10 @@ public class DroidPlannerApp extends ErrorReportApp implements
 		};
 		Preferences pref = new DpPreferences(getApplicationContext());
 		drone = new Drone(MAVClient, clock, handler, pref);
-		drone.events.addDroneListener(mNotificationHandler);
-		mavLinkMsgHandler = new org.droidplanner.core.MAVLink.MavLinkMsgHandler(
-				drone);
+        drone.events.addDroneListener(this);
+
+        missionRender = new MissionRender(drone.mission);
+		mavLinkMsgHandler = new org.droidplanner.core.MAVLink.MavLinkMsgHandler(drone);
 	}
 
 	@Override
@@ -73,4 +78,16 @@ public class DroidPlannerApp extends ErrorReportApp implements
 	public void notifyDisconnected() {
 		drone.events.notifyDroneEvent(DroneEventsType.DISCONNECTED);
 	}
+
+    @Override
+    public void onDroneEvent(DroneEventsType event, Drone drone) {
+        mNotificationHandler.onDroneEvent(event, drone);
+
+        switch (event) {
+            case MISSION_RECEIVED:
+                //Refresh the mission render state
+                missionRender.refresh();
+                break;
+        }
+    }
 }

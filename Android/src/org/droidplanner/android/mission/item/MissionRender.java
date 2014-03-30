@@ -30,6 +30,12 @@ public class MissionRender {
      */
     private final List<MissionItemRender> mSelectedItems = new ArrayList<MissionItemRender>();
 
+    /**
+     * Stores the list of selection update listeners.
+     */
+    private final List<OnSelectionUpdateListener> mSelectionsListeners = new
+            ArrayList<OnSelectionUpdateListener>();
+
     public MissionRender(Mission mission){
         mMission = mission;
         refresh();
@@ -165,6 +171,7 @@ public class MissionRender {
      */
     public void clearSelection() {
         mSelectedItems.clear();
+
     }
 
     /**
@@ -263,6 +270,34 @@ public class MissionRender {
         } while(mSelectedItems.contains(mMissionItems.get(--to)));
 
         return mMissionItems.subList(to, from + 1); // includes one unselected item.
+    }
+
+    /**
+     * Adds given argument to the list of selection update listeners.
+     * @param listener
+     */
+    public void addSelectionUpdateListener(OnSelectionUpdateListener listener){
+        mSelectionsListeners.add(listener);
+    }
+
+    private void notifySelectionUpdate(){
+        for(OnSelectionUpdateListener listener: mSelectionsListeners)
+            listener.onSelectionUpdate(mSelectedItems);
+    }
+
+    /**
+     * Removes given argument from the list of selection update listeners.
+     * @param listener
+     */
+    public void removeSelectionUpdateListener(OnSelectionUpdateListener listener){
+        mSelectionsListeners.remove(listener);
+    }
+
+    /**
+     * Classes interested in getting selection update should implement this interface.
+     */
+    public interface OnSelectionUpdateListener {
+        public void onSelectionUpdate(List<MissionItemRender> selected);
     }
 
 }

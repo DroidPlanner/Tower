@@ -1,25 +1,21 @@
 package org.droidplanner.core.mission;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import org.droidplanner.core.drone.Drone;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.core.drone.DroneVariable;
-import org.droidplanner.core.helpers.coordinates.Coord2D;
-import org.droidplanner.core.helpers.coordinates.Coord3D;
-import org.droidplanner.core.helpers.geoTools.GeoTools;
-import org.droidplanner.core.helpers.units.Altitude;
-import org.droidplanner.core.helpers.units.Length;
-import org.droidplanner.core.mission.survey.Survey;
-import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
-import org.droidplanner.core.mission.waypoints.Waypoint;
-
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_CMD;
+
+import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
+import org.droidplanner.core.drone.DroneVariable;
+import org.droidplanner.core.helpers.geoTools.GeoTools;
+import org.droidplanner.core.helpers.units.Altitude;
+import org.droidplanner.core.helpers.units.Length;
+import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
+import org.droidplanner.core.mission.waypoints.Waypoint;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * This implements a mavlink mission.
@@ -28,6 +24,9 @@ import com.MAVLink.Messages.enums.MAV_CMD;
  */
 public class Mission extends DroneVariable {
 
+    /**
+     * Stores the set of mission items belonging to this mission.
+     */
 	private List<MissionItem> items = new ArrayList<MissionItem>();
 	private Altitude defaultAlt = new Altitude(20.0);
 

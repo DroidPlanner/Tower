@@ -26,30 +26,31 @@ import org.droidplanner.core.drone.variables.Type;
 import org.droidplanner.core.mission.Mission;
 
 public class Drone {
-	public DroneEvents events = new DroneEvents(this);
-	public Type type = new Type(this);
-	public Profile profile = new Profile(this);
-	public GPS GPS = new GPS(this);
-	public RC RC = new RC(this);
-	public Speed speed = new Speed(this);
-	public Battery battery = new Battery(this);
-	public Radio radio = new Radio(this);
-	public Home home = new Home(this);
-	public Mission mission = new Mission(this);
-	public MissionStats missionStats = new MissionStats(this);
-	public StreamRates streamRates = new StreamRates(this);
-	public Altitude altitude = new Altitude(this);
-	public Orientation orientation = new Orientation(this);
-	public Navigation navigation = new Navigation(this);
-	public GuidedPoint guidedPoint = new GuidedPoint(this);
-	public Parameters parameters = new Parameters(this);
-	public Calibration calibrationSetup = new Calibration(this);
-	public WaypointManager waypointManager = new WaypointManager(this);
-	public State state;
-	public HeartBeat heartbeat;
 
-	public MAVLinkOutputStream MavClient;
-	public Preferences preferences;
+	public final DroneEvents events = new DroneEvents(this);
+	public final Type type = new Type(this);
+	public final Profile profile = new Profile(this);
+	public final GPS GPS = new GPS(this);
+	public final RC RC = new RC(this);
+	public final Speed speed = new Speed(this);
+	public final Battery battery = new Battery(this);
+	public final Radio radio = new Radio(this);
+	public final Home home = new Home(this);
+	public final Mission mission = new Mission(this);
+	public final MissionStats missionStats = new MissionStats(this);
+	public final StreamRates streamRates = new StreamRates(this);
+	public final Altitude altitude = new Altitude(this);
+	public final Orientation orientation = new Orientation(this);
+	public final Navigation navigation = new Navigation(this);
+	public final GuidedPoint guidedPoint = new GuidedPoint(this);
+	public final Parameters parameters = new Parameters(this);
+	public final Calibration calibrationSetup = new Calibration(this);
+	public final WaypointManager waypointManager = new WaypointManager(this);
+	public final State state;
+	public final HeartBeat heartbeat;
+
+	public final MAVLinkOutputStream MavClient;
+	public final Preferences preferences;
 
 	public Drone(MAVLinkOutputStream mavClient, Clock clock, Handler handler,
 			Preferences pref) {
