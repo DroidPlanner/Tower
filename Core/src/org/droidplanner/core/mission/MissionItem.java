@@ -48,7 +48,7 @@ public abstract class MissionItem implements Comparable<MissionItem> {
 
 	@Override
 	public int compareTo(MissionItem another) {
-		return mission.getNumber(this) - mission.getNumber(another);
+		return mission.getOrder(this) - mission.getOrder(another);
 	}
 
 }

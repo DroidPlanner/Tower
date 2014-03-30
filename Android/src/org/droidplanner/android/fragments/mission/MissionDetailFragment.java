@@ -71,7 +71,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 		typeSpinner.setOnItemSelectedListener(this);
 		final TextView waypointIndex = (TextView) view
 				.findViewById(R.id.WaypointIndex);
-		Integer temp = mission.getNumber(item);
+		Integer temp = mission.getOrder(item);
 		waypointIndex.setText(temp.toString());
 
 		final TextView distanceView = (TextView) view

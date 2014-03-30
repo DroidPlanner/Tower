@@ -88,7 +88,7 @@ public class MissionItemView extends ArrayAdapter<MissionItem> {
 		}
 */
 		//TODO fix the numbering
-		//nameView.setText(String.format("%3d", waypoint.getNumber()));
+		//nameView.setText(String.format("%3d", waypoint.getOrder()));
 
 
 	/*	typeView.setText(waypoint.getCmd().getName());

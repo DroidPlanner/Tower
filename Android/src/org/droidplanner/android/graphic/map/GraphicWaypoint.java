@@ -53,7 +53,7 @@ public class GraphicWaypoint extends Waypoint implements EditorMissionItem,
 			drawable = R.drawable.ic_wp_map;
 		}
 		Bitmap marker = MarkerWithText.getMarkerWithTextAndDetail(drawable,
-				Integer.toString(mission.getNumber(this)), getIconDetail(),
+				Integer.toString(mission.getOrder(this)), getIconDetail(),
 				context);
 		return BitmapDescriptorFactory.fromBitmap(marker);
 	}
