@@ -21,7 +21,6 @@ public class EditorToolsFragment extends Fragment implements OnClickListener, On
 
 	public interface OnEditorToolSelected {
 		public void editorToolChanged(EditorTools tools);
-
 		public void editorToolLongClicked(EditorTools tools);
 	}
 
@@ -32,21 +31,29 @@ public class EditorToolsFragment extends Fragment implements OnClickListener, On
 	private EditorTools tool = EditorTools.MARKER;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_editor_tools, container, false);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.fragment_editor_tools, container,
+				false);
 
-		mEditorRadioGroup = (RadioGroup) view.findViewById(R.id.editor_tools_layout);
-		final RadioButtonCenter buttonDraw = (RadioButtonCenter) view.findViewById(R.id.editor_tools_draw);
-		final RadioButtonCenter buttonMarker = (RadioButtonCenter) view.findViewById(R.id.editor_tools_marker);
-		final RadioButtonCenter buttonPoly = (RadioButtonCenter) view.findViewById(R.id.editor_tools_poly);
-		final RadioButtonCenter buttonTrash = (RadioButtonCenter) view.findViewById(R.id.editor_tools_trash);
-
-		for (View vv: new View[] { buttonDraw, buttonMarker, buttonPoly, buttonTrash }) {
-			vv.setOnClickListener(this);
-			vv.setOnLongClickListener(this);
-		}
-
-		mEditorRadioGroup.check(R.id.editor_tools_marker);
+        mEditorRadioGroup = (RadioGroup) view.findViewById(R.id.editor_tools_layout);
+		final RadioButtonCenter buttonDraw = (RadioButtonCenter) view.findViewById(R.id
+                .editor_tools_draw);
+        final RadioButtonCenter buttonMarker = (RadioButtonCenter) view.findViewById(R.id
+                .editor_tools_marker);
+        final RadioButtonCenter buttonPoly = (RadioButtonCenter) view.findViewById(R.id
+                .editor_tools_poly);
+        final RadioButtonCenter buttonTrash = (RadioButtonCenter) view.findViewById(R.id
+                .editor_tools_trash);
+        
+        for(View vv: new View[] { 
+                buttonDraw, buttonMarker, buttonPoly, buttonTrash 
+            }) {
+            vv.setOnClickListener(this);
+            vv.setOnLongClickListener(this);
+        }
+		
+        mEditorRadioGroup.check(R.id.editor_tools_marker);
 		return view;
 	}
 
@@ -81,8 +88,8 @@ public class EditorToolsFragment extends Fragment implements OnClickListener, On
 
 		return false;
 	}
-
-	@Override
+	
+    @Override
 	public void onClick(View v) {
 		EditorTools newTool = EditorTools.NONE;
 		switch (v.getId()) {

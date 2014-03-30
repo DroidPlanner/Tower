@@ -377,18 +377,19 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	}
 
 	private void doClearMissionConfirmation() {
-		YesNoDialog ynd = YesNoDialog.newInstance(getString(R.string.dlg_clear_mission_title),
-				getString(R.string.dlg_clear_mission_confirm), new YesNoDialog.Listener() {
-					@Override
-					public void onYes() {
-						mission.clear();
-					}
-
-					@Override
-					public void onNo() {
-					}
-				});
-
-		ynd.show(getSupportFragmentManager(), "clearMission");
+	    YesNoDialog ynd = YesNoDialog.newInstance(
+	            getString(R.string.dlg_clear_mission_title), 
+	            getString(R.string.dlg_clear_mission_confirm), 
+	            new YesNoDialog.Listener() {
+                    @Override
+                    public void onYes() {
+                        mission.clear();
+                    }
+                    
+                    @Override
+                    public void onNo() {}
+                });
+	    
+	    ynd.show(getSupportFragmentManager(), "clearMission");
 	}
 }
