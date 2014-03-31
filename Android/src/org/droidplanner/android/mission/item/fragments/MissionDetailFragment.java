@@ -1,12 +1,13 @@
-package org.droidplanner.android.fragments.mission;
+package org.droidplanner.android.mission.item.fragments;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.EditorActivity;
-import org.droidplanner.android.fragments.mission.MissionItemTypes.InvalidItemException;
-import org.droidplanner.core.mission.Mission;
+import org.droidplanner.android.mission.item.MissionItemRender;
+import org.droidplanner.android.mission.item.MissionRender;
+import org.droidplanner.android.mission.item.adapters.AdapterMissionItems;
 import org.droidplanner.core.mission.MissionItem;
-import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
+import org.droidplanner.core.mission.MissionItemTypes;
 import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
 
 import android.app.Activity;
@@ -23,19 +24,24 @@ import android.widget.TextView;
 public abstract class MissionDetailFragment extends DialogFragment implements
 		OnItemSelectedListener {
 
+    /**
+     * Mission item extra key used to pass the mission item via the fragment's argument bundle.
+     */
+    public static final String EXTRA_MISSION_ITEM_RENDER = MissionDetailFragment.class.getPackage() +
+            ".EXTRA_MISSION_ITEM_RENDER";
+
 	public interface OnWayPointTypeChangeListener {
-		public void onWaypointTypeChanged(MissionItem newItem,
-				MissionItem oldItem);
+		public void onWaypointTypeChanged(MissionItemRender newItem, MissionItemRender oldItem);
 	}
 
 	protected abstract int getResource();
 
 	protected SpinnerSelfSelect typeSpinner;
 	protected AdapterMissionItems commandAdapter;
-	protected Mission mission;
+	protected MissionRender missionRender;
 	private OnWayPointTypeChangeListener mListener;
 
-	protected MissionItem item;
+	protected MissionItemRender itemRender;
 
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -43,7 +49,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 		final EditorActivity parentActivity = (EditorActivity) getActivity();
 		if (parentActivity.getItemDetailFragment() != this) {
 			dismiss();
-			parentActivity.switchItemDetail(item);
+			parentActivity.switchItemDetail(itemRender);
 		}
 	}
 
@@ -58,32 +64,36 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(getResource(), null);
+
+        Bundle args = getArguments();
+        if(args == null)
+            throw new IllegalStateException("Missing mission item render argument.");
+
+        itemRender = (MissionItemRender)args.getSerializable(EXTRA_MISSION_ITEM_RENDER);
+
 		setupViews(view);
 		return view;
 	}
 
 	protected void setupViews(View view) {
-		typeSpinner = (SpinnerSelfSelect) view
-				.findViewById(R.id.spinnerWaypointType);
-		commandAdapter = new AdapterMissionItems(this.getActivity(),
-				android.R.layout.simple_list_item_1, MissionItemTypes.values());
+        commandAdapter = new AdapterMissionItems(this.getActivity(),
+                android.R.layout.simple_list_item_1, MissionItemTypes.values());
+
+		typeSpinner = (SpinnerSelfSelect) view.findViewById(R.id.spinnerWaypointType);
 		typeSpinner.setAdapter(commandAdapter);
 		typeSpinner.setOnItemSelectedListener(this);
-		final TextView waypointIndex = (TextView) view
-				.findViewById(R.id.WaypointIndex);
-		Integer temp = mission.getOrder(item);
+
+        final TextView waypointIndex = (TextView) view.findViewById(R.id.WaypointIndex);
+		Integer temp = missionRender.getOrder(itemRender);
 		waypointIndex.setText(temp.toString());
 
-		final TextView distanceView = (TextView) view
-				.findViewById(R.id.DistanceValue);
+		final TextView distanceView = (TextView) view.findViewById(R.id.DistanceValue);
 
-		final TextView distanceLabelView = (TextView) view
-				.findViewById(R.id.DistanceLabel);
+		final TextView distanceLabelView = (TextView) view.findViewById(R.id.DistanceLabel);
 
 		try {
 			distanceLabelView.setVisibility(View.VISIBLE);
-			distanceView.setText(mission.getDistanceFromLastWaypoint(
-					(SpatialCoordItem) item).toString());
+			distanceView.setText(missionRender.getDistanceFromLastWaypoint(itemRender).toString());
 		} catch (NullPointerException e) {
 			// Can fail if distanceView doesn't exists
 		} catch (Exception e) {
@@ -96,22 +106,22 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		mission = ((DroidPlannerApp) getActivity().getApplication()).drone.mission;
+		missionRender = ((DroidPlannerApp) getActivity().getApplication()).missionRender;
 		mListener = (OnWayPointTypeChangeListener) activity;
 	}
 
 	@Override
-	public void onItemSelected(AdapterView<?> arg0, View v, int position,
-			long id) {
+	public void onItemSelected(AdapterView<?> arg0, View v, int position, long id) {
 
 		MissionItemTypes selected = commandAdapter.getItem(position);
 		try {
-			MissionItem newItem = selected.getNewItem(getItem());
+			MissionItem newItem = selected.getNewItem(missionRender.getMission());
 			if (!newItem.getClass().equals(getItem().getClass())) {
 				Log.d("CLASS", "Different waypoint Classes");
-				mListener.onWaypointTypeChanged(newItem, getItem());
+				mListener.onWaypointTypeChanged(new MissionItemRender(missionRender, newItem),
+                        getItem());
 			}
-		} catch (InvalidItemException e) {
+		} catch (IllegalArgumentException e) {
 		}
 	}
 
@@ -119,12 +129,9 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 	public void onNothingSelected(AdapterView<?> arg0) {
 	}
 
-	public MissionItem getItem() {
-		return item;
+	public MissionItemRender getItem() {
+		return itemRender;
 	}
 
-	public void setItem(MissionItem item) {
-		this.item = item;
-	}
 
 }

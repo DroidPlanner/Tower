@@ -11,11 +11,13 @@ import java.util.List;
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
+import org.droidplanner.android.mission.item.MissionItemRender;
+import org.droidplanner.android.mission.item.MissionRender;
+import org.droidplanner.android.widgets.adapterViews.MissionItemRenderView;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.mission.*;
-import org.droidplanner.android.widgets.adapterViews.MissionItemView;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -30,10 +32,11 @@ import android.widget.ListView;
 
 public class EditorListFragment extends Fragment implements
 		OnItemLongClickListener, OnItemClickListener, OnDroneListener,
-		OnClickListener {
+		OnClickListener, MissionRender.OnSelectionUpdateListener {
+
 	private HListView list;
-	private Mission mission;
-	private MissionItemView adapter;
+	private MissionRender missionRender;
+	private MissionItemRenderView adapter;
 	private OnEditorInteraction editorListener;
 	private ImageButton leftArrow;
 	private ImageButton rightArrow;
@@ -42,23 +45,24 @@ public class EditorListFragment extends Fragment implements
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_editor_list, container,
-				false);
+		View view = inflater.inflate(R.layout.fragment_editor_list, container,	false);
+
+        DroidPlannerApp app = ((DroidPlannerApp) getActivity().getApplication());
+        drone = app.drone;
+        missionRender = app.missionRender;
+        adapter = new MissionItemRenderView(getActivity(), missionRender.getItems());
+
 		list = (HListView) view.findViewById(R.id.mission_item_list);
+        list.setOnItemClickListener(this);
+        list.setOnItemLongClickListener(this);
+        list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        list.setAdapter(adapter);
+
 		leftArrow = (ImageButton) view.findViewById(R.id.listLeftArrow);
 		rightArrow = (ImageButton) view.findViewById(R.id.listRightArrow);
 		leftArrow.setOnClickListener(this);
 		rightArrow.setOnClickListener(this);
 
-		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
-		mission = drone.mission;
-		adapter = new MissionItemView(this.getActivity(),
-				android.R.layout.simple_list_item_1, mission.getItems());
-		list.setOnItemClickListener(this);
-		list.setOnItemLongClickListener(this);
-		list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-
-		list.setAdapter(adapter);
 		return view;
 	}
 
@@ -67,12 +71,14 @@ public class EditorListFragment extends Fragment implements
 		super.onStart();
 		updateViewVisibility();
 		drone.events.addDroneListener(this);
+        missionRender.addSelectionUpdateListener(this);
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
 		drone.events.removeDroneListener(this);
+        missionRender.removeSelectionUpdateListener(this);
 	}
 
 	@Override
@@ -106,31 +112,27 @@ public class EditorListFragment extends Fragment implements
 
 	public void deleteSelected() {
 		SparseBooleanArray selected = list.getCheckedItemPositions();
-		ArrayList<MissionItem> toRemove = new ArrayList<MissionItem>();
+		ArrayList<MissionItemRender> toRemove = new ArrayList<MissionItemRender>();
 
 		for (int i = 0; i < selected.size(); i++) {
 			if (selected.valueAt(i)) {
-				MissionItem item = adapter.getItem(selected.keyAt(i));
+				MissionItemRender item = adapter.getItem(selected.keyAt(i));
 				toRemove.add(item);
 			}
 		}
 
-		mission.removeWaypoints(toRemove);
+		missionRender.removeWaypoints(toRemove);
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> adapter, View view, int position,
-			long id) {
-		MissionItem missionItem = (MissionItem) adapter
-				.getItemAtPosition(position);
+	public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
+		MissionItemRender missionItem = (MissionItemRender) adapter.getItemAtPosition(position);
 		editorListener.onItemClick(missionItem);
 	}
 
 	@Override
-	public boolean onItemLongClick(AdapterView<?> adapter, View view,
-			int position, long id) {
-		MissionItem missionItem = (MissionItem) adapter
-				.getItemAtPosition(position);
+	public boolean onItemLongClick(AdapterView<?> adapter, View view, int position, long id) {
+		MissionItemRender missionItem = (MissionItemRender) adapter.getItemAtPosition(position);
 		return editorListener.onItemLongClick(missionItem);
 	}
 
@@ -158,32 +160,24 @@ public class EditorListFragment extends Fragment implements
 		}
 	}
 
-	/**
-	 * Updates the selected mission items in the list.
-	 * 
-	 * @param selected
-	 *            list of selected mission items
-	 */
-	public void updateMissionItemSelection(List<MissionItem> selected) {
-		list.clearChoices();
-		for (MissionItem item : selected) {
-			list.setItemChecked(adapter.getPosition(item), true);
-		}
-		adapter.notifyDataSetChanged();
-	}
-
 	@Override
 	public void onClick(View v) {
 		if (v == leftArrow) {
-			mission.moveSelection(false);
+			missionRender.moveSelection(false);
 			adapter.notifyDataSetChanged();
-			updateMissionItemSelection(mission.getSelected());
 		}
 		if (v == rightArrow) {
-			mission.moveSelection(true);
+			missionRender.moveSelection(true);
 			adapter.notifyDataSetChanged();
-			updateMissionItemSelection(mission.getSelected());
 		}
 	}
 
+    @Override
+    public void onSelectionUpdate(List<MissionItemRender> selected) {
+        list.clearChoices();
+        for (MissionItemRender item : selected) {
+            list.setItemChecked(adapter.getPosition(item), true);
+        }
+        adapter.notifyDataSetChanged();
+    }
 }

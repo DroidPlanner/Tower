@@ -3,6 +3,7 @@ package org.droidplanner.android.widgets.adapterViews;
 import java.util.List;
 
 import org.droidplanner.R;
+import org.droidplanner.android.mission.item.MissionItemRender;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
@@ -19,90 +20,21 @@ import android.widget.TextView;
  * MissionItem Adapter for the MissionItem horizontal list view.
  * This adapter updates the content of the list view item's view based on the mission item type.
  */
-public class MissionItemView extends ArrayAdapter<MissionItem> {
+public class MissionItemRenderView extends ArrayAdapter<MissionItemRender> {
 
-	private final Context context;
-    private final LayoutInflater inflater;
-	private List<MissionItem> waypoints;
+	private List<MissionItemRender> waypoints;
 
-	public MissionItemView(Context context, int resource, List<MissionItem> list) {
-		super(context, resource, list);
+	public MissionItemRenderView(Context context, List<MissionItemRender> list) {
+		super(context, 0, list);
 		this.waypoints = list;
-		this.context = context;
-        this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	}
-
-	public MissionItemView(Context context, int resource) {
-		super(context, resource);
-		this.context = context;
-        this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		MissionItem waypoint = waypoints.get(position);
-		View view = createLayoutFromResource(parent);
-		setupViewsText(view, waypoint);
-		return view;
+		final MissionItemRender waypoint = waypoints.get(position);
+        return waypoint.getListViewItemView(getContext(), parent);
 	}
 
-	private View createLayoutFromResource(ViewGroup parent) {
-		return inflater.inflate(R.layout.fragment_editor_list_item, parent,false);
-	}
-
-	private void setupViewsText(View view, MissionItem
-            item) {
-        TextView nameView = (TextView) view.findViewById(R.id.rowNameView);
-        TextView altitudeView = (TextView) view.findViewById(R.id.rowAltitudeView);
-        		/*
-		TextView typeView = (TextView) view.findViewById(R.id.rowTypeView);
-		TextView descView = (TextView) view.findViewById(R.id.rowDescView);
-		TextView distanceView = (TextView) view.findViewById(R.id.rowDistanceView);
-*/
-
-		nameView.setText(String.format("%3d", this.waypoints.indexOf(item)+1));
-
-		if (item instanceof SpatialCoordItem) {
-			SpatialCoordItem waypoint = (SpatialCoordItem) item;
-			altitudeView.setText(String.format("%3.0fm", waypoint.getCoordinate().getAltitude().valueInMeters()));
-
-			try {
-				Length diff = waypoint.getMission().getAltitudeDiffFromPreviousItem(waypoint);
-				if (diff.valueInMeters() > 0) {
-					altitudeView.setTextColor(Color.RED);
-				} else if (diff.valueInMeters() < 0) {
-					altitudeView.setTextColor(Color.BLUE);
-				}
-			} catch (Exception e) {
-				// Do nothing when last item doesn't have an altitude
-			}
-		} else {
-			altitudeView.setText("");
-		}
-
-		/*
-		if (waypoint.getCmd().showOnMap()) {
-			altitudeView.setText(String.format(Locale.ENGLISH, "%3.0fm", waypoint.getHeight()));
-		} else {
-			altitudeView.setText("-");
-		}
-*/
-		//TODO fix the numbering
-		//nameView.setText(String.format("%3d", waypoint.getOrder()));
-
-
-	/*	typeView.setText(waypoint.getCmd().getName());
-		descView.setText(setupDescription(waypoint));
-
-		double distanceFromPrevPoint = waypoint.getDistanceFromPrevPoint();
-		if(distanceFromPrevPoint != waypoint.UNKNOWN_DISTANCE) {
-			distanceView.setText(String.format(Locale.ENGLISH, "%4.0fm", distanceFromPrevPoint));
-		}
-		else {
-			distanceView.setText("-");
-		}
-		*/
-	}
 /*
 	private String setupDescription(waypoint waypoint) {
 		String descStr = null;

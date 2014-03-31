@@ -4,11 +4,11 @@ import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.graphic.DroneHelper;
 import org.droidplanner.android.graphic.map.GraphicDrone;
 import org.droidplanner.android.graphic.map.GraphicGuided;
+import org.droidplanner.android.mission.item.MissionRender;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.android.graphic.map.GraphicHome;
-import org.droidplanner.android.graphic.map.GraphicMission;
 import org.droidplanner.android.graphic.map.MarkerManager;
 
 import android.app.Activity;
@@ -36,12 +36,12 @@ public abstract class DroneMap extends OfflineMapFragment implements OnDroneList
 	protected MapPath missionPath;
     protected MapPath droneLeashPath;
     private Polyline flightPath;
-    public GraphicMission mission;
     private GraphicHome home;
     public GraphicDrone droneMarker;
     public GraphicGuided guided;
     public int maxFlightPathSize;
 
+    protected MissionRender missionRender;
     public Drone drone;
 
     protected Context context;
@@ -51,13 +51,14 @@ public abstract class DroneMap extends OfflineMapFragment implements OnDroneList
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle bundle) {
 		View view = super.onCreateView(inflater, viewGroup, bundle);
-		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
+        final DroidPlannerApp app = ((DroidPlannerApp) getActivity().getApplication());
+		drone = app.drone;
 		home = new GraphicHome(drone);
-		mission = new GraphicMission(drone);
 		mMap = getMap();
 		markers = new MarkerManager(mMap);
 		missionPath = new MapPath(mMap,getResources());
 
+        missionRender = app.missionRender;
         droneMarker = new GraphicDrone(drone, mMap);
         droneLeashPath = new MapPath(mMap, getResources());
         guided = new GraphicGuided(drone);
@@ -176,7 +177,7 @@ public abstract class DroneMap extends OfflineMapFragment implements OnDroneList
 			markers.updateMarker(home, false, context);
 		}
 
-		markers.updateMarkers(mission.getMarkers(), isMissionDraggable(), context);
+		markers.updateMarkers(missionRender.getMarkers(), isMissionDraggable(), context);
 
 		//TODO reimplement the mission path
 		//missionPath.update(mission);

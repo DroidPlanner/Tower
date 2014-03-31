@@ -13,6 +13,7 @@ import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.core.mission.waypoints.Waypoint;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -22,7 +23,7 @@ import java.util.List;
  * A mavlink mission is a set of commands/mission items to be carried out by the drone.
  * TODO: rename the 'waypoint' method to 'missionItem' (i.e: addMissionItem)
  */
-public class Mission extends DroneVariable {
+public class Mission extends DroneVariable implements Serializable {
 
     /**
      * Stores the set of mission items belonging to this mission.
@@ -141,7 +142,7 @@ public class Mission extends DroneVariable {
 	}
 
 	public Length getAltitudeDiffFromPreviousItem(SpatialCoordItem waypoint)
-			throws Exception {
+			throws IllegalArgumentException {
 		int i = items.indexOf(waypoint);
 		if (i > 0) {
 			MissionItem previus = items.get(i - 1);
@@ -154,11 +155,11 @@ public class Mission extends DroneVariable {
 										.getAltitude());
 			}
 		}
-		throw new Exception("Last waypoint doesn't have an altitude");
+		throw new IllegalArgumentException("Last waypoint doesn't have an altitude");
 	}
 
 	public Length getDistanceFromLastWaypoint(SpatialCoordItem waypoint)
-			throws Exception {
+			throws IllegalArgumentException {
 		int i = items.indexOf(waypoint);
 		if (i > 0) {
 			MissionItem previous = items.get(i - 1);
@@ -167,7 +168,7 @@ public class Mission extends DroneVariable {
 						((SpatialCoordItem) previous).getCoordinate());
 			}
 		}
-		throw new Exception("Last waypoint doesn't have a coordinate");
+		throw new IllegalArgumentException("Last waypoint doesn't have a coordinate");
 	}
 
 	public boolean hasItem(MissionItem item) {

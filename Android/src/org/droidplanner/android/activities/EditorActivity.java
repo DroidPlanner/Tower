@@ -18,10 +18,9 @@ import org.droidplanner.android.fragments.EditorToolsFragment.OnEditorToolSelect
 import org.droidplanner.android.fragments.helpers.GestureMapFragment;
 import org.droidplanner.android.fragments.helpers.GestureMapFragment.OnPathFinishedListener;
 import org.droidplanner.android.fragments.helpers.MapProjection;
-import org.droidplanner.android.fragments.mission.MissionDetailFragment;
-import org.droidplanner.android.fragments.mission.MissionDetailFragment.OnWayPointTypeChangeListener;
+import org.droidplanner.android.mission.item.fragments.MissionDetailFragment;
+import org.droidplanner.android.mission.item.fragments.MissionDetailFragment.OnWayPointTypeChangeListener;
 import org.droidplanner.android.graphic.DroneHelper;
-import org.droidplanner.android.graphic.EditorMissionItem;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.mission.MissionItem;
 
@@ -145,7 +144,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		case MISSION_UPDATE:
 			// Remove detail window if item is removed
 			if (itemDetailFragment != null) {
-				if (!drone.mission.hasItem(itemDetailFragment.getItem())) {
+				if (!missionRender.contains(itemDetailFragment.getItem())) {
 					removeItemDetail();
 				}
 			}
@@ -171,8 +170,6 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	public void onMapClick(LatLng point) {
         //If an mission item is selected, unselect it.
         missionRender.clearSelection();
-        removeItemDetail();
-        notifySelectionChanged();
 
 		switch (getTool()) {
 		case MARKER:
@@ -195,9 +192,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 	@Override
 	public void editorToolChanged(EditorTools tools) {
-		removeItemDetail();
 		missionRender.clearSelection();
-		notifySelectionChanged();
 
 		switch (tools) {
 		case DRAW:
@@ -213,7 +208,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		}
 	}
 
-	private void showItemDetail(MissionItem item) {
+	private void showItemDetail(MissionItemRender item) {
 		if (itemDetailFragment == null) {
 			addItemDetail(item);
 		} else {
@@ -221,24 +216,22 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		}
 	}
 
-	private void addItemDetail(MissionItem item) {
-		if (item instanceof EditorMissionItem) {
-			itemDetailFragment = ((EditorMissionItem)item).getDetailFragment();
+    private void addItemDetail(MissionItemRender item) {
+        itemDetailFragment = item.getDetailFragment();
 
-	        if (mContainerItemDetail == null) {
-	            itemDetailFragment.show(fragmentManager, "Item detail dialog");
-	        } else {
-	            fragmentManager.beginTransaction().add(R.id.containerItemDetail,
-	                    itemDetailFragment).commit();
-	        }
-		}
+        if (mContainerItemDetail == null) {
+            itemDetailFragment.show(fragmentManager, "Item detail dialog");
+        } else {
+            fragmentManager.beginTransaction().add(R.id.containerItemDetail,
+                    itemDetailFragment).commit();
+        }
     }
 
     public MissionDetailFragment getItemDetailFragment(){
         return itemDetailFragment;
     }
 
-	public void switchItemDetail(MissionItem item) {
+	public void switchItemDetail(MissionItemRender item) {
         removeItemDetail();
 		addItemDetail(item);
 	}
@@ -278,7 +271,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	}
 
 	@Override
-	public void onWaypointTypeChanged(MissionItem newItem, MissionItem oldItem) {
+	public void onWaypointTypeChanged(MissionItemRender newItem, MissionItemRender oldItem) {
 		missionRender.replace(oldItem, newItem);
 		showItemDetail(newItem);
 	}
@@ -291,13 +284,11 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		switch(item.getItemId()){
 		case MENU_DELETE:
 			missionRender.removeWaypoints(missionRender.getSelected());
-			notifySelectionChanged();
 			mode.finish();
 			return true;
 
 		case MENU_REVERSE:
 			missionRender.reverse();
-			notifySelectionChanged();
 			return true;
 
 		default:
@@ -317,7 +308,6 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	public void onDestroyActionMode(ActionMode arg0) {
 		missionListFragment.updateChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		missionRender.clearSelection();
-		notifySelectionChanged();
 		contextualActionBar = null;
 		editorToolsFragment.getView().setVisibility(View.VISIBLE);
 	}
@@ -328,29 +318,24 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	}
 
 	@Override
-	public boolean onItemLongClick(MissionItem item) {
+	public boolean onItemLongClick(MissionItemRender item) {
 		if (contextualActionBar != null) {
 			if (missionRender.selectionContains(item)) {
 				missionRender.clearSelection();
 			} else {
-				missionRender.clearSelection();
-				missionRender.addToSelection(missionRender.getItems());
+				missionRender.setSelectionTo(missionRender.getItems());
 			}
-			notifySelectionChanged();
 		} else {
-			removeItemDetail();
 			editorToolsFragment.setTool(EditorTools.NONE);
 			missionListFragment.updateChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 			contextualActionBar = startActionMode(this);
-			missionRender.clearSelection();
-			missionRender.addToSelection(item);
-			notifySelectionChanged();
+			missionRender.setSelectionTo(item);
 		}
 		return true;
 	}
 
 	@Override
-	public void onItemClick(MissionItem item) {
+	public void onItemClick(MissionItemRender item) {
 		switch (editorToolsFragment.getTool()) {
 		default:
 			if (contextualActionBar != null) {
@@ -362,11 +347,9 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 			} else {
 				if (missionRender.selectionContains(item)) {
 					missionRender.clearSelection();
-					removeItemDetail();
 				} else {
 					editorToolsFragment.setTool(EditorTools.NONE);
 					missionRender.setSelectionTo(item);
-					showItemDetail(item);
 				}
 			}
 			break;
@@ -379,19 +362,6 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 			}
 			break;
 		}
-		notifySelectionChanged();
-	}
-
-	private void notifySelectionChanged() {
-        List<MissionItem> selectedItems = missionRender.getSelected();
-        missionListFragment.updateMissionItemSelection(selectedItems);
-
-		if (selectedItems.size() == 0) {
-			missionListFragment.setArrowsVisibility(false);
-		} else {
-			missionListFragment.setArrowsVisibility(true);
-		}
-		planningMapFragment.update();
 	}
 
 	@Override
@@ -401,6 +371,19 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
     @Override
     public void onSelectionUpdate(List<MissionItemRender> selected) {
+        final int selectedCount = selected.size();
+        if(selectedCount != 1){
+            removeItemDetail();
+            missionListFragment.setArrowsVisibility(selectedCount > 0);
+        }
+        else{
+            if(contextualActionBar != null)
+                removeItemDetail();
+            else{
+                showItemDetail(selected.get(0));
+            }
+        }
 
+        planningMapFragment.update();
     }
 }

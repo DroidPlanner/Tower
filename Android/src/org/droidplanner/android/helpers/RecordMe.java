@@ -1,5 +1,7 @@
 package org.droidplanner.android.helpers;
 
+import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.mission.item.MissionRender;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
@@ -15,15 +17,14 @@ public class RecordMe implements LocationListener {
 	private static final float MIN_DISTANCE_M = 0;
 
 	private Context context;
-	private Drone drone;
+    private final MissionRender missionRender;
 	private LocationManager locationManager;
 	private boolean recordMeEnabled = false;
 
-	public RecordMe(Context context, Drone drone) {
+	public RecordMe(Context context, MissionRender missionRender) {
 		this.context = context;
-		this.drone = drone;
-		this.locationManager = (LocationManager) context
-				.getSystemService(Context.LOCATION_SERVICE);
+        this.missionRender = missionRender;
+		this.locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 	}
 
 	public void toogleRecordMeState() {
@@ -56,7 +57,7 @@ public class RecordMe implements LocationListener {
 		// TODO find a better way to do the altitude
 		Coord2D coord = new Coord2D(location.getLatitude(),
 				location.getLongitude());
-		drone.mission.addWaypoint(coord);
+        missionRender.addWaypoint(coord);
 	}
 
 	@Override

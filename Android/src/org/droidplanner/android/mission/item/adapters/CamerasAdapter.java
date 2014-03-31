@@ -1,4 +1,4 @@
-package org.droidplanner.android.fragments.mission.survey;
+package org.droidplanner.android.mission.item.adapters;
 
 import org.droidplanner.R;
 import org.droidplanner.android.utils.file.help.CameraInfoLoader;

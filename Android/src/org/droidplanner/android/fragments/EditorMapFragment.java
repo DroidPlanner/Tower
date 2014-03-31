@@ -6,6 +6,7 @@ import org.droidplanner.android.fragments.helpers.MapPath;
 import org.droidplanner.android.graphic.DroneHelper;
 import org.droidplanner.android.graphic.map.CameraGroundOverlays;
 import org.droidplanner.android.graphic.map.MarkerManager.MarkerSource;
+import org.droidplanner.android.mission.item.MissionItemRender;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.core.polygon.Polygon;
@@ -85,7 +86,7 @@ public class EditorMapFragment extends DroneMap implements
 			 */
 
 			// update flight path
-			missionPath.update(mission);
+			missionPath.update(missionRender);
 		}
 	}
 
@@ -125,8 +126,8 @@ public class EditorMapFragment extends DroneMap implements
 	@Override
 	public boolean onMarkerClick(Marker marker) {
 		MarkerSource source = markers.getSourceFromMarker(marker);
-		if (source instanceof MissionItem) {
-			editorListener.onItemClick((MissionItem) source);
+		if (source instanceof MissionItemRender) {
+			editorListener.onItemClick((MissionItemRender) source);
 			return true;
 		} else {
 			return false;

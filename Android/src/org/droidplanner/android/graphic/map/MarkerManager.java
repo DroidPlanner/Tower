@@ -36,8 +36,7 @@ public class MarkerManager {
 		}
 	}
 
-	public void updateMarker(MarkerSource source, boolean draggable,
-			Context context) {
+	public void updateMarker(MarkerSource source, boolean draggable, Context context) {
 
 		if (hashMap.containsValue(source)) {
 			Marker marker = getMarkerFromSource(source);
@@ -72,8 +71,7 @@ public class MarkerManager {
 		}
 	}
 
-	private void addMarker(MarkerSource object, boolean draggable,
-			Context context) {
+	private void addMarker(MarkerSource object, boolean draggable,	Context context) {
 		Marker marker = mMap.addMarker(object.build(context));
 		marker.setDraggable(draggable);
 		hashMap.put(marker, object);
