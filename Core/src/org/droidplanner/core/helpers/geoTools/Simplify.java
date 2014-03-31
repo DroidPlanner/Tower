@@ -13,11 +13,10 @@ public class Simplify {
 	public static List<Coord2D> simplify(List<Coord2D> list, double tolerance) {
 		int index = 0;
 		double dmax = 0;
-		double squareTolerance = tolerance * tolerance;
 		int lastIndex = list.size() - 1;
 
 		// Find the point with the maximum distance
-		for (int i = 1; i < list.size() - 1; i++) {
+		for (int i = 1; i < lastIndex; i++) {
 			double d = PointTools.pointToLineDistance(list.get(0),
 					list.get(lastIndex), list.get(i));
 			if (d > dmax) {
@@ -28,7 +27,7 @@ public class Simplify {
 
 		// If max distance is greater than epsilon, recursively simplify
 		List<Coord2D> ResultList = new ArrayList<Coord2D>();
-		if (dmax > squareTolerance) {
+		if (dmax > tolerance) {
 			// Recursive call
 			List<Coord2D> recResults1 = simplify(list.subList(0, index + 1),
 					tolerance);
