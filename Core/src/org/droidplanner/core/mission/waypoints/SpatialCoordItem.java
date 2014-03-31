@@ -54,7 +54,6 @@ public abstract class SpatialCoordItem extends MissionItem {
 
 	public void setAltitude(Altitude altitude) {
 		coordinate.set(coordinate.getX(), coordinate.getY(), altitude);
-
 	}
 
 	public void setPosition(Coord2D position) {

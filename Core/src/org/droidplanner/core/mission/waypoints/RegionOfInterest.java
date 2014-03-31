@@ -3,6 +3,7 @@ package org.droidplanner.core.mission.waypoints;
 import java.util.List;
 
 import org.droidplanner.core.mission.MissionItem;
+import org.droidplanner.core.mission.MissionItemType;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 
@@ -23,5 +24,10 @@ public class RegionOfInterest extends SpatialCoordItem {
 		// TODO Auto-generated method stub
 		super.unpackMAVMessage(mavMsg);
 	}
+
+    @Override
+    public MissionItemType getType() {
+        return MissionItemType.ROI;
+    }
 
 }

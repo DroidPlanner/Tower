@@ -5,6 +5,7 @@ import java.util.List;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.mission.MissionItem;
+import org.droidplanner.core.mission.MissionItemType;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_CMD;
@@ -46,5 +47,10 @@ public class ReturnToHome extends MissionCMD {
 	public void unpackMAVMessage(msg_mission_item mavMessageItem) {
 		returnAltitude = new Altitude(mavMessageItem.z);
 	}
+
+    @Override
+    public MissionItemType getType() {
+        return MissionItemType.RTL;
+    }
 
 }

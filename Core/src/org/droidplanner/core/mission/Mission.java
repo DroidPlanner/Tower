@@ -23,7 +23,7 @@ import java.util.List;
  * A mavlink mission is a set of commands/mission items to be carried out by the drone.
  * TODO: rename the 'waypoint' method to 'missionItem' (i.e: addMissionItem)
  */
-public class Mission extends DroneVariable implements Serializable {
+public class Mission extends DroneVariable {
 
     /**
      * Stores the set of mission items belonging to this mission.

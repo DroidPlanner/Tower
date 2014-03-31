@@ -6,12 +6,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import org.droidplanner.core.mission.MissionItemTypes;
+import org.droidplanner.core.mission.MissionItemType;
 
-public class AdapterMissionItems extends ArrayAdapter<MissionItemTypes> {
+public class AdapterMissionItems extends ArrayAdapter<MissionItemType> {
 
 	public AdapterMissionItems(Context context, int resource,
-			MissionItemTypes[] objects) {
+			MissionItemType[] objects) {
 		super(context, resource, objects);
 	}
 

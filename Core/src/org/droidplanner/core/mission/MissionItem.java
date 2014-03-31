@@ -7,7 +7,7 @@ import java.util.List;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_FRAME;
 
-public abstract class MissionItem implements Comparable<MissionItem>, Serializable {
+public abstract class MissionItem implements Comparable<MissionItem> {
 
 	protected Mission mission;
 
@@ -42,6 +42,8 @@ public abstract class MissionItem implements Comparable<MissionItem>, Serializab
 	 * @return
 	 */
 	public abstract void unpackMAVMessage(msg_mission_item mavMsg);
+
+    public abstract MissionItemType getType();
 
 	public Mission getMission() {
 		return mission;

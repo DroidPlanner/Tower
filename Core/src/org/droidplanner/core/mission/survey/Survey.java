@@ -7,6 +7,7 @@ import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.mission.MissionItem;
+import org.droidplanner.core.mission.MissionItemType;
 import org.droidplanner.core.mission.survey.grid.Grid;
 import org.droidplanner.core.mission.survey.grid.GridBuilder;
 import org.droidplanner.core.polygon.Polygon;
@@ -82,5 +83,10 @@ public class Survey extends MissionItem {
 		// TODO Auto-generated method stub
 
 	}
+
+    @Override
+    public MissionItemType getType() {
+        return MissionItemType.SURVEY;
+    }
 
 }

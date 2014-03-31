@@ -218,17 +218,15 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
     private void addItemDetail(MissionItemRender item) {
         itemDetailFragment = item.getDetailFragment();
+        if(itemDetailFragment == null)
+            return;
 
         if (mContainerItemDetail == null) {
             itemDetailFragment.show(fragmentManager, "Item detail dialog");
         } else {
-            fragmentManager.beginTransaction().add(R.id.containerItemDetail,
+            fragmentManager.beginTransaction().replace(R.id.containerItemDetail,
                     itemDetailFragment).commit();
         }
-    }
-
-    public MissionDetailFragment getItemDetailFragment(){
-        return itemDetailFragment;
     }
 
 	public void switchItemDetail(MissionItemRender item) {
@@ -273,7 +271,6 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	@Override
 	public void onWaypointTypeChanged(MissionItemRender newItem, MissionItemRender oldItem) {
 		missionRender.replace(oldItem, newItem);
-		showItemDetail(newItem);
 	}
 
 	private static final int MENU_DELETE = 1;

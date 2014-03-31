@@ -5,6 +5,7 @@ import java.util.List;
 import org.droidplanner.core.helpers.coordinates.Coord3D;
 import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.mission.MissionItem;
+import org.droidplanner.core.mission.MissionItemType;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_CMD;
@@ -53,7 +54,12 @@ public class Waypoint extends SpatialCoordItem {
 		setYawAngle(mavMsg.param4);
 	}
 
-	public double getDelay() {
+    @Override
+    public MissionItemType getType() {
+        return MissionItemType.WAYPOINT;
+    }
+
+    public double getDelay() {
 		return delay;
 	}
 

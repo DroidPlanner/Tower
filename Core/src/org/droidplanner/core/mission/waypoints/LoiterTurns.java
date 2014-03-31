@@ -5,6 +5,7 @@ import java.util.List;
 import org.droidplanner.core.helpers.coordinates.Coord3D;
 import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.mission.MissionItem;
+import org.droidplanner.core.mission.MissionItemType;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_CMD;
@@ -43,5 +44,10 @@ public class LoiterTurns extends Loiter {
 		super.unpackMAVMessage(mavMsg);
 		setTurns((int) mavMsg.param1);
 	}
+
+    @Override
+    public MissionItemType getType() {
+        return MissionItemType.LOITERN;
+    }
 
 }

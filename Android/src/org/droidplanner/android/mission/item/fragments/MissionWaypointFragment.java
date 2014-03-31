@@ -1,7 +1,7 @@
 package org.droidplanner.android.mission.item.fragments;
 
 import org.droidplanner.R;
-import org.droidplanner.core.mission.MissionItemTypes;
+import org.droidplanner.core.mission.MissionItemType;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.mission.waypoints.Waypoint;
 import org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText;
@@ -31,7 +31,7 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
 	protected void setupViews(View view) {
 		super.setupViews(view);
 		typeSpinner.setSelection(commandAdapter
-				.getPosition(MissionItemTypes.WAYPOINT));
+				.getPosition(MissionItemType.WAYPOINT));
 
 		Waypoint item = (Waypoint) this.itemRender.getMissionItem();
 

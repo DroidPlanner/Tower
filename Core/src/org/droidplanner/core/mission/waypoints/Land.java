@@ -5,6 +5,7 @@ import java.util.List;
 import org.droidplanner.core.helpers.coordinates.Coord3D;
 import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.mission.MissionItem;
+import org.droidplanner.core.mission.MissionItemType;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_CMD;
@@ -36,5 +37,10 @@ public class Land extends SpatialCoordItem {
 	public void unpackMAVMessage(msg_mission_item mavMsg) {
 		super.unpackMAVMessage(mavMsg);
 	}
+
+    @Override
+    public MissionItemType getType() {
+        return MissionItemType.LAND;
+    }
 
 }

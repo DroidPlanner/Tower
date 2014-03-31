@@ -20,6 +20,7 @@ import org.droidplanner.android.graphic.DroneHelper;
 import org.droidplanner.android.mission.item.fragments.MissionDetailFragment;
 import org.droidplanner.android.mission.item.fragments.MissionWaypointFragment;
 import org.droidplanner.android.graphic.map.MarkerManager.MarkerSource;
+import org.droidplanner.android.mission.item.markers.MissionItemMarkerSource;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
@@ -31,8 +32,7 @@ import java.io.Serializable;
  * {@link org.droidplanner.core.mission.MissionItem} class on the Android layer,
  * as well as providing methods for rendering it on the Android UI.
  */
-public class MissionItemRender implements Comparable<MissionItemRender>, Serializable,
-        MarkerSource {
+public class MissionItemRender implements Comparable<MissionItemRender> {
 
     /**
      * This is the mission item object this class is built around.
@@ -40,13 +40,27 @@ public class MissionItemRender implements Comparable<MissionItemRender>, Seriali
     private final MissionItem mMissionItem;
 
     /**
-     * This mission render to which this item belongs.
+     * This is the mission render to which this item belongs.
      */
     private final MissionRender mMission;
+
+    /**
+     * This is the marker source for this mission item render.
+     */
+    private final MissionItemMarkerSource mMarkerSource;
 
     public MissionItemRender(MissionRender mission, MissionItem missionItem){
         mMission = mission;
         mMissionItem = missionItem;
+        mMarkerSource = MissionItemMarkerSource.newInstance(this);
+    }
+
+    /**
+     * Provides access to the owning mission render instance.
+     * @return
+     */
+    public MissionRender getMissionRender(){
+        return mMission;
     }
 
     /**
@@ -58,13 +72,11 @@ public class MissionItemRender implements Comparable<MissionItemRender>, Seriali
     }
 
     public MissionDetailFragment getDetailFragment() {
-        final Bundle fragmentArgs = new Bundle();
-        fragmentArgs.putSerializable(MissionDetailFragment.EXTRA_MISSION_ITEM_RENDER, this);
+        return MissionDetailFragment.newInstance(mMissionItem.getType());
+    }
 
-        MissionDetailFragment fragment = new MissionWaypointFragment();
-        fragment.setArguments(fragmentArgs);
-
-        return fragment;
+    public MissionItemMarkerSource getMarkerSource(){
+        return mMarkerSource;
     }
 
     public View getListViewItemView(Context context, ViewGroup parent) {
@@ -129,52 +141,5 @@ public class MissionItemRender implements Comparable<MissionItemRender>, Seriali
     @Override
     public int compareTo(MissionItemRender another){
         return mMissionItem.compareTo(another.mMissionItem);
-    }
-
-    /*****
-     * TODO: Abstract this class, and create specialize instances for the different types for
-     * mission items.
-     * Keep a factory in this class to retrieve the correct sub instances.
-     */
-    @Override
-    public MarkerOptions build(Context context) {
-        return new MarkerOptions()
-                .position(DroneHelper.CoordToLatLang(((SpatialCoordItem)mMissionItem).getCoordinate
-                        ()))
-                .draggable(true).anchor(0.5f, 0.5f).icon(getIcon(context));
-    }
-
-    @Override
-    public void update(Marker marker, Context context) {
-        marker.setPosition(DroneHelper.CoordToLatLang(((SpatialCoordItem)mMissionItem).getCoordinate()));
-        marker.setIcon(getIcon(context));
-    }
-
-    protected BitmapDescriptor getIcon(Context context) {
-        int drawable;
-        if (mMission.selectionContains(MissionItemRender.this)) {
-            drawable = R.drawable.ic_wp_map_selected;
-        } else {
-            drawable = R.drawable.ic_wp_map;
-        }
-        Bitmap marker = MarkerWithText.getMarkerWithTextAndDetail(drawable,
-                Integer.toString(mMission.getOrder(MissionItemRender.this)),
-                getIconDetail(),
-                context);
-        return BitmapDescriptorFactory.fromBitmap(marker);
-    }
-
-    private String getIconDetail() {
-        try {
-            if (mMission.getAltitudeDiffFromPreviousItem(MissionItemRender.this)
-                    .valueInMeters() ==
-                    0) {
-                return null;
-            } else {
-                return null; // altitude.toString();
-            }
-        } catch (Exception e) {
-            return null;
-        }
     }
 }

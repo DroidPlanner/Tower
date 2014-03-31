@@ -5,6 +5,7 @@ import java.util.List;
 import org.droidplanner.core.helpers.coordinates.Coord3D;
 import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.mission.MissionItem;
+import org.droidplanner.core.mission.MissionItemType;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 
@@ -62,5 +63,10 @@ public class Loiter extends SpatialCoordItem {
 		setOrbitCCW(mavMsg.param3 < 0);
 		setOrbitalRadius(Math.abs(mavMsg.param3));
 	}
+
+    @Override
+    public MissionItemType getType() {
+        return MissionItemType.LOITER;
+    }
 
 }

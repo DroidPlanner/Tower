@@ -3,7 +3,6 @@ package org.droidplanner.android.mission.item;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.droidplanner.android.fragments.helpers.MapPath;
-import org.droidplanner.android.graphic.map.MarkerManager;
 import org.droidplanner.android.graphic.map.MarkerManager.MarkerSource;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.coordinates.Coord3D;
@@ -66,7 +65,9 @@ public class MissionRender implements MapPath.PathSource {
     public List<MarkerSource> getMarkers(){
         List<MarkerSource> markers = new ArrayList<MarkerSource>();
         for(MissionItemRender itemRender: mMissionItems){
-            markers.add(itemRender);
+            MarkerSource markerSource = itemRender.getMarkerSource();
+            if (markerSource != null)
+                markers.add(itemRender.getMarkerSource());
         }
         return markers;
     }
@@ -177,16 +178,19 @@ public class MissionRender implements MapPath.PathSource {
      */
     public void replace(MissionItemRender oldItem, MissionItemRender newItem){
         final int index = mMissionItems.indexOf(oldItem);
-        if(selectionContains(oldItem)){
-            removeItemFromSelection(oldItem);
-            addToSelection(newItem);
-        }
+        if(index == -1)
+            return;
 
         mMissionItems.remove(index);
         mMissionItems.add(index, newItem);
 
         //Update the mission object
         mMission.replace(oldItem.getMissionItem(), newItem.getMissionItem());
+
+        if(selectionContains(oldItem)){
+            removeItemFromSelection(oldItem);
+            addToSelection(newItem);
+        }
     }
 
     /**
