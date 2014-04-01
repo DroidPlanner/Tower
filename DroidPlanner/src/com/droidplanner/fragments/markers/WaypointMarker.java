@@ -57,8 +57,9 @@ public class WaypointMarker {
 			return BitmapDescriptorFactory.fromBitmap(MarkerWithText.getMarkerWithTextAndDetail(0xff00ff, // MAGENTA
 					Integer.toString(wp.getNumber()), String.format("%.0fm", wp.getHeight()), context));
 
-		case CMD_NAV_PATHPLANNING:
-		case CMD_NAV_ROI:
+		case CMD_NAV_PATHPLANNING:		
+		// Correct ROI that uses 201 instead of 80
+		case MAV_CMD_DO_SET_ROI:
 			return BitmapDescriptorFactory.fromBitmap(MarkerWithText.getMarkerWithTextAndDetail(0x007fff, // AZURE
 					Integer.toString(wp.getNumber()), getRoiDetail(wp, context), context));
 		}
