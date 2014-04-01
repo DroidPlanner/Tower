@@ -1,6 +1,11 @@
 package org.droidplanner.android.mission.item;
 
+import android.graphics.Color;
+
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.droidplanner.android.fragments.helpers.MapPath;
 import org.droidplanner.android.graphic.map.MarkerManager.MarkerSource;
@@ -16,6 +21,7 @@ import org.droidplanner.core.mission.waypoints.Waypoint;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -24,7 +30,15 @@ import java.util.List;
  */
 public class MissionRender implements MapPath.PathSource {
 
+    private static final int DEFAULT_COLOR = Color.WHITE;
+    private static final int DEFAULT_WIDTH = 4;
+
     private final Mission mMission;
+
+    /**
+     * This is the mission path outline on the map.
+     */
+    private HashMap<GoogleMap, Polyline> mMissionPaths = new HashMap<GoogleMap, Polyline>();
 
     /**
      * Stores all the mission item renders for this mission render.
@@ -169,6 +183,22 @@ public class MissionRender implements MapPath.PathSource {
      */
     public int getOrder(MissionItemRender item){
         return mMission.getOrder(item.getMissionItem());
+    }
+
+    /**
+     * Updates the mission outline on the map.
+     * @param map google map for which the mission outline should be updated
+     */
+    public void updateMissionPath(GoogleMap map){
+        Polyline missionPath = mMissionPaths.get(map);
+        if(missionPath == null) {
+            PolylineOptions pathOptions = new PolylineOptions();
+            pathOptions.color(DEFAULT_COLOR).width(DEFAULT_WIDTH);
+            missionPath = map.addPolyline(pathOptions);
+        }
+
+        missionPath.setPoints(getPathPoints());
+        mMissionPaths.put(map, missionPath);
     }
 
     /**
@@ -364,7 +394,11 @@ public class MissionRender implements MapPath.PathSource {
 
     @Override
     public List<LatLng> getPathPoints() {
-        return null;
+        List<LatLng> pathPoints = new ArrayList<LatLng>();
+        for(MissionItemRender missionItem: mMissionItems){
+            pathPoints.addAll(missionItem.getPath());
+        }
+        return pathPoints;
     }
 
     /**

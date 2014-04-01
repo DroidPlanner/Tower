@@ -33,7 +33,6 @@ public abstract class DroneMap extends OfflineMapFragment implements OnDroneList
 	public GoogleMap mMap;
 
 	protected MarkerManager markers;
-	protected MapPath missionPath;
     protected MapPath droneLeashPath;
     private Polyline flightPath;
     private GraphicHome home;
@@ -56,7 +55,6 @@ public abstract class DroneMap extends OfflineMapFragment implements OnDroneList
 		home = new GraphicHome(drone);
 		mMap = getMap();
 		markers = new MarkerManager(mMap);
-		missionPath = new MapPath(mMap,getResources());
 
         missionRender = app.missionRender;
         droneMarker = new GraphicDrone(drone, mMap);
@@ -178,9 +176,7 @@ public abstract class DroneMap extends OfflineMapFragment implements OnDroneList
 		}
 
 		markers.updateMarkers(missionRender.getMarkers(), isMissionDraggable(), context);
-
-		//TODO reimplement the mission path
-		//missionPath.update(mission);
+        missionRender.updateMissionPath(mMap);
 	}
 
 }

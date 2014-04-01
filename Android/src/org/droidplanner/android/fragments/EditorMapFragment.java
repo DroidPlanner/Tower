@@ -87,7 +87,7 @@ public class EditorMapFragment extends DroneMap implements
 			 */
 
 			// update flight path
-			missionPath.update(missionRender);
+            missionRender.updateMissionPath(mMap);
 		}
 	}
 

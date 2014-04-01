@@ -1,31 +1,24 @@
 package org.droidplanner.android.mission.item;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.droidplanner.R;
-import org.droidplanner.android.fragments.markers.helpers.MarkerWithText;
 import org.droidplanner.android.graphic.DroneHelper;
 import org.droidplanner.android.mission.item.fragments.MissionDetailFragment;
-import org.droidplanner.android.mission.item.fragments.MissionWaypointFragment;
-import org.droidplanner.android.graphic.map.MarkerManager.MarkerSource;
 import org.droidplanner.android.mission.item.markers.MissionItemMarkerSource;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 
-import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is responsible for providing logic to access and interpret the
@@ -77,6 +70,30 @@ public class MissionItemRender implements Comparable<MissionItemRender> {
 
     public MissionItemMarkerSource getMarkerSource(){
         return mMarkerSource;
+    }
+
+    /**
+     * @return the set of points/coords making up this mission item.
+     */
+    public List<LatLng> getPath() {
+        List<LatLng> pathPoints = new ArrayList<LatLng>();
+        switch (mMissionItem.getType()) {
+            case LAND:
+            case LOITER:
+            case LOITER_INF:
+            case LOITERT:
+            case LOITERN:
+            case TAKEOFF:
+            case WAYPOINT:
+                pathPoints.add(DroneHelper.CoordToLatLang(((SpatialCoordItem)
+                        mMissionItem).getCoordinate()));
+                break;
+
+            default:
+                break;
+        }
+
+        return pathPoints;
     }
 
     public View getListViewItemView(Context context, ViewGroup parent) {
