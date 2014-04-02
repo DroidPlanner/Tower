@@ -29,7 +29,7 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 public class FlightMapFragment extends DroneMap implements
-		OnMapLongClickListener, OnMarkerClickListener, OnMarkerDragListener,GuidedDialogListener {
+		OnMapLongClickListener, OnMarkerClickListener, OnMarkerDragListener, GuidedDialogListener {
 
 	private static final int ZOOM_LEVEL = 20;
 	
@@ -156,6 +156,12 @@ public class FlightMapFragment extends DroneMap implements
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch (event) {
+        case ARMING:
+            // Clear the previous flight path when arming.
+            if (drone.state.isArmed()) {
+                clearFlightPath();
+            }
+            break;
 		case GPS:
 			droneLeashPath.update(drone.guidedPoint);
 			addFlightPathPoint(drone.GPS

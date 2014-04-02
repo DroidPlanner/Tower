@@ -29,10 +29,10 @@ public class MarkerManager {
 		removeOldMarkers(emptyList);
 	}
 
-	public <T> void updateMarkers(List<T> list, boolean draggable,
+	public <T extends MarkerSource> void updateMarkers(List<T> list, boolean draggable,
 			Context context) {
 		for (T object : list) {
-			updateMarker((MarkerSource) object, draggable, context);
+			updateMarker(object, draggable, context);
 		}
 	}
 

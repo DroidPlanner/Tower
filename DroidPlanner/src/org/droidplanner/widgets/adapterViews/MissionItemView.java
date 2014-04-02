@@ -14,78 +14,59 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+/**
+ * MissionItem Adapter for the MissionItem horizontal list view.
+ * This adapter updates the content of the list view item's view based on the mission item type.
+ */
 public class MissionItemView extends ArrayAdapter<org.droidplanner.drone.variables.mission.MissionItem> {
 
-	private Context context;
+	private final Context context;
+    private final LayoutInflater inflater;
 	private List<org.droidplanner.drone.variables.mission.MissionItem> waypoints;
-
-
-	private TextView nameView;
-	private TextView altitudeView;
-	private TextView typeView;
-	private TextView descView;
-	private TextView distanceView;
-
-
 
 	public MissionItemView(Context context, int resource, List<org.droidplanner.drone.variables.mission.MissionItem> list) {
 		super(context, resource, list);
 		this.waypoints = list;
 		this.context = context;
+        this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
 	public MissionItemView(Context context, int resource) {
 		super(context, resource);
 		this.context = context;
+        this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		org.droidplanner.drone.variables.mission.MissionItem waypoint = waypoints.get(position);
 		View view = createLayoutFromResource(parent);
-		findViewObjects(view);
-		setupViewsText(waypoint);
+		setupViewsText(view, waypoint);
 		return view;
 	}
-
-
 
 	private View createLayoutFromResource(ViewGroup parent) {
-		LayoutInflater inflater = (LayoutInflater) context
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View view = inflater.inflate(R.layout.fragment_editor_list_item, parent,false);
-		return view;
+		return inflater.inflate(R.layout.fragment_editor_list_item, parent,false);
 	}
 
-
-	private void findViewObjects(View view) {
-		nameView = (TextView) view.findViewById(R.id.rowNameView);
-		altitudeView = (TextView) view.findViewById(R.id.rowAltitudeView);
-
-		//nameView.setText(String.format("%3d", waypoint.getNumber()));
-		//nameView.setText(String.format("%3d", waypoints.size()));
-
-		//
-
-		/*
-		typeView = (TextView) view.findViewById(R.id.rowTypeView);
-		descView = (TextView) view.findViewById(R.id.rowDescView);
-		distanceView = (TextView) view.findViewById(R.id.rowDistanceView);
+	private void setupViewsText(View view, org.droidplanner.drone.variables.mission.MissionItem
+            item) {
+        TextView nameView = (TextView) view.findViewById(R.id.rowNameView);
+        TextView altitudeView = (TextView) view.findViewById(R.id.rowAltitudeView);
+        		/*
+		TextView typeView = (TextView) view.findViewById(R.id.rowTypeView);
+		TextView descView = (TextView) view.findViewById(R.id.rowDescView);
+		TextView distanceView = (TextView) view.findViewById(R.id.rowDistanceView);
 */
-	}
-	private void setupViewsText(org.droidplanner.drone.variables.mission.MissionItem item) {
+
 		nameView.setText(String.format("%3d", this.waypoints.indexOf(item)+1));
 
 		if (item instanceof SpatialCoordItem) {
 			SpatialCoordItem waypoint = (SpatialCoordItem) item;
-			altitudeView.setText(String.format("%3.0fm",
-					waypoint.getAltitude().valueInMeters()));
-			
-			
-			Length diff;
+			altitudeView.setText(String.format("%3.0fm", waypoint.getAltitude().valueInMeters()));
+
 			try {
-				diff = waypoint.getMission().getAltitudeDiffFromPreviusItem(
-						waypoint);
+				Length diff = waypoint.getMission().getAltitudeDiffFromPreviousItem(waypoint);
 				if (diff.valueInMeters() > 0) {
 					altitudeView.setTextColor(Color.RED);
 				} else if (diff.valueInMeters() < 0) {
