@@ -46,12 +46,11 @@ public class EditorToolsFragment extends Fragment implements OnClickListener, On
         final RadioButtonCenter buttonTrash = (RadioButtonCenter) view.findViewById(R.id
                 .editor_tools_trash);
         
-        for(View vv: new View[] { 
-                buttonDraw, buttonMarker, buttonPoly, buttonTrash 
-            }) {
-            vv.setOnClickListener(this);
-            vv.setOnLongClickListener(this);
-        }
+		for (View vv : new View[] { buttonDraw, buttonMarker, buttonPoly,
+				buttonTrash }) {
+			vv.setOnClickListener(this);
+			vv.setOnLongClickListener(this);
+		}
 		
         mEditorRadioGroup.check(R.id.editor_tools_marker);
 		return view;
@@ -68,45 +67,45 @@ public class EditorToolsFragment extends Fragment implements OnClickListener, On
 		EditorTools newTool = EditorTools.NONE;
 
 		switch (v.getId()) {
-			case R.id.editor_tools_marker:
-				newTool = EditorTools.MARKER;
-				break;
-			case R.id.editor_tools_draw:
-				newTool = EditorTools.DRAW;
-				break;
-			case R.id.editor_tools_poly:
-				newTool = EditorTools.POLY;
-				break;
-			case R.id.editor_tools_trash:
-				newTool = EditorTools.TRASH;
-				break;
+		case R.id.editor_tools_marker:
+			newTool = EditorTools.MARKER;
+			break;
+		case R.id.editor_tools_draw:
+			newTool = EditorTools.DRAW;
+			break;
+		case R.id.editor_tools_poly:
+			newTool = EditorTools.POLY;
+			break;
+		case R.id.editor_tools_trash:
+			newTool = EditorTools.TRASH;
+			break;
 		}
 
-		if(newTool != EditorTools.NONE) {
+		if (newTool != EditorTools.NONE) {
 			listener.editorToolLongClicked(newTool);
 		}
 
 		return false;
 	}
 	
-    @Override
+	@Override
 	public void onClick(View v) {
 		EditorTools newTool = EditorTools.NONE;
 		switch (v.getId()) {
-			case R.id.editor_tools_marker:
-				newTool = EditorTools.MARKER;
-				break;
-			case R.id.editor_tools_draw:
-				newTool = EditorTools.DRAW;
-				break;
-			case R.id.editor_tools_poly:
-				newTool = EditorTools.POLY;
-				break;
-			case R.id.editor_tools_trash:
-				newTool = EditorTools.TRASH;
-				break;
+		case R.id.editor_tools_marker:
+			newTool = EditorTools.MARKER;
+			break;
+		case R.id.editor_tools_draw:
+			newTool = EditorTools.DRAW;
+			break;
+		case R.id.editor_tools_poly:
+			newTool = EditorTools.POLY;
+			break;
+		case R.id.editor_tools_trash:
+			newTool = EditorTools.TRASH;
+			break;
 		}
-		if(newTool == this.tool) {
+		if (newTool == this.tool) {
 			newTool = EditorTools.NONE;
 			mEditorRadioGroup.clearCheck();
 		}
@@ -119,7 +118,7 @@ public class EditorToolsFragment extends Fragment implements OnClickListener, On
 
 	public void setTool(EditorTools tool) {
 		this.tool = tool;
-		if(tool == EditorTools.NONE) {
+		if (tool == EditorTools.NONE) {
 			mEditorRadioGroup.clearCheck();
 		}
 		listener.editorToolChanged(this.tool);

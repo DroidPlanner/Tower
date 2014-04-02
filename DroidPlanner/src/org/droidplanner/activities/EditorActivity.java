@@ -179,23 +179,23 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 			break;
 		}
 	}
-	
+
 	@Override
 	public void editorToolLongClicked(EditorTools tools) {
 		switch (tools) {
-			case TRASH: {
-				// Clear the mission?
-				doClearMissionConfirmation();
-				break;
-			}
+		case TRASH: {
+			// Clear the mission?
+			doClearMissionConfirmation();
+			break;
+		}
 
-			default: {
-				break;
-			}
+		default: {
+			break;
+		}
 		}
 	}
 
-    private void showItemDetail(MissionItem item) {
+	private void showItemDetail(MissionItem item) {
 		if (itemDetailFragment == null) {
 			addItemDetail(item);
 		} else {
@@ -377,19 +377,20 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	}
 
 	private void doClearMissionConfirmation() {
-	    YesNoDialog ynd = YesNoDialog.newInstance(
-	            getString(R.string.dlg_clear_mission_title), 
-	            getString(R.string.dlg_clear_mission_confirm), 
-	            new YesNoDialog.Listener() {
-                    @Override
-                    public void onYes() {
-                        mission.clear();
-                    }
-                    
-                    @Override
-                    public void onNo() {}
-                });
-	    
-	    ynd.show(getSupportFragmentManager(), "clearMission");
+		YesNoDialog ynd = YesNoDialog.newInstance(
+				getString(R.string.dlg_clear_mission_title),
+				getString(R.string.dlg_clear_mission_confirm),
+				new YesNoDialog.Listener() {
+					@Override
+					public void onYes() {
+						mission.clear();
+					}
+
+					@Override
+					public void onNo() {
+					}
+				});
+
+		ynd.show(getSupportFragmentManager(), "clearMission");
 	}
 }
