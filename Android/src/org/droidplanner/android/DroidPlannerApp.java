@@ -1,6 +1,6 @@
 package org.droidplanner.android;
 
-import org.droidplanner.android.mission.item.MissionRender;
+import org.droidplanner.android.mission.MissionRender;
 import org.droidplanner.android.notifications.NotificationHandler;
 import org.droidplanner.core.MAVLink.MAVLinkStreams;
 import org.droidplanner.core.MAVLink.MavLinkMsgHandler;
@@ -12,7 +12,6 @@ import org.droidplanner.core.drone.DroneInterfaces.Handler;
 import org.droidplanner.core.drone.Preferences;
 import org.droidplanner.android.communication.service.MAVLinkClient;
 import org.droidplanner.android.helpers.DpPreferences;
-import org.droidplanner.android.notifications.TTSNotificationProvider;
 
 import android.os.SystemClock;
 

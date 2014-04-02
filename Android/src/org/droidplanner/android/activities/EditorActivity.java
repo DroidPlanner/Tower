@@ -7,7 +7,7 @@ import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.mission.item.MissionItemRender;
-import org.droidplanner.android.mission.item.MissionRender;
+import org.droidplanner.android.mission.MissionRender;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.android.fragments.EditorListFragment;
@@ -22,7 +22,6 @@ import org.droidplanner.android.mission.item.fragments.MissionDetailFragment;
 import org.droidplanner.android.mission.item.fragments.MissionDetailFragment.OnWayPointTypeChangeListener;
 import org.droidplanner.android.graphic.DroneHelper;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
-import org.droidplanner.core.mission.MissionItem;
 
 import android.app.ActionBar;
 import android.os.Bundle;

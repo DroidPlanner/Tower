@@ -4,7 +4,7 @@ import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.graphic.DroneHelper;
 import org.droidplanner.android.graphic.map.GraphicDrone;
 import org.droidplanner.android.graphic.map.GraphicGuided;
-import org.droidplanner.android.mission.item.MissionRender;
+import org.droidplanner.android.mission.MissionRender;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;

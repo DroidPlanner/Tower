@@ -12,12 +12,11 @@ import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 import org.droidplanner.android.mission.item.MissionItemRender;
-import org.droidplanner.android.mission.item.MissionRender;
+import org.droidplanner.android.mission.MissionRender;
 import org.droidplanner.android.widgets.adapterViews.MissionItemRenderView;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.core.mission.*;
 
 import android.app.Activity;
 import android.os.Bundle;

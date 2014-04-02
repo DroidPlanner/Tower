@@ -1,4 +1,4 @@
-package org.droidplanner.android.mission.item;
+package org.droidplanner.android.mission;
 
 import android.graphics.Color;
 
@@ -9,6 +9,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.droidplanner.android.fragments.helpers.MapPath;
 import org.droidplanner.android.graphic.map.MarkerManager.MarkerSource;
+import org.droidplanner.android.mission.item.MissionItemRender;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.coordinates.Coord3D;
 import org.droidplanner.core.helpers.units.Altitude;

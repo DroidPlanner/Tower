@@ -11,6 +11,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import org.droidplanner.R;
 import org.droidplanner.android.graphic.DroneHelper;
+import org.droidplanner.android.mission.MissionRender;
 import org.droidplanner.android.mission.item.fragments.MissionDetailFragment;
 import org.droidplanner.android.mission.item.markers.MissionItemMarkerSource;
 import org.droidplanner.core.helpers.units.Length;

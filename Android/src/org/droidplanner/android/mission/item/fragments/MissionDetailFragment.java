@@ -2,9 +2,8 @@ package org.droidplanner.android.mission.item.fragments;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.activities.EditorActivity;
 import org.droidplanner.android.mission.item.MissionItemRender;
-import org.droidplanner.android.mission.item.MissionRender;
+import org.droidplanner.android.mission.MissionRender;
 import org.droidplanner.android.mission.item.adapters.AdapterMissionItems;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.MissionItemType;

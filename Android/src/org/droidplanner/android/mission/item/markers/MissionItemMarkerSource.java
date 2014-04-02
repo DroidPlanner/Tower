@@ -12,7 +12,7 @@ import org.droidplanner.android.fragments.markers.helpers.MarkerWithText;
 import org.droidplanner.android.graphic.DroneHelper;
 import org.droidplanner.android.graphic.map.MarkerManager;
 import org.droidplanner.android.mission.item.MissionItemRender;
-import org.droidplanner.android.mission.item.MissionRender;
+import org.droidplanner.android.mission.MissionRender;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 
 import java.io.Serializable;
