@@ -289,9 +289,8 @@ public class FlightActivity extends DrawerNavigationUI implements
 	@Override
 	public CharSequence[][] getHelpItems() {
 		return new CharSequence[][] {
-				{ "Spline", "DP v3" },
-				{ "https://www.youtube.com/watch?v=v9ydP-NWoJE",
-						"https://www.youtube.com/watch?v=miwWUgX6nwY" } };
+				{ "How to plan and fly a mission" },
+				{ "https://www.youtube.com/watch?v=btsk7bzn-9Q"} };
 	}
 
 }
