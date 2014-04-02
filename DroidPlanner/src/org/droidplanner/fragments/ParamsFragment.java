@@ -220,26 +220,26 @@ public class ParamsFragment extends ListFragment implements DroneInterfaces
         }
     }
 
-    @Override
-    public void onBeginReceivingParameters() {
-        progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setTitle(R.string.refreshing_parameters);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setCancelable(false);
-        progressDialog.setCanceledOnTouchOutside(true);
+	@Override
+	public void onBeginReceivingParameters() {
+		progressDialog = new ProgressDialog(getActivity());
+		progressDialog.setTitle(R.string.refreshing_parameters);
+		progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+		progressDialog.setIndeterminate(true);
+		progressDialog.setCancelable(false);
+		progressDialog.setCanceledOnTouchOutside(true);
 
-        progressDialog.show();
+		progressDialog.show();
 
-        mReceived = 0;
-        mTotal = 0;
+		mReceived = 0;
+		mTotal = 0;
     }
 
     private int mReceived = 0, mTotal = 0;
 
     @Override
-    public void onParameterReceived(Parameter parameter, int index, int count) {
-        ++mReceived;
+	public void onParameterReceived(Parameter parameter, int index, int count) {
+		++mReceived;
 
         if (progressDialog != null) {
             if (progressDialog.isIndeterminate()) {
@@ -252,10 +252,11 @@ public class ParamsFragment extends ListFragment implements DroneInterfaces
     }
 
     @Override
-    public void onEndReceivingParameters(List<Parameter> parameters) {
-        if(mReceived < mTotal) {
-            Log.w(TAG, "Total of " + mTotal + " params, but only got " + mReceived);
-        }
+	public void onEndReceivingParameters(List<Parameter> parameters) {
+		if (mReceived < mTotal) {
+			Log.w(TAG, "Total of " + mTotal + " params, but only got "
+					+ mReceived);
+		}
 
         Collections.sort(parameters, new Comparator<Parameter>() {
             @Override

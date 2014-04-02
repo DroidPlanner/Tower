@@ -64,18 +64,20 @@ public class Parameters extends DroneVariable {
 		parameters.add(param);
 
 		// update listener
-		if(parameterListener!=null)
-			parameterListener.onParameterReceived(param, m_value.param_index, m_value.param_count);
+		if (parameterListener != null)
+			parameterListener.onParameterReceived(param, m_value.param_index,
+					m_value.param_count);
 
-		if(m_value.param_index > paramsReceived) {
-			Log.w(TAG, "Skipped index: Index is " + m_value.param_index + " received=" + paramsReceived);
+		if (m_value.param_index > paramsReceived) {
+			Log.w(TAG, "Skipped index: Index is " + m_value.param_index
+					+ " received=" + paramsReceived);
 		}
 
 		// last param? Notify the listener with the parameters
-		if(++paramsReceived >= m_value.param_count - 1) {
-		    if(parameterListener != null) {
-		        parameterListener.onEndReceivingParameters(parameters);
-		    }
+		if (++paramsReceived >= m_value.param_count - 1) {
+			if (parameterListener != null) {
+				parameterListener.onEndReceivingParameters(parameters);
+			}
 		}
 
 		myDrone.events.notifyDroneEvent(DroneEventsType.PARAMETER);
