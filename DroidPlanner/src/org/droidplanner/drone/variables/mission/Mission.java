@@ -29,7 +29,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class Mission extends DroneVariable implements PathSource{
 
-	private List<MissionItem> itens = new ArrayList<MissionItem>();
+	private List<MissionItem> items = new ArrayList<MissionItem>();
 	private List<MissionItem> selection = new ArrayList<MissionItem>();
 	private Altitude defaultAlt = new Altitude(20.0);
 
@@ -46,27 +46,33 @@ public class Mission extends DroneVariable implements PathSource{
 	}
 
 	public void removeWaypoint(MissionItem item) {
-		itens.remove(item);
+		items.remove(item);
 		selection.remove(item);
 		notifiyMissionUpdate();
 	}
 
 	public void removeWaypoints(List<MissionItem> toRemove) {
-		itens.removeAll(toRemove);
+		items.removeAll(toRemove);
 		selection.removeAll(toRemove);
 		notifiyMissionUpdate();		
+	}
+	
+	public void clear() {
+	    items.clear();
+	    selection.clear();
+	    notifiyMissionUpdate();
 	}
 
 	public void addWaypoints(List<LatLng> points) {
 		Altitude alt = getLastAltitude();
 		for (LatLng point : points) {
-			itens.add(new Waypoint(this, point,alt));
+			items.add(new Waypoint(this, point,alt));
 		}		
 		notifiyMissionUpdate();
 	}
 
 	public void addWaypoint(LatLng point) {
-		itens.add(new Waypoint(this,point,getLastAltitude()));
+		items.add(new Waypoint(this,point,getLastAltitude()));
 		notifiyMissionUpdate();
 	}
 
@@ -77,7 +83,7 @@ public class Mission extends DroneVariable implements PathSource{
 	private Altitude getLastAltitude() {
 		Altitude alt;
 		try{
-			SpatialCoordItem lastItem = (SpatialCoordItem) itens.get(itens.size()-1);
+			SpatialCoordItem lastItem = (SpatialCoordItem) items.get(items.size()-1);
 			alt = lastItem.getAltitude();
 		}catch (Exception e){
 			alt = defaultAlt;			
@@ -86,18 +92,18 @@ public class Mission extends DroneVariable implements PathSource{
 	}
 	
 	public void replace(MissionItem oldItem, MissionItem newItem) {
-		int index = itens.indexOf(oldItem);
+		int index = items.indexOf(oldItem);
 		if (selectionContains(oldItem)) {
 			removeItemFromSelection(oldItem);
 			addToSelection(newItem);
 		}
-		itens.remove(index);
-		itens.add(index, newItem);
+		items.remove(index);
+		items.add(index, newItem);
 		notifiyMissionUpdate();		
 	}
 
 	public void reverse() {
-		Collections.reverse(itens);
+		Collections.reverse(items);
 		notifiyMissionUpdate();	
 	}
 
@@ -111,7 +117,7 @@ public class Mission extends DroneVariable implements PathSource{
 	 *            true to move up, but can be false to move down
 	 */
 	public void moveSelection(boolean moveUp) {
-		if (selection.size() > 0 | selection.size() < itens.size()) {
+		if (selection.size() > 0 | selection.size() < items.size()) {
 			Collections.sort(selection);
 			if (moveUp) {
 				Collections.rotate(getSublistToRotateUp(), 1);				
@@ -123,29 +129,29 @@ public class Mission extends DroneVariable implements PathSource{
 	}
 
 	private List<MissionItem> getSublistToRotateUp() {
-		int from = itens.indexOf(selection.get(0));
+		int from = items.indexOf(selection.get(0));
 		int to = from;
 		do{
-			if (itens.size() < to + 2)
-				return itens.subList(0, 0);
-		}while (selection.contains(itens.get(++to)));
-		return itens.subList(from, to + 1); // includes one unselected item
+			if (items.size() < to + 2)
+				return items.subList(0, 0);
+		}while (selection.contains(items.get(++to)));
+		return items.subList(from, to + 1); // includes one unselected item
 	}
 
 	private List<MissionItem> getSublistToRotateDown() {
-		int from = itens.indexOf(selection.get(selection.size() - 1));
+		int from = items.indexOf(selection.get(selection.size() - 1));
 		int to = from;
 		do {
 			if (to < 1) {
-				return itens.subList(0, 0);
+				return items.subList(0, 0);
 			}
-		} while (selection.contains(itens.get(--to)));
-		return itens.subList(to, from + 1); // includes one unselected item
+		} while (selection.contains(items.get(--to)));
+		return items.subList(to, from + 1); // includes one unselected item
 	}
 
 	public void addSurveyPolygon(List<LatLng> points) {
 		Survey survey = new Survey(this, points, myDrone.context);
-		itens.add(survey);
+		items.add(survey);
 		notifiyMissionUpdate();		
 	}
 
@@ -158,7 +164,7 @@ public class Mission extends DroneVariable implements PathSource{
 	@Override
 	public List<LatLng> getPathPoints() {
 		List<LatLng> newPath = new ArrayList<LatLng>();
-		for (MissionItem item : itens) {
+		for (MissionItem item : items) {
 			try {
 				newPath.addAll(item.getPath());
 			} catch (Exception e) {
@@ -169,12 +175,12 @@ public class Mission extends DroneVariable implements PathSource{
 	}
 
 	public List<MissionItem> getItems() {
-		return itens;
+		return items;
 	}
 
 	public List<MarkerSource> getMarkers() {
 		List<MarkerSource> markers = new ArrayList<MarkerSource>();
-		for (MissionItem item : itens) {
+		for (MissionItem item : items) {
 			try {
 				markers.addAll(item.getMarkers());
 			} catch (Exception e) {
@@ -185,14 +191,14 @@ public class Mission extends DroneVariable implements PathSource{
 	}
 
 	public Integer getNumber(MissionItem waypoint) {
-		return itens.indexOf(waypoint)+1; // plus one to account for the fact that this is an index
+		return items.indexOf(waypoint)+1; // plus one to account for the fact that this is an index
 	}
 
 	public Length getAltitudeDiffFromPreviousItem(
             SpatialCoordItem waypoint) throws Exception {
-		int i = itens.indexOf(waypoint);
+		int i = items.indexOf(waypoint);
 		if (i > 0) {
-			MissionItem previus = itens.get(i - 1);
+			MissionItem previus = items.get(i - 1);
 			if (previus instanceof SpatialCoordItem) {
 				return waypoint.getAltitude().subtract(
 						((SpatialCoordItem) previus).getAltitude());
@@ -202,9 +208,9 @@ public class Mission extends DroneVariable implements PathSource{
 	}
 
 	public Length getDistanceFromLastWaypoint(SpatialCoordItem waypoint) throws Exception {
-		int i = itens.indexOf(waypoint);
+		int i = items.indexOf(waypoint);
 		if (i > 0) {
-			MissionItem previus = itens.get(i - 1);
+			MissionItem previus = items.get(i - 1);
 			if (previus instanceof SpatialCoordItem) {
 				return GeoTools.getDistance(waypoint.getCoordinate(),
 						((SpatialCoordItem) previus).getCoordinate());
@@ -214,7 +220,7 @@ public class Mission extends DroneVariable implements PathSource{
 	}
 
 	public boolean hasItem(MissionItem item) {
-		return itens.contains(item);
+		return items.contains(item);
 	}
 
 	public void clearSelection() {
@@ -253,8 +259,8 @@ public class Mission extends DroneVariable implements PathSource{
 			myDrone.home.setHome(msgs.get(0));
 			msgs.remove(0); // Remove Home waypoint
 			selection.clear();
-			itens.clear();
-			itens.addAll(processMavLinkMessages(msgs));
+			items.clear();
+			items.addAll(processMavLinkMessages(msgs));
 			myDrone.events.notifyDroneEvent(DroneEventsType.MISSION_RECEIVED);
 			notifiyMissionUpdate();
 		}
@@ -287,7 +293,7 @@ public class Mission extends DroneVariable implements PathSource{
 	public void sendMissionToAPM() {
 		List<msg_mission_item> data = new ArrayList<msg_mission_item>();
 		data.add(myDrone.home.packMavlink());
-		for (MissionItem item : itens) {
+		for (MissionItem item : items) {
 			data.addAll(item.packMissionItem());			
 		}				
 		myDrone.waypointMananger.writeWaypoints(data);
