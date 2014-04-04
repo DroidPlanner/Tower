@@ -68,7 +68,7 @@ public class msg_command_long extends MAVLinkMessage{
 	public MAVLinkPacket pack(){
 		MAVLinkPacket packet = new MAVLinkPacket();
 		packet.len = MAVLINK_MSG_LENGTH;
-		packet.sysid = 255;
+//		packet.sysid = 255;
 		packet.compid = 190;
 		packet.msgid = MAVLINK_MSG_ID_COMMAND_LONG;
 		packet.payload.putFloat(param1);
