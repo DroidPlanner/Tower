@@ -55,4 +55,6 @@ public class DroidPlannerApp extends ErrorReportApp implements
 	public void notifyDisconnected() {
 		drone.events.notifyDroneEvent(DroneEventsType.DISCONNECTED);
 	}
+	
+	public Drone getDrone() { return drone; }
 }

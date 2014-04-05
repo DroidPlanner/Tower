@@ -1,26 +1,28 @@
 package org.droidplanner.widgets.actionProviders;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+import org.droidplanner.R;
+import org.droidplanner.drone.Drone;
+import org.droidplanner.widgets.spinners.ModeAdapter;
+import org.droidplanner.widgets.spinners.SpinnerSelfSelect;
+
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.MAVLink.Messages.ApmModes;
-
-import org.droidplanner.R;
-import org.droidplanner.drone.Drone;
-import org.droidplanner.drone.variables.State;
-import org.droidplanner.widgets.spinners.ModeAdapter;
-import org.droidplanner.widgets.spinners.SpinnerSelfSelect;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Set of actions supported by the info bar
@@ -400,27 +402,57 @@ public abstract class InfoBarItem {
 
         @Override
         public void updateItemView(final Context context, final Drone drone) {
+        	System.out.println("updateItemView()!");
             mDrone = drone;
 
             if (mItemView == null)
                 return;
 
             final SpinnerSelfSelect modesSpinner = (SpinnerSelfSelect) mItemView;
-            final int droneType = drone == null ? -1: drone.type.getType();
-            if(droneType != mLastDroneType){
-                final List<ApmModes> flightModes = droneType == -1
-                        ? Collections.<ApmModes>emptyList()
-                        : ApmModes.getModeList(droneType);
+            final int droneType = (drone == null)? -1: drone.type.getType();
 
-                mModeAdapter.clear();
-                mModeAdapter.addAll(flightModes);
-                mModeAdapter.notifyDataSetChanged();
+            final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            final String menuModes = prefs.getString("pref_menu_modes", null);
+            final String[] parts = (menuModes != null)? menuModes.split(","): null;
 
-                mLastDroneType = droneType;
-            }
+            final List<ApmModes> flightModes = droneType == -1
+                    ? Collections.<ApmModes>emptyList()
+                    : ApmModes.getModeList(droneType);
+
+            mModeAdapter.clear();
+            mModeAdapter.addAll(filterUnselected(flightModes, parts));
+            mModeAdapter.notifyDataSetChanged();
+
+            mLastDroneType = droneType;
 
             if (mDrone != null)
                 modesSpinner.forcedSetSelection(mModeAdapter.getPosition(mDrone.state.getMode()));
+        }
+        
+        private static List<ApmModes> filterUnselected(Collection<ApmModes> modes, String[] ids) {
+        	final ArrayList<ApmModes> list = new ArrayList<ApmModes>();
+        	for(ApmModes mode: modes) {
+        		if(isSelectedIn(ids, mode)) {
+        			System.out.println(mode.getName());
+        			list.add(mode);
+        		}
+        	}
+        	return list;
+        }
+        
+        private static boolean isSelectedIn(String[] list, ApmModes mode) {
+        	if(list == null) {
+        		return true;
+        	}
+        	
+        	final String ord = String.valueOf(mode.ordinal());
+        	for(String s: list) {
+        		if(ord.equals(s)) {
+        			return true;
+        		}
+        	}
+        	
+        	return false;
         }
     }
 

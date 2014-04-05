@@ -94,6 +94,11 @@
     <string name="pref_server_port">Server Port</string>
     <string name="pref_server_udp">UDP connection</string>
     <string name="pref_udp_server_port">UDP Server Port</string>
+    
+    <string name="pref_menu_modes_title">Available Flight Modes</string>
+    <string name="pref_menu_modes_summary">Select which modes are available from the menu</string>
+    <string name="pref_menu_modes_dialog_title">Available Flight Modes</string>
+    
     <string name="about">About</string>
     <string name="version">Version</string>
     <string name="storage_folder">Storage Folder</string>

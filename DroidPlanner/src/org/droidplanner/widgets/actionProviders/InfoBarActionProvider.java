@@ -13,6 +13,9 @@ import org.droidplanner.widgets.actionProviders.InfoBarItem.PhoneExtraInfo;
 import org.droidplanner.widgets.actionProviders.InfoBarItem.SignalInfo;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.preference.PreferenceManager;
 import android.view.ActionProvider;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,24 +53,37 @@ public class InfoBarActionProvider extends ActionProvider implements OnDroneList
     private SignalInfo mSignalInfo;
     private FlightModesInfo mFlightModesInfo;
     private PhoneExtraInfo mPhoneExtraInfo;
-
+    
+    private final OnSharedPreferenceChangeListener mPrefChangeListener = new OnSharedPreferenceChangeListener() {
+		@Override
+		public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+			System.out.println("onSharedPreferenceChanged()");
+			if("pref_menu_modes".equals(key)) {
+				updateInfoBar();
+			}
+		}
+    };
 
     public InfoBarActionProvider(Context context) {
         super(context);
         mContext = context;
+        
     }
 
     @Override
     public View onCreateActionView() {
         final LayoutInflater inflater = LayoutInflater.from(mContext);
         mView = inflater.inflate(R.layout.action_provider_info_bar, null);
-
+        
         setupActionView();
         updateInfoBar();
 
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        prefs.registerOnSharedPreferenceChangeListener(mPrefChangeListener);
+        
         return mView;
     }
-
+    
     /**
      * This is used to update the current drone state.
      *
