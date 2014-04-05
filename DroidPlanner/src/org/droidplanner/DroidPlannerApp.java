@@ -56,5 +56,11 @@ public class DroidPlannerApp extends ErrorReportApp implements
 		drone.events.notifyDroneEvent(DroneEventsType.DISCONNECTED);
 	}
 	
-	public Drone getDrone() { return drone; }
+	public Drone getDrone() { 
+		return drone; 
+	}
+	
+	public boolean isDroneConnected() {
+		return drone.MavClient.isConnected();
+	}
 }

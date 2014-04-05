@@ -1,9 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ListView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:cacheColorHint="@android:color/transparent"
-    />
-
+    android:orientation="vertical"
+    android:padding="@dimen/list_area_padding"
+    >
+    <LinearLayout
+        android:id="@+id/mav_type_panel" 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lbl_uv_type"
+            style="@style/textLabelsLarge"
+            />
+        
+        <Spinner
+            android:id="@+id/spin_uv_type"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            />
+    </LinearLayout>
+    
+    <ListView
+        
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:cacheColorHint="@android:color/transparent"
+        />
+</LinearLayout>
