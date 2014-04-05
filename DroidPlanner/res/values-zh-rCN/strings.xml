@@ -217,6 +217,9 @@
     <string name="waypoint_repeat">重复航点</string>
     <string name="Orbits">轨道</string>
 
+    <string name="dlg_clear_mission_title">清除任务</string>
+    <string name="dlg_clear_mission_confirm">从地图上清除所有航点？</string>
+
     <!-- Selection of map style -->
     <string name="menu_map_type">地图样式</string>
     <string name="menu_map_type_satellite">卫星</string>
