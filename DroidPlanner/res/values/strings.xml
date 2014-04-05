@@ -98,6 +98,10 @@
     <string name="pref_menu_modes_title">Available Flight Modes</string>
     <string name="pref_menu_modes_summary">Select which modes are available from the menu</string>
     <string name="pref_menu_modes_dialog_title">Available Flight Modes</string>
+    <string name="lbl_uv_type">Vehicle Type:</string>
+    <string name="mavtype_quad">Multi-Rotor</string>
+    <string name="mavtype_rover">Rover</string>
+    <string name="mavtype_fixedwing">Fixed-Wing</string>
     
     <string name="about">About</string>
     <string name="version">Version</string>

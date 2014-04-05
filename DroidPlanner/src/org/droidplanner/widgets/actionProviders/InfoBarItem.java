@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.droidplanner.R;
 import org.droidplanner.drone.Drone;
+import org.droidplanner.utils.Utils;
 import org.droidplanner.widgets.spinners.ModeAdapter;
 import org.droidplanner.widgets.spinners.SpinnerSelfSelect;
 
@@ -402,7 +403,6 @@ public abstract class InfoBarItem {
 
         @Override
         public void updateItemView(final Context context, final Drone drone) {
-        	System.out.println("updateItemView()!");
             mDrone = drone;
 
             if (mItemView == null)
@@ -412,7 +412,7 @@ public abstract class InfoBarItem {
             final int droneType = (drone == null)? -1: drone.type.getType();
 
             final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            final String menuModes = prefs.getString("pref_menu_modes", null);
+            final String menuModes = prefs.getString(Utils.getMenuModesPrefName(droneType), null);
             final String[] parts = (menuModes != null)? menuModes.split(","): null;
 
             final List<ApmModes> flightModes = droneType == -1
@@ -433,7 +433,6 @@ public abstract class InfoBarItem {
         	final ArrayList<ApmModes> list = new ArrayList<ApmModes>();
         	for(ApmModes mode: modes) {
         		if(isSelectedIn(ids, mode)) {
-        			System.out.println(mode.getName());
         			list.add(mode);
         		}
         	}

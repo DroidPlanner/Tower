@@ -57,8 +57,7 @@ public class InfoBarActionProvider extends ActionProvider implements OnDroneList
     private final OnSharedPreferenceChangeListener mPrefChangeListener = new OnSharedPreferenceChangeListener() {
 		@Override
 		public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-			System.out.println("onSharedPreferenceChanged()");
-			if("pref_menu_modes".equals(key)) {
+			if(key.startsWith("pref_menu_modes_")) {
 				updateInfoBar();
 			}
 		}

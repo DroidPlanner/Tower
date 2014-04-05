@@ -79,4 +79,9 @@ public class Utils {
             res.updateConfiguration(config, res.getDisplayMetrics());
         }
     }
+
+    /** Return the preference name for the "menu_modes" preference by drone type. */
+	public static String getMenuModesPrefName(int droneType) {
+		return String.format(Locale.US, "pref_menu_modes_%d", droneType);
+	}
 }

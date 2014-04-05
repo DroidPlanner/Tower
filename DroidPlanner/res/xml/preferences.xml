@@ -106,7 +106,6 @@
                     android:title="@string/pref_lock_screen_orientation"/>
             </PreferenceCategory>
             <org.droidplanner.activities.MenuModesPreference
-                android:key="pref_menu_modes"
                 android:dialogLayout="@layout/dlg_menu_modes"
                 android:dialogTitle="@string/pref_menu_modes_dialog_title"
                 android:title="@string/pref_menu_modes_title"
