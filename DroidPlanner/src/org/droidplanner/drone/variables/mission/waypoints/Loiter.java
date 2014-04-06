@@ -23,6 +23,10 @@ public abstract class Loiter extends SpatialCoordItem implements MarkerSource {
 	private double yawAngle;
 	private boolean orbitCCW;
 	
+	public Loiter(Mission m) {
+	    super(m);
+	}
+	
 	public Loiter(MissionItem item) {
 		super(item);
 	}

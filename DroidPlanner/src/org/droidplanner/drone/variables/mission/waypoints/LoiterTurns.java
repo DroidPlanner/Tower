@@ -2,6 +2,7 @@ package org.droidplanner.drone.variables.mission.waypoints;
 
 import java.util.List;
 
+import org.droidplanner.drone.variables.mission.Mission;
 import org.droidplanner.drone.variables.mission.MissionItem;
 import org.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import org.droidplanner.fragments.mission.MissionDetailFragment;
@@ -12,6 +13,15 @@ import com.MAVLink.Messages.enums.MAV_CMD;
 
 public class LoiterTurns extends Loiter implements MarkerSource {
 	private int turns;
+	
+	public LoiterTurns(Mission m) {
+	    super(m);
+	}
+	
+    public LoiterTurns(msg_mission_item msg, Mission mission) {
+        super(mission, null, null);
+        unpackMAVMessage(msg);
+    }
 	
 	public LoiterTurns(MissionItem item) {
 		super(item);

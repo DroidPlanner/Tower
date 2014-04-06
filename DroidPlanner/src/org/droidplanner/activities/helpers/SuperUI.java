@@ -4,13 +4,18 @@ import org.droidplanner.R;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneInterfaces.OnDroneListener;
+import org.droidplanner.fragments.InputDialogFragment;
+import org.droidplanner.fragments.MissionFileSelectFragment;
+import org.droidplanner.fragments.YesNoDialogFragment;
 import org.droidplanner.gcs.GCSHeartbeat;
+import org.droidplanner.helpers.MissionFiles;
 import org.droidplanner.utils.Utils;
 import org.droidplanner.widgets.actionProviders.InfoBarActionProvider;
 
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public abstract class SuperUI extends SuperActivity implements OnDroneListener {
 	private ScreenOrientation screenOrientation = new ScreenOrientation(this);
@@ -118,9 +123,91 @@ public abstract class SuperUI extends SuperActivity implements OnDroneListener {
             case R.id.menu_load_mission:
                 drone.waypointMananger.getWaypoints();
                 return true;
-
+                
+            case R.id.menu_save_mission:
+                doMenuSaveMission();
+                return true;
+                
+            case R.id.menu_get_saved_mission:
+                doMenuLoadMission();
+                return true;
+                
             default:
                 return super.onOptionsItemSelected(item);
         }
+	}
+	
+	void doMenuSaveMission() {
+	    final InputDialogFragment.Listener listener = new InputDialogFragment.Listener() {
+            @Override
+            public void onInput(String text) {
+                try {
+                    MissionFiles.save(drone.mission, text);
+                }
+                catch(Exception ex) {
+                    Toast.makeText(SuperUI.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+            
+            @Override
+            public void onCancel() {}
+        };
+        
+	    InputDialogFragment dlg = InputDialogFragment.newInstance(
+	            getString(R.string.save_mission),
+	            getString(R.string.dlg_enter_mission_name), 
+	            listener);
+	    
+	    dlg.show(getSupportFragmentManager(), "saveMission");
+	}
+	
+	void doMenuLoadMission() {
+	    final MissionFileSelectFragment.Listener listener = new MissionFileSelectFragment.Listener() {
+            @Override
+            public void onFileSelected(CharSequence name) {
+                try {
+                    MissionFiles.load(drone.mission, name.toString());
+                }
+                catch(Exception ex) {
+                    Toast.makeText(SuperUI.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onDeleteFiles(final CharSequence[] names) {
+                if(names.length > 0) {
+                    final YesNoDialogFragment.Listener listener = new YesNoDialogFragment.Listener() {
+                        @Override
+                        public void onOK() {
+                            MissionFiles.delete(names);
+                        }
+                        
+                        @Override
+                        public void onCancel() {
+                        }
+                    };
+                    
+                    final int resId = (names.length > 1)? R.string.dlg_delete_files_confirm:
+                        R.string.dlg_delete_file_confirm;
+                    final String confirm = getString(resId, names.length);
+                    
+                    YesNoDialogFragment dlg = YesNoDialogFragment.newInstance(
+                            getString(R.string.btn_delete), 
+                            confirm,
+                            getString(android.R.string.ok),
+                            getString(android.R.string.cancel),
+                            listener);
+                    dlg.show(getSupportFragmentManager(), "deleteConfirm");
+                }
+            }
+
+            @Override
+            public void onCancel() {}
+        };
+        
+        MissionFileSelectFragment dlg = MissionFileSelectFragment.newInstance(
+                getString(R.string.dlg_get_saved_mission_title), 
+                getString(R.string.dlg_select_mission_file), listener);
+        dlg.show(getSupportFragmentManager(), "pickMission");
 	}
 }

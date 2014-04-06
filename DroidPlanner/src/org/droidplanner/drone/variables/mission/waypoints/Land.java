@@ -13,6 +13,10 @@ import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_CMD;
 
 public class Land extends SpatialCoordItem implements MarkerSource {
+    
+    public Land(Mission m) {
+        super(m);
+    }
 
 	public Land(MissionItem item) {
 		super(item);
