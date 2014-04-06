@@ -18,6 +18,7 @@ public class DroidPlannerApp extends ErrorReportApp implements
 	public FollowMe followMe;
 	public RecordMe recordMe;
 	private TTS tts;
+	private boolean mConnectedToDrone = false;
 
 	@Override
 	public void onCreate() {
@@ -48,11 +49,13 @@ public class DroidPlannerApp extends ErrorReportApp implements
 
 	@Override
 	public void notifyConnected() {
+		mConnectedToDrone = true;
 		drone.events.notifyDroneEvent(DroneEventsType.CONNECTED);
 	}
 
 	@Override
 	public void notifyDisconnected() {
+		mConnectedToDrone = false;
 		drone.events.notifyDroneEvent(DroneEventsType.DISCONNECTED);
 	}
 	
