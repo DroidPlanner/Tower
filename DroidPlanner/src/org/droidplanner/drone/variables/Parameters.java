@@ -10,6 +10,8 @@ import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.DroneVariable;
 import org.droidplanner.parameters.Parameter;
 
+import android.util.Log;
+
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_param_value;
 
@@ -22,9 +24,12 @@ import com.MAVLink.Messages.ardupilotmega.msg_param_value;
  *
  */
 public class Parameters extends DroneVariable {
-    private List<Parameter> parameters = new ArrayList<Parameter>();
+	private static final String TAG = Parameters.class.getSimpleName();
+
+	private List<Parameter> parameters = new ArrayList<Parameter>();
 
 	public DroneInterfaces.OnParameterManagerListener parameterListener;
+	private int paramsReceived = 0;
 
 	public Parameters(Drone myDrone) {
 		super(myDrone);
@@ -32,6 +37,7 @@ public class Parameters extends DroneVariable {
 
 	public void getAllParameters() {
 		parameters.clear();
+		paramsReceived = 0;
 		if(parameterListener!=null)
 			parameterListener.onBeginReceivingParameters();
 		MavLinkParameters.requestParametersList(myDrone);
@@ -46,7 +52,7 @@ public class Parameters extends DroneVariable {
 	 */
 	public boolean processMessage(MAVLinkMessage msg) {
 		if (msg.msgid == msg_param_value.MAVLINK_MSG_ID_PARAM_VALUE) {
-				processReceivedParam((msg_param_value) msg);
+			processReceivedParam((msg_param_value) msg);
 			return true;
 		}
 		return false;
@@ -58,14 +64,22 @@ public class Parameters extends DroneVariable {
 		parameters.add(param);
 
 		// update listener
-		if(parameterListener!=null)
-			parameterListener.onParameterReceived(param, m_value.param_index, m_value.param_count);
+		if (parameterListener != null)
+			parameterListener.onParameterReceived(param, m_value.param_index,
+					m_value.param_count);
 
-		// last param? notify listener w/ params
-		if (m_value.param_index == m_value.param_count - 1) {
-			if(parameterListener!=null)
-				parameterListener.onEndReceivingParameters(parameters);
+		if (m_value.param_index > paramsReceived) {
+			Log.w(TAG, "Skipped index: Index is " + m_value.param_index
+					+ " received=" + paramsReceived);
 		}
+
+		// last param? Notify the listener with the parameters
+		if (++paramsReceived >= m_value.param_count - 1) {
+			if (parameterListener != null) {
+				parameterListener.onEndReceivingParameters(parameters);
+			}
+		}
+
 		myDrone.events.notifyDroneEvent(DroneEventsType.PARAMETER);
 	}
 

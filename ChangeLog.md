@@ -8,6 +8,16 @@ Our convention for release control is the following (for a release like DPvA.B.C
 All the changes are logged below (preferable with the pull request numbers in parenteses):
 
 # Releases
+## Droidplanner v2.2.5
+* Long press on trash tool removes the entire mission (#714)
+* Clear the previous flight path when arming (#705)
+* Improves the parameter download algorithm on bad links (#715)
+* Fix problems with decimal point on Parameters screen (#690)
+* Added a help video (#716)
+* Fix minor UX issues. The message on polygon tool and the guided dialog (#691)
+* Commented out the follow me preference until it's implemented (#704)
+* Fixng typos and formatting (#702)
+
 ## Droidplanner v2.2.4
 * Fix User Experience problems with the Survey tool (#688)
 * Updated the README file (#687)

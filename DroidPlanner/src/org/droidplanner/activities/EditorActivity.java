@@ -5,6 +5,7 @@ import java.util.List;
 import org.droidplanner.R;
 import org.droidplanner.activities.helpers.OnEditorInteraction;
 import org.droidplanner.activities.helpers.SuperUI;
+import org.droidplanner.dialogs.YesNoDialog;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.variables.mission.Mission;
@@ -59,7 +60,8 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		setContentView(R.layout.activity_editor);
 
 		ActionBar actionBar = getActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
+        if(actionBar != null)
+		    actionBar.setDisplayHomeAsUpEnabled(true);
 
 		fragmentManager = getSupportFragmentManager();
 
@@ -175,6 +177,21 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		case NONE:
 			gestureMapFragment.disableGestureDetection();
 			break;
+		}
+	}
+
+	@Override
+	public void editorToolLongClicked(EditorTools tools) {
+		switch (tools) {
+		case TRASH: {
+			// Clear the mission?
+			doClearMissionConfirmation();
+			break;
+		}
+
+		default: {
+			break;
+		}
 		}
 	}
 
@@ -311,6 +328,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 	@Override
 	public void onItemClick(MissionItem item) {
+	    
 		switch (editorToolsFragment.getTool()) {
 		default:
 			if (contextualActionBar != null) {
@@ -358,4 +376,21 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		updateMapPadding();
 	}
 
+	private void doClearMissionConfirmation() {
+		YesNoDialog ynd = YesNoDialog.newInstance(
+				getString(R.string.dlg_clear_mission_title),
+				getString(R.string.dlg_clear_mission_confirm),
+				new YesNoDialog.Listener() {
+					@Override
+					public void onYes() {
+						mission.clear();
+					}
+
+					@Override
+					public void onNo() {
+					}
+				});
+
+		ynd.show(getSupportFragmentManager(), "clearMission");
+	}
 }
