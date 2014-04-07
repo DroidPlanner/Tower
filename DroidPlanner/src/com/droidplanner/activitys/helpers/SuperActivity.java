@@ -217,12 +217,16 @@ public abstract class SuperActivity extends Activity implements
 	}
 
 	public void notifyArmed() {
+		
+		// Change menu button
 		if (armButton != null) {
 			armButton.setTitle("Arm");
 		}
 	}
 
 	public void notifyDisarmed() {
+		
+		// Change menu button
 		if (armButton != null) {
 			armButton.setTitle("Disarm");
 		}
