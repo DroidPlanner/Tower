@@ -231,20 +231,6 @@ public class FlightDataActivity extends SuperFlightActivity implements
 				drone.tts.speak("No telemetry link");
 			}
 			
-			// Flip the name of the button and flip the color
-			if(!drone.state.isArmed())
-			{
-				// Disarmed
-				armDisarmButton.setText("Arm");
-				armDisarmButton.setBackgroundColor(0xffffa500); // Should be orange
-			}
-			else
-			{
-				// Armed
-				armDisarmButton.setText("Disarm");
-				armDisarmButton.setBackgroundColor(0xff0000ff); // Should be standard green
-			}
-			
 			// We have handled the long press so return true
 			return true;
 		}
@@ -267,6 +253,35 @@ public class FlightDataActivity extends SuperFlightActivity implements
 		
 		//We have not handled the long press so let someone above us handle it by returning false
 		return false;
+	}
+	
+	@Override
+	public void notifyArmed()
+	{
+		// Call the superclass method
+		super.notifyArmed();
+		
+		if (armDisarmButton != null)
+		{
+			// Armed
+			armDisarmButton.setText("Disarm");
+			armDisarmButton.setBackgroundColor(0xff0000ff); // Should be standard green
+		}
+	}
+	
+	@Override
+	public void notifyDisarmed()
+	{
+		// Call the superclass method
+		super.notifyDisarmed();
+		
+		if (armDisarmButton != null)
+		{
+			// Disarmed
+			armDisarmButton.setText("Arm");
+			armDisarmButton.setBackgroundColor(0xffffa500); // Should be orange
+		}
+		
 	}
 
 }
