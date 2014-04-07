@@ -266,6 +266,7 @@ public class FlightDataActivity extends SuperFlightActivity implements
 			// Armed
 			armDisarmButton.setText("Disarm");
 			armDisarmButton.setBackgroundColor(0xff0000ff); // Should be standard green
+			armDisarmButton.setTextColor(0xFFFFFF); // Set text color to white
 		}
 	}
 	
