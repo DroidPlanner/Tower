@@ -220,7 +220,7 @@ public abstract class SuperActivity extends Activity implements
 		
 		// Change menu button
 		if (armButton != null) {
-			armButton.setTitle("Arm");
+			armButton.setTitle("Disarm");
 		}
 	}
 
@@ -228,7 +228,7 @@ public abstract class SuperActivity extends Activity implements
 		
 		// Change menu button
 		if (armButton != null) {
-			armButton.setTitle("Disarm");
+			armButton.setTitle("Arm");
 		}
 	}
 	@Override
