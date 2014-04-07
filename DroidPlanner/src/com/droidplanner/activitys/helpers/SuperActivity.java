@@ -219,14 +219,12 @@ public abstract class SuperActivity extends Activity implements
 	public void notifyArmed() {
 		if (armButton != null) {
 			armButton.setTitle("Arm");
-			// Add change color for GUI arm/disarm button
 		}
 	}
 
 	public void notifyDisarmed() {
 		if (armButton != null) {
 			armButton.setTitle("Disarm");
-			// Add change color for GUI arm/disarm button
 		}
 	}
 	@Override
