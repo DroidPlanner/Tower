@@ -44,7 +44,7 @@ public class msg_roll_pitch_yaw_thrust_setpoint extends MAVLinkMessage{
 	public MAVLinkPacket pack(){
 		MAVLinkPacket packet = new MAVLinkPacket();
 		packet.len = MAVLINK_MSG_LENGTH;
-//		packet.sysid = 255;
+		packet.sysid = 255;
 		packet.compid = 190;
 		packet.msgid = MAVLINK_MSG_ID_ROLL_PITCH_YAW_THRUST_SETPOINT;
 		packet.payload.putInt(time_boot_ms);

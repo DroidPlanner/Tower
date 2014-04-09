@@ -31,9 +31,6 @@ public class MAVLinkPacket implements Serializable {
 	
 	public static final int MAVLINK_STX = 254;
 	
-	// Set ground control station ID here instead of in each message's java file
-	public static final int GCS_ID = 5;
-	
 	/**
 	 * Message length. NOT counting STX, LENGTH, SEQ, SYSID, COMPID, MSGID, CRC1 and CRC2
 	 */
@@ -46,7 +43,7 @@ public class MAVLinkPacket implements Serializable {
 	 * ID of the SENDING system. Allows to differentiate different MAVs on the
 	 * same network.
 	 */
-	public int sysid = GCS_ID;
+	public int sysid;
 	/**
 	 * ID of the SENDING component. Allows to differentiate different components
 	 * of the same system, e.g. the IMU and the autopilot.
