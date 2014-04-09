@@ -1,5 +1,7 @@
 package org.droidplanner.file.IO;
 
+import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -8,18 +10,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.droidplanner.dialogs.openfile.OpenFileDialog.FileReader;
-import org.droidplanner.drone.variables.Home;
-import org.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.file.DirectoryPath;
 import org.droidplanner.file.FileList;
 import org.droidplanner.file.FileManager;
 
 public class MissionReader implements FileReader {
-	private Home home;
-	private List<SpatialCoordItem> waypoints;
+
+    private List<msg_mission_item> msgMissionItems;
 
 	public MissionReader() {
-		this.waypoints = new ArrayList<SpatialCoordItem>();
+		this.msgMissionItems = new ArrayList<msg_mission_item>();
 	}
 
 	public boolean openMission(String file) {
@@ -35,8 +35,7 @@ public class MissionReader implements FileReader {
 				in.close();
 				return false;
 			}
-			parseHomeLine(reader);
-			parseWaypointLines(reader);
+			parseLines(reader);
 
 			in.close();
 
@@ -48,50 +47,37 @@ public class MissionReader implements FileReader {
 		return true;
 	}
 
-	public Home getHome() {
-		return home;
+	public List<msg_mission_item> getMsgMissionItems() {
+		return msgMissionItems;
 	}
 
-	public List<SpatialCoordItem> getWaypoints() {
-		return waypoints;
-	}
+	private void parseLines(BufferedReader reader) throws IOException {
+        msgMissionItems.clear();
 
-	private void parseWaypointLines(BufferedReader reader) throws IOException {
-		String line;
-		waypoints.clear();
-		while ((line = reader.readLine()) != null) {
-			throw new IllegalArgumentException("NOT implemented"); //TODO implement this
-			/*
-			String[] RowData = line.split("\t");
-			Waypoint wp = new Waypoint(Double.valueOf(RowData[8]),
-					Double.valueOf(RowData[9]), Double.valueOf(RowData[10]));
-			wp.setNumber(Integer.valueOf(RowData[0]));
-			wp.setFrame(Integer.valueOf(RowData[2]));
-			wp.setCmd(ApmCommands.getCmd(Integer.valueOf(RowData[3])));
-			wp.setParameters(Float.valueOf(RowData[4]),
-					Float.valueOf(RowData[5]), Float.valueOf(RowData[6]),
-					Float.valueOf(RowData[7]));
-			wp.setAutoContinue(Integer.valueOf(RowData[11]));
-			waypoints.add(wp);
-			*/
+        String line;
+        while ((line = reader.readLine()) != null) {
+			final String[] RowData = line.split("\t");
+
+            final msg_mission_item msg = new msg_mission_item();
+            msg.seq = Short.parseShort(RowData[0]);
+            msg.current = Byte.parseByte(RowData[1]);
+            msg.frame = Byte.parseByte(RowData[2]);
+            msg.command = Short.parseShort(RowData[3]);
+
+            msg.param1 = Float.parseFloat(RowData[4]);
+            msg.param2 = Float.parseFloat(RowData[5]);
+            msg.param3 = Float.parseFloat(RowData[6]);
+            msg.param4 = Float.parseFloat(RowData[7]);
+
+            msg.x = Float.parseFloat(RowData[8]);
+            msg.y = Float.parseFloat(RowData[9]);
+            msg.z = Float.parseFloat(RowData[10]);
+
+            msg.autocontinue = Byte.parseByte(RowData[11]);
+
+            msgMissionItems.add(msg);
 		}
 
-	}
-
-	private void parseHomeLine(BufferedReader reader) throws IOException {
-		throw new IllegalArgumentException("NOT implemented"); //TODO implement this
-		/*
-		String[] RowData = reader.readLine().split("\t");
-		home = new Home(Double.valueOf(RowData[8]), Double.valueOf(RowData[9]),
-				Double.valueOf(RowData[10]));
-		home.setNumber(Integer.valueOf(RowData[0]));
-		home.setFrame(Integer.valueOf(RowData[2]));
-		home.setCmd(ApmCommands.getCmd(Integer.valueOf(RowData[3])));
-		home.setParameters(Float.valueOf(RowData[4]),
-				Float.valueOf(RowData[5]), Float.valueOf(RowData[6]),
-				Float.valueOf(RowData[7]));
-		home.setAutoContinue(Integer.valueOf(RowData[11]));
-		*/
 	}
 
 	private static boolean isWaypointFile(BufferedReader reader)

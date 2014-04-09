@@ -266,6 +266,19 @@ public class Mission extends DroneVariable implements PathSource{
 		}
 	}
 
+    public void onMissionLoaded(List<msg_mission_item> msgs) {
+        if (msgs != null) {
+            Toast.makeText(myDrone.context, "Waypoints loaded from file",
+                    Toast.LENGTH_SHORT).show();
+            myDrone.home.setHome(msgs.get(0));
+            msgs.remove(0); // Remove Home waypoint
+            selection.clear();
+            itens.clear();
+            itens.addAll(processMavLinkMessages(msgs));
+            notifiyMissionUpdate();
+        }
+    }
+
 	private List<MissionItem> processMavLinkMessages(List<msg_mission_item> msgs) {
 		List<MissionItem> received = new ArrayList<MissionItem>();
 		

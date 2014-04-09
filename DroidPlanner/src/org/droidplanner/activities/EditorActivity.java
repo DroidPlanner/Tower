@@ -6,10 +6,13 @@ import org.droidplanner.R;
 import org.droidplanner.activities.helpers.OnEditorInteraction;
 import org.droidplanner.activities.helpers.SuperUI;
 import org.droidplanner.dialogs.YesNoDialog;
+import org.droidplanner.dialogs.openfile.OpenFileDialog;
+import org.droidplanner.dialogs.openfile.OpenMissionDialog;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.variables.mission.Mission;
 import org.droidplanner.drone.variables.mission.MissionItem;
+import org.droidplanner.file.IO.MissionReader;
 import org.droidplanner.fragments.EditorListFragment;
 import org.droidplanner.fragments.EditorMapFragment;
 import org.droidplanner.fragments.EditorToolsFragment;
@@ -91,6 +94,42 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
         getMenuInflater().inflate(R.menu.menu_mission, menu);
         return true;
     }
+
+    @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_open_mission:
+                openMissionFile();
+                return true;
+
+            case R.id.menu_save_mission:
+//                menuSaveFile();
+                return true;
+
+            default:
+                return super.onMenuItemSelected(featureId, item);
+        }
+    }
+
+    private void openMissionFile() {
+        OpenFileDialog missionDialog = new OpenMissionDialog(drone) {
+            @Override
+            public void waypointFileLoaded(MissionReader reader) {
+                drone.mission.onMissionLoaded(reader.getMsgMissionItems());
+            }
+        };
+        missionDialog.openDialog(this);
+    }
+
+//    private void menuSaveFile() {
+//        if (writeMission()) {
+//            Toast.makeText(this, R.string.file_saved, Toast.LENGTH_SHORT)
+//                    .show();
+//        } else {
+//            Toast.makeText(this, R.string.error_when_saving, Toast.LENGTH_SHORT)
+//                    .show();
+//        }
+//    }
 
     @Override
 	public void onWindowFocusChanged(boolean hasFocus) {
