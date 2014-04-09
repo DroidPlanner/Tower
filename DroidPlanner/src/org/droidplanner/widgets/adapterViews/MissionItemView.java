@@ -65,16 +65,17 @@ public class MissionItemView extends ArrayAdapter<org.droidplanner.drone.variabl
 			SpatialCoordItem waypoint = (SpatialCoordItem) item;
 			altitudeView.setText(String.format("%3.0fm", waypoint.getAltitude().valueInMeters()));
 
-			try {
-				Length diff = waypoint.getMission().getAltitudeDiffFromPreviousItem(waypoint);
-				if (diff.valueInMeters() > 0) {
-					altitudeView.setTextColor(Color.RED);
-				} else if (diff.valueInMeters() < 0) {
-					altitudeView.setTextColor(Color.BLUE);
-				}
-			} catch (Exception e) {
-				// Do nothing when last item doesn't have an altitude
-			}
+            // TODO: RNG hard to read against background
+//			try {
+//				Length diff = waypoint.getMission().getAltitudeDiffFromPreviousItem(waypoint);
+//				if (diff.valueInMeters() > 0) {
+//					altitudeView.setTextColor(Color.RED);
+//				} else if (diff.valueInMeters() < 0) {
+//					altitudeView.setTextColor(Color.BLUE);
+//				}
+//			} catch (Exception e) {
+//				// Do nothing when last item doesn't have an altitude
+//			}
 		} else {
 			altitudeView.setText("");
 		}
