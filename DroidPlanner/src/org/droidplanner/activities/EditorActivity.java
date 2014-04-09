@@ -5,6 +5,7 @@ import java.util.List;
 import org.droidplanner.R;
 import org.droidplanner.activities.helpers.OnEditorInteraction;
 import org.droidplanner.activities.helpers.SuperUI;
+import org.droidplanner.dialogs.YesNoDialog;
 import org.droidplanner.drone.Drone;
 import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.variables.mission.Mission;
@@ -32,6 +33,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -58,7 +60,8 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		setContentView(R.layout.activity_editor);
 
 		ActionBar actionBar = getActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
+        if(actionBar != null)
+		    actionBar.setDisplayHomeAsUpEnabled(true);
 
 		fragmentManager = getSupportFragmentManager();
 
@@ -166,6 +169,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		switch (tools) {
 		case DRAW:
 		case POLY:
+			Toast.makeText(this,R.string.draw_the_survey_region, Toast.LENGTH_SHORT).show();
 			gestureMapFragment.enableGestureDetection();
 			break;
 		case MARKER:
@@ -173,6 +177,21 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		case NONE:
 			gestureMapFragment.disableGestureDetection();
 			break;
+		}
+	}
+
+	@Override
+	public void editorToolLongClicked(EditorTools tools) {
+		switch (tools) {
+		case TRASH: {
+			// Clear the mission?
+			doClearMissionConfirmation();
+			break;
+		}
+
+		default: {
+			break;
+		}
 		}
 	}
 
@@ -224,7 +243,12 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 			drone.mission.addWaypoints(points);
 			break;
 		case POLY:
-			drone.mission.addSurveyPolygon(points);
+			if (path.size()>2) {
+				drone.mission.addSurveyPolygon(points);				
+			}else{
+				editorToolsFragment.setTool(EditorTools.POLY);
+				return;
+			}
 			break;
 		default:
 			break;
@@ -304,6 +328,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 	@Override
 	public void onItemClick(MissionItem item) {
+	    
 		switch (editorToolsFragment.getTool()) {
 		default:
 			if (contextualActionBar != null) {
@@ -351,4 +376,21 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		updateMapPadding();
 	}
 
+	private void doClearMissionConfirmation() {
+		YesNoDialog ynd = YesNoDialog.newInstance(
+				getString(R.string.dlg_clear_mission_title),
+				getString(R.string.dlg_clear_mission_confirm),
+				new YesNoDialog.Listener() {
+					@Override
+					public void onYes() {
+						mission.clear();
+					}
+
+					@Override
+					public void onNo() {
+					}
+				});
+
+		ynd.show(getSupportFragmentManager(), "clearMission");
+	}
 }

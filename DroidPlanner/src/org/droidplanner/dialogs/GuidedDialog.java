@@ -1,5 +1,7 @@
 package org.droidplanner.dialogs;
 
+import org.droidplanner.R;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -28,7 +30,7 @@ public class GuidedDialog extends DialogFragment {
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-		builder.setMessage("Guided Mode Warning !!!").setPositiveButton(
+		builder.setMessage(R.string.guided_mode_warning).setPositiveButton(
 				android.R.string.ok, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						if (coord != null) {

@@ -39,10 +39,7 @@ public enum ApmModes {
 	ROVER_GUIDED(15, "GUIDED", MAV_TYPE.MAV_TYPE_GROUND_ROVER),
 	ROVER_INITIALIZING(16, "INITIALIZING", MAV_TYPE.MAV_TYPE_GROUND_ROVER),
 
-
-	UNKNOWN(-1, "Unknown",0);
-
-
+	UNKNOWN(-1, "Unknown", MAV_TYPE.MAV_TYPE_GENERIC);
 
 	private final int number;
     private final String name;
@@ -92,7 +89,7 @@ public enum ApmModes {
 		}
 
 		for (ApmModes mode : ApmModes.values()) {
-			if (isValid(mode) & mode.getType() == type) {
+			if (mode.getType() == type) {
 				modeList.add(mode);
 			}
 		}

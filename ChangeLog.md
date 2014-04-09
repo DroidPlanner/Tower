@@ -8,6 +8,27 @@ Our convention for release control is the following (for a release like DPvA.B.C
 All the changes are logged below (preferable with the pull request numbers in parenteses):
 
 # Releases
+## Droidplanner v2.2.5
+* Long press on trash tool removes the entire mission (#714)
+* Clear the previous flight path when arming (#705)
+* Improves the parameter download algorithm on bad links (#715)
+* Fix problems with decimal point on Parameters screen (#690)
+* Added a help video (#716)
+* Fix minor UX issues. The message on polygon tool and the guided dialog (#691)
+* Commented out the follow me preference until it's implemented (#704)
+* Fixng typos and formatting (#702)
+
+## Droidplanner v2.2.4
+* Fix User Experience problems with the Survey tool (#688)
+* Updated the README file (#687)
+* Fix problems with the Flight Mode spinner(#686,#675)
+
+## Droidplanner v2.2.3
+* Fix User Experience problems at the Editor (#670)
+* Make landscape the default camera orientation for Survey (#671)
+* Fixed problem with the Drone HeartBeat detector, no more "connected" speach messages (#674)
+* Fixed Toast message at the Fragments screen (#678)
+
 ## Droidplanner v2.2.2
 * Implemented the Android Navigation Drawer (#653)
 * Renamed the HUD to Attitude Indicator (#651)

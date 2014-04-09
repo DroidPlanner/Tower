@@ -23,6 +23,7 @@ import org.droidplanner.parameters.ParameterMetadata;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,10 +35,11 @@ import android.widget.Toast;
 
 public class ParamsFragment extends ListFragment implements DroneInterfaces
         .OnParameterManagerListener, OnDroneListener{
+    static final String TAG = ParamsFragment.class.getSimpleName();
 
     public static final String ADAPTER_ITEMS = ParamsFragment.class.getName() + ".adapter.items";
 
-    private ProgressDialog pd;
+    private ProgressDialog progressDialog;
 
     private Drone drone;
     private ParamsAdapter adapter;
@@ -49,7 +51,8 @@ public class ParamsFragment extends ListFragment implements DroneInterfaces
         // create adapter
         if(savedInstanceState != null) {
             // load adapter items
-            final ArrayList<ParamsAdapterItem> pwms =
+            @SuppressWarnings("unchecked")
+			final ArrayList<ParamsAdapterItem> pwms =
                     (ArrayList<ParamsAdapterItem>) savedInstanceState.getSerializable(ADAPTER_ITEMS);
             adapter = new ParamsAdapter(getActivity(), R.layout.row_params, pwms);
 
@@ -183,7 +186,7 @@ public class ParamsFragment extends ListFragment implements DroneInterfaces
         }
         if(written > 0)
             adapter.notifyDataSetChanged();
-        Toast.makeText(getActivity(), written +" "+R.string.msg_parameters_written_to_drone, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), written +" "+getResources().getString(R.string.msg_parameters_written_to_drone), Toast.LENGTH_SHORT).show();
     }
 
     private void openParametersFromFile() {
@@ -217,31 +220,44 @@ public class ParamsFragment extends ListFragment implements DroneInterfaces
         }
     }
 
-    @Override
-    public void onBeginReceivingParameters() {
-        pd = new ProgressDialog(getActivity());
-        pd.setTitle(R.string.refreshing_parameters);
-        pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        pd.setIndeterminate(true);
-        pd.setCancelable(false);
-        pd.setCanceledOnTouchOutside(true);
+	@Override
+	public void onBeginReceivingParameters() {
+		progressDialog = new ProgressDialog(getActivity());
+		progressDialog.setTitle(R.string.refreshing_parameters);
+		progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+		progressDialog.setIndeterminate(true);
+		progressDialog.setCancelable(false);
+		progressDialog.setCanceledOnTouchOutside(true);
 
-        pd.show();
+		progressDialog.show();
+
+		mReceived = 0;
+		mTotal = 0;
     }
 
+    private int mReceived = 0, mTotal = 0;
+
     @Override
-    public void onParameterReceived(Parameter parameter, int index, int count) {
-        if (pd != null) {
-            if (pd.isIndeterminate()) {
-                pd.setIndeterminate(false);
-                pd.setMax(count);
+	public void onParameterReceived(Parameter parameter, int index, int count) {
+		++mReceived;
+
+        if (progressDialog != null) {
+            if (progressDialog.isIndeterminate()) {
+                progressDialog.setIndeterminate(false);
+                mTotal = count;
+                progressDialog.setMax(count);
             }
-            pd.setProgress(index);
+            progressDialog.setProgress(mReceived);
         }
     }
 
     @Override
-    public void onEndReceivingParameters(List<Parameter> parameters) {
+	public void onEndReceivingParameters(List<Parameter> parameters) {
+		if (mReceived < mTotal) {
+			Log.w(TAG, "Total of " + mTotal + " params, but only got "
+					+ mReceived);
+		}
+
         Collections.sort(parameters, new Comparator<Parameter>() {
             @Override
             public int compare(Parameter p1, Parameter p2) {
@@ -251,9 +267,9 @@ public class ParamsFragment extends ListFragment implements DroneInterfaces
         adapter.loadParameters(drone, parameters);
 
         // dismiss progress dialog
-        if (pd != null) {
-            pd.dismiss();
-            pd = null;
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+            progressDialog = null;
         }
     }
 }
