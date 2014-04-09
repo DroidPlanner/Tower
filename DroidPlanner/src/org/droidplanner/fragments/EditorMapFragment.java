@@ -157,4 +157,7 @@ public class EditorMapFragment extends DroneMap implements
 		return true;
 	}
 
+    public void zoomToFit() {
+        zoomToExtents(mission.getVisibleCoordinates());
+    }
 }

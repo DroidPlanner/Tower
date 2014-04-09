@@ -268,8 +268,7 @@ public class Mission extends DroneVariable implements PathSource{
 
     public void onMissionLoaded(List<msg_mission_item> msgs) {
         if (msgs != null) {
-            Toast.makeText(myDrone.context, "Waypoints loaded from file",
-                    Toast.LENGTH_SHORT).show();
+            // no toast needed - OpenFile dialog will toast filename
             myDrone.home.setHome(msgs.get(0));
             msgs.remove(0); // Remove Home waypoint
             selection.clear();
@@ -321,5 +320,32 @@ public class Mission extends DroneVariable implements PathSource{
 			OnDroneListener listener) {
 		myDrone.events.removeDroneListener(listener);		
 	}
+
+    public List<LatLng> getVisibleCoordinates() {
+        final List<LatLng> coords = new ArrayList<LatLng>();
+
+        for (MissionItem item : itens) {
+            if(!(item instanceof SpatialCoordItem))
+                continue;
+
+            final LatLng coordinate = ((SpatialCoordItem) item).getCoordinate();
+            if(isEmptyCoordinate(coordinate))
+                continue;
+
+            coords.add(coordinate);
+        }
+
+        if(myDrone.home.isValid()) {
+            LatLng coord = myDrone.home.getCoord();
+            if (!isEmptyCoordinate(coord))
+                coords.add(coord);
+        }
+
+        return coords;
+    }
+
+    private boolean isEmptyCoordinate(LatLng coordinate) {
+        return coordinate.latitude == 0 || coordinate.longitude == 0;
+    }
 
 }
