@@ -11,6 +11,7 @@ import org.droidplanner.helpers.units.Altitude;
 import org.droidplanner.utils.Constants;
 import org.droidplanner.utils.Utils;
 
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -62,8 +63,13 @@ public abstract class SuperActivity extends FragmentActivity implements OnAltitu
 
             if (Utils.ConnectionType.BLUETOOTH.name().equals(connectionType)) {
                 //Launch a bluetooth device selection screen for the user
-                new BTDeviceListFragment().show(getSupportFragmentManager(), "Device selection dialog");
-                return;
+
+                final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+                final String address = settings.getString(Constants.PREF_BLUETOOTH_DEVICE_ADDRESS, null);
+                if(address == null || address.isEmpty()) {
+                    new BTDeviceListFragment().show(getSupportFragmentManager(), "Device selection dialog");
+                    return;
+                }
             }
         }
         drone.MavClient.toggleConnectionState();

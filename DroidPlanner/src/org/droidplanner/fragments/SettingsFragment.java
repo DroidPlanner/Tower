@@ -74,6 +74,8 @@ public class SettingsFragment extends PreferenceFragment implements
 				sharedPref.getString("pref_server_port", ""));
 		findPreference("pref_udp_server_port").setSummary(
 				sharedPref.getString("pref_udp_server_port", ""));
+        findPreference("pref_bluetooth_device_address").setSummary(
+                sharedPref.getString("pref_bluetooth_device_address", ""));
 		findPreference("pref_map_type").setSummary(
 				sharedPref.getString("pref_map_type", ""));
 		findPreference("pref_vehicle_type").setSummary(
@@ -128,6 +130,10 @@ public class SettingsFragment extends PreferenceFragment implements
 			findPreference(key)
 					.setSummary(sharedPreferences.getString(key, ""));
 		}
+        if (key.equals("pref_bluetooth_device_address")) {
+            findPreference(key)
+                    .setSummary(sharedPreferences.getString(key, ""));
+        }
 		if (key.equals("pref_map_type")) {
 			findPreference(key)
 					.setSummary(sharedPreferences.getString(key, ""));

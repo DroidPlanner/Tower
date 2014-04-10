@@ -358,5 +358,7 @@
     <string name="mode1_throttle_on_right_stick">Mode 1: Throttle on RIGHT stick</string>
     <string name="mode2_throttle_on_left_stick">Mode 2: Throttle on LEFT stick</string>
     <string name="zoom_fit">Zoom (Fit)</string>
+    <string name="pref_bluetooth">BLUETOOTH CONNECTION</string>
+    <string name="pref_bluetooth_device_address">Bluetooth device</string>
 
 </resources>
