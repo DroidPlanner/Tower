@@ -27,11 +27,10 @@ public class MissionWriter {
 
     public static boolean write(List<msg_mission_item> msgMissionItems, String name) {
 		try {
-			if (!FileManager.isExternalStorageAvaliable()) {
-				return false;
-			}
-			FileOutputStream out = FileStream.getWaypointFileStream(name);
+			if (!FileManager.isExternalStorageAvaliable())
+                return false;
 
+			final FileOutputStream out = FileStream.getWaypointFileStream(name);
 			writeHeader(out);
 			writeMissionItems(out, msgMissionItems);
 			out.close();
@@ -54,8 +53,9 @@ public class MissionWriter {
 
             // write msg (TAB delimited)
             out.write(String.format(Locale.ENGLISH,
-                    "%d\t0\t%d\t%d\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%d\n",
-                    i + 1,
+                    "%d\t%d\t%d\t%d\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%d\n",
+                    i,
+                    i == 0 ? 1 : 0,     // set CURRENT_WP = 1 for 'home' - msg[0], 0 for all others
                     msg.frame,
                     msg.command,
                     msg.param1, msg.param2, msg.param3, msg.param4,
