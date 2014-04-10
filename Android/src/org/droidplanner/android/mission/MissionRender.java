@@ -31,15 +31,7 @@ import java.util.List;
  */
 public class MissionRender implements MapPath.PathSource {
 
-    private static final int DEFAULT_COLOR = Color.WHITE;
-    private static final int DEFAULT_WIDTH = 4;
-
     private final Mission mMission;
-
-    /**
-     * This is the mission path outline on the map.
-     */
-    private HashMap<GoogleMap, Polyline> mMissionPaths = new HashMap<GoogleMap, Polyline>();
 
     /**
      * Stores all the mission item renders for this mission render.
@@ -184,22 +176,6 @@ public class MissionRender implements MapPath.PathSource {
      */
     public int getOrder(MissionItemRender item){
         return mMission.getOrder(item.getMissionItem());
-    }
-
-    /**
-     * Updates the mission outline on the map.
-     * @param map google map for which the mission outline should be updated
-     */
-    public void updateMissionPath(GoogleMap map){
-        Polyline missionPath = mMissionPaths.get(map);
-        if(missionPath == null) {
-            PolylineOptions pathOptions = new PolylineOptions();
-            pathOptions.color(DEFAULT_COLOR).width(DEFAULT_WIDTH);
-            missionPath = map.addPolyline(pathOptions);
-        }
-
-        missionPath.setPoints(getPathPoints());
-        mMissionPaths.put(map, missionPath);
     }
 
     /**

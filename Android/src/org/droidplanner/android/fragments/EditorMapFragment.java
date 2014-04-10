@@ -30,23 +30,22 @@ public class EditorMapFragment extends DroneMap implements
 		OnMapLongClickListener, OnMarkerDragListener, OnMapClickListener,
 		OnMarkerClickListener {
 
-	public MapPath polygonPath;
-
-	public CameraGroundOverlays cameraOverlays;
-	public Polygon polygon = new Polygon();
+//	public MapPath polygonPath;
+//	public CameraGroundOverlays cameraOverlays;
 	private OnEditorInteraction editorListener;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
-			Bundle bundle) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle bundle) {
 		View view = super.onCreateView(inflater, viewGroup, bundle);
 
-		mMap.setOnMarkerDragListener(this);
-		mMap.setOnMarkerClickListener(this);
-		mMap.setOnMapClickListener(this);
-		mMap.setOnMapLongClickListener(this);
-		polygonPath = new MapPath(mMap, Color.BLACK, getResources());
-		cameraOverlays = new CameraGroundOverlays(mMap);
+        mMapFragment.setOnMarkerDragListener(this);
+        mMapFragment.setOnMarkerClickListener(this);
+        mMapFragment.setOnMapClickListener(this);
+        mMapFragment.setOnMapLongClickListener(this);
+
+        //TODO: figure out if it's still needed
+//		polygonPath = new MapPath(mMap, Color.BLACK, getResources());
+//		cameraOverlays = new CameraGroundOverlays(mMap);
 
 		return view;
 	}
@@ -58,13 +57,13 @@ public class EditorMapFragment extends DroneMap implements
 
 	@Override
 	public void onMarkerDrag(Marker marker) {
-		MarkerSource source = markers.getSourceFromMarker(marker);
+		MarkerSource source = mMapFragment.getMarkerSource(marker);
 		checkForWaypointMarkerMoving(source, marker, true);
 	}
 
 	@Override
 	public void onMarkerDragStart(Marker marker) {
-		MarkerSource source = markers.getSourceFromMarker(marker);
+		MarkerSource source = mMapFragment.getMarkerSource(marker);
 		checkForWaypointMarkerMoving(source, marker, false);
 	}
 
@@ -85,13 +84,13 @@ public class EditorMapFragment extends DroneMap implements
 			 */
 
 			// update flight path
-            missionRender.updateMissionPath(mMap);
+            mMapFragment.updateMissionPath(missionRender.getPathPoints());
 		}
 	}
 
 	@Override
 	public void onMarkerDragEnd(Marker marker) {
-		MarkerSource source = markers.getSourceFromMarker(marker);
+		MarkerSource source = mMapFragment.getMarkerSource(marker);
 		checkForWaypointMarker(source, marker);
 		checkForPolygonMarker(source, marker);
 	}
@@ -124,7 +123,7 @@ public class EditorMapFragment extends DroneMap implements
 
 	@Override
 	public boolean onMarkerClick(Marker marker) {
-		MarkerSource source = markers.getSourceFromMarker(marker);
+		MarkerSource source = mMapFragment.getMarkerSource(marker);
 		if (source instanceof MissionItemMarkerSource) {
 			editorListener.onItemClick(((MissionItemMarkerSource) source).getMarkerOrigin());
 			return true;

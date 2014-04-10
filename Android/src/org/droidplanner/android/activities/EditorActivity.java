@@ -126,7 +126,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 			rightPadding = editorToolsFragment.getView().getRight();
 			bottomPadding = missionListFragment.getView().getHeight();
 		}
-		planningMapFragment.mMap.setPadding(rightPadding, topPadding, 0, bottomPadding);
+		planningMapFragment.setMapPadding(rightPadding, topPadding, 0, bottomPadding);
 	}
 
 	@Override
@@ -246,7 +246,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 	@Override
 	public void onPathFinished(List<Coord2D> path) {
-		List<Coord2D> points = MapProjection.projectPathIntoMap(path, planningMapFragment.mMap);
+		List<Coord2D> points = planningMapFragment.projectPathIntoMap(path);
 		switch (getTool()) {
 		case DRAW:
 			missionRender.addWaypoints(points);

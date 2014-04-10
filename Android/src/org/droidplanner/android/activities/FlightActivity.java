@@ -44,8 +44,6 @@ public class FlightActivity extends DrawerNavigationUI implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_flight);
 
-        startActivity(new Intent(this, TestActivity.class));
-
 		fragmentManager = getSupportFragmentManager();
 		failsafeTextView = findViewById(R.id.failsafeTextView);
 
@@ -201,8 +199,7 @@ public class FlightActivity extends DrawerNavigationUI implements
 				bottomPadding = editorToolsView.getHeight();
 			}
 		}
-		mapFragment.mMap
-				.setPadding(leftPadding, 0, rightPadding, bottomPadding);
+		mapFragment.setMapPadding(leftPadding, 0, rightPadding, bottomPadding);
 	}
 
 	private int getSlidingDrawerWidth() {

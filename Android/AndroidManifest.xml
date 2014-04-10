@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="org.droidplanner"
-          android:versionCode="65"
-          android:versionName="please run version.sh to get the version name">
+    package="org.droidplanner"
+    android:versionCode="66"
+    android:versionName="please run version.sh to get the version name" >
 
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="19" />
 
-    <supports-screens
-        android:requiresSmallestWidthDp="320"/>
+    <supports-screens android:requiresSmallestWidthDp="320" />
 
     <permission
         android:name=".permission.MAPS_RECEIVE"
@@ -53,7 +52,7 @@
         android:required="true" />
 
     <application
-        android:name=".android.DroidPlannerApp"
+        android:name="org.droidplanner.android.DroidPlannerApp"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"
@@ -69,12 +68,12 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <service android:name=".android.communication.service.MAVLinkService" >
+        <service android:name="org.droidplanner.android.communication.service.MAVLinkService" >
         </service>
 
-		<activity
-		    android:name=".android.activities.FlightActivity"
-		    android:launchMode="singleTask" >
+        <activity
+            android:name="org.droidplanner.android.activities.FlightActivity"
+            android:launchMode="singleTask" >
 
             <!-- Launcher Intent -->
             <intent-filter>
@@ -93,10 +92,10 @@
                 android:resource="@xml/device_filter" />
         </activity>
         <activity
-            android:name=".android.activities.EditorActivity"
+            android:name="org.droidplanner.android.activities.EditorActivity"
             android:label="@string/editor"
             android:launchMode="singleTop"
-            android:parentActivityName=".android.activities.FlightActivity" >
+            android:parentActivityName="org.droidplanner.android.activities.FlightActivity" >
 
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
@@ -113,21 +112,22 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".android.activities.ConfigurationActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:launchMode="singleTop"
-            android:theme="@style/Theme.PageIndicatorDefaults"
+            android:name="org.droidplanner.android.activities.ConfigurationActivity"
             android:label="@string/menu_drone_setup"
-            android:parentActivityName=".android.activities.SettingsActivity" >
+            android:launchMode="singleTop"
+            android:parentActivityName="org.droidplanner.android.activities.SettingsActivity"
+            android:theme="@style/Theme.PageIndicatorDefaults"
+            android:windowSoftInputMode="adjustPan" >
 
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".android.activities.SettingsActivity" />
         </activity>
-        <activity android:name=".android.activities.SettingsActivity"
-                  android:launchMode="singleTop"
-                  android:label="@string/settings"/>
+        <activity
+            android:name="org.droidplanner.android.activities.SettingsActivity"
+            android:label="@string/settings"
+            android:launchMode="singleTop" />
     </application>
 
 </manifest>

@@ -1,46 +1,38 @@
 package org.droidplanner.android.maps.fragments;
 
+import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.fragments.helpers.MapPath;
 import org.droidplanner.android.graphic.DroneHelper;
 import org.droidplanner.android.graphic.map.GraphicDrone;
 import org.droidplanner.android.graphic.map.GraphicGuided;
-import org.droidplanner.android.maps.fragments.OfflineMapFragment;
 import org.droidplanner.android.mission.MissionRender;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.android.graphic.map.GraphicHome;
-import org.droidplanner.android.graphic.map.MarkerManager;
+import org.droidplanner.core.helpers.coordinates.Coord2D;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.CameraPosition.Builder;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.List;
 
-public abstract class DroneMap extends OfflineMapFragment implements OnDroneListener {
-	public GoogleMap mMap;
+public abstract class DroneMap extends Fragment implements OnDroneListener {
 
-	protected MarkerManager markers;
-    protected MapPath droneLeashPath;
-    private Polyline flightPath;
+    //TODO: replace with DPMap type when the interface is complete.
+    protected GoogleMapFragment mMapFragment;
+
     private GraphicHome home;
-    public GraphicDrone droneMarker;
+    public GraphicDrone graphicDrone;
     public GraphicGuided guided;
-    public int maxFlightPathSize;
 
     protected MissionRender missionRender;
     public Drone drone;
@@ -51,19 +43,27 @@ public abstract class DroneMap extends OfflineMapFragment implements OnDroneList
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle bundle) {
-		View view = super.onCreateView(inflater, viewGroup, bundle);
+        final View view = inflater.inflate(R.layout.fragment_drone_map, viewGroup, false);
+
         final DroidPlannerApp app = ((DroidPlannerApp) getActivity().getApplication());
 		drone = app.drone;
-		home = new GraphicHome(drone);
-		mMap = getMap();
-		markers = new MarkerManager(mMap);
-
         missionRender = app.missionRender;
-        droneMarker = new GraphicDrone(drone, mMap);
-        droneLeashPath = new MapPath(mMap, getResources());
+
+		home = new GraphicHome(drone);
+        graphicDrone = new GraphicDrone(drone);
         guided = new GraphicGuided(drone);
 
-        addFlightPathToMap();
+        //Add the map fragment instance (based on user preference)
+        FragmentManager fm  = getChildFragmentManager();
+        mMapFragment = (GoogleMapFragment)fm.findFragmentById(R.id.map_fragment_container);
+        if(mMapFragment == null){
+            final Bundle mapArgs = new Bundle();
+            mapArgs.putInt(GoogleMapFragment.EXTRA_MAX_FLIGHT_PATH_SIZE, getMaxFlightPathSize());
+
+            mMapFragment = new GoogleMapFragment();
+            mMapFragment.setArguments(mapArgs);
+            fm.beginTransaction().add(R.id.map_fragment_container, mMapFragment).commit();
+        }
 
 		return view;
 	}
@@ -72,7 +72,7 @@ public abstract class DroneMap extends OfflineMapFragment implements OnDroneList
 	public void onStart() {
 		super.onStart();
 		drone.events.addDroneListener(this);
-		loadCameraPosition();
+		mMapFragment.loadCameraPosition();
 		update();
 	}
 
@@ -80,7 +80,7 @@ public abstract class DroneMap extends OfflineMapFragment implements OnDroneList
 	public void onStop() {
 		super.onStop();
 		drone.events.removeDroneListener(this);
-		saveCameraPosition();
+		mMapFragment.saveCameraPosition();
 	}
 
 	@Override
@@ -89,96 +89,63 @@ public abstract class DroneMap extends OfflineMapFragment implements OnDroneList
 		context = activity.getApplicationContext();
 	}
 
-    public void clearFlightPath() {
-        List<LatLng> oldFlightPath = flightPath.getPoints();
-        oldFlightPath.clear();
-        flightPath.setPoints(oldFlightPath);
-    }
-
-    private void addFlightPathToMap() {
-        PolylineOptions flightPathOptions = new PolylineOptions();
-        flightPathOptions.color(0xfffd693f).width(6).zIndex(1);
-        flightPath = mMap.addPolyline(flightPathOptions);
-    }
-
-    public void addFlightPathPoint(LatLng position) {
-        if (maxFlightPathSize > 0) {
-            List<LatLng> oldFlightPath = flightPath.getPoints();
-            if (oldFlightPath.size() > maxFlightPathSize) {
-                oldFlightPath.remove(0);
-            }
-            oldFlightPath.add(position);
-            flightPath.setPoints(oldFlightPath);
-        }
-    }
-
-	/**
-	 * Save the map camera state on a preference file
-	 * http://stackoverflow.com/questions/16697891/google-maps-android-api-v2-restoring-map-state/16698624#16698624
-	 */
-	public void saveCameraPosition() {
-		CameraPosition camera = mMap.getCameraPosition();
-		SharedPreferences settings = context.getSharedPreferences("MAP", 0);
-		SharedPreferences.Editor editor = settings.edit();
-		editor.putFloat("lat", (float) camera.target.latitude);
-		editor.putFloat("lng", (float) camera.target.longitude);
-		editor.putFloat("bea", camera.bearing);
-		editor.putFloat("tilt", camera.tilt);
-		editor.putFloat("zoom", camera.zoom);
-		editor.commit();
-	}
-
-	private void loadCameraPosition() {
-		Builder camera = new CameraPosition.Builder();
-		SharedPreferences settings = context.getSharedPreferences("MAP", 0);
-		camera.bearing(settings.getFloat("bea", 0));
-		camera.tilt(settings.getFloat("tilt", 0));
-		camera.zoom(settings.getFloat("zoom", 0));
-		camera.target(new LatLng(settings.getFloat("lat", 0),settings.getFloat("lng", 0)));
-		mMap.moveCamera(CameraUpdateFactory.newCameraPosition(camera.build()));
-	}
-
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
         final LatLng position = DroneHelper.CoordToLatLang(drone.GPS.getPosition());
-		switch (event) {
-		case MISSION_UPDATE:
-			update();
-			break;
-
+        switch (event) {
             case GPS:
-                droneLeashPath.update(guided);
-                addFlightPathPoint(position);
+                mMapFragment.updateDroneLeashPath(guided);
+                mMapFragment.addFlightPathPoint(position);
+
+                //Fall-Through
+
+            case MISSION_UPDATE:
+                update();
                 break;
 
             case GUIDEDPOINT:
-                markers.updateMarker(guided, true, context);
-                droneLeashPath.update(guided);
+                mMapFragment.updateMarker(guided, true);
+                mMapFragment.updateDroneLeashPath(guided);
                 break;
 
-		default:
-			break;
-		}
-	}
-
-	public LatLng getMyLocation() {
-		if (mMap.getMyLocation() != null) {
-			return new LatLng(mMap.getMyLocation().getLatitude(), mMap
-					.getMyLocation().getLongitude());
-		} else {
-			return null;
-		}
-	}
+            default:
+                break;
+        }
+    }
 
 	public void update() {
-		markers.clean();
+		mMapFragment.cleanMarkers();
 
 		if (home.isValid()) {
-			markers.updateMarker(home, false, context);
+			mMapFragment.updateMarker(home, false);
 		}
 
-		markers.updateMarkers(missionRender.getMarkers(), isMissionDraggable(), context);
-        missionRender.updateMissionPath(mMap);
+        mMapFragment.updateMarker(graphicDrone, false);
+        mMapFragment.updateMarkers(missionRender.getMarkers(), isMissionDraggable());
+        mMapFragment.updateMissionPath(missionRender.getPathPoints());
 	}
+
+    protected int getMaxFlightPathSize(){
+        return 0;
+    }
+
+    /**
+     * Adds padding around the edges of the map.
+     * @param left the number of pixels of padding to be added on the left of the map.
+     * @param top the number of pixels of padding to be added on the top of the map.
+     * @param right the number of pixels of padding to be added on the right of the map.
+     * @param bottom the number of pixels of padding to be added on the bottom of the map.
+     */
+    public void setMapPadding(int left, int top, int right, int bottom){
+        mMapFragment.setMapPadding(left, top, right, bottom);
+    }
+
+    public void saveCameraPosition(){
+        mMapFragment.saveCameraPosition();
+    }
+
+    public List<Coord2D> projectPathIntoMap(List<Coord2D> path) {
+        return mMapFragment.projectPathIntoMap(path);
+    }
 
 }

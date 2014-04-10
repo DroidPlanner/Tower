@@ -41,38 +41,37 @@ public class FlightMapFragment extends DroneMap implements
 
 		getPreferences();
 
-		mMap.setOnMapLongClickListener(this);
-		mMap.setOnMarkerDragListener(this);
-		mMap.setOnMarkerClickListener(this);
+		mMapFragment.setOnMapLongClickListener(this);
+        mMapFragment.setOnMarkerDragListener(this);
+        mMapFragment.setOnMarkerClickListener(this);
 		return view;
 	}
 
 	private void getPreferences() {
-		Context context = this.getActivity();
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
-		maxFlightPathSize = Integer.valueOf(prefs.getString(
-				"pref_max_flight_path_size", "0"));
 		isAutoPanEnabled = prefs.getBoolean("pref_auto_pan_enabled", false);
 		guidedModeOnLongPress = prefs.getBoolean("pref_guided_mode_on_long_press", true);
 	}
+
+    @Override
+    protected int getMaxFlightPathSize(){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return Integer.valueOf(prefs.getString("pref_max_flight_path_size", "0"));
+    }
 
 	@Override
 	public void update() {
 		super.update();
 	}
 
-
-
 	private void animateCamera(LatLng coord) {
 		if (!hasBeenZoomed) {
 			hasBeenZoomed = true;
-			mMap.animateCamera(CameraUpdateFactory
-					.newLatLngZoom(coord, ZOOM_LEVEL));
+            mMapFragment.updateCamera(coord, ZOOM_LEVEL);
 		}
 		if (isAutoPanEnabled) {
-			mMap.animateCamera(CameraUpdateFactory
-					.newLatLngZoom(coord, ZOOM_LEVEL));
+            mMapFragment.updateCamera(coord, ZOOM_LEVEL);
 		}
 	}
 
@@ -128,7 +127,7 @@ public class FlightMapFragment extends DroneMap implements
         case ARMING:
             // Clear the previous flight path when arming.
             if (drone.state.isArmed()) {
-                clearFlightPath();
+                mMapFragment.clearFlightPath();
             }
             break;
 		case GPS:
@@ -143,12 +142,10 @@ public class FlightMapFragment extends DroneMap implements
 	private void animateCameraIfNeeded(LatLng coord) {
 		if (!hasBeenZoomed) {
 			hasBeenZoomed = true;
-			mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coord,
-					ZOOM_LEVEL));
+            mMapFragment.updateCamera(coord, ZOOM_LEVEL);
 		}
 		if (isAutoPanEnabled) {
-			mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coord,
-					ZOOM_LEVEL));
+            mMapFragment.updateCamera(coord, ZOOM_LEVEL);
 		}
 	}
 
