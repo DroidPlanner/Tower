@@ -1,5 +1,6 @@
 package org.droidplanner.activities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.droidplanner.R;
@@ -13,6 +14,7 @@ import org.droidplanner.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.drone.variables.mission.Mission;
 import org.droidplanner.drone.variables.mission.MissionItem;
 import org.droidplanner.file.IO.MissionReader;
+import org.droidplanner.file.IO.MissionWriter;
 import org.droidplanner.fragments.EditorListFragment;
 import org.droidplanner.fragments.EditorMapFragment;
 import org.droidplanner.fragments.EditorToolsFragment;
@@ -38,6 +40,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.google.android.gms.maps.model.LatLng;
 
 public class EditorActivity extends SuperUI implements OnPathFinishedListener,
@@ -107,7 +110,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
                 return true;
 
             case R.id.menu_save_mission:
-//                menuSaveFile();
+                menuSaveFile();
                 return true;
 
             default:
@@ -116,7 +119,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
     }
 
     private void openMissionFile() {
-        OpenFileDialog missionDialog = new OpenMissionDialog(drone) {
+        final OpenFileDialog missionDialog = new OpenMissionDialog(drone) {
             @Override
             public void waypointFileLoaded(MissionReader reader) {
                 drone.mission.onMissionLoaded(reader.getMsgMissionItems());
@@ -126,15 +129,15 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
         missionDialog.openDialog(this);
     }
 
-//    private void menuSaveFile() {
-//        if (writeMission()) {
-//            Toast.makeText(this, R.string.file_saved, Toast.LENGTH_SHORT)
-//                    .show();
-//        } else {
-//            Toast.makeText(this, R.string.error_when_saving, Toast.LENGTH_SHORT)
-//                    .show();
-//        }
-//    }
+    private void menuSaveFile() {
+        final List<msg_mission_item> msgMissionItems = mission.getMsgMissionItems();
+
+        if (MissionWriter.write(msgMissionItems)) {
+            Toast.makeText(this, "File saved", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Error saving file", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @Override
 	public void onWindowFocusChanged(boolean hasFocus) {

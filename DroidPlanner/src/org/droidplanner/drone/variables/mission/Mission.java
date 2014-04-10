@@ -321,6 +321,19 @@ public class Mission extends DroneVariable implements PathSource{
 		myDrone.events.removeDroneListener(listener);		
 	}
 
+    public List<msg_mission_item> getMsgMissionItems() {
+        final List<msg_mission_item> list = new ArrayList<msg_mission_item>();
+
+        // add home
+        list.add(myDrone.home.packMavlink());
+
+        // add mission items
+        for (MissionItem item : items)
+            list.addAll(item.packMissionItem());
+
+        return list;
+    }
+
     public List<LatLng> getVisibleCoordinates() {
         final List<LatLng> coords = new ArrayList<LatLng>();
 

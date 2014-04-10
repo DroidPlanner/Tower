@@ -14,6 +14,15 @@ import org.droidplanner.file.DirectoryPath;
 import org.droidplanner.file.FileList;
 import org.droidplanner.file.FileManager;
 
+/**
+ * Read msg_mission_item list as...
+ *
+ * QGC WPL <VERSION>
+ * <INDEX> <CURRENT WP> <COORD FRAME> <COMMAND> <PARAM1> <PARAM2> <PARAM3> <PARAM4> <PARAM5/X/LONGITUDE> <PARAM6/Y/LATITUDE> <PARAM7/Z/ALTITUDE> <AUTOCONTINUE>
+ *
+ * See http://qgroundcontrol.org/mavlink/waypoint_protocol for details
+ *
+ */
 public class MissionReader implements FileReader {
 
     private List<msg_mission_item> msgMissionItems;
@@ -27,8 +36,8 @@ public class MissionReader implements FileReader {
 			return false;
 		}
 		try {
-			FileInputStream in = new FileInputStream(file);
-			BufferedReader reader = new BufferedReader(
+			final FileInputStream in = new FileInputStream(file);
+			final BufferedReader reader = new BufferedReader(
 					new InputStreamReader(in));
 
 			if (!isWaypointFile(reader)) {
@@ -54,8 +63,10 @@ public class MissionReader implements FileReader {
 	private void parseLines(BufferedReader reader) throws IOException {
         msgMissionItems.clear();
 
+        // for all lines
         String line;
         while ((line = reader.readLine()) != null) {
+            // parse line (TAB delimited)
 			final String[] RowData = line.split("\t");
 
             final msg_mission_item msg = new msg_mission_item();
