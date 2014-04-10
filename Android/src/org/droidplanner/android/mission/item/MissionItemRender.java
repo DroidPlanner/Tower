@@ -14,6 +14,7 @@ import org.droidplanner.android.graphic.DroneHelper;
 import org.droidplanner.android.mission.MissionRender;
 import org.droidplanner.android.mission.item.fragments.MissionDetailFragment;
 import org.droidplanner.android.mission.item.markers.MissionItemMarkerSource;
+import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
@@ -76,8 +77,8 @@ public class MissionItemRender implements Comparable<MissionItemRender> {
     /**
      * @return the set of points/coords making up this mission item.
      */
-    public List<LatLng> getPath() {
-        List<LatLng> pathPoints = new ArrayList<LatLng>();
+    public List<Coord2D> getPath() {
+        List<Coord2D> pathPoints = new ArrayList<Coord2D>();
         switch (mMissionItem.getType()) {
             case LAND:
             case LOITER:
@@ -86,8 +87,7 @@ public class MissionItemRender implements Comparable<MissionItemRender> {
             case LOITERN:
             case TAKEOFF:
             case WAYPOINT:
-                pathPoints.add(DroneHelper.CoordToLatLang(((SpatialCoordItem)
-                        mMissionItem).getCoordinate()));
+                pathPoints.add(((SpatialCoordItem) mMissionItem).getCoordinate());
                 break;
 
             default:

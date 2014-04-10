@@ -8,9 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.droidplanner.R;
+import org.droidplanner.android.graphic.DroneHelper;
+import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.osm.RotationGestureOverlay;
+import org.droidplanner.core.helpers.coordinates.Coord2D;
+import org.osmdroid.bonuspack.overlays.Polyline;
 import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.compass.CompassOverlay;
@@ -18,13 +23,14 @@ import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * This fragment abstracts the use and interaction with an OpenStreetMap view.
  *
  */
-public class OSMapFragment extends Fragment {
+public class OSMapFragment extends Fragment implements DPMap {
 
     /**
      * osmdroid MapView handle.
@@ -34,11 +40,22 @@ public class OSMapFragment extends Fragment {
     private MyLocationNewOverlay mLocationOverlay;
     private CompassOverlay mCompassOverlay;
 
+    private Polyline mFlightPath;
+    private Polyline mMissionPath;
+    private Polyline mDroneLeashPath;
+    private int mMaxFlightPathSize;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_osmap, container, false);
         mMapView = (MapView) view.findViewById(R.id.osm_mapview);
+
+        final Bundle args = getArguments();
+        if(args != null){
+            mMaxFlightPathSize = args.getInt(EXTRA_MAX_FLIGHT_PATH_SIZE);
+        }
+
         return view;
     }
 
@@ -92,4 +109,84 @@ public class OSMapFragment extends Fragment {
         mCompassOverlay.enableCompass();
     }
 
+    @Override
+    public void clearFlightPath(){
+        if(mFlightPath != null) {
+            mFlightPath.clearPath();
+            mMapView.invalidate();
+        }
+    }
+
+    @Override
+    public void addFlightPathPoint(Coord2D coord){
+        final GeoPoint position = DroneHelper.CoordToGeoPoint(coord);
+        if(mMaxFlightPathSize > 0){
+            if(mFlightPath == null){
+                mFlightPath = new Polyline(getActivity().getApplicationContext());
+                mFlightPath.setColor(FLIGHT_PATH_DEFAULT_COLOR);
+                mFlightPath.setWidth(FLIGHT_PATH_DEFAULT_WIDTH);
+                mMapView.getOverlays().add(mFlightPath);
+            }
+
+            List<GeoPoint> oldFlightPath = mFlightPath.getPoints();
+            if(oldFlightPath.size() > mMaxFlightPathSize){
+                oldFlightPath.remove(0);
+            }
+
+            oldFlightPath.add(position);
+            mFlightPath.setPoints(oldFlightPath);
+            mMapView.invalidate();
+        }
+    }
+
+    /**
+     * Nop operation
+     *
+     * {@inheritDoc}
+     * @param left the number of pixels of padding to be added on the left of the map.
+     * @param top the number of pixels of padding to be added on the top of the map.
+     * @param right the number of pixels of padding to be added on the right of the map.
+     * @param bottom the number of pixels of padding to be added on the bottom of the map.
+     */
+    @Override
+    public void setMapPadding(int left, int top, int right, int bottom) { }
+
+    @Override
+    public void updateDroneLeashPath(PathSource pathSource){
+        List<Coord2D> pathCoords = pathSource.getPathPoints();
+        final List<GeoPoint> geoPoints = new ArrayList<GeoPoint>(pathCoords.size());
+        for(Coord2D coord: pathCoords){
+            geoPoints.add(DroneHelper.CoordToGeoPoint(coord));
+        }
+
+        if(mDroneLeashPath == null){
+            mDroneLeashPath = new Polyline(getActivity().getApplicationContext());
+            mDroneLeashPath.setColor(DRONE_LEASH_DEFAULT_COLOR);
+            mDroneLeashPath.setWidth(DroneHelper.scaleDpToPixels(DRONE_LEASH_DEFAULT_WIDTH,
+                    getResources()));
+            mMapView.getOverlays().add(mDroneLeashPath);
+        }
+
+        mDroneLeashPath.setPoints(geoPoints);
+        mMapView.invalidate();
+    }
+
+    @Override
+    public void updateMissionPath(PathSource pathSource){
+        List<Coord2D> pathCoords = pathSource.getPathPoints();
+        final List<GeoPoint> geoPoints = new ArrayList<GeoPoint>(pathCoords.size());
+        for(Coord2D coord: pathCoords){
+            geoPoints.add(DroneHelper.CoordToGeoPoint(coord));
+        }
+
+        if(mMissionPath == null){
+            mMissionPath = new Polyline(getActivity().getApplicationContext());
+            mMissionPath.setColor(MISSION_PATH_DEFAULT_COLOR);
+            mMissionPath.setWidth(MISSION_PATH_DEFAULT_WIDTH);
+            mMapView.getOverlays().add(mMissionPath);
+        }
+
+        mMissionPath.setPoints(geoPoints);
+        mMapView.invalidate();
+    }
 }

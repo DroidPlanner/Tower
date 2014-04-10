@@ -7,10 +7,11 @@ import org.droidplanner.R;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.variables.GPS;
 import org.droidplanner.core.drone.variables.GuidedPoint;
-import org.droidplanner.android.fragments.helpers.MapPath.PathSource;
+import org.droidplanner.android.maps.DPMap.PathSource;
 import org.droidplanner.android.fragments.markers.helpers.MarkerWithText;
 import org.droidplanner.android.graphic.DroneHelper;
 import org.droidplanner.android.graphic.map.MarkerManager.MarkerSource;
+import org.droidplanner.core.helpers.coordinates.Coord2D;
 
 import android.content.Context;
 
@@ -57,11 +58,11 @@ public class GraphicGuided implements MarkerSource, PathSource {
 	}
 
 	@Override
-	public List<LatLng> getPathPoints() {
-		List<LatLng> path = new ArrayList<LatLng>();
+	public List<Coord2D> getPathPoints() {
+		List<Coord2D> path = new ArrayList<Coord2D>();
 		if (guidedPoint.isActive()) {
-			path.add(DroneHelper.CoordToLatLang(GPS.getPosition()));
-			path.add(DroneHelper.CoordToLatLang(guidedPoint.getCoord()));
+			path.add(GPS.getPosition());
+			path.add(guidedPoint.getCoord());
 		}
 		return path;
 	}

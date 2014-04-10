@@ -91,7 +91,6 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
-        final LatLng position = DroneHelper.CoordToLatLang(drone.GPS.getPosition());
         switch (event) {
             case MISSION_UPDATE:
                 update();
@@ -100,7 +99,7 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
             case GPS:
                 mMapFragment.updateMarker(graphicDrone, false);
                 mMapFragment.updateDroneLeashPath(guided);
-                mMapFragment.addFlightPathPoint(position);
+                mMapFragment.addFlightPathPoint(drone.GPS.getPosition());
                 break;
 
             case GUIDEDPOINT:
@@ -121,7 +120,7 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 		}
 
         mMapFragment.updateMarkers(missionRender.getMarkers(), isMissionDraggable());
-        mMapFragment.updateMissionPath(missionRender.getPathPoints());
+        mMapFragment.updateMissionPath(missionRender);
 	}
 
     protected int getMaxFlightPathSize(){

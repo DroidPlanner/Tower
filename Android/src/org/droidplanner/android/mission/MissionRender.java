@@ -1,14 +1,10 @@
 package org.droidplanner.android.mission;
 
-import android.graphics.Color;
-
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
 
-import org.droidplanner.android.fragments.helpers.MapPath;
+import org.droidplanner.android.graphic.DroneHelper;
 import org.droidplanner.android.graphic.map.MarkerManager.MarkerSource;
+import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.mission.item.MissionItemRender;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.coordinates.Coord3D;
@@ -22,14 +18,13 @@ import org.droidplanner.core.mission.waypoints.Waypoint;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 /**
  * This class is used to render a {@link org.droidplanner.core.mission.Mission} object on the Android
  * side.
  */
-public class MissionRender implements MapPath.PathSource {
+public class MissionRender implements DPMap.PathSource {
 
     private final Mission mMission;
 
@@ -370,8 +365,8 @@ public class MissionRender implements MapPath.PathSource {
     }
 
     @Override
-    public List<LatLng> getPathPoints() {
-        List<LatLng> pathPoints = new ArrayList<LatLng>();
+    public List<Coord2D> getPathPoints(){
+        final List<Coord2D> pathPoints = new ArrayList<Coord2D>();
         for(MissionItemRender missionItem: mMissionItems){
             pathPoints.addAll(missionItem.getPath());
         }

@@ -1,9 +1,10 @@
 package org.droidplanner.android.maps.fragments;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.droidplanner.android.fragments.helpers.MapPath;
 import org.droidplanner.android.fragments.helpers.MapProjection;
+import org.droidplanner.android.graphic.DroneHelper;
 import org.droidplanner.android.graphic.map.MarkerManager;
 import org.droidplanner.android.helpers.LocalMapTileProvider;
 import org.droidplanner.android.maps.DPMap;
@@ -11,7 +12,6 @@ import org.droidplanner.core.helpers.coordinates.Coord2D;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
@@ -34,11 +34,6 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 
 public class GoogleMapFragment extends SupportMapFragment implements DPMap {
 
-    public static final String PACKAGE_NAME = GoogleMapFragment.class.getPackage().getName();
-
-    public static final String EXTRA_MAX_FLIGHT_PATH_SIZE = PACKAGE_NAME + "" +
-            ".EXTRA_MAX_FLIGHT_PATH_SIZE";
-
 	public static final String PREF_MAP_TYPE = "pref_map_type";
 
 	public static final String MAP_TYPE_SATELLITE = "Satellite";
@@ -46,15 +41,12 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
 	public static final String MAP_TYPE_NORMAL = "Normal";
 	public static final String MAP_TYPE_TERRAIN = "Terrain";
 
-    private static final int DEFAULT_COLOR = Color.WHITE;
-    private static final int DEFAULT_WIDTH = 4;
-
 	private GoogleMap mMap;
 
     private MarkerManager markers;
-    private MapPath droneLeashPath;
     private Polyline flightPath;
     private Polyline missionPath;
+    private Polyline mDroneLeashPath;
     private int maxFlightPathSize;
 
     /*
@@ -78,25 +70,31 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
 		setupMap();
 
         markers = new MarkerManager(mMap);
-        droneLeashPath = new MapPath(mMap, getResources());
 
 		return view;
 	}
 
-    public void addFlightPathToMap() {
-        PolylineOptions flightPathOptions = new PolylineOptions();
-        flightPathOptions.color(0xfffd693f).width(6).zIndex(1);
-        flightPath = mMap.addPolyline(flightPathOptions);
-    }
-
+    @Override
     public void clearFlightPath() {
-        List<LatLng> oldFlightPath = flightPath.getPoints();
-        oldFlightPath.clear();
-        flightPath.setPoints(oldFlightPath);
+        if(flightPath != null) {
+            List<LatLng> oldFlightPath = flightPath.getPoints();
+            oldFlightPath.clear();
+            flightPath.setPoints(oldFlightPath);
+        }
     }
 
-    public void addFlightPathPoint(LatLng position) {
+    @Override
+    public void addFlightPathPoint(Coord2D coord) {
+        final LatLng position = DroneHelper.CoordToLatLang(coord);
+
         if (maxFlightPathSize > 0) {
+        if(flightPath == null){
+            PolylineOptions flightPathOptions = new PolylineOptions();
+            flightPathOptions.color(FLIGHT_PATH_DEFAULT_COLOR).width(FLIGHT_PATH_DEFAULT_WIDTH).zIndex(1);
+            flightPath = mMap.addPolyline(flightPathOptions);
+        }
+
+
             List<LatLng> oldFlightPath = flightPath.getPoints();
             if (oldFlightPath.size() > maxFlightPathSize) {
                 oldFlightPath.remove(0);
@@ -154,8 +152,22 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coord, zoomLevel));
     }
 
-    public void updateDroneLeashPath(MapPath.PathSource source){
-        droneLeashPath.update(source);
+    @Override
+    public void updateDroneLeashPath(PathSource pathSource){
+        List<Coord2D> pathCoords = pathSource.getPathPoints();
+        final List<LatLng> pathPoints = new ArrayList<LatLng>(pathCoords.size());
+        for(Coord2D coord: pathCoords){
+            pathPoints.add(DroneHelper.CoordToLatLang(coord));
+        }
+
+        if(mDroneLeashPath == null){
+            PolylineOptions flightPath = new PolylineOptions();
+            flightPath.color(DRONE_LEASH_DEFAULT_COLOR).width(DroneHelper.scaleDpToPixels
+                    (DRONE_LEASH_DEFAULT_WIDTH, getResources()));
+            mDroneLeashPath = mMap.addPolyline(flightPath);
+        }
+
+        mDroneLeashPath.setPoints(pathPoints);
     }
 
     public void updateMarker(MarkerManager.MarkerSource source, boolean draggable ){
@@ -166,10 +178,17 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
         markers.updateMarkers(sources, draggable, getActivity().getApplicationContext());
     }
 
-    public void updateMissionPath(List<LatLng> pathPoints){
+    @Override
+    public void updateMissionPath(PathSource pathSource){
+        List<Coord2D> pathCoords = pathSource.getPathPoints();
+        final List<LatLng> pathPoints = new ArrayList<LatLng>(pathCoords.size());
+        for(Coord2D coord: pathCoords){
+            pathPoints.add(DroneHelper.CoordToLatLang(coord));
+        }
+
         if(missionPath == null){
             PolylineOptions pathOptions = new PolylineOptions();
-            pathOptions.color(DEFAULT_COLOR).width(DEFAULT_WIDTH);
+            pathOptions.color(MISSION_PATH_DEFAULT_COLOR).width(MISSION_PATH_DEFAULT_WIDTH);
             missionPath = mMap.addPolyline(pathOptions);
         }
 
@@ -210,7 +229,6 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
             // skipping the setup
             setupMapUI();
 			setupMapOverlay();
-            addFlightPathToMap();
             setupMapListeners();
 		}
 	}

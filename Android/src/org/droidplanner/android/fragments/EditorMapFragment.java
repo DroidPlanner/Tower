@@ -2,17 +2,13 @@ package org.droidplanner.android.fragments;
 
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 import org.droidplanner.android.maps.fragments.DroneMap;
-import org.droidplanner.android.fragments.helpers.MapPath;
 import org.droidplanner.android.graphic.DroneHelper;
-import org.droidplanner.android.graphic.map.CameraGroundOverlays;
 import org.droidplanner.android.graphic.map.MarkerManager.MarkerSource;
 import org.droidplanner.android.mission.item.markers.MissionItemMarkerSource;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
-import org.droidplanner.core.polygon.Polygon;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,7 +80,7 @@ public class EditorMapFragment extends DroneMap implements
 			 */
 
 			// update flight path
-            mMapFragment.updateMissionPath(missionRender.getPathPoints());
+            mMapFragment.updateMissionPath(missionRender);
 		}
 	}
 
