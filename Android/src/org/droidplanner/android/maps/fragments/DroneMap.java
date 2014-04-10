@@ -1,9 +1,11 @@
-package org.droidplanner.android.fragments.helpers;
+package org.droidplanner.android.maps.fragments;
 
 import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.fragments.helpers.MapPath;
 import org.droidplanner.android.graphic.DroneHelper;
 import org.droidplanner.android.graphic.map.GraphicDrone;
 import org.droidplanner.android.graphic.map.GraphicGuided;
+import org.droidplanner.android.maps.fragments.OfflineMapFragment;
 import org.droidplanner.android.mission.MissionRender;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;

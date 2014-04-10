@@ -44,6 +44,8 @@ public class FlightActivity extends DrawerNavigationUI implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_flight);
 
+        startActivity(new Intent(this, TestActivity.class));
+
 		fragmentManager = getSupportFragmentManager();
 		failsafeTextView = findViewById(R.id.failsafeTextView);
 

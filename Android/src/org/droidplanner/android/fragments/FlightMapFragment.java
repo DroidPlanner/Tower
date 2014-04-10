@@ -2,7 +2,7 @@ package org.droidplanner.android.fragments;
 
 import org.droidplanner.android.dialogs.GuidedDialog;
 import org.droidplanner.android.dialogs.GuidedDialog.GuidedDialogListener;
-import org.droidplanner.android.fragments.helpers.DroneMap;
+import org.droidplanner.android.maps.fragments.DroneMap;
 import org.droidplanner.android.graphic.DroneHelper;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;

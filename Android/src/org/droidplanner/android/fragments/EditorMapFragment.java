@@ -1,14 +1,12 @@
 package org.droidplanner.android.fragments;
 
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
-import org.droidplanner.android.fragments.helpers.DroneMap;
+import org.droidplanner.android.maps.fragments.DroneMap;
 import org.droidplanner.android.fragments.helpers.MapPath;
 import org.droidplanner.android.graphic.DroneHelper;
 import org.droidplanner.android.graphic.map.CameraGroundOverlays;
 import org.droidplanner.android.graphic.map.MarkerManager.MarkerSource;
-import org.droidplanner.android.mission.item.MissionItemRender;
 import org.droidplanner.android.mission.item.markers.MissionItemMarkerSource;
-import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.core.polygon.Polygon;
 

@@ -227,7 +227,7 @@
 
     <!-- Parameters screen -->
     <string name="params_click_to_refresh">Click to refresh parameters from drone</string>
-    <string name="refreshing_parameters">Refreshing Parameters&#8230;</string>
+    <string name="refreshing_parameters">Refreshing Parameters…</string>
     <string name="parameters_saved">Parameters saved</string>
     <string name="msg_parameters_written_to_drone">parameters written to drone</string>
     <string name="metadata_value">Value:</string>
@@ -355,5 +355,8 @@
     <string name="msg_connect_first">Please connect first</string>
     <string name="mode1_throttle_on_right_stick">Mode 1: Throttle on RIGHT stick</string>
     <string name="mode2_throttle_on_left_stick">Mode 2: Throttle on LEFT stick</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_test">TestActivity</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>
