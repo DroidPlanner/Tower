@@ -360,5 +360,7 @@
     <string name="zoom_fit">Zoom (Fit)</string>
     <string name="pref_bluetooth">BLUETOOTH CONNECTION</string>
     <string name="pref_bluetooth_device_address">Bluetooth device</string>
+    <string name="pref_ui_gps_hdop_summary">Display HDOP instead of FIX in satellite info bar item</string>
+    <string name="pref_ui_gps_hdop_title">Display Satellite HDOP</string>
 
 </resources>

@@ -22,6 +22,8 @@ public class Constants {
      */
     public static final String PREF_BLUETOOTH_DEVICE_ADDRESS = "pref_bluetooth_device_address";
 
+    public static final String PREF_UI_GPS_HDOP = "pref_ui_gps_hdop";
+
     /**
      * This is the preference for the connection type.
      * The possible values are members of the {@link org.droidplanner.utils.Utils.ConnectionType}
