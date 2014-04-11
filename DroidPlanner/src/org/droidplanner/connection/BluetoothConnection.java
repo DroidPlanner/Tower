@@ -42,14 +42,24 @@ public class BluetoothConnection extends MAVLinkConnection {
         //Reset the bluetooth connection
         resetConnection();
 
-        //Retrieve the stored address
-        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences
-                (parentContext);
-        String address = settings.getString(Constants.PREF_BLUETOOTH_DEVICE_ADDRESS, null);
+        //Retrieve the stored device
+        BluetoothDevice device = null;
+        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(parentContext);
+        final String addressName = settings.getString(Constants.PREF_BLUETOOTH_DEVICE_ADDRESS, null);
 
-        BluetoothDevice device = address == null
-                ? findSerialBluetoothBoard()
-                : mBluetoothAdapter.getRemoteDevice(address);
+        if (addressName != null) {
+            // strip name, use address part - stored as <address>;<name>
+            final String part[] = addressName.split(";");
+            try {
+                device = mBluetoothAdapter.getRemoteDevice(part[0]);
+            } catch (IllegalArgumentException ex) {
+                // invalid configuration (device may have been removed)
+                // NOP fall through to 'no device'
+            }
+        }
+        // no device
+        if(device == null)
+            device = findSerialBluetoothBoard();
 
         Log.d(BLUE, "Trying to connect to device with address " + device.getAddress());
 		Log.d(BLUE, "BT Create Socket Call...");
