@@ -3,12 +3,14 @@ package org.droidplanner.drone.variables.mission.waypoints;
 import java.util.List;
 
 import org.droidplanner.R;
+import org.droidplanner.drone.variables.mission.Mission;
 import org.droidplanner.drone.variables.mission.MissionItem;
 import org.droidplanner.fragments.markers.MarkerManager.MarkerSource;
 import org.droidplanner.fragments.mission.MissionDetailFragment;
 import org.droidplanner.fragments.mission.MissionRegionOfInterestFragment;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
+import com.MAVLink.Messages.enums.MAV_CMD;
 import com.google.android.gms.maps.model.LatLng;
 
 public class RegionOfInterest extends SpatialCoordItem implements MarkerSource{
@@ -16,6 +18,11 @@ public class RegionOfInterest extends SpatialCoordItem implements MarkerSource{
 	public RegionOfInterest(MissionItem item) {
 		super(item);
 	}
+
+    public RegionOfInterest(msg_mission_item msg, Mission mission) {
+        super(mission, null, null);
+        unpackMAVMessage(msg);
+    }
 	
 	@Override
 	public List<LatLng> getPath() throws Exception {
@@ -31,19 +38,20 @@ public class RegionOfInterest extends SpatialCoordItem implements MarkerSource{
 
 	@Override
 	public List<msg_mission_item> packMissionItem() {
-		// TODO Auto-generated method stub
-		return super.packMissionItem();
+        final List<msg_mission_item> list = super.packMissionItem();
+        msg_mission_item mavMsg = list.get(0);
+        mavMsg.command = MAV_CMD.MAV_CMD_NAV_WAYPOINT;
+        return list;
 	}
 
 	@Override
 	public void unpackMAVMessage(msg_mission_item mavMsg) {
-		// TODO Auto-generated method stub
 		super.unpackMAVMessage(mavMsg);
 	}
 
 	@Override
 	protected int getIconDrawable() {
-		return R.drawable.ic_wp_map;
+		return R.drawable.ic_wp_roi;
 	}
 	
 	@Override

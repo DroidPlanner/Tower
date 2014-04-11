@@ -11,6 +11,7 @@ import org.droidplanner.drone.DroneVariable;
 import org.droidplanner.drone.variables.mission.commands.ReturnToHome;
 import org.droidplanner.drone.variables.mission.survey.Survey;
 import org.droidplanner.drone.variables.mission.waypoints.Land;
+import org.droidplanner.drone.variables.mission.waypoints.RegionOfInterest;
 import org.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.drone.variables.mission.waypoints.Takeoff;
 import org.droidplanner.drone.variables.mission.waypoints.Waypoint;
@@ -295,6 +296,9 @@ public class Mission extends DroneVariable implements PathSource{
 			case MAV_CMD.MAV_CMD_NAV_RETURN_TO_LAUNCH:
 				received.add(new ReturnToHome(msg, this));
 				break;
+            case MAV_CMD.MAV_CMD_NAV_ROI:
+                received.add(new RegionOfInterest(msg, this));
+                break;
 			default:
 				break;
 			}
