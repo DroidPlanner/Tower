@@ -1,6 +1,5 @@
 package org.droidplanner.android.maps;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 
@@ -93,7 +92,7 @@ public interface MarkerInfo {
 
         @Override
         public float getAlpha() {
-            return 0;
+            return 1;
         }
 
         @Override

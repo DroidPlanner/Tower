@@ -125,10 +125,11 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
 
     @Override
     public void updateMarker(MarkerInfo markerInfo, boolean isDraggable){
+        final LatLng position = DroneHelper.CoordToLatLang(markerInfo.getPosition());
         Marker marker = mMarkers.get(markerInfo);
         if(marker == null){
             //Generate the marker
-            marker = mMap.addMarker(new MarkerOptions());
+            marker = mMap.addMarker(new MarkerOptions().position(position));
             mMarkers.put(markerInfo, marker);
         }
 
@@ -137,7 +138,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
         marker.setAnchor(markerInfo.getAnchorU(), markerInfo.getAnchorV());
         marker.setIcon(BitmapDescriptorFactory.fromBitmap(markerInfo.getIcon(getResources())));
         marker.setInfoWindowAnchor(markerInfo.getInfoWindowAnchorU(), markerInfo.getInfoWindowAnchorV());
-        marker.setPosition(DroneHelper.CoordToLatLang(markerInfo.getPosition()));
+        marker.setPosition(position);
         marker.setRotation(markerInfo.getRotation());
         marker.setSnippet(markerInfo.getSnippet());
         marker.setTitle(markerInfo.getTitle());

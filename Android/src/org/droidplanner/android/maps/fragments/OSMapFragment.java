@@ -327,11 +327,15 @@ public class OSMapFragment extends Fragment implements DPMap {
 
     @Override
     public void updateMarker(MarkerInfo markerInfo, boolean isDraggable){
+        final GeoPoint position = DroneHelper.CoordToGeoPoint(markerInfo.getPosition());
         Marker marker = mMarkers.get(markerInfo);
         if(marker == null){
             marker = new Marker(mMapView);
+            marker.setPosition(position);
             marker.setOnMarkerClickListener(mMarkerClickHandler);
             marker.setOnMarkerDragListener(mMarkerDragHandler);
+            mMapView.getOverlays().add(marker);
+            mMapView.invalidate();
             mMarkers.put(markerInfo, marker);
         }
 
@@ -342,7 +346,7 @@ public class OSMapFragment extends Fragment implements DPMap {
         marker.setAnchor(markerInfo.getAnchorU(), markerInfo.getAnchorV());
         marker.setIcon(new BitmapDrawable(res, markerInfo.getIcon(res)));
         marker.setInfoWindowAnchor(markerInfo.getInfoWindowAnchorU(), markerInfo.getInfoWindowAnchorV());
-        marker.setPosition(DroneHelper.CoordToGeoPoint(markerInfo.getPosition()));
+        marker.setPosition(position);
         marker.setRotation(markerInfo.getRotation());
         marker.setSnippet(markerInfo.getSnippet());
         marker.setTitle(markerInfo.getTitle());

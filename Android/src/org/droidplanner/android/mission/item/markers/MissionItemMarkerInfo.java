@@ -87,6 +87,11 @@ public abstract class MissionItemMarkerInfo extends MarkerInfo.SimpleMarkerInfo 
     }
 
     @Override
+    public boolean isVisible(){
+        return true;
+    }
+
+    @Override
     public Bitmap getIcon(Resources res){
         int drawable;
         final MissionProxy missionProxy = mMarkerOrigin.getMissionRender();
