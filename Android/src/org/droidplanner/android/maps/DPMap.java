@@ -28,6 +28,12 @@ public interface DPMap {
     public static final int DRONE_LEASH_DEFAULT_COLOR = Color.WHITE;
     public static final int DRONE_LEASH_DEFAULT_WIDTH = 2;
 
+    public static final String PREF_LAT = "lat";
+    public static final String PREF_LNG = "lng";
+    public static final String PREF_BEA = "bea";
+    public static final String PREF_TILT = "tilt";
+    public static final String PREF_ZOOM = "zoom";
+
     interface PathSource {
         public List<Coord2D> getPathPoints();
     }
@@ -111,7 +117,17 @@ public interface DPMap {
      */
     public void clearFlightPath();
 
+    /**
+     * Restores the map's camera settings from preferences.
+     */
+    public void loadCameraPosition();
+
     public List<Coord2D> projectPathIntoMap(List<Coord2D> pathPoints);
+
+    /**
+     * Stores the map camera settings.
+     */
+    public void saveCameraPosition();
 
     /**
      * Adds padding around the edges of the map.
@@ -149,6 +165,13 @@ public interface DPMap {
      * @param listener The callback that's invoked on marker drag events. To unset the callback, use null.
      */
     public void setOnMarkerDragListener(OnMarkerDragListener listener);
+
+    /**
+     * Updates the map's center, and zoom level.
+     * @param coord location for the map center
+     * @param zoomLevel zoom level for the map
+     */
+    public void updateCamera(Coord2D coord, int zoomLevel);
 
     /**
      * Updates the drone leash path on the map.

@@ -208,8 +208,10 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
         mMarkerClickListener = listener;
     }
 
-    public void updateCamera(LatLng coord, int zoomLevel){
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coord, zoomLevel));
+    @Override
+    public void updateCamera(Coord2D coord, int zoomLevel){
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(DroneHelper.CoordToLatLang(coord),
+                zoomLevel));
     }
 
     @Override
@@ -251,25 +253,27 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
      * Save the map camera state on a preference file
      * http://stackoverflow.com/questions/16697891/google-maps-android-api-v2-restoring-map-state/16698624#16698624
      */
+    @Override
     public void saveCameraPosition() {
         CameraPosition camera = mMap.getCameraPosition();
         SharedPreferences settings = getActivity().getSharedPreferences("MAP", 0);
         SharedPreferences.Editor editor = settings.edit();
-        editor.putFloat("lat", (float) camera.target.latitude);
-        editor.putFloat("lng", (float) camera.target.longitude);
-        editor.putFloat("bea", camera.bearing);
-        editor.putFloat("tilt", camera.tilt);
-        editor.putFloat("zoom", camera.zoom);
-        editor.commit();
+        editor.putFloat(PREF_LAT, (float) camera.target.latitude);
+        editor.putFloat(PREF_LNG, (float) camera.target.longitude);
+        editor.putFloat(PREF_BEA, camera.bearing);
+        editor.putFloat(PREF_TILT, camera.tilt);
+        editor.putFloat(PREF_ZOOM, camera.zoom);
+        editor.apply();
     }
 
+    @Override
     public void loadCameraPosition() {
         CameraPosition.Builder camera = new CameraPosition.Builder();
         SharedPreferences settings = getActivity().getSharedPreferences("MAP", 0);
-        camera.bearing(settings.getFloat("bea", 0));
-        camera.tilt(settings.getFloat("tilt", 0));
-        camera.zoom(settings.getFloat("zoom", 0));
-        camera.target(new LatLng(settings.getFloat("lat", 0),settings.getFloat("lng", 0)));
+        camera.bearing(settings.getFloat(PREF_BEA, 0));
+        camera.tilt(settings.getFloat(PREF_TILT, 0));
+        camera.zoom(settings.getFloat(PREF_ZOOM, 0));
+        camera.target(new LatLng(settings.getFloat(PREF_LAT, 0),settings.getFloat(PREF_LNG, 0)));
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(camera.build()));
     }
 

@@ -4,6 +4,7 @@ import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.graphic.map.GraphicDrone;
 import org.droidplanner.android.graphic.map.GraphicGuided;
+import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.mission.MissionProxy;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
@@ -24,8 +25,7 @@ import java.util.List;
 
 public abstract class DroneMap extends Fragment implements OnDroneListener {
 
-    //TODO: replace with DPMap type when the interface is complete.
-    protected GoogleMapFragment mMapFragment;
+    protected DPMap mMapFragment;
 
     private GraphicHome home;
     public GraphicDrone graphicDrone;
@@ -55,11 +55,11 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
         mMapFragment = (GoogleMapFragment)fm.findFragmentById(R.id.map_fragment_container);
         if(mMapFragment == null){
             final Bundle mapArgs = new Bundle();
-            mapArgs.putInt(GoogleMapFragment.EXTRA_MAX_FLIGHT_PATH_SIZE, getMaxFlightPathSize());
+            mapArgs.putInt(DPMap.EXTRA_MAX_FLIGHT_PATH_SIZE, getMaxFlightPathSize());
 
             mMapFragment = new GoogleMapFragment();
-            mMapFragment.setArguments(mapArgs);
-            fm.beginTransaction().add(R.id.map_fragment_container, mMapFragment).commit();
+            ((Fragment)mMapFragment).setArguments(mapArgs);
+            fm.beginTransaction().add(R.id.map_fragment_container, (Fragment)mMapFragment).commit();
         }
 
 		return view;

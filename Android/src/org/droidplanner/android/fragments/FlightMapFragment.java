@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 
 import org.droidplanner.android.dialogs.GuidedDialog;
 import org.droidplanner.android.dialogs.GuidedDialog.GuidedDialogListener;
@@ -63,7 +62,7 @@ public class FlightMapFragment extends DroneMap implements
 		super.update();
 	}
 
-	private void animateCamera(LatLng coord) {
+	private void animateCamera(Coord2D coord) {
 		if (!hasBeenZoomed) {
 			hasBeenZoomed = true;
             mMapFragment.updateCamera(coord, ZOOM_LEVEL);
@@ -117,7 +116,6 @@ public class FlightMapFragment extends DroneMap implements
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		LatLng position = DroneHelper.CoordToLatLang(drone.GPS.getPosition());
 		switch (event) {
         case ARMING:
             // Clear the previous flight path when arming.
@@ -126,7 +124,7 @@ public class FlightMapFragment extends DroneMap implements
             }
             break;
 		case GPS:
-			animateCameraIfNeeded(position);
+			animateCameraIfNeeded(drone.GPS.getPosition());
 			break;
 		default:
 			break;
@@ -134,7 +132,7 @@ public class FlightMapFragment extends DroneMap implements
 		super.onDroneEvent(event,drone);
 	}
 
-	private void animateCameraIfNeeded(LatLng coord) {
+	private void animateCameraIfNeeded(Coord2D coord) {
 		if (!hasBeenZoomed) {
 			hasBeenZoomed = true;
             mMapFragment.updateCamera(coord, ZOOM_LEVEL);
