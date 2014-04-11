@@ -8,6 +8,7 @@ import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.mission.item.MissionItemRender;
 import org.droidplanner.android.mission.MissionRender;
+import org.droidplanner.android.mission.MissionSelection;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.android.fragments.EditorListFragment;
@@ -45,7 +46,7 @@ import com.google.android.gms.maps.model.LatLng;
  */
 public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		OnEditorToolSelected, OnWayPointTypeChangeListener,
-		OnEditorInteraction, Callback, MissionRender.OnSelectionUpdateListener {
+		OnEditorInteraction, Callback, MissionSelection.OnSelectionUpdateListener {
 
     /**
      * Used to provide access and interact with the {@link org.droidplanner.core.mission.Mission}
@@ -104,13 +105,13 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
     @Override
     public void onStart(){
         super.onStart();
-        missionRender.addSelectionUpdateListener(this);
+        missionRender.selection.addSelectionUpdateListener(this);
     }
 
     @Override
     public void onStop(){
         super.onStop();
-        missionRender.removeSelectionUpdateListener(this);
+        missionRender.selection.removeSelectionUpdateListener(this);
     }
 
 	@Override
@@ -169,7 +170,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	@Override
 	public void onMapClick(LatLng point) {
         //If an mission item is selected, unselect it.
-        missionRender.clearSelection();
+        missionRender.selection.clearSelection();
 
 		switch (getTool()) {
 		case MARKER:
@@ -192,7 +193,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 	@Override
 	public void editorToolChanged(EditorTools tools) {
-		missionRender.clearSelection();
+		missionRender.selection.clearSelection();
 
 		switch (tools) {
 		case DRAW:
@@ -295,7 +296,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 		switch(item.getItemId()){
 		case MENU_DELETE:
-			missionRender.removeSelection();
+			missionRender.removeSelection(missionRender.selection);
 			mode.finish();
 			return true;
 
@@ -319,7 +320,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	@Override
 	public void onDestroyActionMode(ActionMode arg0) {
 		missionListFragment.updateChoiceMode(ListView.CHOICE_MODE_SINGLE);
-		missionRender.clearSelection();
+		missionRender.selection.clearSelection();
 		contextualActionBar = null;
 		editorToolsFragment.getView().setVisibility(View.VISIBLE);
 	}
@@ -332,16 +333,16 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	@Override
 	public boolean onItemLongClick(MissionItemRender item) {
 		if (contextualActionBar != null) {
-			if (missionRender.selectionContains(item)) {
-				missionRender.clearSelection();
+			if (missionRender.selection.selectionContains(item)) {
+				missionRender.selection.clearSelection();
 			} else {
-				missionRender.setSelectionTo(missionRender.getItems());
+				missionRender.selection.setSelectionTo(missionRender.getItems());
 			}
 		} else {
 			editorToolsFragment.setTool(EditorTools.NONE);
 			missionListFragment.updateChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 			contextualActionBar = startActionMode(this);
-			missionRender.setSelectionTo(item);
+			missionRender.selection.setSelectionTo(item);
 		}
 		return true;
 	}
@@ -351,24 +352,24 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		switch (editorToolsFragment.getTool()) {
 		default:
 			if (contextualActionBar != null) {
-				if (missionRender.selectionContains(item)) {
-					missionRender.removeItemFromSelection(item);
+				if (missionRender.selection.selectionContains(item)) {
+					missionRender.selection.removeItemFromSelection(item);
 				} else {
-					missionRender.addToSelection(item);
+					missionRender.selection.addToSelection(item);
 				}
 			} else {
-				if (missionRender.selectionContains(item)) {
-					missionRender.clearSelection();
+				if (missionRender.selection.selectionContains(item)) {
+					missionRender.selection.clearSelection();
 				} else {
 					editorToolsFragment.setTool(EditorTools.NONE);
-					missionRender.setSelectionTo(item);
+					missionRender.selection.setSelectionTo(item);
 				}
 			}
 			break;
 
 		case TRASH:
 			missionRender.removeWaypoint(item);
-			missionRender.clearSelection();
+			missionRender.selection.clearSelection();
 			if (missionRender.getItems().size() <= 0) {
 				editorToolsFragment.setTool(EditorTools.NONE);
 			}

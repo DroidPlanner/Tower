@@ -83,7 +83,7 @@ public abstract class MissionItemMarkerSource implements MarkerManager.MarkerSou
     protected BitmapDescriptor getIcon(Context context) {
         int drawable;
         final MissionRender missionRender = mMarkerOrigin.getMissionRender();
-        if (missionRender.selectionContains(mMarkerOrigin)) {
+        if (missionRender.selection.selectionContains(mMarkerOrigin)) {
             drawable = getSelectedIconResource();
         } else {
             drawable = getIconResource();

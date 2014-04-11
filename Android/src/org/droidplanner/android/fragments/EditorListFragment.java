@@ -11,6 +11,7 @@ import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 import org.droidplanner.android.mission.MissionRender;
+import org.droidplanner.android.mission.MissionSelection;
 import org.droidplanner.android.mission.item.MissionItemRender;
 import org.droidplanner.android.widgets.adapterViews.MissionItemRenderView;
 import org.droidplanner.core.drone.Drone;
@@ -29,7 +30,7 @@ import android.widget.ListView;
 
 public class EditorListFragment extends Fragment implements
 		OnItemLongClickListener, OnItemClickListener, OnDroneListener,
-		OnClickListener, MissionRender.OnSelectionUpdateListener {
+		OnClickListener, MissionSelection.OnSelectionUpdateListener {
 
 	private HListView list;
 	private MissionRender missionRender;
@@ -68,14 +69,14 @@ public class EditorListFragment extends Fragment implements
 		super.onStart();
 		updateViewVisibility();
 		drone.events.addDroneListener(this);
-        missionRender.addSelectionUpdateListener(this);
+        missionRender.selection.addSelectionUpdateListener(this);
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
 		drone.events.removeDroneListener(this);
-        missionRender.removeSelectionUpdateListener(this);
+        missionRender.selection.removeSelectionUpdateListener(this);
 	}
 
 	@Override

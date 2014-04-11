@@ -1,11 +1,9 @@
 package org.droidplanner.android.mission;
 
-import android.graphics.Color;
-
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 import org.droidplanner.android.fragments.helpers.MapPath;
 import org.droidplanner.android.graphic.map.MarkerManager.MarkerSource;
@@ -20,10 +18,12 @@ import org.droidplanner.core.mission.survey.Survey;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.core.mission.waypoints.Waypoint;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import android.graphics.Color;
+
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 /**
  * This class is used to render a {@link org.droidplanner.core.mission.Mission} object on the Android
@@ -46,18 +46,9 @@ public class MissionRender implements MapPath.PathSource {
      */
     private final List<MissionItemRender> mMissionItems = new ArrayList<MissionItemRender>();
 
-    /**
-     * Stores the selected mission items renders.
-     */
-    private final List<MissionItemRender> mSelectedItems = new ArrayList<MissionItemRender>();
+    public MissionSelection selection = new MissionSelection();
 
-    /**
-     * Stores the list of selection update listeners.
-     */
-    private final List<OnSelectionUpdateListener> mSelectionsListeners = new
-            ArrayList<OnSelectionUpdateListener>();
-
-    public MissionRender(Mission mission){
+	public MissionRender(Mission mission){
         mMission = mission;
         refresh();
     }
@@ -91,14 +82,14 @@ public class MissionRender implements MapPath.PathSource {
      * Update the state for this object based on the state of the Mission object.
      */
     public void refresh(){
-        mSelectedItems.clear();
+        selection.mSelectedItems.clear();
         mMissionItems.clear();
 
         for(MissionItem item: mMission.getItems()){
             mMissionItems.add(new MissionItemRender(this, item));
         }
 
-        notifySelectionUpdate();
+        selection.notifySelectionUpdate();
     }
 
     /**
@@ -116,9 +107,9 @@ public class MissionRender implements MapPath.PathSource {
      */
     public void removeWaypoint(MissionItemRender item){
         mMissionItems.remove(item);
-        mSelectedItems.remove(item);
+        selection.mSelectedItems.remove(item);
         mMission.removeWaypoint(item.getMissionItem());
-        notifySelectionUpdate();
+        selection.notifySelectionUpdate();
     }
 
     /**
@@ -132,17 +123,13 @@ public class MissionRender implements MapPath.PathSource {
     		toRemove.add(item.getMissionItem());
     	}
     	
-    	mSelectedItems.removeAll(items);
+    	selection.mSelectedItems.removeAll(items);
         mMissionItems.removeAll(items);
         mMission.removeWaypoints(toRemove);
-        notifySelectionUpdate();
+        selection.notifySelectionUpdate();
     }
 
-    public void removeSelection() {
-		removeWaypoints(mSelectedItems);
-	}
-
-	/**
+    /**
      * Adds a survey mission item to the set.
      * @param points 2D points making up the survey
      */
@@ -222,9 +209,9 @@ public class MissionRender implements MapPath.PathSource {
         //Update the mission object
         mMission.replace(oldItem.getMissionItem(), newItem.getMissionItem());
 
-        if(selectionContains(oldItem)){
-            removeItemFromSelection(oldItem);
-            addToSelection(newItem);
+        if(selection.selectionContains(oldItem)){
+            selection.removeItemFromSelection(oldItem);
+            selection.addToSelection(newItem);
         }
     }
 
@@ -236,87 +223,11 @@ public class MissionRender implements MapPath.PathSource {
         mMission.reverse();
     }
 
-    /**
-     * Deselects all mission items renders
-     */
-    public void clearSelection() {
-        mSelectedItems.clear();
-        notifySelectionUpdate();
-    }
-
     public void clear() {
     	removeWaypoints(mMissionItems);	
 	}
 
 	/**
-     * Checks if the passed mission item render is selected.
-     * @param item mission item render to check for selection
-     * @return true if selected
-     */
-    public boolean selectionContains(MissionItemRender item) {
-        return mSelectedItems.contains(item);
-    }
-
-    /**
-     * Selects the given list of mission items renders
-     * TODO: check if the given mission items renders belong to this mission render
-     * @param items list of mission items renders to select.
-     */
-    public void addToSelection(List<MissionItemRender> items) {
-        mSelectedItems.addAll(items);
-        notifySelectionUpdate();
-    }
-
-    /**
-     * Adds the given mission item render to the selected list.
-     * TODO: check the mission item render belongs to this mission render
-     * @param item mission item render to add to the selected list.
-     */
-    public void addToSelection(MissionItemRender item) {
-        mSelectedItems.add(item);
-        notifySelectionUpdate();
-    }
-
-    /**
-     * Selects only the given mission item render.
-     * TODO: check the mission item render belongs to this mission render
-     * @param item mission item render to select.
-     */
-    public void setSelectionTo(MissionItemRender item) {
-        mSelectedItems.clear();
-        mSelectedItems.add(item);
-        notifySelectionUpdate();
-    }
-
-    /**
-     * Selects only the given mission items renders.
-     * TODO: check the mission items renders belong to this mission render
-     * @param items list of mission items renders to select.
-     */
-    public void setSelectionTo(List<MissionItemRender> items){
-        mSelectedItems.clear();
-        mSelectedItems.addAll(items);
-        notifySelectionUpdate();
-    }
-
-    /**
-     * Removes the given mission item render from the selected list.
-     * TODO: check the argument belongs to this mission render
-     * @param item mission item rendere to remove from the selected list
-     */
-    public void removeItemFromSelection(MissionItemRender item) {
-        mSelectedItems.remove(item);
-        notifySelectionUpdate();
-    }
-
-    /**
-     * @return the list of selected mission items renders
-     */
-    public List<MissionItemRender> getSelected() {
-        return mSelectedItems;
-    }
-
-    /**
      * Moves the selected objects up or down into the mission listing
      *
      * Think of it as pushing the selected objects, while you can only move a
@@ -326,8 +237,8 @@ public class MissionRender implements MapPath.PathSource {
      *            true to move up, but can be false to move down
      */
     public void moveSelection(boolean moveUp){
-        if(mSelectedItems.size() > 0 || mSelectedItems.size() < mMissionItems.size()){
-            Collections.sort(mSelectedItems);
+        if(selection.mSelectedItems.size() > 0 || selection.mSelectedItems.size() < mMissionItems.size()){
+            Collections.sort(selection.mSelectedItems);
             if(moveUp){
                 Collections.rotate(getSubListToRotateUp(), 1);
             }
@@ -335,29 +246,29 @@ public class MissionRender implements MapPath.PathSource {
                 Collections.rotate(getSubListToRotateDown(), -1);
             }
 
-            notifySelectionUpdate();
+            selection.notifySelectionUpdate();
             mMission.notifyMissionUpdate();
         }
     }
 
     private List<MissionItemRender> getSubListToRotateUp(){
-        final int from = mMissionItems.indexOf(mSelectedItems.get(0));
+        final int from = mMissionItems.indexOf(selection.mSelectedItems.get(0));
         int to = from;
         do{
             if(mMissionItems.size() < to + 2)
                 return mMissionItems.subList(0, 0);
-        }while(mSelectedItems.contains(mMissionItems.get(++to)));
+        }while(selection.mSelectedItems.contains(mMissionItems.get(++to)));
 
         return mMissionItems.subList(from, to+1); //includes one unselected item
     }
 
     private List<MissionItemRender> getSubListToRotateDown(){
-        final int from = mMissionItems.indexOf(mSelectedItems.get(mSelectedItems.size() - 1));
+        final int from = mMissionItems.indexOf(selection.mSelectedItems.get(selection.mSelectedItems.size() - 1));
         int to = from;
         do{
             if(to < 1)
                 return mMissionItems.subList(0, 0);
-        } while(mSelectedItems.contains(mMissionItems.get(--to)));
+        } while(selection.mSelectedItems.contains(mMissionItems.get(--to)));
 
         return mMissionItems.subList(to, from + 1); // includes one unselected item.
     }
@@ -380,27 +291,6 @@ public class MissionRender implements MapPath.PathSource {
         return mMission.getDistanceFromLastWaypoint((SpatialCoordItem) waypoint);
     }
 
-    /**
-     * Adds given argument to the list of selection update listeners.
-     * @param listener
-     */
-    public void addSelectionUpdateListener(OnSelectionUpdateListener listener){
-        mSelectionsListeners.add(listener);
-    }
-
-    private void notifySelectionUpdate(){
-        for(OnSelectionUpdateListener listener: mSelectionsListeners)
-            listener.onSelectionUpdate(mSelectedItems);
-    }
-
-    /**
-     * Removes given argument from the list of selection update listeners.
-     * @param listener
-     */
-    public void removeSelectionUpdateListener(OnSelectionUpdateListener listener){
-        mSelectionsListeners.remove(listener);
-    }
-
     @Override
     public List<LatLng> getPathPoints() {
         List<LatLng> pathPoints = new ArrayList<LatLng>();
@@ -410,11 +300,8 @@ public class MissionRender implements MapPath.PathSource {
         return pathPoints;
     }
 
-    /**
-     * Classes interested in getting selection update should implement this interface.
-     */
-    public interface OnSelectionUpdateListener {
-        public void onSelectionUpdate(List<MissionItemRender> selected);
-    }
+	public void removeSelection(MissionSelection missionSelection) {
+		removeWaypoints(missionSelection.mSelectedItems);
+	}
 
 }

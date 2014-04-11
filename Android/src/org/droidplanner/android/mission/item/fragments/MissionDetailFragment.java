@@ -86,7 +86,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 
         final MissionRender missionRender = ((DroidPlannerApp)getActivity().getApplication())
                 .missionRender;
-        itemRender = missionRender.getSelected().get(0);
+        itemRender = missionRender.selection.getSelected().get(0);
 
 		setupViews(view);
 		return view;
