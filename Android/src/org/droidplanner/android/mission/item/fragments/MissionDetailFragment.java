@@ -2,8 +2,8 @@ package org.droidplanner.android.mission.item.fragments;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.mission.item.MissionItemRender;
-import org.droidplanner.android.mission.MissionRender;
+import org.droidplanner.android.mission.item.MissionItemProxy;
+import org.droidplanner.android.mission.MissionProxy;
 import org.droidplanner.android.mission.item.adapters.AdapterMissionItems;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.MissionItemType;
@@ -24,7 +24,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 		OnItemSelectedListener {
 
 	public interface OnWayPointTypeChangeListener {
-		public void onWaypointTypeChanged(MissionItemRender newItem, MissionItemRender oldItem);
+		public void onWaypointTypeChanged(MissionItemProxy newItem, MissionItemProxy oldItem);
 	}
 
 	protected abstract int getResource();
@@ -33,7 +33,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 	protected AdapterMissionItems commandAdapter;
 	private OnWayPointTypeChangeListener mListener;
 
-	protected MissionItemRender itemRender;
+	protected MissionItemProxy itemRender;
 
     public static MissionDetailFragment newInstance(MissionItemType itemType){
         MissionDetailFragment fragment;
@@ -84,16 +84,16 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(getResource(), null);
 
-        final MissionRender missionRender = ((DroidPlannerApp)getActivity().getApplication())
-                .missionRender;
-        itemRender = missionRender.getSelected().get(0);
+        final MissionProxy missionProxy = ((DroidPlannerApp)getActivity().getApplication())
+                .missionProxy;
+        itemRender = missionProxy.getSelected().get(0);
 
 		setupViews(view);
 		return view;
 	}
 
 	protected void setupViews(View view) {
-        final MissionRender missionRender = itemRender.getMissionRender();
+        final MissionProxy missionProxy = itemRender.getMissionRender();
 
         commandAdapter = new AdapterMissionItems(this.getActivity(),
                 android.R.layout.simple_list_item_1, MissionItemType.values());
@@ -104,7 +104,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 
         final TextView waypointIndex = (TextView) view.findViewById(R.id.WaypointIndex);
         if(waypointIndex != null) {
-            final int itemOrder = missionRender.getOrder(itemRender);
+            final int itemOrder = missionProxy.getOrder(itemRender);
             waypointIndex.setText(String.valueOf(itemOrder));
         }
 
@@ -114,7 +114,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 
 		try {
 			distanceLabelView.setVisibility(View.VISIBLE);
-			distanceView.setText(missionRender.getDistanceFromLastWaypoint(itemRender).toString());
+			distanceView.setText(missionProxy.getDistanceFromLastWaypoint(itemRender).toString());
 		} catch (NullPointerException e) {
 			// Can fail if distanceView doesn't exists
 		} catch (Exception e) {
@@ -138,7 +138,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
             if(oldItem.getType() != selected){
 				Log.d("CLASS", "Different waypoint Classes");
                 MissionItem newItem = selected.getNewItem(oldItem);
-				mListener.onWaypointTypeChanged(new MissionItemRender(itemRender.getMissionRender(), newItem),
+				mListener.onWaypointTypeChanged(new MissionItemProxy(itemRender.getMissionRender(), newItem),
                         itemRender);
                 dismiss();
 			}
@@ -150,7 +150,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 	public void onNothingSelected(AdapterView<?> arg0) {
 	}
 
-	public MissionItemRender getItem() {
+	public MissionItemProxy getItem() {
 		return itemRender;
 	}
 

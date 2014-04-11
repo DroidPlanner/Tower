@@ -7,11 +7,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.common.collect.HashBiMap;
+
 import org.droidplanner.R;
 import org.droidplanner.android.graphic.DroneHelper;
 import org.droidplanner.android.maps.DPMap;
+import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.maps.osm.RotationGestureOverlay;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
+import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.bonuspack.overlays.Polyline;
 import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -25,6 +29,7 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This fragment abstracts the use and interaction with an OpenStreetMap view.
@@ -44,6 +49,8 @@ public class OSMapFragment extends Fragment implements DPMap {
     private Polyline mMissionPath;
     private Polyline mDroneLeashPath;
     private int mMaxFlightPathSize;
+
+    private HashBiMap<MarkerInfo, Marker> mMarkers = HashBiMap.create();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -110,6 +117,16 @@ public class OSMapFragment extends Fragment implements DPMap {
     }
 
     @Override
+    public void cleanMarkers(){
+        for(Map.Entry<MarkerInfo, Marker> entry: mMarkers.entrySet()){
+            Marker marker = entry.getValue();
+            marker.remove(mMapView);
+        }
+
+        mMarkers.clear();
+    }
+
+    @Override
     public void clearFlightPath(){
         if(mFlightPath != null) {
             mFlightPath.clearPath();
@@ -137,6 +154,17 @@ public class OSMapFragment extends Fragment implements DPMap {
             mFlightPath.setPoints(oldFlightPath);
             mMapView.invalidate();
         }
+    }
+
+    @Override
+    public List<Coord2D> projectPathIntoMap(List<Coord2D> path){
+        List<Coord2D> coords = new ArrayList<Coord2D>();
+
+        //TODO: check the result from this projection with regard to the GoogleMap Projection.
+        // They might have a different coordinate frame.
+        MapView.Projection projection = mMapView.getProjection();
+
+        return coords;
     }
 
     /**

@@ -1,21 +1,15 @@
 package org.droidplanner.android.graphic.map;
 
-import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import org.droidplanner.R;
-import org.droidplanner.android.graphic.DroneHelper;
+import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.core.drone.Drone;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-
-public class GraphicDrone implements MarkerManager.MarkerSource {
+public class GraphicDrone extends MarkerInfo.SimpleMarkerInfo {
 
 	private Drone drone;
 
@@ -24,17 +18,37 @@ public class GraphicDrone implements MarkerManager.MarkerSource {
 	}
 
     @Override
-    public MarkerOptions build(Context context){
-        return new MarkerOptions()
-                .anchor((float) 0.5, (float) 0.5).position(new LatLng(0, 0))
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.quad))
-                .visible(false).flat(true);
+    public float getAnchorU() {
+        return 0.5f;
     }
 
     @Override
-    public void update(Marker marker, Context context){
-        marker.setRotation((float)drone.orientation.getYaw());
-        marker.setPosition(DroneHelper.CoordToLatLang(drone.GPS.getPosition()));
-        marker.setVisible(true);
+    public float getAnchorV() {
+        return 0.5f;
+    }
+
+    @Override
+    public Coord2D getPosition(){
+        return drone.GPS.getPosition();
+    }
+
+    @Override
+    public Bitmap getIcon(Resources res){
+        return BitmapFactory.decodeResource(res, R.drawable.quad);
+    }
+
+    @Override
+    public boolean isVisible(){
+        return true;
+    }
+
+    @Override
+    public boolean isFlat(){
+        return true;
+    }
+
+    @Override
+    public float getRotation(){
+        return (float)drone.orientation.getYaw();
     }
 }

@@ -2,10 +2,9 @@ package org.droidplanner.android.maps.fragments;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.graphic.DroneHelper;
 import org.droidplanner.android.graphic.map.GraphicDrone;
 import org.droidplanner.android.graphic.map.GraphicGuided;
-import org.droidplanner.android.mission.MissionRender;
+import org.droidplanner.android.mission.MissionProxy;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
@@ -21,8 +20,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.util.List;
 
 public abstract class DroneMap extends Fragment implements OnDroneListener {
@@ -34,7 +31,7 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
     public GraphicDrone graphicDrone;
     public GraphicGuided guided;
 
-    protected MissionRender missionRender;
+    protected MissionProxy missionProxy;
     public Drone drone;
 
     protected Context context;
@@ -47,7 +44,7 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 
         final DroidPlannerApp app = ((DroidPlannerApp) getActivity().getApplication());
 		drone = app.drone;
-        missionRender = app.missionRender;
+        missionProxy = app.missionProxy;
 
 		home = new GraphicHome(drone);
         graphicDrone = new GraphicDrone(drone);
@@ -97,13 +94,13 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
                 break;
 
             case GPS:
-                mMapFragment.updateMarker(graphicDrone, false);
+                mMapFragment.updateMarker(graphicDrone);
                 mMapFragment.updateDroneLeashPath(guided);
                 mMapFragment.addFlightPathPoint(drone.GPS.getPosition());
                 break;
 
             case GUIDEDPOINT:
-                mMapFragment.updateMarker(guided, true);
+                mMapFragment.updateMarker(guided);
                 mMapFragment.updateDroneLeashPath(guided);
                 break;
 
@@ -116,11 +113,11 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 		mMapFragment.cleanMarkers();
 
 		if (home.isValid()) {
-			mMapFragment.updateMarker(home, false);
+			mMapFragment.updateMarker(home);
 		}
 
-        mMapFragment.updateMarkers(missionRender.getMarkers(), isMissionDraggable());
-        mMapFragment.updateMissionPath(missionRender);
+        mMapFragment.updateMarkers(missionProxy.getMarkersInfos(), isMissionDraggable());
+        mMapFragment.updateMissionPath(missionProxy);
 	}
 
     protected int getMaxFlightPathSize(){

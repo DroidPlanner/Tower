@@ -1,14 +1,5 @@
 package org.droidplanner.android.fragments;
 
-import org.droidplanner.android.dialogs.GuidedDialog;
-import org.droidplanner.android.dialogs.GuidedDialog.GuidedDialogListener;
-import org.droidplanner.android.maps.fragments.DroneMap;
-import org.droidplanner.android.graphic.DroneHelper;
-import org.droidplanner.core.drone.Drone;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -16,15 +7,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
+import org.droidplanner.android.dialogs.GuidedDialog;
+import org.droidplanner.android.dialogs.GuidedDialog.GuidedDialogListener;
+import org.droidplanner.android.graphic.DroneHelper;
+import org.droidplanner.android.maps.DPMap;
+import org.droidplanner.android.maps.MarkerInfo;
+import org.droidplanner.android.maps.fragments.DroneMap;
+import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
+import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
+import org.droidplanner.core.helpers.coordinates.Coord2D;
+
 public class FlightMapFragment extends DroneMap implements
-		OnMapLongClickListener, OnMarkerClickListener, OnMarkerDragListener,
+        DPMap.OnMapLongClickListener, DPMap.OnMarkerClickListener, DPMap.OnMarkerDragListener,
 		GuidedDialogListener, OnDroneListener {
 
 	private static final int ZOOM_LEVEL = 20;
@@ -76,16 +74,15 @@ public class FlightMapFragment extends DroneMap implements
 	}
 
 	@Override
-	public void onMapLongClick(LatLng coord) {
+	public void onMapLongClick(Coord2D coord) {
 		getPreferences();
 		if (drone.MavClient.isConnected()) {
 			if (drone.guidedPoint.isInitialized()) {
-				drone.guidedPoint.newGuidedCoord(DroneHelper
-						.LatLngToCoord(coord));
+				drone.guidedPoint.newGuidedCoord(coord);
 			} else {
 				if (guidedModeOnLongPress) {
 					GuidedDialog dialog = new GuidedDialog();
-					dialog.setCoord(coord);
+					dialog.setCoord(DroneHelper.CoordToLatLang(coord));
 					dialog.setListener(this);
 					dialog.show(getChildFragmentManager(), "GUIDED dialog");
 				}
@@ -100,23 +97,21 @@ public class FlightMapFragment extends DroneMap implements
 	}
 
 	@Override
-	public void onMarkerDragStart(Marker marker) {
+	public void onMarkerDragStart(MarkerInfo markerInfo) {
 	}
 
 	@Override
-	public void onMarkerDrag(Marker marker) {
+	public void onMarkerDrag(MarkerInfo markerInfo) {
 	}
 
 	@Override
-	public void onMarkerDragEnd(Marker marker) {
-		drone.guidedPoint.newGuidedCoord(DroneHelper.LatLngToCoord(marker
-				.getPosition()));
+	public void onMarkerDragEnd(MarkerInfo markerInfo) {
+		drone.guidedPoint.newGuidedCoord(markerInfo.getPosition());
 	}
 
 	@Override
-	public boolean onMarkerClick(Marker marker) {
-		drone.guidedPoint.newGuidedCoord(DroneHelper.LatLngToCoord(marker
-				.getPosition()));
+	public boolean onMarkerClick(MarkerInfo markerInfo) {
+		drone.guidedPoint.newGuidedCoord(markerInfo.getPosition());
 		return true;
 	}
 

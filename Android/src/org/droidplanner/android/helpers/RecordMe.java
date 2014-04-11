@@ -1,6 +1,6 @@
 package org.droidplanner.android.helpers;
 
-import org.droidplanner.android.mission.MissionRender;
+import org.droidplanner.android.mission.MissionProxy;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
 import android.content.Context;
@@ -15,13 +15,13 @@ public class RecordMe implements LocationListener {
 	private static final float MIN_DISTANCE_M = 0;
 
 	private Context context;
-    private final MissionRender missionRender;
+    private final MissionProxy missionProxy;
 	private LocationManager locationManager;
 	private boolean recordMeEnabled = false;
 
-	public RecordMe(Context context, MissionRender missionRender) {
+	public RecordMe(Context context, MissionProxy missionProxy) {
 		this.context = context;
-        this.missionRender = missionRender;
+        this.missionProxy = missionProxy;
 		this.locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 	}
 
@@ -55,7 +55,7 @@ public class RecordMe implements LocationListener {
 		// TODO find a better way to do the altitude
 		Coord2D coord = new Coord2D(location.getLatitude(),
 				location.getLongitude());
-        missionRender.addWaypoint(coord);
+        missionProxy.addWaypoint(coord);
 	}
 
 	@Override

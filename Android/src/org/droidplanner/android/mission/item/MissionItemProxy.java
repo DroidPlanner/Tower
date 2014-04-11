@@ -7,13 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import org.droidplanner.R;
-import org.droidplanner.android.graphic.DroneHelper;
-import org.droidplanner.android.mission.MissionRender;
+import org.droidplanner.android.mission.MissionProxy;
 import org.droidplanner.android.mission.item.fragments.MissionDetailFragment;
-import org.droidplanner.android.mission.item.markers.MissionItemMarkerSource;
+import org.droidplanner.android.mission.item.markers.MissionItemMarkerInfo;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.MissionItem;
@@ -27,7 +24,7 @@ import java.util.List;
  * {@link org.droidplanner.core.mission.MissionItem} class on the Android layer,
  * as well as providing methods for rendering it on the Android UI.
  */
-public class MissionItemRender implements Comparable<MissionItemRender> {
+public class MissionItemProxy implements Comparable<MissionItemProxy> {
 
     /**
      * This is the mission item object this class is built around.
@@ -37,24 +34,24 @@ public class MissionItemRender implements Comparable<MissionItemRender> {
     /**
      * This is the mission render to which this item belongs.
      */
-    private final MissionRender mMission;
+    private final MissionProxy mMission;
 
     /**
      * This is the marker source for this mission item render.
      */
-    private final MissionItemMarkerSource mMarkerSource;
+    private final MissionItemMarkerInfo mMarkerInfo;
 
-    public MissionItemRender(MissionRender mission, MissionItem missionItem){
+    public MissionItemProxy(MissionProxy mission, MissionItem missionItem){
         mMission = mission;
         mMissionItem = missionItem;
-        mMarkerSource = MissionItemMarkerSource.newInstance(this);
+        mMarkerInfo = MissionItemMarkerInfo.newInstance(this);
     }
 
     /**
      * Provides access to the owning mission render instance.
      * @return
      */
-    public MissionRender getMissionRender(){
+    public MissionProxy getMissionRender(){
         return mMission;
     }
 
@@ -70,8 +67,8 @@ public class MissionItemRender implements Comparable<MissionItemRender> {
         return MissionDetailFragment.newInstance(mMissionItem.getType());
     }
 
-    public MissionItemMarkerSource getMarkerSource(){
-        return mMarkerSource;
+    public MissionItemMarkerInfo getMarkerInfo(){
+        return mMarkerInfo;
     }
 
     /**
@@ -157,7 +154,7 @@ public class MissionItemRender implements Comparable<MissionItemRender> {
     }
 
     @Override
-    public int compareTo(MissionItemRender another){
+    public int compareTo(MissionItemProxy another){
         return mMissionItem.compareTo(another.mMissionItem);
     }
 }

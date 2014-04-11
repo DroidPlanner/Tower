@@ -11,8 +11,8 @@ import java.util.List;
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
-import org.droidplanner.android.mission.item.MissionItemRender;
-import org.droidplanner.android.mission.MissionRender;
+import org.droidplanner.android.mission.item.MissionItemProxy;
+import org.droidplanner.android.mission.MissionProxy;
 import org.droidplanner.android.widgets.adapterViews.MissionItemRenderView;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
@@ -31,10 +31,10 @@ import android.widget.ListView;
 
 public class EditorListFragment extends Fragment implements
 		OnItemLongClickListener, OnItemClickListener, OnDroneListener,
-		OnClickListener, MissionRender.OnSelectionUpdateListener {
+		OnClickListener, MissionProxy.OnSelectionUpdateListener {
 
 	private HListView list;
-	private MissionRender missionRender;
+	private MissionProxy missionProxy;
 	private MissionItemRenderView adapter;
 	private OnEditorInteraction editorListener;
 	private ImageButton leftArrow;
@@ -48,8 +48,8 @@ public class EditorListFragment extends Fragment implements
 
         DroidPlannerApp app = ((DroidPlannerApp) getActivity().getApplication());
         drone = app.drone;
-        missionRender = app.missionRender;
-        adapter = new MissionItemRenderView(getActivity(), missionRender.getItems());
+        missionProxy = app.missionProxy;
+        adapter = new MissionItemRenderView(getActivity(), missionProxy.getItems());
 
 		list = (HListView) view.findViewById(R.id.mission_item_list);
         list.setOnItemClickListener(this);
@@ -70,14 +70,14 @@ public class EditorListFragment extends Fragment implements
 		super.onStart();
 		updateViewVisibility();
 		drone.events.addDroneListener(this);
-        missionRender.addSelectionUpdateListener(this);
+        missionProxy.addSelectionUpdateListener(this);
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
 		drone.events.removeDroneListener(this);
-        missionRender.removeSelectionUpdateListener(this);
+        missionProxy.removeSelectionUpdateListener(this);
 	}
 
 	@Override
@@ -111,27 +111,27 @@ public class EditorListFragment extends Fragment implements
 
 	public void deleteSelected() {
 		SparseBooleanArray selected = list.getCheckedItemPositions();
-		ArrayList<MissionItemRender> toRemove = new ArrayList<MissionItemRender>();
+		ArrayList<MissionItemProxy> toRemove = new ArrayList<MissionItemProxy>();
 
 		for (int i = 0; i < selected.size(); i++) {
 			if (selected.valueAt(i)) {
-				MissionItemRender item = adapter.getItem(selected.keyAt(i));
+				MissionItemProxy item = adapter.getItem(selected.keyAt(i));
 				toRemove.add(item);
 			}
 		}
 
-		missionRender.removeWaypoints(toRemove);
+		missionProxy.removeWaypoints(toRemove);
 	}
 
 	@Override
 	public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
-		MissionItemRender missionItem = (MissionItemRender) adapter.getItemAtPosition(position);
+		MissionItemProxy missionItem = (MissionItemProxy) adapter.getItemAtPosition(position);
 		editorListener.onItemClick(missionItem);
 	}
 
 	@Override
 	public boolean onItemLongClick(AdapterView<?> adapter, View view, int position, long id) {
-		MissionItemRender missionItem = (MissionItemRender) adapter.getItemAtPosition(position);
+		MissionItemProxy missionItem = (MissionItemProxy) adapter.getItemAtPosition(position);
 		return editorListener.onItemLongClick(missionItem);
 	}
 
@@ -162,19 +162,19 @@ public class EditorListFragment extends Fragment implements
 	@Override
 	public void onClick(View v) {
 		if (v == leftArrow) {
-			missionRender.moveSelection(false);
+			missionProxy.moveSelection(false);
 			adapter.notifyDataSetChanged();
 		}
 		if (v == rightArrow) {
-			missionRender.moveSelection(true);
+			missionProxy.moveSelection(true);
 			adapter.notifyDataSetChanged();
 		}
 	}
 
     @Override
-    public void onSelectionUpdate(List<MissionItemRender> selected) {
+    public void onSelectionUpdate(List<MissionItemProxy> selected) {
         list.clearChoices();
-        for (MissionItemRender item : selected) {
+        for (MissionItemProxy item : selected) {
             list.setItemChecked(adapter.getPosition(item), true);
         }
         adapter.notifyDataSetChanged();

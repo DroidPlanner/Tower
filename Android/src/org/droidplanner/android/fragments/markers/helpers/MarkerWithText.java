@@ -66,8 +66,8 @@ public class MarkerWithText {
 	}
 
 	public static Bitmap getMarkerWithTextAndDetail(int gResId, String text,
-			String detail, Context context) {
-		return drawTextAndDetailToBitmap(context, gResId, text, detail);
+			String detail, Resources res) {
+		return drawTextAndDetailToBitmap(res, gResId, text, detail);
 	}
 
 	/**
@@ -75,9 +75,8 @@ public class MarkerWithText {
 	 * http://stackoverflow.com/questions/18335642/how-to-draw-text-in-
 	 * default-marker-of-google-map-v2?lq=1
 	 */
-	private static Bitmap drawTextAndDetailToBitmap(Context gContext,
+	private static Bitmap drawTextAndDetailToBitmap(Resources resources,
 			int gResId, String gText, String gDetail) {
-		Resources resources = gContext.getResources();
 		float scale = resources.getDisplayMetrics().density;
 		Bitmap bitmap = BitmapFactory.decodeResource(resources, gResId);
 

@@ -2,36 +2,29 @@ package org.droidplanner.android.widgets.adapterViews;
 
 import java.util.List;
 
-import org.droidplanner.R;
-import org.droidplanner.android.mission.item.MissionItemRender;
-import org.droidplanner.core.helpers.units.Length;
-import org.droidplanner.core.mission.MissionItem;
-import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
+import org.droidplanner.android.mission.item.MissionItemProxy;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 /**
  * MissionItem Adapter for the MissionItem horizontal list view.
  * This adapter updates the content of the list view item's view based on the mission item type.
  */
-public class MissionItemRenderView extends ArrayAdapter<MissionItemRender> {
+public class MissionItemRenderView extends ArrayAdapter<MissionItemProxy> {
 
-	private List<MissionItemRender> waypoints;
+	private List<MissionItemProxy> waypoints;
 
-	public MissionItemRenderView(Context context, List<MissionItemRender> list) {
+	public MissionItemRenderView(Context context, List<MissionItemProxy> list) {
 		super(context, 0, list);
 		this.waypoints = list;
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		final MissionItemRender waypoint = waypoints.get(position);
+		final MissionItemProxy waypoint = waypoints.get(position);
         return waypoint.getListViewItemView(getContext(), parent);
 	}
 

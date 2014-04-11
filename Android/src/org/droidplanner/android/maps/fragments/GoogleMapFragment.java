@@ -2,16 +2,17 @@ package org.droidplanner.android.maps.fragments;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-import org.droidplanner.android.fragments.helpers.MapProjection;
 import org.droidplanner.android.graphic.DroneHelper;
-import org.droidplanner.android.graphic.map.MarkerManager;
 import org.droidplanner.android.helpers.LocalMapTileProvider;
 import org.droidplanner.android.maps.DPMap;
+import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
@@ -21,16 +22,20 @@ import android.view.ViewGroup;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.google.common.collect.HashBiMap;
 
 public class GoogleMapFragment extends SupportMapFragment implements DPMap {
 
@@ -43,19 +48,20 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
 
 	private GoogleMap mMap;
 
-    private MarkerManager markers;
     private Polyline flightPath;
     private Polyline missionPath;
     private Polyline mDroneLeashPath;
     private int maxFlightPathSize;
 
+    private HashBiMap<MarkerInfo, Marker> mMarkers = HashBiMap.create();
+
     /*
     Map listeners
      */
-    private GoogleMap.OnMapClickListener mMapClickListener;
-    private GoogleMap.OnMapLongClickListener mMapLongClickListener;
-    private GoogleMap.OnMarkerClickListener mMarkerClickListener;
-    private GoogleMap.OnMarkerDragListener mMarkerDragListener;
+    private DPMap.OnMapClickListener mMapClickListener;
+    private DPMap.OnMapLongClickListener mMapLongClickListener;
+    private DPMap.OnMarkerClickListener mMarkerClickListener;
+    private DPMap.OnMarkerDragListener mMarkerDragListener;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
@@ -68,8 +74,6 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
         }
 
 		setupMap();
-
-        markers = new MarkerManager(mMap);
 
 		return view;
 	}
@@ -104,48 +108,104 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
         }
     }
 
+    @Override
     public void cleanMarkers(){
-        markers.clean();
+        for(Map.Entry<MarkerInfo, Marker> entry: mMarkers.entrySet()){
+            Marker marker = entry.getValue();
+            marker.remove();
+        }
+
+        mMarkers.clear();
     }
 
-    public MarkerManager.MarkerSource getMarkerSource(Marker marker){
-        return markers.getSourceFromMarker(marker);
+    @Override
+    public void updateMarker(MarkerInfo markerInfo){
+        updateMarker(markerInfo, markerInfo.isDraggable());
     }
 
+    @Override
+    public void updateMarker(MarkerInfo markerInfo, boolean isDraggable){
+        Marker marker = mMarkers.get(markerInfo);
+        if(marker == null){
+            //Generate the marker
+            marker = mMap.addMarker(new MarkerOptions());
+            mMarkers.put(markerInfo, marker);
+        }
+
+        //Update the marker
+        marker.setAlpha(markerInfo.getAlpha());
+        marker.setAnchor(markerInfo.getAnchorU(), markerInfo.getAnchorV());
+        marker.setIcon(BitmapDescriptorFactory.fromBitmap(markerInfo.getIcon(getResources())));
+        marker.setInfoWindowAnchor(markerInfo.getInfoWindowAnchorU(), markerInfo.getInfoWindowAnchorV());
+        marker.setPosition(DroneHelper.CoordToLatLang(markerInfo.getPosition()));
+        marker.setRotation(markerInfo.getRotation());
+        marker.setSnippet(markerInfo.getSnippet());
+        marker.setTitle(markerInfo.getTitle());
+        marker.setDraggable(isDraggable);
+        marker.setFlat(markerInfo.isFlat());
+        marker.setVisible(markerInfo.isVisible());
+    }
+
+    @Override
+    public void updateMarkers(List<MarkerInfo> markersInfos){
+        for(MarkerInfo info: markersInfos){
+            updateMarker(info);
+        }
+    }
+
+    @Override
+    public void updateMarkers(List<MarkerInfo> markersInfos, boolean isDraggable){
+        for(MarkerInfo info: markersInfos){
+            updateMarker(info, isDraggable);
+        }
+    }
+
+    /**
+     * Used to retrieve the info for the given marker.
+     * @param marker marker whose info to retrieve
+     * @return marker's info
+     */
+    private MarkerInfo getMarkerInfo(Marker marker){
+        return mMarkers.inverse().get(marker);
+    }
+
+    @Override
     public List<Coord2D> projectPathIntoMap(List<Coord2D> path){
-        return MapProjection.projectPathIntoMap(path, mMap);
+        List<Coord2D> coords = new ArrayList<Coord2D>();
+        Projection projection = mMap.getProjection();
+
+        for (Coord2D point : path) {
+            LatLng coord = projection.fromScreenLocation(new Point((int) point
+                    .getX(), (int) point.getY()));
+            coords.add(new Coord2D(coord.longitude, coord.latitude));
+        }
+
+        return coords;
     }
 
+    @Override
     public void setMapPadding(int left, int top, int right, int bottom){
         mMap.setPadding(left, top, right, bottom);
     }
 
-    public void setOnMapClickListener(GoogleMap.OnMapClickListener listener){
+    @Override
+    public void setOnMapClickListener(OnMapClickListener listener){
         mMapClickListener = listener;
-        if(mMap != null){
-            mMap.setOnMapClickListener(mMapClickListener);
-        }
     }
 
-    public void setOnMapLongClickListener(GoogleMap.OnMapLongClickListener listener){
+    @Override
+    public void setOnMapLongClickListener(OnMapLongClickListener listener){
         mMapLongClickListener = listener;
-        if(mMap != null){
-            mMap.setOnMapLongClickListener(mMapLongClickListener);
-        }
     }
 
-    public void setOnMarkerDragListener(GoogleMap.OnMarkerDragListener listener){
+    @Override
+    public void setOnMarkerDragListener(OnMarkerDragListener listener){
         mMarkerDragListener = listener;
-        if(mMap != null){
-            mMap.setOnMarkerDragListener(mMarkerDragListener);
-        }
     }
 
-    public void setOnMarkerClickListener(GoogleMap.OnMarkerClickListener listener){
+    @Override
+    public void setOnMarkerClickListener(OnMarkerClickListener listener){
         mMarkerClickListener = listener;
-        if(mMap != null){
-            mMap.setOnMarkerClickListener(mMarkerClickListener);
-        }
     }
 
     public void updateCamera(LatLng coord, int zoomLevel){
@@ -168,14 +228,6 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
         }
 
         mDroneLeashPath.setPoints(pathPoints);
-    }
-
-    public void updateMarker(MarkerManager.MarkerSource source, boolean draggable ){
-        markers.updateMarker(source, draggable, getActivity().getApplicationContext());
-    }
-
-    public void updateMarkers(List<MarkerManager.MarkerSource> sources, boolean draggable){
-        markers.updateMarkers(sources, draggable, getActivity().getApplicationContext());
     }
 
     @Override
@@ -243,10 +295,62 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
     }
 
     private void setupMapListeners(){
-        mMap.setOnMapClickListener(mMapClickListener);
-        mMap.setOnMapLongClickListener(mMapLongClickListener);
-        mMap.setOnMarkerDragListener(mMarkerDragListener);
-        mMap.setOnMarkerClickListener(mMarkerClickListener);
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                if(mMapClickListener != null){
+                    mMapClickListener.onMapClick(DroneHelper.LatLngToCoord(latLng));
+                }
+            }
+        });
+
+        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                if(mMapLongClickListener != null){
+                    mMapLongClickListener.onMapLongClick(DroneHelper.LatLngToCoord(latLng));
+                }
+            }
+        });
+
+        mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+            @Override
+            public void onMarkerDragStart(Marker marker) {
+                if(mMarkerDragListener != null){
+                    final MarkerInfo markerInfo = getMarkerInfo(marker);
+                    markerInfo.setPosition(DroneHelper.LatLngToCoord(marker.getPosition()));
+                    mMarkerDragListener.onMarkerDragStart(markerInfo);
+                }
+            }
+
+            @Override
+            public void onMarkerDrag(Marker marker) {
+                if(mMarkerDragListener != null){
+                    final MarkerInfo markerInfo = getMarkerInfo(marker);
+                    markerInfo.setPosition(DroneHelper.LatLngToCoord(marker.getPosition()));
+                    mMarkerDragListener.onMarkerDrag(markerInfo);
+                }
+            }
+
+            @Override
+            public void onMarkerDragEnd(Marker marker) {
+                if(mMarkerDragListener != null){
+                    final MarkerInfo markerInfo = getMarkerInfo(marker);
+                    markerInfo.setPosition(DroneHelper.LatLngToCoord(marker.getPosition()));
+                    mMarkerDragListener.onMarkerDragEnd(markerInfo);
+                }
+            }
+        });
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                if(mMarkerClickListener != null){
+                    return mMarkerClickListener.onMarkerClick(getMarkerInfo(marker));
+                }
+                return false;
+            }
+        });
     }
 
 	private void setupMapUI() {
