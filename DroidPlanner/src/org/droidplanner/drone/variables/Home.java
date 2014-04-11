@@ -56,6 +56,10 @@ public class Home extends DroneVariable implements MarkerSource {
 		return coordinate;
 	}
 
+    public boolean hasCoordinates() {
+        return coordinate != null && coordinate.latitude != 0 && coordinate.longitude != 0;
+    }
+
 	public Length getAltitude() {
 		return altitude;
 	}

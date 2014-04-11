@@ -26,6 +26,8 @@ public abstract class MissionItem implements Comparable<MissionItem>{
 	 */
 	public abstract List<LatLng> getPath() throws Exception;
 
+    public abstract boolean hasCoordinates();
+
 	/**
 	 * Gets all markers for this item
 	 * @return list of markers

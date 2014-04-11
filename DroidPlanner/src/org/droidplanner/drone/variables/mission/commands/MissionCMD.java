@@ -37,7 +37,12 @@ public abstract class MissionCMD extends MissionItem{
 		throw new Exception();
 	}
 
-	@Override
+    @Override
+    public boolean hasCoordinates() {
+        return false;
+    }
+
+    @Override
 	public List<MarkerSource> getMarkers() throws Exception {
 		throw new Exception();
 	}

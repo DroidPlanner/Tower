@@ -76,7 +76,12 @@ public abstract class SpatialCoordItem extends MissionItem implements
 		return points;
 	}
 
-	protected BitmapDescriptor getIcon(Context context) {
+    @Override
+    public boolean hasCoordinates() {
+        return coordinate != null && coordinate.latitude != 0 && coordinate.longitude != 0;
+    }
+
+    protected BitmapDescriptor getIcon(Context context) {
 		int drawable;
 		if (mission.selectionContains(this)) {
 			drawable = getIconDrawableSelected();

@@ -167,7 +167,8 @@ public class Mission extends DroneVariable implements PathSource{
 		List<LatLng> newPath = new ArrayList<LatLng>();
 		for (MissionItem item : items) {
 			try {
-				newPath.addAll(item.getPath());
+                if(item.hasCoordinates())
+				    newPath.addAll(item.getPath());
 			} catch (Exception e) {
 				// Exception when no path for the item
 			}
@@ -342,27 +343,14 @@ public class Mission extends DroneVariable implements PathSource{
         final List<LatLng> coords = new ArrayList<LatLng>();
 
         for (MissionItem item : items) {
-            if(!(item instanceof SpatialCoordItem))
-                continue;
-
-            final LatLng coordinate = ((SpatialCoordItem) item).getCoordinate();
-            if(isEmptyCoordinate(coordinate))
-                continue;
-
-            coords.add(coordinate);
+            if(item.hasCoordinates())
+                coords.add(((SpatialCoordItem) item).getCoordinate());
         }
 
-        if(myDrone.home.isValid()) {
-            LatLng coord = myDrone.home.getCoord();
-            if (!isEmptyCoordinate(coord))
-                coords.add(coord);
-        }
+        if (myDrone.home.hasCoordinates())
+            coords.add(myDrone.home.getCoord());
 
         return coords;
-    }
-
-    private boolean isEmptyCoordinate(LatLng coordinate) {
-        return coordinate.latitude == 0 || coordinate.longitude == 0;
     }
 
 }

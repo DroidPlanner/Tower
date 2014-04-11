@@ -53,7 +53,12 @@ public class Survey extends MissionItem {
 			return grid.getCameraLocations();
 	}
 
-	private void build() throws Exception {		
+    @Override
+    public boolean hasCoordinates() {
+        return false;
+    }
+
+    private void build() throws Exception {
 		try {
 		//TODO find better point than (0,0) to reference the grid
 		GridBuilder gridBuilder = new GridBuilder(polygon, surveyData, new LatLng(0, 0),context);
