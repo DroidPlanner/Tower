@@ -5,14 +5,13 @@ import it.sephiroth.android.library.widget.AdapterView.OnItemClickListener;
 import it.sephiroth.android.library.widget.AdapterView.OnItemLongClickListener;
 import it.sephiroth.android.library.widget.HListView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
-import org.droidplanner.android.mission.item.MissionItemRender;
 import org.droidplanner.android.mission.MissionRender;
+import org.droidplanner.android.mission.item.MissionItemRender;
 import org.droidplanner.android.widgets.adapterViews.MissionItemRenderView;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
@@ -21,7 +20,6 @@ import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -107,20 +105,6 @@ public class EditorListFragment extends Fragment implements
 				view.setVisibility(View.INVISIBLE);
 			editorListener.onListVisibilityChanged();
 		}
-	}
-
-	public void deleteSelected() {
-		SparseBooleanArray selected = list.getCheckedItemPositions();
-		ArrayList<MissionItemRender> toRemove = new ArrayList<MissionItemRender>();
-
-		for (int i = 0; i < selected.size(); i++) {
-			if (selected.valueAt(i)) {
-				MissionItemRender item = adapter.getItem(selected.keyAt(i));
-				toRemove.add(item);
-			}
-		}
-
-		missionRender.removeWaypoints(toRemove);
 	}
 
 	@Override

@@ -126,19 +126,23 @@ public class MissionRender implements MapPath.PathSource {
      * @param items list of items to remove
      */
     public void removeWaypoints(List<MissionItemRender> items){
+    	
+    	final List<MissionItem> toRemove = new ArrayList<MissionItem>(items.size());
+    	for(MissionItemRender item: items){
+    		toRemove.add(item.getMissionItem());
+    	}
+    	
+    	mSelectedItems.removeAll(items);
         mMissionItems.removeAll(items);
-        mSelectedItems.removeAll(items);
-
-        final List<MissionItem> toRemove = new ArrayList<MissionItem>(items.size());
-        for(MissionItemRender item: items){
-            toRemove.add(item.getMissionItem());
-        }
-
         mMission.removeWaypoints(toRemove);
         notifySelectionUpdate();
     }
 
-    /**
+    public void removeSelection() {
+		removeWaypoints(mSelectedItems);
+	}
+
+	/**
      * Adds a survey mission item to the set.
      * @param points 2D points making up the survey
      */
@@ -241,8 +245,7 @@ public class MissionRender implements MapPath.PathSource {
     }
 
     public void clear() {
-    	clearSelection();    	
-    	mMission.clear();		
+    	removeWaypoints(mMissionItems);	
 	}
 
 	/**

@@ -1,8 +1,8 @@
 package org.droidplanner.core.mission;
 
-import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
-import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
-import com.MAVLink.Messages.enums.MAV_CMD;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
@@ -13,10 +13,9 @@ import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.core.mission.waypoints.Waypoint;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
+import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
+import com.MAVLink.Messages.enums.MAV_CMD;
 
 /**
  * This implements a mavlink mission.
@@ -128,14 +127,6 @@ public class Mission extends DroneVariable {
 		notifyMissionUpdate();
 	}
 	
-	/**
-	 * Clear all items in the mission.
-	 */
-	public void clear() {
-	    items.clear();
-	    notifyMissionUpdate();
-	}
-
 	public void onWriteWaypoints(msg_mission_ack msg) {
 		myDrone.events.notifyDroneEvent(DroneEventsType.MISSION_SENT);
 	}

@@ -295,7 +295,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 		switch(item.getItemId()){
 		case MENU_DELETE:
-			missionRender.removeWaypoints(missionRender.getSelected());
+			missionRender.removeSelection();
 			mode.finish();
 			return true;
 
