@@ -127,6 +127,14 @@ public class Mission extends DroneVariable {
 		Collections.reverse(items);
 		notifyMissionUpdate();
 	}
+	
+	/**
+	 * Clear all items in the mission.
+	 */
+	public void clear() {
+	    items.clear();
+	    notifyMissionUpdate();
+	}
 
 	public void onWriteWaypoints(msg_mission_ack msg) {
 		myDrone.events.notifyDroneEvent(DroneEventsType.MISSION_SENT);

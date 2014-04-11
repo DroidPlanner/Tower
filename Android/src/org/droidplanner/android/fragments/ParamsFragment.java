@@ -23,6 +23,7 @@ import org.droidplanner.core.parameters.ParameterMetadata;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,6 +35,8 @@ import android.widget.Toast;
 
 public class ParamsFragment extends ListFragment implements
 		DroneInterfaces.OnParameterManagerListener, OnDroneListener {
+	
+	static final String TAG = ParamsFragment.class.getSimpleName();
 
 	public static final String ADAPTER_ITEMS = ParamsFragment.class.getName()
 			+ ".adapter.items";
@@ -240,21 +243,34 @@ public class ParamsFragment extends ListFragment implements
 		progressDialog.setCanceledOnTouchOutside(true);
 
 		progressDialog.show();
+
+		mReceived = 0;
+		mTotal = 0;
 	}
 
+	private int mReceived = 0, mTotal = 0;
+	
 	@Override
 	public void onParameterReceived(Parameter parameter, int index, int count) {
+		++mReceived;
+		
 		if (progressDialog != null) {
 			if (progressDialog.isIndeterminate()) {
 				progressDialog.setIndeterminate(false);
+				mTotal = count;
 				progressDialog.setMax(count);
 			}
-			progressDialog.setProgress(index);
+			progressDialog.setProgress(mReceived);
 		}
 	}
 
 	@Override
 	public void onEndReceivingParameters(List<Parameter> parameters) {
+		if (mReceived < mTotal) {
+			Log.w(TAG, "Total of " + mTotal + " params, but only got "
+					+ mReceived);
+		}
+
 		Collections.sort(parameters, new Comparator<Parameter>() {
 			@Override
 			public int compare(Parameter p1, Parameter p2) {

@@ -22,6 +22,7 @@ import org.droidplanner.android.mission.item.fragments.MissionDetailFragment;
 import org.droidplanner.android.mission.item.fragments.MissionDetailFragment.OnWayPointTypeChangeListener;
 import org.droidplanner.android.graphic.DroneHelper;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
+import org.droidplanner.android.dialogs.YesNoDialog;
 
 import android.app.ActionBar;
 import android.os.Bundle;
@@ -207,6 +208,21 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		}
 	}
 
+	@Override
+	public void editorToolLongClicked(EditorTools tools) {
+		switch (tools) {
+		case TRASH: {
+			// Clear the mission?
+			doClearMissionConfirmation();
+			break;
+		}
+
+		default: {
+			break;
+		}
+		}
+	}
+
 	private void showItemDetail(MissionItemRender item) {
 		if (itemDetailFragment == null) {
 			addItemDetail(item);
@@ -382,4 +398,22 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
         planningMapFragment.update();
     }
+
+	private void doClearMissionConfirmation() {
+		YesNoDialog ynd = YesNoDialog.newInstance(
+				getString(R.string.dlg_clear_mission_title),
+				getString(R.string.dlg_clear_mission_confirm),
+				new YesNoDialog.Listener() {
+					@Override
+					public void onYes() {
+						missionRender.clear();
+					}
+
+					@Override
+					public void onNo() {
+					}
+				});
+
+		ynd.show(getSupportFragmentManager(), "clearMission");
+	}
 }

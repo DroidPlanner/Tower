@@ -240,7 +240,12 @@ public class MissionRender implements MapPath.PathSource {
         notifySelectionUpdate();
     }
 
-    /**
+    public void clear() {
+    	clearSelection();    	
+    	mMission.clear();		
+	}
+
+	/**
      * Checks if the passed mission item render is selected.
      * @param item mission item render to check for selection
      * @return true if selected
