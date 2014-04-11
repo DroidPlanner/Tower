@@ -3,15 +3,21 @@ package org.droidplanner.widgets.adapterViews;
 import java.util.List;
 
 import org.droidplanner.R;
+import org.droidplanner.drone.variables.mission.commands.ReturnToHome;
+import org.droidplanner.drone.variables.mission.waypoints.Land;
+import org.droidplanner.drone.variables.mission.waypoints.RegionOfInterest;
 import org.droidplanner.drone.variables.mission.waypoints.SpatialCoordItem;
+import org.droidplanner.drone.variables.mission.waypoints.Takeoff;
 import org.droidplanner.helpers.units.Length;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -49,11 +55,12 @@ public class MissionItemView extends ArrayAdapter<org.droidplanner.drone.variabl
 		return inflater.inflate(R.layout.fragment_editor_list_item, parent,false);
 	}
 
-	private void setupViewsText(View view, org.droidplanner.drone.variables.mission.MissionItem
-            item) {
+	private void setupViewsText(View view, org.droidplanner.drone.variables.mission.MissionItem item) {
         TextView nameView = (TextView) view.findViewById(R.id.rowNameView);
         TextView altitudeView = (TextView) view.findViewById(R.id.rowAltitudeView);
-        		/*
+        ImageView icon = (ImageView) view.findViewById(R.id.imageView1);
+
+                /*
 		TextView typeView = (TextView) view.findViewById(R.id.rowTypeView);
 		TextView descView = (TextView) view.findViewById(R.id.rowDescView);
 		TextView distanceView = (TextView) view.findViewById(R.id.rowDistanceView);
@@ -61,11 +68,24 @@ public class MissionItemView extends ArrayAdapter<org.droidplanner.drone.variabl
 
 		nameView.setText(String.format("%3d", this.waypoints.indexOf(item)+1));
 
+        // CUST_UI
+        if(item instanceof RegionOfInterest) {
+            icon.setImageResource(R.drawable.ic_mission_roi);
+        } else if(item instanceof Takeoff) {
+            icon.setImageResource(R.drawable.ic_mission_takeoff);
+        } else if(item instanceof Land) {
+            icon.setImageResource(R.drawable.ic_mission_land);
+        } else if(item instanceof ReturnToHome) {
+            icon.setImageResource(R.drawable.ic_mission_home);
+        } else {
+            icon.setImageResource(R.drawable.ic_mission_wp);
+        }
+
 		if (item instanceof SpatialCoordItem) {
 			SpatialCoordItem waypoint = (SpatialCoordItem) item;
 			altitudeView.setText(String.format("%3.0fm", waypoint.getAltitude().valueInMeters()));
 
-            // TODO: RNG hard to read against background
+            // CUST_UI: hard to read against background
 //			try {
 //				Length diff = waypoint.getMission().getAltitudeDiffFromPreviousItem(waypoint);
 //				if (diff.valueInMeters() > 0) {
