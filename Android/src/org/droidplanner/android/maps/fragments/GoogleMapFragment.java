@@ -46,6 +46,8 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
 	public static final String MAP_TYPE_NORMAL = "Normal";
 	public static final String MAP_TYPE_TERRAIN = "Terrain";
 
+    private final HashBiMap<MarkerInfo, Marker> mMarkers = HashBiMap.create();
+
 	private GoogleMap mMap;
 
     private Polyline flightPath;
@@ -53,10 +55,8 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
     private Polyline mDroneLeashPath;
     private int maxFlightPathSize;
 
-    private HashBiMap<MarkerInfo, Marker> mMarkers = HashBiMap.create();
-
     /*
-    Map listeners
+    DP Map listeners
      */
     private DPMap.OnMapClickListener mMapClickListener;
     private DPMap.OnMapLongClickListener mMapLongClickListener;

@@ -3,6 +3,7 @@ package org.droidplanner.android.graphic;
 import android.content.res.Resources;
 
 import org.droidplanner.core.helpers.coordinates.Coord2D;
+import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.GeoPoint;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -14,6 +15,10 @@ public class DroneHelper {
 
     public static GeoPoint CoordToGeoPoint(Coord2D coord){
         return new GeoPoint(coord.getLat(), coord.getLng());
+    }
+
+    public static Coord2D GeoPointToCoord(IGeoPoint point){
+        return new Coord2D(point.getLatitude(), point.getLongitude());
     }
 
 	public static Coord2D LatLngToCoord(LatLng point) {
