@@ -368,7 +368,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 			break;
 
 		case TRASH:
-			missionRender.removeWaypoint(item);
+			missionRender.removeItem(item);
 			missionRender.selection.clearSelection();
 			if (missionRender.getItems().size() <= 0) {
 				editorToolsFragment.setTool(EditorTools.NONE);

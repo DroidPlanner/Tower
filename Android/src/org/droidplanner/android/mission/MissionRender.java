@@ -102,10 +102,10 @@ public class MissionRender implements MapPath.PathSource {
     }
 
     /**
-     * Removes a waypoint mission item from the set of mission items commands.
+     * Removes a mission item from the set of mission items commands.
      * @param item item to remove
      */
-    public void removeWaypoint(MissionItemRender item){
+    public void removeItem(MissionItemRender item){
         mMissionItems.remove(item);
         selection.mSelectedItems.remove(item);
         mMission.removeWaypoint(item.getMissionItem());
@@ -116,7 +116,7 @@ public class MissionRender implements MapPath.PathSource {
      * Removes a set of mission items from the mission' set.
      * @param items list of items to remove
      */
-    public void removeWaypoints(List<MissionItemRender> items){
+    public void removeItemList(List<MissionItemRender> items){
     	
     	final List<MissionItem> toRemove = new ArrayList<MissionItem>(items.size());
     	for(MissionItemRender item: items){
@@ -224,7 +224,7 @@ public class MissionRender implements MapPath.PathSource {
     }
 
     public void clear() {
-    	removeWaypoints(mMissionItems);	
+    	removeItemList(mMissionItems);	
 	}
 
 	/**
@@ -301,7 +301,7 @@ public class MissionRender implements MapPath.PathSource {
     }
 
 	public void removeSelection(MissionSelection missionSelection) {
-		removeWaypoints(missionSelection.mSelectedItems);
+		removeItemList(missionSelection.mSelectedItems);
 	}
 
 }
