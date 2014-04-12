@@ -6,8 +6,8 @@ import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 import org.droidplanner.android.activities.helpers.SuperUI;
-import org.droidplanner.android.mission.item.MissionItemProxy;
-import org.droidplanner.android.mission.MissionProxy;
+import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
+import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.android.fragments.EditorListFragment;
@@ -17,9 +17,9 @@ import org.droidplanner.android.fragments.EditorToolsFragment.EditorTools;
 import org.droidplanner.android.fragments.EditorToolsFragment.OnEditorToolSelected;
 import org.droidplanner.android.fragments.helpers.GestureMapFragment;
 import org.droidplanner.android.fragments.helpers.GestureMapFragment.OnPathFinishedListener;
-import org.droidplanner.android.mission.item.fragments.MissionDetailFragment;
-import org.droidplanner.android.mission.item.fragments.MissionDetailFragment.OnWayPointTypeChangeListener;
-import org.droidplanner.android.graphic.DroneHelper;
+import org.droidplanner.android.proxy.mission.item.fragments.MissionDetailFragment;
+import org.droidplanner.android.proxy.mission.item.fragments.MissionDetailFragment.OnWayPointTypeChangeListener;
+
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
 import android.app.ActionBar;
@@ -34,8 +34,6 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.maps.model.LatLng;
 
 /**
  * This implements the map editor activity. The map editor activity allows the user to create

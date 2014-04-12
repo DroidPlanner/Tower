@@ -1,6 +1,6 @@
 package org.droidplanner.android;
 
-import org.droidplanner.android.mission.MissionProxy;
+import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.notifications.NotificationHandler;
 import org.droidplanner.core.MAVLink.MAVLinkStreams;
 import org.droidplanner.core.MAVLink.MavLinkMsgHandler;

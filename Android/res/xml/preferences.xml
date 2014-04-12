@@ -105,6 +105,11 @@
                     android:summary="@string/pref_lock_screen_orientation_summary"
                     android:title="@string/pref_lock_screen_orientation"/>
             </PreferenceCategory>
+            <PreferenceCategory android:key="@string/pref_maps_category_key"
+                android:title="@string/pref_maps_title">
+                <ListPreference
+                    android:key="@string/pref_maps_type_key"/>
+            </PreferenceCategory>
         </PreferenceScreen>
         <PreferenceScreen
             android:key="pref_flight_data"

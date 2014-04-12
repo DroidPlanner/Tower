@@ -24,6 +24,7 @@
     <!-- App Settings/Preferences -->
     <string name="pref_connection_type">Telemetry Connection Type</string>
     <string name="pref_connection_type_summary">Which link to use to connect to the drone</string>
+    <string name="pref_maps_title">Maps</string>
     <string name="pref_mavlink">MAVLink</string>
     <string name="pref_mavlink_log">Enable Logging</string>
     <string name="pref_mavlink_log_summary">Logs the MAVLink communication to a *.tlog file, may degrade performance</string>

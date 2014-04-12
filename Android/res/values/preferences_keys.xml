@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used to store the preferences keys so that it's accessible and modifiable from one location.
+ To use in preference.xml, do: android:key="@string/<pref_key>"
+ To use in code, do: findPreference(getText(R.string.<pref_key>))
+
+ NOTE: DO NOT TRANSLATE THE CONTENT IN THIS FILE!! (the only allowed translation is this warning)
+ NOTE: NE TRANSLATER PAS LE CONTENU DANS CETTE FICHE!! (la seule translation permit est cette notification)
+ -->
+<resources>
+    <string name="pref_maps_category_key">pref_maps_category</string>
+    <string name="pref_maps_type_key">pref_maps_type_key</string>
+</resources>

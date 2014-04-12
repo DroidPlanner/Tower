@@ -2,7 +2,7 @@ package org.droidplanner.android.widgets.adapterViews;
 
 import java.util.List;
 
-import org.droidplanner.android.mission.item.MissionItemProxy;
+import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 
 import android.content.Context;
 import android.view.View;

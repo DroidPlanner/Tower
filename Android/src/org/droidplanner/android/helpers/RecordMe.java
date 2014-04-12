@@ -1,6 +1,6 @@
 package org.droidplanner.android.helpers;
 
-import org.droidplanner.android.mission.MissionProxy;
+import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
 import android.content.Context;

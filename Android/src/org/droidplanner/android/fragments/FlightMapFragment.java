@@ -11,10 +11,9 @@ import com.google.android.gms.maps.model.LatLng;
 
 import org.droidplanner.android.dialogs.GuidedDialog;
 import org.droidplanner.android.dialogs.GuidedDialog.GuidedDialogListener;
-import org.droidplanner.android.graphic.DroneHelper;
+import org.droidplanner.android.utils.DroneHelper;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
-import org.droidplanner.android.maps.fragments.DroneMap;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;

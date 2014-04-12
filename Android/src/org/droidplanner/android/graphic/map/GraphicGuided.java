@@ -4,7 +4,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 
 import org.droidplanner.R;
-import org.droidplanner.android.fragments.markers.helpers.MarkerWithText;
+import org.droidplanner.android.maps.MarkerWithText;
 import org.droidplanner.android.maps.DPMap.PathSource;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.core.drone.Drone;
