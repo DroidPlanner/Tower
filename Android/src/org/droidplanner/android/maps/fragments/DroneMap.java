@@ -57,7 +57,7 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
             final Bundle mapArgs = new Bundle();
             mapArgs.putInt(DPMap.EXTRA_MAX_FLIGHT_PATH_SIZE, getMaxFlightPathSize());
 
-            mMapFragment = new GoogleMapFragment();
+            mMapFragment = new OSMapFragment();
             ((Fragment)mMapFragment).setArguments(mapArgs);
             fm.beginTransaction().add(R.id.map_fragment_container, (Fragment)mMapFragment).commit();
         }

@@ -27,7 +27,6 @@ import org.osmdroid.bonuspack.overlays.Polyline;
 import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.compass.CompassOverlay;
@@ -41,7 +40,6 @@ import java.util.Map;
 
 /**
  * This fragment abstracts the use and interaction with an OpenStreetMap view.
- *
  */
 public class OSMapFragment extends Fragment implements DPMap {
 
@@ -49,22 +47,24 @@ public class OSMapFragment extends Fragment implements DPMap {
 
     private final HashBiMap<MarkerInfo, Marker> mMarkers = HashBiMap.create();
 
-    private final Marker.OnMarkerClickListener mMarkerClickHandler = new Marker.OnMarkerClickListener() {
+    private final Marker.OnMarkerClickListener mMarkerClickHandler = new Marker
+            .OnMarkerClickListener() {
 
         @Override
         public boolean onMarkerClick(Marker marker, MapView mapView) {
-            if(mMarkerClickListener != null){
+            if (mMarkerClickListener != null) {
                 return mMarkerClickListener.onMarkerClick(getMarkerInfo(marker));
             }
             return false;
         }
     };
 
-    private final Marker.OnMarkerDragListener mMarkerDragHandler = new Marker.OnMarkerDragListener() {
+    private final Marker.OnMarkerDragListener mMarkerDragHandler = new Marker
+            .OnMarkerDragListener() {
 
         @Override
         public void onMarkerDrag(Marker marker) {
-            if(mMarkerDragListener != null){
+            if (mMarkerDragListener != null) {
                 final MarkerInfo markerInfo = getMarkerInfo(marker);
                 markerInfo.setPosition(DroneHelper.GeoPointToCoord(marker.getPosition()));
                 mMarkerDragListener.onMarkerDrag(markerInfo);
@@ -73,7 +73,7 @@ public class OSMapFragment extends Fragment implements DPMap {
 
         @Override
         public void onMarkerDragEnd(Marker marker) {
-            if(mMarkerDragListener != null){
+            if (mMarkerDragListener != null) {
                 final MarkerInfo markerInfo = getMarkerInfo(marker);
                 markerInfo.setPosition(DroneHelper.GeoPointToCoord(marker.getPosition()));
                 mMarkerDragListener.onMarkerDragEnd(markerInfo);
@@ -82,7 +82,7 @@ public class OSMapFragment extends Fragment implements DPMap {
 
         @Override
         public void onMarkerDragStart(Marker marker) {
-            if(mMarkerDragListener != null){
+            if (mMarkerDragListener != null) {
                 final MarkerInfo markerInfo = getMarkerInfo(marker);
                 markerInfo.setPosition(DroneHelper.GeoPointToCoord(marker.getPosition()));
                 mMarkerDragListener.onMarkerDragStart(markerInfo);
@@ -118,7 +118,7 @@ public class OSMapFragment extends Fragment implements DPMap {
         mMapView = (MapView) view.findViewById(R.id.osm_mapview);
 
         final Bundle args = getArguments();
-        if(args != null){
+        if (args != null) {
             mMaxFlightPathSize = args.getInt(EXTRA_MAX_FLIGHT_PATH_SIZE);
         }
 
@@ -126,12 +126,12 @@ public class OSMapFragment extends Fragment implements DPMap {
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState){
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setupMapUI();
     }
 
-    private void setupMapUI(){
+    private void setupMapUI() {
         final Context context = getActivity();
 
         mCompassOverlay = new CompassOverlay(context, new InternalCompassOrientationProvider
@@ -142,11 +142,12 @@ public class OSMapFragment extends Fragment implements DPMap {
                 mMapView);
         rotationOverlay.setEnabled(true);
 
-        final MapEventsOverlay eventsOverlay = new MapEventsOverlay(context, new MapEventsReceiver() {
+        final MapEventsOverlay eventsOverlay = new MapEventsOverlay(context,
+                new MapEventsReceiver() {
 
             @Override
             public boolean singleTapUpHelper(IGeoPoint iGeoPoint) {
-                if(mMapClickListener != null){
+                if (mMapClickListener != null) {
                     mMapClickListener.onMapClick(DroneHelper.GeoPointToCoord(iGeoPoint));
                     return true;
                 }
@@ -155,7 +156,7 @@ public class OSMapFragment extends Fragment implements DPMap {
 
             @Override
             public boolean longPressHelper(IGeoPoint iGeoPoint) {
-                if(mMapLongClickListener != null){
+                if (mMapLongClickListener != null) {
                     mMapLongClickListener.onMapLongClick(DroneHelper.GeoPointToCoord(iGeoPoint));
                     return true;
                 }
@@ -179,7 +180,7 @@ public class OSMapFragment extends Fragment implements DPMap {
     }
 
     @Override
-    public void onPause(){
+    public void onPause() {
         super.onPause();
         mLocationOverlay.disableFollowLocation();
         mLocationOverlay.disableMyLocation();
@@ -187,7 +188,7 @@ public class OSMapFragment extends Fragment implements DPMap {
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
 
         final ITileSource tileSource = TileSourceFactory.getTileSource(TileSourceFactory
@@ -200,8 +201,8 @@ public class OSMapFragment extends Fragment implements DPMap {
     }
 
     @Override
-    public void cleanMarkers(){
-        for(Map.Entry<MarkerInfo, Marker> entry: mMarkers.entrySet()){
+    public void cleanMarkers() {
+        for (Map.Entry<MarkerInfo, Marker> entry : mMarkers.entrySet()) {
             Marker marker = entry.getValue();
             marker.remove(mMapView);
             marker.setOnMarkerClickListener(null);
@@ -209,48 +210,51 @@ public class OSMapFragment extends Fragment implements DPMap {
         }
 
         mMarkers.clear();
+        mMapView.invalidate();
     }
 
     @Override
-    public void clearFlightPath(){
-        if(mFlightPath != null) {
+    public void clearFlightPath() {
+        if (mFlightPath != null) {
             mFlightPath.clearPath();
+            mMapView.invalidate();
         }
     }
 
     @Override
-    public void addFlightPathPoint(Coord2D coord){
+    public void addFlightPathPoint(Coord2D coord) {
         final GeoPoint position = DroneHelper.CoordToGeoPoint(coord);
-        if(mMaxFlightPathSize > 0){
-            if(mFlightPath == null){
+        if (mMaxFlightPathSize > 0) {
+            if (mFlightPath == null) {
                 mFlightPath = new Polyline(getActivity().getApplicationContext());
                 mFlightPath.setColor(FLIGHT_PATH_DEFAULT_COLOR);
                 mFlightPath.setWidth(FLIGHT_PATH_DEFAULT_WIDTH);
                 mMapView.getOverlays().add(mFlightPath);
-                mMapView.invalidate();
             }
 
             List<GeoPoint> oldFlightPath = mFlightPath.getPoints();
-            if(oldFlightPath.size() > mMaxFlightPathSize){
+            if (oldFlightPath.size() > mMaxFlightPathSize) {
                 oldFlightPath.remove(0);
             }
 
             oldFlightPath.add(position);
             mFlightPath.setPoints(oldFlightPath);
+            mMapView.invalidate();
         }
     }
 
     /**
      * Used to retrieve the info for the given marker.
+     *
      * @param marker marker whose info to retrieve
      * @return marker's info
      */
-    private MarkerInfo getMarkerInfo(Marker marker){
+    private MarkerInfo getMarkerInfo(Marker marker) {
         return mMarkers.inverse().get(marker);
     }
 
     @Override
-    public void loadCameraPosition(){
+    public void loadCameraPosition() {
         SharedPreferences settings = getActivity().getSharedPreferences(PREFS_NAME, 0);
         final IMapController mapController = mMapView.getController();
         mapController.setCenter(new GeoPoint(settings.getFloat(PREF_LAT, 0),
@@ -260,7 +264,7 @@ public class OSMapFragment extends Fragment implements DPMap {
     }
 
     @Override
-    public List<Coord2D> projectPathIntoMap(List<Coord2D> path){
+    public List<Coord2D> projectPathIntoMap(List<Coord2D> path) {
         List<Coord2D> coords = new ArrayList<Coord2D>();
 
         //TODO: check the result from this projection with regard to the GoogleMap Projection.
@@ -271,7 +275,7 @@ public class OSMapFragment extends Fragment implements DPMap {
     }
 
     @Override
-    public void saveCameraPosition(){
+    public void saveCameraPosition() {
         SharedPreferences.Editor editor = getActivity().getSharedPreferences(PREFS_NAME, 0).edit();
         final IGeoPoint mapCenter = mMapView.getMapCenter();
         editor.putFloat(PREF_LAT, (float) mapCenter.getLatitude())
@@ -283,59 +287,60 @@ public class OSMapFragment extends Fragment implements DPMap {
 
     /**
      * Nop operation
-     *
+     * <p/>
      * {@inheritDoc}
-     * @param left the number of pixels of padding to be added on the left of the map.
-     * @param top the number of pixels of padding to be added on the top of the map.
-     * @param right the number of pixels of padding to be added on the right of the map.
+     *
+     * @param left   the number of pixels of padding to be added on the left of the map.
+     * @param top    the number of pixels of padding to be added on the top of the map.
+     * @param right  the number of pixels of padding to be added on the right of the map.
      * @param bottom the number of pixels of padding to be added on the bottom of the map.
      */
     @Override
-    public void setMapPadding(int left, int top, int right, int bottom) { }
+    public void setMapPadding(int left, int top, int right, int bottom) {
+    }
 
     @Override
-    public void setOnMapClickListener(OnMapClickListener listener){
+    public void setOnMapClickListener(OnMapClickListener listener) {
         mMapClickListener = listener;
     }
 
     @Override
-    public void setOnMapLongClickListener(OnMapLongClickListener listener){
+    public void setOnMapLongClickListener(OnMapLongClickListener listener) {
         mMapLongClickListener = listener;
     }
 
     @Override
-    public void setOnMarkerDragListener(OnMarkerDragListener listener){
+    public void setOnMarkerDragListener(OnMarkerDragListener listener) {
         mMarkerDragListener = listener;
     }
 
     @Override
-    public void setOnMarkerClickListener(OnMarkerClickListener listener){
+    public void setOnMarkerClickListener(OnMarkerClickListener listener) {
         mMarkerClickListener = listener;
     }
 
     @Override
-    public void updateCamera(Coord2D coord, int zoomLevel){
+    public void updateCamera(Coord2D coord, int zoomLevel) {
         IMapController mapController = mMapView.getController();
         mapController.animateTo(DroneHelper.CoordToGeoPoint(coord));
         mapController.setZoom(zoomLevel);
     }
 
     @Override
-    public void updateMarker(MarkerInfo markerInfo){
+    public void updateMarker(MarkerInfo markerInfo) {
         updateMarker(markerInfo, markerInfo.isDraggable());
     }
 
     @Override
-    public void updateMarker(MarkerInfo markerInfo, boolean isDraggable){
+    public void updateMarker(MarkerInfo markerInfo, boolean isDraggable) {
         final GeoPoint position = DroneHelper.CoordToGeoPoint(markerInfo.getPosition());
         Marker marker = mMarkers.get(markerInfo);
-        if(marker == null){
+        if (marker == null) {
             marker = new Marker(mMapView);
             marker.setPosition(position);
             marker.setOnMarkerClickListener(mMarkerClickHandler);
             marker.setOnMarkerDragListener(mMarkerDragHandler);
             mMapView.getOverlays().add(marker);
-            mMapView.invalidate();
             mMarkers.put(markerInfo, marker);
         }
 
@@ -345,7 +350,8 @@ public class OSMapFragment extends Fragment implements DPMap {
         marker.setAlpha(markerInfo.getAlpha());
         marker.setAnchor(markerInfo.getAnchorU(), markerInfo.getAnchorV());
         marker.setIcon(new BitmapDrawable(res, markerInfo.getIcon(res)));
-        marker.setInfoWindowAnchor(markerInfo.getInfoWindowAnchorU(), markerInfo.getInfoWindowAnchorV());
+        marker.setInfoWindowAnchor(markerInfo.getInfoWindowAnchorU(),
+                markerInfo.getInfoWindowAnchorV());
         marker.setPosition(position);
         marker.setRotation(markerInfo.getRotation());
         marker.setSnippet(markerInfo.getSnippet());
@@ -353,58 +359,60 @@ public class OSMapFragment extends Fragment implements DPMap {
         marker.setDraggable(isDraggable);
         marker.setFlat(markerInfo.isFlat());
         marker.setEnabled(markerInfo.isVisible());
+
+        mMapView.invalidate();
     }
 
     @Override
-    public void updateMarkers(List<MarkerInfo> markersInfos){
-        for(MarkerInfo info: markersInfos){
+    public void updateMarkers(List<MarkerInfo> markersInfos) {
+        for (MarkerInfo info : markersInfos) {
             updateMarker(info);
         }
     }
 
     @Override
-    public void updateMarkers(List<MarkerInfo> markersInfos, boolean isDraggable){
-        for(MarkerInfo info: markersInfos){
+    public void updateMarkers(List<MarkerInfo> markersInfos, boolean isDraggable) {
+        for (MarkerInfo info : markersInfos) {
             updateMarker(info, isDraggable);
         }
     }
 
     @Override
-    public void updateDroneLeashPath(PathSource pathSource){
+    public void updateDroneLeashPath(PathSource pathSource) {
         List<Coord2D> pathCoords = pathSource.getPathPoints();
         final List<GeoPoint> geoPoints = new ArrayList<GeoPoint>(pathCoords.size());
-        for(Coord2D coord: pathCoords){
+        for (Coord2D coord : pathCoords) {
             geoPoints.add(DroneHelper.CoordToGeoPoint(coord));
         }
 
-        if(mDroneLeashPath == null){
+        if (mDroneLeashPath == null) {
             mDroneLeashPath = new Polyline(getActivity().getApplicationContext());
             mDroneLeashPath.setColor(DRONE_LEASH_DEFAULT_COLOR);
             mDroneLeashPath.setWidth(DroneHelper.scaleDpToPixels(DRONE_LEASH_DEFAULT_WIDTH,
                     getResources()));
             mMapView.getOverlays().add(mDroneLeashPath);
-            mMapView.invalidate();
         }
 
         mDroneLeashPath.setPoints(geoPoints);
+        mMapView.invalidate();
     }
 
     @Override
-    public void updateMissionPath(PathSource pathSource){
+    public void updateMissionPath(PathSource pathSource) {
         List<Coord2D> pathCoords = pathSource.getPathPoints();
         final List<GeoPoint> geoPoints = new ArrayList<GeoPoint>(pathCoords.size());
-        for(Coord2D coord: pathCoords){
+        for (Coord2D coord : pathCoords) {
             geoPoints.add(DroneHelper.CoordToGeoPoint(coord));
         }
 
-        if(mMissionPath == null){
+        if (mMissionPath == null) {
             mMissionPath = new Polyline(getActivity().getApplicationContext());
             mMissionPath.setColor(MISSION_PATH_DEFAULT_COLOR);
             mMissionPath.setWidth(MISSION_PATH_DEFAULT_WIDTH);
             mMapView.getOverlays().add(mMissionPath);
-            mMapView.invalidate();
         }
 
         mMissionPath.setPoints(geoPoints);
+        mMapView.invalidate();
     }
 }

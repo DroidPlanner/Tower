@@ -18,7 +18,7 @@ public class DroneHelper {
     }
 
     public static Coord2D GeoPointToCoord(IGeoPoint point){
-        return new Coord2D(point.getLatitude(), point.getLongitude());
+        return new Coord2D(point.getLongitude(), point.getLatitude());
     }
 
 	public static Coord2D LatLngToCoord(LatLng point) {
