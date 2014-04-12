@@ -1,4 +1,4 @@
-package org.droidplanner.android.maps.types.osm;
+package org.droidplanner.android.maps.providers.osm;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.google.common.collect.HashBiMap;
 
 import org.droidplanner.R;
+import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.utils.DroneHelper;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
@@ -218,6 +219,11 @@ public class OSMapFragment extends Fragment implements DPMap {
             mFlightPath.clearPath();
             mMapView.invalidate();
         }
+    }
+
+    @Override
+    public DPMapProvider getProvider(){
+        return DPMapProvider.OPEN_STREET_MAP;
     }
 
     @Override

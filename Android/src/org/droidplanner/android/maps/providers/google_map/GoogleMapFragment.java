@@ -1,9 +1,10 @@
-package org.droidplanner.android.maps.types.google_map;
+package org.droidplanner.android.maps.providers.google_map;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.utils.DroneHelper;
 import org.droidplanner.android.helpers.LocalMapTileProvider;
 import org.droidplanner.android.maps.DPMap;
@@ -85,6 +86,11 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
             oldFlightPath.clear();
             flightPath.setPoints(oldFlightPath);
         }
+    }
+
+    @Override
+    public DPMapProvider getProvider(){
+        return DPMapProvider.GOOGLE_MAP;
     }
 
     @Override

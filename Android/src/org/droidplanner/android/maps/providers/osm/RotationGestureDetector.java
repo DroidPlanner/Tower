@@ -1,4 +1,4 @@
-package org.droidplanner.android.maps.types.osm;
+package org.droidplanner.android.maps.providers.osm;
 
 import android.view.MotionEvent;
 

@@ -5,8 +5,10 @@ import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.graphic.map.GraphicDrone;
 import org.droidplanner.android.graphic.map.GraphicGuided;
 import org.droidplanner.android.maps.DPMap;
-import org.droidplanner.android.maps.types.osm.OSMapFragment;
+import org.droidplanner.android.maps.providers.DPMapProvider;
+import org.droidplanner.android.maps.providers.osm.OSMapFragment;
 import org.droidplanner.android.proxy.mission.MissionProxy;
+import org.droidplanner.android.utils.Utils;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
@@ -43,7 +45,8 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle bundle) {
         final View view = inflater.inflate(R.layout.fragment_drone_map, viewGroup, false);
 
-        final DroidPlannerApp app = ((DroidPlannerApp) getActivity().getApplication());
+        final Activity activity = getActivity();
+        final DroidPlannerApp app = ((DroidPlannerApp) activity.getApplication());
 		drone = app.drone;
         missionProxy = app.missionProxy;
 
@@ -51,34 +54,52 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
         graphicDrone = new GraphicDrone(drone);
         guided = new GraphicGuided(drone);
 
-        //Add the map fragment instance (based on user preference)
-        FragmentManager fm  = getChildFragmentManager();
-        mMapFragment = (DPMap)fm.findFragmentById(R.id.map_fragment_container);
-        if(mMapFragment == null){
-            final Bundle mapArgs = new Bundle();
-            mapArgs.putInt(DPMap.EXTRA_MAX_FLIGHT_PATH_SIZE, getMaxFlightPathSize());
-
-            mMapFragment = new OSMapFragment();
-            ((Fragment)mMapFragment).setArguments(mapArgs);
-            fm.beginTransaction().add(R.id.map_fragment_container, (Fragment)mMapFragment).commit();
-        }
+        updateMapFragment();
 
 		return view;
 	}
 
+    private void updateMapFragment(){
+        //Add the map fragment instance (based on user preference)
+        final DPMapProvider mapProvider = Utils.getMapProvider(getActivity().getApplicationContext());
+
+        final FragmentManager fm  = getChildFragmentManager();
+        mMapFragment = (DPMap)fm.findFragmentById(R.id.map_fragment_container);
+        if(mMapFragment == null || mMapFragment.getProvider() != mapProvider){
+            final Bundle mapArgs = new Bundle();
+            mapArgs.putInt(DPMap.EXTRA_MAX_FLIGHT_PATH_SIZE, getMaxFlightPathSize());
+
+            mMapFragment = mapProvider.getMapFragment();
+            ((Fragment)mMapFragment).setArguments(mapArgs);
+            fm.beginTransaction().replace(R.id.map_fragment_container, (Fragment)mMapFragment)
+                    .commit();
+        }
+    }
+
+    @Override
+    public void onPause(){
+     super.onPause();
+        drone.events.removeDroneListener(this);
+        mMapFragment.saveCameraPosition();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        drone.events.addDroneListener(this);
+        mMapFragment.loadCameraPosition();
+        update();
+    }
+
 	@Override
 	public void onStart() {
 		super.onStart();
-		drone.events.addDroneListener(this);
-		mMapFragment.loadCameraPosition();
-		update();
+        updateMapFragment();
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
-		drone.events.removeDroneListener(this);
-		mMapFragment.saveCameraPosition();
 	}
 
 	@Override

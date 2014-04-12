@@ -108,7 +108,14 @@
             <PreferenceCategory android:key="@string/pref_maps_category_key"
                 android:title="@string/pref_maps_title">
                 <ListPreference
-                    android:key="@string/pref_maps_type_key"/>
+                    android:key="@string/pref_maps_providers_key"
+                    android:title="@string/pref_maps_providers_title"
+                    android:summary="@string/pref_maps_providers_summary"/>
+
+                <PreferenceScreen android:key="@string/pref_map_provider_settings_key"
+                    android:title="@string/pref_map_provider_settings_title"
+                    android:summary="@string/pref_map_provider_settings_summary"/>
+
             </PreferenceCategory>
         </PreferenceScreen>
         <PreferenceScreen

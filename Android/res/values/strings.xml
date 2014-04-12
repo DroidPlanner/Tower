@@ -25,6 +25,8 @@
     <string name="pref_connection_type">Telemetry Connection Type</string>
     <string name="pref_connection_type_summary">Which link to use to connect to the drone</string>
     <string name="pref_maps_title">Maps</string>
+    <string name="pref_maps_providers_summary">Which map provider to use.</string>
+    <string name="pref_maps_providers_title">Maps providers</string>
     <string name="pref_mavlink">MAVLink</string>
     <string name="pref_mavlink_log">Enable Logging</string>
     <string name="pref_mavlink_log_summary">Logs the MAVLink communication to a *.tlog file, may degrade performance</string>
@@ -359,5 +361,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_test">TestActivity</string>
     <string name="hello_world">Hello world!</string>
+    <string name="pref_map_provider_settings_summary">Configure the selected map provider</string>
+    <string name="pref_map_provider_settings_title">Map Provider Preferences</string>
 
 </resources>

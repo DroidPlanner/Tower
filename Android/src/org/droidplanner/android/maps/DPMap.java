@@ -5,6 +5,7 @@ import android.graphics.Color;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
 import java.util.List;
@@ -116,6 +117,11 @@ public interface DPMap {
      * Clears the drone's flight path.
      */
     public void clearFlightPath();
+
+    /**
+     * @return this map's provider.
+     */
+    public DPMapProvider getProvider();
 
     /**
      * Restores the map's camera settings from preferences.
