@@ -119,15 +119,23 @@ public abstract class SuperFlightActivity extends SuperActivity implements
     
     public void sendRC(){
         RcOutput rcOutput = new RcOutput(drone, this);
+        
+        // Eanble RC Override
         rcOutput.enableRcOverride();
-        rcOutput.setRcChannel(RcOutput.TROTTLE, 1);
+        
+        // Set channel to override to be throttle
+        rcOutput.setRcChannel(RcOutput.TROTTLE, .1);
+        
+        // Pause for one second
         try{
-            Thread.sleep(500);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             //TODO Auto-generated catch block
             e.printStackTrace();
             
         }
+        
+        // After delay above disable RC Override
         rcOutput.disableRcOverride();
     }
 }
