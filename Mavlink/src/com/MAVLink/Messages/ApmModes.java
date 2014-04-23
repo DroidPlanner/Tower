@@ -64,6 +64,10 @@ public enum ApmModes {
 	}
 
 	public static ApmModes getMode(int i, int type) {
+        if (isCopter(type)) {
+            type = MAV_TYPE.MAV_TYPE_QUADROTOR;
+        }
+
 		for (ApmModes mode : ApmModes.values()) {
 			if (i == mode.getNumber() & type == mode.getType()) {
 				return mode;
