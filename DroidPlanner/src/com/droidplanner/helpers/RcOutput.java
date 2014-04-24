@@ -81,10 +81,16 @@ public class RcOutput {
 	}
 
 	public void setRcChannel(int ch, double value) {
+		
+		// Bounds check
 		if (value > +1)
 			value = +1;
+		
+		// Bounds check
 		if (value < -1)
 			value = -1;
+		
+		// Send signal, converted to PWM values. Compare this to radio calibration to get correct value
 		rcOutputs[ch] = (int) (value * RC_RANGE + RC_TRIM);
 	}
 
