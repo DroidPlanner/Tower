@@ -3,18 +3,18 @@
 <!-- Custom colors by QuadForge, used for FlightData buttons -->
 <resources>
     
-    <!-- Color for launch button on flight data screen, set, not sure -->
+    <!-- Color for launch button on flight data screen -->
     <color name="blue">#ff0000ff</color>
-    <!-- Color for land button on flight data screen, set, not sure -->
+    <!-- Color for land button on flight data screen -->
     <color name="green">#ff00ff00</color>
-    <!-- Color for ArmDisarm button on flight data screen, set, not sure -->
+    <!-- Color for ArmDisarm button on flight data screen -->
     <color name="orange">#ffffa500</color>
-    <!-- Color for ArmDisarm button on flight data screen, not set -->
+    <!-- Color for ArmDisarm button on flight data screen -->
     <color name="otherGreen">#ff0000ff</color>
-    <!-- Color for stabilize button on flight data screen, set, not sure -->
+    <!-- Color for stabilize button on flight data screen -->
     <color name="yellow">#ffffff00</color>
-    <!-- Color for RTL button on flight data screen, set, not sure -->
+    <!-- Color for RTL button on flight data screen -->
     <color name="red">#ffff0000</color>
-    <color name="black">#000000</color>
+    <color name="black">#ff000000</color>
     
 </resources>
