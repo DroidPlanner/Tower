@@ -136,7 +136,9 @@ public class MissionItemRender implements Comparable<MissionItemRender> {
             } catch (Exception e) {
                 // Do nothing when last item doesn't have an altitude
             }
-        } else {
+        } else if (mMissionItem instanceof Survey) {
+			altitudeView.setText(((Survey)mMissionItem).surveyData.getAltitude().toString());
+		} else {
             altitudeView.setText("");
         }
 
