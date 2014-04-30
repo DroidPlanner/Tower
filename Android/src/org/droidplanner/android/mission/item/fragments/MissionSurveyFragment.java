@@ -13,6 +13,7 @@ import org.droidplanner.core.mission.MissionItemType;
 import org.droidplanner.core.mission.survey.Survey;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
@@ -121,9 +122,10 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 				sidelapView.getValue());
 		try {
 			survey.build();
+			altitudeView.setBackgroundColor(Color.TRANSPARENT);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			altitudeView.setBackgroundColor(Color.RED);			
 		}	
 
 		survey.getMission().notifyMissionUpdate();
