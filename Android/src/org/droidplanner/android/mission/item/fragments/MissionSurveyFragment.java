@@ -111,6 +111,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 	@Override
 	public void onSpinnerItemSelected(Spinner spinner, int position, String text) {
 		survey.setCameraInfo(cameraAdapter.getCamera(position));
+		onSeekBarChanged();
 	}
 
 	@Override
@@ -124,6 +125,8 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}	
+
+		survey.getMission().notifyMissionUpdate();
 	}
 
 	@Override
