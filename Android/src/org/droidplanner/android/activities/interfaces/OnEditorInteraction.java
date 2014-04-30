@@ -1,7 +1,6 @@
 package org.droidplanner.android.activities.interfaces;
 
 import org.droidplanner.android.mission.item.MissionItemRender;
-import org.droidplanner.core.mission.MissionItem;
 
 import com.google.android.gms.maps.model.LatLng;
 

@@ -304,4 +304,9 @@ public class MissionRender implements MapPath.PathSource {
 		removeItemList(missionSelection.mSelectedItems);
 	}
 
+	public void move(MissionItemRender item, Coord2D position) {
+			((SpatialCoordItem)item.getMissionItem()).setPosition(position);	
+            mMission.notifyMissionUpdate();	
+	}
+
 }
