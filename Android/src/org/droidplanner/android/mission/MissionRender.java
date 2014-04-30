@@ -123,8 +123,8 @@ public class MissionRender implements MapPath.PathSource {
     		toRemove.add(item.getMissionItem());
     	}
     	
+    	mMissionItems.removeAll(items);
     	selection.mSelectedItems.removeAll(items);
-        mMissionItems.removeAll(items);
         mMission.removeWaypoints(toRemove);
         selection.notifySelectionUpdate();
     }
