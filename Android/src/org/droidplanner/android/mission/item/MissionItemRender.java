@@ -13,6 +13,7 @@ import org.droidplanner.R;
 import org.droidplanner.android.graphic.DroneHelper;
 import org.droidplanner.android.mission.MissionRender;
 import org.droidplanner.android.mission.item.fragments.MissionDetailFragment;
+import org.droidplanner.android.mission.item.markers.MissionItemGenericMarkerSource;
 import org.droidplanner.android.mission.item.markers.MissionItemMarkerSource;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.MissionItem;
@@ -41,7 +42,7 @@ public class MissionItemRender implements Comparable<MissionItemRender> {
     /**
      * This is the marker source for this mission item render.
      */
-    private final MissionItemMarkerSource mMarkerSource;
+    private final MissionItemGenericMarkerSource mMarkerSource;
 
     public MissionItemRender(MissionRender mission, MissionItem missionItem){
         mMission = mission;
@@ -69,7 +70,7 @@ public class MissionItemRender implements Comparable<MissionItemRender> {
         return MissionDetailFragment.newInstance(mMissionItem.getType());
     }
 
-    public MissionItemMarkerSource getMarkerSource(){
+    public MissionItemGenericMarkerSource getMarkerSource(){
         return mMarkerSource;
     }
 

@@ -8,6 +8,9 @@ import java.util.List;
 import org.droidplanner.android.fragments.helpers.MapPath;
 import org.droidplanner.android.graphic.map.MarkerManager.MarkerSource;
 import org.droidplanner.android.mission.item.MissionItemRender;
+import org.droidplanner.android.mission.item.markers.MissionItemGenericMarkerSource;
+import org.droidplanner.android.mission.item.markers.MissionItemMarkerSource;
+import org.droidplanner.android.mission.item.markers.MissionItemSurveyMarkerSource;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.coordinates.Coord3D;
 import org.droidplanner.core.helpers.units.Altitude;
@@ -71,9 +74,14 @@ public class MissionRender implements MapPath.PathSource {
     public List<MarkerSource> getMarkers(){
         List<MarkerSource> markers = new ArrayList<MarkerSource>();
         for(MissionItemRender itemRender: mMissionItems){
-            MarkerSource markerSource = itemRender.getMarkerSource();
-            if (markerSource != null)
-                markers.add(itemRender.getMarkerSource());
+            MissionItemGenericMarkerSource markerSource = itemRender.getMarkerSource();
+            if (markerSource != null){
+            	if (markerSource instanceof MissionItemMarkerSource) {
+            		markers.add((MissionItemMarkerSource)markerSource);					
+				}else if(markerSource instanceof MissionItemSurveyMarkerSource) {
+					markers.addAll(((MissionItemSurveyMarkerSource)markerSource).getMarkers());
+				}
+            }
         }
         return markers;
     }
@@ -135,8 +143,8 @@ public class MissionRender implements MapPath.PathSource {
      */
     public void addSurveyPolygon(List<Coord2D> points){
         Survey survey = new Survey(mMission, points);
-        mMissionItems.add(new MissionItemRender(this, survey));
         mMission.addWaypoint(survey);
+        mMissionItems.add(new MissionItemRender(this, survey));
     }
 
     /**

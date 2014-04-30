@@ -6,6 +6,7 @@ import org.droidplanner.android.fragments.helpers.MapPath;
 import org.droidplanner.android.graphic.DroneHelper;
 import org.droidplanner.android.graphic.map.CameraGroundOverlays;
 import org.droidplanner.android.graphic.map.MarkerManager.MarkerSource;
+import org.droidplanner.android.mission.item.markers.MissionItemGenericMarkerSource;
 import org.droidplanner.android.mission.item.markers.MissionItemMarkerSource;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.core.polygon.Polygon;
@@ -98,7 +99,7 @@ public class EditorMapFragment extends DroneMap implements
 
 	private void checkForWaypointMarker(MarkerSource source, Marker marker) {
 		if(source instanceof MissionItemMarkerSource) {
-			missionRender.move(((MissionItemMarkerSource) source).getMarkerOrigin(), DroneHelper.LatLngToCoord(marker.getPosition()));
+			missionRender.move(((MissionItemGenericMarkerSource) source).getMarkerOrigin(), DroneHelper.LatLngToCoord(marker.getPosition()));
 		}
 	}
 
@@ -125,7 +126,7 @@ public class EditorMapFragment extends DroneMap implements
 	public boolean onMarkerClick(Marker marker) {
 		MarkerSource source = markers.getSourceFromMarker(marker);
 		if (source instanceof MissionItemMarkerSource) {
-			editorListener.onItemClick(((MissionItemMarkerSource) source).getMarkerOrigin());
+			editorListener.onItemClick(((MissionItemGenericMarkerSource) source).getMarkerOrigin());
 			return true;
 		} else {
 			return false;
