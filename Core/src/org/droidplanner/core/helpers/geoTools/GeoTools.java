@@ -61,7 +61,7 @@ public class GeoTools {
 				+ Math.atan2(Math.sin(brng) * Math.sin(dr) * Math.cos(lat1),
 						Math.cos(dr) - Math.sin(lat1) * Math.sin(lat2));
 
-		return (new Coord2D(Math.toDegrees(lat2), Math.toDegrees(lon2)));
+		return (new Coord2D(Math.toDegrees(lon2), Math.toDegrees(lat2)));
 	}
 
 	/**

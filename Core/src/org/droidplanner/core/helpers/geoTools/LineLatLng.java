@@ -39,4 +39,9 @@ public class LineLatLng {
 		return GeoTools.getAproximatedDistance(p1, point);
 	}
 
+	@Override
+	public String toString() {
+		return "from:"+p1.toString()+ "to:"+p2.toString();
+	}
+
 }
