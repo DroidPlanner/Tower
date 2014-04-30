@@ -1,3 +1,5 @@
 include ':Mavlink'
 include ':HorizontalVariableListView:HorizontalVariableListView'
-include ':DroidPlanner'
+include ':Android'
+include ':Core'
+include ':usb-serial-for-android:UsbSerialLibrary'
