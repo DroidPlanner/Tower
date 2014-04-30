@@ -385,9 +385,11 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
     @Override
     public void onSelectionUpdate(List<MissionItemRender> selected) {
         final int selectedCount = selected.size();
+        
+        missionListFragment.setArrowsVisibility(selectedCount > 0);
+        
         if(selectedCount != 1){
             removeItemDetail();
-            missionListFragment.setArrowsVisibility(selectedCount > 0);
         }
         else{
             if(contextualActionBar != null)
