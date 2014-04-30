@@ -143,8 +143,8 @@ public class MissionRender implements MapPath.PathSource {
      */
     public void addSurveyPolygon(List<Coord2D> points){
         Survey survey = new Survey(mMission, points);
-        mMission.addWaypoint(survey);
         mMissionItems.add(new MissionItemRender(this, survey));
+        mMission.addWaypoint(survey);
     }
 
     /**
