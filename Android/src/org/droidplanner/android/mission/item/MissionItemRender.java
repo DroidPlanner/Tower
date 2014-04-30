@@ -15,8 +15,11 @@ import org.droidplanner.android.mission.MissionRender;
 import org.droidplanner.android.mission.item.fragments.MissionDetailFragment;
 import org.droidplanner.android.mission.item.markers.MissionItemGenericMarkerSource;
 import org.droidplanner.android.mission.item.markers.MissionItemMarkerSource;
+import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.MissionItem;
+import org.droidplanner.core.mission.survey.Survey;
+import org.droidplanner.core.mission.survey.grid.Grid;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 
 import java.util.ArrayList;
@@ -79,7 +82,8 @@ public class MissionItemRender implements Comparable<MissionItemRender> {
      */
     public List<LatLng> getPath() {
         List<LatLng> pathPoints = new ArrayList<LatLng>();
-        switch (mMissionItem.getType()) {
+        Grid grid;
+		switch (mMissionItem.getType()) {
             case LAND:
             case LOITER:
             case LOITER_INF:
@@ -90,7 +94,11 @@ public class MissionItemRender implements Comparable<MissionItemRender> {
                 pathPoints.add(DroneHelper.CoordToLatLang(((SpatialCoordItem)
                         mMissionItem).getCoordinate()));
                 break;
-
+            case SURVEY:
+            	grid = ((Survey) mMissionItem).grid;
+            	if (grid != null) {				
+            		pathPoints.addAll(DroneHelper.CoordToLatLang(grid.gridPoints));
+            	}
             default:
                 break;
         }

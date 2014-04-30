@@ -118,6 +118,12 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 		survey.update(angleView.getValue(),
 				new Altitude(altitudeView.getValue()), overlapView.getValue(),
 				sidelapView.getValue());
+		try {
+			survey.build();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
 	}
 
 	@Override
