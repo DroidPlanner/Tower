@@ -40,8 +40,8 @@ public abstract class SpatialCoordItem extends MissionItem {
 	public List<msg_mission_item> packMissionItem() {
 		List<msg_mission_item> list = super.packMissionItem();
 		msg_mission_item mavMsg = list.get(0);
-		mavMsg.x = (float) coordinate.getX();
-		mavMsg.y = (float) coordinate.getY();
+		mavMsg.x = (float) coordinate.getLat();
+		mavMsg.y = (float) coordinate.getLng();
 		mavMsg.z = (float) coordinate.getAltitude().valueInMeters();
 		return list;
 	}
@@ -49,7 +49,7 @@ public abstract class SpatialCoordItem extends MissionItem {
 	@Override
 	public void unpackMAVMessage(msg_mission_item mavMsg) {
 		Altitude alt = new Altitude(mavMsg.z);
-		setCoordinate(new Coord3D(mavMsg.x, mavMsg.y, alt));
+		setCoordinate(new Coord3D(mavMsg.y, mavMsg.x, alt)); // For MAVLink x is Latitude, and y is Longitude, that`s why this is reversed.
 	}
 
 	public void setAltitude(Altitude altitude) {

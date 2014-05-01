@@ -44,7 +44,7 @@ public class Home extends DroneVariable {
 	}
 
 	public void setHome(msg_mission_item msg) {
-		this.coordinate = new Coord2D(msg.x, msg.y);
+		this.coordinate = new Coord2D(msg.y, msg.x); // MAVlink has y as longitude.
 		this.altitude = new Altitude(msg.z);
 		myDrone.events.notifyDroneEvent(DroneEventsType.HOME);
 	}
