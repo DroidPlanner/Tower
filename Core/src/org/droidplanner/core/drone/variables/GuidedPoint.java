@@ -111,7 +111,7 @@ public class GuidedPoint extends DroneVariable implements OnDroneListener {
 	private void sendGuidedPoint() {
 		if (state == GuidedStates.ACTIVE) {
 			myDrone.events.notifyDroneEvent(DroneEventsType.GUIDEDPOINT);
-			MavLinkModes.setGuidedMode(myDrone, coord.getY(), coord.getX(),
+			MavLinkModes.setGuidedMode(myDrone, coord.getLat(), coord.getLng(),
 					altitude.valueInMeters());
 		}
 	}
