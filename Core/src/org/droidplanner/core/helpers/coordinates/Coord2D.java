@@ -1,45 +1,45 @@
 package org.droidplanner.core.helpers.coordinates;
 
 public class Coord2D {
-	private double x; // aka Longitude
-	private double y; // aka Latitude
+	private double latitude;  // aka x
+	private double longitude; // aka y
 
-	public Coord2D(double x, double y) {
-		set(x, y);
+	public Coord2D(double lat, double lon) {
+		set(lat, lon);
 	}
 
 	public Coord2D(Coord2D point) {
 		set(point);
 	}
 
-	public void set(double x, double y) {
-		this.x = x;
-		this.y = y;
+	public void set(double lat, double lon) {
+		this.latitude = lat;
+		this.longitude = lon;
 	}
 
 	public void set(Coord2D coord) {
-		set(coord.x, coord.y);
+		set(coord.latitude, coord.longitude);
 	}
 
 	public double getX() {
-		return x;
+		return latitude;
 	}
 
 	public double getY() {
-		return y;
+		return longitude;
 	}
 
 	public double getLng() {
-		return x;
+		return longitude;
 	}
 
 	public double getLat() {
-		return y;
+		return latitude;
 	}
 
 	@Override
 	public String toString() {
-		return "X/Y: " + getX() + "/" + getY();
+		return "lat/lon: " + getLat() + "/" + getLng();
 	}
 
 }

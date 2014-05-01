@@ -22,8 +22,8 @@ public class SpatialCoordItemTest extends TestCase {
 		assertEquals(1, mavMsg.target_component);
 		assertEquals(1, mavMsg.target_system);
 		assertEquals(MAV_FRAME.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavMsg.frame);
-		assertEquals(1f, mavMsg.x);
-		assertEquals(0.1f, mavMsg.y);
+		assertEquals(0.1f, mavMsg.x);
+		assertEquals(1f, mavMsg.y);
 		assertEquals(2f, mavMsg.z);
 	}
 
