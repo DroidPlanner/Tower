@@ -21,7 +21,7 @@ public class MapProjection {
 		for (Coord2D point : path) {
 			LatLng coord = projection.fromScreenLocation(new Point((int) point
 					.getX(), (int) point.getY()));
-			coords.add(new Coord2D(coord.longitude, coord.latitude));
+			coords.add(new Coord2D(coord.latitude, coord.longitude));
 		}
 
 		return coords;
