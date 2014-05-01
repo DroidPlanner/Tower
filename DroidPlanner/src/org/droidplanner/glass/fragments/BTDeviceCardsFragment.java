@@ -81,9 +81,7 @@ public class BTDeviceCardsFragment extends DialogFragment {
                 //If it's already paired, skip it because it's been listed already
                 if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
                     mCardsAdapter.addDevice(device);
-
-                    if (mCardsView != null && mCardsView.isActivated())
-                        mCardsView.updateViews(true);
+                    mCardsAdapter.notifyDataSetChanged();
                 }
             }
         }
@@ -158,7 +156,7 @@ public class BTDeviceCardsFragment extends DialogFragment {
                 mCardsAdapter.addDevice(device);
             }
 
-            mCardsView.updateViews(true);
+            mCardsAdapter.notifyDataSetChanged();
 
             //Do discovery
             if (mBtAdapter.isDiscovering())
@@ -244,16 +242,11 @@ public class BTDeviceCardsFragment extends DialogFragment {
                         .setFootnote(device.getAddress())
                         .addImage(R.drawable.ic_action_bluetooth);
             }
-            return card.toView();
+            return card.getView();
         }
 
         @Override
-        public int findIdPosition(Object o) {
-            return -1;
-        }
-
-        @Override
-        public int findItemPosition(Object o) {
+        public int getPosition(Object o) {
             if (mBtDevices.isEmpty())
                 return -1;
 

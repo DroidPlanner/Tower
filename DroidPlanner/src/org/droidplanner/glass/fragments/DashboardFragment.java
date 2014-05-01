@@ -153,16 +153,11 @@ public class DashboardFragment extends Fragment {
                     .addImage(sectionInfo.getSectionLogoRes())
                     .setImageLayout(Card.ImageLayout.FULL);
 
-            return card.toView();
+            return card.getView();
         }
 
         @Override
-        public int findIdPosition(Object o) {
-            return -1;
-        }
-
-        @Override
-        public int findItemPosition(Object o) {
+        public int getPosition(Object o) {
             int defaultId = -1;
             if(!(o instanceof SectionInfo))
                 return defaultId;
