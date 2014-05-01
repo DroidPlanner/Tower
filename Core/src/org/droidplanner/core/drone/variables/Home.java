@@ -44,7 +44,7 @@ public class Home extends DroneVariable {
 	}
 
 	public void setHome(msg_mission_item msg) {
-		this.coordinate = new Coord2D(msg.y, msg.x); // MAVlink has y as longitude.
+		this.coordinate = new Coord2D(msg.x, msg.y);
 		this.altitude = new Altitude(msg.z);
 		myDrone.events.notifyDroneEvent(DroneEventsType.HOME);
 	}
@@ -57,8 +57,8 @@ public class Home extends DroneVariable {
 		mavMsg.target_component = 1;
 		mavMsg.target_system = 1;
 		if (isValid()) {
-			mavMsg.x = (float) getCoord().getX();
-			mavMsg.y = (float) getCoord().getY();
+			mavMsg.x = (float) getCoord().getLat();
+			mavMsg.y = (float) getCoord().getLng();
 			mavMsg.z = (float) getAltitude().valueInMeters();
 		}
 		return mavMsg;

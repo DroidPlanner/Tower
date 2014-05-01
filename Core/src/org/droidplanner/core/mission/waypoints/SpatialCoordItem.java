@@ -49,11 +49,11 @@ public abstract class SpatialCoordItem extends MissionItem {
 	@Override
 	public void unpackMAVMessage(msg_mission_item mavMsg) {
 		Altitude alt = new Altitude(mavMsg.z);
-		setCoordinate(new Coord3D(mavMsg.y, mavMsg.x, alt)); // For MAVLink x is Latitude, and y is Longitude, that`s why this is reversed.
+		setCoordinate(new Coord3D(mavMsg.x, mavMsg.y, alt));
 	}
 
 	public void setAltitude(Altitude altitude) {
-		coordinate.set(coordinate.getX(), coordinate.getY(), altitude);
+		coordinate.set(coordinate.getLat(), coordinate.getLng(), altitude);
 	}
 
 	public void setPosition(Coord2D position) {

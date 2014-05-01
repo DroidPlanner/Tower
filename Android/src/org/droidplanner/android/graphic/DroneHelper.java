@@ -13,7 +13,7 @@ public class DroneHelper {
 	}
 
 	public static Coord2D LatLngToCoord(LatLng point) {
-		return new Coord2D(point.longitude, point.latitude);
+		return new Coord2D(point.latitude, point.longitude);
 	}
 
 	public static List<LatLng> CoordToLatLang(
