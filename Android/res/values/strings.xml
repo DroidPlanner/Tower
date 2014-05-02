@@ -5,29 +5,29 @@
     <string name="app_title">DroidPlanner</string>
 
     <!-- Generic strings -->
-    <string name="settings">Settings</string>
-    <string name="help">Help</string>
+    <string name="settings">Impostazioni</string>
+    <string name="help">Aiuto</string>
     <string name="menu_drone_setup">Drone Setup</string>
-    <string name="app_settings">App Settings</string>
-    <string name="flight_data">Flight Data</string>
-    <string name="editor">Editor</string>
-    <string name="send_mission">Send Mission</string>
-    <string name="load_mission">Load Mission</string>
+    <string name="app_settings">Impostazioni App</string>
+    <string name="flight_data">Dati volo</string>
+    <string name="editor">Editore</string>
+    <string name="send_mission">Invia missione</string>
+    <string name="load_mission">Carica missione</string>
 
     <!-- Drone Setup tabs -->
-    <string name="screen_tuning">Tuning</string>
-    <string name="screen_cal">Calibration</string>
-    <string name="screen_checklist">Checklist</string>
+    <string name="screen_tuning">Messa a punto</string>
+    <string name="screen_cal">Calibrazione</string>
+    <string name="screen_checklist">Lista di controllo</string>
     <string name="screen_rc">Radio</string>
-    <string name="screen_parameters">Parameters</string>
+    <string name="screen_parameters">Parametri</string>
     
     <!-- App Settings/Preferences -->
-    <string name="pref_connection_type">Telemetry Connection Type</string>
-    <string name="pref_connection_type_summary">Which link to use to connect to the drone</string>
+    <string name="pref_connection_type">Tipo Connessione Telemetria</string>
+    <string name="pref_connection_type_summary">Tipo di collegamento da usare per connettere drone</string>
     <string name="pref_mavlink">MAVLink</string>
-    <string name="pref_mavlink_log">Enable Logging</string>
+    <string name="pref_mavlink_log">Abilita registrazione</string>
     <string name="pref_mavlink_log_summary">Logs the MAVLink communication to a *.tlog file, may degrade performance</string>
-    <string name="pref_mavlink_rates">Stream Rates</string>
+    <string name="pref_mavlink_rates">Rata di flusso</string>
     <string name="pref_mavlink_rates_summary">Rate in which flight data should be received from the drone (in Hz)</string>
     <string name="pref_mavlink_stream_rate_ext_stat">Waypoints, GPS raw, fence data, current waypoint, etc</string>
     <string name="pref_mavlink_stream_rate_extra1">Attitude</string>
