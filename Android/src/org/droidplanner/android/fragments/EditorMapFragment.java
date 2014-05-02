@@ -11,6 +11,7 @@ import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.item.markers.MissionItemMarkerInfo;
+import org.droidplanner.android.proxy.mission.item.markers.SurveyMarkerInfo;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 
@@ -81,9 +82,10 @@ public class EditorMapFragment extends DroneMap implements
     }
 
     private void checkForWaypointMarker(MarkerInfo markerInfo) {
-        if (SpatialCoordItem.class.isInstance(markerInfo)) {
-            // mListener.onMoveWaypoint((SpatialCoordItem) markerInfo,
-            // marker.getPosition());
+        if(!(markerInfo instanceof SurveyMarkerInfo) && (markerInfo instanceof
+                MissionItemMarkerInfo)){
+            missionProxy.move(((MissionItemMarkerInfo)markerInfo).getMarkerOrigin(),
+                    markerInfo.getPosition());
         }
     }
 

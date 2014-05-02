@@ -2,8 +2,8 @@ package org.droidplanner.android.proxy.mission;
 
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
-import org.droidplanner.android.mission.MissionSelection;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
+import org.droidplanner.android.proxy.mission.item.markers.SurveyMarkerInfo;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.coordinates.Coord3D;
 import org.droidplanner.core.helpers.units.Altitude;
@@ -51,7 +51,6 @@ public class MissionProxy implements DPMap.PathSource {
     }
 
     /**
-     * TODO: update based on following method
      * @return the map markers corresponding to this mission's command set.
      */
     public List<MarkerInfo> getMarkersInfos() {
@@ -59,30 +58,18 @@ public class MissionProxy implements DPMap.PathSource {
 
         for (MissionItemProxy itemProxy : mMissionItems) {
             MarkerInfo markerInfo = itemProxy.getMarkerInfo();
-            if (markerInfo != null)
-                markerInfos.add(itemProxy.getMarkerInfo());
+            if (markerInfo != null) {
+                if(markerInfo instanceof SurveyMarkerInfo){
+                    markerInfos.addAll(((SurveyMarkerInfo)markerInfo).getMarkersInfos());
+                }
+                else {
+                    markerInfos.add(markerInfo);
+                }
+            }
         }
         return markerInfos;
     }
 
-//    /**
-//     * @return the map markers corresponding to this mission's command set.
-//     */
-//    public List<MarkerSource> getMarkers(){
-//        List<MarkerSource> markers = new ArrayList<MarkerSource>();
-//        for(MissionItemRender itemRender: mMissionItems){
-//            MissionItemGenericMarkerSource markerSource = itemRender.getMarkerSource();
-//            if (markerSource != null){
-//                if (markerSource instanceof MissionItemMarkerSource) {
-//                    markers.add((MissionItemMarkerSource)markerSource);
-//                }else if(markerSource instanceof MissionItemSurveyMarkerSource) {
-//                    markers.addAll(((MissionItemSurveyMarkerSource)markerSource).getMarkers());
-//                }
-//            }
-//        }
-//        return markers;
-//    }
-    
     /**
      * Update the state for this object based on the state of the Mission object.
      */
@@ -252,8 +239,8 @@ public class MissionProxy implements DPMap.PathSource {
     }
 
     private List<MissionItemProxy> getSubListToRotateDown() {
-        final int from = mMissionItems.indexOf(selection.mSelectedItems.get(mSelectedItems.size() - 
-                1));
+        final int from = mMissionItems.indexOf(selection.mSelectedItems.get(selection.mSelectedItems
+                .size() -  1));
         int to = from;
         do{
             if(to < 1)

@@ -11,6 +11,7 @@ import org.droidplanner.R;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.fragments.MissionDetailFragment;
 import org.droidplanner.android.proxy.mission.item.markers.MissionItemMarkerInfo;
+import org.droidplanner.android.utils.DroneHelper;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.MissionItem;
@@ -53,7 +54,7 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
      * Provides access to the owning mission render instance.
      * @return
      */
-    public MissionProxy getMissionRender(){
+    public MissionProxy getMissionProxy(){
         return mMission;
     }
 
@@ -90,9 +91,9 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
                 break;
             
             case SURVEY:
-                Grid grid; = ((Survey) mMissionItem).grid;
+                Grid grid = ((Survey) mMissionItem).grid;
             	if (grid != null) {				
-            		pathPoints.addAll(DroneHelper.CoordToLatLang(grid.gridPoints));
+            		pathPoints.addAll(grid.gridPoints);
             	}
             default:
                 break;

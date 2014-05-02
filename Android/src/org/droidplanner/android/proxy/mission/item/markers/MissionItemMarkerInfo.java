@@ -45,6 +45,10 @@ public abstract class MissionItemMarkerInfo extends MarkerInfo.SimpleMarkerInfo 
                 markerInfo = new WaypointMarkerInfo(origin);
                 break;
 
+            case SURVEY:
+                markerInfo = new SurveyMarkerInfo(origin);
+                break;
+
             default:
                 markerInfo = null;
                 break;
@@ -94,8 +98,8 @@ public abstract class MissionItemMarkerInfo extends MarkerInfo.SimpleMarkerInfo 
     @Override
     public Bitmap getIcon(Resources res){
         int drawable;
-        final MissionProxy missionProxy = mMarkerOrigin.getMissionRender();
-        if (missionProxy.selectionContains(mMarkerOrigin)) {
+        final MissionProxy missionProxy = mMarkerOrigin.getMissionProxy();
+        if (missionProxy.selection.selectionContains(mMarkerOrigin)) {
             drawable = getSelectedIconResource();
         } else {
             drawable = getIconResource();
@@ -107,7 +111,7 @@ public abstract class MissionItemMarkerInfo extends MarkerInfo.SimpleMarkerInfo 
 
     private String getIconDetail() {
         try {
-            final MissionProxy missionProxy = mMarkerOrigin.getMissionRender();
+            final MissionProxy missionProxy = mMarkerOrigin.getMissionProxy();
             if (missionProxy.getAltitudeDiffFromPreviousItem(mMarkerOrigin).valueInMeters() ==
                     0) {
                 return null;

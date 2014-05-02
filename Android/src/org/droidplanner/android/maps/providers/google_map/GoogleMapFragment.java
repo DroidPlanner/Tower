@@ -13,6 +13,7 @@ import org.droidplanner.core.helpers.coordinates.Coord2D;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -140,9 +141,13 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
         }
 
         //Update the marker
+        final Bitmap markerIcon = markerInfo.getIcon(getResources());
+        if(markerIcon != null){
+            marker.setIcon(BitmapDescriptorFactory.fromBitmap(markerIcon));
+        }
+
         marker.setAlpha(markerInfo.getAlpha());
         marker.setAnchor(markerInfo.getAnchorU(), markerInfo.getAnchorV());
-        marker.setIcon(BitmapDescriptorFactory.fromBitmap(markerInfo.getIcon(getResources())));
         marker.setInfoWindowAnchor(markerInfo.getInfoWindowAnchorU(), markerInfo.getInfoWindowAnchorV());
         marker.setPosition(position);
         marker.setRotation(markerInfo.getRotation());
@@ -184,7 +189,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
         for (Coord2D point : path) {
             LatLng coord = projection.fromScreenLocation(new Point((int) point
                     .getX(), (int) point.getY()));
-            coords.add(new Coord2D(coord.longitude, coord.latitude));
+            coords.add(DroneHelper.LatLngToCoord(coord));
         }
 
         return coords;

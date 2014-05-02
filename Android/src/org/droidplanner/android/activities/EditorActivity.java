@@ -6,7 +6,7 @@ import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 import org.droidplanner.android.activities.helpers.SuperUI;
-import org.droidplanner.android.mission.MissionSelection;
+import org.droidplanner.android.proxy.mission.MissionSelection;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.core.drone.Drone;
@@ -401,18 +401,19 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 	private void doClearMissionConfirmation() {
 		YesNoDialog ynd = YesNoDialog.newInstance(
-				getString(R.string.dlg_clear_mission_title),
-				getString(R.string.dlg_clear_mission_confirm),
-				new YesNoDialog.Listener() {
-					@Override
-					public void onYes() {
-						missionRender.clear();
-					}
+                getString(R.string.dlg_clear_mission_title),
+                getString(R.string.dlg_clear_mission_confirm),
+                new YesNoDialog.Listener() {
+                    @Override
+                    public void onYes() {
+                        missionProxy.clear();
+                    }
 
-					@Override
-					public void onNo() {
-					}
-				});
+                    @Override
+                    public void onNo() {
+                    }
+                }
+        );
 
 		ynd.show(getSupportFragmentManager(), "clearMission");
 	}

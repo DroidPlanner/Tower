@@ -93,7 +93,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 	}
 
 	protected void setupViews(View view) {
-        final MissionProxy missionProxy = itemRender.getMissionRender();
+        final MissionProxy missionProxy = itemRender.getMissionProxy();
 
         commandAdapter = new AdapterMissionItems(this.getActivity(),
                 android.R.layout.simple_list_item_1, MissionItemType.values());
@@ -138,7 +138,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
             if(oldItem.getType() != selected){
 				Log.d("CLASS", "Different waypoint Classes");
                 MissionItem newItem = selected.getNewItem(oldItem);
-				mListener.onWaypointTypeChanged(new MissionItemProxy(itemRender.getMissionRender(), newItem),
+				mListener.onWaypointTypeChanged(new MissionItemProxy(itemRender.getMissionProxy(), newItem),
                         itemRender);
                 dismiss();
 			}

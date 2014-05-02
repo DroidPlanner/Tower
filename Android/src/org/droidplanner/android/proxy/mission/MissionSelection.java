@@ -1,22 +1,23 @@
 package org.droidplanner.android.proxy.mission;
 
+import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import org.droidplanner.android.mission.item.MissionItemRender;
 
 public class MissionSelection {
 	/**
 	 * Classes interested in getting selection update should implement this interface.
 	 */
 	public interface OnSelectionUpdateListener {
-	    public void onSelectionUpdate(List<MissionItemRender> selected);
+	    public void onSelectionUpdate(List<MissionItemProxy> selected);
 	}
 
 	/**
 	 * Stores the selected mission items renders.
 	 */
-	public List<MissionItemRender> mSelectedItems =	new ArrayList<MissionItemRender>();
+	public List<MissionItemProxy> mSelectedItems =	new ArrayList<MissionItemProxy>();
 	/**
 	 * Stores the list of selection update listeners.
 	 */
@@ -29,7 +30,7 @@ public class MissionSelection {
 	 * TODO: check the argument belongs to this mission render
 	 * @param item mission item rendere to remove from the selected list
 	 */
-	public void removeItemFromSelection(MissionItemRender item) {
+	public void removeItemFromSelection(MissionItemProxy item) {
 	    mSelectedItems.remove(item);
 	    notifySelectionUpdate();
 	}
@@ -39,7 +40,7 @@ public class MissionSelection {
 	 * TODO: check the mission items renders belong to this mission render
 	 * @param items list of mission items renders to select.
 	 */
-	public void setSelectionTo(List<MissionItemRender> items){
+	public void setSelectionTo(List<MissionItemProxy> items){
 	    mSelectedItems.clear();
 	    mSelectedItems.addAll(items);
 	    notifySelectionUpdate();
@@ -50,7 +51,7 @@ public class MissionSelection {
 	 * TODO: check the mission item render belongs to this mission render
 	 * @param item mission item render to select.
 	 */
-	public void setSelectionTo(MissionItemRender item) {
+	public void setSelectionTo(MissionItemProxy item) {
 	    mSelectedItems.clear();
 	    mSelectedItems.add(item);
 	    notifySelectionUpdate();
@@ -61,7 +62,7 @@ public class MissionSelection {
 	 * TODO: check the mission item render belongs to this mission render
 	 * @param item mission item render to add to the selected list.
 	 */
-	public void addToSelection(MissionItemRender item) {
+	public void addToSelection(MissionItemProxy item) {
 	    mSelectedItems.add(item);
 	    notifySelectionUpdate();
 	}
@@ -71,7 +72,7 @@ public class MissionSelection {
 	 * TODO: check if the given mission items renders belong to this mission render
 	 * @param items list of mission items renders to select.
 	 */
-	public void addToSelection(List<MissionItemRender> items) {
+	public void addToSelection(List<MissionItemProxy> items) {
 	    mSelectedItems.addAll(items);
 	    notifySelectionUpdate();
 	}
@@ -81,14 +82,14 @@ public class MissionSelection {
 	 * @param item mission item render to check for selection
 	 * @return true if selected
 	 */
-	public boolean selectionContains(MissionItemRender item) {
+	public boolean selectionContains(MissionItemProxy item) {
 	    return mSelectedItems.contains(item);
 	}
 
 	/**
 	 * @return the list of selected mission items renders
 	 */
-	public List<MissionItemRender> getSelected() {
+	public List<MissionItemProxy> getSelected() {
 	    return mSelectedItems;
 	}
 

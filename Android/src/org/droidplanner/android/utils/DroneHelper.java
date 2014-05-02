@@ -18,11 +18,11 @@ public class DroneHelper {
     }
 
     public static Coord2D GeoPointToCoord(IGeoPoint point){
-        return new Coord2D(point.getLongitude(), point.getLatitude());
+        return new Coord2D(point.getLatitude(), point.getLongitude());
     }
 
 	public static Coord2D LatLngToCoord(LatLng point) {
-		return new Coord2D(point.longitude, point.latitude);
+		return new Coord2D(point.latitude, point.longitude);
 	}
 
     public static int scaleDpToPixels(double value, Resources res) {

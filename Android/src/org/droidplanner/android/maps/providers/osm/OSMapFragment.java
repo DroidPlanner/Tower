@@ -3,6 +3,7 @@ package org.droidplanner.android.maps.providers.osm;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -272,9 +273,12 @@ public class OSMapFragment extends Fragment implements DPMap {
     public List<Coord2D> projectPathIntoMap(List<Coord2D> path) {
         List<Coord2D> coords = new ArrayList<Coord2D>();
 
-        //TODO: check the result from this projection with regard to the GoogleMap Projection.
-        // They might have a different coordinate frame.
         MapView.Projection projection = mMapView.getProjection();
+
+        for(Coord2D point : path){
+            IGeoPoint coord = projection.fromPixels((float)point.getX(), (float)point.getY());
+            coords.add(DroneHelper.GeoPointToCoord(coord));
+        }
 
         return coords;
     }
@@ -352,10 +356,13 @@ public class OSMapFragment extends Fragment implements DPMap {
 
         //Update the marker
         final Resources res = getResources();
+        final Bitmap markerIcon = markerInfo.getIcon(res);
+        if(markerIcon != null) {
+            marker.setIcon(new BitmapDrawable(res, markerIcon));
+        }
 
         marker.setAlpha(markerInfo.getAlpha());
         marker.setAnchor(markerInfo.getAnchorU(), markerInfo.getAnchorV());
-        marker.setIcon(new BitmapDrawable(res, markerInfo.getIcon(res)));
         marker.setInfoWindowAnchor(markerInfo.getInfoWindowAnchorU(),
                 markerInfo.getInfoWindowAnchorV());
         marker.setPosition(position);
