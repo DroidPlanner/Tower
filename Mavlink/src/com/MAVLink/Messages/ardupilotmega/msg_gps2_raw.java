@@ -1,4 +1,4 @@
-// MESSAGE GPS_RAW_INT PACKING
+// MESSAGE GPS2_RAW PACKING
 package com.MAVLink.Messages.ardupilotmega;
 
 import com.MAVLink.Messages.MAVLinkMessage;
@@ -7,14 +7,13 @@ import com.MAVLink.Messages.MAVLinkPayload;
 //import android.util.Log;
 
 /**
-* The global position, as returned by the Global Positioning System (GPS). This is
-                NOT the global position estimate of the sytem, but rather a RAW sensor value. See message GLOBAL_POSITION for the global position estimate. Coordinate frame is right-handed, Z-axis up (GPS frame).
+* Second GPS data. Coordinate frame is right-handed, Z-axis up (GPS frame).
 */
-public class msg_gps_raw_int extends MAVLinkMessage{
+public class msg_gps2_raw extends MAVLinkMessage{
 
-	public static final int MAVLINK_MSG_ID_GPS_RAW_INT = 24;
-	public static final int MAVLINK_MSG_LENGTH = 30;
-	private static final long serialVersionUID = MAVLINK_MSG_ID_GPS_RAW_INT;
+	public static final int MAVLINK_MSG_ID_GPS2_RAW = 124;
+	public static final int MAVLINK_MSG_LENGTH = 35;
+	private static final long serialVersionUID = MAVLINK_MSG_ID_GPS2_RAW;
 	
 
  	/**
@@ -33,6 +32,10 @@ public class msg_gps_raw_int extends MAVLinkMessage{
 	* Altitude (WGS84), in meters * 1000 (positive for up)
 	*/
 	public int alt; 
+ 	/**
+	* Age of DGPS info
+	*/
+	public int dgps_age; 
  	/**
 	* GPS HDOP horizontal dilution of position in cm (m*100). If unknown, set to: UINT16_MAX
 	*/
@@ -57,6 +60,10 @@ public class msg_gps_raw_int extends MAVLinkMessage{
 	* Number of satellites visible. If unknown, set to 255
 	*/
 	public byte satellites_visible; 
+ 	/**
+	* Number of DGPS satellites
+	*/
+	public byte dgps_numch; 
 
 	/**
 	 * Generates the payload for a mavlink message for a message of this type
@@ -67,22 +74,24 @@ public class msg_gps_raw_int extends MAVLinkMessage{
 		packet.len = MAVLINK_MSG_LENGTH;
 		packet.sysid = 255;
 		packet.compid = 190;
-		packet.msgid = MAVLINK_MSG_ID_GPS_RAW_INT;
+		packet.msgid = MAVLINK_MSG_ID_GPS2_RAW;
 		packet.payload.putLong(time_usec);
 		packet.payload.putInt(lat);
 		packet.payload.putInt(lon);
 		packet.payload.putInt(alt);
+		packet.payload.putInt(dgps_age);
 		packet.payload.putShort(eph);
 		packet.payload.putShort(epv);
 		packet.payload.putShort(vel);
 		packet.payload.putShort(cog);
 		packet.payload.putByte(fix_type);
 		packet.payload.putByte(satellites_visible);
+		packet.payload.putByte(dgps_numch);
 		return packet;		
 	}
 
     /**
-     * Decode a gps_raw_int message into this class fields
+     * Decode a gps2_raw message into this class fields
      *
      * @param payload The message to decode
      */
@@ -92,19 +101,21 @@ public class msg_gps_raw_int extends MAVLinkMessage{
 	    lat = payload.getInt();
 	    lon = payload.getInt();
 	    alt = payload.getInt();
+	    dgps_age = payload.getInt();
 	    eph = payload.getShort();
 	    epv = payload.getShort();
 	    vel = payload.getShort();
 	    cog = payload.getShort();
 	    fix_type = payload.getByte();
-	    satellites_visible = payload.getByte();    
+	    satellites_visible = payload.getByte();
+	    dgps_numch = payload.getByte();    
     }
 
      /**
      * Constructor for a new message, just initializes the msgid
      */
-    public msg_gps_raw_int(){
-    	msgid = MAVLINK_MSG_ID_GPS_RAW_INT;
+    public msg_gps2_raw(){
+    	msgid = MAVLINK_MSG_ID_GPS2_RAW;
     }
 
     /**
@@ -112,20 +123,20 @@ public class msg_gps_raw_int extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_gps_raw_int(MAVLinkPacket mavLinkPacket){
+    public msg_gps2_raw(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = MAVLINK_MSG_ID_GPS_RAW_INT;
+        this.msgid = MAVLINK_MSG_ID_GPS2_RAW;
         unpack(mavLinkPacket.payload);
-        //Log.d("MAVLink", "GPS_RAW_INT");
-        //Log.d("MAVLINK_MSG_ID_GPS_RAW_INT", toString());
+        //Log.d("MAVLink", "GPS2_RAW");
+        //Log.d("MAVLINK_MSG_ID_GPS2_RAW", toString());
     }
     
-                    
+                        
     /**
      * Returns a string with the MSG name and data
      */
     public String toString(){
-    	return "MAVLINK_MSG_ID_GPS_RAW_INT -"+" time_usec:"+time_usec+" lat:"+lat+" lon:"+lon+" alt:"+alt+" eph:"+eph+" epv:"+epv+" vel:"+vel+" cog:"+cog+" fix_type:"+fix_type+" satellites_visible:"+satellites_visible+"";
+    	return "MAVLINK_MSG_ID_GPS2_RAW -"+" time_usec:"+time_usec+" lat:"+lat+" lon:"+lon+" alt:"+alt+" dgps_age:"+dgps_age+" eph:"+eph+" epv:"+epv+" vel:"+vel+" cog:"+cog+" fix_type:"+fix_type+" satellites_visible:"+satellites_visible+" dgps_numch:"+dgps_numch+"";
     }
 }

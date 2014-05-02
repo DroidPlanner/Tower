@@ -1,4 +1,4 @@
-// MESSAGE OPTICAL_FLOW PACKING
+// MESSAGE HIL_OPTICAL_FLOW PACKING
 package com.MAVLink.Messages.ardupilotmega;
 
 import com.MAVLink.Messages.MAVLinkMessage;
@@ -7,13 +7,13 @@ import com.MAVLink.Messages.MAVLinkPayload;
 //import android.util.Log;
 
 /**
-* Optical flow from a flow sensor (e.g. optical mouse sensor)
+* Simulated optical flow from a flow sensor (e.g. optical mouse sensor)
 */
-public class msg_optical_flow extends MAVLinkMessage{
+public class msg_hil_optical_flow extends MAVLinkMessage{
 
-	public static final int MAVLINK_MSG_ID_OPTICAL_FLOW = 100;
+	public static final int MAVLINK_MSG_ID_HIL_OPTICAL_FLOW = 114;
 	public static final int MAVLINK_MSG_LENGTH = 26;
-	private static final long serialVersionUID = MAVLINK_MSG_ID_OPTICAL_FLOW;
+	private static final long serialVersionUID = MAVLINK_MSG_ID_HIL_OPTICAL_FLOW;
 	
 
  	/**
@@ -33,11 +33,11 @@ public class msg_optical_flow extends MAVLinkMessage{
 	*/
 	public float ground_distance; 
  	/**
-	* Flow in pixels * 10 in x-sensor direction (dezi-pixels)
+	* Flow in pixels in x-sensor direction
 	*/
 	public short flow_x; 
  	/**
-	* Flow in pixels * 10 in y-sensor direction (dezi-pixels)
+	* Flow in pixels in y-sensor direction
 	*/
 	public short flow_y; 
  	/**
@@ -58,7 +58,7 @@ public class msg_optical_flow extends MAVLinkMessage{
 		packet.len = MAVLINK_MSG_LENGTH;
 		packet.sysid = 255;
 		packet.compid = 190;
-		packet.msgid = MAVLINK_MSG_ID_OPTICAL_FLOW;
+		packet.msgid = MAVLINK_MSG_ID_HIL_OPTICAL_FLOW;
 		packet.payload.putLong(time_usec);
 		packet.payload.putFloat(flow_comp_m_x);
 		packet.payload.putFloat(flow_comp_m_y);
@@ -71,7 +71,7 @@ public class msg_optical_flow extends MAVLinkMessage{
 	}
 
     /**
-     * Decode a optical_flow message into this class fields
+     * Decode a hil_optical_flow message into this class fields
      *
      * @param payload The message to decode
      */
@@ -90,8 +90,8 @@ public class msg_optical_flow extends MAVLinkMessage{
      /**
      * Constructor for a new message, just initializes the msgid
      */
-    public msg_optical_flow(){
-    	msgid = MAVLINK_MSG_ID_OPTICAL_FLOW;
+    public msg_hil_optical_flow(){
+    	msgid = MAVLINK_MSG_ID_HIL_OPTICAL_FLOW;
     }
 
     /**
@@ -99,13 +99,13 @@ public class msg_optical_flow extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_optical_flow(MAVLinkPacket mavLinkPacket){
+    public msg_hil_optical_flow(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = MAVLINK_MSG_ID_OPTICAL_FLOW;
+        this.msgid = MAVLINK_MSG_ID_HIL_OPTICAL_FLOW;
         unpack(mavLinkPacket.payload);
-        //Log.d("MAVLink", "OPTICAL_FLOW");
-        //Log.d("MAVLINK_MSG_ID_OPTICAL_FLOW", toString());
+        //Log.d("MAVLink", "HIL_OPTICAL_FLOW");
+        //Log.d("MAVLINK_MSG_ID_HIL_OPTICAL_FLOW", toString());
     }
     
                 
@@ -113,6 +113,6 @@ public class msg_optical_flow extends MAVLinkMessage{
      * Returns a string with the MSG name and data
      */
     public String toString(){
-    	return "MAVLINK_MSG_ID_OPTICAL_FLOW -"+" time_usec:"+time_usec+" flow_comp_m_x:"+flow_comp_m_x+" flow_comp_m_y:"+flow_comp_m_y+" ground_distance:"+ground_distance+" flow_x:"+flow_x+" flow_y:"+flow_y+" sensor_id:"+sensor_id+" quality:"+quality+"";
+    	return "MAVLINK_MSG_ID_HIL_OPTICAL_FLOW -"+" time_usec:"+time_usec+" flow_comp_m_x:"+flow_comp_m_x+" flow_comp_m_y:"+flow_comp_m_y+" ground_distance:"+ground_distance+" flow_x:"+flow_x+" flow_y:"+flow_y+" sensor_id:"+sensor_id+" quality:"+quality+"";
     }
 }
