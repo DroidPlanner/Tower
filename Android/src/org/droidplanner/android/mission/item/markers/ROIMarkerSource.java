@@ -18,6 +18,6 @@ class ROIMarkerSource extends MissionItemMarkerSource {
 
     @Override
     protected int getIconResource() {
-        return R.drawable.ic_wp_map;
+        return R.drawable.ic_roi;
     }
 }
