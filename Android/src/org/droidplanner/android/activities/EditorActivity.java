@@ -410,6 +410,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 					@Override
 					public void onYes() {
 						missionRender.clear();
+						missionRender.addTakeoff();
 					}
 
 					@Override

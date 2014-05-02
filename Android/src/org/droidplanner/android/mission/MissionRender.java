@@ -17,6 +17,7 @@ import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.mission.MissionItem;
+import org.droidplanner.core.mission.commands.Takeoff;
 import org.droidplanner.core.mission.survey.Survey;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.core.mission.waypoints.Waypoint;
@@ -176,7 +177,13 @@ public class MissionRender implements MapPath.PathSource {
         mMission.addWaypoint(waypoint);
     }
 
-    /**
+    public void addTakeoff() {
+		Takeoff takeoff = new Takeoff(mMission, new Altitude(10));
+		mMissionItems.add(new MissionItemRender(this, takeoff));
+        mMission.addWaypoint(takeoff);		
+	}
+
+	/**
      * Returns the order for the given argument in the mission set.
      * @param item
      * @return order of the given argument
