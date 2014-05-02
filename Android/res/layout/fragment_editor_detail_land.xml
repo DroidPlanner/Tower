@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/opaque_white"
+	tools:ignore="HardcodedText"
+    >
+    <org.droidplanner.android.widgets.spinners.SpinnerSelfSelect
+        android:id="@+id/spinnerWaypointType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+		android:layout_alignParentTop="true"
+        android:entries="@array/ExampleWaypointType"
+        />
+
+    <RelativeLayout
+		android:id="@+id/title_rect"
+		android:layout_width="match_parent"
+		android:layout_height="64dp"
+		android:layout_alignParentTop="true"
+		android:background="@drawable/wp_title_rectangle">
+
+		<TextView
+			android:id="@+id/WaypointIndex"
+			style="@style/largeMissionDetailText"
+			android:layout_width="64dp"
+			android:layout_height="wrap_content"
+			android:layout_centerVertical="true"
+			android:text="22" />
+
+		<View
+			android:id="@+id/title_div"
+			android:layout_width="1dp"
+			android:layout_marginTop="5dp"
+			android:layout_height="54dp"
+			android:layout_toRightOf="@id/WaypointIndex"
+			android:layout_alignParentTop="true"
+			android:background="@drawable/wp_title_div"/>
+
+		<RelativeLayout
+			android:id="@+id/title_content"
+			android:layout_toRightOf="@id/title_div"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:layout_centerVertical="true">
+
+			<TextView
+				android:id="@+id/WaypointType"
+				style="@style/missionHeaderTitle"
+				android:layout_marginLeft="12dp"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/waypointType_Land"
+                android:textAllCaps="true" />
+
+			<TextView
+				android:id="@+id/DistanceLabel"
+				style="@style/missionHeaderlabel"
+				android:layout_alignLeft="@id/WaypointType"
+				android:layout_below="@id/WaypointType"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/distance_to_home" />
+
+			<TextView
+				android:id="@+id/DistanceValue"
+				style="@style/missionHeaderValue"
+				android:layout_toRightOf="@id/DistanceLabel"
+				android:layout_alignBaseline="@id/DistanceLabel"
+                android:layout_marginLeft="12dp"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="20m" />
+		</RelativeLayout>
+	</RelativeLayout>
+
+	<ImageView
+        android:id="@+id/menuHint"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentRight="true"
+		android:layout_alignBottom="@id/title_rect"
+		android:src="@drawable/ic_menu_hint"
+		android:layout_margin="10dp"
+		tools:ignore="ContentDescription"
+		/>
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title_rect">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+			<TextView
+			    android:id="@+id/textView1"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    style="@style/ModeDetailText"
+			    android:background="@drawable/mode_desc_rectangle"
+			    android:text="@string/waypointInfo_Land" />
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+		        android:padding="12dp"
+				android:orientation="vertical" >
+
+			</LinearLayout>
+		</LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/opaque_white"
+    android:orientation="vertical" >
+
+    <org.droidplanner.android.widgets.spinners.SpinnerSelfSelect
+        android:id="@+id/spinnerWaypointType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:entries="@array/ExampleWaypointType" />
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <FrameLayout
+                android:id="@+id/optionLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <CheckBox
+                    android:id="@string/loiter_ccw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="20dp"
+                    android:text="@string/loiter_ccw" />
+
+                <org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText
+                    android:id="@+id/loiterRadius"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:layout_marginRight="10dp"
+                    android:visibility="visible"
+                    app:inc="1"
+                    app:max="100"
+                    app:min="0"
+                    app:title="@string/loiter_radius"
+                    app:unit="m" >
+                </org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText>
+            </FrameLayout>
+
+            <org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText
+                android:id="@+id/waypointAngle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                app:inc="5"
+                app:max="360"
+                app:min="0"
+                app:title="@string/waypoint_angle"
+                app:unit="°" >
+            </org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText>
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/waypointInfo_Loiter" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

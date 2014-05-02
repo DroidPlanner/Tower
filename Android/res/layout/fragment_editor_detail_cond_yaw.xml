@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/opaque_white"
+    android:orientation="vertical" >
+
+    <org.droidplanner.android.widgets.spinners.SpinnerSelfSelect
+        android:id="@+id/spinnerWaypointType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:entries="@array/ExampleWaypointType" />
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText
+                android:id="@+id/waypointAngle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                custom:inc="5"
+                custom:max="360"
+                custom:min="0"
+                custom:title="@string/waypoint_angle"
+                custom:unit="°" >
+            </org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText>
+
+            <org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText
+                android:id="@+id/waypointYawRate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                custom:inc="1"
+                custom:max="50"
+                custom:min="0"
+                custom:title="@string/waypoint_yawrate"
+                custom:unit="°/s" >
+            </org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText>
+
+            <CheckBox
+                android:id="@+id/checkBoxYawDir"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.00"
+                android:text="@string/waypoint_yawdir" />
+
+            <CheckBox
+                android:id="@+id/checkBoxYawOffset"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.00"
+                android:text="@string/waypoint_yawoffset" />
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/waypointInfo_CondYaw" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
