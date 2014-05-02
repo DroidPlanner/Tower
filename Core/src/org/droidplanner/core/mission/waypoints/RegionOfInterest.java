@@ -24,7 +24,7 @@ public class RegionOfInterest extends SpatialCoordItem {
 	public List<msg_mission_item> packMissionItem() {
 		List<msg_mission_item> list = super.packMissionItem();
 		msg_mission_item mavMsg = list.get(0);
-		mavMsg.command = MAV_CMD.MAV_CMD_NAV_ROI;
+		mavMsg.command = MAV_CMD.MAV_CMD_DO_SET_ROI;
 		return list;
 	}
 

@@ -202,7 +202,7 @@ public class Mission extends DroneVariable {
 			case MAV_CMD.MAV_CMD_NAV_TAKEOFF:
 				received.add(new Takeoff(msg, this));
 				break;
-			case MAV_CMD.MAV_CMD_NAV_ROI:
+			case MAV_CMD.MAV_CMD_DO_SET_ROI:
 				received.add(new RegionOfInterest(msg, this));
 			default:
 				break;
