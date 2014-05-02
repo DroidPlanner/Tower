@@ -10,9 +10,9 @@ import org.droidplanner.core.drone.DroneVariable;
 import org.droidplanner.core.helpers.geoTools.GeoTools;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.helpers.units.Length;
+import org.droidplanner.core.mission.commands.Takeoff;
 import org.droidplanner.core.mission.waypoints.Land;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
-import org.droidplanner.core.mission.waypoints.Takeoff;
 import org.droidplanner.core.mission.waypoints.Waypoint;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;

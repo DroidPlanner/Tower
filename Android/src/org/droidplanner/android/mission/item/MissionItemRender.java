@@ -18,6 +18,7 @@ import org.droidplanner.android.mission.item.markers.MissionItemMarkerSource;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.MissionItem;
+import org.droidplanner.core.mission.commands.Takeoff;
 import org.droidplanner.core.mission.survey.Survey;
 import org.droidplanner.core.mission.survey.grid.Grid;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
@@ -88,8 +89,7 @@ public class MissionItemRender implements Comparable<MissionItemRender> {
             case LOITER:
             case LOITER_INF:
             case LOITERT:
-            case LOITERN:
-            case TAKEOFF:
+            case LOITERN:            
             case WAYPOINT:
                 pathPoints.add(DroneHelper.CoordToLatLang(((SpatialCoordItem)
                         mMissionItem).getCoordinate()));
@@ -99,6 +99,7 @@ public class MissionItemRender implements Comparable<MissionItemRender> {
             	if (grid != null) {				
             		pathPoints.addAll(DroneHelper.CoordToLatLang(grid.gridPoints));
             	}
+            case TAKEOFF:
             default:
                 break;
         }
@@ -138,6 +139,9 @@ public class MissionItemRender implements Comparable<MissionItemRender> {
             }
         } else if (mMissionItem instanceof Survey) {
 			altitudeView.setText(((Survey)mMissionItem).surveyData.getAltitude().toString());
+
+        } else if (mMissionItem instanceof Takeoff) {
+			altitudeView.setText(((Takeoff)mMissionItem).getFinishedAlt().toString());
 		} else {
             altitudeView.setText("");
         }
