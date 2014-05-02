@@ -86,7 +86,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 
         final MissionProxy missionProxy = ((DroidPlannerApp)getActivity().getApplication())
                 .missionProxy;
-        itemRender = missionProxy.getSelected().get(0);
+        itemRender = missionProxy.selection.getSelected().get(0);
 
 		setupViews(view);
 		return view;

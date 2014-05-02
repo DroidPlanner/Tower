@@ -40,8 +40,8 @@ public abstract class SpatialCoordItem extends MissionItem {
 	public List<msg_mission_item> packMissionItem() {
 		List<msg_mission_item> list = super.packMissionItem();
 		msg_mission_item mavMsg = list.get(0);
-		mavMsg.x = (float) coordinate.getX();
-		mavMsg.y = (float) coordinate.getY();
+		mavMsg.x = (float) coordinate.getLat();
+		mavMsg.y = (float) coordinate.getLng();
 		mavMsg.z = (float) coordinate.getAltitude().valueInMeters();
 		return list;
 	}
@@ -53,7 +53,7 @@ public abstract class SpatialCoordItem extends MissionItem {
 	}
 
 	public void setAltitude(Altitude altitude) {
-		coordinate.set(coordinate.getX(), coordinate.getY(), altitude);
+		coordinate.set(coordinate.getLat(), coordinate.getLng(), altitude);
 	}
 
 	public void setPosition(Coord2D position) {

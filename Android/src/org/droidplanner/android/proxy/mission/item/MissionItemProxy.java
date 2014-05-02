@@ -14,6 +14,8 @@ import org.droidplanner.android.proxy.mission.item.markers.MissionItemMarkerInfo
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.MissionItem;
+import org.droidplanner.core.mission.survey.Survey;
+import org.droidplanner.core.mission.survey.grid.Grid;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 
 import java.util.ArrayList;
@@ -86,7 +88,12 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
             case WAYPOINT:
                 pathPoints.add(((SpatialCoordItem) mMissionItem).getCoordinate());
                 break;
-
+            
+            case SURVEY:
+                Grid grid; = ((Survey) mMissionItem).grid;
+            	if (grid != null) {				
+            		pathPoints.addAll(DroneHelper.CoordToLatLang(grid.gridPoints));
+            	}
             default:
                 break;
         }
@@ -124,7 +131,9 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
             } catch (Exception e) {
                 // Do nothing when last item doesn't have an altitude
             }
-        } else {
+        } else if (mMissionItem instanceof Survey) {
+			altitudeView.setText(((Survey)mMissionItem).surveyData.getAltitude().toString());
+		} else {
             altitudeView.setText("");
         }
 

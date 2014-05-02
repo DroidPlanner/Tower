@@ -38,8 +38,9 @@ public class Survey extends MissionItem {
 		mission.notifyMissionUpdate();
 	}
 
-	private void build() throws Exception {
+	public void build() throws Exception {
 		// TODO find better point than (0,0) to reference the grid
+		grid = null;
 		GridBuilder gridBuilder = new GridBuilder(polygon, surveyData,
 				new Coord2D(0, 0));
 		polygon.checkIfValid();

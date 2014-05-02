@@ -57,8 +57,8 @@ public class Home extends DroneVariable {
 		mavMsg.target_component = 1;
 		mavMsg.target_system = 1;
 		if (isValid()) {
-			mavMsg.x = (float) getCoord().getX();
-			mavMsg.y = (float) getCoord().getY();
+			mavMsg.x = (float) getCoord().getLat();
+			mavMsg.y = (float) getCoord().getLng();
 			mavMsg.z = (float) getAltitude().valueInMeters();
 		}
 		return mavMsg;

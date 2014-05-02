@@ -13,6 +13,7 @@ import org.droidplanner.core.mission.MissionItemType;
 import org.droidplanner.core.mission.survey.Survey;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
@@ -111,6 +112,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 	@Override
 	public void onSpinnerItemSelected(Spinner spinner, int position, String text) {
 		survey.setCameraInfo(cameraAdapter.getCamera(position));
+		onSeekBarChanged();
 	}
 
 	@Override
@@ -118,6 +120,15 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 		survey.update(angleView.getValue(),
 				new Altitude(altitudeView.getValue()), overlapView.getValue(),
 				sidelapView.getValue());
+		try {
+			survey.build();
+			altitudeView.setBackgroundColor(Color.TRANSPARENT);
+		} catch (Exception e) {
+			e.printStackTrace();
+			altitudeView.setBackgroundColor(Color.RED);			
+		}	
+
+		survey.getMission().notifyMissionUpdate();
 	}
 
 	@Override

@@ -48,8 +48,8 @@ public class GeoTools {
 	public static Coord2D newCoordFromBearingAndDistance(Coord2D origin,
 			double bearing, double distance) {
 
-		double lat = origin.getY();
-		double lon = origin.getX();
+		double lat = origin.getLat();
+		double lon = origin.getLng();
 		double lat1 = Math.toRadians(lat);
 		double lon1 = Math.toRadians(lon);
 		double brng = Math.toRadians(bearing);
@@ -72,16 +72,16 @@ public class GeoTools {
 	 */
 	static double getArcInRadians(Coord2D from, Coord2D to) {
 
-		double latitudeArc = Math.toRadians(from.getY() - to.getY());
-		double longitudeArc = Math.toRadians(from.getX() - to.getX());
+		double latitudeArc = Math.toRadians(from.getLat() - to.getLat());
+		double longitudeArc = Math.toRadians(from.getLng() - to.getLng());
 
 		double latitudeH = Math.sin(latitudeArc * 0.5);
 		latitudeH *= latitudeH;
 		double lontitudeH = Math.sin(longitudeArc * 0.5);
 		lontitudeH *= lontitudeH;
 
-		double tmp = Math.cos(Math.toRadians(from.getY()))
-				* Math.cos(Math.toRadians(to.getY()));
+		double tmp = Math.cos(Math.toRadians(from.getLat()))
+				* Math.cos(Math.toRadians(to.getLat()));
 		return Math.toDegrees(2.0 * Math.asin(Math.sqrt(latitudeH + tmp
 				* lontitudeH)));
 	}

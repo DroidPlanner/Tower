@@ -2,6 +2,7 @@ package org.droidplanner.android.proxy.mission;
 
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
+import org.droidplanner.android.mission.MissionSelection;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.coordinates.Coord3D;
@@ -19,8 +20,7 @@ import java.util.List;
 
 /**
  * This class is used to render a {@link org.droidplanner.core.mission.Mission} object on the
- * Android
- * side.
+ * Android side.
  */
 public class MissionProxy implements DPMap.PathSource {
 
@@ -31,16 +31,7 @@ public class MissionProxy implements DPMap.PathSource {
      */
     private final List<MissionItemProxy> mMissionItems = new ArrayList<MissionItemProxy>();
 
-    /**
-     * Stores the selected mission items renders.
-     */
-    private final List<MissionItemProxy> mSelectedItems = new ArrayList<MissionItemProxy>();
-
-    /**
-     * Stores the list of selection update listeners.
-     */
-    private final List<OnSelectionUpdateListener> mSelectionsListeners = new
-            ArrayList<OnSelectionUpdateListener>();
+    public MissionSelection selection = new MissionSelection();
 
     public MissionProxy(Mission mission) {
         mMission = mission;
@@ -49,7 +40,6 @@ public class MissionProxy implements DPMap.PathSource {
 
     /**
      * Provides access to the class' mission instance.
-     *
      * @return {@link org.droidplanner.core.mission.Mission} object
      */
     public Mission getMission() {
@@ -61,6 +51,7 @@ public class MissionProxy implements DPMap.PathSource {
     }
 
     /**
+     * TODO: update based on following method
      * @return the map markers corresponding to this mission's command set.
      */
     public List<MarkerInfo> getMarkersInfos() {
@@ -74,23 +65,40 @@ public class MissionProxy implements DPMap.PathSource {
         return markerInfos;
     }
 
+//    /**
+//     * @return the map markers corresponding to this mission's command set.
+//     */
+//    public List<MarkerSource> getMarkers(){
+//        List<MarkerSource> markers = new ArrayList<MarkerSource>();
+//        for(MissionItemRender itemRender: mMissionItems){
+//            MissionItemGenericMarkerSource markerSource = itemRender.getMarkerSource();
+//            if (markerSource != null){
+//                if (markerSource instanceof MissionItemMarkerSource) {
+//                    markers.add((MissionItemMarkerSource)markerSource);
+//                }else if(markerSource instanceof MissionItemSurveyMarkerSource) {
+//                    markers.addAll(((MissionItemSurveyMarkerSource)markerSource).getMarkers());
+//                }
+//            }
+//        }
+//        return markers;
+//    }
+    
     /**
      * Update the state for this object based on the state of the Mission object.
      */
-    public void refresh() {
-        mSelectedItems.clear();
+    public void refresh(){
+        selection.mSelectedItems.clear();
         mMissionItems.clear();
 
         for (MissionItem item : mMission.getItems()) {
             mMissionItems.add(new MissionItemProxy(this, item));
         }
 
-        notifySelectionUpdate();
+        selection.notifySelectionUpdate();
     }
 
     /**
      * Checks if this mission render contains the passed argument.
-     *
      * @param item mission item render object
      * @return true if this mission render contains the passed argument
      */
@@ -100,37 +108,34 @@ public class MissionProxy implements DPMap.PathSource {
 
     /**
      * Removes a waypoint mission item from the set of mission items commands.
-     *
      * @param item item to remove
      */
-    public void removeWaypoint(MissionItemProxy item) {
+    public void removeItem(MissionItemProxy item) {
         mMissionItems.remove(item);
-        mSelectedItems.remove(item);
+        selection.mSelectedItems.remove(item);
         mMission.removeWaypoint(item.getMissionItem());
-        notifySelectionUpdate();
+        selection.notifySelectionUpdate();
     }
 
     /**
      * Removes a set of mission items from the mission' set.
-     *
      * @param items list of items to remove
      */
-    public void removeWaypoints(List<MissionItemProxy> items) {
-        mMissionItems.removeAll(items);
-        mSelectedItems.removeAll(items);
-
-        final List<MissionItem> toRemove = new ArrayList<MissionItem>(items.size());
-        for (MissionItemProxy item : items) {
-            toRemove.add(item.getMissionItem());
-        }
-
+    public void removeItemList(List<MissionItemProxy> items){
+    	
+    	final List<MissionItem> toRemove = new ArrayList<MissionItem>(items.size());
+    	for(MissionItemProxy item: items){
+    		toRemove.add(item.getMissionItem());
+    	}
+    	
+    	mMissionItems.removeAll(items);
+    	selection.mSelectedItems.removeAll(items);
         mMission.removeWaypoints(toRemove);
-        notifySelectionUpdate();
+        selection.notifySelectionUpdate();
     }
 
     /**
      * Adds a survey mission item to the set.
-     *
      * @param points 2D points making up the survey
      */
     public void addSurveyPolygon(List<Coord2D> points) {
@@ -142,7 +147,6 @@ public class MissionProxy implements DPMap.PathSource {
     /**
      * Add a set of waypoints generated around the passed 2D points.
      * TODO: replace Coord2D with library's classes such as android.graphics.Point
-     *
      * @param points list of points used to generate the mission waypoints
      */
     public void addWaypoints(List<Coord2D> points) {
@@ -160,7 +164,6 @@ public class MissionProxy implements DPMap.PathSource {
     /**
      * Add a waypoint generated around the passed 2D point.
      * TODO: replace Coord2D with library's classes such as android.graphics.Point
-     *
      * @param point point used to generate the mission waypoint
      */
     public void addWaypoint(Coord2D point) {
@@ -172,7 +175,6 @@ public class MissionProxy implements DPMap.PathSource {
 
     /**
      * Returns the order for the given argument in the mission set.
-     *
      * @param item
      * @return order of the given argument
      */
@@ -182,7 +184,6 @@ public class MissionProxy implements DPMap.PathSource {
 
     /**
      * Updates a mission item render
-     *
      * @param oldItem mission item render to update
      * @param newItem new mission item render
      */
@@ -197,9 +198,9 @@ public class MissionProxy implements DPMap.PathSource {
         //Update the mission object
         mMission.replace(oldItem.getMissionItem(), newItem.getMissionItem());
 
-        if (selectionContains(oldItem)) {
-            removeItemFromSelection(oldItem);
-            addToSelection(newItem);
+        if(selection.selectionContains(oldItem)){
+            selection.removeItemFromSelection(oldItem);
+            selection.addToSelection(newItem);
         }
     }
 
@@ -211,128 +212,53 @@ public class MissionProxy implements DPMap.PathSource {
         mMission.reverse();
     }
 
-    /**
-     * Deselects all mission items renders
-     */
-    public void clearSelection() {
-        mSelectedItems.clear();
-        notifySelectionUpdate();
-    }
+    public void clear() {
+    	removeItemList(mMissionItems);	
+	}
 
-    /**
-     * Checks if the passed mission item render is selected.
-     *
-     * @param item mission item render to check for selection
-     * @return true if selected
-     */
-    public boolean selectionContains(MissionItemProxy item) {
-        return mSelectedItems.contains(item);
-    }
-
-    /**
-     * Selects the given list of mission items renders
-     * TODO: check if the given mission items renders belong to this mission render
-     *
-     * @param items list of mission items renders to select.
-     */
-    public void addToSelection(List<MissionItemProxy> items) {
-        mSelectedItems.addAll(items);
-        notifySelectionUpdate();
-    }
-
-    /**
-     * Adds the given mission item render to the selected list.
-     * TODO: check the mission item render belongs to this mission render
-     *
-     * @param item mission item render to add to the selected list.
-     */
-    public void addToSelection(MissionItemProxy item) {
-        mSelectedItems.add(item);
-        notifySelectionUpdate();
-    }
-
-    /**
-     * Selects only the given mission item render.
-     * TODO: check the mission item render belongs to this mission render
-     *
-     * @param item mission item render to select.
-     */
-    public void setSelectionTo(MissionItemProxy item) {
-        mSelectedItems.clear();
-        mSelectedItems.add(item);
-        notifySelectionUpdate();
-    }
-
-    /**
-     * Selects only the given mission items renders.
-     * TODO: check the mission items renders belong to this mission render
-     *
-     * @param items list of mission items renders to select.
-     */
-    public void setSelectionTo(List<MissionItemProxy> items) {
-        mSelectedItems.clear();
-        mSelectedItems.addAll(items);
-        notifySelectionUpdate();
-    }
-
-    /**
-     * Removes the given mission item render from the selected list.
-     * TODO: check the argument belongs to this mission render
-     *
-     * @param item mission item rendere to remove from the selected list
-     */
-    public void removeItemFromSelection(MissionItemProxy item) {
-        mSelectedItems.remove(item);
-        notifySelectionUpdate();
-    }
-
-    /**
-     * @return the list of selected mission items renders
-     */
-    public List<MissionItemProxy> getSelected() {
-        return mSelectedItems;
-    }
-
-    /**
+	/**
      * Moves the selected objects up or down into the mission listing
-     * <p/>
+     *
      * Think of it as pushing the selected objects, while you can only move a
      * single unselected object per turn.
      *
-     * @param moveUp true to move up, but can be false to move down
+     * @param moveUp
+     *            true to move up, but can be false to move down
      */
-    public void moveSelection(boolean moveUp) {
-        if (mSelectedItems.size() > 0 || mSelectedItems.size() < mMissionItems.size()) {
-            Collections.sort(mSelectedItems);
-            if (moveUp) {
+    public void moveSelection(boolean moveUp){
+        if(selection.mSelectedItems.size() > 0 || selection.mSelectedItems.size() < mMissionItems.size()){
+            Collections.sort(selection.mSelectedItems);
+            if(moveUp){
                 Collections.rotate(getSubListToRotateUp(), 1);
-            } else {
+            }
+            else{
                 Collections.rotate(getSubListToRotateDown(), -1);
             }
 
-            notifySelectionUpdate();
+            selection.notifySelectionUpdate();
             mMission.notifyMissionUpdate();
         }
     }
 
     private List<MissionItemProxy> getSubListToRotateUp() {
-        final int from = mMissionItems.indexOf(mSelectedItems.get(0));
+        final int from = mMissionItems.indexOf(selection.mSelectedItems.get(0));
         int to = from;
-        do {
-            if (mMissionItems.size() < to + 2)
+        do{
+            if(mMissionItems.size() < to + 2)
                 return mMissionItems.subList(0, 0);
-        } while (mSelectedItems.contains(mMissionItems.get(++to)));
+        }while(selection.mSelectedItems.contains(mMissionItems.get(++to)));
 
         return mMissionItems.subList(from, to + 1); //includes one unselected item
     }
 
     private List<MissionItemProxy> getSubListToRotateDown() {
-        final int from = mMissionItems.indexOf(mSelectedItems.get(mSelectedItems.size() - 1));
+        final int from = mMissionItems.indexOf(selection.mSelectedItems.get(mSelectedItems.size() - 
+                1));
         int to = from;
-        do {
-            if (to < 1)
+        do{
+            if(to < 1)
                 return mMissionItems.subList(0, 0);
-        } while (mSelectedItems.contains(mMissionItems.get(--to)));
+        } while(selection.mSelectedItems.contains(mMissionItems.get(--to)));
 
         return mMissionItems.subList(to, from + 1); // includes one unselected item.
     }
@@ -340,7 +266,7 @@ public class MissionProxy implements DPMap.PathSource {
     public Length getAltitudeDiffFromPreviousItem(MissionItemProxy waypointRender) throws
             IllegalArgumentException {
         MissionItem waypoint = waypointRender.getMissionItem();
-        if (!(waypoint instanceof SpatialCoordItem))
+        if(!(waypoint instanceof SpatialCoordItem))
             throw new IllegalArgumentException("Invalid mission item type.");
 
         return mMission.getAltitudeDiffFromPreviousItem((SpatialCoordItem) waypoint);
@@ -349,33 +275,10 @@ public class MissionProxy implements DPMap.PathSource {
     public Length getDistanceFromLastWaypoint(MissionItemProxy waypointRender) throws
             IllegalArgumentException {
         MissionItem waypoint = waypointRender.getMissionItem();
-        if (!(waypoint instanceof SpatialCoordItem))
+        if(!(waypoint instanceof SpatialCoordItem))
             throw new IllegalArgumentException("Invalid mission item type.");
 
         return mMission.getDistanceFromLastWaypoint((SpatialCoordItem) waypoint);
-    }
-
-    /**
-     * Adds given argument to the list of selection update listeners.
-     *
-     * @param listener
-     */
-    public void addSelectionUpdateListener(OnSelectionUpdateListener listener) {
-        mSelectionsListeners.add(listener);
-    }
-
-    private void notifySelectionUpdate() {
-        for (OnSelectionUpdateListener listener : mSelectionsListeners)
-            listener.onSelectionUpdate(mSelectedItems);
-    }
-
-    /**
-     * Removes given argument from the list of selection update listeners.
-     *
-     * @param listener
-     */
-    public void removeSelectionUpdateListener(OnSelectionUpdateListener listener) {
-        mSelectionsListeners.remove(listener);
     }
 
     @Override
@@ -387,11 +290,13 @@ public class MissionProxy implements DPMap.PathSource {
         return pathPoints;
     }
 
-    /**
-     * Classes interested in getting selection update should implement this interface.
-     */
-    public interface OnSelectionUpdateListener {
-        public void onSelectionUpdate(List<MissionItemProxy> selected);
-    }
+	public void removeSelection(MissionSelection missionSelection) {
+		removeItemList(missionSelection.mSelectedItems);
+	}
+
+	public void move(MissionItemProxy item, Coord2D position) {
+			((SpatialCoordItem)item.getMissionItem()).setPosition(position);	
+            mMission.notifyMissionUpdate();	
+	}
 
 }

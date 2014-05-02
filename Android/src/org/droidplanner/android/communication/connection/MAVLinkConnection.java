@@ -103,7 +103,6 @@ public abstract class MAVLinkConnection extends Thread {
 				listener.onReceiveMessage(msg);
 			}
 		}
-
 	}
 
 	private void saveToLog(MAVLinkPacket receivedPacket) throws IOException {

@@ -78,6 +78,7 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
 		// item.setYawAngle((float) yawSeekBar.getValue());
 		// item.setOrbitalRadius((float) orbitSeekBar.getValue());
 		// item.setOrbitCCW(orbitCCW.isChecked());
+		item.getMission().notifyMissionUpdate();		
 	}
 
 }

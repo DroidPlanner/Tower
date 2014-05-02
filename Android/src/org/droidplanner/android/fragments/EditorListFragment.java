@@ -5,12 +5,12 @@ import it.sephiroth.android.library.widget.AdapterView.OnItemClickListener;
 import it.sephiroth.android.library.widget.AdapterView.OnItemLongClickListener;
 import it.sephiroth.android.library.widget.HListView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
+import org.droidplanner.android.mission.MissionSelection;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.widgets.adapterViews.MissionItemRenderView;
@@ -31,7 +31,7 @@ import android.widget.ListView;
 
 public class EditorListFragment extends Fragment implements
 		OnItemLongClickListener, OnItemClickListener, OnDroneListener,
-		OnClickListener, MissionProxy.OnSelectionUpdateListener {
+		OnClickListener, MissionSelection.OnSelectionUpdateListener {
 
 	private HListView list;
 	private MissionProxy missionProxy;
@@ -70,14 +70,14 @@ public class EditorListFragment extends Fragment implements
 		super.onStart();
 		updateViewVisibility();
 		drone.events.addDroneListener(this);
-        missionProxy.addSelectionUpdateListener(this);
+        missionProxy.selection.addSelectionUpdateListener(this);
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
 		drone.events.removeDroneListener(this);
-        missionProxy.removeSelectionUpdateListener(this);
+        missionProxy.selection.removeSelectionUpdateListener(this);
 	}
 
 	@Override
@@ -107,20 +107,6 @@ public class EditorListFragment extends Fragment implements
 				view.setVisibility(View.INVISIBLE);
 			editorListener.onListVisibilityChanged();
 		}
-	}
-
-	public void deleteSelected() {
-		SparseBooleanArray selected = list.getCheckedItemPositions();
-		ArrayList<MissionItemProxy> toRemove = new ArrayList<MissionItemProxy>();
-
-		for (int i = 0; i < selected.size(); i++) {
-			if (selected.valueAt(i)) {
-				MissionItemProxy item = adapter.getItem(selected.keyAt(i));
-				toRemove.add(item);
-			}
-		}
-
-		missionProxy.removeWaypoints(toRemove);
 	}
 
 	@Override
