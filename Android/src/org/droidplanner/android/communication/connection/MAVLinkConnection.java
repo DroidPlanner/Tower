@@ -78,7 +78,6 @@ public abstract class MAVLinkConnection extends Thread {
 				readDataBlock();
 				handleData();
 			}
-			closeConnection();
 
 		} catch (FileNotFoundException e) {
 			listener.onComError(e.getMessage());
@@ -86,7 +85,13 @@ public abstract class MAVLinkConnection extends Thread {
 		} catch (IOException e) {
 			listener.onComError(e.getMessage());
 			e.printStackTrace();
-		}
+		} finally {
+            try {
+                closeConnection();
+            } catch(IOException e) {
+                // Ignore errors while closing
+            }
+        }
 
 		listener.onDisconnect();
 	}
