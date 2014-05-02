@@ -12,6 +12,7 @@ import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.commands.Takeoff;
 import org.droidplanner.core.mission.waypoints.Land;
+import org.droidplanner.core.mission.waypoints.RegionOfInterest;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.core.mission.waypoints.Waypoint;
 
@@ -201,6 +202,8 @@ public class Mission extends DroneVariable {
 			case MAV_CMD.MAV_CMD_NAV_TAKEOFF:
 				received.add(new Takeoff(msg, this));
 				break;
+			case MAV_CMD.MAV_CMD_NAV_ROI:
+				received.add(new RegionOfInterest(msg, this));
 			default:
 				break;
 			}
