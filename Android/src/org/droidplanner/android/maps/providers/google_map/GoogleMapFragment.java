@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.droidplanner.R;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.utils.DroneHelper;
 import org.droidplanner.android.helpers.LocalMapTileProvider;
@@ -75,10 +76,14 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
             maxFlightPathSize = args.getInt(EXTRA_MAX_FLIGHT_PATH_SIZE);
         }
 
-		setupMap();
-
 		return view;
 	}
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        setupMap();
+    }
 
     @Override
     public void clearFlightPath() {
@@ -390,7 +395,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
 		Context context = this.getActivity();
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
-		return prefs.getBoolean("pref_advanced_use_offline_maps", false);
+		return prefs.getBoolean(getString(R.string.pref_advanced_use_offline_maps_key), false);
 	}
 
 	private void setupOnlineMapOverlay() {
@@ -400,7 +405,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
 	private int getMapType() {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());
-		String mapType = prefs.getString(PREF_MAP_TYPE, "");
+		String mapType = prefs.getString(getString(R.string.pref_map_type_key), "");
 
 		if (mapType.equalsIgnoreCase(MAP_TYPE_SATELLITE)) {
 			return GoogleMap.MAP_TYPE_SATELLITE;

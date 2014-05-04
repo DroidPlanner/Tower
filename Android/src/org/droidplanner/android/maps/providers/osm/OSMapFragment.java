@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -127,8 +128,8 @@ public class OSMapFragment extends Fragment implements DPMap {
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onStart(){
+        super.onStart();
         setupMapUI();
     }
 
@@ -196,7 +197,15 @@ public class OSMapFragment extends Fragment implements DPMap {
                 .DEFAULT_TILE_SOURCE.name());
         mMapView.setTileSource(tileSource);
 
-        mLocationOverlay.enableFollowLocation();
+        //Check if autopan should be enabled.
+        final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences
+                (getActivity().getApplicationContext());
+        final boolean autoPan = sharedPrefs.getBoolean(getString(R.string
+                .pref_auto_pan_enabled_key), false);
+        if(autoPan) {
+            mLocationOverlay.enableFollowLocation();
+        }
+
         mLocationOverlay.enableMyLocation();
         mCompassOverlay.enableCompass();
     }
