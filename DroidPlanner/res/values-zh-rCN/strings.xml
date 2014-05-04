@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Do not translate the following strings -->
+    <string name="app_title">DroidPlanner</string>
+
+    <!-- Generic strings -->
+    <string name="settings">设置</string>
+    <string name="help">帮助</string>
+    <string name="menu_drone_setup">无人机设置</string>
+    <string name="app_settings">应用设置</string>
+    <string name="flight_data">飞行数据</string>
+    <string name="editor">编辑器</string>
+    <string name="send_mission">发送任务</string>
+    <string name="load_mission">加载任务</string>
+
+    <!-- Drone Setup tabs -->
+    <string name="screen_tuning">调参</string>
+    <string name="screen_cal">校准</string>
+    <string name="screen_checklist">检查清单</string>
+    <string name="screen_rc">遥控</string>
+    <string name="screen_parameters">参数</string>
+
+    <!-- App Settings/Preferences -->
+    <string name="pref_connection_type">遥测连接方式</string>
+    <string name="pref_connection_type_summary">选择用来连接无人机分链接</string>
+    <string name="pref_mavlink">MAVLink</string>
+    <string name="pref_mavlink_log">启用日志</string>
+    <string name="pref_mavlink_log_summary">记录MAVLink通信至*.tlog文件，可能会降低性能</string>
+    <string name="pref_mavlink_rates">流速</string>
+    <string name="pref_mavlink_rates_summary">从无人机接受飞行数据的速度（以Hz为单位）</string>
+    <string name="pref_mavlink_stream_rate_ext_stat">航点、GPS原始数据、围栏数据、当前航点等</string>
+    <string name="pref_mavlink_stream_rate_extra1">姿态</string>
+    <string name="pref_mavlink_stream_rate_extra2">VFR_Hud数据</string>
+    <string name="pref_mavlink_stream_rate_extra3">AHRS，硬件状态，风速</string>
+    <string name="pref_mavlink_stream_rate_position">位置数据</string>
+    <string name="pref_mavlink_stream_rate_RC_override">遥控覆盖</string>
+    <string name="pref_mavlink_stream_rate_rc_channels">遥控通道数据</string>
+    <string name="pref_mavlink_stream_rate_raw_sensors">传感器原始数据</string>
+    <string name="pref_mavlink_stream_rate_raw_controller">控制器原始数据</string>
+    <string name="pref_ui">用户界面</string>
+    <string name="pref_ui_language_english">将英语作为界面语言</string>
+    <string name="pref_ui_language_english_summary">使用英语语言（代替系统语言）需要重启应用。</string>
+    <string name="pref_connection_actions">当连接到无人机时</string>
+    <string name="pref_connection_actions_summary">执行动作或连接到无人机时\n断开并重连生效</string>
+    <string name="pref_keep_screen_bright">保持屏幕常亮</string>
+    <string name="pref_keep_screen_bright_summary">如果不勾选屏幕就会在一段时间后变暗（保持电量）</string>
+    <string name="pref_lock_screen_orientation">锁定屏幕方向</string>
+    <string name="pref_lock_screen_orientation_summary">连接时锁定当前屏幕的方向</string>
+    <string name="pref_flight_data">飞行数据</string>
+    <string name="pref_max_flight_path_size">飞行路径大小</string>
+    <string name="pref_max_flight_path_size_summary">飞行路径的大小，设置为0禁用。</string>
+    <string name="pref_guided_mode_on_long_press">长按启动引导模式</string>
+    <string name="pref_guided_mode_on_long_press_summary">长按地图进入引导模式。</string>
+    <string name="pref_follow_me_mode_enabled">启用跟着我模式</string>
+    <string name="pref_follow_me_mode_enabled_summary">在开发</string>
+    <string name="pref_auto_pan_enabled">启用自动平移</string>
+    <string name="pref_auto_pan_enabled_summary">当收到新的GPS坐标时自动平移地图</string>
+    <string name="pref_heading_mode">启动FPV指向模式</string>
+    <string name="pref_heading_mode_summary">改变指向模式为FPV（-180°至180°）</string>
+    <string name="pref_advanced">高级</string>
+    <string name="pref_advanced_use_offline_maps">使用离线地图</string>
+    <string name="pref_advanced_use_offline_maps_summary">使用本地储存的地图块，用于离线地图浏览</string>
+    <string name="pref_map_type">地图样式</string>
+    <string name="pref_map_type_default">卫星</string>
+    <string name="pref_map_type_summary">使用哪种类型的地图</string>
+    <string name="pref_enable_tts">启用文本转语音</string>
+    <string name="pref_enable_tts_summary">用于重要事件的语音消息</string>
+    <string name="pref_vehicle_type">默认模型种类</string>
+    <string name="pref_vehicle_type_summary">断开连接时的默认模型种类</string>
+    <string name="pref_rc">遥控界面</string>
+    <string name="pref_rc_general">常规</string>
+    <string name="pref_rc_mode">遥控模式</string>
+    <string name="pref_rc_mode_summary">油门在左摇杆还是右摇杆</string>
+    <string name="pref_rc_quickmode_left">快速模式左</string>
+    <string name="pref_rc_quickmode_right">快速模式右</string>
+    <string name="pref_rc_reverse">反向</string>
+    <string name="pref_rc_throttle">油门</string>
+    <string name="pref_rc_throttle_reverse_summary">反转油门方向</string>
+    <string name="pref_rc_throttle_returntocenter">回到中点</string>
+    <string name="pref_rc_throttle_returntocenter_summary">触摸后放开油门回到中点</string>
+    <string name="pref_rc_rudder">方向舵</string>
+    <string name="pref_rc_rudder_reverse_summary">反转方向舵/Yaw方向</string>
+    <string name="pref_rc_aileron">副翼</string>
+    <string name="pref_rc_aileron_reverse_summary">反转副翼/Roll方向</string>
+    <string name="pref_rc_elevator">升降舵</string>
+    <string name="pref_rc_elevator_reverse_summary">反转升降舵/Pitch方向</string>
+    <string name="pref_connection">连接参数</string>
+    <string name="pref_usb">USB连接</string>
+    <string name="pref_baud_type">遥测连接速度</string>
+    <string name="pref_baud_type_summary">USB遥测连接的波特率</string>
+    <string name="pref_server">TCP连接</string>
+    <string name="pref_server_ip">服务器IP</string>
+    <string name="pref_server_port">服务器端口</string>
+    <string name="pref_server_udp">UDP连接</string>
+    <string name="pref_udp_server_port">UDP服务器端口</string>
+    <string name="about">关于</string>
+    <string name="version">版本（由APM中文网-酷酷小狼翻译）</string>
+    <string name="storage_folder">存储文件夹</string>
+
+    <!-- Connection State -->
+    <string name="menu_connect">连接</string>
+    <string name="menu_disconnect">断开连接</string>
+    <string name="connected">已连接</string>
+    <string name="disconnected">已断开</string>
+
+    <!-- Failsafe Strings -->
+    <string name="RCFailsafe">警告！遥控故障保护 – 回到起飞点</string>
+
+    <!-- Common Setup Buttons Resource Strings -->
+    <string name="button_setup_calibrate">校准</string>
+    <string name="button_setup_cancel">取消</string>
+    <string name="button_setup_send">发送</string>
+    <string name="button_setup_next">下一步</string>
+    <string name="button_setup_done">完成</string>
+    <string name="Pause">暂停</string>
+    <string name="dialog_box_btn_txt_ok">OK</string>
+
+    <!-- File operations -->
+    <string name="select_file_to_open">选择要打开的文件：</string>
+    <string name="no_files">没有文件</string>
+    <string name="error_when_opening_file">打开文件时出错</string>
+    <string name="save">保存</string>
+    <string name="open">打开</string>
+    <string name="write">写入</string>
+    <string name="refresh">刷新</string>
+
+    <!-- Survey/Mapping related strings -->
+    <string name="distance_between_lines">横向的</string>
+    <string name="footprint">足迹</string>
+    <string name="ground_resolution">GSD</string>
+    <string name="distance_between_pictures">纵向的</string>
+    <string name="area">区域</string>
+    <string name="camera_">相机：</string>
+    <string name="inner_wps">内部航点</string>
+    <string name="hatch_angle">开口角度：</string>
+    <string name="flight_altitude">飞行高度：</string>
+    <string name="overlap">重叠：</string>
+    <string name="sidelap">侧向重叠：</string>
+    <string name="mission_length">网格长度</string>
+    <string name="pictures">图片</string>
+    <string name="number_of_strips">条数</string>
+    <string name="exception_draw_polygon">绘制多边形/WPT</string>
+    <string name="exception_draw_2_more_polygon_points">绘制至少2个多边形点</string>
+    <string name="exception_draw_1_more_polygon_points">绘制至少1个多边形点</string>
+    <string name="draw_the_survey_region">绘制测量区域</string>
+    <string name="mission_is_too_lengthy">任务太长了</string>
+
+    <!-- Flight Mode information -->
+    <string name="mode_acro">Acro特技模式可以让飞手直接控制旋转速率。</string>
+    <string name="mode_althold">Alt Hold定高模式自动控制油门来保持高度。不需要GPS。</string>
+    <string name="mode_auto">Auto自动模式执行储存在模型上的脚本任务。</string>
+    <string name="mode_circle">Circle绕圈模式让模型绕着一个目标点转。模型会一直指向中点。需要GPS锁定。</string>
+    <string name="mode_drift">Drift飘移模式结合roll和yaw产生更自然更直观的飞行。需要GPS锁定。</string>
+    <string name="mode_guided">Guided引导模式可以让你从地面站进行位置控制。需要GPS锁定。</string>
+    <string name="mode_land">Land降落在当前位置。需要GPS锁定。</string>
+    <string name="mode_loiter">Loiter悬停模式可以让飞手完全通过GPS飞行。</string>
+    <string name="mode_ofloiter">启用光流的悬停模式需要光流传感器来保持位置和高度。</string>
+    <string name="mode_position">Position定点模式可以让飞手完全通过GPS飞行，但是油门是靠手动控制的。</string>
+    <string name="mode_rtl">RTL返航模式升至最低高度，返回家的位置并降落。需要GPS锁定。</string>
+    <string name="mode_sport">Sport运动模式可以让飞手直接控制旋转速率，并附加自动平衡。</string>
+    <string name="mode_stabilize">Stabilize自稳模式让模型水平飞行。</string>
+
+    <!-- Waypoint types -->
+    <string name="waypointType_Waypoint">航点</string>
+    <string name="waypointType_TakeOff">起飞</string>
+    <string name="waypointType_RTL">回到出发点</string>
+    <string name="waypointType_Land">降落</string>
+    <string name="waypointType_Circle">绕圈</string>
+    <string name="waypointType_Loiter">悬停</string>
+    <string name="waypointType_ROI">感兴趣区域</string>
+    <string name="waypointType_Survey">调查多边形</string>
+
+    <!-- Waypoint info -->
+    <string name="waypointInfo_Land">在当前位置降落模型。你必须手动退出自动模式来锁定电机。</string>
+    <string name="waypointInfo_Generic">常用航点</string>
+    <string name="waypointInfo_Loiter">未使用。</string>
+    <string name="waypointInfo_LoiterN">所期望的绕当前位置飞行的圈数。</string>
+    <string name="waypointInfo_LoiterT">所期望的保持当前位置的秒数，或不限制结束任务的时间。</string>
+    <string name="waypointInfo_RTL">将解锁时设定的家的位置发送给模型。高度为0时会以返航高度参数返回家。</string>
+    <string name="waypointInfo_TakeOff">在执行下一个航点前，从地面起飞至特定的高度。</string>
+    <string name="waypointInfo_Waypoint">行进至三维空间中的一个位置。可选延迟（以秒为单位）用于保持位置。</string>
+    <string name="waypointInfo_CondAlt">以特定速率爬升/降落。延迟任务状态机直到达到期望高度。</string>
+    <string name="waypointInfo_CondYaw">设定达到指定目标角度的条件。</string>
+    <string name="waypointInfo_CondDistance">延迟任务状态机，直到在所期望的下一个航点的距离内</string>
+    <string name="waypointInfo_SetHome">家的位置既可以改为当前位置，也可以改为指定位置。</string>
+    <string name="waypointInfo_SetSpeed">改变速度和/或油门设定点。如果不需要改变，设为-1可同时用于速度和油门</string>
+    <string name="waypointInfo_ROI">设置一个位置和高度来设定飞行器指向，瞄准可选的相机。</string>
+    <string name="waypointInfo_SetJump">重复航点</string>
+
+    <!-- Waypoint editor -->
+    <string name="editor_info_window">距离：200m，飞行时间：3:30s</string>
+    <string name="distance_to_home">至家的距离</string>
+    <string name="loiter_time">悬停时间</string>
+    <string name="waypoint_delay">到下一个航点前的延迟</string>
+    <string name="loiter_radius">悬停半径</string>
+    <string name="loiter_ccw">逆时针</string>
+    <string name="waypoint_altitude">高度</string>
+    <string name="waypoint_angle">Yaw角度</string>
+    <string name="waypoint_finalaltitude">目标高度</string>
+    <string name="waypoint_altrate">爬升/下降速率</string>
+    <string name="waypoint_yawrate">Yaw速率</string>
+    <string name="waypoint_yawdir">设定Yaw方向为逆时针</string>
+    <string name="waypoint_yawoffset">使用相对偏移</string>
+    <string name="waypoint_distance">距离</string>
+    <string name="waypoint_homecurrent">将当前位置设为家</string>
+    <string name="waypoint_longitude">经度：</string>
+    <string name="waypoint_latitude">纬度：</string>
+    <string name="waypoint_speed">目标速度</string>
+    <string name="waypoint_throttle">油门</string>
+    <string name="waypoint_speedtype">速度类型</string>
+    <string name="waypoint_airspeed">空速</string>
+    <string name="waypoint_groundspeed">地速</string>
+    <string name="selectCoodSource">选择位置来源</string>
+    <string name="waypoint_coordsrc">源数据</string>
+    <string name="waypoint_jumpto">跳至航点：</string>
+    <string name="waypoint_repeat">重复航点</string>
+    <string name="Orbits">轨道</string>
+
+    <string name="dlg_clear_mission_title">清除任务</string>
+    <string name="dlg_clear_mission_confirm">从地图上清除所有航点？</string>
+
+    <!-- Selection of map style -->
+    <string name="menu_map_type">地图样式</string>
+    <string name="menu_map_type_satellite">卫星</string>
+    <string name="menu_map_type_hybrid">混合</string>
+    <string name="menu_map_type_normal">正常</string>
+    <string name="menu_map_type_terrain">地形</string>
+
+    <!-- Parameters screen -->
+    <string name="params_click_to_refresh">点击以从无人机刷新参数</string>
+    <string name="refreshing_parameters">参数刷新中...</string>
+    <string name="parameters_saved">参数已保存</string>
+    <string name="msg_parameters_written_to_drone">参数写入无人机</string>
+    <string name="metadata_value">值：</string>
+    <string name="metadata_custom_value">** 自定义值 **</string>
+    <string name="metadata_values">值：</string>
+    <string name="metadata_units">单位：</string>
+    <string name="metadata_range">范围：</string>
+    <string name="lst_note_hint">添加更多行，只需点击回车</string>
+    <string name="set_to_zero_to_disable">（设为0以禁用）。</string>
+
+    <!-- Calibration data progress -->
+    <string name="progress_title_uploading">上传校准数据</string>
+    <string name="progress_desc_uploading">DroidPlanner正在将校准数据上传至模型</string>
+    <string name="progress_title_downloading">下载校准数据</string>
+    <string name="progress_desc_downloading">DroidPlanner正在从模型中下载校准数据如果系统未连接，请按取消。</string>
+
+    <!-- Radio Setup Resource Strings -->
+    <string name="setup_radio_title">遥控通道校准</string>
+    <string name="setup_radio_cal_title">开始校准</string>
+    <string name="setup_radio_cal_desc">点击校准开始遥控校准。确保遥控发射机开关已\&apos;开\&apos;并在发送数据。</string>
+    <string name="setup_radio_title_minmax">设定最小&amp;最大值</string>
+    <string name="setup_radio_title_middle">设定中点值</string>
+    <string name="setup_radio_title_complete">校准完成</string>
+    <string name="setup_radio_desc_minmax">将摇杆在整个行程范围内移动数次，并拨动开关、控制杆、旋钮至全部可能的位置。</string>
+    <string name="setup_radio_desc_middle">将油门摇杆放在最低位置，其他摇杆、开关、控制杆、旋钮在中点。</string>
+    <string name="setup_radio_desc_complete">遥控校准完成。按\&apos;保存\&apos;上传数据至模型。</string>
+
+    <!-- Compass Setup Resource Strings -->
+    <string name="setup_mag_title">罗盘校准</string>
+
+    <!-- Accelerometer Setup Resource Strings -->
+    <string name="setup_imu_title">加速度计校准</string>
+    <string name="setup_imu_start">点击校准开始IMU校准。开始校准过程之前确保模型放置在平坦表面上。</string>
+    <string name="setup_imu_normal">将模型放在水平位置，确保移动最小化，然后按下一步。</string>
+    <string name="setup_imu_left">将模型左面朝上放好，确保移动最小化，然后按下一步。</string>
+    <string name="setup_imu_right">将模型右面朝上放好，确保移动最小化，然后按下一步。</string>
+    <string name="setup_imu_nosedown">将模型机头朝下放好，确保移动最小化，然后按下一步。</string>
+    <string name="setup_imu_noseup">将模型机头朝上放好，确保移动最小化，然后按下一步。</string>
+    <string name="setup_imu_back">将模型底朝天放好，确保移动最小化，然后按下一步。</string>
+    <string name="setup_imu_completed">加速度计校准完成。如果未成功，请重新校准。</string>
+    <string name="setup_imu_step">要开始校准，请点击校准。</string>
+    <string name="setup_imu_timeleft">下一个方向前的剩余时间：</string>
+
+    <!-- Flight Setup Resource Strings -->
+    <string name="setup_fm_title">飞行模式配置</string>
+    <string name="setup_fm_side_title">更新飞行模式</string>
+    <string name="setup_fm_side_desc">按\&apos;发送\&apos;更新新的飞行模式到模型。</string>
+    <string name="setup_fm_desc_uploading">上传飞行模式配置数据</string>
+    <string name="setup_fm_desc_downloading">下载飞行模式配置数据</string>
+    <string name="setup_fm_mode1">1.</string>
+    <string name="setup_fm_mode2">2.</string>
+    <string name="setup_fm_mode3">3.</string>
+    <string name="setup_fm_mode4">4.</string>
+    <string name="setup_fm_mode5">5.</string>
+    <string name="setup_fm_mode6">6.</string>
+    <string name="setup_fm_simple">简单模式</string>
+    <string name="setup_fm_super">超简单模式</string>
+
+    <!-- Channel Options Setup Resource Strings -->
+    <string name="setup_ch_title">通道选项配置</string>
+    <string name="setup_ch_side_title">更新通道选项</string>
+    <string name="setup_ch_side_desc">按\&apos;发送\&apos;更新新的舵机功能到模型。</string>
+    <string name="setup_ch_tune_title">通道6 - 调参功能</string>
+    <string name="setup_ch_options_title">通道选项 - 通道7&amp;通道8</string>
+    <string name="setup_ch_CH7_options">通道7选项：</string>
+    <string name="setup_ch_CH6_options">通道6调整：</string>
+    <string name="setup_ch_CH8_options">通道8调整：</string>
+    <string name="setup_ch_tune_low">调整值 - 低：</string>
+    <string name="setup_ch_tune_high">调整值 - 高：</string>
+
+    <!-- Servo functions Setup Resource Strings -->
+    <string name="setup_sf_title">舵机功能配置</string>
+    <string name="setup_sf_side_title">更新舵机功能</string>
+    <string name="setup_sf_side_desc">按\&apos;发送\&apos;更新新的舵机功能到模型。</string>
+    <string name="setup_sf_desc_uploading">上传舵机配置数据中</string>
+    <string name="setup_sf_desc_downloading">瞎子舵机配置数据中</string>
+    <string name="setup_sf_servo_title">舵机功能配置</string>
+    <string name="setup_sf_servo5">舵机5：</string>
+    <string name="setup_sf_servo6">舵机6：</string>
+    <string name="setup_sf_servo7">舵机7：</string>
+    <string name="setup_sf_servo8">舵机8：</string>
+    <string name="setup_sf_servo9">舵机9：</string>
+    <string name="setup_sf_servo10">舵机10：</string>
+
+    <!-- Main Screen and Telemetry -->
+    <string name="telemetry_default_value">0.0</string>
+    <string name="climb_rate_label">爬升速率</string>
+    <string name="altitude_label">高度</string>
+    <string name="meter_unit">m</string>
+    <string name="speed_unit">m/s</string>
+    <string name="ground_speed_label">地速</string>
+    <string name="air_speed_label">空速</string>
+    <string name="default_angle_value">--°</string>
+    <string name="mission_control_control">控制</string>
+    <string name="mission_control_edit">编辑</string>
+    <string name="mission_control_home">回家</string>
+    <string name="mission_control_land">降落</string>
+    <string name="mission_control_takeoff">起飞</string>
+    <string name="mission_control_loiter">悬停</string>
+    <string name="mission_control_follow">跟随</string>
+    <string name="telemetry_label">遥测</string>
+    <string name="flight_modes_label">飞行模式</string>
+    <string name="menu_info_bar">信息栏</string>
+    <string name="drawer_open">打开导航抽屉</string>
+    <string name="drawer_close">关闭导航抽屉</string>
+    <string name="guided_mode_warning">按OK输入引导模式。\n要改变位置，点击并按住地图。</string>
+
+    <!-- Bluetooth device selection strings -->
+    <string name="select_device">选择要连接的设备</string>
+    <string name="none_paired">没有已配对设备</string>
+    <string name="none_found">没有找到设备</string>
+    <string name="title_paired_devices">已配对的设备</string>
+    <string name="title_other_devices">其他可用设备</string>
+    <string name="button_scan">扫描设备</string>
+    <string name="scanning">扫描设备中</string>
+
+    <!-- Content description -->
+    <string name="expandable_listview_icon_desc">可扩展列表视图图标</string>
+
+    <!-- Others (when possible move to a grouping above) -->
+    <string name="tune_roll">手动调整roll和pitch参数。Rate_P是要调整的主要数值。</string>
+    <string name="dialog_box_title_altitude">高度</string>
+    <string name="mode_switch">将遥控通道5分配在你的遥控器上的开关用来控制飞行模式。移动开关到每个位置并在下方选择期望的飞行模式。</string>
+    <string name="MAVLinkError">MAVLink错误：</string>
+    <string name="msg_connect_first">请首先连接</string>
+    <string name="mode1_throttle_on_right_stick">日本手：油门在右摇杆</string>
+    <string name="mode2_throttle_on_left_stick">美国手：油门在左摇杆</string>
+
+</resources>
