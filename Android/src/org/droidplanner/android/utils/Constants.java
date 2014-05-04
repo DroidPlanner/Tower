@@ -15,8 +15,7 @@ public class Constants {
 	 * 
 	 * @since 1.2.0
 	 */
-	private static final String PACKAGE_NAME = Constants.class.getPackage()
-			.getName();
+	public static final String PACKAGE_NAME = Constants.class.getPackage().getName();
 
 	/*
 	 * Preferences, and default values.

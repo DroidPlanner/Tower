@@ -1,12 +1,12 @@
 package org.droidplanner.android.maps.providers;
 
-import android.content.Context;
-import android.preference.Preference;
-import android.preference.PreferenceCategory;
+import com.google.android.gms.maps.GoogleMap;
 
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.providers.google_map.GoogleMapFragment;
+import org.droidplanner.android.maps.providers.google_map.GoogleMapProviderPreferences;
 import org.droidplanner.android.maps.providers.osm.OSMapFragment;
+import org.droidplanner.android.maps.providers.osm.OSMapProviderPreferences;
 
 /**
  * Contains a listing of the various map providers supported, and implemented in DroidPlanner.
@@ -23,10 +23,8 @@ public enum DPMapProvider {
         }
 
         @Override
-        public Preference[] getMapPreferences(Context context) {
-            final Preference testPreference = new Preference(context);
-            testPreference.setTitle("Test Preference");
-            return new Preference[]{testPreference};
+        public MapProviderPreferences getMapProviderPreferences() {
+            return new GoogleMapProviderPreferences();
         }
     },
 
@@ -40,8 +38,8 @@ public enum DPMapProvider {
         }
 
         @Override
-        public Preference[] getMapPreferences(Context context) {
-            return super.getMapPreferences(context);
+        public MapProviderPreferences getMapProviderPreferences() {
+            return new OSMapProviderPreferences();
         }
     };
 
@@ -53,19 +51,23 @@ public enum DPMapProvider {
     /**
      * @return the set of preferences supported by the map.
      */
-    public Preference[] getMapPreferences(Context context){
-        return sEmptyPrefsSet;
-    }
+    public abstract MapProviderPreferences getMapProviderPreferences();
 
     /**
      * Returns the map type corresponding to the given map name.
+     *
      * @param mapName name of the map type
      * @return {@link DPMapProvider} object.
      */
-    public static DPMapProvider getMapProvider(String mapName){
+    public static DPMapProvider getMapProvider(String mapName) {
+        if(mapName == null){
+            return null;
+        }
+
         try {
             return DPMapProvider.valueOf(mapName);
-        }catch(IllegalArgumentException e){
+        }
+        catch (IllegalArgumentException e) {
             return null;
         }
     }
@@ -74,9 +76,4 @@ public enum DPMapProvider {
      * By default, Google Map is the map provider.
      */
     public static final DPMapProvider DEFAULT_MAP_PROVIDER = GOOGLE_MAP;
-
-    /**
-     * Used to avoid allocating new arrays of length 0 when an empty set of preferences is needed.
-     */
-    private static final Preference[] sEmptyPrefsSet = new Preference[0];
 }
