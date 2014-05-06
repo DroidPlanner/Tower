@@ -1,52 +1,54 @@
 package org.droidplanner.android.graphic.map;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import org.droidplanner.R;
-import org.droidplanner.android.graphic.DroneHelper;
+import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.core.drone.Drone;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
+public class GraphicDrone extends MarkerInfo.SimpleMarkerInfo {
 
-public class GraphicDrone implements OnDroneListener {
+	private Drone drone;
 
-	private Marker droneMarker;
-	private GoogleMap map;
-
-	public GraphicDrone(Drone drone, GoogleMap map) {
-		this.map = map;
-		addMarkerToMap();
-		drone.events.addDroneListener(this);
+	public GraphicDrone(Drone drone) {
+		this.drone = drone;
 	}
 
-	public void updatePosition(float yaw, Coord2D coord2d) {
-		droneMarker.setPosition(DroneHelper.CoordToLatLang(coord2d));
-		droneMarker.setRotation(yaw);
-		droneMarker.setVisible(true);
-	}
+    @Override
+    public float getAnchorU() {
+        return 0.5f;
+    }
 
-	private void addMarkerToMap() {
-		droneMarker = map.addMarker(new MarkerOptions()
-				.anchor((float) 0.5, (float) 0.5).position(new LatLng(0, 0))
-				.icon(BitmapDescriptorFactory.fromResource(R.drawable.quad))
-				.visible(false).flat(true));
-	}
+    @Override
+    public float getAnchorV() {
+        return 0.5f;
+    }
 
-	@Override
-	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		switch (event) {
-		case GPS:
-			updatePosition((float) drone.orientation.getYaw(),
-					drone.GPS.getPosition());
-			break;
-		default:
-			break;
-		}
+    @Override
+    public Coord2D getPosition(){
+        return drone.GPS.getPosition();
+    }
 
-	}
+    @Override
+    public Bitmap getIcon(Resources res){
+        return BitmapFactory.decodeResource(res, R.drawable.quad);
+    }
+
+    @Override
+    public boolean isVisible(){
+        return true;
+    }
+
+    @Override
+    public boolean isFlat(){
+        return true;
+    }
+
+    @Override
+    public float getRotation(){
+        return (float)drone.orientation.getYaw();
+    }
 }

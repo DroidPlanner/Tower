@@ -199,8 +199,7 @@ public class FlightActivity extends DrawerNavigationUI implements
 				bottomPadding = editorToolsView.getHeight();
 			}
 		}
-		mapFragment.mMap
-				.setPadding(leftPadding, 0, rightPadding, bottomPadding);
+		mapFragment.setMapPadding(leftPadding, 0, rightPadding, bottomPadding);
 	}
 
 	private int getSlidingDrawerWidth() {
