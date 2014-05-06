@@ -41,7 +41,7 @@
     <string name="pref_ui">Interfaccia Utente</string>
     <string name="pref_ui_language_english">Inglese come lingua IU</string>
     <string name="pref_ui_language_english_summary">Usare Inglese (al posto di lingua del sistema). Richiede riavvio dell' App.</string>
-    <string name="pref_connection_actions">Mentre Connesso a Drone</string>
+    <string name="pref_connection_actions">Mentre connesso a Drone</string>
     <string name="pref_connection_actions_summary">Actions to perform on or while connected to the Drone\nTo apply disconnect and reconnect</string>
     <string name="pref_keep_screen_bright">Mantenere schermo acceso</string>
     <string name="pref_keep_screen_bright_summary">Mantenere schermo acceso e luminoso (incide sulla durata vita batteria)</string>
@@ -60,7 +60,7 @@
     <string name="pref_heading_mode_summary">Cambia orientazione su modo FPV (-180º to 180º)</string>
     <string name="pref_advanced">Avanzato</string>
     <string name="pref_advanced_use_offline_maps">Usare Mappe offline</string>
-    <string name="pref_advanced_use_offline_maps_summary">Usare piastrelle mappe su memoria locale, per vista mappa offline</string>
+    <string name="pref_advanced_use_offline_maps_summary">Usare piastre mappe su memoria locale, per vista mappa offline</string>
     <string name="pref_map_type">Tipo Mappa</string>
     <string name="pref_map_type_default">Satellite</string>
     <string name="pref_map_type_summary">Tipo Mappa da usare</string>
@@ -87,43 +87,43 @@
     <string name="pref_rc_elevator_reverse_summary">Invertire direzione Equilibratore/Beccheggio</string>
     <string name="pref_connection">Preferenze Connessione</string>
     <string name="pref_usb">Connessione USB</string>
-    <string name="pref_baud_type">Telemetry link speed</string>
-    <string name="pref_baud_type_summary">Baud Rate of the USB Telementry Link</string>
-    <string name="pref_server">TCP connection</string>
+    <string name="pref_baud_type">Rapidità connessione Telemetria</string>
+    <string name="pref_baud_type_summary">Rata Baud connessione Telemetria USB</string>
+    <string name="pref_server">Connessione TCP</string>
     <string name="pref_server_ip">Server IP</string>
-    <string name="pref_server_port">Server Port</string>
-    <string name="pref_server_udp">UDP connection</string>
-    <string name="pref_udp_server_port">UDP Server Port</string>
+    <string name="pref_server_port">Porta Server</string>
+    <string name="pref_server_udp">UDP Connessione</string>
+    <string name="pref_udp_server_port">Porta Server UDP</string>
     <string name="about">About</string>
-    <string name="version">Version</string>
-    <string name="storage_folder">Storage Folder</string>
+    <string name="version">Versione</string>
+    <string name="storage_folder">Cartella Memoria</string>
 
     <!-- Connection State -->
-    <string name="menu_connect">Connect</string>
-    <string name="menu_disconnect">Disconnect</string>
-    <string name="connected">Connected</string>
-    <string name="disconnected">Disconnected</string>
+    <string name="menu_connect">Connettere</string>
+    <string name="menu_disconnect">Sconnettere</string>
+    <string name="connected">Connesso</string>
+    <string name="disconnected">Sconnesso</string>
 
     <!-- Failsafe Strings -->
-    <string name="RCFailsafe">Warning! RC Failsafe – Returning to Launch</string>
+    <string name="RCFailsafe">Allarme! RC Failsafe – Returning to Launch</string>
 
     <!-- Common Setup Buttons Resource Strings -->
-    <string name="button_setup_calibrate">Calibrate</string>
-    <string name="button_setup_cancel">Cancel</string>
-    <string name="button_setup_send">Send</string>
-    <string name="button_setup_next">Next</string>
-    <string name="button_setup_done">Done</string>
-    <string name="Pause">Pause</string>
+    <string name="button_setup_calibrate">Calibrare</string>
+    <string name="button_setup_cancel">Cancella</string>
+    <string name="button_setup_send">Inviare</string>
+    <string name="button_setup_next">Prossimo</string>
+    <string name="button_setup_done">Fatto</string>
+    <string name="Pause">Pausa</string>
     <string name="dialog_box_btn_txt_ok">OK</string>
 
     <!-- File operations -->
-    <string name="select_file_to_open">Select file to open:</string>
-    <string name="no_files">No files</string>
-    <string name="error_when_opening_file">Error when opening file</string>
-    <string name="save">Save</string>
-    <string name="open">Open</string>
-    <string name="write">Write</string>
-    <string name="refresh">Refresh</string>
+    <string name="select_file_to_open">Selezionare file da aprire:</string>
+    <string name="no_files">Nessun file</string>
+    <string name="error_when_opening_file">Errore aprendo file</string>
+    <string name="save">Salvare</string>
+    <string name="open">Oprire</string>
+    <string name="write">Scrivere</string>
+    <string name="refresh">Ricarica</string>
 
     <!-- Survey/Mapping related strings -->
     <string name="distance_between_lines">Lateral</string>
