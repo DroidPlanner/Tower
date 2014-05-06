@@ -5,7 +5,6 @@ import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.fragments.helpers.BTDeviceListFragment;
 import org.droidplanner.android.maps.providers.google_map.GoogleMapFragment;
-import org.droidplanner.android.fragments.helpers.OfflineMapFragment;
 import org.droidplanner.android.glass.fragments.BTDeviceCardsFragment;
 import org.droidplanner.android.glass.utils.GlassUtils;
 import org.droidplanner.android.utils.Constants;

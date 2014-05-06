@@ -22,6 +22,12 @@
                 android:summary="@string/pref_mavlink_log_summary"
                 android:title="@string/pref_mavlink_log"/>
 
+            <CheckBoxPreference
+                android:title="Enable bluetooth relay server"
+                android:summary="Mavlink data is relayed from this device to other bluetooth connected devices."
+                android:defaultValue="false"
+                android:key="pref_bluetooth_relay_server_toggle"/>
+
             <PreferenceCategory
                 android:key="pref_mavlink_rates"
                 android:summary="@string/pref_mavlink_rates_summary"
@@ -107,6 +113,12 @@
                     android:key="pref_lock_screen_orientation"
                     android:summary="@string/pref_lock_screen_orientation_summary"
                     android:title="@string/pref_lock_screen_orientation"/>
+
+                <CheckBoxPreference
+                    android:defaultValue="false"
+                    android:key="pref_glass_voice_control"
+                    android:summary="use voice to control the user interface for Google Glass"
+                    android:title="Use Voice control" />
 
             </PreferenceCategory>
             <PreferenceCategory android:key="@string/pref_maps_category_key"

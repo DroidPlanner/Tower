@@ -3,7 +3,6 @@ package org.droidplanner.android.utils;
 import java.util.Locale;
 
 import org.droidplanner.R;
-import org.droidplanner.android.communication.connection.BluetoothConnection;
 import org.droidplanner.android.communication.connection.MAVLinkConnection;
 import org.droidplanner.android.communication.connection.TcpConnection;
 import org.droidplanner.android.communication.connection.UdpConnection;

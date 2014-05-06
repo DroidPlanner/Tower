@@ -4,6 +4,7 @@ import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.ConfigurationActivity;
 import org.droidplanner.android.activities.helpers.MapPreferencesActivity;
+import org.droidplanner.android.glass.utils.GlassUtils;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.android.utils.Constants;
@@ -15,15 +16,19 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.util.Log;
 
 import java.util.HashSet;
+
+import static org.droidplanner.android.utils.Constants.*;
 
 /**
  * Implements the application settings screen.
@@ -50,37 +55,72 @@ public class SettingsFragment extends PreferenceFragment implements
 
         final Context context = getActivity().getApplicationContext();
         final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        final PreferenceScreen prefScreen = getPreferenceScreen();
 
-        // Populate the drone settings category
-        final PreferenceCategory dronePrefs = (PreferenceCategory) findPreference(Constants
-                .PREF_DRONE_SETTINGS);
-        if (dronePrefs != null) {
-            dronePrefs.removeAll();
+        //Populate the drone settings category
+        final PreferenceCategory dronePrefs = (PreferenceCategory) findPreference
+                (Constants.PREF_DRONE_SETTINGS);
+        if(dronePrefs != null){
+            if (GlassUtils.isGlassDevice()) {
+                //Remove the drone setup section from glass for now
+                prefScreen.removePreference(dronePrefs);
+            } else {
+                dronePrefs.removeAll();
 
-            final int configSectionsCount = ConfigurationActivity.sConfigurationFragments.length;
-            for (int i = 0; i < configSectionsCount; i++) {
-                final int index = i;
-                Preference configPref = new Preference(context);
-                configPref.setLayoutResource(R.layout.preference_config_screen);
-                configPref.setTitle(ConfigurationActivity.sConfigurationFragmentTitlesRes[i]);
-                configPref.setIcon(ConfigurationActivity.sConfigurationFragmentIconRes[i]);
-                configPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener
-                        () {
-                    @Override
-                    public boolean onPreferenceClick(
-                            Preference preference) {
-                        // Launch the configuration activity to show the
-                        // current config screen
-                        final Intent configIntent = new Intent(context, ConfigurationActivity.class)
-                                .putExtra(ConfigurationActivity.EXTRA_CONFIG_SCREEN_INDEX,
-                                        index);
+                final int configSectionsCount = ConfigurationActivity.sConfigurationFragments.length;
+                for(int i = 0; i < configSectionsCount; i++){
+                    final int index = i;
+                    Preference configPref = new Preference(context);
+                    configPref.setLayoutResource(R.layout.preference_config_screen);
+                    configPref.setTitle(ConfigurationActivity.sConfigurationFragmentTitlesRes[i]);
+                    configPref.setIcon(ConfigurationActivity.sConfigurationFragmentIconRes[i]);
+                    configPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                        @Override
+                        public boolean onPreferenceClick(Preference preference) {
+                            //Launch the configuration activity to show the current config screen
+                            final Intent configIntent = new Intent(context,
+                                    ConfigurationActivity.class).putExtra(ConfigurationActivity
+                                    .EXTRA_CONFIG_SCREEN_INDEX, index);
 
-                        startActivity(configIntent);
-                        return true;
-                    }
-                });
+                            startActivity(configIntent);
+                            return true;
+                        }
+                    });
 
-                dronePrefs.addPreference(configPref);
+                    dronePrefs.addPreference(configPref);
+                }
+            }
+        }
+
+        //Mavlink preferences
+        final CheckBoxPreference btRelayServerSwitch = (CheckBoxPreference) findPreference
+                (PREF_BLUETOOTH_RELAY_SERVER_TOGGLE);
+        if(btRelayServerSwitch != null){
+            boolean defaultValue = sharedPref.getBoolean
+                    (PREF_BLUETOOTH_RELAY_SERVER_TOGGLE,
+                            DEFAULT_BLUETOOTH_RELAY_SERVER_TOGGLE);
+            btRelayServerSwitch.setChecked(defaultValue);
+            btRelayServerSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    //Broadcast the preference update
+                    context.sendBroadcast(new Intent(ACTION_BLUETOOTH_RELAY_SERVER)
+                            .putExtra(EXTRA_BLUETOOTH_RELAY_SERVER_ENABLED, (Boolean)newValue));
+                    return true;
+                }
+            });
+        }
+
+        //User Interface preferences
+        final PreferenceScreen uiPrefScreen = (PreferenceScreen) findPreference(PREF_UI_SCREEN);
+        if (uiPrefScreen != null) {
+            final CheckBoxPreference voiceControlPref = (CheckBoxPreference) findPreference
+                    (PREF_GLASS_VOICE_CONTROL);
+            if (voiceControlPref != null) {
+                if (!GlassUtils.isGlassDevice()) {
+                    uiPrefScreen.removePreference(voiceControlPref);
+                }
             }
         }
 
