@@ -155,29 +155,28 @@
     <string name="mode_guided">Guided consente il controllo di posizione da postazione terra (Ground Station). Richiede GPS lock.</string>
     <string name="mode_land">Land atterra nella posizione attuale. Richiede GPS lock.</string>
     <string name="mode_loiter">Loiter consente al pilota di volare interamente mediante GPS. Richiede GPS lock.</string>
-    <string name="mode_ofloiter">Optical Flow abilitato. Loiter holds position and altitude assisted by the required optical flow sensors.</string>
-    <string name="mode_position">Position allows the pilot to fly completely through GPS, but with manual throttle control.</string>
+    <string name="mode_ofloiter">Optical Flow abilitato. Loiter mantiene posizione e altitudine con assistenza del sensore optical flow.</string>
+    <string name="mode_position">Position consente al pilota di volare interamente mediante GPS, ma con controllo manuale di throttle. Richiede GPS lock.</string>
     <string name="mode_rtl">RTL rises to the minimum altitude, returns to the home location and lands. Richiede lock GPS.</string>
-    <string name="mode_sport">Sport consente al pilota di controllare direttamente con l' aggiunta di auto-livello.</string>
-    <string name="mode_stabilize">Stabilize livella il veicolo in volo.</string>
+    <string name="mode_sport">Sport consente al pilota di controllare il veicolo direttamente con aiuto di auto-livello. Non richiede GPS.</string>
+    <string name="mode_stabilize">Stabilize auto-livella il veicolo in volo. Non richiede GPS.</string>
 
     <!-- Waypoint types -->
-    <string name="waypointType_Waypoint">Waypoint</string>
-    <string name="waypointType_TakeOff">Take-Off</string>
-    <string name="waypointType_RTL">Return To Launch</string>
-    <string name="waypointType_Land">Land</string>
-    <string name="waypointType_Circle">Circle</string>
-    <string name="waypointType_Loiter">Loiter</string>
-    <string name="waypointType_ROI">Region of Interest</string>
-    <string name="waypointType_Survey">Survey Polygon</string>
-
+    <string name="waypointType_Waypoint">Waypoint (Punto posizione)</string>
+    <string name="waypointType_TakeOff">Take-Off (Decollare)</string>
+    <string name="waypointType_RTL">Return To Launch (Ritorno a punto Decollo)</string>
+    <string name="waypointType_Land">Land (Atterrare)</string>
+    <string name="waypointType_Circle">Circle (Cerchiare)</string>
+    <string name="waypointType_Loiter">Loiter (Crociera su Posizione)</string>
+    <string name="waypointType_ROI">Region of Interest (Area di Interesso)</string>
+    <string name="waypointType_Survey">Rilievo Poligono</string>
     <!-- Waypoint info -->
-    <string name="waypointInfo_Land">Land vehicle at the current location. You must manually exit Auto mode to disarm motors.</string>
-    <string name="waypointInfo_Generic">Generic Waypoint</string>
-    <string name="waypointInfo_Loiter">not used.</string>
-    <string name="waypointInfo_LoiterN">Orbit the current location for the desired number of turns.</string>
-    <string name="waypointInfo_LoiterT">Hold the current location for the desired number of seconds or indefinitely to end the mission.</string>
-    <string name="waypointInfo_RTL">Send the vehicle to the home location set when armed. An altitude of 0 will return to home at the RTL altitude parameter.</string>
+    <string name="waypointInfo_Land">Atterrare veicolo nella posizione attuale. Uscire manualmente da modo Auto per disarmare motori.</string>
+    <string name="waypointInfo_Generic">Waypoint Generico</string>
+    <string name="waypointInfo_Loiter">non usato.</string>
+    <string name="waypointInfo_LoiterN">Orbitare posizione corrente per numero di volte desiderato.</string>
+    <string name="waypointInfo_LoiterT">Mantenere posizione corrente per numero di secondi desiderato, oppure indefinitivamente per terminare Missione.</string>
+    <string name="waypointInfo_RTL">Invia veicolo a posizione Home fissata durante Armare. Altitudine 0 ritorna veicolo a posizione Home con altitudine fissata secondo parametri RTL.</string>
     <string name="waypointInfo_TakeOff">Lift off from the ground to the specified altitude before proceeding to the next waypoint.</string>
     <string name="waypointInfo_Waypoint">Travel to a position in 3D space. Optional delay (in seconds) to hold position.</string>
     <string name="waypointInfo_CondAlt">Climb/descend at specified rate. Delay mission state machine until desired altitude reached.</string>
@@ -221,22 +220,22 @@
     <string name="dlg_clear_mission_confirm">Clear all waypoints from the map?</string>
 
     <!-- Selection of map style -->
-    <string name="menu_map_type">Map Type</string>
+    <string name="menu_map_type">Tipo Mappa</string>
     <string name="menu_map_type_satellite">Satellite</string>
-    <string name="menu_map_type_hybrid">Hybrid</string>
-    <string name="menu_map_type_normal">Normal</string>
-    <string name="menu_map_type_terrain">Terrain</string>
+    <string name="menu_map_type_hybrid">Ibrido</string>
+    <string name="menu_map_type_normal">Normale</string>
+    <string name="menu_map_type_terrain">Terreno</string>
 
     <!-- Parameters screen -->
-    <string name="params_click_to_refresh">Click to refresh parameters from drone</string>
-    <string name="refreshing_parameters">Refreshing Parameters&#8230;</string>
-    <string name="parameters_saved">Parameters saved</string>
-    <string name="msg_parameters_written_to_drone">parameters written to drone</string>
-    <string name="metadata_value">Value:</string>
-    <string name="metadata_custom_value">** Custom value **</string>
-    <string name="metadata_values">Values:</string>
-    <string name="metadata_units">Units:</string>
-    <string name="metadata_range">Range:</string>
+    <string name="params_click_to_refresh">Cliccare per ricarico Parametri drone</string>
+    <string name="refreshing_parameters">Ricarico Parametri&#8230;</string>
+    <string name="parameters_saved">Parametri salvati</string>
+    <string name="msg_parameters_written_to_drone">Parametri scritti su drone</string>
+    <string name="metadata_value">Valore:</string>
+    <string name="metadata_custom_value">** Valore personalizzato **</string>
+    <string name="metadata_values">Valori:</string>
+    <string name="metadata_units">Unità:</string>
+    <string name="metadata_range">Raggio:</string>
     <string name="lst_note_hint">To add more rows, just press Enter</string>
     <string name="set_to_zero_to_disable">(set to zero to disable).</string>
 
