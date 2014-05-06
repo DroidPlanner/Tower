@@ -78,7 +78,7 @@
     <string name="pref_rc_throttle">Throttle</string>
     <string name="pref_rc_throttle_reverse_summary">Invertire direzione Throttle</string>
     <string name="pref_rc_throttle_returntocenter">Ritorno al Centro</string>
-    <string name="pref_rc_throttle_returntocenter_summary">Su rilascio premere Throttle  ritorna al centro</string>
+    <string name="pref_rc_throttle_returntocenter_summary">Su tolta di premuta il Throttle  ritorna al centro</string>
     <string name="pref_rc_rudder">Timone</string>
     <string name="pref_rc_rudder_reverse_summary">Invertire direzione Timone/ Imbardata</string>
     <string name="pref_rc_aileron">Alettoni</string>
@@ -112,7 +112,7 @@
     <string name="button_setup_cancel">Cancella</string>
     <string name="button_setup_send">Inviare</string>
     <string name="button_setup_next">Prossimo</string>
-    <string name="button_setup_done">Fatto</string>
+    <string name="button_setup_done">Eseguito</string>
     <string name="Pause">Pausa</string>
     <string name="dialog_box_btn_txt_ok">OK</string>
 
@@ -126,40 +126,40 @@
     <string name="refresh">Ricarica</string>
 
     <!-- Survey/Mapping related strings -->
-    <string name="distance_between_lines">Lateral</string>
-    <string name="footprint">Footprint</string>
+    <string name="distance_between_lines">Laterale</string>
+    <string name="footprint">Impronta</string>
     <string name="ground_resolution">GSD</string>
-    <string name="distance_between_pictures">Longitudinal</string>
+    <string name="distance_between_pictures">Longitudinale</string>
     <string name="area">Area</string>
     <string name="camera_">Camera:</string>
-    <string name="inner_wps">Inner WPs</string>
-    <string name="hatch_angle">Hatch angle:</string>
-    <string name="flight_altitude">Flight Altitude:</string>
-    <string name="overlap">Overlap:</string>
-    <string name="sidelap">Sidelap:</string>
-    <string name="mission_length">Grid Length</string>
-    <string name="pictures">Pictures</string>
-    <string name="number_of_strips">Number of Strips</string>
-    <string name="exception_draw_polygon">Draw a polygon/WPTs</string>
-    <string name="exception_draw_2_more_polygon_points">Draw at least 2 more polygon points</string>
-    <string name="exception_draw_1_more_polygon_points">Draw at least 1 more polygon point</string>
-    <string name="draw_the_survey_region">Draw the survey region</string>
-    <string name="mission_is_too_lengthy">Mission is too lengthy</string>
+    <string name="inner_wps">WPs interno</string>
+    <string name="hatch_angle">Angolo tratteggio:</string>
+    <string name="flight_altitude">Altitudine volo:</string>
+    <string name="overlap">Sovrapposizione:</string>
+    <string name="sidelap">Giro laterale:</string>
+    <string name="mission_length">Lunghezza griglia</string>
+    <string name="pictures">Foto</string>
+    <string name="number_of_strips">Quantità di fasce</string>
+    <string name="exception_draw_polygon">Tracciare poligono/WPTs</string>
+    <string name="exception_draw_2_more_polygon_points">Tracciare almeno 2 punti poligono addizionali</string>
+    <string name="exception_draw_1_more_polygon_points">Tracciare almeno 1 punto poligono addizionale</string>
+    <string name="draw_the_survey_region">Tracciare l' area da rilevare</string>
+    <string name="mission_is_too_lengthy">Missione troppo lunga</string>
 
     <!-- Flight Mode information -->
-    <string name="mode_acro">Acro allows a pilot to control rate of rotation directly.</string>
-    <string name="mode_althold">Alt Hold automatically controls throttle and maintains altitude. Does not require GPS.</string>
-    <string name="mode_auto">Auto follows the scripted mission stored on the vehicle.</string>
-    <string name="mode_circle">Circle rotates the vehicle around a point of interest. The vehicle will always point toward the center. Requires GPS lock.</string>
-    <string name="mode_drift">Drift combines roll and yaw to produce a more natural and intuitive flight. Requires GPS lock.</string>
-    <string name="mode_guided">Guided enables position control from a ground station. Requires GPS lock.</string>
-    <string name="mode_land">Land at the current location. Requires GPS lock.</string>
-    <string name="mode_loiter">Loiter allows the pilot to fly completely through GPS.</string>
-    <string name="mode_ofloiter">Optical Flow enabled Loiter holds position and altitude assisted by the required optical flow sensors.</string>
+    <string name="mode_acro">Acro consente al pilota di controllare direttamente la rata di rotazione. Non richiede GPS.</string>
+    <string name="mode_althold">Alt Hold controlla automaticamente il throttle e mantiene l' altitudine . Non richiede GPS.</string>
+    <string name="mode_auto">Auto eseguisce la missione programmata e salvata in memoria veicolo. Richiede GPS lock.</string>
+    <string name="mode_circle">Circle fa rotare il veicolo attorno  al point of interest. Il veicolo punta sempre sul centro. Richiede GPS lock.</string>
+    <string name="mode_drift">Drift combines roll and yaw to produce a more natural and intuitive flight. Richiede GPS lock.</string>
+    <string name="mode_guided">Guided consente il controllo di posizione da postazione terra (Ground Station). Richiede GPS lock.</string>
+    <string name="mode_land">Land atterra nella posizione attuale. Richiede GPS lock.</string>
+    <string name="mode_loiter">Loiter consente al pilota di volare interamente mediante GPS. Richiede GPS lock.</string>
+    <string name="mode_ofloiter">Optical Flow abilitato. Loiter holds position and altitude assisted by the required optical flow sensors.</string>
     <string name="mode_position">Position allows the pilot to fly completely through GPS, but with manual throttle control.</string>
-    <string name="mode_rtl">RTL rises to the minimum altitude, returns to the home location and lands. Requires GPS lock.</string>
-    <string name="mode_sport">Sport allows a pilot to control rate of rotation directly with the addition of self-leveling.</string>
-    <string name="mode_stabilize">Stabilize levels the vehicle in flight.</string>
+    <string name="mode_rtl">RTL rises to the minimum altitude, returns to the home location and lands. Richiede lock GPS.</string>
+    <string name="mode_sport">Sport consente al pilota di controllare direttamente con l' aggiunta di auto-livello.</string>
+    <string name="mode_stabilize">Stabilize livella il veicolo in volo.</string>
 
     <!-- Waypoint types -->
     <string name="waypointType_Waypoint">Waypoint</string>
