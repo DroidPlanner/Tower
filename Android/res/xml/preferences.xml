@@ -21,7 +21,27 @@
                 android:key="pref_mavlink_log_enabled"
                 android:summary="@string/pref_mavlink_log_summary"
                 android:title="@string/pref_mavlink_log"/>
-
+            
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="pref_live_upload_enabled"
+                android:summary="@string/pref_live_upload_summary"
+                android:title="@string/pref_live_upload" />
+            <EditTextPreference
+	        android:defaultValue=""
+	        android:dialogTitle="Droneshare username"
+	        android:inputType="textEmailAddress"
+	        android:key="dshare_username"
+	        android:summary="If that user does not exist, it will be created"
+	        android:title="Username" />
+	    <EditTextPreference
+	        android:defaultValue=""
+	        android:dialogTitle="Droneshare password"
+	        android:inputType="textVisiblePassword"
+	        android:key="dshare_password"
+	        android:summary="Just pick a password"
+	        android:title="Password" />
+            
             <PreferenceScreen
                 android:key="pref_mavlink_rates"
                 android:summary="@string/pref_mavlink_rates_summary"

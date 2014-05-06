@@ -9,6 +9,7 @@ import java.nio.ByteOrder;
 
 import org.droidplanner.android.utils.file.FileStream;
 
+import android.util.Log;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -18,6 +19,8 @@ import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
 
 public abstract class MAVLinkConnection extends Thread {
+
+	private static final String TAG = MAVLinkConnection.class.getSimpleName();
 
 	protected abstract void openConnection() throws UnknownHostException,
 			IOException;
@@ -42,6 +45,11 @@ public abstract class MAVLinkConnection extends Thread {
 	protected Context parentContext;
 	private MavLinkConnectionListener listener;
 	private boolean logEnabled;
+
+	private boolean liveUploadEnabled;
+	private DroneshareClient uploader = null;
+	private String droneshareLogin, dronesharePassword;
+
 	private BufferedOutputStream logWriter;
 
 	protected MAVLinkPacket receivedPacket;
@@ -59,6 +67,9 @@ public abstract class MAVLinkConnection extends Thread {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(parentContext);
 		logEnabled = prefs.getBoolean("pref_mavlink_log_enabled", false);
+		liveUploadEnabled = prefs.getBoolean("pref_live_upload_enabled", false);
+		droneshareLogin = prefs.getString("dshare_username", "").trim();
+		dronesharePassword = prefs.getString("dshare_password", "").trim();
 		getPreferences(prefs);
 	}
 
@@ -74,11 +85,19 @@ public abstract class MAVLinkConnection extends Thread {
 				logBuffer.order(ByteOrder.BIG_ENDIAN);
 			}
 
+			if (liveUploadEnabled && !droneshareLogin.isEmpty()
+					&& !dronesharePassword.isEmpty()) {
+				Log.i(TAG, "Starting live upload");
+				uploader = new DroneshareClient();
+				uploader.connect(droneshareLogin, dronesharePassword);
+			} else {
+				Log.w(TAG, "Skipping live upload");
+			}
+
 			while (connected) {
 				readDataBlock();
 				handleData();
 			}
-			closeConnection();
 
 		} catch (FileNotFoundException e) {
 			listener.onComError(e.getMessage());
@@ -86,6 +105,15 @@ public abstract class MAVLinkConnection extends Thread {
 		} catch (IOException e) {
 			listener.onComError(e.getMessage());
 			e.printStackTrace();
+		} finally {
+			try {
+				if (uploader != null)
+					uploader.close();
+
+				closeConnection();
+			} catch (IOException e) {
+				// Ignore errors while closing
+			}
 		}
 
 		listener.onDisconnect();
@@ -111,8 +139,14 @@ public abstract class MAVLinkConnection extends Thread {
 				logBuffer.clear();
 				long time = System.currentTimeMillis() * 1000;
 				logBuffer.putLong(time);
+				byte[] bytes = receivedPacket.encodePacket();
 				logWriter.write(logBuffer.array());
-				logWriter.write(receivedPacket.encodePacket());
+				logWriter.write(bytes);
+
+				// HUGE FIXME - it is possible for the current filterMavlink to
+				// block BAD-BAD
+				if (uploader != null)
+					uploader.filterMavlink(uploader.interfaceNum, bytes);
 			} catch (Exception e) {
 				// There was a null pointer error for some users on
 				// logBuffer.clear();

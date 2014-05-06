@@ -16,7 +16,7 @@ public class UdpConnection extends MAVLinkConnection {
 	private int serverPort;
 
 	private int hostPort;
-	private InetAddress hostAdd;
+	private InetAddress hostAdd = null;
 
 	public UdpConnection(Context context) {
 		super(context);
@@ -47,10 +47,11 @@ public class UdpConnection extends MAVLinkConnection {
 		protected Integer doInBackground(byte[]... params) {
 			try {
 				byte[] buffer = params[0];
-				DatagramPacket packet = new DatagramPacket(buffer,
+                if (hostAdd != null) {  // We can't send to our sister until they have connected to us
+				    DatagramPacket packet = new DatagramPacket(buffer,
 						buffer.length, hostAdd, hostPort);
-				socket.send(packet);
-
+				    socket.send(packet);
+                }
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
