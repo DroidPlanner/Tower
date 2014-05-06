@@ -26,6 +26,11 @@ dependencies {
 android {
     compileSdkVersion 19
     buildToolsVersion '19.0.1'
+
+    defaultConfig {
+        versionName getGitVersion()
+    }
+
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -50,4 +55,10 @@ android {
         release.setRoot('build-types/release')
     }
 
+}
+
+def getGitVersion(){
+    def cmd = "git describe --tag --dirty"
+    def proc = cmd.execute()
+    return proc.text.trim()
 }
