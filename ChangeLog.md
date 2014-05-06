@@ -8,6 +8,13 @@ Our convention for release control is the following (for a release like DPvA.B.C
 All the changes are logged below (preferable with the pull request numbers in parenteses):
 
 # Releases
+## Droidplanner v2.3.0
+* Decoupling of drone code from Android (#734, #649)
+* Mode change bugfix for copter other than quads (#719)
+* Fixed problems added by #734 in the Coord2D class (#735,#736,#737)
+* Cleaning up Android Studio files (#738,#744)
+* Chinese Translation (#717) 
+
 ## Droidplanner v2.2.5
 * Long press on trash tool removes the entire mission (#714)
 * Clear the previous flight path when arming (#705)
