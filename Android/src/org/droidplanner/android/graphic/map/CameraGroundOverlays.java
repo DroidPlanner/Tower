@@ -3,7 +3,7 @@ package org.droidplanner.android.graphic.map;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.droidplanner.android.graphic.DroneHelper;
+import org.droidplanner.android.utils.DroneHelper;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.geoTools.GeoTools;
 import org.droidplanner.core.mission.survey.SurveyData;
