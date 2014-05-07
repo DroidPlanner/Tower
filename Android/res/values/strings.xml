@@ -216,8 +216,8 @@
     <string name="waypoint_repeat">Ripetere waypoint</string>
     <string name="Orbits">Orbite</string>
 
-    <string name="dlg_clear_mission_title">Clear Mission</string>
-    <string name="dlg_clear_mission_confirm">Clear all waypoints from the map?</string>
+    <string name="dlg_clear_mission_title">Elimina Missione</string>
+    <string name="dlg_clear_mission_confirm">Eliminare tutti i waypoints dalla mappa?</string>
 
     <!-- Selection of map style -->
     <string name="menu_map_type">Tipo Mappa</string>
@@ -236,8 +236,8 @@
     <string name="metadata_values">Valori:</string>
     <string name="metadata_units">Unità:</string>
     <string name="metadata_range">Raggio:</string>
-    <string name="lst_note_hint">To add more rows, just press Enter</string>
-    <string name="set_to_zero_to_disable">(set to zero to disable).</string>
+    <string name="lst_note_hint">Per aggiungere righe usare tasto Enter</string>
+    <string name="set_to_zero_to_disable">(usare 0 per disabilitare).</string>
 
     <!-- Calibration data progress -->
     <string name="progress_title_uploading">Uploading calibration data</string>
