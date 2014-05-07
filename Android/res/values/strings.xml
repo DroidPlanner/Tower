@@ -7,7 +7,7 @@
     <!-- Generic strings -->
     <string name="settings">Impostazioni</string>
     <string name="help">Aiuto</string>
-    <string name="menu_drone_setup">Drone Setup</string>
+    <string name="menu_drone_setup">Configurazione Drone </string>
     <string name="app_settings">Impostazioni App</string>
     <string name="flight_data">Dati volo</string>
     <string name="editor">Editore</string>
@@ -162,9 +162,9 @@
     <string name="mode_stabilize">Stabilize auto-livella il veicolo in volo. Non richiede GPS.</string>
 
     <!-- Waypoint types -->
-    <string name="waypointType_Waypoint">Waypoint (Punto posizione)</string>
-    <string name="waypointType_TakeOff">Take-Off (Decollare)</string>
-    <string name="waypointType_RTL">Return To Launch (Ritorno a punto Decollo)</string>
+    <string name="waypointType_Waypoint">Waypoint (Punto percorso)</string>
+    <string name="waypointType_TakeOff">Take-Off (Decollo)</string>
+    <string name="waypointType_RTL">Return To Launch (Ritorno a Punto Decollo)</string>
     <string name="waypointType_Land">Land (Atterrare)</string>
     <string name="waypointType_Circle">Circle (Cerchiare)</string>
     <string name="waypointType_Loiter">Loiter (Crociera su Posizione)</string>
@@ -176,8 +176,8 @@
     <string name="waypointInfo_Loiter">non usato.</string>
     <string name="waypointInfo_LoiterN">Orbitare posizione corrente per numero di volte desiderato.</string>
     <string name="waypointInfo_LoiterT">Mantenere posizione corrente per numero di secondi desiderato, oppure indefinitivamente per terminare Missione.</string>
-    <string name="waypointInfo_RTL">Invia veicolo a posizione Home fissata durante Armare. Altitudine 0 ritorna veicolo a posizione Home con altitudine fissata secondo parametri RTL.</string>
-    <string name="waypointInfo_TakeOff">Lift off from the ground to the specified altitude before proceeding to the next waypoint.</string>
+    <string name="waypointInfo_RTL">Invia veicolo al punto Home fissato durante Armare. Altitudine 0 ritorna veicolo a posizione Home con altitudine fissata secondo parametri RTL.</string>
+    <string name="waypointInfo_TakeOff">Decollo con volo sino altitudine specificata con proseguo su prossimo waypoint.</string>
     <string name="waypointInfo_Waypoint">Travel to a position in 3D space. Optional delay (in seconds) to hold position.</string>
     <string name="waypointInfo_CondAlt">Climb/descend at specified rate. Delay mission state machine until desired altitude reached.</string>
     <string name="waypointInfo_CondYaw">Set condition to reach a certain target angle.</string>
