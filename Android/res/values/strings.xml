@@ -178,18 +178,18 @@
     <string name="waypointInfo_LoiterT">Mantenere posizione corrente per numero di secondi desiderato, oppure indefinitivamente per terminare Missione.</string>
     <string name="waypointInfo_RTL">Invia veicolo al punto Home fissato durante Armare. Altitudine 0 ritorna veicolo a posizione Home con altitudine fissata secondo parametri RTL.</string>
     <string name="waypointInfo_TakeOff">Decollo con volo sino altitudine specificata con proseguo su prossimo waypoint.</string>
-    <string name="waypointInfo_Waypoint">Travel to a position in 3D space. Optional delay (in seconds) to hold position.</string>
-    <string name="waypointInfo_CondAlt">Climb/descend at specified rate. Delay mission state machine until desired altitude reached.</string>
-    <string name="waypointInfo_CondYaw">Set condition to reach a certain target angle.</string>
+    <string name="waypointInfo_Waypoint">Volo su punto in 3D space. Optional Opzione di mantenere posizione (in secondi).</string>
+    <string name="waypointInfo_CondAlt">Ascesa / discesa a velocità specificata. Delay mission state machine until desired altitude reached.</string>
+    <string name="waypointInfo_CondYaw">Impostare condizione per raggiungere cibia con un certo angolo.</string>
     <string name="waypointInfo_CondDistance">Delay mission state machine until within desired distance of next NAV point</string>
-    <string name="waypointInfo_SetHome">Changes the home location either to the current location or a specified location.</string>
-    <string name="waypointInfo_SetSpeed">Change speed and/or throttle set points.Set -1 for both Speed and Throttle if no changes is required</string>
-    <string name="waypointInfo_ROI">Sets a location and altitude to point copter towards and to aim an optional camera.</string>
-    <string name="waypointInfo_SetJump">Repeat waypoint</string>
+    <string name="waypointInfo_SetHome">Cambio posizione home su posizione corrente oppure su posizione specifica.</string>
+    <string name="waypointInfo_SetSpeed">Cambio punti impostazione velocità e/o throttle. Impostazione -1 per entrambi velocità e throttle se nessun cambiamento richiesto.</string>
+    <string name="waypointInfo_ROI">Imposto posizione ed altitudine per puntare drone sull' avanti e puntare eventuale camera.</string>
+    <string name="waypointInfo_SetJump">Ripetere waypoint</string>
 
     <!-- Waypoint editor -->
-    <string name="editor_info_window">Distance: 200m, Flight time: 3:30s</string>
-    <string name="distance_to_home">Distance to home</string>
+    <string name="editor_info_window">Distanza: 200m, Tempo volo: 3:30s</string>
+    <string name="distance_to_home">Distanza da home</string>
     <string name="loiter_time">Loiter Time</string>
     <string name="waypoint_delay">Delay before next waypoint</string>
     <string name="loiter_radius">Loiter Radius</string>
