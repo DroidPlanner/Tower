@@ -7,7 +7,7 @@
     <!-- Generic strings -->
     <string name="settings">Impostazioni</string>
     <string name="help">Aiuto</string>
-    <string name="menu_drone_setup">Configurazione Drone </string>
+    <string name="menu_drone_setup">Configurazione Drone</string>
     <string name="app_settings">Impostazioni App</string>
     <string name="flight_data">Dati volo</string>
     <string name="editor">Editore</string>
