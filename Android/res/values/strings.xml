@@ -50,14 +50,14 @@
     <string name="pref_flight_data">Dati Volo</string>
     <string name="pref_max_flight_path_size">Dimensione traettoria Volo</string>
     <string name="pref_max_flight_path_size_summary">Dimensione Traettoria Volo, mettere a zero per disabilitare.</string>
-    <string name="pref_guided_mode_on_long_press">Premere a lungo per Modo Guidato</string>
-    <string name="pref_guided_mode_on_long_press_summary">Abilita Modo Guidato premendo a lungo la mappa</string>
-    <string name="pref_follow_me_mode_enabled">Abilita Modo FollowMe</string>
+    <string name="pref_guided_mode_on_long_press">Premere a lungo per Modalità Guidato</string>
+    <string name="pref_guided_mode_on_long_press_summary">Abilita Modalità Guidato premendo a lungo la mappa</string>
+    <string name="pref_follow_me_mode_enabled">Abilita Modalità FollowMe</string>
     <string name="pref_follow_me_mode_enabled_summary">Sotto Sviluppo</string>
     <string name="pref_auto_pan_enabled">Abilita auto pan</string>
     <string name="pref_auto_pan_enabled_summary">Auto pan mappa su ricezione nuove coordinate GPS</string>
     <string name="pref_heading_mode">Abilita orientazione FPV</string>
-    <string name="pref_heading_mode_summary">Cambia orientazione su modo FPV (-180º to 180º)</string>
+    <string name="pref_heading_mode_summary">Cambia orientazione su Modalità FPV (-180º to 180º)</string>
     <string name="pref_advanced">Avanzato</string>
     <string name="pref_advanced_use_offline_maps">Usare Mappe offline</string>
     <string name="pref_advanced_use_offline_maps_summary">Usare piastre mappe su memoria locale, per vista mappa offline</string>
@@ -70,7 +70,7 @@
     <string name="pref_vehicle_type_summary">Tipo Veicolo per difetto quando sconnesso</string>
     <string name="pref_rc">Schermo RC</string>
     <string name="pref_rc_general">Generale</string>
-    <string name="pref_rc_mode">Modo RC</string>
+    <string name="pref_rc_mode">Modalità RC</string>
     <string name="pref_rc_mode_summary">Throttle su stick sinistro o destro</string>
     <string name="pref_rc_quickmode_left">QuickMode sinistra</string>
     <string name="pref_rc_quickmode_right">QuickMode destra</string>
@@ -171,7 +171,7 @@
     <string name="waypointType_ROI">Region of Interest (Area di Interesso)</string>
     <string name="waypointType_Survey">Rilievo Poligono</string>
     <!-- Waypoint info -->
-    <string name="waypointInfo_Land">Atterrare veicolo nella posizione attuale. Uscire manualmente da modo Auto per disarmare motori.</string>
+    <string name="waypointInfo_Land">Atterrare veicolo nella posizione attuale. Uscire manualmente da Modalità Auto per disarmare motori.</string>
     <string name="waypointInfo_Generic">Waypoint Generico</string>
     <string name="waypointInfo_Loiter">non usato.</string>
     <string name="waypointInfo_LoiterN">Orbitare posizione corrente per numero di volte desiderato.</string>
@@ -252,22 +252,22 @@
     <string name="setup_radio_title_minmax">Fissare valori Min e Max</string>
     <string name="setup_radio_title_middle">Fissare valori Centro</string>
     <string name="setup_radio_title_complete">Calibrazione completata</string>
-    <string name="setup_radio_desc_minmax">Move the joysticks all the way out several times and toggle the switches, levers and knobs to all possible positions.</string>
-    <string name="setup_radio_desc_middle">Set throttle stick to the lowest position and other joysticks, switches, levers and knobs to their center position.</string>
-    <string name="setup_radio_desc_complete">RC calibration completed. Press \'Save\' to upload data to vehicle.</string>
+    <string name="setup_radio_desc_minmax">Muovere più volte il joystick in tutte le direzioni fino al limite, muovere gli interruttori, leve e manopole in tutte le posizioni.</string>
+    <string name="setup_radio_desc_middle">Abbassare il throttle stick  sulla posizione minima e tutti gli altri interruttori, leve e manopole su posizione centro.</string>
+    <string name="setup_radio_desc_complete">Calibrazione RC completata. Premere \'Save\' per caricare dati su drone.</string>
 
     <!-- Compass Setup Resource Strings -->
     <string name="setup_mag_title">Calibrazione Compasso</string>
 
     <!-- Accelerometer Setup Resource Strings -->
     <string name="setup_imu_title">Calibrazione Accelerometro</string>
-    <string name="setup_imu_start">Premere Calibrare per inizio calibrazione  IMU. Assicurarsi drone sia posata su superfice PIANA prima di iniziare il processo di calibrazione.</string>
-    <string name="setup_imu_normal">Place the vehicle on its NORMAL position ensuring very minimal movement and press Next.</string>
-    <string name="setup_imu_left">Place the vehicle on its LEFT ensuring very minimal movement and press Next.</string>
-    <string name="setup_imu_right">Place the vehicle on its RIGHT ensuring very minimal movement and press Next.</string>
-    <string name="setup_imu_nosedown">Place the vehicle NOSE DOWN ensuring very minimal movement and press Next.</string>
-    <string name="setup_imu_noseup">Place the vehicle NOSE UP ensuring very minimal movement and press Next.</string>
-    <string name="setup_imu_back">Place the vehicle on its BACK ensuring very minimal movement and press Next.</string>
+    <string name="setup_imu_start">Premere Calibrare per inizio calibrazione  IMU. Assicurarsi drone sia posata su superfice A LIVELLO prima di iniziare il processo di calibrazione.</string>
+    <string name="setup_imu_normal">Posare drone in orientazione NORMALE assicurandosi di movimenti minimi, poi premere Next.</string>
+    <string name="setup_imu_left">Posare drone in orientazione SINISTRA assicurandosi di movimenti minimi, poi premere Next.</string>
+    <string name="setup_imu_right">Posare drone in orientazione DESTRA assicurandosi di movimenti minimi, poi premere Next.</string>
+    <string name="setup_imu_nosedown">Posare drone in orientazione NASO IN BASSO assicurandosi di movimenti minimi, poi premere Next.</string>
+    <string name="setup_imu_noseup">Posare drone in orientazione NASO IN ALTO assicurandosi di movimenti minimi, poi premere Next.</string>
+    <string name="setup_imu_back">Posare drone in orientazione DI SCHIENA assicurandosi di movimenti minimi, poi premere Next.</string>
     <string name="setup_imu_completed">Calibrazione Accelerometro completata. Se non riuscita si prega di ricalibrare.</string>
     <string name="setup_imu_step">Per iniziare calibrazione premere Calibrare.</string>
     <string name="setup_imu_timeleft">Tempo restante prima della prossima orientazione:/string>
@@ -284,8 +284,8 @@
     <string name="setup_fm_mode4">4.</string>
     <string name="setup_fm_mode5">5.</string>
     <string name="setup_fm_mode6">6.</string>
-    <string name="setup_fm_simple">Simple Mode</string>
-    <string name="setup_fm_super">Super Simple Mode</string>
+    <string name="setup_fm_simple">Modalità Simple</string>
+    <string name="setup_fm_super">Modalità Super Simple</string>
 
     <!-- Channel Options Setup Resource Strings -->
     <string name="setup_ch_title">Channel Options Configuration</string>
