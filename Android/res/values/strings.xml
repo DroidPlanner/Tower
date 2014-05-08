@@ -42,13 +42,13 @@
     <string name="pref_ui_language_english">Inglese come lingua IU</string>
     <string name="pref_ui_language_english_summary">Usare Inglese (al posto di lingua del sistema). Richiede riavvio dell' App.</string>
     <string name="pref_connection_actions">Mentre connesso a Drone</string>
-    <string name="pref_connection_actions_summary">Actions to perform on or while connected to the Drone\nTo apply disconnect and reconnect</string>
+    <string name="pref_connection_actions_summary">Azioni da eseguire durante connession con drone. Richiede disconnessa / riconnessa</string>
     <string name="pref_keep_screen_bright">Mantenere schermo acceso</string>
     <string name="pref_keep_screen_bright_summary">Mantenere schermo acceso e luminoso (incide sulla durata vita batteria)</string>
     <string name="pref_lock_screen_orientation">Bloccare orientazione schermo</string>
     <string name="pref_lock_screen_orientation_summary">Bloccare orientazione schermo come orientato durante inizio connessione</string>
     <string name="pref_flight_data">Dati Volo</string>
-    <string name="pref_max_flight_path_size">Dimensione Traettoria Volo</string>
+    <string name="pref_max_flight_path_size">Dimensione traettoria Volo</string>
     <string name="pref_max_flight_path_size_summary">Dimensione Traettoria Volo, mettere a zero per disabilitare.</string>
     <string name="pref_guided_mode_on_long_press">Premere a lungo per Modo Guidato</string>
     <string name="pref_guided_mode_on_long_press_summary">Abilita Modo Guidato premendo a lungo la mappa</string>
@@ -240,37 +240,37 @@
     <string name="set_to_zero_to_disable">(usare 0 per disabilitare).</string>
 
     <!-- Calibration data progress -->
-    <string name="progress_title_uploading">Uploading calibration data</string>
-    <string name="progress_desc_uploading">DroidPlanner is uploading calibration data to vehicel</string>
-    <string name="progress_title_downloading">Downloading calibration data</string>
-    <string name="progress_desc_downloading">DroidPlanner is downloading calibration data from vehicle. If system is not connected, press Cancel.</string>
+    <string name="progress_title_uploading">Caricamento dati calibrazione</string>
+    <string name="progress_desc_uploading">DroidPlanner sta caricando dati calibrazione su drone</string>
+    <string name="progress_title_downloading">Scaricamento dati calibrazione</string>
+    <string name="progress_desc_downloading">DroidPlanner sta scaricando dati calibrazione da drone. Se sistema sconnesso premere Cancel.</string>
 
     <!-- Radio Setup Resource Strings -->
-    <string name="setup_radio_title">Radio Channel Calibration</string>
-    <string name="setup_radio_cal_title">Start Calibration</string>
-    <string name="setup_radio_cal_desc">Press Calibrate to start the radio calibration. Ensure the radio transmitter is switched \'ON\' and transmitting.</string>
-    <string name="setup_radio_title_minmax">Set Min &amp; Max values</string>
-    <string name="setup_radio_title_middle">Set Center values</string>
-    <string name="setup_radio_title_complete">Calibration complete</string>
+    <string name="setup_radio_title">Calibrazioen canali radio</string>
+    <string name="setup_radio_cal_title">Inizio calibrazione</string>
+    <string name="setup_radio_cal_desc">Premere Calibrazione per iniziare calibrazione  radio. Assicurarsi trasmettitore radio sia acceso e trasmettendo.</string>
+    <string name="setup_radio_title_minmax">Fissare valori Min e Max</string>
+    <string name="setup_radio_title_middle">Fissare valori Centro</string>
+    <string name="setup_radio_title_complete">Calibrazione completata</string>
     <string name="setup_radio_desc_minmax">Move the joysticks all the way out several times and toggle the switches, levers and knobs to all possible positions.</string>
     <string name="setup_radio_desc_middle">Set throttle stick to the lowest position and other joysticks, switches, levers and knobs to their center position.</string>
     <string name="setup_radio_desc_complete">RC calibration completed. Press \'Save\' to upload data to vehicle.</string>
 
     <!-- Compass Setup Resource Strings -->
-    <string name="setup_mag_title">Compass Calibration</string>
+    <string name="setup_mag_title">Calibrazione Compasso</string>
 
     <!-- Accelerometer Setup Resource Strings -->
-    <string name="setup_imu_title">Accelerometer Calibration</string>
-    <string name="setup_imu_start">Press Calibrate to start IMU calibration. Ensure vehicle is placed on a FLAT surface before beginning the calibration process.</string>
+    <string name="setup_imu_title">Calibrazione Accelerometro</string>
+    <string name="setup_imu_start">Premere Calibrare per inizio calibrazione  IMU. Assicurarsi drone sia posata su superfice PIANA prima di iniziare il processo di calibrazione.</string>
     <string name="setup_imu_normal">Place the vehicle on its NORMAL position ensuring very minimal movement and press Next.</string>
     <string name="setup_imu_left">Place the vehicle on its LEFT ensuring very minimal movement and press Next.</string>
     <string name="setup_imu_right">Place the vehicle on its RIGHT ensuring very minimal movement and press Next.</string>
     <string name="setup_imu_nosedown">Place the vehicle NOSE DOWN ensuring very minimal movement and press Next.</string>
     <string name="setup_imu_noseup">Place the vehicle NOSE UP ensuring very minimal movement and press Next.</string>
     <string name="setup_imu_back">Place the vehicle on its BACK ensuring very minimal movement and press Next.</string>
-    <string name="setup_imu_completed">Accelerometer calibration completed. If it was not successful, please recalibrate.</string>
-    <string name="setup_imu_step">To start calibration, press Calibrate.</string>
-    <string name="setup_imu_timeleft">Time left before next orientation:</string>
+    <string name="setup_imu_completed">Calibrazione Accelerometro completata. Se non riuscita si prega di ricalibrare.</string>
+    <string name="setup_imu_step">Per iniziare calibrazione premere Calibrare.</string>
+    <string name="setup_imu_timeleft">Tempo restante prima della prossima orientazione:/string>
 
     <!-- Flight Setup Resource Strings -->
     <string name="setup_fm_title">Flight Mode Configuration</string>
