@@ -273,11 +273,11 @@
     <string name="setup_imu_timeleft">Tempo restante prima della prossima orientazione:/string>
 
     <!-- Flight Setup Resource Strings -->
-    <string name="setup_fm_title">Flight Mode Configuration</string>
-    <string name="setup_fm_side_title">Update Flight Mode</string>
-    <string name="setup_fm_side_desc">Press \'Send\' to update the new flight modes to vehicle.</string>
-    <string name="setup_fm_desc_uploading">Uploading Flight Mode configuration data</string>
-    <string name="setup_fm_desc_downloading">Downloading Flight Mode configuration data</string>
+    <string name="setup_fm_title">Configurazione modalità volo</string>
+    <string name="setup_fm_side_title">Aggiorno modalità volo</string>
+    <string name="setup_fm_side_desc">Premere \'Send\' per caricare nuove modalità volo su drone.</string>
+    <string name="setup_fm_desc_uploading">Caricando dati configurazione modalità volo</string>
+    <string name="setup_fm_desc_downloading">Scaricando dati configurazione modalità volo</string>
     <string name="setup_fm_mode1">1.</string>
     <string name="setup_fm_mode2">2.</string>
     <string name="setup_fm_mode3">3.</string>
@@ -337,16 +337,16 @@
     <string name="guided_mode_warning">"Press OK to enter Guided mode. \nTo change locations, press and hold the map.</string>
 
     <!-- Bluetooth device selection strings -->
-    <string name="select_device">Select device to connect</string>
-    <string name="none_paired">No devices have been paired</string>
-    <string name="none_found">No devices found</string>
-    <string name="title_paired_devices">Paired Devices</string>
-    <string name="title_other_devices">Other Available Devices</string>
-    <string name="button_scan">Scan for devices</string>
-    <string name="scanning">Scanning for devices</string>
+    <string name="select_device">Selezionare dispositivo da connettere</string>
+    <string name="none_paired">Nessun dispositivo accoppiato</string>
+    <string name="none_found">Nessun dispositivo trovato</string>
+    <string name="title_paired_devices">Dispositivi accoppiati/string>
+    <string name="title_other_devices">Altri dispositivi disponibili</string>
+    <string name="button_scan">Cerca dispositivi</string>
+    <string name="scanning">Ricercando dispositivi...</string>
 
     <!-- Content description -->
-    <string name="expandable_listview_icon_desc">Expandable listview icon</string>
+    <string name="expandable_listview_icon_desc">Icona vista lista espansibile</string>
 
     <!-- Others (when possible move to a grouping above) -->
     <string name="tune_roll">Manual adjustment of roll and beccheggio tuning. Rate_P is the primary value to adjust.</string>
