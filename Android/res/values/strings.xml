@@ -322,19 +322,19 @@
     <string name="ground_speed_label">Velocità al suolo</string>
     <string name="air_speed_label">Velocità aria</string>
     <string name="default_angle_value">--°</string>
-    <string name="mission_control_control">Controllo</string>
-    <string name="mission_control_edit">Edito</string>
-    <string name="mission_control_home">Home</string>
+    <string name="mission_control_control">Control (Controllo)</string>
+    <string name="mission_control_edit">Edit (Modifico)</string>
+    <string name="mission_control_home">Home (Casa)</string>
     <string name="mission_control_land">Land (Atterrare)</string>
-    <string name="mission_control_takeoff">Take</string>
-    <string name="mission_control_loiter">Loiter</string>
-    <string name="mission_control_follow">Follow</string>
-    <string name="telemetry_label">Telemetry</string>
-    <string name="flight_modes_label">Flight modes</string>
-    <string name="menu_info_bar">Info Bar</string>
-    <string name="drawer_open">Open navigation drawer</string>
-    <string name="drawer_close">Close navigation drawer</string>
-    <string name="guided_mode_warning">"Press OK to enter Guided mode. \nTo change locations, press and hold the map.</string>
+    <string name="mission_control_takeoff">Takeoff (Decollo)</string>
+    <string name="mission_control_loiter">Loiter (Crociera su Posizione)</string>
+    <string name="mission_control_follow">Follow(Seguire)</string>
+    <string name="telemetry_label">Telemetry(Telemetria)</string>
+    <string name="flight_modes_label">Flight modes(Modalità volo)</string>
+    <string name="menu_info_bar">Info Bar(Barra info)</string>
+    <string name="drawer_open">Aprire cassetto di navigazione</string>
+    <string name="drawer_close">Chiuder cassetto di navigazione</string>
+    <string name="guided_mode_warning">"Premere OK per entrare modalità Volo Guidato. Per cambiare posizione mantenere premuto la mappa.</string>
 
     <!-- Bluetooth device selection strings -->
     <string name="select_device">Selezionare dispositivo da connettere</string>
