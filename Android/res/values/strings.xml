@@ -209,7 +209,7 @@
     <string name="waypoint_throttle">Throttle</string>
     <string name="waypoint_speedtype">Typo velocità/string>
     <string name="waypoint_airspeed">Velocità aria</string>
-    <string name="waypoint_groundspeed">Velocità suolo</string>
+    <string name="waypoint_groundspeed">Velocità al suolo</string>
     <string name="selectCoodSource">Selezionare fonte posizione</string>
     <string name="waypoint_coordsrc">Fonte dati:</string>
     <string name="waypoint_jumpto">Vai a waypoint:</string>
@@ -288,24 +288,24 @@
     <string name="setup_fm_super">Modalità Super Simple</string>
 
     <!-- Channel Options Setup Resource Strings -->
-    <string name="setup_ch_title">Channel Options Configuration</string>
-    <string name="setup_ch_side_title">Update Channel Options</string>
+    <string name="setup_ch_title">Opzioni configurazione canali</string>
+    <string name="setup_ch_side_title">Aggiorno opzioni canali</string>
     <string name="setup_ch_side_desc">Press \'Send\' to update the new servo function to vehicle.</string>
-    <string name="setup_ch_tune_title">Channel 6 - Tuning Function</string>
-    <string name="setup_ch_options_title">Channel Options - CH7 &amp; CH8</string>
-    <string name="setup_ch_CH7_options">Channel 7 Options:</string>
-    <string name="setup_ch_CH6_options">Channel 6 Tuning:</string>
-    <string name="setup_ch_CH8_options">Channel 8 Tuning:</string>
-    <string name="setup_ch_tune_low">Tune Value - Low:</string>
-    <string name="setup_ch_tune_high">Tune Value - High:</string>
+    <string name="setup_ch_tune_title">Canalel 6 - Funzione regolaggio</string>
+    <string name="setup_ch_options_title">Opzioni canale - CH7 &amp; CH8</string>
+    <string name="setup_ch_CH7_options">Opzioni canale 7:</string>
+    <string name="setup_ch_CH6_options">Opzioni canale 6:</string>
+    <string name="setup_ch_CH8_options">Opzioni canale 8:</string>
+    <string name="setup_ch_tune_low">Valore regolaggio - Basso:</string>
+    <string name="setup_ch_tune_high">Valore regolaggio - Alto:</string>
 
     <!-- Servo functions Setup Resource Strings -->
-    <string name="setup_sf_title">Servo Function Configuration</string>
-    <string name="setup_sf_side_title">Update Servo Function</string>
-    <string name="setup_sf_side_desc">Press \'Send\' to update the new servo function to vehicle.</string>
-    <string name="setup_sf_desc_uploading">Uploading Servo configuration data</string>
-    <string name="setup_sf_desc_downloading">Downloading Servo configuration data</string>
-    <string name="setup_sf_servo_title">Servo Functions Configuration</string>
+    <string name="setup_sf_title">Configurazione funzioni servo</string>
+    <string name="setup_sf_side_title">Aggiorno funzioni servo</string>
+    <string name="setup_sf_side_desc">Premere \'Send\' per aggiornare le nouve funzioni servo su drone.</string>
+    <string name="setup_sf_desc_uploading">Carico dati configurazione servo</string>
+    <string name="setup_sf_desc_downloading">Scarico dati configurazione servo</string>
+    <string name="setup_sf_servo_title">Configurazione funzioni servo</string>
     <string name="setup_sf_servo5">Servo 5:</string>
     <string name="setup_sf_servo6">Servo 6:</string>
     <string name="setup_sf_servo7">Servo 7:</string>
@@ -315,17 +315,17 @@
 
     <!-- Main Screen and Telemetry -->
     <string name="telemetry_default_value">0.0</string>
-    <string name="climb_rate_label">Climb Rate</string>
-    <string name="altitude_label">Altitude</string>
+    <string name="climb_rate_label">Rata ascesa</string>
+    <string name="altitude_label">Altitudine</string>
     <string name="meter_unit">m</string>
     <string name="speed_unit">m/s</string>
-    <string name="ground_speed_label">Ground Speed</string>
-    <string name="air_speed_label">Air Speed</string>
+    <string name="ground_speed_label">Velocità al suolo</string>
+    <string name="air_speed_label">Velocità aria</string>
     <string name="default_angle_value">--°</string>
-    <string name="mission_control_control">Control</string>
-    <string name="mission_control_edit">Edit</string>
+    <string name="mission_control_control">Controllo</string>
+    <string name="mission_control_edit">Edito</string>
     <string name="mission_control_home">Home</string>
-    <string name="mission_control_land">Land</string>
+    <string name="mission_control_land">Land (Atterrare)</string>
     <string name="mission_control_takeoff">Take</string>
     <string name="mission_control_loiter">Loiter</string>
     <string name="mission_control_follow">Follow</string>
@@ -349,12 +349,12 @@
     <string name="expandable_listview_icon_desc">Icona vista lista espansibile</string>
 
     <!-- Others (when possible move to a grouping above) -->
-    <string name="tune_roll">Manual adjustment of roll and beccheggio tuning. Rate_P is the primary value to adjust.</string>
-    <string name="dialog_box_title_altitude">Altitude</string>
-    <string name="mode_switch">Assign RC channel 5 to a switch on your radio to control flight modes. Move the switch to each position and select the desired flight mode below.</string>
-    <string name="MAVLinkError">MAVLink Error:</string>
-    <string name="msg_connect_first">Please connect first</string>
-    <string name="mode1_throttle_on_right_stick">Mode 1: Throttle on RIGHT stick</string>
-    <string name="mode2_throttle_on_left_stick">Mode 2: Throttle on LEFT stick</string>
+    <string name="tune_roll">Adattamento manuale del regolaggio rollio and beccheggio. Rate_P é il valore primario da regolare.</string>
+    <string name="dialog_box_title_altitude">Altitudine</string>
+    <string name="mode_switch">Assegnare canale RC 5 ad un interruttore della radio per controllare modalità volo. Muovere l' interruttore su ognuna posizione e selezionare la modalità volo sottostante.</string>
+    <string name="MAVLinkError">Errore MAVLink:</string>
+    <string name="msg_connect_first">Si prega di collegare prima</string>
+    <string name="mode1_throttle_on_right_stick">Modalità 1: Throttle su stick DESTRO</string>
+    <string name="mode2_throttle_on_left_stick">Modalità 2: Throttle su stick SINISTRO</string>
 
 </resources>
