@@ -91,8 +91,8 @@
     <string name="pref_rc_elevator_reverse_summary">Invertire direzione Elevator (equilibratore) / Pitch (Beccheggio)</string>
     <string name="pref_connection">Preferenze connessione</string>
     <string name="pref_usb">Connessione USB</string>
-    <string name="pref_baud_type">Rapidità connessione Telemetria</string>
-    <string name="pref_baud_type_summary">Rata Baud connessione Telemetria USB</string>
+    <string name="pref_baud_type">Rapidità connessione telemetria</string>
+    <string name="pref_baud_type_summary">Rata Baud di connessione Telemetria USB</string>
     <string name="pref_server">Connessione TCP</string>
     <string name="pref_server_ip">Server IP</string>
     <string name="pref_server_port">Porta Server</string>
@@ -109,7 +109,7 @@
     <string name="disconnected">Sconnesso</string>
 
     <!-- Failsafe Strings -->
-    <string name="RCFailsafe">Allarme! RC Failsafe – Returning to Launch</string>
+    <string name="RCFailsafe">Allarme! RC Failsafe – Returning to Launch (ritorno a punto decollo)</string>
 
     <!-- Common Setup Buttons Resource Strings -->
     <string name="button_setup_calibrate">Calibrare</string>
@@ -125,9 +125,9 @@
     <string name="no_files">Nessun file</string>
     <string name="error_when_opening_file">Errore aprendo file</string>
     <string name="save">Salvare</string>
-    <string name="open">Oprire</string>
+    <string name="open">Aprire</string>
     <string name="write">Scrivere</string>
-    <string name="refresh">Ricarica</string>
+    <string name="refresh">Ricaricare</string>
 
     <!-- Survey/Mapping related strings -->
     <string name="distance_between_lines">Laterale</string>
@@ -143,8 +143,8 @@
     <string name="sidelap">Giro laterale:</string>
     <string name="mission_length">Lunghezza griglia</string>
     <string name="pictures">Foto</string>
-    <string name="number_of_strips">Quantità di fasce</string>
-    <string name="exception_draw_polygon">Tracciare poligono/WPTs</string>
+    <string name="number_of_strips">Quantità fasce</string>
+    <string name="exception_draw_polygon">Tracciare poligono / WPTs</string>
     <string name="exception_draw_2_more_polygon_points">Tracciare almeno 2 punti poligono addizionali</string>
     <string name="exception_draw_1_more_polygon_points">Tracciare almeno 1 punto poligono addizionale</string>
     <string name="draw_the_survey_region">Tracciare l' area da rilevare</string>
@@ -161,7 +161,7 @@
     <string name="mode_loiter">Loiter consente al pilota di volare interamente mediante GPS. Richiede GPS lock.</string>
     <string name="mode_ofloiter">Optical Flow abilitato. Loiter mantiene posizione e altitudine con assistenza del sensore optical flow.</string>
     <string name="mode_position">Position consente al pilota di volare interamente mediante GPS, ma con controllo manuale di throttle. Richiede GPS lock.</string>
-    <string name="mode_rtl">RTL rises to the minimum altitude, returns to the home location and lands. Richiede lock GPS.</string>
+    <string name="mode_rtl">RTL ascende ad altitudine minima, ritorna sopra posizione Home ed atterra. Richiede lock GPS.</string>
     <string name="mode_sport">Sport consente al pilota di controllare il veicolo direttamente con aiuto di auto-livello. Non richiede GPS.</string>
     <string name="mode_stabilize">Stabilize auto-livella il veicolo in volo. Non richiede GPS.</string>
 
@@ -176,38 +176,38 @@
     <string name="waypointType_Survey">Rilievo Poligono</string>
     
     <!-- Waypoint info -->
-    <string name="waypointInfo_Land">Atterrare veicolo nella posizione attuale. Uscire manualmente da Modalità Auto per disarmare motori.</string>
-    <string name="waypointInfo_Generic">Waypoint Generico</string>
+    <string name="waypointInfo_Land">Atterrare veicolo nella posizione attuale. Uscire manualmente da modalità Auto per disarmare motori.</string>
+    <string name="waypointInfo_Generic">Waypoint generico</string>
     <string name="waypointInfo_Loiter">non usato.</string>
     <string name="waypointInfo_LoiterN">Orbitare posizione corrente per numero di volte desiderato.</string>
     <string name="waypointInfo_LoiterT">Mantenere posizione corrente per numero di secondi desiderato, oppure indefinitivamente per terminare Missione.</string>
-    <string name="waypointInfo_RTL">Invia veicolo al punto Home fissato durante Armare. Altitudine 0 ritorna veicolo a posizione Home con altitudine fissata secondo parametri RTL.</string>
+    <string name="waypointInfo_RTL">Invia veicolo al punto Home fissato durante armare. Altitudine 0 ritorna veicolo a posizione Home con altitudine fissata secondo parametri RTL.</string>
     <string name="waypointInfo_TakeOff">Decollo con volo sino altitudine specificata con proseguo su prossimo waypoint.</string>
-    <string name="waypointInfo_Waypoint">Volo su punto in 3D space. Optional Opzione di mantenere posizione (in secondi).</string>
+    <string name="waypointInfo_Waypoint">Volo su punto in 3D space. Opzione di mantenere posizione (in secondi).</string>
     <string name="waypointInfo_CondAlt">Ascesa / discesa a velocità specificata. Ritarda missione finché desiderata alitudine raggiunta.</string>
     <string name="waypointInfo_CondYaw">Impostare condizione per raggiungere cibia con un certo angolo.</string>
-    <string name="waypointInfo_CondDistance">Ritardo missione finché entro distanza desiderata del prossimo waypoint.</string>
-    <string name="waypointInfo_SetHome">Cambio posizione home su posizione corrente oppure su posizione specifica.</string>
+    <string name="waypointInfo_CondDistance">Ritardo missione finché entro distanza desiderata dal prossimo waypoint.</string>
+    <string name="waypointInfo_SetHome">Cambio posizione Home su posizione corrente oppure su posizione specifica.</string>
     <string name="waypointInfo_SetSpeed">Cambio punti impostazione velocità e/o throttle. Impostazione -1 per entrambi velocità e throttle se nessun cambiamento richiesto.</string>
     <string name="waypointInfo_ROI">Imposto posizione ed altitudine per puntare drone sull' avanti e puntare eventuale camera.</string>
-    <string name="waypointInfo_SetJump">Ripetere waypoint</string>
+    <string name="waypointInfo_SetJump">Ripetere Waypoint</string>
 
     <!-- Waypoint editor -->
     <string name="editor_info_window">Distanza: 200m, Tempo volo: 3:30s</string>
-    <string name="distance_to_home">Distanza da home</string>
+    <string name="distance_to_home">Distanza da Home</string>
     <string name="loiter_time">Durata Loiter</string>
-    <string name="waypoint_delay">Ritardo prima del prossimo waypoint</string>
+    <string name="waypoint_delay">Ritardo prima del prossimo Waypoint</string>
     <string name="loiter_radius">Raggio Loiter</string>
     <string name="loiter_ccw">CCW (senso antiorario)</string>
     <string name="waypoint_altitude">Altitudine</string>
-    <string name="waypoint_angle">Angolo Beccheggio</string>
+    <string name="waypoint_angle">Angolo beccheggio</string>
     <string name="waypoint_finalaltitude">Altitudine obiettivo</string>
     <string name="waypoint_altrate">Rata ascesa / discesa</string>
     <string name="waypoint_yawrate">Rata beccheggio</string>
     <string name="waypoint_yawdir">Imposto direzione beccheggio in senso antiorario</string>
     <string name="waypoint_yawoffset">Uso offset relativo</string>
     <string name="waypoint_distance">Distanza</string>
-    <string name="waypoint_homecurrent">Imposta home usando posizione attuale</string>
+    <string name="waypoint_homecurrent">Imposta Home usando posizione attuale</string>
     <string name="waypoint_longitude">Longitudine:</string>
     <string name="waypoint_latitude">Latitudine:</string>
     <string name="waypoint_speed">Velocità obbiettivo</string>
@@ -215,25 +215,25 @@
     <string name="waypoint_speedtype">Typo velocità/string>
     <string name="waypoint_airspeed">Velocità aria</string>
     <string name="waypoint_groundspeed">Velocità al suolo</string>
-    <string name="selectCoodSource">Selezionare fonte posizione</string>
+    <string name="selectCoodSource">Selezionare origine posizione</string>
     <string name="waypoint_coordsrc">Fonte dati:</string>
-    <string name="waypoint_jumpto">Vai a waypoint:</string>
-    <string name="waypoint_repeat">Ripetere waypoint</string>
+    <string name="waypoint_jumpto">Vai a Waypoint:</string>
+    <string name="waypoint_repeat">Ripetere Waypoint</string>
     <string name="Orbits">Orbite</string>
 
-    <string name="dlg_clear_mission_title">Elimina Missione</string>
+    <string name="dlg_clear_mission_title">Elimina missione</string>
     <string name="dlg_clear_mission_confirm">Eliminare tutti i waypoints dalla mappa?</string>
 
     <!-- Selection of map style -->
-    <string name="menu_map_type">Tipo Mappa</string>
+    <string name="menu_map_type">Tipo mappa</string>
     <string name="menu_map_type_satellite">Satellite</string>
     <string name="menu_map_type_hybrid">Ibrido</string>
     <string name="menu_map_type_normal">Normale</string>
     <string name="menu_map_type_terrain">Terreno</string>
 
     <!-- Parameters screen -->
-    <string name="params_click_to_refresh">Cliccare per ricarico Parametri drone</string>
-    <string name="refreshing_parameters">Ricarico Parametri&#8230;</string>
+    <string name="params_click_to_refresh">Cliccare per ricarico parametri drone</string>
+    <string name="refreshing_parameters">Ricarico parametri&#8230;</string>
     <string name="parameters_saved">Parametri salvati</string>
     <string name="msg_parameters_written_to_drone">Parametri scritti su drone</string>
     <string name="metadata_value">Valore:</string>
@@ -246,16 +246,16 @@
 
     <!-- Calibration data progress -->
     <string name="progress_title_uploading">Caricamento dati calibrazione</string>
-    <string name="progress_desc_uploading">DroidPlanner sta caricando dati calibrazione su drone</string>
+    <string name="progress_desc_uploading">DroidPlanner sta caricando dati calibrazione su Drone</string>
     <string name="progress_title_downloading">Scaricamento dati calibrazione</string>
     <string name="progress_desc_downloading">DroidPlanner sta scaricando dati calibrazione da drone. Se sistema sconnesso premere Cancel.</string>
 
     <!-- Radio Setup Resource Strings -->
-    <string name="setup_radio_title">Calibrazioen canali radio</string>
+    <string name="setup_radio_title">Calibrazine canali radio</string>
     <string name="setup_radio_cal_title">Inizio calibrazione</string>
-    <string name="setup_radio_cal_desc">Premere Calibrazione per iniziare calibrazione  radio. Assicurarsi trasmettitore radio sia acceso e trasmettendo.</string>
+    <string name="setup_radio_cal_desc">Premere Calibrare per iniziare calibrazione  radio. Assicurarsi trasmettitore radio sia acceso e trasmettendo.</string>
     <string name="setup_radio_title_minmax">Fissare valori Min e Max</string>
-    <string name="setup_radio_title_middle">Fissare valori Centro</string>
+    <string name="setup_radio_title_middle">Fissare valori centro</string>
     <string name="setup_radio_title_complete">Calibrazione completata</string>
     <string name="setup_radio_desc_minmax">Muovere più volte il joystick in tutte le direzioni fino al limite, muovere gli interruttori, leve e manopole in tutte le posizioni.</string>
     <string name="setup_radio_desc_middle">Abbassare il throttle stick  sulla posizione minima e tutti gli altri interruttori, leve e manopole su posizione centro.</string>
@@ -265,7 +265,7 @@
     <string name="setup_mag_title">Calibrazione Compasso</string>
 
     <!-- Accelerometer Setup Resource Strings -->
-    <string name="setup_imu_title">Calibrazione Accelerometro</string>
+    <string name="setup_imu_title">Calibrazione accelerometro</string>
     <string name="setup_imu_start">Premere Calibrare per inizio calibrazione  IMU. Assicurarsi drone sia posata su superfice A LIVELLO prima di iniziare il processo di calibrazione.</string>
     <string name="setup_imu_normal">Posare drone in orientazione NORMALE assicurandosi di movimenti minimi, poi premere Next.</string>
     <string name="setup_imu_left">Posare drone in orientazione SINISTRA assicurandosi di movimenti minimi, poi premere Next.</string>
@@ -339,7 +339,7 @@
     <string name="menu_info_bar">Info Bar(Barra info)</string>
     <string name="drawer_open">Aprire cassetto di navigazione</string>
     <string name="drawer_close">Chiuder cassetto di navigazione</string>
-    <string name="guided_mode_warning">"Premere OK per entrare modalità Volo Guidato. Per cambiare posizione mantenere premuto la mappa.</string>
+    <string name="guided_mode_warning">"Premere OK per entrare modalità Guided (volo guidato). Per cambiare posizione mantenere premuto la mappa.</string>
 
     <!-- Bluetooth device selection strings -->
     <string name="select_device">Selezionare dispositivo da connettere</string>
@@ -354,7 +354,7 @@
     <string name="expandable_listview_icon_desc">Icona vista lista espansibile</string>
 
     <!-- Others (when possible move to a grouping above) -->
-    <string name="tune_roll">Adattamento manuale del regolaggio rollio and beccheggio. Rate_P é il valore primario da regolare.</string>
+    <string name="tune_roll">Adattamento manuale del regolaggio Roll (rollio) and Pitch (beccheggio). Rate_P é il valore primario da variare.</string>
     <string name="dialog_box_title_altitude">Altitudine</string>
     <string name="mode_switch">Assegnare canale RC 5 ad un interruttore della radio per controllare modalità volo. Muovere l' interruttore su ognuna posizione e selezionare la modalità volo sottostante.</string>
     <string name="MAVLinkError">Errore MAVLink:</string>
