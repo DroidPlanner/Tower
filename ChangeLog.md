@@ -8,6 +8,12 @@ Our convention for release control is the following (for a release like DPvA.B.C
 All the changes are logged below (preferable with the pull request numbers in parenteses):
 
 # Releases
+## Droidplanner v2.3.1
+* Improve Mission Support, Takeoff and ROI (#739)
+* Fix problems with UDP connection (#742)
+* Fix build settings (#748,#749)
+* Add support for Droneshare (#746)
+
 ## Droidplanner v2.3.0
 * Decoupling of drone code from Android (#734, #649)
 * Mode change bugfix for copter other than quads (#719)
