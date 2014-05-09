@@ -45,7 +45,7 @@
     <string name="pref_ui_language_english">Inglese come lingua IU</string>
     <string name="pref_ui_language_english_summary">Usare Inglese (al posto di lingua del sistema). Richiede riavvio dell' App.</string>
     <string name="pref_connection_actions">Mentre connesso a Drone</string>
-    <string name="pref_connection_actions_summary">Azioni da eseguire durante connession con drone. Richiede disconnessa / riconnessa</string>
+    <string name="pref_connection_actions_summary">Azioni da eseguire durante connession con drone.\nTo Richiede disconnessa / riconnessa</string>
     <string name="pref_keep_screen_bright">Mantenere schermo acceso</string>
     <string name="pref_keep_screen_bright_summary">Mantenere schermo acceso e luminoso (incide sulla durata vita batteria)</string>
    
