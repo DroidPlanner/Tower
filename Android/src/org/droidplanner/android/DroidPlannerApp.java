@@ -1,6 +1,6 @@
 package org.droidplanner.android;
 
-import org.droidplanner.android.proxy.mission.MissionProxy;
+import org.droidplanner.android.mission.MissionRender;
 import org.droidplanner.android.notifications.NotificationHandler;
 import org.droidplanner.core.MAVLink.MAVLinkStreams;
 import org.droidplanner.core.MAVLink.MavLinkMsgHandler;
@@ -21,7 +21,7 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
         DroneInterfaces.OnDroneListener {
 
 	public Drone drone;
-    public MissionProxy missionProxy;
+    public MissionRender missionRender;
 	private MavLinkMsgHandler mavLinkMsgHandler;
 
 	/**
@@ -59,7 +59,7 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 		drone = new Drone(MAVClient, clock, handler, pref);
         drone.events.addDroneListener(this);
 
-        missionProxy = new MissionProxy(drone.mission);
+        missionRender = new MissionRender(drone.mission);
 		mavLinkMsgHandler = new org.droidplanner.core.MAVLink.MavLinkMsgHandler(drone);
 	}
 
@@ -85,7 +85,7 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
         switch (event) {
             case MISSION_RECEIVED:
                 //Refresh the mission render state
-                missionProxy.refresh();
+                missionRender.refresh();
                 break;
         }
     }

@@ -1,5 +1,14 @@
 package org.droidplanner.android.fragments;
 
+import org.droidplanner.android.dialogs.GuidedDialog;
+import org.droidplanner.android.dialogs.GuidedDialog.GuidedDialogListener;
+import org.droidplanner.android.fragments.helpers.DroneMap;
+import org.droidplanner.android.graphic.DroneHelper;
+import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
+import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
+
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -7,20 +16,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.model.LatLng;
-
-import org.droidplanner.android.dialogs.GuidedDialog;
-import org.droidplanner.android.dialogs.GuidedDialog.GuidedDialogListener;
-import org.droidplanner.android.utils.DroneHelper;
-import org.droidplanner.android.maps.DPMap;
-import org.droidplanner.android.maps.MarkerInfo;
-import org.droidplanner.core.drone.Drone;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.core.helpers.coordinates.Coord2D;
+import com.google.android.gms.maps.model.Marker;
 
 public class FlightMapFragment extends DroneMap implements
-        DPMap.OnMapLongClickListener, DPMap.OnMarkerClickListener, DPMap.OnMarkerDragListener,
+		OnMapLongClickListener, OnMarkerClickListener, OnMarkerDragListener,
 		GuidedDialogListener, OnDroneListener {
 
 	private static final int ZOOM_LEVEL = 20;
@@ -37,50 +41,52 @@ public class FlightMapFragment extends DroneMap implements
 
 		getPreferences();
 
-		mMapFragment.setOnMapLongClickListener(this);
-        mMapFragment.setOnMarkerDragListener(this);
-        mMapFragment.setOnMarkerClickListener(this);
+		mMap.setOnMapLongClickListener(this);
+		mMap.setOnMarkerDragListener(this);
+		mMap.setOnMarkerClickListener(this);
 		return view;
 	}
 
 	private void getPreferences() {
+		Context context = this.getActivity();
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
+		maxFlightPathSize = Integer.valueOf(prefs.getString(
+				"pref_max_flight_path_size", "0"));
 		isAutoPanEnabled = prefs.getBoolean("pref_auto_pan_enabled", false);
 		guidedModeOnLongPress = prefs.getBoolean("pref_guided_mode_on_long_press", true);
 	}
-
-    @Override
-    protected int getMaxFlightPathSize(){
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return Integer.valueOf(prefs.getString("pref_max_flight_path_size", "0"));
-    }
 
 	@Override
 	public void update() {
 		super.update();
 	}
 
-	private void animateCamera(Coord2D coord) {
+
+
+	private void animateCamera(LatLng coord) {
 		if (!hasBeenZoomed) {
 			hasBeenZoomed = true;
-            mMapFragment.updateCamera(coord, ZOOM_LEVEL);
+			mMap.animateCamera(CameraUpdateFactory
+					.newLatLngZoom(coord, ZOOM_LEVEL));
 		}
 		if (isAutoPanEnabled) {
-            mMapFragment.updateCamera(coord, ZOOM_LEVEL);
+			mMap.animateCamera(CameraUpdateFactory
+					.newLatLngZoom(coord, ZOOM_LEVEL));
 		}
 	}
 
 	@Override
-	public void onMapLongClick(Coord2D coord) {
+	public void onMapLongClick(LatLng coord) {
 		getPreferences();
 		if (drone.MavClient.isConnected()) {
 			if (drone.guidedPoint.isInitialized()) {
-				drone.guidedPoint.newGuidedCoord(coord);
+				drone.guidedPoint.newGuidedCoord(DroneHelper
+						.LatLngToCoord(coord));
 			} else {
 				if (guidedModeOnLongPress) {
 					GuidedDialog dialog = new GuidedDialog();
-					dialog.setCoord(DroneHelper.CoordToLatLang(coord));
+					dialog.setCoord(coord);
 					dialog.setListener(this);
 					dialog.show(getChildFragmentManager(), "GUIDED dialog");
 				}
@@ -95,35 +101,38 @@ public class FlightMapFragment extends DroneMap implements
 	}
 
 	@Override
-	public void onMarkerDragStart(MarkerInfo markerInfo) {
+	public void onMarkerDragStart(Marker marker) {
 	}
 
 	@Override
-	public void onMarkerDrag(MarkerInfo markerInfo) {
+	public void onMarkerDrag(Marker marker) {
 	}
 
 	@Override
-	public void onMarkerDragEnd(MarkerInfo markerInfo) {
-		drone.guidedPoint.newGuidedCoord(markerInfo.getPosition());
+	public void onMarkerDragEnd(Marker marker) {
+		drone.guidedPoint.newGuidedCoord(DroneHelper.LatLngToCoord(marker
+				.getPosition()));
 	}
 
 	@Override
-	public boolean onMarkerClick(MarkerInfo markerInfo) {
-		drone.guidedPoint.newGuidedCoord(markerInfo.getPosition());
+	public boolean onMarkerClick(Marker marker) {
+		drone.guidedPoint.newGuidedCoord(DroneHelper.LatLngToCoord(marker
+				.getPosition()));
 		return true;
 	}
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
+		LatLng position = DroneHelper.CoordToLatLang(drone.GPS.getPosition());
 		switch (event) {
         case ARMING:
             // Clear the previous flight path when arming.
             if (drone.state.isArmed()) {
-                mMapFragment.clearFlightPath();
+                clearFlightPath();
             }
             break;
 		case GPS:
-			animateCameraIfNeeded(drone.GPS.getPosition());
+			animateCameraIfNeeded(position);
 			break;
 		default:
 			break;
@@ -131,13 +140,15 @@ public class FlightMapFragment extends DroneMap implements
 		super.onDroneEvent(event,drone);
 	}
 
-	private void animateCameraIfNeeded(Coord2D coord) {
+	private void animateCameraIfNeeded(LatLng coord) {
 		if (!hasBeenZoomed) {
 			hasBeenZoomed = true;
-            mMapFragment.updateCamera(coord, ZOOM_LEVEL);
+			mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coord,
+					ZOOM_LEVEL));
 		}
 		if (isAutoPanEnabled) {
-            mMapFragment.updateCamera(coord, ZOOM_LEVEL);
+			mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coord,
+					ZOOM_LEVEL));
 		}
 	}
 

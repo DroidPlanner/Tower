@@ -9,7 +9,7 @@
             android:defaultValue="USB"
             android:entries="@array/TelemetryConnectionTypes"
             android:entryValues="@array/TelemetryConnectionTypes"
-            android:key="@string/pref_connection_type_key"
+            android:key="pref_connection_type"
             android:summary="@string/pref_connection_type_summary"
             android:title="@string/pref_connection_type"/>
 
@@ -48,7 +48,7 @@
              </PreferenceCategory>
             
 
-            <PreferenceCategory
+            <PreferenceScreen
                 android:key="pref_mavlink_rates"
                 android:summary="@string/pref_mavlink_rates_summary"
                 android:title="@string/pref_mavlink_rates">
@@ -106,23 +106,20 @@
                     android:gravity="center"
                     android:key="pref_mavlink_stream_rate_raw_controller"
                     android:title="@string/pref_mavlink_stream_rate_raw_controller"/>
-            </PreferenceCategory>
+            </PreferenceScreen>
         </PreferenceScreen>
         <PreferenceScreen
             android:key="pref_ui"
             android:title="@string/pref_ui">
-
-            <PreferenceCategory android:title="@string/pref_title_language">
             <CheckBoxPreference
                 android:defaultValue="false"
                 android:key="pref_ui_language_english"
                 android:title="@string/pref_ui_language_english"
                 android:summary="@string/pref_ui_language_english_summary"/>
-            </PreferenceCategory>
-
             <PreferenceCategory
                 android:key="pref_connection_actions"
-                android:title="@string/pref_title_screen">
+                android:summary="@string/pref_connection_actions_summary"
+                android:title="@string/pref_connection_actions">
                 <CheckBoxPreference
                     android:defaultValue="true"
                     android:key="pref_keep_screen_bright"
@@ -133,41 +130,69 @@
                     android:key="pref_lock_screen_orientation"
                     android:summary="@string/pref_lock_screen_orientation_summary"
                     android:title="@string/pref_lock_screen_orientation"/>
-
-            </PreferenceCategory>
-            <PreferenceCategory android:key="@string/pref_maps_category_key"
-                android:title="@string/pref_maps_title">
-                <ListPreference
-                    android:key="@string/pref_maps_providers_key"
-                    android:title="@string/pref_maps_providers_title"
-                    android:summary="@string/pref_maps_providers_summary"/>
-
-                <Preference android:key="@string/pref_map_provider_settings_key"
-                    android:title="@string/pref_map_provider_settings_title"
-                    android:summary="@string/pref_map_provider_settings_summary"/>
-
-            </PreferenceCategory>
-
-            <PreferenceCategory android:title="@string/pref_title_notifications">
-
-                <CheckBoxPreference
-                    android:defaultValue="true"
-                    android:key="pref_enable_tts"
-                    android:summary="@string/pref_enable_tts_summary"
-                    android:title="@string/pref_enable_tts"/>
-
             </PreferenceCategory>
         </PreferenceScreen>
-
+        <PreferenceScreen
+            android:key="pref_flight_data"
+            android:title="@string/pref_flight_data">
+            <EditTextPreference
+                android:defaultValue="500"
+                android:inputType="number"
+                android:gravity="center"
+                android:key="pref_max_flight_path_size"
+                android:summary="@string/pref_max_flight_path_size_summary"
+                android:title="@string/pref_max_flight_path_size"/>
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="pref_guided_mode_on_long_press"
+                android:summary="@string/pref_guided_mode_on_long_press_summary"
+                android:title="@string/pref_guided_mode_on_long_press"/>
+            <!-- Not implemented yet: https://plus.sandbox.google.com/116605163428216404962/posts/A1DT8X3n7dX
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="pref_follow_me_mode_enabled"
+                android:summary="@string/pref_follow_me_mode_enabled_summary"
+                android:title="@string/pref_follow_me_mode_enabled"/>
+                -->
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="pref_auto_pan_enabled"
+                android:summary="@string/pref_auto_pan_enabled_summary"
+                android:title="@string/pref_auto_pan_enabled"/>
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="pref_heading_mode"
+                android:summary="@string/pref_heading_mode_summary"
+                android:title="@string/pref_heading_mode"/>
+        </PreferenceScreen>
         <PreferenceScreen
             android:key="pref_advanced"
             android:title="@string/pref_advanced">
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="pref_advanced_use_offline_maps"
+                android:summary="@string/pref_advanced_use_offline_maps_summary"
+                android:title="@string/pref_advanced_use_offline_maps"/>
+
+            <ListPreference
+                android:defaultValue="@string/pref_map_type_default"
+                android:entries="@array/MapTypes"
+                android:entryValues="@array/MapTypes"
+                android:key="pref_map_type"
+                android:summary="@string/pref_map_type_summary"
+                android:title="@string/pref_map_type"/>
+
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="pref_enable_tts"
+                android:summary="@string/pref_enable_tts_summary"
+                android:title="@string/pref_enable_tts"/>
 
             <ListPreference
                 android:defaultValue="ArduCopter"
                 android:entries="@array/VehicleType"
                 android:entryValues="@array/VehicleType"
-                android:key="@string/pref_vehicle_type_key"
+                android:key="pref_vehicle_type"
                 android:summary="@string/pref_vehicle_type_summary"
                 android:title="@string/pref_vehicle_type"/>
 
@@ -181,21 +206,21 @@
                         android:defaultValue="MODE2"
                         android:entries="@array/RCModes"
                         android:entryValues="@array/RCModeValues"
-                        android:key="@string/pref_rc_mode_key"
+                        android:key="pref_rc_mode"
                         android:summary="@string/pref_rc_mode_summary"
                         android:title="@string/pref_rc_mode"/>
                     <ListPreference
                         android:defaultValue="Loiter"
                         android:entries="@array/RCQuickModes"
                         android:entryValues="@array/RCQuickModes"
-                        android:key="@string/pref_rc_quickmode_left_key"
+                        android:key="pref_rc_quickmode_left"
                         android:title="@string/pref_rc_quickmode_left"/>
                     <ListPreference
                         android:defaultValue="Stabilize"
                         android:entries="@array/RCQuickModes"
                         android:entryValues="@array/RCQuickModes"
-                        android:key="@string/pref_rc_quickmode_right_key"
-                        android:title="@string/pref_rc_quickmode_right"/>
+                        android:key="pref_rc_quickmode_right"
+                        android:title="@string/pref_rc_quickmode_left"/>
                 </PreferenceCategory>
                 <PreferenceCategory
                     android:key="pref_rc_throttle"
@@ -239,73 +264,36 @@
                         android:title="@string/pref_rc_reverse"/>
                 </PreferenceCategory>
             </PreferenceScreen>
-
-            <PreferenceCategory
-                android:key="pref_flight_data"
-                android:title="@string/pref_flight_data">
-                <EditTextPreference
-                    android:defaultValue="500"
-                    android:inputType="number"
-                    android:gravity="center"
-                    android:key="@string/pref_max_flight_path_size_key"
-                    android:summary="@string/pref_max_flight_path_size_summary"
-                    android:title="@string/pref_max_flight_path_size"/>
-                <CheckBoxPreference
-                    android:defaultValue="true"
-                    android:key="pref_guided_mode_on_long_press"
-                    android:summary="@string/pref_guided_mode_on_long_press_summary"
-                    android:title="@string/pref_guided_mode_on_long_press"/>
-                <!-- Not implemented yet: https://plus.sandbox.google.com/116605163428216404962/posts/A1DT8X3n7dX
-                <CheckBoxPreference
-                    android:defaultValue="false"
-                    android:key="pref_follow_me_mode_enabled"
-                    android:summary="@string/pref_follow_me_mode_enabled_summary"
-                    android:title="@string/pref_follow_me_mode_enabled"/>
-                    -->
-
-                <CheckBoxPreference
-                    android:defaultValue="false"
-                    android:key="pref_heading_mode"
-                    android:summary="@string/pref_heading_mode_summary"
-                    android:title="@string/pref_heading_mode"/>
-            </PreferenceCategory>
-
         </PreferenceScreen>
         <PreferenceScreen
             android:key="pref_connection"
             android:title="@string/pref_connection">
-
             <PreferenceCategory
                 android:key="pref_usb"
                 android:title="@string/pref_usb">
-
                 <ListPreference
                     android:defaultValue="57600"
                     android:entries="@array/TelemetryBaudTypes"
                     android:entryValues="@array/TelemetryBaudTypes"
-                    android:key="@string/pref_baud_type_key"
+                    android:key="pref_baud_type"
                     android:summary="@string/pref_baud_type_summary"
                     android:title="@string/pref_baud_type"/>
             </PreferenceCategory>
-
             <PreferenceCategory
                 android:key="pref_server"
                 android:title="@string/pref_server">
-
                 <EditTextPreference
                     android:defaultValue="192.168.40.100"
-                    android:key="@string/pref_server_ip_key"
+                    android:key="pref_server_ip"
                     android:gravity="center"
                     android:title="@string/pref_server_ip"/>
-
                 <EditTextPreference
                     android:defaultValue="9761"
                     android:inputType="number"
                     android:gravity="center"
-                    android:key="@string/pref_server_port_key"
+                    android:key="pref_server_port"
                     android:title="@string/pref_server_port"/>
             </PreferenceCategory>
-
             <PreferenceCategory
                 android:key="pref_server_udp"
                 android:title="@string/pref_server_udp">
@@ -313,7 +301,7 @@
                     android:defaultValue="14550"
                     android:inputType="number"
                     android:gravity="center"
-                    android:key="@string/pref_udp_server_port_key"
+                    android:key="pref_udp_server_port"
                     android:title="@string/pref_udp_server_port"/>
             </PreferenceCategory>
         </PreferenceScreen>
@@ -327,10 +315,9 @@
             android:selectable="false"
             android:shouldDisableView="false"
             android:title="@string/version"/>
-
         <EditTextPreference
             android:enabled="false"
-            android:key="@string/pref_storage_key"
+            android:key="pref_storage"
             android:persistent="false"
             android:selectable="false"
             android:shouldDisableView="false"

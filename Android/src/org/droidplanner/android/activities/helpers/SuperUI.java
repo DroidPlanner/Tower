@@ -3,7 +3,7 @@ package org.droidplanner.android.activities.helpers;
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.fragments.helpers.BTDeviceListFragment;
-import org.droidplanner.android.maps.providers.google_map.GoogleMapFragment;
+import org.droidplanner.android.fragments.helpers.OfflineMapFragment;
 import org.droidplanner.android.utils.Constants;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.widgets.actionProviders.InfoBarActionProvider;
@@ -194,21 +194,21 @@ public abstract class SuperUI extends FragmentActivity implements
 		final String mapType;
 		switch (itemId) {
 		case R.id.menu_map_type_hybrid:
-			mapType = GoogleMapFragment.MAP_TYPE_HYBRID;
+			mapType = OfflineMapFragment.MAP_TYPE_HYBRID;
 			break;
 		case R.id.menu_map_type_normal:
-			mapType = GoogleMapFragment.MAP_TYPE_NORMAL;
+			mapType = OfflineMapFragment.MAP_TYPE_NORMAL;
 			break;
 		case R.id.menu_map_type_terrain:
-			mapType = GoogleMapFragment.MAP_TYPE_TERRAIN;
+			mapType = OfflineMapFragment.MAP_TYPE_TERRAIN;
 			break;
 		default:
-			mapType = GoogleMapFragment.MAP_TYPE_SATELLITE;
+			mapType = OfflineMapFragment.MAP_TYPE_SATELLITE;
 			break;
 		}
 
 		PreferenceManager.getDefaultSharedPreferences(this).edit()
-				.putString(GoogleMapFragment.PREF_MAP_TYPE, mapType).commit();
+				.putString(OfflineMapFragment.PREF_MAP_TYPE, mapType).commit();
 
 		// drone.notifyMapTypeChanged();
 	}

@@ -1,72 +1,68 @@
 package org.droidplanner.android.graphic.map;
 
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-
-import org.droidplanner.R;
-import org.droidplanner.android.maps.MarkerWithText;
-import org.droidplanner.android.maps.DPMap.PathSource;
-import org.droidplanner.android.maps.MarkerInfo;
-import org.droidplanner.core.drone.Drone;
-import org.droidplanner.core.drone.variables.GPS;
-import org.droidplanner.core.drone.variables.GuidedPoint;
-import org.droidplanner.core.helpers.coordinates.Coord2D;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class GraphicGuided extends MarkerInfo.SimpleMarkerInfo implements PathSource {
+import org.droidplanner.R;
+import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.drone.variables.GPS;
+import org.droidplanner.core.drone.variables.GuidedPoint;
+import org.droidplanner.android.fragments.helpers.MapPath.PathSource;
+import org.droidplanner.android.fragments.markers.helpers.MarkerWithText;
+import org.droidplanner.android.graphic.DroneHelper;
+import org.droidplanner.android.graphic.map.MarkerManager.MarkerSource;
 
-    private GuidedPoint guidedPoint;
-    private GPS GPS;
+import android.content.Context;
 
-    public GraphicGuided(Drone drone) {
-        guidedPoint = drone.guidedPoint;
-        GPS = drone.GPS;
-    }
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
-    @Override
-    public List<Coord2D> getPathPoints() {
-        List<Coord2D> path = new ArrayList<Coord2D>();
-        if (guidedPoint.isActive()) {
-            path.add(GPS.getPosition());
-            path.add(guidedPoint.getCoord());
-        }
-        return path;
-    }
+public class GraphicGuided implements MarkerSource, PathSource {
 
-    @Override
-    public boolean isVisible() {
-        return guidedPoint.isActive();
-    }
+	private GuidedPoint guidedPoint;
+	private GPS GPS;
 
-    @Override
-    public float getAnchorU() {
-        return 0.5f;
-    }
+	public GraphicGuided(Drone drone) {
+		guidedPoint = drone.guidedPoint;
+		GPS = drone.GPS;
+	}
 
-    @Override
-    public float getAnchorV() {
-        return 0.5f;
-    }
+	@Override
+	public MarkerOptions build(Context context) {
+		return new MarkerOptions()
+				.position(DroneHelper.CoordToLatLang(guidedPoint.getCoord()))
+				.icon(getIcon(context)).anchor(0.5f, 0.5f).visible(false);
+	}
 
-    @Override
-    public Coord2D getPosition() {
-        return guidedPoint.getCoord();
-    }
+	@Override
+	public void update(Marker marker, Context context) {
 
-    @Override
-    public void setPosition(Coord2D coord) {
-        guidedPoint.forcedGuidedCoordinate(coord);
-    }
+		if (guidedPoint.isActive()) {
+			marker.setPosition(DroneHelper.CoordToLatLang(guidedPoint
+					.getCoord()));
+			marker.setIcon(getIcon(context));
+			marker.setVisible(true);
+		} else {
+			marker.setVisible(false);
+		}
+	}
 
-    @Override
-    public Bitmap getIcon(Resources res) {
-        return MarkerWithText.getMarkerWithTextAndDetail(R.drawable.ic_wp_map, "Guided", "", res);
-    }
+	private static BitmapDescriptor getIcon(Context context) {
+		return BitmapDescriptorFactory.fromBitmap(MarkerWithText
+				.getMarkerWithTextAndDetail(R.drawable.ic_wp_map, "Guided", "",
+						context));
+	}
 
-    @Override
-    public boolean isDraggable() {
-        return true;
-    }
+	@Override
+	public List<LatLng> getPathPoints() {
+		List<LatLng> path = new ArrayList<LatLng>();
+		if (guidedPoint.isActive()) {
+			path.add(DroneHelper.CoordToLatLang(GPS.getPosition()));
+			path.add(DroneHelper.CoordToLatLang(guidedPoint.getCoord()));
+		}
+		return path;
+	}
 }

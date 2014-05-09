@@ -1,16 +1,15 @@
 package org.droidplanner.android.activities.interfaces;
 
-import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
-import org.droidplanner.core.helpers.coordinates.Coord2D;
+import org.droidplanner.android.mission.item.MissionItemRender;
 
 import com.google.android.gms.maps.model.LatLng;
 
 public interface OnEditorInteraction {
-	public boolean onItemLongClick(MissionItemProxy item);
+	public boolean onItemLongClick(MissionItemRender item);
 
-	public void onItemClick(MissionItemProxy item);
+	public void onItemClick(MissionItemRender item);
 
-	public void onMapClick(Coord2D coord);
+	public void onMapClick(LatLng coord);
 
 	public void onListVisibilityChanged();
 }

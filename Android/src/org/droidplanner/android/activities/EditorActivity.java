@@ -6,9 +6,9 @@ import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 import org.droidplanner.android.activities.helpers.SuperUI;
-import org.droidplanner.android.proxy.mission.MissionSelection;
-import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
-import org.droidplanner.android.proxy.mission.MissionProxy;
+import org.droidplanner.android.mission.item.MissionItemRender;
+import org.droidplanner.android.mission.MissionRender;
+import org.droidplanner.android.mission.MissionSelection;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.android.fragments.EditorListFragment;
@@ -18,9 +18,10 @@ import org.droidplanner.android.fragments.EditorToolsFragment.EditorTools;
 import org.droidplanner.android.fragments.EditorToolsFragment.OnEditorToolSelected;
 import org.droidplanner.android.fragments.helpers.GestureMapFragment;
 import org.droidplanner.android.fragments.helpers.GestureMapFragment.OnPathFinishedListener;
-import org.droidplanner.android.proxy.mission.item.fragments.MissionDetailFragment;
-import org.droidplanner.android.proxy.mission.item.fragments.MissionDetailFragment.OnWayPointTypeChangeListener;
-
+import org.droidplanner.android.fragments.helpers.MapProjection;
+import org.droidplanner.android.mission.item.fragments.MissionDetailFragment;
+import org.droidplanner.android.mission.item.fragments.MissionDetailFragment.OnWayPointTypeChangeListener;
+import org.droidplanner.android.graphic.DroneHelper;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.android.dialogs.YesNoDialog;
 
@@ -37,6 +38,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
 /**
  * This implements the map editor activity. The map editor activity allows the user to create
  * and/or modify autonomous missions for the drone.
@@ -49,7 +52,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
      * Used to provide access and interact with the {@link org.droidplanner.core.mission.Mission}
      * object on the Android layer.
      */
-    private MissionProxy missionProxy;
+    private MissionRender missionRender;
 
 	private EditorMapFragment planningMapFragment;
 	private GestureMapFragment gestureMapFragment;
@@ -95,20 +98,20 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
          */
         mContainerItemDetail = findViewById(R.id.containerItemDetail);
 
-		missionProxy = ((DroidPlannerApp)getApplication()).missionProxy;
+		missionRender = ((DroidPlannerApp)getApplication()).missionRender;
 		gestureMapFragment.setOnPathFinishedListener(this);
 	}
 
     @Override
     public void onStart(){
         super.onStart();
-        missionProxy.selection.addSelectionUpdateListener(this);
+        missionRender.selection.addSelectionUpdateListener(this);
     }
 
     @Override
     public void onStop(){
         super.onStop();
-        missionProxy.selection.removeSelectionUpdateListener(this);
+        missionRender.selection.removeSelectionUpdateListener(this);
     }
 
 	@Override
@@ -121,11 +124,11 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		int topPadding = infoView.getBottom();
 		int rightPadding = 0,bottomPadding = 0;
 
-		if (missionProxy.getItems().size()>0) {
+		if (missionRender.getItems().size()>0) {
 			rightPadding = editorToolsFragment.getView().getRight();
 			bottomPadding = missionListFragment.getView().getHeight();
 		}
-		planningMapFragment.setMapPadding(rightPadding, topPadding, 0, bottomPadding);
+		planningMapFragment.mMap.setPadding(rightPadding, topPadding, 0, bottomPadding);
 	}
 
 	@Override
@@ -142,7 +145,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		case MISSION_UPDATE:
 			// Remove detail window if item is removed
 			if (itemDetailFragment != null) {
-				if (!missionProxy.contains(itemDetailFragment.getItem())) {
+				if (!missionRender.contains(itemDetailFragment.getItem())) {
 					removeItemDetail();
 				}
 			}
@@ -165,13 +168,13 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	}
 
 	@Override
-	public void onMapClick(Coord2D point) {
+	public void onMapClick(LatLng point) {
         //If an mission item is selected, unselect it.
-        missionProxy.selection.clearSelection();
+        missionRender.selection.clearSelection();
 
 		switch (getTool()) {
 		case MARKER:
-			missionProxy.addWaypoint(point);
+			missionRender.addWaypoint(DroneHelper.LatLngToCoord(point));
 			break;
 		case DRAW:
 			break;
@@ -190,7 +193,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 	@Override
 	public void editorToolChanged(EditorTools tools) {
-		missionProxy.selection.clearSelection();
+		missionRender.selection.clearSelection();
 
 		switch (tools) {
 		case DRAW:
@@ -221,7 +224,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		}
 	}
 
-	private void showItemDetail(MissionItemProxy item) {
+	private void showItemDetail(MissionItemRender item) {
 		if (itemDetailFragment == null) {
 			addItemDetail(item);
 		} else {
@@ -229,7 +232,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		}
 	}
 
-    private void addItemDetail(MissionItemProxy item) {
+    private void addItemDetail(MissionItemRender item) {
         itemDetailFragment = item.getDetailFragment();
         if(itemDetailFragment == null)
             return;
@@ -242,7 +245,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
         }
     }
 
-	public void switchItemDetail(MissionItemProxy item) {
+	public void switchItemDetail(MissionItemRender item) {
         removeItemDetail();
 		addItemDetail(item);
 	}
@@ -260,15 +263,15 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 	@Override
 	public void onPathFinished(List<Coord2D> path) {
-		List<Coord2D> points = planningMapFragment.projectPathIntoMap(path);
+		List<Coord2D> points = MapProjection.projectPathIntoMap(path, planningMapFragment.mMap);
 		switch (getTool()) {
 		case DRAW:
-			missionProxy.addWaypoints(points);
+			missionRender.addWaypoints(points);
 			break;
 
 		case POLY:
 			if (path.size()>2) {
-				missionProxy.addSurveyPolygon(points);
+				missionRender.addSurveyPolygon(points);
 			}else{
 				editorToolsFragment.setTool(EditorTools.POLY);
 				return;
@@ -282,8 +285,8 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	}
 
 	@Override
-	public void onWaypointTypeChanged(MissionItemProxy newItem, MissionItemProxy oldItem) {
-		missionProxy.replace(oldItem, newItem);
+	public void onWaypointTypeChanged(MissionItemRender newItem, MissionItemRender oldItem) {
+		missionRender.replace(oldItem, newItem);
 	}
 
 	private static final int MENU_DELETE = 1;
@@ -293,12 +296,12 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 		switch(item.getItemId()){
 		case MENU_DELETE:
-			missionProxy.removeSelection(missionProxy.selection);
+			missionRender.removeSelection(missionRender.selection);
 			mode.finish();
 			return true;
 
 		case MENU_REVERSE:
-			missionProxy.reverse();
+			missionRender.reverse();
 			return true;
 
 		default:
@@ -317,7 +320,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	@Override
 	public void onDestroyActionMode(ActionMode arg0) {
 		missionListFragment.updateChoiceMode(ListView.CHOICE_MODE_SINGLE);
-		missionProxy.selection.clearSelection();
+		missionRender.selection.clearSelection();
 		contextualActionBar = null;
 		editorToolsFragment.getView().setVisibility(View.VISIBLE);
 	}
@@ -328,46 +331,46 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	}
 
 	@Override
-	public boolean onItemLongClick(MissionItemProxy item) {
+	public boolean onItemLongClick(MissionItemRender item) {
 		if (contextualActionBar != null) {
-			if (missionProxy.selection.selectionContains(item)) {
-				missionProxy.selection.clearSelection();
+			if (missionRender.selection.selectionContains(item)) {
+				missionRender.selection.clearSelection();
 			} else {
-				missionProxy.selection.setSelectionTo(missionProxy.getItems());
+				missionRender.selection.setSelectionTo(missionRender.getItems());
 			}
 		} else {
 			editorToolsFragment.setTool(EditorTools.NONE);
 			missionListFragment.updateChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 			contextualActionBar = startActionMode(this);
-			missionProxy.selection.setSelectionTo(item);
+			missionRender.selection.setSelectionTo(item);
 		}
 		return true;
 	}
 
 	@Override
-	public void onItemClick(MissionItemProxy item) {
+	public void onItemClick(MissionItemRender item) {
 		switch (editorToolsFragment.getTool()) {
 		default:
 			if (contextualActionBar != null) {
-				if (missionProxy.selection.selectionContains(item)) {
-					missionProxy.selection.removeItemFromSelection(item);
+				if (missionRender.selection.selectionContains(item)) {
+					missionRender.selection.removeItemFromSelection(item);
 				} else {
-					missionProxy.selection.addToSelection(item);
+					missionRender.selection.addToSelection(item);
 				}
 			} else {
-				if (missionProxy.selection.selectionContains(item)) {
-					missionProxy.selection.clearSelection();
+				if (missionRender.selection.selectionContains(item)) {
+					missionRender.selection.clearSelection();
 				} else {
 					editorToolsFragment.setTool(EditorTools.NONE);
-					missionProxy.selection.setSelectionTo(item);
+					missionRender.selection.setSelectionTo(item);
 				}
 			}
 			break;
 
 		case TRASH:
-			missionProxy.removeItem(item);
-			missionProxy.selection.clearSelection();
-			if (missionProxy.getItems().size() <= 0) {
+			missionRender.removeItem(item);
+			missionRender.selection.clearSelection();
+			if (missionRender.getItems().size() <= 0) {
 				editorToolsFragment.setTool(EditorTools.NONE);
 			}
 			break;
@@ -380,7 +383,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	}
 
     @Override
-    public void onSelectionUpdate(List<MissionItemProxy> selected) {
+    public void onSelectionUpdate(List<MissionItemRender> selected) {
         final int selectedCount = selected.size();
         
         missionListFragment.setArrowsVisibility(selectedCount > 0);
@@ -401,19 +404,18 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 	private void doClearMissionConfirmation() {
 		YesNoDialog ynd = YesNoDialog.newInstance(
-                getString(R.string.dlg_clear_mission_title),
-                getString(R.string.dlg_clear_mission_confirm),
-                new YesNoDialog.Listener() {
-                    @Override
-                    public void onYes() {
-                        missionProxy.clear();
-                    }
+				getString(R.string.dlg_clear_mission_title),
+				getString(R.string.dlg_clear_mission_confirm),
+				new YesNoDialog.Listener() {
+					@Override
+					public void onYes() {
+						missionRender.clear();
+					}
 
-                    @Override
-                    public void onNo() {
-                    }
-                }
-        );
+					@Override
+					public void onNo() {
+					}
+				});
 
 		ynd.show(getSupportFragmentManager(), "clearMission");
 	}
