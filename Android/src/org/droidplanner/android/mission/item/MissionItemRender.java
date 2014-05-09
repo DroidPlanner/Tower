@@ -1,5 +1,21 @@
 package org.droidplanner.android.mission.item;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.droidplanner.R;
+import org.droidplanner.android.graphic.DroneHelper;
+import org.droidplanner.android.mission.MissionRender;
+import org.droidplanner.android.mission.item.fragments.MissionDetailFragment;
+import org.droidplanner.android.mission.item.markers.MissionItemGenericMarkerSource;
+import org.droidplanner.android.mission.item.markers.MissionItemMarkerSource;
+import org.droidplanner.core.helpers.units.Length;
+import org.droidplanner.core.mission.MissionItem;
+import org.droidplanner.core.mission.commands.Takeoff;
+import org.droidplanner.core.mission.survey.Survey;
+import org.droidplanner.core.mission.survey.grid.Grid;
+import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
+
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -8,22 +24,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
-
-import org.droidplanner.R;
-import org.droidplanner.android.graphic.DroneHelper;
-import org.droidplanner.android.mission.MissionRender;
-import org.droidplanner.android.mission.item.fragments.MissionDetailFragment;
-import org.droidplanner.android.mission.item.markers.MissionItemGenericMarkerSource;
-import org.droidplanner.android.mission.item.markers.MissionItemMarkerSource;
-import org.droidplanner.core.helpers.coordinates.Coord2D;
-import org.droidplanner.core.helpers.units.Length;
-import org.droidplanner.core.mission.MissionItem;
-import org.droidplanner.core.mission.survey.Survey;
-import org.droidplanner.core.mission.survey.grid.Grid;
-import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This class is responsible for providing logic to access and interpret the
@@ -88,8 +88,7 @@ public class MissionItemRender implements Comparable<MissionItemRender> {
             case LOITER:
             case LOITER_INF:
             case LOITERT:
-            case LOITERN:
-            case TAKEOFF:
+            case LOITERN:            
             case WAYPOINT:
                 pathPoints.add(DroneHelper.CoordToLatLang(((SpatialCoordItem)
                         mMissionItem).getCoordinate()));
@@ -99,6 +98,7 @@ public class MissionItemRender implements Comparable<MissionItemRender> {
             	if (grid != null) {				
             		pathPoints.addAll(DroneHelper.CoordToLatLang(grid.gridPoints));
             	}
+            case TAKEOFF:
             default:
                 break;
         }
@@ -138,6 +138,9 @@ public class MissionItemRender implements Comparable<MissionItemRender> {
             }
         } else if (mMissionItem instanceof Survey) {
 			altitudeView.setText(((Survey)mMissionItem).surveyData.getAltitude().toString());
+
+        } else if (mMissionItem instanceof Takeoff) {
+			altitudeView.setText(((Takeoff)mMissionItem).getFinishedAlt().toString());
 		} else {
             altitudeView.setText("");
         }

@@ -21,5 +21,6 @@ public class MAV_TYPE {
 	public static final int MAV_TYPE_TRICOPTER = 15; /* Octorotor | */
 	public static final int MAV_TYPE_FLAPPING_WING = 16; /* Flapping wing | */
 	public static final int MAV_TYPE_KITE = 17; /* Flapping wing | */
-	public static final int MAV_TYPE_ENUM_END = 18; /*  | */
+	public static final int MAV_TYPE_ONBOARD_CONTROLLER = 18; /* Onboard companion controller | */
+	public static final int MAV_TYPE_ENUM_END = 19; /*  | */
 }

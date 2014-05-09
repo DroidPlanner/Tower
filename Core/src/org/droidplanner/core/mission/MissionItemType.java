@@ -2,6 +2,7 @@ package org.droidplanner.core.mission;
 
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.mission.commands.ReturnToHome;
+import org.droidplanner.core.mission.commands.Takeoff;
 import org.droidplanner.core.mission.survey.Survey;
 import org.droidplanner.core.mission.waypoints.Land;
 import org.droidplanner.core.mission.waypoints.Loiter;
@@ -9,7 +10,6 @@ import org.droidplanner.core.mission.waypoints.LoiterInfinite;
 import org.droidplanner.core.mission.waypoints.LoiterTime;
 import org.droidplanner.core.mission.waypoints.LoiterTurns;
 import org.droidplanner.core.mission.waypoints.RegionOfInterest;
-import org.droidplanner.core.mission.waypoints.Takeoff;
 import org.droidplanner.core.mission.waypoints.Waypoint;
 
 import java.util.Collections;

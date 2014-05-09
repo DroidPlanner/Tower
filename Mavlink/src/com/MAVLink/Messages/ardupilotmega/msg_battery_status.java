@@ -12,10 +12,18 @@ import com.MAVLink.Messages.MAVLinkPayload;
 public class msg_battery_status extends MAVLinkMessage{
 
 	public static final int MAVLINK_MSG_ID_BATTERY_STATUS = 147;
-	public static final int MAVLINK_MSG_LENGTH = 16;
+	public static final int MAVLINK_MSG_LENGTH = 24;
 	private static final long serialVersionUID = MAVLINK_MSG_ID_BATTERY_STATUS;
 	
 
+ 	/**
+	* Consumed charge, in milliampere hours (1 = 1 mAh), -1: autopilot does not provide mAh consumption estimate
+	*/
+	public int current_consumed; 
+ 	/**
+	* Consumed energy, in 100*Joules (intergrated U*I*dt)  (1 = 100 Joule), -1: autopilot does not provide energy consumption estimate
+	*/
+	public int energy_consumed; 
  	/**
 	* Battery voltage of cell 1, in millivolts (1 = 1 millivolt)
 	*/
@@ -63,6 +71,8 @@ public class msg_battery_status extends MAVLinkMessage{
 		packet.sysid = 255;
 		packet.compid = 190;
 		packet.msgid = MAVLINK_MSG_ID_BATTERY_STATUS;
+		packet.payload.putInt(current_consumed);
+		packet.payload.putInt(energy_consumed);
 		packet.payload.putShort(voltage_cell_1);
 		packet.payload.putShort(voltage_cell_2);
 		packet.payload.putShort(voltage_cell_3);
@@ -82,6 +92,8 @@ public class msg_battery_status extends MAVLinkMessage{
      */
     public void unpack(MAVLinkPayload payload) {
         payload.resetIndex();
+	    current_consumed = payload.getInt();
+	    energy_consumed = payload.getInt();
 	    voltage_cell_1 = payload.getShort();
 	    voltage_cell_2 = payload.getShort();
 	    voltage_cell_3 = payload.getShort();
@@ -114,11 +126,11 @@ public class msg_battery_status extends MAVLinkMessage{
         //Log.d("MAVLINK_MSG_ID_BATTERY_STATUS", toString());
     }
     
-                  
+                      
     /**
      * Returns a string with the MSG name and data
      */
     public String toString(){
-    	return "MAVLINK_MSG_ID_BATTERY_STATUS -"+" voltage_cell_1:"+voltage_cell_1+" voltage_cell_2:"+voltage_cell_2+" voltage_cell_3:"+voltage_cell_3+" voltage_cell_4:"+voltage_cell_4+" voltage_cell_5:"+voltage_cell_5+" voltage_cell_6:"+voltage_cell_6+" current_battery:"+current_battery+" accu_id:"+accu_id+" battery_remaining:"+battery_remaining+"";
+    	return "MAVLINK_MSG_ID_BATTERY_STATUS -"+" current_consumed:"+current_consumed+" energy_consumed:"+energy_consumed+" voltage_cell_1:"+voltage_cell_1+" voltage_cell_2:"+voltage_cell_2+" voltage_cell_3:"+voltage_cell_3+" voltage_cell_4:"+voltage_cell_4+" voltage_cell_5:"+voltage_cell_5+" voltage_cell_6:"+voltage_cell_6+" current_battery:"+current_battery+" accu_id:"+accu_id+" battery_remaining:"+battery_remaining+"";
     }
 }

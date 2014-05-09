@@ -1,4 +1,4 @@
-// MESSAGE GPS_RAW_INT PACKING
+// MESSAGE HIL_GPS PACKING
 package com.MAVLink.Messages.ardupilotmega;
 
 import com.MAVLink.Messages.MAVLinkMessage;
@@ -8,13 +8,13 @@ import com.MAVLink.Messages.MAVLinkPayload;
 
 /**
 * The global position, as returned by the Global Positioning System (GPS). This is
-                NOT the global position estimate of the sytem, but rather a RAW sensor value. See message GLOBAL_POSITION for the global position estimate. Coordinate frame is right-handed, Z-axis up (GPS frame).
+                 NOT the global position estimate of the sytem, but rather a RAW sensor value. See message GLOBAL_POSITION for the global position estimate. Coordinate frame is right-handed, Z-axis up (GPS frame).
 */
-public class msg_gps_raw_int extends MAVLinkMessage{
+public class msg_hil_gps extends MAVLinkMessage{
 
-	public static final int MAVLINK_MSG_ID_GPS_RAW_INT = 24;
-	public static final int MAVLINK_MSG_LENGTH = 30;
-	private static final long serialVersionUID = MAVLINK_MSG_ID_GPS_RAW_INT;
+	public static final int MAVLINK_MSG_ID_HIL_GPS = 113;
+	public static final int MAVLINK_MSG_LENGTH = 36;
+	private static final long serialVersionUID = MAVLINK_MSG_ID_HIL_GPS;
 	
 
  	/**
@@ -34,19 +34,31 @@ public class msg_gps_raw_int extends MAVLinkMessage{
 	*/
 	public int alt; 
  	/**
-	* GPS HDOP horizontal dilution of position in cm (m*100). If unknown, set to: UINT16_MAX
+	* GPS HDOP horizontal dilution of position in cm (m*100). If unknown, set to: 65535
 	*/
 	public short eph; 
  	/**
-	* GPS VDOP vertical dilution of position in cm (m*100). If unknown, set to: UINT16_MAX
+	* GPS VDOP vertical dilution of position in cm (m*100). If unknown, set to: 65535
 	*/
 	public short epv; 
  	/**
-	* GPS ground speed (m/s * 100). If unknown, set to: UINT16_MAX
+	* GPS ground speed (m/s * 100). If unknown, set to: 65535
 	*/
 	public short vel; 
  	/**
-	* Course over ground (NOT heading, but direction of movement) in degrees * 100, 0.0..359.99 degrees. If unknown, set to: UINT16_MAX
+	* GPS velocity in cm/s in NORTH direction in earth-fixed NED frame
+	*/
+	public short vn; 
+ 	/**
+	* GPS velocity in cm/s in EAST direction in earth-fixed NED frame
+	*/
+	public short ve; 
+ 	/**
+	* GPS velocity in cm/s in DOWN direction in earth-fixed NED frame
+	*/
+	public short vd; 
+ 	/**
+	* Course over ground (NOT heading, but direction of movement) in degrees * 100, 0.0..359.99 degrees. If unknown, set to: 65535
 	*/
 	public short cog; 
  	/**
@@ -67,7 +79,7 @@ public class msg_gps_raw_int extends MAVLinkMessage{
 		packet.len = MAVLINK_MSG_LENGTH;
 		packet.sysid = 255;
 		packet.compid = 190;
-		packet.msgid = MAVLINK_MSG_ID_GPS_RAW_INT;
+		packet.msgid = MAVLINK_MSG_ID_HIL_GPS;
 		packet.payload.putLong(time_usec);
 		packet.payload.putInt(lat);
 		packet.payload.putInt(lon);
@@ -75,6 +87,9 @@ public class msg_gps_raw_int extends MAVLinkMessage{
 		packet.payload.putShort(eph);
 		packet.payload.putShort(epv);
 		packet.payload.putShort(vel);
+		packet.payload.putShort(vn);
+		packet.payload.putShort(ve);
+		packet.payload.putShort(vd);
 		packet.payload.putShort(cog);
 		packet.payload.putByte(fix_type);
 		packet.payload.putByte(satellites_visible);
@@ -82,7 +97,7 @@ public class msg_gps_raw_int extends MAVLinkMessage{
 	}
 
     /**
-     * Decode a gps_raw_int message into this class fields
+     * Decode a hil_gps message into this class fields
      *
      * @param payload The message to decode
      */
@@ -95,6 +110,9 @@ public class msg_gps_raw_int extends MAVLinkMessage{
 	    eph = payload.getShort();
 	    epv = payload.getShort();
 	    vel = payload.getShort();
+	    vn = payload.getShort();
+	    ve = payload.getShort();
+	    vd = payload.getShort();
 	    cog = payload.getShort();
 	    fix_type = payload.getByte();
 	    satellites_visible = payload.getByte();    
@@ -103,8 +121,8 @@ public class msg_gps_raw_int extends MAVLinkMessage{
      /**
      * Constructor for a new message, just initializes the msgid
      */
-    public msg_gps_raw_int(){
-    	msgid = MAVLINK_MSG_ID_GPS_RAW_INT;
+    public msg_hil_gps(){
+    	msgid = MAVLINK_MSG_ID_HIL_GPS;
     }
 
     /**
@@ -112,20 +130,20 @@ public class msg_gps_raw_int extends MAVLinkMessage{
      * from a mavlink packet
      * 
      */
-    public msg_gps_raw_int(MAVLinkPacket mavLinkPacket){
+    public msg_hil_gps(MAVLinkPacket mavLinkPacket){
         this.sysid = mavLinkPacket.sysid;
         this.compid = mavLinkPacket.compid;
-        this.msgid = MAVLINK_MSG_ID_GPS_RAW_INT;
+        this.msgid = MAVLINK_MSG_ID_HIL_GPS;
         unpack(mavLinkPacket.payload);
-        //Log.d("MAVLink", "GPS_RAW_INT");
-        //Log.d("MAVLINK_MSG_ID_GPS_RAW_INT", toString());
+        //Log.d("MAVLink", "HIL_GPS");
+        //Log.d("MAVLINK_MSG_ID_HIL_GPS", toString());
     }
     
-                    
+                          
     /**
      * Returns a string with the MSG name and data
      */
     public String toString(){
-    	return "MAVLINK_MSG_ID_GPS_RAW_INT -"+" time_usec:"+time_usec+" lat:"+lat+" lon:"+lon+" alt:"+alt+" eph:"+eph+" epv:"+epv+" vel:"+vel+" cog:"+cog+" fix_type:"+fix_type+" satellites_visible:"+satellites_visible+"";
+    	return "MAVLINK_MSG_ID_HIL_GPS -"+" time_usec:"+time_usec+" lat:"+lat+" lon:"+lon+" alt:"+alt+" eph:"+eph+" epv:"+epv+" vel:"+vel+" vn:"+vn+" ve:"+ve+" vd:"+vd+" cog:"+cog+" fix_type:"+fix_type+" satellites_visible:"+satellites_visible+"";
     }
 }

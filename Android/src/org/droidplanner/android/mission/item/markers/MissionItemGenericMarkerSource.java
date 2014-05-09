@@ -27,11 +27,7 @@ public class MissionItemGenericMarkerSource {
 	        case ROI:
 	            markerSource = new ROIMarkerSource(origin);
 	            break;
-	
-	        case TAKEOFF:
-	            markerSource = new TakeoffMarkerSource(origin);
-	            break;
-	
+		
 	        case WAYPOINT:
 	            markerSource = new WaypointMarkerSource(origin);
 	            break;
