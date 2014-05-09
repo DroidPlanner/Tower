@@ -254,7 +254,7 @@
     <string name="setup_radio_title">Calibrazine canali radio</string>
     <string name="setup_radio_cal_title">Inizio calibrazione</string>
     <string name="setup_radio_cal_desc">Premere Calibrare per iniziare calibrazione  radio. Assicurarsi trasmettitore radio sia acceso e trasmettendo.</string>
-    <string name="setup_radio_title_minmax">Fissare valori Min e Max</string>
+    <string name="setup_radio_title_minmax">Fissare valori Min &amp; Max</string>
     <string name="setup_radio_title_middle">Fissare valori centro</string>
     <string name="setup_radio_title_complete">Calibrazione completata</string>
     <string name="setup_radio_desc_minmax">Muovere più volte il joystick in tutte le direzioni fino al limite, muovere gli interruttori, leve e manopole in tutte le posizioni.</string>
