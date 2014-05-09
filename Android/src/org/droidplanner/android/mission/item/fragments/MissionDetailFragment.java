@@ -1,5 +1,11 @@
 package org.droidplanner.android.mission.item.fragments;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.mission.item.MissionItemRender;
@@ -95,8 +101,18 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 	protected void setupViews(View view) {
         final MissionRender missionRender = itemRender.getMissionRender();
 
+		MissionItemType[] objects = MissionItemType.values();
+		// Remove unfinished item types
+		Set<MissionItemType> asSet = new HashSet<MissionItemType>(
+				Arrays.asList(objects));
+		asSet.remove(MissionItemType.LOITER);
+		asSet.remove(MissionItemType.LOITER_INF);
+		asSet.remove(MissionItemType.LOITERN);
+		asSet.remove(MissionItemType.LOITERT);
+		objects = asSet.toArray(new MissionItemType[] {});
+
         commandAdapter = new AdapterMissionItems(this.getActivity(),
-                android.R.layout.simple_list_item_1, MissionItemType.values());
+                android.R.layout.simple_list_item_1, objects);
 
 		typeSpinner = (SpinnerSelfSelect) view.findViewById(R.id.spinnerWaypointType);
 		typeSpinner.setAdapter(commandAdapter);
