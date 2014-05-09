@@ -339,7 +339,7 @@
     <string name="menu_info_bar">Info Bar(Barra info)</string>
     <string name="drawer_open">Aprire cassetto di navigazione</string>
     <string name="drawer_close">Chiuder cassetto di navigazione</string>
-    <string name="guided_mode_warning">"Premere OK per entrare modalità Volo Guidato. Per cambiare posizione mantenere premuto la mappa.</string>
+    <string name="guided_mode_warning">"Premere OK per entrare modalità Volo Guidato.\nTo Per cambiare posizione mantenere premuto la mappa.</string>
 
     <!-- Bluetooth device selection strings -->
     <string name="select_device">Selezionare dispositivo da connettere</string>
