@@ -339,7 +339,7 @@
     <string name="menu_info_bar">Info Bar(Barra info)</string>
     <string name="drawer_open">Aprire cassetto di navigazione</string>
     <string name="drawer_close">Chiuder cassetto di navigazione</string>
-    <string name="guided_mode_warning">"Premere OK per entrare modalità Volo Guidato.\nTo Per cambiare posizione mantenere premuto la mappa.</string>
+    <string name="guided_mode_warning">"Premere OK per entrare modalità Volo Guidato. Per cambiare posizione mantenere premuto la mappa.</string>
 
     <!-- Bluetooth device selection strings -->
     <string name="select_device">Selezionare dispositivo da connettere</string>
@@ -364,13 +364,13 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_test">TestActivity</string>
     <string name="hello_world">Hello world!</string>
-    <string name="pref_map_provider_settings_summary">Configure the selected map provider</string>
-    <string name="pref_map_provider_settings_title">Map Provider Preferences</string>
-    <string name="pref_title_google_map">Google Map Preferences</string>
-    <string name="pref_title_osm">Open Street Map Preferences</string>
-    <string name="activity_title_map_provider_preferences">Map Provider Preferences</string>
-    <string name="pref_title_language">Language</string>
-    <string name="pref_title_screen">Screen</string>
-    <string name="pref_title_notifications">Notifications</string>
+    <string name="pref_map_provider_settings_summary">Impostare map provider selezionato</string>
+    <string name="pref_map_provider_settings_title">Preferenza Map Provider</string>
+    <string name="pref_title_google_map">Preferenza Google Map</string>
+    <string name="pref_title_osm">Preferenza Open Street</string>
+    <string name="activity_title_map_provider_preferences">Preferenza Map Provider</string>
+    <string name="pref_title_language">Lingua</string>
+    <string name="pref_title_screen">Schermo</string>
+    <string name="pref_title_notifications">Notifica</string>
 
 </resources>
