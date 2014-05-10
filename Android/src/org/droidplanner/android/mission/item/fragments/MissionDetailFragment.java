@@ -1,19 +1,17 @@
 package org.droidplanner.android.mission.item.fragments;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.mission.item.MissionItemRender;
 import org.droidplanner.android.mission.MissionRender;
+import org.droidplanner.android.mission.item.MissionItemRender;
 import org.droidplanner.android.mission.item.adapters.AdapterMissionItems;
+import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.MissionItemType;
-import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -109,6 +107,8 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 		asSet.remove(MissionItemType.LOITER_INF);
 		asSet.remove(MissionItemType.LOITERN);
 		asSet.remove(MissionItemType.LOITERT);
+		asSet.remove(MissionItemType.ROI);
+		asSet.remove(MissionItemType.RTL);
 		objects = asSet.toArray(new MissionItemType[] {});
 
         commandAdapter = new AdapterMissionItems(this.getActivity(),
