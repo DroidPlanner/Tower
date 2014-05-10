@@ -8,6 +8,11 @@ Our convention for release control is the following (for a release like DPvA.B.C
 All the changes are logged below (preferable with the pull request numbers in parenteses):
 
 # Releases
+## Droidplanner v2.3.2
+* Change waypoint max delay to 60s (#730)
+* Land mission item defaults altitude to zero (#752)
+* Mission progress update are reported by TTS (#759)
+
 ## Droidplanner v2.3.1
 * Improve Mission Support, Takeoff and ROI (#739)
 * Fix problems with UDP connection (#742)
