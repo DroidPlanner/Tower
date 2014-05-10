@@ -132,7 +132,7 @@
 					android:layout_height="wrap_content"
 					android:layout_margin="2dp"
 					custom:inc="1"
-					custom:max="600"
+					custom:max="60"
 					custom:min="0"
 					custom:title="@string/waypoint_delay"
 					custom:unit="s" >
