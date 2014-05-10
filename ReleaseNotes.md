@@ -1,6 +1,9 @@
 # Releases Notes
 These notes document what was removed from a Release Candidate (RC), which is build from a corresponding version of the program. These are not comulative between program versions (they can be between RCs), and express the diff from the master branch.
 
+## Droidplanner v2.3.2 RC2
+* Fixed loop problem in TTS (#761), chery picked from master
+
 ## Droidplanner v2.3.2 RC1
 * On the DroneSetup pane removed the Tuning and Calibration Fragments
 * Removed unfinished/untested missionItems (Only Waypoint, Takeoff and Land are allowed)
