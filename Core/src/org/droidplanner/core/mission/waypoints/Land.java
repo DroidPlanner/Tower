@@ -3,6 +3,7 @@ package org.droidplanner.core.mission.waypoints;
 import java.util.List;
 
 import org.droidplanner.core.helpers.coordinates.Coord3D;
+import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.MissionItemType;
@@ -14,6 +15,7 @@ public class Land extends SpatialCoordItem {
 
 	public Land(MissionItem item) {
 		super(item);
+		setAltitude(new Altitude(0.0));
 	}
 
 	public Land(Mission mission) {
