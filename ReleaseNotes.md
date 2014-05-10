@@ -1,9 +1,17 @@
 # Releases Notes
 These notes document what was removed from a Release Candidate (RC), which is build from a corresponding version of the program. These are not comulative between program versions (they can be between RCs), and express the diff from the master branch.
 
-## Droidplanner v2.3.1 RC1
+## Droidplanner v2.3.2 RC1
 * On the DroneSetup pane removed the Tuning and Calibration Fragments
 * Removed unfinished/untested missionItems (Only Waypoint, Takeoff and Land are allowed)
+* Removed Failsafe warnings
+* Removed distance/time view at the editor screen
+* Removed un-finished buttons on the Circle mode fragment
+* Removed follow me button from Flight Activity.
+
+## Droidplanner v2.3.1 RC1
+* On the DroneSetup pane removed the Tuning and Calibration Fragments
+* Removed unfinished/untested missionItems (Only Waypoint,ROI,RTL, Takeoff and Land are allowed)
 * Removed Failsafe warnings
 * Removed distance/time view at the editor screen
 * Removed un-finished buttons on the Circle mode fragment
