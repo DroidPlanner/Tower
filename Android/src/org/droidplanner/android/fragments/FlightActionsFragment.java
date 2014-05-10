@@ -63,6 +63,8 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 		takeoffBtn = (Button) parentView.findViewById(R.id.mc_takeoff);
 		loiterBtn = (Button) parentView.findViewById(R.id.mc_loiter);
 		followBtn = (Button) parentView.findViewById(R.id.mc_follow);
+		
+		followBtn.setVisibility(View.GONE); // TODO Re-Implement follow me, and remove this line
 	}
 
 	private void setupListener() {

@@ -5,7 +5,6 @@ import java.util.Locale;
 import org.droidplanner.R;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.drone.variables.Calibration;
 
 import android.content.Context;
@@ -98,6 +97,9 @@ public class TTSNotificationProvider implements OnInitListener,
 				break;
 			case HEARTBEAT_RESTORED:
 				speak("Data link restored");
+				break;
+			case MISSION_WP_UPDATE:
+				speak("Going for waypoint "+ drone.missionStats.getCurrentWP());
 				break;
 			default:
 				break;
