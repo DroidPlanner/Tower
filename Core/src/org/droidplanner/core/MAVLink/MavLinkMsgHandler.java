@@ -60,8 +60,7 @@ public class MavLinkMsgHandler {
 			msg_heartbeat msg_heart = (msg_heartbeat) msg;
 			drone.type.setType(msg_heart.type);
 			processState(msg_heart);
-			ApmModes newMode;
-			newMode = ApmModes.getMode(msg_heart.custom_mode,
+			ApmModes newMode = ApmModes.getMode(msg_heart.custom_mode,
 					drone.type.getType());
 			drone.state.setMode(newMode);
 			drone.heartbeat.onHeartbeat(msg_heart);

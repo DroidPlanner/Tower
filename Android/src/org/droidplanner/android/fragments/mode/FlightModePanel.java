@@ -133,6 +133,12 @@ public class FlightModePanel extends Fragment implements OnDroneListener {
 			case ROTOR_TOY:
 				infoPanel = new ModeDriftFragment();
 				break;
+			case ROTOR_SPORT:
+				infoPanel = new ModeSportFragment();
+				break;
+			case ROTOR_HYBRID:
+				infoPanel = new ModeHybridFragment();
+				break;
 			default:
 				infoPanel = new ModeDisconnectedFragment();
 				break;
