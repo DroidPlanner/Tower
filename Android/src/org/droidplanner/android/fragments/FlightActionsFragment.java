@@ -88,7 +88,7 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 			drone.state.changeFlightMode(ApmModes.ROTOR_LAND);
 			break;
 		case R.id.mc_takeoff:
-			drone.state.changeFlightMode(ApmModes.ROTOR_TAKEOFF);
+			//drone.state.changeFlightMode(ApmModes.ROTOR_TAKEOFF); //TODO there isn`t a takeoff mode on ArduCopter
 			break;
 		case R.id.mc_homeBtn:
 			drone.state.changeFlightMode(ApmModes.ROTOR_RTL);
