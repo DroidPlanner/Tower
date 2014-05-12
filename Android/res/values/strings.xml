@@ -31,7 +31,7 @@
     <string name="pref_mavlink_log">Abilita registrazione</string>
     <string name="pref_mavlink_log_summary">Logs the MAVLink communication to a *.tlog file, potrebbe degradare prestazioni</string>
     <string name="pref_mavlink_rates">Rata di flusso</string>
-    <string name="pref_mavlink_rates_summary">Rata ricezione dati volo del drone (in Hz)</string>
+    <string name="pref_mavlink_rates_summary">Rata ricezione dati volo del Drone (in Hz)</string>
     <string name="pref_mavlink_stream_rate_ext_stat">Waypoints, GPS raw,  dati GeoFence , Waypoint corrente etc</string>
     <string name="pref_mavlink_stream_rate_extra1">Assetto</string>
     <string name="pref_mavlink_stream_rate_extra2">Dati VFR_Hud</string>
@@ -45,7 +45,7 @@
     <string name="pref_ui_language_english">Inglese come lingua IU</string>
     <string name="pref_ui_language_english_summary">Usare inglese (al posto della lingua del sistema). Richiede riavvio dell' App.</string>
     <string name="pref_connection_actions">Mentre connesso a Drone</string>
-    <string name="pref_connection_actions_summary">Azioni da eseguire durante connession con drone.\nTo Richiede disconnessa / riconnessa</string>
+    <string name="pref_connection_actions_summary">Azioni da eseguire durante connession con Drone.\nTo Richiede disconnessa / riconnessa</string>
     <string name="pref_keep_screen_bright">Mantenere schermo acceso</string>
     <string name="pref_keep_screen_bright_summary">Mantenere schermo acceso e luminoso (incide sulla durata vita batteria)</string>
    
@@ -189,7 +189,7 @@
     <string name="waypointInfo_CondDistance">Ritardo missione finché entro distanza desiderata dal prossimo waypoint.</string>
     <string name="waypointInfo_SetHome">Cambio posizione Home su posizione corrente oppure su posizione specifica.</string>
     <string name="waypointInfo_SetSpeed">Cambio punti impostazione velocità e/o throttle. Impostazione -1 per entrambi velocità e throttle se nessun cambiamento richiesto.</string>
-    <string name="waypointInfo_ROI">Imposto posizione ed altitudine per puntare drone sull' avanti e puntare eventuale camera.</string>
+    <string name="waypointInfo_ROI">Imposto posizione ed altitudine per puntare Drone sull' avanti e puntare eventuale camera.</string>
     <string name="waypointInfo_SetJump">Ripetere Waypoint</string>
 
     <!-- Waypoint editor -->
@@ -232,10 +232,10 @@
     <string name="menu_map_type_terrain">Terreno</string>
 
     <!-- Parameters screen -->
-    <string name="params_click_to_refresh">Cliccare per ricarico parametri drone</string>
+    <string name="params_click_to_refresh">Cliccare per ricarico parametri Drone</string>
     <string name="refreshing_parameters">Ricarico parametri&#8230;</string>
     <string name="parameters_saved">Parametri salvati</string>
-    <string name="msg_parameters_written_to_drone">Parametri scritti su drone</string>
+    <string name="msg_parameters_written_to_drone">Parametri scritti su Drone</string>
     <string name="metadata_value">Valore:</string>
     <string name="metadata_custom_value">** Valore personalizzato **</string>
     <string name="metadata_values">Valori:</string>
@@ -248,7 +248,7 @@
     <string name="progress_title_uploading">Caricamento dati calibrazione</string>
     <string name="progress_desc_uploading">DroidPlanner sta caricando dati calibrazione su Drone</string>
     <string name="progress_title_downloading">Scaricamento dati calibrazione</string>
-    <string name="progress_desc_downloading">DroidPlanner sta scaricando dati calibrazione da drone. Se sistema sconnesso premere Cancel.</string>
+    <string name="progress_desc_downloading">DroidPlanner sta scaricando dati calibrazione da Drone. Se sistema sconnesso premere Cancel.</string>
 
     <!-- Radio Setup Resource Strings -->
     <string name="setup_radio_title">Calibrazine canali radio</string>
@@ -259,20 +259,20 @@
     <string name="setup_radio_title_complete">Calibrazione completata</string>
     <string name="setup_radio_desc_minmax">Muovere più volte il joystick in tutte le direzioni fino al limite, muovere gli interruttori, leve e manopole in tutte le posizioni.</string>
     <string name="setup_radio_desc_middle">Abbassare il throttle stick  sulla posizione minima e tutti gli altri interruttori, leve e manopole su posizione centro.</string>
-    <string name="setup_radio_desc_complete">Calibrazione RC completata. Premere \'Save\' per caricare dati su drone.</string>
+    <string name="setup_radio_desc_complete">Calibrazione RC completata. Premere \'Save\' per caricare dati su Drone.</string>
 
     <!-- Compass Setup Resource Strings -->
     <string name="setup_mag_title">Calibrazione Compasso</string>
 
     <!-- Accelerometer Setup Resource Strings -->
     <string name="setup_imu_title">Calibrazione accelerometro</string>
-    <string name="setup_imu_start">Premere Calibrare per inizio calibrazione  IMU. Assicurarsi drone sia posata su superfice A LIVELLO prima di iniziare il processo di calibrazione.</string>
-    <string name="setup_imu_normal">Posare drone in orientazione NORMALE assicurandosi di movimenti minimi, poi premere Next.</string>
-    <string name="setup_imu_left">Posare drone in orientazione SINISTRA assicurandosi di movimenti minimi, poi premere Next.</string>
-    <string name="setup_imu_right">Posare drone in orientazione DESTRA assicurandosi di movimenti minimi, poi premere Next.</string>
-    <string name="setup_imu_nosedown">Posare drone in orientazione NASO IN BASSO assicurandosi di movimenti minimi, poi premere Next.</string>
-    <string name="setup_imu_noseup">Posare drone in orientazione NASO IN ALTO assicurandosi di movimenti minimi, poi premere Next.</string>
-    <string name="setup_imu_back">Posare drone in orientazione DI SCHIENA assicurandosi di movimenti minimi, poi premere Next.</string>
+    <string name="setup_imu_start">Premere Calibrare per inizio calibrazione  IMU. Assicurarsi Drone sia posata su superfice A LIVELLO prima di iniziare il processo di calibrazione.</string>
+    <string name="setup_imu_normal">Posare Drone in orientazione NORMALE assicurandosi di movimenti minimi, poi premere Next.</string>
+    <string name="setup_imu_left">Posare Drone in orientazione SINISTRA assicurandosi di movimenti minimi, poi premere Next.</string>
+    <string name="setup_imu_right">Posare Drone in orientazione DESTRA assicurandosi di movimenti minimi, poi premere Next.</string>
+    <string name="setup_imu_nosedown">Posare Drone in orientazione NASO IN BASSO assicurandosi di movimenti minimi, poi premere Next.</string>
+    <string name="setup_imu_noseup">Posare Drone in orientazione NASO IN ALTO assicurandosi di movimenti minimi, poi premere Next.</string>
+    <string name="setup_imu_back">Posare Drone in orientazione DI SCHIENA assicurandosi di movimenti minimi, poi premere Next.</string>
     <string name="setup_imu_completed">Calibrazione Accelerometro completata. Se non riuscita si prega di ricalibrare.</string>
     <string name="setup_imu_step">Per iniziare calibrazione premere Calibrare.</string>
     <string name="setup_imu_timeleft">Tempo restante prima della prossima orientazione:/string>
@@ -280,7 +280,7 @@
     <!-- Flight Setup Resource Strings -->
     <string name="setup_fm_title">Configurazione modalità volo</string>
     <string name="setup_fm_side_title">Aggiorno modalità volo</string>
-    <string name="setup_fm_side_desc">Premere \'Send\' per caricare nuove modalità volo su drone.</string>
+    <string name="setup_fm_side_desc">Premere \'Send\' per caricare nuove modalità volo su Drone.</string>
     <string name="setup_fm_desc_uploading">Caricando dati configurazione modalità volo</string>
     <string name="setup_fm_desc_downloading">Scaricando dati configurazione modalità volo</string>
     <string name="setup_fm_mode1">1.</string>
@@ -307,7 +307,7 @@
     <!-- Servo functions Setup Resource Strings -->
     <string name="setup_sf_title">Configurazione funzioni servo</string>
     <string name="setup_sf_side_title">Aggiorno funzioni servo</string>
-    <string name="setup_sf_side_desc">Premere \'Send\' per aggiornare le nouve funzioni servo su drone.</string>
+    <string name="setup_sf_side_desc">Premere \'Send\' per aggiornare le nouve funzioni servo su Drone.</string>
     <string name="setup_sf_desc_uploading">Carico dati configurazione servo</string>
     <string name="setup_sf_desc_downloading">Scarico dati configurazione servo</string>
     <string name="setup_sf_servo_title">Configurazione funzioni servo</string>
