@@ -1,31 +1,36 @@
 package org.droidplanner.android.gcs;
 
 import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
+import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
+import org.droidplanner.core.helpers.coordinates.Coord2D;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
+import com.MAVLink.Messages.ApmModes;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.location.LocationRequest;
 
-public class FollowMe implements LocationListener {
-	private static final long MIN_TIME_MS = 2000;
+public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,GooglePlayServicesClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener, OnDroneListener {
+	private static final long MIN_TIME_MS = 200;
 	private static final float MIN_DISTANCE_M = 0;
 	private Context context;
 	private boolean followMeEnabled = false;
-	private LocationManager locationManager;
 	private Drone drone;
+	private LocationClient mLocationClient;
 
 	public FollowMe(Context context, Drone drone) {
 		this.context = context;
 		this.drone = drone;
-		this.locationManager = (LocationManager) context
-				.getSystemService(Context.LOCATION_SERVICE);
+		mLocationClient = new LocationClient(context, this, this);
+		mLocationClient.connect();
+		drone.events.addDroneListener(this);
 	}
 
 	public void toogleFollowMeState() {
@@ -41,19 +46,27 @@ public class FollowMe implements LocationListener {
 	}
 
 	private void enableFollowMe() {
+		Log.d("follow", "enable");
 		Toast.makeText(context, "FollowMe Enabled", Toast.LENGTH_SHORT).show();
 
 		// Register the listener with the Location Manager to receive location
 		// updates
-		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-				MIN_TIME_MS, MIN_DISTANCE_M, this);
+		
+		LocationRequest mLocationRequest = LocationRequest.create();
+		mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+		mLocationRequest.setInterval(MIN_TIME_MS);
+		mLocationRequest.setFastestInterval(MIN_TIME_MS);
+		mLocationRequest.setSmallestDisplacement(MIN_DISTANCE_M);
+		mLocationClient.requestLocationUpdates(mLocationRequest, this);
 
 		followMeEnabled = true;
+		drone.state.setMode(ApmModes.ROTOR_GUIDED);
 	}
 
 	private void disableFollowMe() {
 		Toast.makeText(context, "FollowMe Disabled", Toast.LENGTH_SHORT).show();
-		locationManager.removeUpdates(this);
+		Log.d("follow", "disable");
+		mLocationClient.removeLocationUpdates(this);
 		followMeEnabled = false;
 	}
 
@@ -63,29 +76,52 @@ public class FollowMe implements LocationListener {
 
 	@Override
 	public void onLocationChanged(Location location) {
-		LatLng coord = new LatLng(location.getLatitude(),
+		Coord2D coord = new Coord2D(location.getLatitude(),
 				location.getLongitude());
-		// TODO find a better way to do the GUIDED altitude
-		// TODO reimplement follow-me
-		// drone.guidedPoint.newGuidedPointWithCurrentAlt(coord);
-	}
-
-	@Override
-	public void onProviderDisabled(String provider) {
-	}
-
-	@Override
-	public void onProviderEnabled(String provider) {
-	}
-
-	@Override
-	public void onStatusChanged(String provider, int status, Bundle extras) {
+		Log.d("follow", coord.toString());
+		drone.guidedPoint.newGuidedCoord(coord);
 	}
 
 	private boolean isEnabledInPreferences() {
+		return true; // TODO remove this method if not needed
+		/*
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
 
 		return prefs.getBoolean("pref_follow_me_mode_enabled", false);
+		*/
+	}
+
+	@Override
+	public void onConnectionFailed(ConnectionResult arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onConnected(Bundle arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onDisconnected() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onDroneEvent(DroneEventsType event, Drone drone) {
+		switch(event){
+		case MODE:
+			if ((drone.state.getMode() != ApmModes.ROTOR_GUIDED)) {
+				disableFollowMe();
+			}			
+			break;
+		default:
+			return;
+		
+		}
+		
 	}
 }
