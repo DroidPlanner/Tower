@@ -33,7 +33,7 @@ import static org.droidplanner.android.utils.Constants.*;
 /**
  * Implements the application settings screen.
  */
-public class SettingsFragment extends PreferenceFragment implements
+public class SettingsFragment extends GlassPreferenceFragment implements
         OnSharedPreferenceChangeListener {
 
     /**
