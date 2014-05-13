@@ -1,4 +1,4 @@
-package org.droidplanner.android.helpers;
+package org.droidplanner.android.gcs;
 
 import org.droidplanner.core.drone.Drone;
 
