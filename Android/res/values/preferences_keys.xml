@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used to store the preferences keys so that it's accessible and modifiable from one location.
+ To use in preference.xml, do: android:key="@string/<pref_key>"
+ To use in code, do: findPreference(getText(R.string.<pref_key>))
+
+ NOTE: DO NOT TRANSLATE THE CONTENT IN THIS FILE!! (the only allowed translation is this warning)
+ NOTE: NE TRANSLATER PAS LE CONTENU DANS CETTE FICHE!! (la seule translation permit est cette notification)
+ -->
+<resources>
+    <string name="pref_maps_category_key">pref_maps_category</string>
+    <string name="pref_maps_providers_key">pref_maps_providers_key</string>
+    <string name="pref_map_provider_settings_key">pref_map_provider_settings</string>
+    <string name="pref_connection_type_key">pref_connection_type</string>
+    <string name="pref_map_type_key">pref_map_type</string>
+    <string name="pref_advanced_use_offline_maps_key">pref_advanced_use_offline_maps</string>
+    <string name="pref_auto_pan_enabled_key">pref_auto_pan_enabled</string>
+    <string name="pref_baud_type_key">pref_baud_type</string>
+    <string name="pref_server_ip_key">pref_server_ip</string>
+    <string name="pref_server_port_key">pref_server_port</string>
+    <string name="pref_udp_server_port_key">pref_udp_server_port</string>
+    <string name="pref_vehicle_type_key">pref_vehicle_type</string>
+    <string name="pref_rc_quickmode_right_key">pref_rc_quickmode_right</string>
+    <string name="pref_rc_quickmode_left_key">pref_rc_quickmode_left</string>
+    <string name="pref_max_flight_path_size_key">pref_max_flight_path_size</string>
+    <string name="pref_storage_key">pref_storage</string>
+    <string name="pref_rc_mode_key">pref_rc_mode</string>
+</resources>

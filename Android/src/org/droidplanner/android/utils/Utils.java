@@ -2,11 +2,13 @@ package org.droidplanner.android.utils;
 
 import java.util.Locale;
 
+import org.droidplanner.R;
 import org.droidplanner.android.communication.connection.BluetoothConnection;
 import org.droidplanner.android.communication.connection.MAVLinkConnection;
 import org.droidplanner.android.communication.connection.TcpConnection;
 import org.droidplanner.android.communication.connection.UdpConnection;
 import org.droidplanner.android.communication.connection.UsbConnection;
+import org.droidplanner.android.maps.providers.DPMapProvider;
 
 import android.content.Context;
 import android.content.res.Configuration;
@@ -65,6 +67,19 @@ public class Utils {
 		 */
 		public abstract MAVLinkConnection getConnection(Context context);
 	}
+
+    /**
+     * Returns the map provider selected by the user.
+     * @param context application context
+     * @return selected map provider
+     */
+    public static DPMapProvider getMapProvider(Context context){
+        final String mapProviderName = PreferenceManager.getDefaultSharedPreferences(context)
+                .getString(context.getString(R.string.pref_maps_providers_key), null);
+
+        return mapProviderName == null ? DPMapProvider.DEFAULT_MAP_PROVIDER : DPMapProvider
+                .getMapProvider(mapProviderName);
+    }
 
 	/**
 	 * Used to update the user interface language.
