@@ -163,7 +163,7 @@ public class MissionProxy implements DPMap.PathSource {
 
     public void addTakeoff() {
 		Takeoff takeoff = new Takeoff(mMission, new Altitude(10));
-		mMissionItems.add(new MissionItemRender(this, takeoff));
+		mMissionItems.add(new MissionItemProxy(this, takeoff));
         mMission.addWaypoint(takeoff);		
 	}
 
