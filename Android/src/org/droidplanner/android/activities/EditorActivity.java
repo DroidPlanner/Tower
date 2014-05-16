@@ -407,6 +407,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
                     @Override
                     public void onYes() {
                         missionProxy.clear();
+                        missionProxy.addTakeoff();
                     }
 
                     @Override

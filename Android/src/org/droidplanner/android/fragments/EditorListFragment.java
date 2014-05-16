@@ -13,7 +13,7 @@ import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 import org.droidplanner.android.proxy.mission.MissionSelection;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.proxy.mission.MissionProxy;
-import org.droidplanner.android.widgets.adapterViews.MissionItemRenderView;
+import org.droidplanner.android.widgets.adapterViews.MissionItemProxyView;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
@@ -34,7 +34,7 @@ public class EditorListFragment extends Fragment implements
 
 	private HListView list;
 	private MissionProxy missionProxy;
-	private MissionItemRenderView adapter;
+	private MissionItemProxyView adapter;
 	private OnEditorInteraction editorListener;
 	private ImageButton leftArrow;
 	private ImageButton rightArrow;
@@ -48,7 +48,7 @@ public class EditorListFragment extends Fragment implements
         DroidPlannerApp app = ((DroidPlannerApp) getActivity().getApplication());
         drone = app.drone;
         missionProxy = app.missionProxy;
-        adapter = new MissionItemRenderView(getActivity(), missionProxy.getItems());
+        adapter = new MissionItemProxyView(getActivity(), missionProxy.getItems());
 
 		list = (HListView) view.findViewById(R.id.mission_item_list);
         list.setOnItemClickListener(this);

@@ -13,11 +13,11 @@ import android.widget.ArrayAdapter;
  * MissionItem Adapter for the MissionItem horizontal list view.
  * This adapter updates the content of the list view item's view based on the mission item type.
  */
-public class MissionItemRenderView extends ArrayAdapter<MissionItemProxy> {
+public class MissionItemProxyView extends ArrayAdapter<MissionItemProxy> {
 
 	private List<MissionItemProxy> waypoints;
 
-	public MissionItemRenderView(Context context, List<MissionItemProxy> list) {
+	public MissionItemProxyView(Context context, List<MissionItemProxy> list) {
 		super(context, 0, list);
 		this.waypoints = list;
 	}
