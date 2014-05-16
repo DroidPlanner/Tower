@@ -11,6 +11,8 @@ import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Template class and factory for a mission item's marker source.
@@ -19,42 +21,42 @@ public abstract class MissionItemMarkerInfo extends MarkerInfo.SimpleMarkerInfo 
 
     protected final MissionItemProxy mMarkerOrigin;
 
-    public static MissionItemMarkerInfo newInstance(MissionItemProxy origin) {
-        MissionItemMarkerInfo markerInfo;
+    public static List<MarkerInfo> newInstance(MissionItemProxy origin) {
+        List<MarkerInfo> markerInfos = new ArrayList<MarkerInfo>();
         switch (origin.getMissionItem().getType()) {
             case LAND:
-                markerInfo = new LandMarkerInfo(origin);
+                markerInfos.add(new LandMarkerInfo(origin));
                 break;
 
             case LOITER:
             case LOITER_INF:
             case LOITERN:
             case LOITERT:
-                markerInfo = new LoiterMarkerInfo(origin);
+                markerInfos.add(new LoiterMarkerInfo(origin));
                 break;
 
             case ROI:
-                markerInfo = new ROIMarkerInfo(origin);
+                markerInfos.add(new ROIMarkerInfo(origin));
                 break;
 
-            case TAKEOFF:
-                markerInfo = new TakeoffMarkerInfo(origin);
-                break;
+            //TODO: TAKEOFF is currently not displayed on the map. Check with Arthur.
+//            case TAKEOFF:
+//                markerInfos.add(new TakeoffMarkerInfo(origin));
+//                break;
 
             case WAYPOINT:
-                markerInfo = new WaypointMarkerInfo(origin);
+                markerInfos.add(new WaypointMarkerInfo(origin));
                 break;
 
             case SURVEY:
-                markerInfo = new SurveyMarkerInfo(origin);
+                markerInfos.addAll(new SurveyMarkerInfoProvider(origin).getMarkersInfos());
                 break;
 
             default:
-                markerInfo = null;
                 break;
         }
 
-        return markerInfo;
+        return markerInfos;
     }
 
     protected MissionItemMarkerInfo(MissionItemProxy origin) {

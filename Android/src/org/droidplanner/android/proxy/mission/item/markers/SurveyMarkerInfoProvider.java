@@ -11,13 +11,12 @@ import java.util.List;
 /**
  *
  */
-public class SurveyMarkerInfo extends MissionItemMarkerInfo {
+public class SurveyMarkerInfoProvider {
 
     private final Survey mSurvey;
     private final List<MarkerInfo> mPolygonMarkers = new ArrayList<MarkerInfo>();
 
-    protected SurveyMarkerInfo(MissionItemProxy origin) {
-        super(origin);
+    protected SurveyMarkerInfoProvider(MissionItemProxy origin) {
         mSurvey = (Survey) origin.getMissionItem();
         updateMarkerInfoList();
     }
@@ -30,15 +29,5 @@ public class SurveyMarkerInfo extends MissionItemMarkerInfo {
 
     public List<MarkerInfo> getMarkersInfos(){
         return mPolygonMarkers;
-    }
-
-    @Override
-    protected int getSelectedIconResource() {
-        return 0;
-    }
-
-    @Override
-    protected int getIconResource() {
-        return 0;
     }
 }

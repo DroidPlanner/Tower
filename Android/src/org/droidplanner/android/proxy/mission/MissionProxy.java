@@ -3,7 +3,7 @@ package org.droidplanner.android.proxy.mission;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
-import org.droidplanner.android.proxy.mission.item.markers.SurveyMarkerInfo;
+import org.droidplanner.android.proxy.mission.item.markers.SurveyMarkerInfoProvider;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.coordinates.Coord3D;
 import org.droidplanner.core.helpers.units.Altitude;
@@ -58,14 +58,9 @@ public class MissionProxy implements DPMap.PathSource {
         List<MarkerInfo> markerInfos = new ArrayList<MarkerInfo>();
 
         for (MissionItemProxy itemProxy : mMissionItems) {
-            MarkerInfo markerInfo = itemProxy.getMarkerInfo();
-            if (markerInfo != null) {
-                if(markerInfo instanceof SurveyMarkerInfo){
-                    markerInfos.addAll(((SurveyMarkerInfo)markerInfo).getMarkersInfos());
-                }
-                else {
-                    markerInfos.add(markerInfo);
-                }
+            List<MarkerInfo> itemMarkerInfos = itemProxy.getMarkerInfos();
+            if (itemMarkerInfos != null && !itemMarkerInfos.isEmpty()) {
+                markerInfos.addAll(itemMarkerInfos);
             }
         }
         return markerInfos;

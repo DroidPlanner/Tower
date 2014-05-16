@@ -8,10 +8,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.droidplanner.R;
+import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.fragments.MissionDetailFragment;
 import org.droidplanner.android.proxy.mission.item.markers.MissionItemMarkerInfo;
-import org.droidplanner.android.utils.DroneHelper;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.MissionItem;
@@ -43,12 +43,12 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
     /**
      * This is the marker source for this mission item render.
      */
-    private final MissionItemMarkerInfo mMarkerInfo;
+    private final List<MarkerInfo> mMarkerInfos;
 
     public MissionItemProxy(MissionProxy mission, MissionItem missionItem){
         mMission = mission;
         mMissionItem = missionItem;
-        mMarkerInfo = MissionItemMarkerInfo.newInstance(this);
+        mMarkerInfos = MissionItemMarkerInfo.newInstance(this);
     }
 
     /**
@@ -71,8 +71,8 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
         return MissionDetailFragment.newInstance(mMissionItem.getType());
     }
 
-    public MissionItemMarkerInfo getMarkerInfo(){
-        return mMarkerInfo;
+    public List<MarkerInfo> getMarkerInfos(){
+        return mMarkerInfos;
     }
 
     /**
