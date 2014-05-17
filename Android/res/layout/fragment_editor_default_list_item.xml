@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+Used to Style the horizontal list of spatial mission items.
+-->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/editorHListMissionItem"
+    android:background="@drawable/wp_mission_button_bg"
+    >
+
+    <TextView
+        style="@style/editorHListMissionItemOrderView"
+        android:text="44"
+        android:drawableLeft="@drawable/ic_mission_wp"
+        />
+
+    <TextView
+        style="@style/editorHListMissionItemAltitudeView"
+        android:text="200m"
+        android:drawableLeft="@drawable/ic_action_arrow_bottom"
+        />
+
+</LinearLayout>

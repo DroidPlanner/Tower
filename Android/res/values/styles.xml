@@ -421,5 +421,34 @@
 
     </style>
 
+    <!-- Editor horizontal list item style -->
+    <style name="editorHListMissionItem">
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minWidth">65dp</item>
+        <item name="android:minHeight">65dp</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="editorHListMissionItemOrderView">
+        <item name="android:id">@id/mission_item_order</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">2dp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/editor_list_item_text_size</item>
+        <item name="android:textStyle">italic</item>
+    </style>
+
+    <style name="editorHListMissionItemAltitudeView">
+        <item name="android:id">@id/mission_item_altitude</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>
 
