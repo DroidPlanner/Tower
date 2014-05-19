@@ -12,7 +12,7 @@ Used to Style the horizontal list of spatial mission items.
 
     <TextView
         style="@style/editorHListMissionItemOrderView"
-        android:text="44"
+        android:text="444"
         android:drawableLeft="@drawable/ic_mission_wp"
         />
 

@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/editorHListMissionItem"
+    android:background="@drawable/cmd_mission_button_bg"
+    >
+
+    <TextView
+        style="@style/editorHListMissionItemOrderView"
+        android:text="10"
+        android:textSize="20sp"
+        android:drawableLeft="@drawable/ic_mission_land"/>
 
 </LinearLayout>

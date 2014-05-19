@@ -118,7 +118,8 @@ public class MissionItemRender implements Comparable<MissionItemRender> {
             view = inflater.inflate( R.layout.fragment_editor_takeoff_list_item, parent, false);
 
             final TextView altitudeView = (TextView) view.findViewById(R.id.mission_item_altitude);
-            altitudeView.setText(((Takeoff)mMissionItem).getFinishedAlt().toString());
+            altitudeView.setText(String.format("%3.0fm",((Takeoff)mMissionItem).getFinishedAlt()
+                    .valueInMeters()));
         }
         else if(mMissionItem instanceof Land){
             view = inflater.inflate( R.layout.fragment_editor_land_list_item, parent, false);
@@ -131,7 +132,8 @@ public class MissionItemRender implements Comparable<MissionItemRender> {
 
             if(mMissionItem instanceof Survey){
                 final TextView altitudeView = (TextView) view.findViewById(R.id.mission_item_altitude);
-                altitudeView.setText(((Survey)mMissionItem).surveyData.getAltitude().toString());
+                altitudeView.setText(String.format("%3.0fm",((Survey)mMissionItem).surveyData
+                        .getAltitude().valueInMeters()));
             }
             else if(mMissionItem instanceof SpatialCoordItem){
                 SpatialCoordItem waypoint = (SpatialCoordItem) mMissionItem;
