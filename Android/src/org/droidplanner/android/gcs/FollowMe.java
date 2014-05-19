@@ -127,18 +127,34 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 	public void onLocationChanged(Location location) {
 		Coord2D gcsCoord = new Coord2D(location.getLatitude(),
 				location.getLongitude());
+		float bearing = location.getBearing();
 		Log.d("follow", gcsCoord.toString());
 
 		// TODO implement some sort of Follow-me type selection
-		// processNewLocationAsOverYourHead(gcsCoord);
-		processNewLocationAsLeash(gcsCoord);
+		//processNewLocationAsOverYourHead(gcsCoord,bearing);
+		//processNewLocationAsLeash(gcsCoord,bearing);
+		//processNewLocationAsFixedAngle(gcsCoord,bearing);
+		processNewLocationAsHeadingAngle(gcsCoord,bearing);
+		
 	}
 
-	private void processNewLocationAsOverYourHead(Coord2D gcsCoord) {
+	private void processNewLocationAsHeadingAngle(Coord2D gcsCoord, float bearing) {
+		Coord2D goCoord = GeoTools.newCoordFromBearingAndDistance(gcsCoord,
+				bearing+90.0, LEASH_LENGTH);
+		drone.guidedPoint.newGuidedCoord(goCoord);	
+	}
+
+	private void processNewLocationAsFixedAngle(Coord2D gcsCoord, float bearing) {
+			Coord2D goCoord = GeoTools.newCoordFromBearingAndDistance(gcsCoord,
+					90.0, LEASH_LENGTH);
+			drone.guidedPoint.newGuidedCoord(goCoord);
+	}
+
+	private void processNewLocationAsOverYourHead(Coord2D gcsCoord, float bearing) {
 		drone.guidedPoint.newGuidedCoord(gcsCoord);
 	}
 
-	private void processNewLocationAsLeash(Coord2D gcsCoord) {
+	private void processNewLocationAsLeash(Coord2D gcsCoord, float bearing) {
 		if (GeoTools.getDistance(gcsCoord, drone.GPS.getPosition())
 				.valueInMeters() > LEASH_LENGTH) {
 			double headingGCStoDrone = GeoTools.getHeadingFromCoordinates(
