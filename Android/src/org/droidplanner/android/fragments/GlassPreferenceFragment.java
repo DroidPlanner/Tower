@@ -20,6 +20,8 @@ import android.view.accessibility.AccessibilityEvent;
 import com.google.android.glass.touchpad.Gesture;
 import com.google.android.glass.touchpad.GestureDetector;
 
+import org.droidplanner.android.glass.utils.GlassUtils;
+
 
 /**
  * This class provides the necessary workarounds to make the default preference fragment screen
@@ -31,9 +33,11 @@ public class GlassPreferenceFragment extends PreferenceFragment {
     public void onStart() {
         super.onStart();
 
-        final Activity parentActivity = getActivity();
-        if (parentActivity != null) {
-            updateWindowCallback(parentActivity.getWindow());
+        if(GlassUtils.isGlassDevice()) {
+            final Activity parentActivity = getActivity();
+            if (parentActivity != null) {
+                updateWindowCallback(parentActivity.getWindow());
+            }
         }
     }
 
@@ -41,9 +45,11 @@ public class GlassPreferenceFragment extends PreferenceFragment {
     public void onStop() {
         super.onStop();
 
-        final Activity parentActivity = getActivity();
-        if (parentActivity != null) {
-            restoreWindowCallback(parentActivity.getWindow());
+        if(GlassUtils.isGlassDevice()) {
+            final Activity parentActivity = getActivity();
+            if (parentActivity != null) {
+                restoreWindowCallback(parentActivity.getWindow());
+            }
         }
     }
 
