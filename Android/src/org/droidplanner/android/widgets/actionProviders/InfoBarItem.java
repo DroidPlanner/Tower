@@ -328,15 +328,11 @@ public abstract class InfoBarItem {
 
 			final View popupView = mPopup.getContentView();
 			mRssiView = (TextView) popupView.findViewById(R.id.bar_signal_rssi);
-			mRemRssiView = (TextView) popupView
-					.findViewById(R.id.bar_signal_remrssi);
-			mNoiseView = (TextView) popupView
-					.findViewById(R.id.bar_signal_noise);
-			mRemNoiseView = (TextView) popupView
-					.findViewById(R.id.bar_signal_remnoise);
+			mRemRssiView = (TextView) popupView.findViewById(R.id.bar_signal_remrssi);
+			mNoiseView = (TextView) popupView.findViewById(R.id.bar_signal_noise);
+			mRemNoiseView = (TextView) popupView.findViewById(R.id.bar_signal_remnoise);
 			mFadeView = (TextView) popupView.findViewById(R.id.bar_signal_fade);
-			mRemFadeView = (TextView) popupView
-					.findViewById(R.id.bar_signal_remfade);
+			mRemFadeView = (TextView) popupView.findViewById(R.id.bar_signal_remfade);
 
 			mItemView.setOnClickListener(new View.OnClickListener() {
 				@Override
@@ -603,15 +599,13 @@ public abstract class InfoBarItem {
 			 */
 			private final View mWindowView;
 
-			public ExtraSignalInfo(Context context, View parentView,
-					Drone drone, View windowView) {
+			public ExtraSignalInfo(Context context, View parentView, Drone drone, View windowView) {
 				super(context, parentView, drone);
 				mWindowView = windowView;
 			}
 
 			@Override
-			protected void initItemView(Context context, final View parentView,
-					Drone drone) {
+			protected void initItemView(Context context, final View parentView,	Drone drone) {
 				super.initItemView(context, parentView, drone);
 				if (mItemView == null)
 					return;
