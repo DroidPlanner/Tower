@@ -1,6 +1,7 @@
 package org.droidplanner.android.widgets.actionProviders;
 
 import android.content.Context;
+import android.graphics.drawable.LevelListDrawable;
 import android.os.Handler;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import org.droidplanner.R;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.android.widgets.spinners.ModeAdapter;
 import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
+import org.droidplanner.core.drone.variables.GPS;
 
 import java.util.Collections;
 import java.util.List;
@@ -40,8 +42,7 @@ public abstract class InfoBarItem {
 	 */
 	protected View mItemView;
 
-	protected InfoBarItem(Context context, View parentView, Drone drone,
-			int itemId) {
+	protected InfoBarItem(Context context, View parentView, Drone drone, int itemId) {
 		mItemId = itemId;
 		initItemView(context, parentView, drone);
 	}
@@ -56,8 +57,7 @@ public abstract class InfoBarItem {
 	 * @param drone
 	 *            current drone state
 	 */
-	protected void initItemView(final Context context, View parentView,
-			Drone drone) {
+	protected void initItemView(final Context context, View parentView, Drone drone) {
 		mItemView = parentView.findViewById(mItemId);
 	}
 
@@ -109,8 +109,9 @@ public abstract class InfoBarItem {
 		@Override
 		public void updateItemView(final Context context, final Drone drone) {
 			if (mItemView != null) {
-				String update = drone == null ? "--" : String.format(
-						"Home\n%s", drone.home.getDroneDistanceToHome()
+				String update = drone == null
+                        ? context.getString(R.string.info_bar_empty)
+                        : context.getString(R.string.home_info, drone.home.getDroneDistanceToHome()
 								.toString());
 				((TextView) mItemView).setText(update);
 			}
@@ -129,9 +130,20 @@ public abstract class InfoBarItem {
 		@Override
 		public void updateItemView(final Context context, final Drone drone) {
 			if (mItemView != null) {
-				String update = drone == null ? "--" : String.format(
-						"Satellite\n%d, %s", drone.GPS.getSatCount(),
-						drone.GPS.getFixType());
+                String update;
+                if(drone == null){
+                    update = context.getString(R.string.info_bar_empty);
+                }
+                else{
+                    final int satCount = drone.GPS.getSatCount();
+                    final String fixType = drone.GPS.getFixType();
+                    if(satCount < GPS.FIX_2D){
+                        update = context.getString(R.string.satellite_info_no_fix, fixType);
+                    }
+                    else{
+                        update = context.getString(R.string.satellite_info_fix, fixType, satCount);
+                    }
+                }
 
 				((TextView) mItemView).setText(update);
 			}
@@ -279,6 +291,11 @@ public abstract class InfoBarItem {
 		 */
 		protected static final int sPopupWindowLayoutId = R.layout.popup_info_signal;
 
+        /**
+         * Used to update the rssi signal based on signal strength
+         */
+        private LevelListDrawable mRssiSignalIcon;
+
 		/**
 		 * This popup is used to show additional signal info.
 		 */
@@ -304,6 +321,8 @@ public abstract class InfoBarItem {
 			super.initItemView(context, parentView, drone);
 			if (mItemView == null)
 				return;
+
+            mRssiSignalIcon = (LevelListDrawable) ((TextView)mItemView).getCompoundDrawables()[0];
 
 			mPopup = initPopupWindow(context, sPopupWindowLayoutId);
 
@@ -341,6 +360,10 @@ public abstract class InfoBarItem {
 			if (drone == null) {
 				infoUpdate = sDefaultValue;
 
+                if(mRssiSignalIcon != null){
+                    mRssiSignalIcon.setLevel(0);
+                }
+
 				mRssiView.setText(sDefaultValue);
 				mRemRssiView.setText(sDefaultValue);
 				mNoiseView.setText(sDefaultValue);
@@ -348,8 +371,23 @@ public abstract class InfoBarItem {
 				mFadeView.setText(sDefaultValue);
 				mRemFadeView.setText(sDefaultValue);
 			} else {
-				infoUpdate = String.format("%d%%",
-						drone.radio.getSignalStrength());
+                final int signalStrength = drone.radio.getSignalStrength();
+				infoUpdate = String.format("%d%%", signalStrength);
+
+                if(mRssiSignalIcon != null){
+                    if(signalStrength > 75){
+                        mRssiSignalIcon.setLevel(3);
+                    }
+                    else if(signalStrength > 50){
+                        mRssiSignalIcon.setLevel(2);
+                    }
+                    else if(signalStrength > 25){
+                        mRssiSignalIcon.setLevel(1);
+                    }
+                    else {
+                        mRssiSignalIcon.setLevel(0);
+                    }
+                }
 
 				mRssiView.setText(String.format("RSSI %2.0f dB",
 						drone.radio.getRssi()));

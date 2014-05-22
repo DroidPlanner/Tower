@@ -340,6 +340,10 @@
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="guided_mode_warning">"Press OK to enter Guided mode. \nTo change locations, press and hold the map.</string>
+    <string name="home_info">%1$s</string>
+    <string name="info_bar_empty">--</string>
+    <string name="satellite_info_no_fix">%1$s</string>
+    <string name="satellite_info_fix">%1$s (%2$d)</string>
 
     <!-- Bluetooth device selection strings -->
     <string name="select_device">Select device to connect</string>

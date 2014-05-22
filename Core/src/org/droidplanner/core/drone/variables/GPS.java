@@ -6,6 +6,17 @@ import org.droidplanner.core.drone.DroneVariable;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
 public class GPS extends DroneVariable {
+
+    /**
+     * Number of satellites required to get a 2D gps fix.
+     */
+    public static final int FIX_2D = 2;
+
+    /**
+     * Least number of satellites required to get a 3D gps fix.
+     */
+    public static final int FIX_3D = 3;
+
 	private double gps_eph = -1;
 	private int satCount = -1;
 	private int fixType = -1;

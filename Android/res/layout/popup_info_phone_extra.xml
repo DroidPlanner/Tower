@@ -62,7 +62,7 @@
         android:layout_weight="1"
         android:layout_height="0dp"
         android:text="--"
-        android:drawableLeft="@drawable/ic_status_rssi"
+        android:drawableLeft="@drawable/ic_wifi_signal"
         android:textSize="@dimen/info_bar_text_size"
         android:drawablePadding="@dimen/info_bar_drawable_padding"
         />

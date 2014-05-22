@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<level-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:maxLevel="0" android:drawable="@drawable/btn_wifi_0" />
+    <item android:maxLevel="1" android:drawable="@drawable/btn_wifi_1" />
+    <item android:maxLevel="2" android:drawable="@drawable/btn_wifi_2" />
+    <item android:maxLevel="3" android:drawable="@drawable/btn_wifi_3" />
+</level-list>
