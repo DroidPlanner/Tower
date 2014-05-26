@@ -6,11 +6,11 @@ import java.util.List;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.coordinates.CoordBounds;
 import org.droidplanner.core.helpers.geoTools.GeoTools;
-import org.droidplanner.core.helpers.geoTools.LineLatLng;
+import org.droidplanner.core.helpers.geoTools.LineCoord2D;
 
 public class CircumscribedGrid {
 	private static final int MAX_NUMBER_OF_LINES = 200;
-	List<LineLatLng> grid = new ArrayList<LineLatLng>();
+	List<LineCoord2D> grid = new ArrayList<LineCoord2D>();
 	private Coord2D gridLowerLeft;
 	private double extrapolatedDiag;
 	private Double angle;
@@ -30,7 +30,7 @@ public class CircumscribedGrid {
 			Coord2D endPoint = GeoTools.newCoordFromBearingAndDistance(
 					startPoint, angle, extrapolatedDiag);
 
-			LineLatLng line = new LineLatLng(startPoint, endPoint);
+			LineCoord2D line = new LineCoord2D(startPoint, endPoint);
 			grid.add(line);
 
 			startPoint = GeoTools.newCoordFromBearingAndDistance(startPoint,
@@ -50,7 +50,7 @@ public class CircumscribedGrid {
 		extrapolatedDiag = bounds.getDiag() * 1.5;
 	}
 
-	public List<LineLatLng> getGrid() {
+	public List<LineCoord2D> getGrid() {
 		return grid;
 	}
 

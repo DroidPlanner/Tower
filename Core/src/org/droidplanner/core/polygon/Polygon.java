@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.geoTools.GeoTools;
-import org.droidplanner.core.helpers.geoTools.LineLatLng;
+import org.droidplanner.core.helpers.geoTools.LineCoord2D;
 import org.droidplanner.core.helpers.units.Area;
 
 public class Polygon {
@@ -30,11 +30,11 @@ public class Polygon {
 		return points;
 	}
 
-	public List<LineLatLng> getLines() {
-		List<LineLatLng> list = new ArrayList<LineLatLng>();
+	public List<LineCoord2D> getLines() {
+		List<LineCoord2D> list = new ArrayList<LineCoord2D>();
 		for (int i = 0; i < points.size(); i++) {
 			int endIndex = (i == 0) ? points.size() - 1 : i - 1;
-			list.add(new LineLatLng(points.get(i), points.get(endIndex)));
+			list.add(new LineCoord2D(points.get(i), points.get(endIndex)));
 		}
 		return list;
 	}
