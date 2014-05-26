@@ -170,6 +170,7 @@
 
     <!-- Waypoint types -->
     <string name="waypointType_Waypoint">Waypoint</string>
+    <string name="waypointType_SplineWaypoint">Spline Waypoint</string>
     <string name="waypointType_TakeOff">Take-Off</string>
     <string name="waypointType_RTL">Return To Launch</string>
     <string name="waypointType_Land">Land</string>
@@ -375,5 +376,7 @@
     <string name="pref_title_language">Language</string>
     <string name="pref_title_screen">Screen</string>
     <string name="pref_title_notifications">Notifications</string>
+    <string name="normal_waypoint_toggle">Normal</string>
+    <string name="spline_waypoint_toggle">Spline</string>
 
 </resources>

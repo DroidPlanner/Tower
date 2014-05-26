@@ -1,5 +1,6 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
+import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -27,8 +28,8 @@ public class MissionLoiterNFragment extends MissionDetailFragment implements
     }
 
     @Override
-    protected void setupViews(View view) {
-        super.setupViews(view);
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.LOITERN));
 
         LoiterTurns item = (LoiterTurns) this.itemRender.getMissionItem();

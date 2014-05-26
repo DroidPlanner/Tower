@@ -33,7 +33,10 @@ import android.view.ActionMode.Callback;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +54,9 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
      */
     private MissionProxy missionProxy;
 
+    /*
+    View widgets.
+     */
 	private EditorMapFragment planningMapFragment;
 	private GestureMapFragment gestureMapFragment;
 	private EditorToolsFragment editorToolsFragment;
@@ -58,6 +64,8 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	private FragmentManager fragmentManager;
 	private EditorListFragment missionListFragment;
 	private TextView infoView;
+    private View mSplineToggleContainer;
+    private boolean mIsSplineEnabled;
 
     /**
      * This view hosts the mission item detail fragment.
@@ -89,6 +97,25 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		missionListFragment = (EditorListFragment) fragmentManager
 				.findFragmentById(R.id.missionFragment1);
 		infoView = (TextView) findViewById(R.id.editorInfoWindow);
+
+        mSplineToggleContainer = findViewById(R.id.editorSplineToggleContainer);
+        mSplineToggleContainer.setVisibility(View.INVISIBLE);
+
+        final RadioButton normalToggle = (RadioButton) findViewById(R.id.normalWpToggle);
+        normalToggle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mIsSplineEnabled = !normalToggle.isChecked();
+            }
+        });
+
+        final RadioButton splineToggle = (RadioButton) findViewById(R.id.splineWpToggle);
+        splineToggle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mIsSplineEnabled = splineToggle.isChecked();
+            }
+        });
 
         /*
          * On phone, this view will be null causing the item detail to be shown as a dialog.
@@ -171,7 +198,12 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 		switch (getTool()) {
 		case MARKER:
-			missionProxy.addWaypoint(point);
+            if(mIsSplineEnabled){
+                missionProxy.addSplineWaypoint(point);
+            }
+            else {
+                missionProxy.addWaypoint(point);
+            }
 			break;
 		case DRAW:
 			break;
@@ -194,13 +226,25 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 		switch (tools) {
 		case DRAW:
+            enableSplineToggle(true);
+            gestureMapFragment.enableGestureDetection();
+            break;
+
 		case POLY:
+            enableSplineToggle(false);
 			Toast.makeText(this,R.string.draw_the_survey_region, Toast.LENGTH_SHORT).show();
 			gestureMapFragment.enableGestureDetection();
 			break;
+
 		case MARKER:
+            //Enable to spline selection toggle
+            enableSplineToggle(true);
+            gestureMapFragment.disableGestureDetection();
+            break;
+
 		case TRASH:
 		case NONE:
+            enableSplineToggle(false);
 			gestureMapFragment.disableGestureDetection();
 			break;
 		}
@@ -220,6 +264,12 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		}
 		}
 	}
+
+    private void enableSplineToggle(boolean isEnabled){
+        if(mSplineToggleContainer != null){
+            mSplineToggleContainer.setVisibility(isEnabled ? View.VISIBLE : View.INVISIBLE);
+        }
+    }
 
 	private void showItemDetail(MissionItemProxy item) {
 		if (itemDetailFragment == null) {
@@ -263,7 +313,12 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		List<Coord2D> points = planningMapFragment.projectPathIntoMap(path);
 		switch (getTool()) {
 		case DRAW:
-			missionProxy.addWaypoints(points);
+            if(mIsSplineEnabled){
+                missionProxy.addSplineWaypoints(points);
+            }
+            else {
+                missionProxy.addWaypoints(points);
+            }
 			break;
 
 		case POLY:

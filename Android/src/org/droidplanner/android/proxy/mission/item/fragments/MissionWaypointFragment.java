@@ -7,6 +7,8 @@ import org.droidplanner.core.mission.waypoints.Waypoint;
 import org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText;
 import org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListener;
 
+
+import android.os.Bundle;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -28,8 +30,8 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
 	}
 
 	@Override
-	protected void setupViews(View view) {
-		super.setupViews(view);
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 		typeSpinner.setSelection(commandAdapter
 				.getPosition(MissionItemType.WAYPOINT));
 

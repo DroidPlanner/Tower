@@ -74,7 +74,7 @@ public class Mission extends DroneVariable {
      * Add a list of waypoints to the mission's set of mission items.
      * @param missionItems list of waypoints to add
      */
-	public void addWaypoints(List<MissionItem> missionItems) {
+	public void addMissionItems(List<MissionItem> missionItems) {
         items.addAll(missionItems);
         notifyMissionUpdate();
 	}
@@ -83,7 +83,7 @@ public class Mission extends DroneVariable {
      * Add a waypoint to the mission's set of mission item.
      * @param missionItem waypoint to add
      */
-	public void addWaypoint(MissionItem missionItem) {
+	public void addMissionItem(MissionItem missionItem) {
 		items.add(missionItem);
 		notifyMissionUpdate();
 	}

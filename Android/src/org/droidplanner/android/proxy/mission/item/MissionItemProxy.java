@@ -87,6 +87,7 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
             case LOITERT:
             case LOITERN:            
             case WAYPOINT:
+            case SPLINE_WAYPOINT:
                 pathPoints.add(((SpatialCoordItem) mMissionItem).getCoordinate());
                 break;
             

@@ -48,6 +48,10 @@ public abstract class MissionItemMarkerInfo extends MarkerInfo.SimpleMarkerInfo 
                 markerInfos.add(new WaypointMarkerInfo(origin));
                 break;
 
+            case SPLINE_WAYPOINT:
+                markerInfos.add(new SplineWaypointMarkerInfo(origin));
+                break;
+
             case SURVEY:
                 markerInfos.addAll(new SurveyMarkerInfoProvider(origin).getMarkersInfos());
                 break;

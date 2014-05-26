@@ -3,9 +3,9 @@ package org.droidplanner.android.proxy.mission;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
-import org.droidplanner.android.proxy.mission.item.markers.SurveyMarkerInfoProvider;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.coordinates.Coord3D;
+import org.droidplanner.core.helpers.geoTools.spline.SplinePath;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.Mission;
@@ -13,6 +13,7 @@ import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.commands.Takeoff;
 import org.droidplanner.core.mission.survey.Survey;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
+import org.droidplanner.core.mission.waypoints.SplineWaypoint;
 import org.droidplanner.core.mission.waypoints.Waypoint;
 
 import java.util.ArrayList;
@@ -124,7 +125,7 @@ public class MissionProxy implements DPMap.PathSource {
     public void addSurveyPolygon(List<Coord2D> points) {
         Survey survey = new Survey(mMission, points);
         mMissionItems.add(new MissionItemProxy(this, survey));
-        mMission.addWaypoint(survey);
+        mMission.addMissionItem(survey);
     }
 
     /**
@@ -137,11 +138,32 @@ public class MissionProxy implements DPMap.PathSource {
         final List<MissionItem> missionItemsToAdd = new ArrayList<MissionItem>(points.size());
         for (Coord2D point : points) {
             Waypoint waypoint = new Waypoint(mMission, new Coord3D(point, alt));
-            mMissionItems.add(new MissionItemProxy(this, waypoint));
             missionItemsToAdd.add(waypoint);
         }
 
-        mMission.addWaypoints(missionItemsToAdd);
+        addMissionItems(missionItemsToAdd);
+    }
+
+    /**
+     * Add a set of spline waypoints generated around the passed 2D points.
+     * @param points list of points used as location for the spline waypoints
+     */
+    public void addSplineWaypoints(List<Coord2D> points){
+        final Altitude alt = mMission.getLastAltitude();
+        final List<MissionItem> missionItemsToAdd = new ArrayList<MissionItem>(points.size());
+        for (Coord2D point : points) {
+            SplineWaypoint splineWaypoint = new SplineWaypoint(mMission, new Coord3D(point, alt));
+            missionItemsToAdd.add(splineWaypoint);
+        }
+
+        addMissionItems(missionItemsToAdd);
+    }
+
+    private void addMissionItems(List<MissionItem> missionItems){
+        for(MissionItem missionItem: missionItems){
+            mMissionItems.add(new MissionItemProxy(this, missionItem));
+        }
+        mMission.addMissionItems(missionItems);
     }
 
     /**
@@ -152,14 +174,28 @@ public class MissionProxy implements DPMap.PathSource {
     public void addWaypoint(Coord2D point) {
         final Altitude alt = mMission.getLastAltitude();
         final Waypoint waypoint = new Waypoint(mMission, new Coord3D(point, alt));
-        mMissionItems.add(new MissionItemProxy(this, waypoint));
-        mMission.addWaypoint(waypoint);
+        addMissionItem(waypoint);
+    }
+
+    /**
+     * Add a spline waypoint generated around the passed 2D point.
+     * @param point point used as location for the spline waypoint.
+     */
+    public void addSplineWaypoint(Coord2D point){
+        final Altitude alt = mMission.getLastAltitude();
+        final SplineWaypoint splineWaypoint = new SplineWaypoint(mMission, new Coord3D(point, alt));
+        addMissionItem(splineWaypoint);
+    }
+
+    private void addMissionItem(MissionItem missionItem){
+        mMissionItems.add(new MissionItemProxy(this, missionItem));
+        mMission.addMissionItem(missionItem);
     }
 
     public void addTakeoff() {
 		Takeoff takeoff = new Takeoff(mMission, new Altitude(10));
 		mMissionItems.add(new MissionItemProxy(this, takeoff));
-        mMission.addWaypoint(takeoff);		
+        mMission.addMissionItem(takeoff);
 	}
 
 	/**
@@ -273,8 +309,37 @@ public class MissionProxy implements DPMap.PathSource {
     @Override
     public List<Coord2D> getPathPoints() {
         final List<Coord2D> pathPoints = new ArrayList<Coord2D>();
-        for (MissionItemProxy missionItem : mMissionItems) {
-            pathPoints.addAll(missionItem.getPath());
+
+        final int missionItemsCount = mMissionItems.size();
+        for (int i = 0; i < missionItemsCount; i++) {
+            final MissionItemProxy missionItemProxy = mMissionItems.get(i);
+
+            /*
+            If the current mission item a spline waypoint, accumulate it,
+            and the following mission items as long as they're also spline waypoints.
+            Once we ran out of spline waypoints (or mission items), process the spline path for
+            the accumulated spline waypoints.
+             */
+            if (missionItemProxy.getMissionItem() instanceof SplineWaypoint) {
+                final List<Coord2D> splinePoints = new ArrayList<Coord2D>();
+                splinePoints.addAll(missionItemProxy.getPath());
+
+                for(i = i + 1; i < missionItemsCount; i++){
+                    final MissionItemProxy splineWpProxy = mMissionItems.get(i);
+
+                    if(!(splineWpProxy.getMissionItem() instanceof SplineWaypoint)){
+                        //Rewind, so the outside loop can catch this mission item.
+                        i--;
+                        break;
+                    }
+
+                    splinePoints.addAll(splineWpProxy.getPath());
+                }
+                pathPoints.addAll(SplinePath.process(splinePoints));
+            }
+            else {
+                pathPoints.addAll(missionItemProxy.getPath());
+            }
         }
         return pathPoints;
     }
