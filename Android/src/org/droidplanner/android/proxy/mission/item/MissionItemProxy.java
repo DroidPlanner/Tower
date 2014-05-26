@@ -19,6 +19,7 @@ import org.droidplanner.core.mission.commands.Takeoff;
 import org.droidplanner.core.mission.survey.Survey;
 import org.droidplanner.core.mission.survey.grid.Grid;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
+import org.droidplanner.core.mission.waypoints.SplineWaypoint;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,13 +112,13 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
 
         TextView nameView = (TextView) view.findViewById(R.id.rowNameView);
         TextView altitudeView = (TextView) view.findViewById(R.id.rowAltitudeView);
-                /*
-		TextView typeView = (TextView) view.findViewById(R.id.rowTypeView);
-		TextView descView = (TextView) view.findViewById(R.id.rowDescView);
-		TextView distanceView = (TextView) view.findViewById(R.id.rowDistanceView);
-*/
 
         nameView.setText(String.format("%3d", mMissionItem.getMission().getOrder(mMissionItem)));
+
+        final int leftDrawable = mMissionItem instanceof SplineWaypoint
+                ? R.drawable.ic_mission_spline_wp
+                : R.drawable.ic_mission_wp;
+        altitudeView.setCompoundDrawablesWithIntrinsicBounds(leftDrawable, 0, 0, 0);
 
         if (mMissionItem instanceof SpatialCoordItem) {
             SpatialCoordItem waypoint = (SpatialCoordItem) mMissionItem;

@@ -15,11 +15,11 @@ public class SplineWaypointMarkerInfo extends MissionItemMarkerInfo {
 
     @Override
     protected int getSelectedIconResource() {
-        return R.drawable.ic_wp_map_selected;
+        return R.drawable.ic_spline_wp_map_selected;
     }
 
     @Override
     protected int getIconResource() {
-        return R.drawable.ic_wp_map;
+        return R.drawable.ic_spline_wp_map;
     }
 }
