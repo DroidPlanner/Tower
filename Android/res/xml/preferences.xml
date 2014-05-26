@@ -320,7 +320,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/about">
-        <EditTextPreference
+        <Preference
             android:enabled="false"
             android:key="pref_version"
             android:persistent="false"
@@ -328,7 +328,15 @@
             android:shouldDisableView="false"
             android:title="@string/version"/>
 
-        <EditTextPreference
+        <Preference
+            android:enabled="false"
+            android:key="@string/pref_mavlink_version_key"
+            android:persistent="false"
+            android:selectable="false"
+            android:shouldDisableView="false"
+            android:title="@string/mavlink_version"/>
+
+        <Preference
             android:enabled="false"
             android:key="@string/pref_storage_key"
             android:persistent="false"

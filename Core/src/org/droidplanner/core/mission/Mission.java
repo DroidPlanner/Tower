@@ -14,6 +14,7 @@ import org.droidplanner.core.mission.commands.Takeoff;
 import org.droidplanner.core.mission.waypoints.Land;
 import org.droidplanner.core.mission.waypoints.RegionOfInterest;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
+import org.droidplanner.core.mission.waypoints.SplineWaypoint;
 import org.droidplanner.core.mission.waypoints.Waypoint;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
@@ -196,6 +197,11 @@ public class Mission extends DroneVariable {
 			case MAV_CMD.MAV_CMD_NAV_WAYPOINT:
 				received.add(new Waypoint(msg, this));
 				break;
+
+                case MAV_CMD.MAV_CMD_NAV_SPLINE_WAYPOINT:
+                    received.add(new SplineWaypoint(msg, this));
+                    break;
+
 			case MAV_CMD.MAV_CMD_NAV_LAND:
 				received.add(new Land(msg, this));
 				break;

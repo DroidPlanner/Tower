@@ -1,9 +1,12 @@
 package org.droidplanner.android;
 
+import org.droidplanner.core.bus.events.DroneConnectedEvent;
+import org.droidplanner.core.bus.events.DroneDisconnectedEvent;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.notifications.NotificationHandler;
 import org.droidplanner.core.MAVLink.MAVLinkStreams;
 import org.droidplanner.core.MAVLink.MavLinkMsgHandler;
+import org.droidplanner.core.bus.events.DroneEvent;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.DroneInterfaces.Clock;
@@ -16,6 +19,8 @@ import org.droidplanner.android.helpers.DpPreferences;
 import android.os.SystemClock;
 
 import com.MAVLink.Messages.MAVLinkMessage;
+
+import de.greenrobot.event.EventBus;
 
 public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.MavlinkInputStream,
         DroneInterfaces.OnDroneListener {
@@ -71,12 +76,25 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 	@Override
 	public void notifyConnected() {
 		drone.events.notifyDroneEvent(DroneEventsType.CONNECTED);
+
+        //Broadcast the events
+        final EventBus bus = EventBus.getDefault();
+        bus.removeStickyEvent(DroneDisconnectedEvent.class);
+        bus.postSticky(new DroneConnectedEvent());
+
 	}
 
 	@Override
 	public void notifyDisconnected() {
-		drone.events.notifyDroneEvent(DroneEventsType.DISCONNECTED);
-	}
+        drone.events.notifyDroneEvent(DroneEventsType.DISCONNECTED);
+
+        //Broadcast the events
+        final EventBus bus = EventBus.getDefault();
+
+        //Remove all prior drone event broadcasts.
+        bus.removeStickyEvent(DroneEvent.class);
+        bus.postSticky(new DroneDisconnectedEvent());
+    }
 
     @Override
     public void onDroneEvent(DroneEventsType event, Drone drone) {
