@@ -1,5 +1,7 @@
 package org.droidplanner.android.utils.file;
 
+import java.io.File;
+
 import android.os.Environment;
 
 public class DirectoryPath {
@@ -21,8 +23,21 @@ public class DirectoryPath {
 		return getDroidPlannerPath() + "/GCP/";
 	}
 
-	static public String getTLogPath() {
-		return getDroidPlannerPath() + "/Logs/";
+	static public File getTLogPath() {
+		File f = new File(getDroidPlannerPath() + "/Logs/");
+		f.mkdirs();
+		return f;
+	}
+
+	/**
+	 * After tlogs are uploaded they get moved to this directory
+	 * 
+	 * @return
+	 */
+	static public File getSentPath() {
+		File f = new File(getDroidPlannerPath() + "/Sent/");
+		f.mkdirs();
+		return f;
 	}
 
 	static public String getMapsPath() {
