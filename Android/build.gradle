@@ -4,6 +4,7 @@ dependencies {
     compile 'com.android.support:support-v4:19.+'
     compile files('libs/droneapi-java-0.1-SNAPSHOT.jar')
     compile files('libs/protobuf-java-2.5.0.jar')
+    compile files('libs/jeromq-0.3.4.jar')
 
     compile project(':Core')
     compile files('libs/usbseriallibrary.jar')
