@@ -1,7 +1,10 @@
 package org.droidplanner.android;
 
+import org.droidplanner.android.communication.service.MAVLinkClient;
+import org.droidplanner.android.communication.service.NetworkStateReceiver;
 import org.droidplanner.android.mission.MissionRender;
 import org.droidplanner.android.notifications.NotificationHandler;
+import org.droidplanner.android.utils.DroidplannerPrefs;
 import org.droidplanner.core.MAVLink.MAVLinkStreams;
 import org.droidplanner.core.MAVLink.MavLinkMsgHandler;
 import org.droidplanner.core.drone.Drone;
@@ -10,9 +13,6 @@ import org.droidplanner.core.drone.DroneInterfaces.Clock;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
 import org.droidplanner.core.drone.Preferences;
-import org.droidplanner.android.communication.service.MAVLinkClient;
-import org.droidplanner.android.communication.service.NetworkStateReceiver;
-import org.droidplanner.android.helpers.DpPreferences;
 
 import android.os.SystemClock;
 
@@ -56,7 +56,7 @@ public class DroidPlannerApp extends ErrorReportApp implements
 				handler.postDelayed(thread, timeout);
 			}
 		};
-		Preferences pref = new DpPreferences(getApplicationContext());
+		Preferences pref = new DroidplannerPrefs(getApplicationContext());
 		drone = new Drone(MAVClient, clock, handler, pref);
 		drone.events.addDroneListener(this);
 
@@ -90,6 +90,8 @@ public class DroidPlannerApp extends ErrorReportApp implements
 		case MISSION_RECEIVED:
 			// Refresh the mission render state
 			missionRender.refresh();
+			break;
+		default:
 			break;
 		}
 	}

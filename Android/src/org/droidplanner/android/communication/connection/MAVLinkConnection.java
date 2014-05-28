@@ -12,10 +12,9 @@ import org.droidplanner.android.communication.service.UploaderService;
 import org.droidplanner.android.utils.DroidplannerPrefs;
 import org.droidplanner.android.utils.file.FileStream;
 
-import android.util.Log;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.MAVLink.Parser;
 import com.MAVLink.Messages.MAVLinkMessage;
