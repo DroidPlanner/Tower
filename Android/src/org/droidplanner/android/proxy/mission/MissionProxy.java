@@ -1,5 +1,7 @@
 package org.droidplanner.android.proxy.mission;
 
+import android.util.Pair;
+
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
@@ -308,39 +310,84 @@ public class MissionProxy implements DPMap.PathSource {
 
     @Override
     public List<Coord2D> getPathPoints() {
-        final List<Coord2D> pathPoints = new ArrayList<Coord2D>();
+        if(mMissionItems.isEmpty()){
+            return Collections.emptyList();
+        }
 
-        final int missionItemsCount = mMissionItems.size();
-        for (int i = 0; i < missionItemsCount; i++) {
-            final MissionItemProxy missionItemProxy = mMissionItems.get(i);
+        //Partition the mission items into spline/non-spline buckets.
+        final List<Pair<Boolean, List<MissionItemProxy>>> bucketsList = new
+                ArrayList<Pair<Boolean, List<MissionItemProxy>>>();
 
-            /*
-            If the current mission item a spline waypoint, accumulate it,
-            and the following mission items as long as they're also spline waypoints.
-            Once we ran out of spline waypoints (or mission items), process the spline path for
-            the accumulated spline waypoints.
-             */
-            if (missionItemProxy.getMissionItem() instanceof SplineWaypoint) {
-                final List<Coord2D> splinePoints = new ArrayList<Coord2D>();
-                splinePoints.addAll(missionItemProxy.getPath());
+        boolean isSpline = false;
+        List<MissionItemProxy> currentBucket = new ArrayList<MissionItemProxy>();
+        for (MissionItemProxy missionItemProxy: mMissionItems) {
 
-                for(i = i + 1; i < missionItemsCount; i++){
-                    final MissionItemProxy splineWpProxy = mMissionItems.get(i);
+            if (missionItemProxy.getMissionItem() instanceof SplineWaypoint){
+                if(!isSpline){
+                    if(!currentBucket.isEmpty()) {
+                        //Get the last item from the current bucket. It will become the first
+                        // anchor point for the spline path.
+                        final MissionItemProxy lastItem = currentBucket.get(currentBucket.size()
+                                -1);
 
-                    if(!(splineWpProxy.getMissionItem() instanceof SplineWaypoint)){
-                        //Rewind, so the outside loop can catch this mission item.
-                        i--;
-                        break;
+                        //Store the previous item bucket.
+                        bucketsList.add(new Pair<Boolean, List<MissionItemProxy>>(Boolean.FALSE,
+                                currentBucket));
+
+                        //Create a new bucket for this category and update 'isSpline'
+                        currentBucket = new ArrayList<MissionItemProxy>();
+                        currentBucket.add(lastItem);
                     }
 
-                    splinePoints.addAll(splineWpProxy.getPath());
+                    isSpline = true;
                 }
-                pathPoints.addAll(SplinePath.process(splinePoints));
+
+                //Add the current element into the bucket
+                currentBucket.add(missionItemProxy);
             }
-            else {
-                pathPoints.addAll(missionItemProxy.getPath());
+            else{
+                if(isSpline){
+
+                    //Add the current item to the spline bucket. It will act as the end anchor
+                    // point for the spline path.
+                    if(!currentBucket.isEmpty()) {
+                        currentBucket.add(missionItemProxy);
+
+                        //Store the previous item bucket.
+                        bucketsList.add(new Pair<Boolean, List<MissionItemProxy>>(Boolean.TRUE,
+                                currentBucket));
+
+                        currentBucket = new ArrayList<MissionItemProxy>();
+                    }
+
+                    isSpline = false;
+                }
+
+                //Add the current element into the bucket
+                currentBucket.add(missionItemProxy);
             }
         }
+
+        bucketsList.add(new Pair<Boolean, List<MissionItemProxy>>(isSpline, currentBucket));
+
+        final List<Coord2D> pathPoints = new ArrayList<Coord2D>();
+        for(Pair<Boolean, List<MissionItemProxy>> bucketEntry : bucketsList){
+            final List<MissionItemProxy> bucket = bucketEntry.second;
+            if(bucketEntry.first){
+                final List<Coord2D> splinePoints = new ArrayList<Coord2D>();
+                for(MissionItemProxy missionItemProxy: bucket){
+                    splinePoints.addAll(missionItemProxy.getPath());
+                }
+
+                pathPoints.addAll(SplinePath.process(splinePoints));
+            }
+            else{
+                for(MissionItemProxy missionItemProxy : bucket){
+                    pathPoints.addAll(missionItemProxy.getPath());
+                }
+            }
+        }
+
         return pathPoints;
     }
 
