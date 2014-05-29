@@ -312,7 +312,11 @@ public class MissionRender implements MapPath.PathSource {
         LatLng lastPoint = null;
         for(MissionItemRender missionItem: mMissionItems){
             pathPoints.addAll(missionItem.getPath(lastPoint));
-            lastPoint = pathPoints.get(pathPoints.size()-1);
+            if (pathPoints.size()>0) {
+            	lastPoint = pathPoints.get(pathPoints.size()-1);				
+			} else {
+				lastPoint = null;
+			}
         }
         return pathPoints;
     }
