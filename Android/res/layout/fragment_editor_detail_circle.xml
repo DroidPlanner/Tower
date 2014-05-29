@@ -169,6 +169,37 @@
 					</org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText>
 				</FrameLayout>
 
+				<CheckBox
+				    android:id="@+id/checkBoxAdvanced"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:text="Advanced" />
+
+				<org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText
+				    android:id="@+id/numberSteps"
+				    android:layout_width="match_parent"
+				    android:layout_height="wrap_content"
+				    android:layout_margin="2dp"
+				    custom:inc="1"
+				    custom:max="10"
+				    custom:min="1"
+				    custom:title="Number of Steps"
+				    custom:unit="turns"
+				    android:visibility="gone" >
+				</org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText>
+				
+				<org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText
+				    android:id="@+id/altitudeStep"
+				    android:layout_width="match_parent"
+				    android:layout_height="wrap_content"
+				    android:layout_margin="2dp"
+				    custom:inc="0.5"
+				    custom:max="10"
+				    custom:min="0.5"
+				    custom:title="Altitude Step"
+				    android:visibility="gone" >
+				</org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText>
+
 
 			</LinearLayout>
         </LinearLayout>

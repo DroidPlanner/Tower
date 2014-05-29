@@ -19,6 +19,9 @@ public class MissionCircleFragment extends MissionDetailFragment implements
     private SeekBarWithText loiterTurnSeekBar;
     private SeekBarWithText loiterRadiusSeekBar;
     private CheckBox loiterCCW;
+	private CheckBox checkBoxAdvanced;
+	private SeekBarWithText altitudeStepSeekBar;
+	private SeekBarWithText numberStepSeekBar;
 
     @Override
     protected int getResource() {
@@ -35,6 +38,18 @@ public class MissionCircleFragment extends MissionDetailFragment implements
         //loiterCCW = (CheckBox) view.findViewById(R.id.loiter_ccw);
         //loiterCCW.setChecked(!item.isOrbitCW());
         //loiterCCW.setOnCheckedChangeListener(this);
+        
+        checkBoxAdvanced = (CheckBox) view.findViewById(R.id.checkBoxAdvanced);
+        checkBoxAdvanced.setOnCheckedChangeListener(this);
+        
+
+        altitudeStepSeekBar = (SeekBarWithText) view.findViewById(R.id.altitudeStep);
+        altitudeStepSeekBar.setValue(item.getAltitudeStep());
+        altitudeStepSeekBar.setOnChangedListener(this);
+
+        numberStepSeekBar = (SeekBarWithText) view.findViewById(R.id.numberSteps);
+        numberStepSeekBar.setOnChangedListener(this);
+        numberStepSeekBar.setValue(item.getNumberOfSteps());
 
         altitudeSeekBar = (SeekBarWithText) view.findViewById(R.id.altitudeView);
         altitudeSeekBar.setValue(item.getCoordinate().getAltitude().valueInMeters());
@@ -52,6 +67,11 @@ public class MissionCircleFragment extends MissionDetailFragment implements
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+    	if (buttonView == checkBoxAdvanced) {
+    		int visibility = (isChecked)?View.VISIBLE:View.GONE;
+			altitudeStepSeekBar.setVisibility(visibility);
+    		numberStepSeekBar.setVisibility(visibility);
+		}
     }
 
 
@@ -63,6 +83,12 @@ public class MissionCircleFragment extends MissionDetailFragment implements
         item.setTurns((int) loiterTurnSeekBar.getValue());
         //item.setOrbitalRadius(loiterRadiusSeekBar.getValue());
         //item.setYawAngle(yawSeekBar.getValue());
+        
+        if (checkBoxAdvanced.isChecked()) {
+        	item.setMultiCircle((int) numberStepSeekBar.getValue(),altitudeStepSeekBar.getValue());			
+		}else{
+			item.setSingleCircle();
+		}
     }
 
 }
