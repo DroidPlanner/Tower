@@ -10,24 +10,34 @@ import org.droidplanner.core.mission.MissionItemType;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_CMD;
 
-public class LoiterTurns extends Loiter {
+public class Circle extends SpatialCoordItem {
 
-	private int turns;
+	private double radius = 7.0;
+	private int turns = 1;
 
-	public LoiterTurns(MissionItem item) {
+	public Circle(MissionItem item) {
 		super(item);
 	}
 
-	public LoiterTurns(Mission mission, Coord3D coord) {
+	public Circle(Mission mission, Coord3D coord) {
 		super(mission, coord);
 	}
 
-	public int getTurns() {
-		return turns;
+	public Circle(msg_mission_item msg, Mission mission) {
+		super(mission, null);
+		unpackMAVMessage(msg);
 	}
 
 	public void setTurns(int turns) {
-		this.turns = turns;
+		this.turns = (int)Math.abs(turns);
+	}
+	
+	public int getNumeberOfTurns() {
+		return turns;
+	}
+
+	public double getRadius() {
+		return radius;
 	}
 
 	@Override
@@ -35,7 +45,8 @@ public class LoiterTurns extends Loiter {
 		List<msg_mission_item> list = super.packMissionItem();
 		msg_mission_item mavMsg = list.get(0);
 		mavMsg.command = MAV_CMD.MAV_CMD_NAV_LOITER_TURNS;
-		mavMsg.param1 = (float) getTurns();
+		mavMsg.param1 = Math.abs(turns);
+		mavMsg.param3 = (turns > 0) ? 1 : -1;
 		return list;
 	}
 
@@ -45,9 +56,9 @@ public class LoiterTurns extends Loiter {
 		setTurns((int) mavMsg.param1);
 	}
 
-    @Override
-    public MissionItemType getType() {
-        return MissionItemType.LOITERN;
-    }
+	@Override
+	public MissionItemType getType() {
+		return MissionItemType.CIRCLE;
+	}
 
 }

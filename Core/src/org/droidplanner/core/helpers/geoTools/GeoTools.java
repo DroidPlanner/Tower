@@ -101,7 +101,7 @@ public class GeoTools {
 	 * 
 	 * @return heading in degrees
 	 */
-	static double getHeadingFromCoordinates(Coord2D fromLoc, Coord2D toLoc) {
+	public static double getHeadingFromCoordinates(Coord2D fromLoc, Coord2D toLoc) {
 		double fLat = Math.toRadians(fromLoc.getY());
 		double fLng = Math.toRadians(fromLoc.getX());
 		double tLat = Math.toRadians(toLoc.getY());

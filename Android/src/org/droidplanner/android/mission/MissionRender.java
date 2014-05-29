@@ -309,8 +309,10 @@ public class MissionRender implements MapPath.PathSource {
     @Override
     public List<LatLng> getPathPoints() {
         List<LatLng> pathPoints = new ArrayList<LatLng>();
+        LatLng lastPoint = null;
         for(MissionItemRender missionItem: mMissionItems){
-            pathPoints.addAll(missionItem.getPath());
+            pathPoints.addAll(missionItem.getPath(lastPoint));
+            lastPoint = pathPoints.get(pathPoints.size()-1);
         }
         return pathPoints;
     }
