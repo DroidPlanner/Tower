@@ -184,7 +184,6 @@
 				    custom:max="10"
 				    custom:min="1"
 				    custom:title="Number of Steps"
-				    custom:unit="turns"
 				    android:visibility="gone" >
 				</org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText>
 				
@@ -196,6 +195,7 @@
 				    custom:inc="0.5"
 				    custom:max="10"
 				    custom:min="0.5"
+				    custom:unit="m"
 				    custom:title="Altitude Step"
 				    android:visibility="gone" >
 				</org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText>
