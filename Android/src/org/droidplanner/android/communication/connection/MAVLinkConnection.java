@@ -1,18 +1,20 @@
 package org.droidplanner.android.communication.connection;
 
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import org.droidplanner.android.communication.service.UploaderService;
+import org.droidplanner.android.utils.DroidplannerPrefs;
 import org.droidplanner.android.utils.file.FileStream;
 
-import android.util.Log;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.MAVLink.Parser;
 import com.MAVLink.Messages.MAVLinkMessage;
@@ -44,13 +46,12 @@ public abstract class MAVLinkConnection extends Thread {
 
 	protected Context parentContext;
 	private MavLinkConnectionListener listener;
-	private boolean logEnabled;
 
-	private boolean liveUploadEnabled;
 	private DroneshareClient uploader = null;
-	private String droneshareLogin, dronesharePassword;
+	private DroidplannerPrefs prefs;
 
-	private BufferedOutputStream logWriter;
+	private File logFile = null;
+	private BufferedOutputStream logWriter = null;
 
 	protected MAVLinkPacket receivedPacket;
 	protected Parser parser = new Parser();
@@ -64,13 +65,8 @@ public abstract class MAVLinkConnection extends Thread {
 		this.parentContext = parentContext;
 		this.listener = (MavLinkConnectionListener) parentContext;
 
-		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(parentContext);
-		logEnabled = prefs.getBoolean("pref_mavlink_log_enabled", false);
-		liveUploadEnabled = prefs.getBoolean("pref_live_upload_enabled", false);
-		droneshareLogin = prefs.getString("dshare_username", "").trim();
-		dronesharePassword = prefs.getString("dshare_password", "").trim();
-		getPreferences(prefs);
+		prefs = new DroidplannerPrefs(parentContext);
+		getPreferences(prefs.prefs);
 	}
 
 	@Override
@@ -79,17 +75,20 @@ public abstract class MAVLinkConnection extends Thread {
 		try {
 			parser.stats.mavlinkResetStats();
 			openConnection();
-			if (logEnabled) {
-				logWriter = FileStream.getTLogFileStream();
+			if (prefs.getLogEnabled()) {
+				logFile = FileStream.getTLogFile();
+				logWriter = FileStream.openOutputStream(logFile);
 				logBuffer = ByteBuffer.allocate(Long.SIZE / Byte.SIZE);
 				logBuffer.order(ByteOrder.BIG_ENDIAN);
 			}
 
-			if (liveUploadEnabled && !droneshareLogin.isEmpty()
-					&& !dronesharePassword.isEmpty()) {
+			String login = prefs.getDroneshareLogin();
+			String password = prefs.getDronesharePassword();
+			if (prefs.getLiveUploadEnabled() && !login.isEmpty()
+					&& !password.isEmpty()) {
 				Log.i(TAG, "Starting live upload");
 				uploader = new DroneshareClient();
-				uploader.connect(droneshareLogin, dronesharePassword);
+				uploader.connect(login, password);
 			} else {
 				Log.w(TAG, "Skipping live upload");
 			}
@@ -98,15 +97,29 @@ public abstract class MAVLinkConnection extends Thread {
 				readDataBlock();
 				handleData();
 			}
-
 		} catch (FileNotFoundException e) {
 			listener.onComError(e.getMessage());
 			e.printStackTrace();
 		} catch (IOException e) {
-			listener.onComError(e.getMessage());
-			e.printStackTrace();
+			if (connected) { // Ignore errors while shutting down
+				listener.onComError(e.getMessage());
+				e.printStackTrace();
+			}
 		} finally {
 			try {
+				// Never leak file descriptors
+				if (logWriter != null) {
+					// Success - commit our tlog!
+					logWriter.close();
+					logWriter = null;
+
+					FileStream.commitFile(logFile);
+
+					// See if we can at least do a delayed upload
+					parentContext.startService(UploaderService
+							.createIntent(parentContext));
+				}
+
 				if (uploader != null)
 					uploader.close();
 
@@ -134,7 +147,7 @@ public abstract class MAVLinkConnection extends Thread {
 	}
 
 	private void saveToLog(MAVLinkPacket receivedPacket) throws IOException {
-		if (logEnabled) {
+		if (logWriter != null) {
 			try {
 				logBuffer.clear();
 				long time = System.currentTimeMillis() * 1000;
@@ -172,7 +185,16 @@ public abstract class MAVLinkConnection extends Thread {
 	}
 
 	public void disconnect() {
+		Log.i(TAG, "Disconnecting mavlink");
 		connected = false;
+
+		// Force our socket or file descriptor closed, which will cause
+		// readDataBlock() to return.
+		try {
+			closeConnection();
+		} catch (IOException ex) {
+			// If connection already closed, succeed silently
+		}
 	}
 
 }

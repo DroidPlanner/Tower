@@ -197,6 +197,7 @@ public class MAVLinkService extends Service implements
 	}
 
 	private void disconnectMAVConnection() {
+		Log.d("MAVLinkService", "Pre disconnect");
 		if (mavConnection != null) {
 			mavConnection.disconnect();
 			mavConnection = null;
