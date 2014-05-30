@@ -8,9 +8,8 @@ import android.support.v4.app.DialogFragment;
 public class GenericDialogFragment extends DialogFragment {
 
     public static GenericDialogFragment newInstance(String title, String msg,
-                                                 String positiveButtonText,
-                              Runnable positiveCallback, String negativeButtonText,
-                              Runnable negativeCallback){
+                                                 String positiveButtonText, Runnable positiveCb,
+                                                 String negativeButtonText, Runnable negativeCb){
         return null;
     }
 }
