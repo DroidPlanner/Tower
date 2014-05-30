@@ -3,7 +3,10 @@ package org.droidplanner.android;
 import org.droidplanner.core.bus.events.DroneConnectedEvent;
 import org.droidplanner.core.bus.events.DroneDisconnectedEvent;
 import org.droidplanner.android.proxy.mission.MissionProxy;
+import org.droidplanner.android.communication.service.MAVLinkClient;
+import org.droidplanner.android.communication.service.NetworkStateReceiver;
 import org.droidplanner.android.notifications.NotificationHandler;
+import org.droidplanner.android.utils.DroidplannerPrefs;
 import org.droidplanner.core.MAVLink.MAVLinkStreams;
 import org.droidplanner.core.MAVLink.MavLinkMsgHandler;
 import org.droidplanner.core.bus.events.DroneEvent;
@@ -13,8 +16,6 @@ import org.droidplanner.core.drone.DroneInterfaces.Clock;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
 import org.droidplanner.core.drone.Preferences;
-import org.droidplanner.android.communication.service.MAVLinkClient;
-import org.droidplanner.android.helpers.DpPreferences;
 
 import android.os.SystemClock;
 
@@ -60,12 +61,14 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 				handler.postDelayed(thread, timeout);
 			}
 		};
-		Preferences pref = new DpPreferences(getApplicationContext());
+		Preferences pref = new DroidplannerPrefs(getApplicationContext());
 		drone = new Drone(MAVClient, clock, handler, pref);
-        drone.events.addDroneListener(this);
+		drone.events.addDroneListener(this);
 
         missionProxy = new MissionProxy(drone.mission);
 		mavLinkMsgHandler = new org.droidplanner.core.MAVLink.MavLinkMsgHandler(drone);
+
+        NetworkStateReceiver.register(getApplicationContext());
 	}
 
 	@Override

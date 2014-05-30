@@ -72,6 +72,8 @@
         <service android:name=".android.communication.service.MAVLinkService" >
         </service>
 
+        <service android:name=".android.communication.service.UploaderService" />
+
 		<activity
 		    android:name=".android.activities.FlightActivity"
 		    android:launchMode="singleTask" >
