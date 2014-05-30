@@ -36,6 +36,7 @@ public class UploaderService extends IntentService {
 	static final String apiKey = "2d38fb2e.72afe7b3761d5ee6346c178fdd6b680f";
 
 	private DroidplannerPrefs prefs;
+	private int numUploaded = 0;
 
 	private IUploadListener callback = new IUploadListener() {
 		public void onUploadStart(File f) {
@@ -47,6 +48,7 @@ public class UploaderService extends IntentService {
 		public void onUploadSuccess(File f, String viewURL) {
 			Log.i(TAG, "Upload success: " + f + " url=" + viewURL);
 
+			numUploaded += 1;
 			nBuilder.setContentText("Select to view..."); // FIXME localize
 
 			// Attach the view URL
@@ -73,6 +75,8 @@ public class UploaderService extends IntentService {
 			nBuilder.addAction(android.R.drawable.ic_menu_share, "Share",
 					PendingIntent.getActivity(UploaderService.this, 0,
 							sendIntent, 0));
+			if (numUploaded > 1)
+				nBuilder.setNumber(numUploaded);
 			nBuilder.setPriority(NotificationCompat.PRIORITY_HIGH); // The user
 																	// probably
 																	// wants to
@@ -92,7 +96,7 @@ public class UploaderService extends IntentService {
 		}
 	};
 
-	private int notifyId = 1;
+	private int notifyId = 2;
 
 	private NotificationManager notifyManager;
 	private NotificationCompat.Builder nBuilder;
@@ -111,9 +115,9 @@ public class UploaderService extends IntentService {
 		nBuilder.setContentTitle("Droneshare upload")
 				// FIXME - extract for localization
 				.setContentText("Uploading log file")
-				.setSmallIcon(R.drawable.ic_launcher)
+				.setSmallIcon(R.drawable.ic_launcher).setAutoCancel(true)
 				// .setProgress(fileSize, 0, false)
-				.setPriority(NotificationCompat.PRIORITY_LOW);
+				.setPriority(NotificationCompat.PRIORITY_HIGH);
 	}
 
 	@Override
@@ -135,14 +139,19 @@ public class UploaderService extends IntentService {
 		String login = prefs.getDroneshareLogin();
 		String password = prefs.getDronesharePassword();
 
-		DirectoryUploader up = new DirectoryUploader(srcDir, destDir, callback,
-				login, password, prefs.getVehicleId(), apiKey);
-		up.run();
+		if (!login.isEmpty() && !password.isEmpty()) {
+			DirectoryUploader up = new DirectoryUploader(srcDir, destDir,
+					callback, login, password, prefs.getVehicleId(), apiKey);
+			up.run();
+		}
 	}
 
 	private void updateNotification(boolean isForeground) {
 		Notification n = nBuilder.build();
 
+		Log.d(TAG, "Updating notification " + isForeground);
+		notifyManager.cancel(notifyId);
+		notifyId += 1; // Generate a new notification for each status change
 		notifyManager.notify(notifyId, n);
 		if (isForeground)
 			startForeground(notifyId, n);
