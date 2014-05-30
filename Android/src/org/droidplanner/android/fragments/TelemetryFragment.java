@@ -2,11 +2,13 @@ package org.droidplanner.android.fragments;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.fragments.helpers.GenericDialogFragment;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.android.widgets.AttitudeIndicator;
 
+import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -66,13 +68,21 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
         mAirTimeLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
+                final Runnable resetTimerCb = new Runnable() {
+                    @Override
+                    public void run() {
+                        if(drone != null) {
+                            drone.state.resetFlightTimer();
+                        }
+                        else{
+                            mAirTime.setText("--:--");
+                        }
+                    }
+                };
 
-                if(drone != null) {
-                    drone.state.resetFlightTimer();
-                }
-                else{
-                    mAirTime.setText("--:--");
-                }
+                final GenericDialogFragment confirmDialog = GenericDialogFragment.newInstance
+                        ("Air Timer", "Reset timer?", "Reset", resetTimerCb, "Cancel", null);
+                confirmDialog.show(getChildFragmentManager(), "Timer confirmation dialog");
                 return true;
             }
         });
