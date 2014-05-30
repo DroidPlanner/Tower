@@ -9,6 +9,7 @@ import org.droidplanner.android.widgets.AttitudeIndicator;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -17,6 +18,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 public class TelemetryFragment extends Fragment implements OnDroneListener {
+
+    /**
+     * This is the period for the flight time update.
+     */
+    private final static long AIR_TIMER_PERIOD = 1000l; // 1 second
 
 	private AttitudeIndicator attitudeIndicator;
 	private Drone drone;
@@ -27,14 +33,23 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 	private TextView airSpeed;
 	private TextView climbRate;
 	private TextView altitude;
-	private TextView targetAltitude;
 	private boolean headingModeFPV;
+
+    /*
+    Air time view and textview.
+     */
+    private View mAirTimeLayout;
+    private TextView mAirTime;
+
+    private final Handler mAirTimeHandler = new Handler();
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_telemetry, container,
-				false);
+		View view = inflater.inflate(R.layout.fragment_telemetry, container, false);
+
+        drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
+
 		attitudeIndicator = (AttitudeIndicator) view.findViewById(R.id.aiView);
 
 		roll = (TextView) view.findViewById(R.id.rollValueText);
@@ -45,9 +60,23 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 		airSpeed = (TextView) view.findViewById(R.id.airSpeedValue);
 		climbRate = (TextView) view.findViewById(R.id.climbRateValue);
 		altitude = (TextView) view.findViewById(R.id.altitudeValue);
-		targetAltitude = (TextView) view.findViewById(R.id.targetAltitudeValue);
 
-		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
+        mAirTime = (TextView) view.findViewById(R.id.air_time_value);
+        mAirTimeLayout = view.findViewById(R.id.air_time_layout);
+        mAirTimeLayout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                if(drone != null) {
+                    drone.state.resetFlightTimer();
+                }
+                else{
+                    mAirTime.setText("--:--");
+                }
+                return true;
+            }
+        });
+
 		return view;
 	}
 
@@ -57,8 +86,7 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 		drone.events.addDroneListener(this);
 
 		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(getActivity()
-						.getApplicationContext());
+				.getDefaultSharedPreferences(getActivity().getApplicationContext());
 		headingModeFPV = prefs.getBoolean("pref_heading_mode", false);
 	}
 
@@ -69,7 +97,7 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 	}
 
 	@Override
-	public void onDroneEvent(DroneEventsType event, Drone drone) {
+	public void onDroneEvent(DroneEventsType event, final Drone drone) {
 		switch (event) {
 		case NAVIGATION:
 			break;
@@ -79,6 +107,31 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 		case SPEED:
 			onSpeedAltitudeAndClimbRateUpdate(drone);
 			break;
+
+            case STATE:
+                mAirTimeHandler.removeCallbacksAndMessages(null);
+                if(drone != null){
+                    final Runnable airTimeUpdater = new Runnable() {
+                        @Override
+                        public void run() {
+                            if(mAirTime != null){
+                                long timeInSeconds = drone.state.getFlightTime();
+                                long minutes = timeInSeconds / 60;
+                                long seconds = timeInSeconds % 60;
+
+                                mAirTime.setText(String.format("%02d:%02d", minutes, seconds));
+                            }
+
+                            mAirTimeHandler.postDelayed(this, AIR_TIMER_PERIOD);
+                        }
+                    };
+                    airTimeUpdater.run();
+                }
+                else{
+                    mAirTime.setText("--:--");
+                }
+                break;
+
 		default:
 			break;
 		}
@@ -104,15 +157,10 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 
 	public void onSpeedAltitudeAndClimbRateUpdate(Drone drone) {
 		airSpeed.setText(String.format("%3.1f", drone.speed.getAirSpeed()));
-		groundSpeed
-				.setText(String.format("%3.1f", drone.speed.getGroundSpeed()));
-		climbRate
-				.setText(String.format("%3.1f", drone.speed.getVerticalSpeed()));
+		groundSpeed.setText(String.format("%3.1f", drone.speed.getGroundSpeed()));
+		climbRate.setText(String.format("%3.1f", drone.speed.getVerticalSpeed()));
 		double alt = drone.altitude.getAltitude();
-		double targetAlt = drone.altitude.getTargetAltitude();
 		altitude.setText(String.format("%3.1f", alt));
-		targetAltitude.setText(String.format("%3.1f", targetAlt));
-
 	}
 
 }

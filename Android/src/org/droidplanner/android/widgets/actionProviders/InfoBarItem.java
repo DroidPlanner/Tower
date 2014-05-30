@@ -151,116 +151,6 @@ public abstract class InfoBarItem {
 	}
 
 	/**
-	 * Flight time info bar item: displays the amount of time the drone is
-	 * armed.
-	 */
-	public static class FlightTimeInfo extends InfoBarItem {
-
-		/**
-		 * This is the period for the flight time update.
-		 */
-		protected final static long FLIGHT_TIMER_PERIOD = 1000l; // 1 second
-
-		/**
-		 * This is the layout resource id for the popup window.
-		 */
-		protected static final int sPopupWindowLayoutId = R.layout.popup_info_flight_time;
-
-		/**
-		 * This popup is used to offer the user the option to reset the flight
-		 * time.
-		 */
-		protected PopupWindow mPopup;
-
-		/**
-		 * This handler is used to update the flight time value.
-		 */
-		protected Handler mHandler;
-
-		/**
-		 * Handle to the current drone state.
-		 */
-		protected Drone mDrone;
-
-		/**
-		 * Runnable used to update the drone flight time.
-		 */
-		protected Runnable mFlightTimeUpdater;
-
-		public FlightTimeInfo(Context context, View parentView, Drone drone) {
-			super(context, parentView, drone, R.id.bar_propeller);
-		}
-
-		@Override
-		protected void initItemView(final Context context, View parentView,
-				final Drone drone) {
-			super.initItemView(context, parentView, drone);
-			if (mItemView == null)
-				return;
-
-			mHandler = new Handler();
-
-			mFlightTimeUpdater = new Runnable() {
-				@Override
-				public void run() {
-					mHandler.removeCallbacks(this);
-					if (mDrone == null)
-						return;
-
-					if (mItemView != null) {
-						long timeInSeconds = mDrone.state.getFlightTime();
-						long minutes = timeInSeconds / 60;
-						long seconds = timeInSeconds % 60;
-
-						((TextView) mItemView).setText(String.format(
-								"Air Time\n%02d:%02d", minutes, seconds));
-					}
-
-					mHandler.postDelayed(this, FLIGHT_TIMER_PERIOD);
-				}
-			};
-
-			mPopup = initPopupWindow(context, sPopupWindowLayoutId);
-			final View popupView = mPopup.getContentView();
-			popupView.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					if (mDrone != null) {
-						mDrone.state.resetFlightTimer();
-					}
-					mPopup.dismiss();
-				}
-			});
-
-			mItemView.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					if (mPopup == null)
-						return;
-
-					mPopup.showAsDropDown(mItemView);
-				}
-			});
-
-			updateItemView(context, drone);
-		}
-
-		@Override
-		public void updateItemView(final Context context, final Drone drone) {
-			mDrone = drone;
-			if (mItemView == null)
-				return;
-
-			mHandler.removeCallbacks(mFlightTimeUpdater);
-			if (drone != null) {
-				mFlightTimeUpdater.run();
-			} else {
-				((TextView) mItemView).setText("--:--");
-			}
-		}
-	}
-
-	/**
 	 * BatteryInfo info bar item: displays the drone remaining voltage, and
 	 * ratio of remaining to full voltage.
 	 */
@@ -525,8 +415,6 @@ public abstract class InfoBarItem {
 					new HomeInfo(context, popupView, drone),
 					new GpsInfo(context, popupView, drone),
 					new BatteryInfo(context, popupView, drone),
-					new ExtraFlightTimeInfo(context, popupView, drone,
-							mItemView),
 					new ExtraSignalInfo(context, popupView, drone, mItemView) };
 
 			mItemView.setOnClickListener(new View.OnClickListener() {
@@ -550,43 +438,6 @@ public abstract class InfoBarItem {
 			// Update the popup window content.
 			for (InfoBarItem infoItem : mExtraInfoBarItems) {
 				infoItem.updateItemView(context, drone);
-			}
-		}
-
-		private static class ExtraFlightTimeInfo extends FlightTimeInfo {
-
-			/**
-			 * This is the anchor view for the parent popup window. It will
-			 * allow this popup to be shown, as it's currently not possible to
-			 * launch a popup window from another popup window view.
-			 */
-			private final View mWindowView;
-
-			public ExtraFlightTimeInfo(Context context, View parentView,
-					Drone drone, View windowView) {
-				super(context, parentView, drone);
-				mWindowView = windowView;
-			}
-
-			@Override
-			protected void initItemView(Context context, final View parentView,
-					Drone drone) {
-				super.initItemView(context, parentView, drone);
-				if (mItemView == null)
-					return;
-
-				mItemView.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						if (mPopup == null)
-							return;
-
-						int yLoc = mWindowView.getBottom()
-								+ mItemView.getBottom();
-						mPopup.showAtLocation(mWindowView, Gravity.RIGHT
-								| Gravity.TOP, 0, yLoc);
-					}
-				});
 			}
 		}
 

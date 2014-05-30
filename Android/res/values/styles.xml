@@ -45,6 +45,9 @@
         <item name="android:layout_marginRight">4dp</item>
         <item name="android:layout_marginTop">0dp</item>
         <item name="android:gravity">right</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerHorizontal">true</item>
         </style>
 
 
@@ -105,6 +108,16 @@
         <item name="android:layout_marginBottom">1dp</item>
 
         <item name="android:padding">1dp</item>
+    </style>
+
+    <style name="telemetryWidget">
+        <item name="android:layout_marginBottom">3dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:paddingBottom">1dp</item>
+        <item name="android:baselineAligned">true</item>
     </style>
 
     <style name="editorButton">
