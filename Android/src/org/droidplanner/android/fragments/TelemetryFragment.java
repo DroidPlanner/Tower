@@ -8,7 +8,6 @@ import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.android.widgets.AttitudeIndicator;
 
-import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,7 +39,6 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
     /*
     Air time view and textview.
      */
-    private View mAirTimeLayout;
     private TextView mAirTime;
 
     private final Handler mAirTimeHandler = new Handler();
@@ -63,9 +61,8 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 		climbRate = (TextView) view.findViewById(R.id.climbRateValue);
 		altitude = (TextView) view.findViewById(R.id.altitudeValue);
 
-        mAirTime = (TextView) view.findViewById(R.id.air_time_value);
-        mAirTimeLayout = view.findViewById(R.id.air_time_layout);
-        mAirTimeLayout.setOnLongClickListener(new View.OnLongClickListener() {
+        mAirTime = (TextView) view.findViewById(R.id.telemetry_air_time);
+        mAirTime.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 final Runnable resetTimerCb = new Runnable() {

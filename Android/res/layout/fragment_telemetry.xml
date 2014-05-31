@@ -65,64 +65,56 @@
 
         <org.droidplanner.android.widgets.AttitudeIndicator
             android:id="@+id/aiView"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="@dimen/telemetryAttitudeIndicatorWidth"
+            android:layout_height="@dimen/telemetryAttitudeIndicatorHeight"
             android:layout_toRightOf="@+id/yawValueText"
             android:layout_alignTop="@+id/yawValueText"
             android:layout_alignBottom="@+id/rollValueText"
             tools:ignore="ContentDescription"/>
 
         <!-- Air Time -->
-        <RelativeLayout
-            android:id="@+id/air_time_layout"
-            android:layout_below="@+id/rollValueText"
-            style="@style/telemetryWidget"
+        <TextView
+            android:id="@+id/telemetry_air_time"
             android:layout_alignLeft="@+id/rollValueText"
             android:layout_alignRight="@+id/aiView"
-            android:background="@drawable/climb_rate_bg">
-
-            <TextView
-                android:id="@+id/air_time_value"
-                style="@style/largeTelemetryText"
-                android:text="--:--"/>
-
-            <TextView
-                android:id="@+id/airTimeLabel"
-                style="@style/textLabels"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@+id/air_time_value"
-                android:text="@string/air_time_label"
-                android:textColor="@color/ground_speed_label"
-                />
-
-        </RelativeLayout>
+            android:layout_below="@+id/rollValueText"
+            style="@style/largeTelemetryText"
+            android:text="--:--"
+            android:background="@drawable/round_rect_bg"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:drawableLeft="@drawable/ic_status_flight_time"
+            android:paddingLeft="5dp"
+            />
 
         <!-- ************** GROUND SPEED ********************* -->
 
         <RelativeLayout
             android:id="@+id/ground_speed_layout"
-            android:layout_below="@+id/air_time_layout"
+            android:layout_below="@+id/telemetry_air_time"
             style="@style/telemetryWidget"
             android:background="@drawable/ground_speed_bg"
             android:layout_alignLeft="@+id/rollValueText"
             android:layout_alignRight="@+id/aiView">
 
+
             <TextView
                 android:id="@+id/groundSpeedValue"
                 style="@style/largeTelemetryText"
-                android:text="@string/telemetry_default_value"/>
+                android:text="@string/telemetry_default_value"
+                android:layout_toLeftOf="@+id/groundSpeedUnits"
+                android:layout_alignBaseline="@+id/groundSpeedUnits"
+                />
 
             <TextView
                 android:id="@+id/groundSpeedUnits"
                 style="@style/unitText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/groundSpeedValue"
-                android:layout_alignBaseline="@+id/groundSpeedValue"
                 android:text="@string/speed_unit"
-                android:textColor="@color/ground_speed_units"/>
+                android:textColor="@color/ground_speed_units"
+                android:layout_alignParentRight="true"
+                />
 
             <TextView
                 android:id="@+id/groundSpeedLabel"
@@ -150,17 +142,20 @@
             <TextView
                 android:id="@+id/airSpeedValue"
                 style="@style/largeTelemetryText"
-                android:text="@string/telemetry_default_value"/>
+                android:text="@string/telemetry_default_value"
+                android:layout_toLeftOf="@+id/airSpeedUnits"
+                android:layout_alignBaseline="@+id/airSpeedUnits"
+                />
 
             <TextView
                 android:id="@+id/airSpeedUnits"
                 style="@style/unitText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/airSpeedValue"
-                android:layout_alignBaseline="@+id/airSpeedValue"
                 android:text="@string/speed_unit"
-                android:textColor="@color/air_speed_units"/>
+                android:textColor="@color/air_speed_units"
+                android:layout_alignParentRight="true"
+                />
 
             <TextView
                 android:id="@+id/airSpeedLabel"
@@ -184,21 +179,23 @@
             android:layout_alignLeft="@+id/rollValueText"
             android:layout_alignRight="@+id/aiView"
             >
-
             <TextView
                 android:id="@+id/climbRateValue"
                 style="@style/largeTelemetryText"
-                android:text="@string/telemetry_default_value"/>
+                android:text="@string/telemetry_default_value"
+                android:layout_toLeftOf="@+id/climbRateUnits"
+                android:layout_alignBaseline="@+id/climbRateUnits"
+                />
 
             <TextView
                 android:id="@+id/climbRateUnits"
                 style="@style/unitText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/climbRateValue"
-                android:layout_alignBaseline="@+id/climbRateValue"
                 android:text="@string/speed_unit"
-                android:textColor="@color/air_speed_units"/>
+                android:textColor="@color/air_speed_units"
+                android:layout_alignParentRight="true"
+                />
 
             <TextView
                 android:id="@+id/climbRateLabel"
@@ -227,16 +224,18 @@
             <TextView
                 android:id="@+id/altitudeValue"
                 style="@style/largeTelemetryText"
-                android:text="@string/telemetry_default_value"/>
+                android:text="@string/telemetry_default_value"
+                android:layout_alignBaseline="@+id/altitudeUnits"
+                android:layout_toLeftOf="@+id/altitudeUnits"
+                />
 
             <TextView
                 android:id="@+id/altitudeUnits"
                 style="@style/unitText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/altitudeValue"
-                android:layout_alignBaseline="@+id/altitudeValue"
                 android:text="@string/meter_unit"
+                android:layout_alignParentRight="true"
                 />
 
             <TextView
