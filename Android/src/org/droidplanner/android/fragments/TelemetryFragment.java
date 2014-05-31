@@ -18,12 +18,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 public class TelemetryFragment extends Fragment implements OnDroneListener {
 
     /**
      * This is the period for the flight time update.
      */
-    private final static long AIR_TIMER_PERIOD = 1000l; // 1 second
+    private final static long AIR_TIMER_PERIOD = 1000l; // ms
 
 	private AttitudeIndicator attitudeIndicator;
 	private Drone drone;
@@ -37,29 +41,50 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 	private boolean headingModeFPV;
 
     /*
-    Air time view and textview.
+    Air time view, and handler
      */
     private TextView mAirTime;
+    private ScheduledExecutorService mAirTimeExecutor;
+    private final Runnable mAirTimeUpdater = new Runnable() {
+        @Override
+        public void run() {
+            if(mAirTime != null){
+                if(drone != null){
+                    long timeInSeconds = drone.state.getFlightTime();
+                    long minutes = timeInSeconds / 60;
+                    long seconds = timeInSeconds % 60;
 
-    private final Handler mAirTimeHandler = new Handler();
+                    mAirTime.setText(String.format("%02d:%02d", minutes, seconds));
+                }
+                else{
+                    mAirTime.setText("--:--");
+                }
+            }
+        }
+    };
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_telemetry, container, false);
+		return inflater.inflate(R.layout.fragment_telemetry, container, false);
+	}
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState){
+        super.onViewCreated(view, savedInstanceState);
 
         drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
 
-		attitudeIndicator = (AttitudeIndicator) view.findViewById(R.id.aiView);
+        attitudeIndicator = (AttitudeIndicator) view.findViewById(R.id.aiView);
 
-		roll = (TextView) view.findViewById(R.id.rollValueText);
-		yaw = (TextView) view.findViewById(R.id.yawValueText);
-		pitch = (TextView) view.findViewById(R.id.pitchValueText);
+        roll = (TextView) view.findViewById(R.id.rollValueText);
+        yaw = (TextView) view.findViewById(R.id.yawValueText);
+        pitch = (TextView) view.findViewById(R.id.pitchValueText);
 
-		groundSpeed = (TextView) view.findViewById(R.id.groundSpeedValue);
-		airSpeed = (TextView) view.findViewById(R.id.airSpeedValue);
-		climbRate = (TextView) view.findViewById(R.id.climbRateValue);
-		altitude = (TextView) view.findViewById(R.id.altitudeValue);
+        groundSpeed = (TextView) view.findViewById(R.id.groundSpeedValue);
+        airSpeed = (TextView) view.findViewById(R.id.airSpeedValue);
+        climbRate = (TextView) view.findViewById(R.id.climbRateValue);
+        altitude = (TextView) view.findViewById(R.id.altitudeValue);
 
         mAirTime = (TextView) view.findViewById(R.id.telemetry_air_time);
         mAirTime.setOnLongClickListener(new View.OnLongClickListener() {
@@ -83,9 +108,7 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
                 return true;
             }
         });
-
-		return view;
-	}
+    }
 
 	@Override
 	public void onStart() {
@@ -104,7 +127,7 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 	}
 
 	@Override
-	public void onDroneEvent(DroneEventsType event, final Drone drone) {
+	public void onDroneEvent(final DroneEventsType event, final Drone drone) {
 		switch (event) {
 		case NAVIGATION:
 			break;
@@ -115,28 +138,21 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 			onSpeedAltitudeAndClimbRateUpdate(drone);
 			break;
 
+            case CONNECTED:
+                mAirTimeUpdater.run();
+                break;
+
             case STATE:
-                mAirTimeHandler.removeCallbacksAndMessages(null);
-                if(drone != null){
-                    final Runnable airTimeUpdater = new Runnable() {
-                        @Override
-                        public void run() {
-                            if(mAirTime != null){
-                                long timeInSeconds = drone.state.getFlightTime();
-                                long minutes = timeInSeconds / 60;
-                                long seconds = timeInSeconds % 60;
-
-                                mAirTime.setText(String.format("%02d:%02d", minutes, seconds));
-                            }
-
-                            mAirTimeHandler.postDelayed(this, AIR_TIMER_PERIOD);
-                        }
-                    };
-                    airTimeUpdater.run();
+                if(mAirTimeExecutor == null || mAirTimeExecutor.isShutdown()){
+                    mAirTimeExecutor = Executors.newSingleThreadScheduledExecutor();
+                    mAirTimeExecutor.scheduleWithFixedDelay(mAirTimeUpdater, 0, AIR_TIMER_PERIOD,
+                            TimeUnit.MILLISECONDS);
                 }
-                else{
-                    mAirTime.setText("--:--");
-                }
+                break;
+
+            case DISCONNECTED:
+                if(mAirTimeExecutor != null)
+                    mAirTimeExecutor.shutdownNow();
                 break;
 
 		default:
