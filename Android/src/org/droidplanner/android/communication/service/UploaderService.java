@@ -46,46 +46,55 @@ public class UploaderService extends IntentService {
 		}
 
 		public void onUploadSuccess(File f, String viewURL) {
-			Log.i(TAG, "Upload success: " + f + " url=" + viewURL);
+			if (viewURL == null) {
+				Log.i(TAG, "Server thought flight was boring");
+				notifyManager.cancel(notifyId);
+			} else {
+				Log.i(TAG, "Upload success: " + f + " url=" + viewURL);
 
-			numUploaded += 1;
-			nBuilder.setContentText("Select to view..."); // FIXME localize
+				numUploaded += 1;
+				nBuilder.setContentText("Select to view..."); // FIXME localize
 
-			// Attach the view URL
-			PendingIntent pintent = PendingIntent.getActivity(
-					UploaderService.this, 0,
-					new Intent(Intent.ACTION_VIEW, Uri.parse(viewURL)), 0);
-			nBuilder.setContentIntent(pintent);
+				// Attach the view URL
+				PendingIntent pintent = PendingIntent.getActivity(
+						UploaderService.this, 0, new Intent(Intent.ACTION_VIEW,
+								Uri.parse(viewURL)), 0);
+				nBuilder.setContentIntent(pintent);
 
-			// Attach the google earth link
-			// val geintent = PendingIntent.getActivity(acontext, 0, new
-			// Intent(Intent.ACTION_VIEW, Uri.parse(kmzURL)), 0)
-			// nBuilder.addAction(android.R.drawable.ic_menu_mapmode,
-			// S(R.string.google_earth), geintent)
+				// Attach the google earth link
+				// val geintent = PendingIntent.getActivity(acontext, 0, new
+				// Intent(Intent.ACTION_VIEW, Uri.parse(kmzURL)), 0)
+				// nBuilder.addAction(android.R.drawable.ic_menu_mapmode,
+				// S(R.string.google_earth), geintent)
 
-			// Attach a web link
-			nBuilder.addAction(android.R.drawable.ic_menu_set_as, "Web",
-					pintent);
+				// Attach a web link
+				nBuilder.addAction(android.R.drawable.ic_menu_set_as, "Web",
+						pintent);
 
-			// Add a share link
-			Intent sendIntent = new Intent(Intent.ACTION_SEND);
-			sendIntent.putExtra(Intent.EXTRA_TEXT, viewURL);
-			sendIntent.setType("text/plain");
-			// val chooser = Intent.createChooser(sendIntent, "Share log to...")
-			nBuilder.addAction(android.R.drawable.ic_menu_share, "Share",
-					PendingIntent.getActivity(UploaderService.this, 0,
-							sendIntent, 0));
-			if (numUploaded > 1)
-				nBuilder.setNumber(numUploaded);
-			nBuilder.setPriority(NotificationCompat.PRIORITY_HIGH); // The user
-																	// probably
-																	// wants to
-																	// choose us
-																	// now
+				// Add a share link
+				Intent sendIntent = new Intent(Intent.ACTION_SEND);
+				sendIntent.putExtra(Intent.EXTRA_TEXT, viewURL);
+				sendIntent.setType("text/plain");
+				// val chooser = Intent.createChooser(sendIntent,
+				// "Share log to...")
+				nBuilder.addAction(android.R.drawable.ic_menu_share, "Share",
+						PendingIntent.getActivity(UploaderService.this, 0,
+								sendIntent, 0));
+				if (numUploaded > 1)
+					nBuilder.setNumber(numUploaded);
+				nBuilder.setPriority(NotificationCompat.PRIORITY_HIGH); // The
+																		// user
+																		// probably
+																		// wants
+																		// to
+																		// choose
+																		// us
+																		// now
 
-			// FIXME, include action buttons for sharing
+				// FIXME, include action buttons for sharing
 
-			updateNotification(false);
+				updateNotification(false);
+			}
 		}
 
 		public void onUploadFailure(File f, Exception ex) {
