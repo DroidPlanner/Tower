@@ -51,13 +51,23 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
             if(mAirTime != null){
                 if(drone != null){
                     long timeInSeconds = drone.state.getFlightTime();
-                    long minutes = timeInSeconds / 60;
-                    long seconds = timeInSeconds % 60;
+                    final long minutes = timeInSeconds / 60;
+                    final long seconds = timeInSeconds % 60;
 
-                    mAirTime.setText(String.format("%02d:%02d", minutes, seconds));
+                    mAirTime.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mAirTime.setText(String.format("%02d:%02d", minutes, seconds));
+                        }
+                    });
                 }
                 else{
-                    mAirTime.setText("--:--");
+                    mAirTime.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mAirTime.setText("--:--");
+                        }
+                    });
                 }
             }
         }
