@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+    There's a backward compatible version equivalent in 'values/themes.xml'.
+    That needs to be updated if this one is updated.
+    -->
+    <style name="CustomActionBarTheme.Transparent">
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:actionBarStyle">@style/CustomActionBarTheme.ActionBar.Transparent</item>
+    </style>
+</resources>

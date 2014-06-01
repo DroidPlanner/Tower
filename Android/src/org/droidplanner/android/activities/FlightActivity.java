@@ -37,8 +37,6 @@ public class FlightActivity extends DrawerNavigationUI implements
 
 	private SlidingDrawer mSlidingDrawer;
 
-	private boolean mIsPhone;
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -48,29 +46,19 @@ public class FlightActivity extends DrawerNavigationUI implements
 		failsafeTextView = findViewById(R.id.failsafeTextView);
 
 		mSlidingDrawer = (SlidingDrawer) findViewById(R.id.SlidingDrawerRight);
-		mSlidingDrawer
-				.setOnDrawerCloseListener(new SlidingDrawer.OnDrawerCloseListener() {
-					@Override
-					public void onDrawerClosed() {
-						updateMapPadding();
-					}
-				});
+		mSlidingDrawer.setOnDrawerCloseListener(new SlidingDrawer.OnDrawerCloseListener() {
+            @Override
+            public void onDrawerClosed() {
+                updateMapPadding();
+            }
+        });
 
-		mSlidingDrawer
-				.setOnDrawerOpenListener(new SlidingDrawer.OnDrawerOpenListener() {
-					@Override
-					public void onDrawerOpened() {
-						updateMapPadding();
-					}
-				});
-
-		mapFragment = (FlightMapFragment) fragmentManager
-				.findFragmentById(R.id.mapFragment);
-		if (mapFragment == null) {
-			mapFragment = new FlightMapFragment();
-			fragmentManager.beginTransaction()
-					.add(R.id.mapFragment, mapFragment).commit();
-		}
+		mSlidingDrawer.setOnDrawerOpenListener(new SlidingDrawer.OnDrawerOpenListener() {
+            @Override
+            public void onDrawerOpened() {
+                updateMapPadding();
+            }
+        });
 
 		editorTools = fragmentManager
 				.findFragmentById(R.id.editorToolsFragment);
@@ -80,46 +68,26 @@ public class FlightActivity extends DrawerNavigationUI implements
 					.add(R.id.editorToolsFragment, editorTools).commit();
 		}
 
-		/*
-		 * Check to see if we're using a phone layout, or a tablet layout. If
-		 * the 'telemetryFragment' view doesn't exist, then we're in phone
-		 * layout, as it was merged with the right sliding drawer because of
-		 * space constraints.
-		 */
-		View telemetryView = findViewById(R.id.telemetryFragment);
-		mIsPhone = telemetryView == null;
+        // Add the telemtry fragment
+        Fragment telemetryFragment = fragmentManager
+                .findFragmentById(R.id.telemetryFragment);
+        if (telemetryFragment == null) {
+            telemetryFragment = new TelemetryFragment();
+            fragmentManager.beginTransaction()
+                    .add(R.id.telemetryFragment, telemetryFragment)
+                    .commit();
+        }
 
-		if (mIsPhone) {
-			Fragment slidingDrawerContent = fragmentManager
-					.findFragmentById(R.id.sliding_drawer_content);
-			if (slidingDrawerContent == null) {
-				slidingDrawerContent = new FlightSlidingDrawerContent();
-				fragmentManager.beginTransaction()
-						.add(R.id.sliding_drawer_content, slidingDrawerContent)
-						.commit();
-			}
-		} else {
-			// Add the telemtry fragment
-			Fragment telemetryFragment = fragmentManager
-					.findFragmentById(R.id.telemetryFragment);
-			if (telemetryFragment == null) {
-				telemetryFragment = new TelemetryFragment();
-				fragmentManager.beginTransaction()
-						.add(R.id.telemetryFragment, telemetryFragment)
-						.commit();
-			}
-
-			// Add the mode info panel fragment
-			Fragment flightModePanel = fragmentManager
-					.findFragmentById(R.id.sliding_drawer_content);
-			if (flightModePanel == null) {
-				flightModePanel = new FlightModePanel();
-				fragmentManager.beginTransaction()
-						.add(R.id.sliding_drawer_content, flightModePanel)
-						.commit();
-			}
-		}
-	}
+        // Add the mode info panel fragment
+        Fragment flightModePanel = fragmentManager
+                .findFragmentById(R.id.sliding_drawer_content);
+        if (flightModePanel == null) {
+            flightModePanel = new FlightModePanel();
+            fragmentManager.beginTransaction()
+                    .add(R.id.sliding_drawer_content, flightModePanel)
+                    .commit();
+        }
+    }
 
 	/**
 	 * Ensures that the device has the correct version of the Google Play
@@ -168,8 +136,8 @@ public class FlightActivity extends DrawerNavigationUI implements
 	}
 
 	@Override
-	public void onResume() {
-		super.onResume();
+	public void onStart() {
+		super.onStart();
 		setupMapFragment();
 	}
 
@@ -183,25 +151,23 @@ public class FlightActivity extends DrawerNavigationUI implements
 	 * Account for the various ui elements and update the map padding so that it
 	 * remains 'visible'.
 	 */
-	private void updateMapPadding() {
-		int rightPadding = getSlidingDrawerWidth();
+    private void updateMapPadding() {
+        int rightPadding = getSlidingDrawerWidth();
 
-		int bottomPadding = 0;
-		int leftPadding = 0;
-		if (mIsPhone) {
-			final View editorToolsView = editorTools.getView();
-			ViewGroup.LayoutParams lp = editorToolsView.getLayoutParams();
-			if (lp.height == ViewGroup.LayoutParams.MATCH_PARENT) {
-				leftPadding = editorToolsView.getRight();
-			}
+        int bottomPadding = 0;
+        int leftPadding = 0;
 
-			if (lp.width == ViewGroup.LayoutParams.MATCH_PARENT) {
-				bottomPadding = editorToolsView.getHeight();
-			}
-		}
-		mapFragment.mMap
-				.setPadding(leftPadding, 0, rightPadding, bottomPadding);
-	}
+        final View editorToolsView = editorTools.getView();
+        ViewGroup.LayoutParams lp = editorToolsView.getLayoutParams();
+        if (lp.height == ViewGroup.LayoutParams.MATCH_PARENT) {
+            leftPadding = editorToolsView.getRight();
+        }
+
+        if (lp.width == ViewGroup.LayoutParams.MATCH_PARENT) {
+            bottomPadding = editorToolsView.getHeight();
+        }
+        mapFragment.mMap.setPadding(leftPadding, 0, rightPadding, bottomPadding);
+    }
 
 	private int getSlidingDrawerWidth() {
 		if (mSlidingDrawer.isOpened()) {
