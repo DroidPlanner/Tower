@@ -128,21 +128,21 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(getActivity().getApplicationContext());
 		headingModeFPV = prefs.getBoolean("pref_heading_mode", false);
+		
+		if(drone.state.isFlying()){
+			onDroneEvent(DroneEventsType.STATE, drone);
+		}
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
 		drone.events.removeDroneListener(this);
-	}
-
-    @Override
-    public void onDestroy(){
-        super.onDestroy();
-        if(mAirTimeExecutor != null && !mAirTimeExecutor.isShutdown()){
+		
+		if(mAirTimeExecutor != null && !mAirTimeExecutor.isShutdown()){
             mAirTimeExecutor.shutdownNow();
         }
-    }
+	}
 
 	@Override
 	public void onDroneEvent(final DroneEventsType event, final Drone drone) {
