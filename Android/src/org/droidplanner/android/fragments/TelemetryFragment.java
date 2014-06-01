@@ -136,6 +136,14 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 		drone.events.removeDroneListener(this);
 	}
 
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        if(mAirTimeExecutor != null && !mAirTimeExecutor.isShutdown()){
+            mAirTimeExecutor.shutdownNow();
+        }
+    }
+
 	@Override
 	public void onDroneEvent(final DroneEventsType event, final Drone drone) {
 		switch (event) {
