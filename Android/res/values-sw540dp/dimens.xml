@@ -5,6 +5,7 @@
     <dimen name="textLabelsTextSize">19sp</dimen>
     <dimen name="unitTextTextSize">27sp</dimen>
     <dimen name="telemetryWidgetWidth">135dp</dimen>
+    <dimen name="telemetryWidgetHeight">62dp</dimen>
     <dimen name="telemetryAttitudeIndicatorWidth">80dp</dimen>
     <dimen name="telemetryAttitudeIndicatorHeight">80dp</dimen>
 

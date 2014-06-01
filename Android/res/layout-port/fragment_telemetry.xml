@@ -81,7 +81,6 @@
         style="@style/largeTelemetryText"
         android:text="--:--"
         android:background="@drawable/round_rect_bg"
-        android:layout_marginTop="5dp"
         android:drawableLeft="@drawable/ic_status_flight_time"
         android:paddingLeft="5dp"
         />

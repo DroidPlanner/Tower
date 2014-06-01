@@ -20,7 +20,7 @@
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
         <item name="android:textColor">#808080</item>
         <item name="android:textSize">@dimen/textLabelsTextSize</item>
-        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:layout_marginTop">1dp</item>
         </style>
 
 	<style name="RPYtextLabels">
@@ -111,7 +111,7 @@
     <style name="telemetryWidget">
         <item name="android:layout_marginBottom">3dp</item>
         <item name="android:layout_width">@dimen/telemetryWidgetWidth</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_height">@dimen/telemetryWidgetHeight</item>
         <item name="android:paddingLeft">5dp</item>
         <item name="android:paddingRight">5dp</item>
         <item name="android:paddingBottom">1dp</item>
