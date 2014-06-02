@@ -137,7 +137,7 @@ public abstract class InfoBarItem {
                 else{
                     final int satCount = drone.GPS.getSatCount();
                     final String fixType = drone.GPS.getFixType();
-                    if(satCount < GPS.FIX_2D){
+                    if(satCount < GPS.LOCK_2D){
                         update = context.getString(R.string.satellite_info_no_fix, fixType);
                     }
                     else{
