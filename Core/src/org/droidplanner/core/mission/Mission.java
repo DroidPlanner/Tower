@@ -11,6 +11,7 @@ import org.droidplanner.core.helpers.geoTools.GeoTools;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.commands.Takeoff;
+import org.droidplanner.core.mission.waypoints.Circle;
 import org.droidplanner.core.mission.waypoints.Land;
 import org.droidplanner.core.mission.waypoints.RegionOfInterest;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
@@ -204,6 +205,9 @@ public class Mission extends DroneVariable {
 				break;
 			case MAV_CMD.MAV_CMD_DO_SET_ROI:
 				received.add(new RegionOfInterest(msg, this));
+				break;
+			case MAV_CMD.MAV_CMD_NAV_LOITER_TURNS:
+				received.add(new Circle(msg,this));
 			default:
 				break;
 			}

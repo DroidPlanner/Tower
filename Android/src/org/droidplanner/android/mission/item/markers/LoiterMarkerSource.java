@@ -18,6 +18,6 @@ class LoiterMarkerSource extends MissionItemMarkerSource {
 
     @Override
     protected int getIconResource() {
-        return R.drawable.ic_wp_loiter;
+        return R.drawable.ic_wp_circle_cw;
     }
 }

@@ -19,7 +19,7 @@ public class MissionItemGenericMarkerSource {
 	
 	        case LOITER:
 	        case LOITER_INF:
-	        case LOITERN:
+	        case CIRCLE:
 	        case LOITERT:
 	            markerSource = new LoiterMarkerSource(origin);
 	            break;
