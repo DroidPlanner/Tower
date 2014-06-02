@@ -7,6 +7,7 @@ import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.android.utils.Constants;
 import org.droidplanner.android.utils.file.DirectoryPath;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,8 +19,14 @@ import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
-public class SettingsFragment extends PreferenceFragment implements
+public class SettingsFragment extends DpPreferenceFragment implements
 		OnSharedPreferenceChangeListener {
 
 	@Override

@@ -16,6 +16,7 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -148,6 +149,10 @@ public abstract class SuperUI extends FragmentActivity implements
 		case R.id.menu_load_mission:
 			drone.waypointManager.getWaypoints();
 			return true;
+
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
 
 		default:
 			return super.onOptionsItemSelected(item);
