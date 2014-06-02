@@ -102,10 +102,10 @@ public class GeoTools {
 	 * @return heading in degrees
 	 */
 	public static double getHeadingFromCoordinates(Coord2D fromLoc, Coord2D toLoc) {
-		double fLat = Math.toRadians(fromLoc.getY());
-		double fLng = Math.toRadians(fromLoc.getX());
-		double tLat = Math.toRadians(toLoc.getY());
-		double tLng = Math.toRadians(toLoc.getX());
+		double fLat = Math.toRadians(fromLoc.getLat());
+		double fLng = Math.toRadians(fromLoc.getLng());
+		double tLat = Math.toRadians(toLoc.getLat());
+		double tLng = Math.toRadians(toLoc.getLng());
 
 		double degree = Math.toDegrees(Math.atan2(
 				Math.sin(tLng - fLng) * Math.cos(tLat),

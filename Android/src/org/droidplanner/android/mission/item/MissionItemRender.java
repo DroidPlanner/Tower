@@ -101,7 +101,7 @@ public class MissionItemRender implements Comparable<MissionItemRender> {
             		Circle circle = (Circle) mMissionItem;
             		double startHeading = 0;
             		if (previusPoint != null) {
-            			startHeading = GeoTools.getHeadingFromCoordinates(circle.getCoordinate(),DroneHelper.LatLngToCoord(previusPoint))+ 90;						
+            			startHeading = GeoTools.getHeadingFromCoordinates(circle.getCoordinate(),DroneHelper.LatLngToCoord(previusPoint));						
 					}
             		pathPoints.add(DroneHelper.CoordToLatLang(GeoTools
 						.newCoordFromBearingAndDistance(circle.getCoordinate(),

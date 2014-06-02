@@ -2,6 +2,7 @@ package org.droidplanner.android;
 
 import org.droidplanner.android.communication.service.MAVLinkClient;
 import org.droidplanner.android.communication.service.NetworkStateReceiver;
+import org.droidplanner.android.gcs.FollowMe;
 import org.droidplanner.android.mission.MissionRender;
 import org.droidplanner.android.notifications.NotificationHandler;
 import org.droidplanner.android.utils.DroidplannerPrefs;
@@ -23,6 +24,7 @@ public class DroidPlannerApp extends ErrorReportApp implements
 
 	public Drone drone;
 	public MissionRender missionRender;
+	public FollowMe followMe;
 	private MavLinkMsgHandler mavLinkMsgHandler;
 
 	/**
@@ -64,6 +66,7 @@ public class DroidPlannerApp extends ErrorReportApp implements
 		mavLinkMsgHandler = new org.droidplanner.core.MAVLink.MavLinkMsgHandler(
 				drone);
 
+		followMe = new FollowMe(this, drone);
 		NetworkStateReceiver.register(getApplicationContext());
 	}
 
