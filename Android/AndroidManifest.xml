@@ -120,7 +120,6 @@
             android:name=".android.activities.ConfigurationActivity"
             android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTop"
-            android:theme="@style/Theme.PageIndicatorDefaults"
             android:label="@string/menu_drone_setup"
             android:parentActivityName=".android.activities.SettingsActivity" >
 
