@@ -48,8 +48,8 @@ public abstract class MissionDetailFragment extends DialogFragment implements
             case LOITER:
                 fragment = new MissionLoiterFragment();
                 break;
-            case LOITERN:
-                fragment = new MissionLoiterNFragment();
+            case CIRCLE:
+                fragment = new MissionCircleFragment();
                 break;
             case LOITERT:
                 fragment = new MissionLoiterTFragment();
@@ -105,7 +105,6 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 				Arrays.asList(objects));
 		asSet.remove(MissionItemType.LOITER);
 		asSet.remove(MissionItemType.LOITER_INF);
-		asSet.remove(MissionItemType.LOITERN);
 		asSet.remove(MissionItemType.LOITERT);
 		asSet.remove(MissionItemType.ROI);
 		asSet.remove(MissionItemType.RTL);

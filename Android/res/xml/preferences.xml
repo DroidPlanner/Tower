@@ -41,9 +41,9 @@
 	    <EditTextPreference
 	        android:defaultValue=""
 	        android:dialogTitle="Droneshare password"
-	        android:inputType="textVisiblePassword"
+	        android:inputType="textPassword"
 	        android:key="dshare_password"
-	        android:summary="Just pick a password"
+	        android:summary="Enter or pick a password"
 	        android:title="Password" />
              </PreferenceCategory>
             
