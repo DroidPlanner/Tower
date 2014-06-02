@@ -17,6 +17,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SlidingDrawer;
@@ -32,8 +33,10 @@ public class FlightActivity extends DrawerNavigationUI implements
 	private FragmentManager fragmentManager;
 	private RCFragment rcFragment;
 	private View failsafeTextView;
+
 	private FlightMapFragment mapFragment;
-	private Fragment editorTools;
+
+    private Fragment editorTools;
 
 	private SlidingDrawer mSlidingDrawer;
 
@@ -125,12 +128,10 @@ public class FlightActivity extends DrawerNavigationUI implements
 	 */
 	private void setupMapFragment() {
 		if (mapFragment == null && isGooglePlayServicesValid(true)) {
-			mapFragment = (FlightMapFragment) fragmentManager
-					.findFragmentById(R.id.mapFragment);
+			mapFragment = (FlightMapFragment) fragmentManager.findFragmentById(R.id.mapFragment);
 			if (mapFragment == null) {
 				mapFragment = new FlightMapFragment();
-				fragmentManager.beginTransaction()
-						.add(R.id.mapFragment, mapFragment).commit();
+				fragmentManager.beginTransaction().add(R.id.mapFragment, mapFragment).commit();
 			}
 		}
 	}
@@ -152,29 +153,40 @@ public class FlightActivity extends DrawerNavigationUI implements
 	 * remains 'visible'.
 	 */
     private void updateMapPadding() {
-        int rightPadding = getSlidingDrawerWidth();
-
+        int topPadding = 0;
         int bottomPadding = 0;
         int leftPadding = 0;
 
         final View editorToolsView = editorTools.getView();
+        final View mapView = mapFragment.getView();
+
+        int[] posOnScreen = new int[2];
+        editorToolsView.getLocationOnScreen(posOnScreen);
+        final int toolsHeight = editorToolsView.getHeight();
+        final int toolsTop = posOnScreen[1];
+        final int toolsBottom = toolsTop + toolsHeight;
+
+        final float dp48Rule = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48,
+                getResources().getDisplayMetrics());
+        final int myLocationButtonPadding = (int)(2 * dp48Rule);
+
         ViewGroup.LayoutParams lp = editorToolsView.getLayoutParams();
         if (lp.height == ViewGroup.LayoutParams.MATCH_PARENT) {
             leftPadding = editorToolsView.getRight();
+            topPadding = toolsBottom - myLocationButtonPadding;
         }
+        else {
+            topPadding = toolsTop - myLocationButtonPadding;
 
-        if (lp.width == ViewGroup.LayoutParams.MATCH_PARENT) {
-            bottomPadding = editorToolsView.getHeight();
+            if (lp.width == ViewGroup.LayoutParams.MATCH_PARENT) {
+                mapView.getLocationOnScreen(posOnScreen);
+                final int mapTop = posOnScreen[1];
+                final int mapBottom = mapTop + mapView.getHeight();
+                bottomPadding = (mapBottom - toolsBottom) + toolsHeight;
+            }
         }
-        mapFragment.mMap.setPadding(leftPadding, 0, rightPadding, bottomPadding);
+        mapFragment.mMap.setPadding(leftPadding, topPadding, 0, bottomPadding);
     }
-
-	private int getSlidingDrawerWidth() {
-		if (mSlidingDrawer.isOpened()) {
-			return mSlidingDrawer.getContent().getWidth();
-		}
-		return 0;
-	}
 
 	@Override
 	public void onJoystickSelected() {

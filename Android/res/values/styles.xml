@@ -359,7 +359,7 @@
     </style>
 
     <!-- Styles for the view pager tab strip -->
-    <style name="Theme.PageIndicatorDefaults" parent="android:Theme.Holo.Light">
+    <style name="Theme.PageIndicatorDefaults" parent="android:Theme.Holo.Light.DarkActionBar">
         <item name="vpiTabPageIndicatorStyle">@style/Widget.TabPageIndicator</item>
     </style>
 

@@ -28,6 +28,7 @@
             android:layout_height="wrap_content"
             android:text="@string/editor_info_window"
             style="@style/editorMissionOverviewText"
+            android:visibility="visible"
             />
     </org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout>
 

@@ -122,13 +122,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 	private void updateMapPadding() {
 		int topPadding = infoView.getBottom();
-		int rightPadding = 0,bottomPadding = 0;
-
-		if (missionRender.getItems().size()>0) {
-			rightPadding = editorToolsFragment.getView().getRight();
-			bottomPadding = missionListFragment.getView().getHeight();
-		}
-		planningMapFragment.mMap.setPadding(rightPadding, topPadding, 0, bottomPadding);
+		planningMapFragment.mMap.setPadding(0, topPadding, 0, 0);
 	}
 
 	@Override
@@ -379,7 +373,6 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 	@Override
 	public void onListVisibilityChanged() {
-		updateMapPadding();
 	}
 
     @Override
