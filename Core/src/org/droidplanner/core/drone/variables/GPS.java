@@ -10,13 +10,13 @@ public class GPS extends DroneVariable {
     /**
      * Number of satellites required to get a 2D gps fix.
      */
-    public static final int FIX_2D = 2;
+    public final static int LOCK_2D = 2;
 
     /**
      * Least number of satellites required to get a 3D gps fix.
      */
-    public static final int FIX_3D = 3;
-
+	public final static int LOCK_3D = 3;
+	
 	private double gps_eph = -1;
 	private int satCount = -1;
 	private int fixType = -1;
@@ -49,10 +49,10 @@ public class GPS extends DroneVariable {
 	public String getFixType() {
 		String gpsFix = "";
 		switch (fixType) {
-		case 2:
+		case LOCK_2D:
 			gpsFix = ("2D");
 			break;
-		case 3:
+		case LOCK_3D:
 			gpsFix = ("3D");
 			break;
 		default:

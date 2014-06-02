@@ -43,7 +43,7 @@
 	        android:dialogTitle="Droneshare password"
 	        android:inputType="textPassword"
 	        android:key="dshare_password"
-	        android:summary="Just pick a password"
+	        android:summary="Enter or pick a password"
 	        android:title="Password" />
              </PreferenceCategory>
             

@@ -1,6 +1,7 @@
 package org.droidplanner.core.polygon;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.droidplanner.core.helpers.coordinates.Coord2D;
@@ -68,6 +69,10 @@ public class Polygon {
 		public InvalidPolygon(int size) {
 			this.size = size;
 		}
+	}
+
+	public void reversePoints() {
+		Collections.reverse(points);	
 	}
 
 }
