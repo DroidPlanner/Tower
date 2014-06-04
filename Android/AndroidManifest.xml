@@ -121,6 +121,7 @@
             android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTop"
             android:label="@string/menu_drone_setup"
+            android:theme="@style/Theme.PageIndicatorDefaults"
             android:parentActivityName=".android.activities.SettingsActivity" >
 
             <!-- Parent activity meta-data to support API level 7+ -->
