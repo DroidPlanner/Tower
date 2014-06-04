@@ -53,7 +53,7 @@
 
     <style name="largeMissionDetailText">
         <item name="android:textColor">#ffffff</item>
-        <item name="android:textSize">40dp</item>
+        <item name="android:textSize">40sp</item>
 	    <item name="android:textStyle">bold</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:gravity">center</item>
@@ -61,7 +61,7 @@
 
     <style name="whiteHeaderTitle">
         <item name="android:textColor">#fff</item>
-        <item name="android:textSize">24dp</item>
+        <item name="android:textSize">24sp</item>
 	    <item name="android:textStyle">bold</item>
 	    <item name="android:layout_alignParentTop">true</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
@@ -69,19 +69,19 @@
 
     <style name="missionHeaderTitle">
         <item name="android:textColor">#85daff</item>
-        <item name="android:textSize">24dp</item>
+        <item name="android:textSize">24sp</item>
 	    <item name="android:textStyle">bold</item>
 	    <item name="android:layout_alignParentTop">true</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
         </style>
     <style name="missionHeaderlabel">
         <item name="android:textColor">#85daff</item>
-        <item name="android:textSize">14dp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
         </style>
     <style name="missionHeaderValue">
         <item name="android:textColor">#cbefff</item>
-        <item name="android:textSize">14dp</item>
+        <item name="android:textSize">14sp</item>
 	    <item name="android:textStyle">bold</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
         </style>
@@ -146,19 +146,21 @@
 
 	<!-- style the list navigation -->
 	<style name="DropDownItem" parent="@android:style/Widget.Holo.Light.DropDownItem.Spinner">
-		<item name="android:textSize">18dp</item>
+        <item name="android:textColor">@android:color/white</item>
+		<item name="android:textSize">18sp</item>
 		<item name="android:minWidth">120dp</item>
 	    <item name="android:textStyle">bold</item>
         <item name="android:layout_width">100dp</item>
 	</style>
 
 	<style name="SpinnerItem" parent="@android:style/Widget.Holo.TextView.SpinnerItem">
-		<item name="android:textSize">26dp</item>
+		<item name="android:textSize">26sp</item>
 	    <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@android:color/white</item>
 	</style>
 
 	<style name="SetupSpinnerItem" parent="@android:style/Widget.Holo.Light.TextView">
-		<item name="android:textSize">26dp</item>
+		<item name="android:textSize">26sp</item>
 	    <item name="android:textStyle">bold</item>
 	</style>
 
@@ -188,6 +190,7 @@
 	</style>
 	<style name="myCustomMenuTextApearance" parent="@android:style/TextAppearance.Widget.TextView.PopupMenu">
         <item name="android:gravity">left</item>
+        <item name="android:textColor">@android:color/white</item>
 	</style>
 
 
@@ -261,7 +264,7 @@
 	</style>
 	<style name="rc_textPWM" >
         <item name="android:textColor">#fff</item>
-		<item name="android:textSize">16dp</item>
+		<item name="android:textSize">16sp</item>
 	</style>
     <style name="SetupTitle">
         <item name="android:textColor">#fff</item>
@@ -274,7 +277,7 @@
     <!-- Parameters screen -->
     <style name="paramsClickToRefresh">
         <item name="android:textColor">#ffb6b6b6</item>
-        <item name="android:textSize">20dp</item>
+        <item name="android:textSize">20sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
     </style>
@@ -305,7 +308,7 @@
 
     <style name="paramInfoText">
         <item name="android:textColor">@color/greyText</item>
-        <item name="android:textSize">16dp</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:paddingTop">10dp</item>
         <item name="android:paddingBottom">10dp</item>
         <item name="android:paddingLeft">12dp</item>
@@ -315,7 +318,7 @@
 
     <style name="paramInfoText.displayName" parent="paramInfoText">
         <item name="android:textColor">#fff</item>
-        <item name="android:textSize">20dp</item>
+        <item name="android:textSize">20sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:paddingBottom">4dp</item>
     </style>
@@ -351,7 +354,6 @@
     </style>
 
     <style name="paramInfoSpinnerItem" parent="@android:style/Widget.TextView.SpinnerItem">
-        <!--<item name="android:textColor">@color/greyText</item>-->
         <item name="android:textColor">@color/greyText</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
