@@ -1,5 +1,6 @@
 package org.droidplanner.android;
 
+import org.droidplanner.android.gcs.FollowMe;
 import org.droidplanner.core.bus.events.DroneConnectedEvent;
 import org.droidplanner.core.bus.events.DroneDisconnectedEvent;
 import org.droidplanner.android.proxy.mission.MissionProxy;
@@ -27,6 +28,7 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
         DroneInterfaces.OnDroneListener {
 
 	public Drone drone;
+    public FollowMe followMe;
     public MissionProxy missionProxy;
 	private MavLinkMsgHandler mavLinkMsgHandler;
 
@@ -68,6 +70,7 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
         missionProxy = new MissionProxy(drone.mission);
 		mavLinkMsgHandler = new org.droidplanner.core.MAVLink.MavLinkMsgHandler(drone);
 
+        followMe = new FollowMe(this, drone);
         NetworkStateReceiver.register(getApplicationContext());
 	}
 

@@ -2,6 +2,8 @@ package org.droidplanner.android.proxy.mission;
 
 import android.util.Pair;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
@@ -371,19 +373,30 @@ public class MissionProxy implements DPMap.PathSource {
         bucketsList.add(new Pair<Boolean, List<MissionItemProxy>>(isSpline, currentBucket));
 
         final List<Coord2D> pathPoints = new ArrayList<Coord2D>();
+        Coord2D lastPoint = null;
+
         for(Pair<Boolean, List<MissionItemProxy>> bucketEntry : bucketsList){
+
             final List<MissionItemProxy> bucket = bucketEntry.second;
             if(bucketEntry.first){
                 final List<Coord2D> splinePoints = new ArrayList<Coord2D>();
                 for(MissionItemProxy missionItemProxy: bucket){
-                    splinePoints.addAll(missionItemProxy.getPath());
+                    splinePoints.addAll(missionItemProxy.getPath(lastPoint));
+
+                    if(!splinePoints.isEmpty()){
+                        lastPoint = splinePoints.get(splinePoints.size() -1);
+                    }
                 }
 
                 pathPoints.addAll(SplinePath.process(splinePoints));
             }
             else{
                 for(MissionItemProxy missionItemProxy : bucket){
-                    pathPoints.addAll(missionItemProxy.getPath());
+                    pathPoints.addAll(missionItemProxy.getPath(lastPoint));
+
+                    if(!pathPoints.isEmpty()){
+                        lastPoint = pathPoints.get(pathPoints.size() -1);
+                    }
                 }
             }
         }

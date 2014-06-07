@@ -12,7 +12,9 @@ import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.fragments.MissionDetailFragment;
 import org.droidplanner.android.proxy.mission.item.markers.MissionItemMarkerInfo;
+import org.droidplanner.android.utils.DroneHelper;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
+import org.droidplanner.core.helpers.geoTools.GeoTools;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.commands.Takeoff;
@@ -99,13 +101,14 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
             		Circle circle = (Circle) mMissionItem;
             		double startHeading = 0;
             		if (previusPoint != null) {
-            			startHeading = GeoTools.getHeadingFromCoordinates(circle.getCoordinate(),DroneHelper.LatLngToCoord(previusPoint));						
+            			startHeading = GeoTools.getHeadingFromCoordinates(circle.getCoordinate(),
+                                previusPoint);
 					}
-            		pathPoints.add(DroneHelper.CoordToLatLang(GeoTools
-						.newCoordFromBearingAndDistance(circle.getCoordinate(),
-								startHeading + i, circle.getRadius())));
+            		pathPoints.add(GeoTools.newCoordFromBearingAndDistance(circle.getCoordinate(),
+                                    startHeading + i, circle.getRadius()));
 				}
             	break;
+            
             case SURVEY:
                 Grid grid = ((Survey) mMissionItem).grid;
             	if (grid != null) {				
