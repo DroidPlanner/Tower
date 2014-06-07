@@ -18,6 +18,7 @@ import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.commands.Takeoff;
 import org.droidplanner.core.mission.survey.Survey;
 import org.droidplanner.core.mission.survey.grid.Grid;
+import org.droidplanner.core.mission.waypoints.Circle;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.core.mission.waypoints.SplineWaypoint;
 
@@ -77,21 +78,34 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
     }
 
     /**
+     * @param previusPoint Previous point on the path, null if there wasn't a previus point
      * @return the set of points/coords making up this mission item.
      */
-    public List<Coord2D> getPath() {
+    public List<Coord2D> getPath(Coord2D previusPoint) {
         List<Coord2D> pathPoints = new ArrayList<Coord2D>();
         switch (mMissionItem.getType()) {
             case LAND:
             case LOITER:
             case LOITER_INF:
-            case LOITERT:
-            case LOITERN:            
+            case LOITERT:          
             case WAYPOINT:
             case SPLINE_WAYPOINT:
                 pathPoints.add(((SpatialCoordItem) mMissionItem).getCoordinate());
                 break;
             
+                
+            case CIRCLE:
+            	for (int i = 0; i <= 360; i+=10) {
+            		Circle circle = (Circle) mMissionItem;
+            		double startHeading = 0;
+            		if (previusPoint != null) {
+            			startHeading = GeoTools.getHeadingFromCoordinates(circle.getCoordinate(),DroneHelper.LatLngToCoord(previusPoint));						
+					}
+            		pathPoints.add(DroneHelper.CoordToLatLang(GeoTools
+						.newCoordFromBearingAndDistance(circle.getCoordinate(),
+								startHeading + i, circle.getRadius())));
+				}
+            	break;
             case SURVEY:
                 Grid grid = ((Survey) mMissionItem).grid;
             	if (grid != null) {				

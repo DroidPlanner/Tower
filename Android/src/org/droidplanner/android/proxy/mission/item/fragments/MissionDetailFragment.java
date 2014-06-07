@@ -44,8 +44,8 @@ public abstract class MissionDetailFragment extends DialogFragment implements
             case LOITER:
                 fragment = new MissionLoiterFragment();
                 break;
-            case LOITERN:
-                fragment = new MissionLoiterNFragment();
+            case CIRCLE:
+                fragment = new MissionCircleFragment();
                 break;
             case LOITERT:
                 fragment = new MissionLoiterTFragment();
