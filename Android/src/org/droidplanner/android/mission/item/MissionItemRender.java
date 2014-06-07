@@ -9,11 +9,13 @@ import org.droidplanner.android.mission.MissionRender;
 import org.droidplanner.android.mission.item.fragments.MissionDetailFragment;
 import org.droidplanner.android.mission.item.markers.MissionItemGenericMarkerSource;
 import org.droidplanner.android.mission.item.markers.MissionItemMarkerSource;
+import org.droidplanner.core.helpers.geoTools.GeoTools;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.commands.Takeoff;
 import org.droidplanner.core.mission.survey.Survey;
 import org.droidplanner.core.mission.survey.grid.Grid;
+import org.droidplanner.core.mission.waypoints.Circle;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 
 import android.content.Context;
@@ -78,21 +80,34 @@ public class MissionItemRender implements Comparable<MissionItemRender> {
     }
 
     /**
+     * @param previusPoint Previous point on the path, null if there wasn't a previus point
      * @return the set of points/coords making up this mission item.
      */
-    public List<LatLng> getPath() {
+    public List<LatLng> getPath(LatLng previusPoint) {
         List<LatLng> pathPoints = new ArrayList<LatLng>();
         Grid grid;
 		switch (mMissionItem.getType()) {
             case LAND:
             case LOITER:
             case LOITER_INF:
-            case LOITERT:
-            case LOITERN:            
+            case LOITERT:          
             case WAYPOINT:
                 pathPoints.add(DroneHelper.CoordToLatLang(((SpatialCoordItem)
                         mMissionItem).getCoordinate()));
                 break;
+                
+            case CIRCLE:
+            	for (int i = 0; i <= 360; i+=10) {
+            		Circle circle = (Circle) mMissionItem;
+            		double startHeading = 0;
+            		if (previusPoint != null) {
+            			startHeading = GeoTools.getHeadingFromCoordinates(circle.getCoordinate(),DroneHelper.LatLngToCoord(previusPoint));						
+					}
+            		pathPoints.add(DroneHelper.CoordToLatLang(GeoTools
+						.newCoordFromBearingAndDistance(circle.getCoordinate(),
+								startHeading + i, circle.getRadius())));
+				}
+            	break;
             case SURVEY:
             	grid = ((Survey) mMissionItem).grid;
             	if (grid != null) {				

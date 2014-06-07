@@ -8,6 +8,12 @@ Our convention for release control is the following (for a release like DPvA.B.C
 All the changes are logged below (preferable with the pull request numbers in parenteses):
 
 # Releases
+## Droidplanner v2.4.0
+* Initial support for Follow-me (#769)
+* Circle mission item, and advanced circle (#790)
+* Offline/Delayed tlog auto upload to DroneShare (#783,#787)
+* Fixing problems and adding test cases for the GeoTool classes (#770)
+
 ## Droidplanner v2.3.3
 * Fixing mission upload problem in AC3.2 (#767)
 * Adding support for Hybrid mode (#766)
