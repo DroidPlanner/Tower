@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item type="id" name="mapFragment"/>
-    
+
+    <!-- Id for the horizontal listview item order -->
+    <item type="id" name="mission_item_order" />
+
+    <!-- Id for the horizontal listview item altitude -->
+    <item type="id" name="mission_item_altitude" />
 </resources>

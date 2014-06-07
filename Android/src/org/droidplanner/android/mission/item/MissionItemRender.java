@@ -12,10 +12,12 @@ import org.droidplanner.android.mission.item.markers.MissionItemMarkerSource;
 import org.droidplanner.core.helpers.geoTools.GeoTools;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.MissionItem;
+import org.droidplanner.core.mission.commands.ReturnToHome;
 import org.droidplanner.core.mission.commands.Takeoff;
 import org.droidplanner.core.mission.survey.Survey;
 import org.droidplanner.core.mission.survey.grid.Grid;
 import org.droidplanner.core.mission.waypoints.Circle;
+import org.droidplanner.core.mission.waypoints.Land;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 
 import android.content.Context;
@@ -124,64 +126,65 @@ public class MissionItemRender implements Comparable<MissionItemRender> {
     public View getListViewItemView(Context context, ViewGroup parent) {
         final LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context
                 .LAYOUT_INFLATER_SERVICE);
-        final View view = inflater.inflate(R.layout.fragment_editor_list_item, parent, false);
 
-        TextView nameView = (TextView) view.findViewById(R.id.rowNameView);
-        TextView altitudeView = (TextView) view.findViewById(R.id.rowAltitudeView);
-                /*
-		TextView typeView = (TextView) view.findViewById(R.id.rowTypeView);
-		TextView descView = (TextView) view.findViewById(R.id.rowDescView);
-		TextView distanceView = (TextView) view.findViewById(R.id.rowDistanceView);
-*/
+        final View view;
 
-        nameView.setText(String.format("%3d", mMissionItem.getMission().getOrder(mMissionItem)));
+        if(mMissionItem instanceof Takeoff){
+            view = inflater.inflate( R.layout.fragment_editor_takeoff_list_item, parent, false);
 
-        if (mMissionItem instanceof SpatialCoordItem) {
-            SpatialCoordItem waypoint = (SpatialCoordItem) mMissionItem;
-            altitudeView.setText(String.format("%3.0fm", waypoint.getCoordinate().getAltitude()
+            final TextView altitudeView = (TextView) view.findViewById(R.id.mission_item_altitude);
+            altitudeView.setText(String.format("%3.0fm",((Takeoff)mMissionItem).getFinishedAlt()
                     .valueInMeters()));
+        }
+        else if(mMissionItem instanceof Land){
+            view = inflater.inflate( R.layout.fragment_editor_land_list_item, parent, false);
+        }
+        else if(mMissionItem instanceof ReturnToHome){
+            view = inflater.inflate(R.layout.fragment_editor_rtl_list_item, parent, false);
+        }
+        else{
+            view = inflater.inflate( R.layout.fragment_editor_default_list_item, parent, false);
 
-            try {
-                Length diff = waypoint.getMission().getAltitudeDiffFromPreviousItem(waypoint);
-                if (diff.valueInMeters() > 0) {
-                    altitudeView.setTextColor(Color.RED);
-                } else if (diff.valueInMeters() < 0) {
-                    altitudeView.setTextColor(Color.BLUE);
-                }
-            } catch (Exception e) {
-                // Do nothing when last item doesn't have an altitude
+            if(mMissionItem instanceof Survey){
+                final TextView altitudeView = (TextView) view.findViewById(R.id.mission_item_altitude);
+                altitudeView.setText(String.format("%3.0fm",((Survey)mMissionItem).surveyData
+                        .getAltitude().valueInMeters()));
             }
-        } else if (mMissionItem instanceof Survey) {
-			altitudeView.setText(((Survey)mMissionItem).surveyData.getAltitude().toString());
+            else if(mMissionItem instanceof SpatialCoordItem){
+                SpatialCoordItem waypoint = (SpatialCoordItem) mMissionItem;
 
-        } else if (mMissionItem instanceof Takeoff) {
-			altitudeView.setText(((Takeoff)mMissionItem).getFinishedAlt().toString());
-		} else {
-            altitudeView.setText("");
+                final TextView altitudeView = (TextView) view.findViewById(R.id.mission_item_altitude);
+                altitudeView.setText(String.format("%3.0fm", waypoint.getCoordinate().getAltitude()
+                        .valueInMeters()));
+
+                try {
+                    Length diff = waypoint.getMission().getAltitudeDiffFromPreviousItem(waypoint);
+                    if (diff.valueInMeters() > 0) {
+                        altitudeView.setTextColor(Color.RED);
+                        altitudeView.setCompoundDrawablesWithIntrinsicBounds(
+                                R.drawable.ic_action_arrow_top, 0, 0, 0);
+                    } else if (diff.valueInMeters() < 0) {
+                        altitudeView.setTextColor(Color.BLUE);
+                        altitudeView.setCompoundDrawablesWithIntrinsicBounds(
+                                R.drawable.ic_action_arrow_bottom, 0, 0, 0);
+                    }
+                    else{
+                        altitudeView.setCompoundDrawablesWithIntrinsicBounds(
+                                0, 0, 0, 0);
+                    }
+                } catch (Exception e) {
+                    altitudeView.setCompoundDrawablesWithIntrinsicBounds(
+                            0, 0, 0, 0);
+                }
+            }
         }
 
-		/*
-		if (waypoint.getCmd().showOnMap()) {
-			altitudeView.setText(String.format(Locale.ENGLISH, "%3.0fm", waypoint.getHeight()));
-		} else {
-			altitudeView.setText("-");
-		}
-*/
-        //TODO fix the numbering
-        //nameView.setText(String.format("%3d", waypoint.getOrder()));
+        //Common views
+        if(view != null) {
+            final TextView orderView = (TextView) view.findViewById(R.id.mission_item_order);
+            orderView.setText(String.format("%3d", mMissionItem.getMission().getOrder(mMissionItem)));
+        }
 
-
-	/*	typeView.setText(waypoint.getCmd().getName());
-		descView.setText(setupDescription(waypoint));
-
-		double distanceFromPrevPoint = waypoint.getDistanceFromPrevPoint();
-		if(distanceFromPrevPoint != waypoint.UNKNOWN_DISTANCE) {
-			distanceView.setText(String.format(Locale.ENGLISH, "%4.0fm", distanceFromPrevPoint));
-		}
-		else {
-			distanceView.setText("-");
-		}
-		*/
         return view;
     }
 
