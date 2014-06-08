@@ -1,17 +1,23 @@
 package org.droidplanner.android.proxy.mission;
 
+import android.util.Pair;
+
+import com.google.android.gms.maps.model.LatLng;
+
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
-import org.droidplanner.android.proxy.mission.item.markers.SurveyMarkerInfo;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.coordinates.Coord3D;
+import org.droidplanner.core.helpers.geoTools.spline.SplinePath;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.mission.MissionItem;
+import org.droidplanner.core.mission.commands.Takeoff;
 import org.droidplanner.core.mission.survey.Survey;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
+import org.droidplanner.core.mission.waypoints.SplineWaypoint;
 import org.droidplanner.core.mission.waypoints.Waypoint;
 
 import java.util.ArrayList;
@@ -57,14 +63,9 @@ public class MissionProxy implements DPMap.PathSource {
         List<MarkerInfo> markerInfos = new ArrayList<MarkerInfo>();
 
         for (MissionItemProxy itemProxy : mMissionItems) {
-            MarkerInfo markerInfo = itemProxy.getMarkerInfo();
-            if (markerInfo != null) {
-                if(markerInfo instanceof SurveyMarkerInfo){
-                    markerInfos.addAll(((SurveyMarkerInfo)markerInfo).getMarkersInfos());
-                }
-                else {
-                    markerInfos.add(markerInfo);
-                }
+            List<MarkerInfo> itemMarkerInfos = itemProxy.getMarkerInfos();
+            if (itemMarkerInfos != null && !itemMarkerInfos.isEmpty()) {
+                markerInfos.addAll(itemMarkerInfos);
             }
         }
         return markerInfos;
@@ -128,7 +129,7 @@ public class MissionProxy implements DPMap.PathSource {
     public void addSurveyPolygon(List<Coord2D> points) {
         Survey survey = new Survey(mMission, points);
         mMissionItems.add(new MissionItemProxy(this, survey));
-        mMission.addWaypoint(survey);
+        mMission.addMissionItem(survey);
     }
 
     /**
@@ -141,11 +142,32 @@ public class MissionProxy implements DPMap.PathSource {
         final List<MissionItem> missionItemsToAdd = new ArrayList<MissionItem>(points.size());
         for (Coord2D point : points) {
             Waypoint waypoint = new Waypoint(mMission, new Coord3D(point, alt));
-            mMissionItems.add(new MissionItemProxy(this, waypoint));
             missionItemsToAdd.add(waypoint);
         }
 
-        mMission.addWaypoints(missionItemsToAdd);
+        addMissionItems(missionItemsToAdd);
+    }
+
+    /**
+     * Add a set of spline waypoints generated around the passed 2D points.
+     * @param points list of points used as location for the spline waypoints
+     */
+    public void addSplineWaypoints(List<Coord2D> points){
+        final Altitude alt = mMission.getLastAltitude();
+        final List<MissionItem> missionItemsToAdd = new ArrayList<MissionItem>(points.size());
+        for (Coord2D point : points) {
+            SplineWaypoint splineWaypoint = new SplineWaypoint(mMission, new Coord3D(point, alt));
+            missionItemsToAdd.add(splineWaypoint);
+        }
+
+        addMissionItems(missionItemsToAdd);
+    }
+
+    private void addMissionItems(List<MissionItem> missionItems){
+        for(MissionItem missionItem: missionItems){
+            mMissionItems.add(new MissionItemProxy(this, missionItem));
+        }
+        mMission.addMissionItems(missionItems);
     }
 
     /**
@@ -156,11 +178,31 @@ public class MissionProxy implements DPMap.PathSource {
     public void addWaypoint(Coord2D point) {
         final Altitude alt = mMission.getLastAltitude();
         final Waypoint waypoint = new Waypoint(mMission, new Coord3D(point, alt));
-        mMissionItems.add(new MissionItemProxy(this, waypoint));
-        mMission.addWaypoint(waypoint);
+        addMissionItem(waypoint);
     }
 
     /**
+     * Add a spline waypoint generated around the passed 2D point.
+     * @param point point used as location for the spline waypoint.
+     */
+    public void addSplineWaypoint(Coord2D point){
+        final Altitude alt = mMission.getLastAltitude();
+        final SplineWaypoint splineWaypoint = new SplineWaypoint(mMission, new Coord3D(point, alt));
+        addMissionItem(splineWaypoint);
+    }
+
+    private void addMissionItem(MissionItem missionItem){
+        mMissionItems.add(new MissionItemProxy(this, missionItem));
+        mMission.addMissionItem(missionItem);
+    }
+
+    public void addTakeoff() {
+		Takeoff takeoff = new Takeoff(mMission, new Altitude(10));
+		mMissionItems.add(new MissionItemProxy(this, takeoff));
+        mMission.addMissionItem(takeoff);
+	}
+
+	/**
      * Returns the order for the given argument in the mission set.
      * @param item
      * @return order of the given argument
@@ -270,10 +312,95 @@ public class MissionProxy implements DPMap.PathSource {
 
     @Override
     public List<Coord2D> getPathPoints() {
-        final List<Coord2D> pathPoints = new ArrayList<Coord2D>();
-        for (MissionItemProxy missionItem : mMissionItems) {
-            pathPoints.addAll(missionItem.getPath());
+        if(mMissionItems.isEmpty()){
+            return Collections.emptyList();
         }
+
+        //Partition the mission items into spline/non-spline buckets.
+        final List<Pair<Boolean, List<MissionItemProxy>>> bucketsList = new
+                ArrayList<Pair<Boolean, List<MissionItemProxy>>>();
+
+        boolean isSpline = false;
+        List<MissionItemProxy> currentBucket = new ArrayList<MissionItemProxy>();
+        for (MissionItemProxy missionItemProxy: mMissionItems) {
+
+            if (missionItemProxy.getMissionItem() instanceof SplineWaypoint){
+                if(!isSpline){
+                    if(!currentBucket.isEmpty()) {
+                        //Get the last item from the current bucket. It will become the first
+                        // anchor point for the spline path.
+                        final MissionItemProxy lastItem = currentBucket.get(currentBucket.size()
+                                -1);
+
+                        //Store the previous item bucket.
+                        bucketsList.add(new Pair<Boolean, List<MissionItemProxy>>(Boolean.FALSE,
+                                currentBucket));
+
+                        //Create a new bucket for this category and update 'isSpline'
+                        currentBucket = new ArrayList<MissionItemProxy>();
+                        currentBucket.add(lastItem);
+                    }
+
+                    isSpline = true;
+                }
+
+                //Add the current element into the bucket
+                currentBucket.add(missionItemProxy);
+            }
+            else{
+                if(isSpline){
+
+                    //Add the current item to the spline bucket. It will act as the end anchor
+                    // point for the spline path.
+                    if(!currentBucket.isEmpty()) {
+                        currentBucket.add(missionItemProxy);
+
+                        //Store the previous item bucket.
+                        bucketsList.add(new Pair<Boolean, List<MissionItemProxy>>(Boolean.TRUE,
+                                currentBucket));
+
+                        currentBucket = new ArrayList<MissionItemProxy>();
+                    }
+
+                    isSpline = false;
+                }
+
+                //Add the current element into the bucket
+                currentBucket.add(missionItemProxy);
+            }
+        }
+
+        bucketsList.add(new Pair<Boolean, List<MissionItemProxy>>(isSpline, currentBucket));
+
+        final List<Coord2D> pathPoints = new ArrayList<Coord2D>();
+        Coord2D lastPoint = null;
+
+        for(Pair<Boolean, List<MissionItemProxy>> bucketEntry : bucketsList){
+
+            final List<MissionItemProxy> bucket = bucketEntry.second;
+            if(bucketEntry.first){
+                final List<Coord2D> splinePoints = new ArrayList<Coord2D>();
+                for(MissionItemProxy missionItemProxy: bucket){
+                    splinePoints.addAll(missionItemProxy.getPath(lastPoint));
+
+                    if(!splinePoints.isEmpty()){
+                        lastPoint = splinePoints.get(splinePoints.size() -1);
+                    }
+                }
+
+                pathPoints.addAll(SplinePath.process(splinePoints));
+            }
+            else{
+                for(MissionItemProxy missionItemProxy : bucket){
+                    pathPoints.addAll(missionItemProxy.getPath(lastPoint));
+
+                    if(!pathPoints.isEmpty()){
+                        lastPoint = pathPoints.get(pathPoints.size() -1);
+                    }
+                }
+            }
+        }
+
         return pathPoints;
     }
 

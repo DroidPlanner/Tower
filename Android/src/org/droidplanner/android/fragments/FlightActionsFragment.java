@@ -2,6 +2,7 @@ package org.droidplanner.android.fragments;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.gcs.FollowMe;
 import org.droidplanner.core.drone.Drone;
 
 import android.app.Activity;
@@ -25,6 +26,8 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 
 	private Drone drone;
 	private OnMissionControlInteraction listener;
+	private FollowMe followMe;
+	
 	private Button homeBtn;
 	private Button missionBtn;
 	private Button joystickBtn;
@@ -40,7 +43,9 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 				container, false);
 		setupViews(view);
 		setupListener();
-		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
+		DroidPlannerApp droidPlannerApp = (DroidPlannerApp) getActivity().getApplication();
+		drone = droidPlannerApp.drone;
+		followMe = droidPlannerApp.followMe;
 		return view;
 	}
 
@@ -88,13 +93,16 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 			drone.state.changeFlightMode(ApmModes.ROTOR_LAND);
 			break;
 		case R.id.mc_takeoff:
-			drone.state.changeFlightMode(ApmModes.ROTOR_TAKEOFF);
+			//drone.state.changeFlightMode(ApmModes.ROTOR_TAKEOFF); //TODO there isn`t a takeoff mode on ArduCopter
 			break;
 		case R.id.mc_homeBtn:
 			drone.state.changeFlightMode(ApmModes.ROTOR_RTL);
 			break;
 		case R.id.mc_loiter:
 			drone.state.changeFlightMode(ApmModes.ROTOR_LOITER);
+			break;
+		case R.id.mc_follow:
+			followMe.toogleFollowMeState();
 			break;
 		}
 	}

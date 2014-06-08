@@ -8,16 +8,21 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.droidplanner.R;
+import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.fragments.MissionDetailFragment;
 import org.droidplanner.android.proxy.mission.item.markers.MissionItemMarkerInfo;
 import org.droidplanner.android.utils.DroneHelper;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
+import org.droidplanner.core.helpers.geoTools.GeoTools;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.MissionItem;
+import org.droidplanner.core.mission.commands.Takeoff;
 import org.droidplanner.core.mission.survey.Survey;
 import org.droidplanner.core.mission.survey.grid.Grid;
+import org.droidplanner.core.mission.waypoints.Circle;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
+import org.droidplanner.core.mission.waypoints.SplineWaypoint;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,12 +47,12 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
     /**
      * This is the marker source for this mission item render.
      */
-    private final MissionItemMarkerInfo mMarkerInfo;
+    private final List<MarkerInfo> mMarkerInfos;
 
     public MissionItemProxy(MissionProxy mission, MissionItem missionItem){
         mMission = mission;
         mMissionItem = missionItem;
-        mMarkerInfo = MissionItemMarkerInfo.newInstance(this);
+        mMarkerInfos = MissionItemMarkerInfo.newInstance(this);
     }
 
     /**
@@ -70,31 +75,46 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
         return MissionDetailFragment.newInstance(mMissionItem.getType());
     }
 
-    public MissionItemMarkerInfo getMarkerInfo(){
-        return mMarkerInfo;
+    public List<MarkerInfo> getMarkerInfos(){
+        return mMarkerInfos;
     }
 
     /**
+     * @param previusPoint Previous point on the path, null if there wasn't a previus point
      * @return the set of points/coords making up this mission item.
      */
-    public List<Coord2D> getPath() {
+    public List<Coord2D> getPath(Coord2D previusPoint) {
         List<Coord2D> pathPoints = new ArrayList<Coord2D>();
         switch (mMissionItem.getType()) {
             case LAND:
             case LOITER:
             case LOITER_INF:
-            case LOITERT:
-            case LOITERN:
-            case TAKEOFF:
+            case LOITERT:          
             case WAYPOINT:
+            case SPLINE_WAYPOINT:
                 pathPoints.add(((SpatialCoordItem) mMissionItem).getCoordinate());
                 break;
+            
+                
+            case CIRCLE:
+            	for (int i = 0; i <= 360; i+=10) {
+            		Circle circle = (Circle) mMissionItem;
+            		double startHeading = 0;
+            		if (previusPoint != null) {
+            			startHeading = GeoTools.getHeadingFromCoordinates(circle.getCoordinate(),
+                                previusPoint);
+					}
+            		pathPoints.add(GeoTools.newCoordFromBearingAndDistance(circle.getCoordinate(),
+                                    startHeading + i, circle.getRadius()));
+				}
+            	break;
             
             case SURVEY:
                 Grid grid = ((Survey) mMissionItem).grid;
             	if (grid != null) {				
             		pathPoints.addAll(grid.gridPoints);
             	}
+            case TAKEOFF:
             default:
                 break;
         }
@@ -109,13 +129,13 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
 
         TextView nameView = (TextView) view.findViewById(R.id.rowNameView);
         TextView altitudeView = (TextView) view.findViewById(R.id.rowAltitudeView);
-                /*
-		TextView typeView = (TextView) view.findViewById(R.id.rowTypeView);
-		TextView descView = (TextView) view.findViewById(R.id.rowDescView);
-		TextView distanceView = (TextView) view.findViewById(R.id.rowDistanceView);
-*/
 
         nameView.setText(String.format("%3d", mMissionItem.getMission().getOrder(mMissionItem)));
+
+        final int leftDrawable = mMissionItem instanceof SplineWaypoint
+                ? R.drawable.ic_mission_spline_wp
+                : R.drawable.ic_mission_wp;
+        altitudeView.setCompoundDrawablesWithIntrinsicBounds(leftDrawable, 0, 0, 0);
 
         if (mMissionItem instanceof SpatialCoordItem) {
             SpatialCoordItem waypoint = (SpatialCoordItem) mMissionItem;
@@ -134,6 +154,9 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
             }
         } else if (mMissionItem instanceof Survey) {
 			altitudeView.setText(((Survey)mMissionItem).surveyData.getAltitude().toString());
+
+        } else if (mMissionItem instanceof Takeoff) {
+			altitudeView.setText(((Takeoff)mMissionItem).getFinishedAlt().toString());
 		} else {
             altitudeView.setText("");
         }

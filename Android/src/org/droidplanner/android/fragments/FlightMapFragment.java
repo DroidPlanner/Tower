@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -90,8 +91,12 @@ public class FlightMapFragment extends DroneMap implements
 
 	@Override
 	public void onForcedGuidedPoint(LatLng coord) {
-		drone.guidedPoint.forcedGuidedCoordinate(DroneHelper
-				.LatLngToCoord(coord));
+		try {
+			drone.guidedPoint.forcedGuidedCoordinate(DroneHelper
+					.LatLngToCoord(coord));
+		} catch (Exception e) {
+			Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	@Override

@@ -148,7 +148,7 @@ public class OSMapFragment extends Fragment implements DPMap {
                 new MapEventsReceiver() {
 
             @Override
-            public boolean singleTapUpHelper(IGeoPoint iGeoPoint) {
+            public boolean singleTapConfirmedHelper(GeoPoint iGeoPoint) {
                 if (mMapClickListener != null) {
                     mMapClickListener.onMapClick(DroneHelper.GeoPointToCoord(iGeoPoint));
                     return true;
@@ -157,7 +157,7 @@ public class OSMapFragment extends Fragment implements DPMap {
             }
 
             @Override
-            public boolean longPressHelper(IGeoPoint iGeoPoint) {
+            public boolean longPressHelper(GeoPoint iGeoPoint) {
                 if (mMapLongClickListener != null) {
                     mMapLongClickListener.onMapLongClick(DroneHelper.GeoPointToCoord(iGeoPoint));
                     return true;
@@ -197,6 +197,16 @@ public class OSMapFragment extends Fragment implements DPMap {
                 .DEFAULT_TILE_SOURCE.name());
         mMapView.setTileSource(tileSource);
 
+        mLocationOverlay.enableMyLocation();
+        mCompassOverlay.enableCompass();
+
+        applyMapPreferences();
+    }
+
+    /**
+     * Applies the map preferences specified by the user.
+     */
+    private void applyMapPreferences(){
         //Check if autopan should be enabled.
         final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences
                 (getActivity().getApplicationContext());
@@ -205,9 +215,6 @@ public class OSMapFragment extends Fragment implements DPMap {
         if(autoPan) {
             mLocationOverlay.enableFollowLocation();
         }
-
-        mLocationOverlay.enableMyLocation();
-        mCompassOverlay.enableCompass();
     }
 
     @Override

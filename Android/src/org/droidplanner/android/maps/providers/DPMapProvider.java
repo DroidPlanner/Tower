@@ -30,6 +30,7 @@ public enum DPMapProvider {
 
     /**
      * Provides access to open street map.
+     * TODO: enable open street map when implementation is complete
      */
     OPEN_STREET_MAP {
         @Override
@@ -41,7 +42,8 @@ public enum DPMapProvider {
         public MapProviderPreferences getMapProviderPreferences() {
             return new OSMapProviderPreferences();
         }
-    };
+    }
+;
 
     /**
      * @return the fragment implementing the map.

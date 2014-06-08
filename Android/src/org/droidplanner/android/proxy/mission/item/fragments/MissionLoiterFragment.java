@@ -4,6 +4,7 @@ import org.droidplanner.R;
 import org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText;
 import org.droidplanner.core.mission.waypoints.Loiter;
 
+import android.os.Bundle;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -19,8 +20,8 @@ public class MissionLoiterFragment extends MissionDetailFragment implements
 
 
 	@Override
-	protected void setupViews(View view) {
-		super.setupViews(view);
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 		//typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.LOITER));
 
 		//LoiterInfinite item = (LoiterInfinite) this.item;

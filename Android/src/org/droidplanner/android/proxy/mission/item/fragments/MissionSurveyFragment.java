@@ -14,6 +14,7 @@ import org.droidplanner.core.mission.survey.Survey;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
@@ -61,8 +62,8 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 	}
 
 	@Override
-	protected void setupViews(View view) {
-		super.setupViews(view);
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 		this.survey = ((Survey) itemRender.getMissionItem());
 		typeSpinner.setSelection(commandAdapter
 				.getPosition(MissionItemType.SURVEY));

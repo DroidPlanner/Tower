@@ -21,6 +21,32 @@
                 android:key="pref_mavlink_log_enabled"
                 android:summary="@string/pref_mavlink_log_summary"
                 android:title="@string/pref_mavlink_log"/>
+            
+            <PreferenceCategory
+                android:key="pref_mavlink_droneshare"
+                android:title="Droneshare">
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="pref_live_upload_enabled"
+                android:summary="@string/pref_live_upload_summary"
+                android:title="@string/pref_live_upload" />
+            <EditTextPreference
+	        android:defaultValue=""
+	        android:dialogTitle="Droneshare username"
+	        android:inputType="textEmailAddress"
+	        android:key="dshare_username"
+	        android:summary="If that user does not exist, it will be created"
+	        android:title="Username" />
+             
+	    <EditTextPreference
+	        android:defaultValue=""
+	        android:dialogTitle="Droneshare password"
+	        android:inputType="textPassword"
+	        android:key="dshare_password"
+	        android:summary="Enter or pick a password"
+	        android:title="Password" />
+             </PreferenceCategory>
+            
 
             <CheckBoxPreference
                 android:title="Enable bluetooth relay server"
@@ -306,7 +332,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/about">
-        <EditTextPreference
+        <Preference
             android:enabled="false"
             android:key="pref_version"
             android:persistent="false"
@@ -314,7 +340,15 @@
             android:shouldDisableView="false"
             android:title="@string/version"/>
 
-        <EditTextPreference
+        <Preference
+            android:enabled="false"
+            android:key="@string/pref_mavlink_version_key"
+            android:persistent="false"
+            android:selectable="false"
+            android:shouldDisableView="false"
+            android:title="@string/mavlink_version"/>
+
+        <Preference
             android:enabled="false"
             android:key="@string/pref_storage_key"
             android:persistent="false"

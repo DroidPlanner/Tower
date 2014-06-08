@@ -43,20 +43,39 @@ public class FileStream {
 	}
 
 	/**
-	 * Get a file Stream for logging purposes
+	 * Return a filename that is suitable for a tlog
+	 * 
+	 * @return
+	 * @throws FileNotFoundException
+	 */
+	static public File getTLogFile() {
+		File myDir = DirectoryPath.getTLogPath();
+
+		// We add a suffix .tmp to note incomplete tlogs
+		return new File(myDir, FileManager.getTimeStamp() + ".tlog.tmp");
+	}
+
+	/**
+	 * Get a buffered outputstream for a file
 	 * 
 	 * @return output file stream for the log file
 	 */
-	static public BufferedOutputStream getTLogFileStream()
+	static public BufferedOutputStream openOutputStream(File filename)
 			throws FileNotFoundException {
-		File myDir = new File(DirectoryPath.getTLogPath());
-		myDir.mkdirs();
-		File file = new File(myDir, FileManager.getTimeStamp() + ".tlog");
-		if (file.exists())
-			file.delete();
 		BufferedOutputStream out = new BufferedOutputStream(
-				new FileOutputStream(file));
+				new FileOutputStream(filename));
 		return out;
+	}
+
+	/**
+	 * If the specified file ends with .tmp, remove that suffix.
+	 */
+	public static void commitFile(File f) {
+		String fullname = f.getAbsolutePath();
+		if (f.exists() && fullname.endsWith(".tmp")) {
+			String newname = fullname.substring(0, fullname.length() - 4);
+			f.renameTo(new File(newname));
+		}
 	}
 
 	/**

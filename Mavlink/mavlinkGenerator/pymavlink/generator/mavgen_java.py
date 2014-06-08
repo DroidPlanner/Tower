@@ -172,8 +172,8 @@ def generate_message_h(directory, m):
 package com.MAVLink.Messages.ardupilotmega;
 
 import com.MAVLink.Messages.MAVLinkMessage;
-import com.MAVLink.Messages.MAVLinkPayload;
 import com.MAVLink.Messages.MAVLinkPacket;
+import com.MAVLink.Messages.MAVLinkPayload;
 //import android.util.Log;
 
 /**
@@ -255,8 +255,8 @@ def generate_MAVLinkMessage(directory, xml_list):
     f = open(os.path.join(directory, "MAVLinkPacket.java"), mode='w')
     f.write('''package com.MAVLink.Messages;
 
-import android.util.Log;
 import java.io.Serializable;
+import android.util.Log;
 import com.MAVLink.Messages.ardupilotmega.*;
 
 /**

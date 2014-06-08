@@ -6,6 +6,8 @@ import org.droidplanner.android.activities.ConfigurationActivity;
 import org.droidplanner.android.activities.helpers.MapPreferencesActivity;
 import org.droidplanner.android.glass.utils.GlassUtils;
 import org.droidplanner.android.maps.providers.DPMapProvider;
+import org.droidplanner.core.bus.events.DroneDisconnectedEvent;
+import org.droidplanner.core.bus.events.DroneHeartBeatEvent;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.android.utils.Constants;
 import org.droidplanner.android.utils.file.DirectoryPath;
@@ -27,6 +29,8 @@ import android.preference.PreferenceScreen;
 import android.util.Log;
 
 import java.util.HashSet;
+
+import de.greenrobot.event.EventBus;
 
 import static org.droidplanner.android.utils.Constants.*;
 
@@ -130,7 +134,9 @@ public class SettingsFragment extends GlassPreferenceFragment implements
                 (mapsProvidersPrefKey);
         if(mapsProvidersPref != null){
             //Grab the list of maps provider
-            final DPMapProvider[] providers = DPMapProvider.values();
+            //TODO: enable full list of map providers when osm implementation is feature complete.
+//            final DPMapProvider[] providers = DPMapProvider.values();
+            final DPMapProvider[] providers = new DPMapProvider[]{DPMapProvider.GOOGLE_MAP};
             final int providersCount = providers.length;
             final CharSequence[] providersNames = new CharSequence[providersCount];
             final CharSequence[] providersNamesValues = new CharSequence[providersCount];
@@ -191,7 +197,7 @@ public class SettingsFragment extends GlassPreferenceFragment implements
         }
 
         try {
-            EditTextPreference versionPref = (EditTextPreference) findPreference("pref_version");
+            Preference versionPref = findPreference("pref_version");
             if(versionPref != null) {
                 String version = context.getPackageManager().getPackageInfo(
                         context.getPackageName(), 0).versionName;
@@ -200,6 +206,8 @@ public class SettingsFragment extends GlassPreferenceFragment implements
         } catch (NameNotFoundException e) {
             Log.e(TAG, "Unable to retrieve version name.", e);
         }
+
+        updateMavlinkVersionPreference(null);
     }
 
     private void initSummaryPerPrefs(){
@@ -213,6 +221,23 @@ public class SettingsFragment extends GlassPreferenceFragment implements
         mDefaultSummaryPrefs.add(getString(R.string.pref_vehicle_type_key));
         mDefaultSummaryPrefs.add(getString(R.string.pref_rc_quickmode_left_key));
         mDefaultSummaryPrefs.add(getString(R.string.pref_rc_quickmode_right_key));
+    }
+
+    /**
+     * This is used to update the mavlink version preference.
+     * @param version mavlink version
+     */
+    private void updateMavlinkVersionPreference(String version){
+        final Preference mavlinkVersionPref = findPreference(getString(R.string
+                .pref_mavlink_version_key));
+        if(mavlinkVersionPref != null){
+            if(version == null){
+                mavlinkVersionPref.setSummary(getString(R.string.empty_content));
+            }
+            else{
+                mavlinkVersionPref.setSummary(version);
+            }
+        }
     }
 
     private boolean updateMapSettingsPreference(final String mapProviderName){
@@ -265,6 +290,18 @@ public class SettingsFragment extends GlassPreferenceFragment implements
     }
 
     @Override
+    public void onStart(){
+        super.onStart();
+        EventBus.getDefault().registerSticky(this);
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         getPreferenceScreen().getSharedPreferences()
@@ -276,5 +313,28 @@ public class SettingsFragment extends GlassPreferenceFragment implements
         super.onPause();
         getPreferenceScreen().getSharedPreferences()
                 .unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    /*
+    Event bus handler methods
+     */
+
+    /**
+     * Handle update of the settings ui after a drone heartbeat event is received from the event
+     * bus.
+     * @param heartbeatEvent drone heartbeat event
+     */
+    public void onEventMainThread(DroneHeartBeatEvent heartbeatEvent){
+        updateMavlinkVersionPreference(String.valueOf(heartbeatEvent.getHeartBeat()
+                .mavlink_version));
+    }
+
+    /**
+     * Handle update of the settings ui after a drone disconnected event is received from the
+     * event bus.
+     * @param event drone disconnected event
+     */
+    public void onEventMainThread(DroneDisconnectedEvent event){
+        updateMavlinkVersionPreference(null);
     }
 }

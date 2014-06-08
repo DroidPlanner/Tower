@@ -9,6 +9,7 @@ import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.helpers.units.Length;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
+import com.MAVLink.Messages.enums.MAV_CMD;
 import com.MAVLink.Messages.enums.MAV_FRAME;
 
 public class Home extends DroneVariable {
@@ -52,7 +53,8 @@ public class Home extends DroneVariable {
 	public msg_mission_item packMavlink() {
 		msg_mission_item mavMsg = new msg_mission_item();
 		mavMsg.autocontinue = 1;
-		mavMsg.current = 1;
+		mavMsg.command = MAV_CMD.MAV_CMD_NAV_WAYPOINT;
+		mavMsg.current = 0;
 		mavMsg.frame = MAV_FRAME.MAV_FRAME_GLOBAL;
 		mavMsg.target_component = 1;
 		mavMsg.target_system = 1;
@@ -61,6 +63,7 @@ public class Home extends DroneVariable {
 			mavMsg.y = (float) getCoord().getLng();
 			mavMsg.z = (float) getAltitude().valueInMeters();
 		}
+		
 		return mavMsg;
 	}
 

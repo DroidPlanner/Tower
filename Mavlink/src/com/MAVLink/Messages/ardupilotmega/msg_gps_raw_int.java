@@ -22,31 +22,31 @@ public class msg_gps_raw_int extends MAVLinkMessage{
 	*/
 	public long time_usec; 
  	/**
-	* Latitude in 1E7 degrees
+	* Latitude (WGS84), in degrees * 1E7
 	*/
 	public int lat; 
  	/**
-	* Longitude in 1E7 degrees
+	* Longitude (WGS84), in degrees * 1E7
 	*/
 	public int lon; 
  	/**
-	* Altitude in 1E3 meters (millimeters) above MSL
+	* Altitude (WGS84), in meters * 1000 (positive for up)
 	*/
 	public int alt; 
  	/**
-	* GPS HDOP horizontal dilution of position in cm (m*100). If unknown, set to: 65535
+	* GPS HDOP horizontal dilution of position in cm (m*100). If unknown, set to: UINT16_MAX
 	*/
 	public short eph; 
  	/**
-	* GPS VDOP horizontal dilution of position in cm (m*100). If unknown, set to: 65535
+	* GPS VDOP vertical dilution of position in cm (m*100). If unknown, set to: UINT16_MAX
 	*/
 	public short epv; 
  	/**
-	* GPS ground speed (m/s * 100). If unknown, set to: 65535
+	* GPS ground speed (m/s * 100). If unknown, set to: UINT16_MAX
 	*/
 	public short vel; 
  	/**
-	* Course over ground (NOT heading, but direction of movement) in degrees * 100, 0.0..359.99 degrees. If unknown, set to: 65535
+	* Course over ground (NOT heading, but direction of movement) in degrees * 100, 0.0..359.99 degrees. If unknown, set to: UINT16_MAX
 	*/
 	public short cog; 
  	/**

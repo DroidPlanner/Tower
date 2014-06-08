@@ -1,5 +1,7 @@
 package org.droidplanner.core.MAVLink;
 
+import android.util.Log;
+
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
@@ -10,6 +12,8 @@ import com.MAVLink.Messages.enums.MAV_MODE_FLAG;
 import com.MAVLink.Messages.enums.MAV_STATE;
 
 public class MavLinkMsgHandler {
+
+    private static final String TAG = MavLinkMsgHandler.class.getSimpleName();
 
 	private Drone drone;
 
@@ -46,16 +50,16 @@ public class MavLinkMsgHandler {
 			drone.navigation.setNavPitchRollYaw(m_nav.nav_pitch,
 					m_nav.nav_roll, m_nav.nav_bearing);
 			break;
+
 		case msg_heartbeat.MAVLINK_MSG_ID_HEARTBEAT:
 			msg_heartbeat msg_heart = (msg_heartbeat) msg;
 			drone.type.setType(msg_heart.type);
 			processState(msg_heart);
-			ApmModes newMode;
-			newMode = ApmModes.getMode(msg_heart.custom_mode,
-					drone.type.getType());
+			ApmModes newMode = ApmModes.getMode(msg_heart.custom_mode, drone.type.getType());
 			drone.state.setMode(newMode);
 			drone.heartbeat.onHeartbeat(msg_heart);
 			break;
+
 		case msg_global_position_int.MAVLINK_MSG_ID_GLOBAL_POSITION_INT:
 			drone.GPS.setPosition(new Coord2D(
 					((msg_global_position_int) msg).lat / 1E7,

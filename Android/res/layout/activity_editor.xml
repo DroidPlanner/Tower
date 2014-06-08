@@ -22,6 +22,15 @@
 		style="@style/editorMissionOverviewText"
         />
 
+    <include
+        android:id="@+id/editorSplineToggleContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        layout="@layout/editor_spline_toggle"
+        android:layout_below="@+id/editorInfoWindow"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"/>
+
     <fragment
         android:id="@+id/editorToolsFragment"
         android:name="org.droidplanner.android.fragments.EditorToolsFragment"

@@ -44,8 +44,8 @@ public abstract class MissionDetailFragment extends DialogFragment implements
             case LOITER:
                 fragment = new MissionLoiterFragment();
                 break;
-            case LOITERN:
-                fragment = new MissionLoiterNFragment();
+            case CIRCLE:
+                fragment = new MissionCircleFragment();
                 break;
             case LOITERT:
                 fragment = new MissionLoiterTFragment();
@@ -62,9 +62,15 @@ public abstract class MissionDetailFragment extends DialogFragment implements
             case TAKEOFF:
                 fragment = new MissionTakeoffFragment();
                 break;
+
             case WAYPOINT:
                 fragment = new MissionWaypointFragment();
                 break;
+
+            case SPLINE_WAYPOINT:
+                fragment = new MissionSplineWaypointFragment();
+                break;
+
             default:
                 fragment = null;
                 break;
@@ -82,17 +88,18 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(getResource(), null);
+		View view = inflater.inflate(getResource(), container, false);
 
         final MissionProxy missionProxy = ((DroidPlannerApp)getActivity().getApplication())
                 .missionProxy;
         itemRender = missionProxy.selection.getSelected().get(0);
 
-		setupViews(view);
 		return view;
 	}
 
-	protected void setupViews(View view) {
+    @Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         final MissionProxy missionProxy = itemRender.getMissionProxy();
 
         commandAdapter = new AdapterMissionItems(this.getActivity(),

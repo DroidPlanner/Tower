@@ -10,7 +10,12 @@ import org.droidplanner.core.drone.DroneVariable;
 import org.droidplanner.core.helpers.geoTools.GeoTools;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.helpers.units.Length;
+import org.droidplanner.core.mission.commands.Takeoff;
+import org.droidplanner.core.mission.waypoints.Circle;
+import org.droidplanner.core.mission.waypoints.Land;
+import org.droidplanner.core.mission.waypoints.RegionOfInterest;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
+import org.droidplanner.core.mission.waypoints.SplineWaypoint;
 import org.droidplanner.core.mission.waypoints.Waypoint;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
@@ -71,7 +76,7 @@ public class Mission extends DroneVariable {
      * Add a list of waypoints to the mission's set of mission items.
      * @param missionItems list of waypoints to add
      */
-	public void addWaypoints(List<MissionItem> missionItems) {
+	public void addMissionItems(List<MissionItem> missionItems) {
         items.addAll(missionItems);
         notifyMissionUpdate();
 	}
@@ -80,7 +85,7 @@ public class Mission extends DroneVariable {
      * Add a waypoint to the mission's set of mission item.
      * @param missionItem waypoint to add
      */
-	public void addWaypoint(MissionItem missionItem) {
+	public void addMissionItem(MissionItem missionItem) {
 		items.add(missionItem);
 		notifyMissionUpdate();
 	}
@@ -193,6 +198,22 @@ public class Mission extends DroneVariable {
 			case MAV_CMD.MAV_CMD_NAV_WAYPOINT:
 				received.add(new Waypoint(msg, this));
 				break;
+
+                case MAV_CMD.MAV_CMD_NAV_SPLINE_WAYPOINT:
+                    received.add(new SplineWaypoint(msg, this));
+                    break;
+
+			case MAV_CMD.MAV_CMD_NAV_LAND:
+				received.add(new Land(msg, this));
+				break;
+			case MAV_CMD.MAV_CMD_NAV_TAKEOFF:
+				received.add(new Takeoff(msg, this));
+				break;
+			case MAV_CMD.MAV_CMD_DO_SET_ROI:
+				received.add(new RegionOfInterest(msg, this));
+				break;
+			case MAV_CMD.MAV_CMD_NAV_LOITER_TURNS:
+				received.add(new Circle(msg,this));
 			default:
 				break;
 			}

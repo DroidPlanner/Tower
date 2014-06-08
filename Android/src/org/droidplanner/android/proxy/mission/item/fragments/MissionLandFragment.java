@@ -5,6 +5,7 @@ import org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText;
 import org.droidplanner.core.mission.MissionItemType;
 import org.droidplanner.core.mission.waypoints.Land;
 
+import android.os.Bundle;
 import android.view.View;
 
 public class MissionLandFragment extends MissionDetailFragment implements
@@ -18,8 +19,8 @@ public class MissionLandFragment extends MissionDetailFragment implements
 	}
 
 	@Override
-	protected void setupViews(View view) {
-		super.setupViews(view);
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 		Land item = (Land) this.itemRender.getMissionItem();
 		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.LAND));
 		//yawSeekBar = (SeekBarWithText) view.findViewById(R.id.waypointAngle);

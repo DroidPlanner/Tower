@@ -1,9 +1,7 @@
 package com.MAVLink.Messages;
 
 import java.io.Serializable;
-
 import android.util.Log;
-
 import com.MAVLink.Messages.ardupilotmega.*;
 
 /**
@@ -280,6 +278,8 @@ public class MAVLinkPacket implements Serializable {
 			return  new msg_set_quad_swarm_led_roll_pitch_yaw_thrust(this);
 		case msg_state_correction.MAVLINK_MSG_ID_STATE_CORRECTION:
 			return  new msg_state_correction(this);
+		case msg_rc_channels.MAVLINK_MSG_ID_RC_CHANNELS:
+			return  new msg_rc_channels(this);
 		case msg_request_data_stream.MAVLINK_MSG_ID_REQUEST_DATA_STREAM:
 			return  new msg_request_data_stream(this);
 		case msg_data_stream.MAVLINK_MSG_ID_DATA_STREAM:
@@ -318,12 +318,52 @@ public class MAVLinkPacket implements Serializable {
 			return  new msg_vicon_position_estimate(this);
 		case msg_highres_imu.MAVLINK_MSG_ID_HIGHRES_IMU:
 			return  new msg_highres_imu(this);
+		case msg_omnidirectional_flow.MAVLINK_MSG_ID_OMNIDIRECTIONAL_FLOW:
+			return  new msg_omnidirectional_flow(this);
+		case msg_hil_sensor.MAVLINK_MSG_ID_HIL_SENSOR:
+			return  new msg_hil_sensor(this);
+		case msg_sim_state.MAVLINK_MSG_ID_SIM_STATE:
+			return  new msg_sim_state(this);
+		case msg_radio_status.MAVLINK_MSG_ID_RADIO_STATUS:
+			return  new msg_radio_status(this);
 		case msg_file_transfer_start.MAVLINK_MSG_ID_FILE_TRANSFER_START:
 			return  new msg_file_transfer_start(this);
 		case msg_file_transfer_dir_list.MAVLINK_MSG_ID_FILE_TRANSFER_DIR_LIST:
 			return  new msg_file_transfer_dir_list(this);
 		case msg_file_transfer_res.MAVLINK_MSG_ID_FILE_TRANSFER_RES:
 			return  new msg_file_transfer_res(this);
+		case msg_hil_gps.MAVLINK_MSG_ID_HIL_GPS:
+			return  new msg_hil_gps(this);
+		case msg_hil_optical_flow.MAVLINK_MSG_ID_HIL_OPTICAL_FLOW:
+			return  new msg_hil_optical_flow(this);
+		case msg_hil_state_quaternion.MAVLINK_MSG_ID_HIL_STATE_QUATERNION:
+			return  new msg_hil_state_quaternion(this);
+		case msg_scaled_imu2.MAVLINK_MSG_ID_SCALED_IMU2:
+			return  new msg_scaled_imu2(this);
+		case msg_log_request_list.MAVLINK_MSG_ID_LOG_REQUEST_LIST:
+			return  new msg_log_request_list(this);
+		case msg_log_entry.MAVLINK_MSG_ID_LOG_ENTRY:
+			return  new msg_log_entry(this);
+		case msg_log_request_data.MAVLINK_MSG_ID_LOG_REQUEST_DATA:
+			return  new msg_log_request_data(this);
+		case msg_log_data.MAVLINK_MSG_ID_LOG_DATA:
+			return  new msg_log_data(this);
+		case msg_log_erase.MAVLINK_MSG_ID_LOG_ERASE:
+			return  new msg_log_erase(this);
+		case msg_log_request_end.MAVLINK_MSG_ID_LOG_REQUEST_END:
+			return  new msg_log_request_end(this);
+		case msg_gps_inject_data.MAVLINK_MSG_ID_GPS_INJECT_DATA:
+			return  new msg_gps_inject_data(this);
+		case msg_gps2_raw.MAVLINK_MSG_ID_GPS2_RAW:
+			return  new msg_gps2_raw(this);
+		case msg_power_status.MAVLINK_MSG_ID_POWER_STATUS:
+			return  new msg_power_status(this);
+		case msg_serial_control.MAVLINK_MSG_ID_SERIAL_CONTROL:
+			return  new msg_serial_control(this);
+		case msg_data_transmission_handshake.MAVLINK_MSG_ID_DATA_TRANSMISSION_HANDSHAKE:
+			return  new msg_data_transmission_handshake(this);
+		case msg_encapsulated_data.MAVLINK_MSG_ID_ENCAPSULATED_DATA:
+			return  new msg_encapsulated_data(this);
 		case msg_battery_status.MAVLINK_MSG_ID_BATTERY_STATUS:
 			return  new msg_battery_status(this);
 		case msg_setpoint_8dof.MAVLINK_MSG_ID_SETPOINT_8DOF:

@@ -28,7 +28,7 @@ public class EditorToolsFragment extends Fragment implements OnClickListener, On
 
 	private RadioGroup mEditorRadioGroup;
 
-	private EditorTools tool = EditorTools.MARKER;
+	private EditorTools tool;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,15 +53,33 @@ public class EditorToolsFragment extends Fragment implements OnClickListener, On
 			vv.setOnLongClickListener(this);
 		}
 
-		mEditorRadioGroup.check(R.id.editor_tools_marker);
 		return view;
 	}
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState){
+        super.onActivityCreated(savedInstanceState);
+
+        mEditorRadioGroup.check(R.id.editor_tools_marker);
+        setTool(EditorTools.MARKER);
+    }
 
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
+        if(!(activity instanceof OnEditorToolSelected)){
+            throw new IllegalStateException("Parent activity must be an instance of " +
+                    OnEditorToolSelected.class.getName());
+        }
+
 		listener = (OnEditorToolSelected) activity;
 	}
+
+    @Override
+    public void onDetach(){
+        super.onDetach();
+        listener = null;
+    }
 
 	@Override
 	public boolean onLongClick(View v) {
