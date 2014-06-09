@@ -33,10 +33,8 @@ import android.view.ActionMode.Callback;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -81,11 +79,6 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_editor);
 
-		ActionBar actionBar = getActionBar();
-        if(actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-
 		fragmentManager = getSupportFragmentManager();
 
 		planningMapFragment = ((EditorMapFragment) fragmentManager
@@ -99,7 +92,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		infoView = (TextView) findViewById(R.id.editorInfoWindow);
 
         mSplineToggleContainer = findViewById(R.id.editorSplineToggleContainer);
-        mSplineToggleContainer.setVisibility(View.INVISIBLE);
+        mSplineToggleContainer.setVisibility(View.VISIBLE);
 
         final RadioButton normalToggle = (RadioButton) findViewById(R.id.normalWpToggle);
         normalToggle.setOnClickListener(new View.OnClickListener() {
@@ -237,7 +230,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 			break;
 
 		case MARKER:
-            //Enable to spline selection toggle
+            //Enable the spline selection toggle
             enableSplineToggle(true);
             gestureMapFragment.disableGestureDetection();
             break;
