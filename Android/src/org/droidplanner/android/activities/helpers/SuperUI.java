@@ -15,6 +15,7 @@ import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.gcs.GCSHeartbeat;
 
+import android.app.ActionBar;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -34,6 +35,11 @@ public abstract class SuperUI extends FragmentActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+        ActionBar actionBar = getActionBar();
+        if(actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
 		/*
@@ -42,11 +48,8 @@ public abstract class SuperUI extends FragmentActivity implements
 		 * android android.os.PowerManager#newWakeLock documentation.
 		 */
 		if (PreferenceManager.getDefaultSharedPreferences(
-				getApplicationContext()).getBoolean("pref_keep_screen_bright",
-				false)) {
-			getWindow()
-					.addFlags(
-							android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+				getApplicationContext()).getBoolean("pref_keep_screen_bright", false)) {
+			getWindow().addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		}
 
 		app = (DroidPlannerApp) getApplication();

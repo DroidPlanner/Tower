@@ -2,6 +2,7 @@ package org.droidplanner.android.graphic.map;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import org.droidplanner.R;
 import org.droidplanner.android.maps.MarkerWithText;
@@ -16,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GraphicGuided extends MarkerInfo.SimpleMarkerInfo implements PathSource {
+
+    private final static String TAG = GraphicGuided.class.getSimpleName();
 
     private GuidedPoint guidedPoint;
     private GPS GPS;
@@ -57,7 +60,12 @@ public class GraphicGuided extends MarkerInfo.SimpleMarkerInfo implements PathSo
 
     @Override
     public void setPosition(Coord2D coord) {
-        guidedPoint.forcedGuidedCoordinate(coord);
+        try {
+            guidedPoint.forcedGuidedCoordinate(coord);
+        }
+        catch (Exception e) {
+            Log.e(TAG, "Unable to update guided point position.", e);
+        }
     }
 
     @Override

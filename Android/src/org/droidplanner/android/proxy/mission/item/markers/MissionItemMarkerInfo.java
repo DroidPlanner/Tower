@@ -30,7 +30,6 @@ public abstract class MissionItemMarkerInfo extends MarkerInfo.SimpleMarkerInfo 
 
             case LOITER:
             case LOITER_INF:
-            case LOITERN:
             case LOITERT:
                 markerInfos.add(new LoiterMarkerInfo(origin));
                 break;

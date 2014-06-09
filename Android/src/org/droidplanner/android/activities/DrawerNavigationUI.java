@@ -60,7 +60,6 @@ public abstract class DrawerNavigationUI extends SuperUI implements
 
 		ActionBar actionBar = getActionBar();
 		if (actionBar != null) {
-			actionBar.setDisplayHomeAsUpEnabled(true);
 			actionBar.setHomeButtonEnabled(true);
 		}
 

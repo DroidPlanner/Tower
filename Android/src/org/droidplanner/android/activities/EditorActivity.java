@@ -19,7 +19,6 @@ import org.droidplanner.android.fragments.EditorToolsFragment.OnEditorToolSelect
 import org.droidplanner.android.fragments.helpers.GestureMapFragment;
 import org.droidplanner.android.fragments.helpers.GestureMapFragment.OnPathFinishedListener;
 import org.droidplanner.android.proxy.mission.item.fragments.MissionDetailFragment;
-import org.droidplanner.android.proxy.mission.item.fragments.MissionDetailFragment.OnWayPointTypeChangeListener;
 
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.android.dialogs.YesNoDialog;
@@ -33,10 +32,8 @@ import android.view.ActionMode.Callback;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,8 +42,13 @@ import android.widget.Toast;
  * and/or modify autonomous missions for the drone.
  */
 public class EditorActivity extends SuperUI implements OnPathFinishedListener,
-		OnEditorToolSelected, OnWayPointTypeChangeListener,
+		OnEditorToolSelected, MissionDetailFragment.OnMissionDetailListener,
 		OnEditorInteraction, Callback, MissionSelection.OnSelectionUpdateListener {
+
+    /**
+     * Used to retrieve the item detail window when the activity is destroyed, and recreated.
+     */
+    private static final String ITEM_DETAIL_TAG = "Item Detail Window";
 
     /**
      * Used to provide access and interact with the {@link org.droidplanner.core.mission.Mission}
@@ -81,11 +83,6 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_editor);
 
-		ActionBar actionBar = getActionBar();
-        if(actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-
 		fragmentManager = getSupportFragmentManager();
 
 		planningMapFragment = ((EditorMapFragment) fragmentManager
@@ -99,7 +96,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		infoView = (TextView) findViewById(R.id.editorInfoWindow);
 
         mSplineToggleContainer = findViewById(R.id.editorSplineToggleContainer);
-        mSplineToggleContainer.setVisibility(View.INVISIBLE);
+        mSplineToggleContainer.setVisibility(View.VISIBLE);
 
         final RadioButton normalToggle = (RadioButton) findViewById(R.id.normalWpToggle);
         normalToggle.setOnClickListener(new View.OnClickListener() {
@@ -117,6 +114,10 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
             }
         });
 
+        //Retrieve the item detail fragment using its tag
+        itemDetailFragment = (MissionDetailFragment) fragmentManager.findFragmentByTag
+                (ITEM_DETAIL_TAG);
+
         /*
          * On phone, this view will be null causing the item detail to be shown as a dialog.
          */
@@ -125,6 +126,12 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		missionProxy = ((DroidPlannerApp)getApplication()).missionProxy;
 		gestureMapFragment.setOnPathFinishedListener(this);
 	}
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        setupTool(getTool());
+    }
 
     @Override
     public void onStart(){
@@ -223,32 +230,35 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	@Override
 	public void editorToolChanged(EditorTools tools) {
 		missionProxy.selection.clearSelection();
-
-		switch (tools) {
-		case DRAW:
-            enableSplineToggle(true);
-            gestureMapFragment.enableGestureDetection();
-            break;
-
-		case POLY:
-            enableSplineToggle(false);
-			Toast.makeText(this,R.string.draw_the_survey_region, Toast.LENGTH_SHORT).show();
-			gestureMapFragment.enableGestureDetection();
-			break;
-
-		case MARKER:
-            //Enable to spline selection toggle
-            enableSplineToggle(true);
-            gestureMapFragment.disableGestureDetection();
-            break;
-
-		case TRASH:
-		case NONE:
-            enableSplineToggle(false);
-			gestureMapFragment.disableGestureDetection();
-			break;
-		}
+		setupTool(tools);
 	}
+
+    private void setupTool(EditorTools tool){
+        switch (tool) {
+            case DRAW:
+                enableSplineToggle(true);
+                gestureMapFragment.enableGestureDetection();
+                break;
+
+            case POLY:
+                enableSplineToggle(false);
+                Toast.makeText(this,R.string.draw_the_survey_region, Toast.LENGTH_SHORT).show();
+                gestureMapFragment.enableGestureDetection();
+                break;
+
+            case MARKER:
+                //Enable the spline selection toggle
+                enableSplineToggle(true);
+                gestureMapFragment.disableGestureDetection();
+                break;
+
+            case TRASH:
+            case NONE:
+                enableSplineToggle(false);
+                gestureMapFragment.disableGestureDetection();
+                break;
+        }
+    }
 
 	@Override
 	public void editorToolLongClicked(EditorTools tools) {
@@ -285,10 +295,11 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
             return;
 
         if (mContainerItemDetail == null) {
-            itemDetailFragment.show(fragmentManager, "Item detail dialog");
-        } else {
+            itemDetailFragment.show(fragmentManager, ITEM_DETAIL_TAG);
+        }
+        else {
             fragmentManager.beginTransaction().replace(R.id.containerItemDetail,
-                    itemDetailFragment).commit();
+                    itemDetailFragment, ITEM_DETAIL_TAG).commit();
         }
     }
 
@@ -335,6 +346,11 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		}
 		editorToolsFragment.setTool(EditorTools.NONE);
 	}
+
+    @Override
+    public void onDetailDialogDismissed(MissionItemProxy item) {
+        missionProxy.selection.removeItemFromSelection(item);
+    }
 
 	@Override
 	public void onWaypointTypeChanged(MissionItemProxy newItem, MissionItemProxy oldItem) {
@@ -401,7 +417,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 	@Override
 	public void onItemClick(MissionItemProxy item) {
-		switch (editorToolsFragment.getTool()) {
+		switch (getTool()) {
 		default:
 			if (contextualActionBar != null) {
 				if (missionProxy.selection.selectionContains(item)) {

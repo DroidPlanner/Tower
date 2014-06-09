@@ -2,6 +2,7 @@ package org.droidplanner.android.proxy.mission.item.fragments;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.mission.item.fragments.MissionCircleFragment;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.adapters.AdapterMissionItems;
@@ -10,6 +11,7 @@ import org.droidplanner.core.mission.MissionItemType;
 import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
@@ -23,7 +25,19 @@ import android.widget.TextView;
 public abstract class MissionDetailFragment extends DialogFragment implements
 		OnItemSelectedListener {
 
-	public interface OnWayPointTypeChangeListener {
+	public interface OnMissionDetailListener {
+        /**
+         * Only fired when the mission detail is shown as a dialog. Notifies the listener that
+         * the mission detail dialog has been dismissed.
+         * @param item mission item proxy whose details the dialog is showing.
+         */
+        public void onDetailDialogDismissed(MissionItemProxy item);
+
+        /**
+         * Notifies the listener that the mission item proxy was changed.
+         * @param newItem previous mission item proxy
+         * @param oldItem new mission item proxy
+         */
 		public void onWaypointTypeChanged(MissionItemProxy newItem, MissionItemProxy oldItem);
 	}
 
@@ -31,7 +45,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 
 	protected SpinnerSelfSelect typeSpinner;
 	protected AdapterMissionItems commandAdapter;
-	private OnWayPointTypeChangeListener mListener;
+	private OnMissionDetailListener mListener;
 
 	protected MissionItemProxy itemRender;
 
@@ -134,8 +148,27 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		mListener = (OnWayPointTypeChangeListener) activity;
+        if(!(activity instanceof OnMissionDetailListener)){
+            throw new IllegalStateException("Parent activity must be an instance of " +
+                    OnMissionDetailListener.class.getName());
+        }
+
+		mListener = (OnMissionDetailListener) activity;
 	}
+
+    @Override
+    public void onDetach(){
+        super.onDetach();
+        mListener = null;
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog){
+        super.onDismiss(dialog);
+        if(mListener != null){
+            mListener.onDetailDialogDismissed(itemRender);
+        }
+    }
 
 	@Override
 	public void onItemSelected(AdapterView<?> arg0, View v, int position, long id) {
