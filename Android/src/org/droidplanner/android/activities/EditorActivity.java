@@ -20,7 +20,6 @@ import org.droidplanner.android.fragments.helpers.GestureMapFragment;
 import org.droidplanner.android.fragments.helpers.GestureMapFragment.OnPathFinishedListener;
 import org.droidplanner.android.fragments.helpers.MapProjection;
 import org.droidplanner.android.mission.item.fragments.MissionDetailFragment;
-import org.droidplanner.android.mission.item.fragments.MissionDetailFragment.OnWayPointTypeChangeListener;
 import org.droidplanner.android.graphic.DroneHelper;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.android.dialogs.YesNoDialog;
@@ -45,8 +44,13 @@ import com.google.android.gms.maps.model.LatLng;
  * and/or modify autonomous missions for the drone.
  */
 public class EditorActivity extends SuperUI implements OnPathFinishedListener,
-		OnEditorToolSelected, OnWayPointTypeChangeListener,
+		OnEditorToolSelected, MissionDetailFragment.OnMissionDetailListener,
 		OnEditorInteraction, Callback, MissionSelection.OnSelectionUpdateListener {
+
+    /**
+     * Used to retrieve the item detail window when the activity is destroyed, and recreated.
+     */
+    private static final String ITEM_DETAIL_TAG = "Item Detail Window";
 
     /**
      * Used to provide access and interact with the {@link org.droidplanner.core.mission.Mission}
@@ -93,6 +97,10 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 				.findFragmentById(R.id.missionFragment1);
 		infoView = (TextView) findViewById(R.id.editorInfoWindow);
 
+        //Retrieve the item detail fragment using its tag
+        itemDetailFragment = (MissionDetailFragment) fragmentManager.findFragmentByTag
+                (ITEM_DETAIL_TAG);
+
         /*
          * On phone, this view will be null causing the item detail to be shown as a dialog.
          */
@@ -101,6 +109,12 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		missionRender = ((DroidPlannerApp)getApplication()).missionRender;
 		gestureMapFragment.setOnPathFinishedListener(this);
 	}
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        setupTool(getTool());
+    }
 
     @Override
     public void onStart(){
@@ -194,20 +208,23 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	@Override
 	public void editorToolChanged(EditorTools tools) {
 		missionRender.selection.clearSelection();
-
-		switch (tools) {
-		case DRAW:
-		case POLY:
-			Toast.makeText(this,R.string.draw_the_survey_region, Toast.LENGTH_SHORT).show();
-			gestureMapFragment.enableGestureDetection();
-			break;
-		case MARKER:
-		case TRASH:
-		case NONE:
-			gestureMapFragment.disableGestureDetection();
-			break;
-		}
+		setupTool(tools);
 	}
+
+    private void setupTool(EditorTools tool){
+        switch (tool) {
+            case DRAW:
+            case POLY:
+                Toast.makeText(this,R.string.draw_the_survey_region, Toast.LENGTH_SHORT).show();
+                gestureMapFragment.enableGestureDetection();
+                break;
+            case MARKER:
+            case TRASH:
+            case NONE:
+                gestureMapFragment.disableGestureDetection();
+                break;
+        }
+    }
 
 	@Override
 	public void editorToolLongClicked(EditorTools tools) {
@@ -232,16 +249,17 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		}
 	}
 
-    private void addItemDetail(MissionItemRender item) {
+    private void addItemDetail(final MissionItemRender item) {
         itemDetailFragment = item.getDetailFragment();
         if(itemDetailFragment == null)
             return;
 
         if (mContainerItemDetail == null) {
-            itemDetailFragment.show(fragmentManager, "Item detail dialog");
-        } else {
+            itemDetailFragment.show(fragmentManager, ITEM_DETAIL_TAG);
+        }
+        else {
             fragmentManager.beginTransaction().replace(R.id.containerItemDetail,
-                    itemDetailFragment).commit();
+                    itemDetailFragment, ITEM_DETAIL_TAG).commit();
         }
     }
 
@@ -284,7 +302,12 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		editorToolsFragment.setTool(EditorTools.NONE);
 	}
 
-	@Override
+    @Override
+    public void onDetailDialogDismissed(MissionItemRender item) {
+        missionRender.selection.removeItemFromSelection(item);
+    }
+
+    @Override
 	public void onWaypointTypeChanged(MissionItemRender newItem, MissionItemRender oldItem) {
 		missionRender.replace(oldItem, newItem);
 	}
@@ -349,7 +372,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 	@Override
 	public void onItemClick(MissionItemRender item) {
-		switch (editorToolsFragment.getTool()) {
+		switch (getTool()) {
 		default:
 			if (contextualActionBar != null) {
 				if (missionRender.selection.selectionContains(item)) {
