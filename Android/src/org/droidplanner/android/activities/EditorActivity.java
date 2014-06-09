@@ -19,7 +19,6 @@ import org.droidplanner.android.fragments.EditorToolsFragment.OnEditorToolSelect
 import org.droidplanner.android.fragments.helpers.GestureMapFragment;
 import org.droidplanner.android.fragments.helpers.GestureMapFragment.OnPathFinishedListener;
 import org.droidplanner.android.proxy.mission.item.fragments.MissionDetailFragment;
-import org.droidplanner.android.proxy.mission.item.fragments.MissionDetailFragment.OnWayPointTypeChangeListener;
 
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.android.dialogs.YesNoDialog;

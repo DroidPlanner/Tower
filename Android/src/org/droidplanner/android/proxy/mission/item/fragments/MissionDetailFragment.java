@@ -38,7 +38,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
          * @param newItem previous mission item proxy
          * @param oldItem new mission item proxy
          */
-		public void onWaypointTypeChanged(MissionItemProxy newItem, MissionItemRender oldItem);
+		public void onWaypointTypeChanged(MissionItemProxy newItem, MissionItemProxy oldItem);
 	}
 
 	protected abstract int getResource();

@@ -42,8 +42,6 @@ public class EditorToolsFragment extends Fragment implements OnClickListener, On
 	private RadioGroup mEditorRadioGroup;
 	private EditorTools tool;
 
-	private EditorTools tool = EditorTools.MARKER;
-
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
