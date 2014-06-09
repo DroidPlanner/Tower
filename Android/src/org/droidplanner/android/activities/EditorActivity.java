@@ -103,6 +103,12 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	}
 
     @Override
+    public void onResume(){
+        super.onResume();
+        setupTool(getTool());
+    }
+
+    @Override
     public void onStart(){
         super.onStart();
         missionRender.selection.addSelectionUpdateListener(this);
@@ -195,19 +201,23 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	public void editorToolChanged(EditorTools tools) {
 		missionRender.selection.clearSelection();
 
-		switch (tools) {
-		case DRAW:
-		case POLY:
-			Toast.makeText(this,R.string.draw_the_survey_region, Toast.LENGTH_SHORT).show();
-			gestureMapFragment.enableGestureDetection();
-			break;
-		case MARKER:
-		case TRASH:
-		case NONE:
-			gestureMapFragment.disableGestureDetection();
-			break;
-		}
+		setupTool(tools);
 	}
+
+    private void setupTool(EditorTools tool){
+        switch (tool) {
+            case DRAW:
+            case POLY:
+                Toast.makeText(this,R.string.draw_the_survey_region, Toast.LENGTH_SHORT).show();
+                gestureMapFragment.enableGestureDetection();
+                break;
+            case MARKER:
+            case TRASH:
+            case NONE:
+                gestureMapFragment.disableGestureDetection();
+                break;
+        }
+    }
 
 	@Override
 	public void editorToolLongClicked(EditorTools tools) {
