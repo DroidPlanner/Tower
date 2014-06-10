@@ -31,17 +31,13 @@ public abstract class MissionItemMarkerInfo extends MarkerInfo.SimpleMarkerInfo 
             case LOITER:
             case LOITER_INF:
             case LOITERT:
+            case CIRCLE:
                 markerInfos.add(new LoiterMarkerInfo(origin));
                 break;
 
             case ROI:
                 markerInfos.add(new ROIMarkerInfo(origin));
                 break;
-
-            //TODO: TAKEOFF is currently not displayed on the map. Check with Arthur.
-//            case TAKEOFF:
-//                markerInfos.add(new TakeoffMarkerInfo(origin));
-//                break;
 
             case WAYPOINT:
                 markerInfos.add(new WaypointMarkerInfo(origin));
