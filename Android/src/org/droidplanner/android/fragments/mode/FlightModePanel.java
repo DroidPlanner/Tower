@@ -1,6 +1,7 @@
 package org.droidplanner.android.fragments.mode;
 
 import org.droidplanner.R;
+import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
@@ -125,7 +126,11 @@ public class FlightModePanel extends Fragment implements OnDroneListener {
 				infoPanel = new ModeCircleFragment();
 				break;
 			case ROTOR_GUIDED:
-				infoPanel = new ModeGuidedFragment();
+				if (((DroidPlannerApp)getActivity().getApplication()).followMe.isEnabled()) {
+					infoPanel = new ModeFollowFragment();
+				} else {
+					infoPanel = new ModeGuidedFragment();
+				}
 				break;
 			case ROTOR_POSITION:
 				infoPanel = new ModePositionFragment();
