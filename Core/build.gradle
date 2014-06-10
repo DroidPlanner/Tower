@@ -1,7 +1,13 @@
 apply plugin: 'android-library'
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     compile 'com.google.android.gms:play-services:4.0.30'
+    compile 'de.greenrobot:eventbus:2.2.1'
+
     compile project(':Mavlink')
 }
 

@@ -1,5 +1,6 @@
 package org.droidplanner.core.drone.variables;
 
+import org.droidplanner.core.bus.events.DroneHeartBeatEvent;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
@@ -7,6 +8,8 @@ import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.drone.DroneVariable;
 
 import com.MAVLink.Messages.ardupilotmega.msg_heartbeat;
+
+import de.greenrobot.event.EventBus;
 
 public class HeartBeat extends DroneVariable implements OnDroneListener {
 
@@ -16,7 +19,7 @@ public class HeartBeat extends DroneVariable implements OnDroneListener {
 	public HeartbeatState heartbeatState = HeartbeatState.FIRST_HEARTBEAT;;
 	public int droneID = 1;
 
-	enum HeartbeatState {
+	public enum HeartbeatState {
 		FIRST_HEARTBEAT, LOST_HEARTBEAT, NORMAL_HEARTBEAT
 	}
 
@@ -37,6 +40,8 @@ public class HeartBeat extends DroneVariable implements OnDroneListener {
 	public void onHeartbeat(msg_heartbeat msg) {
 		droneID = msg.sysid;
 
+        final EventBus bus = EventBus.getDefault();
+
 		switch (heartbeatState) {
 		case FIRST_HEARTBEAT:
 			myDrone.events.notifyDroneEvent(DroneEventsType.HEARTBEAT_FIRST);
@@ -47,6 +52,9 @@ public class HeartBeat extends DroneVariable implements OnDroneListener {
 		case NORMAL_HEARTBEAT:
 			break;
 		}
+
+        //Broadcast the event
+        bus.postSticky(new DroneHeartBeatEvent(msg, heartbeatState));
 
 		heartbeatState = HeartbeatState.NORMAL_HEARTBEAT;
 		restartWatchdog(HEARTBEAT_NORMAL_TIMEOUT);
@@ -59,7 +67,7 @@ public class HeartBeat extends DroneVariable implements OnDroneListener {
 			notifyConnected();
 			break;
 		case DISCONNECTED:
-			notifiyDisconnected();
+			notifyDisconnected();
 			break;
 		default:
 			break;
@@ -70,7 +78,7 @@ public class HeartBeat extends DroneVariable implements OnDroneListener {
 		restartWatchdog(HEARTBEAT_NORMAL_TIMEOUT);
 	}
 
-	private void notifiyDisconnected() {
+	private void notifyDisconnected() {
 		watchdog.removeCallbacks(watchdogCallback);
 		heartbeatState = HeartbeatState.FIRST_HEARTBEAT;
 	}

@@ -1,47 +1,59 @@
 package org.droidplanner.android.graphic.map;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import org.droidplanner.R;
+import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.variables.Home;
-import org.droidplanner.android.graphic.DroneHelper;
-import org.droidplanner.android.graphic.map.MarkerManager.MarkerSource;
+import org.droidplanner.core.helpers.coordinates.Coord2D;
 
-import android.content.Context;
+public class GraphicHome extends MarkerInfo.SimpleMarkerInfo {
 
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
+    private Home home;
 
-public class GraphicHome implements MarkerSource {
+    public GraphicHome(Drone drone) {
+        home = drone.home;
+    }
 
-	private Home home;
+    public boolean isValid() {
+        return home.isValid();
+    }
 
-	public GraphicHome(Drone drone) {
-		home = drone.home;
-	}
+    @Override
+    public float getAnchorU() {
+        return 0.5f;
+    }
 
-	public boolean isValid() {
-		return home.isValid();
-	}
+    @Override
+    public float getAnchorV() {
+        return 0.5f;
+    }
 
-	@Override
-	public MarkerOptions build(Context context) {
-		return new MarkerOptions()
-				.position(DroneHelper.CoordToLatLang(home.getCoord()))
-				.visible(home.isValid())
-				.title("Home")
-				.snippet(home.getAltitude().toString())
-				.anchor((float) 0.5, (float) 0.5)
-				.icon(BitmapDescriptorFactory
-						.fromResource(R.drawable.ic_wp_home)).title("Home");
-	}
+    @Override
+    public Bitmap getIcon(Resources res) {
+        return BitmapFactory.decodeResource(res, R.drawable.ic_wp_home);
+    }
 
-	@Override
-	public void update(Marker marker, Context context) {
-		marker.setVisible(home.isValid());
-		marker.setPosition(DroneHelper.CoordToLatLang(home.getCoord()));
-		marker.setSnippet("Home " + home.getAltitude());
+    @Override
+    public Coord2D getPosition() {
+        return home.getCoord();
+    }
 
-	}
+    @Override
+    public String getSnippet() {
+        return "Home " + home.getAltitude();
+    }
 
+    @Override
+    public String getTitle() {
+        return "Home";
+    }
+
+    @Override
+    public boolean isVisible() {
+        return home.isValid();
+    }
 }

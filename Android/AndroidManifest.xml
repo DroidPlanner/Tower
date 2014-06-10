@@ -130,6 +130,16 @@
         <activity android:name=".android.activities.SettingsActivity"
                   android:launchMode="singleTop"
                   android:label="@string/settings"/>
+
+        <activity android:name=".android.activities.helpers.MapPreferencesActivity"
+            android:launchMode="singleTop"
+            android:label="@string/activity_title_map_provider_preferences"
+            android:parentActivityName=".android.activities.SettingsActivity">
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".android.activities.SettingsActivity" />
+            </activity>
     </application>
 
 </manifest>
