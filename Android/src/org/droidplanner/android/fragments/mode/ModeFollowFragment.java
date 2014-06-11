@@ -26,23 +26,20 @@ public class ModeFollowFragment extends ModeGuidedFragment implements
 		DroidPlannerApp app = (DroidPlannerApp) getActivity().getApplication();
 		followMe = app.followMe;
 		drone = app.drone;
-		
-		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_mode_follow, container,
 				false);
 
 		setupViews(view);
 		setupListener();
 		updateLabel();
-
 		return view;
 	}
 
 	protected void setupViews(View parentView) {
 		radiusPlus1 = (Button) parentView
-				.findViewById(R.id.button_altitude_plus_1);
+				.findViewById(R.id.button_radius_plus_1);
 		radiusMinus1 = (Button) parentView
-				.findViewById(R.id.button_altitude_minus_1);
+				.findViewById(R.id.button_radius_minus_1);
 		radiusTextView = (TextView) parentView.findViewById(R.id.follow_radius);
 		super.setupViews(parentView);
 	}
@@ -70,6 +67,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements
 	}
 
 	protected void updateLabel() {
+		super.updateLabel();
 		Length radius = followMe.getRadius();
 		if(radiusTextView!= null){
 			this.radiusTextView.setText("Radius: (" + radius + ")");
