@@ -21,6 +21,8 @@ import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.analytics.Tracker;
+
 public abstract class SuperUI extends FragmentActivity implements
 		OnDroneListener {
 	private ScreenOrientation screenOrientation = new ScreenOrientation(this);
@@ -28,6 +30,11 @@ public abstract class SuperUI extends FragmentActivity implements
 	private GCSHeartbeat gcsHeartbeat;
 	public DroidPlannerApp app;
 	public Drone drone;
+
+    /**
+     * Google analytics tracker used by the children activities.
+     */
+    protected Tracker mTracker;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -58,6 +65,8 @@ public abstract class SuperUI extends FragmentActivity implements
 		screenOrientation.unlock();
 		Utils.updateUILanguage(getApplicationContext());
 		gcsHeartbeat = new GCSHeartbeat(drone, 1);
+
+        mTracker = app.getTracker();
 	}
 
 	@Override
