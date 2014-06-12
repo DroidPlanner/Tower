@@ -1,5 +1,6 @@
 package org.droidplanner.android;
 
+import org.droidplanner.R;
 import org.droidplanner.android.gcs.FollowMe;
 import org.droidplanner.core.bus.events.DroneConnectedEvent;
 import org.droidplanner.core.bus.events.DroneDisconnectedEvent;
@@ -21,6 +22,10 @@ import org.droidplanner.core.drone.Preferences;
 import android.os.SystemClock;
 
 import com.MAVLink.Messages.MAVLinkMessage;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 import de.greenrobot.event.EventBus;
 
@@ -31,6 +36,11 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
     public FollowMe followMe;
     public MissionProxy missionProxy;
 	private MavLinkMsgHandler mavLinkMsgHandler;
+
+    /**
+     * Stores a reference to the google analytics app tracker.
+     */
+    private Tracker mAppTracker;
 
 	/**
 	 * Handles dispatching of status bar, and audible notification.
@@ -72,6 +82,8 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 
         followMe = new FollowMe(this, drone);
         NetworkStateReceiver.register(getApplicationContext());
+
+        initGATracker();
 	}
 
 	@Override
@@ -113,4 +125,17 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
                 break;
         }
     }
+
+    private void initGATracker(){
+        final GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+        mAppTracker = analytics.newTracker(R.xml.google_analytics_tracker);
+    }
+
+    /**
+     * @return handles to the google analytics tracker.
+     */
+    public Tracker getTracker(){
+        return mAppTracker;
+    }
+
 }
