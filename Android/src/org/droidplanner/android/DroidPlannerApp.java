@@ -1,5 +1,6 @@
 package org.droidplanner.android;
 
+import org.droidplanner.BuildConfig;
 import org.droidplanner.R;
 import org.droidplanner.android.gcs.FollowMe;
 import org.droidplanner.core.bus.events.DroneConnectedEvent;
@@ -23,6 +24,7 @@ import android.os.SystemClock;
 
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Logger;
 import com.google.android.gms.analytics.Tracker;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -128,6 +130,15 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 
     private void initGATracker(){
         final GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+        //Call is needed for now to allow disptaching of auto activity reports
+        // (http://stackoverflow.com/a/23256722/1088814)
+        analytics.enableAutoActivityReports(this);
+
+        //If we're in debug mode, set log level to verbose.
+        if(BuildConfig.DEBUG){
+            analytics.getLogger().setLogLevel(Logger.LogLevel.VERBOSE);
+        }
+
         mAppTracker = analytics.newTracker(R.xml.google_analytics_tracker);
     }
 
