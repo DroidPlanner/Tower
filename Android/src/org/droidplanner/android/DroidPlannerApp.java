@@ -75,7 +75,7 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 				handler.postDelayed(thread, timeout);
 			}
 		};
-		Preferences pref = new DroidplannerPrefs(getApplicationContext());
+		DroidplannerPrefs pref = new DroidplannerPrefs(getApplicationContext());
 		drone = new Drone(MAVClient, clock, handler, pref);
 		drone.events.addDroneListener(this);
 
@@ -85,7 +85,7 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
         followMe = new FollowMe(this, drone);
         NetworkStateReceiver.register(getApplicationContext());
 
-        initGATracker();
+        initGATracker(pref);
 	}
 
 	@Override
@@ -128,11 +128,13 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
         }
     }
 
-    private void initGATracker(){
+    private void initGATracker(DroidplannerPrefs pref){
         final GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-        //Call is needed for now to allow disptaching of auto activity reports
+        //Call is needed for now to allow dispatching of auto activity reports
         // (http://stackoverflow.com/a/23256722/1088814)
         analytics.enableAutoActivityReports(this);
+
+        analytics.setAppOptOut(!pref.isUsageStatisticsEnabled());
 
         //If we're in debug mode, set log level to verbose.
         if(BuildConfig.DEBUG){
