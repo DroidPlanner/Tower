@@ -380,5 +380,8 @@
     <string name="spline_waypoint_toggle">Spline</string>
     <string name="mavlink_version">Mavlink Version</string>
     <string name="empty_content">--</string>
+    <string name="usage_statistics">Usage Statistics</string>
+    <string name="pref_usage_statistics_title">Send usage statistics</string>
+    <string name="pref_usage_statistics_summary">Help improve DroidPlanner by sending usage statistics.</string>
 
 </resources>

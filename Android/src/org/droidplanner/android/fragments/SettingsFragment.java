@@ -17,6 +17,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -25,6 +26,8 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+
 import java.util.HashSet;
 
 import de.greenrobot.event.EventBus;
@@ -32,7 +35,7 @@ import de.greenrobot.event.EventBus;
 /**
  * Implements the application settings screen.
  */
-public class SettingsFragment extends PreferenceFragment implements
+public class SettingsFragment extends DpPreferenceFragment implements
         OnSharedPreferenceChangeListener {
 
     /**
@@ -149,6 +152,23 @@ public class SettingsFragment extends PreferenceFragment implements
             else {
                 rcModePref.setSummary(getString(R.string.mode2_throttle_on_left_stick));
             }
+        }
+
+        //Set the usage statistics preference
+        final String usageStatKey = getString(R.string.pref_usage_statistics_key);
+        final CheckBoxPreference usageStatPref = (CheckBoxPreference) findPreference(usageStatKey);
+        if(usageStatPref != null){
+            usageStatPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener
+                    () {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    //Update the google analytics singleton.
+                    final boolean optIn = (Boolean) newValue;
+                    final GoogleAnalytics analytics = GoogleAnalytics.getInstance(context);
+                    analytics.setAppOptOut(!optIn);
+                    return true;
+                }
+            });
         }
 
         final Preference storagePref = findPreference(getString(R.string.pref_storage_key));
