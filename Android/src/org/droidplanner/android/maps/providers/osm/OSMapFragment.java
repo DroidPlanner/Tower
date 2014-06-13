@@ -278,6 +278,7 @@ public class OSMapFragment extends Fragment implements DPMap {
     @Override
     public void loadCameraPosition() {
         SharedPreferences settings = getActivity().getSharedPreferences(PREFS_NAME, 0);
+
         final IMapController mapController = mMapView.getController();
         mapController.setCenter(new GeoPoint(settings.getFloat(PREF_LAT, 0),
                 settings.getFloat(PREF_LNG, 0)));
