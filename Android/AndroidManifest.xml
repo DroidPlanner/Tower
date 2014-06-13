@@ -142,7 +142,7 @@
                 android:value=".android.activities.SettingsActivity" />
             </activity>
         <activity
-                android:name=".android.glass.activities.GlassFlightActivity"
+                android:name=".android.glass.activities.GlassUIActivity"
                 android:launchMode="singleTask"
                 android:theme="@android:style/Theme.DeviceDefault"
                 >

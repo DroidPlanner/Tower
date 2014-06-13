@@ -6,6 +6,8 @@ import android.bluetooth.BluetoothSocket;
 import android.util.Log;
 
 import com.MAVLink.Messages.MAVLinkPacket;
+import com.MAVLink.Parser;
+
 import org.droidplanner.android.communication.connection.MAVLinkConnection;
 
 
@@ -66,6 +68,8 @@ public class BluetoothServer {
     public interface RelayListener {
         public void onMessageToRelay(MAVLinkPacket[] relayedPackets);
     }
+
+    private static final Parser parser = new Parser();
 
     /**
      * Tracks whether or not the bluetooth server was started.
@@ -345,7 +349,7 @@ public class BluetoothServer {
 
                     //Relayed the received messages
                     MAVLinkPacket[] receivedPackets = MAVLinkConnection.parseMavlinkBuffer
-                            (buffer, bytes);
+                            (parser, buffer, bytes);
 
                     //Relay the message from the gcs client to the drone
                     mGcsToDrone.addMsg(receivedPackets);

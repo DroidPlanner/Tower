@@ -63,7 +63,12 @@ public class DashboardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
-        final View view = inflater.inflate(R.layout.fragment_glass_dashboard, container, false);
+        return inflater.inflate(R.layout.fragment_glass_dashboard, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState){
+        super.onViewCreated(view, savedInstanceState);
 
         CardScrollView dashView = (CardScrollView) view.findViewById(R.id.glass_dashboard);
         dashView.setAdapter(new SectionCardAdapter((Activity) mDashListener,
@@ -78,7 +83,6 @@ public class DashboardFragment extends Fragment {
                 mDashListener.onSectionSelected((SectionInfo)parent.getItemAtPosition(position));
             }
         });
-        return view;
     }
 
     public static class SectionInfo {

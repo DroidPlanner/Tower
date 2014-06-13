@@ -10,6 +10,7 @@
     <string name="menu_drone_setup">Drone Setup</string>
     <string name="app_settings">App Settings</string>
     <string name="flight_data">Flight Data</string>
+    <string name="mission_editor">Mission Editor</string>
     <string name="editor">Editor</string>
     <string name="send_mission">Send Mission</string>
     <string name="load_mission">Load Mission</string>

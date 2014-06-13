@@ -222,9 +222,20 @@ public abstract class MAVLinkConnection extends Thread {
      * @param mavlinkBuffer received byte(s) buffer
      * @param numBytes bytes count
      * @return parsed mavlink packets
-     * @since 1.2.0
      */
-    public static MAVLinkPacket[] parseMavlinkBuffer(byte[] mavlinkBuffer, int numBytes){
+    public MAVLinkPacket[] parseMavlinkBuffer(byte[] mavlinkBuffer, int numBytes){
+        return parseMavlinkBuffer(parser, mavlinkBuffer, numBytes);
+    }
+
+    /**
+     * Parse the received byte(s) into mavlink packets.
+     * @param parser
+     * @param mavlinkBuffer received byte(s) buffer
+     * @param numBytes bytes count
+     * @return parsed mavlink packets
+     */
+    public static MAVLinkPacket[] parseMavlinkBuffer(Parser parser, byte[] mavlinkBuffer,
+                                                     int numBytes){
         if(numBytes < 1)
             return null;
 

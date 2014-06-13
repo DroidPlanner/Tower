@@ -1,6 +1,5 @@
 package org.droidplanner.android.glass.fragments;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,7 +12,7 @@ import android.view.ViewGroup;
 import com.MAVLink.Messages.ApmModes;
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.glass.activities.GlassActivity;
+import org.droidplanner.android.glass.activities.GlassUIActivity;
 import org.droidplanner.android.glass.utils.hud.HUD;
 import org.droidplanner.core.MAVLink.MavLinkArm;
 import org.droidplanner.core.drone.Drone;
@@ -30,16 +29,20 @@ public class HudFragment extends Fragment implements DroneInterfaces.OnDroneList
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        View view = inflater.inflate(R.layout.fragment_glass_hud, container, false);
+        return inflater.inflate(R.layout.fragment_glass_hud, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState){
+        super.onViewCreated(view, savedInstanceState);
         hudWidget = (HUD) view.findViewById(R.id.hudWidget);
-        return view;
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_glass_hud, menu);
 
-        final Drone drone = ((GlassActivity) getActivity()).app.drone;
+        final Drone drone = ((GlassUIActivity) getActivity()).app.drone;
 
         //Fill the flight modes menu with all the implemented flight modes
         MenuItem flightModes = menu.findItem(R.id.menu_flight_modes);
@@ -73,7 +76,7 @@ public class HudFragment extends Fragment implements DroneInterfaces.OnDroneList
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case Menu.NONE: {
-                final Drone drone = ((GlassActivity) getActivity()).app.drone;
+                final Drone drone = ((GlassUIActivity) getActivity()).app.drone;
 
                 //Handle the flight modes
                 final String itemTitle = item.getTitle().toString();
@@ -110,7 +113,7 @@ public class HudFragment extends Fragment implements DroneInterfaces.OnDroneList
     public void onStart() {
         super.onStart();
 
-        final Drone drone = ((GlassActivity) getActivity()).app.drone;
+        final Drone drone = ((GlassUIActivity) getActivity()).app.drone;
         drone.events.addDroneListener(this);
 
         //Check if we're connected to the drone
@@ -120,7 +123,7 @@ public class HudFragment extends Fragment implements DroneInterfaces.OnDroneList
     @Override
     public void onStop() {
         super.onStop();
-        final DroneEvents droneEvents = ((GlassActivity) getActivity()).app.drone.events;
+        final DroneEvents droneEvents = ((GlassUIActivity) getActivity()).app.drone.events;
         droneEvents.removeDroneListener(this);
     }
 

@@ -116,18 +116,6 @@ public class SettingsFragment extends GlassPreferenceFragment implements
             });
         }
 
-        //User Interface preferences
-        final PreferenceScreen uiPrefScreen = (PreferenceScreen) findPreference(PREF_UI_SCREEN);
-        if (uiPrefScreen != null) {
-            final CheckBoxPreference voiceControlPref = (CheckBoxPreference) findPreference
-                    (PREF_GLASS_VOICE_CONTROL);
-            if (voiceControlPref != null) {
-                if (!GlassUtils.isGlassDevice()) {
-                    uiPrefScreen.removePreference(voiceControlPref);
-                }
-            }
-        }
-
         //Populate the map preference category
         final String mapsProvidersPrefKey = getString(R.string.pref_maps_providers_key);
         final ListPreference mapsProvidersPref = (ListPreference) findPreference

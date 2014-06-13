@@ -1,20 +1,25 @@
 package org.droidplanner.android.glass.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+
+import com.google.android.glass.touchpad.GestureDetector;
+import com.google.android.glass.view.WindowUtils;
+
 import org.droidplanner.R;
-import org.droidplanner.android.activities.SettingsActivity;
+import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.glass.fragments.DashboardFragment;
 import org.droidplanner.android.glass.fragments.DashboardFragment.OnDashboardListener;
 import org.droidplanner.android.glass.fragments.DashboardFragment.SectionInfo;
+import org.droidplanner.android.glass.fragments.GlassSettingsFragment;
 import org.droidplanner.android.glass.fragments.HudFragment;
-import org.droidplanner.android.glass.utils.GlassUtils;
 import org.droidplanner.android.utils.Constants;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.core.drone.Drone;
@@ -23,13 +28,12 @@ import org.droidplanner.core.drone.DroneInterfaces;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import de.greenrobot.event.EventBus;
+
 /**
  * This is the main activity for the glass interface.
- *
- * @author Fredia Huya-Kouadio
- * @since 1.2.0
  */
-public class GlassFlightActivity extends GlassActivity implements DroneInterfaces
+public class GlassUIActivity extends SuperUI implements DroneInterfaces
         .OnDroneListener, OnDashboardListener {
 
     //TODO: update description resource for the section info.
@@ -41,7 +45,14 @@ public class GlassFlightActivity extends GlassActivity implements DroneInterface
                 R.string.empty_string), new Runnable() {
             @Override
             public void run() {
-                launchHud();
+                launchFlightData();
+            }
+        });
+        mSectionInfos.put(new SectionInfo(R.string.mission_editor, R.drawable.ic_edit,
+                R.string.empty_string), new Runnable() {
+            @Override
+            public void run() {
+                launchMissionEditor();
             }
         });
         mSectionInfos.put(new SectionInfo(R.string.settings, R.drawable.ic_action_settings_white,
@@ -55,17 +66,23 @@ public class GlassFlightActivity extends GlassActivity implements DroneInterface
 
     /**
      * This is the activity fragment manager.
-     *
-     * @since 1.2.0
      */
     private FragmentManager mFragManager;
+
+    /**
+     * Glass gesture detector.
+     * Detects glass specific swipes, and taps, and uses it for navigation.
+     */
+    protected GestureDetector mGestureDetector;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(WindowUtils.FEATURE_VOICE_COMMANDS);
         setContentView(R.layout.activity_glass);
 
         updateConnectionPrefs();
+        setUpGestureDetector();
 
         mFragManager = getSupportFragmentManager();
 
@@ -76,6 +93,22 @@ public class GlassFlightActivity extends GlassActivity implements DroneInterface
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        //Register for bus events
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+
+        //Stop listening to bus events
+        EventBus.getDefault().unregister(this);
+    }
+
     private void updateConnectionPrefs() {
         PreferenceManager.getDefaultSharedPreferences
                 (getApplicationContext()).edit().putString(Constants.PREF_CONNECTION_TYPE,
@@ -83,7 +116,7 @@ public class GlassFlightActivity extends GlassActivity implements DroneInterface
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreatePanelMenu(int featureId, Menu menu) {
         getMenuInflater().inflate(R.menu.menu_glass_activity, menu);
 
         //Update the toggle connection menu title
@@ -97,7 +130,15 @@ public class GlassFlightActivity extends GlassActivity implements DroneInterface
         return true;
     }
 
-    private void launchHud() {
+    @Override
+    public boolean onGenericMotionEvent(MotionEvent event) {
+        if (mGestureDetector != null && event.getSource() == InputDevice.SOURCE_TOUCHPAD) {
+            return mGestureDetector.onMotionEvent(event);
+        }
+        return super.onGenericMotionEvent(event);
+    }
+
+    private void launchFlightData() {
         //Replace the current fragment with the hud fragment.
         Fragment currentFragment = getCurrentFragment();
         if (!(currentFragment instanceof HudFragment)) {
@@ -109,12 +150,24 @@ public class GlassFlightActivity extends GlassActivity implements DroneInterface
         }
     }
 
-    private void launchMap() {
+    private void launchMissionEditor() {
         //TODO: complete
     }
 
     private void launchSettings() {
-        startActivity(new Intent(this, SettingsActivity.class));
+        //Replace the current fragment with the settings fragment.
+        Fragment currentFragment = getCurrentFragment();
+        if(!(currentFragment instanceof GlassSettingsFragment)){
+            currentFragment = new GlassSettingsFragment();
+            mFragManager.beginTransaction()
+                    .replace(R.id.glass_layout, currentFragment)
+                    .addToBackStack(null)
+                    .commit();
+        }
+    }
+
+    private void setUpGestureDetector() {
+        mGestureDetector = new GestureDetector(getApplicationContext());
     }
 
     /**
@@ -124,12 +177,7 @@ public class GlassFlightActivity extends GlassActivity implements DroneInterface
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
-            if (GlassUtils.isVoiceControlActive(getApplicationContext())) {
-                openVoiceMenu();
-            }
-            else {
-                openOptionsMenu();
-            }
+            openOptionsMenu();
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -145,12 +193,7 @@ public class GlassFlightActivity extends GlassActivity implements DroneInterface
             case CONNECTED:
             case DISCONNECTED:
             case ARMING:
-                if (GlassUtils.isVoiceControlActive(getApplicationContext())) {
-                    invalidateVoiceMenu();
-                }
-                else {
-                    invalidateOptionsMenu();
-                }
+                invalidateOptionsMenu();
                 break;
         }
     }
@@ -158,8 +201,7 @@ public class GlassFlightActivity extends GlassActivity implements DroneInterface
     @Override
     public void onSectionSelected(SectionInfo sectionInfo) {
         Runnable sectionCb = mSectionInfos.get(sectionInfo);
-        if (sectionCb != null)
-            sectionCb.run();
+        if (sectionCb != null) { sectionCb.run(); }
     }
 
     @Override
