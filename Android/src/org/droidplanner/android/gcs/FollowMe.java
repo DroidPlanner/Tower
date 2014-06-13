@@ -24,7 +24,7 @@ import com.google.android.gms.location.LocationRequest;
 public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 		GooglePlayServicesClient.OnConnectionFailedListener,
 		com.google.android.gms.location.LocationListener, OnDroneListener {
-	private static final long MIN_TIME_MS = 200;
+	private static final long MIN_TIME_MS = 500;
 	private static final float MIN_DISTANCE_M = 0.5f;
 	private Length radius = new Length(5.0);
 	
@@ -136,10 +136,10 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 
 		// TODO implement some sort of Follow-me type selection
 		//processNewLocationAsOverYourHead(location);
-		//processNewLocationAsLeash(location);
+		processNewLocationAsLeash(location);
 		//processNewLocationAsFixedAngle(location);
 		//processNewLocationAsHeadingAngle(location);
-		processNewLocationAsWakeboard(location);
+		//processNewLocationAsWakeboard(location);
 		
 	}
 
