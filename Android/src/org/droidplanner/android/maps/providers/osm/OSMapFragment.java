@@ -140,6 +140,8 @@ public class OSMapFragment extends Fragment implements DPMap {
                 (context), mMapView);
         mLocationOverlay = new MyLocationNewOverlay(context, new GpsMyLocationProvider(context),
                 mMapView);
+        mLocationOverlay.setDrawAccuracyEnabled(true);
+
         final RotationGestureOverlay rotationOverlay = new RotationGestureOverlay(context,
                 mMapView);
         rotationOverlay.setEnabled(true);

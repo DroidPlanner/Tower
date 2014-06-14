@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import com.google.common.collect.HashBiMap;
 import com.mapbox.mapboxsdk.api.ILatLng;
 import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.overlay.GpsLocationProvider;
 import com.mapbox.mapboxsdk.overlay.Icon;
 import com.mapbox.mapboxsdk.overlay.Marker;
 import com.mapbox.mapboxsdk.overlay.PathOverlay;
@@ -41,8 +40,6 @@ import java.util.Map;
  * MapBox implementation of the DPMap interface.
  */
 public class MapBoxFragment extends Fragment implements DPMap {
-
-    private static final int DEFAULT_ZOOM_LEVEL = 4;
 
     private final HashBiMap<MarkerInfo, Marker> mMarkers = HashBiMap.create();
 
@@ -123,7 +120,6 @@ public class MapBoxFragment extends Fragment implements DPMap {
             }
         });
 
-        mMapView.setMinZoomLevel(DEFAULT_ZOOM_LEVEL);
     }
 
     @Override
