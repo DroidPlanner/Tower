@@ -77,8 +77,8 @@ public class GlassUIActivity extends SuperUI implements DroneInterfaces
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         getWindow().requestFeature(WindowUtils.FEATURE_VOICE_COMMANDS);
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_glass);
 
         updateConnectionPrefs();
@@ -98,7 +98,7 @@ public class GlassUIActivity extends SuperUI implements DroneInterfaces
         super.onStart();
 
         //Register for bus events
-        EventBus.getDefault().register(this);
+//        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -106,7 +106,7 @@ public class GlassUIActivity extends SuperUI implements DroneInterfaces
         super.onStop();
 
         //Stop listening to bus events
-        EventBus.getDefault().unregister(this);
+//        EventBus.getDefault().unregister(this);
     }
 
     private void updateConnectionPrefs() {
