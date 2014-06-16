@@ -98,7 +98,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		infoView.setVisibility(View.GONE); //TODO Remove after fixing #676 
 
         mSplineToggleContainer = findViewById(R.id.editorSplineToggleContainer);
-        mSplineToggleContainer.setVisibility(View.VISIBLE);
+        mSplineToggleContainer.setVisibility(View.GONE);
 
         final RadioButton normalToggle = (RadioButton) findViewById(R.id.normalWpToggle);
         normalToggle.setOnClickListener(new View.OnClickListener() {
@@ -279,7 +279,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
     private void enableSplineToggle(boolean isEnabled){
         if(mSplineToggleContainer != null){
-            mSplineToggleContainer.setVisibility(isEnabled ? View.VISIBLE : View.INVISIBLE);
+            //mSplineToggleContainer.setVisibility(isEnabled ? View.VISIBLE : View.INVISIBLE);
         }
     }
 
