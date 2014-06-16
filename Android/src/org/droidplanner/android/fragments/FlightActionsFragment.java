@@ -2,7 +2,6 @@ package org.droidplanner.android.fragments;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.activities.FlightActivity;
 import org.droidplanner.android.gcs.FollowMe;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
@@ -70,8 +69,6 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 		takeoffBtn = (Button) parentView.findViewById(R.id.mc_takeoff);
 		loiterBtn = (Button) parentView.findViewById(R.id.mc_loiter);
 		followBtn = (Button) parentView.findViewById(R.id.mc_follow);
-
-		followBtn.setVisibility(View.GONE);
 	}
 
 	private void setupListener() {
