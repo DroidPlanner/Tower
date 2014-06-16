@@ -3,7 +3,7 @@ package org.droidplanner.android.activities.helpers;
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.fragments.helpers.BTDeviceListFragment;
-import org.droidplanner.android.fragments.helpers.OfflineMapFragment;
+import org.droidplanner.android.maps.providers.google_map.GoogleMapFragment;
 import org.droidplanner.android.utils.Constants;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.widgets.actionProviders.InfoBarActionProvider;
@@ -12,6 +12,7 @@ import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.gcs.GCSHeartbeat;
 
+import android.app.ActionBar;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -31,6 +32,11 @@ public abstract class SuperUI extends FragmentActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+        ActionBar actionBar = getActionBar();
+        if(actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
 		/*
@@ -39,11 +45,8 @@ public abstract class SuperUI extends FragmentActivity implements
 		 * android android.os.PowerManager#newWakeLock documentation.
 		 */
 		if (PreferenceManager.getDefaultSharedPreferences(
-				getApplicationContext()).getBoolean("pref_keep_screen_bright",
-				false)) {
-			getWindow()
-					.addFlags(
-							android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+				getApplicationContext()).getBoolean("pref_keep_screen_bright", false)) {
+			getWindow().addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		}
 
 		app = (DroidPlannerApp) getApplication();
@@ -194,21 +197,21 @@ public abstract class SuperUI extends FragmentActivity implements
 		final String mapType;
 		switch (itemId) {
 		case R.id.menu_map_type_hybrid:
-			mapType = OfflineMapFragment.MAP_TYPE_HYBRID;
+			mapType = GoogleMapFragment.MAP_TYPE_HYBRID;
 			break;
 		case R.id.menu_map_type_normal:
-			mapType = OfflineMapFragment.MAP_TYPE_NORMAL;
+			mapType = GoogleMapFragment.MAP_TYPE_NORMAL;
 			break;
 		case R.id.menu_map_type_terrain:
-			mapType = OfflineMapFragment.MAP_TYPE_TERRAIN;
+			mapType = GoogleMapFragment.MAP_TYPE_TERRAIN;
 			break;
 		default:
-			mapType = OfflineMapFragment.MAP_TYPE_SATELLITE;
+			mapType = GoogleMapFragment.MAP_TYPE_SATELLITE;
 			break;
 		}
 
 		PreferenceManager.getDefaultSharedPreferences(this).edit()
-				.putString(OfflineMapFragment.PREF_MAP_TYPE, mapType).commit();
+				.putString(GoogleMapFragment.PREF_MAP_TYPE, mapType).commit();
 
 		// drone.notifyMapTypeChanged();
 	}

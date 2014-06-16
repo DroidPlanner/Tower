@@ -8,6 +8,13 @@ Our convention for release control is the following (for a release like DPvA.B.C
 All the changes are logged below (preferable with the pull request numbers in parenteses):
 
 # Releases
+## Droidplanner v2.4.1
+* Add basic follow-me UI (810)
+* Add support for OSM (#799)
+* Fix editor tools bugs (#796)
+* Fix gradle build (#795)
+* Fix Eclipse Mavlink build (#797)
+
 ## Droidplanner v2.4.0
 * Initial support for Follow-me (#769)
 * Circle mission item, and advanced circle (#790)

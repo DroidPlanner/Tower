@@ -4,24 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.droidplanner.core.helpers.coordinates.Coord2D;
-import org.droidplanner.core.helpers.geoTools.LineLatLng;
+import org.droidplanner.core.helpers.geoTools.LineCoord2D;
 import org.droidplanner.core.helpers.geoTools.LineTools;
 
 public class Trimmer {
-	List<LineLatLng> trimedGrid = new ArrayList<LineLatLng>();
+	List<LineCoord2D> trimedGrid = new ArrayList<LineCoord2D>();
 
-	public Trimmer(List<LineLatLng> grid, List<LineLatLng> polygon) {
-		for (LineLatLng gridLine : grid) {
+	public Trimmer(List<LineCoord2D> grid, List<LineCoord2D> polygon) {
+		for (LineCoord2D gridLine : grid) {
 			ArrayList<Coord2D> crosses = findCrossings(polygon, gridLine);
 			processCrossings(crosses, gridLine);
 		}
 	}
 
-	private ArrayList<Coord2D> findCrossings(List<LineLatLng> polygon,
-			LineLatLng gridLine) {
+	private ArrayList<Coord2D> findCrossings(List<LineCoord2D> polygon,
+			LineCoord2D gridLine) {
 
 		ArrayList<Coord2D> crossings = new ArrayList<Coord2D>();
-		for (LineLatLng polyLine : polygon) {
+		for (LineCoord2D polyLine : polygon) {
 			try {
 				crossings.add(LineTools
 						.FindLineIntersection(polyLine, gridLine));
@@ -33,20 +33,20 @@ public class Trimmer {
 	}
 
 	private void processCrossings(ArrayList<Coord2D> crosses,
-			LineLatLng gridLine) {
+			LineCoord2D gridLine) {
 		switch (crosses.size()) {
 		case 0:
 		case 1:
 			break;
 		case 2:
-			trimedGrid.add(new LineLatLng(crosses.get(0), crosses.get(1)));
+			trimedGrid.add(new LineCoord2D(crosses.get(0), crosses.get(1)));
 			break;
 		default: // TODO handle multiple crossings in a better way
 			trimedGrid.add(LineTools.findExternalPoints(crosses));
 		}
 	}
 
-	public List<LineLatLng> getTrimmedGrid() {
+	public List<LineCoord2D> getTrimmedGrid() {
 		return trimedGrid;
 	}
 
