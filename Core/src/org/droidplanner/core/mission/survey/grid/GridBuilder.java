@@ -3,7 +3,7 @@ package org.droidplanner.core.mission.survey.grid;
 import java.util.List;
 
 import org.droidplanner.core.helpers.coordinates.Coord2D;
-import org.droidplanner.core.helpers.geoTools.LineLatLng;
+import org.droidplanner.core.helpers.geoTools.LineCoord2D;
 import org.droidplanner.core.mission.survey.SurveyData;
 import org.droidplanner.core.polygon.Polygon;
 
@@ -41,9 +41,9 @@ public class GridBuilder {
 	public Grid generate() throws Exception {
 		List<Coord2D> polygonPoints = poly.getPoints();
 
-		List<LineLatLng> circumscribedGrid = new CircumscribedGrid(
+		List<LineCoord2D> circumscribedGrid = new CircumscribedGrid(
 				polygonPoints, angle, lineDist).getGrid();
-		List<LineLatLng> trimedGrid = new Trimmer(circumscribedGrid,
+		List<LineCoord2D> trimedGrid = new Trimmer(circumscribedGrid,
 				poly.getLines()).getTrimmedGrid();
 		EndpointSorter gridSorter = new EndpointSorter(trimedGrid, wpDistance);
 		gridSorter.sortGrid(origin, innerWPs);

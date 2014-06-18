@@ -2,7 +2,10 @@ package org.droidplanner.android.fragments;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.activities.FlightActivity;
+import org.droidplanner.android.gcs.FollowMe;
 import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -25,6 +28,8 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 
 	private Drone drone;
 	private OnMissionControlInteraction listener;
+	private FollowMe followMe;
+	
 	private Button homeBtn;
 	private Button missionBtn;
 	private Button joystickBtn;
@@ -40,7 +45,9 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 				container, false);
 		setupViews(view);
 		setupListener();
-		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
+		DroidPlannerApp droidPlannerApp = (DroidPlannerApp) getActivity().getApplication();
+		drone = droidPlannerApp.drone;
+		followMe = droidPlannerApp.followMe;
 		return view;
 	}
 
@@ -95,6 +102,10 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 			break;
 		case R.id.mc_loiter:
 			drone.state.changeFlightMode(ApmModes.ROTOR_LOITER);
+			break;
+		case R.id.mc_follow:
+			followMe.toogleFollowMeState();
+			drone.events.notifyDroneEvent(DroneEventsType.MODE);
 			break;
 		}
 	}

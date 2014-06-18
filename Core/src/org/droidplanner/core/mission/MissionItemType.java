@@ -8,19 +8,21 @@ import org.droidplanner.core.mission.waypoints.Land;
 import org.droidplanner.core.mission.waypoints.Loiter;
 import org.droidplanner.core.mission.waypoints.LoiterInfinite;
 import org.droidplanner.core.mission.waypoints.LoiterTime;
-import org.droidplanner.core.mission.waypoints.LoiterTurns;
+import org.droidplanner.core.mission.waypoints.Circle;
 import org.droidplanner.core.mission.waypoints.RegionOfInterest;
+import org.droidplanner.core.mission.waypoints.SplineWaypoint;
 import org.droidplanner.core.mission.waypoints.Waypoint;
 
 import java.util.Collections;
 
 public enum MissionItemType {
     WAYPOINT("Waypoint"),
+    SPLINE_WAYPOINT("Spline Waypoint"),
     TAKEOFF("Takeoff"),
     RTL("Return to Launch"),
     LAND("Land"),
     LOITER("Loiter"),
-    LOITERN("Circle"),
+    CIRCLE("Circle"),
     LOITERT("Loiter Time"),
     LOITER_INF("Loiter indefinitly"),
     ROI("Region of Interest"),
@@ -41,6 +43,8 @@ public enum MissionItemType {
         switch (this) {
             case WAYPOINT:
                 return new Waypoint(referenceItem);
+            case SPLINE_WAYPOINT:
+                return new SplineWaypoint(referenceItem);
             case TAKEOFF:
                 return new Takeoff(referenceItem);
             case RTL:
@@ -49,8 +53,8 @@ public enum MissionItemType {
                 return new Land(referenceItem);
             case LOITER:
                 return new Loiter(referenceItem);
-            case LOITERN:
-                return new LoiterTurns(referenceItem);
+            case CIRCLE:
+                return new Circle(referenceItem);
             case LOITERT:
                 return new LoiterTime(referenceItem);
             case LOITER_INF:

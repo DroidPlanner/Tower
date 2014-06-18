@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="org.droidplanner"
-          android:versionCode="73"
+          android:versionCode="77"
           android:versionName="please run version.sh to get the version name">
 
     <uses-sdk
@@ -130,6 +130,16 @@
         <activity android:name=".android.activities.SettingsActivity"
                   android:launchMode="singleTop"
                   android:label="@string/settings"/>
+
+        <activity android:name=".android.activities.helpers.MapPreferencesActivity"
+            android:launchMode="singleTop"
+            android:label="@string/activity_title_map_provider_preferences"
+            android:parentActivityName=".android.activities.SettingsActivity">
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".android.activities.SettingsActivity" />
+            </activity>
     </application>
 
 </manifest>
