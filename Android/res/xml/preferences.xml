@@ -16,11 +16,6 @@
         <PreferenceScreen
             android:key="pref_mavlink"
             android:title="@string/pref_mavlink">
-            <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="pref_mavlink_log_enabled"
-                android:summary="@string/pref_mavlink_log_summary"
-                android:title="@string/pref_mavlink_log"/>
             
             <PreferenceCategory
                 android:key="pref_mavlink_droneshare"
