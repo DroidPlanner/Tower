@@ -2,6 +2,7 @@ package org.droidplanner.android.utils;
 
 import java.util.UUID;
 
+import org.droidplanner.R;
 import org.droidplanner.android.utils.file.IO.VehicleProfileReader;
 import org.droidplanner.core.drone.profiles.VehicleProfile;
 import org.droidplanner.core.drone.variables.Type.FirmwareType;
@@ -22,7 +23,12 @@ import android.preference.PreferenceManager;
  * 
  */
 public class DroidplannerPrefs implements org.droidplanner.core.drone.Preferences{
-	
+
+    /*
+    Default preference value
+     */
+    public static final boolean DEFAULT_USAGE_STATISTICS = true;
+
 	// Public for legacy usage
 	public SharedPreferences prefs;
 	private Context context;
@@ -98,4 +104,8 @@ public class DroidplannerPrefs implements org.droidplanner.core.drone.Preference
 				"pref_mavlink_stream_rate_raw_controller", "0"));
 		return rates;
 	}
+
+    public boolean isUsageStatisticsEnabled(){
+        return prefs.getBoolean(context.getString(R.string.pref_usage_statistics_key), DEFAULT_USAGE_STATISTICS);
+    }
 }
