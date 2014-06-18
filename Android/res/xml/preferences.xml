@@ -319,10 +319,19 @@
         </PreferenceScreen>
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="@string/usage_statistics">
+        <CheckBoxPreference
+            android:enabled="true"
+            android:key="@string/pref_usage_statistics_key"
+            android:title="@string/pref_usage_statistics_title"
+            android:summary="@string/pref_usage_statistics_summary"
+            android:defaultValue="true"/>
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/about">
         <Preference
             android:enabled="false"
-            android:key="pref_version"
+            android:key="@string/pref_version_key"
             android:persistent="false"
             android:selectable="false"
             android:shouldDisableView="false"

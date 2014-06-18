@@ -8,6 +8,11 @@ Our convention for release control is the following (for a release like DPvA.B.C
 All the changes are logged below (preferable with the pull request numbers in parenteses):
 
 # Releases
+## Droidplanner v2.4.2
+* Added google analytics (#813)
+* Update google play services (#813)
+* Update Droneshare library (#814)
+
 ## Droidplanner v2.4.1
 * Add basic follow-me UI (810)
 * Add support for OSM (#799)
