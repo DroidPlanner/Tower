@@ -116,7 +116,7 @@ public class DashboardFragment extends Fragment {
             if(!(o instanceof SectionInfo))
                 return false;
 
-            SectionInfo that = (SectionInfo) o;
+            final SectionInfo that = (SectionInfo) o;
             return this.mSectionNameRes == that.mSectionNameRes && this.mSectionLogoRes == that
                     .mSectionLogoRes && this.mSectionDescRes == that.mSectionDescRes;
         }

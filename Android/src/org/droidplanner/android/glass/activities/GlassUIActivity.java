@@ -21,6 +21,7 @@ import org.droidplanner.android.glass.fragments.DashboardFragment.SectionInfo;
 import org.droidplanner.android.glass.fragments.GlassSettingsFragment;
 import org.droidplanner.android.glass.fragments.HudFragment;
 import org.droidplanner.android.utils.Constants;
+import org.droidplanner.android.utils.DroidplannerPrefs;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
@@ -48,6 +49,9 @@ public class GlassUIActivity extends SuperUI implements DroneInterfaces
                 launchFlightData();
             }
         });
+
+        //TODO: enable settings, and mission editor once feature complete.
+        /*
         mSectionInfos.put(new SectionInfo(R.string.mission_editor, R.drawable.ic_edit,
                 R.string.empty_string), new Runnable() {
             @Override
@@ -62,7 +66,13 @@ public class GlassUIActivity extends SuperUI implements DroneInterfaces
                 launchSettings();
             }
         });
+        */
     }
+
+    /**
+     * Handle to the app preferences.
+     */
+    private DroidplannerPrefs mPrefs;
 
     /**
      * This is the activity fragment manager.
@@ -81,9 +91,7 @@ public class GlassUIActivity extends SuperUI implements DroneInterfaces
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_glass);
 
-        updateConnectionPrefs();
-        setUpGestureDetector();
-
+        mPrefs = new DroidplannerPrefs(getApplicationContext());
         mFragManager = getSupportFragmentManager();
 
         Fragment dashboardFragment = getCurrentFragment();
@@ -91,27 +99,13 @@ public class GlassUIActivity extends SuperUI implements DroneInterfaces
             dashboardFragment = new DashboardFragment();
             mFragManager.beginTransaction().add(R.id.glass_layout, dashboardFragment).commit();
         }
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        //Register for bus events
-//        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop(){
-        super.onStop();
-
-        //Stop listening to bus events
-//        EventBus.getDefault().unregister(this);
+        updateConnectionPrefs();
+        setUpGestureDetector();
     }
 
     private void updateConnectionPrefs() {
-        PreferenceManager.getDefaultSharedPreferences
-                (getApplicationContext()).edit().putString(Constants.PREF_CONNECTION_TYPE,
+        mPrefs.prefs.edit().putString(Constants.PREF_CONNECTION_TYPE,
                 Utils.ConnectionType.BLUETOOTH.name()).apply();
     }
 
