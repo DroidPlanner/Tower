@@ -189,6 +189,26 @@ public class MapBoxFragment extends Fragment implements DPMap {
     }
 
     @Override
+    public Coord2D getMapCenter() {
+        return DroneHelper.ILatLngToCoord(mMapView.getCenter());
+    }
+
+    @Override
+    public float getMapZoomLevel() {
+        return mMapView.getZoomLevel();
+    }
+
+    @Override
+    public float getMaxZoomLevel() {
+        return mMapView.getMaxZoomLevel();
+    }
+
+    @Override
+    public float getMinZoomLevel() {
+        return mMapView.getMinZoomLevel();
+    }
+
+    @Override
     public DPMapProvider getProvider() {
         return DPMapProvider.MAPBOX;
     }

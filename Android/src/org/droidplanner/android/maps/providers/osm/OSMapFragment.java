@@ -241,6 +241,26 @@ public class OSMapFragment extends Fragment implements DPMap {
     }
 
     @Override
+    public Coord2D getMapCenter() {
+        return DroneHelper.GeoPointToCoord(mMapView.getMapCenter());
+    }
+
+    @Override
+    public float getMapZoomLevel() {
+        return mMapView.getZoomLevel();
+    }
+
+    @Override
+    public float getMaxZoomLevel() {
+        return mMapView.getMaxZoomLevel();
+    }
+
+    @Override
+    public float getMinZoomLevel() {
+        return mMapView.getMinZoomLevel();
+    }
+
+    @Override
     public DPMapProvider getProvider(){
         return DPMapProvider.OPEN_STREET_MAP;
     }

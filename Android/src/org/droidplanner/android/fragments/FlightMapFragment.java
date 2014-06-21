@@ -145,10 +145,4 @@ public class FlightMapFragment extends DroneMap implements
             mMapFragment.updateCamera(coord, ZOOM_LEVEL);
 		}
 	}
-
-    @Override
-    protected boolean isMissionDraggable() {
-        return false;
-    }
-
 }
