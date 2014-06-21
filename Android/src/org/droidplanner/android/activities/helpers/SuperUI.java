@@ -20,8 +20,11 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.google.android.gms.analytics.Tracker;
 
 public abstract class SuperUI extends FragmentActivity implements
 		OnDroneListener {
@@ -30,6 +33,11 @@ public abstract class SuperUI extends FragmentActivity implements
 	private GCSHeartbeat gcsHeartbeat;
 	public DroidPlannerApp app;
 	public Drone drone;
+
+    /**
+     * Google analytics tracker used by the children activities.
+     */
+    protected Tracker mTracker;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -60,6 +68,8 @@ public abstract class SuperUI extends FragmentActivity implements
 		screenOrientation.unlock();
 		Utils.updateUILanguage(getApplicationContext());
 		gcsHeartbeat = new GCSHeartbeat(drone, 1);
+
+        mTracker = app.getTracker();
 	}
 
 	@Override
@@ -154,6 +164,10 @@ public abstract class SuperUI extends FragmentActivity implements
 		case R.id.menu_load_mission:
 			drone.waypointManager.getWaypoints();
 			return true;
+
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
 
 		default:
 			return super.onOptionsItemSelected(item);

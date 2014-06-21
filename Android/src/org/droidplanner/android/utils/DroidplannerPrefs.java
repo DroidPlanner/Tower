@@ -28,8 +28,9 @@ public class DroidplannerPrefs implements org.droidplanner.core.drone.Preference
      * Preferences default values.
      */
     private static final boolean DEFAULT_AUTO_PAN_ENABLED = false;
+    public static final boolean DEFAULT_USAGE_STATISTICS = true;    
 
-    // Public for legacy usage
+	// Public for legacy usage
 	public SharedPreferences prefs;
 	private Context context;
 	
@@ -108,5 +109,9 @@ public class DroidplannerPrefs implements org.droidplanner.core.drone.Preference
     public boolean isMapAutoPanEnabled(){
         return prefs.getBoolean(context.getString(R.string.pref_auto_pan_enabled_key),
                 DEFAULT_AUTO_PAN_ENABLED);
+    }
+
+    public boolean isUsageStatisticsEnabled(){
+        return prefs.getBoolean(context.getString(R.string.pref_usage_statistics_key), DEFAULT_USAGE_STATISTICS);
     }
 }

@@ -28,6 +28,8 @@ import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.util.Log;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+
 import java.util.HashSet;
 
 import de.greenrobot.event.EventBus;
@@ -37,7 +39,7 @@ import static org.droidplanner.android.utils.Constants.*;
 /**
  * Implements the application settings screen.
  */
-public class SettingsFragment extends GlassPreferenceFragment implements
+public class SettingsFragment extends DpPreferenceFragment implements
         OnSharedPreferenceChangeListener {
 
     /**
@@ -175,6 +177,23 @@ public class SettingsFragment extends GlassPreferenceFragment implements
             else {
                 rcModePref.setSummary(getString(R.string.mode2_throttle_on_left_stick));
             }
+        }
+
+        //Set the usage statistics preference
+        final String usageStatKey = getString(R.string.pref_usage_statistics_key);
+        final CheckBoxPreference usageStatPref = (CheckBoxPreference) findPreference(usageStatKey);
+        if(usageStatPref != null){
+            usageStatPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener
+                    () {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    //Update the google analytics singleton.
+                    final boolean optIn = (Boolean) newValue;
+                    final GoogleAnalytics analytics = GoogleAnalytics.getInstance(context);
+                    analytics.setAppOptOut(!optIn);
+                    return true;
+                }
+            });
         }
 
         final Preference storagePref = findPreference(getString(R.string.pref_storage_key));

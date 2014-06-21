@@ -362,6 +362,11 @@
     <!-- Content description -->
     <string name="expandable_listview_icon_desc">Expandable listview icon</string>
 
+    <!-- Google Analytics -->
+    <string name="ga_mode_details_panel_category">Mode Details Panel</string>
+    <string name="ga_mode_details_open_panel">Panel Open Time</string>
+    <string name="ga_mode_details_close_panel">Panel Close Time</string>
+
     <!-- Others (when possible move to a grouping above) -->
     <string name="tune_roll">Manual adjustment of roll and pitch tuning. Rate_P is the primary value to adjust.</string>
     <string name="dialog_box_title_altitude">Altitude</string>
@@ -386,6 +391,9 @@
     <string name="spline_waypoint_toggle">Spline</string>
     <string name="mavlink_version">Mavlink Version</string>
     <string name="empty_content">--</string>
+    <string name="usage_statistics">Usage Statistics</string>
+    <string name="pref_usage_statistics_title">Send usage statistics</string>
+    <string name="pref_usage_statistics_summary">Help improve DroidPlanner by sending usage statistics.</string>
 
     <!-- Google glass strings -->
     <string name="glass_voice_trigger">Let\'s fly</string>

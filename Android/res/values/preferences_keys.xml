@@ -26,4 +26,6 @@ This file is used to store the preferences keys so that it's accessible and modi
     <string name="pref_storage_key">pref_storage</string>
     <string name="pref_rc_mode_key">pref_rc_mode</string>
     <string name="pref_mavlink_version_key">pref_mavlink_version</string>
+    <string name="pref_usage_statistics_key">pref_usage_statistics</string>
+    <string name="pref_version_key">pref_version</string>
 </resources>
