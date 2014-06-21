@@ -1,18 +1,14 @@
-package org.droidplanner.android.glass.fragments;
+package org.droidplanner.android.glass.activities;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.SubMenu;
-import android.view.View;
-import android.view.ViewGroup;
+
 import com.MAVLink.Messages.ApmModes;
+import com.google.android.glass.view.WindowUtils;
+
 import org.droidplanner.R;
-import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.glass.activities.GlassUIActivity;
 import org.droidplanner.android.glass.utils.hud.HUD;
 import org.droidplanner.core.MAVLink.MavLinkArm;
 import org.droidplanner.core.drone.Drone;
@@ -21,62 +17,77 @@ import org.droidplanner.core.drone.DroneInterfaces;
 
 import java.util.List;
 
-public class HudFragment extends Fragment implements DroneInterfaces.OnDroneListener {
+public class HudActivity extends GlassUI {
 
     private HUD hudWidget;
 
+    /**
+     * Reference to the menu so it can be updated when used with contextual voice commands.
+     */
+    protected Menu mMenu;
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
-        return inflater.inflate(R.layout.fragment_glass_hud, container, false);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_glass_hud);
+
+        hudWidget = (HUD) findViewById(R.id.hudWidget);
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState){
-        super.onViewCreated(view, savedInstanceState);
-        hudWidget = (HUD) view.findViewById(R.id.hudWidget);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_glass_hud, menu);
-
-        final Drone drone = ((GlassUIActivity) getActivity()).app.drone;
-
-        //Fill the flight modes menu with all the implemented flight modes
-        MenuItem flightModes = menu.findItem(R.id.menu_flight_modes);
-        SubMenu flightModesMenu = flightModes.getSubMenu();
-
-        //Get the list of apm modes for this drone
-        List<ApmModes> apmModesList = ApmModes.getModeList(drone.type.getType());
-
-        //Add them to the flight modes menu
-        for (ApmModes apmMode : apmModesList) {
-            flightModesMenu.add(apmMode.getName());
+    public boolean onCreatePanelMenu(int featureId, Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_glass_hud, menu);
+        if(featureId == WindowUtils.FEATURE_VOICE_COMMANDS) {
+            mMenu = menu;
         }
+        updateMenu(menu);
+        return true;
+    }
 
-        final boolean isDroneConnected = drone.MavClient.isConnected();
+    protected void updateMenu(Menu menu){
+        if(menu != null){
+            //Update the toggle connection menu title
+            MenuItem connectMenuItem = menu.findItem(R.id.menu_connect);
+            if (connectMenuItem != null) {
+                connectMenuItem.setTitle(drone.MavClient.isConnected()
+                        ? R.string.menu_disconnect
+                        : R.string.menu_connect);
+            }
 
-        //Make the drone control menu visible if connected
-        menu.setGroupVisible(R.id.menu_group_drone_connected, isDroneConnected);
-        menu.setGroupEnabled(R.id.menu_group_drone_connected, isDroneConnected);
+            //Fill the flight modes menu with all the implemented flight modes
+            MenuItem flightModes = menu.findItem(R.id.menu_flight_modes);
+            SubMenu flightModesMenu = flightModes.getSubMenu();
+            flightModesMenu.clear();
 
-        //Update the drone arming state if connected
-        if (isDroneConnected) {
-            final MenuItem armingMenuItem = menu.findItem(R.id.menu_arming_state);
-            if (armingMenuItem != null) {
-                boolean isArmed = drone.state.isArmed();
-                armingMenuItem.setTitle(isArmed ? R.string.menu_disarm : R.string.menu_arm);
+            //Get the list of apm modes for this drone
+            List<ApmModes> apmModesList = ApmModes.getModeList(drone.type.getType());
+
+            //Add them to the flight modes menu
+            for (ApmModes apmMode : apmModesList) {
+                flightModesMenu.add(apmMode.getName());
+            }
+
+            final boolean isDroneConnected = drone.MavClient.isConnected();
+
+            //Make the drone control menu visible if connected
+            menu.setGroupVisible(R.id.menu_group_drone_connected, isDroneConnected);
+            menu.setGroupEnabled(R.id.menu_group_drone_connected, isDroneConnected);
+
+            //Update the drone arming state if connected
+            if (isDroneConnected) {
+                final MenuItem armingMenuItem = menu.findItem(R.id.menu_arming_state);
+                if (armingMenuItem != null) {
+                    boolean isArmed = drone.state.isArmed();
+                    armingMenuItem.setTitle(isArmed ? R.string.menu_disarm : R.string.menu_arm);
+                }
             }
         }
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
         switch (item.getItemId()) {
             case Menu.NONE: {
-                final Drone drone = ((GlassUIActivity) getActivity()).app.drone;
 
                 //Handle the flight modes
                 final String itemTitle = item.getTitle().toString();
@@ -94,13 +105,11 @@ public class HudFragment extends Fragment implements DroneInterfaces.OnDroneList
                 return true;
 
             default:
-                return super.onOptionsItemSelected(item);
+                return super.onMenuItemSelected(featureId, item);
         }
     }
 
     private void toggleArming() {
-        final DroidPlannerApp app = (DroidPlannerApp) getActivity().getApplication();
-        final Drone drone = app.drone;
         final boolean isDroneArmed = drone.state.isArmed();
         if (!isDroneArmed) {
             app.mNotificationHandler.getTtsNotificationProvider().speak("Arming the vehicle, please standby");
@@ -113,7 +122,6 @@ public class HudFragment extends Fragment implements DroneInterfaces.OnDroneList
     public void onStart() {
         super.onStart();
 
-        final Drone drone = ((GlassUIActivity) getActivity()).app.drone;
         drone.events.addDroneListener(this);
 
         //Check if we're connected to the drone
@@ -123,7 +131,7 @@ public class HudFragment extends Fragment implements DroneInterfaces.OnDroneList
     @Override
     public void onStop() {
         super.onStop();
-        final DroneEvents droneEvents = ((GlassUIActivity) getActivity()).app.drone.events;
+        final DroneEvents droneEvents = drone.events;
         droneEvents.removeDroneListener(this);
     }
 
@@ -131,6 +139,9 @@ public class HudFragment extends Fragment implements DroneInterfaces.OnDroneList
     public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
         switch (event) {
             case ARMING:
+                invalidateOptionsMenu();
+                updateMenu(mMenu);
+
             case MODE:
                 hudWidget.updateDroneState(drone.state);
                 break;
@@ -140,11 +151,17 @@ public class HudFragment extends Fragment implements DroneInterfaces.OnDroneList
                 break;
 
             case CONNECTED:
+                invalidateOptionsMenu();
+                updateMenu(mMenu);
+
                 //Enable the hud view
                 hudWidget.setEnabled(true);
                 break;
 
             case DISCONNECTED:
+                invalidateOptionsMenu();
+                updateMenu(mMenu);
+
                 //Disable the hud view
                 hudWidget.setEnabled(false);
                 break;
@@ -168,5 +185,6 @@ public class HudFragment extends Fragment implements DroneInterfaces.OnDroneList
                 hudWidget.setDroneType(drone.type.getType());
                 break;
         }
+        super.onDroneEvent(event, drone);
     }
 }

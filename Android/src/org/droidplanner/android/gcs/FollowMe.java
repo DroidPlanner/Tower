@@ -73,8 +73,9 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 			Toast.makeText(context, "FollowMe Disabled", Toast.LENGTH_SHORT).show();
 			followMeEnabled = false;
 			Log.d("follow", "disable");
+
+            mLocationClient.removeLocationUpdates(this);
 		}
-		mLocationClient.removeLocationUpdates(this);
 	}
 
 	public boolean isEnabled() {

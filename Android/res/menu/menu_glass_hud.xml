@@ -2,6 +2,11 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <item
+        android:id="@+id/menu_connect"
+        android:icon="@drawable/ic_bluetooth_50"
+        android:title="@string/menu_connect"/>
+
     <group
         android:id="@+id/menu_group_drone_connected"
         android:visible="false"

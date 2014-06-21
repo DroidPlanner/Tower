@@ -56,11 +56,13 @@ public class GlassPreferenceFragment extends PreferenceFragment {
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
         if (preference instanceof PreferenceScreen) {
-            //Update the preference dialog window callback. The new callback is able to detect
-            // and handle the glass touchpad gestures.
-            final Dialog prefDialog = ((PreferenceScreen) preference).getDialog();
-            if (prefDialog != null) {
-                updateWindowCallback(prefDialog.getWindow());
+            if(GlassUtils.isGlassDevice()) {
+                //Update the preference dialog window callback. The new callback is able to detect
+                // and handle the glass touchpad gestures.
+                final Dialog prefDialog = ((PreferenceScreen) preference).getDialog();
+                if (prefDialog != null) {
+                    updateWindowCallback(prefDialog.getWindow());
+                }
             }
         }
 
