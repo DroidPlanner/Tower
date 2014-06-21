@@ -27,6 +27,10 @@ import java.util.List;
 
 public class DroneMap extends Fragment implements OnDroneListener {
 
+    protected static final float ZOOM_LEVEL = 20f;
+
+    protected boolean hasBeenZoomed = false;
+
     protected DPMap mMapFragment;
 
     private GraphicHome home;
@@ -128,7 +132,15 @@ public class DroneMap extends Fragment implements OnDroneListener {
             case GPS:
                 mMapFragment.updateMarker(graphicDrone);
                 mMapFragment.updateDroneLeashPath(guided);
-                mMapFragment.addFlightPathPoint(drone.GPS.getPosition());
+
+                Coord2D dronePosition = drone.GPS.getPosition();
+                mMapFragment.addFlightPathPoint(dronePosition);
+
+                if(isAutoPanEnabled()){
+                    float zoomLevel = hasBeenZoomed ? mMapFragment.getMapZoomLevel() : ZOOM_LEVEL;
+                    hasBeenZoomed = true;
+                    mMapFragment.updateCamera(dronePosition, zoomLevel);
+                }
                 break;
 
             case GUIDEDPOINT:
@@ -154,6 +166,10 @@ public class DroneMap extends Fragment implements OnDroneListener {
 
     protected int getMaxFlightPathSize(){
         return 0;
+    }
+
+    protected boolean isAutoPanEnabled(){
+        return false;
     }
 
     /**

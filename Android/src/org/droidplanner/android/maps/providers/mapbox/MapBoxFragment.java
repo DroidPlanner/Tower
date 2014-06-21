@@ -128,27 +128,12 @@ public class MapBoxFragment extends Fragment implements DPMap {
 
         mMapView.setUserLocationEnabled(true);
         mMapView.getUserLocationOverlay().setDrawAccuracyEnabled(true);
-
-        applyMapPreferences();
     }
 
     @Override
     public void onPause() {
         super.onPause();
         mMapView.setUserLocationEnabled(false);
-    }
-
-    /**
-     * Applies the map preferences specified by the user.
-     */
-    private void applyMapPreferences() {
-        //Check if autopan should be enabled.
-        if (mPrefs.isMapAutoPanEnabled()) {
-            mMapView.setUserLocationTrackingMode(UserLocationOverlay.TrackingMode.FOLLOW);
-        }
-        else {
-            mMapView.setUserLocationTrackingMode(UserLocationOverlay.TrackingMode.NONE);
-        }
     }
 
     /**
@@ -273,7 +258,7 @@ public class MapBoxFragment extends Fragment implements DPMap {
     }
 
     @Override
-    public void updateCamera(Coord2D coord, int zoomLevel) {
+    public void updateCamera(Coord2D coord, float zoomLevel) {
         MapController mapController = mMapView.getController();
         mapController.animateTo(DroneHelper.CoordToLatLng(coord));
         mapController.setZoomAnimated(zoomLevel);
