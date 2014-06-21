@@ -200,8 +200,7 @@ public class MAVLinkService extends Service implements
     public void onConnect(){
         //Register a broadcast event receiver in case the relay server is enabled/disabled
         // while the mavlink connection is running.
-        registerReceiver(mReceiver, new IntentFilter(Constants
-                .ACTION_BLUETOOTH_RELAY_SERVER));
+        registerReceiver(mReceiver, new IntentFilter(Constants.ACTION_BLUETOOTH_RELAY_SERVER));
 
         final StatusBarNotificationProvider statusBarNotification = ((DroidPlannerApp) getApplication()).mNotificationHandler
                 .getStatusBarNotificationProvider();
@@ -222,7 +221,7 @@ public class MAVLinkService extends Service implements
             //Stop listening for relay server activation broadcast events
             unregisterReceiver(mReceiver);
         }catch(IllegalArgumentException e){
-            //Falls here is onDisconnect was called before we had a change to register.
+            //Falls here is onDisconnect was called before we had a chance to register.
         }
 
         final StatusBarNotificationProvider statusBarNotification = ((DroidPlannerApp) getApplication()).mNotificationHandler

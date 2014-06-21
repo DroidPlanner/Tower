@@ -1,19 +1,16 @@
 package org.droidplanner.android.glass.activities;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.InputDevice;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 
 import com.google.android.glass.touchpad.GestureDetector;
 import com.google.android.glass.view.WindowUtils;
 
-import org.droidplanner.R;
 import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.utils.DroidplannerPrefs;
-import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
 
 /**
@@ -37,8 +34,9 @@ public abstract class GlassUI extends SuperUI implements DroneInterfaces.OnDrone
         getWindow().requestFeature(WindowUtils.FEATURE_VOICE_COMMANDS);
         super.onCreate(savedInstanceState);
 
-        mPrefs = new DroidplannerPrefs(getApplicationContext());
-        setUpGestureDetector();
+        final Context context = getApplicationContext();
+        mPrefs = new DroidplannerPrefs(context);
+        mGestureDetector = new GestureDetector(context);
     }
 
     @Override
@@ -47,10 +45,6 @@ public abstract class GlassUI extends SuperUI implements DroneInterfaces.OnDrone
             return mGestureDetector.onMotionEvent(event);
         }
         return super.onGenericMotionEvent(event);
-    }
-
-    private void setUpGestureDetector() {
-        mGestureDetector = new GestureDetector(getApplicationContext());
     }
 
     /**

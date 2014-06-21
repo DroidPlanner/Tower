@@ -3,12 +3,14 @@ package org.droidplanner.android.glass.activities;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.SubMenu;
 
 import com.MAVLink.Messages.ApmModes;
 import com.google.android.glass.view.WindowUtils;
 
 import org.droidplanner.R;
+import org.droidplanner.android.glass.fragments.GlassMapFragment;
 import org.droidplanner.android.glass.utils.hud.HUD;
 import org.droidplanner.core.MAVLink.MavLinkArm;
 import org.droidplanner.core.drone.Drone;
@@ -17,7 +19,7 @@ import org.droidplanner.core.drone.DroneInterfaces;
 
 import java.util.List;
 
-public class HudActivity extends GlassUI {
+public class GlassHudActivity extends GlassUI {
 
     private HUD hudWidget;
 
@@ -26,12 +28,16 @@ public class HudActivity extends GlassUI {
      */
     protected Menu mMenu;
 
+    private GlassMapFragment mMapFragment;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_glass_hud);
 
         hudWidget = (HUD) findViewById(R.id.hudWidget);
+        mMapFragment = (GlassMapFragment) getSupportFragmentManager().findFragmentById(R.id
+                .glass_flight_map_fragment);
     }
 
     @Override
@@ -42,6 +48,12 @@ public class HudActivity extends GlassUI {
         }
         updateMenu(menu);
         return true;
+    }
+
+    @Override
+    public boolean onGenericMotionEvent(MotionEvent event){
+        return mMapFragment != null && mMapFragment.onGenericMotionEvent(event)
+                || super.onGenericMotionEvent(event);
     }
 
     protected void updateMenu(Menu menu){

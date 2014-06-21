@@ -3,23 +3,18 @@ package org.droidplanner.android.glass.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.SoundEffectConstants;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.google.android.glass.app.Card;
-import com.google.android.glass.view.WindowUtils;
 import com.google.android.glass.widget.CardScrollAdapter;
 import com.google.android.glass.widget.CardScrollView;
 
 import org.droidplanner.R;
 import org.droidplanner.android.utils.Constants;
 import org.droidplanner.android.utils.Utils;
-import org.droidplanner.core.drone.Drone;
-import org.droidplanner.core.drone.DroneInterfaces;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -29,7 +24,7 @@ import java.util.Map;
  * This is displayed upon launching the app, and allows the user to navigate between the
  * different app sections.
  */
-public class DashboardActivity extends GlassUI {
+public class GlassDashboardActivity extends GlassUI {
 
     //TODO: update description resource for the section info.
     private final Map<SectionInfo, Runnable> mSectionInfos = new LinkedHashMap<SectionInfo,
@@ -44,8 +39,7 @@ public class DashboardActivity extends GlassUI {
             }
         });
 
-        //TODO: enable settings, and mission editor once feature complete.
-        /*
+
         mSectionInfos.put(new SectionInfo(R.string.mission_editor, R.drawable.ic_edit,
                 R.string.empty_string), new Runnable() {
             @Override
@@ -53,6 +47,9 @@ public class DashboardActivity extends GlassUI {
                 launchMissionEditor();
             }
         });
+
+        //TODO: enable settings, and mission editor once feature complete.
+        /*
         mSectionInfos.put(new SectionInfo(R.string.settings, R.drawable.ic_action_settings_white,
                 R.string.empty_string), new Runnable() {
             @Override
@@ -94,11 +91,11 @@ public class DashboardActivity extends GlassUI {
     }
 
     private void launchFlightData() {
-        startActivity(new Intent(getApplicationContext(), HudActivity.class));
+        startActivity(new Intent(getApplicationContext(), GlassHudActivity.class));
     }
 
     private void launchMissionEditor() {
-        //TODO: complete
+        startActivity(new Intent(getApplicationContext(), GlassEditorActivity.class));
     }
 
     private void launchSettings() {

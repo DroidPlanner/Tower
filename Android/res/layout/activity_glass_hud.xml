@@ -1,26 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<org.droidplanner.android.glass.utils.hud.HUD
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:hud="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/hudWidget"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:enabled="false"
-    hud:reticleColor="@android:color/holo_red_dark"
-    hud:reticleRadius="10dp"
-    hud:skyColor="@android:color/holo_blue_dark"
-    hud:groundColor="@android:color/holo_green_dark"
-    hud:failsafeTextSize="25dp"
-    hud:failsafeTextPadding="10dp"
-    android:textSize="13sp"
-    hud:pitchScaleWidth="40dp"
-    hud:bottomBarHeight="28dp"
-    hud:bottomBarBgColor="@android:color/black"
-    hud:bottomBarVerticalPadding="14dp"
-    hud:topBarHeight="25dp"
-    hud:scrollerHeight="150dp"
-    hud:scrollerWidth="65dp"
-    hud:scrollerBgColor="@android:color/transparent"
-    hud:scrollerTicWidth="7dp"
-    hud:scrollerTextHorizontalMargin="20dp"
-    hud:scrollerTextVerticalMargin="3dp"/>
+    android:layout_height="match_parent">
+
+    <fragment
+        android:id="@+id/glass_flight_map_fragment"
+        android:name="org.droidplanner.android.glass.fragments.GlassMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <org.droidplanner.android.glass.utils.hud.HUD
+        android:id="@+id/hudWidget"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:enabled="false"
+        hud:reticleColor="@android:color/holo_red_dark"
+        hud:reticleRadius="10dp"
+        hud:skyColor="@android:color/transparent"
+        hud:groundColor="@android:color/transparent"
+        hud:failsafeTextSize="25dp"
+        hud:failsafeTextPadding="10dp"
+        android:textSize="13sp"
+        hud:pitchScaleWidth="40dp"
+        hud:bottomBarHeight="28dp"
+        hud:bottomBarBgColor="@android:color/black"
+        hud:bottomBarVerticalPadding="14dp"
+        hud:topBarHeight="25dp"
+        hud:scrollerHeight="150dp"
+        hud:scrollerWidth="65dp"
+        hud:scrollerBgColor="@android:color/transparent"
+        hud:scrollerTicWidth="7dp"
+        hud:scrollerTextHorizontalMargin="20dp"
+        hud:scrollerTextVerticalMargin="3dp"/>
+</FrameLayout>
