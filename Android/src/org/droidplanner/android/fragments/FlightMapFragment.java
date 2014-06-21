@@ -24,12 +24,8 @@ public class FlightMapFragment extends DroneMap implements
         DPMap.OnMapLongClickListener, DPMap.OnMarkerClickListener, DPMap.OnMarkerDragListener,
 		GuidedDialogListener, OnDroneListener {
 
-	private static final int ZOOM_LEVEL = 20;
-
-	public boolean isAutoPanEnabled;
+	private boolean isAutoPanEnabled;
 	private boolean guidedModeOnLongPress;
-
-	public boolean hasBeenZoomed = false;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
@@ -62,16 +58,6 @@ public class FlightMapFragment extends DroneMap implements
 		super.update();
 	}
 
-	private void animateCamera(Coord2D coord) {
-		if (!hasBeenZoomed) {
-			hasBeenZoomed = true;
-            mMapFragment.updateCamera(coord, ZOOM_LEVEL);
-		}
-		if (isAutoPanEnabled) {
-            mMapFragment.updateCamera(coord, ZOOM_LEVEL);
-		}
-	}
-
 	@Override
 	public void onMapLongClick(Coord2D coord) {
 		getPreferences();
@@ -92,8 +78,7 @@ public class FlightMapFragment extends DroneMap implements
 	@Override
 	public void onForcedGuidedPoint(LatLng coord) {
 		try {
-			drone.guidedPoint.forcedGuidedCoordinate(DroneHelper
-					.LatLngToCoord(coord));
+			drone.guidedPoint.forcedGuidedCoordinate(DroneHelper.LatLngToCoord(coord));
 		} catch (Exception e) {
 			Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
 		}
@@ -127,9 +112,11 @@ public class FlightMapFragment extends DroneMap implements
                 mMapFragment.clearFlightPath();
             }
             break;
+
 		case GPS:
 			animateCameraIfNeeded(drone.GPS.getPosition());
 			break;
+
 		default:
 			break;
 		}
@@ -141,8 +128,10 @@ public class FlightMapFragment extends DroneMap implements
 			hasBeenZoomed = true;
             mMapFragment.updateCamera(coord, ZOOM_LEVEL);
 		}
-		if (isAutoPanEnabled) {
-            mMapFragment.updateCamera(coord, ZOOM_LEVEL);
-		}
 	}
+
+    @Override
+    protected boolean isAutoPanEnabled(){
+        return isAutoPanEnabled;
+    }
 }

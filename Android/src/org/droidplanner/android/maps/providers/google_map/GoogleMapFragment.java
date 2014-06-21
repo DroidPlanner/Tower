@@ -246,7 +246,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
     }
 
     @Override
-    public void updateCamera(Coord2D coord, int zoomLevel){
+    public void updateCamera(Coord2D coord, float zoomLevel){
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(DroneHelper.CoordToLatLang(coord),
                 zoomLevel));
     }

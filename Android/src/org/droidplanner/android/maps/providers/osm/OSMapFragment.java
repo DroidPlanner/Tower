@@ -186,7 +186,6 @@ public class OSMapFragment extends Fragment implements DPMap {
     @Override
     public void onPause() {
         super.onPause();
-        mLocationOverlay.disableFollowLocation();
         mLocationOverlay.disableMyLocation();
         mCompassOverlay.disableCompass();
     }
@@ -201,22 +200,6 @@ public class OSMapFragment extends Fragment implements DPMap {
 
         mLocationOverlay.enableMyLocation();
         mCompassOverlay.enableCompass();
-
-        applyMapPreferences();
-    }
-
-    /**
-     * Applies the map preferences specified by the user.
-     */
-    private void applyMapPreferences(){
-        //Check if autopan should be enabled.
-        final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences
-                (getActivity().getApplicationContext());
-        final boolean autoPan = sharedPrefs.getBoolean(getString(R.string
-                .pref_auto_pan_enabled_key), false);
-        if(autoPan) {
-            mLocationOverlay.enableFollowLocation();
-        }
     }
 
     @Override
@@ -368,10 +351,10 @@ public class OSMapFragment extends Fragment implements DPMap {
     }
 
     @Override
-    public void updateCamera(Coord2D coord, int zoomLevel) {
+    public void updateCamera(Coord2D coord, float zoomLevel) {
         IMapController mapController = mMapView.getController();
         mapController.animateTo(DroneHelper.CoordToGeoPoint(coord));
-        mapController.setZoom(zoomLevel);
+        mapController.setZoom((int)zoomLevel);
     }
 
     @Override

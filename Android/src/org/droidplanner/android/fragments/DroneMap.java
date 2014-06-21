@@ -6,7 +6,6 @@ import org.droidplanner.android.graphic.map.GraphicDrone;
 import org.droidplanner.android.graphic.map.GraphicGuided;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.providers.DPMapProvider;
-import org.droidplanner.android.maps.providers.osm.OSMapFragment;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.core.drone.Drone;
@@ -27,6 +26,10 @@ import android.view.ViewGroup;
 import java.util.List;
 
 public class DroneMap extends Fragment implements OnDroneListener {
+
+    protected static final float ZOOM_LEVEL = 20f;
+
+    protected boolean hasBeenZoomed = false;
 
     protected DPMap mMapFragment;
 
@@ -129,7 +132,15 @@ public class DroneMap extends Fragment implements OnDroneListener {
             case GPS:
                 mMapFragment.updateMarker(graphicDrone);
                 mMapFragment.updateDroneLeashPath(guided);
-                mMapFragment.addFlightPathPoint(drone.GPS.getPosition());
+
+                Coord2D dronePosition = drone.GPS.getPosition();
+                mMapFragment.addFlightPathPoint(dronePosition);
+
+                if(isAutoPanEnabled()){
+                    float zoomLevel = hasBeenZoomed ? mMapFragment.getMapZoomLevel() : ZOOM_LEVEL;
+                    hasBeenZoomed = true;
+                    mMapFragment.updateCamera(dronePosition, zoomLevel);
+                }
                 break;
 
             case GUIDEDPOINT:
@@ -155,6 +166,10 @@ public class DroneMap extends Fragment implements OnDroneListener {
 
     protected int getMaxFlightPathSize(){
         return 0;
+    }
+
+    protected boolean isAutoPanEnabled(){
+        return false;
     }
 
     /**

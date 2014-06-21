@@ -194,7 +194,7 @@ public interface DPMap {
      * @param coord location for the map center
      * @param zoomLevel zoom level for the map
      */
-    public void updateCamera(Coord2D coord, int zoomLevel);
+    public void updateCamera(Coord2D coord, float zoomLevel);
 
     /**
      * Updates the drone leash path on the map.
