@@ -20,11 +20,6 @@
             android:visible="false"
             />
 
-        <item
-            android:id="@+id/menu_follow_me_mode"
-            android:title="@string/pref_follow_me_mode_enabled"
-            />
-
     </group>
 
     <item

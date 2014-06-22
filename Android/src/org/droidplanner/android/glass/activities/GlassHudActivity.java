@@ -97,15 +97,6 @@ public class GlassHudActivity extends GlassUI {
 //                    armingMenuItem.setTitle(isArmed ? R.string.menu_disarm : R.string.menu_arm);
 //                }
             }
-
-            //Update follow me mode menu
-            MenuItem followMenuItem = menu.findItem(R.id.menu_follow_me_mode);
-            if (followMenuItem != null) {
-                FollowMe followMe = app.followMe;
-                followMenuItem.setTitle(followMe.isEnabled()
-                        ? R.string.pref_follow_me_mode_disabled
-                        : R.string.pref_follow_me_mode_enabled);
-            }
         }
     }
 
@@ -131,22 +122,6 @@ public class GlassHudActivity extends GlassUI {
 
             case R.id.menu_settings:
                 startActivity(new Intent(getApplicationContext(), GlassSettingsActivity.class));
-                return true;
-
-            case R.id.menu_follow_me_mode:
-                final ApmModes matchingMode;
-                if(app.followMe.isEnabled()){
-                    //Set mode to LOITER
-                    matchingMode = ApmModes.ROTOR_LOITER;
-                }
-                else{
-                    //Set mode to GUIDED
-                    matchingMode = ApmModes.ROTOR_GUIDED;
-                }
-                if(ApmModes.isValid(matchingMode)){
-                    drone.state.changeFlightMode(matchingMode);
-                }
-                app.followMe.toggleFollowMeState();
                 return true;
 
             default:
@@ -228,6 +203,7 @@ public class GlassHudActivity extends GlassUI {
                 break;
 
             case TYPE:
+                updateMenu(mMenu);
                 hudWidget.setDroneType(drone.type.getType());
                 break;
         }
