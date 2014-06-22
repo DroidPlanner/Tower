@@ -62,6 +62,7 @@
     <string name="pref_guided_mode_on_long_press">Guided Mode on long press</string>
     <string name="pref_guided_mode_on_long_press_summary">Enable entering the Guided Mode by long pressing the map.</string>
     <string name="pref_follow_me_mode_enabled">Enable FollowMe Mode</string>
+    <string name="pref_follow_me_mode_disabled">Disable FollowMe Mode</string>
     <string name="pref_follow_me_mode_enabled_summary">In development</string>
     <string name="pref_auto_pan_enabled">Enable auto pan</string>
     <string name="pref_auto_pan_enabled_summary">Auto pan the map when a new GPS coordinate is received</string>
@@ -404,4 +405,5 @@
     <string name="menu_map">Map</string>
     <string name="menu_hud">Hud</string>
     <string name="menu_glass_control">Glass Control</string>
+    <string name="menu_drop_waypoint">Drop waypoint</string>
 </resources>

@@ -74,6 +74,7 @@ public class MapBoxFragment extends Fragment implements DPMap {
 
         mPrefs = new DroidplannerPrefs(getActivity().getApplicationContext());
         mMapView = (MapView) view.findViewById(R.id.mapbox_mapview);
+        mMapView.setDiskCacheEnabled(true);
     }
 
     @Override
@@ -260,8 +261,7 @@ public class MapBoxFragment extends Fragment implements DPMap {
     @Override
     public void updateCamera(Coord2D coord, float zoomLevel) {
         MapController mapController = mMapView.getController();
-        mapController.animateTo(DroneHelper.CoordToLatLng(coord));
-        mapController.setZoomAnimated(zoomLevel);
+        mapController.setZoomAnimated(zoomLevel, DroneHelper.CoordToLatLng(coord), true, false);
     }
 
     @Override

@@ -3,3 +3,5 @@ include ':HorizontalVariableListView:HorizontalVariableListView'
 include ':Android'
 include ':Core'
 include ':usb-serial-for-android:UsbSerialLibrary'
+include ':MapboxAndroidSDK'
+project(':MapboxAndroidSDK').projectDir = new File('/home/fhuya/playground/android/projects/mapbox-android-sdk/MapboxAndroidSDK')

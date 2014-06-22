@@ -2,11 +2,6 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item
-        android:id="@+id/menu_connect"
-        android:icon="@drawable/ic_bluetooth_50"
-        android:title="@string/menu_connect"/>
-
     <group
         android:id="@+id/menu_group_drone_connected"
         android:visible="false"
@@ -21,8 +16,26 @@
         <item
             android:id="@+id/menu_arming_state"
             android:title="@string/menu_arm"
+            android:enabled="false"
+            android:visible="false"
+            />
+
+        <item
+            android:id="@+id/menu_follow_me_mode"
+            android:title="@string/pref_follow_me_mode_enabled"
             />
 
     </group>
+
+    <item
+        android:id="@+id/menu_connect"
+        android:icon="@drawable/ic_bluetooth_50"
+        android:title="@string/menu_connect"/>
+
+    <item android:id="@+id/menu_settings"
+        android:icon="@drawable/ic_action_settings_white"
+        android:title="@string/settings"
+        android:enabled="false"
+        android:visible="false"/>
 
 </menu>

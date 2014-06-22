@@ -102,7 +102,7 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 			drone.state.changeFlightMode(ApmModes.ROTOR_LOITER);
 			break;
 		case R.id.mc_follow:
-			followMe.toogleFollowMeState();
+			followMe.toggleFollowMeState();
 			break;
 		}
 	}

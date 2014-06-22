@@ -2,13 +2,10 @@ apply plugin: 'android'
 
 repositories {
     mavenCentral()
-    maven {
-        url 'http://oss.sonatype.org/content/repositories/snapshots'
-    }
-
 }
 
 dependencies {
+
     compile 'com.android.support:support-v4:19.+'
     compile 'com.google.android.gms:play-services:4.+'
     compile 'com.google.guava:guava:17.0'
@@ -16,10 +13,6 @@ dependencies {
     compile 'org.slf4j:slf4j-nop:1.7.7'
     compile 'org.osmdroid:osmdroid-android:4.1'
     compile 'de.greenrobot:eventbus:2.2.1'
-
-    compile ('com.mapbox.mapboxsdk:mapbox-android-sdk:0.3.0-SNAPSHOT@aar'){
-        transitive=true
-    }
 
     compile files('libs/gdk.jar')
     compile files('libs/usbseriallibrary.jar')
@@ -33,6 +26,7 @@ dependencies {
     compile project(':Mavlink')
     compile project(':HorizontalVariableListView:HorizontalVariableListView')
     compile project(':usb-serial-for-android:UsbSerialLibrary')
+    compile project(':MapboxAndroidSDK')
 }
 
 android {

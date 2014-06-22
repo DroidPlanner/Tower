@@ -1,5 +1,6 @@
 package org.droidplanner.android.glass.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,6 +11,7 @@ import com.MAVLink.Messages.ApmModes;
 import com.google.android.glass.view.WindowUtils;
 
 import org.droidplanner.R;
+import org.droidplanner.android.gcs.FollowMe;
 import org.droidplanner.android.glass.fragments.GlassMapFragment;
 import org.droidplanner.android.glass.utils.hud.HUD;
 import org.droidplanner.core.MAVLink.MavLinkArm;
@@ -43,7 +45,7 @@ public class GlassHudActivity extends GlassUI {
     @Override
     public boolean onCreatePanelMenu(int featureId, Menu menu) {
         getMenuInflater().inflate(R.menu.menu_glass_hud, menu);
-        if(featureId == WindowUtils.FEATURE_VOICE_COMMANDS) {
+        if (featureId == WindowUtils.FEATURE_VOICE_COMMANDS) {
             mMenu = menu;
         }
         updateMenu(menu);
@@ -51,13 +53,13 @@ public class GlassHudActivity extends GlassUI {
     }
 
     @Override
-    public boolean onGenericMotionEvent(MotionEvent event){
+    public boolean onGenericMotionEvent(MotionEvent event) {
         return mMapFragment != null && mMapFragment.onGenericMotionEvent(event)
                 || super.onGenericMotionEvent(event);
     }
 
-    protected void updateMenu(Menu menu){
-        if(menu != null){
+    protected void updateMenu(Menu menu) {
+        if (menu != null) {
             //Update the toggle connection menu title
             MenuItem connectMenuItem = menu.findItem(R.id.menu_connect);
             if (connectMenuItem != null) {
@@ -88,10 +90,21 @@ public class GlassHudActivity extends GlassUI {
             //Update the drone arming state if connected
             if (isDroneConnected) {
                 final MenuItem armingMenuItem = menu.findItem(R.id.menu_arming_state);
-                if (armingMenuItem != null) {
-                    boolean isArmed = drone.state.isArmed();
-                    armingMenuItem.setTitle(isArmed ? R.string.menu_disarm : R.string.menu_arm);
-                }
+                armingMenuItem.setVisible(false);
+                armingMenuItem.setEnabled(false);
+//                if (armingMenuItem != null) {
+//                    boolean isArmed = drone.state.isArmed();
+//                    armingMenuItem.setTitle(isArmed ? R.string.menu_disarm : R.string.menu_arm);
+//                }
+            }
+
+            //Update follow me mode menu
+            MenuItem followMenuItem = menu.findItem(R.id.menu_follow_me_mode);
+            if (followMenuItem != null) {
+                FollowMe followMe = app.followMe;
+                followMenuItem.setTitle(followMe.isEnabled()
+                        ? R.string.pref_follow_me_mode_disabled
+                        : R.string.pref_follow_me_mode_enabled);
             }
         }
     }
@@ -116,6 +129,26 @@ public class GlassHudActivity extends GlassUI {
                 toggleArming();
                 return true;
 
+            case R.id.menu_settings:
+                startActivity(new Intent(getApplicationContext(), GlassSettingsActivity.class));
+                return true;
+
+            case R.id.menu_follow_me_mode:
+                final ApmModes matchingMode;
+                if(app.followMe.isEnabled()){
+                    //Set mode to LOITER
+                    matchingMode = ApmModes.ROTOR_LOITER;
+                }
+                else{
+                    //Set mode to GUIDED
+                    matchingMode = ApmModes.ROTOR_GUIDED;
+                }
+                if(ApmModes.isValid(matchingMode)){
+                    drone.state.changeFlightMode(matchingMode);
+                }
+                app.followMe.toggleFollowMeState();
+                return true;
+
             default:
                 return super.onMenuItemSelected(featureId, item);
         }
@@ -124,7 +157,8 @@ public class GlassHudActivity extends GlassUI {
     private void toggleArming() {
         final boolean isDroneArmed = drone.state.isArmed();
         if (!isDroneArmed) {
-            app.mNotificationHandler.getTtsNotificationProvider().speak("Arming the vehicle, please standby");
+            app.mNotificationHandler.getTtsNotificationProvider().speak("Arming the vehicle, " +
+                    "please standby");
         }
 
         MavLinkArm.sendArmMessage(drone, !isDroneArmed);
@@ -137,7 +171,7 @@ public class GlassHudActivity extends GlassUI {
         drone.events.addDroneListener(this);
 
         //Check if we're connected to the drone
-        hudWidget.setEnabled(drone.MavClient.isConnected());
+//        hudWidget.setEnabled(drone.MavClient.isConnected());
     }
 
     @Override
@@ -175,7 +209,7 @@ public class GlassHudActivity extends GlassUI {
                 updateMenu(mMenu);
 
                 //Disable the hud view
-                hudWidget.setEnabled(false);
+                hudWidget.setEnabled(true);
                 break;
 
             case GPS:

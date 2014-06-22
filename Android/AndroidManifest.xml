@@ -142,7 +142,7 @@
                 android:value=".android.activities.SettingsActivity" />
             </activity>
         <activity
-            android:name=".android.glass.activities.GlassDashboardActivity"
+            android:name=".android.glass.activities.GlassHudActivity"
             android:launchMode="singleTask"
             android:theme="@android:style/Theme.DeviceDefault"
             >
@@ -153,14 +153,6 @@
                 android:name="com.google.android.glass.VoiceTrigger"
                 android:resource="@xml/glass_trigger"/>
         </activity>
-        <activity
-            android:name=".android.glass.activities.GlassHudActivity"
-            android:launchMode="singleTop"
-            android:theme="@android:style/Theme.DeviceDefault" />
-        <activity
-            android:name=".android.glass.activities.GlassEditorActivity"
-            android:launchMode="singleTop"
-            android:theme="@android:style/Theme.DeviceDefault"/>
         <activity
             android:name=".android.glass.activities.GlassSettingsActivity"
             android:launchMode="singleTop"

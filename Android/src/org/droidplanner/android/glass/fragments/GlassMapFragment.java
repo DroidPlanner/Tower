@@ -2,9 +2,10 @@ package org.droidplanner.android.glass.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 
+import com.google.android.glass.touchpad.Gesture;
 import com.google.android.glass.touchpad.GestureDetector;
 
 import org.droidplanner.android.fragments.DroneMap;
@@ -19,41 +20,81 @@ public class GlassMapFragment extends DroneMap {
     private static final String TAG = GlassMapFragment.class.getSimpleName();
 
     /**
-     * Scroll input is only registered once it crosses this threshold.
+     * How many different zooming level are supported.
      */
-    protected static final float SCROLL_DELTA_THRESHOLD = 10f;
+    private static final int MAP_ZOOM_PARTITIONS = 5;
 
     /**
      * Glass gesture detector used to provide map navigation via glass gestures.
      */
     protected GestureDetector mGestureDetector;
 
+    /**
+     * Zoom level limits for the underlying map.
+     */
+    protected float mMaxZoomLevel = -1;
+    protected float mMinZoomLevel = -1;
+    protected float mZoomLevelRange = -1;
+    protected float mZoomStep = -1;
+
+    /**
+     * Used to track user head orientation. This is enabled when the user holds two fingers on
+     * the touchpad, and is used to allow panning of the underlying map.
+     */
+
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         final Context context = getActivity().getApplicationContext();
+
         mGestureDetector = new GestureDetector(context);
         mGestureDetector
-                .setFingerListener(new GestureDetector.FingerListener() {
+                .setBaseListener(new GestureDetector.BaseListener() {
                     @Override
-                    public void onFingerCountChanged(int previousCount, int currentCount) {
+                    public boolean onGesture(Gesture gesture) {
+                        if (mMinZoomLevel == -1) {
+                            mMinZoomLevel = mMapFragment.getMinZoomLevel();
+                        }
 
-                    }
-                })
-                .setScrollListener(new GestureDetector.ScrollListener() {
-                    @Override
-                    public boolean onScroll(float displacement, float delta, float velocity) {
-                        return handleScroll(displacement, delta, velocity);
-                    }
-                })
-                .setTwoFingerScrollListener(new GestureDetector.TwoFingerScrollListener() {
-                    @Override
-                    public boolean onTwoFingerScroll(float displacement, float delta,
-                                                     float velocity) {
-                        return handleScroll(displacement, delta, velocity);
+                        if (mMaxZoomLevel == -1) {
+                            mMaxZoomLevel = mMapFragment.getMaxZoomLevel();
+                        }
+
+                        if (mZoomLevelRange == -1) {
+                            mZoomLevelRange = mMaxZoomLevel - mMinZoomLevel;
+                            mZoomStep = mZoomLevelRange / MAP_ZOOM_PARTITIONS;
+                        }
+
+                        switch (gesture) {
+                            case SWIPE_RIGHT: {
+                                updateMapZoomLevel(mMapFragment.getMapZoomLevel() + mZoomStep);
+                                return true;
+                            }
+
+                            case SWIPE_LEFT: {
+                                updateMapZoomLevel(mMapFragment.getMapZoomLevel() - mZoomStep);
+                                return true;
+                            }
+                        }
+                        return false;
                     }
                 });
+    }
+
+    private float clampZoomLevel(float zoomLevel) {
+        if (zoomLevel < mMinZoomLevel) {
+            return mMinZoomLevel;
+        }
+        else if (zoomLevel > mMaxZoomLevel) {
+            return mMaxZoomLevel;
+        }
+        return zoomLevel;
+    }
+
+    private void updateMapZoomLevel(float newZoomLevel) {
+        final float clampedZoom = clampZoomLevel(newZoomLevel);
+        mMapFragment.updateCamera(mMapFragment.getMapCenter(), clampedZoom);
     }
 
     public boolean onGenericMotionEvent(MotionEvent event) {
@@ -65,11 +106,8 @@ public class GlassMapFragment extends DroneMap {
         return DPMapProvider.MAPBOX;
     }
 
-    private boolean handleScroll(float displacement, float delta, float velocity){
-        if(Math.abs(delta) > SCROLL_DELTA_THRESHOLD) {
-            Log.d(TAG, "[displacement: " + displacement + ", delta: " + delta + ", " +
-                    "velocity: " + velocity + "]");
-        }
+    @Override
+    protected boolean isAutoPanEnabled() {
         return true;
     }
 }
