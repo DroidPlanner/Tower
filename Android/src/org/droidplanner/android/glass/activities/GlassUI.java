@@ -57,6 +57,23 @@ public abstract class GlassUI extends SuperUI implements DroneInterfaces.OnDrone
             openOptionsMenu();
             return true;
         }
+
+        if(keyCode == KeyEvent.KEYCODE_CAMERA){
+            //For debug purposes, trigger recording of the glass screen using 'screenrecord',
+            // as well as recording through the glass camera.
+
+        }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event){
+        if(keyCode == KeyEvent.KEYCODE_CAMERA){
+            //For debug purposes, trigger recording of the glass screen using 'screenrecord',
+            // as well as recording through the glass camera.
+            return true;
+        }
+
+        return super.onKeyUp(keyCode, event);
     }
 }
