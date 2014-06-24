@@ -3,3 +3,4 @@ android:
   components:
     - build-tools-19.1.0
     
+script: ./gradlew build
