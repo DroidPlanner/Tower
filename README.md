@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/ne0fhyk/droidplanner.svg?branch=feature_travis_ci)](https://travis-ci.org/ne0fhyk/droidplanner)
+
 # DroidPlanner
 
 Droidplanner is a Ground Control Station (GCS) Android app for UAVs running Ardupilot software.
