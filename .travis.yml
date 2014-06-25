@@ -1,6 +1,13 @@
 language: android
 android:
   components:
-    - build-tools-19.1.0
-    
+  - build-tools-19.1.0
 script: ./gradlew build
+deploy:
+  provider: releases
+  api_key:
+    secure: N1sRQjwlExc51dA10dOvzdnkYMh9/X9WZmKwYqnWOguV+0dg3Jw2xXyBRxZLO1olIlIV0XGaI1HLAAO0OaFEYyWMO9BkZ60aJC8gePGnnwk1LSYR2moGAtlF6Y+aumfMZzXG4gU4QlVKbMd0uLvUWKu6eTqoMtVe+/C8GeJn6pk=
+  file: ./Android/build/outputs/apk/Android-*.apk
+  on:
+    repo: ne0fhyk/droidplanner
+    branch: feature_travis_ci
