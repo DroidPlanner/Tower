@@ -15,5 +15,4 @@ deploy:
     - "./Android/build/outputs/apk/Android-release-unsigned.apk"
   skip_cleanup: true
   on:
-    tags: true
-    all_branches: true
+    branch: feature_travis_ci
