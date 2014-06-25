@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/ne0fhyk/droidplanner.svg?branch=feature_travis_ci)](https://travis-ci.org/DroidPlanner/droidplanner)
+[![Build Status](https://travis-ci.org/DroidPlanner/droidplanner.svg?branch=master)](https://travis-ci.org/DroidPlanner/droidplanner)
 
 # DroidPlanner
 

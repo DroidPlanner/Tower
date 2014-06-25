@@ -6,13 +6,13 @@ android:
 script:
     - ./gradlew build
 
-deploy:
-  provider: releases
-  api_key:
-    secure: N1sRQjwlExc51dA10dOvzdnkYMh9/X9WZmKwYqnWOguV+0dg3Jw2xXyBRxZLO1olIlIV0XGaI1HLAAO0OaFEYyWMO9BkZ60aJC8gePGnnwk1LSYR2moGAtlF6Y+aumfMZzXG4gU4QlVKbMd0uLvUWKu6eTqoMtVe+/C8GeJn6pk=
-  file:
-    - "./Android/build/outputs/apk/Android-debug.apk"
-    - "./Android/build/outputs/apk/Android-release-unsigned.apk"
-  skip_cleanup: true
-  on:
-    branch: feature_travis_ci
+#deploy:
+#  provider: releases
+#  api_key:
+#    secure: N1sRQjwlExc51dA10dOvzdnkYMh9/X9WZmKwYqnWOguV+0dg3Jw2xXyBRxZLO1olIlIV0XGaI1HLAAO0OaFEYyWMO9BkZ60aJC8gePGnnwk1LSYR2moGAtlF6Y+aumfMZzXG4gU4QlVKbMd0uLvUWKu6eTqoMtVe+/C8GeJn6pk=
+#  file:
+#    - "./Android/build/outputs/apk/Android-debug.apk"
+#    - "./Android/build/outputs/apk/Android-release-unsigned.apk"
+#  skip_cleanup: true
+#  on:
+#    branch: feature_travis_ci
