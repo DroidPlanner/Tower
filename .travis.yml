@@ -13,6 +13,5 @@ deploy:
   file: ./Android/build/outputs/apk/Android-*.apk
   skip_cleanup: true
   on:
-    repo: ne0fhyk/droidplanner
     tags: true
     all_branches: true
