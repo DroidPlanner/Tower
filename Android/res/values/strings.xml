@@ -28,8 +28,6 @@
     <string name="pref_maps_providers_summary">Which map provider to use.</string>
     <string name="pref_maps_providers_title">Maps providers</string>
     <string name="pref_mavlink">MAVLink</string>
-    <string name="pref_mavlink_log">Enable Logging</string>
-    <string name="pref_mavlink_log_summary">Logs the MAVLink communication to a *.tlog file, may degrade performance</string>
     <string name="pref_mavlink_rates">Stream Rates</string>
     <string name="pref_mavlink_rates_summary">Rate in which flight data should be received from the drone (in Hz)</string>
     <string name="pref_mavlink_stream_rate_ext_stat">Waypoints, GPS raw, fence data, current waypoint, etc</string>
@@ -357,6 +355,11 @@
     <!-- Content description -->
     <string name="expandable_listview_icon_desc">Expandable listview icon</string>
 
+    <!-- Google Analytics -->
+    <string name="ga_mode_details_panel_category">Mode Details Panel</string>
+    <string name="ga_mode_details_open_panel">Panel Open Time</string>
+    <string name="ga_mode_details_close_panel">Panel Close Time</string>
+
     <!-- Others (when possible move to a grouping above) -->
     <string name="tune_roll">Manual adjustment of roll and pitch tuning. Rate_P is the primary value to adjust.</string>
     <string name="dialog_box_title_altitude">Altitude</string>
@@ -380,5 +383,8 @@
     <string name="spline_waypoint_toggle">Spline</string>
     <string name="mavlink_version">Mavlink Version</string>
     <string name="empty_content">--</string>
+    <string name="usage_statistics">Usage Statistics</string>
+    <string name="pref_usage_statistics_title">Send usage statistics</string>
+    <string name="pref_usage_statistics_summary">Help improve DroidPlanner by sending usage statistics.</string>
 
 </resources>

@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SlidingDrawer;
 
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
@@ -48,21 +49,33 @@ public class FlightActivity extends DrawerNavigationUI implements
 		failsafeTextView = findViewById(R.id.failsafeTextView);
 
 		mSlidingDrawer = (SlidingDrawer) findViewById(R.id.SlidingDrawerRight);
-		mSlidingDrawer
-				.setOnDrawerCloseListener(new SlidingDrawer.OnDrawerCloseListener() {
-					@Override
-					public void onDrawerClosed() {
-						updateMapPadding();
-					}
-				});
+		mSlidingDrawer.setOnDrawerCloseListener(new SlidingDrawer.OnDrawerCloseListener() {
+            @Override
+            public void onDrawerClosed() {
+                updateMapPadding();
 
-		mSlidingDrawer
-				.setOnDrawerOpenListener(new SlidingDrawer.OnDrawerOpenListener() {
-					@Override
-					public void onDrawerOpened() {
-						updateMapPadding();
-					}
-				});
+                //Stop tracking how long this was opened for.
+                mTracker.send(new HitBuilders.TimingBuilder()
+                        .setCategory(getString(R.string.ga_mode_details_panel_category))
+                        .setVariable(getString(R.string.ga_mode_details_close_panel))
+                        .setValue(System.currentTimeMillis())
+                        .build());
+            }
+        });
+
+		mSlidingDrawer.setOnDrawerOpenListener(new SlidingDrawer.OnDrawerOpenListener() {
+            @Override
+            public void onDrawerOpened() {
+                updateMapPadding();
+
+                //Track how long this is opened for.
+                mTracker.send(new HitBuilders.TimingBuilder()
+                        .setCategory(getString(R.string.ga_mode_details_panel_category))
+                        .setVariable(getString(R.string.ga_mode_details_open_panel))
+                        .setValue(System.currentTimeMillis())
+                        .build());
+            }
+        });
 
 		mapFragment = (FlightMapFragment) fragmentManager
 				.findFragmentById(R.id.mapFragment);
