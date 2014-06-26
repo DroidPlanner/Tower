@@ -6,6 +6,7 @@ import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.geoTools.GeoTools;
 import org.droidplanner.core.helpers.math.MathUtil;
+import org.droidplanner.core.helpers.units.Length;
 
 import android.content.Context;
 import android.location.Location;
@@ -16,15 +17,17 @@ import android.widget.Toast;
 import com.MAVLink.Messages.ApmModes;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.games.leaderboard.Leaderboard;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationRequest;
 
 public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 		GooglePlayServicesClient.OnConnectionFailedListener,
 		com.google.android.gms.location.LocationListener, OnDroneListener {
-	private static final long MIN_TIME_MS = 200;
+	private static final long MIN_TIME_MS = 500;
 	private static final float MIN_DISTANCE_M = 0.5f;
-	private static final double LEASH_LENGTH = 10.0;
+	private Length radius = new Length(5.0);
+	
 	private Context context;
 	private boolean followMeEnabled = false;
 	private Drone drone;
@@ -124,15 +127,19 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 
 	}
 
+	public Length getRadius() {
+		return radius;
+	}
+
 	@Override
 	public void onLocationChanged(Location location) {
 
 		// TODO implement some sort of Follow-me type selection
 		//processNewLocationAsOverYourHead(location);
-		//processNewLocationAsLeash(location);
+		processNewLocationAsLeash(location);
 		//processNewLocationAsFixedAngle(location);
 		//processNewLocationAsHeadingAngle(location);
-		processNewLocationAsWakeboard(location);
+		//processNewLocationAsWakeboard(location);
 		
 	}
 
@@ -143,14 +150,14 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 		
 		Coord2D goToCoord;
 		if (GeoTools.getDistance(gcsCoord, drone.GPS.getPosition())
-				.valueInMeters() > LEASH_LENGTH) {
+				.valueInMeters() > radius.valueInMeters()) {
 			double headingGCStoDrone = GeoTools.getHeadingFromCoordinates(
 					gcsCoord, drone.GPS.getPosition());
 			double userRigthHeading = 90.0 + bearing;
 			double alpha = MathUtil.Normalize(location.getSpeed(),0.0,5.0);		
 			double mixedHeading = bisectAngle(headingGCStoDrone,userRigthHeading,alpha);
 			goToCoord = GeoTools.newCoordFromBearingAndDistance(gcsCoord,
-					mixedHeading , LEASH_LENGTH);
+					mixedHeading , radius.valueInMeters());
 		}else{
 			goToCoord = drone.guidedPoint.getCoord();
 		}
@@ -182,7 +189,7 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 		float bearing = location.getBearing();
 		
 		Coord2D goCoord = GeoTools.newCoordFromBearingAndDistance(gcsCoord,
-				bearing+90.0, LEASH_LENGTH);
+				bearing+90.0, radius.valueInMeters());
 		drone.guidedPoint.newGuidedCoord(goCoord);	
 	}
 
@@ -190,7 +197,7 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 		Coord2D gcsCoord = new Coord2D(location.getLatitude(),
 				location.getLongitude());
 			Coord2D goCoord = GeoTools.newCoordFromBearingAndDistance(gcsCoord,
-					90.0, LEASH_LENGTH);
+					90.0, radius.valueInMeters());
 			drone.guidedPoint.newGuidedCoord(goCoord);
 	}
 
@@ -204,13 +211,17 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 		Coord2D gcsCoord = new Coord2D(location.getLatitude(),
 				location.getLongitude());
 		if (GeoTools.getDistance(gcsCoord, drone.GPS.getPosition())
-				.valueInMeters() > LEASH_LENGTH) {
+				.valueInMeters() > radius.valueInMeters()) {
 			double headingGCStoDrone = GeoTools.getHeadingFromCoordinates(
 					gcsCoord, drone.GPS.getPosition());
 			Coord2D goCoord = GeoTools.newCoordFromBearingAndDistance(gcsCoord,
-					headingGCStoDrone, LEASH_LENGTH);
+					headingGCStoDrone, radius.valueInMeters());
 			drone.guidedPoint.newGuidedCoord(goCoord);
 		}
+	}
+
+	public void changeRadius(Double increment) {
+		radius = new Length(radius.valueInMeters()+ increment);
 	}
 
 }
