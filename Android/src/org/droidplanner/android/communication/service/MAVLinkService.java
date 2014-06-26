@@ -235,8 +235,6 @@ public class MAVLinkService extends Service implements	MavLinkConnectionListener
                 .setCategory(GAUtils.Category.MAVLINK_CONNECTION.toString())
                 .setAction("Mavlink disconnecting")
                 .setNewSession()
-                .setCustomDimension(GAUtils.CustomDimension.MAVLINK_CONNECTION_TYPE.getIndex(),
-                        "DISCONNECTED")
                 .build());
     }
 
