@@ -71,7 +71,7 @@ public class FlightActivity extends DrawerNavigationUI implements
 
                 //Track how long this is opened for.
                 mTracker.send(new HitBuilders.TimingBuilder()
-                        .setCategory(getString(R.string.ga_mode_details_panel_category))
+                        .setCategory(GATrackerCategory.FLIGHT_DATA_DETAILS_PANEL.toString())
                         .setVariable(getString(R.string.ga_mode_details_open_panel))
                         .setValue(System.currentTimeMillis())
                         .build());
