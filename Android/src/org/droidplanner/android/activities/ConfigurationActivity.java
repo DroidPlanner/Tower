@@ -146,16 +146,6 @@ public class ConfigurationActivity extends SuperUI {
 		super.onDroneEvent(event, drone);
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			NavUtils.navigateUpFromSameTask(this);
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-
 	/**
 	 * This is the fragment pager adapter to handle the tabs of the
 	 * Configuration activity.

@@ -1,5 +1,7 @@
 package org.droidplanner.android;
 
+import org.droidplanner.BuildConfig;
+import org.droidplanner.R;
 import org.droidplanner.android.gcs.FollowMe;
 import org.droidplanner.core.bus.events.DroneConnectedEvent;
 import org.droidplanner.core.bus.events.DroneDisconnectedEvent;
@@ -21,6 +23,11 @@ import org.droidplanner.core.drone.Preferences;
 import android.os.SystemClock;
 
 import com.MAVLink.Messages.MAVLinkMessage;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Logger;
+import com.google.android.gms.analytics.Tracker;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 import de.greenrobot.event.EventBus;
 
@@ -31,6 +38,11 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
     public FollowMe followMe;
     public MissionProxy missionProxy;
 	private MavLinkMsgHandler mavLinkMsgHandler;
+
+    /**
+     * Stores a reference to the google analytics app tracker.
+     */
+    private Tracker mAppTracker;
 
 	/**
 	 * Handles dispatching of status bar, and audible notification.
@@ -63,7 +75,7 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 				handler.postDelayed(thread, timeout);
 			}
 		};
-		Preferences pref = new DroidplannerPrefs(getApplicationContext());
+		DroidplannerPrefs pref = new DroidplannerPrefs(getApplicationContext());
 		drone = new Drone(MAVClient, clock, handler, pref);
 		drone.events.addDroneListener(this);
 
@@ -72,6 +84,8 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 
         followMe = new FollowMe(this, drone);
         NetworkStateReceiver.register(getApplicationContext());
+
+        initGATracker(pref);
 	}
 
 	@Override
@@ -113,4 +127,28 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
                 break;
         }
     }
+
+    private void initGATracker(DroidplannerPrefs pref){
+        final GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+        //Call is needed for now to allow dispatching of auto activity reports
+        // (http://stackoverflow.com/a/23256722/1088814)
+        analytics.enableAutoActivityReports(this);
+
+        analytics.setAppOptOut(!pref.isUsageStatisticsEnabled());
+
+        //If we're in debug mode, set log level to verbose.
+        if(BuildConfig.DEBUG){
+            analytics.getLogger().setLogLevel(Logger.LogLevel.VERBOSE);
+        }
+
+        mAppTracker = analytics.newTracker(R.xml.google_analytics_tracker);
+    }
+
+    /**
+     * @return handles to the google analytics tracker.
+     */
+    public Tracker getTracker(){
+        return mAppTracker;
+    }
+
 }

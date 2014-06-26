@@ -23,10 +23,7 @@
 
     <!-- App Settings/Preferences -->
     <string name="pref_connection_type">遥测连接方式</string>
-    <string name="pref_connection_type_summary">选择用来连接无人机分链接</string>
-    <string name="pref_mavlink">MAVLink</string>
-    <string name="pref_mavlink_log">启用日志</string>
-    <string name="pref_mavlink_log_summary">记录MAVLink通信至*.tlog文件，可能会降低性能</string>
+    <string name="pref_connection_type_summary">选择用来连接无人机分链接</string>    
     <string name="pref_mavlink_rates">流速</string>
     <string name="pref_mavlink_rates_summary">从无人机接受飞行数据的速度（以Hz为单位）</string>
     <string name="pref_mavlink_stream_rate_ext_stat">航点、GPS原始数据、围栏数据、当前航点等</string>
@@ -128,7 +125,6 @@
     <!-- Survey/Mapping related strings -->
     <string name="distance_between_lines">横向的</string>
     <string name="footprint">足迹</string>
-    <string name="ground_resolution">GSD</string>
     <string name="distance_between_pictures">纵向的</string>
     <string name="area">区域</string>
     <string name="camera_">相机：</string>
