@@ -130,6 +130,7 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 
     private void initGATracker(DroidplannerPrefs pref){
         final GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+
         //Call is needed for now to allow dispatching of auto activity reports
         // (http://stackoverflow.com/a/23256722/1088814)
         analytics.enableAutoActivityReports(this);

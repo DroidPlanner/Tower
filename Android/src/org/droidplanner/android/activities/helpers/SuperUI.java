@@ -5,6 +5,7 @@ import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.fragments.helpers.BTDeviceListFragment;
 import org.droidplanner.android.maps.providers.google_map.GoogleMapFragment;
 import org.droidplanner.android.utils.Constants;
+import org.droidplanner.android.utils.DroidplannerPrefs;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.widgets.actionProviders.InfoBarActionProvider;
 import org.droidplanner.core.drone.Drone;
@@ -23,13 +24,17 @@ import android.view.MenuItem;
 
 import com.google.android.gms.analytics.Tracker;
 
-public abstract class SuperUI extends FragmentActivity implements
-		OnDroneListener {
+public abstract class SuperUI extends FragmentActivity implements OnDroneListener {
 	private ScreenOrientation screenOrientation = new ScreenOrientation(this);
 	private InfoBarActionProvider infoBar;
 	private GCSHeartbeat gcsHeartbeat;
 	public DroidPlannerApp app;
 	public Drone drone;
+
+    /**
+     * Handle to the app preferences.
+     */
+    protected DroidplannerPrefs mAppPrefs;
 
     /**
      * Google analytics tracker used by the children activities.
@@ -45,6 +50,12 @@ public abstract class SuperUI extends FragmentActivity implements
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        app = (DroidPlannerApp) getApplication();
+        this.drone = app.drone;
+        gcsHeartbeat = new GCSHeartbeat(drone, 1);
+        mTracker = app.getTracker();
+        mAppPrefs = new DroidplannerPrefs(getApplicationContext());
+
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
 		/*
@@ -52,21 +63,14 @@ public abstract class SuperUI extends FragmentActivity implements
 		 * org.droidplanner.android.service .MAVLinkService) as suggested by the
 		 * android android.os.PowerManager#newWakeLock documentation.
 		 */
-		if (PreferenceManager.getDefaultSharedPreferences(
-				getApplicationContext()).getBoolean("pref_keep_screen_bright", false)) {
+		if (mAppPrefs.keepScreenOn()) {
 			getWindow().addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		}
-
-		app = (DroidPlannerApp) getApplication();
-		this.drone = app.drone;
 
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
 		screenOrientation.unlock();
 		Utils.updateUILanguage(getApplicationContext());
-		gcsHeartbeat = new GCSHeartbeat(drone, 1);
-
-        mTracker = app.getTracker();
 	}
 
 	@Override
@@ -192,10 +196,7 @@ public abstract class SuperUI extends FragmentActivity implements
 
 	protected void toggleDroneConnection() {
 		if (!drone.MavClient.isConnected()) {
-			final String connectionType = PreferenceManager
-					.getDefaultSharedPreferences(getApplicationContext())
-					.getString(Constants.PREF_CONNECTION_TYPE,
-							Constants.DEFAULT_CONNECTION_TYPE);
+			final String connectionType = mAppPrefs.getMavLinkConnectionType();
 
 			if (Utils.ConnectionType.BLUETOOTH.name().equals(connectionType)) {
 				// Launch a bluetooth device selection screen for the user

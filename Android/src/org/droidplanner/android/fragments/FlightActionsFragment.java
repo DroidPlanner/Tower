@@ -2,9 +2,8 @@ package org.droidplanner.android.fragments;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.activities.FlightActivity;
 import org.droidplanner.android.gcs.FollowMe;
-import org.droidplanner.android.utils.analytics.GATrackerCategory;
+import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 
@@ -85,7 +84,7 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 	@Override
 	public void onClick(View v) {
         HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
-                .setCategory(GATrackerCategory.FLIGHT_DATA_ACTION_BUTTON.toString());
+                .setCategory(GAUtils.Category.FLIGHT_DATA_ACTION_BUTTON.toString());
 
 		switch (v.getId()) {
 		case R.id.mc_planningBtn:
