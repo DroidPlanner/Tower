@@ -38,10 +38,6 @@ public class DroidplannerPrefs implements org.droidplanner.core.drone.Preference
 		prefs = PreferenceManager.getDefaultSharedPreferences(context);
 	}
 
-	public boolean getLogEnabled() {
-		return prefs.getBoolean("pref_mavlink_log_enabled", false);
-	}
-
 	public boolean getLiveUploadEnabled() {
 		return prefs.getBoolean("pref_live_upload_enabled", false);
 	}
