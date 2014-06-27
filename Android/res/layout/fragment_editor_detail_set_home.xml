@@ -56,7 +56,7 @@
                     android:layout_margin="5dp" >
 
                     <TextView
-                        android:id="@+id/TextView01"
+                        android:id="@+id/follow_radius"
                         android:layout_width="100dp"
                         android:layout_height="match_parent"
                         android:gravity="right|center_vertical"

@@ -95,12 +95,10 @@ public abstract class MAVLinkConnection extends Thread {
             //If we get here, the connection is successful. Notify the listener
             listener.onConnect();
             
-			if (prefs.getLogEnabled()) {
 				logFile = FileStream.getTLogFile();
 				logWriter = FileStream.openOutputStream(logFile);
 				logBuffer = ByteBuffer.allocate(Long.SIZE / Byte.SIZE);
 				logBuffer.order(ByteOrder.BIG_ENDIAN);
-			}
 
 			String login = prefs.getDroneshareLogin();
 			String password = prefs.getDronesharePassword();
@@ -176,11 +174,12 @@ public abstract class MAVLinkConnection extends Thread {
 				logWriter.write(logBuffer.array());
 				logWriter.write(bytes);
 
-				// HUGE FIXME - it is possible for the current filterMavlink to
-				// block BAD-BAD
 				if (uploader != null)
 					uploader.filterMavlink(uploader.interfaceNum, bytes);
-			} catch (Exception e) {
+			} catch (IOException e) {
+				Log.e(TAG, "Ignoring IO error in saveToLog: " + e);
+			} catch (NullPointerException e) {
+				Log.e(TAG, "Ignoring NPE in " + e);
 				// There was a null pointer error for some users on
 				// logBuffer.clear();
 			}
