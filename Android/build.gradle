@@ -5,6 +5,7 @@ repositories {
 }
 
 dependencies {
+
     compile 'com.android.support:support-v4:19.+'
     compile files('libs/droneapi-java.jar')
     compile 'com.google.android.gms:play-services:4.+'
@@ -14,6 +15,7 @@ dependencies {
     compile 'org.osmdroid:osmdroid-android:4.1'
     compile 'de.greenrobot:eventbus:2.2.1'
 
+    compile files('libs/gdk.jar')
     compile files('libs/usbseriallibrary.jar')
     compile files('libs/wearable-preview-support.jar')
     compile files('libs/protobuf-java-2.5.0.jar')
@@ -24,6 +26,7 @@ dependencies {
     compile project(':Mavlink')
     compile project(':HorizontalVariableListView:HorizontalVariableListView')
     compile project(':usb-serial-for-android:UsbSerialLibrary')
+    compile project(':MapboxAndroidSDK')
 }
 
 android {

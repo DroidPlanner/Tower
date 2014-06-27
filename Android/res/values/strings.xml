@@ -10,9 +10,14 @@
     <string name="menu_drone_setup">Drone Setup</string>
     <string name="app_settings">App Settings</string>
     <string name="flight_data">Flight Data</string>
+    <string name="mission_editor">Mission Editor</string>
     <string name="editor">Editor</string>
     <string name="send_mission">Send Mission</string>
     <string name="load_mission">Load Mission</string>
+    <string name="empty_string"></string>
+
+    <!-- Map related strings -->
+    <string name="mapbox_id">ne0fhyk.ighceofk</string>
 
     <!-- Drone Setup tabs -->
     <string name="screen_tuning">Tuning</string>
@@ -55,6 +60,7 @@
     <string name="pref_guided_mode_on_long_press">Guided Mode on long press</string>
     <string name="pref_guided_mode_on_long_press_summary">Enable entering the Guided Mode by long pressing the map.</string>
     <string name="pref_follow_me_mode_enabled">Enable FollowMe Mode</string>
+    <string name="pref_follow_me_mode_disabled">Disable FollowMe Mode</string>
     <string name="pref_follow_me_mode_enabled_summary">In development</string>
     <string name="pref_auto_pan_enabled">Enable auto pan</string>
     <string name="pref_auto_pan_enabled_summary">Auto pan the map when a new GPS coordinate is received</string>
@@ -375,6 +381,7 @@
     <string name="pref_map_provider_settings_title">Map Provider Preferences</string>
     <string name="pref_title_google_map">Google Map Preferences</string>
     <string name="pref_title_osm">Open Street Map Preferences</string>
+    <string name="pref_title_mapbox">MapBox Preferences</string>
     <string name="activity_title_map_provider_preferences">Map Provider Preferences</string>
     <string name="pref_title_language">Language</string>
     <string name="pref_title_screen">Screen</string>
@@ -387,4 +394,14 @@
     <string name="pref_usage_statistics_title">Send usage statistics</string>
     <string name="pref_usage_statistics_summary">Help improve DroidPlanner by sending usage statistics.</string>
 
+    <!-- Google glass strings -->
+    <string name="glass_voice_trigger">Let\'s fly</string>
+    <string name="screen_glass">Glass View</string>
+    <string name="menu_flight_modes">Flight Modes</string>
+    <string name="menu_arm">Arm</string>
+    <string name="menu_disarm">Disarm</string>
+    <string name="menu_map">Map</string>
+    <string name="menu_hud">Hud</string>
+    <string name="menu_glass_control">Glass Control</string>
+    <string name="menu_drop_waypoint">Drop waypoint</string>
 </resources>

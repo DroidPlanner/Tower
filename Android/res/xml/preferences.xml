@@ -85,6 +85,13 @@
         <PreferenceScreen
             android:key="pref_advanced"
             android:title="@string/pref_advanced" >
+
+            <CheckBoxPreference
+                android:title="Enable bluetooth relay server"
+                android:summary="Mavlink data is relayed from this device to other bluetooth connected devices."
+                android:defaultValue="false"
+                android:key="pref_bluetooth_relay_server_toggle"/>
+
             <ListPreference
                 android:defaultValue="ArduCopter"
                 android:entries="@array/VehicleType"

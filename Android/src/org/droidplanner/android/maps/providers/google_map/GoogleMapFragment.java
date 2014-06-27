@@ -95,6 +95,26 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
     }
 
     @Override
+    public Coord2D getMapCenter() {
+        return DroneHelper.LatLngToCoord(mMap.getCameraPosition().target);
+    }
+
+    @Override
+    public float getMapZoomLevel() {
+        return mMap.getCameraPosition().zoom;
+    }
+
+    @Override
+    public float getMaxZoomLevel() {
+        return mMap.getMaxZoomLevel();
+    }
+
+    @Override
+    public float getMinZoomLevel() {
+        return mMap.getMinZoomLevel();
+    }
+
+    @Override
     public DPMapProvider getProvider(){
         return DPMapProvider.GOOGLE_MAP;
     }
@@ -226,7 +246,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
     }
 
     @Override
-    public void updateCamera(Coord2D coord, int zoomLevel){
+    public void updateCamera(Coord2D coord, float zoomLevel){
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(DroneHelper.CoordToLatLang(coord),
                 zoomLevel));
     }

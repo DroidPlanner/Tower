@@ -1,9 +1,9 @@
 package org.droidplanner.android.widgets.graph;
 
+import android.widget.LinearLayout;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import android.widget.LinearLayout;
 
 public class ChartCheckBoxList {
 	private List<ChartCheckBox> checkBoxList = new ArrayList<ChartCheckBox>();

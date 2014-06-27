@@ -20,9 +20,17 @@ import com.MAVLink.Parser;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
 
+/**
+ * This class holds the logic to instantiate, communicate over,
+ * and close a mavlink data connection.
+ * @since 1.2.0
+ */
 public abstract class MAVLinkConnection extends Thread {
 
-	private static final String TAG = MAVLinkConnection.class.getSimpleName();
+    /**
+     * This tag is used for logging.
+     */
+    private static final String TAG = MAVLinkConnection.class.getSimpleName();
 
 	protected abstract void openConnection() throws UnknownHostException,
 			IOException;
@@ -36,12 +44,20 @@ public abstract class MAVLinkConnection extends Thread {
 	protected abstract void getPreferences(SharedPreferences prefs);
 
 	public interface MavLinkConnectionListener {
-		public void onReceiveMessage(MAVLinkMessage msg);
+
+        /**
+         * This method is called by the mavlink connection when a successful connection is
+         * established.
+         * @since 1.2.0
+         */
+        public void onConnect();
+
+		public void onReceiveMessage(MAVLinkPacket msgPacket);
 
 		public void onDisconnect();
-
-		public void onComError(String errMsg);
-
+		
+		public void onComError(String errMsg);		
+		
 	}
 
 	protected Context parentContext;
@@ -75,12 +91,15 @@ public abstract class MAVLinkConnection extends Thread {
 		try {
 			parser.stats.mavlinkResetStats();
 			openConnection();
-			
-			logFile = FileStream.getTLogFile();
-			logWriter = FileStream.openOutputStream(logFile);
-			logBuffer = ByteBuffer.allocate(Long.SIZE / Byte.SIZE);
-			logBuffer.order(ByteOrder.BIG_ENDIAN);
-			
+
+            //If we get here, the connection is successful. Notify the listener
+            listener.onConnect();
+            
+				logFile = FileStream.getTLogFile();
+				logWriter = FileStream.openOutputStream(logFile);
+				logBuffer = ByteBuffer.allocate(Long.SIZE / Byte.SIZE);
+				logBuffer.order(ByteOrder.BIG_ENDIAN);
+
 			String login = prefs.getDroneshareLogin();
 			String password = prefs.getDronesharePassword();
 			if (prefs.getLiveUploadEnabled() && !login.isEmpty()
@@ -132,15 +151,15 @@ public abstract class MAVLinkConnection extends Thread {
 	}
 
 	private void handleData() throws IOException {
-		if (iavailable < 1) {
+        MAVLinkPacket[] receivedPackets = parseMavlinkBuffer(readData, iavailable);
+		if (receivedPackets == null) {
 			return;
 		}
-		for (i = 0; i < iavailable; i++) {
-			receivedPacket = parser.mavlink_parse_char(readData[i] & 0x00ff);
+
+        for(MAVLinkPacket receivedPacket: receivedPackets){
 			if (receivedPacket != null) {
 				saveToLog(receivedPacket);
-				MAVLinkMessage msg = receivedPacket.unpack();
-				listener.onReceiveMessage(msg);
+				listener.onReceiveMessage(receivedPacket);
 			}
 		}
 	}
@@ -196,5 +215,34 @@ public abstract class MAVLinkConnection extends Thread {
 			// If connection already closed, succeed silently
 		}
 	}
+
+    /**
+     * Parse the received byte(s) into mavlink packets.
+     * @param mavlinkBuffer received byte(s) buffer
+     * @param numBytes bytes count
+     * @return parsed mavlink packets
+     */
+    public MAVLinkPacket[] parseMavlinkBuffer(byte[] mavlinkBuffer, int numBytes){
+        return parseMavlinkBuffer(parser, mavlinkBuffer, numBytes);
+    }
+
+    /**
+     * Parse the received byte(s) into mavlink packets.
+     * @param parser
+     * @param mavlinkBuffer received byte(s) buffer
+     * @param numBytes bytes count
+     * @return parsed mavlink packets
+     */
+    public static MAVLinkPacket[] parseMavlinkBuffer(Parser parser, byte[] mavlinkBuffer,
+                                                     int numBytes){
+        if(numBytes < 1)
+            return null;
+
+        MAVLinkPacket[] parsedPackets = new MAVLinkPacket[numBytes];
+        for(int i = 0; i < numBytes; i++){
+            parsedPackets[i] = parser.mavlink_parse_char(mavlinkBuffer[i] & 0x00ff);
+        }
+        return parsedPackets;
+    }
 
 }

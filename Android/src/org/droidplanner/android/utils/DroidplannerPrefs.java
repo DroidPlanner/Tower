@@ -24,10 +24,11 @@ import android.preference.PreferenceManager;
  */
 public class DroidplannerPrefs implements org.droidplanner.core.drone.Preferences{
 
-    /*
-    Default preference value
+    /**
+     * Preferences default values.
      */
-    public static final boolean DEFAULT_USAGE_STATISTICS = true;
+    private static final boolean DEFAULT_AUTO_PAN_ENABLED = false;
+    public static final boolean DEFAULT_USAGE_STATISTICS = true;    
 
 	// Public for legacy usage
 	public SharedPreferences prefs;
@@ -100,6 +101,11 @@ public class DroidplannerPrefs implements org.droidplanner.core.drone.Preference
 				"pref_mavlink_stream_rate_raw_controller", "0"));
 		return rates;
 	}
+
+    public boolean isMapAutoPanEnabled(){
+        return prefs.getBoolean(context.getString(R.string.pref_auto_pan_enabled_key),
+                DEFAULT_AUTO_PAN_ENABLED);
+    }
 
     public boolean isUsageStatisticsEnabled(){
         return prefs.getBoolean(context.getString(R.string.pref_usage_statistics_key), DEFAULT_USAGE_STATISTICS);

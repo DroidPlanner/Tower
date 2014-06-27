@@ -1,6 +1,7 @@
 package org.droidplanner.android.utils;
 
 import org.droidplanner.android.utils.Utils.ConnectionType;
+import static org.droidplanner.android.glass.utils.GlassUtils.isGlassDevice;
 
 /**
  * Contains application related constants.
@@ -31,18 +32,46 @@ public class Constants {
 	 */
 	public static final String PREF_CONNECTION_TYPE = "pref_connection_type";
 
-	/**
-	 * This is the default mavlink connection type
-	 * 
-	 * @since 1.2.0
-	 */
-	public static final String DEFAULT_CONNECTION_TYPE = ConnectionType.USB
-			.name();
+    /**
+     * This is the default mavlink connection type
+     *
+     * @since 1.2.0
+     */
+    public static final String DEFAULT_CONNECTION_TYPE = isGlassDevice()
+            ? ConnectionType.BLUETOOTH.name()
+            : ConnectionType.USB.name();
+
+    /**
+     * This preference controls the activation of the mavlink bluetooth relay server.
+     * @since 1.2.0
+     */
+    public static final String PREF_BLUETOOTH_RELAY_SERVER_TOGGLE =
+            "pref_bluetooth_relay_server_toggle";
+
+    /**
+     * By default, the mavlink bluetooth relay server is turned off.
+     * @since 1.2.0
+     */
+    public static final boolean DEFAULT_BLUETOOTH_RELAY_SERVER_TOGGLE = false;
 
 	/**
 	 * Preference screen grouping the ui related preferences.
 	 */
 	public static final String PREF_UI_SCREEN = "pref_ui";
+
+    /*
+    Intent actions
+     */
+    private static final String PREFIX_ACTION = PACKAGE_NAME + ".action.";
+    public static final String ACTION_BLUETOOTH_RELAY_SERVER = PREFIX_ACTION + "RELAY_SERVER";
+
+
+    /*
+    Bundle extras
+     */
+    private static final String PREFIX_EXTRA = PACKAGE_NAME + ".extra.";
+    public static final String EXTRA_BLUETOOTH_RELAY_SERVER_ENABLED = PREFIX_EXTRA +
+            "BLUETOOTH_RELAY_SERVER_ENABLED";
 
 	/**
 	 * Sets whether or not the default language for the ui should be english.

@@ -42,4 +42,37 @@
         <attr name="isSelectable" format="reference|boolean" />
     </declare-styleable>
 
+    <declare-styleable name="HUD">
+        <attr name="android:enabled" />
+        <attr name="skyColor" format="color" />
+        <attr name="groundColor" format="color" />
+        <attr name="reticleColor" format="color" />
+        <attr name="reticleRadius" format="dimension" />
+        <attr name="android:textSize" />
+        <attr name="android:textColor"  />
+        <attr name="failsafeTextSize" format="dimension" />
+        <attr name="failsafeTextPadding" format="dimension" />
+
+        <!-- Yaw related properties -->
+        <attr name="topBarBgColor" format="color" />
+        <attr name="topBarHeight" format="dimension" />
+
+        <!-- Pitch related properties -->
+        <attr name="pitchScaleWidth" format="dimension" />
+
+        <!-- Info bar properties -->
+        <attr name="bottomBarHeight" format="dimension" />
+        <attr name="bottomBarBgColor" format="color" />
+        <attr name="bottomBarVerticalPadding" format="dimension" />
+
+        <!-- Scroller properties -->
+        <attr name="scrollerHeight" format="dimension" />
+        <attr name="scrollerWidth" format="dimension" />
+        <attr name="scrollerBgColor" format="color"/>
+        <attr name="scrollerArrowHeight" format="dimension" />
+        <attr name="scrollerTicWidth" format="dimension" />
+        <attr name="scrollerTextHorizontalMargin" format="dimension" />
+        <attr name="scrollerTextVerticalMargin" format="dimension" />
+    </declare-styleable>
+
 </resources>

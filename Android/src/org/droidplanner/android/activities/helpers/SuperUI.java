@@ -1,9 +1,12 @@
 package org.droidplanner.android.activities.helpers;
 
+import android.support.v4.app.DialogFragment;
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.fragments.helpers.BTDeviceListFragment;
 import org.droidplanner.android.maps.providers.google_map.GoogleMapFragment;
+import org.droidplanner.android.glass.fragments.BTDeviceCardsFragment;
+import org.droidplanner.android.glass.utils.GlassUtils;
 import org.droidplanner.android.utils.Constants;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.widgets.actionProviders.InfoBarActionProvider;
@@ -199,9 +202,11 @@ public abstract class SuperUI extends FragmentActivity implements
 
 			if (Utils.ConnectionType.BLUETOOTH.name().equals(connectionType)) {
 				// Launch a bluetooth device selection screen for the user
-				new BTDeviceListFragment().show(getSupportFragmentManager(),
-						"Device selection dialog");
-				return;
+                final DialogFragment btDeviceList = GlassUtils.isGlassDevice()
+                        ? new BTDeviceCardsFragment()
+                        : new BTDeviceListFragment();
+                btDeviceList.show(getSupportFragmentManager(), "Device selection dialog");
+                return;
 			}
 		}
 		drone.MavClient.toggleConnectionState();

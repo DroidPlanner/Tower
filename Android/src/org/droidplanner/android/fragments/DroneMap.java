@@ -6,7 +6,6 @@ import org.droidplanner.android.graphic.map.GraphicDrone;
 import org.droidplanner.android.graphic.map.GraphicGuided;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.providers.DPMapProvider;
-import org.droidplanner.android.maps.providers.osm.OSMapFragment;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.core.drone.Drone;
@@ -26,7 +25,11 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-public abstract class DroneMap extends Fragment implements OnDroneListener {
+public class DroneMap extends Fragment implements OnDroneListener {
+
+    protected static final float ZOOM_LEVEL = 20f;
+
+    protected boolean hasBeenZoomed = false;
 
     protected DPMap mMapFragment;
 
@@ -39,7 +42,9 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 
     protected Context context;
 
-	protected abstract boolean isMissionDraggable();
+	protected boolean isMissionDraggable(){
+        return false;
+    }
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle bundle) {
@@ -61,7 +66,7 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 
     private void updateMapFragment(){
         //Add the map fragment instance (based on user preference)
-        final DPMapProvider mapProvider = Utils.getMapProvider(getActivity().getApplicationContext());
+        final DPMapProvider mapProvider = getMapProvider();
 
         final FragmentManager fm  = getChildFragmentManager();
         mMapFragment = (DPMap)fm.findFragmentById(R.id.map_fragment_container);
@@ -74,6 +79,15 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
             fm.beginTransaction().replace(R.id.map_fragment_container, (Fragment)mMapFragment)
                     .commit();
         }
+    }
+
+    /**
+     * Returns the map provider to use in this fragment. This method exists so that children can
+     * override the returned map provider based on their need.
+     * @return map provider
+     */
+    protected DPMapProvider getMapProvider(){
+        return Utils.getMapProvider(getActivity().getApplicationContext());
     }
 
     @Override
@@ -118,7 +132,15 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
             case GPS:
                 mMapFragment.updateMarker(graphicDrone);
                 mMapFragment.updateDroneLeashPath(guided);
-                mMapFragment.addFlightPathPoint(drone.GPS.getPosition());
+
+                Coord2D dronePosition = drone.GPS.getPosition();
+                mMapFragment.addFlightPathPoint(dronePosition);
+
+                if(isAutoPanEnabled()){
+                    float zoomLevel = hasBeenZoomed ? mMapFragment.getMapZoomLevel() : ZOOM_LEVEL;
+                    hasBeenZoomed = true;
+                    mMapFragment.updateCamera(dronePosition, zoomLevel);
+                }
                 break;
 
             case GUIDEDPOINT:
@@ -146,6 +168,10 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
         return 0;
     }
 
+    protected boolean isAutoPanEnabled(){
+        return false;
+    }
+
     /**
      * Adds padding around the edges of the map.
      * @param left the number of pixels of padding to be added on the left of the map.
@@ -164,5 +190,4 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
     public List<Coord2D> projectPathIntoMap(List<Coord2D> path) {
         return mMapFragment.projectPathIntoMap(path);
     }
-
 }

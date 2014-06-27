@@ -1,9 +1,6 @@
 package org.droidplanner.android.maps;
 
-import android.content.res.Resources;
 import android.graphics.Color;
-
-import com.google.android.gms.maps.model.LatLng;
 
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
@@ -119,6 +116,26 @@ public interface DPMap {
     public void clearFlightPath();
 
     /**
+     * @return the map center.
+     */
+    public Coord2D getMapCenter();
+
+    /**
+     * @return the map zoom level.
+     */
+    public float getMapZoomLevel();
+
+    /**
+     * @return the map maximum zoom level
+     */
+    public float getMaxZoomLevel();
+
+    /**
+     * @return the map minimum zoom level
+     */
+    public float getMinZoomLevel();
+
+    /**
      * @return this map's provider.
      */
     public DPMapProvider getProvider();
@@ -177,7 +194,7 @@ public interface DPMap {
      * @param coord location for the map center
      * @param zoomLevel zoom level for the map
      */
-    public void updateCamera(Coord2D coord, int zoomLevel);
+    public void updateCamera(Coord2D coord, float zoomLevel);
 
     /**
      * Updates the drone leash path on the map.
