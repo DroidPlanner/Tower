@@ -116,7 +116,7 @@ public class GAUtils {
         final boolean isDroneShareUser = prefs.getLiveUploadEnabled() && !login.isEmpty()
                 && !password.isEmpty();
 
-        sendHit(new HitBuilders.ScreenViewBuilder()
+        sendHit(new HitBuilders.AppViewBuilder()
                 .setNewSession()
                 .setCustomDimension(CustomDimension.MAVLINK_CONNECTION_TYPE.getIndex(),
                         connectionType)

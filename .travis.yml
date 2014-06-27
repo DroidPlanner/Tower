@@ -2,7 +2,6 @@ language: android
 android:
   components:
     - build-tools-19.1.0
-    - extra-google-google_play_services
     - android-19
   licenses:
     - 'android-sdk-license-.+'
