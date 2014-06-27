@@ -32,11 +32,6 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 	private OnMissionControlInteraction listener;
 	private FollowMe followMe;
 
-    /**
-     * Monitors usage of the flight action buttons
-     */
-    private Tracker mTracker;
-	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -45,7 +40,6 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 		DroidPlannerApp droidPlannerApp = (DroidPlannerApp) getActivity().getApplication();
 		drone = droidPlannerApp.drone;
 		followMe = droidPlannerApp.followMe;
-        mTracker = droidPlannerApp.getTracker();
 		return view;
 	}
 
@@ -136,7 +130,7 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 		}
 
         if(eventBuilder != null){
-            mTracker.send(eventBuilder.build());
+            GAUtils.sendEvent(eventBuilder);
         }
 
 	}

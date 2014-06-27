@@ -56,11 +56,10 @@ public class FlightActivity extends DrawerNavigationUI implements
                 updateMapPadding();
 
                 //Stop tracking how long this was opened for.
-                mTracker.send(new HitBuilders.TimingBuilder()
+                GAUtils.sendTiming(new HitBuilders.TimingBuilder()
                         .setCategory(GAUtils.Category.FLIGHT_DATA_DETAILS_PANEL.toString())
                         .setVariable(getString(R.string.ga_mode_details_close_panel))
-                        .setValue(System.currentTimeMillis())
-                        .build());
+                        .setValue(System.currentTimeMillis()));
             }
         });
 
@@ -70,11 +69,10 @@ public class FlightActivity extends DrawerNavigationUI implements
                 updateMapPadding();
 
                 //Track how long this is opened for.
-                mTracker.send(new HitBuilders.TimingBuilder()
+                GAUtils.sendTiming(new HitBuilders.TimingBuilder()
                         .setCategory(GAUtils.Category.FLIGHT_DATA_DETAILS_PANEL.toString())
                         .setVariable(getString(R.string.ga_mode_details_open_panel))
-                        .setValue(System.currentTimeMillis())
-                        .build());
+                        .setValue(System.currentTimeMillis()));
             }
         });
 

@@ -36,11 +36,6 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
      */
     protected DroidplannerPrefs mAppPrefs;
 
-    /**
-     * Google analytics tracker used by the children activities.
-     */
-    protected Tracker mTracker;
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -53,7 +48,6 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
         app = (DroidPlannerApp) getApplication();
         this.drone = app.drone;
         gcsHeartbeat = new GCSHeartbeat(drone, 1);
-        mTracker = app.getTracker();
         mAppPrefs = new DroidplannerPrefs(getApplicationContext());
 
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);

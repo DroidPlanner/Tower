@@ -5,7 +5,6 @@ import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.communication.connection.MAVLinkConnection;
 import org.droidplanner.android.communication.connection.MAVLinkConnection.MavLinkConnectionListener;
 import org.droidplanner.android.notifications.StatusBarNotificationProvider;
-import org.droidplanner.android.utils.Constants;
 import org.droidplanner.android.utils.DroidplannerPrefs;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.analytics.GAUtils;
@@ -20,7 +19,6 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -46,11 +44,6 @@ public class MAVLinkService extends Service implements	MavLinkConnectionListener
      * Provides access to the app preferences.
      */
     private DroidplannerPrefs mAppPrefs;
-
-    /**
-     * Provides access to the google analytics tracker.
-     */
-    private Tracker mTracker;
 
 	private MAVLinkConnection mavConnection;
 	Messenger msgCenter = null;
@@ -155,9 +148,6 @@ public class MAVLinkService extends Service implements	MavLinkConnectionListener
         //Initialise the app preferences handle.
         mAppPrefs = new DroidplannerPrefs(context);
 
-        //Retrieving the app GA tracker.
-        mTracker = dpApp.getTracker();
-
 		commErrMsgLocalStore = getString(R.string.MAVLinkError);
 
 		commErrHandler = new Handler() {
@@ -167,7 +157,7 @@ public class MAVLinkService extends Service implements	MavLinkConnectionListener
 			}
 		};
 
-		connectMAVconnection();
+		connectMAVConnection();
 
 		final StatusBarNotificationProvider statusBarNotification = dpApp.mNotificationHandler
 				.getStatusBarNotificationProvider();
@@ -207,7 +197,7 @@ public class MAVLinkService extends Service implements	MavLinkConnectionListener
 	 * Toggle the current state of the MAVlink connection. Starting and closing
 	 * the as needed. May throw a onConnect or onDisconnect callback
 	 */
-    private void connectMAVconnection() {
+    private void connectMAVConnection() {
         String connectionType = mAppPrefs.getMavLinkConnectionType();
 
         Utils.ConnectionType connType = Utils.ConnectionType.valueOf(connectionType);
@@ -215,13 +205,9 @@ public class MAVLinkService extends Service implements	MavLinkConnectionListener
         mavConnection.start();
 
         //Record which connection type is used.
-        mTracker.send(new HitBuilders.EventBuilder()
+        GAUtils.sendEvent(new HitBuilders.EventBuilder()
                 .setCategory(GAUtils.Category.MAVLINK_CONNECTION.toString())
-                .setAction("Mavlink connecting using " + connectionType)
-                .setNewSession()
-                .setCustomDimension(GAUtils.CustomDimension.MAVLINK_CONNECTION_TYPE.getIndex(),
-                        connectionType)
-                .build());
+                .setAction( "Mavlink connecting using " + connectionType));
     }
 
     private void disconnectMAVConnection() {
@@ -231,11 +217,9 @@ public class MAVLinkService extends Service implements	MavLinkConnectionListener
             mavConnection = null;
         }
 
-        mTracker.send(new HitBuilders.EventBuilder()
+        GAUtils.sendEvent(new HitBuilders.EventBuilder()
                 .setCategory(GAUtils.Category.MAVLINK_CONNECTION.toString())
-                .setAction("Mavlink disconnecting")
-                .setNewSession()
-                .build());
+                .setAction("Mavlink disconnecting"));
     }
 
 }
