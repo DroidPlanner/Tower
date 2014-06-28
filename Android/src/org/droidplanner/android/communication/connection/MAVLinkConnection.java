@@ -10,6 +10,7 @@ import java.nio.ByteOrder;
 
 import org.droidplanner.android.communication.service.UploaderService;
 import org.droidplanner.android.utils.DroidplannerPrefs;
+import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.file.FileStream;
 
 import android.content.Context;
@@ -75,7 +76,11 @@ public abstract class MAVLinkConnection extends Thread {
 		try {
 			parser.stats.mavlinkResetStats();
 			openConnection();
-			
+
+            //Start a new ga analytics session. The new session will be tagged with the mavlink
+            // connection mechanism, as well as whether the user has an active droneshare account.
+            GAUtils.startNewSession(parentContext);
+
 			logFile = FileStream.getTLogFile();
 			logWriter = FileStream.openOutputStream(logFile);
 			logBuffer = ByteBuffer.allocate(Long.SIZE / Byte.SIZE);

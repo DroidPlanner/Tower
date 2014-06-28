@@ -356,7 +356,6 @@
     <string name="expandable_listview_icon_desc">Expandable listview icon</string>
 
     <!-- Google Analytics -->
-    <string name="ga_mode_details_panel_category">Mode Details Panel</string>
     <string name="ga_mode_details_open_panel">Panel Open Time</string>
     <string name="ga_mode_details_close_panel">Panel Close Time</string>
 
