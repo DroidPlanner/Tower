@@ -37,7 +37,7 @@ public class waypoint implements MarkerSource {
 		setHeight(h);
 
 		missionItem.current = 0; // TODO use correct parameter for HOME
-		missionItem.frame = MAV_FRAME.MAV_FRAME_GLOBAL;
+		missionItem.frame = MAV_FRAME.MAV_FRAME_GLOBAL_RELATIVE_ALT;
 		missionItem.command = MAV_CMD.MAV_CMD_NAV_WAYPOINT;
 		missionItem.param1 = 0; // TODO use correct parameter
 		missionItem.param2 = 0; // TODO use correct parameter
