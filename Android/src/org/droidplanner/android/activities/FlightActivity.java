@@ -77,14 +77,6 @@ public class FlightActivity extends DrawerNavigationUI implements
             }
         });
 
-		mapFragment = (FlightMapFragment) fragmentManager
-				.findFragmentById(R.id.mapFragment);
-		if (mapFragment == null) {
-			mapFragment = new FlightMapFragment();
-			fragmentManager.beginTransaction()
-					.add(R.id.mapFragment, mapFragment).commit();
-		}
-
 		editorTools = fragmentManager.findFragmentById(R.id.editorToolsFragment);
 		if (editorTools == null) {
 			editorTools = new FlightActionsFragment();
@@ -205,7 +197,7 @@ public class FlightActivity extends DrawerNavigationUI implements
                 bottomPadding = (mapBottom - toolsBottom) + toolsHeight;
             }
         }
-        mapFragment.mMap.setPadding(leftPadding, topPadding, 0, bottomPadding);
+        mapFragment.setMapPadding(leftPadding, topPadding, 0, bottomPadding);
     }
 
 	@Override
