@@ -7,6 +7,7 @@ import org.droidplanner.android.fragments.RCFragment;
 import org.droidplanner.android.fragments.TelemetryFragment;
 import org.droidplanner.android.fragments.helpers.FlightSlidingDrawerContent;
 import org.droidplanner.android.fragments.mode.FlightModePanel;
+import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
@@ -55,11 +56,10 @@ public class FlightActivity extends DrawerNavigationUI implements
                 updateMapPadding();
 
                 //Stop tracking how long this was opened for.
-                mTracker.send(new HitBuilders.TimingBuilder()
-                        .setCategory(getString(R.string.ga_mode_details_panel_category))
+                GAUtils.sendTiming(new HitBuilders.TimingBuilder()
+                        .setCategory(GAUtils.Category.FLIGHT_DATA_DETAILS_PANEL.toString())
                         .setVariable(getString(R.string.ga_mode_details_close_panel))
-                        .setValue(System.currentTimeMillis())
-                        .build());
+                        .setValue(System.currentTimeMillis()));
             }
         });
 
@@ -69,11 +69,10 @@ public class FlightActivity extends DrawerNavigationUI implements
                 updateMapPadding();
 
                 //Track how long this is opened for.
-                mTracker.send(new HitBuilders.TimingBuilder()
-                        .setCategory(getString(R.string.ga_mode_details_panel_category))
+                GAUtils.sendTiming(new HitBuilders.TimingBuilder()
+                        .setCategory(GAUtils.Category.FLIGHT_DATA_DETAILS_PANEL.toString())
                         .setVariable(getString(R.string.ga_mode_details_open_panel))
-                        .setValue(System.currentTimeMillis())
-                        .build());
+                        .setValue(System.currentTimeMillis()));
             }
         });
 
@@ -85,12 +84,10 @@ public class FlightActivity extends DrawerNavigationUI implements
 					.add(R.id.mapFragment, mapFragment).commit();
 		}
 
-		editorTools = fragmentManager
-				.findFragmentById(R.id.editorToolsFragment);
+		editorTools = fragmentManager.findFragmentById(R.id.editorToolsFragment);
 		if (editorTools == null) {
 			editorTools = new FlightActionsFragment();
-			fragmentManager.beginTransaction()
-					.add(R.id.editorToolsFragment, editorTools).commit();
+			fragmentManager.beginTransaction().add(R.id.editorToolsFragment, editorTools).commit();
 		}
 
 		/*

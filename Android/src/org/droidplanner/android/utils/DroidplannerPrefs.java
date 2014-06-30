@@ -28,8 +28,10 @@ public class DroidplannerPrefs implements org.droidplanner.core.drone.Preference
     Default preference value
      */
     public static final boolean DEFAULT_USAGE_STATISTICS = true;
+    public static final String DEFAULT_CONNECTION_TYPE = Utils.ConnectionType.USB.name();
+    private static final boolean DEFAULT_KEEP_SCREEN_ON = false;
 
-	// Public for legacy usage
+    // Public for legacy usage
 	public SharedPreferences prefs;
 	private Context context;
 	
@@ -101,7 +103,26 @@ public class DroidplannerPrefs implements org.droidplanner.core.drone.Preference
 		return rates;
 	}
 
+    /**
+     * @return true if google analytics reporting is enabled.
+     */
     public boolean isUsageStatisticsEnabled(){
         return prefs.getBoolean(context.getString(R.string.pref_usage_statistics_key), DEFAULT_USAGE_STATISTICS);
+    }
+
+    /**
+     * @return the selected mavlink connection type.
+     */
+    public String getMavLinkConnectionType(){
+        return prefs.getString(context.getString(R.string.pref_connection_type_key),
+                DEFAULT_CONNECTION_TYPE);
+    }
+
+    /**
+     * @return true if the device screen should stay on.
+     */
+    public boolean keepScreenOn(){
+        return prefs.getBoolean(context.getString(R.string.pref_keep_screen_bright_key),
+                DEFAULT_KEEP_SCREEN_ON);
     }
 }
