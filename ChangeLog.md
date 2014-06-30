@@ -8,6 +8,15 @@ Our convention for release control is the following (for a release like DPvA.B.C
 All the changes are logged below (preferable with the pull request numbers in parenteses):
 
 # Releases
+## Droidplanner v2.4.3
+* Improve analytics (#829)
+* Fixed German translation (#831)
+* Restructuring Settings menu (#815)
+* Updating parameters description (#828)
+* Adding support for direct connections to the Pixhawk (#816)
+* Travis CI integration (#821,#824,#829)
+* Fixing log bufferoverflow exception (#834)
+
 ## Droidplanner v2.4.2
 * Added google analytics (#813)
 * Update google play services (#813)
