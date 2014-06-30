@@ -395,7 +395,15 @@
         <item name="android:scrollingCache">false</item>
         <item name="android:footerDividersEnabled">false</item>
         <item name="android:headerDividersEnabled">false</item>
+    </style>
 
+    <!-- Editor window widget styles -->
+    <style name="editorToggleStyle">
+        <item name="android:background">@drawable/button_editor</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:layout_margin">5dp</item>
     </style>
 
 </resources>

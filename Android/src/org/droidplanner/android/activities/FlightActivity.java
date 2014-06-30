@@ -7,6 +7,7 @@ import org.droidplanner.android.fragments.RCFragment;
 import org.droidplanner.android.fragments.TelemetryFragment;
 import org.droidplanner.android.fragments.helpers.FlightSlidingDrawerContent;
 import org.droidplanner.android.fragments.mode.FlightModePanel;
+import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
@@ -22,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SlidingDrawer;
 
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
@@ -53,6 +55,12 @@ public class FlightActivity extends DrawerNavigationUI implements
             @Override
             public void onDrawerClosed() {
                 updateMapPadding();
+
+                //Stop tracking how long this was opened for.
+                GAUtils.sendTiming(new HitBuilders.TimingBuilder()
+                        .setCategory(GAUtils.Category.FLIGHT_DATA_DETAILS_PANEL.toString())
+                        .setVariable(getString(R.string.ga_mode_details_close_panel))
+                        .setValue(System.currentTimeMillis()));
             }
         });
 
@@ -60,15 +68,27 @@ public class FlightActivity extends DrawerNavigationUI implements
             @Override
             public void onDrawerOpened() {
                 updateMapPadding();
+
+                //Track how long this is opened for.
+                GAUtils.sendTiming(new HitBuilders.TimingBuilder()
+                        .setCategory(GAUtils.Category.FLIGHT_DATA_DETAILS_PANEL.toString())
+                        .setVariable(getString(R.string.ga_mode_details_open_panel))
+                        .setValue(System.currentTimeMillis()));
             }
         });
 
-		editorTools = fragmentManager
-				.findFragmentById(R.id.editorToolsFragment);
+		mapFragment = (FlightMapFragment) fragmentManager
+				.findFragmentById(R.id.mapFragment);
+		if (mapFragment == null) {
+			mapFragment = new FlightMapFragment();
+			fragmentManager.beginTransaction()
+					.add(R.id.mapFragment, mapFragment).commit();
+		}
+
+		editorTools = fragmentManager.findFragmentById(R.id.editorToolsFragment);
 		if (editorTools == null) {
 			editorTools = new FlightActionsFragment();
-			fragmentManager.beginTransaction()
-					.add(R.id.editorToolsFragment, editorTools).commit();
+			fragmentManager.beginTransaction().add(R.id.editorToolsFragment, editorTools).commit();
 		}
 
         // Add the telemtry fragment

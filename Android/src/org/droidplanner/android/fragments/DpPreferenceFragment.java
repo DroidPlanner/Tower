@@ -44,7 +44,7 @@ public class DpPreferenceFragment extends PreferenceFragment {
 
                     if (containerParent instanceof LinearLayout) {
                         // This view also contains the title text, set the whole view as clickable
-                        ((LinearLayout) containerParent).setOnClickListener(dismissDialogClickListener);
+                        containerParent.setOnClickListener(dismissDialogClickListener);
                     } else {
                         // Just set it on the home button
                         ((FrameLayout) homeBtnContainer).setOnClickListener(dismissDialogClickListener);

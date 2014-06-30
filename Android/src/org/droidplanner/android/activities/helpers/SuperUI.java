@@ -3,8 +3,9 @@ package org.droidplanner.android.activities.helpers;
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.fragments.helpers.BTDeviceListFragment;
-import org.droidplanner.android.fragments.helpers.OfflineMapFragment;
+import org.droidplanner.android.maps.providers.google_map.GoogleMapFragment;
 import org.droidplanner.android.utils.Constants;
+import org.droidplanner.android.utils.DroidplannerPrefs;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.widgets.actionProviders.InfoBarActionProvider;
 import org.droidplanner.core.drone.Drone;
@@ -12,6 +13,7 @@ import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.gcs.GCSHeartbeat;
 
+import android.app.ActionBar;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -20,17 +22,33 @@ import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public abstract class SuperUI extends FragmentActivity implements
-		OnDroneListener {
+import com.google.android.gms.analytics.Tracker;
+
+public abstract class SuperUI extends FragmentActivity implements OnDroneListener {
 	private ScreenOrientation screenOrientation = new ScreenOrientation(this);
 	private InfoBarActionProvider infoBar;
 	private GCSHeartbeat gcsHeartbeat;
 	public DroidPlannerApp app;
 	public Drone drone;
 
+    /**
+     * Handle to the app preferences.
+     */
+    protected DroidplannerPrefs mAppPrefs;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+        ActionBar actionBar = getActionBar();
+        if(actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
+        app = (DroidPlannerApp) getApplication();
+        this.drone = app.drone;
+        gcsHeartbeat = new GCSHeartbeat(drone, 1);
+        mAppPrefs = new DroidplannerPrefs(getApplicationContext());
 
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
@@ -39,22 +57,14 @@ public abstract class SuperUI extends FragmentActivity implements
 		 * org.droidplanner.android.service .MAVLinkService) as suggested by the
 		 * android android.os.PowerManager#newWakeLock documentation.
 		 */
-		if (PreferenceManager.getDefaultSharedPreferences(
-				getApplicationContext()).getBoolean("pref_keep_screen_bright",
-				false)) {
-			getWindow()
-					.addFlags(
-							android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		if (mAppPrefs.keepScreenOn()) {
+			getWindow().addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		}
-
-		app = (DroidPlannerApp) getApplication();
-		this.drone = app.drone;
 
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
 		screenOrientation.unlock();
 		Utils.updateUILanguage(getApplicationContext());
-		gcsHeartbeat = new GCSHeartbeat(drone, 1);
 	}
 
 	@Override
@@ -180,10 +190,7 @@ public abstract class SuperUI extends FragmentActivity implements
 
 	protected void toggleDroneConnection() {
 		if (!drone.MavClient.isConnected()) {
-			final String connectionType = PreferenceManager
-					.getDefaultSharedPreferences(getApplicationContext())
-					.getString(Constants.PREF_CONNECTION_TYPE,
-							Constants.DEFAULT_CONNECTION_TYPE);
+			final String connectionType = mAppPrefs.getMavLinkConnectionType();
 
 			if (Utils.ConnectionType.BLUETOOTH.name().equals(connectionType)) {
 				// Launch a bluetooth device selection screen for the user
@@ -199,21 +206,21 @@ public abstract class SuperUI extends FragmentActivity implements
 		final String mapType;
 		switch (itemId) {
 		case R.id.menu_map_type_hybrid:
-			mapType = OfflineMapFragment.MAP_TYPE_HYBRID;
+			mapType = GoogleMapFragment.MAP_TYPE_HYBRID;
 			break;
 		case R.id.menu_map_type_normal:
-			mapType = OfflineMapFragment.MAP_TYPE_NORMAL;
+			mapType = GoogleMapFragment.MAP_TYPE_NORMAL;
 			break;
 		case R.id.menu_map_type_terrain:
-			mapType = OfflineMapFragment.MAP_TYPE_TERRAIN;
+			mapType = GoogleMapFragment.MAP_TYPE_TERRAIN;
 			break;
 		default:
-			mapType = OfflineMapFragment.MAP_TYPE_SATELLITE;
+			mapType = GoogleMapFragment.MAP_TYPE_SATELLITE;
 			break;
 		}
 
 		PreferenceManager.getDefaultSharedPreferences(this).edit()
-				.putString(OfflineMapFragment.PREF_MAP_TYPE, mapType).commit();
+				.putString(GoogleMapFragment.PREF_MAP_TYPE, mapType).commit();
 
 		// drone.notifyMapTypeChanged();
 	}

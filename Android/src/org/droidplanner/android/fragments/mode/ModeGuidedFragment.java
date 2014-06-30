@@ -34,7 +34,7 @@ public class ModeGuidedFragment extends Fragment implements OnClickListener {
 		return view;
 	}
 
-	private void setupViews(View parentView) {
+	protected void setupViews(View parentView) {
 		altPlus1 = (Button) parentView
 				.findViewById(R.id.button_altitude_plus_1);
 		altPlus10 = (Button) parentView
@@ -46,7 +46,7 @@ public class ModeGuidedFragment extends Fragment implements OnClickListener {
 		altTextView = (TextView) parentView.findViewById(R.id.guided_altitude);
 	}
 
-	private void setupListener() {
+	protected void setupListener() {
 		altPlus1.setOnClickListener(this);
 		altPlus10.setOnClickListener(this);
 		altMinus1.setOnClickListener(this);
@@ -72,8 +72,8 @@ public class ModeGuidedFragment extends Fragment implements OnClickListener {
 		updateLabel();
 	}
 
-	private void updateLabel() {
-		this.altTextView.setText("Target Altitude: "
-				+ drone.guidedPoint.getAltitude());
+	protected void updateLabel() {
+		this.altTextView.setText("Target Altitude: ("
+				+ drone.guidedPoint.getAltitude()+")");
 	}
 }

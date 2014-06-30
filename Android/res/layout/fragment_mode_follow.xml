@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/flyoutPanelLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:ignore="HardcodedText" >
+
+    <!-- Description -->
+
+    <View
+        android:id="@+id/desc_rect"
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/mode_desc_rectangle" />
+
+    <TextView
+        android:id="@+id/ModeDetail"
+        style="@style/ModeDetailText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/desc_rect"
+        android:layout_alignTop="@id/desc_rect"
+        android:text="@string/mode_guided" />
+
+    <!-- Controls -->
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/desc_rect"
+        android:orientation="vertical"
+        android:padding="16dp" >
+
+        <!-- Altitude buttons -->
+
+        <TextView
+            android:id="@+id/guided_altitude"
+            style="@style/modeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Altitude: (10m)" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/button_altitude_plus_1"
+                style="@style/modeControl"
+                android:layout_width="76dp"
+                android:layout_height="64dp"
+                android:layout_marginRight="3dp"
+                android:background="@drawable/button_mode_options"
+                android:text="+1" />
+
+            <Button
+                android:id="@+id/button_altitude_minus_1"
+                style="@style/modeControl"
+                android:layout_width="76dp"
+                android:layout_height="64dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="3dp"
+                android:background="@drawable/button_mode_options"
+                android:text="-1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/button_altitude_plus_10"
+                style="@style/modeControl"
+                android:layout_width="76dp"
+                android:layout_height="64dp"
+                android:layout_marginRight="3dp"
+                android:background="@drawable/button_mode_options"
+                android:text="+10" />
+
+            <Button
+                android:id="@+id/button_altitude_minus_10"
+                style="@style/modeControl"
+                android:layout_width="76dp"
+                android:layout_height="64dp"
+                android:background="@drawable/button_mode_options"
+                android:text="-10" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/linearLayout1"
+        android:orientation="vertical"
+        android:padding="16dp" >
+
+        <TextView
+            android:id="@+id/follow_radius"
+            style="@style/modeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Radius: (10m)" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/button_radius_plus_1"
+                style="@style/modeControl"
+                android:layout_width="76dp"
+                android:layout_height="64dp"
+                android:layout_marginRight="3dp"
+                android:background="@drawable/button_mode_options"
+                android:text="+" />
+
+            <Button
+                android:id="@+id/button_radius_minus_1"
+                style="@style/modeControl"
+                android:layout_width="76dp"
+                android:layout_height="64dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="3dp"
+                android:background="@drawable/button_mode_options"
+                android:text="-" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,21 @@
+language: android
+android:
+  components:
+    - build-tools-19.1.0
+    - android-19
+  licenses:
+    - 'android-sdk-license-.+'
+
+script:
+    - ./gradlew build
+
+deploy:
+  provider: releases
+  api_key:
+    secure: N1sRQjwlExc51dA10dOvzdnkYMh9/X9WZmKwYqnWOguV+0dg3Jw2xXyBRxZLO1olIlIV0XGaI1HLAAO0OaFEYyWMO9BkZ60aJC8gePGnnwk1LSYR2moGAtlF6Y+aumfMZzXG4gU4QlVKbMd0uLvUWKu6eTqoMtVe+/C8GeJn6pk=
+  file:
+    - "./Android/build/outputs/apk/Android-release-unsigned.apk"
+  skip_cleanup: true
+  on:
+    tags: true
+    branch: feature_travis_ci

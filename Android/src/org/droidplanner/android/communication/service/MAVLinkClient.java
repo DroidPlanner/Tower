@@ -54,8 +54,7 @@ public class MAVLinkClient implements MAVLinkStreams.MAVLinkOutputStream {
 			// it, then now is the time to unregister.
 			if (mService != null) {
 				try {
-					Message msg = Message.obtain(null,
-							MAVLinkService.MSG_UNREGISTER_CLIENT);
+					Message msg = Message.obtain(null, MAVLinkService.MSG_UNREGISTER_CLIENT);
 					msg.replyTo = mMessenger;
 					mService.send(msg);
 

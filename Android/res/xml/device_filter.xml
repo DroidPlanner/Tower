@@ -10,6 +10,7 @@
 	<usb-device vendor-id="1412" product-id="45088" /> <!-- REX-USB60F -->
     <usb-device vendor-id="9025" product-id="16" /><!-- APM 2.5 device -->    
     <usb-device vendor-id="9900" product-id="16" /><!-- APM 2.5 device -->
+    <usb-device vendor-id="9900" product-id="17" /><!-- Pixhawk device -->
     <usb-device vendor-id="5824" product-id="1155" /><!--  Teensyduino  -->
     <usb-device vendor-id="4292" product-id="60000" /><!-- CP210x UART Bridge -->
     <usb-device vendor-id="1118" product-id="688"/>
