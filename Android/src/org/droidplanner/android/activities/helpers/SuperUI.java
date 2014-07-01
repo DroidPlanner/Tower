@@ -80,10 +80,14 @@ public abstract class SuperUI extends FragmentActivity implements
 	}
 
 	private void maxVolumeIfEnabled() {
-		AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-		audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
-		    audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC),
-		    0);
+		if (PreferenceManager.getDefaultSharedPreferences(
+				getApplicationContext()).getBoolean(getString(R.string.pref_request_max_volume_key), false)) {
+
+			AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+			audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
+			    audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC),
+			    0);
+		}
 	}
 
 	@Override
