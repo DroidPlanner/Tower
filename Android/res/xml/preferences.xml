@@ -28,7 +28,7 @@
                 android:title="@string/pref_title_screen" >
                 <CheckBoxPreference
                     android:defaultValue="true"
-                    android:key="pref_keep_screen_bright"
+                    android:key="@string/pref_keep_screen_bright_key"
                     android:summary="@string/pref_keep_screen_bright_summary"
                     android:title="@string/pref_keep_screen_bright" />
                 <CheckBoxPreference
