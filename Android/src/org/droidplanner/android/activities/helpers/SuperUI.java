@@ -78,9 +78,7 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 	}
 
 	private void maxVolumeIfEnabled() {
-		if (PreferenceManager.getDefaultSharedPreferences(
-				getApplicationContext()).getBoolean(getString(R.string.pref_request_max_volume_key), false)) {
-
+		if (mAppPrefs.keepScreenOn()) {
 			AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 			audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
 			    audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC),
