@@ -14,6 +14,7 @@ import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.gcs.GCSHeartbeat;
 
 import android.app.ActionBar;
+import android.content.Context;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -70,9 +71,21 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 	@Override
 	protected void onStart() {
 		super.onStart();
+		maxVolumeIfEnabled();
 		drone.events.addDroneListener(this);
 		drone.MavClient.queryConnectionState();
 		drone.events.notifyDroneEvent(DroneEventsType.MISSION_UPDATE);
+	}
+
+	private void maxVolumeIfEnabled() {
+		if (PreferenceManager.getDefaultSharedPreferences(
+				getApplicationContext()).getBoolean(getString(R.string.pref_request_max_volume_key), false)) {
+
+			AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+			audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
+			    audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC),
+			    0);
+		}
 	}
 
 	@Override
