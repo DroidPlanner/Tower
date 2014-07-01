@@ -30,6 +30,7 @@ public class DroidplannerPrefs implements org.droidplanner.core.drone.Preference
     public static final boolean DEFAULT_USAGE_STATISTICS = true;
     public static final String DEFAULT_CONNECTION_TYPE = Utils.ConnectionType.USB.name();
     private static final boolean DEFAULT_KEEP_SCREEN_ON = false;
+    private static final boolean DEFAULT_MAX_VOLUME_ON_START = false;
 
     // Public for legacy usage
 	public SharedPreferences prefs;
@@ -124,5 +125,13 @@ public class DroidplannerPrefs implements org.droidplanner.core.drone.Preference
     public boolean keepScreenOn(){
         return prefs.getBoolean(context.getString(R.string.pref_keep_screen_bright_key),
                 DEFAULT_KEEP_SCREEN_ON);
+    }
+    
+    /**
+     * @return true if the device screen should stay on.
+     */
+    public boolean maxVolumeOnStart(){
+        return prefs.getBoolean(context.getString(R.string.pref_request_max_volume_key),
+                DEFAULT_MAX_VOLUME_ON_START);
     }
 }
