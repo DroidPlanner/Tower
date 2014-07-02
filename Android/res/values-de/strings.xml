@@ -62,6 +62,7 @@
     <string name="pref_map_type_summary">Kartentyp wählen</string>
     <string name="pref_enable_tts">Sprachausgabe aktivieren</string>
     <string name="pref_enable_tts_summary">Sprachausgabe für wichtige Ereignisse</string>
+    <string name="pref_request_max_volume">Höchste lautstärke am start einstellen</string>
     <string name="pref_vehicle_type">Standard Fahrzeugtyp</string>
     <string name="pref_vehicle_type_summary">Fahrzeugtyp, wenn Verbindung getrennt</string>
     <string name="pref_rc">RC Bildschirm</string>
