@@ -45,7 +45,9 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 		if (isEnabledInPreferences()) {
 			if (isEnabled()) {
 				disableFollowMe();
+				drone.state.changeFlightMode(ApmModes.ROTOR_LOITER);
 			} else {
+				drone.state.changeFlightMode(ApmModes.ROTOR_GUIDED);
 				enableFollowMe();
 			}
 		} else {
@@ -68,7 +70,6 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 		mLocationClient.requestLocationUpdates(mLocationRequest, this);
 
 		followMeEnabled = true;
-		// drone.state.setMode(ApmModes.ROTOR_GUIDED);
 	}
 
 	private void disableFollowMe() {
