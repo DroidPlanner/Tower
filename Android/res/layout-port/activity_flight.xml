@@ -7,45 +7,51 @@
 	tools:ignore="HardcodedText"
     >
 
-    <FrameLayout
-        android:id="@+id/mapFragment"
+    <include
+        layout="@layout/common_flight_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <FrameLayout
-        android:id="@+id/containerRC"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="bottom"
-        android:measureAllChildren="true" >
-    </FrameLayout>
+    <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
+        android:id="@+id/telemetryFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:layout="@layout/fragment_telemetry"
+        android:fitsSystemWindows="true"/>
 
-    <FrameLayout
+    <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:fitsSystemWindows="true"
+        >
+
+        <TextView
+            android:id="@+id/failsafeTextView"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:background="#D8ee2d3e"
+            android:text="@string/RCFailsafe"
+            android:visibility="gone"
+            style="@style/editorMissionOverviewText"
+            />
+    </org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout>
+
+    <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
         android:id="@+id/editorToolsFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        tools:layout="@layout/fragment_mission_control" />
-
-    <TextView
-        android:id="@+id/failsafeTextView"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:layout_alignParentTop="true"
-        android:background="#D8ee2d3e"
-        android:text="@string/RCFailsafe"
-		style="@style/editorMissionOverviewText"
-        android:visibility="gone"
-        />
+        tools:layout="@layout/fragment_mission_control"
+        android:fitsSystemWindows="true"/>
 
     <SlidingDrawer
         android:id="@+id/SlidingDrawerRight"
         android:layout_width="210dp"
-        android:layout_height="match_parent"
+        android:layout_height="540dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_above="@+id/editorToolsFragment"
         android:content="@+id/sliding_drawer_content"
         android:handle="@+id/slideButtonLeft"
         android:orientation="horizontal"
@@ -59,13 +65,13 @@
             android:src="@drawable/drawer_tab"
             tools:ignore="ContentDescription"/>
 
-		<FrameLayout
-			android:id="@+id/sliding_drawer_content"
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			tools:layout="@layout/fragment_flight_sliding_drawer_content" />
+        <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
+            android:id="@+id/sliding_drawer_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            tools:layout="@layout/fragment_flight_mode_panel" />
 
     </SlidingDrawer>
-
 
 </RelativeLayout>

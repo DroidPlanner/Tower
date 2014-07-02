@@ -76,7 +76,8 @@
 
 		<activity
 		    android:name=".android.activities.FlightActivity"
-		    android:launchMode="singleTask" >
+		    android:launchMode="singleTask"
+            android:theme="@style/CustomActionBarTheme.Transparent">
 
             <!-- Launcher Intent -->
             <intent-filter>
@@ -98,6 +99,7 @@
             android:name=".android.activities.EditorActivity"
             android:label="@string/editor"
             android:launchMode="singleTop"
+            android:theme="@style/CustomActionBarTheme.Transparent"
             android:parentActivityName=".android.activities.FlightActivity" >
 
             <!-- Parent activity meta-data to support API level 7+ -->
@@ -118,8 +120,8 @@
             android:name=".android.activities.ConfigurationActivity"
             android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTop"
-            android:theme="@style/Theme.PageIndicatorDefaults"
             android:label="@string/menu_drone_setup"
+            android:theme="@style/Theme.PageIndicatorDefaults"
             android:parentActivityName=".android.activities.SettingsActivity" >
 
             <!-- Parent activity meta-data to support API level 7+ -->

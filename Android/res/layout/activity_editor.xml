@@ -1,56 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
    	>
 
-    <fragment
-        android:id="@+id/gestureMapFragment"
-        android:name="org.droidplanner.android.fragments.helpers.GestureMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout="@layout/fragment_gesture_map" />
-
-    <TextView
-        android:id="@+id/editorInfoWindow"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:text="@string/editor_info_window"
-		style="@style/editorMissionOverviewText"
-        />
-
     <include
-        android:id="@+id/editorSplineToggleContainer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        layout="@layout/editor_spline_toggle"
-        android:layout_below="@+id/editorInfoWindow"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"/>
-
-    <fragment
-        android:id="@+id/editorToolsFragment"
-        android:name="org.droidplanner.android.fragments.EditorToolsFragment"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/missionFragment1"
-        android:layout_centerVertical="true"
-        android:layout_below="@+id/editorInfoWindow"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_margin="5dp"
-        tools:layout="@layout/fragment_editor_tools" />
-
-    <fragment
-        android:id="@+id/missionFragment1"
-        android:name="org.droidplanner.android.fragments.EditorListFragment"
+        layout="@layout/common_editor_layout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/editor_mission_fragment_height"
-        android:layout_alignParentBottom="true"
-        tools:layout="@layout/fragment_editor_list"
-        />
+        android:layout_height="match_parent"/>
 
 </RelativeLayout>

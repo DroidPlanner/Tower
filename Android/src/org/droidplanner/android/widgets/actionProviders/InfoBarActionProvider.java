@@ -6,7 +6,6 @@ import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.android.widgets.actionProviders.InfoBarItem.BatteryInfo;
 import org.droidplanner.android.widgets.actionProviders.InfoBarItem.FlightModesInfo;
-import org.droidplanner.android.widgets.actionProviders.InfoBarItem.FlightTimeInfo;
 import org.droidplanner.android.widgets.actionProviders.InfoBarItem.GpsInfo;
 import org.droidplanner.android.widgets.actionProviders.InfoBarItem.HomeInfo;
 import org.droidplanner.android.widgets.actionProviders.InfoBarItem.PhoneExtraInfo;
@@ -48,7 +47,6 @@ public class InfoBarActionProvider extends ActionProvider implements
 	private HomeInfo mHomeInfo;
 	private GpsInfo mGpsInfo;
 	private BatteryInfo mBatteryInfo;
-	private FlightTimeInfo mFlightTimeInfo;
 	private SignalInfo mSignalInfo;
 	private FlightModesInfo mFlightModesInfo;
 	private PhoneExtraInfo mPhoneExtraInfo;
@@ -116,11 +114,6 @@ public class InfoBarActionProvider extends ActionProvider implements
 				mSignalInfo.updateItemView(mContext, mDrone);
 			break;
 
-		case STATE:
-			if (mFlightTimeInfo != null)
-				mFlightTimeInfo.updateItemView(mContext, mDrone);
-			break;
-
 		case MODE:
 		case TYPE:
 			if (mFlightModesInfo != null)
@@ -144,7 +137,6 @@ public class InfoBarActionProvider extends ActionProvider implements
 		mHomeInfo = new HomeInfo(mContext, mView, mDrone);
 		mGpsInfo = new GpsInfo(mContext, mView, mDrone);
 		mBatteryInfo = new BatteryInfo(mContext, mView, mDrone);
-		mFlightTimeInfo = new FlightTimeInfo(mContext, mView, mDrone);
 		mSignalInfo = new SignalInfo(mContext, mView, mDrone);
 		mFlightModesInfo = new FlightModesInfo(mContext, mView, mDrone);
 		mPhoneExtraInfo = new PhoneExtraInfo(mContext, mView, mDrone);
@@ -162,9 +154,6 @@ public class InfoBarActionProvider extends ActionProvider implements
 
 		if (mBatteryInfo != null)
 			mBatteryInfo.updateItemView(mContext, mDrone);
-
-		if (mFlightTimeInfo != null)
-			mFlightTimeInfo.updateItemView(mContext, mDrone);
 
 		if (mSignalInfo != null)
 			mSignalInfo.updateItemView(mContext, mDrone);

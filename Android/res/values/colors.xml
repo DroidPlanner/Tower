@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="control_button_start_color">#90000000</color>
+    <color name="control_button_end_color">#902c2c2c</color>
+
+    <color name="transparent_dark">#B0000000</color>
+    <color name="transparent_light">#66ffffff</color>
     <color name="opaque_black">#000</color>
     <color name="opaque_white">#fff</color>
     <color name="greyText">#4d4d4d</color>

@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Dimension for the telemetry ui elements -->
-    <dimen name="largeTelemetryTextSize">30sp</dimen>
+    <dimen name="largeTelemetryTextSize">18sp</dimen>
+    <dimen name="textLabelsTextSize">14sp</dimen>
+    <dimen name="unitTextTextSize">18sp</dimen>
+    <dimen name="telemetryWidgetWidth">100dp</dimen>
+    <dimen name="telemetryWidgetHeight">52dp</dimen>
+    <dimen name="telemetryAttitudeIndicatorWidth">70dp</dimen>
+    <dimen name="telemetryAttitudeIndicatorHeight">70dp</dimen>
 
     <!-- Dimension for the flight control buttons -->
     <dimen name="flightControlMargin">0dp</dimen>

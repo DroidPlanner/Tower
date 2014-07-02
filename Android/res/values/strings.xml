@@ -343,6 +343,10 @@
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="guided_mode_warning">"Press OK to enter Guided mode. \nTo change locations, press and hold the map.</string>
+    <string name="home_info">%1$s</string>
+    <string name="info_bar_empty">--</string>
+    <string name="satellite_info_no_fix">%1$s</string>
+    <string name="satellite_info_fix">%1$s (%2$d)</string>
 
     <!-- Bluetooth device selection strings -->
     <string name="select_device">Select device to connect</string>
@@ -368,6 +372,7 @@
     <string name="msg_connect_first">Please connect first</string>
     <string name="mode1_throttle_on_right_stick">Mode 1: Throttle on RIGHT stick</string>
     <string name="mode2_throttle_on_left_stick">Mode 2: Throttle on LEFT stick</string>
+    <string name="air_time_label">Air Time</string>
     <string name="pref_map_provider_settings_summary">Configure the selected map provider</string>
     <string name="pref_map_provider_settings_title">Map Provider Preferences</string>
     <string name="pref_title_google_map">Google Map Preferences</string>
