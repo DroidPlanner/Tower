@@ -41,11 +41,13 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 		drone.events.addDroneListener(this);
 	}
 
-	public void toogleFollowMeState() {
+	public void toggleFollowMeState() {
 		if (isEnabledInPreferences()) {
 			if (isEnabled()) {
 				disableFollowMe();
+				drone.state.changeFlightMode(ApmModes.ROTOR_LOITER);
 			} else {
+				drone.state.changeFlightMode(ApmModes.ROTOR_GUIDED);
 				enableFollowMe();
 			}
 		} else {
@@ -54,6 +56,7 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 	}
 
 	private void enableFollowMe() {
+		drone.events.notifyDroneEvent(DroneEventsType.FOLLOW_START);
 		Log.d("follow", "enable");
 		Toast.makeText(context, "FollowMe Enabled", Toast.LENGTH_SHORT).show();
 
@@ -68,7 +71,6 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 		mLocationClient.requestLocationUpdates(mLocationRequest, this);
 
 		followMeEnabled = true;
-		// drone.state.setMode(ApmModes.ROTOR_GUIDED);
 	}
 
 	private void disableFollowMe() {

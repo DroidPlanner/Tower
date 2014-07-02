@@ -59,7 +59,7 @@
                 <CheckBoxPreference
                     android:defaultValue="false"
                     android:key="@string/pref_request_max_volume_key"
-                    android:title="@string/pref_request_max_value" />
+                    android:title="@string/pref_request_max_volume" />
             </PreferenceCategory>
         </PreferenceScreen>
         <PreferenceScreen
