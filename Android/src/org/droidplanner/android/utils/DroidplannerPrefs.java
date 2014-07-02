@@ -129,7 +129,7 @@ public class DroidplannerPrefs implements org.droidplanner.core.drone.Preference
     }
     
     /**
-     * @return true if the device volume should be at max when starting the app.
+     * @return true if Volume should be set to 100% on app start
      */
     public boolean maxVolumeOnStart(){
         return prefs.getBoolean(context.getString(R.string.pref_request_max_volume_key),
