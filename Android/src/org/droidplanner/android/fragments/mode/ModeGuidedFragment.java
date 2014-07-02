@@ -27,7 +27,7 @@ public class ModeGuidedFragment extends Fragment implements OnClickListener {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_mode_guided, container,
 				false);
-		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
+		drone = ((DroidPlannerApp) getActivity().getApplication()).getDrone();
 		setupViews(view);
 		setupListener();
 		updateLabel();

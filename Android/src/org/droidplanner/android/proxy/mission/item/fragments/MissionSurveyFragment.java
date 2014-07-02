@@ -52,13 +52,13 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 	@Override
 	public void onStart() {
 		super.onStart();
-        ((DroidPlannerApp)getActivity().getApplication()).drone.events.addDroneListener(this);
+        ((DroidPlannerApp)getActivity().getApplication()).getDrone().events.addDroneListener(this);
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
-        ((DroidPlannerApp)getActivity().getApplication()).drone.events.removeDroneListener(this);
+        ((DroidPlannerApp)getActivity().getApplication()).getDrone().events.removeDroneListener(this);
 	}
 
 	@Override
