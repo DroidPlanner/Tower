@@ -101,6 +101,9 @@ public class TTSNotificationProvider implements OnInitListener,
 			case MISSION_WP_UPDATE:
 				speak("Going for waypoint "+ drone.missionStats.getCurrentWP());
 				break;
+			case FOLLOW_START:
+					speak("Following");
+				break;
 			default:
 				break;
 			}

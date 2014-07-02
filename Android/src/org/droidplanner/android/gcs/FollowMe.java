@@ -56,6 +56,7 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 	}
 
 	private void enableFollowMe() {
+		drone.events.notifyDroneEvent(DroneEventsType.FOLLOW_START);
 		Log.d("follow", "enable");
 		Toast.makeText(context, "FollowMe Enabled", Toast.LENGTH_SHORT).show();
 
