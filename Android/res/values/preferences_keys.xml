@@ -30,4 +30,5 @@ This file is used to store the preferences keys so that it's accessible and modi
     <string name="pref_version_key">pref_version</string>
     <string name="pref_request_max_volume_key">pref_request_max_volume</string>
     <string name="pref_keep_screen_bright_key">pref_keep_screen_bright</string>
+    <string name="pref_permanent_notification_key">pref_permanent_notification</string>
 </resources>

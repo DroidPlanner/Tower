@@ -158,22 +158,11 @@ public class MAVLinkService extends Service implements	MavLinkConnectionListener
 		};
 
 		connectMAVConnection();
-
-		final StatusBarNotificationProvider statusBarNotification = dpApp.mNotificationHandler
-				.getStatusBarNotificationProvider();
-
-		statusBarNotification.showNotification();
-		statusBarNotification.updateNotification(getString(R.string.connected));
 	}
 
 	@Override
 	public void onDestroy() {
 		disconnectMAVConnection();
-
-		final StatusBarNotificationProvider statusBarNotification = ((DroidPlannerApp) getApplication()).mNotificationHandler
-				.getStatusBarNotificationProvider();
-		statusBarNotification.dismissNotification();
-
 		super.onDestroy();
 	}
 
