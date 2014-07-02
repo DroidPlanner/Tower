@@ -55,7 +55,7 @@ public class TuningFragment extends Fragment implements OnDroneListener {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
+		drone = ((DroidPlannerApp) getActivity().getApplication()).getDrone();
 	}
 
 	@Override

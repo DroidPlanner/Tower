@@ -18,7 +18,6 @@ import android.widget.Button;
 
 import com.MAVLink.Messages.ApmModes;
 import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 
 public class FlightActionsFragment extends Fragment implements OnClickListener {
 
@@ -38,7 +37,7 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 		View view = inflater.inflate(R.layout.fragment_mission_control,	container, false);
 
 		DroidPlannerApp droidPlannerApp = (DroidPlannerApp) getActivity().getApplication();
-		drone = droidPlannerApp.drone;
+		drone = droidPlannerApp.getDrone();
 		followMe = droidPlannerApp.followMe;
 		return view;
 	}

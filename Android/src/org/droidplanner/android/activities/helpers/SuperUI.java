@@ -4,7 +4,6 @@ import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.fragments.helpers.BTDeviceListFragment;
 import org.droidplanner.android.maps.providers.google_map.GoogleMapFragment;
-import org.droidplanner.android.utils.Constants;
 import org.droidplanner.android.utils.DroidplannerPrefs;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.widgets.actionProviders.InfoBarActionProvider;
@@ -22,8 +21,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import com.google.android.gms.analytics.Tracker;
 
 public abstract class SuperUI extends FragmentActivity implements OnDroneListener {
 	private ScreenOrientation screenOrientation = new ScreenOrientation(this);
@@ -47,7 +44,7 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
         }
 
         app = (DroidPlannerApp) getApplication();
-        this.drone = app.drone;
+        this.drone = app.getDrone();
         gcsHeartbeat = new GCSHeartbeat(drone, 1);
         mAppPrefs = new DroidplannerPrefs(getApplicationContext());
 

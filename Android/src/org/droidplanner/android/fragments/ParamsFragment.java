@@ -97,7 +97,7 @@ public class ParamsFragment extends ListFragment implements
 	@Override
 	public void onStart() {
 		super.onStart();
-		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
+		drone = ((DroidPlannerApp) getActivity().getApplication()).getDrone();
 		drone.events.addDroneListener(this);
 		drone.parameters.parameterListener = this;
 	}

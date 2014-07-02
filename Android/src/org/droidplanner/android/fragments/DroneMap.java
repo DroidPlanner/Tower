@@ -6,7 +6,6 @@ import org.droidplanner.android.graphic.map.GraphicDrone;
 import org.droidplanner.android.graphic.map.GraphicGuided;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.providers.DPMapProvider;
-import org.droidplanner.android.maps.providers.osm.OSMapFragment;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.core.drone.Drone;
@@ -47,7 +46,7 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 
         final Activity activity = getActivity();
         final DroidPlannerApp app = ((DroidPlannerApp) activity.getApplication());
-		drone = app.drone;
+		drone = app.getDrone();
         missionProxy = app.missionProxy;
 
 		home = new GraphicHome(drone);

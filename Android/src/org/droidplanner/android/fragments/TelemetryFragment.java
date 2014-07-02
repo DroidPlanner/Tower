@@ -47,7 +47,7 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 		altitude = (TextView) view.findViewById(R.id.altitudeValue);
 		targetAltitude = (TextView) view.findViewById(R.id.targetAltitudeValue);
 
-		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
+		drone = ((DroidPlannerApp) getActivity().getApplication()).getDrone();
 		return view;
 	}
 
