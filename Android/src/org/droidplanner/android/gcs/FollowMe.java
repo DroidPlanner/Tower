@@ -41,7 +41,7 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 		drone.events.addDroneListener(this);
 	}
 
-	public void toogleFollowMeState() {
+	public void toggleFollowMeState() {
 		if (isEnabledInPreferences()) {
 			if (isEnabled()) {
 				disableFollowMe();

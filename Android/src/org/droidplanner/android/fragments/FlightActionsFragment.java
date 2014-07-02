@@ -117,7 +117,7 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 			break;
 
 		case R.id.mc_follow:
-			followMe.toogleFollowMeState();
+			followMe.toggleFollowMeState();
 			drone.events.notifyDroneEvent(DroneEventsType.MODE);
             eventBuilder.setAction("FollowMe selected")
                     .setLabel(followMe.isEnabled()? "FollowMe enabled" : "FollowMe disabled");
