@@ -135,9 +135,10 @@ public class ConfigurationActivity extends SuperUI {
 		handleIntent(intent);
 	}
 
-	private void handleIntent(Intent intent) {
-		int configScreenIndex = intent
-				.getIntExtra(EXTRA_CONFIG_SCREEN_INDEX, 0);
+    @Override
+	protected void handleIntent(Intent intent) {
+        super.handleIntent(intent);
+		int configScreenIndex = intent.getIntExtra(EXTRA_CONFIG_SCREEN_INDEX, 0);
 		mViewPager.setCurrentItem(configScreenIndex);
 	}
 

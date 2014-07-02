@@ -14,6 +14,7 @@ import org.droidplanner.core.gcs.GCSHeartbeat;
 
 import android.app.ActionBar;
 import android.content.Context;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -22,7 +23,14 @@ import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 
+/**
+ * Parent class for the app activity classes.
+ */
 public abstract class SuperUI extends FragmentActivity implements OnDroneListener {
+
+    public final static String ACTION_TOGGLE_DRONE_CONNECTION = SuperUI.class.getName() +
+            ".ACTION_TOGGLE_DRONE_CONNECTION";
+
 	private ScreenOrientation screenOrientation = new ScreenOrientation(this);
 	private InfoBarActionProvider infoBar;
 	private GCSHeartbeat gcsHeartbeat;
@@ -63,7 +71,25 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 
 		screenOrientation.unlock();
 		Utils.updateUILanguage(getApplicationContext());
+
+        handleIntent(getIntent());
 	}
+
+    @Override
+    public void onNewIntent(Intent intent){
+        super.onNewIntent(intent);
+        handleIntent(intent);
+    }
+
+    protected void handleIntent(Intent intent){
+        if(intent == null)
+            return;
+
+        final String action = intent.getAction();
+        if(ACTION_TOGGLE_DRONE_CONNECTION.equals(action)){
+            toggleDroneConnection();
+        }
+    }
 
 	@Override
 	protected void onStart() {

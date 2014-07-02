@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import org.droidplanner.R;
 import org.droidplanner.android.activities.FlightActivity;
+import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.utils.DroidplannerPrefs;
 import org.droidplanner.android.utils.TextUtils;
 import org.droidplanner.core.drone.Drone;
@@ -35,7 +36,18 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
     /**
      * Builder for the app notification.
      */
-    private final NotificationCompat.Builder mNotificationBuilder;
+    private NotificationCompat.Builder mNotificationBuilder;
+
+    /**
+     * Pending intent for the notification on click behavior.
+     * Opens the FlightActivity screen.
+     */
+    private final PendingIntent mNotificationIntent;
+
+    /**
+     * Pending intent for the notification connect/disconnect action.
+     */
+    private final PendingIntent mToggleConnectionIntent;
 
     /**
      * Uses to generate the inbox style use to populate the notification.
@@ -51,30 +63,32 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
         mContext = context;
         mAppPrefs = new DroidplannerPrefs(context);
 
-        final PendingIntent contentIntent = PendingIntent.getActivity(mContext, 0,
+        mNotificationIntent = PendingIntent.getActivity(mContext, 0,
                 new Intent(mContext, FlightActivity.class), 0);
 
-        mNotificationBuilder = new NotificationCompat.Builder(context)
-                .setContentIntent(contentIntent);
+        mToggleConnectionIntent = PendingIntent.getActivity(mContext, 0,
+                new Intent(mContext, FlightActivity.class).setAction(SuperUI
+                        .ACTION_TOGGLE_DRONE_CONNECTION), 0);
 
         mInboxBuilder = new InboxStyleBuilder();
     }
 
     @Override
     public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
-        switch (event) {
-            case DISCONNECTED:
-                mNotificationBuilder.setContentTitle(mContext.getString(R.string.disconnected))
-                        .setOngoing(false)
-                        .setContentText("")
-                        .setSmallIcon(R.drawable.ic_launcher_bw);
-                mInboxBuilder.reset();
-                break;
+        boolean showNotification = true;
 
+        switch (event) {
             case CONNECTED:
-                mNotificationBuilder.setContentTitle(mContext.getString(R.string.connected))
+                final String summaryText = mContext.getString(R.string.connected);
+                mNotificationBuilder = new NotificationCompat.Builder(mContext)
+                        .addAction(R.drawable.ic_action_io, mContext.getText(R.string
+                                .menu_disconnect), mToggleConnectionIntent)
+                        .setContentIntent(mNotificationIntent)
+                        .setContentText(summaryText)
                         .setOngoing(mAppPrefs.isNotificationPermanent())
                         .setSmallIcon(R.drawable.ic_launcher);
+
+                mInboxBuilder.setSummary(summaryText);
                 updateFlightMode(drone);
                 updateDroneState(drone);
                 updateBattery(drone);
@@ -108,29 +122,45 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
             case TYPE:
                 updateFlightMode(drone);
                 break;
+
+            case DISCONNECTED:
+                mNotificationBuilder = new NotificationCompat.Builder(mContext)
+                        .addAction(R.drawable.ic_action_io, mContext.getText(R.string
+                                .menu_connect), mToggleConnectionIntent)
+                        .setContentIntent(mNotificationIntent)
+                        .setContentTitle(mContext.getString(R.string.disconnected))
+                        .setOngoing(false)
+                        .setContentText("")
+                        .setSmallIcon(R.drawable.ic_launcher_bw);
+                mInboxBuilder.reset();
+                break;
+
+            default:
+                showNotification = false;
+                break;
         }
 
-        showNotification();
+        if (showNotification) { showNotification(); }
     }
 
-    private void updateRadio(Drone drone){
+    private void updateRadio(Drone drone) {
         mInboxBuilder.setLine(4, TextUtils.normal("Signal:   ",
                 TextUtils.bold(String.format("%d%%", drone.radio.getSignalStrength()))));
     }
 
-    private void updateHome(Drone drone){
+    private void updateHome(Drone drone) {
         mInboxBuilder.setLine(0, TextUtils.normal("Home:   ", TextUtils.bold(drone.home
                 .getDroneDistanceToHome().toString())));
     }
 
-    private void updateGps(Drone drone){
+    private void updateGps(Drone drone) {
         mInboxBuilder.setLine(1, TextUtils.normal("Satellite:   ",
                 TextUtils.bold(String.format("%d, %s", drone.GPS.getSatCount(),
                         drone.GPS.getFixType()))
         ));
     }
 
-    private void updateBattery(Drone drone){
+    private void updateBattery(Drone drone) {
         mInboxBuilder.setLine(3, TextUtils.normal("Battery:   ",
                 TextUtils.bold(String.format("%2.1fv (%2.0f%%)",
                         drone.battery.getBattVolt(),
@@ -138,7 +168,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
         ));
     }
 
-    private void updateDroneState(Drone drone){
+    private void updateDroneState(Drone drone) {
         long timeInSeconds = drone.state.getFlightTime();
         long minutes = timeInSeconds / 60;
         long seconds = timeInSeconds % 60;
@@ -147,18 +177,18 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
                 TextUtils.bold(String.format("%02d:%02d", minutes, seconds))));
     }
 
-    private void updateFlightMode(Drone drone){
-        final String flightMode = drone.state.getMode().getName();
-        final CharSequence modeSummary = TextUtils.normal("Mode:   ",
-                TextUtils.bold(flightMode));
-        mInboxBuilder.setSummary(modeSummary);
-        mNotificationBuilder.setContentText(modeSummary);
+    private void updateFlightMode(Drone drone) {
+        final CharSequence modeSummary = TextUtils.normal("Flight Mode:   ",
+                TextUtils.bold(drone.state.getMode().getName()));
+        mNotificationBuilder.setContentTitle(modeSummary);
     }
 
     /**
      * Build a notification from the notification builder, and display it.
      */
     private void showNotification() {
+        if (mNotificationBuilder == null) { return; }
+
         mNotificationBuilder.setStyle(mInboxBuilder.generateInboxStyle());
         NotificationManager notMgr = (NotificationManager) mContext.getSystemService(Context
                 .NOTIFICATION_SERVICE);
