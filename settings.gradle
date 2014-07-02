@@ -1,4 +1,4 @@
-include ':Mavlink'
+include ':Mavlink', ':AndroidWear'
 include ':HorizontalVariableListView:HorizontalVariableListView'
 include ':Android'
 include ':Core'
