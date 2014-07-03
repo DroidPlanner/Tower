@@ -1,7 +1,9 @@
 package org.droidplanner.android.widgets.actionProviders;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 import com.MAVLink.Messages.ApmModes;
 
 import org.droidplanner.R;
+import org.droidplanner.android.utils.Constants;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.android.widgets.spinners.ModeAdapter;
 import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
@@ -129,9 +132,19 @@ public abstract class InfoBarItem {
 		@Override
 		public void updateItemView(final Context context, final Drone drone) {
 			if (mItemView != null) {
-				String update = drone == null ? "--" : String.format(
-						"Satellite\n%d, %s", drone.GPS.getSatCount(),
-						drone.GPS.getFixType());
+                final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+                final boolean displayHdop = settings.getBoolean(Constants.PREF_UI_GPS_HDOP, false);
+
+                final String update;
+                if(drone == null) {
+                    update = "--";
+                } else if(displayHdop) {
+                    update = String.format("Satellite\n%d, %.1f", drone.GPS.getSatCount(),
+                            drone.GPS.getGpsEPH());
+                } else {
+                    update = String.format("Satellite\n%d, %s", drone.GPS.getSatCount(),
+                            drone.GPS.getFixType());
+                }
 
 				((TextView) mItemView).setText(update);
 			}
