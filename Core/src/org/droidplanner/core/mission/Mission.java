@@ -238,11 +238,15 @@ public class Mission extends DroneVariable {
      * Sends the mission to the drone using the mavlink protocol.
      */
 	public void sendMissionToAPM() {
-		List<msg_mission_item> data = new ArrayList<msg_mission_item>();
-		data.add(myDrone.home.packMavlink());
-		for (MissionItem item : items) {
-			data.addAll(item.packMissionItem());
-		}
-		myDrone.waypointManager.writeWaypoints(data);
+        myDrone.waypointManager.writeWaypoints(getMsgMissionItems());
 	}
+
+    public List<msg_mission_item> getMsgMissionItems() {
+        final List<msg_mission_item> data = new ArrayList<msg_mission_item>();
+        data.add(myDrone.home.packMavlink());
+        for (MissionItem item : items) {
+            data.addAll(item.packMissionItem());
+        }
+        return data;
+    }
 }
