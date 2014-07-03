@@ -5,9 +5,9 @@ repositories {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:19.+'
+    compile 'com.android.support:support-v4:20.+'
     compile files('libs/droneapi-java.jar')
-    compile 'com.google.android.gms:play-services:4.+'
+    compile 'com.google.android.gms:play-services:5.+'
     compile 'com.google.guava:guava:17.0'
     compile 'org.slf4j:slf4j-api:1.7.7'
     compile 'org.slf4j:slf4j-nop:1.7.7'

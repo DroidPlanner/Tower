@@ -1,10 +1,10 @@
 package org.droidplanner.android.notifications;
 
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -190,18 +190,14 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
         if (mNotificationBuilder == null) { return; }
 
         mNotificationBuilder.setStyle(mInboxBuilder.generateInboxStyle());
-        NotificationManager notMgr = (NotificationManager) mContext.getSystemService(Context
-                .NOTIFICATION_SERVICE);
-        notMgr.notify(NOTIFICATION_ID, mNotificationBuilder.build());
+        NotificationManagerCompat.from(mContext).notify(NOTIFICATION_ID, mNotificationBuilder.build());
     }
 
     /**
      * Dismiss the app status bar notification.
      */
     private void dismissNotification() {
-        NotificationManager notMgr = (NotificationManager) mContext.getSystemService(Context
-                .NOTIFICATION_SERVICE);
-        notMgr.cancelAll();
+        NotificationManagerCompat.from(mContext).cancelAll();
     }
 
     @Override
