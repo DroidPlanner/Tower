@@ -142,16 +142,17 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
             altitudeView.setText(String.format("%3.0fm", waypoint.getCoordinate().getAltitude()
                     .valueInMeters()));
 
-            try {
-                Length diff = waypoint.getMission().getAltitudeDiffFromPreviousItem(waypoint);
-                if (diff.valueInMeters() > 0) {
-                    altitudeView.setTextColor(Color.RED);
-                } else if (diff.valueInMeters() < 0) {
-                    altitudeView.setTextColor(Color.BLUE);
-                }
-            } catch (Exception e) {
-                // Do nothing when last item doesn't have an altitude
-            }
+// Color combination hard to read - disabled for CUSTUI
+//            try {
+//                Length diff = waypoint.getMission().getAltitudeDiffFromPreviousItem(waypoint);
+//                if (diff.valueInMeters() > 0) {
+//                    altitudeView.setTextColor(Color.RED);
+//                } else if (diff.valueInMeters() < 0) {
+//                    altitudeView.setTextColor(Color.BLUE);
+//                }
+//            } catch (Exception e) {
+//                // Do nothing when last item doesn't have an altitude
+//            }
         } else if (mMissionItem instanceof Survey) {
 			altitudeView.setText(((Survey)mMissionItem).surveyData.getAltitude().toString());
 
