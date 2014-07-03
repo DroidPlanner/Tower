@@ -1,5 +1,7 @@
 package org.droidplanner.core.mission;
 
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -189,6 +191,17 @@ public class Mission extends DroneVariable {
 			notifyMissionUpdate();
 		}
 	}
+
+    public void onMissionLoaded(List<msg_mission_item> msgs) {
+        if (msgs != null) {
+            myDrone.home.setHome(msgs.get(0));
+            msgs.remove(0); // Remove Home waypoint
+            items.clear();
+            items.addAll(processMavLinkMessages(msgs));
+            myDrone.events.notifyDroneEvent(DroneEventsType.MISSION_RECEIVED);
+            notifyMissionUpdate();
+        }
+    }
 
 	private List<MissionItem> processMavLinkMessages(List<msg_mission_item> msgs) {
 		List<MissionItem> received = new ArrayList<MissionItem>();
