@@ -13,6 +13,7 @@ import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.android.utils.file.IO.MissionReader;
+import org.droidplanner.android.utils.file.IO.MissionWriter;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.android.fragments.EditorListFragment;
@@ -27,7 +28,6 @@ import org.droidplanner.android.proxy.mission.item.fragments.MissionDetailFragme
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.android.dialogs.YesNoDialog;
 
-import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
@@ -41,6 +41,8 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 
 /**
  * This implements the map editor activity. The map editor activity allows the user to create
@@ -204,7 +206,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
                 return true;
 
             case R.id.menu_save_mission:
-//                menuSaveFile();
+                saveMissionFile();
                 return true;
 
             default:
@@ -223,15 +225,14 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
         missionDialog.openDialog(this);
     }
 
-//    private void menuSaveFile() {
-//        if (writeMission()) {
-//            Toast.makeText(this, R.string.file_saved, Toast.LENGTH_SHORT)
-//                    .show();
-//        } else {
-//            Toast.makeText(this, R.string.error_when_saving, Toast.LENGTH_SHORT)
-//                    .show();
-//        }
-//    }
+    private void saveMissionFile() {
+
+        if (MissionWriter.write(drone.mission.getMsgMissionItems())) {
+            Toast.makeText(this, "File saved", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Error saving file", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
