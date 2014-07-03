@@ -14,6 +14,7 @@ import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.gcs.GCSHeartbeat;
 
 import android.app.ActionBar;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -194,10 +195,13 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 
 			if (Utils.ConnectionType.BLUETOOTH.name().equals(connectionType)) {
 				// Launch a bluetooth device selection screen for the user
-				new BTDeviceListFragment().show(getSupportFragmentManager(),
-						"Device selection dialog");
-				return;
-			}
+                final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+                final String address = settings.getString(Constants.PREF_BLUETOOTH_DEVICE_ADDRESS, null);
+                if(address == null || address.isEmpty()) {
+                    new BTDeviceListFragment().show(getSupportFragmentManager(), "Device selection dialog");
+                    return;
+                }
+            }
 		}
 		drone.MavClient.toggleConnectionState();
 	}

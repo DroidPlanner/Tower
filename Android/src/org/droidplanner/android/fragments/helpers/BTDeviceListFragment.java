@@ -157,8 +157,9 @@ public class BTDeviceListFragment extends DialogFragment {
 			final Activity activity = getActivity();
 			final SharedPreferences.Editor editor = PreferenceManager
 					.getDefaultSharedPreferences(activity).edit();
-			editor.putString(Constants.PREF_BLUETOOTH_DEVICE_ADDRESS,
-					device.getAddress()).apply();
+            editor.putString(Constants.PREF_BLUETOOTH_DEVICE_ADDRESS,
+                    device.getAddress() + ";" + device.getName())
+                    .apply();
 
 			// Toggle the drone connection
 			((DroidPlannerApp) activity.getApplication()).drone.MavClient

@@ -206,6 +206,15 @@
                         android:key="@string/pref_udp_server_port_key"
                         android:title="@string/pref_udp_server_port" />
                 </PreferenceCategory>
+                <PreferenceCategory
+                    android:key="pref_bluetooth"
+                    android:title="@string/pref_bluetooth">
+                    <EditTextPreference
+                        android:defaultValue=""
+                        android:gravity="center"
+                        android:key="pref_bluetooth_device_address"
+                        android:title="@string/pref_bluetooth_device_address"/>
+                </PreferenceCategory>
             </PreferenceScreen>
             <PreferenceScreen
                 android:key="pref_mavlink_rates"
