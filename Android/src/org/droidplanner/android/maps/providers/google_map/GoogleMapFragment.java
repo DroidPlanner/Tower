@@ -294,7 +294,25 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(camera.build()));
     }
 
-	private void setupMap() {
+    @Override
+    public void zoomToFit(List<Coord2D> coords) {
+        if (!coords.isEmpty()) {
+            final List<LatLng> points = new ArrayList<LatLng>();
+            for (Coord2D coord : coords)
+                points.add(DroneHelper.CoordToLatLang(coord));
+
+            LatLngBounds bounds = getBounds(points);
+            CameraUpdate animation;
+            if (isMapLayoutFinished())
+                animation = CameraUpdateFactory.newLatLngBounds(bounds, 100);
+            else
+                animation = CameraUpdateFactory.newLatLngBounds(bounds, 480,
+                        360, 100);
+            getMap().animateCamera(animation);
+        }
+    }
+
+    private void setupMap() {
 		mMap = getMap();
 		if (isMapLayoutFinished()) {
             // TODO it should wait for the map layout
@@ -319,7 +337,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                if(mMapClickListener != null){
+                if (mMapClickListener != null) {
                     mMapClickListener.onMapClick(DroneHelper.LatLngToCoord(latLng));
                 }
             }
@@ -337,7 +355,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
         mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
             @Override
             public void onMarkerDragStart(Marker marker) {
-                if(mMarkerDragListener != null){
+                if (mMarkerDragListener != null) {
                     final MarkerInfo markerInfo = getMarkerInfo(marker);
                     markerInfo.setPosition(DroneHelper.LatLngToCoord(marker.getPosition()));
                     mMarkerDragListener.onMarkerDragStart(markerInfo);
@@ -346,7 +364,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
 
             @Override
             public void onMarkerDrag(Marker marker) {
-                if(mMarkerDragListener != null){
+                if (mMarkerDragListener != null) {
                     final MarkerInfo markerInfo = getMarkerInfo(marker);
                     markerInfo.setPosition(DroneHelper.LatLngToCoord(marker.getPosition()));
                     mMarkerDragListener.onMarkerDrag(markerInfo);
@@ -355,7 +373,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
 
             @Override
             public void onMarkerDragEnd(Marker marker) {
-                if(mMarkerDragListener != null){
+                if (mMarkerDragListener != null) {
                     final MarkerInfo markerInfo = getMarkerInfo(marker);
                     markerInfo.setPosition(DroneHelper.LatLngToCoord(marker.getPosition()));
                     mMarkerDragListener.onMarkerDragEnd(markerInfo);
@@ -366,7 +384,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                if(mMarkerClickListener != null){
+                if (mMarkerClickListener != null) {
                     return mMarkerClickListener.onMarkerClick(getMarkerInfo(marker));
                 }
                 return false;
@@ -429,19 +447,6 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
 				.tileProvider(new LocalMapTileProvider()));
 		tileOverlay.setZIndex(-1);
 		tileOverlay.clearTileCache();
-	}
-
-	public void zoomToExtents(List<LatLng> pointsList) {
-		if (!pointsList.isEmpty()) {
-			LatLngBounds bounds = getBounds(pointsList);
-			CameraUpdate animation;
-			if (isMapLayoutFinished())
-				animation = CameraUpdateFactory.newLatLngBounds(bounds, 100);
-			else
-				animation = CameraUpdateFactory.newLatLngBounds(bounds, 480,
-						360, 100);
-			getMap().animateCamera(animation);
-		}
 	}
 
 	protected void clearMap() {

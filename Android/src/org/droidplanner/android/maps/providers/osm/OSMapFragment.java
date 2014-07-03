@@ -444,4 +444,9 @@ public class OSMapFragment extends Fragment implements DPMap {
         mMissionPath.setPoints(geoPoints);
         mMapView.invalidate();
     }
+
+    @Override
+    public void zoomToFit(List<Coord2D> coords) {
+        // NOP - not implemented at this time
+    }
 }
