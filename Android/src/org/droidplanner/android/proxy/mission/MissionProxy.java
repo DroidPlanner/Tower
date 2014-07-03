@@ -413,4 +413,20 @@ public class MissionProxy implements DPMap.PathSource {
             mMission.notifyMissionUpdate();	
 	}
 
+    public List<Coord2D> getVisibleCoords() {
+        final List<Coord2D> coords = new ArrayList<Coord2D>();
+
+        for (MissionItem item : mMission.getItems()) {
+            if(!(item instanceof SpatialCoordItem))
+                continue;
+
+            final Coord2D coordinate = ((SpatialCoordItem) item).getCoordinate();
+            if(coordinate.isEmpty())
+                continue;
+
+            coords.add(coordinate);
+        }
+
+        return coords;
+    }
 }

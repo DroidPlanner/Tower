@@ -195,6 +195,10 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menu_zoom_fit_mission:
+                planningMapFragment.zoomToFit();
+                return true;
+
             case R.id.menu_open_mission:
                 openMissionFile();
                 return true;
@@ -213,6 +217,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
             @Override
             public void waypointFileLoaded(MissionReader reader) {
                 drone.mission.onMissionLoaded(reader.getMsgMissionItems());
+                planningMapFragment.zoomToFit();
             }
         };
         missionDialog.openDialog(this);

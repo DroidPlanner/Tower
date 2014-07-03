@@ -384,7 +384,7 @@
     <string name="pref_permanent_notification_title">Enable permanent notification</string>
     <string name="pref_permanent_notification_summary">Enable to make status bar notification permanent when connected.</string>
 
-    <string name="zoom_fit">Zoom (Fit)</string>
+    <string name="zoom_fit">Zoom to Fit</string>
     <string name="pref_bluetooth">BLUETOOTH CONNECTION</string>
     <string name="pref_bluetooth_device_address">Bluetooth device</string>
     <string name="pref_ui_gps_hdop_summary">Display HDOP instead of FIX in satellite info bar item</string>
