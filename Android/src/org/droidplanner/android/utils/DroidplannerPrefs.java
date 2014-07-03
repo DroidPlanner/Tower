@@ -31,6 +31,7 @@ public class DroidplannerPrefs implements org.droidplanner.core.drone.Preference
     public static final String DEFAULT_CONNECTION_TYPE = Utils.ConnectionType.USB.name();
     private static final boolean DEFAULT_KEEP_SCREEN_ON = false;
     private static final boolean DEFAULT_MAX_VOLUME_ON_START = false;
+    private static final boolean DEFAULT_PERMANENT_NOTIFICATION = true;
 
     // Public for legacy usage
 	public SharedPreferences prefs;
@@ -64,7 +65,7 @@ public class DroidplannerPrefs implements org.droidplanner.core.drone.Preference
 		if (r.isEmpty()) {
 			r = UUID.randomUUID().toString();
 
-			prefs.edit().putString("vehicle_id", r).commit();
+			prefs.edit().putString("vehicle_id", r).apply();
 		}
 		return r;
 	}
@@ -133,5 +134,13 @@ public class DroidplannerPrefs implements org.droidplanner.core.drone.Preference
     public boolean maxVolumeOnStart(){
         return prefs.getBoolean(context.getString(R.string.pref_request_max_volume_key),
                 DEFAULT_MAX_VOLUME_ON_START);
+    }
+
+    /**
+     * @return true if the status bar notification should be permanent when connected.
+     */
+    public boolean isNotificationPermanent(){
+        return prefs.getBoolean(context.getString(R.string.pref_permanent_notification_key),
+                DEFAULT_PERMANENT_NOTIFICATION);
     }
 }
