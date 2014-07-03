@@ -131,7 +131,7 @@ public class EditorMapFragment extends DroneMap implements
 
         // add home coord if visible
         final Coord2D homeCoord = drone.home.getCoord();
-        if (!homeCoord.isEmpty())
+        if (homeCoord!= null && !homeCoord.isEmpty())
             visibleCoords.add(homeCoord);
 
         mMapFragment.zoomToFit(visibleCoords);
