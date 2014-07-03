@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 
 dependencies {
-    compile 'com.android.support:support-v4:19.+'
+    compile 'com.android.support:support-v4:20.+'
 }
 
 android {
