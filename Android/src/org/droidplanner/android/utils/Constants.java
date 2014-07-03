@@ -15,6 +15,8 @@ public class Constants {
      */
     public static final String PREF_BLUETOOTH_DEVICE_ADDRESS = "pref_bluetooth_device_address";
 
+    public static final String PREF_UI_GPS_HDOP = "pref_ui_gps_hdop";
+
     /**
      * Sets whether or not the default language for the ui should be english.
      */
