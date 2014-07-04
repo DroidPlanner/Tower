@@ -196,7 +196,7 @@
 
     <!-- Waypoint editor -->
     <string name="editor_info_window">Distance: 200m, Flight time: 3:30s</string>
-    <string name="locator_info_window">Distance: 200m</string>
+    <string name="locator_info_window"></string>
     <string name="distance_to_home">Distance to home</string>
     <string name="loiter_time">Loiter Time</string>
     <string name="waypoint_delay">Delay before next waypoint</string>
