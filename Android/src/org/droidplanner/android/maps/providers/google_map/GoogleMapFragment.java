@@ -466,6 +466,16 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleApiClient.Co
         }
     }
 
+    @Override
+    public Coord2D getGCSPosition() {
+        if (mMap.getMyLocation() != null) {
+            return new Coord2D(mMap.getMyLocation().getLatitude(), mMap
+                    .getMyLocation().getLongitude());
+        } else {
+            return null;
+        }
+    }
+
     private void setupMap() {
         //Make sure the map is initialized
         MapsInitializer.initialize(getActivity().getApplicationContext());
