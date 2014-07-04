@@ -1,5 +1,9 @@
 #include <pebble.h>
 #include <string.h>
+
+  
+//@TODO hide RTL/Loiter if in that mode, make cam a string, receive telem packets, send mode change packets  
+  
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!variables
 static Window *window;
 static TextLayer *mode_layer;
@@ -51,12 +55,14 @@ static void loiter_click_handler(ClickRecognizerRef recognizer, void *context) {
   vibe(100);
   set_mode("Loiter");
   text_layer_set_text(camera_layer, "");
+  layer_mark_dirty(buttons);
 }
 
 static void RTL_handler(ClickRecognizerRef recognizer, void *context) {
   vibe(100);
   set_mode("RTL");
   text_layer_set_text(camera_layer, "");
+  layer_mark_dirty(buttons);
 }
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!draw graphics
 static void buttons_draw(Layer *layer, GContext *ctx) {
@@ -82,14 +88,14 @@ static void buttons_draw(Layer *layer, GContext *ctx) {
            GTextAlignmentCenter,
            NULL);
     }
-  
+    if(strcmp("Loiter",mode)!=0)
     graphics_draw_text(ctx, "Loiter",
          fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD),
          GRect(0,55,50,30),
          GTextOverflowModeTrailingEllipsis,
          GTextAlignmentCenter,
          NULL);
-  
+    if(strcmp("RTL",mode)!=0)
     graphics_draw_text(ctx, "RTL",
          fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD),
          GRect(0,110,50,30),
