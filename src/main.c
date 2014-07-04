@@ -1,5 +1,5 @@
 #include <pebble.h>
-
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!variables
 static Window *window;
 static TextLayer *mode_layer;
 static TextLayer *telem_layer;
@@ -7,19 +7,22 @@ static TextLayer *camera_layer;
 static Layer *buttons;
 bool is_follow = false;
 int cam = 0;
-
-static const VibePattern custom_pattern = {
-  .durations = (uint32_t []) {30},
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!utils
+static void vibe(int milliseconds){
+  VibePattern custom_pattern = {
+  .durations = (uint32_t []) {milliseconds},
   .num_segments = 1
 };
-
+  vibes_enqueue_custom_pattern(custom_pattern);
+}
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!button click handlers
 static void follow_click_handler(ClickRecognizerRef recognizer, void *context) {
   text_layer_set_text(mode_layer, "Follow");
   if(is_follow){
-    vibes_enqueue_custom_pattern(custom_pattern);
+    vibe(30);
     cam++;
   }else{
-    vibes_double_pulse();
+    vibe(100);
   }
   if(cam>2){
     cam=0;
@@ -36,23 +39,23 @@ static void follow_click_handler(ClickRecognizerRef recognizer, void *context) {
     break;
 }
   is_follow=true;
-  //layer_mark_dirty(buttons->layer);
+  layer_mark_dirty(buttons);
 }
 
 static void loiter_click_handler(ClickRecognizerRef recognizer, void *context) {
-  vibes_double_pulse();
+  vibe(100);
   text_layer_set_text(mode_layer, "Loiter");
   text_layer_set_text(camera_layer, "");
   is_follow=false;
 }
 
 static void RTL_handler(ClickRecognizerRef recognizer, void *context) {
-  vibes_double_pulse();
+  vibe(100);
   text_layer_set_text(mode_layer, "RTL");
   text_layer_set_text(camera_layer, "");
   is_follow=false;
 }
-
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!draw graphics
 static void buttons_draw(Layer *layer, GContext *ctx) {
     GRect bounds = layer_get_bounds(layer);
 
@@ -61,13 +64,21 @@ static void buttons_draw(Layer *layer, GContext *ctx) {
     graphics_fill_rect(ctx, bounds, 10, GCornersLeft);
   
     graphics_context_set_text_color(ctx, GColorWhite);
-  
-    graphics_draw_text(ctx, "Follow",
-         fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD),
-         GRect(0,5,50,30),
-         GTextOverflowModeTrailingEllipsis,
-         GTextAlignmentCenter,
-         NULL);
+    if(is_follow){
+      graphics_draw_text(ctx, "Cam",
+           fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD),
+           GRect(0,5,50,30),
+           GTextOverflowModeTrailingEllipsis,
+           GTextAlignmentCenter,
+           NULL);
+    }else{
+      graphics_draw_text(ctx, "Follow",
+           fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD),
+           GRect(0,5,50,30),
+           GTextOverflowModeTrailingEllipsis,
+           GTextAlignmentCenter,
+           NULL);
+    }
   
     graphics_draw_text(ctx, "Loiter",
          fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD),
@@ -83,7 +94,7 @@ static void buttons_draw(Layer *layer, GContext *ctx) {
          GTextAlignmentCenter,
          NULL);
 }
-
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!initialization
 static void click_config_provider(void *context) {
   window_single_click_subscribe(BUTTON_ID_SELECT, loiter_click_handler);
   window_single_click_subscribe(BUTTON_ID_UP, follow_click_handler);
