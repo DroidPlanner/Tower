@@ -8,12 +8,18 @@ static Layer *buttons;
 bool is_follow = false;
 int cam = 0;
 
+static const VibePattern custom_pattern = {
+  .durations = (uint32_t []) {30},
+  .num_segments = 1
+};
+
 static void follow_click_handler(ClickRecognizerRef recognizer, void *context) {
-  vibes_double_pulse();
   text_layer_set_text(mode_layer, "Follow");
   if(is_follow){
-    vibes_short_pulse();
+    vibes_enqueue_custom_pattern(custom_pattern);
     cam++;
+  }else{
+    vibes_double_pulse();
   }
   if(cam>2){
     cam=0;
