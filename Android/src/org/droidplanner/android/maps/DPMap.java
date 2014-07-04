@@ -124,6 +124,16 @@ public interface DPMap {
     public DPMapProvider getProvider();
 
     /**
+     * Move the map to the drone location.
+     */
+    public void goToDroneLocation();
+
+    /**
+     * Move the map to the user location.
+     */
+    public void goToMyLocation();
+
+    /**
      * Restores the map's camera settings from preferences.
      */
     public void loadCameraPosition();

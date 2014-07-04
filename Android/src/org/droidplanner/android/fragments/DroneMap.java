@@ -164,4 +164,11 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
         return mMapFragment.projectPathIntoMap(path);
     }
 
+    /**
+     * Move the map to the user location.
+     */
+    public void goToMyLocation(){
+       mMapFragment.goToMyLocation();
+    }
+
 }

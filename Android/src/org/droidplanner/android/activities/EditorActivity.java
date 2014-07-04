@@ -32,6 +32,7 @@ import android.view.ActionMode.Callback;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -66,8 +67,11 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	private FragmentManager fragmentManager;
 	private EditorListFragment missionListFragment;
 	private TextView infoView;
+
     private View mSplineToggleContainer;
     private boolean mIsSplineEnabled;
+
+    private ImageButton mGoToMyLocation;
 
     /**
      * This view hosts the mission item detail fragment.
@@ -97,6 +101,14 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
         mSplineToggleContainer = findViewById(R.id.editorSplineToggleContainer);
         mSplineToggleContainer.setVisibility(View.VISIBLE);
+
+        mGoToMyLocation = (ImageButton)findViewById(R.id.my_location_button);
+        mGoToMyLocation.setOnClickListener(new View.OnClickListener(){
+           @Override
+            public void onClick(View v){
+               planningMapFragment.goToMyLocation();
+           }
+        });
 
         final RadioButton normalToggle = (RadioButton) findViewById(R.id.normalWpToggle);
         normalToggle.setOnClickListener(new View.OnClickListener() {
@@ -144,23 +156,6 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
         super.onStop();
         missionProxy.selection.removeSelectionUpdateListener(this);
     }
-
-	@Override
-	public void onWindowFocusChanged(boolean hasFocus) {
-		super.onWindowFocusChanged(hasFocus);
-		updateMapPadding();
-	}
-
-	private void updateMapPadding() {
-		int topPadding = infoView.getBottom();
-		int rightPadding = 0,bottomPadding = 0;
-
-		if (missionProxy.getItems().size()>0) {
-			rightPadding = editorToolsFragment.getView().getRight();
-			bottomPadding = missionListFragment.getView().getHeight();
-		}
-		planningMapFragment.setMapPadding(rightPadding, topPadding, 0, bottomPadding);
-	}
 
 	@Override
 	public void onBackPressed() {
@@ -447,7 +442,6 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 	@Override
 	public void onListVisibilityChanged() {
-		updateMapPadding();
 	}
 
     @Override

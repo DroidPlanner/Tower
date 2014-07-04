@@ -18,8 +18,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.SlidingDrawer;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -34,10 +36,14 @@ public class FlightActivity extends DrawerNavigationUI implements
 	private FragmentManager fragmentManager;
 	private RCFragment rcFragment;
 	private View failsafeTextView;
+
 	private FlightMapFragment mapFragment;
+
 	private Fragment editorTools;
 
 	private SlidingDrawer mSlidingDrawer;
+
+    private ImageButton mGoToMyLocation;
 
 	private boolean mIsPhone;
 
@@ -76,13 +82,7 @@ public class FlightActivity extends DrawerNavigationUI implements
             }
         });
 
-		mapFragment = (FlightMapFragment) fragmentManager
-				.findFragmentById(R.id.mapFragment);
-		if (mapFragment == null) {
-			mapFragment = new FlightMapFragment();
-			fragmentManager.beginTransaction()
-					.add(R.id.mapFragment, mapFragment).commit();
-		}
+        setupMapFragment();
 
 		editorTools = fragmentManager.findFragmentById(R.id.editorToolsFragment);
 		if (editorTools == null) {
@@ -167,19 +167,27 @@ public class FlightActivity extends DrawerNavigationUI implements
 	 */
 	private void setupMapFragment() {
 		if (mapFragment == null && isGooglePlayServicesValid(true)) {
-			mapFragment = (FlightMapFragment) fragmentManager
-					.findFragmentById(R.id.mapFragment);
+			mapFragment = (FlightMapFragment) fragmentManager.findFragmentById(R.id.mapFragment);
 			if (mapFragment == null) {
 				mapFragment = new FlightMapFragment();
-				fragmentManager.beginTransaction()
-						.add(R.id.mapFragment, mapFragment).commit();
+				fragmentManager.beginTransaction().add(R.id.mapFragment, mapFragment).commit();
 			}
 		}
+
+        if(mGoToMyLocation == null){
+            mGoToMyLocation = (ImageButton) findViewById(R.id.my_location_button);
+            mGoToMyLocation.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v){
+                    mapFragment.goToMyLocation();
+                }
+            });
+        }
 	}
 
 	@Override
-	public void onResume() {
-		super.onResume();
+	public void onStart() {
+		super.onStart();
 		setupMapFragment();
 	}
 
@@ -193,24 +201,36 @@ public class FlightActivity extends DrawerNavigationUI implements
 	 * Account for the various ui elements and update the map padding so that it
 	 * remains 'visible'.
 	 */
-	private void updateMapPadding() {
-		int rightPadding = getSlidingDrawerWidth();
+    private void updateMapPadding() {
+        int rightPadding = getSlidingDrawerWidth();
+        int bottomPadding = 0;
+        int leftPadding = 0;
 
-		int bottomPadding = 0;
-		int leftPadding = 0;
-		if (mIsPhone) {
-			final View editorToolsView = editorTools.getView();
-			ViewGroup.LayoutParams lp = editorToolsView.getLayoutParams();
-			if (lp.height == ViewGroup.LayoutParams.MATCH_PARENT) {
-				leftPadding = editorToolsView.getRight();
-			}
+        final View editorToolsView = editorTools.getView();
+        final View mapView = mapFragment.getView();
 
-			if (lp.width == ViewGroup.LayoutParams.MATCH_PARENT) {
-				bottomPadding = editorToolsView.getHeight();
-			}
-		}
-		mapFragment.setMapPadding(leftPadding, 0, rightPadding, bottomPadding);
-	}
+        int[] posOnScreen = new int[2];
+        editorToolsView.getLocationOnScreen(posOnScreen);
+        final int toolsHeight = editorToolsView.getHeight();
+        final int toolsBottom = posOnScreen[1] + toolsHeight;
+
+        ViewGroup.LayoutParams lp = editorToolsView.getLayoutParams();
+        if (lp.height == ViewGroup.LayoutParams.MATCH_PARENT) {
+            leftPadding = editorToolsView.getRight();
+        }
+        else {
+            if (lp.width == ViewGroup.LayoutParams.MATCH_PARENT) {
+                mapView.getLocationOnScreen(posOnScreen);
+                final int mapTop = posOnScreen[1];
+                final int mapBottom = mapTop + mapView.getHeight();
+                bottomPadding = (mapBottom - toolsBottom) + toolsHeight;
+            }
+        }
+        mapFragment.setMapPadding(leftPadding, 0, rightPadding, bottomPadding);
+
+        //Update the right margin for the my location button
+//        mGoToMyLocation.getLayoutParams().
+    }
 
 	private int getSlidingDrawerWidth() {
 		if (mSlidingDrawer.isOpened()) {

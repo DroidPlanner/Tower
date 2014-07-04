@@ -16,6 +16,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
@@ -43,16 +44,16 @@ import com.google.common.collect.HashBiMap;
 
 public class GoogleMapFragment extends SupportMapFragment implements DPMap {
 
-	public static final String PREF_MAP_TYPE = "pref_map_type";
+    public static final String PREF_MAP_TYPE = "pref_map_type";
 
-	public static final String MAP_TYPE_SATELLITE = "Satellite";
-	public static final String MAP_TYPE_HYBRID = "Hybrid";
-	public static final String MAP_TYPE_NORMAL = "Normal";
-	public static final String MAP_TYPE_TERRAIN = "Terrain";
+    public static final String MAP_TYPE_SATELLITE = "Satellite";
+    public static final String MAP_TYPE_HYBRID = "Hybrid";
+    public static final String MAP_TYPE_NORMAL = "Normal";
+    public static final String MAP_TYPE_TERRAIN = "Terrain";
 
     private final HashBiMap<MarkerInfo, Marker> mMarkers = HashBiMap.create();
 
-	private GoogleMap mMap;
+    private GoogleMap mMap;
 
     private Polyline flightPath;
     private Polyline missionPath;
@@ -67,18 +68,18 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
     private DPMap.OnMarkerClickListener mMarkerClickListener;
     private DPMap.OnMarkerDragListener mMarkerDragListener;
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
-			Bundle bundle) {
-		View view = super.onCreateView(inflater, viewGroup, bundle);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
+                             Bundle bundle) {
+        View view = super.onCreateView(inflater, viewGroup, bundle);
 
         Bundle args = getArguments();
         if(args != null){
             maxFlightPathSize = args.getInt(EXTRA_MAX_FLIGHT_PATH_SIZE);
         }
 
-		return view;
-	}
+        return view;
+    }
 
     @Override
     public void onStart(){
@@ -109,11 +110,11 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
         final LatLng position = DroneHelper.CoordToLatLang(coord);
 
         if (maxFlightPathSize > 0) {
-        if(flightPath == null){
-            PolylineOptions flightPathOptions = new PolylineOptions();
-            flightPathOptions.color(FLIGHT_PATH_DEFAULT_COLOR).width(FLIGHT_PATH_DEFAULT_WIDTH).zIndex(1);
-            flightPath = mMap.addPolyline(flightPathOptions);
-        }
+            if(flightPath == null){
+                PolylineOptions flightPathOptions = new PolylineOptions();
+                flightPathOptions.color(FLIGHT_PATH_DEFAULT_COLOR).width(FLIGHT_PATH_DEFAULT_WIDTH).zIndex(1);
+                flightPath = mMap.addPolyline(flightPathOptions);
+            }
 
 
             List<LatLng> oldFlightPath = flightPath.getPoints();
@@ -299,25 +300,39 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(camera.build()));
     }
 
-	private void setupMap() {
-		mMap = getMap();
-		if (isMapLayoutFinished()) {
+    private void setupMap() {
+        mMap = getMap();
+        if (isMapLayoutFinished()) {
             // TODO it should wait for the map layout
             // before setting it up, instead of just
             // skipping the setup
             setupMapUI();
-			setupMapOverlay();
+            setupMapOverlay();
             setupMapListeners();
-		}
-	}
+        }
+    }
 
+    //TODO: update to use the LocationClient
     public LatLng getMyLocation() {
-        if (mMap.getMyLocation() != null) {
-            return new LatLng(mMap.getMyLocation().getLatitude(), mMap
-                    .getMyLocation().getLongitude());
+        final Location myLocation = mMap.getMyLocation();
+        if ( myLocation != null) {
+            return new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
         } else {
             return null;
         }
+    }
+
+    @Override
+    public void goToMyLocation(){
+        final float currentZoomLevel = mMap.getCameraPosition().zoom;
+        final LatLng myLocation = getMyLocation();
+        if(myLocation != null)
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, currentZoomLevel));
+    }
+
+    @Override
+    public void goToDroneLocation(){
+        //TODO: complete
     }
 
     private void setupMapListeners(){
@@ -379,101 +394,101 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
         });
     }
 
-	private void setupMapUI() {
-		mMap.setMyLocationEnabled(true);
-		UiSettings mUiSettings = mMap.getUiSettings();
-		mUiSettings.setMyLocationButtonEnabled(true);
-		mUiSettings.setCompassEnabled(true);
-		mUiSettings.setTiltGesturesEnabled(false);
-		mUiSettings.setZoomControlsEnabled(false);
-	}
+    private void setupMapUI() {
+        mMap.setMyLocationEnabled(true);
+        UiSettings mUiSettings = mMap.getUiSettings();
+        mUiSettings.setMyLocationButtonEnabled(false);
+        mUiSettings.setCompassEnabled(true);
+        mUiSettings.setTiltGesturesEnabled(false);
+        mUiSettings.setZoomControlsEnabled(false);
+    }
 
-	private void setupMapOverlay() {
-		if (isOfflineMapEnabled()) {
-			setupOfflineMapOverlay();
-		} else {
-			setupOnlineMapOverlay();
-		}
-	}
+    private void setupMapOverlay() {
+        if (isOfflineMapEnabled()) {
+            setupOfflineMapOverlay();
+        } else {
+            setupOnlineMapOverlay();
+        }
+    }
 
-	private boolean isOfflineMapEnabled() {
-		Context context = this.getActivity();
-		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		return prefs.getBoolean(getString(R.string.pref_advanced_use_offline_maps_key), false);
-	}
+    private boolean isOfflineMapEnabled() {
+        Context context = this.getActivity();
+        SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        return prefs.getBoolean(getString(R.string.pref_advanced_use_offline_maps_key), false);
+    }
 
-	private void setupOnlineMapOverlay() {
-		mMap.setMapType(getMapType());
-	}
+    private void setupOnlineMapOverlay() {
+        mMap.setMapType(getMapType());
+    }
 
-	private int getMapType() {
-		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(getActivity());
-		String mapType = prefs.getString(getString(R.string.pref_map_type_key), "");
+    private int getMapType() {
+        SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(getActivity());
+        String mapType = prefs.getString(getString(R.string.pref_map_type_key), "");
 
-		if (mapType.equalsIgnoreCase(MAP_TYPE_SATELLITE)) {
-			return GoogleMap.MAP_TYPE_SATELLITE;
-		}
-		if (mapType.equalsIgnoreCase(MAP_TYPE_HYBRID)) {
-			return GoogleMap.MAP_TYPE_HYBRID;
-		}
-		if (mapType.equalsIgnoreCase(MAP_TYPE_NORMAL)) {
-			return GoogleMap.MAP_TYPE_NORMAL;
-		}
-		if (mapType.equalsIgnoreCase(MAP_TYPE_TERRAIN)) {
-			return GoogleMap.MAP_TYPE_TERRAIN;
-		} else {
-			return GoogleMap.MAP_TYPE_SATELLITE;
-		}
-	}
+        if (mapType.equalsIgnoreCase(MAP_TYPE_SATELLITE)) {
+            return GoogleMap.MAP_TYPE_SATELLITE;
+        }
+        if (mapType.equalsIgnoreCase(MAP_TYPE_HYBRID)) {
+            return GoogleMap.MAP_TYPE_HYBRID;
+        }
+        if (mapType.equalsIgnoreCase(MAP_TYPE_NORMAL)) {
+            return GoogleMap.MAP_TYPE_NORMAL;
+        }
+        if (mapType.equalsIgnoreCase(MAP_TYPE_TERRAIN)) {
+            return GoogleMap.MAP_TYPE_TERRAIN;
+        } else {
+            return GoogleMap.MAP_TYPE_SATELLITE;
+        }
+    }
 
-	private void setupOfflineMapOverlay() {
-		mMap.setMapType(GoogleMap.MAP_TYPE_NONE);
-		TileOverlay tileOverlay = mMap.addTileOverlay(new TileOverlayOptions()
-				.tileProvider(new LocalMapTileProvider()));
-		tileOverlay.setZIndex(-1);
-		tileOverlay.clearTileCache();
-	}
+    private void setupOfflineMapOverlay() {
+        mMap.setMapType(GoogleMap.MAP_TYPE_NONE);
+        TileOverlay tileOverlay = mMap.addTileOverlay(new TileOverlayOptions()
+                .tileProvider(new LocalMapTileProvider()));
+        tileOverlay.setZIndex(-1);
+        tileOverlay.clearTileCache();
+    }
 
-	public void zoomToExtents(List<LatLng> pointsList) {
-		if (!pointsList.isEmpty()) {
-			LatLngBounds bounds = getBounds(pointsList);
-			CameraUpdate animation;
-			if (isMapLayoutFinished())
-				animation = CameraUpdateFactory.newLatLngBounds(bounds, 100);
-			else
-				animation = CameraUpdateFactory.newLatLngBounds(bounds, 480,
-						360, 100);
-			getMap().animateCamera(animation);
-		}
-	}
+    public void zoomToExtents(List<LatLng> pointsList) {
+        if (!pointsList.isEmpty()) {
+            LatLngBounds bounds = getBounds(pointsList);
+            CameraUpdate animation;
+            if (isMapLayoutFinished())
+                animation = CameraUpdateFactory.newLatLngBounds(bounds, 100);
+            else
+                animation = CameraUpdateFactory.newLatLngBounds(bounds, 480,
+                        360, 100);
+            getMap().animateCamera(animation);
+        }
+    }
 
-	protected void clearMap() {
-		GoogleMap mMap = getMap();
-		mMap.clear();
-		setupMapOverlay();
-	}
+    protected void clearMap() {
+        GoogleMap mMap = getMap();
+        mMap.clear();
+        setupMapOverlay();
+    }
 
-	private LatLngBounds getBounds(List<LatLng> pointsList) {
-		LatLngBounds.Builder builder = new LatLngBounds.Builder();
-		for (LatLng point : pointsList) {
-			builder.include(point);
-		}
-		return builder.build();
-	}
+    private LatLngBounds getBounds(List<LatLng> pointsList) {
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        for (LatLng point : pointsList) {
+            builder.include(point);
+        }
+        return builder.build();
+    }
 
-	public double getMapRotation() {
-		if (isMapLayoutFinished()) {
-			return mMap.getCameraPosition().bearing;
-		} else {
-			return 0;
-		}
-	}
+    public double getMapRotation() {
+        if (isMapLayoutFinished()) {
+            return mMap.getCameraPosition().bearing;
+        } else {
+            return 0;
+        }
+    }
 
-	private boolean isMapLayoutFinished() {
-		return getMap() != null;
-	}
+    private boolean isMapLayoutFinished() {
+        return getMap() != null;
+    }
 
 	/*
 	 * @Override public void onMapTypeChanged() { setupMap(); }

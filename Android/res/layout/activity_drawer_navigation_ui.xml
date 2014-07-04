@@ -16,6 +16,7 @@
         android:childIndicator="@null"
         android:groupIndicator="@null"
         android:layout_gravity="start"
-        android:orientation="vertical"/>
+        android:orientation="vertical"
+        android:fitsSystemWindows="true"/>
 
 </android.support.v4.widget.DrawerLayout>

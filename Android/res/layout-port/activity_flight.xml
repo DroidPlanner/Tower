@@ -7,37 +7,37 @@
 	tools:ignore="HardcodedText"
     >
 
-    <FrameLayout
-        android:id="@+id/mapFragment"
+    <include
+        layout="@layout/common_flight_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <FrameLayout
-        android:id="@+id/containerRC"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="bottom"
-        android:measureAllChildren="true" >
-    </FrameLayout>
-
-    <FrameLayout
-        android:id="@+id/editorToolsFragment"
+    <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        tools:layout="@layout/fragment_mission_control" />
+        android:layout_alignParentTop="true"
+        android:fitsSystemWindows="true"
+        >
 
     <TextView
         android:id="@+id/failsafeTextView"
         android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:layout_alignParentTop="true"
         android:background="#D8ee2d3e"
         android:text="@string/RCFailsafe"
-		style="@style/editorMissionOverviewText"
-        android:visibility="gone"
+        android:visibility="visible"
+        style="@style/editorMissionOverviewText"
         />
+    </org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout>
+
+    <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
+        android:id="@+id/editorToolsFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        tools:layout="@layout/fragment_mission_control"
+        android:fitsSystemWindows="true"/>
 
     <SlidingDrawer
         android:id="@+id/SlidingDrawerRight"
@@ -59,13 +59,13 @@
             android:src="@drawable/drawer_tab"
             tools:ignore="ContentDescription"/>
 
-		<FrameLayout
+        <org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout
 			android:id="@+id/sliding_drawer_content"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
 			tools:layout="@layout/fragment_flight_sliding_drawer_content" />
 
     </SlidingDrawer>
-
 
 </RelativeLayout>

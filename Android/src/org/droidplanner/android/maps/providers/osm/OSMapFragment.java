@@ -244,6 +244,16 @@ public class OSMapFragment extends Fragment implements DPMap {
     }
 
     @Override
+    public void goToMyLocation(){
+        //TODO: complete
+    }
+
+    @Override
+    public void goToDroneLocation(){
+        //TODO: complete
+    }
+
+    @Override
     public void addFlightPathPoint(Coord2D coord) {
         final GeoPoint position = DroneHelper.CoordToGeoPoint(coord);
         if (mMaxFlightPathSize > 0) {
