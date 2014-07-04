@@ -18,7 +18,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -202,7 +201,10 @@ public class FlightActivity extends DrawerNavigationUI implements
 	 * remains 'visible'.
 	 */
     private void updateMapPadding() {
-        int rightPadding = getSlidingDrawerWidth();
+        final int slidingDrawerWidth = mSlidingDrawer.getContent().getWidth();
+        final boolean isSlidingDrawerOpened = mSlidingDrawer.isOpened();
+
+        int rightPadding = isSlidingDrawerOpened ? slidingDrawerWidth : 0;
         int bottomPadding = 0;
         int leftPadding = 0;
 
@@ -229,15 +231,14 @@ public class FlightActivity extends DrawerNavigationUI implements
         mapFragment.setMapPadding(leftPadding, 0, rightPadding, bottomPadding);
 
         //Update the right margin for the my location button
-//        mGoToMyLocation.getLayoutParams().
+        final ViewGroup.MarginLayoutParams marginLp = (ViewGroup.MarginLayoutParams)
+                mGoToMyLocation.getLayoutParams();
+        final int rightMargin = isSlidingDrawerOpened
+                ? marginLp.leftMargin + slidingDrawerWidth
+                : marginLp.leftMargin;
+        marginLp.setMargins(marginLp.leftMargin, marginLp.topMargin, rightMargin,
+                marginLp.bottomMargin);
     }
-
-	private int getSlidingDrawerWidth() {
-		if (mSlidingDrawer.isOpened()) {
-			return mSlidingDrawer.getContent().getWidth();
-		}
-		return 0;
-	}
 
 	@Override
 	public void onJoystickSelected() {
