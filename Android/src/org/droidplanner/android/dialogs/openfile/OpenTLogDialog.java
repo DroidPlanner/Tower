@@ -1,5 +1,7 @@
 package org.droidplanner.android.dialogs.openfile;
 
+import com.MAVLink.Messages.ardupilotmega.msg_global_position_int;
+
 import org.droidplanner.android.utils.file.IO.TLogReader;
 
 public abstract class OpenTLogDialog extends OpenFileDialog {
@@ -7,7 +9,7 @@ public abstract class OpenTLogDialog extends OpenFileDialog {
 
 	@Override
 	protected FileReader createReader() {
-		return new TLogReader();
+		return new TLogReader(msg_global_position_int.MAVLINK_MSG_ID_GLOBAL_POSITION_INT);
 	}
 
 	@Override

@@ -6,6 +6,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.MAVLink.Messages.MAVLinkMessage;
+import com.MAVLink.Messages.ardupilotmega.msg_global_position_int;
+import com.google.common.collect.Lists;
+
 import org.droidplanner.R;
 import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
@@ -13,11 +17,16 @@ import org.droidplanner.android.dialogs.openfile.OpenTLogDialog;
 import org.droidplanner.android.fragments.LocatorMapFragment;
 import org.droidplanner.android.utils.file.IO.TLogReader;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * This implements the map locator activity. The map locator activity allows the user to find
  * a lost drone using last known GPS positions from the tlogs.
  */
 public class LocatorActivity extends SuperUI {
+
+    private List<msg_global_position_int> lastPositions;
 
     /*
     View widgets.
@@ -86,11 +95,24 @@ public class LocatorActivity extends SuperUI {
         OpenFileDialog tlogDialog = new OpenTLogDialog() {
             @Override
             public void tlogFileLoaded(TLogReader reader) {
-//                drone.mission.onMissionLoaded(reader.getMsgMissionItems());
+                loadLastPositions(reader.getLogEvents());
                 locatorMapFragment.zoomToFit();
             }
         };
         tlogDialog.openDialog(this);
+    }
+
+    /*
+    Copy all messages with non-zero coords -> lastPositions and reverse the list (most recent first)
+     */
+    private void loadLastPositions(List<TLogReader.Event> logEvents) {
+        final ArrayList<msg_global_position_int> positions = new ArrayList<msg_global_position_int>();
+        for (TLogReader.Event event : logEvents) {
+            final msg_global_position_int message = (msg_global_position_int) event.getMavLinkMessage();
+            if(message.lat != 0 || message.lon != 0)
+                positions.add(message);
+        }
+        lastPositions = Lists.reverse(positions);
     }
 
     @Override
