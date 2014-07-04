@@ -2,7 +2,7 @@
 #include <string.h>
 
   
-//@TODO hide RTL/Loiter if in that mode, make cam a string, receive telem packets, send mode change packets  
+//@TODO make cam a string, receive telem packets, send mode change packets, auto open on start
   
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!variables
 static Window *window;
@@ -12,6 +12,14 @@ static TextLayer *camera_layer;
 static Layer *buttons;
 char *mode = "Stabilize";
 int cam = 0;
+enum {
+  KEY_MODE = 0,
+  KEW_FOLLOW_TYPE=1,
+  KEY_TELEM_1 = 2,
+  KEY_TELEM_2 = 3,
+  KEY_TELEM_3 = 4,
+  KEY_TELEM_4 = 5,
+};
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!utils
 static void vibe(int milliseconds){
   VibePattern custom_pattern = {
@@ -22,53 +30,44 @@ static void vibe(int milliseconds){
 }
 
 static void set_mode(char *str){
+  vibe(100);
   mode = str;
   text_layer_set_text(mode_layer, str);
+  if(strcmp("Follow",mode)!=0){
+    text_layer_set_text(camera_layer, "");
+  }
+  layer_mark_dirty(buttons);
+}
+static void send_mode_change_request(char *requested_mode){
+  return;
+}
+static void send_follow_type_cycle_request(){
+  return;
 }
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!button click handlers
 static void follow_click_handler(ClickRecognizerRef recognizer, void *context) {
   if(strcmp("Follow",mode)==0){
     vibe(30);
-    cam++;
+    send_follow_type_cycle_request();
   }else{
     vibe(100);
+    send_mode_change_request("Follow");
   }
-  if(cam>2){
-    cam=0;
-  }
-  switch(cam){
-  case 0:
-    text_layer_set_text(camera_layer, "behind");
-    break;
-  case 1:
-    text_layer_set_text(camera_layer, "above");
-    break;
-  case 2:
-    text_layer_set_text(camera_layer, "circle");
-    break;
-}
-  set_mode("Follow");
-  layer_mark_dirty(buttons);
 }
 
 static void loiter_click_handler(ClickRecognizerRef recognizer, void *context) {
   vibe(100);
-  set_mode("Loiter");
-  text_layer_set_text(camera_layer, "");
-  layer_mark_dirty(buttons);
+  send_mode_change_request("Loiter");
 }
 
 static void RTL_handler(ClickRecognizerRef recognizer, void *context) {
   vibe(100);
-  set_mode("RTL");
-  text_layer_set_text(camera_layer, "");
-  layer_mark_dirty(buttons);
+  send_mode_change_request("RTL");
 }
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!draw graphics
 static void buttons_draw(Layer *layer, GContext *ctx) {
     GRect bounds = layer_get_bounds(layer);
 
-    // Draw a black filled rectangle with sharp corners
     graphics_context_set_fill_color(ctx, GColorBlack);
     graphics_fill_rect(ctx, bounds, 10, GCornersLeft);
   
@@ -103,6 +102,45 @@ static void buttons_draw(Layer *layer, GContext *ctx) {
          GTextAlignmentCenter,
          NULL);
 }
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!data sending
+ void out_sent_handler(DictionaryIterator *sent, void *context) {
+   // outgoing message was delivered
+ }
+
+
+ void out_failed_handler(DictionaryIterator *failed, AppMessageResult reason, void *context) {
+   // outgoing message failed
+ }
+
+
+ void in_received_handler(DictionaryIterator *iter, void *context) {
+   Tuple *mode_tuple = dict_find(iter, KEY_MODE);
+   if(strcmp(mode_tuple->value->cstring,mode)!=0)//mode has changed, set new mode
+     set_mode(mode_tuple->value->cstring);
+   else{//otherwise, update whole telem string
+     char telem[256];
+     char *telem1 = dict_find(iter, KEY_TELEM_1)->value->cstring;
+     char *telem2 = dict_find(iter, KEY_TELEM_2)->value->cstring;
+     char *telem3 = dict_find(iter, KEY_TELEM_3)->value->cstring;
+     char *telem4 = dict_find(iter, KEY_TELEM_4)->value->cstring;
+     strcpy(telem,telem1);
+     strcpy(telem,"\n");
+     strcpy(telem,telem2);
+     strcpy(telem,"\n");
+     strcpy(telem,telem3);
+     strcpy(telem,"\n");
+     strcpy(telem,telem4);
+     
+     text_layer_set_text(telem_layer, telem);
+   }
+ }
+
+
+ void in_dropped_handler(AppMessageResult reason, void *context) {
+   // incoming message dropped
+ }
+
+
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!initialization
 static void click_config_provider(void *context) {
   window_single_click_subscribe(BUTTON_ID_SELECT, loiter_click_handler);
@@ -126,10 +164,9 @@ static void window_load(Window *window) {
   text_layer_set_font(camera_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
   layer_add_child(window_layer, text_layer_get_layer(camera_layer));
   
-  telem_layer = text_layer_create((GRect) { .origin = { 10, 110 }, .size = { bounds.size.w-50, 50 } });
-  text_layer_set_text(telem_layer, "Alt: 232m\nBat:10.2V");
+  telem_layer = text_layer_create((GRect) { .origin = { 10, 100 }, .size = { bounds.size.w-50, 60 } });
   text_layer_set_text_alignment(telem_layer, GTextAlignmentLeft);
-  text_layer_set_font(telem_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18));
+  text_layer_set_font(telem_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
   layer_add_child(window_layer, text_layer_get_layer(telem_layer));
   
   buttons = layer_create((GRect) { .origin = { bounds.size.w-50, 5 }, .size = { bounds.size.w, bounds.size.h-10 } });
@@ -150,6 +187,13 @@ static void init(void) {
   });
   const bool animated = true;
   window_stack_push(window, animated);
+  app_message_register_inbox_received(in_received_handler);
+  app_message_register_inbox_dropped(in_dropped_handler);
+  app_message_register_outbox_sent(out_sent_handler);
+  app_message_register_outbox_failed(out_failed_handler);
+  const uint32_t inbound_size = 64;
+  const uint32_t outbound_size = 64;
+  app_message_open(inbound_size, outbound_size);
 }
 
 static void deinit(void) {
