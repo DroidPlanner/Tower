@@ -312,6 +312,16 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
         }
     }
 
+    @Override
+    public Coord2D getGCSPosition() {
+        if (mMap.getMyLocation() != null) {
+            return new Coord2D(mMap.getMyLocation().getLatitude(), mMap
+                    .getMyLocation().getLongitude());
+        } else {
+            return null;
+        }
+    }
+
     private void setupMap() {
 		mMap = getMap();
 		if (isMapLayoutFinished()) {

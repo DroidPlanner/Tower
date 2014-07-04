@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+   	>
+
+    <fragment
+        android:id="@id/mapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="false"
+        class="org.droidplanner.android.fragments.LocatorMapFragment" />
+
+    <TextView
+        android:id="@+id/locatorInfoWindow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="@string/locator_info_window"
+		style="@style/editorMissionOverviewText"
+        />
+
+    <!--fragment
+        android:id="@+id/missionFragment1"
+        android:name="org.droidplanner.android.fragments.EditorListFragment"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/editor_mission_fragment_height"
+        android:layout_alignParentBottom="true"
+        tools:layout="@layout/fragment_editor_list"
+        /-->
+
+</RelativeLayout>

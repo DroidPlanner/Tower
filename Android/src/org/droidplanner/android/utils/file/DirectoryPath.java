@@ -23,6 +23,10 @@ public class DirectoryPath {
 		return getDroidPlannerPath() + "/GCP/";
 	}
 
+    static public String getLogPath() {
+        return getDroidPlannerPath() + "/Logs/";
+    }
+
 	static public File getTLogPath() {
 		File f = new File(getDroidPlannerPath() + "/Logs/");
 		f.mkdirs();
