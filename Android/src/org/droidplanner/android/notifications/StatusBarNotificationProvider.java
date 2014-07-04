@@ -3,6 +3,7 @@ package org.droidplanner.android.notifications;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
@@ -29,6 +30,29 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
     private static final int NOTIFICATION_ID = 1;
 
     /**
+     * Countdown to notification dismissal.
+     */
+    private static final long COUNTDOWN_TO_DISMISSAL = 60000l; //ms
+
+    /**
+     * Used to schedule notification dismissal after a disconnect event.
+     */
+    private final Handler mHandler = new Handler();
+
+    /**
+     * Callback used to dismiss the notification.
+     */
+    private final Runnable mDismissNotification = new Runnable() {
+        @Override
+        public void run() {
+            if(mContext != null) {
+                dismissNotification();
+                mNotificationBuilder = null;
+            }
+        }
+    };
+
+    /**
      * Application context.
      */
     private final Context mContext;
@@ -52,7 +76,7 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
     /**
      * Uses to generate the inbox style use to populate the notification.
      */
-    private final InboxStyleBuilder mInboxBuilder;
+    private InboxStyleBuilder mInboxBuilder;
 
     /**
      * Handle to the app preferences.
@@ -69,8 +93,6 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
         mToggleConnectionIntent = PendingIntent.getActivity(mContext, 0,
                 new Intent(mContext, FlightActivity.class).setAction(SuperUI
                         .ACTION_TOGGLE_DRONE_CONNECTION), 0);
-
-        mInboxBuilder = new InboxStyleBuilder();
     }
 
     @Override
@@ -79,7 +101,12 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 
         switch (event) {
             case CONNECTED:
+                //Cancel the notification dismissal
+                mHandler.removeCallbacks(mDismissNotification);
+
                 final String summaryText = mContext.getString(R.string.connected);
+
+                mInboxBuilder = new InboxStyleBuilder().setSummary(summaryText);
                 mNotificationBuilder = new NotificationCompat.Builder(mContext)
                         .addAction(R.drawable.ic_action_io, mContext.getText(R.string
                                 .menu_disconnect), mToggleConnectionIntent)
@@ -88,7 +115,6 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
                         .setOngoing(mAppPrefs.isNotificationPermanent())
                         .setSmallIcon(R.drawable.ic_launcher);
 
-                mInboxBuilder.setSummary(summaryText);
                 updateFlightMode(drone);
                 updateDroneState(drone);
                 updateBattery(drone);
@@ -124,15 +150,21 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
                 break;
 
             case DISCONNECTED:
-                mNotificationBuilder = new NotificationCompat.Builder(mContext)
-                        .addAction(R.drawable.ic_action_io, mContext.getText(R.string
-                                .menu_connect), mToggleConnectionIntent)
-                        .setContentIntent(mNotificationIntent)
-                        .setContentTitle(mContext.getString(R.string.disconnected))
-                        .setOngoing(false)
-                        .setContentText("")
-                        .setSmallIcon(R.drawable.ic_launcher_bw);
-                mInboxBuilder.reset();
+                mInboxBuilder = null;
+
+                if(mNotificationBuilder != null) {
+                    mNotificationBuilder = new NotificationCompat.Builder(mContext)
+                            .addAction(R.drawable.ic_action_io, mContext.getText(R.string
+                                    .menu_connect), mToggleConnectionIntent)
+                            .setContentIntent(mNotificationIntent)
+                            .setContentTitle(mContext.getString(R.string.disconnected))
+                            .setOngoing(false)
+                            .setContentText("")
+                            .setSmallIcon(R.drawable.ic_launcher_bw);
+
+                    //Schedule the notification dismissal
+                    mHandler.postDelayed(mDismissNotification, COUNTDOWN_TO_DISMISSAL);
+                }
                 break;
 
             default:
@@ -144,16 +176,25 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
     }
 
     private void updateRadio(Drone drone) {
+        if(mInboxBuilder == null)
+            return;
+
         mInboxBuilder.setLine(4, TextUtils.normal("Signal:   ",
                 TextUtils.bold(String.format("%d%%", drone.radio.getSignalStrength()))));
     }
 
     private void updateHome(Drone drone) {
+        if(mInboxBuilder == null)
+            return;
+
         mInboxBuilder.setLine(0, TextUtils.normal("Home:   ", TextUtils.bold(drone.home
                 .getDroneDistanceToHome().toString())));
     }
 
     private void updateGps(Drone drone) {
+        if(mInboxBuilder == null)
+            return;
+
         mInboxBuilder.setLine(1, TextUtils.normal("Satellite:   ",
                 TextUtils.bold(String.format("%d, %s", drone.GPS.getSatCount(),
                         drone.GPS.getFixType()))
@@ -161,6 +202,9 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
     }
 
     private void updateBattery(Drone drone) {
+        if(mInboxBuilder == null)
+            return;
+
         mInboxBuilder.setLine(3, TextUtils.normal("Battery:   ",
                 TextUtils.bold(String.format("%2.1fv (%2.0f%%)",
                         drone.battery.getBattVolt(),
@@ -169,6 +213,9 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
     }
 
     private void updateDroneState(Drone drone) {
+        if(mInboxBuilder == null)
+            return;
+
         long timeInSeconds = drone.state.getFlightTime();
         long minutes = timeInSeconds / 60;
         long seconds = timeInSeconds % 60;
@@ -178,6 +225,9 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
     }
 
     private void updateFlightMode(Drone drone) {
+        if(mNotificationBuilder == null)
+            return;
+
         final CharSequence modeSummary = TextUtils.normal("Flight Mode:   ",
                 TextUtils.bold(drone.state.getMode().getName()));
         mNotificationBuilder.setContentTitle(modeSummary);
@@ -189,7 +239,10 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
     private void showNotification() {
         if (mNotificationBuilder == null) { return; }
 
-        mNotificationBuilder.setStyle(mInboxBuilder.generateInboxStyle());
+        if(mInboxBuilder != null) {
+            mNotificationBuilder.setStyle(mInboxBuilder.generateInboxStyle());
+        }
+
         NotificationManagerCompat.from(mContext).notify(NOTIFICATION_ID, mNotificationBuilder.build());
     }
 
@@ -224,9 +277,10 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
             mHasContent = true;
         }
 
-        public void setSummary(CharSequence summary) {
+        public InboxStyleBuilder setSummary(CharSequence summary) {
             mSummary = summary;
             mHasContent = true;
+            return this;
         }
 
         public void reset() {
