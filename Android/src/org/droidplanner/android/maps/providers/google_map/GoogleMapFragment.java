@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
@@ -82,6 +83,10 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
     @Override
     public void onStart(){
         super.onStart();
+
+        //Make sure the map is initialized
+        MapsInitializer.initialize(getActivity().getApplicationContext());
+
         setupMap();
     }
 
