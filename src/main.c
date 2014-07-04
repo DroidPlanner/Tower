@@ -1,11 +1,12 @@
 #include <pebble.h>
+#include <string.h>
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!variables
 static Window *window;
 static TextLayer *mode_layer;
 static TextLayer *telem_layer;
 static TextLayer *camera_layer;
 static Layer *buttons;
-bool is_follow = false;
+char *mode = "Stabilize";
 int cam = 0;
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!utils
 static void vibe(int milliseconds){
@@ -15,10 +16,14 @@ static void vibe(int milliseconds){
 };
   vibes_enqueue_custom_pattern(custom_pattern);
 }
+
+static void set_mode(char *str){
+  mode = str;
+  text_layer_set_text(mode_layer, str);
+}
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!button click handlers
 static void follow_click_handler(ClickRecognizerRef recognizer, void *context) {
-  text_layer_set_text(mode_layer, "Follow");
-  if(is_follow){
+  if(strcmp("Follow",mode)==0){
     vibe(30);
     cam++;
   }else{
@@ -38,22 +43,20 @@ static void follow_click_handler(ClickRecognizerRef recognizer, void *context) {
     text_layer_set_text(camera_layer, "circle");
     break;
 }
-  is_follow=true;
+  set_mode("Follow");
   layer_mark_dirty(buttons);
 }
 
 static void loiter_click_handler(ClickRecognizerRef recognizer, void *context) {
   vibe(100);
-  text_layer_set_text(mode_layer, "Loiter");
+  set_mode("Loiter");
   text_layer_set_text(camera_layer, "");
-  is_follow=false;
 }
 
 static void RTL_handler(ClickRecognizerRef recognizer, void *context) {
   vibe(100);
-  text_layer_set_text(mode_layer, "RTL");
+  set_mode("RTL");
   text_layer_set_text(camera_layer, "");
-  is_follow=false;
 }
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!draw graphics
 static void buttons_draw(Layer *layer, GContext *ctx) {
@@ -64,7 +67,7 @@ static void buttons_draw(Layer *layer, GContext *ctx) {
     graphics_fill_rect(ctx, bounds, 10, GCornersLeft);
   
     graphics_context_set_text_color(ctx, GColorWhite);
-    if(is_follow){
+    if(strcmp("Follow",mode)==0){
       graphics_draw_text(ctx, "Cam",
            fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD),
            GRect(0,5,50,30),
