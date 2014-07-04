@@ -52,7 +52,7 @@ public class LocatorActivity extends SuperUI implements OnLocatorListListener, L
     private msg_global_position_int selectedMsg;
     private Coord2D lastGCSPosition;
     private float lastGCSBearingTo = Float.MAX_VALUE;
-    private double lastGCSCompass = Double.MAX_VALUE;
+    private double lastGCSAzimuth = Double.MAX_VALUE;
 
     private float[] valuesAccelerometer;
     private float[] valuesMagneticField;
@@ -95,8 +95,8 @@ public class LocatorActivity extends SuperUI implements OnLocatorListListener, L
         super.onResume();
 
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this, null);
-        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), SensorManager.SENSOR_DELAY_NORMAL);
-        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), SensorManager.SENSOR_DELAY_GAME);
+        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
     }
 
     @Override
@@ -223,12 +223,12 @@ public class LocatorActivity extends SuperUI implements OnLocatorListListener, L
                 distance = String.format("Distance: %.01fm", GeoTools.getDistance(lastGCSPosition, msgCoord).valueInMeters());
 
                 if(lastGCSBearingTo != Float.MAX_VALUE) {
-                    final String bearing = String.format(" @ %.01fdeg", lastGCSBearingTo);
+                    final String bearing = String.format(" @ %.0fdeg", lastGCSBearingTo);
                     distance += bearing;
                 }
-                if(lastGCSCompass != Double.MAX_VALUE) {
-                    final String compass = String.format("  Az: %.01fdeg", lastGCSCompass);
-                    distance += compass;
+                if(lastGCSAzimuth != Double.MAX_VALUE) {
+                    final String azimuth = String.format("  Az: %.0fdeg", lastGCSAzimuth);
+                    distance += azimuth;
                 }
                 distance += "    ";
             }
@@ -260,7 +260,8 @@ public class LocatorActivity extends SuperUI implements OnLocatorListListener, L
             target.setLatitude(msgCoord.getLat());
             target.setLongitude(msgCoord.getLng());
 
-            lastGCSBearingTo = location.bearingTo(target);
+            lastGCSBearingTo = Math.round(location.bearingTo(target));
+            lastGCSBearingTo = (lastGCSBearingTo + 360) % 360;
         } else {
             lastGCSBearingTo = Float.MAX_VALUE;
         }
@@ -306,10 +307,13 @@ public class LocatorActivity extends SuperUI implements OnLocatorListListener, L
                 valuesMagneticField);
         if(success) {
             SensorManager.getOrientation(matrixR, matrixValues);
-            lastGCSCompass = Math.toDegrees(matrixValues[0]);
+            lastGCSAzimuth = Math.round(Math.toDegrees(matrixValues[0]));
+            lastGCSAzimuth = (lastGCSAzimuth + 360) % 360;
         } else {
-            lastGCSCompass = Double.MAX_VALUE;
+            lastGCSAzimuth = Double.MAX_VALUE;
         }
+
+        updateInfo();
     }
 
     @Override
