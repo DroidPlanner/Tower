@@ -9,8 +9,10 @@ bool is_follow = false;
 int cam = 0;
 
 static void follow_click_handler(ClickRecognizerRef recognizer, void *context) {
+  vibes_double_pulse();
   text_layer_set_text(mode_layer, "Follow");
   if(is_follow){
+    vibes_short_pulse();
     cam++;
   }
   if(cam>2){
@@ -32,13 +34,17 @@ static void follow_click_handler(ClickRecognizerRef recognizer, void *context) {
 }
 
 static void loiter_click_handler(ClickRecognizerRef recognizer, void *context) {
+  vibes_double_pulse();
   text_layer_set_text(mode_layer, "Loiter");
   text_layer_set_text(camera_layer, "");
+  is_follow=false;
 }
 
 static void RTL_handler(ClickRecognizerRef recognizer, void *context) {
+  vibes_double_pulse();
   text_layer_set_text(mode_layer, "RTL");
   text_layer_set_text(camera_layer, "");
+  is_follow=false;
 }
 
 static void buttons_draw(Layer *layer, GContext *ctx) {
@@ -46,27 +52,27 @@ static void buttons_draw(Layer *layer, GContext *ctx) {
 
     // Draw a black filled rectangle with sharp corners
     graphics_context_set_fill_color(ctx, GColorBlack);
-    graphics_fill_rect(ctx, bounds, 0, GCornerNone);
+    graphics_fill_rect(ctx, bounds, 10, GCornersLeft);
   
     graphics_context_set_text_color(ctx, GColorWhite);
   
-       graphics_draw_text(ctx, "Hold",
+    graphics_draw_text(ctx, "Follow",
          fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD),
-         GRect(0,75,50,30),
+         GRect(0,5,50,30),
          GTextOverflowModeTrailingEllipsis,
          GTextAlignmentCenter,
          NULL);
   
-         graphics_draw_text(ctx, "RTL",
+    graphics_draw_text(ctx, "Loiter",
          fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD),
-         GRect(0,120,50,30),
+         GRect(0,55,50,30),
          GTextOverflowModeTrailingEllipsis,
          GTextAlignmentCenter,
          NULL);
   
-         graphics_draw_text(ctx, "Follow",
+    graphics_draw_text(ctx, "RTL",
          fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD),
-         GRect(0,20,50,30),
+         GRect(0,110,50,30),
          GTextOverflowModeTrailingEllipsis,
          GTextAlignmentCenter,
          NULL);
@@ -91,7 +97,7 @@ static void window_load(Window *window) {
   camera_layer = text_layer_create((GRect) { .origin = { 10, 15+35+10 }, .size = { bounds.size.w-50, 35 } });
   text_layer_set_text(camera_layer, "");
   text_layer_set_text_alignment(camera_layer, GTextAlignmentLeft);
-  text_layer_set_font(camera_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
+  text_layer_set_font(camera_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
   layer_add_child(window_layer, text_layer_get_layer(camera_layer));
   
   telem_layer = text_layer_create((GRect) { .origin = { 10, 110 }, .size = { bounds.size.w-50, 50 } });
@@ -100,7 +106,7 @@ static void window_load(Window *window) {
   text_layer_set_font(telem_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18));
   layer_add_child(window_layer, text_layer_get_layer(telem_layer));
   
-  buttons = layer_create((GRect) { .origin = { bounds.size.w-50, 0 }, .size = { bounds.size.w, bounds.size.h } });
+  buttons = layer_create((GRect) { .origin = { bounds.size.w-50, 5 }, .size = { bounds.size.w, bounds.size.h-10 } });
   layer_set_update_proc(buttons, buttons_draw);
   layer_add_child(window_layer, buttons);
 }
