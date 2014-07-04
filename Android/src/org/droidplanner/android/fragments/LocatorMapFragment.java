@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.droidplanner.android.graphic.map.GraphicDrone;
+import org.droidplanner.android.graphic.map.GraphicLocator;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
 import java.util.ArrayList;
@@ -14,6 +16,8 @@ import java.util.List;
 
 @SuppressLint("UseSparseArrays")
 public class LocatorMapFragment extends DroneMap {
+
+    private GraphicLocator graphicLocator = new GraphicLocator();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle bundle) {
@@ -32,16 +36,29 @@ public class LocatorMapFragment extends DroneMap {
         return false;
     }
 
+    public Coord2D getGCSPosition() {
+        return mMapFragment.getGCSPosition();
+    }
+
+    public void updateLastPosition(Coord2D lastPosition) {
+        graphicLocator.setLastPosition(lastPosition);
+        mMapFragment.updateMarker(graphicLocator);
+    }
+
     public void zoomToFit() {
-        // get visible mission coords
         final List<Coord2D> visibleCoords = new ArrayList<Coord2D>();
+
+        // add lastPosition
+        final Coord2D lastPosition = graphicLocator.getPosition();
+        if(lastPosition != null && !lastPosition.isEmpty())
+            visibleCoords.add(lastPosition);
 
         // add GCS coord
         final Coord2D gcsPosition = mMapFragment.getGCSPosition();
-        if(gcsPosition != null)
+        if(gcsPosition != null && !gcsPosition.isEmpty())
             visibleCoords.add(gcsPosition);
 
-        mMapFragment.zoomToFit(visibleCoords);
+        if(!visibleCoords.isEmpty())
+            mMapFragment.zoomToFit(visibleCoords);
     }
-
 }

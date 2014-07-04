@@ -22,13 +22,13 @@
 		style="@style/editorMissionOverviewText"
         />
 
-    <!--fragment
-        android:id="@+id/missionFragment1"
-        android:name="org.droidplanner.android.fragments.EditorListFragment"
+    <fragment
+        android:id="@+id/locatorListFragment"
+        android:name="org.droidplanner.android.fragments.LocatorListFragment"
         android:layout_width="match_parent"
         android:layout_height="@dimen/editor_mission_fragment_height"
         android:layout_alignParentBottom="true"
-        tools:layout="@layout/fragment_editor_list"
-        /-->
+        tools:layout="@layout/fragment_locator_list"
+        />
 
 </RelativeLayout>
