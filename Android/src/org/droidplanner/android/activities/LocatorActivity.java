@@ -1,5 +1,12 @@
 package org.droidplanner.android.activities;
 
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
@@ -27,20 +34,32 @@ import java.util.List;
  * This implements the map locator activity. The map locator activity allows the user to find
  * a lost drone using last known GPS positions from the tlogs.
  */
-public class LocatorActivity extends SuperUI implements OnLocatorListListener {
+public class LocatorActivity extends SuperUI implements OnLocatorListListener, LocationListener, SensorEventListener {
 
     private final List<msg_global_position_int> lastPositions = new ArrayList<msg_global_position_int>();
 
     /*
     View widgets.
      */
-	private LocatorMapFragment locatorMapFragment;
-	private FragmentManager fragmentManager;
+    private LocationManager locationManager;
+    private SensorManager sensorManager;
+    private FragmentManager fragmentManager;
+
+    private LocatorMapFragment locatorMapFragment;
 	private LocatorListFragment locatorListFragment;
 	private TextView infoView;
 
     private msg_global_position_int selectedMsg;
     private Coord2D lastGCSPosition;
+    private float lastGCSBearingTo = Float.MAX_VALUE;
+    private double lastGCSCompass = Double.MAX_VALUE;
+
+    private float[] valuesAccelerometer;
+    private float[] valuesMagneticField;
+
+    private float[] matrixR;
+    private float[] matrixI;
+    private float[] matrixValues;
 
 
     public List<msg_global_position_int> getLastPositions() {
@@ -52,7 +71,9 @@ public class LocatorActivity extends SuperUI implements OnLocatorListListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_locator);
 
-		fragmentManager = getSupportFragmentManager();
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        fragmentManager = getSupportFragmentManager();
 
 		locatorMapFragment = ((LocatorMapFragment) fragmentManager
 				.findFragmentById(R.id.mapFragment));
@@ -60,23 +81,40 @@ public class LocatorActivity extends SuperUI implements OnLocatorListListener {
 				.findFragmentById(R.id.locatorListFragment);
 
 		infoView = (TextView) findViewById(R.id.locatorInfoWindow);
+
+        valuesAccelerometer = new float[3];
+        valuesMagneticField = new float[3];
+
+        matrixR = new float[9];
+        matrixI = new float[9];
+        matrixValues = new float[3];
 	}
 
     @Override
     public void onResume(){
         super.onResume();
+
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this, null);
+        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        locationManager.removeUpdates(this);
+        sensorManager.unregisterListener(this);
     }
 
     @Override
     public void onStart(){
         super.onStart();
-//        missionProxy.selection.addSelectionUpdateListener(this);
     }
 
     @Override
     public void onStop(){
         super.onStop();
-//        missionProxy.selection.removeSelectionUpdateListener(this);
     }
 
 	@Override
@@ -156,9 +194,6 @@ public class LocatorActivity extends SuperUI implements OnLocatorListListener {
     public void onItemClick(msg_global_position_int msg) {
         setSelectedMsg(msg);
 
-        // TODO - proper update w/ change
-        lastGCSPosition = locatorMapFragment.getGCSPosition();
-
         locatorMapFragment.zoomToFit();
         updateInfo();
     }
@@ -180,15 +215,25 @@ public class LocatorActivity extends SuperUI implements OnLocatorListListener {
             final Coord2D msgCoord = coordFromMsgGlobalPositionInt(selectedMsg);
 
             // distance
-            final String distance;
+            String distance;
             if(lastGCSPosition == null || lastGCSPosition.isEmpty()) {
                 // unknown
-                distance = "?";
+                distance = "";
             } else {
-                distance = String.format("%.01fm", GeoTools.getDistance(lastGCSPosition, msgCoord).valueInMeters());
+                distance = String.format("Distance: %.01fm", GeoTools.getDistance(lastGCSPosition, msgCoord).valueInMeters());
+
+                if(lastGCSBearingTo != Float.MAX_VALUE) {
+                    final String bearing = String.format(" @ %.01fdeg", lastGCSBearingTo);
+                    distance += bearing;
+                }
+                if(lastGCSCompass != Double.MAX_VALUE) {
+                    final String compass = String.format("  Az: %.01fdeg", lastGCSCompass);
+                    distance += compass;
+                }
+                distance += "    ";
             }
 
-            infoView.setText(String.format("Distance: %s    Lat: %f    Lon: %f", distance, msgCoord.getLat(), msgCoord.getLng()));
+            infoView.setText(String.format("%sLat: %f    Lon: %f", distance, msgCoord.getLat(), msgCoord.getLng()));
         } else {
             infoView.setText("");
         }
@@ -204,23 +249,71 @@ public class LocatorActivity extends SuperUI implements OnLocatorListListener {
         return new Coord2D(lat, lon);
     }
 
-//    @Override
-//    public void onSelectionUpdate(List<MissionItemProxy> selected) {
-//        final int selectedCount = selected.size();
-//
-//        missionListFragment.setArrowsVisibility(selectedCount > 0);
-//
-//        if(selectedCount != 1){
-//            removeItemDetail();
-//        }
-//        else{
-//            if(contextualActionBar != null)
-//                removeItemDetail();
-//            else{
-//                showItemDetail(selected.get(0));
-//            }
-//        }
-//
-//        planningMapFragment.update();
-//    }
+    @Override
+    public void onLocationChanged(Location location) {
+        lastGCSPosition = new Coord2D(location.getLatitude(), location.getLongitude());
+
+        if(selectedMsg != null) {
+            final Coord2D msgCoord = coordFromMsgGlobalPositionInt(selectedMsg);
+
+            final Location target = new Location(location);
+            target.setLatitude(msgCoord.getLat());
+            target.setLongitude(msgCoord.getLng());
+
+            lastGCSBearingTo = location.bearingTo(target);
+        } else {
+            lastGCSBearingTo = Float.MAX_VALUE;
+        }
+
+        updateInfo();
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+        // NOP
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+        // NOP
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+        // NOP
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+
+        switch(event.sensor.getType()){
+            case Sensor.TYPE_ACCELEROMETER:
+                for(int i =0; i < 3; i++){
+                    valuesAccelerometer[i] = event.values[i];
+                }
+                break;
+            case Sensor.TYPE_MAGNETIC_FIELD:
+                for(int i =0; i < 3; i++){
+                    valuesMagneticField[i] = event.values[i];
+                }
+                break;
+        }
+
+        boolean success = SensorManager.getRotationMatrix(
+                matrixR,
+                matrixI,
+                valuesAccelerometer,
+                valuesMagneticField);
+        if(success) {
+            SensorManager.getOrientation(matrixR, matrixValues);
+            lastGCSCompass = Math.toDegrees(matrixValues[0]);
+        } else {
+            lastGCSCompass = Double.MAX_VALUE;
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
 }
