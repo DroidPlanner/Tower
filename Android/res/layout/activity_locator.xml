@@ -13,14 +13,39 @@
         android:layout_centerInParent="false"
         class="org.droidplanner.android.fragments.LocatorMapFragment" />
 
-    <TextView
-        android:id="@+id/locatorInfoWindow"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/statusView"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:text="@string/locator_info_window"
-		style="@style/editorMissionOverviewText"
-        />
+        style="@style/editorMissionOverviewText">
+
+        <TextView
+            android:id="@+id/latView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/editorMissionOverviewText"/>
+
+        <TextView
+            android:id="@+id/lonView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/editorMissionOverviewText"/>
+
+        <TextView
+            android:id="@+id/distanceView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/editorMissionOverviewText"/>
+
+        <TextView
+            android:id="@+id/azimuthView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/editorMissionOverviewText"/>
+
+    </LinearLayout>
 
     <fragment
         android:id="@+id/locatorListFragment"

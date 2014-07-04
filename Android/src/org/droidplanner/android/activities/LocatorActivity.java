@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.MAVLink.Messages.ardupilotmega.msg_global_position_int;
@@ -36,7 +37,9 @@ import java.util.List;
  */
 public class LocatorActivity extends SuperUI implements OnLocatorListListener, LocationListener, SensorEventListener {
 
-    private final List<msg_global_position_int> lastPositions = new ArrayList<msg_global_position_int>();
+    private static final String STATE_LASTSELECTEDPOSITION = "STATE_LASTSELECTEDPOSITION";
+
+    private final static List<msg_global_position_int> lastPositions = new ArrayList<msg_global_position_int>();
 
     /*
     View widgets.
@@ -47,19 +50,20 @@ public class LocatorActivity extends SuperUI implements OnLocatorListListener, L
 
     private LocatorMapFragment locatorMapFragment;
 	private LocatorListFragment locatorListFragment;
-	private TextView infoView;
+    private LinearLayout statusView;
+    private TextView latView, lonView, distanceView, azimuthView;
 
     private msg_global_position_int selectedMsg;
     private Coord2D lastGCSPosition;
     private float lastGCSBearingTo = Float.MAX_VALUE;
     private double lastGCSAzimuth = Double.MAX_VALUE;
 
-    private float[] valuesAccelerometer;
-    private float[] valuesMagneticField;
-
-    private float[] matrixR;
-    private float[] matrixI;
-    private float[] matrixValues;
+//    private float[] valuesAccelerometer;
+//    private float[] valuesMagneticField;
+//
+//    private float[] matrixR;
+//    private float[] matrixI;
+//    private float[] matrixValues;
 
 
     public List<msg_global_position_int> getLastPositions() {
@@ -80,23 +84,50 @@ public class LocatorActivity extends SuperUI implements OnLocatorListListener, L
 		locatorListFragment = (LocatorListFragment) fragmentManager
 				.findFragmentById(R.id.locatorListFragment);
 
-		infoView = (TextView) findViewById(R.id.locatorInfoWindow);
+        statusView = (LinearLayout) findViewById(R.id.statusView);
+        latView = (TextView) findViewById(R.id.latView);
+        lonView = (TextView) findViewById(R.id.lonView);
+        distanceView = (TextView) findViewById(R.id.distanceView);
+        azimuthView = (TextView) findViewById(R.id.azimuthView);
 
-        valuesAccelerometer = new float[3];
-        valuesMagneticField = new float[3];
+//        valuesAccelerometer = new float[3];
+//        valuesMagneticField = new float[3];
+//
+//        matrixR = new float[9];
+//        matrixI = new float[9];
+//        matrixValues = new float[3];
 
-        matrixR = new float[9];
-        matrixI = new float[9];
-        matrixValues = new float[3];
+        // clear prev state if this is a fresh start
+        if(savedInstanceState == null) {
+            // fresh start
+            lastPositions.clear();
+        }
 	}
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        final int lastSelectedPosition = lastPositions.indexOf(selectedMsg);
+        outState.putInt(STATE_LASTSELECTEDPOSITION, lastSelectedPosition);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        final int lastSelectedPosition = savedInstanceState.getInt(STATE_LASTSELECTEDPOSITION, -1);
+        if(lastSelectedPosition != -1 && lastSelectedPosition < lastPositions.size())
+            setSelectedMsg(lastPositions.get(lastSelectedPosition));
+    }
 
     @Override
     public void onResume(){
         super.onResume();
 
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this, null);
-        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), SensorManager.SENSOR_DELAY_GAME);
-        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
+//        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), SensorManager.SENSOR_DELAY_GAME);
+//        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
     }
 
     @Override
@@ -104,7 +135,7 @@ public class LocatorActivity extends SuperUI implements OnLocatorListListener, L
         super.onPause();
 
         locationManager.removeUpdates(this);
-        sensorManager.unregisterListener(this);
+//        sensorManager.unregisterListener(this);
     }
 
     @Override
@@ -178,10 +209,11 @@ public class LocatorActivity extends SuperUI implements OnLocatorListListener, L
 	}
 
 	private void updateMapPadding() {
-		final int topPadding = infoView.getBottom();
+        final int leftPadding = statusView.getRight();
+        final int topPadding = statusView.getBottom();
         final int bottomPadding = locatorListFragment.getView().getHeight();
 
-		locatorMapFragment.setMapPadding(0, topPadding, 0, bottomPadding);
+        locatorMapFragment.setMapPadding(leftPadding, topPadding, 0, bottomPadding);
 	}
 
 	@Override
@@ -215,27 +247,31 @@ public class LocatorActivity extends SuperUI implements OnLocatorListListener, L
             final Coord2D msgCoord = coordFromMsgGlobalPositionInt(selectedMsg);
 
             // distance
-            String distance;
             if(lastGCSPosition == null || lastGCSPosition.isEmpty()) {
                 // unknown
-                distance = "";
+                distanceView.setText("");
+                azimuthView.setText("");
             } else {
-                distance = String.format("Distance: %.01fm", GeoTools.getDistance(lastGCSPosition, msgCoord).valueInMeters());
-
+                String distance = String.format("Distance: %.01fm", GeoTools.getDistance(lastGCSPosition, msgCoord).valueInMeters());
                 if(lastGCSBearingTo != Float.MAX_VALUE) {
-                    final String bearing = String.format(" @ %.0fdeg", lastGCSBearingTo);
+                    final String bearing = String.format(" @ %.0f°", lastGCSBearingTo);
                     distance += bearing;
                 }
+                distanceView.setText(distance);
+
                 if(lastGCSAzimuth != Double.MAX_VALUE) {
-                    final String azimuth = String.format("  Az: %.0fdeg", lastGCSAzimuth);
-                    distance += azimuth;
+                    final String azimuth = String.format("Heading: %.0f°", lastGCSAzimuth);
+                    azimuthView.setText(azimuth);
                 }
-                distance += "    ";
             }
 
-            infoView.setText(String.format("%sLat: %f    Lon: %f", distance, msgCoord.getLat(), msgCoord.getLng()));
+            latView.setText(String.format("Latitude: %f°", msgCoord.getLat()));
+            lonView.setText(String.format("Longitude: %f°", msgCoord.getLng()));
         } else {
-            infoView.setText("");
+            latView.setText("");
+            lonView.setText("");
+            distanceView.setText("");
+            azimuthView.setText("");
         }
     }
 
@@ -252,6 +288,7 @@ public class LocatorActivity extends SuperUI implements OnLocatorListListener, L
     @Override
     public void onLocationChanged(Location location) {
         lastGCSPosition = new Coord2D(location.getLatitude(), location.getLongitude());
+        lastGCSAzimuth = location.getBearing();
 
         if(selectedMsg != null) {
             final Coord2D msgCoord = coordFromMsgGlobalPositionInt(selectedMsg);
@@ -287,33 +324,33 @@ public class LocatorActivity extends SuperUI implements OnLocatorListListener, L
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-        switch(event.sensor.getType()){
-            case Sensor.TYPE_ACCELEROMETER:
-                for(int i =0; i < 3; i++){
-                    valuesAccelerometer[i] = event.values[i];
-                }
-                break;
-            case Sensor.TYPE_MAGNETIC_FIELD:
-                for(int i =0; i < 3; i++){
-                    valuesMagneticField[i] = event.values[i];
-                }
-                break;
-        }
-
-        boolean success = SensorManager.getRotationMatrix(
-                matrixR,
-                matrixI,
-                valuesAccelerometer,
-                valuesMagneticField);
-        if(success) {
-            SensorManager.getOrientation(matrixR, matrixValues);
-            lastGCSAzimuth = Math.round(Math.toDegrees(matrixValues[0]));
-            lastGCSAzimuth = (lastGCSAzimuth + 360) % 360;
-        } else {
-            lastGCSAzimuth = Double.MAX_VALUE;
-        }
-
-        updateInfo();
+//        switch(event.sensor.getType()){
+//            case Sensor.TYPE_ACCELEROMETER:
+//                for(int i =0; i < 3; i++){
+//                    valuesAccelerometer[i] = event.values[i];
+//                }
+//                break;
+//            case Sensor.TYPE_MAGNETIC_FIELD:
+//                for(int i =0; i < 3; i++){
+//                    valuesMagneticField[i] = event.values[i];
+//                }
+//                break;
+//        }
+//
+//        boolean success = SensorManager.getRotationMatrix(
+//                matrixR,
+//                matrixI,
+//                valuesAccelerometer,
+//                valuesMagneticField);
+//        if(success) {
+//            SensorManager.getOrientation(matrixR, matrixValues);
+//            lastGCSAzimuth = Math.round(Math.toDegrees(matrixValues[0]));
+//            lastGCSAzimuth = (lastGCSAzimuth + 360) % 360;
+//        } else {
+//            lastGCSAzimuth = Double.MAX_VALUE;
+//        }
+//
+//        updateInfo();
     }
 
     @Override
