@@ -81,7 +81,7 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
         handleIntent(intent);
     }
 
-    protected void handleIntent(Intent intent){
+    private void handleIntent(Intent intent){
         if(intent == null)
             return;
 
