@@ -17,7 +17,7 @@ public class PebbleNotificationProvider implements
 NotificationHandler.NotificationProvider {
 	
 	private static final int KEY_MODE = 0;
-	private static final int KEW_FOLLOW_TYPE=1;
+	private static final int KEY_FOLLOW_TYPE=1;
 	private static final int KEY_TELEM = 2;
 	
 	private static final UUID DP_UUID = UUID.fromString("79a2893d-fc7d-48c4-bc9a-34854d94ef6e");
@@ -25,6 +25,8 @@ NotificationHandler.NotificationProvider {
 	 * Application context.
 	 */
 	private Context mContext;
+	
+	long timeWhenLastTelemSent = System.currentTimeMillis();
 
 	public PebbleNotificationProvider(Context context) {
 		mContext = context;
@@ -37,10 +39,10 @@ NotificationHandler.NotificationProvider {
 			sendDataToWatch(KEY_MODE, drone.state.getMode().getName());
 			break;
 		case BATTERY:
-			sendDataToWatch(KEY_TELEM, getTelemetryToSend(drone) );
+			sendTelem(drone);
 			break;
 		case SPEED:
-			sendDataToWatch(KEY_TELEM, getTelemetryToSend(drone));
+			sendTelem(drone);
 			break;
 		default:
 			break;
@@ -48,12 +50,15 @@ NotificationHandler.NotificationProvider {
 		}
 	}
 	
-	private String getTelemetryToSend(Drone drone){
-		String bat = "Bat:" + Double.toString(roundToOneDecimal(drone.battery.getBattVolt())) + "V";
-		String speed = "Speed: " + Double.toString(roundToOneDecimal(drone.speed.getAirSpeed()));
-		return bat + "\n" + speed;
-		
+	private void sendTelem(Drone drone) {
+		if(System.currentTimeMillis() - timeWhenLastTelemSent > 500){
+			String bat = "Bat:" + Double.toString(roundToOneDecimal(drone.battery.getBattVolt())) + "V";
+			String speed = "Speed: " + Double.toString(roundToOneDecimal(drone.speed.getAirSpeed()));
+			sendDataToWatch(KEY_TELEM, bat + "\n" + speed);
+			timeWhenLastTelemSent = System.currentTimeMillis();
+		}
 	}
+
 	private double roundToOneDecimal(double value){
 		return (double)Math.round(value * 10) / 10;
 	}
