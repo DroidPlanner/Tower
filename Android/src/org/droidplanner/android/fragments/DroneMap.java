@@ -171,4 +171,11 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
        mMapFragment.goToMyLocation();
     }
 
+    /**
+     * Move the map to the drone location.
+     */
+    public void goToDroneLocation(){
+        mMapFragment.goToDroneLocation();
+    }
+
 }

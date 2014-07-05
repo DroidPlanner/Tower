@@ -42,7 +42,9 @@ public class FlightActivity extends DrawerNavigationUI implements
 
 	private SlidingDrawer mSlidingDrawer;
 
+    private View mLocationButtonsContainer;
     private ImageButton mGoToMyLocation;
+    private ImageButton mGoToDroneLocation;
 
 	private boolean mIsPhone;
 
@@ -82,6 +84,24 @@ public class FlightActivity extends DrawerNavigationUI implements
         });
 
         setupMapFragment();
+
+        mLocationButtonsContainer = findViewById(R.id.location_button_container);
+
+        mGoToMyLocation = (ImageButton) findViewById(R.id.my_location_button);
+        mGoToMyLocation.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                mapFragment.goToMyLocation();
+            }
+        });
+
+        mGoToDroneLocation = (ImageButton) findViewById(R.id.drone_location_button);
+        mGoToDroneLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               mapFragment.goToDroneLocation();
+            }
+        });
 
 		editorTools = fragmentManager.findFragmentById(R.id.editorToolsFragment);
 		if (editorTools == null) {
@@ -172,16 +192,6 @@ public class FlightActivity extends DrawerNavigationUI implements
 				fragmentManager.beginTransaction().add(R.id.mapFragment, mapFragment).commit();
 			}
 		}
-
-        if(mGoToMyLocation == null){
-            mGoToMyLocation = (ImageButton) findViewById(R.id.my_location_button);
-            mGoToMyLocation.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v){
-                    mapFragment.goToMyLocation();
-                }
-            });
-        }
 	}
 
 	@Override
@@ -232,7 +242,7 @@ public class FlightActivity extends DrawerNavigationUI implements
 
         //Update the right margin for the my location button
         final ViewGroup.MarginLayoutParams marginLp = (ViewGroup.MarginLayoutParams)
-                mGoToMyLocation.getLayoutParams();
+                mLocationButtonsContainer.getLayoutParams();
         final int rightMargin = isSlidingDrawerOpened
                 ? marginLp.leftMargin + slidingDrawerWidth
                 : marginLp.leftMargin;

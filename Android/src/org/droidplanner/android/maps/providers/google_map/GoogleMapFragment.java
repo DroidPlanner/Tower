@@ -5,24 +5,32 @@ import java.util.List;
 import java.util.Map;
 
 import org.droidplanner.R;
+import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.utils.DroneHelper;
 import org.droidplanner.android.helpers.LocalMapTileProvider;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
+import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
 import android.content.Context;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -42,7 +50,10 @@ import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.common.collect.HashBiMap;
 
-public class GoogleMapFragment extends SupportMapFragment implements DPMap {
+public class GoogleMapFragment extends SupportMapFragment implements DPMap,
+GoogleApiClient.OnConnectionFailedListener{
+
+    private static final String TAG = GoogleMapFragment.class.getSimpleName();
 
     public static final String PREF_MAP_TYPE = "pref_map_type";
 
@@ -53,7 +64,9 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
 
     private final HashBiMap<MarkerInfo, Marker> mMarkers = HashBiMap.create();
 
+    private Drone mDrone;
     private GoogleMap mMap;
+    private GoogleApiClient mApiClient;
 
     private Polyline flightPath;
     private Polyline missionPath;
@@ -69,11 +82,18 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
     private DPMap.OnMarkerDragListener mMarkerDragListener;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
-                             Bundle bundle) {
-        View view = super.onCreateView(inflater, viewGroup, bundle);
+    public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle bundle) {
+        final FragmentActivity activity = getActivity();
 
-        Bundle args = getArguments();
+        final View view = super.onCreateView(inflater, viewGroup, bundle);
+        mApiClient = new GoogleApiClient.Builder(activity.getApplicationContext())
+                .addApi(LocationServices.API)
+                .addOnConnectionFailedListener(this)
+                .build();
+
+        mDrone = ((DroidPlannerApp)activity.getApplication()).getDrone();
+
+        final Bundle args = getArguments();
         if(args != null){
             maxFlightPathSize = args.getInt(EXTRA_MAX_FLIGHT_PATH_SIZE);
         }
@@ -85,10 +105,17 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
     public void onStart(){
         super.onStart();
 
+        mApiClient.connect();
         //Make sure the map is initialized
         MapsInitializer.initialize(getActivity().getApplicationContext());
 
         setupMap();
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        mApiClient.disconnect();
     }
 
     @Override
@@ -233,8 +260,10 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
 
     @Override
     public void updateCamera(Coord2D coord, int zoomLevel){
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(DroneHelper.CoordToLatLang(coord),
-                zoomLevel));
+        if(coord != null) {
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(DroneHelper.CoordToLatLang(coord),
+                    zoomLevel));
+        }
     }
 
     @Override
@@ -312,11 +341,14 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
         }
     }
 
-    //TODO: update to use the LocationClient
-    public LatLng getMyLocation() {
-        final Location myLocation = mMap.getMyLocation();
+    private Coord2D getMyLocation() {
+        if(!mApiClient.isConnected()){
+            return null;
+        }
+
+        final Location myLocation = LocationServices.FusedLocationApi.getLastLocation(mApiClient);
         if ( myLocation != null) {
-            return new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
+            return new Coord2D(myLocation.getLatitude(), myLocation.getLongitude());
         } else {
             return null;
         }
@@ -325,14 +357,14 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
     @Override
     public void goToMyLocation(){
         final float currentZoomLevel = mMap.getCameraPosition().zoom;
-        final LatLng myLocation = getMyLocation();
-        if(myLocation != null)
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, currentZoomLevel));
+        updateCamera(getMyLocation(), (int)currentZoomLevel);
     }
 
     @Override
     public void goToDroneLocation(){
-        //TODO: complete
+        final float currentZoomLevel = mMap.getCameraPosition().zoom;
+        final Coord2D droneLocation = mDrone.GPS.getPosition();
+        updateCamera(droneLocation, (int)currentZoomLevel);
     }
 
     private void setupMapListeners(){
@@ -413,8 +445,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
 
     private boolean isOfflineMapEnabled() {
         Context context = this.getActivity();
-        SharedPreferences prefs = PreferenceManager
-                .getDefaultSharedPreferences(context);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean(getString(R.string.pref_advanced_use_offline_maps_key), false);
     }
 
@@ -423,8 +454,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
     }
 
     private int getMapType() {
-        SharedPreferences prefs = PreferenceManager
-                .getDefaultSharedPreferences(getActivity());
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String mapType = prefs.getString(getString(R.string.pref_map_type_key), "");
 
         if (mapType.equalsIgnoreCase(MAP_TYPE_SATELLITE)) {
@@ -490,7 +520,16 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap {
         return getMap() != null;
     }
 
-	/*
-	 * @Override public void onMapTypeChanged() { setupMap(); }
-	 */
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.e(TAG, "Google API Client connection failed: " + connectionResult.getErrorCode());
+        if(connectionResult.hasResolution()){
+            try {
+                connectionResult.startResolutionForResult(getActivity(), 0);
+            }
+            catch (IntentSender.SendIntentException e) {
+                Log.e(TAG, "Unable to launch the resolution intent.", e);
+            }
+        }
+    }
 }

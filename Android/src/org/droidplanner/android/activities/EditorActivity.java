@@ -72,6 +72,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
     private boolean mIsSplineEnabled;
 
     private ImageButton mGoToMyLocation;
+    private ImageButton mGoToDroneLocation;
 
     /**
      * This view hosts the mission item detail fragment.
@@ -108,6 +109,14 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
             public void onClick(View v){
                planningMapFragment.goToMyLocation();
            }
+        });
+
+        mGoToDroneLocation = (ImageButton) findViewById(R.id.drone_location_button);
+        mGoToDroneLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                planningMapFragment.goToDroneLocation();
+            }
         });
 
         final RadioButton normalToggle = (RadioButton) findViewById(R.id.normalWpToggle);

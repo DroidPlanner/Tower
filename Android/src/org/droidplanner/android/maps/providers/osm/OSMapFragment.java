@@ -15,10 +15,12 @@ import android.view.ViewGroup;
 import com.google.common.collect.HashBiMap;
 
 import org.droidplanner.R;
+import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.utils.DroneHelper;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
+import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.api.IMapController;
@@ -97,6 +99,8 @@ public class OSMapFragment extends Fragment implements DPMap {
      */
     private MapView mMapView;
 
+    private Drone mDrone;
+
     private MyLocationNewOverlay mLocationOverlay;
     private CompassOverlay mCompassOverlay;
 
@@ -123,6 +127,8 @@ public class OSMapFragment extends Fragment implements DPMap {
         if (args != null) {
             mMaxFlightPathSize = args.getInt(EXTRA_MAX_FLIGHT_PATH_SIZE);
         }
+
+        mDrone = ((DroidPlannerApp)getActivity().getApplication()).getDrone();
 
         return view;
     }
@@ -245,12 +251,18 @@ public class OSMapFragment extends Fragment implements DPMap {
 
     @Override
     public void goToMyLocation(){
-        //TODO: complete
+        final int currentZoomLevel = mMapView.getZoomLevel();
+        final GeoPoint myLocation = mLocationOverlay.getMyLocation();
+        if(myLocation != null){
+            updateCamera(DroneHelper.GeoPointToCoord(myLocation), currentZoomLevel);
+        }
     }
 
     @Override
     public void goToDroneLocation(){
-        //TODO: complete
+        final int currentZoomLevel = mMapView.getZoomLevel();
+        final Coord2D droneLocation = mDrone.GPS.getPosition();
+        updateCamera(droneLocation, currentZoomLevel);
     }
 
     @Override
@@ -356,6 +368,10 @@ public class OSMapFragment extends Fragment implements DPMap {
 
     @Override
     public void updateCamera(Coord2D coord, int zoomLevel) {
+        if(coord == null){
+            return;
+        }
+
         IMapController mapController = mMapView.getController();
         mapController.animateTo(DroneHelper.CoordToGeoPoint(coord));
         mapController.setZoom(zoomLevel);

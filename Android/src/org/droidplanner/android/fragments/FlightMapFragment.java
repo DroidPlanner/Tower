@@ -32,8 +32,7 @@ public class FlightMapFragment extends DroneMap implements
 	public boolean hasBeenZoomed = false;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
-			Bundle bundle) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle bundle) {
 		View view = super.onCreateView(inflater, viewGroup, bundle);
 
 		getPreferences();
@@ -45,8 +44,7 @@ public class FlightMapFragment extends DroneMap implements
 	}
 
 	private void getPreferences() {
-		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(context);
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		isAutoPanEnabled = prefs.getBoolean("pref_auto_pan_enabled", false);
 		guidedModeOnLongPress = prefs.getBoolean("pref_guided_mode_on_long_press", true);
 	}
@@ -60,16 +58,6 @@ public class FlightMapFragment extends DroneMap implements
 	@Override
 	public void update() {
 		super.update();
-	}
-
-	private void animateCamera(Coord2D coord) {
-		if (!hasBeenZoomed) {
-			hasBeenZoomed = true;
-            mMapFragment.updateCamera(coord, ZOOM_LEVEL);
-		}
-		if (isAutoPanEnabled) {
-            mMapFragment.updateCamera(coord, ZOOM_LEVEL);
-		}
 	}
 
 	@Override
