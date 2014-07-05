@@ -14,11 +14,8 @@ char *mode = "Stabilize";
 int cam = 0;
 enum {
   KEY_MODE = 0,
-  KEW_FOLLOW_TYPE=1,
-  KEY_TELEM_1 = 2,
-  KEY_TELEM_2 = 3,
-  KEY_TELEM_3 = 4,
-  KEY_TELEM_4 = 5,
+  KEW_FOLLOW_TYPE = 1,
+  KEY_TELEM = 2
 };
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!utils
 static void vibe(int milliseconds){
@@ -31,7 +28,7 @@ static void vibe(int milliseconds){
 
 static void set_mode(char *str){
   vibe(100);
-  mode = str;
+  strncpy(mode,str,10);
   text_layer_set_text(mode_layer, str);
   if(strcmp("Follow",mode)!=0){
     text_layer_set_text(camera_layer, "");
@@ -115,23 +112,12 @@ static void buttons_draw(Layer *layer, GContext *ctx) {
 
  void in_received_handler(DictionaryIterator *iter, void *context) {
    Tuple *mode_tuple = dict_find(iter, KEY_MODE);
-   if(strcmp(mode_tuple->value->cstring,mode)!=0)//mode has changed, set new mode
+   if(mode_tuple && strcmp(mode_tuple->value->cstring,mode)!=0){//mode has changed, set new mode
      set_mode(mode_tuple->value->cstring);
-   else{//otherwise, update whole telem string
-     char telem[256];
-     char *telem1 = dict_find(iter, KEY_TELEM_1)->value->cstring;
-     char *telem2 = dict_find(iter, KEY_TELEM_2)->value->cstring;
-     char *telem3 = dict_find(iter, KEY_TELEM_3)->value->cstring;
-     char *telem4 = dict_find(iter, KEY_TELEM_4)->value->cstring;
-     strcpy(telem,telem1);
-     strcpy(telem,"\n");
-     strcpy(telem,telem2);
-     strcpy(telem,"\n");
-     strcpy(telem,telem3);
-     strcpy(telem,"\n");
-     strcpy(telem,telem4);
-     
-     text_layer_set_text(telem_layer, telem);
+   }else{//otherwise, if telem changed, update the screen
+     Tuple *telem_tuple = dict_find(iter, KEY_TELEM);
+     if(telem_tuple && strcmp(telem_tuple->value->cstring,mode)!=0)
+       text_layer_set_text(telem_layer, telem_tuple->value->cstring);
    }
  }
 
@@ -152,8 +138,8 @@ static void window_load(Window *window) {
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
 
-  mode_layer = text_layer_create((GRect) { .origin = { 10, 15 }, .size = { bounds.size.w-50, 35 } });
-  text_layer_set_text(mode_layer, "Stabilize");
+  mode_layer = text_layer_create((GRect) { .origin = { 10, 5 }, .size = { bounds.size.w-50, 35 } });
+  text_layer_set_text(mode_layer, "No Conn.");
   text_layer_set_text_alignment(mode_layer, GTextAlignmentLeft);
   text_layer_set_font(mode_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
   layer_add_child(window_layer, text_layer_get_layer(mode_layer));
@@ -164,7 +150,9 @@ static void window_load(Window *window) {
   text_layer_set_font(camera_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
   layer_add_child(window_layer, text_layer_get_layer(camera_layer));
   
-  telem_layer = text_layer_create((GRect) { .origin = { 10, 100 }, .size = { bounds.size.w-50, 60 } });
+  telem_layer = text_layer_create((GRect) { .origin = { 10, 50 }, .size = { bounds.size.w-60, bounds.size.h-50 } });
+  text_layer_set_overflow_mode(telem_layer, GTextOverflowModeWordWrap);
+  text_layer_set_text(telem_layer, "No telem. yet");
   text_layer_set_text_alignment(telem_layer, GTextAlignmentLeft);
   text_layer_set_font(telem_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
   layer_add_child(window_layer, text_layer_get_layer(telem_layer));
