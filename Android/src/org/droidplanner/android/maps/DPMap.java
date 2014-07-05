@@ -1,11 +1,9 @@
 package org.droidplanner.android.maps;
 
-import android.content.res.Resources;
 import android.graphics.Color;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import org.droidplanner.android.maps.providers.DPMapProvider;
+import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
 import java.util.List;
@@ -13,7 +11,7 @@ import java.util.List;
 /**
  * Defines the functionality expected from the map providers.
  */
-public interface DPMap {
+public interface DPMap extends DroneInterfaces.OnDroneListener {
 
     public static final String PACKAGE_NAME = DPMap.class.getPackage().getName();
 
@@ -34,6 +32,12 @@ public interface DPMap {
     public static final String PREF_BEA = "bea";
     public static final String PREF_TILT = "tilt";
     public static final String PREF_ZOOM = "zoom";
+
+    /**
+     * If the map center, and the drone/user location are within this threshold,
+     * then autopan will be enabled the next time the 'go to location' button is pressed.
+     */
+    public static final int DISTANCE_THRESHOLD_FOR_AUTOPAN = 10; //meters
 
     interface PathSource {
         public List<Coord2D> getPathPoints();

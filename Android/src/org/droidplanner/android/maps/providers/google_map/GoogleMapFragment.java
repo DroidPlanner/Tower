@@ -12,6 +12,7 @@ import org.droidplanner.android.helpers.LocalMapTileProvider;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
 import android.content.Context;
@@ -104,11 +105,7 @@ GoogleApiClient.OnConnectionFailedListener{
     @Override
     public void onStart(){
         super.onStart();
-
         mApiClient.connect();
-        //Make sure the map is initialized
-        MapsInitializer.initialize(getActivity().getApplicationContext());
-
         setupMap();
     }
 
@@ -330,6 +327,9 @@ GoogleApiClient.OnConnectionFailedListener{
     }
 
     private void setupMap() {
+        //Make sure the map is initialized
+        MapsInitializer.initialize(getActivity().getApplicationContext());
+
         mMap = getMap();
         if (isMapLayoutFinished()) {
             // TODO it should wait for the map layout
@@ -530,6 +530,20 @@ GoogleApiClient.OnConnectionFailedListener{
             catch (IntentSender.SendIntentException e) {
                 Log.e(TAG, "Unable to launch the resolution intent.", e);
             }
+        }
+    }
+
+    /**
+     * Used to monitor drone gps location updates if autopan is enabled.
+     * {@inheritDoc}
+     * @param event event type
+     * @param drone drone state
+     */
+    @Override
+    public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
+        switch(event){
+            case GPS:
+                break;
         }
     }
 }
