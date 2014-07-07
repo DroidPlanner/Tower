@@ -8,13 +8,13 @@
 static Window *window;
 static TextLayer *mode_layer;
 static TextLayer *telem_layer;
-static TextLayer *camera_layer;
+static TextLayer *follow_type_layer;
 static Layer *buttons;
 char *mode = "Stabilize";
 int cam = 0;
 enum {
   KEY_MODE = 0,
-  KEW_FOLLOW_TYPE = 1,
+  KEY_FOLLOW_TYPE = 1,
   KEY_TELEM = 2
 };
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!utils
@@ -31,13 +31,15 @@ static void set_mode(char *str){
   strncpy(mode,str,10);
   text_layer_set_text(mode_layer, str);
   if(strcmp("Follow",mode)!=0){
-    text_layer_set_text(camera_layer, "");
+    text_layer_set_text(follow_type_layer, "");
   }
   layer_mark_dirty(buttons);
 }
+
 static void send_mode_change_request(char *requested_mode){
   return;
 }
+
 static void send_follow_type_cycle_request(){
   return;
 }
@@ -111,13 +113,23 @@ static void buttons_draw(Layer *layer, GContext *ctx) {
 
 
  void in_received_handler(DictionaryIterator *iter, void *context) {
-   Tuple *mode_tuple = dict_find(iter, KEY_MODE);
-   if(mode_tuple && strcmp(mode_tuple->value->cstring,mode)!=0){//mode has changed, set new mode
-     set_mode(mode_tuple->value->cstring);
-   }else{//otherwise, if telem changed, update the screen
-     Tuple *telem_tuple = dict_find(iter, KEY_TELEM);
-     if(telem_tuple && strcmp(telem_tuple->value->cstring,mode)!=0)
-       text_layer_set_text(telem_layer, telem_tuple->value->cstring);
+   for(int i=KEY_MODE;i<=KEY_TELEM;i++){
+     Tuple *tuple = dict_find(iter,i);
+     if(tuple){
+       char *data = tuple->value->cstring;
+       switch(i){
+         case KEY_MODE:
+           if(strcmp(data,mode)!=0)
+             set_mode(data);
+           break;
+         case KEY_FOLLOW_TYPE:
+           
+           break;
+         case KEY_TELEM:
+           text_layer_set_text(telem_layer,data);
+           break;
+       }
+     }
    }
  }
 
@@ -144,11 +156,11 @@ static void window_load(Window *window) {
   text_layer_set_font(mode_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
   layer_add_child(window_layer, text_layer_get_layer(mode_layer));
   
-  camera_layer = text_layer_create((GRect) { .origin = { 10, 15+35+10 }, .size = { bounds.size.w-50, 35 } });
-  text_layer_set_text(camera_layer, "");
-  text_layer_set_text_alignment(camera_layer, GTextAlignmentLeft);
-  text_layer_set_font(camera_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
-  layer_add_child(window_layer, text_layer_get_layer(camera_layer));
+  follow_type_layer = text_layer_create((GRect) { .origin = { 10, 15+35+10 }, .size = { bounds.size.w-50, 35 } });
+  text_layer_set_text(follow_type_layer, "");
+  text_layer_set_text_alignment(follow_type_layer, GTextAlignmentLeft);
+  text_layer_set_font(follow_type_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
+  layer_add_child(window_layer, text_layer_get_layer(follow_type_layer));
   
   telem_layer = text_layer_create((GRect) { .origin = { 10, 50 }, .size = { bounds.size.w-60, bounds.size.h-50 } });
   text_layer_set_overflow_mode(telem_layer, GTextOverflowModeWordWrap);
@@ -179,13 +191,15 @@ static void init(void) {
   app_message_register_inbox_dropped(in_dropped_handler);
   app_message_register_outbox_sent(out_sent_handler);
   app_message_register_outbox_failed(out_failed_handler);
-  const uint32_t inbound_size = 64;
-  const uint32_t outbound_size = 64;
+  const uint32_t inbound_size = 128;
+  const uint32_t outbound_size = 16;
   app_message_open(inbound_size, outbound_size);
+  app_comm_set_sniff_interval(SNIFF_INTERVAL_REDUCED);
 }
 
 static void deinit(void) {
   window_destroy(window);
+  app_comm_set_sniff_interval(SNIFF_INTERVAL_NORMAL);
 }
 
 int main(void) {
