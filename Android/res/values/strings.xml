@@ -56,8 +56,6 @@
     <string name="pref_guided_mode_on_long_press_summary">Enable entering the Guided Mode by long pressing the map.</string>
     <string name="pref_follow_me_mode_enabled">Enable FollowMe Mode</string>
     <string name="pref_follow_me_mode_enabled_summary">In development</string>
-    <string name="pref_map_auto_pan_mode_title">Enable auto pan</string>
-    <string name="pref_map_auto_pan_mode_summary">Auto pan the map when a new GPS coordinate is received</string>
     <string name="pref_heading_mode">Enable FPV heading mode</string>
     <string name="pref_heading_mode_summary">Change heading mode to FPV (-180º to 180º)</string>
     <string name="pref_advanced">Advanced</string>
@@ -385,11 +383,5 @@
     <string name="pref_usage_statistics_summary">Help improve DroidPlanner by sending usage statistics.</string>
     <string name="pref_permanent_notification_title">Enable permanent notification</string>
     <string name="pref_permanent_notification_summary">Enable to make status bar notification permanent when connected.</string>
-    <string name="map_auto_pan_mode_user">user</string>
-    <string name="map_auto_pan_mode_user_label">Pan on user</string>
-    <string name="map_auto_pan_mode_drone">drone</string>
-    <string name="map_auto_pan_mode_drone_label">Pan on drone</string>
-    <string name="map_auto_pan_mode_disabled">disabled</string>
-    <string name="map_auto_pan_mode_disabled_label">Disabled</string>
 
 </resources>

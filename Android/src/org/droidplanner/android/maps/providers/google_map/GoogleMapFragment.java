@@ -1,9 +1,9 @@
 package org.droidplanner.android.maps.providers.google_map;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.droidplanner.android.DroidPlannerApp;
@@ -30,6 +30,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -56,7 +57,7 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.common.collect.HashBiMap;
 
 public class GoogleMapFragment extends SupportMapFragment implements DPMap,
-GoogleApiClient.OnConnectionFailedListener, LocationListener {
+GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleApiClient.ConnectionCallbacks {
 
     private static final String TAG = GoogleMapFragment.class.getSimpleName();
 
@@ -72,7 +73,53 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener {
     private Drone mDrone;
     private DroidPlannerPrefs mAppPrefs;
 
-    private final AtomicReference<AutoPanMode> mPanMode = new AtomicReference(AutoPanMode.DISABLED);
+    private final AtomicReference<AutoPanMode> mPanMode = new AtomicReference<AutoPanMode>
+            (AutoPanMode.DISABLED);
+    private final LinkedList<Runnable> mApiClientTasks = new LinkedList<Runnable>();
+
+    private final Runnable mGoToMyLocationTask = new Runnable() {
+        @Override
+        public void run() {
+            if(mApiClient.isConnected()){
+                final Location myLocation = LocationServices.FusedLocationApi
+                        .getLastLocation(mApiClient);
+                if(myLocation != null){
+                    final float currentZoomLevel = mMap.getCameraPosition().zoom;
+                    updateCamera(DroneHelper.LocationToCoord(myLocation), (int)currentZoomLevel);
+                }
+            }
+            else{
+                mApiClientTasks.add(this);
+            }
+        }
+    };
+
+    private final Runnable mRemoveLocationUpdateTask = new Runnable() {
+        @Override
+        public void run() {
+            if(mApiClient.isConnected()){
+                LocationServices.FusedLocationApi.removeLocationUpdates
+                        (mApiClient, GoogleMapFragment.this);
+            }
+            else{
+                mApiClientTasks.add(this);
+            }
+        }
+    };
+
+    private final Runnable mRequestLocationUpdateTask = new Runnable() {
+        @Override
+        public void run() {
+            if(mApiClient.isConnected()){
+                final LocationRequest locationReq = LocationRequest.create();
+                LocationServices.FusedLocationApi.requestLocationUpdates
+                        (mApiClient, locationReq, GoogleMapFragment.this);
+            }
+            else{
+                mApiClientTasks.add(this);
+            }
+        }
+    };
 
     private GoogleMap mMap;
     private GoogleApiClient mApiClient;
@@ -115,6 +162,7 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener {
     @Override
     public void onStart(){
         super.onStart();
+        mApiClient.registerConnectionCallbacks(this);
         mApiClient.connect();
         setupMap();
     }
@@ -122,7 +170,9 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener {
     @Override
     public void onStop(){
         super.onStop();
+        mApiClient.unregisterConnectionCallbacks(this);
         mApiClient.disconnect();
+        mApiClientTasks.clear();
     }
 
     @Override
@@ -151,7 +201,12 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener {
                     break;
 
                 case USER:
-                    LocationServices.FusedLocationApi.removeLocationUpdates(mApiClient, this);
+                    if(mApiClient.isConnected()){
+                        mRemoveLocationUpdateTask.run();
+                    }
+                    else{
+                        mApiClientTasks.add(mRemoveLocationUpdateTask);
+                    }
                     break;
 
                 case DISABLED:
@@ -165,8 +220,12 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener {
                     break;
 
                 case USER:
-                    final LocationRequest locationReq = LocationRequest.create();
-                    LocationServices.FusedLocationApi.requestLocationUpdates(mApiClient, locationReq, this);
+                    if(mApiClient.isConnected()){
+                        mRequestLocationUpdateTask.run();
+                    }
+                    else{
+                        mApiClientTasks.add(mRequestLocationUpdateTask);
+                    }
                     break;
 
                 case DISABLED:
@@ -395,23 +454,13 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener {
         }
     }
 
-    private Coord2D getMyLocation() {
-        if(!mApiClient.isConnected()){
-            return null;
-        }
-
-        final Location myLocation = LocationServices.FusedLocationApi.getLastLocation(mApiClient);
-        if ( myLocation != null) {
-            return DroneHelper.LocationToCoord(myLocation);
-        } else {
-            return null;
-        }
-    }
-
     @Override
     public void goToMyLocation(){
-        final float currentZoomLevel = mMap.getCameraPosition().zoom;
-        updateCamera(getMyLocation(), (int)currentZoomLevel);
+        if(mApiClient.isConnected())
+            mGoToMyLocationTask.run();
+        else{
+            mApiClientTasks.add(mGoToMyLocationTask);
+        }
     }
 
     @Override
@@ -601,8 +650,22 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
+        Log.d(TAG, "User location changed.");
+        Toast.makeText(getActivity(), "User location changed.", Toast.LENGTH_LONG).show();
         if(mPanMode.get() == AutoPanMode.USER){
             updateCamera(DroneHelper.LocationToCoord(location),(int)mMap.getCameraPosition().zoom);
         }
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        for(Runnable task: mApiClientTasks){
+            task.run();
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.d(TAG, "Google API client connection suspended.");
     }
 }

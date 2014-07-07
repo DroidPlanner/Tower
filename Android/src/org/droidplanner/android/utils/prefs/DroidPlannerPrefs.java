@@ -168,10 +168,8 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
      * @return the target for the map auto panning.
      */
     public AutoPanMode getAutoPanMode(){
-        final String defaultAutoPanTypeString = context.getString(DEFAULT_AUTO_PAN_MODE
-                .getResourceId());
-        final String autoPanTypeString = prefs.getString(context.getString(R.string
-                .pref_map_auto_pan_mode_key), defaultAutoPanTypeString);
+        final String defaultAutoPanModeName = DEFAULT_AUTO_PAN_MODE.name();
+        final String autoPanTypeString = prefs.getString(AutoPanMode.PREF_KEY, defaultAutoPanModeName);
         try {
             return AutoPanMode.valueOf(autoPanTypeString);
         }catch(IllegalArgumentException e){
@@ -184,10 +182,7 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
      * @param target
      */
     public void setAutoPanMode(AutoPanMode target) {
-        prefs.edit()
-                .putString(context.getString(R.string.pref_map_auto_pan_mode_key),
-                        context.getString(target.getResourceId()))
-                .apply();
+        prefs.edit().putString(AutoPanMode.PREF_KEY, target.name()).apply();
     }
 
     public boolean isGuidedModeOnLongPressEnabled(){

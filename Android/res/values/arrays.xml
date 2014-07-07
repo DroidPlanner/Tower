@@ -208,17 +208,4 @@
         <item>No cameras Available</item>
     </string-array>
 
-    <!-- Auto pan target types -->
-    <string-array name="map_auto_pan_mode_labels">
-        <item>@string/map_auto_pan_mode_user_label</item>
-        <item>@string/map_auto_pan_mode_drone_label</item>
-        <item>@string/map_auto_pan_mode_disabled_label</item>
-    </string-array>
-
-    <string-array name="map_auto_pan_modes">
-        <item>@string/map_auto_pan_mode_user</item>
-        <item>@string/map_auto_pan_mode_drone</item>
-        <item>@string/map_auto_pan_mode_disabled</item>
-    </string-array>
-
 </resources>
