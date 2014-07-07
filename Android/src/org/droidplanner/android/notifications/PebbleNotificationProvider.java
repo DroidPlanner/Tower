@@ -6,8 +6,10 @@ import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.getpebble.android.kit.PebbleKit;
+import com.getpebble.android.kit.PebbleKit.PebbleDataReceiver;
 import com.getpebble.android.kit.util.PebbleDictionary;
 
 
@@ -32,9 +34,22 @@ NotificationHandler.NotificationProvider {
 	private Context mContext;
 	
 	long timeWhenLastTelemSent = System.currentTimeMillis();
+	private PebbleDataReceiver datahandler;
 
 	public PebbleNotificationProvider(Context context) {
 		mContext = context;
+		PebbleKit.startAppOnPebble(mContext.getApplicationContext(), DP_UUID);
+		datahandler = new PebbleKit.PebbleDataReceiver(DP_UUID) {
+			
+			@Override
+			public void receiveData(Context context, int transactionId,
+					PebbleDictionary data) {
+				PebbleKit.sendAckToPebble(mContext.getApplicationContext(), transactionId);
+				Log.d("seB",data.toString());
+				//decode
+			}
+		};
+		PebbleKit.registerReceivedDataHandler(mContext.getApplicationContext(),datahandler);
 	}
 
 	@Override
