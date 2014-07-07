@@ -3,10 +3,17 @@
     "capabilities": [
         ""
     ],
-    "companyName": "sebflippers@gmail.com",
+    "companyName": "squilter",
     "longName": "DroidPlanner",
     "resources": {
-        "media": []
+        "media": [
+            {
+                "file": "images/pebble_icon.png",
+                "menuIcon": true,
+                "name": "icon",
+                "type": "png"
+            }
+        ]
     },
     "shortName": "DroidPlanner",
     "uuid": "79a2893d-fc7d-48c4-bc9a-34854d94ef6e",
