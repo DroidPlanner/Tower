@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
+    <!-- Contains drone related preferences, and tuning. -->
     <PreferenceCategory
         android:key="pref_drone_settings"
         android:title="@string/menu_drone_setup" />
+
+    <!-- Contains preferences related to the app. -->
     <PreferenceCategory android:title="@string/app_settings" >
         <ListPreference
             android:defaultValue="USB"
@@ -13,6 +16,7 @@
             android:summary="@string/pref_connection_type_summary"
             android:title="@string/pref_connection_type" />
 
+        <!-- Preferences related to the user interface. -->
         <PreferenceScreen
             android:key="pref_ui"
             android:title="@string/pref_ui" >
@@ -53,15 +57,22 @@
             <PreferenceCategory android:title="@string/pref_title_notifications" >
                 <CheckBoxPreference
                     android:defaultValue="true"
+                    android:key="@string/pref_permanent_notification_key"
+                    android:title="@string/pref_permanent_notification_title"
+                    android:summary="@string/pref_permanent_notification_summary"/>
+                <CheckBoxPreference
+                    android:defaultValue="true"
                     android:key="pref_enable_tts"
                     android:summary="@string/pref_enable_tts_summary"
                     android:title="@string/pref_enable_tts" />
                 <CheckBoxPreference
                     android:defaultValue="false"
                     android:key="@string/pref_request_max_volume_key"
-                    android:title="@string/pref_request_max_value" />
+                    android:title="@string/pref_request_max_volume" />
             </PreferenceCategory>
         </PreferenceScreen>
+
+        <!-- Droneshare preferences section -->
         <PreferenceScreen
             android:key="pref_mavlink_droneshare"
             android:title="Droneshare" >
@@ -86,6 +97,8 @@
                 android:summary="@string/pref_live_upload_summary"
                 android:title="@string/pref_live_upload" />
         </PreferenceScreen>
+
+        <!-- Advanced preferences section. -->
         <PreferenceScreen
             android:key="pref_advanced"
             android:title="@string/pref_advanced" >
@@ -288,6 +301,8 @@
             </PreferenceCategory>
         </PreferenceScreen>
     </PreferenceCategory>
+
+    <!-- Analytics related preferences. -->
     <PreferenceCategory android:title="@string/usage_statistics" >
         <CheckBoxPreference
             android:defaultValue="true"
@@ -296,6 +311,8 @@
             android:summary="@string/pref_usage_statistics_summary"
             android:title="@string/pref_usage_statistics_title" />
     </PreferenceCategory>
+
+    <!-- App and drone misc information -->
     <PreferenceCategory android:title="@string/about" >
         <Preference
             android:enabled="false"

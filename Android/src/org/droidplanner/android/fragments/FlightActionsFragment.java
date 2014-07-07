@@ -18,7 +18,6 @@ import android.widget.Button;
 
 import com.MAVLink.Messages.ApmModes;
 import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 
 public class FlightActionsFragment extends Fragment implements OnClickListener {
 
@@ -38,7 +37,7 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 		View view = inflater.inflate(R.layout.fragment_mission_control,	container, false);
 
 		DroidPlannerApp droidPlannerApp = (DroidPlannerApp) getActivity().getApplication();
-		drone = droidPlannerApp.drone;
+		drone = droidPlannerApp.getDrone();
 		followMe = droidPlannerApp.followMe;
 		return view;
 	}
@@ -118,8 +117,7 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 			break;
 
 		case R.id.mc_follow:
-			followMe.toogleFollowMeState();
-			drone.events.notifyDroneEvent(DroneEventsType.MODE);
+			followMe.toggleFollowMeState();
             eventBuilder.setAction("FollowMe selected")
                     .setLabel(followMe.isEnabled()? "FollowMe enabled" : "FollowMe disabled");
 			break;

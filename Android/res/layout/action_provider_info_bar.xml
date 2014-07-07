@@ -6,7 +6,8 @@
     style="?android:attr/buttonBarStyle"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:minHeight="48dp">
 
     <org.droidplanner.android.widgets.spinners.SpinnerSelfSelect
         android:id="@+id/bar_flight_mode"

@@ -25,7 +25,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements
 			Bundle savedInstanceState) {
 		DroidPlannerApp app = (DroidPlannerApp) getActivity().getApplication();
 		followMe = app.followMe;
-		drone = app.drone;
+		drone = app.getDrone();
 		View view = inflater.inflate(R.layout.fragment_mode_follow, container,
 				false);
 

@@ -1,6 +1,7 @@
 package org.droidplanner.android.utils;
 
 import android.content.res.Resources;
+import android.location.Location;
 
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.osmdroid.api.IGeoPoint;
@@ -24,6 +25,10 @@ public class DroneHelper {
 	public static Coord2D LatLngToCoord(LatLng point) {
 		return new Coord2D(point.latitude, point.longitude);
 	}
+
+    public static Coord2D LocationToCoord(Location location){
+        return new Coord2D(location.getLatitude(), location.getLongitude());
+    }
 
     public static int scaleDpToPixels(double value, Resources res) {
         final float scale = res.getDisplayMetrics().density;

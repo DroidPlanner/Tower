@@ -1,11 +1,10 @@
 package org.droidplanner.android.maps;
 
-import android.content.res.Resources;
 import android.graphics.Color;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import org.droidplanner.android.maps.providers.DPMapProvider;
+import org.droidplanner.android.utils.prefs.AutoPanMode;
+import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
 import java.util.List;
@@ -13,7 +12,7 @@ import java.util.List;
 /**
  * Defines the functionality expected from the map providers.
  */
-public interface DPMap {
+public interface DPMap extends DroneInterfaces.OnDroneListener {
 
     public static final String PACKAGE_NAME = DPMap.class.getPackage().getName();
 
@@ -29,11 +28,20 @@ public interface DPMap {
     public static final int DRONE_LEASH_DEFAULT_COLOR = Color.WHITE;
     public static final int DRONE_LEASH_DEFAULT_WIDTH = 2;
 
-    public static final String PREF_LAT = "lat";
-    public static final String PREF_LNG = "lng";
-    public static final String PREF_BEA = "bea";
-    public static final String PREF_TILT = "tilt";
-    public static final String PREF_ZOOM = "zoom";
+    public static final String PREF_LAT = "pref_map_lat";
+    public static final float DEFAULT_LATITUDE = 37.8575523f;
+
+    public static final String PREF_LNG = "pref_map_lng";
+    public static final float DEFAULT_LONGITUDE = -122.292767f;
+
+    public static final String PREF_BEA = "pref_map_bea";
+    public static final int DEFAULT_BEARING = 0;
+
+    public static final String PREF_TILT = "pref_map_tilt";
+    public static final int DEFAULT_TILT = 0;
+
+    public static final String PREF_ZOOM = "pref_map_zoom";
+    public static final int DEFAULT_ZOOM_LEVEL = 17;
 
     interface PathSource {
         public List<Coord2D> getPathPoints();
@@ -119,9 +127,25 @@ public interface DPMap {
     public void clearFlightPath();
 
     /**
+     * Enable map auto panning on the passed target type.
+     * @param mode auto pan target (user / drone / disabled).
+     */
+    public void selectAutoPanMode(AutoPanMode mode);
+
+    /**
      * @return this map's provider.
      */
     public DPMapProvider getProvider();
+
+    /**
+     * Move the map to the drone location.
+     */
+    public void goToDroneLocation();
+
+    /**
+     * Move the map to the user location.
+     */
+    public void goToMyLocation();
 
     /**
      * Restores the map's camera settings from preferences.

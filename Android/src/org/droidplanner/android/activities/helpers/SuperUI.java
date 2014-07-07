@@ -4,8 +4,7 @@ import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.fragments.helpers.BTDeviceListFragment;
 import org.droidplanner.android.maps.providers.google_map.GoogleMapFragment;
-import org.droidplanner.android.utils.Constants;
-import org.droidplanner.android.utils.DroidplannerPrefs;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.widgets.actionProviders.InfoBarActionProvider;
 import org.droidplanner.core.drone.Drone;
@@ -15,6 +14,7 @@ import org.droidplanner.core.gcs.GCSHeartbeat;
 
 import android.app.ActionBar;
 import android.content.Context;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -23,9 +23,14 @@ import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.android.gms.analytics.Tracker;
-
+/**
+ * Parent class for the app activity classes.
+ */
 public abstract class SuperUI extends FragmentActivity implements OnDroneListener {
+
+    public final static String ACTION_TOGGLE_DRONE_CONNECTION = SuperUI.class.getName() +
+            ".ACTION_TOGGLE_DRONE_CONNECTION";
+
 	private ScreenOrientation screenOrientation = new ScreenOrientation(this);
 	private InfoBarActionProvider infoBar;
 	private GCSHeartbeat gcsHeartbeat;
@@ -35,7 +40,7 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
     /**
      * Handle to the app preferences.
      */
-    protected DroidplannerPrefs mAppPrefs;
+    protected DroidPlannerPrefs mAppPrefs;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -47,9 +52,9 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
         }
 
         app = (DroidPlannerApp) getApplication();
-        this.drone = app.drone;
+        this.drone = app.getDrone();
         gcsHeartbeat = new GCSHeartbeat(drone, 1);
-        mAppPrefs = new DroidplannerPrefs(getApplicationContext());
+        mAppPrefs = new DroidPlannerPrefs(getApplicationContext());
 
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
@@ -66,7 +71,25 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 
 		screenOrientation.unlock();
 		Utils.updateUILanguage(getApplicationContext());
+
+        handleIntent(getIntent());
 	}
+
+    @Override
+    public void onNewIntent(Intent intent){
+        super.onNewIntent(intent);
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent){
+        if(intent == null)
+            return;
+
+        final String action = intent.getAction();
+        if(ACTION_TOGGLE_DRONE_CONNECTION.equals(action)){
+            toggleDroneConnection();
+        }
+    }
 
 	@Override
 	protected void onStart() {

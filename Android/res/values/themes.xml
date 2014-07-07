@@ -8,19 +8,31 @@
         <item name="android:actionBarTabTextStyle">@style/CustomActionBarTheme.ActionBar.Text</item>
         <item name="android:spinnerDropDownItemStyle">@style/DropDownItem</item>
         <item name="android:spinnerItemStyle">@style/SpinnerItem</item>
-        <item name="android:actionBarDivider">@null</item>
         <item name="android:popupMenuStyle">@style/MyPopupMenu</item>
         <item name="android:itemTextAppearance">@style/myCustomMenuTextApearance</item>
         <item name="android:gravity">left</item>
+    </style>
+
+    <!--
+   More features is added in the v19+ version of this theme. That needs to be updated if this
+   one is updated
+   -->
+    <style name="CustomActionBarTheme.Transparent">
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:actionBarStyle">@style/CustomActionBarTheme.ActionBar.Transparent</item>
     </style>
 
     <style name="CustomActionBarTheme.ActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
         <!--<item name="android:background">@drawable/action_texture</item>-->
         <item name="android:titleTextStyle">@style/CustomActionBarTheme.ActionBar.TitleTextStyle</item>
         <item name="android:subtitleTextStyle">@style/CustomActionBarTheme.ActionBar.Text</item>
-        <item name="android:background">@null</item>
-        <item name="android:displayOptions">showHome|homeAsUp|showTitle</item>
+        <item name="android:background">@android:color/white</item>
+        <item name="android:displayOptions">showHome|homeAsUp</item>
         <item name="android:gravity">left</item>
+    </style>
+
+    <style name="CustomActionBarTheme.ActionBar.Transparent">
+        <item name="android:background">@color/transparent_light</item>
     </style>
 
     <!--  Actionbar text-->
@@ -30,5 +42,11 @@
         <item name="android:textColor">@color/greyText</item>
         <item name="android:layout_marginLeft">20dp</item>
         <item name="android:paddingLeft">20dp</item>
+    </style>
+
+    <!-- Styles for the view pager tab strip -->
+    <style name="Theme.PageIndicatorDefaults" parent="android:Theme.Holo.Light">
+        <item name="android:actionBarStyle">@style/CustomActionBarTheme.ActionBar</item>
+        <item name="vpiTabPageIndicatorStyle">@style/Widget.TabPageIndicator</item>
     </style>
 </resources>

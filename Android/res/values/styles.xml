@@ -351,11 +351,6 @@
         <item name="android:fontFamily">sans-serif-condensed</item>
     </style>
 
-    <!-- Styles for the view pager tab strip -->
-    <style name="Theme.PageIndicatorDefaults" parent="android:Theme.Holo.Light">
-        <item name="vpiTabPageIndicatorStyle">@style/Widget.TabPageIndicator</item>
-    </style>
-
     <style name="Widget">
     </style>
 

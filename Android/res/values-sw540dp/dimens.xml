@@ -43,7 +43,7 @@
     <dimen name="tuning_edit_number_text_size">11sp</dimen>
     <dimen name="tuning_mission_header_title_height">64dp</dimen>
     <dimen name="info_bar_text_size">15sp</dimen>
-    <dimen name="info_bar_drawable_padding">3dp</dimen>
+    <dimen name="info_bar_drawable_padding">0dp</dimen>
     <dimen name="info_bar_flight_mode_width">90dp</dimen>
 
 </resources>

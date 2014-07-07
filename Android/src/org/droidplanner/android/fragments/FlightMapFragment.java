@@ -15,6 +15,8 @@ import org.droidplanner.android.dialogs.GuidedDialog.GuidedDialogListener;
 import org.droidplanner.android.utils.DroneHelper;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
+import org.droidplanner.android.utils.prefs.AutoPanMode;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
@@ -24,19 +26,23 @@ public class FlightMapFragment extends DroneMap implements
         DPMap.OnMapLongClickListener, DPMap.OnMarkerClickListener, DPMap.OnMarkerDragListener,
 		GuidedDialogListener, OnDroneListener {
 
-	private static final int ZOOM_LEVEL = 20;
+    private static final int MAX_TOASTS_FOR_LOCATION_PRESS = 3;
 
-	public boolean isAutoPanEnabled;
+    private static final String PREF_USER_LOCATION_FIRST_PRESS = "pref_user_location_first_press";
+    private static final int DEFAULT_USER_LOCATION_FIRST_PRESS = 0;
+
+    private static final String PREF_DRONE_LOCATION_FIRST_PRESS = "pref_drone_location_first_press";
+    private static final int DEFAULT_DRONE_LOCATION_FIRST_PRESS = 0;
+
+    private DroidPlannerPrefs mAppPrefs;
+
 	private boolean guidedModeOnLongPress;
 
-	public boolean hasBeenZoomed = false;
-
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
-			Bundle bundle) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle bundle) {
 		View view = super.onCreateView(inflater, viewGroup, bundle);
 
-		getPreferences();
+        mAppPrefs = new DroidPlannerPrefs(context);
 
 		mMapFragment.setOnMapLongClickListener(this);
         mMapFragment.setOnMarkerDragListener(this);
@@ -44,12 +50,18 @@ public class FlightMapFragment extends DroneMap implements
 		return view;
 	}
 
-	private void getPreferences() {
-		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		isAutoPanEnabled = prefs.getBoolean("pref_auto_pan_enabled", false);
-		guidedModeOnLongPress = prefs.getBoolean("pref_guided_mode_on_long_press", true);
-	}
+    @Override
+    public void onResume(){
+        super.onResume();
+        mMapFragment.selectAutoPanMode(mAppPrefs.getAutoPanMode());
+        guidedModeOnLongPress = mAppPrefs.isGuidedModeOnLongPressEnabled();
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        mMapFragment.selectAutoPanMode(AutoPanMode.DISABLED);
+    }
 
     @Override
     protected int getMaxFlightPathSize(){
@@ -57,24 +69,21 @@ public class FlightMapFragment extends DroneMap implements
         return Integer.valueOf(prefs.getString("pref_max_flight_path_size", "0"));
     }
 
-	@Override
+    @Override
+    public boolean setAutoPanMode(AutoPanMode target) {
+        //Update the map panning preferences.
+        mAppPrefs.setAutoPanMode(target);
+        mMapFragment.selectAutoPanMode(target);
+        return true;
+    }
+
+    @Override
 	public void update() {
 		super.update();
 	}
 
-	private void animateCamera(Coord2D coord) {
-		if (!hasBeenZoomed) {
-			hasBeenZoomed = true;
-            mMapFragment.updateCamera(coord, ZOOM_LEVEL);
-		}
-		if (isAutoPanEnabled) {
-            mMapFragment.updateCamera(coord, ZOOM_LEVEL);
-		}
-	}
-
 	@Override
 	public void onMapLongClick(Coord2D coord) {
-		getPreferences();
 		if (drone.MavClient.isConnected()) {
 			if (drone.guidedPoint.isInitialized()) {
 				drone.guidedPoint.newGuidedCoord(coord);
@@ -127,28 +136,37 @@ public class FlightMapFragment extends DroneMap implements
                 mMapFragment.clearFlightPath();
             }
             break;
-		case GPS:
-			animateCameraIfNeeded(drone.GPS.getPosition());
-			break;
-		default:
-			break;
+
 		}
 		super.onDroneEvent(event,drone);
-	}
-
-	private void animateCameraIfNeeded(Coord2D coord) {
-		if (!hasBeenZoomed) {
-			hasBeenZoomed = true;
-            mMapFragment.updateCamera(coord, ZOOM_LEVEL);
-		}
-		if (isAutoPanEnabled) {
-            mMapFragment.updateCamera(coord, ZOOM_LEVEL);
-		}
 	}
 
     @Override
     protected boolean isMissionDraggable() {
         return false;
+    }
+
+    @Override
+    public void goToMyLocation(){
+        super.goToMyLocation();
+        int pressCount = mAppPrefs.prefs.getInt(PREF_USER_LOCATION_FIRST_PRESS, DEFAULT_USER_LOCATION_FIRST_PRESS);
+        if(pressCount < MAX_TOASTS_FOR_LOCATION_PRESS){
+            Toast.makeText(context, "Long press to activate user auto panning.",
+                    Toast.LENGTH_LONG).show();
+            mAppPrefs.prefs.edit().putInt(PREF_USER_LOCATION_FIRST_PRESS, pressCount + 1).apply();
+        }
+    }
+
+    @Override
+    public void goToDroneLocation(){
+        super.goToDroneLocation();
+        final int pressCount = mAppPrefs.prefs.getInt(PREF_DRONE_LOCATION_FIRST_PRESS,
+                DEFAULT_DRONE_LOCATION_FIRST_PRESS);
+        if(pressCount < MAX_TOASTS_FOR_LOCATION_PRESS){
+            Toast.makeText(context, "Long press to activate drone auto panning.",
+                    Toast.LENGTH_LONG).show();
+            mAppPrefs.prefs.edit().putInt(PREF_DRONE_LOCATION_FIRST_PRESS, pressCount + 1).apply();
+        }
     }
 
 }
