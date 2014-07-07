@@ -31,25 +31,25 @@ NotificationHandler.NotificationProvider {
 	/**
 	 * Application context.
 	 */
-	private Context mContext;
+	private Context applicationContext;
 	
 	long timeWhenLastTelemSent = System.currentTimeMillis();
 	private PebbleDataReceiver datahandler;
 
 	public PebbleNotificationProvider(Context context) {
-		mContext = context;
-		PebbleKit.startAppOnPebble(mContext.getApplicationContext(), DP_UUID);
+		applicationContext = context.getApplicationContext();
+		PebbleKit.startAppOnPebble(applicationContext, DP_UUID);
 		datahandler = new PebbleKit.PebbleDataReceiver(DP_UUID) {
 			
 			@Override
 			public void receiveData(Context context, int transactionId,
 					PebbleDictionary data) {
-				PebbleKit.sendAckToPebble(mContext.getApplicationContext(), transactionId);
+				PebbleKit.sendAckToPebble(applicationContext, transactionId);
 				Log.d("seB",data.toString());
 				//decode
 			}
 		};
-		PebbleKit.registerReceivedDataHandler(mContext.getApplicationContext(),datahandler);
+		PebbleKit.registerReceivedDataHandler(applicationContext,datahandler);
 	}
 
 	@Override
@@ -99,7 +99,7 @@ NotificationHandler.NotificationProvider {
 		String telem = bat + "\n" + speed;
 		data.addString(KEY_TELEM, telem);
 		
-        PebbleKit.sendDataToPebble(mContext.getApplicationContext(), DP_UUID, data);
+        PebbleKit.sendDataToPebble(applicationContext, DP_UUID, data);
     }
     
 	private double roundToOneDecimal(double value){
