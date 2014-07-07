@@ -41,10 +41,16 @@ static void set_mode(char *str){
   layer_mark_dirty(buttons);
 }
 
-static void send_mode_change_request(char *requested_mode){
-  return;
+static void send_mode_change_request(int request_type){
+  Tuplet value = TupletInteger(KEY_PEBBLE_REQUEST,request_type);
+  DictionaryIterator *iter;
+  app_message_outbox_begin(&iter);
+  
+  dict_write_tuplet(iter,&value);
+  app_message_outbox_send();
 }
 
+//TODO implement this.  Android part needs to be implemented first.
 static void send_follow_type_cycle_request(){
   return;
 }
@@ -55,18 +61,18 @@ static void follow_click_handler(ClickRecognizerRef recognizer, void *context) {
     send_follow_type_cycle_request();
   }else{
     vibe(100);
-    send_mode_change_request("Follow");
+    send_mode_change_request(KEY_REQUEST_MODE_FOLLOW);
   }
 }
 
 static void loiter_click_handler(ClickRecognizerRef recognizer, void *context) {
   vibe(100);
-  send_mode_change_request("Loiter");
+  send_mode_change_request(KEY_REQUEST_MODE_LOITER);
 }
 
 static void RTL_handler(ClickRecognizerRef recognizer, void *context) {
   vibe(100);
-  send_mode_change_request("RTL");
+  send_mode_change_request(KEY_REQUEST_MODE_RTL);
 }
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!draw graphics
 static void buttons_draw(Layer *layer, GContext *ctx) {
@@ -106,7 +112,7 @@ static void buttons_draw(Layer *layer, GContext *ctx) {
          GTextAlignmentCenter,
          NULL);
 }
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!data sending
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!data receiving
  void out_sent_handler(DictionaryIterator *sent, void *context) {
    // outgoing message was delivered
  }
