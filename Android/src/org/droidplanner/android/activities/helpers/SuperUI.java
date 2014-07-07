@@ -4,7 +4,7 @@ import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.fragments.helpers.BTDeviceListFragment;
 import org.droidplanner.android.maps.providers.google_map.GoogleMapFragment;
-import org.droidplanner.android.utils.DroidplannerPrefs;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.widgets.actionProviders.InfoBarActionProvider;
 import org.droidplanner.core.drone.Drone;
@@ -40,7 +40,7 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
     /**
      * Handle to the app preferences.
      */
-    protected DroidplannerPrefs mAppPrefs;
+    protected DroidPlannerPrefs mAppPrefs;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -54,7 +54,7 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
         app = (DroidPlannerApp) getApplication();
         this.drone = app.getDrone();
         gcsHeartbeat = new GCSHeartbeat(drone, 1);
-        mAppPrefs = new DroidplannerPrefs(getApplicationContext());
+        mAppPrefs = new DroidPlannerPrefs(getApplicationContext());
 
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
@@ -81,7 +81,7 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
         handleIntent(intent);
     }
 
-    protected void handleIntent(Intent intent){
+    private void handleIntent(Intent intent){
         if(intent == null)
             return;
 

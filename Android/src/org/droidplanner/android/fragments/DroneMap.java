@@ -8,6 +8,7 @@ import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.Utils;
+import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
@@ -162,6 +163,26 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 
     public List<Coord2D> projectPathIntoMap(List<Coord2D> path) {
         return mMapFragment.projectPathIntoMap(path);
+    }
+
+    /**
+     * Set map panning mode on the specified target.
+     * @param target
+     */
+    public abstract boolean setAutoPanMode(AutoPanMode target);
+
+    /**
+     * Move the map to the user location.
+     */
+    public void goToMyLocation(){
+       mMapFragment.goToMyLocation();
+    }
+
+    /**
+     * Move the map to the drone location.
+     */
+    public void goToDroneLocation(){
+        mMapFragment.goToDroneLocation();
     }
 
 }

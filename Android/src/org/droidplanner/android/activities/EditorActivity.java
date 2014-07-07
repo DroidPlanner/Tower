@@ -9,6 +9,7 @@ import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.proxy.mission.MissionSelection;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.proxy.mission.MissionProxy;
+import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.android.fragments.EditorListFragment;
@@ -32,6 +33,7 @@ import android.view.ActionMode.Callback;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -66,8 +68,12 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	private FragmentManager fragmentManager;
 	private EditorListFragment missionListFragment;
 	private TextView infoView;
+
     private View mSplineToggleContainer;
     private boolean mIsSplineEnabled;
+
+    private ImageButton mGoToMyLocation;
+    private ImageButton mGoToDroneLocation;
 
     /**
      * This view hosts the mission item detail fragment.
@@ -97,6 +103,36 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
         mSplineToggleContainer = findViewById(R.id.editorSplineToggleContainer);
         mSplineToggleContainer.setVisibility(View.VISIBLE);
+
+        mGoToMyLocation = (ImageButton)findViewById(R.id.my_location_button);
+        mGoToMyLocation.setOnClickListener(new View.OnClickListener(){
+           @Override
+            public void onClick(View v){
+               planningMapFragment.goToMyLocation();
+           }
+        });
+        mGoToMyLocation.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                planningMapFragment.setAutoPanMode(AutoPanMode.USER);
+                return true;
+            }
+        });
+
+        mGoToDroneLocation = (ImageButton) findViewById(R.id.drone_location_button);
+        mGoToDroneLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                planningMapFragment.goToDroneLocation();
+            }
+        });
+        mGoToDroneLocation.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                planningMapFragment.setAutoPanMode(AutoPanMode.DRONE);
+                return true;
+            }
+        });
 
         final RadioButton normalToggle = (RadioButton) findViewById(R.id.normalWpToggle);
         normalToggle.setOnClickListener(new View.OnClickListener() {
@@ -144,23 +180,6 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
         super.onStop();
         missionProxy.selection.removeSelectionUpdateListener(this);
     }
-
-	@Override
-	public void onWindowFocusChanged(boolean hasFocus) {
-		super.onWindowFocusChanged(hasFocus);
-		updateMapPadding();
-	}
-
-	private void updateMapPadding() {
-		int topPadding = infoView.getBottom();
-		int rightPadding = 0,bottomPadding = 0;
-
-		if (missionProxy.getItems().size()>0) {
-			rightPadding = editorToolsFragment.getView().getRight();
-			bottomPadding = missionListFragment.getView().getHeight();
-		}
-		planningMapFragment.setMapPadding(rightPadding, topPadding, 0, bottomPadding);
-	}
 
 	@Override
 	public void onBackPressed() {
@@ -447,7 +466,6 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 	@Override
 	public void onListVisibilityChanged() {
-		updateMapPadding();
 	}
 
     @Override

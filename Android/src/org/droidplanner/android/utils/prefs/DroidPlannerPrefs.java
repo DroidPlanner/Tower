@@ -1,8 +1,9 @@
-package org.droidplanner.android.utils;
+package org.droidplanner.android.utils.prefs;
 
 import java.util.UUID;
 
 import org.droidplanner.R;
+import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.file.IO.VehicleProfileReader;
 import org.droidplanner.core.drone.profiles.VehicleProfile;
 import org.droidplanner.core.drone.variables.Type.FirmwareType;
@@ -22,7 +23,7 @@ import android.preference.PreferenceManager;
  * 
  * 
  */
-public class DroidplannerPrefs implements org.droidplanner.core.drone.Preferences{
+public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preferences{
 
     /*
     Default preference value
@@ -32,12 +33,16 @@ public class DroidplannerPrefs implements org.droidplanner.core.drone.Preference
     private static final boolean DEFAULT_KEEP_SCREEN_ON = false;
     private static final boolean DEFAULT_MAX_VOLUME_ON_START = false;
     private static final boolean DEFAULT_PERMANENT_NOTIFICATION = true;
+    private static final boolean DEFAULT_OFFLINE_MAP_ENABLED = false;
+    private static final String DEFAULT_MAP_TYPE = "";
+    private static final AutoPanMode DEFAULT_AUTO_PAN_MODE = AutoPanMode.DISABLED;
+    private static final boolean DEFAULT_GUIDED_MODE_ON_LONG_PRESS = true;
 
     // Public for legacy usage
 	public SharedPreferences prefs;
 	private Context context;
 	
-	public DroidplannerPrefs(Context context) {
+	public DroidPlannerPrefs(Context context) {
 		this.context = context;
 		prefs = PreferenceManager.getDefaultSharedPreferences(context);
 	}
@@ -142,5 +147,45 @@ public class DroidplannerPrefs implements org.droidplanner.core.drone.Preference
     public boolean isNotificationPermanent(){
         return prefs.getBoolean(context.getString(R.string.pref_permanent_notification_key),
                 DEFAULT_PERMANENT_NOTIFICATION);
+    }
+
+    /**
+     * @return true if offline map is enabled (if supported by the map provider).
+     */
+    public boolean isOfflineMapEnabled(){
+        return prefs.getBoolean(context.getString(R.string.pref_advanced_use_offline_maps_key),
+                DEFAULT_OFFLINE_MAP_ENABLED);
+    }
+
+    /**
+     * @return the selected map type (if supported by the map provider).
+     */
+    public String getMapType(){
+        return prefs.getString(context.getString(R.string.pref_map_type_key), DEFAULT_MAP_TYPE);
+    }
+
+    /**
+     * @return the target for the map auto panning.
+     */
+    public AutoPanMode getAutoPanMode(){
+        final String defaultAutoPanModeName = DEFAULT_AUTO_PAN_MODE.name();
+        final String autoPanTypeString = prefs.getString(AutoPanMode.PREF_KEY, defaultAutoPanModeName);
+        try {
+            return AutoPanMode.valueOf(autoPanTypeString);
+        }catch(IllegalArgumentException e){
+            return DEFAULT_AUTO_PAN_MODE;
+        }
+    }
+
+    /**
+     * Updates the map auto panning target.
+     * @param target
+     */
+    public void setAutoPanMode(AutoPanMode target) {
+        prefs.edit().putString(AutoPanMode.PREF_KEY, target.name()).apply();
+    }
+
+    public boolean isGuidedModeOnLongPressEnabled(){
+        return prefs.getBoolean("pref_guided_mode_on_long_press", DEFAULT_GUIDED_MODE_ON_LONG_PRESS);
     }
 }

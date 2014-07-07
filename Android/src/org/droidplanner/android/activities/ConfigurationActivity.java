@@ -70,8 +70,7 @@ public class ConfigurationActivity extends SuperUI {
 		if (sConfigurationFragments.length != sConfigurationFragmentTitlesRes.length
 				|| sConfigurationFragmentTitlesRes.length != sConfigurationFragmentIconRes.length) {
 			throw new IllegalStateException(
-					"The fragment and title resource arrays must match in"
-							+ " length.");
+					"The fragment and title resource arrays must match in length.");
 		}
 
 		final Context context = getApplicationContext();
@@ -96,8 +95,6 @@ public class ConfigurationActivity extends SuperUI {
 
 		final ActionBar actionBar = getActionBar();
 		if (actionBar != null) {
-			actionBar.setDisplayHomeAsUpEnabled(true);
-
 			if (isPhone) {
 				actionBar.setDisplayShowTitleEnabled(false);
 				actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
@@ -115,8 +112,7 @@ public class ConfigurationActivity extends SuperUI {
 							}
 						});
 
-				mViewPager
-						.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+				mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 
 							@Override
 							public void onPageSelected(int i) {
@@ -135,9 +131,7 @@ public class ConfigurationActivity extends SuperUI {
 		handleIntent(intent);
 	}
 
-    @Override
-	protected void handleIntent(Intent intent) {
-        super.handleIntent(intent);
+	private void handleIntent(Intent intent) {
 		int configScreenIndex = intent.getIntExtra(EXTRA_CONFIG_SCREEN_INDEX, 0);
 		mViewPager.setCurrentItem(configScreenIndex);
 	}

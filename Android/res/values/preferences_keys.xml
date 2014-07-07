@@ -14,7 +14,6 @@ This file is used to store the preferences keys so that it's accessible and modi
     <string name="pref_connection_type_key">pref_connection_type</string>
     <string name="pref_map_type_key">pref_map_type</string>
     <string name="pref_advanced_use_offline_maps_key">pref_advanced_use_offline_maps</string>
-    <string name="pref_auto_pan_enabled_key">pref_auto_pan_enabled</string>
     <string name="pref_baud_type_key">pref_baud_type</string>
     <string name="pref_server_ip_key">pref_server_ip</string>
     <string name="pref_server_port_key">pref_server_port</string>
