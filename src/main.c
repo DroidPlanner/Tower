@@ -15,7 +15,12 @@ int cam = 0;
 enum {
   KEY_MODE = 0,
   KEY_FOLLOW_TYPE = 1,
-  KEY_TELEM = 2
+  KEY_TELEM = 2,
+  KEY_PEBBLE_REQUEST = 100,
+  KEY_REQUEST_MODE_FOLLOW = 101,
+  KEY_REQUEST_CYCLE_FOLLOW_TYPE=102,
+  KEY_REQUEST_MODE_LOITER=103,
+  KEY_REQUEST_MODE_RTL=104
 };
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!utils
 static void vibe(int milliseconds){
