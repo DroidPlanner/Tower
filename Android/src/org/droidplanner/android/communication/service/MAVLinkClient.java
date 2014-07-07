@@ -42,20 +42,19 @@ public class MAVLinkClient implements MAVLinkStreams.MAVLinkOutputStream {
 		this.listener = listener;
 	}
 
-	public void init() {
+	private void init() {
 		parent.bindService(new Intent(parent, MAVLinkService.class),
 				mConnection, Context.BIND_AUTO_CREATE);
 		mIsBound = true;
 	}
 
-	public void close() {
+	private void close() {
 		if (isConnected()) {
 			// If we have received the service, and hence registered with
 			// it, then now is the time to unregister.
 			if (mService != null) {
 				try {
-					Message msg = Message.obtain(null,
-							MAVLinkService.MSG_UNREGISTER_CLIENT);
+					Message msg = Message.obtain(null, MAVLinkService.MSG_UNREGISTER_CLIENT);
 					msg.replyTo = mMessenger;
 					mService.send(msg);
 

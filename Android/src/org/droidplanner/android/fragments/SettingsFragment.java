@@ -5,11 +5,12 @@ import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.ConfigurationActivity;
 import org.droidplanner.android.activities.helpers.MapPreferencesActivity;
 import org.droidplanner.android.maps.providers.DPMapProvider;
-import org.droidplanner.core.bus.events.DroneDisconnectedEvent;
-import org.droidplanner.core.bus.events.DroneHeartBeatEvent;
+import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.android.utils.Constants;
 import org.droidplanner.android.utils.file.DirectoryPath;
+import org.droidplanner.core.drone.variables.HeartBeat;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,11 +19,9 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
-import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
-import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -30,13 +29,11 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 
 import java.util.HashSet;
 
-import de.greenrobot.event.EventBus;
-
 /**
  * Implements the application settings screen.
  */
 public class SettingsFragment extends DpPreferenceFragment implements
-        OnSharedPreferenceChangeListener {
+        OnSharedPreferenceChangeListener, DroneInterfaces.OnDroneListener {
 
     /**
      * Used as tag for logging.
@@ -215,7 +212,7 @@ public class SettingsFragment extends DpPreferenceFragment implements
                 mavlinkVersionPref.setSummary(getString(R.string.empty_content));
             }
             else{
-                mavlinkVersionPref.setSummary(version);
+                mavlinkVersionPref.setSummary('v' + version);
             }
         }
     }
@@ -256,7 +253,7 @@ public class SettingsFragment extends DpPreferenceFragment implements
         }
 
         if (key.equals(getString(R.string.pref_vehicle_type_key))) {
-            ((DroidPlannerApp) getActivity().getApplication()).drone.events
+            ((DroidPlannerApp) getActivity().getApplication()).getDrone().events
                     .notifyDroneEvent(DroneEventsType.TYPE);
         }
 
@@ -272,20 +269,31 @@ public class SettingsFragment extends DpPreferenceFragment implements
     @Override
     public void onStart(){
         super.onStart();
-        EventBus.getDefault().registerSticky(this);
+
+        final Drone drone = ((DroidPlannerApp)getActivity().getApplication()).getDrone();
+        final byte mavlinkVersion = drone.heartbeat.getMavlinkVersion();
+        if(mavlinkVersion != HeartBeat.INVALID_MAVLINK_VERSION){
+            updateMavlinkVersionPreference(String.valueOf(mavlinkVersion));
+        }
+        else{
+            updateMavlinkVersionPreference(null);
+        }
+
+        drone.events.addDroneListener(this);
     }
 
     @Override
     public void onStop(){
         super.onStop();
-        EventBus.getDefault().unregister(this);
+
+        final Drone drone = ((DroidPlannerApp)getActivity().getApplication()).getDrone();
+        drone.events.removeDroneListener(this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        getPreferenceScreen().getSharedPreferences()
-                .registerOnSharedPreferenceChangeListener(this);
+        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -295,26 +303,17 @@ public class SettingsFragment extends DpPreferenceFragment implements
                 .unregisterOnSharedPreferenceChangeListener(this);
     }
 
-    /*
-    Event bus handler methods
-     */
+    @Override
+    public void onDroneEvent(DroneEventsType event, Drone drone) {
+        switch (event) {
+            case DISCONNECTED:
+                updateMavlinkVersionPreference(null);
+                break;
 
-    /**
-     * Handle update of the settings ui after a drone heartbeat event is received from the event
-     * bus.
-     * @param heartbeatEvent drone heartbeat event
-     */
-    public void onEventMainThread(DroneHeartBeatEvent heartbeatEvent){
-        updateMavlinkVersionPreference(String.valueOf(heartbeatEvent.getHeartBeat()
-                .mavlink_version));
-    }
-
-    /**
-     * Handle update of the settings ui after a drone disconnected event is received from the
-     * event bus.
-     * @param event drone disconnected event
-     */
-    public void onEventMainThread(DroneDisconnectedEvent event){
-        updateMavlinkVersionPreference(null);
+            case HEARTBEAT_FIRST:
+            case HEARTBEAT_RESTORED:
+                updateMavlinkVersionPreference(String.valueOf(drone.heartbeat.getMavlinkVersion()));
+                break;
+        }
     }
 }

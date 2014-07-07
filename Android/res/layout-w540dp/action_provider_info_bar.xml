@@ -6,14 +6,17 @@
     style="?android:attr/buttonBarStyle"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:minHeight="48dp"
+    android:layout_gravity="top"
+    android:gravity="top">
 
 
     <TextView
         android:id="@+id/bar_home"
         style="?android:attr/buttonBarButtonStyle"
-        android:layout_width="0dp"
-        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:minWidth="80dp"
         android:layout_height="match_parent"
         android:text="@string/empty_content"
         android:drawableLeft="@drawable/ic_status_home"
@@ -24,8 +27,8 @@
     <TextView
         android:id="@+id/bar_gps"
         style="?android:attr/buttonBarButtonStyle"
-        android:layout_width="0dp"
-        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:minWidth="90dp"
         android:layout_height="match_parent"
         android:text="@string/empty_content"
         android:drawableLeft="@drawable/ic_status_gps"
@@ -36,8 +39,8 @@
     <TextView
         android:id="@+id/bar_propeller"
         style="?android:attr/buttonBarButtonStyle"
-        android:layout_width="0dp"
-        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:minWidth="90dp"
         android:layout_height="match_parent"
         android:text="--:--"
         android:drawableLeft="@drawable/ic_status_flight_time"
@@ -48,8 +51,8 @@
     <TextView
         android:id="@+id/bar_battery"
         style="?android:attr/buttonBarButtonStyle"
-        android:layout_width="0dp"
-        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:minWidth="75dp"
         android:layout_height="match_parent"
         android:text="@string/empty_content"
         android:drawableLeft="@drawable/ic_status_battery"
@@ -60,8 +63,8 @@
     <TextView
         android:id="@+id/bar_signal"
         style="?android:attr/buttonBarButtonStyle"
-        android:layout_width="0dp"
-        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:minWidth="75dp"
         android:layout_height="match_parent"
         android:text="@string/empty_content"
         android:drawableLeft="@drawable/ic_status_rssi"

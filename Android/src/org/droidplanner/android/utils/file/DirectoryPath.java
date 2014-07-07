@@ -52,4 +52,8 @@ public class DirectoryPath {
 		return getDroidPlannerPath() + "/LogCat/";
 	}
 
+	static public String getSrtmPath() {
+		return getDroidPlannerPath() + "/Srtm/";
+	}
+
 }

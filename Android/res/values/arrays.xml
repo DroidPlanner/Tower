@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Do not change the names here, instead extract the extrings -->
+    <!-- Do not change the names here, instead extract the strings -->
     <string-array name="RCQuickModes">
         <item name="Stabilize">Stabilize</item>
         <item name="Acro">Acro</item>
@@ -205,7 +205,7 @@
 
     <!-- This string is just used to help in the layout editor -->
     <string-array name="ExampleCameraArray">
-        <item>No cameras Avaliable</item>
+        <item>No cameras Available</item>
     </string-array>
 
 </resources>

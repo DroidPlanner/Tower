@@ -1,5 +1,7 @@
 package org.droidplanner.android.widgets.graph;
 
+import java.util.ArrayList;
+
 import android.graphics.Paint;
 
 public class ChartSeries {
@@ -11,6 +13,13 @@ public class ChartSeries {
 
 	public ChartSeries(int bufferSize) {
 		this.data = new double[bufferSize];
+	}
+
+	public ChartSeries(ArrayList<Integer> values) {
+		this(values.size());
+		for (Integer data : values) {
+			newData(data);
+		}
 	}
 
 	public void newData(double d) {

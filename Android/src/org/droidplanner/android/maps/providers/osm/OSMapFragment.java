@@ -1,24 +1,31 @@
 package org.droidplanner.android.maps.providers.osm;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.common.collect.HashBiMap;
 
 import org.droidplanner.R;
+import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.maps.providers.DPMapProvider;
+import org.droidplanner.android.utils.prefs.AutoPanMode;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.utils.DroneHelper;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
+import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.api.IMapController;
@@ -39,13 +46,13 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * This fragment abstracts the use and interaction with an OpenStreetMap view.
  */
 public class OSMapFragment extends Fragment implements DPMap {
-
-    private static final String PREFS_NAME = "OSMAP";
 
     private final HashBiMap<MarkerInfo, Marker> mMarkers = HashBiMap.create();
 
@@ -61,8 +68,7 @@ public class OSMapFragment extends Fragment implements DPMap {
         }
     };
 
-    private final Marker.OnMarkerDragListener mMarkerDragHandler = new Marker
-            .OnMarkerDragListener() {
+    private final Marker.OnMarkerDragListener mMarkerDragHandler = new Marker.OnMarkerDragListener() {
 
         @Override
         public void onMarkerDrag(Marker marker) {
@@ -97,6 +103,11 @@ public class OSMapFragment extends Fragment implements DPMap {
      */
     private MapView mMapView;
 
+    private Drone mDrone;
+    private DroidPlannerPrefs mAppPrefs;
+
+    private final AtomicReference<AutoPanMode> mPanMode = new AtomicReference(AutoPanMode.DISABLED);
+
     private MyLocationNewOverlay mLocationOverlay;
     private CompassOverlay mCompassOverlay;
 
@@ -123,6 +134,10 @@ public class OSMapFragment extends Fragment implements DPMap {
         if (args != null) {
             mMaxFlightPathSize = args.getInt(EXTRA_MAX_FLIGHT_PATH_SIZE);
         }
+
+        final Activity activity = getActivity();
+        mDrone = ((DroidPlannerApp)activity.getApplication()).getDrone();
+        mAppPrefs = new DroidPlannerPrefs(activity.getApplicationContext());
 
         return view;
     }
@@ -184,7 +199,6 @@ public class OSMapFragment extends Fragment implements DPMap {
     @Override
     public void onPause() {
         super.onPause();
-        mLocationOverlay.disableFollowLocation();
         mLocationOverlay.disableMyLocation();
         mCompassOverlay.disableCompass();
     }
@@ -199,22 +213,6 @@ public class OSMapFragment extends Fragment implements DPMap {
 
         mLocationOverlay.enableMyLocation();
         mCompassOverlay.enableCompass();
-
-        applyMapPreferences();
-    }
-
-    /**
-     * Applies the map preferences specified by the user.
-     */
-    private void applyMapPreferences(){
-        //Check if autopan should be enabled.
-        final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences
-                (getActivity().getApplicationContext());
-        final boolean autoPan = sharedPrefs.getBoolean(getString(R.string
-                .pref_auto_pan_enabled_key), false);
-        if(autoPan) {
-            mLocationOverlay.enableFollowLocation();
-        }
     }
 
     @Override
@@ -239,8 +237,65 @@ public class OSMapFragment extends Fragment implements DPMap {
     }
 
     @Override
+    public void selectAutoPanMode(AutoPanMode target) {
+        final AutoPanMode currentMode = mPanMode.get();
+        if(currentMode == target)
+            return;
+
+        setAutoPanMode(currentMode, target);
+    }
+
+    private void setAutoPanMode(AutoPanMode current, AutoPanMode update){
+        if(mPanMode.compareAndSet(current, update)){
+            switch(current){
+                case DRONE:
+                    mDrone.events.removeDroneListener(this);
+                    break;
+
+                case USER:
+                    mLocationOverlay.disableFollowLocation();
+                    break;
+
+                case DISABLED:
+                default:
+                    break;
+            }
+
+            switch(update){
+                case DRONE:
+                    mDrone.events.addDroneListener(this);
+                    break;
+
+                case USER:
+                    mLocationOverlay.enableFollowLocation();
+                    break;
+
+                case DISABLED:
+                default:
+                    break;
+            }
+        }
+    }
+
+    @Override
     public DPMapProvider getProvider(){
         return DPMapProvider.OPEN_STREET_MAP;
+    }
+
+    @Override
+    public void goToMyLocation(){
+        final int currentZoomLevel = mMapView.getZoomLevel();
+        final GeoPoint myLocation = mLocationOverlay.getMyLocation();
+        if(myLocation != null){
+            updateCamera(DroneHelper.GeoPointToCoord(myLocation), currentZoomLevel);
+        }
+    }
+
+    @Override
+    public void goToDroneLocation(){
+        final int currentZoomLevel = mMapView.getZoomLevel();
+        final Coord2D droneLocation = mDrone.GPS.getPosition();
+        updateCamera(droneLocation, currentZoomLevel);
     }
 
     @Override
@@ -277,12 +332,14 @@ public class OSMapFragment extends Fragment implements DPMap {
 
     @Override
     public void loadCameraPosition() {
-        SharedPreferences settings = getActivity().getSharedPreferences(PREFS_NAME, 0);
+        final SharedPreferences settings = mAppPrefs.prefs;
+
         final IMapController mapController = mMapView.getController();
-        mapController.setCenter(new GeoPoint(settings.getFloat(PREF_LAT, 0),
-                settings.getFloat(PREF_LNG, 0)));
-        mapController.setZoom(settings.getInt(PREF_ZOOM, 0));
-        mMapView.setRotation(settings.getFloat(PREF_BEA, 0));
+        mapController.setCenter(new GeoPoint(
+                settings.getFloat(PREF_LAT, DEFAULT_LATITUDE),
+                settings.getFloat(PREF_LNG, DEFAULT_LONGITUDE)));
+        mapController.setZoom(settings.getInt(PREF_ZOOM, DEFAULT_ZOOM_LEVEL));
+        mMapView.setRotation(settings.getFloat(PREF_BEA, DEFAULT_BEARING));
     }
 
     @Override
@@ -301,9 +358,8 @@ public class OSMapFragment extends Fragment implements DPMap {
 
     @Override
     public void saveCameraPosition() {
-        SharedPreferences.Editor editor = getActivity().getSharedPreferences(PREFS_NAME, 0).edit();
         final IGeoPoint mapCenter = mMapView.getMapCenter();
-        editor.putFloat(PREF_LAT, (float) mapCenter.getLatitude())
+        mAppPrefs.prefs.edit().putFloat(PREF_LAT, (float) mapCenter.getLatitude())
                 .putFloat(PREF_LNG, (float) mapCenter.getLongitude())
                 .putFloat(PREF_BEA, mMapView.getRotation())
                 .putInt(PREF_ZOOM, mMapView.getZoomLevel())
@@ -346,6 +402,10 @@ public class OSMapFragment extends Fragment implements DPMap {
 
     @Override
     public void updateCamera(Coord2D coord, int zoomLevel) {
+        if(coord == null){
+            return;
+        }
+
         IMapController mapController = mMapView.getController();
         mapController.animateTo(DroneHelper.CoordToGeoPoint(coord));
         mapController.setZoom(zoomLevel);
@@ -443,5 +503,19 @@ public class OSMapFragment extends Fragment implements DPMap {
 
         mMissionPath.setPoints(geoPoints);
         mMapView.invalidate();
+    }
+
+    /**
+     * Used to monitor drone gps location updates if autopan is enabled.
+     * {@inheritDoc}
+     * @param event event type
+     * @param drone drone state
+     */
+    @Override
+    public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
+        switch(event){
+            case GPS:
+                break;
+        }
     }
 }

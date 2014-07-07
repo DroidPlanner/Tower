@@ -5,11 +5,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 import org.droidplanner.android.communication.service.UploaderService;
-import org.droidplanner.android.utils.DroidplannerPrefs;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
+import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.file.FileStream;
 
 import android.content.Context;
@@ -48,7 +50,7 @@ public abstract class MAVLinkConnection extends Thread {
 	private MavLinkConnectionListener listener;
 
 	private DroneshareClient uploader = null;
-	private DroidplannerPrefs prefs;
+	private DroidPlannerPrefs prefs;
 
 	private File logFile = null;
 	private BufferedOutputStream logWriter = null;
@@ -65,7 +67,7 @@ public abstract class MAVLinkConnection extends Thread {
 		this.parentContext = parentContext;
 		this.listener = (MavLinkConnectionListener) parentContext;
 
-		prefs = new DroidplannerPrefs(parentContext);
+		prefs = new DroidPlannerPrefs(parentContext);
 		getPreferences(prefs.prefs);
 	}
 
@@ -75,10 +77,14 @@ public abstract class MAVLinkConnection extends Thread {
 		try {
 			parser.stats.mavlinkResetStats();
 			openConnection();
-			
+
+            //Start a new ga analytics session. The new session will be tagged with the mavlink
+            // connection mechanism, as well as whether the user has an active droneshare account.
+            GAUtils.startNewSession(parentContext);
+
 			logFile = FileStream.getTLogFile();
 			logWriter = FileStream.openOutputStream(logFile);
-			logBuffer = ByteBuffer.allocate(Long.SIZE / Byte.SIZE);
+			logBuffer = ByteBuffer.allocate(4* Long.SIZE / Byte.SIZE);
 			logBuffer.order(ByteOrder.BIG_ENDIAN);
 			
 			String login = prefs.getDroneshareLogin();
@@ -159,6 +165,8 @@ public abstract class MAVLinkConnection extends Thread {
 					uploader.filterMavlink(uploader.interfaceNum, bytes);
 			} catch (IOException e) {
 				Log.e(TAG, "Ignoring IO error in saveToLog: " + e);
+			}catch (BufferOverflowException e) {
+				Log.e(TAG, "Ignoring Buffer Overflow in saveToLog: " + e);
 			} catch (NullPointerException e) {
 				Log.e(TAG, "Ignoring NPE in " + e);
 				// There was a null pointer error for some users on

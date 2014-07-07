@@ -40,7 +40,7 @@ public class TTSNotificationProvider implements OnInitListener,
 		tts.setLanguage(Locale.US);
 	}
 
-	public void speak(String string) {
+	private void speak(String string) {
 		if (tts != null) {
 			if (shouldEnableTTS()) {
 				tts.speak(string, TextToSpeech.QUEUE_FLUSH, null);
@@ -100,6 +100,9 @@ public class TTSNotificationProvider implements OnInitListener,
 				break;
 			case MISSION_WP_UPDATE:
 				speak("Going for waypoint "+ drone.missionStats.getCurrentWP());
+				break;
+			case FOLLOW_START:
+					speak("Following");
 				break;
 			default:
 				break;
@@ -164,4 +167,9 @@ public class TTSNotificationProvider implements OnInitListener,
 			break;
 		}
 	}
+
+    @Override
+    public void quickNotify(String feedback) {
+        speak(feedback);
+    }
 }

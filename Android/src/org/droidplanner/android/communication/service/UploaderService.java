@@ -2,8 +2,7 @@ package org.droidplanner.android.communication.service;
 
 import java.io.File;
 
-import org.droidplanner.android.communication.connection.MAVLinkConnection;
-import org.droidplanner.android.utils.DroidplannerPrefs;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.utils.file.DirectoryPath;
 
 import com.geeksville.apiproxy.DirectoryUploader;
@@ -16,8 +15,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -35,7 +32,7 @@ public class UploaderService extends IntentService {
 	private static final String TAG = UploaderService.class.getSimpleName();
 	static final String apiKey = "2d38fb2e.72afe7b3761d5ee6346c178fdd6b680f";
 
-	private DroidplannerPrefs prefs;
+	private DroidPlannerPrefs prefs;
 	private int numUploaded = 0;
 
 	private IUploadListener callback = new IUploadListener() {
@@ -118,7 +115,7 @@ public class UploaderService extends IntentService {
 	public void onCreate() {
 		super.onCreate();
 
-		prefs = new DroidplannerPrefs(this);
+		prefs = new DroidPlannerPrefs(this);
 		notifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		nBuilder = new NotificationCompat.Builder(this);
 		nBuilder.setContentTitle("Droneshare upload")
