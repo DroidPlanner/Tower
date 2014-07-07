@@ -2,12 +2,14 @@ package org.droidplanner.android.notifications;
 
 import java.util.UUID;
 
+import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
 
 import android.content.Context;
 import android.util.Log;
 
+import com.MAVLink.Messages.ApmModes;
 import com.getpebble.android.kit.PebbleKit;
 import com.getpebble.android.kit.PebbleKit.PebbleDataReceiver;
 import com.getpebble.android.kit.util.PebbleDictionary;
@@ -59,7 +61,6 @@ NotificationHandler.NotificationProvider {
 			break;
 		default:
 			break;
-
 		}
 	}
 	
@@ -115,9 +116,20 @@ NotificationHandler.NotificationProvider {
 		public void receiveData(Context context, int transactionId,
 				PebbleDictionary data) {
 			PebbleKit.sendAckToPebble(applicationContext, transactionId);
-			Log.d("seB", data.toString());
-			// decode
-	
+			int request = (data.getInteger(KEY_PEBBLE_REQUEST).intValue());
+			switch(request){
+			case KEY_REQUEST_MODE_FOLLOW:
+				((DroidPlannerApp)applicationContext).drone.state.changeFlightMode(ApmModes.ROTOR_GUIDED);
+				break;
+			case KEY_REQUEST_CYCLE_FOLLOW_TYPE://TODO cycle the follow me type
+				break;
+			case KEY_REQUEST_MODE_LOITER:
+				((DroidPlannerApp)applicationContext).drone.state.changeFlightMode(ApmModes.ROTOR_LOITER);
+				break;
+			case KEY_REQUEST_MODE_RTL:
+				((DroidPlannerApp)applicationContext).drone.state.changeFlightMode(ApmModes.ROTOR_RTL);
+				break;
+			}
 		}
 	}
 }
