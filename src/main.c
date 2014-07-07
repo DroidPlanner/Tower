@@ -1,6 +1,6 @@
 #include <pebble.h>
 #include <string.h>
-
+#define APP_VERSION "one"
   
 //@TODO make cam a string, receive telem packets, send mode change packets, auto open on start
   
@@ -16,6 +16,7 @@ enum {
   KEY_MODE = 0,
   KEY_FOLLOW_TYPE = 1,
   KEY_TELEM = 2,
+  KEY_APP_VERSION=3,
   KEY_PEBBLE_REQUEST = 100,
   KEY_REQUEST_MODE_FOLLOW = 101,
   KEY_REQUEST_CYCLE_FOLLOW_TYPE=102,
@@ -50,15 +51,15 @@ static void send_mode_change_request(int request_type){
   app_message_outbox_send();
 }
 
-//TODO implement this.  Android part needs to be implemented first.
-static void send_follow_type_cycle_request(){
-  return;
+static void request_new_app_version(){
+  text_layer_set_text(telem_layer,"Install new watchapp in settings menu");
+  text_layer_set_text(mode_layer,"UPDATE!");
 }
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!button click handlers
 static void follow_click_handler(ClickRecognizerRef recognizer, void *context) {
   if(strcmp("Follow",mode)==0){
     vibe(30);
-    send_follow_type_cycle_request();
+    send_mode_change_request(KEY_REQUEST_CYCLE_FOLLOW_TYPE);
   }else{
     vibe(100);
     send_mode_change_request(KEY_REQUEST_MODE_FOLLOW);
@@ -124,7 +125,7 @@ static void buttons_draw(Layer *layer, GContext *ctx) {
 
 
  void in_received_handler(DictionaryIterator *iter, void *context) {
-   for(int i=KEY_MODE;i<=KEY_TELEM;i++){
+   for(int i=KEY_MODE;i<=KEY_APP_VERSION;i++){
      Tuple *tuple = dict_find(iter,i);
      if(tuple){
        char *data = tuple->value->cstring;
@@ -139,6 +140,11 @@ static void buttons_draw(Layer *layer, GContext *ctx) {
          case KEY_TELEM:
            text_layer_set_text(telem_layer,data);
            break;
+         case KEY_APP_VERSION:
+           if(strcmp(data,APP_VERSION)!=0){
+             request_new_app_version();
+             return;
+           }
        }
      }
    }
