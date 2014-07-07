@@ -18,6 +18,12 @@ NotificationHandler.NotificationProvider {
 	private static final int KEY_FOLLOW_TYPE=1;
 	private static final int KEY_TELEM = 2;
 	
+	private static final int KEY_PEBBLE_REQUEST = 100;
+	private static final int KEY_REQUEST_MODE_FOLLOW = 101;
+	private static final int KEY_REQUEST_CYCLE_FOLLOW_TYPE=102;
+	private static final int KEY_REQUEST_MODE_LOITER=103;
+	private static final int KEY_REQUEST_MODE_RTL=104;
+	
 	private static final UUID DP_UUID = UUID.fromString("79a2893d-fc7d-48c4-bc9a-34854d94ef6e");
 	
 	/**
