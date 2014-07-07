@@ -1,4 +1,4 @@
-package com.droidplanner.helpers.srtm;
+package org.droidplanner.android.helpers.srtm;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -9,7 +9,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
-import com.droidplanner.helpers.srtm.Srtm.OnProgressListner;
+import org.droidplanner.android.helpers.srtm.Srtm.OnProgressListner;
 
 public class SrtmDownloader {
 	static final String url = "http://dds.cr.usgs.gov/srtm/version2_1/SRTM3/";

@@ -1,4 +1,4 @@
-package com.droidplanner.helpers.srtm;
+package org.droidplanner.android.helpers.srtm;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -6,7 +6,7 @@ import java.io.FileInputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import com.droidplanner.helpers.srtm.Srtm.OnProgressListner;
+import org.droidplanner.android.helpers.srtm.Srtm.OnProgressListner;
 
 public class SrtmData {
 	private String path;

@@ -1,4 +1,4 @@
-package com.droidplanner.helpers.srtm;
+package org.droidplanner.android.helpers.srtm;
 
 public class Srtm {
 	private static final int SRTM_NaN = -32768;

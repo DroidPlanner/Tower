@@ -1,12 +1,13 @@
-package com.droidplanner.helpers.srtm;
+package org.droidplanner.android.helpers.srtm;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.droidplanner.android.helpers.srtm.Srtm.OnProgressListner;
+import org.droidplanner.android.utils.file.DirectoryPath;
+
 import android.os.AsyncTask;
 
-import com.droidplanner.file.DirectoryPath;
-import com.droidplanner.helpers.srtm.Srtm.OnProgressListner;
 import com.google.android.gms.maps.model.LatLng;
 
 public class SrtmReader extends AsyncTask<Integer, String, Integer> implements

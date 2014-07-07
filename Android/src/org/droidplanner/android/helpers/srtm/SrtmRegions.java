@@ -1,4 +1,4 @@
-package com.droidplanner.helpers.srtm;
+package org.droidplanner.android.helpers.srtm;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-import com.droidplanner.helpers.srtm.Srtm.OnProgressListner;
+import org.droidplanner.android.helpers.srtm.Srtm.OnProgressListner;
 
 public class SrtmRegions {
 	static final String[] REGIONS = { "Eurasia", "Africa", "Australia",
