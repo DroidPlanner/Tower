@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             layout="@layout/button_my_location"
-            android:layout_margin="8dp"
+            android:layout_margin="10dp"
             android:layout_gravity="center_vertical|right" />
 
     </org.droidplanner.android.widgets.FitsSystemWindowsFrameLayout>

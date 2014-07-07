@@ -26,11 +26,13 @@ public class FlightMapFragment extends DroneMap implements
         DPMap.OnMapLongClickListener, DPMap.OnMarkerClickListener, DPMap.OnMarkerDragListener,
 		GuidedDialogListener, OnDroneListener {
 
+    private static final int MAX_TOASTS_FOR_LOCATION_PRESS = 3;
+
     private static final String PREF_USER_LOCATION_FIRST_PRESS = "pref_user_location_first_press";
-    private static final boolean DEFAULT_USER_LOCATION_FIRST_PRESS = true;
+    private static final int DEFAULT_USER_LOCATION_FIRST_PRESS = 0;
 
     private static final String PREF_DRONE_LOCATION_FIRST_PRESS = "pref_drone_location_first_press";
-    private static final boolean DEFAULT_DRONE_LOCATION_FIRST_PRESS = true;
+    private static final int DEFAULT_DRONE_LOCATION_FIRST_PRESS = 0;
 
     private DroidPlannerPrefs mAppPrefs;
 
@@ -147,20 +149,23 @@ public class FlightMapFragment extends DroneMap implements
     @Override
     public void goToMyLocation(){
         super.goToMyLocation();
-        if(mAppPrefs.prefs.getBoolean(PREF_USER_LOCATION_FIRST_PRESS, DEFAULT_USER_LOCATION_FIRST_PRESS)){
+        int pressCount = mAppPrefs.prefs.getInt(PREF_USER_LOCATION_FIRST_PRESS, DEFAULT_USER_LOCATION_FIRST_PRESS);
+        if(pressCount < MAX_TOASTS_FOR_LOCATION_PRESS){
             Toast.makeText(context, "Long press to activate user auto panning.",
                     Toast.LENGTH_LONG).show();
-            mAppPrefs.prefs.edit().putBoolean(PREF_USER_LOCATION_FIRST_PRESS, false).apply();
+            mAppPrefs.prefs.edit().putInt(PREF_USER_LOCATION_FIRST_PRESS, pressCount + 1).apply();
         }
     }
 
     @Override
     public void goToDroneLocation(){
         super.goToDroneLocation();
-        if(mAppPrefs.prefs.getBoolean(PREF_DRONE_LOCATION_FIRST_PRESS, DEFAULT_DRONE_LOCATION_FIRST_PRESS)){
+        final int pressCount = mAppPrefs.prefs.getInt(PREF_DRONE_LOCATION_FIRST_PRESS,
+                DEFAULT_DRONE_LOCATION_FIRST_PRESS);
+        if(pressCount < MAX_TOASTS_FOR_LOCATION_PRESS){
             Toast.makeText(context, "Long press to activate drone auto panning.",
                     Toast.LENGTH_LONG).show();
-            mAppPrefs.prefs.edit().putBoolean(PREF_DRONE_LOCATION_FIRST_PRESS, false).apply();
+            mAppPrefs.prefs.edit().putInt(PREF_DRONE_LOCATION_FIRST_PRESS, pressCount + 1).apply();
         }
     }
 
