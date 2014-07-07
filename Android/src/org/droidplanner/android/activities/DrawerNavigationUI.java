@@ -18,8 +18,7 @@ import android.widget.ExpandableListView;
  * This abstract activity provides its children access to a navigation drawer
  * interface.
  */
-public abstract class DrawerNavigationUI extends SuperUI implements
-		HelpProvider {
+public abstract class DrawerNavigationUI extends SuperUI implements	HelpProvider {
 
 	/**
 	 * Activates the navigation drawer when the home button is clicked.

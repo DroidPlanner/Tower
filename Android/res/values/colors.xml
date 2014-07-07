@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="transparent_dark">#B0000000</color>
+    <color name="transparent_light">#ddffffff</color>
     <color name="opaque_black">#000</color>
     <color name="opaque_white">#fff</color>
     <color name="greyText">#4d4d4d</color>

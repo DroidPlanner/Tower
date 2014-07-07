@@ -6,12 +6,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.item.markers.MissionItemMarkerInfo;
 import org.droidplanner.android.proxy.mission.item.markers.SurveyMarkerInfoProvider;
+import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 
@@ -106,6 +108,16 @@ public class EditorMapFragment extends DroneMap implements
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         editorListener = (OnEditorInteraction) activity;
+    }
+
+    @Override
+    public boolean setAutoPanMode(AutoPanMode target) {
+        if(target == AutoPanMode.DISABLED)
+            return true;
+
+        Toast.makeText(getActivity(), "Auto pan is not supported on this map.",
+                Toast.LENGTH_LONG).show();
+        return false;
     }
 
     @Override

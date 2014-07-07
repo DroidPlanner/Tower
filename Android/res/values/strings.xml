@@ -26,7 +26,7 @@
     <string name="pref_connection_type_summary">Which link to use to connect to the drone</string>
     <string name="pref_maps_title">Maps</string>
     <string name="pref_maps_providers_summary">Which map provider to use.</string>
-    <string name="pref_maps_providers_title">Maps providers</string>
+    <string name="pref_maps_providers_title">Maps Providers</string>
     <string name="pref_mavlink">MAVLink</string>
     <string name="pref_mavlink_rates">Stream Rates</string>
     <string name="pref_mavlink_rates_summary">Rate in which flight data should be received from the drone (in Hz)</string>
@@ -56,8 +56,6 @@
     <string name="pref_guided_mode_on_long_press_summary">Enable entering the Guided Mode by long pressing the map.</string>
     <string name="pref_follow_me_mode_enabled">Enable FollowMe Mode</string>
     <string name="pref_follow_me_mode_enabled_summary">In development</string>
-    <string name="pref_auto_pan_enabled">Enable auto pan</string>
-    <string name="pref_auto_pan_enabled_summary">Auto pan the map when a new GPS coordinate is received</string>
     <string name="pref_heading_mode">Enable FPV heading mode</string>
     <string name="pref_heading_mode_summary">Change heading mode to FPV (-180º to 180º)</string>
     <string name="pref_advanced">Advanced</string>
@@ -68,6 +66,7 @@
     <string name="pref_map_type_summary">Which type of map to use</string>
     <string name="pref_enable_tts">Enable Text To Speech</string>
     <string name="pref_enable_tts_summary">Audible messages for important events</string>
+    <string name="pref_request_max_volume">Set Volume To Max On Start</string>
     <string name="pref_vehicle_type">Default Vehicle Type</string>
     <string name="pref_vehicle_type_summary">Default vehicle type when disconnected</string>
     <string name="pref_rc">RC Screen</string>
@@ -382,5 +381,7 @@
     <string name="usage_statistics">Usage Statistics</string>
     <string name="pref_usage_statistics_title">Send usage statistics</string>
     <string name="pref_usage_statistics_summary">Help improve DroidPlanner by sending usage statistics.</string>
+    <string name="pref_permanent_notification_title">Enable permanent notification</string>
+    <string name="pref_permanent_notification_summary">Enable to make status bar notification permanent when connected.</string>
 
 </resources>

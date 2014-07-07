@@ -46,7 +46,7 @@ public class EditorListFragment extends Fragment implements
 		View view = inflater.inflate(R.layout.fragment_editor_list, container,	false);
 
         DroidPlannerApp app = ((DroidPlannerApp) getActivity().getApplication());
-        drone = app.drone;
+        drone = app.getDrone();
         missionProxy = app.missionProxy;
         adapter = new MissionItemProxyView(getActivity(), missionProxy.getItems());
 

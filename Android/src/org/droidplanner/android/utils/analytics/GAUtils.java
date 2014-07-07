@@ -11,7 +11,7 @@ import com.google.android.gms.analytics.Tracker;
 import org.droidplanner.BuildConfig;
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.utils.DroidplannerPrefs;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 import java.util.Map;
 
@@ -96,7 +96,7 @@ public class GAUtils {
             // (http://stackoverflow.com/a/23256722/1088814)
             analytics.enableAutoActivityReports(app);
 
-            analytics.setAppOptOut(!new DroidplannerPrefs(context).isUsageStatisticsEnabled());
+            analytics.setAppOptOut(!new DroidPlannerPrefs(context).isUsageStatisticsEnabled());
 
             //If we're in debug mode, set log level to verbose.
             if (BuildConfig.DEBUG) {
@@ -108,7 +108,7 @@ public class GAUtils {
     }
 
     public static void startNewSession(Context context) {
-        final DroidplannerPrefs prefs = new DroidplannerPrefs(context);
+        final DroidPlannerPrefs prefs = new DroidPlannerPrefs(context);
         final String connectionType = prefs.getMavLinkConnectionType();
 
         final String login = prefs.getDroneshareLogin();

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="org.droidplanner"
-          android:versionCode="80"
+          android:versionCode="81"
           android:versionName="please run version.sh to get the version name">
 
     <uses-sdk
@@ -76,7 +76,8 @@
 
 		<activity
 		    android:name=".android.activities.FlightActivity"
-		    android:launchMode="singleTask" >
+		    android:launchMode="singleTask"
+            android:theme="@style/CustomActionBarTheme.Transparent">
 
             <!-- Launcher Intent -->
             <intent-filter>
@@ -98,6 +99,7 @@
             android:name=".android.activities.EditorActivity"
             android:label="@string/editor"
             android:launchMode="singleTop"
+            android:theme="@style/CustomActionBarTheme.Transparent"
             android:parentActivityName=".android.activities.FlightActivity" >
 
             <!-- Parent activity meta-data to support API level 7+ -->

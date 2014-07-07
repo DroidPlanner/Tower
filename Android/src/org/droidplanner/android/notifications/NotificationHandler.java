@@ -16,7 +16,8 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 	 * notification provider types (i.e: audible (text to speech), status bar).
 	 */
 	interface NotificationProvider extends DroneInterfaces.OnDroneListener {
-	}
+        void quickNotify(String feedback);
+    }
 
 	/**
 	 * Handles Droidplanner's audible notifications.
@@ -33,23 +34,19 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 		mStatusBarNotification = new StatusBarNotificationProvider(context);
 	}
 
-	/**
-	 * @return Droidplanner's audible notification provider instance.
-	 */
-	public TTSNotificationProvider getTtsNotificationProvider() {
-		return mTtsNotification;
-	}
-
-	/**
-	 * @return Droidplanner's status bar notification provider instance.
-	 */
-	public StatusBarNotificationProvider getStatusBarNotificationProvider() {
-		return mStatusBarNotification;
-	}
-
 	@Override
 	public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
 		mTtsNotification.onDroneEvent(event, drone);
 		mStatusBarNotification.onDroneEvent(event, drone);
 	}
+
+    /**
+     * Sends a quick notification to the user.
+     * Uses toasts for written notification, and speech if voice notification is enabled.
+     * @param feedback short message to show the user.
+     */
+    public void quickNotify(String feedback){
+        mTtsNotification.quickNotify(feedback);
+        mStatusBarNotification.quickNotify(feedback);
+    }
 }
