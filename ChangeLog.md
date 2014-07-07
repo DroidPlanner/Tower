@@ -8,6 +8,19 @@ Our convention for release control is the following (for a release like DPvA.B.C
 All the changes are logged below (preferable with the pull request numbers in parenteses):
 
 # Releases
+
+## Droidplanner v2.4.4
+* Implemented optional max volume on start (#838,#841,#840)
+* Added Unit tests to Travis CI (#839)
+* Added Italian translation (#845)
+* Removed Android dependencies from the Core library (#849)
+* Improved follow-me UX (#850)
+* Advanced notifications (#851)
+* Fix maps bug, which crashed the app on some devices (#853, #852)
+* Updating project libraries  (#855)
+* Go-to-drone button, and auto-pan (#859)
+* Added SRTM library (#860)
+
 ## Droidplanner v2.4.3
 * Improve analytics (#829)
 * Fixed German translation (#831)
