@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Do not change the names here, instead extract the extrings -->
+    <!-- Do not change the names here, instead extract the strings -->
     <string-array name="RCQuickModes">
         <item name="Stabilize">Stabilize</item>
         <item name="Acro">Acro</item>
@@ -205,7 +205,20 @@
 
     <!-- This string is just used to help in the layout editor -->
     <string-array name="ExampleCameraArray">
-        <item>No cameras Avaliable</item>
+        <item>No cameras Available</item>
+    </string-array>
+
+    <!-- Auto pan target types -->
+    <string-array name="map_auto_pan_mode_labels">
+        <item>@string/map_auto_pan_mode_user_label</item>
+        <item>@string/map_auto_pan_mode_drone_label</item>
+        <item>@string/map_auto_pan_mode_disabled_label</item>
+    </string-array>
+
+    <string-array name="map_auto_pan_modes">
+        <item>@string/map_auto_pan_mode_user</item>
+        <item>@string/map_auto_pan_mode_drone</item>
+        <item>@string/map_auto_pan_mode_disabled</item>
     </string-array>
 
 </resources>

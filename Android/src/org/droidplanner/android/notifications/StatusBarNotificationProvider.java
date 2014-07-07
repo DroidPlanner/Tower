@@ -12,7 +12,7 @@ import android.widget.Toast;
 import org.droidplanner.R;
 import org.droidplanner.android.activities.FlightActivity;
 import org.droidplanner.android.activities.helpers.SuperUI;
-import org.droidplanner.android.utils.DroidplannerPrefs;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.utils.TextUtils;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
@@ -81,11 +81,11 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
     /**
      * Handle to the app preferences.
      */
-    private final DroidplannerPrefs mAppPrefs;
+    private final DroidPlannerPrefs mAppPrefs;
 
     StatusBarNotificationProvider(Context context) {
         mContext = context;
-        mAppPrefs = new DroidplannerPrefs(context);
+        mAppPrefs = new DroidPlannerPrefs(context);
 
         mNotificationIntent = PendingIntent.getActivity(mContext, 0,
                 new Intent(mContext, FlightActivity.class), 0);

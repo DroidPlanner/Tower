@@ -4,8 +4,8 @@ import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.communication.connection.MAVLinkConnection;
 import org.droidplanner.android.communication.connection.MAVLinkConnection.MavLinkConnectionListener;
-import org.droidplanner.android.notifications.StatusBarNotificationProvider;
-import org.droidplanner.android.utils.DroidplannerPrefs;
+
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.analytics.GAUtils;
 
@@ -25,7 +25,6 @@ import android.widget.Toast;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
 import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 
 /**
  * http://developer.android.com/guide/components/bound-services.html#Messenger
@@ -43,7 +42,7 @@ public class MAVLinkService extends Service implements	MavLinkConnectionListener
     /**
      * Provides access to the app preferences.
      */
-    private DroidplannerPrefs mAppPrefs;
+    private DroidPlannerPrefs mAppPrefs;
 
 	private MAVLinkConnection mavConnection;
 	Messenger msgCenter = null;
@@ -146,7 +145,7 @@ public class MAVLinkService extends Service implements	MavLinkConnectionListener
         final DroidPlannerApp dpApp = (DroidPlannerApp) getApplication();
 
         //Initialise the app preferences handle.
-        mAppPrefs = new DroidplannerPrefs(context);
+        mAppPrefs = new DroidPlannerPrefs(context);
 
 		commErrMsgLocalStore = getString(R.string.MAVLinkError);
 

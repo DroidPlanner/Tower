@@ -10,7 +10,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 import org.droidplanner.android.communication.service.UploaderService;
-import org.droidplanner.android.utils.DroidplannerPrefs;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.file.FileStream;
 
@@ -50,7 +50,7 @@ public abstract class MAVLinkConnection extends Thread {
 	private MavLinkConnectionListener listener;
 
 	private DroneshareClient uploader = null;
-	private DroidplannerPrefs prefs;
+	private DroidPlannerPrefs prefs;
 
 	private File logFile = null;
 	private BufferedOutputStream logWriter = null;
@@ -67,7 +67,7 @@ public abstract class MAVLinkConnection extends Thread {
 		this.parentContext = parentContext;
 		this.listener = (MavLinkConnectionListener) parentContext;
 
-		prefs = new DroidplannerPrefs(parentContext);
+		prefs = new DroidPlannerPrefs(parentContext);
 		getPreferences(prefs.prefs);
 	}
 

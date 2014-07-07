@@ -3,6 +3,7 @@ package org.droidplanner.android.maps;
 import android.graphics.Color;
 
 import org.droidplanner.android.maps.providers.DPMapProvider;
+import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
@@ -27,17 +28,20 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
     public static final int DRONE_LEASH_DEFAULT_COLOR = Color.WHITE;
     public static final int DRONE_LEASH_DEFAULT_WIDTH = 2;
 
-    public static final String PREF_LAT = "lat";
-    public static final String PREF_LNG = "lng";
-    public static final String PREF_BEA = "bea";
-    public static final String PREF_TILT = "tilt";
-    public static final String PREF_ZOOM = "zoom";
+    public static final String PREF_LAT = "pref_map_lat";
+    public static final float DEFAULT_LATITUDE = 37.8575523f;
 
-    /**
-     * If the map center, and the drone/user location are within this threshold,
-     * then autopan will be enabled the next time the 'go to location' button is pressed.
-     */
-    public static final int DISTANCE_THRESHOLD_FOR_AUTOPAN = 10; //meters
+    public static final String PREF_LNG = "pref_map_lng";
+    public static final float DEFAULT_LONGITUDE = -122.292767f;
+
+    public static final String PREF_BEA = "pref_map_bea";
+    public static final int DEFAULT_BEARING = 0;
+
+    public static final String PREF_TILT = "pref_map_tilt";
+    public static final int DEFAULT_TILT = 0;
+
+    public static final String PREF_ZOOM = "pref_map_zoom";
+    public static final int DEFAULT_ZOOM_LEVEL = 17;
 
     interface PathSource {
         public List<Coord2D> getPathPoints();
@@ -121,6 +125,12 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
      * Clears the drone's flight path.
      */
     public void clearFlightPath();
+
+    /**
+     * Enable map auto panning on the passed target type.
+     * @param mode auto pan target (user / drone / disabled).
+     */
+    public void selectAutoPanMode(AutoPanMode mode);
 
     /**
      * @return this map's provider.

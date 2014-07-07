@@ -9,6 +9,7 @@ import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.proxy.mission.MissionSelection;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.proxy.mission.MissionProxy;
+import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.android.fragments.EditorListFragment;
@@ -110,12 +111,26 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
                planningMapFragment.goToMyLocation();
            }
         });
+        mGoToMyLocation.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                planningMapFragment.setAutoPanMode(AutoPanMode.USER);
+                return true;
+            }
+        });
 
         mGoToDroneLocation = (ImageButton) findViewById(R.id.drone_location_button);
         mGoToDroneLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 planningMapFragment.goToDroneLocation();
+            }
+        });
+        mGoToDroneLocation.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                planningMapFragment.setAutoPanMode(AutoPanMode.DRONE);
+                return true;
             }
         });
 

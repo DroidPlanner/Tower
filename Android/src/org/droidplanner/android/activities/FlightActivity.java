@@ -8,6 +8,7 @@ import org.droidplanner.android.fragments.TelemetryFragment;
 import org.droidplanner.android.fragments.helpers.FlightSlidingDrawerContent;
 import org.droidplanner.android.fragments.mode.FlightModePanel;
 import org.droidplanner.android.utils.analytics.GAUtils;
+import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
@@ -86,20 +87,38 @@ public class FlightActivity extends DrawerNavigationUI implements
         setupMapFragment();
 
         mLocationButtonsContainer = findViewById(R.id.location_button_container);
-
         mGoToMyLocation = (ImageButton) findViewById(R.id.my_location_button);
+        mGoToDroneLocation = (ImageButton) findViewById(R.id.drone_location_button);
+
         mGoToMyLocation.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 mapFragment.goToMyLocation();
+                updateMapLocationButtons(AutoPanMode.DISABLED);
+            }
+        });
+        mGoToMyLocation.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                mapFragment.goToMyLocation();
+                updateMapLocationButtons(AutoPanMode.USER);
+                return true;
             }
         });
 
-        mGoToDroneLocation = (ImageButton) findViewById(R.id.drone_location_button);
         mGoToDroneLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                mapFragment.goToDroneLocation();
+                updateMapLocationButtons(AutoPanMode.DISABLED);
+            }
+        });
+        mGoToDroneLocation.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                mapFragment.goToDroneLocation();
+                updateMapLocationButtons(AutoPanMode.DRONE);
+                return true;
             }
         });
 
@@ -150,6 +169,23 @@ public class FlightActivity extends DrawerNavigationUI implements
 		}
 	}
 
+    private void updateMapLocationButtons(AutoPanMode mode){
+        mGoToMyLocation.setActivated(false);
+        mGoToDroneLocation.setActivated(false);
+
+        mapFragment.setAutoPanMode(mode);
+
+        switch(mode){
+            case DRONE:
+                mGoToDroneLocation.setActivated(true);
+                break;
+
+            case USER:
+                mGoToMyLocation.setActivated(true);
+                break;
+        }
+    }
+
 	/**
 	 * Ensures that the device has the correct version of the Google Play
 	 * Services.
@@ -199,6 +235,12 @@ public class FlightActivity extends DrawerNavigationUI implements
 		super.onStart();
 		setupMapFragment();
 	}
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        updateMapLocationButtons(mAppPrefs.getAutoPanMode());
+    }
 
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {

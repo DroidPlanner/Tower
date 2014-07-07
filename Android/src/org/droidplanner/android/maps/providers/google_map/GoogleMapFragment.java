@@ -3,10 +3,13 @@ package org.droidplanner.android.maps.providers.google_map;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
-import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.maps.providers.DPMapProvider;
+import org.droidplanner.android.utils.prefs.AutoPanMode;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.utils.DroneHelper;
 import org.droidplanner.android.helpers.LocalMapTileProvider;
 import org.droidplanner.android.maps.DPMap;
@@ -22,7 +25,6 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,6 +33,8 @@ import android.view.ViewGroup;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -52,7 +56,7 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.common.collect.HashBiMap;
 
 public class GoogleMapFragment extends SupportMapFragment implements DPMap,
-GoogleApiClient.OnConnectionFailedListener{
+GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private static final String TAG = GoogleMapFragment.class.getSimpleName();
 
@@ -66,6 +70,10 @@ GoogleApiClient.OnConnectionFailedListener{
     private final HashBiMap<MarkerInfo, Marker> mMarkers = HashBiMap.create();
 
     private Drone mDrone;
+    private DroidPlannerPrefs mAppPrefs;
+
+    private final AtomicReference<AutoPanMode> mPanMode = new AtomicReference(AutoPanMode.DISABLED);
+
     private GoogleMap mMap;
     private GoogleApiClient mApiClient;
 
@@ -85,14 +93,16 @@ GoogleApiClient.OnConnectionFailedListener{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle bundle) {
         final FragmentActivity activity = getActivity();
+        final Context context = activity.getApplicationContext();
 
         final View view = super.onCreateView(inflater, viewGroup, bundle);
-        mApiClient = new GoogleApiClient.Builder(activity.getApplicationContext())
+        mApiClient = new GoogleApiClient.Builder(context)
                 .addApi(LocationServices.API)
                 .addOnConnectionFailedListener(this)
                 .build();
 
         mDrone = ((DroidPlannerApp)activity.getApplication()).getDrone();
+        mAppPrefs = new DroidPlannerPrefs(context);
 
         final Bundle args = getArguments();
         if(args != null){
@@ -121,6 +131,48 @@ GoogleApiClient.OnConnectionFailedListener{
             List<LatLng> oldFlightPath = flightPath.getPoints();
             oldFlightPath.clear();
             flightPath.setPoints(oldFlightPath);
+        }
+    }
+
+    @Override
+    public void selectAutoPanMode(AutoPanMode target) {
+        final AutoPanMode currentMode = mPanMode.get();
+        if(currentMode == target)
+            return;
+
+        setAutoPanMode(currentMode, target);
+    }
+
+    private void setAutoPanMode(AutoPanMode current, AutoPanMode update){
+        if(mPanMode.compareAndSet(current, update)){
+            switch(current){
+                case DRONE:
+                    mDrone.events.removeDroneListener(this);
+                    break;
+
+                case USER:
+                    LocationServices.FusedLocationApi.removeLocationUpdates(mApiClient, this);
+                    break;
+
+                case DISABLED:
+                default:
+                    break;
+            }
+
+            switch(update){
+                case DRONE:
+                    mDrone.events.addDroneListener(this);
+                    break;
+
+                case USER:
+                    final LocationRequest locationReq = LocationRequest.create();
+                    LocationServices.FusedLocationApi.requestLocationUpdates(mApiClient, locationReq, this);
+                    break;
+
+                case DISABLED:
+                default:
+                    break;
+            }
         }
     }
 
@@ -305,24 +357,26 @@ GoogleApiClient.OnConnectionFailedListener{
     @Override
     public void saveCameraPosition() {
         CameraPosition camera = mMap.getCameraPosition();
-        SharedPreferences settings = getActivity().getSharedPreferences("MAP", 0);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putFloat(PREF_LAT, (float) camera.target.latitude);
-        editor.putFloat(PREF_LNG, (float) camera.target.longitude);
-        editor.putFloat(PREF_BEA, camera.bearing);
-        editor.putFloat(PREF_TILT, camera.tilt);
-        editor.putFloat(PREF_ZOOM, camera.zoom);
-        editor.apply();
+        mAppPrefs.prefs.edit()
+                .putFloat(PREF_LAT, (float) camera.target.latitude)
+                .putFloat(PREF_LNG, (float) camera.target.longitude)
+                .putFloat(PREF_BEA, camera.bearing)
+                .putFloat(PREF_TILT, camera.tilt)
+                .putFloat(PREF_ZOOM, camera.zoom)
+                .apply();
     }
 
     @Override
     public void loadCameraPosition() {
+        final SharedPreferences settings = mAppPrefs.prefs;
+
         CameraPosition.Builder camera = new CameraPosition.Builder();
-        SharedPreferences settings = getActivity().getSharedPreferences("MAP", 0);
-        camera.bearing(settings.getFloat(PREF_BEA, 0));
-        camera.tilt(settings.getFloat(PREF_TILT, 0));
-        camera.zoom(settings.getFloat(PREF_ZOOM, 0));
-        camera.target(new LatLng(settings.getFloat(PREF_LAT, 0),settings.getFloat(PREF_LNG, 0)));
+        camera.bearing(settings.getFloat(PREF_BEA, DEFAULT_BEARING));
+        camera.tilt(settings.getFloat(PREF_TILT, DEFAULT_TILT));
+        camera.zoom(settings.getFloat(PREF_ZOOM, DEFAULT_ZOOM_LEVEL));
+        camera.target(new LatLng(settings.getFloat(PREF_LAT, DEFAULT_LATITUDE),
+                settings.getFloat(PREF_LNG, DEFAULT_LONGITUDE)));
+
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(camera.build()));
     }
 
@@ -348,7 +402,7 @@ GoogleApiClient.OnConnectionFailedListener{
 
         final Location myLocation = LocationServices.FusedLocationApi.getLastLocation(mApiClient);
         if ( myLocation != null) {
-            return new Coord2D(myLocation.getLatitude(), myLocation.getLongitude());
+            return DroneHelper.LocationToCoord(myLocation);
         } else {
             return null;
         }
@@ -436,17 +490,11 @@ GoogleApiClient.OnConnectionFailedListener{
     }
 
     private void setupMapOverlay() {
-        if (isOfflineMapEnabled()) {
+        if (mAppPrefs.isOfflineMapEnabled()) {
             setupOfflineMapOverlay();
         } else {
             setupOnlineMapOverlay();
         }
-    }
-
-    private boolean isOfflineMapEnabled() {
-        Context context = this.getActivity();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getBoolean(getString(R.string.pref_advanced_use_offline_maps_key), false);
     }
 
     private void setupOnlineMapOverlay() {
@@ -454,8 +502,7 @@ GoogleApiClient.OnConnectionFailedListener{
     }
 
     private int getMapType() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String mapType = prefs.getString(getString(R.string.pref_map_type_key), "");
+        String mapType = mAppPrefs.getMapType();
 
         if (mapType.equalsIgnoreCase(MAP_TYPE_SATELLITE)) {
             return GoogleMap.MAP_TYPE_SATELLITE;
@@ -543,7 +590,19 @@ GoogleApiClient.OnConnectionFailedListener{
     public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
         switch(event){
             case GPS:
+                if(mPanMode.get() == AutoPanMode.DRONE){
+                    final float currentZoomLevel = mMap.getCameraPosition().zoom;
+                    final Coord2D droneLocation = drone.GPS.getPosition();
+                    updateCamera(droneLocation, (int)currentZoomLevel);
+                }
                 break;
+        }
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        if(mPanMode.get() == AutoPanMode.USER){
+            updateCamera(DroneHelper.LocationToCoord(location),(int)mMap.getCameraPosition().zoom);
         }
     }
 }
