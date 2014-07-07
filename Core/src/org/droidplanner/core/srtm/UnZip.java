@@ -1,4 +1,4 @@
-package org.droidplanner.android.helpers.srtm;
+package org.droidplanner.core.srtm;
 
 import java.io.File;
 import java.io.FileOutputStream;
