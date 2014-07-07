@@ -20,12 +20,6 @@ NotificationHandler.NotificationProvider {
 	private static final int KEY_FOLLOW_TYPE=1;
 	private static final int KEY_TELEM = 2;
 	
-	private static final int KEY_PEBBLE_REQUEST = 100;
-	private static final int KEY_REQUEST_MODE_FOLLOW = 101;
-	private static final int KEY_REQUEST_CYCLE_FOLLOW_TYPE=102;
-	private static final int KEY_REQUEST_MODE_LOITER=103;
-	private static final int KEY_REQUEST_MODE_RTL=104;
-	
 	private static final UUID DP_UUID = UUID.fromString("79a2893d-fc7d-48c4-bc9a-34854d94ef6e");
 	
 	/**
@@ -39,17 +33,16 @@ NotificationHandler.NotificationProvider {
 	public PebbleNotificationProvider(Context context) {
 		applicationContext = context.getApplicationContext();
 		PebbleKit.startAppOnPebble(applicationContext, DP_UUID);
-		datahandler = new PebbleKit.PebbleDataReceiver(DP_UUID) {
-			
-			@Override
-			public void receiveData(Context context, int transactionId,
-					PebbleDictionary data) {
-				PebbleKit.sendAckToPebble(applicationContext, transactionId);
-				Log.d("seB",data.toString());
-				//decode
-			}
-		};
+		datahandler = new PebbleReceiverHandler(DP_UUID);
 		PebbleKit.registerReceivedDataHandler(applicationContext,datahandler);
+	}
+	
+	//FIXME call this method onPause()
+	public void onStop(){
+		if(datahandler !=null){
+			applicationContext.unregisterReceiver(datahandler);
+			datahandler = null;
+		}
 	}
 
 	@Override
@@ -104,5 +97,27 @@ NotificationHandler.NotificationProvider {
     
 	private double roundToOneDecimal(double value){
 		return (double)Math.round(value * 10) / 10;
+	}
+
+	public class PebbleReceiverHandler extends PebbleDataReceiver {
+	
+		private static final int KEY_PEBBLE_REQUEST = 100;
+		private static final int KEY_REQUEST_MODE_FOLLOW = 101;
+		private static final int KEY_REQUEST_CYCLE_FOLLOW_TYPE=102;
+		private static final int KEY_REQUEST_MODE_LOITER=103;
+		private static final int KEY_REQUEST_MODE_RTL=104;
+
+		protected PebbleReceiverHandler(UUID id) {
+			super(id);
+		}
+	
+		@Override
+		public void receiveData(Context context, int transactionId,
+				PebbleDictionary data) {
+			PebbleKit.sendAckToPebble(applicationContext, transactionId);
+			Log.d("seB", data.toString());
+			// decode
+	
+		}
 	}
 }
