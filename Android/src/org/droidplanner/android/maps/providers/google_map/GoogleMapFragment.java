@@ -68,6 +68,11 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleApiClient.Co
     public static final String MAP_TYPE_NORMAL = "Normal";
     public static final String MAP_TYPE_TERRAIN = "Terrain";
 
+    //TODO: update the interval based on the user's current activity.
+    private static final long USER_LOCATION_UPDATE_INTERVAL = 5000; //ms
+    private static final long USER_LOCATION_UPDATE_FASTEST_INTERVAL = 1000; //ms
+    private static final float USER_LOCATION_UPDATE_MIN_DISPLACEMENT = 5; //m
+
     private final HashBiMap<MarkerInfo, Marker> mMarkers = HashBiMap.create();
 
     private Drone mDrone;
@@ -111,7 +116,11 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleApiClient.Co
         @Override
         public void run() {
             if(mApiClient.isConnected()){
-                final LocationRequest locationReq = LocationRequest.create();
+                final LocationRequest locationReq = LocationRequest.create()
+                        .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                        .setFastestInterval(USER_LOCATION_UPDATE_FASTEST_INTERVAL)
+                        .setInterval(USER_LOCATION_UPDATE_INTERVAL)
+                        .setSmallestDisplacement(USER_LOCATION_UPDATE_MIN_DISPLACEMENT);
                 LocationServices.FusedLocationApi.requestLocationUpdates
                         (mApiClient, locationReq, GoogleMapFragment.this);
             }
@@ -651,7 +660,6 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleApiClient.Co
     @Override
     public void onLocationChanged(Location location) {
         Log.d(TAG, "User location changed.");
-        Toast.makeText(getActivity(), "User location changed.", Toast.LENGTH_LONG).show();
         if(mPanMode.get() == AutoPanMode.USER){
             updateCamera(DroneHelper.LocationToCoord(location),(int)mMap.getCameraPosition().zoom);
         }
