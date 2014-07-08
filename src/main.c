@@ -2,8 +2,6 @@
 #include <string.h>
 #define APP_VERSION "one"
   
-//@TODO make cam a string, receive telem packets, send mode change packets, auto open on start
-  
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!variables
 static Window *window;
 static TextLayer *mode_layer;
@@ -11,6 +9,7 @@ static TextLayer *telem_layer;
 static TextLayer *follow_type_layer;
 static Layer *buttons;
 char *mode = "Stabilize";
+char *follow_type = "";
 int cam = 0;
 enum {
   KEY_MODE = 0,
@@ -135,7 +134,10 @@ static void buttons_draw(Layer *layer, GContext *ctx) {
              set_mode(data);
            break;
          case KEY_FOLLOW_TYPE:
-           
+           if(strcmp(data,follow_type)!=0){
+             vibe(30);
+             follow_type=data;
+           }
            break;
          case KEY_TELEM:
            text_layer_set_text(telem_layer,data);
