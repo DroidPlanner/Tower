@@ -288,16 +288,13 @@
                     android:key="@string/pref_max_flight_path_size_key"
                     android:summary="@string/pref_max_flight_path_size_summary"
                     android:title="@string/pref_max_flight_path_size" />
-                <CheckBoxPreference
-                    android:defaultValue="true"
-                    android:key="pref_guided_mode_on_long_press"
-                    android:summary="@string/pref_guided_mode_on_long_press_summary"
-                    android:title="@string/pref_guided_mode_on_long_press" />
-                <CheckBoxPreference
-                    android:defaultValue="false"
-                    android:key="pref_heading_mode"
-                    android:summary="@string/pref_heading_mode_summary"
-                    android:title="@string/pref_heading_mode" />
+            </PreferenceCategory>
+            
+            <PreferenceCategory
+                android:title="@string/pref_pebble" >
+                <Preference
+                    android:key="@string/pref_pebble_install_key"
+                    android:title="@string/pref_pebble_install_watchapp" />
             </PreferenceCategory>
         </PreferenceScreen>
     </PreferenceCategory>

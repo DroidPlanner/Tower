@@ -17,6 +17,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
@@ -185,6 +186,10 @@ public class SettingsFragment extends DpPreferenceFragment implements
         }
 
         updateMavlinkVersionPreference(null);
+        
+        Preference pebblePreference = findPreference(getString(R.string.pref_pebble_install_key));
+        Intent intent = new Intent(Intent.ACTION_VIEW,Uri.parse("https://builds.cloudpebble.net/845b6834-7651-4fcf-a5d0-c507e2bf1d21/watchface.pbw"));
+		pebblePreference.setIntent(intent);
     }
 
     private void initSummaryPerPrefs(){
