@@ -117,6 +117,17 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".android.activities.LocatorActivity"
+            android:label="@string/locator"
+            android:launchMode="singleTop"
+            android:parentActivityName=".android.activities.FlightActivity" >
+
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".android.activities.FlightActivity" />
+        </activity>
+        <activity
             android:name=".android.activities.ConfigurationActivity"
             android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTop"

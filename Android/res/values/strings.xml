@@ -11,6 +11,7 @@
     <string name="app_settings">App Settings</string>
     <string name="flight_data">Flight Data</string>
     <string name="editor">Editor</string>
+    <string name="locator">Locator</string>
     <string name="send_mission">Send Mission</string>
     <string name="load_mission">Load Mission</string>
 
@@ -195,6 +196,7 @@
 
     <!-- Waypoint editor -->
     <string name="editor_info_window">Distance: 200m, Flight time: 3:30s</string>
+    <string name="locator_info_window"></string>
     <string name="distance_to_home">Distance to home</string>
     <string name="loiter_time">Loiter Time</string>
     <string name="waypoint_delay">Delay before next waypoint</string>
@@ -394,4 +396,5 @@
 
     <string name="open_mission_file">Open Mission File</string>
     <string name="save_mission_file">Save Mission File</string>
+    <string name="open_tlog_file">Open Log File</string>
 </resources>
