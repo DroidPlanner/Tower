@@ -1,11 +1,14 @@
 package org.droidplanner.android.gcs;
 
+import org.droidplanner.core.MAVLink.MavLinkROI;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
+import org.droidplanner.core.helpers.coordinates.Coord3D;
 import org.droidplanner.core.helpers.geoTools.GeoTools;
 import org.droidplanner.core.helpers.math.MathUtil;
+import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.helpers.units.Length;
 
 import android.content.Context;
@@ -24,7 +27,7 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 		GooglePlayServicesClient.OnConnectionFailedListener,
 		com.google.android.gms.location.LocationListener, OnDroneListener {
 	private static final long MIN_TIME_MS = 500;
-	private static final float MIN_DISTANCE_M = 0.5f;
+	private static final float MIN_DISTANCE_M = 0.0f;
 	private Length radius = new Length(5.0);
 	
 	private Context context;
@@ -134,6 +137,7 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 
 	@Override
 	public void onLocationChanged(Location location) {
+		MavLinkROI.setROI(drone, new Coord3D(location.getLatitude(),location.getLongitude(), new Altitude(0.0)));
 
 		// TODO implement some sort of Follow-me type selection
 		//processNewLocationAsOverYourHead(location);
