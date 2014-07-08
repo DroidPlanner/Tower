@@ -513,9 +513,14 @@ public class OSMapFragment extends Fragment implements DPMap {
      */
     @Override
     public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
-        switch(event){
+        switch (event) {
             case GPS:
                 break;
         }
+    }
+
+    @Override
+    public void zoomToFit(List<Coord2D> coords) {
+        // NOP - not implemented at this time
     }
 }

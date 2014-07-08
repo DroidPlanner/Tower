@@ -17,6 +17,8 @@ import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 
+import java.util.List;
+
 @SuppressLint("UseSparseArrays")
 public class EditorMapFragment extends DroneMap implements
         DPMap.OnMapLongClickListener, DPMap.OnMarkerDragListener, DPMap.OnMapClickListener,
@@ -133,6 +135,18 @@ public class EditorMapFragment extends DroneMap implements
     @Override
     protected boolean isMissionDraggable() {
         return true;
+    }
+
+    public void zoomToFit() {
+        // get visible mission coords
+        final List<Coord2D> visibleCoords = missionProxy.getVisibleCoords();
+
+        // add home coord if visible
+        final Coord2D homeCoord = drone.home.getCoord();
+        if (homeCoord!= null && !homeCoord.isEmpty())
+            visibleCoords.add(homeCoord);
+
+        mMapFragment.zoomToFit(visibleCoords);
     }
 
 }
