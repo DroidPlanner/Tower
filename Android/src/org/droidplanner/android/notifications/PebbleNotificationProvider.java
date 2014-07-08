@@ -20,8 +20,10 @@ NotificationHandler.NotificationProvider {
 	private static final int KEY_MODE = 0;
 	private static final int KEY_FOLLOW_TYPE=1;
 	private static final int KEY_TELEM = 2;
+	private static final int KEY_APP_VERSION = 3;
 	
 	private static final UUID DP_UUID = UUID.fromString("79a2893d-fc7d-48c4-bc9a-34854d94ef6e");
+	private static final String EXPECTED_APP_VERSION = "one";
 	
 	/**
 	 * Application context.
@@ -36,6 +38,7 @@ NotificationHandler.NotificationProvider {
 		PebbleKit.startAppOnPebble(applicationContext, DP_UUID);
 		datahandler = new PebbleReceiverHandler(DP_UUID);
 		PebbleKit.registerReceivedDataHandler(applicationContext,datahandler);
+		
 	}
 	
 	//FIXME call this method onPause()
@@ -83,7 +86,10 @@ NotificationHandler.NotificationProvider {
     public void sendDataToWatchNow(Drone drone) {
         PebbleDictionary data = new PebbleDictionary();
         
-        data.addString(KEY_MODE, drone.state.getMode().getName());
+        String mode = drone.state.getMode().getName();
+        if(((DroidPlannerApp)applicationContext).followMe.isEnabled()&&mode=="Guided")
+        	mode="Follow";
+        data.addString(KEY_MODE, mode);
         data.addString(KEY_FOLLOW_TYPE, "Leash");
         
 		String bat = "Bat:" + Double.toString(roundToOneDecimal(drone.battery.getBattVolt())) + "V";
@@ -91,6 +97,8 @@ NotificationHandler.NotificationProvider {
 
 		String telem = bat + "\n" + speed;
 		data.addString(KEY_TELEM, telem);
+		
+		data.addString(KEY_APP_VERSION, EXPECTED_APP_VERSION);
 		
         PebbleKit.sendDataToPebble(applicationContext, DP_UUID, data);
     }
@@ -118,7 +126,7 @@ NotificationHandler.NotificationProvider {
 			int request = (data.getInteger(KEY_PEBBLE_REQUEST).intValue());
 			switch(request){
 			case KEY_REQUEST_MODE_FOLLOW:
-				((DroidPlannerApp)applicationContext).getDrone().state.changeFlightMode(ApmModes.ROTOR_GUIDED);
+				((DroidPlannerApp)applicationContext).followMe.toggleFollowMeState();
 				break;
 			case KEY_REQUEST_CYCLE_FOLLOW_TYPE://TODO cycle the follow me type
 				break;
@@ -134,7 +142,5 @@ NotificationHandler.NotificationProvider {
 
 	@Override
 	public void quickNotify(String feedback) {
-		// TODO Auto-generated method stub
-		
 	}
 }
