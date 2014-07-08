@@ -34,6 +34,23 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 	private boolean followMeEnabled = false;
 	private Drone drone;
 	private LocationClient mLocationClient;
+	
+	private FollowModes currentFollowMode = FollowModes.LEASH;
+
+	public enum FollowModes {
+		LEASH("Leash"), FIXED("Fixed"), HEADING("Heading"), WAKEBOARD(
+				"Wakeboard");
+
+		private String name;
+
+		FollowModes(String str) {
+			name = str;
+		}
+		@Override
+		public String toString() {
+			return name;
+		}
+	}
 
 	public FollowMe(Context context, Drone drone) {
 		this.context = context;
@@ -138,13 +155,22 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 	@Override
 	public void onLocationChanged(Location location) {
 		MavLinkROI.setROI(drone, new Coord3D(location.getLatitude(),location.getLongitude(), new Altitude(0.0)));
-
-		// TODO implement some sort of Follow-me type selection
-		//processNewLocationAsOverYourHead(location);
-		processNewLocationAsLeash(location);
-		//processNewLocationAsFixedAngle(location);
-		//processNewLocationAsHeadingAngle(location);
-		//processNewLocationAsWakeboard(location);
+		
+		switch (currentFollowMode) {
+		default:
+		case LEASH:
+			processNewLocationAsLeash(location);
+			break;
+		case HEADING:
+			processNewLocationAsHeadingAngle(location);
+			break;
+		case FIXED:
+			processNewLocationAsFixedAngle(location);
+			break;
+		case WAKEBOARD:
+			processNewLocationAsWakeboard(location);
+			break;
+		}
 		
 	}
 
@@ -205,13 +231,7 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 					90.0, radius.valueInMeters());
 			drone.guidedPoint.newGuidedCoord(goCoord);
 	}
-
-	private void processNewLocationAsOverYourHead(Location location) {
-		Coord2D gcsCoord = new Coord2D(location.getLatitude(),
-				location.getLongitude());
-		drone.guidedPoint.newGuidedCoord(gcsCoord);
-	}
-
+	
 	private void processNewLocationAsLeash(Location location) {
 		Coord2D gcsCoord = new Coord2D(location.getLatitude(),
 				location.getLongitude());
