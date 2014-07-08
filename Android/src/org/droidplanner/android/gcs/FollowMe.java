@@ -61,16 +61,12 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 	}
 
 	public void toggleFollowMeState() {
-		if (isEnabledInPreferences()) {
-			if (isEnabled()) {
-				disableFollowMe();
-				drone.state.changeFlightMode(ApmModes.ROTOR_LOITER);
-			} else {
-				drone.state.changeFlightMode(ApmModes.ROTOR_GUIDED);
-				enableFollowMe();
-			}
-		} else {
+		if (isEnabled()) {
 			disableFollowMe();
+			drone.state.changeFlightMode(ApmModes.ROTOR_LOITER);
+		} else {
+			drone.state.changeFlightMode(ApmModes.ROTOR_GUIDED);
+			enableFollowMe();
 		}
 	}
 
@@ -105,15 +101,6 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 		return followMeEnabled;
 	}
 
-	private boolean isEnabledInPreferences() {
-		return true; // TODO remove this method if not needed
-		/*
-		 * SharedPreferences prefs = PreferenceManager
-		 * .getDefaultSharedPreferences(context);
-		 * 
-		 * return prefs.getBoolean("pref_follow_me_mode_enabled", false);
-		 */
-	}
 
 	@Override
 	public void onConnectionFailed(ConnectionResult arg0) {
