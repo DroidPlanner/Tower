@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.droidplanner.android.graphic.map.GraphicDrone;
 import org.droidplanner.android.graphic.map.GraphicLocator;
+import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
 import java.util.ArrayList;
@@ -33,6 +35,16 @@ public class LocatorMapFragment extends DroneMap {
 
     @Override
     protected boolean isMissionDraggable() {
+        return false;
+    }
+
+    @Override
+    public boolean setAutoPanMode(AutoPanMode target) {
+        if(target == AutoPanMode.DISABLED)
+            return true;
+
+        Toast.makeText(getActivity(), "Auto pan is not supported on this map.",
+                Toast.LENGTH_LONG).show();
         return false;
     }
 

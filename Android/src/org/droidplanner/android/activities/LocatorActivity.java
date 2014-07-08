@@ -209,11 +209,9 @@ public class LocatorActivity extends SuperUI implements OnLocatorListListener, L
 	}
 
 	private void updateMapPadding() {
-        final int leftPadding = statusView.getRight();
-        final int topPadding = statusView.getBottom();
         final int bottomPadding = locatorListFragment.getView().getHeight();
 
-        locatorMapFragment.setMapPadding(leftPadding, topPadding, 0, bottomPadding);
+        locatorMapFragment.setMapPadding(0, 0, 0, bottomPadding);
 	}
 
 	@Override
