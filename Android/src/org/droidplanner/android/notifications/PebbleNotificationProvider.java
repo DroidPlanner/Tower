@@ -61,6 +61,9 @@ NotificationHandler.NotificationProvider {
 		case SPEED:
 			sendDataToWatchIfTimeHasElapsed(drone);
 			break;
+		case CONNECTED:
+			PebbleKit.startAppOnPebble(applicationContext, DP_UUID);
+			break;
 		default:
 			break;
 		}
