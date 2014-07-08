@@ -36,10 +36,16 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 	private LocationClient mLocationClient;
 	
 	private FollowModes currentFollowMode = FollowModes.LEASH;
+	
+	/**
+	 * °/s
+	 */
+	private static final double circleRate = 8;
+	private double circleAngle = 0.0;
 
 	public enum FollowModes {
 		LEASH("Leash"), FIXED("Fixed"), HEADING("Heading"), WAKEBOARD(
-				"Wakeboard");
+				"Wakeboard"),CIRCLE("Circle");
 
 		private String name;
 
@@ -157,6 +163,9 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 		case WAKEBOARD:
 			processNewLocationAsWakeboard(location);
 			break;
+		case CIRCLE:
+			processNewLocationAsCircle(location);
+			break;
 		}
 		
 	}
@@ -216,6 +225,15 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 				location.getLongitude());
 			Coord2D goCoord = GeoTools.newCoordFromBearingAndDistance(gcsCoord,
 					90.0, radius.valueInMeters());
+			drone.guidedPoint.newGuidedCoord(goCoord);
+	}
+	
+	private void processNewLocationAsCircle(Location location) {
+		Coord2D gcsCoord = new Coord2D(location.getLatitude(),
+				location.getLongitude());
+			Coord2D goCoord = GeoTools.newCoordFromBearingAndDistance(gcsCoord,
+					circleAngle , radius.valueInMeters());
+			circleAngle = constrainAngle(circleAngle + circleRate*MIN_TIME_MS/1000.0);
 			drone.guidedPoint.newGuidedCoord(goCoord);
 	}
 	
