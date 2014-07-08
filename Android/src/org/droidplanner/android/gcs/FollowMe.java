@@ -40,7 +40,7 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 	/**
 	 * °/s
 	 */
-	private static final double circleRate = 8;
+	private static final double circleRate = 20;
 	private double circleAngle = 0.0;
 
 	public enum FollowModes {
@@ -182,7 +182,7 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 					gcsCoord, drone.GPS.getPosition());
 			double userRigthHeading = 90.0 + bearing;
 			double alpha = MathUtil.Normalize(location.getSpeed(),0.0,5.0);		
-			double mixedHeading = bisectAngle(headingGCStoDrone,userRigthHeading,alpha);
+			double mixedHeading = MathUtil.bisectAngle(headingGCStoDrone,userRigthHeading,alpha);
 			goToCoord = GeoTools.newCoordFromBearingAndDistance(gcsCoord,
 					mixedHeading , radius.valueInMeters());
 		}else{
@@ -190,24 +190,6 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 		}
 		
 		drone.guidedPoint.newGuidedCoord(goToCoord);		
-	}
-	
-	double angleDiff(double a,double b){
-	    double dif = Math.IEEEremainder(b - a + 180,360);
-	    if (dif < 0)
-	        dif += 360;
-	    return dif - 180;
-	}
-	
-	double constrainAngle(double x){
-	    x = Math.IEEEremainder(x,360);
-	    if (x < 0)
-	        x += 360;
-	    return x;
-	}
-	
-	double bisectAngle(double a,double b, double alpha){
-	    return constrainAngle(a + angleDiff(a,b) * alpha);
 	}
 
 	private void processNewLocationAsHeadingAngle(Location location) {
@@ -233,7 +215,7 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 				location.getLongitude());
 			Coord2D goCoord = GeoTools.newCoordFromBearingAndDistance(gcsCoord,
 					circleAngle , radius.valueInMeters());
-			circleAngle = constrainAngle(circleAngle + circleRate*MIN_TIME_MS/1000.0);
+			circleAngle = MathUtil.constrainAngle(circleAngle + circleRate*MIN_TIME_MS/1000.0);
 			drone.guidedPoint.newGuidedCoord(goCoord);
 	}
 	
