@@ -120,6 +120,7 @@
             android:name=".android.activities.LocatorActivity"
             android:label="@string/locator"
             android:launchMode="singleTop"
+            android:theme="@style/CustomActionBarTheme.Transparent"
             android:parentActivityName=".android.activities.FlightActivity" >
 
             <!-- Parent activity meta-data to support API level 7+ -->
