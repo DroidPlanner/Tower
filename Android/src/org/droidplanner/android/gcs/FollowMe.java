@@ -157,9 +157,6 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 		case HEADING:
 			processNewLocationAsHeadingAngle(location);
 			break;
-		case FIXED:
-			processNewLocationAsFixedAngle(location);
-			break;
 		case WAKEBOARD:
 			processNewLocationAsWakeboard(location);
 			break;
@@ -200,14 +197,6 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 		Coord2D goCoord = GeoTools.newCoordFromBearingAndDistance(gcsCoord,
 				bearing+90.0, radius.valueInMeters());
 		drone.guidedPoint.newGuidedCoord(goCoord);	
-	}
-
-	private void processNewLocationAsFixedAngle(Location location) {
-		Coord2D gcsCoord = new Coord2D(location.getLatitude(),
-				location.getLongitude());
-			Coord2D goCoord = GeoTools.newCoordFromBearingAndDistance(gcsCoord,
-					90.0, radius.valueInMeters());
-			drone.guidedPoint.newGuidedCoord(goCoord);
 	}
 	
 	private void processNewLocationAsCircle(Location location) {
