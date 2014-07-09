@@ -72,6 +72,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
     private View mSplineToggleContainer;
     private boolean mIsSplineEnabled;
 
+    private View mLocationButtonsContainer;
     private ImageButton mGoToMyLocation;
     private ImageButton mGoToDroneLocation;
 
@@ -104,6 +105,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
         mSplineToggleContainer = findViewById(R.id.editorSplineToggleContainer);
         mSplineToggleContainer.setVisibility(View.VISIBLE);
 
+        mLocationButtonsContainer = findViewById(R.id.location_button_container);
         mGoToMyLocation = (ImageButton)findViewById(R.id.my_location_button);
         mGoToMyLocation.setOnClickListener(new View.OnClickListener(){
            @Override
@@ -162,6 +164,23 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		missionProxy = ((DroidPlannerApp)getApplication()).missionProxy;
 		gestureMapFragment.setOnPathFinishedListener(this);
 	}
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        updateMapPadding();
+    }
+
+    /**
+     * Account for the various ui elements and update the map padding so that it
+     * remains 'visible'.
+     */
+    private void updateMapPadding() {
+        int topPadding = mLocationButtonsContainer.getBottom() + mLocationButtonsContainer.getPaddingBottom();
+        int leftPadding = mLocationButtonsContainer.getLeft() - mLocationButtonsContainer
+                .getPaddingLeft();
+        planningMapFragment.setMapPadding(leftPadding, topPadding, 0, 0);
+    }
 
     @Override
     public void onResume(){
@@ -466,6 +485,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 	@Override
 	public void onListVisibilityChanged() {
+        updateMapPadding();
 	}
 
     @Override

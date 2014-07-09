@@ -35,7 +35,7 @@ public class FlightActivity extends DrawerNavigationUI implements
 
 	private FragmentManager fragmentManager;
 	private RCFragment rcFragment;
-	private View failsafeTextView;
+	private View failsafeView;
 
 	private FlightMapFragment mapFragment;
 
@@ -55,7 +55,7 @@ public class FlightActivity extends DrawerNavigationUI implements
 		setContentView(R.layout.activity_flight);
 
 		fragmentManager = getSupportFragmentManager();
-		failsafeTextView = findViewById(R.id.failsafeTextView);
+		failsafeView = findViewById(R.id.failsafeTextView);
 
 		mSlidingDrawer = (SlidingDrawer) findViewById(R.id.SlidingDrawerRight);
 		mSlidingDrawer.setOnDrawerCloseListener(new SlidingDrawer.OnDrawerCloseListener() {
@@ -260,6 +260,9 @@ public class FlightActivity extends DrawerNavigationUI implements
         int bottomPadding = 0;
         int leftPadding = 0;
         int topPadding = mLocationButtonsContainer.getTop();
+        if(failsafeView != null && failsafeView.getVisibility() != View.GONE){
+            topPadding += failsafeView.getHeight();
+        }
 
         final View editorToolsView = editorTools.getView();
         final View mapView = mapFragment.getView();
@@ -340,9 +343,9 @@ public class FlightActivity extends DrawerNavigationUI implements
 
 	public void onFailsafeChanged(Drone drone) {
 		if (drone.state.isFailsafe()) {
-			failsafeTextView.setVisibility(View.VISIBLE);
+			failsafeView.setVisibility(View.VISIBLE);
 		} else {
-			failsafeTextView.setVisibility(View.GONE);
+			failsafeView.setVisibility(View.GONE);
 		}
 	}
 
