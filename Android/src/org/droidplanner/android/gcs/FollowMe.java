@@ -238,4 +238,7 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 			radius=new Length(0);
 	}
 
+	public void setType(FollowModes item) {
+		currentFollowMode = item;
+	}
 }

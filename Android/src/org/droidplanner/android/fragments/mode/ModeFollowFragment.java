@@ -3,6 +3,7 @@ package org.droidplanner.android.fragments.mode;
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.gcs.FollowMe;
+import org.droidplanner.android.gcs.FollowMe.FollowModes;
 import org.droidplanner.core.helpers.units.Length;
 
 import android.os.Bundle;
@@ -10,15 +11,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 public class ModeFollowFragment extends ModeGuidedFragment implements
-		OnClickListener {
+		OnClickListener, OnItemSelectedListener {
 	private Button radiusPlus1;
 	private Button radiusMinus1;
 	private TextView radiusTextView;
 	private FollowMe followMe;
+	private Spinner spinner;
+	private ArrayAdapter<FollowModes> adapter;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -28,7 +35,6 @@ public class ModeFollowFragment extends ModeGuidedFragment implements
 		drone = app.getDrone();
 		View view = inflater.inflate(R.layout.fragment_mode_follow, container,
 				false);
-
 		setupViews(view);
 		setupListener();
 		updateLabel();
@@ -41,12 +47,16 @@ public class ModeFollowFragment extends ModeGuidedFragment implements
 		radiusMinus1 = (Button) parentView
 				.findViewById(R.id.button_radius_minus_1);
 		radiusTextView = (TextView) parentView.findViewById(R.id.follow_radius);
+		spinner = (Spinner) parentView.findViewById(R.id.follow_type_spinner);
+		adapter = new ArrayAdapter<FollowModes>(getActivity(), android.R.layout.simple_dropdown_item_1line, FollowModes.values());
+		spinner.setAdapter(adapter);
 		super.setupViews(parentView);
 	}
 
 	protected void setupListener() {
 		radiusPlus1.setOnClickListener(this);
 		radiusMinus1.setOnClickListener(this);
+		spinner.setOnItemSelectedListener(this);
 		super.setupListener();
 	}
 
@@ -72,6 +82,16 @@ public class ModeFollowFragment extends ModeGuidedFragment implements
 		if(radiusTextView!= null){
 			this.radiusTextView.setText("Radius: (" + radius + ")");
 		}
+	}
+
+	@Override
+	public void onItemSelected(AdapterView<?> parent, View view, int position,
+			long id) {
+			followMe.setType(adapter.getItem(position));
+	}
+
+	@Override
+	public void onNothingSelected(AdapterView<?> arg0) {	
 	}
 
 }
