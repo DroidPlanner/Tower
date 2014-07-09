@@ -234,6 +234,8 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 
 	public void changeRadius(Double increment) {
 		radius = new Length(radius.valueInMeters()+ increment);
+		if(radius.valueInMeters()<0)
+			radius=new Length(0);
 	}
 
 }
