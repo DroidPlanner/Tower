@@ -11,6 +11,9 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -35,7 +38,7 @@ import java.util.List;
  * This implements the map locator activity. The map locator activity allows the user to find
  * a lost drone using last known GPS positions from the tlogs.
  */
-public class LocatorActivity extends SuperUI implements OnLocatorListListener, LocationListener, SensorEventListener {
+public class LocatorActivity extends SuperUI implements OnLocatorListListener, LocationListener {
 
     private static final String STATE_LASTSELECTEDPOSITION = "STATE_LASTSELECTEDPOSITION";
 
@@ -45,25 +48,18 @@ public class LocatorActivity extends SuperUI implements OnLocatorListListener, L
     View widgets.
      */
     private LocationManager locationManager;
-    private SensorManager sensorManager;
     private FragmentManager fragmentManager;
 
     private LocatorMapFragment locatorMapFragment;
 	private LocatorListFragment locatorListFragment;
     private LinearLayout statusView;
+    private FrameLayout lowerWidgetContainer;
     private TextView latView, lonView, distanceView, azimuthView;
 
     private msg_global_position_int selectedMsg;
     private Coord2D lastGCSPosition;
     private float lastGCSBearingTo = Float.MAX_VALUE;
     private double lastGCSAzimuth = Double.MAX_VALUE;
-
-//    private float[] valuesAccelerometer;
-//    private float[] valuesMagneticField;
-//
-//    private float[] matrixR;
-//    private float[] matrixI;
-//    private float[] matrixValues;
 
 
     public List<msg_global_position_int> getLastPositions() {
@@ -76,7 +72,6 @@ public class LocatorActivity extends SuperUI implements OnLocatorListListener, L
 		setContentView(R.layout.activity_locator);
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         fragmentManager = getSupportFragmentManager();
 
 		locatorMapFragment = ((LocatorMapFragment) fragmentManager
@@ -90,12 +85,16 @@ public class LocatorActivity extends SuperUI implements OnLocatorListListener, L
         distanceView = (TextView) findViewById(R.id.distanceView);
         azimuthView = (TextView) findViewById(R.id.azimuthView);
 
-//        valuesAccelerometer = new float[3];
-//        valuesMagneticField = new float[3];
-//
-//        matrixR = new float[9];
-//        matrixI = new float[9];
-//        matrixValues = new float[3];
+        lowerWidgetContainer = (FrameLayout) findViewById(R.id.lowerWidgetContainer);
+
+        // attach click listener to zoom button
+        final ImageButton zoomToFitButton = (ImageButton) findViewById(R.id.zoom_to_fit_button);
+        zoomToFitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                locatorMapFragment.zoomToFit();
+            }
+        });
 
         // clear prev state if this is a fresh start
         if(savedInstanceState == null) {
@@ -126,8 +125,6 @@ public class LocatorActivity extends SuperUI implements OnLocatorListListener, L
         super.onResume();
 
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this, null);
-//        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), SensorManager.SENSOR_DELAY_GAME);
-//        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
     }
 
     @Override
@@ -135,7 +132,6 @@ public class LocatorActivity extends SuperUI implements OnLocatorListListener, L
         super.onPause();
 
         locationManager.removeUpdates(this);
-//        sensorManager.unregisterListener(this);
     }
 
     @Override
@@ -159,10 +155,6 @@ public class LocatorActivity extends SuperUI implements OnLocatorListListener, L
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_zoom_fit_locator:
-                locatorMapFragment.zoomToFit();
-                return true;
-
             case R.id.menu_open_tlog_file:
                 openLogFile();
                 return true;
@@ -209,9 +201,15 @@ public class LocatorActivity extends SuperUI implements OnLocatorListListener, L
 	}
 
 	private void updateMapPadding() {
-        final int bottomPadding = locatorListFragment.getView().getHeight();
+        final int topPadding = statusView.getTop();
+        final int leftPadding = statusView.getRight();
+        int bottomPadding = 0;
 
-        locatorMapFragment.setMapPadding(0, 0, 0, bottomPadding);
+        if(lastPositions.size() > 0) {
+            bottomPadding = locatorListFragment.getView().getHeight();
+        }
+
+        locatorMapFragment.setMapPadding(leftPadding, topPadding, 0, bottomPadding);
 	}
 
 	@Override
@@ -317,42 +315,5 @@ public class LocatorActivity extends SuperUI implements OnLocatorListListener, L
     @Override
     public void onProviderDisabled(String provider) {
         // NOP
-    }
-
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-
-//        switch(event.sensor.getType()){
-//            case Sensor.TYPE_ACCELEROMETER:
-//                for(int i =0; i < 3; i++){
-//                    valuesAccelerometer[i] = event.values[i];
-//                }
-//                break;
-//            case Sensor.TYPE_MAGNETIC_FIELD:
-//                for(int i =0; i < 3; i++){
-//                    valuesMagneticField[i] = event.values[i];
-//                }
-//                break;
-//        }
-//
-//        boolean success = SensorManager.getRotationMatrix(
-//                matrixR,
-//                matrixI,
-//                valuesAccelerometer,
-//                valuesMagneticField);
-//        if(success) {
-//            SensorManager.getOrientation(matrixR, matrixValues);
-//            lastGCSAzimuth = Math.round(Math.toDegrees(matrixValues[0]));
-//            lastGCSAzimuth = (lastGCSAzimuth + 360) % 360;
-//        } else {
-//            lastGCSAzimuth = Double.MAX_VALUE;
-//        }
-//
-//        updateInfo();
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
     }
 }
