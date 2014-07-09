@@ -35,7 +35,7 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 	private Drone drone;
 	private LocationClient mLocationClient;
 	
-	private FollowModes currentFollowMode = FollowModes.LEASH;
+	private FollowModes currentFollowType = FollowModes.LEASH;
 	
 	/**
 	 * °/s
@@ -149,7 +149,7 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 	public void onLocationChanged(Location location) {
 		MavLinkROI.setROI(drone, new Coord3D(location.getLatitude(),location.getLongitude(), new Altitude(0.0)));
 		
-		switch (currentFollowMode) {
+		switch (currentFollowType) {
 		default:
 		case LEASH:
 			processNewLocationAsLeash(location);
@@ -228,6 +228,6 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 	}
 
 	public void setType(FollowModes item) {
-		currentFollowMode = item;
+		currentFollowType = item;
 	}
 }
