@@ -2,8 +2,8 @@ package org.droidplanner.android.fragments.mode;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.gcs.FollowMe;
-import org.droidplanner.android.gcs.FollowMe.FollowModes;
+import org.droidplanner.android.gcs.follow.Follow;
+import org.droidplanner.android.gcs.follow.Follow.FollowModes;
 import org.droidplanner.core.helpers.units.Length;
 
 import android.os.Bundle;
@@ -23,7 +23,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements
 	private Button radiusPlus1;
 	private Button radiusMinus1;
 	private TextView radiusTextView;
-	private FollowMe followMe;
+	private Follow followMe;
 	private Spinner spinner;
 	private ArrayAdapter<FollowModes> adapter;
 

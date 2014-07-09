@@ -1,4 +1,4 @@
-package org.droidplanner.android.gcs;
+package org.droidplanner.android.gcs.follow;
 
 import org.droidplanner.core.MAVLink.MavLinkROI;
 import org.droidplanner.core.drone.Drone;
@@ -23,7 +23,7 @@ import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationRequest;
 
-public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
+public class Follow implements GooglePlayServicesClient.ConnectionCallbacks,
 		GooglePlayServicesClient.OnConnectionFailedListener,
 		com.google.android.gms.location.LocationListener, OnDroneListener {
 	private static final long MIN_TIME_MS = 500;
@@ -58,7 +58,7 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 		}
 	}
 
-	public FollowMe(Context context, Drone drone) {
+	public Follow(Context context, Drone drone) {
 		this.context = context;
 		this.drone = drone;
 		mLocationClient = new LocationClient(context, this, this);
