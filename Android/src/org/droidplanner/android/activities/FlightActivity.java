@@ -40,7 +40,7 @@ public class FlightActivity extends DrawerNavigationUI implements
 	private FlightMapFragment mapFragment;
 
 	private Fragment editorTools;
-
+    private View mTelemetryView;
 	private SlidingDrawer mSlidingDrawer;
 
     private View mLocationButtonsContainer;
@@ -134,8 +134,8 @@ public class FlightActivity extends DrawerNavigationUI implements
 		 * layout, as it was merged with the right sliding drawer because of
 		 * space constraints.
 		 */
-		View telemetryView = findViewById(R.id.telemetryFragment);
-		mIsPhone = telemetryView == null;
+		mTelemetryView = findViewById(R.id.telemetryFragment);
+		mIsPhone = mTelemetryView == null;
 
 		if (mIsPhone) {
 			Fragment slidingDrawerContent = fragmentManager
@@ -259,6 +259,7 @@ public class FlightActivity extends DrawerNavigationUI implements
         int rightPadding = isSlidingDrawerOpened ? slidingDrawerWidth : 0;
         int bottomPadding = 0;
         int leftPadding = 0;
+        int topPadding = mLocationButtonsContainer.getTop();
 
         final View editorToolsView = editorTools.getView();
         final View mapView = mapFragment.getView();
@@ -273,6 +274,11 @@ public class FlightActivity extends DrawerNavigationUI implements
             leftPadding = editorToolsView.getRight();
         }
         else {
+            if(mTelemetryView != null){
+                //Account for the telemetry view on tablet.
+                leftPadding = mTelemetryView.getRight();
+            }
+
             if (lp.width == ViewGroup.LayoutParams.MATCH_PARENT) {
                 mapView.getLocationOnScreen(posOnScreen);
                 final int mapTop = posOnScreen[1];
@@ -280,7 +286,7 @@ public class FlightActivity extends DrawerNavigationUI implements
                 bottomPadding = (mapBottom - toolsBottom) + toolsHeight;
             }
         }
-        mapFragment.setMapPadding(leftPadding, 0, rightPadding, bottomPadding);
+        mapFragment.setMapPadding(leftPadding, topPadding, rightPadding, bottomPadding);
 
         //Update the right margin for the my location button
         final ViewGroup.MarginLayoutParams marginLp = (ViewGroup.MarginLayoutParams)
