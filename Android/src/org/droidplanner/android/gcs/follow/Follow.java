@@ -4,10 +4,7 @@ import org.droidplanner.core.MAVLink.MavLinkROI;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.coordinates.Coord3D;
-import org.droidplanner.core.helpers.geoTools.GeoTools;
-import org.droidplanner.core.helpers.math.MathUtil;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.helpers.units.Length;
 
@@ -28,39 +25,18 @@ public class Follow implements GooglePlayServicesClient.ConnectionCallbacks,
 		com.google.android.gms.location.LocationListener, OnDroneListener {
 	private static final long MIN_TIME_MS = 500;
 	private static final float MIN_DISTANCE_M = 0.0f;
-	private Length radius = new Length(5.0);
 	
 	private Context context;
 	private boolean followMeEnabled = false;
 	private Drone drone;
 	private LocationClient mLocationClient;
 	
-	private FollowModes currentFollowType = FollowModes.LEASH;
+	private FollowType followAlgorithm;
 	
-	/**
-	 * °/s
-	 */
-	private static final double circleRate = 20;
-	private double circleAngle = 0.0;
-
-	public enum FollowModes {
-		LEASH("Leash"), FIXED("Fixed"), HEADING("Heading"), WAKEBOARD(
-				"Wakeboard"),CIRCLE("Circle");
-
-		private String name;
-
-		FollowModes(String str) {
-			name = str;
-		}
-		@Override
-		public String toString() {
-			return name;
-		}
-	}
-
 	public Follow(Context context, Drone drone) {
 		this.context = context;
 		this.drone = drone;
+		followAlgorithm = new FollowLeash(drone,new Length(5.0),MIN_TIME_MS);
 		mLocationClient = new LocationClient(context, this, this);
 		mLocationClient.connect();
 		drone.events.addDroneListener(this);
@@ -142,92 +118,53 @@ public class Follow implements GooglePlayServicesClient.ConnectionCallbacks,
 	}
 
 	public Length getRadius() {
-		return radius;
+		return followAlgorithm.radius;
 	}
 
 	@Override
 	public void onLocationChanged(Location location) {
 		MavLinkROI.setROI(drone, new Coord3D(location.getLatitude(),location.getLongitude(), new Altitude(0.0)));
-		
-		switch (currentFollowType) {
-		default:
-		case LEASH:
-			processNewLocationAsLeash(location);
-			break;
-		case HEADING:
-			processNewLocationAsHeadingAngle(location);
-			break;
-		case WAKEBOARD:
-			processNewLocationAsWakeboard(location);
-			break;
-		case CIRCLE:
-			processNewLocationAsCircle(location);
-			break;
-		}
-		
+		followAlgorithm.processNewLocation(location);
 	}
 
-	private void processNewLocationAsWakeboard(Location location) {
-		Coord2D gcsCoord = new Coord2D(location.getLatitude(),
-				location.getLongitude());
-		float bearing = location.getBearing();
-		
-		Coord2D goToCoord;
-		if (GeoTools.getDistance(gcsCoord, drone.GPS.getPosition())
-				.valueInMeters() > radius.valueInMeters()) {
-			double headingGCStoDrone = GeoTools.getHeadingFromCoordinates(
-					gcsCoord, drone.GPS.getPosition());
-			double userRigthHeading = 90.0 + bearing;
-			double alpha = MathUtil.Normalize(location.getSpeed(),0.0,5.0);		
-			double mixedHeading = MathUtil.bisectAngle(headingGCStoDrone,userRigthHeading,alpha);
-			goToCoord = GeoTools.newCoordFromBearingAndDistance(gcsCoord,
-					mixedHeading , radius.valueInMeters());
-		}else{
-			goToCoord = drone.guidedPoint.getCoord();
-		}
-		
-		drone.guidedPoint.newGuidedCoord(goToCoord);		
-	}
-
-	private void processNewLocationAsHeadingAngle(Location location) {
-		Coord2D gcsCoord = new Coord2D(location.getLatitude(),
-				location.getLongitude());
-		float bearing = location.getBearing();
-		
-		Coord2D goCoord = GeoTools.newCoordFromBearingAndDistance(gcsCoord,
-				bearing+90.0, radius.valueInMeters());
-		drone.guidedPoint.newGuidedCoord(goCoord);	
-	}
-	
-	private void processNewLocationAsCircle(Location location) {
-		Coord2D gcsCoord = new Coord2D(location.getLatitude(),
-				location.getLongitude());
-			Coord2D goCoord = GeoTools.newCoordFromBearingAndDistance(gcsCoord,
-					circleAngle , radius.valueInMeters());
-			circleAngle = MathUtil.constrainAngle(circleAngle + circleRate*MIN_TIME_MS/1000.0);
-			drone.guidedPoint.newGuidedCoord(goCoord);
-	}
-	
-	private void processNewLocationAsLeash(Location location) {
-		Coord2D gcsCoord = new Coord2D(location.getLatitude(),
-				location.getLongitude());
-		if (GeoTools.getDistance(gcsCoord, drone.GPS.getPosition())
-				.valueInMeters() > radius.valueInMeters()) {
-			double headingGCStoDrone = GeoTools.getHeadingFromCoordinates(
-					gcsCoord, drone.GPS.getPosition());
-			Coord2D goCoord = GeoTools.newCoordFromBearingAndDistance(gcsCoord,
-					headingGCStoDrone, radius.valueInMeters());
-			drone.guidedPoint.newGuidedCoord(goCoord);
-		}
-	}
-
-	public void changeRadius(Double increment) {
-		radius = new Length(radius.valueInMeters()+ increment);
-		if(radius.valueInMeters()<0)
-			radius=new Length(0);
-	}
 
 	public void setType(FollowModes item) {
-		currentFollowType = item;
+		followAlgorithm = item.getAlgorithmType(drone,new Length(5.0),MIN_TIME_MS);
+	}
+
+
+	public enum FollowModes {
+		LEASH("Leash"), HEADING("Heading"), WAKEBOARD(
+				"Wakeboard"),CIRCLE("Circle");
+	
+		private String name;
+	
+		FollowModes(String str) {
+			name = str;
+		}
+		@Override
+		public String toString() {
+			return name;
+		}
+		
+		public FollowType getAlgorithmType(Drone drone, Length radius, double mIN_TIME_MS) {
+			switch (this) {
+			default:
+			case LEASH:
+				return new FollowLeash(drone, radius, mIN_TIME_MS);
+			case CIRCLE:
+				return new FollowCircle(drone, radius, mIN_TIME_MS);
+			case HEADING:
+				return new FollowHeading(drone, radius, mIN_TIME_MS);
+			case WAKEBOARD:
+				return new FollowWakeboard(drone, radius, mIN_TIME_MS);
+			}
+		}
+	}
+
+
+	public void changeRadius(double increment) {
+		followAlgorithm.changeRadius(increment);
+		
 	}
 }
