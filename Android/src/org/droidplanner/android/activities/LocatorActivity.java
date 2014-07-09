@@ -245,7 +245,7 @@ public class LocatorActivity extends SuperUI implements OnLocatorListListener, L
             // distance
             if(lastGCSPosition == null || lastGCSPosition.isEmpty()) {
                 // unknown
-                distanceView.setText("");
+                distanceView.setText(R.string.status_waiting_for_gps, TextView.BufferType.NORMAL);
                 azimuthView.setText("");
             } else {
                 String distance = String.format("Distance: %.01fm", GeoTools.getDistance(lastGCSPosition, msgCoord).valueInMeters());
