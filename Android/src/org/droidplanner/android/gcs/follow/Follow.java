@@ -47,8 +47,16 @@ public class Follow implements GooglePlayServicesClient.ConnectionCallbacks,
 			disableFollowMe();
 			drone.state.changeFlightMode(ApmModes.ROTOR_LOITER);
 		} else {
-			drone.state.changeFlightMode(ApmModes.ROTOR_GUIDED);
-			enableFollowMe();
+			if(drone.MavClient.isConnected()){
+				if(drone.state.isArmed()){
+					drone.state.changeFlightMode(ApmModes.ROTOR_GUIDED);
+					enableFollowMe();
+				}else{
+					Toast.makeText(context, "Drone Not Armed", Toast.LENGTH_SHORT).show();
+				}
+			}else{
+				Toast.makeText(context, "Drone Not Connected", Toast.LENGTH_SHORT).show();
+			}
 		}
 	}
 
