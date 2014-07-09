@@ -90,7 +90,8 @@ NotificationHandler.NotificationProvider {
         PebbleDictionary data = new PebbleDictionary();
         
         String mode = drone.state.getMode().getName();
-        if(((DroidPlannerApp)applicationContext).followMe.isEnabled()&&mode=="Guided")
+        if(!drone.state.isArmed())mode="Disarmed";
+        else if(((DroidPlannerApp)applicationContext).followMe.isEnabled()&&mode=="Guided")
         	mode="Follow";
         data.addString(KEY_MODE, mode);
         data.addString(KEY_FOLLOW_TYPE, "Leash");

@@ -83,7 +83,7 @@ static void buttons_draw(Layer *layer, GContext *ctx) {
   
     graphics_context_set_text_color(ctx, GColorWhite);
     if(strcmp("Follow",mode)==0){
-      graphics_draw_text(ctx, "Cam",
+      graphics_draw_text(ctx, "Type",
            fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD),
            GRect(0,5,50,30),
            GTextOverflowModeTrailingEllipsis,
