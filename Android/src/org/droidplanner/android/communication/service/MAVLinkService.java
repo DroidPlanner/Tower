@@ -169,6 +169,7 @@ public class MAVLinkService extends Service implements
 	/**
 	 * Called after the exception raised in any of the MavLinkConnection classes
 	 */
+	@Override
 	public void onComError(String errMsg) {
 
 		Message errMessageObj = new Message();

@@ -55,6 +55,7 @@ public class TTSNotificationProvider implements OnInitListener,
 	/**
 	 * Warn the user if needed via the TTSNotificationProvider module
 	 */
+	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		if (tts != null) {
 			switch (event) {

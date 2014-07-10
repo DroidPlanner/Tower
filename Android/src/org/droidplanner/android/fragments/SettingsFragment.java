@@ -220,6 +220,7 @@ public class SettingsFragment extends DpPreferenceFragment implements
 		Preference pebblePreference = findPreference(getString(R.string.pref_pebble_install_key));
 		pebblePreference
 				.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+					@Override
 					public boolean onPreferenceClick(Preference pref) {
 						if (PebbleKit.isWatchConnected(context
 								.getApplicationContext())) {
@@ -326,6 +327,7 @@ public class SettingsFragment extends DpPreferenceFragment implements
 		return true;
 	}
 
+	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
 		final Preference preference = findPreference(key);

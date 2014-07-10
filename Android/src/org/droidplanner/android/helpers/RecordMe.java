@@ -52,6 +52,7 @@ public class RecordMe implements LocationListener {
 	}
 
 	// @Override
+	@Override
 	public void onLocationChanged(Location location) {
 		// TODO find a better way to do the altitude
 		Coord2D coord = new Coord2D(location.getLatitude(),

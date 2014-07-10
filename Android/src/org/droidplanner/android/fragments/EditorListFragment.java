@@ -25,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
@@ -55,7 +56,7 @@ public class EditorListFragment extends Fragment implements
 		list = (HListView) view.findViewById(R.id.mission_item_list);
 		list.setOnItemClickListener(this);
 		list.setOnItemLongClickListener(this);
-		list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+		list.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
 		list.setAdapter(adapter);
 
 		leftArrow = (ImageButton) view.findViewById(R.id.listLeftArrow);
@@ -143,8 +144,8 @@ public class EditorListFragment extends Fragment implements
 	 */
 	public void updateChoiceMode(int choiceMode) {
 		switch (choiceMode) {
-		case ListView.CHOICE_MODE_SINGLE:
-		case ListView.CHOICE_MODE_MULTIPLE:
+		case AbsListView.CHOICE_MODE_SINGLE:
+		case AbsListView.CHOICE_MODE_MULTIPLE:
 			list.setChoiceMode(choiceMode);
 			break;
 		}

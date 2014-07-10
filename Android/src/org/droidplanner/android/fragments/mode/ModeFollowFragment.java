@@ -46,6 +46,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements
 		return view;
 	}
 
+	@Override
 	protected void setupViews(View parentView) {
 		radiusPlus1 = (Button) parentView
 				.findViewById(R.id.button_radius_plus_1);
@@ -59,6 +60,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements
 		super.setupViews(parentView);
 	}
 
+	@Override
 	protected void setupListener() {
 		radiusPlus1.setOnClickListener(this);
 		radiusMinus1.setOnClickListener(this);
@@ -82,6 +84,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements
 		updateLabel();
 	}
 
+	@Override
 	protected void updateLabel() {
 		super.updateLabel();
 		Length radius = followMe.getRadius();

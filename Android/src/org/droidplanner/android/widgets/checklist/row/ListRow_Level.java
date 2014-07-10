@@ -15,6 +15,7 @@ public class ListRow_Level extends ListRow {
 		super(inflater, checkListItem);
 	}
 
+	@Override
 	public View getView(View convertView) {
 		View view;
 		if (convertView == null) {
@@ -73,6 +74,7 @@ public class ListRow_Level extends ListRow {
 
 	}
 
+	@Override
 	public int getViewType() {
 		return ListRow_Type.LEVEL_ROW.ordinal();
 	}

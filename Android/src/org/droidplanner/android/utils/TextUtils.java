@@ -45,7 +45,7 @@ public class TextUtils {
 	 */
 	private static void openTags(Spannable text, Object[] tags) {
 		for (Object tag : tags) {
-			text.setSpan(tag, 0, 0, Spannable.SPAN_MARK_MARK);
+			text.setSpan(tag, 0, 0, Spanned.SPAN_MARK_MARK);
 		}
 	}
 

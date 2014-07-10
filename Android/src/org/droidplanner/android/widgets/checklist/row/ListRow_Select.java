@@ -17,6 +17,7 @@ public class ListRow_Select extends ListRow implements OnItemSelectedListener {
 		super(inflater, checkListItem);
 	}
 
+	@Override
 	public View getView(View convertView) {
 		View view;
 		if (convertView == null) {
@@ -42,6 +43,7 @@ public class ListRow_Select extends ListRow implements OnItemSelectedListener {
 		updateCheckBox(checkListItem.isVerified());
 	}
 
+	@Override
 	public int getViewType() {
 		return ListRow_Type.SELECT_ROW.ordinal();
 	}

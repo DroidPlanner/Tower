@@ -32,6 +32,7 @@ public class FragmentSetupIMU extends SetupMainPanel implements OnDroneListener 
 
 	private final Handler handler = new Handler();
 
+	@Override
 	public void setupLocalViews(View view) {
 		textViewStep = (TextView) view.findViewById(R.id.textViewIMUStep);
 		textViewOffset = (TextView) view.findViewById(R.id.TextViewIMUOffset);

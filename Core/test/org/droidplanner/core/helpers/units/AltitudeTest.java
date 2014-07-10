@@ -6,6 +6,7 @@ public class AltitudeTest extends TestCase {
 
 	private Altitude altitude;
 
+	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		altitude = new Altitude(1.0);

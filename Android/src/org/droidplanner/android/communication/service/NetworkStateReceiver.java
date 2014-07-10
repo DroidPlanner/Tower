@@ -14,6 +14,7 @@ public class NetworkStateReceiver extends BroadcastReceiver {
 
 	private static NetworkStateReceiver registered = null;
 
+	@Override
 	public void onReceive(Context context, Intent intent) {
 		ConnectivityManager conn = (ConnectivityManager) context
 				.getSystemService(Context.CONNECTIVITY_SERVICE);

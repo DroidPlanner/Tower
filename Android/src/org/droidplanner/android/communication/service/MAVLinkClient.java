@@ -117,6 +117,7 @@ public class MAVLinkClient implements MAVLinkStreams.MAVLinkOutputStream {
 		}
 	};
 
+	@Override
 	public void sendMavPacket(MAVLinkPacket pack) {
 		if (mService == null) {
 			return;
@@ -142,6 +143,7 @@ public class MAVLinkClient implements MAVLinkStreams.MAVLinkOutputStream {
 		listener.notifyDisconnected();
 	}
 
+	@Override
 	public void queryConnectionState() {
 		if (mIsBound) {
 			listener.notifyConnected();
@@ -151,10 +153,12 @@ public class MAVLinkClient implements MAVLinkStreams.MAVLinkOutputStream {
 
 	}
 
+	@Override
 	public boolean isConnected() {
 		return mIsBound;
 	}
 
+	@Override
 	public void toggleConnectionState() {
 		if (isConnected()) {
 			close();

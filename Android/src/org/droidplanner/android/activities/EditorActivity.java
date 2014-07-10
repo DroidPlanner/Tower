@@ -31,6 +31,7 @@ import android.view.ActionMode.Callback;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -432,7 +433,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 	@Override
 	public void onDestroyActionMode(ActionMode arg0) {
-		missionListFragment.updateChoiceMode(ListView.CHOICE_MODE_SINGLE);
+		missionListFragment.updateChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
 		missionProxy.selection.clearSelection();
 		contextualActionBar = null;
 		editorToolsFragment.getView().setVisibility(View.VISIBLE);
@@ -453,7 +454,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 			}
 		} else {
 			editorToolsFragment.setTool(EditorTools.NONE);
-			missionListFragment.updateChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+			missionListFragment.updateChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
 			contextualActionBar = startActionMode(this);
 			missionProxy.selection.setSelectionTo(item);
 		}

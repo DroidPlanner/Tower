@@ -51,13 +51,13 @@ public class SeekBarWithText extends LinearLayout implements
 				R.styleable.SeekBarWithText, 0, 0);
 
 		try {
-			setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-					LayoutParams.WRAP_CONTENT));
+			setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 			setOrientation(VERTICAL);
 			textView = new TextView(context);
 			seekBar = new SeekBar(context);
-			seekBar.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-					LayoutParams.WRAP_CONTENT));
+			seekBar.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 			seekBar.setOnSeekBarChangeListener(this);
 			addView(textView);
 			addView(seekBar);

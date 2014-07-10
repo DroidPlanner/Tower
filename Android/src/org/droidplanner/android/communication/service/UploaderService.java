@@ -36,12 +36,14 @@ public class UploaderService extends IntentService {
 	private int numUploaded = 0;
 
 	private IUploadListener callback = new IUploadListener() {
+		@Override
 		public void onUploadStart(File f) {
 			Log.i(TAG, "Upload start: " + f);
 			// Generate initial notification
 			updateNotification(true);
 		}
 
+		@Override
 		public void onUploadSuccess(File f, String viewURL) {
 			if (viewURL == null) {
 				Log.i(TAG, "Server thought flight was boring");
@@ -94,6 +96,7 @@ public class UploaderService extends IntentService {
 			}
 		}
 
+		@Override
 		public void onUploadFailure(File f, Exception ex) {
 			Log.i(TAG, "Upload fail: " + f + " " + ex);
 			nBuilder.setContentText("Upload failed: " + ex.getMessage());

@@ -6,6 +6,7 @@ public class AreaTest extends TestCase {
 
 	private Area oneSqMeter;
 
+	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		oneSqMeter = new Area(1.0);

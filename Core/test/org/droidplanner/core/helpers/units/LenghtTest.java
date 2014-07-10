@@ -7,6 +7,7 @@ public class LenghtTest extends TestCase {
 
 	private Length length;
 
+	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		length = new Length(1.0);
