@@ -78,7 +78,8 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 			followMeEnabled = false;
 			Log.d("follow", "disable");
 		}
-		mLocationClient.removeLocationUpdates(this);
+        if(mLocationClient.isConnected())
+		    mLocationClient.removeLocationUpdates(this);
 	}
 
 	public boolean isEnabled() {
@@ -113,20 +114,25 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 
 	}
 
-	@Override
-	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		switch (event) {
-		case MODE:
-			if ((drone.state.getMode() != ApmModes.ROTOR_GUIDED)) {
-				disableFollowMe();
-			}
-			break;
-		default:
-			return;
+    @Override
+    public void onDroneEvent(DroneEventsType event, Drone drone) {
+        switch (event) {
+            case MODE:
+                if ((drone.state.getMode() != ApmModes.ROTOR_GUIDED)) {
+                    disableFollowMe();
+                }
+                break;
 
-		}
+            case DISCONNECTED:
+                disableFollowMe();
+                break;
 
-	}
+            default:
+                return;
+
+        }
+
+    }
 
 	public Length getRadius() {
 		return radius;
