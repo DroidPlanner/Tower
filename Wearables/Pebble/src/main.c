@@ -1,6 +1,6 @@
 #include <pebble.h>
 #include <string.h>
-#define APP_VERSION "one"
+#define APP_VERSION "two"
   
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!variables
 static Window *window;
@@ -51,7 +51,7 @@ static void send_mode_change_request(int request_type){
 }
 
 static void request_new_app_version(){
-  text_layer_set_text(telem_layer,"Install new watchapp in settings menu");
+  text_layer_set_text(telem_layer,"Install new watchapp in settings");
   text_layer_set_text(mode_layer,"UPDATE!");
 }
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!button click handlers
@@ -134,10 +134,16 @@ static void buttons_draw(Layer *layer, GContext *ctx) {
              set_mode(data);
            break;
          case KEY_FOLLOW_TYPE:
+         
            if(strcmp(data,follow_type)!=0){
-             vibe(30);
+             vibe(50);
              follow_type=data;
            }
+           if(strcmp(mode,"Follow")==0)
+               text_layer_set_text(follow_type_layer, follow_type);
+           else
+               text_layer_set_text(follow_type_layer, "");
+         
            break;
          case KEY_TELEM:
            text_layer_set_text(telem_layer,data);
@@ -169,19 +175,19 @@ static void window_load(Window *window) {
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
 
-  mode_layer = text_layer_create((GRect) { .origin = { 10, 5 }, .size = { bounds.size.w-50, 35 } });
+  mode_layer = text_layer_create((GRect) { .origin = { 10, 0 }, .size = { bounds.size.w-50, 35 } });
   text_layer_set_text(mode_layer, "No Conn.");
   text_layer_set_text_alignment(mode_layer, GTextAlignmentLeft);
   text_layer_set_font(mode_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
   layer_add_child(window_layer, text_layer_get_layer(mode_layer));
   
-  follow_type_layer = text_layer_create((GRect) { .origin = { 10, 15+35+10 }, .size = { bounds.size.w-50, 35 } });
+  follow_type_layer = text_layer_create((GRect) { .origin = { 10, 28 }, .size = { bounds.size.w-50, 35 } });//was 15+35+10
   text_layer_set_text(follow_type_layer, "");
   text_layer_set_text_alignment(follow_type_layer, GTextAlignmentLeft);
   text_layer_set_font(follow_type_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
   layer_add_child(window_layer, text_layer_get_layer(follow_type_layer));
   
-  telem_layer = text_layer_create((GRect) { .origin = { 10, 50 }, .size = { bounds.size.w-60, bounds.size.h-50 } });
+  telem_layer = text_layer_create((GRect) { .origin = { 10, 60 }, .size = { bounds.size.w-60, bounds.size.h-50 } });
   text_layer_set_overflow_mode(telem_layer, GTextOverflowModeWordWrap);
   text_layer_set_text(telem_layer, "No telem. yet");
   text_layer_set_text_alignment(telem_layer, GTextAlignmentLeft);

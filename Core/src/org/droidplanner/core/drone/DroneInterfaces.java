@@ -175,6 +175,11 @@ public class DroneInterfaces {
          * 
          */
         FOLLOW_START,
+        
+        /**
+         * 
+         */
+        FOLLOW_CHANGE_TYPE,
     }
 
 	public interface OnDroneListener {

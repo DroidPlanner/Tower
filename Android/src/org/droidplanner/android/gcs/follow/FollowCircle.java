@@ -1,5 +1,6 @@
 package org.droidplanner.android.gcs.follow;
 
+import org.droidplanner.android.gcs.follow.Follow.FollowModes;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.geoTools.GeoTools;
@@ -18,6 +19,11 @@ public class FollowCircle extends FollowType  {
 
 	public FollowCircle(Drone drone, Length radius, double mIN_TIME_MS) {
 		super(drone, radius, mIN_TIME_MS);
+	}
+	
+	@Override
+	public FollowModes getType() {
+		return FollowModes.CIRCLE;
 	}
 
 	@Override

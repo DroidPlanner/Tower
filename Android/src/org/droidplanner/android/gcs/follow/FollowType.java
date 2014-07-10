@@ -1,5 +1,6 @@
 package org.droidplanner.android.gcs.follow;
 
+import org.droidplanner.android.gcs.follow.Follow.FollowModes;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.helpers.units.Length;
 
@@ -7,6 +8,7 @@ import android.location.Location;
 
 public abstract class FollowType {
 	public abstract void processNewLocation(Location location);
+	public abstract FollowModes getType();
 
 	protected Drone drone;
 	protected Length radius;

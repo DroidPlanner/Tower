@@ -4,6 +4,9 @@ import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.gcs.follow.Follow;
 import org.droidplanner.android.gcs.follow.Follow.FollowModes;
+import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
+import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.helpers.units.Length;
 
 import android.os.Bundle;
@@ -19,7 +22,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 public class ModeFollowFragment extends ModeGuidedFragment implements
-		OnClickListener, OnItemSelectedListener {
+		OnClickListener, OnItemSelectedListener, OnDroneListener {
 	private Button radiusPlus1;
 	private Button radiusMinus1;
 	private TextView radiusTextView;
@@ -38,6 +41,8 @@ public class ModeFollowFragment extends ModeGuidedFragment implements
 		setupViews(view);
 		setupListener();
 		updateLabel();
+		
+		drone.events.addDroneListener(this);
 		return view;
 	}
 
@@ -92,6 +97,18 @@ public class ModeFollowFragment extends ModeGuidedFragment implements
 
 	@Override
 	public void onNothingSelected(AdapterView<?> arg0) {	
+	}
+
+	@Override
+	public void onDroneEvent(DroneEventsType event, Drone drone) {
+		switch(event){
+		case FOLLOW_CHANGE_TYPE:
+			spinner.setSelection(adapter.getPosition(followMe.getType()));
+			break;
+		default:
+			break;
+		}
+		
 	}
 
 }
