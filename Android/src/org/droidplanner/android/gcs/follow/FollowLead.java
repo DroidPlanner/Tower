@@ -9,8 +9,8 @@ import android.location.Location;
 
 public class FollowLead extends FollowAlgorithm {
 
-	public FollowLead(Drone drone, Length radius, double mIN_TIME_MS) {
-		super(drone, radius, mIN_TIME_MS);
+	public FollowLead(Drone drone, Length radius) {
+		super(drone, radius);
 	}
 
 	@Override

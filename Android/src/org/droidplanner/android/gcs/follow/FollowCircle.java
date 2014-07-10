@@ -13,11 +13,12 @@ public class FollowCircle extends FollowAlgorithm {
 	/**
 	 * °/s
 	 */
-	private static final double circleRate = 20;
+	private double circleStep = 20;
 	private double circleAngle = 0.0;
 
-	public FollowCircle(Drone drone, Length radius, double mIN_TIME_MS) {
-		super(drone, radius, mIN_TIME_MS);
+	public FollowCircle(Drone drone, Length radius, double rate) {
+		super(drone, radius);
+		circleStep = rate;
 	}
 
 	@Override
@@ -31,8 +32,7 @@ public class FollowCircle extends FollowAlgorithm {
 				location.getLongitude());
 		Coord2D goCoord = GeoTools.newCoordFromBearingAndDistance(gcsCoord,
 				circleAngle, radius.valueInMeters());
-		circleAngle = MathUtil.constrainAngle(circleAngle + circleRate
-				* super.MIN_TIME_MS / 1000.0);
+		circleAngle = MathUtil.constrainAngle(circleAngle + circleStep);
 		drone.guidedPoint.newGuidedCoord(goCoord);
 	}
 }

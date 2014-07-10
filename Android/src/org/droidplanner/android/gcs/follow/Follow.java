@@ -37,7 +37,7 @@ public class Follow implements GooglePlayServicesClient.ConnectionCallbacks,
 	public Follow(Context context, Drone drone) {
 		this.context = context;
 		this.drone = drone;
-		followAlgorithm = new FollowLeash(drone, new Length(5.0), MIN_TIME_MS);
+		followAlgorithm = new FollowLeash(drone, new Length(5.0));
 		mLocationClient = new LocationClient(context, this, this);
 		mLocationClient.connect();
 		drone.events.addDroneListener(this);
@@ -144,8 +144,7 @@ public class Follow implements GooglePlayServicesClient.ConnectionCallbacks,
 	}
 
 	public void setType(FollowModes item) {
-		followAlgorithm = item.getAlgorithmType(drone, new Length(5.0),
-				MIN_TIME_MS);
+		followAlgorithm = item.getAlgorithmType(drone, new Length(5.0));
 		drone.events.notifyDroneEvent(DroneEventsType.FOLLOW_CHANGE_TYPE);
 	}
 

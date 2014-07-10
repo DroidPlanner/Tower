@@ -12,13 +12,11 @@ public abstract class FollowAlgorithm {
 
 	protected Drone drone;
 	protected Length radius;
-	protected double MIN_TIME_MS;
 
-	public FollowAlgorithm(Drone drone, Length radius, double mIN_TIME_MS) {
+	public FollowAlgorithm(Drone drone, Length radius) {
 		super();
 		this.drone = drone;
 		this.radius = radius;
-		MIN_TIME_MS = mIN_TIME_MS;
 	}
 
 	public void changeRadius(Double increment) {
@@ -46,18 +44,17 @@ public abstract class FollowAlgorithm {
 			return values()[(ordinal() + 1) % values().length];
 		}
 
-		public FollowAlgorithm getAlgorithmType(Drone drone, Length radius,
-				double mIN_TIME_MS) {
+		public FollowAlgorithm getAlgorithmType(Drone drone, Length radius) {
 			switch (this) {
 			default:
 			case LEASH:
-				return new FollowLeash(drone, radius, mIN_TIME_MS);
+				return new FollowLeash(drone, radius);
 			case CIRCLE:
-				return new FollowCircle(drone, radius, mIN_TIME_MS);
+				return new FollowCircle(drone, radius, 10.0);
 			case LEAD:
-				return new FollowLead(drone, radius, mIN_TIME_MS);
+				return new FollowLead(drone, radius);
 			case WAKEBOARD:
-				return new FollowWakeboard(drone, radius, mIN_TIME_MS);
+				return new FollowWakeboard(drone, radius);
 			}
 		}
 	}

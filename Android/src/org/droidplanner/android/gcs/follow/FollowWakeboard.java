@@ -12,8 +12,8 @@ public class FollowWakeboard extends FollowAlgorithm {
 
 	private static final double TOP_SPEED = 5.0;
 
-	public FollowWakeboard(Drone drone, Length radius, double mIN_TIME_MS) {
-		super(drone, radius, mIN_TIME_MS);
+	public FollowWakeboard(Drone drone, Length radius) {
+		super(drone, radius);
 	}
 
 	@Override
