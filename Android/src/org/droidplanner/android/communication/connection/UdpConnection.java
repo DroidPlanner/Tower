@@ -47,11 +47,12 @@ public class UdpConnection extends MAVLinkConnection {
 		protected Integer doInBackground(byte[]... params) {
 			try {
 				byte[] buffer = params[0];
-                if (hostAdd != null) {  // We can't send to our sister until they have connected to us
-				    DatagramPacket packet = new DatagramPacket(buffer,
-						buffer.length, hostAdd, hostPort);
-				    socket.send(packet);
-                }
+				if (hostAdd != null) { // We can't send to our sister until they
+										// have connected to us
+					DatagramPacket packet = new DatagramPacket(buffer,
+							buffer.length, hostAdd, hostPort);
+					socket.send(packet);
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

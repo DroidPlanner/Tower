@@ -78,15 +78,17 @@ public abstract class MAVLinkConnection extends Thread {
 			parser.stats.mavlinkResetStats();
 			openConnection();
 
-            //Start a new ga analytics session. The new session will be tagged with the mavlink
-            // connection mechanism, as well as whether the user has an active droneshare account.
-            GAUtils.startNewSession(parentContext);
+			// Start a new ga analytics session. The new session will be tagged
+			// with the mavlink
+			// connection mechanism, as well as whether the user has an active
+			// droneshare account.
+			GAUtils.startNewSession(parentContext);
 
 			logFile = FileStream.getTLogFile();
 			logWriter = FileStream.openOutputStream(logFile);
 			logBuffer = ByteBuffer.allocate(Long.SIZE / Byte.SIZE);
 			logBuffer.order(ByteOrder.BIG_ENDIAN);
-			
+
 			String login = prefs.getDroneshareLogin();
 			String password = prefs.getDronesharePassword();
 			if (prefs.getLiveUploadEnabled() && !login.isEmpty()
@@ -165,7 +167,7 @@ public abstract class MAVLinkConnection extends Thread {
 					uploader.filterMavlink(uploader.interfaceNum, bytes);
 			} catch (IOException e) {
 				Log.e(TAG, "Ignoring IO error in saveToLog: " + e);
-			}catch (BufferOverflowException e) {
+			} catch (BufferOverflowException e) {
 				Log.e(TAG, "Ignoring Buffer Overflow in saveToLog: " + e);
 			} catch (NullPointerException e) {
 				Log.e(TAG, "Ignoring NPE in " + e);

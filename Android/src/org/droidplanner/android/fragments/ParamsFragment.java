@@ -35,7 +35,7 @@ import android.widget.Toast;
 
 public class ParamsFragment extends ListFragment implements
 		DroneInterfaces.OnParameterManagerListener, OnDroneListener {
-	
+
 	static final String TAG = ParamsFragment.class.getSimpleName();
 
 	public static final String ADAPTER_ITEMS = ParamsFragment.class.getName()
@@ -249,11 +249,11 @@ public class ParamsFragment extends ListFragment implements
 	}
 
 	private int mReceived = 0, mTotal = 0;
-	
+
 	@Override
 	public void onParameterReceived(Parameter parameter, int index, int count) {
 		++mReceived;
-		
+
 		if (progressDialog != null) {
 			if (progressDialog.isIndeterminate()) {
 				progressDialog.setIndeterminate(false);

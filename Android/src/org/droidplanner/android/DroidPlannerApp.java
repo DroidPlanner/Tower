@@ -20,12 +20,12 @@ import android.os.SystemClock;
 
 import com.MAVLink.Messages.MAVLinkMessage;
 
-public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.MavlinkInputStream,
-        DroneInterfaces.OnDroneListener {
+public class DroidPlannerApp extends ErrorReportApp implements
+		MAVLinkStreams.MavlinkInputStream, DroneInterfaces.OnDroneListener {
 
 	private Drone drone;
-    public Follow followMe;
-    public MissionProxy missionProxy;
+	public Follow followMe;
+	public MissionProxy missionProxy;
 	private MavLinkMsgHandler mavLinkMsgHandler;
 
 	/**
@@ -37,7 +37,7 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 	public void onCreate() {
 		super.onCreate();
 
-        final Context context = getApplicationContext();
+		final Context context = getApplicationContext();
 		mNotificationHandler = new NotificationHandler(context);
 
 		MAVLinkClient MAVClient = new MAVLinkClient(this, this);
@@ -65,14 +65,15 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 		drone = new Drone(MAVClient, clock, handler, pref);
 		getDrone().events.addDroneListener(this);
 
-        missionProxy = new MissionProxy(getDrone().mission);
-		mavLinkMsgHandler = new org.droidplanner.core.MAVLink.MavLinkMsgHandler(getDrone());
+		missionProxy = new MissionProxy(getDrone().mission);
+		mavLinkMsgHandler = new org.droidplanner.core.MAVLink.MavLinkMsgHandler(
+				getDrone());
 
-        followMe = new Follow(this, getDrone());
-        NetworkStateReceiver.register(context);
+		followMe = new Follow(this, getDrone());
+		NetworkStateReceiver.register(context);
 
-        GAUtils.initGATracker(this);
-        GAUtils.startNewSession(context);
+		GAUtils.initGATracker(this);
+		GAUtils.startNewSession(context);
 	}
 
 	@Override
@@ -87,22 +88,22 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 
 	@Override
 	public void notifyDisconnected() {
-        getDrone().events.notifyDroneEvent(DroneEventsType.DISCONNECTED);
-    }
+		getDrone().events.notifyDroneEvent(DroneEventsType.DISCONNECTED);
+	}
 
-    @Override
-    public void onDroneEvent(DroneEventsType event, Drone drone) {
-        mNotificationHandler.onDroneEvent(event, drone);
+	@Override
+	public void onDroneEvent(DroneEventsType event, Drone drone) {
+		mNotificationHandler.onDroneEvent(event, drone);
 
-        switch (event) {
-            case MISSION_RECEIVED:
-                //Refresh the mission render state
-                missionProxy.refresh();
-                break;
-        }
-    }
+		switch (event) {
+		case MISSION_RECEIVED:
+			// Refresh the mission render state
+			missionProxy.refresh();
+			break;
+		}
+	}
 
-    public Drone getDrone() {
-        return drone;
-    }
+	public Drone getDrone() {
+		return drone;
+	}
 }

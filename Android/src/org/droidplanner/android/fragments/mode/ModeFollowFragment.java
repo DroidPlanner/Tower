@@ -41,7 +41,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements
 		setupViews(view);
 		setupListener();
 		updateLabel();
-		
+
 		drone.events.addDroneListener(this);
 		return view;
 	}
@@ -53,7 +53,8 @@ public class ModeFollowFragment extends ModeGuidedFragment implements
 				.findViewById(R.id.button_radius_minus_1);
 		radiusTextView = (TextView) parentView.findViewById(R.id.follow_radius);
 		spinner = (Spinner) parentView.findViewById(R.id.follow_type_spinner);
-		adapter = new ArrayAdapter<FollowModes>(getActivity(), android.R.layout.simple_spinner_item, FollowModes.values());
+		adapter = new ArrayAdapter<FollowModes>(getActivity(),
+				android.R.layout.simple_spinner_item, FollowModes.values());
 		spinner.setAdapter(adapter);
 		super.setupViews(parentView);
 	}
@@ -84,7 +85,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements
 	protected void updateLabel() {
 		super.updateLabel();
 		Length radius = followMe.getRadius();
-		if(radiusTextView!= null){
+		if (radiusTextView != null) {
 			this.radiusTextView.setText("Radius: (" + radius + ")");
 		}
 	}
@@ -92,23 +93,23 @@ public class ModeFollowFragment extends ModeGuidedFragment implements
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position,
 			long id) {
-			followMe.setType(adapter.getItem(position));
+		followMe.setType(adapter.getItem(position));
 	}
 
 	@Override
-	public void onNothingSelected(AdapterView<?> arg0) {	
+	public void onNothingSelected(AdapterView<?> arg0) {
 	}
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		switch(event){
+		switch (event) {
 		case FOLLOW_CHANGE_TYPE:
 			spinner.setSelection(adapter.getPosition(followMe.getType()));
 			break;
 		default:
 			break;
 		}
-		
+
 	}
 
 }

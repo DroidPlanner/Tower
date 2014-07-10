@@ -112,7 +112,8 @@ public class ConfigurationActivity extends SuperUI {
 							}
 						});
 
-				mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+				mViewPager
+						.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 
 							@Override
 							public void onPageSelected(int i) {
@@ -132,7 +133,8 @@ public class ConfigurationActivity extends SuperUI {
 	}
 
 	private void handleIntent(Intent intent) {
-		int configScreenIndex = intent.getIntExtra(EXTRA_CONFIG_SCREEN_INDEX, 0);
+		int configScreenIndex = intent
+				.getIntExtra(EXTRA_CONFIG_SCREEN_INDEX, 0);
 		mViewPager.setCurrentItem(configScreenIndex);
 	}
 

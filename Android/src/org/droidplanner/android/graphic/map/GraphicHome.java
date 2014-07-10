@@ -12,48 +12,48 @@ import org.droidplanner.core.helpers.coordinates.Coord2D;
 
 public class GraphicHome extends MarkerInfo.SimpleMarkerInfo {
 
-    private Home home;
+	private Home home;
 
-    public GraphicHome(Drone drone) {
-        home = drone.home;
-    }
+	public GraphicHome(Drone drone) {
+		home = drone.home;
+	}
 
-    public boolean isValid() {
-        return home.isValid();
-    }
+	public boolean isValid() {
+		return home.isValid();
+	}
 
-    @Override
-    public float getAnchorU() {
-        return 0.5f;
-    }
+	@Override
+	public float getAnchorU() {
+		return 0.5f;
+	}
 
-    @Override
-    public float getAnchorV() {
-        return 0.5f;
-    }
+	@Override
+	public float getAnchorV() {
+		return 0.5f;
+	}
 
-    @Override
-    public Bitmap getIcon(Resources res) {
-        return BitmapFactory.decodeResource(res, R.drawable.ic_wp_home);
-    }
+	@Override
+	public Bitmap getIcon(Resources res) {
+		return BitmapFactory.decodeResource(res, R.drawable.ic_wp_home);
+	}
 
-    @Override
-    public Coord2D getPosition() {
-        return home.getCoord();
-    }
+	@Override
+	public Coord2D getPosition() {
+		return home.getCoord();
+	}
 
-    @Override
-    public String getSnippet() {
-        return "Home " + home.getAltitude();
-    }
+	@Override
+	public String getSnippet() {
+		return "Home " + home.getAltitude();
+	}
 
-    @Override
-    public String getTitle() {
-        return "Home";
-    }
+	@Override
+	public String getTitle() {
+		return "Home";
+	}
 
-    @Override
-    public boolean isVisible() {
-        return home.isValid();
-    }
+	@Override
+	public boolean isVisible() {
+		return home.isValid();
+	}
 }

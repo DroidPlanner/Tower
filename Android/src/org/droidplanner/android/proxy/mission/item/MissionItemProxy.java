@@ -34,160 +34,165 @@ import java.util.List;
  */
 public class MissionItemProxy implements Comparable<MissionItemProxy> {
 
-    /**
-     * This is the mission item object this class is built around.
-     */
-    private final MissionItem mMissionItem;
+	/**
+	 * This is the mission item object this class is built around.
+	 */
+	private final MissionItem mMissionItem;
 
-    /**
-     * This is the mission render to which this item belongs.
-     */
-    private final MissionProxy mMission;
+	/**
+	 * This is the mission render to which this item belongs.
+	 */
+	private final MissionProxy mMission;
 
-    /**
-     * This is the marker source for this mission item render.
-     */
-    private final List<MarkerInfo> mMarkerInfos;
+	/**
+	 * This is the marker source for this mission item render.
+	 */
+	private final List<MarkerInfo> mMarkerInfos;
 
-    public MissionItemProxy(MissionProxy mission, MissionItem missionItem){
-        mMission = mission;
-        mMissionItem = missionItem;
-        mMarkerInfos = MissionItemMarkerInfo.newInstance(this);
-    }
+	public MissionItemProxy(MissionProxy mission, MissionItem missionItem) {
+		mMission = mission;
+		mMissionItem = missionItem;
+		mMarkerInfos = MissionItemMarkerInfo.newInstance(this);
+	}
 
-    /**
-     * Provides access to the owning mission render instance.
-     * @return
-     */
-    public MissionProxy getMissionProxy(){
-        return mMission;
-    }
+	/**
+	 * Provides access to the owning mission render instance.
+	 * 
+	 * @return
+	 */
+	public MissionProxy getMissionProxy() {
+		return mMission;
+	}
 
-    /**
-     * Provides access to the mission item instance.
-     * @return {@link org.droidplanner.core.mission.MissionItem} object
-     */
-    public MissionItem getMissionItem(){
-        return mMissionItem;
-    }
+	/**
+	 * Provides access to the mission item instance.
+	 * 
+	 * @return {@link org.droidplanner.core.mission.MissionItem} object
+	 */
+	public MissionItem getMissionItem() {
+		return mMissionItem;
+	}
 
-    public MissionDetailFragment getDetailFragment() {
-        return MissionDetailFragment.newInstance(mMissionItem.getType());
-    }
+	public MissionDetailFragment getDetailFragment() {
+		return MissionDetailFragment.newInstance(mMissionItem.getType());
+	}
 
-    public List<MarkerInfo> getMarkerInfos(){
-        return mMarkerInfos;
-    }
+	public List<MarkerInfo> getMarkerInfos() {
+		return mMarkerInfos;
+	}
 
-    /**
-     * @param previusPoint Previous point on the path, null if there wasn't a previus point
-     * @return the set of points/coords making up this mission item.
-     */
-    public List<Coord2D> getPath(Coord2D previusPoint) {
-        List<Coord2D> pathPoints = new ArrayList<Coord2D>();
-        switch (mMissionItem.getType()) {
-            case LAND:
-            case LOITER:
-            case LOITER_INF:
-            case LOITERT:          
-            case WAYPOINT:
-            case SPLINE_WAYPOINT:
-                pathPoints.add(((SpatialCoordItem) mMissionItem).getCoordinate());
-                break;
-            
-                
-            case CIRCLE:
-            	for (int i = 0; i <= 360; i+=10) {
-            		Circle circle = (Circle) mMissionItem;
-            		double startHeading = 0;
-            		if (previusPoint != null) {
-            			startHeading = GeoTools.getHeadingFromCoordinates(circle.getCoordinate(),
-                                previusPoint);
-					}
-            		pathPoints.add(GeoTools.newCoordFromBearingAndDistance(circle.getCoordinate(),
-                                    startHeading + i, circle.getRadius()));
+	/**
+	 * @param previusPoint
+	 *            Previous point on the path, null if there wasn't a previus
+	 *            point
+	 * @return the set of points/coords making up this mission item.
+	 */
+	public List<Coord2D> getPath(Coord2D previusPoint) {
+		List<Coord2D> pathPoints = new ArrayList<Coord2D>();
+		switch (mMissionItem.getType()) {
+		case LAND:
+		case LOITER:
+		case LOITER_INF:
+		case LOITERT:
+		case WAYPOINT:
+		case SPLINE_WAYPOINT:
+			pathPoints.add(((SpatialCoordItem) mMissionItem).getCoordinate());
+			break;
+
+		case CIRCLE:
+			for (int i = 0; i <= 360; i += 10) {
+				Circle circle = (Circle) mMissionItem;
+				double startHeading = 0;
+				if (previusPoint != null) {
+					startHeading = GeoTools.getHeadingFromCoordinates(
+							circle.getCoordinate(), previusPoint);
 				}
-            	break;
-            
-            case SURVEY:
-                Grid grid = ((Survey) mMissionItem).grid;
-            	if (grid != null) {				
-            		pathPoints.addAll(grid.gridPoints);
-            	}
-            case TAKEOFF:
-            default:
-                break;
-        }
+				pathPoints.add(GeoTools.newCoordFromBearingAndDistance(
+						circle.getCoordinate(), startHeading + i,
+						circle.getRadius()));
+			}
+			break;
 
-        return pathPoints;
-    }
+		case SURVEY:
+			Grid grid = ((Survey) mMissionItem).grid;
+			if (grid != null) {
+				pathPoints.addAll(grid.gridPoints);
+			}
+		case TAKEOFF:
+		default:
+			break;
+		}
 
-    public View getListViewItemView(Context context, ViewGroup parent) {
-        final LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context
-                .LAYOUT_INFLATER_SERVICE);
-        final View view = inflater.inflate(R.layout.fragment_editor_list_item, parent, false);
+		return pathPoints;
+	}
 
-        TextView nameView = (TextView) view.findViewById(R.id.rowNameView);
-        TextView altitudeView = (TextView) view.findViewById(R.id.rowAltitudeView);
+	public View getListViewItemView(Context context, ViewGroup parent) {
+		final LayoutInflater inflater = (LayoutInflater) context
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		final View view = inflater.inflate(R.layout.fragment_editor_list_item,
+				parent, false);
 
-        nameView.setText(String.format("%3d", mMissionItem.getMission().getOrder(mMissionItem)));
+		TextView nameView = (TextView) view.findViewById(R.id.rowNameView);
+		TextView altitudeView = (TextView) view
+				.findViewById(R.id.rowAltitudeView);
 
-        final int leftDrawable = mMissionItem instanceof SplineWaypoint
-                ? R.drawable.ic_mission_spline_wp
-                : R.drawable.ic_mission_wp;
-        altitudeView.setCompoundDrawablesWithIntrinsicBounds(leftDrawable, 0, 0, 0);
+		nameView.setText(String.format("%3d", mMissionItem.getMission()
+				.getOrder(mMissionItem)));
 
-        if (mMissionItem instanceof SpatialCoordItem) {
-            SpatialCoordItem waypoint = (SpatialCoordItem) mMissionItem;
-            altitudeView.setText(String.format("%3.0fm", waypoint.getCoordinate().getAltitude()
-                    .valueInMeters()));
+		final int leftDrawable = mMissionItem instanceof SplineWaypoint ? R.drawable.ic_mission_spline_wp
+				: R.drawable.ic_mission_wp;
+		altitudeView.setCompoundDrawablesWithIntrinsicBounds(leftDrawable, 0,
+				0, 0);
 
-            try {
-                Length diff = waypoint.getMission().getAltitudeDiffFromPreviousItem(waypoint);
-                if (diff.valueInMeters() > 0) {
-                    altitudeView.setTextColor(Color.RED);
-                } else if (diff.valueInMeters() < 0) {
-                    altitudeView.setTextColor(Color.BLUE);
-                }
-            } catch (Exception e) {
-                // Do nothing when last item doesn't have an altitude
-            }
-        } else if (mMissionItem instanceof Survey) {
-			altitudeView.setText(((Survey)mMissionItem).surveyData.getAltitude().toString());
+		if (mMissionItem instanceof SpatialCoordItem) {
+			SpatialCoordItem waypoint = (SpatialCoordItem) mMissionItem;
+			altitudeView.setText(String.format("%3.0fm", waypoint
+					.getCoordinate().getAltitude().valueInMeters()));
 
-        } else if (mMissionItem instanceof Takeoff) {
-			altitudeView.setText(((Takeoff)mMissionItem).getFinishedAlt().toString());
+			try {
+				Length diff = waypoint.getMission()
+						.getAltitudeDiffFromPreviousItem(waypoint);
+				if (diff.valueInMeters() > 0) {
+					altitudeView.setTextColor(Color.RED);
+				} else if (diff.valueInMeters() < 0) {
+					altitudeView.setTextColor(Color.BLUE);
+				}
+			} catch (Exception e) {
+				// Do nothing when last item doesn't have an altitude
+			}
+		} else if (mMissionItem instanceof Survey) {
+			altitudeView.setText(((Survey) mMissionItem).surveyData
+					.getAltitude().toString());
+
+		} else if (mMissionItem instanceof Takeoff) {
+			altitudeView.setText(((Takeoff) mMissionItem).getFinishedAlt()
+					.toString());
 		} else {
-            altitudeView.setText("");
-        }
+			altitudeView.setText("");
+		}
 
 		/*
-		if (waypoint.getCmd().showOnMap()) {
-			altitudeView.setText(String.format(Locale.ENGLISH, "%3.0fm", waypoint.getHeight()));
-		} else {
-			altitudeView.setText("-");
-		}
-*/
-        //TODO fix the numbering
-        //nameView.setText(String.format("%3d", waypoint.getOrder()));
+		 * if (waypoint.getCmd().showOnMap()) {
+		 * altitudeView.setText(String.format(Locale.ENGLISH, "%3.0fm",
+		 * waypoint.getHeight())); } else { altitudeView.setText("-"); }
+		 */
+		// TODO fix the numbering
+		// nameView.setText(String.format("%3d", waypoint.getOrder()));
 
+		/*
+		 * typeView.setText(waypoint.getCmd().getName());
+		 * descView.setText(setupDescription(waypoint));
+		 * 
+		 * double distanceFromPrevPoint = waypoint.getDistanceFromPrevPoint();
+		 * if(distanceFromPrevPoint != waypoint.UNKNOWN_DISTANCE) {
+		 * distanceView.setText(String.format(Locale.ENGLISH, "%4.0fm",
+		 * distanceFromPrevPoint)); } else { distanceView.setText("-"); }
+		 */
+		return view;
+	}
 
-	/*	typeView.setText(waypoint.getCmd().getName());
-		descView.setText(setupDescription(waypoint));
-
-		double distanceFromPrevPoint = waypoint.getDistanceFromPrevPoint();
-		if(distanceFromPrevPoint != waypoint.UNKNOWN_DISTANCE) {
-			distanceView.setText(String.format(Locale.ENGLISH, "%4.0fm", distanceFromPrevPoint));
-		}
-		else {
-			distanceView.setText("-");
-		}
-		*/
-        return view;
-    }
-
-    @Override
-    public int compareTo(MissionItemProxy another){
-        return mMissionItem.compareTo(another.mMissionItem);
-    }
+	@Override
+	public int compareTo(MissionItemProxy another) {
+		return mMissionItem.compareTo(another.mMissionItem);
+	}
 }

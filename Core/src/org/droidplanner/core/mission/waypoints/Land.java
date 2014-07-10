@@ -40,9 +40,9 @@ public class Land extends SpatialCoordItem {
 		super.unpackMAVMessage(mavMsg);
 	}
 
-    @Override
-    public MissionItemType getType() {
-        return MissionItemType.LAND;
-    }
+	@Override
+	public MissionItemType getType() {
+		return MissionItemType.LAND;
+	}
 
 }

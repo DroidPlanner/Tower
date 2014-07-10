@@ -8,6 +8,7 @@ import android.location.Location;
 
 public abstract class FollowType {
 	public abstract void processNewLocation(Location location);
+
 	public abstract FollowModes getType();
 
 	protected Drone drone;

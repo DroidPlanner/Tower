@@ -23,7 +23,8 @@ import android.widget.TextView;
 
 public class MissionSurveyFragment extends MissionDetailFragment implements
 		OnClickListener, SeekBarWithText.OnTextSeekBarChangedListener,
-        SpinnerSelfSelect.OnSpinnerItemSelectedListener, DroneInterfaces.OnDroneListener {
+		SpinnerSelfSelect.OnSpinnerItemSelectedListener,
+		DroneInterfaces.OnDroneListener {
 
 	public SeekBarWithText overlapView;
 	public SeekBarWithText angleView;
@@ -52,18 +53,20 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 	@Override
 	public void onStart() {
 		super.onStart();
-        ((DroidPlannerApp)getActivity().getApplication()).getDrone().events.addDroneListener(this);
+		((DroidPlannerApp) getActivity().getApplication()).getDrone().events
+				.addDroneListener(this);
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
-        ((DroidPlannerApp)getActivity().getApplication()).getDrone().events.removeDroneListener(this);
+		((DroidPlannerApp) getActivity().getApplication()).getDrone().events
+				.removeDroneListener(this);
 	}
 
 	@Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
 		this.survey = ((Survey) itemRender.getMissionItem());
 		typeSpinner.setSelection(commandAdapter
 				.getPosition(MissionItemType.SURVEY));
@@ -126,8 +129,8 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 			altitudeView.setBackgroundColor(Color.TRANSPARENT);
 		} catch (Exception e) {
 			e.printStackTrace();
-			altitudeView.setBackgroundColor(Color.RED);			
-		}	
+			altitudeView.setBackgroundColor(Color.RED);
+		}
 
 		survey.getMission().notifyMissionUpdate();
 	}
@@ -150,7 +153,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 	}
 
 	private void updateViews() {
-		updateTextViews();			
+		updateTextViews();
 		updateSeekBars();
 		updateCameraSpinner();
 	}
@@ -168,9 +171,9 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 
 	private void updateTextViews() {
 		Context context = getActivity();
-		try{
-			footprintTextView.setText(context.getString(R.string.footprint) + ": "
-					+ survey.surveyData.getLateralFootPrint() + " x"
+		try {
+			footprintTextView.setText(context.getString(R.string.footprint)
+					+ ": " + survey.surveyData.getLateralFootPrint() + " x"
 					+ survey.surveyData.getLongitudinalFootPrint());
 			groundResolutionTextView.setText(context
 					.getString(R.string.ground_resolution)
@@ -186,32 +189,33 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 					+ survey.surveyData.getLateralPictureDistance());
 			areaTextView.setText(context.getString(R.string.area) + ": "
 					+ survey.polygon.getArea());
-			lengthView.setText(context.getString(R.string.mission_length) + ": "
-					+ survey.grid.getLength());
+			lengthView.setText(context.getString(R.string.mission_length)
+					+ ": " + survey.grid.getLength());
 			numberOfPicturesView.setText(context.getString(R.string.pictures)
 					+ ": " + survey.grid.getCameraCount());
-			numberOfStripsView.setText(context.getString(R.string.number_of_strips)
-					+ ": " + survey.grid.getNumberOfLines());
-		}catch (Exception e){
-			footprintTextView.setText(context.getString(R.string.footprint) + ": "
-					+ "???");
+			numberOfStripsView.setText(context
+					.getString(R.string.number_of_strips)
+					+ ": "
+					+ survey.grid.getNumberOfLines());
+		} catch (Exception e) {
+			footprintTextView.setText(context.getString(R.string.footprint)
+					+ ": " + "???");
 			groundResolutionTextView.setText(context
-					.getString(R.string.ground_resolution)
-					+ ": "+ "???");
+					.getString(R.string.ground_resolution) + ": " + "???");
 			distanceTextView.setText(context
 					.getString(R.string.distance_between_pictures)
-					+ ": "+ "???");
+					+ ": "
+					+ "???");
 			distanceBetweenLinesTextView.setText(context
-					.getString(R.string.distance_between_lines)
-					+ ": "+ "???");
+					.getString(R.string.distance_between_lines) + ": " + "???");
 			areaTextView.setText(context.getString(R.string.area) + ": "
 					+ "???");
-			lengthView.setText(context.getString(R.string.mission_length) + ": "
-					+ "???");
+			lengthView.setText(context.getString(R.string.mission_length)
+					+ ": " + "???");
 			numberOfPicturesView.setText(context.getString(R.string.pictures)
 					+ "???");
-			numberOfStripsView.setText(context.getString(R.string.number_of_strips)
-					+ "???");
+			numberOfStripsView.setText(context
+					.getString(R.string.number_of_strips) + "???");
 		}
 	}
 }

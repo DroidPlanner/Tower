@@ -15,17 +15,17 @@ public class LineCoord2D {
 		this(line.start, line.end);
 	}
 
-    public Coord2D getStart() {
-        return start;
-    }
+	public Coord2D getStart() {
+		return start;
+	}
 
-    public Coord2D getEnd() {
-        return end;
-    }
+	public Coord2D getEnd() {
+		return end;
+	}
 
-    public double getHeading(){
-        return GeoTools.getHeadingFromCoordinates(this.start, this.end);
-    }
+	public double getHeading() {
+		return GeoTools.getHeadingFromCoordinates(this.start, this.end);
+	}
 
 	public Coord2D getFarthestEndpointTo(Coord2D point) {
 		if (getClosestEndpointTo(point).equals(start)) {
@@ -53,7 +53,7 @@ public class LineCoord2D {
 
 	@Override
 	public String toString() {
-		return "from:"+ start.toString()+ "to:"+ end.toString();
+		return "from:" + start.toString() + "to:" + end.toString();
 	}
 
 }

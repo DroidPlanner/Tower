@@ -7,7 +7,6 @@ import org.droidplanner.core.mission.waypoints.Waypoint;
 import org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText;
 import org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListener;
 
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -30,15 +29,17 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
 	}
 
 	@Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
 		typeSpinner.setSelection(commandAdapter
 				.getPosition(MissionItemType.WAYPOINT));
 
 		Waypoint item = (Waypoint) this.itemRender.getMissionItem();
 
-		altitudeSeekBar = (SeekBarWithText) view.findViewById(R.id.altitudeView);
-		altitudeSeekBar.setValue(item.getCoordinate().getAltitude().valueInMeters());
+		altitudeSeekBar = (SeekBarWithText) view
+				.findViewById(R.id.altitudeView);
+		altitudeSeekBar.setValue(item.getCoordinate().getAltitude()
+				.valueInMeters());
 		altitudeSeekBar.setOnChangedListener(this);
 
 		delaySeekBar = (SeekBarWithText) view.findViewById(R.id.waypointDelay);
@@ -80,7 +81,7 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
 		// item.setYawAngle((float) yawSeekBar.getValue());
 		// item.setOrbitalRadius((float) orbitSeekBar.getValue());
 		// item.setOrbitCCW(orbitCCW.isChecked());
-		item.getMission().notifyMissionUpdate();		
+		item.getMission().notifyMissionUpdate();
 	}
 
 }

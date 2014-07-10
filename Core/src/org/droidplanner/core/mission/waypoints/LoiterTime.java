@@ -45,9 +45,9 @@ public class LoiterTime extends Loiter {
 		setTime(mavMsg.param1);
 	}
 
-    @Override
-    public MissionItemType getType() {
-        return MissionItemType.LOITERT;
-    }
+	@Override
+	public MissionItemType getType() {
+		return MissionItemType.LOITERT;
+	}
 
 }

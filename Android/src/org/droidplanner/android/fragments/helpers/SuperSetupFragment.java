@@ -96,7 +96,8 @@ public abstract class SuperSetupFragment extends Fragment implements
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		this.drone = ((DroidPlannerApp) getActivity().getApplication()).getDrone();
+		this.drone = ((DroidPlannerApp) getActivity().getApplication())
+				.getDrone();
 	}
 
 	@Override

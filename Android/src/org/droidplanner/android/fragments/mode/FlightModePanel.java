@@ -126,7 +126,8 @@ public class FlightModePanel extends Fragment implements OnDroneListener {
 				infoPanel = new ModeCircleFragment();
 				break;
 			case ROTOR_GUIDED:
-				if (((DroidPlannerApp)getActivity().getApplication()).followMe.isEnabled()) {
+				if (((DroidPlannerApp) getActivity().getApplication()).followMe
+						.isEnabled()) {
 					infoPanel = new ModeFollowFragment();
 				} else {
 					infoPanel = new ModeGuidedFragment();

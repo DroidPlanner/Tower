@@ -9,17 +9,17 @@ import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
  */
 public class SplineWaypointMarkerInfo extends MissionItemMarkerInfo {
 
-    protected SplineWaypointMarkerInfo(MissionItemProxy origin){
-        super(origin);
-    }
+	protected SplineWaypointMarkerInfo(MissionItemProxy origin) {
+		super(origin);
+	}
 
-    @Override
-    protected int getSelectedIconResource() {
-        return R.drawable.ic_spline_wp_map_selected;
-    }
+	@Override
+	protected int getSelectedIconResource() {
+		return R.drawable.ic_spline_wp_map_selected;
+	}
 
-    @Override
-    protected int getIconResource() {
-        return R.drawable.ic_spline_wp_map;
-    }
+	@Override
+	protected int getIconResource() {
+		return R.drawable.ic_spline_wp_map;
+	}
 }

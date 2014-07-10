@@ -13,21 +13,21 @@ import java.util.List;
  */
 public class SurveyMarkerInfoProvider {
 
-    private final Survey mSurvey;
-    private final List<MarkerInfo> mPolygonMarkers = new ArrayList<MarkerInfo>();
+	private final Survey mSurvey;
+	private final List<MarkerInfo> mPolygonMarkers = new ArrayList<MarkerInfo>();
 
-    protected SurveyMarkerInfoProvider(MissionItemProxy origin) {
-        mSurvey = (Survey) origin.getMissionItem();
-        updateMarkerInfoList();
-    }
+	protected SurveyMarkerInfoProvider(MissionItemProxy origin) {
+		mSurvey = (Survey) origin.getMissionItem();
+		updateMarkerInfoList();
+	}
 
-    private void updateMarkerInfoList(){
-        for(Coord2D point: mSurvey.polygon.getPoints()){
-            mPolygonMarkers.add(new PolygonMarkerInfo(point));
-        }
-    }
+	private void updateMarkerInfoList() {
+		for (Coord2D point : mSurvey.polygon.getPoints()) {
+			mPolygonMarkers.add(new PolygonMarkerInfo(point));
+		}
+	}
 
-    public List<MarkerInfo> getMarkersInfos(){
-        return mPolygonMarkers;
-    }
+	public List<MarkerInfo> getMarkersInfos() {
+		return mPolygonMarkers;
+	}
 }
