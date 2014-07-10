@@ -23,6 +23,15 @@ public class FileList {
 		return getFileList(DirectoryPath.getParametersPath(), filter);
 	}
 
+    public static String[] getTLogFileList() {
+        FilenameFilter filter = new FilenameFilter() {
+            public boolean accept(File dir, String filename) {
+                return filename.contains(".tlog");
+            }
+        };
+        return getFileList(DirectoryPath.getLogPath(), filter);
+    }
+
 	static public String[] getKMZFileList() {
 		FilenameFilter filter = new FilenameFilter() {
 			public boolean accept(File dir, String filename) {

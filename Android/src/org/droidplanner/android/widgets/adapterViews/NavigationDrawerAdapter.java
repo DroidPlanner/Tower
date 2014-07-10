@@ -11,6 +11,7 @@ import org.droidplanner.android.activities.ConfigurationActivity;
 import org.droidplanner.android.activities.DrawerNavigationUI;
 import org.droidplanner.android.activities.EditorActivity;
 import org.droidplanner.android.activities.FlightActivity;
+import org.droidplanner.android.activities.LocatorActivity;
 import org.droidplanner.android.activities.SettingsActivity;
 import org.droidplanner.android.fragments.helpers.HelpDialogFragment;
 
@@ -198,8 +199,21 @@ public class NavigationDrawerAdapter extends BaseExpandableListAdapter {
 			}
 		});
 
+        // Locator activity
+        Map<String, Object> locatorData = new HashMap<String, Object>();
+        locatorData.put(KEY_SECTION_NAME, R.string.locator);
+        locatorData.put(KEY_SECTION_ICON, R.drawable.ic_action_circles);
+        locatorData.put(KEY_SECTION_CALLBACK, new Runnable() {
+            @Override
+            public void run() {
+                activity.startActivity(new Intent(activity,
+                        LocatorActivity.class));
+            }
+        });
+
 		final List<Map<String, ? extends Object>> flightGroup = new ArrayList<Map<String, ? extends Object>>();
-		flightGroup.add(editorData);
+        flightGroup.add(editorData);
+        flightGroup.add(locatorData);
 		mChildData.add(flightGroup);
 
 		/*

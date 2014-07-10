@@ -247,4 +247,17 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
      */
     public void updateMissionPath(PathSource pathSource);
 
+    /**
+     * Zoom to fit coordinates on map
+     *
+     * @param coords to be displayed
+     */
+    public void zoomToFit(List<Coord2D> coords);
+
+    /**
+     * Return GCS (my) coordinates or null if not available
+     *
+     * @return
+     */
+    public Coord2D getGCSPosition();
 }

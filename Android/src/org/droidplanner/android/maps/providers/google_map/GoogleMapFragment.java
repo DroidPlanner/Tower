@@ -448,6 +448,34 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleApiClient.Co
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(camera.build()));
     }
 
+    @Override
+    public void zoomToFit(List<Coord2D> coords) {
+        if (!coords.isEmpty()) {
+            final List<LatLng> points = new ArrayList<LatLng>();
+            for (Coord2D coord : coords)
+                points.add(DroneHelper.CoordToLatLang(coord));
+
+            LatLngBounds bounds = getBounds(points);
+            CameraUpdate animation;
+            if (isMapLayoutFinished())
+                animation = CameraUpdateFactory.newLatLngBounds(bounds, 100);
+            else
+                animation = CameraUpdateFactory.newLatLngBounds(bounds, 480,
+                        360, 100);
+            getMap().animateCamera(animation);
+        }
+    }
+
+    @Override
+    public Coord2D getGCSPosition() {
+        if (mMap.getMyLocation() != null) {
+            return new Coord2D(mMap.getMyLocation().getLatitude(), mMap
+                    .getMyLocation().getLongitude());
+        } else {
+            return null;
+        }
+    }
+
     private void setupMap() {
         //Make sure the map is initialized
         MapsInitializer.initialize(getActivity().getApplicationContext());
@@ -483,7 +511,7 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleApiClient.Co
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                if(mMapClickListener != null){
+                if (mMapClickListener != null) {
                     mMapClickListener.onMapClick(DroneHelper.LatLngToCoord(latLng));
                 }
             }
@@ -501,7 +529,7 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleApiClient.Co
         mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
             @Override
             public void onMarkerDragStart(Marker marker) {
-                if(mMarkerDragListener != null){
+                if (mMarkerDragListener != null) {
                     final MarkerInfo markerInfo = getMarkerInfo(marker);
                     markerInfo.setPosition(DroneHelper.LatLngToCoord(marker.getPosition()));
                     mMarkerDragListener.onMarkerDragStart(markerInfo);
@@ -510,7 +538,7 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleApiClient.Co
 
             @Override
             public void onMarkerDrag(Marker marker) {
-                if(mMarkerDragListener != null){
+                if (mMarkerDragListener != null) {
                     final MarkerInfo markerInfo = getMarkerInfo(marker);
                     markerInfo.setPosition(DroneHelper.LatLngToCoord(marker.getPosition()));
                     mMarkerDragListener.onMarkerDrag(markerInfo);
@@ -519,7 +547,7 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleApiClient.Co
 
             @Override
             public void onMarkerDragEnd(Marker marker) {
-                if(mMarkerDragListener != null){
+                if (mMarkerDragListener != null) {
                     final MarkerInfo markerInfo = getMarkerInfo(marker);
                     markerInfo.setPosition(DroneHelper.LatLngToCoord(marker.getPosition()));
                     mMarkerDragListener.onMarkerDragEnd(markerInfo);
@@ -530,7 +558,7 @@ GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleApiClient.Co
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                if(mMarkerClickListener != null){
+                if (mMarkerClickListener != null) {
                     return mMarkerClickListener.onMarkerClick(getMarkerInfo(marker));
                 }
                 return false;
