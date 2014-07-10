@@ -84,7 +84,7 @@ public abstract class MAVLinkConnection extends Thread {
 
 			logFile = FileStream.getTLogFile();
 			logWriter = FileStream.openOutputStream(logFile);
-			logBuffer = ByteBuffer.allocate(4* Long.SIZE / Byte.SIZE);
+			logBuffer = ByteBuffer.allocate(Long.SIZE / Byte.SIZE);
 			logBuffer.order(ByteOrder.BIG_ENDIAN);
 			
 			String login = prefs.getDroneshareLogin();
