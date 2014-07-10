@@ -31,8 +31,8 @@ public class EndpointSorter {
 		}
 	}
 
-	private Coord2D processOneGridLine(LineCoord2D closestLine, Coord2D lastpnt,
-			boolean innerWPs) throws Exception {
+	private Coord2D processOneGridLine(LineCoord2D closestLine,
+			Coord2D lastpnt, boolean innerWPs) throws Exception {
 		Coord2D firstWP = closestLine.getClosestEndpointTo(lastpnt);
 		Coord2D secondWp = closestLine.getFarthestEndpointTo(lastpnt);
 

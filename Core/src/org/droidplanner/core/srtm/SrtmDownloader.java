@@ -58,27 +58,28 @@ public class SrtmDownloader {
 		}
 	}
 
-	private void downloadFile(String urlAddress, File file)
-			throws IOException {
+	private void downloadFile(String urlAddress, File file) throws IOException {
 		URL url = new URL(urlAddress);
-        URLConnection connection = url.openConnection();
-        connection.connect();
-        // this will be useful so that you can show a typical 0-100% progress bar
-        long fileLength = connection.getContentLength();
+		URLConnection connection = url.openConnection();
+		connection.connect();
+		// this will be useful so that you can show a typical 0-100% progress
+		// bar
+		long fileLength = connection.getContentLength();
 
-        // download the file
-        InputStream input = new BufferedInputStream(url.openStream());		
-        BufferedOutputStream outputs = new BufferedOutputStream(new FileOutputStream(file));
-        
-        byte data[] = new byte[2048];
-        long total = 0;
-        int count;
-        while ((count = input.read(data)) != -1) {
-            total += count;
-            outputs.write(data, 0, count);
-            callListner(file.getName(), (int) (total * 100 / fileLength));
-        }
-        
+		// download the file
+		InputStream input = new BufferedInputStream(url.openStream());
+		BufferedOutputStream outputs = new BufferedOutputStream(
+				new FileOutputStream(file));
+
+		byte data[] = new byte[2048];
+		long total = 0;
+		int count;
+		while ((count = input.read(data)) != -1) {
+			total += count;
+			outputs.write(data, 0, count);
+			callListner(file.getName(), (int) (total * 100 / fileLength));
+		}
+
 		outputs.flush();
 		outputs.close();
 		input.close();
@@ -86,9 +87,9 @@ public class SrtmDownloader {
 
 	private void callListner(String filename, int i) {
 		if (listner != null) {
-			if (i>=0) {
-				listner.onProgress(filename, i);				
-			}else{
+			if (i >= 0) {
+				listner.onProgress(filename, i);
+			} else {
 				listner.onProgress(filename, -1);
 			}
 		}

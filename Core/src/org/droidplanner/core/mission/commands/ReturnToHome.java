@@ -48,9 +48,9 @@ public class ReturnToHome extends MissionCMD {
 		returnAltitude = new Altitude(mavMessageItem.z);
 	}
 
-    @Override
-    public MissionItemType getType() {
-        return MissionItemType.RTL;
-    }
+	@Override
+	public MissionItemType getType() {
+		return MissionItemType.RTL;
+	}
 
 }

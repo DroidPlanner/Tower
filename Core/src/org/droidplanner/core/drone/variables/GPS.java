@@ -8,7 +8,7 @@ import org.droidplanner.core.helpers.coordinates.Coord2D;
 public class GPS extends DroneVariable {
 	public final static int LOCK_2D = 2;
 	public final static int LOCK_3D = 3;
-	
+
 	private double gps_eph = -1;
 	private int satCount = -1;
 	private int fixType = -1;

@@ -14,7 +14,7 @@ import com.MAVLink.Messages.enums.MAV_FRAME;
 public class Takeoff extends MissionCMD {
 
 	private Altitude finishedAlt = new Altitude(10);
-	
+
 	public Takeoff(MissionItem item) {
 		super(item);
 	}
@@ -36,7 +36,7 @@ public class Takeoff extends MissionCMD {
 		mavMsg.command = MAV_CMD.MAV_CMD_NAV_TAKEOFF;
 		mavMsg.frame = MAV_FRAME.MAV_FRAME_GLOBAL_RELATIVE_ALT;
 		mavMsg.z = (float) finishedAlt.valueInMeters();
-		return list;		
+		return list;
 	}
 
 	@Override
@@ -44,10 +44,10 @@ public class Takeoff extends MissionCMD {
 		finishedAlt = new Altitude(mavMsg.z);
 	}
 
-    @Override
-    public MissionItemType getType() {
-        return MissionItemType.TAKEOFF;
-    }
+	@Override
+	public MissionItemType getType() {
+		return MissionItemType.TAKEOFF;
+	}
 
 	public Altitude getFinishedAlt() {
 		return finishedAlt;

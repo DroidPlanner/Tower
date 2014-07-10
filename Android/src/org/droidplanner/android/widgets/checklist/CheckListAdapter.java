@@ -9,6 +9,7 @@ import org.droidplanner.android.widgets.checklist.listadapter.ListXmlAdapter;
 import org.droidplanner.android.widgets.checklist.row.ListRow;
 import org.droidplanner.android.widgets.checklist.row.ListRow_CheckBox;
 import org.droidplanner.android.widgets.checklist.row.ListRow_Interface;
+import org.droidplanner.android.widgets.checklist.row.ListRow_Interface.OnRowItemChangeListener;
 import org.droidplanner.android.widgets.checklist.row.ListRow_Level;
 import org.droidplanner.android.widgets.checklist.row.ListRow_Note;
 import org.droidplanner.android.widgets.checklist.row.ListRow_Radio;
@@ -17,7 +18,6 @@ import org.droidplanner.android.widgets.checklist.row.ListRow_Switch;
 import org.droidplanner.android.widgets.checklist.row.ListRow_Toggle;
 import org.droidplanner.android.widgets.checklist.row.ListRow_Type;
 import org.droidplanner.android.widgets.checklist.row.ListRow_Value;
-import org.droidplanner.android.widgets.checklist.row.ListRow_Interface.OnRowItemChangeListener;
 
 import android.graphics.Typeface;
 import android.view.LayoutInflater;

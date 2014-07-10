@@ -10,22 +10,23 @@ import android.widget.FrameLayout;
  */
 public class FitsSystemWindowsFrameLayout extends FrameLayout {
 
-    public FitsSystemWindowsFrameLayout(Context context) {
-        super(context);
-    }
+	public FitsSystemWindowsFrameLayout(Context context) {
+		super(context);
+	}
 
-    public FitsSystemWindowsFrameLayout(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
+	public FitsSystemWindowsFrameLayout(Context context, AttributeSet attrs) {
+		super(context, attrs);
+	}
 
-    public FitsSystemWindowsFrameLayout(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-    }
+	public FitsSystemWindowsFrameLayout(Context context, AttributeSet attrs,
+			int defStyle) {
+		super(context, attrs, defStyle);
+	}
 
-    @Override
-    protected boolean fitSystemWindows(Rect insets) {
-        final Rect insetsCopy = new Rect(insets);
-        super.fitSystemWindows(insetsCopy);
-        return false;
-    }
+	@Override
+	protected boolean fitSystemWindows(Rect insets) {
+		final Rect insetsCopy = new Rect(insets);
+		super.fitSystemWindows(insetsCopy);
+		return false;
+	}
 }

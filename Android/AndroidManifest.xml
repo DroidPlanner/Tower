@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
           package="org.droidplanner"
-          android:versionCode="81"
+          android:versionCode="82"
           android:versionName="please run version.sh to get the version name">
 
     <uses-sdk
@@ -59,7 +60,8 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_title"
         android:theme="@style/CustomActionBarTheme"
-        android:windowSoftInputMode="adjustPan" >
+        android:windowSoftInputMode="adjustPan"
+        tools:replace="android:label">
 
         <!-- You must insert your own Google Maps for Android API v2 key in here. -->
         <meta-data

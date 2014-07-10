@@ -1,7 +1,5 @@
 package org.droidplanner.core.MAVLink;
 
-import android.util.Log;
-
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
@@ -23,7 +21,7 @@ import com.MAVLink.Messages.enums.MAV_STATE;
 
 public class MavLinkMsgHandler {
 
-    private static final String TAG = MavLinkMsgHandler.class.getSimpleName();
+	private static final String TAG = MavLinkMsgHandler.class.getSimpleName();
 
 	private Drone drone;
 
@@ -32,8 +30,8 @@ public class MavLinkMsgHandler {
 	}
 
 	public void receiveData(MAVLinkMessage msg) {
-		if(drone.parameters.processMessage(msg)) {
-		    return;
+		if (drone.parameters.processMessage(msg)) {
+			return;
 		}
 
 		drone.waypointManager.processMessage(msg);
@@ -47,7 +45,8 @@ public class MavLinkMsgHandler {
 			break;
 		case msg_vfr_hud.MAVLINK_MSG_ID_VFR_HUD:
 			msg_vfr_hud m_hud = (msg_vfr_hud) msg;
-			drone.setAltitudeGroundAndAirSpeeds(m_hud.alt, m_hud.groundspeed,m_hud.airspeed, m_hud.climb);
+			drone.setAltitudeGroundAndAirSpeeds(m_hud.alt, m_hud.groundspeed,
+					m_hud.airspeed, m_hud.climb);
 			checkIsFlying(m_hud);
 			break;
 		case msg_mission_current.MAVLINK_MSG_ID_MISSION_CURRENT:
@@ -65,7 +64,8 @@ public class MavLinkMsgHandler {
 			msg_heartbeat msg_heart = (msg_heartbeat) msg;
 			drone.type.setType(msg_heart.type);
 			processState(msg_heart);
-			ApmModes newMode = ApmModes.getMode(msg_heart.custom_mode, drone.type.getType());
+			ApmModes newMode = ApmModes.getMode(msg_heart.custom_mode,
+					drone.type.getType());
 			drone.state.setMode(newMode);
 			drone.heartbeat.onHeartbeat(msg_heart);
 			break;

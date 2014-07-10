@@ -2,14 +2,14 @@ package org.droidplanner.android.fragments;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText;
+import org.droidplanner.android.widgets.graph.Chart;
+import org.droidplanner.android.widgets.graph.ChartSeries;
 import org.droidplanner.core.MAVLink.MavLinkStreamRates;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.parameters.Parameter;
-import org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText;
-import org.droidplanner.android.widgets.graph.Chart;
-import org.droidplanner.android.widgets.graph.ChartSeries;
 
 import android.graphics.Color;
 import android.os.Bundle;

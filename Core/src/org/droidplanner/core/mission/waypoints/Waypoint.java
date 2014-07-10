@@ -54,12 +54,12 @@ public class Waypoint extends SpatialCoordItem {
 		setYawAngle(mavMsg.param4);
 	}
 
-    @Override
-    public MissionItemType getType() {
-        return MissionItemType.WAYPOINT;
-    }
+	@Override
+	public MissionItemType getType() {
+		return MissionItemType.WAYPOINT;
+	}
 
-    public double getDelay() {
+	public double getDelay() {
 		return delay;
 	}
 

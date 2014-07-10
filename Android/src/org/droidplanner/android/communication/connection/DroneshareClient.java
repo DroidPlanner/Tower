@@ -1,12 +1,11 @@
 package org.droidplanner.android.communication.connection;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.UUID;
 
-import com.geeksville.apiproxy.GCSHookImpl;
-
 import android.util.Log;
+
+import com.geeksville.apiproxy.GCSHookImpl;
 
 /**
  * The Droidplanner specific bindings for the drone api FIXME - need to auto

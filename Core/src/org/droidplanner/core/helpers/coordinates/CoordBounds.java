@@ -47,7 +47,8 @@ public class CoordBounds {
 	}
 
 	public Coord2D getMiddle() {
-		return (new Coord2D((ne_1quadrant.getLat() + sw_3quadrant.getLat()) / 2,
+		return (new Coord2D(
+				(ne_1quadrant.getLat() + sw_3quadrant.getLat()) / 2,
 				(ne_1quadrant.getLng() + sw_3quadrant.getLng()) / 2));
 
 	}

@@ -55,6 +55,7 @@ public class TTSNotificationProvider implements OnInitListener,
 	/**
 	 * Warn the user if needed via the TTSNotificationProvider module
 	 */
+	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		if (tts != null) {
 			switch (event) {
@@ -99,10 +100,10 @@ public class TTSNotificationProvider implements OnInitListener,
 				speak("Data link restored");
 				break;
 			case MISSION_WP_UPDATE:
-				speak("Going for waypoint "+ drone.missionStats.getCurrentWP());
+				speak("Going for waypoint " + drone.missionStats.getCurrentWP());
 				break;
 			case FOLLOW_START:
-					speak("Following");
+				speak("Following");
 				break;
 			default:
 				break;
@@ -168,8 +169,8 @@ public class TTSNotificationProvider implements OnInitListener,
 		}
 	}
 
-    @Override
-    public void quickNotify(String feedback) {
-        speak(feedback);
-    }
+	@Override
+	public void quickNotify(String feedback) {
+		speak(feedback);
+	}
 }

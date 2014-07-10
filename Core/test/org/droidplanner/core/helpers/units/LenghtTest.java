@@ -2,13 +2,12 @@ package org.droidplanner.core.helpers.units;
 
 import junit.framework.TestCase;
 
-import org.droidplanner.core.helpers.units.Length;
-
 public class LenghtTest extends TestCase {
 	private static final double TOLERANCE = 1e-8;
 
 	private Length length;
 
+	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		length = new Length(1.0);

@@ -42,7 +42,7 @@ public abstract class MissionItem implements Comparable<MissionItem> {
 	 */
 	public abstract void unpackMAVMessage(msg_mission_item mavMsg);
 
-    public abstract MissionItemType getType();
+	public abstract MissionItemType getType();
 
 	public Mission getMission() {
 		return mission;

@@ -22,7 +22,9 @@
 package it.sephiroth.android.library.widget;
 
 import it.sephiroth.android.library.R;
+
 import java.util.ArrayList;
+
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
