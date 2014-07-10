@@ -72,7 +72,7 @@ public class MAVLinkService extends Service implements	MavLinkConnectionListener
 			case MSG_REGISTER_CLIENT:
 				msgCenter = msg.replyTo;
 				if (couldNotOpenConnection) {
-					selfDestryService();
+					selfDestroyService();
 				}
 				break;
 			case MSG_UNREGISTER_CLIENT:
@@ -121,10 +121,10 @@ public class MAVLinkService extends Service implements	MavLinkConnectionListener
 	@Override
 	public void onDisconnect() {
 		couldNotOpenConnection = true;
-		selfDestryService();
+		selfDestroyService();
 	}
 
-	private void selfDestryService() {
+	private void selfDestroyService() {
 		try {
 			if (msgCenter != null) {
 				Message msg = Message.obtain(null,

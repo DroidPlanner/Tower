@@ -78,7 +78,8 @@ public class FollowMe implements GooglePlayServicesClient.ConnectionCallbacks,
 			followMeEnabled = false;
 			Log.d("follow", "disable");
 		}
-		mLocationClient.removeLocationUpdates(this);
+        if(mLocationClient.isConnected())
+		    mLocationClient.removeLocationUpdates(this);
 	}
 
 	public boolean isEnabled() {
