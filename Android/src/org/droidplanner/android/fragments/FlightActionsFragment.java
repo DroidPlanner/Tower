@@ -2,7 +2,7 @@ package org.droidplanner.android.fragments;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.gcs.FollowMe;
+import org.droidplanner.android.gcs.follow.Follow;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
@@ -29,7 +29,7 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 
 	private Drone drone;
 	private OnMissionControlInteraction listener;
-	private FollowMe followMe;
+	private Follow followMe;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
