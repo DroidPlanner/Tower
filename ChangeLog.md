@@ -9,6 +9,13 @@ All the changes are logged below (preferable with the pull request numbers in pa
 
 # Releases
 
+## Droidplanner v2.5.0
+* Support for Pebble Watch (#874)
+* Follow-Me types (#871)
+* Release GPS when not in use (#873,#872)
+* Fix map padding (#870,#869)
+* Added CONTRIBUTING.md file to guide new developers (#862)
+
 ## Droidplanner v2.4.4
 * Implemented optional max volume on start (#838,#841,#840)
 * Added Unit tests to Travis CI (#839)
