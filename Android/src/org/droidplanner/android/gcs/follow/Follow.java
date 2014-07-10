@@ -142,6 +142,7 @@ public class Follow implements GooglePlayServicesClient.ConnectionCallbacks,
 
 	public void setType(FollowModes item) {
 		followAlgorithm = item.getAlgorithmType(drone,new Length(5.0),MIN_TIME_MS);
+		drone.events.notifyDroneEvent(DroneEventsType.FOLLOW_CHANGE_TYPE);
 	}
 
 
@@ -172,11 +173,22 @@ public class Follow implements GooglePlayServicesClient.ConnectionCallbacks,
 				return new FollowWakeboard(drone, radius, mIN_TIME_MS);
 			}
 		}
+		public FollowModes next() {
+			return values()[(ordinal()+1)%values().length];
+		}
 	}
 
 
 	public void changeRadius(double increment) {
 		followAlgorithm.changeRadius(increment);
 		
+	}
+
+	public void cycleType() {
+		setType(followAlgorithm.getType().next());
+	}
+
+	public FollowModes getType() {
+		return followAlgorithm.getType();
 	}
 }

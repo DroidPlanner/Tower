@@ -1,5 +1,6 @@
 package org.droidplanner.android.gcs.follow;
 
+import org.droidplanner.android.gcs.follow.Follow.FollowModes;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.geoTools.GeoTools;
@@ -14,6 +15,11 @@ public class FollowWakeboard extends FollowType {
 
 	public FollowWakeboard(Drone drone, Length radius, double mIN_TIME_MS) {
 		super(drone, radius, mIN_TIME_MS);
+	}
+
+	@Override
+	public FollowModes getType() {
+		return FollowModes.WAKEBOARD;
 	}
 
 	@Override
@@ -39,5 +45,4 @@ public class FollowWakeboard extends FollowType {
 
 		super.drone.guidedPoint.newGuidedCoord(goToCoord);
 	}
-
 }
