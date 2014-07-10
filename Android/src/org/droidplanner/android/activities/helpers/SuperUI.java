@@ -230,8 +230,7 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 
 			if (Utils.ConnectionType.BLUETOOTH.name().equals(connectionType)) {
 				// Launch a bluetooth device selection screen for the user
-                final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-                final String address = settings.getString(Constants.PREF_BLUETOOTH_DEVICE_ADDRESS, null);
+                final String address = mAppPrefs.getBluetoothDeviceAddress();
                 if(address == null || address.isEmpty()) {
                     new BTDeviceListFragment().show(getSupportFragmentManager(), "Device selection dialog");
                     return;

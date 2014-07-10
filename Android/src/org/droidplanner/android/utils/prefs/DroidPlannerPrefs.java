@@ -3,6 +3,7 @@ package org.droidplanner.android.utils.prefs;
 import java.util.UUID;
 
 import org.droidplanner.R;
+import org.droidplanner.android.utils.Constants;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.file.IO.VehicleProfileReader;
 import org.droidplanner.core.drone.profiles.VehicleProfile;
@@ -187,5 +188,9 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 
     public boolean isGuidedModeOnLongPressEnabled(){
         return prefs.getBoolean("pref_guided_mode_on_long_press", DEFAULT_GUIDED_MODE_ON_LONG_PRESS);
+    }
+    
+    public String getBluetoothDeviceAddress(){
+    	return prefs.getString(Constants.PREF_BLUETOOTH_DEVICE_ADDRESS, null);
     }
 }

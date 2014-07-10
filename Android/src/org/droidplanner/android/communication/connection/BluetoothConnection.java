@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.droidplanner.android.utils.Constants;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
@@ -27,12 +28,15 @@ public class BluetoothConnection extends MAVLinkConnection {
 	private InputStream in;
 	private BluetoothSocket bluetoothSocket;
 
+	protected DroidPlannerPrefs mAppPrefs;
+	
 	public BluetoothConnection(Context parentContext) {
 		super(parentContext);
 		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 		if (mBluetoothAdapter == null) {
 			Log.d(BLUE, "Null adapters");
 		}
+		mAppPrefs = new DroidPlannerPrefs(parentContext.getApplicationContext());
 	}
 
 	@Override
@@ -44,9 +48,8 @@ public class BluetoothConnection extends MAVLinkConnection {
 
         //Retrieve the stored device
         BluetoothDevice device = null;
-        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(parentContext);
-        final String addressName = settings.getString(Constants.PREF_BLUETOOTH_DEVICE_ADDRESS, null);
-
+        final String addressName = mAppPrefs.getBluetoothDeviceAddress();
+        
         if (addressName != null) {
             // strip name, use address part - stored as <address>;<name>
             final String part[] = addressName.split(";");
