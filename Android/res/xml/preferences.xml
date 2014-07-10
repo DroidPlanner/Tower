@@ -220,11 +220,13 @@
                 <PreferenceCategory
                     android:key="pref_bluetooth"
                     android:title="@string/pref_bluetooth">
-                    <EditTextPreference
+                    <org.droidplanner.android.dialogs.ClearBTDialogPreference
                         android:defaultValue=""
                         android:gravity="center"
                         android:key="pref_bluetooth_device_address"
-                        android:title="@string/pref_bluetooth_device_address"/>
+                        android:title="Forget default device"
+                        android:dialogMessage="Are you sure?"
+                        android:positiveButtonText="Forget"/>
                 </PreferenceCategory>
             </PreferenceScreen>
             <PreferenceScreen

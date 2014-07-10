@@ -7,7 +7,6 @@ import java.net.UnknownHostException;
 import java.util.Set;
 import java.util.UUID;
 
-import org.droidplanner.android.utils.Constants;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 import android.annotation.SuppressLint;
@@ -17,7 +16,6 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.ParcelUuid;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class BluetoothConnection extends MAVLinkConnection {

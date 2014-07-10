@@ -193,4 +193,9 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
     public String getBluetoothDeviceAddress(){
     	return prefs.getString(Constants.PREF_BLUETOOTH_DEVICE_ADDRESS, null);
     }
+    public void setBluetoothDeviceAddress(String newAddress){
+		final SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(Constants.PREF_BLUETOOTH_DEVICE_ADDRESS,
+                newAddress).apply();
+    }
 }
