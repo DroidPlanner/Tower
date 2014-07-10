@@ -9,6 +9,13 @@ All the changes are logged below (preferable with the pull request numbers in pa
 
 # Releases
 
+## Droidplanner v2.5.1
+* Fix upload to DroneShare (#880)
+* Clean-up of the codebase (#881)
+* Remember last BlueTooth device (#879)
+* Pebble support for follow-types (#876)
+* Refactoring Follow-me algorithms, implemented Lead-me (#882)
+
 ## Droidplanner v2.5.0
 * Support for Pebble Watch (#874)
 * Follow-Me types (#871)
