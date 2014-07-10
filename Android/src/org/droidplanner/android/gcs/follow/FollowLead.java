@@ -26,7 +26,7 @@ public class FollowLead extends FollowAlgorithm {
 		float bearing = location.getBearing();
 
 		Coord2D goCoord = GeoTools.newCoordFromBearingAndDistance(gcsCoord,
-				bearing + 90.0, radius.valueInMeters());
+				bearing, radius.valueInMeters());
 		drone.guidedPoint.newGuidedCoord(goCoord);
 	}
 
