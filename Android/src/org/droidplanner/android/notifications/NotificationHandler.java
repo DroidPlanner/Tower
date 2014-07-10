@@ -29,15 +29,22 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 	 */
 	private final StatusBarNotificationProvider mStatusBarNotification;
 
+	/**
+	 * Handles Pebble notification.
+	 */
+	private final PebbleNotificationProvider mPebbleNotification;
+
 	public NotificationHandler(Context context) {
 		mTtsNotification = new TTSNotificationProvider(context);
 		mStatusBarNotification = new StatusBarNotificationProvider(context);
+		mPebbleNotification = new PebbleNotificationProvider(context);
 	}
 
 	@Override
 	public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
 		mTtsNotification.onDroneEvent(event, drone);
 		mStatusBarNotification.onDroneEvent(event, drone);
+		mPebbleNotification.onDroneEvent(event,drone);
 	}
 
     /**
