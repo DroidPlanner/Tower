@@ -21,6 +21,7 @@ dependencies {
     compile project(':Core')
     compile project(':Mavlink')
     compile project(':HorizontalVariableListView:HorizontalVariableListView')
+    compile project(':PebbleKit')
     compile project(':usb-serial-for-android:UsbSerialLibrary')
 }
 
