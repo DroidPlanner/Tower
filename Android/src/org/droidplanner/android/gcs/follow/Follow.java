@@ -1,5 +1,6 @@
 package org.droidplanner.android.gcs.follow;
 
+import org.droidplanner.android.gcs.follow.FollowAlgorithm.FollowModes;
 import org.droidplanner.core.MAVLink.MavLinkROI;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
@@ -31,12 +32,12 @@ public class Follow implements GooglePlayServicesClient.ConnectionCallbacks,
 	private Drone drone;
 	private LocationClient mLocationClient;
 
-	private FollowType followAlgorithm;
+	private FollowAlgorithm followAlgorithm;
 
 	public Follow(Context context, Drone drone) {
 		this.context = context;
 		this.drone = drone;
-		followAlgorithm = new FollowLeash(drone, new Length(5.0), MIN_TIME_MS);
+		followAlgorithm = new FollowLeash(drone, new Length(5.0));
 		mLocationClient = new LocationClient(context, this, this);
 		mLocationClient.connect();
 		drone.events.addDroneListener(this);
@@ -143,44 +144,8 @@ public class Follow implements GooglePlayServicesClient.ConnectionCallbacks,
 	}
 
 	public void setType(FollowModes item) {
-		followAlgorithm = item.getAlgorithmType(drone, new Length(5.0),
-				MIN_TIME_MS);
+		followAlgorithm = item.getAlgorithmType(drone, new Length(5.0));
 		drone.events.notifyDroneEvent(DroneEventsType.FOLLOW_CHANGE_TYPE);
-	}
-
-	public enum FollowModes {
-		LEASH("Leash"), HEADING("Heading"), WAKEBOARD("Wakeboard"), CIRCLE(
-				"Circle");
-
-		private String name;
-
-		FollowModes(String str) {
-			name = str;
-		}
-
-		@Override
-		public String toString() {
-			return name;
-		}
-
-		public FollowType getAlgorithmType(Drone drone, Length radius,
-				double mIN_TIME_MS) {
-			switch (this) {
-			default:
-			case LEASH:
-				return new FollowLeash(drone, radius, mIN_TIME_MS);
-			case CIRCLE:
-				return new FollowCircle(drone, radius, mIN_TIME_MS);
-			case HEADING:
-				return new FollowHeading(drone, radius, mIN_TIME_MS);
-			case WAKEBOARD:
-				return new FollowWakeboard(drone, radius, mIN_TIME_MS);
-			}
-		}
-
-		public FollowModes next() {
-			return values()[(ordinal() + 1) % values().length];
-		}
 	}
 
 	public void changeRadius(double increment) {

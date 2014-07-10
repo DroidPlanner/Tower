@@ -1,6 +1,5 @@
 package org.droidplanner.android.gcs.follow;
 
-import org.droidplanner.android.gcs.follow.Follow.FollowModes;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.geoTools.GeoTools;
@@ -8,10 +7,10 @@ import org.droidplanner.core.helpers.units.Length;
 
 import android.location.Location;
 
-public class FollowLeash extends FollowType {
+public class FollowLeash extends FollowAlgorithm {
 
-	public FollowLeash(Drone drone, Length radius, double mIN_TIME_MS) {
-		super(drone, radius, mIN_TIME_MS);
+	public FollowLeash(Drone drone, Length radius) {
+		super(drone, radius);
 	}
 
 	@Override
