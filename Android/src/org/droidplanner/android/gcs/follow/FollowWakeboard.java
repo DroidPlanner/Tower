@@ -1,6 +1,5 @@
 package org.droidplanner.android.gcs.follow;
 
-import org.droidplanner.android.gcs.follow.Follow.FollowModes;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.geoTools.GeoTools;
