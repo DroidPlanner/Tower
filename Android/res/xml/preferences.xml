@@ -224,9 +224,9 @@
                         android:defaultValue=""
                         android:gravity="center"
                         android:key="pref_bluetooth_device_address"
-                        android:title="Forget default device"
-                        android:dialogMessage="Are you sure?"
-                        android:positiveButtonText="Forget"/>
+                        android:title="@string/pref_forget_bluetooth_device_address"
+                        android:dialogMessage="@string/pref_forget_bluetooth_device_address_confirm"
+                        android:positiveButtonText="@string/pref_bluetooth_forget"/>
                 </PreferenceCategory>
             </PreferenceScreen>
             <PreferenceScreen
