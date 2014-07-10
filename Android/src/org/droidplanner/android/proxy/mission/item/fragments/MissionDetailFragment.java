@@ -3,12 +3,12 @@ package org.droidplanner.android.proxy.mission.item.fragments;
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.mission.item.fragments.MissionCircleFragment;
-import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.proxy.mission.MissionProxy;
+import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.proxy.mission.item.adapters.AdapterMissionItems;
+import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.MissionItemType;
-import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
 
 import android.app.Activity;
 import android.content.DialogInterface;

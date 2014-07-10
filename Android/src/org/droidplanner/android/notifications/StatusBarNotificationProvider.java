@@ -1,5 +1,13 @@
 package org.droidplanner.android.notifications;
 
+import org.droidplanner.R;
+import org.droidplanner.android.activities.FlightActivity;
+import org.droidplanner.android.activities.helpers.SuperUI;
+import org.droidplanner.android.utils.TextUtils;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
+import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.drone.DroneInterfaces;
+
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -8,14 +16,6 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.widget.Toast;
-
-import org.droidplanner.R;
-import org.droidplanner.android.activities.FlightActivity;
-import org.droidplanner.android.activities.helpers.SuperUI;
-import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-import org.droidplanner.android.utils.TextUtils;
-import org.droidplanner.core.drone.Drone;
-import org.droidplanner.core.drone.DroneInterfaces;
 
 /**
  * Implements DroidPlanner's status bar notifications.

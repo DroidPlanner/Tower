@@ -5,7 +5,6 @@ import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.gcs.follow.Follow;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.core.drone.Drone;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 
 import android.app.Activity;
 import android.os.Bundle;

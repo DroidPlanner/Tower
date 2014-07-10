@@ -1,9 +1,9 @@
 package org.droidplanner.android.proxy.mission;
 
-import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 
 public class MissionSelection {
 	/**

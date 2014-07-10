@@ -1,8 +1,8 @@
 package org.droidplanner.core.drone.variables;
 
 import org.droidplanner.core.drone.Drone;
-import org.droidplanner.core.drone.DroneVariable;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
+import org.droidplanner.core.drone.DroneVariable;
 import org.droidplanner.core.helpers.units.Length;
 
 public class MissionStats extends DroneVariable {

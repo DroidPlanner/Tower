@@ -4,10 +4,9 @@ import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.communication.connection.MAVLinkConnection;
 import org.droidplanner.android.communication.connection.MAVLinkConnection.MavLinkConnectionListener;
-
-import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.analytics.GAUtils;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 import android.annotation.SuppressLint;
 import android.app.Service;

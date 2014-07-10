@@ -1,14 +1,14 @@
 package org.droidplanner.core.mission.waypoints;
 
-import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
-import com.MAVLink.Messages.enums.MAV_CMD;
+import java.util.List;
 
 import org.droidplanner.core.helpers.coordinates.Coord3D;
 import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.MissionItemType;
 
-import java.util.List;
+import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
+import com.MAVLink.Messages.enums.MAV_CMD;
 
 /**
  * Handle spline waypoint mavlink packet generation.

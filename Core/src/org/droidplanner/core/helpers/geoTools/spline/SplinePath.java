@@ -1,11 +1,11 @@
 package org.droidplanner.core.helpers.geoTools.spline;
 
-import android.util.Log;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.util.Log;
 
 /**
  * This class contains functions used to generate a spline path.

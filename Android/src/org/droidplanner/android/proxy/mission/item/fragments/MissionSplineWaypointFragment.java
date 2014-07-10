@@ -1,17 +1,16 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
-import android.os.Bundle;
-import android.view.View;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-
 import org.droidplanner.R;
 import org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText;
 import org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText.OnTextSeekBarChangedListener;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.mission.MissionItemType;
 import org.droidplanner.core.mission.waypoints.SplineWaypoint;
-import org.droidplanner.core.mission.waypoints.Waypoint;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 
 /**
  * This class renders the detail view for a spline waypoint mission item.

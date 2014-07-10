@@ -1,8 +1,8 @@
 package org.droidplanner.android.proxy.mission;
 
-import android.util.Pair;
-
-import com.google.android.gms.maps.model.LatLng;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
@@ -20,9 +20,7 @@ import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.core.mission.waypoints.SplineWaypoint;
 import org.droidplanner.core.mission.waypoints.Waypoint;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import android.util.Pair;
 
 /**
  * This class is used to render a {@link org.droidplanner.core.mission.Mission}

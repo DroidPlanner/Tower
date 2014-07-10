@@ -7,13 +7,13 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.maps.providers.DPMapProvider;
-import org.droidplanner.android.utils.prefs.AutoPanMode;
-import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-import org.droidplanner.android.utils.DroneHelper;
 import org.droidplanner.android.helpers.LocalMapTileProvider;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
+import org.droidplanner.android.maps.providers.DPMapProvider;
+import org.droidplanner.android.utils.DroneHelper;
+import org.droidplanner.android.utils.prefs.AutoPanMode;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
@@ -30,7 +30,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;

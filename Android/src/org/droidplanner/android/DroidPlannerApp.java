@@ -1,12 +1,12 @@
 package org.droidplanner.android;
 
-import org.droidplanner.android.gcs.follow.Follow;
-import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-import org.droidplanner.android.utils.analytics.GAUtils;
-import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.communication.service.MAVLinkClient;
 import org.droidplanner.android.communication.service.NetworkStateReceiver;
+import org.droidplanner.android.gcs.follow.Follow;
 import org.droidplanner.android.notifications.NotificationHandler;
+import org.droidplanner.android.proxy.mission.MissionProxy;
+import org.droidplanner.android.utils.analytics.GAUtils;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.core.MAVLink.MAVLinkStreams;
 import org.droidplanner.core.MAVLink.MavLinkMsgHandler;
 import org.droidplanner.core.drone.Drone;

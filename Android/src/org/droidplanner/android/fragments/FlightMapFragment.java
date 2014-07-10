@@ -1,5 +1,17 @@
 package org.droidplanner.android.fragments;
 
+import org.droidplanner.android.dialogs.GuidedDialog;
+import org.droidplanner.android.dialogs.GuidedDialog.GuidedDialogListener;
+import org.droidplanner.android.maps.DPMap;
+import org.droidplanner.android.maps.MarkerInfo;
+import org.droidplanner.android.utils.DroneHelper;
+import org.droidplanner.android.utils.prefs.AutoPanMode;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
+import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
+import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
+import org.droidplanner.core.helpers.coordinates.Coord2D;
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -9,18 +21,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
-
-import org.droidplanner.android.dialogs.GuidedDialog;
-import org.droidplanner.android.dialogs.GuidedDialog.GuidedDialogListener;
-import org.droidplanner.android.utils.DroneHelper;
-import org.droidplanner.android.maps.DPMap;
-import org.droidplanner.android.maps.MarkerInfo;
-import org.droidplanner.android.utils.prefs.AutoPanMode;
-import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-import org.droidplanner.core.drone.Drone;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
-import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.core.helpers.coordinates.Coord2D;
 
 public class FlightMapFragment extends DroneMap implements
 		DPMap.OnMapLongClickListener, DPMap.OnMarkerClickListener,

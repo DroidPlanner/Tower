@@ -1,11 +1,11 @@
 package org.droidplanner.android.utils;
 
-import android.content.res.Resources;
-import android.location.Location;
-
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.GeoPoint;
+
+import android.content.res.Resources;
+import android.location.Location;
 
 import com.google.android.gms.maps.model.LatLng;
 

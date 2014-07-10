@@ -12,7 +12,6 @@ import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.ConfigurationActivity;
 import org.droidplanner.android.activities.helpers.MapPreferencesActivity;
 import org.droidplanner.android.maps.providers.DPMapProvider;
-import org.droidplanner.android.notifications.NotificationHandler;
 import org.droidplanner.android.utils.Constants;
 import org.droidplanner.android.utils.file.DirectoryPath;
 import org.droidplanner.core.drone.Drone;
@@ -21,7 +20,6 @@ import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.variables.HeartBeat;
 
 import android.content.ActivityNotFoundException;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -40,7 +38,6 @@ import android.widget.Toast;
 
 import com.getpebble.android.kit.PebbleKit;
 import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.common.io.Files;
 
 /**
  * Implements the application settings screen.

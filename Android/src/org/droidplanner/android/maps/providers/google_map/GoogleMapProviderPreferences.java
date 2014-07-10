@@ -1,18 +1,14 @@
 package org.droidplanner.android.maps.providers.google_map;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceManager;
-import android.support.v4.content.LocalBroadcastManager;
-
 import org.droidplanner.R;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.maps.providers.MapProviderPreferences;
 
-import static org.droidplanner.android.utils.Constants.*;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 
 /**
  * This is the google map provider preferences. It stores and handles all

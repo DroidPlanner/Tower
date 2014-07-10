@@ -1,14 +1,14 @@
 package org.droidplanner.android.graphic.map;
 
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
 import org.droidplanner.R;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.variables.Home;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
+
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 public class GraphicHome extends MarkerInfo.SimpleMarkerInfo {
 

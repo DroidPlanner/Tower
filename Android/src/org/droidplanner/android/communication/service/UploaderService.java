@@ -2,13 +2,10 @@ package org.droidplanner.android.communication.service;
 
 import java.io.File;
 
-import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-import org.droidplanner.android.utils.file.DirectoryPath;
-
-import com.geeksville.apiproxy.DirectoryUploader;
-import com.geeksville.apiproxy.IUploadListener;
-
 import org.droidplanner.R;
+import org.droidplanner.android.utils.file.DirectoryPath;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
+
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -18,6 +15,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+
+import com.geeksville.apiproxy.DirectoryUploader;
+import com.geeksville.apiproxy.IUploadListener;
 
 /**
  * Provides delayed uploads to the DroneShare service.

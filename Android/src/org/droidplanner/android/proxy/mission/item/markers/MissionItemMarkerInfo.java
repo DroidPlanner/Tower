@@ -1,18 +1,18 @@
 package org.droidplanner.android.proxy.mission.item.markers;
 
-import android.content.res.Resources;
-import android.graphics.Bitmap;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.droidplanner.android.maps.MarkerWithText;
 import org.droidplanner.android.maps.MarkerInfo;
+import org.droidplanner.android.maps.MarkerWithText;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
 
 /**
  * Template class and factory for a mission item's marker source.

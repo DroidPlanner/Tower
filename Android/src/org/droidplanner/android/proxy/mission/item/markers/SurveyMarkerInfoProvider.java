@@ -1,12 +1,12 @@
 package org.droidplanner.android.proxy.mission.item.markers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.mission.survey.Survey;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *

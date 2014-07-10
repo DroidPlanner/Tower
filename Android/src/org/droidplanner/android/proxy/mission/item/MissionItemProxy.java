@@ -1,18 +1,13 @@
 package org.droidplanner.android.proxy.mission.item;
 
-import android.content.Context;
-import android.graphics.Color;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.droidplanner.R;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.fragments.MissionDetailFragment;
 import org.droidplanner.android.proxy.mission.item.markers.MissionItemMarkerInfo;
-import org.droidplanner.android.utils.DroneHelper;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.geoTools.GeoTools;
 import org.droidplanner.core.helpers.units.Length;
@@ -24,8 +19,12 @@ import org.droidplanner.core.mission.waypoints.Circle;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.core.mission.waypoints.SplineWaypoint;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.content.Context;
+import android.graphics.Color;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 /**
  * This class is responsible for providing logic to access and interpret the

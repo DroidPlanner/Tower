@@ -4,14 +4,9 @@ import java.util.List;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 import org.droidplanner.android.activities.helpers.SuperUI;
-import org.droidplanner.android.proxy.mission.MissionSelection;
-import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
-import org.droidplanner.android.proxy.mission.MissionProxy;
-import org.droidplanner.android.utils.prefs.AutoPanMode;
-import org.droidplanner.core.drone.Drone;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
+import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
+import org.droidplanner.android.dialogs.YesNoDialog;
 import org.droidplanner.android.fragments.EditorListFragment;
 import org.droidplanner.android.fragments.EditorMapFragment;
 import org.droidplanner.android.fragments.EditorToolsFragment;
@@ -19,12 +14,15 @@ import org.droidplanner.android.fragments.EditorToolsFragment.EditorTools;
 import org.droidplanner.android.fragments.EditorToolsFragment.OnEditorToolSelected;
 import org.droidplanner.android.fragments.helpers.GestureMapFragment;
 import org.droidplanner.android.fragments.helpers.GestureMapFragment.OnPathFinishedListener;
+import org.droidplanner.android.proxy.mission.MissionProxy;
+import org.droidplanner.android.proxy.mission.MissionSelection;
+import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.proxy.mission.item.fragments.MissionDetailFragment;
-
+import org.droidplanner.android.utils.prefs.AutoPanMode;
+import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
-import org.droidplanner.android.dialogs.YesNoDialog;
 
-import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;

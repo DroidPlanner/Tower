@@ -1,13 +1,5 @@
 package org.droidplanner.android.fragments;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
-
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
@@ -16,6 +8,14 @@ import org.droidplanner.android.proxy.mission.item.markers.SurveyMarkerInfoProvi
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
+
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 @SuppressLint("UseSparseArrays")
 public class EditorMapFragment extends DroneMap implements

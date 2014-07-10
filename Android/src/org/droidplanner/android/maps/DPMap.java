@@ -1,13 +1,13 @@
 package org.droidplanner.android.maps;
 
-import android.graphics.Color;
+import java.util.List;
 
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
-import java.util.List;
+import android.graphics.Color;
 
 /**
  * Defines the functionality expected from the map providers.

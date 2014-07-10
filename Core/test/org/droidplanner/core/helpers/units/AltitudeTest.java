@@ -2,9 +2,6 @@ package org.droidplanner.core.helpers.units;
 
 import junit.framework.TestCase;
 
-import org.droidplanner.core.helpers.units.Altitude;
-import org.droidplanner.core.helpers.units.Length;
-
 public class AltitudeTest extends TestCase {
 
 	private Altitude altitude;

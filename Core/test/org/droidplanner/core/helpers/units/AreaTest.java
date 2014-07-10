@@ -2,8 +2,6 @@ package org.droidplanner.core.helpers.units;
 
 import junit.framework.TestCase;
 
-import org.droidplanner.core.helpers.units.Area;
-
 public class AreaTest extends TestCase {
 
 	private Area oneSqMeter;

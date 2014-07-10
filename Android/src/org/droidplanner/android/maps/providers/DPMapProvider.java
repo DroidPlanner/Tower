@@ -1,7 +1,5 @@
 package org.droidplanner.android.maps.providers;
 
-import com.google.android.gms.maps.GoogleMap;
-
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.providers.google_map.GoogleMapFragment;
 import org.droidplanner.android.maps.providers.google_map.GoogleMapProviderPreferences;

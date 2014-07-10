@@ -1,5 +1,7 @@
 package org.droidplanner.android.dialogs;
 
+import org.droidplanner.R;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -7,8 +9,6 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 
 import com.google.android.gms.maps.model.LatLng;
-
-import org.droidplanner.R;
 
 public class GuidedDialog extends DialogFragment {
 

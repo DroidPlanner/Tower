@@ -1,15 +1,15 @@
 package org.droidplanner.android.activities.helpers;
 
+import org.droidplanner.R;
+import org.droidplanner.android.maps.providers.DPMapProvider;
+import org.droidplanner.android.maps.providers.MapProviderPreferences;
+import org.droidplanner.android.utils.Constants;
+
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-
-import org.droidplanner.R;
-import org.droidplanner.android.maps.providers.DPMapProvider;
-import org.droidplanner.android.maps.providers.MapProviderPreferences;
-import org.droidplanner.android.utils.Constants;
 
 /**
  * This activity is used to display the preferences for the currently selected

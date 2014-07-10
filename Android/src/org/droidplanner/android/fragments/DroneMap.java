@@ -1,9 +1,12 @@
 package org.droidplanner.android.fragments;
 
+import java.util.List;
+
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.graphic.map.GraphicDrone;
 import org.droidplanner.android.graphic.map.GraphicGuided;
+import org.droidplanner.android.graphic.map.GraphicHome;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.proxy.mission.MissionProxy;
@@ -12,7 +15,6 @@ import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.android.graphic.map.GraphicHome;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
 import android.app.Activity;
@@ -23,8 +25,6 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import java.util.List;
 
 public abstract class DroneMap extends Fragment implements OnDroneListener {
 

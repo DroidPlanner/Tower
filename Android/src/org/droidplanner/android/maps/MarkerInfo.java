@@ -1,9 +1,9 @@
 package org.droidplanner.android.maps;
 
+import org.droidplanner.core.helpers.coordinates.Coord2D;
+
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-
-import org.droidplanner.core.helpers.coordinates.Coord2D;
 
 /**
  * Defines the methods expected from a MarkerInfo instance. The marker info

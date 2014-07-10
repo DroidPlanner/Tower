@@ -1,10 +1,10 @@
 package org.droidplanner.android.maps.providers.osm;
 
-import android.os.Bundle;
-
 import org.droidplanner.R;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.maps.providers.MapProviderPreferences;
+
+import android.os.Bundle;
 
 /**
  * This is the Open Street Map provider preferences. It stores, and handles all

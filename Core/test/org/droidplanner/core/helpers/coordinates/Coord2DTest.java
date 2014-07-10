@@ -2,8 +2,6 @@ package org.droidplanner.core.helpers.coordinates;
 
 import junit.framework.TestCase;
 
-import org.droidplanner.core.helpers.coordinates.Coord2D;
-
 public class Coord2DTest extends TestCase {
 
 	public void testConstructor() {

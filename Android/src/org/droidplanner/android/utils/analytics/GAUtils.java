@@ -1,5 +1,12 @@
 package org.droidplanner.android.utils.analytics;
 
+import java.util.Map;
+
+import org.droidplanner.BuildConfig;
+import org.droidplanner.R;
+import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
+
 import android.content.Context;
 import android.util.Log;
 
@@ -7,13 +14,6 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Logger;
 import com.google.android.gms.analytics.Tracker;
-
-import org.droidplanner.BuildConfig;
-import org.droidplanner.R;
-import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-
-import java.util.Map;
 
 /**
  * Components related to google analytics logic.

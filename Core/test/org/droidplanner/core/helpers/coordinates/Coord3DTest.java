@@ -1,10 +1,8 @@
 package org.droidplanner.core.helpers.coordinates;
 
-import org.droidplanner.core.helpers.coordinates.Coord2D;
-import org.droidplanner.core.helpers.coordinates.Coord3D;
-import org.droidplanner.core.helpers.units.Altitude;
-
 import junit.framework.TestCase;
+
+import org.droidplanner.core.helpers.units.Altitude;
 
 public class Coord3DTest extends TestCase {
 

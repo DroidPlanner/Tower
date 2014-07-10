@@ -3,11 +3,11 @@ package org.droidplanner.android.fragments.helpers;
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.ConfigurationActivity;
+import org.droidplanner.android.fragments.calibration.SetupMainPanel;
+import org.droidplanner.android.fragments.calibration.SetupSidePanel;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.android.fragments.calibration.SetupMainPanel;
-import org.droidplanner.android.fragments.calibration.SetupSidePanel;
 
 import android.app.Activity;
 import android.os.Bundle;

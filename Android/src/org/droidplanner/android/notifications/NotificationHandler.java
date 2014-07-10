@@ -1,9 +1,9 @@
 package org.droidplanner.android.notifications;
 
-import android.content.Context;
-
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
+
+import android.content.Context;
 
 /**
  * This class handles DroidPlanner's status bar, and audible notifications. It
