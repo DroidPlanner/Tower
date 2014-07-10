@@ -7,15 +7,15 @@ import org.droidplanner.core.helpers.units.Length;
 
 import android.location.Location;
 
-public class FollowHeading extends FollowAlgorithm {
+public class FollowLead extends FollowAlgorithm {
 
-	public FollowHeading(Drone drone, Length radius, double mIN_TIME_MS) {
+	public FollowLead(Drone drone, Length radius, double mIN_TIME_MS) {
 		super(drone, radius, mIN_TIME_MS);
 	}
 
 	@Override
 	public FollowModes getType() {
-		return FollowModes.HEADING;
+		return FollowModes.LEAD;
 	}
 
 	@Override
