@@ -320,8 +320,8 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 	private void enableSplineToggle(boolean isEnabled) {
 		if (mSplineToggleContainer != null) {
-			mSplineToggleContainer.setVisibility(isEnabled ? View.VISIBLE
-					: View.INVISIBLE);
+			//mSplineToggleContainer.setVisibility(isEnabled ? View.VISIBLE: View.INVISIBLE);
+			mSplineToggleContainer.setVisibility(View.GONE);
 		}
 	}
 

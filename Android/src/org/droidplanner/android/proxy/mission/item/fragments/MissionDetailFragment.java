@@ -134,8 +134,8 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 		asSet.remove(MissionItemType.LOITER);
 		asSet.remove(MissionItemType.LOITER_INF);
 		asSet.remove(MissionItemType.LOITERT);
-		asSet.remove(MissionItemType.ROI);
 		asSet.remove(MissionItemType.RTL);
+		asSet.remove(MissionItemType.SPLINE_WAYPOINT);
 		objects = asSet.toArray(new MissionItemType[] {});
 
         commandAdapter = new AdapterMissionItems(this.getActivity(),
