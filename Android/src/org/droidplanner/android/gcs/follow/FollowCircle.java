@@ -9,7 +9,7 @@ import org.droidplanner.core.helpers.units.Length;
 
 import android.location.Location;
 
-public class FollowCircle extends FollowType  {
+public class FollowCircle extends FollowType {
 
 	/**
 	 * °/s
@@ -20,7 +20,7 @@ public class FollowCircle extends FollowType  {
 	public FollowCircle(Drone drone, Length radius, double mIN_TIME_MS) {
 		super(drone, radius, mIN_TIME_MS);
 	}
-	
+
 	@Override
 	public FollowModes getType() {
 		return FollowModes.CIRCLE;

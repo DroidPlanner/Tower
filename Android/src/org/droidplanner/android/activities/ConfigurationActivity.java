@@ -2,14 +2,14 @@ package org.droidplanner.android.activities;
 
 import org.droidplanner.R;
 import org.droidplanner.android.activities.helpers.SuperUI;
-import org.droidplanner.core.drone.Drone;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.android.fragments.ChecklistFragment;
 import org.droidplanner.android.fragments.ParamsFragment;
 import org.droidplanner.android.fragments.SetupRadioFragment;
 import org.droidplanner.android.fragments.SetupSensorFragment;
 import org.droidplanner.android.fragments.TuningFragment;
 import org.droidplanner.android.widgets.viewPager.TabPageIndicator;
+import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 
 import android.app.ActionBar;
 import android.content.Context;
@@ -18,10 +18,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
 /**
@@ -112,7 +110,8 @@ public class ConfigurationActivity extends SuperUI {
 							}
 						});
 
-				mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+				mViewPager
+						.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 
 							@Override
 							public void onPageSelected(int i) {
@@ -132,7 +131,8 @@ public class ConfigurationActivity extends SuperUI {
 	}
 
 	private void handleIntent(Intent intent) {
-		int configScreenIndex = intent.getIntExtra(EXTRA_CONFIG_SCREEN_INDEX, 0);
+		int configScreenIndex = intent
+				.getIntExtra(EXTRA_CONFIG_SCREEN_INDEX, 0);
 		mViewPager.setCurrentItem(configScreenIndex);
 	}
 

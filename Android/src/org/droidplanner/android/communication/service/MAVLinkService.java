@@ -4,10 +4,9 @@ import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.communication.connection.MAVLinkConnection;
 import org.droidplanner.android.communication.connection.MAVLinkConnection.MavLinkConnectionListener;
-
-import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.analytics.GAUtils;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 import android.annotation.SuppressLint;
 import android.app.Service;
@@ -31,18 +30,19 @@ import com.google.android.gms.analytics.HitBuilders;
  * 
  */
 
-public class MAVLinkService extends Service implements	MavLinkConnectionListener {
+public class MAVLinkService extends Service implements
+		MavLinkConnectionListener {
 
-    private static final String LOG_TAG = MAVLinkService.class.getSimpleName();
+	private static final String LOG_TAG = MAVLinkService.class.getSimpleName();
 
 	public static final int MSG_REGISTER_CLIENT = 1;
 	public static final int MSG_UNREGISTER_CLIENT = 2;
 	public static final int MSG_SEND_DATA = 3;
 
-    /**
-     * Provides access to the app preferences.
-     */
-    private DroidPlannerPrefs mAppPrefs;
+	/**
+	 * Provides access to the app preferences.
+	 */
+	private DroidPlannerPrefs mAppPrefs;
 
 	private MAVLinkConnection mavConnection;
 	Messenger msgCenter = null;
@@ -141,18 +141,19 @@ public class MAVLinkService extends Service implements	MavLinkConnectionListener
 	public void onCreate() {
 		super.onCreate();
 
-        final Context context = getApplicationContext();
-        final DroidPlannerApp dpApp = (DroidPlannerApp) getApplication();
+		final Context context = getApplicationContext();
+		final DroidPlannerApp dpApp = (DroidPlannerApp) getApplication();
 
-        //Initialise the app preferences handle.
-        mAppPrefs = new DroidPlannerPrefs(context);
+		// Initialise the app preferences handle.
+		mAppPrefs = new DroidPlannerPrefs(context);
 
 		commErrMsgLocalStore = getString(R.string.MAVLinkError);
 
 		commErrHandler = new Handler() {
 			@Override
 			public void handleMessage(Message msg) {
-				Toast.makeText(context, commErrMsgLocalStore, Toast.LENGTH_LONG).show();
+				Toast.makeText(context, commErrMsgLocalStore, Toast.LENGTH_LONG)
+						.show();
 			}
 		};
 
@@ -168,6 +169,7 @@ public class MAVLinkService extends Service implements	MavLinkConnectionListener
 	/**
 	 * Called after the exception raised in any of the MavLinkConnection classes
 	 */
+	@Override
 	public void onComError(String errMsg) {
 
 		Message errMessageObj = new Message();
@@ -185,29 +187,30 @@ public class MAVLinkService extends Service implements	MavLinkConnectionListener
 	 * Toggle the current state of the MAVlink connection. Starting and closing
 	 * the as needed. May throw a onConnect or onDisconnect callback
 	 */
-    private void connectMAVConnection() {
-        String connectionType = mAppPrefs.getMavLinkConnectionType();
+	private void connectMAVConnection() {
+		String connectionType = mAppPrefs.getMavLinkConnectionType();
 
-        Utils.ConnectionType connType = Utils.ConnectionType.valueOf(connectionType);
-        mavConnection = connType.getConnection(this);
-        mavConnection.start();
+		Utils.ConnectionType connType = Utils.ConnectionType
+				.valueOf(connectionType);
+		mavConnection = connType.getConnection(this);
+		mavConnection.start();
 
-        //Record which connection type is used.
-        GAUtils.sendEvent(new HitBuilders.EventBuilder()
-                .setCategory(GAUtils.Category.MAVLINK_CONNECTION.toString())
-                .setAction( "Mavlink connecting using " + connectionType));
-    }
+		// Record which connection type is used.
+		GAUtils.sendEvent(new HitBuilders.EventBuilder().setCategory(
+				GAUtils.Category.MAVLINK_CONNECTION.toString()).setAction(
+				"Mavlink connecting using " + connectionType));
+	}
 
-    private void disconnectMAVConnection() {
-        Log.d(LOG_TAG, "Pre disconnect");
-        if (mavConnection != null) {
-            mavConnection.disconnect();
-            mavConnection = null;
-        }
+	private void disconnectMAVConnection() {
+		Log.d(LOG_TAG, "Pre disconnect");
+		if (mavConnection != null) {
+			mavConnection.disconnect();
+			mavConnection = null;
+		}
 
-        GAUtils.sendEvent(new HitBuilders.EventBuilder()
-                .setCategory(GAUtils.Category.MAVLINK_CONNECTION.toString())
-                .setAction("Mavlink disconnecting"));
-    }
+		GAUtils.sendEvent(new HitBuilders.EventBuilder().setCategory(
+				GAUtils.Category.MAVLINK_CONNECTION.toString()).setAction(
+				"Mavlink disconnecting"));
+	}
 
 }

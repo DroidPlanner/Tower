@@ -34,7 +34,8 @@ public class FollowWakeboard extends FollowType {
 			double headingGCStoDrone = GeoTools.getHeadingFromCoordinates(
 					gcsCoord, super.drone.GPS.getPosition());
 			double userRigthHeading = 90.0 + bearing;
-			double alpha = MathUtil.Normalize(location.getSpeed(), 0.0, TOP_SPEED);
+			double alpha = MathUtil.Normalize(location.getSpeed(), 0.0,
+					TOP_SPEED);
 			double mixedHeading = MathUtil.bisectAngle(headingGCStoDrone,
 					userRigthHeading, alpha);
 			goToCoord = GeoTools.newCoordFromBearingAndDistance(gcsCoord,

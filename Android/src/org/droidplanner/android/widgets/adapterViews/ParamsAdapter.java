@@ -7,10 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.droidplanner.R;
+import org.droidplanner.android.utils.file.IO.ParameterMetadataMapReader;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.profiles.VehicleProfile;
-import org.droidplanner.android.utils.file.IO.ParameterMetadataMapReader;
-import org.droidplanner.android.widgets.adapterViews.ParamsAdapterItem.Validation;
 import org.droidplanner.core.parameters.Parameter;
 import org.droidplanner.core.parameters.ParameterMetadata;
 

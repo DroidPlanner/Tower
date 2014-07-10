@@ -18,7 +18,7 @@ public class FollowLeash extends FollowType {
 	public FollowModes getType() {
 		return FollowModes.LEASH;
 	}
-	
+
 	@Override
 	public void processNewLocation(Location location) {
 		Coord2D gcsCoord = new Coord2D(location.getLatitude(),

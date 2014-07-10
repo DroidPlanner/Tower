@@ -222,11 +222,11 @@ public class FillBar extends View {
 	}
 
 	public int getMinValue() {
-		return val_min + (int) (getMin() * ((float) (val_max - val_min)));
+		return val_min + (int) (getMin() * (val_max - val_min));
 	}
 
 	public int getMaxValue() {
-		return val_min + (int) (getMax() * ((float) (val_max - val_min)));
+		return val_min + (int) (getMax() * (val_max - val_min));
 	}
 
 	public int getColorOutline() {

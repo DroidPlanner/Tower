@@ -18,17 +18,17 @@ public class FollowHeading extends FollowType {
 	public FollowModes getType() {
 		return FollowModes.HEADING;
 	}
-	
+
 	@Override
 	public void processNewLocation(Location location) {
 
 		Coord2D gcsCoord = new Coord2D(location.getLatitude(),
 				location.getLongitude());
 		float bearing = location.getBearing();
-		
+
 		Coord2D goCoord = GeoTools.newCoordFromBearingAndDistance(gcsCoord,
-				bearing+90.0, radius.valueInMeters());
-		drone.guidedPoint.newGuidedCoord(goCoord);	
+				bearing + 90.0, radius.valueInMeters());
+		drone.guidedPoint.newGuidedCoord(goCoord);
 	}
 
 }

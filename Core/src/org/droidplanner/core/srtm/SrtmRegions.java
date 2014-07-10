@@ -21,7 +21,8 @@ public class SrtmRegions {
 	/*
 	 * Returns region name for a file
 	 */
-	public String findRegion(String fname, OnProgressListner listner) throws Exception {
+	public String findRegion(String fname, OnProgressListner listner)
+			throws Exception {
 		if (regionMap.isEmpty()) {
 			fillRegionData(listner);
 		}
