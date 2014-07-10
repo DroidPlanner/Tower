@@ -48,7 +48,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements
 				.findViewById(R.id.button_radius_minus_1);
 		radiusTextView = (TextView) parentView.findViewById(R.id.follow_radius);
 		spinner = (Spinner) parentView.findViewById(R.id.follow_type_spinner);
-		adapter = new ArrayAdapter<FollowModes>(getActivity(), android.R.layout.simple_dropdown_item_1line, FollowModes.values());
+		adapter = new ArrayAdapter<FollowModes>(getActivity(), android.R.layout.simple_spinner_item, FollowModes.values());
 		spinner.setAdapter(adapter);
 		super.setupViews(parentView);
 	}
