@@ -1,5 +1,44 @@
 package com.getpebble.android.kit;
 
+import static com.getpebble.android.kit.Constants.APP_UUID;
+import static com.getpebble.android.kit.Constants.CUST_APP_TYPE;
+import static com.getpebble.android.kit.Constants.CUST_ICON;
+import static com.getpebble.android.kit.Constants.CUST_NAME;
+import static com.getpebble.android.kit.Constants.DATA_LOG_TAG;
+import static com.getpebble.android.kit.Constants.DATA_LOG_TIMESTAMP;
+import static com.getpebble.android.kit.Constants.DATA_LOG_UUID;
+import static com.getpebble.android.kit.Constants.INTENT_APP_ACK;
+import static com.getpebble.android.kit.Constants.INTENT_APP_CUSTOMIZE;
+import static com.getpebble.android.kit.Constants.INTENT_APP_NACK;
+import static com.getpebble.android.kit.Constants.INTENT_APP_RECEIVE;
+import static com.getpebble.android.kit.Constants.INTENT_APP_RECEIVE_ACK;
+import static com.getpebble.android.kit.Constants.INTENT_APP_RECEIVE_NACK;
+import static com.getpebble.android.kit.Constants.INTENT_APP_SEND;
+import static com.getpebble.android.kit.Constants.INTENT_APP_START;
+import static com.getpebble.android.kit.Constants.INTENT_APP_STOP;
+import static com.getpebble.android.kit.Constants.INTENT_DL_ACK_DATA;
+import static com.getpebble.android.kit.Constants.INTENT_DL_FINISH_SESSION;
+import static com.getpebble.android.kit.Constants.INTENT_DL_RECEIVE_DATA;
+import static com.getpebble.android.kit.Constants.INTENT_DL_REQUEST_DATA;
+import static com.getpebble.android.kit.Constants.INTENT_PEBBLE_CONNECTED;
+import static com.getpebble.android.kit.Constants.INTENT_PEBBLE_DISCONNECTED;
+import static com.getpebble.android.kit.Constants.KIT_STATE_COLUMN_APPMSG_SUPPORT;
+import static com.getpebble.android.kit.Constants.KIT_STATE_COLUMN_CONNECTED;
+import static com.getpebble.android.kit.Constants.KIT_STATE_COLUMN_DATALOGGING_SUPPORT;
+import static com.getpebble.android.kit.Constants.KIT_STATE_COLUMN_VERSION_MAJOR;
+import static com.getpebble.android.kit.Constants.KIT_STATE_COLUMN_VERSION_MINOR;
+import static com.getpebble.android.kit.Constants.KIT_STATE_COLUMN_VERSION_POINT;
+import static com.getpebble.android.kit.Constants.KIT_STATE_COLUMN_VERSION_TAG;
+import static com.getpebble.android.kit.Constants.MSG_DATA;
+import static com.getpebble.android.kit.Constants.PBL_DATA_ID;
+import static com.getpebble.android.kit.Constants.PBL_DATA_OBJECT;
+import static com.getpebble.android.kit.Constants.PBL_DATA_TYPE;
+import static com.getpebble.android.kit.Constants.TRANSACTION_ID;
+
+import java.util.UUID;
+
+import org.json.JSONException;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,14 +48,11 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Base64;
 import android.util.Log;
-import com.getpebble.android.kit.Constants.*;
+
+import com.getpebble.android.kit.Constants.PebbleAppType;
+import com.getpebble.android.kit.Constants.PebbleDataType;
 import com.getpebble.android.kit.util.PebbleDictionary;
 import com.google.common.primitives.UnsignedInteger;
-import org.json.JSONException;
-
-import java.util.UUID;
-
-import static com.getpebble.android.kit.Constants.*;
 
 /**
  * A helper class providing methods for interacting with third-party Pebble Smartwatch applications. Pebble-enabled

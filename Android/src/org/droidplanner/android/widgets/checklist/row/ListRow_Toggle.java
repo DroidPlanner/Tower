@@ -16,6 +16,7 @@ public class ListRow_Toggle extends ListRow implements OnCheckedChangeListener {
 		super(inflater, checkListItem);
 	}
 
+	@Override
 	public View getView(View convertView) {
 		View view;
 		if (convertView == null) {
@@ -49,6 +50,7 @@ public class ListRow_Toggle extends ListRow implements OnCheckedChangeListener {
 		updateCheckBox(checkListItem.isMandatory() && !failMandatory);
 	}
 
+	@Override
 	public int getViewType() {
 		return ListRow_Type.TOGGLE_ROW.ordinal();
 	}
@@ -71,6 +73,6 @@ public class ListRow_Toggle extends ListRow implements OnCheckedChangeListener {
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		this.checkListItem.setSys_activated(isChecked);
-		updateRowChanged((View) (buttonView), this.checkListItem);
+		updateRowChanged((buttonView), this.checkListItem);
 	}
 }

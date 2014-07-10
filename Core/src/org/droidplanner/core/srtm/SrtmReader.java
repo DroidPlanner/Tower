@@ -21,7 +21,8 @@ public class SrtmReader extends AsyncTask<Integer, String, Integer> implements
 	private List<Coord2D> path;
 	private String srtmPath;
 
-	public SrtmReader(List<Coord2D> path, OnSrtmReaderListner listner, String directoryPath) {
+	public SrtmReader(List<Coord2D> path, OnSrtmReaderListner listner,
+			String directoryPath) {
 		super();
 		this.listner = listner;
 		this.path = path;

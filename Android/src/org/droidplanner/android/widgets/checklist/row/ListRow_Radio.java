@@ -19,6 +19,7 @@ public class ListRow_Radio extends ListRow implements OnCheckedChangeListener {
 		super(inflater, checkListItem);
 	}
 
+	@Override
 	public View getView(View convertView) {
 		View view;
 		if (convertView == null) {
@@ -45,6 +46,7 @@ public class ListRow_Radio extends ListRow implements OnCheckedChangeListener {
 
 	}
 
+	@Override
 	public int getViewType() {
 		return ListRow_Type.RADIO_ROW.ordinal();
 	}
@@ -81,7 +83,7 @@ public class ListRow_Radio extends ListRow implements OnCheckedChangeListener {
 	@Override
 	public void onCheckedChanged(RadioGroup arg0, int arg1) {
 		checkListItem.setSelectedIndex(arg1);
-		updateRowChanged((View) arg0, this.checkListItem);
+		updateRowChanged(arg0, this.checkListItem);
 
 	}
 }

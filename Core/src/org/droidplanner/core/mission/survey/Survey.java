@@ -85,9 +85,9 @@ public class Survey extends MissionItem {
 
 	}
 
-    @Override
-    public MissionItemType getType() {
-        return MissionItemType.SURVEY;
-    }
+	@Override
+	public MissionItemType getType() {
+		return MissionItemType.SURVEY;
+	}
 
 }

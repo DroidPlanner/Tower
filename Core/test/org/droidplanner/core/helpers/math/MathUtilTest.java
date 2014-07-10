@@ -2,8 +2,6 @@ package org.droidplanner.core.helpers.math;
 
 import junit.framework.TestCase;
 
-import org.droidplanner.core.helpers.math.MathUtil;
-
 public class MathUtilTest extends TestCase {
 
 	public void testNormalize() {

@@ -74,6 +74,6 @@ public class ModeGuidedFragment extends Fragment implements OnClickListener {
 
 	protected void updateLabel() {
 		this.altTextView.setText("Target Altitude: ("
-				+ drone.guidedPoint.getAltitude()+")");
+				+ drone.guidedPoint.getAltitude() + ")");
 	}
 }

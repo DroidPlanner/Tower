@@ -12,11 +12,11 @@ public class MavLinkROI {
 		msg.target_system = 1;
 		msg.target_component = 1;
 		msg.command = MAV_CMD.MAV_CMD_DO_SET_ROI;
-		
+
 		msg.param5 = (float) coord.getX();
 		msg.param6 = (float) coord.getY();
 		msg.param7 = (float) 0.0;
-		
+
 		drone.MavClient.sendMavPacket(msg.pack());
 	}
 }

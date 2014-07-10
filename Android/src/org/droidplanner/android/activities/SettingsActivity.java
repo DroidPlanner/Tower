@@ -12,6 +12,7 @@ import android.os.Bundle;
  */
 public class SettingsActivity extends DrawerNavigationUI {
 
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_settings);

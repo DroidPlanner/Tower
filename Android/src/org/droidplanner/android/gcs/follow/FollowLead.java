@@ -7,10 +7,15 @@ import org.droidplanner.core.helpers.units.Length;
 
 import android.location.Location;
 
-public class FollowHeading extends FollowType {
+public class FollowLead extends FollowAlgorithm {
 
-	public FollowHeading(Drone drone, Length radius, double mIN_TIME_MS) {
-		super(drone, radius, mIN_TIME_MS);
+	public FollowLead(Drone drone, Length radius) {
+		super(drone, radius);
+	}
+
+	@Override
+	public FollowModes getType() {
+		return FollowModes.LEAD;
 	}
 
 	@Override
@@ -19,10 +24,10 @@ public class FollowHeading extends FollowType {
 		Coord2D gcsCoord = new Coord2D(location.getLatitude(),
 				location.getLongitude());
 		float bearing = location.getBearing();
-		
+
 		Coord2D goCoord = GeoTools.newCoordFromBearingAndDistance(gcsCoord,
-				bearing+90.0, radius.valueInMeters());
-		drone.guidedPoint.newGuidedCoord(goCoord);	
+				bearing, radius.valueInMeters());
+		drone.guidedPoint.newGuidedCoord(goCoord);
 	}
 
 }

@@ -7,175 +7,180 @@ import org.droidplanner.core.parameters.Parameter;
 
 public class DroneInterfaces {
 
-    /**
-     * Sets of drone events used for broadcast throughout the app.
-     */
-    public enum DroneEventsType {
-        /**
+	/**
+	 * Sets of drone events used for broadcast throughout the app.
+	 */
+	public enum DroneEventsType {
+		/**
          *
          */
-        ORIENTATION,
+		ORIENTATION,
 
-        /**
+		/**
          *
          */
-        SPEED,
+		SPEED,
 
-        /**
+		/**
          *
          */
-        BATTERY,
+		BATTERY,
 
-        /**
+		/**
          *
          */
-        GUIDEDPOINT,
+		GUIDEDPOINT,
 
-        /**
+		/**
          *
          */
-        NAVIGATION,
+		NAVIGATION,
 
-        /**
+		/**
          *
          */
-        ATTIUTDE,
+		ATTIUTDE,
 
-        /**
+		/**
          *
          */
-        RADIO,
+		RADIO,
 
-        /**
+		/**
          *
          */
-        RC_IN,
+		RC_IN,
 
-        /**
+		/**
          *
          */
-        RC_OUT,
+		RC_OUT,
 
-        /**
+		/**
          *
          */
-        ARMING,
+		ARMING,
 
-        /**
+		/**
          *
          */
-        FAILSAFE,
+		FAILSAFE,
 
-        /**
+		/**
          *
          */
-        MODE,
+		MODE,
 
-        /**
+		/**
          *
          */
-        STATE,
+		STATE,
 
-        /**
+		/**
          *
          */
-        MISSION_UPDATE,
+		MISSION_UPDATE,
 
-        /**
+		/**
          *
          */
-        MISSION_RECEIVED,
+		MISSION_RECEIVED,
 
-        /**
+		/**
          *
          */
-        TYPE,
+		TYPE,
 
-        /**
+		/**
          *
          */
-        HOME,
+		HOME,
 
-        /**
+		/**
          *
          */
-        GPS,
+		GPS,
 
-        /**
+		/**
          *
          */
-        GPS_FIX,
+		GPS_FIX,
 
-        /**
+		/**
          *
          */
-        GPS_COUNT,
+		GPS_COUNT,
 
-        /**
+		/**
          *
          */
-        PARAMETER,
+		PARAMETER,
 
-        /**
+		/**
          *
          */
-        CALIBRATION_IMU,
+		CALIBRATION_IMU,
 
-        /**
+		/**
          *
          */
-        CALIBRATION_TIMEOUT,
+		CALIBRATION_TIMEOUT,
 
-        /**
+		/**
          *
          */
-        HEARTBEAT_TIMEOUT,
+		HEARTBEAT_TIMEOUT,
 
-        /**
+		/**
          *
          */
-        HEARTBEAT_FIRST,
+		HEARTBEAT_FIRST,
 
-        /**
+		/**
          *
          */
-        HEARTBEAT_RESTORED,
+		HEARTBEAT_RESTORED,
 
-        /**
+		/**
          *
          */
-        DISCONNECTED,
+		DISCONNECTED,
 
-        /**
+		/**
          *
          */
-        CONNECTED,
+		CONNECTED,
 
-        /**
+		/**
          *
          */
-        MISSION_SENT,
+		MISSION_SENT,
 
-        /**
+		/**
          *
          */
-        ARMING_STARTED,
+		ARMING_STARTED,
 
-        /**
+		/**
          *
          */
-        INVALID_POLYGON,
+		INVALID_POLYGON,
 
-        /**
+		/**
          *
          */
-        MISSION_WP_UPDATE,
-        
-        /**
+		MISSION_WP_UPDATE,
+
+		/**
          * 
          */
-        FOLLOW_START,
-    }
+		FOLLOW_START,
+
+		/**
+         * 
+         */
+		FOLLOW_CHANGE_TYPE,
+	}
 
 	public interface OnDroneListener {
 		public void onDroneEvent(DroneEventsType event, Drone drone);

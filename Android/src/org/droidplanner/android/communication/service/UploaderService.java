@@ -2,13 +2,10 @@ package org.droidplanner.android.communication.service;
 
 import java.io.File;
 
-import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
-import org.droidplanner.android.utils.file.DirectoryPath;
-
-import com.geeksville.apiproxy.DirectoryUploader;
-import com.geeksville.apiproxy.IUploadListener;
-
 import org.droidplanner.R;
+import org.droidplanner.android.utils.file.DirectoryPath;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
+
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -18,6 +15,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+
+import com.geeksville.apiproxy.DirectoryUploader;
+import com.geeksville.apiproxy.IUploadListener;
 
 /**
  * Provides delayed uploads to the DroneShare service.
@@ -36,12 +36,14 @@ public class UploaderService extends IntentService {
 	private int numUploaded = 0;
 
 	private IUploadListener callback = new IUploadListener() {
+		@Override
 		public void onUploadStart(File f) {
 			Log.i(TAG, "Upload start: " + f);
 			// Generate initial notification
 			updateNotification(true);
 		}
 
+		@Override
 		public void onUploadSuccess(File f, String viewURL) {
 			if (viewURL == null) {
 				Log.i(TAG, "Server thought flight was boring");
@@ -94,6 +96,7 @@ public class UploaderService extends IntentService {
 			}
 		}
 
+		@Override
 		public void onUploadFailure(File f, Exception ex) {
 			Log.i(TAG, "Upload fail: " + f + " " + ex);
 			nBuilder.setContentText("Upload failed: " + ex.getMessage());

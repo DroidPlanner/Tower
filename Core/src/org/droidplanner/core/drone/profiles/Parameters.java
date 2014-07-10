@@ -39,7 +39,7 @@ public class Parameters extends DroneVariable {
 	public void getAllParameters() {
 		parameters.clear();
 		paramsReceived = 0;
-		if(parameterListener!=null)
+		if (parameterListener != null)
 			parameterListener.onBeginReceivingParameters();
 		MavLinkParameters.requestParametersList(myDrone);
 	}

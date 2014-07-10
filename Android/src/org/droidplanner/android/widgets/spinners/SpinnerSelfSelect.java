@@ -1,12 +1,12 @@
 package org.droidplanner.android.widgets.spinners;
 
+import org.droidplanner.R;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.Spinner;
-
-import org.droidplanner.R;
 
 /**
  * Spinner like widget that has the ability to disable updates to its view based

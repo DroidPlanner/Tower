@@ -7,6 +7,7 @@ public class FileList {
 
 	static public String[] getWaypointFileList() {
 		FilenameFilter filter = new FilenameFilter() {
+			@Override
 			public boolean accept(File dir, String filename) {
 				return filename.contains(".txt");
 			}
@@ -16,6 +17,7 @@ public class FileList {
 
 	public static String[] getParametersFileList() {
 		FilenameFilter filter = new FilenameFilter() {
+			@Override
 			public boolean accept(File dir, String filename) {
 				return filename.contains(".param");
 			}
@@ -25,6 +27,7 @@ public class FileList {
 
 	static public String[] getKMZFileList() {
 		FilenameFilter filter = new FilenameFilter() {
+			@Override
 			public boolean accept(File dir, String filename) {
 				return filename.contains(".kml") || filename.contains(".kmz");
 			}
@@ -34,6 +37,7 @@ public class FileList {
 
 	public static String[] getCameraInfoFileList() {
 		FilenameFilter filter = new FilenameFilter() {
+			@Override
 			public boolean accept(File dir, String filename) {
 				return filename.contains(".xml");
 			}

@@ -18,6 +18,7 @@ public class CheckListXmlParser extends ListXmlParser {
 	private String checkListType;
 	private String checkListVersion;
 
+	@Override
 	public void setOnXMLParserError(OnXmlParserError listener) {
 		errorListener = listener;
 	}

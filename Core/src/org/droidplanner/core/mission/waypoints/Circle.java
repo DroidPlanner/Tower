@@ -36,9 +36,9 @@ public class Circle extends SpatialCoordItem {
 	}
 
 	public void setTurns(int turns) {
-		this.turns = (int)Math.abs(turns);
+		this.turns = Math.abs(turns);
 	}
-	
+
 	public int getNumeberOfTurns() {
 		return turns;
 	}
@@ -46,39 +46,40 @@ public class Circle extends SpatialCoordItem {
 	public double getRadius() {
 		return radius;
 	}
-	
-	public double getAltitudeStep(){
+
+	public double getAltitudeStep() {
 		return altitudeStep;
 	}
-	
-	public int getNumberOfSteps(){
+
+	public int getNumberOfSteps() {
 		return numberOfSteps;
 	}
-	
-	public void setMultiCircle(int number, double stepHeight){
+
+	public void setMultiCircle(int number, double stepHeight) {
 		this.numberOfSteps = number;
 		this.altitudeStep = stepHeight;
 	}
-	
-	public void setSingleCircle(){
+
+	public void setSingleCircle() {
 		numberOfSteps = 1;
 	}
 
 	@Override
 	public List<msg_mission_item> packMissionItem() {
-		
+
 		List<msg_mission_item> list = new ArrayList<msg_mission_item>();
-		
+
 		for (int i = 0; i < getNumberOfSteps(); i++) {
-			Length extraHeight = new Length(getAltitudeStep()*i);
-			packSingleCircle(list,extraHeight);			
+			Length extraHeight = new Length(getAltitudeStep() * i);
+			packSingleCircle(list, extraHeight);
 		}
-		
+
 		Log.d("CIRCLE", list.toString());
 		return list;
 	}
 
-	private void packSingleCircle(List<msg_mission_item> list, Length extraHeight) {
+	private void packSingleCircle(List<msg_mission_item> list,
+			Length extraHeight) {
 		msg_mission_item mavMsg = new msg_mission_item();
 		list.add(mavMsg);
 		mavMsg.autocontinue = 1;
@@ -87,7 +88,8 @@ public class Circle extends SpatialCoordItem {
 		mavMsg.frame = MAV_FRAME.MAV_FRAME_GLOBAL_RELATIVE_ALT;
 		mavMsg.x = (float) coordinate.getLat();
 		mavMsg.y = (float) coordinate.getLng();
-		mavMsg.z = (float) (coordinate.getAltitude().valueInMeters() + extraHeight.valueInMeters());
+		mavMsg.z = (float) (coordinate.getAltitude().valueInMeters() + extraHeight
+				.valueInMeters());
 		mavMsg.command = MAV_CMD.MAV_CMD_NAV_LOITER_TURNS;
 		mavMsg.param1 = Math.abs(turns);
 		mavMsg.param3 = (turns > 0) ? 1 : -1;

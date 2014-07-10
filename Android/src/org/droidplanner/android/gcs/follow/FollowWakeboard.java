@@ -8,12 +8,17 @@ import org.droidplanner.core.helpers.units.Length;
 
 import android.location.Location;
 
-public class FollowWakeboard extends FollowType {
+public class FollowWakeboard extends FollowAlgorithm {
 
 	private static final double TOP_SPEED = 5.0;
 
-	public FollowWakeboard(Drone drone, Length radius, double mIN_TIME_MS) {
-		super(drone, radius, mIN_TIME_MS);
+	public FollowWakeboard(Drone drone, Length radius) {
+		super(drone, radius);
+	}
+
+	@Override
+	public FollowModes getType() {
+		return FollowModes.WAKEBOARD;
 	}
 
 	@Override
@@ -28,7 +33,8 @@ public class FollowWakeboard extends FollowType {
 			double headingGCStoDrone = GeoTools.getHeadingFromCoordinates(
 					gcsCoord, super.drone.GPS.getPosition());
 			double userRigthHeading = 90.0 + bearing;
-			double alpha = MathUtil.Normalize(location.getSpeed(), 0.0, TOP_SPEED);
+			double alpha = MathUtil.Normalize(location.getSpeed(), 0.0,
+					TOP_SPEED);
 			double mixedHeading = MathUtil.bisectAngle(headingGCStoDrone,
 					userRigthHeading, alpha);
 			goToCoord = GeoTools.newCoordFromBearingAndDistance(gcsCoord,
@@ -39,5 +45,4 @@ public class FollowWakeboard extends FollowType {
 
 		super.drone.guidedPoint.newGuidedCoord(goToCoord);
 	}
-
 }

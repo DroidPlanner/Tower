@@ -52,7 +52,7 @@ public class GuidedPoint extends DroneVariable implements OnDroneListener {
 	}
 
 	public void forcedGuidedCoordinate(Coord2D coord) throws Exception {
-		if((myDrone.GPS.getFixTypeNumeric() != GPS.LOCK_3D)){
+		if ((myDrone.GPS.getFixTypeNumeric() != GPS.LOCK_3D)) {
 			throw new Exception("Bad GPS for guided");
 		}
 		initialize();

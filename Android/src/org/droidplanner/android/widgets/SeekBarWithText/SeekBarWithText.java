@@ -1,5 +1,7 @@
 package org.droidplanner.android.widgets.SeekBarWithText;
 
+import org.droidplanner.R;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
@@ -7,8 +9,6 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
-
-import org.droidplanner.R;
 
 public class SeekBarWithText extends LinearLayout implements
 		OnSeekBarChangeListener {
@@ -51,13 +51,13 @@ public class SeekBarWithText extends LinearLayout implements
 				R.styleable.SeekBarWithText, 0, 0);
 
 		try {
-			setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-					LayoutParams.WRAP_CONTENT));
+			setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 			setOrientation(VERTICAL);
 			textView = new TextView(context);
 			seekBar = new SeekBar(context);
-			seekBar.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-					LayoutParams.WRAP_CONTENT));
+			seekBar.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 			seekBar.setOnSeekBarChangeListener(this);
 			addView(textView);
 			addView(seekBar);

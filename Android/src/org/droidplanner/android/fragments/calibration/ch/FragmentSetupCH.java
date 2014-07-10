@@ -1,13 +1,13 @@
 package org.droidplanner.android.fragments.calibration.ch;
 
 import org.droidplanner.R;
-import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.android.fragments.calibration.FragmentSetupSend;
 import org.droidplanner.android.fragments.calibration.SetupSidePanel;
 import org.droidplanner.android.fragments.helpers.SuperSetupMainPanel;
 import org.droidplanner.android.helpers.calibration.CH_CalParameters;
 import org.droidplanner.android.helpers.calibration.CalParameters;
 import org.droidplanner.android.helpers.calibration.CalParameters.OnCalibrationEvent;
+import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 
 import android.view.View;
 import android.widget.ArrayAdapter;
