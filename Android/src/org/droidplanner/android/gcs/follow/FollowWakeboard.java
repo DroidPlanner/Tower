@@ -9,7 +9,7 @@ import org.droidplanner.core.helpers.units.Length;
 
 import android.location.Location;
 
-public class FollowWakeboard extends FollowType {
+public class FollowWakeboard extends FollowAlgorithm {
 
 	private static final double TOP_SPEED = 5.0;
 

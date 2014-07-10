@@ -31,7 +31,7 @@ public class Follow implements GooglePlayServicesClient.ConnectionCallbacks,
 	private Drone drone;
 	private LocationClient mLocationClient;
 
-	private FollowType followAlgorithm;
+	private FollowAlgorithm followAlgorithm;
 
 	public Follow(Context context, Drone drone) {
 		this.context = context;
@@ -163,7 +163,7 @@ public class Follow implements GooglePlayServicesClient.ConnectionCallbacks,
 			return name;
 		}
 
-		public FollowType getAlgorithmType(Drone drone, Length radius,
+		public FollowAlgorithm getAlgorithmType(Drone drone, Length radius,
 				double mIN_TIME_MS) {
 			switch (this) {
 			default:

@@ -6,7 +6,7 @@ import org.droidplanner.core.helpers.units.Length;
 
 import android.location.Location;
 
-public abstract class FollowType {
+public abstract class FollowAlgorithm {
 	public abstract void processNewLocation(Location location);
 
 	public abstract FollowModes getType();
@@ -15,7 +15,7 @@ public abstract class FollowType {
 	protected Length radius;
 	protected double MIN_TIME_MS;
 
-	public FollowType(Drone drone, Length radius, double mIN_TIME_MS) {
+	public FollowAlgorithm(Drone drone, Length radius, double mIN_TIME_MS) {
 		super();
 		this.drone = drone;
 		this.radius = radius;
