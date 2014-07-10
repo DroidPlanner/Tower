@@ -231,10 +231,12 @@ public abstract class SuperUI extends FragmentActivity implements
 
 			if (Utils.ConnectionType.BLUETOOTH.name().equals(connectionType)) {
 				// Launch a bluetooth device selection screen for the user
-				new BTDeviceListFragment().show(getSupportFragmentManager(),
-						"Device selection dialog");
-				return;
-			}
+                final String address = mAppPrefs.getBluetoothDeviceAddress();
+                if(address == null || address.isEmpty()) {
+                    new BTDeviceListFragment().show(getSupportFragmentManager(), "Device selection dialog");
+                    return;
+                }
+            }
 		}
 		drone.MavClient.toggleConnectionState();
 	}

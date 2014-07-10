@@ -4,7 +4,7 @@ import java.util.Set;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.utils.Constants;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -13,9 +13,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -151,14 +149,13 @@ public class BTDeviceListFragment extends DialogFragment {
 			// Retrieve the selected bluetooth device
 			final BluetoothDevice device = (BluetoothDevice) parent
 					.getItemAtPosition(position);
-
+			
 			// Stores the mac address in the shared preferences,
 			// so the bluetooth client can retrieve it on connection.
+			DroidPlannerPrefs mAppPrefs = new DroidPlannerPrefs(getActivity().getApplicationContext());
+			mAppPrefs.setBluetoothDeviceAddress(device.getAddress() + ";" + device.getName());
+			
 			final Activity activity = getActivity();
-			final SharedPreferences.Editor editor = PreferenceManager
-					.getDefaultSharedPreferences(activity).edit();
-			editor.putString(Constants.PREF_BLUETOOTH_DEVICE_ADDRESS,
-					device.getAddress()).apply();
 
 			// Toggle the drone connection
 			((DroidPlannerApp) activity.getApplication()).getDrone().MavClient
