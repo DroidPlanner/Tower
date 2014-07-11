@@ -5,7 +5,6 @@ import android.app.FragmentManager;
 import android.support.wearable.view.FragmentGridPagerAdapter;
 
 import org.droidplanner.android.wear.fragments.WearFlightActionsFragment;
-import org.droidplanner.android.wear.fragments.WearMapFragment;
 
 /**
  * Fragment pager adapter for the droidplanner wear UI.
