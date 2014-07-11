@@ -10,13 +10,13 @@ import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
 import org.droidplanner.android.dialogs.openfile.OpenParameterDialog;
 import org.droidplanner.android.dialogs.parameters.DialogParameterInfo;
+import org.droidplanner.android.utils.file.IO.ParameterWriter;
+import org.droidplanner.android.widgets.adapterViews.ParamsAdapter;
+import org.droidplanner.android.widgets.adapterViews.ParamsAdapterItem;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.android.utils.file.IO.ParameterWriter;
-import org.droidplanner.android.widgets.adapterViews.ParamsAdapter;
-import org.droidplanner.android.widgets.adapterViews.ParamsAdapterItem;
 import org.droidplanner.core.parameters.Parameter;
 import org.droidplanner.core.parameters.ParameterMetadata;
 
@@ -35,7 +35,7 @@ import android.widget.Toast;
 
 public class ParamsFragment extends ListFragment implements
 		DroneInterfaces.OnParameterManagerListener, OnDroneListener {
-	
+
 	static final String TAG = ParamsFragment.class.getSimpleName();
 
 	public static final String ADAPTER_ITEMS = ParamsFragment.class.getName()
@@ -249,11 +249,11 @@ public class ParamsFragment extends ListFragment implements
 	}
 
 	private int mReceived = 0, mTotal = 0;
-	
+
 	@Override
 	public void onParameterReceived(Parameter parameter, int index, int count) {
 		++mReceived;
-		
+
 		if (progressDialog != null) {
 			if (progressDialog.isIndeterminate()) {
 				progressDialog.setIndeterminate(false);

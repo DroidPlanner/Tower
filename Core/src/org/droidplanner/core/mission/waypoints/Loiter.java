@@ -64,9 +64,9 @@ public class Loiter extends SpatialCoordItem {
 		setOrbitalRadius(Math.abs(mavMsg.param3));
 	}
 
-    @Override
-    public MissionItemType getType() {
-        return MissionItemType.LOITER;
-    }
+	@Override
+	public MissionItemType getType() {
+		return MissionItemType.LOITER;
+	}
 
 }

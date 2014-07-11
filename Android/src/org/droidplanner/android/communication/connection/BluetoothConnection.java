@@ -7,7 +7,7 @@ import java.net.UnknownHostException;
 import java.util.Set;
 import java.util.UUID;
 
-import org.droidplanner.android.utils.Constants;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
@@ -16,7 +16,6 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.ParcelUuid;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class BluetoothConnection extends MAVLinkConnection {
@@ -27,12 +26,15 @@ public class BluetoothConnection extends MAVLinkConnection {
 	private InputStream in;
 	private BluetoothSocket bluetoothSocket;
 
+	protected DroidPlannerPrefs mAppPrefs;
+	
 	public BluetoothConnection(Context parentContext) {
 		super(parentContext);
 		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 		if (mBluetoothAdapter == null) {
 			Log.d(BLUE, "Null adapters");
 		}
+		mAppPrefs = new DroidPlannerPrefs(parentContext.getApplicationContext());
 	}
 
 	@Override
@@ -42,16 +44,25 @@ public class BluetoothConnection extends MAVLinkConnection {
 		// Reset the bluetooth connection
 		resetConnection();
 
-		// Retrieve the stored address
-		final SharedPreferences settings = PreferenceManager
-				.getDefaultSharedPreferences(parentContext);
-		String address = settings.getString(
-				Constants.PREF_BLUETOOTH_DEVICE_ADDRESS, null);
+        //Retrieve the stored device
+        BluetoothDevice device = null;
+        final String addressName = mAppPrefs.getBluetoothDeviceAddress();
+        
+        if (addressName != null) {
+            // strip name, use address part - stored as <address>;<name>
+            final String part[] = addressName.split(";");
+            try {
+                device = mBluetoothAdapter.getRemoteDevice(part[0]);
+            } catch (IllegalArgumentException ex) {
+                // invalid configuration (device may have been removed)
+                // NOP fall through to 'no device'
+            }
+        }
+        // no device
+        if(device == null)
+            device = findSerialBluetoothBoard();
 
-		BluetoothDevice device = address == null ? findSerialBluetoothBoard()
-				: mBluetoothAdapter.getRemoteDevice(address);
-
-		Log.d(BLUE,
+        Log.d(BLUE,
 				"Trying to connect to device with address "
 						+ device.getAddress());
 		Log.d(BLUE, "BT Create Socket Call...");

@@ -68,18 +68,22 @@ public class Utils {
 		public abstract MAVLinkConnection getConnection(Context context);
 	}
 
-    /**
-     * Returns the map provider selected by the user.
-     * @param context application context
-     * @return selected map provider
-     */
-    public static DPMapProvider getMapProvider(Context context){
-        final String mapProviderName = PreferenceManager.getDefaultSharedPreferences(context)
-                .getString(context.getString(R.string.pref_maps_providers_key), null);
+	/**
+	 * Returns the map provider selected by the user.
+	 * 
+	 * @param context
+	 *            application context
+	 * @return selected map provider
+	 */
+	public static DPMapProvider getMapProvider(Context context) {
+		final String mapProviderName = PreferenceManager
+				.getDefaultSharedPreferences(context).getString(
+						context.getString(R.string.pref_maps_providers_key),
+						null);
 
-        return mapProviderName == null ? DPMapProvider.DEFAULT_MAP_PROVIDER : DPMapProvider
-                .getMapProvider(mapProviderName);
-    }
+		return mapProviderName == null ? DPMapProvider.DEFAULT_MAP_PROVIDER
+				: DPMapProvider.getMapProvider(mapProviderName);
+	}
 
 	/**
 	 * Used to update the user interface language.

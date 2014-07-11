@@ -28,8 +28,8 @@ public class ChartDataRender {
 				y_i1 = (y_i1 + chart.scale.getRange())
 						/ (2 * chart.scale.getRange()) * chart.height;
 
-				canvas.drawLine((float) pos * delta, (float) y_i,
-						(float) (pos + 1) * delta, (float) y_i1,
+				canvas.drawLine(pos * delta, (float) y_i,
+						(pos + 1) * delta, (float) y_i1,
 						serie.getPaint());
 				pos++;
 			}

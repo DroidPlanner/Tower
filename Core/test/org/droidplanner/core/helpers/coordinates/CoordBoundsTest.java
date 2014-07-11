@@ -4,9 +4,6 @@ import java.util.ArrayList;
 
 import junit.framework.TestCase;
 
-import org.droidplanner.core.helpers.coordinates.Coord2D;
-import org.droidplanner.core.helpers.coordinates.CoordBounds;
-
 public class CoordBoundsTest extends TestCase {
 
 	private Coord2D origin;

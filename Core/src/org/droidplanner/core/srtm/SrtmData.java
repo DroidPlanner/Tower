@@ -17,12 +17,13 @@ public class SrtmData {
 		path = dir;
 	}
 
-	public int load(double lon, double lat, OnProgressListner listner) throws Exception {
+	public int load(double lon, double lat, OnProgressListner listner)
+			throws Exception {
 		int altitude;
 
 		String fname = SrtmData.getName(lon, lat);
 		setupFilePaths(fname);
-		downloadSrtmFileIfNeeded(fname,listner);
+		downloadSrtmFileIfNeeded(fname, listner);
 
 		s = new BufferedInputStream(new FileInputStream(srtmFile));
 		altitude = readHtgFile(s, lon, lat);
@@ -30,7 +31,8 @@ public class SrtmData {
 		return altitude;
 	}
 
-	private void downloadSrtmFileIfNeeded(String fname,OnProgressListner listner) throws Exception {
+	private void downloadSrtmFileIfNeeded(String fname,
+			OnProgressListner listner) throws Exception {
 		if (!srtmFile.exists()) {
 			new SrtmDownloader(listner).downloadSrtmFile(fname, path);
 		}

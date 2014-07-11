@@ -1,5 +1,13 @@
 package org.droidplanner.android.widgets.actionProviders;
 
+import java.util.Collections;
+import java.util.List;
+
+import org.droidplanner.R;
+import org.droidplanner.android.widgets.spinners.ModeAdapter;
+import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
+import org.droidplanner.core.drone.Drone;
+
 import android.content.Context;
 import android.os.Handler;
 import android.view.Gravity;
@@ -11,14 +19,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.MAVLink.Messages.ApmModes;
-
-import org.droidplanner.R;
-import org.droidplanner.core.drone.Drone;
-import org.droidplanner.android.widgets.spinners.ModeAdapter;
-import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Set of actions supported by the info bar

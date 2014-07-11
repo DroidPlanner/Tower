@@ -32,8 +32,15 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/desc_rect"
         android:orientation="vertical"
-        android:padding="16dp" >
-
+        android:padding="3dp" >
+        
+		<!-- Follow Type Spinner -->
+		
+		<Spinner
+    		android:id="@+id/follow_type_spinner"
+    		android:layout_width="fill_parent"
+    		android:layout_height="wrap_content" />
+		
         <!-- Altitude buttons -->
 
         <TextView
@@ -62,7 +69,7 @@
                 style="@style/modeControl"
                 android:layout_width="76dp"
                 android:layout_height="64dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="3dp"
                 android:layout_marginRight="3dp"
                 android:background="@drawable/button_mode_options"
                 android:text="-1" />
@@ -98,7 +105,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/linearLayout1"
         android:orientation="vertical"
-        android:padding="16dp" >
+        android:padding="3dp" >
 
         <TextView
             android:id="@+id/follow_radius"
@@ -126,7 +133,7 @@
                 style="@style/modeControl"
                 android:layout_width="76dp"
                 android:layout_height="64dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="3dp"
                 android:layout_marginRight="3dp"
                 android:background="@drawable/button_mode_options"
                 android:text="-" />

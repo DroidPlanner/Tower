@@ -4,8 +4,8 @@ import org.droidplanner.core.MAVLink.MavLinkStreamRates;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.core.drone.Preferences.Rates;
 import org.droidplanner.core.drone.DroneVariable;
+import org.droidplanner.core.drone.Preferences.Rates;
 
 public class StreamRates extends DroneVariable implements OnDroneListener {
 

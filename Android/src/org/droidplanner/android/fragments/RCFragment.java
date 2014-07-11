@@ -94,10 +94,10 @@ public class RCFragment extends Fragment {
 		// Tested only for wikipad controller. Probably works with most game
 		// controllers.
 		if ((ev.getSource() & InputDevice.SOURCE_CLASS_JOYSTICK) != 0) {
-			lJoystick.OnMoved((double) ev.getAxisValue(MotionEvent.AXIS_X),
-					(double) ev.getAxisValue(MotionEvent.AXIS_Y));
-			rJoystick.OnMoved((double) ev.getAxisValue(MotionEvent.AXIS_Z),
-					(double) ev.getAxisValue(MotionEvent.AXIS_RZ));
+			lJoystick.OnMoved(ev.getAxisValue(MotionEvent.AXIS_X),
+					ev.getAxisValue(MotionEvent.AXIS_Y));
+			rJoystick.OnMoved(ev.getAxisValue(MotionEvent.AXIS_Z),
+					ev.getAxisValue(MotionEvent.AXIS_RZ));
 			return true;
 		}
 		return false;

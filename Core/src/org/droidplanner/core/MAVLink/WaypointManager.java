@@ -393,6 +393,7 @@ public class WaypointManager extends DroneVariable implements OnTimeout {
 			if (timeOutTimer == null) {
 				timeOutTimer = new Timer();
 				timeOutTimer.schedule(new TimerTask() {
+					@Override
 					public void run() {
 						if (timeOutTimer != null) {
 							resetTimeOut();

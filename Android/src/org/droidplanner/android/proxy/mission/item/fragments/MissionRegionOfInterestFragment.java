@@ -20,21 +20,23 @@ public class MissionRegionOfInterestFragment extends MissionDetailFragment
 	}
 
 	@Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
 		typeSpinner.setSelection(commandAdapter
 				.getPosition(MissionItemType.ROI));
 
-		altitudeSeekBar = (SeekBarWithText) view.findViewById(R.id.altitudeView);
-		altitudeSeekBar.setValue(((RegionOfInterest) itemRender.getMissionItem()).getCoordinate()
-                .getAltitude().valueInMeters());
+		altitudeSeekBar = (SeekBarWithText) view
+				.findViewById(R.id.altitudeView);
+		altitudeSeekBar.setValue(((RegionOfInterest) itemRender
+				.getMissionItem()).getCoordinate().getAltitude()
+				.valueInMeters());
 		altitudeSeekBar.setOnChangedListener(this);
 	}
 
 	@Override
 	public void onSeekBarChanged() {
-		((RegionOfInterest) itemRender.getMissionItem()).setAltitude(new Altitude(altitudeSeekBar
-				.getValue()));
+		((RegionOfInterest) itemRender.getMissionItem())
+				.setAltitude(new Altitude(altitudeSeekBar.getValue()));
 	}
 
 }

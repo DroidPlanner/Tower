@@ -21,6 +21,7 @@ public class ListRow_Value extends ListRow implements OnFocusChangeListener {
 		super(inflater, checkListItem);
 	}
 
+	@Override
 	public View getView(View convertView) {
 		View view;
 
@@ -64,6 +65,7 @@ public class ListRow_Value extends ListRow implements OnFocusChangeListener {
 		updateCheckBox(checkListItem.isMandatory() && !failMandatory);
 	}
 
+	@Override
 	public int getViewType() {
 		return ListRow_Type.VALUE_ROW.ordinal();
 	}

@@ -2,10 +2,10 @@ package org.droidplanner.android.fragments;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.widgets.AttitudeIndicator;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.android.widgets.AttitudeIndicator;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;

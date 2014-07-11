@@ -72,7 +72,7 @@ public class Polygon {
 	}
 
 	public void reversePoints() {
-		Collections.reverse(points);	
+		Collections.reverse(points);
 	}
 
 }

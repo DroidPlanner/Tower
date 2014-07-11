@@ -1,5 +1,7 @@
 package org.droidplanner.android.widgets.NumberFieldEdit;
 
+import org.droidplanner.R;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Handler;
@@ -13,8 +15,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import org.droidplanner.R;
 
 public class NumberFieldEdit extends LinearLayout implements OnTouchListener {
 
@@ -64,8 +64,8 @@ public class NumberFieldEdit extends LinearLayout implements OnTouchListener {
 
 		try {
 
-			setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-					LayoutParams.WRAP_CONTENT));
+			setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 			setOrientation(HORIZONTAL);
 
 			titleText = new TextView(context);
@@ -87,13 +87,13 @@ public class NumberFieldEdit extends LinearLayout implements OnTouchListener {
 			editText.setTextSize(textSize);
 
 			separatorText.setLayoutParams(new LayoutParams(
-					LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT));
+					android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.MATCH_PARENT));
 			titleText.setLayoutParams(new LayoutParams(0,
-					LayoutParams.MATCH_PARENT, 5));
+					android.view.ViewGroup.LayoutParams.MATCH_PARENT, 5));
 			editText.setLayoutParams(new LayoutParams(0,
-					LayoutParams.MATCH_PARENT, 5));
+					android.view.ViewGroup.LayoutParams.MATCH_PARENT, 5));
 			buttonLayout.setLayoutParams(new LayoutParams(
-					LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+					android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 
 			buttonLayout.setFocusable(true);
 			buttonLayout.setFocusableInTouchMode(true);
@@ -104,10 +104,10 @@ public class NumberFieldEdit extends LinearLayout implements OnTouchListener {
 
 			final float buttonWidth = a.getDimension(
 					R.styleable.NumberFieldEdit_buttonWidth,
-					LayoutParams.WRAP_CONTENT);
+					android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 			final float buttonHeight = a.getDimension(
 					R.styleable.NumberFieldEdit_buttonHeight,
-					LayoutParams.WRAP_CONTENT);
+					android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 			LayoutParams p = new LayoutParams((int) buttonWidth,
 					(int) buttonHeight);
 			p.setMargins(5, 0, 0, 0);
@@ -226,6 +226,7 @@ public class NumberFieldEdit extends LinearLayout implements OnTouchListener {
 
 	final Handler handler = new Handler();
 	Runnable mLongPressed = new Runnable() {
+		@Override
 		public void run() {
 			delay = 50;
 			updateValue();

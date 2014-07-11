@@ -19,6 +19,8 @@ package org.droidplanner.android.widgets.viewPager;
 import static android.view.ViewGroup.LayoutParams.FILL_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
+import org.droidplanner.R;
+
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -29,8 +31,6 @@ import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import org.droidplanner.R;
 
 /**
  * This widget implements the dynamic action bar tab behavior that can change
@@ -57,6 +57,7 @@ public class TabPageIndicator extends HorizontalScrollView implements
 	private Runnable mTabSelector;
 
 	private final OnClickListener mTabClickListener = new OnClickListener() {
+		@Override
 		public void onClick(View view) {
 			TabView tabView = (TabView) view;
 			final int oldSelected = mViewPager.getCurrentItem();
@@ -128,6 +129,7 @@ public class TabPageIndicator extends HorizontalScrollView implements
 			removeCallbacks(mTabSelector);
 		}
 		mTabSelector = new Runnable() {
+			@Override
 			public void run() {
 				final int scrollPos = tabView.getLeft()
 						- (getWidth() - tabView.getWidth()) / 2;
@@ -206,6 +208,7 @@ public class TabPageIndicator extends HorizontalScrollView implements
 		notifyDataSetChanged();
 	}
 
+	@Override
 	public void notifyDataSetChanged() {
 		mTabLayout.removeAllViews();
 		PagerAdapter adapter = mViewPager.getAdapter();

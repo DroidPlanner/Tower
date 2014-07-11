@@ -15,14 +15,15 @@ public class RecordMe implements LocationListener {
 	private static final float MIN_DISTANCE_M = 0;
 
 	private Context context;
-    private final MissionProxy missionProxy;
+	private final MissionProxy missionProxy;
 	private LocationManager locationManager;
 	private boolean recordMeEnabled = false;
 
 	public RecordMe(Context context, MissionProxy missionProxy) {
 		this.context = context;
-        this.missionProxy = missionProxy;
-		this.locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+		this.missionProxy = missionProxy;
+		this.locationManager = (LocationManager) context
+				.getSystemService(Context.LOCATION_SERVICE);
 	}
 
 	public void toogleRecordMeState() {
@@ -51,11 +52,12 @@ public class RecordMe implements LocationListener {
 	}
 
 	// @Override
+	@Override
 	public void onLocationChanged(Location location) {
 		// TODO find a better way to do the altitude
 		Coord2D coord = new Coord2D(location.getLatitude(),
 				location.getLongitude());
-        missionProxy.addWaypoint(coord);
+		missionProxy.addWaypoint(coord);
 	}
 
 	@Override

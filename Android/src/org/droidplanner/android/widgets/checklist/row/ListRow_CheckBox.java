@@ -13,6 +13,7 @@ public class ListRow_CheckBox extends ListRow {
 		super(inflater, checkListItem);
 	}
 
+	@Override
 	public View getView(View convertView) {
 		View view;
 		if (convertView == null) {
@@ -38,6 +39,7 @@ public class ListRow_CheckBox extends ListRow {
 		updateCheckBox(checkListItem.isVerified());
 	}
 
+	@Override
 	public int getViewType() {
 		return ListRow_Type.CHECKBOX_ROW.ordinal();
 	}

@@ -3,9 +3,9 @@ package org.droidplanner.android.communication.service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.content.IntentFilter;
 
 /**
  * When we see a network connection arrive, try to restart the upload
@@ -14,6 +14,7 @@ public class NetworkStateReceiver extends BroadcastReceiver {
 
 	private static NetworkStateReceiver registered = null;
 
+	@Override
 	public void onReceive(Context context, Intent intent) {
 		ConnectivityManager conn = (ConnectivityManager) context
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
