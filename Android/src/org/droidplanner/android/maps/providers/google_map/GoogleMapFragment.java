@@ -119,10 +119,10 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 						.create()
 						.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
 						.setFastestInterval(
-								USER_LOCATION_UPDATE_FASTEST_INTERVAL)
+                                USER_LOCATION_UPDATE_FASTEST_INTERVAL)
 						.setInterval(USER_LOCATION_UPDATE_INTERVAL)
 						.setSmallestDisplacement(
-								USER_LOCATION_UPDATE_MIN_DISPLACEMENT);
+                                USER_LOCATION_UPDATE_MIN_DISPLACEMENT);
 				LocationServices.FusedLocationApi.requestLocationUpdates(
 						mApiClient, locationReq, GoogleMapFragment.this);
 			} else {

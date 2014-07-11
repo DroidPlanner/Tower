@@ -67,7 +67,7 @@ public abstract class SuperUI extends FragmentActivity implements
 		if (mAppPrefs.keepScreenOn()) {
 			getWindow()
 					.addFlags(
-							android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                            android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		}
 
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
