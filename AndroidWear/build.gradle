@@ -6,7 +6,7 @@ android {
     buildToolsVersion "20.0.0"
 
     defaultConfig {
-        applicationId "org.droidplanner.android.wear"
+        applicationId "org.droidplanner"
         minSdkVersion 20
         targetSdkVersion 20
         versionCode 1

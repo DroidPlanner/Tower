@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.droidplanner.android.wear" >
+    package="org.droidplanner" >
 
     <uses-feature android:name="android.hardware.type.watch" />
 
@@ -18,7 +18,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".WearUI"
+            android:name=".android.wear.WearUI"
             android:label="@string/app_title" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".services.EventHandlerService">
+        <service android:name=".android.wear.services.EventHandlerService">
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
             </intent-filter>

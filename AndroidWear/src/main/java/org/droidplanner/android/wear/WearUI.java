@@ -6,6 +6,7 @@ import android.support.wearable.view.FragmentGridPagerAdapter;
 import android.support.wearable.view.GridViewPager;
 import android.support.wearable.view.WatchViewStub;
 
+import org.droidplanner.R;
 import org.droidplanner.android.wear.views.WearUIPagerAdapter;
 
 public class WearUI extends Activity {

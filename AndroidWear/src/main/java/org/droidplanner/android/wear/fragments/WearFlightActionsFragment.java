@@ -5,9 +5,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
-import org.droidplanner.android.wear.R;
+import org.droidplanner.R;
+
 
 /**
  * Provides screen for the flight action buttons.
