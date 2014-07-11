@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.support.wearable.view.FragmentGridPagerAdapter;
 
+import org.droidplanner.android.wear.fragments.WearFlightActionsFragment;
 import org.droidplanner.android.wear.fragments.WearMapFragment;
 
 /**
@@ -17,7 +18,7 @@ public class WearUIPagerAdapter extends FragmentGridPagerAdapter {
 
     @Override
     public Fragment getFragment(int i, int i2) {
-        return new WearMapFragment();
+        return new WearFlightActionsFragment();
     }
 
     @Override
