@@ -1,9 +1,11 @@
-package org.droidplanner.android.communication.service;
+package org.droidplanner.android.services;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.communication.connection.MAVLinkConnection;
 import org.droidplanner.android.communication.connection.MAVLinkConnection.MavLinkConnectionListener;
+
+import org.droidplanner.android.communication.MAVLinkClient;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;

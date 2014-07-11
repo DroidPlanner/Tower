@@ -6,14 +6,9 @@ import android.support.wearable.view.FragmentGridPagerAdapter;
 import android.support.wearable.view.GridViewPager;
 import android.support.wearable.view.WatchViewStub;
 
-import com.google.android.gms.wearable.MessageApi;
-import com.google.android.gms.wearable.MessageEvent;
-import com.google.android.gms.wearable.Node;
-import com.google.android.gms.wearable.NodeApi;
-
 import org.droidplanner.android.wear.views.WearUIPagerAdapter;
 
-public class WearUI extends Activity implements MessageApi.MessageListener, NodeApi.NodeListener {
+public class WearUI extends Activity {
 
     private GridViewPager mViewPager;
 
@@ -28,24 +23,11 @@ public class WearUI extends Activity implements MessageApi.MessageListener, Node
             public void onLayoutInflated(WatchViewStub stub) {
                 mViewPager = (GridViewPager) stub.findViewById(R.id.grid_view_pager);
 
-                final FragmentGridPagerAdapter pagerAdapter = new WearUIPagerAdapter(getFragmentManager());
+                final FragmentGridPagerAdapter pagerAdapter = new WearUIPagerAdapter
+                        (getFragmentManager());
                 mViewPager.setAdapter(pagerAdapter);
             }
         });
     }
 
-    @Override
-    public void onMessageReceived(MessageEvent messageEvent) {
-
-    }
-
-    @Override
-    public void onPeerConnected(Node node) {
-
-    }
-
-    @Override
-    public void onPeerDisconnected(Node node) {
-
-    }
 }

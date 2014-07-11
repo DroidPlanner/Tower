@@ -71,10 +71,13 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <service android:name=".android.communication.service.MAVLinkService" >
+        <service android:name=".android.services.MAVLinkService" />
+        <service android:name=".android.services.UploaderService" />
+        <service android:name=".android.services.WearManagerService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
+            </intent-filter>
         </service>
-
-        <service android:name=".android.communication.service.UploaderService" />
 
 		<activity
 		    android:name=".android.activities.FlightActivity"

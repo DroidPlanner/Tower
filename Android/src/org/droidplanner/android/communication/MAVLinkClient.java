@@ -1,5 +1,6 @@
-package org.droidplanner.android.communication.service;
+package org.droidplanner.android.communication;
 
+import org.droidplanner.android.services.MAVLinkService;
 import org.droidplanner.core.MAVLink.MAVLinkStreams;
 
 import android.annotation.SuppressLint;

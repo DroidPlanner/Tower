@@ -23,6 +23,8 @@ dependencies {
     compile project(':Mavlink')
     compile project(':PebbleKit')
     compile project(':usb-serial-for-android:UsbSerialLibrary')
+
+    wearApp project(':AndroidWear')
 }
 
 android {

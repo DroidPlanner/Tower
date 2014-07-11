@@ -1,4 +1,4 @@
-package org.droidplanner.android.communication.service;
+package org.droidplanner.android.receivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+
+import org.droidplanner.android.services.UploaderService;
 
 /**
  * When we see a network connection arrive, try to restart the upload

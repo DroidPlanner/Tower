@@ -1,7 +1,7 @@
 package org.droidplanner.android;
 
-import org.droidplanner.android.communication.service.MAVLinkClient;
-import org.droidplanner.android.communication.service.NetworkStateReceiver;
+import org.droidplanner.android.communication.MAVLinkClient;
+import org.droidplanner.android.receivers.NetworkStateReceiver;
 import org.droidplanner.android.gcs.follow.Follow;
 import org.droidplanner.android.notifications.NotificationHandler;
 import org.droidplanner.android.proxy.mission.MissionProxy;

@@ -9,7 +9,7 @@ import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import org.droidplanner.android.communication.service.UploaderService;
+import org.droidplanner.android.services.UploaderService;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.file.FileStream;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
