@@ -43,8 +43,8 @@ public class PebbleNotificationProvider implements
 		PebbleKit.registerReceivedDataHandler(applicationContext, datahandler);
 	}
 
-	// FIXME call this method onPause()
-	public void onStop() {
+    @Override
+	public void onTerminate() {
 		if (datahandler != null) {
 			applicationContext.unregisterReceiver(datahandler);
 			datahandler = null;

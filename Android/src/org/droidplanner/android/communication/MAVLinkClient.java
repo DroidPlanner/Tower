@@ -37,8 +37,7 @@ public class MAVLinkClient implements MAVLinkStreams.MAVLinkOutputStream {
 	final Messenger mMessenger = new Messenger(new IncomingHandler());
 	private boolean mIsBound;
 
-	public MAVLinkClient(Context context,
-			MAVLinkStreams.MavlinkInputStream listener) {
+	public MAVLinkClient(Context context, MAVLinkStreams.MavlinkInputStream listener) {
 		parent = context;
 		this.listener = listener;
 	}

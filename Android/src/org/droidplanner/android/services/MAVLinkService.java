@@ -32,8 +32,7 @@ import com.google.android.gms.analytics.HitBuilders;
  * 
  */
 
-public class MAVLinkService extends Service implements
-		MavLinkConnectionListener {
+public class MAVLinkService extends Service implements MavLinkConnectionListener {
 
 	private static final String LOG_TAG = MAVLinkService.class.getSimpleName();
 
@@ -192,8 +191,7 @@ public class MAVLinkService extends Service implements
 	private void connectMAVConnection() {
 		String connectionType = mAppPrefs.getMavLinkConnectionType();
 
-		Utils.ConnectionType connType = Utils.ConnectionType
-				.valueOf(connectionType);
+		Utils.ConnectionType connType = Utils.ConnectionType.valueOf(connectionType);
 		mavConnection = connType.getConnection(this);
 		mavConnection.start();
 
@@ -211,8 +209,7 @@ public class MAVLinkService extends Service implements
 		}
 
 		GAUtils.sendEvent(new HitBuilders.EventBuilder().setCategory(
-                GAUtils.Category.MAVLINK_CONNECTION.toString()).setAction(
-                "Mavlink disconnecting"));
+                GAUtils.Category.MAVLINK_CONNECTION.toString()).setAction("Mavlink disconnecting"));
 	}
 
 }

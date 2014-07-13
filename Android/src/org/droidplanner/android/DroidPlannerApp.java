@@ -28,17 +28,11 @@ public class DroidPlannerApp extends ErrorReportApp implements
 	public MissionProxy missionProxy;
 	private MavLinkMsgHandler mavLinkMsgHandler;
 
-	/**
-	 * Handles dispatching of status bar, and audible notification.
-	 */
-	public NotificationHandler mNotificationHandler;
-
 	@Override
 	public void onCreate() {
 		super.onCreate();
 
 		final Context context = getApplicationContext();
-		mNotificationHandler = new NotificationHandler(context);
 
 		MAVLinkClient MAVClient = new MAVLinkClient(this, this);
 		Clock clock = new Clock() {
@@ -63,7 +57,7 @@ public class DroidPlannerApp extends ErrorReportApp implements
 
 		DroidPlannerPrefs pref = new DroidPlannerPrefs(context);
 		drone = new Drone(MAVClient, clock, handler, pref);
-		getDrone().events.addDroneListener(this);
+		drone.events.addDroneListener(this);
 
 		missionProxy = new MissionProxy(getDrone().mission);
 		mavLinkMsgHandler = new org.droidplanner.core.MAVLink.MavLinkMsgHandler(
@@ -93,8 +87,6 @@ public class DroidPlannerApp extends ErrorReportApp implements
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		mNotificationHandler.onDroneEvent(event, drone);
-
 		switch (event) {
 		case MISSION_RECEIVED:
 			// Refresh the mission render state

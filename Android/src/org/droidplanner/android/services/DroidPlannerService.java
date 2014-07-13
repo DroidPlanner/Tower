@@ -1,13 +1,17 @@
 package org.droidplanner.android.services;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Binder;
 import android.os.IBinder;
 
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.helpers.BluetoothDevicesActivity;
 import org.droidplanner.android.gcs.follow.Follow;
+import org.droidplanner.android.notifications.NotificationHandler;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.core.drone.Drone;
@@ -20,15 +24,23 @@ import org.droidplanner.core.drone.DroneInterfaces;
  */
 public class DroidPlannerService extends Service implements DroneInterfaces.OnDroneListener {
 
+    public final static String ACTION_TOGGLE_DRONE_CONNECTION = DroidPlannerService.class
+            .getName() + ".ACTION_TOGGLE_DRONE_CONNECTION";
+
     /**
      * Handle to the droidplanner api, provided to clients of this service.
      */
-    private final IBinder mBinder = new DroidPlannerApi();
+    private final DroidPlannerApi mDpApi = new DroidPlannerApi();
 
     /**
      * Handle to the app preferences.
      */
     private DroidPlannerPrefs mAppPrefs;
+
+    /**
+     * Handles dispatching of status bar, and audible notification.
+     */
+    public NotificationHandler mNotificationHandler;
 
     /**
      * Represents the drone controlled by the app.
@@ -44,6 +56,7 @@ public class DroidPlannerService extends Service implements DroneInterfaces.OnDr
     public void onCreate(){
         super.onCreate();
 
+        final Context context = getApplicationContext();
         final DroidPlannerApp dpApp = (DroidPlannerApp) getApplication();
         mFollowMe = dpApp.followMe;
 
@@ -51,22 +64,44 @@ public class DroidPlannerService extends Service implements DroneInterfaces.OnDr
         mDrone.events.addDroneListener(this);
 
         mAppPrefs = new DroidPlannerPrefs(getApplicationContext());
+
+        mNotificationHandler = new NotificationHandler(context, mDrone);
     }
 
     @Override
     public void onDestroy(){
         super.onDestroy();
         mDrone.events.removeDroneListener(this);
+        mNotificationHandler.terminate();
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId){
+        if(intent != null) {
+            final String action = intent.getAction();
+            if(ACTION_TOGGLE_DRONE_CONNECTION.equals(action)){
+                mDpApi.toggleDroneConnection();
+            }
+        }
+
+        return START_REDELIVER_INTENT;
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        return mBinder;
+        return mDpApi;
     }
 
     @Override
     public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
+        switch(event){
+            case CONNECTED:
+                break;
 
+            case DISCONNECTED:
+                stopSelf();
+                break;
+        }
     }
 
     /**
@@ -102,6 +137,14 @@ public class DroidPlannerService extends Service implements DroneInterfaces.OnDr
 
         public boolean isDroneConnected(){
             return mDrone.MavClient.isConnected();
+        }
+
+        public void quickNotify(String msg){
+            mNotificationHandler.quickNotify(msg);
+        }
+
+        public void queryConnectionState(){
+            mDrone.MavClient.queryConnectionState();
         }
     }
 }

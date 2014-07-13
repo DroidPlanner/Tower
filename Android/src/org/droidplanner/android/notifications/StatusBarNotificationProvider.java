@@ -3,6 +3,7 @@ package org.droidplanner.android.notifications;
 import org.droidplanner.R;
 import org.droidplanner.android.activities.FlightActivity;
 import org.droidplanner.android.activities.helpers.SuperUI;
+import org.droidplanner.android.services.DroidPlannerService;
 import org.droidplanner.android.utils.TextUtils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.core.drone.Drone;
@@ -20,39 +21,14 @@ import android.widget.Toast;
 /**
  * Implements DroidPlanner's status bar notifications.
  */
-public class StatusBarNotificationProvider implements
-		NotificationHandler.NotificationProvider {
+public class StatusBarNotificationProvider implements NotificationHandler.NotificationProvider {
 
-	private static final String LOG_TAG = StatusBarNotificationProvider.class
-			.getSimpleName();
+	private static final String LOG_TAG = StatusBarNotificationProvider.class.getSimpleName();
 
 	/**
 	 * Android status bar's notification id.
 	 */
 	private static final int NOTIFICATION_ID = 1;
-
-	/**
-	 * Countdown to notification dismissal.
-	 */
-	private static final long COUNTDOWN_TO_DISMISSAL = 60000l; // ms
-
-	/**
-	 * Used to schedule notification dismissal after a disconnect event.
-	 */
-	private final Handler mHandler = new Handler();
-
-	/**
-	 * Callback used to dismiss the notification.
-	 */
-	private final Runnable mDismissNotification = new Runnable() {
-		@Override
-		public void run() {
-			if (mContext != null) {
-				dismissNotification();
-				mNotificationBuilder = null;
-			}
-		}
-	};
 
 	/**
 	 * Application context.
@@ -92,88 +68,82 @@ public class StatusBarNotificationProvider implements
 		mNotificationIntent = PendingIntent.getActivity(mContext, 0,
 				new Intent(mContext, FlightActivity.class), 0);
 
-		mToggleConnectionIntent = PendingIntent.getActivity(mContext, 0,
-				new Intent(mContext, FlightActivity.class)
-						.setAction(SuperUI.ACTION_TOGGLE_DRONE_CONNECTION), 0);
+		mToggleConnectionIntent = PendingIntent.getService(mContext, 0,
+                new Intent(mContext, DroidPlannerService.class)
+                        .setAction(DroidPlannerService.ACTION_TOGGLE_DRONE_CONNECTION), 0
+        );
 	}
 
 	@Override
 	public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
 		boolean showNotification = true;
 
-		switch (event) {
-		case CONNECTED:
-			// Cancel the notification dismissal
-			mHandler.removeCallbacks(mDismissNotification);
+        switch (event) {
+            case CONNECTED:
+                final String summaryText = mContext.getString(R.string.connected);
 
-			final String summaryText = mContext.getString(R.string.connected);
-
-			mInboxBuilder = new InboxStyleBuilder().setSummary(summaryText);
-			mNotificationBuilder = new NotificationCompat.Builder(mContext)
-					.addAction(R.drawable.ic_action_io,	mContext.getText(R.string.menu_disconnect),
-                            mToggleConnectionIntent)
-					.setContentIntent(mNotificationIntent)
-					.setContentText(summaryText)
-					.setOngoing(mAppPrefs.isNotificationPermanent())
-					.setSmallIcon(R.drawable.ic_launcher)
-                    .setLocalOnly(true);
-
-			updateFlightMode(drone);
-			updateDroneState(drone);
-			updateBattery(drone);
-			updateGps(drone);
-			updateHome(drone);
-			updateRadio(drone);
-			break;
-
-		case BATTERY:
-			updateBattery(drone);
-			break;
-
-		case GPS_FIX:
-		case GPS_COUNT:
-			updateGps(drone);
-			break;
-
-		case HOME:
-			updateHome(drone);
-			break;
-
-		case RADIO:
-			updateRadio(drone);
-			break;
-
-		case STATE:
-			updateDroneState(drone);
-			break;
-
-		case MODE:
-		case TYPE:
-			updateFlightMode(drone);
-			break;
-
-		case DISCONNECTED:
-			mInboxBuilder = null;
-
-			if (mNotificationBuilder != null) {
-				mNotificationBuilder = new NotificationCompat.Builder(mContext)
-						.addAction(R.drawable.ic_action_io,	mContext.getText(R.string.menu_connect),
-								mToggleConnectionIntent)
-						.setContentIntent(mNotificationIntent)
-						.setContentTitle(mContext.getString(R.string.disconnected))
-						.setOngoing(false).setContentText("")
-						.setSmallIcon(R.drawable.ic_launcher_bw)
+                mInboxBuilder = new InboxStyleBuilder().setSummary(summaryText);
+                mNotificationBuilder = new NotificationCompat.Builder(mContext)
+                        .addAction(R.drawable.ic_action_io, mContext.getText(R.string
+                                        .menu_disconnect),
+                                mToggleConnectionIntent)
+                        .setContentIntent(mNotificationIntent)
+                        .setContentText(summaryText)
+                        .setOngoing(mAppPrefs.isNotificationPermanent())
+                        .setSmallIcon(R.drawable.ic_launcher)
                         .setLocalOnly(true);
 
-				// Schedule the notification dismissal
-				mHandler.postDelayed(mDismissNotification, COUNTDOWN_TO_DISMISSAL);
-			}
-			break;
+                updateFlightMode(drone);
+                updateDroneState(drone);
+                updateBattery(drone);
+                updateGps(drone);
+                updateHome(drone);
+                updateRadio(drone);
+                break;
 
-		default:
-			showNotification = false;
-			break;
-		}
+            case BATTERY:
+                updateBattery(drone);
+                break;
+
+            case GPS_FIX:
+            case GPS_COUNT:
+                updateGps(drone);
+                break;
+
+            case HOME:
+                updateHome(drone);
+                break;
+
+            case RADIO:
+                updateRadio(drone);
+                break;
+
+            case STATE:
+                updateDroneState(drone);
+                break;
+
+            case MODE:
+            case TYPE:
+                updateFlightMode(drone);
+                break;
+
+            case DISCONNECTED:
+                mInboxBuilder = null;
+
+                mNotificationBuilder = new NotificationCompat.Builder(mContext)
+                        .addAction(R.drawable.ic_action_io, mContext.getText(R.string.menu_connect),
+                                mToggleConnectionIntent)
+                        .setContentIntent(mNotificationIntent)
+                        .setContentTitle(mContext.getString(R.string.disconnected))
+                        .setOngoing(false).setContentText("")
+                        .setSmallIcon(R.drawable.ic_launcher_bw)
+                        .setLocalOnly(true);
+                break;
+
+            default:
+                showNotification = false;
+                break;
+        }
 
 		if (showNotification) {
 			showNotification();
@@ -249,13 +219,14 @@ public class StatusBarNotificationProvider implements
 		}
 
 		NotificationManagerCompat.from(mContext).notify(NOTIFICATION_ID,
-				mNotificationBuilder.build());
+                mNotificationBuilder.build());
 	}
 
 	/**
 	 * Dismiss the app status bar notification.
 	 */
-	private void dismissNotification() {
+    @Override
+	public void onTerminate() {
 		NotificationManagerCompat.from(mContext).cancelAll();
 	}
 

@@ -40,6 +40,13 @@ public class TTSNotificationProvider implements OnInitListener,
 		tts.setLanguage(Locale.US);
 	}
 
+    @Override
+    public void onTerminate(){
+        if(tts != null){
+            tts.shutdown();
+        }
+    }
+
 	private void speak(String string) {
 		if (tts != null) {
 			if (shouldEnableTTS()) {

@@ -36,13 +36,11 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 
     private final static String TAG = SuperUI.class.getSimpleName();
 
-	public final static String ACTION_TOGGLE_DRONE_CONNECTION = SuperUI.class
-			.getName() + ".ACTION_TOGGLE_DRONE_CONNECTION";
-
     protected final ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             mDpApi = (DroidPlannerApi) service;
+            mDpApi.queryConnectionState();
         }
 
         @Override
@@ -51,7 +49,7 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
         }
     };
 
-    protected DroidPlannerApi mDpApi;
+    private DroidPlannerApi mDpApi;
 
 	private ScreenOrientation screenOrientation = new ScreenOrientation(this);
 	private InfoBarActionProvider infoBar;
@@ -94,23 +92,6 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 		screenOrientation.unlock();
 		Utils.updateUILanguage(getApplicationContext());
 
-		handleIntent(getIntent());
-	}
-
-	@Override
-	public void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
-		handleIntent(intent);
-	}
-
-	private void handleIntent(Intent intent) {
-		if (intent == null)
-			return;
-
-		final String action = intent.getAction();
-		if (ACTION_TOGGLE_DRONE_CONNECTION.equals(action)) {
-			toggleDroneConnection();
-		}
 	}
 
 	@Override
@@ -120,7 +101,6 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
                 mServiceConnection, Context.BIND_AUTO_CREATE);
 		maxVolumeIfEnabled();
 		drone.events.addDroneListener(this);
-		drone.MavClient.queryConnectionState();
 		drone.events.notifyDroneEvent(DroneEventsType.MISSION_UPDATE);
 	}
 
@@ -132,6 +112,10 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 					0);
 		}
 	}
+
+    public DroidPlannerApi getDroidPlannerApi(){
+        return mDpApi;
+    }
 
 	@Override
 	protected void onStop() {
@@ -250,14 +234,8 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 	}
 
 	protected void toggleDroneConnection() {
-        if(mDpApi != null){
-            mDpApi.toggleDroneConnection();
-        }
-        else{
-            Toast.makeText(getApplicationContext(), "Error connecting to the drone!",
-                    Toast.LENGTH_LONG).show();
-            Log.e(TAG, "DroidPlanner api handle is not set!" );
-        }
+        startService(new Intent(getApplicationContext(), DroidPlannerService.class).setAction
+                (DroidPlannerService.ACTION_TOGGLE_DRONE_CONNECTION));
 	}
 
 	private void setMapTypeFromItemId(int itemId) {

@@ -17,7 +17,14 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 	 */
 	interface NotificationProvider extends DroneInterfaces.OnDroneListener {
 		void quickNotify(String feedback);
+
+        /**
+         * Release resources used by the provider.
+         */
+        void onTerminate();
 	}
+
+    private final Drone mDrone;
 
 	/**
 	 * Handles Droidplanner's audible notifications.
@@ -34,10 +41,14 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 	 */
 	private final PebbleNotificationProvider mPebbleNotification;
 
-	public NotificationHandler(Context context) {
+	public NotificationHandler(Context context, Drone drone) {
+        mDrone = drone;
+
 		mTtsNotification = new TTSNotificationProvider(context);
 		mStatusBarNotification = new StatusBarNotificationProvider(context);
 		mPebbleNotification = new PebbleNotificationProvider(context);
+
+        drone.events.addDroneListener(this);
 	}
 
 	@Override
@@ -57,5 +68,17 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 	public void quickNotify(String feedback) {
 		mTtsNotification.quickNotify(feedback);
 		mStatusBarNotification.quickNotify(feedback);
+        mPebbleNotification.quickNotify(feedback);
 	}
+
+    /**
+     * Release resources used by the notification handler.
+     * After calling this method, this object should no longer be used.
+     */
+    public void terminate(){
+        mDrone.events.removeDroneListener(this);
+        mTtsNotification.onTerminate();
+        mStatusBarNotification.onTerminate();
+        mPebbleNotification.onTerminate();
+    }
 }
