@@ -9,34 +9,30 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.MAVLink.Messages.ApmModes;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.wearable.DataApi;
 import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.MessageApi;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Node;
+import com.google.android.gms.wearable.NodeApi;
 import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
 
 import org.droidplanner.android.gcs.follow.Follow;
+import org.droidplanner.android.lib.utils.GoogleApiClientManager;
 import org.droidplanner.android.lib.utils.WearUtils;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
-
-import java.util.HashMap;
-import java.util.Map;
+import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 
 /**
  * Manages communication with the wearable app.
  */
-public class WearManagerService extends WearableListenerService implements GoogleApiClient
-        .ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
-        DroneInterfaces.OnDroneListener {
+public class WearManagerService extends WearableListenerService implements OnDroneListener {
 
     private final static String TAG = WearManagerService.class.getSimpleName();
 
@@ -61,12 +57,6 @@ public class WearManagerService extends WearableListenerService implements Googl
     };
 
     /**
-     * Stores the list of connected wear nodes.
-     * If no nodes is connected, this service stops updating the data items.
-     */
-    private final Map<String, Node> mConnectedNodes = new HashMap<String, Node>();
-
-    /**
      * Contains current drone state information that's relevant to the connected wear node(s).
      */
     private final Bundle mDroneInfoBundle = new Bundle();
@@ -86,18 +76,16 @@ public class WearManagerService extends WearableListenerService implements Googl
      */
     private Follow mFollowMe;
 
-    private GoogleApiClient mGoogleApiClient;
+    private GoogleApiClientManager mGApiClientMgr;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Wearable.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
+        mGApiClientMgr = new GoogleApiClientManager(getApplicationContext(), Wearable.API);
+        mGApiClientMgr.start();
 
-        bindService(new Intent(getApplicationContext(), DroidPlannerService.class), mServiceConnection,
+        bindService(new Intent(getApplicationContext(), DroidPlannerService.class),
+                mServiceConnection,
                 Context.BIND_AUTO_CREATE);
     }
 
@@ -111,25 +99,7 @@ public class WearManagerService extends WearableListenerService implements Googl
             mDrone.events.removeDroneListener(this);
         }
 
-        if (mGoogleApiClient.isConnected() || mGoogleApiClient.isConnecting()) {
-            mGoogleApiClient.disconnect();
-        }
-    }
-
-    @Override
-    public void onConnected(Bundle bundle) {
-        relayDroneInfo();
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        Log.w(TAG, "Google Play Services connection suspended (" + i + ").");
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.e(TAG, "Google Play Services connection failed (" + connectionResult.getErrorCode() +
-                ").");
+        mGApiClientMgr.terminate();
     }
 
     @Override
@@ -138,8 +108,9 @@ public class WearManagerService extends WearableListenerService implements Googl
         switch (event) {
             case CONNECTED:
             case DISCONNECTED:
-                mDroneInfoBundle.putBoolean(WearUtils.KEY_DRONE_CONNECTION_STATE,
-                        drone.MavClient.isConnected());
+                final boolean isConnected = drone.MavClient.isConnected();
+                mDroneInfoBundle.putBoolean(WearUtils.KEY_DRONE_CONNECTION_STATE, isConnected);
+                mGApiClientMgr.start(!isConnected);
                 break;
 
             case FOLLOW_CHANGE_TYPE:
@@ -206,24 +177,27 @@ public class WearManagerService extends WearableListenerService implements Googl
     }
 
     private void relayDroneInfo() {
-        if (!mGoogleApiClient.isConnected()) {
-            Log.w(TAG, "The google api client is not connected. Cancelling relay operation.");
-            return;
-        }
+        boolean result = mGApiClientMgr.addTask(mGApiClientMgr.new GoogleApiClientTask() {
+            @Override
+            public void run() {
+                final PutDataMapRequest dataMap = PutDataMapRequest.create(WearUtils
+                        .DRONE_INFO_PATH);
+                dataMap.getDataMap().putAll(DataMap.fromBundle(mDroneInfoBundle));
+                PutDataRequest request = dataMap.asPutDataRequest();
+                final DataApi.DataItemResult result = Wearable.DataApi
+                        .putDataItem(getGoogleApiClient(), request)
+                        .await();
 
-        final PutDataMapRequest dataMap = PutDataMapRequest.create(WearUtils.DRONE_INFO_PATH);
-        dataMap.getDataMap().putAll(DataMap.fromBundle(mDroneInfoBundle));
-        PutDataRequest request = dataMap.asPutDataRequest();
-        Wearable.DataApi.putDataItem(mGoogleApiClient, request)
-                .setResultCallback(new ResultCallback<DataApi.DataItemResult>() {
-                    @Override
-                    public void onResult(DataApi.DataItemResult dataItemResult) {
-                        final Status status = dataItemResult.getStatus();
-                        if (!status.isSuccess()) {
-                            Log.e(TAG, "Failed to relay the data: " + status.getStatusCode());
-                        }
-                    }
-                });
+                final Status status = result.getStatus();
+                if (!status.isSuccess()) {
+                    Log.e(TAG, "Failed to relay the data: " + status.getStatusCode());
+                }
+            }
+        });
+
+        if(!result){
+            Log.e(TAG, "Unable to add google api client task.");
+        }
     }
 
     @Override
@@ -232,34 +206,40 @@ public class WearManagerService extends WearableListenerService implements Googl
         if(WearUtils.RESET_DRONE_FLIGHT_TIME_PATH.equals(msgPath)){
             mDrone.state.resetFlightTimer();
         }
-        else if(WearUtils.TOGGLE_DRONE_CONNECTION_PATH.equals(msgPath)){
-            if(mDpApi != null) {
-                boolean shouldConnect = WearUtils.decodeDroneConnectionMsgData(msgEvent.getData());
-                if(mDpApi.isDroneConnected() != shouldConnect){
-                    if(!mDpApi.toggleDroneConnection()){
-                        //Have the wear node(s) tell the user to check the main app.
-                        if(!mGoogleApiClient.isConnected()){
-                            Log.w(TAG, "The google api client is not connected. Cancelling relay operation.");
-                            return;
-                        }
+        else if (WearUtils.TOGGLE_DRONE_CONNECTION_PATH.equals(msgPath) && mDpApi != null) {
 
-                        for(String nodeId: mConnectedNodes.keySet()) {
-                            Wearable.MessageApi.sendMessage(mGoogleApiClient, nodeId,
-                                    WearUtils.PHONE_USE_REQUIRED_PATH, null)
-                                    .setResultCallback(new ResultCallback<MessageApi
-                                            .SendMessageResult>() {
+            boolean shouldConnect = WearUtils.decodeDroneConnectionMsgData(msgEvent.getData());
+            if (mDpApi.isDroneConnected() != shouldConnect) {
 
-                                        @Override
-                                        public void onResult(MessageApi.SendMessageResult
-                                                                     sendMessageResult) {
-                                            final Status status = sendMessageResult.getStatus();
-                                            if (!status.isSuccess()) {
-                                                Log.e(TAG, "Failed to relay the data: " + status
-                                                        .getStatusCode());
-                                            }
-                                        }
-                                    });
+                if (!mDpApi.toggleDroneConnection()) {
+
+                    //Have the wear node(s) tell the user to check the main app.
+                    boolean result = mGApiClientMgr.addTask(mGApiClientMgr.new GoogleApiClientTask() {
+
+                        @Override
+                        public void run() {
+                            final GoogleApiClient apiClient = getGoogleApiClient();
+
+                            NodeApi.GetConnectedNodesResult nodes =
+                                    Wearable.NodeApi.getConnectedNodes(apiClient).await();
+
+                            for (Node node : nodes.getNodes()) {
+                                final MessageApi.SendMessageResult result = Wearable.MessageApi
+                                        .sendMessage(apiClient, node.getId(),
+                                                WearUtils.PHONE_USE_REQUIRED_PATH, null)
+                                        .await();
+
+                                final Status status = result.getStatus();
+                                if (!status.isSuccess()) {
+                                    Log.e(TAG, "Failed to relay the data: " + status
+                                            .getStatusCode());
+                                }
+                            }
                         }
+                    });
+
+                    if(!result){
+                        Log.e(TAG, "Unable to add google api client task.");
                     }
                 }
             }
@@ -273,22 +253,6 @@ public class WearManagerService extends WearableListenerService implements Googl
         else if(WearUtils.SET_DRONE_FLIGHT_MODE_PATH.equals(msgPath)){
             ApmModes flightMode = WearUtils.decodeFlightModeMsgData(msgEvent.getData());
             mDrone.state.setMode(flightMode);
-        }
-    }
-
-    @Override
-    public void onPeerConnected(Node peer) {
-        mConnectedNodes.put(peer.getId(), peer);
-        if (!mGoogleApiClient.isConnected() && !mGoogleApiClient.isConnecting()) {
-            mGoogleApiClient.connect();
-        }
-    }
-
-    @Override
-    public void onPeerDisconnected(Node peer) {
-        mConnectedNodes.remove(peer.getId());
-        if (mConnectedNodes.isEmpty()) {
-            mGoogleApiClient.disconnect();
         }
     }
 }
