@@ -117,7 +117,12 @@ public class DroidPlannerService extends Service implements DroneInterfaces.OnDr
             return mFollowMe;
         }
 
-        public void toggleDroneConnection(){
+        /**
+         * Toggle the connection with the drone.
+         * @return true to indicate the operation is in process,
+         * false to indicate that additional user interaction is needed.
+         */
+        public boolean toggleDroneConnection(){
             if (!mDrone.MavClient.isConnected()) {
                 final String connectionType = mAppPrefs.getMavLinkConnectionType();
 
@@ -128,11 +133,12 @@ public class DroidPlannerService extends Service implements DroneInterfaces.OnDr
                         startActivity(new Intent(getApplicationContext(),
                                 BluetoothDevicesActivity.class).addFlags(Intent
                                 .FLAG_ACTIVITY_NEW_TASK));
-                        return;
+                        return false;
                     }
                 }
             }
             mDrone.MavClient.toggleConnectionState();
+            return true;
         }
 
         public boolean isDroneConnected(){

@@ -15,6 +15,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.wearable.DataApi;
 import com.google.android.gms.wearable.DataMap;
+import com.google.android.gms.wearable.MessageApi;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.PutDataMapRequest;
@@ -235,7 +236,31 @@ public class WearManagerService extends WearableListenerService implements Googl
             if(mDpApi != null) {
                 boolean shouldConnect = WearUtils.decodeDroneConnectionMsgData(msgEvent.getData());
                 if(mDpApi.isDroneConnected() != shouldConnect){
-                    mDpApi.toggleDroneConnection();
+                    if(!mDpApi.toggleDroneConnection()){
+                        //Have the wear node(s) tell the user to check the main app.
+                        if(!mGoogleApiClient.isConnected()){
+                            Log.w(TAG, "The google api client is not connected. Cancelling relay operation.");
+                            return;
+                        }
+
+                        for(String nodeId: mConnectedNodes.keySet()) {
+                            Wearable.MessageApi.sendMessage(mGoogleApiClient, nodeId,
+                                    WearUtils.PHONE_USE_REQUIRED_PATH, null)
+                                    .setResultCallback(new ResultCallback<MessageApi
+                                            .SendMessageResult>() {
+
+                                        @Override
+                                        public void onResult(MessageApi.SendMessageResult
+                                                                     sendMessageResult) {
+                                            final Status status = sendMessageResult.getStatus();
+                                            if (!status.isSuccess()) {
+                                                Log.e(TAG, "Failed to relay the data: " + status
+                                                        .getStatusCode());
+                                            }
+                                        }
+                                    });
+                        }
+                    }
                 }
             }
         }

@@ -53,6 +53,8 @@ public class WearUtils {
      */
     private static final String MESSAGE_ROOT_PATH = "/drone/actions";
 
+    public static final String PHONE_USE_REQUIRED_PATH = MESSAGE_ROOT_PATH + "/phone_use_required";
+
     /**
      * Path for the message used to reset the drone flight time.
      */

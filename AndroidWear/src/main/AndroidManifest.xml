@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".android.wear.services.EventHandlerService">
+        <service android:name=".android.wear.services.DroidPlannerWearService">
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
             </intent-filter>

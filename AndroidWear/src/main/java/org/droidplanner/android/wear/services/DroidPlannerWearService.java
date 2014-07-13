@@ -10,7 +10,7 @@ import com.google.android.gms.wearable.WearableListenerService;
 /**
  * Handles communication with the app on the connected mobile device.
  */
-public class EventHandlerService extends WearableListenerService implements GoogleApiClient
+public class DroidPlannerWearService extends WearableListenerService implements GoogleApiClient
         .ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
     private GoogleApiClient mGoogleApiClient;
