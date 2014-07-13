@@ -148,11 +148,4 @@ public class BluetoothConnection extends MAVLinkConnection {
 	protected void getPreferences(SharedPreferences prefs) {
 		// TODO Auto-generated method stub
 	}
-
-	/*
-	 * private getUUID(device: BluetoothDevice) = { val uuids =
-	 * Option(device.getUuids).getOrElse(Array()).map(_.getUuid) uuids.find {
-	 * uuid => uuid.toString.startsWith(serialUUIDprefix) } }
-	 */
-
 }

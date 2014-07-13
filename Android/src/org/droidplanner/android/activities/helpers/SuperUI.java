@@ -2,8 +2,9 @@ package org.droidplanner.android.activities.helpers;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.fragments.helpers.BTDeviceListFragment;
 import org.droidplanner.android.maps.providers.google_map.GoogleMapFragment;
+import org.droidplanner.android.services.DroidPlannerService;
+import org.droidplanner.android.services.DroidPlannerService.DroidPlannerApi;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.widgets.actionProviders.InfoBarActionProvider;
@@ -13,24 +14,44 @@ import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.gcs.GCSHeartbeat;
 
 import android.app.ActionBar;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 /**
  * Parent class for the app activity classes.
  */
-public abstract class SuperUI extends FragmentActivity implements
-		OnDroneListener {
+public abstract class SuperUI extends FragmentActivity implements OnDroneListener {
+
+    private final static String TAG = SuperUI.class.getSimpleName();
 
 	public final static String ACTION_TOGGLE_DRONE_CONNECTION = SuperUI.class
 			.getName() + ".ACTION_TOGGLE_DRONE_CONNECTION";
+
+    protected final ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mDpApi = (DroidPlannerApi) service;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mDpApi = null;
+        }
+    };
+
+    protected DroidPlannerApi mDpApi;
 
 	private ScreenOrientation screenOrientation = new ScreenOrientation(this);
 	private InfoBarActionProvider infoBar;
@@ -65,9 +86,7 @@ public abstract class SuperUI extends FragmentActivity implements
 		 * android android.os.PowerManager#newWakeLock documentation.
 		 */
 		if (mAppPrefs.keepScreenOn()) {
-			getWindow()
-					.addFlags(
-                            android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+			getWindow().addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		}
 
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -97,6 +116,8 @@ public abstract class SuperUI extends FragmentActivity implements
 	@Override
 	protected void onStart() {
 		super.onStart();
+        bindService(new Intent(getApplicationContext(), DroidPlannerService.class),
+                mServiceConnection, Context.BIND_AUTO_CREATE);
 		maxVolumeIfEnabled();
 		drone.events.addDroneListener(this);
 		drone.MavClient.queryConnectionState();
@@ -115,6 +136,7 @@ public abstract class SuperUI extends FragmentActivity implements
 	@Override
 	protected void onStop() {
 		super.onStop();
+        unbindService(mServiceConnection);
 		drone.events.removeDroneListener(this);
 
 		if (infoBar != null) {
@@ -129,21 +151,23 @@ public abstract class SuperUI extends FragmentActivity implements
 			infoBar.onDroneEvent(event, drone);
 		}
 
-		switch (event) {
-		case CONNECTED:
-			gcsHeartbeat.setActive(true);
-			invalidateOptionsMenu();
-			screenOrientation.requestLock();
-			break;
-		case DISCONNECTED:
-			gcsHeartbeat.setActive(false);
-			invalidateOptionsMenu();
-			screenOrientation.unlock();
-			break;
-		default:
-			break;
-		}
-	}
+        switch (event) {
+            case CONNECTED:
+                gcsHeartbeat.setActive(true);
+                invalidateOptionsMenu();
+                screenOrientation.requestLock();
+                break;
+
+            case DISCONNECTED:
+                gcsHeartbeat.setActive(false);
+                invalidateOptionsMenu();
+                screenOrientation.unlock();
+                break;
+
+            default:
+                break;
+        }
+    }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -226,19 +250,14 @@ public abstract class SuperUI extends FragmentActivity implements
 	}
 
 	protected void toggleDroneConnection() {
-		if (!drone.MavClient.isConnected()) {
-			final String connectionType = mAppPrefs.getMavLinkConnectionType();
-
-			if (Utils.ConnectionType.BLUETOOTH.name().equals(connectionType)) {
-				// Launch a bluetooth device selection screen for the user
-                final String address = mAppPrefs.getBluetoothDeviceAddress();
-                if(address == null || address.isEmpty()) {
-                    new BTDeviceListFragment().show(getSupportFragmentManager(), "Device selection dialog");
-                    return;
-                }
-            }
-		}
-		drone.MavClient.toggleConnectionState();
+        if(mDpApi != null){
+            mDpApi.toggleDroneConnection();
+        }
+        else{
+            Toast.makeText(getApplicationContext(), "Error connecting to the drone!",
+                    Toast.LENGTH_LONG).show();
+            Log.e(TAG, "DroidPlanner api handle is not set!" );
+        }
 	}
 
 	private void setMapTypeFromItemId(int itemId) {

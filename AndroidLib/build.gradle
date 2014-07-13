@@ -25,5 +25,7 @@ android {
 }
 
 dependencies {
+    compile project(':Core')
+    compile project(':Mavlink')
     compile project(':HorizontalVariableListView:HorizontalVariableListView')
 }

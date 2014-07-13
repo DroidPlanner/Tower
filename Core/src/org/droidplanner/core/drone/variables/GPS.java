@@ -76,4 +76,9 @@ public class GPS extends DroneVariable {
 			myDrone.events.notifyDroneEvent(DroneEventsType.GPS);
 		}
 	}
+
+    @Override
+    public String toString(){
+        return String.format("Satellite\n%d, %s", satCount, getFixType());
+    }
 }

@@ -110,13 +110,13 @@ public class StatusBarNotificationProvider implements
 
 			mInboxBuilder = new InboxStyleBuilder().setSummary(summaryText);
 			mNotificationBuilder = new NotificationCompat.Builder(mContext)
-					.addAction(R.drawable.ic_action_io,
-							mContext.getText(R.string.menu_disconnect),
-							mToggleConnectionIntent)
+					.addAction(R.drawable.ic_action_io,	mContext.getText(R.string.menu_disconnect),
+                            mToggleConnectionIntent)
 					.setContentIntent(mNotificationIntent)
 					.setContentText(summaryText)
 					.setOngoing(mAppPrefs.isNotificationPermanent())
-					.setSmallIcon(R.drawable.ic_launcher);
+					.setSmallIcon(R.drawable.ic_launcher)
+                    .setLocalOnly(true);
 
 			updateFlightMode(drone);
 			updateDroneState(drone);
@@ -157,18 +157,16 @@ public class StatusBarNotificationProvider implements
 
 			if (mNotificationBuilder != null) {
 				mNotificationBuilder = new NotificationCompat.Builder(mContext)
-						.addAction(R.drawable.ic_action_io,
-								mContext.getText(R.string.menu_connect),
+						.addAction(R.drawable.ic_action_io,	mContext.getText(R.string.menu_connect),
 								mToggleConnectionIntent)
 						.setContentIntent(mNotificationIntent)
-						.setContentTitle(
-								mContext.getString(R.string.disconnected))
+						.setContentTitle(mContext.getString(R.string.disconnected))
 						.setOngoing(false).setContentText("")
-						.setSmallIcon(R.drawable.ic_launcher_bw);
+						.setSmallIcon(R.drawable.ic_launcher_bw)
+                        .setLocalOnly(true);
 
 				// Schedule the notification dismissal
-				mHandler.postDelayed(mDismissNotification,
-						COUNTDOWN_TO_DISMISSAL);
+				mHandler.postDelayed(mDismissNotification, COUNTDOWN_TO_DISMISSAL);
 			}
 			break;
 
@@ -186,11 +184,7 @@ public class StatusBarNotificationProvider implements
 		if (mInboxBuilder == null)
 			return;
 
-		mInboxBuilder.setLine(
-				4,
-				TextUtils.normal(
-						"Signal:   ",
-						TextUtils.bold(String.format("%d%%",
+		mInboxBuilder.setLine(4, TextUtils.normal("Signal:   ",TextUtils.bold(String.format("%d%%",
 								drone.radio.getSignalStrength()))));
 	}
 
@@ -198,8 +192,7 @@ public class StatusBarNotificationProvider implements
 		if (mInboxBuilder == null)
 			return;
 
-		mInboxBuilder
-				.setLine(0, TextUtils.normal("Home:   ", TextUtils
+		mInboxBuilder.setLine(0, TextUtils.normal("Home:   ", TextUtils
 						.bold(drone.home.getDroneDistanceToHome().toString())));
 	}
 
@@ -216,8 +209,7 @@ public class StatusBarNotificationProvider implements
 		if (mInboxBuilder == null)
 			return;
 
-		mInboxBuilder.setLine(3, TextUtils.normal(
-				"Battery:   ",
+		mInboxBuilder.setLine(3, TextUtils.normal("Battery:   ",
 				TextUtils.bold(String.format("%2.1fv (%2.0f%%)",
 						drone.battery.getBattVolt(),
 						drone.battery.getBattRemain()))));

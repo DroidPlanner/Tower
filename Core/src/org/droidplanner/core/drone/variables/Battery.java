@@ -35,4 +35,9 @@ public class Battery extends DroneVariable {
 			myDrone.events.notifyDroneEvent(DroneEventsType.BATTERY);
 		}
 	}
+
+    @Override
+    public String toString(){
+        return String.format("%2.1fv\n%2.0f%%", battVolt, battRemain);
+    }
 }

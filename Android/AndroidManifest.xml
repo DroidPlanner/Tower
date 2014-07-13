@@ -69,6 +69,7 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
+        <service android:name=".android.services.DroidPlannerService" />
         <service android:name=".android.services.MAVLinkService" />
         <service android:name=".android.services.UploaderService" />
         <service android:name=".android.services.WearManagerService">
@@ -136,15 +137,22 @@
                   android:launchMode="singleTop"
                   android:label="@string/settings"/>
 
-        <activity android:name=".android.activities.helpers.MapPreferencesActivity"
+        <activity
+            android:name=".android.activities.helpers.MapPreferencesActivity"
             android:launchMode="singleTop"
             android:label="@string/activity_title_map_provider_preferences"
             android:parentActivityName=".android.activities.SettingsActivity">
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".android.activities.SettingsActivity" />
-            </activity>
+                android:value=".android.activities.SettingsActivity"/>
+        </activity>
+        <activity
+            android:name=".android.activities.helpers.BluetoothDevicesActivity"
+            android:noHistory="true"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar"/>
     </application>
 
 </manifest>

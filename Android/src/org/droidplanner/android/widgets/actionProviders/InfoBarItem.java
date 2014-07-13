@@ -129,9 +129,7 @@ public abstract class InfoBarItem {
 		@Override
 		public void updateItemView(final Context context, final Drone drone) {
 			if (mItemView != null) {
-				String update = drone == null ? "--" : String.format(
-						"Satellite\n%d, %s", drone.GPS.getSatCount(),
-						drone.GPS.getFixType());
+				String update = drone == null ? "--" : drone.GPS.toString();
 
 				((TextView) mItemView).setText(update);
 			}
@@ -260,9 +258,7 @@ public abstract class InfoBarItem {
 		@Override
 		public void updateItemView(Context context, Drone drone) {
 			if (mItemView != null) {
-				String update = drone == null ? "--" : String.format(
-						"%2.1fv\n%2.0f%%", drone.battery.getBattVolt(),
-						drone.battery.getBattRemain());
+				String update = drone == null ? "--" : drone.battery.toString();
 
 				((TextView) mItemView).setText(update);
 			}
