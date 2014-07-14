@@ -52,8 +52,11 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 	@Override
 	public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
 		switch (event) {
+		case CONNECTED:
+			PebbleKit.startAppOnPebble(applicationContext, DP_UUID);
+			break;
 		case MODE:
-			sendDataToWatchNow(drone);
+			sendDataToWatchIfTimeHasElapsed(drone);
 			break;
 		case BATTERY:
 			sendDataToWatchIfTimeHasElapsed(drone);
@@ -61,11 +64,8 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 		case SPEED:
 			sendDataToWatchIfTimeHasElapsed(drone);
 			break;
-		case CONNECTED:
-			PebbleKit.startAppOnPebble(applicationContext, DP_UUID);
-			break;
 		case FOLLOW_CHANGE_TYPE:
-			sendDataToWatchNow(drone);
+			sendDataToWatchIfTimeHasElapsed(drone);
 			break;
 		default:
 			break;
