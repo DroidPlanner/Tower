@@ -14,8 +14,7 @@ import android.graphics.Color;
  */
 public interface DPMap extends DroneInterfaces.OnDroneListener {
 
-	public static final String PACKAGE_NAME = DPMap.class.getPackage()
-			.getName();
+	public static final String PACKAGE_NAME = DPMap.class.getPackage().getName();
 
 	public static final String EXTRA_MAX_FLIGHT_PATH_SIZE = PACKAGE_NAME + ""
 			+ ".EXTRA_MAX_FLIGHT_PATH_SIZE";

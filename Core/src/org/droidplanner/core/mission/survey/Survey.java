@@ -27,8 +27,7 @@ public class Survey extends MissionItem {
 		polygon.addPoints(points);
 	}
 
-	public void update(double angle, Altitude altitude, double overlap,
-			double sidelap) {
+	public void update(double angle, Altitude altitude, double overlap, double sidelap) {
 		surveyData.update(angle, altitude, overlap, sidelap);
 		mission.notifyMissionUpdate();
 	}
@@ -41,8 +40,7 @@ public class Survey extends MissionItem {
 	public void build() throws Exception {
 		// TODO find better point than (0,0) to reference the grid
 		grid = null;
-		GridBuilder gridBuilder = new GridBuilder(polygon, surveyData,
-				new Coord2D(0, 0));
+		GridBuilder gridBuilder = new GridBuilder(polygon, surveyData, new Coord2D(0, 0));
 		polygon.checkIfValid();
 		grid = gridBuilder.generate();
 	}

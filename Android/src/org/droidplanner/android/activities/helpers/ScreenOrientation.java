@@ -34,9 +34,8 @@ public class ScreenOrientation {
 	}
 
 	private void lockOrientation() {
-		int rotation = ((WindowManager) activity
-				.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay()
-				.getRotation();
+		int rotation = ((WindowManager) activity.getSystemService(Context.WINDOW_SERVICE))
+				.getDefaultDisplay().getRotation();
 		int actualOrientation = activity.getResources().getConfiguration().orientation;
 		boolean naturalOrientationLandscape = (((rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) && actualOrientation == Configuration.ORIENTATION_LANDSCAPE) || ((rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) && actualOrientation == Configuration.ORIENTATION_PORTRAIT));
 		if (naturalOrientationLandscape) {
@@ -74,8 +73,7 @@ public class ScreenOrientation {
 	}
 
 	private boolean isPrefLockOrientationSet() {
-		return PreferenceManager.getDefaultSharedPreferences(
-				activity.getApplicationContext()).getBoolean(
-				"pref_lock_screen_orientation", false);
+		return PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext())
+				.getBoolean("pref_lock_screen_orientation", false);
 	}
 }

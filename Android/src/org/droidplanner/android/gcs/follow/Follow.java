@@ -53,12 +53,10 @@ public class Follow implements GooglePlayServicesClient.ConnectionCallbacks,
 					drone.state.changeFlightMode(ApmModes.ROTOR_GUIDED);
 					enableFollowMe();
 				} else {
-					Toast.makeText(context, "Drone Not Armed",
-							Toast.LENGTH_SHORT).show();
+					Toast.makeText(context, "Drone Not Armed", Toast.LENGTH_SHORT).show();
 				}
 			} else {
-				Toast.makeText(context, "Drone Not Connected",
-						Toast.LENGTH_SHORT).show();
+				Toast.makeText(context, "Drone Not Connected", Toast.LENGTH_SHORT).show();
 			}
 		}
 	}
@@ -83,8 +81,7 @@ public class Follow implements GooglePlayServicesClient.ConnectionCallbacks,
 
 	private void disableFollowMe() {
 		if (followMeEnabled) {
-			Toast.makeText(context, "FollowMe Disabled", Toast.LENGTH_SHORT)
-					.show();
+			Toast.makeText(context, "FollowMe Disabled", Toast.LENGTH_SHORT).show();
 			followMeEnabled = false;
 			Log.d("follow", "disable");
 		}
@@ -137,9 +134,8 @@ public class Follow implements GooglePlayServicesClient.ConnectionCallbacks,
 
 	@Override
 	public void onLocationChanged(Location location) {
-		MavLinkROI.setROI(drone,
-				new Coord3D(location.getLatitude(), location.getLongitude(),
-						new Altitude(0.0)));
+		MavLinkROI.setROI(drone, new Coord3D(location.getLatitude(), location.getLongitude(),
+				new Altitude(0.0)));
 		followAlgorithm.processNewLocation(location);
 	}
 

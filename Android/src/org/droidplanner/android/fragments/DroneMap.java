@@ -42,14 +42,11 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 	protected abstract boolean isMissionDraggable();
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
-			Bundle bundle) {
-		final View view = inflater.inflate(R.layout.fragment_drone_map,
-				viewGroup, false);
+	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle bundle) {
+		final View view = inflater.inflate(R.layout.fragment_drone_map, viewGroup, false);
 
 		final Activity activity = getActivity();
-		final DroidPlannerApp app = ((DroidPlannerApp) activity
-				.getApplication());
+		final DroidPlannerApp app = ((DroidPlannerApp) activity.getApplication());
 		drone = app.getDrone();
 		missionProxy = app.missionProxy;
 
@@ -71,14 +68,12 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 		mMapFragment = (DPMap) fm.findFragmentById(R.id.map_fragment_container);
 		if (mMapFragment == null || mMapFragment.getProvider() != mapProvider) {
 			final Bundle mapArgs = new Bundle();
-			mapArgs.putInt(DPMap.EXTRA_MAX_FLIGHT_PATH_SIZE,
-					getMaxFlightPathSize());
+			mapArgs.putInt(DPMap.EXTRA_MAX_FLIGHT_PATH_SIZE, getMaxFlightPathSize());
 
 			mMapFragment = mapProvider.getMapFragment();
 			((Fragment) mMapFragment).setArguments(mapArgs);
-			fm.beginTransaction()
-					.replace(R.id.map_fragment_container,
-							(Fragment) mMapFragment).commit();
+			fm.beginTransaction().replace(R.id.map_fragment_container, (Fragment) mMapFragment)
+					.commit();
 		}
 	}
 
@@ -144,8 +139,7 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 			mMapFragment.updateMarker(home);
 		}
 
-		mMapFragment.updateMarkers(missionProxy.getMarkersInfos(),
-				isMissionDraggable());
+		mMapFragment.updateMarkers(missionProxy.getMarkersInfos(), isMissionDraggable());
 		mMapFragment.updateMissionPath(missionProxy);
 	}
 

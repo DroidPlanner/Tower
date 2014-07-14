@@ -78,8 +78,7 @@ public class Circle extends SpatialCoordItem {
 		return list;
 	}
 
-	private void packSingleCircle(List<msg_mission_item> list,
-			Length extraHeight) {
+	private void packSingleCircle(List<msg_mission_item> list, Length extraHeight) {
 		msg_mission_item mavMsg = new msg_mission_item();
 		list.add(mavMsg);
 		mavMsg.autocontinue = 1;
@@ -88,8 +87,7 @@ public class Circle extends SpatialCoordItem {
 		mavMsg.frame = MAV_FRAME.MAV_FRAME_GLOBAL_RELATIVE_ALT;
 		mavMsg.x = (float) coordinate.getLat();
 		mavMsg.y = (float) coordinate.getLng();
-		mavMsg.z = (float) (coordinate.getAltitude().valueInMeters() + extraHeight
-				.valueInMeters());
+		mavMsg.z = (float) (coordinate.getAltitude().valueInMeters() + extraHeight.valueInMeters());
 		mavMsg.command = MAV_CMD.MAV_CMD_NAV_LOITER_TURNS;
 		mavMsg.param1 = Math.abs(turns);
 		mavMsg.param3 = (turns > 0) ? 1 : -1;

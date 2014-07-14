@@ -19,12 +19,11 @@ public abstract class FollowHeadingAngle extends FollowAlgorithm {
 	@Override
 	public void processNewLocation(Location location) {
 
-		Coord2D gcsCoord = new Coord2D(location.getLatitude(),
-				location.getLongitude());
+		Coord2D gcsCoord = new Coord2D(location.getLatitude(), location.getLongitude());
 		float bearing = location.getBearing();
 
-		Coord2D goCoord = GeoTools.newCoordFromBearingAndDistance(gcsCoord,
-				bearing + angleOffset, radius.valueInMeters());
+		Coord2D goCoord = GeoTools.newCoordFromBearingAndDistance(gcsCoord, bearing + angleOffset,
+				radius.valueInMeters());
 		drone.guidedPoint.newGuidedCoord(goCoord);
 	}
 

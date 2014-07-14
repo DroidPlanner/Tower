@@ -76,13 +76,11 @@ public class Utils {
 	 * @return selected map provider
 	 */
 	public static DPMapProvider getMapProvider(Context context) {
-		final String mapProviderName = PreferenceManager
-				.getDefaultSharedPreferences(context).getString(
-						context.getString(R.string.pref_maps_providers_key),
-						null);
+		final String mapProviderName = PreferenceManager.getDefaultSharedPreferences(context)
+				.getString(context.getString(R.string.pref_maps_providers_key), null);
 
-		return mapProviderName == null ? DPMapProvider.DEFAULT_MAP_PROVIDER
-				: DPMapProvider.getMapProvider(mapProviderName);
+		return mapProviderName == null ? DPMapProvider.DEFAULT_MAP_PROVIDER : DPMapProvider
+				.getMapProvider(mapProviderName);
 	}
 
 	/**
@@ -92,10 +90,8 @@ public class Utils {
 	 *            Application context
 	 */
 	public static void updateUILanguage(Context context) {
-		final boolean isUiLanguageEnglish = PreferenceManager
-				.getDefaultSharedPreferences(context).getBoolean(
-						Constants.PREF_UI_LANGUAGE,
-						Constants.DEFAULT_PREF_UI_LANGUAGE);
+		final boolean isUiLanguageEnglish = PreferenceManager.getDefaultSharedPreferences(context)
+				.getBoolean(Constants.PREF_UI_LANGUAGE, Constants.DEFAULT_PREF_UI_LANGUAGE);
 
 		if (isUiLanguageEnglish) {
 			Configuration config = new Configuration();

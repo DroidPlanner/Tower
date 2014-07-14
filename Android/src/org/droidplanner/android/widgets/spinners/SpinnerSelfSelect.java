@@ -38,8 +38,7 @@ public class SpinnerSelfSelect extends Spinner {
 				R.styleable.SpinnerSelfSelect, 0, 0);
 
 		try {
-			isSelectable = attributes.getBoolean(
-					R.styleable.SpinnerSelfSelect_isSelectable, true);
+			isSelectable = attributes.getBoolean(R.styleable.SpinnerSelfSelect_isSelectable, true);
 		} finally {
 			attributes.recycle();
 		}
@@ -54,8 +53,7 @@ public class SpinnerSelfSelect extends Spinner {
 		}
 
 		if (listener != null) {
-			listener.onSpinnerItemSelected(this, position,
-					getItemAtPosition(position).toString());
+			listener.onSpinnerItemSelected(this, position, getItemAtPosition(position).toString());
 		}
 	}
 
@@ -63,8 +61,7 @@ public class SpinnerSelfSelect extends Spinner {
 		super.setSelection(position);
 	}
 
-	public void setOnSpinnerItemSelectedListener(
-			OnSpinnerItemSelectedListener listener) {
+	public void setOnSpinnerItemSelectedListener(OnSpinnerItemSelectedListener listener) {
 		this.listener = listener;
 	}
 

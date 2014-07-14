@@ -18,9 +18,9 @@ public class ClearBTDialogPreference extends DialogPreference {
 	@Override
 	protected void onDialogClosed(boolean positiveResult) {
 		super.onDialogClosed(positiveResult);
-		if(positiveResult){
+		if (positiveResult) {
 			mAppPrefs.setBluetoothDeviceAddress("");
 		}
 	}
-	
+
 }

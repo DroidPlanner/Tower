@@ -15,8 +15,8 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 /**
  * This class renders the detail view for a spline waypoint mission item.
  */
-public class MissionSplineWaypointFragment extends MissionDetailFragment
-		implements OnTextSeekBarChangedListener, OnCheckedChangeListener {
+public class MissionSplineWaypointFragment extends MissionDetailFragment implements
+		OnTextSeekBarChangedListener, OnCheckedChangeListener {
 
 	private SeekBarWithText altitudeSeekBar;
 	private SeekBarWithText delaySeekBar;
@@ -29,15 +29,12 @@ public class MissionSplineWaypointFragment extends MissionDetailFragment
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		typeSpinner.setSelection(commandAdapter
-				.getPosition(MissionItemType.SPLINE_WAYPOINT));
+		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.SPLINE_WAYPOINT));
 
 		SplineWaypoint item = (SplineWaypoint) this.itemRender.getMissionItem();
 
-		altitudeSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.altitudeView);
-		altitudeSeekBar.setValue(item.getCoordinate().getAltitude()
-				.valueInMeters());
+		altitudeSeekBar = (SeekBarWithText) view.findViewById(R.id.altitudeView);
+		altitudeSeekBar.setValue(item.getCoordinate().getAltitude().valueInMeters());
 		altitudeSeekBar.setOnChangedListener(this);
 
 		delaySeekBar = (SeekBarWithText) view.findViewById(R.id.waypointDelay);

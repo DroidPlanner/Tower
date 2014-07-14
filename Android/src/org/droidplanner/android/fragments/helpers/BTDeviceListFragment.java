@@ -112,15 +112,13 @@ public class BTDeviceListFragment extends DialogFragment {
 			// When discovery finds a device
 			if (BluetoothDevice.ACTION_FOUND.equals(action)) {
 				// Get the BluetoothDevice object from the Intent
-				BluetoothDevice device = intent
-						.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+				BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 				// If it's already paired, skip it, because it's been listed
 				// already
 				if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
 					mNewDevicesArrayAdapter.add(device);
 				}
-			} else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED
-					.equals(action)) {
+			} else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
 				// When discovery is finished, change the dialog title, and hide
 				// the progress bar.
 				mDeviceListTitle.setText(R.string.select_device);
@@ -141,20 +139,19 @@ public class BTDeviceListFragment extends DialogFragment {
 	private final AdapterView.OnItemClickListener mDeviceClickListener = new AdapterView.OnItemClickListener() {
 
 		@Override
-		public void onItemClick(AdapterView<?> parent, View view, int position,
-				long id) {
+		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			// Cancel discovery because it's costly, and we're about to connect
 			mBtAdapter.cancelDiscovery();
 
 			// Retrieve the selected bluetooth device
-			final BluetoothDevice device = (BluetoothDevice) parent
-					.getItemAtPosition(position);
-			
+			final BluetoothDevice device = (BluetoothDevice) parent.getItemAtPosition(position);
+
 			// Stores the mac address in the shared preferences,
 			// so the bluetooth client can retrieve it on connection.
-			DroidPlannerPrefs mAppPrefs = new DroidPlannerPrefs(getActivity().getApplicationContext());
+			DroidPlannerPrefs mAppPrefs = new DroidPlannerPrefs(getActivity()
+					.getApplicationContext());
 			mAppPrefs.setBluetoothDeviceAddress(device.getAddress() + ";" + device.getName());
-			
+
 			final Activity activity = getActivity();
 
 			// Toggle the drone connection
@@ -190,23 +187,19 @@ public class BTDeviceListFragment extends DialogFragment {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 		final Activity activity = getActivity();
-		final View view = inflater.inflate(
-				R.layout.fragment_bluetooth_device_list, container, false);
+		final View view = inflater.inflate(R.layout.fragment_bluetooth_device_list, container,
+				false);
 
 		// Get the local bluetooth adapter
 		mBtAdapter = BluetoothAdapter.getDefaultAdapter();
 
-		mDeviceListTitle = (TextView) view
-				.findViewById(R.id.bt_device_list_title);
-		mDeviceListProgressBar = (ProgressBar) view
-				.findViewById(R.id.bt_scan_progress_bar);
+		mDeviceListTitle = (TextView) view.findViewById(R.id.bt_device_list_title);
+		mDeviceListProgressBar = (ProgressBar) view.findViewById(R.id.bt_scan_progress_bar);
 		mNewDevicesTitle = (TextView) view.findViewById(R.id.title_new_devices);
-		mPairedDevicesTitle = (TextView) view
-				.findViewById(R.id.title_paired_devices);
+		mPairedDevicesTitle = (TextView) view.findViewById(R.id.title_paired_devices);
 
 		// Initialize the button to perform device discovery
 		Button scanButton = (Button) view.findViewById(R.id.button_scan);
@@ -224,14 +217,12 @@ public class BTDeviceListFragment extends DialogFragment {
 		mNewDevicesArrayAdapter = new BluetoothDeviceAdapter(activity);
 
 		// Find and set up the listview for paired devices
-		ListView pairedListView = (ListView) view
-				.findViewById(R.id.paired_devices);
+		ListView pairedListView = (ListView) view.findViewById(R.id.paired_devices);
 		pairedListView.setAdapter(mPairedDevicesArrayAdapter);
 		pairedListView.setOnItemClickListener(mDeviceClickListener);
 
 		// Find and set up the listview for newly discovered devices
-		ListView newDevicesListView = (ListView) view
-				.findViewById(R.id.new_devices);
+		ListView newDevicesListView = (ListView) view.findViewById(R.id.new_devices);
 		newDevicesListView.setAdapter(mNewDevicesArrayAdapter);
 		newDevicesListView.setOnItemClickListener(mDeviceClickListener);
 
@@ -263,8 +254,8 @@ public class BTDeviceListFragment extends DialogFragment {
 			}
 		} else {
 			// Request that bluetooth be enabled
-			startActivityForResult(new Intent(
-					BluetoothAdapter.ACTION_REQUEST_ENABLE), REQUEST_ENABLE_BT);
+			startActivityForResult(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE),
+					REQUEST_ENABLE_BT);
 		}
 	}
 
@@ -299,16 +290,14 @@ public class BTDeviceListFragment extends DialogFragment {
 		mBtAdapter.startDiscovery();
 	}
 
-	public static class BluetoothDeviceAdapter extends
-			ArrayAdapter<BluetoothDevice> {
+	public static class BluetoothDeviceAdapter extends ArrayAdapter<BluetoothDevice> {
 
 		private final LayoutInflater mInflater;
 
 		public BluetoothDeviceAdapter(Context context) {
 			super(context, R.layout.list_device_name);
 
-			mInflater = (LayoutInflater) context
-					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		}
 
 		@Override
@@ -316,8 +305,7 @@ public class BTDeviceListFragment extends DialogFragment {
 			TextView view;
 
 			if (convertView == null) {
-				view = (TextView) mInflater.inflate(R.layout.list_device_name,
-						parent, false);
+				view = (TextView) mInflater.inflate(R.layout.list_device_name, parent, false);
 			} else {
 				view = (TextView) convertView;
 			}

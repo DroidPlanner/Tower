@@ -83,8 +83,7 @@ public class FragmentSetupIMU extends SetupMainPanel implements OnDroneListener 
 			textViewOffset.setVisibility(View.INVISIBLE);
 			textViewScaling.setVisibility(View.INVISIBLE);
 
-			((SetupSensorFragment) getParentFragment())
-					.updateSidePanelTitle(calibration_step);
+			((SetupSensorFragment) getParentFragment()).updateSidePanelTitle(calibration_step);
 		}
 	}
 
@@ -115,8 +114,7 @@ public class FragmentSetupIMU extends SetupMainPanel implements OnDroneListener 
 				 */
 				if (Calibration.isCalibrating() && msg.isEmpty()) {
 					Calibration.setClibrating(false);
-					parentActivity.drone.events
-							.notifyDroneEvent(DroneEventsType.HEARTBEAT_TIMEOUT);
+					parentActivity.drone.events.notifyDroneEvent(DroneEventsType.HEARTBEAT_TIMEOUT);
 				} else {
 					parentActivity.app.mNotificationHandler.quickNotify(msg);
 				}
@@ -154,8 +152,7 @@ public class FragmentSetupIMU extends SetupMainPanel implements OnDroneListener 
 
 		textViewStep.setText(msg);
 
-		((SetupSensorFragment) getParentFragment())
-				.updateSidePanelTitle(calibration_step);
+		((SetupSensorFragment) getParentFragment()).updateSidePanelTitle(calibration_step);
 
 		if (calibration_step == 7) {
 			if (parentActivity != null && parentActivity.app != null) {
@@ -191,8 +188,7 @@ public class FragmentSetupIMU extends SetupMainPanel implements OnDroneListener 
 
 			pbTimeOut.setMax(TIMEOUT_MAX);
 			pbTimeOut.setProgress((int) timeLeft);
-			textViewTimeOut
-					.setText(timeLeftStr + String.valueOf(secLeft) + "s");
+			textViewTimeOut.setText(timeLeftStr + String.valueOf(secLeft) + "s");
 			if (secLeft > 15)
 				pbTimeOut.setProgressDrawable(drawableGood);
 			else if (secLeft <= 15 && secLeft > 5)

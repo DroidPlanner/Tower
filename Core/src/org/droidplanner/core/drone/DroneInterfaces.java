@@ -189,21 +189,17 @@ public class DroneInterfaces {
 	public interface OnParameterManagerListener {
 		public void onBeginReceivingParameters();
 
-		public void onParameterReceived(Parameter parameter, int index,
-				int count);
+		public void onParameterReceived(Parameter parameter, int index, int count);
 
 		public void onEndReceivingParameters(List<Parameter> parameter);
 	}
 
 	public interface OnWaypointManagerListener {
-		public void onBeginWaypointEvent(
-				WaypointManager.WaypointEvent_Type wpEvent);
+		public void onBeginWaypointEvent(WaypointManager.WaypointEvent_Type wpEvent);
 
-		public void onWaypointEvent(WaypointManager.WaypointEvent_Type wpEvent,
-				int index, int count);
+		public void onWaypointEvent(WaypointManager.WaypointEvent_Type wpEvent, int index, int count);
 
-		public void onEndWaypointEvent(
-				WaypointManager.WaypointEvent_Type wpEvent);
+		public void onEndWaypointEvent(WaypointManager.WaypointEvent_Type wpEvent);
 	}
 
 	public interface OnTimeout {

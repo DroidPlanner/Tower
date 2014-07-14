@@ -20,8 +20,8 @@ import android.os.SystemClock;
 
 import com.MAVLink.Messages.MAVLinkMessage;
 
-public class DroidPlannerApp extends ErrorReportApp implements
-		MAVLinkStreams.MavlinkInputStream, DroneInterfaces.OnDroneListener {
+public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.MavlinkInputStream,
+		DroneInterfaces.OnDroneListener {
 
 	private Drone drone;
 	public Follow followMe;
@@ -66,8 +66,7 @@ public class DroidPlannerApp extends ErrorReportApp implements
 		getDrone().events.addDroneListener(this);
 
 		missionProxy = new MissionProxy(getDrone().mission);
-		mavLinkMsgHandler = new org.droidplanner.core.MAVLink.MavLinkMsgHandler(
-				getDrone());
+		mavLinkMsgHandler = new org.droidplanner.core.MAVLink.MavLinkMsgHandler(getDrone());
 
 		followMe = new Follow(this, getDrone());
 		NetworkStateReceiver.register(context);

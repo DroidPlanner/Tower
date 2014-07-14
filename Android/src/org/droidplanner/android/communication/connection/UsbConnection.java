@@ -84,8 +84,7 @@ public class UsbConnection extends MAVLinkConnection {
 
 	private void openCOM() throws IOException {
 		// Get UsbManager from Android.
-		UsbManager manager = (UsbManager) parentContext
-				.getSystemService(Context.USB_SERVICE);
+		UsbManager manager = (UsbManager) parentContext.getSystemService(Context.USB_SERVICE);
 
 		// Find the first available driver.
 		// **TODO: We should probably step through all available USB Devices

@@ -21,13 +21,11 @@ public class MissionTakeoffFragment extends MissionDetailFragment implements
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		typeSpinner.setSelection(commandAdapter
-				.getPosition(MissionItemType.TAKEOFF));
+		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.TAKEOFF));
 
 		Takeoff item = (Takeoff) this.itemRender.getMissionItem();
 
-		altitudeSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.altitudeView);
+		altitudeSeekBar = (SeekBarWithText) view.findViewById(R.id.altitudeView);
 		altitudeSeekBar.setValue(item.getFinishedAlt().valueInMeters());
 		altitudeSeekBar.setOnChangedListener(this);
 

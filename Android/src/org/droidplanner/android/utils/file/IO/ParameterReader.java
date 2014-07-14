@@ -27,8 +27,7 @@ public class ParameterReader implements
 		}
 		try {
 			FileInputStream in = new FileInputStream(itemList);
-			BufferedReader reader = new BufferedReader(
-					new InputStreamReader(in));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
 			if (!isParameterFile(reader)) {
 				in.close();
@@ -77,8 +76,7 @@ public class ParameterReader implements
 		return RowData;
 	}
 
-	private static boolean isParameterFile(BufferedReader reader)
-			throws IOException {
+	private static boolean isParameterFile(BufferedReader reader) throws IOException {
 		return reader.readLine().contains("#NOTE");
 	}
 

@@ -26,8 +26,8 @@ public abstract class FollowAlgorithm {
 	}
 
 	public enum FollowModes {
-		LEASH("Leash"), LEAD("Lead"), WAKEBOARD("Wakeboard"), CIRCLE(
-				"Circle"), RIGHT("Right"), LEFT("Left");
+		LEASH("Leash"), LEAD("Lead"), WAKEBOARD("Wakeboard"), CIRCLE("Circle"), RIGHT("Right"), LEFT(
+				"Left");
 
 		private String name;
 

@@ -19,8 +19,7 @@ public class MissionRTLFragment extends MissionDetailFragment implements
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		typeSpinner.setSelection(commandAdapter
-				.getPosition(MissionItemType.RTL));
+		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.RTL));
 
 		// altitudeSeekBar = (SeekBarWithText)
 		// view.findViewById(R.id.altitudeView);

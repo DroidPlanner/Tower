@@ -14,8 +14,8 @@ import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import android.os.Bundle;
 
 @SuppressWarnings("unused")
-public abstract class SuperSetupMainPanel extends SetupMainPanel implements
-		OnCalibrationEvent, OnDroneListener {
+public abstract class SuperSetupMainPanel extends SetupMainPanel implements OnCalibrationEvent,
+		OnDroneListener {
 
 	protected Drone drone;
 	protected CalParameters parameters;
@@ -82,20 +82,17 @@ public abstract class SuperSetupMainPanel extends SetupMainPanel implements
 	}
 
 	@Override
-	public void onCalibrationData(CalParameters calParameters, int index,
-			int count, boolean isSending) {
+	public void onCalibrationData(CalParameters calParameters, int index, int count,
+			boolean isSending) {
 		if (sidePanel != null && parameters != null) {
 			String title;
 			if (isSending) {
-				title = getResources().getString(
-						R.string.setup_sf_desc_uploading);
+				title = getResources().getString(R.string.setup_sf_desc_uploading);
 			} else {
-				title = getResources().getString(
-						R.string.setup_sf_desc_downloading);
+				title = getResources().getString(R.string.setup_sf_desc_downloading);
 			}
 
-			((FragmentSetupProgress) sidePanel).updateProgress(index + 1,
-					count, title);
+			((FragmentSetupProgress) sidePanel).updateProgress(index + 1, count, title);
 		}
 	}
 
@@ -118,8 +115,7 @@ public abstract class SuperSetupMainPanel extends SetupMainPanel implements
 			downloadCalibrationData();
 		} else {
 			sidePanel = getDefaultPanel();
-			((SetupRadioFragment) getParentFragment())
-					.changeSidePanel(sidePanel);
+			((SetupRadioFragment) getParentFragment()).changeSidePanel(sidePanel);
 
 		}
 		return sidePanel;

@@ -8,8 +8,7 @@ public class Constants {
 	/**
 	 * Class package name.
 	 */
-	public static final String PACKAGE_NAME = Constants.class.getPackage()
-			.getName();
+	public static final String PACKAGE_NAME = Constants.class.getPackage().getName();
 
 	/*
 	 * Preferences, and default values.

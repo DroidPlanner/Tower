@@ -17,14 +17,12 @@ public class Trimmer {
 		}
 	}
 
-	private ArrayList<Coord2D> findCrossings(List<LineCoord2D> polygon,
-			LineCoord2D gridLine) {
+	private ArrayList<Coord2D> findCrossings(List<LineCoord2D> polygon, LineCoord2D gridLine) {
 
 		ArrayList<Coord2D> crossings = new ArrayList<Coord2D>();
 		for (LineCoord2D polyLine : polygon) {
 			try {
-				crossings.add(LineTools
-						.FindLineIntersection(polyLine, gridLine));
+				crossings.add(LineTools.FindLineIntersection(polyLine, gridLine));
 			} catch (Exception e) {
 			}
 		}
@@ -32,8 +30,7 @@ public class Trimmer {
 		return crossings;
 	}
 
-	private void processCrossings(ArrayList<Coord2D> crosses,
-			LineCoord2D gridLine) {
+	private void processCrossings(ArrayList<Coord2D> crosses, LineCoord2D gridLine) {
 		switch (crosses.size()) {
 		case 0:
 		case 1:

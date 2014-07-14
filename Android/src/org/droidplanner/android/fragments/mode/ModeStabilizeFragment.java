@@ -11,10 +11,8 @@ import android.view.ViewGroup;
 public class ModeStabilizeFragment extends Fragment {
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_mode_stabilize,
-				container, false);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.fragment_mode_stabilize, container, false);
 		return view;
 	}
 }
