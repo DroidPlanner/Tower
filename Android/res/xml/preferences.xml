@@ -299,6 +299,11 @@
                     android:key="@string/pref_max_flight_path_size_key"
                     android:summary="@string/pref_max_flight_path_size_summary"
                     android:title="@string/pref_max_flight_path_size" />
+                <CheckBoxPreference
+                	android:defaultValue="false"
+    	            android:key="@string/pref_ui_gps_hdop_key"
+	                android:summary="@string/pref_ui_gps_hdop_summary"
+        	        android:title="@string/pref_ui_gps_hdop_title"/>
             </PreferenceCategory>
             
             <PreferenceCategory

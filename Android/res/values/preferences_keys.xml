@@ -32,4 +32,5 @@ This file is used to store the preferences keys so that it's accessible and modi
     <string name="pref_pebble_install_key">pref_pebble_install_key</string>
     <string name="pref_keep_screen_bright_key">pref_keep_screen_bright</string>
     <string name="pref_permanent_notification_key">pref_permanent_notification</string>
+    <string name="pref_ui_gps_hdop_key">pref_ui_gps_hdop</string>
 </resources>

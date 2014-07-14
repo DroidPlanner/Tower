@@ -200,4 +200,11 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 		final SharedPreferences.Editor editor = prefs.edit();
 		editor.putString(Constants.PREF_BLUETOOTH_DEVICE_ADDRESS, newAddress).apply();
 	}
+	
+	/**
+	 * Use HDOP instead of satellite count on infobar
+	 */
+	public boolean shouldGpsHdopBeDisplayed() {
+		return prefs.getBoolean(context.getString(R.string.pref_ui_gps_hdop_key), false);
+	}
 }

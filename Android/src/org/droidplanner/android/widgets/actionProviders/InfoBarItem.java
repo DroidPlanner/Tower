@@ -2,8 +2,10 @@ package org.droidplanner.android.widgets.actionProviders;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import org.droidplanner.R;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.widgets.spinners.ModeAdapter;
 import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
 import org.droidplanner.core.drone.Drone;
@@ -116,15 +118,27 @@ public abstract class InfoBarItem {
 	 * information.
 	 */
 	public static class GpsInfo extends InfoBarItem {
+		private DroidPlannerPrefs mAppPrefs;
+
 		public GpsInfo(Context context, View parentView, Drone drone) {
 			super(context, parentView, drone, R.id.bar_gps);
+			mAppPrefs = new DroidPlannerPrefs(context.getApplicationContext());
 		}
 
 		@Override
 		public void updateItemView(final Context context, final Drone drone) {
 			if (mItemView != null) {
-				String update = drone == null ? "--" : String.format("Satellite\n%d, %s",
-						drone.GPS.getSatCount(), drone.GPS.getFixType());
+
+				final String update;
+				if (drone == null) {
+					update = "--";
+				} else if (mAppPrefs.shouldGpsHdopBeDisplayed()) {
+					update = String.format(Locale.ENGLISH, "Satellite\n%d, %.1f",
+							drone.GPS.getSatCount(), drone.GPS.getGpsEPH());
+				} else {
+					update = String.format(Locale.ENGLISH, "Satellite\n%d, %s",
+							drone.GPS.getSatCount(), drone.GPS.getFixType());
+				}
 
 				((TextView) mItemView).setText(update);
 			}
@@ -252,7 +266,7 @@ public abstract class InfoBarItem {
 		@Override
 		public void updateItemView(Context context, Drone drone) {
 			if (mItemView != null) {
-				String update = drone == null ? "--" : String.format("%2.1fv\n%2.0f%%",
+				String update = drone == null ? "--" : String.format(Locale.ENGLISH,"%2.1fv\n%2.0f%%",
 						drone.battery.getBattVolt(), drone.battery.getBattRemain());
 
 				((TextView) mItemView).setText(update);
