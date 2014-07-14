@@ -10,13 +10,20 @@ import com.MAVLink.Messages.ardupilotmega.msg_heartbeat;
 
 public class HeartBeat extends DroneVariable implements OnDroneListener {
 
-	private static long HEARTBEAT_NORMAL_TIMEOUT = 5000;
-	private static long HEARTBEAT_LOST_TIMEOUT = 15000;
+	private static final long HEARTBEAT_NORMAL_TIMEOUT = 5000;
+	private static final long HEARTBEAT_LOST_TIMEOUT = 15000;
+
+	public static final byte INVALID_MAVLINK_VERSION = -1;
 
 	public HeartbeatState heartbeatState = HeartbeatState.FIRST_HEARTBEAT;;
 	public int droneID = 1;
 
-	enum HeartbeatState {
+	/**
+	 * Stores the version of the mavlink protocol.
+	 */
+	private byte mMavlinkVersion = INVALID_MAVLINK_VERSION;
+
+	public enum HeartbeatState {
 		FIRST_HEARTBEAT, LOST_HEARTBEAT, NORMAL_HEARTBEAT
 	}
 
@@ -34,8 +41,16 @@ public class HeartBeat extends DroneVariable implements OnDroneListener {
 		myDrone.events.addDroneListener(this);
 	}
 
+	/**
+	 * @return the version of the mavlink protocol.
+	 */
+	public byte getMavlinkVersion() {
+		return mMavlinkVersion;
+	}
+
 	public void onHeartbeat(msg_heartbeat msg) {
 		droneID = msg.sysid;
+		mMavlinkVersion = msg.mavlink_version;
 
 		switch (heartbeatState) {
 		case FIRST_HEARTBEAT:
@@ -59,7 +74,7 @@ public class HeartBeat extends DroneVariable implements OnDroneListener {
 			notifyConnected();
 			break;
 		case DISCONNECTED:
-			notifiyDisconnected();
+			notifyDisconnected();
 			break;
 		default:
 			break;
@@ -70,9 +85,10 @@ public class HeartBeat extends DroneVariable implements OnDroneListener {
 		restartWatchdog(HEARTBEAT_NORMAL_TIMEOUT);
 	}
 
-	private void notifiyDisconnected() {
+	private void notifyDisconnected() {
 		watchdog.removeCallbacks(watchdogCallback);
 		heartbeatState = HeartbeatState.FIRST_HEARTBEAT;
+		mMavlinkVersion = INVALID_MAVLINK_VERSION;
 	}
 
 	private void onHeartbeatTimeout() {

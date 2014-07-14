@@ -1,6 +1,7 @@
 package org.droidplanner.android.fragments.mode;
 
 import org.droidplanner.R;
+import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
@@ -30,9 +31,8 @@ public class FlightModePanel extends Fragment implements OnDroneListener {
 		super.onAttach(activity);
 
 		if (!(activity instanceof SuperUI)) {
-			throw new IllegalStateException(
-					"Parent activity must be an instance of "
-							+ SuperUI.class.getName());
+			throw new IllegalStateException("Parent activity must be an instance of "
+					+ SuperUI.class.getName());
 		}
 
 		mParentActivity = (SuperUI) activity;
@@ -45,10 +45,8 @@ public class FlightModePanel extends Fragment implements OnDroneListener {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.fragment_flight_mode_panel, container,
-				false);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		return inflater.inflate(R.layout.fragment_flight_mode_panel, container, false);
 	}
 
 	@Override
@@ -95,8 +93,7 @@ public class FlightModePanel extends Fragment implements OnDroneListener {
 	private void onModeUpdate(ApmModes mode) {
 		// Update the info panel fragment
 		Fragment infoPanel;
-		if (mParentActivity == null
-				|| !mParentActivity.drone.MavClient.isConnected()) {
+		if (mParentActivity == null || !mParentActivity.drone.MavClient.isConnected()) {
 			infoPanel = new ModeDisconnectedFragment();
 		} else {
 			switch (mode) {
@@ -125,7 +122,11 @@ public class FlightModePanel extends Fragment implements OnDroneListener {
 				infoPanel = new ModeCircleFragment();
 				break;
 			case ROTOR_GUIDED:
-				infoPanel = new ModeGuidedFragment();
+				if (((DroidPlannerApp) getActivity().getApplication()).followMe.isEnabled()) {
+					infoPanel = new ModeFollowFragment();
+				} else {
+					infoPanel = new ModeGuidedFragment();
+				}
 				break;
 			case ROTOR_POSITION:
 				infoPanel = new ModePositionFragment();
@@ -145,7 +146,7 @@ public class FlightModePanel extends Fragment implements OnDroneListener {
 			}
 		}
 
-		getChildFragmentManager().beginTransaction()
-				.replace(R.id.modeInfoPanel, infoPanel).commit();
+		getChildFragmentManager().beginTransaction().replace(R.id.modeInfoPanel, infoPanel)
+				.commit();
 	}
 }

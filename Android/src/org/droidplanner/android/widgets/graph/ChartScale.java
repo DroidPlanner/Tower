@@ -20,8 +20,7 @@ public class ChartScale {
 	protected ScaleGestureDetector scaleDetector;
 
 	public ChartScale(Context context, OnScaleListener listener) {
-		scaleDetector = new ScaleGestureDetector(context,
-				new ChartScaleListener());
+		scaleDetector = new ScaleGestureDetector(context, new ChartScaleListener());
 		this.listener = listener;
 	}
 
@@ -29,8 +28,13 @@ public class ChartScale {
 		return range;
 	}
 
-	class ChartScaleListener extends
-			ScaleGestureDetector.SimpleOnScaleGestureListener {
+	public void setRange(double range, double min, double max) {
+		this.range = range;
+		this.min = min;
+		this.max = max;
+	}
+
+	class ChartScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
 
 		@Override
 		public boolean onScale(ScaleGestureDetector detector) {

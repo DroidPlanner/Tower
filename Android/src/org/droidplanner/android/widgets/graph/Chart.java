@@ -17,14 +17,14 @@ import android.view.SurfaceView;
 /*
  * Widget for a Chart Originally copied from http://code.google.com/p/copter-gcs/
  */
-public class Chart extends SurfaceView implements SurfaceHolder.Callback,
-		canvasPainter, OnScaleListener {
+public class Chart extends SurfaceView implements SurfaceHolder.Callback, canvasPainter,
+		OnScaleListener {
 	private RenderThread renderer;
 	protected int width;
 	protected int height;
 
 	public ChartColorsStack colors = new ChartColorsStack();
-	protected ChartScale scale;
+	public ChartScale scale;
 	private ChartGrid grid = new ChartGrid();
 	public List<ChartSeries> series = new ArrayList<ChartSeries>();
 	private ChartDataRender dataRender = new ChartDataRender();
@@ -45,8 +45,7 @@ public class Chart extends SurfaceView implements SurfaceHolder.Callback,
 	}
 
 	@Override
-	public void surfaceChanged(SurfaceHolder holder, int format, int width,
-			int height) {
+	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 		this.width = width;
 		this.height = height;
 	}

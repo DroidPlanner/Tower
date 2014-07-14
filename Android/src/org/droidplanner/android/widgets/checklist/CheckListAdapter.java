@@ -9,6 +9,7 @@ import org.droidplanner.android.widgets.checklist.listadapter.ListXmlAdapter;
 import org.droidplanner.android.widgets.checklist.row.ListRow;
 import org.droidplanner.android.widgets.checklist.row.ListRow_CheckBox;
 import org.droidplanner.android.widgets.checklist.row.ListRow_Interface;
+import org.droidplanner.android.widgets.checklist.row.ListRow_Interface.OnRowItemChangeListener;
 import org.droidplanner.android.widgets.checklist.row.ListRow_Level;
 import org.droidplanner.android.widgets.checklist.row.ListRow_Note;
 import org.droidplanner.android.widgets.checklist.row.ListRow_Radio;
@@ -17,19 +18,16 @@ import org.droidplanner.android.widgets.checklist.row.ListRow_Switch;
 import org.droidplanner.android.widgets.checklist.row.ListRow_Toggle;
 import org.droidplanner.android.widgets.checklist.row.ListRow_Type;
 import org.droidplanner.android.widgets.checklist.row.ListRow_Value;
-import org.droidplanner.android.widgets.checklist.row.ListRow_Interface.OnRowItemChangeListener;
 
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
-public class CheckListAdapter extends ListXmlAdapter implements
-		OnRowItemChangeListener {
+public class CheckListAdapter extends ListXmlAdapter implements OnRowItemChangeListener {
 
 	public interface OnCheckListItemUpdateListener {
-		public void onRowItemChanged(CheckListItem checkListItem,
-				String mSysTag, boolean isChecked);
+		public void onRowItemChanged(CheckListItem checkListItem, String mSysTag, boolean isChecked);
 
 		public void onRowItemGetData(CheckListItem checkListItem, String mSysTag);
 	}
@@ -46,47 +44,37 @@ public class CheckListAdapter extends ListXmlAdapter implements
 			List<ListRow_Interface> xmlRows = new ArrayList<ListRow_Interface>();
 			for (CheckListItem listItem : listDataChild.get(dataHeader)) {
 				if (listItem.getTagName().equalsIgnoreCase("check_item")) {
-					ListRow_CheckBox row = new ListRow_CheckBox(this.inflater,
-							listItem);
+					ListRow_CheckBox row = new ListRow_CheckBox(this.inflater, listItem);
 					row.setOnRowItemChangeListener(this);
 					xmlRows.add(row);
 
 				} else if (listItem.getTagName().equalsIgnoreCase("value_item")) {
-					ListRow_Value row = new ListRow_Value(this.inflater,
-							listItem);
+					ListRow_Value row = new ListRow_Value(this.inflater, listItem);
 					row.setOnRowItemChangeListener(this);
 					xmlRows.add(row);
 
 				} else if (listItem.getTagName().equalsIgnoreCase("radio_item")) {
-					ListRow_Radio row = new ListRow_Radio(this.inflater,
-							listItem);
+					ListRow_Radio row = new ListRow_Radio(this.inflater, listItem);
 					row.setOnRowItemChangeListener(this);
 					xmlRows.add(row);
 
-				} else if (listItem.getTagName()
-						.equalsIgnoreCase("select_item")) {
-					ListRow_Select row = new ListRow_Select(this.inflater,
-							listItem);
+				} else if (listItem.getTagName().equalsIgnoreCase("select_item")) {
+					ListRow_Select row = new ListRow_Select(this.inflater, listItem);
 					row.setOnRowItemChangeListener(this);
 					xmlRows.add(row);
 
-				} else if (listItem.getTagName()
-						.equalsIgnoreCase("toggle_item")) {
-					ListRow_Toggle row = new ListRow_Toggle(this.inflater,
-							listItem);
+				} else if (listItem.getTagName().equalsIgnoreCase("toggle_item")) {
+					ListRow_Toggle row = new ListRow_Toggle(this.inflater, listItem);
 					row.setOnRowItemChangeListener(this);
 					xmlRows.add(row);
 
-				} else if (listItem.getTagName()
-						.equalsIgnoreCase("switch_item")) {
-					ListRow_Switch row = new ListRow_Switch(this.inflater,
-							listItem);
+				} else if (listItem.getTagName().equalsIgnoreCase("switch_item")) {
+					ListRow_Switch row = new ListRow_Switch(this.inflater, listItem);
 					row.setOnRowItemChangeListener(this);
 					xmlRows.add(row);
 
 				} else if (listItem.getTagName().equalsIgnoreCase("level_item")) {
-					ListRow_Level row = new ListRow_Level(this.inflater,
-							listItem);
+					ListRow_Level row = new ListRow_Level(this.inflater, listItem);
 					row.setOnRowItemChangeListener(this);
 					xmlRows.add(row);
 				} else if (listItem.getTagName().equalsIgnoreCase("note_item")) {
@@ -99,8 +87,7 @@ public class CheckListAdapter extends ListXmlAdapter implements
 		}
 	}
 
-	public void setOnCheckListItemUpdateListener(
-			OnCheckListItemUpdateListener listener) {
+	public void setOnCheckListItemUpdateListener(OnCheckListItemUpdateListener listener) {
 		this.listener = listener;
 	}
 
@@ -120,8 +107,7 @@ public class CheckListAdapter extends ListXmlAdapter implements
 			lblChkRatio.setTextColor(0xff09f93d);
 
 		lblChkRatio.setTypeface(null, Typeface.BOLD);
-		lblChkRatio.setText(String.format("%d/%d [%d]", childVerified,
-				childCount, childMandatory));
+		lblChkRatio.setText(String.format("%d/%d [%d]", childVerified, childCount, childMandatory));
 	}
 
 	private int getChildrenVerified(int groupPosition) {
@@ -162,12 +148,10 @@ public class CheckListAdapter extends ListXmlAdapter implements
 	}
 
 	@Override
-	public void onRowItemChanged(View mView, CheckListItem listItem,
-			boolean isChecked) {
+	public void onRowItemChanged(View mView, CheckListItem listItem, boolean isChecked) {
 		if (this.listener == null)
 			return;
-		this.listener.onRowItemChanged(listItem, listItem.getSys_tag(),
-				isChecked);
+		this.listener.onRowItemChanged(listItem, listItem.getSys_tag(), isChecked);
 	}
 
 	@Override

@@ -54,8 +54,7 @@ public class MapViewPager extends ViewPager {
 	 * @param width
 	 */
 	public void setSwipeMarginWidth(final int width) {
-		swipeRegionWidth = (int) (width * context.getResources()
-				.getDisplayMetrics().density);
+		swipeRegionWidth = (int) (width * context.getResources().getDisplayMetrics().density);
 	}
 
 }

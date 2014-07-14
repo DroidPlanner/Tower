@@ -33,9 +33,9 @@ public class RegionOfInterest extends SpatialCoordItem {
 		super.unpackMAVMessage(mavMsg);
 	}
 
-    @Override
-    public MissionItemType getType() {
-        return MissionItemType.ROI;
-    }
+	@Override
+	public MissionItemType getType() {
+		return MissionItemType.ROI;
+	}
 
 }

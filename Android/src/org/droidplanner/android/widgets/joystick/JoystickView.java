@@ -113,10 +113,8 @@ public class JoystickView extends View {
 
 		// Draw the handle
 		if (handleVisible) {
-			canvas.drawCircle(firstTouchX, firstTouchY, movementRadius,
-					bgHandlePaint);
-			canvas.drawCircle(firstTouchX, firstTouchY, handleRadius,
-					handlePaint);
+			canvas.drawCircle(firstTouchX, firstTouchY, movementRadius, bgHandlePaint);
+			canvas.drawCircle(firstTouchX, firstTouchY, handleRadius, handlePaint);
 		}
 		canvas.restore();
 	}
@@ -230,8 +228,7 @@ public class JoystickView extends View {
 	}
 
 	private boolean hasEnteredHapticFeedbackZone(double value, double oldValue) {
-		return isInHapticFeedbackZone(value)
-				& (!isInHapticFeedbackZone(oldValue));
+		return isInHapticFeedbackZone(value) & (!isInHapticFeedbackZone(oldValue));
 	}
 
 	private boolean isInHapticFeedbackZone(double value) {

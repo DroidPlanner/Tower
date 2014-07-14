@@ -18,8 +18,7 @@ import android.widget.ExpandableListView;
  * This abstract activity provides its children access to a navigation drawer
  * interface.
  */
-public abstract class DrawerNavigationUI extends SuperUI implements
-		HelpProvider {
+public abstract class DrawerNavigationUI extends SuperUI implements HelpProvider {
 
 	/**
 	 * Activates the navigation drawer when the home button is clicked.
@@ -49,18 +48,15 @@ public abstract class DrawerNavigationUI extends SuperUI implements
 		mDrawerLayout = (DrawerLayout) getLayoutInflater().inflate(
 				R.layout.activity_drawer_navigation_ui, null);
 
-		mNavHubView = (ExpandableListView) mDrawerLayout
-				.findViewById(R.id.nav_drawer_container);
+		mNavHubView = (ExpandableListView) mDrawerLayout.findViewById(R.id.nav_drawer_container);
 
-		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-				R.drawable.ic_drawer, R.string.drawer_open,
-				R.string.drawer_close);
+		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer,
+				R.string.drawer_open, R.string.drawer_close);
 
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 
 		ActionBar actionBar = getActionBar();
 		if (actionBar != null) {
-			actionBar.setDisplayHomeAsUpEnabled(true);
 			actionBar.setHomeButtonEnabled(true);
 		}
 
@@ -79,8 +75,7 @@ public abstract class DrawerNavigationUI extends SuperUI implements
 	 */
 	@Override
 	public void setContentView(int layoutResID) {
-		final View contentView = getLayoutInflater().inflate(layoutResID,
-				mDrawerLayout, false);
+		final View contentView = getLayoutInflater().inflate(layoutResID, mDrawerLayout, false);
 		mDrawerLayout.addView(contentView, 0);
 		setContentView(mDrawerLayout);
 	}

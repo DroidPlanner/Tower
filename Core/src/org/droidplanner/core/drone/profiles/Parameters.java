@@ -39,7 +39,7 @@ public class Parameters extends DroneVariable {
 	public void getAllParameters() {
 		parameters.clear();
 		paramsReceived = 0;
-		if(parameterListener!=null)
+		if (parameterListener != null)
 			parameterListener.onBeginReceivingParameters();
 		MavLinkParameters.requestParametersList(myDrone);
 	}
@@ -66,12 +66,11 @@ public class Parameters extends DroneVariable {
 
 		// update listener
 		if (parameterListener != null)
-			parameterListener.onParameterReceived(param, m_value.param_index,
-					m_value.param_count);
+			parameterListener.onParameterReceived(param, m_value.param_index, m_value.param_count);
 
 		if (m_value.param_index > paramsReceived) {
-			Log.w(TAG, "Skipped index: Index is " + m_value.param_index
-					+ " received=" + paramsReceived);
+			Log.w(TAG, "Skipped index: Index is " + m_value.param_index + " received="
+					+ paramsReceived);
 		}
 
 		// last param? Notify the listener with the parameters

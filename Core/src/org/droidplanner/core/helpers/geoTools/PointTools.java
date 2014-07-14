@@ -7,8 +7,7 @@ import org.droidplanner.core.helpers.coordinates.Coord2D;
 
 public class PointTools {
 
-	public static Coord2D findFarthestPoint(ArrayList<Coord2D> crosses,
-			Coord2D middle) {
+	public static Coord2D findFarthestPoint(ArrayList<Coord2D> crosses, Coord2D middle) {
 		double farthestDistance = Double.NEGATIVE_INFINITY;
 		Coord2D farthestPoint = null;
 		for (Coord2D cross : crosses) {

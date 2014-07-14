@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+    >
+
+    <RadioButton
+        android:id="@+id/normalWpToggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/normal_waypoint_toggle"
+        style="@style/editorToggleStyle"
+        android:checked="true"
+        />
+
+    <RadioButton
+        android:id="@+id/splineWpToggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/spline_waypoint_toggle"
+        style="@style/editorToggleStyle"
+        />
+
+
+</RadioGroup>

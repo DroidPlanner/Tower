@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/DroidPlanner/droidplanner.svg?branch=master)](https://travis-ci.org/DroidPlanner/droidplanner)
+
 # DroidPlanner
 
 Droidplanner is a Ground Control Station (GCS) Android app for UAVs running Ardupilot software.
@@ -6,7 +8,7 @@ Droidplanner is a Ground Control Station (GCS) Android app for UAVs running Ardu
 
 ### Usage Guide
 
-The [wiki](./wiki) has some basic documentation (Help us by making it better!)
+The [wiki](https://github.com/DroidPlanner/droidplanner/wiki) has some basic documentation (Help us by making it better!)
 
 For help, visit the [Droidplanner user forums](http://ardupilot.com/forum/viewforum.php?f=15).
 
@@ -22,7 +24,7 @@ The next version of Droidplanner is under development, and we would love your he
 
 ### Contributing
 
-Droidplanner v2 is in active development. If you would like to contribute to the project, see the [Build Setup wiki page](wiki/).
+Droidplanner v2 is in active development. If you would like to contribute to the project, see the [Build Setup wiki page](https://github.com/DroidPlanner/droidplanner/wiki).
 
 If you aren't a developer but want to help out, you can do so by improving the documentation in the Wiki or by writing user guides.
 

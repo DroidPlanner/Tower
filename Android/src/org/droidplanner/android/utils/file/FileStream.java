@@ -7,20 +7,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class FileStream {
-	public static FileOutputStream getParameterFileStream()
-			throws FileNotFoundException {
+	public static FileOutputStream getParameterFileStream() throws FileNotFoundException {
 		File myDir = new File(DirectoryPath.getParametersPath());
 		myDir.mkdirs();
-		File file = new File(myDir, "Parameters-" + FileManager.getTimeStamp()
-				+ ".param");
+		File file = new File(myDir, "Parameters-" + FileManager.getTimeStamp() + ".param");
 		if (file.exists())
 			file.delete();
 		FileOutputStream out = new FileOutputStream(file);
 		return out;
 	}
 
-	public static FileOutputStream getExceptionFileStream()
-			throws FileNotFoundException {
+	public static FileOutputStream getExceptionFileStream() throws FileNotFoundException {
 		File myDir = new File(DirectoryPath.getLogCatPath());
 		myDir.mkdirs();
 		File file = new File(myDir, FileManager.getTimeStamp() + ".txt");
@@ -30,12 +27,10 @@ public class FileStream {
 		return out;
 	}
 
-	static public FileOutputStream getWaypointFileStream(String name)
-			throws FileNotFoundException {
+	static public FileOutputStream getWaypointFileStream(String name) throws FileNotFoundException {
 		File myDir = new File(DirectoryPath.getWaypointsPath());
 		myDir.mkdirs();
-		File file = new File(myDir, name + "-" + FileManager.getTimeStamp()
-				+ ".txt");
+		File file = new File(myDir, name + "-" + FileManager.getTimeStamp() + ".txt");
 		if (file.exists())
 			file.delete();
 		FileOutputStream out = new FileOutputStream(file);
@@ -60,10 +55,8 @@ public class FileStream {
 	 * 
 	 * @return output file stream for the log file
 	 */
-	static public BufferedOutputStream openOutputStream(File filename)
-			throws FileNotFoundException {
-		BufferedOutputStream out = new BufferedOutputStream(
-				new FileOutputStream(filename));
+	static public BufferedOutputStream openOutputStream(File filename) throws FileNotFoundException {
+		BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(filename));
 		return out;
 	}
 

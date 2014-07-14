@@ -2,10 +2,10 @@ package org.droidplanner.android.fragments;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.widgets.AttitudeIndicator;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.android.widgets.AttitudeIndicator;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -31,10 +31,8 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 	private boolean headingModeFPV;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_telemetry, container,
-				false);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.fragment_telemetry, container, false);
 		attitudeIndicator = (AttitudeIndicator) view.findViewById(R.id.aiView);
 
 		roll = (TextView) view.findViewById(R.id.rollValueText);
@@ -47,7 +45,7 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 		altitude = (TextView) view.findViewById(R.id.altitudeValue);
 		targetAltitude = (TextView) view.findViewById(R.id.targetAltitudeValue);
 
-		drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
+		drone = ((DroidPlannerApp) getActivity().getApplication()).getDrone();
 		return view;
 	}
 
@@ -56,9 +54,8 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 		super.onStart();
 		drone.events.addDroneListener(this);
 
-		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(getActivity()
-						.getApplicationContext());
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity()
+				.getApplicationContext());
 		headingModeFPV = prefs.getBoolean("pref_heading_mode", false);
 	}
 
@@ -104,10 +101,8 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 
 	public void onSpeedAltitudeAndClimbRateUpdate(Drone drone) {
 		airSpeed.setText(String.format("%3.1f", drone.speed.getAirSpeed()));
-		groundSpeed
-				.setText(String.format("%3.1f", drone.speed.getGroundSpeed()));
-		climbRate
-				.setText(String.format("%3.1f", drone.speed.getVerticalSpeed()));
+		groundSpeed.setText(String.format("%3.1f", drone.speed.getGroundSpeed()));
+		climbRate.setText(String.format("%3.1f", drone.speed.getVerticalSpeed()));
 		double alt = drone.altitude.getAltitude();
 		double targetAlt = drone.altitude.getTargetAltitude();
 		altitude.setText(String.format("%3.1f", alt));

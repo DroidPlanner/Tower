@@ -1,6 +1,6 @@
 package org.droidplanner.android.helpers;
 
-import org.droidplanner.android.mission.MissionRender;
+import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
 import android.content.Context;
@@ -15,13 +15,13 @@ public class RecordMe implements LocationListener {
 	private static final float MIN_DISTANCE_M = 0;
 
 	private Context context;
-    private final MissionRender missionRender;
+	private final MissionProxy missionProxy;
 	private LocationManager locationManager;
 	private boolean recordMeEnabled = false;
 
-	public RecordMe(Context context, MissionRender missionRender) {
+	public RecordMe(Context context, MissionProxy missionProxy) {
 		this.context = context;
-        this.missionRender = missionRender;
+		this.missionProxy = missionProxy;
 		this.locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 	}
 
@@ -35,8 +35,8 @@ public class RecordMe implements LocationListener {
 
 	private void startRecordMe() {
 		Toast.makeText(context, "Record Enabled", Toast.LENGTH_SHORT).show();
-		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-				MIN_TIME_MS, MIN_DISTANCE_M, this);
+		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_MS,
+				MIN_DISTANCE_M, this);
 		recordMeEnabled = true;
 	}
 
@@ -51,11 +51,11 @@ public class RecordMe implements LocationListener {
 	}
 
 	// @Override
+	@Override
 	public void onLocationChanged(Location location) {
 		// TODO find a better way to do the altitude
-		Coord2D coord = new Coord2D(location.getLatitude(),
-				location.getLongitude());
-        missionRender.addWaypoint(coord);
+		Coord2D coord = new Coord2D(location.getLatitude(), location.getLongitude());
+		missionProxy.addWaypoint(coord);
 	}
 
 	@Override

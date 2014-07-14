@@ -27,8 +27,7 @@ public abstract class ListXmlAdapter extends BaseExpandableListAdapter {
 		this.listItems = new HashMap<String, List<ListRow_Interface>>();
 	}
 
-	public void addRowItem(int groupPosition, int childPostion,
-			ListRow_Interface rowItem) {
+	public void addRowItem(int groupPosition, int childPostion, ListRow_Interface rowItem) {
 
 	}
 
@@ -42,8 +41,7 @@ public abstract class ListXmlAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public Object getChild(int groupPosition, int childPosititon) {
-		return this.listItems.get(this.listHeader.get(groupPosition)).get(
-				childPosititon);
+		return this.listItems.get(this.listHeader.get(groupPosition)).get(childPosititon);
 	}
 
 	@Override
@@ -52,10 +50,9 @@ public abstract class ListXmlAdapter extends BaseExpandableListAdapter {
 	}
 
 	@Override
-	public View getChildView(int groupPosition, final int childPosition,
-			boolean isLastChild, View convertView, ViewGroup parent) {
-		ListRow_Interface row = (ListRow_Interface) getChild(groupPosition,
-				childPosition);
+	public View getChildView(int groupPosition, final int childPosition, boolean isLastChild,
+			View convertView, ViewGroup parent) {
+		ListRow_Interface row = (ListRow_Interface) getChild(groupPosition, childPosition);
 		return row.getView(convertView);
 	}
 
@@ -71,8 +68,7 @@ public abstract class ListXmlAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public int getChildType(int groupPosition, int childPosition) {
-		return ((ListRow_Interface) getChild(groupPosition, childPosition))
-				.getViewType();
+		return ((ListRow_Interface) getChild(groupPosition, childPosition)).getViewType();
 	}
 
 	@Override
@@ -91,21 +87,19 @@ public abstract class ListXmlAdapter extends BaseExpandableListAdapter {
 	}
 
 	@Override
-	public View getGroupView(int groupPosition, boolean isExpanded,
-			View convertView, ViewGroup parent) {
+	public View getGroupView(int groupPosition, boolean isExpanded, View convertView,
+			ViewGroup parent) {
 		String headerTitle = (String) getGroup(groupPosition);
 		if (convertView == null) {
 			LayoutInflater infalInflater = this.inflater;
 			convertView = infalInflater.inflate(layoutId, null);
 		}
 
-		TextView lblListHeader = (TextView) convertView
-				.findViewById(R.id.lblListHeader);
+		TextView lblListHeader = (TextView) convertView.findViewById(R.id.lblListHeader);
 		lblListHeader.setTypeface(null, Typeface.BOLD);
 		lblListHeader.setText(headerTitle);
 
-		TextView lblChkRatio = (TextView) convertView
-				.findViewById(R.id.lblChkRatio);
+		TextView lblChkRatio = (TextView) convertView.findViewById(R.id.lblChkRatio);
 		updateRatioValue(lblChkRatio, groupPosition);
 
 		return convertView;

@@ -46,16 +46,13 @@ public class GPS extends Service implements LocationListener {
 
 	public Location getLocation() {
 		try {
-			locationManager = (LocationManager) mContext
-					.getSystemService(LOCATION_SERVICE);
+			locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
 
 			// getting GPS status
-			isGPSEnabled = locationManager
-					.isProviderEnabled(LocationManager.GPS_PROVIDER);
+			isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
 			// getting network status
-			isNetworkEnabled = locationManager
-					.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+			isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
 			if (!isGPSEnabled && !isNetworkEnabled) {
 				// no network provider is enabled
@@ -63,10 +60,8 @@ public class GPS extends Service implements LocationListener {
 				this.canGetLocation = true;
 				// First get location from Network Provider
 				if (isNetworkEnabled) {
-					locationManager.requestLocationUpdates(
-							LocationManager.NETWORK_PROVIDER,
-							MIN_TIME_BW_UPDATES,
-							MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+					locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+							MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
 					Log.d("Network", "Network");
 					if (locationManager != null) {
 						location = locationManager
@@ -80,10 +75,8 @@ public class GPS extends Service implements LocationListener {
 				// if GPS Enabled get lat/long using GPS Services
 				if (isGPSEnabled) {
 					if (location == null) {
-						locationManager.requestLocationUpdates(
-								LocationManager.GPS_PROVIDER,
-								MIN_TIME_BW_UPDATES,
-								MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+						locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+								MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
 						Log.d("GPS Enabled", "GPS Enabled");
 						if (locationManager != null) {
 							location = locationManager
@@ -158,26 +151,24 @@ public class GPS extends Service implements LocationListener {
 		alertDialog.setTitle("GPS is settings");
 
 		// Setting Dialog Message
-		alertDialog
-				.setMessage("GPS is not enabled. Do you want to go to settings menu?");
+		alertDialog.setMessage("GPS is not enabled. Do you want to go to settings menu?");
 
 		// On pressing Settings button
-		alertDialog.setPositiveButton("Settings",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						Intent intent = new Intent(
-								Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-						mContext.startActivity(intent);
-					}
-				});
+		alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+				mContext.startActivity(intent);
+			}
+		});
 
 		// on pressing cancel button
-		alertDialog.setNegativeButton("Cancel",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.cancel();
-					}
-				});
+		alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.cancel();
+			}
+		});
 
 		// Showing Alert Message
 		alertDialog.show();

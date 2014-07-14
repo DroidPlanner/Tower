@@ -29,7 +29,7 @@ public class GuidedPoint extends DroneVariable implements OnDroneListener {
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch (event) {
 		case MODE:
-			if (myDrone.state.getMode() == ApmModes.ROTOR_GUIDED) {
+			if ((myDrone.state.getMode() == ApmModes.ROTOR_GUIDED)) {
 				initialize();
 			} else {
 				disable();
@@ -51,7 +51,10 @@ public class GuidedPoint extends DroneVariable implements OnDroneListener {
 		changeAlt(altChange);
 	}
 
-	public void forcedGuidedCoordinate(Coord2D coord) {
+	public void forcedGuidedCoordinate(Coord2D coord) throws Exception {
+		if ((myDrone.GPS.getFixTypeNumeric() != GPS.LOCK_3D)) {
+			throw new Exception("Bad GPS for guided");
+		}
 		initialize();
 		changeCoord(coord);
 	}

@@ -40,7 +40,7 @@ public class TTSNotificationProvider implements OnInitListener,
 		tts.setLanguage(Locale.US);
 	}
 
-	public void speak(String string) {
+	private void speak(String string) {
 		if (tts != null) {
 			if (shouldEnableTTS()) {
 				tts.speak(string, TextToSpeech.QUEUE_FLUSH, null);
@@ -55,12 +55,12 @@ public class TTSNotificationProvider implements OnInitListener,
 	/**
 	 * Warn the user if needed via the TTSNotificationProvider module
 	 */
+	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		if (tts != null) {
 			switch (event) {
 			case INVALID_POLYGON:
-				Toast.makeText(context, R.string.exception_draw_polygon,
-						Toast.LENGTH_SHORT).show();
+				Toast.makeText(context, R.string.exception_draw_polygon, Toast.LENGTH_SHORT).show();
 				break;
 			case ARMING:
 				speakArmedState(drone.state.isArmed());
@@ -75,16 +75,14 @@ public class TTSNotificationProvider implements OnInitListener,
 				speakMode(drone.state.getMode());
 				break;
 			case MISSION_SENT:
-				Toast.makeText(context, "Waypoints sent", Toast.LENGTH_SHORT)
-						.show();
+				Toast.makeText(context, "Waypoints sent", Toast.LENGTH_SHORT).show();
 				speak("Waypoints saved to Drone");
 				break;
 			case GPS_FIX:
 				speakGpsMode(drone.GPS.getFixTypeNumeric());
 				break;
 			case MISSION_RECEIVED:
-				Toast.makeText(context, "Waypoints received from Drone",
-						Toast.LENGTH_SHORT).show();
+				Toast.makeText(context, "Waypoints received from Drone", Toast.LENGTH_SHORT).show();
 				speak("Waypoints received");
 				break;
 			case HEARTBEAT_FIRST:
@@ -99,7 +97,10 @@ public class TTSNotificationProvider implements OnInitListener,
 				speak("Data link restored");
 				break;
 			case MISSION_WP_UPDATE:
-				speak("Going for waypoint "+ drone.missionStats.getCurrentWP());
+				speak("Going for waypoint " + drone.missionStats.getCurrentWP());
+				break;
+			case FOLLOW_START:
+				speak("Following");
 				break;
 			default:
 				break;
@@ -163,5 +164,10 @@ public class TTSNotificationProvider implements OnInitListener,
 			speak("Lost GPS Lock");
 			break;
 		}
+	}
+
+	@Override
+	public void quickNotify(String feedback) {
+		speak(feedback);
 	}
 }

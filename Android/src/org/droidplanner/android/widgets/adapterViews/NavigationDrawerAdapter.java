@@ -103,29 +103,24 @@ public class NavigationDrawerAdapter extends BaseExpandableListAdapter {
 		mActivity = activity;
 		mDrawerLayout = activity.getDrawerLayout();
 		mNavHubView = activity.getNavHubView();
-		mNavHubView
-				.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-					@Override
-					public boolean onGroupClick(ExpandableListView parent,
-							View v, int groupPosition, long id) {
-						performCallback((Map<String, Object>) getGroup(groupPosition));
-						return true;
-					}
-				});
-		mNavHubView
-				.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-					@Override
-					public boolean onChildClick(ExpandableListView parent,
-							View v, int groupPosition, int childPosition,
-							long id) {
-						performCallback((Map<String, Object>) getChild(
-								groupPosition, childPosition));
-						return true;
-					}
-				});
+		mNavHubView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+			@Override
+			public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition,
+					long id) {
+				performCallback((Map<String, Object>) getGroup(groupPosition));
+				return true;
+			}
+		});
+		mNavHubView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+			@Override
+			public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
+					int childPosition, long id) {
+				performCallback((Map<String, Object>) getChild(groupPosition, childPosition));
+				return true;
+			}
+		});
 
-		mInflater = (LayoutInflater) activity
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		mInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		mChildData = new ArrayList<List<Map<String, ? extends Object>>>();
 		initChildData(activity);
@@ -134,8 +129,7 @@ public class NavigationDrawerAdapter extends BaseExpandableListAdapter {
 		initGroupData(activity);
 
 		if (sIsGroupExpanded.length != getGroupCount()) {
-			throw new IllegalStateException(
-					"Group state cache doesn't match with group data.");
+			throw new IllegalStateException("Group state cache doesn't match with group data.");
 		}
 	}
 
@@ -153,11 +147,9 @@ public class NavigationDrawerAdapter extends BaseExpandableListAdapter {
 		}
 
 		// Select the container activity's group
-		final int groupPosition = sActivityGroupIndexMap.get(mActivity
-				.getClass());
-		final int flatPosition = mNavHubView
-				.getFlatListPosition(ExpandableListView
-						.getPackedPositionForGroup(groupPosition));
+		final int groupPosition = sActivityGroupIndexMap.get(mActivity.getClass());
+		final int flatPosition = mNavHubView.getFlatListPosition(ExpandableListView
+				.getPackedPositionForGroup(groupPosition));
 		mNavHubView.setItemChecked(flatPosition, true);
 	}
 
@@ -193,8 +185,7 @@ public class NavigationDrawerAdapter extends BaseExpandableListAdapter {
 		editorData.put(KEY_SECTION_CALLBACK, new Runnable() {
 			@Override
 			public void run() {
-				activity.startActivity(new Intent(activity,
-						EditorActivity.class));
+				activity.startActivity(new Intent(activity, EditorActivity.class));
 			}
 		});
 
@@ -215,15 +206,13 @@ public class NavigationDrawerAdapter extends BaseExpandableListAdapter {
 			final Map<String, Object> configData = new HashMap<String, Object>();
 			configData.put(KEY_SECTION_NAME,
 					ConfigurationActivity.sConfigurationFragmentTitlesRes[i]);
-			configData.put(KEY_SECTION_ICON,
-					ConfigurationActivity.sConfigurationFragmentIconRes[i]);
+			configData
+					.put(KEY_SECTION_ICON, ConfigurationActivity.sConfigurationFragmentIconRes[i]);
 			configData.put(KEY_SECTION_CALLBACK, new Runnable() {
 				@Override
 				public void run() {
-					activity.startActivity(new Intent(activity,
-							ConfigurationActivity.class).putExtra(
-							ConfigurationActivity.EXTRA_CONFIG_SCREEN_INDEX,
-							index));
+					activity.startActivity(new Intent(activity, ConfigurationActivity.class)
+							.putExtra(ConfigurationActivity.EXTRA_CONFIG_SCREEN_INDEX, index));
 				}
 			});
 
@@ -247,8 +236,7 @@ public class NavigationDrawerAdapter extends BaseExpandableListAdapter {
 		flightData.put(KEY_SECTION_CALLBACK, new Runnable() {
 			@Override
 			public void run() {
-				activity.startActivity(new Intent(activity,
-						FlightActivity.class));
+				activity.startActivity(new Intent(activity, FlightActivity.class));
 			}
 		});
 		mGroupData.add(flightData);
@@ -260,8 +248,7 @@ public class NavigationDrawerAdapter extends BaseExpandableListAdapter {
 		droneSetupData.put(KEY_SECTION_CALLBACK, new Runnable() {
 			@Override
 			public void run() {
-				activity.startActivity(new Intent(activity,
-						SettingsActivity.class));
+				activity.startActivity(new Intent(activity, SettingsActivity.class));
 			}
 		});
 		mGroupData.add(droneSetupData);
@@ -273,26 +260,23 @@ public class NavigationDrawerAdapter extends BaseExpandableListAdapter {
 		helpData.put(KEY_SECTION_CALLBACK, new Runnable() {
 			@Override
 			public void run() {
-				final HelpDialogFragment helpDialog = HelpDialogFragment
-						.newInstance();
-				helpDialog.show(activity.getSupportFragmentManager(),
-						"Help Dialog");
+				final HelpDialogFragment helpDialog = HelpDialogFragment.newInstance();
+				helpDialog.show(activity.getSupportFragmentManager(), "Help Dialog");
 			}
 		});
 		mGroupData.add(helpData);
 	}
 
 	@Override
-	public View getChildView(int groupPosition, int childPosition,
-			boolean isLastChild, View convertView, ViewGroup parent) {
+	public View getChildView(int groupPosition, int childPosition, boolean isLastChild,
+			View convertView, ViewGroup parent) {
 		View v;
 		if (convertView == null) {
 			v = newChildView(parent);
 		} else {
 			v = convertView;
 		}
-		bindView(v, mChildData.get(groupPosition).get(childPosition),
-				R.id.nav_drawer_child);
+		bindView(v, mChildData.get(groupPosition).get(childPosition), R.id.nav_drawer_child);
 		return v;
 	}
 
@@ -304,8 +288,7 @@ public class NavigationDrawerAdapter extends BaseExpandableListAdapter {
 	 * @return A new child View
 	 */
 	public View newChildView(ViewGroup parent) {
-		return mInflater.inflate(R.layout.adapter_nav_drawer_child, parent,
-				false);
+		return mInflater.inflate(R.layout.adapter_nav_drawer_child, parent, false);
 	}
 
 	@Override
@@ -349,8 +332,8 @@ public class NavigationDrawerAdapter extends BaseExpandableListAdapter {
 	}
 
 	@Override
-	public View getGroupView(final int groupPosition, boolean isExpanded,
-			View convertView, ViewGroup parent) {
+	public View getGroupView(final int groupPosition, boolean isExpanded, View convertView,
+			ViewGroup parent) {
 		View v;
 		if (convertView == null) {
 			v = newGroupView(parent);
@@ -358,15 +341,13 @@ public class NavigationDrawerAdapter extends BaseExpandableListAdapter {
 			v = convertView;
 		}
 
-		final ImageView expandIcon = (ImageView) v
-				.findViewById(R.id.nav_drawer_group_expand_icon);
+		final ImageView expandIcon = (ImageView) v.findViewById(R.id.nav_drawer_group_expand_icon);
 		if (getChildrenCount(groupPosition) == 0) {
 			expandIcon.setVisibility(View.GONE);
 		} else {
 			expandIcon.setVisibility(View.VISIBLE);
 			if (isExpanded) {
-				expandIcon
-						.setImageResource(R.drawable.expandable_listview_icon_expanded);
+				expandIcon.setImageResource(R.drawable.expandable_listview_icon_expanded);
 				expandIcon.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
@@ -375,8 +356,7 @@ public class NavigationDrawerAdapter extends BaseExpandableListAdapter {
 					}
 				});
 			} else {
-				expandIcon
-						.setImageResource(R.drawable.expandable_listview_icon_collapsed);
+				expandIcon.setImageResource(R.drawable.expandable_listview_icon_collapsed);
 				expandIcon.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
@@ -399,17 +379,15 @@ public class NavigationDrawerAdapter extends BaseExpandableListAdapter {
 	 * @return A new group View
 	 */
 	public View newGroupView(ViewGroup parent) {
-		return mInflater.inflate(R.layout.adapter_nav_drawer_group, parent,
-				false);
+		return mInflater.inflate(R.layout.adapter_nav_drawer_group, parent, false);
 	}
 
-	private void bindView(View view, Map<String, ? extends Object> data,
-			int textViewId) {
+	private void bindView(View view, Map<String, ? extends Object> data, int textViewId) {
 		final TextView textView = (TextView) view.findViewById(textViewId);
 		if (textView != null) {
 			textView.setText((Integer) data.get(KEY_SECTION_NAME));
-			textView.setCompoundDrawablesWithIntrinsicBounds(
-					(Integer) data.get(KEY_SECTION_ICON), 0, 0, 0);
+			textView.setCompoundDrawablesWithIntrinsicBounds((Integer) data.get(KEY_SECTION_ICON),
+					0, 0, 0);
 		}
 	}
 }

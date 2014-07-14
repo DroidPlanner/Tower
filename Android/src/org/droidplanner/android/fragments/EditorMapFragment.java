@@ -1,82 +1,68 @@
 package org.droidplanner.android.fragments;
 
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
-import org.droidplanner.android.fragments.helpers.DroneMap;
-import org.droidplanner.android.fragments.helpers.MapPath;
-import org.droidplanner.android.graphic.DroneHelper;
-import org.droidplanner.android.graphic.map.CameraGroundOverlays;
-import org.droidplanner.android.graphic.map.MarkerManager.MarkerSource;
-import org.droidplanner.android.mission.item.markers.MissionItemGenericMarkerSource;
-import org.droidplanner.android.mission.item.markers.MissionItemMarkerSource;
+import org.droidplanner.android.maps.DPMap;
+import org.droidplanner.android.maps.MarkerInfo;
+import org.droidplanner.android.proxy.mission.item.markers.MissionItemMarkerInfo;
+import org.droidplanner.android.proxy.mission.item.markers.SurveyMarkerInfoProvider;
+import org.droidplanner.android.utils.prefs.AutoPanMode;
+import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
-import org.droidplanner.core.polygon.Polygon;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
+import android.widget.Toast;
 
 @SuppressLint("UseSparseArrays")
-public class EditorMapFragment extends DroneMap implements
-		OnMapLongClickListener, OnMarkerDragListener, OnMapClickListener,
-		OnMarkerClickListener {
+public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickListener,
+		DPMap.OnMarkerDragListener, DPMap.OnMapClickListener, DPMap.OnMarkerClickListener {
 
-	public MapPath polygonPath;
-
-	public CameraGroundOverlays cameraOverlays;
-	public Polygon polygon = new Polygon();
+	// public MapPath polygonPath;
+	// public CameraGroundOverlays cameraOverlays;
 	private OnEditorInteraction editorListener;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
-			Bundle bundle) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle bundle) {
 		View view = super.onCreateView(inflater, viewGroup, bundle);
 
-		mMap.setOnMarkerDragListener(this);
-		mMap.setOnMarkerClickListener(this);
-		mMap.setOnMapClickListener(this);
-		mMap.setOnMapLongClickListener(this);
-		polygonPath = new MapPath(mMap, Color.BLACK, getResources());
-		cameraOverlays = new CameraGroundOverlays(mMap);
+		mMapFragment.setOnMarkerDragListener(this);
+		mMapFragment.setOnMarkerClickListener(this);
+		mMapFragment.setOnMapClickListener(this);
+		mMapFragment.setOnMapLongClickListener(this);
+
+		// TODO: figure out if it's still needed
+		// polygonPath = new MapPath(mMap, Color.BLACK, getResources());
+		// cameraOverlays = new CameraGroundOverlays(mMap);
 
 		return view;
 	}
 
 	@Override
-	public void onMapLongClick(LatLng point) {
+	public void onMapLongClick(Coord2D point) {
 		// mListener.onAddPoint(point);
 	}
 
 	@Override
-	public void onMarkerDrag(Marker marker) {
-		MarkerSource source = markers.getSourceFromMarker(marker);
-		checkForWaypointMarkerMoving(source, marker, true);
+	public void onMarkerDrag(MarkerInfo markerInfo) {
+		checkForWaypointMarkerMoving(markerInfo, true);
 	}
 
 	@Override
-	public void onMarkerDragStart(Marker marker) {
-		MarkerSource source = markers.getSourceFromMarker(marker);
-		checkForWaypointMarkerMoving(source, marker, false);
+	public void onMarkerDragStart(MarkerInfo markerInfo) {
+		checkForWaypointMarkerMoving(markerInfo, false);
 	}
 
-	private void checkForWaypointMarkerMoving(MarkerSource source,
-			Marker marker, boolean dragging) {
-		if (SpatialCoordItem.class.isInstance(source)) {
-			LatLng position = marker.getPosition();
+	private void checkForWaypointMarkerMoving(MarkerInfo markerInfo, boolean dragging) {
+		if (SpatialCoordItem.class.isInstance(markerInfo)) {
+			Coord2D position = markerInfo.getPosition();
 
 			// update marker source
-			SpatialCoordItem waypoint = (SpatialCoordItem) source;
-			waypoint.setPosition(DroneHelper.LatLngToCoord(position));
+			SpatialCoordItem waypoint = (SpatialCoordItem) markerInfo;
+			waypoint.setPosition(position);
 
 			/*
 			 * // update info window if(dragging)
@@ -86,33 +72,34 @@ public class EditorMapFragment extends DroneMap implements
 			 */
 
 			// update flight path
-            missionRender.updateMissionPath(mMap);
+			mMapFragment.updateMissionPath(missionProxy);
 		}
 	}
 
 	@Override
-	public void onMarkerDragEnd(Marker marker) {
-		MarkerSource source = markers.getSourceFromMarker(marker);
-		checkForWaypointMarker(source, marker);
-		checkForPolygonMarker(source, marker);
+	public void onMarkerDragEnd(MarkerInfo markerInfo) {
+		checkForWaypointMarker(markerInfo);
+		checkForPolygonMarker(markerInfo);
 	}
 
-	private void checkForWaypointMarker(MarkerSource source, Marker marker) {
-		if(source instanceof MissionItemMarkerSource) {
-			missionRender.move(((MissionItemGenericMarkerSource) source).getMarkerOrigin(), DroneHelper.LatLngToCoord(marker.getPosition()));
+	private void checkForWaypointMarker(MarkerInfo markerInfo) {
+		if (!(markerInfo instanceof SurveyMarkerInfoProvider)
+				&& (markerInfo instanceof MissionItemMarkerInfo)) {
+			missionProxy.move(((MissionItemMarkerInfo) markerInfo).getMarkerOrigin(),
+					markerInfo.getPosition());
 		}
 	}
 
-	private void checkForPolygonMarker(MarkerSource source, Marker marker) {
+	private void checkForPolygonMarker(MarkerInfo info) {
 		/*
-		 * if (PolygonPoint.class.isInstance(source)) {
+		 * if (PolygonPoint.class.isInstance(info)) {
 		 * Listener.onMovePolygonPoint((PolygonPoint)
-		 * source,marker.getPosition()); }
+		 * info,marker.getPosition()); }
 		 */
 	}
 
 	@Override
-	public void onMapClick(LatLng point) {
+	public void onMapClick(Coord2D point) {
 		editorListener.onMapClick(point);
 	}
 
@@ -123,10 +110,19 @@ public class EditorMapFragment extends DroneMap implements
 	}
 
 	@Override
-	public boolean onMarkerClick(Marker marker) {
-		MarkerSource source = markers.getSourceFromMarker(marker);
-		if (source instanceof MissionItemMarkerSource) {
-			editorListener.onItemClick(((MissionItemGenericMarkerSource) source).getMarkerOrigin());
+	public boolean setAutoPanMode(AutoPanMode target) {
+		if (target == AutoPanMode.DISABLED)
+			return true;
+
+		Toast.makeText(getActivity(), "Auto pan is not supported on this map.", Toast.LENGTH_LONG)
+				.show();
+		return false;
+	}
+
+	@Override
+	public boolean onMarkerClick(MarkerInfo info) {
+		if (info instanceof MissionItemMarkerInfo) {
+			editorListener.onItemClick(((MissionItemMarkerInfo) info).getMarkerOrigin());
 			return true;
 		} else {
 			return false;
