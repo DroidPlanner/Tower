@@ -12,8 +12,7 @@ public class FileManager {
 	 * Timestamp for logs in the Mission Planner Format
 	 */
 	static public String getTimeStamp() {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss",
-				Locale.US);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss", Locale.US);
 		String timeStamp = sdf.format(new Date());
 		return timeStamp;
 	}

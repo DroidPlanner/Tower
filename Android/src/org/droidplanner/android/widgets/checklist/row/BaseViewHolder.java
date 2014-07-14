@@ -12,14 +12,12 @@ public class BaseViewHolder {
 	protected CheckBox checkBox;
 
 	public BaseViewHolder(ViewGroup viewGroup, CheckListItem checkListItem) {
-		this.layoutView = (LinearLayout) viewGroup
-				.findViewById(R.id.lst_layout);
+		this.layoutView = (LinearLayout) viewGroup.findViewById(R.id.lst_layout);
 		this.checkBox = (CheckBox) viewGroup.findViewById(R.id.lst_check);
 		setupViewItems(viewGroup, checkListItem);
 	}
 
-	protected void setupViewItems(ViewGroup viewGroup,
-			CheckListItem checkListItem) {
+	protected void setupViewItems(ViewGroup viewGroup, CheckListItem checkListItem) {
 
 	}
 }

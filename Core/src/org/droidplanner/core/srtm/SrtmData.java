@@ -17,8 +17,7 @@ public class SrtmData {
 		path = dir;
 	}
 
-	public int load(double lon, double lat, OnProgressListner listner)
-			throws Exception {
+	public int load(double lon, double lat, OnProgressListner listner) throws Exception {
 		int altitude;
 
 		String fname = SrtmData.getName(lon, lat);
@@ -31,8 +30,7 @@ public class SrtmData {
 		return altitude;
 	}
 
-	private void downloadSrtmFileIfNeeded(String fname,
-			OnProgressListner listner) throws Exception {
+	private void downloadSrtmFileIfNeeded(String fname, OnProgressListner listner) throws Exception {
 		if (!srtmFile.exists()) {
 			new SrtmDownloader(listner).downloadSrtmFile(fname, path);
 		}
@@ -42,8 +40,7 @@ public class SrtmData {
 		srtmFile = new File(path + "/" + fname);
 	}
 
-	private int readHtgFile(BufferedInputStream s, double lon, double lat)
-			throws Exception {
+	private int readHtgFile(BufferedInputStream s, double lon, double lat) throws Exception {
 		byte[] buffer = new byte[2];
 		int index = calculateFileIndex(lon, lat);
 		skipToDataPositionInFile(index);

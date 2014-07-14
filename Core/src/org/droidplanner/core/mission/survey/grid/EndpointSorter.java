@@ -23,16 +23,14 @@ public class EndpointSorter {
 
 	public void sortGrid(Coord2D lastpnt, boolean innerWPs) throws Exception {
 		while (grid.size() > 0) {
-			LineCoord2D closestLine = LineTools.findClosestLineToPoint(lastpnt,
-					grid);
-			Coord2D secondWp = processOneGridLine(closestLine, lastpnt,
-					innerWPs);
+			LineCoord2D closestLine = LineTools.findClosestLineToPoint(lastpnt, grid);
+			Coord2D secondWp = processOneGridLine(closestLine, lastpnt, innerWPs);
 			lastpnt = secondWp;
 		}
 	}
 
-	private Coord2D processOneGridLine(LineCoord2D closestLine,
-			Coord2D lastpnt, boolean innerWPs) throws Exception {
+	private Coord2D processOneGridLine(LineCoord2D closestLine, Coord2D lastpnt, boolean innerWPs)
+			throws Exception {
 		Coord2D firstWP = closestLine.getClosestEndpointTo(lastpnt);
 		Coord2D secondWp = closestLine.getFarthestEndpointTo(lastpnt);
 
@@ -45,10 +43,9 @@ public class EndpointSorter {
 		return secondWp;
 	}
 
-	private void addWaypointsBetween(Coord2D firstWP, Coord2D secondWp,
-			boolean innerWPs) {
-		List<Coord2D> cameraLocationsOnThisStrip = new LineSampler(firstWP,
-				secondWp).sample(sampleDistance);
+	private void addWaypointsBetween(Coord2D firstWP, Coord2D secondWp, boolean innerWPs) {
+		List<Coord2D> cameraLocationsOnThisStrip = new LineSampler(firstWP, secondWp)
+				.sample(sampleDistance);
 		cameraLocations.addAll(cameraLocationsOnThisStrip);
 		if (innerWPs) {
 			for (Coord2D point : cameraLocationsOnThisStrip) {

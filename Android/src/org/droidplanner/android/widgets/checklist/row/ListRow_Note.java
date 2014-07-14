@@ -11,8 +11,7 @@ import android.widget.EditText;
 
 public class ListRow_Note extends ListRow implements OnFocusChangeListener {
 
-	public ListRow_Note(LayoutInflater inflater,
-			final CheckListItem checkListItem) {
+	public ListRow_Note(LayoutInflater inflater, final CheckListItem checkListItem) {
 		super(inflater, checkListItem);
 	}
 
@@ -20,8 +19,7 @@ public class ListRow_Note extends ListRow implements OnFocusChangeListener {
 	public View getView(View convertView) {
 		View view;
 		if (convertView == null) {
-			ViewGroup viewGroup = (ViewGroup) inflater.inflate(
-					R.layout.list_note_item, null);
+			ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.list_note_item, null);
 			holder = new ViewHolder(viewGroup, checkListItem);
 			viewGroup.setTag(holder);
 			view = viewGroup;
@@ -34,8 +32,7 @@ public class ListRow_Note extends ListRow implements OnFocusChangeListener {
 		return view;
 	}
 
-	private void updateDisplay(View view, ViewHolder holder,
-			CheckListItem mListItem) {
+	private void updateDisplay(View view, ViewHolder holder, CheckListItem mListItem) {
 		holder.editTextView.setOnFocusChangeListener(this);
 		holder.editTextView.setText(checkListItem.getValue());
 
@@ -55,18 +52,15 @@ public class ListRow_Note extends ListRow implements OnFocusChangeListener {
 		}
 
 		@Override
-		protected void setupViewItems(ViewGroup viewGroup,
-				CheckListItem checkListItem) {
-			this.editTextView = (EditText) viewGroup
-					.findViewById(R.id.lst_note);
+		protected void setupViewItems(ViewGroup viewGroup, CheckListItem checkListItem) {
+			this.editTextView = (EditText) viewGroup.findViewById(R.id.lst_note);
 		}
 	}
 
 	@Override
 	public void onFocusChange(View v, boolean hasFocus) {
 		if (!v.isFocused() && this.listener != null) {
-			checkListItem.setValue(((ViewHolder) this.holder).editTextView
-					.getText().toString());
+			checkListItem.setValue(((ViewHolder) this.holder).editTextView.getText().toString());
 			updateRowChanged(v, this.checkListItem);
 		}
 

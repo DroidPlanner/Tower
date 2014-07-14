@@ -43,8 +43,8 @@ public class MAVLinkClient implements MAVLinkStreams.MAVLinkOutputStream {
 	}
 
 	private void init() {
-		parent.bindService(new Intent(parent, MAVLinkService.class),
-				mConnection, Context.BIND_AUTO_CREATE);
+		parent.bindService(new Intent(parent, MAVLinkService.class), mConnection,
+				Context.BIND_AUTO_CREATE);
 		mIsBound = true;
 	}
 
@@ -54,8 +54,7 @@ public class MAVLinkClient implements MAVLinkStreams.MAVLinkOutputStream {
 			// it, then now is the time to unregister.
 			if (mService != null) {
 				try {
-					Message msg = Message.obtain(null,
-							MAVLinkService.MSG_UNREGISTER_CLIENT);
+					Message msg = Message.obtain(null, MAVLinkService.MSG_UNREGISTER_CLIENT);
 					msg.replyTo = mMessenger;
 					mService.send(msg);
 
@@ -102,8 +101,7 @@ public class MAVLinkClient implements MAVLinkStreams.MAVLinkOutputStream {
 		public void onServiceConnected(ComponentName className, IBinder service) {
 			mService = new Messenger(service);
 			try {
-				Message msg = Message.obtain(null,
-						MAVLinkService.MSG_REGISTER_CLIENT);
+				Message msg = Message.obtain(null, MAVLinkService.MSG_REGISTER_CLIENT);
 				msg.replyTo = mMessenger;
 				mService.send(msg);
 				onConnectedService();

@@ -87,16 +87,13 @@ public class AttitudeIndicator extends View {
 		radiusExternal = Math.min(halfHeight, halfWidth) / YAW_ARROW_SIZE;
 		radiusInternal = radiusExternal * INTERNAL_RADIUS;
 
-		internalBounds = new RectF(-radiusInternal, -radiusInternal,
-				radiusInternal, radiusInternal);
+		internalBounds = new RectF(-radiusInternal, -radiusInternal, radiusInternal, radiusInternal);
 
-		skyPaint.setShader(new LinearGradient(0, -radiusInternal, 0,
-				radiusInternal, Color.parseColor("#0082d6"), Color
-						.parseColor("#2cb1e1"), TileMode.CLAMP));
+		skyPaint.setShader(new LinearGradient(0, -radiusInternal, 0, radiusInternal, Color
+				.parseColor("#0082d6"), Color.parseColor("#2cb1e1"), TileMode.CLAMP));
 
-		groundPaint.setShader(new LinearGradient(0, radiusInternal, 0,
-				radiusInternal, Color.parseColor("#4bbba1"), Color
-						.parseColor("#008f63"), TileMode.CLAMP));
+		groundPaint.setShader(new LinearGradient(0, radiusInternal, 0, radiusInternal, Color
+				.parseColor("#4bbba1"), Color.parseColor("#008f63"), TileMode.CLAMP));
 
 	}
 
@@ -125,8 +122,7 @@ public class AttitudeIndicator extends View {
 	}
 
 	private void radialLineTo(Path path, float angle, float radius) {
-		path.lineTo((float) Math.sin(angle) * radius, (float) Math.cos(angle)
-				* radius);
+		path.lineTo((float) Math.sin(angle) * radius, (float) Math.cos(angle) * radius);
 	}
 
 	private void drawSkyAndGround(Canvas canvas) {
@@ -135,10 +131,8 @@ public class AttitudeIndicator extends View {
 
 		// Overlay the ground
 		groundPath.reset();
-		float pitchProjection = (float) Math.toDegrees(Math.acos(pitch
-				/ PITCH_RANGE));
-		groundPath.addArc(internalBounds, 90 - pitchProjection - roll,
-				pitchProjection * 2);
+		float pitchProjection = (float) Math.toDegrees(Math.acos(pitch / PITCH_RANGE));
+		groundPath.addArc(internalBounds, 90 - pitchProjection - roll, pitchProjection * 2);
 		canvas.drawPath(groundPath, groundPaint);
 
 	}
@@ -148,28 +142,23 @@ public class AttitudeIndicator extends View {
 				* PITCH_TICK_LINE_LENGTH;
 		float lineY = (float) (Math.sin(Math.toRadians(-roll)) * radiusInternal)
 				* PITCH_TICK_LINE_LENGTH;
-		float dx = (float) (Math.cos(Math.toRadians(-roll - 90))
-				* radiusInternal / PITCH_RANGE);
-		float dy = (float) (Math.sin(Math.toRadians(-roll - 90))
-				* radiusInternal / PITCH_RANGE);
+		float dx = (float) (Math.cos(Math.toRadians(-roll - 90)) * radiusInternal / PITCH_RANGE);
+		float dy = (float) (Math.sin(Math.toRadians(-roll - 90)) * radiusInternal / PITCH_RANGE);
 		int i = (int) ((-PITCH_RANGE + pitch + PITCH_TICK_PADDING) / PITCH_TICK_SPACING);
 		int loopEnd = (int) ((PITCH_RANGE + pitch - PITCH_TICK_PADDING) / PITCH_TICK_SPACING);
 		for (; i <= loopEnd; i++) {
 			float degree = -pitch + PITCH_TICK_SPACING * i;
-			canvas.drawLine(lineX + dx * degree, lineY + dy * degree, -lineX
-					+ dx * degree, -lineY + dy * degree, tickPaint);
+			canvas.drawLine(lineX + dx * degree, lineY + dy * degree, -lineX + dx * degree, -lineY
+					+ dy * degree, tickPaint);
 		}
 	}
 
 	private void drawPlane(Canvas canvas) {
-		canvas.drawLine(radiusInternal * PLANE_SIZE, 0, -radiusInternal
-				* PLANE_SIZE, 0, planePaint);
-		canvas.drawLine(0, 0, 0, -radiusInternal * PLANE_SIZE * 5 / 12,
-				planeFinPaint);
-		canvas.drawCircle(0, 0, radiusInternal * PLANE_SIZE * PLANE_BODY_SIZE,
-				planePaint);
-		canvas.drawCircle(0, 0, radiusInternal * PLANE_SIZE * PLANE_BODY_SIZE
-				/ 2f, planeCenterPaint);
+		canvas.drawLine(radiusInternal * PLANE_SIZE, 0, -radiusInternal * PLANE_SIZE, 0, planePaint);
+		canvas.drawLine(0, 0, 0, -radiusInternal * PLANE_SIZE * 5 / 12, planeFinPaint);
+		canvas.drawCircle(0, 0, radiusInternal * PLANE_SIZE * PLANE_BODY_SIZE, planePaint);
+		canvas.drawCircle(0, 0, radiusInternal * PLANE_SIZE * PLANE_BODY_SIZE / 2f,
+				planeCenterPaint);
 	}
 
 	public void setAttitude(float roll, float pitch, float yaw) {

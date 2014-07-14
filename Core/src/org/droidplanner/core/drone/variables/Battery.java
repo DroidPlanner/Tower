@@ -25,8 +25,7 @@ public class Battery extends DroneVariable {
 		return battCurrent;
 	}
 
-	public void setBatteryState(double battVolt, double battRemain,
-			double battCurrent) {
+	public void setBatteryState(double battVolt, double battRemain, double battCurrent) {
 		if (this.battVolt != battVolt | this.battRemain != battRemain
 				| this.battCurrent != battCurrent) {
 			this.battVolt = battVolt;

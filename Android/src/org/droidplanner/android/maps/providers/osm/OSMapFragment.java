@@ -58,8 +58,7 @@ public class OSMapFragment extends Fragment implements DPMap {
 		@Override
 		public boolean onMarkerClick(Marker marker, MapView mapView) {
 			if (mMarkerClickListener != null) {
-				return mMarkerClickListener
-						.onMarkerClick(getMarkerInfo(marker));
+				return mMarkerClickListener.onMarkerClick(getMarkerInfo(marker));
 			}
 			return false;
 		}
@@ -71,8 +70,7 @@ public class OSMapFragment extends Fragment implements DPMap {
 		public void onMarkerDrag(Marker marker) {
 			if (mMarkerDragListener != null) {
 				final MarkerInfo markerInfo = getMarkerInfo(marker);
-				markerInfo.setPosition(DroneHelper.GeoPointToCoord(marker
-						.getPosition()));
+				markerInfo.setPosition(DroneHelper.GeoPointToCoord(marker.getPosition()));
 				mMarkerDragListener.onMarkerDrag(markerInfo);
 			}
 		}
@@ -81,8 +79,7 @@ public class OSMapFragment extends Fragment implements DPMap {
 		public void onMarkerDragEnd(Marker marker) {
 			if (mMarkerDragListener != null) {
 				final MarkerInfo markerInfo = getMarkerInfo(marker);
-				markerInfo.setPosition(DroneHelper.GeoPointToCoord(marker
-						.getPosition()));
+				markerInfo.setPosition(DroneHelper.GeoPointToCoord(marker.getPosition()));
 				mMarkerDragListener.onMarkerDragEnd(markerInfo);
 			}
 		}
@@ -91,8 +88,7 @@ public class OSMapFragment extends Fragment implements DPMap {
 		public void onMarkerDragStart(Marker marker) {
 			if (mMarkerDragListener != null) {
 				final MarkerInfo markerInfo = getMarkerInfo(marker);
-				markerInfo.setPosition(DroneHelper.GeoPointToCoord(marker
-						.getPosition()));
+				markerInfo.setPosition(DroneHelper.GeoPointToCoord(marker.getPosition()));
 				mMarkerDragListener.onMarkerDragStart(markerInfo);
 			}
 		}
@@ -106,8 +102,7 @@ public class OSMapFragment extends Fragment implements DPMap {
 	private Drone mDrone;
 	private DroidPlannerPrefs mAppPrefs;
 
-	private final AtomicReference<AutoPanMode> mPanMode = new AtomicReference(
-			AutoPanMode.DISABLED);
+	private final AtomicReference<AutoPanMode> mPanMode = new AtomicReference(AutoPanMode.DISABLED);
 
 	private MyLocationNewOverlay mLocationOverlay;
 	private CompassOverlay mCompassOverlay;
@@ -126,10 +121,8 @@ public class OSMapFragment extends Fragment implements DPMap {
 	private DPMap.OnMarkerDragListener mMarkerDragListener;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		final View view = inflater.inflate(R.layout.fragment_osmap, container,
-				false);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		final View view = inflater.inflate(R.layout.fragment_osmap, container, false);
 		mMapView = (MapView) view.findViewById(R.id.osm_mapview);
 
 		final Bundle args = getArguments();
@@ -153,12 +146,11 @@ public class OSMapFragment extends Fragment implements DPMap {
 	private void setupMapUI() {
 		final Context context = getActivity();
 
-		mCompassOverlay = new CompassOverlay(context,
-				new InternalCompassOrientationProvider(context), mMapView);
-		mLocationOverlay = new MyLocationNewOverlay(context,
-				new GpsMyLocationProvider(context), mMapView);
-		final RotationGestureOverlay rotationOverlay = new RotationGestureOverlay(
-				context, mMapView);
+		mCompassOverlay = new CompassOverlay(context, new InternalCompassOrientationProvider(
+				context), mMapView);
+		mLocationOverlay = new MyLocationNewOverlay(context, new GpsMyLocationProvider(context),
+				mMapView);
+		final RotationGestureOverlay rotationOverlay = new RotationGestureOverlay(context, mMapView);
 		rotationOverlay.setEnabled(true);
 
 		final MapEventsOverlay eventsOverlay = new MapEventsOverlay(context,
@@ -167,8 +159,7 @@ public class OSMapFragment extends Fragment implements DPMap {
 					@Override
 					public boolean singleTapConfirmedHelper(GeoPoint iGeoPoint) {
 						if (mMapClickListener != null) {
-							mMapClickListener.onMapClick(DroneHelper
-									.GeoPointToCoord(iGeoPoint));
+							mMapClickListener.onMapClick(DroneHelper.GeoPointToCoord(iGeoPoint));
 							return true;
 						}
 						return false;
@@ -291,8 +282,7 @@ public class OSMapFragment extends Fragment implements DPMap {
 		final int currentZoomLevel = mMapView.getZoomLevel();
 		final GeoPoint myLocation = mLocationOverlay.getMyLocation();
 		if (myLocation != null) {
-			updateCamera(DroneHelper.GeoPointToCoord(myLocation),
-					currentZoomLevel);
+			updateCamera(DroneHelper.GeoPointToCoord(myLocation), currentZoomLevel);
 		}
 	}
 
@@ -308,8 +298,7 @@ public class OSMapFragment extends Fragment implements DPMap {
 		final GeoPoint position = DroneHelper.CoordToGeoPoint(coord);
 		if (mMaxFlightPathSize > 0) {
 			if (mFlightPath == null) {
-				mFlightPath = new Polyline(getActivity()
-						.getApplicationContext());
+				mFlightPath = new Polyline(getActivity().getApplicationContext());
 				mFlightPath.setColor(FLIGHT_PATH_DEFAULT_COLOR);
 				mFlightPath.setWidth(FLIGHT_PATH_DEFAULT_WIDTH);
 				mMapView.getOverlays().add(mFlightPath);
@@ -342,9 +331,8 @@ public class OSMapFragment extends Fragment implements DPMap {
 		final SharedPreferences settings = mAppPrefs.prefs;
 
 		final IMapController mapController = mMapView.getController();
-		mapController.setCenter(new GeoPoint(settings.getFloat(PREF_LAT,
-				DEFAULT_LATITUDE), settings.getFloat(PREF_LNG,
-				DEFAULT_LONGITUDE)));
+		mapController.setCenter(new GeoPoint(settings.getFloat(PREF_LAT, DEFAULT_LATITUDE),
+				settings.getFloat(PREF_LNG, DEFAULT_LONGITUDE)));
 		mapController.setZoom(settings.getInt(PREF_ZOOM, DEFAULT_ZOOM_LEVEL));
 		mMapView.setRotation(settings.getFloat(PREF_BEA, DEFAULT_BEARING));
 	}
@@ -356,8 +344,7 @@ public class OSMapFragment extends Fragment implements DPMap {
 		MapView.Projection projection = mMapView.getProjection();
 
 		for (Coord2D point : path) {
-			IGeoPoint coord = projection.fromPixels((float) point.getX(),
-					(float) point.getY());
+			IGeoPoint coord = projection.fromPixels((float) point.getX(), (float) point.getY());
 			coords.add(DroneHelper.GeoPointToCoord(coord));
 		}
 
@@ -367,8 +354,7 @@ public class OSMapFragment extends Fragment implements DPMap {
 	@Override
 	public void saveCameraPosition() {
 		final IGeoPoint mapCenter = mMapView.getMapCenter();
-		mAppPrefs.prefs.edit()
-				.putFloat(PREF_LAT, (float) mapCenter.getLatitude())
+		mAppPrefs.prefs.edit().putFloat(PREF_LAT, (float) mapCenter.getLatitude())
 				.putFloat(PREF_LNG, (float) mapCenter.getLongitude())
 				.putFloat(PREF_BEA, mMapView.getRotation())
 				.putInt(PREF_ZOOM, mMapView.getZoomLevel()).apply();
@@ -434,8 +420,7 @@ public class OSMapFragment extends Fragment implements DPMap {
 
 	@Override
 	public void updateMarker(MarkerInfo markerInfo, boolean isDraggable) {
-		final GeoPoint position = DroneHelper.CoordToGeoPoint(markerInfo
-				.getPosition());
+		final GeoPoint position = DroneHelper.CoordToGeoPoint(markerInfo.getPosition());
 		Marker marker = mMarkers.get(markerInfo);
 		if (marker == null) {
 			marker = new Marker(mMapView);
@@ -486,18 +471,16 @@ public class OSMapFragment extends Fragment implements DPMap {
 	@Override
 	public void updateDroneLeashPath(PathSource pathSource) {
 		List<Coord2D> pathCoords = pathSource.getPathPoints();
-		final List<GeoPoint> geoPoints = new ArrayList<GeoPoint>(
-				pathCoords.size());
+		final List<GeoPoint> geoPoints = new ArrayList<GeoPoint>(pathCoords.size());
 		for (Coord2D coord : pathCoords) {
 			geoPoints.add(DroneHelper.CoordToGeoPoint(coord));
 		}
 
 		if (mDroneLeashPath == null) {
-			mDroneLeashPath = new Polyline(getActivity()
-					.getApplicationContext());
+			mDroneLeashPath = new Polyline(getActivity().getApplicationContext());
 			mDroneLeashPath.setColor(DRONE_LEASH_DEFAULT_COLOR);
-			mDroneLeashPath.setWidth(DroneHelper.scaleDpToPixels(
-					DRONE_LEASH_DEFAULT_WIDTH, getResources()));
+			mDroneLeashPath.setWidth(DroneHelper.scaleDpToPixels(DRONE_LEASH_DEFAULT_WIDTH,
+					getResources()));
 			mMapView.getOverlays().add(mDroneLeashPath);
 		}
 
@@ -508,8 +491,7 @@ public class OSMapFragment extends Fragment implements DPMap {
 	@Override
 	public void updateMissionPath(PathSource pathSource) {
 		List<Coord2D> pathCoords = pathSource.getPathPoints();
-		final List<GeoPoint> geoPoints = new ArrayList<GeoPoint>(
-				pathCoords.size());
+		final List<GeoPoint> geoPoints = new ArrayList<GeoPoint>(pathCoords.size());
 		for (Coord2D coord : pathCoords) {
 			geoPoints.add(DroneHelper.CoordToGeoPoint(coord));
 		}
@@ -539,6 +521,13 @@ public class OSMapFragment extends Fragment implements DPMap {
 		switch (event) {
 		case GPS:
 			break;
+		default:
+			break;
 		}
+	}
+	
+	@Override
+	public void zoomToFit(List<Coord2D> coords) {
+		// NOP - not implemented at this time
 	}
 }

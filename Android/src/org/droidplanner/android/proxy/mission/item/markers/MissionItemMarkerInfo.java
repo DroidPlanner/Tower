@@ -17,8 +17,8 @@ import android.graphics.Bitmap;
 /**
  * Template class and factory for a mission item's marker source.
  */
-public abstract class MissionItemMarkerInfo extends MarkerInfo.SimpleMarkerInfo
-		implements Serializable {
+public abstract class MissionItemMarkerInfo extends MarkerInfo.SimpleMarkerInfo implements
+		Serializable {
 
 	protected final MissionItemProxy mMarkerOrigin;
 
@@ -49,8 +49,7 @@ public abstract class MissionItemMarkerInfo extends MarkerInfo.SimpleMarkerInfo
 			break;
 
 		case SURVEY:
-			markerInfos.addAll(new SurveyMarkerInfoProvider(origin)
-					.getMarkersInfos());
+			markerInfos.addAll(new SurveyMarkerInfoProvider(origin).getMarkersInfos());
 			break;
 
 		default:
@@ -80,8 +79,7 @@ public abstract class MissionItemMarkerInfo extends MarkerInfo.SimpleMarkerInfo
 
 	@Override
 	public Coord2D getPosition() {
-		return ((SpatialCoordItem) mMarkerOrigin.getMissionItem())
-				.getCoordinate();
+		return ((SpatialCoordItem) mMarkerOrigin.getMissionItem()).getCoordinate();
 	}
 
 	@Override
@@ -110,15 +108,13 @@ public abstract class MissionItemMarkerInfo extends MarkerInfo.SimpleMarkerInfo
 		}
 
 		return MarkerWithText.getMarkerWithTextAndDetail(drawable,
-				Integer.toString(missionProxy.getOrder(mMarkerOrigin)),
-				getIconDetail(), res);
+				Integer.toString(missionProxy.getOrder(mMarkerOrigin)), getIconDetail(), res);
 	}
 
 	private String getIconDetail() {
 		try {
 			final MissionProxy missionProxy = mMarkerOrigin.getMissionProxy();
-			if (missionProxy.getAltitudeDiffFromPreviousItem(mMarkerOrigin)
-					.valueInMeters() == 0) {
+			if (missionProxy.getAltitudeDiffFromPreviousItem(mMarkerOrigin).valueInMeters() == 0) {
 				return null;
 			} else {
 				return null; // altitude.toString();

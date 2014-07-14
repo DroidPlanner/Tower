@@ -130,8 +130,7 @@ public class MissionSelection {
 	 * 
 	 * @param listener
 	 */
-	public void removeSelectionUpdateListener(
-			MissionSelection.OnSelectionUpdateListener listener) {
+	public void removeSelectionUpdateListener(MissionSelection.OnSelectionUpdateListener listener) {
 		mSelectionsListeners.remove(listener);
 	}
 }

@@ -2,18 +2,17 @@ package org.droidplanner.android.utils;
 
 import java.util.Locale;
 
-import org.droidplanner.R;
 import org.droidplanner.android.communication.connection.BluetoothConnection;
 import org.droidplanner.android.communication.connection.MAVLinkConnection;
 import org.droidplanner.android.communication.connection.TcpConnection;
 import org.droidplanner.android.communication.connection.UdpConnection;
 import org.droidplanner.android.communication.connection.UsbConnection;
 import org.droidplanner.android.maps.providers.DPMapProvider;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.preference.PreferenceManager;
 
 /**
  * Contains application related functions.
@@ -76,13 +75,11 @@ public class Utils {
 	 * @return selected map provider
 	 */
 	public static DPMapProvider getMapProvider(Context context) {
-		final String mapProviderName = PreferenceManager
-				.getDefaultSharedPreferences(context).getString(
-						context.getString(R.string.pref_maps_providers_key),
-						null);
+		DroidPlannerPrefs prefs = new DroidPlannerPrefs(context);
+		final String mapProviderName = prefs .getMapProviderName();
 
-		return mapProviderName == null ? DPMapProvider.DEFAULT_MAP_PROVIDER
-				: DPMapProvider.getMapProvider(mapProviderName);
+		return mapProviderName == null ? DPMapProvider.DEFAULT_MAP_PROVIDER : DPMapProvider
+				.getMapProvider(mapProviderName);
 	}
 
 	/**
@@ -92,12 +89,8 @@ public class Utils {
 	 *            Application context
 	 */
 	public static void updateUILanguage(Context context) {
-		final boolean isUiLanguageEnglish = PreferenceManager
-				.getDefaultSharedPreferences(context).getBoolean(
-						Constants.PREF_UI_LANGUAGE,
-						Constants.DEFAULT_PREF_UI_LANGUAGE);
-
-		if (isUiLanguageEnglish) {
+		DroidPlannerPrefs prefs = new DroidPlannerPrefs(context);
+		if (prefs.isEnglishDefaultLanguage()) {
 			Configuration config = new Configuration();
 			config.locale = Locale.ENGLISH;
 

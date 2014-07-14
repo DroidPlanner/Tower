@@ -18,19 +18,16 @@ public class GridBuilder {
 
 	private Grid grid;
 
-	public GridBuilder(Polygon polygon, SurveyData surveyData,
-			Coord2D originPoint) {
+	public GridBuilder(Polygon polygon, SurveyData surveyData, Coord2D originPoint) {
 		this.poly = polygon;
 		this.origin = originPoint;
 		this.angle = surveyData.getAngle();
 		this.lineDist = surveyData.getLateralPictureDistance().valueInMeters();
 		this.innerWPs = surveyData.shouldGenerateInnerWPs();
-		this.wpDistance = surveyData.getLongitudinalPictureDistance()
-				.valueInMeters();
+		this.wpDistance = surveyData.getLongitudinalPictureDistance().valueInMeters();
 	}
 
-	public GridBuilder(Polygon polygon, double angle, double distance,
-			Coord2D originPoint) {
+	public GridBuilder(Polygon polygon, double angle, double distance, Coord2D originPoint) {
 		this.poly = polygon;
 		this.origin = originPoint;
 		this.angle = angle;
@@ -41,14 +38,13 @@ public class GridBuilder {
 	public Grid generate() throws Exception {
 		List<Coord2D> polygonPoints = poly.getPoints();
 
-		List<LineCoord2D> circumscribedGrid = new CircumscribedGrid(
-				polygonPoints, angle, lineDist).getGrid();
-		List<LineCoord2D> trimedGrid = new Trimmer(circumscribedGrid,
-				poly.getLines()).getTrimmedGrid();
+		List<LineCoord2D> circumscribedGrid = new CircumscribedGrid(polygonPoints, angle, lineDist)
+				.getGrid();
+		List<LineCoord2D> trimedGrid = new Trimmer(circumscribedGrid, poly.getLines())
+				.getTrimmedGrid();
 		EndpointSorter gridSorter = new EndpointSorter(trimedGrid, wpDistance);
 		gridSorter.sortGrid(origin, innerWPs);
-		grid = new Grid(gridSorter.getSortedGrid(),
-				gridSorter.getCameraLocations());
+		grid = new Grid(gridSorter.getSortedGrid(), gridSorter.getCameraLocations());
 		return grid;
 	}
 

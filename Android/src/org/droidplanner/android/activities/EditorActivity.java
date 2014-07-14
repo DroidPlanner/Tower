@@ -7,6 +7,8 @@ import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 import org.droidplanner.android.dialogs.YesNoDialog;
+import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
+import org.droidplanner.android.dialogs.openfile.OpenMissionDialog;
 import org.droidplanner.android.fragments.EditorListFragment;
 import org.droidplanner.android.fragments.EditorMapFragment;
 import org.droidplanner.android.fragments.EditorToolsFragment;
@@ -18,6 +20,8 @@ import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.MissionSelection;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.proxy.mission.item.fragments.MissionDetailFragment;
+import org.droidplanner.android.utils.file.IO.MissionReader;
+import org.droidplanner.android.utils.file.IO.MissionWriter;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
@@ -42,9 +46,8 @@ import android.widget.Toast;
  * user to create and/or modify autonomous missions for the drone.
  */
 public class EditorActivity extends SuperUI implements OnPathFinishedListener,
-		OnEditorToolSelected, MissionDetailFragment.OnMissionDetailListener,
-		OnEditorInteraction, Callback,
-		MissionSelection.OnSelectionUpdateListener {
+		OnEditorToolSelected, MissionDetailFragment.OnMissionDetailListener, OnEditorInteraction,
+		Callback, MissionSelection.OnSelectionUpdateListener {
 
 	/**
 	 * Used to retrieve the item detail window when the activity is destroyed,
@@ -129,14 +132,13 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 				planningMapFragment.goToDroneLocation();
 			}
 		});
-		mGoToDroneLocation
-				.setOnLongClickListener(new View.OnLongClickListener() {
-					@Override
-					public boolean onLongClick(View v) {
-						planningMapFragment.setAutoPanMode(AutoPanMode.DRONE);
-						return true;
-					}
-				});
+		mGoToDroneLocation.setOnLongClickListener(new View.OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+				planningMapFragment.setAutoPanMode(AutoPanMode.DRONE);
+				return true;
+			}
+		});
 
 		final RadioButton normalToggle = (RadioButton) findViewById(R.id.normalWpToggle);
 		normalToggle.setOnClickListener(new View.OnClickListener() {
@@ -169,24 +171,6 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	}
 
 	@Override
-	public void onWindowFocusChanged(boolean hasFocus) {
-		super.onWindowFocusChanged(hasFocus);
-		updateMapPadding();
-	}
-
-	/**
-	 * Account for the various ui elements and update the map padding so that it
-	 * remains 'visible'.
-	 */
-	private void updateMapPadding() {
-		int topPadding = mLocationButtonsContainer.getBottom()
-				+ mLocationButtonsContainer.getPaddingBottom();
-		int leftPadding = mLocationButtonsContainer.getLeft()
-				- mLocationButtonsContainer.getPaddingLeft();
-		planningMapFragment.setMapPadding(leftPadding, topPadding, 0, 0);
-	}
-
-	@Override
 	public void onResume() {
 		super.onResume();
 		setupTool(getTool());
@@ -204,6 +188,72 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		missionProxy.selection.removeSelectionUpdateListener(this);
 	}
 
+	@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        getMenuInflater().inflate(R.menu.menu_mission, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_zoom_fit_mission:
+                planningMapFragment.zoomToFit();
+                return true;
+
+            case R.id.menu_open_mission:
+                openMissionFile();
+                return true;
+
+            case R.id.menu_save_mission:
+                saveMissionFile();
+                return true;
+
+            default:
+                return super.onMenuItemSelected(featureId, item);
+        }
+    }
+
+    private void openMissionFile() {
+        OpenFileDialog missionDialog = new OpenMissionDialog(drone) {
+            @Override
+            public void waypointFileLoaded(MissionReader reader) {
+                drone.mission.onMissionLoaded(reader.getMsgMissionItems());
+                planningMapFragment.zoomToFit();
+            }
+        };
+        missionDialog.openDialog(this);
+    }
+
+    private void saveMissionFile() {
+
+        if (MissionWriter.write(drone.mission.getMsgMissionItems())) {
+            Toast.makeText(this, "File saved", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Error saving file", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+		super.onWindowFocusChanged(hasFocus);
+		updateMapPadding();
+	}
+
+	/**
+	 * Account for the various ui elements and update the map padding so that it
+	 * remains 'visible'.
+	 */
+	private void updateMapPadding() {
+		int topPadding = mLocationButtonsContainer.getBottom()
+				+ mLocationButtonsContainer.getPaddingBottom();
+		int leftPadding = mLocationButtonsContainer.getLeft()
+				- mLocationButtonsContainer.getPaddingLeft();
+		planningMapFragment.setMapPadding(leftPadding, topPadding, 0, 0);
+	}
+	
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
@@ -283,8 +333,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 		case POLY:
 			enableSplineToggle(false);
-			Toast.makeText(this, R.string.draw_the_survey_region,
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, R.string.draw_the_survey_region, Toast.LENGTH_SHORT).show();
 			gestureMapFragment.enableGestureDetection();
 			break;
 
@@ -319,8 +368,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 	private void enableSplineToggle(boolean isEnabled) {
 		if (mSplineToggleContainer != null) {
-			mSplineToggleContainer.setVisibility(isEnabled ? View.VISIBLE
-					: View.INVISIBLE);
+			mSplineToggleContainer.setVisibility(isEnabled ? View.VISIBLE : View.INVISIBLE);
 		}
 	}
 
@@ -340,10 +388,9 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		if (mContainerItemDetail == null) {
 			itemDetailFragment.show(fragmentManager, ITEM_DETAIL_TAG);
 		} else {
-			fragmentManager
-					.beginTransaction()
-					.replace(R.id.containerItemDetail, itemDetailFragment,
-							ITEM_DETAIL_TAG).commit();
+			fragmentManager.beginTransaction()
+					.replace(R.id.containerItemDetail, itemDetailFragment, ITEM_DETAIL_TAG)
+					.commit();
 		}
 	}
 
@@ -357,8 +404,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 			if (mContainerItemDetail == null) {
 				itemDetailFragment.dismiss();
 			} else {
-				fragmentManager.beginTransaction().remove(itemDetailFragment)
-						.commit();
+				fragmentManager.beginTransaction().remove(itemDetailFragment).commit();
 			}
 			itemDetailFragment = null;
 		}
@@ -397,8 +443,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	}
 
 	@Override
-	public void onWaypointTypeChanged(MissionItemProxy newItem,
-			MissionItemProxy oldItem) {
+	public void onWaypointTypeChanged(MissionItemProxy newItem, MissionItemProxy oldItem) {
 		missionProxy.replace(oldItem, newItem);
 	}
 
@@ -515,10 +560,8 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	}
 
 	private void doClearMissionConfirmation() {
-		YesNoDialog ynd = YesNoDialog.newInstance(
-				getString(R.string.dlg_clear_mission_title),
-				getString(R.string.dlg_clear_mission_confirm),
-				new YesNoDialog.Listener() {
+		YesNoDialog ynd = YesNoDialog.newInstance(getString(R.string.dlg_clear_mission_title),
+				getString(R.string.dlg_clear_mission_confirm), new YesNoDialog.Listener() {
 					@Override
 					public void onYes() {
 						missionProxy.clear();

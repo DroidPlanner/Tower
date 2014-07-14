@@ -45,14 +45,13 @@ public class SplinePath {
 	private static List<Coord2D> processPath(List<Coord2D> points) {
 		final List<Coord2D> results = new ArrayList<Coord2D>();
 		for (int i = 3; i < points.size(); i++) {
-			results.addAll(processPathSegment(points.get(i - 3),
-					points.get(i - 2), points.get(i - 1), points.get(i)));
+			results.addAll(processPathSegment(points.get(i - 3), points.get(i - 2),
+					points.get(i - 1), points.get(i)));
 		}
 		return results;
 	}
 
-	private static List<Coord2D> processPathSegment(Coord2D l1, Coord2D l2,
-			Coord2D l3, Coord2D l4) {
+	private static List<Coord2D> processPathSegment(Coord2D l1, Coord2D l2, Coord2D l3, Coord2D l4) {
 		Spline spline = new Spline(l1, l2, l3, l4);
 		return spline.generateCoordinates(SPLINE_DECIMATION);
 	}

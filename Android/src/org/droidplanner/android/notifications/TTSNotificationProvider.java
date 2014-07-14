@@ -67,8 +67,7 @@ public class TTSNotificationProvider implements OnInitListener,
 		if (tts != null) {
 			switch (event) {
 			case INVALID_POLYGON:
-				Toast.makeText(context, R.string.exception_draw_polygon,
-						Toast.LENGTH_SHORT).show();
+				Toast.makeText(context, R.string.exception_draw_polygon, Toast.LENGTH_SHORT).show();
 				break;
 			case ARMING:
 				speakArmedState(drone.state.isArmed());
@@ -83,16 +82,14 @@ public class TTSNotificationProvider implements OnInitListener,
 				speakMode(drone.state.getMode());
 				break;
 			case MISSION_SENT:
-				Toast.makeText(context, "Waypoints sent", Toast.LENGTH_SHORT)
-						.show();
+				Toast.makeText(context, "Waypoints sent", Toast.LENGTH_SHORT).show();
 				speak("Waypoints saved to Drone");
 				break;
 			case GPS_FIX:
 				speakGpsMode(drone.GPS.getFixTypeNumeric());
 				break;
 			case MISSION_RECEIVED:
-				Toast.makeText(context, "Waypoints received from Drone",
-						Toast.LENGTH_SHORT).show();
+				Toast.makeText(context, "Waypoints received from Drone", Toast.LENGTH_SHORT).show();
 				speak("Waypoints received");
 				break;
 			case HEARTBEAT_FIRST:
@@ -127,7 +124,8 @@ public class TTSNotificationProvider implements OnInitListener,
 	}
 
 	private void batteryDischargeNotification(double battRemain) {
-		if (lastBatteryDischargeNotification != (int) ((battRemain - 1) / BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT)) {
+		if (lastBatteryDischargeNotification > (int) ((battRemain - 1) / BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT) ||
+				lastBatteryDischargeNotification + 1 < (int) ((battRemain - 1) / BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT)) {
 			lastBatteryDischargeNotification = (int) ((battRemain - 1) / BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT);
 			speak("Battery at" + (int) battRemain + "%");
 		}

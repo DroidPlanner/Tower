@@ -3,7 +3,6 @@ package org.droidplanner.android.activities.helpers;
 import org.droidplanner.R;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.maps.providers.MapProviderPreferences;
-import org.droidplanner.android.utils.Constants;
 
 import android.app.FragmentManager;
 import android.content.Intent;
@@ -21,14 +20,12 @@ public class MapPreferencesActivity extends FragmentActivity {
 	/**
 	 * Used as tag for logging.
 	 */
-	private final static String TAG = MapPreferencesActivity.class
-			.getSimpleName();
+	private final static String TAG = MapPreferencesActivity.class.getSimpleName();
 
 	/**
 	 * Bundle key used to pass, and retrieve the current map provider name.
 	 */
-	public final static String EXTRA_MAP_PROVIDER_NAME = Constants.PACKAGE_NAME
-			+ ".EXTRA_MAP_PROVIDER_NAME";
+	public final static String EXTRA_MAP_PROVIDER_NAME = "EXTRA_MAP_PROVIDER_NAME";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -59,10 +56,8 @@ public class MapPreferencesActivity extends FragmentActivity {
 		}
 
 		// Retrieve the selected map provider
-		final String mapProviderName = intent
-				.getStringExtra(EXTRA_MAP_PROVIDER_NAME);
-		final DPMapProvider mapProvider = DPMapProvider
-				.getMapProvider(mapProviderName);
+		final String mapProviderName = intent.getStringExtra(EXTRA_MAP_PROVIDER_NAME);
+		final DPMapProvider mapProvider = DPMapProvider.getMapProvider(mapProviderName);
 		if (mapProvider == null) {
 			Log.w(TAG, "Invalid map provider name: " + mapProviderName);
 			finish();
@@ -73,17 +68,14 @@ public class MapPreferencesActivity extends FragmentActivity {
 		final FragmentManager fm = getFragmentManager();
 		MapProviderPreferences currentPrefs = (MapProviderPreferences) fm
 				.findFragmentById(R.id.map_preferences_container);
-		if (currentPrefs == null
-				|| currentPrefs.getMapProvider() != mapProvider) {
+		if (currentPrefs == null || currentPrefs.getMapProvider() != mapProvider) {
 			currentPrefs = mapProvider.getMapProviderPreferences();
 			if (currentPrefs == null) {
-				Log.w(TAG, "Undefined map provider preferences for provider "
-						+ mapProviderName);
+				Log.w(TAG, "Undefined map provider preferences for provider " + mapProviderName);
 				finish();
 				return;
 			} else {
-				fm.beginTransaction()
-						.replace(R.id.map_preferences_container, currentPrefs)
+				fm.beginTransaction().replace(R.id.map_preferences_container, currentPrefs)
 						.commit();
 			}
 		}

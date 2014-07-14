@@ -14,8 +14,7 @@ public class Navigation extends DroneVariable {
 		super(myDrone);
 	}
 
-	public void setNavPitchRollYaw(float nav_pitch, float nav_roll,
-			short nav_bearing) {
+	public void setNavPitchRollYaw(float nav_pitch, float nav_roll, short nav_bearing) {
 		this.nav_pitch = nav_pitch;
 		this.nav_roll = nav_roll;
 		this.nav_bearing = nav_bearing;

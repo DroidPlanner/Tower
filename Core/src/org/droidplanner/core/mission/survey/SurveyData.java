@@ -14,8 +14,7 @@ public class SurveyData {
 	private boolean generateInnerWps = false;
 	private CameraInfo camera = new CameraInfo();
 
-	public void update(double angle, Altitude altitude, double overlap,
-			double sidelap) {
+	public void update(double angle, Altitude altitude, double overlap, double sidelap) {
 		this.angle = angle;
 		this.altitude = altitude;
 		this.overlap = overlap;
@@ -23,14 +22,14 @@ public class SurveyData {
 	}
 
 	public Length getLateralFootPrint() {
-		return new Length(altitude.valueInMeters()
-				* camera.getSensorLateralSize() / camera.focalLength);
+		return new Length(altitude.valueInMeters() * camera.getSensorLateralSize()
+				/ camera.focalLength);
 
 	}
 
 	public Length getLongitudinalFootPrint() {
-		return new Length(altitude.valueInMeters()
-				* camera.getSensorLongitudinalSize() / camera.focalLength);
+		return new Length(altitude.valueInMeters() * camera.getSensorLongitudinalSize()
+				/ camera.focalLength);
 	}
 
 	public Area getGroundResolution() {
@@ -38,18 +37,15 @@ public class SurveyData {
 				((altitude.valueInMeters()
 						* camera.getSensorLateralSize()
 						/ camera.focalLength
-						* (altitude.valueInMeters()
-								* camera.getSensorLongitudinalSize() / camera.focalLength) / (camera.sensorResolution * 1000))) / 10000);
+						* (altitude.valueInMeters() * camera.getSensorLongitudinalSize() / camera.focalLength) / (camera.sensorResolution * 1000))) / 10000);
 	}
 
 	public Length getLongitudinalPictureDistance() {
-		return new Length(getLongitudinalFootPrint().valueInMeters()
-				* (1 - overlap * .01));
+		return new Length(getLongitudinalFootPrint().valueInMeters() * (1 - overlap * .01));
 	}
 
 	public Length getLateralPictureDistance() {
-		return new Length(getLateralFootPrint().valueInMeters()
-				* (1 - sidelap * .01));
+		return new Length(getLateralFootPrint().valueInMeters() * (1 - sidelap * .01));
 	}
 
 	public void setCameraInfo(CameraInfo info) {
@@ -96,8 +92,7 @@ public class SurveyData {
 
 	@Override
 	public String toString() {
-		return String.format(Locale.US,
-				"Altitude: %f Angle %f Overlap: %f Sidelap: %f", altitude,
+		return String.format(Locale.US, "Altitude: %f Angle %f Overlap: %f Sidelap: %f", altitude,
 				angle, overlap, sidelap);
 	}
 

@@ -47,8 +47,7 @@ public class CameraInfoLoader {
 
 	private CameraInfo readAssetsFile(String file) throws Exception {
 		CameraInfoReader reader = new CameraInfoReader();
-		InputStream inputStream = context.getAssets().open(
-				filesInAssets.get(file));
+		InputStream inputStream = context.getAssets().open(filesInAssets.get(file));
 		reader.openFile(inputStream);
 		inputStream.close();
 		return reader.getCameraInfo();
@@ -65,12 +64,10 @@ public class CameraInfoLoader {
 
 	private List<String> getCameraInfoListFromAssets() {
 		try {
-			String[] list = context.getAssets()
-					.list(CAMERA_INFO_ASSESTS_FOLDER);
+			String[] list = context.getAssets().list(CAMERA_INFO_ASSESTS_FOLDER);
 			filesInAssets.clear();
 			for (String string : list) {
-				filesInAssets.put(string, CAMERA_INFO_ASSESTS_FOLDER + "/"
-						+ string);
+				filesInAssets.put(string, CAMERA_INFO_ASSESTS_FOLDER + "/" + string);
 			}
 			return Arrays.asList(list);
 
@@ -83,8 +80,7 @@ public class CameraInfoLoader {
 		List<String> list = Arrays.asList(FileList.getCameraInfoFileList());
 		filesInSdCard.clear();
 		for (String string : list) {
-			filesInSdCard.put(string, DirectoryPath.getCameraInfoPath()
-					+ string);
+			filesInSdCard.put(string, DirectoryPath.getCameraInfoPath() + string);
 		}
 		return list;
 	}

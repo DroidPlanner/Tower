@@ -11,8 +11,7 @@ public class Parameter implements Serializable {
 	public double value;
 	public int type;
 
-	private final static DecimalFormat format = (DecimalFormat) DecimalFormat
-			.getInstance();
+	private final static DecimalFormat format = (DecimalFormat) DecimalFormat.getInstance();
 	static {
 		format.applyPattern("0.###");
 	}

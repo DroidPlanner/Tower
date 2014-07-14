@@ -20,8 +20,7 @@ public class ListRow_Switch extends ListRow implements OnCheckedChangeListener {
 	public View getView(View convertView) {
 		View view;
 		if (convertView == null) {
-			ViewGroup viewGroup = (ViewGroup) inflater.inflate(
-					R.layout.list_switch_item, null);
+			ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.list_switch_item, null);
 			holder = new ViewHolder(viewGroup, checkListItem);
 
 			viewGroup.setTag(holder);
@@ -35,8 +34,7 @@ public class ListRow_Switch extends ListRow implements OnCheckedChangeListener {
 		return view;
 	}
 
-	private void updateDisplay(View view, ViewHolder holder,
-			CheckListItem mListItem) {
+	private void updateDisplay(View view, ViewHolder holder, CheckListItem mListItem) {
 		boolean failMandatory = false;
 
 		getData(mListItem);
@@ -63,8 +61,7 @@ public class ListRow_Switch extends ListRow implements OnCheckedChangeListener {
 		}
 
 		@Override
-		protected void setupViewItems(ViewGroup viewGroup,
-				CheckListItem checkListItem) {
+		protected void setupViewItems(ViewGroup viewGroup, CheckListItem checkListItem) {
 			this.switchView = (Switch) viewGroup.findViewById(R.id.lst_switch);
 		}
 	}

@@ -1,5 +1,7 @@
 package org.droidplanner.core.mission;
 
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -114,8 +116,7 @@ public class Mission extends DroneVariable {
 	public Altitude getLastAltitude() {
 		Altitude alt;
 		try {
-			SpatialCoordItem lastItem = (SpatialCoordItem) items.get(items
-					.size() - 1);
+			SpatialCoordItem lastItem = (SpatialCoordItem) items.get(items.size() - 1);
 			alt = lastItem.getCoordinate().getAltitude();
 		} catch (Exception e) {
 			alt = defaultAlt;
@@ -165,16 +166,11 @@ public class Mission extends DroneVariable {
 		if (i > 0) {
 			MissionItem previus = items.get(i - 1);
 			if (previus instanceof SpatialCoordItem) {
-				return waypoint
-						.getCoordinate()
-						.getAltitude()
-						.subtract(
-								((SpatialCoordItem) previus).getCoordinate()
-										.getAltitude());
+				return waypoint.getCoordinate().getAltitude()
+						.subtract(((SpatialCoordItem) previus).getCoordinate().getAltitude());
 			}
 		}
-		throw new IllegalArgumentException(
-				"Last waypoint doesn't have an altitude");
+		throw new IllegalArgumentException("Last waypoint doesn't have an altitude");
 	}
 
 	public Length getDistanceFromLastWaypoint(SpatialCoordItem waypoint)
@@ -187,8 +183,7 @@ public class Mission extends DroneVariable {
 						((SpatialCoordItem) previous).getCoordinate());
 			}
 		}
-		throw new IllegalArgumentException(
-				"Last waypoint doesn't have a coordinate");
+		throw new IllegalArgumentException("Last waypoint doesn't have a coordinate");
 	}
 
 	public boolean hasItem(MissionItem item) {
@@ -205,6 +200,17 @@ public class Mission extends DroneVariable {
 			notifyMissionUpdate();
 		}
 	}
+
+    public void onMissionLoaded(List<msg_mission_item> msgs) {
+        if (msgs != null) {
+            myDrone.home.setHome(msgs.get(0));
+            msgs.remove(0); // Remove Home waypoint
+            items.clear();
+            items.addAll(processMavLinkMessages(msgs));
+            myDrone.events.notifyDroneEvent(DroneEventsType.MISSION_RECEIVED);
+            notifyMissionUpdate();
+        }
+    }
 
 	private List<MissionItem> processMavLinkMessages(List<msg_mission_item> msgs) {
 		List<MissionItem> received = new ArrayList<MissionItem>();
@@ -241,11 +247,15 @@ public class Mission extends DroneVariable {
 	 * Sends the mission to the drone using the mavlink protocol.
 	 */
 	public void sendMissionToAPM() {
-		List<msg_mission_item> data = new ArrayList<msg_mission_item>();
-		data.add(myDrone.home.packMavlink());
-		for (MissionItem item : items) {
-			data.addAll(item.packMissionItem());
-		}
-		myDrone.waypointManager.writeWaypoints(data);
+        myDrone.waypointManager.writeWaypoints(getMsgMissionItems());
 	}
+
+    public List<msg_mission_item> getMsgMissionItems() {
+        final List<msg_mission_item> data = new ArrayList<msg_mission_item>();
+        data.add(myDrone.home.packMavlink());
+        for (MissionItem item : items) {
+            data.addAll(item.packMissionItem());
+        }
+        return data;
+    }
 }

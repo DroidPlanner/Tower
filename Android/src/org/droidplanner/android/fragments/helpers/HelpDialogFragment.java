@@ -36,19 +36,14 @@ public class HelpDialogFragment extends DialogFragment {
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		final Activity activity = (Activity) mHelpProvider;
-		return new AlertDialog.Builder(activity)
-				.setTitle(R.string.help)
-				.setItems(mHelpProvider.getHelpItems()[0],
-						new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
-								activity.startActivity(new Intent(
-										Intent.ACTION_VIEW,
-										Uri.parse(mHelpProvider.getHelpItems()[1][which]
-												.toString())));
-							}
-						}).create();
+		return new AlertDialog.Builder(activity).setTitle(R.string.help)
+				.setItems(mHelpProvider.getHelpItems()[0], new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri
+								.parse(mHelpProvider.getHelpItems()[1][which].toString())));
+					}
+				}).create();
 	}
 
 	public static HelpDialogFragment newInstance() {

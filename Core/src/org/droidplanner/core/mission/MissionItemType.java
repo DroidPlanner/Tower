@@ -17,9 +17,9 @@ import org.droidplanner.core.mission.waypoints.Waypoint;
 
 public enum MissionItemType {
 	WAYPOINT("Waypoint"), SPLINE_WAYPOINT("Spline Waypoint"), TAKEOFF("Takeoff"), RTL(
-			"Return to Launch"), LAND("Land"), LOITER("Loiter"), CIRCLE(
-			"Circle"), LOITERT("Loiter Time"), LOITER_INF("Loiter indefinitly"), ROI(
-			"Region of Interest"), SURVEY("Survey");
+			"Return to Launch"), LAND("Land"), LOITER("Loiter"), CIRCLE("Circle"), LOITERT(
+			"Loiter Time"), LOITER_INF("Loiter indefinitly"), ROI("Region of Interest"), SURVEY(
+			"Survey");
 
 	private final String name;
 
@@ -31,8 +31,7 @@ public enum MissionItemType {
 		return name;
 	}
 
-	public MissionItem getNewItem(MissionItem referenceItem)
-			throws IllegalArgumentException {
+	public MissionItem getNewItem(MissionItem referenceItem) throws IllegalArgumentException {
 		switch (this) {
 		case WAYPOINT:
 			return new Waypoint(referenceItem);
@@ -55,11 +54,10 @@ public enum MissionItemType {
 		case ROI:
 			return new RegionOfInterest(referenceItem);
 		case SURVEY:
-			return new Survey(referenceItem.getMission(),
-					Collections.<Coord2D> emptyList());
+			return new Survey(referenceItem.getMission(), Collections.<Coord2D> emptyList());
 		default:
-			throw new IllegalArgumentException(
-					"Unrecognized mission item type (" + name + ")" + ".");
+			throw new IllegalArgumentException("Unrecognized mission item type (" + name + ")"
+					+ ".");
 		}
 	}
 }

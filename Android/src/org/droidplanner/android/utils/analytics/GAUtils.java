@@ -94,16 +94,14 @@ public class GAUtils {
 		if (sAppTracker == null) {
 			final Context context = app.getApplicationContext();
 
-			final GoogleAnalytics analytics = GoogleAnalytics
-					.getInstance(context);
+			final GoogleAnalytics analytics = GoogleAnalytics.getInstance(context);
 
 			// Call is needed for now to allow dispatching of auto activity
 			// reports
 			// (http://stackoverflow.com/a/23256722/1088814)
 			analytics.enableAutoActivityReports(app);
 
-			analytics.setAppOptOut(!new DroidPlannerPrefs(context)
-					.isUsageStatisticsEnabled());
+			analytics.setAppOptOut(!new DroidPlannerPrefs(context).isUsageStatisticsEnabled());
 
 			// If we're in debug mode, set log level to verbose.
 			if (BuildConfig.DEBUG) {
@@ -120,16 +118,14 @@ public class GAUtils {
 
 		final String login = prefs.getDroneshareLogin();
 		final String password = prefs.getDronesharePassword();
-		final boolean isDroneShareUser = prefs.getLiveUploadEnabled()
-				&& !login.isEmpty() && !password.isEmpty();
+		final boolean isDroneShareUser = prefs.getLiveUploadEnabled() && !login.isEmpty()
+				&& !password.isEmpty();
 
 		sendHit(new HitBuilders.AppViewBuilder()
 				.setNewSession()
-				.setCustomDimension(
-						CustomDimension.MAVLINK_CONNECTION_TYPE.getIndex(),
+				.setCustomDimension(CustomDimension.MAVLINK_CONNECTION_TYPE.getIndex(),
 						connectionType)
-				.setCustomDimension(
-						CustomDimension.DRONESHARE_ACTIVE.getIndex(),
+				.setCustomDimension(CustomDimension.DRONESHARE_ACTIVE.getIndex(),
 						String.valueOf(isDroneShareUser)).build());
 	}
 

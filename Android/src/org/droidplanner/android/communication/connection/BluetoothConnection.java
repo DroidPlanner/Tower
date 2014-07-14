@@ -27,7 +27,7 @@ public class BluetoothConnection extends MAVLinkConnection {
 	private BluetoothSocket bluetoothSocket;
 
 	protected DroidPlannerPrefs mAppPrefs;
-	
+
 	public BluetoothConnection(Context parentContext) {
 		super(parentContext);
 		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -44,27 +44,25 @@ public class BluetoothConnection extends MAVLinkConnection {
 		// Reset the bluetooth connection
 		resetConnection();
 
-        //Retrieve the stored device
-        BluetoothDevice device = null;
-        final String addressName = mAppPrefs.getBluetoothDeviceAddress();
-        
-        if (addressName != null) {
-            // strip name, use address part - stored as <address>;<name>
-            final String part[] = addressName.split(";");
-            try {
-                device = mBluetoothAdapter.getRemoteDevice(part[0]);
-            } catch (IllegalArgumentException ex) {
-                // invalid configuration (device may have been removed)
-                // NOP fall through to 'no device'
-            }
-        }
-        // no device
-        if(device == null)
-            device = findSerialBluetoothBoard();
+		// Retrieve the stored device
+		BluetoothDevice device = null;
+		final String addressName = mAppPrefs.getBluetoothDeviceAddress();
 
-        Log.d(BLUE,
-				"Trying to connect to device with address "
-						+ device.getAddress());
+		if (addressName != null) {
+			// strip name, use address part - stored as <address>;<name>
+			final String part[] = addressName.split(";");
+			try {
+				device = mBluetoothAdapter.getRemoteDevice(part[0]);
+			} catch (IllegalArgumentException ex) {
+				// invalid configuration (device may have been removed)
+				// NOP fall through to 'no device'
+			}
+		}
+		// no device
+		if (device == null)
+			device = findSerialBluetoothBoard();
+
+		Log.d(BLUE, "Trying to connect to device with address " + device.getAddress());
 		Log.d(BLUE, "BT Create Socket Call...");
 		bluetoothSocket = device.createInsecureRfcommSocketToServiceRecord(UUID
 				.fromString(UUID_SPP_DEVICE));
@@ -82,10 +80,8 @@ public class BluetoothConnection extends MAVLinkConnection {
 	}
 
 	@SuppressLint("NewApi")
-	private BluetoothDevice findSerialBluetoothBoard()
-			throws UnknownHostException {
-		Set<BluetoothDevice> pairedDevices = mBluetoothAdapter
-				.getBondedDevices();
+	private BluetoothDevice findSerialBluetoothBoard() throws UnknownHostException {
+		Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
 		// If there are paired devices
 		if (pairedDevices.size() > 0) {
 			// Loop through paired devices
@@ -97,8 +93,7 @@ public class BluetoothConnection extends MAVLinkConnection {
 					// TODO maybe this will not work on newer devices
 					Log.d(BLUE, "id:" + id.toString());
 					if (id.toString().equalsIgnoreCase(UUID_SPP_DEVICE)) {
-						Log.d(BLUE, ">> Selected: " + device.getName()
-								+ " Using: " + id.toString());
+						Log.d(BLUE, ">> Selected: " + device.getName() + " Using: " + id.toString());
 						return device;
 					}
 				}

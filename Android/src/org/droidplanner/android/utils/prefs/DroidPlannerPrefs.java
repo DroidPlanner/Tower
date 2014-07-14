@@ -3,7 +3,6 @@ package org.droidplanner.android.utils.prefs;
 import java.util.UUID;
 
 import org.droidplanner.R;
-import org.droidplanner.android.utils.Constants;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.file.IO.VehicleProfileReader;
 import org.droidplanner.core.drone.profiles.VehicleProfile;
@@ -24,15 +23,13 @@ import android.preference.PreferenceManager;
  * 
  * 
  */
-public class DroidPlannerPrefs implements
-		org.droidplanner.core.drone.Preferences {
+public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preferences {
 
 	/*
 	 * Default preference value
 	 */
 	public static final boolean DEFAULT_USAGE_STATISTICS = true;
-	public static final String DEFAULT_CONNECTION_TYPE = Utils.ConnectionType.USB
-			.name();
+	public static final String DEFAULT_CONNECTION_TYPE = Utils.ConnectionType.USB.name();
 	private static final boolean DEFAULT_KEEP_SCREEN_ON = false;
 	private static final boolean DEFAULT_MAX_VOLUME_ON_START = false;
 	private static final boolean DEFAULT_PERMANENT_NOTIFICATION = true;
@@ -40,6 +37,7 @@ public class DroidPlannerPrefs implements
 	private static final String DEFAULT_MAP_TYPE = "";
 	private static final AutoPanMode DEFAULT_AUTO_PAN_MODE = AutoPanMode.DISABLED;
 	private static final boolean DEFAULT_GUIDED_MODE_ON_LONG_PRESS = true;
+	public static final boolean DEFAULT_PREF_UI_LANGUAGE = false;
 
 	// Public for legacy usage
 	public SharedPreferences prefs;
@@ -80,8 +78,7 @@ public class DroidPlannerPrefs implements
 
 	@Override
 	public FirmwareType getVehicleType() {
-		String str = prefs.getString("pref_vehicle_type",
-				FirmwareType.ARDU_COPTER.toString());
+		String str = prefs.getString("pref_vehicle_type", FirmwareType.ARDU_COPTER.toString());
 		return FirmwareType.firmwareFromString(str);
 	}
 
@@ -96,18 +93,15 @@ public class DroidPlannerPrefs implements
 
 		rates.extendedStatus = Integer.parseInt(prefs.getString(
 				"pref_mavlink_stream_rate_ext_stat", "0"));
-		rates.extra1 = Integer.parseInt(prefs.getString(
-				"pref_mavlink_stream_rate_extra1", "0"));
-		rates.extra2 = Integer.parseInt(prefs.getString(
-				"pref_mavlink_stream_rate_extra2", "0"));
-		rates.extra3 = Integer.parseInt(prefs.getString(
-				"pref_mavlink_stream_rate_extra3", "0"));
-		rates.position = Integer.parseInt(prefs.getString(
-				"pref_mavlink_stream_rate_position", "0"));
-		rates.rcChannels = Integer.parseInt(prefs.getString(
-				"pref_mavlink_stream_rate_rc_channels", "0"));
-		rates.rawSensors = Integer.parseInt(prefs.getString(
-				"pref_mavlink_stream_rate_raw_sensors", "0"));
+		rates.extra1 = Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_extra1", "0"));
+		rates.extra2 = Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_extra2", "0"));
+		rates.extra3 = Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_extra3", "0"));
+		rates.position = Integer
+				.parseInt(prefs.getString("pref_mavlink_stream_rate_position", "0"));
+		rates.rcChannels = Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_rc_channels",
+				"0"));
+		rates.rawSensors = Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_raw_sensors",
+				"0"));
 		rates.rawController = Integer.parseInt(prefs.getString(
 				"pref_mavlink_stream_rate_raw_controller", "0"));
 		return rates;
@@ -117,8 +111,7 @@ public class DroidPlannerPrefs implements
 	 * @return true if google analytics reporting is enabled.
 	 */
 	public boolean isUsageStatisticsEnabled() {
-		return prefs.getBoolean(
-				context.getString(R.string.pref_usage_statistics_key),
+		return prefs.getBoolean(context.getString(R.string.pref_usage_statistics_key),
 				DEFAULT_USAGE_STATISTICS);
 	}
 
@@ -126,8 +119,7 @@ public class DroidPlannerPrefs implements
 	 * @return the selected mavlink connection type.
 	 */
 	public String getMavLinkConnectionType() {
-		return prefs.getString(
-				context.getString(R.string.pref_connection_type_key),
+		return prefs.getString(context.getString(R.string.pref_connection_type_key),
 				DEFAULT_CONNECTION_TYPE);
 	}
 
@@ -135,8 +127,7 @@ public class DroidPlannerPrefs implements
 	 * @return true if the device screen should stay on.
 	 */
 	public boolean keepScreenOn() {
-		return prefs.getBoolean(
-				context.getString(R.string.pref_keep_screen_bright_key),
+		return prefs.getBoolean(context.getString(R.string.pref_keep_screen_bright_key),
 				DEFAULT_KEEP_SCREEN_ON);
 	}
 
@@ -144,8 +135,7 @@ public class DroidPlannerPrefs implements
 	 * @return true if Volume should be set to 100% on app start
 	 */
 	public boolean maxVolumeOnStart() {
-		return prefs.getBoolean(
-				context.getString(R.string.pref_request_max_volume_key),
+		return prefs.getBoolean(context.getString(R.string.pref_request_max_volume_key),
 				DEFAULT_MAX_VOLUME_ON_START);
 	}
 
@@ -154,8 +144,7 @@ public class DroidPlannerPrefs implements
 	 *         connected.
 	 */
 	public boolean isNotificationPermanent() {
-		return prefs.getBoolean(
-				context.getString(R.string.pref_permanent_notification_key),
+		return prefs.getBoolean(context.getString(R.string.pref_permanent_notification_key),
 				DEFAULT_PERMANENT_NOTIFICATION);
 	}
 
@@ -164,8 +153,7 @@ public class DroidPlannerPrefs implements
 	 *         provider).
 	 */
 	public boolean isOfflineMapEnabled() {
-		return prefs.getBoolean(
-				context.getString(R.string.pref_advanced_use_offline_maps_key),
+		return prefs.getBoolean(context.getString(R.string.pref_advanced_use_offline_maps_key),
 				DEFAULT_OFFLINE_MAP_ENABLED);
 	}
 
@@ -173,8 +161,7 @@ public class DroidPlannerPrefs implements
 	 * @return the selected map type (if supported by the map provider).
 	 */
 	public String getMapType() {
-		return prefs.getString(context.getString(R.string.pref_map_type_key),
-				DEFAULT_MAP_TYPE);
+		return prefs.getString(context.getString(R.string.pref_map_type_key), DEFAULT_MAP_TYPE);
 	}
 
 	/**
@@ -201,17 +188,31 @@ public class DroidPlannerPrefs implements
 	}
 
 	public boolean isGuidedModeOnLongPressEnabled() {
-		return prefs.getBoolean("pref_guided_mode_on_long_press",
-				DEFAULT_GUIDED_MODE_ON_LONG_PRESS);
+		return prefs
+				.getBoolean("pref_guided_mode_on_long_press", DEFAULT_GUIDED_MODE_ON_LONG_PRESS);
 	}
 
 	public String getBluetoothDeviceAddress() {
-		return prefs.getString(Constants.PREF_BLUETOOTH_DEVICE_ADDRESS, null);
+		return prefs.getString(context.getString(R.string.pref_bluetooth_device_address_key), null);
 	}
 
 	public void setBluetoothDeviceAddress(String newAddress) {
 		final SharedPreferences.Editor editor = prefs.edit();
-		editor.putString(Constants.PREF_BLUETOOTH_DEVICE_ADDRESS, newAddress)
-				.apply();
+		editor.putString(context.getString(R.string.pref_bluetooth_device_address_key), newAddress).apply();
+	}
+	
+	/**
+	 * Use HDOP instead of satellite count on infobar
+	 */
+	public boolean shouldGpsHdopBeDisplayed() {
+		return prefs.getBoolean(context.getString(R.string.pref_ui_gps_hdop_key), false);
+	}
+
+	public boolean isEnglishDefaultLanguage() {
+		return prefs.getBoolean(context.getString(R.string.pref_ui_language_english_key), DEFAULT_PREF_UI_LANGUAGE);
+	}
+
+	public String getMapProviderName() {
+		return prefs.getString(context.getString(R.string.pref_maps_providers_key), null);
 	}
 }
