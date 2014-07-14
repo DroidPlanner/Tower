@@ -1,12 +1,11 @@
 package org.droidplanner.android.communication.connection;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.UUID;
 
-import com.geeksville.apiproxy.GCSHookImpl;
-
 import android.util.Log;
+
+import com.geeksville.apiproxy.GCSHookImpl;
 
 /**
  * The Droidplanner specific bindings for the drone api FIXME - need to auto
@@ -30,8 +29,7 @@ public class DroneshareClient extends GCSHookImpl {
 				loginUser(login, password);
 
 			int sysId = 1;
-			setVehicleId("550e8400-e29b-41d4-a716-446655440000", interfaceNum,
-					sysId, false);
+			setVehicleId("550e8400-e29b-41d4-a716-446655440000", interfaceNum, sysId, false);
 
 			startMission(false, UUID.randomUUID());
 		} catch (Exception ex) {

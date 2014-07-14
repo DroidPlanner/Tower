@@ -1,5 +1,7 @@
 package org.droidplanner.android.maps;
 
+import org.droidplanner.R;
+
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -10,16 +12,12 @@ import android.graphics.LightingColorFilter;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
-import org.droidplanner.R;
-
 public class MarkerWithText {
 
 	private static final int RECT_PADDING = 6;
 
-	public static Bitmap getMarkerWithText(int color, String text,
-			Context context) {
-		return drawTextToBitmap(context, R.drawable.ic_marker_white, color,
-				text);
+	public static Bitmap getMarkerWithText(int color, String text, Context context) {
+		return drawTextToBitmap(context, R.drawable.ic_marker_white, color, text);
 	}
 
 	/**
@@ -27,8 +25,7 @@ public class MarkerWithText {
 	 * http://stackoverflow.com/questions/18335642/how-to-draw-text-
 	 * in-default-marker-of-google-map-v2?lq=1
 	 */
-	private static Bitmap drawTextToBitmap(Context gContext, int gResId,
-			int color, String gText) {
+	private static Bitmap drawTextToBitmap(Context gContext, int gResId, int color, String gText) {
 		Resources resources = gContext.getResources();
 		float scale = resources.getDisplayMetrics().density;
 		Bitmap bitmap = BitmapFactory.decodeResource(resources, gResId);
@@ -65,8 +62,8 @@ public class MarkerWithText {
 		return bitmap;
 	}
 
-	public static Bitmap getMarkerWithTextAndDetail(int gResId, String text,
-			String detail, Resources res) {
+	public static Bitmap getMarkerWithTextAndDetail(int gResId, String text, String detail,
+			Resources res) {
 		return drawTextAndDetailToBitmap(res, gResId, text, detail);
 	}
 
@@ -75,8 +72,8 @@ public class MarkerWithText {
 	 * http://stackoverflow.com/questions/18335642/how-to-draw-text-in-
 	 * default-marker-of-google-map-v2?lq=1
 	 */
-	private static Bitmap drawTextAndDetailToBitmap(Resources resources,
-			int gResId, String gText, String gDetail) {
+	private static Bitmap drawTextAndDetailToBitmap(Resources resources, int gResId, String gText,
+			String gDetail) {
 		float scale = resources.getDisplayMetrics().density;
 		Bitmap bitmap = BitmapFactory.decodeResource(resources, gResId);
 
@@ -127,14 +124,12 @@ public class MarkerWithText {
 		int x = (bitmap.getWidth() - brect.width()) / 2;
 		int y = bounds.top + (bitmap.getHeight() - brect.height()) / 2;
 		brect.offsetTo(x, y - (bounds.height()));
-		brect.set(brect.left - RECT_PADDING, brect.top - RECT_PADDING,
-				brect.right + RECT_PADDING, brect.bottom + RECT_PADDING);
+		brect.set(brect.left - RECT_PADDING, brect.top - RECT_PADDING, brect.right + RECT_PADDING,
+				brect.bottom + RECT_PADDING);
 
 		// draw text
 		x = (bitmap.getWidth() - bounds.width()) / 2;
-		y = bounds.top
-				+ (bitmap.getHeight() - (bounds.height() + dbounds.height()))
-				/ 2;
+		y = bounds.top + (bitmap.getHeight() - (bounds.height() + dbounds.height())) / 2;
 		canvas.drawText(gText, x, y, paint);
 
 		if (gDetail != null) {

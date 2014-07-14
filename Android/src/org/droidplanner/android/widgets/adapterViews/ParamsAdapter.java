@@ -7,10 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.droidplanner.R;
+import org.droidplanner.android.utils.file.IO.ParameterMetadataMapReader;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.profiles.VehicleProfile;
-import org.droidplanner.android.utils.file.IO.ParameterMetadataMapReader;
-import org.droidplanner.android.widgets.adapterViews.ParamsAdapterItem.Validation;
 import org.droidplanner.core.parameters.Parameter;
 import org.droidplanner.core.parameters.ParameterMetadata;
 
@@ -50,8 +49,7 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
 		this(context, resource, new ArrayList<ParamsAdapterItem>());
 	}
 
-	public ParamsAdapter(Context context, int resource,
-			List<ParamsAdapterItem> objects) {
+	public ParamsAdapter(Context context, int resource, List<ParamsAdapterItem> objects) {
 		super(context, resource, objects);
 
 		this.resource = resource;
@@ -77,17 +75,13 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
 
 		if (convertView == null) {
 			// create new view
-			final LayoutInflater inflater = ((Activity) getContext())
-					.getLayoutInflater();
+			final LayoutInflater inflater = ((Activity) getContext()).getLayoutInflater();
 			view = inflater.inflate(resource, parent, false);
 
 			paramTag = new ParamTag();
-			paramTag.setNameView((TextView) view
-					.findViewById(R.id.params_row_name));
-			paramTag.setDescView((TextView) view
-					.findViewById(R.id.params_row_desc));
-			paramTag.setValueView((EditText) view
-					.findViewById(R.id.params_row_value));
+			paramTag.setNameView((TextView) view.findViewById(R.id.params_row_name));
+			paramTag.setDescView((TextView) view.findViewById(R.id.params_row_desc));
+			paramTag.setValueView((EditText) view.findViewById(R.id.params_row_value));
 			view.setTag(paramTag);
 
 		} else {
@@ -125,8 +119,7 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
 		valueView.setOnFocusChangeListener(paramTag);
 
 		// alternate background color for clarity
-		view.setBackgroundColor((position % 2 == 1) ? colorAltRow
-				: Color.TRANSPARENT);
+		view.setBackgroundColor((position % 2 == 1) ? colorAltRow : Color.TRANSPARENT);
 
 		return view;
 	}
@@ -165,14 +158,12 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
 		// get metadata type from profile, bail if none
 		final String metadataType;
 		final VehicleProfile profile = drone.profile.getProfile();
-		if (profile == null
-				|| (metadataType = profile.getParameterMetadataType()) == null)
+		if (profile == null || (metadataType = profile.getParameterMetadataType()) == null)
 			return;
 
 		try {
 			// load
-			metadataMap = ParameterMetadataMapReader.load(getContext(),
-					metadataType);
+			metadataMap = ParameterMetadataMapReader.load(getContext(), metadataType);
 
 		} catch (Exception ex) {
 			// nop
@@ -200,13 +191,11 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
 
 			final InputMethodManager inputMethodManager = (InputMethodManager) getContext()
 					.getSystemService(Context.INPUT_METHOD_SERVICE);
-			inputMethodManager
-					.hideSoftInputFromWindow(view.getWindowToken(), 0);
+			inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
 		}
 	}
 
-	private class ParamTag implements TextWatcher, View.OnFocusChangeListener,
-			View.OnClickListener {
+	private class ParamTag implements TextWatcher, View.OnFocusChangeListener, View.OnClickListener {
 		private int position;
 		private TextView nameView;
 		private TextView descView;
@@ -242,8 +231,7 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
 
 		public double getValue() {
 			try {
-				return formatter.parse(valueView.getText().toString())
-						.doubleValue();
+				return formatter.parse(valueView.getText().toString()).doubleValue();
 			} catch (ParseException ex) {
 				// invalid number, return 0
 				return 0;
@@ -253,8 +241,7 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
 		public void setAppearance(ParamsAdapterItem item) {
 			final int resid;
 			if (item.isDirty()) {
-				final ParamsAdapterItem.Validation validation = item
-						.getValidation();
+				final ParamsAdapterItem.Validation validation = item.getValidation();
 				switch (validation) {
 				case VALID:
 					resid = R.style.paramValueValid;
@@ -274,14 +261,12 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
 		}
 
 		@Override
-		public void beforeTextChanged(CharSequence charSequence, int i, int i2,
-				int i3) {
+		public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
 			// nop
 		}
 
 		@Override
-		public void onTextChanged(CharSequence charSequence, int i, int i2,
-				int i3) {
+		public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
 			// nop
 		}
 

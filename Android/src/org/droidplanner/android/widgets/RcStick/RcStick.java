@@ -59,8 +59,7 @@ public class RcStick extends View {
 
 	public void setPosition(float x, float y) {
 		xPos = (int) ((width - 2 * stickRadius) * ((1 + x) / 2f)) + stickRadius;
-		yPos = (int) ((height - 2 * stickRadius) * ((1 - y) / 2f))
-				+ stickRadius;
+		yPos = (int) ((height - 2 * stickRadius) * ((1 - y) / 2f)) + stickRadius;
 		invalidate();
 	}
 

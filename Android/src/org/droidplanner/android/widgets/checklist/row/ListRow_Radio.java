@@ -19,11 +19,11 @@ public class ListRow_Radio extends ListRow implements OnCheckedChangeListener {
 		super(inflater, checkListItem);
 	}
 
+	@Override
 	public View getView(View convertView) {
 		View view;
 		if (convertView == null) {
-			ViewGroup viewGroup = (ViewGroup) inflater.inflate(
-					R.layout.list_radio_item, null);
+			ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.list_radio_item, null);
 			holder = new ViewHolder(viewGroup, checkListItem);
 			viewGroup.setTag(holder);
 			view = viewGroup;
@@ -35,8 +35,7 @@ public class ListRow_Radio extends ListRow implements OnCheckedChangeListener {
 		return view;
 	}
 
-	private void updateDisplay(View view, ViewHolder holder,
-			CheckListItem mListItem) {
+	private void updateDisplay(View view, ViewHolder holder, CheckListItem mListItem) {
 
 		holder.radioGroupView.setOnCheckedChangeListener(this);
 
@@ -45,6 +44,7 @@ public class ListRow_Radio extends ListRow implements OnCheckedChangeListener {
 
 	}
 
+	@Override
 	public int getViewType() {
 		return ListRow_Type.RADIO_ROW.ordinal();
 	}
@@ -57,18 +57,16 @@ public class ListRow_Radio extends ListRow implements OnCheckedChangeListener {
 		}
 
 		@Override
-		protected void setupViewItems(ViewGroup viewGroup,
-				CheckListItem checkListItem) {
-			this.radioGroupView = (RadioGroup) viewGroup
-					.findViewById(R.id.lst_radioGroup);
+		protected void setupViewItems(ViewGroup viewGroup, CheckListItem checkListItem) {
+			this.radioGroupView = (RadioGroup) viewGroup.findViewById(R.id.lst_radioGroup);
 
 			this.radioGroupView.removeAllViews();
 
 			List<String> optionLists = checkListItem.getOptionLists();
 			for (String optionlist : optionLists) {
 				RadioButton rButton = new RadioButton(viewGroup.getContext());
-				rButton.setLayoutParams(new LayoutParams(
-						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+				rButton.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
+						LayoutParams.WRAP_CONTENT));
 				rButton.setText(optionlist);
 				rButton.setId(optionLists.indexOf(optionlist));
 				this.radioGroupView.addView(rButton);
@@ -81,7 +79,7 @@ public class ListRow_Radio extends ListRow implements OnCheckedChangeListener {
 	@Override
 	public void onCheckedChanged(RadioGroup arg0, int arg1) {
 		checkListItem.setSelectedIndex(arg1);
-		updateRowChanged((View) arg0, this.checkListItem);
+		updateRowChanged(arg0, this.checkListItem);
 
 	}
 }

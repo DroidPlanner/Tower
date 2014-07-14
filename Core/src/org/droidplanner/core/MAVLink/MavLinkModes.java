@@ -9,8 +9,7 @@ import com.MAVLink.Messages.enums.MAV_CMD;
 import com.MAVLink.Messages.enums.MAV_FRAME;
 
 public class MavLinkModes {
-	public static void setGuidedMode(Drone drone, double latitude,
-			double longitude, double d) {
+	public static void setGuidedMode(Drone drone, double latitude, double longitude, double d) {
 		msg_mission_item msg = new msg_mission_item();
 		msg.seq = 0;
 		msg.current = 2; // TODO use guided mode enum

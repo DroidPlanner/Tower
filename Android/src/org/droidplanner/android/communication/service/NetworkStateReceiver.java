@@ -3,9 +3,9 @@ package org.droidplanner.android.communication.service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.content.IntentFilter;
 
 /**
  * When we see a network connection arrive, try to restart the upload
@@ -14,6 +14,7 @@ public class NetworkStateReceiver extends BroadcastReceiver {
 
 	private static NetworkStateReceiver registered = null;
 
+	@Override
 	public void onReceive(Context context, Intent intent) {
 		ConnectivityManager conn = (ConnectivityManager) context
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -27,8 +28,7 @@ public class NetworkStateReceiver extends BroadcastReceiver {
 	public static boolean isNetworkAvailable(Context context) {
 		ConnectivityManager connectivityManager = (ConnectivityManager) context
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo activeNetworkInfo = connectivityManager
-				.getActiveNetworkInfo();
+		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 		return activeNetworkInfo != null && activeNetworkInfo.isConnected();
 	}
 
@@ -38,8 +38,7 @@ public class NetworkStateReceiver extends BroadcastReceiver {
 			context.startService(UploaderService.createIntent(context));
 
 		if (registered == null) {
-			IntentFilter filter = new IntentFilter(
-					ConnectivityManager.CONNECTIVITY_ACTION);
+			IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
 
 			registered = new NetworkStateReceiver();
 			context.registerReceiver(registered, filter);

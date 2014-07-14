@@ -10,7 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 
 public class MissionTakeoffFragment extends MissionDetailFragment implements
-        SeekBarWithText.OnTextSeekBarChangedListener {
+		SeekBarWithText.OnTextSeekBarChangedListener {
 	private SeekBarWithText altitudeSeekBar;
 
 	@Override
@@ -19,8 +19,8 @@ public class MissionTakeoffFragment extends MissionDetailFragment implements
 	}
 
 	@Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
 		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.TAKEOFF));
 
 		Takeoff item = (Takeoff) this.itemRender.getMissionItem();

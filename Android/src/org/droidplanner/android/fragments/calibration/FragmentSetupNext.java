@@ -17,13 +17,11 @@ public class FragmentSetupNext extends SetupSidePanel {
 	private TextView textTitle, textDesc;;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 		final SetupRadioFragment setupFragment = (SetupRadioFragment) getParentFragment();
 
-		final View view = inflater.inflate(R.layout.fragment_setup_panel_next,
-				container, false);
+		final View view = inflater.inflate(R.layout.fragment_setup_panel_next, container, false);
 
 		textTitle = (TextView) view.findViewById(R.id.setupTitle);
 		textDesc = (TextView) view.findViewById(R.id.setupDesc);

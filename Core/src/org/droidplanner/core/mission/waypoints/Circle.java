@@ -36,9 +36,9 @@ public class Circle extends SpatialCoordItem {
 	}
 
 	public void setTurns(int turns) {
-		this.turns = (int)Math.abs(turns);
+		this.turns = Math.abs(turns);
 	}
-	
+
 	public int getNumeberOfTurns() {
 		return turns;
 	}
@@ -46,34 +46,34 @@ public class Circle extends SpatialCoordItem {
 	public double getRadius() {
 		return radius;
 	}
-	
-	public double getAltitudeStep(){
+
+	public double getAltitudeStep() {
 		return altitudeStep;
 	}
-	
-	public int getNumberOfSteps(){
+
+	public int getNumberOfSteps() {
 		return numberOfSteps;
 	}
-	
-	public void setMultiCircle(int number, double stepHeight){
+
+	public void setMultiCircle(int number, double stepHeight) {
 		this.numberOfSteps = number;
 		this.altitudeStep = stepHeight;
 	}
-	
-	public void setSingleCircle(){
+
+	public void setSingleCircle() {
 		numberOfSteps = 1;
 	}
 
 	@Override
 	public List<msg_mission_item> packMissionItem() {
-		
+
 		List<msg_mission_item> list = new ArrayList<msg_mission_item>();
-		
+
 		for (int i = 0; i < getNumberOfSteps(); i++) {
-			Length extraHeight = new Length(getAltitudeStep()*i);
-			packSingleCircle(list,extraHeight);			
+			Length extraHeight = new Length(getAltitudeStep() * i);
+			packSingleCircle(list, extraHeight);
 		}
-		
+
 		Log.d("CIRCLE", list.toString());
 		return list;
 	}

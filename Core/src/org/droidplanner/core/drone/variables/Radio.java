@@ -63,16 +63,15 @@ public class Radio extends DroneVariable {
 	 * @return percentage
 	 */
 	public int getSignalStrength() {
-		return (int) (MathUtil.Normalize(
-				Math.min(getFadeMargin(), getRemFadeMargin()), MIN_FADE_MARGIN,
-				MAX_FADE_MARGIN) * 100);
+		return (int) (MathUtil.Normalize(Math.min(getFadeMargin(), getRemFadeMargin()),
+				MIN_FADE_MARGIN, MAX_FADE_MARGIN) * 100);
 	}
 
-	public void setRadioState(short rxerrors, short fixed, byte rssi,
-			byte remrssi, byte txbuf, byte noise, byte remnoise) {
+	public void setRadioState(short rxerrors, short fixed, byte rssi, byte remrssi, byte txbuf,
+			byte noise, byte remnoise) {
 		if (this.rxerrors != rxerrors | this.fixed != fixed | this.rssi != rssi
-				| this.remrssi != remrssi | this.txbuf != txbuf
-				| this.noise != noise | this.remnoise != remnoise) {
+				| this.remrssi != remrssi | this.txbuf != txbuf | this.noise != noise
+				| this.remnoise != remnoise) {
 
 			this.rxerrors = rxerrors & 0xFFFF;
 			this.fixed = fixed & 0xFFFF;

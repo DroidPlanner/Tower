@@ -38,8 +38,7 @@ public class Waypoint extends SpatialCoordItem {
 		mavMsg.command = MAV_CMD.MAV_CMD_NAV_WAYPOINT;
 		mavMsg.param1 = (float) getDelay();
 		mavMsg.param2 = (float) getAcceptanceRadius();
-		mavMsg.param3 = (float) (isOrbitCCW() ? getOrbitalRadius() * -1.0
-				: getOrbitalRadius());
+		mavMsg.param3 = (float) (isOrbitCCW() ? getOrbitalRadius() * -1.0 : getOrbitalRadius());
 		mavMsg.param4 = (float) getYawAngle();
 		return list;
 	}
@@ -54,12 +53,12 @@ public class Waypoint extends SpatialCoordItem {
 		setYawAngle(mavMsg.param4);
 	}
 
-    @Override
-    public MissionItemType getType() {
-        return MissionItemType.WAYPOINT;
-    }
+	@Override
+	public MissionItemType getType() {
+		return MissionItemType.WAYPOINT;
+	}
 
-    public double getDelay() {
+	public double getDelay() {
 		return delay;
 	}
 

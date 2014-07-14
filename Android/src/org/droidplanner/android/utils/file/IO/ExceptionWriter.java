@@ -13,8 +13,7 @@ public class ExceptionWriter {
 
 	public void saveStackTraceToSD() {
 		try {
-			PrintStream out = new PrintStream(
-					FileStream.getExceptionFileStream());
+			PrintStream out = new PrintStream(FileStream.getExceptionFileStream());
 			exception.printStackTrace(out);
 			out.close();
 		} catch (Exception excep) {

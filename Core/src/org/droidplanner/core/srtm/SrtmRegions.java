@@ -9,8 +9,8 @@ import java.util.Scanner;
 import org.droidplanner.core.srtm.Srtm.OnProgressListner;
 
 public class SrtmRegions {
-	static final String[] REGIONS = { "Eurasia", "Africa", "Australia",
-			"Islands", "North_America", "South_America" };
+	static final String[] REGIONS = { "Eurasia", "Africa", "Australia", "Islands", "North_America",
+			"South_America" };
 	private Map<String, Integer> regionMap = new HashMap<String, Integer>();
 	private String path;
 

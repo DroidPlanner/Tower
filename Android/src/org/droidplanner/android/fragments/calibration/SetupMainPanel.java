@@ -40,8 +40,7 @@ public abstract class SetupMainPanel extends Fragment {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstaneState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstaneState) {
 		final View view = inflater.inflate(getPanelLayout(), container, false);
 
 		setupLocalViews(view);

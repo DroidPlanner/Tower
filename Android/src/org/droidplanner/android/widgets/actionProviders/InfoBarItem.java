@@ -1,5 +1,14 @@
 package org.droidplanner.android.widgets.actionProviders;
 
+import java.util.Collections;
+import java.util.List;
+
+import org.droidplanner.R;
+import org.droidplanner.android.utils.Constants;
+import org.droidplanner.android.widgets.spinners.ModeAdapter;
+import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
+import org.droidplanner.core.drone.Drone;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
@@ -13,15 +22,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.MAVLink.Messages.ApmModes;
-
-import org.droidplanner.R;
-import org.droidplanner.android.utils.Constants;
-import org.droidplanner.core.drone.Drone;
-import org.droidplanner.android.widgets.spinners.ModeAdapter;
-import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Set of actions supported by the info bar
@@ -43,8 +43,7 @@ public abstract class InfoBarItem {
 	 */
 	protected View mItemView;
 
-	protected InfoBarItem(Context context, View parentView, Drone drone,
-			int itemId) {
+	protected InfoBarItem(Context context, View parentView, Drone drone, int itemId) {
 		mItemId = itemId;
 		initItemView(context, parentView, drone);
 	}
@@ -59,8 +58,7 @@ public abstract class InfoBarItem {
 	 * @param drone
 	 *            current drone state
 	 */
-	protected void initItemView(final Context context, View parentView,
-			Drone drone) {
+	protected void initItemView(final Context context, View parentView, Drone drone) {
 		mItemView = parentView.findViewById(mItemId);
 	}
 
@@ -82,19 +80,16 @@ public abstract class InfoBarItem {
 	 * @param context
 	 *            application context
 	 */
-	protected static PopupWindow initPopupWindow(Context context,
-			int popupViewRes) {
+	protected static PopupWindow initPopupWindow(Context context, int popupViewRes) {
 		if (popupViewRes == 0)
 			return null;
 
 		final LayoutInflater inflater = LayoutInflater.from(context);
 		final View popupView = inflater.inflate(popupViewRes, null);
 
-		final PopupWindow popup = new PopupWindow(popupView,
-				ViewGroup.LayoutParams.WRAP_CONTENT,
+		final PopupWindow popup = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT,
 				ViewGroup.LayoutParams.WRAP_CONTENT, true);
-		popup.setBackgroundDrawable(context.getResources().getDrawable(
-				R.drawable.panel_white_bg));
+		popup.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.panel_white_bg));
 
 		return popup;
 	}
@@ -112,9 +107,8 @@ public abstract class InfoBarItem {
 		@Override
 		public void updateItemView(final Context context, final Drone drone) {
 			if (mItemView != null) {
-				String update = drone == null ? "--" : String.format(
-						"Home\n%s", drone.home.getDroneDistanceToHome()
-								.toString());
+				String update = drone == null ? "--" : String.format("Home\n%s", drone.home
+						.getDroneDistanceToHome().toString());
 				((TextView) mItemView).setText(update);
 			}
 		}
@@ -193,8 +187,7 @@ public abstract class InfoBarItem {
 		}
 
 		@Override
-		protected void initItemView(final Context context, View parentView,
-				final Drone drone) {
+		protected void initItemView(final Context context, View parentView, final Drone drone) {
 			super.initItemView(context, parentView, drone);
 			if (mItemView == null)
 				return;
@@ -213,8 +206,8 @@ public abstract class InfoBarItem {
 						long minutes = timeInSeconds / 60;
 						long seconds = timeInSeconds % 60;
 
-						((TextView) mItemView).setText(String.format(
-								"Air Time\n%02d:%02d", minutes, seconds));
+						((TextView) mItemView).setText(String.format("Air Time\n%02d:%02d",
+								minutes, seconds));
 					}
 
 					mHandler.postDelayed(this, FLIGHT_TIMER_PERIOD);
@@ -273,9 +266,8 @@ public abstract class InfoBarItem {
 		@Override
 		public void updateItemView(Context context, Drone drone) {
 			if (mItemView != null) {
-				String update = drone == null ? "--" : String.format(
-						"%2.1fv\n%2.0f%%", drone.battery.getBattVolt(),
-						drone.battery.getBattRemain());
+				String update = drone == null ? "--" : String.format("%2.1fv\n%2.0f%%",
+						drone.battery.getBattVolt(), drone.battery.getBattRemain());
 
 				((TextView) mItemView).setText(update);
 			}
@@ -312,8 +304,7 @@ public abstract class InfoBarItem {
 		}
 
 		@Override
-		protected void initItemView(Context context, View parentView,
-				Drone drone) {
+		protected void initItemView(Context context, View parentView, Drone drone) {
 			super.initItemView(context, parentView, drone);
 			if (mItemView == null)
 				return;
@@ -322,15 +313,11 @@ public abstract class InfoBarItem {
 
 			final View popupView = mPopup.getContentView();
 			mRssiView = (TextView) popupView.findViewById(R.id.bar_signal_rssi);
-			mRemRssiView = (TextView) popupView
-					.findViewById(R.id.bar_signal_remrssi);
-			mNoiseView = (TextView) popupView
-					.findViewById(R.id.bar_signal_noise);
-			mRemNoiseView = (TextView) popupView
-					.findViewById(R.id.bar_signal_remnoise);
+			mRemRssiView = (TextView) popupView.findViewById(R.id.bar_signal_remrssi);
+			mNoiseView = (TextView) popupView.findViewById(R.id.bar_signal_noise);
+			mRemNoiseView = (TextView) popupView.findViewById(R.id.bar_signal_remnoise);
 			mFadeView = (TextView) popupView.findViewById(R.id.bar_signal_fade);
-			mRemFadeView = (TextView) popupView
-					.findViewById(R.id.bar_signal_remfade);
+			mRemFadeView = (TextView) popupView.findViewById(R.id.bar_signal_remfade);
 
 			mItemView.setOnClickListener(new View.OnClickListener() {
 				@Override
@@ -361,19 +348,14 @@ public abstract class InfoBarItem {
 				mFadeView.setText(sDefaultValue);
 				mRemFadeView.setText(sDefaultValue);
 			} else {
-				infoUpdate = String.format("%d%%",
-						drone.radio.getSignalStrength());
+				infoUpdate = String.format("%d%%", drone.radio.getSignalStrength());
 
-				mRssiView.setText(String.format("RSSI %2.0f dB",
-						drone.radio.getRssi()));
-				mRemRssiView.setText(String.format("RemRSSI %2.0f dB",
-						drone.radio.getRemRssi()));
-				mNoiseView.setText(String.format("Noise %2.0f dB",
-						drone.radio.getNoise()));
-				mRemNoiseView.setText(String.format("RemNoise %2.0f dB",
-						drone.radio.getRemNoise()));
-				mFadeView.setText(String.format("Fade %2.0f dB",
-						drone.radio.getFadeMargin()));
+				mRssiView.setText(String.format("RSSI %2.0f dB", drone.radio.getRssi()));
+				mRemRssiView.setText(String.format("RemRSSI %2.0f dB", drone.radio.getRemRssi()));
+				mNoiseView.setText(String.format("Noise %2.0f dB", drone.radio.getNoise()));
+				mRemNoiseView
+						.setText(String.format("RemNoise %2.0f dB", drone.radio.getRemNoise()));
+				mFadeView.setText(String.format("Fade %2.0f dB", drone.radio.getFadeMargin()));
 				mRemFadeView.setText(String.format("RemFade %2.0f dB",
 						drone.radio.getRemFadeMargin()));
 			}
@@ -409,8 +391,7 @@ public abstract class InfoBarItem {
 		}
 
 		@Override
-		protected void initItemView(final Context context, View parentView,
-				final Drone drone) {
+		protected void initItemView(final Context context, View parentView, final Drone drone) {
 			super.initItemView(context, parentView, drone);
 			if (mItemView == null)
 				return;
@@ -423,8 +404,7 @@ public abstract class InfoBarItem {
 			modesSpinner
 					.setOnSpinnerItemSelectedListener(new SpinnerSelfSelect.OnSpinnerItemSelectedListener() {
 						@Override
-						public void onSpinnerItemSelected(Spinner parent,
-								int position, String text) {
+						public void onSpinnerItemSelected(Spinner parent, int position, String text) {
 							if (mDrone != null) {
 								final ApmModes newMode = (ApmModes) parent
 										.getItemAtPosition(position);
@@ -447,8 +427,7 @@ public abstract class InfoBarItem {
 			final int droneType = drone == null ? -1 : drone.type.getType();
 			if (droneType != mLastDroneType) {
 				final List<ApmModes> flightModes = droneType == -1 ? Collections
-						.<ApmModes> emptyList() : ApmModes
-						.getModeList(droneType);
+						.<ApmModes> emptyList() : ApmModes.getModeList(droneType);
 
 				mModeAdapter.clear();
 				mModeAdapter.addAll(flightModes);
@@ -458,8 +437,7 @@ public abstract class InfoBarItem {
 			}
 
 			if (mDrone != null)
-				modesSpinner.forcedSetSelection(mModeAdapter
-						.getPosition(mDrone.state.getMode()));
+				modesSpinner.forcedSetSelection(mModeAdapter.getPosition(mDrone.state.getMode()));
 		}
 	}
 
@@ -490,8 +468,7 @@ public abstract class InfoBarItem {
 		}
 
 		@Override
-		protected void initItemView(Context context, View parentView,
-				Drone drone) {
+		protected void initItemView(Context context, View parentView, Drone drone) {
 			super.initItemView(context, parentView, drone);
 			if (mItemView == null)
 				return;
@@ -500,12 +477,10 @@ public abstract class InfoBarItem {
 			mPopup = initPopupWindow(context, sPopupWindowLayoutId);
 			final View popupView = mPopup.getContentView();
 
-			mExtraInfoBarItems = new InfoBarItem[] {
-					new HomeInfo(context, popupView, drone),
+			mExtraInfoBarItems = new InfoBarItem[] { new HomeInfo(context, popupView, drone),
 					new GpsInfo(context, popupView, drone),
 					new BatteryInfo(context, popupView, drone),
-					new ExtraFlightTimeInfo(context, popupView, drone,
-							mItemView),
+					new ExtraFlightTimeInfo(context, popupView, drone, mItemView),
 					new ExtraSignalInfo(context, popupView, drone, mItemView) };
 
 			mItemView.setOnClickListener(new View.OnClickListener() {
@@ -541,15 +516,14 @@ public abstract class InfoBarItem {
 			 */
 			private final View mWindowView;
 
-			public ExtraFlightTimeInfo(Context context, View parentView,
-					Drone drone, View windowView) {
+			public ExtraFlightTimeInfo(Context context, View parentView, Drone drone,
+					View windowView) {
 				super(context, parentView, drone);
 				mWindowView = windowView;
 			}
 
 			@Override
-			protected void initItemView(Context context, final View parentView,
-					Drone drone) {
+			protected void initItemView(Context context, final View parentView, Drone drone) {
 				super.initItemView(context, parentView, drone);
 				if (mItemView == null)
 					return;
@@ -560,10 +534,8 @@ public abstract class InfoBarItem {
 						if (mPopup == null)
 							return;
 
-						int yLoc = mWindowView.getBottom()
-								+ mItemView.getBottom();
-						mPopup.showAtLocation(mWindowView, Gravity.RIGHT
-								| Gravity.TOP, 0, yLoc);
+						int yLoc = mWindowView.getBottom() + mItemView.getBottom();
+						mPopup.showAtLocation(mWindowView, Gravity.RIGHT | Gravity.TOP, 0, yLoc);
 					}
 				});
 			}
@@ -578,15 +550,13 @@ public abstract class InfoBarItem {
 			 */
 			private final View mWindowView;
 
-			public ExtraSignalInfo(Context context, View parentView,
-					Drone drone, View windowView) {
+			public ExtraSignalInfo(Context context, View parentView, Drone drone, View windowView) {
 				super(context, parentView, drone);
 				mWindowView = windowView;
 			}
 
 			@Override
-			protected void initItemView(Context context, final View parentView,
-					Drone drone) {
+			protected void initItemView(Context context, final View parentView, Drone drone) {
 				super.initItemView(context, parentView, drone);
 				if (mItemView == null)
 					return;
@@ -597,10 +567,8 @@ public abstract class InfoBarItem {
 						if (mPopup == null)
 							return;
 
-						int yLoc = mWindowView.getBottom()
-								+ mItemView.getBottom();
-						mPopup.showAtLocation(mWindowView, Gravity.RIGHT
-								| Gravity.TOP, 0, yLoc);
+						int yLoc = mWindowView.getBottom() + mItemView.getBottom();
+						mPopup.showAtLocation(mWindowView, Gravity.RIGHT | Gravity.TOP, 0, yLoc);
 					}
 				});
 			}

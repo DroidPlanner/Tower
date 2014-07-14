@@ -2,6 +2,8 @@ package org.droidplanner.core.mission.waypoints;
 
 import java.util.List;
 
+import junit.framework.TestCase;
+
 import org.droidplanner.core.helpers.coordinates.Coord3D;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.mission.Mission;
@@ -9,14 +11,11 @@ import org.droidplanner.core.mission.Mission;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_CMD;
 
-import junit.framework.TestCase;
-
 public class WaypointTest extends TestCase {
 
 	public void testPackMissionItem() {
 		Mission mission = new Mission(null);
-		Waypoint item = new Waypoint(mission,
-				new Coord3D(0, 1, new Altitude(2)));
+		Waypoint item = new Waypoint(mission, new Coord3D(0, 1, new Altitude(2)));
 
 		List<msg_mission_item> listOfMsg = item.packMissionItem();
 		assertEquals(1, listOfMsg.size());

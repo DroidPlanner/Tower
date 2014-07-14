@@ -9,9 +9,9 @@ import android.os.Bundle;
 import android.view.View;
 
 public class MissionLandFragment extends MissionDetailFragment implements
-        SeekBarWithText.OnTextSeekBarChangedListener {
+		SeekBarWithText.OnTextSeekBarChangedListener {
 
-	//private SeekBarWithText yawSeekBar;
+	// private SeekBarWithText yawSeekBar;
 
 	@Override
 	protected int getResource() {
@@ -19,19 +19,19 @@ public class MissionLandFragment extends MissionDetailFragment implements
 	}
 
 	@Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
 		Land item = (Land) this.itemRender.getMissionItem();
 		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.LAND));
-		//yawSeekBar = (SeekBarWithText) view.findViewById(R.id.waypointAngle);
-		//yawSeekBar.setValue(item.getYawAngle());
-		//yawSeekBar.setOnChangedListener(this);
+		// yawSeekBar = (SeekBarWithText) view.findViewById(R.id.waypointAngle);
+		// yawSeekBar.setValue(item.getYawAngle());
+		// yawSeekBar.setOnChangedListener(this);
 	}
 
 	@Override
 	public void onSeekBarChanged() {
 		Land item = (Land) this.itemRender.getMissionItem();
-		//item.setYawAngle((float) yawSeekBar.getValue());
+		// item.setYawAngle((float) yawSeekBar.getValue());
 	}
 
 }

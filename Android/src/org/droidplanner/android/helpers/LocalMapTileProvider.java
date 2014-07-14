@@ -50,8 +50,7 @@ public class LocalMapTileProvider implements TileProvider {
 		ByteArrayOutputStream buffer = null;
 
 		try {
-			String patch = DirectoryPath.getMapsPath()
-					+ getTileFilename(x, y, zoom);
+			String patch = DirectoryPath.getMapsPath() + getTileFilename(x, y, zoom);
 			in = new FileInputStream(patch);
 			buffer = new ByteArrayOutputStream();
 
