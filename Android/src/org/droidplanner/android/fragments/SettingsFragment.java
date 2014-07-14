@@ -6,13 +6,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashSet;
+import java.util.Locale;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.ConfigurationActivity;
 import org.droidplanner.android.activities.helpers.MapPreferencesActivity;
 import org.droidplanner.android.maps.providers.DPMapProvider;
-import org.droidplanner.android.utils.Constants;
 import org.droidplanner.android.utils.file.DirectoryPath;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
@@ -66,7 +66,7 @@ public class SettingsFragment extends DpPreferenceFragment implements
 		final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 
 		// Populate the drone settings category
-		final PreferenceCategory dronePrefs = (PreferenceCategory) findPreference(Constants.PREF_DRONE_SETTINGS);
+		final PreferenceCategory dronePrefs = (PreferenceCategory) findPreference(context.getString(R.string.pref_drone_settings_key));
 		if (dronePrefs != null) {
 			dronePrefs.removeAll();
 
@@ -109,7 +109,7 @@ public class SettingsFragment extends DpPreferenceFragment implements
 			for (int i = 0; i < providersCount; i++) {
 				final String providerName = providers[i].name();
 				providersNamesValues[i] = providerName;
-				providersNames[i] = providerName.toLowerCase().replace('_', ' ');
+				providersNames[i] = providerName.toLowerCase(Locale.ENGLISH).replace('_', ' ');
 			}
 
 			final String defaultProviderName = sharedPref.getString(mapsProvidersPrefKey,
@@ -371,6 +371,8 @@ public class SettingsFragment extends DpPreferenceFragment implements
 		case HEARTBEAT_FIRST:
 		case HEARTBEAT_RESTORED:
 			updateMavlinkVersionPreference(String.valueOf(drone.heartbeat.getMavlinkVersion()));
+			break;
+		default:
 			break;
 		}
 	}
