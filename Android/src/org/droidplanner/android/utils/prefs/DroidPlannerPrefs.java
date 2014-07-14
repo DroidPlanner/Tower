@@ -3,7 +3,6 @@ package org.droidplanner.android.utils.prefs;
 import java.util.UUID;
 
 import org.droidplanner.R;
-import org.droidplanner.android.utils.Constants;
 import org.droidplanner.android.utils.Utils;
 import org.droidplanner.android.utils.file.IO.VehicleProfileReader;
 import org.droidplanner.core.drone.profiles.VehicleProfile;
@@ -38,6 +37,7 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 	private static final String DEFAULT_MAP_TYPE = "";
 	private static final AutoPanMode DEFAULT_AUTO_PAN_MODE = AutoPanMode.DISABLED;
 	private static final boolean DEFAULT_GUIDED_MODE_ON_LONG_PRESS = true;
+	public static final boolean DEFAULT_PREF_UI_LANGUAGE = false;
 
 	// Public for legacy usage
 	public SharedPreferences prefs;
@@ -193,12 +193,12 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 	}
 
 	public String getBluetoothDeviceAddress() {
-		return prefs.getString(Constants.PREF_BLUETOOTH_DEVICE_ADDRESS, null);
+		return prefs.getString(context.getString(R.string.pref_bluetooth_device_address_key), null);
 	}
 
 	public void setBluetoothDeviceAddress(String newAddress) {
 		final SharedPreferences.Editor editor = prefs.edit();
-		editor.putString(Constants.PREF_BLUETOOTH_DEVICE_ADDRESS, newAddress).apply();
+		editor.putString(context.getString(R.string.pref_bluetooth_device_address_key), newAddress).apply();
 	}
 	
 	/**
@@ -206,5 +206,13 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 	 */
 	public boolean shouldGpsHdopBeDisplayed() {
 		return prefs.getBoolean(context.getString(R.string.pref_ui_gps_hdop_key), false);
+	}
+
+	public boolean isEnglishDefaultLanguage() {
+		return prefs.getBoolean(context.getString(R.string.pref_ui_language_english_key), DEFAULT_PREF_UI_LANGUAGE);
+	}
+
+	public String getMapProviderName() {
+		return prefs.getString(context.getString(R.string.pref_maps_providers_key), null);
 	}
 }

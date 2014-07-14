@@ -3,7 +3,7 @@
 
     <!-- Contains drone related preferences, and tuning. -->
     <PreferenceCategory
-        android:key="pref_drone_settings"
+        android:key="@string/pref_drone_settings_key"
         android:title="@string/menu_drone_setup" />
 
     <!-- Contains preferences related to the app. -->
@@ -23,7 +23,7 @@
             <PreferenceCategory android:title="@string/pref_title_language" >
                 <CheckBoxPreference
                     android:defaultValue="false"
-                    android:key="pref_ui_language_english"
+                    android:key="@string/pref_ui_language_english_key"
                     android:summary="@string/pref_ui_language_english_summary"
                     android:title="@string/pref_ui_language_english" />
             </PreferenceCategory>
