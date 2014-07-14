@@ -3,7 +3,6 @@ package org.droidplanner.android.activities.helpers;
 import org.droidplanner.R;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.maps.providers.MapProviderPreferences;
-import org.droidplanner.android.utils.Constants;
 
 import android.app.FragmentManager;
 import android.content.Intent;
@@ -26,8 +25,7 @@ public class MapPreferencesActivity extends FragmentActivity {
 	/**
 	 * Bundle key used to pass, and retrieve the current map provider name.
 	 */
-	public final static String EXTRA_MAP_PROVIDER_NAME = Constants.PACKAGE_NAME
-			+ ".EXTRA_MAP_PROVIDER_NAME";
+	public final static String EXTRA_MAP_PROVIDER_NAME = "EXTRA_MAP_PROVIDER_NAME";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
