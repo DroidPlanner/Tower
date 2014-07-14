@@ -15,21 +15,18 @@ public class ChartDataRender {
 
 		if (serie.isActive()) {
 
-			int start = (serie.newestData - numPtsToDraw + serie.data.length)
-					% serie.data.length;
+			int start = (serie.newestData - numPtsToDraw + serie.data.length) % serie.data.length;
 			int pos = 0;
 			for (int i = start; i < start + numPtsToDraw; i++) {
 
 				double y_i = -serie.data[i % serie.data.length];
-				y_i = (y_i + chart.scale.getRange())
-						/ (2 * chart.scale.getRange()) * chart.height;
+				y_i = (y_i + chart.scale.getRange()) / (2 * chart.scale.getRange()) * chart.height;
 
 				double y_i1 = -serie.data[(i + 1) % serie.data.length];
-				y_i1 = (y_i1 + chart.scale.getRange())
-						/ (2 * chart.scale.getRange()) * chart.height;
+				y_i1 = (y_i1 + chart.scale.getRange()) / (2 * chart.scale.getRange())
+						* chart.height;
 
-				canvas.drawLine((float) pos * delta, (float) y_i,
-						(float) (pos + 1) * delta, (float) y_i1,
+				canvas.drawLine(pos * delta, (float) y_i, (pos + 1) * delta, (float) y_i1,
 						serie.getPaint());
 				pos++;
 			}

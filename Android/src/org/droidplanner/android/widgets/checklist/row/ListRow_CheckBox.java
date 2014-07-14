@@ -13,11 +13,11 @@ public class ListRow_CheckBox extends ListRow {
 		super(inflater, checkListItem);
 	}
 
+	@Override
 	public View getView(View convertView) {
 		View view;
 		if (convertView == null) {
-			ViewGroup viewGroup = (ViewGroup) inflater.inflate(
-					R.layout.list_check_item, null);
+			ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.list_check_item, null);
 			holder = new ViewHolder(viewGroup, checkListItem);
 			viewGroup.setTag(holder);
 			view = viewGroup;
@@ -30,14 +30,14 @@ public class ListRow_CheckBox extends ListRow {
 		return view;
 	}
 
-	private void updateDisplay(View view, ViewHolder holder,
-			CheckListItem mListItem) {
+	private void updateDisplay(View view, ViewHolder holder, CheckListItem mListItem) {
 
 		getData(mListItem);
 
 		updateCheckBox(checkListItem.isVerified());
 	}
 
+	@Override
 	public int getViewType() {
 		return ListRow_Type.CHECKBOX_ROW.ordinal();
 	}

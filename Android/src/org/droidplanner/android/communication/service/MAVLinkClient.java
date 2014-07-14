@@ -36,15 +36,14 @@ public class MAVLinkClient implements MAVLinkStreams.MAVLinkOutputStream {
 	final Messenger mMessenger = new Messenger(new IncomingHandler());
 	private boolean mIsBound;
 
-	public MAVLinkClient(Context context,
-			MAVLinkStreams.MavlinkInputStream listener) {
+	public MAVLinkClient(Context context, MAVLinkStreams.MavlinkInputStream listener) {
 		parent = context;
 		this.listener = listener;
 	}
 
 	private void init() {
-		parent.bindService(new Intent(parent, MAVLinkService.class),
-				mConnection, Context.BIND_AUTO_CREATE);
+		parent.bindService(new Intent(parent, MAVLinkService.class), mConnection,
+				Context.BIND_AUTO_CREATE);
 		mIsBound = true;
 	}
 
@@ -101,8 +100,7 @@ public class MAVLinkClient implements MAVLinkStreams.MAVLinkOutputStream {
 		public void onServiceConnected(ComponentName className, IBinder service) {
 			mService = new Messenger(service);
 			try {
-				Message msg = Message.obtain(null,
-						MAVLinkService.MSG_REGISTER_CLIENT);
+				Message msg = Message.obtain(null, MAVLinkService.MSG_REGISTER_CLIENT);
 				msg.replyTo = mMessenger;
 				mService.send(msg);
 				onConnectedService();
@@ -116,6 +114,7 @@ public class MAVLinkClient implements MAVLinkStreams.MAVLinkOutputStream {
 		}
 	};
 
+	@Override
 	public void sendMavPacket(MAVLinkPacket pack) {
 		if (mService == null) {
 			return;
@@ -141,6 +140,7 @@ public class MAVLinkClient implements MAVLinkStreams.MAVLinkOutputStream {
 		listener.notifyDisconnected();
 	}
 
+	@Override
 	public void queryConnectionState() {
 		if (mIsBound) {
 			listener.notifyConnected();
@@ -150,10 +150,12 @@ public class MAVLinkClient implements MAVLinkStreams.MAVLinkOutputStream {
 
 	}
 
+	@Override
 	public boolean isConnected() {
 		return mIsBound;
 	}
 
+	@Override
 	public void toggleConnectionState() {
 		if (isConnected()) {
 			close();

@@ -13,15 +13,15 @@ public class HeartBeat extends DroneVariable implements OnDroneListener {
 	private static final long HEARTBEAT_NORMAL_TIMEOUT = 5000;
 	private static final long HEARTBEAT_LOST_TIMEOUT = 15000;
 
-    public static final byte INVALID_MAVLINK_VERSION = -1;
+	public static final byte INVALID_MAVLINK_VERSION = -1;
 
 	public HeartbeatState heartbeatState = HeartbeatState.FIRST_HEARTBEAT;;
 	public int droneID = 1;
 
-    /**
-     * Stores the version of the mavlink protocol.
-     */
-    private byte mMavlinkVersion = INVALID_MAVLINK_VERSION;
+	/**
+	 * Stores the version of the mavlink protocol.
+	 */
+	private byte mMavlinkVersion = INVALID_MAVLINK_VERSION;
 
 	public enum HeartbeatState {
 		FIRST_HEARTBEAT, LOST_HEARTBEAT, NORMAL_HEARTBEAT
@@ -41,16 +41,16 @@ public class HeartBeat extends DroneVariable implements OnDroneListener {
 		myDrone.events.addDroneListener(this);
 	}
 
-    /**
-     * @return the version of the mavlink protocol.
-     */
-    public byte getMavlinkVersion(){
-        return mMavlinkVersion;
-    }
+	/**
+	 * @return the version of the mavlink protocol.
+	 */
+	public byte getMavlinkVersion() {
+		return mMavlinkVersion;
+	}
 
 	public void onHeartbeat(msg_heartbeat msg) {
 		droneID = msg.sysid;
-        mMavlinkVersion = msg.mavlink_version;
+		mMavlinkVersion = msg.mavlink_version;
 
 		switch (heartbeatState) {
 		case FIRST_HEARTBEAT:
@@ -88,7 +88,7 @@ public class HeartBeat extends DroneVariable implements OnDroneListener {
 	private void notifyDisconnected() {
 		watchdog.removeCallbacks(watchdogCallback);
 		heartbeatState = HeartbeatState.FIRST_HEARTBEAT;
-        mMavlinkVersion = INVALID_MAVLINK_VERSION;
+		mMavlinkVersion = INVALID_MAVLINK_VERSION;
 	}
 
 	private void onHeartbeatTimeout() {

@@ -45,8 +45,8 @@ public class GeoTools {
 	 *            distance to be added
 	 * @return New point with the added distance
 	 */
-	public static Coord2D newCoordFromBearingAndDistance(Coord2D origin,
-			double bearing, double distance) {
+	public static Coord2D newCoordFromBearingAndDistance(Coord2D origin, double bearing,
+			double distance) {
 
 		double lat = origin.getLat();
 		double lon = origin.getLng();
@@ -55,8 +55,8 @@ public class GeoTools {
 		double brng = Math.toRadians(bearing);
 		double dr = distance / RADIUS_OF_EARTH;
 
-		double lat2 = Math.asin(Math.sin(lat1) * Math.cos(dr) + Math.cos(lat1)
-				* Math.sin(dr) * Math.cos(brng));
+		double lat2 = Math.asin(Math.sin(lat1) * Math.cos(dr) + Math.cos(lat1) * Math.sin(dr)
+				* Math.cos(brng));
 		double lon2 = lon1
 				+ Math.atan2(Math.sin(brng) * Math.sin(dr) * Math.cos(lat1),
 						Math.cos(dr) - Math.sin(lat1) * Math.sin(lat2));
@@ -82,8 +82,7 @@ public class GeoTools {
 
 		double tmp = Math.cos(Math.toRadians(from.getLat()))
 				* Math.cos(Math.toRadians(to.getLat()));
-		return Math.toDegrees(2.0 * Math.asin(Math.sqrt(latitudeH + tmp
-				* lontitudeH)));
+		return Math.toDegrees(2.0 * Math.asin(Math.sqrt(latitudeH + tmp * lontitudeH)));
 	}
 
 	/**
@@ -92,8 +91,7 @@ public class GeoTools {
 	 * @return distance in meters
 	 */
 	public static Length getDistance(Coord2D from, Coord2D to) {
-		return new Length(RADIUS_OF_EARTH
-				* Math.toRadians(getArcInRadians(from, to)));
+		return new Length(RADIUS_OF_EARTH * Math.toRadians(getArcInRadians(from, to)));
 	}
 
 	/**
@@ -109,8 +107,8 @@ public class GeoTools {
 
 		double degree = Math.toDegrees(Math.atan2(
 				Math.sin(tLng - fLng) * Math.cos(tLat),
-				Math.cos(fLat) * Math.sin(tLat) - Math.sin(fLat)
-						* Math.cos(tLat) * Math.cos(tLng - fLng)));
+				Math.cos(fLat) * Math.sin(tLat) - Math.sin(fLat) * Math.cos(tLat)
+						* Math.cos(tLng - fLng)));
 
 		if (degree >= 0) {
 			return degree;
@@ -130,10 +128,10 @@ public class GeoTools {
 		int length = poly.getPoints().size();
 		for (int i = 0; i < length - 1; i++) {
 			sum = sum
-					+ (latToMeters(poly.getPoints().get(i).getX()) * latToMeters(poly
-							.getPoints().get(i + 1).getY()))
-					- (latToMeters(poly.getPoints().get(i).getY()) * latToMeters(poly
-							.getPoints().get(i + 1).getX()));
+					+ (latToMeters(poly.getPoints().get(i).getX()) * latToMeters(poly.getPoints()
+							.get(i + 1).getY()))
+					- (latToMeters(poly.getPoints().get(i).getY()) * latToMeters(poly.getPoints()
+							.get(i + 1).getX()));
 		}
 		sum = sum
 				+ (latToMeters(poly.getPoints().get(length - 1).getX()) * latToMeters(poly

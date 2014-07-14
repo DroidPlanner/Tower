@@ -10,9 +10,9 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 import org.droidplanner.android.communication.service.UploaderService;
-import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.android.utils.file.FileStream;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -26,8 +26,7 @@ public abstract class MAVLinkConnection extends Thread {
 
 	private static final String TAG = MAVLinkConnection.class.getSimpleName();
 
-	protected abstract void openConnection() throws UnknownHostException,
-			IOException;
+	protected abstract void openConnection() throws UnknownHostException, IOException;
 
 	protected abstract void readDataBlock() throws IOException;
 
@@ -78,19 +77,20 @@ public abstract class MAVLinkConnection extends Thread {
 			parser.stats.mavlinkResetStats();
 			openConnection();
 
-            //Start a new ga analytics session. The new session will be tagged with the mavlink
-            // connection mechanism, as well as whether the user has an active droneshare account.
-            GAUtils.startNewSession(parentContext);
+			// Start a new ga analytics session. The new session will be tagged
+			// with the mavlink
+			// connection mechanism, as well as whether the user has an active
+			// droneshare account.
+			GAUtils.startNewSession(parentContext);
 
 			logFile = FileStream.getTLogFile();
 			logWriter = FileStream.openOutputStream(logFile);
-			logBuffer = ByteBuffer.allocate(4* Long.SIZE / Byte.SIZE);
+			logBuffer = ByteBuffer.allocate(Long.SIZE / Byte.SIZE);
 			logBuffer.order(ByteOrder.BIG_ENDIAN);
-			
+
 			String login = prefs.getDroneshareLogin();
 			String password = prefs.getDronesharePassword();
-			if (prefs.getLiveUploadEnabled() && !login.isEmpty()
-					&& !password.isEmpty()) {
+			if (prefs.getLiveUploadEnabled() && !login.isEmpty() && !password.isEmpty()) {
 				Log.i(TAG, "Starting live upload");
 				uploader = new DroneshareClient();
 				uploader.connect(login, password);
@@ -121,8 +121,7 @@ public abstract class MAVLinkConnection extends Thread {
 					FileStream.commitFile(logFile);
 
 					// See if we can at least do a delayed upload
-					parentContext.startService(UploaderService
-							.createIntent(parentContext));
+					parentContext.startService(UploaderService.createIntent(parentContext));
 				}
 
 				if (uploader != null)
@@ -165,7 +164,7 @@ public abstract class MAVLinkConnection extends Thread {
 					uploader.filterMavlink(uploader.interfaceNum, bytes);
 			} catch (IOException e) {
 				Log.e(TAG, "Ignoring IO error in saveToLog: " + e);
-			}catch (BufferOverflowException e) {
+			} catch (BufferOverflowException e) {
 				Log.e(TAG, "Ignoring Buffer Overflow in saveToLog: " + e);
 			} catch (NullPointerException e) {
 				Log.e(TAG, "Ignoring NPE in " + e);

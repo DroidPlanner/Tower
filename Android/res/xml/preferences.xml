@@ -3,7 +3,7 @@
 
     <!-- Contains drone related preferences, and tuning. -->
     <PreferenceCategory
-        android:key="pref_drone_settings"
+        android:key="@string/pref_drone_settings_key"
         android:title="@string/menu_drone_setup" />
 
     <!-- Contains preferences related to the app. -->
@@ -23,7 +23,7 @@
             <PreferenceCategory android:title="@string/pref_title_language" >
                 <CheckBoxPreference
                     android:defaultValue="false"
-                    android:key="pref_ui_language_english"
+                    android:key="@string/pref_ui_language_english_key"
                     android:summary="@string/pref_ui_language_english_summary"
                     android:title="@string/pref_ui_language_english" />
             </PreferenceCategory>
@@ -217,6 +217,17 @@
                         android:key="@string/pref_udp_server_port_key"
                         android:title="@string/pref_udp_server_port" />
                 </PreferenceCategory>
+                <PreferenceCategory
+                    android:key="pref_bluetooth"
+                    android:title="@string/pref_bluetooth">
+                    <org.droidplanner.android.dialogs.ClearBTDialogPreference
+                        android:defaultValue=""
+                        android:gravity="center"
+                        android:key="pref_bluetooth_device_address"
+                        android:title="@string/pref_forget_bluetooth_device_address"
+                        android:dialogMessage="@string/pref_forget_bluetooth_device_address_confirm"
+                        android:positiveButtonText="@string/pref_bluetooth_forget"/>
+                </PreferenceCategory>
             </PreferenceScreen>
             <PreferenceScreen
                 android:key="pref_mavlink_rates"
@@ -289,15 +300,17 @@
                     android:summary="@string/pref_max_flight_path_size_summary"
                     android:title="@string/pref_max_flight_path_size" />
                 <CheckBoxPreference
-                    android:defaultValue="true"
-                    android:key="pref_guided_mode_on_long_press"
-                    android:summary="@string/pref_guided_mode_on_long_press_summary"
-                    android:title="@string/pref_guided_mode_on_long_press" />
-                <CheckBoxPreference
-                    android:defaultValue="false"
-                    android:key="pref_heading_mode"
-                    android:summary="@string/pref_heading_mode_summary"
-                    android:title="@string/pref_heading_mode" />
+                	android:defaultValue="false"
+    	            android:key="@string/pref_ui_gps_hdop_key"
+	                android:summary="@string/pref_ui_gps_hdop_summary"
+        	        android:title="@string/pref_ui_gps_hdop_title"/>
+            </PreferenceCategory>
+            
+            <PreferenceCategory
+                android:title="@string/pref_pebble" >
+                <Preference
+                    android:key="@string/pref_pebble_install_key"
+                    android:title="@string/pref_pebble_install_watchapp" />
             </PreferenceCategory>
         </PreferenceScreen>
     </PreferenceCategory>

@@ -12,13 +12,14 @@ import com.hoho.android.usbserial.driver.UsbSerialDriver;
 import com.hoho.android.usbserial.driver.UsbSerialProber;
 
 /**
- * This version is modified by Helibot to use the "USB Serial for Android Library"
-//See https://code.google.com/p/usb-serial-for-android/ 
-// It should allow support of FDTI and other Serial to USB converters.
-// It should allow APM v2.0 and 2.5 to connect via USB cable straight to APM.
-// Be sure to set the Telementry speed in the setting menu to 
-//    115200 when connecting directly with USB cable.
-*/
+ * This version is modified by Helibot to use the
+ * "USB Serial for Android Library" //See
+ * https://code.google.com/p/usb-serial-for-android/ // It should allow support
+ * of FDTI and other Serial to USB converters. // It should allow APM v2.0 and
+ * 2.5 to connect via USB cable straight to APM. // Be sure to set the
+ * Telementry speed in the setting menu to // 115200 when connecting directly
+ * with USB cable.
+ */
 public class UsbConnection extends MAVLinkConnection {
 	private static int baud_rate = 57600;
 	private static UsbSerialDriver sDriver = null;
@@ -83,8 +84,7 @@ public class UsbConnection extends MAVLinkConnection {
 
 	private void openCOM() throws IOException {
 		// Get UsbManager from Android.
-		UsbManager manager = (UsbManager) parentContext
-				.getSystemService(Context.USB_SERVICE);
+		UsbManager manager = (UsbManager) parentContext.getSystemService(Context.USB_SERVICE);
 
 		// Find the first available driver.
 		// **TODO: We should probably step through all available USB Devices

@@ -2,14 +2,14 @@ package org.droidplanner.android.fragments;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
+import org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText;
+import org.droidplanner.android.widgets.graph.Chart;
+import org.droidplanner.android.widgets.graph.ChartSeries;
 import org.droidplanner.core.MAVLink.MavLinkStreamRates;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.parameters.Parameter;
-import org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText;
-import org.droidplanner.android.widgets.graph.Chart;
-import org.droidplanner.android.widgets.graph.ChartSeries;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -59,10 +59,8 @@ public class TuningFragment extends Fragment implements OnDroneListener {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = inflater
-				.inflate(R.layout.fragment_tuning, container, false);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.fragment_tuning, container, false);
 
 		setupLocalViews(view);
 		setupCharts();
@@ -86,22 +84,17 @@ public class TuningFragment extends Fragment implements OnDroneListener {
 
 	private void setupDataStreamingForTuning() {
 		// Sets the nav messages at 50Hz and other messages at a low rate 1Hz
-		MavLinkStreamRates.setupStreamRates(drone.MavClient, 1, 0, 1, 1, 1, 0,
-				0, NAV_MSG_RATE);
+		MavLinkStreamRates.setupStreamRates(drone.MavClient, 1, 0, 1, 1, 1, 0, 0, NAV_MSG_RATE);
 	}
 
 	private void setupLocalViews(View view) {
 		topChart = (Chart) view.findViewById(R.id.chartTop);
 		bottomChart = (Chart) view.findViewById(R.id.chartBottom);
 
-		rollPSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.SeekBarRollPitchControl);
-		rollDSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.SeekBarRollPitchDampenning);
-		yawPSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.SeekBarYawControl);
-		thrAclSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.SeekBarThrottleAccel);
+		rollPSeekBar = (SeekBarWithText) view.findViewById(R.id.SeekBarRollPitchControl);
+		rollDSeekBar = (SeekBarWithText) view.findViewById(R.id.SeekBarRollPitchDampenning);
+		yawPSeekBar = (SeekBarWithText) view.findViewById(R.id.SeekBarYawControl);
+		thrAclSeekBar = (SeekBarWithText) view.findViewById(R.id.SeekBarThrottleAccel);
 	}
 
 	private void setupCharts() {

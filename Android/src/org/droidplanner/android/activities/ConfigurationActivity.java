@@ -2,14 +2,14 @@ package org.droidplanner.android.activities;
 
 import org.droidplanner.R;
 import org.droidplanner.android.activities.helpers.SuperUI;
-import org.droidplanner.core.drone.Drone;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.android.fragments.ChecklistFragment;
 import org.droidplanner.android.fragments.ParamsFragment;
 import org.droidplanner.android.fragments.SetupRadioFragment;
 import org.droidplanner.android.fragments.SetupSensorFragment;
 import org.droidplanner.android.fragments.TuningFragment;
 import org.droidplanner.android.widgets.viewPager.TabPageIndicator;
+import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 
 import android.app.ActionBar;
 import android.content.Context;
@@ -18,10 +18,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
 /**
@@ -33,31 +31,28 @@ public class ConfigurationActivity extends SuperUI {
 	/**
 	 * Used as logging tag.
 	 */
-	private static final String TAG = ConfigurationActivity.class
-			.getSimpleName();
+	private static final String TAG = ConfigurationActivity.class.getSimpleName();
 
-	public static final String EXTRA_CONFIG_SCREEN_INDEX = ConfigurationActivity.class
-			.getPackage().getName() + ".EXTRA_CONFIG_SCREEN_INDEX";
+	public static final String EXTRA_CONFIG_SCREEN_INDEX = ConfigurationActivity.class.getPackage()
+			.getName() + ".EXTRA_CONFIG_SCREEN_INDEX";
 
 	/**
 	 * Holds the list of configuration screens this activity supports.
 	 */
 	public static final Class<? extends Fragment>[] sConfigurationFragments = new Class[] {
-			TuningFragment.class, SetupRadioFragment.class,
-			SetupSensorFragment.class, ChecklistFragment.class,
-			ParamsFragment.class };
+			TuningFragment.class, SetupRadioFragment.class, SetupSensorFragment.class,
+			ChecklistFragment.class, ParamsFragment.class };
 
 	/**
 	 * Holds the title resources for the configuration screens.
 	 */
-	public static final int[] sConfigurationFragmentTitlesRes = {
-			R.string.screen_tuning, R.string.screen_rc, R.string.screen_cal,
-			R.string.screen_checklist, R.string.screen_parameters };
+	public static final int[] sConfigurationFragmentTitlesRes = { R.string.screen_tuning,
+			R.string.screen_rc, R.string.screen_cal, R.string.screen_checklist,
+			R.string.screen_parameters };
 
 	public static final int[] sConfigurationFragmentIconRes = {
 			android.R.drawable.ic_menu_preferences, R.drawable.ic_status_rssi,
-			R.drawable.ic_action_circles, R.drawable.ic_action_paste,
-			R.drawable.ic_action_database };
+			R.drawable.ic_action_circles, R.drawable.ic_action_paste, R.drawable.ic_action_database };
 
 	private ViewPager mViewPager;
 
@@ -75,8 +70,8 @@ public class ConfigurationActivity extends SuperUI {
 
 		final Context context = getApplicationContext();
 
-		final ConfigurationPagerAdapter pagerAdapter = new ConfigurationPagerAdapter(
-				context, getSupportFragmentManager());
+		final ConfigurationPagerAdapter pagerAdapter = new ConfigurationPagerAdapter(context,
+				getSupportFragmentManager());
 
 		mViewPager = (ViewPager) findViewById(R.id.configuration_pager);
 		mViewPager.setAdapter(pagerAdapter);
@@ -100,13 +95,11 @@ public class ConfigurationActivity extends SuperUI {
 				actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
 				// Display the sections as an action bar drop down list.
-				actionBar.setListNavigationCallbacks(
-						new ConfigurationSpinnerAdapter(context,
-								R.layout.spinner_configuration_screen_item),
+				actionBar.setListNavigationCallbacks(new ConfigurationSpinnerAdapter(context,
+						R.layout.spinner_configuration_screen_item),
 						new ActionBar.OnNavigationListener() {
 							@Override
-							public boolean onNavigationItemSelected(
-									int itemPosition, long itemId) {
+							public boolean onNavigationItemSelected(int itemPosition, long itemId) {
 								mViewPager.setCurrentItem(itemPosition, true);
 								return true;
 							}
@@ -114,11 +107,11 @@ public class ConfigurationActivity extends SuperUI {
 
 				mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 
-							@Override
-							public void onPageSelected(int i) {
-								actionBar.setSelectedNavigationItem(i);
-							}
-						});
+					@Override
+					public void onPageSelected(int i) {
+						actionBar.setSelectedNavigationItem(i);
+					}
+				});
 			}
 		}
 
@@ -183,8 +176,7 @@ public class ConfigurationActivity extends SuperUI {
 		}
 	}
 
-	private static class ConfigurationSpinnerAdapter extends
-			ArrayAdapter<CharSequence> {
+	private static class ConfigurationSpinnerAdapter extends ArrayAdapter<CharSequence> {
 
 		public ConfigurationSpinnerAdapter(Context context, int resource) {
 			super(context, resource);
@@ -197,8 +189,7 @@ public class ConfigurationActivity extends SuperUI {
 
 		@Override
 		public CharSequence getItem(int position) {
-			return getContext().getText(
-					sConfigurationFragmentTitlesRes[position]);
+			return getContext().getText(sConfigurationFragmentTitlesRes[position]);
 		}
 
 	}

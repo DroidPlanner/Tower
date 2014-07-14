@@ -4,8 +4,8 @@ import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.fragments.helpers.BTDeviceListFragment;
 import org.droidplanner.android.maps.providers.google_map.GoogleMapFragment;
-import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.utils.Utils;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.widgets.actionProviders.InfoBarActionProvider;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
@@ -28,8 +28,8 @@ import android.view.MenuItem;
  */
 public abstract class SuperUI extends FragmentActivity implements OnDroneListener {
 
-    public final static String ACTION_TOGGLE_DRONE_CONNECTION = SuperUI.class.getName() +
-            ".ACTION_TOGGLE_DRONE_CONNECTION";
+	public final static String ACTION_TOGGLE_DRONE_CONNECTION = SuperUI.class.getName()
+			+ ".ACTION_TOGGLE_DRONE_CONNECTION";
 
 	private ScreenOrientation screenOrientation = new ScreenOrientation(this);
 	private InfoBarActionProvider infoBar;
@@ -37,24 +37,24 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 	public DroidPlannerApp app;
 	public Drone drone;
 
-    /**
-     * Handle to the app preferences.
-     */
-    protected DroidPlannerPrefs mAppPrefs;
+	/**
+	 * Handle to the app preferences.
+	 */
+	protected DroidPlannerPrefs mAppPrefs;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-        ActionBar actionBar = getActionBar();
-        if(actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+		ActionBar actionBar = getActionBar();
+		if (actionBar != null) {
+			actionBar.setDisplayHomeAsUpEnabled(true);
+		}
 
-        app = (DroidPlannerApp) getApplication();
-        this.drone = app.getDrone();
-        gcsHeartbeat = new GCSHeartbeat(drone, 1);
-        mAppPrefs = new DroidPlannerPrefs(getApplicationContext());
+		app = (DroidPlannerApp) getApplication();
+		this.drone = app.getDrone();
+		gcsHeartbeat = new GCSHeartbeat(drone, 1);
+		mAppPrefs = new DroidPlannerPrefs(getApplicationContext());
 
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
@@ -72,24 +72,24 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 		screenOrientation.unlock();
 		Utils.updateUILanguage(getApplicationContext());
 
-        handleIntent(getIntent());
+		handleIntent(getIntent());
 	}
 
-    @Override
-    public void onNewIntent(Intent intent){
-        super.onNewIntent(intent);
-        handleIntent(intent);
-    }
+	@Override
+	public void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		handleIntent(intent);
+	}
 
-    private void handleIntent(Intent intent){
-        if(intent == null)
-            return;
+	private void handleIntent(Intent intent) {
+		if (intent == null)
+			return;
 
-        final String action = intent.getAction();
-        if(ACTION_TOGGLE_DRONE_CONNECTION.equals(action)){
-            toggleDroneConnection();
-        }
-    }
+		final String action = intent.getAction();
+		if (ACTION_TOGGLE_DRONE_CONNECTION.equals(action)) {
+			toggleDroneConnection();
+		}
+	}
 
 	@Override
 	protected void onStart() {
@@ -104,8 +104,7 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 		if (mAppPrefs.maxVolumeOnStart()) {
 			AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 			audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
-			    audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC),
-			    0);
+					audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
 		}
 	}
 
@@ -194,9 +193,9 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 			drone.waypointManager.getWaypoints();
 			return true;
 
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                return true;
+		case android.R.id.home:
+			NavUtils.navigateUpFromSameTask(this);
+			return true;
 
 		default:
 			return super.onOptionsItemSelected(item);
@@ -228,9 +227,12 @@ public abstract class SuperUI extends FragmentActivity implements OnDroneListene
 
 			if (Utils.ConnectionType.BLUETOOTH.name().equals(connectionType)) {
 				// Launch a bluetooth device selection screen for the user
-				new BTDeviceListFragment().show(getSupportFragmentManager(),
-						"Device selection dialog");
-				return;
+				final String address = mAppPrefs.getBluetoothDeviceAddress();
+				if (address == null || address.isEmpty()) {
+					new BTDeviceListFragment().show(getSupportFragmentManager(),
+							"Device selection dialog");
+					return;
+				}
 			}
 		}
 		drone.MavClient.toggleConnectionState();

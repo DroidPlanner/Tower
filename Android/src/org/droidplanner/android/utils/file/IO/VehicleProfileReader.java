@@ -5,10 +5,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.droidplanner.core.drone.profiles.VehicleProfile;
-import org.droidplanner.core.drone.variables.Type.FirmwareType;
 import org.droidplanner.android.utils.file.AssetUtil;
 import org.droidplanner.android.utils.file.DirectoryPath;
+import org.droidplanner.core.drone.profiles.VehicleProfile;
+import org.droidplanner.core.drone.variables.Type.FirmwareType;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -48,8 +48,7 @@ public class VehicleProfileReader {
 			}
 
 			// load (override) from file if available
-			final File file = new File(DirectoryPath.getDroidPlannerPath()
-					+ path);
+			final File file = new File(DirectoryPath.getDroidPlannerPath() + path);
 			if (file.exists()) {
 				final InputStream inputStream = new FileInputStream(file);
 				VehicleProfileReader.open(inputStream, newProfile);
@@ -89,8 +88,7 @@ public class VehicleProfileReader {
 			case XmlPullParser.START_TAG:
 				if (parserName.equals(TAG_METADATATYPE)) {
 					// set metadata type
-					final String value = parser.getAttributeValue(null,
-							ATTR_TYPE);
+					final String value = parser.getAttributeValue(null, ATTR_TYPE);
 					if (value != null)
 						profile.setParameterMetadataType(value);
 
@@ -109,8 +107,7 @@ public class VehicleProfileReader {
 	}
 
 	// parse Default
-	private static void parseDefault(XmlPullParser parser,
-			VehicleProfile.Default default_) {
+	private static void parseDefault(XmlPullParser parser, VehicleProfile.Default default_) {
 		// wpNavSpeed
 		String value = parser.getAttributeValue(null, ATTR_WPNAV_SPEED);
 		if (value != null)

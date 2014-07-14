@@ -30,16 +30,14 @@ public class LineSampler {
 		return sampledPoints;
 	}
 
-	private List<Coord2D> sampleLine(Coord2D from, Coord2D to,
-			double samplingDistance) {
+	private List<Coord2D> sampleLine(Coord2D from, Coord2D to, double samplingDistance) {
 		List<Coord2D> result = new ArrayList<Coord2D>();
 		double heading = GeoTools.getHeadingFromCoordinates(from, to);
 		double totalLength = GeoTools.getDistance(from, to).valueInMeters();
 		double distance = 0;
 
 		while (distance < totalLength) {
-			result.add(GeoTools.newCoordFromBearingAndDistance(from, heading,
-					distance));
+			result.add(GeoTools.newCoordFromBearingAndDistance(from, heading, distance));
 			distance += samplingDistance;
 		}
 		return result;

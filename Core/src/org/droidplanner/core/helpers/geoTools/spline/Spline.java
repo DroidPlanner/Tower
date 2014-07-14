@@ -17,7 +17,8 @@ public class Spline {
 	public Spline(Coord2D pMinus1, Coord2D p0, Coord2D p1, Coord2D p2) {
 		this.p0 = p0;
 
-		// derivative at a point is based on difference of previous and next points
+		// derivative at a point is based on difference of previous and next
+		// points
 		p0_prime = p1.subtract(pMinus1).dot(1 / SPLINE_TENSION);
 		Coord2D p1_prime = p2.subtract(this.p0).dot(1 / SPLINE_TENSION);
 

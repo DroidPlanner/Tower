@@ -4,18 +4,11 @@ import java.util.List;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 import org.droidplanner.android.activities.helpers.SuperUI;
+import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
+import org.droidplanner.android.dialogs.YesNoDialog;
 import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
 import org.droidplanner.android.dialogs.openfile.OpenMissionDialog;
-import org.droidplanner.android.proxy.mission.MissionSelection;
-import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
-import org.droidplanner.android.proxy.mission.MissionProxy;
-import org.droidplanner.android.utils.prefs.AutoPanMode;
-import org.droidplanner.android.utils.file.IO.MissionReader;
-import org.droidplanner.android.utils.file.IO.MissionWriter;
-import org.droidplanner.core.drone.Drone;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.android.fragments.EditorListFragment;
 import org.droidplanner.android.fragments.EditorMapFragment;
 import org.droidplanner.android.fragments.EditorToolsFragment;
@@ -23,10 +16,16 @@ import org.droidplanner.android.fragments.EditorToolsFragment.EditorTools;
 import org.droidplanner.android.fragments.EditorToolsFragment.OnEditorToolSelected;
 import org.droidplanner.android.fragments.helpers.GestureMapFragment;
 import org.droidplanner.android.fragments.helpers.GestureMapFragment.OnPathFinishedListener;
+import org.droidplanner.android.proxy.mission.MissionProxy;
+import org.droidplanner.android.proxy.mission.MissionSelection;
+import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.proxy.mission.item.fragments.MissionDetailFragment;
-
+import org.droidplanner.android.utils.file.IO.MissionReader;
+import org.droidplanner.android.utils.file.IO.MissionWriter;
+import org.droidplanner.android.utils.prefs.AutoPanMode;
+import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
-import org.droidplanner.android.dialogs.YesNoDialog;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -36,36 +35,36 @@ import android.view.ActionMode.Callback;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
-
 /**
- * This implements the map editor activity. The map editor activity allows the user to create
- * and/or modify autonomous missions for the drone.
+ * This implements the map editor activity. The map editor activity allows the
+ * user to create and/or modify autonomous missions for the drone.
  */
 public class EditorActivity extends SuperUI implements OnPathFinishedListener,
-		OnEditorToolSelected, MissionDetailFragment.OnMissionDetailListener,
-		OnEditorInteraction, Callback, MissionSelection.OnSelectionUpdateListener {
+		OnEditorToolSelected, MissionDetailFragment.OnMissionDetailListener, OnEditorInteraction,
+		Callback, MissionSelection.OnSelectionUpdateListener {
 
-    /**
-     * Used to retrieve the item detail window when the activity is destroyed, and recreated.
-     */
-    private static final String ITEM_DETAIL_TAG = "Item Detail Window";
+	/**
+	 * Used to retrieve the item detail window when the activity is destroyed,
+	 * and recreated.
+	 */
+	private static final String ITEM_DETAIL_TAG = "Item Detail Window";
 
-    /**
-     * Used to provide access and interact with the {@link org.droidplanner.core.mission.Mission}
-     * object on the Android layer.
-     */
-    private MissionProxy missionProxy;
+	/**
+	 * Used to provide access and interact with the
+	 * {@link org.droidplanner.core.mission.Mission} object on the Android
+	 * layer.
+	 */
+	private MissionProxy missionProxy;
 
-    /*
-    View widgets.
-     */
+	/*
+	 * View widgets.
+	 */
 	private EditorMapFragment planningMapFragment;
 	private GestureMapFragment gestureMapFragment;
 	private EditorToolsFragment editorToolsFragment;
@@ -74,18 +73,19 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	private EditorListFragment missionListFragment;
 	private TextView infoView;
 
-    private View mSplineToggleContainer;
-    private boolean mIsSplineEnabled;
+	private View mSplineToggleContainer;
+	private boolean mIsSplineEnabled;
 
-    private ImageButton mGoToMyLocation;
-    private ImageButton mGoToDroneLocation;
+	private View mLocationButtonsContainer;
+	private ImageButton mGoToMyLocation;
+	private ImageButton mGoToDroneLocation;
 
-    /**
-     * This view hosts the mission item detail fragment.
-     * On phone, or device with limited screen estate, it's removed from the layout,
-     * and the item detail ends up displayed as a dialog.
-     */
-    private View mContainerItemDetail;
+	/**
+	 * This view hosts the mission item detail fragment. On phone, or device
+	 * with limited screen estate, it's removed from the layout, and the item
+	 * detail ends up displayed as a dialog.
+	 */
+	private View mContainerItemDetail;
 
 	private ActionMode contextualActionBar;
 
@@ -106,85 +106,87 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 				.findFragmentById(R.id.missionFragment1);
 		infoView = (TextView) findViewById(R.id.editorInfoWindow);
 
-        mSplineToggleContainer = findViewById(R.id.editorSplineToggleContainer);
-        mSplineToggleContainer.setVisibility(View.VISIBLE);
+		mSplineToggleContainer = findViewById(R.id.editorSplineToggleContainer);
+		mSplineToggleContainer.setVisibility(View.VISIBLE);
 
-        mGoToMyLocation = (ImageButton)findViewById(R.id.my_location_button);
-        mGoToMyLocation.setOnClickListener(new View.OnClickListener(){
-           @Override
-            public void onClick(View v){
-               planningMapFragment.goToMyLocation();
-           }
-        });
-        mGoToMyLocation.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                planningMapFragment.setAutoPanMode(AutoPanMode.USER);
-                return true;
-            }
-        });
+		mLocationButtonsContainer = findViewById(R.id.location_button_container);
+		mGoToMyLocation = (ImageButton) findViewById(R.id.my_location_button);
+		mGoToMyLocation.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				planningMapFragment.goToMyLocation();
+			}
+		});
+		mGoToMyLocation.setOnLongClickListener(new View.OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+				planningMapFragment.setAutoPanMode(AutoPanMode.USER);
+				return true;
+			}
+		});
 
-        mGoToDroneLocation = (ImageButton) findViewById(R.id.drone_location_button);
-        mGoToDroneLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                planningMapFragment.goToDroneLocation();
-            }
-        });
-        mGoToDroneLocation.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                planningMapFragment.setAutoPanMode(AutoPanMode.DRONE);
-                return true;
-            }
-        });
+		mGoToDroneLocation = (ImageButton) findViewById(R.id.drone_location_button);
+		mGoToDroneLocation.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				planningMapFragment.goToDroneLocation();
+			}
+		});
+		mGoToDroneLocation.setOnLongClickListener(new View.OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+				planningMapFragment.setAutoPanMode(AutoPanMode.DRONE);
+				return true;
+			}
+		});
 
-        final RadioButton normalToggle = (RadioButton) findViewById(R.id.normalWpToggle);
-        normalToggle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mIsSplineEnabled = !normalToggle.isChecked();
-            }
-        });
+		final RadioButton normalToggle = (RadioButton) findViewById(R.id.normalWpToggle);
+		normalToggle.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mIsSplineEnabled = !normalToggle.isChecked();
+			}
+		});
 
-        final RadioButton splineToggle = (RadioButton) findViewById(R.id.splineWpToggle);
-        splineToggle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mIsSplineEnabled = splineToggle.isChecked();
-            }
-        });
+		final RadioButton splineToggle = (RadioButton) findViewById(R.id.splineWpToggle);
+		splineToggle.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mIsSplineEnabled = splineToggle.isChecked();
+			}
+		});
 
-        //Retrieve the item detail fragment using its tag
-        itemDetailFragment = (MissionDetailFragment) fragmentManager.findFragmentByTag
-                (ITEM_DETAIL_TAG);
+		// Retrieve the item detail fragment using its tag
+		itemDetailFragment = (MissionDetailFragment) fragmentManager
+				.findFragmentByTag(ITEM_DETAIL_TAG);
 
-        /*
-         * On phone, this view will be null causing the item detail to be shown as a dialog.
-         */
-        mContainerItemDetail = findViewById(R.id.containerItemDetail);
+		/*
+		 * On phone, this view will be null causing the item detail to be shown
+		 * as a dialog.
+		 */
+		mContainerItemDetail = findViewById(R.id.containerItemDetail);
 
-		missionProxy = ((DroidPlannerApp)getApplication()).missionProxy;
+		missionProxy = ((DroidPlannerApp) getApplication()).missionProxy;
 		gestureMapFragment.setOnPathFinishedListener(this);
 	}
 
-    @Override
-    public void onResume(){
-        super.onResume();
-        setupTool(getTool());
-    }
+	@Override
+	public void onResume() {
+		super.onResume();
+		setupTool(getTool());
+	}
 
-    @Override
-    public void onStart(){
-        super.onStart();
-        missionProxy.selection.addSelectionUpdateListener(this);
-    }
+	@Override
+	public void onStart() {
+		super.onStart();
+		missionProxy.selection.addSelectionUpdateListener(this);
+	}
 
-    @Override
-    public void onStop(){
-        super.onStop();
-        missionProxy.selection.removeSelectionUpdateListener(this);
-    }
+	@Override
+	public void onStop() {
+		super.onStop();
+		missionProxy.selection.removeSelectionUpdateListener(this);
+	}
 
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -240,17 +242,18 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		updateMapPadding();
 	}
 
+	/**
+	 * Account for the various ui elements and update the map padding so that it
+	 * remains 'visible'.
+	 */
 	private void updateMapPadding() {
-		int topPadding = infoView.getBottom();
-		int rightPadding = 0,bottomPadding = 0;
-
-		if (missionProxy.getItems().size()>0) {
-			rightPadding = editorToolsFragment.getView().getRight();
-			bottomPadding = missionListFragment.getView().getHeight();
-		}
-		planningMapFragment.setMapPadding(rightPadding, topPadding, 0, bottomPadding);
+		int topPadding = mLocationButtonsContainer.getBottom()
+				+ mLocationButtonsContainer.getPaddingBottom();
+		int leftPadding = mLocationButtonsContainer.getLeft()
+				- mLocationButtonsContainer.getPaddingLeft();
+		planningMapFragment.setMapPadding(leftPadding, topPadding, 0, 0);
 	}
-
+	
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
@@ -289,17 +292,16 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 	@Override
 	public void onMapClick(Coord2D point) {
-        //If an mission item is selected, unselect it.
-        missionProxy.selection.clearSelection();
+		// If an mission item is selected, unselect it.
+		missionProxy.selection.clearSelection();
 
 		switch (getTool()) {
 		case MARKER:
-            if(mIsSplineEnabled){
-                missionProxy.addSplineWaypoint(point);
-            }
-            else {
-                missionProxy.addWaypoint(point);
-            }
+			if (mIsSplineEnabled) {
+				missionProxy.addSplineWaypoint(point);
+			} else {
+				missionProxy.addWaypoint(point);
+			}
 			break;
 		case DRAW:
 			break;
@@ -322,32 +324,32 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		setupTool(tools);
 	}
 
-    private void setupTool(EditorTools tool){
-        switch (tool) {
-            case DRAW:
-                enableSplineToggle(true);
-                gestureMapFragment.enableGestureDetection();
-                break;
+	private void setupTool(EditorTools tool) {
+		switch (tool) {
+		case DRAW:
+			enableSplineToggle(true);
+			gestureMapFragment.enableGestureDetection();
+			break;
 
-            case POLY:
-                enableSplineToggle(false);
-                Toast.makeText(this,R.string.draw_the_survey_region, Toast.LENGTH_SHORT).show();
-                gestureMapFragment.enableGestureDetection();
-                break;
+		case POLY:
+			enableSplineToggle(false);
+			Toast.makeText(this, R.string.draw_the_survey_region, Toast.LENGTH_SHORT).show();
+			gestureMapFragment.enableGestureDetection();
+			break;
 
-            case MARKER:
-                //Enable the spline selection toggle
-                enableSplineToggle(true);
-                gestureMapFragment.disableGestureDetection();
-                break;
+		case MARKER:
+			// Enable the spline selection toggle
+			enableSplineToggle(true);
+			gestureMapFragment.disableGestureDetection();
+			break;
 
-            case TRASH:
-            case NONE:
-                enableSplineToggle(false);
-                gestureMapFragment.disableGestureDetection();
-                break;
-        }
-    }
+		case TRASH:
+		case NONE:
+			enableSplineToggle(false);
+			gestureMapFragment.disableGestureDetection();
+			break;
+		}
+	}
 
 	@Override
 	public void editorToolLongClicked(EditorTools tools) {
@@ -364,11 +366,11 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		}
 	}
 
-    private void enableSplineToggle(boolean isEnabled){
-        if(mSplineToggleContainer != null){
-            mSplineToggleContainer.setVisibility(isEnabled ? View.VISIBLE : View.INVISIBLE);
-        }
-    }
+	private void enableSplineToggle(boolean isEnabled) {
+		if (mSplineToggleContainer != null) {
+			mSplineToggleContainer.setVisibility(isEnabled ? View.VISIBLE : View.INVISIBLE);
+		}
+	}
 
 	private void showItemDetail(MissionItemProxy item) {
 		if (itemDetailFragment == null) {
@@ -378,33 +380,33 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		}
 	}
 
-    private void addItemDetail(MissionItemProxy item) {
-        itemDetailFragment = item.getDetailFragment();
-        if(itemDetailFragment == null)
-            return;
+	private void addItemDetail(MissionItemProxy item) {
+		itemDetailFragment = item.getDetailFragment();
+		if (itemDetailFragment == null)
+			return;
 
-        if (mContainerItemDetail == null) {
-            itemDetailFragment.show(fragmentManager, ITEM_DETAIL_TAG);
-        }
-        else {
-            fragmentManager.beginTransaction().replace(R.id.containerItemDetail,
-                    itemDetailFragment, ITEM_DETAIL_TAG).commit();
-        }
-    }
+		if (mContainerItemDetail == null) {
+			itemDetailFragment.show(fragmentManager, ITEM_DETAIL_TAG);
+		} else {
+			fragmentManager.beginTransaction()
+					.replace(R.id.containerItemDetail, itemDetailFragment, ITEM_DETAIL_TAG)
+					.commit();
+		}
+	}
 
 	public void switchItemDetail(MissionItemProxy item) {
-        removeItemDetail();
+		removeItemDetail();
 		addItemDetail(item);
 	}
 
 	private void removeItemDetail() {
 		if (itemDetailFragment != null) {
-            if (mContainerItemDetail == null) {
-                itemDetailFragment.dismiss();
-            } else {
-                fragmentManager.beginTransaction().remove(itemDetailFragment).commit();
-            }
-            itemDetailFragment = null;
+			if (mContainerItemDetail == null) {
+				itemDetailFragment.dismiss();
+			} else {
+				fragmentManager.beginTransaction().remove(itemDetailFragment).commit();
+			}
+			itemDetailFragment = null;
 		}
 	}
 
@@ -413,33 +415,32 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		List<Coord2D> points = planningMapFragment.projectPathIntoMap(path);
 		switch (getTool()) {
 		case DRAW:
-            if(mIsSplineEnabled){
-                missionProxy.addSplineWaypoints(points);
-            }
-            else {
-                missionProxy.addWaypoints(points);
-            }
+			if (mIsSplineEnabled) {
+				missionProxy.addSplineWaypoints(points);
+			} else {
+				missionProxy.addWaypoints(points);
+			}
 			break;
 
 		case POLY:
-			if (path.size()>2) {
+			if (path.size() > 2) {
 				missionProxy.addSurveyPolygon(points);
-			}else{
+			} else {
 				editorToolsFragment.setTool(EditorTools.POLY);
 				return;
 			}
 			break;
 
-            default:
+		default:
 			break;
 		}
 		editorToolsFragment.setTool(EditorTools.NONE);
 	}
 
-    @Override
-    public void onDetailDialogDismissed(MissionItemProxy item) {
-        missionProxy.selection.removeItemFromSelection(item);
-    }
+	@Override
+	public void onDetailDialogDismissed(MissionItemProxy item) {
+		missionProxy.selection.removeItemFromSelection(item);
+	}
 
 	@Override
 	public void onWaypointTypeChanged(MissionItemProxy newItem, MissionItemProxy oldItem) {
@@ -451,7 +452,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 	@Override
 	public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-		switch(item.getItemId()){
+		switch (item.getItemId()) {
 		case MENU_DELETE:
 			missionProxy.removeSelection(missionProxy.selection);
 			mode.finish();
@@ -476,7 +477,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 	@Override
 	public void onDestroyActionMode(ActionMode arg0) {
-		missionListFragment.updateChoiceMode(ListView.CHOICE_MODE_SINGLE);
+		missionListFragment.updateChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
 		missionProxy.selection.clearSelection();
 		contextualActionBar = null;
 		editorToolsFragment.getView().setVisibility(View.VISIBLE);
@@ -497,7 +498,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 			}
 		} else {
 			editorToolsFragment.setTool(EditorTools.NONE);
-			missionListFragment.updateChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+			missionListFragment.updateChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
 			contextualActionBar = startActionMode(this);
 			missionProxy.selection.setSelectionTo(item);
 		}
@@ -536,44 +537,41 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 	@Override
 	public void onListVisibilityChanged() {
+		updateMapPadding();
 	}
 
-    @Override
-    public void onSelectionUpdate(List<MissionItemProxy> selected) {
-        final int selectedCount = selected.size();
-        
-        missionListFragment.setArrowsVisibility(selectedCount > 0);
-        
-        if(selectedCount != 1){
-            removeItemDetail();
-        }
-        else{
-            if(contextualActionBar != null)
-                removeItemDetail();
-            else{
-                showItemDetail(selected.get(0));
-            }
-        }
+	@Override
+	public void onSelectionUpdate(List<MissionItemProxy> selected) {
+		final int selectedCount = selected.size();
 
-        planningMapFragment.update();
-    }
+		missionListFragment.setArrowsVisibility(selectedCount > 0);
+
+		if (selectedCount != 1) {
+			removeItemDetail();
+		} else {
+			if (contextualActionBar != null)
+				removeItemDetail();
+			else {
+				showItemDetail(selected.get(0));
+			}
+		}
+
+		planningMapFragment.update();
+	}
 
 	private void doClearMissionConfirmation() {
-		YesNoDialog ynd = YesNoDialog.newInstance(
-                getString(R.string.dlg_clear_mission_title),
-                getString(R.string.dlg_clear_mission_confirm),
-                new YesNoDialog.Listener() {
-                    @Override
-                    public void onYes() {
-                        missionProxy.clear();
-                        missionProxy.addTakeoff();
-                    }
+		YesNoDialog ynd = YesNoDialog.newInstance(getString(R.string.dlg_clear_mission_title),
+				getString(R.string.dlg_clear_mission_confirm), new YesNoDialog.Listener() {
+					@Override
+					public void onYes() {
+						missionProxy.clear();
+						missionProxy.addTakeoff();
+					}
 
-                    @Override
-                    public void onNo() {
-                    }
-                }
-        );
+					@Override
+					public void onNo() {
+					}
+				});
 
 		ynd.show(getSupportFragmentManager(), "clearMission");
 	}

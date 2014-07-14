@@ -1,13 +1,13 @@
 package org.droidplanner.android.fragments.calibration.flightmodes;
 
 import org.droidplanner.R;
-import org.droidplanner.core.drone.Drone;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.android.fragments.calibration.FragmentSetupSend;
 import org.droidplanner.android.fragments.calibration.SetupSidePanel;
 import org.droidplanner.android.fragments.helpers.SuperSetupMainPanel;
 import org.droidplanner.android.helpers.calibration.CalParameters;
 import org.droidplanner.android.helpers.calibration.FM_CalParameters;
+import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -95,19 +95,16 @@ public class FragmentSetupFM extends SuperSetupMainPanel {
 	protected void updatePanelInfo() {
 		for (int i = 0; i < 6; i++) {
 			int fmData = (int) parameters.getParamValue(i);
-			pwmSpinners[i].setSelection(
-					getSpinnerIndexFromValue(fmData, valueFM), true);
+			pwmSpinners[i].setSelection(getSpinnerIndexFromValue(fmData, valueFM), true);
 		}
 
 		for (int i = 0; i < 6; i++) {
 			int fmData;
 			fmData = (int) parameters.getParamValue(6);
-			chkbxSimple[i]
-					.setChecked((fmData & flightModeIndex[i]) == flightModeIndex[i]);
+			chkbxSimple[i].setChecked((fmData & flightModeIndex[i]) == flightModeIndex[i]);
 
 			fmData = (int) parameters.getParamValue(7);
-			chkbxSuperSimple[i]
-					.setChecked((fmData & flightModeIndex[i]) == flightModeIndex[i]);
+			chkbxSuperSimple[i].setChecked((fmData & flightModeIndex[i]) == flightModeIndex[i]);
 		}
 	}
 
@@ -163,8 +160,8 @@ public class FragmentSetupFM extends SuperSetupMainPanel {
 	private void setupSpinners() {
 		getFMOptions();
 
-		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-				parentActivity, R.layout.spinner_setup_item, stringFM);
+		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(parentActivity,
+				R.layout.spinner_setup_item, stringFM);
 
 		adapter.setDropDownViewResource(R.layout.spinner_setup_item_dropdown);
 
@@ -178,8 +175,8 @@ public class FragmentSetupFM extends SuperSetupMainPanel {
 		int pwmId = getPWMRangeIndex(pwmIn);
 
 		textPWMCurrent.setText(String.format("PWM in : %d", pwmIn));
-		textPWMRange.setText("Flight Mode #" + String.valueOf(pwmId + 1) + " ("
-				+ listPWM[pwmId] + ")");
+		textPWMRange.setText("Flight Mode #" + String.valueOf(pwmId + 1) + " (" + listPWM[pwmId]
+				+ ")");
 		updateLayout(pwmId);
 
 	}
@@ -190,8 +187,7 @@ public class FragmentSetupFM extends SuperSetupMainPanel {
 		}
 
 		if (pwmId > -1) {
-			layoutPWM[pwmId].setBackgroundColor(getResources().getColor(
-					R.color.air_speed_label));
+			layoutPWM[pwmId].setBackgroundColor(getResources().getColor(R.color.air_speed_label));
 		}
 	}
 
@@ -214,8 +210,7 @@ public class FragmentSetupFM extends SuperSetupMainPanel {
 	}
 
 	private void getFMOptions() {
-		String pairs[] = getResources().getStringArray(
-				R.array.FligthMode_CopterV3_1);
+		String pairs[] = getResources().getStringArray(R.array.FligthMode_CopterV3_1);
 		valueFM = null;
 		valueFM = new int[pairs.length];
 		stringFM = null;

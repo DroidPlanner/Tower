@@ -39,8 +39,7 @@ public class CamerasAdapter extends ArrayAdapter<String> {
 		try {
 			return loader.openFile(getItem(position));
 		} catch (Exception e) {
-			Toast.makeText(context,
-					context.getString(R.string.error_when_opening_file),
+			Toast.makeText(context, context.getString(R.string.error_when_opening_file),
 					Toast.LENGTH_SHORT).show();
 			return loadLastFile();
 		}

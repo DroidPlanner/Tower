@@ -55,12 +55,12 @@ public class TTSNotificationProvider implements OnInitListener,
 	/**
 	 * Warn the user if needed via the TTSNotificationProvider module
 	 */
+	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		if (tts != null) {
 			switch (event) {
 			case INVALID_POLYGON:
-				Toast.makeText(context, R.string.exception_draw_polygon,
-						Toast.LENGTH_SHORT).show();
+				Toast.makeText(context, R.string.exception_draw_polygon, Toast.LENGTH_SHORT).show();
 				break;
 			case ARMING:
 				speakArmedState(drone.state.isArmed());
@@ -75,16 +75,14 @@ public class TTSNotificationProvider implements OnInitListener,
 				speakMode(drone.state.getMode());
 				break;
 			case MISSION_SENT:
-				Toast.makeText(context, "Waypoints sent", Toast.LENGTH_SHORT)
-						.show();
+				Toast.makeText(context, "Waypoints sent", Toast.LENGTH_SHORT).show();
 				speak("Waypoints saved to Drone");
 				break;
 			case GPS_FIX:
 				speakGpsMode(drone.GPS.getFixTypeNumeric());
 				break;
 			case MISSION_RECEIVED:
-				Toast.makeText(context, "Waypoints received from Drone",
-						Toast.LENGTH_SHORT).show();
+				Toast.makeText(context, "Waypoints received from Drone", Toast.LENGTH_SHORT).show();
 				speak("Waypoints received");
 				break;
 			case HEARTBEAT_FIRST:
@@ -99,10 +97,10 @@ public class TTSNotificationProvider implements OnInitListener,
 				speak("Data link restored");
 				break;
 			case MISSION_WP_UPDATE:
-				speak("Going for waypoint "+ drone.missionStats.getCurrentWP());
+				speak("Going for waypoint " + drone.missionStats.getCurrentWP());
 				break;
 			case FOLLOW_START:
-					speak("Following");
+				speak("Following");
 				break;
 			default:
 				break;
@@ -119,7 +117,8 @@ public class TTSNotificationProvider implements OnInitListener,
 	}
 
 	private void batteryDischargeNotification(double battRemain) {
-		if (lastBatteryDischargeNotification != (int) ((battRemain - 1) / BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT)) {
+		if (lastBatteryDischargeNotification > (int) ((battRemain - 1) / BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT) ||
+				lastBatteryDischargeNotification + 1 < (int) ((battRemain - 1) / BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT)) {
 			lastBatteryDischargeNotification = (int) ((battRemain - 1) / BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT);
 			speak("Battery at" + (int) battRemain + "%");
 		}
@@ -168,8 +167,8 @@ public class TTSNotificationProvider implements OnInitListener,
 		}
 	}
 
-    @Override
-    public void quickNotify(String feedback) {
-        speak(feedback);
-    }
+	@Override
+	public void quickNotify(String feedback) {
+		speak(feedback);
+	}
 }

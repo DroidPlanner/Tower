@@ -63,7 +63,7 @@ public class Home extends DroneVariable {
 			mavMsg.y = (float) getCoord().getLng();
 			mavMsg.z = (float) getAltitude().valueInMeters();
 		}
-		
+
 		return mavMsg;
 	}
 

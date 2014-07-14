@@ -42,8 +42,7 @@ public class CoordBounds {
 	}
 
 	public double getDiag() {
-		return GeoTools.latToMeters(GeoTools.getAproximatedDistance(
-				ne_1quadrant, sw_3quadrant));
+		return GeoTools.latToMeters(GeoTools.getAproximatedDistance(ne_1quadrant, sw_3quadrant));
 	}
 
 	public Coord2D getMiddle() {

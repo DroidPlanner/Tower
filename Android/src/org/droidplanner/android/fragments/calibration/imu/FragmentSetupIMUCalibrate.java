@@ -17,10 +17,8 @@ public class FragmentSetupIMUCalibrate extends SetupSidePanel {
 	private TextView textDesc;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		final View view = inflater.inflate(
-				R.layout.fragment_setup_imu_calibrate, container, false);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		final View view = inflater.inflate(R.layout.fragment_setup_imu_calibrate, container, false);
 
 		final SetupSensorFragment setupFragment = (SetupSensorFragment) getParentFragment();
 

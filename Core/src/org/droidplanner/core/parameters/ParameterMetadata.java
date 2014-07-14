@@ -96,8 +96,7 @@ public class ParameterMetadata implements Serializable {
 				final String[] parts = tpart.split(":");
 				if (parts.length != 2)
 					throw new IllegalArgumentException();
-				outValues.put(format.parse(parts[0].trim()).doubleValue(),
-						parts[1].trim());
+				outValues.put(format.parse(parts[0].trim()).doubleValue(), parts[1].trim());
 			}
 		}
 		return outValues;

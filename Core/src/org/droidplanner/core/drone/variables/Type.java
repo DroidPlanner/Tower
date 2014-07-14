@@ -50,8 +50,7 @@ public class Type extends DroneVariable {
 	}
 
 	public enum FirmwareType {
-		ARDU_PLANE("ArduPlane"), ARDU_COPTER("ArduCopter"), ARDU_ROVER(
-				"ArduRover");
+		ARDU_PLANE("ArduPlane"), ARDU_COPTER("ArduCopter"), ARDU_ROVER("ArduRover");
 
 		private final String type;
 

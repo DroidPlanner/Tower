@@ -33,8 +33,7 @@ public class Speed extends DroneVariable {
 		targetSpeed = aspd_error + airSpeed;
 	}
 
-	public void setGroundAndAirSpeeds(double groundSpeed, double airSpeed,
-			double climb) {
+	public void setGroundAndAirSpeeds(double groundSpeed, double airSpeed, double climb) {
 		this.groundSpeed = groundSpeed;
 		this.airSpeed = airSpeed;
 		this.verticalSpeed = climb;

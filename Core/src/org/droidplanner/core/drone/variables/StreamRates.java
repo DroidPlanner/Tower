@@ -4,8 +4,8 @@ import org.droidplanner.core.MAVLink.MavLinkStreamRates;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.core.drone.Preferences.Rates;
 import org.droidplanner.core.drone.DroneVariable;
+import org.droidplanner.core.drone.Preferences.Rates;
 
 public class StreamRates extends DroneVariable implements OnDroneListener {
 
@@ -29,9 +29,8 @@ public class StreamRates extends DroneVariable implements OnDroneListener {
 	public void setupStreamRatesFromPref() {
 		Rates rates = myDrone.preferences.getRates();
 
-		MavLinkStreamRates.setupStreamRates(myDrone.MavClient,
-				rates.extendedStatus, rates.extra1, rates.extra2, rates.extra3,
-				rates.position, rates.rcChannels, rates.rawSensors,
+		MavLinkStreamRates.setupStreamRates(myDrone.MavClient, rates.extendedStatus, rates.extra1,
+				rates.extra2, rates.extra3, rates.position, rates.rcChannels, rates.rawSensors,
 				rates.rawController);
 	}
 

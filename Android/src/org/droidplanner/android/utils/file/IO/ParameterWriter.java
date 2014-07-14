@@ -36,14 +36,13 @@ public class ParameterWriter {
 	}
 
 	private void writeFirstLine(FileOutputStream out) throws IOException {
-		out.write((new String("#NOTE: " + FileManager.getTimeStamp() + "\n")
-				.getBytes()));
+		out.write((new String("#NOTE: " + FileManager.getTimeStamp() + "\n").getBytes()));
 	}
 
 	private void writeWaypointsLines(FileOutputStream out) throws IOException {
 		for (Parameter param : parameterList) {
-			out.write(String.format(Locale.ENGLISH, "%s , %f\n", param.name,
-					param.value).getBytes());
+			out.write(String.format(Locale.ENGLISH, "%s , %f\n", param.name, param.value)
+					.getBytes());
 		}
 	}
 }

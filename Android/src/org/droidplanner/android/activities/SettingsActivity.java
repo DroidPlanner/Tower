@@ -12,18 +12,16 @@ import android.os.Bundle;
  */
 public class SettingsActivity extends DrawerNavigationUI {
 
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_settings);
 
 		FragmentManager fm = getFragmentManager();
-		Fragment settingsFragment = fm
-				.findFragmentById(R.id.fragment_settings_layout);
+		Fragment settingsFragment = fm.findFragmentById(R.id.fragment_settings_layout);
 		if (settingsFragment == null) {
 			settingsFragment = new SettingsFragment();
-			fm.beginTransaction()
-					.add(R.id.fragment_settings_layout, settingsFragment)
-					.commit();
+			fm.beginTransaction().add(R.id.fragment_settings_layout, settingsFragment).commit();
 		}
 	}
 

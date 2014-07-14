@@ -17,11 +17,11 @@ public class ListRow_Select extends ListRow implements OnItemSelectedListener {
 		super(inflater, checkListItem);
 	}
 
+	@Override
 	public View getView(View convertView) {
 		View view;
 		if (convertView == null) {
-			ViewGroup viewGroup = (ViewGroup) inflater.inflate(
-					R.layout.list_select_item, null);
+			ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.list_select_item, null);
 			holder = new ViewHolder(viewGroup, checkListItem);
 			viewGroup.setTag(holder);
 			view = viewGroup;
@@ -34,14 +34,14 @@ public class ListRow_Select extends ListRow implements OnItemSelectedListener {
 		return view;
 	}
 
-	private void updateDisplay(View view, ViewHolder holder,
-			CheckListItem mListItem) {
+	private void updateDisplay(View view, ViewHolder holder, CheckListItem mListItem) {
 		holder.selectView.setOnItemSelectedListener(this);
 		getData(mListItem);
 
 		updateCheckBox(checkListItem.isVerified());
 	}
 
+	@Override
 	public int getViewType() {
 		return ListRow_Type.SELECT_ROW.ordinal();
 	}
@@ -59,18 +59,15 @@ public class ListRow_Select extends ListRow implements OnItemSelectedListener {
 		}
 
 		@Override
-		protected void setupViewItems(ViewGroup viewGroup,
-				CheckListItem checkListItem) {
+		protected void setupViewItems(ViewGroup viewGroup, CheckListItem checkListItem) {
 			this.selectView = (Spinner) viewGroup.findViewById(R.id.lst_select);
 
 			setupSpinner(viewGroup, checkListItem);
 		}
 
-		private void setupSpinner(ViewGroup viewGroup,
-				CheckListItem checkListItem) {
+		private void setupSpinner(ViewGroup viewGroup, CheckListItem checkListItem) {
 			adapter = new ArrayAdapter<String>(viewGroup.getContext(),
-					android.R.layout.simple_spinner_item,
-					checkListItem.getOptionLists());
+					android.R.layout.simple_spinner_item, checkListItem.getOptionLists());
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 			selectView.setAdapter(adapter);
@@ -79,8 +76,7 @@ public class ListRow_Select extends ListRow implements OnItemSelectedListener {
 	}
 
 	@Override
-	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
-			long arg3) {
+	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		checkListItem.setSelectedIndex(arg2);
 		updateRowChanged(arg1, this.checkListItem);
 	}

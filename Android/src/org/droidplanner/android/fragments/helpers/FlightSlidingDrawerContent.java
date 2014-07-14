@@ -19,23 +19,18 @@ import android.view.ViewGroup;
  */
 public class FlightSlidingDrawerContent extends Fragment {
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		final View view = inflater.inflate(
-				R.layout.fragment_flight_sliding_drawer_content, container,
-				false);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		final View view = inflater.inflate(R.layout.fragment_flight_sliding_drawer_content,
+				container, false);
 
-		final ViewPager viewPager = (ViewPager) view
-				.findViewById(R.id.sliding_drawer_content);
-		viewPager.setAdapter(new FlightSlidingDrawerAdapter(
-				getChildFragmentManager(), getActivity()
-						.getApplicationContext()));
+		final ViewPager viewPager = (ViewPager) view.findViewById(R.id.sliding_drawer_content);
+		viewPager.setAdapter(new FlightSlidingDrawerAdapter(getChildFragmentManager(),
+				getActivity().getApplicationContext()));
 
 		return view;
 	}
 
-	private static class FlightSlidingDrawerAdapter extends
-			FragmentPagerAdapter {
+	private static class FlightSlidingDrawerAdapter extends FragmentPagerAdapter {
 
 		private final Context mContext;
 
