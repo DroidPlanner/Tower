@@ -31,11 +31,9 @@ public class DirectoryPath {
 
 	/**
 	 * After tlogs are uploaded they get moved to this directory
-	 * 
-	 * @return
 	 */
 	static public File getSentPath() {
-		File f = new File(getDroidPlannerPath() + "/Sent/");
+		File f = new File(getTLogPath() + "/Sent/");
 		f.mkdirs();
 		return f;
 	}
