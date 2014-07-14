@@ -1,5 +1,7 @@
 package org.droidplanner.android.fragments;
 
+import java.util.List;
+
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
@@ -133,5 +135,17 @@ public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 	protected boolean isMissionDraggable() {
 		return true;
 	}
+
+    public void zoomToFit() {
+        // get visible mission coords
+        final List<Coord2D> visibleCoords = missionProxy.getVisibleCoords();
+
+        // add home coord if visible
+        final Coord2D homeCoord = drone.home.getCoord();
+        if (homeCoord!= null && !homeCoord.isEmpty())
+            visibleCoords.add(homeCoord);
+
+        mMapFragment.zoomToFit(visibleCoords);
+    }
 
 }

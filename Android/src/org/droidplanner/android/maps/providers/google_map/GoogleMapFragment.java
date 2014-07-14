@@ -457,6 +457,24 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 			setupMapListeners();
 		}
 	}
+	
+    @Override
+    public void zoomToFit(List<Coord2D> coords) {
+        if (!coords.isEmpty()) {
+            final List<LatLng> points = new ArrayList<LatLng>();
+            for (Coord2D coord : coords)
+                points.add(DroneHelper.CoordToLatLang(coord));
+
+            LatLngBounds bounds = getBounds(points);
+            CameraUpdate animation;
+            if (isMapLayoutFinished())
+                animation = CameraUpdateFactory.newLatLngBounds(bounds, 100);
+            else
+                animation = CameraUpdateFactory.newLatLngBounds(bounds, 480,
+                        360, 100);
+            getMap().animateCamera(animation);
+        }
+    }
 
 	@Override
 	public void goToMyLocation() {

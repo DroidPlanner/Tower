@@ -37,6 +37,10 @@ public class Coord2D {
 		return latitude;
 	}
 
+    public boolean isEmpty() {
+        return latitude == 0 || longitude == 0;
+    }
+
 	@Override
 	public String toString() {
 		return "lat/lon: " + getLat() + "/" + getLng();

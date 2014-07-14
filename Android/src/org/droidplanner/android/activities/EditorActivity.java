@@ -7,6 +7,8 @@ import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
 import org.droidplanner.android.dialogs.YesNoDialog;
+import org.droidplanner.android.dialogs.openfile.OpenFileDialog;
+import org.droidplanner.android.dialogs.openfile.OpenMissionDialog;
 import org.droidplanner.android.fragments.EditorListFragment;
 import org.droidplanner.android.fragments.EditorMapFragment;
 import org.droidplanner.android.fragments.EditorToolsFragment;
@@ -18,6 +20,8 @@ import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.MissionSelection;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.proxy.mission.item.fragments.MissionDetailFragment;
+import org.droidplanner.android.utils.file.IO.MissionReader;
+import org.droidplanner.android.utils.file.IO.MissionWriter;
 import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
@@ -33,7 +37,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -168,24 +171,6 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	}
 
 	@Override
-	public void onWindowFocusChanged(boolean hasFocus) {
-		super.onWindowFocusChanged(hasFocus);
-		updateMapPadding();
-	}
-
-	/**
-	 * Account for the various ui elements and update the map padding so that it
-	 * remains 'visible'.
-	 */
-	private void updateMapPadding() {
-		int topPadding = mLocationButtonsContainer.getBottom()
-				+ mLocationButtonsContainer.getPaddingBottom();
-		int leftPadding = mLocationButtonsContainer.getLeft()
-				- mLocationButtonsContainer.getPaddingLeft();
-		planningMapFragment.setMapPadding(leftPadding, topPadding, 0, 0);
-	}
-
-	@Override
 	public void onResume() {
 		super.onResume();
 		setupTool(getTool());
@@ -203,6 +188,72 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		missionProxy.selection.removeSelectionUpdateListener(this);
 	}
 
+	@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        getMenuInflater().inflate(R.menu.menu_mission, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_zoom_fit_mission:
+                planningMapFragment.zoomToFit();
+                return true;
+
+            case R.id.menu_open_mission:
+                openMissionFile();
+                return true;
+
+            case R.id.menu_save_mission:
+                saveMissionFile();
+                return true;
+
+            default:
+                return super.onMenuItemSelected(featureId, item);
+        }
+    }
+
+    private void openMissionFile() {
+        OpenFileDialog missionDialog = new OpenMissionDialog(drone) {
+            @Override
+            public void waypointFileLoaded(MissionReader reader) {
+                drone.mission.onMissionLoaded(reader.getMsgMissionItems());
+                planningMapFragment.zoomToFit();
+            }
+        };
+        missionDialog.openDialog(this);
+    }
+
+    private void saveMissionFile() {
+
+        if (MissionWriter.write(drone.mission.getMsgMissionItems())) {
+            Toast.makeText(this, "File saved", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Error saving file", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+		super.onWindowFocusChanged(hasFocus);
+		updateMapPadding();
+	}
+
+	/**
+	 * Account for the various ui elements and update the map padding so that it
+	 * remains 'visible'.
+	 */
+	private void updateMapPadding() {
+		int topPadding = mLocationButtonsContainer.getBottom()
+				+ mLocationButtonsContainer.getPaddingBottom();
+		int leftPadding = mLocationButtonsContainer.getLeft()
+				- mLocationButtonsContainer.getPaddingLeft();
+		planningMapFragment.setMapPadding(leftPadding, topPadding, 0, 0);
+	}
+	
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
