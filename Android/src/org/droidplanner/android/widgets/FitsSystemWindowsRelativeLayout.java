@@ -17,8 +17,7 @@ public class FitsSystemWindowsRelativeLayout extends RelativeLayout {
 		super(context, attrs);
 	}
 
-	public FitsSystemWindowsRelativeLayout(Context context, AttributeSet attrs,
-			int defStyle) {
+	public FitsSystemWindowsRelativeLayout(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 	}
 

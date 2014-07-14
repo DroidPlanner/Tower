@@ -16,8 +16,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.util.Log;
 
-public class GraphicGuided extends MarkerInfo.SimpleMarkerInfo implements
-		PathSource {
+public class GraphicGuided extends MarkerInfo.SimpleMarkerInfo implements PathSource {
 
 	private final static String TAG = GraphicGuided.class.getSimpleName();
 
@@ -70,8 +69,7 @@ public class GraphicGuided extends MarkerInfo.SimpleMarkerInfo implements
 
 	@Override
 	public Bitmap getIcon(Resources res) {
-		return MarkerWithText.getMarkerWithTextAndDetail(R.drawable.ic_wp_map,
-				"Guided", "", res);
+		return MarkerWithText.getMarkerWithTextAndDetail(R.drawable.ic_wp_map, "Guided", "", res);
 	}
 
 	@Override

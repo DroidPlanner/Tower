@@ -18,17 +18,15 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 @SuppressLint("UseSparseArrays")
-public class EditorMapFragment extends DroneMap implements
-		DPMap.OnMapLongClickListener, DPMap.OnMarkerDragListener,
-		DPMap.OnMapClickListener, DPMap.OnMarkerClickListener {
+public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickListener,
+		DPMap.OnMarkerDragListener, DPMap.OnMapClickListener, DPMap.OnMarkerClickListener {
 
 	// public MapPath polygonPath;
 	// public CameraGroundOverlays cameraOverlays;
 	private OnEditorInteraction editorListener;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
-			Bundle bundle) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle bundle) {
 		View view = super.onCreateView(inflater, viewGroup, bundle);
 
 		mMapFragment.setOnMarkerDragListener(this);
@@ -58,8 +56,7 @@ public class EditorMapFragment extends DroneMap implements
 		checkForWaypointMarkerMoving(markerInfo, false);
 	}
 
-	private void checkForWaypointMarkerMoving(MarkerInfo markerInfo,
-			boolean dragging) {
+	private void checkForWaypointMarkerMoving(MarkerInfo markerInfo, boolean dragging) {
 		if (SpatialCoordItem.class.isInstance(markerInfo)) {
 			Coord2D position = markerInfo.getPosition();
 
@@ -88,8 +85,7 @@ public class EditorMapFragment extends DroneMap implements
 	private void checkForWaypointMarker(MarkerInfo markerInfo) {
 		if (!(markerInfo instanceof SurveyMarkerInfoProvider)
 				&& (markerInfo instanceof MissionItemMarkerInfo)) {
-			missionProxy.move(
-					((MissionItemMarkerInfo) markerInfo).getMarkerOrigin(),
+			missionProxy.move(((MissionItemMarkerInfo) markerInfo).getMarkerOrigin(),
 					markerInfo.getPosition());
 		}
 	}
@@ -118,16 +114,15 @@ public class EditorMapFragment extends DroneMap implements
 		if (target == AutoPanMode.DISABLED)
 			return true;
 
-		Toast.makeText(getActivity(), "Auto pan is not supported on this map.",
-				Toast.LENGTH_LONG).show();
+		Toast.makeText(getActivity(), "Auto pan is not supported on this map.", Toast.LENGTH_LONG)
+				.show();
 		return false;
 	}
 
 	@Override
 	public boolean onMarkerClick(MarkerInfo info) {
 		if (info instanceof MissionItemMarkerInfo) {
-			editorListener.onItemClick(((MissionItemMarkerInfo) info)
-					.getMarkerOrigin());
+			editorListener.onItemClick(((MissionItemMarkerInfo) info).getMarkerOrigin());
 			return true;
 		} else {
 			return false;

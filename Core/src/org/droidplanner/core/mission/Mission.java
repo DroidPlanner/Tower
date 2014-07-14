@@ -114,8 +114,7 @@ public class Mission extends DroneVariable {
 	public Altitude getLastAltitude() {
 		Altitude alt;
 		try {
-			SpatialCoordItem lastItem = (SpatialCoordItem) items.get(items
-					.size() - 1);
+			SpatialCoordItem lastItem = (SpatialCoordItem) items.get(items.size() - 1);
 			alt = lastItem.getCoordinate().getAltitude();
 		} catch (Exception e) {
 			alt = defaultAlt;
@@ -165,16 +164,11 @@ public class Mission extends DroneVariable {
 		if (i > 0) {
 			MissionItem previus = items.get(i - 1);
 			if (previus instanceof SpatialCoordItem) {
-				return waypoint
-						.getCoordinate()
-						.getAltitude()
-						.subtract(
-								((SpatialCoordItem) previus).getCoordinate()
-										.getAltitude());
+				return waypoint.getCoordinate().getAltitude()
+						.subtract(((SpatialCoordItem) previus).getCoordinate().getAltitude());
 			}
 		}
-		throw new IllegalArgumentException(
-				"Last waypoint doesn't have an altitude");
+		throw new IllegalArgumentException("Last waypoint doesn't have an altitude");
 	}
 
 	public Length getDistanceFromLastWaypoint(SpatialCoordItem waypoint)
@@ -187,8 +181,7 @@ public class Mission extends DroneVariable {
 						((SpatialCoordItem) previous).getCoordinate());
 			}
 		}
-		throw new IllegalArgumentException(
-				"Last waypoint doesn't have a coordinate");
+		throw new IllegalArgumentException("Last waypoint doesn't have a coordinate");
 	}
 
 	public boolean hasItem(MissionItem item) {

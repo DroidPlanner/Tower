@@ -26,11 +26,10 @@ import android.view.MenuItem;
 /**
  * Parent class for the app activity classes.
  */
-public abstract class SuperUI extends FragmentActivity implements
-		OnDroneListener {
+public abstract class SuperUI extends FragmentActivity implements OnDroneListener {
 
-	public final static String ACTION_TOGGLE_DRONE_CONNECTION = SuperUI.class
-			.getName() + ".ACTION_TOGGLE_DRONE_CONNECTION";
+	public final static String ACTION_TOGGLE_DRONE_CONNECTION = SuperUI.class.getName()
+			+ ".ACTION_TOGGLE_DRONE_CONNECTION";
 
 	private ScreenOrientation screenOrientation = new ScreenOrientation(this);
 	private InfoBarActionProvider infoBar;
@@ -65,9 +64,7 @@ public abstract class SuperUI extends FragmentActivity implements
 		 * android android.os.PowerManager#newWakeLock documentation.
 		 */
 		if (mAppPrefs.keepScreenOn()) {
-			getWindow()
-					.addFlags(
-							android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+			getWindow().addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		}
 
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -107,8 +104,7 @@ public abstract class SuperUI extends FragmentActivity implements
 		if (mAppPrefs.maxVolumeOnStart()) {
 			AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 			audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
-					audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC),
-					0);
+					audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
 		}
 	}
 
@@ -231,12 +227,13 @@ public abstract class SuperUI extends FragmentActivity implements
 
 			if (Utils.ConnectionType.BLUETOOTH.name().equals(connectionType)) {
 				// Launch a bluetooth device selection screen for the user
-                final String address = mAppPrefs.getBluetoothDeviceAddress();
-                if(address == null || address.isEmpty()) {
-                    new BTDeviceListFragment().show(getSupportFragmentManager(), "Device selection dialog");
-                    return;
-                }
-            }
+				final String address = mAppPrefs.getBluetoothDeviceAddress();
+				if (address == null || address.isEmpty()) {
+					new BTDeviceListFragment().show(getSupportFragmentManager(),
+							"Device selection dialog");
+					return;
+				}
+			}
 		}
 		drone.MavClient.toggleConnectionState();
 	}

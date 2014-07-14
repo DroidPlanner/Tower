@@ -22,9 +22,9 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
-public class FlightMapFragment extends DroneMap implements
-		DPMap.OnMapLongClickListener, DPMap.OnMarkerClickListener,
-		DPMap.OnMarkerDragListener, GuidedDialogListener, OnDroneListener {
+public class FlightMapFragment extends DroneMap implements DPMap.OnMapLongClickListener,
+		DPMap.OnMarkerClickListener, DPMap.OnMarkerDragListener, GuidedDialogListener,
+		OnDroneListener {
 
 	private static final int MAX_TOASTS_FOR_LOCATION_PRESS = 3;
 
@@ -39,8 +39,7 @@ public class FlightMapFragment extends DroneMap implements
 	private boolean guidedModeOnLongPress;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,
-			Bundle bundle) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle bundle) {
 		View view = super.onCreateView(inflater, viewGroup, bundle);
 
 		mAppPrefs = new DroidPlannerPrefs(context);
@@ -66,10 +65,8 @@ public class FlightMapFragment extends DroneMap implements
 
 	@Override
 	protected int getMaxFlightPathSize() {
-		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		return Integer.valueOf(prefs
-				.getString("pref_max_flight_path_size", "0"));
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		return Integer.valueOf(prefs.getString("pref_max_flight_path_size", "0"));
 	}
 
 	@Override
@@ -104,11 +101,9 @@ public class FlightMapFragment extends DroneMap implements
 	@Override
 	public void onForcedGuidedPoint(LatLng coord) {
 		try {
-			drone.guidedPoint.forcedGuidedCoordinate(DroneHelper
-					.LatLngToCoord(coord));
+			drone.guidedPoint.forcedGuidedCoordinate(DroneHelper.LatLngToCoord(coord));
 		} catch (Exception e) {
-			Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT)
-					.show();
+			Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -156,28 +151,21 @@ public class FlightMapFragment extends DroneMap implements
 		int pressCount = mAppPrefs.prefs.getInt(PREF_USER_LOCATION_FIRST_PRESS,
 				DEFAULT_USER_LOCATION_FIRST_PRESS);
 		if (pressCount < MAX_TOASTS_FOR_LOCATION_PRESS) {
-			Toast.makeText(context,
-					"Long press to activate user auto panning.",
-					Toast.LENGTH_LONG).show();
-			mAppPrefs.prefs.edit()
-					.putInt(PREF_USER_LOCATION_FIRST_PRESS, pressCount + 1)
-					.apply();
+			Toast.makeText(context, "Long press to activate user auto panning.", Toast.LENGTH_LONG)
+					.show();
+			mAppPrefs.prefs.edit().putInt(PREF_USER_LOCATION_FIRST_PRESS, pressCount + 1).apply();
 		}
 	}
 
 	@Override
 	public void goToDroneLocation() {
 		super.goToDroneLocation();
-		final int pressCount = mAppPrefs.prefs.getInt(
-				PREF_DRONE_LOCATION_FIRST_PRESS,
+		final int pressCount = mAppPrefs.prefs.getInt(PREF_DRONE_LOCATION_FIRST_PRESS,
 				DEFAULT_DRONE_LOCATION_FIRST_PRESS);
 		if (pressCount < MAX_TOASTS_FOR_LOCATION_PRESS) {
-			Toast.makeText(context,
-					"Long press to activate drone auto panning.",
-					Toast.LENGTH_LONG).show();
-			mAppPrefs.prefs.edit()
-					.putInt(PREF_DRONE_LOCATION_FIRST_PRESS, pressCount + 1)
-					.apply();
+			Toast.makeText(context, "Long press to activate drone auto panning.", Toast.LENGTH_LONG)
+					.show();
+			mAppPrefs.prefs.edit().putInt(PREF_DRONE_LOCATION_FIRST_PRESS, pressCount + 1).apply();
 		}
 	}
 

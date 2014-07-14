@@ -24,8 +24,7 @@ public class Spline {
 
 		// compute a and b coords used in spline formula
 		a = Coord2D.sum(this.p0.dot(2), p1.dot(-2), p0_prime, p1_prime);
-		b = Coord2D.sum(this.p0.dot(-3), p1.dot(3), p0_prime.dot(-2),
-				p1_prime.negate());
+		b = Coord2D.sum(this.p0.dot(-3), p1.dot(3), p0_prime.dot(-2), p1_prime.negate());
 	}
 
 	public List<Coord2D> generateCoordinates(int decimation) {

@@ -42,8 +42,7 @@ public class FragmentSetupSF extends SuperSetupMainPanel {
 	@Override
 	protected void updateCalibrationData() {
 		for (int i = 0; i < 6; i++) {
-			parameters.setParamValue(i,
-					valueSF[spinnerSFs[i].getSelectedItemPosition()]);
+			parameters.setParamValue(i, valueSF[spinnerSFs[i].getSelectedItemPosition()]);
 		}
 	}
 
@@ -54,8 +53,7 @@ public class FragmentSetupSF extends SuperSetupMainPanel {
 
 		for (int i = 0; i < 6; i++) {
 			spinnerSFs[i].setSelection(
-					getSpinnerIndexFromValue((int) parameters.getParamValue(i),
-							valueSF), true);
+					getSpinnerIndexFromValue((int) parameters.getParamValue(i), valueSF), true);
 		}
 	}
 
@@ -74,8 +72,8 @@ public class FragmentSetupSF extends SuperSetupMainPanel {
 	private void setupSpinners() {
 		getSFOptions();
 
-		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-				parentActivity, R.layout.spinner_setup_item, stringSF);
+		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(parentActivity,
+				R.layout.spinner_setup_item, stringSF);
 		adapter.setDropDownViewResource(R.layout.spinner_setup_item_dropdown);
 
 		for (Spinner spinner : spinnerSFs)

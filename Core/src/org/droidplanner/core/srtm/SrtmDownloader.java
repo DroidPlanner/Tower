@@ -19,8 +19,7 @@ public class SrtmDownloader {
 		this.listner = listner;
 	}
 
-	public void downloadRegionIndex(int region, String srtmPath)
-			throws IOException {
+	public void downloadRegionIndex(int region, String srtmPath) throws IOException {
 		String regionIndex = SrtmRegions.REGIONS[region] + ".index.html";
 		regionIndex = getIndexPath(srtmPath) + regionIndex;
 		File regionIndexFile = new File(regionIndex);
@@ -36,23 +35,20 @@ public class SrtmDownloader {
 		output.delete();
 	}
 
-	private void downloadSrtmFile(String fname, File output, String region)
-			throws IOException {
+	private void downloadSrtmFile(String fname, File output, String region) throws IOException {
 		try {
-			downloadFile(SrtmDownloader.url + region + "/" + fname + ".zip",
-					output);
+			downloadFile(SrtmDownloader.url + region + "/" + fname + ".zip", output);
 		} catch (IOException e) {
 			downloadAlternativeSrtmFile(fname, output, region, e);
 		}
 	}
 
-	private void downloadAlternativeSrtmFile(String fname, File output,
-			String region, IOException e) throws IOException {
+	private void downloadAlternativeSrtmFile(String fname, File output, String region, IOException e)
+			throws IOException {
 		// fix SRTM 2.1 naming problem in North America
 		if (fname.startsWith("N5") && region.equalsIgnoreCase("North_America")) {
-			downloadFile(
-					SrtmDownloader.url + region + "/"
-							+ fname.replace(".hgt", "hgt") + ".zip", output);
+			downloadFile(SrtmDownloader.url + region + "/" + fname.replace(".hgt", "hgt") + ".zip",
+					output);
 		} else {
 			throw e;
 		}
@@ -68,8 +64,7 @@ public class SrtmDownloader {
 
 		// download the file
 		InputStream input = new BufferedInputStream(url.openStream());
-		BufferedOutputStream outputs = new BufferedOutputStream(
-				new FileOutputStream(file));
+		BufferedOutputStream outputs = new BufferedOutputStream(new FileOutputStream(file));
 
 		byte data[] = new byte[2048];
 		long total = 0;

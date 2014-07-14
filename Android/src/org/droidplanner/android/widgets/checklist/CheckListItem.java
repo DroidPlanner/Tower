@@ -30,9 +30,8 @@ public class CheckListItem extends ListXmlData {
 		super(mTagName);
 	}
 
-	public CheckListItem(int mcategoryIndex, String mTagName, String mTitle,
-			String mDescription, String mSysTag, String mMandatory,
-			String mEditable) {
+	public CheckListItem(int mcategoryIndex, String mTagName, String mTitle, String mDescription,
+			String mSysTag, String mMandatory, String mEditable) {
 		super(mTagName);
 		this.setCategoryIndex(mcategoryIndex);
 		this.setTitle(mTitle);

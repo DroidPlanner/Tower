@@ -24,8 +24,7 @@ public class DpPreferenceFragment extends PreferenceFragment {
 	 * @return
 	 */
 	@Override
-	public boolean onPreferenceTreeClick(PreferenceScreen prefScreen,
-			Preference pref) {
+	public boolean onPreferenceTreeClick(PreferenceScreen prefScreen, Preference pref) {
 		if (pref instanceof PreferenceScreen) {
 			final Dialog dialog = ((PreferenceScreen) pref).getDialog();
 			final View homeBtn = dialog.findViewById(android.R.id.home);
@@ -42,14 +41,12 @@ public class DpPreferenceFragment extends PreferenceFragment {
 
 				// The home button is an ImageView inside a FrameLayout
 				if (homeBtnContainer instanceof FrameLayout) {
-					ViewGroup containerParent = (ViewGroup) homeBtnContainer
-							.getParent();
+					ViewGroup containerParent = (ViewGroup) homeBtnContainer.getParent();
 
 					if (containerParent instanceof LinearLayout) {
 						// This view also contains the title text, set the whole
 						// view as clickable
-						containerParent
-								.setOnClickListener(dismissDialogClickListener);
+						containerParent.setOnClickListener(dismissDialogClickListener);
 					} else {
 						// Just set it on the home button
 						((FrameLayout) homeBtnContainer)

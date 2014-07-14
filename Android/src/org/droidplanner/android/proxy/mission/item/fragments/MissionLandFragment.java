@@ -22,8 +22,7 @@ public class MissionLandFragment extends MissionDetailFragment implements
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		Land item = (Land) this.itemRender.getMissionItem();
-		typeSpinner.setSelection(commandAdapter
-				.getPosition(MissionItemType.LAND));
+		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.LAND));
 		// yawSeekBar = (SeekBarWithText) view.findViewById(R.id.waypointAngle);
 		// yawSeekBar.setValue(item.getYawAngle());
 		// yawSeekBar.setOnChangedListener(this);

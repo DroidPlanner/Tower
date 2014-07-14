@@ -58,39 +58,31 @@ public class FlightActivity extends DrawerNavigationUI implements
 		failsafeView = findViewById(R.id.failsafeTextView);
 
 		mSlidingDrawer = (SlidingDrawer) findViewById(R.id.SlidingDrawerRight);
-		mSlidingDrawer
-				.setOnDrawerCloseListener(new SlidingDrawer.OnDrawerCloseListener() {
-					@Override
-					public void onDrawerClosed() {
-						updateMapPadding();
+		mSlidingDrawer.setOnDrawerCloseListener(new SlidingDrawer.OnDrawerCloseListener() {
+			@Override
+			public void onDrawerClosed() {
+				updateMapPadding();
 
-						// Stop tracking how long this was opened for.
-						GAUtils.sendTiming(new HitBuilders.TimingBuilder()
-								.setCategory(
-										GAUtils.Category.FLIGHT_DATA_DETAILS_PANEL
-												.toString())
-								.setVariable(
-										getString(R.string.ga_mode_details_close_panel))
-								.setValue(System.currentTimeMillis()));
-					}
-				});
+				// Stop tracking how long this was opened for.
+				GAUtils.sendTiming(new HitBuilders.TimingBuilder()
+						.setCategory(GAUtils.Category.FLIGHT_DATA_DETAILS_PANEL.toString())
+						.setVariable(getString(R.string.ga_mode_details_close_panel))
+						.setValue(System.currentTimeMillis()));
+			}
+		});
 
-		mSlidingDrawer
-				.setOnDrawerOpenListener(new SlidingDrawer.OnDrawerOpenListener() {
-					@Override
-					public void onDrawerOpened() {
-						updateMapPadding();
+		mSlidingDrawer.setOnDrawerOpenListener(new SlidingDrawer.OnDrawerOpenListener() {
+			@Override
+			public void onDrawerOpened() {
+				updateMapPadding();
 
-						// Track how long this is opened for.
-						GAUtils.sendTiming(new HitBuilders.TimingBuilder()
-								.setCategory(
-										GAUtils.Category.FLIGHT_DATA_DETAILS_PANEL
-												.toString())
-								.setVariable(
-										getString(R.string.ga_mode_details_open_panel))
-								.setValue(System.currentTimeMillis()));
-					}
-				});
+				// Track how long this is opened for.
+				GAUtils.sendTiming(new HitBuilders.TimingBuilder()
+						.setCategory(GAUtils.Category.FLIGHT_DATA_DETAILS_PANEL.toString())
+						.setVariable(getString(R.string.ga_mode_details_open_panel))
+						.setValue(System.currentTimeMillis()));
+			}
+		});
 
 		setupMapFragment();
 
@@ -121,22 +113,19 @@ public class FlightActivity extends DrawerNavigationUI implements
 				updateMapLocationButtons(AutoPanMode.DISABLED);
 			}
 		});
-		mGoToDroneLocation
-				.setOnLongClickListener(new View.OnLongClickListener() {
-					@Override
-					public boolean onLongClick(View v) {
-						mapFragment.goToDroneLocation();
-						updateMapLocationButtons(AutoPanMode.DRONE);
-						return true;
-					}
-				});
+		mGoToDroneLocation.setOnLongClickListener(new View.OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+				mapFragment.goToDroneLocation();
+				updateMapLocationButtons(AutoPanMode.DRONE);
+				return true;
+			}
+		});
 
-		editorTools = fragmentManager
-				.findFragmentById(R.id.editorToolsFragment);
+		editorTools = fragmentManager.findFragmentById(R.id.editorToolsFragment);
 		if (editorTools == null) {
 			editorTools = new FlightActionsFragment();
-			fragmentManager.beginTransaction()
-					.add(R.id.editorToolsFragment, editorTools).commit();
+			fragmentManager.beginTransaction().add(R.id.editorToolsFragment, editorTools).commit();
 		}
 
 		/*
@@ -154,17 +143,14 @@ public class FlightActivity extends DrawerNavigationUI implements
 			if (slidingDrawerContent == null) {
 				slidingDrawerContent = new FlightSlidingDrawerContent();
 				fragmentManager.beginTransaction()
-						.add(R.id.sliding_drawer_content, slidingDrawerContent)
-						.commit();
+						.add(R.id.sliding_drawer_content, slidingDrawerContent).commit();
 			}
 		} else {
 			// Add the telemtry fragment
-			Fragment telemetryFragment = fragmentManager
-					.findFragmentById(R.id.telemetryFragment);
+			Fragment telemetryFragment = fragmentManager.findFragmentById(R.id.telemetryFragment);
 			if (telemetryFragment == null) {
 				telemetryFragment = new TelemetryFragment();
-				fragmentManager.beginTransaction()
-						.add(R.id.telemetryFragment, telemetryFragment)
+				fragmentManager.beginTransaction().add(R.id.telemetryFragment, telemetryFragment)
 						.commit();
 			}
 
@@ -174,8 +160,7 @@ public class FlightActivity extends DrawerNavigationUI implements
 			if (flightModePanel == null) {
 				flightModePanel = new FlightModePanel();
 				fragmentManager.beginTransaction()
-						.add(R.id.sliding_drawer_content, flightModePanel)
-						.commit();
+						.add(R.id.sliding_drawer_content, flightModePanel).commit();
 			}
 		}
 	}
@@ -210,9 +195,8 @@ public class FlightActivity extends DrawerNavigationUI implements
 		final boolean isValid = playStatus == ConnectionResult.SUCCESS;
 
 		if (!isValid && showErrorDialog) {
-			final Dialog errorDialog = GooglePlayServicesUtil.getErrorDialog(
-					playStatus, this, GOOGLE_PLAY_SERVICES_REQUEST_CODE,
-					new DialogInterface.OnCancelListener() {
+			final Dialog errorDialog = GooglePlayServicesUtil.getErrorDialog(playStatus, this,
+					GOOGLE_PLAY_SERVICES_REQUEST_CODE, new DialogInterface.OnCancelListener() {
 						@Override
 						public void onCancel(DialogInterface dialog) {
 							finish();
@@ -233,12 +217,10 @@ public class FlightActivity extends DrawerNavigationUI implements
 	 */
 	private void setupMapFragment() {
 		if (mapFragment == null && isGooglePlayServicesValid(true)) {
-			mapFragment = (FlightMapFragment) fragmentManager
-					.findFragmentById(R.id.mapFragment);
+			mapFragment = (FlightMapFragment) fragmentManager.findFragmentById(R.id.mapFragment);
 			if (mapFragment == null) {
 				mapFragment = new FlightMapFragment();
-				fragmentManager.beginTransaction()
-						.add(R.id.mapFragment, mapFragment).commit();
+				fragmentManager.beginTransaction().add(R.id.mapFragment, mapFragment).commit();
 			}
 		}
 	}
@@ -301,16 +283,15 @@ public class FlightActivity extends DrawerNavigationUI implements
 				bottomPadding = (mapBottom - toolsBottom) + toolsHeight;
 			}
 		}
-		mapFragment.setMapPadding(leftPadding, topPadding, rightPadding,
-				bottomPadding);
+		mapFragment.setMapPadding(leftPadding, topPadding, rightPadding, bottomPadding);
 
 		// Update the right margin for the my location button
 		final ViewGroup.MarginLayoutParams marginLp = (ViewGroup.MarginLayoutParams) mLocationButtonsContainer
 				.getLayoutParams();
-		final int rightMargin = isSlidingDrawerOpened ? marginLp.leftMargin
-				+ slidingDrawerWidth : marginLp.leftMargin;
-		marginLp.setMargins(marginLp.leftMargin, marginLp.topMargin,
-				rightMargin, marginLp.bottomMargin);
+		final int rightMargin = isSlidingDrawerOpened ? marginLp.leftMargin + slidingDrawerWidth
+				: marginLp.leftMargin;
+		marginLp.setMargins(marginLp.leftMargin, marginLp.topMargin, rightMargin,
+				marginLp.bottomMargin);
 	}
 
 	@Override
@@ -332,8 +313,7 @@ public class FlightActivity extends DrawerNavigationUI implements
 	private void toggleRCFragment() {
 		if (rcFragment == null) {
 			rcFragment = new RCFragment();
-			fragmentManager.beginTransaction()
-					.add(R.id.containerRC, rcFragment).commit();
+			fragmentManager.beginTransaction().add(R.id.containerRC, rcFragment).commit();
 		} else {
 			fragmentManager.beginTransaction().remove(rcFragment).commit();
 			rcFragment = null;

@@ -23,10 +23,8 @@ public class ModeGuidedFragment extends Fragment implements OnClickListener {
 	public Drone drone;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_mode_guided, container,
-				false);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.fragment_mode_guided, container, false);
 		drone = ((DroidPlannerApp) getActivity().getApplication()).getDrone();
 		setupViews(view);
 		setupListener();
@@ -35,14 +33,10 @@ public class ModeGuidedFragment extends Fragment implements OnClickListener {
 	}
 
 	protected void setupViews(View parentView) {
-		altPlus1 = (Button) parentView
-				.findViewById(R.id.button_altitude_plus_1);
-		altPlus10 = (Button) parentView
-				.findViewById(R.id.button_altitude_plus_10);
-		altMinus1 = (Button) parentView
-				.findViewById(R.id.button_altitude_minus_1);
-		altMinus10 = (Button) parentView
-				.findViewById(R.id.button_altitude_minus_10);
+		altPlus1 = (Button) parentView.findViewById(R.id.button_altitude_plus_1);
+		altPlus10 = (Button) parentView.findViewById(R.id.button_altitude_plus_10);
+		altMinus1 = (Button) parentView.findViewById(R.id.button_altitude_minus_1);
+		altMinus10 = (Button) parentView.findViewById(R.id.button_altitude_minus_10);
 		altTextView = (TextView) parentView.findViewById(R.id.guided_altitude);
 	}
 
@@ -73,7 +67,6 @@ public class ModeGuidedFragment extends Fragment implements OnClickListener {
 	}
 
 	protected void updateLabel() {
-		this.altTextView.setText("Target Altitude: ("
-				+ drone.guidedPoint.getAltitude() + ")");
+		this.altTextView.setText("Target Altitude: (" + drone.guidedPoint.getAltitude() + ")");
 	}
 }

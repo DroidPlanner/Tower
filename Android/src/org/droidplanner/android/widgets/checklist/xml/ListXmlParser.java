@@ -35,15 +35,13 @@ public abstract class ListXmlParser {
 		getListItemsFromResource(context, resourceId);
 	}
 
-	public ListXmlParser(String ioFile) throws FileNotFoundException,
-			XmlPullParserException {
+	public ListXmlParser(String ioFile) throws FileNotFoundException, XmlPullParserException {
 		getListItemsFromFile(ioFile);
 	}
 
-	public void getListItemsFromFile(String ioFile)
-			throws FileNotFoundException, XmlPullParserException {
-		ioFile = Environment.getExternalStorageDirectory()
-				+ "/DroidPlanner/Checklists/" + ioFile;
+	public void getListItemsFromFile(String ioFile) throws FileNotFoundException,
+			XmlPullParserException {
+		ioFile = Environment.getExternalStorageDirectory() + "/DroidPlanner/Checklists/" + ioFile;
 		File file = new File(ioFile);
 		FileInputStream fis = new FileInputStream(file);
 		XmlPullParserFactory factory = XmlPullParserFactory.newInstance();

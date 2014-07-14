@@ -21,8 +21,8 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-public class ModeFollowFragment extends ModeGuidedFragment implements
-		OnClickListener, OnItemSelectedListener, OnDroneListener {
+public class ModeFollowFragment extends ModeGuidedFragment implements OnClickListener,
+		OnItemSelectedListener, OnDroneListener {
 	private Button radiusPlus1;
 	private Button radiusMinus1;
 	private TextView radiusTextView;
@@ -31,13 +31,11 @@ public class ModeFollowFragment extends ModeGuidedFragment implements
 	private ArrayAdapter<FollowModes> adapter;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		DroidPlannerApp app = (DroidPlannerApp) getActivity().getApplication();
 		followMe = app.followMe;
 		drone = app.getDrone();
-		View view = inflater.inflate(R.layout.fragment_mode_follow, container,
-				false);
+		View view = inflater.inflate(R.layout.fragment_mode_follow, container, false);
 		setupViews(view);
 		setupListener();
 		updateLabel();
@@ -48,10 +46,8 @@ public class ModeFollowFragment extends ModeGuidedFragment implements
 
 	@Override
 	protected void setupViews(View parentView) {
-		radiusPlus1 = (Button) parentView
-				.findViewById(R.id.button_radius_plus_1);
-		radiusMinus1 = (Button) parentView
-				.findViewById(R.id.button_radius_minus_1);
+		radiusPlus1 = (Button) parentView.findViewById(R.id.button_radius_plus_1);
+		radiusMinus1 = (Button) parentView.findViewById(R.id.button_radius_minus_1);
 		radiusTextView = (TextView) parentView.findViewById(R.id.follow_radius);
 		spinner = (Spinner) parentView.findViewById(R.id.follow_type_spinner);
 		adapter = new ArrayAdapter<FollowModes>(getActivity(),
@@ -94,8 +90,7 @@ public class ModeFollowFragment extends ModeGuidedFragment implements
 	}
 
 	@Override
-	public void onItemSelected(AdapterView<?> parent, View view, int position,
-			long id) {
+	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 		followMe.setType(adapter.getItem(position));
 	}
 

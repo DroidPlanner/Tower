@@ -29,8 +29,7 @@ public class CameraInfoReader {
 		return cameraInfo;
 	}
 
-	public void parse(InputStream in) throws XmlPullParserException,
-			IOException {
+	public void parse(InputStream in) throws XmlPullParserException, IOException {
 		parser = Xml.newPullParser();
 		parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
 		parser.setInput(in, null);
@@ -62,24 +61,21 @@ public class CameraInfoReader {
 			} else if (name.equals("Name")) {
 				cameraInfo.name = readString("Name");
 			} else if (name.equals("Orientation")) {
-				cameraInfo.isInLandscapeOrientation = readText().equals(
-						"Portrait") ? false : true;
+				cameraInfo.isInLandscapeOrientation = readText().equals("Portrait") ? false : true;
 			} else {
 				skip();
 			}
 		}
 	}
 
-	private String readString(String entry) throws IOException,
-			XmlPullParserException {
+	private String readString(String entry) throws IOException, XmlPullParserException {
 		parser.require(XmlPullParser.START_TAG, null, entry);
 		String value = readText();
 		parser.require(XmlPullParser.END_TAG, null, entry);
 		return value;
 	}
 
-	private Double readDouble(String entry) throws IOException,
-			XmlPullParserException {
+	private Double readDouble(String entry) throws IOException, XmlPullParserException {
 		parser.require(XmlPullParser.START_TAG, null, entry);
 		Double value = Double.valueOf(readText());
 		parser.require(XmlPullParser.END_TAG, null, entry);

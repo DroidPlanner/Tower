@@ -43,9 +43,8 @@ import android.widget.Toast;
  * user to create and/or modify autonomous missions for the drone.
  */
 public class EditorActivity extends SuperUI implements OnPathFinishedListener,
-		OnEditorToolSelected, MissionDetailFragment.OnMissionDetailListener,
-		OnEditorInteraction, Callback,
-		MissionSelection.OnSelectionUpdateListener {
+		OnEditorToolSelected, MissionDetailFragment.OnMissionDetailListener, OnEditorInteraction,
+		Callback, MissionSelection.OnSelectionUpdateListener {
 
 	/**
 	 * Used to retrieve the item detail window when the activity is destroyed,
@@ -130,14 +129,13 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 				planningMapFragment.goToDroneLocation();
 			}
 		});
-		mGoToDroneLocation
-				.setOnLongClickListener(new View.OnLongClickListener() {
-					@Override
-					public boolean onLongClick(View v) {
-						planningMapFragment.setAutoPanMode(AutoPanMode.DRONE);
-						return true;
-					}
-				});
+		mGoToDroneLocation.setOnLongClickListener(new View.OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+				planningMapFragment.setAutoPanMode(AutoPanMode.DRONE);
+				return true;
+			}
+		});
 
 		final RadioButton normalToggle = (RadioButton) findViewById(R.id.normalWpToggle);
 		normalToggle.setOnClickListener(new View.OnClickListener() {
@@ -284,8 +282,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 		case POLY:
 			enableSplineToggle(false);
-			Toast.makeText(this, R.string.draw_the_survey_region,
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, R.string.draw_the_survey_region, Toast.LENGTH_SHORT).show();
 			gestureMapFragment.enableGestureDetection();
 			break;
 
@@ -320,8 +317,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 	private void enableSplineToggle(boolean isEnabled) {
 		if (mSplineToggleContainer != null) {
-			mSplineToggleContainer.setVisibility(isEnabled ? View.VISIBLE
-					: View.INVISIBLE);
+			mSplineToggleContainer.setVisibility(isEnabled ? View.VISIBLE : View.INVISIBLE);
 		}
 	}
 
@@ -341,10 +337,9 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		if (mContainerItemDetail == null) {
 			itemDetailFragment.show(fragmentManager, ITEM_DETAIL_TAG);
 		} else {
-			fragmentManager
-					.beginTransaction()
-					.replace(R.id.containerItemDetail, itemDetailFragment,
-							ITEM_DETAIL_TAG).commit();
+			fragmentManager.beginTransaction()
+					.replace(R.id.containerItemDetail, itemDetailFragment, ITEM_DETAIL_TAG)
+					.commit();
 		}
 	}
 
@@ -358,8 +353,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 			if (mContainerItemDetail == null) {
 				itemDetailFragment.dismiss();
 			} else {
-				fragmentManager.beginTransaction().remove(itemDetailFragment)
-						.commit();
+				fragmentManager.beginTransaction().remove(itemDetailFragment).commit();
 			}
 			itemDetailFragment = null;
 		}
@@ -398,8 +392,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	}
 
 	@Override
-	public void onWaypointTypeChanged(MissionItemProxy newItem,
-			MissionItemProxy oldItem) {
+	public void onWaypointTypeChanged(MissionItemProxy newItem, MissionItemProxy oldItem) {
 		missionProxy.replace(oldItem, newItem);
 	}
 
@@ -516,10 +509,8 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	}
 
 	private void doClearMissionConfirmation() {
-		YesNoDialog ynd = YesNoDialog.newInstance(
-				getString(R.string.dlg_clear_mission_title),
-				getString(R.string.dlg_clear_mission_confirm),
-				new YesNoDialog.Listener() {
+		YesNoDialog ynd = YesNoDialog.newInstance(getString(R.string.dlg_clear_mission_title),
+				getString(R.string.dlg_clear_mission_confirm), new YesNoDialog.Listener() {
 					@Override
 					public void onYes() {
 						missionProxy.clear();

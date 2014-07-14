@@ -51,8 +51,8 @@ public class GCSHeartbeat {
 	public void setActive(boolean active) {
 		if (active) {
 			heartbeatExecutor = Executors.newSingleThreadScheduledExecutor();
-			heartbeatExecutor.scheduleWithFixedDelay(heartbeatRunnable, 0,
-					period, TimeUnit.SECONDS);
+			heartbeatExecutor
+					.scheduleWithFixedDelay(heartbeatRunnable, 0, period, TimeUnit.SECONDS);
 		} else if (heartbeatExecutor != null) {
 			heartbeatExecutor.shutdownNow();
 			heartbeatExecutor = null;

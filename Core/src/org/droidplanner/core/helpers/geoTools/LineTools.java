@@ -21,23 +21,23 @@ public class LineTools {
 	 * 
 	 * @throws Exception
 	 */
-	public static Coord2D FindLineIntersection(LineCoord2D first,
-			LineCoord2D second) throws Exception {
-		double denom = ((first.getEnd().getX() - first.getStart().getX()) * (second
-				.getEnd().getY() - second.getStart().getY()))
-				- ((first.getEnd().getY() - first.getStart().getY()) * (second
-						.getEnd().getX() - second.getStart().getX()));
+	public static Coord2D FindLineIntersection(LineCoord2D first, LineCoord2D second)
+			throws Exception {
+		double denom = ((first.getEnd().getX() - first.getStart().getX()) * (second.getEnd().getY() - second
+				.getStart().getY()))
+				- ((first.getEnd().getY() - first.getStart().getY()) * (second.getEnd().getX() - second
+						.getStart().getX()));
 		if (denom == 0)
 			throw new Exception("Parralel Lines");
-		double numer = ((first.getStart().getY() - second.getStart().getY()) * (second
-				.getEnd().getX() - second.getStart().getX()))
-				- ((first.getStart().getX() - second.getStart().getX()) * (second
-						.getEnd().getY() - second.getStart().getY()));
+		double numer = ((first.getStart().getY() - second.getStart().getY()) * (second.getEnd()
+				.getX() - second.getStart().getX()))
+				- ((first.getStart().getX() - second.getStart().getX()) * (second.getEnd().getY() - second
+						.getStart().getY()));
 		double r = numer / denom;
-		double numer2 = ((first.getStart().getY() - second.getStart().getY()) * (first
-				.getEnd().getX() - first.getStart().getX()))
-				- ((first.getStart().getX() - second.getStart().getX()) * (first
-						.getEnd().getY() - first.getStart().getY()));
+		double numer2 = ((first.getStart().getY() - second.getStart().getY()) * (first.getEnd()
+				.getX() - first.getStart().getX()))
+				- ((first.getStart().getX() - second.getStart().getX()) * (first.getEnd().getY() - first
+						.getStart().getY()));
 		double s = numer2 / denom;
 		if ((r < 0 || r > 1) || (s < 0 || s > 1))
 			throw new Exception("No Intersection");
@@ -58,14 +58,12 @@ public class LineTools {
 	 *            A list of lines to search
 	 * @return The closest Line
 	 */
-	public static LineCoord2D findClosestLineToPoint(Coord2D point,
-			List<LineCoord2D> list) {
+	public static LineCoord2D findClosestLineToPoint(Coord2D point, List<LineCoord2D> list) {
 		LineCoord2D answer = list.get(0);
 		double shortest = Double.MAX_VALUE;
 
 		for (LineCoord2D line : list) {
-			double ans1 = GeoTools.getAproximatedDistance(point,
-					line.getStart());
+			double ans1 = GeoTools.getAproximatedDistance(point, line.getStart());
 			double ans2 = GeoTools.getAproximatedDistance(point, line.getEnd());
 			Coord2D shorterpnt = ans1 < ans2 ? line.getStart() : line.getEnd();
 

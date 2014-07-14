@@ -103,12 +103,11 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
 				Circle circle = (Circle) mMissionItem;
 				double startHeading = 0;
 				if (previusPoint != null) {
-					startHeading = GeoTools.getHeadingFromCoordinates(
-							circle.getCoordinate(), previusPoint);
+					startHeading = GeoTools.getHeadingFromCoordinates(circle.getCoordinate(),
+							previusPoint);
 				}
-				pathPoints.add(GeoTools.newCoordFromBearingAndDistance(
-						circle.getCoordinate(), startHeading + i,
-						circle.getRadius()));
+				pathPoints.add(GeoTools.newCoordFromBearingAndDistance(circle.getCoordinate(),
+						startHeading + i, circle.getRadius()));
 			}
 			break;
 
@@ -128,29 +127,24 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
 	public View getListViewItemView(Context context, ViewGroup parent) {
 		final LayoutInflater inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		final View view = inflater.inflate(R.layout.fragment_editor_list_item,
-				parent, false);
+		final View view = inflater.inflate(R.layout.fragment_editor_list_item, parent, false);
 
 		TextView nameView = (TextView) view.findViewById(R.id.rowNameView);
-		TextView altitudeView = (TextView) view
-				.findViewById(R.id.rowAltitudeView);
+		TextView altitudeView = (TextView) view.findViewById(R.id.rowAltitudeView);
 
-		nameView.setText(String.format("%3d", mMissionItem.getMission()
-				.getOrder(mMissionItem)));
+		nameView.setText(String.format("%3d", mMissionItem.getMission().getOrder(mMissionItem)));
 
 		final int leftDrawable = mMissionItem instanceof SplineWaypoint ? R.drawable.ic_mission_spline_wp
 				: R.drawable.ic_mission_wp;
-		altitudeView.setCompoundDrawablesWithIntrinsicBounds(leftDrawable, 0,
-				0, 0);
+		altitudeView.setCompoundDrawablesWithIntrinsicBounds(leftDrawable, 0, 0, 0);
 
 		if (mMissionItem instanceof SpatialCoordItem) {
 			SpatialCoordItem waypoint = (SpatialCoordItem) mMissionItem;
-			altitudeView.setText(String.format("%3.0fm", waypoint
-					.getCoordinate().getAltitude().valueInMeters()));
+			altitudeView.setText(String.format("%3.0fm", waypoint.getCoordinate().getAltitude()
+					.valueInMeters()));
 
 			try {
-				Length diff = waypoint.getMission()
-						.getAltitudeDiffFromPreviousItem(waypoint);
+				Length diff = waypoint.getMission().getAltitudeDiffFromPreviousItem(waypoint);
 				if (diff.valueInMeters() > 0) {
 					altitudeView.setTextColor(Color.RED);
 				} else if (diff.valueInMeters() < 0) {
@@ -160,12 +154,10 @@ public class MissionItemProxy implements Comparable<MissionItemProxy> {
 				// Do nothing when last item doesn't have an altitude
 			}
 		} else if (mMissionItem instanceof Survey) {
-			altitudeView.setText(((Survey) mMissionItem).surveyData
-					.getAltitude().toString());
+			altitudeView.setText(((Survey) mMissionItem).surveyData.getAltitude().toString());
 
 		} else if (mMissionItem instanceof Takeoff) {
-			altitudeView.setText(((Takeoff) mMissionItem).getFinishedAlt()
-					.toString());
+			altitudeView.setText(((Takeoff) mMissionItem).getFinishedAlt().toString());
 		} else {
 			altitudeView.setText("");
 		}

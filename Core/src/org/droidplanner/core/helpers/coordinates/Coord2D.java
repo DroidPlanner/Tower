@@ -51,13 +51,11 @@ public class Coord2D {
 	}
 
 	public Coord2D subtract(Coord2D coord) {
-		return new Coord2D(latitude - coord.latitude, longitude
-				- coord.longitude);
+		return new Coord2D(latitude - coord.latitude, longitude - coord.longitude);
 	}
 
 	public Coord2D sum(Coord2D coord) {
-		return new Coord2D(latitude + coord.latitude, longitude
-				+ coord.longitude);
+		return new Coord2D(latitude + coord.latitude, longitude + coord.longitude);
 	}
 
 	public static Coord2D sum(Coord2D... toBeAdded) {

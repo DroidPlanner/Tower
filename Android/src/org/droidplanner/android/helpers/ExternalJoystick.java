@@ -9,8 +9,7 @@ public class ExternalJoystick {
 		Log.d("DEV", "Found " + inputIds.length);
 		for (int i = 0; i < inputIds.length; i++) {
 			InputDevice inputDevice = InputDevice.getDevice(inputIds[i]);
-			Log.d("DEV", "name:" + inputDevice.getName() + " Sources:"
-					+ inputDevice.getSources());
+			Log.d("DEV", "name:" + inputDevice.getName() + " Sources:" + inputDevice.getSources());
 		}
 	}
 }

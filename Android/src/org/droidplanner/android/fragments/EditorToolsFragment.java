@@ -17,8 +17,7 @@ import android.widget.RadioGroup;
  * This fragment implements and displays the 'tools' used in the editor window
  * to switch between different type of waypoints creation.
  */
-public class EditorToolsFragment extends Fragment implements OnClickListener,
-		OnLongClickListener {
+public class EditorToolsFragment extends Fragment implements OnClickListener, OnLongClickListener {
 
 	/**
 	 * Used as key to retrieve the last selected tool from the bundle passed on
@@ -46,18 +45,15 @@ public class EditorToolsFragment extends Fragment implements OnClickListener,
 	private EditorTools tool;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.fragment_editor_tools, container,
-				false);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		return inflater.inflate(R.layout.fragment_editor_tools, container, false);
 	}
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
-		mEditorRadioGroup = (RadioGroup) view
-				.findViewById(R.id.editor_tools_layout);
+		mEditorRadioGroup = (RadioGroup) view.findViewById(R.id.editor_tools_layout);
 		final RadioButtonCenter buttonDraw = (RadioButtonCenter) view
 				.findViewById(R.id.editor_tools_draw);
 		final RadioButtonCenter buttonMarker = (RadioButtonCenter) view
@@ -67,8 +63,7 @@ public class EditorToolsFragment extends Fragment implements OnClickListener,
 		final RadioButtonCenter buttonTrash = (RadioButtonCenter) view
 				.findViewById(R.id.editor_tools_trash);
 
-		for (View vv : new View[] { buttonDraw, buttonMarker, buttonPoly,
-				buttonTrash }) {
+		for (View vv : new View[] { buttonDraw, buttonMarker, buttonPoly, buttonTrash }) {
 			vv.setOnClickListener(this);
 			vv.setOnLongClickListener(this);
 		}
@@ -78,8 +73,8 @@ public class EditorToolsFragment extends Fragment implements OnClickListener,
 		} else {
 			// Retrieve the tool that was last selected before the fragment was
 			// destroyed.
-			final String toolName = savedInstanceState.getString(
-					STATE_SELECTED_TOOL, DEFAULT_TOOL.name());
+			final String toolName = savedInstanceState.getString(STATE_SELECTED_TOOL,
+					DEFAULT_TOOL.name());
 			final EditorTools savedTool = EditorTools.valueOf(toolName);
 			setToolAndUpdateView(savedTool);
 		}
@@ -89,9 +84,8 @@ public class EditorToolsFragment extends Fragment implements OnClickListener,
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		if (!(activity instanceof OnEditorToolSelected)) {
-			throw new IllegalStateException(
-					"Parent activity must be an instance of "
-							+ OnEditorToolSelected.class.getName());
+			throw new IllegalStateException("Parent activity must be an instance of "
+					+ OnEditorToolSelected.class.getName());
 		}
 
 		listener = (OnEditorToolSelected) activity;
