@@ -107,7 +107,6 @@ public class PebbleNotificationProvider implements NotificationHandler.Notificat
 
 		FollowModes type = followMe.getType();
 		if (type != null) {
-			Log.d("seB", type.toString());
 			data.addString(KEY_FOLLOW_TYPE, type.toString());
 		} else
 			data.addString(KEY_FOLLOW_TYPE, "none");
