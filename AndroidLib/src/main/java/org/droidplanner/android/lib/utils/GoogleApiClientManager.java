@@ -1,6 +1,8 @@
 package org.droidplanner.android.lib.utils;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -16,12 +18,11 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class GoogleApiClientManager {
 
     private final static String TAG = GoogleApiClientManager.class.getSimpleName();
-    private final static boolean DEFAULT_DISCONNECT_ON_TASKS_COMPLETION = true;
 
     /**
      * Manager background thread used to run the submitted google api client tasks.
      */
-    private final Thread mBgThread = new Thread("GAC Manager Background Thread"){
+    private final Thread mDriverThread = new Thread("GAC Manager Driver Thread"){
 
         @Override
         public void run() {
@@ -37,22 +38,30 @@ public class GoogleApiClientManager {
                         }
                     }
 
-                    task.run();
-
-                    if(mTaskQueue.size() == 0 && mDisconnectOnTasksCompletion){
-                        mGoogleApiClient.disconnect();
+                    if(task.mRunOnBackgroundThread) {
+                        mBgHandler.post(task);
                     }
-                }
-
-                if(mDisconnectOnTasksCompletion){
-                    mGoogleApiClient.disconnect();
+                    else{
+                        mMainHandler.post(task);
+                    }
                 }
             }
             catch(InterruptedException e){
-                Log.w(TAG, e.getMessage(), e);
+                Log.v(TAG, e.getMessage(), e);
             }
         }
     };
+
+    /**
+     * This handler is in charge of running google api client tasks on the calling thread.
+     */
+    private final Handler mMainHandler;
+
+    /**
+     * This handler is in charge of running google api client tasks on the background thread.
+     */
+    private Handler mBgHandler;
+    private final HandlerThread mBgHandlerThread;
 
     /**
      * Application context.
@@ -65,12 +74,6 @@ public class GoogleApiClientManager {
     private final GoogleApiClient mGoogleApiClient;
 
     /**
-     * If true, the google api client will be disconnected when the tasks are complete,
-     * until new tasks are ready for processing.
-     */
-    private boolean mDisconnectOnTasksCompletion = DEFAULT_DISCONNECT_ON_TASKS_COMPLETION;
-
-    /**
      * Holds tasks that needs to be run using the google api client.
      * A background thread will be blocking on this queue until new tasks are inserted. In which
      * case, it will retrieve the new task, and process it.
@@ -81,6 +84,8 @@ public class GoogleApiClientManager {
     public GoogleApiClientManager(Context context, Api<? extends Api.ApiOptions.NotRequiredOptions>
             ... apis){
         mContext = context;
+        mMainHandler = new Handler();
+        mBgHandlerThread = new HandlerThread("GAC Manager Background Thread");
 
         final GoogleApiClient.Builder apiBuilder = new GoogleApiClient.Builder(context);
         for(Api api: apis){
@@ -90,9 +95,42 @@ public class GoogleApiClientManager {
         mGoogleApiClient = apiBuilder.build();
     }
 
+    private void destroyBgHandler() {
+        if (mBgHandlerThread.isAlive()) {
+            mBgHandlerThread.quit();
+            mBgHandlerThread.interrupt();
+        }
+
+        mBgHandler = null;
+    }
+
+    private void destroyDriverThread(){
+        if(mDriverThread.isAlive()){
+            mDriverThread.interrupt();
+        }
+    }
+
+    private void initializeBgHandler(){
+        if(!mBgHandlerThread.isAlive()) {
+            mBgHandlerThread.start();
+            mBgHandler = null;
+        }
+
+        if(mBgHandler == null) {
+            mBgHandler = new Handler(mBgHandlerThread.getLooper());
+        }
+    }
+
+    private void initializeDriverThread(){
+        if(!mDriverThread.isAlive()){
+            mDriverThread.start();
+        }
+    }
+
     /**
-     * Adds a task to the google api client manager tasks queue.
-     * @param task
+     * Adds a task to the google api client manager tasks queue. This task will be scheduled to
+     * run on the calling thread.
+     * @param task task making use of the google api client.
      * @return true if the task was successfully added to the queue.
      * @throws IllegalStateException is the start() method was not called.
      */
@@ -101,6 +139,23 @@ public class GoogleApiClientManager {
             throw new IllegalStateException("GoogleApiClientManager#start() was not called.");
         }
 
+        task.mRunOnBackgroundThread = false;
+        return mTaskQueue.offer(task);
+    }
+
+    /**
+     * Adds a task to the google api client manager tasks queue. This task will be scheduled to
+     * run on a background thread.
+     * @param task task making use of the google api client.
+     * @return true if the task was successfully added to the queue.
+     * @throws IllegalStateException is the start() method was not called.
+     */
+    public boolean addTaskToBackground(GoogleApiClientTask task){
+        if(!isStarted()){
+            throw new IllegalStateException("GoogleApiClientManager#start() was not called.");
+        }
+
+        task.mRunOnBackgroundThread = true;
         return mTaskQueue.offer(task);
     }
 
@@ -108,50 +163,42 @@ public class GoogleApiClientManager {
      * @return true the google api client manager was started.
      */
     private boolean isStarted(){
-        return mBgThread.isAlive();
+        return mDriverThread.isAlive() && mBgHandlerThread.isAlive() && mBgHandler != null &&
+                mBgHandler.getLooper() != null;
     }
 
     /**
      * Activates the google api client manager.
      */
     public void start(){
-        start(DEFAULT_DISCONNECT_ON_TASKS_COMPLETION);
-    }
-
-    /**
-     * Activates the google api client manager.
-     * @param disconnectOnTasksCompletion true to disconnect the google api client on tasks
-     *                                    completion.
-     */
-    public void start(boolean disconnectOnTasksCompletion){
-        mDisconnectOnTasksCompletion = disconnectOnTasksCompletion;
-
-        if(!mBgThread.isAlive()){
-            mBgThread.start();
-        }
+        initializeDriverThread();
+        initializeBgHandler();
     }
 
     /**
      * Release the resources used by this manager.
      * After calling this method, start() needs to be called again to use that manager again.
      */
-    public void terminate(){
-        if(mBgThread.isAlive()){
-            mBgThread.interrupt();
-        }
+    public void stop(){
+        destroyBgHandler();
+        destroyDriverThread();
 
         mTaskQueue.clear();
         if(mGoogleApiClient.isConnected() || mGoogleApiClient.isConnecting()){
             mGoogleApiClient.disconnect();
         }
-
-        mDisconnectOnTasksCompletion = DEFAULT_DISCONNECT_ON_TASKS_COMPLETION;
     }
 
     /**
      * Type for the google api client tasks.
      */
     public abstract class GoogleApiClientTask implements Runnable {
+
+        /**
+         * If true, this task will be scheduled to run on a background thread.
+         * Otherwise, it will run on the calling thread.
+         */
+        private boolean mRunOnBackgroundThread = false;
 
         protected GoogleApiClient getGoogleApiClient(){
             return mGoogleApiClient;

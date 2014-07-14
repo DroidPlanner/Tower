@@ -1,13 +1,14 @@
 package org.droidplanner.android.maps.providers.google_map;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.helpers.LocalMapTileProvider;
+import org.droidplanner.android.lib.utils.GoogleApiClientManager;
+import org.droidplanner.android.lib.utils.GoogleApiClientManager.GoogleApiClientTask;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.maps.providers.DPMapProvider;
@@ -19,7 +20,6 @@ import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
 import android.content.Context;
-import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Point;
@@ -31,8 +31,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -55,9 +53,7 @@ import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.common.collect.HashBiMap;
 
-public class GoogleMapFragment extends SupportMapFragment implements DPMap,
-		GoogleApiClient.OnConnectionFailedListener, LocationListener,
-		GoogleApiClient.ConnectionCallbacks {
+public class GoogleMapFragment extends SupportMapFragment implements DPMap, LocationListener {
 
 	private static final String TAG = GoogleMapFragment.class.getSimpleName();
 
@@ -80,59 +76,13 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 
 	private final AtomicReference<AutoPanMode> mPanMode = new AtomicReference<AutoPanMode>(
 			AutoPanMode.DISABLED);
-	private final LinkedList<Runnable> mApiClientTasks = new LinkedList<Runnable>();
 
-	private final Runnable mGoToMyLocationTask = new Runnable() {
-		@Override
-		public void run() {
-			if (mApiClient.isConnected()) {
-				final Location myLocation = LocationServices.FusedLocationApi
-						.getLastLocation(mApiClient);
-				if (myLocation != null) {
-					final float currentZoomLevel = mMap.getCameraPosition().zoom;
-					updateCamera(DroneHelper.LocationToCoord(myLocation),
-							(int) currentZoomLevel);
-				}
-			} else {
-				mApiClientTasks.add(this);
-			}
-		}
-	};
-
-	private final Runnable mRemoveLocationUpdateTask = new Runnable() {
-		@Override
-		public void run() {
-			if (mApiClient.isConnected()) {
-				LocationServices.FusedLocationApi.removeLocationUpdates(
-						mApiClient, GoogleMapFragment.this);
-			} else {
-				mApiClientTasks.add(this);
-			}
-		}
-	};
-
-	private final Runnable mRequestLocationUpdateTask = new Runnable() {
-		@Override
-		public void run() {
-			if (mApiClient.isConnected()) {
-				final LocationRequest locationReq = LocationRequest
-						.create()
-						.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-						.setFastestInterval(
-                                USER_LOCATION_UPDATE_FASTEST_INTERVAL)
-						.setInterval(USER_LOCATION_UPDATE_INTERVAL)
-						.setSmallestDisplacement(
-                                USER_LOCATION_UPDATE_MIN_DISPLACEMENT);
-				LocationServices.FusedLocationApi.requestLocationUpdates(
-						mApiClient, locationReq, GoogleMapFragment.this);
-			} else {
-				mApiClientTasks.add(this);
-			}
-		}
-	};
+	private GoogleApiClientTask mGoToMyLocationTask;
+	private GoogleApiClientTask mRemoveLocationUpdateTask;
+	private GoogleApiClientTask mRequestLocationUpdateTask;
 
 	private GoogleMap mMap;
-	private GoogleApiClient mApiClient;
+    private GoogleApiClientManager mGApiClientMgr;
 
 	private Polyline flightPath;
 	private Polyline missionPath;
@@ -154,9 +104,42 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 		final Context context = activity.getApplicationContext();
 
 		final View view = super.onCreateView(inflater, viewGroup, bundle);
-		mApiClient = new GoogleApiClient.Builder(context)
-				.addApi(LocationServices.API)
-				.addOnConnectionFailedListener(this).build();
+
+        mGApiClientMgr = new GoogleApiClientManager(context, LocationServices.API);
+
+        mGoToMyLocationTask = mGApiClientMgr.new GoogleApiClientTask() {
+            @Override
+            public void run() {
+                final Location myLocation = LocationServices.FusedLocationApi
+                        .getLastLocation(getGoogleApiClient());
+                if (myLocation != null) {
+                    final float currentZoomLevel = mMap.getCameraPosition().zoom;
+                    updateCamera(DroneHelper.LocationToCoord(myLocation), (int) currentZoomLevel);
+                }
+            }
+        };
+
+        mRemoveLocationUpdateTask = mGApiClientMgr.new GoogleApiClientTask() {
+            @Override
+            public void run() {
+                LocationServices.FusedLocationApi
+                        .removeLocationUpdates(getGoogleApiClient(), GoogleMapFragment.this);
+            }
+        };
+
+        mRequestLocationUpdateTask = mGApiClientMgr.new GoogleApiClientTask() {
+            @Override
+            public void run() {
+                final LocationRequest locationReq = LocationRequest.create()
+                        .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                        .setFastestInterval(USER_LOCATION_UPDATE_FASTEST_INTERVAL)
+                        .setInterval(USER_LOCATION_UPDATE_INTERVAL)
+                        .setSmallestDisplacement(USER_LOCATION_UPDATE_MIN_DISPLACEMENT);
+                LocationServices.FusedLocationApi.requestLocationUpdates(
+                        getGoogleApiClient(), locationReq, GoogleMapFragment.this);
+
+            }
+        };
 
 		mDrone = ((DroidPlannerApp) activity.getApplication()).getDrone();
 		mAppPrefs = new DroidPlannerPrefs(context);
@@ -172,17 +155,14 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 	@Override
 	public void onStart() {
 		super.onStart();
-		mApiClient.registerConnectionCallbacks(this);
-		mApiClient.connect();
+		mGApiClientMgr.start();
 		setupMap();
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
-		mApiClient.unregisterConnectionCallbacks(this);
-		mApiClient.disconnect();
-		mApiClientTasks.clear();
+		mGApiClientMgr.stop();
 	}
 
 	@Override
@@ -211,12 +191,10 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 				break;
 
 			case USER:
-				if (mApiClient.isConnected()) {
-					mRemoveLocationUpdateTask.run();
-				} else {
-					mApiClientTasks.add(mRemoveLocationUpdateTask);
-				}
-				break;
+                if(!mGApiClientMgr.addTask(mRemoveLocationUpdateTask)){
+                    Log.e(TAG, "Unable to add google api client task.");
+                }
+                break;
 
 			case DISABLED:
 			default:
@@ -229,11 +207,9 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 				break;
 
 			case USER:
-				if (mApiClient.isConnected()) {
-					mRequestLocationUpdateTask.run();
-				} else {
-					mApiClientTasks.add(mRequestLocationUpdateTask);
-				}
+                if(!mGApiClientMgr.addTask(mRequestLocationUpdateTask)){
+                    Log.e(TAG, "Unable to add google api client task.");
+                }
 				break;
 
 			case DISABLED:
@@ -471,11 +447,9 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 
 	@Override
 	public void goToMyLocation() {
-		if (mApiClient.isConnected())
-			mGoToMyLocationTask.run();
-		else {
-			mApiClientTasks.add(mGoToMyLocationTask);
-		}
+        if(!mGApiClientMgr.addTask(mGoToMyLocationTask)){
+            Log.e(TAG, "Unable to add google api client task.");
+        }
 	}
 
 	@Override
@@ -637,20 +611,6 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 		return getMap() != null;
 	}
 
-	@Override
-	public void onConnectionFailed(ConnectionResult connectionResult) {
-		Log.e(TAG,
-				"Google API Client connection failed: "
-						+ connectionResult.getErrorCode());
-		if (connectionResult.hasResolution()) {
-			try {
-				connectionResult.startResolutionForResult(getActivity(), 0);
-			} catch (IntentSender.SendIntentException e) {
-				Log.e(TAG, "Unable to launch the resolution intent.", e);
-			}
-		}
-	}
-
 	/**
 	 * Used to monitor drone gps location updates if autopan is enabled.
 	 * {@inheritDoc}
@@ -677,20 +637,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 	public void onLocationChanged(Location location) {
 		Log.d(TAG, "User location changed.");
 		if (mPanMode.get() == AutoPanMode.USER) {
-			updateCamera(DroneHelper.LocationToCoord(location),
-					(int) mMap.getCameraPosition().zoom);
+			updateCamera(DroneHelper.LocationToCoord(location),(int) mMap.getCameraPosition().zoom);
 		}
-	}
-
-	@Override
-	public void onConnected(Bundle bundle) {
-		for (Runnable task : mApiClientTasks) {
-			task.run();
-		}
-	}
-
-	@Override
-	public void onConnectionSuspended(int i) {
-		Log.d(TAG, "Google API client connection suspended.");
 	}
 }

@@ -85,8 +85,7 @@ public class WearManagerService extends WearableListenerService implements OnDro
         mGApiClientMgr.start();
 
         bindService(new Intent(getApplicationContext(), DroidPlannerService.class),
-                mServiceConnection,
-                Context.BIND_AUTO_CREATE);
+                mServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -99,7 +98,7 @@ public class WearManagerService extends WearableListenerService implements OnDro
             mDrone.events.removeDroneListener(this);
         }
 
-        mGApiClientMgr.terminate();
+        mGApiClientMgr.stop();
     }
 
     @Override
@@ -108,9 +107,8 @@ public class WearManagerService extends WearableListenerService implements OnDro
         switch (event) {
             case CONNECTED:
             case DISCONNECTED:
-                final boolean isConnected = drone.MavClient.isConnected();
-                mDroneInfoBundle.putBoolean(WearUtils.KEY_DRONE_CONNECTION_STATE, isConnected);
-                mGApiClientMgr.start(!isConnected);
+                mDroneInfoBundle.putBoolean(WearUtils.KEY_DRONE_CONNECTION_STATE,
+                        drone.MavClient.isConnected());
                 break;
 
             case FOLLOW_CHANGE_TYPE:
@@ -177,7 +175,8 @@ public class WearManagerService extends WearableListenerService implements OnDro
     }
 
     private void relayDroneInfo() {
-        boolean result = mGApiClientMgr.addTask(mGApiClientMgr.new GoogleApiClientTask() {
+        boolean result = mGApiClientMgr.addTaskToBackground(mGApiClientMgr.new
+                                                                    GoogleApiClientTask() {
             @Override
             public void run() {
                 final PutDataMapRequest dataMap = PutDataMapRequest.create(WearUtils
@@ -209,38 +208,34 @@ public class WearManagerService extends WearableListenerService implements OnDro
         else if (WearUtils.TOGGLE_DRONE_CONNECTION_PATH.equals(msgPath) && mDpApi != null) {
 
             boolean shouldConnect = WearUtils.decodeDroneConnectionMsgData(msgEvent.getData());
-            if (mDpApi.isDroneConnected() != shouldConnect) {
+            if (mDpApi.isDroneConnected() != shouldConnect && !mDpApi.toggleDroneConnection()) {
 
-                if (!mDpApi.toggleDroneConnection()) {
+                //Have the wear node(s) tell the user to check the main app.
+                boolean result = mGApiClientMgr.addTaskToBackground(mGApiClientMgr.new GoogleApiClientTask() {
 
-                    //Have the wear node(s) tell the user to check the main app.
-                    boolean result = mGApiClientMgr.addTask(mGApiClientMgr.new GoogleApiClientTask() {
+                    @Override
+                    public void run() {
+                        final GoogleApiClient apiClient = getGoogleApiClient();
 
-                        @Override
-                        public void run() {
-                            final GoogleApiClient apiClient = getGoogleApiClient();
+                        NodeApi.GetConnectedNodesResult nodes =
+                                Wearable.NodeApi.getConnectedNodes(apiClient).await();
 
-                            NodeApi.GetConnectedNodesResult nodes =
-                                    Wearable.NodeApi.getConnectedNodes(apiClient).await();
+                        for (Node node : nodes.getNodes()) {
+                            final MessageApi.SendMessageResult result = Wearable.MessageApi
+                                    .sendMessage(apiClient, node.getId(),
+                                            WearUtils.PHONE_USE_REQUIRED_PATH, null)
+                                    .await();
 
-                            for (Node node : nodes.getNodes()) {
-                                final MessageApi.SendMessageResult result = Wearable.MessageApi
-                                        .sendMessage(apiClient, node.getId(),
-                                                WearUtils.PHONE_USE_REQUIRED_PATH, null)
-                                        .await();
-
-                                final Status status = result.getStatus();
-                                if (!status.isSuccess()) {
-                                    Log.e(TAG, "Failed to relay the data: " + status
-                                            .getStatusCode());
-                                }
+                            final Status status = result.getStatus();
+                            if (!status.isSuccess()) {
+                                Log.e(TAG, "Failed to relay the data: " + status.getStatusCode());
                             }
                         }
-                    });
-
-                    if(!result){
-                        Log.e(TAG, "Unable to add google api client task.");
                     }
+                });
+
+                if (!result) {
+                    Log.e(TAG, "Unable to add google api client task.");
                 }
             }
         }
