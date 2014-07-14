@@ -9,16 +9,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.MAVLink.Messages.ApmModes;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.wearable.DataApi;
-import com.google.android.gms.wearable.DataMap;
-import com.google.android.gms.wearable.MessageApi;
 import com.google.android.gms.wearable.MessageEvent;
-import com.google.android.gms.wearable.Node;
-import com.google.android.gms.wearable.NodeApi;
-import com.google.android.gms.wearable.PutDataMapRequest;
-import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
 
@@ -76,6 +67,10 @@ public class WearManagerService extends WearableListenerService implements OnDro
      */
     private Follow mFollowMe;
 
+    /**
+     * Manager for the google api client. Handles connection/disconnection and running of
+     * google api client related tasks.
+     */
     private GoogleApiClientManager mGApiClientMgr;
 
     @Override
@@ -94,7 +89,7 @@ public class WearManagerService extends WearableListenerService implements OnDro
 
         unbindService(mServiceConnection);
 
-        if(mDrone != null) {
+        if (mDrone != null) {
             mDrone.events.removeDroneListener(this);
         }
 
@@ -135,7 +130,8 @@ public class WearManagerService extends WearableListenerService implements OnDro
                 break;
 
             case RADIO:
-                mDroneInfoBundle.putInt(WearUtils.KEY_DRONE_SIGNAL, drone.radio.getSignalStrength());
+                mDroneInfoBundle.putInt(WearUtils.KEY_DRONE_SIGNAL, drone.radio.getSignalStrength
+                        ());
                 break;
 
             case BATTERY:
@@ -175,26 +171,10 @@ public class WearManagerService extends WearableListenerService implements OnDro
     }
 
     private void relayDroneInfo() {
-        boolean result = mGApiClientMgr.addTaskToBackground(mGApiClientMgr.new
-                                                                    GoogleApiClientTask() {
-            @Override
-            public void run() {
-                final PutDataMapRequest dataMap = PutDataMapRequest.create(WearUtils
-                        .DRONE_INFO_PATH);
-                dataMap.getDataMap().putAll(DataMap.fromBundle(mDroneInfoBundle));
-                PutDataRequest request = dataMap.asPutDataRequest();
-                final DataApi.DataItemResult result = Wearable.DataApi
-                        .putDataItem(getGoogleApiClient(), request)
-                        .await();
+        boolean result = WearUtils.asyncPutDataItem(mGApiClientMgr, WearUtils.DRONE_INFO_PATH,
+                mDroneInfoBundle);
 
-                final Status status = result.getStatus();
-                if (!status.isSuccess()) {
-                    Log.e(TAG, "Failed to relay the data: " + status.getStatusCode());
-                }
-            }
-        });
-
-        if(!result){
+        if (!result) {
             Log.e(TAG, "Unable to add google api client task.");
         }
     }
@@ -202,8 +182,18 @@ public class WearManagerService extends WearableListenerService implements OnDro
     @Override
     public void onMessageReceived(MessageEvent msgEvent) {
         final String msgPath = msgEvent.getPath();
-        if(WearUtils.RESET_DRONE_FLIGHT_TIME_PATH.equals(msgPath)){
+        if (WearUtils.RESET_DRONE_FLIGHT_TIME_PATH.equals(msgPath)) {
             mDrone.state.resetFlightTimer();
+        }
+        else if (WearUtils.TOGGLE_DRONE_FOLLOW_ME_PATH.equals(msgPath)) {
+            boolean newState = WearUtils.decodeFollowMeMsgData(msgEvent.getData());
+            if (mFollowMe.isEnabled() != newState) {
+                mFollowMe.toggleFollowMeState();
+            }
+        }
+        else if (WearUtils.SET_DRONE_FLIGHT_MODE_PATH.equals(msgPath)) {
+            ApmModes flightMode = WearUtils.decodeFlightModeMsgData(msgEvent.getData());
+            mDrone.state.setMode(flightMode);
         }
         else if (WearUtils.TOGGLE_DRONE_CONNECTION_PATH.equals(msgPath) && mDpApi != null) {
 
@@ -211,43 +201,13 @@ public class WearManagerService extends WearableListenerService implements OnDro
             if (mDpApi.isDroneConnected() != shouldConnect && !mDpApi.toggleDroneConnection()) {
 
                 //Have the wear node(s) tell the user to check the main app.
-                boolean result = mGApiClientMgr.addTaskToBackground(mGApiClientMgr.new GoogleApiClientTask() {
-
-                    @Override
-                    public void run() {
-                        final GoogleApiClient apiClient = getGoogleApiClient();
-
-                        NodeApi.GetConnectedNodesResult nodes =
-                                Wearable.NodeApi.getConnectedNodes(apiClient).await();
-
-                        for (Node node : nodes.getNodes()) {
-                            final MessageApi.SendMessageResult result = Wearable.MessageApi
-                                    .sendMessage(apiClient, node.getId(),
-                                            WearUtils.PHONE_USE_REQUIRED_PATH, null)
-                                    .await();
-
-                            final Status status = result.getStatus();
-                            if (!status.isSuccess()) {
-                                Log.e(TAG, "Failed to relay the data: " + status.getStatusCode());
-                            }
-                        }
-                    }
-                });
+                boolean result = WearUtils.asyncSendMessage(mGApiClientMgr,
+                        WearUtils.PHONE_USE_REQUIRED_PATH, null);
 
                 if (!result) {
                     Log.e(TAG, "Unable to add google api client task.");
                 }
             }
-        }
-        else if(WearUtils.TOGGLE_DRONE_FOLLOW_ME_PATH.equals(msgPath)){
-            boolean newState = WearUtils.decodeFollowMeMsgData(msgEvent.getData());
-            if(mFollowMe.isEnabled() != newState){
-                mFollowMe.toggleFollowMeState();
-            }
-        }
-        else if(WearUtils.SET_DRONE_FLIGHT_MODE_PATH.equals(msgPath)){
-            ApmModes flightMode = WearUtils.decodeFlightModeMsgData(msgEvent.getData());
-            mDrone.state.setMode(flightMode);
         }
     }
 }
