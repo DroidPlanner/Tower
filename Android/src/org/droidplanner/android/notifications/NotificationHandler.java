@@ -1,5 +1,6 @@
 package org.droidplanner.android.notifications;
 
+import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
 
@@ -41,14 +42,22 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 	 */
 	private final PebbleNotificationProvider mPebbleNotification;
 
-	public NotificationHandler(Context context, Drone drone) {
-        mDrone = drone;
+    /**
+     * Handles notifications, and data relays for connected wear nodes.
+     */
+    private final WearNotificationProvider mWearNotification;
+
+	public NotificationHandler(DroidPlannerApp dpApp) {
+        mDrone = dpApp.getDrone();
+
+        final Context context = dpApp.getApplicationContext();
 
 		mTtsNotification = new TTSNotificationProvider(context);
 		mStatusBarNotification = new StatusBarNotificationProvider(context);
 		mPebbleNotification = new PebbleNotificationProvider(context);
+        mWearNotification = new WearNotificationProvider(context, dpApp.followMe);
 
-        drone.events.addDroneListener(this);
+        mDrone.events.addDroneListener(this);
 	}
 
 	@Override
@@ -56,6 +65,7 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 		mTtsNotification.onDroneEvent(event, drone);
 		mStatusBarNotification.onDroneEvent(event, drone);
 		mPebbleNotification.onDroneEvent(event, drone);
+        mWearNotification.onDroneEvent(event, drone);
 	}
 
 	/**
@@ -69,6 +79,7 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 		mTtsNotification.quickNotify(feedback);
 		mStatusBarNotification.quickNotify(feedback);
         mPebbleNotification.quickNotify(feedback);
+        mWearNotification.quickNotify(feedback);
 	}
 
     /**
@@ -80,5 +91,6 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
         mTtsNotification.onTerminate();
         mStatusBarNotification.onTerminate();
         mPebbleNotification.onTerminate();
+        mWearNotification.onTerminate();
     }
 }

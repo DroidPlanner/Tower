@@ -72,7 +72,7 @@
         <service android:name=".android.services.DroidPlannerService" />
         <service android:name=".android.services.MAVLinkService" />
         <service android:name=".android.services.UploaderService" />
-        <service android:name=".android.services.WearManagerService">
+        <service android:name=".android.services.WearNotificationService">
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
             </intent-filter>

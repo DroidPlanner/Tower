@@ -22,12 +22,11 @@ public class GoogleApiClientManager {
     /**
      * Manager background thread used to run the submitted google api client tasks.
      */
-    private final Thread mDriverThread = new Thread("GAC Manager Driver Thread"){
-
+    private final Runnable mDriverRunnable = new Runnable() {
         @Override
         public void run() {
             try{
-                while(!isInterrupted()){
+                while(true){
                     final GoogleApiClientTask task = mTaskQueue.take();
 
                     if(!mGoogleApiClient.isConnected()){
@@ -52,6 +51,8 @@ public class GoogleApiClientManager {
         }
     };
 
+    private Thread mDriverThread;
+
     /**
      * This handler is in charge of running google api client tasks on the calling thread.
      */
@@ -61,7 +62,7 @@ public class GoogleApiClientManager {
      * This handler is in charge of running google api client tasks on the background thread.
      */
     private Handler mBgHandler;
-    private final HandlerThread mBgHandlerThread;
+    private HandlerThread mBgHandlerThread;
 
     /**
      * Application context.
@@ -85,7 +86,6 @@ public class GoogleApiClientManager {
             ... apis){
         mContext = context;
         mMainHandler = new Handler();
-        mBgHandlerThread = new HandlerThread("GAC Manager Background Thread");
 
         final GoogleApiClient.Builder apiBuilder = new GoogleApiClient.Builder(context);
         for(Api api: apis){
@@ -96,22 +96,25 @@ public class GoogleApiClientManager {
     }
 
     private void destroyBgHandler() {
-        if (mBgHandlerThread.isAlive()) {
+        if (mBgHandlerThread != null && mBgHandlerThread.isAlive()) {
             mBgHandlerThread.quit();
             mBgHandlerThread.interrupt();
+            mBgHandlerThread = null;
         }
 
         mBgHandler = null;
     }
 
     private void destroyDriverThread(){
-        if(mDriverThread.isAlive()){
+        if(mDriverThread != null && mDriverThread.isAlive()){
             mDriverThread.interrupt();
+            mDriverThread = null;
         }
     }
 
     private void initializeBgHandler(){
-        if(!mBgHandlerThread.isAlive()) {
+        if(mBgHandlerThread == null || mBgHandlerThread.isInterrupted()) {
+            mBgHandlerThread = new HandlerThread("GAC Manager Background Thread");
             mBgHandlerThread.start();
             mBgHandler = null;
         }
@@ -122,7 +125,8 @@ public class GoogleApiClientManager {
     }
 
     private void initializeDriverThread(){
-        if(!mDriverThread.isAlive()){
+        if(mDriverThread == null || mDriverThread.isInterrupted()){
+            mDriverThread = new Thread(mDriverRunnable, "GAC Manager Driver Thread");
             mDriverThread.start();
         }
     }
@@ -163,8 +167,9 @@ public class GoogleApiClientManager {
      * @return true the google api client manager was started.
      */
     private boolean isStarted(){
-        return mDriverThread.isAlive() && mBgHandlerThread.isAlive() && mBgHandler != null &&
-                mBgHandler.getLooper() != null;
+        return mDriverThread != null && mDriverThread.isAlive()
+                && mBgHandlerThread != null && mBgHandlerThread.isAlive()
+                && mBgHandler != null && mBgHandler.getLooper() != null;
     }
 
     /**

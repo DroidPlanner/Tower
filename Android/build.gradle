@@ -29,6 +29,7 @@ android {
     buildToolsVersion '19.1.0'
 
     defaultConfig {
+        applicationId "org.droidplanner"
         minSdkVersion 14
         targetSdkVersion 19
         versionName getGitVersion()

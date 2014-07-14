@@ -56,7 +56,6 @@ public class DroidPlannerService extends Service implements DroneInterfaces.OnDr
     public void onCreate(){
         super.onCreate();
 
-        final Context context = getApplicationContext();
         final DroidPlannerApp dpApp = (DroidPlannerApp) getApplication();
         mFollowMe = dpApp.followMe;
 
@@ -65,7 +64,7 @@ public class DroidPlannerService extends Service implements DroneInterfaces.OnDr
 
         mAppPrefs = new DroidPlannerPrefs(getApplicationContext());
 
-        mNotificationHandler = new NotificationHandler(context, mDrone);
+        mNotificationHandler = new NotificationHandler(dpApp);
     }
 
     @Override

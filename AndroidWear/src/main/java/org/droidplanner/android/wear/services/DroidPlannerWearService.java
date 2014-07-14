@@ -1,14 +1,22 @@
 package org.droidplanner.android.wear.services;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.wearable.DataEvent;
 import com.google.android.gms.wearable.DataEventBuffer;
+import com.google.android.gms.wearable.DataItem;
+import com.google.android.gms.wearable.DataItemBuffer;
+import com.google.android.gms.wearable.DataMap;
+import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.MessageEvent;
+import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
 
@@ -39,11 +47,6 @@ public class DroidPlannerWearService extends WearableListenerService {
      * google api client related tasks.
      */
     private GoogleApiClientManager mGApiClientMgr;
-
-    /**
-     * Stores the data received from the main app.
-     */
-    private final Bundle mReceivedDataBundle = new Bundle();
 
     @Override
     public void onCreate() {
@@ -78,9 +81,34 @@ public class DroidPlannerWearService extends WearableListenerService {
                 final ParcelableApmMode apmModeParcel = intent.getParcelableExtra(action);
                 sendMessage(action, WearUtils.encodeFlightModeMsgData(apmModeParcel.getApmMode()));
             }
-            else if(ACTION_RECEIVED_DATA.equals(action)){
-                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new
-                        Intent(action).putExtra(KEY_RECEIVED_DATA, mReceivedDataBundle));
+            else if (ACTION_RECEIVED_DATA.equals(action)) {
+                mGApiClientMgr.addTask(mGApiClientMgr.new GoogleApiClientTask() {
+                    @Override
+                    public void run() {
+                        Wearable.DataApi.getDataItems(getGoogleApiClient(),
+                                Uri.parse(WearUtils.DRONE_INFO_PATH))
+                                .setResultCallback(new ResultCallback<DataItemBuffer>() {
+
+                                    @Override
+                                    public void onResult(DataItemBuffer dataItems) {
+                                        final Bundle dataBundle = new Bundle();
+                                        final int dataCount = dataItems.getCount();
+
+                                        for(int i = 0; i < dataCount; i++){
+                                            DataItem dataItem = dataItems.get(i);
+                                            DataMap dataMap = DataMapItem.fromDataItem(dataItem)
+                                                    .getDataMap();
+                                            if(dataMap != null){
+                                                dataBundle.putAll(dataMap.toBundle());
+                                            }
+                                        }
+
+                                        broadcastDroneDataUpdate(dataBundle);
+                                        dataItems.release();
+                                    }
+                                });
+                    }
+                });
             }
         }
         return super.onStartCommand(intent, flags, startId);
@@ -88,9 +116,34 @@ public class DroidPlannerWearService extends WearableListenerService {
 
     @Override
     public void onDataChanged(DataEventBuffer dataEvents){
-        for(DataEvent dataEvent: dataEvents){
+        boolean dataUpdated = false;
+        final Bundle dataBundle = new Bundle();
 
+        for(DataEvent dataEvent: dataEvents){
+            final DataItem dataItem = dataEvent.getDataItem();
+            final Uri dataUri = dataItem.getUri();
+            if(WearUtils.DRONE_INFO_PATH.equals(dataUri.getPath())){
+                final int eventType = dataEvent.getType();
+
+                if(eventType == DataEvent.TYPE_DELETED){
+                    dataUpdated = true;
+                }
+                else if(eventType == DataEvent.TYPE_CHANGED){
+                    dataBundle.putAll(DataMapItem.fromDataItem(dataItem).getDataMap().toBundle());
+                    dataUpdated = true;
+                }
+            }
         }
+
+        if(dataUpdated){
+            broadcastDroneDataUpdate(dataBundle);
+            Toast.makeText(getApplicationContext(), "Data updated", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void broadcastDroneDataUpdate(Bundle dataBundle){
+        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new
+                Intent(ACTION_RECEIVED_DATA).putExtra(KEY_RECEIVED_DATA, dataBundle));
     }
 
     @Override
