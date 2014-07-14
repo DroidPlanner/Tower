@@ -74,7 +74,7 @@ public class Parameters extends DroneVariable {
 		}
 
 		// last param? Notify the listener with the parameters
-		if (++paramsReceived >= m_value.param_count - 1) {
+		if (++paramsReceived >= m_value.param_count) {
 			if (parameterListener != null) {
 				parameterListener.onEndReceivingParameters(parameters);
 			}
