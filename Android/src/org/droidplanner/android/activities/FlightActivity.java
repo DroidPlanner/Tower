@@ -146,7 +146,7 @@ public class FlightActivity extends DrawerNavigationUI implements
 						.add(R.id.sliding_drawer_content, slidingDrawerContent).commit();
 			}
 		} else {
-			// Add the telemtry fragment
+			// Add the telemetry fragment
 			Fragment telemetryFragment = fragmentManager.findFragmentById(R.id.telemetryFragment);
 			if (telemetryFragment == null) {
 				telemetryFragment = new TelemetryFragment();
