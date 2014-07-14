@@ -28,7 +28,7 @@
             android:drawableLeft="@drawable/yaw_icon"
             android:focusable="true"
             android:gravity="left|center_vertical"
-            android:text="359"
+            android:text="@string/default_angle_value"
             android:textSize="16sp" />
 
         <TextView
