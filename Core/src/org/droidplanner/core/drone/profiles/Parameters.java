@@ -3,6 +3,7 @@ package org.droidplanner.core.drone.profiles;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import org.droidplanner.core.MAVLink.MavLinkParameters;
 import org.droidplanner.core.drone.Drone;
@@ -42,9 +43,6 @@ public class Parameters extends DroneVariable {
 		if (parameterListener != null)
 			parameterListener.onBeginReceivingParameters();
 		MavLinkParameters.requestParametersList(myDrone);
-		
-		//Request missing parameters!!!
-		//MavLinkParameters.readParameter(myDrone, name);
 	}
 
 	/**
@@ -71,10 +69,22 @@ public class Parameters extends DroneVariable {
 		if (parameterListener != null)
 			parameterListener.onParameterReceived(param, m_value.param_index, m_value.param_count);
 
+		//if the previous parameter is missing, go thru the whole hashmap and request every single missing value
+		if(!parameters.containsKey((int)m_value.param_index-1)){
+			Integer[] keySetObjects =  (Integer[]) parameters.keySet().toArray();
+			for(int keySetIndex = 0;keySetIndex<keySetObjects.length;keySetIndex++){
+				int currentParamID = keySetObjects[keySetIndex];
+				int previousParamID = keySetObjects[keySetIndex-1];
+				for(int missingID = previousParamID;missingID<currentParamID;missingID++){
+					//TODO request resend of that parameter by ID
+					//MavLinkParameters.readParameter(myDrone, name);
+				}
+			}
+		}
+			
 		// last param? Notify the listener with the parameters
 		if (parameters.size()>= m_value.param_count) {
 			if (parameterListener != null) {
-				//TODO fill in the missing prefs before converting to a list and passing on to onEndReceivingParameters
 				List<Parameter> parameterList = new ArrayList<Parameter>();
 				for(int key : parameters.keySet()) {
 					parameterList.add(parameters.get(key));
