@@ -18,9 +18,9 @@ public class GuidedPoint extends DroneVariable implements OnDroneListener {
 
 	private enum GuidedStates {
 		UNINITIALIZED, IDLE, ACTIVE
-	};
+	}
 
-	public GuidedPoint(Drone myDrone) {
+    public GuidedPoint(Drone myDrone) {
 		super(myDrone);
 		myDrone.events.addDroneListener(this);
 	}

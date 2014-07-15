@@ -9,7 +9,6 @@ import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.MAVLink.Messages.ApmModes;
 import com.getpebble.android.kit.PebbleKit;

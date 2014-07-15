@@ -34,11 +34,6 @@ public class TuningFragment extends Fragment implements OnDroneListener {
 	private Chart topChart;
 	private Chart bottomChart;
 
-	private SeekBarWithText rollPSeekBar;
-	private SeekBarWithText rollDSeekBar;
-	private SeekBarWithText yawPSeekBar;
-	private SeekBarWithText thrAclSeekBar;
-
 	private Parameter rollP;
 	private Parameter rollD;
 	private Parameter yawP;
@@ -91,10 +86,13 @@ public class TuningFragment extends Fragment implements OnDroneListener {
 		topChart = (Chart) view.findViewById(R.id.chartTop);
 		bottomChart = (Chart) view.findViewById(R.id.chartBottom);
 
-		rollPSeekBar = (SeekBarWithText) view.findViewById(R.id.SeekBarRollPitchControl);
-		rollDSeekBar = (SeekBarWithText) view.findViewById(R.id.SeekBarRollPitchDampenning);
-		yawPSeekBar = (SeekBarWithText) view.findViewById(R.id.SeekBarYawControl);
-		thrAclSeekBar = (SeekBarWithText) view.findViewById(R.id.SeekBarThrottleAccel);
+		SeekBarWithText rollPSeekBar = (SeekBarWithText) view
+				.findViewById(R.id.SeekBarRollPitchControl);
+		SeekBarWithText rollDSeekBar = (SeekBarWithText) view
+				.findViewById(R.id.SeekBarRollPitchDampenning);
+		SeekBarWithText yawPSeekBar = (SeekBarWithText) view.findViewById(R.id.SeekBarYawControl);
+		SeekBarWithText thrAclSeekBar = (SeekBarWithText) view
+				.findViewById(R.id.SeekBarThrottleAccel);
 	}
 
 	private void setupCharts() {

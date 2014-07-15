@@ -31,7 +31,6 @@ public abstract class SuperSetupFragment extends Fragment implements OnDroneList
 	private Drone drone;
 
 	protected ConfigurationActivity parentActivity;
-	private Spinner spinnerSetup;
 
 	private FragmentManager fragmentManager;
 	private SetupMainPanel setupPanel;
@@ -127,7 +126,7 @@ public abstract class SuperSetupFragment extends Fragment implements OnDroneList
 	}
 
 	private void setupLocalViews(View view) {
-		spinnerSetup = (Spinner) view.findViewById(R.id.spinnerSetupType);
+		Spinner spinnerSetup = (Spinner) view.findViewById(R.id.spinnerSetupType);
 		spinnerSetup.setOnItemSelectedListener(this);
 
 		final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(parentActivity,
@@ -136,7 +135,7 @@ public abstract class SuperSetupFragment extends Fragment implements OnDroneList
 		spinnerSetup.setAdapter(adapter);
 	}
 
-	public SetupMainPanel changeMainPanel(int step) {
+	public void changeMainPanel(int step) {
 		setupPanel = getMainPanel(step);
 		sidePanel = setupPanel.getSidePanel();
 
@@ -150,7 +149,6 @@ public abstract class SuperSetupFragment extends Fragment implements OnDroneList
 		}
 
 		ft.commit();
-		return setupPanel;
 	}
 
 	public SetupSidePanel changeSidePanel(SetupSidePanel sPanel) {

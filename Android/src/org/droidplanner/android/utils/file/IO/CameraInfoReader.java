@@ -61,7 +61,7 @@ public class CameraInfoReader {
 			} else if (name.equals("Name")) {
 				cameraInfo.name = readString("Name");
 			} else if (name.equals("Orientation")) {
-				cameraInfo.isInLandscapeOrientation = readText().equals("Portrait") ? false : true;
+				cameraInfo.isInLandscapeOrientation = !readText().equals("Portrait");
 			} else {
 				skip();
 			}

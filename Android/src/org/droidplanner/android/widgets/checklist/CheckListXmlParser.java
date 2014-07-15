@@ -109,13 +109,13 @@ public class CheckListXmlParser extends ListXmlParser {
 	}
 
 	@Override
-	public void process_StartDocument(XmlPullParser xpp) {
+	public void process_StartDocument() {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void process_EndDocument(XmlPullParser xpp) {
+	public void process_EndDocument() {
 		// TODO Auto-generated method stub
 
 	}
@@ -134,13 +134,13 @@ public class CheckListXmlParser extends ListXmlParser {
 	}
 
 	@Override
-	public void process_EndTag(XmlPullParser xpp) {
+	public void process_EndTag() {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void process_Text(XmlPullParser xpp) {
+	public void process_Text() {
 		// TODO Auto-generated method stub
 
 	}

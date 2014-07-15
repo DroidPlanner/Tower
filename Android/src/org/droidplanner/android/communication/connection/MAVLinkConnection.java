@@ -26,7 +26,7 @@ public abstract class MAVLinkConnection extends Thread {
 
 	private static final String TAG = MAVLinkConnection.class.getSimpleName();
 
-	protected abstract void openConnection() throws UnknownHostException, IOException;
+	protected abstract void openConnection() throws IOException;
 
 	protected abstract void readDataBlock() throws IOException;
 

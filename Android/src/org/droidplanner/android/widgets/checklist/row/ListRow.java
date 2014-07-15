@@ -35,9 +35,9 @@ public class ListRow implements ListRow_Interface, OnClickListener, OnLongClickL
 		checkListItem.setVerified(mState);
 	}
 
-	public void updateRowChanged(View mView, CheckListItem mListItem) {
+	public void updateRowChanged() {
 		if (listener != null)
-			listener.onRowItemChanged(mView, this.checkListItem, this.checkListItem.isVerified());
+			listener.onRowItemChanged(this.checkListItem);
 	}
 
 	public CheckListItem getCheckListItem() {
@@ -82,7 +82,7 @@ public class ListRow implements ListRow_Interface, OnClickListener, OnLongClickL
 		}
 	}
 
-	protected void getData(CheckListItem mListItem) {
+	protected void getData() {
 		if (this.listener != null)
 			this.listener.onRowItemGetData(checkListItem, checkListItem.getSys_tag());
 	}
@@ -90,7 +90,7 @@ public class ListRow implements ListRow_Interface, OnClickListener, OnLongClickL
 	@Override
 	public void onClick(View v) {
 		this.checkListItem.setVerified(((CheckBox) v).isChecked());
-		updateRowChanged(v, this.checkListItem);
+		updateRowChanged();
 	}
 
 	@Override

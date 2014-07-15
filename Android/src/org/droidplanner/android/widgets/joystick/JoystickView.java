@@ -36,9 +36,6 @@ public class JoystickView extends View {
 	private int pointerId = INVALID_POINTER_ID;
 	private float touchX, touchY;
 
-	// Cartesian coordinates of last touch point - joystick center is (0,0)
-	private double cartX, cartY;
-
 	// User coordinates of last touch point
 	private double userX, userY;
 	private double userXold, userYold;
@@ -237,8 +234,8 @@ public class JoystickView extends View {
 
 	private void calcUserCoordinates() {
 		// First convert to cartesian coordinates
-		cartX = (touchX / movementRadius);
-		cartY = (touchY / movementRadius);
+		double cartX = (touchX / movementRadius);
+		double cartY = (touchY / movementRadius);
 
 		// Invert axis if requested
 		if (!xAxisInverted)

@@ -62,8 +62,7 @@ public class Parameter implements Serializable {
 		} else if (name.contains("FORMAT_VERSION")) {
 			throw new Exception("ExludedName");
 		} else {
-			return;
-		}
+        }
 	}
 
 	public static DecimalFormat getFormat() {

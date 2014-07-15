@@ -295,10 +295,11 @@ public interface DPMap extends DroneInterfaces.OnDroneListener {
 	 */
 	public void updateMissionPath(PathSource pathSource);
 
-    /**
-     * Zoom to fit coordinates on map
-     *
-     * @param coords to be displayed
-     */
-    public void zoomToFit(List<Coord2D> coords);
+	/**
+	 * Zoom to fit coordinates on map
+	 * 
+	 * @param coords
+	 *            to be displayed
+	 */
+	public void zoomToFit(List<Coord2D> coords);
 }

@@ -11,8 +11,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 public class ListRow_Value extends ListRow implements OnFocusChangeListener {
-	@SuppressWarnings("unused")
-	private EditText editText;
 	private boolean lastFocusState;
 	private float lastValue;
 
@@ -50,9 +48,9 @@ public class ListRow_Value extends ListRow implements OnFocusChangeListener {
 		String unit = mListItem.getUnit();
 		boolean failMandatory = sysValue <= minVal;
 
-		getData(mListItem);
+		getData();
 
-		editText = holder.editTextView;
+		EditText editText = holder.editTextView;
 		if (holder.editTextView.getText().toString() == null)
 			holder.editTextView.setText("0.0");
 		holder.editTextView.setOnFocusChangeListener(this);
@@ -105,7 +103,7 @@ public class ListRow_Value extends ListRow implements OnFocusChangeListener {
 			}
 
 			if (listener != null)
-				listener.onRowItemChanged(v, this.checkListItem, this.checkListItem.isVerified());
+				listener.onRowItemChanged(this.checkListItem);
 		} else if (hasFocus) {
 			lastFocusState = !lastFocusState;
 		}

@@ -26,13 +26,13 @@ public class ListRow_CheckBox extends ListRow {
 			view = convertView;
 		}
 
-		updateDisplay(view, (ViewHolder) holder, checkListItem);
+		updateDisplay();
 		return view;
 	}
 
-	private void updateDisplay(View view, ViewHolder holder, CheckListItem mListItem) {
+	private void updateDisplay() {
 
-		getData(mListItem);
+		getData();
 
 		updateCheckBox(checkListItem.isVerified());
 	}

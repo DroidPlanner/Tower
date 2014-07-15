@@ -105,6 +105,7 @@ public class MAVLinkClient implements MAVLinkStreams.MAVLinkOutputStream {
 				mService.send(msg);
 				onConnectedService();
 			} catch (RemoteException e) {
+				e.printStackTrace();
 			}
 		}
 
