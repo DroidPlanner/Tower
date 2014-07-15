@@ -1,6 +1,7 @@
 package org.droidplanner.core.drone.profiles;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.droidplanner.core.MAVLink.MavLinkParameters;
@@ -27,10 +28,10 @@ public class Parameters extends DroneVariable {
 
 	private static final String TAG = Parameters.class.getSimpleName();
 
-	private List<Parameter> parameters = new ArrayList<Parameter>();
-
+//	private ArrayList<Integer> missingParameters = new ArrayList<Integer>();
+	private HashMap<Integer,Parameter> parameters = new HashMap<Integer,Parameter>();
+	
 	public DroneInterfaces.OnParameterManagerListener parameterListener;
-	private int paramsReceived = 0;
 
 	public Parameters(Drone myDrone) {
 		super(myDrone);
@@ -38,10 +39,12 @@ public class Parameters extends DroneVariable {
 
 	public void getAllParameters() {
 		parameters.clear();
-		paramsReceived = 0;
 		if (parameterListener != null)
 			parameterListener.onBeginReceivingParameters();
 		MavLinkParameters.requestParametersList(myDrone);
+		
+		//Request missing parameters!!!
+		//MavLinkParameters.readParameter(myDrone, name);
 	}
 
 	/**
@@ -62,24 +65,23 @@ public class Parameters extends DroneVariable {
 	private void processReceivedParam(msg_param_value m_value) {
 		// collect params in parameter list
 		Parameter param = new Parameter(m_value);
-		parameters.add(param);
+		parameters.put((int) m_value.param_index,param);
 
 		// update listener
 		if (parameterListener != null)
 			parameterListener.onParameterReceived(param, m_value.param_index, m_value.param_count);
 
-		if (m_value.param_index > paramsReceived) {
-			Log.w(TAG, "Skipped index: Index is " + m_value.param_index + " received="
-					+ paramsReceived);
-		}
-
 		// last param? Notify the listener with the parameters
-		if (++paramsReceived >= m_value.param_count) {
+		if (parameters.size()>= m_value.param_count) {
 			if (parameterListener != null) {
-				parameterListener.onEndReceivingParameters(parameters);
+				//TODO fill in the missing prefs before converting to a list and passing on to onEndReceivingParameters
+				List<Parameter> parameterList = new ArrayList<Parameter>();
+				for(int key : parameters.keySet()) {
+					parameterList.add(parameters.get(key));
+				}
+				parameterListener.onEndReceivingParameters(parameterList);
 			}
 		}
-
 		myDrone.events.notifyDroneEvent(DroneEventsType.PARAMETER);
 	}
 
@@ -91,10 +93,10 @@ public class Parameters extends DroneVariable {
 		MavLinkParameters.readParameter(myDrone, name);
 	}
 
-	public Parameter getParamter(String name) {
-		for (Parameter parameter : parameters) {
-			if (parameter.name.equalsIgnoreCase(name))
-				return parameter;
+	public Parameter getParameter(String name) {
+		for (int key : parameters.keySet()) {
+			if (parameters.get(key).name.equalsIgnoreCase(name))
+				return parameters.get(key);
 		}
 		return null;
 	}
