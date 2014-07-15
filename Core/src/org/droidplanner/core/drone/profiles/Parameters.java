@@ -1,9 +1,9 @@
 package org.droidplanner.core.drone.profiles;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 import org.droidplanner.core.MAVLink.MavLinkParameters;
 import org.droidplanner.core.drone.Drone;
@@ -27,9 +27,7 @@ import com.MAVLink.Messages.ardupilotmega.msg_param_value;
  */
 public class Parameters extends DroneVariable {
 
-	private static final String TAG = Parameters.class.getSimpleName();
 
-//	private ArrayList<Integer> missingParameters = new ArrayList<Integer>();
 	private HashMap<Integer,Parameter> parameters = new HashMap<Integer,Parameter>();
 	
 	public DroneInterfaces.OnParameterManagerListener parameterListener;
@@ -68,31 +66,36 @@ public class Parameters extends DroneVariable {
 		// update listener
 		if (parameterListener != null)
 			parameterListener.onParameterReceived(param, m_value.param_index, m_value.param_count);
-
-		//if the previous parameter is missing, go thru the whole hashmap and request every single missing value
-		if(!parameters.containsKey((int)m_value.param_index-1)){
-			Integer[] keySetObjects =  (Integer[]) parameters.keySet().toArray();
-			for(int keySetIndex = 0;keySetIndex<keySetObjects.length;keySetIndex++){
-				int currentParamID = keySetObjects[keySetIndex];
-				int previousParamID = keySetObjects[keySetIndex-1];
-				for(int missingID = previousParamID;missingID<currentParamID;missingID++){
-					//TODO request resend of that parameter by ID
-					//MavLinkParameters.readParameter(myDrone, name);
-				}
-			}
-		}
 			
-		// last param? Notify the listener with the parameters
+		// Are all parameters here? Notify the listener with the parameters
 		if (parameters.size()>= m_value.param_count) {
 			if (parameterListener != null) {
 				List<Parameter> parameterList = new ArrayList<Parameter>();
 				for(int key : parameters.keySet()) {
 					parameterList.add(parameters.get(key));
 				}
+				Log.d("param","all params are here");
 				parameterListener.onEndReceivingParameters(parameterList);
 			}
+		//if the final parameter arrived but the hashmap is incomplete, go thru the whole hashmap and request every single missing value
+		}else if(m_value.param_index==m_value.param_count-1){
+			reRequestMissingParams(m_value);		
+			Log.d("param","final param arrived, but something's missing");
 		}
+		
+		Log.d("param",m_value.param_index+ " out of " + m_value.param_count);
+		if(m_value.param_index==m_value.param_count-1)
+			Log.d("param","final param arrived");
+		
 		myDrone.events.notifyDroneEvent(DroneEventsType.PARAMETER);
+	}
+
+	private void reRequestMissingParams(msg_param_value m_value) {
+		for (int i=0;i<m_value.param_count;i++){
+			if(!parameters.containsKey(i)){
+				MavLinkParameters.readParameter(myDrone, i);
+			}
+		}
 	}
 
 	public void sendParameter(Parameter parameter) {
