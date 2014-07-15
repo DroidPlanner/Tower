@@ -116,11 +116,10 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 
 		for (int h = 0; h < listDataHeader.size(); h++) {
 			cli = new ArrayList<CheckListItem>();
-			for (int i = 0; i < checklistItems.size(); i++) {
-				CheckListItem c = checklistItems.get(i);
-				if (c.getCategoryIndex() == h)
-					cli.add(c);
-			}
+            for (CheckListItem c : checklistItems) {
+                if (c.getCategoryIndex() == h)
+                    cli.add(c);
+            }
 			listDataChild.put(listDataHeader.get(h), cli);
 		}
 	}
