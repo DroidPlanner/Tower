@@ -3,6 +3,7 @@ package org.droidplanner.android.wear.services;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -152,6 +153,8 @@ public class DroidPlannerWearService extends WearableListenerService {
         }
         else if(WearUtils.MAIN_APP_STARTED_PATH.equals(msgPath)){
             //TODO: insert a notification in the context stream
+//            NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext())
+//                    .setContentTitle()
         }
         else if(WearUtils.MAIN_APP_STOPPED_PATH.equals(msgPath)){
             //TODO: remove the notification from the context stream
