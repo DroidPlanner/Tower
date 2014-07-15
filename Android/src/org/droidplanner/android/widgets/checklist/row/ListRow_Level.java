@@ -40,7 +40,7 @@ public class ListRow_Level extends ListRow {
 		String unit = mListItem.getUnit();
 		boolean failMandatory = false;
 
-		getData(mListItem);
+		getData();
 
 		failMandatory = sysValue <= minVal;
 

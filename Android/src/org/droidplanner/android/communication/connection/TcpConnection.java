@@ -23,7 +23,7 @@ public class TcpConnection extends MAVLinkConnection {
 	}
 
 	@Override
-	protected void openConnection() throws UnknownHostException, IOException {
+	protected void openConnection() throws IOException {
 		getTCPStream();
 	}
 
@@ -52,7 +52,7 @@ public class TcpConnection extends MAVLinkConnection {
 
 	}
 
-	private void getTCPStream() throws UnknownHostException, IOException {
+	private void getTCPStream() throws IOException {
 		InetAddress serverAddr = InetAddress.getByName(serverIP);
 		socket = new Socket(serverAddr, serverPort);
 		mavOut = new BufferedOutputStream((socket.getOutputStream()));

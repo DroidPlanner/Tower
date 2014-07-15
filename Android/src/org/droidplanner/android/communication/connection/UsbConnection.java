@@ -29,7 +29,7 @@ public class UsbConnection extends MAVLinkConnection {
 	}
 
 	@Override
-	protected void openConnection() throws UnknownHostException, IOException {
+	protected void openConnection() throws IOException {
 		openCOM();
 	}
 
@@ -108,7 +108,7 @@ public class UsbConnection extends MAVLinkConnection {
 					// Ignore.
 				}
 				sDriver = null;
-            }
+			}
 		}
 	}
 }

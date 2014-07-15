@@ -17,7 +17,6 @@ public class MissionCircleFragment extends MissionDetailFragment implements
 
 	private SeekBarWithText altitudeSeekBar;
 	private SeekBarWithText loiterTurnSeekBar;
-	private SeekBarWithText loiterRadiusSeekBar;
 	private CheckBox loiterCCW;
 	private CheckBox checkBoxAdvanced;
 	private SeekBarWithText altitudeStepSeekBar;
@@ -58,7 +57,8 @@ public class MissionCircleFragment extends MissionDetailFragment implements
 		loiterTurnSeekBar.setOnChangedListener(this);
 		loiterTurnSeekBar.setValue(item.getNumeberOfTurns());
 
-		loiterRadiusSeekBar = (SeekBarWithText) view.findViewById(R.id.loiterRadius);
+		SeekBarWithText loiterRadiusSeekBar = (SeekBarWithText) view
+				.findViewById(R.id.loiterRadius);
 		// loiterRadiusSeekBar.setAbsValue(item.getRadius());
 		loiterRadiusSeekBar.setOnChangedListener(this);
 	}

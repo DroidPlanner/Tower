@@ -27,7 +27,7 @@ public abstract class ListXmlAdapter extends BaseExpandableListAdapter {
 		this.listItems = new HashMap<String, List<ListRow_Interface>>();
 	}
 
-	public void addRowItem(int groupPosition, int childPostion, ListRow_Interface rowItem) {
+	public void addRowItem() {
 
 	}
 
@@ -106,7 +106,7 @@ public abstract class ListXmlAdapter extends BaseExpandableListAdapter {
 	}
 
 	public void updateRatioValue(TextView lblChkRatio, int groupPosition) {
-    }
+	}
 
 	@Override
 	public boolean hasStableIds() {

@@ -71,19 +71,18 @@ public abstract class SuperSetupMainPanel extends SetupMainPanel implements OnCa
 	}
 
 	@Override
-	public void onReadCalibration(CalParameters calParameters) {
+	public void onReadCalibration() {
 		doCalibrationStep(0);
 		updatePanelInfo();
 	}
 
 	@Override
-	public void onSentCalibration(CalParameters calParameters) {
+	public void onSentCalibration() {
 		doCalibrationStep(0);
 	}
 
 	@Override
-	public void onCalibrationData(CalParameters calParameters, int index, int count,
-			boolean isSending) {
+	public void onCalibrationData(int index, int count, boolean isSending) {
 		if (sidePanel != null && parameters != null) {
 			String title;
 			if (isSending) {

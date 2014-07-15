@@ -129,11 +129,6 @@ public class ConfigurationActivity extends SuperUI {
 		mViewPager.setCurrentItem(configScreenIndex);
 	}
 
-	@Override
-	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		super.onDroneEvent(event, drone);
-	}
-
 	/**
 	 * This is the fragment pager adapter to handle the tabs of the
 	 * Configuration activity.

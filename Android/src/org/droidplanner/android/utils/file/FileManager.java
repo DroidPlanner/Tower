@@ -19,7 +19,7 @@ public class FileManager {
 
 	public static boolean isExternalStorageAvaliable() {
 		String state = Environment.getExternalStorageState();
-        return Environment.MEDIA_MOUNTED.equals(state);
-    }
+		return Environment.MEDIA_MOUNTED.equals(state);
+	}
 
 }

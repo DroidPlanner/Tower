@@ -21,7 +21,6 @@ public class NumberFieldEdit extends LinearLayout implements OnTouchListener {
 	private TextView titleText;
 	private TextView separatorText;
 	private EditText editText;
-	private LinearLayout buttonLayout;
 	private ImageButton buttonPlus;
 	private ImageButton buttonMinus;
 	private double min = 0;
@@ -73,7 +72,7 @@ public class NumberFieldEdit extends LinearLayout implements OnTouchListener {
 			editText = new EditText(context);
 			buttonPlus = new ImageButton(context);
 			buttonMinus = new ImageButton(context);
-			buttonLayout = new LinearLayout(context);
+			LinearLayout buttonLayout = new LinearLayout(context);
 
 			titleText.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
 			separatorText.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);

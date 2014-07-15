@@ -16,7 +16,7 @@ import android.widget.Spinner;
 public class SpinnerSelfSelect extends Spinner {
 
 	public interface OnSpinnerItemSelectedListener {
-		void onSpinnerItemSelected(Spinner spinner, int position, String text);
+		void onSpinnerItemSelected(Spinner spinner, int position);
 	}
 
 	private OnSpinnerItemSelectedListener listener;
@@ -53,7 +53,7 @@ public class SpinnerSelfSelect extends Spinner {
 		}
 
 		if (listener != null) {
-			listener.onSpinnerItemSelected(this, position, getItemAtPosition(position).toString());
+			listener.onSpinnerItemSelected(this, position);
 		}
 	}
 

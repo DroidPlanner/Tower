@@ -44,7 +44,7 @@ public class FragmentSetupRC extends SuperSetupMainPanel {
 	private FillBar bar6;
 	private FillBar bar7;
 	private FillBar bar8;
-    private TextView roll_pitch_text;
+	private TextView roll_pitch_text;
 	private TextView thr_yaw_text;
 	private TextView ch_5_text;
 	private TextView ch_6_text;
@@ -96,7 +96,7 @@ public class FragmentSetupRC extends SuperSetupMainPanel {
 	}
 
 	@Override
-	public void onReadCalibration(CalParameters calParameters) {
+	public void onReadCalibration() {
 		doCalibrationStep(0);// show progress sidepanel
 	}
 
@@ -191,7 +191,7 @@ public class FragmentSetupRC extends SuperSetupMainPanel {
 		return ((SetupRadioFragment) getParentFragment()).changeSidePanel(sidePanel);
 	}
 
-	private SetupSidePanel getProgressPanel(boolean isSending) {
+	private void getProgressPanel(boolean isSending) {
 		sidePanel = new FragmentSetupProgress();
 		if (isSending) {
 			sidePanel.updateTitle(R.string.progress_title_uploading);
@@ -200,8 +200,6 @@ public class FragmentSetupRC extends SuperSetupMainPanel {
 			sidePanel.updateTitle(R.string.progress_title_downloading);
 			sidePanel.updateDescription(R.string.progress_desc_downloading);
 		}
-
-		return ((SetupRadioFragment) getParentFragment()).changeSidePanel(sidePanel);
 	}
 
 	@Override

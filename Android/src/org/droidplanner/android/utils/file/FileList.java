@@ -43,7 +43,7 @@ public class FileList {
 				return mPath.list(filter);
 			}
 		} catch (SecurityException e) {
-            e.printStackTrace();
+			e.printStackTrace();
 		}
 		return new String[0];
 	}

@@ -31,15 +31,15 @@ public class ListRow_Radio extends ListRow implements OnCheckedChangeListener {
 			view = convertView;
 			holder = (ViewHolder) convertView.getTag();
 		}
-		updateDisplay(view, (ViewHolder) holder, checkListItem);
+		updateDisplay((ViewHolder) holder);
 		return view;
 	}
 
-	private void updateDisplay(View view, ViewHolder holder, CheckListItem mListItem) {
+	private void updateDisplay(ViewHolder holder) {
 
 		holder.radioGroupView.setOnCheckedChangeListener(this);
 
-		getData(mListItem);
+		getData();
 		updateCheckBox(checkListItem.isVerified());
 
 	}
@@ -79,7 +79,7 @@ public class ListRow_Radio extends ListRow implements OnCheckedChangeListener {
 	@Override
 	public void onCheckedChanged(RadioGroup arg0, int arg1) {
 		checkListItem.setSelectedIndex(arg1);
-		updateRowChanged(arg0, this.checkListItem);
+		updateRowChanged();
 
 	}
 }

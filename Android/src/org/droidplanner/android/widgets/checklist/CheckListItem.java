@@ -190,7 +190,8 @@ public class CheckListItem extends ListXmlData {
 			this.optionLists = new ArrayList<String>(
 					Arrays.asList(optionListStr.split("\\s*,\\s*")));
 
-            for (String optionList : optionLists) System.out.println("option : " + optionList);
+			for (String optionList : optionLists)
+				System.out.println("option : " + optionList);
 
 		}
 	}

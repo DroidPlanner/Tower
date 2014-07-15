@@ -16,7 +16,7 @@ public class FragmentSetupSend extends SetupSidePanel {
 	private int titleId = 0, descId = 0;
 	private TextView textTitle, textDesc;
 
-    @Override
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 		final SetupRadioFragment setupFragment = (SetupRadioFragment) getParentFragment();

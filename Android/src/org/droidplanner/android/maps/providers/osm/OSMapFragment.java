@@ -525,7 +525,7 @@ public class OSMapFragment extends Fragment implements DPMap {
 			break;
 		}
 	}
-	
+
 	@Override
 	public void zoomToFit(List<Coord2D> coords) {
 		// NOP - not implemented at this time

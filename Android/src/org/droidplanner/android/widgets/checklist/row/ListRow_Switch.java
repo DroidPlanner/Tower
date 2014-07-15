@@ -30,14 +30,14 @@ public class ListRow_Switch extends ListRow implements OnCheckedChangeListener {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		updateDisplay(view, (ViewHolder) holder, checkListItem);
+		updateDisplay((ViewHolder) holder, checkListItem);
 		return view;
 	}
 
-	private void updateDisplay(View view, ViewHolder holder, CheckListItem mListItem) {
+	private void updateDisplay(ViewHolder holder, CheckListItem mListItem) {
 		boolean failMandatory = false;
 
-		getData(mListItem);
+		getData();
 
 		failMandatory = !checkListItem.isSys_activated();
 
@@ -69,6 +69,6 @@ public class ListRow_Switch extends ListRow implements OnCheckedChangeListener {
 	@Override
 	public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
 		this.checkListItem.setSys_activated(arg1);
-		updateRowChanged(arg0, this.checkListItem);
+		updateRowChanged();
 	}
 }

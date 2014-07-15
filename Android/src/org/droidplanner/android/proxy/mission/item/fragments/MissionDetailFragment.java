@@ -186,7 +186,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 				dismiss();
 			}
 		} catch (IllegalArgumentException e) {
-            e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 

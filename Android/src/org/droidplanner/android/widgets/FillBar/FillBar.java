@@ -18,8 +18,6 @@ public class FillBar extends View {
 	private int height;
 	private int width;
 	private float percentage = 0.5f;
-	private float fheight;
-	private float fwidth;
 	private float min = 0.5f;
 	private float max = 0.5f;
 	private boolean showMinMax = false;
@@ -59,8 +57,8 @@ public class FillBar extends View {
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 
-		fheight = height < width ? height : (height * (1 - percentage));
-		fwidth = height < width ? (width * (percentage)) : width;
+		float fheight = height < width ? height : (height * (1 - percentage));
+		float fwidth = height < width ? (width * (percentage)) : width;
 
 		paintFill.setColor(colorOutline);
 		outlinePath.reset();
