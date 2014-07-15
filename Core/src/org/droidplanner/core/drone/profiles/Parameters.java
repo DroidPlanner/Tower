@@ -1,7 +1,6 @@
 package org.droidplanner.core.drone.profiles;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -9,10 +8,12 @@ import org.droidplanner.core.MAVLink.MavLinkParameters;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
+import org.droidplanner.core.drone.DroneInterfaces.Handler;
+import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.drone.DroneVariable;
 import org.droidplanner.core.parameters.Parameter;
 
-import android.util.Log;
+import android.annotation.SuppressLint;
 
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_param_value;
@@ -25,15 +26,29 @@ import com.MAVLink.Messages.ardupilotmega.msg_param_value;
  * MAV Message.
  * 
  */
-public class Parameters extends DroneVariable {
+public class Parameters extends DroneVariable implements OnDroneListener {
 
+	private static final int TIMEOUT = 1000;
 
-	private HashMap<Integer,Parameter> parameters = new HashMap<Integer,Parameter>();
-	
+	private int expectedParams;
+
+	@SuppressLint("UseSparseArrays")
+	private HashMap<Integer, Parameter> parameters = new HashMap<Integer, Parameter>();
+
 	public DroneInterfaces.OnParameterManagerListener parameterListener;
 
-	public Parameters(Drone myDrone) {
+	public Handler watchdog;
+	public Runnable watchdogCallback = new Runnable() {
+		@Override
+		public void run() {
+			onParameterStreamStopped();
+		}
+	};
+
+	public Parameters(Drone myDrone, Handler handler) {
 		super(myDrone);
+		this.watchdog = handler;
+		myDrone.events.addDroneListener(this);
 	}
 
 	public void getAllParameters() {
@@ -41,6 +56,7 @@ public class Parameters extends DroneVariable {
 		if (parameterListener != null)
 			parameterListener.onBeginReceivingParameters();
 		MavLinkParameters.requestParametersList(myDrone);
+		resetWatchdog();
 	}
 
 	/**
@@ -61,38 +77,34 @@ public class Parameters extends DroneVariable {
 	private void processReceivedParam(msg_param_value m_value) {
 		// collect params in parameter list
 		Parameter param = new Parameter(m_value);
-		parameters.put((int) m_value.param_index,param);
+		parameters.put((int) m_value.param_index, param);
 
+		expectedParams = m_value.param_count;
+		
 		// update listener
 		if (parameterListener != null)
-			parameterListener.onParameterReceived(param, m_value.param_index, m_value.param_count);
-			
+			parameterListener.onParameterReceived(param, m_value.param_index,
+					m_value.param_count);
+
 		// Are all parameters here? Notify the listener with the parameters
-		if (parameters.size()>= m_value.param_count) {
+		if (parameters.size() >= m_value.param_count) {
 			if (parameterListener != null) {
 				List<Parameter> parameterList = new ArrayList<Parameter>();
-				for(int key : parameters.keySet()) {
+				for (int key : parameters.keySet()) {
 					parameterList.add(parameters.get(key));
 				}
-				Log.d("param","all params are here");
+				killWatchdog();
 				parameterListener.onEndReceivingParameters(parameterList);
 			}
-		//if the final parameter arrived but the hashmap is incomplete, go thru the whole hashmap and request every single missing value
-		}else if(m_value.param_index==m_value.param_count-1){
-			reRequestMissingParams(m_value);		
-			Log.d("param","final param arrived, but something's missing");
+		} else {
+			resetWatchdog();
 		}
-		
-		Log.d("param",m_value.param_index+ " out of " + m_value.param_count);
-		if(m_value.param_index==m_value.param_count-1)
-			Log.d("param","final param arrived");
-		
 		myDrone.events.notifyDroneEvent(DroneEventsType.PARAMETER);
 	}
 
-	private void reRequestMissingParams(msg_param_value m_value) {
-		for (int i=0;i<m_value.param_count;i++){
-			if(!parameters.containsKey(i)){
+	private void reRequestMissingParams(int howManyParams) {
+		for (int i = 0; i < howManyParams; i++) {
+			if (!parameters.containsKey(i)) {
 				MavLinkParameters.readParameter(myDrone, i);
 			}
 		}
@@ -119,5 +131,32 @@ public class Parameters extends DroneVariable {
 			return parameters.get(parameters.size() - 1);
 
 		return null;
+	}
+
+	private void onParameterStreamStopped() {
+		reRequestMissingParams(expectedParams);
+		resetWatchdog();
+	}
+
+	private void resetWatchdog() {
+		watchdog.removeCallbacks(watchdogCallback);
+		watchdog.postDelayed(watchdogCallback, TIMEOUT);
+	}
+
+	private void killWatchdog() {
+		watchdog.removeCallbacks(watchdogCallback);
+	}
+
+	@Override
+	public void onDroneEvent(DroneEventsType event, Drone drone) {
+		switch(event){
+		case DISCONNECTED:
+		case HEARTBEAT_TIMEOUT:
+			killWatchdog();
+			break;
+		default:
+			break;
+		
+		}
 	}
 }
