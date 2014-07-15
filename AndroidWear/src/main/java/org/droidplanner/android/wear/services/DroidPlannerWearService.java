@@ -1,9 +1,13 @@
 package org.droidplanner.android.wear.services;
 
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -16,12 +20,16 @@ import com.google.android.gms.wearable.DataItemBuffer;
 import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.MessageEvent;
+import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
 
+import org.droidplanner.R;
 import org.droidplanner.android.lib.parcelables.ParcelableApmMode;
 import org.droidplanner.android.lib.utils.GoogleApiClientManager;
 import org.droidplanner.android.lib.utils.WearUtils;
+import org.droidplanner.android.wear.WearUI;
+import org.droidplanner.android.wear.activities.ContextStreamActivity;
 
 /**
  * Handles communication with the app on the connected mobile device.
@@ -29,6 +37,8 @@ import org.droidplanner.android.lib.utils.WearUtils;
 public class DroidPlannerWearService extends WearableListenerService {
 
     private static final String TAG = DroidPlannerWearService.class.getSimpleName();
+
+    private static final int WEAR_NOTIFICATION_ID = 112;
 
     /**
      * Action used to broadcast data updates.
@@ -84,8 +94,10 @@ public class DroidPlannerWearService extends WearableListenerService {
                 mGApiClientMgr.addTask(mGApiClientMgr.new GoogleApiClientTask() {
                     @Override
                     public void run() {
-                        Wearable.DataApi.getDataItems(getGoogleApiClient(),
-                                Uri.parse(WearUtils.DRONE_INFO_PATH))
+                        final Uri dataItemUri = new Uri.Builder().scheme(PutDataRequest
+                                .WEAR_URI_SCHEME).path(WearUtils.DRONE_INFO_PATH).build();
+
+                        Wearable.DataApi.getDataItems(getGoogleApiClient(), dataItemUri)
                                 .setResultCallback(new ResultCallback<DataItemBuffer>() {
 
                                     @Override
@@ -146,18 +158,17 @@ public class DroidPlannerWearService extends WearableListenerService {
 
     @Override
     public void onMessageReceived(MessageEvent msgEvent){
+        final Context context = getApplicationContext();
         final String msgPath = msgEvent.getPath();
         if(WearUtils.MAIN_APP_USE_REQUIRED_PATH.equals(msgPath)){
-            Toast.makeText(getApplicationContext(), "Check the main app to complete this " +
+            Toast.makeText(context, "Check the main app to complete this " +
                     "action!", Toast.LENGTH_LONG).show();
         }
         else if(WearUtils.MAIN_APP_STARTED_PATH.equals(msgPath)){
-            //TODO: insert a notification in the context stream
-//            NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext())
-//                    .setContentTitle()
+            updateNotification();
         }
         else if(WearUtils.MAIN_APP_STOPPED_PATH.equals(msgPath)){
-            //TODO: remove the notification from the context stream
+            cancelNotification();
         }
     }
 
@@ -166,5 +177,31 @@ public class DroidPlannerWearService extends WearableListenerService {
         if(!result){
             Log.e(TAG, "Unable to add google api client task.");
         }
+    }
+
+    private void updateNotification(){
+        final Context context = getApplicationContext();
+
+        // insert a notification in the context stream
+        final Intent displayIntent = new Intent(context, ContextStreamActivity.class);
+        final PendingIntent displayPendingIntent = PendingIntent.getActivity(context, 0,
+                displayIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Notification notification = new NotificationCompat.Builder(context)
+                .setContentTitle(getText(R.string.app_title))
+                .setContentText("")
+                .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context,
+                        WearUI.class), 0))
+                .setSmallIcon(R.drawable.ic_launcher)
+                .extend(new NotificationCompat.WearableExtender()
+                        .setDisplayIntent(displayPendingIntent))
+                .build();
+
+        NotificationManagerCompat.from(context).notify(WEAR_NOTIFICATION_ID, notification);
+    }
+
+    private void cancelNotification(){
+//remove the notification from the context stream
+        NotificationManagerCompat.from(getApplicationContext()).cancel(WEAR_NOTIFICATION_ID);
     }
 }
