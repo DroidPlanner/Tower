@@ -9,6 +9,13 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import org.droidplanner.android.gcs.follow.Follow;
+import org.droidplanner.android.lib.parcelables.ParcelableApmMode;
+import org.droidplanner.android.lib.parcelables.ParcelableBattery;
+import org.droidplanner.android.lib.parcelables.ParcelableGPS;
+import org.droidplanner.android.lib.parcelables.ParcelableOrientation;
+import org.droidplanner.android.lib.parcelables.ParcelableRadio;
+import org.droidplanner.android.lib.parcelables.ParcelableSpeed;
+import org.droidplanner.android.lib.utils.ParcelableUtils;
 import org.droidplanner.android.lib.utils.WearUtils;
 import org.droidplanner.android.services.WearNotificationService;
 import org.droidplanner.core.drone.Drone;
@@ -36,6 +43,8 @@ public class WearNotificationProvider implements NotificationHandler.Notificatio
     WearNotificationProvider(Context context, Follow followMe){
         mContext = context;
         mFollowMe = followMe;
+        mContext.startService(new Intent(mContext, WearNotificationService.class).setAction
+                (WearUtils.MAIN_APP_STARTED_PATH));
     }
 
     @Override
@@ -45,6 +54,8 @@ public class WearNotificationProvider implements NotificationHandler.Notificatio
 
     @Override
     public void onTerminate() {
+        mContext.startService(new Intent(mContext, WearNotificationService.class).setAction
+                (WearUtils.MAIN_APP_STOPPED_PATH));
         mDroneInfoBundle.clear();
     }
 
@@ -66,8 +77,8 @@ public class WearNotificationProvider implements NotificationHandler.Notificatio
 
             case MODE:
             case TYPE:
-                mDroneInfoBundle.putString(WearUtils.KEY_DRONE_FLIGHT_MODE,
-                        drone.state.getMode().getName());
+                mDroneInfoBundle.putByteArray(WearUtils.KEY_DRONE_FLIGHT_MODE,
+                        ParcelableUtils.marshall(new ParcelableApmMode(drone.state.getMode())));
                 mDroneInfoBundle.putInt(WearUtils.KEY_DRONE_TYPE, drone.type.getType());
                 break;
 
@@ -82,31 +93,29 @@ public class WearNotificationProvider implements NotificationHandler.Notificatio
                 break;
 
             case RADIO:
-                mDroneInfoBundle.putInt(WearUtils.KEY_DRONE_SIGNAL, drone.radio.getSignalStrength());
+                mDroneInfoBundle.putByteArray(WearUtils.KEY_DRONE_SIGNAL,
+                        ParcelableUtils.marshall(new ParcelableRadio(drone.radio)));
                 break;
 
             case BATTERY:
-                mDroneInfoBundle.putString(WearUtils.KEY_DRONE_BATTERY, drone.battery.toString());
+                mDroneInfoBundle.putByteArray(WearUtils.KEY_DRONE_BATTERY,
+                        ParcelableUtils.marshall(new ParcelableBattery(drone.battery)));
                 break;
 
             case GPS_COUNT:
             case GPS_FIX:
-                mDroneInfoBundle.putString(WearUtils.KEY_DRONE_GPS, drone.GPS.toString());
+                mDroneInfoBundle.putByteArray(WearUtils.KEY_DRONE_GPS,
+                        ParcelableUtils.marshall(new ParcelableGPS(drone.GPS)));
                 break;
 
             case ORIENTATION:
-                mDroneInfoBundle.putDouble(WearUtils.KEY_DRONE_ROLL, drone.orientation.getRoll());
-                mDroneInfoBundle.putDouble(WearUtils.KEY_DRONE_PITCH, drone.orientation.getPitch());
-                mDroneInfoBundle.putDouble(WearUtils.KEY_DRONE_YAW, drone.orientation.getYaw());
+                mDroneInfoBundle.putByteArray(WearUtils.KEY_DRONE_ORIENTATION,
+                        ParcelableUtils.marshall(new ParcelableOrientation(drone.orientation)));
                 break;
 
             case SPEED:
-                mDroneInfoBundle.putDouble(WearUtils.KEY_DRONE_AIR_SPEED,
-                        drone.speed.getAirSpeed());
-                mDroneInfoBundle.putDouble(WearUtils.KEY_DRONE_GROUND_SPEED,
-                        drone.speed.getGroundSpeed());
-                mDroneInfoBundle.putDouble(WearUtils.KEY_DRONE_CLIMB_RATE,
-                        drone.speed.getVerticalSpeed());
+                mDroneInfoBundle.putByteArray(WearUtils.KEY_DRONE_SPEED,
+                        ParcelableUtils.marshall(new ParcelableSpeed(drone.speed)));
                 mDroneInfoBundle.putDouble(WearUtils.KEY_DRONE_ALTITUDE,
                         drone.altitude.getAltitude());
                 break;

@@ -7,7 +7,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.wearable.DataEvent;
 import com.google.android.gms.wearable.DataEventBuffer;
@@ -16,7 +15,6 @@ import com.google.android.gms.wearable.DataItemBuffer;
 import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.MessageEvent;
-import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
 
@@ -137,7 +135,6 @@ public class DroidPlannerWearService extends WearableListenerService {
 
         if(dataUpdated){
             broadcastDroneDataUpdate(dataBundle);
-            Toast.makeText(getApplicationContext(), "Data updated", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -149,9 +146,15 @@ public class DroidPlannerWearService extends WearableListenerService {
     @Override
     public void onMessageReceived(MessageEvent msgEvent){
         final String msgPath = msgEvent.getPath();
-        if(WearUtils.PHONE_USE_REQUIRED_PATH.equals(msgPath)){
+        if(WearUtils.MAIN_APP_USE_REQUIRED_PATH.equals(msgPath)){
             Toast.makeText(getApplicationContext(), "Check the main app to complete this " +
                     "action!", Toast.LENGTH_LONG).show();
+        }
+        else if(WearUtils.MAIN_APP_STARTED_PATH.equals(msgPath)){
+            //TODO: insert a notification in the context stream
+        }
+        else if(WearUtils.MAIN_APP_STOPPED_PATH.equals(msgPath)){
+            //TODO: remove the notification from the context stream
         }
     }
 

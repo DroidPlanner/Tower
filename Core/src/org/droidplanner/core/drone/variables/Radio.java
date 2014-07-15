@@ -6,8 +6,8 @@ import org.droidplanner.core.drone.DroneVariable;
 import org.droidplanner.core.helpers.math.MathUtil;
 
 public class Radio extends DroneVariable {
-	private static final int MAX_FADE_MARGIN = 50;
-	private static final int MIN_FADE_MARGIN = 6;
+	public static final int MAX_FADE_MARGIN = 50;
+	public static final int MIN_FADE_MARGIN = 6;
 
 	private int rxerrors = -1;
 	private int fixed = -1;

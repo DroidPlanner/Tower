@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.MAVLink.Messages.ApmModes;
@@ -91,6 +90,13 @@ public class WearNotificationService extends WearableListenerService {
                 final Bundle dataBundle = intent.getBundleExtra(action);
                 updateDataItem(action, dataBundle);
             }
+            else if(WearUtils.MAIN_APP_STARTED_PATH.equals(action) ||
+                    WearUtils.MAIN_APP_STOPPED_PATH.equals(action)){
+                boolean result = WearUtils.asyncSendMessage(mGApiClientMgr, action, null);
+                if(!result){
+                    Log.e(TAG, "Unable to add google api client task.");
+                }
+            }
         }
         return super.onStartCommand(intent, flags, startId);
     }
@@ -126,7 +132,7 @@ public class WearNotificationService extends WearableListenerService {
 
                     //Have the wear node(s) tell the user to check the main app.
                     boolean result = WearUtils.asyncSendMessage(mGApiClientMgr,
-                            WearUtils.PHONE_USE_REQUIRED_PATH, null);
+                            WearUtils.MAIN_APP_USE_REQUIRED_PATH, null);
 
                     if (!result) {
                         Log.e(TAG, "Unable to add google api client task.");

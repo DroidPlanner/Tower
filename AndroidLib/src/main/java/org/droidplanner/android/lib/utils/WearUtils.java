@@ -52,12 +52,8 @@ public class WearUtils {
     public static final String KEY_DRONE_FLIGHT_TIME = "key_drone_flight_time";
     public static final String KEY_DRONE_SIGNAL = "key_drone_signal";
 
-    public static final String KEY_DRONE_ROLL = "key_drone_roll";
-    public static final String KEY_DRONE_YAW = "key_drone_yaw";
-    public static final String KEY_DRONE_PITCH = "key_drone_pitch";
-    public static final String KEY_DRONE_GROUND_SPEED = "key_drone_ground_speed";
-    public static final String KEY_DRONE_AIR_SPEED = "key_drone_air_speed";
-    public static final String KEY_DRONE_CLIMB_RATE = "key_drone_climb_rate";
+    public static final String KEY_DRONE_ORIENTATION = "key_drone_orientation";
+    public static final String KEY_DRONE_SPEED = "key_drone_speed";
     public static final String KEY_DRONE_ALTITUDE = "key_drone_altitude";
 
     /*
@@ -68,7 +64,21 @@ public class WearUtils {
      */
     private static final String MESSAGE_ROOT_PATH = "/drone/actions";
 
-    public static final String PHONE_USE_REQUIRED_PATH = MESSAGE_ROOT_PATH + "/phone_use_required";
+    /**
+     * Path for the message used to signal the main app was started.
+     */
+    public static final String MAIN_APP_STARTED_PATH = MESSAGE_ROOT_PATH + "/main_app_started";
+
+    /**
+     * Path for the message used to signal the main app was stopped.
+     */
+    public static final String MAIN_APP_STOPPED_PATH = MESSAGE_ROOT_PATH + "/main_app_stopped";
+
+    /**
+     * Path for the message used to signal that user interaction with the main app is required.
+     */
+    public static final String MAIN_APP_USE_REQUIRED_PATH = MESSAGE_ROOT_PATH +
+            "/main_app_use_required";
 
     /**
      * Path for the message used to reset the drone flight time.
