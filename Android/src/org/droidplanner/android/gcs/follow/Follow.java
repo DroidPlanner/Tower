@@ -124,8 +124,7 @@ public class Follow implements GooglePlayServicesClient.ConnectionCallbacks,
 			disableFollowMe();
 			break;
 		default:
-			return;
-		}
+        }
 	}
 
 	public Length getRadius() {

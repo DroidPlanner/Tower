@@ -42,8 +42,6 @@ public class RadioButtonCenter extends RadioButton {
 		} finally {
 			attributes.recycle();
 		}
-
-		setButtonDrawable(android.R.color.transparent);
 	}
 
 	@Override

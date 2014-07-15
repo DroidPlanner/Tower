@@ -27,9 +27,9 @@ public class FragmentSetupFM extends SuperSetupMainPanel {
 	private String[] stringFM;
 	private String[] listPWM;
 	private CheckBox[] chkbxSimple = new CheckBox[6];
-	private CheckBox[] chkbxSuperSimple = new CheckBox[6];;
-	private Spinner[] pwmSpinners = new Spinner[6];;
-	private TableRow[] layoutPWM = new TableRow[6];
+	private CheckBox[] chkbxSuperSimple = new CheckBox[6];
+    private Spinner[] pwmSpinners = new Spinner[6];
+    private TableRow[] layoutPWM = new TableRow[6];
 
 	private TextView textPWMRange, textPWMCurrent;
 

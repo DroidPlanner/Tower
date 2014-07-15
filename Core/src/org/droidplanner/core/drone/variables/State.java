@@ -65,7 +65,7 @@ public class State extends DroneVariable {
 		if (this.armed != newState) {
 			this.armed = newState;
 			myDrone.events.notifyDroneEvent(DroneEventsType.ARMING);
-			if (newState == true) {
+			if (newState) {
 				myDrone.waypointManager.getWaypoints();
 			}
 		}

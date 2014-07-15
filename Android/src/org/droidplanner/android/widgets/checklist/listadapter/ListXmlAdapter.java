@@ -106,8 +106,7 @@ public abstract class ListXmlAdapter extends BaseExpandableListAdapter {
 	}
 
 	public void updateRatioValue(TextView lblChkRatio, int groupPosition) {
-		return;
-	}
+    }
 
 	@Override
 	public boolean hasStableIds() {

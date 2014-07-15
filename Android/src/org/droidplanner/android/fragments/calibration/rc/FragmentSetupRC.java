@@ -43,8 +43,8 @@ public class FragmentSetupRC extends SuperSetupMainPanel {
 	private FillBar bar5;
 	private FillBar bar6;
 	private FillBar bar7;
-	private FillBar bar8;;
-	private TextView roll_pitch_text;
+	private FillBar bar8;
+    private TextView roll_pitch_text;
 	private TextView thr_yaw_text;
 	private TextView ch_5_text;
 	private TextView ch_6_text;

@@ -29,7 +29,7 @@ public abstract class SuperSetupMainPanel extends SetupMainPanel implements OnCa
 	protected abstract void updateCalibrationData();
 
 	protected void onInitialize() {
-	};// can be overridden if necessary
+	}// can be overridden if necessary
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {

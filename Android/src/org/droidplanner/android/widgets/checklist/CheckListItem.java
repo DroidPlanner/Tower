@@ -82,7 +82,7 @@ public class CheckListItem extends ListXmlData {
 
 	public void setEditable(String editable) {
 		if (editable != null) {
-			this.editable = editable.equalsIgnoreCase("yes") ? true : false;
+			this.editable = editable.equalsIgnoreCase("yes");
 		}
 	}
 
@@ -96,7 +96,7 @@ public class CheckListItem extends ListXmlData {
 
 	public void setMandatory(String mandatory) {
 		if (mandatory != null) {
-			this.mandatory = mandatory.equalsIgnoreCase("yes") ? true : false;
+			this.mandatory = mandatory.equalsIgnoreCase("yes");
 		}
 	}
 

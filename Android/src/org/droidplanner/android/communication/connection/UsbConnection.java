@@ -108,8 +108,7 @@ public class UsbConnection extends MAVLinkConnection {
 					// Ignore.
 				}
 				sDriver = null;
-				return;
-			}
+            }
 		}
 	}
 }
