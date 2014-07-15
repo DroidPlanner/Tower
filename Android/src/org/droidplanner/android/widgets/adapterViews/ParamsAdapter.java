@@ -18,6 +18,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -134,10 +135,13 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
 
 	private void addParameter(Parameter parameter) {
 		try {
-			Parameter.checkParameterName(parameter.name);
-			add(new ParamsAdapterItem(parameter, getMetadata(parameter.name)));
+            Parameter.checkParameterName(parameter.name);
 
-		} catch (Exception ex) {
+            // paramters from AC 3.2 may contain duplicates - add only if unique
+            if(!containsParameterWithName(parameter.name))
+                add(new ParamsAdapterItem(parameter, getMetadata(parameter.name)));
+
+        } catch (Exception ex) {
 			// eat it
 		}
 	}
@@ -151,6 +155,16 @@ public class ParamsAdapter extends ArrayAdapter<ParamsAdapterItem> {
 		}
 		notifyDataSetChanged();
 	}
+
+    private boolean containsParameterWithName(String name)
+    {
+        final int count = getCount();
+        for(int i = 0; i < count; i++) {
+            if (name.equals(getItem(i).getParameter().name))
+                return true;
+        }
+        return false;
+    }
 
 	private void loadMetadataInternal(Drone drone) {
 		metadataMap = null;
