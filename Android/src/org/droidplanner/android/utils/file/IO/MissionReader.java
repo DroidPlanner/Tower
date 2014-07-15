@@ -16,16 +16,17 @@ import java.util.List;
 
 /**
  * Read msg_mission_item list as...
- *
- * QGC WPL <VERSION>
- * <INDEX> <CURRENT WP> <COORD FRAME> <COMMAND> <PARAM1> <PARAM2> <PARAM3> <PARAM4> <PARAM5/X/LONGITUDE> <PARAM6/Y/LATITUDE> <PARAM7/Z/ALTITUDE> <AUTOCONTINUE>
- *
+ * 
+ * QGC WPL <VERSION> <INDEX> <CURRENT WP> <COORD FRAME> <COMMAND> <PARAM1>
+ * <PARAM2> <PARAM3> <PARAM4> <PARAM5/X/LONGITUDE> <PARAM6/Y/LATITUDE>
+ * <PARAM7/Z/ALTITUDE> <AUTOCONTINUE>
+ * 
  * See http://qgroundcontrol.org/mavlink/waypoint_protocol for details
- *
+ * 
  */
 public class MissionReader implements OpenFileDialog.FileReader {
 
-    private List<msg_mission_item> msgMissionItems;
+	private List<msg_mission_item> msgMissionItems;
 
 	public MissionReader() {
 		this.msgMissionItems = new ArrayList<msg_mission_item>();
@@ -37,8 +38,7 @@ public class MissionReader implements OpenFileDialog.FileReader {
 		}
 		try {
 			final FileInputStream in = new FileInputStream(file);
-			final BufferedReader reader = new BufferedReader(
-					new InputStreamReader(in));
+			final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
 			if (!isWaypointFile(reader)) {
 				in.close();
@@ -61,38 +61,37 @@ public class MissionReader implements OpenFileDialog.FileReader {
 	}
 
 	private void parseLines(BufferedReader reader) throws IOException {
-        msgMissionItems.clear();
+		msgMissionItems.clear();
 
-        // for all lines
-        String line;
-        while ((line = reader.readLine()) != null) {
-            // parse line (TAB delimited)
+		// for all lines
+		String line;
+		while ((line = reader.readLine()) != null) {
+			// parse line (TAB delimited)
 			final String[] RowData = line.split("\t");
 
-            final msg_mission_item msg = new msg_mission_item();
-            msg.seq = Short.parseShort(RowData[0]);
-            msg.current = Byte.parseByte(RowData[1]);
-            msg.frame = Byte.parseByte(RowData[2]);
-            msg.command = Short.parseShort(RowData[3]);
+			final msg_mission_item msg = new msg_mission_item();
+			msg.seq = Short.parseShort(RowData[0]);
+			msg.current = Byte.parseByte(RowData[1]);
+			msg.frame = Byte.parseByte(RowData[2]);
+			msg.command = Short.parseShort(RowData[3]);
 
-            msg.param1 = Float.parseFloat(RowData[4]);
-            msg.param2 = Float.parseFloat(RowData[5]);
-            msg.param3 = Float.parseFloat(RowData[6]);
-            msg.param4 = Float.parseFloat(RowData[7]);
+			msg.param1 = Float.parseFloat(RowData[4]);
+			msg.param2 = Float.parseFloat(RowData[5]);
+			msg.param3 = Float.parseFloat(RowData[6]);
+			msg.param4 = Float.parseFloat(RowData[7]);
 
-            msg.x = Float.parseFloat(RowData[8]);
-            msg.y = Float.parseFloat(RowData[9]);
-            msg.z = Float.parseFloat(RowData[10]);
+			msg.x = Float.parseFloat(RowData[8]);
+			msg.y = Float.parseFloat(RowData[9]);
+			msg.z = Float.parseFloat(RowData[10]);
 
-            msg.autocontinue = Byte.parseByte(RowData[11]);
+			msg.autocontinue = Byte.parseByte(RowData[11]);
 
-            msgMissionItems.add(msg);
+			msgMissionItems.add(msg);
 		}
 
 	}
 
-	private static boolean isWaypointFile(BufferedReader reader)
-			throws IOException {
+	private static boolean isWaypointFile(BufferedReader reader) throws IOException {
 		return reader.readLine().contains("QGC WPL 110");
 	}
 

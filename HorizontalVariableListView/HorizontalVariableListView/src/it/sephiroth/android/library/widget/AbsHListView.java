@@ -5523,7 +5523,7 @@ public abstract class AbsHListView extends AdapterView<ListAdapter> implements V
 			// into the scrap heap
 			int viewType = lp.viewType;
 
-			final boolean scrapHasTransientState = android.os.Build.VERSION.SDK_INT >= 16 ? scrap.hasTransientState() : false;
+			final boolean scrapHasTransientState = Build.VERSION.SDK_INT >= 16 && scrap.hasTransientState();
 
 			if ( !shouldRecycleViewType( viewType ) || scrapHasTransientState ) {
 				if ( viewType != ITEM_VIEW_TYPE_HEADER_OR_FOOTER || scrapHasTransientState ) {
@@ -5591,7 +5591,7 @@ public abstract class AbsHListView extends AdapterView<ListAdapter> implements V
 
 					activeViews[i] = null;
 
-					final boolean scrapHasTransientState = android.os.Build.VERSION.SDK_INT >= 16 ? victim.hasTransientState() : false;
+					final boolean scrapHasTransientState = Build.VERSION.SDK_INT >= 16 && victim.hasTransientState();
 					if ( !shouldRecycleViewType( whichScrap ) || scrapHasTransientState ) {
 						// Do not move views that should be ignored
 						if ( whichScrap != ITEM_VIEW_TYPE_HEADER_OR_FOOTER ||

@@ -66,7 +66,8 @@ public class SettingsFragment extends DpPreferenceFragment implements
 		final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 
 		// Populate the drone settings category
-		final PreferenceCategory dronePrefs = (PreferenceCategory) findPreference(context.getString(R.string.pref_drone_settings_key));
+		final PreferenceCategory dronePrefs = (PreferenceCategory) findPreference(context
+				.getString(R.string.pref_drone_settings_key));
 		if (dronePrefs != null) {
 			dronePrefs.removeAll();
 
@@ -208,7 +209,6 @@ public class SettingsFragment extends DpPreferenceFragment implements
 					OutputStream out = null;
 					try {
 						in = context.getAssets().open("Pebble/DroidPlanner.pbw");
-						;
 						File outFile = new File(DirectoryPath.getDroidPlannerPath(),
 								"DroidPlanner.pbw");
 						out = new FileOutputStream(outFile);

@@ -23,7 +23,7 @@ public class UdpConnection extends MAVLinkConnection {
 	}
 
 	@Override
-	protected void openConnection() throws UnknownHostException, IOException {
+	protected void openConnection() throws IOException {
 		getUdpStream();
 	}
 
@@ -70,7 +70,7 @@ public class UdpConnection extends MAVLinkConnection {
 		serverPort = Integer.parseInt(prefs.getString("pref_udp_server_port", "14550"));
 	}
 
-	private void getUdpStream() throws UnknownHostException, IOException {
+	private void getUdpStream() throws IOException {
 		socket = new DatagramSocket(serverPort);
 		socket.setBroadcast(true);
 		socket.setReuseAddress(true);

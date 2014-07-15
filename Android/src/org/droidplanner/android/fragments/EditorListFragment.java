@@ -27,7 +27,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ImageButton;
-import android.widget.ListView;
 
 public class EditorListFragment extends Fragment implements OnItemLongClickListener,
 		OnItemClickListener, OnDroneListener, OnClickListener,

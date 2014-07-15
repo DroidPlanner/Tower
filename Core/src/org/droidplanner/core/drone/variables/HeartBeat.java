@@ -15,8 +15,8 @@ public class HeartBeat extends DroneVariable implements OnDroneListener {
 
 	public static final byte INVALID_MAVLINK_VERSION = -1;
 
-	public HeartbeatState heartbeatState = HeartbeatState.FIRST_HEARTBEAT;;
-	public int droneID = 1;
+	public HeartbeatState heartbeatState = HeartbeatState.FIRST_HEARTBEAT;
+    public int droneID = 1;
 
 	/**
 	 * Stores the version of the mavlink protocol.

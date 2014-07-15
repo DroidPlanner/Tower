@@ -76,7 +76,7 @@ public class Utils {
 	 */
 	public static DPMapProvider getMapProvider(Context context) {
 		DroidPlannerPrefs prefs = new DroidPlannerPrefs(context);
-		final String mapProviderName = prefs .getMapProviderName();
+		final String mapProviderName = prefs.getMapProviderName();
 
 		return mapProviderName == null ? DPMapProvider.DEFAULT_MAP_PROVIDER : DPMapProvider
 				.getMapProvider(mapProviderName);

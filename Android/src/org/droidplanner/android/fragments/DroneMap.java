@@ -99,11 +99,6 @@ public abstract class DroneMap extends Fragment implements OnDroneListener {
 	}
 
 	@Override
-	public void onStop() {
-		super.onStop();
-	}
-
-	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		context = activity.getApplicationContext();

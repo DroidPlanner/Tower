@@ -28,11 +28,11 @@ public class ListRow_Note extends ListRow implements OnFocusChangeListener {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		updateDisplay(view, (ViewHolder) holder, checkListItem);
+		updateDisplay((ViewHolder) holder);
 		return view;
 	}
 
-	private void updateDisplay(View view, ViewHolder holder, CheckListItem mListItem) {
+	private void updateDisplay(ViewHolder holder) {
 		holder.editTextView.setOnFocusChangeListener(this);
 		holder.editTextView.setText(checkListItem.getValue());
 
@@ -61,7 +61,7 @@ public class ListRow_Note extends ListRow implements OnFocusChangeListener {
 	public void onFocusChange(View v, boolean hasFocus) {
 		if (!v.isFocused() && this.listener != null) {
 			checkListItem.setValue(((ViewHolder) this.holder).editTextView.getText().toString());
-			updateRowChanged(v, this.checkListItem);
+			updateRowChanged();
 		}
 
 	}

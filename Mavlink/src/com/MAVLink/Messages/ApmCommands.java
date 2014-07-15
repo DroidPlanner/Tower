@@ -97,6 +97,6 @@ public enum ApmCommands {
 		NAVIGATION,
 		COMMAND,
 		COMMAND_WITH_TARGET
-	};
+	}
 	
 }

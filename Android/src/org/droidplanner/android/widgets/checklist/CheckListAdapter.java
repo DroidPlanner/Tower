@@ -21,13 +21,12 @@ import org.droidplanner.android.widgets.checklist.row.ListRow_Value;
 
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.TextView;
 
 public class CheckListAdapter extends ListXmlAdapter implements OnRowItemChangeListener {
 
 	public interface OnCheckListItemUpdateListener {
-		public void onRowItemChanged(CheckListItem checkListItem, String mSysTag, boolean isChecked);
+		public void onRowItemChanged(CheckListItem checkListItem);
 
 		public void onRowItemGetData(CheckListItem checkListItem, String mSysTag);
 	}
@@ -148,10 +147,10 @@ public class CheckListAdapter extends ListXmlAdapter implements OnRowItemChangeL
 	}
 
 	@Override
-	public void onRowItemChanged(View mView, CheckListItem listItem, boolean isChecked) {
+	public void onRowItemChanged(CheckListItem listItem) {
 		if (this.listener == null)
 			return;
-		this.listener.onRowItemChanged(listItem, listItem.getSys_tag(), isChecked);
+		this.listener.onRowItemChanged(listItem);
 	}
 
 	@Override

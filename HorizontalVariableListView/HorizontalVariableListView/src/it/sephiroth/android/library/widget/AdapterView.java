@@ -924,12 +924,9 @@ public abstract class AdapterView<T extends Adapter> extends ViewGroup {
 	@Override
 	public boolean dispatchPopulateAccessibilityEvent( AccessibilityEvent event ) {
 		View selectedView = getSelectedView();
-		if ( selectedView != null && selectedView.getVisibility() == VISIBLE
-				&& selectedView.dispatchPopulateAccessibilityEvent( event ) ) {
-			return true;
-		}
-		return false;
-	}
+        return selectedView != null && selectedView.getVisibility() == VISIBLE
+                && selectedView.dispatchPopulateAccessibilityEvent(event);
+    }
 
 	@TargetApi(14)
 	@Override

@@ -50,15 +50,15 @@ public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 
 	@Override
 	public void onMarkerDrag(MarkerInfo markerInfo) {
-		checkForWaypointMarkerMoving(markerInfo, true);
+		checkForWaypointMarkerMoving(markerInfo);
 	}
 
 	@Override
 	public void onMarkerDragStart(MarkerInfo markerInfo) {
-		checkForWaypointMarkerMoving(markerInfo, false);
+		checkForWaypointMarkerMoving(markerInfo);
 	}
 
-	private void checkForWaypointMarkerMoving(MarkerInfo markerInfo, boolean dragging) {
+	private void checkForWaypointMarkerMoving(MarkerInfo markerInfo) {
 		if (SpatialCoordItem.class.isInstance(markerInfo)) {
 			Coord2D position = markerInfo.getPosition();
 
@@ -81,7 +81,7 @@ public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 	@Override
 	public void onMarkerDragEnd(MarkerInfo markerInfo) {
 		checkForWaypointMarker(markerInfo);
-		checkForPolygonMarker(markerInfo);
+		checkForPolygonMarker();
 	}
 
 	private void checkForWaypointMarker(MarkerInfo markerInfo) {
@@ -92,7 +92,7 @@ public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 		}
 	}
 
-	private void checkForPolygonMarker(MarkerInfo info) {
+	private void checkForPolygonMarker() {
 		/*
 		 * if (PolygonPoint.class.isInstance(info)) {
 		 * Listener.onMovePolygonPoint((PolygonPoint)
@@ -136,16 +136,16 @@ public class EditorMapFragment extends DroneMap implements DPMap.OnMapLongClickL
 		return true;
 	}
 
-    public void zoomToFit() {
-        // get visible mission coords
-        final List<Coord2D> visibleCoords = missionProxy.getVisibleCoords();
+	public void zoomToFit() {
+		// get visible mission coords
+		final List<Coord2D> visibleCoords = missionProxy.getVisibleCoords();
 
-        // add home coord if visible
-        final Coord2D homeCoord = drone.home.getCoord();
-        if (homeCoord!= null && !homeCoord.isEmpty())
-            visibleCoords.add(homeCoord);
+		// add home coord if visible
+		final Coord2D homeCoord = drone.home.getCoord();
+		if (homeCoord != null && !homeCoord.isEmpty())
+			visibleCoords.add(homeCoord);
 
-        mMapFragment.zoomToFit(visibleCoords);
-    }
+		mMapFragment.zoomToFit(visibleCoords);
+	}
 
 }

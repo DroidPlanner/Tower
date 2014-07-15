@@ -73,7 +73,6 @@ public class MapPreferencesActivity extends FragmentActivity {
 			if (currentPrefs == null) {
 				Log.w(TAG, "Undefined map provider preferences for provider " + mapProviderName);
 				finish();
-				return;
 			} else {
 				fm.beginTransaction().replace(R.id.map_preferences_container, currentPrefs)
 						.commit();

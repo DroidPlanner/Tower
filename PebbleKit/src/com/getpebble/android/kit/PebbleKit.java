@@ -574,7 +574,6 @@ public final class PebbleKit {
                 receiveData(context, transactionId, data);
             } catch (JSONException e) {
                 e.printStackTrace();
-                return;
             }
         }
     }
@@ -864,7 +863,6 @@ public final class PebbleKit {
                 }
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
-                return;
             }
         }
     }
