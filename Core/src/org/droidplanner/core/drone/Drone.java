@@ -43,11 +43,11 @@ public class Drone {
 	public final Orientation orientation = new Orientation(this);
 	public final Navigation navigation = new Navigation(this);
 	public final GuidedPoint guidedPoint = new GuidedPoint(this);
-	public final Parameters parameters = new Parameters(this);
 	public final Calibration calibrationSetup = new Calibration(this);
 	public final WaypointManager waypointManager = new WaypointManager(this);
 	public final State state;
 	public final HeartBeat heartbeat;
+	public final Parameters parameters;
 
 	public final MAVLinkOutputStream MavClient;
 	public final Preferences preferences;
@@ -57,6 +57,7 @@ public class Drone {
 		this.preferences = pref;
 		state = new State(this, clock);
 		heartbeat = new HeartBeat(this, handler);
+		parameters = new Parameters(this, handler);
 		profile.load();
 	}
 
