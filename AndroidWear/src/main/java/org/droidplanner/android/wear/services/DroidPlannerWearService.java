@@ -15,6 +15,8 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.widget.Toast;
 
+import com.MAVLink.Messages.ApmModes;
+import com.MAVLink.Messages.enums.MAV_TYPE;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.wearable.DataEvent;
 import com.google.android.gms.wearable.DataEventBuffer;
@@ -30,12 +32,14 @@ import com.google.android.gms.wearable.WearableListenerService;
 import org.droidplanner.R;
 import org.droidplanner.android.lib.parcelables.ParcelableApmMode;
 import org.droidplanner.android.lib.utils.GoogleApiClientManager;
+import org.droidplanner.android.lib.utils.ParcelableUtils;
 import org.droidplanner.android.lib.utils.WearUtils;
-import org.droidplanner.android.wear.WearUI;
 import org.droidplanner.android.wear.activities.ContextStreamActivity;
+import org.droidplanner.android.wear.activities.FlightModesSelectionActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Handles communication with the app on the connected mobile device.
@@ -68,8 +72,8 @@ public class DroidPlannerWearService extends WearableListenerService {
     /**
      * Action used to broadcast drone connection updates.
      */
-    public static final String ACTION_CONNECTION_UPDATE = PACKAGE_NAME + "" +
-            ".ACTION_CONNECTION_UPDATE";
+    public static final String ACTION_DRONE_STATE_UPDATE = PACKAGE_NAME + "" +
+            ".ACTION_DRONE_STATE_UPDATE";
 
     /**
      * extra used to retrieve the updated data bundle.
@@ -79,7 +83,8 @@ public class DroidPlannerWearService extends WearableListenerService {
     /**
      * extra used to retrieve the connection state.
      */
-    public static final String EXTRA_CONNECTION_STATE = "extra_connection_state";
+    public static final String EXTRA_DRONE_STATE = "extra_drone_state";
+    public static final String EXTRA_CURRENT_FLIGHT_MODE = "extra_current_flight_mode";
 
     /**
      * Manager for the google api client. Handles connection/disconnection and running of
@@ -185,6 +190,9 @@ public class DroidPlannerWearService extends WearableListenerService {
         boolean dataUpdated = false;
         final Bundle dataBundle = new Bundle();
 
+        boolean droneStateUpdated = false;
+        final Bundle droneStateBundle = new Bundle();
+
         for(DataEvent dataEvent: dataEvents){
             final DataItem dataItem = dataEvent.getDataItem();
             final Uri dataUri = dataItem.getUri();
@@ -201,16 +209,19 @@ public class DroidPlannerWearService extends WearableListenerService {
                     dataUpdated = true;
                 }
             }
-            else if(WearUtils.DRONE_CONNECTION_PATH.equals(dataPath)){
+            else if(WearUtils.DRONE_STATE_PATH.equals(dataPath)){
                 if(eventType == DataEvent.TYPE_DELETED){
-                    updateNotification(false);
+                    droneStateUpdated = true;
                 }
                 else if(eventType == DataEvent.TYPE_CHANGED){
-                    boolean isConnected = WearUtils.decodeDroneConnectionMsgData(dataItem.getData
-                            ());
-                    updateNotification(isConnected);
+                    droneStateBundle.putAll(DataMapItem.fromDataItem(dataItem).getDataMap().toBundle());
+                    droneStateUpdated = true;
                 }
             }
+        }
+
+        if(droneStateUpdated){
+            updateDroneState(droneStateBundle);
         }
 
         if(dataUpdated){
@@ -247,31 +258,65 @@ public class DroidPlannerWearService extends WearableListenerService {
     }
 
     private void asyncUpdateNotification(){
-        runDataItemTask(WearUtils.DRONE_CONNECTION_PATH, new DataItemTask(false) {
+        runDataItemTask(WearUtils.DRONE_STATE_PATH, new DataItemTask(true) {
             @Override
             public void run() {
-                for(byte[] data: mDataList){
-                    boolean isConnected = WearUtils.decodeDroneConnectionMsgData(data);
-                    updateNotification(isConnected);
+                for(Bundle dataBundle: mDataBundleList){
+                    updateDroneState(dataBundle);
                 }
             }
         });
     }
 
-    private void updateNotification(boolean isConnected){
+    private void updateDroneState(Bundle droneState){
         final Context context = getApplicationContext();
         final Resources res = getResources();
 
+        boolean isConnected = droneState.getBoolean(WearUtils.KEY_DRONE_CONNECTION_STATE, false);
+        boolean isFollowMeEnabled = droneState.getBoolean(WearUtils.KEY_DRONE_FOLLOW_STATE, false);
+
+        byte[] apmModeBytes = droneState.getByteArray(WearUtils.KEY_DRONE_FLIGHT_MODE);
+        ParcelableApmMode apmMode = null;
+        if(apmModeBytes != null) {
+            apmMode = ParcelableUtils.unmarshall(apmModeBytes, ParcelableApmMode.CREATOR);
+        }
+
+        if(apmMode == null || apmMode.getApmMode() == null){
+            apmMode = new ParcelableApmMode(ApmModes.UNKNOWN);
+        }
+
+
         // insert a notification in the context stream
-        Notification droneInfo = null;
+        NotificationCompat.WearableExtender extender = new NotificationCompat.WearableExtender()
+                .setBackground(BitmapFactory.decodeResource(res, R.drawable.wear_notification_bg));
+
+        /*
+        Set of actions
+         */
+        //Connection action
+        final CharSequence connectTitle = getText(isConnected ? R.string.menu_disconnect : R
+                .string.menu_connect);
+        final Intent connectIntent = new Intent(context, DroidPlannerWearService.class)
+                .setAction(WearUtils.TOGGLE_DRONE_CONNECTION_PATH)
+                .putExtra(WearUtils.TOGGLE_DRONE_CONNECTION_PATH, !isConnected);
+        final PendingIntent connectPendingIntent = PendingIntent.getService(context, 0,
+                connectIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        final NotificationCompat.Action connectAction = new NotificationCompat.Action(R.drawable
+                .ic_action_io, connectTitle, connectPendingIntent);
+
+        extender.addAction(connectAction);
+
+        int notificationPriority = Notification.PRIORITY_DEFAULT;
         if(isConnected) {
+            notificationPriority = Notification.PRIORITY_MAX;
+
             final Intent displayIntent = new Intent(context, ContextStreamActivity.class);
             final PendingIntent displayPendingIntent = PendingIntent.getActivity(context, 0,
                     displayIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             final float customHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                     140, res.getDisplayMetrics());
-            droneInfo = new NotificationCompat.Builder(context)
+            Notification droneInfo = new NotificationCompat.Builder(context)
                     .setContentTitle(getText(R.string.app_title))
                     .setContentText("")
                     .setSmallIcon(R.drawable.ic_launcher)
@@ -279,29 +324,48 @@ public class DroidPlannerWearService extends WearableListenerService {
                             .setDisplayIntent(displayPendingIntent)
                             .setCustomContentHeight((int)customHeight))
                     .build();
-        }
 
-        NotificationCompat.WearableExtender extender = new NotificationCompat.WearableExtender()
-                .setBackground(BitmapFactory.decodeResource(res, R.drawable.wear_notification_bg));
-        if(droneInfo != null){
             extender.addPage(droneInfo);
+
+            //Flight mode action
+            final CharSequence flightModeTitle = apmMode.getApmMode().getName();
+            final Intent flightModeIntent = new Intent(context, FlightModesSelectionActivity.class)
+                    .putExtra(EXTRA_CURRENT_FLIGHT_MODE, apmMode);
+            final PendingIntent flightModePendingIntent = PendingIntent.getActivity(context, 0,
+                    flightModeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            final NotificationCompat.Action flightModeAction = new NotificationCompat.Action(R
+                    .drawable.ic_action_plane_white, flightModeTitle, flightModePendingIntent);
+
+            extender.addAction(flightModeAction);
+
+            //Follow me toggle action
+            final CharSequence followTitle = String.format("%s Follow-Me",
+                    isFollowMeEnabled ? "Disable" : "Enable");
+            final Intent followIntent = new Intent(context, DroidPlannerWearService.class)
+                    .setAction(WearUtils.TOGGLE_DRONE_FOLLOW_ME_PATH)
+                    .putExtra(WearUtils.TOGGLE_DRONE_FOLLOW_ME_PATH, !isFollowMeEnabled);
+            final PendingIntent followPendingIntent = PendingIntent.getService(context, 0,
+                    followIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            final NotificationCompat.Action followAction = new NotificationCompat.Action(R.drawable
+                    .ic_follow, followTitle, followPendingIntent);
+
+            extender.addAction(followAction);
         }
 
         Notification streamNotification = new NotificationCompat.Builder(context)
                 .setContentTitle(getText(R.string.app_title))
                 .setContentText(getText(isConnected ? R.string.connected : R.string.disconnected))
                 .setSmallIcon(R.drawable.ic_launcher)
-                .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context,
-                        WearUI.class), 0))
                 .extend(extender)
-                .setPriority(Notification.PRIORITY_HIGH)
+                .setPriority(notificationPriority)
                 .build();
 
         NotificationManagerCompat.from(context).notify(WEAR_NOTIFICATION_ID, streamNotification);
 
         //Send a broadcast as well
-        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent
-                (ACTION_CONNECTION_UPDATE).putExtra(EXTRA_CONNECTION_STATE, isConnected));
+        LocalBroadcastManager.getInstance(context)
+                .sendBroadcast(new Intent(ACTION_DRONE_STATE_UPDATE)
+                        .putExtra(EXTRA_DRONE_STATE, droneState));
     }
 
     private void cancelNotification(){

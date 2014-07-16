@@ -41,21 +41,23 @@ public class WearUtils {
     /**
      * Data item path for the drone connection state
      */
-    public static final String DRONE_CONNECTION_PATH = DRONE_EVENTS_PATH + "/drone_connection";
+    public static final String DRONE_STATE_PATH = DRONE_EVENTS_PATH + "/drone_state";
 
     /*
     Data map keys
      */
+    //State
+    public static final String KEY_DRONE_CONNECTION_STATE = "key_drone_connection_state";
     public static final String KEY_DRONE_FOLLOW_STATE = "key_drone_follow_state";
     public static final String KEY_DRONE_FLIGHT_MODE = "key_drone_flight_mode";
     public static final String KEY_DRONE_TYPE = "key_drone_type";
 
+    //Info
     public static final String KEY_DRONE_HOME = "key_drone_home";
     public static final String KEY_DRONE_GPS = "key_drone_gps";
     public static final String KEY_DRONE_BATTERY = "key_drone_battery";
     public static final String KEY_DRONE_FLIGHT_TIME = "key_drone_flight_time";
     public static final String KEY_DRONE_SIGNAL = "key_drone_signal";
-
     public static final String KEY_DRONE_ORIENTATION = "key_drone_orientation";
     public static final String KEY_DRONE_SPEED = "key_drone_speed";
     public static final String KEY_DRONE_ALTITUDE = "key_drone_altitude";

@@ -13,10 +13,8 @@ import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
 
-import org.droidplanner.android.gcs.follow.Follow;
 import org.droidplanner.android.lib.utils.GoogleApiClientManager;
 import org.droidplanner.android.lib.utils.WearUtils;
-import org.droidplanner.core.drone.Drone;
 
 /**
  * Manages communication with the wearable app.
@@ -32,8 +30,6 @@ public class WearNotificationService extends WearableListenerService {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             mDpApi = (DroidPlannerService.DroidPlannerApi) service;
-            mDrone = mDpApi.getDrone();
-            mFollowMe = mDpApi.getFollowMe();
         }
 
         @Override
@@ -46,16 +42,6 @@ public class WearNotificationService extends WearableListenerService {
      * Handle to the droidplanner api.
      */
     private DroidPlannerService.DroidPlannerApi mDpApi;
-
-    /**
-     * Represents the drone controlled by the app.
-     */
-    private Drone mDrone;
-
-    /**
-     * Handle to toggle follow me mode.
-     */
-    private Follow mFollowMe;
 
     /**
      * Manager for the google api client. Handles connection/disconnection and running of
@@ -83,23 +69,18 @@ public class WearNotificationService extends WearableListenerService {
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId){
-        if(intent != null){
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if (intent != null) {
             final String action = intent.getAction();
-            if(WearUtils.DRONE_INFO_PATH.equals(action)){
+            if (WearUtils.DRONE_INFO_PATH.equals(action) ||
+                    WearUtils.DRONE_STATE_PATH.equals(action)) {
                 final Bundle dataBundle = intent.getBundleExtra(action);
                 updateDataItem(action, dataBundle);
             }
-            else if(WearUtils.DRONE_CONNECTION_PATH.equals(action)){
-                final boolean isConnected = intent.getBooleanExtra(action, false);
-                final byte[] connectionPayload = WearUtils.encodeDroneConnectionMsgData
-                        (isConnected);
-                updateDataItem(action, connectionPayload);
-            }
-            else if(WearUtils.MAIN_APP_STARTED_PATH.equals(action) ||
-                    WearUtils.MAIN_APP_STOPPED_PATH.equals(action)){
+            else if (WearUtils.MAIN_APP_STARTED_PATH.equals(action) ||
+                    WearUtils.MAIN_APP_STOPPED_PATH.equals(action)) {
                 boolean result = WearUtils.asyncSendMessage(mGApiClientMgr, action, null);
-                if(!result){
+                if (!result) {
                     Log.e(TAG, "Unable to add google api client task.");
                 }
             }
@@ -107,7 +88,7 @@ public class WearNotificationService extends WearableListenerService {
         return super.onStartCommand(intent, flags, startId);
     }
 
-    private void updateDataItem(String dataItemPath, byte[] data){
+    private void updateDataItem(String dataItemPath, byte[] data) {
         boolean result = WearUtils.asyncPutDataItem(mGApiClientMgr, dataItemPath, data);
 
         if (!result) {
@@ -115,7 +96,7 @@ public class WearNotificationService extends WearableListenerService {
         }
     }
 
-    private void updateDataItem(String dataItemPath, Bundle dataBundle){
+    private void updateDataItem(String dataItemPath, Bundle dataBundle) {
         boolean result = WearUtils.asyncPutDataItem(mGApiClientMgr, dataItemPath, dataBundle);
 
         if (!result) {
@@ -125,23 +106,24 @@ public class WearNotificationService extends WearableListenerService {
 
     @Override
     public void onMessageReceived(MessageEvent msgEvent) {
-        final String msgPath = msgEvent.getPath();
-        if (WearUtils.RESET_DRONE_FLIGHT_TIME_PATH.equals(msgPath)) {
-            mDrone.state.resetFlightTimer();
-        }
-        else if (WearUtils.TOGGLE_DRONE_FOLLOW_ME_PATH.equals(msgPath)) {
-            boolean newState = WearUtils.decodeFollowMeMsgData(msgEvent.getData());
-            if (mFollowMe.isEnabled() != newState) {
-                mFollowMe.toggleFollowMeState();
+        if (mDpApi != null) {
+            final String msgPath = msgEvent.getPath();
+            if (WearUtils.RESET_DRONE_FLIGHT_TIME_PATH.equals(msgPath)) {
+                mDpApi.resetFlightTimer();
             }
-        }
-        else if (WearUtils.SET_DRONE_FLIGHT_MODE_PATH.equals(msgPath)) {
-            ApmModes flightMode = WearUtils.decodeFlightModeMsgData(msgEvent.getData());
-            mDrone.state.setMode(flightMode);
-        }
-        else if (WearUtils.TOGGLE_DRONE_CONNECTION_PATH.equals(msgPath)) {
-            if(mDpApi != null) {
+            else if (WearUtils.TOGGLE_DRONE_FOLLOW_ME_PATH.equals(msgPath)) {
+                boolean newState = WearUtils.decodeFollowMeMsgData(msgEvent.getData());
+                if (mDpApi.isFollowMeEnabled() != newState) {
+                    mDpApi.toggleFollowMe();
+                }
+            }
+            else if (WearUtils.SET_DRONE_FLIGHT_MODE_PATH.equals(msgPath)) {
+                ApmModes flightMode = WearUtils.decodeFlightModeMsgData(msgEvent.getData());
+                mDpApi.setFlightMode(flightMode);
+            }
+            else if (WearUtils.TOGGLE_DRONE_CONNECTION_PATH.equals(msgPath)) {
                 boolean shouldConnect = WearUtils.decodeDroneConnectionMsgData(msgEvent.getData());
+
                 if (mDpApi.isDroneConnected() != shouldConnect && !mDpApi.toggleDroneConnection()) {
 
                     //Have the wear node(s) tell the user to check the main app.
@@ -153,9 +135,9 @@ public class WearNotificationService extends WearableListenerService {
                     }
                 }
             }
-        }
-        else{
-            Log.w(TAG, "Received message with unknown path: " + msgPath);
+            else {
+                Log.w(TAG, "Received message with unknown path: " + msgPath);
+            }
         }
     }
 }

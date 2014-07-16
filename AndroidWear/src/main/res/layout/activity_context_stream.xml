@@ -9,6 +9,7 @@
     android:layout_gravity="center"
     android:orientation="vertical"
     android:gravity="center"
+    android:keepScreenOn="true"
     tools:deviceIds="wear"
     tools:context=".android.wear.activities.ContextStreamActivity">
 

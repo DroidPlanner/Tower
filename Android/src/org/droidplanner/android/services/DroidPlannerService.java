@@ -6,7 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
+
+import com.MAVLink.Messages.ApmModes;
 
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.helpers.BluetoothDevicesActivity;
@@ -26,6 +29,11 @@ public class DroidPlannerService extends Service implements DroneInterfaces.OnDr
 
     public final static String ACTION_TOGGLE_DRONE_CONNECTION = DroidPlannerService.class
             .getName() + ".ACTION_TOGGLE_DRONE_CONNECTION";
+
+    /**
+     * Used to execute tasks on the main thread.
+     */
+    private final Handler mHandler = new Handler();
 
     /**
      * Handle to the droidplanner api, provided to clients of this service.
@@ -108,14 +116,6 @@ public class DroidPlannerService extends Service implements DroneInterfaces.OnDr
      */
     public class DroidPlannerApi extends Binder {
 
-        public Drone getDrone(){
-            return mDrone;
-        }
-
-        public Follow getFollowMe(){
-            return mFollowMe;
-        }
-
         /**
          * Toggle the connection with the drone.
          * @return true to indicate the operation is in process,
@@ -136,8 +136,45 @@ public class DroidPlannerService extends Service implements DroneInterfaces.OnDr
                     }
                 }
             }
-            mDrone.MavClient.toggleConnectionState();
+
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    mDrone.MavClient.toggleConnectionState();
+                }
+            });
             return true;
+        }
+
+        public boolean isFollowMeEnabled(){
+            return mFollowMe.isEnabled();
+        }
+
+        public void setFlightMode(final ApmModes flightMode){
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    mDrone.state.changeFlightMode(flightMode);
+                }
+            });
+        }
+
+        public void toggleFollowMe(){
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    mFollowMe.toggleFollowMeState();
+                }
+            });
+        }
+
+        public void resetFlightTimer(){
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    mDrone.state.resetFlightTimer();
+                }
+            });
         }
 
         public boolean isDroneConnected(){

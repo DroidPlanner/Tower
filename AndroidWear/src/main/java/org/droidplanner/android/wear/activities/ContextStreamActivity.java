@@ -107,7 +107,7 @@ public class ContextStreamActivity extends Activity {
             //Update the textviews within the view.
             String homeInfo = mDataBundle.getString(WearUtils.KEY_DRONE_HOME);
             if (homeInfo == null) {
-                homeInfo = "0.0m";
+                homeInfo = "0.0 m";
             }
             mHomeInfo.setText(homeInfo);
 
@@ -116,7 +116,7 @@ public class ContextStreamActivity extends Activity {
                 final ParcelableGPS gpsInfo = ParcelableUtils.unmarshall(gpsByteArray,
                         ParcelableGPS.CREATOR);
                 if (gpsInfo != null) {
-                    final String gpsSummary = String.format("%s [%d, %.1f]",
+                    final String gpsSummary = String.format("%s [ %d, %.1f ]",
                             gpsInfo.getFixType(), gpsInfo.getSatCount(), gpsInfo.getGpsEPH());
                     mGpsInfo.setText(gpsSummary);
                 }
@@ -133,7 +133,7 @@ public class ContextStreamActivity extends Activity {
                 final ParcelableBattery batteryInfo = ParcelableUtils.unmarshall
                         (batteryByteArray, ParcelableBattery.CREATOR);
                 if (batteryInfo != null) {
-                    final String batterySummary = String.format("%2.0f%% [%2.1fv, %2.1fA]",
+                    final String batterySummary = String.format("%2.0f%% [ %2.1fv, %2.1fA ]",
                             batteryInfo.getBattRemain(), batteryInfo.getBattVolt(),
                             batteryInfo.getBattCurrent());
                     mBatteryInfo.setText(batterySummary);

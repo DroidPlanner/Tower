@@ -1,12 +1,8 @@
 package org.droidplanner.android.notifications;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
 import org.droidplanner.android.gcs.follow.Follow;
 import org.droidplanner.android.lib.parcelables.ParcelableApmMode;
@@ -29,9 +25,14 @@ public class WearNotificationProvider implements NotificationHandler.Notificatio
     private final static String TAG = WearNotificationProvider.class.getSimpleName();
 
     /**
-     * Contains current drone state information that's relevant to the connected wear node(s).
+     * Contains current drone telemetry information that's relevant to the connected wear node(s).
      */
     private final Bundle mDroneInfoBundle = new Bundle();
+
+    /**
+     * Contains current drone state.
+     */
+    private final Bundle mDroneStateBundle = new Bundle();
 
     /**
      * Application context
@@ -61,26 +62,45 @@ public class WearNotificationProvider implements NotificationHandler.Notificatio
 
     @Override
     public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
-        boolean relayInfo = true;
+        handleDroneState(event, drone);
+        handleDroneTelemetry(event, drone);
+    }
+
+    private void handleDroneState(DroneInterfaces.DroneEventsType event, Drone drone){
+        boolean relayState = true;
         switch (event) {
             case CONNECTED:
             case DISCONNECTED:
-                relayConnectionState(drone.MavClient.isConnected());
-                return;
+                mDroneStateBundle.putBoolean(WearUtils.KEY_DRONE_CONNECTION_STATE,
+                        drone.MavClient.isConnected());
+                break;
 
             case FOLLOW_CHANGE_TYPE:
             case FOLLOW_START:
-                mDroneInfoBundle.putBoolean(WearUtils.KEY_DRONE_FOLLOW_STATE,
+            case FOLLOW_STOP:
+                mDroneStateBundle.putBoolean(WearUtils.KEY_DRONE_FOLLOW_STATE,
                         mFollowMe.isEnabled());
                 break;
 
             case MODE:
             case TYPE:
-                mDroneInfoBundle.putByteArray(WearUtils.KEY_DRONE_FLIGHT_MODE,
+                mDroneStateBundle.putByteArray(WearUtils.KEY_DRONE_FLIGHT_MODE,
                         ParcelableUtils.marshall(new ParcelableApmMode(drone.state.getMode())));
-                mDroneInfoBundle.putInt(WearUtils.KEY_DRONE_TYPE, drone.type.getType());
+                mDroneStateBundle.putInt(WearUtils.KEY_DRONE_TYPE, drone.type.getType());
                 break;
 
+            default:
+                relayState = false;
+        }
+
+        if(relayState){
+            relayDroneState();
+        }
+    }
+
+    private void handleDroneTelemetry(DroneInterfaces.DroneEventsType event, Drone drone){
+        boolean relayInfo = true;
+        switch (event) {
             case HOME:
                 mDroneInfoBundle.putString(WearUtils.KEY_DRONE_HOME,
                         drone.home.getDroneDistanceToHome().toString());
@@ -134,9 +154,9 @@ public class WearNotificationProvider implements NotificationHandler.Notificatio
                 .DRONE_INFO_PATH).putExtra(WearUtils.DRONE_INFO_PATH, mDroneInfoBundle));
     }
 
-    private void relayConnectionState(boolean isConnected){
+    private void relayDroneState(){
         mContext.startService(new Intent(mContext, WearNotificationService.class).setAction
-                (WearUtils.DRONE_CONNECTION_PATH).putExtra(WearUtils.DRONE_CONNECTION_PATH,
-                isConnected));
+                (WearUtils.DRONE_STATE_PATH).putExtra(WearUtils.DRONE_STATE_PATH,
+                mDroneStateBundle));
     }
 }

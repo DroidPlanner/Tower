@@ -80,6 +80,7 @@ public class Follow implements GooglePlayServicesClient.ConnectionCallbacks,
 	}
 
 	private void disableFollowMe() {
+        drone.events.notifyDroneEvent(DroneEventsType.FOLLOW_STOP);
 		if (followMeEnabled) {
 			Toast.makeText(context, "FollowMe Disabled", Toast.LENGTH_SHORT).show();
 			followMeEnabled = false;
