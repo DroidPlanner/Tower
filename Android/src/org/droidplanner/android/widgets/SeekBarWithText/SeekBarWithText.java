@@ -35,7 +35,7 @@ public class SeekBarWithText extends LinearLayout implements OnSeekBarChangeList
 
 	public SeekBarWithText(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		createViews(context, attrs, defStyle);
+		createViews(context, attrs);
 	}
 
 	private void setFormat(String string) {
@@ -45,7 +45,7 @@ public class SeekBarWithText extends LinearLayout implements OnSeekBarChangeList
 		}
 	}
 
-	private void createViews(Context context, AttributeSet attrs, int defStyle) {
+	private void createViews(Context context, AttributeSet attrs) {
 		TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
 				R.styleable.SeekBarWithText, 0, 0);
 

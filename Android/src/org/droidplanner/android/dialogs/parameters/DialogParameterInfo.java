@@ -24,7 +24,7 @@ import android.widget.TextView;
 public class DialogParameterInfo {
 
 	public static AlertDialog build(ParamsAdapterItem item, EditText valueView, Context context) {
-		final View view = buildView(item, valueView, context);
+		final View view = buildView(item, context);
 
 		final AlertDialog dialog = new AlertDialog.Builder(context).setView(view).create();
 
@@ -34,7 +34,7 @@ public class DialogParameterInfo {
 		return dialog;
 	}
 
-	private static View buildView(ParamsAdapterItem item, EditText valueView, Context context) {
+	private static View buildView(ParamsAdapterItem item, Context context) {
 		final LayoutInflater inflater = LayoutInflater.from(context);
 		final View view = inflater.inflate(R.layout.fragment_parameters_info, null);
 

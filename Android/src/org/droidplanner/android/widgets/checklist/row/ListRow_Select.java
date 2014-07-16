@@ -30,13 +30,13 @@ public class ListRow_Select extends ListRow implements OnItemSelectedListener {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		updateDisplay(view, (ViewHolder) holder, checkListItem);
+		updateDisplay((ViewHolder) holder);
 		return view;
 	}
 
-	private void updateDisplay(View view, ViewHolder holder, CheckListItem mListItem) {
+	private void updateDisplay(ViewHolder holder) {
 		holder.selectView.setOnItemSelectedListener(this);
-		getData(mListItem);
+		getData();
 
 		updateCheckBox(checkListItem.isVerified());
 	}
@@ -78,7 +78,7 @@ public class ListRow_Select extends ListRow implements OnItemSelectedListener {
 	@Override
 	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		checkListItem.setSelectedIndex(arg2);
-		updateRowChanged(arg1, this.checkListItem);
+		updateRowChanged();
 	}
 
 	@Override

@@ -71,14 +71,11 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	private MissionDetailFragment itemDetailFragment;
 	private FragmentManager fragmentManager;
 	private EditorListFragment missionListFragment;
-	private TextView infoView;
 
 	private View mSplineToggleContainer;
 	private boolean mIsSplineEnabled;
 
 	private View mLocationButtonsContainer;
-	private ImageButton mGoToMyLocation;
-	private ImageButton mGoToDroneLocation;
 
 	/**
 	 * This view hosts the mission item detail fragment. On phone, or device
@@ -104,13 +101,13 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 				.findFragmentById(R.id.editorToolsFragment);
 		missionListFragment = (EditorListFragment) fragmentManager
 				.findFragmentById(R.id.missionFragment1);
-		infoView = (TextView) findViewById(R.id.editorInfoWindow);
+		TextView infoView = (TextView) findViewById(R.id.editorInfoWindow);
 
 		mSplineToggleContainer = findViewById(R.id.editorSplineToggleContainer);
 		mSplineToggleContainer.setVisibility(View.VISIBLE);
 
 		mLocationButtonsContainer = findViewById(R.id.location_button_container);
-		mGoToMyLocation = (ImageButton) findViewById(R.id.my_location_button);
+		ImageButton mGoToMyLocation = (ImageButton) findViewById(R.id.my_location_button);
 		mGoToMyLocation.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -125,7 +122,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 			}
 		});
 
-		mGoToDroneLocation = (ImageButton) findViewById(R.id.drone_location_button);
+		ImageButton mGoToDroneLocation = (ImageButton) findViewById(R.id.drone_location_button);
 		mGoToDroneLocation.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -189,55 +186,55 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	}
 
 	@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
 
-        getMenuInflater().inflate(R.menu.menu_mission, menu);
-        return true;
-    }
+		getMenuInflater().inflate(R.menu.menu_mission, menu);
+		return true;
+	}
 
-    @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_zoom_fit_mission:
-                planningMapFragment.zoomToFit();
-                return true;
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_zoom_fit_mission:
+			planningMapFragment.zoomToFit();
+			return true;
 
-            case R.id.menu_open_mission:
-                openMissionFile();
-                return true;
+		case R.id.menu_open_mission:
+			openMissionFile();
+			return true;
 
-            case R.id.menu_save_mission:
-                saveMissionFile();
-                return true;
+		case R.id.menu_save_mission:
+			saveMissionFile();
+			return true;
 
-            default:
-                return super.onMenuItemSelected(featureId, item);
-        }
-    }
+		default:
+			return super.onMenuItemSelected(featureId, item);
+		}
+	}
 
-    private void openMissionFile() {
-        OpenFileDialog missionDialog = new OpenMissionDialog(drone) {
-            @Override
-            public void waypointFileLoaded(MissionReader reader) {
-                drone.mission.onMissionLoaded(reader.getMsgMissionItems());
-                planningMapFragment.zoomToFit();
-            }
-        };
-        missionDialog.openDialog(this);
-    }
+	private void openMissionFile() {
+		OpenFileDialog missionDialog = new OpenMissionDialog(drone) {
+			@Override
+			public void waypointFileLoaded(MissionReader reader) {
+				drone.mission.onMissionLoaded(reader.getMsgMissionItems());
+				planningMapFragment.zoomToFit();
+			}
+		};
+		missionDialog.openDialog(this);
+	}
 
-    private void saveMissionFile() {
+	private void saveMissionFile() {
 
-        if (MissionWriter.write(drone.mission.getMsgMissionItems())) {
-            Toast.makeText(this, "File saved", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Error saving file", Toast.LENGTH_SHORT).show();
-        }
-    }
+		if (MissionWriter.write(drone.mission.getMsgMissionItems())) {
+			Toast.makeText(this, "File saved", Toast.LENGTH_SHORT).show();
+		} else {
+			Toast.makeText(this, "Error saving file", Toast.LENGTH_SHORT).show();
+		}
+	}
 
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
 		updateMapPadding();
 	}
@@ -253,7 +250,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 				- mLocationButtonsContainer.getPaddingLeft();
 		planningMapFragment.setMapPadding(leftPadding, topPadding, 0, 0);
 	}
-	
+
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();

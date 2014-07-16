@@ -266,7 +266,9 @@ public abstract class InfoBarItem {
 		@Override
 		public void updateItemView(Context context, Drone drone) {
 			if (mItemView != null) {
-				String update = drone == null ? "--" : drone.battery.toString();
+				String update = drone == null ? "--" : String.format(Locale.ENGLISH,
+						"%2.1fv\n%2.0f%%", drone.battery.getBattVolt(),
+						drone.battery.getBattRemain());
 
 				((TextView) mItemView).setText(update);
 			}
@@ -403,7 +405,7 @@ public abstract class InfoBarItem {
 			modesSpinner
 					.setOnSpinnerItemSelectedListener(new SpinnerSelfSelect.OnSpinnerItemSelectedListener() {
 						@Override
-						public void onSpinnerItemSelected(Spinner parent, int position, String text) {
+						public void onSpinnerItemSelected(Spinner parent, int position) {
 							if (mDrone != null) {
 								final ApmModes newMode = (ApmModes) parent
 										.getItemAtPosition(position);

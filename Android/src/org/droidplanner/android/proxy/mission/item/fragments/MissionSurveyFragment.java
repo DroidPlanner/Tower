@@ -107,7 +107,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements OnCl
 	}
 
 	@Override
-	public void onSpinnerItemSelected(Spinner spinner, int position, String text) {
+	public void onSpinnerItemSelected(Spinner spinner, int position) {
 		survey.setCameraInfo(cameraAdapter.getCamera(position));
 		onSeekBarChanged();
 	}

@@ -124,7 +124,6 @@ public class Follow implements GooglePlayServicesClient.ConnectionCallbacks,
 			disableFollowMe();
 			break;
 		default:
-			return;
 		}
 	}
 
@@ -140,7 +139,7 @@ public class Follow implements GooglePlayServicesClient.ConnectionCallbacks,
 	}
 
 	public void setType(FollowModes item) {
-		followAlgorithm = item.getAlgorithmType(drone, new Length(5.0));
+		followAlgorithm = item.getAlgorithmType(drone);
 		drone.events.notifyDroneEvent(DroneEventsType.FOLLOW_CHANGE_TYPE);
 	}
 

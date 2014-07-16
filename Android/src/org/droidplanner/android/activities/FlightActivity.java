@@ -47,8 +47,6 @@ public class FlightActivity extends DrawerNavigationUI implements
 	private ImageButton mGoToMyLocation;
 	private ImageButton mGoToDroneLocation;
 
-	private boolean mIsPhone;
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -135,7 +133,7 @@ public class FlightActivity extends DrawerNavigationUI implements
 		 * space constraints.
 		 */
 		mTelemetryView = findViewById(R.id.telemetryFragment);
-		mIsPhone = mTelemetryView == null;
+		boolean mIsPhone = mTelemetryView == null;
 
 		if (mIsPhone) {
 			Fragment slidingDrawerContent = fragmentManager

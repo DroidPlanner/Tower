@@ -198,9 +198,10 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 
 	public void setBluetoothDeviceAddress(String newAddress) {
 		final SharedPreferences.Editor editor = prefs.edit();
-		editor.putString(context.getString(R.string.pref_bluetooth_device_address_key), newAddress).apply();
+		editor.putString(context.getString(R.string.pref_bluetooth_device_address_key), newAddress)
+				.apply();
 	}
-	
+
 	/**
 	 * Use HDOP instead of satellite count on infobar
 	 */
@@ -209,7 +210,8 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 	}
 
 	public boolean isEnglishDefaultLanguage() {
-		return prefs.getBoolean(context.getString(R.string.pref_ui_language_english_key), DEFAULT_PREF_UI_LANGUAGE);
+		return prefs.getBoolean(context.getString(R.string.pref_ui_language_english_key),
+				DEFAULT_PREF_UI_LANGUAGE);
 	}
 
 	public String getMapProviderName() {
