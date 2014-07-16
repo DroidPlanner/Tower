@@ -4,6 +4,9 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.support.wearable.view.FragmentGridPagerAdapter;
 
+import org.droidplanner.android.wear.fragments.SetFlightModeFragment;
+import org.droidplanner.android.wear.fragments.ToggleConnectionFragment;
+import org.droidplanner.android.wear.fragments.ToggleFollowMeFragment;
 import org.droidplanner.android.wear.fragments.WearFlightActionsFragment;
 
 /**
@@ -16,8 +19,18 @@ public class WearUIPagerAdapter extends FragmentGridPagerAdapter {
     }
 
     @Override
-    public Fragment getFragment(int i, int i2) {
-        return new WearFlightActionsFragment();
+    public Fragment getFragment(int row, int column) {
+        switch(column){
+            case 0:
+            default:
+                return new ToggleConnectionFragment();
+
+            case 1:
+                return new SetFlightModeFragment();
+
+            case 2:
+                return new ToggleFollowMeFragment();
+        }
     }
 
     @Override
@@ -27,11 +40,11 @@ public class WearUIPagerAdapter extends FragmentGridPagerAdapter {
 
     @Override
     public int getColumnCount(int i) {
-        return 1;
+        return 3;
     }
 
     @Override
     public long getFragmentId(int row, int column){
-        return 0l;
+        return column;
     }
 }

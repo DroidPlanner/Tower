@@ -90,6 +90,12 @@ public class WearNotificationService extends WearableListenerService {
                 final Bundle dataBundle = intent.getBundleExtra(action);
                 updateDataItem(action, dataBundle);
             }
+            else if(WearUtils.DRONE_CONNECTION_PATH.equals(action)){
+                final boolean isConnected = intent.getBooleanExtra(action, false);
+                final byte[] connectionPayload = WearUtils.encodeDroneConnectionMsgData
+                        (isConnected);
+                updateDataItem(action, connectionPayload);
+            }
             else if(WearUtils.MAIN_APP_STARTED_PATH.equals(action) ||
                     WearUtils.MAIN_APP_STOPPED_PATH.equals(action)){
                 boolean result = WearUtils.asyncSendMessage(mGApiClientMgr, action, null);
@@ -99,6 +105,14 @@ public class WearNotificationService extends WearableListenerService {
             }
         }
         return super.onStartCommand(intent, flags, startId);
+    }
+
+    private void updateDataItem(String dataItemPath, byte[] data){
+        boolean result = WearUtils.asyncPutDataItem(mGApiClientMgr, dataItemPath, data);
+
+        if (!result) {
+            Log.e(TAG, "Unable to add google api client task.");
+        }
     }
 
     private void updateDataItem(String dataItemPath, Bundle dataBundle){

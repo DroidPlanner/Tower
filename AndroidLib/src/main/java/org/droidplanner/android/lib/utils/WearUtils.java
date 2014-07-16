@@ -38,11 +38,15 @@ public class WearUtils {
      */
     public static final String DRONE_INFO_PATH = DRONE_EVENTS_PATH + "/info";
 
+    /**
+     * Data item path for the drone connection state
+     */
+    public static final String DRONE_CONNECTION_PATH = DRONE_EVENTS_PATH + "/drone_connection";
+
     /*
     Data map keys
      */
     public static final String KEY_DRONE_FOLLOW_STATE = "key_drone_follow_state";
-    public static final String KEY_DRONE_CONNECTION_STATE = "key_drone_connection_state";
     public static final String KEY_DRONE_FLIGHT_MODE = "key_drone_flight_mode";
     public static final String KEY_DRONE_TYPE = "key_drone_type";
 
@@ -236,6 +240,34 @@ public class WearUtils {
                 final PutDataMapRequest dataMap = PutDataMapRequest.create(path);
                 dataMap.getDataMap().putAll(DataMap.fromBundle(dataMapBundle));
                 PutDataRequest request = dataMap.asPutDataRequest();
+                final DataApi.DataItemResult result = Wearable.DataApi
+                        .putDataItem(getGoogleApiClient(), request)
+                        .await();
+
+                final Status status = result.getStatus();
+                if (!status.isSuccess()) {
+                    Log.e(TAG, "Failed to relay the data: " + status.getStatusCode());
+                }
+            }
+        });
+    }
+
+    /**
+     * Asynchronously push/update a data item using the Wearable.DataApi api to connected wear
+     * nodes.
+     * @param apiClientMgr google api client manager
+     * @param path non-null path
+     * @param data non-null data payload
+     * @return true if the task was successfully queued.
+     */
+    public static boolean asyncPutDataItem(GoogleApiClientManager apiClientMgr,
+                                           final String path, final byte[] data) {
+        return apiClientMgr.addTaskToBackground(apiClientMgr.new GoogleApiClientTask() {
+
+            @Override
+            public void run() {
+                final PutDataRequest request = PutDataRequest.create(path);
+                request.setData(data);
                 final DataApi.DataItemResult result = Wearable.DataApi
                         .putDataItem(getGoogleApiClient(), request)
                         .await();

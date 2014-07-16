@@ -1,32 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/context_stream_connected"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:gravity="center"
+    tools:deviceIds="wear"
+    tools:context=".android.wear.activities.ContextStreamActivity">
 
     <TextView
-        android:id="@+id/context_stream_disconnected"
+        android:id="@+id/home_info"
+        style="@style/Notification.Wear"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/disconnected"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:textStyle="bold"/>
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_status_home"
+        android:text="@string/empty_content"
+        />
 
-    <LinearLayout
-        android:id="@+id/context_stream_connected"
+    <TextView
+        android:id="@+id/gps_info"
+        style="@style/Notification.Wear"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        android:layout_gravity="center"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_status_gps"
+        android:text="@string/empty_content"
+        />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Connected"/>
+    <TextView
+        android:id="@+id/air_time_info"
+        style="@style/Notification.Wear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_status_flight_time"
+        android:text="@string/empty_content"
+        />
 
-        </LinearLayout>
+    <TextView
+        android:id="@+id/battery_info"
+        style="@style/Notification.Wear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_status_battery"
+        android:text="@string/empty_content"
+        />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/radio_info"
+        style="@style/Notification.Wear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_status_rssi"
+        android:text="@string/empty_content"
+        />
+
+</LinearLayout>

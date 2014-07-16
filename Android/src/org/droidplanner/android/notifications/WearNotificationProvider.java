@@ -65,9 +65,8 @@ public class WearNotificationProvider implements NotificationHandler.Notificatio
         switch (event) {
             case CONNECTED:
             case DISCONNECTED:
-                mDroneInfoBundle.putBoolean(WearUtils.KEY_DRONE_CONNECTION_STATE,
-                        drone.MavClient.isConnected());
-                break;
+                relayConnectionState(drone.MavClient.isConnected());
+                return;
 
             case FOLLOW_CHANGE_TYPE:
             case FOLLOW_START:
@@ -133,5 +132,11 @@ public class WearNotificationProvider implements NotificationHandler.Notificatio
     private void relayDroneInfo() {
         mContext.startService(new Intent(mContext, WearNotificationService.class).setAction(WearUtils
                 .DRONE_INFO_PATH).putExtra(WearUtils.DRONE_INFO_PATH, mDroneInfoBundle));
+    }
+
+    private void relayConnectionState(boolean isConnected){
+        mContext.startService(new Intent(mContext, WearNotificationService.class).setAction
+                (WearUtils.DRONE_CONNECTION_PATH).putExtra(WearUtils.DRONE_CONNECTION_PATH,
+                isConnected));
     }
 }

@@ -1,12 +1,14 @@
 package org.droidplanner.android.wear;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.wearable.view.FragmentGridPagerAdapter;
 import android.support.wearable.view.GridViewPager;
 import android.support.wearable.view.WatchViewStub;
 
 import org.droidplanner.R;
+import org.droidplanner.android.wear.services.DroidPlannerWearService;
 import org.droidplanner.android.wear.views.WearUIPagerAdapter;
 
 public class WearUI extends Activity {
@@ -29,6 +31,9 @@ public class WearUI extends Activity {
                 mViewPager.setAdapter(pagerAdapter);
             }
         });
+
+        startService(new Intent(getApplicationContext(), DroidPlannerWearService.class).setAction
+                (DroidPlannerWearService.ACTION_UPDATE_NOTIFICATION));
     }
 
 }

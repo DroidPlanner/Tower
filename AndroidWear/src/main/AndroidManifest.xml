@@ -8,7 +8,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_title"
-        android:theme="@android:style/Theme.DeviceDefault.Light" >
+        android:theme="@style/DPWatchTheme" >
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -16,7 +16,8 @@
 
         <activity
             android:name=".android.wear.WearUI"
-            android:label="@string/app_title" >
+            android:label="@string/app_title"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
