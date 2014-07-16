@@ -62,7 +62,6 @@ public class Follow implements GooglePlayServicesClient.ConnectionCallbacks,
 	}
 
 	private void enableFollowMe() {
-		drone.events.notifyDroneEvent(DroneEventsType.FOLLOW_START);
 		Log.d("follow", "enable");
 		Toast.makeText(context, "FollowMe Enabled", Toast.LENGTH_SHORT).show();
 
@@ -77,10 +76,10 @@ public class Follow implements GooglePlayServicesClient.ConnectionCallbacks,
 		mLocationClient.requestLocationUpdates(mLocationRequest, this);
 
 		followMeEnabled = true;
+        drone.events.notifyDroneEvent(DroneEventsType.FOLLOW_START);
 	}
 
 	private void disableFollowMe() {
-        drone.events.notifyDroneEvent(DroneEventsType.FOLLOW_STOP);
 		if (followMeEnabled) {
 			Toast.makeText(context, "FollowMe Disabled", Toast.LENGTH_SHORT).show();
 			followMeEnabled = false;
@@ -89,6 +88,7 @@ public class Follow implements GooglePlayServicesClient.ConnectionCallbacks,
 		if (mLocationClient.isConnected()) {
 			mLocationClient.removeLocationUpdates(this);
 		}
+        drone.events.notifyDroneEvent(DroneEventsType.FOLLOW_STOP);
 	}
 
 	public boolean isEnabled() {
