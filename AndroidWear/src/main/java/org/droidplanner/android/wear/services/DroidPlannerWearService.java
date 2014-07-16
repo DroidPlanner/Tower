@@ -352,12 +352,17 @@ public class DroidPlannerWearService extends WearableListenerService {
             extender.addAction(followAction);
         }
 
+        final CharSequence notificationText = getText(isConnected ? R.string.connected : R.string
+                .disconnected);
         Notification streamNotification = new NotificationCompat.Builder(context)
                 .setContentTitle(getText(R.string.app_title))
-                .setContentText(getText(isConnected ? R.string.connected : R.string.disconnected))
+                .setContentText(notificationText)
                 .setSmallIcon(R.drawable.ic_launcher)
                 .extend(extender)
                 .setPriority(notificationPriority)
+                .setOngoing(isConnected)
+                .setTicker(notificationText)
+                .setDefaults(Notification.DEFAULT_ALL)
                 .build();
 
         NotificationManagerCompat.from(context).notify(WEAR_NOTIFICATION_ID, streamNotification);
