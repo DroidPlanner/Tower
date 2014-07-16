@@ -4,12 +4,11 @@ import org.droidplanner.android.gcs.follow.FollowAlgorithm.FollowModes;
 import org.droidplanner.android.gcs.location.FusedLocation;
 import org.droidplanner.android.gcs.location.LocationFinder;
 import org.droidplanner.android.gcs.location.LocationReceiver;
-import org.droidplanner.core.MAVLink.MavLinkROI;
+import org.droidplanner.android.gcs.location.ROIEstimator;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
+import org.droidplanner.core.drone.DroneInterfaces.Handler;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.core.helpers.coordinates.Coord3D;
-import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.helpers.units.Length;
 
 import android.content.Context;
@@ -25,14 +24,16 @@ public class Follow implements OnDroneListener, LocationReceiver {
 	private boolean followMeEnabled = false;
 	private Drone drone;
 
+	private ROIEstimator roiEstimator;
 	private LocationFinder locationFinder;
 	private FollowAlgorithm followAlgorithm;
 
-	public Follow(Context context, Drone drone) {
+	public Follow(Context context, Drone drone, Handler handler) {
 		this.context = context;
 		this.drone = drone;
 		followAlgorithm = new FollowLeash(drone, new Length(5.0));
-		locationFinder = new FusedLocation(context,this);
+		locationFinder = new FusedLocation(context, this);
+		roiEstimator = new ROIEstimator(handler,drone);
 		drone.events.addDroneListener(this);
 	}
 
@@ -71,6 +72,7 @@ public class Follow implements OnDroneListener, LocationReceiver {
 			Log.d("follow", "disable");
 		}
 		locationFinder.disableLocationUpdates();
+		roiEstimator.disableLocationUpdates();
 	}
 
 	public boolean isEnabled() {
@@ -98,9 +100,8 @@ public class Follow implements OnDroneListener, LocationReceiver {
 
 	@Override
 	public void onLocationChanged(Location location) {
-		MavLinkROI.setROI(drone, new Coord3D(location.getLatitude(), location.getLongitude(),
-				new Altitude(0.0)));
 		followAlgorithm.processNewLocation(location);
+		roiEstimator.onLocationChanged(location);
 	}
 
 	public void setType(FollowModes item) {

@@ -1,0 +1,76 @@
+package org.droidplanner.android.gcs.location;
+
+import org.droidplanner.core.MAVLink.MavLinkROI;
+import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.drone.DroneInterfaces.Handler;
+import org.droidplanner.core.helpers.coordinates.Coord2D;
+import org.droidplanner.core.helpers.coordinates.Coord3D;
+import org.droidplanner.core.helpers.geoTools.GeoTools;
+import org.droidplanner.core.helpers.units.Altitude;
+
+import android.location.Location;
+import android.util.Log;
+
+/**
+ * Uses location data from Android's FusedLocation LocationManager at 1Hz and calculates new points at 10Hz based on Last Location and Last Velocity.
+ *
+ */
+public class ROIEstimator implements LocationReceiver{
+	
+	private static final int TIMEOUT = 100;
+	private Location realLocation;
+	private long timeOfLastLocation;
+	
+	private Drone drone;
+	private Handler watchdog;
+	public Runnable watchdogCallback = new Runnable() {
+		@Override
+		public void run() {
+			updateROI();
+		}
+
+	};
+	
+	public ROIEstimator(Handler handler, Drone drone) {
+		this.watchdog = handler;
+		this.drone = drone;
+	}
+
+	public void disableLocationUpdates() {
+		watchdog.removeCallbacks(watchdogCallback);
+	}
+
+	@Override
+	public void onLocationChanged(Location location) {
+		disableLocationUpdates();
+		realLocation = location;
+		timeOfLastLocation = System.currentTimeMillis();
+		updateROI();
+	}
+	
+	private void updateROI() {
+		Log.d("gps","calcing new pos");
+		if(realLocation==null){
+			return;
+		}
+		Coord2D gcsCoord = new Coord2D(realLocation.getLatitude(), realLocation.getLongitude());
+		
+		float bearing = realLocation.getBearing();
+		float distanceTraveledSinceLastPoint = realLocation.getSpeed()*(System.currentTimeMillis()-timeOfLastLocation)/1000;
+		
+		Coord2D goCoord = GeoTools.newCoordFromBearingAndDistance(gcsCoord, bearing,
+				distanceTraveledSinceLastPoint);
+
+		double latitude = goCoord.getLat();
+		double longitude = goCoord.getLng();
+		
+		Location newLocation = new Location(realLocation);
+		newLocation.setLatitude(latitude);
+		newLocation.setLongitude(longitude);
+		newLocation.setBearing(bearing);
+
+		MavLinkROI.setROI(drone, new Coord3D(newLocation.getLatitude(), newLocation.getLongitude(),
+				new Altitude(0.0)));
+		watchdog.postDelayed(watchdogCallback, TIMEOUT);
+	}
+}
