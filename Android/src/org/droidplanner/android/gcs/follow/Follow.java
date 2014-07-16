@@ -1,6 +1,9 @@
 package org.droidplanner.android.gcs.follow;
 
 import org.droidplanner.android.gcs.follow.FollowAlgorithm.FollowModes;
+import org.droidplanner.android.gcs.location.FusedLocation;
+import org.droidplanner.android.gcs.location.LocationFinder;
+import org.droidplanner.android.gcs.location.LocationReceiver;
 import org.droidplanner.core.MAVLink.MavLinkROI;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
@@ -11,35 +14,25 @@ import org.droidplanner.core.helpers.units.Length;
 
 import android.content.Context;
 import android.location.Location;
-import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.MAVLink.Messages.ApmModes;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
-import com.google.android.gms.location.LocationClient;
-import com.google.android.gms.location.LocationRequest;
 
-public class Follow implements GooglePlayServicesClient.ConnectionCallbacks,
-		GooglePlayServicesClient.OnConnectionFailedListener,
-		com.google.android.gms.location.LocationListener, OnDroneListener {
-	private static final long MIN_TIME_MS = 500;
-	private static final float MIN_DISTANCE_M = 0.0f;
+public class Follow implements OnDroneListener, LocationReceiver {
 
 	private Context context;
 	private boolean followMeEnabled = false;
 	private Drone drone;
-	private LocationClient mLocationClient;
 
+	private LocationFinder locationFinder;
 	private FollowAlgorithm followAlgorithm;
 
 	public Follow(Context context, Drone drone) {
 		this.context = context;
 		this.drone = drone;
 		followAlgorithm = new FollowLeash(drone, new Length(5.0));
-		mLocationClient = new LocationClient(context, this, this);
-		mLocationClient.connect();
+		locationFinder = new FusedLocation(context,this);
 		drone.events.addDroneListener(this);
 	}
 
@@ -65,16 +58,8 @@ public class Follow implements GooglePlayServicesClient.ConnectionCallbacks,
 		drone.events.notifyDroneEvent(DroneEventsType.FOLLOW_START);
 		Log.d("follow", "enable");
 		Toast.makeText(context, "FollowMe Enabled", Toast.LENGTH_SHORT).show();
-
-		// Register the listener with the Location Manager to receive location
-		// updates
-
-		LocationRequest mLocationRequest = LocationRequest.create();
-		mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-		mLocationRequest.setInterval(MIN_TIME_MS);
-		mLocationRequest.setFastestInterval(MIN_TIME_MS);
-		mLocationRequest.setSmallestDisplacement(MIN_DISTANCE_M);
-		mLocationClient.requestLocationUpdates(mLocationRequest, this);
+		
+		locationFinder.enableLocationUpdates();
 
 		followMeEnabled = true;
 	}
@@ -85,31 +70,11 @@ public class Follow implements GooglePlayServicesClient.ConnectionCallbacks,
 			followMeEnabled = false;
 			Log.d("follow", "disable");
 		}
-		if (mLocationClient.isConnected()) {
-			mLocationClient.removeLocationUpdates(this);
-		}
+		locationFinder.disableLocatioUpdates();
 	}
 
 	public boolean isEnabled() {
 		return followMeEnabled;
-	}
-
-	@Override
-	public void onConnectionFailed(ConnectionResult arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onConnected(Bundle arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onDisconnected() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
