@@ -15,7 +15,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".android.wear.WearUI"
+            android:name=".android.wear.activities.WearUI"
             android:label="@string/app_title"
             android:launchMode="singleTask">
             <!--<intent-filter>
