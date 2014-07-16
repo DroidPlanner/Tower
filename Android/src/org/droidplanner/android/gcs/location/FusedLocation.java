@@ -9,6 +9,10 @@ import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationRequest;
 
+/**
+ * Feeds Location Data from Android's FusedLocation LocationProvider
+ *
+ */
 public class FusedLocation implements LocationFinder,
 		GooglePlayServicesClient.ConnectionCallbacks,
 		GooglePlayServicesClient.OnConnectionFailedListener,
@@ -37,9 +41,10 @@ public class FusedLocation implements LocationFinder,
 	}
 
 	@Override
-	public void disableLocatioUpdates() {
-		// TODO Auto-generated method stub
-
+	public void disableLocationUpdates() {
+		if(mLocationClient.isConnected()){
+			mLocationClient.removeLocationUpdates(this);
+		}
 	}
 
 	@Override

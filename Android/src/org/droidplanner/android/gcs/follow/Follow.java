@@ -70,7 +70,7 @@ public class Follow implements OnDroneListener, LocationReceiver {
 			followMeEnabled = false;
 			Log.d("follow", "disable");
 		}
-		locationFinder.disableLocatioUpdates();
+		locationFinder.disableLocationUpdates();
 	}
 
 	public boolean isEnabled() {
