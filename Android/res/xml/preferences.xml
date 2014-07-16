@@ -78,24 +78,31 @@
             android:title="Droneshare" >
             <EditTextPreference
                 android:defaultValue=""
-                android:dialogTitle="Droneshare username"
+                android:dialogTitle="@string/droneshare_username"
                 android:inputType="textEmailAddress"
                 android:key="dshare_username"
-                android:summary="If that user does not exist, it will be created"
+                android:summary="@string/if_that_user_does_not_exist_it_will_be_created"
                 android:title="Username" />
             <EditTextPreference
                 android:defaultValue=""
-                android:dialogTitle="Droneshare password"
+                android:dialogTitle="@string/droneshare_password"
                 android:inputType="textPassword"
                 android:key="dshare_password"
-                android:summary="Enter or pick a password"
+                android:summary="@string/enter_or_pick_a_password"
                 android:title="Password" />
 
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="dshare_enabled"
+                android:summary="@string/do_you_want_to_use_droneshare_"
+                android:title="@string/droneshare_enabled" />
+                        
             <CheckBoxPreference
                 android:defaultValue="false"
                 android:key="pref_live_upload_enabled"
                 android:summary="@string/pref_live_upload_summary"
                 android:title="@string/pref_live_upload" />
+            
         </PreferenceScreen>
 
         <!-- Advanced preferences section. -->

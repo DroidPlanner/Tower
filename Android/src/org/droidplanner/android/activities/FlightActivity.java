@@ -1,6 +1,8 @@
 package org.droidplanner.android.activities;
 
 import org.droidplanner.R;
+import org.droidplanner.android.communication.service.UploaderService;
+import org.droidplanner.android.dialogs.DroneshareDialog;
 import org.droidplanner.android.fragments.FlightActionsFragment;
 import org.droidplanner.android.fragments.FlightMapFragment;
 import org.droidplanner.android.fragments.RCFragment;
@@ -161,6 +163,12 @@ public class FlightActivity extends DrawerNavigationUI implements
 						.add(R.id.sliding_drawer_content, flightModePanel).commit();
 			}
 		}
+
+		DroneshareDialog.perhapsShow(this);
+
+		// Any time the main activity is relaunched, do a quick scan to see if
+		// we need any uploads
+		startService(UploaderService.createIntent(this));
 	}
 
 	private void updateMapLocationButtons(AutoPanMode mode) {

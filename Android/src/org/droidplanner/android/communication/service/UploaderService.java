@@ -2,6 +2,7 @@ package org.droidplanner.android.communication.service;
 
 import java.io.File;
 
+import org.apache.http.client.HttpResponseException;
 import org.droidplanner.R;
 import org.droidplanner.android.utils.file.DirectoryPath;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
@@ -55,8 +56,9 @@ public class UploaderService extends IntentService {
 				nBuilder.setContentText("Select to view..."); // FIXME localize
 
 				// Attach the view URL
-				PendingIntent pintent = PendingIntent.getActivity(UploaderService.this, 0,
-						new Intent(Intent.ACTION_VIEW, Uri.parse(viewURL)), 0);
+				PendingIntent pintent = PendingIntent.getActivity(
+						UploaderService.this, 0, new Intent(Intent.ACTION_VIEW,
+								Uri.parse(viewURL)), 0);
 				nBuilder.setContentIntent(pintent);
 
 				// Attach the google earth link
@@ -66,7 +68,8 @@ public class UploaderService extends IntentService {
 				// S(R.string.google_earth), geintent)
 
 				// Attach a web link
-				nBuilder.addAction(android.R.drawable.ic_menu_set_as, "Web", pintent);
+				nBuilder.addAction(android.R.drawable.ic_menu_set_as, "Web",
+						pintent);
 
 				// Add a share link
 				Intent sendIntent = new Intent(Intent.ACTION_SEND);
@@ -75,7 +78,8 @@ public class UploaderService extends IntentService {
 				// val chooser = Intent.createChooser(sendIntent,
 				// "Share log to...")
 				nBuilder.addAction(android.R.drawable.ic_menu_share, "Share",
-						PendingIntent.getActivity(UploaderService.this, 0, sendIntent, 0));
+						PendingIntent.getActivity(UploaderService.this, 0,
+								sendIntent, 0));
 				if (numUploaded > 1)
 					nBuilder.setNumber(numUploaded);
 				nBuilder.setPriority(NotificationCompat.PRIORITY_HIGH); // The
@@ -96,7 +100,12 @@ public class UploaderService extends IntentService {
 		@Override
 		public void onUploadFailure(File f, Exception ex) {
 			Log.i(TAG, "Upload fail: " + f + " " + ex);
-			nBuilder.setContentText("Upload failed: " + ex.getMessage());
+
+			String msg = "UploadFailed";
+			if (ex instanceof HttpResponseException)
+				msg = ((HttpResponseException) ex).getMessage();
+
+			nBuilder.setContentText(msg);
 			nBuilder.setSubText("Will try again later"); // FIXME - localize
 			updateNotification(false);
 		}
@@ -115,14 +124,18 @@ public class UploaderService extends IntentService {
 	public void onCreate() {
 		super.onCreate();
 
+		PendingIntent nullIntent = PendingIntent.getActivity(
+				getApplicationContext(), 0, new Intent(), 0);
+
 		prefs = new DroidPlannerPrefs(this);
 		notifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		nBuilder = new NotificationCompat.Builder(this);
 		nBuilder.setContentTitle("Droneshare upload")
 				// FIXME - extract for localization
-				.setContentText("Uploading log file").setSmallIcon(R.drawable.ic_launcher)
-				.setAutoCancel(true)
+				.setContentText("Uploading log file")
+				.setSmallIcon(R.drawable.ic_launcher)
 				// .setProgress(fileSize, 0, false)
+				.setContentIntent(nullIntent).setAutoCancel(true)
 				.setPriority(NotificationCompat.PRIORITY_HIGH);
 	}
 
@@ -146,8 +159,9 @@ public class UploaderService extends IntentService {
 		String password = prefs.getDronesharePassword();
 
 		if (!login.isEmpty() && !password.isEmpty()) {
-			DirectoryUploader up = new DirectoryUploader(srcDir, destDir, callback, login,
-					password, prefs.getVehicleId(), apiKey);
+			DirectoryUploader up = new DirectoryUploader(srcDir, destDir,
+					callback, login, password, prefs.getVehicleId(), apiKey,
+					"DEFAULT");
 			up.run();
 		}
 	}
