@@ -70,7 +70,7 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 		switch (event) {
 		case NAVIGATION:
 			break;
-		case ORIENTATION:
+		case ATTITUDE:
 			onOrientationUpdate(drone);
 			break;
 		case SPEED:
