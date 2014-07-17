@@ -9,6 +9,22 @@ All the changes are logged below (preferable with the pull request numbers in pa
 
 # Releases
 
+## Droidplanner v2.6.0
+* Improved follow-me ROI (#916)
+* New follow-modes, 'track from above', ' right' and 'left' (#908, #887)
+* Change default radius values for the varius follow-modes (#904)
+* Added option to load/save files from the mission editor (#901)
+* Option to displayb HDOP instead of GPS fix (#898)
+* Droneshare imoprovements (#917,#913,#785,#895)
+* Fixed parameters download (#906, #820)
+* Fix duplicated parameters after a fetch (#902)
+* Fix telemetry indicator bug (#914)
+* Add hysteresis to TTS notification of battery voltage (#329)
+* Fix some problems with the Pebble app (#897)
+* Small fix to the telmetry fragment layout (#896)
+* Clean-up of small language issues (#903, #894,#905)
+* Clean up of the preferences file (#900)
+
 ## Droidplanner v2.5.1
 * Fix upload to DroneShare (#880)
 * Clean-up of the codebase (#881)
