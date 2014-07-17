@@ -68,7 +68,7 @@ public class ROIEstimator implements LocationReceiver {
 		newLocation.setLongitude(longitude);
 		newLocation.setBearing(bearing);
 
-		if (distanceTraveledSinceLastPoint > 0.05) {
+		if (distanceTraveledSinceLastPoint > 0.0) {
 			MavLinkROI.setROI(drone, new Coord3D(newLocation.getLatitude(),
 					newLocation.getLongitude(), new Altitude(0.0)));
 		}
