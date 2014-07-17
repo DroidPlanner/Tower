@@ -39,7 +39,7 @@ public class DroneInterfaces {
 		/**
          *
          */
-		ATTIUTDE,
+		ATTITUDE,
 
 		/**
          *
