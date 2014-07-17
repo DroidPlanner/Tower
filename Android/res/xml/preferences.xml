@@ -3,7 +3,7 @@
 
     <!-- Contains drone related preferences, and tuning. -->
     <PreferenceCategory
-        android:key="pref_drone_settings"
+        android:key="@string/pref_drone_settings_key"
         android:title="@string/menu_drone_setup" />
 
     <!-- Contains preferences related to the app. -->
@@ -23,7 +23,7 @@
             <PreferenceCategory android:title="@string/pref_title_language" >
                 <CheckBoxPreference
                     android:defaultValue="false"
-                    android:key="pref_ui_language_english"
+                    android:key="@string/pref_ui_language_english_key"
                     android:summary="@string/pref_ui_language_english_summary"
                     android:title="@string/pref_ui_language_english" />
             </PreferenceCategory>
@@ -78,24 +78,31 @@
             android:title="Droneshare" >
             <EditTextPreference
                 android:defaultValue=""
-                android:dialogTitle="Droneshare username"
+                android:dialogTitle="@string/droneshare_username"
                 android:inputType="textEmailAddress"
                 android:key="dshare_username"
-                android:summary="If that user does not exist, it will be created"
+                android:summary="@string/if_that_user_does_not_exist_it_will_be_created"
                 android:title="Username" />
             <EditTextPreference
                 android:defaultValue=""
-                android:dialogTitle="Droneshare password"
+                android:dialogTitle="@string/droneshare_password"
                 android:inputType="textPassword"
                 android:key="dshare_password"
-                android:summary="Enter or pick a password"
+                android:summary="@string/enter_or_pick_a_password"
                 android:title="Password" />
 
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="dshare_enabled"
+                android:summary="@string/do_you_want_to_use_droneshare_"
+                android:title="@string/droneshare_enabled" />
+                        
             <CheckBoxPreference
                 android:defaultValue="false"
                 android:key="pref_live_upload_enabled"
                 android:summary="@string/pref_live_upload_summary"
                 android:title="@string/pref_live_upload" />
+            
         </PreferenceScreen>
 
         <!-- Advanced preferences section. -->
@@ -299,6 +306,11 @@
                     android:key="@string/pref_max_flight_path_size_key"
                     android:summary="@string/pref_max_flight_path_size_summary"
                     android:title="@string/pref_max_flight_path_size" />
+                <CheckBoxPreference
+                	android:defaultValue="false"
+    	            android:key="@string/pref_ui_gps_hdop_key"
+	                android:summary="@string/pref_ui_gps_hdop_summary"
+        	        android:title="@string/pref_ui_gps_hdop_title"/>
             </PreferenceCategory>
             
             <PreferenceCategory

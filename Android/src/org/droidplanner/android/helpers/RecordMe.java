@@ -22,8 +22,7 @@ public class RecordMe implements LocationListener {
 	public RecordMe(Context context, MissionProxy missionProxy) {
 		this.context = context;
 		this.missionProxy = missionProxy;
-		this.locationManager = (LocationManager) context
-				.getSystemService(Context.LOCATION_SERVICE);
+		this.locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 	}
 
 	public void toogleRecordMeState() {
@@ -36,8 +35,8 @@ public class RecordMe implements LocationListener {
 
 	private void startRecordMe() {
 		Toast.makeText(context, "Record Enabled", Toast.LENGTH_SHORT).show();
-		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-				MIN_TIME_MS, MIN_DISTANCE_M, this);
+		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_MS,
+				MIN_DISTANCE_M, this);
 		recordMeEnabled = true;
 	}
 
@@ -55,8 +54,7 @@ public class RecordMe implements LocationListener {
 	@Override
 	public void onLocationChanged(Location location) {
 		// TODO find a better way to do the altitude
-		Coord2D coord = new Coord2D(location.getLatitude(),
-				location.getLongitude());
+		Coord2D coord = new Coord2D(location.getLatitude(), location.getLongitude());
 		missionProxy.addWaypoint(coord);
 	}
 

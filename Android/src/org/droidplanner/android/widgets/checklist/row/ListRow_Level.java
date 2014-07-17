@@ -19,8 +19,7 @@ public class ListRow_Level extends ListRow {
 	public View getView(View convertView) {
 		View view;
 		if (convertView == null) {
-			ViewGroup viewGroup = (ViewGroup) inflater.inflate(
-					R.layout.list_level_item, null);
+			ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.list_level_item, null);
 			holder = new ViewHolder(viewGroup, checkListItem);
 			viewGroup.setTag(holder);
 			view = viewGroup;
@@ -33,8 +32,7 @@ public class ListRow_Level extends ListRow {
 		return view;
 	}
 
-	private void updateDisplay(View view, ViewHolder holder,
-			CheckListItem mListItem) {
+	private void updateDisplay(View view, ViewHolder holder, CheckListItem mListItem) {
 		int drawableId;
 		double minVal = mListItem.getMin_val();
 		double nomVal = mListItem.getNom_val();
@@ -42,7 +40,7 @@ public class ListRow_Level extends ListRow {
 		String unit = mListItem.getUnit();
 		boolean failMandatory = false;
 
-		getData(mListItem);
+		getData();
 
 		failMandatory = sysValue <= minVal;
 
@@ -54,8 +52,7 @@ public class ListRow_Level extends ListRow {
 			drawableId = R.drawable.pstate_good;
 
 		holder.progressBar.setMax((int) mListItem.getMax_val());
-		holder.progressBar.setProgressDrawable(view.getResources().getDrawable(
-				drawableId));
+		holder.progressBar.setProgressDrawable(view.getResources().getDrawable(drawableId));
 		holder.progressBar.setProgress((int) sysValue);
 
 		try {
@@ -88,10 +85,8 @@ public class ListRow_Level extends ListRow {
 		}
 
 		@Override
-		protected void setupViewItems(ViewGroup viewGroup,
-				CheckListItem checkListItem) {
-			this.progressBar = (ProgressBar) viewGroup
-					.findViewById(R.id.lst_level);
+		protected void setupViewItems(ViewGroup viewGroup, CheckListItem checkListItem) {
+			this.progressBar = (ProgressBar) viewGroup.findViewById(R.id.lst_level);
 			this.unitView = (TextView) viewGroup.findViewById(R.id.lst_unit);
 			this.progressBar.setMax((int) checkListItem.getMax_val());
 

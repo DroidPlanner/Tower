@@ -30,8 +30,7 @@ import com.google.android.gms.analytics.HitBuilders;
  * 
  */
 
-public class MAVLinkService extends Service implements
-		MavLinkConnectionListener {
+public class MAVLinkService extends Service implements MavLinkConnectionListener {
 
 	private static final String LOG_TAG = MAVLinkService.class.getSimpleName();
 
@@ -101,8 +100,7 @@ public class MAVLinkService extends Service implements
 	private void notifyNewMessage(MAVLinkMessage m) {
 		try {
 			if (msgCenter != null) {
-				Message msg = Message.obtain(null,
-						MAVLinkClient.MSG_RECEIVED_DATA);
+				Message msg = Message.obtain(null, MAVLinkClient.MSG_RECEIVED_DATA);
 				Bundle data = new Bundle();
 				data.putSerializable("msg", m);
 				msg.setData(data);
@@ -127,8 +125,7 @@ public class MAVLinkService extends Service implements
 	private void selfDestroyService() {
 		try {
 			if (msgCenter != null) {
-				Message msg = Message.obtain(null,
-						MAVLinkClient.MSG_SELF_DESTRY_SERVICE);
+				Message msg = Message.obtain(null, MAVLinkClient.MSG_SELF_DESTRY_SERVICE);
 				msgCenter.send(msg);
 			}
 		} catch (RemoteException e) {
@@ -152,8 +149,7 @@ public class MAVLinkService extends Service implements
 		commErrHandler = new Handler() {
 			@Override
 			public void handleMessage(Message msg) {
-				Toast.makeText(context, commErrMsgLocalStore, Toast.LENGTH_LONG)
-						.show();
+				Toast.makeText(context, commErrMsgLocalStore, Toast.LENGTH_LONG).show();
 			}
 		};
 
@@ -190,8 +186,7 @@ public class MAVLinkService extends Service implements
 	private void connectMAVConnection() {
 		String connectionType = mAppPrefs.getMavLinkConnectionType();
 
-		Utils.ConnectionType connType = Utils.ConnectionType
-				.valueOf(connectionType);
+		Utils.ConnectionType connType = Utils.ConnectionType.valueOf(connectionType);
 		mavConnection = connType.getConnection(this);
 		mavConnection.start();
 
@@ -209,8 +204,7 @@ public class MAVLinkService extends Service implements
 		}
 
 		GAUtils.sendEvent(new HitBuilders.EventBuilder().setCategory(
-				GAUtils.Category.MAVLINK_CONNECTION.toString()).setAction(
-				"Mavlink disconnecting"));
+				GAUtils.Category.MAVLINK_CONNECTION.toString()).setAction("Mavlink disconnecting"));
 	}
 
 }

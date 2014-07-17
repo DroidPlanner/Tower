@@ -14,8 +14,8 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-public class FragmentSetupCH extends SuperSetupMainPanel implements
-		OnCalibrationEvent, OnDroneListener {
+public class FragmentSetupCH extends SuperSetupMainPanel implements OnCalibrationEvent,
+		OnDroneListener {
 
 	private int[] valueCH6;
 	private int[] valueCH;
@@ -50,14 +50,11 @@ public class FragmentSetupCH extends SuperSetupMainPanel implements
 
 	@Override
 	protected void updateCalibrationData() {
-		parameters.setParamValueByName("CH7_OPT",
-				valueCH[spinnerCH7.getSelectedItemPosition()]);
-		parameters.setParamValueByName("CH8_OPT",
-				valueCH[spinnerCH8.getSelectedItemPosition()]);
-		parameters.setParamValueByName("TUNE",
-				valueCH6[spinnerCH6.getSelectedItemPosition()]);
-		parameters.setParamValueByName("TUNE_LOW",
-				Integer.parseInt(editTuneL.getText().toString()));
+		parameters.setParamValueByName("CH7_OPT", valueCH[spinnerCH7.getSelectedItemPosition()]);
+		parameters.setParamValueByName("CH8_OPT", valueCH[spinnerCH8.getSelectedItemPosition()]);
+		parameters.setParamValueByName("TUNE", valueCH6[spinnerCH6.getSelectedItemPosition()]);
+		parameters
+				.setParamValueByName("TUNE_LOW", Integer.parseInt(editTuneL.getText().toString()));
 		parameters.setParamValueByName("TUNE_HIGH",
 				Integer.parseInt(editTuneH.getText().toString()));
 	}
@@ -67,10 +64,8 @@ public class FragmentSetupCH extends SuperSetupMainPanel implements
 		if (parameters == null)
 			return;
 
-		editTuneL.setText(String.format("%d",
-				(int) parameters.getParamValueByName("TUNE_LOW")));
-		editTuneH.setText(String.format("%d",
-				(int) parameters.getParamValueByName("TUNE_HIGH")));
+		editTuneL.setText(String.format("%d", (int) parameters.getParamValueByName("TUNE_LOW")));
+		editTuneH.setText(String.format("%d", (int) parameters.getParamValueByName("TUNE_HIGH")));
 
 		spinnerCH6.setSelection(getSpinnerIndexFromValue(
 				(int) parameters.getParamValueByName("TUNE"), valueCH6));
@@ -96,14 +91,13 @@ public class FragmentSetupCH extends SuperSetupMainPanel implements
 		getCH6Options();
 		getCHOptions();
 
-		final ArrayAdapter<String> adapterCH = new ArrayAdapter<String>(
-				parentActivity, R.layout.spinner_setup_item, stringCH);
-		final ArrayAdapter<String> adapterTune = new ArrayAdapter<String>(
-				parentActivity, R.layout.spinner_setup_item, stringCH6);
+		final ArrayAdapter<String> adapterCH = new ArrayAdapter<String>(parentActivity,
+				R.layout.spinner_setup_item, stringCH);
+		final ArrayAdapter<String> adapterTune = new ArrayAdapter<String>(parentActivity,
+				R.layout.spinner_setup_item, stringCH6);
 
 		adapterCH.setDropDownViewResource(R.layout.spinner_setup_item_dropdown);
-		adapterTune
-				.setDropDownViewResource(R.layout.spinner_setup_item_dropdown);
+		adapterTune.setDropDownViewResource(R.layout.spinner_setup_item_dropdown);
 
 		spinnerCH6.setAdapter(adapterTune);
 		spinnerCH7.setAdapter(adapterCH);

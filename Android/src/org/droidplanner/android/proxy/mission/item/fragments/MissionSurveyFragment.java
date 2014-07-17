@@ -21,10 +21,9 @@ import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-public class MissionSurveyFragment extends MissionDetailFragment implements
-		OnClickListener, SeekBarWithText.OnTextSeekBarChangedListener,
-		SpinnerSelfSelect.OnSpinnerItemSelectedListener,
-		DroneInterfaces.OnDroneListener {
+public class MissionSurveyFragment extends MissionDetailFragment implements OnClickListener,
+		SeekBarWithText.OnTextSeekBarChangedListener,
+		SpinnerSelfSelect.OnSpinnerItemSelectedListener, DroneInterfaces.OnDroneListener {
 
 	public SeekBarWithText overlapView;
 	public SeekBarWithText angleView;
@@ -53,8 +52,7 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 	@Override
 	public void onStart() {
 		super.onStart();
-		((DroidPlannerApp) getActivity().getApplication()).getDrone().events
-				.addDroneListener(this);
+		((DroidPlannerApp) getActivity().getApplication()).getDrone().events.addDroneListener(this);
 	}
 
 	@Override
@@ -68,15 +66,13 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		this.survey = ((Survey) itemRender.getMissionItem());
-		typeSpinner.setSelection(commandAdapter
-				.getPosition(MissionItemType.SURVEY));
+		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.SURVEY));
 		setupLocalViews(view);
 		updateViews();
 	}
 
 	public void setupLocalViews(View view) {
-		cameraSpinner = (SpinnerSelfSelect) view
-				.findViewById(id.cameraFileSpinner);
+		cameraSpinner = (SpinnerSelfSelect) view.findViewById(id.cameraFileSpinner);
 		footprintCheckBox = (CheckBox) view.findViewById(id.CheckBoxFootprints);
 
 		angleView = (SeekBarWithText) view.findViewById(id.angleView);
@@ -90,13 +86,10 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 		distanceBetweenLinesTextView = (TextView) view
 				.findViewById(id.distanceBetweenLinesTextView);
 		footprintTextView = (TextView) view.findViewById(id.footprintTextView);
-		groundResolutionTextView = (TextView) view
-				.findViewById(id.groundResolutionTextView);
+		groundResolutionTextView = (TextView) view.findViewById(id.groundResolutionTextView);
 		distanceTextView = (TextView) view.findViewById(id.distanceTextView);
-		numberOfPicturesView = (TextView) view
-				.findViewById(id.numberOfPicturesTextView);
-		numberOfStripsView = (TextView) view
-				.findViewById(id.numberOfStripsTextView);
+		numberOfPicturesView = (TextView) view.findViewById(id.numberOfPicturesTextView);
+		numberOfStripsView = (TextView) view.findViewById(id.numberOfStripsTextView);
 		lengthView = (TextView) view.findViewById(id.lengthTextView);
 
 		cameraAdapter = new CamerasAdapter(getActivity(),
@@ -114,16 +107,15 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 	}
 
 	@Override
-	public void onSpinnerItemSelected(Spinner spinner, int position, String text) {
+	public void onSpinnerItemSelected(Spinner spinner, int position) {
 		survey.setCameraInfo(cameraAdapter.getCamera(position));
 		onSeekBarChanged();
 	}
 
 	@Override
 	public void onSeekBarChanged() {
-		survey.update(angleView.getValue(),
-				new Altitude(altitudeView.getValue()), overlapView.getValue(),
-				sidelapView.getValue());
+		survey.update(angleView.getValue(), new Altitude(altitudeView.getValue()),
+				overlapView.getValue(), sidelapView.getValue());
 		try {
 			survey.build();
 			altitudeView.setBackgroundColor(Color.TRANSPARENT);
@@ -172,50 +164,35 @@ public class MissionSurveyFragment extends MissionDetailFragment implements
 	private void updateTextViews() {
 		Context context = getActivity();
 		try {
-			footprintTextView.setText(context.getString(R.string.footprint)
-					+ ": " + survey.surveyData.getLateralFootPrint() + " x"
+			footprintTextView.setText(context.getString(R.string.footprint) + ": "
+					+ survey.surveyData.getLateralFootPrint() + " x"
 					+ survey.surveyData.getLongitudinalFootPrint());
-			groundResolutionTextView.setText(context
-					.getString(R.string.ground_resolution)
-					+ ": "
+			groundResolutionTextView.setText(context.getString(R.string.ground_resolution) + ": "
 					+ survey.surveyData.getGroundResolution() + "/px");
-			distanceTextView.setText(context
-					.getString(R.string.distance_between_pictures)
-					+ ": "
+			distanceTextView.setText(context.getString(R.string.distance_between_pictures) + ": "
 					+ survey.surveyData.getLongitudinalPictureDistance());
-			distanceBetweenLinesTextView.setText(context
-					.getString(R.string.distance_between_lines)
-					+ ": "
-					+ survey.surveyData.getLateralPictureDistance());
-			areaTextView.setText(context.getString(R.string.area) + ": "
-					+ survey.polygon.getArea());
-			lengthView.setText(context.getString(R.string.mission_length)
-					+ ": " + survey.grid.getLength());
-			numberOfPicturesView.setText(context.getString(R.string.pictures)
-					+ ": " + survey.grid.getCameraCount());
-			numberOfStripsView.setText(context
-					.getString(R.string.number_of_strips)
-					+ ": "
+			distanceBetweenLinesTextView.setText(context.getString(R.string.distance_between_lines)
+					+ ": " + survey.surveyData.getLateralPictureDistance());
+			areaTextView
+					.setText(context.getString(R.string.area) + ": " + survey.polygon.getArea());
+			lengthView.setText(context.getString(R.string.mission_length) + ": "
+					+ survey.grid.getLength());
+			numberOfPicturesView.setText(context.getString(R.string.pictures) + ": "
+					+ survey.grid.getCameraCount());
+			numberOfStripsView.setText(context.getString(R.string.number_of_strips) + ": "
 					+ survey.grid.getNumberOfLines());
 		} catch (Exception e) {
-			footprintTextView.setText(context.getString(R.string.footprint)
+			footprintTextView.setText(context.getString(R.string.footprint) + ": " + "???");
+			groundResolutionTextView.setText(context.getString(R.string.ground_resolution) + ": "
+					+ "???");
+			distanceTextView.setText(context.getString(R.string.distance_between_pictures) + ": "
+					+ "???");
+			distanceBetweenLinesTextView.setText(context.getString(R.string.distance_between_lines)
 					+ ": " + "???");
-			groundResolutionTextView.setText(context
-					.getString(R.string.ground_resolution) + ": " + "???");
-			distanceTextView.setText(context
-					.getString(R.string.distance_between_pictures)
-					+ ": "
-					+ "???");
-			distanceBetweenLinesTextView.setText(context
-					.getString(R.string.distance_between_lines) + ": " + "???");
-			areaTextView.setText(context.getString(R.string.area) + ": "
-					+ "???");
-			lengthView.setText(context.getString(R.string.mission_length)
-					+ ": " + "???");
-			numberOfPicturesView.setText(context.getString(R.string.pictures)
-					+ "???");
-			numberOfStripsView.setText(context
-					.getString(R.string.number_of_strips) + "???");
+			areaTextView.setText(context.getString(R.string.area) + ": " + "???");
+			lengthView.setText(context.getString(R.string.mission_length) + ": " + "???");
+			numberOfPicturesView.setText(context.getString(R.string.pictures) + "???");
+			numberOfStripsView.setText(context.getString(R.string.number_of_strips) + "???");
 		}
 	}
 }

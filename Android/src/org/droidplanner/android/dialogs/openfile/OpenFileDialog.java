@@ -32,8 +32,7 @@ public abstract class OpenFileDialog implements OnClickListener {
 
 		itemList = reader.getFileList();
 		if (itemList.length == 0) {
-			Toast.makeText(context, R.string.no_files, Toast.LENGTH_SHORT)
-					.show();
+			Toast.makeText(context, R.string.no_files, Toast.LENGTH_SHORT).show();
 			return;
 		}
 		AlertDialog.Builder dialog = new AlertDialog.Builder(context);
@@ -44,14 +43,12 @@ public abstract class OpenFileDialog implements OnClickListener {
 
 	@Override
 	public void onClick(DialogInterface dialog, int which) {
-		boolean isFileOpen = reader
-				.openFile(reader.getPath() + itemList[which]);
+		boolean isFileOpen = reader.openFile(reader.getPath() + itemList[which]);
 
 		if (isFileOpen) {
 			Toast.makeText(context, itemList[which], Toast.LENGTH_LONG).show();
 		} else {
-			Toast.makeText(context, R.string.error_when_opening_file,
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, R.string.error_when_opening_file, Toast.LENGTH_SHORT).show();
 		}
 
 		onDataLoaded(reader);

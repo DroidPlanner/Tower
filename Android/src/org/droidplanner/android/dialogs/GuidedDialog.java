@@ -32,15 +32,14 @@ public class GuidedDialog extends DialogFragment {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
 		builder.setMessage(R.string.guided_mode_warning)
-				.setPositiveButton(android.R.string.ok,
-						new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int id) {
-								if (coord != null) {
-									listener.onForcedGuidedPoint(coord);
-								}
-							}
-						}).setNegativeButton(android.R.string.cancel, null);
+				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						if (coord != null) {
+							listener.onForcedGuidedPoint(coord);
+						}
+					}
+				}).setNegativeButton(android.R.string.cancel, null);
 
 		return builder.create();
 	}

@@ -21,14 +21,11 @@ public class Area {
 	@Override
 	public String toString() {
 		if (areaInSqMeters >= 100000) {
-			return String.format(Locale.US, "%2.1f km" + SQUARE_SYMBOL,
-					areaInSqMeters / 1000000);
+			return String.format(Locale.US, "%2.1f km" + SQUARE_SYMBOL, areaInSqMeters / 1000000);
 		} else if (areaInSqMeters >= 1) {
-			return String.format(Locale.US, "%2.1f m" + SQUARE_SYMBOL,
-					areaInSqMeters);
+			return String.format(Locale.US, "%2.1f m" + SQUARE_SYMBOL, areaInSqMeters);
 		} else if (areaInSqMeters >= 0.00001) {
-			return String.format(Locale.US, "%2.2f cm" + SQUARE_SYMBOL,
-					areaInSqMeters * 10000);
+			return String.format(Locale.US, "%2.2f cm" + SQUARE_SYMBOL, areaInSqMeters * 10000);
 		} else {
 			return areaInSqMeters + " m" + SQUARE_SYMBOL;
 		}

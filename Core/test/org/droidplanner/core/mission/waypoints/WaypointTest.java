@@ -15,8 +15,7 @@ public class WaypointTest extends TestCase {
 
 	public void testPackMissionItem() {
 		Mission mission = new Mission(null);
-		Waypoint item = new Waypoint(mission,
-				new Coord3D(0, 1, new Altitude(2)));
+		Waypoint item = new Waypoint(mission, new Coord3D(0, 1, new Altitude(2)));
 
 		List<msg_mission_item> listOfMsg = item.packMissionItem();
 		assertEquals(1, listOfMsg.size());

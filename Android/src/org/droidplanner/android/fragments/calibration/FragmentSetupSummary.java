@@ -13,8 +13,8 @@ import android.widget.TextView;
 
 public class FragmentSetupSummary extends SetupSidePanel {
 
-	public final static String EXTRA_TEXT_SUMMARY = FragmentSetupSummary.class
-			.getName() + "" + ".extra.TEXT_SUMMARY";
+	public final static String EXTRA_TEXT_SUMMARY = FragmentSetupSummary.class.getName() + ""
+			+ ".extra.TEXT_SUMMARY";
 	private int descId;
 	private int titleId;
 	private TextView textTitle;
@@ -22,13 +22,11 @@ public class FragmentSetupSummary extends SetupSidePanel {
 	private TextView textSummary;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 		final SetupRadioFragment setupFragment = (SetupRadioFragment) getParentFragment();
 
-		final View view = inflater.inflate(
-				R.layout.fragment_setup_panel_summary, container, false);
+		final View view = inflater.inflate(R.layout.fragment_setup_panel_summary, container, false);
 
 		textTitle = (TextView) view.findViewById(R.id.setupTitle);
 		textDesc = (TextView) view.findViewById(R.id.setupDesc);

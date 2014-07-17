@@ -23,7 +23,7 @@ public class UdpConnection extends MAVLinkConnection {
 	}
 
 	@Override
-	protected void openConnection() throws UnknownHostException, IOException {
+	protected void openConnection() throws IOException {
 		getUdpStream();
 	}
 
@@ -49,8 +49,8 @@ public class UdpConnection extends MAVLinkConnection {
 				byte[] buffer = params[0];
 				if (hostAdd != null) { // We can't send to our sister until they
 										// have connected to us
-					DatagramPacket packet = new DatagramPacket(buffer,
-							buffer.length, hostAdd, hostPort);
+					DatagramPacket packet = new DatagramPacket(buffer, buffer.length, hostAdd,
+							hostPort);
 					socket.send(packet);
 				}
 			} catch (Exception e) {
@@ -67,11 +67,10 @@ public class UdpConnection extends MAVLinkConnection {
 
 	@Override
 	protected void getPreferences(SharedPreferences prefs) {
-		serverPort = Integer.parseInt(prefs.getString("pref_udp_server_port",
-				"14550"));
+		serverPort = Integer.parseInt(prefs.getString("pref_udp_server_port", "14550"));
 	}
 
-	private void getUdpStream() throws UnknownHostException, IOException {
+	private void getUdpStream() throws IOException {
 		socket = new DatagramSocket(serverPort);
 		socket.setBroadcast(true);
 		socket.setReuseAddress(true);

@@ -36,8 +36,7 @@ import android.widget.TextView;
  * This widget implements the dynamic action bar tab behavior that can change
  * across different configurations or circumstances.
  */
-public class TabPageIndicator extends HorizontalScrollView implements
-		PageIndicator {
+public class TabPageIndicator extends HorizontalScrollView implements PageIndicator {
 	/** Title text used when no title is provided by the adapter. */
 	private static final CharSequence EMPTY_TITLE = "";
 
@@ -87,8 +86,7 @@ public class TabPageIndicator extends HorizontalScrollView implements
 		setHorizontalScrollBarEnabled(false);
 
 		mTabLayout = new LinearLayout(getContext());
-		addView(mTabLayout, new ViewGroup.LayoutParams(WRAP_CONTENT,
-				FILL_PARENT));
+		addView(mTabLayout, new ViewGroup.LayoutParams(WRAP_CONTENT, FILL_PARENT));
 	}
 
 	public void setOnTabReselectedListener(OnTabReselectedListener listener) {
@@ -131,8 +129,7 @@ public class TabPageIndicator extends HorizontalScrollView implements
 		mTabSelector = new Runnable() {
 			@Override
 			public void run() {
-				final int scrollPos = tabView.getLeft()
-						- (getWidth() - tabView.getWidth()) / 2;
+				final int scrollPos = tabView.getLeft() - (getWidth() - tabView.getWidth()) / 2;
 				smoothScrollTo(scrollPos, 0);
 				mTabSelector = null;
 			}
@@ -164,8 +161,7 @@ public class TabPageIndicator extends HorizontalScrollView implements
 		tabView.setOnClickListener(mTabClickListener);
 		tabView.setText(text);
 
-		mTabLayout.addView(tabView, new LinearLayout.LayoutParams(0,
-				FILL_PARENT, 1));
+		mTabLayout.addView(tabView, new LinearLayout.LayoutParams(0, FILL_PARENT, 1));
 	}
 
 	@Override
@@ -200,8 +196,7 @@ public class TabPageIndicator extends HorizontalScrollView implements
 		}
 		final PagerAdapter adapter = view.getAdapter();
 		if (adapter == null) {
-			throw new IllegalStateException(
-					"ViewPager does not have adapter instance.");
+			throw new IllegalStateException("ViewPager does not have adapter instance.");
 		}
 		mViewPager = view;
 		view.setOnPageChangeListener(this);
@@ -270,8 +265,8 @@ public class TabPageIndicator extends HorizontalScrollView implements
 
 			// Re-measure if we went beyond our maximum size.
 			if (mMaxTabWidth > 0 && getMeasuredWidth() > mMaxTabWidth) {
-				super.onMeasure(MeasureSpec.makeMeasureSpec(mMaxTabWidth,
-						MeasureSpec.EXACTLY), heightMeasureSpec);
+				super.onMeasure(MeasureSpec.makeMeasureSpec(mMaxTabWidth, MeasureSpec.EXACTLY),
+						heightMeasureSpec);
 			}
 		}
 

@@ -80,31 +80,23 @@ public class CheckListXmlParser extends ListXmlParser {
 
 		if (itemType != null) {
 			checkListItems.add(new CheckListItem(xpp.getName()));
-			CheckListItem checkListItem = checkListItems.get(checkListItems
-					.size() - 1);
+			CheckListItem checkListItem = checkListItems.get(checkListItems.size() - 1);
 			checkListItem.setDepth(xpp.getDepth());
 			checkListItem.setCategoryIndex(categories.size() - 1);
 			checkListItem.setTitle(xpp.getAttributeValue(null, "title"));
 			checkListItem.setDesc(xpp.getAttributeValue(null, "description"));
 			checkListItem.setUnit(xpp.getAttributeValue(null, "unit"));
 			checkListItem.setOn_label(xpp.getAttributeValue(null, "on_label"));
-			checkListItem
-					.setOff_label(xpp.getAttributeValue(null, "off_label"));
+			checkListItem.setOff_label(xpp.getAttributeValue(null, "off_label"));
 			checkListItem.setSys_tag(xpp.getAttributeValue(null, "system_tag"));
 			checkListItem.setEditable(xpp.getAttributeValue(null, "editable"));
-			checkListItem
-					.setMandatory(xpp.getAttributeValue(null, "mandatory"));
-			checkListItem
-					.setNom_val(xpp.getAttributeValue(null, "nominal_val"));
-			checkListItem
-					.setMin_val(xpp.getAttributeValue(null, "minimum_val"));
-			checkListItem
-					.setMax_val(xpp.getAttributeValue(null, "maximum_val"));
+			checkListItem.setMandatory(xpp.getAttributeValue(null, "mandatory"));
+			checkListItem.setNom_val(xpp.getAttributeValue(null, "nominal_val"));
+			checkListItem.setMin_val(xpp.getAttributeValue(null, "minimum_val"));
+			checkListItem.setMax_val(xpp.getAttributeValue(null, "maximum_val"));
 			checkListItem.setValue(xpp.getAttributeValue(null, "value"));
-			checkListItem.setSelectedIndex(xpp.getAttributeValue(null,
-					"selectindex"));
-			checkListItem.setOptionLists(xpp.getAttributeValue(null,
-					"optionlist"));
+			checkListItem.setSelectedIndex(xpp.getAttributeValue(null, "selectindex"));
+			checkListItem.setOptionLists(xpp.getAttributeValue(null, "optionlist"));
 		}
 	}
 
@@ -117,13 +109,13 @@ public class CheckListXmlParser extends ListXmlParser {
 	}
 
 	@Override
-	public void process_StartDocument(XmlPullParser xpp) {
+	public void process_StartDocument() {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void process_EndDocument(XmlPullParser xpp) {
+	public void process_EndDocument() {
 		// TODO Auto-generated method stub
 
 	}
@@ -142,13 +134,13 @@ public class CheckListXmlParser extends ListXmlParser {
 	}
 
 	@Override
-	public void process_EndTag(XmlPullParser xpp) {
+	public void process_EndTag() {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void process_Text(XmlPullParser xpp) {
+	public void process_Text() {
 		// TODO Auto-generated method stub
 
 	}

@@ -6,13 +6,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashSet;
+import java.util.Locale;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.ConfigurationActivity;
 import org.droidplanner.android.activities.helpers.MapPreferencesActivity;
 import org.droidplanner.android.maps.providers.DPMapProvider;
-import org.droidplanner.android.utils.Constants;
 import org.droidplanner.android.utils.file.DirectoryPath;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
@@ -63,11 +63,11 @@ public class SettingsFragment extends DpPreferenceFragment implements
 		initSummaryPerPrefs();
 
 		final Context context = getActivity().getApplicationContext();
-		final SharedPreferences sharedPref = PreferenceManager
-				.getDefaultSharedPreferences(context);
+		final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 
 		// Populate the drone settings category
-		final PreferenceCategory dronePrefs = (PreferenceCategory) findPreference(Constants.PREF_DRONE_SETTINGS);
+		final PreferenceCategory dronePrefs = (PreferenceCategory) findPreference(context
+				.getString(R.string.pref_drone_settings_key));
 		if (dronePrefs != null) {
 			dronePrefs.removeAll();
 
@@ -76,27 +76,20 @@ public class SettingsFragment extends DpPreferenceFragment implements
 				final int index = i;
 				Preference configPref = new Preference(context);
 				configPref.setLayoutResource(R.layout.preference_config_screen);
-				configPref
-						.setTitle(ConfigurationActivity.sConfigurationFragmentTitlesRes[i]);
-				configPref
-						.setIcon(ConfigurationActivity.sConfigurationFragmentIconRes[i]);
-				configPref
-						.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-							@Override
-							public boolean onPreferenceClick(
-									Preference preference) {
-								// Launch the configuration activity to show the
-								// current config screen
-								final Intent configIntent = new Intent(context,
-										ConfigurationActivity.class)
-										.putExtra(
-												ConfigurationActivity.EXTRA_CONFIG_SCREEN_INDEX,
-												index);
+				configPref.setTitle(ConfigurationActivity.sConfigurationFragmentTitlesRes[i]);
+				configPref.setIcon(ConfigurationActivity.sConfigurationFragmentIconRes[i]);
+				configPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+					@Override
+					public boolean onPreferenceClick(Preference preference) {
+						// Launch the configuration activity to show the
+						// current config screen
+						final Intent configIntent = new Intent(context, ConfigurationActivity.class)
+								.putExtra(ConfigurationActivity.EXTRA_CONFIG_SCREEN_INDEX, index);
 
-								startActivity(configIntent);
-								return true;
-							}
-						});
+						startActivity(configIntent);
+						return true;
+					}
+				});
 
 				dronePrefs.addPreference(configPref);
 			}
@@ -117,12 +110,10 @@ public class SettingsFragment extends DpPreferenceFragment implements
 			for (int i = 0; i < providersCount; i++) {
 				final String providerName = providers[i].name();
 				providersNamesValues[i] = providerName;
-				providersNames[i] = providerName.toLowerCase()
-						.replace('_', ' ');
+				providersNames[i] = providerName.toLowerCase(Locale.ENGLISH).replace('_', ' ');
 			}
 
-			final String defaultProviderName = sharedPref.getString(
-					mapsProvidersPrefKey,
+			final String defaultProviderName = sharedPref.getString(mapsProvidersPrefKey,
 					DPMapProvider.DEFAULT_MAP_PROVIDER.name());
 
 			mapsProvidersPref.setEntries(providersNames);
@@ -132,8 +123,7 @@ public class SettingsFragment extends DpPreferenceFragment implements
 					.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 
 						@Override
-						public boolean onPreferenceChange(
-								Preference preference, Object newValue) {
+						public boolean onPreferenceChange(Preference preference, Object newValue) {
 							// Update the map provider settings preference.
 							final String mapProviderName = newValue.toString();
 							return updateMapSettingsPreference(mapProviderName);
@@ -155,22 +145,17 @@ public class SettingsFragment extends DpPreferenceFragment implements
 		final String maxFlightPathSizeKey = getString(R.string.pref_max_flight_path_size_key);
 		final Preference maxFlightPathSizePref = findPreference(maxFlightPathSizeKey);
 		if (maxFlightPathSizePref != null) {
-			maxFlightPathSizePref.setSummary(sharedPref.getString(
-					maxFlightPathSizeKey, "")
-					+ " "
+			maxFlightPathSizePref.setSummary(sharedPref.getString(maxFlightPathSizeKey, "") + " "
 					+ getString(R.string.set_to_zero_to_disable));
 		}
 
 		final String rcModeKey = getString(R.string.pref_rc_mode_key);
 		final Preference rcModePref = findPreference(rcModeKey);
 		if (rcModePref != null) {
-			if (sharedPref.getString(rcModeKey, "MODE2").equalsIgnoreCase(
-					"MODE1")) {
-				rcModePref
-						.setSummary(getString(R.string.mode1_throttle_on_right_stick));
+			if (sharedPref.getString(rcModeKey, "MODE2").equalsIgnoreCase("MODE1")) {
+				rcModePref.setSummary(getString(R.string.mode1_throttle_on_right_stick));
 			} else {
-				rcModePref
-						.setSummary(getString(R.string.mode2_throttle_on_left_stick));
+				rcModePref.setSummary(getString(R.string.mode2_throttle_on_left_stick));
 			}
 		}
 
@@ -181,12 +166,10 @@ public class SettingsFragment extends DpPreferenceFragment implements
 			usageStatPref
 					.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 						@Override
-						public boolean onPreferenceChange(
-								Preference preference, Object newValue) {
+						public boolean onPreferenceChange(Preference preference, Object newValue) {
 							// Update the google analytics singleton.
 							final boolean optIn = (Boolean) newValue;
-							final GoogleAnalytics analytics = GoogleAnalytics
-									.getInstance(context);
+							final GoogleAnalytics analytics = GoogleAnalytics.getInstance(context);
 							analytics.setAppOptOut(!optIn);
 							return true;
 						}
@@ -218,56 +201,48 @@ public class SettingsFragment extends DpPreferenceFragment implements
 		 * overwrite), and sends pbw intent for pebble app to install bundle.
 		 */
 		Preference pebblePreference = findPreference(getString(R.string.pref_pebble_install_key));
-		pebblePreference
-				.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-					@Override
-					public boolean onPreferenceClick(Preference pref) {
-						if (PebbleKit.isWatchConnected(context
-								.getApplicationContext())) {
-							InputStream in = null;
-							OutputStream out = null;
-							try {
-								in = context.getAssets().open(
-										"Pebble/DroidPlanner.pbw");
-								;
-								File outFile = new File(DirectoryPath
-										.getDroidPlannerPath(),
-										"DroidPlanner.pbw");
-								out = new FileOutputStream(outFile);
-								byte[] buffer = new byte[1024];
-								int read;
-								while ((read = in.read(buffer)) != -1) {
-									out.write(buffer, 0, read);
-								}
-								in.close();
-								in = null;
-								out.flush();
-								out.close();
-								out = null;
-
-								Intent intent = new Intent(Intent.ACTION_VIEW);
-								intent.setData(Uri.fromFile(outFile));
-								intent.setClassName("com.getpebble.android",
-										"com.getpebble.android.ui.UpdateActivity");
-								startActivity(intent);
-							} catch (IOException e) {
-								Log.e("pebble", "Failed to copy pbw asset", e);
-								Toast.makeText(context,
-										"Failed to copy pbw asset",
-										Toast.LENGTH_SHORT).show();
-							} catch (ActivityNotFoundException e) {
-								Log.e("pebble", "Pebble App Not installed", e);
-								Toast.makeText(context,
-										"Pebble App Not installed",
-										Toast.LENGTH_SHORT).show();
-							}
-						} else {
-							Toast.makeText(context, "No Pebble Connected",
-									Toast.LENGTH_SHORT).show();
+		pebblePreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference pref) {
+				if (PebbleKit.isWatchConnected(context.getApplicationContext())) {
+					InputStream in = null;
+					OutputStream out = null;
+					try {
+						in = context.getAssets().open("Pebble/DroidPlanner.pbw");
+						File outFile = new File(DirectoryPath.getDroidPlannerPath(),
+								"DroidPlanner.pbw");
+						out = new FileOutputStream(outFile);
+						byte[] buffer = new byte[1024];
+						int read;
+						while ((read = in.read(buffer)) != -1) {
+							out.write(buffer, 0, read);
 						}
-						return true;
+						in.close();
+						in = null;
+						out.flush();
+						out.close();
+						out = null;
+
+						Intent intent = new Intent(Intent.ACTION_VIEW);
+						intent.setData(Uri.fromFile(outFile));
+						intent.setClassName("com.getpebble.android",
+								"com.getpebble.android.ui.UpdateActivity");
+						startActivity(intent);
+					} catch (IOException e) {
+						Log.e("pebble", "Failed to copy pbw asset", e);
+						Toast.makeText(context, "Failed to copy pbw asset", Toast.LENGTH_SHORT)
+								.show();
+					} catch (ActivityNotFoundException e) {
+						Log.e("pebble", "Pebble App Not installed", e);
+						Toast.makeText(context, "Pebble App Not installed", Toast.LENGTH_SHORT)
+								.show();
 					}
-				});
+				} else {
+					Toast.makeText(context, "No Pebble Connected", Toast.LENGTH_SHORT).show();
+				}
+				return true;
+			}
+		});
 	}
 
 	private void initSummaryPerPrefs() {
@@ -278,13 +253,10 @@ public class SettingsFragment extends DpPreferenceFragment implements
 		mDefaultSummaryPrefs.add(getString(R.string.pref_server_port_key));
 		mDefaultSummaryPrefs.add(getString(R.string.pref_server_ip_key));
 		mDefaultSummaryPrefs.add(getString(R.string.pref_udp_server_port_key));
-		mDefaultSummaryPrefs
-				.add(getString(R.string.pref_bluetooth_device_address_key));
+		mDefaultSummaryPrefs.add(getString(R.string.pref_bluetooth_device_address_key));
 		mDefaultSummaryPrefs.add(getString(R.string.pref_vehicle_type_key));
-		mDefaultSummaryPrefs
-				.add(getString(R.string.pref_rc_quickmode_left_key));
-		mDefaultSummaryPrefs
-				.add(getString(R.string.pref_rc_quickmode_right_key));
+		mDefaultSummaryPrefs.add(getString(R.string.pref_rc_quickmode_left_key));
+		mDefaultSummaryPrefs.add(getString(R.string.pref_rc_quickmode_right_key));
 	}
 
 	/**
@@ -297,8 +269,7 @@ public class SettingsFragment extends DpPreferenceFragment implements
 		final Preference mavlinkVersionPref = findPreference(getString(R.string.pref_mavlink_version_key));
 		if (mavlinkVersionPref != null) {
 			if (version == null) {
-				mavlinkVersionPref
-						.setSummary(getString(R.string.empty_content));
+				mavlinkVersionPref.setSummary(getString(R.string.empty_content));
 			} else {
 				mavlinkVersionPref.setSummary('v' + version);
 			}
@@ -306,32 +277,26 @@ public class SettingsFragment extends DpPreferenceFragment implements
 	}
 
 	private boolean updateMapSettingsPreference(final String mapProviderName) {
-		final DPMapProvider mapProvider = DPMapProvider
-				.getMapProvider(mapProviderName);
+		final DPMapProvider mapProvider = DPMapProvider.getMapProvider(mapProviderName);
 		if (mapProvider == null)
 			return false;
 
 		final Preference providerPrefs = findPreference(getText(R.string.pref_map_provider_settings_key));
 		if (providerPrefs != null) {
-			providerPrefs
-					.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-						@Override
-						public boolean onPreferenceClick(Preference preference) {
-							startActivity(new Intent(getActivity(),
-									MapPreferencesActivity.class)
-									.putExtra(
-											MapPreferencesActivity.EXTRA_MAP_PROVIDER_NAME,
-											mapProviderName));
-							return true;
-						}
-					});
+			providerPrefs.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+				@Override
+				public boolean onPreferenceClick(Preference preference) {
+					startActivity(new Intent(getActivity(), MapPreferencesActivity.class).putExtra(
+							MapPreferencesActivity.EXTRA_MAP_PROVIDER_NAME, mapProviderName));
+					return true;
+				}
+			});
 		}
 		return true;
 	}
 
 	@Override
-	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
-			String key) {
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		final Preference preference = findPreference(key);
 		if (preference == null) {
 			return;
@@ -352,8 +317,7 @@ public class SettingsFragment extends DpPreferenceFragment implements
 		}
 
 		if (key.equals(getString(R.string.pref_rc_mode_key))) {
-			if (sharedPreferences.getString(key, "MODE2").equalsIgnoreCase(
-					"MODE1")) {
+			if (sharedPreferences.getString(key, "MODE2").equalsIgnoreCase("MODE1")) {
 				preference.setSummary(R.string.mode1_throttle_on_right_stick);
 			} else {
 				preference.setSummary(R.string.mode2_throttle_on_left_stick);
@@ -365,8 +329,7 @@ public class SettingsFragment extends DpPreferenceFragment implements
 	public void onStart() {
 		super.onStart();
 
-		final Drone drone = ((DroidPlannerApp) getActivity().getApplication())
-				.getDrone();
+		final Drone drone = ((DroidPlannerApp) getActivity().getApplication()).getDrone();
 		final byte mavlinkVersion = drone.heartbeat.getMavlinkVersion();
 		if (mavlinkVersion != HeartBeat.INVALID_MAVLINK_VERSION) {
 			updateMavlinkVersionPreference(String.valueOf(mavlinkVersion));
@@ -381,23 +344,21 @@ public class SettingsFragment extends DpPreferenceFragment implements
 	public void onStop() {
 		super.onStop();
 
-		final Drone drone = ((DroidPlannerApp) getActivity().getApplication())
-				.getDrone();
+		final Drone drone = ((DroidPlannerApp) getActivity().getApplication()).getDrone();
 		drone.events.removeDroneListener(this);
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		getPreferenceScreen().getSharedPreferences()
-				.registerOnSharedPreferenceChangeListener(this);
+		getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		getPreferenceScreen().getSharedPreferences()
-				.unregisterOnSharedPreferenceChangeListener(this);
+		getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(
+				this);
 	}
 
 	@Override
@@ -409,8 +370,9 @@ public class SettingsFragment extends DpPreferenceFragment implements
 
 		case HEARTBEAT_FIRST:
 		case HEARTBEAT_RESTORED:
-			updateMavlinkVersionPreference(String.valueOf(drone.heartbeat
-					.getMavlinkVersion()));
+			updateMavlinkVersionPreference(String.valueOf(drone.heartbeat.getMavlinkVersion()));
+			break;
+		default:
 			break;
 		}
 	}

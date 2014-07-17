@@ -9,23 +9,20 @@ import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.MAVLink.Messages.ApmModes;
 import com.getpebble.android.kit.PebbleKit;
 import com.getpebble.android.kit.PebbleKit.PebbleDataReceiver;
 import com.getpebble.android.kit.util.PebbleDictionary;
 
-public class PebbleNotificationProvider implements
-		NotificationHandler.NotificationProvider {
+public class PebbleNotificationProvider implements NotificationHandler.NotificationProvider {
 
 	private static final int KEY_MODE = 0;
 	private static final int KEY_FOLLOW_TYPE = 1;
 	private static final int KEY_TELEM = 2;
 	private static final int KEY_APP_VERSION = 3;
 
-	private static final UUID DP_UUID = UUID
-			.fromString("79a2893d-fc7d-48c4-bc9a-34854d94ef6e");
+	private static final UUID DP_UUID = UUID.fromString("79a2893d-fc7d-48c4-bc9a-34854d94ef6e");
 	private static final String EXPECTED_APP_VERSION = "two";
 
 	/**
@@ -54,8 +51,11 @@ public class PebbleNotificationProvider implements
 	@Override
 	public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
 		switch (event) {
+		case CONNECTED:
+			PebbleKit.startAppOnPebble(applicationContext, DP_UUID);
+			break;
 		case MODE:
-			sendDataToWatchNow(drone);
+			sendDataToWatchIfTimeHasElapsed(drone);
 			break;
 		case BATTERY:
 			sendDataToWatchIfTimeHasElapsed(drone);
@@ -63,11 +63,8 @@ public class PebbleNotificationProvider implements
 		case SPEED:
 			sendDataToWatchIfTimeHasElapsed(drone);
 			break;
-		case CONNECTED:
-			PebbleKit.startAppOnPebble(applicationContext, DP_UUID);
-			break;
 		case FOLLOW_CHANGE_TYPE:
-			sendDataToWatchNow(drone);
+			sendDataToWatchIfTimeHasElapsed(drone);
 			break;
 		default:
 			break;
@@ -102,27 +99,21 @@ public class PebbleNotificationProvider implements
 
 		String mode = drone.state.getMode().getName();
 		if (!drone.state.isArmed())
-			mode = "No Arm";
-		else if (((DroidPlannerApp) applicationContext).followMe.isEnabled()
-				&& mode == "Guided")
+			mode = "Disarmd";
+		else if (((DroidPlannerApp) applicationContext).followMe.isEnabled() && mode == "Guided")
 			mode = "Follow";
 		data.addString(KEY_MODE, mode);
 
 		FollowModes type = followMe.getType();
 		if (type != null) {
-			Log.d("seB", type.toString());
 			data.addString(KEY_FOLLOW_TYPE, type.toString());
 		} else
 			data.addString(KEY_FOLLOW_TYPE, "none");
 
-		String bat = "Bat:"
-				+ Double.toString(roundToOneDecimal(drone.battery.getBattVolt()))
-				+ "V";
-		String speed = "Speed: "
-				+ Double.toString(roundToOneDecimal(drone.speed.getAirSpeed()));
+		String bat = "Bat:" + Double.toString(roundToOneDecimal(drone.battery.getBattVolt())) + "V";
+		String speed = "Speed: " + Double.toString(roundToOneDecimal(drone.speed.getAirSpeed()));
 		String altitude = "Alt: "
-				+ Double.toString(roundToOneDecimal(drone.altitude
-						.getAltitude()));
+				+ Double.toString(roundToOneDecimal(drone.altitude.getAltitude()));
 		String telem = bat + "\n" + altitude + "\n" + speed;
 		data.addString(KEY_TELEM, telem);
 
@@ -148,8 +139,7 @@ public class PebbleNotificationProvider implements
 		}
 
 		@Override
-		public void receiveData(Context context, int transactionId,
-				PebbleDictionary data) {
+		public void receiveData(Context context, int transactionId, PebbleDictionary data) {
 			Follow followMe = ((DroidPlannerApp) applicationContext).followMe;
 			PebbleKit.sendAckToPebble(applicationContext, transactionId);
 			int request = (data.getInteger(KEY_PEBBLE_REQUEST).intValue());

@@ -58,8 +58,7 @@ public class WaypointManager extends DroneVariable implements OnTimeout {
 		this.timeOut = timeOut;
 	}
 
-	public void setWaypointManagerListener(
-			OnWaypointManagerListener wpEventListener) {
+	public void setWaypointManagerListener(OnWaypointManagerListener wpEventListener) {
 		this.wpEventListener = wpEventListener;
 	}
 
@@ -181,8 +180,7 @@ public class WaypointManager extends DroneVariable implements OnTimeout {
 			if (msg.msgid == msg_mission_item.MAVLINK_MSG_ID_MISSION_ITEM) {
 				timeOut.setTimeOut();
 				processReceivedWaypoint((msg_mission_item) msg);
-				doWaypointEvent(WaypointEvent_Type.WP_DOWNLOAD, readIndex + 1,
-						waypointCount);
+				doWaypointEvent(WaypointEvent_Type.WP_DOWNLOAD, readIndex + 1, waypointCount);
 				if (mission.size() < waypointCount) {
 					MavLinkWaypoint.requestWayPoint(myDrone, mission.size());
 				} else {
@@ -201,8 +199,7 @@ public class WaypointManager extends DroneVariable implements OnTimeout {
 			if (msg.msgid == msg_mission_request.MAVLINK_MSG_ID_MISSION_REQUEST) {
 				timeOut.setTimeOut();
 				processWaypointToSend((msg_mission_request) msg);
-				doWaypointEvent(WaypointEvent_Type.WP_UPLOAD, writeIndex + 1,
-						mission.size());
+				doWaypointEvent(WaypointEvent_Type.WP_UPLOAD, writeIndex + 1, mission.size());
 				return true;
 			}
 			break;
@@ -238,8 +235,7 @@ public class WaypointManager extends DroneVariable implements OnTimeout {
 		// If max retry is reached, set state to IDLE. No more retry.
 		if (mTimeOutCount >= timeOut.getTimeOutRetry()) {
 			state = WaypointStates.IDLE;
-			doWaypointEvent(WaypointEvent_Type.WP_TIMED_OUT, retryIndex,
-					maxRetry);
+			doWaypointEvent(WaypointEvent_Type.WP_TIMED_OUT, retryIndex, maxRetry);
 			return false;
 		}
 
@@ -270,8 +266,7 @@ public class WaypointManager extends DroneVariable implements OnTimeout {
 			}
 			break;
 		case WAITING_WRITE_ACK:
-			myDrone.MavClient.sendMavPacket(mission.get(mission.size() - 1)
-					.pack());
+			myDrone.MavClient.sendMavPacket(mission.get(mission.size() - 1).pack());
 			break;
 		}
 
@@ -315,8 +310,7 @@ public class WaypointManager extends DroneVariable implements OnTimeout {
 
 	private void doEndWaypointEvent(WaypointEvent_Type wpEvent) {
 		if (retryIndex > 0)// if retry successful, notify that we now continue
-			doWaypointEvent(WaypointEvent_Type.WP_CONTINUE, retryIndex,
-					maxRetry);
+			doWaypointEvent(WaypointEvent_Type.WP_CONTINUE, retryIndex, maxRetry);
 
 		retryIndex = 0;
 
@@ -326,8 +320,7 @@ public class WaypointManager extends DroneVariable implements OnTimeout {
 		wpEventListener.onEndWaypointEvent(wpEvent);
 	}
 
-	private void doWaypointEvent(WaypointEvent_Type wpEvent, int index,
-			int count) {
+	private void doWaypointEvent(WaypointEvent_Type wpEvent, int index, int count) {
 		retryIndex = 0;
 
 		if (wpEventListener == null)
@@ -381,8 +374,7 @@ public class WaypointManager extends DroneVariable implements OnTimeout {
 			setTimeOut(this.timeOut, resetTimeOutCount);
 		}
 
-		public synchronized void setTimeOut(long timeout_ms,
-				boolean resetTimeOutCount) {
+		public synchronized void setTimeOut(long timeout_ms, boolean resetTimeOutCount) {
 			/*
 			 * Log.d("TIMEOUT", "set " + String.valueOf(timeout_ms));
 			 */

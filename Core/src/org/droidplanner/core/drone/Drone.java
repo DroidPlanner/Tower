@@ -43,33 +43,32 @@ public class Drone {
 	public final Orientation orientation = new Orientation(this);
 	public final Navigation navigation = new Navigation(this);
 	public final GuidedPoint guidedPoint = new GuidedPoint(this);
-	public final Parameters parameters = new Parameters(this);
 	public final Calibration calibrationSetup = new Calibration(this);
 	public final WaypointManager waypointManager = new WaypointManager(this);
 	public final State state;
 	public final HeartBeat heartbeat;
+	public final Parameters parameters;
 
 	public final MAVLinkOutputStream MavClient;
 	public final Preferences preferences;
 
-	public Drone(MAVLinkOutputStream mavClient, Clock clock, Handler handler,
-			Preferences pref) {
+	public Drone(MAVLinkOutputStream mavClient, Clock clock, Handler handler, Preferences pref) {
 		this.MavClient = mavClient;
 		this.preferences = pref;
 		state = new State(this, clock);
 		heartbeat = new HeartBeat(this, handler);
+		parameters = new Parameters(this, handler);
 		profile.load();
 	}
 
-	public void setAltitudeGroundAndAirSpeeds(double altitude,
-			double groundSpeed, double airSpeed, double climb) {
+	public void setAltitudeGroundAndAirSpeeds(double altitude, double groundSpeed, double airSpeed,
+			double climb) {
 		this.altitude.setAltitude(altitude);
 		speed.setGroundAndAirSpeeds(groundSpeed, airSpeed, climb);
 		events.notifyDroneEvent(DroneEventsType.SPEED);
 	}
 
-	public void setDisttowpAndSpeedAltErrors(double disttowp, double alt_error,
-			double aspd_error) {
+	public void setDisttowpAndSpeedAltErrors(double disttowp, double alt_error, double aspd_error) {
 		missionStats.setDistanceToWp(disttowp);
 		altitude.setAltitudeError(alt_error);
 		speed.setSpeedError(aspd_error);

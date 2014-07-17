@@ -9,8 +9,8 @@ import org.droidplanner.core.mission.waypoints.RegionOfInterest;
 import android.os.Bundle;
 import android.view.View;
 
-public class MissionRegionOfInterestFragment extends MissionDetailFragment
-		implements SeekBarWithText.OnTextSeekBarChangedListener {
+public class MissionRegionOfInterestFragment extends MissionDetailFragment implements
+		SeekBarWithText.OnTextSeekBarChangedListener {
 
 	private SeekBarWithText altitudeSeekBar;
 
@@ -22,21 +22,18 @@ public class MissionRegionOfInterestFragment extends MissionDetailFragment
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		typeSpinner.setSelection(commandAdapter
-				.getPosition(MissionItemType.ROI));
+		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.ROI));
 
-		altitudeSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.altitudeView);
-		altitudeSeekBar.setValue(((RegionOfInterest) itemRender
-				.getMissionItem()).getCoordinate().getAltitude()
-				.valueInMeters());
+		altitudeSeekBar = (SeekBarWithText) view.findViewById(R.id.altitudeView);
+		altitudeSeekBar.setValue(((RegionOfInterest) itemRender.getMissionItem()).getCoordinate()
+				.getAltitude().valueInMeters());
 		altitudeSeekBar.setOnChangedListener(this);
 	}
 
 	@Override
 	public void onSeekBarChanged() {
-		((RegionOfInterest) itemRender.getMissionItem())
-				.setAltitude(new Altitude(altitudeSeekBar.getValue()));
+		((RegionOfInterest) itemRender.getMissionItem()).setAltitude(new Altitude(altitudeSeekBar
+				.getValue()));
 	}
 
 }

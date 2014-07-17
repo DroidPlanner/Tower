@@ -70,10 +70,8 @@ public class RcOutput {
 	}
 
 	private int getRcOverrideDelayMs() {
-		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(parrentContext);
-		int rate = Integer.parseInt(prefs.getString(
-				"pref_mavlink_stream_rate_RC_override", "0"));
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(parrentContext);
+		int rate = Integer.parseInt(prefs.getString("pref_mavlink_stream_rate_RC_override", "0"));
 		if ((rate > 1) & (rate < 500)) {
 			return 1000 / rate;
 		} else {

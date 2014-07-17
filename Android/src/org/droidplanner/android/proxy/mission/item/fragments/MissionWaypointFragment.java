@@ -31,15 +31,12 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		typeSpinner.setSelection(commandAdapter
-				.getPosition(MissionItemType.WAYPOINT));
+		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.WAYPOINT));
 
 		Waypoint item = (Waypoint) this.itemRender.getMissionItem();
 
-		altitudeSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.altitudeView);
-		altitudeSeekBar.setValue(item.getCoordinate().getAltitude()
-				.valueInMeters());
+		altitudeSeekBar = (SeekBarWithText) view.findViewById(R.id.altitudeView);
+		altitudeSeekBar.setValue(item.getCoordinate().getAltitude().valueInMeters());
 		altitudeSeekBar.setOnChangedListener(this);
 
 		delaySeekBar = (SeekBarWithText) view.findViewById(R.id.waypointDelay);

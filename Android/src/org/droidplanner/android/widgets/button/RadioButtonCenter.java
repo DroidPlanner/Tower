@@ -38,13 +38,10 @@ public class RadioButtonCenter extends RadioButton {
 				R.styleable.RadioButtonCenter, defStyle, 0);
 
 		try {
-			mButtonDrawable = attributes
-					.getDrawable(R.styleable.RadioButtonCenter_android_button);
+			mButtonDrawable = attributes.getDrawable(R.styleable.RadioButtonCenter_android_button);
 		} finally {
 			attributes.recycle();
 		}
-
-		setButtonDrawable(android.R.color.transparent);
 	}
 
 	@Override
@@ -53,8 +50,7 @@ public class RadioButtonCenter extends RadioButton {
 
 		if (mButtonDrawable != null) {
 			mButtonDrawable.setState(getDrawableState());
-			final int verticalGravity = getGravity()
-					& Gravity.VERTICAL_GRAVITY_MASK;
+			final int verticalGravity = getGravity() & Gravity.VERTICAL_GRAVITY_MASK;
 			final int height = mButtonDrawable.getIntrinsicHeight();
 
 			int y = 0;
@@ -70,8 +66,7 @@ public class RadioButtonCenter extends RadioButton {
 
 			int buttonWidth = mButtonDrawable.getIntrinsicWidth();
 			int buttonLeft = (getWidth() - buttonWidth) / 2;
-			mButtonDrawable.setBounds(buttonLeft, y, buttonLeft + buttonWidth,
-					y + height);
+			mButtonDrawable.setBounds(buttonLeft, y, buttonLeft + buttonWidth, y + height);
 			mButtonDrawable.draw(canvas);
 		}
 	}

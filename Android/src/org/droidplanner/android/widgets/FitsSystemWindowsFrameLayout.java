@@ -18,8 +18,7 @@ public class FitsSystemWindowsFrameLayout extends FrameLayout {
 		super(context, attrs);
 	}
 
-	public FitsSystemWindowsFrameLayout(Context context, AttributeSet attrs,
-			int defStyle) {
+	public FitsSystemWindowsFrameLayout(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 	}
 

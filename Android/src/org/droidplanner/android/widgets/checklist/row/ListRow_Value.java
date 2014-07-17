@@ -11,13 +11,10 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 public class ListRow_Value extends ListRow implements OnFocusChangeListener {
-	@SuppressWarnings("unused")
-	private EditText editText;
 	private boolean lastFocusState;
 	private float lastValue;
 
-	public ListRow_Value(LayoutInflater inflater,
-			final CheckListItem checkListItem) {
+	public ListRow_Value(LayoutInflater inflater, final CheckListItem checkListItem) {
 		super(inflater, checkListItem);
 	}
 
@@ -26,8 +23,7 @@ public class ListRow_Value extends ListRow implements OnFocusChangeListener {
 		View view;
 
 		if (convertView == null) {
-			ViewGroup viewGroup = (ViewGroup) inflater.inflate(
-					R.layout.list_value_item, null);
+			ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.list_value_item, null);
 			holder = new ViewHolder(viewGroup, checkListItem);
 			viewGroup.setTag(holder);
 			view = viewGroup;
@@ -45,22 +41,20 @@ public class ListRow_Value extends ListRow implements OnFocusChangeListener {
 	}
 
 	@SuppressWarnings("unused")
-	private void updateDisplay(View view, ViewHolder holder,
-			CheckListItem mListItem) {
+	private void updateDisplay(View view, ViewHolder holder, CheckListItem mListItem) {
 		double minVal = mListItem.getMin_val();
 		double nomVal = mListItem.getNom_val();
 		double sysValue = mListItem.getSys_value();
 		String unit = mListItem.getUnit();
 		boolean failMandatory = sysValue <= minVal;
 
-		getData(mListItem);
+		getData();
 
-		editText = holder.editTextView;
+		EditText editText = holder.editTextView;
 		if (holder.editTextView.getText().toString() == null)
 			holder.editTextView.setText("0.0");
 		holder.editTextView.setOnFocusChangeListener(this);
-		holder.editTextView.setText(String.valueOf(checkListItem
-				.getFloatValue()));
+		holder.editTextView.setText(String.valueOf(checkListItem.getFloatValue()));
 
 		updateCheckBox(checkListItem.isMandatory() && !failMandatory);
 	}
@@ -78,13 +72,10 @@ public class ListRow_Value extends ListRow implements OnFocusChangeListener {
 		}
 
 		@Override
-		protected void setupViewItems(ViewGroup viewGroup,
-				CheckListItem checkListItem) {
-			this.editTextView = (EditText) viewGroup
-					.findViewById(R.id.lst_editText);
+		protected void setupViewItems(ViewGroup viewGroup, CheckListItem checkListItem) {
+			this.editTextView = (EditText) viewGroup.findViewById(R.id.lst_editText);
 			this.editTextView.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL
-					| InputType.TYPE_NUMBER_FLAG_SIGNED
-					| InputType.TYPE_CLASS_NUMBER);
+					| InputType.TYPE_NUMBER_FLAG_SIGNED | InputType.TYPE_CLASS_NUMBER);
 		}
 	}
 
@@ -108,13 +99,11 @@ public class ListRow_Value extends ListRow implements OnFocusChangeListener {
 
 			if (a != lastValue) {
 				lastValue = a;
-				this.checkListItem
-						.setValue(((EditText) v).getText().toString());
+				this.checkListItem.setValue(((EditText) v).getText().toString());
 			}
 
 			if (listener != null)
-				listener.onRowItemChanged(v, this.checkListItem,
-						this.checkListItem.isVerified());
+				listener.onRowItemChanged(this.checkListItem);
 		} else if (hasFocus) {
 			lastFocusState = !lastFocusState;
 		}

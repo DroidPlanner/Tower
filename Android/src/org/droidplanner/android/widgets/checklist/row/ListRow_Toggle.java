@@ -20,8 +20,7 @@ public class ListRow_Toggle extends ListRow implements OnCheckedChangeListener {
 	public View getView(View convertView) {
 		View view;
 		if (convertView == null) {
-			ViewGroup viewGroup = (ViewGroup) inflater.inflate(
-					R.layout.list_toggle_item, null);
+			ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.list_toggle_item, null);
 			holder = new ViewHolder(viewGroup, checkListItem);
 
 			viewGroup.setTag(holder);
@@ -31,15 +30,14 @@ public class ListRow_Toggle extends ListRow implements OnCheckedChangeListener {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		updateDisplay(view, (ViewHolder) holder, checkListItem);
+		updateDisplay((ViewHolder) holder);
 		return view;
 	}
 
-	private void updateDisplay(View view, ViewHolder holder,
-			CheckListItem mListItem) {
+	private void updateDisplay(ViewHolder holder) {
 		boolean failMandatory = false;
 
-		getData(mListItem);
+		getData();
 
 		failMandatory = !checkListItem.isSys_activated();
 
@@ -63,16 +61,14 @@ public class ListRow_Toggle extends ListRow implements OnCheckedChangeListener {
 		}
 
 		@Override
-		protected void setupViewItems(ViewGroup viewGroup,
-				CheckListItem checkListItem) {
-			this.toggleButton = (ToggleButton) viewGroup
-					.findViewById(R.id.lst_toggle);
+		protected void setupViewItems(ViewGroup viewGroup, CheckListItem checkListItem) {
+			this.toggleButton = (ToggleButton) viewGroup.findViewById(R.id.lst_toggle);
 		}
 	}
 
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		this.checkListItem.setSys_activated(isChecked);
-		updateRowChanged((buttonView), this.checkListItem);
+		updateRowChanged();
 	}
 }

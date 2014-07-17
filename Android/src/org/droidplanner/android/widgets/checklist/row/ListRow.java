@@ -10,8 +10,7 @@ import android.view.View.OnLongClickListener;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
-public class ListRow implements ListRow_Interface, OnClickListener,
-		OnLongClickListener {
+public class ListRow implements ListRow_Interface, OnClickListener, OnLongClickListener {
 	protected final CheckListItem checkListItem;
 	protected final LayoutInflater inflater;
 
@@ -30,18 +29,15 @@ public class ListRow implements ListRow_Interface, OnClickListener,
 		holder.checkBox.setOnClickListener(this);
 		holder.checkBox.setText(checkListItem.getTitle());
 		holder.checkBox.setChecked(mState);
-		holder.checkBox
-				.setClickable(checkListItem.getSys_tag() == null ? checkListItem
-						.isEditable() : !checkListItem.getSys_tag().contains(
-						"SYS"));
+		holder.checkBox.setClickable(checkListItem.getSys_tag() == null ? checkListItem
+				.isEditable() : !checkListItem.getSys_tag().contains("SYS"));
 
 		checkListItem.setVerified(mState);
 	}
 
-	public void updateRowChanged(View mView, CheckListItem mListItem) {
+	public void updateRowChanged() {
 		if (listener != null)
-			listener.onRowItemChanged(mView, this.checkListItem,
-					this.checkListItem.isVerified());
+			listener.onRowItemChanged(this.checkListItem);
 	}
 
 	public CheckListItem getCheckListItem() {
@@ -76,8 +72,7 @@ public class ListRow implements ListRow_Interface, OnClickListener,
 		} else if (sys_tag.equalsIgnoreCase("SYS_GPS3D_LVL")) {
 			mListItem.setSys_value(mDrone.GPS.getSatCount());
 		} else if (sys_tag.equalsIgnoreCase("SYS_DEF_ALT")) {
-			mListItem.setSys_value(mDrone.mission.getDefaultAlt()
-					.valueInMeters());
+			mListItem.setSys_value(mDrone.mission.getDefaultAlt().valueInMeters());
 		} else if (sys_tag.equalsIgnoreCase("SYS_ARM_STATE")) {
 			mListItem.setSys_activated(mDrone.state.isArmed());
 		} else if (sys_tag.equalsIgnoreCase("SYS_FAILSAFE_STATE")) {
@@ -87,23 +82,21 @@ public class ListRow implements ListRow_Interface, OnClickListener,
 		}
 	}
 
-	protected void getData(CheckListItem mListItem) {
+	protected void getData() {
 		if (this.listener != null)
-			this.listener.onRowItemGetData(checkListItem,
-					checkListItem.getSys_tag());
+			this.listener.onRowItemGetData(checkListItem, checkListItem.getSys_tag());
 	}
 
 	@Override
 	public void onClick(View v) {
 		this.checkListItem.setVerified(((CheckBox) v).isChecked());
-		updateRowChanged(v, this.checkListItem);
+		updateRowChanged();
 	}
 
 	@Override
 	public boolean onLongClick(View arg0) {
 		if (arg0.equals(this.holder.layoutView)) {
-			Toast.makeText(arg0.getContext(), checkListItem.getDesc(),
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(arg0.getContext(), checkListItem.getDesc(), Toast.LENGTH_SHORT).show();
 
 		}
 		return false;
