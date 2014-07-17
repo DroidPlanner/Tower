@@ -13,7 +13,7 @@ public class FollowCircle extends FollowAlgorithm {
 	/**
 	 * °/s
 	 */
-	private double circleStep = 20;
+	private double circleStep = 2;
 	private double circleAngle = 0.0;
 
 	public FollowCircle(Drone drone, Length radius, double rate) {

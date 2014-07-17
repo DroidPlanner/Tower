@@ -56,8 +56,44 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 		return prefs.getString("dshare_username", "").trim();
 	}
 
+	public void setDroneshareLogin(String b) {
+		prefs.edit().putString("dshare_username", b.trim()).apply();
+	}
+
+	public String getDroneshareEmail() {
+		return prefs.getString("dshare_email", "").trim();
+	}
+
+	public void setDroneshareEmail(String b) {
+		prefs.edit().putString("dshare_email", b.trim()).apply();
+	}
+
 	public String getDronesharePassword() {
 		return prefs.getString("dshare_password", "").trim();
+	}
+
+	public void setDronesharePassword(String b) {
+		prefs.edit().putString("dshare_password", b.trim()).apply();
+	}
+
+	public boolean getDroneshareEnabled() {
+		return prefs.getBoolean("dshare_enabled", true);
+	}
+
+	public void setDroneshareEnabled(boolean b) {
+		prefs.edit().putBoolean("dshare_enabled", b).apply();
+	}
+
+	/**
+	 * How many times has this application been started? (will increment for
+	 * each call)
+	 */
+	public int getNumberOfRuns() {
+		int r = prefs.getInt("num_runs", 0) + 1;
+
+		prefs.edit().putInt("num_runs", r).apply();
+
+		return r;
 	}
 
 	/**
