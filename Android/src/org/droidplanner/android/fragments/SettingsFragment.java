@@ -12,6 +12,7 @@ import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.ConfigurationActivity;
 import org.droidplanner.android.activities.helpers.MapPreferencesActivity;
+import org.droidplanner.android.communication.service.UploaderService;
 import org.droidplanner.android.maps.providers.DPMapProvider;
 import org.droidplanner.android.utils.file.DirectoryPath;
 import org.droidplanner.core.drone.Drone;
@@ -28,6 +29,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
@@ -193,57 +195,116 @@ public class SettingsFragment extends DpPreferenceFragment implements
 		}
 
 		updateMavlinkVersionPreference(null);
-
-		/*
-		 * Pebble Install Button. When clicked, will check for pebble if pebble
-		 * is not present, error displayed. If it is, the pbw (pebble bundle)
-		 * will be copied from assets to external memory (makes sure to
-		 * overwrite), and sends pbw intent for pebble app to install bundle.
-		 */
-		Preference pebblePreference = findPreference(getString(R.string.pref_pebble_install_key));
-		pebblePreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-			@Override
-			public boolean onPreferenceClick(Preference pref) {
-				if (PebbleKit.isWatchConnected(context.getApplicationContext())) {
-					InputStream in = null;
-					OutputStream out = null;
-					try {
-						in = context.getAssets().open("Pebble/DroidPlanner.pbw");
-						File outFile = new File(DirectoryPath.getDroidPlannerPath(),
-								"DroidPlanner.pbw");
-						out = new FileOutputStream(outFile);
-						byte[] buffer = new byte[1024];
-						int read;
-						while ((read = in.read(buffer)) != -1) {
-							out.write(buffer, 0, read);
-						}
-						in.close();
-						in = null;
-						out.flush();
-						out.close();
-						out = null;
-
-						Intent intent = new Intent(Intent.ACTION_VIEW);
-						intent.setData(Uri.fromFile(outFile));
-						intent.setClassName("com.getpebble.android",
-								"com.getpebble.android.ui.UpdateActivity");
-						startActivity(intent);
-					} catch (IOException e) {
-						Log.e("pebble", "Failed to copy pbw asset", e);
-						Toast.makeText(context, "Failed to copy pbw asset", Toast.LENGTH_SHORT)
-								.show();
-					} catch (ActivityNotFoundException e) {
-						Log.e("pebble", "Pebble App Not installed", e);
-						Toast.makeText(context, "Pebble App Not installed", Toast.LENGTH_SHORT)
-								.show();
-					}
-				} else {
-					Toast.makeText(context, "No Pebble Connected", Toast.LENGTH_SHORT).show();
-				}
-				return true;
-			}
-		});
+		setupPebblePreference();
+        setDronesharePreferencesListeners();
 	}
+
+    /**
+     * When a droneshare preference is updated, the listener will kick start the droneshare
+     * uploader service to see if any action is needed.
+     */
+    private void setDronesharePreferencesListeners() {
+        final Context context = getActivity().getApplicationContext();
+
+        CheckBoxPreference dshareTogglePref = (CheckBoxPreference) findPreference(getString(R
+                .string.pref_dshare_enabled_key));
+        if(dshareTogglePref != null){
+            dshareTogglePref.setOnPreferenceChangeListener(new Preference
+                    .OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    if((Boolean) newValue){
+                        context.startService(UploaderService.createIntent(context));
+                    }
+                    return true;
+                }
+            });
+        }
+
+        EditTextPreference dshareUsernamePref = (EditTextPreference) findPreference(getString(R
+                .string.pref_dshare_username_key));
+        if(dshareUsernamePref != null){
+            dshareUsernamePref.setOnPreferenceChangeListener(new Preference
+                    .OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    if(!newValue.toString().isEmpty()){
+                        context.startService(UploaderService.createIntent(context));
+                    }
+                    return true;
+                }
+            });
+        }
+
+        EditTextPreference dsharePasswordPref = (EditTextPreference) findPreference(getString(R
+                .string.pref_dshare_password_key));
+        if(dsharePasswordPref != null){
+            dsharePasswordPref.setOnPreferenceChangeListener(new Preference
+                    .OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    if(!newValue.toString().isEmpty()){
+                        context.startService(UploaderService.createIntent(context));
+                    }
+                    return true;
+                }
+            });
+        }
+    }
+
+    /**
+     * Pebble Install Button. When clicked, will check for pebble if pebble
+     * is not present, error displayed. If it is, the pbw (pebble bundle)
+     * will be copied from assets to external memory (makes sure to
+     * overwrite), and sends pbw intent for pebble app to install bundle.
+     */
+    private void setupPebblePreference(){
+        final Context context = getActivity().getApplicationContext();
+
+        Preference pebblePreference = findPreference(getString(R.string.pref_pebble_install_key));
+        pebblePreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference pref) {
+                if (PebbleKit.isWatchConnected(context)) {
+                    InputStream in = null;
+                    OutputStream out = null;
+                    try {
+                        in = context.getAssets().open("Pebble/DroidPlanner.pbw");
+                        File outFile = new File(DirectoryPath.getDroidPlannerPath(),
+                                "DroidPlanner.pbw");
+                        out = new FileOutputStream(outFile);
+                        byte[] buffer = new byte[1024];
+                        int read;
+                        while ((read = in.read(buffer)) != -1) {
+                            out.write(buffer, 0, read);
+                        }
+                        in.close();
+                        in = null;
+                        out.flush();
+                        out.close();
+                        out = null;
+
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri.fromFile(outFile));
+                        intent.setClassName("com.getpebble.android",
+                                "com.getpebble.android.ui.UpdateActivity");
+                        startActivity(intent);
+                    } catch (IOException e) {
+                        Log.e("pebble", "Failed to copy pbw asset", e);
+                        Toast.makeText(context, "Failed to copy pbw asset", Toast.LENGTH_SHORT)
+                                .show();
+                    } catch (ActivityNotFoundException e) {
+                        Log.e("pebble", "Pebble App Not installed", e);
+                        Toast.makeText(context, "Pebble App Not installed", Toast.LENGTH_SHORT)
+                                .show();
+                    }
+                } else {
+                    Toast.makeText(context, "No Pebble Connected", Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            }
+        });
+    }
 
 	private void initSummaryPerPrefs() {
 		mDefaultSummaryPrefs.clear();
