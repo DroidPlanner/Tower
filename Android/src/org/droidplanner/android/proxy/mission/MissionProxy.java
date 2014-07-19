@@ -117,8 +117,7 @@ public class MissionProxy implements DPMap.PathSource {
 	 */
 	public void removeItemList(List<MissionItemProxy> items) {
 
-		final List<MissionItem> toRemove = new ArrayList<MissionItem>(
-				items.size());
+		final List<MissionItem> toRemove = new ArrayList<MissionItem>(items.size());
 		for (MissionItemProxy item : items) {
 			toRemove.add(item.getMissionItem());
 		}
@@ -150,8 +149,7 @@ public class MissionProxy implements DPMap.PathSource {
 	 */
 	public void addWaypoints(List<Coord2D> points) {
 		final Altitude alt = mMission.getLastAltitude();
-		final List<MissionItem> missionItemsToAdd = new ArrayList<MissionItem>(
-				points.size());
+		final List<MissionItem> missionItemsToAdd = new ArrayList<MissionItem>(points.size());
 		for (Coord2D point : points) {
 			Waypoint waypoint = new Waypoint(mMission, new Coord3D(point, alt));
 			missionItemsToAdd.add(waypoint);
@@ -168,11 +166,9 @@ public class MissionProxy implements DPMap.PathSource {
 	 */
 	public void addSplineWaypoints(List<Coord2D> points) {
 		final Altitude alt = mMission.getLastAltitude();
-		final List<MissionItem> missionItemsToAdd = new ArrayList<MissionItem>(
-				points.size());
+		final List<MissionItem> missionItemsToAdd = new ArrayList<MissionItem>(points.size());
 		for (Coord2D point : points) {
-			SplineWaypoint splineWaypoint = new SplineWaypoint(mMission,
-					new Coord3D(point, alt));
+			SplineWaypoint splineWaypoint = new SplineWaypoint(mMission, new Coord3D(point, alt));
 			missionItemsToAdd.add(splineWaypoint);
 		}
 
@@ -195,8 +191,7 @@ public class MissionProxy implements DPMap.PathSource {
 	 */
 	public void addWaypoint(Coord2D point) {
 		final Altitude alt = mMission.getLastAltitude();
-		final Waypoint waypoint = new Waypoint(mMission,
-				new Coord3D(point, alt));
+		final Waypoint waypoint = new Waypoint(mMission, new Coord3D(point, alt));
 		addMissionItem(waypoint);
 	}
 
@@ -208,8 +203,7 @@ public class MissionProxy implements DPMap.PathSource {
 	 */
 	public void addSplineWaypoint(Coord2D point) {
 		final Altitude alt = mMission.getLastAltitude();
-		final SplineWaypoint splineWaypoint = new SplineWaypoint(mMission,
-				new Coord3D(point, alt));
+		final SplineWaypoint splineWaypoint = new SplineWaypoint(mMission, new Coord3D(point, alt));
 		addMissionItem(splineWaypoint);
 	}
 
@@ -320,14 +314,13 @@ public class MissionProxy implements DPMap.PathSource {
 													// item.
 	}
 
-	public Length getAltitudeDiffFromPreviousItem(
-			MissionItemProxy waypointRender) throws IllegalArgumentException {
+	public Length getAltitudeDiffFromPreviousItem(MissionItemProxy waypointRender)
+			throws IllegalArgumentException {
 		MissionItem waypoint = waypointRender.getMissionItem();
 		if (!(waypoint instanceof SpatialCoordItem))
 			throw new IllegalArgumentException("Invalid mission item type.");
 
-		return mMission
-				.getAltitudeDiffFromPreviousItem((SpatialCoordItem) waypoint);
+		return mMission.getAltitudeDiffFromPreviousItem((SpatialCoordItem) waypoint);
 	}
 
 	public Length getDistanceFromLastWaypoint(MissionItemProxy waypointRender)
@@ -336,8 +329,7 @@ public class MissionProxy implements DPMap.PathSource {
 		if (!(waypoint instanceof SpatialCoordItem))
 			throw new IllegalArgumentException("Invalid mission item type.");
 
-		return mMission
-				.getDistanceFromLastWaypoint((SpatialCoordItem) waypoint);
+		return mMission.getDistanceFromLastWaypoint((SpatialCoordItem) waypoint);
 	}
 
 	@Override
@@ -363,9 +355,8 @@ public class MissionProxy implements DPMap.PathSource {
 								.get(currentBucket.size() - 1);
 
 						// Store the previous item bucket.
-						bucketsList
-								.add(new Pair<Boolean, List<MissionItemProxy>>(
-										Boolean.FALSE, currentBucket));
+						bucketsList.add(new Pair<Boolean, List<MissionItemProxy>>(Boolean.FALSE,
+								currentBucket));
 
 						// Create a new bucket for this category and update
 						// 'isSpline'
@@ -388,9 +379,8 @@ public class MissionProxy implements DPMap.PathSource {
 						currentBucket.add(missionItemProxy);
 
 						// Store the previous item bucket.
-						bucketsList
-								.add(new Pair<Boolean, List<MissionItemProxy>>(
-										Boolean.TRUE, currentBucket));
+						bucketsList.add(new Pair<Boolean, List<MissionItemProxy>>(Boolean.TRUE,
+								currentBucket));
 
 						currentBucket = new ArrayList<MissionItemProxy>();
 					}
@@ -403,8 +393,7 @@ public class MissionProxy implements DPMap.PathSource {
 			}
 		}
 
-		bucketsList.add(new Pair<Boolean, List<MissionItemProxy>>(isSpline,
-				currentBucket));
+		bucketsList.add(new Pair<Boolean, List<MissionItemProxy>>(isSpline, currentBucket));
 
 		final List<Coord2D> pathPoints = new ArrayList<Coord2D>();
 		Coord2D lastPoint = null;
@@ -446,4 +435,20 @@ public class MissionProxy implements DPMap.PathSource {
 		mMission.notifyMissionUpdate();
 	}
 
+	public List<Coord2D> getVisibleCoords() {
+		final List<Coord2D> coords = new ArrayList<Coord2D>();
+
+		for (MissionItem item : mMission.getItems()) {
+			if (!(item instanceof SpatialCoordItem))
+				continue;
+
+			final Coord2D coordinate = ((SpatialCoordItem) item).getCoordinate();
+			if (coordinate.isEmpty())
+				continue;
+
+			coords.add(coordinate);
+		}
+
+		return coords;
+	}
 }

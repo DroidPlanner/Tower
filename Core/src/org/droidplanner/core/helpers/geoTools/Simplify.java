@@ -17,8 +17,8 @@ public class Simplify {
 
 		// Find the point with the maximum distance
 		for (int i = 1; i < lastIndex; i++) {
-			double d = PointTools.pointToLineDistance(list.get(0),
-					list.get(lastIndex), list.get(i));
+			double d = PointTools
+					.pointToLineDistance(list.get(0), list.get(lastIndex), list.get(i));
 			if (d > dmax) {
 				index = i;
 				dmax = d;
@@ -29,10 +29,8 @@ public class Simplify {
 		List<Coord2D> ResultList = new ArrayList<Coord2D>();
 		if (dmax > tolerance) {
 			// Recursive call
-			List<Coord2D> recResults1 = simplify(list.subList(0, index + 1),
-					tolerance);
-			List<Coord2D> recResults2 = simplify(
-					list.subList(index, lastIndex + 1), tolerance);
+			List<Coord2D> recResults1 = simplify(list.subList(0, index + 1), tolerance);
+			List<Coord2D> recResults2 = simplify(list.subList(index, lastIndex + 1), tolerance);
 
 			// Build the result list
 			recResults1.remove(recResults1.size() - 1);

@@ -24,8 +24,7 @@ import android.view.View;
  * <b>Note:</b> The parent activity must add instantiations of this class to the
  * list of DroneEvent listeners.
  */
-public class InfoBarActionProvider extends ActionProvider implements
-		OnDroneListener {
+public class InfoBarActionProvider extends ActionProvider implements OnDroneListener {
 
 	/**
 	 * Application context.

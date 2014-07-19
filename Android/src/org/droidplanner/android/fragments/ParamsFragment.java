@@ -38,8 +38,7 @@ public class ParamsFragment extends ListFragment implements
 
 	static final String TAG = ParamsFragment.class.getSimpleName();
 
-	public static final String ADAPTER_ITEMS = ParamsFragment.class.getName()
-			+ ".adapter.items";
+	public static final String ADAPTER_ITEMS = ParamsFragment.class.getName() + ".adapter.items";
 
 	private ProgressDialog progressDialog;
 
@@ -56,8 +55,7 @@ public class ParamsFragment extends ListFragment implements
 			@SuppressWarnings("unchecked")
 			final ArrayList<ParamsAdapterItem> pwms = (ArrayList<ParamsAdapterItem>) savedInstanceState
 					.getSerializable(ADAPTER_ITEMS);
-			adapter = new ParamsAdapter(getActivity(), R.layout.row_params,
-					pwms);
+			adapter = new ParamsAdapter(getActivity(), R.layout.row_params, pwms);
 
 		} else {
 			// empty adapter
@@ -75,20 +73,17 @@ public class ParamsFragment extends ListFragment implements
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// bind & initialize UI
-		final View view = inflater.inflate(R.layout.fragment_params, container,
-				false);
+		final View view = inflater.inflate(R.layout.fragment_params, container, false);
 
 		// listen for clicks on empty
-		view.findViewById(android.R.id.empty).setOnClickListener(
-				new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						refreshParameters();
-					}
-				});
+		view.findViewById(android.R.id.empty).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				refreshParameters();
+			}
+		});
 
 		setHasOptionsMenu(true);
 		return view;
@@ -174,8 +169,7 @@ public class ParamsFragment extends ListFragment implements
 		if (drone.MavClient.isConnected()) {
 			drone.parameters.getAllParameters();
 		} else {
-			Toast.makeText(getActivity(), R.string.msg_connect_first,
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(getActivity(), R.string.msg_connect_first, Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -193,12 +187,8 @@ public class ParamsFragment extends ListFragment implements
 		}
 		if (written > 0)
 			adapter.notifyDataSetChanged();
-		Toast.makeText(
-				getActivity(),
-				written
-						+ " "
-						+ getResources().getString(
-								R.string.msg_parameters_written_to_drone),
+		Toast.makeText(getActivity(),
+				written + " " + getResources().getString(R.string.msg_parameters_written_to_drone),
 				Toast.LENGTH_SHORT).show();
 	}
 
@@ -227,8 +217,7 @@ public class ParamsFragment extends ListFragment implements
 		if (parameters.size() > 0) {
 			ParameterWriter parameterWriter = new ParameterWriter(parameters);
 			if (parameterWriter.saveParametersToFile()) {
-				Toast.makeText(getActivity(), R.string.parameters_saved,
-						Toast.LENGTH_SHORT).show();
+				Toast.makeText(getActivity(), R.string.parameters_saved, Toast.LENGTH_SHORT).show();
 			}
 		}
 	}
@@ -267,8 +256,7 @@ public class ParamsFragment extends ListFragment implements
 	@Override
 	public void onEndReceivingParameters(List<Parameter> parameters) {
 		if (mReceived < mTotal) {
-			Log.w(TAG, "Total of " + mTotal + " params, but only got "
-					+ mReceived);
+			Log.w(TAG, "Total of " + mTotal + " params, but only got " + mReceived);
 		}
 
 		Collections.sort(parameters, new Comparator<Parameter>() {

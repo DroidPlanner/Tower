@@ -25,8 +25,7 @@ public class CheckListSysLink {
 		} else if (mSysTag.equalsIgnoreCase("SYS_GPS3D_LVL")) {
 			mListItem.setSys_value(drone.GPS.getSatCount());
 		} else if (mSysTag.equalsIgnoreCase("SYS_DEF_ALT")) {
-			mListItem.setSys_value(drone.mission.getDefaultAlt()
-					.valueInMeters());
+			mListItem.setSys_value(drone.mission.getDefaultAlt().valueInMeters());
 		} else if (mSysTag.equalsIgnoreCase("SYS_ARM_STATE")) {
 			mListItem.setSys_activated(drone.state.isArmed());
 		} else if (mSysTag.equalsIgnoreCase("SYS_FAILSAFE_STATE")) {
@@ -42,10 +41,10 @@ public class CheckListSysLink {
 			return;
 
 		if (checkListItem.getSys_tag().equalsIgnoreCase("SYS_CONNECTION_STATE")) {
-			doSysConnect(checkListItem, checkListItem.isSys_activated());
+			doSysConnect(checkListItem);
 
 		} else if (checkListItem.getSys_tag().equalsIgnoreCase("SYS_ARM_STATE")) {
-			doSysArm(checkListItem, checkListItem.isSys_activated());
+			doSysArm(checkListItem);
 
 		} else if (checkListItem.getSys_tag().equalsIgnoreCase("SYS_DEF_ALT")) {
 			doDefAlt(checkListItem);
@@ -54,11 +53,10 @@ public class CheckListSysLink {
 	}
 
 	private void doDefAlt(CheckListItem checkListItem) {
-		drone.mission
-				.setDefaultAlt(new Altitude(checkListItem.getFloatValue()));
+		drone.mission.setDefaultAlt(new Altitude(checkListItem.getFloatValue()));
 	}
 
-	private void doSysArm(CheckListItem checkListItem, boolean arm) {
+	private void doSysArm(CheckListItem checkListItem) {
 		if (drone.MavClient.isConnected()) {
 			if (checkListItem.isSys_activated() && !drone.state.isArmed()) {
 				drone.events.notifyDroneEvent(DroneEventsType.ARMING_STARTED);
@@ -69,7 +67,7 @@ public class CheckListSysLink {
 		}
 	}
 
-	private void doSysConnect(CheckListItem checkListItem, boolean connect) {
+	private void doSysConnect(CheckListItem checkListItem) {
 		boolean activated = checkListItem.isSys_activated();
 		boolean connected = drone.MavClient.isConnected();
 		if (activated != connected) {

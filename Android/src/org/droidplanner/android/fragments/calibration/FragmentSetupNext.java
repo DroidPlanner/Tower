@@ -14,16 +14,14 @@ import android.widget.TextView;
 public class FragmentSetupNext extends SetupSidePanel {
 
 	private int titleId = 0, descId = 0;
-	private TextView textTitle, textDesc;;
+	private TextView textTitle, textDesc;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 		final SetupRadioFragment setupFragment = (SetupRadioFragment) getParentFragment();
 
-		final View view = inflater.inflate(R.layout.fragment_setup_panel_next,
-				container, false);
+		final View view = inflater.inflate(R.layout.fragment_setup_panel_next, container, false);
 
 		textTitle = (TextView) view.findViewById(R.id.setupTitle);
 		textDesc = (TextView) view.findViewById(R.id.setupDesc);

@@ -36,9 +36,6 @@ public class JoystickView extends View {
 	private int pointerId = INVALID_POINTER_ID;
 	private float touchX, touchY;
 
-	// Cartesian coordinates of last touch point - joystick center is (0,0)
-	private double cartX, cartY;
-
 	// User coordinates of last touch point
 	private double userX, userY;
 	private double userXold, userYold;
@@ -113,10 +110,8 @@ public class JoystickView extends View {
 
 		// Draw the handle
 		if (handleVisible) {
-			canvas.drawCircle(firstTouchX, firstTouchY, movementRadius,
-					bgHandlePaint);
-			canvas.drawCircle(firstTouchX, firstTouchY, handleRadius,
-					handlePaint);
+			canvas.drawCircle(firstTouchX, firstTouchY, movementRadius, bgHandlePaint);
+			canvas.drawCircle(firstTouchX, firstTouchY, handleRadius, handlePaint);
 		}
 		canvas.restore();
 	}
@@ -230,8 +225,7 @@ public class JoystickView extends View {
 	}
 
 	private boolean hasEnteredHapticFeedbackZone(double value, double oldValue) {
-		return isInHapticFeedbackZone(value)
-				& (!isInHapticFeedbackZone(oldValue));
+		return isInHapticFeedbackZone(value) & (!isInHapticFeedbackZone(oldValue));
 	}
 
 	private boolean isInHapticFeedbackZone(double value) {
@@ -240,8 +234,8 @@ public class JoystickView extends View {
 
 	private void calcUserCoordinates() {
 		// First convert to cartesian coordinates
-		cartX = (touchX / movementRadius);
-		cartY = (touchY / movementRadius);
+		double cartX = (touchX / movementRadius);
+		double cartY = (touchY / movementRadius);
 
 		// Invert axis if requested
 		if (!xAxisInverted)

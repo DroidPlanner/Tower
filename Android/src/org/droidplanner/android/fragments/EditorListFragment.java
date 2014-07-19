@@ -27,11 +27,10 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ImageButton;
-import android.widget.ListView;
 
-public class EditorListFragment extends Fragment implements
-		OnItemLongClickListener, OnItemClickListener, OnDroneListener,
-		OnClickListener, MissionSelection.OnSelectionUpdateListener {
+public class EditorListFragment extends Fragment implements OnItemLongClickListener,
+		OnItemClickListener, OnDroneListener, OnClickListener,
+		MissionSelection.OnSelectionUpdateListener {
 
 	private HListView list;
 	private MissionProxy missionProxy;
@@ -42,16 +41,13 @@ public class EditorListFragment extends Fragment implements
 	private Drone drone;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_editor_list, container,
-				false);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.fragment_editor_list, container, false);
 
 		DroidPlannerApp app = ((DroidPlannerApp) getActivity().getApplication());
 		drone = app.getDrone();
 		missionProxy = app.missionProxy;
-		adapter = new MissionItemProxyView(getActivity(),
-				missionProxy.getItems());
+		adapter = new MissionItemProxyView(getActivity(), missionProxy.getItems());
 
 		list = (HListView) view.findViewById(R.id.mission_item_list);
 		list.setOnItemClickListener(this);
@@ -112,18 +108,14 @@ public class EditorListFragment extends Fragment implements
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> adapter, View view, int position,
-			long id) {
-		MissionItemProxy missionItem = (MissionItemProxy) adapter
-				.getItemAtPosition(position);
+	public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
+		MissionItemProxy missionItem = (MissionItemProxy) adapter.getItemAtPosition(position);
 		editorListener.onItemClick(missionItem);
 	}
 
 	@Override
-	public boolean onItemLongClick(AdapterView<?> adapter, View view,
-			int position, long id) {
-		MissionItemProxy missionItem = (MissionItemProxy) adapter
-				.getItemAtPosition(position);
+	public boolean onItemLongClick(AdapterView<?> adapter, View view, int position, long id) {
+		MissionItemProxy missionItem = (MissionItemProxy) adapter.getItemAtPosition(position);
 		return editorListener.onItemLongClick(missionItem);
 	}
 

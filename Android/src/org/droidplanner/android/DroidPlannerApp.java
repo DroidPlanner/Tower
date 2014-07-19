@@ -30,6 +30,7 @@ import com.MAVLink.Messages.MAVLinkMessage;
 public class DroidPlannerApp extends ErrorReportApp implements
 		MAVLinkStreams.MavlinkInputStream, DroneInterfaces.OnDroneListener, IWeatherDataProvider.AsyncListener {
 
+
 	private Drone drone;
 	public Follow followMe;
 	public MissionProxy missionProxy;
@@ -74,10 +75,9 @@ public class DroidPlannerApp extends ErrorReportApp implements
 		getDrone().events.addDroneListener(this);
 
 		missionProxy = new MissionProxy(getDrone().mission);
-		mavLinkMsgHandler = new org.droidplanner.core.MAVLink.MavLinkMsgHandler(
-				getDrone());
+		mavLinkMsgHandler = new org.droidplanner.core.MAVLink.MavLinkMsgHandler(getDrone());
 
-		followMe = new Follow(this, getDrone());
+		followMe = new Follow(this, getDrone(), handler);
 		NetworkStateReceiver.register(context);
 		
 		weatherProvider = new WeatherDataProvider(this);

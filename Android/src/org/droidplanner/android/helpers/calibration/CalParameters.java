@@ -16,12 +16,11 @@ public class CalParameters {
 	private int uploadIndex = 0;
 
 	public interface OnCalibrationEvent {
-		public void onReadCalibration(CalParameters calParameters);
+		public void onReadCalibration();
 
-		public void onSentCalibration(CalParameters calParameters);
+		public void onSentCalibration();
 
-		public void onCalibrationData(CalParameters calParameters, int index,
-				int count, boolean isSending);
+		public void onCalibrationData(int index, int count, boolean isSending);
 	}
 
 	public CalParameters(Drone myDrone) {
@@ -49,8 +48,7 @@ public class CalParameters {
 	private void compareCalibrationParameter(Parameter param) {
 		Parameter paramRef = calParameterItems.get(uploadIndex);
 
-		if (paramRef.name.equalsIgnoreCase(param.name)
-				&& paramRef.value == param.value) {
+		if (paramRef.name.equalsIgnoreCase(param.name) && paramRef.value == param.value) {
 			uploadIndex++;
 		}
 		sendCalibrationParameters();
@@ -66,7 +64,7 @@ public class CalParameters {
 	private void readCalibrationParameter(int seq) {
 		if (seq >= calParameterNames.size()) {
 			if (this.listener != null)
-				this.listener.onReadCalibration(this);
+				this.listener.onReadCalibration();
 			return;
 		}
 
@@ -74,8 +72,7 @@ public class CalParameters {
 			myDrone.parameters.ReadParameter(calParameterNames.get(seq));
 
 		if (this.listener != null) {
-			this.listener.onCalibrationData(this, seq,
-					calParameterNames.size(), isUpdating);
+			this.listener.onCalibrationData(seq, calParameterNames.size(), isUpdating);
 		}
 	}
 
@@ -83,18 +80,16 @@ public class CalParameters {
 		isUpdating = true;
 		if (calParameterItems.size() > 0 && uploadIndex < paramCount) {
 			if (this.listener != null) {
-				this.listener.onCalibrationData(this, uploadIndex, paramCount,
-						isUpdating);
+				this.listener.onCalibrationData(uploadIndex, paramCount, isUpdating);
 			}
 			if (myDrone != null) {
-				myDrone.parameters.sendParameter(calParameterItems
-						.get(uploadIndex));
+				myDrone.parameters.sendParameter(calParameterItems.get(uploadIndex));
 			}
 		} else {
 			isUpdating = false;
 			uploadIndex = 0;
 			if (this.listener != null) {
-				this.listener.onSentCalibration(this);
+				this.listener.onSentCalibration();
 			}
 		}
 	}

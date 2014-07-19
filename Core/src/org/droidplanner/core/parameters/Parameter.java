@@ -11,8 +11,7 @@ public class Parameter implements Serializable {
 	public double value;
 	public int type;
 
-	private final static DecimalFormat format = (DecimalFormat) DecimalFormat
-			.getInstance();
+	private final static DecimalFormat format = (DecimalFormat) DecimalFormat.getInstance();
 	static {
 		format.applyPattern("0.###");
 	}
@@ -63,8 +62,7 @@ public class Parameter implements Serializable {
 		} else if (name.contains("FORMAT_VERSION")) {
 			throw new Exception("ExludedName");
 		} else {
-			return;
-		}
+        }
 	}
 
 	public static DecimalFormat getFormat() {

@@ -77,7 +77,6 @@ public class SetupRadioFragment extends SuperSetupFragment {
 	}
 
 	public void setupDataStreamingForRcSetup() {
-		MavLinkStreamRates.setupStreamRates(drone.MavClient, 1, 0, 1, 1, 1,
-				RC_MSG_RATE, 0, 0);
+		MavLinkStreamRates.setupStreamRates(drone.MavClient, 1, 0, 1, 1, 1, RC_MSG_RATE, 0, 0);
 	}
 }

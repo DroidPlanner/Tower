@@ -29,8 +29,7 @@ public class DroneshareClient extends GCSHookImpl {
 				loginUser(login, password);
 
 			int sysId = 1;
-			setVehicleId("550e8400-e29b-41d4-a716-446655440000", interfaceNum,
-					sysId, false);
+			setVehicleId("550e8400-e29b-41d4-a716-446655440000", interfaceNum, sysId, false);
 
 			startMission(false, UUID.randomUUID());
 		} catch (Exception ex) {

@@ -10,8 +10,7 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
-public class SeekBarWithText extends LinearLayout implements
-		OnSeekBarChangeListener {
+public class SeekBarWithText extends LinearLayout implements OnSeekBarChangeListener {
 
 	public interface OnTextSeekBarChangedListener {
 		public void onSeekBarChanged();
@@ -36,7 +35,7 @@ public class SeekBarWithText extends LinearLayout implements
 
 	public SeekBarWithText(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		createViews(context, attrs, defStyle);
+		createViews(context, attrs);
 	}
 
 	private void setFormat(String string) {
@@ -46,7 +45,7 @@ public class SeekBarWithText extends LinearLayout implements
 		}
 	}
 
-	private void createViews(Context context, AttributeSet attrs, int defStyle) {
+	private void createViews(Context context, AttributeSet attrs) {
 		TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
 				R.styleable.SeekBarWithText, 0, 0);
 
@@ -56,7 +55,8 @@ public class SeekBarWithText extends LinearLayout implements
 			setOrientation(VERTICAL);
 			textView = new TextView(context);
 			seekBar = new SeekBar(context);
-			seekBar.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+			seekBar.setLayoutParams(new LayoutParams(
+					android.view.ViewGroup.LayoutParams.MATCH_PARENT,
 					android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 			seekBar.setOnSeekBarChangeListener(this);
 			addView(textView);
@@ -94,8 +94,7 @@ public class SeekBarWithText extends LinearLayout implements
 	}
 
 	private void updateTitle() {
-		textView.setText(String.format("%s\t" + formatString + " %s", title,
-				getValue(), unit));
+		textView.setText(String.format("%s\t" + formatString + " %s", title, getValue(), unit));
 	}
 
 	public double getValue() {
@@ -113,8 +112,7 @@ public class SeekBarWithText extends LinearLayout implements
 	}
 
 	@Override
-	public void onProgressChanged(SeekBar seekBar, int progress,
-			boolean fromUser) {
+	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 		updateTitle();
 	}
 

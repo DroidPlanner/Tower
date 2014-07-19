@@ -10,8 +10,7 @@ import android.widget.TextView;
 
 public class AdapterMissionItems extends ArrayAdapter<MissionItemType> {
 
-	public AdapterMissionItems(Context context, int resource,
-			MissionItemType[] objects) {
+	public AdapterMissionItems(Context context, int resource, MissionItemType[] objects) {
 		super(context, resource, objects);
 	}
 

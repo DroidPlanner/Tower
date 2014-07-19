@@ -17,7 +17,6 @@ public class MissionCircleFragment extends MissionDetailFragment implements
 
 	private SeekBarWithText altitudeSeekBar;
 	private SeekBarWithText loiterTurnSeekBar;
-	private SeekBarWithText loiterRadiusSeekBar;
 	private CheckBox loiterCCW;
 	private CheckBox checkBoxAdvanced;
 	private SeekBarWithText altitudeStepSeekBar;
@@ -31,8 +30,7 @@ public class MissionCircleFragment extends MissionDetailFragment implements
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		typeSpinner.setSelection(commandAdapter
-				.getPosition(MissionItemType.CIRCLE));
+		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.CIRCLE));
 
 		Circle item = (Circle) this.itemRender.getMissionItem();
 
@@ -43,28 +41,23 @@ public class MissionCircleFragment extends MissionDetailFragment implements
 		checkBoxAdvanced = (CheckBox) view.findViewById(R.id.checkBoxAdvanced);
 		checkBoxAdvanced.setOnCheckedChangeListener(this);
 
-		altitudeStepSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.altitudeStep);
+		altitudeStepSeekBar = (SeekBarWithText) view.findViewById(R.id.altitudeStep);
 		altitudeStepSeekBar.setValue(item.getAltitudeStep());
 		altitudeStepSeekBar.setOnChangedListener(this);
 
-		numberStepSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.numberSteps);
+		numberStepSeekBar = (SeekBarWithText) view.findViewById(R.id.numberSteps);
 		numberStepSeekBar.setOnChangedListener(this);
 		numberStepSeekBar.setValue(item.getNumberOfSteps());
 
-		altitudeSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.altitudeView);
-		altitudeSeekBar.setValue(item.getCoordinate().getAltitude()
-				.valueInMeters());
+		altitudeSeekBar = (SeekBarWithText) view.findViewById(R.id.altitudeView);
+		altitudeSeekBar.setValue(item.getCoordinate().getAltitude().valueInMeters());
 		altitudeSeekBar.setOnChangedListener(this);
 
-		loiterTurnSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.loiterTurn);
+		loiterTurnSeekBar = (SeekBarWithText) view.findViewById(R.id.loiterTurn);
 		loiterTurnSeekBar.setOnChangedListener(this);
 		loiterTurnSeekBar.setValue(item.getNumeberOfTurns());
 
-		loiterRadiusSeekBar = (SeekBarWithText) view
+		SeekBarWithText loiterRadiusSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.loiterRadius);
 		// loiterRadiusSeekBar.setAbsValue(item.getRadius());
 		loiterRadiusSeekBar.setOnChangedListener(this);
@@ -89,8 +82,7 @@ public class MissionCircleFragment extends MissionDetailFragment implements
 		// item.setYawAngle(yawSeekBar.getValue());
 
 		if (checkBoxAdvanced.isChecked()) {
-			item.setMultiCircle((int) numberStepSeekBar.getValue(),
-					altitudeStepSeekBar.getValue());
+			item.setMultiCircle((int) numberStepSeekBar.getValue(), altitudeStepSeekBar.getValue());
 		} else {
 			item.setSingleCircle();
 		}

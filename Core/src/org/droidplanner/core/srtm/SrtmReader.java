@@ -8,8 +8,7 @@ import org.droidplanner.core.srtm.Srtm.OnProgressListner;
 
 import android.os.AsyncTask;
 
-public class SrtmReader extends AsyncTask<Integer, String, Integer> implements
-		OnProgressListner {
+public class SrtmReader extends AsyncTask<Integer, String, Integer> implements OnProgressListner {
 	public interface OnSrtmReaderListner {
 		public void updateSrtmReaderProgress(String values);
 
@@ -21,8 +20,7 @@ public class SrtmReader extends AsyncTask<Integer, String, Integer> implements
 	private List<Coord2D> path;
 	private String srtmPath;
 
-	public SrtmReader(List<Coord2D> path, OnSrtmReaderListner listner,
-			String directoryPath) {
+	public SrtmReader(List<Coord2D> path, OnSrtmReaderListner listner, String directoryPath) {
 		super();
 		this.listner = listner;
 		this.path = path;
@@ -42,8 +40,7 @@ public class SrtmReader extends AsyncTask<Integer, String, Integer> implements
 	@Override
 	public void onProgress(String filename, int percentage) {
 		if (percentage >= 0) {
-			publishProgress("Downloading " + filename + " - " + percentage
-					+ "%");
+			publishProgress("Downloading " + filename + " - " + percentage + "%");
 		} else {
 			publishProgress("Downloading " + filename);
 		}

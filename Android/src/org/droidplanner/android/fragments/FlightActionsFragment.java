@@ -31,13 +31,10 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 	private Follow followMe;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_mission_control,
-				container, false);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.fragment_mission_control, container, false);
 
-		DroidPlannerApp droidPlannerApp = (DroidPlannerApp) getActivity()
-				.getApplication();
+		DroidPlannerApp droidPlannerApp = (DroidPlannerApp) getActivity().getApplication();
 		drone = droidPlannerApp.getDrone();
 		followMe = droidPlannerApp.followMe;
 		return view;
@@ -47,12 +44,10 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
-		final Button missionBtn = (Button) view
-				.findViewById(R.id.mc_planningBtn);
+		final Button missionBtn = (Button) view.findViewById(R.id.mc_planningBtn);
 		missionBtn.setOnClickListener(this);
 
-		final Button joystickBtn = (Button) view
-				.findViewById(R.id.mc_joystickBtn);
+		final Button joystickBtn = (Button) view.findViewById(R.id.mc_joystickBtn);
 		joystickBtn.setOnClickListener(this);
 
 		final Button homeBtn = (Button) view.findViewById(R.id.mc_homeBtn);
@@ -80,8 +75,7 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
-				.setCategory(GAUtils.Category.FLIGHT_DATA_ACTION_BUTTON
-						.toString());
+				.setCategory(GAUtils.Category.FLIGHT_DATA_ACTION_BUTTON.toString());
 
 		switch (v.getId()) {
 		case R.id.mc_planningBtn:
@@ -98,8 +92,7 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 
 		case R.id.mc_land:
 			drone.state.changeFlightMode(ApmModes.ROTOR_LAND);
-			eventBuilder.setAction("Changed flight mode").setLabel(
-					ApmModes.ROTOR_LAND.getName());
+			eventBuilder.setAction("Changed flight mode").setLabel(ApmModes.ROTOR_LAND.getName());
 			break;
 
 		case R.id.mc_takeoff:
@@ -111,21 +104,18 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 
 		case R.id.mc_homeBtn:
 			drone.state.changeFlightMode(ApmModes.ROTOR_RTL);
-			eventBuilder.setAction("Changed flight mode").setLabel(
-					ApmModes.ROTOR_RTL.getName());
+			eventBuilder.setAction("Changed flight mode").setLabel(ApmModes.ROTOR_RTL.getName());
 			break;
 
 		case R.id.mc_loiter:
 			drone.state.changeFlightMode(ApmModes.ROTOR_LOITER);
-			eventBuilder.setAction("Changed flight mode").setLabel(
-					ApmModes.ROTOR_LOITER.getName());
+			eventBuilder.setAction("Changed flight mode").setLabel(ApmModes.ROTOR_LOITER.getName());
 			break;
 
 		case R.id.mc_follow:
 			followMe.toggleFollowMeState();
 			eventBuilder.setAction("FollowMe selected").setLabel(
-					followMe.isEnabled() ? "FollowMe enabled"
-							: "FollowMe disabled");
+					followMe.isEnabled() ? "FollowMe enabled" : "FollowMe disabled");
 			break;
 
 		default:

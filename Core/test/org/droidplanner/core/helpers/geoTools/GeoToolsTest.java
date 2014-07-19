@@ -14,16 +14,13 @@ public class GeoToolsTest extends TestCase {
 
 	public void testGetDistance() {
 		double tolerance = distP1toP2 * 0.0005;
-		assertEquals(distP1toP2, GeoTools.getDistance(p1, p2).valueInMeters(),
-				tolerance);
-		assertEquals(distP1toP2, GeoTools.getDistance(p2, p1).valueInMeters(),
-				tolerance);
+		assertEquals(distP1toP2, GeoTools.getDistance(p1, p2).valueInMeters(), tolerance);
+		assertEquals(distP1toP2, GeoTools.getDistance(p2, p1).valueInMeters(), tolerance);
 	}
 
 	public void testGetHeadingFromCoordinates() {
 		double tolerance = headingP1toP2 * 0.0005;
-		assertEquals(headingP1toP2, GeoTools.getHeadingFromCoordinates(p1, p2),
-				tolerance);
+		assertEquals(headingP1toP2, GeoTools.getHeadingFromCoordinates(p1, p2), tolerance);
 	}
 
 	public void testGetArea() {

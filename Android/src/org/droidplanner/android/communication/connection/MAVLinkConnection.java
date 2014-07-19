@@ -26,8 +26,7 @@ public abstract class MAVLinkConnection extends Thread {
 
 	private static final String TAG = MAVLinkConnection.class.getSimpleName();
 
-	protected abstract void openConnection() throws UnknownHostException,
-			IOException;
+	protected abstract void openConnection() throws IOException;
 
 	protected abstract void readDataBlock() throws IOException;
 
@@ -91,8 +90,7 @@ public abstract class MAVLinkConnection extends Thread {
 
 			String login = prefs.getDroneshareLogin();
 			String password = prefs.getDronesharePassword();
-			if (prefs.getLiveUploadEnabled() && !login.isEmpty()
-					&& !password.isEmpty()) {
+			if (prefs.getLiveUploadEnabled() && !login.isEmpty() && !password.isEmpty()) {
 				Log.i(TAG, "Starting live upload");
 				uploader = new DroneshareClient();
 				uploader.connect(login, password);
@@ -123,8 +121,7 @@ public abstract class MAVLinkConnection extends Thread {
 					FileStream.commitFile(logFile);
 
 					// See if we can at least do a delayed upload
-					parentContext.startService(UploaderService
-							.createIntent(parentContext));
+					parentContext.startService(UploaderService.createIntent(parentContext));
 				}
 
 				if (uploader != null)

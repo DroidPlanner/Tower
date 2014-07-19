@@ -31,8 +31,8 @@ public class FragmentSetupRC extends SuperSetupMainPanel {
 	 */
 	private static final int RC_MAX = 2100;
 
-	private static final String[] RCStr = { "CH 1 ", "CH 2 ", "CH 3 ", "CH 4 ",
-			"CH 5", "CH 6", "CH 7", "CH 8" };
+	private static final String[] RCStr = { "CH 1 ", "CH 2 ", "CH 3 ", "CH 4 ", "CH 5", "CH 6",
+			"CH 7", "CH 8" };
 
 	private int calibrationStep = 0;
 
@@ -43,7 +43,7 @@ public class FragmentSetupRC extends SuperSetupMainPanel {
 	private FillBar bar5;
 	private FillBar bar6;
 	private FillBar bar7;
-	private FillBar bar8;;
+	private FillBar bar8;
 	private TextView roll_pitch_text;
 	private TextView thr_yaw_text;
 	private TextView ch_5_text;
@@ -96,7 +96,7 @@ public class FragmentSetupRC extends SuperSetupMainPanel {
 	}
 
 	@Override
-	public void onReadCalibration(CalParameters calParameters) {
+	public void onReadCalibration() {
 		doCalibrationStep(0);// show progress sidepanel
 	}
 
@@ -151,8 +151,7 @@ public class FragmentSetupRC extends SuperSetupMainPanel {
 	private SetupSidePanel getCompletedPanel() {
 		calibrationStep = 0;
 		Bundle args = new Bundle();
-		args.putString(FragmentSetupSummary.EXTRA_TEXT_SUMMARY,
-				getCalibrationStr());
+		args.putString(FragmentSetupSummary.EXTRA_TEXT_SUMMARY, getCalibrationStr());
 		sidePanel = ((SetupRadioFragment) getParentFragment())
 				.changeSidePanel(new FragmentSetupSummary());
 		if (sidePanel != null) {
@@ -166,8 +165,7 @@ public class FragmentSetupRC extends SuperSetupMainPanel {
 
 		switch (calibrationStep) {
 		case 0:
-			if (!parameters.isParameterDownloaded()
-					&& drone.MavClient.isConnected()) {
+			if (!parameters.isParameterDownloaded() && drone.MavClient.isConnected()) {
 				getProgressPanel(true);
 				parameters.getCalibrationParameters(drone);
 				return sidePanel;
@@ -190,11 +188,10 @@ public class FragmentSetupRC extends SuperSetupMainPanel {
 		sidePanel.updateTitle(textId);
 		sidePanel.updateDescription(descId);
 
-		return ((SetupRadioFragment) getParentFragment())
-				.changeSidePanel(sidePanel);
+		return ((SetupRadioFragment) getParentFragment()).changeSidePanel(sidePanel);
 	}
 
-	private SetupSidePanel getProgressPanel(boolean isSending) {
+	private void getProgressPanel(boolean isSending) {
 		sidePanel = new FragmentSetupProgress();
 		if (isSending) {
 			sidePanel.updateTitle(R.string.progress_title_uploading);
@@ -203,9 +200,6 @@ public class FragmentSetupRC extends SuperSetupMainPanel {
 			sidePanel.updateTitle(R.string.progress_title_downloading);
 			sidePanel.updateDescription(R.string.progress_desc_downloading);
 		}
-
-		return ((SetupRadioFragment) getParentFragment())
-				.changeSidePanel(sidePanel);
 	}
 
 	@Override
@@ -220,10 +214,10 @@ public class FragmentSetupRC extends SuperSetupMainPanel {
 		bar7.setValue(data[6]);
 		bar8.setValue(data[7]);
 
-		roll_pitch_text.setText("Roll: " + Integer.toString(data[0])
-				+ "\nPitch: " + Integer.toString(data[1]));
-		thr_yaw_text.setText("Throttle: " + Integer.toString(data[2])
-				+ "\nYaw: " + Integer.toString(data[3]));
+		roll_pitch_text.setText("Roll: " + Integer.toString(data[0]) + "\nPitch: "
+				+ Integer.toString(data[1]));
+		thr_yaw_text.setText("Throttle: " + Integer.toString(data[2]) + "\nYaw: "
+				+ Integer.toString(data[3]));
 		ch_5_text.setText("CH 5: " + Integer.toString(data[4]));
 		ch_6_text.setText("CH 6: " + Integer.toString(data[5]));
 		ch_7_text.setText("CH 7: " + Integer.toString(data[6]));
@@ -287,12 +281,9 @@ public class FragmentSetupRC extends SuperSetupMainPanel {
 	@Override
 	public void updateCalibrationData() {
 		for (int i = 0; i < 8; i++) {
-			parameters.setParamValueByName("RC" + String.valueOf(i + 1)
-					+ "_MIN", cMin[i]);
-			parameters.setParamValueByName("RC" + String.valueOf(i + 1)
-					+ "_MAX", cMax[i]);
-			parameters.setParamValueByName("RC" + String.valueOf(i + 1)
-					+ "_TRIM", cMid[i]);
+			parameters.setParamValueByName("RC" + String.valueOf(i + 1) + "_MIN", cMin[i]);
+			parameters.setParamValueByName("RC" + String.valueOf(i + 1) + "_MAX", cMax[i]);
+			parameters.setParamValueByName("RC" + String.valueOf(i + 1) + "_TRIM", cMid[i]);
 		}
 
 		setFillBarShowMinMax(false);

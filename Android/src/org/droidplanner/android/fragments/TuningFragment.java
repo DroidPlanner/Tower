@@ -34,11 +34,6 @@ public class TuningFragment extends Fragment implements OnDroneListener {
 	private Chart topChart;
 	private Chart bottomChart;
 
-	private SeekBarWithText rollPSeekBar;
-	private SeekBarWithText rollDSeekBar;
-	private SeekBarWithText yawPSeekBar;
-	private SeekBarWithText thrAclSeekBar;
-
 	private Parameter rollP;
 	private Parameter rollD;
 	private Parameter yawP;
@@ -59,10 +54,8 @@ public class TuningFragment extends Fragment implements OnDroneListener {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = inflater
-				.inflate(R.layout.fragment_tuning, container, false);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.fragment_tuning, container, false);
 
 		setupLocalViews(view);
 		setupCharts();
@@ -86,21 +79,19 @@ public class TuningFragment extends Fragment implements OnDroneListener {
 
 	private void setupDataStreamingForTuning() {
 		// Sets the nav messages at 50Hz and other messages at a low rate 1Hz
-		MavLinkStreamRates.setupStreamRates(drone.MavClient, 1, 0, 1, 1, 1, 0,
-				0, NAV_MSG_RATE);
+		MavLinkStreamRates.setupStreamRates(drone.MavClient, 1, 0, 1, 1, 1, 0, 0, NAV_MSG_RATE);
 	}
 
 	private void setupLocalViews(View view) {
 		topChart = (Chart) view.findViewById(R.id.chartTop);
 		bottomChart = (Chart) view.findViewById(R.id.chartBottom);
 
-		rollPSeekBar = (SeekBarWithText) view
+		SeekBarWithText rollPSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.SeekBarRollPitchControl);
-		rollDSeekBar = (SeekBarWithText) view
+		SeekBarWithText rollDSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.SeekBarRollPitchDampenning);
-		yawPSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.SeekBarYawControl);
-		thrAclSeekBar = (SeekBarWithText) view
+		SeekBarWithText yawPSeekBar = (SeekBarWithText) view.findViewById(R.id.SeekBarYawControl);
+		SeekBarWithText thrAclSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.SeekBarThrottleAccel);
 	}
 

@@ -14,8 +14,8 @@ import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import android.os.Bundle;
 
 @SuppressWarnings("unused")
-public abstract class SuperSetupMainPanel extends SetupMainPanel implements
-		OnCalibrationEvent, OnDroneListener {
+public abstract class SuperSetupMainPanel extends SetupMainPanel implements OnCalibrationEvent,
+		OnDroneListener {
 
 	protected Drone drone;
 	protected CalParameters parameters;
@@ -29,7 +29,7 @@ public abstract class SuperSetupMainPanel extends SetupMainPanel implements
 	protected abstract void updateCalibrationData();
 
 	protected void onInitialize() {
-	};// can be overridden if necessary
+	}// can be overridden if necessary
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -71,31 +71,27 @@ public abstract class SuperSetupMainPanel extends SetupMainPanel implements
 	}
 
 	@Override
-	public void onReadCalibration(CalParameters calParameters) {
+	public void onReadCalibration() {
 		doCalibrationStep(0);
 		updatePanelInfo();
 	}
 
 	@Override
-	public void onSentCalibration(CalParameters calParameters) {
+	public void onSentCalibration() {
 		doCalibrationStep(0);
 	}
 
 	@Override
-	public void onCalibrationData(CalParameters calParameters, int index,
-			int count, boolean isSending) {
+	public void onCalibrationData(int index, int count, boolean isSending) {
 		if (sidePanel != null && parameters != null) {
 			String title;
 			if (isSending) {
-				title = getResources().getString(
-						R.string.setup_sf_desc_uploading);
+				title = getResources().getString(R.string.setup_sf_desc_uploading);
 			} else {
-				title = getResources().getString(
-						R.string.setup_sf_desc_downloading);
+				title = getResources().getString(R.string.setup_sf_desc_downloading);
 			}
 
-			((FragmentSetupProgress) sidePanel).updateProgress(index + 1,
-					count, title);
+			((FragmentSetupProgress) sidePanel).updateProgress(index + 1, count, title);
 		}
 	}
 
@@ -118,8 +114,7 @@ public abstract class SuperSetupMainPanel extends SetupMainPanel implements
 			downloadCalibrationData();
 		} else {
 			sidePanel = getDefaultPanel();
-			((SetupRadioFragment) getParentFragment())
-					.changeSidePanel(sidePanel);
+			((SetupRadioFragment) getParentFragment()).changeSidePanel(sidePanel);
 
 		}
 		return sidePanel;

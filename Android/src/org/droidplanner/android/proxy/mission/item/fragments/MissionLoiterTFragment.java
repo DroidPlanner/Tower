@@ -25,19 +25,15 @@ public class MissionLoiterTFragment extends MissionDetailFragment implements
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		typeSpinner.setSelection(commandAdapter
-				.getPosition(MissionItemType.LOITERT));
+		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.LOITERT));
 
 		LoiterTime item = (LoiterTime) this.itemRender.getMissionItem();
 
-		altitudeSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.altitudeView);
-		altitudeSeekBar.setValue(item.getCoordinate().getAltitude()
-				.valueInMeters());
+		altitudeSeekBar = (SeekBarWithText) view.findViewById(R.id.altitudeView);
+		altitudeSeekBar.setValue(item.getCoordinate().getAltitude().valueInMeters());
 		altitudeSeekBar.setOnChangedListener(this);
 
-		loiterTimeSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.loiterTime);
+		loiterTimeSeekBar = (SeekBarWithText) view.findViewById(R.id.loiterTime);
 		loiterTimeSeekBar.setOnChangedListener(this);
 		loiterTimeSeekBar.setValue(item.getTime());
 

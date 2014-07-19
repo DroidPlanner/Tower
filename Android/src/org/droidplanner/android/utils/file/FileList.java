@@ -25,16 +25,6 @@ public class FileList {
 		return getFileList(DirectoryPath.getParametersPath(), filter);
 	}
 
-	static public String[] getKMZFileList() {
-		FilenameFilter filter = new FilenameFilter() {
-			@Override
-			public boolean accept(File dir, String filename) {
-				return filename.contains(".kml") || filename.contains(".kmz");
-			}
-		};
-		return getFileList(DirectoryPath.getGCPPath(), filter);
-	}
-
 	public static String[] getCameraInfoFileList() {
 		FilenameFilter filter = new FilenameFilter() {
 			@Override
@@ -53,6 +43,7 @@ public class FileList {
 				return mPath.list(filter);
 			}
 		} catch (SecurityException e) {
+			e.printStackTrace();
 		}
 		return new String[0];
 	}
