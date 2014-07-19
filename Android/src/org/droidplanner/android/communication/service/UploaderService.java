@@ -25,8 +25,6 @@ import com.geeksville.apiproxy.IUploadListener;
  * 
  * If you send any intent to this service it will scan the tlog directory and
  * upload any complete tlogs it finds.
- * 
- * @author kevinh
  */
 public class UploaderService extends IntentService {
 

@@ -131,15 +131,11 @@ public class ConfigurationActivity extends SuperUI {
 	/**
 	 * This is the fragment pager adapter to handle the tabs of the
 	 * Configuration activity.
-	 * 
-	 * @since 1.2.0
 	 */
 	private static class ConfigurationPagerAdapter extends FragmentPagerAdapter {
 
 		/**
 		 * Application context object used to retrieve the tabs' title.
-		 * 
-		 * @since 1.2.0
 		 */
 		private final Context mContext;
 
