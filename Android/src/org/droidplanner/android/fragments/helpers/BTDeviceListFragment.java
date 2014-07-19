@@ -34,13 +34,6 @@ import android.widget.TextView;
 public class BTDeviceListFragment extends DialogFragment {
 
 	/**
-	 * This tag is used for logging.
-	 * 
-	 * @since 1.2.0
-	 */
-	private static final String TAG = BTDeviceListFragment.class.getName();
-
-	/**
 	 * Request code used in onActivityResult to check for bluetooth activation
 	 * result.
 	 * 
