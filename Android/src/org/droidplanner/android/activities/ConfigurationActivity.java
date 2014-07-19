@@ -8,8 +8,6 @@ import org.droidplanner.android.fragments.SetupRadioFragment;
 import org.droidplanner.android.fragments.SetupSensorFragment;
 import org.droidplanner.android.fragments.TuningFragment;
 import org.droidplanner.android.widgets.viewPager.TabPageIndicator;
-import org.droidplanner.core.drone.Drone;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 
 import android.app.ActionBar;
 import android.content.Context;
@@ -39,6 +37,7 @@ public class ConfigurationActivity extends SuperUI {
 	/**
 	 * Holds the list of configuration screens this activity supports.
 	 */
+	@SuppressWarnings("unchecked")
 	public static final Class<? extends Fragment>[] sConfigurationFragments = new Class[] {
 			TuningFragment.class, SetupRadioFragment.class, SetupSensorFragment.class,
 			ChecklistFragment.class, ParamsFragment.class };
