@@ -5,6 +5,9 @@ import org.droidplanner.android.activities.FlightActivity;
 import org.droidplanner.android.activities.helpers.SuperUI;
 import org.droidplanner.android.utils.TextUtils;
 import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
+import org.droidplanner.android.weather.item.IWeatherItem;
+import org.droidplanner.android.weather.item.SolarRadiation;
+import org.droidplanner.android.weather.item.Wind;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
 
@@ -29,7 +32,9 @@ public class StatusBarNotificationProvider implements
 	/**
 	 * Android status bar's notification id.
 	 */
-	private static final int NOTIFICATION_ID = 1;
+	private static final int GENERAL_NOTIFICATION_ID = 1;
+	private static final int WEATHER_WIND_NOTIFICATION_ID = 2;
+	private static final int WEATHER_SOLAR_RADIATION_NOTIFICATION_ID = 3;
 
 	/**
 	 * Countdown to notification dismissal.
@@ -44,12 +49,22 @@ public class StatusBarNotificationProvider implements
 	/**
 	 * Callback used to dismiss the notification.
 	 */
-	private final Runnable mDismissNotification = new Runnable() {
+	private final Runnable mDismissGeneralNotification = new Runnable() {
 		@Override
 		public void run() {
 			if (mContext != null) {
-				dismissNotification();
+				dismissNotification(GENERAL_NOTIFICATION_ID);
 				mNotificationBuilder = null;
+			}
+		}
+	};
+	
+	private final Runnable mDismissWeatherNotification = new Runnable() {
+		@Override
+		public void run() {
+			if (mContext != null) {
+				dismissNotification(WEATHER_WIND_NOTIFICATION_ID);
+				dismissNotification(WEATHER_SOLAR_RADIATION_NOTIFICATION_ID);
 			}
 		}
 	};
@@ -104,7 +119,7 @@ public class StatusBarNotificationProvider implements
 		switch (event) {
 		case CONNECTED:
 			// Cancel the notification dismissal
-			mHandler.removeCallbacks(mDismissNotification);
+			mHandler.removeCallbacks(mDismissGeneralNotification);
 
 			final String summaryText = mContext.getString(R.string.connected);
 
@@ -167,7 +182,7 @@ public class StatusBarNotificationProvider implements
 						.setSmallIcon(R.drawable.ic_launcher_bw);
 
 				// Schedule the notification dismissal
-				mHandler.postDelayed(mDismissNotification,
+				mHandler.postDelayed(mDismissGeneralNotification,
 						COUNTDOWN_TO_DISMISSAL);
 			}
 			break;
@@ -178,7 +193,7 @@ public class StatusBarNotificationProvider implements
 		}
 
 		if (showNotification) {
-			showNotification();
+			showGeneralNotification();
 		}
 	}
 
@@ -247,7 +262,7 @@ public class StatusBarNotificationProvider implements
 	/**
 	 * Build a notification from the notification builder, and display it.
 	 */
-	private void showNotification() {
+	private void showGeneralNotification() {
 		if (mNotificationBuilder == null) {
 			return;
 		}
@@ -256,15 +271,15 @@ public class StatusBarNotificationProvider implements
 			mNotificationBuilder.setStyle(mInboxBuilder.generateInboxStyle());
 		}
 
-		NotificationManagerCompat.from(mContext).notify(NOTIFICATION_ID,
+		NotificationManagerCompat.from(mContext).notify(GENERAL_NOTIFICATION_ID,
 				mNotificationBuilder.build());
 	}
 
 	/**
 	 * Dismiss the app status bar notification.
 	 */
-	private void dismissNotification() {
-		NotificationManagerCompat.from(mContext).cancelAll();
+	private void dismissNotification(int id) {
+		NotificationManagerCompat.from(mContext).cancel(id);
 	}
 
 	@Override
@@ -326,4 +341,41 @@ public class StatusBarNotificationProvider implements
 			return inboxStyle;
 		}
 	}
-}
+
+	@Override
+	public void onWeatherFetchSuccess(IWeatherItem item) {
+		int notificationId = 0;
+		NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext)
+		.setContentIntent(mNotificationIntent)
+		.setSmallIcon(R.drawable.ic_launcher);
+		
+		
+		if (item instanceof Wind){
+			Wind wind = (Wind) item;
+			if(wind.getSpeed() >= 10) {
+				builder.setContentText("You may have problems with drone controlling");
+				builder.setContentTitle("Extreme wind speed!");
+				notificationId = WEATHER_WIND_NOTIFICATION_ID;
+			}
+			
+		}
+		else if (item instanceof SolarRadiation){
+			SolarRadiation radiation = (SolarRadiation) item;
+			if (radiation.getkIndex() >= SolarRadiation.MIDDLE_VALUE){
+			builder.setContentText("You may have problems with GPS");
+			notificationId = WEATHER_SOLAR_RADIATION_NOTIFICATION_ID;
+			builder.setContentTitle("Extreme solar radiation!");
+			}
+		}
+		
+		mHandler.removeCallbacks(mDismissWeatherNotification);
+		// Schedule the notification dismissal
+		mHandler.postDelayed(mDismissWeatherNotification,
+				COUNTDOWN_TO_DISMISSAL);
+		
+		NotificationManagerCompat.from(mContext).notify(notificationId,
+				builder.build());
+		
+	}
+
+	}

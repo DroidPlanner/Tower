@@ -3,6 +3,7 @@ package org.droidplanner.android.notifications;
 import java.util.Locale;
 
 import org.droidplanner.R;
+import org.droidplanner.android.weather.item.IWeatherItem;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.variables.Calibration;
@@ -173,4 +174,11 @@ public class TTSNotificationProvider implements OnInitListener,
 	public void quickNotify(String feedback) {
 		speak(feedback);
 	}
+
+	@Override
+	public void onWeatherFetchSuccess(IWeatherItem item) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

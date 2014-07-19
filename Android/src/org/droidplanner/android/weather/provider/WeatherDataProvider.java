@@ -63,7 +63,7 @@ public class WeatherDataProvider implements IWeatherDataProvider {
 				double speed = windJson.getDouble("speed");
 
 				Wind wind = new Wind(speed);
-				listener.onResult(wind);
+				listener.onWeatherFetchSuccess(wind);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -71,8 +71,8 @@ public class WeatherDataProvider implements IWeatherDataProvider {
 
 		public void onFailure(int statusCode, Header[] headers,
 				String responseString, Throwable throwable) {
-			listener.onError("Http error: " + statusCode + ", "
-					+ throwable.getMessage());
+			//listener.onWeatherFetchFail("Http error: " + statusCode + ", "
+					//+ throwable.getMessage());
 		};
 	};
 
@@ -100,7 +100,7 @@ public class WeatherDataProvider implements IWeatherDataProvider {
 					for (int i = kIndexList.size() - 1; i > 0; i--) {
 						int kIndex = kIndexList.get(i);
 						if (kIndex != -1) {
-							listener.onResult(new SolarRadiation(kIndex));
+							listener.onWeatherFetchSuccess(new SolarRadiation(kIndex));
 							scanner.close();
 							return;
 						}
@@ -114,8 +114,8 @@ public class WeatherDataProvider implements IWeatherDataProvider {
 		@Override
 		public void onFailure(int statusCode, Header[] headers,
 				String responseString, Throwable throwable) {
-			listener.onError("Http error: " + statusCode + ", "
-					+ throwable.getMessage());
+			//listener.onWeatherFetchFail("Http error: " + statusCode + ", "
+				//	+ throwable.getMessage());
 
 		}
 	};

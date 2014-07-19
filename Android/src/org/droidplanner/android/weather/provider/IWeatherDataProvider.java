@@ -9,9 +9,8 @@ public interface IWeatherDataProvider {
 	
 
 	public interface AsyncListener {
-		public void onResult(IWeatherItem item);
+		public void onWeatherFetchSuccess(IWeatherItem item);
 
-		public void onError(String reason);
 	}
 
 	public void getWind(Coord2D location);

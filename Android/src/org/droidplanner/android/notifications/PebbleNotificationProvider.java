@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.gcs.follow.Follow;
 import org.droidplanner.android.gcs.follow.FollowAlgorithm.FollowModes;
+import org.droidplanner.android.weather.item.IWeatherItem;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
 
@@ -175,4 +176,12 @@ public class PebbleNotificationProvider implements
 	@Override
 	public void quickNotify(String feedback) {
 	}
+
+	@Override
+	public void onWeatherFetchSuccess(IWeatherItem item) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
 }
