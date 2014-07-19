@@ -59,9 +59,8 @@ android {
         release.setRoot('build-types/release')
     }
 
-    //FIXME: remove this after lint errors have been taken care of
     lintOptions {
-        abortOnError false
+        abortOnError true
     }
 
 }
