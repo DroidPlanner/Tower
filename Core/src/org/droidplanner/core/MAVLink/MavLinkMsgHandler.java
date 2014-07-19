@@ -14,6 +14,7 @@ import com.MAVLink.Messages.ardupilotmega.msg_nav_controller_output;
 import com.MAVLink.Messages.ardupilotmega.msg_radio;
 import com.MAVLink.Messages.ardupilotmega.msg_rc_channels_raw;
 import com.MAVLink.Messages.ardupilotmega.msg_servo_output_raw;
+import com.MAVLink.Messages.ardupilotmega.msg_statustext;
 import com.MAVLink.Messages.ardupilotmega.msg_sys_status;
 import com.MAVLink.Messages.ardupilotmega.msg_vfr_hud;
 import com.MAVLink.Messages.enums.MAV_MODE_FLAG;
@@ -90,6 +91,13 @@ public class MavLinkMsgHandler {
 			break;
 		case msg_servo_output_raw.MAVLINK_MSG_ID_SERVO_OUTPUT_RAW:
 			drone.RC.setRcOutputValues((msg_servo_output_raw) msg);
+			break;
+		case msg_statustext.MAVLINK_MSG_ID_STATUSTEXT:
+			msg_statustext msg_statustext = (msg_statustext)msg;
+			String message = msg_statustext.getText();
+			if(message.substring(0,7).equals("PreArm:")){
+				drone.state.setFailsafe(message);
+			}
 			break;
 		}
 	}

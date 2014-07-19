@@ -27,7 +27,7 @@ public class State extends DroneVariable {
 	}
 
 	public boolean isFailsafe() {
-		return failsafe.equals("");
+		return !failsafe.equals("");
 	}
 
 	public boolean isArmed() {
