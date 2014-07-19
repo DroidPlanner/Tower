@@ -1,7 +1,6 @@
 package org.droidplanner.android.communication.connection;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 
 import android.content.Context;
 import android.content.SharedPreferences;
