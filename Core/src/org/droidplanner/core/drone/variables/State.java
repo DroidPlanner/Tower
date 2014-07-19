@@ -9,7 +9,7 @@ import org.droidplanner.core.drone.DroneVariable;
 import com.MAVLink.Messages.ApmModes;
 
 public class State extends DroneVariable {
-	private boolean failsafe = false;
+	private String failsafe = "";
 	private boolean armed = false;
 	private boolean isFlying = false;
 	private ApmModes mode = ApmModes.UNKNOWN;
@@ -27,7 +27,7 @@ public class State extends DroneVariable {
 	}
 
 	public boolean isFailsafe() {
-		return failsafe;
+		return failsafe.equals("");
 	}
 
 	public boolean isArmed() {
@@ -40,6 +40,10 @@ public class State extends DroneVariable {
 
 	public ApmModes getMode() {
 		return mode;
+	}
+	
+	public String getFailsafe(){
+		return failsafe;
 	}
 
 	public void setIsFlying(boolean newState) {
@@ -54,8 +58,8 @@ public class State extends DroneVariable {
 		}
 	}
 
-	public void setFailsafe(boolean newFailsafe) {
-		if (this.failsafe != newFailsafe) {
+	public void setFailsafe(String newFailsafe) {
+		if (!this.failsafe.equals(newFailsafe)) {
 			this.failsafe = newFailsafe;
 			myDrone.events.notifyDroneEvent(DroneEventsType.FAILSAFE);
 		}

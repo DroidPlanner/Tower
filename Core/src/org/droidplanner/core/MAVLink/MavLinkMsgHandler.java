@@ -105,7 +105,7 @@ public class MavLinkMsgHandler {
 
 	private void checkFailsafe(msg_heartbeat msg_heart) {
 		boolean failsafe2 = msg_heart.system_status == (byte) MAV_STATE.MAV_STATE_CRITICAL;
-		drone.state.setFailsafe(failsafe2);
+		drone.state.setFailsafe(failsafe2?"RC Failsafe":"");
 	}
 
 	private void checkArmState(msg_heartbeat msg_heart) {
