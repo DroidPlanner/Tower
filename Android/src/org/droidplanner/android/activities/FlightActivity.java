@@ -185,6 +185,8 @@ public class FlightActivity extends DrawerNavigationUI implements
 		case USER:
 			mGoToMyLocation.setActivated(true);
 			break;
+		default:
+			break;
 		}
 	}
 

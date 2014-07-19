@@ -99,6 +99,8 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 			// Refresh the mission render state
 			missionProxy.refresh();
 			break;
+		default:
+			break;
 		}
 	}
 
