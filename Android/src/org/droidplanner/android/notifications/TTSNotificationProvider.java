@@ -104,7 +104,7 @@ public class TTSNotificationProvider implements OnInitListener,
 				break;
 			case FAILSAFE:
 				String failsafe = drone.state.getFailsafe();
-				if(drone.state.isFailsafe()&&failsafe.substring(0,4).equals("Arm:")){
+				if(drone.state.isFailsafe()){
 					speak(failsafe);
 				}
 			default:

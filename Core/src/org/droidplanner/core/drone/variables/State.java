@@ -10,7 +10,7 @@ import org.droidplanner.core.drone.DroneVariable;
 import com.MAVLink.Messages.ApmModes;
 
 public class State extends DroneVariable {
-	private static final long failsafeOnScreenTimeout = 2000;
+	private static final long failsafeOnScreenTimeout = 5000;
 	private String failsafe = "";
 	private boolean armed = false;
 	private boolean isFlying = false;
