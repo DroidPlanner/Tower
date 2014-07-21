@@ -4,11 +4,13 @@ import org.droidplanner.core.MAVLink.MavLinkModes;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.Clock;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
+import org.droidplanner.core.drone.DroneInterfaces.Handler;
 import org.droidplanner.core.drone.DroneVariable;
 
 import com.MAVLink.Messages.ApmModes;
 
 public class State extends DroneVariable {
+	private static final long timeout = 2000;
 	private String failsafe = "";
 	private boolean armed = false;
 	private boolean isFlying = false;
@@ -19,12 +21,22 @@ public class State extends DroneVariable {
 	private long startTime = 0;
 	private long elapsedFlightTime = 0;
 	private Clock clock;
+	
+	public Handler watchdog;
+	public Runnable watchdogCallback = new Runnable() {
+		@Override
+		public void run() {
+			removeFailsafe();
+		}
+	};
 
-	public State(Drone myDrone, Clock clock) {
+	public State(Drone myDrone, Clock clock, Handler handler) {
 		super(myDrone);
 		this.clock = clock;
+		this.watchdog=handler;
 		resetFlightTimer();
 	}
+
 
 	public boolean isFailsafe() {
 		return !failsafe.equals("");
@@ -63,6 +75,8 @@ public class State extends DroneVariable {
 			this.failsafe = newFailsafe;
 			myDrone.events.notifyDroneEvent(DroneEventsType.FAILSAFE);
 		}
+		watchdog.removeCallbacks(watchdogCallback);
+		this.watchdog.postDelayed(watchdogCallback, timeout);
 	}
 
 	public void setArmed(boolean newState) {
@@ -86,6 +100,10 @@ public class State extends DroneVariable {
 		if (ApmModes.isValid(mode)) {
 			MavLinkModes.changeFlightMode(myDrone, mode);
 		}
+	}
+	
+	protected void removeFailsafe() {
+		setFailsafe("");
 	}
 
 	// flightTimer
