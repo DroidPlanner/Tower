@@ -95,8 +95,10 @@ public class MavLinkMsgHandler {
 		case msg_statustext.MAVLINK_MSG_ID_STATUSTEXT:
 			msg_statustext msg_statustext = (msg_statustext)msg;
 			String message = msg_statustext.getText();
-			if(message.substring(0,7).equals("PreArm:")){
-				drone.state.setFailsafe(message);
+			if(message.length()>7){
+				if(message.substring(0,7).equals("PreArm:")||message.substring(0,4).equals("Arm:")){
+					drone.state.setFailsafe(message);
+				}
 			}
 			break;
 		}
