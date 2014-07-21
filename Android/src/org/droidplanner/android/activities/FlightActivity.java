@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.SlidingDrawer;
+import android.widget.TextView;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.common.ConnectionResult;
@@ -37,7 +38,7 @@ public class FlightActivity extends DrawerNavigationUI implements
 
 	private FragmentManager fragmentManager;
 	private RCFragment rcFragment;
-	private View failsafeView;
+	private TextView failsafeView;
 
 	private FlightMapFragment mapFragment;
 
@@ -55,7 +56,7 @@ public class FlightActivity extends DrawerNavigationUI implements
 		setContentView(R.layout.activity_flight);
 
 		fragmentManager = getSupportFragmentManager();
-		failsafeView = findViewById(R.id.failsafeTextView);
+		failsafeView = (TextView) findViewById(R.id.failsafeTextView);
 
 		mSlidingDrawer = (SlidingDrawer) findViewById(R.id.SlidingDrawerRight);
 		mSlidingDrawer.setOnDrawerCloseListener(new SlidingDrawer.OnDrawerCloseListener() {
@@ -341,6 +342,7 @@ public class FlightActivity extends DrawerNavigationUI implements
 
 	public void onFailsafeChanged(Drone drone) {
 		if (drone.state.isFailsafe()) {
+			failsafeView.setText(drone.state.getFailsafe());
 			failsafeView.setVisibility(View.VISIBLE);
 		} else {
 			failsafeView.setVisibility(View.GONE);

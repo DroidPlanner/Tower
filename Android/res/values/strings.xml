@@ -109,9 +109,6 @@
     <string name="connected">Connected</string>
     <string name="disconnected">Disconnected</string>
 
-    <!-- Failsafe Strings -->
-    <string name="RCFailsafe">Warning! RC Failsafe – Returning to Launch</string>
-
     <!-- Common Setup Buttons Resource Strings -->
     <string name="button_setup_calibrate">Calibrate</string>
     <string name="button_setup_cancel">Cancel</string>

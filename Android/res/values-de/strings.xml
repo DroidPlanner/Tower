@@ -98,10 +98,7 @@
     <string name="menu_disconnect">Trennen</string>
     <string name="connected">Verbunden</string>
     <string name="disconnected">Getrennt</string>
-
-    <!-- Failsafe Strings -->
-    <string name="RCFailsafe">Warnung! RC-Failsafe - Rückkehr zum Start</string>
-
+    
     <!-- Common Setup Buttons Resource Strings -->
     <string name="button_setup_calibrate">Kalibrieren</string>
     <string name="button_setup_cancel">Abbrechen</string>
