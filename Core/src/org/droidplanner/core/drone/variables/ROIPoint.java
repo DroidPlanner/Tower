@@ -15,19 +15,15 @@ public class ROIPoint extends DroneVariable {
 		super(myDrone);
 	}
 
-	public void newROICoord(Coord2D coord) {
-		changeCoord(coord);
+	public void setROICoord(Coord2D coord) {
+		this.coord = coord;
+		sendROIPoint();
 	}
 
 	public void setROIAlt(Altitude alt) {
 		this.altitude = alt;
 	}
-
-	private void changeCoord(Coord2D coord) {
-		this.coord = coord;
-		sendROIPoint();
-	}
-
+	
 	private void sendROIPoint() {
 		MavLinkROI.setROI(myDrone, new Coord3D(coord.getLat(), coord.getLng(),
 				altitude));

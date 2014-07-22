@@ -1,10 +1,9 @@
 package org.droidplanner.android.gcs.location;
 
-import org.droidplanner.core.MAVLink.MavLinkROI;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
+import org.droidplanner.core.drone.variables.ROIPoint;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
-import org.droidplanner.core.helpers.coordinates.Coord3D;
 import org.droidplanner.core.helpers.geoTools.GeoTools;
 import org.droidplanner.core.helpers.units.Altitude;
 
@@ -23,6 +22,8 @@ public class ROIEstimator implements LocationReceiver {
 
 	private Drone drone;
 	private Handler watchdog;
+	private ROIPoint rOIPoint = new ROIPoint(drone);
+
 	public Runnable watchdogCallback = new Runnable() {
 		@Override
 		public void run() {
@@ -52,6 +53,7 @@ public class ROIEstimator implements LocationReceiver {
 		if (realLocation == null) {
 			return;
 		}
+
 		Coord2D gcsCoord = new Coord2D(realLocation.getLatitude(),
 				realLocation.getLongitude());
 
@@ -60,18 +62,12 @@ public class ROIEstimator implements LocationReceiver {
 				* (System.currentTimeMillis() - timeOfLastLocation) / 1000f;
 		Coord2D goCoord = GeoTools.newCoordFromBearingAndDistance(gcsCoord,
 				bearing, distanceTraveledSinceLastPoint);
-		double latitude = goCoord.getLat();
-		double longitude = goCoord.getLng();
-
-		Location newLocation = new Location(realLocation);
-		newLocation.setLatitude(latitude);
-		newLocation.setLongitude(longitude);
-		newLocation.setBearing(bearing);
 
 		if (distanceTraveledSinceLastPoint > 0.0) {
-			MavLinkROI.setROI(drone, new Coord3D(newLocation.getLatitude(),
-					newLocation.getLongitude(), new Altitude(0.0)));
+			rOIPoint.setROIAlt(new Altitude(1.0));
+			rOIPoint.setROICoord(goCoord);
 		}
+
 		watchdog.postDelayed(watchdogCallback, TIMEOUT);
 	}
 }
