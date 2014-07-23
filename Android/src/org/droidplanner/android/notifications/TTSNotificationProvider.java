@@ -9,9 +9,11 @@ import org.droidplanner.core.drone.variables.Calibration;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.MAVLink.Messages.ApmModes;
@@ -21,6 +23,9 @@ import com.MAVLink.Messages.ApmModes;
  */
 public class TTSNotificationProvider implements OnInitListener,
 		NotificationHandler.NotificationProvider {
+
+    private static final String TAG = TTSNotificationProvider.class.getSimpleName();
+
 	private static final double BATTERY_DISCHARGE_NOTIFICATION_EVERY_PERCENT = 10;
 
 	TextToSpeech tts;
@@ -37,7 +42,39 @@ public class TTSNotificationProvider implements OnInitListener,
 
 	@Override
 	public void onInit(int status) {
-		tts.setLanguage(Locale.US);
+        if(status == TextToSpeech.SUCCESS) {
+            //TODO: check if the language is available
+            Locale ttsLanguage;
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                ttsLanguage = tts.getDefaultLanguage();
+            }
+            else{
+                ttsLanguage = tts.getLanguage();
+            }
+
+            if(ttsLanguage == null){
+                ttsLanguage = Locale.US;
+            }
+
+            int supportStatus = tts.setLanguage(ttsLanguage);
+            switch(supportStatus){
+                case TextToSpeech.LANG_MISSING_DATA:
+                case TextToSpeech.LANG_NOT_SUPPORTED:
+                    tts.shutdown();
+                    tts = null;
+
+                    Log.e(TAG, "TTS Language data is not available.");
+                    Toast.makeText(context, "Unable to set 'Text to Speech' language!",
+                            Toast.LENGTH_LONG).show();
+                    break;
+            }
+        }
+        else{
+            //Notify the user that the tts engine is not available.
+            Log.e(TAG, "TextToSpeech initialization failed.");
+            Toast.makeText(context, "Please make sure 'Text to Speech' is enabled in the " +
+                            "system accessibility settings.", Toast.LENGTH_LONG).show();
+        }
 	}
 
 	private void speak(String string) {
@@ -102,6 +139,11 @@ public class TTSNotificationProvider implements OnInitListener,
 			case FOLLOW_START:
 				speak("Following");
 				break;
+			case FAILSAFE:
+				String failsafe = drone.state.getFailsafe();
+				if(drone.state.isFailsafe()){
+					speak(failsafe);
+				}
 			default:
 				break;
 			}
