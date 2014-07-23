@@ -9,6 +9,7 @@ import org.droidplanner.core.drone.variables.Calibration;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
@@ -43,7 +44,14 @@ public class TTSNotificationProvider implements OnInitListener,
 	public void onInit(int status) {
         if(status == TextToSpeech.SUCCESS) {
             //TODO: check if the language is available
-            Locale ttsLanguage = tts.getDefaultLanguage();
+            Locale ttsLanguage;
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                ttsLanguage = tts.getDefaultLanguage();
+            }
+            else{
+                ttsLanguage = tts.getLanguage();
+            }
+
             if(ttsLanguage == null){
                 ttsLanguage = Locale.US;
             }
