@@ -27,6 +27,9 @@ public class Type extends DroneVariable {
 	}
 
 	public FirmwareType getFirmwareType() {
+		if (myDrone.preferences.getVehicleType() == FirmwareType.AR_DRONE) {
+			return myDrone.preferences.getVehicleType(); // AR_DRONE ignores type from heartbeat
+		}
 		if (myDrone.MavClient.isConnected()) {
 			switch (myDrone.type.getType()) {
 			case MAV_TYPE.MAV_TYPE_FIXED_WING:
@@ -50,7 +53,7 @@ public class Type extends DroneVariable {
 	}
 
 	public enum FirmwareType {
-		ARDU_PLANE("ArduPlane"), ARDU_COPTER("ArduCopter"), ARDU_ROVER("ArduRover");
+		ARDU_PLANE("ArduPlane"), ARDU_COPTER("ArduCopter"), ARDU_ROVER("ArduRover"), AR_DRONE("ARDrone");
 
 		private final String type;
 
@@ -64,6 +67,9 @@ public class Type extends DroneVariable {
 		}
 
 		public static FirmwareType firmwareFromString(String str) {
+			if (str.equalsIgnoreCase(AR_DRONE.type)) {
+				return AR_DRONE;
+			}
 			if (str.equalsIgnoreCase(ARDU_PLANE.type)) {
 				return ARDU_PLANE;
 			}
