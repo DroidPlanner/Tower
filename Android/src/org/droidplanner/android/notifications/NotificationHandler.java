@@ -1,5 +1,7 @@
 package org.droidplanner.android.notifications;
 
+import org.droidplanner.android.weather.item.IWeatherItem;
+import org.droidplanner.android.weather.provider.IWeatherDataProvider;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces;
 
@@ -9,13 +11,13 @@ import android.content.Context;
  * This class handles DroidPlanner's status bar, and audible notifications. It
  * also provides support for the Android Wear functionality.
  */
-public class NotificationHandler implements DroneInterfaces.OnDroneListener {
+public class NotificationHandler implements DroneInterfaces.OnDroneListener, IWeatherDataProvider.AsyncListener {
 
 	/**
 	 * Defines the methods that need to be supported by Droidplanner's
 	 * notification provider types (i.e: audible (text to speech), status bar).
 	 */
-	interface NotificationProvider extends DroneInterfaces.OnDroneListener {
+	interface NotificationProvider extends DroneInterfaces.OnDroneListener, IWeatherDataProvider.AsyncListener {
 		void quickNotify(String feedback);
 	}
 
@@ -58,4 +60,13 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener {
 		mTtsNotification.quickNotify(feedback);
 		mStatusBarNotification.quickNotify(feedback);
 	}
+
+	@Override
+	public void onWeatherFetchSuccess(IWeatherItem item) {
+		mStatusBarNotification.onWeatherFetchSuccess(item);
+		
+		
+	}
+
+	
 }
