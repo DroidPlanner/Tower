@@ -71,7 +71,7 @@ public class UploaderService extends IntentService {
 				numUploaded++;
 
                 final NotificationCompat.Builder notifBuilder = generateNotificationBuilder()
-                        .setContentText("Upload successful! Select to view...") // FIXME localize
+                        .setContentText(getString(R.string.uploader_success_message))
                         .setContentIntent(pIntent)
                         // Attach a web link
                         .addAction(android.R.drawable.ic_menu_set_as, "Web", pIntent)
@@ -89,15 +89,15 @@ public class UploaderService extends IntentService {
 		public void onUploadFailure(File f, Exception ex) {
 			Log.i(TAG, "Upload fail: " + f + " " + ex);
 
-			String msg = "UploadFailed";
+			String msg = "Upload Failed";
 			if (ex instanceof HttpResponseException)
 				msg = ex.getMessage();
 
             if(failedUploadNotification == null) {
                 failedUploadNotification = generateNotificationBuilder()
                         .setContentText(msg)
-                        .setSubText("Will try again later")
-                        .build(); // FIXME - localize
+                        .setSubText(getString(R.string.uploader_fail_retry_message))
+                        .build();
             }
             updateUploadStatusNotification(failedUploadNotification);
 
@@ -150,8 +150,7 @@ public class UploaderService extends IntentService {
 
     private NotificationCompat.Builder generateNotificationBuilder(){
         return new NotificationCompat.Builder(getApplicationContext())
-                .setContentTitle("Droneshare upload")
-                        // FIXME - extract for localization
+                .setContentTitle(getString(R.string.uploader_notification_title))
                 .setSmallIcon(R.drawable.ic_launcher)
                         // .setProgress(fileSize, 0, false)
                 .setAutoCancel(true)
