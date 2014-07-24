@@ -71,11 +71,12 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	private MissionDetailFragment itemDetailFragment;
 	private FragmentManager fragmentManager;
 	private EditorListFragment missionListFragment;
-
+	
 	private View mSplineToggleContainer;
 	private boolean mIsSplineEnabled;
 
 	private View mLocationButtonsContainer;
+	private TextView editorInfoView;
 
 	/**
 	 * This view hosts the mission item detail fragment. On phone, or device
@@ -101,7 +102,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 				.findFragmentById(R.id.editorToolsFragment);
 		missionListFragment = (EditorListFragment) fragmentManager
 				.findFragmentById(R.id.missionFragment1);
-		TextView infoView = (TextView) findViewById(R.id.editorInfoWindow);
+		editorInfoView = (TextView) findViewById(R.id.editorInfoWindow);
 
 		mSplineToggleContainer = findViewById(R.id.editorSplineToggleContainer);
 		mSplineToggleContainer.setVisibility(View.VISIBLE);
@@ -269,11 +270,22 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 					removeItemDetail();
 				}
 			}
+			recalculateMissionTime();
 			break;
 
 		default:
 			break;
 		}
+	}
+
+	private void recalculateMissionTime() {
+		//get mission items
+		String distance = getString(R.string.distance);
+		double dist = 0.0;
+		//TODO calculate flight time.  Or don't.  Seems pretty hard.
+		//String flightTime = getString(R.string.flight_time);
+		
+		editorInfoView.setText(distance + ": " + dist + "m");
 	}
 
 	@Override
