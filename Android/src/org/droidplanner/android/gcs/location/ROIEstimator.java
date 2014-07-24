@@ -22,7 +22,7 @@ public class ROIEstimator implements LocationReceiver {
 
 	private Drone drone;
 	private Handler watchdog;
-	private ROIPoint rOIPoint = new ROIPoint(drone);
+	private ROIPoint rOIPoint;
 
 	public Runnable watchdogCallback = new Runnable() {
 		@Override
@@ -35,6 +35,7 @@ public class ROIEstimator implements LocationReceiver {
 	public ROIEstimator(Handler handler, Drone drone) {
 		this.watchdog = handler;
 		this.drone = drone;
+		rOIPoint = new ROIPoint(drone);
 	}
 
 	public void disableLocationUpdates() {
@@ -56,15 +57,18 @@ public class ROIEstimator implements LocationReceiver {
 
 		Coord2D gcsCoord = new Coord2D(realLocation.getLatitude(),
 				realLocation.getLongitude());
-
-		float bearing = realLocation.getBearing();
+		
+		float bearing = 0;
+		if(realLocation.hasBearing()){
+			bearing = realLocation.getBearing();
+		}
+		
 		float distanceTraveledSinceLastPoint = realLocation.getSpeed()
 				* (System.currentTimeMillis() - timeOfLastLocation) / 1000f;
-		Coord2D goCoord = GeoTools.newCoordFromBearingAndDistance(gcsCoord,
-				bearing, distanceTraveledSinceLastPoint);
 
 		if (distanceTraveledSinceLastPoint > 0.0) {
-			rOIPoint.setROIAlt(new Altitude(1.0));
+			Coord2D goCoord = GeoTools.newCoordFromBearingAndDistance(gcsCoord,
+					bearing, distanceTraveledSinceLastPoint);
 			rOIPoint.setROICoord(goCoord);
 		}
 

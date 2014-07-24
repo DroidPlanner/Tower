@@ -9,10 +9,12 @@ import org.droidplanner.core.helpers.units.Altitude;
 
 public class ROIPoint extends DroneVariable {
 	private Coord2D coord = new Coord2D(0, 0);
-	private Altitude altitude = new Altitude(0.0);
-
-	public ROIPoint(Drone myDrone) {
-		super(myDrone);
+	private Altitude altitude = new Altitude(1.0);
+	private Drone myDrone;
+	
+	public ROIPoint(Drone drone) {
+		super(drone);
+		myDrone = drone;
 	}
 
 	public void setROICoord(Coord2D coord) {
@@ -25,7 +27,7 @@ public class ROIPoint extends DroneVariable {
 	}
 	
 	private void sendROIPoint() {
-		MavLinkROI.setROI(myDrone, new Coord3D(coord.getLat(), coord.getLng(),
+			MavLinkROI.setROI(myDrone, new Coord3D(coord.getLat(), coord.getLng(),
 				altitude));
 	}
 
