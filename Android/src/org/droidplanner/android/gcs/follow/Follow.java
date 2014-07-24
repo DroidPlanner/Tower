@@ -112,7 +112,6 @@ public class Follow implements OnDroneListener, LocationReceiver {
 
 	public void changeRadius(double increment) {
 		followAlgorithm.changeRadius(increment);
-
 	}
 
 	public void cycleType() {

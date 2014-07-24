@@ -21,14 +21,12 @@
 
         <TextView
             android:id="@+id/failsafeTextView"
+            style="@style/editorMissionOverviewText"
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:background="#D8ee2d3e"
-            android:text="@string/RCFailsafe"
-            android:visibility="gone"
             android:gravity="left|center_vertical"
-            style="@style/editorMissionOverviewText"
-            />
+            android:visibility="gone" />
 
         <include
             android:layout_width="wrap_content"

@@ -153,6 +153,13 @@
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
             android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar"/>
+
+        <receiver android:name=".android.communication.service.NetworkConnectivityReceiver"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+            </receiver>
     </application>
 
 </manifest>

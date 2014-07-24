@@ -1,7 +1,8 @@
 package org.droidplanner.android;
 
-import org.droidplanner.android.communication.MAVLinkClient;
-import org.droidplanner.android.receivers.NetworkStateReceiver;
+import org.droidplanner.android.communication.service.MAVLinkClient;
+import org.droidplanner.android.communication.service.NetworkConnectivityReceiver;
+import org.droidplanner.android.communication.service.UploaderService;
 import org.droidplanner.android.gcs.follow.Follow;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.utils.analytics.GAUtils;
@@ -62,10 +63,12 @@ public class DroidPlannerApp extends ErrorReportApp implements MAVLinkStreams.Ma
 		mavLinkMsgHandler = new org.droidplanner.core.MAVLink.MavLinkMsgHandler(getDrone());
 
 		followMe = new Follow(this, getDrone(), handler);
-		NetworkStateReceiver.register(context);
 
 		GAUtils.initGATracker(this);
 		GAUtils.startNewSession(context);
+
+        // Any time the application is started, do a quick scan to see if we need any uploads
+        startService(UploaderService.createIntent(this));
 	}
 
 	@Override
