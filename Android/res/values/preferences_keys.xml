@@ -35,4 +35,8 @@ This file is used to store the preferences keys so that it's accessible and modi
     <string name="pref_ui_gps_hdop_key">pref_ui_gps_hdop</string>
     <string name="pref_ui_language_english_key">pref_ui_language_english</string>
     <string name="pref_drone_settings_key">pref_drone_settings</string>
+    <string name="pref_dshare_username_key">dshare_username</string>
+    <string name="pref_dshare_password_key">dshare_password</string>
+    <string name="pref_dshare_enabled_key">dshare_enabled</string>
+    <string name="pref_live_upload_enabled_key">pref_live_upload_enabled</string>
 </resources>
