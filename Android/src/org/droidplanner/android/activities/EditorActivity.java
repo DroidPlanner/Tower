@@ -26,6 +26,10 @@ import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
+import org.droidplanner.core.helpers.units.Length;
+import org.droidplanner.core.mission.MissionItem;
+import org.droidplanner.core.mission.waypoints.Circle;
+import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -46,8 +50,9 @@ import android.widget.Toast;
  * user to create and/or modify autonomous missions for the drone.
  */
 public class EditorActivity extends SuperUI implements OnPathFinishedListener,
-		OnEditorToolSelected, MissionDetailFragment.OnMissionDetailListener, OnEditorInteraction,
-		Callback, MissionSelection.OnSelectionUpdateListener {
+		OnEditorToolSelected, MissionDetailFragment.OnMissionDetailListener,
+		OnEditorInteraction, Callback,
+		MissionSelection.OnSelectionUpdateListener {
 
 	/**
 	 * Used to retrieve the item detail window when the activity is destroyed,
@@ -71,7 +76,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	private MissionDetailFragment itemDetailFragment;
 	private FragmentManager fragmentManager;
 	private EditorListFragment missionListFragment;
-	
+
 	private View mSplineToggleContainer;
 	private boolean mIsSplineEnabled;
 
@@ -130,13 +135,14 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 				planningMapFragment.goToDroneLocation();
 			}
 		});
-		mGoToDroneLocation.setOnLongClickListener(new View.OnLongClickListener() {
-			@Override
-			public boolean onLongClick(View v) {
-				planningMapFragment.setAutoPanMode(AutoPanMode.DRONE);
-				return true;
-			}
-		});
+		mGoToDroneLocation
+				.setOnLongClickListener(new View.OnLongClickListener() {
+					@Override
+					public boolean onLongClick(View v) {
+						planningMapFragment.setAutoPanMode(AutoPanMode.DRONE);
+						return true;
+					}
+				});
 
 		final RadioButton normalToggle = (RadioButton) findViewById(R.id.normalWpToggle);
 		normalToggle.setOnClickListener(new View.OnClickListener() {
@@ -230,7 +236,8 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		if (MissionWriter.write(drone.mission.getMsgMissionItems())) {
 			Toast.makeText(this, "File saved", Toast.LENGTH_SHORT).show();
 		} else {
-			Toast.makeText(this, "Error saving file", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "Error saving file", Toast.LENGTH_SHORT)
+					.show();
 		}
 	}
 
@@ -279,13 +286,65 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	}
 
 	private void recalculateMissionTime() {
-		//get mission items
+		// get mission items
 		String distance = getString(R.string.distance);
-		double dist = 0.0;
-		//TODO calculate flight time.  Or don't.  Seems pretty hard.
-		//String flightTime = getString(R.string.flight_time);
-		
-		editorInfoView.setText(distance + ": " + dist + "m");
+		Length dist = new Length(0.0);
+		List<MissionItem> waypoints = drone.mission.getItems();
+		for (MissionItem waypoint : waypoints) {
+			switch (waypoint.getType()) {
+			case SPLINE_WAYPOINT:
+			case WAYPOINT:
+				Length altDelta, distDelta;
+				try {
+					altDelta = drone.mission
+							.getAltitudeDiffFromPreviousItem((SpatialCoordItem) waypoint);
+					distDelta = drone.mission
+							.getDistanceFromLastWaypoint((SpatialCoordItem) waypoint);
+				} catch (IllegalArgumentException e) {
+					altDelta = new Length(0.0);//If a mission starts with a waypoint (not a takeoff), then this happens.
+					distDelta = new Length(0.0);
+				}
+				dist.add(pythagoreamTheorem(altDelta, distDelta));
+				break;
+			case TAKEOFF:
+				dist.add(drone.mission.getDefaultAlt());
+				break;
+			case LAND:
+				dist.add(drone.mission.getLastAltitude());
+				break;
+			case CIRCLE:
+				// Add the circumferences (PI*r*r), but subtract twice the
+				// radius, b/c the drone never actually travels to/from the
+				// center of the circle. It stops at the edge of the circle and
+				// begins strafing. Also add all altitude steps. And remember to
+				// multiply each circumference by the number of turns it does
+				Circle circle = (Circle) waypoint;
+				dist.addMeters(-2 * circle.getRadius());
+				for (int step = 0; step < circle.getNumberOfSteps(); step++) {
+					double circumference = Math.pow(circle.getRadius(), 2)
+							* Math.PI;
+					dist.addMeters(circumference * circle.getNumberOfTurns());
+					dist.addMeters(circle.getAltitudeStep());
+				}
+				break;
+			case RTL:
+				// TODO implement this
+				break;
+			default:
+				break;
+
+			}
+		}
+
+		// TODO calculate flight time. Or don't. Seems pretty hard.
+		// String flightTime = getString(R.string.flight_time);
+
+		editorInfoView.setText(distance + ": " + dist);
+	}
+
+	private Length pythagoreamTheorem(Length altDelta, Length distDelta) {
+		return new Length(Math.sqrt(Math.pow(altDelta.valueInMeters(), 2)
+				+ Math.pow(distDelta.valueInMeters(), 2)));
 	}
 
 	@Override
@@ -342,7 +401,8 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 		case POLY:
 			enableSplineToggle(false);
-			Toast.makeText(this, R.string.draw_the_survey_region, Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, R.string.draw_the_survey_region,
+					Toast.LENGTH_SHORT).show();
 			gestureMapFragment.enableGestureDetection();
 			break;
 
@@ -377,7 +437,8 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 	private void enableSplineToggle(boolean isEnabled) {
 		if (mSplineToggleContainer != null) {
-			mSplineToggleContainer.setVisibility(isEnabled ? View.VISIBLE : View.INVISIBLE);
+			mSplineToggleContainer.setVisibility(isEnabled ? View.VISIBLE
+					: View.INVISIBLE);
 		}
 	}
 
@@ -397,9 +458,10 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		if (mContainerItemDetail == null) {
 			itemDetailFragment.show(fragmentManager, ITEM_DETAIL_TAG);
 		} else {
-			fragmentManager.beginTransaction()
-					.replace(R.id.containerItemDetail, itemDetailFragment, ITEM_DETAIL_TAG)
-					.commit();
+			fragmentManager
+					.beginTransaction()
+					.replace(R.id.containerItemDetail, itemDetailFragment,
+							ITEM_DETAIL_TAG).commit();
 		}
 	}
 
@@ -413,7 +475,8 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 			if (mContainerItemDetail == null) {
 				itemDetailFragment.dismiss();
 			} else {
-				fragmentManager.beginTransaction().remove(itemDetailFragment).commit();
+				fragmentManager.beginTransaction().remove(itemDetailFragment)
+						.commit();
 			}
 			itemDetailFragment = null;
 		}
@@ -452,7 +515,8 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	}
 
 	@Override
-	public void onWaypointTypeChanged(MissionItemProxy newItem, MissionItemProxy oldItem) {
+	public void onWaypointTypeChanged(MissionItemProxy newItem,
+			MissionItemProxy oldItem) {
 		missionProxy.replace(oldItem, newItem);
 	}
 
@@ -507,7 +571,8 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 			}
 		} else {
 			editorToolsFragment.setTool(EditorTools.NONE);
-			missionListFragment.updateChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+			missionListFragment
+					.updateChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
 			contextualActionBar = startActionMode(this);
 			missionProxy.selection.setSelectionTo(item);
 		}
@@ -569,8 +634,10 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	}
 
 	private void doClearMissionConfirmation() {
-		YesNoDialog ynd = YesNoDialog.newInstance(getString(R.string.dlg_clear_mission_title),
-				getString(R.string.dlg_clear_mission_confirm), new YesNoDialog.Listener() {
+		YesNoDialog ynd = YesNoDialog.newInstance(
+				getString(R.string.dlg_clear_mission_title),
+				getString(R.string.dlg_clear_mission_confirm),
+				new YesNoDialog.Listener() {
 					@Override
 					public void onYes() {
 						missionProxy.clear();
