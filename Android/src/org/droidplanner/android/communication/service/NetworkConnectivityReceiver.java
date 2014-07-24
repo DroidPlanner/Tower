@@ -10,6 +10,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
+import org.droidplanner.android.services.UploaderService;
+
 /**
  * When the device's network connectivity is restored, check and see if there's anymore data to
  * upload.
