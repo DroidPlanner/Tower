@@ -55,7 +55,7 @@ public class MissionCircleFragment extends MissionDetailFragment implements
 
 		loiterTurnSeekBar = (SeekBarWithText) view.findViewById(R.id.loiterTurn);
 		loiterTurnSeekBar.setOnChangedListener(this);
-		loiterTurnSeekBar.setValue(item.getNumeberOfTurns());
+		loiterTurnSeekBar.setValue(item.getNumberOfTurns());
 
 		SeekBarWithText loiterRadiusSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.loiterRadius);
