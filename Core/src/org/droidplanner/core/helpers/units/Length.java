@@ -16,6 +16,10 @@ public class Length {
 	public void set(double lengthInMeters) {
 		this.lengthInMeters = lengthInMeters;
 	}
+	
+	public void addMeters(double lengthInMeters){
+		this.lengthInMeters+=lengthInMeters;
+	}
 
 	@Override
 	public String toString() {
