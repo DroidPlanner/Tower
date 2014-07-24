@@ -7,6 +7,7 @@ import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.proxy.mission.item.adapters.AdapterMissionItems;
 import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
+import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.MissionItemType;
 
@@ -54,7 +55,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 
 	protected MissionItemProxy itemRender;
 
-	public static MissionDetailFragment newInstance(MissionItemType itemType) {
+	public static MissionDetailFragment newInstance(MissionItemType itemType, Mission mission) {
 		MissionDetailFragment fragment;
 		switch (itemType) {
 		case LAND:
@@ -64,7 +65,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 			fragment = new MissionLoiterFragment();
 			break;
 		case CIRCLE:
-			fragment = new MissionCircleFragment();
+			fragment = new MissionCircleFragment(mission);
 			break;
 		case LOITERT:
 			fragment = new MissionLoiterTFragment();
