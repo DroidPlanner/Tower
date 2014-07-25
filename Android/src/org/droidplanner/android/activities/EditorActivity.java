@@ -308,14 +308,14 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 			MissionItem previousWaypoint = mission
 					.getPreviousItem((MissionItem) waypoint);
 			Coord2D previousWaypointCoordinate = null;
-			
-			 try {
+
+			try {
 				if ((SpatialCoordItem) previousWaypoint != null) {
-						previousWaypointCoordinate = ((SpatialCoordItem) previousWaypoint)
-								.getCoordinate();
-					}
+					previousWaypointCoordinate = ((SpatialCoordItem) previousWaypoint)
+							.getCoordinate();
+				}
 			} catch (ClassCastException c) {
-				//Some missionitems, like RTL, have no associated coordinate
+				// Some missionitems, like RTL, have no associated coordinate
 			}
 
 			if (previousWaypoint instanceof Survey) {
@@ -439,7 +439,8 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 				Grid surveyGrid = survey.getGrid();
 				if (previousWaypoint != null) {
 					if (surveyGrid != null && surveyGrid.gridPoints != null
-							&& surveyGrid.gridPoints.size() > 0) {
+							&& surveyGrid.gridPoints.size() > 0
+							&& previousWaypoint != null) {
 						Coord2D startOfSurvey = surveyGrid.gridPoints.get(0);
 						dist.add(GeoTools.getDistance(
 								previousWaypointCoordinate, startOfSurvey));
