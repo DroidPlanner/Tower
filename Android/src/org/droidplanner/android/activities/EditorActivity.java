@@ -31,6 +31,8 @@ import org.droidplanner.core.helpers.geoTools.GeoTools;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.mission.MissionItem;
+import org.droidplanner.core.mission.survey.Survey;
+import org.droidplanner.core.mission.survey.grid.Grid;
 import org.droidplanner.core.mission.waypoints.Circle;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.core.parameters.Parameter;
@@ -406,6 +408,16 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 				// now, land from the rTLALT
 				dist.addMeters(rTLAlt);
 				break;
+			case SURVEY:
+				Survey survey = (Survey) waypoint;
+				Grid surveyGrid = survey.getGrid();
+				if(surveyGrid!=null){
+					List<Coord2D> surveyGridWaypoints = survey.getGrid().getGridPoints();					
+					for(int i=0;i<surveyGridWaypoints.size()-1;i++){
+						dist.add(GeoTools.getDistance(surveyGridWaypoints.get(i), surveyGridWaypoints.get(i+1)));
+					}
+				}
+				break; 
 			default:
 				break;
 
