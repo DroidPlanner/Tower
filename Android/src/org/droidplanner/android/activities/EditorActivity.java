@@ -26,6 +26,8 @@ import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
+import org.droidplanner.core.helpers.coordinates.Coord3D;
+import org.droidplanner.core.helpers.geoTools.GeoTools;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.waypoints.Circle;
@@ -34,6 +36,7 @@ import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.ActionMode.Callback;
 import android.view.Menu;
@@ -290,7 +293,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		String distance = getString(R.string.distance);
 		Length dist = new Length(0.0);
 		List<MissionItem> waypoints = drone.mission.getItems();
-		if(waypoints.size()<2){
+		if (waypoints.size() < 2) {
 			editorInfoView.setText(distance + ": " + dist);
 			return;
 		}
@@ -298,15 +301,31 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 			switch (waypoint.getType()) {
 			case SPLINE_WAYPOINT:
 			case WAYPOINT:
-				Length altDelta, distDelta;
+				Length altDelta = new Length(0.0),
+						distDelta = new Length(0.0);
 				try {
 					altDelta = drone.mission
 							.getAltitudeDiffFromPreviousItem((SpatialCoordItem) waypoint);
 					distDelta = drone.mission
 							.getDistanceFromLastWaypoint((SpatialCoordItem) waypoint);
-				} catch (IllegalArgumentException e) {
-					altDelta = new Length(0.0);//If a mission starts with a waypoint (not a takeoff), then this happens.
-					distDelta = new Length(0.0);
+				} catch (IllegalArgumentException e) {// if this is the first
+														// waypoint after a
+														// takeoff, this
+														// happens. We want to
+														// assume that the
+														// current user location
+														// is the arming
+														// location
+					if (planningMapFragment.drone.home.isValid()) {
+						Coord2D home = planningMapFragment.drone.home
+								.getCoord();
+						Coord3D waypointCoordinate = ((SpatialCoordItem) waypoint)
+								.getCoordinate();
+						altDelta = new Length(waypointCoordinate.getAltitude()
+								.valueInMeters());
+						distDelta = GeoTools.getDistance(home,
+								waypointCoordinate);
+					}
 				}
 				dist.add(pythagoreamTheorem(altDelta, distDelta));
 				break;
@@ -323,20 +342,37 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 				// begins strafing. Also add all altitude steps. And remember to
 				// multiply each circumference by the number of turns it does
 				Circle circle = (Circle) waypoint;
-				Length altDelta2, distDelta2;
+				Length altDelta2 = new Length(0.0),
+						distDelta2 = new Length(0.0);
 				try {
 					altDelta2 = drone.mission
 							.getAltitudeDiffFromPreviousItem((SpatialCoordItem) waypoint);
-					distDelta2 = drone.mission
-							.getDistanceFromLastWaypoint((SpatialCoordItem) waypoint).addMeters(-1*circle.getRadius());
-				} catch (IllegalArgumentException e) {
-					altDelta2 = new Length(0.0);//If a mission starts with a circle (not a takeoff), then this happens.
-					distDelta2 = new Length(0.0);
+					distDelta2 = drone.mission.getDistanceFromLastWaypoint(
+							(SpatialCoordItem) waypoint).addMeters(
+							-1 * circle.getRadius());
+				} catch (IllegalArgumentException e) {// if this is the first
+														// waypoint after a
+														// takeoff, this
+														// happens. We want to
+														// assume that the
+														// current user location
+														// is the arming
+														// location
+					if (planningMapFragment.drone.home.isValid()) {
+						Coord2D home = planningMapFragment.drone.home
+								.getCoord();
+						Coord3D waypointCoordinate = ((SpatialCoordItem) waypoint)
+								.getCoordinate();
+						altDelta2 = new Length(waypointCoordinate.getAltitude()
+								.valueInMeters());
+						distDelta2 = GeoTools.getDistance(home,
+								waypointCoordinate);
+					}
 				}
 				dist.add(pythagoreamTheorem(altDelta2, distDelta2));
 				dist.addMeters(-1 * circle.getRadius());
 				for (int step = 0; step < circle.getNumberOfSteps(); step++) {
-					double circumference = circle.getRadius()*2 * Math.PI;
+					double circumference = circle.getRadius() * 2 * Math.PI;
 					dist.addMeters(circumference * circle.getNumberOfTurns());
 					dist.addMeters(circle.getAltitudeStep());
 				}
