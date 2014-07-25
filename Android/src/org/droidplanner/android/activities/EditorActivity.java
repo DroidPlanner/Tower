@@ -342,9 +342,6 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 					dist.addMeters(circle.getAltitudeStep());
 				}
 				break;
-			case RTL:
-				// TODO implement this
-				break;
 			default:
 				break;
 
