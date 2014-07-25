@@ -163,13 +163,13 @@ public class Mission extends DroneVariable {
 			throws IllegalArgumentException {
 		int i = items.indexOf(waypoint);
 		if (i > 0) {
-			MissionItem previus = items.get(i - 1);
-			if (previus instanceof SpatialCoordItem) {
+			MissionItem previous = items.get(i - 1);
+			if (previous instanceof SpatialCoordItem) {
 				return waypoint
 						.getCoordinate()
 						.getAltitude()
 						.subtract(
-								((SpatialCoordItem) previus).getCoordinate()
+								((SpatialCoordItem) previous).getCoordinate()
 										.getAltitude());
 			}
 		}
