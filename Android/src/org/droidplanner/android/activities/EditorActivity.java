@@ -317,7 +317,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 				dist.add(drone.mission.getLastAltitude());
 				break;
 			case CIRCLE:
-				// Add the circumferences (PI*r*r), but subtract twice the
+				// Add the circumferences (2*PI*r), but subtract twice the
 				// radius, b/c the drone never actually travels to/from the
 				// center of the circle. It stops at the edge of the circle and
 				// begins strafing. Also add all altitude steps. And remember to
@@ -336,8 +336,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 				dist.add(pythagoreamTheorem(altDelta2, distDelta2));
 				dist.addMeters(-1 * circle.getRadius());
 				for (int step = 0; step < circle.getNumberOfSteps(); step++) {
-					double circumference = Math.pow(circle.getRadius(), 2)
-							* Math.PI;
+					double circumference = circle.getRadius()*2 * Math.PI;
 					dist.addMeters(circumference * circle.getNumberOfTurns());
 					dist.addMeters(circle.getAltitudeStep());
 				}
