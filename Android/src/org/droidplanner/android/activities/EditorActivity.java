@@ -290,6 +290,10 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		String distance = getString(R.string.distance);
 		Length dist = new Length(0.0);
 		List<MissionItem> waypoints = drone.mission.getItems();
+		if(waypoints.size()<2){
+			editorInfoView.setText(distance + ": " + dist);
+			return;
+		}
 		for (MissionItem waypoint : waypoints) {
 			switch (waypoint.getType()) {
 			case SPLINE_WAYPOINT:
