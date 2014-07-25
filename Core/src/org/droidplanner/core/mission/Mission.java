@@ -190,7 +190,15 @@ public class Mission extends DroneVariable {
 		throw new IllegalArgumentException(
 				"Last waypoint doesn't have a coordinate");
 	}
-
+	
+	public MissionItem getPreviousItem(MissionItem item){
+		int i = items.indexOf(item);
+		if(i>0){
+			return items.get(i - 1);
+		}
+		return null;
+	}
+	
 	public boolean hasItem(MissionItem item) {
 		return items.contains(item);
 	}
