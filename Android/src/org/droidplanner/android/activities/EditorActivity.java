@@ -285,7 +285,8 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 			}
 			recalculateMissionTime();
 			break;
-
+		case HOME:
+			recalculateMissionTime();
 		default:
 			break;
 		}
