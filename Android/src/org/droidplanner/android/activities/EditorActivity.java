@@ -285,16 +285,16 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 					removeItemDetail();
 				}
 			}
-			recalculateMissionTime();
+			recalculateMissionLength();
 			break;
 		case HOME:
-			recalculateMissionTime();
+			recalculateMissionLength();
 		default:
 			break;
 		}
 	}
 
-	private void recalculateMissionTime() {
+	private void recalculateMissionLength() {
 		// get mission items
 		String distance = getString(R.string.distance);
 		Length dist = new Length(0.0);
@@ -304,6 +304,22 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 			return;
 		}
 		for (MissionItem waypoint : waypoints) {
+			Mission mission = waypoint.getMission();
+			MissionItem previousWaypoint = mission
+					.getPreviousItem((MissionItem) waypoint);
+			Coord2D previousWaypointCoordinate = null;
+			if (previousWaypoint instanceof Survey) {
+				if (((Survey) previousWaypoint).getGrid() != null) {
+					List<Coord2D> gridPoints = ((Survey) previousWaypoint)
+							.getGrid().gridPoints;
+					previousWaypointCoordinate = gridPoints.get(gridPoints
+							.size() - 1);
+				}
+			} else if ((SpatialCoordItem) previousWaypoint != null) {
+				previousWaypointCoordinate = ((SpatialCoordItem) previousWaypoint)
+						.getCoordinate();
+			}
+
 			switch (waypoint.getType()) {
 			case SPLINE_WAYPOINT:
 			case WAYPOINT:
@@ -312,8 +328,11 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 				try {
 					altDelta = drone.mission
 							.getAltitudeDiffFromPreviousItem((SpatialCoordItem) waypoint);
-					distDelta = drone.mission
-							.getDistanceFromLastWaypoint((SpatialCoordItem) waypoint);
+					if (previousWaypoint != null) {
+						distDelta = GeoTools.getDistance(
+								previousWaypointCoordinate,
+								((SpatialCoordItem) waypoint).getCoordinate());
+					}
 				} catch (IllegalArgumentException e) {// if this is the first
 														// waypoint after a
 														// takeoff, this
@@ -353,9 +372,12 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 				try {
 					altDelta2 = drone.mission
 							.getAltitudeDiffFromPreviousItem((SpatialCoordItem) waypoint);
-					distDelta2 = drone.mission.getDistanceFromLastWaypoint(
-							(SpatialCoordItem) waypoint).addMeters(
-							-1 * circle.getRadius());
+					if (previousWaypoint != null) {
+						distDelta2 = GeoTools.getDistance(
+								previousWaypointCoordinate,
+								((SpatialCoordItem) waypoint).getCoordinate());
+					}
+					distDelta2.addMeters(-1 * circle.getRadius());
 				} catch (IllegalArgumentException e) {// if this is the first
 														// waypoint after a
 														// takeoff, this
@@ -398,12 +420,10 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 				// then, travel back to home
 				if (planningMapFragment.drone.home.isValid()) {
 					Coord2D home = planningMapFragment.drone.home.getCoord();
-					Mission mission = waypoint.getMission();
-					SpatialCoordItem previousWaypoint = (SpatialCoordItem) mission
-							.getPreviousItem((MissionItem) waypoint);
-					Coord3D previousWaypointCoordinate = previousWaypoint
-							.getCoordinate();
-					dist.add(GeoTools.getDistance(home, previousWaypointCoordinate));
+					if (previousWaypoint != null) {
+						dist.add(GeoTools.getDistance(home,
+								previousWaypointCoordinate));
+					}
 				}
 				// now, land from the rTLALT
 				dist.addMeters(rTLAlt);
@@ -411,13 +431,25 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 			case SURVEY:
 				Survey survey = (Survey) waypoint;
 				Grid surveyGrid = survey.getGrid();
-				if(surveyGrid!=null){
-					List<Coord2D> surveyGridWaypoints = survey.getGrid().getGridPoints();					
-					for(int i=0;i<surveyGridWaypoints.size()-1;i++){
-						dist.add(GeoTools.getDistance(surveyGridWaypoints.get(i), surveyGridWaypoints.get(i+1)));
+				if (previousWaypoint != null) {
+					if (surveyGrid != null && surveyGrid.gridPoints != null
+							&& surveyGrid.gridPoints.size() > 0) {
+						Coord2D startOfSurvey = surveyGrid.gridPoints.get(0);
+						dist.add(GeoTools.getDistance(
+								previousWaypointCoordinate, startOfSurvey));
+					}
+
+				}
+				if (surveyGrid != null) {
+					List<Coord2D> surveyGridWaypoints = survey.getGrid()
+							.getGridPoints();
+					for (int i = 0; i < surveyGridWaypoints.size() - 1; i++) {
+						dist.add(GeoTools.getDistance(
+								surveyGridWaypoints.get(i),
+								surveyGridWaypoints.get(i + 1)));
 					}
 				}
-				break; 
+				break;
 			default:
 				break;
 
