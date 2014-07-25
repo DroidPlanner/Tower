@@ -17,8 +17,9 @@ public class Length {
 		this.lengthInMeters = lengthInMeters;
 	}
 	
-	public void addMeters(double lengthInMeters){
+	public Length addMeters(double lengthInMeters){
 		this.lengthInMeters+=lengthInMeters;
+		return this;
 	}
 	
 	public Length add(Length length){
