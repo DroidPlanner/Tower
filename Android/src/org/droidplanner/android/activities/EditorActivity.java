@@ -308,6 +308,16 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 			MissionItem previousWaypoint = mission
 					.getPreviousItem((MissionItem) waypoint);
 			Coord2D previousWaypointCoordinate = null;
+			
+			 try {
+				if ((SpatialCoordItem) previousWaypoint != null) {
+						previousWaypointCoordinate = ((SpatialCoordItem) previousWaypoint)
+								.getCoordinate();
+					}
+			} catch (ClassCastException c) {
+				//Some missionitems, like RTL, have no associated coordinate
+			}
+
 			if (previousWaypoint instanceof Survey) {
 				if (((Survey) previousWaypoint).getGrid() != null) {
 					List<Coord2D> gridPoints = ((Survey) previousWaypoint)
@@ -315,11 +325,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 					previousWaypointCoordinate = gridPoints.get(gridPoints
 							.size() - 1);
 				}
-			} else if ((SpatialCoordItem) previousWaypoint != null) {
-				previousWaypointCoordinate = ((SpatialCoordItem) previousWaypoint)
-						.getCoordinate();
 			}
-
 			switch (waypoint.getType()) {
 			case SPLINE_WAYPOINT:
 			case WAYPOINT:
