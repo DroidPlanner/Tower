@@ -29,11 +29,14 @@ import org.droidplanner.core.helpers.coordinates.Coord2D;
 import org.droidplanner.core.helpers.coordinates.Coord3D;
 import org.droidplanner.core.helpers.geoTools.GeoTools;
 import org.droidplanner.core.helpers.units.Length;
+import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.waypoints.Circle;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
+import org.droidplanner.core.parameters.Parameter;
 
 import android.os.Bundle;
+import android.preference.Preference;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
@@ -302,7 +305,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 			case SPLINE_WAYPOINT:
 			case WAYPOINT:
 				Length altDelta = new Length(0.0),
-						distDelta = new Length(0.0);
+				distDelta = new Length(0.0);
 				try {
 					altDelta = drone.mission
 							.getAltitudeDiffFromPreviousItem((SpatialCoordItem) waypoint);
@@ -311,11 +314,11 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 				} catch (IllegalArgumentException e) {// if this is the first
 														// waypoint after a
 														// takeoff, this
-														// happens. We want to
-														// assume that the
-														// current user location
-														// is the arming
-														// location
+														// happens. Use drone
+														// "home" only if
+														// available, else just
+														// ignore from
+														// calculations.
 					if (planningMapFragment.drone.home.isValid()) {
 						Coord2D home = planningMapFragment.drone.home
 								.getCoord();
@@ -343,7 +346,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 				// multiply each circumference by the number of turns it does
 				Circle circle = (Circle) waypoint;
 				Length altDelta2 = new Length(0.0),
-						distDelta2 = new Length(0.0);
+				distDelta2 = new Length(0.0);
 				try {
 					altDelta2 = drone.mission
 							.getAltitudeDiffFromPreviousItem((SpatialCoordItem) waypoint);
@@ -353,11 +356,11 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 				} catch (IllegalArgumentException e) {// if this is the first
 														// waypoint after a
 														// takeoff, this
-														// happens. We want to
-														// assume that the
-														// current user location
-														// is the arming
-														// location
+														// happens. Use drone
+														// "home" only if
+														// available, else just
+														// ignore from
+														// calculations.
 					if (planningMapFragment.drone.home.isValid()) {
 						Coord2D home = planningMapFragment.drone.home
 								.getCoord();
@@ -376,6 +379,31 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 					dist.addMeters(circumference * circle.getNumberOfTurns());
 					dist.addMeters(circle.getAltitudeStep());
 				}
+				break;
+			case RTL:
+				// first, change altitude to rTLALT
+				double rTLAlt = 15.0;// default RTL value in case we haven't
+										// loaded this param yet
+				Parameter prefAlt = drone.parameters.getParameter("RTL_ATL");
+				if (prefAlt != null) {
+					rTLAlt = prefAlt.value / 10.0;// it's in centimeters
+				}
+				double lastAltitude = waypoint.getMission().getLastAltitude()
+						.valueInMeters();
+				Length altDelta3 = new Length(Math.abs(lastAltitude - rTLAlt));
+				dist.add(altDelta3);
+				// then, travel back to home
+				if (planningMapFragment.drone.home.isValid()) {
+					Coord2D home = planningMapFragment.drone.home.getCoord();
+					Mission mission = waypoint.getMission();
+					SpatialCoordItem previousWaypoint = (SpatialCoordItem) mission
+							.getPreviousItem((MissionItem) waypoint);
+					Coord3D previousWaypointCoordinate = previousWaypoint
+							.getCoordinate();
+					dist.add(GeoTools.getDistance(home, previousWaypointCoordinate));
+				}
+				// now, land from the rTLALT
+				dist.addMeters(rTLAlt);
 				break;
 			default:
 				break;
