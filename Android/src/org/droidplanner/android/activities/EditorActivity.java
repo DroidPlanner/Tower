@@ -319,7 +319,18 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 				// begins strafing. Also add all altitude steps. And remember to
 				// multiply each circumference by the number of turns it does
 				Circle circle = (Circle) waypoint;
-				dist.addMeters(-2 * circle.getRadius());
+				Length altDelta2, distDelta2;
+				try {
+					altDelta2 = drone.mission
+							.getAltitudeDiffFromPreviousItem((SpatialCoordItem) waypoint);
+					distDelta2 = drone.mission
+							.getDistanceFromLastWaypoint((SpatialCoordItem) waypoint).addMeters(-1*circle.getRadius());
+				} catch (IllegalArgumentException e) {
+					altDelta2 = new Length(0.0);//If a mission starts with a circle (not a takeoff), then this happens.
+					distDelta2 = new Length(0.0);
+				}
+				dist.add(pythagoreamTheorem(altDelta2, distDelta2));
+				dist.addMeters(-1 * circle.getRadius());
 				for (int step = 0; step < circle.getNumberOfSteps(); step++) {
 					double circumference = Math.pow(circle.getRadius(), 2)
 							* Math.PI;
