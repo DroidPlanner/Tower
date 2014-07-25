@@ -180,7 +180,6 @@
     <string name="waypointInfo_SetJump">重复航点</string>
 
     <!-- Waypoint editor -->
-    <string name="editor_info_window">：200m，飞行时间：3:30s</string>
     <string name="distance">距离</string>
     <string name="flight_time">飞行时间</string>    
     <string name="distance_to_home">至家的距离</string>
