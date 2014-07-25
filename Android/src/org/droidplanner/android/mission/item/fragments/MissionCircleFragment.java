@@ -22,12 +22,7 @@ public class MissionCircleFragment extends MissionDetailFragment implements
 	private CheckBox checkBoxAdvanced;
 	private SeekBarWithText altitudeStepSeekBar;
 	private SeekBarWithText numberStepSeekBar;
-	private Mission mission;
 
-	public MissionCircleFragment(Mission mission){
-		this.mission = mission;
-	}
-	
 	@Override
 	protected int getResource() {
 		return R.layout.fragment_editor_detail_circle;
@@ -92,7 +87,7 @@ public class MissionCircleFragment extends MissionDetailFragment implements
 		} else {
 			item.setSingleCircle();
 		}
-		mission.notifyMissionUpdate();
+		this.itemRender.getMissionItem().getMission().notifyMissionUpdate();
 	}
 
 }

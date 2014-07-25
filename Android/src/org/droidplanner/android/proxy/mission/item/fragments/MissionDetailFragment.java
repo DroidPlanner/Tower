@@ -55,7 +55,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 
 	protected MissionItemProxy itemRender;
 
-	public static MissionDetailFragment newInstance(MissionItemType itemType, Mission mission) {
+	public static MissionDetailFragment newInstance(MissionItemType itemType) {
 		MissionDetailFragment fragment;
 		switch (itemType) {
 		case LAND:
@@ -65,7 +65,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 			fragment = new MissionLoiterFragment();
 			break;
 		case CIRCLE:
-			fragment = new MissionCircleFragment(mission);
+			fragment = new MissionCircleFragment();
 			break;
 		case LOITERT:
 			fragment = new MissionLoiterTFragment();
