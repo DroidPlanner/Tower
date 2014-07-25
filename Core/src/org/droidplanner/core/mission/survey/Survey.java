@@ -77,6 +77,10 @@ public class Survey extends MissionItem {
 		return mavMsg;
 	}
 
+	public Polygon getPolygon(){
+		return polygon;
+	}
+
 	@Override
 	public void unpackMAVMessage(msg_mission_item mavMsg) {
 		// TODO Auto-generated method stub
