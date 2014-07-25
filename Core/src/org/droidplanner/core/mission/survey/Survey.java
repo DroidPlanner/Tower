@@ -80,6 +80,10 @@ public class Survey extends MissionItem {
 	public Polygon getPolygon(){
 		return polygon;
 	}
+	
+	public Grid getGrid(){
+		return grid;
+	}
 
 	@Override
 	public void unpackMAVMessage(msg_mission_item mavMsg) {
