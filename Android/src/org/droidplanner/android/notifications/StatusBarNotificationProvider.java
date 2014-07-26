@@ -342,37 +342,46 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 	@Override
 	public void onWeatherFetchSuccess(IWeatherItem item) {
 		int notificationId = 0;
-		NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext)
-		.setContentIntent(mNotificationIntent)
-		.setSmallIcon(R.drawable.ic_launcher);
-		
-		
-		if (item instanceof Wind){
+		NotificationCompat.Builder builder = new NotificationCompat.Builder(
+				mContext).setContentIntent(mNotificationIntent).setSmallIcon(
+				R.drawable.ic_launcher);
+
+		if (item instanceof Wind) {
 			Wind wind = (Wind) item;
-			if(wind.getSpeed() >= 10) {
-				builder.setContentText("You may have problems with drone controlling");
-				builder.setContentTitle("Extreme wind speed!");
-				notificationId = WEATHER_WIND_NOTIFICATION_ID;
+			notificationId = WEATHER_WIND_NOTIFICATION_ID;
+			if (wind.getSpeed() >= Wind.MEDIUM_SPEED
+					&& wind.getSpeed() < Wind.EXTREME_SPEED) {
+				builder.setContentTitle(mContext
+						.getString(R.string.weather_wind_medium));
+
 			}
-			
-		}
-		else if (item instanceof SolarRadiation){
+
+			else if (wind.getSpeed() >= Wind.EXTREME_SPEED) {
+				builder.setContentTitle(mContext
+						.getString(R.string.weather_wind_extreme));
+			}
+
+		} else if (item instanceof SolarRadiation) {
 			SolarRadiation radiation = (SolarRadiation) item;
-			if (radiation.getkIndex() >= SolarRadiation.MIDDLE_VALUE){
-			builder.setContentText("You may have problems with GPS");
 			notificationId = WEATHER_SOLAR_RADIATION_NOTIFICATION_ID;
-			builder.setContentTitle("Extreme solar radiation!");
+			if (radiation.getkIndex() == SolarRadiation.MIDDLE_K_INDEX) {
+
+				builder.setContentTitle(mContext
+						.getString(R.string.weather_wind_medium));
+			} else if (radiation.getkIndex() > SolarRadiation.MIDDLE_K_INDEX) {
+				builder.setContentTitle(mContext
+						.getString(R.string.weather_wind_extreme));
 			}
 		}
-		
+
 		mHandler.removeCallbacks(mDismissWeatherNotification);
 		// Schedule the notification dismissal
 		mHandler.postDelayed(mDismissWeatherNotification,
 				COUNTDOWN_TO_DISMISSAL);
-		
+
 		NotificationManagerCompat.from(mContext).notify(notificationId,
 				builder.build());
-		
+
 	}
 
 	}
