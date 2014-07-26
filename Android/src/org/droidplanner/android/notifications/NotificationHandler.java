@@ -64,7 +64,7 @@ public class NotificationHandler implements DroneInterfaces.OnDroneListener, IWe
 	@Override
 	public void onWeatherFetchSuccess(IWeatherItem item) {
 		mStatusBarNotification.onWeatherFetchSuccess(item);
-		
+		mTtsNotification.onWeatherFetchSuccess(item);
 		
 	}
 
