@@ -4,6 +4,8 @@ import java.util.Locale;
 
 import org.droidplanner.R;
 import org.droidplanner.android.weather.item.IWeatherItem;
+import org.droidplanner.android.weather.item.SolarRadiation;
+import org.droidplanner.android.weather.item.Wind;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.variables.Calibration;
@@ -175,8 +177,30 @@ public class TTSNotificationProvider implements OnInitListener,
 
 	@Override
 	public void onWeatherFetchSuccess(IWeatherItem item) {
-		// TODO Auto-generated method stub
-		
+		if (item instanceof Wind) {
+			Wind wind = (Wind) item;
+
+			if (wind.getSpeed() >= Wind.MEDIUM_SPEED
+					&& wind.getSpeed() < Wind.EXTREME_SPEED) {
+				speak(context.getString(R.string.weather_wind_medium));
+
+			}
+
+			else if (wind.getSpeed() >= Wind.EXTREME_SPEED) {
+				speak(context.getString(R.string.weather_wind_extreme));
+			}
+
+		} else if (item instanceof SolarRadiation) {
+			SolarRadiation radiation = (SolarRadiation) item;
+
+			if (radiation.getkIndex() == SolarRadiation.MIDDLE_K_INDEX) {
+
+				speak(context.getString(R.string.weather_wind_medium));
+			} else if (radiation.getkIndex() > SolarRadiation.MIDDLE_K_INDEX) {
+				speak(context.getString(R.string.weather_wind_extreme));
+			}
+		}
+
 	}
 
 }
