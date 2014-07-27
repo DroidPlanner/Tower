@@ -158,21 +158,48 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		switch (event){
+		switch (event) {
 		case HEARTBEAT_TIMEOUT:
 			setFlyingActionsVisibility(View.GONE);
 			break;
-			
-		case ARMING: case FAILSAFE:
-			
-			int visibility = (drone.state.isArmed() &&  !drone.state.isFailsafe()) ? View.VISIBLE:View.GONE;
+
+		case ARMING:
+		case FAILSAFE:
+
+			int visibility = (drone.state.isArmed() && !drone.state
+					.isFailsafe()) ? View.VISIBLE : View.GONE;
 			setFlyingActionsVisibility(visibility);
+			break;
+		case MODE:
+			switch (drone.state.getMode()) {
+			case ROTOR_LOITER:
+				loiterBtn.setEnabled(false);
+				homeBtn.setEnabled(true);
+				landBtn.setEnabled(true);
+				break;
+			case ROTOR_RTL:
+				loiterBtn.setEnabled(true);
+				homeBtn.setEnabled(false);
+				landBtn.setEnabled(true);
+				break;
+			case ROTOR_LAND:
+				loiterBtn.setEnabled(true);
+				homeBtn.setEnabled(true);
+				landBtn.setEnabled(false);
+				break;
+			default:
+				loiterBtn.setEnabled(true);
+				homeBtn.setEnabled(true);
+				landBtn.setEnabled(true);
+				break;
+
+			}
 			break;
 		default:
 			break;
-			
+
 		}
-		
+
 	}
 
 }
