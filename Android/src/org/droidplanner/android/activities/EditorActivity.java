@@ -282,24 +282,33 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 					removeItemDetail();
 				}
 			}
-			recalculateMissionLength();
+			recalculateMissionLength(planningMapFragment.drone);
 			break;
 		case HOME:
-			recalculateMissionLength();
+			recalculateMissionLength(planningMapFragment.drone);
 		default:
 			break;
 		}
 	}
 
-	private void recalculateMissionLength() {
+	private void recalculateMissionLength(Drone drone2) {
 		// get mission items
 		String distance = getString(R.string.distance);
 		Length dist = new Length(0.0);
-		List<MissionItem> waypoints = drone.mission.getItems();
+		List<MissionItem> waypoints = drone2.mission.getItems();
 		if (waypoints.size() < 2) {
 			editorInfoView.setText(distance + ": " + dist);
 			return;
 		}
+		dist(drone2, dist, waypoints);
+
+		// TODO calculate flight time. Or don't. Seems pretty hard.
+		// String flightTime = getString(R.string.flight_time);
+
+		editorInfoView.setText(distance + ": " + dist);
+	}
+
+	static private void dist(Drone drone2, Length dist, List<MissionItem> waypoints) {
 		for (MissionItem waypoint : waypoints) {
 			Mission mission = waypoint.getMission();
 			MissionItem previousWaypoint = mission.getPreviousItem((MissionItem) waypoint);
@@ -326,7 +335,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 				Length altDelta = new Length(0.0),
 				distDelta = new Length(0.0);
 				try {
-					altDelta = drone.mission
+					altDelta = drone2.mission
 							.getAltitudeDiffFromPreviousItem((SpatialCoordItem) waypoint);
 					if (previousWaypoint != null) {
 						distDelta = GeoTools.getDistance(previousWaypointCoordinate,
@@ -340,8 +349,8 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 														// available, else just
 														// ignore from
 														// calculations.
-					if (planningMapFragment.drone.home.isValid()) {
-						Coord2D home = planningMapFragment.drone.home.getCoord();
+					if (drone2.home.isValid()) {
+						Coord2D home = drone2.home.getCoord();
 						Coord3D waypointCoordinate = ((SpatialCoordItem) waypoint).getCoordinate();
 						altDelta = new Length(waypointCoordinate.getAltitude().valueInMeters());
 						distDelta = GeoTools.getDistance(home, waypointCoordinate);
@@ -350,10 +359,10 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 				dist.add(pythagoreamTheorem(altDelta, distDelta));
 				break;
 			case TAKEOFF:
-				dist.add(drone.mission.getDefaultAlt());
+				dist.add(drone2.mission.getDefaultAlt());
 				break;
 			case LAND:
-				dist.add(drone.mission.getLastAltitude());
+				dist.add(drone2.mission.getLastAltitude());
 				break;
 			case CIRCLE:
 				// Add the circumferences (2*PI*r), but subtract twice the
@@ -365,7 +374,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 				Length altDelta2 = new Length(0.0),
 				distDelta2 = new Length(0.0);
 				try {
-					altDelta2 = drone.mission
+					altDelta2 = drone2.mission
 							.getAltitudeDiffFromPreviousItem((SpatialCoordItem) waypoint);
 					if (previousWaypoint != null) {
 						distDelta2 = GeoTools.getDistance(previousWaypointCoordinate,
@@ -380,8 +389,8 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 														// available, else just
 														// ignore from
 														// calculations.
-					if (planningMapFragment.drone.home.isValid()) {
-						Coord2D home = planningMapFragment.drone.home.getCoord();
+					if (drone2.home.isValid()) {
+						Coord2D home = drone2.home.getCoord();
 						Coord3D waypointCoordinate = ((SpatialCoordItem) waypoint).getCoordinate();
 						altDelta2 = new Length(waypointCoordinate.getAltitude().valueInMeters());
 						distDelta2 = GeoTools.getDistance(home, waypointCoordinate);
@@ -399,7 +408,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 				// first, change altitude to rTLALT
 				double rTLAlt = 15.0;// default RTL value in case we haven't
 										// loaded this param yet
-				Parameter prefAlt = drone.parameters.getParameter("RTL_ATL");
+				Parameter prefAlt = drone2.parameters.getParameter("RTL_ATL");
 				if (prefAlt != null) {
 					rTLAlt = prefAlt.value / 10.0;// it's in centimeters
 				}
@@ -407,8 +416,8 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 				Length altDelta3 = new Length(Math.abs(lastAltitude - rTLAlt));
 				dist.add(altDelta3);
 				// then, travel back to home
-				if (planningMapFragment.drone.home.isValid()) {
-					Coord2D home = planningMapFragment.drone.home.getCoord();
+				if (drone2.home.isValid()) {
+					Coord2D home = drone2.home.getCoord();
 					if (previousWaypoint != null) {
 						dist.add(GeoTools.getDistance(home, previousWaypointCoordinate));
 					}
@@ -440,14 +449,9 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 			}
 		}
-
-		// TODO calculate flight time. Or don't. Seems pretty hard.
-		// String flightTime = getString(R.string.flight_time);
-
-		editorInfoView.setText(distance + ": " + dist);
 	}
 
-	private Length pythagoreamTheorem(Length altDelta, Length distDelta) {
+	private static Length pythagoreamTheorem(Length altDelta, Length distDelta) {
 		return new Length(Math.sqrt(Math.pow(altDelta.valueInMeters(), 2)
 				+ Math.pow(distDelta.valueInMeters(), 2)));
 	}
