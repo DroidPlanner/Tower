@@ -34,8 +34,7 @@ public class MathUtil {
 		return constrainAngle(a + angleDiff(a, b) * alpha);
 	}
 
-	public static Length pythagoreamTheorem(Length altDelta, Length distDelta) {
-		return new Length(Math.sqrt(Math.pow(altDelta.valueInMeters(), 2)
-				+ Math.pow(distDelta.valueInMeters(), 2)));
+	public static Length hypot(Length altDelta, Length distDelta) {
+		return new Length(Math.hypot(altDelta.valueInMeters(),distDelta.valueInMeters()));
 	}
 }

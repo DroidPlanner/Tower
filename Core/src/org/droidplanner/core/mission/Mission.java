@@ -319,7 +319,7 @@ public class Mission extends DroneVariable {
 						distDelta = GeoTools.getDistance(home, waypointCoordinate);
 					}
 				}
-				dist.add(MathUtil.pythagoreamTheorem(altDelta, distDelta));
+				dist.add(MathUtil.hypot(altDelta, distDelta));
 				break;
 			case TAKEOFF:
 				dist.add(drone2.mission.getDefaultAlt());
@@ -359,7 +359,7 @@ public class Mission extends DroneVariable {
 						distDelta2 = GeoTools.getDistance(home, waypointCoordinate);
 					}
 				}
-				dist.add(MathUtil.pythagoreamTheorem(altDelta2, distDelta2));
+				dist.add(MathUtil.hypot(altDelta2, distDelta2));
 				dist.addMeters(-1 * circle.getRadius());
 				for (int step = 0; step < circle.getNumberOfSteps(); step++) {
 					double circumference = circle.getRadius() * 2 * Math.PI;
