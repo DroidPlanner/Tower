@@ -2,14 +2,12 @@ package org.droidplanner.android.fragments;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText;
 import org.droidplanner.android.widgets.graph.Chart;
 import org.droidplanner.android.widgets.graph.ChartSeries;
 import org.droidplanner.core.MAVLink.MavLinkStreamRates;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.core.parameters.Parameter;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -34,10 +32,10 @@ public class TuningFragment extends Fragment implements OnDroneListener {
 	private Chart topChart;
 	private Chart bottomChart;
 
-	private Parameter rollP;
-	private Parameter rollD;
-	private Parameter yawP;
-	private Parameter thrAcl;
+	/*
+	 * private Parameter rollP; private Parameter rollD; private Parameter yawP;
+	 * private Parameter thrAcl;
+	 */
 
 	private ChartSeries bottomDataReference;
 
@@ -86,13 +84,16 @@ public class TuningFragment extends Fragment implements OnDroneListener {
 		topChart = (Chart) view.findViewById(R.id.chartTop);
 		bottomChart = (Chart) view.findViewById(R.id.chartBottom);
 
-		SeekBarWithText rollPSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.SeekBarRollPitchControl);
-		SeekBarWithText rollDSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.SeekBarRollPitchDampenning);
-		SeekBarWithText yawPSeekBar = (SeekBarWithText) view.findViewById(R.id.SeekBarYawControl);
-		SeekBarWithText thrAclSeekBar = (SeekBarWithText) view
-				.findViewById(R.id.SeekBarThrottleAccel);
+		/*
+		 * SeekBarWithText rollPSeekBar = (SeekBarWithText) view
+		 * .findViewById(R.id.SeekBarRollPitchControl); SeekBarWithText
+		 * rollDSeekBar = (SeekBarWithText) view
+		 * .findViewById(R.id.SeekBarRollPitchDampenning); SeekBarWithText
+		 * yawPSeekBar = (SeekBarWithText)
+		 * view.findViewById(R.id.SeekBarYawControl); SeekBarWithText
+		 * thrAclSeekBar = (SeekBarWithText) view
+		 * .findViewById(R.id.SeekBarThrottleAccel);
+		 */
 	}
 
 	private void setupCharts() {

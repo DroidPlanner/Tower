@@ -27,82 +27,54 @@ import android.widget.TextView;
 
 /**
  * This is used to show the user a list of bluetooth devices to connect to.
- * 
- * @author Fredia Huya-Kouadio
- * @since 1.2.0
  */
 public class BTDeviceListFragment extends DialogFragment {
 
 	/**
-	 * This tag is used for logging.
-	 * 
-	 * @since 1.2.0
-	 */
-	private static final String TAG = BTDeviceListFragment.class.getName();
-
-	/**
 	 * Request code used in onActivityResult to check for bluetooth activation
 	 * result.
-	 * 
-	 * @since 1.2.0
 	 */
 	public static final int REQUEST_ENABLE_BT = 111;
 
 	/**
 	 * Bluetooth adapter.
-	 * 
-	 * @since 1.2.0
 	 */
 	private BluetoothAdapter mBtAdapter;
 
 	/**
 	 * Contains the list of paired devices.
-	 * 
-	 * @since 1.2.0
 	 */
 	private BluetoothDeviceAdapter mPairedDevicesArrayAdapter;
 
 	/**
 	 * Contains the list of newly discovered devices.
-	 * 
-	 * @since 1.2.0
 	 */
 	private BluetoothDeviceAdapter mNewDevicesArrayAdapter;
 
 	/**
 	 * Title for this dialog.
-	 * 
-	 * @since 1.2.0
 	 */
 	private TextView mDeviceListTitle;
 
 	/**
 	 * Progress for this dialog, indicating the device is scanning for new
 	 * bluetooth connections.
-	 * 
-	 * @since 1.2.0
 	 */
 	private ProgressBar mDeviceListProgressBar;
 
 	/**
 	 * Title for the paired devices.
-	 * 
-	 * @since 1.2.0
 	 */
 	private TextView mPairedDevicesTitle;
 
 	/**
 	 * Title for the newly discovered devices.
-	 * 
-	 * @since 1.2.0
 	 */
 	private TextView mNewDevicesTitle;
 
 	/**
 	 * The broadcast receiver listens for discovered devices, and changes the
 	 * title when discovery is finished
-	 * 
-	 * @since 1.2.0
 	 */
 	private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
 		@Override
@@ -133,8 +105,6 @@ public class BTDeviceListFragment extends DialogFragment {
 
 	/**
 	 * The on-click listener for all devices in the listviews.
-	 * 
-	 * @since 1.2.0
 	 */
 	private final AdapterView.OnItemClickListener mDeviceClickListener = new AdapterView.OnItemClickListener() {
 

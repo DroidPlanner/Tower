@@ -1,6 +1,5 @@
 package org.droidplanner.android.widgets.adapterViews;
 
-import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.Map;
@@ -11,7 +10,7 @@ import org.droidplanner.core.parameters.ParameterMetadata;
 /**
  * Date: 2013-12-09 Time: 1:32 AM
  */
-public class ParamsAdapterItem implements Serializable {
+public class ParamsAdapterItem {
 	public enum Validation {
 		NA, INVALID, VALID
 	}

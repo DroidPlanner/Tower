@@ -13,7 +13,6 @@ import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 
 import android.os.Bundle;
 
-@SuppressWarnings("unused")
 public abstract class SuperSetupMainPanel extends SetupMainPanel implements OnCalibrationEvent,
 		OnDroneListener {
 
