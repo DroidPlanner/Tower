@@ -58,9 +58,8 @@ import android.widget.Toast;
  * user to create and/or modify autonomous missions for the drone.
  */
 public class EditorActivity extends SuperUI implements OnPathFinishedListener,
-		OnEditorToolSelected, MissionDetailFragment.OnMissionDetailListener,
-		OnEditorInteraction, Callback,
-		MissionSelection.OnSelectionUpdateListener {
+		OnEditorToolSelected, MissionDetailFragment.OnMissionDetailListener, OnEditorInteraction,
+		Callback, MissionSelection.OnSelectionUpdateListener {
 
 	/**
 	 * Used to retrieve the item detail window when the activity is destroyed,
@@ -143,14 +142,13 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 				planningMapFragment.goToDroneLocation();
 			}
 		});
-		mGoToDroneLocation
-				.setOnLongClickListener(new View.OnLongClickListener() {
-					@Override
-					public boolean onLongClick(View v) {
-						planningMapFragment.setAutoPanMode(AutoPanMode.DRONE);
-						return true;
-					}
-				});
+		mGoToDroneLocation.setOnLongClickListener(new View.OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+				planningMapFragment.setAutoPanMode(AutoPanMode.DRONE);
+				return true;
+			}
+		});
 
 		final RadioButton normalToggle = (RadioButton) findViewById(R.id.normalWpToggle);
 		normalToggle.setOnClickListener(new View.OnClickListener() {
@@ -244,8 +242,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		if (MissionWriter.write(drone.mission.getMsgMissionItems())) {
 			Toast.makeText(this, "File saved", Toast.LENGTH_SHORT).show();
 		} else {
-			Toast.makeText(this, "Error saving file", Toast.LENGTH_SHORT)
-					.show();
+			Toast.makeText(this, "Error saving file", Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -305,8 +302,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		}
 		for (MissionItem waypoint : waypoints) {
 			Mission mission = waypoint.getMission();
-			MissionItem previousWaypoint = mission
-					.getPreviousItem((MissionItem) waypoint);
+			MissionItem previousWaypoint = mission.getPreviousItem((MissionItem) waypoint);
 			Coord2D previousWaypointCoordinate = null;
 
 			try {
@@ -320,10 +316,8 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 			if (previousWaypoint instanceof Survey) {
 				if (((Survey) previousWaypoint).getGrid() != null) {
-					List<Coord2D> gridPoints = ((Survey) previousWaypoint)
-							.getGrid().gridPoints;
-					previousWaypointCoordinate = gridPoints.get(gridPoints
-							.size() - 1);
+					List<Coord2D> gridPoints = ((Survey) previousWaypoint).getGrid().gridPoints;
+					previousWaypointCoordinate = gridPoints.get(gridPoints.size() - 1);
 				}
 			}
 			switch (waypoint.getType()) {
@@ -335,8 +329,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 					altDelta = drone.mission
 							.getAltitudeDiffFromPreviousItem((SpatialCoordItem) waypoint);
 					if (previousWaypoint != null) {
-						distDelta = GeoTools.getDistance(
-								previousWaypointCoordinate,
+						distDelta = GeoTools.getDistance(previousWaypointCoordinate,
 								((SpatialCoordItem) waypoint).getCoordinate());
 					}
 				} catch (IllegalArgumentException e) {// if this is the first
@@ -348,14 +341,10 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 														// ignore from
 														// calculations.
 					if (planningMapFragment.drone.home.isValid()) {
-						Coord2D home = planningMapFragment.drone.home
-								.getCoord();
-						Coord3D waypointCoordinate = ((SpatialCoordItem) waypoint)
-								.getCoordinate();
-						altDelta = new Length(waypointCoordinate.getAltitude()
-								.valueInMeters());
-						distDelta = GeoTools.getDistance(home,
-								waypointCoordinate);
+						Coord2D home = planningMapFragment.drone.home.getCoord();
+						Coord3D waypointCoordinate = ((SpatialCoordItem) waypoint).getCoordinate();
+						altDelta = new Length(waypointCoordinate.getAltitude().valueInMeters());
+						distDelta = GeoTools.getDistance(home, waypointCoordinate);
 					}
 				}
 				dist.add(pythagoreamTheorem(altDelta, distDelta));
@@ -379,8 +368,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 					altDelta2 = drone.mission
 							.getAltitudeDiffFromPreviousItem((SpatialCoordItem) waypoint);
 					if (previousWaypoint != null) {
-						distDelta2 = GeoTools.getDistance(
-								previousWaypointCoordinate,
+						distDelta2 = GeoTools.getDistance(previousWaypointCoordinate,
 								((SpatialCoordItem) waypoint).getCoordinate());
 					}
 					distDelta2.addMeters(-1 * circle.getRadius());
@@ -393,14 +381,10 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 														// ignore from
 														// calculations.
 					if (planningMapFragment.drone.home.isValid()) {
-						Coord2D home = planningMapFragment.drone.home
-								.getCoord();
-						Coord3D waypointCoordinate = ((SpatialCoordItem) waypoint)
-								.getCoordinate();
-						altDelta2 = new Length(waypointCoordinate.getAltitude()
-								.valueInMeters());
-						distDelta2 = GeoTools.getDistance(home,
-								waypointCoordinate);
+						Coord2D home = planningMapFragment.drone.home.getCoord();
+						Coord3D waypointCoordinate = ((SpatialCoordItem) waypoint).getCoordinate();
+						altDelta2 = new Length(waypointCoordinate.getAltitude().valueInMeters());
+						distDelta2 = GeoTools.getDistance(home, waypointCoordinate);
 					}
 				}
 				dist.add(pythagoreamTheorem(altDelta2, distDelta2));
@@ -419,16 +403,14 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 				if (prefAlt != null) {
 					rTLAlt = prefAlt.value / 10.0;// it's in centimeters
 				}
-				double lastAltitude = waypoint.getMission().getLastAltitude()
-						.valueInMeters();
+				double lastAltitude = waypoint.getMission().getLastAltitude().valueInMeters();
 				Length altDelta3 = new Length(Math.abs(lastAltitude - rTLAlt));
 				dist.add(altDelta3);
 				// then, travel back to home
 				if (planningMapFragment.drone.home.isValid()) {
 					Coord2D home = planningMapFragment.drone.home.getCoord();
 					if (previousWaypoint != null) {
-						dist.add(GeoTools.getDistance(home,
-								previousWaypointCoordinate));
+						dist.add(GeoTools.getDistance(home, previousWaypointCoordinate));
 					}
 				}
 				// now, land from the rTLALT
@@ -439,20 +421,16 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 				Grid surveyGrid = survey.getGrid();
 				if (previousWaypoint != null) {
 					if (surveyGrid != null && surveyGrid.gridPoints != null
-							&& surveyGrid.gridPoints.size() > 0
-							&& previousWaypoint != null) {
+							&& surveyGrid.gridPoints.size() > 0 && previousWaypoint != null) {
 						Coord2D startOfSurvey = surveyGrid.gridPoints.get(0);
-						dist.add(GeoTools.getDistance(
-								previousWaypointCoordinate, startOfSurvey));
+						dist.add(GeoTools.getDistance(previousWaypointCoordinate, startOfSurvey));
 					}
 
 				}
 				if (surveyGrid != null) {
-					List<Coord2D> surveyGridWaypoints = survey.getGrid()
-							.getGridPoints();
+					List<Coord2D> surveyGridWaypoints = survey.getGrid().getGridPoints();
 					for (int i = 0; i < surveyGridWaypoints.size() - 1; i++) {
-						dist.add(GeoTools.getDistance(
-								surveyGridWaypoints.get(i),
+						dist.add(GeoTools.getDistance(surveyGridWaypoints.get(i),
 								surveyGridWaypoints.get(i + 1)));
 					}
 				}
@@ -528,8 +506,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 		case POLY:
 			enableSplineToggle(false);
-			Toast.makeText(this, R.string.draw_the_survey_region,
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, R.string.draw_the_survey_region, Toast.LENGTH_SHORT).show();
 			gestureMapFragment.enableGestureDetection();
 			break;
 
@@ -564,8 +541,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 
 	private void enableSplineToggle(boolean isEnabled) {
 		if (mSplineToggleContainer != null) {
-			mSplineToggleContainer.setVisibility(isEnabled ? View.VISIBLE
-					: View.INVISIBLE);
+			mSplineToggleContainer.setVisibility(isEnabled ? View.VISIBLE : View.INVISIBLE);
 		}
 	}
 
@@ -585,10 +561,9 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 		if (mContainerItemDetail == null) {
 			itemDetailFragment.show(fragmentManager, ITEM_DETAIL_TAG);
 		} else {
-			fragmentManager
-					.beginTransaction()
-					.replace(R.id.containerItemDetail, itemDetailFragment,
-							ITEM_DETAIL_TAG).commit();
+			fragmentManager.beginTransaction()
+					.replace(R.id.containerItemDetail, itemDetailFragment, ITEM_DETAIL_TAG)
+					.commit();
 		}
 	}
 
@@ -602,8 +577,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 			if (mContainerItemDetail == null) {
 				itemDetailFragment.dismiss();
 			} else {
-				fragmentManager.beginTransaction().remove(itemDetailFragment)
-						.commit();
+				fragmentManager.beginTransaction().remove(itemDetailFragment).commit();
 			}
 			itemDetailFragment = null;
 		}
@@ -642,8 +616,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	}
 
 	@Override
-	public void onWaypointTypeChanged(MissionItemProxy newItem,
-			MissionItemProxy oldItem) {
+	public void onWaypointTypeChanged(MissionItemProxy newItem, MissionItemProxy oldItem) {
 		missionProxy.replace(oldItem, newItem);
 	}
 
@@ -698,8 +671,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 			}
 		} else {
 			editorToolsFragment.setTool(EditorTools.NONE);
-			missionListFragment
-					.updateChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+			missionListFragment.updateChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
 			contextualActionBar = startActionMode(this);
 			missionProxy.selection.setSelectionTo(item);
 		}
@@ -761,10 +733,8 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	}
 
 	private void doClearMissionConfirmation() {
-		YesNoDialog ynd = YesNoDialog.newInstance(
-				getString(R.string.dlg_clear_mission_title),
-				getString(R.string.dlg_clear_mission_confirm),
-				new YesNoDialog.Listener() {
+		YesNoDialog ynd = YesNoDialog.newInstance(getString(R.string.dlg_clear_mission_title),
+				getString(R.string.dlg_clear_mission_confirm), new YesNoDialog.Listener() {
 					@Override
 					public void onYes() {
 						missionProxy.clear();
