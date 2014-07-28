@@ -7,16 +7,22 @@ import java.util.List;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneVariable;
+import org.droidplanner.core.helpers.coordinates.Coord2D;
+import org.droidplanner.core.helpers.coordinates.Coord3D;
 import org.droidplanner.core.helpers.geoTools.GeoTools;
+import org.droidplanner.core.helpers.math.MathUtil;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.mission.commands.Takeoff;
+import org.droidplanner.core.mission.survey.Survey;
+import org.droidplanner.core.mission.survey.grid.Grid;
 import org.droidplanner.core.mission.waypoints.Circle;
 import org.droidplanner.core.mission.waypoints.Land;
 import org.droidplanner.core.mission.waypoints.RegionOfInterest;
 import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 import org.droidplanner.core.mission.waypoints.SplineWaypoint;
 import org.droidplanner.core.mission.waypoints.Waypoint;
+import org.droidplanner.core.parameters.Parameter;
 
 import com.MAVLink.Messages.ardupilotmega.msg_mission_ack;
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
@@ -263,5 +269,148 @@ public class Mission extends DroneVariable {
 			data.addAll(item.packMissionItem());
 		}
 		return data;
+	}
+
+	public static void dist(Drone drone2, Length dist, List<MissionItem> waypoints) {
+		for (MissionItem waypoint : waypoints) {
+			Mission mission = waypoint.getMission();
+			MissionItem previousWaypoint = mission.getPreviousItem((MissionItem) waypoint);
+			Coord2D previousWaypointCoordinate = null;
+	
+			try {
+				if ((SpatialCoordItem) previousWaypoint != null) {
+					previousWaypointCoordinate = ((SpatialCoordItem) previousWaypoint)
+							.getCoordinate();
+				}
+			} catch (ClassCastException c) {
+				// Some missionitems, like RTL, have no associated coordinate
+			}
+	
+			if (previousWaypoint instanceof Survey) {
+				if (((Survey) previousWaypoint).getGrid() != null) {
+					List<Coord2D> gridPoints = ((Survey) previousWaypoint).getGrid().gridPoints;
+					previousWaypointCoordinate = gridPoints.get(gridPoints.size() - 1);
+				}
+			}
+			switch (waypoint.getType()) {
+			case SPLINE_WAYPOINT:
+			case WAYPOINT:
+				Length altDelta = new Length(0.0),
+				distDelta = new Length(0.0);
+				try {
+					altDelta = drone2.mission
+							.getAltitudeDiffFromPreviousItem((SpatialCoordItem) waypoint);
+					if (previousWaypoint != null) {
+						distDelta = GeoTools.getDistance(previousWaypointCoordinate,
+								((SpatialCoordItem) waypoint).getCoordinate());
+					}
+				} catch (IllegalArgumentException e) {// if this is the first
+														// waypoint after a
+														// takeoff, this
+														// happens. Use drone
+														// "home" only if
+														// available, else just
+														// ignore from
+														// calculations.
+					if (drone2.home.isValid()) {
+						Coord2D home = drone2.home.getCoord();
+						Coord3D waypointCoordinate = ((SpatialCoordItem) waypoint).getCoordinate();
+						altDelta = new Length(waypointCoordinate.getAltitude().valueInMeters());
+						distDelta = GeoTools.getDistance(home, waypointCoordinate);
+					}
+				}
+				dist.add(MathUtil.pythagoreamTheorem(altDelta, distDelta));
+				break;
+			case TAKEOFF:
+				dist.add(drone2.mission.getDefaultAlt());
+				break;
+			case LAND:
+				dist.add(drone2.mission.getLastAltitude());
+				break;
+			case CIRCLE:
+				// Add the circumferences (2*PI*r), but subtract twice the
+				// radius, b/c the drone never actually travels to/from the
+				// center of the circle. It stops at the edge of the circle and
+				// begins strafing. Also add all altitude steps. And remember to
+				// multiply each circumference by the number of turns it does
+				Circle circle = (Circle) waypoint;
+				Length altDelta2 = new Length(0.0),
+				distDelta2 = new Length(0.0);
+				try {
+					altDelta2 = drone2.mission
+							.getAltitudeDiffFromPreviousItem((SpatialCoordItem) waypoint);
+					if (previousWaypoint != null) {
+						distDelta2 = GeoTools.getDistance(previousWaypointCoordinate,
+								((SpatialCoordItem) waypoint).getCoordinate());
+					}
+					distDelta2.addMeters(-1 * circle.getRadius());
+				} catch (IllegalArgumentException e) {// if this is the first
+														// waypoint after a
+														// takeoff, this
+														// happens. Use drone
+														// "home" only if
+														// available, else just
+														// ignore from
+														// calculations.
+					if (drone2.home.isValid()) {
+						Coord2D home = drone2.home.getCoord();
+						Coord3D waypointCoordinate = ((SpatialCoordItem) waypoint).getCoordinate();
+						altDelta2 = new Length(waypointCoordinate.getAltitude().valueInMeters());
+						distDelta2 = GeoTools.getDistance(home, waypointCoordinate);
+					}
+				}
+				dist.add(MathUtil.pythagoreamTheorem(altDelta2, distDelta2));
+				dist.addMeters(-1 * circle.getRadius());
+				for (int step = 0; step < circle.getNumberOfSteps(); step++) {
+					double circumference = circle.getRadius() * 2 * Math.PI;
+					dist.addMeters(circumference * circle.getNumberOfTurns());
+					dist.addMeters(circle.getAltitudeStep());
+				}
+				break;
+			case RTL:
+				// first, change altitude to rTLALT
+				double rTLAlt = 15.0;// default RTL value in case we haven't
+										// loaded this param yet
+				Parameter prefAlt = drone2.parameters.getParameter("RTL_ATL");
+				if (prefAlt != null) {
+					rTLAlt = prefAlt.value / 10.0;// it's in centimeters
+				}
+				double lastAltitude = waypoint.getMission().getLastAltitude().valueInMeters();
+				Length altDelta3 = new Length(Math.abs(lastAltitude - rTLAlt));
+				dist.add(altDelta3);
+				// then, travel back to home
+				if (drone2.home.isValid()) {
+					Coord2D home = drone2.home.getCoord();
+					if (previousWaypoint != null) {
+						dist.add(GeoTools.getDistance(home, previousWaypointCoordinate));
+					}
+				}
+				// now, land from the rTLALT
+				dist.addMeters(rTLAlt);
+				break;
+			case SURVEY:
+				Survey survey = (Survey) waypoint;
+				Grid surveyGrid = survey.getGrid();
+				if (previousWaypoint != null) {
+					if (surveyGrid != null && surveyGrid.gridPoints != null
+							&& surveyGrid.gridPoints.size() > 0 && previousWaypoint != null) {
+						Coord2D startOfSurvey = surveyGrid.gridPoints.get(0);
+						dist.add(GeoTools.getDistance(previousWaypointCoordinate, startOfSurvey));
+					}
+	
+				}
+				if (surveyGrid != null) {
+					List<Coord2D> surveyGridWaypoints = survey.getGrid().getGridPoints();
+					for (int i = 0; i < surveyGridWaypoints.size() - 1; i++) {
+						dist.add(GeoTools.getDistance(surveyGridWaypoints.get(i),
+								surveyGridWaypoints.get(i + 1)));
+					}
+				}
+				break;
+			default:
+				break;
+	
+			}
+		}
 	}
 }
