@@ -193,7 +193,6 @@
     <string name="waypointInfo_SetJump">Repeat waypoint</string>
 
     <!-- Waypoint editor -->
-    <string name="editor_info_window">Distance: 200m, Flight time: 3:30s</string>
     <string name="distance">Distance</string>
     <string name="flight_time">Flight Time</string>
     <string name="distance_to_home">Distance to home</string>
