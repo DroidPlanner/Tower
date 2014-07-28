@@ -3,6 +3,7 @@ package org.droidplanner.android.mission.item.fragments;
 import org.droidplanner.R;
 import org.droidplanner.android.proxy.mission.item.fragments.MissionDetailFragment;
 import org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText;
+import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.mission.MissionItemType;
 import org.droidplanner.core.mission.waypoints.Circle;
 
@@ -17,7 +18,7 @@ public class MissionCircleFragment extends MissionDetailFragment implements
 
 	private SeekBarWithText altitudeSeekBar;
 	private SeekBarWithText loiterTurnSeekBar;
-	private CheckBox loiterCCW;
+	//private CheckBox loiterCCW;
 	private CheckBox checkBoxAdvanced;
 	private SeekBarWithText altitudeStepSeekBar;
 	private SeekBarWithText numberStepSeekBar;
@@ -55,7 +56,7 @@ public class MissionCircleFragment extends MissionDetailFragment implements
 
 		loiterTurnSeekBar = (SeekBarWithText) view.findViewById(R.id.loiterTurn);
 		loiterTurnSeekBar.setOnChangedListener(this);
-		loiterTurnSeekBar.setValue(item.getNumeberOfTurns());
+		loiterTurnSeekBar.setValue(item.getNumberOfTurns());
 
 		SeekBarWithText loiterRadiusSeekBar = (SeekBarWithText) view
 				.findViewById(R.id.loiterRadius);
@@ -86,6 +87,7 @@ public class MissionCircleFragment extends MissionDetailFragment implements
 		} else {
 			item.setSingleCircle();
 		}
+		this.itemRender.getMissionItem().getMission().notifyMissionUpdate();
 	}
 
 }

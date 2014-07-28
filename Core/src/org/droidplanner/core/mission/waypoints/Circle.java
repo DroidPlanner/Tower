@@ -39,7 +39,7 @@ public class Circle extends SpatialCoordItem {
 		this.turns = Math.abs(turns);
 	}
 
-	public int getNumeberOfTurns() {
+	public int getNumberOfTurns() {
 		return turns;
 	}
 
