@@ -31,6 +31,8 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
+//TODO find some newer class to use instead of the SlidingDrawer
+@SuppressWarnings("deprecation") 
 public class FlightActivity extends DrawerNavigationUI implements
 		FlightActionsFragment.OnMissionControlInteraction, OnDroneListener {
 
@@ -181,6 +183,8 @@ public class FlightActivity extends DrawerNavigationUI implements
 
 		case USER:
 			mGoToMyLocation.setActivated(true);
+			break;
+		default:
 			break;
 		}
 	}

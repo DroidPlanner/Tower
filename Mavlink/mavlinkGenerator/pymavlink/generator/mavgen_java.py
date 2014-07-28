@@ -278,8 +278,6 @@ import com.MAVLink.Messages.ardupilotmega.*;
  * The minimum packet length is 8 bytes for acknowledgement packets without payload
  * The maximum packet length is 263 bytes for full payload
  * 
- * @author ghelle
- *
  */
 public class MAVLinkPacket implements Serializable {
 	private static final long serialVersionUID = 2095947771227815314L;
