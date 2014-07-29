@@ -1,7 +1,6 @@
 package org.droidplanner.android.communication.service;
 
 import org.droidplanner.R;
-import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.communication.connection.MAVLinkConnection;
 import org.droidplanner.android.communication.connection.MAVLinkConnection.MavLinkConnectionListener;
 import org.droidplanner.android.utils.Utils;
@@ -139,7 +138,6 @@ public class MAVLinkService extends Service implements MavLinkConnectionListener
 		super.onCreate();
 
 		final Context context = getApplicationContext();
-		final DroidPlannerApp dpApp = (DroidPlannerApp) getApplication();
 
 		// Initialise the app preferences handle.
 		mAppPrefs = new DroidPlannerPrefs(context);

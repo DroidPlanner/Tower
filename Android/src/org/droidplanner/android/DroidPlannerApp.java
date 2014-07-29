@@ -5,7 +5,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import org.droidplanner.android.communication.service.MAVLinkClient;
-import org.droidplanner.android.communication.service.NetworkStateReceiver;
+import org.droidplanner.android.communication.service.NetworkConnectivityReceiver;
+import org.droidplanner.android.communication.service.UploaderService;
 import org.droidplanner.android.gcs.follow.Follow;
 import org.droidplanner.android.notifications.NotificationHandler;
 import org.droidplanner.android.proxy.mission.MissionProxy;
@@ -78,15 +79,16 @@ public class DroidPlannerApp extends ErrorReportApp implements
 		mavLinkMsgHandler = new org.droidplanner.core.MAVLink.MavLinkMsgHandler(getDrone());
 
 		followMe = new Follow(this, getDrone(), handler);
-		NetworkStateReceiver.register(context);
-		
+				
 		weatherProvider = new WeatherDataProvider(this);
 		ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 		scheduler.scheduleWithFixedDelay(weatherUpdateTask, 0, 1, TimeUnit.HOURS);
-		
 
 		GAUtils.initGATracker(this);
 		GAUtils.startNewSession(context);
+
+        // Any time the application is started, do a quick scan to see if we need any uploads
+        startService(UploaderService.createIntent(this));
 	}
 	
 	private Runnable weatherUpdateTask = new Runnable() {
@@ -122,6 +124,8 @@ public class DroidPlannerApp extends ErrorReportApp implements
 		case MISSION_RECEIVED:
 			// Refresh the mission render state
 			missionProxy.refresh();
+			break;
+		default:
 			break;
 		}
 	}

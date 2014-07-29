@@ -99,9 +99,6 @@
     <string name="connected">已连接</string>
     <string name="disconnected">已断开</string>
 
-    <!-- Failsafe Strings -->
-    <string name="RCFailsafe">警告！遥控故障保护 – 回到起飞点</string>
-
     <!-- Common Setup Buttons Resource Strings -->
     <string name="button_setup_calibrate">校准</string>
     <string name="button_setup_cancel">取消</string>

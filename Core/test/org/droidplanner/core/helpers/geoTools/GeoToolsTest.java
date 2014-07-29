@@ -3,19 +3,28 @@ package org.droidplanner.core.helpers.geoTools;
 import junit.framework.TestCase;
 
 import org.droidplanner.core.helpers.coordinates.Coord2D;
+import org.droidplanner.core.helpers.coordinates.Coord3D;
+import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.polygon.Polygon;
 
 public class GeoToolsTest extends TestCase {
 
-	Coord2D p1 = new Coord2D(37.85363485683941, -122.4204097390123);
-	Coord2D p2 = new Coord2D(37.85130335221235, -122.4142645673542);
-	double distP1toP2 = 598.6;
+	Coord3D p1 = new Coord3D(37.85363485683941, -122.4204097390123, new Altitude(250.0));
+	Coord3D p2 = new Coord3D(37.85130335221235, -122.4142645673542, new Altitude(0.0));
+	double dist2DP1toP2 = 598.6;
+	double dist3DP1toP2 = 648.7;
 	double headingP1toP2 = 115.7;
 
 	public void testGetDistance() {
-		double tolerance = distP1toP2 * 0.0005;
-		assertEquals(distP1toP2, GeoTools.getDistance(p1, p2).valueInMeters(), tolerance);
-		assertEquals(distP1toP2, GeoTools.getDistance(p2, p1).valueInMeters(), tolerance);
+		double tolerance = dist2DP1toP2 * 0.0005;
+		assertEquals(dist2DP1toP2, GeoTools.getDistance(p1, p2).valueInMeters(), tolerance);
+		assertEquals(dist2DP1toP2, GeoTools.getDistance(p2, p1).valueInMeters(), tolerance);
+	}
+	
+	public void testGet3DDistance() {
+		double tolerance = dist2DP1toP2 * 0.0005;
+		assertEquals(dist3DP1toP2, GeoTools.get3DDistance(p1, p2).valueInMeters(), tolerance);
+		assertEquals(dist3DP1toP2, GeoTools.get3DDistance(p2, p1).valueInMeters(), tolerance);
 	}
 
 	public void testGetHeadingFromCoordinates() {

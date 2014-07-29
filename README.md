@@ -4,7 +4,7 @@
 
 Droidplanner is a Ground Control Station (GCS) Android app for UAVs running Ardupilot software.
 
-[![Google Play Store](https://developer.android.com/images/brand/en_app_rgb_wo_45.png)](https://play.google.com/store/apps/details?id=com.droidplanner)
+[![Google Play Store](https://developer.android.com/images/brand/en_app_rgb_wo_45.png)](https://play.google.com/store/apps/details?id=org.droidplanner)
 
 ### Usage Guide
 

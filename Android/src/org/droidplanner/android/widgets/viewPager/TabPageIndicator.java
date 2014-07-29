@@ -16,7 +16,6 @@
  */
 package org.droidplanner.android.widgets.viewPager;
 
-import static android.view.ViewGroup.LayoutParams.FILL_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 import org.droidplanner.R;
@@ -86,7 +85,7 @@ public class TabPageIndicator extends HorizontalScrollView implements PageIndica
 		setHorizontalScrollBarEnabled(false);
 
 		mTabLayout = new LinearLayout(getContext());
-		addView(mTabLayout, new ViewGroup.LayoutParams(WRAP_CONTENT, FILL_PARENT));
+		addView(mTabLayout, new ViewGroup.LayoutParams(WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
 	}
 
 	public void setOnTabReselectedListener(OnTabReselectedListener listener) {
@@ -161,7 +160,7 @@ public class TabPageIndicator extends HorizontalScrollView implements PageIndica
 		tabView.setOnClickListener(mTabClickListener);
 		tabView.setText(text);
 
-		mTabLayout.addView(tabView, new LinearLayout.LayoutParams(0, FILL_PARENT, 1));
+		mTabLayout.addView(tabView, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1));
 	}
 
 	@Override

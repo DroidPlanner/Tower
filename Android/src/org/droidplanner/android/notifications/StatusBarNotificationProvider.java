@@ -310,15 +310,6 @@ public class StatusBarNotificationProvider implements NotificationHandler.Notifi
 			return this;
 		}
 
-		public void reset() {
-			mSummary = null;
-			for (int i = 0; i < MAX_LINES_COUNT; i++) {
-				mLines[i] = null;
-			}
-
-			mHasContent = false;
-		}
-
 		public NotificationCompat.InboxStyle generateInboxStyle() {
 			if (!mHasContent) {
 				return null;

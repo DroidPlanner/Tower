@@ -25,11 +25,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.SlidingDrawer;
+import android.widget.TextView;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
+//TODO find some newer class to use instead of the SlidingDrawer
+@SuppressWarnings("deprecation") 
 public class FlightActivity extends DrawerNavigationUI implements
 		FlightActionsFragment.OnMissionControlInteraction, OnDroneListener {
 
@@ -37,7 +40,7 @@ public class FlightActivity extends DrawerNavigationUI implements
 
 	private FragmentManager fragmentManager;
 	private RCFragment rcFragment;
-	private View failsafeView;
+	private TextView failsafeView;
 
 	private FlightMapFragment mapFragment;
 
@@ -55,7 +58,7 @@ public class FlightActivity extends DrawerNavigationUI implements
 		setContentView(R.layout.activity_flight);
 
 		fragmentManager = getSupportFragmentManager();
-		failsafeView = findViewById(R.id.failsafeTextView);
+		failsafeView = (TextView) findViewById(R.id.failsafeTextView);
 
 		mSlidingDrawer = (SlidingDrawer) findViewById(R.id.SlidingDrawerRight);
 		mSlidingDrawer.setOnDrawerCloseListener(new SlidingDrawer.OnDrawerCloseListener() {
@@ -165,10 +168,6 @@ public class FlightActivity extends DrawerNavigationUI implements
 		}
 
 		DroneshareDialog.perhapsShow(this);
-
-		// Any time the main activity is relaunched, do a quick scan to see if
-		// we need any uploads
-		startService(UploaderService.createIntent(this));
 	}
 
 	private void updateMapLocationButtons(AutoPanMode mode) {
@@ -184,6 +183,8 @@ public class FlightActivity extends DrawerNavigationUI implements
 
 		case USER:
 			mGoToMyLocation.setActivated(true);
+			break;
+		default:
 			break;
 		}
 	}
@@ -341,6 +342,7 @@ public class FlightActivity extends DrawerNavigationUI implements
 
 	public void onFailsafeChanged(Drone drone) {
 		if (drone.state.isFailsafe()) {
+			failsafeView.setText(drone.state.getFailsafe());
 			failsafeView.setVisibility(View.VISIBLE);
 		} else {
 			failsafeView.setVisibility(View.GONE);
