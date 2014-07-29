@@ -26,7 +26,6 @@
             android:id="@+id/editorInfoWindow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/editor_info_window"
             style="@style/editorMissionOverviewText"
             android:visibility="visible"
             android:layout_alignParentTop="true"

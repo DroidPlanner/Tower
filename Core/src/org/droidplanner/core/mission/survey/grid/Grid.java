@@ -26,6 +26,10 @@ public class Grid {
 	public List<Coord2D> getCameraLocations() {
 		return cameraLocations;
 	}
+	
+	public List<Coord2D> getGridPoints() {
+		return gridPoints;
+	}
 
 	public int getCameraCount() {
 		return getCameraLocations().size();

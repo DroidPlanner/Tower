@@ -26,10 +26,15 @@ import org.droidplanner.android.utils.prefs.AutoPanMode;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
+import org.droidplanner.core.helpers.units.Length;
+import org.droidplanner.core.mission.Mission;
+import org.droidplanner.core.mission.MissionItem;
 
 import android.os.Bundle;
+import android.preference.Preference;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.ActionMode.Callback;
 import android.view.Menu;
@@ -38,6 +43,7 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -75,6 +81,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	private boolean mIsSplineEnabled;
 
 	private View mLocationButtonsContainer;
+	private TextView editorInfoView;
 
 	/**
 	 * This view hosts the mission item detail fragment. On phone, or device
@@ -100,6 +107,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 				.findFragmentById(R.id.editorToolsFragment);
 		missionListFragment = (EditorListFragment) fragmentManager
 				.findFragmentById(R.id.missionFragment1);
+		editorInfoView = (TextView) findViewById(R.id.editorInfoWindow);
 
 		mSplineToggleContainer = findViewById(R.id.editorSplineToggleContainer);
 		mSplineToggleContainer.setVisibility(View.VISIBLE);
@@ -267,11 +275,30 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 					removeItemDetail();
 				}
 			}
+			recalculateMissionLength(planningMapFragment.drone);
 			break;
-
+		case HOME:
+			recalculateMissionLength(planningMapFragment.drone);
 		default:
 			break;
 		}
+	}
+
+	private void recalculateMissionLength(Drone drone2) {
+		// get mission items
+		String distance = getString(R.string.distance);
+		Length dist = new Length(0.0);
+		List<MissionItem> waypoints = drone2.mission.getItems();
+		if (waypoints.size() < 2) {
+			editorInfoView.setText(distance + ": " + dist);
+			return;
+		}
+		Mission.dist(drone2, dist, waypoints);
+
+		// TODO calculate flight time. Or don't. Seems pretty hard.
+		// String flightTime = getString(R.string.flight_time);
+
+		editorInfoView.setText(distance + ": " + dist);
 	}
 
 	@Override
