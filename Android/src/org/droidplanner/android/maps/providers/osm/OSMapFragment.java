@@ -102,6 +102,7 @@ public class OSMapFragment extends Fragment implements DPMap {
 	private Drone mDrone;
 	private DroidPlannerPrefs mAppPrefs;
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private final AtomicReference<AutoPanMode> mPanMode = new AtomicReference(AutoPanMode.DISABLED);
 
 	private MyLocationNewOverlay mLocationOverlay;

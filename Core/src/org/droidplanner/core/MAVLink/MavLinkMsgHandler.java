@@ -22,8 +22,6 @@ import com.MAVLink.Messages.enums.MAV_STATE;
 
 public class MavLinkMsgHandler {
 
-	private static final String TAG = MavLinkMsgHandler.class.getSimpleName();
-
 	private Drone drone;
 
 	public MavLinkMsgHandler(Drone drone) {

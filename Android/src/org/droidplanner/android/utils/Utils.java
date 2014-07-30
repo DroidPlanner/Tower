@@ -16,17 +16,12 @@ import android.content.res.Resources;
 
 /**
  * Contains application related functions.
- * 
- * @author fhuya
- * @since 1.2.0
  */
 public class Utils {
 
 	/**
 	 * This enum represents the different connection types to access the mavlink
 	 * data.
-	 * 
-	 * @since 1.2.0
 	 */
 	public enum ConnectionType {
 
@@ -62,7 +57,6 @@ public class Utils {
 		 * @param context
 		 *            application context
 		 * @return mavlink connection
-		 * @since 1.2.0
 		 */
 		public abstract MAVLinkConnection getConnection(Context context);
 	}
