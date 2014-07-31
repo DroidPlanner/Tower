@@ -9,6 +9,7 @@ import java.net.UnknownHostException;
 import java.util.Arrays;
 
 import org.droidplanner.core.MAVLink.MAVLinkStreams.MAVLinkOutputStream;
+import org.droidplanner.core.MAVLink.MavLinkMsgHandler;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.Clock;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
@@ -25,11 +26,13 @@ public class Console {
 	private static final int PORT = 14550;
 	public static Drone drone;
 	protected static Parser parser = new Parser();
+	private static MavLinkMsgHandler mavlinkHandler;
 
 	public static void main(String[] args) {
 		System.out.println("Hello");
 
 		drone = droneFactory();
+		mavlinkHandler = new MavLinkMsgHandler(drone);
 
 		try {
 			DatagramSocket socket = new DatagramSocket(PORT);
@@ -51,7 +54,7 @@ public class Console {
 					if (mavPacket != null) {
 						MAVLinkMessage msg = mavPacket.unpack();
 						System.out.println("decoded:" + msg.toString());
-						// listener.onReceiveMessage(msg);
+						mavlinkHandler.receiveData(msg);
 					}
 				}
 			}
@@ -117,11 +120,23 @@ public class Console {
 
 			@Override
 			public Rates getRates() {
-				// TODO Auto-generated method stub
-				return null;
+				return new Rates();
 			}
 		};
-		Handler handler = null;
+		Handler handler = new Handler() {
+			
+			@Override
+			public void removeCallbacks(Runnable thread) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void postDelayed(Runnable thread, long timeout) {
+				// TODO Auto-generated method stub
+				
+			}
+		};
 
 		return new Drone(MAVClient, clock, handler, pref);
 	}
