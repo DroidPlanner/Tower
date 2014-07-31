@@ -22,6 +22,7 @@ public class MavLinkHeartbeat {
 	 * @since 1.2.0
 	 */
 	private static final msg_heartbeat sMsg = new msg_heartbeat();
+	private static int sequence_number = 0;
 	static {
 		sMsg.type = MAV_TYPE.MAV_TYPE_GCS;
 		sMsg.autopilot = MAV_AUTOPILOT.MAV_AUTOPILOT_GENERIC;
@@ -44,8 +45,14 @@ public class MavLinkHeartbeat {
 	 * @since 1.2.0
 	 */
 	public static void sendMavHeartbeat(Drone drone) {
-		if (drone != null)
+		if (drone != null){
+			sequence_number++;
+			if (sequence_number > 255){
+				sequence_number = 0;
+			}
+			sMsgPacket.seq = sequence_number;
 			drone.MavClient.sendMavPacket(sMsgPacket);
+		}
 	}
 
 }
