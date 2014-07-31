@@ -30,8 +30,6 @@ public class Console {
 	private static MavLinkMsgHandler mavlinkHandler;
 
 	public static void main(String[] args) {
-		System.out.println("Hello");
-
 		drone = droneFactory();
 		mavlinkHandler = new MavLinkMsgHandler(drone);
 		OnDroneListener eventListner = new OnDroneListener() {
