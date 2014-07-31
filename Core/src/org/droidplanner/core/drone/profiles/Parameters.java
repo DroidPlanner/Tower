@@ -20,11 +20,11 @@ import com.MAVLink.Messages.ardupilotmega.msg_param_value;
 
 /**
  * Class to manage the communication of parameters to the MAV.
- * 
+ *
  * Should be initialized with a MAVLink Object, so the manager can send messages
  * via the MAV link. The function processMessage must be called with every new
  * MAV Message.
- * 
+ *
  */
 public class Parameters extends DroneVariable implements OnDroneListener {
 
@@ -61,7 +61,7 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 
 	/**
 	 * Try to process a Mavlink message if it is a parameter related message
-	 * 
+	 *
 	 * @param msg
 	 *            Mavlink message to process
 	 * @return Returns true if the message has been processed
@@ -80,7 +80,7 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 		parameters.put((int) m_value.param_index, param);
 
 		expectedParams = m_value.param_count;
-		
+
 		// update listener
 		if (parameterListener != null)
 			parameterListener.onParameterReceived(param, m_value.param_index,
@@ -150,13 +150,16 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch(event){
-		case DISCONNECTED:
-		case HEARTBEAT_TIMEOUT:
-			killWatchdog();
-			break;
-		default:
-			break;
-		
+			case CONNECTED:
+				getAllParameters();
+				break;
+			case DISCONNECTED:
+			case HEARTBEAT_TIMEOUT:
+				killWatchdog();
+				break;
+			default:
+				break;
+
 		}
 	}
 }
