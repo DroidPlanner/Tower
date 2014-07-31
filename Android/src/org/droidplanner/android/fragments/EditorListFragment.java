@@ -10,6 +10,8 @@ import java.util.List;
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.interfaces.OnEditorInteraction;
+import org.droidplanner.android.fragments.EditorToolsFragment.EditorTools;
+import org.droidplanner.android.fragments.EditorToolsFragment.OnEditorToolSelected;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.MissionSelection;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
@@ -19,6 +21,7 @@ import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 
 import android.app.Activity;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -30,7 +33,7 @@ import android.widget.ImageButton;
 
 public class EditorListFragment extends Fragment implements OnItemLongClickListener,
 		OnItemClickListener, OnDroneListener, OnClickListener,
-		MissionSelection.OnSelectionUpdateListener {
+		MissionSelection.OnSelectionUpdateListener , OnEditorToolSelected{
 
 	private HListView list;
 	private MissionProxy missionProxy;
@@ -162,5 +165,27 @@ public class EditorListFragment extends Fragment implements OnItemLongClickListe
 			list.setItemChecked(adapter.getPosition(item), true);
 		}
 		adapter.notifyDataSetChanged();
+	}
+
+	@Override
+	public void editorToolChanged(EditorTools tools) {
+	switch (tools){
+	case TRASH:
+		adapter.setDeleteModeEnabled(true);
+		adapter.notifyDataSetChanged();
+		break;
+	default:
+		adapter.setDeleteModeEnabled(false);
+		adapter.notifyDataSetChanged();
+		break;
+		
+	}
+		
+	}
+
+	@Override
+	public void editorToolLongClicked(EditorTools tools) {
+		// NO-OP
+		
 	}
 }

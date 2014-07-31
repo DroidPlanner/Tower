@@ -318,6 +318,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	@Override
 	public void editorToolChanged(EditorTools tools) {
 		missionProxy.selection.clearSelection();
+		missionListFragment.editorToolChanged(tools);
 		setupTool(tools);
 	}
 

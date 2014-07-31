@@ -17,6 +17,8 @@ import android.widget.ArrayAdapter;
 public class MissionItemProxyView extends ArrayAdapter<MissionItemProxy> {
 
 	private List<MissionItemProxy> waypoints;
+	private boolean deleteModeEnabled;
+	
 
 	public MissionItemProxyView(Context context, List<MissionItemProxy> list) {
 		super(context, 0, list);
@@ -26,7 +28,11 @@ public class MissionItemProxyView extends ArrayAdapter<MissionItemProxy> {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		final MissionItemProxy waypoint = waypoints.get(position);
-		return waypoint.getListViewItemView(getContext(), parent);
+		return waypoint.getListViewItemView(getContext(), parent,deleteModeEnabled);
+	}
+	
+	public void setDeleteModeEnabled (boolean enable){
+		deleteModeEnabled = enable;
 	}
 
 	/*
