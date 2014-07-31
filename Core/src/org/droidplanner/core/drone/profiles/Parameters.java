@@ -34,6 +34,7 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 
 	@SuppressLint("UseSparseArrays")
 	private HashMap<Integer, Parameter> parameters = new HashMap<Integer, Parameter>();
+	private boolean downloadInProgress = false;
 
 	public DroneInterfaces.OnParameterManagerListener parameterListener;
 
@@ -52,11 +53,15 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 	}
 
 	public void getAllParameters() {
+		if(downloadInProgress){
+			return;
+		}
 		parameters.clear();
 		if (parameterListener != null)
 			parameterListener.onBeginReceivingParameters();
 		MavLinkParameters.requestParametersList(myDrone);
 		resetWatchdog();
+		downloadInProgress = true;
 	}
 
 	/**
@@ -96,6 +101,7 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 				killWatchdog();
 				parameterListener.onEndReceivingParameters(parameterList);
 			}
+			downloadInProgress = false;
 		} else {
 			resetWatchdog();
 		}
