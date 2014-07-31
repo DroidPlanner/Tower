@@ -27,6 +27,9 @@ public class FollowMe implements LocationListener, ModeChangedListener {
 		this.drone = drone;
 		this.locationManager = (LocationManager) context
 				.getSystemService(Context.LOCATION_SERVICE);
+
+		// Register ourselves with the modeChangedListener so we get mode updates
+		drone.setModeChangedListener(this);
 	}
 
 	public void toogleFollowMeState() {
@@ -88,7 +91,7 @@ public class FollowMe implements LocationListener, ModeChangedListener {
 
 		return prefs.getBoolean("pref_follow_me_mode_enabled", false);
 	}
-	
+
 	/* For all modes other than guided turn off follow me as only guided should be used for follow me
 	 * 
 	 * Without this the tablet will keep sending a new waypoint and setting guided mode using
@@ -99,15 +102,15 @@ public class FollowMe implements LocationListener, ModeChangedListener {
 	@Override
 	public void onModeChanged()
 	{
-		
+
 		// Guided mode is correct, don't do anything, for other modes cancel follow me
 		if (drone.state.getMode() != ApmModes.ROTOR_GUIDED)
 		{
-			
-			// Call built in method to turn off follow me
+
+			// Vehicle is not in guided mode, disable follow me using existing method
 			disableFollowMe();
-			
+
 		}
-		
+
 	}
 }
