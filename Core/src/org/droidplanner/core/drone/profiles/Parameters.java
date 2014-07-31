@@ -84,11 +84,9 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 		//Sometimes we accidentally request new parameters and they arrive after we already have everything.
 		//This is to prevent us from starting up the dog again and creating an endless loop of param downloads.
 		if(!downloadInProgress){
-			Log.d("param","didn't expect that param");
 			killWatchdog();
 			return;
 		}
-		Log.d("param",downloadInProgress?"expected":"unexpected");
 
 		// collect params in parameter list
 		Parameter param = new Parameter(m_value);
@@ -104,7 +102,6 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 		// Are all parameters here? Notify the listener with the parameters
 		if (parameters.size() >= m_value.param_count) {
 			downloadInProgress = false;
-			Log.d("param","all here");
 			killWatchdog();
 			if (parameterListener != null) {
 				List<Parameter> parameterList = new ArrayList<Parameter>();

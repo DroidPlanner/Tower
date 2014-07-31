@@ -246,7 +246,6 @@ public class ParamsFragment extends ListFragment implements
 	@Override
 	public void onParameterReceived(Parameter parameter, int index, int count) {
 		++mReceived;
-		Log.d("param","received param: "+index);
 		if(progressDialog == null){//user opens parameter fragment in the middle of param download
 			mReceived = index - 1;
 			startProgressDialog();
