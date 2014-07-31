@@ -6,13 +6,14 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.Arrays;
 
 import org.droidplanner.core.MAVLink.MAVLinkStreams.MAVLinkOutputStream;
 import org.droidplanner.core.MAVLink.MavLinkMsgHandler;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.Clock;
+import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
+import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.drone.Preferences;
 import org.droidplanner.core.drone.profiles.VehicleProfile;
 import org.droidplanner.core.drone.variables.Type.FirmwareType;
@@ -33,6 +34,13 @@ public class Console {
 
 		drone = droneFactory();
 		mavlinkHandler = new MavLinkMsgHandler(drone);
+		OnDroneListener eventListner = new OnDroneListener() {
+			@Override
+			public void onDroneEvent(DroneEventsType event, Drone drone) {
+				System.out.println("Drone Event:" + event.toString());
+			}
+		};
+		drone.events.addDroneListener(eventListner);
 
 		try {
 			DatagramSocket socket = new DatagramSocket(PORT);
@@ -124,17 +132,17 @@ public class Console {
 			}
 		};
 		Handler handler = new Handler() {
-			
+
 			@Override
 			public void removeCallbacks(Runnable thread) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void postDelayed(Runnable thread, long timeout) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		};
 
