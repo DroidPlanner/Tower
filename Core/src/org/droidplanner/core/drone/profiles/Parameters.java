@@ -151,7 +151,9 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch(event){
 			case CONNECTED:
-				getAllParameters();
+				if(!drone.state.isFlying()){
+					getAllParameters();
+				}
 				break;
 			case DISCONNECTED:
 			case HEARTBEAT_TIMEOUT:
