@@ -7,19 +7,15 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Arrays;
-import java.util.List;
 
 import org.droidplanner.core.MAVLink.MAVLinkStreams.MAVLinkOutputStream;
 import org.droidplanner.core.MAVLink.MavLinkMsgHandler;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.Clock;
-import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
-import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.drone.Preferences;
 import org.droidplanner.core.drone.profiles.VehicleProfile;
 import org.droidplanner.core.drone.variables.Type.FirmwareType;
-import org.droidplanner.core.mission.MissionItem;
 
 import com.MAVLink.Parser;
 import com.MAVLink.Messages.MAVLinkMessage;
@@ -44,29 +40,6 @@ public class Logic {
 	private void setup() {
 		drone = droneFactory();
 		mavlinkHandler = new MavLinkMsgHandler(drone);
-		OnDroneListener eventListner = new OnDroneListener() {
-			@Override
-			public void onDroneEvent(DroneEventsType event, Drone drone) {
-				System.out.println("Drone Event:" + event.toString());
-
-				switch (event) {
-				case HEARTBEAT_FIRST: // TODO remove this, it's only debug
-										// code
-					drone.waypointManager.getWaypoints();
-					break;
-				case MISSION_RECEIVED:
-					List<MissionItem> list = drone.mission.getItems();
-					for (MissionItem item : list) {
-						System.out.println(item.getClass().getSimpleName());
-					}
-					break;
-				default:
-					break;
-				}
-
-			}
-		};
-		drone.events.addDroneListener(eventListner);
 
 		try {
 			socket = new DatagramSocket(PORT);

@@ -2,9 +2,13 @@ package org.droidplanner.desktop;
 
 public class Console {
 
+	private static Logic logic;
+	private static Map map;
+
 	public static void main(String[] args) {
-		//new Logic();
-		new Map().setVisible(true);
+		logic = new Logic();
+		map = new Map();
+		map.setVisible(true);
 	}
 
 }
