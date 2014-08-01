@@ -164,7 +164,6 @@ public class FlightActionsFragment extends Fragment implements OnClickListener, 
 			break;
 
 		case ARMING:
-		case FAILSAFE:
 
 			int visibility = (drone.state.isArmed() && !drone.state
 					.isFailsafe()) ? View.VISIBLE : View.GONE;
