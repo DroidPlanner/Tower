@@ -6,6 +6,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 
 import org.droidplanner.core.MAVLink.MAVLinkStreams.MAVLinkOutputStream;
 import org.droidplanner.core.MAVLink.MavLinkMsgHandler;
@@ -25,9 +26,15 @@ import com.MAVLink.Messages.MAVLinkPacket;
 public class Console {
 
 	private static final int PORT = 14550;
+	protected static InetAddress hostAdd = null;
+	private static int hostPort;
+	static byte[] receiveData = new byte[1024];
+	byte[] sendBuffer = new byte[1024];
+
 	public static Drone drone;
 	protected static Parser parser = new Parser();
 	private static MavLinkMsgHandler mavlinkHandler;
+	private static DatagramSocket socket;
 
 	public static void main(String[] args) {
 		drone = droneFactory();
@@ -41,10 +48,9 @@ public class Console {
 		drone.events.addDroneListener(eventListner);
 
 		try {
-			DatagramSocket socket = new DatagramSocket(PORT);
+			socket = new DatagramSocket(PORT);
 			socket.setBroadcast(true);
 			socket.setReuseAddress(true);
-			byte[] receiveData = new byte[1024];
 
 			DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 
@@ -54,12 +60,14 @@ public class Console {
 				socket.receive(receivePacket);
 				byte[] data = receivePacket.getData();
 				int length = receivePacket.getLength();
+				hostAdd = receivePacket.getAddress();
+				hostPort = receivePacket.getPort();
 
 				for (int i = 0; i < length; i++) {
 					MAVLinkPacket mavPacket = parser.mavlink_parse_char(data[i] & 0x00ff);
 					if (mavPacket != null) {
 						MAVLinkMessage msg = mavPacket.unpack();
-						System.out.println("decoded:" + msg.toString());
+						// System.out.println("decoded:" + msg.toString());
 						mavlinkHandler.receiveData(msg);
 					}
 				}
@@ -78,6 +86,7 @@ public class Console {
 	private static Drone droneFactory() {
 		MAVLinkOutputStream MAVClient = new MAVLinkOutputStream() {
 
+
 			@Override
 			public void toggleConnectionState() {
 				// TODO Auto-generated method stub
@@ -85,9 +94,20 @@ public class Console {
 			}
 
 			@Override
-			public void sendMavPacket(MAVLinkPacket pack) {
-				// TODO Auto-generated method stub
+			public void sendMavPacket(MAVLinkPacket packet) {
 
+				byte[] buffer = packet.encodePacket();
+				try {
+					if (hostAdd != null) { // Need to have received at least one
+											// packet
+						DatagramPacket udpPacket = new DatagramPacket(buffer, buffer.length,
+								hostAdd, hostPort);
+						socket.send(udpPacket);
+						System.out.println("sending: " + Arrays.toString(udpPacket.getData()));
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 
 			@Override
