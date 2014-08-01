@@ -125,11 +125,11 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 		mMissionProxy = itemRender.getMissionProxy();
 
 		List<MissionItemType> list = new LinkedList<MissionItemType>(Arrays.asList(MissionItemType.values()));
-		if (mMissionProxy.getItems().size() > 1){
+		if (mMissionProxy.getItems().indexOf(itemRender) != 0){
 			list.remove(MissionItemType.TAKEOFF);
 		}
 		
-		if (mMissionProxy.getItems().indexOf(itemRender) < (mMissionProxy.getItems().size() - 1)){
+		if (mMissionProxy.getItems().indexOf(itemRender) != (mMissionProxy.getItems().size() - 1)){
 			list.remove(MissionItemType.LAND);
 			list.remove(MissionItemType.RTL);
 		}
