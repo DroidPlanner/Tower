@@ -128,6 +128,11 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 		if (mMissionProxy.getItems().size() > 1){
 			list.remove(MissionItemType.TAKEOFF);
 		}
+		
+		if (mMissionProxy.getItems().indexOf(itemRender) < (mMissionProxy.getItems().size() - 1)){
+			list.remove(MissionItemType.LAND);
+			list.remove(MissionItemType.RTL);
+		}
 		commandAdapter = new AdapterMissionItems(this.getActivity(),
 				android.R.layout.simple_list_item_1, list.toArray(new MissionItemType[0]));
 
