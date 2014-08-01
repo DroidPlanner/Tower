@@ -42,8 +42,6 @@ public class EditorListFragment extends Fragment implements OnItemLongClickListe
 	private ImageButton leftArrow;
 	private ImageButton rightArrow;
 	private Drone drone;
-	private boolean isInDeleteMode;
-	private static final String DELETE_MODE_KEY = "DELETE_MODE_KEY";
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,10 +51,7 @@ public class EditorListFragment extends Fragment implements OnItemLongClickListe
 		drone = app.getDrone();
 		missionProxy = app.missionProxy;
 		adapter = new MissionItemProxyView(getActivity(), missionProxy.getItems());
-		if (savedInstanceState != null){
-			isInDeleteMode = savedInstanceState.getBoolean(DELETE_MODE_KEY);
-			adapter.setDeleteModeEnabled(isInDeleteMode);
-		}
+	
 		list = (HListView) view.findViewById(R.id.mission_item_list);
 		list.setOnItemClickListener(this);
 		list.setOnItemLongClickListener(this);
@@ -71,11 +66,6 @@ public class EditorListFragment extends Fragment implements OnItemLongClickListe
 		return view;
 	}
 	
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		outState.putBoolean(DELETE_MODE_KEY, isInDeleteMode);
-		super.onSaveInstanceState(outState);
-	}
 
 	@Override
 	public void onStart() {
@@ -182,12 +172,12 @@ public class EditorListFragment extends Fragment implements OnItemLongClickListe
 	public void editorToolChanged(EditorTools tools) {
 	switch (tools){
 	case TRASH:
-		isInDeleteMode = true;
+	
 		adapter.setDeleteModeEnabled(true);
 		adapter.notifyDataSetChanged();
 		break;
 	default:
-		isInDeleteMode = false;
+	
 		adapter.setDeleteModeEnabled(false);
 		adapter.notifyDataSetChanged();
 		break;

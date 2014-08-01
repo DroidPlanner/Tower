@@ -171,6 +171,7 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	public void onResume() {
 		super.onResume();
 		setupTool(getTool());
+		missionListFragment.editorToolChanged(getTool());
 	}
 
 	@Override
