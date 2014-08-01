@@ -1,5 +1,9 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.mission.item.fragments.MissionCircleFragment;
@@ -51,6 +55,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 	protected SpinnerSelfSelect typeSpinner;
 	protected AdapterMissionItems commandAdapter;
 	private OnMissionDetailListener mListener;
+	private MissionProxy mMissionProxy;
 
 	protected MissionItemProxy itemRender;
 
@@ -117,10 +122,19 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		final MissionProxy missionProxy = itemRender.getMissionProxy();
+		mMissionProxy = itemRender.getMissionProxy();
 
+		List<MissionItemType> list = new LinkedList<MissionItemType>(Arrays.asList(MissionItemType.values()));
+		if (mMissionProxy.getItems().indexOf(itemRender) != 0){
+			list.remove(MissionItemType.TAKEOFF);
+		}
+		
+		if (mMissionProxy.getItems().indexOf(itemRender) != (mMissionProxy.getItems().size() - 1)){
+			list.remove(MissionItemType.LAND);
+			list.remove(MissionItemType.RTL);
+		}
 		commandAdapter = new AdapterMissionItems(this.getActivity(),
-				android.R.layout.simple_list_item_1, MissionItemType.values());
+				android.R.layout.simple_list_item_1, list.toArray(new MissionItemType[0]));
 
 		typeSpinner = (SpinnerSelfSelect) view.findViewById(R.id.spinnerWaypointType);
 		typeSpinner.setAdapter(commandAdapter);
@@ -128,7 +142,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 
 		final TextView waypointIndex = (TextView) view.findViewById(R.id.WaypointIndex);
 		if (waypointIndex != null) {
-			final int itemOrder = missionProxy.getOrder(itemRender);
+			final int itemOrder = mMissionProxy.getOrder(itemRender);
 			waypointIndex.setText(String.valueOf(itemOrder));
 		}
 
@@ -138,7 +152,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 
 		try {
 			distanceLabelView.setVisibility(View.VISIBLE);
-			distanceView.setText(missionProxy.getDistanceFromLastWaypoint(itemRender).toString());
+			distanceView.setText(mMissionProxy.getDistanceFromLastWaypoint(itemRender).toString());
 		} catch (NullPointerException e) {
 			// Can fail if distanceView doesn't exists
 		} catch (Exception e) {
