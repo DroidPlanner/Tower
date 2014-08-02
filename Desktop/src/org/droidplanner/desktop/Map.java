@@ -13,13 +13,13 @@ public class Map extends JFrame {
 	private MapMarkerDot marker;
 	private JMapViewer map;
 
-	
-	public Map(){
+	public Map() {
 		super("Map");
 		setSize(800, 600);
 		map = new JMapViewer();
 		try {
 			map.setTileLoader(new OsmFileCacheTileLoader(map));
+			map.setTileSource(new OsmTileSource.CycleMap());
 		} catch (SecurityException | IOException e) {
 			e.printStackTrace();
 		}
