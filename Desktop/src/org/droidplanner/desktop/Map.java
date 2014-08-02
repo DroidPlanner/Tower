@@ -21,6 +21,7 @@ public class Map extends JFrame implements OnDroneListener {
 	public Map() {
 		super("Map");
 		setSize(800, 600);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		map = new JMapViewer();
 		try {
 			map.setTileLoader(new OsmFileCacheTileLoader(map));
