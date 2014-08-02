@@ -9,6 +9,10 @@ public class Console {
 		logic = new Logic();
 		map = new Map();
 		map.setVisible(true);
+
+		new Thread(logic).start();
+
+		logic.drone.events.addDroneListener(map);
 	}
 
 }
