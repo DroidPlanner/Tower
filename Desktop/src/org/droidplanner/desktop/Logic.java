@@ -1,12 +1,7 @@
 package org.droidplanner.desktop;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.SocketException;
-import java.net.UnknownHostException;
-import java.util.Arrays;
 
 import org.droidplanner.core.MAVLink.MAVLinkStreams.MAVLinkOutputStream;
 import org.droidplanner.core.MAVLink.MavLinkMsgHandler;
@@ -17,21 +12,13 @@ import org.droidplanner.core.drone.Preferences;
 import org.droidplanner.core.drone.profiles.VehicleProfile;
 import org.droidplanner.core.drone.variables.Type.FirmwareType;
 
-import com.MAVLink.Parser;
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
 
-public class Logic {
-	private final int PORT = 14550;
-	protected InetAddress hostAdd = null;
-	private int hostPort;
-	byte[] receiveData = new byte[1024];
-	byte[] sendBuffer = new byte[1024];
-
+public class Logic implements Runnable {
 	public Drone drone;
-	protected Parser parser = new Parser();
 	private MavLinkMsgHandler mavlinkHandler;
-	private DatagramSocket socket;
+	protected Connection link = new Connection(14550);
 
 	public Logic() {
 		setup();
@@ -41,42 +28,6 @@ public class Logic {
 		drone = droneFactory();
 		mavlinkHandler = new MavLinkMsgHandler(drone);
 
-		try {
-			socket = new DatagramSocket(PORT);
-			socket.setBroadcast(true);
-			socket.setReuseAddress(true);
-
-			DatagramPacket receivePacket = new DatagramPacket(receiveData,
-					receiveData.length);
-
-			System.out.printf("Listening on udp:%s:%d%n", InetAddress
-					.getLocalHost().getHostAddress(), PORT);
-			while (System.in.available() == 0) {
-				socket.receive(receivePacket);
-				byte[] data = receivePacket.getData();
-				int length = receivePacket.getLength();
-				hostAdd = receivePacket.getAddress();
-				hostPort = receivePacket.getPort();
-
-				for (int i = 0; i < length; i++) {
-					MAVLinkPacket mavPacket = parser
-							.mavlink_parse_char(data[i] & 0x00ff);
-					if (mavPacket != null) {
-						MAVLinkMessage msg = mavPacket.unpack();
-						// System.out.println("decoded:" + msg.toString());
-						mavlinkHandler.receiveData(msg);
-					}
-				}
-			}
-			System.out.println("Closing socket");
-			socket.close();
-		} catch (SocketException e) {
-			e.printStackTrace();
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	private Drone droneFactory() {
@@ -90,21 +41,7 @@ public class Logic {
 
 			@Override
 			public void sendMavPacket(MAVLinkPacket packet) {
-
-				byte[] buffer = packet.encodePacket();
-				try {
-					if (hostAdd != null) { // Need to have received at least
-											// one
-											// packet
-						DatagramPacket udpPacket = new DatagramPacket(buffer,
-								buffer.length, hostAdd, hostPort);
-						socket.send(udpPacket);
-						System.out.println("sending: "
-								+ Arrays.toString(udpPacket.getData()));
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				link.sendBuffer(packet.encodePacket());
 			}
 
 			@Override
@@ -162,5 +99,32 @@ public class Logic {
 		};
 
 		return new Drone(MAVClient, clock, handler, pref);
+	}
+
+	@Override
+	public void run() {
+		try {
+			link.getUdpStream();
+			System.out.printf("Listening on udp:%s:%d%n", InetAddress
+					.getLocalHost().getHostAddress(), link.localPort);
+			while (true) {
+				byte[] data = link.readDataBlock();
+
+				for (int i = 0; i < link.length; i++) {
+					MAVLinkPacket mavPacket = link.parser
+							.mavlink_parse_char(data[i] & 0x00ff);
+					if (mavPacket != null) {
+						MAVLinkMessage msg = mavPacket.unpack();
+						// System.out.println("decoded:" + msg.toString());
+						mavlinkHandler.receiveData(msg);
+					}
+				}
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("Closing socket");
+		link.socket.close();
 	}
 }
