@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/opaque_white"
 	tools:ignore="HardcodedText"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <org.droidplanner.android.widgets.spinners.SpinnerSelfSelect
         android:id="@+id/spinnerWaypointType"
         android:layout_width="match_parent"
@@ -107,14 +107,21 @@
 			    style="@style/ModeDetailText"
 			    android:background="@drawable/mode_desc_rectangle"
 			    android:text="@string/waypointInfo_Land" />
-
-			<LinearLayout
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-		        android:padding="12dp"
-				android:orientation="vertical" >
-
-			</LinearLayout>
+			
+            <org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText
+                android:id="@+id/waypointAngle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/scrollView1"
+                android:layout_margin="2dp"
+                app:inc="5"
+                app:max="360"
+                app:min="0"
+                app:title="@string/waypoint_angle"
+                app:unit="°" >
+            </org.droidplanner.android.widgets.SeekBarWithText.SeekBarWithText>
+            
 		</LinearLayout>
     </ScrollView>
 

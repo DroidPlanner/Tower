@@ -10,6 +10,7 @@ import org.droidplanner.android.mission.item.fragments.MissionCircleFragment;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.proxy.mission.item.adapters.AdapterMissionItems;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 import org.droidplanner.android.widgets.spinners.SpinnerSelfSelect;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.MissionItemType;
@@ -58,6 +59,8 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 	private MissionProxy mMissionProxy;
 
 	protected MissionItemProxy itemRender;
+	
+	protected static DroidPlannerPrefs mAppPrefs;
 
 	public static MissionDetailFragment newInstance(MissionItemType itemType) {
 		MissionDetailFragment fragment;
@@ -171,6 +174,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 		}
 
 		mListener = (OnMissionDetailListener) activity;
+		mAppPrefs = new DroidPlannerPrefs(activity.getApplicationContext());
 	}
 
 	@Override

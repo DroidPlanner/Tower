@@ -9,6 +9,7 @@ import org.droidplanner.core.mission.waypoints.Waypoint;
 
 import android.os.Bundle;
 import android.view.View;
+// import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
@@ -18,7 +19,7 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
 	private SeekBarWithText altitudeSeekBar;
 	private SeekBarWithText delaySeekBar;
 
-	// private SeekBarWithText yawSeekBar;
+	private SeekBarWithText yawSeekBar;
 	// private SeekBarWithText radiusSeekBar;
 	// private SeekBarWithText orbitSeekBar;
 	// private CheckBox orbitCCW;
@@ -43,25 +44,28 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
 		delaySeekBar.setValue(item.getDelay());
 		delaySeekBar.setOnChangedListener(this);
 
-		/*
-		 * radiusSeekBar = (SeekBarWithText) view
-		 * .findViewById(R.id.waypointAcceptanceRadius);
-		 * radiusSeekBar.setValue(item.getAcceptanceRadius());
-		 * radiusSeekBar.setOnChangedListener(this);
-		 * 
-		 * yawSeekBar = (SeekBarWithText) view.findViewById(R.id.waypointAngle);
-		 * yawSeekBar.setValue(item.getYawAngle());
-		 * yawSeekBar.setOnChangedListener(this);
-		 * 
-		 * orbitSeekBar = (SeekBarWithText) view
-		 * .findViewById(R.id.waypointOrbitalRadius);
-		 * orbitSeekBar.setOnChangedListener(this);
-		 * orbitSeekBar.setAbsValue(item.getOrbitalRadius());
-		 * 
-		 * orbitCCW = (CheckBox) view.findViewById(R.id.waypoint_CCW);
-		 * orbitCCW.setChecked(item.isOrbitCCW());
-		 * orbitCCW.setOnCheckedChangeListener(this);
-		 */
+		yawSeekBar = (SeekBarWithText) view.findViewById(R.id.waypointAngle);
+		if (mAppPrefs.shouldOfferExtraParameters()) {
+			yawSeekBar.setVisibility(View.VISIBLE);
+			yawSeekBar.setOnChangedListener(this);
+		} else {
+			yawSeekBar.setVisibility(View.GONE);
+		}
+		yawSeekBar.setValue(item.getYawAngle());
+
+			/*
+			radiusSeekBar = (SeekBarWithText) view.findViewById(R.id.waypointAcceptanceRadius);
+			radiusSeekBar.setValue(item.getAcceptanceRadius());
+			radiusSeekBar.setOnChangedListener(this);
+			
+			orbitSeekBar = (SeekBarWithText) view.findViewById(R.id.waypointOrbitalRadius);
+			orbitSeekBar.setOnChangedListener(this);
+			orbitSeekBar.setAbsValue(item.getOrbitalRadius());
+		  
+			orbitCCW = (CheckBox) view.findViewById(R.id.waypoint_CCW);
+			orbitCCW.setChecked(item.isOrbitCCW());
+			orbitCCW.setOnCheckedChangeListener(this);
+			*/
 	}
 
 	@Override
@@ -74,8 +78,8 @@ public class MissionWaypointFragment extends MissionDetailFragment implements
 		Waypoint item = (Waypoint) this.itemRender.getMissionItem();
 		item.setAltitude(new Altitude(altitudeSeekBar.getValue()));
 		item.setDelay((float) delaySeekBar.getValue());
+		item.setYawAngle((float) yawSeekBar.getValue());
 		// item.setAcceptanceRadius((float) radiusSeekBar.getValue());
-		// item.setYawAngle((float) yawSeekBar.getValue());
 		// item.setOrbitalRadius((float) orbitSeekBar.getValue());
 		// item.setOrbitCCW(orbitCCW.isChecked());
 		item.getMission().notifyMissionUpdate();

@@ -39,4 +39,5 @@ This file is used to store the preferences keys so that it's accessible and modi
     <string name="pref_dshare_password_key">dshare_password</string>
     <string name="pref_dshare_enabled_key">dshare_enabled</string>
     <string name="pref_live_upload_enabled_key">pref_live_upload_enabled</string>
+    <string name="pref_more_parameters_key">pref_drone_settings</string>
 </resources>
