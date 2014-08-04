@@ -1,5 +1,6 @@
 package org.droidplanner.desktop;
 
+import java.awt.BorderLayout;
 import java.io.IOException;
 
 import javax.swing.JFrame;
@@ -18,11 +19,14 @@ public class Map extends JFrame implements OnDroneListener {
 	private static final long serialVersionUID = 1L;
 	private MapMarkerDot marker;
 	private JMapViewer map;
+	private TelemetryPanel telemetryData;
 
 	public Map() {
 		super("Map");
 		setSize(800, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
+		
 		map = new JMapViewer();
 		try {
 			map.setTileLoader(new OsmFileCacheTileLoader(map));
@@ -30,13 +34,18 @@ public class Map extends JFrame implements OnDroneListener {
 		} catch (SecurityException | IOException e) {
 			e.printStackTrace();
 		}
-		add(map);
 		marker = new MapMarkerDot(-29, -51);
 		map.addMapMarker(marker);
+		
+		telemetryData = new TelemetryPanel();
+		
+		add(telemetryData,BorderLayout.WEST);
+		add(map);
 	}
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
+		telemetryData.onDroneEvent(event,drone);
 		System.out.println(event);
 
 		Coord2D position = drone.GPS.getPosition();
