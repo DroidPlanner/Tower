@@ -36,10 +36,11 @@ public class ParameterMetadataMapReader {
 		final File file = new File(DirectoryPath.getDroidPlannerPath() + PARAMETERMETADATA_PATH);
 		if (file.exists()) {
 			inputStream = new FileInputStream(file);
+			return open(inputStream, metadataType);
 		} else {
 			inputStream = context.getAssets().open(PARAMETERMETADATA_PATH);
+			return open(inputStream, metadataType);
 		}
-		return open(inputStream, metadataType);
 	}
 
 	private static ParameterMetadataMap open(InputStream inputStream, String metadataType)

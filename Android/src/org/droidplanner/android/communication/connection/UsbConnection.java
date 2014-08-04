@@ -1,7 +1,6 @@
 package org.droidplanner.android.communication.connection;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -39,7 +38,12 @@ public class UsbConnection extends MAVLinkConnection {
 		// bytes.
 		// If no data is received it will timeout after 200ms (as set by
 		// parameter 2)
-		iavailable = sDriver.read(readData, 200);
+		try {
+			iavailable = sDriver.read(readData, 200);
+		} catch (NullPointerException e) {
+			Log.e("USB", "Error Reading: " + e.getMessage() + "\nAssuming inaccessible USB device.  Closing connection.", e);
+			closeConnection();
+		}
 		if (iavailable == 0)
 			iavailable = -1;
 		// Log.d("USB", "Bytes read" + iavailable);

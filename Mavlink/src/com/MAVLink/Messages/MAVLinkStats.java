@@ -1,10 +1,7 @@
 package com.MAVLink.Messages;
 
-
 /**
  * Storage for MAVLink Packet and Error statistics
- * 
- * @author Helibot
  * 
  */
 public class MAVLinkStats /* implements Serializable */{

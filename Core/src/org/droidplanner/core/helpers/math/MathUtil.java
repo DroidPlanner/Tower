@@ -1,5 +1,7 @@
 package org.droidplanner.core.helpers.math;
 
+import org.droidplanner.core.helpers.units.Length;
+
 public class MathUtil {
 
 	private static double Constrain(double value, double min, double max) {
@@ -30,5 +32,9 @@ public class MathUtil {
 
 	public static double bisectAngle(double a, double b, double alpha) {
 		return constrainAngle(a + angleDiff(a, b) * alpha);
+	}
+
+	public static Length hypot(Length altDelta, Length distDelta) {
+		return new Length(Math.hypot(altDelta.valueInMeters(),distDelta.valueInMeters()));
 	}
 }
