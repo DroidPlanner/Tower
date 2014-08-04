@@ -8,6 +8,7 @@ import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
+import org.openstreetmap.gui.jmapviewer.Coordinate;
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
 import org.openstreetmap.gui.jmapviewer.MapMarkerDot;
 import org.openstreetmap.gui.jmapviewer.OsmFileCacheTileLoader;
@@ -38,12 +39,15 @@ public class Map extends JFrame implements OnDroneListener {
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		System.out.println(event);
 
+		Coord2D position = drone.GPS.getPosition();
 		switch (event) {
 		case GPS:
-			Coord2D position = drone.GPS.getPosition();
 			marker.setLat(position.getLat());
 			marker.setLon(position.getLng());
 			map.repaint();
+			break;
+		case HEARTBEAT_FIRST:
+			map.setDisplayPosition(new Coordinate(position.getLat(), position.getLng()), 17);
 			break;
 		default:
 			break;
