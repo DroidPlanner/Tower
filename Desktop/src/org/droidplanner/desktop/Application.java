@@ -9,6 +9,7 @@ public class Application {
 		logic = new Logic();
 		map = new Map();
 		map.setVisible(true);
+		map.setJMenuBar(new Menu());
 
 		new Thread(logic).start();
 
