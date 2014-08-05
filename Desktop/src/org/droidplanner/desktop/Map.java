@@ -1,6 +1,7 @@
 package org.droidplanner.desktop;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.io.IOException;
 
 import javax.swing.JFrame;
@@ -9,6 +10,9 @@ import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
+import org.droidplanner.core.helpers.coordinates.Coord3D;
+import org.droidplanner.core.mission.MissionItem;
+import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
 import org.openstreetmap.gui.jmapviewer.MapMarkerDot;
@@ -57,6 +61,17 @@ public class Map extends JFrame implements OnDroneListener {
 			break;
 		case HEARTBEAT_FIRST:
 			map.setDisplayPosition(new Coordinate(position.getLat(), position.getLng()), 17);
+			break;
+			
+		case MISSION_RECEIVED:
+			for (MissionItem item : drone.mission.getItems()) {
+				if (item instanceof SpatialCoordItem) {
+					Coord3D coordinate = ((SpatialCoordItem) item).getCoordinate();
+					MapMarkerDot missionMarker = new MapMarkerDot(coordinate.getLat(),coordinate.getLng());
+					missionMarker.setBackColor(Color.BLACK);
+					map.addMapMarker(missionMarker);					
+				}
+			}
 			break;
 		default:
 			break;
