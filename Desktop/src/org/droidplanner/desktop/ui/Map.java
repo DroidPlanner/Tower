@@ -1,4 +1,4 @@
-package org.droidplanner.desktop;
+package org.droidplanner.desktop.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

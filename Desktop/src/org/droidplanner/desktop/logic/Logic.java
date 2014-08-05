@@ -1,4 +1,4 @@
-package org.droidplanner.desktop;
+package org.droidplanner.desktop.logic;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -11,6 +11,7 @@ import org.droidplanner.core.drone.DroneInterfaces.Handler;
 import org.droidplanner.core.drone.Preferences;
 import org.droidplanner.core.drone.profiles.VehicleProfile;
 import org.droidplanner.core.drone.variables.Type.FirmwareType;
+import org.droidplanner.desktop.Communication.Connection;
 
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;

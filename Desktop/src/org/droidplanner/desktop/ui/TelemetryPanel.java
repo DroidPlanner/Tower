@@ -1,4 +1,4 @@
-package org.droidplanner.desktop;
+package org.droidplanner.desktop.ui;
 
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;

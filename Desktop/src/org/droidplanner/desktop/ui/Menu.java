@@ -1,4 +1,4 @@
-package org.droidplanner.desktop;
+package org.droidplanner.desktop.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

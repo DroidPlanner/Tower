@@ -1,5 +1,9 @@
 package org.droidplanner.desktop;
 
+import org.droidplanner.desktop.logic.Logic;
+import org.droidplanner.desktop.ui.Map;
+import org.droidplanner.desktop.ui.Menu;
+
 public class Application {
 
 	private static Logic logic;
