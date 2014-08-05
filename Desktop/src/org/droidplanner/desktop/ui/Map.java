@@ -2,6 +2,7 @@ package org.droidplanner.desktop.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.io.IOException;
 
 import javax.swing.JFrame;
@@ -43,6 +44,7 @@ public class Map extends JFrame implements OnDroneListener {
 		map.addMapMarker(marker);
 
 		telemetryData = new TelemetryPanel();
+		telemetryData.setPreferredSize(new Dimension(200, 0));
 
 		add(telemetryData, BorderLayout.WEST);
 		add(map);
