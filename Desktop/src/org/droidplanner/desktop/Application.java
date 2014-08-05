@@ -1,6 +1,6 @@
 package org.droidplanner.desktop;
 
-public class Console {
+public class Application {
 
 	private static Logic logic;
 	private static Map map;
