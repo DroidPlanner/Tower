@@ -16,12 +16,13 @@ import org.droidplanner.core.mission.waypoints.SpatialCoordItem;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
 import org.openstreetmap.gui.jmapviewer.MapMarkerDot;
+import org.openstreetmap.gui.jmapviewer.MapMarkerIcon;
 import org.openstreetmap.gui.jmapviewer.OsmFileCacheTileLoader;
 import org.openstreetmap.gui.jmapviewer.tilesources.OsmTileSource;
 
 public class Map extends JFrame implements OnDroneListener {
 	private static final long serialVersionUID = 1L;
-	private MapMarkerDot marker;
+	private MapMarkerIcon marker;
 	private JMapViewer map;
 	private TelemetryPanel telemetryData;
 
@@ -38,7 +39,7 @@ public class Map extends JFrame implements OnDroneListener {
 		} catch (SecurityException | IOException e) {
 			e.printStackTrace();
 		}
-		marker = new MapMarkerDot(-29, -51);
+		marker = new MapMarkerIcon(new Coordinate(-29, -51));
 		map.addMapMarker(marker);
 
 		telemetryData = new TelemetryPanel();
