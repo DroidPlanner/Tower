@@ -93,7 +93,6 @@ public class MapMarkerIcon extends MapObjectImpl implements MapMarker {
     }
     
     public void setRotation(double degrees){
-    	System.out.println("rotation "+ Double.toString(degrees));
     	rotation = Math.toRadians(degrees);
     }
 }
