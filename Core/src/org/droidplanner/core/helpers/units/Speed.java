@@ -17,12 +17,16 @@ public class Speed {
 		this.speedInMetersPerSecond = speedInMetersPerSecond;
 	}
 
+	public String toStringInMetersPerSecond() {
+		return String.format(Locale.US, "%2.1f m/s", speedInMetersPerSecond);		
+	}
+
 	@Override
 	public String toString() {
 		if (speedInMetersPerSecond >= 1000) {
 			return String.format(Locale.US, "%2.1f km/s", speedInMetersPerSecond / 1000);
 		} else if (speedInMetersPerSecond >= 1) {
-			return String.format(Locale.US, "%2.1f m/s", speedInMetersPerSecond);
+			return toStringInMetersPerSecond();
 		} else {
 			return speedInMetersPerSecond + " m/s";
 		}
@@ -35,5 +39,6 @@ public class Speed {
 		}
 		return false;
 	}
+
 
 }

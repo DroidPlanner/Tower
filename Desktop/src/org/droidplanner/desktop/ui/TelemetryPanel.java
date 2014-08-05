@@ -56,7 +56,7 @@ public class TelemetryPanel extends JPanel implements OnDroneListener {
 			labelLongitude.setText(LONGITUDE + position.getLng());
 			break;
 		case SPEED:
-			labelSpeed.setText(SPEED + drone.speed.getGroundSpeed());
+			labelSpeed.setText(SPEED + drone.speed.getGroundSpeed().toStringInMetersPerSecond());
 			labelAltitude.setText(ALTITUDE
 					+ new Length(drone.altitude.getAltitude()));
 			break;
