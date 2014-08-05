@@ -9,7 +9,7 @@ public class Application {
 		logic = new Logic();
 		map = new Map();
 		map.setVisible(true);
-		map.setJMenuBar(new Menu());
+		map.setJMenuBar(new Menu(logic.drone));
 
 		new Thread(logic).start();
 

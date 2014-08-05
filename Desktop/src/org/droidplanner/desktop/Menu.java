@@ -7,29 +7,37 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import org.droidplanner.core.drone.Drone;
+
 public class Menu extends JMenuBar implements ActionListener {
 	private static final long serialVersionUID = 3070514693880578004L;
 
 	private static final String LOAD_MISSION = "Load Mission";
 	private static final String LOAD_PARAMETERS = "Load Parameters";
+
+	private Drone drone;
 	
-	public Menu(){
+	public Menu(Drone drone){
 		super();
-		JMenu drone = new JMenu("Drone");
+		this.drone = drone;
+		JMenu droneMenu = new JMenu("Drone");
 		JMenuItem loadMission = new JMenuItem(LOAD_MISSION);
 		JMenuItem loadParameters = new JMenuItem(LOAD_PARAMETERS);
+		
 		loadMission.addActionListener(this);
-		drone.add(loadMission);
-		drone.add(loadParameters);
-		add(drone);
+		loadParameters.addActionListener(this);
+		
+		droneMenu.add(loadMission);
+		droneMenu.add(loadParameters);
+		add(droneMenu);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equalsIgnoreCase(LOAD_MISSION)) {
-			//TODO load the mission here
+			drone.waypointManager.getWaypoints();
 		}else if (e.getActionCommand().equalsIgnoreCase(LOAD_PARAMETERS)) {
-			//TODO load the parameters here			
+			drone.parameters.getAllParameters();
 		}
 	}
 
