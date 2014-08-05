@@ -100,9 +100,9 @@ public class TelemetryFragment extends Fragment implements OnDroneListener {
 	}
 
 	public void onSpeedAltitudeAndClimbRateUpdate(Drone drone) {
-		airSpeed.setText(String.format("%3.1f", drone.speed.getAirSpeed()));
-		groundSpeed.setText(String.format("%3.1f", drone.speed.getGroundSpeed()));
-		climbRate.setText(String.format("%3.1f", drone.speed.getVerticalSpeed()));
+		airSpeed.setText(String.format("%3.1f", drone.speed.getAirSpeed().valueInMetersPerSecond()));
+		groundSpeed.setText(String.format("%3.1f", drone.speed.getGroundSpeed().valueInMetersPerSecond()));
+		climbRate.setText(String.format("%3.1f", drone.speed.getVerticalSpeed().valueInMetersPerSecond()));
 		double alt = drone.altitude.getAltitude();
 		double targetAlt = drone.altitude.getTargetAltitude();
 		altitude.setText(String.format("%3.1f", alt));
