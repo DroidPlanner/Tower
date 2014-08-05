@@ -21,7 +21,7 @@ public class ParametersDialog extends JDialog {
 	private static final String col[] = { "Name", "Value" };
 
 	public ParametersDialog(ArrayList<Parameter> parameterList) {
-		JFrame frame = new JFrame("JTable Test Display");
+		JFrame frame = new JFrame("Parameters");
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
