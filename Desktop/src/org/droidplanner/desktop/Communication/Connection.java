@@ -5,7 +5,6 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
-import java.util.Arrays;
 
 import com.MAVLink.Parser;
 
@@ -41,14 +40,10 @@ public class Connection {
 
 	public void sendBuffer(byte[] buffer) {
 		try {
-			if (hostAdd != null) { // Need to have received at least
-									// one
-									// packet
+			if (hostAdd != null) {
 				DatagramPacket udpPacket = new DatagramPacket(buffer,
 						buffer.length, hostAdd, hostPort);
 				socket.send(udpPacket);
-				System.out.println("sending: "
-						+ Arrays.toString(udpPacket.getData()));
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
