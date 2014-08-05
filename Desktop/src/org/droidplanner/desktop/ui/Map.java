@@ -57,6 +57,7 @@ public class Map extends JFrame implements OnDroneListener {
 		case GPS:
 			marker.setLat(position.getLat());
 			marker.setLon(position.getLng());
+			marker.setRotation(drone.orientation.getYaw());
 			map.repaint();
 			break;
 		case HEARTBEAT_FIRST:

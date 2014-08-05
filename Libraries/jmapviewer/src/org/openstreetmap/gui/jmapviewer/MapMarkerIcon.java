@@ -1,13 +1,13 @@
 // License: GPL. For details, see Readme.txt file.
 package org.openstreetmap.gui.jmapviewer;
 
-import java.awt.AlphaComposite;
 import java.awt.Color;
-import java.awt.Composite;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.IOException;
 
@@ -24,6 +24,7 @@ public class MapMarkerIcon extends MapObjectImpl implements MapMarker {
 
     Coordinate coord;
 	private Image img;
+	private double rotation = 0;
 
     public MapMarkerIcon(Coordinate coord) {
         super("");
@@ -56,8 +57,19 @@ public class MapMarkerIcon extends MapObjectImpl implements MapMarker {
     }
 
 	public void paint(Graphics g, Point position, int radio) {
-		g.drawImage(img, position.x - img.getWidth(null) / 2,
-				position.y - img.getWidth(null) / 2, null);
+		int halfWidth = img.getWidth(null) / 2;
+		int halfHeight = img.getHeight(null) / 2;
+		if (g instanceof Graphics2D) {
+			Graphics2D g2 = ((Graphics2D) g);
+			AffineTransform t = new AffineTransform();
+			t.translate(position.x - halfWidth, position.y - halfHeight);
+			t.rotate(rotation, halfWidth, halfHeight);
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+					RenderingHints.VALUE_ANTIALIAS_ON);
+			g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+	                   RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+			g2.drawImage(img, t, null);
+		}
 		if (getLayer() == null || getLayer().isVisibleTexts())
 			paintText(g, position);
 	}
@@ -78,5 +90,10 @@ public class MapMarkerIcon extends MapObjectImpl implements MapMarker {
     public void setLon(double lon) {
         if(coord==null) coord = new Coordinate(0,lon);
         else coord.setLon(lon);
+    }
+    
+    public void setRotation(double degrees){
+    	System.out.println("rotation "+ Double.toString(degrees));
+    	rotation = Math.toRadians(degrees);
     }
 }
