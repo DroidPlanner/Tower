@@ -50,7 +50,6 @@ public class Map extends JFrame implements OnDroneListener {
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		telemetryData.onDroneEvent(event,drone);
-		//System.out.println(event);
 
 		Coord2D position = drone.GPS.getPosition();
 		switch (event) {
@@ -73,6 +72,9 @@ public class Map extends JFrame implements OnDroneListener {
 				}
 			}
 			break;
+		case PARAMETERS_DOWNLOADED:
+			new ParametersDialog(drone.parameters.parameterList);
+			break;			
 		default:
 			break;
 		}
