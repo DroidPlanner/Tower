@@ -29,8 +29,8 @@ public class Map extends JFrame implements OnDroneListener {
 		super("Map");
 		setSize(800, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout());
-		
+		setLayout(new BorderLayout());
+
 		map = new JMapViewer();
 		try {
 			map.setTileLoader(new OsmFileCacheTileLoader(map));
@@ -40,16 +40,16 @@ public class Map extends JFrame implements OnDroneListener {
 		}
 		marker = new MapMarkerDot(-29, -51);
 		map.addMapMarker(marker);
-		
+
 		telemetryData = new TelemetryPanel();
-		
-		add(telemetryData,BorderLayout.WEST);
+
+		add(telemetryData, BorderLayout.WEST);
 		add(map);
 	}
 
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
-		telemetryData.onDroneEvent(event,drone);
+		telemetryData.onDroneEvent(event, drone);
 
 		Coord2D position = drone.GPS.getPosition();
 		switch (event) {
@@ -59,22 +59,25 @@ public class Map extends JFrame implements OnDroneListener {
 			map.repaint();
 			break;
 		case HEARTBEAT_FIRST:
-			map.setDisplayPosition(new Coordinate(position.getLat(), position.getLng()), 17);
+			map.setDisplayPosition(
+					new Coordinate(position.getLat(), position.getLng()), 17);
 			break;
-			
+
 		case MISSION_RECEIVED:
 			for (MissionItem item : drone.mission.getItems()) {
 				if (item instanceof SpatialCoordItem) {
-					Coord3D coordinate = ((SpatialCoordItem) item).getCoordinate();
-					MapMarkerDot missionMarker = new MapMarkerDot(coordinate.getLat(),coordinate.getLng());
+					Coord3D coordinate = ((SpatialCoordItem) item)
+							.getCoordinate();
+					MapMarkerDot missionMarker = new MapMarkerDot(
+							coordinate.getLat(), coordinate.getLng());
 					missionMarker.setBackColor(Color.BLACK);
-					map.addMapMarker(missionMarker);					
+					map.addMapMarker(missionMarker);
 				}
 			}
 			break;
 		case PARAMETERS_DOWNLOADED:
 			new ParametersDialog(drone.parameters.parameterList);
-			break;			
+			break;
 		default:
 			break;
 		}

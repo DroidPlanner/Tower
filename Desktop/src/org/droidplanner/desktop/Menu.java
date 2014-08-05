@@ -16,17 +16,17 @@ public class Menu extends JMenuBar implements ActionListener {
 	private static final String LOAD_PARAMETERS = "Load Parameters";
 
 	private Drone drone;
-	
-	public Menu(Drone drone){
+
+	public Menu(Drone drone) {
 		super();
 		this.drone = drone;
 		JMenu droneMenu = new JMenu("Drone");
 		JMenuItem loadMission = new JMenuItem(LOAD_MISSION);
 		JMenuItem loadParameters = new JMenuItem(LOAD_PARAMETERS);
-		
+
 		loadMission.addActionListener(this);
 		loadParameters.addActionListener(this);
-		
+
 		droneMenu.add(loadMission);
 		droneMenu.add(loadParameters);
 		add(droneMenu);
@@ -36,7 +36,7 @@ public class Menu extends JMenuBar implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equalsIgnoreCase(LOAD_MISSION)) {
 			drone.waypointManager.getWaypoints();
-		}else if (e.getActionCommand().equalsIgnoreCase(LOAD_PARAMETERS)) {
+		} else if (e.getActionCommand().equalsIgnoreCase(LOAD_PARAMETERS)) {
 			drone.parameters.getAllParameters();
 		}
 	}

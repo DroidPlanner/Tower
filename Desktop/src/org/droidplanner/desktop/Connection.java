@@ -32,7 +32,7 @@ public class Connection {
 		hostPort = receivePacket.getPort();
 		return receivePacket.getData();
 	}
-	
+
 	public void getUdpStream() throws SocketException {
 		socket = new DatagramSocket(localPort);
 		socket.setBroadcast(true);
