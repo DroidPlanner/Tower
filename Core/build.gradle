@@ -23,8 +23,8 @@ dependencies {
     compile project(':Mavlink')
 
     //FIXME: hackish implementation
-    unitTestCompile files("$project.buildDir/intermediates/classes/release")
-    unitTestCompile files("${project(':Mavlink').buildDir}/intermediates/classes/release")
+    unitTestCompile files("$project.buildDir/classes/main")
+    unitTestCompile files("${project(':Mavlink').buildDir}/classes/main")
     unitTestCompile 'junit:junit:3.+'
 }
 
