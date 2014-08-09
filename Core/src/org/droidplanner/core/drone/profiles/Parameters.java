@@ -12,8 +12,6 @@ import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.core.drone.DroneVariable;
 import org.droidplanner.core.parameters.Parameter;
 
-import android.annotation.SuppressLint;
-
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_param_value;
 
@@ -31,7 +29,6 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 
 	private int expectedParams;
 
-	@SuppressLint("UseSparseArrays")
 	private HashMap<Integer, Parameter> parameters = new HashMap<Integer, Parameter>();
 
 	public DroneInterfaces.OnParameterManagerListener parameterListener;

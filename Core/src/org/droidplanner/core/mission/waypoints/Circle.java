@@ -9,8 +9,6 @@ import org.droidplanner.core.mission.Mission;
 import org.droidplanner.core.mission.MissionItem;
 import org.droidplanner.core.mission.MissionItemType;
 
-import android.util.Log;
-
 import com.MAVLink.Messages.ardupilotmega.msg_mission_item;
 import com.MAVLink.Messages.enums.MAV_CMD;
 import com.MAVLink.Messages.enums.MAV_FRAME;
@@ -74,7 +72,7 @@ public class Circle extends SpatialCoordItem {
 			packSingleCircle(list, extraHeight);
 		}
 
-		Log.d("CIRCLE", list.toString());
+		System.out.println(list.toString());
 		return list;
 	}
 
