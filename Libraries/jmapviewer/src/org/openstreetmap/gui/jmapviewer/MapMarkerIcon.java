@@ -31,7 +31,7 @@ public class MapMarkerIcon extends MapObjectImpl implements MapMarker {
         this.coord = coord;
         
         try {
-			img = ImageIO.read(new File("Android/res/drawable-hdpi/quad.png"));
+			img = ImageIO.read(new File("../Android/res/drawable-hdpi/quad.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
