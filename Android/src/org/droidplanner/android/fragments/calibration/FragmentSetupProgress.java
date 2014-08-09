@@ -24,13 +24,12 @@ public class FragmentSetupProgress extends SetupSidePanel {
 	private int titleId = 0, descId = 0;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 		final SuperSetupFragment setupFragment = (SuperSetupFragment) getParentFragment();
 
-		final View view = inflater.inflate(
-				R.layout.fragment_setup_panel_progress, container, false);
+		final View view = inflater
+				.inflate(R.layout.fragment_setup_panel_progress, container, false);
 
 		textTitle = (TextView) view.findViewById(R.id.setupTitle);
 		textDesc = (TextView) view.findViewById(R.id.setupDesc);
@@ -72,8 +71,7 @@ public class FragmentSetupProgress extends SetupSidePanel {
 		}
 
 		if (textProgress != null) {
-			textProgress.setText(String.valueOf(index) + "/"
-					+ String.valueOf(count));
+			textProgress.setText(String.valueOf(index) + "/" + String.valueOf(count));
 		}
 	}
 

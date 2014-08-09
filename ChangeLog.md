@@ -8,6 +8,70 @@ Our convention for release control is the following (for a release like DPvA.B.C
 All the changes are logged below (preferable with the pull request numbers in parenteses):
 
 # Releases
+
+## Droidplanner v2.6.0
+* Improved follow-me ROI (#916)
+* New follow-modes, 'track from above', ' right' and 'left' (#908, #887)
+* Change default radius values for the varius follow-modes (#904)
+* Added option to load/save files from the mission editor (#901)
+* Option to displayb HDOP instead of GPS fix (#898)
+* Droneshare imoprovements (#917,#913,#785,#895)
+* Fixed parameters download (#906, #820)
+* Fix duplicated parameters after a fetch (#902)
+* Fix telemetry indicator bug (#914)
+* Add hysteresis to TTS notification of battery voltage (#329)
+* Fix some problems with the Pebble app (#897)
+* Small fix to the telmetry fragment layout (#896)
+* Clean-up of small language issues (#903, #894,#905)
+* Clean up of the preferences file (#900)
+
+## Droidplanner v2.5.1
+* Fix upload to DroneShare (#880)
+* Clean-up of the codebase (#881)
+* Remember last BlueTooth device (#879)
+* Pebble support for follow-types (#876)
+* Refactoring Follow-me algorithms, implemented Lead-me (#882)
+
+## Droidplanner v2.5.0
+* Support for Pebble Watch (#874)
+* Follow-Me types (#871)
+* Release GPS when not in use (#873,#872)
+* Fix map padding (#870,#869)
+* Added CONTRIBUTING.md file to guide new developers (#862)
+
+## Droidplanner v2.4.4
+* Implemented optional max volume on start (#838,#841,#840)
+* Added Unit tests to Travis CI (#839)
+* Added Italian translation (#845)
+* Removed Android dependencies from the Core library (#849)
+* Improved follow-me UX (#850)
+* Advanced notifications (#851)
+* Fix maps bug, which crashed the app on some devices (#853, #852)
+* Updating project libraries  (#855)
+* Go-to-drone button, and auto-pan (#859)
+* Added SRTM library (#860)
+
+## Droidplanner v2.4.3
+* Improve analytics (#829)
+* Fixed German translation (#831)
+* Restructuring Settings menu (#815)
+* Updating parameters description (#828)
+* Adding support for direct connections to the Pixhawk (#816)
+* Travis CI integration (#821,#824,#829)
+* Fixing log bufferoverflow exception (#834)
+
+## Droidplanner v2.4.2
+* Added google analytics (#813)
+* Update google play services (#813)
+* Update Droneshare library (#814)
+
+## Droidplanner v2.4.1
+* Add basic follow-me UI (810)
+* Add support for OSM (#799)
+* Fix editor tools bugs (#796)
+* Fix gradle build (#795)
+* Fix Eclipse Mavlink build (#797)
+
 ## Droidplanner v2.4.0
 * Initial support for Follow-me (#769)
 * Circle mission item, and advanced circle (#790)

@@ -5,7 +5,6 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -23,7 +22,7 @@ public class TcpConnection extends MAVLinkConnection {
 	}
 
 	@Override
-	protected void openConnection() throws UnknownHostException, IOException {
+	protected void openConnection() throws IOException {
 		getTCPStream();
 	}
 
@@ -52,7 +51,7 @@ public class TcpConnection extends MAVLinkConnection {
 
 	}
 
-	private void getTCPStream() throws UnknownHostException, IOException {
+	private void getTCPStream() throws IOException {
 		InetAddress serverAddr = InetAddress.getByName(serverIP);
 		socket = new Socket(serverAddr, serverPort);
 		mavOut = new BufferedOutputStream((socket.getOutputStream()));

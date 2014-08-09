@@ -18,7 +18,7 @@ import android.os.Environment;
 public abstract class ListXmlParser {
 
 	public interface OnXmlParserError {
-		public void onError(XmlPullParser parser);
+		public void onError();
 	}
 
 	protected OnXmlParserError errorListener;
@@ -35,15 +35,13 @@ public abstract class ListXmlParser {
 		getListItemsFromResource(context, resourceId);
 	}
 
-	public ListXmlParser(String ioFile) throws FileNotFoundException,
-			XmlPullParserException {
+	public ListXmlParser(String ioFile) throws FileNotFoundException, XmlPullParserException {
 		getListItemsFromFile(ioFile);
 	}
 
-	public void getListItemsFromFile(String ioFile)
-			throws FileNotFoundException, XmlPullParserException {
-		ioFile = Environment.getExternalStorageDirectory()
-				+ "/DroidPlanner/Checklists/" + ioFile;
+	public void getListItemsFromFile(String ioFile) throws FileNotFoundException,
+			XmlPullParserException {
+		ioFile = Environment.getExternalStorageDirectory() + "/DroidPlanner/Checklists/" + ioFile;
 		File file = new File(ioFile);
 		FileInputStream fis = new FileInputStream(file);
 		XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
@@ -78,12 +76,12 @@ public abstract class ListXmlParser {
 				_xpp.next();
 			} catch (XmlPullParserException e) {
 				if (errorListener != null)
-					errorListener.onError(_xpp);
+					errorListener.onError();
 
 				e.printStackTrace();
 			} catch (IOException e) {
 				if (errorListener != null)
-					errorListener.onError(_xpp);
+					errorListener.onError();
 
 				e.printStackTrace();
 			}
@@ -102,43 +100,43 @@ public abstract class ListXmlParser {
 			eventType = _xpp.getEventType();
 		} catch (XmlPullParserException e) {
 			if (errorListener != null)
-				errorListener.onError(_xpp);
+				errorListener.onError();
 			e.printStackTrace();
 		}
 
 		while (eventType != XmlPullParser.END_DOCUMENT) {
 			if (eventType == XmlPullParser.START_DOCUMENT) {
-				process_StartDocument(_xpp);
+				process_StartDocument();
 			} else if (eventType == XmlPullParser.END_DOCUMENT) {
-				process_EndDocument(_xpp);
+				process_EndDocument();
 			} else if (eventType == XmlPullParser.START_TAG) {
 				process_StartTag(_xpp);
 			} else if (eventType == XmlPullParser.END_TAG) {
-				process_EndTag(_xpp);
+				process_EndTag();
 			} else if (eventType == XmlPullParser.TEXT) {
-				process_Text(_xpp);
+				process_Text();
 			}
 			try {
 				eventType = _xpp.next();
 			} catch (XmlPullParserException e) {
 				if (errorListener != null)
-					errorListener.onError(_xpp);
+					errorListener.onError();
 				e.printStackTrace();
 			} catch (IOException e) {
 				if (errorListener != null)
-					errorListener.onError(_xpp);
+					errorListener.onError();
 				e.printStackTrace();
 			}
 		}
 	}
 
-	public abstract void process_StartDocument(XmlPullParser xpp);
+	public abstract void process_StartDocument();
 
-	public abstract void process_EndDocument(XmlPullParser xpp);
+	public abstract void process_EndDocument();
 
 	public abstract void process_StartTag(XmlPullParser xpp);
 
-	public abstract void process_EndTag(XmlPullParser xpp);
+	public abstract void process_EndTag();
 
-	public abstract void process_Text(XmlPullParser xpp);
+	public abstract void process_Text();
 }

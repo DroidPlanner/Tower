@@ -29,9 +29,9 @@ public class LoiterInfinite extends Loiter {
 		super.unpackMAVMessage(mavMsg);
 	}
 
-    @Override
-    public MissionItemType getType() {
-        return MissionItemType.LOITER_INF;
-    }
+	@Override
+	public MissionItemType getType() {
+		return MissionItemType.LOITER_INF;
+	}
 
 }

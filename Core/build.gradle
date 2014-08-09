@@ -1,12 +1,27 @@
-apply plugin: 'android-library'
+apply plugin: 'com.android.library'
 
 repositories {
     mavenCentral()
 }
 
+sourceSets {
+    unitTest {
+        java.srcDir file('test')
+    }
+}
+
+configurations {
+    unitTestCompile.extendsFrom runtime
+    unitTestRuntime.extendsFrom unitTestCompile
+}
+
 dependencies {
-    compile 'de.greenrobot:eventbus:2.2.1'
     compile project(':Mavlink')
+
+    //FIXME: hackish implementation
+    unitTestCompile files("$project.buildDir/intermediates/classes/release")
+    unitTestCompile files("${project(':Mavlink').buildDir}/intermediates/classes/release")
+    unitTestCompile 'junit:junit:3.+'
 }
 
 android {
@@ -24,7 +39,16 @@ android {
             assets.srcDirs = ['assets']
         }
 
-        // Move the tests to tests/java, tests/res, etc...
-        androidTest.setRoot('test')
+        androidTest {
+            java.srcDirs = ['test']
+        }
     }
 }
+
+task unitTest(type: Test, dependsOn: assemble){
+    description = "run unit tests"
+    testClassesDir = project.sourceSets.unitTest.output.classesDir
+    classpath = project.sourceSets.unitTest.runtimeClasspath
+}
+
+check.dependsOn unitTest

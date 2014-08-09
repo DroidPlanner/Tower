@@ -1,18 +1,16 @@
 package org.droidplanner.core.parameters;
 
-import java.io.Serializable;
 import java.text.DecimalFormat;
 
 import com.MAVLink.Messages.ardupilotmega.msg_param_value;
 
-public class Parameter implements Serializable {
+public class Parameter{
 
 	public String name;
 	public double value;
 	public int type;
 
-	private final static DecimalFormat format = (DecimalFormat) DecimalFormat
-			.getInstance();
+	private final static DecimalFormat format = (DecimalFormat) DecimalFormat.getInstance();
 	static {
 		format.applyPattern("0.###");
 	}
@@ -63,8 +61,7 @@ public class Parameter implements Serializable {
 		} else if (name.contains("FORMAT_VERSION")) {
 			throw new Exception("ExludedName");
 		} else {
-			return;
-		}
+        }
 	}
 
 	public static DecimalFormat getFormat() {

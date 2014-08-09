@@ -1,12 +1,11 @@
 package org.droidplanner.core.parameters;
 
-import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class ParameterMetadata implements Serializable {
+public class ParameterMetadata{
 	public static final int RANGE_LOW = 0;
 	public static final int RANGE_HIGH = 1;
 
@@ -96,8 +95,7 @@ public class ParameterMetadata implements Serializable {
 				final String[] parts = tpart.split(":");
 				if (parts.length != 2)
 					throw new IllegalArgumentException();
-				outValues.put(format.parse(parts[0].trim()).doubleValue(),
-						parts[1].trim());
+				outValues.put(format.parse(parts[0].trim()).doubleValue(), parts[1].trim());
 			}
 		}
 		return outValues;

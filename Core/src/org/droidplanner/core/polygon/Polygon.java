@@ -58,8 +58,7 @@ public class Polygon {
 		if (points.size() < 3) {
 			throw new InvalidPolygon(points.size());
 		} else {
-			return;
-		}
+        }
 	}
 
 	public class InvalidPolygon extends Exception {
@@ -72,7 +71,7 @@ public class Polygon {
 	}
 
 	public void reversePoints() {
-		Collections.reverse(points);	
+		Collections.reverse(points);
 	}
 
 }

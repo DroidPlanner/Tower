@@ -2,7 +2,8 @@ package org.droidplanner.android.fragments;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
-import org.droidplanner.android.gcs.FollowMe;
+import org.droidplanner.android.gcs.follow.Follow;
+import org.droidplanner.android.utils.analytics.GAUtils;
 import org.droidplanner.core.drone.Drone;
 
 import android.app.Activity;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.MAVLink.Messages.ApmModes;
+import com.google.android.gms.analytics.HitBuilders;
 
 public class FlightActionsFragment extends Fragment implements OnClickListener {
 
@@ -26,27 +28,42 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 
 	private Drone drone;
 	private OnMissionControlInteraction listener;
-	private FollowMe followMe;
-	
-	private Button homeBtn;
-	private Button missionBtn;
-	private Button joystickBtn;
-	private Button landBtn;
-	private Button loiterBtn;
-	private Button takeoffBtn;
-	private Button followBtn;
+	private Follow followMe;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_mission_control,
-				container, false);
-		setupViews(view);
-		setupListener();
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.fragment_mission_control, container, false);
+
 		DroidPlannerApp droidPlannerApp = (DroidPlannerApp) getActivity().getApplication();
-		drone = droidPlannerApp.drone;
+		drone = droidPlannerApp.getDrone();
 		followMe = droidPlannerApp.followMe;
 		return view;
+	}
+
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+
+		final Button missionBtn = (Button) view.findViewById(R.id.mc_planningBtn);
+		missionBtn.setOnClickListener(this);
+
+		final Button joystickBtn = (Button) view.findViewById(R.id.mc_joystickBtn);
+		joystickBtn.setOnClickListener(this);
+
+		final Button homeBtn = (Button) view.findViewById(R.id.mc_homeBtn);
+		homeBtn.setOnClickListener(this);
+
+		final Button landBtn = (Button) view.findViewById(R.id.mc_land);
+		landBtn.setOnClickListener(this);
+
+		final Button takeoffBtn = (Button) view.findViewById(R.id.mc_takeoff);
+		takeoffBtn.setOnClickListener(this);
+
+		final Button loiterBtn = (Button) view.findViewById(R.id.mc_loiter);
+		loiterBtn.setOnClickListener(this);
+
+		final Button followBtn = (Button) view.findViewById(R.id.mc_follow);
+		followBtn.setOnClickListener(this);
 	}
 
 	@Override
@@ -56,55 +73,60 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 	}
 
 	@Override
-	public void onDestroy() {
-		super.onDestroy();
-	}
-
-	private void setupViews(View parentView) {
-		missionBtn = (Button) parentView.findViewById(R.id.mc_planningBtn);
-		joystickBtn = (Button) parentView.findViewById(R.id.mc_joystickBtn);
-		homeBtn = (Button) parentView.findViewById(R.id.mc_homeBtn);
-		landBtn = (Button) parentView.findViewById(R.id.mc_land);
-		takeoffBtn = (Button) parentView.findViewById(R.id.mc_takeoff);
-		loiterBtn = (Button) parentView.findViewById(R.id.mc_loiter);
-		followBtn = (Button) parentView.findViewById(R.id.mc_follow);
-	}
-
-	private void setupListener() {
-		missionBtn.setOnClickListener(this);
-		joystickBtn.setOnClickListener(this);
-		homeBtn.setOnClickListener(this);
-		landBtn.setOnClickListener(this);
-		takeoffBtn.setOnClickListener(this);
-		loiterBtn.setOnClickListener(this);
-		followBtn.setOnClickListener(this);
-	}
-
-	@Override
 	public void onClick(View v) {
+		HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
+				.setCategory(GAUtils.Category.FLIGHT_DATA_ACTION_BUTTON.toString());
+
 		switch (v.getId()) {
 		case R.id.mc_planningBtn:
 			listener.onPlanningSelected();
+			eventBuilder.setAction("Planning selected").setLabel(
+					getString(R.string.mission_control_edit));
 			break;
+
 		case R.id.mc_joystickBtn:
 			listener.onJoystickSelected();
+			eventBuilder.setAction("Joystick selected").setLabel(
+					getString(R.string.mission_control_control));
 			break;
+
 		case R.id.mc_land:
 			drone.state.changeFlightMode(ApmModes.ROTOR_LAND);
+			eventBuilder.setAction("Changed flight mode").setLabel(ApmModes.ROTOR_LAND.getName());
 			break;
+
 		case R.id.mc_takeoff:
-			//drone.state.changeFlightMode(ApmModes.ROTOR_TAKEOFF); //TODO there isn`t a takeoff mode on ArduCopter
+			// drone.state.changeFlightMode(ApmModes.ROTOR_TAKEOFF); //TODO
+			// there isn`t a takeoff mode on ArduCopter
+			// eventBuilder.setAction("Changed flight mode")
+			// .setLabel(ApmModes.ROTOR_TAKEOFF.getName());
 			break;
+
 		case R.id.mc_homeBtn:
 			drone.state.changeFlightMode(ApmModes.ROTOR_RTL);
+			eventBuilder.setAction("Changed flight mode").setLabel(ApmModes.ROTOR_RTL.getName());
 			break;
+
 		case R.id.mc_loiter:
 			drone.state.changeFlightMode(ApmModes.ROTOR_LOITER);
+			eventBuilder.setAction("Changed flight mode").setLabel(ApmModes.ROTOR_LOITER.getName());
 			break;
+
 		case R.id.mc_follow:
-			followMe.toogleFollowMeState();
+			followMe.toggleFollowMeState();
+			eventBuilder.setAction("FollowMe selected").setLabel(
+					followMe.isEnabled() ? "FollowMe enabled" : "FollowMe disabled");
+			break;
+
+		default:
+			eventBuilder = null;
 			break;
 		}
+
+		if (eventBuilder != null) {
+			GAUtils.sendEvent(eventBuilder);
+		}
+
 	}
 
 }

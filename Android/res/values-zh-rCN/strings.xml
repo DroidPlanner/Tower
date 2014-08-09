@@ -23,10 +23,7 @@
 
     <!-- App Settings/Preferences -->
     <string name="pref_connection_type">遥测连接方式</string>
-    <string name="pref_connection_type_summary">选择用来连接无人机分链接</string>
-    <string name="pref_mavlink">MAVLink</string>
-    <string name="pref_mavlink_log">启用日志</string>
-    <string name="pref_mavlink_log_summary">记录MAVLink通信至*.tlog文件，可能会降低性能</string>
+    <string name="pref_connection_type_summary">选择用来连接无人机分链接</string>    
     <string name="pref_mavlink_rates">流速</string>
     <string name="pref_mavlink_rates_summary">从无人机接受飞行数据的速度（以Hz为单位）</string>
     <string name="pref_mavlink_stream_rate_ext_stat">航点、GPS原始数据、围栏数据、当前航点等</string>
@@ -54,8 +51,6 @@
     <string name="pref_guided_mode_on_long_press_summary">长按地图进入引导模式。</string>
     <string name="pref_follow_me_mode_enabled">启用跟着我模式</string>
     <string name="pref_follow_me_mode_enabled_summary">在开发</string>
-    <string name="pref_auto_pan_enabled">启用自动平移</string>
-    <string name="pref_auto_pan_enabled_summary">当收到新的GPS坐标时自动平移地图</string>
     <string name="pref_heading_mode">启动FPV指向模式</string>
     <string name="pref_heading_mode_summary">改变指向模式为FPV（-180°至180°）</string>
     <string name="pref_advanced">高级</string>
@@ -104,9 +99,6 @@
     <string name="connected">已连接</string>
     <string name="disconnected">已断开</string>
 
-    <!-- Failsafe Strings -->
-    <string name="RCFailsafe">警告！遥控故障保护 – 回到起飞点</string>
-
     <!-- Common Setup Buttons Resource Strings -->
     <string name="button_setup_calibrate">校准</string>
     <string name="button_setup_cancel">取消</string>
@@ -128,7 +120,6 @@
     <!-- Survey/Mapping related strings -->
     <string name="distance_between_lines">横向的</string>
     <string name="footprint">足迹</string>
-    <string name="ground_resolution">GSD</string>
     <string name="distance_between_pictures">纵向的</string>
     <string name="area">区域</string>
     <string name="camera_">相机：</string>

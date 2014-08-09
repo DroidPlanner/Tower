@@ -3,11 +3,11 @@ package org.droidplanner.android.fragments.helpers;
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.activities.ConfigurationActivity;
+import org.droidplanner.android.fragments.calibration.SetupMainPanel;
+import org.droidplanner.android.fragments.calibration.SetupSidePanel;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.droidplanner.android.fragments.calibration.SetupMainPanel;
-import org.droidplanner.android.fragments.calibration.SetupSidePanel;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -25,13 +25,12 @@ import android.widget.Spinner;
 /**
  * This fragment is used to calibrate the drone's compass, and accelerometer.
  */
-public abstract class SuperSetupFragment extends Fragment implements
-		OnDroneListener, OnItemSelectedListener {
+public abstract class SuperSetupFragment extends Fragment implements OnDroneListener,
+		OnItemSelectedListener {
 
 	private Drone drone;
 
 	protected ConfigurationActivity parentActivity;
-	private Spinner spinnerSetup;
 
 	private FragmentManager fragmentManager;
 	private SetupMainPanel setupPanel;
@@ -61,11 +60,9 @@ public abstract class SuperSetupFragment extends Fragment implements
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-		final View view = inflater.inflate(R.layout.fragment_setup, container,
-				false);
+		final View view = inflater.inflate(R.layout.fragment_setup, container, false);
 
 		setupLocalViews(view);
 
@@ -76,8 +73,8 @@ public abstract class SuperSetupFragment extends Fragment implements
 		if (setupPanel == null) {
 			setupPanel = initMainPanel();
 
-			fragmentManager.beginTransaction()
-					.add(R.id.fragment_setup_mainpanel, setupPanel).commit();
+			fragmentManager.beginTransaction().add(R.id.fragment_setup_mainpanel, setupPanel)
+					.commit();
 		}
 
 		sidePanel = (SetupSidePanel) fragmentManager
@@ -85,8 +82,8 @@ public abstract class SuperSetupFragment extends Fragment implements
 		if (sidePanel == null) {
 			sidePanel = setupPanel.getSidePanel();
 			if (sidePanel != null) {
-				fragmentManager.beginTransaction()
-						.add(R.id.fragment_setup_sidepanel, sidePanel).commit();
+				fragmentManager.beginTransaction().add(R.id.fragment_setup_sidepanel, sidePanel)
+						.commit();
 			}
 		}
 
@@ -96,7 +93,7 @@ public abstract class SuperSetupFragment extends Fragment implements
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		this.drone = ((DroidPlannerApp) getActivity().getApplication()).drone;
+		this.drone = ((DroidPlannerApp) getActivity().getApplication()).getDrone();
 	}
 
 	@Override
@@ -112,8 +109,7 @@ public abstract class SuperSetupFragment extends Fragment implements
 	}
 
 	@Override
-	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
-			long arg3) {
+	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		changeMainPanel(arg2);
 	}
 
@@ -130,17 +126,16 @@ public abstract class SuperSetupFragment extends Fragment implements
 	}
 
 	private void setupLocalViews(View view) {
-		spinnerSetup = (Spinner) view.findViewById(R.id.spinnerSetupType);
+		Spinner spinnerSetup = (Spinner) view.findViewById(R.id.spinnerSetupType);
 		spinnerSetup.setOnItemSelectedListener(this);
 
-		final ArrayAdapter<CharSequence> adapter = ArrayAdapter
-				.createFromResource(parentActivity, getSpinnerItems(),
-						R.layout.spinner_setup);
+		final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(parentActivity,
+				getSpinnerItems(), R.layout.spinner_setup);
 
 		spinnerSetup.setAdapter(adapter);
 	}
 
-	public SetupMainPanel changeMainPanel(int step) {
+	public void changeMainPanel(int step) {
 		setupPanel = getMainPanel(step);
 		sidePanel = setupPanel.getSidePanel();
 
@@ -154,7 +149,6 @@ public abstract class SuperSetupFragment extends Fragment implements
 		}
 
 		ft.commit();
-		return setupPanel;
 	}
 
 	public SetupSidePanel changeSidePanel(SetupSidePanel sPanel) {

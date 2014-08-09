@@ -14,11 +14,11 @@ This file is used to store the preferences keys so that it's accessible and modi
     <string name="pref_connection_type_key">pref_connection_type</string>
     <string name="pref_map_type_key">pref_map_type</string>
     <string name="pref_advanced_use_offline_maps_key">pref_advanced_use_offline_maps</string>
-    <string name="pref_auto_pan_enabled_key">pref_auto_pan_enabled</string>
     <string name="pref_baud_type_key">pref_baud_type</string>
     <string name="pref_server_ip_key">pref_server_ip</string>
     <string name="pref_server_port_key">pref_server_port</string>
     <string name="pref_udp_server_port_key">pref_udp_server_port</string>
+    <string name="pref_bluetooth_device_address_key">pref_bluetooth_device_address</string>
     <string name="pref_vehicle_type_key">pref_vehicle_type</string>
     <string name="pref_rc_quickmode_right_key">pref_rc_quickmode_right</string>
     <string name="pref_rc_quickmode_left_key">pref_rc_quickmode_left</string>
@@ -26,4 +26,17 @@ This file is used to store the preferences keys so that it's accessible and modi
     <string name="pref_storage_key">pref_storage</string>
     <string name="pref_rc_mode_key">pref_rc_mode</string>
     <string name="pref_mavlink_version_key">pref_mavlink_version</string>
+    <string name="pref_usage_statistics_key">pref_usage_statistics</string>
+    <string name="pref_version_key">pref_version</string>
+    <string name="pref_request_max_volume_key">pref_request_max_volume</string>
+    <string name="pref_pebble_install_key">pref_pebble_install_key</string>
+    <string name="pref_keep_screen_bright_key">pref_keep_screen_bright</string>
+    <string name="pref_permanent_notification_key">pref_permanent_notification</string>
+    <string name="pref_ui_gps_hdop_key">pref_ui_gps_hdop</string>
+    <string name="pref_ui_language_english_key">pref_ui_language_english</string>
+    <string name="pref_drone_settings_key">pref_drone_settings</string>
+    <string name="pref_dshare_username_key">dshare_username</string>
+    <string name="pref_dshare_password_key">dshare_password</string>
+    <string name="pref_dshare_enabled_key">dshare_enabled</string>
+    <string name="pref_live_upload_enabled_key">pref_live_upload_enabled</string>
 </resources>

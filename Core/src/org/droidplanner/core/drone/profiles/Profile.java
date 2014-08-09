@@ -19,7 +19,6 @@ public class Profile extends DroneVariable {
 	 * Load vehicle profile for current vehicle type
 	 */
 	public void load() {
-		profile = myDrone.preferences.loadVehicleProfile(myDrone.type
-				.getFirmwareType());
+		profile = myDrone.preferences.loadVehicleProfile(myDrone.type.getFirmwareType());
 	}
 }

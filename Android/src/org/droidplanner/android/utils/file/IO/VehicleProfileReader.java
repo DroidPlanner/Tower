@@ -2,13 +2,14 @@ package org.droidplanner.android.utils.file.IO;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.droidplanner.core.drone.profiles.VehicleProfile;
-import org.droidplanner.core.drone.variables.Type.FirmwareType;
 import org.droidplanner.android.utils.file.AssetUtil;
 import org.droidplanner.android.utils.file.DirectoryPath;
+import org.droidplanner.core.drone.profiles.VehicleProfile;
+import org.droidplanner.core.drone.variables.Type.FirmwareType;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -38,28 +39,36 @@ public class VehicleProfileReader {
 		final String path = VEHICLEPROFILE_PATH + File.separator + fileName;
 
 		try {
-			final VehicleProfile newProfile = new VehicleProfile();
+			VehicleProfile newProfile = new VehicleProfile();
 
-			// load profile from resources first
-			final AssetManager assetManager = context.getAssets();
-			if (AssetUtil.exists(assetManager, VEHICLEPROFILE_PATH, fileName)) {
-				final InputStream inputStream = assetManager.open(path);
-				VehicleProfileReader.open(inputStream, newProfile);
-			}
-
-			// load (override) from file if available
-			final File file = new File(DirectoryPath.getDroidPlannerPath()
-					+ path);
+			File file = new File(DirectoryPath.getDroidPlannerPath() + path);
 			if (file.exists()) {
-				final InputStream inputStream = new FileInputStream(file);
-				VehicleProfileReader.open(inputStream, newProfile);
+				loadProfileFromFile(newProfile, file);
+			} else {
+				loadProfileFromResources(context, fileName, path, newProfile);
 			}
 			return newProfile;
 
 		} catch (Exception e) {
-			// nop
+			e.printStackTrace();
 		}
 		return null;
+	}
+
+	private static void loadProfileFromFile(final VehicleProfile newProfile, final File file)
+			throws FileNotFoundException, XmlPullParserException, IOException {
+		final InputStream inputStream = new FileInputStream(file);
+		VehicleProfileReader.open(inputStream, newProfile);
+	}
+
+	private static void loadProfileFromResources(Context context, final String fileName,
+			final String path, final VehicleProfile newProfile) throws IOException,
+			XmlPullParserException {
+		final AssetManager assetManager = context.getAssets();
+		if (AssetUtil.exists(assetManager, VEHICLEPROFILE_PATH, fileName)) {
+			final InputStream inputStream = assetManager.open(path);
+			VehicleProfileReader.open(inputStream, newProfile);
+		}
 	}
 
 	private static void open(InputStream inputStream, VehicleProfile profile)
@@ -89,8 +98,7 @@ public class VehicleProfileReader {
 			case XmlPullParser.START_TAG:
 				if (parserName.equals(TAG_METADATATYPE)) {
 					// set metadata type
-					final String value = parser.getAttributeValue(null,
-							ATTR_TYPE);
+					final String value = parser.getAttributeValue(null, ATTR_TYPE);
 					if (value != null)
 						profile.setParameterMetadataType(value);
 
@@ -109,8 +117,7 @@ public class VehicleProfileReader {
 	}
 
 	// parse Default
-	private static void parseDefault(XmlPullParser parser,
-			VehicleProfile.Default default_) {
+	private static void parseDefault(XmlPullParser parser, VehicleProfile.Default default_) {
 		// wpNavSpeed
 		String value = parser.getAttributeValue(null, ATTR_WPNAV_SPEED);
 		if (value != null)
@@ -128,17 +135,6 @@ public class VehicleProfileReader {
 
 		try {
 			return Integer.parseInt(str);
-		} catch (NumberFormatException e) {
-			return 0;
-		}
-	}
-
-	private static double parseDouble(String str) {
-		if (str == null)
-			return 0;
-
-		try {
-			return Double.parseDouble(str);
 		} catch (NumberFormatException e) {
 			return 0;
 		}

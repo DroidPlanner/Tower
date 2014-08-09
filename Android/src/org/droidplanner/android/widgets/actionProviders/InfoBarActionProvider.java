@@ -1,9 +1,6 @@
 package org.droidplanner.android.widgets.actionProviders;
 
 import org.droidplanner.R;
-import org.droidplanner.core.drone.Drone;
-import org.droidplanner.core.drone.DroneInterfaces;
-import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 import org.droidplanner.android.widgets.actionProviders.InfoBarItem.BatteryInfo;
 import org.droidplanner.android.widgets.actionProviders.InfoBarItem.FlightModesInfo;
 import org.droidplanner.android.widgets.actionProviders.InfoBarItem.FlightTimeInfo;
@@ -11,6 +8,9 @@ import org.droidplanner.android.widgets.actionProviders.InfoBarItem.GpsInfo;
 import org.droidplanner.android.widgets.actionProviders.InfoBarItem.HomeInfo;
 import org.droidplanner.android.widgets.actionProviders.InfoBarItem.PhoneExtraInfo;
 import org.droidplanner.android.widgets.actionProviders.InfoBarItem.SignalInfo;
+import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.drone.DroneInterfaces;
+import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
 
 import android.content.Context;
 import android.view.ActionProvider;
@@ -24,8 +24,7 @@ import android.view.View;
  * <b>Note:</b> The parent activity must add instantiations of this class to the
  * list of DroneEvent listeners.
  */
-public class InfoBarActionProvider extends ActionProvider implements
-		OnDroneListener {
+public class InfoBarActionProvider extends ActionProvider implements OnDroneListener {
 
 	/**
 	 * Application context.

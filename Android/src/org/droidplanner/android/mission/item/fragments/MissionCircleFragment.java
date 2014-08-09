@@ -12,85 +12,80 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
-
 public class MissionCircleFragment extends MissionDetailFragment implements
-        SeekBarWithText.OnTextSeekBarChangedListener, OnCheckedChangeListener {
+		SeekBarWithText.OnTextSeekBarChangedListener, OnCheckedChangeListener {
 
-
-    private SeekBarWithText altitudeSeekBar;
-    private SeekBarWithText loiterTurnSeekBar;
-    private SeekBarWithText loiterRadiusSeekBar;
-    private CheckBox loiterCCW;
+	private SeekBarWithText altitudeSeekBar;
+	private SeekBarWithText loiterTurnSeekBar;
+	//private CheckBox loiterCCW;
 	private CheckBox checkBoxAdvanced;
 	private SeekBarWithText altitudeStepSeekBar;
 	private SeekBarWithText numberStepSeekBar;
 
-    @Override
-    protected int getResource() {
-        return R.layout.fragment_editor_detail_circle;
-    }
+	@Override
+	protected int getResource() {
+		return R.layout.fragment_editor_detail_circle;
+	}
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.CIRCLE));
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.CIRCLE));
 
-        Circle item = (Circle) this.itemRender.getMissionItem();
+		Circle item = (Circle) this.itemRender.getMissionItem();
 
-        //loiterCCW = (CheckBox) view.findViewById(R.id.loiter_ccw);
-        //loiterCCW.setChecked(!item.isOrbitCW());
-        //loiterCCW.setOnCheckedChangeListener(this);
-        
-        checkBoxAdvanced = (CheckBox) view.findViewById(R.id.checkBoxAdvanced);
-        checkBoxAdvanced.setOnCheckedChangeListener(this);
-        
+		// loiterCCW = (CheckBox) view.findViewById(R.id.loiter_ccw);
+		// loiterCCW.setChecked(!item.isOrbitCW());
+		// loiterCCW.setOnCheckedChangeListener(this);
 
-        altitudeStepSeekBar = (SeekBarWithText) view.findViewById(R.id.altitudeStep);
-        altitudeStepSeekBar.setValue(item.getAltitudeStep());
-        altitudeStepSeekBar.setOnChangedListener(this);
+		checkBoxAdvanced = (CheckBox) view.findViewById(R.id.checkBoxAdvanced);
+		checkBoxAdvanced.setOnCheckedChangeListener(this);
 
-        numberStepSeekBar = (SeekBarWithText) view.findViewById(R.id.numberSteps);
-        numberStepSeekBar.setOnChangedListener(this);
-        numberStepSeekBar.setValue(item.getNumberOfSteps());
+		altitudeStepSeekBar = (SeekBarWithText) view.findViewById(R.id.altitudeStep);
+		altitudeStepSeekBar.setValue(item.getAltitudeStep());
+		altitudeStepSeekBar.setOnChangedListener(this);
 
-        altitudeSeekBar = (SeekBarWithText) view.findViewById(R.id.altitudeView);
-        altitudeSeekBar.setValue(item.getCoordinate().getAltitude().valueInMeters());
-        altitudeSeekBar.setOnChangedListener(this);
+		numberStepSeekBar = (SeekBarWithText) view.findViewById(R.id.numberSteps);
+		numberStepSeekBar.setOnChangedListener(this);
+		numberStepSeekBar.setValue(item.getNumberOfSteps());
 
-        loiterTurnSeekBar = (SeekBarWithText) view.findViewById(R.id.loiterTurn);
-        loiterTurnSeekBar.setOnChangedListener(this);
-        loiterTurnSeekBar.setValue(item.getNumeberOfTurns());
+		altitudeSeekBar = (SeekBarWithText) view.findViewById(R.id.altitudeView);
+		altitudeSeekBar.setValue(item.getCoordinate().getAltitude().valueInMeters());
+		altitudeSeekBar.setOnChangedListener(this);
 
-        loiterRadiusSeekBar = (SeekBarWithText) view.findViewById(R.id.loiterRadius);
-        //loiterRadiusSeekBar.setAbsValue(item.getRadius());
-        loiterRadiusSeekBar.setOnChangedListener(this);
-    }
+		loiterTurnSeekBar = (SeekBarWithText) view.findViewById(R.id.loiterTurn);
+		loiterTurnSeekBar.setOnChangedListener(this);
+		loiterTurnSeekBar.setValue(item.getNumeberOfTurns());
 
+		SeekBarWithText loiterRadiusSeekBar = (SeekBarWithText) view
+				.findViewById(R.id.loiterRadius);
+		// loiterRadiusSeekBar.setAbsValue(item.getRadius());
+		loiterRadiusSeekBar.setOnChangedListener(this);
+	}
 
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-    	if (buttonView == checkBoxAdvanced) {
-    		int visibility = (isChecked)?View.VISIBLE:View.GONE;
+	@Override
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		if (buttonView == checkBoxAdvanced) {
+			int visibility = (isChecked) ? View.VISIBLE : View.GONE;
 			altitudeStepSeekBar.setVisibility(visibility);
-    		numberStepSeekBar.setVisibility(visibility);
+			numberStepSeekBar.setVisibility(visibility);
 		}
-    }
+	}
 
+	@Override
+	public void onSeekBarChanged() {
+		Circle item = (Circle) this.itemRender.getMissionItem();
 
-    @Override
-    public void onSeekBarChanged() {
-        Circle item = (Circle) this.itemRender.getMissionItem();
+		item.getCoordinate().getAltitude().set(altitudeSeekBar.getValue());
+		item.setTurns((int) loiterTurnSeekBar.getValue());
+		// item.setOrbitalRadius(loiterRadiusSeekBar.getValue());
+		// item.setYawAngle(yawSeekBar.getValue());
 
-        item.getCoordinate().getAltitude().set(altitudeSeekBar.getValue());
-        item.setTurns((int) loiterTurnSeekBar.getValue());
-        //item.setOrbitalRadius(loiterRadiusSeekBar.getValue());
-        //item.setYawAngle(yawSeekBar.getValue());
-        
-        if (checkBoxAdvanced.isChecked()) {
-        	item.setMultiCircle((int) numberStepSeekBar.getValue(),altitudeStepSeekBar.getValue());			
-		}else{
+		if (checkBoxAdvanced.isChecked()) {
+			item.setMultiCircle((int) numberStepSeekBar.getValue(), altitudeStepSeekBar.getValue());
+		} else {
 			item.setSingleCircle();
 		}
-    }
+	}
 
 }

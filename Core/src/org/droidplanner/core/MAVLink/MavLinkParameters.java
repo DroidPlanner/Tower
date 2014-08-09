@@ -32,5 +32,13 @@ public class MavLinkParameters {
 		msg.target_component = 1;
 		msg.setParam_Id(name);
 		drone.MavClient.sendMavPacket(msg.pack());
+	}	
+	
+	public static void readParameter(Drone drone, int index) {
+		msg_param_request_read msg = new msg_param_request_read();
+		msg.target_system = 1;
+		msg.target_component = 1;
+		msg.param_index = (short) index;
+		drone.MavClient.sendMavPacket(msg.pack());
 	}
 }

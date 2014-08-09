@@ -10,8 +10,7 @@ public class ChartCheckBoxList {
 
 	public void populateView(LinearLayout view, String[] labels, Chart chart) {
 		for (String label : labels) {
-			ChartCheckBox checkBox = new ChartCheckBox(view.getContext(),
-					label, chart);
+			ChartCheckBox checkBox = new ChartCheckBox(view.getContext(), label, chart);
 			checkBoxList.add(checkBox);
 			view.addView(checkBox);
 		}

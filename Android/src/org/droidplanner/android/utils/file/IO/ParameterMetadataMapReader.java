@@ -28,23 +28,23 @@ public class ParameterMetadataMapReader {
 	private static final String METADATA_VALUES = "Values";
 	private static final String METADATA_RANGE = "Range";
 
-	public static Map<String, ParameterMetadata> load(Context context,
-			String metadataType) throws IOException, XmlPullParserException {
+	public static Map<String, ParameterMetadata> load(Context context, String metadataType)
+			throws IOException, XmlPullParserException {
 		// use user supplied file in ~/Parameters if available, else fallback to
 		// asset from resources
 		final InputStream inputStream;
-		final File file = new File(DirectoryPath.getDroidPlannerPath()
-				+ PARAMETERMETADATA_PATH);
+		final File file = new File(DirectoryPath.getDroidPlannerPath() + PARAMETERMETADATA_PATH);
 		if (file.exists()) {
 			inputStream = new FileInputStream(file);
+			return open(inputStream, metadataType);
 		} else {
 			inputStream = context.getAssets().open(PARAMETERMETADATA_PATH);
+			return open(inputStream, metadataType);
 		}
-		return open(inputStream, metadataType);
 	}
 
-	private static ParameterMetadataMap open(InputStream inputStream,
-			String metadataType) throws XmlPullParserException, IOException {
+	private static ParameterMetadataMap open(InputStream inputStream, String metadataType)
+			throws XmlPullParserException, IOException {
 		try {
 			XmlPullParser parser = Xml.newPullParser();
 			parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
@@ -59,8 +59,8 @@ public class ParameterMetadataMapReader {
 		}
 	}
 
-	private static ParameterMetadataMap parseMetadata(XmlPullParser parser,
-			String metadataType) throws XmlPullParserException, IOException {
+	private static ParameterMetadataMap parseMetadata(XmlPullParser parser, String metadataType)
+			throws XmlPullParserException, IOException {
 		String name;
 		boolean parsing = false;
 		ParameterMetadata metadata = null;
@@ -105,8 +105,7 @@ public class ParameterMetadataMapReader {
 		return null;
 	}
 
-	private static void addMetaDataProperty(ParameterMetadata metaData,
-			String name, String text) {
+	private static void addMetaDataProperty(ParameterMetadata metaData, String name, String text) {
 		if (name.equals(METADATA_DISPLAYNAME))
 			metaData.setDisplayName(text);
 		else if (name.equals(METADATA_DESCRIPTION))

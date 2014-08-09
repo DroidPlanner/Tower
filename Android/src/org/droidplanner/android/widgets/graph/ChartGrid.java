@@ -19,8 +19,8 @@ public class ChartGrid {
 		canvas.drawColor(Color.rgb(20, 20, 20));
 
 		for (int vertical = 1; vertical < 10; vertical++) {
-			canvas.drawLine(vertical * (chart.width / 10) + 1, 1, vertical
-					* (chart.width / 10) + 1, chart.height + 1, grid_paint);
+			canvas.drawLine(vertical * (chart.width / 10) + 1, 1,
+					vertical * (chart.width / 10) + 1, chart.height + 1, grid_paint);
 
 		}
 
@@ -31,9 +31,8 @@ public class ChartGrid {
 			} else {
 				paint = grid_paint;
 			}
-			canvas.drawLine(1, horizontal * (chart.height / 10) + 1,
-					chart.width + 1, horizontal * (chart.height / 10) + 1,
-					paint);
+			canvas.drawLine(1, horizontal * (chart.height / 10) + 1, chart.width + 1, horizontal
+					* (chart.height / 10) + 1, paint);
 
 		}
 	}

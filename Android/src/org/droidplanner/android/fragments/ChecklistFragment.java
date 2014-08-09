@@ -15,7 +15,6 @@ import org.droidplanner.android.widgets.checklist.xml.ListXmlParser.OnXmlParserE
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.OnDroneListener;
-import org.xmlpull.v1.XmlPullParser;
 
 import android.app.Activity;
 import android.content.Context;
@@ -39,11 +38,9 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 	private CheckListSysLink sysLink;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-		View view = inflater.inflate(R.layout.fragment_checklist, container,
-				false);
+		View view = inflater.inflate(R.layout.fragment_checklist, container, false);
 		expListView = (ExpandableListView) view.findViewById(R.id.expListView);
 
 		createListAdapter();
@@ -103,8 +100,8 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 
 	// Load checklist from file
 	private void loadXMLChecklist() {
-		CheckListXmlParser xml = new CheckListXmlParser("checklist_ext.xml",
-				context, R.xml.checklist_default);
+		CheckListXmlParser xml = new CheckListXmlParser("checklist_ext.xml", context,
+				R.xml.checklist_default);
 
 		xml.setOnXMLParserError(this);
 		listDataHeader = xml.getCategories();
@@ -118,8 +115,7 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 
 		for (int h = 0; h < listDataHeader.size(); h++) {
 			cli = new ArrayList<CheckListItem>();
-			for (int i = 0; i < checklistItems.size(); i++) {
-				CheckListItem c = checklistItems.get(i);
+			for (CheckListItem c : checklistItems) {
 				if (c.getCategoryIndex() == h)
 					cli.add(c);
 			}
@@ -132,8 +128,7 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 		final LayoutInflater layoutInflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-		listAdapter = new CheckListAdapter(layoutInflater, listDataHeader,
-				listDataChild);
+		listAdapter = new CheckListAdapter(layoutInflater, listDataHeader, listDataChild);
 
 		listAdapter.setHeaderLayout(R.layout.list_group_header);
 		listAdapter.setOnCheckListItemUpdateListener(this);
@@ -151,14 +146,13 @@ public class ChecklistFragment extends Fragment implements OnXmlParserError,
 	}
 
 	@Override
-	public void onError(XmlPullParser parser) {
+	public void onError() {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void onRowItemChanged(CheckListItem checkListItem, String mSysTag,
-			boolean isChecked) {
+	public void onRowItemChanged(CheckListItem checkListItem) {
 		sysLink.setSystemData(checkListItem);
 		listAdapter.notifyDataSetChanged();
 		listViewAutoExpand(false, true);

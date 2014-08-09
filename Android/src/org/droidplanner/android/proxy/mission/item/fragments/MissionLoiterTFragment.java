@@ -12,7 +12,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
 public class MissionLoiterTFragment extends MissionDetailFragment implements
-        SeekBarWithText.OnTextSeekBarChangedListener, OnCheckedChangeListener {
+		SeekBarWithText.OnTextSeekBarChangedListener, OnCheckedChangeListener {
 
 	private SeekBarWithText altitudeSeekBar;
 	private SeekBarWithText loiterTimeSeekBar;
@@ -22,10 +22,9 @@ public class MissionLoiterTFragment extends MissionDetailFragment implements
 		return R.layout.fragment_editor_detail_loitert;
 	}
 
-
 	@Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
 		typeSpinner.setSelection(commandAdapter.getPosition(MissionItemType.LOITERT));
 
 		LoiterTime item = (LoiterTime) this.itemRender.getMissionItem();
@@ -35,16 +34,15 @@ public class MissionLoiterTFragment extends MissionDetailFragment implements
 		altitudeSeekBar.setOnChangedListener(this);
 
 		loiterTimeSeekBar = (SeekBarWithText) view.findViewById(R.id.loiterTime);
-		loiterTimeSeekBar .setOnChangedListener(this);
+		loiterTimeSeekBar.setOnChangedListener(this);
 		loiterTimeSeekBar.setValue(item.getTime());
 
 	}
 
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+	@Override
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		((Loiter) itemRender.getMissionItem()).setOrbitCCW(isChecked);
-    }
-
+	}
 
 	@Override
 	public void onSeekBarChanged() {
@@ -52,9 +50,8 @@ public class MissionLoiterTFragment extends MissionDetailFragment implements
 
 		item.getCoordinate().getAltitude().set(altitudeSeekBar.getValue());
 		item.setTime(loiterTimeSeekBar.getValue());
-		//item.setOrbitalRadius(loiterRadiusSeekBar.getValue());
-		//item.setYawAngle(yawSeekBar.getValue());
+		// item.setOrbitalRadius(loiterRadiusSeekBar.getValue());
+		// item.setYawAngle(yawSeekBar.getValue());
 	}
-
 
 }

@@ -1,13 +1,11 @@
 package org.droidplanner.android.communication.service;
 
 import org.droidplanner.R;
-import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.communication.connection.MAVLinkConnection;
 import org.droidplanner.android.communication.connection.MAVLinkConnection.MavLinkConnectionListener;
-import org.droidplanner.android.notifications.NotificationHandler;
-import org.droidplanner.android.notifications.StatusBarNotificationProvider;
-import org.droidplanner.android.utils.Constants;
 import org.droidplanner.android.utils.Utils;
+import org.droidplanner.android.utils.analytics.GAUtils;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 import android.annotation.SuppressLint;
 import android.app.Service;
@@ -19,23 +17,30 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.MAVLinkPacket;
+import com.google.android.gms.analytics.HitBuilders;
 
 /**
  * http://developer.android.com/guide/components/bound-services.html#Messenger
  * 
  */
 
-public class MAVLinkService extends Service implements
-		MavLinkConnectionListener {
+public class MAVLinkService extends Service implements MavLinkConnectionListener {
+
+	private static final String LOG_TAG = MAVLinkService.class.getSimpleName();
+
 	public static final int MSG_REGISTER_CLIENT = 1;
 	public static final int MSG_UNREGISTER_CLIENT = 2;
 	public static final int MSG_SEND_DATA = 3;
+
+	/**
+	 * Provides access to the app preferences.
+	 */
+	private DroidPlannerPrefs mAppPrefs;
 
 	private MAVLinkConnection mavConnection;
 	Messenger msgCenter = null;
@@ -65,7 +70,7 @@ public class MAVLinkService extends Service implements
 			case MSG_REGISTER_CLIENT:
 				msgCenter = msg.replyTo;
 				if (couldNotOpenConnection) {
-					selfDestryService();
+					selfDestroyService();
 				}
 				break;
 			case MSG_UNREGISTER_CLIENT:
@@ -94,8 +99,7 @@ public class MAVLinkService extends Service implements
 	private void notifyNewMessage(MAVLinkMessage m) {
 		try {
 			if (msgCenter != null) {
-				Message msg = Message.obtain(null,
-						MAVLinkClient.MSG_RECEIVED_DATA);
+				Message msg = Message.obtain(null, MAVLinkClient.MSG_RECEIVED_DATA);
 				Bundle data = new Bundle();
 				data.putSerializable("msg", m);
 				msg.setData(data);
@@ -114,14 +118,13 @@ public class MAVLinkService extends Service implements
 	@Override
 	public void onDisconnect() {
 		couldNotOpenConnection = true;
-		selfDestryService();
+		selfDestroyService();
 	}
 
-	private void selfDestryService() {
+	private void selfDestroyService() {
 		try {
 			if (msgCenter != null) {
-				Message msg = Message.obtain(null,
-						MAVLinkClient.MSG_SELF_DESTRY_SERVICE);
+				Message msg = Message.obtain(null, MAVLinkClient.MSG_SELF_DESTRY_SERVICE);
 				msgCenter.send(msg);
 			}
 		} catch (RemoteException e) {
@@ -133,40 +136,34 @@ public class MAVLinkService extends Service implements
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		commErrMsgLocalStore = getResources().getString(R.string.MAVLinkError);
+
+		final Context context = getApplicationContext();
+
+		// Initialise the app preferences handle.
+		mAppPrefs = new DroidPlannerPrefs(context);
+
+		commErrMsgLocalStore = getString(R.string.MAVLinkError);
 
 		commErrHandler = new Handler() {
 			@Override
 			public void handleMessage(Message msg) {
-				Toast.makeText(getApplicationContext(), commErrMsgLocalStore,
-						Toast.LENGTH_LONG).show();
+				Toast.makeText(context, commErrMsgLocalStore, Toast.LENGTH_LONG).show();
 			}
 		};
 
-		connectMAVconnection();
-
-		final StatusBarNotificationProvider statusBarNotification = ((DroidPlannerApp) getApplication()).mNotificationHandler
-				.getStatusBarNotificationProvider();
-
-		statusBarNotification.showNotification();
-		statusBarNotification.updateNotification(getResources().getString(
-				R.string.connected));
+		connectMAVConnection();
 	}
 
 	@Override
 	public void onDestroy() {
 		disconnectMAVConnection();
-
-		final StatusBarNotificationProvider statusBarNotification = ((DroidPlannerApp) getApplication()).mNotificationHandler
-				.getStatusBarNotificationProvider();
-		statusBarNotification.dismissNotification();
-
 		super.onDestroy();
 	}
 
 	/**
 	 * Called after the exception raised in any of the MavLinkConnection classes
 	 */
+	@Override
 	public void onComError(String errMsg) {
 
 		Message errMessageObj = new Message();
@@ -184,24 +181,28 @@ public class MAVLinkService extends Service implements
 	 * Toggle the current state of the MAVlink connection. Starting and closing
 	 * the as needed. May throw a onConnect or onDisconnect callback
 	 */
-	private void connectMAVconnection() {
-		String connectionType = PreferenceManager.getDefaultSharedPreferences(
-				getApplicationContext()).getString(
-				Constants.PREF_CONNECTION_TYPE,
-				Constants.DEFAULT_CONNECTION_TYPE);
+	private void connectMAVConnection() {
+		String connectionType = mAppPrefs.getMavLinkConnectionType();
 
-		Utils.ConnectionType connType = Utils.ConnectionType
-				.valueOf(connectionType);
+		Utils.ConnectionType connType = Utils.ConnectionType.valueOf(connectionType);
 		mavConnection = connType.getConnection(this);
 		mavConnection.start();
+
+		// Record which connection type is used.
+		GAUtils.sendEvent(new HitBuilders.EventBuilder().setCategory(
+				GAUtils.Category.MAVLINK_CONNECTION.toString()).setAction(
+				"Mavlink connecting using " + connectionType));
 	}
 
 	private void disconnectMAVConnection() {
-		Log.d("MAVLinkService", "Pre disconnect");
+		Log.d(LOG_TAG, "Pre disconnect");
 		if (mavConnection != null) {
 			mavConnection.disconnect();
 			mavConnection = null;
 		}
+
+		GAUtils.sendEvent(new HitBuilders.EventBuilder().setCategory(
+				GAUtils.Category.MAVLINK_CONNECTION.toString()).setAction("Mavlink disconnecting"));
 	}
 
 }
