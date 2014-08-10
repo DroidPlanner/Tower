@@ -209,5 +209,19 @@ public class GoogleApiClientManager {
             return mGoogleApiClient;
         }
 
+        @Override
+        public void run(){
+            if(!getGoogleApiClient().isConnected()){
+                //Add the task back to the queue.
+                mTaskQueue.offer(this);
+                return;
+            }
+
+            //Run the task
+            doRun();
+        }
+
+        protected abstract void doRun();
+
     }
 }

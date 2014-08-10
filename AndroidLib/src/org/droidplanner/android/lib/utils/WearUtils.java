@@ -204,7 +204,7 @@ public class WearUtils {
         return apiClientMgr.addTaskToBackground(apiClientMgr.new GoogleApiClientTask() {
 
             @Override
-            public void run() {
+            public void doRun() {
                 final GoogleApiClient apiClient = getGoogleApiClient();
 
                 NodeApi.GetConnectedNodesResult nodes = Wearable.NodeApi
@@ -238,7 +238,7 @@ public class WearUtils {
         return apiClientMgr.addTaskToBackground(apiClientMgr.new GoogleApiClientTask() {
 
             @Override
-            public void run() {
+            public void doRun() {
                 final PutDataMapRequest dataMap = PutDataMapRequest.create(path);
                 dataMap.getDataMap().putAll(DataMap.fromBundle(dataMapBundle));
                 PutDataRequest request = dataMap.asPutDataRequest();
@@ -267,7 +267,7 @@ public class WearUtils {
         return apiClientMgr.addTaskToBackground(apiClientMgr.new GoogleApiClientTask() {
 
             @Override
-            public void run() {
+            public void doRun() {
                 final PutDataRequest request = PutDataRequest.create(path);
                 request.setData(data);
                 final DataApi.DataItemResult result = Wearable.DataApi

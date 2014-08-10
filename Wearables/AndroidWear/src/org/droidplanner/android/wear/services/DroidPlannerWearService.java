@@ -146,7 +146,7 @@ public class DroidPlannerWearService extends WearableListenerService {
     private void runDataItemTask(final String dataPath, final DataItemTask task){
         mGApiClientMgr.addTask(mGApiClientMgr.new GoogleApiClientTask() {
             @Override
-            public void run() {
+            public void doRun() {
                 final Uri dataItemUri = new Uri.Builder().scheme(PutDataRequest
                         .WEAR_URI_SCHEME).path(dataPath).build();
 

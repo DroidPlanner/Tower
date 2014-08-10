@@ -109,7 +109,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
 
         mGoToMyLocationTask = mGApiClientMgr.new GoogleApiClientTask() {
             @Override
-            public void run() {
+            public void doRun() {
                 final Location myLocation = LocationServices.FusedLocationApi
                         .getLastLocation(getGoogleApiClient());
                 if (myLocation != null) {
@@ -121,7 +121,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
 
         mRemoveLocationUpdateTask = mGApiClientMgr.new GoogleApiClientTask() {
             @Override
-            public void run() {
+            public void doRun() {
                 LocationServices.FusedLocationApi
                         .removeLocationUpdates(getGoogleApiClient(), GoogleMapFragment.this);
             }
@@ -129,7 +129,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap, Loca
 
         mRequestLocationUpdateTask = mGApiClientMgr.new GoogleApiClientTask() {
             @Override
-            public void run() {
+            public void doRun() {
                 final LocationRequest locationReq = LocationRequest.create()
                         .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                         .setFastestInterval(USER_LOCATION_UPDATE_FASTEST_INTERVAL)
