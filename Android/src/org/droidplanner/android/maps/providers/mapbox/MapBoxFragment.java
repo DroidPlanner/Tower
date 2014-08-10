@@ -1,5 +1,6 @@
 package org.droidplanner.android.maps.providers.mapbox;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -25,16 +26,21 @@ import com.mapbox.mapboxsdk.views.MapViewListener;
 import com.mapbox.mapboxsdk.views.util.Projection;
 
 import org.droidplanner.R;
+import org.droidplanner.android.DroidPlannerApp;
 import org.droidplanner.android.maps.DPMap;
 import org.droidplanner.android.maps.MarkerInfo;
 import org.droidplanner.android.maps.providers.DPMapProvider;
-import org.droidplanner.android.utils.DroidplannerPrefs;
 import org.droidplanner.android.utils.DroneHelper;
+import org.droidplanner.android.utils.prefs.AutoPanMode;
+import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
+import org.droidplanner.core.drone.Drone;
+import org.droidplanner.core.drone.DroneInterfaces;
 import org.droidplanner.core.helpers.coordinates.Coord2D;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * MapBox implementation of the DPMap interface.
@@ -43,7 +49,11 @@ public class MapBoxFragment extends Fragment implements DPMap {
 
     private final HashBiMap<MarkerInfo, Marker> mMarkers = HashBiMap.create();
 
-    private DroidplannerPrefs mPrefs;
+    private Drone mDrone;
+    private DroidPlannerPrefs mPrefs;
+
+    private final AtomicReference<AutoPanMode> mPanMode = new AtomicReference<AutoPanMode>
+            (AutoPanMode.DISABLED);
 
     /**
      * Mapbox map view handle
@@ -72,7 +82,9 @@ public class MapBoxFragment extends Fragment implements DPMap {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mPrefs = new DroidplannerPrefs(getActivity().getApplicationContext());
+        final Activity activity = getActivity();
+        mDrone = ((DroidPlannerApp) activity.getApplication()).getDrone();
+        mPrefs = new DroidPlannerPrefs(getActivity().getApplicationContext());
         mMapView = (MapView) view.findViewById(R.id.mapbox_mapview);
     }
 
@@ -199,6 +211,22 @@ public class MapBoxFragment extends Fragment implements DPMap {
     }
 
     @Override
+    public void goToDroneLocation() {
+        final float currentZoomLevel = getMapZoomLevel();
+        final Coord2D droneLocation = mDrone.GPS.getPosition();
+        updateCamera(droneLocation, currentZoomLevel);
+    }
+
+    @Override
+    public void goToMyLocation() {
+        final float currentZoomLevel = getMapZoomLevel();
+        final LatLng userLocation = mMapView.getUserLocation();
+        if(userLocation != null){
+            updateCamera(DroneHelper.ILatLngToCoord(userLocation), currentZoomLevel);
+        }
+    }
+
+    @Override
     public void loadCameraPosition() {
         final float centerLat = mPrefs.prefs.getFloat(PREF_LAT, 0);
         final float centerLng = mPrefs.prefs.getFloat(PREF_LNG, 0);
@@ -232,6 +260,47 @@ public class MapBoxFragment extends Fragment implements DPMap {
                 .putFloat(PREF_BEA, mMapView.getRotation())
                 .putInt(PREF_ZOOM, (int) mMapView.getZoomLevel())
                 .apply();
+    }
+
+    @Override
+    public void selectAutoPanMode(AutoPanMode target) {
+        final AutoPanMode currentMode = mPanMode.get();
+        if(currentMode == target)
+            return;
+
+        setAutoPanMode(currentMode, target);
+    }
+
+    private void setAutoPanMode(AutoPanMode current, AutoPanMode update){
+        if (mPanMode.compareAndSet(current, update)) {
+            switch (current) {
+                case DRONE:
+                    mDrone.events.removeDroneListener(this);
+                    break;
+
+                case USER:
+                    mMapView.setUserLocationTrackingMode(UserLocationOverlay.TrackingMode.NONE);
+                    break;
+
+                case DISABLED:
+                default:
+                    break;
+            }
+
+            switch (update) {
+                case DRONE:
+                    mDrone.events.addDroneListener(this);
+                    break;
+
+                case USER:
+                    mMapView.setUserLocationTrackingMode(UserLocationOverlay.TrackingMode.FOLLOW);
+                    break;
+
+                case DISABLED:
+                default:
+                    break;
+            }
+        }
     }
 
     @Override
@@ -335,6 +404,22 @@ public class MapBoxFragment extends Fragment implements DPMap {
         mMissionPath.clearPath();
         for(Coord2D coord: pathCoords){
             mMissionPath.addPoint(DroneHelper.CoordToLatLng(coord));
+        }
+    }
+
+    @Override
+    public void zoomToFit(List<Coord2D> coords) {
+        //NOP - not implemented at this time.
+    }
+
+    @Override
+    public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
+        switch(event){
+            case GPS:
+                break;
+
+            default:
+                break;
         }
     }
 }

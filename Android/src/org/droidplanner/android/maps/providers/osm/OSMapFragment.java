@@ -102,8 +102,8 @@ public class OSMapFragment extends Fragment implements DPMap {
 	private Drone mDrone;
 	private DroidPlannerPrefs mAppPrefs;
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private final AtomicReference<AutoPanMode> mPanMode = new AtomicReference(AutoPanMode.DISABLED);
+	private final AtomicReference<AutoPanMode> mPanMode = new AtomicReference<AutoPanMode>
+            (AutoPanMode.DISABLED);
 
 	private MyLocationNewOverlay mLocationOverlay;
 	private CompassOverlay mCompassOverlay;
@@ -232,7 +232,27 @@ public class OSMapFragment extends Fragment implements DPMap {
 		}
 	}
 
-	@Override
+    @Override
+    public Coord2D getMapCenter() {
+        return DroneHelper.GeoPointToCoord(mMapView.getMapCenter());
+    }
+
+    @Override
+    public float getMapZoomLevel() {
+        return mMapView.getZoomLevel();
+    }
+
+    @Override
+    public float getMaxZoomLevel() {
+        return mMapView.getMaxZoomLevel();
+    }
+
+    @Override
+    public float getMinZoomLevel() {
+        return mMapView.getMinZoomLevel();
+    }
+
+    @Override
 	public void selectAutoPanMode(AutoPanMode target) {
 		final AutoPanMode currentMode = mPanMode.get();
 		if (currentMode == target)
@@ -243,31 +263,31 @@ public class OSMapFragment extends Fragment implements DPMap {
 
 	private void setAutoPanMode(AutoPanMode current, AutoPanMode update) {
 		if (mPanMode.compareAndSet(current, update)) {
-			switch (current) {
-			case DRONE:
-				mDrone.events.removeDroneListener(this);
-				break;
+                    switch (current) {
+                        case DRONE:
+                            mDrone.events.removeDroneListener(this);
+                            break;
 
-			case USER:
-				mLocationOverlay.disableFollowLocation();
-				break;
+                        case USER:
+                            mLocationOverlay.disableFollowLocation();
+                            break;
 
-			case DISABLED:
-			default:
-				break;
-			}
+                        case DISABLED:
+                        default:
+                            break;
+                    }
 
-			switch (update) {
-			case DRONE:
-				mDrone.events.addDroneListener(this);
-				break;
+                    switch (update) {
+                        case DRONE:
+                            mDrone.events.addDroneListener(this);
+                            break;
 
-			case USER:
-				mLocationOverlay.enableFollowLocation();
-				break;
+                        case USER:
+                            mLocationOverlay.enableFollowLocation();
+                            break;
 
-			case DISABLED:
-			default:
+                        case DISABLED:
+                        default:
 				break;
 			}
 		}
@@ -404,14 +424,14 @@ public class OSMapFragment extends Fragment implements DPMap {
 	}
 
 	@Override
-	public void updateCamera(Coord2D coord, int zoomLevel) {
+	public void updateCamera(Coord2D coord, float zoomLevel) {
 		if (coord == null) {
 			return;
 		}
 
 		IMapController mapController = mMapView.getController();
 		mapController.animateTo(DroneHelper.CoordToGeoPoint(coord));
-		mapController.setZoom(zoomLevel);
+		mapController.setZoom((int)zoomLevel);
 	}
 
 	@Override
