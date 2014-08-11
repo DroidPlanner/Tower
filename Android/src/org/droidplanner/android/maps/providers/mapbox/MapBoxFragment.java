@@ -16,10 +16,12 @@ import android.view.ViewGroup;
 import com.google.common.collect.HashBiMap;
 import com.mapbox.mapboxsdk.api.ILatLng;
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.overlay.GpsLocationProvider;
 import com.mapbox.mapboxsdk.overlay.Icon;
 import com.mapbox.mapboxsdk.overlay.Marker;
 import com.mapbox.mapboxsdk.overlay.PathOverlay;
 import com.mapbox.mapboxsdk.overlay.UserLocationOverlay;
+import com.mapbox.mapboxsdk.overlay.UserLocationOverlay.TrackingMode;
 import com.mapbox.mapboxsdk.views.MapController;
 import com.mapbox.mapboxsdk.views.MapView;
 import com.mapbox.mapboxsdk.views.MapViewListener;
@@ -59,6 +61,7 @@ public class MapBoxFragment extends Fragment implements DPMap {
      * Mapbox map view handle
      */
     private MapView mMapView;
+    private TrackingMode mUserLocationTrackingMode = TrackingMode.NONE;
 
     private PathOverlay mFlightPath;
     private PathOverlay mMissionPath;
@@ -92,6 +95,18 @@ public class MapBoxFragment extends Fragment implements DPMap {
     public void onStart() {
         super.onStart();
         setupMap();
+
+        mMapView.setUserLocationEnabled(true);
+        final UserLocationOverlay userLocation = mMapView.getUserLocationOverlay();
+        if(userLocation != null) {
+            userLocation.setDrawAccuracyEnabled(true);
+
+            if (mUserLocationTrackingMode == TrackingMode.NONE) {
+                userLocation.disableFollowLocation();
+            } else {
+                userLocation.enableFollowLocation();
+            }
+        }
     }
 
     private void setupMap() {
@@ -131,20 +146,17 @@ public class MapBoxFragment extends Fragment implements DPMap {
                 }
             }
         });
-
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStop() {
+        super.onStop();
 
-        mMapView.setUserLocationEnabled(true);
-        mMapView.getUserLocationOverlay().setDrawAccuracyEnabled(true);
-    }
+        final UserLocationOverlay userLocation = mMapView.getUserLocationOverlay();
+        if(userLocation != null) {
+            userLocation.disableFollowLocation();
+        }
 
-    @Override
-    public void onPause() {
-        super.onPause();
         mMapView.setUserLocationEnabled(false);
     }
 
@@ -219,10 +231,9 @@ public class MapBoxFragment extends Fragment implements DPMap {
 
     @Override
     public void goToMyLocation() {
-        final float currentZoomLevel = getMapZoomLevel();
-        final LatLng userLocation = mMapView.getUserLocation();
+        final UserLocationOverlay userLocation = mMapView.getUserLocationOverlay();
         if(userLocation != null){
-            updateCamera(DroneHelper.ILatLngToCoord(userLocation), currentZoomLevel);
+            userLocation.goToMyPosition(true);
         }
     }
 
@@ -258,7 +269,7 @@ public class MapBoxFragment extends Fragment implements DPMap {
         editor.putFloat(PREF_LAT, (float)mapCenter.getLatitude())
                 .putFloat(PREF_LNG, (float) mapCenter.getLongitude())
                 .putFloat(PREF_BEA, mMapView.getRotation())
-                .putInt(PREF_ZOOM, (int) mMapView.getZoomLevel())
+                .putInt(PREF_ZOOM, (int)mMapView.getZoomLevel())
                 .apply();
     }
 
@@ -279,7 +290,11 @@ public class MapBoxFragment extends Fragment implements DPMap {
                     break;
 
                 case USER:
-                    mMapView.setUserLocationTrackingMode(UserLocationOverlay.TrackingMode.NONE);
+                    mUserLocationTrackingMode = TrackingMode.NONE;
+                    final UserLocationOverlay userLocation = mMapView.getUserLocationOverlay();
+                    if(userLocation != null) {
+                        userLocation.disableFollowLocation();
+                    }
                     break;
 
                 case DISABLED:
@@ -293,7 +308,11 @@ public class MapBoxFragment extends Fragment implements DPMap {
                     break;
 
                 case USER:
-                    mMapView.setUserLocationTrackingMode(UserLocationOverlay.TrackingMode.FOLLOW);
+                    mUserLocationTrackingMode = TrackingMode.FOLLOW;
+                    final UserLocationOverlay userLocation = mMapView.getUserLocationOverlay();
+                    if(userLocation != null) {
+                        userLocation.enableFollowLocation();
+                    }
                     break;
 
                 case DISABLED:
@@ -329,8 +348,9 @@ public class MapBoxFragment extends Fragment implements DPMap {
     @Override
     public void updateCamera(Coord2D coord, float zoomLevel) {
         MapController mapController = mMapView.getController();
-        mapController.animateTo(DroneHelper.CoordToLatLng(coord));
-        mapController.setZoomAnimated(zoomLevel);
+        if(mapController != null) {
+            mapController.setZoomAnimated(zoomLevel, DroneHelper.CoordToLatLng(coord), true, false);
+        }
     }
 
     @Override
@@ -416,6 +436,11 @@ public class MapBoxFragment extends Fragment implements DPMap {
     public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
         switch(event){
             case GPS:
+                if(mPanMode.get() == AutoPanMode.DRONE){
+                    final float currentZoomLevel = getMapZoomLevel();
+                    final Coord2D droneLocation = drone.GPS.getPosition();
+                    updateCamera(droneLocation, currentZoomLevel);
+                }
                 break;
 
             default:

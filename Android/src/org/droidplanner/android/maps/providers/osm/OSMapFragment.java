@@ -541,6 +541,11 @@ public class OSMapFragment extends Fragment implements DPMap {
 	public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
 		switch (event) {
 		case GPS:
+            if(mPanMode.get() == AutoPanMode.DRONE){
+                final float currentZoomLevel = getMapZoomLevel();
+                final Coord2D droneLocation = drone.GPS.getPosition();
+                updateCamera(droneLocation, currentZoomLevel);
+            }
 			break;
 		default:
 			break;

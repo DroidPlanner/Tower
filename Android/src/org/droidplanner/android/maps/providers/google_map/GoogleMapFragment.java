@@ -684,7 +684,7 @@ public class GoogleMapFragment extends SupportMapFragment implements DPMap,
 			if (mPanMode.get() == AutoPanMode.DRONE) {
 				final float currentZoomLevel = mMap.getCameraPosition().zoom;
 				final Coord2D droneLocation = drone.GPS.getPosition();
-				updateCamera(droneLocation, (int) currentZoomLevel);
+				updateCamera(droneLocation, currentZoomLevel);
 			}
 			break;
 		default:

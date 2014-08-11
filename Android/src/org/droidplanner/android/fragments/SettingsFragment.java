@@ -104,8 +104,8 @@ public class SettingsFragment extends DpPreferenceFragment implements
 			// Grab the list of maps provider
 			// TODO: enable full list of map providers when osm implementation
 			// is feature complete.
-			// final DPMapProvider[] providers = DPMapProvider.values();
-			final DPMapProvider[] providers = new DPMapProvider[] { DPMapProvider.GOOGLE_MAP };
+			final DPMapProvider[] providers = DPMapProvider.values();
+//			final DPMapProvider[] providers = new DPMapProvider[] { DPMapProvider.GOOGLE_MAP };
 			final int providersCount = providers.length;
 			final CharSequence[] providersNames = new CharSequence[providersCount];
 			final CharSequence[] providersNamesValues = new CharSequence[providersCount];
