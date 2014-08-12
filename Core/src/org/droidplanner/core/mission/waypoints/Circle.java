@@ -38,6 +38,11 @@ public class Circle extends SpatialCoordItem {
 	public void setTurns(int turns) {
 		this.turns = Math.abs(turns);
 	}
+	
+
+	public void setRadius(double radius) {
+		this.radius = Math.abs(radius);
+	}
 
 	public int getNumeberOfTurns() {
 		return turns;
@@ -90,7 +95,7 @@ public class Circle extends SpatialCoordItem {
 		mavMsg.z = (float) (coordinate.getAltitude().valueInMeters() + extraHeight.valueInMeters());
 		mavMsg.command = MAV_CMD.MAV_CMD_NAV_LOITER_TURNS;
 		mavMsg.param1 = Math.abs(turns);
-		mavMsg.param3 = (turns > 0) ? 1 : -1;
+		mavMsg.param3 = (float) radius;
 	}
 
 	@Override
