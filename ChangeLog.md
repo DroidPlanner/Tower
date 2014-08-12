@@ -9,6 +9,20 @@ All the changes are logged below (preferable with the pull request numbers in pa
 
 # Releases
 
+## Droidplanner v2.6.1
+* Failsafe messages (#922)
+* Fixed the circle item on mission planning (#970)
+* Do not crash the app when there is no USB device (#954)
+* Refactor the ROI class (#947)
+* New 3D distance method (#943)
+* Fix issues with Droneshare uploader (#920)
+* Do not allow mission items after RTL or Land (#959)
+* When the user doesn't have TTS, fail silently (#924, #911)
+* Fix issue with waypoint tool icon on editor (#909,#918)
+* Moved all the libraries to a sub-folder (#960)
+* Moved follow-me development to another branch (#948)
+* Smaller changes to project structure (#921, #923, #938, #939, #945, #946)
+
 ## Droidplanner v2.6.0
 * Improved follow-me ROI (#916)
 * New follow-modes, 'track from above', ' right' and 'left' (#908, #887)
