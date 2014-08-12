@@ -55,7 +55,7 @@ public class Drone {
 	public Drone(MAVLinkOutputStream mavClient, Clock clock, Handler handler, Preferences pref) {
 		this.MavClient = mavClient;
 		this.preferences = pref;
-		state = new State(this, clock);
+		state = new State(this, clock, handler);
 		heartbeat = new HeartBeat(this, handler);
 		parameters = new Parameters(this, handler);
 		profile.load();

@@ -14,14 +14,13 @@ import com.MAVLink.Messages.ardupilotmega.msg_nav_controller_output;
 import com.MAVLink.Messages.ardupilotmega.msg_radio;
 import com.MAVLink.Messages.ardupilotmega.msg_rc_channels_raw;
 import com.MAVLink.Messages.ardupilotmega.msg_servo_output_raw;
+import com.MAVLink.Messages.ardupilotmega.msg_statustext;
 import com.MAVLink.Messages.ardupilotmega.msg_sys_status;
 import com.MAVLink.Messages.ardupilotmega.msg_vfr_hud;
 import com.MAVLink.Messages.enums.MAV_MODE_FLAG;
 import com.MAVLink.Messages.enums.MAV_STATE;
 
 public class MavLinkMsgHandler {
-
-	private static final String TAG = MavLinkMsgHandler.class.getSimpleName();
 
 	private Drone drone;
 
@@ -91,6 +90,15 @@ public class MavLinkMsgHandler {
 		case msg_servo_output_raw.MAVLINK_MSG_ID_SERVO_OUTPUT_RAW:
 			drone.RC.setRcOutputValues((msg_servo_output_raw) msg);
 			break;
+		case msg_statustext.MAVLINK_MSG_ID_STATUSTEXT:
+			msg_statustext msg_statustext = (msg_statustext)msg;
+			String message = msg_statustext.getText();
+			if(message.length()>7){
+				if(message.substring(0,7).equals("PreArm:")||message.substring(0,4).equals("Arm:")){
+					drone.state.setFailsafe(message);
+				}
+			}
+			break;
 		}
 	}
 
@@ -105,7 +113,9 @@ public class MavLinkMsgHandler {
 
 	private void checkFailsafe(msg_heartbeat msg_heart) {
 		boolean failsafe2 = msg_heart.system_status == (byte) MAV_STATE.MAV_STATE_CRITICAL;
-		drone.state.setFailsafe(failsafe2);
+		if(failsafe2){
+			drone.state.setFailsafe("RC Failsafe");
+		}
 	}
 
 	private void checkArmState(msg_heartbeat msg_heart) {

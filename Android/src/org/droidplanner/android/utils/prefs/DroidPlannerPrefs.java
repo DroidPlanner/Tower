@@ -49,15 +49,16 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 	}
 
 	public boolean getLiveUploadEnabled() {
-		return prefs.getBoolean("pref_live_upload_enabled", false);
+		return prefs.getBoolean(context.getString(R.string.pref_live_upload_enabled_key), false);
 	}
 
 	public String getDroneshareLogin() {
-		return prefs.getString("dshare_username", "").trim();
+		return prefs.getString(context.getString(R.string.pref_dshare_username_key), "").trim();
 	}
 
 	public void setDroneshareLogin(String b) {
-		prefs.edit().putString("dshare_username", b.trim()).apply();
+		prefs.edit().putString(context.getString(R.string.pref_dshare_username_key), b.trim())
+                .apply();
 	}
 
 	public String getDroneshareEmail() {
@@ -69,19 +70,20 @@ public class DroidPlannerPrefs implements org.droidplanner.core.drone.Preference
 	}
 
 	public String getDronesharePassword() {
-		return prefs.getString("dshare_password", "").trim();
+		return prefs.getString(context.getString(R.string.pref_dshare_password_key), "").trim();
 	}
 
 	public void setDronesharePassword(String b) {
-		prefs.edit().putString("dshare_password", b.trim()).apply();
+		prefs.edit().putString(context.getString(R.string.pref_dshare_password_key), b.trim())
+                .apply();
 	}
 
 	public boolean getDroneshareEnabled() {
-		return prefs.getBoolean("dshare_enabled", true);
+		return prefs.getBoolean(context.getString(R.string.pref_dshare_enabled_key), true);
 	}
 
 	public void setDroneshareEnabled(boolean b) {
-		prefs.edit().putBoolean("dshare_enabled", b).apply();
+		prefs.edit().putBoolean(context.getString(R.string.pref_dshare_enabled_key), b).apply();
 	}
 
 	/**

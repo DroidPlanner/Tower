@@ -1,13 +1,11 @@
 package org.droidplanner.android.proxy.mission.item.fragments;
 
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.droidplanner.R;
 import org.droidplanner.android.DroidPlannerApp;
-
-import org.droidplanner.android.mission.item.fragments.MissionCircleFragment;
 import org.droidplanner.android.proxy.mission.MissionProxy;
 import org.droidplanner.android.proxy.mission.item.MissionItemProxy;
 import org.droidplanner.android.proxy.mission.item.adapters.AdapterMissionItems;
@@ -56,6 +54,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 	protected SpinnerSelfSelect typeSpinner;
 	protected AdapterMissionItems commandAdapter;
 	private OnMissionDetailListener mListener;
+	private MissionProxy mMissionProxy;
 
 	protected MissionItemProxy itemRender;
 
@@ -122,21 +121,26 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		final MissionProxy missionProxy = itemRender.getMissionProxy();
+		mMissionProxy = itemRender.getMissionProxy();
 
-		MissionItemType[] objects = MissionItemType.values();
-		// Remove unfinished item types
-		Set<MissionItemType> asSet = new HashSet<MissionItemType>(
-				Arrays.asList(objects));
-		asSet.remove(MissionItemType.LOITER);
-		asSet.remove(MissionItemType.LOITER_INF);
-		asSet.remove(MissionItemType.LOITERT);
-		asSet.remove(MissionItemType.RTL);
-		asSet.remove(MissionItemType.SPLINE_WAYPOINT);
-		objects = asSet.toArray(new MissionItemType[] {});
-
-        commandAdapter = new AdapterMissionItems(this.getActivity(),
-                android.R.layout.simple_list_item_1, objects);
+		List<MissionItemType> list = new LinkedList<MissionItemType>(Arrays.asList(MissionItemType.values()));
+		if (mMissionProxy.getItems().indexOf(itemRender) != 0){
+			list.remove(MissionItemType.TAKEOFF);
+		}
+		
+		if (mMissionProxy.getItems().indexOf(itemRender) != (mMissionProxy.getItems().size() - 1)){
+			list.remove(MissionItemType.LAND);
+			list.remove(MissionItemType.RTL);
+		}
+		
+		//Remvoing just for the Release
+		list.remove(MissionItemType.LOITER);
+		list.remove(MissionItemType.LOITER_INF);
+		list.remove(MissionItemType.LOITERT);
+		list.remove(MissionItemType.SPLINE_WAYPOINT);
+		
+		commandAdapter = new AdapterMissionItems(this.getActivity(),
+				android.R.layout.simple_list_item_1, list.toArray(new MissionItemType[0]));
 
 		typeSpinner = (SpinnerSelfSelect) view.findViewById(R.id.spinnerWaypointType);
 		typeSpinner.setAdapter(commandAdapter);
@@ -144,7 +148,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 
 		final TextView waypointIndex = (TextView) view.findViewById(R.id.WaypointIndex);
 		if (waypointIndex != null) {
-			final int itemOrder = missionProxy.getOrder(itemRender);
+			final int itemOrder = mMissionProxy.getOrder(itemRender);
 			waypointIndex.setText(String.valueOf(itemOrder));
 		}
 
@@ -154,7 +158,7 @@ public abstract class MissionDetailFragment extends DialogFragment implements
 
 		try {
 			distanceLabelView.setVisibility(View.VISIBLE);
-			distanceView.setText(missionProxy.getDistanceFromLastWaypoint(itemRender).toString());
+			distanceView.setText(mMissionProxy.getDistanceFromLastWaypoint(itemRender).toString());
 		} catch (NullPointerException e) {
 			// Can fail if distanceView doesn't exists
 		} catch (Exception e) {

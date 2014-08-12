@@ -3,6 +3,8 @@ package org.droidplanner.core.helpers.geoTools;
 import java.util.List;
 
 import org.droidplanner.core.helpers.coordinates.Coord2D;
+import org.droidplanner.core.helpers.coordinates.Coord3D;
+import org.droidplanner.core.helpers.math.MathUtil;
 import org.droidplanner.core.helpers.units.Area;
 import org.droidplanner.core.helpers.units.Length;
 import org.droidplanner.core.polygon.Polygon;
@@ -95,6 +97,20 @@ public class GeoTools {
 	}
 
 	/**
+	 * Computes the distance between two coordinates taking in account the
+	 * height difference
+	 * 
+	 * @return distance in meters
+	 */
+	public static Length get3DDistance(Coord3D end, Coord3D start) {
+		Length horizontalDistance = getDistance(end, start);
+		Length altitudeDiff = new Length(Math.abs((end.getAltitude().valueInMeters() - start
+				.getAltitude().valueInMeters())));
+		return MathUtil.hypot(horizontalDistance, altitudeDiff);
+	}
+
+
+	/**
 	 * Computes the heading between two coordinates
 	 * 
 	 * @return heading in degrees
@@ -141,5 +157,4 @@ public class GeoTools {
 		return new Area(Math.abs(0.5 * sum));
 		// return new Area(0);
 	}
-
 }

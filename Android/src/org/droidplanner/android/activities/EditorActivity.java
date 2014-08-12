@@ -33,9 +33,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.RadioButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -69,7 +67,6 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 	private MissionDetailFragment itemDetailFragment;
 	private FragmentManager fragmentManager;
 	private EditorListFragment missionListFragment;
-	private TextView infoView;
 
 	private View mSplineToggleContainer;
 	private boolean mIsSplineEnabled;
@@ -102,7 +99,6 @@ public class EditorActivity extends SuperUI implements OnPathFinishedListener,
 				.findFragmentById(R.id.editorToolsFragment);
 		missionListFragment = (EditorListFragment) fragmentManager
 				.findFragmentById(R.id.missionFragment1);
-		infoView = (TextView) findViewById(R.id.editorInfoWindow);
 
 		mSplineToggleContainer = findViewById(R.id.editorSplineToggleContainer);
 		mSplineToggleContainer.setVisibility(View.GONE);

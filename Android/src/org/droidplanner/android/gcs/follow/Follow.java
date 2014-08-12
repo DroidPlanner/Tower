@@ -4,7 +4,7 @@ import org.droidplanner.android.gcs.follow.FollowAlgorithm.FollowModes;
 import org.droidplanner.android.gcs.location.FusedLocation;
 import org.droidplanner.android.gcs.location.LocationFinder;
 import org.droidplanner.android.gcs.location.LocationReceiver;
-import org.droidplanner.android.gcs.location.ROIEstimator;
+import org.droidplanner.android.gcs.roi.ROIEstimator;
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
 import org.droidplanner.core.drone.DroneInterfaces.Handler;
@@ -111,7 +111,6 @@ public class Follow implements OnDroneListener, LocationReceiver {
 
 	public void changeRadius(double increment) {
 		followAlgorithm.changeRadius(increment);
-
 	}
 
 	public void cycleType() {

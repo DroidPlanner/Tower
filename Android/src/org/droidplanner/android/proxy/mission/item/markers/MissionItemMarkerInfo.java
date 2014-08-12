@@ -1,6 +1,5 @@
 package org.droidplanner.android.proxy.mission.item.markers;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +16,7 @@ import android.graphics.Bitmap;
 /**
  * Template class and factory for a mission item's marker source.
  */
-public abstract class MissionItemMarkerInfo extends MarkerInfo.SimpleMarkerInfo implements
-		Serializable {
+public abstract class MissionItemMarkerInfo extends MarkerInfo.SimpleMarkerInfo {
 
 	protected final MissionItemProxy mMarkerOrigin;
 

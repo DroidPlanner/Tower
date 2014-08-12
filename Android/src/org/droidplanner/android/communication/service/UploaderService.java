@@ -9,12 +9,12 @@ import org.droidplanner.android.utils.prefs.DroidPlannerPrefs;
 
 import android.app.IntentService;
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
 import com.geeksville.apiproxy.DirectoryUploader;
@@ -25,75 +25,61 @@ import com.geeksville.apiproxy.IUploadListener;
  * 
  * If you send any intent to this service it will scan the tlog directory and
  * upload any complete tlogs it finds.
- * 
- * @author kevinh
  */
 public class UploaderService extends IntentService {
 
 	private static final String TAG = UploaderService.class.getSimpleName();
 	static final String apiKey = "2d38fb2e.72afe7b3761d5ee6346c178fdd6b680f";
 
-	private DroidPlannerPrefs prefs;
-	private int numUploaded = 0;
+    private static final int ONGOING_UPLOAD_NOTIFICATION_ID = 123;
+    private static final int UPLOAD_STATUS_NOTIFICATION_ID = 124;
 
-	private IUploadListener callback = new IUploadListener() {
+	private DroidPlannerPrefs prefs;
+
+	private final IUploadListener callback = new IUploadListener() {
+
+        private int numUploaded = 0;
+        private Notification failedUploadNotification;
+
 		@Override
 		public void onUploadStart(File f) {
 			Log.i(TAG, "Upload start: " + f);
-			// Generate initial notification
-			updateNotification(true);
 		}
 
 		@Override
 		public void onUploadSuccess(File f, String viewURL) {
 			if (viewURL == null) {
 				Log.i(TAG, "Server thought flight was boring");
-				notifyManager.cancel(notifyId);
+				notifyManager.cancel(ONGOING_UPLOAD_NOTIFICATION_ID);
 			} else {
 				Log.i(TAG, "Upload success: " + f + " url=" + viewURL);
 
-				numUploaded += 1;
-				nBuilder.setContentText("Select to view..."); // FIXME localize
+                // Attach the view URL
+                final PendingIntent pIntent = PendingIntent.getActivity(UploaderService.this, 0,
+                        new Intent(Intent.ACTION_VIEW, Uri.parse(viewURL)),
+                        PendingIntent.FLAG_UPDATE_CURRENT);
 
-				// Attach the view URL
-				PendingIntent pintent = PendingIntent.getActivity(
-						UploaderService.this, 0, new Intent(Intent.ACTION_VIEW,
-								Uri.parse(viewURL)), 0);
-				nBuilder.setContentIntent(pintent);
+                final Intent sendIntent = new Intent(Intent.ACTION_SEND)
+                        .putExtra(Intent.EXTRA_TEXT, viewURL)
+                        .setType("text/plain");
 
-				// Attach the google earth link
-				// val geintent = PendingIntent.getActivity(acontext, 0, new
-				// Intent(Intent.ACTION_VIEW, Uri.parse(kmzURL)), 0)
-				// nBuilder.addAction(android.R.drawable.ic_menu_mapmode,
-				// S(R.string.google_earth), geintent)
+                final PendingIntent sendPIntent = PendingIntent.getActivity(UploaderService.this, 0,
+                        sendIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-				// Attach a web link
-				nBuilder.addAction(android.R.drawable.ic_menu_set_as, "Web",
-						pintent);
+				numUploaded++;
 
-				// Add a share link
-				Intent sendIntent = new Intent(Intent.ACTION_SEND);
-				sendIntent.putExtra(Intent.EXTRA_TEXT, viewURL);
-				sendIntent.setType("text/plain");
-				// val chooser = Intent.createChooser(sendIntent,
-				// "Share log to...")
-				nBuilder.addAction(android.R.drawable.ic_menu_share, "Share",
-						PendingIntent.getActivity(UploaderService.this, 0,
-								sendIntent, 0));
+                final NotificationCompat.Builder notifBuilder = generateNotificationBuilder()
+                        .setContentText(getString(R.string.uploader_success_message))
+                        .setContentIntent(pIntent)
+                        // Attach a web link
+                        .addAction(android.R.drawable.ic_menu_set_as, "Web", pIntent)
+                        // Add a share link
+                        .addAction(android.R.drawable.ic_menu_share, "Share", sendPIntent);
+
 				if (numUploaded > 1)
-					nBuilder.setNumber(numUploaded);
-				nBuilder.setPriority(NotificationCompat.PRIORITY_HIGH); // The
-																		// user
-																		// probably
-																		// wants
-																		// to
-																		// choose
-																		// us
-																		// now
+					notifBuilder.setNumber(numUploaded);
 
-				// FIXME, include action buttons for sharing
-
-				updateNotification(false);
+				updateUploadStatusNotification(notifBuilder.build());
 			}
 		}
 
@@ -101,20 +87,29 @@ public class UploaderService extends IntentService {
 		public void onUploadFailure(File f, Exception ex) {
 			Log.i(TAG, "Upload fail: " + f + " " + ex);
 
-			String msg = "UploadFailed";
+			String msg = "Upload Failed";
 			if (ex instanceof HttpResponseException)
-				msg = ((HttpResponseException) ex).getMessage();
+				msg = ex.getMessage();
 
-			nBuilder.setContentText(msg);
-			nBuilder.setSubText("Will try again later"); // FIXME - localize
-			updateNotification(false);
+            if(failedUploadNotification == null) {
+                failedUploadNotification = generateNotificationBuilder()
+                        .setContentText(msg)
+                        .setSubText(getString(R.string.uploader_fail_retry_message))
+                        .build();
+            }
+            updateUploadStatusNotification(failedUploadNotification);
+
+            if(!NetworkConnectivityReceiver.isNetworkAvailable(getApplicationContext())){
+                //Activating the network connectivity receiver so we can be restarted when
+                // connectivity is restored.
+                Log.d(TAG, "Activating connectivity receiver");
+                NetworkConnectivityReceiver.enableConnectivityReceiver(getApplicationContext(),
+                        true);
+            }
 		}
 	};
 
-	private int notifyId = 2;
-
-	private NotificationManager notifyManager;
-	private NotificationCompat.Builder nBuilder;
+	private NotificationManagerCompat notifyManager;
 
 	public UploaderService() {
 		super("Uploader");
@@ -124,32 +119,45 @@ public class UploaderService extends IntentService {
 	public void onCreate() {
 		super.onCreate();
 
-		PendingIntent nullIntent = PendingIntent.getActivity(
-				getApplicationContext(), 0, new Intent(), 0);
-
-		prefs = new DroidPlannerPrefs(this);
-		notifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		nBuilder = new NotificationCompat.Builder(this);
-		nBuilder.setContentTitle("Droneshare upload")
-				// FIXME - extract for localization
-				.setContentText("Uploading log file")
-				.setSmallIcon(R.drawable.ic_launcher)
-				// .setProgress(fileSize, 0, false)
-				.setContentIntent(nullIntent).setAutoCancel(true)
-				.setPriority(NotificationCompat.PRIORITY_HIGH);
+        prefs = new DroidPlannerPrefs(this);
+        notifyManager = NotificationManagerCompat.from(getApplicationContext());
 	}
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		// Any time we receive an intent - rescan the directory
-		if (NetworkStateReceiver.isNetworkAvailable(this)) {
+        //Check if droneshare is enabled, and the login credentials set before trying to do
+        // anything.
+        if(prefs.getDroneshareEnabled() && areLoginCredentialsSet()) {
 
-			Log.i(TAG, "Scanning for new uploads");
-			doUploads();
-		} else {
-			Log.e(TAG, "Not scanning - network offline");
-		}
+            // Any time we receive an intent - rescan the directory
+            if (NetworkConnectivityReceiver.isNetworkAvailable(this)) {
+                Log.i(TAG, "Scanning for new uploads");
+                doUploads();
+            }
+            else {
+                Log.v(TAG, "Not scanning - network offline");
+
+                //Activating the network connectivity receiver so we can be restarted when
+                // connectivity is restored.
+                Log.d(TAG, "Activating connectivity receiver");
+                NetworkConnectivityReceiver.enableConnectivityReceiver(getApplicationContext(),
+                        true);
+            }
+        }
 	}
+
+    private NotificationCompat.Builder generateNotificationBuilder(){
+        return new NotificationCompat.Builder(getApplicationContext())
+                .setContentTitle(getString(R.string.uploader_notification_title))
+                .setSmallIcon(R.drawable.ic_launcher)
+                        // .setProgress(fileSize, 0, false)
+                .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_HIGH);
+    }
+
+    private boolean areLoginCredentialsSet(){
+        return !prefs.getDroneshareLogin().isEmpty() && !prefs.getDronesharePassword().isEmpty();
+    }
 
 	private void doUploads() {
 		File srcDir = DirectoryPath.getTLogPath();
@@ -160,30 +168,25 @@ public class UploaderService extends IntentService {
 
 		if (!login.isEmpty() && !password.isEmpty()) {
 			DirectoryUploader up = new DirectoryUploader(srcDir, destDir,
-					callback, login, password, prefs.getVehicleId(), apiKey,
-					"DEFAULT");
+					callback, login, password, prefs.getVehicleId(), apiKey, "DEFAULT");
+
+            final Notification notification = generateNotificationBuilder()
+                    .setContentText("Uploading log file")
+                    .build();
+            startForeground(ONGOING_UPLOAD_NOTIFICATION_ID, notification);
 			up.run();
+            stopForeground(true);
 		}
 	}
 
-	private void updateNotification(boolean isForeground) {
-		Notification n = nBuilder.build();
+    private void updateUploadStatusNotification(Notification notification) {
+        notifyManager.notify(UPLOAD_STATUS_NOTIFICATION_ID, notification);
+    }
 
-		Log.d(TAG, "Updating notification " + isForeground);
-		notifyManager.cancel(notifyId);
-		notifyId += 1; // Generate a new notification for each status change
-		notifyManager.notify(notifyId, n);
-		if (isForeground)
-			startForeground(notifyId, n);
-		else {
-			stopForeground(false);
-		}
-	}
-
-	// private void removeProgress() { nBuilder.setProgress(0, 0, false); }
-
-	// / Create an Intent that will start this service
-	static public Intent createIntent(Context context) {
+    /**
+     * Create an Intent that will start this service
+     */
+    static public Intent createIntent(Context context) {
 		return new Intent(context, UploaderService.class);
 	}
 }
