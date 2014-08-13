@@ -10,6 +10,7 @@ import org.droidplanner.core.drone.DroneVariable;
 import org.droidplanner.core.helpers.geoTools.GeoTools;
 import org.droidplanner.core.helpers.units.Altitude;
 import org.droidplanner.core.helpers.units.Length;
+import org.droidplanner.core.mission.commands.ReturnToHome;
 import org.droidplanner.core.mission.commands.Takeoff;
 import org.droidplanner.core.mission.waypoints.Circle;
 import org.droidplanner.core.mission.waypoints.Land;
@@ -234,6 +235,9 @@ public class Mission extends DroneVariable {
 				break;
 			case MAV_CMD.MAV_CMD_NAV_LOITER_TURNS:
 				received.add(new Circle(msg, this));
+				break;
+			case MAV_CMD.MAV_CMD_NAV_RETURN_TO_LAUNCH:
+				received.add(new ReturnToHome(msg, this));
 			default:
 				break;
 			}

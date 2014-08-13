@@ -46,7 +46,7 @@ public class EditorToolsFragment extends Fragment implements OnClickListener, On
 
 	private OnEditorToolSelected listener;
 	private RadioGroup mEditorRadioGroup;
-	private EditorTools tool;
+	private EditorTools tool = EditorTools.NONE;
 	private MissionProxy mMissionProxy;
 
 	@Override
