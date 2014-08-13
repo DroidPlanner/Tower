@@ -102,6 +102,7 @@ public class Circle extends SpatialCoordItem {
 	public void unpackMAVMessage(msg_mission_item mavMsg) {
 		super.unpackMAVMessage(mavMsg);
 		setTurns((int) mavMsg.param1);
+		setRadius(mavMsg.param3);
 	}
 
 	@Override
