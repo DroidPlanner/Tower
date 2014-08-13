@@ -17,7 +17,7 @@ import com.MAVLink.Messages.enums.MAV_FRAME;
 
 public class Circle extends SpatialCoordItem {
 
-	private double radius = 7.0;
+	private double radius = 10.0;
 	private int turns = 1;
 	private int numberOfSteps = 1;
 	private double altitudeStep = 2;
@@ -102,6 +102,7 @@ public class Circle extends SpatialCoordItem {
 	public void unpackMAVMessage(msg_mission_item mavMsg) {
 		super.unpackMAVMessage(mavMsg);
 		setTurns((int) mavMsg.param1);
+		setRadius(mavMsg.param3);
 	}
 
 	@Override
