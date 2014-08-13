@@ -1,6 +1,9 @@
 # Releases Notes
 These notes document what was removed from a Release Candidate (RC), which is build from a corresponding version of the program. These are not comulative between program versions (they can be between RCs), and express the diff from the master branch.
 
+## Droidplanner v2.6.1 RC3
+* Quick-fix on bug on editor screen,  PR #972 was merged without creating a new release
+
 ## Droidplanner v2.6.1 RC2
 * Quick-fix on Circle and RTL, PR #971 was merged without creating a new release
 
