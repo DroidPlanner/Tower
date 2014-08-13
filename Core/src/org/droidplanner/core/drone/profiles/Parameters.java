@@ -14,17 +14,18 @@ import org.droidplanner.core.drone.DroneVariable;
 import org.droidplanner.core.parameters.Parameter;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 
 import com.MAVLink.Messages.MAVLinkMessage;
 import com.MAVLink.Messages.ardupilotmega.msg_param_value;
 
 /**
  * Class to manage the communication of parameters to the MAV.
- * 
+ *
  * Should be initialized with a MAVLink Object, so the manager can send messages
  * via the MAV link. The function processMessage must be called with every new
  * MAV Message.
- * 
+ *
  */
 public class Parameters extends DroneVariable implements OnDroneListener {
 
@@ -34,6 +35,7 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 
 	@SuppressLint("UseSparseArrays")
 	private HashMap<Integer, Parameter> parameters = new HashMap<Integer, Parameter>();
+	private boolean downloadInProgress = false;
 
 	public DroneInterfaces.OnParameterManagerListener parameterListener;
 
@@ -52,16 +54,20 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 	}
 
 	public void getAllParameters() {
+		if(downloadInProgress){
+			return;
+		}
 		parameters.clear();
 		if (parameterListener != null)
 			parameterListener.onBeginReceivingParameters();
 		MavLinkParameters.requestParametersList(myDrone);
 		resetWatchdog();
+		downloadInProgress = true;
 	}
 
 	/**
 	 * Try to process a Mavlink message if it is a parameter related message
-	 * 
+	 *
 	 * @param msg
 	 *            Mavlink message to process
 	 * @return Returns true if the message has been processed
@@ -75,12 +81,19 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 	}
 
 	private void processReceivedParam(msg_param_value m_value) {
+		//Sometimes we accidentally request new parameters and they arrive after we already have everything.
+		//This is to prevent us from starting up the dog again and creating an endless loop of param downloads.
+		if(!downloadInProgress){
+			killWatchdog();
+			return;
+		}
+
 		// collect params in parameter list
 		Parameter param = new Parameter(m_value);
 		parameters.put((int) m_value.param_index, param);
 
 		expectedParams = m_value.param_count;
-		
+
 		// update listener
 		if (parameterListener != null)
 			parameterListener.onParameterReceived(param, m_value.param_index,
@@ -88,12 +101,13 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 
 		// Are all parameters here? Notify the listener with the parameters
 		if (parameters.size() >= m_value.param_count) {
+			downloadInProgress = false;
+			killWatchdog();
 			if (parameterListener != null) {
 				List<Parameter> parameterList = new ArrayList<Parameter>();
 				for (int key : parameters.keySet()) {
 					parameterList.add(parameters.get(key));
 				}
-				killWatchdog();
 				parameterListener.onEndReceivingParameters(parameterList);
 			}
 		} else {
@@ -150,13 +164,18 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch(event){
-		case DISCONNECTED:
-		case HEARTBEAT_TIMEOUT:
-			killWatchdog();
-			break;
-		default:
-			break;
-		
+			case CONNECTED:
+				if(!drone.state.isFlying()){
+					getAllParameters();
+				}
+				break;
+			case DISCONNECTED:
+			case HEARTBEAT_TIMEOUT:
+				killWatchdog();
+				break;
+			default:
+				break;
+
 		}
 	}
 }

@@ -224,6 +224,13 @@ public class ParamsFragment extends ListFragment implements
 
 	@Override
 	public void onBeginReceivingParameters() {
+		startProgressDialog();
+
+		mReceived = 0;
+		mTotal = 0;
+	}
+
+	private void startProgressDialog() {
 		progressDialog = new ProgressDialog(getActivity());
 		progressDialog.setTitle(R.string.refreshing_parameters);
 		progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
@@ -232,9 +239,6 @@ public class ParamsFragment extends ListFragment implements
 		progressDialog.setCanceledOnTouchOutside(true);
 
 		progressDialog.show();
-
-		mReceived = 0;
-		mTotal = 0;
 	}
 
 	private int mReceived = 0, mTotal = 0;
@@ -242,7 +246,10 @@ public class ParamsFragment extends ListFragment implements
 	@Override
 	public void onParameterReceived(Parameter parameter, int index, int count) {
 		++mReceived;
-
+		if(progressDialog == null){//user opens parameter fragment in the middle of param download
+			mReceived = index - 1;
+			startProgressDialog();
+		}
 		if (progressDialog != null) {
 			if (progressDialog.isIndeterminate()) {
 				progressDialog.setIndeterminate(false);
