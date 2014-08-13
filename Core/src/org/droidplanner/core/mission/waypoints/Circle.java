@@ -17,7 +17,7 @@ import com.MAVLink.Messages.enums.MAV_FRAME;
 
 public class Circle extends SpatialCoordItem {
 
-	private double radius = 7.0;
+	private double radius = 10.0;
 	private int turns = 1;
 	private int numberOfSteps = 1;
 	private double altitudeStep = 2;
