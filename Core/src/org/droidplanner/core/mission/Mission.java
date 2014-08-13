@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.droidplanner.core.drone.Drone;
 import org.droidplanner.core.drone.DroneInterfaces.DroneEventsType;
+import org.droidplanner.core.drone.variables.Type.FirmwareType;
 import org.droidplanner.core.drone.DroneVariable;
 import org.droidplanner.core.helpers.geoTools.GeoTools;
 import org.droidplanner.core.helpers.units.Altitude;
@@ -192,7 +193,9 @@ public class Mission extends DroneVariable {
 	public void onMissionReceived(List<msg_mission_item> msgs) {
 		if (msgs != null) {
 			myDrone.home.setHome(msgs.get(0));
-			msgs.remove(0); // Remove Home waypoint
+			if (myDrone.type.getFirmwareType() != FirmwareType.AR_DRONE) {
+				msgs.remove(0); // Remove Home waypoint
+			}
 			items.clear();
 			items.addAll(processMavLinkMessages(msgs));
 			myDrone.events.notifyDroneEvent(DroneEventsType.MISSION_RECEIVED);
@@ -202,8 +205,10 @@ public class Mission extends DroneVariable {
 
     public void onMissionLoaded(List<msg_mission_item> msgs) {
         if (msgs != null) {
-            myDrone.home.setHome(msgs.get(0));
-            msgs.remove(0); // Remove Home waypoint
+			myDrone.home.setHome(msgs.get(0));
+			if (myDrone.type.getFirmwareType() != FirmwareType.AR_DRONE) {
+				msgs.remove(0); // Remove Home waypoint
+			}
             items.clear();
             items.addAll(processMavLinkMessages(msgs));
             myDrone.events.notifyDroneEvent(DroneEventsType.MISSION_RECEIVED);
@@ -254,7 +259,9 @@ public class Mission extends DroneVariable {
 
     public List<msg_mission_item> getMsgMissionItems() {
         final List<msg_mission_item> data = new ArrayList<msg_mission_item>();
-        data.add(myDrone.home.packMavlink());
+		if (myDrone.type.getFirmwareType() != FirmwareType.AR_DRONE) {
+			data.add(myDrone.home.packMavlink());
+		}
         for (MissionItem item : items) {
             data.addAll(item.packMissionItem());
         }

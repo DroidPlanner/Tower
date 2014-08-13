@@ -100,6 +100,7 @@
         <item>ArduCopter</item>
         <item>ArduPlane</item>
         <item>ArduRover</item>
+        <item>ARDrone</item>
     </string-array>
     <string-array name="FligthMode_CopterV3_1">
         <item>0;Stabilize</item>

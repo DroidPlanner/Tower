@@ -16,7 +16,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.MAVLink.Messages.ApmModes;
+import com.MAVLink.Messages.ardupilotmega.msg_command_long;
+import com.MAVLink.Messages.enums.MAV_CMD;
+import com.MAVLink.Messages.enums.MAV_GOTO;
 import com.google.android.gms.analytics.HitBuilders;
+import org.droidplanner.core.drone.variables.Type.FirmwareType;
 
 public class FlightActionsFragment extends Fragment implements OnClickListener {
 
@@ -58,6 +62,11 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 
 		final Button takeoffBtn = (Button) view.findViewById(R.id.mc_takeoff);
 		takeoffBtn.setOnClickListener(this);
+		if (drone.type.getFirmwareType() == FirmwareType.AR_DRONE) {
+			takeoffBtn.setVisibility(View.VISIBLE);
+		} else {
+			takeoffBtn.setVisibility(View.GONE);
+		}
 
 		final Button loiterBtn = (Button) view.findViewById(R.id.mc_loiter);
 		loiterBtn.setOnClickListener(this);
@@ -76,6 +85,9 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 	public void onClick(View v) {
 		HitBuilders.EventBuilder eventBuilder = new HitBuilders.EventBuilder()
 				.setCategory(GAUtils.Category.FLIGHT_DATA_ACTION_BUTTON.toString());
+		msg_command_long msg = new msg_command_long();
+		msg.target_system = 1;
+		msg.target_component = 1;
 
 		switch (v.getId()) {
 		case R.id.mc_planningBtn:
@@ -91,8 +103,13 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 			break;
 
 		case R.id.mc_land:
-			drone.state.changeFlightMode(ApmModes.ROTOR_LAND);
-			eventBuilder.setAction("Changed flight mode").setLabel(ApmModes.ROTOR_LAND.getName());
+			if (drone.type.getFirmwareType() == FirmwareType.AR_DRONE) {
+				msg.command = (short) MAV_CMD.MAV_CMD_NAV_LAND;
+				drone.MavClient.sendMavPacket(msg.pack());
+			} else {
+				drone.state.changeFlightMode(ApmModes.ROTOR_LAND);
+				eventBuilder.setAction("Changed flight mode").setLabel(ApmModes.ROTOR_LAND.getName());
+			}
 			break;
 
 		case R.id.mc_takeoff:
@@ -100,16 +117,33 @@ public class FlightActionsFragment extends Fragment implements OnClickListener {
 			// there isn`t a takeoff mode on ArduCopter
 			// eventBuilder.setAction("Changed flight mode")
 			// .setLabel(ApmModes.ROTOR_TAKEOFF.getName());
+
+			if (drone.type.getFirmwareType() == FirmwareType.AR_DRONE) {
+				msg.command = (short) MAV_CMD.MAV_CMD_NAV_TAKEOFF;
+				drone.MavClient.sendMavPacket(msg.pack());
+			}
 			break;
 
 		case R.id.mc_homeBtn:
-			drone.state.changeFlightMode(ApmModes.ROTOR_RTL);
-			eventBuilder.setAction("Changed flight mode").setLabel(ApmModes.ROTOR_RTL.getName());
+			if (drone.type.getFirmwareType() == FirmwareType.AR_DRONE) {
+				msg.command = (short) MAV_CMD.MAV_CMD_NAV_RETURN_TO_LAUNCH;
+				drone.MavClient.sendMavPacket(msg.pack());
+			} else {
+				drone.state.changeFlightMode(ApmModes.ROTOR_RTL);
+				eventBuilder.setAction("Changed flight mode").setLabel(ApmModes.ROTOR_RTL.getName());
+			}
 			break;
 
 		case R.id.mc_loiter:
-			drone.state.changeFlightMode(ApmModes.ROTOR_LOITER);
-			eventBuilder.setAction("Changed flight mode").setLabel(ApmModes.ROTOR_LOITER.getName());
+			if (drone.type.getFirmwareType() == FirmwareType.AR_DRONE) {
+				msg.command = (short) MAV_CMD.MAV_CMD_OVERRIDE_GOTO;
+				msg.param1 = MAV_GOTO.MAV_GOTO_DO_HOLD;
+				msg.param2 = MAV_GOTO.MAV_GOTO_HOLD_AT_CURRENT_POSITION;
+				drone.MavClient.sendMavPacket(msg.pack());
+			} else {
+				drone.state.changeFlightMode(ApmModes.ROTOR_LOITER);
+				eventBuilder.setAction("Changed flight mode").setLabel(ApmModes.ROTOR_LOITER.getName());
+			}
 			break;
 
 		case R.id.mc_follow:
