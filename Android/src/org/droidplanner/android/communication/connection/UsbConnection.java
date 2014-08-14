@@ -1,7 +1,11 @@
 package org.droidplanner.android.communication.connection;
 
+import java.util.Map.Entry;
+
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.hardware.usb.UsbDevice;
+import android.hardware.usb.UsbManager;
 
 public abstract class UsbConnection extends MAVLinkConnection {
 	protected static int baud_rate = 57600;
@@ -22,14 +26,20 @@ public abstract class UsbConnection extends MAVLinkConnection {
 	}
 
 	public static MAVLinkConnection getUSBConnection(Context context) {
-		if (isFTDIdevice()) {
+		if (isFTDIdevice(context)) {
 			return new UsbFTDIConnection(context);
 		} else {
 			return new UsbCDCConnection(context);
 		}
 	}
 
-	private static boolean isFTDIdevice() {
+	private static boolean isFTDIdevice(Context context) {
+		UsbManager manager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
+		for (Entry<String, UsbDevice> device : manager.getDeviceList().entrySet()) {
+			if (device.getValue().getVendorId() == 0x0403) {
+				return true;
+			}
+		}
 		return false;
 	}
 }
