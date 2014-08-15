@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.google.common.collect.HashBiMap;
 import com.mapbox.mapboxsdk.api.ILatLng;
+import com.mapbox.mapboxsdk.geometry.BoundingBox;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.overlay.Icon;
 import com.mapbox.mapboxsdk.overlay.ItemizedIconOverlay;
@@ -453,7 +454,17 @@ public class MapBoxFragment extends Fragment implements DPMap {
 
     @Override
     public void zoomToFit(List<Coord2D> coords) {
-        //NOP - not implemented at this time.
+        if(coords.isEmpty()){
+            return;
+        }
+
+        final ArrayList<LatLng> boxCoords = new ArrayList<LatLng>(coords.size());
+        for(Coord2D coord: coords){
+            boxCoords.add(DroneHelper.CoordToLatLng(coord));
+        }
+
+        final BoundingBox enclosingBounds = BoundingBox.fromLatLngs(boxCoords);
+        mMapView.zoomToBoundingBox(enclosingBounds, true, true, true);
     }
 
     @Override
