@@ -1,7 +1,6 @@
 package org.droidplanner.android.maps.providers.mapbox;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -16,8 +15,8 @@ import android.view.ViewGroup;
 import com.google.common.collect.HashBiMap;
 import com.mapbox.mapboxsdk.api.ILatLng;
 import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.overlay.GpsLocationProvider;
 import com.mapbox.mapboxsdk.overlay.Icon;
+import com.mapbox.mapboxsdk.overlay.ItemizedIconOverlay;
 import com.mapbox.mapboxsdk.overlay.Marker;
 import com.mapbox.mapboxsdk.overlay.PathOverlay;
 import com.mapbox.mapboxsdk.overlay.UserLocationOverlay;
@@ -41,7 +40,6 @@ import org.droidplanner.core.helpers.coordinates.Coord2D;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -50,6 +48,42 @@ import java.util.concurrent.atomic.AtomicReference;
 public class MapBoxFragment extends Fragment implements DPMap {
 
     private final HashBiMap<MarkerInfo, Marker> mMarkers = HashBiMap.create();
+
+    private final MapViewListener mMapViewListener = new MapViewListener() {
+        @Override
+        public void onShowMarker(MapView pMapView, Marker pMarker) {
+        }
+
+        @Override
+        public void onHidemarker(MapView pMapView, Marker pMarker) {
+        }
+
+        @Override
+        public void onTapMarker(MapView pMapView, final Marker pMarker) {
+            if (mMarkerClickListener != null) {
+                mMarkerClickListener.onMarkerClick(getMarkerInfo(pMarker));
+            }
+        }
+
+        @Override
+        public void onLongPressMarker(MapView pMapView, Marker pMarker) {
+
+        }
+
+        @Override
+        public void onTapMap(MapView pMapView, final ILatLng pPosition) {
+            if (mMapClickListener != null) {
+                mMapClickListener.onMapClick(DroneHelper.ILatLngToCoord(pPosition));
+            }
+        }
+
+        @Override
+        public void onLongPressMap(MapView pMapView, final ILatLng pPosition) {
+            if (mMapLongClickListener != null) {
+                mMapLongClickListener.onMapLongClick(DroneHelper.ILatLngToCoord(pPosition));
+            }
+        }
+    };
 
     private Drone mDrone;
     private DroidPlannerPrefs mPrefs;
@@ -62,6 +96,7 @@ public class MapBoxFragment extends Fragment implements DPMap {
      */
     private MapView mMapView;
     private TrackingMode mUserLocationTrackingMode = TrackingMode.NONE;
+    private ItemizedIconOverlay mMarkersOverlay;
 
     private PathOverlay mFlightPath;
     private PathOverlay mMissionPath;
@@ -87,7 +122,7 @@ public class MapBoxFragment extends Fragment implements DPMap {
 
         final Activity activity = getActivity();
         mDrone = ((DroidPlannerApp) activity.getApplication()).getDrone();
-        mPrefs = new DroidPlannerPrefs(getActivity().getApplicationContext());
+        mPrefs = new DroidPlannerPrefs(activity.getApplicationContext());
         mMapView = (MapView) view.findViewById(R.id.mapbox_mapview);
     }
 
@@ -98,7 +133,7 @@ public class MapBoxFragment extends Fragment implements DPMap {
 
         mMapView.setUserLocationEnabled(true);
         final UserLocationOverlay userLocation = mMapView.getUserLocationOverlay();
-        if(userLocation != null) {
+        if (userLocation != null) {
             userLocation.setDrawAccuracyEnabled(true);
 
             if (mUserLocationTrackingMode == TrackingMode.NONE) {
@@ -110,42 +145,32 @@ public class MapBoxFragment extends Fragment implements DPMap {
     }
 
     private void setupMap() {
-        final Context context = getActivity().getApplicationContext();
-
         //TODO complete
-        mMapView.setMapViewListener(new MapViewListener() {
-            @Override
-            public void onShowMarker(MapView pMapView, Marker pMarker) {}
+        mMapView.setMapViewListener(mMapViewListener);
+        resetMarkersOverlay();
+    }
 
-            @Override
-            public void onHidemarker(MapView pMapView, Marker pMarker) {}
+    private void resetMarkersOverlay() {
+        if (mMarkersOverlay != null) {
+            mMarkersOverlay.removeAllItems();
+            mMapView.removeOverlay(mMarkersOverlay);
+        }
 
+        mMarkersOverlay = new ItemizedIconOverlay(getActivity().getApplicationContext(),
+                new ArrayList<Marker>(), new ItemizedIconOverlay.OnItemGestureListener<Marker>() {
             @Override
-            public void onTapMarker(MapView pMapView, Marker pMarker) {
-                if(mMarkerClickListener != null){
-                    mMarkerClickListener.onMarkerClick(getMarkerInfo(pMarker));
-                }
+            public boolean onItemSingleTapUp(int index, Marker item) {
+                mMapView.selectMarker(item);
+                return true;
             }
 
             @Override
-            public void onLongPressMarker(MapView pMapView, Marker pMarker) {
-
-            }
-
-            @Override
-            public void onTapMap(MapView pMapView, ILatLng pPosition) {
-                if(mMapClickListener != null){
-                    mMapClickListener.onMapClick(DroneHelper.ILatLngToCoord(pPosition));
-                }
-            }
-
-            @Override
-            public void onLongPressMap(MapView pMapView, ILatLng pPosition) {
-                if(mMapLongClickListener != null){
-                    mMapLongClickListener.onMapLongClick(DroneHelper.ILatLngToCoord(pPosition));
-                }
+            public boolean onItemLongPress(int index, Marker item) {
+                mMapViewListener.onLongPressMarker(mMapView, item);
+                return true;
             }
         });
+        mMapView.addItemizedOverlay(mMarkersOverlay);
     }
 
     @Override
@@ -153,7 +178,7 @@ public class MapBoxFragment extends Fragment implements DPMap {
         super.onStop();
 
         final UserLocationOverlay userLocation = mMapView.getUserLocationOverlay();
-        if(userLocation != null) {
+        if (userLocation != null) {
             userLocation.disableFollowLocation();
         }
 
@@ -182,17 +207,14 @@ public class MapBoxFragment extends Fragment implements DPMap {
 
     @Override
     public void cleanMarkers() {
-        for (Map.Entry<MarkerInfo, Marker> entry : mMarkers.entrySet()) {
-            Marker marker = entry.getValue();
-            mMapView.removeMarker(marker);
-        }
-
+        resetMarkersOverlay();
         mMarkers.clear();
+        mMapView.invalidate();
     }
 
     @Override
     public void clearFlightPath() {
-        if(mFlightPath != null){
+        if (mFlightPath != null) {
             mFlightPath.clearPath();
         }
     }
@@ -232,7 +254,7 @@ public class MapBoxFragment extends Fragment implements DPMap {
     @Override
     public void goToMyLocation() {
         final UserLocationOverlay userLocation = mMapView.getUserLocationOverlay();
-        if(userLocation != null){
+        if (userLocation != null) {
             userLocation.goToMyPosition(true);
         }
     }
@@ -243,7 +265,7 @@ public class MapBoxFragment extends Fragment implements DPMap {
         final float centerLng = mPrefs.prefs.getFloat(PREF_LNG, 0);
         mMapView.setCenter(new LatLng(centerLat, centerLng));
 
-        final int zoom = mPrefs.prefs.getInt(PREF_ZOOM, 0);
+        final float zoom = mPrefs.prefs.getFloat(PREF_ZOOM, 0);
         mMapView.setZoom(zoom);
 
         final float rotation = mPrefs.prefs.getFloat(PREF_BEA, 0);
@@ -255,8 +277,8 @@ public class MapBoxFragment extends Fragment implements DPMap {
         final List<Coord2D> coords = new ArrayList<Coord2D>();
 
         Projection projection = mMapView.getProjection();
-        for(Coord2D point: pathPoints){
-            ILatLng coord = projection.fromPixels((float)point.getX(), (float)point.getY());
+        for (Coord2D point : pathPoints) {
+            ILatLng coord = projection.fromPixels((float) point.getX(), (float) point.getY());
             coords.add(DroneHelper.ILatLngToCoord(coord));
         }
         return coords;
@@ -266,23 +288,23 @@ public class MapBoxFragment extends Fragment implements DPMap {
     public void saveCameraPosition() {
         SharedPreferences.Editor editor = mPrefs.prefs.edit();
         final ILatLng mapCenter = mMapView.getCenter();
-        editor.putFloat(PREF_LAT, (float)mapCenter.getLatitude())
+        editor.putFloat(PREF_LAT, (float) mapCenter.getLatitude())
                 .putFloat(PREF_LNG, (float) mapCenter.getLongitude())
                 .putFloat(PREF_BEA, mMapView.getRotation())
-                .putInt(PREF_ZOOM, (int)mMapView.getZoomLevel())
+                .putFloat(PREF_ZOOM, mMapView.getZoomLevel())
                 .apply();
     }
 
     @Override
     public void selectAutoPanMode(AutoPanMode target) {
         final AutoPanMode currentMode = mPanMode.get();
-        if(currentMode == target)
+        if (currentMode == target)
             return;
 
         setAutoPanMode(currentMode, target);
     }
 
-    private void setAutoPanMode(AutoPanMode current, AutoPanMode update){
+    private void setAutoPanMode(AutoPanMode current, AutoPanMode update) {
         if (mPanMode.compareAndSet(current, update)) {
             switch (current) {
                 case DRONE:
@@ -292,7 +314,7 @@ public class MapBoxFragment extends Fragment implements DPMap {
                 case USER:
                     mUserLocationTrackingMode = TrackingMode.NONE;
                     final UserLocationOverlay userLocation = mMapView.getUserLocationOverlay();
-                    if(userLocation != null) {
+                    if (userLocation != null) {
                         userLocation.disableFollowLocation();
                     }
                     break;
@@ -310,7 +332,7 @@ public class MapBoxFragment extends Fragment implements DPMap {
                 case USER:
                     mUserLocationTrackingMode = TrackingMode.FOLLOW;
                     final UserLocationOverlay userLocation = mMapView.getUserLocationOverlay();
-                    if(userLocation != null) {
+                    if (userLocation != null) {
                         userLocation.enableFollowLocation();
                     }
                     break;
@@ -323,7 +345,8 @@ public class MapBoxFragment extends Fragment implements DPMap {
     }
 
     @Override
-    public void setMapPadding(int left, int top, int right, int bottom) {}
+    public void setMapPadding(int left, int top, int right, int bottom) {
+    }
 
     @Override
     public void setOnMapClickListener(OnMapClickListener listener) {
@@ -348,7 +371,7 @@ public class MapBoxFragment extends Fragment implements DPMap {
     @Override
     public void updateCamera(Coord2D coord, float zoomLevel) {
         MapController mapController = mMapView.getController();
-        if(mapController != null) {
+        if (mapController != null) {
             mapController.setZoomAnimated(zoomLevel, DroneHelper.CoordToLatLng(coord), true, false);
         }
     }
@@ -357,13 +380,13 @@ public class MapBoxFragment extends Fragment implements DPMap {
     public void updateDroneLeashPath(PathSource pathSource) {
         final List<Coord2D> pathCoords = pathSource.getPathPoints();
 
-        if(mDroneLeashPath == null){
+        if (mDroneLeashPath == null) {
             mDroneLeashPath = new PathOverlay(DRONE_LEASH_DEFAULT_COLOR, DRONE_LEASH_DEFAULT_WIDTH);
             mMapView.getOverlays().add(mDroneLeashPath);
         }
 
         mDroneLeashPath.clearPath();
-        for(Coord2D coord: pathCoords){
+        for (Coord2D coord : pathCoords) {
             mDroneLeashPath.addPoint(DroneHelper.CoordToLatLng(coord));
         }
     }
@@ -377,12 +400,11 @@ public class MapBoxFragment extends Fragment implements DPMap {
     public void updateMarker(MarkerInfo markerInfo, boolean isDraggable) {
         final LatLng position = DroneHelper.CoordToLatLng(markerInfo.getPosition());
         Marker marker = mMarkers.get(markerInfo);
-        if(marker == null){
+        if (marker == null) {
             marker = new Marker(mMapView, markerInfo.getTitle(), markerInfo.getSnippet(), position);
-            mMapView.addMarker(marker);
+            mMarkersOverlay.addItem(marker);
             mMarkers.put(markerInfo, marker);
-        }
-        else{
+        } else {
             marker.setTitle(markerInfo.getTitle());
             marker.setDescription(markerInfo.getSnippet());
             marker.setPoint(position);
@@ -391,23 +413,25 @@ public class MapBoxFragment extends Fragment implements DPMap {
         //Update the marker
         final Resources res = getResources();
         final Bitmap markerIcon = markerInfo.getIcon(res);
-        if(markerIcon != null){
+        if (markerIcon != null) {
             marker.setIcon(new Icon(new BitmapDrawable(res, markerIcon)));
         }
 
         marker.setAnchor(new PointF(markerInfo.getAnchorU(), markerInfo.getAnchorV()));
+        marker.invalidate();
+        mMapView.invalidate();
     }
 
     @Override
     public void updateMarkers(List<MarkerInfo> markersInfos) {
-        for(MarkerInfo info: markersInfos){
+        for (MarkerInfo info : markersInfos) {
             updateMarker(info);
         }
     }
 
     @Override
     public void updateMarkers(List<MarkerInfo> markersInfos, boolean isDraggable) {
-        for(MarkerInfo info: markersInfos){
+        for (MarkerInfo info : markersInfos) {
             updateMarker(info, isDraggable);
         }
     }
@@ -416,13 +440,13 @@ public class MapBoxFragment extends Fragment implements DPMap {
     public void updateMissionPath(PathSource pathSource) {
         final List<Coord2D> pathCoords = pathSource.getPathPoints();
 
-        if(mMissionPath == null){
+        if (mMissionPath == null) {
             mMissionPath = new PathOverlay(MISSION_PATH_DEFAULT_COLOR, MISSION_PATH_DEFAULT_WIDTH);
             mMapView.getOverlays().add(mMissionPath);
         }
 
         mMissionPath.clearPath();
-        for(Coord2D coord: pathCoords){
+        for (Coord2D coord : pathCoords) {
             mMissionPath.addPoint(DroneHelper.CoordToLatLng(coord));
         }
     }
@@ -434,9 +458,9 @@ public class MapBoxFragment extends Fragment implements DPMap {
 
     @Override
     public void onDroneEvent(DroneInterfaces.DroneEventsType event, Drone drone) {
-        switch(event){
+        switch (event) {
             case GPS:
-                if(mPanMode.get() == AutoPanMode.DRONE){
+                if (mPanMode.get() == AutoPanMode.DRONE) {
                     final float currentZoomLevel = getMapZoomLevel();
                     final Coord2D droneLocation = drone.GPS.getPosition();
                     updateCamera(droneLocation, currentZoomLevel);
