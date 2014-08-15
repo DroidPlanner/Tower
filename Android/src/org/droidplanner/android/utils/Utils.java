@@ -40,7 +40,7 @@ public class Utils {
 		USB {
 			@Override
 			public MAVLinkConnection getConnection(Context context) {
-				return new UsbConnection(context);
+				return UsbConnection.getUSBConnection(context);
 			}
 		},
 		TCP {

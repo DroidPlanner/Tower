@@ -9,6 +9,12 @@ All the changes are logged below (preferable with the pull request numbers in pa
 
 # Releases
 
+## Droidplanner v2.6.2
+* Parameter download on start-up (#976)
+* Use FTDI usb library for FTDI devices (#975)
+* Fix NullPointer error on editor (#972)
+* Fix a couple of mission items unpack method (#971)
+
 ## Droidplanner v2.6.1
 * Failsafe messages (#922)
 * Fixed the circle item on mission planning (#970)
