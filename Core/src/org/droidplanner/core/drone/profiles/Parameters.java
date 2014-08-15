@@ -149,6 +149,9 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 	@Override
 	public void onDroneEvent(DroneEventsType event, Drone drone) {
 		switch(event){
+		case HEARTBEAT_FIRST:
+			getAllParameters();
+			break;		
 		case DISCONNECTED:
 		case HEARTBEAT_TIMEOUT:
 			killWatchdog();
