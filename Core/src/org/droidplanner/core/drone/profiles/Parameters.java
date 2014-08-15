@@ -80,20 +80,19 @@ public class Parameters extends DroneVariable implements OnDroneListener {
 		parameters.put((int) m_value.param_index, param);
 
 		expectedParams = m_value.param_count;
-		
+
 		// update listener
 		if (parameterListener != null)
-			parameterListener.onParameterReceived(param, m_value.param_index,
-					m_value.param_count);
+			parameterListener.onParameterReceived(param, m_value.param_index, m_value.param_count);
 
 		// Are all parameters here? Notify the listener with the parameters
 		if (parameters.size() >= m_value.param_count) {
+			List<Parameter> parameterList = new ArrayList<Parameter>();
+			for (int key : parameters.keySet()) {
+				parameterList.add(parameters.get(key));
+			}
+			killWatchdog();
 			if (parameterListener != null) {
-				List<Parameter> parameterList = new ArrayList<Parameter>();
-				for (int key : parameters.keySet()) {
-					parameterList.add(parameters.get(key));
-				}
-				killWatchdog();
 				parameterListener.onEndReceivingParameters(parameterList);
 			}
 		} else {
