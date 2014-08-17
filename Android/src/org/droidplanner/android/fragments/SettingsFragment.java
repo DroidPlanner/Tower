@@ -101,11 +101,7 @@ public class SettingsFragment extends DpPreferenceFragment implements
 		final String mapsProvidersPrefKey = getString(R.string.pref_maps_providers_key);
 		final ListPreference mapsProvidersPref = (ListPreference) findPreference(mapsProvidersPrefKey);
 		if (mapsProvidersPref != null) {
-			// Grab the list of maps provider
-			// TODO: enable full list of map providers when osm implementation
-			// is feature complete.
 			final DPMapProvider[] providers = DPMapProvider.values();
-//			final DPMapProvider[] providers = new DPMapProvider[] { DPMapProvider.GOOGLE_MAP };
 			final int providersCount = providers.length;
 			final CharSequence[] providersNames = new CharSequence[providersCount];
 			final CharSequence[] providersNamesValues = new CharSequence[providersCount];
@@ -135,8 +131,7 @@ public class SettingsFragment extends DpPreferenceFragment implements
 			updateMapSettingsPreference(defaultProviderName);
 		}
 
-		// update the summary for the preferences in the mDefaultSummaryPrefs
-		// hash table.
+		// update the summary for the preferences in the mDefaultSummaryPrefs hash table.
 		for (String prefKey : mDefaultSummaryPrefs) {
 			final Preference pref = findPreference(prefKey);
 			if (pref != null) {
